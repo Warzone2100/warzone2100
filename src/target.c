@@ -67,7 +67,7 @@ void targetInitialise(void)
 void targetOpenList(BASE_OBJECT *psTargeting)
 {
 	NumTargets = 0;
-	FoundCurrent = FALSE;
+	FoundCurrent = false;
 	TargetingObject = psTargeting;
 }
 

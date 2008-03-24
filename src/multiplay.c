@@ -70,17 +70,17 @@
 // ////////////////////////////////////////////////////////////////////////////
 // ////////////////////////////////////////////////////////////////////////////
 // globals.
-BOOL						bMultiPlayer				= FALSE;	// true when more than 1 player.
+BOOL						bMultiPlayer				= false;	// true when more than 1 player.
 char						sForceName[256]				= "Default";
 SDWORD						player2dpid[MAX_PLAYERS]	={0,0,0,0,0,0,0,0};		//stores dpids of each player. FILTHY HACK (ASSUMES 8 players)
 //UDWORD						arenaPlayersReceived=0;
-BOOL						openchannels[MAX_PLAYERS]={TRUE};
+BOOL						openchannels[MAX_PLAYERS]={true};
 UBYTE						bDisplayMultiJoiningStatus;
 
 MULTIPLAYERGAME				game;									//info to describe game.
 MULTIPLAYERINGAME			ingame;
 
-BOOL						bSendingMap					= FALSE;	// map broadcasting.
+BOOL						bSendingMap					= false;	// map broadcasting.
 
 char						tempString[12];
 char						beaconReceiveMsg[MAX_PLAYERS][MAX_CONSOLE_STRING_LENGTH];	//beacon msg for each player
@@ -121,25 +121,25 @@ BOOL turnOffMultiMsg(BOOL bDoit)
 
 	if(bDoit)	// turn off msgs.
 	{
-		if(bTemp == TRUE)
+		if(bTemp == true)
 		{
 			debug(LOG_NET, "turnOffMultiMsg: multiple calls to turn off");
 		}
 		if(bMultiPlayer)
 		{
-			bMultiPlayer = FALSE;
-			bTemp = TRUE;
+			bMultiPlayer = false;
+			bTemp = true;
 		}
 	}
 	else	// turn on msgs.
 	{
 		if(bTemp)
 		{
-			bMultiPlayer = TRUE;
-			bTemp = FALSE;
+			bMultiPlayer = true;
+			bTemp = false;
 		}
 	}
-	return TRUE;
+	return true;
 }
 
 
@@ -155,7 +155,7 @@ BOOL multiplayerWinSequence(BOOL firstCall)
 
 	if(firstCall)
 	{
-		pos  = cameraToHome(selectedPlayer,TRUE);			// pan the camera to home if not already doing so
+		pos  = cameraToHome(selectedPlayer,true);			// pan the camera to home if not already doing so
 		last =0;
 
 		// stop all research
@@ -177,14 +177,14 @@ BOOL multiplayerWinSequence(BOOL firstCall)
 	// rotate world
 	if(!getWarCamStatus())
 	{
-		rotAmount = timeAdjustedIncrement(MAP_SPIN_RATE / 12, TRUE);
+		rotAmount = timeAdjustedIncrement(MAP_SPIN_RATE / 12, true);
 		player.r.y += rotAmount;
 	}
 
 	if(last > gameTime)last= 0;
 	if((gameTime-last) < 500 )							// only  if not done recently.
 	{
-		return TRUE;
+		return true;
 	}
 	last = gameTime;
 
@@ -206,13 +206,13 @@ BOOL multiplayerWinSequence(BOOL firstCall)
 		if ((unsigned)pos2.z > world_coord(mapHeight))
 			pos2.z = world_coord(mapHeight);
 
-		addEffect(&pos2,EFFECT_FIREWORK,FIREWORK_TYPE_LAUNCHER,FALSE,NULL,0);	// throw up some fire works.
+		addEffect(&pos2,EFFECT_FIREWORK,FIREWORK_TYPE_LAUNCHER,false,NULL,0);	// throw up some fire works.
 	}
 
 	// show the score..
 
 
-	return TRUE;
+	return true;
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -236,7 +236,7 @@ BOOL multiPlayerLoop(void)
 		}
 		if(joinCount)
 		{
-			setWidgetsStatus(FALSE);
+			setWidgetsStatus(false);
 			bDisplayMultiJoiningStatus = joinCount;	// someone is still joining! say So
 
 			// deselect anything selected.
@@ -245,8 +245,8 @@ BOOL multiPlayerLoop(void)
 			if(keyPressed(KEY_ESC) )// check for cancel
 			{
 				bDisplayMultiJoiningStatus = 0;
-				setWidgetsStatus(TRUE);
-				setPlayerHasLost(TRUE);
+				setWidgetsStatus(true);
+				setPlayerHasLost(true);
 			}
 		}
 		else		//everyone is in the game now!
@@ -254,7 +254,7 @@ BOOL multiPlayerLoop(void)
 			if(bDisplayMultiJoiningStatus)
 			{
 				bDisplayMultiJoiningStatus = 0;
-				setWidgetsStatus(TRUE);
+				setWidgetsStatus(true);
 			}
 		}
 
@@ -264,9 +264,9 @@ BOOL multiPlayerLoop(void)
 	// if player has won then process the win effects...
 	if(testPlayerHasWon())
 	{
-		multiplayerWinSequence(FALSE);
+		multiplayerWinSequence(false);
 	}
-	return TRUE;
+	return true;
 }
 
 
@@ -288,10 +288,10 @@ BOOL IdToDroid(UDWORD id, UDWORD player, DROID **psDroid)
 			if(d)
 			{
 				*psDroid = d;
-				return TRUE;
+				return true;
 			}
 		}
-		return FALSE;
+		return false;
 	}
 	else									// find the droid, given player
 	{
@@ -300,9 +300,9 @@ BOOL IdToDroid(UDWORD id, UDWORD player, DROID **psDroid)
 		if(d)
 		{
 			*psDroid = d;
-			return TRUE;
+			return true;
 		}
-		return FALSE;
+		return false;
 	}
 }
 
@@ -464,13 +464,13 @@ BOOL setPlayerName(UDWORD player, const char *sName)
 {
 	if(player > MAX_PLAYERS)
 	{
-		ASSERT(FALSE, "setPlayerName: wrong player index (%d)", player);
-		return FALSE;
+		ASSERT(false, "setPlayerName: wrong player index (%d)", player);
+		return false;
 	}
 
 	strcpy(playerName[player],sName);
 
-	return TRUE;
+	return true;
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -478,7 +478,7 @@ BOOL setPlayerName(UDWORD player, const char *sName)
 BOOL isHumanPlayer(UDWORD player)
 {
 	if (player >= MAX_PLAYERS)
-		return FALSE;
+		return false;
 
 	return (BOOL) (player2dpid[player] != 0);
 }
@@ -535,11 +535,11 @@ BOOL myResponsibility(UDWORD player)
 {
 	if(whosResponsible(player) == selectedPlayer)
 	{
-		return TRUE;
+		return true;
 	}
 	else
 	{
-		return FALSE;
+		return false;
 	}
 }
 
@@ -549,11 +549,11 @@ BOOL responsibleFor(UDWORD player, UDWORD playerinquestion)
 
 	if(whosResponsible(playerinquestion) == player)
 	{
-		return TRUE;
+		return true;
 	}
 	else
 	{
-		return FALSE;
+		return false;
 	}
 }
 
@@ -598,7 +598,7 @@ Vector3i cameraToHome(UDWORD player,BOOL scroll)
 	}
 	else
 	{
-		setViewPos(x,y,TRUE);
+		setViewPos(x,y,true);
 	}
 
 	res.x = world_coord(x);
@@ -754,7 +754,7 @@ BOOL recvMessage(void)
 				break;
 			}
 			// This player is now with us!
-			ingame.JoiningInProgress[player_id] = FALSE;
+			ingame.JoiningInProgress[player_id] = false;
 			break;
 		}
 		case NET_COLOURREQUEST:
@@ -770,7 +770,7 @@ BOOL recvMessage(void)
 			recvMultiPlayerFeature();
 			break;
 		case NET_ALLIANCE:
-			recvAlliance(TRUE);
+			recvAlliance(true);
 			break;
 		case NET_KICK:
 		{
@@ -782,7 +782,7 @@ BOOL recvMessage(void)
 
 			if (NetPlay.dpidPlayer == player_id)  // we've been told to leave.
 			{
-				setPlayerHasLost(TRUE);
+				setPlayerHasLost(true);
 			}
 			break;
 		}
@@ -799,7 +799,7 @@ BOOL recvMessage(void)
 		}
 	}
 
-	return TRUE;
+	return true;
 }
 
 
@@ -834,13 +834,13 @@ BOOL SendResearch(uint8_t player, uint32_t index)
 				{
 					// Do the research for that player
 					MakeResearchCompleted(pPlayerRes);
-					researchResult(index, i, FALSE, NULL);
+					researchResult(index, i, false, NULL);
 				}
 			}
 		}
 	}
 
-	return TRUE;
+	return true;
 }
 
 // recv a research topic that is now complete.
@@ -860,7 +860,7 @@ static BOOL recvResearch()
 	if (player >= MAX_PLAYERS || index >= numResearch)
 	{
 		debug(LOG_ERROR, "Bad NET_RESEARCH received, player is %d, index is %u", (int)player, index);
-		return FALSE;
+		return false;
 	}
 
 	pPlayerRes = asPlayerResList[player] + index;
@@ -869,7 +869,7 @@ static BOOL recvResearch()
 	if (IsResearchCompleted(pPlayerRes))
 	{
 		MakeResearchCompleted(pPlayerRes);
-		researchResult(index, player, FALSE, NULL);
+		researchResult(index, player, false, NULL);
 
 		// Take off the power if available
 		pResearch = asResearch + index;
@@ -889,13 +889,13 @@ static BOOL recvResearch()
 				{
 					// Do the research for that player
 					MakeResearchCompleted(pPlayerRes);
-					researchResult(index, i, FALSE, NULL);
+					researchResult(index, i, false, NULL);
 				}
 			}
 		}
 	}
 
-	return TRUE;
+	return true;
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -906,7 +906,7 @@ BOOL sendReseachStatus(STRUCTURE *psBuilding, uint32_t index, uint8_t player, BO
 {
 	if (!myResponsibility(player) || gameTime < 5)
 	{
-		return TRUE;
+		return true;
 	}
 
 	NETbeginEncode(NET_RESEARCHSTATUS, NET_ALL_PLAYERS);
@@ -927,7 +927,7 @@ BOOL sendReseachStatus(STRUCTURE *psBuilding, uint32_t index, uint8_t player, BO
 		NETuint32_t(&index);
 	NETend();
 
-	return TRUE;
+	return true;
 }
 
 BOOL recvResearchStatus()
@@ -950,7 +950,7 @@ BOOL recvResearchStatus()
 	if (player >= MAX_PLAYERS || index >= numResearch)
 	{
 		debug(LOG_ERROR, "Bad NET_RESEARCHSTATUS received, player is %d, index is %u", (int)player, index);
-		return FALSE;
+		return false;
 	}
 
 	pPlayerRes = asPlayerResList[player] + index;
@@ -1004,7 +1004,7 @@ BOOL recvResearchStatus()
 		// If they completed the research, we're done
 		if (IsResearchCompleted(pPlayerRes))
 		{
-			return TRUE;
+			return true;
 		}
 
 		// If they did not say what facility it was, look it up orselves
@@ -1034,7 +1034,7 @@ BOOL recvResearchStatus()
 		}
 	}
 
-	return TRUE;
+	return true;
 }
 
 
@@ -1044,7 +1044,7 @@ BOOL recvResearchStatus()
 // eg "123 hi there" sends "hi there" to players 1,2 and 3.
 BOOL sendTextMessage(const char *pStr, BOOL all)
 {
-	BOOL				normal = TRUE;
+	BOOL				normal = true;
 	BOOL				sendto[MAX_PLAYERS];
 	UDWORD				i;
 	char				display[MAX_CONSOLE_STRING_LENGTH];
@@ -1054,7 +1054,7 @@ BOOL sendTextMessage(const char *pStr, BOOL all)
 
 	if (!ingame.localOptionsReceived)
 	{
-		return TRUE;
+		return true;
 	}
 
 	memset(display,0x0, sizeof(display));	//clear buffer
@@ -1063,8 +1063,8 @@ BOOL sendTextMessage(const char *pStr, BOOL all)
 	strlcpy(msg, pStr, sizeof(msg));
 	for(i = 0; ((pStr[i] >= '0' ) && (pStr[i] <= '8' )  && (i < MAX_PLAYERS )); i++)		// for each numeric char encountered..
 	{
-		sendto[ pStr[i]-'0' ] = TRUE;
-		normal = FALSE;
+		sendto[ pStr[i]-'0' ] = true;
+		normal = false;
 	}
 
 	if (!all && !normal)	// lets user know it is a private message
@@ -1135,7 +1135,7 @@ BOOL sendTextMessage(const char *pStr, BOOL all)
 
 	addConsoleMessage(display, DEFAULT_JUSTIFY, messageType);		// display
 
-	return TRUE;
+	return true;
 }
 
 //AI multiplayer message, send from a certain player index to another player index
@@ -1156,14 +1156,14 @@ BOOL sendAIMessage(char *pStr, UDWORD player, UDWORD to)
 		if (!msgStackPush(CALL_AI_MSG,player,to,pStr,-1,-1,NULL))
 		{
 			debug(LOG_ERROR, "sendAIMessage() - msgStackPush - stack failed");
-			return FALSE;
+			return false;
 		}
 	}
 	else		//not a local player (use multiplayer mode)
 	{
 		if (!ingame.localOptionsReceived)
 		{
-			return TRUE;
+			return true;
 		}
 
 		//find machine that is hosting this human or AI
@@ -1172,13 +1172,13 @@ BOOL sendAIMessage(char *pStr, UDWORD player, UDWORD to)
 		if (sendPlayer >= MAX_PLAYERS)
 		{
 			debug(LOG_ERROR, "sendAIMessage() - sendPlayer >= MAX_PLAYERS");
-			return FALSE;
+			return false;
 		}
 
 		if (!isHumanPlayer(sendPlayer))		//NETsend can't send to non-humans
 		{
 			debug(LOG_ERROR, "sendAIMessage() - player is not human.");
-			return FALSE;
+			return false;
 		}
 		netplayer = player2dpid[sendPlayer];
 
@@ -1191,7 +1191,7 @@ BOOL sendAIMessage(char *pStr, UDWORD player, UDWORD to)
 		NETend();
 	}
 
-	return TRUE;
+	return true;
 }
 
 //
@@ -1208,7 +1208,7 @@ BOOL sendBeacon(int32_t locX, int32_t locY, int32_t forPlayer, int32_t sender, c
 	if(sendPlayer >= MAX_PLAYERS)
 	{
 		debug(LOG_ERROR, "sendAIMessage() - whosResponsible() failed.");
-		return FALSE;
+		return false;
 	}
 
 	// I assume this is correct, looks like it sends it to ONLY that person, and the routine
@@ -1225,7 +1225,7 @@ BOOL sendBeacon(int32_t locX, int32_t locY, int32_t forPlayer, int32_t sender, c
 		NETstring((char*)pStr, MAX_CONSOLE_STRING_LENGTH);  // copy message in.
 	NETend();
 
-	return TRUE;
+	return true;
 }
 
 void displayAIMessage(char *pStr, SDWORD from, SDWORD to)
@@ -1310,7 +1310,7 @@ BOOL recvTextMessage()
 		audio_PlayTrack(ID_SOUND_MESSAGEEND);
 	}
 
-	return TRUE;
+	return true;
 }
 
 //AI multiplayer message - received message from AI (from scripts)
@@ -1339,10 +1339,10 @@ BOOL recvTextMessageAI()
 	if(!msgStackPush(CALL_AI_MSG,sender,receiver,msg,-1,-1,NULL))
 	{
 		debug(LOG_ERROR, "recvTextMessageAI() - msgStackPush - stack failed");
-		return FALSE;
+		return false;
 	}
 
-	return TRUE;
+	return true;
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -1355,7 +1355,7 @@ BOOL sendTemplate(DROID_TEMPLATE *pTempl)
 	uint8_t player = selectedPlayer;
 
 	ASSERT(pTempl != NULL, "sendTemplate: Old Pumpkin bug");
-	if (!pTempl) return TRUE; /* hack */
+	if (!pTempl) return true; /* hack */
 
 	NETbeginEncode(NET_TEMPLATE, NET_ALL_PLAYERS);
 		NETuint8_t(&player);
@@ -1438,7 +1438,7 @@ BOOL recvTemplate()
 		apsDroidTemplates[player]->ref = REF_TEMPLATE_START;
 	}
 
-	return TRUE;
+	return true;
 }
 
 
@@ -1454,7 +1454,7 @@ BOOL SendDestroyTemplate(DROID_TEMPLATE *t)
 		NETuint32_t(&t->multiPlayerID);
 	NETend();
 
-	return TRUE;
+	return true;
 }
 
 // acknowledge another player no longer has a template
@@ -1497,7 +1497,7 @@ static BOOL recvDestroyTemplate()
 		free(psTempl);
 	}
 
-	return TRUE;
+	return true;
 }
 
 
@@ -1510,7 +1510,7 @@ BOOL SendDestroyFeature(FEATURE *pF)
 {
 	// Only send if it is our responsibility
 	if (myResponsibility(pF->player))
-		return TRUE;
+		return true;
 
 	NETbeginEncode(NET_FEATUREDEST, NET_ALL_PLAYERS);
 		NETuint32_t(&pF->id);
@@ -1531,15 +1531,15 @@ BOOL recvDestroyFeature()
 
 	if (pF == NULL)
 	{
-		return FALSE;
+		return false;
 	}
 
 	// Remove the feature locally
-	turnOffMultiMsg(TRUE);
+	turnOffMultiMsg(true);
 	removeFeature(pF);
-	turnOffMultiMsg(FALSE);
+	turnOffMultiMsg(false);
 
-	return TRUE;
+	return true;
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -1551,7 +1551,7 @@ BOOL recvMapFileRequested()
 	// another player is requesting the map
 	if(!NetPlay.bHost)
 	{
-		return TRUE;
+		return true;
 	}
 
 	// start sending the map to the other players.
@@ -1560,7 +1560,7 @@ BOOL recvMapFileRequested()
 		memset(mapStr,0,256);
 		memset(mapName,0,256);
 		memset(fixedname,0,256);
-		bSendingMap = TRUE;
+		bSendingMap = true;
 		addConsoleMessage("Map was requested: SENDING MAP!",DEFAULT_JUSTIFY, CONSOLE_SYSTEM);
 
 		strlcpy(mapName, game.map, sizeof(mapName));
@@ -1577,10 +1577,10 @@ BOOL recvMapFileRequested()
 		snprintf(mapStr, sizeof(mapStr), "%dc-%s.wz", game.maxPlayers, mapName);
 		snprintf(fixedname, sizeof(fixedname), "maps/%s", mapStr);		//We know maps are in /maps dir...now. fix for linux -Q
 		strlcpy(mapStr, fixedname, sizeof(mapStr));
-		NETsendFile(TRUE,mapStr,0);
+		NETsendFile(true,mapStr,0);
 	}
 
-	return TRUE;
+	return true;
 }
 
 // continue sending the map
@@ -1598,12 +1598,12 @@ UBYTE sendMap(void)
 	lastCall = gameTime;
 
 
-	done = NETsendFile(FALSE,game.map,0);
+	done = NETsendFile(false,game.map,0);
 
 	if(done == 100)
 	{
 		addConsoleMessage("MAP SENT!",DEFAULT_JUSTIFY, CONSOLE_SYSTEM);
-		bSendingMap = FALSE;
+		bSendingMap = false;
 	}
 
 	return done;
@@ -1618,15 +1618,15 @@ BOOL recvMapFileData()
 	if(done == 100)
 	{
 		addConsoleMessage("MAP DOWNLOADED!",DEFAULT_JUSTIFY, CONSOLE_SYSTEM);
-		sendTextMessage("MAP DOWNLOADED",TRUE);					//send
+		sendTextMessage("MAP DOWNLOADED",true);					//send
 
 		// clear out the old level list.
 		levShutDown();
 		levInitialise();
-		rebuildSearchPath(mod_multiplay, TRUE);	// MUST rebuild search path for the new maps we just got!
+		rebuildSearchPath(mod_multiplay, true);	// MUST rebuild search path for the new maps we just got!
 		if (!buildMapList())
 		{
-			return FALSE;
+			return false;
 		}
 	}
 	else
@@ -1635,7 +1635,7 @@ BOOL recvMapFileData()
 		CONPRINTF(ConsoleString,(ConsoleString,"MAP:%d%%",done));
 	}
 
-	return TRUE;
+	return true;
 }
 
 
@@ -1654,7 +1654,7 @@ UDWORD msgStackPush(SDWORD CBtype, SDWORD plFrom, SDWORD plTo, const char *tStr,
 	if (msgStackPos >= MAX_MSG_STACK)
 	{
 		debug(LOG_ERROR, "msgStackPush() - stack full");
-		return FALSE;
+		return false;
 	}
 
 	//make point to the last valid element
@@ -1672,13 +1672,13 @@ UDWORD msgStackPush(SDWORD CBtype, SDWORD plFrom, SDWORD plTo, const char *tStr,
 
 	msgDroid[msgStackPos] = psDroid;
 
-	return TRUE;
+	return true;
 }
 
 BOOL isMsgStackEmpty(void)
 {
-	if(msgStackPos <= (-1)) return TRUE;
-	return FALSE;
+	if(msgStackPos <= (-1)) return true;
+	return false;
 }
 
 BOOL msgStackGetFrom(SDWORD  *psVal)
@@ -1686,12 +1686,12 @@ BOOL msgStackGetFrom(SDWORD  *psVal)
 	if(msgStackPos < 0)
 	{
 		debug(LOG_ERROR, "msgStackGetFrom: msgStackPos < 0");
-		return FALSE;
+		return false;
 	}
 
 	*psVal = msgPlFrom[0];
 
-	return TRUE;
+	return true;
 }
 
 BOOL msgStackGetTo(SDWORD  *psVal)
@@ -1699,12 +1699,12 @@ BOOL msgStackGetTo(SDWORD  *psVal)
 	if(msgStackPos < 0)
 	{
 		debug(LOG_ERROR, "msgStackGetTo: msgStackPos < 0");
-		return FALSE;
+		return false;
 	}
 
 	*psVal = msgPlTo[0];
 
-	return TRUE;
+	return true;
 }
 
 static BOOL msgStackGetCallbackType(SDWORD  *psVal)
@@ -1712,12 +1712,12 @@ static BOOL msgStackGetCallbackType(SDWORD  *psVal)
 	if(msgStackPos < 0)
 	{
 		debug(LOG_ERROR, "msgStackGetCallbackType: msgStackPos < 0");
-		return FALSE;
+		return false;
 	}
 
 	*psVal = callbackType[0];
 
-	return TRUE;
+	return true;
 }
 
 static BOOL msgStackGetXY(SDWORD  *psValx, SDWORD  *psValy)
@@ -1725,13 +1725,13 @@ static BOOL msgStackGetXY(SDWORD  *psValx, SDWORD  *psValy)
 	if(msgStackPos < 0)
 	{
 		debug(LOG_ERROR, "msgStackGetXY: msgStackPos < 0");
-		return FALSE;
+		return false;
 	}
 
 	*psValx = locx[0];
 	*psValy = locy[0];
 
-	return TRUE;
+	return true;
 }
 
 
@@ -1740,13 +1740,13 @@ BOOL msgStackGetMsg(char  *psVal)
 	if(msgStackPos < 0)
 	{
 		debug(LOG_ERROR, "msgStackGetMsg: msgStackPos < 0");
-		return FALSE;
+		return false;
 	}
 
 	strcpy(psVal, msgStr[0]);
 	//*psVal = msgPlTo[msgStackPos];
 
-	return TRUE;
+	return true;
 }
 
 static BOOL msgStackSort(void)
@@ -1778,7 +1778,7 @@ static BOOL msgStackSort(void)
 
 	msgStackPos--;		//since removed the top element
 
-	return TRUE;
+	return true;
 }
 
 BOOL msgStackPop(void)
@@ -1788,7 +1788,7 @@ BOOL msgStackPop(void)
 	if(msgStackPos < 0 || msgStackPos > MAX_MSG_STACK)
 	{
 		debug(LOG_ERROR, "msgStackPop: wrong msgStackPos index: %d", msgStackPos);
-		return FALSE;
+		return false;
 	}
 
 	return msgStackSort();		//move all elements 1 pos lower
@@ -1799,12 +1799,12 @@ BOOL msgStackGetDroid(DROID **ppsDroid)
 	if(msgStackPos < 0)
 	{
 		debug(LOG_ERROR, "msgStackGetDroid: msgStackPos < 0");
-		return FALSE;
+		return false;
 	}
 
 	*ppsDroid = msgDroid[0];
 
-	return TRUE;
+	return true;
 }
 
 SDWORD msgStackGetCount(void)
@@ -1820,11 +1820,11 @@ BOOL msgStackFireTop(void)
 	if(msgStackPos < 0)
 	{
 		debug(LOG_ERROR, "msgStackFireTop: msgStackPos < 0");
-		return FALSE;
+		return false;
 	}
 
 	if(!msgStackGetCallbackType(&_callbackType))
-		return FALSE;
+		return false;
 
 	switch(_callbackType)
 	{
@@ -1834,12 +1834,12 @@ BOOL msgStackFireTop(void)
 			break;
 
 		case CALL_DORDER_STOP:
-			ASSERT(FALSE,"CALL_DORDER_STOP is currently disabled");
+			ASSERT(false,"CALL_DORDER_STOP is currently disabled");
 
 			debug(LOG_SCRIPT, "msgStackFireTop: popped CALL_DORDER_STOP");
 
 			if(!msgStackGetDroid(&psScrCBOrderDroid))
-				return FALSE;
+				return false;
 
 			eventFireCallbackTrigger((TRIGGER_TYPE)CALL_DORDER_STOP);
 			break;
@@ -1847,16 +1847,16 @@ BOOL msgStackFireTop(void)
 		case CALL_BEACON:
 
 			if(!msgStackGetXY(&beaconX, &beaconY))
-				return FALSE;
+				return false;
 
 			if(!msgStackGetFrom(&MultiMsgPlayerFrom))
-				return FALSE;
+				return false;
 
 			if(!msgStackGetTo(&MultiMsgPlayerTo))
-				return FALSE;
+				return false;
 
 			if(!msgStackGetMsg(msg))
-				return FALSE;
+				return false;
 
 			strcpy(MultiplayMsg, msg);
 
@@ -1865,13 +1865,13 @@ BOOL msgStackFireTop(void)
 
 		case CALL_AI_MSG:
 			if(!msgStackGetFrom(&MultiMsgPlayerFrom))
-				return FALSE;
+				return false;
 
 			if(!msgStackGetTo(&MultiMsgPlayerTo))
-				return FALSE;
+				return false;
 
 			if(!msgStackGetMsg(msg))
-				return FALSE;
+				return false;
 
 			strcpy(MultiplayMsg, msg);
 
@@ -1880,14 +1880,14 @@ BOOL msgStackFireTop(void)
 
 		default:
 			debug(LOG_ERROR, "msgStackFireTop: unknown callback type");
-			return FALSE;
+			return false;
 			break;
 	}
 
 	if(!msgStackPop())
-		return FALSE;
+		return false;
 
-	return TRUE;
+	return true;
 }
 
 static BOOL recvBeacon()

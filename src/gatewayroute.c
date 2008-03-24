@@ -120,26 +120,26 @@ static BOOL gwrBlockedGateway(GATEWAY *psGate, SDWORD player, UDWORD terrain)
 	BOOL	blocked;
 	MAPTILE	*psTile;
 
-	blocked = FALSE;
+	blocked = false;
 
 	psTile = mapTile( (psGate->x1+psGate->x2)/2,
 					  (psGate->y1+psGate->y2)/2);
 	if ( (terrainType(psTile) == TER_WATER) &&
 		 !(terrain & GWR_TER_WATER))
 	{
-		blocked = TRUE;
+		blocked = true;
 	}
 	if ( (terrainType(psTile) != TER_WATER) &&
 		 !(terrain & GWR_TER_LAND))
 	{
-		blocked = TRUE;
+		blocked = true;
 	}
 	if (psGate->flags & GWR_IGNORE)
 	{
-		blocked = TRUE;
+		blocked = true;
 	}
 
-/*	blocked = TRUE;
+/*	blocked = true;
 	if (psGate->x1 == psGate->x2)
 	{
 		for(pos = psGate->y1; pos <= psGate->y2; pos += 1)
@@ -148,7 +148,7 @@ static BOOL gwrBlockedGateway(GATEWAY *psGate, SDWORD player, UDWORD terrain)
 			if (!fpathBlockingTile(psGate->x1, pos) &&
 				TEST_TILE_VISIBLE(player, psTile))
 			{
-				blocked = FALSE;
+				blocked = false;
 			}
 		}
 	}
@@ -160,7 +160,7 @@ static BOOL gwrBlockedGateway(GATEWAY *psGate, SDWORD player, UDWORD terrain)
 			if (!fpathBlockingTile(pos, psGate->y1) &&
 				TEST_TILE_VISIBLE(player, psTile))
 			{
-				blocked = FALSE;
+				blocked = false;
 			}
 		}
 	}*/
@@ -214,28 +214,28 @@ SDWORD gwrAStarRoute(SDWORD player, UDWORD terrain,
 	psOpenList = NULL;
 	for(psNew = psGateways; psNew; psNew=psNew->psNext)
 	{
-		add = FALSE;
+		add = false;
 		if (psNew->zone1 == zone)
 		{
 			psNew->flags |= GWR_ZONE1;
-			add = TRUE;
+			add = true;
 		}
 		else if (psNew->zone2 == zone)
 		{
 			psNew->flags |= GWR_ZONE2;
-			add = TRUE;
+			add = true;
 		}
 		else if ((psNew->flags & GWR_WATERLINK) &&
 				 gwZoneInEquiv(psNew->zone1, zone))
 		{
 			psNew->flags |= GWR_ZONE2;
-			add = TRUE;
+			add = true;
 		}
 
 		if (gwrBlockedGateway(psNew, player, terrain))
 		{
 			psNew->flags |= GWR_BLOCKED;
-			add = FALSE;
+			add = false;
 		}
 
 		if (add && gwrConsiderGateway(psNew))

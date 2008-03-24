@@ -121,13 +121,13 @@ BOOL NETstartLogging(void)
 	{
 		debug(LOG_ERROR, "Could not create net log %s: %s", filename,
 		      PHYSFS_getLastError());
-		return FALSE;
+		return false;
 	}
 	snprintf(buf, sizeof(buf), "NETPLAY log: %s\n", asctime(newtime));
 	// Guarantee to nul-terminate
 	buf[sizeof(buf) - 1] = '\0';
 	PHYSFS_write( pFileHandle, buf, strlen( buf ), 1 );
-	return TRUE;
+	return true;
 }
 
 BOOL NETstopLogging(void)
@@ -148,10 +148,10 @@ BOOL NETstopLogging(void)
 	if (!PHYSFS_close(pFileHandle))
 	{
 		debug(LOG_ERROR, "Could not close net log: %s", PHYSFS_getLastError());
-		return FALSE;
+		return false;
 	}
 
-	return TRUE;
+	return true;
 }
 
 void NETlogPacket(NETMSG *msg, BOOL received)
@@ -176,7 +176,7 @@ BOOL NETlogEntry(const char *str,UDWORD a,UDWORD b)
 #ifndef MASSIVELOGS
 	if(a ==9 || a==10)
 	{
-		return TRUE;
+		return true;
 	}
 #endif
 
@@ -213,5 +213,5 @@ BOOL NETlogEntry(const char *str,UDWORD a,UDWORD b)
 		PHYSFS_write(pFileHandle, star_line, strlen(star_line), 1);
 
 	PHYSFS_flush(pFileHandle);
-	return TRUE;
+	return true;
 }

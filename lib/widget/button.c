@@ -34,7 +34,7 @@
 /* Initialise the button module */
 BOOL buttonStartUp(void)
 {
-	return TRUE;
+	return true;
 }
 
 

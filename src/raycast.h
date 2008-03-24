@@ -37,7 +37,7 @@
 extern BOOL rayInitialise(void);
 
 /* The raycast intersection callback.
- * Return FALSE if no more points are required, TRUE otherwise
+ * Return false if no more points are required, true otherwise
  */
 typedef BOOL (*RAY_CALLBACK)(SDWORD x, SDWORD y, SDWORD dist);
 

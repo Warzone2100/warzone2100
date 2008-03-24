@@ -88,7 +88,7 @@ BOOL attemptCheatCode(const char* cheat_name)
 			/* We've got our man... */
 			cheatCodes[index].function();	// run it
 			/* And get out of here */
-			return(TRUE);
+			return(true);
 		}
 		index++;
 	}
@@ -102,5 +102,5 @@ BOOL attemptCheatCode(const char* cheat_name)
 
 		addConsoleMessage(errorString, LEFT_JUSTIFY,CONSOLE_SYSTEM);
 	}
-	return(FALSE);
+	return(false);
 }

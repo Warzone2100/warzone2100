@@ -89,7 +89,7 @@ static ALCdevice* device = 0;
 static ALCcontext* context = 0;
 #endif
 
-BOOL openal_initialized = FALSE;
+BOOL openal_initialized = false;
 
 /** Removes the given sample from the "active_samples" linked list
  *  \param previous either NULL (if \c to_remove is the first item in the
@@ -142,7 +142,7 @@ BOOL sound_InitLibrary( void )
 	{
 		PrintOpenALVersion(LOG_ERROR);
 		debug(LOG_ERROR, "Couldn't open audio device.");
-		return FALSE;
+		return false;
 	}
 
 	context = alcCreateContext(device, NULL);		//NULL was contextAttributes
@@ -153,11 +153,11 @@ BOOL sound_InitLibrary( void )
 	{
 		PrintOpenALVersion(LOG_ERROR);
 		debug(LOG_ERROR, "Couldn't initialize audio context: %s", alcGetString(device, err));
-		return FALSE;
+		return false;
 	}
 #endif
 
-	openal_initialized = TRUE;
+	openal_initialized = true;
 
 #ifndef WZ_NOSOUND
 	// Clear Error Codes
@@ -173,7 +173,7 @@ BOOL sound_InitLibrary( void )
 	alListenerfv( AL_ORIENTATION, listenerOri );
 	alDistanceModel( AL_NONE );
 #endif
-	return TRUE;
+	return true;
 }
 
 //*
@@ -333,7 +333,7 @@ BOOL sound_QueueSamplePlaying( void )
 
 	if ( current_queue_sample == (ALuint)AL_INVALID )
 	{
-		return FALSE;
+		return false;
 	}
 
 	alGetSourcei(current_queue_sample, AL_SOURCE_STATE, &state);
@@ -342,11 +342,11 @@ BOOL sound_QueueSamplePlaying( void )
 	// If one did, the state returned is useless. So instead of
 	// using it return false.
 	if (sound_GetError() != AL_NO_ERROR)
-		return FALSE;
+		return false;
 
 	if (state == AL_PLAYING)
 	{
-		return TRUE;
+		return true;
 	}
 
 	if (current_queue_sample != (ALuint)AL_INVALID)
@@ -356,7 +356,7 @@ BOOL sound_QueueSamplePlaying( void )
 		current_queue_sample = AL_INVALID;
 	}
 #endif
-	return FALSE;
+	return false;
 }
 
 /** Decodes an opened OggVorbis file into an OpenAL buffer
@@ -370,7 +370,7 @@ static inline TRACK* sound_DecodeOggVorbisTrack(TRACK *psTrack, PHYSFS_file* PHY
 	ALenum		format;
 	ALuint		buffer;
 
-	struct OggVorbisDecoderState* decoder = sound_CreateOggVorbisDecoder(PHYSFS_fileHandle, TRUE);
+	struct OggVorbisDecoderState* decoder = sound_CreateOggVorbisDecoder(PHYSFS_fileHandle, true);
 	soundDataBuffer* soundBuffer;
 
 	soundBuffer = sound_DecodeOggVorbis(decoder, 0);
@@ -543,7 +543,7 @@ BOOL sound_Play2DSample( TRACK *psTrack, AUDIO_SAMPLE *psSample, BOOL bQueued )
 
 	if (sfx_volume == 0.0)
 	{
-		return FALSE;
+		return false;
 	}
 	volume = ((float)psTrack->iVol / 100.0f);       // each object can have OWN volume!
 	psSample->fVol = volume;                        // save computed volume
@@ -570,7 +570,7 @@ BOOL sound_Play2DSample( TRACK *psTrack, AUDIO_SAMPLE *psSample, BOOL bQueued )
 	}
 #endif
 
-	return TRUE;
+	return true;
 }
 
 //*
@@ -585,7 +585,7 @@ BOOL sound_Play3DSample( TRACK *psTrack, AUDIO_SAMPLE *psSample )
 
 	if (sfx3d_volume == 0.0)
 	{
-		return FALSE;
+		return false;
 	}
 
 	volume = ((float)psTrack->iVol / 100.f);        // max range is 0-100
@@ -604,7 +604,7 @@ BOOL sound_Play3DSample( TRACK *psTrack, AUDIO_SAMPLE *psSample )
 	alSourcePlay( psSample->iSample );
 	sound_GetError();
 #endif
-	return TRUE;
+	return true;
 }
 
 /** Plays the audio data from the given file
@@ -656,7 +656,7 @@ AUDIO_STREAM* sound_PlayStreamWithBuf(PHYSFS_file* fileHandle, float volume, voi
 
 	stream->fileHandle = fileHandle;
 
-	stream->decoder = sound_CreateOggVorbisDecoder(stream->fileHandle, FALSE);
+	stream->decoder = sound_CreateOggVorbisDecoder(stream->fileHandle, false);
 	if (stream->decoder == NULL)
 	{
 		debug(LOG_ERROR, "sound_PlayStream: Failed to open audio file for decoding");
@@ -1118,7 +1118,7 @@ BOOL sound_SampleIsFinished( AUDIO_SAMPLE *psSample )
 	sound_GetError(); // check for an error and clear the error state for later on in this function
 	if (state == AL_PLAYING || state == AL_PAUSED)
 	{
-		return FALSE;
+		return false;
 	}
 
 	if (psSample->iSample != (ALuint)AL_INVALID)
@@ -1128,7 +1128,7 @@ BOOL sound_SampleIsFinished( AUDIO_SAMPLE *psSample )
 		psSample->iSample = AL_INVALID;
 	}
 #endif
-	return TRUE;
+	return true;
 }
 
 //*

@@ -87,11 +87,11 @@ audio_list:				audio_list audio_track |
 
 audio_track:			AUDIO QTEXT LOOP INTEGER INTEGER
 						{
-							audio_SetTrackVals( $2, TRUE, $4, $5 );
+							audio_SetTrackVals( $2, true, $4, $5 );
 						}
 						| AUDIO QTEXT ONESHOT INTEGER INTEGER
 						{
-							audio_SetTrackVals( $2, FALSE, $4, $5 );
+							audio_SetTrackVals( $2, false, $4, $5 );
 						}
 						;
 
@@ -220,7 +220,7 @@ BOOL ParseResourceFile(PHYSFS_file* fileHandle)
 
 	audp_parse();
 
-	return TRUE;
+	return true;
 }
 
 /***************************************************************************/

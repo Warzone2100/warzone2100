@@ -66,8 +66,8 @@ static BOOL chat_store_parameter(INTERP_VAL *cmdParam)
 	//if(numMsgParams >= MAX_CHAT_ARGUMENTS)
 	if(chat_msg.numCommands >= MAX_CHAT_COMMANDS)
 	{
-		ASSERT(FALSE, "chat_store_parameter: too many commands in a message");
-		return FALSE;
+		ASSERT(false, "chat_store_parameter: too many commands in a message");
+		return false;
 	}
 
 	numCommands = chat_msg.numCommands;
@@ -76,8 +76,8 @@ static BOOL chat_store_parameter(INTERP_VAL *cmdParam)
 	/* Make sure we still have room for more parameters */
 	if(numCmdParams >= MAX_CHAT_CMD_PARAMS)
 	{
-		ASSERT(FALSE, "chat_store_parameter: out of parameters for command %d", numCommands);
-		return FALSE;
+		ASSERT(false, "chat_store_parameter: out of parameters for command %d", numCommands);
+		return false;
 	}
 
 	/* Store parameter for command we are currently processing */
@@ -86,7 +86,7 @@ static BOOL chat_store_parameter(INTERP_VAL *cmdParam)
 
 	chat_msg.cmdData[numCommands].numCmdParams++;
 
-	return TRUE;
+	return true;
 }
 
 // Store extracted command for use in scripts
@@ -99,7 +99,7 @@ static void chat_store_command(const char *command)
 	/* Make sure we have no overflow */
 	if(chat_msg.numCommands >= MAX_CHAT_COMMANDS)
 	{
-		ASSERT(FALSE, "chat_store_command: too many commands in a message");
+		ASSERT(false, "chat_store_command: too many commands in a message");
 		return;
 	}
 
@@ -109,7 +109,7 @@ static void chat_store_command(const char *command)
 	/* Make sure we still have room for more parameters */
 	if(numCmdParams >= MAX_CHAT_CMD_PARAMS)
 	{
-		ASSERT(FALSE, "chat_store_command: out of parameters for command %d", numCommands);
+		ASSERT(false, "chat_store_command: out of parameters for command %d", numCommands);
 		return;
 	}
 
@@ -129,7 +129,7 @@ static void chat_store_player(SDWORD cmdIndex, SDWORD playerIndex)
 	/* Make sure we have no overflow */
 	if(cmdIndex < 0 || cmdIndex >= MAX_CHAT_COMMANDS)
 	{
-		ASSERT(FALSE, "chat_store_player: command message out of bounds: %d", cmdIndex);
+		ASSERT(false, "chat_store_player: command message out of bounds: %d", cmdIndex);
 		return;
 	}
 
@@ -138,16 +138,16 @@ static void chat_store_player(SDWORD cmdIndex, SDWORD playerIndex)
 		/* Ally players addressed */
 		for(i=0; i<MAX_PLAYERS; i++)
 		{
-			chat_msg.cmdData[cmdIndex].bPlayerAddressed[i] = TRUE;
+			chat_msg.cmdData[cmdIndex].bPlayerAddressed[i] = true;
 		}
 	}
 	else if(playerIndex >= 0 && playerIndex < MAX_PLAYERS)
 	{
-		chat_msg.cmdData[cmdIndex].bPlayerAddressed[playerIndex] = TRUE;
+		chat_msg.cmdData[cmdIndex].bPlayerAddressed[playerIndex] = true;
 	}
 	else	/* Wrong player index */
 	{
-		ASSERT(FALSE, "chat_store_player: wrong player index: %d", playerIndex);
+		ASSERT(false, "chat_store_player: wrong player index: %d", playerIndex);
 		return;
 	}
 }
@@ -163,7 +163,7 @@ static void chat_reset_command(SDWORD cmdIndex)
 
 	for(i=0; i<MAX_PLAYERS; i++)
 	{
-		chat_msg.cmdData[cmdIndex].bPlayerAddressed[i] = FALSE;
+		chat_msg.cmdData[cmdIndex].bPlayerAddressed[i] = false;
 	}
 }
 
@@ -712,7 +712,7 @@ BOOL chatLoad(char *pData, UDWORD size)
 	/* Don't parse the same message again for a different player */
 	if(strcmp(pData, &(chat_msg.lastMessage[0])) == 0)	//just parsed this message for some other player
 	{
-		return TRUE;			//keep all the parsed data unmodified
+		return true;			//keep all the parsed data unmodified
 	}
 
 	/* Tell bison what to parse */
@@ -736,10 +736,10 @@ BOOL chatLoad(char *pData, UDWORD size)
 	/* See if we were successfull parsing */
 	if (parseResult != 0)
 	{
-		return FALSE;
+		return false;
 	}
 
-	return TRUE;
+	return true;
 }
 
 /* A simple error reporting routine */

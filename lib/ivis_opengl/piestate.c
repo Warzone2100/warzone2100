@@ -128,9 +128,9 @@ void pie_SetFogStatus(BOOL val)
 	else
 	{
 		//fog disabled so turn it off if not off already
-		if (rendStates.fog != FALSE)
+		if (rendStates.fog != false)
 		{
-			rendStates.fog = FALSE;
+			rendStates.fog = false;
 		}
 	}
 }
@@ -168,7 +168,7 @@ void pie_SetAlphaTest(BOOL keyingOn)
 		rendStates.keyingOn = keyingOn;
 		pieStateCount++;
 
-		if (keyingOn == TRUE) {
+		if (keyingOn == true) {
 			glEnable(GL_ALPHA_TEST);
 			glAlphaFunc(GL_GREATER, 0.1f);
 		} else {

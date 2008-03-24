@@ -123,7 +123,7 @@ static BOOL pushedKeyMap(UDWORD key)
 
 	}
 
-	return TRUE;
+	return true;
 }
 
 
@@ -167,7 +167,7 @@ static BOOL pushedKeyCombo(KEY_CODE subkey)
 	if(pExist && (pExist->status == KEYMAP_ALWAYS || pExist->status == KEYMAP_ALWAYS_PROCESS))
 	{
 		selectedKeyMap = NULL;	// unhighlght selected.
-		return FALSE;
+		return false;
 	}
 
 	/* Clear down mappings using these keys... But only if it isn't unassigned */
@@ -213,11 +213,11 @@ static BOOL pushedKeyCombo(KEY_CODE subkey)
 
 // readd the widgets.
 //	widgDelete(psWScreen,FRONTEND_BACKDROP);
-//	startKeyMapEditor(FALSE);
+//	startKeyMapEditor(false);
 
 	*/
 	selectedKeyMap = NULL;	// unhighlght selected .
-	return TRUE;
+	return true;
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -258,9 +258,9 @@ BOOL runKeyMapEditor(void)
 	if(id == KM_DEFAULT)
 	{
 		keyClearMappings();
-		keyInitMappings(TRUE);
+		keyInitMappings(true);
 		widgDelete(psWScreen,FRONTEND_BACKDROP);// readd the widgets
-		startKeyMapEditor(FALSE);
+		startKeyMapEditor(false);
 	}
 	else if( id>=KM_START && id<=KM_END)
 	{
@@ -278,20 +278,20 @@ BOOL runKeyMapEditor(void)
 
 	widgDisplayScreen(psWScreen);				// show the widgets currently running
 
-	return TRUE;
+	return true;
 }
 
 // ////////////////////////////////////////////////////////////////////////////
 // returns key to press given a mapping.
 static BOOL keyMapToString(char *pStr, KEY_MAPPING *psMapping)
 {
-	BOOL	onlySub = TRUE;
+	BOOL	onlySub = true;
 	char	asciiSub[20],asciiMeta[20];
 
 	if(psMapping->metaKeyCode!=KEY_IGNORE)
 	{
 		keyScanToString(psMapping->metaKeyCode,(char *)&asciiMeta,20);
-		onlySub = FALSE;
+		onlySub = false;
 	}
 	keyScanToString(psMapping->subKeyCode,(char *)&asciiSub,20);
 
@@ -303,7 +303,7 @@ static BOOL keyMapToString(char *pStr, KEY_MAPPING *psMapping)
 	{
 		sprintf(pStr,"%s - %s",asciiMeta,asciiSub);
 	}
-	return TRUE;
+	return true;
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -375,13 +375,13 @@ BOOL startKeyMapEditor(BOOL first)
 					8,5,
 					iV_GetImageWidth(FrontImages,IMAGE_RETURN),
 					iV_GetImageHeight(FrontImages,IMAGE_RETURN),
-					_("Return To Previous Screen"),IMAGE_RETURN,IMAGE_RETURN_HI,TRUE);
+					_("Return To Previous Screen"),IMAGE_RETURN,IMAGE_RETURN_HI,true);
 
 	addMultiBut(psWScreen,KM_FORM,KM_DEFAULT,
 				11,45,
 				56,38,
 				_("Select Default"),
-				IMAGE_KEYMAP_DEFAULT,IMAGE_KEYMAP_DEFAULT,TRUE);	// default.
+				IMAGE_KEYMAP_DEFAULT,IMAGE_KEYMAP_DEFAULT,true);	// default.
 
 
 	/* Better be none that come after this...! */
@@ -449,13 +449,13 @@ BOOL startKeyMapEditor(BOOL first)
 
 	/* Now add the others... */
 	bubbleCount = 0;
-	bAtEnd = FALSE;
+	bAtEnd = false;
 	/* Stop when the right number or when aphabetically last - not sure...! */
 	while(bubbleCount<mapcount-1 && !bAtEnd)
 	{
 		/* Same test as before for upper limit */
 	 	strlcpy(test, "zzzzzzzzzzzzzzzzzzzzz", sizeof(test));
-		for(psMapping = keyMappings,psNext = NULL,bGotOne = FALSE; psMapping; psMapping = psMapping->psNext)
+		for(psMapping = keyMappings,psNext = NULL,bGotOne = false; psMapping; psMapping = psMapping->psNext)
 		{
 			/* Only certain mappings get displayed */
 			if( (psMapping->status!=KEYMAP__DEBUG)&&(psMapping->status!=KEYMAP___HIDE))		// if it's not a debug mapping..
@@ -466,7 +466,7 @@ BOOL startKeyMapEditor(BOOL first)
 					/* Keep a record of it */
 					strlcpy(test, psMapping->pName, sizeof(test));
 				   	psNext = psMapping;
-					bGotOne = TRUE;
+					bGotOne = true;
 				}
 			}
 		}
@@ -493,12 +493,12 @@ BOOL startKeyMapEditor(BOOL first)
 		else
 		{
 			/* The previous one we found was alphabetically last - time to stop */
-			bAtEnd = TRUE;
+			bAtEnd = true;
 		}
 	}
 
 	/* Go home... */
-	return TRUE;
+	return true;
 }
 
 
@@ -519,16 +519,16 @@ BOOL saveKeyMap(void)
 	if (!pfile) {
 		debug(LOG_ERROR, "saveKeyMap: %s could not be created: %s", KeyMapPath,
 		      PHYSFS_getLastError());
-		assert(FALSE);
-		return FALSE;
+		assert(false);
+		return false;
 	}
 
 #define WRITE(var, size)                                               \
 	if (PHYSFS_write(pfile, var, 1, size) != size) {                     \
 		debug(LOG_ERROR, "saveKeyMap: could not write to %s %d bytes: %s", \
 		      KeyMapPath, (int)size, PHYSFS_getLastError());                    \
-		assert(FALSE);                                                     \
-		return FALSE;                                                      \
+		assert(false);                                                     \
+		return false;                                                      \
 	}
 
 	// write out number of entries.
@@ -566,11 +566,11 @@ BOOL saveKeyMap(void)
 	if (!PHYSFS_close(pfile)) {
 		debug(LOG_ERROR, "saveKeyMap: Error closing %s: %s", KeyMapPath,
 		      PHYSFS_getLastError());
-		assert(FALSE);
-		return FALSE;
+		assert(false);
+		return false;
 	}
 	debug(LOG_WZ, "Keymap written ok to %s.", KeyMapPath);
-	return TRUE;	// saved ok.
+	return true;	// saved ok.
 #undef WRITE
 }
 
@@ -596,14 +596,14 @@ BOOL loadKeyMap(void)
 
 	if (!PHYSFS_exists(KeyMapPath)) {
 		debug(LOG_WZ, "loadKeyMap: %s not found", KeyMapPath);
-		return FALSE;
+		return false;
 	}
 	pfile = PHYSFS_openRead(KeyMapPath);
 	if (!pfile) {
 		debug(LOG_ERROR, "loadKeyMap: %s could not be opened: %s", KeyMapPath,
 		      PHYSFS_getLastError());
-		assert(FALSE);
-		return FALSE;
+		assert(false);
+		return false;
 	}
 	filesize = PHYSFS_fileLength(pfile);
 
@@ -613,9 +613,9 @@ BOOL loadKeyMap(void)
 	if (length_read != size) {                                  \
 		debug(LOG_ERROR, "loadKeyMap: Reading %s short: %s",      \
 		      KeyMapPath, PHYSFS_getLastError());                 \
-		assert(FALSE);                                            \
+		assert(false);                                            \
 		(void) PHYSFS_close(pfile);                               \
-		return FALSE;                                             \
+		return false;                                             \
 	}
 
 	READ(&count, sizeof(count));
@@ -624,7 +624,7 @@ BOOL loadKeyMap(void)
 	if (strncmp(ver, keymapVersion, 8) != 0) {
 		/* If wrong version, create a new one instead. */
 		PHYSFS_close(pfile);
-		return FALSE;
+		return false;
 	}
 
 	for(; count > 0; count--) {
@@ -642,12 +642,12 @@ BOOL loadKeyMap(void)
 	if (!PHYSFS_close(pfile)) {
 		debug(LOG_ERROR, "loadKeyMap: Error closing %s: %s", KeyMapPath,
 		      PHYSFS_getLastError());
-		assert(FALSE);
-		return FALSE;
+		assert(false);
+		return false;
 	}
 	if (countsize != filesize) {
 		debug(LOG_ERROR, "loadKeyMap: File size different from bytes read!");
-		assert(FALSE);
+		assert(false);
 	}
-	return TRUE;
+	return true;
 }

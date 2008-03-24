@@ -495,7 +495,7 @@ static BOOL intRefreshOrderButtons(void);
 
 
 
-BOOL OrderUp = FALSE;
+BOOL OrderUp = false;
 
 // update the order interface only if it is already open.
 BOOL intUpdateOrder(DROID *psDroid)
@@ -508,11 +508,11 @@ BOOL intUpdateOrder(DROID *psDroid)
         intAddOrder((BASE_OBJECT *)psDroid);
 	}
 
-	return TRUE;
+	return true;
 }
 
 // Add the droid order screen.
-// Returns TRUE if the form was displayed ok.
+// Returns true if the form was displayed ok.
 //
 //changed to a BASE_OBJECT to accomodate the factories - AB 21/04/99
 //BOOL _intAddOrder(DROID *Droid)
@@ -520,7 +520,7 @@ BOOL intAddOrder(BASE_OBJECT *psObj)
 {
 	W_FORMINIT			sFormInit;
 	W_BUTINIT			sButInit;
-	BOOL Animate = TRUE;
+	BOOL Animate = true;
 	SECONDARY_STATE State;
 	UWORD i,j;//,k;
 	UWORD OrdIndex;
@@ -538,18 +538,18 @@ BOOL intAddOrder(BASE_OBJECT *psObj)
 	if(bInTutorial)
 	{
 		// No RMB orders in tutorial!!
-		return(FALSE);
+		return(false);
 	}
 
 	// Is the form already up?
 	if(widgGetFromID(psWScreen,IDORDER_FORM) != NULL) {
 		intRemoveOrderNoAnim();
-		Animate = FALSE;
+		Animate = false;
 	}
 	// Is the stats window up?
 	if(widgGetFromID(psWScreen,IDSTAT_FORM) != NULL) {
 		intRemoveStatsNoAnim();
-		Animate = FALSE;
+		Animate = false;
 	}
 
     if (psObj)
@@ -567,7 +567,7 @@ BOOL intAddOrder(BASE_OBJECT *psObj)
         }
         else
         {
-            ASSERT( FALSE, "_intAddOrder: Invalid object type" );
+            ASSERT( false, "_intAddOrder: Invalid object type" );
             Droid = NULL;
             psStructure =  NULL;
         }
@@ -580,8 +580,8 @@ BOOL intAddOrder(BASE_OBJECT *psObj)
 
 
 
-  //	intResetScreen(TRUE);
-	setWidgetsStatus(TRUE);
+  //	intResetScreen(true);
+	setWidgetsStatus(true);
 
 	NumAvailableOrders = 0;
 	NumSelectedDroids = 0;
@@ -598,7 +598,7 @@ BOOL intAddOrder(BASE_OBJECT *psObj)
     {
         if (!BuildStructureOrderList(psStructure))
         {
-            return FALSE;
+            return false;
         }
     }
 	// Otherwise build a list of selected droids.
@@ -617,7 +617,7 @@ BOOL intAddOrder(BASE_OBJECT *psObj)
 	    if(!BuildDroidOrderList())
         {
 		    // If no orders then return;
-		    return FALSE;
+		    return false;
         }
 	}
 
@@ -636,14 +636,14 @@ BOOL intAddOrder(BASE_OBJECT *psObj)
 	// If the window was closed then do open animation.
 	if(Animate) {
 		sFormInit.pDisplay = intOpenPlainForm;
-		sFormInit.disableChildren = TRUE;
+		sFormInit.disableChildren = true;
 	} else {
 	// otherwise just recreate it.
 		sFormInit.pDisplay = intDisplayPlainForm;
 	}
 	if (!widgAddForm(psWScreen, &sFormInit))
 	{
-		return FALSE;
+		return false;
 	}
 
 
@@ -663,7 +663,7 @@ BOOL intAddOrder(BASE_OBJECT *psObj)
 	sButInit.UserData = PACKDWORD_TRI(0,IMAGE_CLOSEHILIGHT , IMAGE_CLOSE);
 	if (!widgAddButton(psWScreen, &sButInit))
 	{
-		return FALSE;
+		return false;
 	}
 
 
@@ -718,7 +718,7 @@ BOOL intAddOrder(BASE_OBJECT *psObj)
 //			}
 //		}
 
-		bLastCombine = FALSE;
+		bLastCombine = false;
 
 		switch (OrderButtons[OrdIndex].ButJustify & ORD_JUSTIFY_MASK) {
 			case ORD_JUSTIFY_LEFT:
@@ -785,7 +785,7 @@ BOOL intAddOrder(BASE_OBJECT *psObj)
 				// see if need to start a new line of buttons
 				if ((NumCombineBefore + 1) == (NumCombineButs % ORD_MAX_COMBINE_BUTS))
 				{
-					bLastCombine = TRUE;
+					bLastCombine = true;
 				}
 
 				break;
@@ -802,7 +802,7 @@ BOOL intAddOrder(BASE_OBJECT *psObj)
 											 );
 			if(!widgAddButton(psWScreen, &sButInit))
 			{
-				return FALSE;
+				return false;
 			}
 
 			// Set the default state for the button.
@@ -836,28 +836,28 @@ BOOL intAddOrder(BASE_OBJECT *psObj)
 			}
 
 			// may not add a button if the factory doesn't exist
-			bHidden = FALSE;
+			bHidden = false;
 			switch (OrderButtons[OrdIndex].Class)
 			{
 			case ORDBUTCLASS_FACTORY:
 				if (!checkFactoryExists(selectedPlayer, FACTORY_FLAG, i))
 				{
 					widgHide(psWScreen, sButInit.id);
-					bHidden = TRUE;
+					bHidden = true;
 				}
 				break;
 			case ORDBUTCLASS_CYBORGFACTORY:
 				if (!checkFactoryExists(selectedPlayer, CYBORG_FLAG, i))
 				{
 					widgHide(psWScreen, sButInit.id);
-					bHidden = TRUE;
+					bHidden = true;
 				}
 				break;
 			case ORDBUTCLASS_VTOLFACTORY:
 				if (!checkFactoryExists(selectedPlayer, VTOL_FLAG, i))
 				{
 					widgHide(psWScreen, sButInit.id);
-					bHidden = TRUE;
+					bHidden = true;
 				}
 				break;
 			default:
@@ -888,9 +888,9 @@ BOOL intAddOrder(BASE_OBJECT *psObj)
 
 
 
-	OrderUp = TRUE;
+	OrderUp = true;
 
-	return TRUE;
+	return true;
 }
 
 
@@ -1076,7 +1076,7 @@ static BOOL _intRefreshOrder(void)
 	    	{
 		    	// no units selected - quit
 			    intRemoveOrder();
-			    return TRUE;
+			    return true;
             }
 		}
 
@@ -1090,14 +1090,14 @@ static BOOL _intRefreshOrder(void)
 		{
 			// Refresh it by re-adding it.
 			Ret = intAddOrder(NULL);
-			if(Ret == FALSE) {
+			if(Ret == false) {
 				intMode = INT_NORMAL;
 			}
 		}
 		return Ret;
 	}
 
-	return TRUE;
+	return true;
 }
 
 
@@ -1125,9 +1125,9 @@ void intRemoveOrder(void)
 	if(Form) {
 		Form->display = intClosePlainForm;
 		Form->pUserData = NULL; // Used to signal when the close anim has finished.
-		Form->disableChildren = TRUE;
-		ClosingOrder = TRUE;
-		OrderUp = FALSE;
+		Form->disableChildren = true;
+		ClosingOrder = true;
+		OrderUp = false;
 		NumSelectedDroids = 0;
         psSelectedFactory = NULL;
     }
@@ -1141,14 +1141,14 @@ void intRemoveOrderNoAnim(void)
 {
 	widgDelete(psWScreen, IDORDER_CLOSE);
 	widgDelete(psWScreen, IDORDER_FORM);
-	OrderUp = FALSE;
+	OrderUp = false;
 	NumSelectedDroids = 0;
     psSelectedFactory = NULL;
 }
 
 
 // Build a list of currently selected droids.
-// Returns TRUE if droids were selected.
+// Returns true if droids were selected.
 //
 static BOOL BuildSelectedDroidList(void)
 {
@@ -1167,10 +1167,10 @@ static BOOL BuildSelectedDroidList(void)
 //	DBPRINTF(("%d droids selected\n",NumSelectedDroids));
 
 	if(NumSelectedDroids) {
-		return TRUE;
+		return true;
 	}
 
-	return FALSE;
+	return false;
 }
 
 //looks thru' the players' list of Structures to see if one is a factory and it is selected
@@ -1184,16 +1184,16 @@ static BOOL BuildSelectedDroidList(void)
         {
             //found one - set as one to use for the interface
             psSelectedFactory = psStruct;
-            return TRUE;
+            return true;
         }
     }
     //obviously never found a factory
-    return FALSE;
+    return false;
 }*/
 
 
 // Set the secondary order state for all currently selected droids. And Factory (if one selected)
-// Returns TRUE if succesfull.
+// Returns true if succesfull.
 //
 static BOOL SetSecondaryState(SECONDARY_ORDER sec, SECONDARY_STATE State)
 {
@@ -1205,7 +1205,7 @@ static BOOL SetSecondaryState(SECONDARY_ORDER sec, SECONDARY_STATE State)
 			//Only set the state if it's not a transporter.
 			if(SelectedDroids[i]->droidType != DROID_TRANSPORTER) {
 				if(!secondarySetState(SelectedDroids[i], sec, State)) {
-					return FALSE;
+					return false;
 				}
 			}
 		}
@@ -1215,11 +1215,11 @@ static BOOL SetSecondaryState(SECONDARY_ORDER sec, SECONDARY_STATE State)
     {
         if (!setFactoryState(psSelectedFactory, sec, State))
         {
-            return FALSE;
+            return false;
         }
     }
 
-	return TRUE;
+	return true;
 }
 
 
@@ -1243,12 +1243,12 @@ static BOOL BuildDroidOrderList(void)
 			if(secondarySupported(SelectedDroids[j], OrderButtons[OrdIndex].Order)) {
 				if(NumAvailableOrders < MAX_AVAILABLE_ORDERS) {
 					// Have we already got this order?
-					Found = FALSE;
+					Found = false;
 					for(i=0; i<NumAvailableOrders; i++) {
 						if(AvailableOrders[i].OrderIndex == OrdIndex) {
 							// Yes! Then increment it's reference count.
 							AvailableOrders[i].RefCount++;
-							Found = TRUE;
+							Found = true;
 						}
 					}
 
@@ -1264,26 +1264,26 @@ static BOOL BuildDroidOrderList(void)
 	}
 
 	if(NumAvailableOrders == 0) {
-		return FALSE;
+		return false;
 	}
 
 	if(NumAvailableOrders > 1) {
 		// Sort by Order index, A bubble sort? I know but it's only
 		// a small list so what the hell.
 		do {
-			Sorted = TRUE;
+			Sorted = true;
 			for(i=0; i<NumAvailableOrders-1; i++) {
 				if(AvailableOrders[i].OrderIndex > AvailableOrders[i+1].OrderIndex) {
 					Tmp = AvailableOrders[i];
 					AvailableOrders[i] = AvailableOrders[i+1];
 					AvailableOrders[i+1] = Tmp;
-					Sorted = FALSE;
+					Sorted = false;
 				}
 			}
 		} while(!Sorted);
 	}
 
-	return TRUE;
+	return true;
 }
 
 // Build a list of orders available for the selected structure.
@@ -1292,8 +1292,8 @@ static BOOL BuildStructureOrderList(STRUCTURE *psStructure)
     //only valid for Factories (at the moment)
     if (!StructIsFactory(psStructure))
     {
-        ASSERT( FALSE, "BuildStructureOrderList: structure is not a factory" );
-        return FALSE;
+        ASSERT( false, "BuildStructureOrderList: structure is not a factory" );
+        return false;
     }
 
     //this can be hard-coded!
@@ -1308,7 +1308,7 @@ static BOOL BuildStructureOrderList(STRUCTURE *psStructure)
 
     NumAvailableOrders = 4;
 
-    return TRUE;
+    return true;
 }
 
 
@@ -1333,8 +1333,8 @@ static BOOL CheckObjectOrderList(void)
         //only valid for Factories (at the moment)
         if (!StructIsFactory(psSelectedFactory))
         {
-            ASSERT( FALSE, "CheckObjectOrderList: structure is not a factory" );
-            return FALSE;
+            ASSERT( false, "CheckObjectOrderList: structure is not a factory" );
+            return false;
         }
 
         //this can be hard-coded!
@@ -1351,7 +1351,7 @@ static BOOL CheckObjectOrderList(void)
 
 	    if (NumNewOrders != NumAvailableOrders)
 	    {
-		    return FALSE;
+		    return false;
 	    }
     }
     else
@@ -1364,12 +1364,12 @@ static BOOL CheckObjectOrderList(void)
 			    if(secondarySupported(SelectedDroids[j], OrderButtons[OrdIndex].Order)) {
 				    if(NumNewOrders < MAX_AVAILABLE_ORDERS) {
 					    // Have we already got this order?
-					    Found = FALSE;
+					    Found = false;
 					    for(i=0; i<NumNewOrders; i++) {
 						    if(NewAvailableOrders[i].OrderIndex == OrdIndex) {
 							    // Yes! Then increment it's reference count.
 							    NewAvailableOrders[i].RefCount++;
-							    Found = TRUE;
+							    Found = true;
 						    }
 					    }
 
@@ -1386,20 +1386,20 @@ static BOOL CheckObjectOrderList(void)
 
 	    if (NumNewOrders != NumAvailableOrders)
 	    {
-		    return FALSE;
+		    return false;
 	    }
 
 	    if(NumNewOrders > 1) {
 		    // Sort by Order index, A bubble sort? I know but it's only
 		    // a small list so what the hell.
 		    do {
-			    Sorted = TRUE;
+			    Sorted = true;
 			    for(i=0; i<NumNewOrders-1; i++) {
 				    if(NewAvailableOrders[i].OrderIndex > NewAvailableOrders[i+1].OrderIndex) {
 					    Tmp = NewAvailableOrders[i];
 					    NewAvailableOrders[i] = NewAvailableOrders[i+1];
 					    NewAvailableOrders[i+1] = Tmp;
-					    Sorted = FALSE;
+					    Sorted = false;
 				    }
 			    }
 		    } while(!Sorted);
@@ -1411,11 +1411,11 @@ static BOOL CheckObjectOrderList(void)
 	{
 		if (NewAvailableOrders[i].OrderIndex != AvailableOrders[i].OrderIndex)
 		{
-			return FALSE;
+			return false;
 		}
 	}
 
-	return TRUE;
+	return true;
 }
 
 static BOOL intRefreshOrderButtons(void)
@@ -1490,7 +1490,7 @@ static BOOL intRefreshOrderButtons(void)
 		}
 	}
 
-	return TRUE;
+	return true;
 }
 
 
@@ -1503,7 +1503,7 @@ static SDWORD GetSecondaryStates(SECONDARY_ORDER sec)
 	BOOL	bFirst;
 
 	state = 0;
-	bFirst = TRUE;
+	bFirst = true;
     //handle a factory being selected - AB 22/04/99
     if (psSelectedFactory)
     {
@@ -1521,7 +1521,7 @@ static SDWORD GetSecondaryStates(SECONDARY_ORDER sec)
 			    if (bFirst)
 			    {
 				    state = currState;
-				    bFirst = FALSE;
+				    bFirst = false;
 			    }
 			    else if (state != currState)
 			    {
@@ -1551,7 +1551,7 @@ void intAddFactoryOrder(STRUCTURE *psStructure)
 {
 	if(!OrderUp)
 	{
-		intResetScreen(FALSE);
+		intResetScreen(false);
 		intAddOrder((BASE_OBJECT *)psStructure);
 		intMode = INT_ORDER;
 	}

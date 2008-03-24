@@ -127,7 +127,7 @@ BOOL rayInitialise(void)
 		angle += RAY_ANGLE;
 	}
 
-	return TRUE;
+	return true;
 }
 
 
@@ -457,10 +457,10 @@ static BOOL	getTileHighestCallback(SDWORD x, SDWORD y, SDWORD dist)
 	}
 	else
 	{
-		return(FALSE);
+		return(false);
 	}
 
-	return(TRUE);
+	return(true);
 
 }
 //-----------------------------------------------------------------------------------
@@ -516,24 +516,24 @@ static BOOL	getTileHeightCallback(SDWORD x, SDWORD y, SDWORD dist)
 			pos.x = x;
 			pos.y = height;
 			pos.z = y;
-			addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_SMALL,FALSE,NULL,0);
+			addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_SMALL,false,NULL,0);
 #endif
 	//		if(height > gMaxRayHeight)
 	//		{
 	//			gMaxRayHeight = height;
 	//			gRayDist = dist;
-	//			return(TRUE);
+	//			return(true);
 	//		}
 		}
 	}
 	else
 	{
 		/* We've hit edge of grid - so exit!! */
-		return(FALSE);
+		return(false);
 	}
 
 	/* Not at edge yet - so exit */
-	return(TRUE);
+	return(true);
 }
 
 void	getBestPitchToEdgeOfGrid(UDWORD x, UDWORD y, UDWORD direction, SDWORD *pitch)

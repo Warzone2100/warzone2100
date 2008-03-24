@@ -49,15 +49,15 @@ BOOL aiCheckAlliances(UDWORD s1,UDWORD s2)
     //features have their player number set to (MAX_PLAYERS + 1)
     if ( s1 == (MAX_PLAYERS + 1) || s2 == (MAX_PLAYERS + 1))
     {
-        return FALSE;
+        return false;
     }
 	if ((s1 == s2) ||
 		(alliances[s1][s2] == ALLIANCE_FORMED))
 	{
-		return TRUE;
+		return true;
 	}
 
-	return FALSE;
+	return false;
 }
 
 /* Initialise the AI system */
@@ -73,13 +73,13 @@ BOOL aiInitialise(void)
 		}
 	}
 
-	return TRUE;
+	return true;
 }
 
 /* Shutdown the AI system */
 BOOL aiShutdown(void)
 {
-	return TRUE;
+	return true;
 }
 
 // Find the best nearest target for a droid
@@ -89,7 +89,7 @@ SDWORD aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot
 	UDWORD				i;
 	SDWORD				bestMod,newMod,failure=-1;
 	BASE_OBJECT			*psTarget,*friendlyObj,*bestTarget,*targetInQuestion,*tempTarget;
-	BOOL				electronic = FALSE;
+	BOOL				electronic = false;
 	STRUCTURE			*targetStructure;
 	WEAPON_EFFECT		weaponEffect;
 
@@ -271,7 +271,7 @@ static SDWORD targetAttackWeight(BASE_OBJECT *psTarget, BASE_OBJECT *psAttacker,
 	STRUCTURE		*targetStructure=NULL;
 	WEAPON_EFFECT	weaponEffect;
 	WEAPON_STATS	*attackerWeapon;
-	BOOL			bEmpWeap=FALSE,bCmdAttached=FALSE,bTargetingCmd=FALSE;
+	BOOL			bEmpWeap=false,bCmdAttached=false,bTargetingCmd=false;
 
 	if (psTarget == NULL || psAttacker == NULL)
 	{
@@ -309,7 +309,7 @@ static SDWORD targetAttackWeight(BASE_OBJECT *psTarget, BASE_OBJECT *psAttacker,
 					//see if this weapon is targeting our commander
 					if (psDroid->psActionTarget[weaponSlot] == (BASE_OBJECT *)psAttackerDroid->psGroup->psCommander)
 					{
-						bTargetingCmd = TRUE;
+						bTargetingCmd = true;
 					}
 				}
 			}
@@ -324,7 +324,7 @@ static SDWORD targetAttackWeight(BASE_OBJECT *psTarget, BASE_OBJECT *psAttacker,
 						if( ((STRUCTURE *)psTarget)->psTarget[weaponSlot] ==
 								(BASE_OBJECT *)psAttackerDroid->psGroup->psCommander)
 						{
-							bTargetingCmd = TRUE;
+							bTargetingCmd = true;
 						}
 					}
 				}
@@ -514,7 +514,7 @@ static BOOL aiStructHasRange(STRUCTURE *psStruct, BASE_OBJECT *psTarget, int wea
 	if (psStruct->numWeaps == 0 || psStruct->asWeaps[0].nStat == 0)
 	{
 		// Can't attack without a weapon
-		return FALSE;
+		return false;
 	}
 
 	psWStats = psStruct->asWeaps[weapon_slot].nStat + asWeaponStats;
@@ -525,11 +525,11 @@ static BOOL aiStructHasRange(STRUCTURE *psStruct, BASE_OBJECT *psTarget, int wea
 	if (xdiff*xdiff + ydiff*ydiff < longRange*longRange)
 	{
 		// in range
-		return TRUE;
+		return true;
 
 	}
 
-	return FALSE;
+	return false;
 }
 
 
@@ -538,16 +538,16 @@ static BOOL aiObjIsWall(BASE_OBJECT *psObj)
 {
 	if (psObj->type != OBJ_STRUCTURE)
 	{
-		return FALSE;
+		return false;
 	}
 
 	if ( ((STRUCTURE *)psObj)->pStructureType->type != REF_WALL &&
 		 ((STRUCTURE *)psObj)->pStructureType->type != REF_WALLCORNER )
 	{
-		return FALSE;
+		return false;
 	}
 
-	return TRUE;
+	return true;
 }
 
 
@@ -571,14 +571,14 @@ BOOL aiChooseTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget, int weapon_slot
 	case OBJ_DROID:
 		if (((DROID *)psObj)->asWeaps[weapon_slot].nStat == 0)
 		{
-			return FALSE;
+			return false;
 		}
 
 		if (((DROID *)psObj)->asWeaps[0].nStat == 0 &&
 			((DROID *)psObj)->droidType != DROID_SENSOR)
 		{
 			// Can't attack without a weapon
-			return FALSE;
+			return false;
 		}
 		radSquared = sensorRange * sensorRange;
 		break;
@@ -586,7 +586,7 @@ BOOL aiChooseTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget, int weapon_slot
 		if (((STRUCTURE *)psObj)->numWeaps == 0 || ((STRUCTURE *)psObj)->asWeaps[0].nStat == 0)
 		{
 			// Can't attack without a weapon
-			return FALSE;
+			return false;
 		}
 
 		// increase the sensor range for AA sites
@@ -637,7 +637,7 @@ BOOL aiChooseTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget, int weapon_slot
 				{
 					ASSERT(!isDead(psTarget), "aiChooseTarget: Droid found a dead target!");
 				    *ppsTarget = psTarget;
-				    return TRUE;
+				    return true;
 				}
 			}
 		}
@@ -654,14 +654,14 @@ BOOL aiChooseTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget, int weapon_slot
 		// see if there is a target from the command droids
 		psTarget = NULL;
 		psCommander = cmdDroidGetDesignator(psObj->player);
-		bCommanderBlock = FALSE;
+		bCommanderBlock = false;
 		if (!proj_Direct(psWStats) && (psCommander != NULL) &&
 			aiStructHasRange((STRUCTURE *)psObj, (BASE_OBJECT *)psCommander, weapon_slot))
 		{
 			// there is a commander that can fire designate for this structure
 			// set bCommanderBlock so that the structure does not fire until the commander
 			// has a target - (slow firing weapons will not be ready to fire otherwise).
-			bCommanderBlock = TRUE;
+			bCommanderBlock = true;
 			if (psCommander->action == DACTION_ATTACK
 			    && psCommander->psActionTarget[0] != NULL
 			    && !psCommander->psActionTarget[0]->died)
@@ -675,7 +675,7 @@ BOOL aiChooseTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget, int weapon_slot
 				else
 				{
 					// target out of range - release the commander block
-					bCommanderBlock = FALSE;
+					bCommanderBlock = false;
 				}
 			}
 		}
@@ -683,7 +683,7 @@ BOOL aiChooseTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget, int weapon_slot
 		// indirect fire structures use sensor towers first
 		tarDist = SDWORD_MAX;
 		minDist = psWStats->minRange * psWStats->minRange;
-		bCBTower = FALSE;
+		bCBTower = false;
 		if (psTarget == NULL &&
 			!bCommanderBlock &&
 			!proj_Direct(psWStats))
@@ -733,7 +733,7 @@ BOOL aiChooseTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget, int weapon_slot
 					    {
 						    tarDist = distSq;
 						    psTarget = psCStruct->psTarget[0];
-						    bCBTower = TRUE;
+						    bCBTower = true;
 					    }
 					}
 				}
@@ -782,11 +782,11 @@ BOOL aiChooseTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget, int weapon_slot
 		{
 			ASSERT(!psTarget->died, "aiChooseTarget: Structure found a dead target!");
 			*ppsTarget = psTarget;
-			return TRUE;
+			return true;
 		}
 	}
 
-	return FALSE;
+	return false;
 }
 
 
@@ -807,7 +807,7 @@ BOOL aiChooseSensorTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget)
 			location != LOC_TURRET)
 		{
 			// to be used for Turret Sensors only
-			return FALSE;
+			return false;
 		}
 		radSquared = sensorRange * sensorRange;
 		break;
@@ -816,7 +816,7 @@ BOOL aiChooseSensorTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget)
 			structVTOLSensor((STRUCTURE *)psObj)))
 		{
 			// to be used for Standard and VTOL intercept Turret Sensors only
-			return FALSE;
+			return false;
 		}
 		radSquared = sensorRange * sensorRange;
 		break;
@@ -836,7 +836,7 @@ BOOL aiChooseSensorTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget)
 			if (xdiff*xdiff + ydiff*ydiff < (SDWORD)radSquared)
 			{
 				*ppsTarget = psTarget;
-				return TRUE;
+				return true;
 			}
 		}
 	}
@@ -874,11 +874,11 @@ BOOL aiChooseSensorTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget)
 		{
 			ASSERT(!psTemp->died, "aiChooseSensorTarget gave us a dead target");
 			*ppsTarget = psTemp;
-			return TRUE;
+			return true;
 		}
 	}
 
-	return FALSE;
+	return false;
 }
 
 /* Do the AI for a droid */
@@ -891,20 +891,20 @@ void aiUpdateDroid(DROID *psDroid)
 	ASSERT( psDroid != NULL,
 		"updateUnitAI: invalid Unit pointer" );
 
-	lookForTarget = TRUE;
-	updateTarget = TRUE;
+	lookForTarget = true;
+	updateTarget = true;
 
 	// don't look for a target if sulking
 	if (psDroid->action == DACTION_SULK)
 	{
-		lookForTarget = FALSE;
-		updateTarget = FALSE;
+		lookForTarget = false;
+		updateTarget = false;
 	}
 	// don't look for a target if doing something else
 	if (!orderState(psDroid, DORDER_NONE) &&
 		!orderState(psDroid, DORDER_GUARD))
 	{
-		lookForTarget = FALSE;
+		lookForTarget = false;
 	}
 
 	/* Only try to update target if already have some target */
@@ -913,21 +913,21 @@ void aiUpdateDroid(DROID *psDroid)
 		psDroid->action != DACTION_MOVETOATTACK &&
 		psDroid->action != DACTION_ROTATETOATTACK)
 	{
-		updateTarget = FALSE;
+		updateTarget = false;
 	}
 
 	/* Don't update target if we are sent to attack and reached
 		attack destination (attacking our target) */
 	if (orderState(psDroid, DORDER_ATTACK) && psDroid->psActionTarget[0] == psDroid->psTarget)
 	{
-		updateTarget = FALSE;
+		updateTarget = false;
 	}
 
 	// don't look for a target if there are any queued orders
 	if (psDroid->listSize > 0)
 	{
-		lookForTarget = FALSE;
-		updateTarget = FALSE;
+		lookForTarget = false;
+		updateTarget = false;
 	}
 
 	// horrible check to stop droids looking for a target if
@@ -938,43 +938,43 @@ void aiUpdateDroid(DROID *psDroid)
 		secondaryGetState(psDroid, DSO_HALTTYPE, &state) &&
 		(state == DSS_HALT_GUARD))
 	{
-		lookForTarget = FALSE;
-		updateTarget = FALSE;
+		lookForTarget = false;
+		updateTarget = false;
 	}
 
 	// don't allow units to start attacking if they will switch to guarding the commander
 	if (psDroid->droidType != DROID_COMMAND && psDroid->psGroup != NULL &&
 		 psDroid->psGroup->type == GT_COMMAND)
 	{
-		lookForTarget = FALSE;
-		updateTarget = FALSE;
+		lookForTarget = false;
+		updateTarget = false;
 	}
 
 	if(bMultiPlayer && vtolDroid(psDroid) && isHumanPlayer(psDroid->player))
 	{
-		lookForTarget = FALSE;
-		updateTarget = FALSE;
+		lookForTarget = false;
+		updateTarget = false;
 	}
 
 	// do not choose another target if doing anything while guarding
 	if (orderState(psDroid, DORDER_GUARD) &&
 		(psDroid->action != DACTION_NONE))
 	{
-		lookForTarget = FALSE;
+		lookForTarget = false;
 	}
 
 	// do not look for a target if droid is currently under direct control.
 	if(driveModeActive() && (psDroid == driveGetDriven())) {
-		lookForTarget = FALSE;
-		updateTarget = FALSE;
+		lookForTarget = false;
+		updateTarget = false;
 	}
 
 	// only computer sensor droids in the single player game aquire targets
 	if ((psDroid->droidType == DROID_SENSOR && psDroid->player == selectedPlayer)
 	    && !bMultiPlayer)
 	{
-		lookForTarget = FALSE;
-		updateTarget = FALSE;
+		lookForTarget = false;
+		updateTarget = false;
 	}
 
 	// do not attack if the attack level is wrong
@@ -982,14 +982,14 @@ void aiUpdateDroid(DROID *psDroid)
 	{
 		if (state != DSS_ALEV_ALWAYS)
 		{
-			lookForTarget = FALSE;
+			lookForTarget = false;
 		}
 	}
 
 	/* Don't rebuild 'Naybor' list too often */
 	if(!CAN_UPDATE_NAYBORS(psDroid))
 	{
-		lookForTarget = FALSE;
+		lookForTarget = false;
 	}
 
 	/* For commanders and non-assigned non-commanders:
@@ -1019,23 +1019,23 @@ void aiUpdateDroid(DROID *psDroid)
 
 	if (lookForTarget && !updateTarget)
 	{
-		turnOffMultiMsg(TRUE);
+		turnOffMultiMsg(true);
 		if (psDroid->droidType == DROID_SENSOR)
 		{
 			//Watermelon:only 1 target for sensor droid
-			if ( aiChooseTarget((BASE_OBJECT *)psDroid, &psTarget, 0, TRUE) )
+			if ( aiChooseTarget((BASE_OBJECT *)psDroid, &psTarget, 0, true) )
 			{
 				orderDroidObj(psDroid, DORDER_OBSERVE, psTarget);
 			}
 		}
 		else
 		{
-			if (aiChooseTarget((BASE_OBJECT *)psDroid, &psTarget, 0, TRUE))
+			if (aiChooseTarget((BASE_OBJECT *)psDroid, &psTarget, 0, true))
 			{
 				orderDroidObj(psDroid, DORDER_ATTACKTARGET, psTarget);
 			}
 		}
-		turnOffMultiMsg(FALSE);
+		turnOffMultiMsg(false);
 	}
 }
 
@@ -1044,12 +1044,12 @@ can fire on the propulsion type of the target*/
 //Watermelon:added weapon_slot
 BOOL validTarget(BASE_OBJECT *psObject, BASE_OBJECT *psTarget, int weapon_slot)
 {
-	BOOL	bTargetInAir, bValidTarget = FALSE;
+	BOOL	bTargetInAir, bValidTarget = false;
 	UBYTE	surfaceToAir;
 
 	if (!psTarget)
 	{
-		return FALSE;
+		return false;
 	}
 
 	//need to check propulsion type of target
@@ -1061,22 +1061,22 @@ BOOL validTarget(BASE_OBJECT *psObject, BASE_OBJECT *psTarget, int weapon_slot)
         {
 			if (((DROID *)psTarget)->sMove.Status != MOVEINACTIVE)
 			{
-	            bTargetInAir = TRUE;
+	            bTargetInAir = true;
 			}
 			else
 			{
-	            bTargetInAir = FALSE;
+	            bTargetInAir = false;
 			}
         }
         else
         {
-            bTargetInAir = FALSE;
+            bTargetInAir = false;
         }
         break;
     case OBJ_STRUCTURE:
 	default:
         //lets hope so!
-        bTargetInAir = FALSE;
+        bTargetInAir = false;
         break;
     }
 
@@ -1092,12 +1092,12 @@ BOOL validTarget(BASE_OBJECT *psObject, BASE_OBJECT *psTarget, int weapon_slot)
 			surfaceToAir = asWeaponStats[((DROID *)psObject)->asWeaps[weapon_slot].nStat].surfaceToAir;
 			if ( ((surfaceToAir & SHOOT_IN_AIR) && bTargetInAir) || ((surfaceToAir & SHOOT_ON_GROUND) && !bTargetInAir) )
 			{
-				return TRUE;
+				return true;
 			}
 		}
 		else
 		{
-			return FALSE;
+			return false;
 		}
 		/*
         if (((DROID *)psObject)->asWeaps[0].nStat != 0 && ((DROID *)psObject)->numWeaps > 0)
@@ -1125,7 +1125,7 @@ BOOL validTarget(BASE_OBJECT *psObject, BASE_OBJECT *psTarget, int weapon_slot)
 
 		if ( ((surfaceToAir & SHOOT_IN_AIR) && bTargetInAir) || ((surfaceToAir & SHOOT_ON_GROUND) && !bTargetInAir) )
 		{
-			return TRUE;
+			return true;
 		}
 			break;
 		default:
@@ -1136,13 +1136,13 @@ BOOL validTarget(BASE_OBJECT *psObject, BASE_OBJECT *psTarget, int weapon_slot)
     //if target is in the air and you can shoot in the air - OK
     if (bTargetInAir && (surfaceToAir & SHOOT_IN_AIR))
     {
-        bValidTarget = TRUE;
+        bValidTarget = true;
     }
 
     //if target is on the ground and can shoot at it - OK
     if (!bTargetInAir && (surfaceToAir & SHOOT_ON_GROUND))
     {
-        bValidTarget = TRUE;
+        bValidTarget = true;
     }
 
     return bValidTarget;
@@ -1153,7 +1153,7 @@ BOOL updateAttackTarget(BASE_OBJECT * psAttacker, SDWORD weapon_slot)
 {
 	BASE_OBJECT		*psBetterTarget=NULL;
 
-	if(aiChooseTarget(psAttacker, &psBetterTarget, weapon_slot, TRUE))	//update target
+	if(aiChooseTarget(psAttacker, &psBetterTarget, weapon_slot, true))	//update target
 	{
 		if(psAttacker->type == OBJ_DROID)
 		{
@@ -1178,8 +1178,8 @@ BOOL updateAttackTarget(BASE_OBJECT * psAttacker, SDWORD weapon_slot)
 			setStructureTarget(psBuilding, psBetterTarget, weapon_slot);
 		}
 
-		return TRUE;
+		return true;
 	}
 
-	return FALSE;
+	return false;
 }

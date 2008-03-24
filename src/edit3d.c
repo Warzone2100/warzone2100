@@ -107,13 +107,13 @@ SDWORD	newHeight;
 
 BOOL	inHighlight(UDWORD realX, UDWORD realY)
 {
-BOOL	retVal = FALSE;
+BOOL	retVal = false;
 
 	if (realX>=buildSite.xTL && realX<=buildSite.xBR)
 	{
 		if (realY>=buildSite.yTL && realY<=buildSite.yBR)
 		{
-			retVal = TRUE;
+			retVal = true;
 		}
 	}
 
@@ -179,7 +179,7 @@ BOOL process3DBuilding(void)
 	//if not trying to build ignore
 	if (buildState == BUILD3D_NONE)
   	{
-		return TRUE;
+		return true;
 	}
 
 
@@ -194,7 +194,7 @@ BOOL process3DBuilding(void)
 			bY += 1;
 		}
 
-      	if (validLocation(sBuildDetails.psStats, bX, bY, selectedPlayer, TRUE))
+      	if (validLocation(sBuildDetails.psStats, bX, bY, selectedPlayer, true))
         {
   		   	buildState = BUILD3D_VALID;
         }
@@ -251,10 +251,10 @@ BOOL process3DBuilding(void)
 	{
 		sBuildDetails.CallBack(sBuildDetails.x,sBuildDetails.y,sBuildDetails.UserData);
 		buildState = BUILD3D_NONE;
-		return TRUE;
+		return true;
 	}
 
-	return FALSE;
+	return false;
 }
 
 
@@ -263,7 +263,7 @@ BOOL found3DBuilding(UDWORD *x, UDWORD *y)
 {
 	if (buildState != BUILD3D_FINISHED)
 	{
-		return FALSE;
+		return false;
 	}
 
 	*x = sBuildDetails.x;
@@ -278,7 +278,7 @@ BOOL found3DBuilding(UDWORD *x, UDWORD *y)
 
 	buildState = BUILD3D_NONE;
 
-	return TRUE;
+	return true;
 }
 
 /* See if a second position for a build has been found */
@@ -288,13 +288,13 @@ BOOL found3DBuildLocTwo(UDWORD *px1, UDWORD *py1, UDWORD *px2, UDWORD *py2)
 		  ((STRUCTURE_STATS *)sBuildDetails.psStats)->type != REF_DEFENSE) ||
 		wallDrag.status != DRAG_RELEASED)
 	{
-		return FALSE;
+		return false;
 	}
 
-    //whilst we're still looking for a valid location - return FALSE
+    //whilst we're still looking for a valid location - return false
     if (buildState == BUILD3D_POS)
     {
-        return FALSE;
+        return false;
     }
 
 	wallDrag.status = DRAG_INACTIVE;
@@ -302,7 +302,7 @@ BOOL found3DBuildLocTwo(UDWORD *px1, UDWORD *py1, UDWORD *px2, UDWORD *py2)
 	*py1 = wallDrag.y1;
 	*px2 = wallDrag.x2;
 	*py2 = wallDrag.y2;
-	return TRUE;
+	return true;
 }
 
 /*returns true if the build state is not equal to BUILD3D_NONE*/
@@ -310,10 +310,10 @@ BOOL tryingToGetLocation(void)
 {
     if (buildState == BUILD3D_NONE)
     {
-        return FALSE;
+        return false;
     }
     else
     {
-        return TRUE;
+        return true;
     }
 }

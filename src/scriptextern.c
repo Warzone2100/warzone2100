@@ -44,26 +44,26 @@
 SDWORD		scrGameLevel = 0;
 
 // whether the tutorial is active
-BOOL		bInTutorial = FALSE;
+BOOL		bInTutorial = false;
 
 // whether any additional special case victory/failure conditions have been met
-BOOL		bExtraVictoryFlag = FALSE;
-BOOL		bExtraFailFlag = FALSE;
+BOOL		bExtraVictoryFlag = false;
+BOOL		bExtraFailFlag = false;
 
 
 
 // whether or not to track the player's transporter as it comes
 // into an offworld mission.
-BOOL		bTrackTransporter = FALSE;
+BOOL		bTrackTransporter = false;
 
 
 // reset the script externals for a new level
 void scrExternReset(void)
 {
 	scrGameLevel = 0;
-	bInTutorial = FALSE;
-	bExtraVictoryFlag = FALSE;
-	bExtraFailFlag = FALSE;
+	bInTutorial = false;
+	bExtraVictoryFlag = false;
+	bExtraFailFlag = false;
 }
 
 
@@ -147,17 +147,17 @@ BOOL scrGenExternGet(UDWORD index)
 		break;
 
 		default:
-		ASSERT( FALSE, "scrGenExternGet: unknown variable index" );
-		return FALSE;
+		ASSERT( false, "scrGenExternGet: unknown variable index" );
+		return false;
 		break;
 	}
 
 	if (!stackPushResult(type, &scrFunctionResult))
 	{
-		return FALSE;
+		return false;
 	}
 
-	return TRUE;
+	return true;
 }
 
 
@@ -171,7 +171,7 @@ BOOL scrGenExternSet(UDWORD index)
 	// Get the value and store it in type,val
 	if (!stackPop(&sVal))
 	{
-		return FALSE;
+		return false;
 	}
 	type = sVal.type;
 	val = sVal.v.ival;
@@ -181,40 +181,40 @@ BOOL scrGenExternSet(UDWORD index)
 	case EXTID_GAMELEVEL:
 		if (type != VAL_INT)
 		{
-			ASSERT( FALSE,"invalid type for gameLevel" );
-			return FALSE;
+			ASSERT( false,"invalid type for gameLevel" );
+			return false;
 		}
 		scrGameLevel = val;
 		break;
 	case EXTID_TUTORIAL:
 		if (type != VAL_BOOL)
 		{
-			ASSERT( FALSE,"invalid type for inTutorial" );
-			return FALSE;
+			ASSERT( false,"invalid type for inTutorial" );
+			return false;
 		}
 		bInTutorial = val;
 		break;
 	case EXTID_EXTRAVICTORYFLAG:
 		if (type != VAL_BOOL)
 		{
-			ASSERT( FALSE,"invalid type for extraVictoryFlag" );
-			return FALSE;
+			ASSERT( false,"invalid type for extraVictoryFlag" );
+			return false;
 		}
 		bExtraVictoryFlag = val;
 		break;
 	case EXTID_EXTRAFAILFLAG:
 		if (type != VAL_BOOL)
 		{
-			ASSERT( FALSE,"invalid type for extraFailFlag" );
-			return FALSE;
+			ASSERT( false,"invalid type for extraFailFlag" );
+			return false;
 		}
 		bExtraFailFlag = val;
 		break;
 	default:
-		ASSERT( FALSE, "scrGenExternSet: unknown variable index" );
-		return FALSE;
+		ASSERT( false, "scrGenExternSet: unknown variable index" );
+		return false;
 		break;
 	}
 
-	return TRUE;
+	return true;
 }

@@ -115,7 +115,7 @@ void clusterUpdate(void)
 		{
 			scrCBEmptyClusterID = i;
 			eventFireCallbackTrigger((TRIGGER_TYPE)CALL_CLUSTER_EMPTY);
-			aClusterEmpty[i] = FALSE;
+			aClusterEmpty[i] = false;
 		}
 	}
 }
@@ -168,7 +168,7 @@ void clustRemoveObject(BASE_OBJECT *psObj)
 // 						debug( LOG_NEVER, "Cluster %d empty: ", i );
 // 						debug( LOG_NEVER, "%s ", (psObj->type == OBJ_DROID) ? "Unit" : ( (psObj->type == OBJ_STRUCTURE) ? "Struct" : "Feat") );
 // 						debug( LOG_NEVER, "id %d player %d\n", psObj->id, psObj->player );
-						aClusterEmpty[i] = TRUE;
+						aClusterEmpty[i] = true;
 					}
 				}
 			}
@@ -358,7 +358,7 @@ void clustDisplay(void)
 		cluster = aClusterMap[map];
 		if (cluster != 0)
 		{
-			found = FALSE;
+			found = false;
 			for(player = 0; player < MAX_PLAYERS; player++)
 			{
 //				if (player == (SDWORD)selectedPlayer)
@@ -377,7 +377,7 @@ void clustDisplay(void)
 							// found a cluster print it out
 							sprintf(aBuff, "Unit cluster %d (%d), ", map, cluster);
 							sprintf(aBuff + strlen(aBuff), "player %d:", psDroid->player);
-							found = TRUE;
+							found = true;
 						}
 
 						if (strlen(aBuff) < 250)
@@ -398,7 +398,7 @@ void clustDisplay(void)
 							// found a cluster print it out
 							sprintf(aBuff, "struct cluster %d (%d), ", map, cluster);
 							sprintf(aBuff + strlen(aBuff), "player %d:", psStruct->player);
-							found = TRUE;
+							found = true;
 						}
 
 						if (strlen(aBuff) < 250)
@@ -428,7 +428,7 @@ void clustUpdateObject(BASE_OBJECT * psObj)
 	oldCluster = psObj->cluster;
 
 	// update the cluster map
-	found = FALSE;
+	found = false;
 	if (oldCluster != 0)
 	{
 		for(i=0; i<CLUSTER_MAX; i++)
@@ -451,7 +451,7 @@ void clustUpdateObject(BASE_OBJECT * psObj)
 						aClusterVisibility[newCluster] |= 1 << player;
 					}
 				}
-				found = TRUE;
+				found = true;
 				break;
 			}
 		}

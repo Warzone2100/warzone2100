@@ -69,10 +69,10 @@ typedef struct _star
 #define MAX_STARS 20
 static STAR	stars[MAX_STARS];	// quick hack for loading stuff
 
-static BOOL		firstcall = FALSE;
+static BOOL		firstcall = false;
 static UDWORD	loadScreenCallNo=0;
-static BOOL		bPlayerHasLost = FALSE;
-static BOOL		bPlayerHasWon = FALSE;
+static BOOL		bPlayerHasLost = false;
+static BOOL		bPlayerHasWon = false;
 static UBYTE    scriptWinLoseVideo = PLAY_NONE;
 
 void	startCreditsScreen	( void );
@@ -98,10 +98,10 @@ static void initStars(void)
 //
 BOOL frontendInitVars(void)
 {
-	firstcall = TRUE;
+	firstcall = true;
 	initStars();
 
-	return TRUE;
+	return true;
 }
 
 // ///////////////// /////////////////////////////////////////////////
@@ -111,12 +111,12 @@ TITLECODE titleLoop(void)
 	TITLECODE RetCode = TITLECODE_CONTINUE;
 
 	pie_SetDepthBufferStatus(DEPTH_CMP_ALWAYS_WRT_ON);
-	pie_SetFogStatus(FALSE);
+	pie_SetFogStatus(false);
 	screen_RestartBackDrop();
 
 	if (firstcall)
 	{
-		firstcall = FALSE;
+		firstcall = false;
 
 		changeTitleMode(TITLE);
 
@@ -198,7 +198,7 @@ TITLECODE titleLoop(void)
 
 		case STARTGAME:
 		case LOADSAVEGAME:
-			initLoadingScreen(TRUE);//render active
+			initLoadingScreen(true);//render active
   			if (titleMode == LOADSAVEGAME)
 			{
 				RetCode = TITLECODE_SAVEGAMELOAD;
@@ -210,7 +210,7 @@ TITLECODE titleLoop(void)
 			return RetCode;			// don't flip!
 
 		case SHOWINTRO:
-			pie_SetFogStatus(FALSE);
+			pie_SetFogStatus(false);
 	  		pie_ScreenFlip(CLEAR_BLACK);
 			changeTitleMode(TITLE);
 			RetCode = TITLECODE_SHOWINTRO;
@@ -223,7 +223,7 @@ TITLECODE titleLoop(void)
 
 	audio_Update();
 
-	pie_SetFogStatus(FALSE);
+	pie_SetFogStatus(false);
 	pie_ScreenFlip(CLEAR_BLACK);//title loop
 
 	if ((keyDown(KEY_LALT) || keyDown(KEY_RALT))
@@ -303,14 +303,14 @@ void initLoadingScreen( BOOL drawbdrop )
 	{
 		//just init the load bar with the current screen
 		// setup the callback....
-		pie_SetFogStatus(FALSE);
+		pie_SetFogStatus(false);
 		pie_ScreenFlip(CLEAR_BLACK);
 		resSetLoadCallback(loadingScreenCallback);
 		loadScreenCallNo = 0;
 		return;
 	}
 
-	pie_SetFogStatus(FALSE);
+	pie_SetFogStatus(false);
 	pie_ScreenFlip(CLEAR_BLACK);//init loading
 
 	// setup the callback....
@@ -331,7 +331,7 @@ void startCreditsScreen(void)
 
 	pie_LoadBackDrop(screen);
 
-	pie_SetFogStatus(FALSE);
+	pie_SetFogStatus(false);
 	pie_ScreenFlip(CLEAR_BLACK);//init loading
 }
 
@@ -365,7 +365,7 @@ void closeLoadingScreen(void)
 BOOL displayGameOver(BOOL bDidit)
 {
 // AlexL says take this out......
-//	setConsolePermanence(TRUE,TRUE);
+//	setConsolePermanence(true,true);
 //	flushConsoleMessages( );
 
 //	addConsoleMessage(" ", CENTRE_JUSTIFY, CONSOLE_SYSTEM);
@@ -374,8 +374,8 @@ BOOL displayGameOver(BOOL bDidit)
 
 	if(bDidit)
 	{
-		setPlayerHasWon(TRUE);
-		multiplayerWinSequence(TRUE);
+		setPlayerHasWon(true);
+		multiplayerWinSequence(true);
 		if(bMultiPlayer)
 		{
 			updateMultiStatsWins();
@@ -383,7 +383,7 @@ BOOL displayGameOver(BOOL bDidit)
 	}
 	else
 	{
-		setPlayerHasLost(TRUE);
+		setPlayerHasLost(true);
 		if(bMultiPlayer)
 		{
 			updateMultiStatsLoses();
@@ -392,9 +392,9 @@ BOOL displayGameOver(BOOL bDidit)
 
 	//clear out any mission widgets - timers etc that may be on the screen
 	clearMissionWidgets();
-	intAddMissionResult(bDidit, TRUE);
+	intAddMissionResult(bDidit, true);
 
-	return TRUE;
+	return true;
 }
 
 

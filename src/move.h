@@ -53,10 +53,10 @@ extern BOOL moveInitialise(void);
 /* Update the base speed for all movement */
 extern void moveUpdateBaseSpeed(void);
 
-/* Set a target location for a droid to move to  - returns a BOOL based on if there is a path to the destination (TRUE if there is a path)*/
+/* Set a target location for a droid to move to  - returns a BOOL based on if there is a path to the destination (true if there is a path)*/
 extern BOOL moveDroidTo(DROID *psDroid, UDWORD x, UDWORD y);
 
-/* Set a target location for a droid to move to  - returns a BOOL based on if there is a path to the destination (TRUE if there is a path)*/
+/* Set a target location for a droid to move to  - returns a BOOL based on if there is a path to the destination (true if there is a path)*/
 // the droid will not join a formation when it gets to the location
 extern BOOL moveDroidToNoFormation(DROID *psDroid, UDWORD x, UDWORD y);
 

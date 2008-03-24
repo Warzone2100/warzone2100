@@ -40,7 +40,7 @@ extern UDWORD selectedPlayer;
 DROID	*apsCmdDesignator[MAX_PLAYERS];
 
 // whether experience should be boosted due to a multi game
-static BOOL bMultiExpBoost = FALSE;
+static BOOL bMultiExpBoost = false;
 
 
 // Initialise the command droids
@@ -48,7 +48,7 @@ BOOL cmdDroidInit(void)
 {
 	memset(apsCmdDesignator, 0, sizeof(DROID *)*MAX_PLAYERS);
 
-	return TRUE;
+	return true;
 }
 
 
@@ -223,7 +223,7 @@ DROID	*psCurr;
 		{
 			if(psCurr->psGroup->psCommander == psDroid)
 			{
-//				psCurr->selected = TRUE;
+//				psCurr->selected = true;
 				SelectDroid(psCurr);
 			}
 		}

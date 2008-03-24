@@ -151,26 +151,26 @@ static PIELIGHT getColour(int id)
 
 STAT_BAR	infoBars[]=
 {
-	{LC_X,100,STAT_BAR_WIDTH,16,10,STR_MR_UNITS_LOST,0,FALSE,TRUE,0},	// left column		STAT_UNIT_LOST
-	{LC_X,120,STAT_BAR_WIDTH,16,20,STR_MR_UNITS_KILLED,0,FALSE,TRUE,0},			 //	STAT_UNIT_KILLED
-	{LC_X,160,STAT_BAR_WIDTH,16,30,STR_MR_STR_LOST,0,FALSE,TRUE,0},				 //	STAT_STR_LOST
-	{LC_X,180,STAT_BAR_WIDTH,16,40,STR_MR_STR_BLOWN_UP,0,FALSE,TRUE,0}, 			 //	STAT_STR_BLOWN_UP
-	{LC_X,220,STAT_BAR_WIDTH,16,50,STR_MR_UNITS_BUILT,0,FALSE,TRUE,0}, 			 //	STAT_UNITS_BUILT
-	{LC_X,240,STAT_BAR_WIDTH,16,60,STR_MR_UNITS_NOW,0,FALSE,TRUE,0}, 				 //	STAT_UNITS_NOW
-	{LC_X,260,STAT_BAR_WIDTH,16,70,STR_MR_STR_BUILT,0,FALSE,TRUE,0}, 				 //	STAT_STR_BUILT
-	{LC_X,280,STAT_BAR_WIDTH,16,80,STR_MR_STR_NOW,0,FALSE,FALSE,0}, 				 //	STAT_STR_NOW
+	{LC_X,100,STAT_BAR_WIDTH,16,10,STR_MR_UNITS_LOST,0,false,true,0},	// left column		STAT_UNIT_LOST
+	{LC_X,120,STAT_BAR_WIDTH,16,20,STR_MR_UNITS_KILLED,0,false,true,0},			 //	STAT_UNIT_KILLED
+	{LC_X,160,STAT_BAR_WIDTH,16,30,STR_MR_STR_LOST,0,false,true,0},				 //	STAT_STR_LOST
+	{LC_X,180,STAT_BAR_WIDTH,16,40,STR_MR_STR_BLOWN_UP,0,false,true,0}, 			 //	STAT_STR_BLOWN_UP
+	{LC_X,220,STAT_BAR_WIDTH,16,50,STR_MR_UNITS_BUILT,0,false,true,0}, 			 //	STAT_UNITS_BUILT
+	{LC_X,240,STAT_BAR_WIDTH,16,60,STR_MR_UNITS_NOW,0,false,true,0}, 				 //	STAT_UNITS_NOW
+	{LC_X,260,STAT_BAR_WIDTH,16,70,STR_MR_STR_BUILT,0,false,true,0}, 				 //	STAT_STR_BUILT
+	{LC_X,280,STAT_BAR_WIDTH,16,80,STR_MR_STR_NOW,0,false,false,0}, 				 //	STAT_STR_NOW
 
-	{RC_X,100,RANK_BAR_WIDTH,16,10,STR_MR_LEVEL_ROOKIE,0,FALSE,TRUE,0},	// right column	//	STAT_ROOKIE
-	{RC_X,120,RANK_BAR_WIDTH,16,20,STR_MR_LEVEL_GREEN,0,FALSE,TRUE,0}, 			 		//	STAT_GREEN
-	{RC_X,140,RANK_BAR_WIDTH,16,30,STR_MR_LEVEL_TRAINED,0,FALSE,TRUE,0}, 		 			//	STAT_TRAINED
-	{RC_X,160,RANK_BAR_WIDTH,16,40,STR_MR_LEVEL_REGULAR,0,FALSE,TRUE,0}, 		 			//	STAT_REGULAR
-	{RC_X,180,RANK_BAR_WIDTH,16,50,STR_MR_LEVEL_VETERAN,0,FALSE,TRUE,0}, 		 			//	STAT_VETERAN
-	{RC_X,200,RANK_BAR_WIDTH,16,60,STR_MR_LEVEL_CRACK,0,FALSE,TRUE,0}, 			 		//	STAT_CRACK
-	{RC_X,220,RANK_BAR_WIDTH,16,70,STR_MR_LEVEL_ELITE,0,FALSE,TRUE,0}, 			 		//	STAT_ELITE
-	{RC_X,240,RANK_BAR_WIDTH,16,80,STR_MR_LEVEL_SPECIAL,0,FALSE,TRUE,0}, 		 			//	STAT_SPECIAL
-	{RC_X,260,RANK_BAR_WIDTH,16,90,STR_MR_LEVEL_ACE,0,FALSE,TRUE,0}, 			 			//	STAT_ACE
+	{RC_X,100,RANK_BAR_WIDTH,16,10,STR_MR_LEVEL_ROOKIE,0,false,true,0},	// right column	//	STAT_ROOKIE
+	{RC_X,120,RANK_BAR_WIDTH,16,20,STR_MR_LEVEL_GREEN,0,false,true,0}, 			 		//	STAT_GREEN
+	{RC_X,140,RANK_BAR_WIDTH,16,30,STR_MR_LEVEL_TRAINED,0,false,true,0}, 		 			//	STAT_TRAINED
+	{RC_X,160,RANK_BAR_WIDTH,16,40,STR_MR_LEVEL_REGULAR,0,false,true,0}, 		 			//	STAT_REGULAR
+	{RC_X,180,RANK_BAR_WIDTH,16,50,STR_MR_LEVEL_VETERAN,0,false,true,0}, 		 			//	STAT_VETERAN
+	{RC_X,200,RANK_BAR_WIDTH,16,60,STR_MR_LEVEL_CRACK,0,false,true,0}, 			 		//	STAT_CRACK
+	{RC_X,220,RANK_BAR_WIDTH,16,70,STR_MR_LEVEL_ELITE,0,false,true,0}, 			 		//	STAT_ELITE
+	{RC_X,240,RANK_BAR_WIDTH,16,80,STR_MR_LEVEL_SPECIAL,0,false,true,0}, 		 			//	STAT_SPECIAL
+	{RC_X,260,RANK_BAR_WIDTH,16,90,STR_MR_LEVEL_ACE,0,false,true,0}, 			 			//	STAT_ACE
 
-	{0, 0, 0, 0, 0, 0, 0, FALSE, FALSE, 0}
+	{0, 0, 0, 0, 0, 0, 0, false, false, 0}
 };
 
 // --------------------------------------------------------------------
@@ -185,7 +185,7 @@ void	dispAdditionalInfo( void );
 /* The present mission data */
 static	MISSION_DATA	missionData;
 static	UDWORD	dispST;
-static	BOOL	bDispStarted = FALSE;
+static	BOOL	bDispStarted = false;
 static	char	text[255];
 static	char	text2[255];
 
@@ -207,8 +207,8 @@ BOOL	scoreInitSystem( void )
 	missionData.shotsOnTarget	= 0;
 	missionData.shotsOffTarget	= 0;
 	missionData.babasMowedDown	= 0;
-	bDispStarted = FALSE;
-	return(TRUE);
+	bDispStarted = false;
+	return(true);
 }
 
 // --------------------------------------------------------------------
@@ -337,7 +337,7 @@ UDWORD	width,height;
 
 	if(!bDispStarted)
 	{
-		bDispStarted = TRUE;
+		bDispStarted = true;
 		dispST = gameTime2;
 		audio_PlayTrack(ID_SOUND_BUTTON_CLICK_5);
 	}
@@ -352,17 +352,17 @@ UDWORD	width,height;
 	iV_DrawText( _("Force Information"), LC_X + D_W, 200 + 16 + D_H );
 
 	index = 0;
-	bMoreBars = TRUE;
+	bMoreBars = true;
 	while(bMoreBars)
 	{
 		/* Is it time to display this bar? */
 		if( infoBars[index].bActive)
 		{
 			/* Has it been queued before? */
-			if(infoBars[index].bQueued == FALSE)
+			if(infoBars[index].bQueued == false)
 			{
 				/* Don't do this next time...! */
-				infoBars[index].bQueued = TRUE;
+				infoBars[index].bQueued = true;
 
 				/* Play a sound */
 //				audio_PlayTrack(ID_SOUND_BUTTON_CLICK_5);
@@ -415,7 +415,7 @@ UDWORD	width,height;
 		index++;
 		if(infoBars[index].topX == 0 && infoBars[index].topY == 0)
 		{
-			bMoreBars = FALSE;
+			bMoreBars = false;
 		}
 	}
 	dispAdditionalInfo();

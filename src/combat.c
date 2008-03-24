@@ -80,14 +80,14 @@ static BUL_DIR aScatterDir[BUL_MAXSCATTERDIR] =
 /* Initialise the combat system */
 BOOL combInitialise(void)
 {
-	return TRUE;
+	return true;
 }
 
 
 /* Shutdown the combat system */
 BOOL combShutdown(void)
 {
-	return TRUE;
+	return true;
 }
 
 // Watermelon:real projectile
@@ -372,7 +372,7 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 		}
 		debug(LOG_SENSOR, "combFire: Accurate prediction range (%d)", dice);
 		if (!proj_SendProjectile(psWeap, psAttacker, psAttacker->player,
-							predictX, predictY, psTarget->pos.z, psTarget, FALSE, FALSE, weapon_slot))
+							predictX, predictY, psTarget->pos.z, psTarget, false, false, weapon_slot))
 		{
 			/* Out of memory - we can safely ignore this */
 			debug(LOG_ERROR, "Out of memory");
@@ -402,7 +402,7 @@ missed:
 	/* Fire off the bullet to the miss location. The miss is only visible if the player owns
 	 * the target. (Why? - Per) */
 	proj_SendProjectile(psWeap, psAttacker, psAttacker->player, missX,missY, psTarget->pos.z, NULL,
-	                    psTarget->player == selectedPlayer, FALSE, weapon_slot);
+	                    psTarget->player == selectedPlayer, false, weapon_slot);
 
 	return;
 }
@@ -507,12 +507,12 @@ float objDamage(BASE_OBJECT *psObj, UDWORD damage, UDWORD originalhp, UDWORD wea
 	if (psObj->player != selectedPlayer)
 	{
 		// Player inflicting damage on enemy.
-		damage = (UDWORD) modifyForDifficultyLevel(damage,TRUE);
+		damage = (UDWORD) modifyForDifficultyLevel(damage,true);
 	}
 	else
 	{
 		// Enemy inflicting damage on player.
-		damage = (UDWORD) modifyForDifficultyLevel(damage,FALSE);
+		damage = (UDWORD) modifyForDifficultyLevel(damage,false);
 	}
 
 	armour = psObj->armour[impactSide][weaponClass];

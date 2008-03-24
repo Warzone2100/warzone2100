@@ -189,12 +189,12 @@ BOOL imageInitBitmaps(void)
 {
 	IntImages = (IMAGEFILE*)resGetData("IMG", "intfac.img");
 
-	return TRUE;
+	return true;
 }
 
 void RenderWindowFrame(FRAMETYPE frame, UDWORD x, UDWORD y, UDWORD Width, UDWORD Height)
 {
-	RenderWindow(frame, x, y, Width, Height, FALSE);
+	RenderWindow(frame, x, y, Width, Height, false);
 }
 
 // Render a window frame.
@@ -211,7 +211,7 @@ void RenderWindow(FRAMETYPE frame, UDWORD x, UDWORD y, UDWORD Width, UDWORD Heig
 	SWORD HBottomLeft = 0;
 	UWORD RectI;
 	FRAMERECT *Rect;
-	BOOL Masked = FALSE;
+	BOOL Masked = false;
 	IMAGEFRAME *Frame;
 
 	if (frame == 0)
@@ -233,11 +233,11 @@ void RenderWindow(FRAMETYPE frame, UDWORD x, UDWORD y, UDWORD Width, UDWORD Heig
 
 		switch(Rect->Type) {
 			case FR_FRAME:
-				if(Opaque==FALSE)
+				if(Opaque==false)
 				{
-					if(Masked == FALSE) {
+					if(Masked == false) {
 						Width &= 0xfffc;	// Software transboxfill needs to be a multiple of 4 pixels.
-						Masked = TRUE;
+						Masked = true;
 					}
 
 
@@ -255,10 +255,10 @@ void RenderWindow(FRAMETYPE frame, UDWORD x, UDWORD y, UDWORD Width, UDWORD Heig
 				break;
 
 			case FR_LEFT:
-				if(Opaque==FALSE) {
-					if(Masked == FALSE) {
+				if(Opaque==false) {
+					if(Masked == false) {
 						Width &= 0xfffc;	// Software transboxfill needs to be a multiple of 4 pixels.
-						Masked = TRUE;
+						Masked = true;
 					}
 					iV_TransBoxFill( x+Rect->TLXOffset,
 									y+Rect->TLYOffset,
@@ -271,10 +271,10 @@ void RenderWindow(FRAMETYPE frame, UDWORD x, UDWORD y, UDWORD Width, UDWORD Heig
 				break;
 
 			case FR_RIGHT:
-				if(Opaque==FALSE) {
-					if(Masked == FALSE) {
+				if(Opaque==false) {
+					if(Masked == false) {
 						Width &= 0xfffc;	// Software transboxfill needs to be a multiple of 4 pixels.
-						Masked = TRUE;
+						Masked = true;
 					}
 					iV_TransBoxFill( x+Width-INCEND+Rect->TLXOffset,
 									y+Rect->TLYOffset,
@@ -288,10 +288,10 @@ void RenderWindow(FRAMETYPE frame, UDWORD x, UDWORD y, UDWORD Width, UDWORD Heig
 				break;
 
 			case FR_TOP:
-				if(Opaque==FALSE) {
-					if(Masked == FALSE) {
+				if(Opaque==false) {
+					if(Masked == false) {
 						Width &= 0xfffc;	// Software transboxfill needs to be a multiple of 4 pixels.
-						Masked = TRUE;
+						Masked = true;
 					}
 					iV_TransBoxFill( x+Rect->TLXOffset,
 									y+Rect->TLYOffset,
@@ -304,12 +304,12 @@ void RenderWindow(FRAMETYPE frame, UDWORD x, UDWORD y, UDWORD Width, UDWORD Heig
 				break;
 
 			case FR_BOTTOM:
-				if(Opaque==FALSE)
+				if(Opaque==false)
 				{
-					if(Masked == FALSE)
+					if(Masked == false)
 					{
 						Width &= 0xfffc;	// Software transboxfill needs to be a multiple of 4 pixels.
-						Masked = TRUE;
+						Masked = true;
 					}
 					iV_TransBoxFill( x+Rect->TLXOffset,
 									y+Height-INCEND+Rect->TLYOffset,

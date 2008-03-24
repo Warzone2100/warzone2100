@@ -36,7 +36,7 @@
 #include "slider.h"
 #include "tip.h"
 
-static	BOOL	bWidgetsActive = TRUE;
+static	BOOL	bWidgetsActive = true;
 
 /* The widget the mouse is over this update */
 static WIDGET	*psMouseOverWidget = NULL;
@@ -152,7 +152,7 @@ void widgReleaseWidgetList(WIDGET *psWidgets)
 			sliderFree((W_SLIDER *)psCurr);
 			break;
 		default:
-			ASSERT( FALSE,"widgReleaseWidgetList: Unknown widget type" );
+			ASSERT( false,"widgReleaseWidgetList: Unknown widget type" );
 			break;
 		}
 	}
@@ -194,7 +194,7 @@ void widgRelease(WIDGET *psWidget)
 		sliderFree((W_SLIDER *)psWidget);
 		break;
 	default:
-		ASSERT( FALSE,"widgRelease: Unknown widget type" );
+		ASSERT( false,"widgRelease: Unknown widget type" );
 		break;
 	}
 }
@@ -212,7 +212,7 @@ static BOOL widgCheckIDForm(W_FORM *psForm, UDWORD id)
 	{
 		if (psCurr->id == id)
 		{
-			return TRUE;
+			return true;
 		}
 
 		if (psCurr->type == WIDG_FORM)
@@ -220,7 +220,7 @@ static BOOL widgCheckIDForm(W_FORM *psForm, UDWORD id)
 			/* Another form so recurse */
 			if (widgCheckIDForm((W_FORM *)psCurr, id))
 			{
-				return TRUE;
+				return true;
 			}
 		}
 
@@ -232,7 +232,7 @@ static BOOL widgCheckIDForm(W_FORM *psForm, UDWORD id)
 		}
 	}
 
-	return FALSE;
+	return false;
 }
 
 #if 0
@@ -265,8 +265,8 @@ BOOL widgAddForm(W_SCREEN *psScreen, const W_FORMINIT* psInit)
 
 	if (widgCheckIDForm((W_FORM *)psScreen->psForm,psInit->id))
 	{
-		ASSERT( FALSE, "widgAddForm: ID number has already been used (%d)", psInit->id );
-		return FALSE;
+		ASSERT( false, "widgAddForm: ID number has already been used (%d)", psInit->id );
+		return false;
 	}
 
 	/* Find the form to add the widget to */
@@ -280,9 +280,9 @@ BOOL widgAddForm(W_SCREEN *psScreen, const W_FORMINIT* psInit)
 		psParent = (W_FORM *)widgGetFromID(psScreen, psInit->formID);
 		if (!psParent || psParent->type != WIDG_FORM)
 		{
-			ASSERT( FALSE,
+			ASSERT( false,
 				"widgAddForm: Could not find parent form from formID" );
-			return FALSE;
+			return false;
 		}
 	}
 
@@ -292,10 +292,10 @@ BOOL widgAddForm(W_SCREEN *psScreen, const W_FORMINIT* psInit)
 	/* Add it to the screen */
 	 || !formAddWidget(psParent, (WIDGET *)psForm, (W_INIT *)psInit))
 	{
-		return FALSE;
+		return false;
 	}
 
-	return TRUE;
+	return true;
 }
 
 
@@ -310,8 +310,8 @@ BOOL widgAddLabel(W_SCREEN *psScreen, const W_LABINIT* psInit)
 
 	if (widgCheckIDForm((W_FORM *)psScreen->psForm,psInit->id))
 	{
-		ASSERT( FALSE, "widgAddLabel: ID number has already been used (%d)", psInit->id );
-		return FALSE;
+		ASSERT( false, "widgAddLabel: ID number has already been used (%d)", psInit->id );
+		return false;
 	}
 
 	/* Find the form to put the button on */
@@ -324,9 +324,9 @@ BOOL widgAddLabel(W_SCREEN *psScreen, const W_LABINIT* psInit)
 		psForm = (W_FORM *)widgGetFromID(psScreen, psInit->formID);
 		if (psForm == NULL || psForm->type != WIDG_FORM)
 		{
-			ASSERT( FALSE,
+			ASSERT( false,
 				"widgAddLabel: Could not find parent form from formID" );
-			return FALSE;
+			return false;
 		}
 	}
 
@@ -336,10 +336,10 @@ BOOL widgAddLabel(W_SCREEN *psScreen, const W_LABINIT* psInit)
 	/* Add it to the form */
 	 || !formAddWidget(psForm, (WIDGET *)psLabel, (W_INIT *)psInit))
 	{
-		return FALSE;
+		return false;
 	}
 
-	return TRUE;
+	return true;
 }
 
 
@@ -354,8 +354,8 @@ BOOL widgAddButton(W_SCREEN *psScreen, const W_BUTINIT* psInit)
 
 	if (widgCheckIDForm((W_FORM *)psScreen->psForm,psInit->id))
 	{
-		ASSERT( FALSE, "widgAddButton: ID number has already been used(%d)", psInit->id );
-		return FALSE;
+		ASSERT( false, "widgAddButton: ID number has already been used(%d)", psInit->id );
+		return false;
 	}
 
 	/* Find the form to put the button on */
@@ -368,9 +368,9 @@ BOOL widgAddButton(W_SCREEN *psScreen, const W_BUTINIT* psInit)
 		psForm = (W_FORM *)widgGetFromID(psScreen, psInit->formID);
 		if (psForm == NULL || psForm->type != WIDG_FORM)
 		{
-			ASSERT( FALSE,
+			ASSERT( false,
 				"widgAddButton: Could not find parent form from formID" );
-			return FALSE;
+			return false;
 		}
 	}
 
@@ -380,10 +380,10 @@ BOOL widgAddButton(W_SCREEN *psScreen, const W_BUTINIT* psInit)
 	/* Add it to the form */
 	 || !formAddWidget(psForm, (WIDGET *)psButton, (W_INIT *)psInit))
 	{
-		return FALSE;
+		return false;
 	}
 
-	return TRUE;
+	return true;
 }
 
 
@@ -398,8 +398,8 @@ BOOL widgAddEditBox(W_SCREEN *psScreen, const W_EDBINIT* psInit)
 
 	if (widgCheckIDForm((W_FORM *)psScreen->psForm,psInit->id))
 	{
-		ASSERT( FALSE, "widgAddEditBox: ID number has already been used (%d)", psInit->id );
-		return FALSE;
+		ASSERT( false, "widgAddEditBox: ID number has already been used (%d)", psInit->id );
+		return false;
 	}
 
 	/* Find the form to put the edit box on */
@@ -412,9 +412,9 @@ BOOL widgAddEditBox(W_SCREEN *psScreen, const W_EDBINIT* psInit)
 		psForm = (W_FORM *)widgGetFromID(psScreen, psInit->formID);
 		if (!psForm || psForm->type != WIDG_FORM)
 		{
-			ASSERT( FALSE,
+			ASSERT( false,
 				"widgAddEditBox: Could not find parent form from formID" );
-			return FALSE;
+			return false;
 		}
 	}
 
@@ -424,10 +424,10 @@ BOOL widgAddEditBox(W_SCREEN *psScreen, const W_EDBINIT* psInit)
 	/* Add it to the form */
 	 || !formAddWidget(psForm, (WIDGET *)psEdBox, (W_INIT *)psInit))
 	{
-		return FALSE;
+		return false;
 	}
 
-	return TRUE;
+	return true;
 }
 
 
@@ -442,8 +442,8 @@ BOOL widgAddBarGraph(W_SCREEN *psScreen, const W_BARINIT* psInit)
 
 	if (widgCheckIDForm((W_FORM *)psScreen->psForm,psInit->id))
 	{
-		ASSERT( FALSE, "widgAddBarGraph: ID number has already been used (%d)", psInit->id );
-		return FALSE;
+		ASSERT( false, "widgAddBarGraph: ID number has already been used (%d)", psInit->id );
+		return false;
 	}
 
 	/* Find the form to put the bar graph on */
@@ -456,9 +456,9 @@ BOOL widgAddBarGraph(W_SCREEN *psScreen, const W_BARINIT* psInit)
 		psForm = (W_FORM *)widgGetFromID(psScreen, psInit->formID);
 		if (!psForm || psForm->type != WIDG_FORM)
 		{
-			ASSERT( FALSE,
+			ASSERT( false,
 				"widgAddBarGraph: Could not find parent form from formID" );
-			return FALSE;
+			return false;
 		}
 	}
 
@@ -468,10 +468,10 @@ BOOL widgAddBarGraph(W_SCREEN *psScreen, const W_BARINIT* psInit)
 	/* Add it to the form */
 	 || !formAddWidget(psForm, (WIDGET *)psBarGraph, (W_INIT *)psInit))
 	{
-		return FALSE;
+		return false;
 	}
 
-	return TRUE;
+	return true;
 }
 
 
@@ -486,8 +486,8 @@ BOOL widgAddSlider(W_SCREEN *psScreen, const W_SLDINIT* psInit)
 
 	if (widgCheckIDForm((W_FORM *)psScreen->psForm, psInit->id))
 	{
-		ASSERT(FALSE, "widgSlider: ID number has already been used (%d)", psInit->id);
-		return FALSE;
+		ASSERT(false, "widgSlider: ID number has already been used (%d)", psInit->id);
+		return false;
 	}
 
 	/* Find the form to put the slider on */
@@ -501,8 +501,8 @@ BOOL widgAddSlider(W_SCREEN *psScreen, const W_SLDINIT* psInit)
 		if (!psForm
 		 || psForm->type != WIDG_FORM)
 		{
-			ASSERT(FALSE, "widgAddSlider: Could not find parent form from formID");
-			return FALSE;
+			ASSERT(false, "widgAddSlider: Could not find parent form from formID");
+			return false;
 		}
 	}
 
@@ -512,10 +512,10 @@ BOOL widgAddSlider(W_SCREEN *psScreen, const W_SLDINIT* psInit)
 	/* Add it to the form */
 	 || !formAddWidget(psForm, (WIDGET *)psSlider, (W_INIT *)psInit))
 	{
-		return FALSE;
+		return false;
 	}
 
-	return TRUE;
+	return true;
 }
 
 
@@ -556,7 +556,7 @@ static BOOL widgDeleteFromForm(W_FORM *psForm, UDWORD id, W_CONTEXT *psContext)
 					widgRelease(psMinor->psWidgets);
 					psMinor->psWidgets = psNext;
 
-					return TRUE;
+					return true;
 				}
 				else
 				{
@@ -567,7 +567,7 @@ static BOOL widgDeleteFromForm(W_FORM *psForm, UDWORD id, W_CONTEXT *psContext)
 							psPrev->psNext = psCurr->psNext;
 							widgRelease(psCurr);
 
-							return TRUE;
+							return true;
 						}
 						if (psCurr->type == WIDG_FORM)
 						{
@@ -580,7 +580,7 @@ static BOOL widgDeleteFromForm(W_FORM *psForm, UDWORD id, W_CONTEXT *psContext)
 							sNewContext.my = psContext->my - psCurr->y;
 							if (widgDeleteFromForm((W_FORM *)psCurr, id, &sNewContext))
 							{
-								return TRUE;
+								return true;
 							}
 						}
 						psPrev = psCurr;
@@ -604,7 +604,7 @@ static BOOL widgDeleteFromForm(W_FORM *psForm, UDWORD id, W_CONTEXT *psContext)
 			widgRelease(psForm->psWidgets);
 			psForm->psWidgets = psNext;
 
-			return TRUE;
+			return true;
 		}
 		else
 		{
@@ -616,7 +616,7 @@ static BOOL widgDeleteFromForm(W_FORM *psForm, UDWORD id, W_CONTEXT *psContext)
 					psPrev->psNext = psCurr->psNext;
 					widgRelease(psCurr);
 
-					return TRUE;
+					return true;
 				}
 				if (psCurr->type == WIDG_FORM)
 				{
@@ -629,7 +629,7 @@ static BOOL widgDeleteFromForm(W_FORM *psForm, UDWORD id, W_CONTEXT *psContext)
 					sNewContext.my = psContext->my - psCurr->y;
 					if (widgDeleteFromForm((W_FORM *)psCurr, id, &sNewContext))
 					{
-						return TRUE;
+						return true;
 					}
 				}
 				psPrev = psCurr;
@@ -637,7 +637,7 @@ static BOOL widgDeleteFromForm(W_FORM *psForm, UDWORD id, W_CONTEXT *psContext)
 		}
 	}
 
-	return FALSE;
+	return false;
 }
 
 
@@ -704,7 +704,7 @@ static void widgStartForm(W_FORM *psForm)
 			sliderInitialise((W_SLIDER *)psCurr);
 			break;
 		default:
-			ASSERT( FALSE,"widgStartScreen: Unknown widget type" );
+			ASSERT( false,"widgStartScreen: Unknown widget type" );
 			break;
 		}
 
@@ -822,7 +822,7 @@ void widgGetPos(W_SCREEN *psScreen, UDWORD id, SWORD *pX, SWORD *pY)
 	}
 	else
 	{
-		ASSERT( FALSE, "widgGetPos: Couldn't find widget from ID" );
+		ASSERT( false, "widgGetPos: Couldn't find widget from ID" );
 		*pX = 0;
 		*pY = 0;
 	}
@@ -993,7 +993,7 @@ UDWORD widgGetButtonState(W_SCREEN *psScreen, UDWORD id)
 	psWidget = widgGetFromID(psScreen, id);
 	if (psWidget == NULL)
 	{
-		ASSERT( FALSE, "widgGetButtonState: Couldn't find button/click form from ID" );
+		ASSERT( false, "widgGetButtonState: Couldn't find button/click form from ID" );
 	}
 	else if (psWidget->type == WIDG_BUTTON)
 	{
@@ -1005,7 +1005,7 @@ UDWORD widgGetButtonState(W_SCREEN *psScreen, UDWORD id)
 	}
 	else
 	{
-		ASSERT( FALSE, "widgGetButtonState: Couldn't find button/click form from ID" );
+		ASSERT( false, "widgGetButtonState: Couldn't find button/click form from ID" );
 	}
 	return 0;
 }
@@ -1019,7 +1019,7 @@ void widgSetButtonFlash(W_SCREEN *psScreen, UDWORD id)
 	psWidget = widgGetFromID(psScreen, id);
 	if (psWidget == NULL)
 	{
-		ASSERT( FALSE, "widgSetButtonFlash: Couldn't find button/click form from ID" );
+		ASSERT( false, "widgSetButtonFlash: Couldn't find button/click form from ID" );
 	}
 	else if (psWidget->type == WIDG_BUTTON)
 	{
@@ -1035,7 +1035,7 @@ void widgSetButtonFlash(W_SCREEN *psScreen, UDWORD id)
 	}
 	else
 	{
-		ASSERT( FALSE, "widgSetButtonFlash: Couldn't find button/click form from ID" );
+		ASSERT( false, "widgSetButtonFlash: Couldn't find button/click form from ID" );
 	}
 }
 
@@ -1048,7 +1048,7 @@ void widgClearButtonFlash(W_SCREEN *psScreen, UDWORD id)
 	psWidget = widgGetFromID(psScreen, id);
 	if (psWidget == NULL)
 	{
-		ASSERT( FALSE, "widgSetButtonFlash: Couldn't find button/click form from ID" );
+		ASSERT( false, "widgSetButtonFlash: Couldn't find button/click form from ID" );
 	}
 	else if (psWidget->type == WIDG_BUTTON)
 	{
@@ -1063,7 +1063,7 @@ void widgClearButtonFlash(W_SCREEN *psScreen, UDWORD id)
 	}
 	else
 	{
-		ASSERT( FALSE, "widgClearButtonFlash: Couldn't find button/click form from ID" );
+		ASSERT( false, "widgClearButtonFlash: Couldn't find button/click form from ID" );
 	}
 }
 
@@ -1077,7 +1077,7 @@ void widgSetButtonState(W_SCREEN *psScreen, UDWORD id, UDWORD state)
 	psWidget = widgGetFromID(psScreen, id);
 	if (psWidget == NULL)
 	{
-		ASSERT( FALSE, "widgSetButtonState: Couldn't find button/click form from ID" );
+		ASSERT( false, "widgSetButtonState: Couldn't find button/click form from ID" );
 	}
 	else if (psWidget->type == WIDG_BUTTON)
 	{
@@ -1093,7 +1093,7 @@ void widgSetButtonState(W_SCREEN *psScreen, UDWORD id, UDWORD state)
 	}
 	else
 	{
-		ASSERT( FALSE, "widgSetButtonState: Couldn't find button/click form from ID" );
+		ASSERT( false, "widgSetButtonState: Couldn't find button/click form from ID" );
 	}
 }
 
@@ -1113,7 +1113,7 @@ const char *widgGetString(W_SCREEN *psScreen, UDWORD id)
 		switch (psWidget->type)
 		{
 			case WIDG_FORM:
-				ASSERT( FALSE, "widgGetString: Forms do not have a string" );
+				ASSERT( false, "widgGetString: Forms do not have a string" );
 				aStringRetBuffer[0] = '\0';
 				break;
 			case WIDG_LABEL:
@@ -1133,22 +1133,22 @@ const char *widgGetString(W_SCREEN *psScreen, UDWORD id)
 				strlcpy(aStringRetBuffer, ((W_EDITBOX *)psWidget)->aText, sizeof(aStringRetBuffer));
 				break;
 			case WIDG_BARGRAPH:
-				ASSERT( FALSE, "widgGetString: Bar Graphs do not have a string" );
+				ASSERT( false, "widgGetString: Bar Graphs do not have a string" );
 				aStringRetBuffer[0] = '\0';
 				break;
 			case WIDG_SLIDER:
-				ASSERT( FALSE, "widgGetString: Sliders do not have a string" );
+				ASSERT( false, "widgGetString: Sliders do not have a string" );
 				aStringRetBuffer[0] = '\0';
 				break;
 			default:
-				ASSERT( FALSE,"widgGetString: Unknown widget type" );
+				ASSERT( false,"widgGetString: Unknown widget type" );
 				aStringRetBuffer[0] = '\0';
 				break;
 		}
 	}
 	else
 	{
-		ASSERT( FALSE, "widgGetString: couldn't get widget from id" );
+		ASSERT( false, "widgGetString: couldn't get widget from id" );
 		aStringRetBuffer[0] = '\0';
 	}
 
@@ -1175,7 +1175,7 @@ void widgSetString(W_SCREEN *psScreen, UDWORD id, const char *pText)
 	switch (psWidget->type)
 	{
 		case WIDG_FORM:
-			ASSERT( FALSE, "widgSetString: forms do not have a string" );
+			ASSERT( false, "widgSetString: forms do not have a string" );
 			break;
 
 		case WIDG_LABEL:
@@ -1281,7 +1281,7 @@ static void widgProcessForm(W_CONTEXT *psContext)
 	/* Note current form */
 	psForm = psContext->psForm;
 
-//	if(psForm->disableChildren == TRUE) {
+//	if(psForm->disableChildren == true) {
 //		return;
 //	}
 
@@ -1488,7 +1488,7 @@ static void widgDisplayForm(W_FORM *psForm, UDWORD xOffset, UDWORD yOffset)
 
 	/* Display the form */
 	psForm->display( (WIDGET *)psForm, xOffset, yOffset, psForm->aColours );
-	if(psForm->disableChildren == TRUE) {
+	if(psForm->disableChildren == true) {
 		return;
 	}
 
@@ -1562,7 +1562,7 @@ static void widgFocusLost(W_SCREEN* psScreen, WIDGET *psWidget)
 	case WIDG_SLIDER:
 		break;
 	default:
-		ASSERT( FALSE,"widgFocusLost: Unknown widget type" );
+		ASSERT( false,"widgFocusLost: Unknown widget type" );
 		break;
 	}
 }
@@ -1613,7 +1613,7 @@ void widgHiLite(WIDGET *psWidget, W_CONTEXT *psContext)
 		sliderHiLite((W_SLIDER *)psWidget);
 		break;
 	default:
-		ASSERT( FALSE,"widgHiLite: Unknown widget type" );
+		ASSERT( false,"widgHiLite: Unknown widget type" );
 		break;
 	}
 }
@@ -1644,7 +1644,7 @@ void widgHiLiteLost(WIDGET *psWidget, W_CONTEXT *psContext)
 		sliderHiLiteLost((W_SLIDER *)psWidget);
 		break;
 	default:
-		ASSERT( FALSE,"widgHiLiteLost: Unknown widget type" );
+		ASSERT( false,"widgHiLiteLost: Unknown widget type" );
 		break;
 	}
 }
@@ -1671,7 +1671,7 @@ static void widgClicked(WIDGET *psWidget, UDWORD key, W_CONTEXT *psContext)
 		sliderClicked((W_SLIDER *)psWidget, psContext);
 		break;
 	default:
-		ASSERT( FALSE,"widgClicked: Unknown widget type" );
+		ASSERT( false,"widgClicked: Unknown widget type" );
 		break;
 	}
 }
@@ -1699,7 +1699,7 @@ static void widgReleased(WIDGET *psWidget, UDWORD key, W_CONTEXT *psContext)
 		sliderReleased((W_SLIDER *)psWidget);
 		break;
 	default:
-		ASSERT( FALSE,"widgReleased: Unknown widget type" );
+		ASSERT( false,"widgReleased: Unknown widget type" );
 		break;
 	}
 }
@@ -1727,7 +1727,7 @@ static void widgRun(WIDGET *psWidget, W_CONTEXT *psContext)
 		sliderRun((W_SLIDER *)psWidget, psContext);
 		break;
 	default:
-		ASSERT( FALSE,"widgRun: Unknown widget type" );
+		ASSERT( false,"widgRun: Unknown widget type" );
 		break;
 	}
 }

@@ -65,7 +65,7 @@ BOOL mechShutdown(void)
 	}
 	psDestroyedObj = NULL;
 
-	return TRUE;
+	return true;
 }
 
 
@@ -82,7 +82,7 @@ BOOL allocComponentList(COMPONENT_TYPE	type, SDWORD number)
 		{
 			debug( LOG_ERROR, "Out of memory assigning Player Component Lists" );
 			abort();
-			return FALSE;
+			return false;
 		}
 
 		//initialise the players' lists
@@ -92,7 +92,7 @@ BOOL allocComponentList(COMPONENT_TYPE	type, SDWORD number)
 		}
 	}
 
-	return TRUE;
+	return true;
 }
 
 // release all the component lists
@@ -129,7 +129,7 @@ BOOL allocStructLists(void)
 			{
 				debug( LOG_ERROR, "Out of memory assigning Player Structure Lists" );
 				abort();
-				return FALSE;
+				return false;
 			}
 			for (stat = 0; stat < (SDWORD)numStructureStats; stat++)
 			{
@@ -142,7 +142,7 @@ BOOL allocStructLists(void)
 		}
 	}
 
-	return TRUE;
+	return true;
 }
 
 

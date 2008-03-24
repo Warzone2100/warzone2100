@@ -162,9 +162,9 @@ void	processParticle( ATPART *psPart )
 	if(!gamePaused())
 	{
 		/* Move the particle - frame rate controlled */
- 		psPart->position.x += timeAdjustedIncrement(psPart->velocity.x, TRUE);
-		psPart->position.y += timeAdjustedIncrement(psPart->velocity.y, TRUE);
-		psPart->position.z += timeAdjustedIncrement(psPart->velocity.z, TRUE);
+ 		psPart->position.x += timeAdjustedIncrement(psPart->velocity.x, true);
+		psPart->position.y += timeAdjustedIncrement(psPart->velocity.y, true);
+		psPart->position.z += timeAdjustedIncrement(psPart->velocity.z, true);
 
 		/* Wrap it around if it's gone off grid... */
 	   	testParticleWrap(psPart);
@@ -202,7 +202,7 @@ void	processParticle( ATPART *psPart )
 						pos.z = psPart->position.z;
 						pos.y = groundHeight;
 						effectSetSize(60);
-						addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_SPECIFIED,TRUE,getImdFromIndex(MI_SPLASH),0);
+						addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_SPECIFIED,true,getImdFromIndex(MI_SPLASH),0);
 					}
 				}
 				return;

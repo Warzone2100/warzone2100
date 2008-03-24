@@ -59,7 +59,7 @@ BOOL gwInitialise(void)
 
 	psGateways = NULL;
 
-	return TRUE;
+	return true;
 }
 
 
@@ -98,8 +98,8 @@ BOOL gwNewGateway(SDWORD x1, SDWORD y1, SDWORD x2, SDWORD y2)
 		(y2 < 0) || (y2 >= gwMapHeight()) ||
 		((x1 != x2) && (y1 != y2)))
 	{
-		ASSERT( FALSE,"gwNewGateway: invalid coordinates" );
-		return FALSE;
+		ASSERT( false,"gwNewGateway: invalid coordinates" );
+		return false;
 	}
 
 	psNew = (GATEWAY*)malloc(sizeof(GATEWAY));
@@ -107,7 +107,7 @@ BOOL gwNewGateway(SDWORD x1, SDWORD y1, SDWORD x2, SDWORD y2)
 	{
 		debug( LOG_ERROR, "gwNewGateway: out of memory" );
 		abort();
-		return FALSE;
+		return false;
 	}
 
 	// make sure the first coordinate is always the smallest
@@ -158,7 +158,7 @@ BOOL gwNewGateway(SDWORD x1, SDWORD y1, SDWORD x2, SDWORD y2)
 		}
 	}
 
-	return TRUE;
+	return true;
 }
 
 
@@ -170,8 +170,8 @@ BOOL gwNewLinkGateway(SDWORD x, SDWORD y)
 	if ((x < 0) || (x >= gwMapWidth())  ||
 		(y < 0) || (y >= gwMapHeight()))
 	{
-		ASSERT( FALSE,"gwNewLinkGateway: invalid coordinates" );
-		return FALSE;
+		ASSERT( false,"gwNewLinkGateway: invalid coordinates" );
+		return false;
 	}
 
 	psNew = (GATEWAY*)malloc(sizeof(GATEWAY));
@@ -179,7 +179,7 @@ BOOL gwNewLinkGateway(SDWORD x, SDWORD y)
 	{
 		debug( LOG_ERROR, "gwNewGateway: out of memory" );
 		abort();
-		return FALSE;
+		return false;
 	}
 
 	// initialise the gateway
@@ -196,7 +196,7 @@ BOOL gwNewLinkGateway(SDWORD x, SDWORD y)
 	psNew->psNext = psGateways;
 	psGateways = psNew;
 
-	return TRUE;
+	return true;
 }
 
 
@@ -207,16 +207,16 @@ static BOOL gwBlockingTile(SDWORD x,SDWORD y)
 	if (x <1 || y < 1 || x >= (SDWORD)mapWidth-1 || y >= (SDWORD)mapHeight-1)
 	{
 		// coords off map - auto blocking tile
-		return TRUE;
+		return true;
 	}
 
 	psTile = mapTile((UDWORD)x, (UDWORD)y);
 	if (terrainType(psTile) == TER_CLIFFFACE)
 	{
-		return TRUE;
+		return true;
 	}
 
-	return FALSE;
+	return false;
 }
 
 
@@ -241,7 +241,7 @@ static BOOL gwFindZone(SDWORD zone, SDWORD cx, SDWORD cy,
 			{
 				*px = x;
 				*py = y;
-				return TRUE;
+				return true;
 			}
 		}
 
@@ -255,7 +255,7 @@ static BOOL gwFindZone(SDWORD zone, SDWORD cx, SDWORD cy,
 			{
 				*px = x;
 				*py = y;
-				return TRUE;
+				return true;
 			}
 		}
 
@@ -269,7 +269,7 @@ static BOOL gwFindZone(SDWORD zone, SDWORD cx, SDWORD cy,
 			{
 				*px = x;
 				*py = y;
-				return TRUE;
+				return true;
 			}
 		}
 
@@ -283,12 +283,12 @@ static BOOL gwFindZone(SDWORD zone, SDWORD cx, SDWORD cy,
 			{
 				*px = x;
 				*py = y;
-				return TRUE;
+				return true;
 			}
 		}
 	}
 
-	return FALSE;
+	return false;
 }
 
 
@@ -394,7 +394,7 @@ BOOL gwGenerateLinkGates(void)
 			gwCalcZoneCenter(zone, &cx,&cy);
 			if (!gwNewLinkGateway(cx,cy))
 			{
-				return FALSE;
+				return false;
 			}
 			debug(LOG_GATEWAY, "new water link gateway at (%d,%d) for zone %d", cx, cy, zone);
 		}
@@ -402,7 +402,7 @@ BOOL gwGenerateLinkGates(void)
 
 	debug( LOG_NEVER, "Done\n" );
 
-	return TRUE;
+	return true;
 }
 
 
@@ -483,7 +483,7 @@ BOOL gwLoadGateways(char *pFileBuffer, UDWORD fileSize)
 
 		if (!gwNewGateway(x1,y1, x2,y2))
 		{
-			return FALSE;
+			return false;
 		}
 
 		for (; *pPos != '\n' && pPos < (pFileBuffer + fileSize); pPos += 1)
@@ -492,7 +492,7 @@ BOOL gwLoadGateways(char *pFileBuffer, UDWORD fileSize)
 		numGW -= 1;
 	}
 
-	return TRUE;
+	return true;
 }
 
 
@@ -503,18 +503,18 @@ BOOL gwZoneInEquiv(SDWORD mainZone, SDWORD checkZone)
 
 	if (apEquivZones == NULL)
 	{
-		return FALSE;
+		return false;
 	}
 
 	for(i=0; i<aNumEquiv[mainZone]; i+= 1)
 	{
 		if (apEquivZones[mainZone][i] == checkZone)
 		{
-			return TRUE;
+			return true;
 		}
 	}
 
-	return FALSE;
+	return false;
 }
 
 // find a route between two gateways and return
@@ -605,7 +605,7 @@ static BOOL gwCheckFloodTiles(GATEWAY *psGate)
 
 	if (gwBlockingTile(floodX,floodY))
 	{
-		return FALSE;
+		return false;
 	}
 
 	// second zone is right/below
@@ -624,10 +624,10 @@ static BOOL gwCheckFloodTiles(GATEWAY *psGate)
 
 	if (gwBlockingTile(floodX,floodY))
 	{
-		return FALSE;
+		return false;
 	}
 
-	return TRUE;
+	return true;
 }
 
 
@@ -646,7 +646,7 @@ BOOL gwLinkGateways(void)
 	{
 		debug( LOG_ERROR, "gwLinkGateways: out of memory" );
 		abort();
-		return FALSE;
+		return false;
 	}
 	memset(aZoneReachable, 0, sizeof(UBYTE) * gwNumZones);
 
@@ -681,8 +681,8 @@ BOOL gwLinkGateways(void)
 			psCurr->x1,psCurr->y1, psCurr->x2,psCurr->y2,
 			psCurr->zone1, psCurr->zone2 );
 
-		aZoneReachable[psCurr->zone1] = TRUE;
-		aZoneReachable[psCurr->zone2] = TRUE;
+		aZoneReachable[psCurr->zone1] = true;
+		aZoneReachable[psCurr->zone2] = true;
 	}
 
 	// now link all the gateways together
@@ -734,7 +734,7 @@ BOOL gwLinkGateways(void)
 			{
 				debug( LOG_ERROR, "gwLinkGateways: out of memory" );
 				abort();
-				return FALSE;
+				return false;
 			}
 		}
 		else
@@ -749,7 +749,7 @@ BOOL gwLinkGateways(void)
 		zone = psCurr->zone1;
 		otherZone = psCurr->zone2;
 		zoneLinks = zone1Links;
-		bZone1 = TRUE;
+		bZone1 = true;
 		while (link < (zone1Links + zone2Links))
 		{
 			for(psLink=psGateways; psLink && (link < zoneLinks); psLink=psLink->psNext)
@@ -759,14 +759,14 @@ BOOL gwLinkGateways(void)
 					// don't link a gateway to itself
 					continue;
 				}
-				bAddLink = FALSE;
+				bAddLink = false;
 				if (!bZone1 && (psCurr->flags & GWR_WATERLINK))
 				{
 					// calculating links for a water link gateway
 					if (gwZoneInEquiv(psCurr->zone1, psLink->zone1) ||
 						gwZoneInEquiv(psCurr->zone1, psLink->zone2))
 					{
-						bAddLink = TRUE;
+						bAddLink = true;
 					}
 				}
 				else if ((psLink->zone1 == zone) || (psLink->zone2 == zone) ||
@@ -774,7 +774,7 @@ BOOL gwLinkGateways(void)
 						  gwZoneInEquiv(psLink->zone1, zone) &&
 						  !gwZoneInEquiv(psLink->zone1, otherZone) ))
 				{
-					bAddLink = TRUE;
+					bAddLink = true;
 				}
 
 				if (bAddLink)
@@ -793,11 +793,11 @@ BOOL gwLinkGateways(void)
 			zone = psCurr->zone2;
 			otherZone = psCurr->zone1;
 			zoneLinks = zone1Links + zone2Links;
-			bZone1 = FALSE;
+			bZone1 = false;
 		}
 	}
 
-	return TRUE;
+	return true;
 }
 
 
@@ -849,7 +849,7 @@ BOOL gwNewZoneMap(void)
 	{
 		debug( LOG_ERROR, "gwNewZoneMap: Out of memory" );
 		abort();
-		return FALSE;
+		return false;
 	}
 
 	for(i=0; i< gwMapHeight(); i++)
@@ -857,7 +857,7 @@ BOOL gwNewZoneMap(void)
 		apRLEZones[i] = NULL;
 	}
 
-	return TRUE;
+	return true;
 }
 
 // Create a new empty zone map line in the zone map.
@@ -891,7 +891,7 @@ BOOL gwCreateNULLZoneMap(void)
 
 	if (!gwNewZoneMap())
 	{
-		return FALSE;
+		return false;
 	}
 
 	for(y=0; y<gwMapHeight(); y++)
@@ -899,13 +899,13 @@ BOOL gwCreateNULLZoneMap(void)
 		pBuf = gwNewZoneLine(y, 2);
 		if (!pBuf)
 		{
-			return FALSE;
+			return false;
 		}
 		pBuf[0] = (UBYTE)gwMapWidth();
 		pBuf[1] = 0;
 	}
 
-	return TRUE;
+	return true;
 }
 
 
@@ -969,7 +969,7 @@ BOOL gwNewEquivTable(SDWORD numZones)
 	{
 		debug( LOG_ERROR, "gwNewEquivTable: out of memory" );
 		abort();
-		return FALSE;
+		return false;
 	}
 	for(i=0; i<numZones; i+=1)
 	{
@@ -981,14 +981,14 @@ BOOL gwNewEquivTable(SDWORD numZones)
 	{
 		debug( LOG_ERROR, "gwNewEquivTable: out of memory" );
 		abort();
-		return FALSE;
+		return false;
 	}
 	for(i=0; i<numZones; i+=1)
 	{
 		apEquivZones[i] = NULL;
 	}
 
-	return TRUE;
+	return true;
 }
 
 // release the equivalence table
@@ -1035,7 +1035,7 @@ BOOL gwSetZoneEquiv(SDWORD zone, SDWORD numEquiv, UBYTE *pEquiv)
 	{
 		debug( LOG_ERROR, "gwSetZoneEquiv: out of memory" );
 		abort();
-		return FALSE;
+		return false;
 	}
 
 	aNumEquiv[zone] = (UBYTE)numEquiv;
@@ -1044,7 +1044,7 @@ BOOL gwSetZoneEquiv(SDWORD zone, SDWORD numEquiv, UBYTE *pEquiv)
 		apEquivZones[zone][i] = pEquiv[i];
 	}
 
-	return TRUE;
+	return true;
 }
 
 

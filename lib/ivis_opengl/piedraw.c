@@ -68,11 +68,11 @@ BOOL check_extension(const char *extName)
 		int n = strcspn(p, " ");
 		if ((extNameLen == n) && (strncmp(extName, p, n) == 0))
 		{
-			return TRUE;
+			return true;
 		}
 		p += (n + 1);
 	}
-	return FALSE;
+	return false;
 }
 
 // EXT_stencil_two_side
@@ -91,7 +91,7 @@ PFNGLACTIVESTENCILFACEEXTPROC glActiveStencilFaceEXT;
 /** Check if we can use one-pass stencil in the shadow draw code. */
 static BOOL stencil_one_pass(void)
 {
-	// tribool, -1: uninitialized, 0: FALSE, 1: TRUE
+	// tribool, -1: uninitialized, 0: false, 1: true
 	static int can_do_stencil_one_pass = -1;
 
 	if (can_do_stencil_one_pass < 0) {
@@ -125,8 +125,8 @@ static BOOL stencil_one_pass(void)
 static unsigned int pieCount = 0;
 static unsigned int tileCount = 0;
 static unsigned int polyCount = 0;
-static BOOL lighting = FALSE;
-static BOOL shadows = FALSE;
+static BOOL lighting = false;
+static BOOL shadows = false;
 
 /*
  *	Source
@@ -148,14 +148,14 @@ void pie_BeginLighting(const Vector3f * light)
 	glLightfv(GL_LIGHT0, GL_SPECULAR, specular);
 	glEnable(GL_LIGHT0);
 
-//	lighting = TRUE;
-	shadows = TRUE;
+//	lighting = true;
+	shadows = true;
 }
 
 void pie_EndLighting(void)
 {
-	shadows = FALSE;
-	lighting = FALSE;
+	shadows = false;
+	lighting = false;
 }
 
 /***************************************************************************
@@ -197,33 +197,33 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELI
 	iIMDPoly *pPolys;
 	BOOL light = lighting;
 
-	pie_SetAlphaTest(TRUE);
+	pie_SetAlphaTest(true);
 
 	/* Set tranlucency */
 	if (pieFlag & pie_ADDITIVE)
 	{ //Assume also translucent
-		pie_SetFogStatus(FALSE);
+		pie_SetFogStatus(false);
 		pie_SetRendMode(REND_ADDITIVE_TEX);
 		colour.byte.a = (UBYTE)pieFlagData;
-		light = FALSE;
+		light = false;
 	}
 	else if (pieFlag & pie_TRANSLUCENT)
 	{
-		pie_SetFogStatus(FALSE);
+		pie_SetFogStatus(false);
 		pie_SetRendMode(REND_ALPHA_TEX);
 		colour.byte.a = (UBYTE)pieFlagData;
-		light = FALSE;
+		light = false;
 	}
 	else
 	{
 		if (pieFlag & pie_BUTTON)
 		{
-			pie_SetFogStatus(FALSE);
+			pie_SetFogStatus(false);
 			pie_SetDepthBufferStatus(DEPTH_CMP_LEQ_WRT_ON);
 		}
 		else
 		{
-			pie_SetFogStatus(TRUE);
+			pie_SetFogStatus(true);
 		}
 		pie_SetRendMode(REND_GOURAUD_TEX);
 	}
@@ -361,19 +361,19 @@ static int compare_edge (EDGE *A, EDGE *B, const Vector3f *pVertices )
 	{
 		if(A->to == B->from)
 		{
-			return TRUE;
+			return true;
 		}
 		return Vector3f_Compare(pVertices[A->to], pVertices[B->from]);
 	}
 
 	if(!Vector3f_Compare(pVertices[A->from], pVertices[B->to]))
 	{
-		return FALSE;
+		return false;
 	}
 
 	if(A->to == B->from)
 	{
-		return TRUE;
+		return true;
 	}
 	return Vector3f_Compare(pVertices[A->to], pVertices[B->from]);
 }
@@ -384,7 +384,7 @@ static void addToEdgeList(int a, int b, EDGE *edgelist, unsigned int* edge_count
 {
 	EDGE newEdge = {a, b};
 	unsigned int i;
-	BOOL foundMatching = FALSE;
+	BOOL foundMatching = false;
 
 	for(i = 0; i < *edge_count; i++)
 	{
@@ -396,7 +396,7 @@ static void addToEdgeList(int a, int b, EDGE *edgelist, unsigned int* edge_count
 		if(compare_edge(&newEdge, &edgelist[i], pVertices)) {
 			// remove the other too
 			edgelist[i].from = -1;
-			foundMatching = TRUE;
+			foundMatching = true;
 			break;
 		}
 	}
@@ -698,7 +698,7 @@ static void pie_DrawShadows(void)
 
 	glPushMatrix();
 
-	pie_SetAlphaTest(FALSE);
+	pie_SetAlphaTest(false);
 	glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
 	glDepthFunc(GL_LESS);
 	glDepthMask(GL_FALSE);

@@ -34,10 +34,10 @@ BOOL objInitialise(void)
 {
 	if (!objmemInitialise())
 	{
-		return FALSE;
+		return false;
 	}
 
-	return TRUE;
+	return true;
 }
 
 
@@ -46,7 +46,7 @@ BOOL objShutdown(void)
 {
 	objmemShutdown();
 
-	return TRUE;
+	return true;
 }
 
 

@@ -34,7 +34,7 @@
 
 /* Turn on and off the treap debugging */
 #ifdef DEBUG
-// #define DEBUG_TREAP TRUE
+// #define DEBUG_TREAP true
 #else
 #undef DEBUG_TREAP
 #endif

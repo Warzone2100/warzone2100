@@ -76,7 +76,7 @@ static Uint64	lastFrames = 0;
 static Uint32	curTicks = 0; // Number of ticks since execution started
 static Uint32	lastTicks = 0;
 static FPSmanager wzFPSmanager;
-static BOOL	initFPSmanager = FALSE;
+static BOOL	initFPSmanager = false;
 
 void setFramerateLimit(int fpsLimit)
 {
@@ -84,7 +84,7 @@ void setFramerateLimit(int fpsLimit)
 	{
 		/* Initialize framerate handler */
 		SDL_initFramerate(&wzFPSmanager);
-		initFPSmanager = TRUE;
+		initFPSmanager = true;
 	}
 	SDL_setFramerate(&wzFPSmanager, fpsLimit);
 }
@@ -222,7 +222,7 @@ BOOL frameInitialise(
 	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) != 0)
 	{
 		debug( LOG_ERROR, "Error: Could not initialise SDL (%s).\n", SDL_GetError() );
-		return FALSE;
+		return false;
 	}
 
 	SDL_WM_SetCaption(pWindowName, NULL);
@@ -230,7 +230,7 @@ BOOL frameInitialise(
 	/* Initialise the trig stuff */
 	if (!trigInitialise())
 	{
-		return FALSE;
+		return false;
 	}
 
 	/* initialise all cursors */
@@ -238,7 +238,7 @@ BOOL frameInitialise(
 
 	if (!screenInitialise(width, height, bitDepth, fullScreen))
 	{
-		return FALSE;
+		return false;
 	}
 
 	/* Initialise the input system */
@@ -250,10 +250,10 @@ BOOL frameInitialise(
 	// Initialise the resource stuff
 	if (!resInitialise())
 	{
-		return FALSE;
+		return false;
 	}
 
-	return TRUE;
+	return true;
 }
 
 
@@ -328,7 +328,7 @@ static BOOL loadFile2(const char *pFileName, char **ppFileData, UDWORD *pFileSiz
 	pfile = openLoadFile(pFileName, hard_fail);
 	if (!pfile)
 	{
-		return FALSE;
+		return false;
 	}
 
 	filesize = PHYSFS_fileLength(pfile);
@@ -342,8 +342,8 @@ static BOOL loadFile2(const char *pFileName, char **ppFileData, UDWORD *pFileSiz
 		if (*ppFileData == NULL)
 		{
 			debug(LOG_ERROR, "loadFile2: Out of memory loading %s", pFileName);
-			assert(FALSE);
-			return FALSE;
+			assert(false);
+			return false;
 		}
 	}
 	else
@@ -351,8 +351,8 @@ static BOOL loadFile2(const char *pFileName, char **ppFileData, UDWORD *pFileSiz
 		if (filesize > *pFileSize)
 		{
 			debug(LOG_ERROR, "loadFile2: No room for file %s, buffer is too small! Got: %d Need: %ld", pFileName, *pFileSize, (long)filesize);
-			assert(FALSE);
-			return FALSE;
+			assert(false);
+			return false;
 		}
 		assert(*ppFileData != NULL);
 	}
@@ -369,8 +369,8 @@ static BOOL loadFile2(const char *pFileName, char **ppFileData, UDWORD *pFileSiz
 
 		debug(LOG_ERROR, "loadFile2: Reading %s short: %s",
 		      pFileName, PHYSFS_getLastError());
-		assert(FALSE);
-		return FALSE;
+		assert(false);
+		return false;
 	}
 
 	if (!PHYSFS_close(pfile))
@@ -383,8 +383,8 @@ static BOOL loadFile2(const char *pFileName, char **ppFileData, UDWORD *pFileSiz
 
 		debug(LOG_ERROR, "loadFile2: Error closing %s: %s", pFileName,
 		      PHYSFS_getLastError());
-		assert(FALSE);
-		return FALSE;
+		assert(false);
+		return false;
 	}
 
 	// Add the terminating zero
@@ -393,7 +393,7 @@ static BOOL loadFile2(const char *pFileName, char **ppFileData, UDWORD *pFileSiz
 	// always set to correct size
 	*pFileSize = filesize;
 
-	return TRUE;
+	return true;
 }
 
 PHYSFS_file* openSaveFile(const char* fileName)
@@ -427,20 +427,20 @@ BOOL saveFile(const char *pFileName, const char *pFileData, UDWORD fileSize)
 	pfile = openSaveFile(pFileName);
 	if (!pfile)
 	{
-		return FALSE;
+		return false;
 	}
 
 	if (PHYSFS_write(pfile, pFileData, 1, size) != size) {
 		debug(LOG_ERROR, "saveFile: %s could not write: %s", pFileName,
 		      PHYSFS_getLastError());
-		assert(FALSE);
-		return FALSE;
+		assert(false);
+		return false;
 	}
 	if (!PHYSFS_close(pfile)) {
 		debug(LOG_ERROR, "saveFile: Error closing %s: %s", pFileName,
 		      PHYSFS_getLastError());
-		assert(FALSE);
-		return FALSE;
+		assert(false);
+		return false;
 	}
 
 	if (PHYSFS_getRealDir(pFileName) == NULL) {
@@ -452,26 +452,26 @@ BOOL saveFile(const char *pFileName, const char *pFileData, UDWORD fileSize)
 		      PHYSFS_getRealDir(pFileName), PHYSFS_getDirSeparator(),
 		      pFileName, size);
 	}
-	return TRUE;
+	return true;
 }
 
 BOOL loadFile(const char *pFileName, char **ppFileData, UDWORD *pFileSize)
 {
-	return loadFile2(pFileName, ppFileData, pFileSize, TRUE, TRUE);
+	return loadFile2(pFileName, ppFileData, pFileSize, true, true);
 }
 
 // load a file from disk into a fixed memory buffer
 BOOL loadFileToBuffer(const char *pFileName, char *pFileBuffer, UDWORD bufferSize, UDWORD *pSize)
 {
 	*pSize = bufferSize;
-	return loadFile2(pFileName, &pFileBuffer, pSize, FALSE, TRUE);
+	return loadFile2(pFileName, &pFileBuffer, pSize, false, true);
 }
 
 // as above but returns quietly if no file found
 BOOL loadFileToBufferNoError(const char *pFileName, char *pFileBuffer, UDWORD bufferSize, UDWORD *pSize)
 {
 	*pSize = bufferSize;
-	return loadFile2(pFileName, &pFileBuffer, pSize, FALSE, FALSE);
+	return loadFile2(pFileName, &pFileBuffer, pSize, false, false);
 }
 
 

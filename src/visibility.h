@@ -74,7 +74,7 @@ static inline BOOL visObjInRange(BASE_OBJECT *psObj1, BASE_OBJECT *psObj2, SDWOR
 	if (xdiff > range)
 	{
 		// too far away, reject
-		return FALSE;
+		return false;
 	}
 
 	ydiff = (SDWORD)psObj1->pos.y - (SDWORD)psObj2->pos.y;
@@ -85,7 +85,7 @@ static inline BOOL visObjInRange(BASE_OBJECT *psObj1, BASE_OBJECT *psObj2, SDWOR
 	if (ydiff > range)
 	{
 		// too far away, reject
-		return FALSE;
+		return false;
 	}
 
 	distSq = xdiff*xdiff + ydiff*ydiff;
@@ -93,10 +93,10 @@ static inline BOOL visObjInRange(BASE_OBJECT *psObj1, BASE_OBJECT *psObj2, SDWOR
 	if (distSq > rangeSq)
 	{
 		// too far away, reject
-		return FALSE;
+		return false;
 	}
 
-	return TRUE;
+	return true;
 }
 
 static inline int objSensorRange(BASE_OBJECT *psObj)

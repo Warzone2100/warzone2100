@@ -115,7 +115,7 @@ static void featureType(FEATURE_STATS* psFeature, const char *pType)
 		}
 	}
 
-	ASSERT(FALSE, "featureType: Unknown feature type");
+	ASSERT(false, "featureType: Unknown feature type");
 }
 
 /* Load the feature stats */
@@ -134,7 +134,7 @@ BOOL loadFeatureStats(const char *pFeatureData, UDWORD bufferSize)
 	{
 		debug( LOG_ERROR, "Feature Stats - Out of memory" );
 		abort();
-		return FALSE;
+		return false;
 	}
 
 	psFeature = asFeatureStats;
@@ -161,7 +161,7 @@ BOOL loadFeatureStats(const char *pFeatureData, UDWORD bufferSize)
 
 		if (!allocateName(&psFeature->pName, featureName))
 		{
-			return FALSE;
+			return false;
 		}
 
 		//determine the feature type
@@ -179,7 +179,7 @@ BOOL loadFeatureStats(const char *pFeatureData, UDWORD bufferSize)
 		{
 			debug( LOG_ERROR, "Cannot find the feature PIE for record %s",  getName( psFeature->pName ) );
 			abort();
-			return FALSE;
+			return false;
 		}
 
 		psFeature->ref = REF_FEATURE_START + i;
@@ -190,7 +190,7 @@ BOOL loadFeatureStats(const char *pFeatureData, UDWORD bufferSize)
 		psFeature++;
 	}
 
-	return TRUE;
+	return true;
 }
 
 /* Release the feature stats memory */
@@ -285,7 +285,7 @@ FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,BOOL FromSave)
 		debug( LOG_NEVER, "Oil resource at (%d,%d) is unreachable", startX, startY );
 	}
 
-	if(FromSave == TRUE) {
+	if(FromSave == true) {
 		psFeature->pos.x = (UWORD)x;
 		psFeature->pos.y = (UWORD)y;
 	} else {
@@ -307,7 +307,7 @@ FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,BOOL FromSave)
 		psFeature->direction = 0;
 	}
 	//psFeature->damage = featureDamage;
-	psFeature->selected = FALSE;
+	psFeature->selected = false;
 	psFeature->psStats = psStats;
 	//psFeature->subType = psStats->subType;
 	psFeature->body = psStats->body;
@@ -315,7 +315,7 @@ FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,BOOL FromSave)
 	psFeature->sensorRange = 0;
 	psFeature->sensorPower = 0;
 	psFeature->ECMMod = 0;
-	psFeature->bTargetted = FALSE;
+	psFeature->bTargetted = false;
 	psFeature->timeLastHit = 0;
 
 	// it has never been drawn
@@ -405,7 +405,7 @@ FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,BOOL FromSave)
 				}
 			}
 
-			if( (!psStats->tileDraw) && (FromSave == FALSE) )
+			if( (!psStats->tileDraw) && (FromSave == false) )
 			{
 				psTile->height = (UBYTE)(height / ELEVATION_SCALE);
 			}
@@ -478,7 +478,7 @@ void removeFeature(FEATURE *psDel)
 	if (psDel->died)
 	{
 		// feature has already been killed, quit
-		ASSERT( FALSE,
+		ASSERT( false,
 			"removeFeature: feature already dead" );
 		return;
 	}
@@ -510,7 +510,7 @@ void removeFeature(FEATURE *psDel)
 		pos.x = psDel->pos.x;
 		pos.z = psDel->pos.y;
 		pos.y = map_Height(pos.x,pos.z);
-		addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_DISCOVERY,FALSE,NULL,0);
+		addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_DISCOVERY,false,NULL,0);
 		scoreUpdateVar(WD_ARTEFACTS_FOUND);
 		intRefreshScreen();
 	}
@@ -576,7 +576,7 @@ void destroyFeature(FEATURE *psDel)
 			pos.x = psDel->pos.x + widthScatter - rand()%(2*widthScatter);
 			pos.z = psDel->pos.y + breadthScatter - rand()%(2*breadthScatter);
 			pos.y = psDel->pos.z + 32 + rand()%heightScatter;
-			addEffect(&pos,EFFECT_EXPLOSION,explosionSize,FALSE,NULL,0);
+			addEffect(&pos,EFFECT_EXPLOSION,explosionSize,false,NULL,0);
 		}
 
 //	  	if(psDel->sDisplay.imd->pos.ymax>300)	// WARNING - STATS CHANGE NEEDED!!!!!!!!!!!
@@ -585,7 +585,7 @@ void destroyFeature(FEATURE *psDel)
 			pos.x = psDel->pos.x;
 			pos.z = psDel->pos.y;
 			pos.y = psDel->pos.z;
-			addEffect(&pos,EFFECT_DESTRUCTION,DESTRUCTION_TYPE_SKYSCRAPER,TRUE,psDel->sDisplay.imd,0);
+			addEffect(&pos,EFFECT_DESTRUCTION,DESTRUCTION_TYPE_SKYSCRAPER,true,psDel->sDisplay.imd,0);
 			initPerimeterSmoke(psDel->sDisplay.imd,pos.x,pos.y,pos.z);
 
 			// ----- Flip all the tiles under the skyscraper to a rubble tile
@@ -630,7 +630,7 @@ void destroyFeature(FEATURE *psDel)
 		pos.x = psDel->pos.x;
 		pos.z = psDel->pos.y;
 		pos.y = map_Height(pos.x,pos.z);
-		addEffect(&pos,EFFECT_DESTRUCTION,DESTRUCTION_TYPE_FEATURE,FALSE,NULL,0);
+		addEffect(&pos,EFFECT_DESTRUCTION,DESTRUCTION_TYPE_FEATURE,false,NULL,0);
 
 		//play sound
 		// ffs gj

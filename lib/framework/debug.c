@@ -72,7 +72,7 @@ static const char *code_part_names[] = {
 };
 
 static char inputBuffer[2][MAX_LEN_LOG_LINE];
-static BOOL useInputBuffer1 = FALSE;
+static BOOL useInputBuffer1 = false;
 
 /**
  * Convert code_part names to enum. Case insensitive.
@@ -205,12 +205,12 @@ void debug_init(void)
 
 	STATIC_ASSERT(ARRAY_SIZE(code_part_names) - 1 == LOG_LAST); // enums start at 0
 
-	memset( enabled_debug, FALSE, sizeof(enabled_debug) );
-	enabled_debug[LOG_ERROR] = TRUE;
+	memset( enabled_debug, false, sizeof(enabled_debug) );
+	enabled_debug[LOG_ERROR] = true;
 	inputBuffer[0][0] = '\0';
 	inputBuffer[1][0] = '\0';
 #ifdef DEBUG
-	enabled_debug[LOG_WARNING] = TRUE;
+	enabled_debug[LOG_WARNING] = true;
 #endif
 }
 
@@ -268,7 +268,7 @@ BOOL debug_enable_switch(const char *str)
 		enabled_debug[part] = !enabled_debug[part];
 	}
 	if (part == LOG_ALL) {
-		memset(enabled_debug, TRUE, sizeof(enabled_debug));
+		memset(enabled_debug, true, sizeof(enabled_debug));
 	}
 	return (part != LOG_LAST);
 }

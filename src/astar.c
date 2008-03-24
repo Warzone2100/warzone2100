@@ -96,11 +96,11 @@ BOOL astarInitialise(void)
 	apsNodes = (FP_NODE**)malloc(sizeof(FP_NODE *) * FPATH_TABLESIZE);
 	if (!apsNodes)
 	{
-		return FALSE;
+		return false;
 	}
 	ClearAstarNodes();
 
-	return TRUE;
+	return true;
 }
 
 // Shutdown the findpath routine
@@ -343,17 +343,17 @@ static BOOL fpathVisCallback(SDWORD x, SDWORD y, SDWORD dist)
 	vy = y - finalY;
 	if (vx*vectorX + vy*vectorY <=0)
 	{
-		return FALSE;
+		return false;
 	}
 
 	if (fpathBlockingTile(map_coord(x), map_coord(y)))
 	{
 		// found an obstruction
-		obstruction = TRUE;
-		return FALSE;
+		obstruction = true;
+		return false;
 	}
 
-	return TRUE;
+	return true;
 }
 
 // Check los between two tiles
@@ -370,7 +370,7 @@ BOOL fpathTileLOS(SDWORD x1,SDWORD y1, SDWORD x2,SDWORD y2)
 	finalY = y2;
 	vectorX = x1 - x2;
 	vectorY = y1 - y2;
-	obstruction = FALSE;
+	obstruction = false;
 
 	rayCast(x1,y1, rayPointsToAngle(x1,y1,x2,y2),
 			RAY_MAXLEN, fpathVisCallback);
@@ -391,7 +391,7 @@ static void fpathOptimise(FP_NODE *psRoute)
 	do
 	{
 		// work down the route looking for a failed LOS
-		los = TRUE;
+		los = true;
 		psSearch = psCurr->psRoute;
 		while (psSearch)
 		{

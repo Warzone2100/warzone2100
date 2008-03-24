@@ -97,7 +97,7 @@ void	processDemoCam( void )
 {
 UDWORD	firstPlayer,otherPlayer;
 DROID	*psDroid;
-BOOL	bSkipOrder = FALSE;
+BOOL	bSkipOrder = false;
 UDWORD	i,numWith;
 
 	/* Is the demo camera actually active? */
@@ -133,7 +133,7 @@ UDWORD	i,numWith;
 			/* We need two sides for this to work! */
 			if(numWith<2)
 			{
-				bSkipOrder = TRUE;
+				bSkipOrder = true;
 			}
 
 			if(!bSkipOrder)
@@ -164,8 +164,8 @@ UDWORD	i,numWith;
 				/* Only do this if we've got a droid and an enemy building to attack! */
 				if(psDroid && apsStructLists[otherPlayer])
 				{
-					if( (orderState(psDroid,DORDER_NONE) == TRUE) ||
-						((orderState(psDroid,DORDER_GUARD) == TRUE) && (psDroid->action == DACTION_NONE)))
+					if( (orderState(psDroid,DORDER_NONE) == true) ||
+						((orderState(psDroid,DORDER_GUARD) == true) && (psDroid->action == DACTION_NONE)))
 					{
 						/* Make the droid attack the building - it'll indirectly route there too */
 						orderDroidLoc(psDroid,DORDER_SCOUT,
@@ -203,11 +203,11 @@ BOOL	demoGetStatus( void )
 {
 	if(presentStatus == DC_ISACTIVE)
 	{
-		return(TRUE);
+		return(true);
 	}
 	else
 	{
-		return(FALSE);
+		return(false);
 	}
 }
 
@@ -230,7 +230,7 @@ DROID	*psDroid;
 UDWORD	numWith;
 BOOL	bSeekOnlyLocations;
 UDWORD	i;
-BOOL	bHaveHuman = FALSE;
+BOOL	bHaveHuman = false;
 PROPULSION_STATS	*psPropStats;
 
 //---
@@ -239,7 +239,7 @@ PROPULSION_STATS	*psPropStats;
 //----
 
 	/* There may be droids, so don't rule it out */
-	bSeekOnlyLocations = FALSE;
+	bSeekOnlyLocations = false;
 	/* Check all the droid lists, looking for empty ones */
 	for(i = 0,numWith = 0; i<MAX_PLAYERS; i++)
 	{
@@ -250,7 +250,7 @@ PROPULSION_STATS	*psPropStats;
 			numWith++;
 			if(i<MAX_PLAYERS-2)
 			{
-				bHaveHuman = TRUE;
+				bHaveHuman = true;
 			}
 		}
 	}
@@ -258,11 +258,11 @@ PROPULSION_STATS	*psPropStats;
 	/* We need two sides for this to work! */
 	if(numWith<2 || !bHaveHuman)
 	{
-		bSeekOnlyLocations = TRUE;
+		bSeekOnlyLocations = true;
 	}
 
 	/* We haven't yet got a droid if we're looking for one...*/
-	gotNewTarget = FALSE;
+	gotNewTarget = false;
 
 	/* Keep going until we get one */
 //	while(!gotNewTarget)
@@ -307,7 +307,7 @@ PROPULSION_STATS	*psPropStats;
 			/* If there was a droid last time, deselect it */
 			if(psLastDroid && !psLastDroid->died)
 			{
-				psLastDroid->selected = FALSE;
+				psLastDroid->selected = false;
 			}
 
 			/* Jump to droid and track */
@@ -315,10 +315,10 @@ PROPULSION_STATS	*psPropStats;
 			/* Only do if we've got a droid and an enemy building to attack */
 			if(psDroid && apsStructLists[otherPlayer])
 			{
-				psDroid->selected = TRUE;
+				psDroid->selected = true;
 			  	selectedPlayer = player;
 				psLastDroid = psDroid;
-			  //	if(orderState(psDroid,DORDER_ATTACK) == FALSE)
+			  //	if(orderState(psDroid,DORDER_ATTACK) == false)
 			  //	{
 		 	 		orderDroidLoc(psDroid,DORDER_MOVE,
 					apsStructLists[otherPlayer]->pos.x, apsStructLists[otherPlayer]->pos.y);
@@ -350,7 +350,7 @@ PROPULSION_STATS	*psPropStats;
 			/* Go to a new location cos there's no droids left in the world....ahhhhhhh*/
 		case OVERRIDE_SEEK:
 			requestRadarTrack((16 + rand()%(mapWidth-31))*TILE_UNITS, (16 + rand()%(mapHeight-31)) * TILE_UNITS );
-			gotNewTarget = TRUE;
+			gotNewTarget = true;
 			break;
 		default:
 			break;
@@ -394,10 +394,10 @@ BOOL	tooNearEdge( UDWORD x, UDWORD y )
 		(y > ((visibleTiles.y/2) * TILE_UNITS)) &&
 		(y < ((mapHeight-(visibleTiles.y/2)) * TILE_UNITS)) )
 	{
-		return(FALSE);
+		return(false);
 	}
 	else
 	{
-		return(TRUE);
+		return(true);
 	}
 }

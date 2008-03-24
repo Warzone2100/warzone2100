@@ -33,11 +33,11 @@
 void cpPrintType(INTERP_TYPE type)
 {
 	UDWORD	i;
-	BOOL	ref = FALSE;
+	BOOL	ref = false;
 
 	if (type & VAL_REF)
 	{
-		ref = TRUE;
+		ref = true;
 		type = (INTERP_TYPE)(type & ~VAL_REF);
 	}
 
@@ -77,7 +77,7 @@ void cpPrintType(INTERP_TYPE type)
 				}
 			}
 		}
-		ASSERT( FALSE, "cpPrintType: Unknown type" );
+		ASSERT( false, "cpPrintType: Unknown type" );
 		break;
 	}
 
@@ -134,7 +134,7 @@ void cpPrintVal(INTERP_VAL *psVal)
 				}
 			}
 		}
-		ASSERT( FALSE, "cpPrintVal: Unknown value type" );
+		ASSERT( false, "cpPrintVal: Unknown value type" );
 		break;
 	}
 }
@@ -191,7 +191,7 @@ void cpPrintPackedVal(INTERP_VAL *ip)
 				}
 			}
 		}
-		ASSERT( FALSE, "cpPrintVal: Unknown value type" );
+		ASSERT( false, "cpPrintVal: Unknown value type" );
 		break;
 	}
 }
@@ -251,7 +251,7 @@ void cpPrintMathsOp(UDWORD opcode)
 		debug( LOG_NEVER, "LESS" );
 		break;
 	default:
-		ASSERT( FALSE, "cpPrintMathsOp: unknown operator" );
+		ASSERT( false, "cpPrintMathsOp: unknown operator" );
 		break;
 	}
 }
@@ -441,7 +441,7 @@ void cpPrintProgram(SCRIPT_CODE *psProg)
 	}
 
 	ip = psProg->pCode;
-	triggerCode = psProg->numTriggers > 0 ? TRUE : FALSE;
+	triggerCode = psProg->numTriggers > 0 ? true : false;
 	end = (INTERP_VAL *)(((UBYTE *)ip) + psProg->size);
 	opcode = (OPCODE)(ip->v.ival >> OPCODE_SHIFT);
 	data = (ip->v.ival & OPCODE_DATAMASK);
@@ -476,7 +476,7 @@ void cpPrintProgram(SCRIPT_CODE *psProg)
 				if (jumpOffset >= psProg->numTriggers)
 				{
 					// Got to the end of the triggers
-					triggerCode = FALSE;
+					triggerCode = false;
 					jumpOffset = 0;
 				}
 			}
@@ -577,7 +577,7 @@ void cpPrintProgram(SCRIPT_CODE *psProg)
 			ip += aOpSize[opcode];
 			break;
 		default:
-			ASSERT( FALSE,"cpPrintProgram: Unknown opcode: %x", ip->type );
+			ASSERT( false,"cpPrintProgram: Unknown opcode: %x", ip->type );
 			break;
 		}
 

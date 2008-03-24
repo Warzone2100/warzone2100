@@ -80,7 +80,7 @@ BOOL recvGift(void)
 	{
 		case RADAR_GIFT:
 			audioTrack = ID_SENSOR_DOWNLOAD;
-			giftRadar(from, to, FALSE);
+			giftRadar(from, to, false);
 			break;
 		case DROID_GIFT:
 			audioTrack = ID_UNITS_TRANSFER;
@@ -88,15 +88,15 @@ BOOL recvGift(void)
 			break;
 		case RESEARCH_GIFT:
 			audioTrack = ID_TECHNOLOGY_TRANSFER;
-			giftResearch(from, to, FALSE);
+			giftResearch(from, to, false);
 			break;
 		case POWER_GIFT:
 			audioTrack = ID_POWER_TRANSMIT;
-			giftPower(from, to, FALSE);
+			giftPower(from, to, false);
 			break;
 		default:
 			debug(LOG_ERROR, "recvGift: Unknown Gift recvd");
-			return FALSE;
+			return false;
 			break;
 	}
 
@@ -105,7 +105,7 @@ BOOL recvGift(void)
 	{
 		audio_QueueTrack(audioTrack);
 	}
-	return TRUE;
+	return true;
 }
 
 BOOL sendGift(uint8_t type, uint8_t to)
@@ -116,7 +116,7 @@ BOOL sendGift(uint8_t type, uint8_t to)
 	{
 		case RADAR_GIFT:
 			audioTrack = ID_SENSOR_DOWNLOAD;
-			giftRadar(selectedPlayer, to, TRUE);
+			giftRadar(selectedPlayer, to, true);
 			break;
 		case DROID_GIFT:
 			audioTrack = ID_UNITS_TRANSFER;
@@ -124,23 +124,23 @@ BOOL sendGift(uint8_t type, uint8_t to)
 			break;
 		case RESEARCH_GIFT:
 			audioTrack = ID_TECHNOLOGY_TRANSFER;
-			giftResearch(selectedPlayer, to, TRUE);
+			giftResearch(selectedPlayer, to, true);
 			break;
 		case POWER_GIFT:
 			audioTrack = ID_POWER_TRANSMIT;
-			giftPower(selectedPlayer, to, TRUE);
+			giftPower(selectedPlayer, to, true);
 			break;
 		default:
 			debug( LOG_ERROR, "Unknown Gift sent" );
 			abort();
-			return FALSE;
+			return false;
 			break;
 	}
 
 	// Play the appropriate audio track
 	audio_QueueTrack(audioTrack);
 
-	return TRUE;
+	return true;
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -277,7 +277,7 @@ static void giftResearch(uint8_t from, uint8_t to, BOOL send)
 		 && !IsResearchCompleted(&pRto[i]))
 		{
 			MakeResearchCompleted(&pRto[i]);
-			researchResult(i, to, FALSE, NULL);
+			researchResult(i, to, false, NULL);
 		}
 	}
 
@@ -370,7 +370,7 @@ void requestAlliance(uint8_t from, uint8_t to, BOOL prop, BOOL allowAudio)
 
 	if (prop)
 	{
-		sendAlliance(from, to, ALLIANCE_REQUESTED, FALSE);
+		sendAlliance(from, to, ALLIANCE_REQUESTED, false);
 	}
 }
 
@@ -394,7 +394,7 @@ void breakAlliance(uint8_t p1, uint8_t p2, BOOL prop, BOOL allowAudio)
 
 	if (prop)
 	{
-		sendAlliance(p1, p2, ALLIANCE_BROKEN, FALSE);
+		sendAlliance(p1, p2, ALLIANCE_BROKEN, false);
 	}
 }
 
@@ -421,18 +421,18 @@ void formAlliance(uint8_t p1, uint8_t p2, BOOL prop, BOOL allowAudio, BOOL allow
 
 	if (bMultiPlayer && prop)
 	{
-		sendAlliance(p1, p2, ALLIANCE_FORMED, FALSE);
+		sendAlliance(p1, p2, ALLIANCE_FORMED, false);
 	}
 
 	// Not campaign and alliances are transitive
 	if ((bMultiPlayer || game.type == SKIRMISH) && game.alliance == ALLIANCES_TEAMS)
 	{
-		giftRadar(p1, p2, FALSE);
-		giftRadar(p2, p1, FALSE);
+		giftRadar(p1, p2, false);
+		giftRadar(p2, p1, false);
 	}
 
 	// Clear out any attacking orders
-	turnOffMultiMsg(TRUE);
+	turnOffMultiMsg(true);
 
 	for (psDroid = apsDroidLists[p1]; psDroid; psDroid = psDroid->psNext)	// from -> to
 	{
@@ -453,7 +453,7 @@ void formAlliance(uint8_t p1, uint8_t p2, BOOL prop, BOOL allowAudio, BOOL allow
 		}
 	}
 
-	turnOffMultiMsg(FALSE);
+	turnOffMultiMsg(false);
 }
 
 
@@ -485,21 +485,21 @@ BOOL recvAlliance(BOOL allowAudio)
 		case ALLIANCE_NULL:
 			break;
 		case ALLIANCE_REQUESTED:
-			requestAlliance(from, to, FALSE, allowAudio);
+			requestAlliance(from, to, false, allowAudio);
 			break;
 		case ALLIANCE_FORMED:
-			formAlliance(from, to, FALSE, allowAudio, TRUE);
+			formAlliance(from, to, false, allowAudio, true);
 			break;
 		case ALLIANCE_BROKEN:
-			breakAlliance(from, to, FALSE, allowAudio);
+			breakAlliance(from, to, false, allowAudio);
 			break;
 		default:
 			debug(LOG_ERROR, "Unknown alliance state recvd.");
-			return FALSE;
+			return false;
 			break;
 	}
 
-	return TRUE;
+	return true;
 }
 
 
@@ -523,14 +523,14 @@ void  technologyGiveAway(const STRUCTURE *pS)
 		// Pick a tile to place the artifact
 		if (!pickATileGen(&x, &y, LOOK_FOR_EMPTY_TILE, zonedPAT))
 		{
-			ASSERT(FALSE, "technologyGiveAway: Unable to find a free location");
+			ASSERT(false, "technologyGiveAway: Unable to find a free location");
 		}
 
 		// Get the feature offset
 		for(i = 0; i < numFeatureStats && asFeatureStats[i].subType != FEAT_GEN_ARTE; i++);
 
 		// 'Build' the artifact
-		pF = buildFeature((asFeatureStats + i), world_coord(x), world_coord(y), FALSE);
+		pF = buildFeature((asFeatureStats + i), world_coord(x), world_coord(y), false);
 		if (pF)
 		{
 			pF->player = pS->player;
@@ -615,12 +615,12 @@ void addLoserGifts(void)
 
 				if (!pickATileGen(&x, &y, LOOK_FOR_EMPTY_TILE, zonedPAT))
 				{
-					ASSERT(FALSE, "addlosergifts: Unable to find a free location");
+					ASSERT(false, "addlosergifts: Unable to find a free location");
 				}
 
 				NETlogEntry("gift", 0, 0);
 
-				pF = buildFeature((asFeatureStats + i), world_coord(x), world_coord(y), FALSE);
+				pF = buildFeature((asFeatureStats + i), world_coord(x), world_coord(y), false);
 
 				NETuint32_t(&x);
 				NETuint32_t(&y);
@@ -675,7 +675,7 @@ void recvMultiPlayerFeature()
 		if (asFeatureStats[i].subType == subType)
 		{
 			// Create a feature of the specified type at the given location
-			buildFeature(&asFeatureStats[i], x, y, FALSE);
+			buildFeature(&asFeatureStats[i], x, y, false);
 
 			break;
 		}
@@ -707,10 +707,10 @@ void  addMultiPlayerRandomArtifacts(uint8_t quantity, FEATURE_TYPE type)
 
 			if (!pickATileGen(&x, &y, LOOK_FOR_EMPTY_TILE, zonedPAT))
 			{
-				ASSERT(FALSE, "addMultiPlayerRandomArtifacts: Unable to find a free location");
+				ASSERT(false, "addMultiPlayerRandomArtifacts: Unable to find a free location");
 			}
 
-			pF = buildFeature(asFeatureStats + i, world_coord(x), world_coord(y), FALSE);
+			pF = buildFeature(asFeatureStats + i, world_coord(x), world_coord(y), false);
 
 			NETuint32_t(&x);
 			NETuint32_t(&y);
@@ -730,7 +730,7 @@ void  addMultiPlayerRandomArtifacts(uint8_t quantity, FEATURE_TYPE type)
 BOOL addOilDrum(uint8_t count)
 {
 	addMultiPlayerRandomArtifacts(count, FEAT_OIL_DRUM);
-	return TRUE;
+	return true;
 }
 
 // ///////////////////////////////////////////////////////////////
@@ -771,7 +771,7 @@ void recvMultiPlayerRandomArtifacts()
 			continue;
 		}
 
-		pF = buildFeature((asFeatureStats + i), world_coord(tx), world_coord(ty), FALSE);
+		pF = buildFeature((asFeatureStats + i), world_coord(tx), world_coord(ty), false);
 		if (pF)
 		{
 			pF->id		= ref;
@@ -814,7 +814,7 @@ void processMultiPlayerArtifacts(void)
 	FEATURE	*pF,*pFN;
 	UDWORD	x,y,pl;
 	Vector3i position;
-	BOOL	found=FALSE;
+	BOOL	found=false;
 
 	// only do this every now and again.
 	if(lastCall > gameTime)lastCall= 0;
@@ -838,7 +838,7 @@ void processMultiPlayerArtifacts(void)
 				position.x = pF->pos.x;				// Add an effect
 				position.z = pF->pos.y;
 				position.y = pF->pos.z;
-				addEffect(&position,EFFECT_EXPLOSION,EXPLOSION_TYPE_DISCOVERY,FALSE,NULL,FALSE);
+				addEffect(&position,EFFECT_EXPLOSION,EXPLOSION_TYPE_DISCOVERY,false,NULL,false);
 
 				x = pF->pos.x;
 				y = pF->pos.y;
@@ -871,7 +871,7 @@ void createTeamAlliances(void)
 			 && game.skDiff[j])	// Not allied and not ignoring teams
 			{
 				// Create silently
-				formAlliance(i, j, FALSE, FALSE, FALSE);
+				formAlliance(i, j, false, false, false);
 			}
 		}
 	}

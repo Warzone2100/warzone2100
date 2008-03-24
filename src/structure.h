@@ -130,7 +130,7 @@ void structureRelease(STRUCTURE *psBuilding);
 extern BOOL destroyStruct(STRUCTURE *psDel);
 
 // remove a structure from a game without any visible effects
-// bDestroy = TRUE if the object is to be destroyed
+// bDestroy = true if the object is to be destroyed
 // (for example used to change the type of wall at a location)
 BOOL removeStruct(STRUCTURE *psDel, BOOL bDestroy);
 
@@ -164,7 +164,7 @@ extern void initStructLimits(void);
 extern void setCurrentStructQuantity(BOOL displayError);
 /* get a stat inc based on the name */
 extern SDWORD getStructStatFromName(char *pName);
-/*check to see if the structure is 'doing' anything  - return TRUE if idle*/
+/*check to see if the structure is 'doing' anything  - return true if idle*/
 extern BOOL  structureIdle(STRUCTURE *psBuilding);
 /*checks to see if any structure exists of a specified type with a specified status */
 extern BOOL checkStructureStatus( STRUCTURE_STATS *psStats, UDWORD player, UDWORD status);
@@ -251,7 +251,7 @@ extern unsigned int countAssignedDroids(STRUCTURE *psStructure);
 //print some info at the top of the screen dependant on the structure
 extern void printStructureInfo(STRUCTURE *psStructure);
 
-/*Checks the template type against the factory type - returns FALSE
+/*Checks the template type against the factory type - returns false
 if not a good combination!*/
 extern BOOL validTemplateForFactory(DROID_TEMPLATE *psTemplate, STRUCTURE *psFactory);
 
@@ -335,18 +335,18 @@ FIRE_SUPPORT order can be assigned*/
 extern BOOL structSensorDroidWeapon(STRUCTURE *psStruct, DROID *psDroid);
 
 /*checks if the structure has a Counter Battery sensor attached - returns
-TRUE if it has*/
+true if it has*/
 extern BOOL structCBSensor(STRUCTURE *psStruct);
 /*checks if the structure has a Standard Turret sensor attached - returns
-TRUE if it has*/
+true if it has*/
 extern BOOL structStandardSensor(STRUCTURE *psStruct);
 
 /*checks if the structure has a VTOL Intercept sensor attached - returns
-TRUE if it has*/
+true if it has*/
 extern BOOL structVTOLSensor(STRUCTURE *psStruct);
 
 /*checks if the structure has a VTOL Counter Battery sensor attached - returns
-TRUE if it has*/
+true if it has*/
 extern BOOL structVTOLCBSensor(STRUCTURE *psStruct);
 
 // return the nearest rearm pad
@@ -391,7 +391,7 @@ extern BOOL checkFactoryExists(UDWORD player, UDWORD factoryType, UDWORD inc);
 extern BOOL	ptInStructure(STRUCTURE *psStruct, UDWORD x, UDWORD y);
 
 /*checks the structure passed in is a Las Sat structure which is currently
-selected - returns TRUE if valid*/
+selected - returns true if valid*/
 extern BOOL lasSatStructSelected(STRUCTURE *psStruct);
 
 BOOL structureCheckReferences(STRUCTURE *psVictimStruct);

@@ -28,11 +28,11 @@ extern DROID *psDrivenDroid;
 
 static inline BOOL driveHasDriven(void)
 {
-	return (DirectControl) && (psDrivenDroid != NULL) ? TRUE : FALSE;
+	return (DirectControl) && (psDrivenDroid != NULL) ? true : false;
 }
 
 
-// Returns TRUE if drive mode is active.
+// Returns true if drive mode is active.
 //
 static inline BOOL driveModeActive(void)
 {
@@ -40,17 +40,17 @@ static inline BOOL driveModeActive(void)
 }
 
 
-// Return TRUE if the specified droid is the driven droid.
+// Return true if the specified droid is the driven droid.
 //
 static inline BOOL driveIsDriven(DROID *psDroid)
 {
-	return (DirectControl) && (psDrivenDroid != NULL) && (psDroid == psDrivenDroid) ? TRUE : FALSE;
+	return (DirectControl) && (psDrivenDroid != NULL) && (psDroid == psDrivenDroid) ? true : false;
 }
 
 
 static inline BOOL driveIsFollower(DROID *psDroid)
 {
-	return (DirectControl) && (psDrivenDroid != NULL) && (psDroid != psDrivenDroid) && psDroid->selected ? TRUE : FALSE;
+	return (DirectControl) && (psDrivenDroid != NULL) && (psDroid != psDrivenDroid) && psDroid->selected ? true : false;
 }
 
 

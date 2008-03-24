@@ -113,9 +113,9 @@ BOOL loadConfig(void)
 	else
 	{
 #ifdef DEBUG
-		bAllowDebugMode = TRUE;
+		bAllowDebugMode = true;
 #else
-		bAllowDebugMode = FALSE;
+		bAllowDebugMode = false;
 #endif
 		setWarzoneKeyNumeric("debugmode", bAllowDebugMode);
 	}
@@ -141,8 +141,8 @@ BOOL loadConfig(void)
 	}
 	else
 	{
-		showFPS = FALSE;
-		setWarzoneKeyNumeric("showFPS", FALSE);
+		showFPS = false;
+		setWarzoneKeyNumeric("showFPS", false);
 	}
 
 	// //////////////////////////
@@ -183,8 +183,8 @@ BOOL loadConfig(void)
 	}
 	else
 	{
-		setShakeStatus(FALSE);
-		setWarzoneKeyNumeric("shake", FALSE);
+		setShakeStatus(false);
+		setWarzoneKeyNumeric("shake", false);
 	}
 
 	// //////////////////////////
@@ -195,8 +195,8 @@ BOOL loadConfig(void)
 	}
 	else
 	{
-		setDrawShadows(TRUE);
-		setWarzoneKeyNumeric("shadows", TRUE);
+		setDrawShadows(true);
+		setWarzoneKeyNumeric("shadows", true);
 	}
 
 	// //////////////////////////
@@ -207,8 +207,8 @@ BOOL loadConfig(void)
 	}
 	else
 	{
-		war_setSoundEnabled( TRUE );
-		setWarzoneKeyNumeric( "sound", TRUE );
+		war_setSoundEnabled( true );
+		setWarzoneKeyNumeric( "sound", true );
 	}
 
 	// //////////////////////////
@@ -219,8 +219,8 @@ BOOL loadConfig(void)
 	}
 	else
 	{
-		setInvertMouseStatus(TRUE);
-		setWarzoneKeyNumeric("mouseflip", TRUE);
+		setInvertMouseStatus(true);
+		setWarzoneKeyNumeric("mouseflip", true);
 	}
 
 	if (getWarzoneKeyString("masterserver_name", sBuf))
@@ -272,7 +272,7 @@ BOOL loadConfig(void)
 	}
 	else
 	{
-		seq_SetSubtitles(TRUE);
+		seq_SetSubtitles(true);
 	}
 
 	// //////////////////////////
@@ -294,19 +294,19 @@ BOOL loadConfig(void)
 	{
 		if(val)
 		{
-			war_SetFog(FALSE);
-			avSetStatus(TRUE);
+			war_SetFog(false);
+			avSetStatus(true);
 		}
 		else
 		{
-			avSetStatus(FALSE);
-			war_SetFog(TRUE);
+			avSetStatus(false);
+			war_SetFog(true);
 		}
 	}
 	else
 	{
-		avSetStatus(FALSE);
-		war_SetFog(TRUE);
+		avSetStatus(false);
+		war_SetFog(true);
 		setWarzoneKeyNumeric("visfog", 0);
 	}
 
@@ -334,8 +334,8 @@ BOOL loadConfig(void)
 	}
 	else
 	{
-		intReopenBuild(TRUE);
-		setWarzoneKeyNumeric("reopenBuild", TRUE);
+		intReopenBuild(true);
+		setWarzoneKeyNumeric("reopenBuild", true);
 	}
 
 	// /////////////////////////
@@ -394,7 +394,7 @@ BOOL loadConfig(void)
 	}
 	else
 	{
-		game.fog= TRUE;
+		game.fog= true;
 		setWarzoneKeyNumeric("fog", game.fog);
 	}
 
@@ -466,7 +466,7 @@ BOOL loadConfig(void)
 	{
 		bEnemyAllyRadarColor =(BOOL)val;
 	} else {
-		bEnemyAllyRadarColor = FALSE;
+		bEnemyAllyRadarColor = false;
 		setWarzoneKeyNumeric("radarObjectMode", (SDWORD)bEnemyAllyRadarColor);
 	}
 
@@ -502,15 +502,15 @@ BOOL loadRenderMode(void)
 	bool bad_resolution = false;
 
 	if( !openWarzoneKey() ) {
-		return FALSE;
+		return false;
 	}
 
 	if( getWarzoneKeyNumeric("fullscreen", &val) ) {
 		war_setFullscreen(val);
 	} else {
 		// If no setting is found go to fullscreen by default
-		setWarzoneKeyNumeric("fullscreen", TRUE);
-		war_setFullscreen(TRUE);
+		setWarzoneKeyNumeric("fullscreen", true);
+		war_setFullscreen(true);
 	}
 
 	if (getWarzoneKeyNumeric("trapCursor", &val))
@@ -519,7 +519,7 @@ BOOL loadRenderMode(void)
 	}
 	else
 	{
-		war_SetTrapCursor(FALSE);
+		war_SetTrapCursor(false);
 	}
 
 	// now load the desired res..
@@ -569,7 +569,7 @@ BOOL saveConfig(void)
 
 	if(!openWarzoneKey())
 	{
-		return FALSE;
+		return false;
 	}
 
 	// //////////////////////////

@@ -415,7 +415,7 @@ bool loadWeaponStatsFromDB(const char* filename)
 		// rotate                NUMERIC NOT NULL, -- amount the weapon(turret) can rotate 0 = none
 		if (sqlite3_column_int(stmt, colnum) > UBYTE_MAX)
 		{
-			ASSERT(FALSE, "loadWeaponStats: rotate is greater than %u for weapon %s", (unsigned int)UBYTE_MAX, getStatName(stats));
+			ASSERT(false, "loadWeaponStats: rotate is greater than %u for weapon %s", (unsigned int)UBYTE_MAX, getStatName(stats));
 			goto in_statement_err;
 		}
 		stats->rotate = sqlite3_column_double(stmt, colnum++);
@@ -423,7 +423,7 @@ bool loadWeaponStatsFromDB(const char* filename)
 		// maxElevation          NUMERIC NOT NULL, -- max amount the turret can be elevated up
 		if (sqlite3_column_int(stmt, colnum) > UBYTE_MAX)
 		{
-			ASSERT(FALSE, "loadWeaponStats: maxElevation is greater than %u for weapon %s", (unsigned int)UBYTE_MAX, getStatName(stats));
+			ASSERT(false, "loadWeaponStats: maxElevation is greater than %u for weapon %s", (unsigned int)UBYTE_MAX, getStatName(stats));
 			goto in_statement_err;
 		}
 		stats->maxElevation = sqlite3_column_double(stmt, colnum++);
@@ -432,15 +432,15 @@ bool loadWeaponStatsFromDB(const char* filename)
 		if (sqlite3_column_int(stmt, colnum) > SBYTE_MAX
 		 || sqlite3_column_int(stmt, colnum) < SBYTE_MIN)
 		{
-			ASSERT(FALSE, "loadWeaponStats: minElevation is outside of limits for weapon %s", getStatName(stats));
+			ASSERT(false, "loadWeaponStats: minElevation is outside of limits for weapon %s", getStatName(stats));
 			goto in_statement_err;
 		}
 		stats->minElevation = sqlite3_column_double(stmt, colnum++);
 
 		// facePlayer            TEXT    NOT NULL, -- flag to make the (explosion) effect face the player when drawn
-		stats->facePlayer = compareYes((const char*)sqlite3_column_text(stmt, colnum++), getStatName(stats)) ? TRUE : FALSE;
+		stats->facePlayer = compareYes((const char*)sqlite3_column_text(stmt, colnum++), getStatName(stats)) ? true : false;
 		// faceInFlight          TEXT    NOT NULL, -- flag to make the inflight effect face the player when drawn
-		stats->faceInFlight = compareYes((const char*)sqlite3_column_text(stmt, colnum++), getStatName(stats)) ? TRUE : FALSE;
+		stats->faceInFlight = compareYes((const char*)sqlite3_column_text(stmt, colnum++), getStatName(stats)) ? true : false;
 
 		// recoilValue           NUMERIC NOT NULL, -- used to compare with weight to see if recoils or not
 		stats->recoilValue = sqlite3_column_double(stmt, colnum++);
@@ -448,12 +448,12 @@ bool loadWeaponStatsFromDB(const char* filename)
 		stats->minRange = sqlite3_column_double(stmt, colnum++);
 
 		// lightWorld            TEXT    NOT NULL, -- flag to indicate whether the effect lights up the world
-		stats->lightWorld = compareYes((const char*)sqlite3_column_text(stmt, colnum++), getStatName(stats)) ? TRUE : FALSE;
+		stats->lightWorld = compareYes((const char*)sqlite3_column_text(stmt, colnum++), getStatName(stats)) ? true : false;
 
 		// effectSize            NUMERIC NOT NULL, -- size of the effect 100 = normal, 50 = half etc
 		if (sqlite3_column_int(stmt, colnum) > UBYTE_MAX)
 		{
-			ASSERT(FALSE, "loadWeaponStats: effectSize is greater than %u for weapon %s", (unsigned int)UBYTE_MAX, getStatName(stats));
+			ASSERT(false, "loadWeaponStats: effectSize is greater than %u for weapon %s", (unsigned int)UBYTE_MAX, getStatName(stats));
 			goto in_statement_err;
 		}
 		stats->rotate = sqlite3_column_double(stmt, colnum++);
@@ -461,7 +461,7 @@ bool loadWeaponStatsFromDB(const char* filename)
 		// surfaceToAir          NUMERIC NOT NULL, -- indicates how good in the air - SHOOT_ON_GROUND, SHOOT_IN_AIR or both
 		if (sqlite3_column_int(stmt, colnum) > UBYTE_MAX)
 		{
-			ASSERT(FALSE, "loadWeaponStats: surfaceToAir is greater than %u for weapon %s", (unsigned int)UBYTE_MAX, getStatName(stats));
+			ASSERT(false, "loadWeaponStats: surfaceToAir is greater than %u for weapon %s", (unsigned int)UBYTE_MAX, getStatName(stats));
 			goto in_statement_err;
 		}
 		stats->surfaceToAir = sqlite3_column_double(stmt, colnum++);
@@ -481,16 +481,16 @@ bool loadWeaponStatsFromDB(const char* filename)
 		// numAttackRuns         NUMERIC NOT NULL, -- number of attack runs a VTOL droid can do with this weapon
 		if (sqlite3_column_int(stmt, colnum) > UBYTE_MAX)
 		{
-			ASSERT(FALSE, "loadWeaponStats: numAttackRuns is greater than %u for weapon %s", (unsigned int)UBYTE_MAX, getStatName(stats));
+			ASSERT(false, "loadWeaponStats: numAttackRuns is greater than %u for weapon %s", (unsigned int)UBYTE_MAX, getStatName(stats));
 			goto in_statement_err;
 		}
 		stats->vtolAttackRuns = sqlite3_column_double(stmt, colnum++);
 
 		// designable            INTEGER NOT NULL, -- flag to indicate whether this component can be used in the design screen
-		stats->design = sqlite3_column_int(stmt, colnum++) ? TRUE : FALSE;
+		stats->design = sqlite3_column_int(stmt, colnum++) ? true : false;
 
 		// penetrate             NUMERIC NOT NULL  -- flag to indicate whether pentrate droid or not
-		stats->penetrate = sqlite3_column_int(stmt, colnum++) ? TRUE : FALSE;
+		stats->penetrate = sqlite3_column_int(stmt, colnum++) ? true : false;
 
 		// error check the ranges
 		if (stats->flightSpeed > 0
@@ -629,7 +629,7 @@ bool loadBodyStatsFromDB(const char* filename)
 		// size                  TEXT    NOT NULL, -- How big the body is - affects how hit
 		if (!getBodySize((const char*)sqlite3_column_text(stmt, colnum++), &stats->size))
 		{
-			ASSERT(FALSE, "loadBodyStats: unknown body size for %s", getStatName(stats));
+			ASSERT(false, "loadBodyStats: unknown body size for %s", getStatName(stats));
 			goto in_statement_err;
 		}
 
@@ -712,7 +712,7 @@ bool loadBodyStatsFromDB(const char* filename)
 		}
 
 		// designable            NUMERIC NOT NULL  -- flag to indicate whether this component can be used in the design screen
-		stats->design = sqlite3_column_int(stmt, colnum++) ? TRUE : FALSE;
+		stats->design = sqlite3_column_int(stmt, colnum++) ? true : false;
 
 		//set the max stat values for the design screen
 		if (stats->design)
@@ -843,7 +843,7 @@ bool loadBrainStatsFromDB(const char* filename)
 		stats->progCap = sqlite3_column_int(stmt, colnum++);
 
 		// All brains except ZNULLBRAIN available in design screen
-		stats->design = strcmp(stats->pName, "ZNULLBRAIN") ? TRUE : FALSE;
+		stats->design = strcmp(stats->pName, "ZNULLBRAIN") ? true : false;
 
 		// save the stats
 		statsSetBrain(stats, brain_id - 1);

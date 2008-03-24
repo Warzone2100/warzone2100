@@ -90,7 +90,7 @@ BOOL fpathInitialise(void)
 	fpathBlockingTile = fpathGroundBlockingTile;
 	psPartialRouteObj = NULL;
 
-	return TRUE;
+	return true;
 }
 
 // update routine for the findpath system
@@ -118,7 +118,7 @@ BOOL fpathGroundBlockingTile(SDWORD x, SDWORD y)
 			x >= scrollMaxX-1 || y >= scrollMaxY-1)
 		{
 			// coords off map - auto blocking tile
-			return TRUE;
+			return true;
 		}
 	}
 
@@ -132,9 +132,9 @@ BOOL fpathGroundBlockingTile(SDWORD x, SDWORD y)
 		(terrainType(psTile) == TER_CLIFFFACE) ||
 		(terrainType(psTile) == TER_WATER))
 	{
-		return TRUE;
+		return true;
 	}
-	return FALSE;
+	return false;
 }
 
 // Check if the map tile at a location blocks a droid
@@ -146,7 +146,7 @@ BOOL fpathHoverBlockingTile(SDWORD x, SDWORD y)
 		x >= scrollMaxX-1 || y >= scrollMaxY-1)
 	{
 		// coords off map - auto blocking tile
-		return TRUE;
+		return true;
 	}
 
 	ASSERT( !(x <1 || y < 1 ||	x >= (SDWORD)mapWidth-1 || y >= (SDWORD)mapHeight-1),
@@ -158,9 +158,9 @@ BOOL fpathHoverBlockingTile(SDWORD x, SDWORD y)
 		(TILE_OCCUPIED(psTile) && !TILE_IS_NOTBLOCKING(psTile)) ||
 		(terrainType(psTile) == TER_CLIFFFACE))
 	{
-		return TRUE;
+		return true;
 	}
-	return FALSE;
+	return false;
 }
 
 // Check if the map tile at a location blocks a vtol
@@ -179,18 +179,18 @@ static BOOL fpathLiftBlockingTile(SDWORD x, SDWORD y)
 	{
 		if ( x<1 || y<1 || x>=(SDWORD)mapWidth-1 || y>=(SDWORD)mapHeight-1 )
 		{
-			return TRUE;
+			return true;
 		}
 
 		psTile = mapTile((UDWORD)x, (UDWORD)y);
 
 		if ( TILE_HAS_TALLSTRUCTURE(psTile) )
 		{
-			return TRUE;
+			return true;
 		}
 		else
 		{
-			return FALSE;
+			return false;
 		}
 	}
 
@@ -200,7 +200,7 @@ static BOOL fpathLiftBlockingTile(SDWORD x, SDWORD y)
 		 y >= (SDWORD)mapHeight-VTOL_MAP_EDGE_TILES   )
 	{
 		// coords off map - auto blocking tile
-		return TRUE;
+		return true;
 	}
 
 	ASSERT( !(x <1 || y < 1 ||	x >= (SDWORD)mapWidth-1 || y >= (SDWORD)mapHeight-1),
@@ -209,7 +209,7 @@ static BOOL fpathLiftBlockingTile(SDWORD x, SDWORD y)
 	/* no tiles are blocking if returning to rearm */
 	if( psDroid->action == DACTION_MOVETOREARM )
 	{
-		return FALSE;
+		return false;
 	}
 
 	psTile = mapTile((UDWORD)x, (UDWORD)y);
@@ -237,20 +237,20 @@ static BOOL fpathLiftBlockingTile(SDWORD x, SDWORD y)
 					  (SDWORD) map_Height( g_psObjRoute->pos.x, g_psObjRoute->pos.y );
 		if ( iLiftHeight > iBlockingHeight )
 		{
-			return TRUE;
+			return true;
 		}
 		else
 		{
-			return FALSE;
+			return false;
 		}
 	}
 	else if ( TILE_HAS_TALLSTRUCTURE(psTile) )
 	{
-		return TRUE;
+		return true;
 	}
 	else
 	{
-		return FALSE;
+		return false;
 	}
 }
 
@@ -261,11 +261,11 @@ BOOL fpathLiftSlideBlockingTile(SDWORD x, SDWORD y)
 		 x >= (SDWORD)GetWidthOfMap()-1  ||
 		 y >= (SDWORD)GetHeightOfMap()-1    )
 	{
-		return TRUE;
+		return true;
 	}
 	else
 	{
-		return FALSE;
+		return false;
 	}
 }
 
@@ -298,7 +298,7 @@ static BOOL fpathEndPointCallback(SDWORD x, SDWORD y, SDWORD dist)
 	vy = y - finalY;
 	if (vx*vectorX + vy*vectorY <=0)
 	{
-		return FALSE;
+		return false;
 	}
 
 	// note the last clear tile
@@ -309,10 +309,10 @@ static BOOL fpathEndPointCallback(SDWORD x, SDWORD y, SDWORD dist)
 	}
 	else
 	{
-		obstruction = TRUE;
+		obstruction = true;
 	}
 
-	return TRUE;
+	return true;
 }
 
 /* To plan a path from psObj's current position to 2D position Vector(targetX,targetY)
@@ -370,10 +370,10 @@ static BOOL fpathPointInGateway(SDWORD x, SDWORD y, GATEWAY *psGate)
 	if ((x >= psGate->x1) && (x <= psGate->x2) &&
 		(y >= psGate->y1) && (y <= psGate->y2))
 	{
-		return TRUE;
+		return true;
 	}
 
-	return FALSE;
+	return false;
 }
 
 
@@ -627,13 +627,13 @@ static BOOL fpathRouteCloser(MOVE_CONTROL *psMoveCntl, ASTAR_ROUTE *psAStarRoute
 	if (psAStarRoute->numPoints == 0)
 	{
 		// no route to copy do nothing
-		return FALSE;
+		return false;
 	}
 
 	if (psMoveCntl->numPoints == 0)
 	{
 		// no previous route - this has to be better
-		return TRUE;
+		return true;
 	}
 
 	// see which route is closest to the final destination
@@ -647,10 +647,10 @@ static BOOL fpathRouteCloser(MOVE_CONTROL *psMoveCntl, ASTAR_ROUTE *psAStarRoute
 
 	if (nextDist < prevDist)
 	{
-		return TRUE;
+		return true;
 	}
 
-	return FALSE;
+	return false;
 }
 
 // create a final route from a gateway route
@@ -672,11 +672,11 @@ static FPATH_RETVAL fpathGatewayRoute(BASE_OBJECT *psObj, SDWORD routeMode, SDWO
 		// initialise the move control structures
 		psMoveCntl->numPoints = 0;
 		sAStarRoute.numPoints = 0;
-		bFirstRoute = TRUE;
+		bFirstRoute = true;
 	}
 
 	// keep trying gateway routes until out of options
-	bRouting = TRUE;
+	bRouting = true;
 	while (bRouting)
 	{
 		if (routeMode == ASR_NEWROUTE)
@@ -731,7 +731,7 @@ static FPATH_RETVAL fpathGatewayRoute(BASE_OBJECT *psObj, SDWORD routeMode, SDWO
 			matchPoints = 0;
 			sAStarRoute.numPoints = 0;
 		}
-		bFirstRoute = FALSE;
+		bFirstRoute = false;
 
 		if (routeMode == ASR_NEWROUTE)
 		{
@@ -748,8 +748,8 @@ static FPATH_RETVAL fpathGatewayRoute(BASE_OBJECT *psObj, SDWORD routeMode, SDWO
 		}
 
 		// now generate the route
-		bRouting = FALSE;
-		bFinished = FALSE;
+		bRouting = false;
+		bFinished = false;
 		while (!bFinished)
 		{
 			if ((psCurrRoute == NULL) ||
@@ -823,7 +823,7 @@ static FPATH_RETVAL fpathGatewayRoute(BASE_OBJECT *psObj, SDWORD routeMode, SDWO
 						fpathAppendRoute(psMoveCntl, &sAStarRoute);
 					}
 					fpathBlockGatewayLink(psLastGW, psCurrRoute);
-					bRouting = TRUE;
+					bRouting = true;
 					break;
 				}
 			}
@@ -838,7 +838,7 @@ static FPATH_RETVAL fpathGatewayRoute(BASE_OBJECT *psObj, SDWORD routeMode, SDWO
 			}
 			else
 			{
-				bFinished = TRUE;
+				bFinished = true;
 			}
 		}
 	}
@@ -1010,7 +1010,7 @@ FPATH_RETVAL fpathRoute(BASE_OBJECT *psObj, MOVE_CONTROL *psMoveCntl,
 		clearX = finalX; clearY = finalY;
 		vectorX = startX - finalX;
 		vectorY = startY - finalY;
-		obstruction = FALSE;
+		obstruction = false;
 
 		// cast the ray to find the last clear tile before the obstruction
 		rayCast(startX,startY, rayPointsToAngle(startX,startY, finalX, finalY),
@@ -1136,7 +1136,7 @@ exit:
 		{
 			if (psTile->tileInfoBits & BITS_FPATHBLOCK)
 			{
-				ASSERT( FALSE,"fpathRoute: blocking flags still in the map" );
+				ASSERT( false,"fpathRoute: blocking flags still in the map" );
 			}
 			psTile += 1;
 		}
@@ -1161,11 +1161,11 @@ static BOOL fpathFindFirstRoutePoint(MOVE_CONTROL *psMove, SDWORD *pIndex, SDWOR
 		// found it if the dot products have the same sign
 		if ( (vx1 * vx2 + vy1 * vy2) < 0 )
 		{
-			return TRUE;
+			return true;
 		}
 	}
 
-	return FALSE;
+	return false;
 }
 
 // See if there is another unit on your side that has a route this unit can use
@@ -1177,7 +1177,7 @@ static BOOL fpathFindRoute(DROID *psDroid, SDWORD sX,SDWORD sY, SDWORD tX,SDWORD
 
 	if (!formationFind(&psFormation, tX,tY))
 	{
-		return FALSE;
+		return false;
 	}
 
 	// now look for a unit in this formation with a route that can be used
@@ -1203,7 +1203,7 @@ static BOOL fpathFindRoute(DROID *psDroid, SDWORD sX,SDWORD sY, SDWORD tX,SDWORD
 			clearX = finalX; clearY = finalY;
 			vectorX = startX - finalX;
 			vectorY = startY - finalY;
-			obstruction = FALSE;
+			obstruction = false;
 
 			// cast the ray to find the last clear tile before the obstruction
 			rayCast(startX,startY, rayPointsToAngle(startX,startY, finalX, finalY),
@@ -1220,10 +1220,10 @@ static BOOL fpathFindRoute(DROID *psDroid, SDWORD sX,SDWORD sY, SDWORD tX,SDWORD
 
 				// now see if the route
 
-				return TRUE;
+				return true;
 			}
 		}
 	}
 
-	return FALSE;
+	return false;
 }

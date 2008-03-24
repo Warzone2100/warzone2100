@@ -98,7 +98,7 @@ BOOL bucketSetupList(void)
 	{
 		bucketArray[i] = NULL;
 	}
-	return TRUE;
+	return true;
 }
 
 /* add an object to the current render list */
@@ -113,7 +113,7 @@ extern BOOL bucketAddTypeToList(RENDER_TYPE objectType, void* pObject)
 	{
 		debug(LOG_NEVER, "bucket sort too many objects");
 		/* Just get out if there's too much to render already...! */
-		return(TRUE);
+		return(true);
 	}
 	resourceCounter++;
 	ASSERT( resourceCounter <= NUM_OBJECTS, "bucketAddTypeToList: too many objects" );
@@ -166,7 +166,7 @@ extern BOOL bucketAddTypeToList(RENDER_TYPE objectType, void* pObject)
 			psStructure->sDisplay.frameNumber = 0;
 		}
 
-		return TRUE;
+		return true;
 	}
 
 	/* Maintain biggest*/
@@ -201,7 +201,7 @@ extern BOOL bucketAddTypeToList(RENDER_TYPE objectType, void* pObject)
 	newTag->actualZ = z;
 	bucketArray[z] = newTag;
 
-	return TRUE;
+	return true;
 }
 
 
@@ -261,7 +261,7 @@ extern BOOL bucketRenderCurrentList(void)
 	zMin = SDWORD_MAX;
 	worldMax = SDWORD_MIN;
 	worldMin = SDWORD_MAX;
-	return TRUE;
+	return true;
 }
 
 static SDWORD bucketCalculateZ(RENDER_TYPE objectType, void* pObject)

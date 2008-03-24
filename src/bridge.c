@@ -44,8 +44,8 @@
  */
 
 /*
-Returns TRUE or FALSE as to whether a bridge is valid.
-For it to be TRUE - all intervening points must be lower than the start
+Returns true or false as to whether a bridge is valid.
+For it to be true - all intervening points must be lower than the start
 and end points. We can also check other stuff here like what it's going
 over. Also, it has to be between a minimum and maximum length and
 one of the axes must share the same values.
@@ -58,15 +58,15 @@ UDWORD	startHeight,endHeight,sectionHeight;
 UDWORD	i;
 
 	/* Establish axes allignment */
-	xBridge = ( (startX == endX) ? TRUE : FALSE );
-	yBridge = ( (startY == endY) ? TRUE : FALSE );
+	xBridge = ( (startX == endX) ? true : false );
+	yBridge = ( (startY == endY) ? true : false );
 
 	/* At least one axis must be constant */
 	if (!xBridge && !yBridge)
 	{
 		/*	Bridge isn't straight - this shouldn't have been passed
 			in, but better safe than sorry! */
-		return(FALSE);
+		return(false);
 	}
 
 	/* Get the bridge length */
@@ -76,7 +76,7 @@ UDWORD	i;
 	if(bridgeLength<MINIMUM_BRIDGE_SPAN || bridgeLength>MAXIMUM_BRIDGE_SPAN)
 	{
 		/* Cry out */
-		return(FALSE);
+		return(false);
 	}
 
 	/*	Check intervening tiles to see if they're lower
@@ -97,11 +97,11 @@ UDWORD	i;
 		if( sectionHeight > MAX(startHeight,endHeight) )
 		{
 			/* Cry out */
-			return(FALSE);
+			return(false);
 		}
 	}
 	/* Everything's just fine */
-	return(TRUE);
+	return(true);
 }
 
 
@@ -122,7 +122,7 @@ BOOL	renderBridgeSection(STRUCTURE *psStructure)
 			/* Bomb out if it's not visible and there's no active god mode */
 			if(!psStructure->visible[selectedPlayer] && !godMode)
 			{
-				return(FALSE);
+				return(false);
 			}
 
 			/* Get it's x and y coordinates so we don't have to deref. struct later */
@@ -151,7 +151,7 @@ BOOL	renderBridgeSection(STRUCTURE *psStructure)
 			pie_Draw3DShape(psStructure->sDisplay.imd, 0, 0, WZCOL_WHITE, WZCOL_BLACK, 0, 0);
 
 			pie_MatEnd();
-			return(TRUE);
+			return(true);
 }
 
 /*
@@ -177,13 +177,13 @@ BOOL	startHigher;
 	endHeight = map_TileHeight(endX,endY);
 
 	/* Find out which is higher */
-	startHigher = (startHeight>=endHeight ? TRUE : FALSE);
+	startHigher = (startHeight>=endHeight ? true : false);
 
 	/* If the start position is higher */
 	if(startHigher)
 	{
 		/* Inform structure */
-		info->startHighest = TRUE;
+		info->startHighest = true;
 
 		/* And the end position needs raising */
 		info->heightChange = startHeight - endHeight;
@@ -192,7 +192,7 @@ BOOL	startHigher;
 	else
 	{
 		/* Inform structure */
-		info->startHighest = FALSE;
+		info->startHighest = false;
 		/* So we need to raise the start position */
 		info->heightChange = endHeight - startHeight;
 	}
@@ -200,8 +200,8 @@ BOOL	startHigher;
 	/* Establish axes allignment */
 	/* Only one of these can occur otherwise
 	bridge is one square big */
-	xBridge = ( (startX == endX) ? TRUE : FALSE );
-	yBridge = ( (startY == endY) ? TRUE : FALSE );
+	xBridge = ( (startX == endX) ? true : false );
+	yBridge = ( (startY == endY) ? true : false );
 
 	/*
 		Set the bridge's height.
@@ -222,13 +222,13 @@ BOOL	startHigher;
 	/* We've got a bridge of constant X */
 	if(xBridge)
 	{
-		info->bConstantX = TRUE;
+		info->bConstantX = true;
 		info->bridgeLength = abs(startY-endY);
 	}
 	/* We've got a bridge of constant Y */
 	else if(yBridge)
 	{
-		info->bConstantX = FALSE;
+		info->bConstantX = false;
 		info->bridgeLength = abs(startX-endX);
 	}
 	else
@@ -255,7 +255,7 @@ void testBuildBridge(UDWORD startX, UDWORD startY, UDWORD endX, UDWORD endY)
 		   		dv.x = ((bridge.startX*128)+64);
 		   		dv.z = ((i*128)+64);
 				dv.y = bridge.bridgeHeight;
-				addEffect(&dv,EFFECT_SMOKE,SMOKE_TYPE_DRIFTING,FALSE,NULL,0);
+				addEffect(&dv,EFFECT_SMOKE,SMOKE_TYPE_DRIFTING,false,NULL,0);
 //				addExplosion(&dv,TYPE_EXPLOSION_SMOKE_CLOUD,NULL);
 			}
 		}
@@ -266,7 +266,7 @@ void testBuildBridge(UDWORD startX, UDWORD startY, UDWORD endX, UDWORD endY)
 		   		dv.x = ((i*128)+64);
 		   		dv.z = ((bridge.startY*128)+64);
 				dv.y = bridge.bridgeHeight;
-				addEffect(&dv,EFFECT_SMOKE,SMOKE_TYPE_DRIFTING,FALSE,NULL,0);
+				addEffect(&dv,EFFECT_SMOKE,SMOKE_TYPE_DRIFTING,false,NULL,0);
 //				addExplosion(&dv,TYPE_EXPLOSION_SMOKE_CLOUD,NULL);
 			}
 		}
@@ -292,7 +292,7 @@ void testBuildBridge(UDWORD startX, UDWORD startY, UDWORD endX, UDWORD endY)
 		   		dv.x = ((bridge.startX*128)+64);
 		   		dv.z = ((i*128)+64);
 				dv.y = bridge.bridgeHeight;
-				addEffect(&dv,EFFECT_EXPLOSION,EXPLOSION_TYPE_SMALL,FALSE,NULL,0);
+				addEffect(&dv,EFFECT_EXPLOSION,EXPLOSION_TYPE_SMALL,false,NULL,0);
 //				addExplosion(&dv,TYPE_EXPLOSION_MED,NULL);
 			}
 		}
@@ -303,7 +303,7 @@ void testBuildBridge(UDWORD startX, UDWORD startY, UDWORD endX, UDWORD endY)
 		   		dv.x = ((i*128)+64);
 		   		dv.z = ((bridge.startY*128)+64);
 				dv.y = bridge.bridgeHeight;
-				addEffect(&dv,EFFECT_EXPLOSION,EXPLOSION_TYPE_SMALL,FALSE,NULL,0);
+				addEffect(&dv,EFFECT_EXPLOSION,EXPLOSION_TYPE_SMALL,false,NULL,0);
 //				addExplosion(&dv,TYPE_EXPLOSION_MED,NULL);
 			}
 		}

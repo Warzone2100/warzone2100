@@ -79,7 +79,7 @@ BOOL objmemInitialise(void)
 	// reset the object ID number
 	objID = OBJ_ID_INIT;
 
-	return TRUE;
+	return true;
 }
 
 /* Release the object heaps */
@@ -402,7 +402,7 @@ DROID* createDroid(UDWORD player)
      it will cancel itself - HACK?!*/
      if (pList[psDroidToAdd->player] == apsDroidLists[psDroidToAdd->player])
      {
-         psDroidToAdd->died = FALSE;
+         psDroidToAdd->died = false;
 
 		 // commanders have to get their group back
 		 if (psDroidToAdd->droidType == DROID_COMMAND)
@@ -597,16 +597,16 @@ BOOL createFlagPosition(FLAG_POSITION **ppsNew, UDWORD player)
 	if (*ppsNew == NULL)
 	{
 		debug(LOG_ERROR, "createFlagPosition: Out of memory");
-		return FALSE;
+		return false;
 	}
 	(*ppsNew)->type = POS_DELIVERY;
 	(*ppsNew)->player = player;
 	(*ppsNew)->frameNumber = 0;
-	(*ppsNew)->selected = FALSE;
+	(*ppsNew)->selected = false;
 	(*ppsNew)->coords.x = ~0;
 	(*ppsNew)->coords.y = ~0;
 	(*ppsNew)->coords.z = ~0;
-	return TRUE;
+	return true;
 }
 
 /* add the Flag Position to the Flag Position Lists */

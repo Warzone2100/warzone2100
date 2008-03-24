@@ -182,17 +182,17 @@ static BOOL registry_load( const char *filename )
 	debug(LOG_WZ, "Loading the registry from %s", filename);
 	if (PHYSFS_exists(filename)) {
 		if (!loadFile(filename, &bptr, &filesize)) {
-			return FALSE;           // happens only in NDEBUG case
+			return false;           // happens only in NDEBUG case
 		}
 	} else {
 		// Registry does not exist. Caller will write a new one.
-		return FALSE;
+		return false;
 	}
 
 	debug(LOG_WZ, "Parsing the registry from %s", filename);
 	if (filesize == 0 || strlen(bptr) == 0) {
 		debug(LOG_WARNING, "Registry file %s is empty!", filename);
-		return FALSE;
+		return false;
 	}
 	bufstart = bptr;
 	bptr[filesize - 1] = '\0'; // make sure it is terminated
@@ -224,7 +224,7 @@ static BOOL registry_load( const char *filename )
 		}
 	}
 	free(bufstart);
-	return TRUE;
+	return true;
 }
 
 //
@@ -253,9 +253,9 @@ static BOOL registry_save( const char *filename )
 	}
 
 	if (!saveFile(filename, buffer, count)) {
-		return FALSE; // only in NDEBUG case
+		return false; // only in NDEBUG case
 	}
-	return TRUE;
+	return true;
 }
 
 void setRegistryFilePath(const char* fileName)
@@ -270,16 +270,16 @@ void setRegistryFilePath(const char* fileName)
 BOOL openWarzoneKey( void )
 {
 	//~~~~~~~~~~~~~~~~~~~~~
-	static BOOL done = FALSE;
+	static BOOL done = false;
 	//~~~~~~~~~~~~~~~~~~~~~
 
-	if ( done == FALSE )
+	if ( done == false )
 	{
 		registry_load( RegFilePath );
-		done = TRUE;
+		done = true;
 	}
 
-	return TRUE;
+	return true;
 }
 
 ///
@@ -289,7 +289,7 @@ BOOL openWarzoneKey( void )
 BOOL closeWarzoneKey( void )
 {
 	registry_save( RegFilePath );
-	return TRUE;
+	return true;
 }
 
 /**
@@ -306,11 +306,11 @@ BOOL getWarzoneKeyNumeric( const char *pName, SDWORD *val )
 
 	if ( value == NULL || sscanf(value, "%i", val) != 1 )
 	{
-		return FALSE;
+		return false;
 	}
 	else
 	{
-		return TRUE;
+		return true;
 	}
 }
 
@@ -326,14 +326,14 @@ BOOL getWarzoneKeyString( const char *pName, char *pString )
 
 	if ( value == NULL )
 	{
-		return FALSE;
+		return false;
 	}
 	else
 	{
 		strcpy( pString, value );
 	}
 
-	return TRUE;
+	return true;
 }
 
 ///
@@ -351,7 +351,7 @@ BOOL setWarzoneKeyNumeric( const char *pName, SDWORD val )
 	buf[sizeof(buf) - 1] = '\0';
 
 	registry_set_key( pName, buf );
-	return TRUE;
+	return true;
 }
 
 ///
@@ -361,5 +361,5 @@ BOOL setWarzoneKeyNumeric( const char *pName, SDWORD val )
 BOOL setWarzoneKeyString( const char *pName, const char *pString )
 {
 	registry_set_key( pName, pString );
-	return TRUE;
+	return true;
 }

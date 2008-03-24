@@ -43,7 +43,7 @@
 /* Alex McLean, Pumpkin Studios, EIDOS Interactive */
 
 /** Is the console history on or off? */
-static BOOL	bConsoleDropped = FALSE;
+static BOOL	bConsoleDropped = false;
 
 /** Stores the console dimensions and states */
 static CONSOLE mainConsole;
@@ -145,7 +145,7 @@ void	initConsoleMessages( void )
 
 	lastDropChange = 0;
 
-	bConsoleDropped = FALSE;
+	bConsoleDropped = false;
 
 	/* Linked list is empty */
 	consoleMessages = NULL;
@@ -154,10 +154,10 @@ void	initConsoleMessages( void )
 	setConsoleMessageDuration(DEFAULT_MESSAGE_DURATION);
 
 	/* No box under the text */
-	setConsoleBackdropStatus(TRUE);
+	setConsoleBackdropStatus(true);
 
 	/* Turn on the console display */
-	enableConsoleDisplay(TRUE);
+	enableConsoleDisplay(true);
 
 	/* Set left justification as default */
 	setDefaultConsoleJust(LEFT_JUSTIFY);
@@ -169,21 +169,21 @@ void	initConsoleMessages( void )
 	setConsoleLineInfo(MAX_CONSOLE_MESSAGES/4 + 4);
 
 	/* We're not initially having permanent messages */
-	setConsolePermanence(FALSE,TRUE);
+	setConsolePermanence(false,true);
 
 	/* Allow new messages */
-	permitNewConsoleMessages(TRUE);
+	permitNewConsoleMessages(true);
 }
 
 /** Open the console when it's closed and close it when it's open. */
 void	toggleConsoleDrop( void )
 {
 	/* If it's closed ... */
-	if(bConsoleDropped == FALSE)
+	if(bConsoleDropped == false)
 	{
 		dropState = DROP_DROPPING;
 		consoleDrop = 0;
-		bConsoleDropped = TRUE;
+		bConsoleDropped = true;
 
 		audio_PlayTrack(ID_SOUND_WINDOWOPEN);
 	}
@@ -205,13 +205,13 @@ static BOOL _addConsoleMessage(const char *messageText, CONSOLE_TEXT_JUSTIFICATI
 	/* Just don't add it if there's too many already */
 	if(numActiveMessages>=MAX_CONSOLE_MESSAGES-1)
 	{
-		return FALSE;
+		return false;
 	}
 
 	/* Don't allow it to be added if we've disabled adding of new messages */
 	if(!allowNewMessages)
 	{
-		return FALSE ;
+		return false ;
 	}
 
 	/* Is the string too long? */
@@ -290,7 +290,7 @@ static BOOL _addConsoleMessage(const char *messageText, CONSOLE_TEXT_JUSTIFICATI
 
 	/* There's one more active console message */
 	numActiveMessages++;
-	return TRUE;
+	return true;
 }
 
 /// Wrapper for _addConsoleMessage
@@ -335,7 +335,7 @@ void	updateConsoleMessages( void )
 			else
 			{
 				dropState = DROP_CLOSED;
-				bConsoleDropped = FALSE;
+				bConsoleDropped = false;
 			}
 		}
 	}
@@ -494,7 +494,7 @@ void	displayConsoleMessages( void )
 	linePitch = iV_GetTextLineSize();
 
 	pie_SetDepthBufferStatus(DEPTH_CMP_ALWAYS_WRT_ON);
-	pie_SetFogStatus(FALSE);
+	pie_SetFogStatus(false);
 
 	drop = 0;
 	if(bConsoleDropped)
@@ -575,14 +575,14 @@ int displayOldMessages()
 
 	if(thisIndex)
 	{
-		bQuit = FALSE;
+		bQuit = false;
 		while(!bQuit)
 		{
-			for(i=0,bGotIt = FALSE; i<MAX_CONSOLE_MESSAGES && !bGotIt; i++)
+			for(i=0,bGotIt = false; i<MAX_CONSOLE_MESSAGES && !bGotIt; i++)
 			{
 				if(consoleStorage[i].id == thisIndex-1)
 				{
-					bGotIt = TRUE;
+					bGotIt = true;
 					marker = i;
 				}
 			}
@@ -593,7 +593,7 @@ int displayOldMessages()
 			}
 			else
 			{
-				bQuit = TRUE;	// count holds how many we got
+				bQuit = true;	// count holds how many we got
 			}
 			if(thisIndex)
 			{
@@ -602,12 +602,12 @@ int displayOldMessages()
 			}
 			else
 			{
-				bQuit = TRUE;	// We've reached the big bang - there is nothing older...
+				bQuit = true;	// We've reached the big bang - there is nothing older...
 			}
 			/* History can only hold so many */
 			if(count>=consoleDrop)
 			{
-				bQuit = TRUE;
+				bQuit = true;
 			}
 		}
 	}
@@ -725,13 +725,13 @@ void	setConsoleSizePos(UDWORD x, UDWORD y, UDWORD width)
 /**	Establishes whether the console messages stay there */
 void	setConsolePermanence(BOOL state, BOOL bClearOld)
 {
- 	if(mainConsole.permanent == TRUE && state == FALSE)
+ 	if(mainConsole.permanent == true && state == false)
 	{
 		if(bClearOld)
 		{
 			flushConsoleMessages();
 		}
-		mainConsole.permanent = FALSE;
+		mainConsole.permanent = false;
 	}
 	else
 	{
@@ -743,7 +743,7 @@ void	setConsolePermanence(BOOL state, BOOL bClearOld)
 	}
 }
 
-/** TRUE or FALSE as to whether the mouse is presently over the console window */
+/** true or false as to whether the mouse is presently over the console window */
 BOOL	mouseOverConsoleBox( void )
 {
 	if	(
@@ -753,11 +753,11 @@ BOOL	mouseOverConsoleBox( void )
 		&& ((UDWORD)mouseY() < (mainConsole.topY + iV_GetTextLineSize()*numActiveMessages))	//condition 4
 	)
 	{
-		return(TRUE);
+		return(true);
 	}
 	else
 	{
-		return(FALSE);
+		return(false);
 	}
 }
 

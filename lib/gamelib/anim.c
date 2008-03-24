@@ -71,7 +71,7 @@ BOOL anim_Init()
 	g_animGlobals.uwCurObj      = 0;
 	g_animGlobals.uwCurState    = 0;
 
-	return TRUE;
+	return true;
 }
 
 /***************************************************************************/
@@ -119,7 +119,7 @@ BOOL anim_Shutdown()
 		psAnim = psAnimTmp;
 	}
 
-	return TRUE;
+	return true;
 }
 
 static void anim_InitBaseMembers(BASEANIM * psAnim, UWORD uwStates, UWORD uwFrameRate,
@@ -149,7 +149,7 @@ BOOL anim_Create3D(char szPieFileName[], UWORD uwStates, UWORD uwFrameRate, UWOR
 	/* allocate anim */
 	if ( (psAnim3D = (ANIM3D*)malloc(sizeof(ANIM3D))) == NULL )
 	{
-		return FALSE;
+		return false;
 	}
 
 	/* get local pointer to shape */
@@ -170,7 +170,7 @@ BOOL anim_Create3D(char szPieFileName[], UWORD uwStates, UWORD uwFrameRate, UWOR
 		debug( LOG_ERROR, "anim_Create3D: frames in pie %s != script objects %i\n",
 					szPieFileName, uwObj );
 		abort();
-		return FALSE;
+		return false;
 	}
 
 	/* get pointers to individual frames */
@@ -194,7 +194,7 @@ BOOL anim_Create3D(char szPieFileName[], UWORD uwStates, UWORD uwFrameRate, UWOR
 	/* update globals */
 	g_animGlobals.uwCurObj = 0;
 
-	return TRUE;
+	return true;
 }
 
 /***************************************************************************/
@@ -218,13 +218,13 @@ BOOL anim_EndScript()
 	{
 		debug( LOG_ERROR, "anim_End3D: states in current anim not consistent with header\n" );
 		abort();
-		return FALSE;
+		return false;
 	}
 
 	/* update globals */
 	g_animGlobals.uwCurObj++;
 
-	return TRUE;
+	return true;
 }
 
 /***************************************************************************/
@@ -270,7 +270,7 @@ BOOL anim_AddFrameToAnim(int iFrame, Vector3i vecPos, Vector3i vecRot, Vector3i 
 	/* update globals */
 	g_animGlobals.uwCurState++;
 
-	return TRUE;
+	return true;
 }
 
 /***************************************************************************/
@@ -312,7 +312,7 @@ void anim_SetVals(char szFileName[], UWORD uwAnimID)
 
 BASEANIM *anim_LoadFromFile(PHYSFS_file* fileHandle)
 {
-	if ( ParseResourceFile( fileHandle ) == FALSE )
+	if ( ParseResourceFile( fileHandle ) == false )
 	{
 		debug( LOG_ERROR, "anim_LoadFromFile: couldn't parse file\n" );
 		abort();

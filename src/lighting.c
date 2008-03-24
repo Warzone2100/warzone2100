@@ -85,7 +85,7 @@ void initLighting(UDWORD x1, UDWORD y1, UDWORD x2, UDWORD y2)
 	// quick check not trying to go off the map - don't need to check for < 0 since UWORD's!!
 	if (x1 > mapWidth || x2 > mapWidth || y1 > mapHeight || y2 > mapHeight)
 	{
-		ASSERT( FALSE, "initLighting: coords off edge of map" );
+		ASSERT( false, "initLighting: coords off edge of map" );
 		return;
 	}
 
@@ -331,7 +331,7 @@ static void normalsOnTile(unsigned int tileX, unsigned int tileY, unsigned int q
 		}
 		break;
 	default:
-		ASSERT( FALSE,"Invalid quadrant in lighting code" );
+		ASSERT( false,"Invalid quadrant in lighting code" );
 	} // end switch
 }
 
@@ -397,7 +397,7 @@ SDWORD	distToCorner;
 UDWORD	percent;
 
  	/* Firstly - there's no point processing lights that are off the grid */
-	if(clipXY(psLight->position.x,psLight->position.z) == FALSE)
+	if(clipXY(psLight->position.x,psLight->position.z) == false)
 	{
 		return;
 	}
@@ -497,7 +497,7 @@ static void colourTile(SDWORD xIndex, SDWORD yIndex, LIGHT_COLOUR colouridx, UBY
 			colour.byte.b = MIN(255, colour.byte.b + percent);
 		break;
 		default:
-			ASSERT( FALSE,"Weirdy colour of light attempted" );
+			ASSERT( false,"Weirdy colour of light attempted" );
 			break;
 	}
 	setTileColour(xIndex, yIndex, colour);
@@ -547,7 +547,7 @@ UDWORD	retVal;
 	if(lightVal>255) lightVal = 255;
 	presVal = psDroid->illumination;
 	adjust = (float)lightVal - (float)presVal;
-	adjust *= timeAdjustedIncrement(DROID_SEEK_LIGHT_SPEED, TRUE);
+	adjust *= timeAdjustedIncrement(DROID_SEEK_LIGHT_SPEED, true);
 	retVal = presVal + adjust;
 	if(retVal > 255) retVal = 255;
 	psDroid->illumination = (UBYTE)retVal;

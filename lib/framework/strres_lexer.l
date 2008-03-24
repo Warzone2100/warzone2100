@@ -99,9 +99,9 @@ static PHYSFS_file* pReadFile = NULL;
 [ \t\n\x0d\x0a]						;
 
 	/* Strip comments */
-"/*"						{ inComment=TRUE; BEGIN COMMENT; }
+"/*"						{ inComment=true; BEGIN COMMENT; }
 <COMMENT>"*/" |
-<COMMENT>"*/"\n				{ inComment=FALSE; BEGIN 0; }
+<COMMENT>"*/"\n				{ inComment=false; BEGIN 0; }
 <COMMENT>. |
 <COMMENT>\n					;
 

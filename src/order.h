@@ -214,10 +214,10 @@ void orderSelectedStatsTwoLoc(UDWORD player, DROID_ORDER order,
 // see if a droid supports a secondary order
 extern BOOL secondarySupported(DROID *psDroid, SECONDARY_ORDER sec);
 
-// get the state of a secondary order, return FALSE if unsupported
+// get the state of a secondary order, return false if unsupported
 extern BOOL secondaryGetState(DROID *psDroid, SECONDARY_ORDER sec, SECONDARY_STATE *pState);
 
-// set the state of a secondary order, return FALSE if failed.
+// set the state of a secondary order, return false if failed.
 extern BOOL secondarySetState(DROID *psDroid, SECONDARY_ORDER sec, SECONDARY_STATE State);
 
 // check the damage level of a droid against it's secondary state
@@ -244,9 +244,9 @@ extern BASE_OBJECT * checkForDamagedStruct(DROID *psDroid, STRUCTURE *psTarget);
 // do a health check for a droid
 extern void orderHealthCheck(DROID *psDroid);
 
-// set the state of a secondary order for a Factory, return FALSE if failed.
+// set the state of a secondary order for a Factory, return false if failed.
 extern BOOL setFactoryState(STRUCTURE *psStruct, SECONDARY_ORDER sec, SECONDARY_STATE State);
-// get the state of a secondary order for a Factory, return FALSE if unsupported
+// get the state of a secondary order for a Factory, return false if unsupported
 extern BOOL getFactoryState(STRUCTURE *psStruct, SECONDARY_ORDER sec, SECONDARY_STATE *pState);
 
 //lasSat structure can select a target

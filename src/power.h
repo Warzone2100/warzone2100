@@ -99,13 +99,13 @@ extern void updateLastPowered(BASE_OBJECT *psObject,UBYTE player);
 */
 extern STRUCTURE *getRExtractor(STRUCTURE *psStruct);
 
-/** Checks if the object to be powered next - returns TRUE if power. */
+/** Checks if the object to be powered next - returns true if power. */
 extern BOOL getLastPowered(BASE_OBJECT *psStructure);
 
-/** Defines which structure types draw power - returns TRUE if use power. */
+/** Defines which structure types draw power - returns true if use power. */
 extern BOOL structUsesPower(STRUCTURE *psStruct);
 
-/** Defines which droid types draw power - returns TRUE if use power. */
+/** Defines which droid types draw power - returns true if use power. */
 extern BOOL droidUsesPower(DROID *psDroid);
 
 /** This is a check cos there is a problem with the power but not sure where!! */

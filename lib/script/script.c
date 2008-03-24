@@ -43,18 +43,18 @@ BOOL scriptInitialise()
 {
 	if (!stackInitialise())
 	{
-		return FALSE;
+		return false;
 	}
 	if (!interpInitialise())
 	{
-		return FALSE;
+		return false;
 	}
 	if (!eventInitialise())
 	{
-		return FALSE;
+		return false;
 	}
 
-	return TRUE;
+	return true;
 }
 
 // Shutdown the script library
@@ -176,7 +176,7 @@ BOOL scriptGetVarIndex(SCRIPT_CODE *psCode, char *pID, UDWORD *pIndex)
 
 	if (!psCode->psVarDebug)
 	{
-		return FALSE;
+		return false;
 	}
 
 	for(index=0; index<psCode->numGlobals; index++)
@@ -184,11 +184,11 @@ BOOL scriptGetVarIndex(SCRIPT_CODE *psCode, char *pID, UDWORD *pIndex)
 		if (strcmp(psCode->psVarDebug[index].pIdent, pID)==0)
 		{
 			*pIndex = index;
-			return TRUE;
+			return true;
 		}
 	}
 
-	return FALSE;
+	return false;
 }
 
 /* returns true if passed INTERP_TYPE is used as a pointer in INTERP_VAL, false otherwise.
@@ -199,7 +199,7 @@ BOOL scriptTypeIsPointer(INTERP_TYPE type)
 {
 	ASSERT( ((type < ST_MAXTYPE) || (type >= VAL_REF)), "scriptTypeIsPointer: invalid type: %d", type );
 	// any value or'ed with VAL_REF is a pointer
-	if (type >= VAL_REF) return TRUE;
+	if (type >= VAL_REF) return true;
 	switch (type) {
 		case VAL_STRING:
 		case VAL_OBJ_GETSET:
@@ -218,7 +218,7 @@ BOOL scriptTypeIsPointer(INTERP_TYPE type)
 		case ST_POINTER_T:
 		case ST_POINTER_S:
 		case ST_POINTER_STRUCTSTAT:
-			return TRUE;
+			return true;
 		case VAL_BOOL:
 		case VAL_INT:
 		case VAL_FLOAT:
@@ -242,9 +242,9 @@ BOOL scriptTypeIsPointer(INTERP_TYPE type)
 		case ST_FEATURESTAT:
 		case ST_DROIDID:
 		case ST_SOUND:
-			return FALSE;
+			return false;
 		default:
-			ASSERT(FALSE, "scriptTypeIsPointer: unhandled type: %d", type );
-			return FALSE;
+			ASSERT(false, "scriptTypeIsPointer: unhandled type: %d", type );
+			return false;
 	}
 }

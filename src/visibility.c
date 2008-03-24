@@ -84,16 +84,16 @@ BOOL visInitialise(void)
 	visLevelInc = 0;
 	visLevelDec = 0;
 
-	return TRUE;
+	return true;
 }
 
 // update the visibility change levels
 void visUpdateLevel(void)
 {
-	visLevelIncAcc += timeAdjustedIncrement(VIS_LEVEL_INC, TRUE);
+	visLevelIncAcc += timeAdjustedIncrement(VIS_LEVEL_INC, true);
 	visLevelInc = visLevelIncAcc;
 	visLevelIncAcc -= visLevelInc;
-	visLevelDecAcc += timeAdjustedIncrement(VIS_LEVEL_DEC, TRUE);
+	visLevelDecAcc += timeAdjustedIncrement(VIS_LEVEL_DEC, true);
 	visLevelDec = visLevelDecAcc;
 	visLevelDecAcc -= visLevelDec;
 }
@@ -115,7 +115,7 @@ static SDWORD visObjHeight(BASE_OBJECT *psObject)
 		height = psObject->sDisplay.imd->max.y;
 		break;
 	default:
-		ASSERT( FALSE,"visObjHeight: unknown object type" );
+		ASSERT( false,"visObjHeight: unknown object type" );
 		height = 0;
 		break;
 	}
@@ -169,12 +169,12 @@ static BOOL rayTerrainCallback(SDWORD x, SDWORD y, SDWORD dist)
 			{
 				// can see opponent moving
 				avInformOfChange(map_coord(x), map_coord(y));		//reveal map
-				psTile->activeSensor = TRUE;
+				psTile->activeSensor = true;
 			}
 		}
 	}
 
-	return TRUE;
+	return true;
 }
 
 /* The los ray callback */
@@ -195,7 +195,7 @@ static BOOL rayLOSCallback(SDWORD x, SDWORD y, SDWORD dist)
 
 	if (rayStart)
 	{
-		rayStart = FALSE;
+		rayStart = false;
 	}
 	else
 	{
@@ -211,7 +211,7 @@ static BOOL rayLOSCallback(SDWORD x, SDWORD y, SDWORD dist)
 	if (distSq >= tarDist)
 	{
 		lastD = dist;
-		return FALSE;
+		return false;
 	}
 	else
 	{
@@ -229,7 +229,7 @@ static BOOL rayLOSCallback(SDWORD x, SDWORD y, SDWORD dist)
 				numWalls += 1;
 				wallX = x;
 				wallY = y;
-	//			return FALSE;
+	//			return false;
 			}
 			else
 			{
@@ -243,7 +243,7 @@ static BOOL rayLOSCallback(SDWORD x, SDWORD y, SDWORD dist)
 		lastD = dist;
 	}
 
-	return TRUE;
+	return true;
 }
 
 #define VTRAYSTEP	(NUM_RAYS/120)
@@ -307,13 +307,13 @@ BOOL visibleObject(BASE_OBJECT *psViewer, BASE_OBJECT *psTarget)
 		// a structure that is being built cannot see anything
 		if (psStruct->status != SS_BUILT)
 		{
-			return FALSE;
+			return false;
 		}
 
 		if ((psStruct->pStructureType->type == REF_WALL) ||
 			(psStruct->pStructureType->type == REF_WALLCORNER))
 		{
-			return FALSE;
+			return false;
 		}
 
 		if ((structCBSensor((STRUCTURE *)psViewer) ||
@@ -322,7 +322,7 @@ BOOL visibleObject(BASE_OBJECT *psViewer, BASE_OBJECT *psTarget)
 		{
 			// if a unit is targetted by a counter battery sensor
 			// it is automatically seen
-			return TRUE;
+			return true;
 		}
 
 		// increase the sensor range for AA sites
@@ -335,10 +335,10 @@ BOOL visibleObject(BASE_OBJECT *psViewer, BASE_OBJECT *psTarget)
 
 		break;
 	default:
-		ASSERT( FALSE,
+		ASSERT( false,
 			"visibleObject: visibility checking is only implemented for"
 			"units and structures" );
-		return FALSE;
+		return false;
 		break;
 	}
 
@@ -358,7 +358,7 @@ BOOL visibleObject(BASE_OBJECT *psViewer, BASE_OBJECT *psTarget)
 	if (xdiff > range)
 	{
 		// too far away, reject
-		return FALSE;
+		return false;
 	}
 
 	y = (SDWORD)psViewer->pos.y;
@@ -370,20 +370,20 @@ BOOL visibleObject(BASE_OBJECT *psViewer, BASE_OBJECT *psTarget)
 	if (ydiff > range)
 	{
 		// too far away, reject
-		return FALSE;
+		return false;
 	}
 
 	rangeSquared = xdiff*xdiff + ydiff*ydiff;
 	if (rangeSquared > (range*range))
 	{
 		/* Out of sensor range */
-		return FALSE;
+		return false;
 	}
 
 	if (rangeSquared == 0)
 	{
 		// Should never be on top of each other, but ...
-		return TRUE;
+		return true;
 	}
 
 	// initialise the callback variables
@@ -391,7 +391,7 @@ BOOL visibleObject(BASE_OBJECT *psViewer, BASE_OBJECT *psTarget)
 	startH += visObjHeight(psViewer);
 	currG = -UBYTE_MAX * GRAD_MUL * ELEVATION_SCALE;
 	tarDist = rangeSquared;
-	rayStart = TRUE;
+	rayStart = true;
 	currObj = 0;
 	ray = NUM_RAYS-1 - calcDirection(psViewer->pos.x,psViewer->pos.y, psTarget->pos.x,psTarget->pos.y);
 	finalX = map_coord(psTarget->pos.x);
@@ -412,9 +412,9 @@ BOOL visibleObjWallBlock(BASE_OBJECT *psViewer, BASE_OBJECT *psTarget)
 {
 	BOOL	result;
 
-	blockingWall = TRUE;
+	blockingWall = true;
 	result = visibleObject(psViewer,psTarget);
-	blockingWall = FALSE;
+	blockingWall = false;
 
 	return result;
 }
@@ -425,10 +425,10 @@ BOOL visGetBlockingWall(BASE_OBJECT *psViewer, BASE_OBJECT *psTarget, STRUCTURE 
 	SDWORD		tileX, tileY, player;
 	STRUCTURE	*psCurr, *psWall;
 
-	blockingWall = TRUE;
+	blockingWall = true;
 	numWalls = 0;
 	visibleObject(psViewer, psTarget);
-	blockingWall = FALSE;
+	blockingWall = false;
 
 	// see if there was a wall in the way
 	psWall = NULL;
@@ -476,7 +476,7 @@ void processVisibility(BASE_OBJECT *psObj)
 		memset (currVis, 0, sizeof(BOOL) * MAX_PLAYERS);
 
 		// one can trivially see oneself
-		currVis[psObj->player]=TRUE;
+		currVis[psObj->player]=true;
 	}
 	else
 	{
@@ -495,7 +495,7 @@ void processVisibility(BASE_OBJECT *psObj)
 			{
 				if(aiCheckAlliances(player,psObj->player))
 				{
-					currVis[player] = TRUE;
+					currVis[player] = true;
 				}
 			}
 		}
@@ -506,7 +506,7 @@ void processVisibility(BASE_OBJECT *psObj)
 	{
 		if (getSatUplinkExists(player))
 		{
-			currVis[player] = TRUE;
+			currVis[player] = true;
 			if (psObj->visible[player] == 0)
 			{
 				psObj->visible[player] = 1;
@@ -523,7 +523,7 @@ void processVisibility(BASE_OBJECT *psObj)
 			 visibleObject(psViewer, psObj) )
  		{
 			// Tell system that this side can see this object
- 			currVis[psViewer->player]=TRUE;
+ 			currVis[psViewer->player]=true;
 			if (!prevVis[psViewer->player])
 			{
 
@@ -552,7 +552,7 @@ void processVisibility(BASE_OBJECT *psObj)
 			{
 				if (currVis[player] && aiCheckAlliances(player, ally))
 				{
-					currVis[ally] = TRUE;
+					currVis[ally] = true;
 				}
 			}
 		}
@@ -619,7 +619,7 @@ void processVisibility(BASE_OBJECT *psObj)
 			if(!TILE_HAS_STRUCTURE(mapTile(map_coord(psObj->pos.x),
 			                               map_coord(psObj->pos.y))))
 			{
-				psMessage = addMessage(MSG_PROXIMITY, TRUE, selectedPlayer);
+				psMessage = addMessage(MSG_PROXIMITY, true, selectedPlayer);
 				if (psMessage)
 				{
 					psMessage->pViewData = (MSG_VIEWDATA *)psObj;
@@ -635,7 +635,7 @@ void processVisibility(BASE_OBJECT *psObj)
 
 			if (((FEATURE *)psObj)->psStats->subType == FEAT_GEN_ARTE)
 			{
-				psMessage = addMessage(MSG_PROXIMITY, TRUE, selectedPlayer);
+				psMessage = addMessage(MSG_PROXIMITY, true, selectedPlayer);
 				if (psMessage)
 				{
 					psMessage->pViewData = (MSG_VIEWDATA *)psObj;
@@ -708,7 +708,7 @@ void updateSensorDisplay()
 	// clear sensor info
 	for (x = 0; x < mapWidth * mapHeight; x++)
 	{
-		psTile->activeSensor = FALSE;
+		psTile->activeSensor = false;
 		psTile++;
 	}
 

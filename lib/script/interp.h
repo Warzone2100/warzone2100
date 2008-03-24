@@ -278,7 +278,7 @@ extern BOOL interpCheckEquiv(INTERP_TYPE to, INTERP_TYPE from);
 // Initialise the interpreter
 extern BOOL interpInitialise(void);
 
-// TRUE if the interpreter is currently running
+// true if the interpreter is currently running
 extern BOOL interpProcessorActive(void);
 
 /* Output script call stack trace */

@@ -90,10 +90,10 @@ static SDWORD	presAvAngle = 0;;
 
 
 /* How much info do you want when tracking a droid - this toggles full stat info */
-static	BOOL bFullInfo = FALSE;
+static	BOOL bFullInfo = false;
 
 /* Are we requesting a new track to start that is a radar (location) track? */
-static	BOOL bRadarTrackingRequested = FALSE;
+static	BOOL bRadarTrackingRequested = false;
 
 /* World coordinates for a radar track/jump */
 static  float	 radarX,radarY;
@@ -113,7 +113,7 @@ void	initWarCam( void )
 	/* Logo setup */
 	warCamLogoRotation = 0;
 
-	OldViewValid = FALSE;
+	OldViewValid = false;
 }
 
 
@@ -199,7 +199,7 @@ static void processLeaderSelection( void )
 		leaderClass = LEADER_STATIC;
 	}
 
-	bSuccess = FALSE;
+	bSuccess = false;
 	bestSoFar = UDWORD_MAX;
 
 	switch (leaderClass)
@@ -216,7 +216,7 @@ static void processLeaderSelection( void )
 					if (dif < bestSoFar)
 					{
 						bestSoFar = dif;
-						bSuccess = TRUE;
+						bSuccess = true;
 						psNew = psDroid;
 					}
 				}
@@ -235,7 +235,7 @@ static void processLeaderSelection( void )
 					if (dif < bestSoFar)
 					{
 						bestSoFar = dif;
-						bSuccess = TRUE;
+						bSuccess = true;
 						psNew = psDroid;
 					}
 				}
@@ -254,7 +254,7 @@ static void processLeaderSelection( void )
 					if (dif < bestSoFar)
 					{
 						bestSoFar = dif;
-						bSuccess = TRUE;
+						bSuccess = true;
 						psNew = psDroid;
 					}
 				}
@@ -273,7 +273,7 @@ static void processLeaderSelection( void )
 					if (dif < bestSoFar)
 					{
 						bestSoFar = dif;
-						bSuccess = TRUE;
+						bSuccess = true;
 						psNew = psDroid;
 					}
 				}
@@ -323,7 +323,7 @@ static BASE_OBJECT *camFindTarget(void)
 	if (bRadarTrackingRequested)
 	{
 		setUpRadarTarget(radarX, radarY);
-		bRadarTrackingRequested = FALSE;
+		bRadarTrackingRequested = false;
 		return(&radarTarget);
 	}
 
@@ -337,12 +337,12 @@ BOOL camTrackCamera(void);
 BOOL	processWarCam( void )
 {
 BASE_OBJECT	*foundTarget;
-BOOL Status = TRUE;
+BOOL Status = true;
 
 	/* Get out if the camera isn't active */
 	if(trackingCamera.status == CAM_INACTIVE)
 	{
-		return(TRUE);
+		return(true);
 	}
 
 	/* Ensure that the camera only ever flips state within this routine! */
@@ -412,7 +412,7 @@ BOOL Status = TRUE;
 			/* Switch to inactive mode */
 			trackingCamera.status = CAM_INACTIVE;
 //			addConsoleMessage("Droid-CAM V0.1 Disabled",DEFAULT_JUSTIFY,CONSOLE_SYSTEM);
-			Status = FALSE;
+			Status = false;
 		break;
 	default:
 		debug( LOG_ERROR, "Weirdy status for tracking Camera" );
@@ -431,7 +431,7 @@ void	setWarCamActive(BOOL status)
 	debug( LOG_NEVER, "setWarCamActive(%d)\n", status );
 
 	/* We're trying to switch it on */
-	if(status == TRUE)
+	if(status == true)
 	{
 		/* If it's not inactive then it's already in use - so return */
 		/* We're tracking a droid */
@@ -525,7 +525,7 @@ void	camAllignWithTarget(BASE_OBJECT *psTarget)
 	trackingCamera.lastUpdate = gameTime2;
 
 
-	OldViewValid = TRUE;
+	OldViewValid = true;
 }
 
 
@@ -545,7 +545,7 @@ static SDWORD getAverageTrackAngle( BOOL bCheckOnScreen )
 		/* Is he worth selecting? */
 		if (psDroid->selected)
 		{
-			if (bCheckOnScreen ? droidOnScreen(psDroid, pie_GetVideoBufferWidth() / 6) : TRUE)
+			if (bCheckOnScreen ? droidOnScreen(psDroid, pie_GetVideoBufferWidth() / 6) : true)
 			{
 					droidCount++;
 					averageAngle += psDroid->direction;
@@ -587,7 +587,7 @@ static SDWORD getGroupAverageTrackAngle(UDWORD groupNumber, BOOL bCheckOnScreen)
 		/* Is he worth considering? */
 		if (psDroid->group == groupNumber)
 		{
-			if (bCheckOnScreen ? droidOnScreen(psDroid, pie_GetVideoBufferWidth() / 6) : TRUE)
+			if (bCheckOnScreen ? droidOnScreen(psDroid, pie_GetVideoBufferWidth() / 6) : true)
 			{
 					droidCount++;
 					averageAngle += psDroid->direction;
@@ -654,7 +654,7 @@ static void getGroupTrackingConcerns(SDWORD *x, SDWORD *y, SDWORD *z, UDWORD gro
 		{
 			if (psDroid->group == groupNumber)
 			{
-				if (bOnScreen ? droidOnScreen(psDroid, pie_GetVideoBufferWidth() / 4) : TRUE)
+				if (bOnScreen ? droidOnScreen(psDroid, pie_GetVideoBufferWidth() / 4) : true)
 				{
 				 		count++;
 						xTotals += psDroid->pos.x;
@@ -721,7 +721,7 @@ static void updateCameraAcceleration(UBYTE update)
 		trackingCamera.target->pos.y
 	};
 	Vector2i behind = {0, 0}; /* Irrelevant for normal radar tracking */
-	BOOL bFlying = FALSE;
+	BOOL bFlying = false;
 
 	/*
 		This is where we check what it is we're tracking.
@@ -743,7 +743,7 @@ static void updateCameraAcceleration(UBYTE update)
 
 		if (psPropStats->propulsionType == LIFT)
 		{
-			bFlying = TRUE;
+			bFlying = true;
 		}
 
 		/* Present direction is important */
@@ -753,13 +753,13 @@ static void updateCameraAcceleration(UBYTE update)
 
 			if (trackingCamera.target->selected)
 			{
-				multiAngle = getAverageTrackAngle(TRUE);
+				multiAngle = getAverageTrackAngle(true);
 				getTrackingConcerns(&concern.x, &concern.y, &concern.z);
 			}
 			else
 			{
-				multiAngle = getGroupAverageTrackAngle( trackingCamera.target->group, TRUE );
-				getGroupTrackingConcerns(&concern.x, &concern.y, &concern.z, trackingCamera.target->group, TRUE);
+				multiAngle = getGroupAverageTrackAngle( trackingCamera.target->group, true );
+				getGroupTrackingConcerns(&concern.x, &concern.y, &concern.z, trackingCamera.target->group, true);
 			}
 
 			behind.x = ( CAM_DEFAULT_Y_OFFSET * SIN( DEG(multiAngle) ) ) >> FP12_SHIFT;
@@ -830,17 +830,17 @@ static void updateCameraVelocity(UBYTE update)
 {
 	if(update & X_UPDATE)
 	{
-		trackingCamera.velocity.x += timeAdjustedIncrement(trackingCamera.acceleration.x, FALSE);
+		trackingCamera.velocity.x += timeAdjustedIncrement(trackingCamera.acceleration.x, false);
 	}
 
 	if(update & Y_UPDATE)
 	{
-		trackingCamera.velocity.y += timeAdjustedIncrement(trackingCamera.acceleration.y, FALSE);
+		trackingCamera.velocity.y += timeAdjustedIncrement(trackingCamera.acceleration.y, false);
 	}
 
 	if(update & Z_UPDATE)
 	{
-		trackingCamera.velocity.z += timeAdjustedIncrement(trackingCamera.acceleration.z, FALSE);
+		trackingCamera.velocity.z += timeAdjustedIncrement(trackingCamera.acceleration.z, false);
 	}
 }
 
@@ -852,33 +852,33 @@ BOOL	bFlying;
 DROID	*psDroid;
 PROPULSION_STATS	*psPropStats;
 
-	bFlying = FALSE;
+	bFlying = false;
 	if(trackingCamera.target->type == OBJ_DROID)
 	{
 		psDroid = (DROID*)trackingCamera.target;
 		psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
 		if(psPropStats->propulsionType == LIFT)
 		{
-			bFlying = TRUE;
+			bFlying = true;
 		}
 	}
 
 	if(update & X_UPDATE)
 	{
 		/* Need to update position along x axis */
-		trackingCamera.position.x += timeAdjustedIncrement(trackingCamera.velocity.x, FALSE);
+		trackingCamera.position.x += timeAdjustedIncrement(trackingCamera.velocity.x, false);
 	}
 
 	if(update & Y_UPDATE)
 	{
 		/* Need to update position along y axis */
-		trackingCamera.position.y += timeAdjustedIncrement(trackingCamera.velocity.y, FALSE);
+		trackingCamera.position.y += timeAdjustedIncrement(trackingCamera.velocity.y, false);
 	}
 
 	if(update & Z_UPDATE)
 	{
 		/* Need to update position along z axis */
-		trackingCamera.position.z += timeAdjustedIncrement(trackingCamera.velocity.z, FALSE);
+		trackingCamera.position.z += timeAdjustedIncrement(trackingCamera.velocity.z, false);
 	}
 }
 
@@ -892,10 +892,10 @@ static void updateCameraRotationAcceleration( UBYTE update )
 	BOOL	bTooLow;
 	PROPULSION_STATS *psPropStats;
 	SDWORD	pitch;
-	BOOL	bGotFlying = FALSE;
+	BOOL	bGotFlying = false;
 	SDWORD	xPos = 0, yPos = 0, zPos = 0;
 
-	bTooLow = FALSE;
+	bTooLow = false;
 	if(trackingCamera.target->type == OBJ_DROID)
 	{
 		DROID *psDroid = (DROID*)trackingCamera.target;
@@ -904,13 +904,13 @@ static void updateCameraRotationAcceleration( UBYTE update )
 		{
 			UDWORD	droidHeight, difHeight, droidMapHeight;
 
-			bGotFlying = TRUE;
+			bGotFlying = true;
 			droidHeight = psDroid->pos.z;
 			droidMapHeight = map_Height(psDroid->pos.x, psDroid->pos.y);
 			difHeight = abs(droidHeight - droidMapHeight);
 			if(difHeight < MIN_TRACK_HEIGHT)
 			{
-				bTooLow = TRUE;
+				bTooLow = true;
 			}
 		}
 	}
@@ -923,11 +923,11 @@ static void updateCameraRotationAcceleration( UBYTE update )
 		{
 			if(trackingCamera.target->selected)
 			{
-				yConcern = DEG( getAverageTrackAngle(FALSE) ); //DEG(trackingCamera.target->direction);
+				yConcern = DEG( getAverageTrackAngle(false) ); //DEG(trackingCamera.target->direction);
 			}
 			else
 			{
-				yConcern = DEG( getGroupAverageTrackAngle(trackingCamera.target->group, FALSE) ); //DEG(trackingCamera.target->direction);
+				yConcern = DEG( getGroupAverageTrackAngle(trackingCamera.target->group, false) ); //DEG(trackingCamera.target->direction);
 			}
 		}
 		else
@@ -963,11 +963,11 @@ static void updateCameraRotationAcceleration( UBYTE update )
 			getTrackingConcerns(&xPos,&yPos,&zPos);
 			if(trackingCamera.target->selected)
 			{
-				getBestPitchToEdgeOfGrid(xPos,zPos,360-((getAverageTrackAngle(TRUE)+180)%360),&pitch);
+				getBestPitchToEdgeOfGrid(xPos,zPos,360-((getAverageTrackAngle(true)+180)%360),&pitch);
 			}
 			else
 			{
-				getBestPitchToEdgeOfGrid(xPos,zPos,360-((getGroupAverageTrackAngle(trackingCamera.target->group,TRUE)+180)%360),&pitch);
+				getBestPitchToEdgeOfGrid(xPos,zPos,360-((getGroupAverageTrackAngle(trackingCamera.target->group,true)+180)%360),&pitch);
 			}
 			if(pitch<14) pitch = 14;
 			xConcern = DEG(-pitch);
@@ -1048,15 +1048,15 @@ static void updateCameraRotationVelocity( UBYTE update )
 {
 	if(update & Y_UPDATE)
 	{
-		trackingCamera.rotVel.y += timeAdjustedIncrement(trackingCamera.rotAccel.y, FALSE);
+		trackingCamera.rotVel.y += timeAdjustedIncrement(trackingCamera.rotAccel.y, false);
 	}
 	if(update & X_UPDATE)
 	{
-		trackingCamera.rotVel.x += timeAdjustedIncrement(trackingCamera.rotAccel.x, FALSE);
+		trackingCamera.rotVel.x += timeAdjustedIncrement(trackingCamera.rotAccel.x, false);
 	}
 	if(update & Z_UPDATE)
 	{
-		trackingCamera.rotVel.z += timeAdjustedIncrement(trackingCamera.rotAccel.z, FALSE);
+		trackingCamera.rotVel.z += timeAdjustedIncrement(trackingCamera.rotAccel.z, false);
 	}
 
 }
@@ -1067,15 +1067,15 @@ static void updateCameraRotationPosition( UBYTE update )
 {
  	if (update & Y_UPDATE)
 	{
-		trackingCamera.rotation.y += timeAdjustedIncrement(trackingCamera.rotVel.y, FALSE);
+		trackingCamera.rotation.y += timeAdjustedIncrement(trackingCamera.rotVel.y, false);
 	}
 	if (update & X_UPDATE)
 	{
-		trackingCamera.rotation.x += timeAdjustedIncrement(trackingCamera.rotVel.x, FALSE);
+		trackingCamera.rotation.x += timeAdjustedIncrement(trackingCamera.rotVel.x, false);
 	}
 	if (update & Z_UPDATE)
 	{
-		trackingCamera.rotation.z += timeAdjustedIncrement(trackingCamera.rotVel.z, FALSE);
+		trackingCamera.rotation.z += timeAdjustedIncrement(trackingCamera.rotVel.z, false);
 	}
 }
 
@@ -1114,13 +1114,13 @@ PROPULSION_STATS	*psPropStats;
 DROID	*psDroid;
 BOOL	bFlying;
 
-	bFlying = FALSE;
+	bFlying = false;
 
 	/* Most importantly - see if the target we're tracking is dead! */
 	if(trackingCamera.target->died)
 	{
 		setFindNewTarget();
-		return(FALSE);
+		return(false);
 	}
 
 	/*	Cancel tracking if it's no longer selected.
@@ -1130,7 +1130,7 @@ BOOL	bFlying;
 
 //		if(!trackingCamera.target->selected)
 //		{
-//			return(FALSE);
+//			return(false);
 //		}
 	}
 
@@ -1150,17 +1150,17 @@ BOOL	bFlying;
 		psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
 		if (psPropStats->propulsionType == LIFT)
 		{
-				bFlying = TRUE;
+				bFlying = true;
 		}
 	}
 /*
-	bIsBuilding = FALSE;
+	bIsBuilding = false;
 	if(trackingCamera.target->type == OBJ_DROID)
 	{
 		psDroid= (DROID*)trackingCamera.target;
 		if(DroidIsBuilding(psDroid))
 		{
-			bIsBuilding = TRUE;
+			bIsBuilding = true;
 		}
 	}
 */
@@ -1251,11 +1251,11 @@ BOOL	bFlying;
 		{
 			if(getPositionMagnitude() < 60)
 			{
-				setWarCamActive(FALSE);
+				setWarCamActive(false);
 			}
 		}
 	}
-	return(TRUE);
+	return(true);
 }
 //-----------------------------------------------------------------------------------
 DROID *getTrackingDroid( void )
@@ -1288,12 +1288,12 @@ BOOL	getWarCamStatus( void )
 	/* Is it switched off? */
 	if(trackingCamera.status == CAM_INACTIVE)
 	{
-		return(FALSE);
+		return(false);
 	}
 	else
 	{
 		/* Tracking is ON */
-		return(TRUE);
+		return(true);
 	}
 }
 
@@ -1306,12 +1306,12 @@ void	camToggleStatus( void )
 	if(trackingCamera.status == CAM_INACTIVE)
 	{
 		/* Switch it on */
-		setWarCamActive(TRUE);
+		setWarCamActive(true);
 	}
 	else
 	{
 		/* Otherwise, switch it off */
-		setWarCamActive(FALSE);
+		setWarCamActive(false);
 		if(getDrivingStatus())
 		{
 			StopDriverMode();
@@ -1332,10 +1332,10 @@ void	requestRadarTrack(SDWORD x, SDWORD y)
 {
 	radarX = (SWORD)x;
  	radarY = (SWORD)y;
- 	bRadarTrackingRequested = TRUE;
+ 	bRadarTrackingRequested = true;
 	trackingCamera.status = CAM_REQUEST;
 	processWarCam();
-// 	setWarCamActive(TRUE);
+// 	setWarCamActive(true);
 }
 
 /* Returns whether we're presently tracking to a new _location_ */
@@ -1345,7 +1345,7 @@ BOOL	retVal;
 
 	if(trackingCamera.status == CAM_INACTIVE)
 	{
-		retVal = FALSE;
+		retVal = false;
 	}
 	else
 	{
@@ -1353,11 +1353,11 @@ BOOL	retVal;
         //if you know why the above check was commented out please tell me AB 19/11/98
         if(trackingCamera.target && trackingCamera.target->type == OBJ_TARGET)
 		{
-			retVal = TRUE;
+			retVal = true;
 		}
 		else
 		{
-			retVal = FALSE;
+			retVal = false;
 		}
 	}
 	return(retVal);

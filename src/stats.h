@@ -274,7 +274,7 @@ extern BOOL allocateName(char **ppStore, const char *pName);
 extern BOOL getResourceName(const char *pName);
 /*return the name to display for the interface - valid for OBJECTS and STATS*/
 extern const char* getName(const char *pNameID);
-/*sets the store to the body size based on the name passed in - returns FALSE
+/*sets the store to the body size based on the name passed in - returns false
 if doesn't compare with any*/
 extern BOOL getBodySize(const char *pSize, UBYTE *pStore);
 

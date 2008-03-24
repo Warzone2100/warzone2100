@@ -43,7 +43,7 @@ typedef struct { SDWORD a, b, c,  d, e, f,  g, h, i,  j, k, l; } SDMATRIX;
 static SDMATRIX	aMatrixStack[MATRIX_MAX];
 static SDMATRIX *psMatrix = &aMatrixStack[0];
 
-BOOL drawing_interface = TRUE;
+BOOL drawing_interface = true;
 
 //*************************************************************************
 
@@ -323,13 +323,13 @@ void pie_TranslateTextureEnd(void)
 void pie_Begin3DScene(void)
 {
 	glDepthRange(0.1, 1);
-	drawing_interface = FALSE;
+	drawing_interface = false;
 }
 
 void pie_BeginInterface(void)
 {
 	glDepthRange(0, 0.1);
-	drawing_interface = TRUE;
+	drawing_interface = true;
 }
 
 void pie_SetGeometricOffset(int x, int y)

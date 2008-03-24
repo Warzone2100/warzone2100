@@ -52,8 +52,8 @@
 #include "main.h"
 
 //status bools.(for hci.h)
-BOOL	ClosingInGameOp	= FALSE;
-BOOL	InGameOpUp		= FALSE;
+BOOL	ClosingInGameOp	= false;
+BOOL	InGameOpUp		= false;
 
 // ////////////////////////////////////////////////////////////////////////////
 // functions
@@ -82,7 +82,7 @@ static BOOL addIGTextButton(UDWORD id, UWORD y, const char *string, UDWORD Style
 	sButInit.pText		= string;
 	widgAddButton(psWScreen, &sButInit);
 
-	return TRUE;
+	return true;
 }
 
 static BOOL addQuitOptions(void)
@@ -109,7 +109,7 @@ static BOOL addQuitOptions(void)
 	sFormInit.height	= INTINGAMEOP3_H;
 
 	sFormInit.pDisplay	= intOpenPlainForm;
-	sFormInit.disableChildren= TRUE;
+	sFormInit.disableChildren= true;
 
 	widgAddForm(psWScreen, &sFormInit);
 
@@ -119,7 +119,7 @@ static BOOL addQuitOptions(void)
 	//  quit
 	addIGTextButton(INTINGAMEOP_QUIT_CONFIRM, INTINGAMEOP_2_Y, _("Quit"), OPALIGN);
 
-	return TRUE;
+	return true;
 }
 
 
@@ -144,7 +144,7 @@ static BOOL addSlideOptions(void)
 	sFormInit.height	= INTINGAMEOP2_H;
 
 	sFormInit.pDisplay	= intOpenPlainForm;
-	sFormInit.disableChildren= TRUE;
+	sFormInit.disableChildren= true;
 
 	widgAddForm(psWScreen, &sFormInit);
 
@@ -179,7 +179,7 @@ static BOOL addSlideOptions(void)
 	}
 */
 
-	return TRUE;
+	return true;
 }
 
 
@@ -197,16 +197,16 @@ static BOOL _intAddInGameOptions(void)
     clearMissionWidgets();
 
 
-	setWidgetsStatus(TRUE);
+	setWidgetsStatus(true);
 
 	//if already open, then close!
 	if (widgGetFromID(psWScreen,INTINGAMEOP))
 	{
-		intCloseInGameOptions(FALSE, TRUE);
-		return TRUE;
+		intCloseInGameOptions(false, true);
+		return true;
 	}
 
-	intResetScreen(FALSE);
+	intResetScreen(false);
 
 
 	// Pause the game.
@@ -242,7 +242,7 @@ static BOOL _intAddInGameOptions(void)
 
 
 	sFormInit.pDisplay	= intOpenPlainForm;
-	sFormInit.disableChildren= TRUE;
+	sFormInit.disableChildren= true;
 
 	widgAddForm(psWScreen, &sFormInit);
 
@@ -274,12 +274,12 @@ static BOOL _intAddInGameOptions(void)
 
 
 	intMode		= INT_INGAMEOP;			// change interface mode.
-	InGameOpUp	= TRUE;					// inform interface.
+	InGameOpUp	= true;					// inform interface.
 
 	// TODO: find out if the line below is needed (may be for old csnap stuff)
 	frameSetCursorFromRes(IDC_DEFAULT);						// reset cursor	(sw)
 
-	return TRUE;
+	return true;
 }
 
 
@@ -309,7 +309,7 @@ static void ProcessOptionFinished(void)
 void intCloseInGameOptionsNoAnim(BOOL bResetMissionWidgets)
 {
 	widgDelete(psWScreen, INTINGAMEOP);
-	InGameOpUp = FALSE;
+	InGameOpUp = false;
 
 	ProcessOptionFinished();
 
@@ -337,8 +337,8 @@ BOOL intCloseInGameOptions(BOOL bPutUpLoadSave, BOOL bResetMissionWidgets)
 			widgDelete(psWScreen,INTINGAMEOP);
 		}
 
-		InGameOpUp = FALSE;
-		ClosingInGameOp = TRUE;
+		InGameOpUp = false;
+		ClosingInGameOp = true;
 	}
 	else
 	{
@@ -348,9 +348,9 @@ BOOL intCloseInGameOptions(BOOL bPutUpLoadSave, BOOL bResetMissionWidgets)
 		if(Form) {
 			Form->display		 = intClosePlainForm;
 			Form->pUserData		 = NULL; // Used to signal when the close anim has finished.
-			Form->disableChildren= TRUE;
-			ClosingInGameOp		 = TRUE;		// like orderup/closingorder
-			InGameOpUp			 = FALSE;
+			Form->disableChildren= true;
+			ClosingInGameOp		 = true;		// like orderup/closingorder
+			InGameOpUp			 = false;
 		}
 	}
 
@@ -363,7 +363,7 @@ BOOL intCloseInGameOptions(BOOL bPutUpLoadSave, BOOL bResetMissionWidgets)
         resetMissionWidgets();
     }
 
-    return TRUE;
+    return true;
 }
 
 
@@ -381,7 +381,7 @@ void intProcessInGameOptions(UDWORD id)
 		break;
 
 	case INTINGAMEOP_QUIT_CONFIRM:		//quit was confirmed.
-		intCloseInGameOptions(FALSE, FALSE);
+		intCloseInGameOptions(false, false);
 		break;
 
 	case INTINGAMEOP_OPTIONS:			//game options  was pressed
@@ -389,12 +389,12 @@ void intProcessInGameOptions(UDWORD id)
 		break;
 
 	case INTINGAMEOP_RESUME:			//resume was pressed.
-		intCloseInGameOptions(FALSE, TRUE);
+		intCloseInGameOptions(false, true);
 		break;
 
 
 //	case INTINGAMEOP_REPLAY:
-//		intCloseInGameOptions(TRUE, FALSE);
+//		intCloseInGameOptions(true, false);
 //		if(0!=strcmp(getLevelName(),"CAM_1A"))
 //		{
 //			loopMissionState = LMS_LOADGAME;
@@ -403,11 +403,11 @@ void intProcessInGameOptions(UDWORD id)
 //		}
 //		break;
 	case INTINGAMEOP_LOAD:
-		intCloseInGameOptions(TRUE, FALSE);
+		intCloseInGameOptions(true, false);
 		addLoadSave(LOAD_INGAME,SaveGamePath,"gam",_("Load Saved Game"));	// change mode when loadsave returns//		if(runLoadSave())// check for file name.
 		break;
 	case INTINGAMEOP_SAVE:
-		intCloseInGameOptions(TRUE, FALSE);
+		intCloseInGameOptions(true, false);
 		addLoadSave(SAVE_INGAME,SaveGamePath,"gam", _("Save Game") );
 		break;
 

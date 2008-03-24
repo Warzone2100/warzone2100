@@ -515,10 +515,10 @@ BOOL mouseDrag(MOUSE_KEY_CODE code, UDWORD *px, UDWORD *py)
 	{
 		*px = dragX;
 		*py = dragY;
-		return TRUE;
+		return true;
 	}
 
-	return FALSE;
+	return false;
 }
 
 void SetMousePos(Uint16 x, Uint16 y)

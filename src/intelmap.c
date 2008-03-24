@@ -153,7 +153,7 @@
 extern W_SCREEN		*psWScreen;
 
 static UDWORD			messageID;
-static BOOL				immediateMessage = FALSE;
+static BOOL				immediateMessage = false;
 
 //flags whether to open the Intel Screen with a message
 static BOOL				playCurrent;
@@ -201,23 +201,23 @@ BOOL intAddIntelMap(void)
 {
 	W_FORMINIT		sFormInit;
 	W_LABINIT		sLabInit;
-	BOOL			Animate = TRUE;
+	BOOL			Animate = true;
 
 	//check playCurrent with psCurrentMsg
 	if (psCurrentMsg == NULL)
 	{
-		playCurrent = FALSE;
+		playCurrent = false;
 	}
 	else
 	{
-		playCurrent = TRUE;
+		playCurrent = true;
 	}
 
 	// Is the form already up?
 	if(widgGetFromID(psWScreen,IDINTMAP_FORM) != NULL)
 	{
 		intRemoveIntelMapNoAnim();
-		Animate = FALSE;
+		Animate = false;
 	}
 	else
 	{
@@ -243,7 +243,7 @@ BOOL intAddIntelMap(void)
 			sLabInit.FontID = font_regular;
 			if (!widgAddLabel(psWScreen, &sLabInit))
 			{
-				return FALSE;
+				return false;
 			}
 		}
 	}
@@ -267,7 +267,7 @@ BOOL intAddIntelMap(void)
 	if(Animate)
 	{
 		sFormInit.pDisplay = intOpenPlainForm;
-		sFormInit.disableChildren = TRUE;
+		sFormInit.disableChildren = true;
 	}
 	else
 	{
@@ -278,15 +278,15 @@ BOOL intAddIntelMap(void)
 	//sFormInit.pDisplay = intDisplayPlainForm;
 	if (!widgAddForm(psWScreen, &sFormInit))
 	{
-		return FALSE;
+		return false;
 	}
 
 	if (!intAddMessageForm(playCurrent))
 	{
-		return FALSE;
+		return false;
 	}
 
-	return TRUE;
+	return true;
 }
 
 /* Add the Message sub form */
@@ -354,7 +354,7 @@ static BOOL intAddMessageForm(BOOL playCurrent)
 
 	if (!widgAddForm(psWScreen, &sFormInit))
 	{
-		return FALSE;
+		return false;
 	}
 
 
@@ -380,7 +380,7 @@ static BOOL intAddMessageForm(BOOL playCurrent)
 		/*if (psMessage->type == MSG_TUTORIAL)
 		{
 			//tutorial cases should never happen
-			ASSERT( FALSE, "Tutorial message in Intelligence screen!" );
+			ASSERT( false, "Tutorial message in Intelligence screen!" );
 			continue;
 		}*/
 		if (psMessage->type == MSG_PROXIMITY)
@@ -422,7 +422,7 @@ static BOOL intAddMessageForm(BOOL playCurrent)
 
 		if (!widgAddForm(psWScreen, &sBFormInit))
 		{
-			return FALSE;
+			return false;
 		}
 
 		/* if the current message matches psSelected lock the button */
@@ -463,14 +463,14 @@ static BOOL intAddMessageForm(BOOL playCurrent)
 		//is it a proximity message?
 		if (psCurrentMsg->type == MSG_PROXIMITY)
 		{
-			//intIntelButtonPressed(TRUE, messageID);
+			//intIntelButtonPressed(true, messageID);
 		}
 		else
 		{
-			intIntelButtonPressed(FALSE, messageID);
+			intIntelButtonPressed(false, messageID);
 		}
 	}
-	return TRUE;
+	return true;
 }
 
 /*Add the 3D world view for the particular message (only research nmessages now) */
@@ -479,14 +479,14 @@ BOOL intAddMessageView(MESSAGE * psMessage)
 	W_FORMINIT		sFormInit;
 	W_BUTINIT		sButInit;
 	W_LABINIT		sLabInit;
-	BOOL			Animate = TRUE;
+	BOOL			Animate = true;
 	RESEARCH		*psResearch;
 
 	// Is the form already up?
 	if(widgGetFromID(psWScreen,IDINTMAP_MSGVIEW) != NULL)
 	{
-		intRemoveMessageView(FALSE);
-		Animate = FALSE;
+		intRemoveMessageView(false);
+		Animate = false;
 	}
 
 	/* Add the base form */
@@ -504,7 +504,7 @@ BOOL intAddMessageView(MESSAGE * psMessage)
 	if(Animate)
 	{
 		sFormInit.pDisplay = intOpenPlainForm;
-		sFormInit.disableChildren = TRUE;
+		sFormInit.disableChildren = true;
 	}
 	else
 	{
@@ -514,7 +514,7 @@ BOOL intAddMessageView(MESSAGE * psMessage)
 
 	if (!widgAddForm(psWScreen, &sFormInit))
 	{
-		return FALSE;
+		return false;
 	}
 
 	/* Add the close box */
@@ -531,7 +531,7 @@ BOOL intAddMessageView(MESSAGE * psMessage)
 	sButInit.UserData = PACKDWORD_TRI(0,IMAGE_CLOSEHILIGHT , IMAGE_CLOSE);
 	if (!widgAddButton(psWScreen, &sButInit))
 	{
-		return FALSE;
+		return false;
 	}
 
 	if (psMessage->type != MSG_RESEARCH &&
@@ -570,14 +570,14 @@ BOOL intAddMessageView(MESSAGE * psMessage)
 		}
 		while (!intDisplaySeqTextViewPage(psViewReplay, 0, 0,
 						  sFormInit.width, sFormInit.height,
-						  FALSE, &cur_seq, &cur_seqpage));
+						  false, &cur_seq, &cur_seqpage));
 
 		sFormInit.pUserData = &StandardTab;
 		sFormInit.pTabDisplay = intDisplayTab;
 
 		if (!widgAddForm(psWScreen, &sFormInit))
 		{
-			return FALSE;
+			return false;
 		}
 
 		memset(&sTabForm, 0, sizeof(W_FORMINIT));
@@ -599,11 +599,11 @@ BOOL intAddMessageView(MESSAGE * psMessage)
 			sTabForm.majorID = i;
 			if (!widgAddForm(psWScreen, &sTabForm))
 			{
-				return FALSE;
+				return false;
 			}
 		}
 
-		return TRUE;
+		return true;
 	}
 
 	/*add the Label for the title box*/
@@ -629,7 +629,7 @@ BOOL intAddMessageView(MESSAGE * psMessage)
 	sLabInit.FontID = font_regular;
 	if (!widgAddLabel(psWScreen, &sLabInit))
 	{
-		return FALSE;
+		return false;
 	}
 
 	/*Add the PIE box*/
@@ -646,7 +646,7 @@ BOOL intAddMessageView(MESSAGE * psMessage)
 	sFormInit.pUserData = psMessage;
 	if (!widgAddForm(psWScreen, &sFormInit))
 	{
-		return FALSE;
+		return false;
 	}
 
 #ifndef NO_VIDEO
@@ -663,7 +663,7 @@ BOOL intAddMessageView(MESSAGE * psMessage)
 	sFormInit.pUserData = psMessage;
 	if (!widgAddForm(psWScreen, &sFormInit))
 	{
-		return FALSE;
+		return false;
 	}
 #endif
 
@@ -682,10 +682,10 @@ BOOL intAddMessageView(MESSAGE * psMessage)
 	sFormInit.pUserData = psMessage;
 	if (!widgAddForm(psWScreen, &sFormInit))
 	{
-		return FALSE;
+		return false;
 	}
 
-	return TRUE;
+	return true;
 }
 
 /* Process return codes from the Intelligence Map */
@@ -694,13 +694,13 @@ void intProcessIntelMap(UDWORD id)
 
 	if (id >= IDINTMAP_MSGSTART && id <= IDINTMAP_MSGEND)
 	{
-		intIntelButtonPressed(FALSE, id);
+		intIntelButtonPressed(false, id);
 	}
 	else if (id == IDINTMAP_CLOSE)
 	{
 		//if close button pressed on 3D View then close the view only
 		psCurrentMsg = NULL;
-		intRemoveMessageView(TRUE);
+		intRemoveMessageView(true);
 	}
 }
 
@@ -718,7 +718,7 @@ static BOOL intDisplaySeqTextViewPage(VIEW_REPLAY *psViewReplay,
 
 	if (!psViewReplay)
 	{
-		return TRUE;	/* nothing to do */
+		return true;	/* nothing to do */
 	}
 
 	iV_SetFont(font_regular);
@@ -737,7 +737,7 @@ static BOOL intDisplaySeqTextViewPage(VIEW_REPLAY *psViewReplay,
 			{
 				cur_y = iV_DrawFormattedText(psSeqDisplay->ppTextMsg[i],
 					    x0 + TEXT_XINDENT,
-					    cur_y, width, FALSE);
+					    cur_y, width, false);
 			}
 			else
 			{
@@ -748,13 +748,13 @@ static BOOL intDisplaySeqTextViewPage(VIEW_REPLAY *psViewReplay,
 				/* run out of room - need to make new tab */
 				*cur_seq = sequence;
 				*cur_seqpage = i;
-				return FALSE;
+				return false;
 			}
 		}
 		i = 0;
 	}
 
-	return TRUE;		/* done */
+	return true;		/* done */
 }
 
 /**
@@ -784,20 +784,20 @@ static void intDisplaySeqTextView(WIDGET *psWidget,
 		{
 			intDisplaySeqTextViewPage(psViewReplay, x0, y0,
 						  Form->width, Form->height,
-						  FALSE, &cur_seq, &cur_seqpage);
+						  false, &cur_seq, &cur_seqpage);
 		}
 	}
 
 	intDisplaySeqTextViewPage(psViewReplay, x0, y0,
 				  Form->width-40, Form->height,
-				  TRUE, &cur_seq, &cur_seqpage);
+				  true, &cur_seq, &cur_seqpage);
 }
 
 
 // Add all the Video Sequences for a message
 static void StartMessageSequences(MESSAGE *psMessage, BOOL Start)
 {
-	BOOL bLoop = FALSE;
+	BOOL bLoop = false;
 
 	debug(LOG_GUI, "StartMessageSequences: start message sequence");
 
@@ -826,11 +826,11 @@ static void StartMessageSequences(MESSAGE *psMessage, BOOL Start)
 		{
 			if (psViewReplay->pSeqList[Sequence].flag == 1)
 			{
-				bLoop = TRUE;
+				bLoop = true;
 			}
 			else
 			{
-				bLoop = FALSE;
+				bLoop = false;
 			}
 
 
@@ -840,7 +840,7 @@ static void StartMessageSequences(MESSAGE *psMessage, BOOL Start)
 			addVideoText(&psViewReplay->pSeqList[Sequence],Sequence);
 		}
 		//play first full screen video
-		if (Start==TRUE)
+		if (Start==true)
 		{
 		 	seq_StartNextFullScreenVideo();
 		}
@@ -854,9 +854,9 @@ static void StartMessageSequences(MESSAGE *psMessage, BOOL Start)
 		psViewReplay = (VIEW_RESEARCH *)((VIEWDATA *)psCurrentMsg->pViewData)->pData;
 
 		seq_ClearSeqList();
-		seq_AddSeqToList(psViewReplay->sequenceName, psViewReplay->pAudio, NULL, FALSE);
+		seq_AddSeqToList(psViewReplay->sequenceName, psViewReplay->pAudio, NULL, false);
 		//play first full screen video
-		if (Start==TRUE)
+		if (Start==true)
 		{
 			seq_StartNextFullScreenVideo();
 		}
@@ -874,7 +874,7 @@ void intIntelButtonPressed(BOOL proxMsg, UDWORD id)
 	UDWORD			currID;//, i;
 	RESEARCH		*psResearch;
 
-	ASSERT( proxMsg != TRUE,
+	ASSERT( proxMsg != true,
 		"intIntelButtonPressed: Shouldn't be able to get a proximity message!" );
 
 	if(id == 0)
@@ -887,7 +887,7 @@ void intIntelButtonPressed(BOOL proxMsg, UDWORD id)
 	if (messageID != 0)
 	{
 		widgSetButtonState(psWScreen, messageID, 0);
-		intRemoveMessageView(FALSE);
+		intRemoveMessageView(false);
 		psCurrentMsg = NULL;
 	}
 
@@ -918,7 +918,7 @@ void intIntelButtonPressed(BOOL proxMsg, UDWORD id)
 		psCurrentMsg = psMessage;
 
 		//set the read flag
-		psCurrentMsg->read = TRUE;
+		psCurrentMsg->read = true;
 
 		debug(LOG_GUI, "intIntelButtonPressed: Dealing with a new message type=%d",
 		      psMessage->type);
@@ -937,7 +937,7 @@ void intIntelButtonPressed(BOOL proxMsg, UDWORD id)
 				intAddMessageView(psMessage);
 			}
 
-			StartMessageSequences(psMessage,TRUE);
+			StartMessageSequences(psMessage,true);
 
 		}
 		else if (((VIEWDATA *)psMessage->pViewData)->type == VIEW_RES)
@@ -1001,7 +1001,7 @@ static void intCleanUpIntelMap(void)
 		}
 	}
 	resetIntelligencePauseState();
-	immediateMessage = FALSE;
+	immediateMessage = false;
 
 	cdAudio_Resume();
 
@@ -1032,7 +1032,7 @@ void intRemoveIntelMap(void)
 	Widg = widgGetFromID(psWScreen,IDINTMAP_MSGVIEW);
 	if(Widg)
 	{
-		intRemoveMessageView(FALSE);
+		intRemoveMessageView(false);
 	}
 
 	// Start the window close animation.
@@ -1040,10 +1040,10 @@ void intRemoveIntelMap(void)
 	if(Form)
 	{
 		Form->display = intClosePlainForm;
-		Form->disableChildren = TRUE;
+		Form->disableChildren = true;
 		Form->pUserData = NULL; // Used to signal when the close anim has finished.
 	}
-	ClosingIntelMap = TRUE;
+	ClosingIntelMap = true;
 	//remove the text label
 	widgDelete(psWScreen, IDINTMAP_PAUSELABEL);
 
@@ -1059,7 +1059,7 @@ void intRemoveIntelMapNoAnim(void)
 	Widg = widgGetFromID(psWScreen,IDINTMAP_MSGVIEW);
 	if(Widg)
 	{
-		intRemoveMessageView(FALSE);
+		intRemoveMessageView(false);
 	}
 	//remove main Intelligence screen
 	widgDelete(psWScreen, IDINTMAP_FORM);
@@ -1094,9 +1094,9 @@ void intRemoveMessageView(BOOL animated)
 
 			// Start the window close animation.
 			Form->display = intClosePlainForm;
-			Form->disableChildren = TRUE;
+			Form->disableChildren = true;
 			Form->pUserData = NULL; // Used to signal when the close anim has finished.
-			ClosingMessageView = TRUE;
+			ClosingMessageView = true;
 		}
 		else
 		{
@@ -1115,12 +1115,12 @@ void intDisplayMessageButton(WIDGET *psWidget, UDWORD xOffset,
 	W_CLICKFORM		*psButton = (W_CLICKFORM*)psWidget;
 	RENDERED_BUTTON *psBuffer = (RENDERED_BUTTON*)psButton->pUserData;
 	MESSAGE			*psMsg;
-	BOOL			Hilight = FALSE;
+	BOOL			Hilight = false;
 	UDWORD			Down = 0, IMDType = 0, compID;
 	SDWORD			image = -1;
 	RESEARCH		*pResearch = NULL;
     BASE_STATS      *psResGraphic = NULL;
-	BOOL MovieButton = FALSE;
+	BOOL MovieButton = false;
 
 	OpenButtonRender((UWORD)(xOffset+psButton->x), (UWORD)(yOffset+psButton->y),
 		psButton->width, psButton->height);
@@ -1163,7 +1163,7 @@ void intDisplayMessageButton(WIDGET *psWidget, UDWORD xOffset,
 				}
 				else
 				{
-					ASSERT( FALSE, "intDisplayMessageButton: invalid stat" );
+					ASSERT( false, "intDisplayMessageButton: invalid stat" );
 					IMDType = IMDTYPE_RESEARCH;
 					psResGraphic = (BASE_STATS *)pResearch;
 				}
@@ -1178,11 +1178,11 @@ void intDisplayMessageButton(WIDGET *psWidget, UDWORD xOffset,
 		break;
 	case MSG_CAMPAIGN:
 		image = IMAGE_INTEL_CAMPAIGN;
-		MovieButton = TRUE;
+		MovieButton = true;
 		break;
 	case MSG_MISSION:
 		image = IMAGE_INTEL_MISSION;
-		MovieButton = TRUE;
+		MovieButton = true;
 		break;
 	default:
 		debug( LOG_ERROR, "Unknown message type: %i", psMsg->type );
@@ -1269,7 +1269,7 @@ void intDisplayPIEView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGH
 
 		if (((VIEWDATA *)psMessage->pViewData)->type != VIEW_RES)
 		{
-			ASSERT( FALSE, "intDisplayPIEView: Invalid message type" );
+			ASSERT( false, "intDisplayPIEView: Invalid message type" );
 			return;
 		}
 
@@ -1319,7 +1319,7 @@ void intDisplayFLICView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIG
 
 		if (((VIEWDATA *)psMessage->pViewData)->type != VIEW_RES)
 		{
-			ASSERT( FALSE, "intDisplayFLICView: Invalid message type" );
+			ASSERT( false, "intDisplayFLICView: Invalid message type" );
 			return;
 		}
 		//render a frame of the current movie
@@ -1373,7 +1373,7 @@ void intDisplayTEXTView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIG
 			//check haven't run out of room first!
 			if (i * linePitch > Form->height)
 			{
-				ASSERT( FALSE, "intDisplayTEXTView: Run out of room!" );
+				ASSERT( false, "intDisplayTEXTView: Run out of room!" );
 				return;
 			}
 			//need to check the string will fit!
@@ -1397,7 +1397,7 @@ void addVideoText(SEQ_DISPLAY *psSeqDisplay, UDWORD sequence)
 		y = VIDEO_TEXT_TOP_Y;
 
 
-		seq_AddTextForVideo(psSeqDisplay->ppTextMsg[0], x, y, TEXT_START_FRAME, TEXT_END_FRAME, FALSE); //startframe endFrame
+		seq_AddTextForVideo(psSeqDisplay->ppTextMsg[0], x, y, TEXT_START_FRAME, TEXT_END_FRAME, false); //startframe endFrame
 
 		//add each message, the rest at the bottom
 		x = VIDEO_TEXT_BOTTOM_X;
@@ -1405,7 +1405,7 @@ void addVideoText(SEQ_DISPLAY *psSeqDisplay, UDWORD sequence)
 		i = 1;
 		while (i < psSeqDisplay->numText)
 		{
-			seq_AddTextForVideo(psSeqDisplay->ppTextMsg[i], x, y, TEXT_START_FRAME, TEXT_END_FRAME, FALSE); //startframe endFrame
+			seq_AddTextForVideo(psSeqDisplay->ppTextMsg[i], x, y, TEXT_START_FRAME, TEXT_END_FRAME, false); //startframe endFrame
 			//initialise after the first setting
 			x = y = 0;
 			i++;
@@ -1438,13 +1438,13 @@ void setIntelligencePauseState(void)
 		//need to clear mission widgets from being shown on intel screen
 		clearMissionWidgets();
 		gameTimeStop();
-		setGameUpdatePause(TRUE);
+		setGameUpdatePause(true);
 		if(!bInTutorial)
 		{	// Don't pause the scripts or the console if the tutorial is running.
-			setScriptPause(TRUE);
-			setConsolePause(TRUE);
+			setScriptPause(true);
+			setConsolePause(true);
 		}
-		setScrollPause(TRUE);
+		setScrollPause(true);
 	}
 }
 
@@ -1455,13 +1455,13 @@ void resetIntelligencePauseState(void)
 	{
 		//put any widgets back on for the missions
 		resetMissionWidgets();
-		setGameUpdatePause(FALSE);
+		setGameUpdatePause(false);
 		if(!bInTutorial)
 		{
-			setScriptPause(FALSE);
+			setScriptPause(false);
 		}
-		setScrollPause(FALSE);
-		setConsolePause(FALSE);
+		setScrollPause(false);
+		setConsolePause(false);
 		gameTimeStart();
 	}
 }
@@ -1486,7 +1486,7 @@ void displayImmediateMessage(MESSAGE *psMessage)
 	return;
 #endif
 
-	StartMessageSequences(psMessage,TRUE);
+	StartMessageSequences(psMessage,true);
 }
 
 

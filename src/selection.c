@@ -105,11 +105,11 @@ char	selInfo[255];
 			retVal = selSelectAllSame(player,bOnScreen);
 			break;
 		default:
-			ASSERT( FALSE,"Invalid selection type in uniDroidSelection" );
+			ASSERT( false,"Invalid selection type in uniDroidSelection" );
 		}
 		break;
 	default:
-		ASSERT( FALSE,"Invalid selection attempt in uniDroidSelection" );
+		ASSERT( false,"Invalid selection attempt in uniDroidSelection" );
 		break;
 	}
 
@@ -132,12 +132,12 @@ UDWORD	count;
 		psDroid; psDroid = psDroid->psNext)
 		{
 			/* Do we care about them being on screen? */
-			if(bOnScreen ? droidOnScreen(psDroid,0) : TRUE)
+			if(bOnScreen ? droidOnScreen(psDroid,0) : true)
 			{
 				/* can select everything except transporters */
 				if(psDroid->droidType != DROID_TRANSPORTER)
 				{
-//					psDroid->selected = TRUE;
+//					psDroid->selected = true;
 					SelectDroid(psDroid);
 					count++;
 				}
@@ -162,7 +162,7 @@ UDWORD	count;
 		psDroid; psDroid = psDroid->psNext)
 	{
 		/* Is on screen important */
-		if(bOnScreen ? droidOnScreen(psDroid,0) : TRUE)
+		if(bOnScreen ? droidOnScreen(psDroid,0) : true)
 		{
 			/* Get the propulsion type */
 			psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
@@ -171,7 +171,7 @@ UDWORD	count;
 			/* Same as that asked for - don't want Transporters*/
 			if ( psPropStats->propulsionType == propType && psDroid->droidType != DROID_TRANSPORTER)
 			{
-				psDroid->selected = TRUE;
+				psDroid->selected = true;
 				count++;
 			}
 		}
@@ -196,12 +196,12 @@ UDWORD	count;
             if(psDroid->asWeaps[0].nStat > 0)
 			{
 		  		/* Is on screen relevant? */
-				if(bOnScreen ? droidOnScreen(psDroid,0) : TRUE)
+				if(bOnScreen ? droidOnScreen(psDroid,0) : true)
 				{
                     //we don't want to get the Transporter
 	 				if(psDroid->droidType != DROID_TRANSPORTER)
 					{
-						psDroid->selected = TRUE;
+						psDroid->selected = true;
 						count ++;
 					}
 				}
@@ -228,12 +228,12 @@ UDWORD	count;
 			if(damage<REPAIRLEV_LOW)
 			{
 				/* Is on screen relevant? */
-				if(bOnScreen ? droidOnScreen(psDroid,0) : TRUE)
+				if(bOnScreen ? droidOnScreen(psDroid,0) : true)
 				{
                     //we don't want to get the Transporter
 	 				if(psDroid->droidType != DROID_TRANSPORTER)
                     {
-//    					psDroid->selected = TRUE;
+//    					psDroid->selected = true;
 						SelectDroid(psDroid);
 	    				count ++;
                     }
@@ -256,7 +256,7 @@ DROID	*psDroid;
 			{
 				count++;
 			}
-//			psDroid->selected = FALSE;
+//			psDroid->selected = false;
 			DeSelectDroid(psDroid);
 		}
 	return(count);
@@ -314,11 +314,11 @@ UDWORD	count;
 		{
 			if(!psDroid->selected)
 			{
-				if(bOnScreen ? droidOnScreen(psDroid,0) : TRUE)
+				if(bOnScreen ? droidOnScreen(psDroid,0) : true)
 				{
 					if(!strcmp(droidName,psDroid->aName))
 					{
-//						psDroid->selected = TRUE;
+//						psDroid->selected = true;
 						SelectDroid(psDroid);
 						count++;
 					}
@@ -341,18 +341,18 @@ DROID	*psResult;
 DROID	*psFirst;
 BOOL	bLaterInList, bMatch;
 
-	for(psCurr = apsDroidLists[selectedPlayer],psFirst = NULL,psResult = NULL,bLaterInList = FALSE;
+	for(psCurr = apsDroidLists[selectedPlayer],psFirst = NULL,psResult = NULL,bLaterInList = false;
 		psCurr && !psResult; psCurr = psCurr->psNext)
 	{
 		//if( psCurr->droidType == (SDWORD)unitType )
         //exceptions - as always...
-        bMatch = FALSE;
+        bMatch = false;
         if (unitType == DROID_CONSTRUCT)
         {
             if (psCurr->droidType == DROID_CONSTRUCT ||
                 psCurr->droidType == DROID_CYBORG_CONSTRUCT)
             {
-                bMatch = TRUE;
+                bMatch = true;
             }
         }
         else if (unitType == DROID_REPAIR)
@@ -360,12 +360,12 @@ BOOL	bLaterInList, bMatch;
             if (psCurr->droidType == DROID_REPAIR ||
                 psCurr->droidType == DROID_CYBORG_REPAIR)
             {
-                bMatch = TRUE;
+                bMatch = true;
             }
         }
         else if(psCurr->droidType == (SDWORD)unitType)
         {
-            bMatch = TRUE;
+            bMatch = true;
         }
         if (bMatch)
 		{
@@ -377,7 +377,7 @@ BOOL	bLaterInList, bMatch;
 
 			if(psCurr == psOldRD)
 			{
-				bLaterInList = TRUE;
+				bLaterInList = true;
 			}
 
 			/* Nothing previously found... */
@@ -408,7 +408,7 @@ BOOL	bLaterInList, bMatch;
 	if(psResult && !psResult->died)
 	{
 	 	selDroidDeselect(selectedPlayer);
-//		psResult->selected = TRUE;
+//		psResult->selected = true;
 		SelectDroid(psResult);
 		if(getWarCamStatus())
 		{
@@ -422,7 +422,7 @@ BOOL	bLaterInList, bMatch;
 			{
 //				camToggleStatus();
 				/* Centre display on him if warcam isn't active */
-				setViewPos(map_coord(psResult->pos.x), map_coord(psResult->pos.y), TRUE);
+				setViewPos(map_coord(psResult->pos.x), map_coord(psResult->pos.y), true);
 			}
 		psOldRD = psResult;
 	}
@@ -453,7 +453,7 @@ DROID	*psResult;
 DROID	*psFirst;
 BOOL	bLaterInList;
 
-	for(psCurr = apsDroidLists[selectedPlayer],psFirst = NULL,psResult = NULL,bLaterInList = FALSE;
+	for(psCurr = apsDroidLists[selectedPlayer],psFirst = NULL,psResult = NULL,bLaterInList = false;
 		psCurr && !psResult; psCurr = psCurr->psNext)
 	{
 		/* Only look at unselected ones */
@@ -468,7 +468,7 @@ BOOL	bLaterInList;
 
 			if(psCurr == psOldNS)
 			{
-				bLaterInList = TRUE;
+				bLaterInList = true;
 			}
 
 			/* First one...? */
@@ -498,7 +498,7 @@ BOOL	bLaterInList;
 	if(psResult && !psResult->died)
 	{
 	 	selDroidDeselect(selectedPlayer);
-//		psResult->selected = TRUE;
+//		psResult->selected = true;
 		SelectDroid(psResult);
 		if(getWarCamStatus())
 		{
@@ -512,7 +512,7 @@ BOOL	bLaterInList;
 			{
 //				camToggleStatus();
 				/* Centre display on him if warcam isn't active */
-				setViewPos(map_coord(psResult->pos.x), map_coord(psResult->pos.y), TRUE);
+				setViewPos(map_coord(psResult->pos.x), map_coord(psResult->pos.y), true);
 			}
 		psOldNS = psResult;
 	}
@@ -533,7 +533,7 @@ BOOL		bLaterInList;
 	ASSERT( structType>=REF_HQ && structType<=NUM_DIFF_BUILDINGS,
 		"Invalid structure type in selNextSpecifiedBuilding" );
 
-	for(psCurr = apsStructLists[selectedPlayer], psFirst = NULL,psResult = NULL,bLaterInList = FALSE;
+	for(psCurr = apsStructLists[selectedPlayer], psFirst = NULL,psResult = NULL,bLaterInList = false;
 		psCurr && !psResult; psCurr = psCurr->psNext)
 		{
 			if(psCurr->pStructureType->type == structType)
@@ -544,7 +544,7 @@ BOOL		bLaterInList;
 				}
 				if(psCurr == psOldStruct)
 				{
-					bLaterInList = TRUE;
+					bLaterInList = true;
 				}
 				if(!psOldStruct)
 				{
@@ -571,7 +571,7 @@ BOOL		bLaterInList;
 			{
 				camToggleStatus();
 			}
-			setViewPos(map_coord(psResult->pos.x), map_coord(psResult->pos.y), FALSE);
+			setViewPos(map_coord(psResult->pos.x), map_coord(psResult->pos.y), false);
 			psOldStruct = psResult;
 		}
 		else
@@ -593,7 +593,7 @@ static BOOL droidIsCommanderNum(DROID *psDroid, SDWORD n)
 
 	if (psDroid->droidType != DROID_COMMAND)
 	{
-		return FALSE;
+		return false;
 	}
 
 	numLess = 0;
@@ -608,10 +608,10 @@ static BOOL droidIsCommanderNum(DROID *psDroid, SDWORD n)
 
 	if (numLess == (n - 1))
 	{
-		return TRUE;
+		return true;
 	}
 
-	return FALSE;
+	return false;
 }
 
 // select the n'th command droid
@@ -626,12 +626,12 @@ void selCommander(SDWORD n)
 			if (!psCurr->selected)
 			{
 				clearSelection();
-				psCurr->selected = TRUE;
+				psCurr->selected = true;
 			}
 			else
 			{
 				clearSelection();
-				psCurr->selected = TRUE;
+				psCurr->selected = true;
 
 				// this horrible bit of code is taken from activateGroupAndMove
 				// and sets the camera position to that of the commander
@@ -646,7 +646,7 @@ void selCommander(SDWORD n)
 				if(!getWarCamStatus())
 				{
 					/* Centre display on him if warcam isn't active */
-					setViewPos(map_coord(psCurr->pos.x), map_coord(psCurr->pos.y), TRUE);
+					setViewPos(map_coord(psCurr->pos.x), map_coord(psCurr->pos.y), true);
 				}
 
 			}

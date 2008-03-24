@@ -136,7 +136,7 @@ BOOL researchInitVars(void)
 	{
 		debug( LOG_ERROR, "Research Stats - Out of memory" );
 		abort();
-		return FALSE;
+		return false;
 	}
 	memset(asResearch, 0, (MAX_RESEARCH * sizeof(RESEARCH)));
 
@@ -149,7 +149,7 @@ BOOL researchInitVars(void)
 		{
 			debug( LOG_ERROR, "Out of memory assigning Player_Research" );
 			abort();
-			return FALSE;
+			return false;
 		}
 		memset(asPlayerResList[i], 0, (MAX_RESEARCH * sizeof(PLAYER_RESEARCH)));
 	}
@@ -162,7 +162,7 @@ BOOL researchInitVars(void)
 	{
 		debug( LOG_ERROR, "Research Stats - Out of memory" );
 		abort();
-		return FALSE;
+		return false;
 	}
 	memset(pResearchPR, 0, (MAX_RESEARCH_PR * sizeof(UWORD)));
 
@@ -171,7 +171,7 @@ BOOL researchInitVars(void)
 	{
 		debug( LOG_ERROR, "Research Stats - Out of memory" );
 		abort();
-		return FALSE;
+		return false;
 	}
 	memset(pResearchStructPR, 0, (MAX_RESEARCH_STRUCT_PR * sizeof(UWORD)));
 
@@ -180,7 +180,7 @@ BOOL researchInitVars(void)
 	{
 		debug( LOG_ERROR, "Research Stats - Out of memory" );
 		abort();
-		return FALSE;
+		return false;
 	}
 	memset(pResearchFunc, 0, (MAX_RESEARCH_FUNC * sizeof(FUNCTION *)));
 
@@ -189,7 +189,7 @@ BOOL researchInitVars(void)
 	{
 		debug( LOG_ERROR, "Research Stats - Out of memory" );
 		abort();
-		return FALSE;
+		return false;
 	}
 	memset(pResearchStructRed, 0, (MAX_RESEARCH_STRUCT_RED * sizeof(UWORD)));
 
@@ -198,7 +198,7 @@ BOOL researchInitVars(void)
 	{
 		debug( LOG_ERROR, "Research Stats - Out of memory" );
 		abort();
-		return FALSE;
+		return false;
 	}
 	memset(pResearchArteRed, 0, (MAX_RESEARCH_ARTE_RED * sizeof(COMP_BASE_STATS *)));
 
@@ -207,7 +207,7 @@ BOOL researchInitVars(void)
 	{
 		debug( LOG_ERROR, "Research Stats - Out of memory" );
 		abort();
-		return FALSE;
+		return false;
 	}
 	memset(pResearchStructRes, 0, (MAX_RESEARCH_STRUCT_RES * sizeof(UWORD)));
 
@@ -216,7 +216,7 @@ BOOL researchInitVars(void)
 	{
 		debug( LOG_ERROR, "Research Stats - Out of memory" );
 		abort();
-		return FALSE;
+		return false;
 	}
 	memset(pResearchArteRes, 0, (MAX_RESEARCH_ARTE_RES * sizeof(COMP_BASE_STATS *)));
 
@@ -225,16 +225,16 @@ BOOL researchInitVars(void)
 	{
 		debug( LOG_ERROR, "Research Stats - Out of memory" );
 		abort();
-		return FALSE;
+		return false;
 	}
 	memset(pResearchArteRep, 0, (MAX_RESEARCH_ARTE_RES * sizeof(COMP_BASE_STATS *)));
 
 	for(i=0; i<MAX_PLAYERS; i++)
 	{
-		bSelfRepair[i] = FALSE;
+		bSelfRepair[i] = false;
 	}
 
-	return TRUE;
+	return true;
 }
 
 
@@ -274,13 +274,13 @@ BOOL loadResearch(const char *pResearchData, UDWORD bufferSize)
 		//allocate storage for the name
 		if (!allocateName(&pResearch->pName, ResearchName))
 		{
-			return FALSE;
+			return false;
 		}
 
 		//check the name hasn't been used already
 		if (!checkResearchName(pResearch, i))
 		{
-			return FALSE;
+			return false;
 		}
 
 		pResearchData += (strlen(ResearchName)+1);
@@ -292,7 +292,7 @@ BOOL loadResearch(const char *pResearchData, UDWORD bufferSize)
 		sscanf(pResearchData,"%[^','],", ResearchName);
 		if (!setTechLevel((BASE_STATS *)pResearch, ResearchName))
 		{
-			return FALSE;
+			return false;
 		}
 
 		pResearchData += (strlen(ResearchName)+1);
@@ -349,11 +349,11 @@ BOOL loadResearch(const char *pResearchData, UDWORD bufferSize)
 		//set keytopic flag
 		if (keyTopic)
 		{
-			pResearch->keyTopic = TRUE;
+			pResearch->keyTopic = true;
 		}
 		else
 		{
-			pResearch->keyTopic = FALSE;
+			pResearch->keyTopic = false;
 		}
 
 		//check the tech code is valid
@@ -361,7 +361,7 @@ BOOL loadResearch(const char *pResearchData, UDWORD bufferSize)
 		{
 			debug( LOG_ERROR, "Invalid tech code for research topic - %s ", getResearchName(pResearch) );
 			abort();
-			return FALSE;
+			return false;
 		}
 		if (techCode == 0)
 		{
@@ -395,7 +395,7 @@ BOOL loadResearch(const char *pResearchData, UDWORD bufferSize)
 			{
 				debug( LOG_ERROR, "Cannot find the structure Stat for Research %s", getResearchName(pResearch) );
 				abort();
-				return FALSE;
+				return false;
 			}
 		}
 		else if (strcmp(compName, "0"))
@@ -410,7 +410,7 @@ BOOL loadResearch(const char *pResearchData, UDWORD bufferSize)
 			{
 				debug( LOG_ERROR, "Cannot find the component Stat for Research %s", getResearchName(pResearch) );
 				abort();
-				return FALSE;
+				return false;
 			}
 		}
 		else
@@ -424,7 +424,7 @@ BOOL loadResearch(const char *pResearchData, UDWORD bufferSize)
 			{
 				debug( LOG_ERROR, "Cannot find the research PIE for record %s", getResearchName(pResearch) );
 				abort();
-				return FALSE;
+				return false;
 			}
 		}
 		else
@@ -439,7 +439,7 @@ BOOL loadResearch(const char *pResearchData, UDWORD bufferSize)
 			{
 				debug( LOG_ERROR, "Cannot find the 2nd research PIE for record %s", getResearchName(pResearch) );
 				abort();
-				return FALSE;
+				return false;
 			}
 		}
 		else
@@ -469,7 +469,7 @@ BOOL loadResearch(const char *pResearchData, UDWORD bufferSize)
 			{
 				debug( LOG_ERROR, "Out of memory assigning research artefacts - redundancies" );
 				abort();
-				return FALSE;
+				return false;
 			}
 			//don't MALLOC - get them from the pre-defined arrays
 			pResearch->pRedArtefacts = pResearchArteRed + numResearchArteRed;
@@ -484,7 +484,7 @@ BOOL loadResearch(const char *pResearchData, UDWORD bufferSize)
 			{
 				debug( LOG_ERROR, "Out of memory assigning research artefacts - results" );
 				abort();
-				return FALSE;
+				return false;
 			}
 
 			//don't MALLOC - get them from the pre-defined arrays
@@ -501,7 +501,7 @@ BOOL loadResearch(const char *pResearchData, UDWORD bufferSize)
 			{
 				debug( LOG_ERROR, "Out of memory assigning research artefacts - replacements" );
 				abort();
-				return FALSE;
+				return false;
 			}
 
 			//don't MALLOC - get them from the pre-defined arrays
@@ -518,7 +518,7 @@ BOOL loadResearch(const char *pResearchData, UDWORD bufferSize)
 			{
 				debug( LOG_ERROR, "Out of memory assigning research functions" );
 				abort();
-				return FALSE;
+				return false;
 			}
 
 			//don't MALLOC - get them from the pre-defined arrays
@@ -535,7 +535,7 @@ BOOL loadResearch(const char *pResearchData, UDWORD bufferSize)
 			{
 				debug( LOG_ERROR, "Out of memory assigning research pre-requisities" );
 				abort();
-				return FALSE;
+				return false;
 			}
 
 			//don't MALLOC - get them from the pre-defined arrays
@@ -553,7 +553,7 @@ BOOL loadResearch(const char *pResearchData, UDWORD bufferSize)
 			{
 				debug( LOG_ERROR, "Out of memory assigning research structures - requirements" );
 				abort();
-				return FALSE;
+				return false;
 			}
 
 			//don't MALLOC - get them from the pre-defined arrays
@@ -570,7 +570,7 @@ BOOL loadResearch(const char *pResearchData, UDWORD bufferSize)
 			{
 				debug( LOG_ERROR, "Out of memory assigning research structures - redundancies" );
 				abort();
-				return FALSE;
+				return false;
 			}
 			//don't MALLOC - get them from the pre-defined arrays
 			pResearch->pRedStructs = pResearchStructRed + numResearchStructRed;
@@ -585,7 +585,7 @@ BOOL loadResearch(const char *pResearchData, UDWORD bufferSize)
 			{
 				debug( LOG_ERROR, "Out of memory assigning research structures - results" );
 				abort();
-				return FALSE;
+				return false;
 			}
 
 			//don't MALLOC - get them from the pre-defined arrays
@@ -600,7 +600,7 @@ BOOL loadResearch(const char *pResearchData, UDWORD bufferSize)
 		{
 			debug( LOG_ERROR, "Research Points too high for research topic - %s ", getResearchName(pResearch) );
 			abort();
-			return FALSE;
+			return false;
 		}
 		pResearch->researchPoints = (UWORD)resPoints;
 
@@ -617,7 +617,7 @@ BOOL loadResearch(const char *pResearchData, UDWORD bufferSize)
 		pResearch++;
 	}
 
-	return TRUE;
+	return true;
 }
 
 
@@ -637,7 +637,7 @@ BOOL loadResearchPR(const char *pPRData, UDWORD bufferSize)
 
 	for (i = 0; i < NumToAlloc; i++)
 	{
-		recFound = FALSE;
+		recFound = false;
 
 		//read the data into the storage - the data is delimited using commas
 		ResearchName[0] = '\0';
@@ -646,11 +646,11 @@ BOOL loadResearchPR(const char *pPRData, UDWORD bufferSize)
 
 		if (!getResourceName(ResearchName))
 		{
-			return FALSE;
+			return false;
 		}
 		if (!getResourceName(PRName))
 		{
-			return FALSE;
+			return false;
 		}
 
 		//loop through each Research to compare the name
@@ -669,7 +669,7 @@ BOOL loadResearchPR(const char *pPRData, UDWORD bufferSize)
 						{
 							debug( LOG_ERROR, "Trying to allocate more pre-requisites than allowed for research %s", ResearchName );
 							abort();
-							return FALSE;
+							return false;
 						}
 						//PRresearch found alloc this to the current Research
 						pResearch[incR].pPRList[pResearch[incR].
@@ -677,7 +677,7 @@ BOOL loadResearchPR(const char *pPRData, UDWORD bufferSize)
                         //keep tab on how many we have loaded in
                         numResearchPR++;
 						pResearch[incR].storeCount++;
-						recFound = TRUE;
+						recFound = true;
 						break;
 					}
 				}
@@ -686,7 +686,7 @@ BOOL loadResearchPR(const char *pPRData, UDWORD bufferSize)
 				{
 					debug( LOG_ERROR, "Unable to find Pre-requisite %s for research %s", PRName, ResearchName );
 					abort();
-					return FALSE;
+					return false;
 				}
 				else
 				{
@@ -699,7 +699,7 @@ BOOL loadResearchPR(const char *pPRData, UDWORD bufferSize)
 		{
 			debug( LOG_ERROR, "Unable to find Research %s", ResearchName );
 			abort();
-			return FALSE;
+			return false;
 		}
 		//quick check that haven't reached maxPR
 		if (numResearchPR >= MAX_RESEARCH_PR)
@@ -711,7 +711,7 @@ BOOL loadResearchPR(const char *pPRData, UDWORD bufferSize)
 		pPRData = strchr(pPRData,'\n') + 1;
 	}
 
-	return TRUE;
+	return true;
 }
 
 //Load the artefacts for a research list
@@ -762,25 +762,25 @@ BOOL loadResearchArtefacts(const char *pArteData, UDWORD bufferSize, UDWORD list
 
 		if (!getResourceName(ResearchName))
 		{
-			return FALSE;
+			return false;
 		}
 		if (!getResourceName(ArteName))
 		{
-			return FALSE;
+			return false;
 		}
 
 		pArtefact = getComponentDetails(TypeName, ArteName);
 		if (pArtefact == NULL)
 		{
-			return FALSE;
+			return false;
 		}
 		//get the type for comparison later
 		newType = statType(pArtefact->ref);
 
-		pResearch = getResearch(ResearchName, FALSE);
+		pResearch = getResearch(ResearchName, false);
 		if (pResearch == NULL)
 		{
-			return FALSE;
+			return false;
 		}
 
 		//ArtefactResearch found - alloc the artefact to the current Research topic
@@ -801,7 +801,7 @@ BOOL loadResearchArtefacts(const char *pArteData, UDWORD bufferSize, UDWORD list
 			default:
 				debug( LOG_ERROR, "Unknown research list" );
 				abort();
-				return FALSE;
+				return false;
 		}
 		//deal with extra data
 		switch (listNumber)
@@ -822,19 +822,19 @@ BOOL loadResearchArtefacts(const char *pArteData, UDWORD bufferSize, UDWORD list
 				{
 					if (!getResourceName(ArteName))
 					{
-						return FALSE;
+						return false;
 					}
 					pArtefact = getComponentDetails(TypeName, ArteName);
 					if (pArtefact == NULL)
 					{
-						return FALSE;
+						return false;
 					}
 					//check the old and new types are the same
 					if (statType(pArtefact->ref) != newType)
 					{
 						debug( LOG_ERROR, "You are trying to replace one type of component with a different type for research %s in ResultComponents.txt", ResearchName );
 						abort();
-						return FALSE;
+						return false;
 					}
 					//ArtefactResearch found - alloc the artefact to the current Research topic
 					pResearch->pReplacedArtefacts[pResearch->storeCount] = pArtefact;
@@ -844,7 +844,7 @@ BOOL loadResearchArtefacts(const char *pArteData, UDWORD bufferSize, UDWORD list
 			default:
 				debug( LOG_ERROR, "Unknown research list" );
 				abort();
-				return FALSE;
+				return false;
 		}
 
 		//check not allocating more than allowed
@@ -852,7 +852,7 @@ BOOL loadResearchArtefacts(const char *pArteData, UDWORD bufferSize, UDWORD list
 		{
 			debug( LOG_ERROR, "Trying to allocate more artefacts than allowed for research %s", getResearchName(pResearch) );
 			abort();
-			return FALSE;
+			return false;
 		}
 		pResearch->storeCount++;
 
@@ -867,7 +867,7 @@ BOOL loadResearchArtefacts(const char *pArteData, UDWORD bufferSize, UDWORD list
 		pArteData = strchr(pArteData,'\n') + 1;
 	}
 
-	return TRUE;
+	return true;
 }
 
 //Load the Structures for a research list
@@ -910,7 +910,7 @@ BOOL loadResearchStructures(const char *pStructData, UDWORD bufferSize,UDWORD li
 
 	for (i = 0; i < NumToAlloc; i++)
 	{
-		recFound = FALSE;
+		recFound = false;
 		numToFind = 0;
 
 		//read the data into the storage - the data is delimited using comma's
@@ -920,11 +920,11 @@ BOOL loadResearchStructures(const char *pStructData, UDWORD bufferSize,UDWORD li
 
 		if (!getResourceName(ResearchName))
 		{
-			return FALSE;
+			return false;
 		}
 		if (!getResourceName(StructureName))
 		{
-			return FALSE;
+			return false;
 		}
 
 		//loop through each Research to compare the name
@@ -965,16 +965,16 @@ BOOL loadResearchStructures(const char *pStructData, UDWORD bufferSize,UDWORD li
 								/* NO DEFAULT CASE? Alex.... Here ya go - just for you...*/
 								debug( LOG_ERROR, "Unknown research list" );
 								abort();
-								return FALSE;
+								return false;
 						}
-						recFound = TRUE;
+						recFound = true;
 						//check not allocating more than allowed
 						if (pResearch[incR].storeCount >
 										(SDWORD)numToFind)
 						{
 							debug( LOG_ERROR, "Trying to allocate more Structures than allowed for research %s", getResearchName(pResearch) );
 							abort();
-							return FALSE;
+							return false;
 						}
 						pResearch[incR].storeCount++;
 						break;
@@ -985,7 +985,7 @@ BOOL loadResearchStructures(const char *pStructData, UDWORD bufferSize,UDWORD li
 				{
 					debug( LOG_ERROR, "Unable to find Structure %s for research %s", StructureName, ResearchName );
 					abort();
-					return FALSE;
+					return false;
 				}
 				else
 				{
@@ -998,7 +998,7 @@ BOOL loadResearchStructures(const char *pStructData, UDWORD bufferSize,UDWORD li
 		{
 			debug( LOG_ERROR, "Unable to allocate all Research Structures for %s", ResearchName );
 			abort();
-			return FALSE;
+			return false;
 		}
 
 		//quick check that haven't reached max structs
@@ -1013,7 +1013,7 @@ BOOL loadResearchStructures(const char *pStructData, UDWORD bufferSize,UDWORD li
 		pStructData = strchr(pStructData,'\n') + 1;
 	}
 
-	return TRUE;
+	return true;
 }
 
 //Load the pre-requisites for a research list
@@ -1040,7 +1040,7 @@ BOOL loadResearchFunctions(const char *pFunctionData, UDWORD bufferSize)
 
 	for (i=0; i < NumToAlloc; i++)
 	{
-		recFound = FALSE;
+		recFound = false;
 		//read the data into the storage - the data is delimited using comma's
 		ResearchName[0] = '\0';
 		FunctionName[0] = '\0';
@@ -1048,7 +1048,7 @@ BOOL loadResearchFunctions(const char *pFunctionData, UDWORD bufferSize)
 
 		if (!getResourceName(ResearchName))
 		{
-			return FALSE;
+			return false;
 		}
 
 		//loop through each Research to compare the name
@@ -1067,14 +1067,14 @@ BOOL loadResearchFunctions(const char *pFunctionData, UDWORD bufferSize)
 						//keep tab on how many we have loaded in
 						numResearchFunc++;
 
-						recFound = TRUE;
+						recFound = true;
 						//check not allocating more than allowed
 						if (pResearch[incR].storeCount >
 										(SDWORD)pResearch[incR].numFunctions)
 						{
 							debug( LOG_ERROR, "Trying to allocate more Functions than allowed for research %s", ResearchName );
 							abort();
-							return FALSE;
+							return false;
 						}
 						pResearch[incR].storeCount++;
 						break;
@@ -1085,7 +1085,7 @@ BOOL loadResearchFunctions(const char *pFunctionData, UDWORD bufferSize)
 				{
 					debug( LOG_ERROR, "Unable to find Function %s for research %s", FunctionName, ResearchName );
 					abort();
-					return FALSE;
+					return false;
 				}
 				else
 				{
@@ -1098,7 +1098,7 @@ BOOL loadResearchFunctions(const char *pFunctionData, UDWORD bufferSize)
 		{
 			debug( LOG_ERROR, "Unable to allocate all research Functions for %s", ResearchName );
 			abort();
-			return FALSE;
+			return false;
 		}
 		//quick check that haven't reached maxPR
 
@@ -1111,7 +1111,7 @@ BOOL loadResearchFunctions(const char *pFunctionData, UDWORD bufferSize)
 		pFunctionData = strchr(pFunctionData,'\n') + 1;
 	}
 
-	return TRUE;
+	return true;
 }
 
 /*
@@ -1154,7 +1154,7 @@ UWORD fillResearchList(UWORD *plist, UDWORD playerID, UWORD topic, UWORD limit)
 		//if the topic is possible and has not already been researched - add to list
 		if ((IsResearchPossible(&pPlayerRes[inc])))
 		{
-			if ((IsResearchCompleted(&pPlayerRes[inc])==FALSE) && (IsResearchStarted(&pPlayerRes[inc])==FALSE))
+			if ((IsResearchCompleted(&pPlayerRes[inc])==false) && (IsResearchStarted(&pPlayerRes[inc])==false))
 			{
 				goto add_research;
 			}
@@ -1171,7 +1171,7 @@ UWORD fillResearchList(UWORD *plist, UDWORD playerID, UWORD topic, UWORD limit)
 		}
 
 		// make sure that the research is not completed  or started by another researchfac
-		if ((IsResearchCompleted(&pPlayerRes[inc])==FALSE) && (IsResearchStarted(&pPlayerRes[inc])==FALSE))
+		if ((IsResearchCompleted(&pPlayerRes[inc])==false) && (IsResearchStarted(&pPlayerRes[inc])==false))
 		{
 			// Research is not completed  ... also  it has not been started by another researchfac
 
@@ -1182,13 +1182,13 @@ UWORD fillResearchList(UWORD *plist, UDWORD playerID, UWORD topic, UWORD limit)
 			}
 
 			//check for pre-requisites
-			bPRFound = TRUE;
+			bPRFound = true;
 			for (incPR = 0; incPR < asResearch[inc].numPRRequired; incPR++)
 			{
 				if (IsResearchCompleted(&(pPlayerRes[asResearch[inc].pPRList[incPR]]))==0)
 				{
 					//if haven't pre-requisite - quit checking rest
-					bPRFound = FALSE;
+					bPRFound = false;
 					break;
 				}
 			}
@@ -1199,14 +1199,14 @@ UWORD fillResearchList(UWORD *plist, UDWORD playerID, UWORD topic, UWORD limit)
 			}
 
 			//check for structure effects
-			bStructFound = TRUE;
+			bStructFound = true;
 			for (incS = 0; incS < asResearch[inc].numStructures; incS++)
 			{
 				if (!checkSpecificStructExists(asResearch[inc].pStructList[incS],
 					playerID))
 				{
 					//if not built, quit checking
-					bStructFound = FALSE;
+					bStructFound = false;
 					break;
 				}
 			}
@@ -1245,7 +1245,7 @@ void researchResult(UDWORD researchIndex, UBYTE player, BOOL bDisplay,
 
 	ASSERT( researchIndex < numResearch, "researchResult: invalid research index" );
 
-	sendReseachStatus(NULL, researchIndex, player, FALSE);
+	sendReseachStatus(NULL, researchIndex, player, false);
 
 	MakeResearchCompleted(&pPlayerRes[researchIndex]);
 
@@ -1368,7 +1368,7 @@ void researchResult(UDWORD researchIndex, UBYTE player, BOOL bDisplay,
 						if (apProductionUpgrades[player][upgrade].functionInc == pFunction->
 							ref - REF_FUNCTION_START)
 						{
-							apProductionUpgrades[player][upgrade].available = TRUE;
+							apProductionUpgrades[player][upgrade].available = true;
 							break;
 						}
 					}*/
@@ -1411,7 +1411,7 @@ void researchResult(UDWORD researchIndex, UBYTE player, BOOL bDisplay,
 						if (apResearchUpgrades[player][upgrade].functionInc == pFunction->
 							ref - REF_FUNCTION_START)
 						{
-							apResearchUpgrades[player][upgrade].available = TRUE;
+							apResearchUpgrades[player][upgrade].available = true;
 							break;
 						}
 					}*/
@@ -1737,7 +1737,7 @@ void researchResult(UDWORD researchIndex, UBYTE player, BOOL bDisplay,
 					if (apArmourUpgrades[player][upgrade].functionInc == pFunction->
 						ref - REF_FUNCTION_START)
 					{
-						apArmourUpgrades[player][upgrade].available = TRUE;
+						apArmourUpgrades[player][upgrade].available = true;
 						break;
 					}
 				}
@@ -1758,7 +1758,7 @@ void researchResult(UDWORD researchIndex, UBYTE player, BOOL bDisplay,
 					if (apRepairUpgrades[player][upgrade].functionInc == pFunction->
 						ref - REF_FUNCTION_START)
 					{
-						apRepairUpgrades[player][upgrade].available = TRUE;
+						apRepairUpgrades[player][upgrade].available = true;
 						break;
 					}
 				}
@@ -1779,7 +1779,7 @@ void researchResult(UDWORD researchIndex, UBYTE player, BOOL bDisplay,
 					if (apBodyUpgrades[player][upgrade].functionInc == pFunction->
 						ref - REF_FUNCTION_START)
 					{
-						apBodyUpgrades[player][upgrade].available = TRUE;
+						apBodyUpgrades[player][upgrade].available = true;
 						break;
 					}
 				}
@@ -1800,7 +1800,7 @@ void researchResult(UDWORD researchIndex, UBYTE player, BOOL bDisplay,
 					if (apResistanceUpgrades[player][upgrade].functionInc == pFunction->
 						ref - REF_FUNCTION_START)
 					{
-						apResistanceUpgrades[player][upgrade].available = TRUE;
+						apResistanceUpgrades[player][upgrade].available = true;
 						break;
 					}
 				}
@@ -1809,7 +1809,7 @@ void researchResult(UDWORD researchIndex, UBYTE player, BOOL bDisplay,
 			}*/
 			default:
 			{
-				ASSERT( FALSE,"Invalid function type" );
+				ASSERT( false,"Invalid function type" );
 			}
 		}//end of switch
 	}//end of function loop
@@ -1826,7 +1826,7 @@ void researchResult(UDWORD researchIndex, UBYTE player, BOOL bDisplay,
 		//check there is viewdata for the research topic - just don't add message if not!
 		if (pResearch->pViewData != NULL)
 		{
-			pMessage = addMessage(MSG_RESEARCH, FALSE, player);
+			pMessage = addMessage(MSG_RESEARCH, false, player);
 			if (pMessage != NULL)
 			{
 				pMessage->pViewData = (MSG_VIEWDATA *)pResearch->pViewData;
@@ -1931,7 +1931,7 @@ BOOL ResearchShutDown(void)
     memset(pResearchArteRes, 0, (MAX_RESEARCH_ARTE_RES * sizeof(COMP_BASE_STATS *)));
     memset(pResearchArteRep, 0, (MAX_RESEARCH_ARTE_RES * sizeof(COMP_BASE_STATS *)));
 
-    return TRUE;
+    return true;
 }
 
 /*This function is called when a game finishes*/
@@ -2061,7 +2061,7 @@ void cancelResearch(STRUCTURE *psBuilding)
 	topicInc = ((RESEARCH *)psResFac->psSubject) - asResearch;
 	if (topicInc > numResearch)
 	{
-		ASSERT( FALSE, "cancelResearch: invalid research topic" );
+		ASSERT( false, "cancelResearch: invalid research topic" );
 		return;
 	}
 	pPlayerRes = asPlayerResList[psBuilding->player] + topicInc;
@@ -2090,7 +2090,7 @@ void cancelResearch(STRUCTURE *psBuilding)
 			MakeResearchCancelled(pPlayerRes);
 		}
 
-		 sendReseachStatus(psBuilding, topicInc, psBuilding->player, FALSE);
+		 sendReseachStatus(psBuilding, topicInc, psBuilding->player, false);
 
 		// Initialise the research facility's subject
 		psResFac->psSubject = NULL;
@@ -2218,7 +2218,7 @@ static UWORD setIconID(char *pIconName, char *pName)
 	}
 
 	// Add more names as images are created
-	ASSERT( FALSE, "Invalid icon graphic %s for topic %s", pIconName, pName );
+	ASSERT( false, "Invalid icon graphic %s for topic %s", pIconName, pName );
 
 	return 0;	// Should never get here.
 }
@@ -2290,7 +2290,7 @@ SDWORD	mapRIDToIcon( UDWORD rid )
 		break;
 
 	default:
-		ASSERT( FALSE,"Weirdy mapping request for RID to icon" );
+		ASSERT( false,"Weirdy mapping request for RID to icon" );
 		return(-1); //pass back a value that can never have been set up
 		break;
 	}
@@ -2437,7 +2437,7 @@ COMP_BASE_STATS * getComponentDetails(char *pName, char *pCompName)
 			//COMP_UNKNOWN should be an error
 			debug( LOG_ERROR, "Unknown artefact type  - %s", pName );
 			abort();
-			return FALSE;
+			return false;
 		}
 	}
 
@@ -2479,7 +2479,7 @@ RESEARCH * getResearch(const char *pName, BOOL resName)
 		debug(LOG_ERROR, "  Research %d: %s", inc, asResearch[inc].pName);
 	}
 	debug(LOG_ERROR, "Unknown research - %s", pName);
-	assert(FALSE);
+	assert(false);
 
 	return NULL;
 }
@@ -2563,11 +2563,11 @@ static BOOL checkResearchName(RESEARCH *psResearch, UDWORD numStats)
 		if (!strcmp(asResearch[inc].pName, pName))
 		{
 			//oops! found the name
-			ASSERT( FALSE, "Research name has already been used - %s", pName );
-			return FALSE;
+			ASSERT( false, "Research name has already been used - %s", pName );
+			return false;
 		}
 	}
-	return TRUE;
+	return true;
 }
 
 /* Sets the 'possible' flag for a player's research so the topic will appear in
@@ -2577,14 +2577,14 @@ BOOL enableResearch(RESEARCH *psResearch, UDWORD player)
 	UDWORD				inc;
 	PLAYER_RESEARCH		*pPlayerRes = asPlayerResList[player];
 	STRUCTURE			*psStruct;
-	BOOL				resFree = FALSE;
+	BOOL				resFree = false;
 
 
 	inc = psResearch - asResearch;
 	if (inc > numResearch)
 	{
-		ASSERT( FALSE, "enableResearch: Invalid research topic - %s", getResearchName(psResearch) );
-		return FALSE;
+		ASSERT( false, "enableResearch: Invalid research topic - %s", getResearchName(psResearch) );
+		return false;
 	}
 
 	//found, so set the flag
@@ -2599,7 +2599,7 @@ BOOL enableResearch(RESEARCH *psResearch, UDWORD player)
                 psStruct->status == SS_BUILT &&
 				((RESEARCH_FACILITY *)psStruct->pFunctionality)->psSubject == NULL)
 			{
-				resFree = TRUE;
+				resFree = true;
 				break;
 			}
 		}
@@ -2609,7 +2609,7 @@ BOOL enableResearch(RESEARCH *psResearch, UDWORD player)
 		}
 	}
 
-	return TRUE;
+	return true;
 }
 
 /*find the last research topic of importance that the losing player did and
@@ -2649,7 +2649,7 @@ void researchReward(UBYTE losingPlayer, UBYTE rewardPlayer)
 	//if a topic was found give the reward player the results of that research
 	if (rewardID)
 	{
-		researchResult(rewardID, rewardPlayer, TRUE, NULL);
+		researchResult(rewardID, rewardPlayer, true, NULL);
 		if (rewardPlayer == selectedPlayer)
 		{
 			//name the actual reward
@@ -2672,10 +2672,10 @@ BOOL checkResearchStats(void)
 		{
 			if (asResearch[resInc].pPRList != NULL)
 			{
-				ASSERT( FALSE,
+				ASSERT( false,
 					"checkResearchStats: PreReq for topic %s should be NULL",
 					asResearch[resInc].pName );
-				return FALSE;
+				return false;
 			}
 		}
 		else
@@ -2684,10 +2684,10 @@ BOOL checkResearchStats(void)
 			{
 				if (asResearch[resInc].pPRList[inc] > numResearch)
 				{
-					ASSERT( FALSE,
+					ASSERT( false,
 						"checkResearchStats: Invalid PreReq for topic %s",
 						asResearch[resInc].pName );
-					return FALSE;
+					return false;
 				}
 
 			}
@@ -2696,10 +2696,10 @@ BOOL checkResearchStats(void)
 		{
 			if (asResearch[resInc].pStructList != NULL)
 			{
-				ASSERT( FALSE,
+				ASSERT( false,
 					"checkResearchStats: StructureList for topic %s should be NULL",
 					asResearch[resInc].pName );
-				return FALSE;
+				return false;
 			}
 		}
 		else
@@ -2708,10 +2708,10 @@ BOOL checkResearchStats(void)
 			{
 				if (asResearch[resInc].pStructList[inc] > numStructureStats)
 				{
-					ASSERT( FALSE,
+					ASSERT( false,
 						"checkResearchStats: Invalid Structure for topic %s",
 						asResearch[resInc].pName );
-					return FALSE;
+					return false;
 				}
 			}
 		}
@@ -2719,10 +2719,10 @@ BOOL checkResearchStats(void)
 		{
 			if (asResearch[resInc].pFunctionList != NULL)
 			{
-				ASSERT( FALSE,
+				ASSERT( false,
 					"checkResearchStats: FunctionList for topic %s should be NULL",
 					asResearch[resInc].pName );
-				return FALSE;
+				return false;
 			}
 		}
 		else
@@ -2732,7 +2732,7 @@ BOOL checkResearchStats(void)
 				if (asResearch[resInc].pFunctionList[inc]->ref -
 					REF_FUNCTION_START > numFunctions)
 				{
-					ASSERT( FALSE, "checkResearchStats: Invalid function for %s",
+					ASSERT( false, "checkResearchStats: Invalid function for %s",
 					asResearch[resInc].pName );
 				}
 			}
@@ -2741,10 +2741,10 @@ BOOL checkResearchStats(void)
 		{
 			if (asResearch[resInc].pRedStructs != NULL)
 			{
-				ASSERT( FALSE,
+				ASSERT( false,
 					"checkResearchStats: Redundant StructList for topic %s should be NULL",
 					asResearch[resInc].pName );
-				return FALSE;
+				return false;
 			}
 		}
 		else
@@ -2753,10 +2753,10 @@ BOOL checkResearchStats(void)
 			{
 				if (asResearch[resInc].pRedStructs[inc] > numStructureStats)
 				{
-					ASSERT( FALSE,
+					ASSERT( false,
 						"checkResearchStats: Invalid Redundant Structure for topic %s",
 						asResearch[resInc].pName );
-					return FALSE;
+					return false;
 				}
 			}
 		}
@@ -2764,10 +2764,10 @@ BOOL checkResearchStats(void)
 		{
 			if (asResearch[resInc].pStructureResults != NULL)
 			{
-				ASSERT( FALSE,
+				ASSERT( false,
 					"checkResearchStats: Result StructList for topic %s should be NULL",
 					asResearch[resInc].pName );
-				return FALSE;
+				return false;
 			}
 		}
 		else
@@ -2776,10 +2776,10 @@ BOOL checkResearchStats(void)
 			{
 				if (asResearch[resInc].pStructureResults[inc] > numStructureStats)
 				{
-					ASSERT( FALSE,
+					ASSERT( false,
 						"checkResearchStats: Invalid Result Structure for topic %s",
 						asResearch[resInc].pName );
-					return FALSE;
+					return false;
 				}
 			}
 		}
@@ -2787,10 +2787,10 @@ BOOL checkResearchStats(void)
 		{
 			if (asResearch[resInc].pArtefactResults != NULL)
 			{
-				ASSERT( FALSE,
+				ASSERT( false,
 					"checkResearchStats: CompResultList for topic %s should be NULL",
 					asResearch[resInc].pName );
-				return FALSE;
+				return false;
 			}
 		}
 		else
@@ -2806,10 +2806,10 @@ BOOL checkResearchStats(void)
 		{
 			if (asResearch[resInc].pRedArtefacts != NULL)
 			{
-				ASSERT( FALSE,
+				ASSERT( false,
 					"checkResearchStats: RedundantCompList for topic %s should be NULL",
 					asResearch[resInc].pName );
-				return FALSE;
+				return false;
 			}
 		}
 		else
@@ -2823,13 +2823,13 @@ BOOL checkResearchStats(void)
 		}
 	}
 
-	return TRUE;
+	return true;
 }
 
 /*flag self repair so droids can start when idle*/
 void enableSelfRepair(UBYTE player)
 {
-	bSelfRepair[player] = TRUE;
+	bSelfRepair[player] = true;
 }
 
 /*check to see if any research has been completed that enables self repair*/
@@ -2837,11 +2837,11 @@ BOOL selfRepairEnabled(UBYTE player)
 {
 	if (bSelfRepair[player])
 	{
-		return TRUE;
+		return true;
 	}
 	else
 	{
-		return FALSE;
+		return false;
 	}
 }
 
@@ -2853,11 +2853,11 @@ BOOL wallDefenceStruct(STRUCTURE_STATS *psStats)
 		psStats->type == REF_WALLCORNER ||
         psStats->type == REF_BLASTDOOR)
 	{
-		return TRUE;
+		return true;
 	}
 	else
 	{
-		return FALSE;
+		return false;
 	}
 }
 

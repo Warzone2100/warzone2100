@@ -47,9 +47,9 @@ UDWORD		screenDepth = 0;
 int wz_texture_compression;
 
 static SDL_Surface	*screen = NULL;
-static BOOL		bBackDrop = FALSE;
+static BOOL		bBackDrop = false;
 static char		screendump_filename[PATH_MAX];
-static BOOL		screendump_required = FALSE;
+static BOOL		screendump_required = false;
 static GLuint		backDropTexture = ~0;
 
 /* Initialise the double buffered display */
@@ -75,7 +75,7 @@ BOOL screenInitialise(
 		const SDL_VideoInfo* video_info = SDL_GetVideoInfo();
 
 		if (!video_info) {
-			return FALSE;
+			return false;
 		}
 
 		// The flags to pass to SDL_SetVideoMode.
@@ -105,7 +105,7 @@ BOOL screenInitialise(
 		bpp = SDL_VideoModeOK(width, height, bitDepth, video_flags);
 		if (!bpp) {
 			debug( LOG_ERROR, "Error: Video mode %dx%d@%dbpp is not supported!\n", width, height, bitDepth );
-			return FALSE;
+			return false;
 		}
 		switch ( bpp )
 		{
@@ -141,7 +141,7 @@ BOOL screenInitialise(
 	screen = SDL_SetVideoMode(width, height, bpp, video_flags);
 	if ( !screen ) {
 		debug( LOG_ERROR, "Error: SDL_SetVideoMode failed (%s).", SDL_GetError() );
-		return FALSE;
+		return false;
 	}
 	if ( SDL_GL_GetAttribute(SDL_GL_DOUBLEBUFFER, &value) == -1)
 	{
@@ -181,7 +181,7 @@ BOOL screenInitialise(
 
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
-	return TRUE;
+	return true;
 }
 
 
@@ -240,12 +240,12 @@ void screen_SetBackDropFromFile(const char* filename)
 
 void screen_StopBackDrop(void)
 {
-	bBackDrop = FALSE;	//checking [movie]
+	bBackDrop = false;	//checking [movie]
 }
 
 void screen_RestartBackDrop(void)
 {
-	bBackDrop = TRUE;
+	bBackDrop = true;
 }
 
 BOOL screen_GetBackDrop(void)
@@ -342,7 +342,7 @@ void screenDoDumpToDiskIfRequired(void)
 	// Write the screen to a PNG
 	iV_saveImage_PNG(fileName, &image);
 
-	screendump_required = FALSE;
+	screendump_required = false;
 }
 
 void screenDumpToDisk(const char* path) {
@@ -361,5 +361,5 @@ void screenDumpToDisk(const char* path) {
 
 	// If we have an integer overflow, we don't want to go about and overwrite files
 	if (screendump_num != 0)
-		screendump_required = TRUE;
+		screendump_required = true;
 }

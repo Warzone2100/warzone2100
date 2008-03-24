@@ -42,7 +42,7 @@ static char aText[TEXT_BUFFERS][YYLMAX];
 static UDWORD currText=0;
 
 // Note if we are in a comment
-static BOOL inComment = FALSE;
+static BOOL inComment = false;
 
 /* FLEX include buffer stack */
 static YY_BUFFER_STATE include_stack[MAX_SCR_INCLUDE_DEPTH];
@@ -91,7 +91,7 @@ SDWORD scriptGetVarToken(VAR_SYMBOL *psVar)
 	// See if this is an object pointer
 	if (!asScrTypeTab || psVar->type < VAL_USERTYPESTART)
 	{
-		object = FALSE;
+		object = false;
 	}
 	else
 	{
@@ -205,7 +205,7 @@ SDWORD scriptGetConstToken(CONST_SYMBOL *psConst)
 	// See if this is an object constant
 	if (!asScrTypeTab || psConst->type < VAL_USERTYPESTART)
 	{
-		object = FALSE;
+		object = false;
 	}
 	else
 	{
@@ -284,7 +284,7 @@ SDWORD scriptGetCustomFuncToken(EVENT_SYMBOL *psFunc)
 	// See if this is an object pointer
 	if (!asScrTypeTab || psFunc->retType < VAL_USERTYPESTART)
 	{
-		object = FALSE;
+		object = false;
 	}
 	else
 	{
@@ -339,11 +339,11 @@ BOOL scriptLoopUpMacro(const char *pMacro, char **ppMacroBody)
 			*ppMacroBody = (char *)malloc(MAXSTRLEN);
 			strcpy( *ppMacroBody, &(scr_macro[i].scr_define_body[0]) );		//copy macro body into buffer so we can process it
 			//*pMacroBody = &(scr_macro[i].scr_define_body[0]);	//return macro body
-			return TRUE;
+			return true;
 		}
 	}
 
-	return FALSE;
+	return false;
 }
 
 /* Return to the previous macto buffer */
@@ -490,10 +490,10 @@ float					{ scr_lval.tval = VAL_FLOAT; return TYPE; }
 FLOAT					{ scr_lval.tval = VAL_FLOAT; return TYPE; }
 
 	/* Match boolean values */
-TRUE					{ scr_lval.bval = TRUE; return BOOLEAN_T; }
-true					{ scr_lval.bval = TRUE; return BOOLEAN_T; }
-FALSE					{ scr_lval.bval = FALSE; return BOOLEAN_T; }
-false					{ scr_lval.bval = FALSE; return BOOLEAN_T; }
+true					{ scr_lval.bval = true; return BOOLEAN_T; }
+TRUE					{ scr_lval.bval = true; return BOOLEAN_T; }
+false					{ scr_lval.bval = false; return BOOLEAN_T; }
+FALSE					{ scr_lval.bval = false; return BOOLEAN_T; }
 
 	/* Match increment/decrement operators */
 "++"					{RULE("++"); return _INC; }
@@ -773,9 +773,9 @@ NOT						return _NOT;
 [ \t\n\x0d\x0a]				;
 
 	/* Strip comments */
-"/*"						{ inComment=TRUE; BEGIN (COMMENT); }
+"/*"						{ inComment=true; BEGIN (COMMENT); }
 <COMMENT>"*/" |
-<COMMENT>"*/"\n				{ inComment=FALSE; BEGIN (INITIAL); }
+<COMMENT>"*/"\n				{ inComment=false; BEGIN (INITIAL); }
 <COMMENT>. |
 <COMMENT>\n					;
 

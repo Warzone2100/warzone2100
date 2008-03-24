@@ -105,9 +105,9 @@ unsigned int loopStateChanges;
 /*
  * local variables
  */
-static BOOL paused=FALSE;
-static BOOL video=FALSE;
-static BOOL bQuitVideo=FALSE;
+static BOOL paused=false;
+static BOOL video=false;
+static BOOL bQuitVideo=false;
 static	SDWORD clearCount = 0;
 
 //holds which pause is valid at any one time
@@ -145,7 +145,7 @@ GAMECODE gameLoop(void)
 	STRUCTURE	*psCBuilding, *psNBuilding;
 	FEATURE		*psCFeat, *psNFeat;
 	UDWORD		i,widgval;
-	BOOL		quitting=FALSE;
+	BOOL		quitting=false;
 	INT_RETVAL	intRetVal;
 	int	        clearMode = 0;
 
@@ -165,7 +165,7 @@ GAMECODE gameLoop(void)
 	}
 	if (loopMissionState == LMS_SAVECONTINUE)
 	{
-		pie_SetFogStatus(FALSE);
+		pie_SetFogStatus(false);
 		clearMode = CLEAR_BLACK;
 	}
 	pie_ScreenFlip(clearMode);//gameloopflip
@@ -259,11 +259,11 @@ GAMECODE gameLoop(void)
 				updatePlayerPower(i);
 
 				//this is a check cos there is a problem with the power but not sure where!!
-				powerCheck(TRUE, (UBYTE)i);
+				powerCheck(true, (UBYTE)i);
 
 				//set the flag for each player
-				setHQExists(FALSE, i);
-				setSatUplinkExists(FALSE, i);
+				setHQExists(false, i);
+				setSatUplinkExists(false, i);
 
 				numCommandDroids[i] = 0;
 				numConstructorDroids[i] = 0;
@@ -349,7 +349,7 @@ GAMECODE gameLoop(void)
 
 				/*set this up AFTER droidUpdate so that if trying to building a
 				new one, we know whether one exists already*/
-				setLasSatExists(FALSE, i);
+				setLasSatExists(false, i);
 				for (psCBuilding = apsStructLists[i]; psCBuilding; psCBuilding = psNBuilding)
 				{
 					/* Copy the next pointer - not 100% sure if the structure could get destroyed but this covers us anyway */
@@ -359,18 +359,18 @@ GAMECODE gameLoop(void)
 					if (psCBuilding->pStructureType->type == REF_HQ &&
 						psCBuilding->status == SS_BUILT)
 					{
-						setHQExists(TRUE, i);
+						setHQExists(true, i);
 					}
 					if (psCBuilding->pStructureType->type == REF_SAT_UPLINK &&
 						psCBuilding->status == SS_BUILT)
 					{
-						setSatUplinkExists(TRUE, i);
+						setSatUplinkExists(true, i);
 					}
 					//don't wait for the Las Sat to be built - can't build another if one is partially built
 					if (asWeaponStats[psCBuilding->asWeaps[0].nStat].
 						weaponSubClass == WSC_LAS_SAT)
 					{
-						setLasSatExists(TRUE, i);
+						setLasSatExists(true, i);
 					}
 				}
 				for (psCBuilding = mission.apsStructLists[i]; psCBuilding;
@@ -382,22 +382,22 @@ GAMECODE gameLoop(void)
 					if (psCBuilding->pStructureType->type == REF_HQ &&
 						psCBuilding->status == SS_BUILT)
 					{
-						setHQExists(TRUE, i);
+						setHQExists(true, i);
 					}
 					if (psCBuilding->pStructureType->type == REF_SAT_UPLINK &&
 						psCBuilding->status == SS_BUILT)
 					{
-						setSatUplinkExists(TRUE, i);
+						setSatUplinkExists(true, i);
 					}
 					//don't wait for the Las Sat to be built - can't build another if one is partially built
 					if (asWeaponStats[psCBuilding->asWeaps[0].nStat].
 						weaponSubClass == WSC_LAS_SAT)
 					{
-						setLasSatExists(TRUE, i);
+						setLasSatExists(true, i);
 					}
 				}
 				//this is a check cos there is a problem with the power but not sure where!!
-				powerCheck(FALSE, (UBYTE)i);
+				powerCheck(false, (UBYTE)i);
 			}
 
 			missionTimerUpdate();
@@ -452,7 +452,7 @@ GAMECODE gameLoop(void)
 			}
 		}
 
-		if(bLoadSaveUp && runLoadSave(TRUE) && strlen(sRequestResult))
+		if(bLoadSaveUp && runLoadSave(true) && strlen(sRequestResult))
 		{
 			debug( LOG_NEVER, "Returned %s", sRequestResult );
 			if(bRequestLoad)
@@ -470,7 +470,7 @@ GAMECODE gameLoop(void)
 					}
 					else
 					{
-						ASSERT( FALSE,"Mission Results: saveGame Failed" );
+						ASSERT( false,"Mission Results: saveGame Failed" );
 						deleteSaveGame(sRequestResult);
 					}
 				}
@@ -488,7 +488,7 @@ GAMECODE gameLoop(void)
 				}
 				else
 				{
-					ASSERT( FALSE, "Attempt to save game with incorrect load/save mode" );
+					ASSERT( false, "Attempt to save game with incorrect load/save mode" );
 				}
 			}
 		}
@@ -501,13 +501,13 @@ GAMECODE gameLoop(void)
 		{
 			//quitting from the game to the front end
 			//so get a new backdrop
-			quitting = TRUE;
+			quitting = true;
 
 			pie_LoadBackDrop(SCREEN_RANDOMBDROP);
 		}
 		else //if in video mode esc kill video
 		{
-			bQuitVideo = TRUE;
+			bQuitVideo = true;
 		}
 	}
 	if (!loop_GetVideoStatus() && !quitting)
@@ -530,12 +530,12 @@ GAMECODE gameLoop(void)
 		}
 		/* Display the in game interface */
 		pie_SetDepthBufferStatus(DEPTH_CMP_ALWAYS_WRT_ON);
-		pie_SetFogStatus(FALSE);
+		pie_SetFogStatus(false);
 
 		if(bMultiPlayer && bDisplayMultiJoiningStatus)
 		{
 			intDisplayMultiJoiningStatus(bDisplayMultiJoiningStatus);
-			setWidgetsStatus(FALSE);
+			setWidgetsStatus(false);
 		}
 
 		if(getWidgetsStatus())
@@ -543,14 +543,14 @@ GAMECODE gameLoop(void)
 			intDisplayWidgets();
 		}
 		pie_SetDepthBufferStatus(DEPTH_CMP_LEQ_WRT_ON);
-		pie_SetFogStatus(TRUE);
+		pie_SetFogStatus(true);
 	}
 
 	/* Check for toggling video playbackmode */
 	if (bQuitVideo && loop_GetVideoStatus())
 	{
 		seq_StopFullScreenVideo();
-		bQuitVideo = FALSE;
+		bQuitVideo = false;
 	}
 
 	pie_GetResetCounts(&loopPieCount, &loopTileCount, &loopPolyCount, &loopStateChanges);
@@ -559,7 +559,7 @@ GAMECODE gameLoop(void)
 	{
 		if (loopMissionState == LMS_SAVECONTINUE)
 		{
-			pie_SetFogStatus(FALSE);
+			pie_SetFogStatus(false);
 			clearMode = CLEAR_BLACK;
 		}
 	}
@@ -582,7 +582,7 @@ GAMECODE gameLoop(void)
 	{
 		case LMS_CLEAROBJECTS:
 			missionDestroyObjects();
-			setScriptPause(TRUE);
+			setScriptPause(true);
 			loopMissionState = LMS_SETUPMISSION;
 			break;
 
@@ -590,7 +590,7 @@ GAMECODE gameLoop(void)
 			// default
 			break;
 		case LMS_SETUPMISSION:
-			setScriptPause(FALSE);
+			setScriptPause(false);
 			if (!setUpMission(nextMissionType))
 			{
 				return GAMECODE_QUITGAME;
@@ -609,13 +609,13 @@ GAMECODE gameLoop(void)
 			return GAMECODE_LOADGAME;
 			break;
 		default:
-			ASSERT( FALSE, "unknown loopMissionState" );
+			ASSERT( false, "unknown loopMissionState" );
 			break;
 	}
 
 	if (quitting)
 	{
-		pie_SetFogStatus(FALSE);
+		pie_SetFogStatus(false);
 		pie_ScreenFlip(CLEAR_BLACK);//gameloopflip
 		/* Check for toggling display mode */
 		if ((keyDown(KEY_LALT) || keyDown(KEY_RALT)) && keyPressed(KEY_RETURN))
@@ -640,7 +640,7 @@ void videoLoop(void)
 	float originalVolume = 0.0;
 
 	// There is something really odd here. - Per
-	static BOOL bActiveBackDrop = FALSE;
+	static BOOL bActiveBackDrop = false;
 
 #ifdef DEBUG
 	// Surely this should be: bActiveBackDrop = screen_GetBackDrop(); ?? - Per
@@ -666,13 +666,13 @@ void videoLoop(void)
 	if (keyPressed(KEY_ESC) || mouseReleased(MOUSE_LMB))
 	{
 		seq_StopFullScreenVideo();
-		bQuitVideo = FALSE;
+		bQuitVideo = false;
 
 		// remove the intelligence screen if necessary
 		if (messageIsImmediate())
 		{
-			intResetScreen(TRUE);
-			setMessageImmediate(FALSE);
+			intResetScreen(true);
+			setMessageImmediate(false);
 		}
 		//Script callback for video over
 		//don't do the callback if we're playing the win/lose video
@@ -697,7 +697,7 @@ void videoLoop(void)
 	if (bQuitVideo)
 	{
 		seq_StopFullScreenVideo();
-		bQuitVideo = FALSE;
+		bQuitVideo = false;
 
 		//set the next video off - if any
 		if (seq_AnySeqLeft())
@@ -716,8 +716,8 @@ void videoLoop(void)
 			// remove the intelligence screen if necessary
 			if (messageIsImmediate())
 			{
-				intResetScreen(TRUE);
-				setMessageImmediate(FALSE);
+				intResetScreen(true);
+				setMessageImmediate(false);
 			}
 			//don't do the callback if we're playing the win/lose video
 			if (!getScriptWinLoseVideo())
@@ -742,12 +742,12 @@ void videoLoop(void)
 	{
 		if (screen_GetBackDrop())
 		{
-			bActiveBackDrop = TRUE;
+			bActiveBackDrop = true;
 			screen_StopBackDrop();
 		}
 		else
 		{
-			bActiveBackDrop = FALSE;
+			bActiveBackDrop = false;
 			screen_StopBackDrop();
 		}
 	}
@@ -767,11 +767,11 @@ void videoLoop(void)
 void loop_SetVideoPlaybackMode(void)
 {
 	videoMode += 1;
-	paused = TRUE;
-	video = TRUE;
+	paused = true;
+	video = true;
 	clearCount = 0;
 	gameTimeStop();
-	pie_SetFogStatus(FALSE);
+	pie_SetFogStatus(false);
 	audio_StopAll();
 }
 
@@ -779,10 +779,10 @@ void loop_SetVideoPlaybackMode(void)
 void loop_ClearVideoPlaybackMode(void)
 {
 	videoMode -=1;
-	paused = FALSE;
-	video = FALSE;
+	paused = false;
+	video = false;
 	gameTimeStart();
-	pie_SetFogStatus(TRUE);
+	pie_SetFogStatus(true);
 	cdAudio_Resume();
 	ASSERT( videoMode == 0, "loop_ClearVideoPlaybackMode: out of sync." );
 }
@@ -911,13 +911,13 @@ void incNumConstructorDroids(UDWORD player)
 /* Fire waiting beacon messages which we couldn't run before */
 static void fireWaitingCallbacks(void)
 {
-	BOOL bOK = TRUE;
+	BOOL bOK = true;
 
 	while(!isMsgStackEmpty() && bOK)
 	{
 		bOK = msgStackFireTop();
 		if(!bOK){
-			ASSERT(FALSE, "fireWaitingCallbacks: msgStackFireTop() failed (stack count: %d)", msgStackGetCount());
+			ASSERT(false, "fireWaitingCallbacks: msgStackFireTop() failed (stack count: %d)", msgStackGetCount());
 		}
 	}
 }

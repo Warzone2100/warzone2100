@@ -78,11 +78,11 @@ typedef struct {
 } BUTTON_SURFACE;
 
 
-#define RENDERBUTTON_INUSE(x)  ((x)->InUse=TRUE)
-#define RENDERBUTTON_NOTINUSE(x)  ((x)->InUse=FALSE)
+#define RENDERBUTTON_INUSE(x)  ((x)->InUse=true)
+#define RENDERBUTTON_NOTINUSE(x)  ((x)->InUse=false)
 
-#define RENDERBUTTON_INITIALISED(x)  ((x)->Initialised=TRUE)
-#define RENDERBUTTON_NOTINITIALISED(x)  ((x)->Initialised=FALSE)
+#define RENDERBUTTON_INITIALISED(x)  ((x)->Initialised=true)
+#define RENDERBUTTON_NOTINITIALISED(x)  ((x)->Initialised=false)
 
 #define IsBufferInitialised(x) ((x)->Initialised)
 #define IsBufferInUse(x) ((x)->InUse)

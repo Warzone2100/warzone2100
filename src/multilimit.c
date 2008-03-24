@@ -86,16 +86,16 @@ static BOOL useStruct(UDWORD count,UDWORD i)
 
 	if(count >= (4*BUTPERFORM))
 	{
-		return FALSE;
+		return false;
 	}
 
 	// now see if we loaded that stat..
 	if(asStructLimits[0][i].globalLimit ==LOTS_OF)
 	{
-		return FALSE;
+		return false;
 	}
 
-	return TRUE;
+	return true;
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -111,19 +111,19 @@ BOOL startLimitScreen(void)
 	// load stats...
 	if(!bForceEditorLoaded)
 	{
-		initLoadingScreen( TRUE );//changed by jeremy mar8
+		initLoadingScreen( true );//changed by jeremy mar8
 
 		if (!resLoad("wrf/piestats.wrf", 501))
 		{
-			return FALSE;
+			return false;
 		}
 
 		if (!resLoad("wrf/forcedit2.wrf", 502))
 		{
-			return FALSE;
+			return false;
 		}
 
-		bForceEditorLoaded = TRUE;
+		bForceEditorLoaded = true;
 		closeLoadingScreen();
 	}
 
@@ -145,7 +145,7 @@ BOOL startLimitScreen(void)
 					LIMITS_OKX-40,LIMITS_OKY,
 					iV_GetImageWidth(FrontImages,IMAGE_RETURN),
 					iV_GetImageHeight(FrontImages,IMAGE_RETURN),
-					_("Return To Previous Screen"),IMAGE_NO,IMAGE_NO,TRUE);
+					_("Return To Previous Screen"),IMAGE_NO,IMAGE_NO,true);
 
 
 	// ok button
@@ -153,7 +153,7 @@ BOOL startLimitScreen(void)
 					LIMITS_OKX,LIMITS_OKY,
 					iV_GetImageWidth(FrontImages,IMAGE_BIGOK),
 					iV_GetImageHeight(FrontImages,IMAGE_BIGOK),
-					_("Accept Settings"),IMAGE_OK,IMAGE_OK,TRUE);
+					_("Accept Settings"),IMAGE_OK,IMAGE_OK,true);
 
 	// Count the number of minor tabs needed
 	numButtons = 0;
@@ -233,7 +233,7 @@ BOOL startLimitScreen(void)
 		}
 	}
 
-	return TRUE;
+	return true;
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -265,7 +265,7 @@ void runLimitScreen(void)
 			eventReset();
 			resReleaseBlockData(501);
 			resReleaseBlockData(502);
-			bForceEditorLoaded = FALSE;
+			bForceEditorLoaded = false;
 			changeTitleMode(MULTIOPTION);
 
 			// make some noize.
@@ -275,7 +275,7 @@ void runLimitScreen(void)
 			}
 			else
 			{
-				sendTextMessage("Limits Reset To Default Values",TRUE);
+				sendTextMessage("Limits Reset To Default Values",true);
 			}
 
 			break;
@@ -409,7 +409,7 @@ static void displayStructureBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset
 	}
 
 	pie_SetDepthBufferStatus(DEPTH_CMP_LEQ_WRT_ON);
-	displayStructureStatButton(stat ,0,	 &Rotation,&Position,TRUE, scale);
+	displayStructureStatButton(stat ,0,	 &Rotation,&Position,true, scale);
 	pie_SetDepthBufferStatus(DEPTH_CMP_ALWAYS_WRT_ON);
 
 	// draw name

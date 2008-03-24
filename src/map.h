@@ -281,7 +281,7 @@ extern TILE_COORD	*aMapLinePoints;
 /* Return height of x,y */
 extern SWORD map_Height(int x, int y);
 
-/* returns TRUE if object is above ground */
+/* returns true if object is above ground */
 extern BOOL mapObjIsAboveGround( BASE_OBJECT *psObj );
 
 /* returns the max and min height of a tile by looking at the four corners

@@ -27,7 +27,7 @@
 // FIXME Direct iVis implementation include!
 #include "lib/ivis_common/rendmode.h"
 
-BOOL DragEnabled = TRUE;
+BOOL DragEnabled = true;
 
 void sliderEnableDrag(BOOL Enable)
 {
@@ -41,14 +41,14 @@ W_SLIDER* sliderCreate(const W_SLDINIT* psInit)
 
 	if (psInit->style & ~(WBAR_PLAIN | WIDG_HIDDEN))
 	{
-		ASSERT(FALSE, "sliderCreate: Unknown style");
+		ASSERT(false, "sliderCreate: Unknown style");
 		return NULL;
 	}
 
 	if (psInit->orientation < WSLD_LEFT
 	 || psInit->orientation > WSLD_BOTTOM)
 	{
-		ASSERT(FALSE, "sliderCreate: Unknown orientation");
+		ASSERT(false, "sliderCreate: Unknown orientation");
 		return NULL;
 	}
 
@@ -59,13 +59,13 @@ W_SLIDER* sliderCreate(const W_SLDINIT* psInit)
 	   || psInit->orientation == WSLD_BOTTOM)
 	  && psInit->numStops > (psInit->height - psInit->barSize)))
 	{
-		ASSERT(FALSE, "sliderCreate: Too many stops for slider length");
+		ASSERT(false, "sliderCreate: Too many stops for slider length");
 		return NULL;
 	}
 
 	if (psInit->pos > psInit->numStops)
 	{
-		ASSERT(FALSE, "sliderCreate: slider position greater than stops (%d/%d)", psInit->pos,  psInit->numStops);
+		ASSERT(false, "sliderCreate: slider position greater than stops (%d/%d)", psInit->pos,  psInit->numStops);
 		return NULL;
 	}
 
@@ -76,7 +76,7 @@ W_SLIDER* sliderCreate(const W_SLDINIT* psInit)
 	   || psInit->orientation == WSLD_BOTTOM)
 	  && psInit->barSize > psInit->height))
 	{
-		ASSERT(FALSE, "sliderCreate: slider bar is larger than slider width");
+		ASSERT(false, "sliderCreate: slider bar is larger than slider width");
 		return NULL;
 	}
 

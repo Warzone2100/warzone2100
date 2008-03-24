@@ -40,7 +40,7 @@ W_LABEL* labelCreate(const W_LABINIT* psInit)
 	if (psInit->style & ~(WLAB_PLAIN | WLAB_ALIGNLEFT |
 						   WLAB_ALIGNRIGHT | WLAB_ALIGNCENTRE | WIDG_HIDDEN))
 	{
-		ASSERT( FALSE, "Unknown button style" );
+		ASSERT( false, "Unknown button style" );
 		return NULL;
 	}
 

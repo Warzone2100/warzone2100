@@ -166,7 +166,7 @@ BOOL recvBuildStarted()
 		}
 	}
 	
-	return TRUE;
+	return true;
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -217,7 +217,7 @@ BOOL recvBuildFinished()
 			buildingComplete(psStruct);
 		}
 		NETlogEntry("building finished ok." ,0,0);
-		return TRUE;
+		return true;
 	}
 
 	// The building wasn't started, so we'll have to just plonk it down in the map.
@@ -240,12 +240,12 @@ BOOL recvBuildFinished()
 			buildingComplete(psStruct);
 			NETlogEntry("structure id modified", 0, player);
 
-			return TRUE;
+			return true;
 		}
 	}
 	// Build the structure
 	psStruct = buildStructure(&(asStructureStats[typeindex]),	// Build the structure.
-	                          x, y, player,TRUE);
+	                          x, y, player,true);
 	
 	if (psStruct)
 	{
@@ -260,7 +260,7 @@ BOOL recvBuildFinished()
 		NETlogEntry("had to plonk down a building, BUT FAILED OH S**T." ,0,player);
 	}
 	
-	return FALSE;
+	return false;
 }
 
 
@@ -292,13 +292,13 @@ BOOL recvDemolishFinished()
 	if (!IdToDroid(droidID, ANYPLAYER, &psDroid))
 	{
 		debug(LOG_ERROR, "recvDemolishFinished: Packet with bad droid ID received. Discarding!");
-		return FALSE;
+		return false;
 	}
 
 	if (psStruct)
 	{
 		// Demolish it
-		removeStruct(psStruct, TRUE);
+		removeStruct(psStruct, true);
 		if (psDroid && psDroid->psTarStats)
 		{
 			// Update droid if reqd
@@ -306,7 +306,7 @@ BOOL recvDemolishFinished()
 		}
 	}
 	
-	return TRUE;
+	return true;
 }
 
 
@@ -339,15 +339,15 @@ BOOL recvDestroyStructure()
 
 	if (psStruct)
 	{
-		turnOffMultiMsg(TRUE);
+		turnOffMultiMsg(true);
 		// Remove the struct from remote players machine
 		destroyStruct(psStruct);
-		turnOffMultiMsg(FALSE);
+		turnOffMultiMsg(false);
 		// NOTE: I do not think this should be here!
 		technologyGiveAway(psStruct);
 	}
 	
-	return TRUE;
+	return true;
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -387,11 +387,11 @@ BOOL recvLasSat()
 		{
 			// Give enemy no quarter, unleash the lasat
 			proj_SendProjectile(&psStruct->asWeaps[0], NULL, player, psObj->pos.x,
-	            psObj->pos.y, psObj->pos.z, psObj, TRUE, FALSE, 0);
+	            psObj->pos.y, psObj->pos.z, psObj, true, false, 0);
 	      	// Play 5 second countdown message
 			audio_QueueTrackPos( ID_SOUND_LAS_SAT_COUNTDOWN, psObj->pos.x, psObj->pos.y,
 	            psObj->pos.z);
 		}
 
-	return TRUE;
+	return true;
 }

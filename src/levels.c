@@ -90,7 +90,7 @@ BOOL levInitialise(void)
 	psBaseData = NULL;
 	psCurrLevel = NULL;
 
-	return TRUE;
+	return true;
 }
 
 SDWORD getLevelLoadType(void)
@@ -130,7 +130,7 @@ void levError(const char *pError)
 	levGetErrorData(&line, &pText);
 
 #ifdef DEBUG
-	ASSERT( FALSE, "Level File parse error:\n%s at line %d text %s\n", pError, line, pText );
+	ASSERT( false, "Level File parse error:\n%s at line %d text %s\n", pError, line, pText );
 #else
 	debug( LOG_ERROR, "Level File parse error:\n%s at line %d text %s\n", pError, line, pText );
 #endif
@@ -148,12 +148,12 @@ BOOL levFindDataSet(char *pName, LEVEL_DATASET **ppsDataSet)
 			if (strcmp(psNewLevel->pName, pName) == 0)
 			{
 				*ppsDataSet = psNewLevel;
-				return TRUE;
+				return true;
 			}
 		}
 	}
 
-	return FALSE;
+	return false;
 }
 
 // parse a level description data file
@@ -188,7 +188,7 @@ BOOL levParse(char *pBuffer, SDWORD size, searchPathMode datadir)
 				if (!psDataSet)
 				{
 					levError("Out of memory");
-					return FALSE;
+					return false;
 				}
 				memset(psDataSet, 0, sizeof(LEVEL_DATASET));
 				psDataSet->players = 1;
@@ -231,14 +231,14 @@ BOOL levParse(char *pBuffer, SDWORD size, searchPathMode datadir)
 					psDataSet->type = LDS_MKEEP_LIMBO;
 					break;
 				default:
-					ASSERT( FALSE,"eh?" );
+					ASSERT( false,"eh?" );
 					break;
 				}
 			}
 			else
 			{
 				levError("Syntax Error");
-				return FALSE;
+				return false;
 			}
 			state = LP_LEVEL;
 			break;
@@ -251,7 +251,7 @@ BOOL levParse(char *pBuffer, SDWORD size, searchPathMode datadir)
 			else
 			{
 				levError("Syntax Error");
-				return FALSE;
+				return false;
 			}
 			break;
 		case LTK_TYPE:
@@ -262,7 +262,7 @@ BOOL levParse(char *pBuffer, SDWORD size, searchPathMode datadir)
 			else
 			{
 				levError("Syntax Error");
-				return FALSE;
+				return false;
 			}
 			break;
 		case LTK_INTEGER:
@@ -275,7 +275,7 @@ BOOL levParse(char *pBuffer, SDWORD size, searchPathMode datadir)
 				if (levVal < MULTI_TYPE_START)
 				{
 					levError("invalid type number");
-					return FALSE;
+					return false;
 				}
 
 				psDataSet->type = (SWORD)levVal;
@@ -283,7 +283,7 @@ BOOL levParse(char *pBuffer, SDWORD size, searchPathMode datadir)
 			else
 			{
 				levError("Syntax Error");
-				return FALSE;
+				return false;
 			}
 			state = LP_LEVELDONE;
 			break;
@@ -295,7 +295,7 @@ BOOL levParse(char *pBuffer, SDWORD size, searchPathMode datadir)
 			else
 			{
 				levError("Syntax Error");
-				return FALSE;
+				return false;
 			}
 			break;
 		case LTK_DATA:
@@ -315,14 +315,14 @@ BOOL levParse(char *pBuffer, SDWORD size, searchPathMode datadir)
 					)
 				{
 					levError("Missing dataset command");
-					return FALSE;
+					return false;
 				}
 				state = LP_DATA;
 			}
 			else
 			{
 				levError("Syntax Error");
-				return FALSE;
+				return false;
 			}
 			break;
 		case LTK_GAME:
@@ -334,7 +334,7 @@ BOOL levParse(char *pBuffer, SDWORD size, searchPathMode datadir)
 			else
 			{
 				levError("Syntax Error");
-				return FALSE;
+				return false;
 			}
 			break;
 		case LTK_IDENT:
@@ -346,13 +346,13 @@ BOOL levParse(char *pBuffer, SDWORD size, searchPathMode datadir)
 					if (!levFindDataSet(pLevToken, &psFoundData))
 					{
 						levError("Cannot find full data set for camchange");
-						return FALSE;
+						return false;
 					}
 
 					if (psFoundData->type != LDS_CAMSTART)
 					{
 						levError("Invalid data set name for cam change");
-						return FALSE;
+						return false;
 					}
 					psFoundData->psChange = psDataSet;
 				}
@@ -363,7 +363,7 @@ BOOL levParse(char *pBuffer, SDWORD size, searchPathMode datadir)
 					debug(LOG_ERROR, "levParse: Out of memory!");
 					levError("Out of memory");
 					abort();
-					return FALSE;
+					return false;
 				}
 
 				state = LP_LEVELDONE;
@@ -374,14 +374,14 @@ BOOL levParse(char *pBuffer, SDWORD size, searchPathMode datadir)
 				if (!levFindDataSet(pLevToken, &psDataSet->psBaseData))
 				{
 					levError("Unknown dataset");
-					return FALSE;
+					return false;
 				}
 				state = LP_WAITDATA;
 			}
 			else
 			{
 				levError("Syntax Error");
-				return FALSE;
+				return false;
 			}
 			break;
 		case LTK_STRING:
@@ -390,7 +390,7 @@ BOOL levParse(char *pBuffer, SDWORD size, searchPathMode datadir)
 				if (currData >= LEVEL_MAXFILES)
 				{
 					levError("Too many data files");
-					return FALSE;
+					return false;
 				}
 
 				// note the game index if necessary
@@ -406,7 +406,7 @@ BOOL levParse(char *pBuffer, SDWORD size, searchPathMode datadir)
 					debug(LOG_ERROR, "levParse: Out of memory!");
 					levError("Out of memory");
 					abort();
-					return FALSE;
+					return false;
 				}
 
 				resToLower(pLevToken);
@@ -417,7 +417,7 @@ BOOL levParse(char *pBuffer, SDWORD size, searchPathMode datadir)
 			else
 			{
 				levError("Syntax Error");
-				return FALSE;
+				return false;
 			}
 			break;
 		default:
@@ -432,10 +432,10 @@ BOOL levParse(char *pBuffer, SDWORD size, searchPathMode datadir)
 	if (state != LP_WAITDATA || currData == 0)
 	{
 		levError("Unexpected end of file");
-		return FALSE;
+		return false;
 	}
 
-	return TRUE;
+	return true;
 }
 
 
@@ -449,7 +449,7 @@ BOOL levReleaseMissionData(void)
 	{
 		if (!stageThreeShutDown())
 		{
-			return FALSE;
+			return false;
 		}
 
 		// free up the old data
@@ -461,7 +461,7 @@ BOOL levReleaseMissionData(void)
 				{
 					if (!stageTwoShutDown())
 					{
-						return FALSE;
+						return false;
 					}
 				}
 			}
@@ -472,7 +472,7 @@ BOOL levReleaseMissionData(void)
 			}
 		}
 	}
-	return TRUE;
+	return true;
 }
 
 
@@ -486,7 +486,7 @@ BOOL levReleaseAll(void)
 	{
 		if (!levReleaseMissionData())
 		{
-			return FALSE;
+			return false;
 		}
 
 		// release the game data
@@ -494,7 +494,7 @@ BOOL levReleaseAll(void)
 		{
 			if (!stageTwoShutDown())
 			{
-				return FALSE;
+				return false;
 			}
 		}
 
@@ -512,13 +512,13 @@ BOOL levReleaseAll(void)
 
 		if (!stageOneShutDown())
 		{
-			return FALSE;
+			return false;
 		}
 	}
 
 	psCurrLevel=NULL;
 
-	return TRUE;
+	return true;
 }
 
 // load up a single wrf file
@@ -534,24 +534,24 @@ static BOOL levLoadSingleWRF(char *pName)
 	// load up the WRF
 	if (!stageOneInitialise())
 	{
-		return FALSE;
+		return false;
 	}
 
 	// load the data
 	debug(LOG_WZ, "levLoadSingleWRF: Loading %s ...", pName);
 	if (!resLoad(pName, 0))
 	{
-		return FALSE;
+		return false;
 	}
 
 	if (!stageThreeInitialise())
 	{
-		return FALSE;
+		return false;
 	}
 
 	psCurrLevel = &sSingleWRF;
 
-	return TRUE;
+	return true;
 }
 
 
@@ -582,12 +582,12 @@ BOOL levLoadData(char *pName, char *pSaveName, SDWORD saveType)
 	/* Keep a copy of the present level name */
 	strlcpy(currentLevelName, pName, sizeof(currentLevelName));
 
-	bCamChangeSaveGame = FALSE;
+	bCamChangeSaveGame = false;
 	if (pSaveName && saveType == GTYPE_SAVE_START)
 	{
 		if (psNewLevel->psChange != NULL)
 		{
-			bCamChangeSaveGame = TRUE;
+			bCamChangeSaveGame = true;
 		}
 	}
 
@@ -605,7 +605,7 @@ BOOL levLoadData(char *pName, char *pSaveName, SDWORD saveType)
 	if (psNewLevel->type == LDS_CAMPAIGN)
 	{
 		debug( LOG_ERROR, "levLoadData: Cannot load a campaign dataset (%s)", psNewLevel->pName );
-		return FALSE;
+		return false;
 	}
 	else
 	{
@@ -641,7 +641,7 @@ BOOL levLoadData(char *pName, char *pSaveName, SDWORD saveType)
 		}
 	}
 
-	rebuildSearchPath(psNewLevel->dataDir, FALSE);
+	rebuildSearchPath(psNewLevel->dataDir, false);
 
 	// reset the old mission data if necessary
 	if (psCurrLevel != NULL)
@@ -649,7 +649,7 @@ BOOL levLoadData(char *pName, char *pSaveName, SDWORD saveType)
 		debug(LOG_WZ, "levLoadData: reseting old mission data");
 		if (!levReleaseMissionData())
 		{
-			return FALSE;
+			return false;
 		}
 	}
 
@@ -659,7 +659,7 @@ BOOL levLoadData(char *pName, char *pSaveName, SDWORD saveType)
 	{
 		if (!saveGameReset())
 		{
-			return FALSE;
+			return false;
 		}
 	}
 
@@ -670,7 +670,7 @@ BOOL levLoadData(char *pName, char *pSaveName, SDWORD saveType)
 		debug(LOG_WZ, "levLoadData: Calling stageOneInitialise!");
 		if (!stageOneInitialise())
 		{
-			return FALSE;
+			return false;
 		}
 	}
 
@@ -686,7 +686,7 @@ BOOL levLoadData(char *pName, char *pSaveName, SDWORD saveType)
 				debug(LOG_WZ, "levLoadData: Loading %s ...", psBaseData->apDataFiles[i]);
 				if (!resLoad(psBaseData->apDataFiles[i], i))
 				{
-					return FALSE;
+					return false;
 				}
 			}
 		}
@@ -695,7 +695,7 @@ BOOL levLoadData(char *pName, char *pSaveName, SDWORD saveType)
 	{
 		if (!campaignReset())
 		{
-			return FALSE;
+			return false;
 		}
 	}
 	if (psNewLevel->game == -1)  //no .gam file to load - BETWEEN missions (for Editor games only)
@@ -709,7 +709,7 @@ BOOL levLoadData(char *pName, char *pSaveName, SDWORD saveType)
 			{
 				if (!stageTwoInitialise())
 				{
-					return FALSE;
+					return false;
 				}
 			}
 
@@ -719,7 +719,7 @@ BOOL levLoadData(char *pName, char *pSaveName, SDWORD saveType)
 				debug( LOG_NEVER, "levLoadData: init mission stuff\n" );
 				if (!startMissionSave(psNewLevel->type))
 				{
-					return FALSE;
+					return false;
 				}
 
 				debug( LOG_NEVER, "levLoadData: dataSetSaveFlag\n" );
@@ -727,9 +727,9 @@ BOOL levLoadData(char *pName, char *pSaveName, SDWORD saveType)
 			}
 
 			debug( LOG_NEVER, "levLoadData: loading savegame: %s\n", pSaveName );
-			if (!loadGame(pSaveName, FALSE, TRUE,TRUE))
+			if (!loadGame(pSaveName, false, true,true))
 			{
-				return FALSE;
+				return false;
 			}
 		}
 
@@ -739,7 +739,7 @@ BOOL levLoadData(char *pName, char *pSaveName, SDWORD saveType)
 			debug( LOG_NEVER, "levLoadData: start mission - no .gam\n" );
 			if (!startMission(psNewLevel->type, NULL))
 			{
-				return FALSE;
+				return false;
 			}
 		}
 	}
@@ -754,19 +754,19 @@ BOOL levLoadData(char *pName, char *pSaveName, SDWORD saveType)
 			{
 				if (!stageTwoInitialise())
 				{
-					return FALSE;
+					return false;
 				}
 			}
 
 			debug( LOG_NEVER, "levLoadData: loading savegame: %s\n", pSaveName );
-			if (!loadGame(pSaveName, FALSE, TRUE,TRUE))
+			if (!loadGame(pSaveName, false, true,true))
 			{
-				return FALSE;
+				return false;
 			}
 
 			if (!campaignReset())
 			{
-				return FALSE;
+				return false;
 			}
 		}
 	}
@@ -783,7 +783,7 @@ BOOL levLoadData(char *pName, char *pSaveName, SDWORD saveType)
 			{
 				if (!stageTwoInitialise())
 				{
-					return FALSE;
+					return false;
 				}
 			}
 
@@ -796,7 +796,7 @@ BOOL levLoadData(char *pName, char *pSaveName, SDWORD saveType)
 					debug( LOG_NEVER, "levLoadData: init mission stuff\n" );
 					if (!startMissionSave(psNewLevel->type))
 					{
-						return FALSE;
+						return false;
 					}
 
 					debug( LOG_NEVER, "levLoadData: dataSetSaveFlag\n" );
@@ -804,9 +804,9 @@ BOOL levLoadData(char *pName, char *pSaveName, SDWORD saveType)
 				}
 
 				debug( LOG_NEVER, "levLoadData: loading save game %s\n", pSaveName );
-				if (!loadGame(pSaveName, FALSE, TRUE,TRUE))
+				if (!loadGame(pSaveName, false, true,true))
 				{
-					return FALSE;
+					return false;
 				}
 			}
 
@@ -822,14 +822,14 @@ BOOL levLoadData(char *pName, char *pSaveName, SDWORD saveType)
 					debug(LOG_WZ, "levLoadData: LDS_COMPLETE / LDS_CAMSTART");
 					if (!startMission(LDS_CAMSTART, psNewLevel->apDataFiles[i]))
 					{
-						return FALSE;
+						return false;
 					}
 					break;
 				case LDS_BETWEEN:
 					debug(LOG_WZ, "levLoadData: LDS_BETWEEN");
 					if (!startMission(LDS_BETWEEN, psNewLevel->apDataFiles[i]))
 					{
-						return FALSE;
+						return false;
 					}
 					break;
 
@@ -837,14 +837,14 @@ BOOL levLoadData(char *pName, char *pSaveName, SDWORD saveType)
 					debug(LOG_WZ, "levLoadData: LDS_MKEEP");
 					if (!startMission(LDS_MKEEP, psNewLevel->apDataFiles[i]))
 					{
-						return FALSE;
+						return false;
 					}
 					break;
 				case LDS_CAMCHANGE:
 					debug(LOG_WZ, "levLoadData: LDS_CAMCHANGE");
 					if (!startMission(LDS_CAMCHANGE, psNewLevel->apDataFiles[i]))
 					{
-						return FALSE;
+						return false;
 					}
 					break;
 
@@ -852,14 +852,14 @@ BOOL levLoadData(char *pName, char *pSaveName, SDWORD saveType)
 					debug(LOG_WZ, "levLoadData: LDS_EXPAND");
 					if (!startMission(LDS_EXPAND, psNewLevel->apDataFiles[i]))
 					{
-						return FALSE;
+						return false;
 					}
 					break;
 				case LDS_EXPAND_LIMBO:
 					debug(LOG_WZ, "levLoadData: LDS_LIMBO");
 					if (!startMission(LDS_EXPAND_LIMBO, psNewLevel->apDataFiles[i]))
 					{
-						return FALSE;
+						return false;
 					}
 					break;
 
@@ -867,7 +867,7 @@ BOOL levLoadData(char *pName, char *pSaveName, SDWORD saveType)
 					debug(LOG_WZ, "levLoadData: LDS_MCLEAR");
 					if (!startMission(LDS_MCLEAR, psNewLevel->apDataFiles[i]))
 					{
-						return FALSE;
+						return false;
 					}
 					break;
 				case LDS_MKEEP_LIMBO:
@@ -875,7 +875,7 @@ BOOL levLoadData(char *pName, char *pSaveName, SDWORD saveType)
 					debug( LOG_NEVER, "MKEEP_LIMBO\n" );
 					if (!startMission(LDS_MKEEP_LIMBO, psNewLevel->apDataFiles[i]))
 					{
-						return FALSE;
+						return false;
 					}
 					break;
 				default:
@@ -884,7 +884,7 @@ BOOL levLoadData(char *pName, char *pSaveName, SDWORD saveType)
 					debug(LOG_WZ, "levLoadData: default (MULTIPLAYER)");
 					if (!startMission(LDS_CAMSTART, psNewLevel->apDataFiles[i]))
 					{
-						return FALSE;
+						return false;
 					}
 					break;
 				}
@@ -896,7 +896,7 @@ BOOL levLoadData(char *pName, char *pSaveName, SDWORD saveType)
 			debug(LOG_WZ, "levLoadData: Loading %s", psNewLevel->apDataFiles[i]);
 			if (!resLoad(psNewLevel->apDataFiles[i], i + CURRENT_DATAID))
 			{
-				return FALSE;
+				return false;
 			}
 		}
 	}
@@ -908,7 +908,7 @@ BOOL levLoadData(char *pName, char *pSaveName, SDWORD saveType)
 		//load MidMission Extras
 		if (!loadMissionExtras(pSaveName, psNewLevel->type))
 		{
-			return FALSE;
+			return false;
 		}
 	}
 
@@ -919,13 +919,13 @@ BOOL levLoadData(char *pName, char *pSaveName, SDWORD saveType)
 		debug( LOG_NEVER, "levLoadData: loading script system state\n" );
 		if (!loadScriptState(pSaveName))
 		{
-			return FALSE;
+			return false;
 		}
 	}
 
 	if (!stageThreeInitialise())
 	{
-		return FALSE;
+		return false;
 	}
 
 	//this enables us to to start cam2/cam3 without going via a save game and get the extra droids
@@ -946,5 +946,5 @@ BOOL levLoadData(char *pName, char *pSaveName, SDWORD saveType)
 	}
 
 
-	return TRUE;
+	return true;
 }

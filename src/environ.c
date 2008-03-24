@@ -55,9 +55,9 @@ BOOL    environInit( void )
 	{
 		debug( LOG_ERROR, "Can't get memory for the environment data" );
 		abort();
-		return FALSE;
+		return false;
 	}
-    return TRUE;
+    return true;
 }
 
 /** This function is called whenever the map changes - load new level or return from an offWorld map. */

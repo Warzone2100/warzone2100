@@ -90,7 +90,7 @@ BOOL treapCreate(TREAP **ppsTreap, TREAP_CMP cmp)
 	{
 		debug( LOG_ERROR, "treapCreate: Out of memory" );
 		abort();
-		return FALSE;
+		return false;
 	}
 
 	// Store the comparison function if there is one, use the default otherwise
@@ -111,7 +111,7 @@ BOOL treapCreate(TREAP **ppsTreap, TREAP_CMP cmp)
 	(*ppsTreap)->pFile = pCFile;
 	(*ppsTreap)->line = cLine;
 #endif
-	return TRUE;
+	return true;
 }
 
 /* Rotate a tree to the right
@@ -184,7 +184,7 @@ BOOL treapAdd(TREAP *psTreap, void *key, void *pObj)
 	if (psNew == NULL)
 	{
 		debug(LOG_ERROR, "treapAdd: Out of memory");
-		return FALSE;
+		return false;
 	}
 	psNew->priority = (UDWORD)rand();
 	psNew->key = key;
@@ -199,7 +199,7 @@ BOOL treapAdd(TREAP *psTreap, void *key, void *pObj)
 
 	treapAddNode(&psTreap->psRoot, psNew, psTreap->cmp);
 
-	return TRUE;
+	return true;
 }
 
 
@@ -265,7 +265,7 @@ TREAP_NODE *treapDelRec(TREAP_NODE **ppsRoot, void *key, TREAP_CMP cmp)
 		}
 		break;
 	default:
-		ASSERT( FALSE, "treapDelRec: invalid return from comparison" );
+		ASSERT( false, "treapDelRec: invalid return from comparison" );
 		break;
 	}
 	return NULL;
@@ -281,7 +281,7 @@ BOOL treapDel(TREAP *psTreap, void *key)
 	psDel = treapDelRec(&psTreap->psRoot, key, psTreap->cmp);
 	if (!psDel)
 	{
-		return FALSE;
+		return false;
 	}
 
 	// Release the node
@@ -290,7 +290,7 @@ BOOL treapDel(TREAP *psTreap, void *key)
 #endif
 	free(psDel);
 
-	return TRUE;
+	return true;
 }
 
 
@@ -315,7 +315,7 @@ void *treapFindRec(TREAP_NODE *psRoot, void *key, TREAP_CMP cmp)
 		return treapFindRec(psRoot->psRight, key, cmp);
 		break;
 	default:
-		ASSERT( FALSE, "treapFindRec: invalid return from comparison" );
+		ASSERT( false, "treapFindRec: invalid return from comparison" );
 		break;
 	}
 	return NULL;

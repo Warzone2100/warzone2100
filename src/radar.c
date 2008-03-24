@@ -56,7 +56,7 @@
 
 static PIELIGHT	colRadarAlly, colRadarMe, colRadarEnemy;
 
-BOOL bEnemyAllyRadarColor = FALSE;     //enemy/ally radar color
+BOOL bEnemyAllyRadarColor = false;     //enemy/ally radar color
 
 //current mini-map mode
 RADAR_DRAW_MODE	radarDrawMode = RADAR_MODE_DEFAULT;
@@ -135,7 +135,7 @@ BOOL InitRadar(void)
 	radarBuffer = malloc(RADWIDTH * RADHEIGHT * sizeof(UDWORD));
 	if (radarBuffer == NULL)
 	{
-		return FALSE;
+		return false;
 	}
 	memset(radarBuffer, 0, RADWIDTH * RADHEIGHT * sizeof(UDWORD));
 
@@ -146,7 +146,7 @@ BOOL InitRadar(void)
 
 	pie_InitRadar();
 
-	return TRUE;
+	return true;
 }
 
 
@@ -157,7 +157,7 @@ BOOL ShutdownRadar(void)
 	free(radarBuffer);
 	radarBuffer = NULL;
 
-	return TRUE;
+	return true;
 }
 
 
@@ -884,10 +884,10 @@ BOOL CoordInRadar(int x,int y)
 		(y >=RADTLY -1) &&
 		(y < RADTLY +RADHEIGHT+1) ) {
 
-		return TRUE;
+		return true;
 	}
 
-	return FALSE;
+	return false;
 }
 
 void radarColour(UDWORD tileNumber, uint8_t r, uint8_t g, uint8_t b)

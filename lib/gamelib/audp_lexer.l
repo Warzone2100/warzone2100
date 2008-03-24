@@ -127,13 +127,13 @@ ANIMOBJECT						{	return ANIMOBJECT;		}
 int
 audp_wrap( void )
 {
-	if ( g_bParsingSubFile == TRUE )
+	if ( g_bParsingSubFile == true )
 	{
 		/* close current file and restore old file pointer */
 		fclose( audp_in );
 		audp_in = g_fpOld;
 
-		g_bParsingSubFile = FALSE;
+		g_bParsingSubFile = false;
 
 		return 0;
 	}

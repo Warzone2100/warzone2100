@@ -63,7 +63,7 @@ static LONG WINAPI windowsExceptionHandler(PEXCEPTION_POINTERS pExceptionInfo)
 		{
 			MINIDUMP_USER_STREAM uStream = { LastReservedStream+1, strlen(PACKAGE_VERSION), PACKAGE_VERSION };
 			MINIDUMP_USER_STREAM_INFORMATION uInfo = { 1, &uStream };
-			MINIDUMP_EXCEPTION_INFORMATION eInfo = { GetCurrentThreadId(), pExceptionInfo, FALSE };
+			MINIDUMP_EXCEPTION_INFORMATION eInfo = { GetCurrentThreadId(), pExceptionInfo, false };
 
 			if ( MiniDumpWriteDump(
 				 	GetCurrentProcess(),
@@ -135,7 +135,7 @@ static struct sigaction oldAction[NSIG];
 
 
 static struct utsname sysInfo;
-static BOOL gdbIsAvailable = FALSE, programIsAvailable = FALSE, sysInfoValid = FALSE;
+static BOOL gdbIsAvailable = false, programIsAvailable = false, sysInfoValid = false;
 static char
 	executionDate[MAX_DATE_STRING] = {'\0'},
 	programPID[MAX_PID_STRING] = {'\0'},
@@ -596,7 +596,7 @@ void setupExceptionHandler(const char * programCommand)
 	// Were we able to find ourselves?
 	if (strlen(programPath) > 0)
 	{
-		programIsAvailable = TRUE;
+		programIsAvailable = true;
 		*(strrchr(programPath, '\n')) = '\0'; // `which' adds a \n which confuses exec()
 		debug(LOG_WZ, "Found us at %s", programPath);
 	}
@@ -613,7 +613,7 @@ void setupExceptionHandler(const char * programCommand)
 	// Did we find GDB?
 	if (strlen(gdbPath) > 0)
 	{
-		gdbIsAvailable = TRUE;
+		gdbIsAvailable = true;
 		*(strrchr(gdbPath, '\n')) = '\0'; // `which' adds a \n which confuses exec()
 		debug(LOG_WZ, "Found gdb at %s", gdbPath);
 	}

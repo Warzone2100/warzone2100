@@ -85,7 +85,7 @@ BOOL iV_loadImage_PNG(const char *fileName, iV_Image *image)
 	{
 		debug(LOG_ERROR, "pie_PNGLoadFile: PHYSFS_openRead(%s) failed with error: %s\n", fileName, PHYSFS_getLastError());
 		PNGReadCleanup(&info_ptr, &png_ptr, fileHandle);
-		return FALSE;
+		return false;
 	}
 
 	// Read PNG header from file
@@ -94,7 +94,7 @@ BOOL iV_loadImage_PNG(const char *fileName, iV_Image *image)
 	{
 		debug(LOG_ERROR, "pie_PNGLoadFile: PHYSFS_read(%s) failed with error: %s\n", fileName, PHYSFS_getLastError());
 		PNGReadCleanup(&info_ptr, &png_ptr, fileHandle);
-		return FALSE;
+		return false;
 	}
 
 	// Verify the PNG header to be correct
@@ -102,21 +102,21 @@ BOOL iV_loadImage_PNG(const char *fileName, iV_Image *image)
 	{
 		debug(LOG_3D, "pie_PNGLoadMem: Did not recognize PNG header in %s", fileName);
 		PNGReadCleanup(&info_ptr, &png_ptr, fileHandle);
-		return FALSE;
+		return false;
 	}
 
 	png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
 	if (png_ptr == NULL) {
 		debug(LOG_3D, "pie_PNGLoadMem: Unable to create png struct");
 		PNGReadCleanup(&info_ptr, &png_ptr, fileHandle);
-		return FALSE;
+		return false;
 	}
 
 	info_ptr = png_create_info_struct(png_ptr);
 	if (info_ptr == NULL) {
 		debug(LOG_3D, "pie_PNGLoadMem: Unable to create png info struct");
 		PNGReadCleanup(&info_ptr, &png_ptr, fileHandle);
-		return FALSE;
+		return false;
 	}
 
 	// Set libpng's failure jump position to the if branch,
@@ -124,7 +124,7 @@ BOOL iV_loadImage_PNG(const char *fileName, iV_Image *image)
 	if (setjmp(png_jmpbuf(png_ptr))) {
 		debug(LOG_3D, "pie_PNGLoadMem: Error decoding PNG data in %s", fileName);
 		PNGReadCleanup(&info_ptr, &png_ptr, fileHandle);
-		return FALSE;
+		return false;
 	}
 
 	// Tell libpng how many byte we already read
@@ -166,7 +166,7 @@ BOOL iV_loadImage_PNG(const char *fileName, iV_Image *image)
 	}
 
 	PNGReadCleanup(&info_ptr, &png_ptr, fileHandle);
-	return TRUE;
+	return true;
 }
 
 void iV_saveImage_PNG(const char *fileName, const iV_Image *image)

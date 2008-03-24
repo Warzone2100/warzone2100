@@ -164,27 +164,27 @@ extern BOOL droidStartBuild(DROID *psDroid);
 extern BOOL	droidStartDemolishing( DROID *psDroid );
 
 /* Update a construction droid while it is demolishing
-   returns TRUE while demolishing */
+   returns true while demolishing */
 extern BOOL	droidUpdateDemolishing( DROID *psDroid );
 
 /* Sets a droid to start repairing - returns true if successful */
 extern BOOL	droidStartRepair( DROID *psDroid );
 
 /* Update a construction droid while it is repairing
-   returns TRUE while repairing */
+   returns true while repairing */
 extern BOOL	droidUpdateRepair( DROID *psDroid );
 
-/*Start a Repair Droid working on a damaged droid - returns TRUE if successful*/
+/*Start a Repair Droid working on a damaged droid - returns true if successful*/
 extern BOOL droidStartDroidRepair( DROID *psDroid );
 
-/*Updates a Repair Droid working on a damaged droid - returns TRUE whilst repairing*/
+/*Updates a Repair Droid working on a damaged droid - returns true whilst repairing*/
 extern BOOL droidUpdateDroidRepair(DROID *psRepairDroid);
 
 /*checks a droids current body points to see if need to self repair*/
 extern void droidSelfRepair(DROID *psDroid);
 
 /* Update a construction droid while it is building
-   returns TRUE while building continues */
+   returns true while building continues */
 extern BOOL droidUpdateBuild(DROID *psDroid);
 
 /*Start a EW weapon droid working on a low resistance structure*/
@@ -209,7 +209,7 @@ extern void	vanishDroid(DROID *psDel);
 extern void droidBurn( DROID * psDroid );
 
 /* Remove a droid from the apsDroidLists so doesn't update or get drawn etc*/
-//returns TRUE if successfully removed from the list
+//returns true if successfully removed from the list
 extern BOOL droidRemove(DROID *psDroid, DROID *pList[MAX_PLAYERS]);
 
 //free the storage for the droid templates
@@ -280,15 +280,15 @@ extern	BOOL	pickATileGenThreat(UDWORD *x, UDWORD *y, UBYTE numIterations, SDWORD
 extern void initDroidMovement(DROID *psDroid);
 
 /* Looks through the players list of droids to see if any of them are
-building the specified structure - returns TRUE if finds one*/
+building the specified structure - returns true if finds one*/
 extern BOOL checkDroidsBuilding(STRUCTURE *psStructure);
 
 /* Looks through the players list of droids to see if any of them are
-demolishing the specified structure - returns TRUE if finds one*/
+demolishing the specified structure - returns true if finds one*/
 extern BOOL checkDroidsDemolishing(STRUCTURE *psStructure);
 
 /* checks the structure for type and capacity and orders the droid to build
-a module if it can - returns TRUE if order is set */
+a module if it can - returns true if order is set */
 extern BOOL buildModule(STRUCTURE *psStruct);
 
 /*Deals with building a module - checking if any droid is currently doing this
@@ -327,7 +327,7 @@ extern UBYTE checkCommandExist(UBYTE player);
 /* Set up a droid to clear a wrecked building feature - returns true if successful */
 extern BOOL droidStartClearing( DROID *psDroid );
 /* Update a construction droid while it is clearing
-   returns TRUE while continues */
+   returns true while continues */
 extern BOOL droidUpdateClearing( DROID *psDroid );
 
 /*For a given repair droid, check if there are any damaged droids within
@@ -336,7 +336,7 @@ extern BASE_OBJECT * checkForRepairRange(DROID *psDroid,DROID *psTarget);
 
 //access function
 extern BOOL vtolDroid(DROID *psDroid);
-/*returns TRUE if a VTOL Weapon Droid which has completed all runs*/
+/*returns true if a VTOL Weapon Droid which has completed all runs*/
 extern BOOL vtolEmpty(DROID *psDroid);
 /*Checks a vtol for being fully armed and fully repaired to see if ready to
 leave reArm pad */
@@ -374,7 +374,7 @@ extern SWORD   droidResistance(DROID *psDroid);
 
 /*this is called to check the weapon is 'allowed'. Check if VTOL, the weapon is
 direct fire. Also check numVTOLattackRuns for the weapon is not zero - return
-TRUE if valid weapon*/
+true if valid weapon*/
 extern BOOL checkValidWeaponForProp(DROID_TEMPLATE *psTemplate);
 
 extern const char *getDroidNameForRank(UDWORD rank);
@@ -397,7 +397,7 @@ extern UWORD repairPowerPoint(DROID *psDroid);
 /* audio finished callback */
 extern BOOL droidAudioTrackStopped( void *psObj );
 
-/*returns TRUE if droid type is one of the Cyborg types*/
+/*returns true if droid type is one of the Cyborg types*/
 extern BOOL cyborgDroid(DROID *psDroid);
 
 // check for illegal references to droid we want to release

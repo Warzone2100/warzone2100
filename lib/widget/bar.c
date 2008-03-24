@@ -37,26 +37,26 @@ W_BARGRAPH* barGraphCreate(const W_BARINIT* psInit)
 
 	if (psInit->style & ~(WBAR_PLAIN | WBAR_TROUGH | WBAR_DOUBLE | WIDG_HIDDEN))
 	{
-		ASSERT(FALSE, "Unknown bar graph style");
+		ASSERT(false, "Unknown bar graph style");
 		return NULL;
 	}
 
 	if (psInit->orientation < WBAR_LEFT
 	 || psInit->orientation > WBAR_BOTTOM)
 	{
-		ASSERT(FALSE, "barGraphCreate: Unknown orientation");
+		ASSERT(false, "barGraphCreate: Unknown orientation");
 		return NULL;
 	}
 
 	if (psInit->size > WBAR_SCALE)
 	{
-		ASSERT(FALSE, "barGraphCreate: Bar size out of range");
+		ASSERT(false, "barGraphCreate: Bar size out of range");
 		return NULL;
 	}
 	if ((psInit->style & WBAR_DOUBLE)
 	 && (psInit->minorSize > WBAR_SCALE))
 	{
-		ASSERT(FALSE, "barGraphCreate: Minor bar size out of range");
+		ASSERT(false, "barGraphCreate: Minor bar size out of range");
 		return NULL;
 	}
 
@@ -156,7 +156,7 @@ void widgSetBarSize(W_SCREEN *psScreen, UDWORD id, UDWORD iValue)
 	psBGraph = (W_BARGRAPH *)widgGetFromID(psScreen, id);
 	if (psBGraph == NULL || psBGraph->type != WIDG_BARGRAPH)
 	{
-		ASSERT( FALSE, "widgSetBarSize: Couldn't find widget from id" );
+		ASSERT( false, "widgSetBarSize: Couldn't find widget from id" );
 		return;
 	}
 
@@ -187,7 +187,7 @@ void widgSetMinorBarSize(W_SCREEN *psScreen, UDWORD id, UDWORD iValue )
 	psBGraph = (W_BARGRAPH *)widgGetFromID(psScreen, id);
 	if (psBGraph == NULL || psBGraph->type != WIDG_BARGRAPH)
 	{
-		ASSERT( FALSE, "widgSetBarSize: Couldn't find widget from id" );
+		ASSERT( false, "widgSetBarSize: Couldn't find widget from id" );
 		return;
 	}
 
@@ -377,7 +377,7 @@ void barGraphDisplayTrough(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIE
 	SDWORD		x0 = 0, y0 = 0, x1 = 0, y1 = 0;		// Position of the bar
 	SDWORD		tx0 = 0, ty0 = 0, tx1 = 0, ty1 = 0;	// Position of the trough
 	W_BARGRAPH	*psBGraph;
-	BOOL		showBar=TRUE, showTrough=TRUE;
+	BOOL		showBar=true, showTrough=true;
 
 	psBGraph = (W_BARGRAPH *)psWidget;
 
@@ -391,7 +391,7 @@ void barGraphDisplayTrough(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIE
 		y1 = y0 + psWidget->height;
 		if (x0 == x1)
 		{
-			showBar = FALSE;
+			showBar = false;
 		}
 		tx0 = x1+1;
 		ty0 = y0;
@@ -399,7 +399,7 @@ void barGraphDisplayTrough(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIE
 		ty1 = y1;
 		if (tx0 >= tx1)
 		{
-			showTrough = FALSE;
+			showTrough = false;
 		}
 		break;
 	case WBAR_RIGHT:
@@ -409,7 +409,7 @@ void barGraphDisplayTrough(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIE
 		y1 = y0 + psWidget->height;
 		if (x0 == x1)
 		{
-			showBar = FALSE;
+			showBar = false;
 		}
 		tx0 = xOffset + psWidget->x;
 		ty0 = y0;
@@ -417,7 +417,7 @@ void barGraphDisplayTrough(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIE
 		ty1 = y1;
 		if (tx0 >= tx1)
 		{
-			showTrough = FALSE;
+			showTrough = false;
 		}
 		break;
 	case WBAR_TOP:
@@ -427,7 +427,7 @@ void barGraphDisplayTrough(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIE
 		y1 = y0 + psWidget->height * psBGraph->majorSize / WBAR_SCALE;
 		if (y0 == y1)
 		{
-			showBar = FALSE;
+			showBar = false;
 		}
 		tx0 = x0;
 		ty0 = y1+1;
@@ -435,7 +435,7 @@ void barGraphDisplayTrough(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIE
 		ty1 = y0 + psWidget->height;
 		if (ty0 >= ty1)
 		{
-			showTrough = FALSE;
+			showTrough = false;
 		}
 		break;
 	case WBAR_BOTTOM:
@@ -445,7 +445,7 @@ void barGraphDisplayTrough(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIE
 		y0 = y1 - psWidget->height * psBGraph->majorSize / WBAR_SCALE;
 		if (y0 == y1)
 		{
-			showBar = FALSE;
+			showBar = false;
 		}
 		tx0 = x0;
 		ty0 = yOffset + psWidget->y;
@@ -453,7 +453,7 @@ void barGraphDisplayTrough(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIE
 		ty1 = y0-1;
 		if (ty0 >= ty1)
 		{
-			showTrough = FALSE;
+			showTrough = false;
 		}
 		break;
 	}

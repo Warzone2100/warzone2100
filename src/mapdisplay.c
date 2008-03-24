@@ -136,7 +136,7 @@ void renderResearchToBuffer(RESEARCH *psResearch,
 		    }
             else
             {
-                ASSERT( FALSE, "intDisplayMessageButton: invalid stat" );
+                ASSERT( false, "intDisplayMessageButton: invalid stat" );
                 IMDType = IMDTYPE_RESEARCH;
                 psResGraphic = (BASE_STATS *)psResearch;
             }
@@ -174,14 +174,14 @@ void renderResearchToBuffer(RESEARCH *psResearch,
 
 	/* display the IMDs */
 	if(IMDType == IMDTYPE_COMPONENT) {
-		displayComponentButton(psResGraphic,&Rotation,&Position,TRUE, scale);
+		displayComponentButton(psResGraphic,&Rotation,&Position,true, scale);
 	} else if(IMDType == IMDTYPE_RESEARCH) {
-		displayResearchButton(psResGraphic,&Rotation,&Position,TRUE, scale);
+		displayResearchButton(psResGraphic,&Rotation,&Position,true, scale);
 	} else if(IMDType == IMDTYPE_STRUCTURESTAT) {
 		displayStructureStatButton((STRUCTURE_STATS *)psResGraphic,selectedPlayer,&Rotation,
-            &Position,TRUE, scale);
+            &Position,true, scale);
 	} else {
-		ASSERT( FALSE, "renderResearchToBuffer: Unknown PIEType" );
+		ASSERT( false, "renderResearchToBuffer: Unknown PIEType" );
 	}
 
 	// close matrix context

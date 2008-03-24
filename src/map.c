@@ -144,7 +144,7 @@ BOOL mapNew(UDWORD width, UDWORD height)
 	{
 		debug( LOG_ERROR, "mapNew: map too large : %d %d\n", width, height );
 		abort();
-		return FALSE;
+		return false;
 	}
 
 	psMapTiles = calloc(width * height, sizeof(MAPTILE));
@@ -167,7 +167,7 @@ BOOL mapNew(UDWORD width, UDWORD height)
 	scrollMaxX = mapWidth;
 	scrollMaxY = mapHeight;
 
-	return TRUE;
+	return true;
 }
 
 /* load the map data - for version 3 */
@@ -211,7 +211,7 @@ static BOOL mapLoadV3(char *pFileData, UDWORD fileSize)
 		if (!gwNewGateway(psGate->x0,psGate->y0, psGate->x1,psGate->y1)) {
 			debug( LOG_ERROR, "mapLoadV3: Unable to add gateway" );
 			abort();
-			return FALSE;
+			return false;
 		}
 		psGate++;
 	}
@@ -228,7 +228,7 @@ static BOOL mapLoadV3(char *pFileData, UDWORD fileSize)
 			"Invalid zone map version" );
 
 	if(!gwNewZoneMap()) {
-		return FALSE;
+		return false;
 	}
 
 	// This is a bit nasty but should work fine.
@@ -247,7 +247,7 @@ static BOOL mapLoadV3(char *pFileData, UDWORD fileSize)
 		pDestZone = gwNewZoneLine(i,ZoneSize);
 
 		if(pDestZone == NULL) {
-			return FALSE;
+			return false;
 		}
 
 		for(j=0; j<ZoneSize; j++) {
@@ -265,7 +265,7 @@ static BOOL mapLoadV3(char *pFileData, UDWORD fileSize)
 			if(!gwNewEquivTable(psZoneHeader->numEquivZones)) {
 				debug( LOG_ERROR, "gwNewEquivTable failed" );
 				abort();
-				return FALSE;
+				return false;
 			}
 
 			for(i=0; i<psZoneHeader->numEquivZones; i++) {
@@ -273,7 +273,7 @@ static BOOL mapLoadV3(char *pFileData, UDWORD fileSize)
 					if(!gwSetZoneEquiv(i, (SDWORD)*pZone, pZone+1)) {
 						debug( LOG_ERROR, "gwSetZoneEquiv failed" );
 						abort();
-						return FALSE;
+						return false;
 					}
 				}
 				pZone += ((UDWORD)*pZone)+1;
@@ -285,7 +285,7 @@ static BOOL mapLoadV3(char *pFileData, UDWORD fileSize)
 	{
 		debug( LOG_ERROR, "mapLoadV3: unexpected end of file" );
 		abort();
-		return FALSE;
+		return false;
 	}
 
 	LOADBARCALLBACK();	//	loadingScreenCallback();
@@ -293,7 +293,7 @@ static BOOL mapLoadV3(char *pFileData, UDWORD fileSize)
 	if ((apEquivZones != NULL) &&
 		!gwGenerateLinkGates())
 	{
-		return FALSE;
+		return false;
 	}
 
 	LOADBARCALLBACK();	//	loadingScreenCallback();
@@ -301,7 +301,7 @@ static BOOL mapLoadV3(char *pFileData, UDWORD fileSize)
 	//add new map initialise
 	if (!gwLinkGateways())
 	{
-		return FALSE;
+		return false;
 	}
 
 	LOADBARCALLBACK();	//	loadingScreenCallback();
@@ -310,7 +310,7 @@ static BOOL mapLoadV3(char *pFileData, UDWORD fileSize)
 	gwCheckZoneSizes();
 #endif
 
-	return TRUE;
+	return true;
 }
 
 
@@ -328,7 +328,7 @@ BOOL mapLoad(char *pFileData, UDWORD fileSize)
 		debug( LOG_ERROR, "mapLoad: Incorrect file type" );
 		abort();
 		free(pFileData);
-		return FALSE;
+		return false;
 	}
 
 	/* MAP_SAVEHEADER */
@@ -339,15 +339,15 @@ BOOL mapLoad(char *pFileData, UDWORD fileSize)
 	/* Check the file version */
 	if (psHeader->version <= VERSION_9)
 	{
-		ASSERT(FALSE, "MapLoad: unsupported save format version %d", psHeader->version);
+		ASSERT(false, "MapLoad: unsupported save format version %d", psHeader->version);
 		free(pFileData);
-		return FALSE;
+		return false;
 	}
 	else if (psHeader->version > CURRENT_VERSION_NUM)
 	{
-		ASSERT(FALSE, "MapLoad: undefined save format version %d", psHeader->version);
+		ASSERT(false, "MapLoad: undefined save format version %d", psHeader->version);
 		free(pFileData);
-		return FALSE;
+		return false;
 	}
 
 	/* Get the width and height */
@@ -358,7 +358,7 @@ BOOL mapLoad(char *pFileData, UDWORD fileSize)
 	{
 		debug( LOG_ERROR, "mapLoad: map too large : %d %d\n", width, height );
 		abort();
-		return FALSE;
+		return false;
 	}
 
 	/* See if this is the first time a map has been loaded */
@@ -381,7 +381,7 @@ BOOL mapLoad(char *pFileData, UDWORD fileSize)
 	scrollMaxX = mapWidth;
 	scrollMaxY = mapHeight;
 
-	return TRUE;
+	return true;
 }
 
 // Object macro group
@@ -783,7 +783,7 @@ BOOL mapSaveTagged(char *pFileName)
 	if (!tagOpenWrite(definition, pFileName))
 	{
 		debug(LOG_ERROR, "mapSaveTagged: Failed to create savegame %s", pFileName);
-		return FALSE;
+		return false;
 	}
 	debug(LOG_MAP, "Creating tagged savegame %s with definition %s:", pFileName, definition);
 
@@ -1082,7 +1082,7 @@ BOOL mapSaveTagged(char *pFileName)
 	tagWriteLeave(0x11);
 
 	tagClose();
-	return TRUE;
+	return true;
 }
 
 BOOL mapLoadTagged(char *pFileName)
@@ -1094,7 +1094,7 @@ BOOL mapLoadTagged(char *pFileName)
 	if (!tagOpenRead(definition, pFileName))
 	{
 		debug(LOG_ERROR, "mapLoadTagged: Failed to open savegame %s", pFileName);
-		return FALSE;
+		return false;
 	}
 	debug(LOG_MAP, "Reading tagged savegame %s with definition %s:", pFileName, definition);
 
@@ -1121,7 +1121,7 @@ BOOL mapLoadTagged(char *pFileName)
 	tagReadLeave(0x05);
 
 	tagClose();
-	return TRUE;
+	return true;
 }
 
 /* Save the map data */
@@ -1169,7 +1169,7 @@ BOOL mapSave(char **ppFileData, UDWORD *pFileSize)
 	{
 		debug( LOG_ERROR, "Out of memory" );
 		abort();
-		return FALSE;
+		return false;
 	}
 
 	/* Put the file header on the file */
@@ -1270,7 +1270,7 @@ BOOL mapSave(char **ppFileData, UDWORD *pFileSize)
 
 	ASSERT( (intptr_t)psLastZone - (intptr_t)*ppFileData < (intptr_t)*pFileSize, "Buffer overflow saving map" );
 
-	return TRUE;
+	return true;
 }
 
 /* Shutdown the map module */
@@ -1283,7 +1283,7 @@ BOOL mapShutdown(void)
 	psMapTiles = NULL;
 	mapWidth = mapHeight = 0;
 
-	return TRUE;
+	return true;
 }
 
 /* Return linear interpolated height of x,y */
@@ -1291,7 +1291,7 @@ extern SWORD map_Height(int x, int y)
 {
 	int	retVal, tileX, tileY, tileYOffset, tileX2, tileY2Offset, dx, dy, ox, oy;
 	int	h0, hx, hy, hxy, wTL = 0, wTR = 0, wBL = 0, wBR = 0;
-	BOOL	bWaterTile = FALSE;
+	BOOL	bWaterTile = false;
 
 	ASSERT(x >= 0, "map_Height: Negative x value");
 	ASSERT(y >= 0, "map_Height: Negative y value");
@@ -1309,7 +1309,7 @@ extern SWORD map_Height(int x, int y)
 
 	if (terrainType(mapTile(tileX,tileY)) == TER_WATER)
 	{
-		bWaterTile = TRUE;
+		bWaterTile = true;
 		wTL = environGetValue(tileX,tileY)/2;
 		wTR = environGetValue(tileX+1,tileY)/2;
 		wBL = environGetValue(tileX,tileY+1)/2;
@@ -1428,7 +1428,7 @@ extern SWORD map_Height(int x, int y)
 	return 0;
 }
 
-/* returns TRUE if object is above ground */
+/* returns true if object is above ground */
 extern BOOL mapObjIsAboveGround( BASE_OBJECT *psObj )
 {
 	// min is used to make sure we don't go over array bounds!
@@ -1446,25 +1446,25 @@ extern BOOL mapObjIsAboveGround( BASE_OBJECT *psObj )
 	if ( (psObj->pos.z > h1) && (psObj->pos.z > h2) &&
 		 (psObj->pos.z > h3) && (psObj->pos.z > h4)    )
 	{
-		return TRUE;
+		return true;
 	}
 
 	/* trivial test below */
 	if ( (psObj->pos.z <= h1) && (psObj->pos.z <= h2) &&
 		 (psObj->pos.z <= h3) && (psObj->pos.z <= h4)    )
 	{
-		return FALSE;
+		return false;
 	}
 
 	/* exhaustive test */
 	iZ = map_Height( psObj->pos.x, psObj->pos.y );
 	if ( psObj->pos.z > iZ )
 	{
-		return TRUE;
+		return true;
 	}
 	else
 	{
-		return FALSE;
+		return false;
 	}
 }
 

@@ -73,7 +73,7 @@ BOOL formationInitialise(void)
 {
 	psFormationList = NULL;
 
-	return TRUE;
+	return true;
 }
 
 // Shutdown the formation system
@@ -101,7 +101,7 @@ BOOL formationNew(FORMATION **ppsFormation, FORMATION_TYPE type,
 	if (psNew == NULL)
 	{
 		debug(LOG_ERROR, "formationNew: Out of memory");
-		return FALSE;
+		return false;
 	}
 
 // 	debug( LOG_NEVER, "formationNew: type %d, at (%d,%d), dir %d\n", type, x, y, dir );
@@ -147,7 +147,7 @@ BOOL formationNew(FORMATION **ppsFormation, FORMATION_TYPE type,
 		psNew->asLines[0].member = -1;
 		break;
 	default:
-		ASSERT( FALSE,"fmNewFormation: unknown formation type" );
+		ASSERT( false,"fmNewFormation: unknown formation type" );
 		break;
 	}
 
@@ -156,7 +156,7 @@ BOOL formationNew(FORMATION **ppsFormation, FORMATION_TYPE type,
 
 	*ppsFormation = psNew;
 
-	return TRUE;
+	return true;
 }
 
 
@@ -339,7 +339,7 @@ void formationReset(FORMATION *psFormation)
 				((DROID *)psObj)->sMove.psFormation = NULL;
 				break;
 			default:
-				ASSERT( FALSE,
+				ASSERT( false,
 					"formationReset: unknown unit type" );
 				break;
 			}
@@ -384,7 +384,7 @@ static void formationFindFree(FORMATION *psFormation, BASE_OBJECT *psObj,
 
 	if (psFormation->free == -1)
 	{
-		ASSERT( FALSE,
+		ASSERT( false,
 			"formationFindFree: no members left to allocate" );
 		*pX = psFormation->x;
 		*pY = psFormation->y;
@@ -407,7 +407,7 @@ static void formationFindFree(FORMATION *psFormation, BASE_OBJECT *psObj,
 		rank = 1;
 		prev = -1;
 		unit = asLines[line].member;
-		found = FALSE;
+		found = false;
 		while (!found && rank <= MAX_RANK)
 		{
 			ASSERT( unit < F_MAXMEMBERS, "formationFindFree: unit out of range" );
@@ -418,7 +418,7 @@ static void formationFindFree(FORMATION *psFormation, BASE_OBJECT *psObj,
 				radius = formationObjRadius(asMembers[unit].psObj);
 				if (objRadius*2 <= asMembers[unit].dist - radius - currDist)
 				{
-					found = TRUE;
+					found = true;
 				}
 				else
 				{
@@ -437,7 +437,7 @@ static void formationFindFree(FORMATION *psFormation, BASE_OBJECT *psObj,
 			}
 			else
 			{
-				found = TRUE;
+				found = true;
 			}
 
 			if (found)
@@ -447,7 +447,7 @@ static void formationFindFree(FORMATION *psFormation, BASE_OBJECT *psObj,
 				if (fpathBlockingTile(map_coord(x), map_coord(y)))
 				{
 					// blocked, try the next rank
-					found = FALSE;
+					found = false;
 					currDist = psFormation->size * rank;
 					rank += 1;
 				}
@@ -592,7 +592,7 @@ BOOL formationGetPos( FORMATION *psFormation, BASE_OBJECT *psObj,
 /*	if (psFormation->refCount == 1)
 	{
 		// nothing else in the formation so don't do anything
-		return FALSE;
+		return false;
 	}*/
 
 	// see if the unit is close enough to join the formation
@@ -603,7 +603,7 @@ BOOL formationGetPos( FORMATION *psFormation, BASE_OBJECT *psObj,
 //	rangeSq = rangeSq*rangeSq;
 //	if (distSq > F_JOINRANGE*F_JOINRANGE)
 //	{
-//		return FALSE;
+//		return false;
 //	}
 
 	// see if the unit is already in the formation
@@ -648,20 +648,20 @@ BOOL formationGetPos( FORMATION *psFormation, BASE_OBJECT *psObj,
 	}
 	else
 	{
-		return FALSE;
+		return false;
 	}
 
 	// check the unit can get to the formation position
 	if ( bCheckLOS && !fpathTileLOS(map_coord(psObj->pos.x), map_coord(psObj->pos.y),
 									map_coord(x), map_coord(y)))
 	{
-		return FALSE;
+		return false;
 	}
 
 	*pX = x;
 	*pY = y;
 
-	return TRUE;
+	return true;
 }
 
 
@@ -678,11 +678,11 @@ BOOL formationMember(FORMATION *psFormation, BASE_OBJECT *psObj)
 	{
 		if (asMembers[member].psObj == psObj)
 		{
-			return TRUE;
+			return true;
 		}
 	}
 
-	return FALSE;
+	return false;
 }
 
 SDWORD formationObjRadius(BASE_OBJECT *psObj)
@@ -721,7 +721,7 @@ SDWORD formationObjRadius(BASE_OBJECT *psObj)
 		radius = psObj->sDisplay.imd->radius/2;
 		break;
 	default:
-		ASSERT( FALSE,"formationObjRadius: unknown object type" );
+		ASSERT( false,"formationObjRadius: unknown object type" );
 		radius = 0;
 		break;
 	}

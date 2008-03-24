@@ -58,7 +58,7 @@ audio_ObjectDead( void * psObj )
 	if ( psSimpleObj == NULL )
 	{
 		debug( LOG_NEVER, "audio_ObjectDead: simple object pointer invalid\n" );
-		return TRUE;
+		return true;
 	}
 
 	/* check projectiles */
@@ -68,17 +68,17 @@ audio_ObjectDead( void * psObj )
 		if ( psProj == NULL )
 		{
 			debug( LOG_NEVER, "audio_ObjectDead: projectile object pointer invalid\n" );
-			return TRUE;
+			return true;
 		}
 		else
 		{
 			if ( psProj->state == PROJ_POSTIMPACT )
 			{
-				return TRUE;
+				return true;
 			}
 			else
 			{
-				return FALSE;
+				return false;
 			}
 		}
 	}
@@ -91,7 +91,7 @@ audio_ObjectDead( void * psObj )
 		if ( psBaseObj == NULL )
 		{
 			debug( LOG_NEVER, "audio_ObjectDead: base object pointer invalid\n" );
-			return TRUE;
+			return true;
 		}
 		else
 		{

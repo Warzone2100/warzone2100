@@ -60,7 +60,7 @@ W_EDITBOX* editBoxCreate(const W_EDBINIT* psInit)
 
 	if (psInit->style & ~(WEDB_PLAIN | WIDG_HIDDEN | WEDB_DISABLED))
 	{
-		ASSERT( FALSE, "Unknown edit box style" );
+		ASSERT( false, "Unknown edit box style" );
 		return NULL;
 	}
 
@@ -391,7 +391,7 @@ void editBoxRun(W_EDITBOX *psWidget, W_CONTEXT *psContext)
 	iV_SetFont(psWidget->FontID);
 
 	/* Loop through the characters in the input buffer */
-	done = FALSE;
+	done = false;
 	for (key = inputGetKey(); key != 0 && !done; key = inputGetKey())
 	{
 		/* Deal with all the control keys, assume anything else is a printable character */

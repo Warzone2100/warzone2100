@@ -90,7 +90,7 @@ static MISC_IMD	miscImds[] =
 static BOOL multiLoadMiscImds( void )
 {
 UDWORD	i=0;
-BOOL	bMoreToProcess=TRUE;
+BOOL	bMoreToProcess=true;
 char	name[15];	// hopefully!
 
 	/* Go thru' the list */
@@ -103,17 +103,17 @@ char	name[15];	// hopefully!
 		/* If it didn't get it then... */
 		if(!miscImds[i].pImd)
 		{
-			/* Say which one and return FALSE */
+			/* Say which one and return false */
 			debug( LOG_ERROR, "Can't find misselaneous PIE file : %s", miscImds[i].pName );
-			ASSERT( FALSE,"NULL PIE" );
-			return(FALSE);
+			ASSERT( false,"NULL PIE" );
+			return(false);
 		}
 		/*	If the next one's the end one, then get out now.
 			This is cos strcmp will return 0 only at end of list
 		*/
 		bMoreToProcess = strcmp(miscImds[++i].pName,"END_OF_IMD_LIST");
 	}
-	return TRUE;
+	return true;
 }
 // -------------------------------------------------------------------------------
 // Returns a pointer to the imd from a #define number passed in - see above
@@ -181,7 +181,7 @@ BOOL	initMiscImds( void )
 		{
 			debug( LOG_ERROR, "Can't find assembly point graphic for factory" );
 			abort();
-			return(FALSE);
+			return(false);
 		}
 		cybName[6] = *pieNum;
 		pAssemblyPointIMDs[CYBORG_FLAG][i] = (iIMDShape*)resGetData("IMD", cybName);
@@ -189,7 +189,7 @@ BOOL	initMiscImds( void )
 		{
 			debug( LOG_ERROR, "Can't find assembly point graphic for cyborg factory" );
 			abort();
-			return(FALSE);
+			return(false);
 		}
 		vtolName[6] = *pieNum;
 		pAssemblyPointIMDs[VTOL_FLAG][i] = (iIMDShape*)resGetData("IMD", vtolName);
@@ -197,15 +197,15 @@ BOOL	initMiscImds( void )
 		{
 			debug( LOG_ERROR, "Can't find assembly point graphic for vtol factory" );
 			abort();
-			return(FALSE);
+			return(false);
 		}
 		pAssemblyPointIMDs[REPAIR_FLAG][i] = (iIMDShape*)resGetData("IMD", "mirnum1.pie");
 		if (!pAssemblyPointIMDs[REPAIR_FLAG][i])
 		{
 			debug( LOG_ERROR, "Can't find assembly point graphic for repair facility" );
 			abort();
-			return(FALSE);
+			return(false);
 		}
 	}
-	return(TRUE);
+	return(true);
 }

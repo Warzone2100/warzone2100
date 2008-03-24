@@ -100,7 +100,7 @@ BOOL intDisplayMultiJoiningStatus(UBYTE joinCount)
 	sprintf(sTmp,"%d%%", PERCENT((NetPlay.playercount-joinCount),NetPlay.playercount) );
 	iV_DrawText(sTmp ,x + (w / 2) - 10, y + (h / 2) + 10);
 
-	return TRUE;
+	return true;
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -112,7 +112,7 @@ void clearPlayer(UDWORD player,BOOL quietly,BOOL removeOil)
 	STRUCTURE		*psStruct,*psNext;
 
 	player2dpid[player] = 0;					// remove player, make computer controlled
-	ingame.JoiningInProgress[player] = FALSE;	// if they never joined, reset the flag
+	ingame.JoiningInProgress[player] = false;	// if they never joined, reset the flag
 
 	(void)setPlayerName(player,"");				//clear custom player name (will use default instead)
 
@@ -137,19 +137,19 @@ void clearPlayer(UDWORD player,BOOL quietly,BOOL removeOil)
 	while(psStruct)				// delete all structs
 	{
 		psNext = psStruct->psNext;
-		bTemp = FALSE;
+		bTemp = false;
 
 		if(removeOil)
 		{
 			if (psStruct->pStructureType->type == REF_RESOURCE_EXTRACTOR)
 			{
-				bTemp =  TRUE;
+				bTemp =  true;
 			}
 		}
 
 		if(quietly)
 		{
-			removeStruct(psStruct, TRUE);
+			removeStruct(psStruct, true);
 		}
 		else
 		{
@@ -187,13 +187,13 @@ static void resetMultiVisibility(UDWORD player)
 			//droids
 			for(pDroid = apsDroidLists[owned];pDroid;pDroid=pDroid->psNext)
 			{
-				pDroid->visible[player] = FALSE;
+				pDroid->visible[player] = false;
 			}
 
 			//structures
 			for(pStruct= apsStructLists[owned];pStruct;pStruct=pStruct->psNext)
 			{
-				pStruct->visible[player] = FALSE;
+				pStruct->visible[player] = false;
 			}
 
 		}
@@ -218,11 +218,11 @@ BOOL MultiPlayerLeave( UDWORD dp)
 
 		sprintf( buf,_("%s has Left the Game"),getPlayerName(i) );
 
-		turnOffMultiMsg(TRUE);
-		clearPlayer(i,FALSE,FALSE);
+		turnOffMultiMsg(true);
+		clearPlayer(i,false,false);
 		game.skDiff[dp-1] = (DIFF_SLIDER_STOPS / 2);
 
-		turnOffMultiMsg(FALSE);
+		turnOffMultiMsg(false);
 
 		addConsoleMessage(buf,DEFAULT_JUSTIFY, CONSOLE_SYSTEM);
 
@@ -239,7 +239,7 @@ BOOL MultiPlayerLeave( UDWORD dp)
 	eventFireCallbackTrigger((TRIGGER_TYPE)CALL_PLAYERLEFT);
 
 
-	return TRUE;
+	return true;
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -257,7 +257,7 @@ BOOL MultiPlayerJoin(UDWORD dpid)
 	{
 		if (!multiRequestUp && (bHosted || ingame.localJoiningInProgress))
 		{
-			addPlayerBox(TRUE);	// update the player box.
+			addPlayerBox(true);	// update the player box.
 		}
 	}
 
@@ -268,7 +268,7 @@ BOOL MultiPlayerJoin(UDWORD dpid)
 		{
 			if((player2dpid[i] == dpid) && ingame.JoiningInProgress[i] )
 			{
-				return TRUE;
+				return true;
 			}
 		}
 		ASSERT( NetPlay.playercount<=MAX_PLAYERS,"Too many players!" );
@@ -293,7 +293,7 @@ BOOL MultiPlayerJoin(UDWORD dpid)
 		}
 
 	}
-	return TRUE;
+	return true;
 }
 
 
@@ -306,7 +306,7 @@ void setupNewPlayer(UDWORD dpid, UDWORD player)
 
 	player2dpid[player] = dpid;							// assign them a player too.
 	ingame.PingTimes[player] =0;						// reset ping time
-	ingame.JoiningInProgress[player] = TRUE;			// note that player is now joining.
+	ingame.JoiningInProgress[player] = true;			// note that player is now joining.
 
 	for(i=0;i<MAX_PLAYERS;i++)							// set all alliances to broken.
 	{
@@ -317,7 +317,7 @@ void setupNewPlayer(UDWORD dpid, UDWORD player)
 	resetMultiVisibility(player);						// set visibility flags.
 	NETplayerInfo();								// update the net info stuff
 
-	setMultiStats(player2dpid[player],getMultiStats(player,FALSE),TRUE);  // get the players score from the ether.
+	setMultiStats(player2dpid[player],getMultiStats(player,false),true);  // get the players score from the ether.
 
 	sprintf( buf,_("%s is Joining the Game"),getPlayerName(player) );
 	addConsoleMessage(buf,DEFAULT_JUSTIFY, CONSOLE_SYSTEM);

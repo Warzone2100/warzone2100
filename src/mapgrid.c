@@ -73,7 +73,7 @@ BOOL gridInitialise(void)
 	psIterateGrid = NULL;
 	iterateEntry = 0;
 
-	return TRUE;
+	return true;
 }
 
 //clear the grid of everything on it
@@ -232,7 +232,7 @@ void gridRemoveObject(BASE_OBJECT *psObj)
 					{
 						if (psCurr->apsObjects[i] == psObj)
 						{
-							ASSERT( FALSE,"gridRemoveObject: grid out of sync" );
+							ASSERT( false,"gridRemoveObject: grid out of sync" );
 							psCurr->apsObjects[i] = NULL;
 						}
 					}
@@ -340,7 +340,7 @@ void gridGarbageCollect(void)
 					if ( !((psCurr == psCheck) && (curr == check)) &&
 						(psCurr->apsObjects[curr] == psObj) )
 					{
-						ASSERT( FALSE, "mapGrid integrity check failed" );
+						ASSERT( false, "mapGrid integrity check failed" );
 
 						psCurr->apsObjects[curr] = NULL;
 					}
@@ -531,7 +531,7 @@ void gridDisplayCoverage(BASE_OBJECT *psObj)
 
 // Fast circle rectangle intersection, taken from Graphics Gems I, p51
 // by Clifford A Shaffer
-/* Return TRUE iff rectangle R intersects circle with centerpoint C and
+/* Return true iff rectangle R intersects circle with centerpoint C and
    radius Rad. */
 static BOOL gridIntersect(SDWORD x1,SDWORD y1, SDWORD x2,SDWORD y2,
 				   SDWORD cx,SDWORD cy, SDWORD Rad)
@@ -586,7 +586,7 @@ static BOOL gridIntersect(SDWORD x1,SDWORD y1, SDWORD x2,SDWORD y2,
 		}
    		else 				/* R contains circle centerpoint */
 		{
-     		return(TRUE);
+     		return(true);
 		}
 	}
 }

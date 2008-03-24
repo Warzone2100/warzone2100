@@ -53,7 +53,7 @@ extern char * campaign_mods[MAX_MODS];
 extern char * multiplay_mods[MAX_MODS];
 
 //! Let the end user into debug mode....
-BOOL	bAllowDebugMode = FALSE;
+BOOL	bAllowDebugMode = false;
 
 typedef enum
 {
@@ -144,7 +144,7 @@ static const struct poptOption* getOptionsTable()
  * set up first.
  * \param argc number of arguments given
  * \param argv string array of the arguments
- * \return Returns TRUE on success, FALSE on error */
+ * \return Returns true on success, false on error */
 bool ParseCommandLineEarly(int argc, const char** argv)
 {
 	poptContext poptCon = poptGetContext(NULL, argc, argv, getOptionsTable(), 0);
@@ -237,7 +237,7 @@ bool ParseCommandLineEarly(int argc, const char** argv)
  * the first half. Note that render mode must come before resolution flag.
  * \param argc number of arguments given
  * \param argv string array of the arguments
- * \return Returns TRUE on success, FALSE on error */
+ * \return Returns true on success, false on error */
 bool ParseCommandLine(int argc, const char** argv)
 {
 	poptContext poptCon = poptGetContext(NULL, argc, argv, getOptionsTable(), 0);
@@ -262,7 +262,7 @@ bool ParseCommandLine(int argc, const char** argv)
 
 			case CLI_CHEAT:
 				printf("  ** DEBUG MODE UNLOCKED! **\n");
-				bAllowDebugMode = TRUE;
+				bAllowDebugMode = true;
 				break;
 
 			case CLI_DATADIR:
@@ -278,7 +278,7 @@ bool ParseCommandLine(int argc, const char** argv)
 				break;
 
 			case CLI_FULLSCREEN:
-				war_setFullscreen(TRUE);
+				war_setFullscreen(true);
 				break;
 
 			case CLI_GAME:
@@ -381,7 +381,7 @@ bool ParseCommandLine(int argc, const char** argv)
 				{
 					debug(LOG_ERROR, "Invalid resolution");
 					abort();
-					return FALSE;
+					return false;
 				}
 				// tell the display system of the desired resolution
 				pie_SetVideoBufferWidth(width);
@@ -406,23 +406,23 @@ bool ParseCommandLine(int argc, const char** argv)
 				break;
 
 			case CLI_WINDOW:
-				war_setFullscreen(FALSE);
+				war_setFullscreen(false);
 				break;
 
 			case CLI_SHADOWS:
-				setDrawShadows(TRUE);
+				setDrawShadows(true);
 				break;
 
 			case CLI_NOSHADOWS:
-				setDrawShadows(FALSE);
+				setDrawShadows(false);
 				break;
 
 			case CLI_SOUND:
-				war_setSoundEnabled(TRUE);
+				war_setSoundEnabled(true);
 				break;
 
 			case CLI_NOSOUND:
-				war_setSoundEnabled(FALSE);
+				war_setSoundEnabled(false);
 				break;
 		};
 	}

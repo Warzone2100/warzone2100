@@ -55,15 +55,15 @@ static BOOL AtEndOfFile(const char *CurPos, const char *EndOfFile)
 		CurPos++;
 		if (CurPos >= EndOfFile)
 		{
-			return TRUE;
+			return true;
 		}
 	}
 
 	if (CurPos >= EndOfFile)
 	{
-		return TRUE;
+		return true;
 	}
-	return FALSE;
+	return false;
 }
 
 
@@ -71,7 +71,7 @@ static BOOL AtEndOfFile(const char *CurPos, const char *EndOfFile)
  * Load shape level polygons
  * \param ppFileData Pointer to the data (usualy read from a file)
  * \param s Pointer to shape level
- * \return FALSE on error (memory allocation failure/bad file format), TRUE otherwise
+ * \return false on error (memory allocation failure/bad file format), true otherwise
  * \pre ppFileData loaded
  * \pre s allocated
  * \pre s->npolys set
@@ -91,7 +91,7 @@ static BOOL _imd_load_polys( const char **ppFileData, iIMDShape *s )
 	if (s->polys == NULL)
 	{
 		debug(LOG_ERROR, "(_load_polys) Out of memory (polys)");
-		return FALSE;
+		return false;
 	}
 
 	for (i = 0, poly = s->polys; i < s->npolys; i++, poly++)
@@ -112,7 +112,7 @@ static BOOL _imd_load_polys( const char **ppFileData, iIMDShape *s )
 		if (poly->pindex == NULL)
 		{
 			debug(LOG_ERROR, "(_load_polys) [poly %u] memory alloc fail (poly indices)", i);
-			return FALSE;
+			return false;
 		}
 
 		for (j = 0; j < poly->npnts; j++)
@@ -122,7 +122,7 @@ static BOOL _imd_load_polys( const char **ppFileData, iIMDShape *s )
 			if (sscanf(pFileData, "%d%n", &newID, &cnt) != 1)
 			{
 				debug(LOG_ERROR, "failed poly %u. point %d", i, j);
-				return FALSE;
+				return false;
 			}
 			pFileData += cnt;
 			poly->pindex[j] = vertexTable[newID];
@@ -158,7 +158,7 @@ static BOOL _imd_load_polys( const char **ppFileData, iIMDShape *s )
 			if (sscanf(pFileData, "%d %d %d %d%n", &nFrames, &pbRate, &tWidth, &tHeight, &cnt) != 4)
 			{
 				debug(LOG_ERROR, "(_load_polys) [poly %u] error reading texanim data", i);
-				return FALSE;
+				return false;
 			}
 			pFileData += cnt;
 
@@ -187,7 +187,7 @@ static BOOL _imd_load_polys( const char **ppFileData, iIMDShape *s )
 			if (poly->texCoord == NULL)
 			{
 				debug(LOG_ERROR, "(_load_polys) [poly %u] memory alloc fail (vertex struct)", i);
-				return FALSE;
+				return false;
 			}
 
 			for (j = 0; j < poly->npnts; j++)
@@ -196,7 +196,7 @@ static BOOL _imd_load_polys( const char **ppFileData, iIMDShape *s )
 				if (sscanf(pFileData, "%f %f%n", &VertexU, &VertexV, &cnt) != 2)
 				{
 					debug(LOG_ERROR, "(_load_polys) [poly %u] error reading tex outline", i);
-					return FALSE;
+					return false;
 				}
 				pFileData += cnt;
 
@@ -212,7 +212,7 @@ static BOOL _imd_load_polys( const char **ppFileData, iIMDShape *s )
 
 	*ppFileData = pFileData;
 
-	return TRUE;
+	return true;
 }
 
 
@@ -228,7 +228,7 @@ static BOOL ReadPoints( const char **ppFileData, iIMDShape *s )
 		if (sscanf(pFileData, "%f %f %f%n", &newVector.x, &newVector.y, &newVector.z, &cnt) != 3)
 		{
 			debug(LOG_ERROR, "(_load_points) file corrupt -K");
-			return FALSE;
+			return false;
 		}
 		pFileData += cnt;
 
@@ -271,7 +271,7 @@ static BOOL ReadPoints( const char **ppFileData, iIMDShape *s )
 
 	*ppFileData = pFileData;
 
-	return TRUE;
+	return true;
 }
 
 
@@ -290,15 +290,15 @@ static BOOL _imd_load_points( const char **ppFileData, iIMDShape *s )
 	s->points = (Vector3f*)malloc(sizeof(Vector3f) * s->npoints);
 	if (s->points == NULL)
 	{
-		return FALSE;
+		return false;
 	}
 
 	// Read in points and remove duplicates (!)
-	if ( ReadPoints( ppFileData, s ) == FALSE )
+	if ( ReadPoints( ppFileData, s ) == false )
 	{
 		free(s->points);
 		s->points = NULL;
-		return FALSE;
+		return false;
 	}
 
 	s->max.x = s->max.y = s->max.z = tempXMax = tempZMax = -FP12_MULTIPLIER;
@@ -495,7 +495,7 @@ static BOOL _imd_load_points( const char **ppFileData, iIMDShape *s )
 
 // END: tight bounding sphere
 
-	return TRUE;
+	return true;
 }
 
 
@@ -503,7 +503,7 @@ static BOOL _imd_load_points( const char **ppFileData, iIMDShape *s )
  * Load shape level connectors
  * \param ppFileData Pointer to the data (usualy read from a file)
  * \param s Pointer to shape level
- * \return FALSE on error (memory allocation failure/bad file format), TRUE otherwise
+ * \return false on error (memory allocation failure/bad file format), true otherwise
  * \pre ppFileData loaded
  * \pre s allocated
  * \pre s->nconnectors set
@@ -519,7 +519,7 @@ static BOOL _imd_load_connectors(const char **ppFileData, iIMDShape *s)
 	if (s->connectors == NULL)
 	{
 		debug(LOG_ERROR, "(_load_connectors) MALLOC fail");
-		return FALSE;
+		return false;
 	}
 
 	for (p = s->connectors; p < s->connectors + s->nconnectors; p++)
@@ -527,7 +527,7 @@ static BOOL _imd_load_connectors(const char **ppFileData, iIMDShape *s)
 		if (sscanf(pFileData, "%f %f %f%n", &newVector.x, &newVector.y, &newVector.z, &cnt) != 3)
 		{
 			debug(LOG_ERROR, "(_load_connectors) file corrupt -M");
-			return FALSE;
+			return false;
 		}
 		pFileData += cnt;
 		*p = newVector;
@@ -535,7 +535,7 @@ static BOOL _imd_load_connectors(const char **ppFileData, iIMDShape *s)
 
 	*ppFileData = pFileData;
 
-	return TRUE;
+	return true;
 }
 
 
@@ -672,12 +672,12 @@ iIMDShape *iV_ProcessIMD( const char **ppFileData, const char *FileDataEnd )
 	UDWORD level;
 	Sint32 imd_version;
 	Uint32 imd_flags; // FIXME UNUSED
-	BOOL bTextured = FALSE;
+	BOOL bTextured = false;
 
 	if (sscanf(pFileData, "%s %d%n", buffer, &imd_version, &cnt) != 2)
 	{
 		debug(LOG_ERROR, "iV_ProcessIMD %s bad version: (%s)", pFileName, buffer);
-		assert(FALSE);
+		assert(false);
 		return NULL;
 	}
 	pFileData += cnt;
@@ -759,7 +759,7 @@ iIMDShape *iV_ProcessIMD( const char **ppFileData, const char *FileDataEnd )
 		}
 		pFileData += cnt;
 
-		bTextured = TRUE;
+		bTextured = true;
 	}
 
 	if (strncmp(buffer, "LEVELS", 6) != 0)

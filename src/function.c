@@ -129,7 +129,7 @@ static UDWORD functionType(const char* pType)
 		return REARM_UPGRADE_TYPE;
 	}
 
-	ASSERT( FALSE, "Unknown Function Type: %s", pType );
+	ASSERT( false, "Unknown Function Type: %s", pType );
 	return 0;
 }
 
@@ -141,10 +141,10 @@ static BOOL storeName(FUNCTION* pFunction, const char* pNameToStore)
 	{
 		debug( LOG_ERROR, "Function Name - Out of memory" );
 		abort();
-		return FALSE;
+		return false;
 	}
 
-	return TRUE;
+	return true;
 }
 
 
@@ -163,7 +163,7 @@ static BOOL loadProduction(const char *pData)
 	{
 		debug( LOG_ERROR, "Production Function - Out of memory" );
 		abort();
-		return FALSE;
+		return false;
 	}
 	memset(psFunction, 0, sizeof(PRODUCTION_FUNCTION));
 
@@ -203,23 +203,23 @@ static BOOL loadProduction(const char *pData)
 	if (!psFunction->propulsionType)
 	{
 		DBERROR(("Unknown Propulsion Type"));
-		return FALSE;
+		return false;
 	}
 */
 	/*propType = getPropulsionType(propulsionType);
 	if (propType == INVALID_PROP_TYPE)
 	{
 		DBERROR(("Unknown Propulsion Type - %s", propulsionType));
-		return FALSE;
+		return false;
 	}
 	psFunction->propulsionType = propType;*/
 
 	if (!getBodySize(bodySize, (UBYTE*)&psFunction->capacity))
 	{
 
-		ASSERT( FALSE, "loadProduction: unknown body size for %s",psFunction->pName );
+		ASSERT( false, "loadProduction: unknown body size for %s",psFunction->pName );
 
-		return FALSE;
+		return false;
 	}
 
 	//check prod output < UWORD_MAX
@@ -230,12 +230,12 @@ static BOOL loadProduction(const char *pData)
 	else
 	{
 
-		ASSERT( FALSE, "loadProduction: production Output too big for %s",psFunction->pName );
+		ASSERT( false, "loadProduction: production Output too big for %s",psFunction->pName );
 
 		psFunction->productionOutput = 0;
 	}
 
-	return TRUE;
+	return true;
 }
 
 static BOOL loadProductionUpgradeFunction(const char *pData)
@@ -252,7 +252,7 @@ static BOOL loadProductionUpgradeFunction(const char *pData)
 	{
 		debug( LOG_ERROR, "Production Upgrade Function - Out of memory" );
 		abort();
-		return FALSE;
+		return false;
 	}
 	memset(psFunction, 0, sizeof(PRODUCTION_UPGRADE_FUNCTION));
 
@@ -278,32 +278,32 @@ static BOOL loadProductionUpgradeFunction(const char *pData)
 	//set the factory flags
 	if (factory)
 	{
-		psFunction->factory = TRUE;
+		psFunction->factory = true;
 	}
 	else
 	{
-		psFunction->factory = FALSE;
+		psFunction->factory = false;
 	}
 	if (cyborg)
 	{
-		psFunction->cyborgFactory = TRUE;
+		psFunction->cyborgFactory = true;
 	}
 	else
 	{
-		psFunction->cyborgFactory = FALSE;
+		psFunction->cyborgFactory = false;
 	}
 	if (vtol)
 	{
-		psFunction->vtolFactory = TRUE;
+		psFunction->vtolFactory = true;
 	}
 	else
 	{
-		psFunction->vtolFactory = FALSE;
+		psFunction->vtolFactory = false;
 	}
 
 	//increment the number of upgrades
 	//numProductionUpgrades++;
-	return TRUE;
+	return true;
 }
 
 static BOOL loadResearchFunction(const char *pData)
@@ -317,7 +317,7 @@ static BOOL loadResearchFunction(const char *pData)
 	{
 		debug( LOG_ERROR, "Research Function - Out of memory" );
 		abort();
-		return FALSE;
+		return false;
 	}
 	memset(psFunction, 0, sizeof(RESEARCH_FUNCTION));
 
@@ -337,7 +337,7 @@ static BOOL loadResearchFunction(const char *pData)
 	//allocate storage for the name
 	storeName((FUNCTION *)psFunction, functionName);
 
-	return TRUE;
+	return true;
 }
 
 static BOOL loadReArmFunction(const char *pData)
@@ -351,7 +351,7 @@ static BOOL loadReArmFunction(const char *pData)
 	{
 		debug( LOG_ERROR, "ReArm Function - Out of memory" );
 		abort();
-		return FALSE;
+		return false;
 	}
 	memset(psFunction, 0, sizeof(REARM_FUNCTION));
 
@@ -371,7 +371,7 @@ static BOOL loadReArmFunction(const char *pData)
 	//allocate storage for the name
 	storeName((FUNCTION *)psFunction, functionName);
 
-	return TRUE;
+	return true;
 }
 
 
@@ -388,7 +388,7 @@ static BOOL loadUpgradeFunction(const char *pData, UBYTE type)
 	{
 		debug( LOG_ERROR, "Upgrade Function - Out of memory" );
 		abort();
-		return FALSE;
+		return false;
 	}
 	memset(psFunction, 0, sizeof(UPGRADE_FUNCTION));
 
@@ -410,14 +410,14 @@ static BOOL loadUpgradeFunction(const char *pData, UBYTE type)
 
 	if (modifier > UWORD_MAX)
 	{
-		ASSERT( FALSE, "loadUpgradeFunction: modifier too great for %s", functionName );
-		return FALSE;
+		ASSERT( false, "loadUpgradeFunction: modifier too great for %s", functionName );
+		return false;
 	}
 
 	//store the % upgrade
 	psFunction->upgradePoints = (UWORD)modifier;
 
-	return TRUE;
+	return true;
 }
 
 
@@ -472,7 +472,7 @@ static BOOL loadDroidBodyUpgradeFunction(const char *pData)
 	{
 		debug( LOG_ERROR, "UnitBody Upgrade Function - Out of memory" );
 		abort();
-		return FALSE;
+		return false;
 	}
 	memset(psFunction, 0, sizeof(DROIDBODY_UPGRADE_FUNCTION));
 
@@ -496,9 +496,9 @@ static BOOL loadDroidBodyUpgradeFunction(const char *pData)
 	if (modifier > UWORD_MAX || armourKinetic > UWORD_MAX ||
 		armourHeat > UWORD_MAX || body > UWORD_MAX)
 	{
-		ASSERT( FALSE,
+		ASSERT( false,
 			"loadUnitBodyUpgradeFunction: one or more modifiers too great" );
-		return FALSE;
+		return false;
 	}
 
 	//store the % upgrades
@@ -508,22 +508,22 @@ static BOOL loadDroidBodyUpgradeFunction(const char *pData)
 	psFunction->armourValue[WC_HEAT] = (UWORD)armourHeat;
 	if (droid)
 	{
-		psFunction->droid = TRUE;
+		psFunction->droid = true;
 	}
 	else
 	{
-		psFunction->droid = FALSE;
+		psFunction->droid = false;
 	}
 	if (cyborg)
 	{
-		psFunction->cyborg = TRUE;
+		psFunction->cyborg = true;
 	}
 	else
 	{
-		psFunction->cyborg = FALSE;
+		psFunction->cyborg = false;
 	}
 
-	return TRUE;
+	return true;
 }
 
 static BOOL loadDroidSensorUpgradeFunction(const char *pData)
@@ -539,7 +539,7 @@ static BOOL loadDroidSensorUpgradeFunction(const char *pData)
 	{
 		debug( LOG_ERROR, "UnitSensor Upgrade Function - Out of memory" );
 		abort();
-		return FALSE;
+		return false;
 	}
 	memset(psFunction, 0, sizeof(DROIDSENSOR_UPGRADE_FUNCTION));
 
@@ -561,16 +561,16 @@ static BOOL loadDroidSensorUpgradeFunction(const char *pData)
 
 	if (modifier > UWORD_MAX || range > UWORD_MAX)
 	{
-		ASSERT( FALSE,
+		ASSERT( false,
 			"loadUnitSensorUpgradeFunction: one or more modifiers too great" );
-		return FALSE;
+		return false;
 	}
 
 	//store the % upgrades
 	psFunction->upgradePoints = (UWORD)modifier;
 	psFunction->range = (UWORD)range;
 
-    return TRUE;
+    return true;
 }
 
 static BOOL loadWeaponUpgradeFunction(const char *pData)
@@ -588,7 +588,7 @@ static BOOL loadWeaponUpgradeFunction(const char *pData)
 	{
 		debug( LOG_ERROR, "Weapon Upgrade Function - Out of memory" );
 		abort();
-		return FALSE;
+		return false;
 	}
 	memset(psFunction, 0, sizeof(WEAPON_UPGRADE_FUNCTION));
 
@@ -614,7 +614,7 @@ static BOOL loadWeaponUpgradeFunction(const char *pData)
 	psFunction->subClass = getWeaponSubClass(weaponSubClass);
 	if (psFunction->subClass == INVALID_SUBCLASS)
 	{
-		return FALSE;
+		return false;
 	}
 
 	//check none of the %increases are over UBYTE max
@@ -628,7 +628,7 @@ static BOOL loadWeaponUpgradeFunction(const char *pData)
 	{
 		debug( LOG_ERROR, "A percentage increase for Weapon Upgrade function is too large" );
 		abort();
-		return FALSE;
+		return false;
 	}
 
 	//copy the data across
@@ -643,7 +643,7 @@ static BOOL loadWeaponUpgradeFunction(const char *pData)
 	//increment the number of upgrades
 	//numWeaponUpgrades++;
 
-    return TRUE;
+    return true;
 }
 
 static BOOL loadStructureUpgradeFunction(const char *pData)
@@ -659,7 +659,7 @@ static BOOL loadStructureUpgradeFunction(const char *pData)
 	{
 		debug( LOG_ERROR, "Structure Upgrade Function - Out of memory" );
 		abort();
-		return FALSE;
+		return false;
 	}
 	memset(psFunction, 0, sizeof(STRUCTURE_UPGRADE_FUNCTION));
 
@@ -686,7 +686,7 @@ static BOOL loadStructureUpgradeFunction(const char *pData)
 	{
 		debug( LOG_ERROR, "A percentage increase for Structure Upgrade function is too large" );
 		abort();
-		return FALSE;
+		return false;
 	}
 
 	//copy the data across
@@ -694,7 +694,7 @@ static BOOL loadStructureUpgradeFunction(const char *pData)
 	psFunction->body = (UWORD)body;
 	psFunction->resistance = (UWORD)resistance;
 
-	return TRUE;
+	return true;
 }
 
 static BOOL loadWallDefenceUpgradeFunction(const char *pData)
@@ -710,7 +710,7 @@ static BOOL loadWallDefenceUpgradeFunction(const char *pData)
 	{
 		debug( LOG_ERROR, "WallDefence Upgrade Function - Out of memory" );
 		abort();
-		return FALSE;
+		return false;
 	}
 	memset(psFunction, 0, sizeof(WALLDEFENCE_UPGRADE_FUNCTION));
 
@@ -736,14 +736,14 @@ static BOOL loadWallDefenceUpgradeFunction(const char *pData)
 	{
 		debug( LOG_ERROR, "A percentage increase for WallDefence Upgrade function is too large" );
 		abort();
-		return FALSE;
+		return false;
 	}
 
 	//copy the data across
 	psFunction->armour = (UWORD)armour;
 	psFunction->body = (UWORD)body;
 
-	return TRUE;
+	return true;
 }
 
 
@@ -759,7 +759,7 @@ static BOOL loadPowerGenFunction(const char *pData)
 	{
 		debug( LOG_ERROR, "Power Gen Function - Out of memory" );
 		abort();
-		return FALSE;
+		return false;
 	}
 	memset(psFunction, 0, sizeof(POWER_GEN_FUNCTION));
 
@@ -789,7 +789,7 @@ static BOOL loadPowerGenFunction(const char *pData)
 	//allocate storage for the name
 	storeName((FUNCTION *)psFunction, functionName);
 
-	return TRUE;
+	return true;
 }
 
 static BOOL loadResourceFunction(const char *pData)
@@ -804,7 +804,7 @@ static BOOL loadResourceFunction(const char *pData)
 	{
 		debug( LOG_ERROR, "Resource Function - Out of memory" );
 		abort();
-		return FALSE;
+		return false;
 	}
 	memset(psFunction, 0, sizeof(RESOURCE_FUNCTION));
 
@@ -824,7 +824,7 @@ static BOOL loadResourceFunction(const char *pData)
 	//allocate storage for the name
 	storeName((FUNCTION *)psFunction, functionName);
 
-	return TRUE;
+	return true;
 }
 
 
@@ -840,7 +840,7 @@ static BOOL loadRepairDroidFunction(const char *pData)
 	{
 		debug( LOG_ERROR, "Repair Droid Function - Out of memory" );
 		abort();
-		return FALSE;
+		return false;
 	}
 	memset(psFunction, 0, sizeof(REPAIR_DROID_FUNCTION));
 
@@ -861,7 +861,7 @@ static BOOL loadRepairDroidFunction(const char *pData)
 	//allocate storage for the name
 	storeName((FUNCTION *)psFunction, functionName);
 
-	return TRUE;
+	return true;
 }
 
 
@@ -880,7 +880,7 @@ static BOOL loadWallFunction(const char *pData)
 	{
 		debug( LOG_ERROR, "Wall Function - Out of memory" );
 		abort();
-		return FALSE;
+		return false;
 	}
 	memset(psFunction, 0, sizeof(WALL_FUNCTION));
 
@@ -907,11 +907,11 @@ static BOOL loadWallFunction(const char *pData)
 	{
 		debug( LOG_ERROR, "Structure Stats Invalid for function - %s", functionName );
 		abort();
-		return FALSE;
+		return false;
 	}
 	psFunction->pCornerStat = NULL;
 
-	return TRUE;
+	return true;
 }
 
 void productionUpgrade(FUNCTION *pFunction, UBYTE player)
@@ -1535,7 +1535,7 @@ BOOL FunctionShutDown(void)
 	}
 	free(pStartList);
 
-	return TRUE;
+	return true;
 }
 
 BOOL loadFunctionStats(const char *pFunctionData, UDWORD bufferSize)
@@ -1576,7 +1576,7 @@ BOOL loadFunctionStats(const char *pFunctionData, UDWORD bufferSize)
 	{
 		debug( LOG_ERROR, "Out of memory" );
 		abort();
-		return FALSE;
+		return false;
 	}
 	pStartList = asFunctions;
 	//initialise the storage
@@ -1596,7 +1596,7 @@ BOOL loadFunctionStats(const char *pFunctionData, UDWORD bufferSize)
 
 		if (!(pLoadFunction[type](pFunctionData)))
 		{
-			return FALSE;
+			return false;
 		}
 		//increment the pointer to the start of the next record
 		pFunctionData = strchr(pFunctionData,'\n') + 1;
@@ -1604,5 +1604,5 @@ BOOL loadFunctionStats(const char *pFunctionData, UDWORD bufferSize)
 	//set the function list pointer to the start
 	asFunctions = pStartList;
 
-	return TRUE;
+	return true;
 }

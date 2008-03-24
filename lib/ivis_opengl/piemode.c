@@ -92,7 +92,7 @@ BOOL pie_Initialise(void)
 	pie_SetDefaultStates();
 	iV_RenderAssign(&rendSurface);
 
-	return TRUE;
+	return true;
 }
 
 

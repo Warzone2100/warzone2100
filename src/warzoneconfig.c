@@ -77,9 +77,9 @@ static WARZONE_GLOBALS	warGlobs;//STATIC use or write an access function if you 
 void war_SetDefaultStates(void)//Sets all states
 {
 	//set those here and reset in clParse or loadConfig
-	war_SetFog(FALSE);
-	war_SetPlayAudioCDs(TRUE);
-	war_setSoundEnabled( TRUE );
+	war_SetFog(false);
+	war_SetPlayAudioCDs(true);
+	war_setSoundEnabled( true );
 }
 
 void war_SetPlayAudioCDs(BOOL b) {
@@ -146,15 +146,15 @@ void war_SetFog(BOOL val)
 	{
 		warGlobs.bFog = val;
 	}
-	if (warGlobs.bFog == TRUE)
+	if (warGlobs.bFog == true)
 	{
-		setRevealStatus(FALSE);
+		setRevealStatus(false);
 	}
 	else
 	{
 		PIELIGHT black;
 
-		setRevealStatus(TRUE);
+		setRevealStatus(true);
 		black.argb = 0;
 		black.byte.a = 255;
 		pie_SetFogColour(black);

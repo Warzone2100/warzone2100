@@ -128,7 +128,7 @@ char * multiplay_mods[MAX_MODS] = { NULL };
 // Warzone 2100 . Pumpkin Studios
 
 //flag to indicate when initialisation is complete
-BOOL	gameInitialised = FALSE;
+BOOL	gameInitialised = false;
 char	SaveGamePath[PATH_MAX];
 char	ScreenDumpPath[PATH_MAX];
 char	MultiForcesPath[PATH_MAX];
@@ -158,10 +158,10 @@ static BOOL inList( char * list[], const char * item )
 		debug( LOG_NEVER, "inList: Checking for match with: [%s]", list[i] );
 #endif
 		if ( strcmp( list[i], item ) == 0 )
-			return TRUE;
+			return true;
 		i++;
 	}
-	return FALSE;
+	return false;
 }
 
 void addSubdirs( const char * basedir, const char * subdir, const BOOL appendToPath, char * checkList[] )
@@ -289,7 +289,7 @@ static void getPlatformUserDir(char * const tmpstr, size_t const size)
 	long dir_id;
 	FSSpec fsspec;
 	FSRef fsref;
-	OSErr error = FindFolder(kUserDomain, kApplicationSupportFolderType, FALSE, &vol_ref, &dir_id);
+	OSErr error = FindFolder(kUserDomain, kApplicationSupportFolderType, false, &vol_ref, &dir_id);
 	if (!error)
 		error = FSMakeFSSpec(vol_ref, dir_id, (const unsigned char *) "", &fsspec);
 	if (!error)
@@ -430,7 +430,7 @@ static void scanDataDirs( void )
 
 	// User's home dir
 	registerSearchPath( PHYSFS_getWriteDir(), 2 );
-	rebuildSearchPath( mod_multiplay, TRUE );
+	rebuildSearchPath( mod_multiplay, true );
 
 	if( !PHYSFS_exists("gamedesc.lev") )
 	{
@@ -438,7 +438,7 @@ static void scanDataDirs( void )
 		strlcpy(tmpstr, prefix, sizeof(tmpstr));
 		strlcat(tmpstr, "/data/", sizeof(tmpstr));
 		registerSearchPath( tmpstr, 3 );
-		rebuildSearchPath( mod_multiplay, TRUE );
+		rebuildSearchPath( mod_multiplay, true );
 
 		if( !PHYSFS_exists("gamedesc.lev") )
 		{
@@ -446,19 +446,19 @@ static void scanDataDirs( void )
 			strlcpy(tmpstr, prefix, sizeof(tmpstr));
 			strlcat(tmpstr, "/share/warzone2100/", sizeof(tmpstr));
 			registerSearchPath( tmpstr, 4 );
-			rebuildSearchPath( mod_multiplay, TRUE );
+			rebuildSearchPath( mod_multiplay, true );
 
 			if( !PHYSFS_exists("gamedesc.lev") )
 			{
 				// Program dir
 				registerSearchPath( PHYSFS_getBaseDir(), 5 );
-				rebuildSearchPath( mod_multiplay, TRUE );
+				rebuildSearchPath( mod_multiplay, true );
 
 				if( !PHYSFS_exists("gamedesc.lev") )
 				{
 					// Guessed fallback default datadir on Unix
 					registerSearchPath( DATADIR, 6 );
-					rebuildSearchPath( mod_multiplay, TRUE );
+					rebuildSearchPath( mod_multiplay, true );
 				}
 			}
 		}
@@ -473,7 +473,7 @@ static void scanDataDirs( void )
 							PATH_MAX) ) {
 			chdir( resourcePath );
 			registerSearchPath( "data", 7 );
-			rebuildSearchPath( mod_multiplay, TRUE );
+			rebuildSearchPath( mod_multiplay, true );
 		} else {
 			debug( LOG_ERROR, "Could not change to resources directory." );
 		}
@@ -591,7 +591,7 @@ static void startGameLoop(void)
 	}
 
 	// set a flag for the trigger/event system to indicate initialisation is complete
-	gameInitialised = TRUE;
+	gameInitialised = true;
 }
 
 
@@ -603,8 +603,8 @@ static void stopGameLoop(void)
 {
 	if (gameLoopStatus != GAMECODE_NEWLEVEL)
 	{
-		initLoadingScreen(TRUE); // returning to f.e. do a loader.render not active
-		pie_EnableFog(FALSE); // dont let the normal loop code set status on
+		initLoadingScreen(true); // returning to f.e. do a loader.render not active
+		pie_EnableFog(false); // dont let the normal loop code set status on
 		fogStatus = 0;
 		if (gameLoopStatus != GAMECODE_LOADGAME)
 		{
@@ -618,7 +618,7 @@ static void stopGameLoop(void)
 		SDL_WM_GrabInput(SDL_GRAB_OFF);
 	}
 
-	gameInitialised = FALSE;
+	gameInitialised = false;
 }
 
 
@@ -716,10 +716,10 @@ static void runTitleLoop(void)
 		case TITLECODE_SHOWINTRO:
 			debug(LOG_MAIN, "TITLECODE_SHOWINTRO");
 			seq_ClearSeqList();
-			seq_AddSeqToList("eidos-logo.rpl", NULL, NULL, FALSE);
-			seq_AddSeqToList("pumpkin.rpl", NULL, NULL, FALSE);
-			seq_AddSeqToList("titles.rpl", NULL, NULL, FALSE);
-			seq_AddSeqToList("devastation.rpl", NULL, "devastation.txa", FALSE);
+			seq_AddSeqToList("eidos-logo.rpl", NULL, NULL, false);
+			seq_AddSeqToList("pumpkin.rpl", NULL, NULL, false);
+			seq_AddSeqToList("titles.rpl", NULL, NULL, false);
+			seq_AddSeqToList("devastation.rpl", NULL, "devastation.txa", false);
 			seq_StartNextFullScreenVideo();
 			break;
 		default:
@@ -782,7 +782,7 @@ static void mainLoop(void)
 {
 	SDL_Event event;
 
-	while (TRUE)
+	while (true)
 	{
 		frameUpdate(); // General housekeeping
 
@@ -919,7 +919,7 @@ int main(int argc, char *argv[])
 	tagTest();
 #endif
 
-	NETinit(TRUE);
+	NETinit(true);
 
 	if (!frameInitialise( "Warzone 2100", pie_GetVideoBufferWidth(), pie_GetVideoBufferHeight(), pie_GetVideoBufferDepth(), war_getFullscreen() ))
 	{
@@ -927,14 +927,14 @@ int main(int argc, char *argv[])
 	}
 	atexit(frameShutDown);
 
-	pie_SetFogStatus(FALSE);
+	pie_SetFogStatus(false);
 	pie_ScreenFlip(CLEAR_BLACK);
 
 	pal_Init();
 	atexit(pal_ShutDown);
 
 	pie_LoadBackDrop(SCREEN_RANDOMBDROP);
-	pie_SetFogStatus(FALSE);
+	pie_SetFogStatus(false);
 	pie_ScreenFlip(CLEAR_BLACK);
 
 	if (!systemInitialise())
@@ -944,7 +944,7 @@ int main(int argc, char *argv[])
 	atexit(systemShutdown);
 
 	//set all the pause states to false
-	setAllPauseStates(FALSE);
+	setAllPauseStates(false);
 
 	// Do the game mode specific initialisation.
 	switch(GetGameMode())

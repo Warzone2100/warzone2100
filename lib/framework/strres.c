@@ -55,7 +55,7 @@ static BOOL strresAllocBlock(STR_BLOCK **ppsBlock, UDWORD size)
 	{
 		debug( LOG_ERROR, "strresAllocBlock: Out of memory - 1" );
 		abort();
-		return FALSE;
+		return false;
 	}
 
 	(*ppsBlock)->apStrings = (char**)malloc(sizeof(char *) * size);
@@ -64,7 +64,7 @@ static BOOL strresAllocBlock(STR_BLOCK **ppsBlock, UDWORD size)
 		debug( LOG_ERROR, "strresAllocBlock: Out of memory - 2" );
 		abort();
 		free(*ppsBlock);
-		return FALSE;
+		return false;
 	}
 	memset((*ppsBlock)->apStrings, 0, sizeof(char *) * size);
 
@@ -73,7 +73,7 @@ static BOOL strresAllocBlock(STR_BLOCK **ppsBlock, UDWORD size)
 	memset((*ppsBlock)->aUsage, 0, sizeof(UDWORD) * size);
 #endif
 
-	return TRUE;
+	return true;
 }
 
 
@@ -87,7 +87,7 @@ BOOL strresCreate(STR_RES **ppsRes, UDWORD init, UDWORD ext)
 	{
 		debug( LOG_ERROR, "strresCreate: Out of memory" );
 		abort();
-		return FALSE;
+		return false;
 	}
 	psRes->init = init;
 	psRes->ext = ext;
@@ -98,14 +98,14 @@ BOOL strresCreate(STR_RES **ppsRes, UDWORD init, UDWORD ext)
 		debug( LOG_ERROR, "strresCreate: Out of memory" );
 		abort();
 		free(psRes);
-		return FALSE;
+		return false;
 	}
 
 	if (!strresAllocBlock(&psRes->psStrings, init))
 	{
 		TREAP_DESTROY(psRes->psIDTreap);
 		free(psRes);
-		return FALSE;
+		return false;
 	}
 	psRes->psStrings->psNext = NULL;
 	psRes->psStrings->idStart = 0;
@@ -113,7 +113,7 @@ BOOL strresCreate(STR_RES **ppsRes, UDWORD init, UDWORD ext)
 
 	*ppsRes = psRes;
 
-	return TRUE;
+	return true;
 }
 
 
@@ -201,7 +201,7 @@ BOOL strresGetIDNum(STR_RES *psRes, const char *pIDStr, UDWORD *pIDNum)
 	if (!psID)
 	{
 		*pIDNum = 0;
-		return FALSE;
+		return false;
 	}
 
 	if (psID->id & ID_ALLOC)
@@ -212,7 +212,7 @@ BOOL strresGetIDNum(STR_RES *psRes, const char *pIDStr, UDWORD *pIDNum)
 	{
 		*pIDNum = psID->id;
 	}
-	return TRUE;
+	return true;
 }
 
 
@@ -227,11 +227,11 @@ BOOL strresGetIDString(STR_RES *psRes, const char *pIDStr, char **ppStoredID)
 	if (!psID)
 	{
 		*ppStoredID = NULL;
-		return FALSE;
+		return false;
 	}
 
 	*ppStoredID = psID->pIDStr;
-	return TRUE;
+	return true;
 }
 
 
@@ -256,7 +256,7 @@ BOOL strresStoreString(STR_RES *psRes, char *pID, const char *pString)
 		{
 			debug( LOG_ERROR, "strresStoreString: Out of memory" );
 			abort();
-			return FALSE;
+			return false;
 		}
 		psID->pIDStr = (char*)malloc(sizeof(char) * (strlen(pID) + 1));
 		if (!psID->pIDStr)
@@ -264,7 +264,7 @@ BOOL strresStoreString(STR_RES *psRes, char *pID, const char *pString)
 			debug( LOG_ERROR, "strresStoreString: Out of memory" );
 			abort();
 			free(psID);
-			return FALSE;
+			return false;
 		}
 		stringCpy(psID->pIDStr, pID);
 		psID->id = psRes->nextID | ID_ALLOC;
@@ -289,7 +289,7 @@ BOOL strresStoreString(STR_RES *psRes, char *pID, const char *pString)
 			// Need to allocate a new string block
 			if (!strresAllocBlock(&psBlock->psNext, psRes->ext))
 			{
-				return FALSE;
+				return false;
 			}
 			psBlock->psNext->idStart = psBlock->idEnd+1;
 			psBlock->psNext->idEnd = psBlock->idEnd + psRes->ext;
@@ -302,7 +302,7 @@ BOOL strresStoreString(STR_RES *psRes, char *pID, const char *pString)
 	{
 		debug( LOG_ERROR, "strresStoreString: Duplicate string for id: %s", psID->pIDStr );
 		abort();
-		return FALSE;
+		return false;
 	}
 
 	// Allocate a copy of the string
@@ -311,12 +311,12 @@ BOOL strresStoreString(STR_RES *psRes, char *pID, const char *pString)
 	{
 		debug( LOG_ERROR, "strresStoreString: Out of memory" );
 		abort();
-		return FALSE;
+		return false;
 	}
 	stringCpy(pNew, pString);
 	psBlock->apStrings[id - psBlock->idStart] = pNew;
 
-	return TRUE;
+	return true;
 }
 
 
@@ -335,7 +335,7 @@ char *strresGetString(STR_RES *psRes, UDWORD id)
 
 	if (!psBlock)
 	{
-		ASSERT( FALSE, "strresGetString: String not found" );
+		ASSERT( false, "strresGetString: String not found" );
 		// Return the default string
 		return psRes->psStrings->apStrings[0];
 	}
@@ -364,7 +364,7 @@ BOOL strresLoad(STR_RES* psRes, const char* fileName)
 	if (!fileHandle)
 	{
 		debug(LOG_ERROR, "strresLoadFile: PHYSFS_openRead(\"%s\") failed with error: %s\n", fileName, PHYSFS_getLastError());
-		return FALSE;
+		return false;
 	}
 
 	// Set string resource to operate on
@@ -374,11 +374,11 @@ BOOL strresLoad(STR_RES* psRes, const char* fileName)
 	if (strres_parse() != 0)
 	{
 		PHYSFS_close(fileHandle);
-		return FALSE;
+		return false;
 	}
 	PHYSFS_close(fileHandle);
 
-	return TRUE;
+	return true;
 }
 
 /* Copy a char */

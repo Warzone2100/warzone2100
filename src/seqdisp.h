@@ -72,7 +72,7 @@ extern void seq_AddSeqToList(const char *pSeqName, const char *pAudioName, const
 /*checks to see if there are any sequences left in the list to play*/
 extern BOOL seq_AnySeqLeft(void);
 
-//set and check subtitle mode, TRUE subtitles on
+//set and check subtitle mode, true subtitles on
 extern void seq_SetSubtitles(BOOL bNewState);
 extern BOOL seq_GetSubtitles(void);
 

@@ -44,7 +44,7 @@ char aText[TEXT_BUFFERS][YYLMAX];		// No longer static ... lets use this area gl
 static UDWORD currText=0;
 
 // Note if we are in a comment
-static BOOL inComment = FALSE;
+static BOOL inComment = false;
 
 /* Pointer to the input buffer */
 static const char *pInputBuffer = NULL;
@@ -102,9 +102,9 @@ file						{ return FILETOKEN; }
 [ \t\n\x0d\x0a]						;
 
 	/* Strip comments */
-"/*"						{ inComment=TRUE; BEGIN COMMENT; }
+"/*"						{ inComment=true; BEGIN COMMENT; }
 <COMMENT>"*/" |
-<COMMENT>"*/"\n				{ inComment=FALSE; BEGIN 0; }
+<COMMENT>"*/"\n				{ inComment=false; BEGIN 0; }
 <COMMENT>. |
 <COMMENT>\n					;
 
@@ -126,7 +126,7 @@ void resSetInputBuffer(char *pBuffer, UDWORD size)
 
 	/* Reset the lexer incase it's been used before */
 	res__flush_buffer(YY_CURRENT_BUFFER);
-	inComment = FALSE;
+	inComment = false;
 }
 
 void resGetErrorData(int *pLine, char **ppText)

@@ -75,7 +75,7 @@
  *********************************************************/
 
 // whether a save game is currently being loaded
-static BOOL saveFlag = FALSE;
+static BOOL saveFlag = false;
 
 extern int scr_lineno;
 
@@ -84,11 +84,11 @@ extern int scr_lineno;
 
 void dataSetSaveFlag(void)
 {
-	saveFlag = TRUE;
+	saveFlag = true;
 }
 void dataClearSaveFlag(void)
 {
-	saveFlag = FALSE;
+	saveFlag = false;
 }
 
 
@@ -98,12 +98,12 @@ static BOOL bufferSBODYLoad(const char *pBuffer, UDWORD size, void **ppData)
 	if (!loadBodyStats(pBuffer, size)
 	 || !allocComponentList(COMP_BODY, numBodyStats))
 	{
-		return FALSE;
+		return false;
 	}
 
 	// set a dummy value so the release function gets called
 	*ppData = (void *)1;
-	return TRUE;
+	return true;
 }
 
 static BOOL dataDBBODYLoad(const char* filename, void **ppData)
@@ -111,12 +111,12 @@ static BOOL dataDBBODYLoad(const char* filename, void **ppData)
 	if (!loadBodyStatsFromDB(filename)
 	 || !allocComponentList(COMP_BODY, numBodyStats))
 	{
-		return FALSE;
+		return false;
 	}
 
 	// set a dummy value so the release function gets called
 	*ppData = (void *)1;
-	return TRUE;
+	return true;
 }
 
 static void dataReleaseStats(void *pData)
@@ -132,12 +132,12 @@ static BOOL bufferSWEAPONLoad(const char *pBuffer, UDWORD size, void **ppData)
 	if (!loadWeaponStats(pBuffer, size)
 	 || !allocComponentList(COMP_WEAPON, numWeaponStats))
 	{
-		return FALSE;
+		return false;
 	}
 
 	// not interested in this value
 	*ppData = NULL;
-	return TRUE;
+	return true;
 }
 
 static BOOL dataDBWEAPONLoad(const char* filename, void **ppData)
@@ -145,12 +145,12 @@ static BOOL dataDBWEAPONLoad(const char* filename, void **ppData)
 	if (!loadWeaponStatsFromDB(filename)
 	 || !allocComponentList(COMP_WEAPON, numWeaponStats))
 	{
-		return FALSE;
+		return false;
 	}
 
 	// not interested in this value
 	*ppData = NULL;
-	return TRUE;
+	return true;
 }
 
 /* Load the constructor stats */
@@ -159,12 +159,12 @@ static BOOL bufferSCONSTRLoad(const char *pBuffer, UDWORD size, void **ppData)
 	if (!loadConstructStats(pBuffer, size)
 	 || !allocComponentList(COMP_CONSTRUCT, numConstructStats))
 	{
-		return FALSE;
+		return false;
 	}
 
 	//not interested in this value
 	*ppData = NULL;
-	return TRUE;
+	return true;
 }
 
 /* Load the ECM stats */
@@ -173,12 +173,12 @@ static BOOL bufferSECMLoad(const char *pBuffer, UDWORD size, void **ppData)
 	if (!loadECMStats(pBuffer, size)
 	 || !allocComponentList(COMP_ECM, numECMStats))
 	{
-		return FALSE;
+		return false;
 	}
 
 	//not interested in this value
 	*ppData = NULL;
-	return TRUE;
+	return true;
 }
 
 /* Load the Propulsion stats */
@@ -187,12 +187,12 @@ static BOOL bufferSPROPLoad(const char *pBuffer, UDWORD size, void **ppData)
 	if (!loadPropulsionStats(pBuffer, size)
 	 || !allocComponentList(COMP_PROPULSION, numPropulsionStats))
 	{
-		return FALSE;
+		return false;
 	}
 
 	//not interested in this value
 	*ppData = NULL;
-	return TRUE;
+	return true;
 }
 
 /* Load the Sensor stats */
@@ -201,12 +201,12 @@ static BOOL bufferSSENSORLoad(const char *pBuffer, UDWORD size, void **ppData)
 	if (!loadSensorStats(pBuffer, size)
 	 || !allocComponentList(COMP_SENSOR, numSensorStats))
 	{
-		return FALSE;
+		return false;
 	}
 
 	//not interested in this value
 	*ppData = NULL;
-	return TRUE;
+	return true;
 }
 
 /* Load the Repair stats */
@@ -215,12 +215,12 @@ static BOOL bufferSREPAIRLoad(const char *pBuffer, UDWORD size, void **ppData)
 	if (!loadRepairStats(pBuffer, size)
 	 || !allocComponentList(COMP_REPAIRUNIT, numRepairStats))
 	{
-		return FALSE;
+		return false;
 	}
 
 	//not interested in this value
 	*ppData = NULL;
-	return TRUE;
+	return true;
 }
 
 /* Load the Brain stats */
@@ -229,12 +229,12 @@ static BOOL bufferSBRAINLoad(const char *pBuffer, UDWORD size, void **ppData)
 	if (!loadBrainStats(pBuffer, size)
 	 || !allocComponentList(COMP_BRAIN, numBrainStats))
 	{
-		return FALSE;
+		return false;
 	}
 
 	//not interested in this value
 	*ppData = NULL;
-	return TRUE;
+	return true;
 }
 
 static BOOL dataDBBRAINLoad(const char* filename, void** ppData)
@@ -242,12 +242,12 @@ static BOOL dataDBBRAINLoad(const char* filename, void** ppData)
 	if (!loadBrainStatsFromDB(filename)
 	 || !allocComponentList(COMP_BRAIN, numBrainStats))
 	{
-		return FALSE;
+		return false;
 	}
 
 	//not interested in this value
 	*ppData = NULL;
-	return TRUE;
+	return true;
 }
 
 /* Load the PropulsionType stats */
@@ -255,13 +255,13 @@ static BOOL bufferSPROPTYPESLoad(const char *pBuffer, UDWORD size, void **ppData
 {
 	if (!loadPropulsionTypes(pBuffer, size))
 	{
-		return FALSE;
+		return false;
 	}
 
 
 	//not interested in this value
 	*ppData = NULL;
-	return TRUE;
+	return true;
 }
 
 /* Load the propulsion type sound stats */
@@ -269,12 +269,12 @@ static BOOL bufferSPROPSNDLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
 	if (!loadPropulsionSounds(pBuffer, size))
 	{
-		return FALSE;
+		return false;
 	}
 
 	//not interested in this value
 	*ppData = NULL;
-	return TRUE;
+	return true;
 }
 
 /* Load the SSPECABIL stats */
@@ -282,12 +282,12 @@ static BOOL bufferSSPECABILLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
 	if (!loadSpecialAbility(pBuffer, size))
 	{
-		return FALSE;
+		return false;
 	}
 
 	//not interested in this value
 	*ppData = NULL;
-	return TRUE;
+	return true;
 }
 
 /* Load the STERRTABLE stats */
@@ -295,12 +295,12 @@ static BOOL bufferSTERRTABLELoad(const char *pBuffer, UDWORD size, void **ppData
 {
 	if (!loadTerrainTable(pBuffer, size))
 	{
-		return FALSE;
+		return false;
 	}
 
 	//not interested in this value
 	*ppData = NULL;
-	return TRUE;
+	return true;
 }
 
 /* Load the body/propulsion IMDs stats */
@@ -308,12 +308,12 @@ static BOOL bufferSBPIMDLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
 	if (!loadBodyPropulsionIMDs(pBuffer, size))
 	{
-		return FALSE;
+		return false;
 	}
 
 	//not interested in this value
 	*ppData = NULL;
-	return TRUE;
+	return true;
 }
 
 /* Load the weapon sound stats */
@@ -321,12 +321,12 @@ static BOOL bufferSWEAPSNDLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
 	if (!loadWeaponSounds(pBuffer, size))
 	{
-		return FALSE;
+		return false;
 	}
 
 	//not interested in this value
 	*ppData = NULL;
-	return TRUE;
+	return true;
 }
 
 /* Load the Weapon Effect modifier stats */
@@ -334,12 +334,12 @@ static BOOL bufferSWEAPMODLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
 	if (!loadWeaponModifiers(pBuffer, size))
 	{
-		return FALSE;
+		return false;
 	}
 
 	//not interested in this value
 	*ppData = NULL;
-	return TRUE;
+	return true;
 }
 
 
@@ -348,12 +348,12 @@ static BOOL bufferSTEMPLLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
 	if (!loadDroidTemplates(pBuffer, size))
 	{
-		return FALSE;
+		return false;
 	}
 
 	// set a dummy value so the release function gets called
 	*ppData = (void *)1;
-	return TRUE;
+	return true;
 }
 
 // release the templates
@@ -368,12 +368,12 @@ static BOOL bufferSTEMPWEAPLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
 	if (!loadDroidWeapons(pBuffer, size))
 	{
-		return FALSE;
+		return false;
 	}
 
 	//not interested in this value
 	*ppData = NULL;
-	return TRUE;
+	return true;
 }
 
 /* Load the Structure stats */
@@ -382,12 +382,12 @@ static BOOL bufferSSTRUCTLoad(const char *pBuffer, UDWORD size, void **ppData)
 	if (!loadStructureStats(pBuffer, size)
 	 || !allocStructLists())
 	{
-		return FALSE;
+		return false;
 	}
 
 	// set a dummy value so the release function gets called
 	*ppData = (void *)1;
-	return TRUE;
+	return true;
 }
 
 // release the structure stats
@@ -402,12 +402,12 @@ static BOOL bufferSSTRWEAPLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
 	if (!loadStructureWeapons(pBuffer, size))
 	{
-		return FALSE;
+		return false;
 	}
 
 	//not interested in this value
 	*ppData = NULL;
-	return TRUE;
+	return true;
 }
 
 /* Load the Structure Functions stats */
@@ -415,12 +415,12 @@ static BOOL bufferSSTRFUNCLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
 	if (!loadStructureFunctions(pBuffer, size))
 	{
-		return FALSE;
+		return false;
 	}
 
 	//not interested in this value
 	*ppData = NULL;
-	return TRUE;
+	return true;
 }
 
 /* Load the Structure strength modifier stats */
@@ -428,12 +428,12 @@ static BOOL bufferSSTRMODLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
 	if (!loadStructureStrengthModifiers(pBuffer, size))
 	{
-		return FALSE;
+		return false;
 	}
 
 	//not interested in this value
 	*ppData = NULL;
-	return TRUE;
+	return true;
 }
 
 /* Load the Feature stats */
@@ -441,12 +441,12 @@ static BOOL bufferSFEATLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
 	if (!loadFeatureStats(pBuffer, size))
 	{
-		return FALSE;
+		return false;
 	}
 
 	// set a dummy value so the release function gets called
 	*ppData = (void *)1;
-	return TRUE;
+	return true;
 }
 
 // free the feature stats
@@ -460,7 +460,7 @@ static BOOL bufferSFUNCLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
 	if (!loadFunctionStats(pBuffer, size))
 	{
-		return FALSE;
+		return false;
 	}
 
     //adjust max values of stats used in the design screen due to any possible upgrades
@@ -468,7 +468,7 @@ static BOOL bufferSFUNCLoad(const char *pBuffer, UDWORD size, void **ppData)
 
 	// set a dummy value so the release function gets called
 	*ppData = (void *)1;
-	return TRUE;
+	return true;
 }
 
 // release the function stats
@@ -496,7 +496,7 @@ static BOOL bufferRESCHLoad(const char *pBuffer, UDWORD size, void **ppData)
 
 	if (!loadResearch(pBuffer, size))
 	{
-		return FALSE;
+		return false;
 	}
 
 
@@ -505,7 +505,7 @@ static BOOL bufferRESCHLoad(const char *pBuffer, UDWORD size, void **ppData)
 	// *ppData = (void *)1;
 	 * pass back NULL so that can load the same name file for the next campaign*/
 	*ppData = NULL;
-	return TRUE;
+	return true;
 }
 
 /* Load the research pre-requisites */
@@ -513,12 +513,12 @@ static BOOL bufferRPREREQLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
 	if (!loadResearchPR(pBuffer, size))
 	{
-		return FALSE;
+		return false;
 	}
 
 	//not interested in this value
 	*ppData = NULL;
-	return TRUE;
+	return true;
 }
 
 /* Load the research components made redundant */
@@ -526,12 +526,12 @@ static BOOL bufferRCOMPREDLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
 	if (!loadResearchArtefacts(pBuffer, size, RED_LIST))
 	{
-		return FALSE;
+		return false;
 	}
 
 	//not interested in this value
 	*ppData = NULL;
-	return TRUE;
+	return true;
 }
 
 /* Load the research component results */
@@ -539,12 +539,12 @@ static BOOL bufferRCOMPRESLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
 	if (!loadResearchArtefacts(pBuffer, size, RES_LIST))
 	{
-		return FALSE;
+		return false;
 	}
 
 	//not interested in this value
 	*ppData = NULL;
-	return TRUE;
+	return true;
 }
 
 /* Load the research structures required */
@@ -552,12 +552,12 @@ static BOOL bufferRSTRREQLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
 	if (!loadResearchStructures(pBuffer, size, REQ_LIST))
 	{
-		return FALSE;
+		return false;
 	}
 
 	//not interested in this value
 	*ppData = NULL;
-	return TRUE;
+	return true;
 }
 
 /* Load the research structures made redundant */
@@ -565,12 +565,12 @@ static BOOL bufferRSTRREDLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
 	if (!loadResearchStructures(pBuffer, size, RED_LIST))
 	{
-		return FALSE;
+		return false;
 	}
 
 	//not interested in this value
 	*ppData = NULL;
-	return TRUE;
+	return true;
 }
 
 /* Load the research structure results */
@@ -578,12 +578,12 @@ static BOOL bufferRSTRRESLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
 	if (!loadResearchStructures(pBuffer, size, RES_LIST))
 	{
-		return FALSE;
+		return false;
 	}
 
 	//not interested in this value
 	*ppData = NULL;
-	return TRUE;
+	return true;
 }
 
 /* Load the research functions */
@@ -591,12 +591,12 @@ static BOOL bufferRFUNCLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
 	if (!loadResearchFunctions(pBuffer, size))
 	{
-		return FALSE;
+		return false;
 	}
 
 	//not interested in this value
 	*ppData = NULL;
-	return TRUE;
+	return true;
 }
 
 /* Load the message viewdata */
@@ -607,12 +607,12 @@ static BOOL bufferSMSGLoad(const char *pBuffer, UDWORD size, void **ppData)
 	pViewData = loadViewData(pBuffer, size);
 	if (!pViewData)
 	{
-		return FALSE;
+		return false;
 	}
 
 	// set the pointer so the release function gets called with it
 	*ppData = (void *)pViewData;
-	return TRUE;
+	return true;
 }
 
 
@@ -632,11 +632,11 @@ static BOOL dataIMDBufferLoad(const char *pBuffer, UDWORD size, void **ppData)
 	if (psIMD == NULL) {
 		debug( LOG_ERROR, "IMD load failed - %s", GetLastResourceFilename() );
 		abort();
-		return FALSE;
+		return false;
 	}
 
 	*ppData = psIMD;
-	return TRUE;
+	return true;
 }
 
 
@@ -648,18 +648,18 @@ static BOOL dataImageLoad(const char *fileName, void **ppData)
 	iV_Image *psSprite = malloc(sizeof(iV_Image));
 	if (!psSprite)
 	{
-		return FALSE;
+		return false;
 	}
 
 	if (!iV_loadImage_PNG(fileName, psSprite))
 	{
 		debug( LOG_ERROR, "IMGPAGE load failed" );
-		return FALSE;
+		return false;
 	}
 
 	*ppData = psSprite;
 
-	return TRUE;
+	return true;
 }
 
 
@@ -672,7 +672,7 @@ static BOOL dataTERTILESLoad(const char *fileName, void **ppData)
 	// set a dummy value so the release function gets called
 	*ppData = (void *)1;
 
-	return TRUE;
+	return true;
 }
 
 static void dataTERTILESRelease(void *pData)
@@ -687,10 +687,10 @@ static BOOL dataIMGLoad(const char *fileName, void **ppData)
 	*ppData = iV_LoadImageFile(fileName);
 	if(*ppData == NULL)
 	{
-		return FALSE;
+		return false;
 	}
 
-	return TRUE;
+	return true;
 }
 
 
@@ -711,7 +711,7 @@ static BOOL dataTexPageLoad(const char *fileName, void **ppData)
 	pie_MakeTexPageName(texpage);
 	if (!dataImageLoad(fileName, ppData))
 	{
-		return FALSE;
+		return false;
 	}
 
 	// see if this texture page has already been loaded
@@ -728,7 +728,7 @@ static BOOL dataTexPageLoad(const char *fileName, void **ppData)
 		(void) pie_AddTexPage(*ppData, texpage, 0);
 	}
 
-	return TRUE;
+	return true;
 }
 
 /*!
@@ -748,11 +748,11 @@ static void dataImageRelease(void *pData)
 /* Load an audio file */
 static BOOL dataAudioLoad(const char* fileName, void **ppData)
 {
-	if ( audio_Disabled() == TRUE )
+	if ( audio_Disabled() == true )
 	{
 		*ppData = NULL;
-		// No error occurred (sound is just disabled), so we return TRUE
-		return TRUE;
+		// No error occurred (sound is just disabled), so we return true
+		return true;
 	}
 
 	// Load the track from a file
@@ -771,14 +771,14 @@ static BOOL dataAudioCfgLoad(const char* fileName, void **ppData)
 
 	if (audio_Disabled())
 	{
-		return TRUE;
+		return true;
 	}
 
 	fileHandle = PHYSFS_openRead(fileName);
 
 	if (fileHandle == NULL)
 	{
-		return FALSE;
+		return false;
 	}
 
 	success = ParseResourceFile(fileHandle);
@@ -795,7 +795,7 @@ static BOOL dataAnimLoad(const char *fileName, void **ppData)
 	if (fileHandle == NULL)
 	{
 		*ppData = NULL;
-		return FALSE;
+		return false;
 	}
 
 	*ppData = anim_LoadFromFile(fileHandle);
@@ -814,7 +814,7 @@ static BOOL dataAnimCfgLoad(const char *fileName, void **ppData)
 
 	if (fileHandle == NULL)
 	{
-		return FALSE;
+		return false;
 	}
 
 	success = ParseResourceFile(fileHandle);
@@ -838,17 +838,17 @@ static BOOL dataStrResLoad(const char* fileName, void** ppData)
 	{
 		if (!stringsInitialise())
 		{
-			return FALSE;
+			return false;
 		}
 	}
 
 	if (!strresLoad(psStringRes, fileName))
 	{
-		return FALSE;
+		return false;
 	}
 
 	*ppData = psStringRes;
-	return TRUE;
+	return true;
 }
 
 static void dataStrResRelease(void *pData)
@@ -876,7 +876,7 @@ static BOOL dataScriptLoad(const char* fileName, void **ppData)
 
 	if (fileHandle == NULL)
 	{
-		return FALSE;
+		return false;
 	}
 
 	*psProg = scriptCompile(fileHandle, SCRIPTTYPE);
@@ -886,7 +886,7 @@ static BOOL dataScriptLoad(const char* fileName, void **ppData)
 	if (!*psProg)		// see script.h
 	{
 		debug(LOG_ERROR, "Script %s did not compile", GetLastResourceFilename());
-		return FALSE;
+		return false;
 	}
 
 	if (printHack)
@@ -894,7 +894,7 @@ static BOOL dataScriptLoad(const char* fileName, void **ppData)
 		cpPrintProgram(*psProg);
 	}
 
-	return TRUE;
+	return true;
 }
 
 // Load a script variable values file
@@ -908,7 +908,7 @@ static BOOL dataScriptLoadVals(const char* fileName, void **ppData)
 	// don't load anything if a saved game is being loaded
 	if (saveFlag)
 	{
-		return TRUE;
+		return true;
 	}
 
 	debug(LOG_WZ, "Loading script data %s", GetLastResourceFilename());
@@ -917,7 +917,7 @@ static BOOL dataScriptLoadVals(const char* fileName, void **ppData)
 
 	if (fileHandle == NULL)
 	{
-		return FALSE;
+		return false;
 	}
 
 	success = scrvLoad(fileHandle);
@@ -1019,7 +1019,7 @@ BOOL dataInitLoadFuncs(void)
 		{
 			if(!resAddBufferLoad(CurrentType->aType, CurrentType->buffLoad, CurrentType->release))
 			{
-				return FALSE; // error whilst adding a buffer load
+				return false; // error whilst adding a buffer load
 			}
 		}
 	}
@@ -1034,10 +1034,10 @@ BOOL dataInitLoadFuncs(void)
 		{
 			if(!resAddFileLoad(CurrentType->aType, CurrentType->fileLoad, CurrentType->release))
 			{
-				return FALSE; // error whilst adding a buffer load
+				return false; // error whilst adding a buffer load
 			}
 		}
 	}
 
-	return TRUE;
+	return true;
 }

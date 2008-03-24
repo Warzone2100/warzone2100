@@ -92,7 +92,7 @@ UDWORD	bestSoFar;
         if (!vtolDroid(psDroid))
         {
 		    /* Clever (?) bit that reads whether we're interested in droids being selected or not */
-		    if( (bSelected ? psDroid->selected : TRUE ) )
+		    if( (bSelected ? psDroid->selected : true ) )
 		    {
 			    /* Get the differences */
 			    xDif = abs(psDroid->pos.x - x);
@@ -172,7 +172,7 @@ BOOL	droidOnScreen( DROID *psDroid, SDWORD tolerance )
 {
 SDWORD	dX,dY;
 
-	if (DrawnInLastFrame(psDroid->sDisplay.frameNumber)==TRUE)
+	if (DrawnInLastFrame(psDroid->sDisplay.frameNumber)==true)
 		{
 			dX = psDroid->sDisplay.screenX;
 			dY = psDroid->sDisplay.screenY;
@@ -181,8 +181,8 @@ SDWORD	dX,dY;
 				&& dX < (SDWORD)(pie_GetVideoBufferWidth()+tolerance)
 				&& dY < (SDWORD)(pie_GetVideoBufferHeight()+tolerance))
 			{
-				return(TRUE);
+				return(true);
 			}
 		}
-	return(FALSE);
+	return(false);
 }

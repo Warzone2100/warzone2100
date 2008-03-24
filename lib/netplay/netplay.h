@@ -154,7 +154,7 @@ typedef struct {
 
 	// booleans
 	uint32_t        bComms;				// actually do the comms?
-	uint32_t        bHost;				// TRUE if we are hosting the session
+	uint32_t        bHost;				// true if we are hosting the session
 } NETPLAY;
 
 // ////////////////////////////////////////////////////////////////////////

@@ -105,10 +105,10 @@ static	W_SCREEN	*psRequestScreen;					// Widget screen for requester
 static	BOOL		mode;
 static	UDWORD		chosenSlotId;
 
-BOOL				bLoadSaveUp = FALSE;        // true when interface is up and should be run.
+BOOL				bLoadSaveUp = false;        // true when interface is up and should be run.
 char				saveGameName[256];          //the name of the save game to load from the front end
 char				sRequestResult[PATH_MAX];   // filename returned;
-BOOL				bRequestLoad = FALSE;
+BOOL				bRequestLoad = false;
 LOADSAVE_MODE		bLoadSaveMode;
 
 static char			sPath[255];
@@ -141,13 +141,13 @@ BOOL bLoad;
 	case LOAD_MISSIONEND:
 	case LOAD_INGAME:
 	case LOAD_FORCE:
-		bLoad = TRUE;
+		bLoad = true;
 		break;
 	case SAVE_MISSIONEND:
 	case SAVE_INGAME:
 	case SAVE_FORCE:
 	default:
-		bLoad = FALSE;
+		bLoad = false;
 		break;
 	}
 
@@ -179,22 +179,22 @@ static BOOL _addLoadSave(BOOL bLoad, const char *sSearchPath, const char *sExten
 			{
 				BOOL radOnScreen = radarOnScreen;				// Only do this in main game.
 
-				bRender3DOnly = TRUE;
-				radarOnScreen = FALSE;
+				bRender3DOnly = true;
+				radarOnScreen = false;
 
 				displayWorld();									// Just display the 3d, no interface
 
 				pie_UploadDisplayBuffer();			// Upload the current display back buffer into system memory.
 
 				radarOnScreen = radOnScreen;
-				bRender3DOnly = FALSE;
+				bRender3DOnly = false;
 			}
 
-			setGamePauseStatus( TRUE );
-			setGameUpdatePause(TRUE);
-			setScriptPause(TRUE);
-			setScrollPause(TRUE);
-			setConsolePause(TRUE);
+			setGamePauseStatus( true );
+			setGameUpdatePause(true);
+			setScriptPause(true);
+			setScrollPause(true);
+			setConsolePause(true);
 
 		}
 
@@ -216,7 +216,7 @@ static BOOL _addLoadSave(BOOL bLoad, const char *sSearchPath, const char *sExten
 	sFormInit.y = (SWORD)(LOADSAVE_Y);
 	sFormInit.width = LOADSAVE_W;
 	sFormInit.height = (LOADSAVE_H*2)-46;		// hmm..the bottom of the box.... -Q
-	sFormInit.disableChildren = TRUE;
+	sFormInit.disableChildren = true;
 	sFormInit.pDisplay = intOpenPlainForm;
 	widgAddForm(psRequestScreen, &sFormInit);
 
@@ -227,7 +227,7 @@ static BOOL _addLoadSave(BOOL bLoad, const char *sSearchPath, const char *sExten
 	sFormInit.y = LOADSAVE_VGAP;
 	sFormInit.width = LOADSAVE_W-(2*LOADSAVE_HGAP);
 	sFormInit.height = LOADSAVE_BANNER_DEPTH;
-	sFormInit.disableChildren = FALSE;
+	sFormInit.disableChildren = false;
 	sFormInit.pDisplay = displayLoadBanner;
 	sFormInit.UserData = bLoad;
 	widgAddForm(psRequestScreen, &sFormInit);
@@ -331,15 +331,15 @@ static BOOL _addLoadSave(BOOL bLoad, const char *sSearchPath, const char *sExten
 	}
 	PHYSFS_freeList(files);
 
-	bLoadSaveUp = TRUE;
-	return TRUE;
+	bLoadSaveUp = true;
+	return true;
 }
 
 // ////////////////////////////////////////////////////////////////////////////
 BOOL closeLoadSave(void)
 {
 	widgDelete(psRequestScreen,LOADSAVE_FORM);
-	bLoadSaveUp = FALSE;
+	bLoadSaveUp = false;
 
 	if ((bLoadSaveMode == LOAD_INGAME) || (bLoadSaveMode == SAVE_INGAME))
 	{
@@ -347,11 +347,11 @@ BOOL closeLoadSave(void)
 		if (!bMultiPlayer || (NetPlay.bComms == 0))
 		{
 			gameTimeStart();
-			setGamePauseStatus( FALSE );
-			setGameUpdatePause(FALSE);
-			setScriptPause(FALSE);
-			setScrollPause(FALSE);
-			setConsolePause(FALSE);
+			setGamePauseStatus( false );
+			setGameUpdatePause(false);
+			setScriptPause(false);
+			setScrollPause(false);
+			setConsolePause(false);
 		}
 
 		intAddReticule();
@@ -360,7 +360,7 @@ BOOL closeLoadSave(void)
 	}
 	widgReleaseScreen(psRequestScreen);
 
-	return TRUE;
+	return true;
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -418,8 +418,8 @@ void deleteSaveGame(char* saveGameName)
 
 
 // ////////////////////////////////////////////////////////////////////////////
-// Returns TRUE if cancel pressed or a valid game slot was selected.
-// if when returning TRUE strlen(sRequestResult) != 0 then a valid game
+// Returns true if cancel pressed or a valid game slot was selected.
+// if when returning true strlen(sRequestResult) != 0 then a valid game
 // slot was selected otherwise cancel was selected..
 static BOOL _runLoadSave(BOOL bResetMissionWidgets)
 {
@@ -519,7 +519,7 @@ static BOOL _runLoadSave(BOOL bResetMissionWidgets)
 		{
 			widgDelete(psRequestScreen,SAVEENTRY_EDIT);	//unselect this box, and go back ..
 			widgReveal(psRequestScreen,chosenSlotId);
-			return TRUE;
+			return true;
 		}
 
 
@@ -540,7 +540,7 @@ static BOOL _runLoadSave(BOOL bResetMissionWidgets)
 				// move mouse to same box..
 				//	SetMousePos(widgGetFromID(psRequestScreen,i)->pos.x ,widgGetFromID(psRequestScreen,i)->pos.y);
 					audio_PlayTrack(ID_SOUND_BUILD_FAIL);
-					return TRUE;
+					return true;
 				}
 			}
 		}
@@ -564,33 +564,33 @@ static BOOL _runLoadSave(BOOL bResetMissionWidgets)
 
 		// we're done. saving.
 		closeLoadSave();
-		bRequestLoad = FALSE;
+		bRequestLoad = false;
         if (bResetMissionWidgets && widgGetFromID(psWScreen,IDMISSIONRES_FORM) == NULL)
         {
             resetMissionWidgets();			//reset the mission widgets here if necessary
         }
-		return TRUE;
+		return true;
 	}
 
-	return FALSE;
+	return false;
 
 // failed and/or cancelled..
 failure:
 	closeLoadSave();
-	bRequestLoad = FALSE;
+	bRequestLoad = false;
     if (bResetMissionWidgets && widgGetFromID(psWScreen,IDMISSIONRES_FORM) == NULL)
 	{
 		resetMissionWidgets();
 	}
-    return TRUE;
+    return true;
 
 // success on load.
 success:
 	setCampaignNumber( getCampaign(sRequestResult) );
 successforce:
 	closeLoadSave();
-	bRequestLoad = TRUE;
-	return TRUE;
+	bRequestLoad = true;
+	return true;
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -598,7 +598,7 @@ successforce:
 BOOL displayLoadSave(void)
 {
 	widgDisplayScreen(psRequestScreen);	// display widgets.
-	return TRUE;
+	return true;
 }
 
 

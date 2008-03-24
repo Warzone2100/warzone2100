@@ -109,24 +109,24 @@ static HIT_SIDE getHitSide (PROJECTILE *psObj, BASE_OBJECT *psTarget);
 /***************************************************************************/
 BOOL gfxVisible(PROJECTILE *psObj)
 {
-	BOOL bVisible = FALSE;
+	BOOL bVisible = false;
 
 	// Already know it is visible
 	if (psObj->bVisible)
 	{
-		return TRUE;
+		return true;
 	}
 
 	// You fired it
 	if (psObj->player == selectedPlayer)
 	{
-		return TRUE;
+		return true;
 	}
 
 	// Always see in this mode
 	if (godMode)
 	{
-		return TRUE;
+		return true;
 	}
 
 	// You can see the source
@@ -134,7 +134,7 @@ BOOL gfxVisible(PROJECTILE *psObj)
 	 && !psObj->psSource->died
 	 && psObj->psSource->visible[selectedPlayer])
 	{
-		bVisible = TRUE;
+		bVisible = true;
 	}
 
 	// You can see the destination
@@ -142,7 +142,7 @@ BOOL gfxVisible(PROJECTILE *psObj)
 	 && !psObj->psDest->died
 	 && psObj->psDest->visible[selectedPlayer])
 	{
-		bVisible = TRUE;
+		bVisible = true;
 	}
 
 	// Someone elses structure firing at something you can't see
@@ -154,7 +154,7 @@ BOOL gfxVisible(PROJECTILE *psObj)
 	  || psObj->psDest->died
 	  || !psObj->psDest->visible[selectedPlayer]))
 	{
-		bVisible = FALSE;
+		bVisible = false;
 	}
 
 	// Something you cannot see firing at a structure that isn't yours
@@ -165,7 +165,7 @@ BOOL gfxVisible(PROJECTILE *psObj)
 	 && (psObj->psSource == NULL
 	  || !psObj->psSource->visible[selectedPlayer]))
 	{
-		bVisible = FALSE;
+		bVisible = false;
 	}
 
 	return bVisible;
@@ -179,7 +179,7 @@ proj_InitSystem( void )
 	psProjectileList = NULL;
 	psProjectileNext = NULL;
 
-	return TRUE;
+	return true;
 }
 
 /***************************************************************************/
@@ -209,7 +209,7 @@ proj_Shutdown( void )
 {
 	proj_FreeAllProjectiles();
 
-	return TRUE;
+	return true;
 }
 
 /***************************************************************************/
@@ -382,8 +382,8 @@ BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, in
 	psObj->targetRadius = (psTarget ? establishTargetRadius(psTarget) : 0); // needed to backtrack FX
 	psObj->born			= gameTime;
 	psObj->player		= (UBYTE)player;
-	psObj->bVisible		= FALSE;
-	psObj->airTarget	= FALSE;
+	psObj->bVisible		= false;
+	psObj->airTarget	= false;
 	psObj->psDamaged	= NULL; // must initialize these to NULL first!
 	psObj->psSource		= NULL;
 	psObj->psDest		= NULL;
@@ -396,7 +396,7 @@ BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, in
 	if ((psTarget != NULL && psTarget->type == OBJ_DROID && vtolDroid((DROID*)psTarget))
 	    || (psTarget == NULL && (SDWORD)tarZ > map_Height(tarX,tarY)))
 	{
-		psObj->airTarget = TRUE;
+		psObj->airTarget = true;
 	}
 
 	//Watermelon:use the source of the source of psObj :) (psAttacker is a projectile)
@@ -602,7 +602,7 @@ BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, in
 	if ( bVisible || gfxVisible(psObj) )
 	{
 		// note that the projectile is visible
-		psObj->bVisible = TRUE;
+		psObj->bVisible = true;
 
 		if ( psObj->psWStats->iAudioFireID != NO_SOUND )
 		{
@@ -635,7 +635,7 @@ BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, in
 
 	CHECK_PROJECTILE(psObj);
 
-	return TRUE;
+	return true;
 }
 
 /***************************************************************************/
@@ -655,7 +655,7 @@ proj_InFlightDirectFunc( PROJECTILE *psObj )
 	//Watermelon:2 temp BASE_OBJECT pointer
 	BASE_OBJECT		*psNewTarget;
 	//Watermelon:Missile or not
-	BOOL			bMissile = FALSE;
+	BOOL			bMissile = false;
 	//Watermelon:extended 'lifespan' of a projectile
 	//no more disappeared projectiles.
 	SDWORD			extendRad;
@@ -709,7 +709,7 @@ proj_InFlightDirectFunc( PROJECTILE *psObj )
 	iY = psObj->startY + (dist * dy / rad);
 
 	/* impact if about to go off map else update coordinates */
-	if ( worldOnMap( iX, iY ) == FALSE )
+	if ( worldOnMap( iX, iY ) == false )
 	{
 		psObj->state = PROJ_IMPACT;
 		debug( LOG_NEVER, "**** projectile off map - removed ****\n" );
@@ -730,7 +730,7 @@ proj_InFlightDirectFunc( PROJECTILE *psObj )
 			pos.x = psObj->pos.x;
 			pos.y = psObj->pos.z-8;
 			pos.z = psObj->pos.y;
-			addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_FLAMETHROWER,FALSE,NULL,0);
+			addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_FLAMETHROWER,false,NULL,0);
 		}
 		else if ( psStats->weaponSubClass == WSC_COMMAND ||
 			psStats->weaponSubClass == WSC_ELECTRONIC ||
@@ -740,7 +740,7 @@ proj_InFlightDirectFunc( PROJECTILE *psObj )
 			pos.x = psObj->pos.x;
 			pos.y = psObj->pos.z-8;
 			pos.z = psObj->pos.y;
-  			addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_LASER,FALSE,NULL,0);
+  			addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_LASER,false,NULL,0);
 		}
 		else if ( psStats->weaponSubClass == WSC_ROCKET ||
 			psStats->weaponSubClass == WSC_MISSILE ||
@@ -750,7 +750,7 @@ proj_InFlightDirectFunc( PROJECTILE *psObj )
 			pos.x = psObj->pos.x;
 			pos.y = psObj->pos.z+8;
 			pos.z = psObj->pos.y;
-			addEffect(&pos,EFFECT_SMOKE,SMOKE_TYPE_TRAIL,FALSE,NULL,0);
+			addEffect(&pos,EFFECT_SMOKE,SMOKE_TYPE_TRAIL,false,NULL,0);
 		}
 	}
 
@@ -760,7 +760,7 @@ proj_InFlightDirectFunc( PROJECTILE *psObj )
 		psStats->weaponSubClass == WSC_SLOWROCKET ||
 		psStats->weaponSubClass == WSC_SLOWMISSILE )
 	{
-		bMissile = TRUE;
+		bMissile = true;
 	}
 	else if ( psStats->weaponSubClass == WSC_MGUN ||
 			psStats->weaponSubClass == WSC_COMMAND )
@@ -875,7 +875,7 @@ proj_InFlightDirectFunc( PROJECTILE *psObj )
 						TargetY = psObj->startY + extendRad * dy / rad;
 						CLIP(TargetX, 0, world_coord(mapWidth - 1));
 						CLIP(TargetY, 0, world_coord(mapHeight - 1));
-						proj_SendProjectile( &asWeap, (BASE_OBJECT*)psObj, psObj->player, TargetX, TargetY, psObj->pos.z, NULL, TRUE, bPenetrate, -1 );
+						proj_SendProjectile( &asWeap, (BASE_OBJECT*)psObj, psObj->player, TargetX, TargetY, psObj->pos.z, NULL, true, bPenetrate, -1 );
 					}
 					else
 					{
@@ -926,7 +926,7 @@ proj_InFlightDirectFunc( PROJECTILE *psObj )
 
 #if CHECK_PROJ_ABOVE_GROUND
 	/* check not trying to travel through terrain - if so count as a miss */
-	if ( mapObjIsAboveGround( (BASE_OBJECT *) psObj ) == FALSE )
+	if ( mapObjIsAboveGround( (BASE_OBJECT *) psObj ) == false )
 	{
 		psObj->state = PROJ_IMPACT;
 		/* miss registered if NULL target */
@@ -941,7 +941,7 @@ proj_InFlightDirectFunc( PROJECTILE *psObj )
 		pos.x = psObj->pos.x;
 		pos.y = psObj->pos.z+8;
 		pos.z = psObj->pos.y;
-		addEffect(&pos,EFFECT_SMOKE,SMOKE_TYPE_TRAIL,FALSE,NULL,0);
+		addEffect(&pos,EFFECT_SMOKE,SMOKE_TYPE_TRAIL,false,NULL,0);
 	}
 }
 
@@ -954,7 +954,7 @@ proj_InFlightIndirectFunc( PROJECTILE *psObj )
 	SDWORD			iTime, iRad, iDist, dx, dy, dz, iX, iY;
 	Vector3i pos;
 	float			fVVert;
-	BOOL			bOver = FALSE;
+	BOOL			bOver = false;
 	BASE_OBJECT		*psNewTarget;
 	UDWORD			i;
 	SDWORD			xdiff,ydiff,extendRad;
@@ -1027,7 +1027,7 @@ proj_InFlightIndirectFunc( PROJECTILE *psObj )
 				pos.x = psObj->pos.x;
 				pos.y = psObj->pos.z-8;
 				pos.z = psObj->pos.y;
-				addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_FLAMETHROWER,FALSE,NULL,0);
+				addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_FLAMETHROWER,false,NULL,0);
 				break;
 			case WSC_COMMAND:
 			case WSC_ELECTRONIC:
@@ -1036,7 +1036,7 @@ proj_InFlightIndirectFunc( PROJECTILE *psObj )
 				pos.x = psObj->pos.x;
 				pos.y = psObj->pos.z-8;
 				pos.z = psObj->pos.y;
-				addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_LASER,FALSE,NULL,0);
+				addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_LASER,false,NULL,0);
 				break;
 			case WSC_ROCKET:
 			case WSC_MISSILE:
@@ -1045,7 +1045,7 @@ proj_InFlightIndirectFunc( PROJECTILE *psObj )
 				pos.x = psObj->pos.x;
 				pos.y = psObj->pos.z+8;
 				pos.z = psObj->pos.y;
-				addEffect(&pos,EFFECT_SMOKE,SMOKE_TYPE_TRAIL,FALSE,NULL,0);
+				addEffect(&pos,EFFECT_SMOKE,SMOKE_TYPE_TRAIL,false,NULL,0);
 				break;
 		}
 	}
@@ -1124,7 +1124,7 @@ proj_InFlightIndirectFunc( PROJECTILE *psObj )
 						TargetX = MIN(TargetX, world_coord(mapWidth - 1));
 						TargetY = MAX(psObj->startY + extendRad * dy / iRad, 0);
 						TargetY = MIN(TargetY, world_coord(mapHeight - 1));
-						proj_SendProjectile( &asWeap, (BASE_OBJECT*)psObj, psObj->player, TargetX, TargetY, psObj->pos.z, NULL, TRUE, bPenetrate, -1 );
+						proj_SendProjectile( &asWeap, (BASE_OBJECT*)psObj, psObj->player, TargetX, TargetY, psObj->pos.z, NULL, true, bPenetrate, -1 );
 					}
 					else
 					{
@@ -1165,17 +1165,17 @@ proj_InFlightIndirectFunc( PROJECTILE *psObj )
 				setProjectileDestination(psObj, NULL);
 			}
 		}
-		bOver = TRUE;
+		bOver = true;
 	}
 
 #if CHECK_PROJ_ABOVE_GROUND
 	/* check not trying to travel through terrain - if so count as a miss */
-	if ( mapObjIsAboveGround( (BASE_OBJECT *) psObj ) == FALSE )
+	if ( mapObjIsAboveGround( (BASE_OBJECT *) psObj ) == false )
 	{
 		psObj->state = PROJ_IMPACT;
 		/* miss registered if NULL target */
 		setProjectileDestination(psObj, NULL);
-		bOver = TRUE;
+		bOver = true;
 	}
 #endif
 
@@ -1194,7 +1194,7 @@ proj_InFlightIndirectFunc( PROJECTILE *psObj )
 			pos.x = psObj->pos.x;
 			pos.y = psObj->pos.z+4;
 			pos.z = psObj->pos.y;
-			addEffect(&pos,EFFECT_SMOKE,SMOKE_TYPE_TRAIL,FALSE,NULL,0);
+			addEffect(&pos,EFFECT_SMOKE,SMOKE_TYPE_TRAIL,false,NULL,0);
 		}
 	}
 }
@@ -1267,7 +1267,7 @@ proj_ImpactFunc( PROJECTILE *psObj )
 			position.y = map_Height(position.x, position.z);
 			effectGiveAuxVar(psStats->incenRadius);
 			effectGiveAuxVarSec(psStats->incenTime);
-			addEffect(&position, EFFECT_FIRE, FIRE_TYPE_LOCALISED, FALSE, NULL, 0);
+			addEffect(&position, EFFECT_FIRE, FIRE_TYPE_LOCALISED, false, NULL, 0);
 		}
 
 		// may want to add both a fire effect and the las sat effect
@@ -1276,7 +1276,7 @@ proj_ImpactFunc( PROJECTILE *psObj )
 			position.x = psObj->tarX;
 			position.z = psObj->tarY;
 			position.y = map_Height(position.x, position.z);
-			addEffect(&position, EFFECT_SAT_LASER, SAT_LASER_STANDARD, FALSE, NULL, 0);
+			addEffect(&position, EFFECT_SAT_LASER, SAT_LASER_STANDARD, false, NULL, 0);
 			if (clipXY(psObj->tarX, psObj->tarY))
 			{
 				shakeStart();
@@ -1308,14 +1308,14 @@ proj_ImpactFunc( PROJECTILE *psObj )
 				imd = psStats->pTargetMissGraphic;
 			}
 
-			addMultiEffect(&position, &scatter, EFFECT_EXPLOSION, facing, TRUE, imd, psStats->numExplosions, psStats->lightWorld, psStats->effectSize);
+			addMultiEffect(&position, &scatter, EFFECT_EXPLOSION, facing, true, imd, psStats->numExplosions, psStats->lightWorld, psStats->effectSize);
 
 			// If the target was a VTOL hit in the air add smoke
 			if (psObj->airTarget
 			 && (psStats->surfaceToAir & SHOOT_IN_AIR)
 			 && !(psStats->surfaceToAir & SHOOT_ON_GROUND))
 			{
-				addMultiEffect(&position, &scatter, EFFECT_SMOKE, SMOKE_TYPE_DRIFTING, FALSE, NULL, 3, 0, 0);
+				addMultiEffect(&position, &scatter, EFFECT_SMOKE, SMOKE_TYPE_DRIFTING, false, NULL, 3, 0, 0);
 			}
 		}
 	}
@@ -1341,7 +1341,7 @@ proj_ImpactFunc( PROJECTILE *psObj )
 			 && psStats->weaponSubClass == WSC_AAGUN)
 			{
 				imd = psStats->pTargetMissGraphic;
-				addMultiEffect(&position, &scatter, EFFECT_SMOKE, SMOKE_TYPE_DRIFTING, FALSE, NULL, 3, 0, 0);
+				addMultiEffect(&position, &scatter, EFFECT_SMOKE, SMOKE_TYPE_DRIFTING, false, NULL, 3, 0, 0);
 			}
 			// Otherwise we just hit it plain and simple
 			else
@@ -1349,7 +1349,7 @@ proj_ImpactFunc( PROJECTILE *psObj )
 				imd = psStats->pTargetHitGraphic;
 			}
 
-			addMultiEffect(&position, &scatter, EFFECT_EXPLOSION, facing, TRUE, imd, psStats->numExplosions, psStats->lightWorld, psStats->effectSize);
+			addMultiEffect(&position, &scatter, EFFECT_EXPLOSION, facing, true, imd, psStats->numExplosions, psStats->lightWorld, psStats->effectSize);
 		}
 
 		// Check for electronic warfare damage where we know the subclass and source
@@ -1478,7 +1478,7 @@ proj_ImpactFunc( PROJECTILE *psObj )
 								{
 									updateMultiStatsDamage(psObj->psSource->player, psCurrD->player, damage);
 								}
-								turnOffMultiMsg(TRUE);
+								turnOffMultiMsg(true);
 							}
 
 							//Watermelon:uses a slightly different check for angle,
@@ -1487,7 +1487,7 @@ proj_ImpactFunc( PROJECTILE *psObj )
 
 							relativeDamage = droidDamage(psCurrD, damage, psStats->weaponClass, psStats->weaponSubClass, impactSide);
 
-							turnOffMultiMsg(FALSE);	// multiplay msgs back on.
+							turnOffMultiMsg(false);	// multiplay msgs back on.
 
 							proj_UpdateKills(psObj, relativeDamage);
 						}
@@ -1694,9 +1694,9 @@ proj_Update( PROJECTILE *psObj )
 	}
 
 	// This extra check fixes a crash in cam2, mission1
-	if (worldOnMap(psObj->pos.x, psObj->pos.y) == FALSE)
+	if (worldOnMap(psObj->pos.x, psObj->pos.y) == false)
 	{
-		psObj->died = TRUE;
+		psObj->died = true;
 		return;
 	}
 
@@ -2121,7 +2121,7 @@ STRUCTURE	*psStructure;
 
 	if(gamePaused())
 	{
-		return(FALSE);	// Don't shake when paused...!
+		return(false);	// Don't shake when paused...!
 	}
 
 	switch(psObj->type)
@@ -2131,7 +2131,7 @@ STRUCTURE	*psStructure;
 			if ((gameTime - psDroid->timeLastHit) < ELEC_DAMAGE_DURATION
 			 && psDroid->lastHitWeapon == WSC_ELECTRONIC)
 			{
-				return(TRUE);
+				return(true);
 			}
 			break;
 
@@ -2139,7 +2139,7 @@ STRUCTURE	*psStructure;
 			psFeature = (FEATURE*)psObj;
 			if ((gameTime - psFeature->timeLastHit) < ELEC_DAMAGE_DURATION)
 			{
-				return(TRUE);
+				return(true);
 			}
 			break;
 
@@ -2148,7 +2148,7 @@ STRUCTURE	*psStructure;
 			if ((gameTime - psStructure->timeLastHit) < ELEC_DAMAGE_DURATION
 			 && psStructure->lastHitWeapon == WSC_ELECTRONIC)
 			{
-				return TRUE;
+				return true;
 			}
 			break;
 
@@ -2167,7 +2167,7 @@ STRUCTURE	*psStructure;
 			abort();
 	}
 
-	return FALSE;
+	return false;
 }
 
 void	objectShimmy(BASE_OBJECT *psObj)
