@@ -96,10 +96,4 @@ typedef int BOOL;
 #define SDWORD_MIN	(0x80000000)
 #define SDWORD_MAX	0x7fffffff
 
-/* Standard Defines */
-#ifndef NULL
-#  define NULL	((void*)(0))
-#endif
-
-
 #endif
