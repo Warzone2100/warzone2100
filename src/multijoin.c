@@ -63,6 +63,7 @@
 #include "multiint.h"
 #include "multistat.h"
 #include "multigifts.h"
+#include "scriptcb.h"
 
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -236,6 +237,7 @@ BOOL MultiPlayerLeave( UDWORD dp)
 
 
 	// fire script callback to reassign skirmish players.
+	CBPlayerLeft = i;
 	eventFireCallbackTrigger((TRIGGER_TYPE)CALL_PLAYERLEFT);
 
 

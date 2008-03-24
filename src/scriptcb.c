@@ -61,6 +61,9 @@ BASE_OBJECT	*psScrCBAttacker, *psScrCBTarget;
 // alliance details
 UDWORD	CBallFrom,CBallTo;
 
+// player number that left the game
+UDWORD	CBPlayerLeft;
+
 //console callback stuff
 //---------------------------
 SDWORD ConsolePlayer = -2;
@@ -791,11 +794,13 @@ BOOL scrCBResCompleted(void)
 /* when a humna player leaves a game*/
 BOOL scrCBPlayerLeft(void)
 {
-	SDWORD	player;
+	SDWORD	*player;
 	if (!stackPopParams(1, VAL_INT, &player) )
 	{
 		return false;
 	}
+
+	*player = CBallFrom;
 
 	scrFunctionResult.v.bval = true;
 	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))

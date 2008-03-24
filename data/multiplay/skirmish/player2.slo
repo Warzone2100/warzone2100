@@ -205,7 +205,7 @@ trigger vtolAttackTr				(every, 150);
 trigger vtolEnablerTr				(every, 700);
 trigger takeoverTr					(CALL_UNITTAKEOVER, ref droid);
 trigger useLassatTr					(every, 3000);
-trigger reassignTr					(CALL_PLAYERLEFT,count);
+trigger reassignTr					(CALL_PLAYERLEFT,ref count);
 trigger formAllianceEventTr			(every,170);
 trigger breakAllianceEventTr		(every,3000);
 trigger difficultyModifierTr		(every,600);
@@ -3052,7 +3052,10 @@ function void shutDownAI()
 
 event reassignPlayers(reassignTr)
 {
-	reassignAI();
+	if(count == me)
+	{
+		reassignAI();
+	}
 }
 
 function void reassignAI()
