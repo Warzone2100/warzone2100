@@ -1108,8 +1108,7 @@ droidBuildStartAudioCallback( void *psObj )
 /* Set up a droid to build a structure - returns true if successful */
 BOOL droidStartBuild(DROID *psDroid)
 {
-	STRUCTURE			*psStruct;
-	STRUCTURE_STATS		*psStructStat;
+	STRUCTURE *psStruct;
 
 	CHECK_DROID(psDroid);
 
@@ -1118,11 +1117,11 @@ BOOL droidStartBuild(DROID *psDroid)
 		(psDroid->order == DORDER_BUILD ||
 		 psDroid->order == DORDER_LINEBUILD))
 	{
+		STRUCTURE_STATS *psStructStat = (STRUCTURE_STATS *)psDroid->psTarStats;
+		STRUCTURE_LIMITS *structLimit = &asStructLimits[psDroid->player][psStructStat - asStructureStats];
+
 		//need to check structLimits have not been exceeded
-		psStructStat = (STRUCTURE_STATS *)psDroid->psTarStats;
-		if (asStructLimits[psDroid->player][psStructStat - asStructureStats].
-			currentQuantity >= asStructLimits[psDroid->player][psStructStat -
-			asStructureStats].limit)
+		if (structLimit->currentQuantity >= structLimit->limit)
 		{
 			intBuildFinished(psDroid);
 			return false;
@@ -1135,8 +1134,7 @@ BOOL droidStartBuild(DROID *psDroid)
 			return false;
 		}
 		//add one to current quantity for this player
-		asStructLimits[psDroid->player][psStructStat - asStructureStats].
-			currentQuantity++;
+		structLimit->currentQuantity++;
 
 		//commented out for demo - 2/1/98
 		//ASSERT( droidNextToStruct(psDroid, (BASE_OBJECT *)psStruct),
@@ -1157,7 +1155,7 @@ BOOL droidStartBuild(DROID *psDroid)
 	{
 		/* Check the structure is still there to build (joining a partially built struct) */
 		psStruct = (STRUCTURE *)psDroid->psTarget;
-		if (!droidNextToStruct(psDroid,  (BASE_OBJECT *)psStruct))
+		if (!droidNextToStruct(psDroid, (BASE_OBJECT *)psStruct))
 		{
 			/* Nope - stop building */
 			debug( LOG_NEVER, "unitStartBuild: not next to structure\n" );
