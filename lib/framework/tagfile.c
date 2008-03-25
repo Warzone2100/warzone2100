@@ -89,6 +89,14 @@ do { \
 } while(0)
 
 
+/*
+static inline WZ_DECL_CONST const char * bool2string(bool var)
+{
+	return (var ? "true" : "false");
+}
+*/
+
+
 void tf_error(const char * fmt, ...)
 {
 	va_list ap;
