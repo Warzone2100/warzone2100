@@ -200,6 +200,9 @@
 #define	TAUNT_SUCCESS					0
 #define	TAUNT_FAILURE					1
 
+#define	NONE							(-1)
+
+
 public	int				player,numLego,numTemplates[2],numBaseStructs,numDef,numRes[2],
 						numGatewayDef,numAA,numRepairTmpl,maxDamageLevels,damageLevel[4],
 						numBranches,techTanks,techAir,numVtolTemplates,numVitalStructs,
@@ -10432,7 +10435,7 @@ function void checkBaseThreat()
 			_counterEnemy = counterEnemy;
 			stopDefending();
 			
-			taunt(enemy, TAUNT_SUCCESS, 55);
+			taunt(NONE, TAUNT_SUCCESS, 55);
 
 			notifyAllies("i'm ok", FALSE);		//tell allies we are ok now
 
@@ -10607,9 +10610,17 @@ function void notifyIdle(bool bAfterFailure)
 
 function void taunt(int targetPlayer, int type, int tauntProbability)
 {
+	local	string		sTargetName;
+
 	if(random(100) >= tauntProbability)
 	{
 		return;
+	}
+
+	// see if we are refering to some player
+	if(targetPlayer != NONE)
+	{
+		sTargetName = getPlayerName(targetPlayer) &  ", ";
 	}
 
 	dice = random(10);
@@ -10618,7 +10629,7 @@ function void taunt(int targetPlayer, int type, int tauntProbability)
 	{
 		if(dice < 3)
 		{
-			notifyAll(getPlayerName(targetPlayer) &  ", you suck.");
+			notifyAll(sTargetName & "you suck.");
 		}
 		else if(dice < 7)
 		{
@@ -10631,7 +10642,7 @@ function void taunt(int targetPlayer, int type, int tauntProbability)
 	}
 	else if(type == TAUNT_FAILURE)
 	{
-		notifyAll(getPlayerName(targetPlayer) &  ", screw you!!");
+		notifyAll(sTargetName & "screw you!!");
 	}
 }
 
