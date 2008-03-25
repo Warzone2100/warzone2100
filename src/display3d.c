@@ -4357,8 +4357,8 @@ static void	showSensorRange2(BASE_OBJECT *psObj)
 
 		xDif = xDif/4096;	 // cos it's fixed point
 		yDif = yDif/4096;
-		pos.x = psObj->pos.x - xDif;
-		pos.z = psObj->pos.y - yDif;
+		pos.x = MAX(psObj->pos.x - xDif, 0);
+		pos.z = MAX(psObj->pos.y - yDif, 0);
 		pos.y = map_Height(pos.x,pos.z) + 16;
 		effectGiveAuxVar(80);	// half normal plasma size...
 		if(bBuilding)
