@@ -144,7 +144,6 @@ void pie_SetTexturePage(SDWORD num)
 	// Only bind textures when they're not bound already
 	if (num != rendStates.texPage)
 	{
-		rendStates.texPage = num;
 		switch (num)
 		{
 			case TEXPAGE_NONE:
@@ -155,9 +154,13 @@ void pie_SetTexturePage(SDWORD num)
 				glEnable(GL_TEXTURE_2D);
 				break;
 			default:
-				glEnable(GL_TEXTURE_2D);
+				if (rendStates.texPage == TEXPAGE_NONE || rendStates.texPage == TEXPAGE_FONT)
+				{
+					glEnable(GL_TEXTURE_2D);
+				}
 				glBindTexture(GL_TEXTURE_2D, _TEX_PAGE[num].id);
 		}
+		rendStates.texPage = num;
 	}
 }
 

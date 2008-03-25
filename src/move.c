@@ -482,6 +482,7 @@ BOOL moveDroidTo(DROID *psDroid, UDWORD x,UDWORD y)
 // move a droid to a location, not joining a formation
 BOOL moveDroidToNoFormation(DROID *psDroid, UDWORD x,UDWORD y)
 {
+	ASSERT(x > 0 && y > 0, "Bad movement position");
 	return moveDroidToBase(psDroid,x,y, false);
 }
 
