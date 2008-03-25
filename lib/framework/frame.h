@@ -98,6 +98,12 @@ extern UDWORD HashString( const char *String );
 extern UDWORD HashStringIgnoreCase( const char *String );
 
 
+static inline WZ_DECL_CONST const char * bool2string(bool var)
+{
+	return (var ? "true" : "false");
+}
+
+
 /* Endianness hacks */
 // TODO Use SDL_SwapXXXX instead
 

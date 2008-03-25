@@ -89,12 +89,6 @@ do { \
 } while(0)
 
 
-static const char * bool2string(bool var)
-{
-	return (var ? "true" : "false");
-}
-
-
 void tf_error(const char * fmt, ...)
 {
 	va_list ap;
