@@ -118,10 +118,12 @@ BOOL resLoad(const char *pResFile, SDWORD blockID)
 	if (res_parse() != 0)
 	{
 		debug(LOG_ERROR, "resLoad: failed to parse %s", pResFile);
+		res_lex_destroy();
 		free(pBuffer);
 		return FALSE;
 	}
 
+	res_lex_destroy();
 	free(pBuffer);
 
 	return TRUE;
