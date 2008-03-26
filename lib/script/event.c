@@ -348,10 +348,9 @@ BOOL eventNewContext(SCRIPT_CODE *psCode, CONTEXT_RELEASE release,
 					 SCRIPT_CONTEXT **ppsContext)
 {
 	SCRIPT_CONTEXT	*psContext;
-	SDWORD		val, storeIndex, arrayNum, arraySize;
-	UDWORD		i, j;
-	INTERP_TYPE	type;
+	SDWORD		val, storeIndex, arrayNum, arraySize = 1;
 	VAL_CHUNK	*psNewChunk, *psNextChunk;
+	unsigned int i;
 
 	ASSERT(psCode != NULL, "eventNewContext: Invalid code pointer");
 
@@ -369,9 +368,10 @@ BOOL eventNewContext(SCRIPT_CODE *psCode, CONTEXT_RELEASE release,
 	psContext->release = release;
 	psContext->psGlobals = NULL;
 	psContext->id = -1;		// only used by the save game
+
 	val = psCode->numGlobals + psCode->arraySize - 1;
 	arrayNum = psCode->numArrays - 1;
-	arraySize = 1;
+
 	if (psCode->numArrays > 0)
 	{
 		for(i=0; i<psCode->psArrayInfo[arrayNum].dimensions; i++)
@@ -387,26 +387,24 @@ BOOL eventNewContext(SCRIPT_CODE *psCode, CONTEXT_RELEASE release,
 
 	debug(LOG_SCRIPT,"allocated space for %d events", psCode->numEvents);
 
-	for(i=0;i < psCode->numEvents; i++)
+	for(i = 0; i < psCode->numEvents; i++)
 	{
 		if(psCode->numLocalVars[i] > 0)	//this event has any local vars declared
 		{
+			unsigned int j;
+
 			psCode->ppsLocalVarVal[i] = (INTERP_VAL*)malloc(sizeof(INTERP_VAL) * psCode->numLocalVars[i]);	//allocate space for local vars array (for the current event)
 
 			debug(LOG_SCRIPT,"Event %d has %d local variables", i, psCode->numLocalVars[i]);
 
-			for(j=0; j < psCode->numLocalVars[i]; j++)
+			for(j = 0; j < psCode->numLocalVars[i]; j++)
 			{
-				type = psCode->ppsLocalVars[i][j];
+				INTERP_TYPE type = psCode->ppsLocalVars[i][j];
 
-				//debug(LOG_SCRIPT,"var %d's type: %d", i, type);
-
-				/* initialize Strings, integers, floats etc
-				   memset to 0, the only special case is strings */
-				memset (&(psCode->ppsLocalVarVal[i][j]), 0, sizeof(INTERP_VAL));
-				if (type == VAL_STRING) {
-					psCode->ppsLocalVarVal[i][j].v.sval = (char*)malloc(MAXSTRLEN);
-					strcpy(psCode->ppsLocalVarVal[i][j].v.sval,"\0");
+				if (!interpInitValue(type, &psCode->ppsLocalVarVal[i][j]))
+				{
+					debug(LOG_ERROR, "eventNewContext: failed to init local value");
+					return false;
 				}
 
 				//Initialize objects
@@ -419,19 +417,13 @@ BOOL eventNewContext(SCRIPT_CODE *psCode, CONTEXT_RELEASE release,
 					}
 				}
 
-				psCode->ppsLocalVarVal[i][j].type = type; //store (copy) var type (data used during parsing -> data used during interpreting)
-
-				//debug(LOG_SCRIPT, "i=%d, j=%d, value=%d",i,j,psCode->ppsLocalVarVal[i][j].v.ival);
+				assert(psCode->ppsLocalVarVal[i][j].type == type);
 			}
-
-			//debug(LOG_SCRIPT,"------");
-
 		}
 		else	//this event has no local vars
 		{
 			psCode->ppsLocalVarVal[i] = NULL;
 		}
-
 	}
 
 	while (val >= 0)
@@ -452,6 +444,8 @@ BOOL eventNewContext(SCRIPT_CODE *psCode, CONTEXT_RELEASE release,
 		storeIndex = val % CONTEXT_VALS;
 		while (storeIndex >= 0)
 		{
+			INTERP_TYPE type;
+
 			if (val >= psCode->numGlobals)
 			{
 				type = psCode->psArrayInfo[arrayNum].type;
@@ -462,15 +456,11 @@ BOOL eventNewContext(SCRIPT_CODE *psCode, CONTEXT_RELEASE release,
 			}
 
 			// initialize Strings, integers etc
-			// memset to 0
-			memset(&(psNewChunk->asVals[storeIndex]), 0, sizeof(INTERP_VAL));
-			if (type == VAL_STRING) {
-				psNewChunk->asVals[storeIndex].v.sval = (char*)malloc(MAXSTRLEN);
-				strcpy(psNewChunk->asVals[storeIndex].v.sval,"\0");
+			if (!interpInitValue(type, &psNewChunk->asVals[storeIndex]))
+			{
+				debug(LOG_ERROR, "eventNewContext: failed to init global value");
+				return false;
 			}
-
-			// set type
-			psNewChunk->asVals[storeIndex].type = type;
 
 			//initialize objects
 			if (asCreateFuncs != NULL && type < numFuncs && asCreateFuncs[type])

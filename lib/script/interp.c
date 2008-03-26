@@ -1138,6 +1138,79 @@ const char *interpFunctionToString(SCRIPT_FUNC function)
 }
 
 
+BOOL interpInitValue(INTERP_TYPE type, INTERP_VAL *value)
+{
+	memset(value, 0, sizeof(*value));
+
+	value->type = type;
+	switch (type)
+	{
+		case VAL_STRING:
+			value->v.sval = malloc(MAXSTRLEN);
+			if (value->v.sval == NULL)
+				return false;
+			value->v.sval[0] = '\0';
+			break;
+		default:
+			break;
+	}
+
+	return true;
+}
+
+
+BOOL interpCleanValue(INTERP_VAL *value)
+{
+	switch (value->type)
+	{
+		case VAL_STRING:
+			free(value->v.sval);
+			value->v.sval = NULL;
+			break;
+		default:
+			break;
+	}
+
+	return true;
+}
+
+
+BOOL interpCopyValue(INTERP_VAL *to, INTERP_VAL *from)
+{
+	if (interpCheckEquiv(to->type, from->type))
+	{
+		memcpy(&(to->v), &(from->v), sizeof(to->v));
+		return true;
+	}
+
+	switch (to->type)
+	{
+		case VAL_STRING:
+			switch (from->type)
+			{
+				case VAL_INT:
+					return snprintf(to->v.sval, MAXSTRLEN, "%d", from->v.ival);
+				case VAL_BOOL:
+					return snprintf(to->v.sval, MAXSTRLEN, "%d", from->v.bval);
+				case VAL_FLOAT:
+					return snprintf(to->v.sval, MAXSTRLEN, "%f", from->v.fval);
+				case VAL_STRING:
+					return strlcpy(to->v.sval, from->v.sval, MAXSTRLEN);
+				default:
+					break;
+			}
+			break;
+		default:
+			break;
+	}
+
+	ASSERT( false,
+		"interpCopyValue: type mismatch (expected %s, got %s)",
+		interpTypeToString(to->type), interpTypeToString(from->type) );
+	return false;
+}
+
+
 /* Check if two types are equivalent
  * Means: Their data can be copied without conversion.
  * I.e. strings are NOT equivalent to anything but strings, even though they can be converted
@@ -1338,10 +1411,9 @@ static inline void createVarEnvironment(SCRIPT_CONTEXT *psContext, UDWORD eventI
 		// allocate new space for strings to preserve original ones
 		for (i = 0; i < numEventVars; i++)
 		{
-			if (varEnvironment[callDepth][i].type == VAL_STRING)
+			if (!interpInitValue(varEnvironment[callDepth][i].type, &varEnvironment[callDepth][i]))
 			{
-				varEnvironment[callDepth][i].v.sval = (char*)malloc(MAXSTRLEN);
-				strcpy( varEnvironment[callDepth][i].v.sval, "" );	//initialize
+				debug(LOG_ERROR, "createVarEnvironment: failed to init local var");
 			}
 		}
 	}

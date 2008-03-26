@@ -81,14 +81,7 @@ void scriptFreeCode(SCRIPT_CODE *psCode)
 			//free strings for event i
 			for(j=0; j < psCode->numLocalVars[i]; j++)
 			{
-
-				if(psCode->ppsLocalVarVal[i][j].type == VAL_STRING)	//if a string
-				{
-					if(psCode->ppsLocalVarVal[i][j].v.sval != NULL)		//doublecheck..
-					{
-						free(psCode->ppsLocalVarVal[i][j].v.sval);		//free string
-					}
-				}
+				interpCleanValue(&psCode->ppsLocalVarVal[i][j]);
 			}
 
 			free(psCode->ppsLocalVars[i]);

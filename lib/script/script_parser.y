@@ -1992,10 +1992,12 @@ script:			header var_list
 						numVars, numArrays, numTriggers, numEvents);
 
 					//store local vars
+					psFinalProg->numLocalVars = (UDWORD *)malloc(sizeof(UDWORD) * numEvents);	//how many local vars each event has
+
 					//allocate array for holding an array of local vars for each event
 					psFinalProg->ppsLocalVars = (INTERP_TYPE **)malloc(sizeof(INTERP_TYPE*) * numEvents);
 					psFinalProg->ppsLocalVarVal = NULL;
-					psFinalProg->numLocalVars = (UDWORD *)malloc(sizeof(UDWORD) * numEvents);	//how many local vars each event has
+
 					psFinalProg->numParams = (UDWORD *)malloc(sizeof(UDWORD) * numEvents);	//how many arguments each event has
 
 					for(psEvent = psEvents, i = 0; psEvent; psEvent = psEvent->psNext, i++)
