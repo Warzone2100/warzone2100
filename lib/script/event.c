@@ -374,7 +374,7 @@ BOOL eventNewContext(SCRIPT_CODE *psCode, CONTEXT_RELEASE release,
 
 	if (psCode->numArrays > 0)
 	{
-		for(i=0; i<psCode->psArrayInfo[arrayNum].dimensions; i++)
+		for(i = 0; i<psCode->psArrayInfo[arrayNum].dimensions; i++)
 		{
 			arraySize *= psCode->psArrayInfo[arrayNum].elements[i];
 		}
@@ -383,25 +383,19 @@ BOOL eventNewContext(SCRIPT_CODE *psCode, CONTEXT_RELEASE release,
 
 	//prepare local variables (initialize, store type)
 	//-------------------------------
-	psCode->ppsLocalVarVal = (INTERP_VAL **)malloc(sizeof(INTERP_VAL*) * psCode->numEvents);	//allocate space for array of local var arrays for each event
-
-	debug(LOG_SCRIPT,"allocated space for %d events", psCode->numEvents);
-
 	for(i = 0; i < psCode->numEvents; i++)
 	{
 		if(psCode->numLocalVars[i] > 0)	//this event has any local vars declared
 		{
 			unsigned int j;
 
-			psCode->ppsLocalVarVal[i] = (INTERP_VAL*)malloc(sizeof(INTERP_VAL) * psCode->numLocalVars[i]);	//allocate space for local vars array (for the current event)
-
 			debug(LOG_SCRIPT,"Event %d has %d local variables", i, psCode->numLocalVars[i]);
 
 			for(j = 0; j < psCode->numLocalVars[i]; j++)
 			{
-				INTERP_TYPE type = psCode->ppsLocalVars[i][j];
+				INTERP_TYPE type = psCode->ppsLocalVars[i][j].type;
 
-				if (!interpInitValue(type, &psCode->ppsLocalVarVal[i][j]))
+				if (!interpInitValue(type, &psCode->ppsLocalVars[i][j]))
 				{
 					debug(LOG_ERROR, "eventNewContext: failed to init local value");
 					return false;
@@ -410,7 +404,7 @@ BOOL eventNewContext(SCRIPT_CODE *psCode, CONTEXT_RELEASE release,
 				//Initialize objects
 				if (asCreateFuncs != NULL && type < numFuncs && asCreateFuncs[type])
 				{
-					if (!asCreateFuncs[type](&(psCode->ppsLocalVarVal[i][j]) ))
+					if (!asCreateFuncs[type](&(psCode->ppsLocalVars[i][j])))
 					{
 						debug(LOG_ERROR,"eventNewContext: asCreateFuncs failed for local var");
 						return false;
@@ -420,7 +414,7 @@ BOOL eventNewContext(SCRIPT_CODE *psCode, CONTEXT_RELEASE release,
 		}
 		else	//this event has no local vars
 		{
-			psCode->ppsLocalVarVal[i] = NULL;
+			psCode->ppsLocalVars[i] = NULL;
 		}
 	}
 

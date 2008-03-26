@@ -245,12 +245,10 @@ typedef struct _script_code
 	UDWORD			arraySize;		// the number of elements in all the defined arrays
 	INTERP_TYPE		*pGlobals;		// Types of the global variables
 
-
-	INTERP_TYPE		**ppsLocalVars;		//storage for local vars (type)
 	UDWORD			*numLocalVars;		//number of local vars each event has
-	INTERP_VAL		**ppsLocalVarVal;	//Values of the local vars used during interpreting process
-	UDWORD			*numParams;			//number of arguments this event has
+	INTERP_VAL		**ppsLocalVars;		//storage for local vars
 
+	UDWORD			*numParams;			//number of arguments this event has
 
 	VAR_DEBUG		*psVarDebug;	// The names and storage types of variables
 	ARRAY_DATA		*psArrayInfo;	// The sizes of the program arrays

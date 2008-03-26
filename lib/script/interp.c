@@ -1406,7 +1406,7 @@ static inline void createVarEnvironment(SCRIPT_CONTEXT *psContext, UDWORD eventI
 		varEnvironment[callDepth] = (INTERP_VAL *)malloc(sizeof(INTERP_VAL) * numEventVars);
 
 		// create environment
-		memcpy(varEnvironment[callDepth], psContext->psCode->ppsLocalVarVal[eventIndex], sizeof(INTERP_VAL) * numEventVars);
+		memcpy(varEnvironment[callDepth], psContext->psCode->ppsLocalVars[eventIndex], sizeof(INTERP_VAL) * numEventVars);
 
 		// allocate new space for strings to preserve original ones
 		for (i = 0; i < numEventVars; i++)
