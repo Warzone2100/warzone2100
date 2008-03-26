@@ -151,15 +151,9 @@ BOOL stackPop(INTERP_VAL *psVal)
 	}
 
 	/* move the stack pointer down one */
-	if (currEntry == 0)
+	if (!stackReduce(1))
 	{
-		/* have to move onto the previous chunk. */
-		psCurrChunk = psCurrChunk->psPrev;
-		currEntry = psCurrChunk->size -1;
-	}
-	else
-	{
-		currEntry--;
+		return false;
 	}
 
 	/* copy the entire value off the stack */
