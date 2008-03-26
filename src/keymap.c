@@ -389,7 +389,7 @@ void	keyInitMappings( BOOL bForceDefaults )
 	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_Q,KEYMAP_PRESSED,kf_SetDroidMovePatrol ,		_("Patrol"));
 	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_R,KEYMAP_PRESSED,kf_SetDroidGoForRepair ,	_("Return For Repair"));
 	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_S,KEYMAP_PRESSED,kf_SetDroidMoveHold ,		_("Hold Position"));
-	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_T,KEYMAP_PRESSED,kf_SendTextMessage,			_("Send Text Message"));
+	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_RETURN,KEYMAP_PRESSED,kf_SendTextMessage,			_("Send Text Message"));
 	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_U,KEYMAP_PRESSED,kf_SetDroidRangeLong,		_("Long Range"));
 
 	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_LALT,KEY_H,KEYMAP_PRESSED,kf_AddHelpBlip,		"Drop a beacon");
