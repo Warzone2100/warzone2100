@@ -1014,10 +1014,6 @@ BOOL interpCopyValue(INTERP_VAL *to, INTERP_VAL *from)
 		switch (to->type)
 		{
 			case VAL_STRING:
-				free(to->v.sval);
-				to->v.sval = malloc(MAXSTRLEN);
-				if (to->v.sval == NULL)
-					return false;
 				return (strlcpy(to->v.sval, from->v.sval, MAXSTRLEN) != 0);
 			default:
 				return (memcpy(&(to->v), &(from->v), sizeof(to->v)) != NULL);
