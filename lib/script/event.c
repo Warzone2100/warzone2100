@@ -416,8 +416,6 @@ BOOL eventNewContext(SCRIPT_CODE *psCode, CONTEXT_RELEASE release,
 						return false;
 					}
 				}
-
-				assert(psCode->ppsLocalVarVal[i][j].type == type);
 			}
 		}
 		else	//this event has no local vars
