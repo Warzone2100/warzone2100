@@ -447,6 +447,8 @@ BOOL levParse(char *pBuffer, SDWORD size, searchPathMode datadir)
 		token = lev_lex();
 	}
 
+	lev_lex_destroy();
+
 	if (state != LP_WAITDATA || currData == 0)
 	{
 		levError("Unexpected end of file");

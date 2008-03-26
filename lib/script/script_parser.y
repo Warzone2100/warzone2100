@@ -38,6 +38,7 @@
 /* Script defines stack */
 
 extern int scr_lex(void);
+extern int scr_lex_destroy(void);
 
 /* Error return codes for code generation functions */
 typedef enum _code_error
@@ -5875,8 +5876,10 @@ SCRIPT_CODE* scriptCompile(PHYSFS_file* fileHandle, SCR_DEBUGTYPE debugType)
 
 	if (scr_parse() != 0 || bError)
 	{
+		scr_lex_destroy();
 		return NULL;
 	}
+	scr_lex_destroy();
 
 	scriptResetTables();
 

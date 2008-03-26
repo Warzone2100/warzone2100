@@ -43,6 +43,7 @@
 #include "src/research.h"
 
 extern int scrv_lex(void);
+extern int scrv_lex_destroy(void);
 
 // The current script code
 static SCRIPT_CODE		*psCurrScript;
@@ -834,8 +835,10 @@ BOOL scrvLoad(PHYSFS_file* fileHandle)
 
 	if (scrv_parse() != 0)
 	{
+		scrv_lex_destroy();
 		return FALSE;
 	}
+	scrv_lex_destroy();
 
 	return TRUE;
 }
