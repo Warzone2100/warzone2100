@@ -37,7 +37,7 @@ void cpPrintVal(INTERP_VAL value)
 	{
 		value.type &= ~VAL_REF;
 		debug( LOG_NEVER, "type: %5s, value: %i (ref)",
-			interpTypeToString(value.type), value.v.ival );
+			scriptTypeToString(value.type), value.v.ival );
 		return;
 	}
 
@@ -45,29 +45,29 @@ void cpPrintVal(INTERP_VAL value)
 	{
 		case VAL_BOOL:
 			debug( LOG_NEVER, "type: %5s, value: %s",
-				interpTypeToString(value.type),
+				scriptTypeToString(value.type),
 				bool2string(value.v.bval) );
 			break;
 		case VAL_INT:
 			debug( LOG_NEVER, "type: %5s, value: %d",
-				interpTypeToString(value.type),
+				scriptTypeToString(value.type),
 				value.v.ival );
 			break;
 		case VAL_FLOAT:
 			debug( LOG_NEVER, "type: %5s, value: %f",
-				interpTypeToString(value.type),
+				scriptTypeToString(value.type),
 				value.v.fval );
 			break;
 		case VAL_STRING:
 			debug( LOG_NEVER, "type: %5s, value: %s",
-				interpTypeToString(value.type),
+				scriptTypeToString(value.type),
 				value.v.sval );
 			break;
 		case VAL_TRIGGER:
 		case VAL_EVENT:
 		default:
 			debug( LOG_NEVER, "type: %5s, value: %d",
-				interpTypeToString(value.type),
+				scriptTypeToString(value.type),
 				value.v.ival );
 			break;
 	}
@@ -273,7 +273,7 @@ void cpPrintProgram(SCRIPT_CODE *psProg)
 
 		// Display the code offset
 		debug( LOG_NEVER, "offset: %-6d", (int)(ip - psProg->pCode) );
-		debug( LOG_NEVER, "opcode: %s", interpOpcodeToString(opcode) );
+		debug( LOG_NEVER, "opcode: %s", scriptOpcodeToString(opcode) );
 
 		switch (opcode)
 		{
@@ -299,7 +299,7 @@ void cpPrintProgram(SCRIPT_CODE *psProg)
 				debug( LOG_NEVER, "-> %d", (ip+1)->v.ival );
 				break;
 			case OP_CALL:
-				debug( LOG_NEVER, "-> %s", interpFunctionToString((ip+1)->v.pFuncExtern) );
+				debug( LOG_NEVER, "-> %s", scriptFunctionToString((ip+1)->v.pFuncExtern) );
 				break;
 			case OP_VARCALL:
 				cpPrintVarFunc( ((INTERP_VAL *)(ip+1))->v.pObjGetSet, data);
@@ -312,7 +312,7 @@ void cpPrintProgram(SCRIPT_CODE *psProg)
 				break;
 			case OP_BINARYOP:
 			case OP_UNARYOP:
-				debug( LOG_NEVER, "-> %s", interpOpcodeToString(data) );
+				debug( LOG_NEVER, "-> %s", scriptOpcodeToString(data) );
 				break;
 			case OP_EXIT:
 				break;

@@ -113,6 +113,10 @@ extern BOOL scriptGetVarIndex(SCRIPT_CODE *psCode, char *pID, UDWORD *pIndex);
 /* returns true if passed INTERP_TYPE is used as a pointer in INTERP_VAL, false otherwise */
 extern BOOL scriptTypeIsPointer(INTERP_TYPE type);
 
+extern const char *scriptTypeToString(INTERP_TYPE type) WZ_DECL_PURE;
+extern const char *scriptOpcodeToString(OPCODE opcode) WZ_DECL_PURE;
+extern const char *scriptFunctionToString(SCRIPT_FUNC function) WZ_DECL_PURE;
+
 /* Run a compiled script */
 extern BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType,
 							UDWORD index, UDWORD offset);

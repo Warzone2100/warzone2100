@@ -330,7 +330,7 @@ BOOL stackPopParams(unsigned int numParams, ...)
 		{
 			ASSERT( false,
 				"stackPopParams: type mismatch (expected %s, got %s)",
-				interpTypeToString(type), interpTypeToString(psVal->type) );
+				scriptTypeToString(type), scriptTypeToString(psVal->type) );
 			va_end(args);
 			return false;
 		}
@@ -364,7 +364,7 @@ BOOL stackPopParams(unsigned int numParams, ...)
 					default:
 						ASSERT(false,
 							"StackPopParam - wrong data type being converted to string (type: %s)",
-							interpTypeToString(psVal->type));
+							scriptTypeToString(psVal->type));
 						break;
 				}
 				break;
@@ -378,7 +378,7 @@ BOOL stackPopParams(unsigned int numParams, ...)
 						/* doublecheck types */
 						ASSERT(interpCheckEquiv(type & ~VAL_REF, refVal->type),
 							"stackPopParams: type mismatch for a reference (expected %s, got %s)",
-							interpTypeToString(type & ~VAL_REF), interpTypeToString(refVal->type));
+							scriptTypeToString(type & ~VAL_REF), scriptTypeToString(refVal->type));
 						// type of provided container and type of the INTERP_VAL pointed by psVal->v.oval
 
 						*(void**)pData = &(refVal->v); /* get pointer to the union */
@@ -945,7 +945,7 @@ BOOL stackCastTop(INTERP_TYPE neededType)
 	}
 
 	debug(LOG_ERROR, "can't cast from %s to %s",
-		interpTypeToString(pTop->type), interpTypeToString(neededType));
+		scriptTypeToString(pTop->type), scriptTypeToString(neededType));
 
 	return false;
 }

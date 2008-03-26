@@ -237,3 +237,174 @@ BOOL scriptTypeIsPointer(INTERP_TYPE type)
 			return false;
 	}
 }
+
+
+static const struct {
+	INTERP_TYPE type;
+	const char *name;
+} typeToStringMap[] = {
+	// Basic types
+	{ VAL_BOOL, "bool" },
+	{ VAL_INT, "int" },
+	{ VAL_FLOAT, "float" },
+	{ VAL_STRING, "string" },
+
+	// events and triggers
+	{ VAL_TRIGGER, "trigger" },
+	{ VAL_EVENT, "event" },
+
+	{ VAL_VOID, "void" },
+
+	{ VAL_OPCODE, "opcode" },
+	{ VAL_PKOPCODE, "pkopcode" },
+
+	{ VAL_OBJ_GETSET, "objgs" },
+	{ VAL_FUNC_EXTERN, "func" },
+
+	{ VAL_USERTYPESTART, "usertype" },
+	{ VAL_REF, "ref" },
+};
+
+
+const char *scriptTypeToString(INTERP_TYPE type)
+{
+	int i; // Loop goes down -> signed
+
+	// Look whether it is a defaul type:
+	for (i = ARRAY_SIZE(typeToStringMap)-1;
+		i >= 0 && type <= typeToStringMap[i].type;
+		i--)
+	{
+		if (type >= typeToStringMap[i].type)
+			return typeToStringMap[i].name;
+	}
+
+	// Look whether it is a user type:
+	if (asScrTypeTab)
+	{
+		unsigned int i;
+		for(i = 0; asScrTypeTab[i].typeID != 0; i++)
+		{
+			if (asScrTypeTab[i].typeID == type)
+			{
+				return asScrTypeTab[i].pIdent;
+			}
+		}
+	}
+
+	return "unknown";
+}
+
+
+static const struct {
+	OPCODE opcode;
+	const char *name;
+} opcodeToStringMap[] = {
+	{ OP_PUSH, "push" },
+	{ OP_PUSHREF, "push(ref)" },
+	{ OP_POP, "pop" },
+
+	{ OP_PUSHGLOBAL, "push(global)" },
+	{ OP_POPGLOBAL, "pop(global)" },
+
+	{ OP_PUSHARRAYGLOBAL, "push(global[])" },
+	{ OP_POPARRAYGLOBAL, "push(global[])" },
+
+	{ OP_CALL, "call" },
+	{ OP_VARCALL, "vcall" },
+
+	{ OP_JUMP, "jump" },
+	{ OP_JUMPTRUE, "jump(true)" },
+	{ OP_JUMPFALSE, "jump(false)" },
+
+	{ OP_BINARYOP, "binary" },
+	{ OP_UNARYOP, "unary" },
+
+	{ OP_EXIT, "exit" },
+	{ OP_PAUSE, "pause" },
+
+	// The following operations are secondary data to OP_BINARYOP and OP_UNARYOP
+
+	// Maths operators
+	{ OP_ADD, "+" },
+	{ OP_SUB, "-" },
+	{ OP_MUL, "*" },
+	{ OP_DIV, "/" },
+	{ OP_NEG, "(-)" },
+	{ OP_INC, "--" },
+	{ OP_DEC, "++" },
+
+	// Boolean operators
+	{ OP_AND, "&&" },
+	{ OP_OR, "||" },
+	{ OP_NOT, "!" },
+
+	//String concatenation
+	{ OP_CONC, "&" },
+
+	// Comparison operators
+	{ OP_EQUAL, "=" },
+	{ OP_NOTEQUAL, "!=" },
+	{ OP_GREATEREQUAL, ">=" },
+	{ OP_LESSEQUAL, "<=" },
+	{ OP_GREATER, ">" },
+	{ OP_LESS, "<" },
+
+	{ OP_FUNC, "func" },
+	{ OP_POPLOCAL, "pop(local)" },
+	{ OP_PUSHLOCAL, "push(local)" },
+
+	{ OP_PUSHLOCALREF, "push(localref)" },
+	{ OP_TO_FLOAT, "(float)" },
+	{ OP_TO_INT, "(int)" },
+};
+
+
+const char *scriptOpcodeToString(OPCODE opcode)
+{
+	int i; // Loop goes down -> signed
+
+	// Look whether it is a defaul type:
+	for (i = ARRAY_SIZE(opcodeToStringMap)-1;
+		i >= 0 && opcode <= opcodeToStringMap[i].opcode;
+		i--)
+	{
+		if (opcode >= opcodeToStringMap[i].opcode)
+			return opcodeToStringMap[i].name;
+	}
+
+	return "unknown";
+}
+
+
+const char *scriptFunctionToString(SCRIPT_FUNC function)
+{
+	// Search the instinct functions
+	if (asScrInstinctTab)
+	{
+		unsigned int i;
+		for(i = 0; asScrInstinctTab[i].pFunc != NULL; i++)
+		{
+			if (asScrInstinctTab[i].pFunc == function)
+			{
+				return asScrInstinctTab[i].pIdent;
+			}
+		}
+	}
+
+	// Search the callback functions
+	if (asScrCallbackTab)
+	{
+		unsigned int i;
+		for(i = 0; asScrCallbackTab[i].type != 0; i++)
+		{
+			if (asScrCallbackTab[i].pFunc == function)
+			{
+				return asScrCallbackTab[i].pIdent;
+			}
+		}
+	}
+
+	return "unknown";
+}
+
