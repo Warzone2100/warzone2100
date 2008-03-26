@@ -1493,7 +1493,7 @@ function void doMilitary()
 		else
 		{
 			dbg("DEFEND ALLY: time out, rtb!!!!!!!!!!!!!!!!!", me);
-			msg("retreating for now, call me if you need me again" , me, enemy);	//allyInThreat
+			notifyAllies(getPlayerName(enemy) & ", retreating for now, call me if you need me again" , false);	//allyInThreat
 			stopAllyDefense();
 		}
 	}
@@ -2993,7 +2993,7 @@ function void stopDefending()
 			temp = findAllyInTrouble();		//see if any of our allies is in trouble
 			if(temp != none)
 			{
-				msg("coming now, hold on", me, temp);
+				notifyAllies(getPlayerName(temp) & ", coming now, hold on", false);
 
 				_busy = TRUE;
 
@@ -3872,8 +3872,8 @@ function void manageHelpAlly()
 
 	if((sendForceX <= 0) or (sendForceY <= 0))
 	{
-		msg("I can't see your base" , me, enemy);	//allyInThreat
-		//msg("give vision" , me, enemy);	//allyInThreat
+		notifyAllies(getPlayerName(enemy) & ", I can't see your base", false);	//allyInThreat
+		//notifyAllies(getPlayerName(enemy) & ", give vision" , false);	//allyInThreat
 		ASSERT(FALSE, "manageHelpAlly - (sendForceX <= 0) or (sendForceY <= 0)", me);
 
 		stopAllyDefense();
@@ -3884,7 +3884,7 @@ function void manageHelpAlly()
 
 	if(not knowBase[enemy])		//no visible structures left for this ally
 	{
-		msg("I don't see your base" , me, enemy);	//allyInThreat
+		notifyAllies(getPlayerName(enemy) & ", I don't see your base" , false);	//allyInThreat
 		dbg("manageHelpAlly - not haveBase", me);
 
 		stopAllyDefense();
@@ -10494,7 +10494,7 @@ function void requestHelp()
 		if(allianceExistsBetween(me , _temp))
 		{
 			giftRadar(me, _temp, FALSE);
-			msg("help" ,me , _temp);
+			msg("help", me, _temp);
 			dropBeacon("help", _temp, me, baseX, baseY, 0);
 		}
 		_temp = _temp + 1;
@@ -10874,45 +10874,45 @@ function void notifyStatus(int _playerToNotify)
 {
 	if(state == stDefending)
 	{
-		msg("help" ,me , _playerToNotify);
+		notifyAllies(getPlayerName(_playerToNotify) & ": help" , false);
 	}
 	if(defendingOil())
 	{
-		msg("defending oil" ,me , _playerToNotify);
+		notifyAllies(getPlayerName(_playerToNotify) & ": defending oil" , false);
 		dropAllyBeacon("defending oil", sendForceX, sendForceY);
 	}
 	else if(state == stAttacking)
 	{
-		msg("attacking " & getPlayerName(enemy), me, _playerToNotify);
+		notifyAllies(getPlayerName(_playerToNotify) & ": attacking " & getPlayerName(enemy), false);
 	}
 	else if(state == stHelpingAlly)
 	{
-		msg("helping " & getPlayerName(enemy), me, _playerToNotify);
+		notifyAllies(getPlayerName(_playerToNotify) & ": helping " & getPlayerName(enemy), false);
 	}
 	else if(state == stTakingOil)
 	{
-		msg("hunting " & getPlayerName(enemy) & "'s oil" ,me , _playerToNotify);
+		notifyAllies(getPlayerName(_playerToNotify) & ": hunting " & getPlayerName(enemy) & "'s oil" , false);
 		dropAllyBeacon("hunting " & getPlayerName(enemy) & "'s oil", sendForceX, sendForceY);
 	}
 	else if(((state == stDrop) or (state == stTransporting)) and (enemy != none))
 	{
-		msg("dropping " & getPlayerName(enemy), me , _playerToNotify);
+		notifyAllies(getPlayerName(_playerToNotify) & ": dropping " & getPlayerName(enemy), false);
 
 		if(phase <= phGettingUnits)
 		{
-			msg("preparing drop", me , _playerToNotify);
+			notifyAllies(getPlayerName(_playerToNotify) & ": preparing drop", false);
 		}
 		else if(phase == phWaitAllies)
 		{
-			msg("ready to drop", me , _playerToNotify);
+			notifyAllies(getPlayerName(_playerToNotify) & ": ready to drop", false);
 		}
 		else if(phase == phLoadingTransport)
 		{
-			msg("loading transport", me , _playerToNotify);
+			notifyAllies(getPlayerName(_playerToNotify) & ": loading transport", false);
 		}
 		else if(phase == phSendDrop)
 		{
-			msg("transporting units", me , _playerToNotify);
+			notifyAllies(getPlayerName(_playerToNotify) & ": transporting units", false);
 		}
 	}
 }
@@ -14645,13 +14645,13 @@ function void processCommand(string _message, int _sender, bool _bBlipMessage)
 
 						if((_player == me) or (ally[_player]))
 						{
-							msg(getPlayerName(_player) & "???", me, _sender);
+							notifyAllies(getPlayerName(_player) & "???", false);
 							return;
 						}
 
 						if(dead[_player])
 						{
-							msg(getPlayerName(_player) & " is dead", me, _sender);
+							notifyAllies(getPlayerName(_player) & " is dead", false);
 							return;
 						}
 
@@ -14663,13 +14663,13 @@ function void processCommand(string _message, int _sender, bool _bBlipMessage)
 								updateStateCoord(beaconX[_sender], beaconY[_sender]);
 								if(random(2)==0)
 								{
-									msg("roger", me, _sender);
+									notifyAllies("roger", false);
 								}
 								return;
 							}
 							else	/* if a normal msg, and we are already doind it, say so, since the destination can only be tweaked with a beacon */
 							{
-								msg("I am", me, _sender);
+								notifyAllies("I am", false);
 								return;
 							}
 						}		/* we are doing something else already */
@@ -14688,7 +14688,7 @@ function void processCommand(string _message, int _sender, bool _bBlipMessage)
 						{
 							if(killedBase[_player] and (not seeBase[_player]))	/* we have no idea where the enemy has rebuilt the base */
 							{
-								msg("drop a beacon", me, _sender);
+								notifyAllies(getPlayerName(_sender) & ", drop a beacon", false);
 								return;
 							}
 							else if(curBase[_player][0] > 0)	/* remember or can directly see it */
@@ -14698,7 +14698,7 @@ function void processCommand(string _message, int _sender, bool _bBlipMessage)
 							}
 							else
 							{
-								msg("drop a beacon", me, _sender);
+								notifyAllies(getPlayerName(_sender) & ", drop a beacon", false);
 								return;
 							}
 						}
@@ -14711,11 +14711,11 @@ function void processCommand(string _message, int _sender, bool _bBlipMessage)
 
 						if(killedBase[_player])
 						{
-							msg("ok, but haven't we destroyed " & getPlayerName(_player) & "'s base already?", me, _sender);
+							notifyAllies(getPlayerName(_sender) & ", ok, but haven't we destroyed " & getPlayerName(_player) & "'s base already?", false);
 						}
 						else
 						{
-							msg("ok" , me, _sender);
+							notifyAllies("ok" , false);
 						}
 
 						allyState[_sender] = stAttacking;
@@ -14748,7 +14748,7 @@ function void processCommand(string _message, int _sender, bool _bBlipMessage)
 
 						if(_player == me)
 						{
-							msg("you bastard!", me, _sender);
+							notifyAllies(getPlayerName(_sender) & ", you bastard!", false);
 							breakAlliance(me, _sender);
 							return;
 						}
@@ -14757,7 +14757,7 @@ function void processCommand(string _message, int _sender, bool _bBlipMessage)
 
 						if(dead[_player])
 						{
-							msg("isn't " & getPlayerName(_player) & " dead already", me, _sender);
+							notifyAllies("isn't " & getPlayerName(_player) & " dead already?", false);
 							return;
 						}
 
@@ -14788,7 +14788,7 @@ function void processCommand(string _message, int _sender, bool _bBlipMessage)
 						{
 							if(killedBase[_player] and (not seeBase[_player]))	/* we have no idea where the enemy has rebuilt the base */
 							{
-								msg("drop a beacon", me, _sender);
+								notifyAllies(getPlayerName(_sender) & ", drop a beacon", false);
 								return;
 							}
 							else if(curBase[_player][0] > 0)	/* remember or can directly see it */
@@ -14825,11 +14825,11 @@ function void processCommand(string _message, int _sender, bool _bBlipMessage)
 						{
 							if(hasVTOLs[_player])
 							{
-								msg("I know", me, _sender);
+								notifyAllies("I know", false);
 							}
 							else
 							{
-								msg("ok", me, _sender);
+								notifyAllies("ok", false);
 							}
 						}
 
@@ -14856,7 +14856,7 @@ function void processCommand(string _message, int _sender, bool _bBlipMessage)
 
 						if(_player == me)
 						{
-							msg("you bastard!", me, _sender);
+							notifyAllies(getPlayerName(_sender) & ", you bastard!", false);
 							breakAlliance(me, _sender);
 							return;
 						}
@@ -14870,7 +14870,7 @@ function void processCommand(string _message, int _sender, bool _bBlipMessage)
 
 						if(dead[_player])
 						{
-							msg("isn't " & getPlayerName(_player) & " dead already", me, _sender);
+							notifyAllies("isn't " & getPlayerName(_player) & " dead already?", false);
 							return;
 						}
 
