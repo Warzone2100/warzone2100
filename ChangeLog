@@ -2,6 +2,7 @@
  * General:
    * Fix: Dull radar player colors were replaced by brighter colors.
    * Change: Effect of skirmish modifier slider increased by 20%.
+   * Change: 'ENTER' key brings up the chat dialog instead of 'T'.
  * Aivolution AI:
    * Fix: Using "go <player>" command makes Aivolution send its units to the proper player now.
 
