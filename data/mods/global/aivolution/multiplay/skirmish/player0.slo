@@ -199,6 +199,8 @@
 
 #define	TAUNT_SUCCESS					0
 #define	TAUNT_FAILURE					1
+#define	TAUNT_POSSESSION_LOSS			2
+#define	TAUNT_GAME_LOSS					3
 
 #define	NONE							(-1)
 
@@ -328,7 +330,7 @@ trigger	diffModTr				(every,600);
 trigger allianceOfferedTr		(CALL_ALLIANCEOFFER,ref temp, ref temp2);
 trigger droidSeenTr				(CALL_DROID_SEEN, me, ref droid, ref obj);
 trigger objectSeenTr			(CALL_OBJ_SEEN, me, ref obj, ref obj2);
-trigger	checkLostTr				(every, 120);
+trigger	checkLostTr				(every, 70);
 trigger structDestroyedTr		(CALL_STRUCT_DESTROYED, me, ref structure);
 trigger droidDestroyedTr		(CALL_DROID_DESTROYED, me, ref droid);
 trigger	buildStructureModelTr	(wait, 10);
@@ -1397,6 +1399,7 @@ event checkLost(inactive)
 		
 	if(getDroidCount(me) == 0)
 	{
+		taunt(NONE, TAUNT_GAME_LOSS, 80);
 		shutDown();
 	}
 }
@@ -10640,9 +10643,35 @@ function void taunt(int targetPlayer, int type, int tauntProbability)
 			notifyAll("I get what I want");
 		}
 	}
-	else if(type == TAUNT_FAILURE)
+	else if(type == TAUNT_FAILURE)	// state failed
 	{
-		notifyAll(sTargetName & "screw you!!");
+		if(dice < 5){
+			notifyAll(sTargetName & "screw you!!");
+		}else{
+			notifyAll(sTargetName & "stop turtling");
+		}
+	}
+	else if(type == TAUNT_POSSESSION_LOSS)		// lost a derrick etc
+	{
+		if(dice < 5){
+			notifyAll(sTargetName & "I didn't need it anyway");
+		}else if(dice < 8){
+			notifyAll(sTargetName & "next time i'll kick your ass!");
+		}else{
+			notifyAll(sTargetName & "i'll get it back");
+		}
+	}
+	else if(type == TAUNT_GAME_LOSS)
+	{
+		if(dice < 6){
+			notifyAll("gg");
+		}else if(dice < 8){
+			notifyAll("rematch?");
+		}else if(dice < 9){
+			notifyAll("I can do better");
+		}else{
+			notifyAll("it's just not my day..");
+		}
 	}
 }
 
@@ -13096,7 +13125,7 @@ event coordinatePhases(inactive)
 		{
 			dbg("TAKE OIL: little attackers left, cancel", me);
 			
-			taunt(enemy, TAUNT_FAILURE, 40);
+			taunt(enemy, TAUNT_FAILURE, 30);
 			
 			stopTakingOil();
 			
@@ -13208,7 +13237,7 @@ event coordinatePhases(inactive)
 		{
 			dbg("DEFENDING OIL: little attackers left, cancel", me);
 			
-			taunt(enemy, TAUNT_FAILURE, 70);
+			taunt(enemy, TAUNT_POSSESSION_LOSS, 50);
 
 			stopDefendingOil();
 			_bStopped = true;
