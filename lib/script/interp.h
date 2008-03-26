@@ -288,7 +288,7 @@ extern const char *interpFunctionToString(SCRIPT_FUNC function) WZ_DECL_PURE;
 
 extern BOOL interpCopyValue(INTERP_VAL *to, INTERP_VAL *from);
 extern BOOL interpInitValue(INTERP_TYPE type, INTERP_VAL *value);
-extern BOOL interpCleanValue(INTERP_VAL *value);
+extern void interpCleanValue(INTERP_VAL *value);
 
 #endif
 

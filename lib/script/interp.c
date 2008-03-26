@@ -1148,7 +1148,10 @@ BOOL interpInitValue(INTERP_TYPE type, INTERP_VAL *value)
 		case VAL_STRING:
 			value->v.sval = malloc(MAXSTRLEN);
 			if (value->v.sval == NULL)
+			{
+				debug(LOG_ERROR, "interpInitValue(string): Out of memory");
 				return false;
+			}
 			value->v.sval[0] = '\0';
 			break;
 		default:
@@ -1159,7 +1162,7 @@ BOOL interpInitValue(INTERP_TYPE type, INTERP_VAL *value)
 }
 
 
-BOOL interpCleanValue(INTERP_VAL *value)
+void interpCleanValue(INTERP_VAL *value)
 {
 	switch (value->type)
 	{
@@ -1170,32 +1173,39 @@ BOOL interpCleanValue(INTERP_VAL *value)
 		default:
 			break;
 	}
-
-	return true;
 }
 
 
 BOOL interpCopyValue(INTERP_VAL *to, INTERP_VAL *from)
 {
+	/* Check whether we can do a direct copy */
 	if (interpCheckEquiv(to->type, from->type))
 	{
-		memcpy(&(to->v), &(from->v), sizeof(to->v));
-		return true;
+		switch (to->type)
+		{
+			case VAL_STRING:
+				free(to->v.sval);
+				to->v.sval = malloc(MAXSTRLEN);
+				if (to->v.sval == NULL)
+					return false;
+				return (strlcpy(to->v.sval, from->v.sval, MAXSTRLEN) != 0);
+			default:
+				return (memcpy(&(to->v), &(from->v), sizeof(to->v)) != NULL);
+		}
 	}
 
+	/* Or have to do an implicit conversion */
 	switch (to->type)
 	{
 		case VAL_STRING:
 			switch (from->type)
 			{
 				case VAL_INT:
-					return snprintf(to->v.sval, MAXSTRLEN, "%d", from->v.ival);
+					return (snprintf(to->v.sval, MAXSTRLEN, "%d", from->v.ival) != 0);
 				case VAL_BOOL:
-					return snprintf(to->v.sval, MAXSTRLEN, "%d", from->v.bval);
+					return (snprintf(to->v.sval, MAXSTRLEN, "%d", from->v.bval) != 0);
 				case VAL_FLOAT:
-					return snprintf(to->v.sval, MAXSTRLEN, "%f", from->v.fval);
-				case VAL_STRING:
-					return strlcpy(to->v.sval, from->v.sval, MAXSTRLEN);
+					return (snprintf(to->v.sval, MAXSTRLEN, "%f", from->v.fval) != 0);
 				default:
 					break;
 			}
