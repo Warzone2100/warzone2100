@@ -163,6 +163,9 @@ typedef enum _op_code
 #define ARRAY_DIMENSION_SHIFT	20
 #define ARRAY_DIMENSION_MASK	0x00f00000
 
+#define VAR_COPY_DEEP true
+#define VAR_COPY_FLAT false
+
 /* The possible storage types for a variable */
 typedef enum _storage_type
 {
@@ -282,7 +285,7 @@ extern BOOL interpProcessorActive(void);
 /* Output script call stack trace */
 extern void scrOutputCallTrace(void);
 
-extern BOOL interpCopyValue(INTERP_VAL *to, INTERP_VAL *from);
+extern BOOL interpCopyValue(INTERP_VAL *to, INTERP_VAL *from, BOOL deep);
 extern BOOL interpInitValue(INTERP_TYPE type, INTERP_VAL *value);
 extern void interpCleanValue(INTERP_VAL *value);
 

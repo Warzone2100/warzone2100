@@ -117,11 +117,8 @@ BOOL stackPush(INTERP_VAL *psVal)
 	/* Store the value in the stack - psCurrChunk/currEntry always point to
 	valid space */
 
-	/* String support: Copy the string, otherwise the stack will operate directly on the
-	original string (like & opcode will actually store the result in the first
-	variable which would point to the original string) */
 	interpInitValue(psVal->type, &psCurrChunk->aVals[currEntry]);
-	interpCopyValue(&psCurrChunk->aVals[currEntry], psVal);
+	interpCopyValue(&psCurrChunk->aVals[currEntry], psVal, VAR_COPY_DEEP);
 
 	/* Now update psCurrChunk and currEntry */
 	currEntry++;
@@ -991,15 +988,7 @@ void stackShutDown(void)
 
 	for(psCurr = psStackBase; psCurr != NULL; psCurr = psNext)
 	{
-		unsigned int i;
 		psNext = psCurr->psNext;
-
-		/* Free strings */
-		for(i = 0; i < psCurr->size; i++)		//go through all values on this chunk
-		{
-			interpCleanValue(&psCurr->aVals[i]);
-		}
-
 		free(psCurr->aVals);
 		free(psCurr);
 	}

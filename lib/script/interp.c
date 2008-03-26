@@ -1006,18 +1006,16 @@ void interpCleanValue(INTERP_VAL *value)
 }
 
 
-BOOL interpCopyValue(INTERP_VAL *to, INTERP_VAL *from)
+BOOL interpCopyValue(INTERP_VAL *to, INTERP_VAL *from, BOOL deep)
 {
 	/* Check whether we can do a direct copy */
 	if (interpCheckEquiv(to->type, from->type))
 	{
-		switch (to->type)
+		if (deep && to->type == VAL_STRING)
 		{
-			case VAL_STRING:
-				return (strlcpy(to->v.sval, from->v.sval, MAXSTRLEN) != 0);
-			default:
-				return (memcpy(&(to->v), &(from->v), sizeof(to->v)) != NULL);
+			return (strlcpy(to->v.sval, from->v.sval, MAXSTRLEN) != 0);
 		}
+		return (memcpy(&(to->v), &(from->v), sizeof(to->v)) != NULL);
 	}
 
 	/* Or have to do an implicit conversion */
@@ -1026,10 +1024,10 @@ BOOL interpCopyValue(INTERP_VAL *to, INTERP_VAL *from)
 		case VAL_STRING:
 			switch (from->type)
 			{
-				case VAL_INT:
-					return (snprintf(to->v.sval, MAXSTRLEN, "%d", from->v.ival) != 0);
 				case VAL_BOOL:
 					return (snprintf(to->v.sval, MAXSTRLEN, "%d", from->v.bval) != 0);
+				case VAL_INT:
+					return (snprintf(to->v.sval, MAXSTRLEN, "%d", from->v.ival) != 0);
 				case VAL_FLOAT:
 					return (snprintf(to->v.sval, MAXSTRLEN, "%f", from->v.fval) != 0);
 				default:
