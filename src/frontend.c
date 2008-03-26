@@ -1427,10 +1427,15 @@ void addSideText(UDWORD id,  UDWORD PosX, UDWORD PosY, const char *txt)
 // show a background piccy
 static void displayTitleBitmap(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
 {
+	static char versionString[MAX_STR_LENGTH] = {'\0'};
+
+	if (versionString[0] == '\0')
+		strlcpy(versionString, version_getFormattedVersionString(), sizeof(versionString));
+
 	iV_SetFont(font_regular);
 	iV_SetTextColour(WZCOL_TEXT_BRIGHT);
 
-	iV_DrawTextRotated(version_getFormattedVersionString(), pie_GetVideoBufferWidth() - 10, pie_GetVideoBufferHeight() - 15, 270.f);
+	iV_DrawTextRotated(versionString, pie_GetVideoBufferWidth() - 10, pie_GetVideoBufferHeight() - 15, 270.f);
 }
 
 // ////////////////////////////////////////////////////////////////////////////
