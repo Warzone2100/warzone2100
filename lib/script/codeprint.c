@@ -77,7 +77,8 @@ void cpPrintVal(INTERP_VAL value)
 /* Display a value from a program that has been packed with an opcode */
 void cpPrintPackedVal(INTERP_VAL *ip)
 {
-	INTERP_VAL data = { (ip->v.ival & OPCODE_DATAMASK), (ip + 1)->v };
+	INTERP_VAL data = { (ip->v.ival & OPCODE_DATAMASK), {0} };
+	data.v = (ip + 1)->v;
 
 	cpPrintVal(data);
 }
