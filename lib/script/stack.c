@@ -48,20 +48,20 @@ typedef struct _stack_chunk
 	INTERP_VAL	*aVals;
 	UDWORD		size;
 
-	struct _stack_chunk		*psNext, *psPrev;
+	struct _stack_chunk *psNext, *psPrev;
 } STACK_CHUNK;
 
 /* The first chunk of the stack */
-static STACK_CHUNK		*psStackBase=NULL;
+static STACK_CHUNK *psStackBase = NULL;
 
 /* The current stack chunk */
-static STACK_CHUNK		*psCurrChunk=NULL;
+static STACK_CHUNK *psCurrChunk = NULL;
 
 /* The current free entry on the current stack chunk */
-static UDWORD			currEntry=0;
+static UDWORD currEntry = 0;
 
-/* Get rid of the top value without returning it */
-static inline BOOL stackRemoveTop(void);
+/* Get rid of the top value(s) without returning it */
+static inline BOOL stackReduce(unsigned int numItems);
 
 
 /* Check if the stack is empty */
@@ -112,7 +112,7 @@ static BOOL stackNewChunk(UDWORD size)
 
 
 /* Push a value onto the stack */
-BOOL stackPush(INTERP_VAL  *psVal)
+BOOL stackPush(INTERP_VAL *psVal)
 {
 	/* Store the value in the stack - psCurrChunk/currEntry always point to
 	valid space */
@@ -120,27 +120,8 @@ BOOL stackPush(INTERP_VAL  *psVal)
 	/* String support: Copy the string, otherwise the stack will operate directly on the
 	original string (like & opcode will actually store the result in the first
 	variable which would point to the original string) */
-	if(psVal->type == VAL_STRING)		//pushing string
-	{
-		/* strings should already have memory allocated */
-		if(psCurrChunk->aVals[currEntry].type != VAL_STRING)		//needs to have memory allocated for string
-			psCurrChunk->aVals[currEntry].v.sval = (char*)malloc(MAXSTRLEN);
-
-		strcpy(psCurrChunk->aVals[currEntry].v.sval, psVal->v.sval);		//copy string to stack
-		psCurrChunk->aVals[currEntry].type = VAL_STRING;
-	}
-	else		/* pushing non-string */
-	{
-		/* free stack var allocated string memory, if stack var used to be of type VAL_STRING */
-		if(psCurrChunk->aVals[currEntry].type == VAL_STRING)
-		{
-			free(psCurrChunk->aVals[currEntry].v.sval);			//don't need it anymore
-			psCurrChunk->aVals[currEntry].v.sval = NULL;
-		}
-
-		/* copy type/data as union */
-		memcpy(&(psCurrChunk->aVals[currEntry]), psVal, sizeof(INTERP_VAL));
-	}
+	interpInitValue(psVal->type, &psCurrChunk->aVals[currEntry]);
+	interpCopyValue(&psCurrChunk->aVals[currEntry], psVal);
 
 	/* Now update psCurrChunk and currEntry */
 	currEntry++;
@@ -159,9 +140,8 @@ BOOL stackPush(INTERP_VAL  *psVal)
 }
 
 
-
 /* Pop a value off the stack */
-BOOL stackPop(INTERP_VAL  *psVal)
+BOOL stackPop(INTERP_VAL *psVal)
 {
 	if (stackEmpty())
 	{
@@ -183,13 +163,14 @@ BOOL stackPop(INTERP_VAL  *psVal)
 	}
 
 	/* copy the entire value off the stack */
-	memcpy(psVal, &(psCurrChunk->aVals[currEntry]), sizeof(INTERP_VAL));
+	memcpy(psVal, &psCurrChunk->aVals[currEntry], sizeof(*psVal));
 
 	return true;
 }
 
+
 /* Return pointer to the top value without poping it */
-BOOL stackPeekTop(INTERP_VAL  **ppsVal)
+BOOL stackPeekTop(INTERP_VAL **ppsVal)
 {
 	if ((psCurrChunk->psPrev == NULL) && (currEntry == 0))
 	{
@@ -219,9 +200,9 @@ BOOL stackPeekTop(INTERP_VAL  **ppsVal)
 
 
 /* Pop a value off the stack, checking that the type matches what is passed in */
-BOOL stackPopType(INTERP_VAL  *psVal)
+BOOL stackPopType(INTERP_VAL *psVal)
 {
-	INTERP_VAL	*psTop;
+	INTERP_VAL *psTop;
 
 	if ((psCurrChunk->psPrev == NULL) && (currEntry == 0))
 	{
@@ -481,8 +462,6 @@ BOOL stackPushResult(INTERP_TYPE type, INTERP_VAL *result)
  */
 BOOL stackPeek(INTERP_VAL *psVal, UDWORD index)
 {
-	STACK_CHUNK		*psCurr;
-
 	if (index < currEntry)
 	{
 		/* Looking at entry on current chunk */
@@ -491,6 +470,8 @@ BOOL stackPeek(INTERP_VAL *psVal, UDWORD index)
 	}
 	else
 	{
+                STACK_CHUNK *psCurr;
+
 		/* Have to work down the previous chunks to find the entry */
 		index -= currEntry;
 
@@ -502,10 +483,8 @@ BOOL stackPeek(INTERP_VAL *psVal, UDWORD index)
 				memcpy(psVal, &(psCurr->aVals[psCurr->size - 1 - index]), sizeof(INTERP_VAL));
 				return true;
 			}
-			else
-			{
-				index -= psCurr->size;
-			}
+
+			index -= psCurr->size;
 		}
 	}
 
@@ -836,7 +815,7 @@ BOOL stackUnaryOp(OPCODE opcode)
 			psVal->v.ival++;
 
 			/* Just get rid of the variable pointer, since already increased it */
-			if (!stackRemoveTop())
+			if (!stackReduce(1))
 			{
 				debug( LOG_ERROR, "stackUnaryOpcode: OP_INC: could not pop" );
 				return false;
@@ -861,7 +840,7 @@ BOOL stackUnaryOp(OPCODE opcode)
 			psVal->v.ival--;
 
 			/* Just get rid of the variable pointer, since already decreased it */
-			if (!stackRemoveTop())
+			if (!stackReduce(1))
 			{
 				debug( LOG_ERROR, "stackUnaryOpcode: OP_DEC: could not pop" );
 				return false;
@@ -909,6 +888,7 @@ BOOL stackUnaryOp(OPCODE opcode)
 
 	return true;
 }
+
 
 BOOL stackCastTop(INTERP_TYPE neededType)
 {
@@ -1005,38 +985,25 @@ BOOL stackInitialise(void)
 }
 
 
-
 /* Shutdown the stack */
 void stackShutDown(void)
 {
-	STACK_CHUNK		*psCurr, *psNext;
-	UDWORD				i;
+	STACK_CHUNK *psCurr, *psNext;
 
-	if ((psCurrChunk != psStackBase) && (currEntry != 0))
+	if (!stackEmpty())
 	{
 		debug( LOG_NEVER, "stackShutDown: stack is not empty on shutdown" );
 	}
 
 	for(psCurr = psStackBase; psCurr != NULL; psCurr = psNext)
 	{
+		unsigned int i;
 		psNext = psCurr->psNext;
 
 		/* Free strings */
-		for(i=0; i< psCurr->size; i++)		//go through all values on this chunk
+		for(i = 0; i < psCurr->size; i++)		//go through all values on this chunk
 		{
-			if(psCurr->aVals[i].type == VAL_STRING)
-			{
-				if(psCurr->aVals[i].v.sval != NULL)					//FIXME: seems to be causing problems sometimes
-				{
-					debug(LOG_WZ, "freeing '%s' ", psCurr->aVals[i].v.sval);
-					free(psCurr->aVals[i].v.sval);
-					psCurr->aVals[i].v.sval = NULL;
-				}
-				else
-				{
-					debug(LOG_SCRIPT, "stackShutDown: VAL_STRING with null pointer");
-				}
-			}
+			interpCleanValue(&psCurr->aVals[i]);
 		}
 
 		free(psCurr->aVals);
@@ -1044,28 +1011,51 @@ void stackShutDown(void)
 	}
 }
 
-/* Get rid of the top value without returning it */
-static inline BOOL stackRemoveTop(void)
+
+/* Get rid of the top value(s) without returning it */
+static inline BOOL stackReduce(unsigned int numItems)
 {
-	if ((psCurrChunk->psPrev == NULL) && (currEntry == 0))
+	if (stackEmpty())
 	{
-		debug(LOG_ERROR, "stackRemoveTop: stack empty");
-		ASSERT( false, "stackRemoveTop: stack empty" );
+		debug(LOG_ERROR, "stackReduce: stack empty");
+		ASSERT( false, "stackReduce: stack empty" );
 		return false;
 	}
 
-	/* move the stack pointer down one */
-	if (currEntry == 0)
+	// Find the position of the first item, and set
+	// the stack top to it
+	if (numItems <= currEntry)
 	{
-		/* have to move onto the previous chunk. */
-		psCurrChunk = psCurrChunk->psPrev;
-		currEntry = psCurrChunk->size -1;
+		// items are all on current chunk
+		currEntry = currEntry - numItems;
 	}
 	else
 	{
-		currEntry--;
-	}
+		// Have to work down the previous chunks to find the first item
+		unsigned int items = numItems - currEntry;
+		STACK_CHUNK *psCurr;
 
+		for(psCurr = psCurrChunk->psPrev; psCurr != NULL; psCurr = psCurr->psPrev)
+		{
+			if (items <= psCurr->size)
+			{
+				// found the first item
+				currEntry = psCurr->size - items;
+				psCurrChunk = psCurr;
+				break;
+			}
+
+			items -= psCurr->size;
+		}
+
+		if (!psCurr)
+		{
+			debug( LOG_ERROR, "stackReduce: not enough parameters on stack" );
+			ASSERT( false, "stackReduce: not enough parameters on stack" );
+			return false;
+		}
+	}
+	
 	return true;
 }
 
@@ -1073,7 +1063,7 @@ static inline BOOL stackRemoveTop(void)
 /* Reset the stack to an empty state */
 void stackReset(void)
 {
-	ASSERT( ((psCurrChunk == psStackBase) && (currEntry == 0)),
+	ASSERT(stackEmpty(),
 		"stackReset: stack is not empty" );
 
 	psCurrChunk = psStackBase;
