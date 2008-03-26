@@ -107,9 +107,6 @@ extern SCRIPT_CODE* scriptCompile(PHYSFS_file* fileHandle, SCR_DEBUGTYPE debugTy
 /* Free a SCRIPT_CODE structure */
 extern void scriptFreeCode(SCRIPT_CODE *psCode);
 
-/* Display the contents of a program in readable form */
-extern void cpPrintProgram(SCRIPT_CODE *psProg);
-
 /* Lookup a script variable */
 extern BOOL scriptGetVarIndex(SCRIPT_CODE *psCode, char *pID, UDWORD *pIndex);
 

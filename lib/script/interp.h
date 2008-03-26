@@ -285,6 +285,8 @@ extern BOOL interpProcessorActive(void);
 extern void scrOutputCallTrace(void);
 
 extern const char *interpTypeToString(INTERP_TYPE type) WZ_DECL_PURE;
+extern const char *interpOpcodeToString(OPCODE opcode) WZ_DECL_PURE;
+extern const char *interpFunctionToString(SCRIPT_FUNC function) WZ_DECL_PURE;
 
 #endif
 

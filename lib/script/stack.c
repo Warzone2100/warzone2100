@@ -518,10 +518,10 @@ BOOL stackPeek(INTERP_VAL *psVal, UDWORD index)
 /* Print the top value on the stack */
 void stackPrintTop(void)
 {
-	INTERP_VAL	sVal;
+	INTERP_VAL sVal;
 	if (stackPeek(&sVal, 0))
 	{
-		cpPrintVal(&sVal);
+		cpPrintVal(sVal);
 	}
 	else
 	{

@@ -167,18 +167,17 @@ static BOOL bCurCallerIsEvent = false;
 	if (interpTrace) \
 		cpPrintVal(x)
 
-#define TRCPRINTMATHSOP(x) \
+#define TRCPRINTOPCODE(x) \
 	if (interpTrace) \
-		cpPrintMathsOp(x)
+		debug( LOG_NEVER, "%s", interpOpcodeToString(x) )
 
 #define TRCPRINTSTACKTOP() \
 	if (interpTrace) \
 		stackPrintTop()
 
-
 #define TRCPRINTFUNC(x) \
 	if (interpTrace) \
-		cpPrintFunc(x)
+		debug( LOG_NEVER, "%s", interpFunctionToString(x) )
 
 #define TRCPRINTVARFUNC(x, data) \
 	if (interpTrace) \
@@ -547,8 +546,8 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 				/* get local variable */
 				sVal.v.oval = &(varEnvironment[retStackCallDepth()][data]);
 
-				TRCPRINTF( "PUSHREF     " );
-				TRCPRINTVAL(&sVal);
+				TRCPRINTOPCODE(opcode);
+				TRCPRINTVAL(sVal);
 				TRCPRINTF( "\n" );
 
 				if (!stackPush(&sVal))
@@ -572,8 +571,8 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 				/* copy value */
 				memcpy(&sVal, (INTERP_VAL *)(InstrPointer + 1), sizeof(INTERP_VAL));
 
-				TRCPRINTF( "PUSH        " );
-				TRCPRINTVAL(&sVal);
+				TRCPRINTOPCODE(opcode);
+				TRCPRINTVAL(sVal);
 				TRCPRINTF( "\n" );
 				if (!stackPush(&sVal))
 				{
@@ -590,8 +589,8 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 				// store pointer to INTERP_VAL
 				sVal.v.oval = interpGetVarData(psGlobals, ((INTERP_VAL *)(InstrPointer + 1))->v.ival);
 
-				TRCPRINTF( "PUSHREF     " );
-				TRCPRINTVAL(&sVal);
+				TRCPRINTOPCODE(opcode);
+				TRCPRINTVAL(sVal);
 				TRCPRINTF( "\n" );
 				if (!stackPush(&sVal))
 				{
@@ -605,7 +604,7 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 				ASSERT( InstrPointer->type == VAL_OPCODE,
 					"wrong value type passed for OP_POP: %d", InstrPointer->type);
 
-				TRCPRINTF( "POP\n" );
+				TRCPRINTOPCODE(opcode);
 				if (!stackPop(&sVal))
 				{
 					debug( LOG_ERROR, "interpRunScript: could not do stack pop" );
@@ -617,7 +616,7 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 				ASSERT( InstrPointer->type == VAL_PKOPCODE,
 					"wrong value type passed for OP_BINARYOP: %d", InstrPointer->type);
 
-				TRCPRINTMATHSOP(data);
+				TRCPRINTOPCODE(opcode);
 				if (!stackBinaryOp((OPCODE)data))
 				{
 					debug( LOG_ERROR, "interpRunScript: could not do binary op" );
@@ -631,7 +630,7 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 				ASSERT( InstrPointer->type == VAL_PKOPCODE,
 					"wrong value type passed for OP_UNARYOP: %d", InstrPointer->type);
 
-				TRCPRINTMATHSOP(data);
+				TRCPRINTOPCODE(opcode);
 				if (!stackUnaryOp((OPCODE)data))
 				{
 					debug( LOG_ERROR, "interpRunScript: could not do unary op" );
@@ -682,7 +681,7 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 				ASSERT( InstrPointer->type == VAL_PKOPCODE,
 					"wrong value type passed for OP_PUSHARRAYGLOBAL: %d", InstrPointer->type);
 
-				TRCPRINTF( "PUSHARRAYGLOBAL  " );
+				TRCPRINTOPCODE(opcode);
 				if (!interpGetArrayVarData(&InstrPointer, psGlobals, psProg, &psVar))
 				{
 					debug( LOG_ERROR, "interpRunScript: could not get array var data, CurEvent=%d", CurEvent );
@@ -699,7 +698,7 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 				ASSERT( InstrPointer->type == VAL_PKOPCODE,
 					"wrong value type passed for OP_POPARRAYGLOBAL: %d", InstrPointer->type);
 
-				TRCPRINTF( "POPARRAYGLOBAL   " );
+				TRCPRINTOPCODE(opcode);
 				if (!interpGetArrayVarData(&InstrPointer, psGlobals, psProg, &psVar))
 				{
 					debug( LOG_ERROR, "interpRunScript: could not get array var data" );
@@ -763,9 +762,9 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 				ASSERT( InstrPointer->type == VAL_OPCODE,
 					"wrong value type passed for OP_CALL: %d", InstrPointer->type);
 
-				TRCPRINTFUNC( ((INTERP_VAL *)(InstrPointer+1))->v.pFuncExtern );
-				TRCPRINTF( "\n" );
 				scriptFunc = ((INTERP_VAL *)(InstrPointer+1))->v.pFuncExtern;
+				TRCPRINTFUNC( scriptFunc );
+				TRCPRINTF( "\n" );
 				//debug(LOG_SCRIPT, "OP_CALL 1");
 				if (!scriptFunc())
 				{
@@ -780,7 +779,7 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 				ASSERT( InstrPointer->type == VAL_PKOPCODE,
 					"wrong value type passed for OP_VARCALL: %d", InstrPointer->type);
 
-				TRCPRINTF( "VARCALL     " );
+				TRCPRINTOPCODE(opcode);
 				TRCPRINTVARFUNC(  ((INTERP_VAL *)(InstrPointer+1))->v.pObjGetSet, data );
 				TRCPRINTF( "(%d)\n", data );
 
@@ -1018,6 +1017,119 @@ const char *interpTypeToString(INTERP_TYPE type)
 			if (asScrTypeTab[i].typeID == type)
 			{
 				return asScrTypeTab[i].pIdent;
+			}
+		}
+	}
+
+	return "unknown";
+}
+
+
+static const struct {
+	OPCODE opcode;
+	const char *name;
+} opcodeToStringMap[] = {
+	{ OP_PUSH, "push" },
+	{ OP_PUSHREF, "push(ref)" },
+	{ OP_POP, "pop" },
+
+	{ OP_PUSHGLOBAL, "push(global)" },
+	{ OP_POPGLOBAL, "pop(global)" },
+
+	{ OP_PUSHARRAYGLOBAL, "push(global[])" },
+	{ OP_POPARRAYGLOBAL, "push(global[])" },
+
+	{ OP_CALL, "call" },
+	{ OP_VARCALL, "vcall" },
+
+	{ OP_JUMP, "jump" },
+	{ OP_JUMPTRUE, "jump(true)" },
+	{ OP_JUMPFALSE, "jump(false)" },
+
+	{ OP_BINARYOP, "binary" },
+	{ OP_UNARYOP, "unary" },
+
+	{ OP_EXIT, "exit" },
+	{ OP_PAUSE, "pause" },
+
+	// The following operations are secondary data to OP_BINARYOP and OP_UNARYOP
+
+	// Maths operators
+	{ OP_ADD, "+" },
+	{ OP_SUB, "-" },
+	{ OP_MUL, "*" },
+	{ OP_DIV, "/" },
+	{ OP_NEG, "(-)" },
+	{ OP_INC, "--" },
+	{ OP_DEC, "++" },
+
+	// Boolean operators
+	{ OP_AND, "&&" },
+	{ OP_OR, "||" },
+	{ OP_NOT, "!" },
+
+	//String concatenation
+	{ OP_CONC, "&" },
+
+	// Comparison operators
+	{ OP_EQUAL, "=" },
+	{ OP_NOTEQUAL, "!=" },
+	{ OP_GREATEREQUAL, ">=" },
+	{ OP_LESSEQUAL, "<=" },
+	{ OP_GREATER, ">" },
+	{ OP_LESS, "<" },
+
+	{ OP_FUNC, "func" },
+	{ OP_POPLOCAL, "pop(local)" },
+	{ OP_PUSHLOCAL, "push(local)" },
+
+	{ OP_PUSHLOCALREF, "push(localref)" },
+	{ OP_TO_FLOAT, "(float)" },
+	{ OP_TO_INT, "(int)" },
+};
+
+
+const char *interpOpcodeToString(OPCODE opcode)
+{
+	int i; // Loop goes down -> signed
+
+	// Look whether it is a defaul type:
+	for (i = ARRAY_SIZE(opcodeToStringMap)-1;
+		i >= 0 && opcode <= opcodeToStringMap[i].opcode;
+		i--)
+	{
+		if (opcode >= opcodeToStringMap[i].opcode)
+			return opcodeToStringMap[i].name;
+	}
+
+	return "unknown";
+}
+
+
+const char *interpFunctionToString(SCRIPT_FUNC function)
+{
+	// Search the instinct functions
+	if (asScrInstinctTab)
+	{
+		unsigned int i;
+		for(i = 0; asScrInstinctTab[i].pFunc != NULL; i++)
+		{
+			if (asScrInstinctTab[i].pFunc == function)
+			{
+				return asScrInstinctTab[i].pIdent;
+			}
+		}
+	}
+
+	// Search the callback functions
+	if (asScrCallbackTab)
+	{
+		unsigned int i;
+		for(i = 0; asScrCallbackTab[i].type != 0; i++)
+		{
+			if (asScrCallbackTab[i].pFunc == function)
+			{
+				return asScrCallbackTab[i].pIdent;
 			}
 		}
 	}
