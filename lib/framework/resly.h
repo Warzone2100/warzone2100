@@ -39,5 +39,9 @@ extern void resGetErrorData(int *pLine, char **ppText);
 /* Call the yacc parser */
 extern int res_parse(void);
 
+/* Destroy the lexer */
+extern int res_lex_destroy(void);
+
+
 #endif
 

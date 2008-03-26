@@ -373,9 +373,11 @@ BOOL strresLoad(STR_RES* psRes, const char* fileName)
 	strresSetInputFile(fileHandle);
 	if (strres_parse() != 0)
 	{
+		strres_lex_destroy();
 		PHYSFS_close(fileHandle);
 		return false;
 	}
+	strres_lex_destroy();
 	PHYSFS_close(fileHandle);
 
 	return true;

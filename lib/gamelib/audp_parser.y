@@ -27,7 +27,9 @@
 static int		g_iCurAnimID = 0;
 static Vector3i vecPos, vecRot, vecScale;
 
-int audp_lex();
+extern int audp_lex(void);
+extern int audp_lex_destroy(void);
+
 void audp_error(char *pMessage,...);
 
 %}
@@ -219,6 +221,7 @@ BOOL ParseResourceFile(PHYSFS_file* fileHandle)
 	parserSetInputFile(fileHandle);
 
 	audp_parse();
+	audp_lex_destroy();
 
 	return true;
 }

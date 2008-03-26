@@ -128,9 +128,9 @@ const char* version_getSvnTime()
 
 const char* version_getFormattedVersionString()
 {
-	static const char* versionString = NULL;
+	static char versionString[MAX_STR_LENGTH] = {'\0'};
 
-	if (versionString == NULL)
+	if (versionString[0] == '\0')
 	{
 		// Compose the working copy state string
 #if (SVN_WC_MODIFIED && SVN_WC_SWITCHED)
@@ -147,7 +147,7 @@ const char* version_getFormattedVersionString()
 #ifdef DEBUG
 		const char* build_type = _(" - DEBUG");
 #else
-		static const char build_type[] = "";
+		const char* build_type = "";
 #endif
 
 		const char* build_date = NULL;
@@ -164,7 +164,7 @@ const char* version_getFormattedVersionString()
 		// Construct the version string
 		// TRANSLATORS: This string looks as follows when expanded.
 		// "Version <version name/number> <working copy state><BUILD DATE><BUILD TYPE>"
-		asprintf((char**)&versionString, _("Version %s%s%s%s"), version_getVersionString(), wc_state, build_date, build_type);
+		snprintf(versionString, MAX_STR_LENGTH, _("Version %s%s%s%s"), version_getVersionString(), wc_state, build_date, build_type);
 	}
 
 	return versionString;

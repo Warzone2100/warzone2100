@@ -31,7 +31,7 @@
 #include "lib/framework/strres.h"
 #include "lib/framework/strresly.h"
 
-int strres_lex (void);
+extern int strres_lex (void);
 
 /*
  * A simple error reporting routine
