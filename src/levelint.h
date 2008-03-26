@@ -56,6 +56,7 @@ extern void levError(const char *pError);
 
 // the lexer function
 extern int lev_lex(void);
+extern int lev_lex_destroy(void);
 
 /* Set the current input buffer for the lexer */
 extern void levSetInputBuffer(char *pBuffer, UDWORD size);

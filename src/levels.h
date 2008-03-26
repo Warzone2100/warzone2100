@@ -46,7 +46,7 @@ enum _level_type
 	LDS_MCLEAR,			// off map mission (extra map data)
 	LDS_EXPAND_LIMBO,   // expand campaign map using droids held in apsLimboDroids
 	LDS_MKEEP_LIMBO,    // off map saving any droids (selectedPlayer) at end into apsLimboDroids
-	LDS_NONE,			//flags when not got a mission to go back to or when 
+	LDS_NONE,			//flags when not got a mission to go back to or when
 						//already on one - ****LEAVE AS LAST ONE****
 };
 
@@ -94,10 +94,10 @@ extern BOOL levReleaseAll(void);
 
 // free the data for the current mission
 extern BOOL levReleaseMissionData(void);
- 
+
 //get the type of level currently being loaded of GTYPE type
 extern SDWORD getLevelLoadType(void);
 
-char *getLevelName( void );
+extern char *getLevelName( void );
 
 #endif // __INCLUDED_SRC_LEVELS_H__
