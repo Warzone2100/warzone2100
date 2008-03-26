@@ -616,7 +616,7 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 				ASSERT( InstrPointer->type == VAL_PKOPCODE,
 					"wrong value type passed for OP_BINARYOP: %d", InstrPointer->type);
 
-				TRCPRINTOPCODE(opcode);
+				TRCPRINTOPCODE(data);
 				if (!stackBinaryOp((OPCODE)data))
 				{
 					debug( LOG_ERROR, "interpRunScript: could not do binary op" );
@@ -630,7 +630,7 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 				ASSERT( InstrPointer->type == VAL_PKOPCODE,
 					"wrong value type passed for OP_UNARYOP: %d", InstrPointer->type);
 
-				TRCPRINTOPCODE(opcode);
+				TRCPRINTOPCODE(data);
 				if (!stackUnaryOp((OPCODE)data))
 				{
 					debug( LOG_ERROR, "interpRunScript: could not do unary op" );
