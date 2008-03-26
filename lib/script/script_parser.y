@@ -1514,10 +1514,7 @@ static CODE_ERROR scriptCodeConstant(CONST_SYMBOL	*psConst,	// The object variab
 static CODE_ERROR scriptCodeVarGet(VAR_SYMBOL		*psVariable,	// The object variable symbol
 							CODE_BLOCK		**ppsBlock)		// Generated code
 {
-	SDWORD	size;
-
-	//size = sizeof(OPCODE);
-	size = 1;	//1 - for opcode
+	SDWORD size = 1; //1 - for opcode
 
 	if (psVariable->storage == ST_EXTERN)
 	{
@@ -1528,9 +1525,9 @@ static CODE_ERROR scriptCodeVarGet(VAR_SYMBOL		*psVariable,	// The object variab
 			return CE_PARSE;
 		}
 
-		//size += sizeof(SCRIPT_VARFUNC);
-		size += 1;
+		size++;
 	}
+
 	ALLOC_BLOCK(*ppsBlock, size);
 	ip = (*ppsBlock)->pCode;
 	(*ppsBlock)->type = psVariable->type;
@@ -1953,7 +1950,8 @@ script:			header var_list
 				}
 						 trigger_list event_list
 				{
-					SDWORD			size, debug_i, i, dimension, arraySize, totalArraySize;
+					unsigned int i;
+					SDWORD			size = 0, debug_i = 0, totalArraySize = 0;
 					SDWORD			numArrays;
 					UDWORD			base;
 					VAR_SYMBOL		*psCurr;
@@ -1961,14 +1959,9 @@ script:			header var_list
 					EVENT_SYMBOL	*psEvent;
 					UDWORD			numVars;
 
-					INTERP_TYPE		*pCurEvLocalVars;
-					UDWORD		j;
-
 					RULE("script: header var_list");
 
 					// Calculate the code size
-					size = 0;
-					debug_i = 0;
 					for(psTrig = psTriggers; psTrig; psTrig = psTrig->psNext)
 					{
 						// Add the trigger code size
@@ -1986,11 +1979,10 @@ script:			header var_list
 					// Allocate the program
 					numVars = psGlobalVars ? psGlobalVars->index+1 : 0;
 					numArrays = psGlobalArrays ? psGlobalArrays->index+1 : 0;
-					totalArraySize = 0;
 					for(psCurr=psGlobalArrays; psCurr; psCurr=psCurr->psNext)
 					{
-						arraySize = 1;
-						for(dimension = 0; dimension < psCurr->dimensions; dimension += 1)
+						unsigned int arraySize = 1, dimension;
+						for(dimension = 0; dimension < psCurr->dimensions; dimension++)
 						{
 							arraySize *= psCurr->elements[dimension];
 						}
@@ -2006,8 +1998,7 @@ script:			header var_list
 					psFinalProg->numLocalVars = (UDWORD *)malloc(sizeof(UDWORD) * numEvents);	//how many local vars each event has
 					psFinalProg->numParams = (UDWORD *)malloc(sizeof(UDWORD) * numEvents);	//how many arguments each event has
 
-					i=0;
-					for(psEvent = psEvents; psEvent; psEvent = psEvent->psNext)
+					for(psEvent = psEvents, i = 0; psEvent; psEvent = psEvent->psNext, i++)
 					{
 						psEvent->numLocalVars = numEventLocalVars[i];
 
@@ -2016,35 +2007,28 @@ script:			header var_list
 
 						if(numEventLocalVars[i] > 0)
 						{
-							pCurEvLocalVars = (INTERP_TYPE*)malloc(sizeof(INTERP_TYPE) * numEventLocalVars[i]);
+							unsigned int j;
+							INTERP_TYPE * pCurEvLocalVars = (INTERP_TYPE*)malloc(sizeof(INTERP_TYPE) * numEventLocalVars[i]);
 
-							j=0;
-							for(psCurr =psLocalVarsB[i]; psCurr != NULL; psCurr = psCurr->psNext)
+							for(psCurr = psLocalVarsB[i], j = 0; psCurr != NULL; psCurr = psCurr->psNext, j++)
 							{
-								//debug(LOG_SCRIPT, "remembering loc var ");
-								//debug(LOG_SCRIPT, "%d - %d \n",i,j);
 								pCurEvLocalVars[numEventLocalVars[i] - j - 1] = psCurr->type;	//save type, order is reversed
-								j++;
 							}
+
+							psFinalProg->ppsLocalVars[i] = pCurEvLocalVars;
 						}
 						else
 						{
-							pCurEvLocalVars = NULL;	//this event has no local vars
+							psFinalProg->ppsLocalVars[i] = NULL; //this event has no local vars
 						}
-
-						psFinalProg->ppsLocalVars[i] = pCurEvLocalVars;
-						i++;
 					}
-
-
 
 					ALLOC_DEBUG(psFinalProg, debug_i);
 					psFinalProg->debugEntries = 0;
 					ip = psFinalProg->pCode;
 
 					// Add the trigger code
-					i=0;
-					for(psTrig = psTriggers; psTrig; psTrig = psTrig->psNext)
+					for(psTrig = psTriggers, i = 0; psTrig; psTrig = psTrig->psNext, i++)
 					{
 						// Store the trigger offset
 						psFinalProg->pTriggerTab[i] = (UWORD)(ip - psFinalProg->pCode);
@@ -2066,14 +2050,12 @@ script:			header var_list
 						// Store the data
 						psFinalProg->psTriggerData[i].type = (UWORD)psTrig->type;
 						psFinalProg->psTriggerData[i].time = psTrig->time;
-						i = i+1;
 					}
 					// Note the end of the final trigger
 					psFinalProg->pTriggerTab[i] = (UWORD)(ip - psFinalProg->pCode);
 
 					// Add the event code
-					i=0;
-					for(psEvent = psEvents; psEvent; psEvent = psEvent->psNext)
+					for(psEvent = psEvents, i = 0; psEvent; psEvent = psEvent->psNext, i++)
 					{
 						// Check the event was declared and has a code body
 						if (psEvent->pCode == NULL)
@@ -2094,7 +2076,6 @@ script:			header var_list
 						APPEND_DEBUG(psFinalProg, ip - psFinalProg->pCode, psEvent);
 						// Store the code
 						PUT_BLOCK(ip, psEvent);
-						i = i+1;
 					}
 					// Note the end of the final event
 					psFinalProg->pEventTab[i] = (UWORD)(ip - psFinalProg->pCode);
@@ -2138,7 +2119,7 @@ script:			header var_list
 					/* Now set the types for the global variables */
 					for(psCurr = psGlobalVars; psCurr != NULL; psCurr = psCurr->psNext)
 					{
-						i = psCurr->index;
+						unsigned int i = psCurr->index;
 						psFinalProg->pGlobals[i] = psCurr->type;
 
 						if (genDebugInfo)
@@ -2159,11 +2140,11 @@ script:			header var_list
 					psFinalProg->arraySize = totalArraySize;
 					for(psCurr = psGlobalArrays; psCurr != NULL; psCurr = psCurr->psNext)
 					{
-						i = psCurr->index;
+						unsigned int i = psCurr->index, dimension;
 
 						psFinalProg->psArrayInfo[i].type = (UBYTE)psCurr->type;
 						psFinalProg->psArrayInfo[i].dimensions = (UBYTE)psCurr->dimensions;
-						for(dimension=0; dimension < psCurr->dimensions; dimension += 1)
+						for(dimension = 0; dimension < psCurr->dimensions; dimension++)
 						{
 							psFinalProg->psArrayInfo[i].elements[dimension] = (UBYTE)psCurr->elements[dimension];
 						}
@@ -2185,10 +2166,10 @@ script:			header var_list
 					base = psFinalProg->numGlobals;
 					for(i=0; i<numArrays; i++)
 					{
-						psFinalProg->psArrayInfo[i].base = base;
+						unsigned int arraySize = 1, dimension;
 
-						arraySize = 1;
-						for(dimension = 0; dimension < psFinalProg->psArrayInfo[i].dimensions; dimension += 1)
+						psFinalProg->psArrayInfo[i].base = base;
+						for(dimension = 0; dimension < psFinalProg->psArrayInfo[i].dimensions; dimension++)
 						{
 							arraySize *= psFinalProg->psArrayInfo[i].elements[dimension];
 						}
