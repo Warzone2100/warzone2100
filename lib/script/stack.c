@@ -67,7 +67,7 @@ static inline BOOL stackRemoveTop(void);
 /* Check if the stack is empty */
 BOOL stackEmpty(void)
 {
-	return psCurrChunk == psStackBase && currEntry == 0;
+	return (psCurrChunk->psPrev == NULL && currEntry == 0);
 }
 
 
@@ -109,6 +109,7 @@ static BOOL stackNewChunk(UDWORD size)
 
 	return true;
 }
+
 
 /* Push a value onto the stack */
 BOOL stackPush(INTERP_VAL  *psVal)
@@ -162,7 +163,7 @@ BOOL stackPush(INTERP_VAL  *psVal)
 /* Pop a value off the stack */
 BOOL stackPop(INTERP_VAL  *psVal)
 {
-	if ((psCurrChunk->psPrev == NULL) && (currEntry == 0))
+	if (stackEmpty())
 	{
 		debug(LOG_ERROR, "stackPop: stack empty");
 		ASSERT( false, "stackPop: stack empty" );
@@ -909,13 +910,12 @@ BOOL stackUnaryOp(OPCODE opcode)
 	return true;
 }
 
-BOOL castTop(INTERP_TYPE neededType)
+BOOL stackCastTop(INTERP_TYPE neededType)
 {
-	INTERP_VAL	*pTop=NULL;
+	INTERP_VAL *pTop;
 
-	//debug(LOG_WZ, "casting to %d", neededType);
-
-	ASSERT(neededType == VAL_INT || neededType == VAL_FLOAT, "stackCast: can't cast to %d", neededType);
+	ASSERT(neededType == VAL_INT || neededType == VAL_FLOAT,
+		"stackCast: can't cast to %d", neededType);
 
 	if (!stackPeekTop(&pTop) || pTop==NULL)
 	{
@@ -923,60 +923,49 @@ BOOL castTop(INTERP_TYPE neededType)
 		return false;
 	}
 
-	//debug(LOG_WZ, "castTop: stack type %d", pTop->type);
-
 	/* see if we can cast this data type */
 	switch (pTop->type)
 	{
-	case VAL_BOOL:
+		case VAL_BOOL:
+			switch (neededType)
+			{
+				case VAL_FLOAT:		/* casting from bool to float */
 
-		switch (neededType)
-		{
-		case VAL_FLOAT:		/* casting from bool to float */
-
-			pTop->v.fval = (float)pTop->v.bval;
-			pTop->type = VAL_FLOAT;
-			return true;
-
+					pTop->v.fval = (float)pTop->v.bval;
+					pTop->type = VAL_FLOAT;
+					return true;
+				default:
+					break;
+			}
+			break;
+		case VAL_INT:
+			switch (neededType)
+			{
+				case VAL_FLOAT:		/* casting from int to float */
+					pTop->v.fval = (float)pTop->v.ival;
+					pTop->type = VAL_FLOAT;
+					return true;
+				default:
+					break;
+			}
+			break;
+		case VAL_FLOAT:
+			switch (neededType)
+			{
+				case VAL_INT:		/* casting from float to int */
+					pTop->v.ival = (int)pTop->v.fval;
+					pTop->type = VAL_INT;
+					return true;
+				default:
+					break;
+			}
 			break;
 		default:
-			debug(LOG_ERROR, "cast error %d->%d", pTop->type, neededType);
 			break;
-		}
-		break;
-	case VAL_INT:
-
-		switch (neededType)
-		{
-		case VAL_FLOAT:		/* casting from int to float */
-			pTop->v.fval = (float)pTop->v.ival;
-			pTop->type = VAL_FLOAT;
-			return true;
-			break;
-		default:
-			debug(LOG_ERROR, "cast error %d->%d", pTop->type, neededType);
-			break;
-		}
-		break;
-	case VAL_FLOAT:
-
-		switch (neededType)
-		{
-		case VAL_INT:		/* casting from float to int */
-			pTop->v.ival = (SDWORD)pTop->v.fval;
-			pTop->type = VAL_INT;
-			return true;
-			break;
-		default:
-			debug(LOG_ERROR, "cast error %d->%d", pTop->type, neededType);
-			break;
-		}
-		break;
-
-	default:
-		debug(LOG_ERROR, "can't cast from %d to %d", pTop->type, neededType);
-		break;
 	}
+
+	debug(LOG_ERROR, "can't cast from %s to %s",
+		interpTypeToString(pTop->type), interpTypeToString(neededType));
 
 	return false;
 }

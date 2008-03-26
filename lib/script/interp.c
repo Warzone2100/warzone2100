@@ -824,7 +824,7 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 				ASSERT( InstrPointer->type == VAL_OPCODE,
 					"wrong value type passed for OP_TO_FLOAT: %d", InstrPointer->type);
 
-				if(!castTop(VAL_FLOAT))
+				if(!stackCastTop(VAL_FLOAT))
 				{
 					debug( LOG_ERROR, "interpRunScript: OP_TO_FLOAT failed" );
 					goto exit_with_error;
@@ -835,7 +835,7 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 				ASSERT( InstrPointer->type == VAL_OPCODE,
 					"wrong value type passed for OP_TO_INT: %d", InstrPointer->type);
 
-				if(!castTop(VAL_INT))
+				if(!stackCastTop(VAL_INT))
 				{
 					debug( LOG_ERROR, "interpRunScript: OP_TO_INT failed" );
 					goto exit_with_error;
@@ -1000,17 +1000,36 @@ const char *interpTypeToString(INTERP_TYPE type)
 {
 	int i; // Loop goes down -> signed
 
-	for (i = ARRAY_SIZE(typeToStringMap)-1; i >= 0; i--)
+	// Look whether it is a defaul type:
+	for (i = ARRAY_SIZE(typeToStringMap)-1;
+		i >= 0 && type <= typeToStringMap[i].type;
+		i--)
 	{
 		if (type >= typeToStringMap[i].type)
 			return typeToStringMap[i].name;
+	}
+
+	// Look whether it is a user type:
+	if (asScrTypeTab)
+	{
+		unsigned int i;
+		for(i = 0; asScrTypeTab[i].typeID != 0; i++)
+		{
+			if (asScrTypeTab[i].typeID == type)
+			{
+				return asScrTypeTab[i].pIdent;
+			}
+		}
 	}
 
 	return "unknown";
 }
 
 
-/* Check if two types are equivalent */
+/* Check if two types are equivalent
+ * Means: Their data can be copied without conversion.
+ * I.e. strings are NOT equivalent to anything but strings, even though they can be converted
+ */
 BOOL interpCheckEquiv(INTERP_TYPE to, INTERP_TYPE from)
 {
 	BOOL toRef = false, fromRef = false;
@@ -1019,12 +1038,12 @@ BOOL interpCheckEquiv(INTERP_TYPE to, INTERP_TYPE from)
 	if (to & VAL_REF)
 	{
 		toRef = true;
-		to = (INTERP_TYPE)(to & ~VAL_REF);
+		to &= ~VAL_REF;
 	}
 	if (from & VAL_REF)
 	{
 		fromRef = true;
-		from = (INTERP_TYPE)(from & ~VAL_REF);
+		from &= ~VAL_REF;
 	}
 	if (toRef != fromRef)
 	{
@@ -1032,14 +1051,8 @@ BOOL interpCheckEquiv(INTERP_TYPE to, INTERP_TYPE from)
 	}
 
 	/* Void pointer is compatible with any other type */
-	if (to == VAL_VOID && toRef == true && fromRef == true)
-	{
-		return true;
-	}
-
-	/* Strings can be converted to */
-	if ( to == VAL_STRING &&
-		(from == VAL_BOOL || from == VAL_INT || from == VAL_FLOAT) )
+	if (toRef == true && fromRef == true &&
+		(to == VAL_VOID || from == VAL_VOID) )
 	{
 		return true;
 	}

@@ -164,16 +164,14 @@ void scrvReleaseBasePointer(INTERP_VAL *psVal)
 // Check all the base pointers to see if they have died
 void scrvUpdateBasePointers(void)
 {
-	SDWORD		i;
-	INTERP_VAL	*psVal;
-	BASE_OBJECT	*psObj;
+	unsigned int i;
 
-	for(i=0; i<MAX_BASEPOINTER; i++)
+	for(i = 0; i < MAX_BASEPOINTER; i++)
 	{
 		if (asBasePointers[i] != NULL)
 		{
-			psVal = asBasePointers[i];
-			psObj = (BASE_OBJECT *)psVal->v.oval;
+			INTERP_VAL *psVal = asBasePointers[i];
+			BASE_OBJECT *psObj = (BASE_OBJECT *)psVal->v.oval;
 
 			if (psObj && isDead(psObj))
 			{
