@@ -24,6 +24,7 @@
 #include "read_write_mutex.hpp"
 #include <boost/thread.hpp>
 #include "raii_counter.hpp"
+#include <cassert>
 
 class ReadWriteMutex::impl : boost::noncopyable
 {
@@ -55,6 +56,7 @@ class ReadWriteMutex::impl : boost::noncopyable
         inline void releaseReadLock() const
         {
             boost::mutex::scoped_lock lock(_mutex);
+            assert(_readerCount != 0);
             --_readerCount;
 
             if (_readerCount == 0)
@@ -101,11 +103,11 @@ class ReadWriteMutex::impl : boost::noncopyable
     private:
         mutable boost::mutex      _mutex;
 
-        mutable unsigned int      _readerCount;
+        mutable volatile unsigned int _readerCount;
         mutable boost::condition  _allReadersFinished;
 
         RAIICounter               _pendingWriters;
-        bool                      _currentWriter;
+        volatile bool             _currentWriter;
         mutable boost::condition  _writerFinished;
 };
 
