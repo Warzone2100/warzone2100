@@ -160,7 +160,7 @@ class RequestHandler(SocketServer.ThreadingMixIn, SocketServer.StreamRequestHand
 		# Process the incoming command. #
 		#################################
 		
-		logging.debug("Command(%s): %s" % (gameHost, netCommand))
+		logging.debug("(%s) Command: %s" % (gameHost, netCommand))
 		
 		# Add a game.
 		if netCommand == 'addg':
@@ -168,16 +168,16 @@ class RequestHandler(SocketServer.ThreadingMixIn, SocketServer.StreamRequestHand
 			# Check we can connect to the host
 			s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 			try:
-				logging.debug("Checking gameserver's vitality...")
+				logging.debug("(%s) Checking gameserver's vitality..." % gameHost)
 				s.settimeout(10.0)
 				s.connect((gameHost, gamePort))
 				s.close()
 			except:
-				logging.debug("Gameserver did not respond!")
+				logging.debug("(%s) Gameserver did not respond!" % gameHost)
 				return
 			
 			# The host is valid
-			logging.debug("Adding gameserver...")
+			logging.debug("(%s) Adding gameserver..." % gameHost)
 			try:
 				# create a game object
 				g = Game(self)
@@ -189,7 +189,7 @@ class RequestHandler(SocketServer.ThreadingMixIn, SocketServer.StreamRequestHand
 				while True:
 					newGameData = self.rfile.read(gsSize)
 					if not newGameData:
-						logging.debug("End of gameserver")
+						logging.debug("(%s) End of gameserver" % gameHost)
 						return
 					
 					#set Gamedata
@@ -200,9 +200,9 @@ class RequestHandler(SocketServer.ThreadingMixIn, SocketServer.StreamRequestHand
 					logging.debug("Updated games:")
 					gamedb.listGames()
 			except struct.error:
-				logging.warning("Host quit unexpectedly %s" % gameHost )
+				logging.warning("(%s) Host quit unexpectedly" % gameHost)
 			except KeyError:
-				logging.warning("Communication error with %s" % gameHost )
+				logging.warning("(%s) Communication error" % gameHost)
 			finally:
 				if g:
 					gamedb.removeGame(g)
