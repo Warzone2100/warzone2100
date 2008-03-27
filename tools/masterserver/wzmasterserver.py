@@ -59,8 +59,9 @@ logging.basicConfig(level=logging.DEBUG, format="%(asctime)-15s %(levelname)s %(
 ################################################################################
 # Game DB
 
-gdb=None
+gamedb = None
 gamedblock = Lock()
+
 class GameDB:
 	def __init__(self):
 		self.list = set()
@@ -94,7 +95,7 @@ class GameDB:
 	
 	def listGames(self):
 		with gamedblock:
-			gamesCount=len(self.getGames())
+			gamesCount = len(self.getGames())
 			logging.debug("Gameserver list: %i game(s)" % (gamesCount))
 			for game in self.getGames():
 				logging.debug(" %s" % game)
@@ -125,8 +126,8 @@ class Game:
 		""" decode the c-structure from the server into local varialbles"""
 		(self.description, self.size, self.flags, self.host, self.maxPlayers, self.currentPlayers, 
 			self.user1, self.user2, self.user3, self.user4 ) = struct.unpack("!64sII16sIIIIII", d)
-		self.description=self.description.strip("\x00")
-		self.host=self.host.strip("\x00")
+		self.description = self.description.strip("\x00")
+		self.host = self.host.strip("\x00")
 		logging.debug("Game: %s %s %s %s" % ( self.host, self.description, self.maxPlayers, self.currentPlayers))
 	
 	def getData(self):
@@ -139,7 +140,7 @@ class Game:
 	
 	def __str__(self):
 		return "Game: %16s %s %s %s" % ( self.host, self.description, self.maxPlayers, self.currentPlayers)
-	
+
 #
 ################################################################################
 # Socket Handler.
@@ -176,13 +177,13 @@ class RequestHandler(SocketServer.ThreadingMixIn, SocketServer.StreamRequestHand
 				return
 			
 			# The host is valid
-			logging.debug("Adding gameserver.")
+			logging.debug("Adding gameserver...")
 			try:
 				# create a game object
 				g = Game(self)
 				
 				# put it in the database
-				gdb.addGame(g)
+				gamedb.addGame(g)
 				
 				# and start receiving updates about the game
 				while True:
@@ -190,22 +191,27 @@ class RequestHandler(SocketServer.ThreadingMixIn, SocketServer.StreamRequestHand
 					if not newGameData:
 						logging.debug("End of gameserver")
 						return
+					
 					#set Gamedata
 					g.setData(newGameData)
 					#set gamehost
 					g.host = gameHost
-					gdb.listGames()
+					
+					logging.debug("Updated games:")
+					gamedb.listGames()
+			except struct.error:
+				logging.warning("Host quit unexpectedly %s" % gameHost )
 			except KeyError:
-				logging.warning("Communication error with %s" % g )
+				logging.warning("Communication error with %s" % gameHost )
 			finally:
 				if g:
-					gdb.removeGame(g)
+					gamedb.removeGame(g)
 		
 		# Get a game list.
 		elif netCommand == 'list':
 			# Lock the gamelist to prevent new games while output.
 			with gamedblock:
-				gamesCount=len(gdb.getGames())
+				gamesCount = len(gamedb.getGames())
 				logging.debug("Gameserver list: %i game(s)" % (gamesCount))
 				
 				# Transmit the length of the following list as unsigned integer (in network byte-order: big-endian).
@@ -213,7 +219,7 @@ class RequestHandler(SocketServer.ThreadingMixIn, SocketServer.StreamRequestHand
 				self.wfile.write(count)
 				
 				# Transmit the single games.
-				for game in gdb.getGames():
+				for game in gamedb.getGames():
 					logging.debug(" %s" % game)
 					self.wfile.write(game.getData())
 		
@@ -227,7 +233,7 @@ class RequestHandler(SocketServer.ThreadingMixIn, SocketServer.StreamRequestHand
 
 if __name__ == '__main__':
 	logging.info("Starting Warzone 2100 lobby server on port %d" % lobbyPort)
-	gdb = GameDB()
+	gamedb = GameDB()
 	
 	SocketServer.ThreadingTCPServer.allow_reuse_address = True
 	tcpserver = SocketServer.ThreadingTCPServer(('0.0.0.0', lobbyPort), RequestHandler)
@@ -237,6 +243,6 @@ if __name__ == '__main__':
 	except KeyboardInterrupt:
 		pass
 	logging.info("Shutting down lobby server, cleaning up")
-	for game in gdb.getAllGames():
+	for game in gamedb.getAllGames():
 		game.requestHandler.finish()
 	tcpserver.server_close()
