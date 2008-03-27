@@ -192,12 +192,12 @@ class RequestHandler(SocketServer.ThreadingMixIn, SocketServer.StreamRequestHand
 						logging.debug("(%s) End of gameserver" % gameHost)
 						return
 					
+					logging.debug("(%s) Updating game..." % gameHost)
 					#set Gamedata
 					g.setData(newGameData)
 					#set gamehost
 					g.host = gameHost
 					
-					logging.debug("Updated games:")
 					gamedb.listGames()
 			except struct.error:
 				logging.warning("(%s) Host quit unexpectedly" % gameHost)
