@@ -108,7 +108,7 @@ class GameDB:
 class Game:
 	""" class for a single game """
 	
-	def __init__(self):
+	def __init__(self, requestHandler):
 		self.description = None
 		self.size = None
 		self.flags = None
@@ -119,6 +119,7 @@ class Game:
 		self.user2 = None
 		self.user3 = None
 		self.user4 = None
+		self.requestHandler = requestHandler
 	
 	def setData(self, d):
 		""" decode the c-structure from the server into local varialbles"""
@@ -178,7 +179,7 @@ class RequestHandler(SocketServer.ThreadingMixIn, SocketServer.StreamRequestHand
 			logging.debug("Adding gameserver.")
 			try:
 				# create a game object
-				g=Game()
+				g = Game(self)
 				
 				# put it in the database
 				gdb.addGame(g)
