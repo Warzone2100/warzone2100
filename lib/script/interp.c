@@ -968,83 +968,6 @@ void scriptSetTypeEquiv(TYPE_EQUIV *psTypeTab)
 }
 
 
-BOOL interpInitValue(INTERP_TYPE type, INTERP_VAL *value)
-{
-	memset(value, 0, sizeof(*value));
-
-	value->type = type;
-	switch (type)
-	{
-		case VAL_STRING:
-			value->v.sval = malloc(MAXSTRLEN);
-			if (value->v.sval == NULL)
-			{
-				debug(LOG_ERROR, "interpInitValue(string): Out of memory");
-				return false;
-			}
-			value->v.sval[0] = '\0';
-			break;
-		default:
-			break;
-	}
-
-	return true;
-}
-
-
-void interpCleanValue(INTERP_VAL *value)
-{
-	switch (value->type)
-	{
-		case VAL_STRING:
-			free(value->v.sval);
-			value->v.sval = NULL;
-			break;
-		default:
-			break;
-	}
-}
-
-
-BOOL interpCopyValue(INTERP_VAL *to, INTERP_VAL *from, BOOL deep)
-{
-	/* Check whether we can do a direct copy */
-	if (interpCheckEquiv(to->type, from->type))
-	{
-		if (deep && to->type == VAL_STRING)
-		{
-			return (strlcpy(to->v.sval, from->v.sval, MAXSTRLEN) != 0);
-		}
-		return (memcpy(&(to->v), &(from->v), sizeof(to->v)) != NULL);
-	}
-
-	/* Or have to do an implicit conversion */
-	switch (to->type)
-	{
-		case VAL_STRING:
-			switch (from->type)
-			{
-				case VAL_BOOL:
-					return (snprintf(to->v.sval, MAXSTRLEN, "%d", from->v.bval) != 0);
-				case VAL_INT:
-					return (snprintf(to->v.sval, MAXSTRLEN, "%d", from->v.ival) != 0);
-				case VAL_FLOAT:
-					return (snprintf(to->v.sval, MAXSTRLEN, "%f", from->v.fval) != 0);
-				default:
-					break;
-			}
-			break;
-		default:
-			break;
-	}
-
-	ASSERT( false,
-		"interpCopyValue: type mismatch (expected %s, got %s)",
-		scriptTypeToString(to->type), scriptTypeToString(from->type) );
-	return false;
-}
-
-
 /* Check if two types are equivalent
  * Means: Their data can be copied without conversion.
  * I.e. strings are NOT equivalent to anything but strings, even though they can be converted
@@ -1240,14 +1163,15 @@ static inline void createVarEnvironment(SCRIPT_CONTEXT *psContext, UDWORD eventI
 		varEnvironment[callDepth] = (INTERP_VAL *)malloc(sizeof(INTERP_VAL) * numEventVars);
 
 		// create environment
-		memcpy(varEnvironment[callDepth], psContext->psCode->ppsLocalVars[eventIndex], sizeof(INTERP_VAL) * numEventVars);
+		memcpy(varEnvironment[callDepth], psContext->psCode->ppsLocalVarVal[eventIndex], sizeof(INTERP_VAL) * numEventVars);
 
 		// allocate new space for strings to preserve original ones
 		for (i = 0; i < numEventVars; i++)
 		{
-			if (!interpInitValue(varEnvironment[callDepth][i].type, &varEnvironment[callDepth][i]))
+			if (varEnvironment[callDepth][i].type == VAL_STRING)
 			{
-				debug(LOG_ERROR, "createVarEnvironment: failed to init local var");
+				varEnvironment[callDepth][i].v.sval = (char*)malloc(MAXSTRLEN);
+				strcpy( varEnvironment[callDepth][i].v.sval, "" );	//initialize
 			}
 		}
 	}

@@ -163,9 +163,6 @@ typedef enum _op_code
 #define ARRAY_DIMENSION_SHIFT	20
 #define ARRAY_DIMENSION_MASK	0x00f00000
 
-#define VAR_COPY_DEEP true
-#define VAR_COPY_FLAT false
-
 /* The possible storage types for a variable */
 typedef enum _storage_type
 {
@@ -248,10 +245,12 @@ typedef struct _script_code
 	UDWORD			arraySize;		// the number of elements in all the defined arrays
 	INTERP_TYPE		*pGlobals;		// Types of the global variables
 
-	UDWORD			*numLocalVars;		//number of local vars each event has
-	INTERP_VAL		**ppsLocalVars;		//storage for local vars
 
+	INTERP_TYPE		**ppsLocalVars;		//storage for local vars (type)
+	UDWORD			*numLocalVars;		//number of local vars each event has
+	INTERP_VAL		**ppsLocalVarVal;	//Values of the local vars used during interpreting process
 	UDWORD			*numParams;			//number of arguments this event has
+
 
 	VAR_DEBUG		*psVarDebug;	// The names and storage types of variables
 	ARRAY_DATA		*psArrayInfo;	// The sizes of the program arrays
@@ -284,10 +283,6 @@ extern BOOL interpProcessorActive(void);
 
 /* Output script call stack trace */
 extern void scrOutputCallTrace(void);
-
-extern BOOL interpCopyValue(INTERP_VAL *to, INTERP_VAL *from, BOOL deep);
-extern BOOL interpInitValue(INTERP_TYPE type, INTERP_VAL *value);
-extern void interpCleanValue(INTERP_VAL *value);
 
 #endif
 

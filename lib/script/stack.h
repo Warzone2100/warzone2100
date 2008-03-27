@@ -37,13 +37,16 @@ extern BOOL stackInitialise(void);
 extern void stackShutDown(void);
 
 /* Push a value onto the stack */
-extern BOOL stackPush(INTERP_VAL *psVal);
+extern BOOL stackPush(INTERP_VAL  *psVal);
 
 /* Pop a value off the stack */
-extern BOOL stackPop(INTERP_VAL *psVal);
+extern BOOL stackPop(INTERP_VAL  *psVal);
+
+/* Return pointer to the top value without poping it */
+extern BOOL stackPeekTop(INTERP_VAL  **ppsVal);
 
 /* Pop a value off the stack, checking that the type matches what is passed in */
-extern BOOL stackPopType(INTERP_VAL *psVal);
+extern BOOL stackPopType(INTERP_VAL  *psVal);
 
 /* Look at a value on the stack without removing it.
  * index is how far down the stack to look.

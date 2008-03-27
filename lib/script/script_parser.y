@@ -1992,14 +1992,11 @@ script:			header var_list
 					ALLOC_PROG(psFinalProg, size, psCurrBlock->pCode,
 						numVars, numArrays, numTriggers, numEvents);
 
-					debug(LOG_SCRIPT, "allocated space for %d events", numEvents);
-
 					//store local vars
-					psFinalProg->numLocalVars = (UDWORD *)malloc(sizeof(UDWORD) * numEvents);	//how many local vars each event has
-
 					//allocate array for holding an array of local vars for each event
-					psFinalProg->ppsLocalVars = (INTERP_VAL **)malloc(sizeof(INTERP_VAL*) * numEvents);
-
+					psFinalProg->ppsLocalVars = (INTERP_TYPE **)malloc(sizeof(INTERP_TYPE*) * numEvents);
+					psFinalProg->ppsLocalVarVal = NULL;
+					psFinalProg->numLocalVars = (UDWORD *)malloc(sizeof(UDWORD) * numEvents);	//how many local vars each event has
 					psFinalProg->numParams = (UDWORD *)malloc(sizeof(UDWORD) * numEvents);	//how many arguments each event has
 
 					for(psEvent = psEvents, i = 0; psEvent; psEvent = psEvent->psNext, i++)
@@ -2012,11 +2009,11 @@ script:			header var_list
 						if(numEventLocalVars[i] > 0)
 						{
 							unsigned int j;
-							INTERP_VAL * pCurEvLocalVars = (INTERP_VAL*)malloc(sizeof(INTERP_VAL) * numEventLocalVars[i]);
+							INTERP_TYPE * pCurEvLocalVars = (INTERP_TYPE*)malloc(sizeof(INTERP_TYPE) * numEventLocalVars[i]);
 
 							for(psCurr = psLocalVarsB[i], j = 0; psCurr != NULL; psCurr = psCurr->psNext, j++)
 							{
-								interpInitValue(psCurr->type, &pCurEvLocalVars[numEventLocalVars[i] - j - 1]);
+								pCurEvLocalVars[numEventLocalVars[i] - j - 1] = psCurr->type;	//save type, order is reversed
 							}
 
 							psFinalProg->ppsLocalVars[i] = pCurEvLocalVars;
