@@ -138,6 +138,19 @@ class Game:
 			self.host.ljust(16, "\x00"),
 			self.maxPlayers, self.currentPlayers, self.user1, self.user2, self.user3, self.user4)
 	
+	def test(self):
+		# Check we can connect to the host
+		s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+		try:
+			logging.debug("(%s) Checking gameserver's vitality..." % self.host)
+			s.settimeout(10.0)
+			s.connect((self.host, gamePort))
+			s.close()
+			return True
+		except:
+			logging.debug("(%s) Gameserver did not respond!" % self.host)
+			return False
+	
 	def __str__(self):
 		return "Game: %16s %s %s %s" % ( self.host, self.description, self.maxPlayers, self.currentPlayers)
 
@@ -165,17 +178,6 @@ class RequestHandler(SocketServer.ThreadingMixIn, SocketServer.StreamRequestHand
 		# Add a game.
 		if netCommand == 'addg':
 			
-			# Check we can connect to the host
-			s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-			try:
-				logging.debug("(%s) Checking gameserver's vitality..." % gameHost)
-				s.settimeout(10.0)
-				s.connect((gameHost, gamePort))
-				s.close()
-			except:
-				logging.debug("(%s) Gameserver did not respond!" % gameHost)
-				return
-			
 			# The host is valid
 			logging.debug("(%s) Adding gameserver..." % gameHost)
 			try:
@@ -197,6 +199,10 @@ class RequestHandler(SocketServer.ThreadingMixIn, SocketServer.StreamRequestHand
 					g.setData(newGameData)
 					#set gamehost
 					g.host = gameHost
+					
+					if not g.test():
+						logging.debug("(%s) Gameserver unreachable" % gameHost)
+						return
 					
 					gamedb.listGames()
 			except struct.error:
