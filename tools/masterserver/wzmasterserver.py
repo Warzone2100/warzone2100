@@ -63,6 +63,8 @@ gamedb = None
 gamedblock = Lock()
 
 class GameDB:
+	global gamedblock
+	
 	def __init__(self):
 		self.list = set()
 	
@@ -158,6 +160,8 @@ class Game:
 
 class RequestHandler(SocketServer.ThreadingMixIn, SocketServer.StreamRequestHandler):
 	def handle(self):
+		global gamedb
+		
 		# client address
 		gameHost = self.client_address[0]
 		
