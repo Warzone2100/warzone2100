@@ -10497,8 +10497,8 @@ function void requestHelp()
 		if(allianceExistsBetween(me , _temp))
 		{
 			giftRadar(me, _temp, FALSE);
-			msg("help", me, _temp);
 			dropBeacon("help", _temp, me, baseX, baseY, 0);
+			msg("help", me, _temp);
 		}
 		_temp = _temp + 1;
 	}
