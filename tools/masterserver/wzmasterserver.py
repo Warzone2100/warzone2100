@@ -64,12 +64,12 @@ gamedblock = Lock()
 class GameDB:
 	def __init__(self):
 		self.list = set()
-
+	
 	def addGame(self, g):
 		""" add a game """
 		with gamedblock:
 			self.list.add(g)
-
+	
 	def removeGame(self, g):
 		""" remove a game from the list"""
 		with gamedblock:
@@ -78,27 +78,27 @@ class GameDB:
 				self.list.remove(g)
 			except KeyError:
 				pass
-
+	
 	# only games with a valid description
 	def getGames(self):
 		""" filter all games with a valid description """
 		return filter(lambda x: x.description, self.list)
-
+	
 	def getAllGames(self):
 		""" return all knwon games """
 		return self.list
-
+	
 	def getGamesByHost(self, host):
 		""" filter all games of a certain host"""
 		return filter(lambda x: x.host == host, self.getGames())
-
+	
 	def listGames(self):
-            with gamedblock:
-                gamesCount=len(self.getGames())
-                logging.debug("Gameserver list: %i game(s)" % (gamesCount))
-                for game in self.getGames():
-                    logging.debug(" %s" % game)
- 
+		with gamedblock:
+			gamesCount=len(self.getGames())
+			logging.debug("Gameserver list: %i game(s)" % (gamesCount))
+			for game in self.getGames():
+				logging.debug(" %s" % game)
+
 
 
 #
@@ -107,7 +107,7 @@ class GameDB:
 	
 class Game:
 	""" class for a single game """
-		
+	
 	def __init__(self):
 		self.description = None
 		self.size = None
@@ -119,19 +119,19 @@ class Game:
 		self.user2 = None
 		self.user3 = None
 		self.user4 = None
-
+	
 	def setData(self, d):
 		""" decode the c-structure from the server into local varialbles"""
-                (self.description, self.size, self.flags, self.host, self.maxPlayers, self.currentPlayers, 
+		(self.description, self.size, self.flags, self.host, self.maxPlayers, self.currentPlayers, 
 			self.user1, self.user2, self.user3, self.user4 ) = struct.unpack("!64sII16sIIIIII", d)
 		self.description=self.description.strip("\x00")
 		self.host=self.host.strip("\x00")
 		logging.debug("Game: %s %s %s %s" % ( self.host, self.description, self.maxPlayers, self.currentPlayers))
-
+	
 	def getData(self):
 		""" use local variables and build a c-structure, for sending to the clients"""
-		return struct.pack("64sII16sIIIIII", 
-			self.description.ljust(64, "\x00"), 
+		return struct.pack("64sII16sIIIIII",
+			self.description.ljust(64, "\x00"),
 			self.size, self.flags,
 			self.host.ljust(16, "\x00"),
 			self.maxPlayers, self.currentPlayers, self.user1, self.user2, self.user3, self.user4)
@@ -144,99 +144,100 @@ class Game:
 # Socket Handler.
 
 class RequestHandler(SocketServer.ThreadingMixIn, SocketServer.StreamRequestHandler):
-    def handle(self):
-	# client address
-        gameHost = self.client_address[0]
-
-    	# Read the incoming command.
-        netCommand = self.rfile.read(4)
-
-        # Skip the trailing NULL.
-        self.rfile.read(1)
-
-        #################################
-        # Process the incoming command. #
-        #################################
-
-        logging.debug("Command(%s): %s" % (gameHost, netCommand))
-        # Add a game.
-        if netCommand == 'addg':
-
-            # Check we can connect to the host
-            s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            try:
-                logging.debug("Checking gameserver's vitality...")
-                s.settimeout(10.0)
-                s.connect((gameHost, gamePort))
-                s.close()
-            except:
-                logging.debug("Gameserver did not respond!")
-                return
+	def handle(self):
+		# client address
+		gameHost = self.client_address[0]
 		
-            # The host is valid
-            logging.debug("Adding gameserver.")
-            try:
-		# create a game object
-                g=Game()
+		# Read the incoming command.
+		netCommand = self.rfile.read(4)
 		
-		# put it in the database
-                gdb.addGame(g)
-    
-                # and start receiving updates about the game
-                while True:
-                    newGameData = self.rfile.read(gsSize)
-                    if not newGameData:
-			logging.debug("End of gameserver")
-                        return
-    
-                    #set Gamedata
-                    g.setData(newGameData)
-                    #set gamehost
-                    g.host = gameHost
-                    gdb.listGames()
-    
-            except KeyError:
-               logging.warning("Communication error with %s" % g )
-            finally:
-                if g:
-                    gdb.removeGame(g)
-        # Get a game list.
-        elif netCommand == 'list':
-
-            # Lock the gamelist to prevent new games while output.
-            with gamedblock:
-                gamesCount=len(gdb.getGames())
-                logging.debug("Gameserver list: %i game(s)" % (gamesCount))
-    
-                # Transmit the length of the following list as unsigned integer (in network byte-order: big-endian).
-                count = struct.pack('!I', gamesCount)
-                self.wfile.write(count)
-    
-                # Transmit the single games.
-                for game in gdb.getGames():
-                    logging.debug(" %s" % game)
-                    self.wfile.write(game.getData())
-        
-        # If something unknown apperas.
-        else:
-            raise Exception("Recieved a unknown command: %s" % netCommand)
+		# Skip the trailing NULL.
+		self.rfile.read(1)
+		
+		#################################
+		# Process the incoming command. #
+		#################################
+		
+		logging.debug("Command(%s): %s" % (gameHost, netCommand))
+		
+		# Add a game.
+		if netCommand == 'addg':
+			
+			# Check we can connect to the host
+			s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+			try:
+				logging.debug("Checking gameserver's vitality...")
+				s.settimeout(10.0)
+				s.connect((gameHost, gamePort))
+				s.close()
+			except:
+				logging.debug("Gameserver did not respond!")
+				return
+			
+			# The host is valid
+			logging.debug("Adding gameserver.")
+			try:
+				# create a game object
+				g=Game()
+				
+				# put it in the database
+				gdb.addGame(g)
+				
+				# and start receiving updates about the game
+				while True:
+					newGameData = self.rfile.read(gsSize)
+					if not newGameData:
+						logging.debug("End of gameserver")
+						return
+				
+				#set Gamedata
+				g.setData(newGameData)
+				#set gamehost
+				g.host = gameHost
+				gdb.listGames()
+			
+			except KeyError:
+				logging.warning("Communication error with %s" % g )
+			finally:
+				if g:
+					gdb.removeGame(g)
+		
+		# Get a game list.
+		elif netCommand == 'list':
+			# Lock the gamelist to prevent new games while output.
+			with gamedblock:
+				gamesCount=len(gdb.getGames())
+				logging.debug("Gameserver list: %i game(s)" % (gamesCount))
+				
+				# Transmit the length of the following list as unsigned integer (in network byte-order: big-endian).
+				count = struct.pack('!I', gamesCount)
+				self.wfile.write(count)
+				
+				# Transmit the single games.
+				for game in gdb.getGames():
+					logging.debug(" %s" % game)
+					self.wfile.write(game.getData())
+			
+			# If something unknown apperas.
+			else:
+				raise Exception("Recieved a unknown command: %s" % netCommand)
 
 #
 ################################################################################
 # The legendary Main.
 
 if __name__ == '__main__':
-    logging.info("Starting Warzone 2100 lobby server on port %d" % lobbyPort)
-    gdb=GameDB()
-
-    SocketServer.ThreadingTCPServer.allow_reuse_address = True
-    tcpserver = SocketServer.ThreadingTCPServer(('0.0.0.0', lobbyPort), RequestHandler)
-    try:
-	while True:
-            tcpserver.handle_request()
-    except KeyboardInterrupt:
-        pass
-    logging.info("Shutting down lobby server, cleaning up")
-    for game in gdb.getAllGames():
-        game.requestHandler.finish()
-    tcpserver.server_close()
+	logging.info("Starting Warzone 2100 lobby server on port %d" % lobbyPort)
+	gdb = GameDB()
+	
+	SocketServer.ThreadingTCPServer.allow_reuse_address = True
+	tcpserver = SocketServer.ThreadingTCPServer(('0.0.0.0', lobbyPort), RequestHandler)
+	try:
+		while True:
+		tcpserver.handle_request()
+	except KeyboardInterrupt:
+		pass
+	logging.info("Shutting down lobby server, cleaning up")
+	for game in gdb.getAllGames():
+		game.requestHandler.finish()
+	tcpserver.server_close()
