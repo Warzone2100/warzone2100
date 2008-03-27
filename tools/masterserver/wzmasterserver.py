@@ -53,7 +53,7 @@ gamePort  = 9999         # Gameserver port.
 lobbyPort = 9998         # Lobby port.
 gsSize    = 112          # Size of GAMESTRUCT in byte.
 
-logging.basicConfig(level=logging.DEBUG, format="%(asctime)-15s %(levelname)s %(message)s")
+logging.basicConfig(level = logging.DEBUG, format = "%(asctime)-15s %(levelname)s %(message)s")
 
 #
 ################################################################################
@@ -100,12 +100,10 @@ class GameDB:
 			for game in self.getGames():
 				logging.debug(" %s" % game)
 
-
-
 #
 ################################################################################
 # Game class
-	
+
 class Game:
 	""" class for a single game """
 	
@@ -128,7 +126,7 @@ class Game:
 			self.user1, self.user2, self.user3, self.user4 ) = struct.unpack("!64sII16sIIIIII", d)
 		self.description = self.description.strip("\x00")
 		self.host = self.host.strip("\x00")
-		logging.debug("Game: %s %s %s %s" % ( self.host, self.description, self.maxPlayers, self.currentPlayers))
+		logging.debug(self)
 	
 	def getData(self):
 		""" use local variables and build a c-structure, for sending to the clients"""
@@ -138,7 +136,7 @@ class Game:
 			self.host.ljust(16, "\x00"),
 			self.maxPlayers, self.currentPlayers, self.user1, self.user2, self.user3, self.user4)
 	
-	def test(self):
+	def check(self):
 		# Check we can connect to the host
 		s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 		try:
@@ -191,7 +189,7 @@ class RequestHandler(SocketServer.ThreadingMixIn, SocketServer.StreamRequestHand
 				while True:
 					newGameData = self.rfile.read(gsSize)
 					if not newGameData:
-						logging.debug("(%s) End of gameserver" % gameHost)
+						logging.debug("(%s) Removing aborted game" % gameHost)
 						return
 					
 					logging.debug("(%s) Updating game..." % gameHost)
@@ -200,8 +198,8 @@ class RequestHandler(SocketServer.ThreadingMixIn, SocketServer.StreamRequestHand
 					#set gamehost
 					g.host = gameHost
 					
-					if not g.test():
-						logging.debug("(%s) Gameserver unreachable" % gameHost)
+					if not g.check():
+						logging.debug("(%s) Removing unreachable game" % gameHost)
 						return
 					
 					gamedb.listGames()
