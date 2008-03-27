@@ -189,12 +189,11 @@ class RequestHandler(SocketServer.ThreadingMixIn, SocketServer.StreamRequestHand
 					if not newGameData:
 						logging.debug("End of gameserver")
 						return
-				
-				#set Gamedata
-				g.setData(newGameData)
-				#set gamehost
-				g.host = gameHost
-				gdb.listGames()
+					#set Gamedata
+					g.setData(newGameData)
+					#set gamehost
+					g.host = gameHost
+					gdb.listGames()
 			except KeyError:
 				logging.warning("Communication error with %s" % g )
 			finally:
