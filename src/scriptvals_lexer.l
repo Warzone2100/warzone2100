@@ -196,3 +196,11 @@ int scrv_wrap(void)
 }
 
 
+/* Older GNU Flex versions don't define yylex_destroy()
+ * (and neither define a subminor version)
+ */
+#if !defined(YY_FLEX_SUBMINOR_VERSION) || (YY_FLEX_SUBMINOR_VERSION < 30)
+int scrv_lex_destroy(void)
+{
+}
+#endif
