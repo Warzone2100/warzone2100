@@ -195,7 +195,6 @@ class RequestHandler(SocketServer.ThreadingMixIn, SocketServer.StreamRequestHand
 				#set gamehost
 				g.host = gameHost
 				gdb.listGames()
-			
 			except KeyError:
 				logging.warning("Communication error with %s" % g )
 			finally:
@@ -217,10 +216,10 @@ class RequestHandler(SocketServer.ThreadingMixIn, SocketServer.StreamRequestHand
 				for game in gdb.getGames():
 					logging.debug(" %s" % game)
 					self.wfile.write(game.getData())
-			
-			# If something unknown apperas.
-			else:
-				raise Exception("Recieved a unknown command: %s" % netCommand)
+		
+		# If something unknown apperas.
+		else:
+			raise Exception("Recieved a unknown command: %s" % netCommand)
 
 #
 ################################################################################
@@ -234,7 +233,7 @@ if __name__ == '__main__':
 	tcpserver = SocketServer.ThreadingTCPServer(('0.0.0.0', lobbyPort), RequestHandler)
 	try:
 		while True:
-		tcpserver.handle_request()
+			tcpserver.handle_request()
 	except KeyboardInterrupt:
 		pass
 	logging.info("Shutting down lobby server, cleaning up")
