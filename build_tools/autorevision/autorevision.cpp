@@ -477,7 +477,7 @@ static string GetWorkingDir()
     char* curDir = new char[curDirSize];
 
     // Retrieve the current directory
-    GetCurrentDirectoryA(curDirSize, curDir.get());
+    GetCurrentDirectoryA(curDirSize, curDir);
 
     // Return the current directory as a STL string
     string cwd(curDir);
