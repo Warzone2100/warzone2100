@@ -887,7 +887,9 @@ BOOL scrCallBeacon(void)
 		return false;
 	}
 
-	
+	debug(LOG_SCRIPT, "scrCallBeacon: to: %d (%d), text: %s ",
+		playerTo, MultiMsgPlayerTo, *BeaconText);
+
 	if(*BeaconText == NULL)
 	{
 		debug(LOG_ERROR, "scrCallBeacon(): passed string was not initialized");
