@@ -334,6 +334,8 @@ static void FreeResourceFile(RESOURCEFILE *OldResource)
 
 static inline RES_DATA* resDataInit(const char *DebugName, UDWORD DataIDHash, void *pData, UDWORD BlockID)
 {
+	char* resID;
+
 	// Allocate memory to hold the RES_DATA structure plus the identifying string
 	RES_DATA* psRes = malloc(sizeof(RES_DATA) + strlen(DebugName) + 1);
 	if (!psRes)
@@ -343,10 +345,11 @@ static inline RES_DATA* resDataInit(const char *DebugName, UDWORD DataIDHash, vo
 	}
 
 	// Initialize the pointer for our ID string
-	psRes->aID = (char*)(psRes + 1);
+	resID = (char*)(psRes + 1);
 
 	// Copy over the identifying string
-	strcpy((char*)psRes->aID, DebugName);
+	strcpy(resID, DebugName);
+	psRes->aID = resID;
 
 	psRes->pData = pData;
 	psRes->blockID = BlockID;

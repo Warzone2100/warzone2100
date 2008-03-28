@@ -74,7 +74,7 @@ UDWORD			oilResFeature;
 
 struct featureTypeMap
 {
-	char *typeStr;
+	const char *typeStr;
 	FEATURE_TYPE type;
 };
 
