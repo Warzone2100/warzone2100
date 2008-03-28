@@ -1542,6 +1542,14 @@ static void updateFire(EFFECT *psEffect)
 		psEffect->lastFrame = gameTime;
 		pos.x = (psEffect->position.x + ((rand() % psEffect->radius) - (rand() % (2 * psEffect->radius))));
 		pos.z = (psEffect->position.z + ((rand() % psEffect->radius) - (rand() % (2 * psEffect->radius))));
+		
+		// Effect is off map, no need to update it anymore
+		if(!worldOnMap(pos.x, pos.z))
+		{
+			killEffect(psEffect);
+			return;
+		}
+		
 		pos.y = map_Height(pos.x,pos.z);
 
 		if(psEffect->type == FIRE_TYPE_SMOKY_BLUE)
@@ -1564,6 +1572,14 @@ static void updateFire(EFFECT *psEffect)
 		{
 			pos.x = (psEffect->position.x + ((rand() % psEffect->radius) - (rand() % (2 * psEffect->radius))));
 			pos.z = (psEffect->position.z + ((rand() % psEffect->radius) - (rand() % (2 * psEffect->radius))));
+
+			// Effect is off map, no need to update it anymore
+			if(!worldOnMap(pos.x, pos.z))
+			{
+				killEffect(psEffect);
+				return;
+			}
+
 			pos.y = map_Height(pos.x,pos.z);
 			addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_SMALL,false,NULL,0);
 		}
