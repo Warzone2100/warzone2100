@@ -14365,6 +14365,11 @@ function void processCommand(string _message, int _sender, bool _bBlipMessage)
 	debug(me & ") processCommand: '" & _message & "' from " & _sender);
 	dbg("processCommand: '" & _message & "' from " & _sender, me);
 	dbg("got " & _numMsgs & " commands", me);
+	
+	if(_message == "are you aiv?" or _message == "are you aivolution?")
+	{
+		notifyAll("yes");
+	}
 
 	/* Process all messages */
 	while(_curMsg < _numMsgs)
