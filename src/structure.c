@@ -530,24 +530,6 @@ static void initModulePIEs(char *PIEName,UDWORD i,STRUCTURE_STATS *psStructure)
 		// Setup the PIE's for the research modules.
 		if (psStructure->type == REF_RESEARCH_MODULE)
 		{
-#ifdef MULTI_UPGRADE
-			length = strlen(GfxFile) - 5;
-			for (module = 1; module < NUM_RESEARCH_MODULES+1; module++)
-			{
-				sprintf(charNum,"%d",module);
-				GfxFile[length] = *charNum;
-				researchModuleIMDs[module-1] = (iIMDShape*) resGetData(
-					"IMD", GfxFile);
-				if (researchModuleIMDs[module-1] == NULL)
-				{
-					debug( LOG_ERROR, "Cannot find the PIE for research module %d - %s", module, GfxFile );
-					abort();
-					return;
-				}
-			}
-			//store the stat for easy access later on
-			researchModuleStat = i;
-#else
 			length = strlen(GfxFile) - 5;
 			GfxFile[length] = '4';
 
@@ -565,30 +547,11 @@ static void initModulePIEs(char *PIEName,UDWORD i,STRUCTURE_STATS *psStructure)
 
 			//store the stat for easy access later on
 			researchModuleStat = i;
-#endif
 		}
 
 		// Setup the PIE's for the power modules.
 		if (psStructure->type == REF_POWER_MODULE)
 		{
-#ifdef MULTI_UPGRADE
-			length = strlen(GfxFile) - 5;
-			for (module = 1; module < NUM_POWER_MODULES+1; module++)
-			{
-				sprintf(charNum,"%d",module);
-				GfxFile[length] = *charNum;
-				powerModuleIMDs[module-1] = (iIMDShape*) resGetData(
-					"IMD", GfxFile);
-				if (powerModuleIMDs[module-1] == NULL)
-				{
-					debug( LOG_ERROR, "Cannot find the PIE for power module %d - %s", module, GfxFile );
-					abort();
-					return;
-				}
-			}
-			//store the stat for easy access later on
-			powerModuleStat = i;
-#else
 			length = strlen(GfxFile) - 5;
 
 			GfxFile[length] = '4';
@@ -607,7 +570,6 @@ static void initModulePIEs(char *PIEName,UDWORD i,STRUCTURE_STATS *psStructure)
 
 			//store the stat for easy access later on
 			powerModuleStat = i;
-#endif
 		}
 }
 
