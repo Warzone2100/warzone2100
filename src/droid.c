@@ -2121,7 +2121,7 @@ BOOL loadDroidTemplates(const char *pDroidData, UDWORD bufferSize)
 		else
 		{
 			COMP_BASE_STATS *pStats = (COMP_BASE_STATS *)asBodyStats;
-			unsigned int size = sizeof(BODY_STATS);
+			const size_t size = sizeof(BODY_STATS);
 			unsigned int inc = 0;
 			BOOL found = false;
 
@@ -2165,7 +2165,7 @@ BOOL loadDroidTemplates(const char *pDroidData, UDWORD bufferSize)
 		else
 		{
 			COMP_BASE_STATS *pStats = (COMP_BASE_STATS *)asBrainStats;
-			unsigned int size = sizeof(BRAIN_STATS);
+			const size_t size = sizeof(BRAIN_STATS);
 			unsigned int inc = 0;
 			BOOL found = false;
 
@@ -2210,7 +2210,7 @@ BOOL loadDroidTemplates(const char *pDroidData, UDWORD bufferSize)
 		else
 		{
 			COMP_BASE_STATS *pStats = (COMP_BASE_STATS *)asConstructStats;
-			unsigned int size = sizeof(CONSTRUCT_STATS);
+			const size_t size = sizeof(CONSTRUCT_STATS);
 			unsigned int inc = 0;
 			BOOL found = false;
 
@@ -2253,7 +2253,7 @@ BOOL loadDroidTemplates(const char *pDroidData, UDWORD bufferSize)
 		else
 		{
 			COMP_BASE_STATS *pStats = (COMP_BASE_STATS *)asECMStats;
-			unsigned int size = sizeof(ECM_STATS);
+			const size_t size = sizeof(ECM_STATS);
 			unsigned int inc = 0;
 			BOOL found = false;
 
@@ -2309,7 +2309,7 @@ BOOL loadDroidTemplates(const char *pDroidData, UDWORD bufferSize)
 		else
 		{
 			COMP_BASE_STATS *pStats = (COMP_BASE_STATS *)asPropulsionStats;
-			unsigned int size = sizeof(PROPULSION_STATS);
+			const size_t size = sizeof(PROPULSION_STATS);
 			unsigned int inc = 0;
 			BOOL found = false;
 
@@ -2352,7 +2352,7 @@ BOOL loadDroidTemplates(const char *pDroidData, UDWORD bufferSize)
 		else
 		{
 			COMP_BASE_STATS *pStats = (COMP_BASE_STATS *)asRepairStats;
-			unsigned int size = sizeof(REPAIR_STATS);
+			const size_t size = sizeof(REPAIR_STATS);
 			unsigned int inc = 0;
 			BOOL found = false;
 
@@ -2429,7 +2429,7 @@ BOOL loadDroidTemplates(const char *pDroidData, UDWORD bufferSize)
 		else
 		{
 			COMP_BASE_STATS *pStats = (COMP_BASE_STATS *)asSensorStats;
-			unsigned int size = sizeof(SENSOR_STATS);
+			const size_t size = sizeof(SENSOR_STATS);
 			unsigned int inc = 0;
 			BOOL found = false;
 
