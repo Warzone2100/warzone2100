@@ -3834,12 +3834,12 @@ DROID_TEMPLATE * getTemplateFromTranslatedNameNoPlayer(char *pName)
 			if (strcmp(psCurr->aName, pName) == 0)
 			{
 				//if template is selectedPlayers' it must be a CYBORG or we ignore it
-				if (!bMultiPlayer &&
-					player == selectedPlayer &&
-					!(psCurr->droidType == DROID_CYBORG ||
-					psCurr->droidType == DROID_CYBORG_SUPER ||
-					psCurr->droidType == DROID_CYBORG_CONSTRUCT ||
-					psCurr->droidType == DROID_CYBORG_REPAIR))
+				if (!bMultiPlayer
+				 && player == selectedPlayer
+				 && !(psCurr->droidType == DROID_CYBORG
+				   || psCurr->droidType == DROID_CYBORG_SUPER
+				   || psCurr->droidType == DROID_CYBORG_CONSTRUCT
+				   || psCurr->droidType == DROID_CYBORG_REPAIR))
 				{
 					//ignore
 					continue;
