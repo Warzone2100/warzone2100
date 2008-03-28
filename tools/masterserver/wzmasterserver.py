@@ -158,13 +158,13 @@ class Game:
 		# Check we can connect to the host
 		s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 		try:
-			logging.debug("(%s) Checking gameserver's vitality..." % self.host)
+			logging.debug("Checking %s's vitality..." % self.host)
 			s.settimeout(10.0)
 			s.connect((self.host, gamePort))
 			s.close()
 			return True
 		except:
-			logging.debug("(%s) Gameserver did not respond!" % self.host)
+			logging.debug("%s did not respond!" % self.host)
 			return False
 
 #
@@ -241,7 +241,7 @@ class RequestHandler(SocketServer.ThreadingMixIn, SocketServer.StreamRequestHand
 			# Lock the gamelist to prevent new games while output.
 			with gamedblock:
 				gamesCount = len(gamedb.getGames())
-				logging.debug("Gameserver list: %i game(s)" % (gamesCount))
+				logging.debug("(%s) Gameserver list: %i game(s)" % (gameHost, gamesCount))
 				
 				# Transmit the length of the following list as unsigned integer (in network byte-order: big-endian).
 				count = struct.pack('!I', gamesCount)
@@ -254,7 +254,7 @@ class RequestHandler(SocketServer.ThreadingMixIn, SocketServer.StreamRequestHand
 		
 		# If something unknown apperas.
 		else:
-			raise Exception("Recieved a unknown command: %s" % netCommand)
+			raise Exception("(%s) Recieved a unknown command: %s" % (gameHost, netCommand))
 
 #
 ################################################################################
