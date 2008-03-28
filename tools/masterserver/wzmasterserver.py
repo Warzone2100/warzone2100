@@ -69,6 +69,13 @@ class GameDB:
 	def __init__(self):
 		self.list = set()
 	
+	def __remove(self, g):
+		# if g is not in the list, ignore the KeyError exception
+		try:
+			self.list.remove(g)
+		except KeyError:
+			pass
+	
 	def addGame(self, g):
 		""" add a game """
 		with gamedblock:
@@ -77,11 +84,7 @@ class GameDB:
 	def removeGame(self, g):
 		""" remove a game from the list"""
 		with gamedblock:
-			# if g is not in the list, ignore the KeyError exception
-			try:
-				self.list.remove(g)
-			except KeyError:
-				pass
+			self.__remove(g)
 	
 	# only games with a valid description
 	def getGames(self):
@@ -103,11 +106,7 @@ class GameDB:
 			for game in self.getGames():
 				if not game.check():
 					logging.debug("Removing unreachable game: %s" % game)
-					# HACK Code duplication with removeGame()
-					try:
-						self.list.remove(g)
-					except KeyError:
-						pass
+					self.__remove(g)
 	
 	def listGames(self):
 		with gamedblock:
@@ -135,6 +134,9 @@ class Game:
 		self.user3 = None
 		self.user4 = None
 		self.requestHandler = requestHandler
+	
+	def __str__(self):
+		return "Game: %16s %s %s %s" % ( self.host, self.description, self.maxPlayers, self.currentPlayers)
 	
 	def setData(self, d):
 		""" decode the c-structure from the server into local varialbles"""
@@ -164,9 +166,6 @@ class Game:
 		except:
 			logging.debug("(%s) Gameserver did not respond!" % self.host)
 			return False
-	
-	def __str__(self):
-		return "Game: %16s %s %s %s" % ( self.host, self.description, self.maxPlayers, self.currentPlayers)
 
 #
 ################################################################################
