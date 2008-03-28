@@ -37,9 +37,9 @@ using namespace std;
         #define pclose _pclose
     #endif
 #else
-    #include <stdlib.h>
-    #include <unistd.h>
-    #include <errno.h>
+    #include <cstdlib>
+    #include <climits>
+    #include <cerrno>
     inline void set_env(const char* k, const char* v) { setenv(k, v, 1); };
 #endif
 
