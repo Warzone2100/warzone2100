@@ -134,7 +134,7 @@ typedef struct _w_init
 // The below define is max # of tabs we can have.
 // It is set to 20  Look @  #define	MAXSTRUCTURES	200 in hci.h  Keep them in check!
 // New routines really have no max limit. I am not sure what max # a legal user can have.
-#define WFORM_MAXMAJOR		20	   // Maximum number of major tabs on a tab form
+#define WFORM_MAXMAJOR		40	   // Maximum number of major tabs on a tab form
 // we do NOT use MAX MINOR now, it is another way to draw the widgets.
 #define WFORM_MAXMINOR		5	   //15		// Maximum number of minor tabs off a major
 #define MAX_TAB_STD_SHOWN   4		// max # of tabs we can display using standard tab icons.
