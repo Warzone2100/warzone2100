@@ -2763,7 +2763,10 @@ BOOL droidTemplateShutDown(void)
 			pTemplate = pNext)
 		{
 			pNext = pTemplate->psNext;
-			free(pTemplate->pName);
+			if (pTemplate->pName != sDefaultDesignTemplate.pName)
+			{
+				free(pTemplate->pName);
+			}
 			free(pTemplate);
 		}
 		apsDroidTemplates[player] = NULL;
