@@ -2489,6 +2489,10 @@ BOOL loadDroidTemplates(const char *pDroidData, UDWORD bufferSize)
 		*/
 		if ( pDroidDesign->droidType == DROID_DEFAULT )
 		{
+			// NOTE: sDefaultDesignTemplate.pName takes ownership
+			//       of the memory allocated to pDroidDesign->pName
+			//       here. Which is good because pDroidDesign leaves
+			//       scope here anyway.
 			memcpy( &sDefaultDesignTemplate, pDroidDesign, sizeof(DROID_TEMPLATE) );
 			free(pDroidDesign);
 		}
@@ -2500,7 +2504,6 @@ BOOL loadDroidTemplates(const char *pDroidData, UDWORD bufferSize)
 
 		//increment the pointer to the start of the next record
 		pDroidData = strchr(pDroidData,'\n') + 1;
-		pDroidDesign++;
 	}
 
 	if ( bDefaultTemplateFound == false )
@@ -2677,8 +2680,11 @@ BOOL loadDroidWeapons(const char *pWeaponData, UDWORD bufferSize)
 			/* if Template not found - try default design */
 			if (!pTemplate)
 			{
-				pTemplate = &sDefaultDesignTemplate;
-				if ( strcmp(TemplateName, pTemplate->pName) != 0 )
+				if (strcmp(TemplateName, sDefaultDesignTemplate.pName) == 0)
+				{
+					pTemplate = &sDefaultDesignTemplate;
+				}
+				else
 				{
 					debug( LOG_ERROR, "Unable to find Template - %s", TemplateName );
 					abort();
@@ -2759,10 +2765,10 @@ BOOL droidTemplateShutDown(void)
 	{
 		DROID_TEMPLATE *pTemplate, *pNext;
 
-		for(pTemplate = apsDroidTemplates[player]; pTemplate != NULL;
-			pTemplate = pNext)
+		for (pTemplate = apsDroidTemplates[player]; pTemplate != NULL; pTemplate = pNext)
 		{
 			pNext = pTemplate->psNext;
+			ASSERT(sDefaultDesignTemplate.pName != pTemplate->pName, "We'll soon be getting a double free()!!!");
 			if (pTemplate->pName != sDefaultDesignTemplate.pName)
 			{
 				free(pTemplate->pName);

@@ -470,6 +470,7 @@ static BOOL _intAddDesign( BOOL bShowCentreScreen )
 	else
 	{
 		memcpy(&sCurrDesign, &sDefaultDesignTemplate, sizeof(DROID_TEMPLATE));
+		sCurrDesign.pName = NULL;
 		strlcpy(aCurrName, _("New Vehicle"), sizeof(aCurrName));
 		strlcpy(sCurrDesign.aName, aCurrName, sizeof(sCurrDesign.aName));
 	}
@@ -3455,6 +3456,7 @@ static void desCreateDefaultTemplate( void )
 {
 	/* set current design to default */
 	memcpy( &sCurrDesign, &sDefaultDesignTemplate, sizeof(DROID_TEMPLATE) );
+	sCurrDesign.pName = NULL;
 
 	/* reset stats */
 	intSetDesignStats(&sCurrDesign);
