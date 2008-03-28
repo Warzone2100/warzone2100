@@ -422,6 +422,7 @@ TRACK* sound_LoadTrackFromFile(const char *fileName)
 	TRACK* pTrack;
 	PHYSFS_file* fileHandle;
 	size_t filename_size;
+	char* track_name;
 
 	// Use PhysicsFS to open the file
 	fileHandle = PHYSFS_openRead(fileName);
@@ -458,13 +459,14 @@ TRACK* sound_LoadTrackFromFile(const char *fileName)
 	// Set filename pointer; if the filename (as returned by
 	// GetLastResourceFilename()) is a NULL pointer, then this will be a
 	// NULL pointer as well.
-	pTrack->fileName = filename_size ? (const char*)pTrack + sizeof(TRACK) : NULL;
+	track_name = filename_size ? (char*)(pTrack + 1) : NULL;
 
 	// Copy the filename into the struct, if we don't have a NULL pointer
 	if (filename_size != 0)
 	{
-		strcpy((char*)pTrack->fileName, GetLastResourceFilename());
+		strcpy(track_name, GetLastResourceFilename());
 	}
+	pTrack->fileName = track_name;
 
 	// Now use sound_ReadTrackFromBuffer to decode the file's contents
 	pTrack = sound_DecodeOggVorbisTrack(pTrack, fileHandle);
