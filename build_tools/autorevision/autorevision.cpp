@@ -1,8 +1,9 @@
 /*
  * autorevision - a tool to incorporate Subversion revisions into binary builds
- * Copyright (C) 2005 Thomas Denk
- * Copyright (C) 2007 Giel van Schijndel
- * Copyright (C) 2007 Warzone Resurrection Project
+ * Copyright (C) 2005       Thomas Denk
+ * Copyright (C) 2008       Paul Wise
+ * Copyright (C) 2007-2008  Giel van Schijndel
+ * Copyright (C) 2007-2008  Warzone Resurrection Project
  *
  * This program is distributed under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or (at your option) any later version.
@@ -37,6 +38,8 @@ using namespace std;
     #endif
 #else
     #include <stdlib.h>
+    #include <unistd.h>
+    #include <errno.h>
     inline void set_env(const char* k, const char* v) { setenv(k, v, 1); };
 #endif
 
@@ -128,7 +131,7 @@ class RevisionExtractor
          *    "return extractRevision(revision, date, wc_uri);"
          */
         virtual bool extractRevision(RevisionInformation& rev_info) = 0;
-		
+
     private:
         // Declare the pointer itself const; not whatever it points to
         RevisionExtractor* const _successor;
@@ -182,6 +185,23 @@ class RevFileParse : public RevisionExtractor
 
     private:
         const std::string _docFile;
+};
+
+class RevGitSVNQuery : public RevisionExtractor
+{
+    public:
+        RevGitSVNQuery(const std::string& workingDir, RevisionExtractor* s = NULL) :
+            RevisionExtractor(s),
+            _workingDir(workingDir)
+        {}
+
+        virtual bool extractRevision(RevisionInformation& rev_info);
+
+    private:
+        bool FindRev(const char* cmd, std::string& str) const;
+
+    private:
+        const std::string _workingDir;
 };
 
 class RevConfigFile : public RevisionExtractor
@@ -257,7 +277,8 @@ int main(int argc, char** argv)
     RevConfigFile revRetr4(workingDir + "/autorevision.conf");
     RevFileParse revRetr3(workingDir + "/_svn/entries", &revRetr4);
     RevFileParse revRetr2(workingDir + "/.svn/entries", &revRetr3);
-    RevSVNQuery  revRetr1(workingDir, &revRetr2);
+    RevGitSVNQuery revRetr2_1(workingDir, &revRetr2);
+    RevSVNQuery  revRetr1(workingDir, &revRetr2_1);
 
     RevSVNVersionQuery revRetr(workingDir, &revRetr1);
 
@@ -273,17 +294,22 @@ int main(int argc, char** argv)
         rev_info.revision = "0";
     }
 
+    if (rev_info.date == "")
+        rev_info.date = "0000-00-00 00:00:00";
+
     WriteOutput(outputFile, rev_info);
 
     return 0;
 }
 
-void removeAfterNewLine(string& str)
+bool removeAfterNewLine(string& str)
 {
     // Find a newline and erase everything that comes after it
     string::size_type lbreak_pos = str.find_first_of("\r\n");
     if (lbreak_pos != string::npos)
         str.erase(lbreak_pos);
+
+    return !str.empty();
 }
 
 bool RevSVNVersionQuery::extractRevision(RevisionInformation& rev_info)
@@ -364,9 +390,9 @@ bool RevSVNQuery::extractRevision(RevisionInformation& rev_info)
         line.assign(buf);
         if(line.find("Revision: ") != string::npos)
         {
-            std::string revision = line.substr(strlen("Revision: "));
+            rev_info.revision = line.substr(strlen("Revision: "));
 
-            removeAfterNewLine(revision);
+            removeAfterNewLine(rev_info.revision);
         }
         if(line.find("Last Changed Date: ") != string::npos)
         {
@@ -432,6 +458,127 @@ bool RevFileParse::extractRevision(RevisionInformation& rev_info)
     rev_info.date[10] = ' ';
 
     return true;
+}
+
+static string GetWorkingDir()
+{
+#if !defined(SAG_COM) && (defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__) || defined(WIN64) || defined(_WIN64) || defined(__WIN64__))
+    // Determine the required buffer size to contain the current directory
+    const DWORD curDirSize = GetCurrentDirectoryA(0, NULL);
+
+    // GetCurrentDirectoryA returns zero only on an error
+    if (curDirSize == 0)
+        return string();
+
+    // Create a buffer of the required size
+    // @note: We're using a dynamically allocated array here, instead of a
+    //        variably sized array, because MSVC doesn't support variably sized
+    //        arrays.
+    char* curDir = new char[curDirSize];
+
+    // Retrieve the current directory
+    GetCurrentDirectoryA(curDirSize, curDir.get());
+
+    // Return the current directory as a STL string
+    string cwd(curDir);
+    delete [] curDir;
+    return cwd;
+#else
+    size_t curDirSize = PATH_MAX;
+    char* curDir = new char[curDirSize];
+
+    // Retrieve the current working directory
+    if (!getcwd(curDir, curDirSize))
+        if (errno == ERANGE)
+        {
+            delete [] curDir;
+            curDirSize *= 2;
+            curDir = new char[curDirSize];
+
+               if (!getcwd(curDir, curDirSize))
+               {
+                    curDir[0] = '\0';
+               }
+        }
+        else
+        {
+            curDir[0] = '\0';
+        }
+
+    string cwd(curDir);
+    delete [] curDir;
+    return cwd;
+#endif
+}
+
+static bool ChangeDir(const string& dir)
+{
+#if !defined(SAG_COM) && (defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__) || defined(WIN64) || defined(_WIN64) || defined(__WIN64__))
+    return (SetCurrentDirectoryA(dir.c_str()) != 0);
+#else
+    return (chdir(dir.c_str()) == 0);
+#endif
+}
+
+bool RevGitSVNQuery::FindRev(const char* cmd, std::string& str) const
+{
+    const string cwd(GetWorkingDir());
+    if (!ChangeDir(_workingDir))
+        return false;
+
+    set_env("LANG", "C");
+    set_env("LC_ALL", "C");
+    FILE *gitsvn = popen(cmd, "r");
+
+    // Change directories back
+    ChangeDir(cwd);
+
+    if (!gitsvn)
+        return false;
+
+    char buf[1024];
+    const char* retval = fgets(buf, sizeof(buf), gitsvn);
+    pclose(gitsvn);
+
+    if (!retval)
+        return false;
+
+    str.assign(buf);
+    return true;
+}
+
+bool RevGitSVNQuery::extractRevision(RevisionInformation& rev_info)
+{
+    string revision;
+    if (!FindRev("git-svn find-rev HEAD", revision)
+     || !removeAfterNewLine(revision))
+    {
+        // If we got here it means that the current HEAD of git is no SVN
+        // revision, which means that there are changes compared to whatever
+        // SVN revision we originate from.
+        std::string gitrevision;
+        // Retrieve the most recently used git revision that's still from SVN
+        if (!FindRev("git-rev-list --max-count=1 --grep='git-svn-id: ' HEAD", gitrevision)
+        // Match it up with a subversion revision number
+         || !FindRev(("git-svn find-rev " + gitrevision).c_str(), revision))
+            return RevisionExtractor::extractRevision(rev_info);
+
+        removeAfterNewLine(revision);
+        rev_info.revision = revision;
+        rev_info.wc_modified = true;
+    }
+    else
+    {
+        rev_info.revision = revision;
+        if (system(NULL))
+        {
+            // This command will return without success if the working copy is
+            // changed, wether checked into index or not.
+            rev_info.wc_modified = system("git-diff --quiet HEAD");
+        }
+    }
+
+    return RevisionExtractor::extractRevision(rev_info);
 }
 
 bool RevConfigFile::extractRevision(RevisionInformation& rev_info)
