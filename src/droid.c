@@ -2768,6 +2768,7 @@ BOOL droidTemplateShutDown(void)
 		apsDroidTemplates[player] = NULL;
 	}
 	free(sDefaultDesignTemplate.pName);
+	sDefaultDesignTemplate.pName = NULL;
 
 	return true;
 }
