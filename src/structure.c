@@ -5063,13 +5063,7 @@ SDWORD getStructStatFromName(char *pName)
 {
 	UDWORD				inc;
 	STRUCTURE_STATS		*psStat;
-
-#ifdef RESOURCE_NAMES
-	if (!getResourceName(pName))
-	{
-		return -1;
-	}
-#endif
+	
 	for (inc = 0; inc < numStructureStats; inc++)
 	{
 		psStat = &asStructureStats[inc];

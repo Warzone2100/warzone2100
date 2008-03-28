@@ -655,13 +655,6 @@ SDWORD getFeatureStatFromName( const char *pName )
 	unsigned int inc;
 	FEATURE_STATS *psStat;
 
-#ifdef RESOURCE_NAMES
-	if (!getResourceName(pName))
-	{
-		return -1;
-	}
-#endif
-
 	for (inc = 0; inc < numFeatureStats; inc++)
 	{
 		psStat = &asFeatureStats[inc];
