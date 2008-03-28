@@ -2084,7 +2084,8 @@ BOOL loadDroidTemplates(const char *pDroidData, UDWORD bufferSize)
 	for (line = 0; line < NumDroids; line++)
 	{
 		char componentName[MAX_STR_LENGTH];
-		unsigned int cnt, player;
+		unsigned int player;
+		int cnt;
 		DROID_TEMPLATE *pDroidDesign = malloc(sizeof(DROID_TEMPLATE));
 		if (pDroidDesign == NULL)
 		{
@@ -2481,7 +2482,7 @@ BOOL loadDroidTemplates(const char *pDroidData, UDWORD bufferSize)
 
 		pDroidDesign->ref = REF_TEMPLATE_START + line;
 /*	Loaded in from the database now AB 29/10/98
-			pDroidDesign->multiPlayerID = i;			// another unique number, just for multiplayer stuff.
+			pDroidDesign->multiPlayerID = line;			// another unique number, just for multiplayer stuff.
 */
 		/* store global default design if found else
 		* store in the appropriate array
@@ -2659,7 +2660,7 @@ BOOL loadDroidWeapons(const char *pWeaponData, UDWORD bufferSize)
 
 	for (line = 0; line < NumWeapons; line++)
 	{
-		unsigned int player = 0;
+		unsigned int player;
 		char WeaponName[DROID_MAXWEAPS][MAX_STR_LENGTH] = {{'\0'}},
 			TemplateName[MAX_STR_LENGTH] = {'\0'};
 
@@ -2669,7 +2670,7 @@ BOOL loadDroidWeapons(const char *pWeaponData, UDWORD bufferSize)
 
 		if (player < MAX_PLAYERS)
 		{
-			unsigned int j = 0;
+			unsigned int j;
 
 			DROID_TEMPLATE *pTemplate = getTemplateFromUniqueName(TemplateName, player);
 
@@ -4607,7 +4608,7 @@ a string ID or something the user types in*/
 const char* getTemplateName(const DROID_TEMPLATE *psTemplate)
 {
 	const char *pNameID = psTemplate->aName;
-	unsigned int id;
+	UDWORD id;
 
 	/*see if the name has a resource associated with it by trying to get
 	the ID for the string*/
@@ -4640,7 +4641,7 @@ BOOL	droidIsDamaged(DROID *psDroid)
 
 BOOL getDroidResourceName(char *pName)
 {
-	unsigned int id;
+	UDWORD id;
 
 	//see if the name has a resource associated with it by trying to get the ID for the string
 	if (!strresGetIDNum(psStringRes, pName, &id))
