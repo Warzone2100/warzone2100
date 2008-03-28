@@ -166,9 +166,11 @@ parseGetErrorData(int *pLine, char **ppText)
 /* Older GNU Flex versions don't define yylex_destroy()
  * (and neither define a subminor version)
  */
-#if !defined(YY_FLEX_SUBMINOR_VERSION) || (YY_FLEX_SUBMINOR_VERSION < 30)
+#if !defined(YY_FLEX_SUBMINOR_VERSION) || (YY_FLEX_SUBMINOR_VERSION < 9)
 int audp_lex_destroy(void)
 {
+	/* For non-reentrant C scanner only. */
+	yy_delete_buffer(YY_CURRENT_BUFFER);
+	yy_init = 1;
 }
 #endif
-
