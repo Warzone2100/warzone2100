@@ -2103,6 +2103,8 @@ BOOL loadDroidTemplates(const char *pDroidData, UDWORD bufferSize)
 		// Store translated name in aName
 		if (!getDroidResourceName(componentName))
 		{
+			free(pDroidDesign->pName);
+			free(pDroidDesign);
 			return false;
 		}
 		strlcpy(pDroidDesign->aName, componentName, sizeof(pDroidDesign->aName));
@@ -2125,6 +2127,8 @@ BOOL loadDroidTemplates(const char *pDroidData, UDWORD bufferSize)
 
 			if (!getResourceName(componentName))
 			{
+				free(pDroidDesign->pName);
+				free(pDroidDesign);
 				return false;
 			}
 
@@ -2143,6 +2147,8 @@ BOOL loadDroidTemplates(const char *pDroidData, UDWORD bufferSize)
 			{
 				debug( LOG_ERROR, "Body component not found for droid %s", getTemplateName(pDroidDesign) );
 				abort();
+				free(pDroidDesign->pName);
+				free(pDroidDesign);
 				return false;
 			}
 		}
@@ -2165,6 +2171,8 @@ BOOL loadDroidTemplates(const char *pDroidData, UDWORD bufferSize)
 
 			if (!getResourceName(componentName))
 			{
+				free(pDroidDesign->pName);
+				free(pDroidDesign);
 				return false;
 			}
 
@@ -2184,6 +2192,8 @@ BOOL loadDroidTemplates(const char *pDroidData, UDWORD bufferSize)
 				debug( LOG_ERROR, "Brain component not found for droid %s", getTemplateName(pDroidDesign) );
 				abort();
 //				DBERROR(("Brain component not found for droid %s", pDroidDesign->pName));
+				free(pDroidDesign->pName);
+				free(pDroidDesign);
 				return false;
 			}
 		}
@@ -2206,6 +2216,8 @@ BOOL loadDroidTemplates(const char *pDroidData, UDWORD bufferSize)
 
 			if (!getResourceName(componentName))
 			{
+				free(pDroidDesign->pName);
+				free(pDroidDesign);
 				return false;
 			}
 			for (inc=0; inc < numConstructStats; inc++)
@@ -2223,6 +2235,8 @@ BOOL loadDroidTemplates(const char *pDroidData, UDWORD bufferSize)
 			{
 				debug( LOG_ERROR, "Construct component not found for droid %s", getTemplateName(pDroidDesign) );
 				abort();
+				free(pDroidDesign->pName);
+				free(pDroidDesign);
 				return false;
 			}
 		}
@@ -2245,6 +2259,8 @@ BOOL loadDroidTemplates(const char *pDroidData, UDWORD bufferSize)
 
 			if (!getResourceName(componentName))
 			{
+				free(pDroidDesign->pName);
+				free(pDroidDesign);
 				return false;
 			}
 			for (inc=0; inc < numECMStats; inc++)
@@ -2262,6 +2278,8 @@ BOOL loadDroidTemplates(const char *pDroidData, UDWORD bufferSize)
 			{
 				debug( LOG_ERROR, "ECM component not found for droid %s", getTemplateName(pDroidDesign) );
 				abort();
+				free(pDroidDesign->pName);
+				free(pDroidDesign);
 				return false;
 			}
 		}
@@ -2274,6 +2292,8 @@ BOOL loadDroidTemplates(const char *pDroidData, UDWORD bufferSize)
 		{
 			debug( LOG_ERROR, "Duplicate template %s", pDroidDesign->pName );
 			abort();
+			free(pDroidDesign->pName);
+			free(pDroidDesign);
 			return false;
 		}
 
@@ -2295,6 +2315,8 @@ BOOL loadDroidTemplates(const char *pDroidData, UDWORD bufferSize)
 
 			if (!getResourceName(componentName))
 			{
+				free(pDroidDesign->pName);
+				free(pDroidDesign);
 				return false;
 			}
 			for (inc=0; inc < numPropulsionStats; inc++)
@@ -2312,6 +2334,8 @@ BOOL loadDroidTemplates(const char *pDroidData, UDWORD bufferSize)
 			{
 				debug( LOG_ERROR, "Propulsion component not found for droid %s", getTemplateName(pDroidDesign) );
 				abort();
+				free(pDroidDesign->pName);
+				free(pDroidDesign);
 				return false;
 			}
 		}
@@ -2334,6 +2358,8 @@ BOOL loadDroidTemplates(const char *pDroidData, UDWORD bufferSize)
 
 			if (!getResourceName(componentName))
 			{
+				free(pDroidDesign->pName);
+				free(pDroidDesign);
 				return false;
 			}
 			for (inc=0; inc < numRepairStats; inc++)
@@ -2351,6 +2377,8 @@ BOOL loadDroidTemplates(const char *pDroidData, UDWORD bufferSize)
 			{
 				debug( LOG_ERROR, "Repair component not found for droid %s", getTemplateName(pDroidDesign) );
 				abort();
+				free(pDroidDesign->pName);
+				free(pDroidDesign);
 				return false;
 			}
 		}
@@ -2407,6 +2435,8 @@ BOOL loadDroidTemplates(const char *pDroidData, UDWORD bufferSize)
 
 			if (!getResourceName(componentName))
 			{
+				free(pDroidDesign->pName);
+				free(pDroidDesign);
 				return false;
 			}
 
@@ -2425,6 +2455,8 @@ BOOL loadDroidTemplates(const char *pDroidData, UDWORD bufferSize)
 			{
 				debug( LOG_ERROR, "Sensor not found for droid Template: %s", pDroidDesign->aName );
 				abort();
+				free(pDroidDesign->pName);
+				free(pDroidDesign);
 				return false;
 			}
 		}
@@ -2441,6 +2473,8 @@ BOOL loadDroidTemplates(const char *pDroidData, UDWORD bufferSize)
 		{
 			debug( LOG_ERROR, "Too many weapons have been allocated for droid Template: %s", pDroidDesign->aName );
 			abort();
+			free(pDroidDesign->pName);
+			free(pDroidDesign);
 			return false;
 		}
 
