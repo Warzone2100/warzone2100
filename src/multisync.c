@@ -50,6 +50,7 @@
 #include "frontend.h"								// for titlemode
 #include "multistat.h"
 #include "power.h"									// for power checks
+#include "multirecv.h"
 
 // ////////////////////////////////////////////////////////////////////////////
 // function definitions

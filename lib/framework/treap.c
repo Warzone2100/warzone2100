@@ -55,7 +55,7 @@ void treapSetCallPos(const char *pFileName, SDWORD lineNumber)
 }
 
 /* nothing actually uses the default comparison function.... */
-static SDWORD defaultCmp(void *key1, void *key2)
+static SDWORD defaultCmp(const void *key1, const void *key2)
 {
 	if (key1 < key2)
 	{
@@ -70,7 +70,7 @@ static SDWORD defaultCmp(void *key1, void *key2)
 }
 
 /* A useful comparison function - keys are char pointers */
-SDWORD treapStringCmp(void *key1, void *key2)
+SDWORD treapStringCmp(const void *key1, const void *key2)
 {
 	SDWORD result;
 	const char *pStr1 = (const char *)key1;
@@ -295,7 +295,7 @@ BOOL treapDel(TREAP *psTreap, void *key)
 
 
 /* Recursively find an object in a treap */
-void *treapFindRec(TREAP_NODE *psRoot, void *key, TREAP_CMP cmp)
+static void *treapFindRec(TREAP_NODE *psRoot, const void *key, TREAP_CMP cmp)
 {
 	if (psRoot == NULL)
 	{
@@ -323,7 +323,7 @@ void *treapFindRec(TREAP_NODE *psRoot, void *key, TREAP_CMP cmp)
 
 
 /* Find an object in a treap */
-void *treapFind(TREAP *psTreap, void *key)
+void *treapFind(TREAP *psTreap, const void *key)
 {
 	return treapFindRec(psTreap->psRoot, key, psTreap->cmp);
 }

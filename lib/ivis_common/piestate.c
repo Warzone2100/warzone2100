@@ -22,8 +22,6 @@
 unsigned int pieStateCount = 0; // Used in pie_GetResetCounts
 RENDER_STATE rendStates;
 
-void pie_SetTranslucencyMode(TRANSLUCENCY_MODE transMode);
-
 void pie_SetDefaultStates(void)//Sets all states
 {
 	PIELIGHT black;

@@ -27,6 +27,7 @@
  *
  */
 #include "frame.h"
+#include "file.h"
 
 #include <SDL.h>
 #include <physfs.h>

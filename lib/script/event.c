@@ -273,7 +273,7 @@ const char *eventGetEventID(SCRIPT_CODE *psCode, SDWORD event)
 }
 
 // Print out all the info available about a trigger
-void eventPrintTriggerInfo(ACTIVE_TRIGGER *psTrigger)
+static void eventPrintTriggerInfo(ACTIVE_TRIGGER *psTrigger)
 {
 	SCRIPT_CODE *psCode = psTrigger->psContext->psCode;
 	const char	*pTrigLab, *pEventLab;

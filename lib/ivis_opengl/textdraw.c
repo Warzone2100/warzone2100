@@ -83,7 +83,7 @@ static inline void iV_printFontList()
 		snprintf(prBuffer, sizeof(prBuffer), "Font #%d : %s ", font, (const char*)glcGetFontc(font, GLC_FAMILY));
 		prBuffer[sizeof(prBuffer) - 1] = 0;
 		strlcat(prBuffer, glcGetFontFace(font), sizeof(prBuffer));
-		debug(LOG_NEVER, prBuffer);
+		debug(LOG_NEVER, "%s", prBuffer);
 	}
 }
 

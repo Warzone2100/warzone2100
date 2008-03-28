@@ -34,6 +34,7 @@
 
 #include "cluster.h"
 #include "lib/sound/aud.h"
+#include "lib/sound/tracklib.h"
 
 /***************************************************************************/
 

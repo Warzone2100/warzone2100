@@ -43,14 +43,10 @@
 #include "action.h"
 #include "console.h"
 #include "mapgrid.h"
+#include "multirecv.h"
 
 #define ANYPLAYER	99
 #define UNKNOWN		99
-
-// ////////////////////////////////////////////////////////////////////////////
-// External Stuff.
-extern DROID_ORDER chooseOrderLoc(DROID *psDroid, UDWORD x,UDWORD y);
-extern DROID_ORDER chooseOrderObj(DROID *psDroid, BASE_OBJECT *psObj);
 
 // ////////////////////////////////////////////////////////////////////////////
 // Local Prototypes

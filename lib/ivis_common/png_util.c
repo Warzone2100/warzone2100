@@ -171,7 +171,7 @@ BOOL iV_loadImage_PNG(const char *fileName, iV_Image *image)
 
 void iV_saveImage_PNG(const char *fileName, const iV_Image *image)
 {
-	const unsigned char** scanlines = NULL;
+	unsigned char** scanlines = NULL;
 	png_infop info_ptr = NULL;
 	png_structp png_ptr = NULL;
 
@@ -252,7 +252,7 @@ void iV_saveImage_PNG(const char *fileName, const iV_Image *image)
 			scanlines[currentRow] = &image->bmp[row_stride * (image->height - currentRow - 1)];
 		}
 
-		png_set_rows(png_ptr, info_ptr, (const png_bytepp)scanlines);
+		png_set_rows(png_ptr, info_ptr, (png_bytepp)scanlines);
 
 		png_write_png(png_ptr, info_ptr, PNG_TRANSFORM_IDENTITY, NULL);
 	}

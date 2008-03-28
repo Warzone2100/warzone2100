@@ -253,7 +253,7 @@ void displayRequestOption(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIEL
 // ////////////////////////////////////////////////////////////////////////////
 // ////////////////////////////////////////////////////////////////////////////
 
-void displayCamTypeBut(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
+static void displayCamTypeBut(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
 {
 	UDWORD	x = xOffset+psWidget->x;
 	UDWORD	y = yOffset+psWidget->y;
@@ -269,7 +269,7 @@ void displayCamTypeBut(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGH
 	iV_DrawText(buffer, x+2, y+12);
 }
 
-void displayNumPlayersBut(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
+static void displayNumPlayersBut(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
 {
 	UDWORD	x = xOffset+psWidget->x;
 	UDWORD	y = yOffset+psWidget->y;
@@ -672,7 +672,7 @@ BOOL runMultiRequester(UDWORD id,UDWORD *mode, char *chosen,UDWORD *chosenValue)
 // Display Functions
 
 
-void displayExtraGubbins(UDWORD height)
+static void displayExtraGubbins(UDWORD height)
 {
 	char	str[128];
 
@@ -734,7 +734,7 @@ void displayExtraGubbins(UDWORD height)
 }
 
 
-void displayMultiPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
+static void displayMultiPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
 {
 	char			str[128];
 	UDWORD			x					= xOffset+psWidget->x;
@@ -886,7 +886,7 @@ void displayMultiPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIG
 	}
 }
 
-void displayDebugMenu(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
+static void displayDebugMenu(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
 {
 	char			str[128];
 	UDWORD			x					= xOffset+psWidget->x;
@@ -907,7 +907,7 @@ void displayDebugMenu(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT
 // ////////////////////////////////////////////////////////////////////////////
 // alliance display funcs
 
-void displayAllianceState(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
+static void displayAllianceState(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
 {
 	UDWORD a, b, c, player = psWidget->UserData;
 	switch(alliances[selectedPlayer][player])
@@ -941,7 +941,7 @@ void displayAllianceState(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIEL
 }
 
 
-void displayChannelState(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
+static void displayChannelState(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
 {
 	UDWORD a, b, c, player = psWidget->UserData;
 	switch(openchannels[player])
@@ -967,7 +967,7 @@ void displayChannelState(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELI
 
 // ////////////////////////////////////////////////////////////////////////////
 
-void addMultiPlayer(UDWORD player,UDWORD pos)
+static void addMultiPlayer(UDWORD player,UDWORD pos)
 {
 	UDWORD			y,id;
 	W_BUTINIT		sButInit;

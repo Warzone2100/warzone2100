@@ -99,7 +99,6 @@
 #define	MAP_ZOOM_RATE	(1000)
 #define MAP_PITCH_RATE	(SPIN_SCALING/SECS_PER_SPIN)
 
-extern		void shakeStop(void);
 extern char	ScreenDumpPath[];
 
 BOOL		bAllowOtherKeyPresses = true;

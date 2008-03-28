@@ -264,4 +264,7 @@ static inline void removeDroidOrderTarget(DROID *psDroid, SDWORD idx)
 	psDroid->asOrderList[idx].psOrderTarget = NULL;
 }
 
+extern DROID_ORDER chooseOrderLoc(DROID *psDroid, UDWORD x,UDWORD y);
+extern DROID_ORDER chooseOrderObj(DROID *psDroid, BASE_OBJECT *psObj);
+
 #endif // __INCLUDED_SRC_ORDER_H__

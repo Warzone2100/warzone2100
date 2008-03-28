@@ -1165,7 +1165,7 @@ UBYTE NETrecvFile(void)
 	return ((currPos + bytesRead) * 100) / fileSize;
 }
 
-void NETregisterServer(int state)
+static void NETregisterServer(int state)
 {
 	static TCPsocket rs_socket = NULL;
 	static int registered = 0;

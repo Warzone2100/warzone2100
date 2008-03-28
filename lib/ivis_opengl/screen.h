@@ -61,4 +61,6 @@ extern int wz_texture_compression;
 /* defined in piedraw.c */
 extern BOOL check_extension(const char* extension_name);
 
+extern void screenDoDumpToDiskIfRequired(void);
+
 #endif

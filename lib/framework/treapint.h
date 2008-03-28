@@ -36,11 +36,7 @@
 extern void treapAddNode(TREAP_NODE **ppsRoot, TREAP_NODE *psNew, TREAP_CMP cmp);
 
 /* Recursively find and remove a node from the tree */
-extern TREAP_NODE *treapDelRec(TREAP_NODE **ppsRoot, void *key,
-							   TREAP_CMP cmp);
-
-/* Recurisvely find an object in a treap */
-extern void *treapFindRec(TREAP_NODE *psRoot, void *key, TREAP_CMP cmp);
+extern TREAP_NODE *treapDelRec(TREAP_NODE **ppsRoot, void *key, TREAP_CMP cmp);
 
 /* Recursively display the treap structure */
 extern void treapDisplayRec(TREAP_NODE *psRoot, UDWORD indent);

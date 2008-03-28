@@ -334,4 +334,6 @@ extern UDWORD getMaxPropulsionSpeed(void);
 
 extern BOOL objHasWeapon(BASE_OBJECT *psObj);
 
+extern void statsInitVars(void);
+
 #endif // __INCLUDED_SRC_STATS_H__

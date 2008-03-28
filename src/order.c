@@ -3443,7 +3443,7 @@ BOOL secondaryGetState(DROID *psDroid, SECONDARY_ORDER sec, SECONDARY_STATE *pSt
 
 
 #ifdef DEBUG
-char *secondaryPrintFactories(UDWORD state)
+static char *secondaryPrintFactories(UDWORD state)
 {
 	SDWORD		i;
 	static		char aBuff[255];

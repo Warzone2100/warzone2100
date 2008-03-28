@@ -45,7 +45,7 @@
  *         1 for more
  *         0 for equal
  */
-typedef SDWORD (*TREAP_CMP)(void *key1, void *key2);
+typedef SDWORD (*TREAP_CMP)(const void *key1, const void *key2);
 
 
 /* The basic elements in the treap node.
@@ -119,7 +119,7 @@ extern BOOL treapAdd(TREAP *psTreap, void *key, void *pObj);
 extern BOOL treapDel(TREAP *psTreap, void *key);
 
 /* Find an object in a treap */
-extern void *treapFind(TREAP *psTreap, void *key);
+extern void *treapFind(TREAP *psTreap, const void *key);
 
 /* Release all the nodes in the treap */
 extern void treapReset(TREAP *psTreap);
@@ -140,7 +140,7 @@ extern void *treapGetSmallest(TREAP *psTreap);
 /*                            Comparison Functions                                      */
 
 /* A useful comparison function - keys are char pointers */
-extern SDWORD treapStringCmp(void *key1, void *key2);
+extern SDWORD treapStringCmp(const void *key1, const void *key2);
 
 /****************************************************************************************/
 /*                            Macro definitions                                         */

@@ -35,6 +35,7 @@
 #include "lib/ivis_common/piestate.h"
 #include "lib/ivis_common/pieclip.h"
 #include "piematrix.h"
+#include "screen.h"
 
 #define SHADOW_END_DISTANCE (8000*8000) // Keep in sync with lighting.c:FOG_END
 
@@ -58,8 +59,8 @@ extern BOOL drawing_interface;
 
 BOOL check_extension(const char *extName)
 {
-	char *p = (char *) glGetString(GL_EXTENSIONS);
-	char *end;
+	const char *p = (const char *)glGetString(GL_EXTENSIONS);
+	const char *end;
 	size_t extNameLen= strlen(extName);
 
 	end = p + strlen(p);

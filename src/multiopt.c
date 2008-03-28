@@ -52,6 +52,7 @@
 #include "multigifts.h"
 #include "aiexperience.h"	//for beacon messages
 #include "multiint.h"
+#include "multirecv.h"
 
 // ////////////////////////////////////////////////////////////////////////////
 // External Variables
@@ -383,6 +384,7 @@ BOOL joinCampaign(UDWORD gameNumber, char *sPlayer)
 	return true;
 }
 
+#if 0	// unused - useful?
 // ////////////////////////////////////////////////////////////////////////////
 // Lobby launched. fires the correct routine when the game was lobby launched.
 BOOL LobbyLaunched(void)
@@ -410,6 +412,7 @@ BOOL LobbyLaunched(void)
 
 	return true;
 }
+#endif
 
 // ////////////////////////////////////////////////////////////////////////////
 // say goodbye to everyone else

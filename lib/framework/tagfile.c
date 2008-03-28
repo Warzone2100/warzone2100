@@ -107,7 +107,7 @@ void tf_error(const char * fmt, ...)
 	va_start(ap, fmt);
 	vsnprintf(errorBuffer, sizeof(errorBuffer), fmt, ap);
 	va_end(ap);
-	debug(LOG_ERROR, errorBuffer);
+	debug(LOG_ERROR, "%s", errorBuffer);
 
 	tf_print_nested_groups(0, current);
 

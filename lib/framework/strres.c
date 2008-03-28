@@ -197,7 +197,7 @@ BOOL strresGetIDNum(STR_RES *psRes, const char *pIDStr, UDWORD *pIDNum)
 	ASSERT( psRes != NULL,
 		"strresGetIDNum: Invalid string res pointer" );
 
-	psID = (STR_ID*)TREAP_FIND(psRes->psIDTreap, (void*)pIDStr);
+	psID = (STR_ID*)TREAP_FIND(psRes->psIDTreap, pIDStr);
 	if (!psID)
 	{
 		*pIDNum = 0;
@@ -223,7 +223,7 @@ BOOL strresGetIDString(STR_RES *psRes, const char *pIDStr, char **ppStoredID)
 
 	ASSERT( psRes != NULL, "strresGetIDString: Invalid string res pointer" );
 
-	psID = (STR_ID*)TREAP_FIND(psRes->psIDTreap, (void*)pIDStr);
+	psID = (STR_ID*)TREAP_FIND(psRes->psIDTreap, pIDStr);
 	if (!psID)
 	{
 		*ppStoredID = NULL;

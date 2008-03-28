@@ -171,7 +171,7 @@ enum
 };
 
 // return translated text
-const char *getDORDDescription(int id)
+static const char *getDORDDescription(int id)
 {
 		switch ( id )
 		{

@@ -93,15 +93,9 @@
 #include "main.h"
 #include "wrappers.h"
 
-extern char UserMusicPath[];
+static void	initMiscVars(void);
 
-extern void statsInitVars(void);
-extern void	structureInitVars(void);
-extern BOOL messageInitVars(void);
-extern BOOL researchInitVars(void);
-extern void	featureInitVars(void);
-extern void radarInitVars(void);
-extern void	initMiscVars( void );
+extern char UserMusicPath[];
 
 extern char * global_mods[];
 extern char * campaign_mods[];
@@ -1201,7 +1195,7 @@ BOOL saveGameReset(void)
 }
 
 // --- Miscellaneous Initialisation stuff that really should be done each restart
-void	initMiscVars( void )
+static void	initMiscVars(void)
 {
 	selectedPlayer = 0;
 	godMode = false;

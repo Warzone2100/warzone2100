@@ -129,4 +129,6 @@ extern void pie_SetTexturePage(SDWORD num);
 extern void pie_SetAlphaTest(BOOL keyingOn);
 extern void pie_SetRendMode(REND_MODE rendMode);
 
+extern void pie_SetTranslucencyMode(TRANSLUCENCY_MODE transMode);
+
 #endif // _pieState_h

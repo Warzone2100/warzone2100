@@ -80,4 +80,6 @@ extern void displayProximityMessage(PROXIMITY_DISPLAY *psProxDisp);
 /** Add proximity messages for all untapped VISIBLE oil resources. */
 extern void addOilResourceProximities(void);
 
+extern BOOL messageInitVars(void);
+
 #endif // __INCLUDED_SRC_MESSAGE_H__

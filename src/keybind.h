@@ -26,7 +26,7 @@ extern void	kf_HalveHeights( void );
 extern void	kf_DebugDroidInfo( void );
 extern void	kf_BuildInfo( void );
 extern void	kf_ToggleFPS(void);		//FPS counter NOT same as kf_Framerate! -Q
-extern void kf_ToggleSamples(void);	//displays # of sound samples in Q/list.
+extern void	kf_ToggleSamples(void);		// Displays # of sound samples in Q/list.
 extern void	kf_FrameRate( void );
 extern void	kf_ShowNumObjects( void );
 extern void	kf_ToggleRadar( void );
@@ -58,6 +58,7 @@ extern void	kf_PitchForward( void );
 extern void	kf_ResetPitch( void );
 extern void	kf_ToggleDimension( void );
 extern void	kf_ShowMappings( void );
+extern void	kf_SelectGrouping( UDWORD groupNumber );
 extern void	kf_SelectGrouping_0( void );
 extern void	kf_SelectGrouping_1( void );
 extern void	kf_SelectGrouping_2( void );
@@ -169,7 +170,9 @@ extern void	kf_JumpToRepairUnits( void );
 extern void	kf_JumpToConstructorUnits( void );
 extern void	kf_JumpToCommandUnits( void );
 extern void	kf_JumpToSensorUnits( void );
-extern void kf_AddHelpBlip( void );				//Add a beacon
+extern void	kf_AddHelpBlip( void );				//Add a beacon
+extern void	kf_ToggleBlips( void );
+extern void	kf_ToggleProximitys( void );
 
 extern void	kf_JumpToUnassignedUnits( void );
 extern void	kf_TriggerShockWave( void );

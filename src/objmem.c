@@ -708,14 +708,6 @@ void checkFactoryFlags(void)
 #endif
 
 
-/**************************  STRUC FUNCTIONALITY ********************************/
-
-/*remove a structure Functionality from the heap*/
-void removeStructFunc(FUNCTIONALITY *psDel)
-{
-	free(psDel);
-}
-
 /**************************  OBJECT ACCESS FUNCTIONALITY ********************************/
 
 // Find a base object from it's id

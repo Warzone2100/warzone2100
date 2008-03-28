@@ -711,7 +711,7 @@ void script_debug(const char *pFormat, ...)
 	// Guarantee to nul-terminate
 	buffer[sizeof(buffer) - 1] = '\0';
 
-	debug(LOG_SCRIPT, buffer);
+	debug(LOG_SCRIPT, "%s", buffer);
 }
 
 /* Generate the code for a function call, checking the parameter

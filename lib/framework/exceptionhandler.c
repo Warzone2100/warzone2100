@@ -507,9 +507,8 @@ static void posixExceptionHandler(int signum, siginfo_t * siginfo, WZ_DECL_UNUSE
 			pid = fork();
 			if (pid == (pid_t)0)
 			{
-				const char
-					* gdbArgv[] = { gdbPath, programPath, programPID, NULL },
-					* gdbEnv[] = {NULL};
+				char *gdbArgv[] = { gdbPath, programPath, programPID, NULL };
+				char *gdbEnv[] = { NULL };
 
 				close(gdbPipe[1]); // No output to pipe
 
@@ -519,7 +518,7 @@ static void posixExceptionHandler(int signum, siginfo_t * siginfo, WZ_DECL_UNUSE
 				write(dumpFile, "GDB extended backtrace:\n",
 					  strlen("GDB extended backtrace:\n"));
 
-				execve(gdbPath, (char**)gdbArgv, (char**)gdbEnv);
+				execve(gdbPath, (char **)gdbArgv, (char **)gdbEnv);
 			}
 			else if (pid > (pid_t)0)
 			{

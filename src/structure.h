@@ -433,4 +433,6 @@ do { \
 	} \
 } while (0)
 
+extern void     structureInitVars(void);
+
 #endif // __INCLUDED_SRC_STRUCTURE_H__

@@ -171,7 +171,7 @@ void widgReleaseScreen(W_SCREEN *psScreen)
 
 
 /* Release a widget */
-void widgRelease(WIDGET *psWidget)
+static void widgRelease(WIDGET *psWidget)
 {
 	switch(psWidget->type)
 	{

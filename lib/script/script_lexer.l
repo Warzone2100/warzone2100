@@ -84,7 +84,7 @@ static char *pScrMacroBuffer[MAX_SCR_MACRO_DEPTH];
 static YYSTYPE dummy;
 
 /* Get the token type for a variable symbol */
-SDWORD scriptGetVarToken(VAR_SYMBOL *psVar)
+static SDWORD scriptGetVarToken(VAR_SYMBOL *psVar)
 {
 	BOOL	object;
 
@@ -198,7 +198,7 @@ SDWORD scriptGetVarToken(VAR_SYMBOL *psVar)
 }
 
 /* Get the token type for a constant symbol */
-SDWORD scriptGetConstToken(CONST_SYMBOL *psConst)
+static SDWORD scriptGetConstToken(CONST_SYMBOL *psConst)
 {
 	BOOL	object;
 
@@ -239,7 +239,7 @@ SDWORD scriptGetConstToken(CONST_SYMBOL *psConst)
 }
 
 /* Get the token type for a function symbol */
-SDWORD scriptGetFuncToken(FUNC_SYMBOL *psFunc)
+static SDWORD scriptGetFuncToken(FUNC_SYMBOL *psFunc)
 {
 	BOOL	object;
 
@@ -277,7 +277,7 @@ SDWORD scriptGetFuncToken(FUNC_SYMBOL *psFunc)
 }
 
 /* Get the token type for a custom function symbol */
-SDWORD scriptGetCustomFuncToken(EVENT_SYMBOL *psFunc)
+static SDWORD scriptGetCustomFuncToken(EVENT_SYMBOL *psFunc)
 {
 	BOOL	object;
 
@@ -328,7 +328,7 @@ SDWORD scriptGetCustomFuncToken(EVENT_SYMBOL *psFunc)
 }
 
 /* Look up defined macro and return new define buffer */
-BOOL scriptLoopUpMacro(const char *pMacro, char **ppMacroBody)
+static BOOL scriptLoopUpMacro(const char *pMacro, char **ppMacroBody)
 {
 	unsigned int i;
 
@@ -347,7 +347,7 @@ BOOL scriptLoopUpMacro(const char *pMacro, char **ppMacroBody)
 }
 
 /* Return to the previous macto buffer */
-void popMacroStack(void)
+static void popMacroStack(void)
 {
 	ASSERT(scr_macro_stack_ptr <= MAX_SCR_MACRO_DEPTH,
 		"FLEX: macro stack pointer out of bounds: %d", scr_macro_stack_ptr);
@@ -366,7 +366,7 @@ void popMacroStack(void)
 }
 
 /* Store macro name */
-void storeMacroName(const char *pMacroName)
+static void storeMacroName(const char *pMacroName)
 {
 	ASSERT(scr_num_macros < MAX_SCR_MACROS,
 		"FLEX: macro count out of bounds: %u", scr_num_macros);
@@ -389,7 +389,7 @@ void storeMacroName(const char *pMacroName)
 }
 
 /* Store macro body */
-void storeMacroBody(const char *pMacroBody)
+static void storeMacroBody(const char *pMacroBody)
 {
 	ASSERT(scr_num_macros < MAX_SCR_MACROS,
 		"FLEX: macro count out of bounds: %u", scr_num_macros);
@@ -401,7 +401,7 @@ void storeMacroBody(const char *pMacroBody)
 }
 
 /* include directive encountered - push current buffer, set up new one */
-void pushInclude(const char *pIncludePath)
+static void pushInclude(const char *pIncludePath)
 {
 	PHYSFS_file* newInput;
 

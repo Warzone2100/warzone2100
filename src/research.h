@@ -147,4 +147,6 @@ extern void enableSelfRepair(UBYTE player);
 
 void CancelAllResearch(UDWORD pl);
 
+extern BOOL researchInitVars(void);
+
 #endif // __INCLUDED_SRC_RESEARCH_H__

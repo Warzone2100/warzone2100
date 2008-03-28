@@ -92,7 +92,7 @@ enum
 
 
 // return translated string
-const char *getDescription(int id)
+static const char *getDescription(int id)
 {
 	switch ( id )
 	{

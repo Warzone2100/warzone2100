@@ -33,6 +33,7 @@ extern BOOL dispInitialise(void);
 extern Uint16 mouseXPos, mouseYPos;
 
 extern void shakeStart(void);
+extern void shakeStop(void);
 
 extern void ProcessRadarInput(void);
 

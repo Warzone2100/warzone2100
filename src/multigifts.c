@@ -564,7 +564,7 @@ void  technologyGiveAway(const STRUCTURE *pS)
 
 #define GIFTFREQ (1000*(60*5))			// every 5 mins tops..
 
-void addLoserGifts(void)
+static void addLoserGifts(void)
 {
 	static UDWORD	lastgift = 0;
 	int				count, i;
