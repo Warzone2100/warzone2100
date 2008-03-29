@@ -1948,70 +1948,28 @@ UDWORD	calcDamage(UDWORD baseDamage, WEAPON_EFFECT weaponEffect, BASE_OBJECT *ps
 {
 	UDWORD	damage;
 
-	//default value
-	damage = baseDamage;
-
 	if (psTarget->type == OBJ_STRUCTURE)
 	{
 		damage = baseDamage * asStructStrengthModifier[weaponEffect][((
 			STRUCTURE *)psTarget)->pStructureType->strength] / 100;
-
-        //a little fail safe!
-        if (damage == 0 && baseDamage != 0)
-        {
-            damage = 1;
-        }
-
-#if(0)
-	{
-		UDWORD Mod;
-		UDWORD PropType=  (( STRUCTURE *)psTarget)->pStructureType->strength;
-		UDWORD damage1;
-
-		Mod=asStructStrengthModifier[weaponEffect][PropType];
-
-		damage1 = baseDamage * Mod / 100;
-
-
-//	my_error("",0,"","STRUCT damage1=%d damage=%d baseDamage=%d mod=%d (weaponEffect=%d proptype=%d) \n",damage1,damage,baseDamage,Mod,weaponEffect,PropType);
-	}
-#endif
-
-
 	}
 	else if (psTarget->type == OBJ_DROID)
 	{
-
 		damage = baseDamage * asWeaponModifier[weaponEffect][(
    			asPropulsionStats + ((DROID *)psTarget)->asBits[COMP_PROPULSION].
 			nStat)->propulsionType] / 100;
-
-        //a little fail safe!
-        if (damage == 0 && baseDamage != 0)
-        {
-            damage = 1;
-        }
-
-#if(0)
+	}
+	// Default value
+	else
 	{
-		UDWORD Mod;
-		UDWORD PropType=	  (asPropulsionStats + ((DROID *)psTarget)->asBits[COMP_PROPULSION].nStat)->propulsionType;
-		UDWORD damage1;
-
-		Mod=asWeaponModifier[weaponEffect][PropType];
-
-		damage1 = baseDamage * Mod / 100;
-
-
-		debug( LOG_NEVER, "damage1=%d damage=%d baseDamage=%d mod=%d (weaponEffect=%d proptype=%d) \n", damage1, damage, baseDamage, Mod, weaponEffect, PropType );
+		damage = baseDamage;
 	}
-#endif
-
-
-
-	}
-
-
+	
+    // A little fail safe!
+    if (damage == 0 && baseDamage != 0)
+    {
+        damage = 1;
+    }
 
 	return damage;
 }
