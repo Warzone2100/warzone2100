@@ -1906,7 +1906,7 @@ static BOOL recvBeacon()
 	debug(LOG_WZ, "Received beacon for player: %d, from: %d",receiver, sender);
 
 	strlcat(msg, NetPlay.players[sender].name, sizeof(msg));    // name
-	strlcpy(beaconReceiveMsg[sender], msg, sizeof(msg));
+	strlcpy(beaconReceiveMsg[sender], msg, sizeof(beaconReceiveMsg[player]));
 
 	return addHelpBlip(locX, locY, receiver, sender, beaconReceiveMsg[sender]);
 }
