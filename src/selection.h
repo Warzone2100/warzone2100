@@ -41,7 +41,7 @@ DST_ALL_SAME
 } SELECTIONTYPE;
 
 // EXTERNALLY REFERENCED FUNCTIONS
-extern UDWORD	selDroidSelection( UDWORD	player, SELECTION_CLASS droidClass, 
+extern UDWORD	selDroidSelection( UDWORD	player, SELECTION_CLASS droidClass,
 						  SELECTIONTYPE droidType, BOOL bOnScreen );
 extern UDWORD	selDroidDeselect		( UDWORD player );
 extern UDWORD	selNumSelected			( UDWORD player );

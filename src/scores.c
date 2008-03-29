@@ -124,15 +124,15 @@ static PIELIGHT getColour(int id)
 	switch (id)
 	{
 		case STR_MR_STR_LOST	 :
-		case STR_MR_UNITS_LOST   : 
+		case STR_MR_UNITS_LOST   :
 			return WZCOL_MENU_SCORE_LOSS;
 		case STR_MR_STR_BLOWN_UP :
-		case STR_MR_UNITS_KILLED : 
+		case STR_MR_UNITS_KILLED :
 			return WZCOL_MENU_SCORE_DESTROYED;
 		case STR_MR_UNITS_BUILT  :
 		case STR_MR_UNITS_NOW    :
 		case STR_MR_STR_BUILT    :
-		case STR_MR_STR_NOW      : 
+		case STR_MR_STR_NOW      :
 			return WZCOL_MENU_SCORE_BUILT;
 		case STR_MR_LEVEL_ROOKIE :
 		case STR_MR_LEVEL_GREEN  :

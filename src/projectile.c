@@ -327,7 +327,7 @@ static void proj_UpdateKills(PROJECTILE *psObj, float experienceInc)
 
 /***************************************************************************/
 
-BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, int tarX, int tarY, int tarZ, 
+BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, int tarX, int tarY, int tarZ,
                          BASE_OBJECT *psTarget, BOOL bVisible, BOOL bPenetrate, int weapon_slot)
 {
 	PROJECTILE		*psObj = malloc(sizeof(PROJECTILE));

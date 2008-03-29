@@ -24,7 +24,7 @@
 #ifndef __INCLUDED_SRC_INGAMEOP_H__
 #define __INCLUDED_SRC_INGAMEOP_H__
 
-// functions	
+// functions
 extern BOOL intAddInGameOptions			(void);
 extern BOOL intCloseInGameOptions		(BOOL bPutUpLoadSave, BOOL bResetMissionWidgets);
 extern void intCloseInGameOptionsNoAnim	(BOOL bResetMissionWidgets);
@@ -49,7 +49,7 @@ extern BOOL	InGameOpUp;
 // game options
 
 // initial options
-#define INTINGAMEOP_W			120	 
+#define INTINGAMEOP_W			120
 #define INTINGAMEOP_H			124
 #define INTINGAMEOP_HS			88
 

@@ -1037,7 +1037,7 @@ FPATH_RETVAL fpathRoute(BASE_OBJECT *psObj, MOVE_CONTROL *psMoveCntl,
 			// Does this code work? - Per
 			targetX = clearX;
 			targetY = clearY;
-			objTrace(LOG_MOVEMENT, psObj->id, "Unit %d: end point is blocked, going to (%d, %d) instead", 
+			objTrace(LOG_MOVEMENT, psObj->id, "Unit %d: end point is blocked, going to (%d, %d) instead",
 			         (int)psObj->id, (int)clearX, (int)clearY);
 		}
 
@@ -1046,7 +1046,7 @@ FPATH_RETVAL fpathRoute(BASE_OBJECT *psObj, MOVE_CONTROL *psMoveCntl,
 		{
 			if (psPartialRouteObj != NULL)
 			{
-				objTrace(LOG_MOVEMENT, psObj->id, "fpathRoute droid %d: found existing route during multi-frame path", 
+				objTrace(LOG_MOVEMENT, psObj->id, "fpathRoute droid %d: found existing route during multi-frame path",
 				         (int)psObj->id);
 			}
 			else

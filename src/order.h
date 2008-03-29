@@ -236,7 +236,7 @@ extern const char* getDroidOrderName(DROID_ORDER order);
 
 extern DROID *FindATransporter(void);
 
-/*For a given constructor droid, check if there are any damaged buildings within 
+/*For a given constructor droid, check if there are any damaged buildings within
 a defined range*/
 extern BASE_OBJECT * checkForDamagedStruct(DROID *psDroid, STRUCTURE *psTarget);
 

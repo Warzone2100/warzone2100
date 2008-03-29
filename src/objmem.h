@@ -78,7 +78,7 @@ void killStruct(STRUCTURE *psDel);
 extern void freeAllStructs(void);
 
 /*Remove a single Structure from a list*/
-extern void removeStructureFromList(STRUCTURE *psStructToRemove, 
+extern void removeStructureFromList(STRUCTURE *psStructToRemove,
                                     STRUCTURE *pList[MAX_PLAYERS]);
 
 /* Create a new Feature */

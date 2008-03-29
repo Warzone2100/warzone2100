@@ -294,7 +294,7 @@ static BOOL _addConsoleMessage(const char *messageText, CONSOLE_TEXT_JUSTIFICATI
 }
 
 /// Wrapper for _addConsoleMessage
-BOOL addConsoleMessage(const char *messageText, CONSOLE_TEXT_JUSTIFICATION jusType, 
+BOOL addConsoleMessage(const char *messageText, CONSOLE_TEXT_JUSTIFICATION jusType,
 					   CONSOLE_TEXT_TYPE textType)
 {
 	return _addConsoleMessage(messageText, jusType, textType);

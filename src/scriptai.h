@@ -30,7 +30,7 @@ extern BOOL scrGroupAddDroid(void);
 // Add droids in an area to a group
 extern BOOL scrGroupAddArea(void);
 
-// Add groupless droids in an area to a group 
+// Add groupless droids in an area to a group
 extern BOOL scrGroupAddAreaNoGroup(void);
 
 // Move the droids from one group to another

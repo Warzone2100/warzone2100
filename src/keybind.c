@@ -400,7 +400,7 @@ void kf_ToggleSamples(void) //Displays number of sound sample in the sound queue
 /* Writes out the frame rate */
 void	kf_FrameRate( void )
 {
-	CONPRINTF(ConsoleString,(ConsoleString, _("FPS %d; FPS-Limit: %d; PIEs %d; polys %d; Terr. polys %d; States %d"), 
+	CONPRINTF(ConsoleString,(ConsoleString, _("FPS %d; FPS-Limit: %d; PIEs %d; polys %d; Terr. polys %d; States %d"),
 	          frameGetAverageRate(), getFramerateLimit(), loopPieCount, loopPolyCount, loopTileCount, loopStateChanges));
 	if (runningMultiplayer()) {
 			CONPRINTF(ConsoleString,(ConsoleString,
@@ -2260,13 +2260,13 @@ float available_speed[] = {
 // Since some of these values can ruin a SP game, we disallow them in normal mode.
 	1.f / 8.f,	// n
 	1.f / 5.f,	// n
-	1.f / 3.f,	// p 
+	1.f / 3.f,	// p
 	3.f / 4.f,	// p
-	1.f / 1.f,	// p  
+	1.f / 1.f,	// p
 	5.f / 4.f,	// p
 	3.f / 2.f,	// p
 	2.f / 1.f,	// p (in debug mode only)
-	5.f / 2.f,	// n 
+	5.f / 2.f,	// n
 	3.f / 1.f,	// n
 	10.f / 1.f,	// n
 	20.f / 1.f	// n
@@ -2296,7 +2296,7 @@ void kf_SpeedUp( void )
 			mod = available_speed[i];
 			// only in debug/cheat mode do we enable all time compression speeds.
 			if (!getDebugMappingStatus())
-			{	
+			{
 				if (mod >= 2.f / 1.f)		// max officialy allowed time compression
 					break;
 			}
@@ -2337,7 +2337,7 @@ void kf_SlowDown( void )
 			mod = available_speed[i];
 			// only in debug/cheat mode do we enable all time compression speeds.
 			if( !getDebugMappingStatus() )
-			{	
+			{
 				if (mod < 1.f / 3.f)
 					break;
 			}

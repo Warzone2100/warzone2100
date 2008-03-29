@@ -845,7 +845,7 @@ BOOL scrCallConsole(void)
 	SDWORD	*player;
 	char	**ConsoleText = NULL;
 
-	if (!stackPopParams(2, VAL_REF | VAL_INT, &player, VAL_REF | VAL_STRING, &ConsoleText) ) 
+	if (!stackPopParams(2, VAL_REF | VAL_INT, &player, VAL_REF | VAL_STRING, &ConsoleText) )
 	{
 		debug(LOG_ERROR, "scrCallConsole(): stack failed");
 		return false;
@@ -881,7 +881,7 @@ BOOL scrCallBeacon(void)
 
 	if (!stackPopParams(5, VAL_INT, &playerTo, VAL_REF | VAL_INT, &playerFrom,
 		VAL_REF | VAL_INT, &locX, VAL_REF | VAL_INT, &locY,
-		VAL_REF | VAL_STRING, &BeaconText)) 
+		VAL_REF | VAL_STRING, &BeaconText))
 	{
 		debug(LOG_ERROR, "scrCallBeacon() - failed to pop parameters.");
 		return false;
@@ -902,7 +902,7 @@ BOOL scrCallBeacon(void)
 		if(MultiMsgPlayerTo == playerTo)
 		{
 			strcpy(*BeaconText,MultiplayMsg);
-	 
+
 			*playerFrom = MultiMsgPlayerFrom;
 			*locX = beaconX;
 			*locY = beaconY;
@@ -935,7 +935,7 @@ BOOL scrCallBeacon(void)
 	{
 		return false;
 	}
-	
+
 	return true;
 }
 
@@ -946,7 +946,7 @@ BOOL scrCallMultiMsg(void)
 	SDWORD	*player, playerTo;
 	char	**ConsoleText = NULL;
 
-	if (!stackPopParams(3, VAL_INT, &playerTo, VAL_REF | VAL_INT, &player, VAL_REF | VAL_STRING, &ConsoleText) ) 
+	if (!stackPopParams(3, VAL_INT, &playerTo, VAL_REF | VAL_INT, &player, VAL_REF | VAL_STRING, &ConsoleText) )
 	{
 		debug(LOG_ERROR, "scrCallMultiMsg() failed to pop parameters.");
 		return false;
@@ -963,7 +963,7 @@ BOOL scrCallMultiMsg(void)
 		if(MultiMsgPlayerTo == playerTo)
 		{
 			strcpy(*ConsoleText,MultiplayMsg);
-	 
+
 			*player = MultiMsgPlayerFrom;
 
 			scrFunctionResult.v.bval = true;
@@ -995,7 +995,7 @@ BOOL scrCallMultiMsg(void)
 		debug(LOG_ERROR, "scrCallMultiMsg: stackPushResult failed");
 		return false;
 	}
-	
+
 	return true;
 }
 
@@ -1010,7 +1010,7 @@ BOOL scrCBStructBuilt(void)
 	BOOL		triggered = false;
 	DROID		**ppsDroid;
 
-	if (!stackPopParams(3, VAL_INT, &player, VAL_REF|ST_DROID, &ppsDroid, VAL_REF|ST_STRUCTURE, &ppsStructure) ) 
+	if (!stackPopParams(3, VAL_INT, &player, VAL_REF|ST_DROID, &ppsDroid, VAL_REF|ST_STRUCTURE, &ppsStructure) )
 	{
 		debug(LOG_ERROR, "scrCBStructBuilt() failed to pop parameters.");
 		return false;

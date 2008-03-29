@@ -60,7 +60,7 @@ extern SDWORD rayPointDist(SDWORD x1,SDWORD y1, SDWORD x2,SDWORD y2,
 // point to the edge of the grid
 extern void	getBestPitchToEdgeOfGrid(UDWORD x, UDWORD y, UDWORD direction, SDWORD *pitch);
 
-extern void	getPitchToHighestPoint( UDWORD x, UDWORD y, UDWORD direction, 
+extern void	getPitchToHighestPoint( UDWORD x, UDWORD y, UDWORD direction,
 								   UDWORD thresholdDistance, SDWORD *pitch );
 
 #endif // __INCLUDED_SRC_RAYCAST_H__

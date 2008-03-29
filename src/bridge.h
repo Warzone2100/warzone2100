@@ -31,7 +31,7 @@
 
 typedef struct _bridge_info
 {
-UDWORD	startX,startY,endX,endY;			// Copy of coordinates of bridge. 
+UDWORD	startX,startY,endX,endY;			// Copy of coordinates of bridge.
 UDWORD	heightChange;						// How much to raise lowest end by.
 UDWORD	bridgeHeight;						// How high are the sections?
 UDWORD	bridgeLength;						// How many tiles long?

@@ -241,7 +241,7 @@
 /* maximum array sizes */
 #define	MAXSTRUCTURES	200	//bumped up from 80.  NOTE: was used for max # in build menus.
 #define	MAXRESEARCH		200 //was 80 topic displayed   "           "
-#define	MAXTEMPLATES	80	//was 20                           
+#define	MAXTEMPLATES	80	//was 20
 #define	MAXFEATURES		80
 #define	MAXCOMPONENT	80
 #define	MAXEXTRASYS		80

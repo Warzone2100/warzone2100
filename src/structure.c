@@ -1169,37 +1169,39 @@ BOOL structureStatsShutDown(void)
 // TODO: The abandoned code needs to be factored out, see: saveMissionData
 void handleAbandonedStructures()
 {
+	// FIXME: We should control the calling frequency externally from this
+	//        function, rather than controlling the amount of times this
+	//        function performs work internally.
 	static int lastHandled = 0;
-	int reductionAmount = 8;
-	int i;
-	
+	int player;
+
 	// We only need to run once every two seconds (2000ms)
 	if (gameTime - lastHandled < 2000)
 	{
 		return;
 	}
-	
+
 	// Update when we last ran
 	lastHandled = gameTime;
-	
-	for (i = 0; i < MAX_PLAYERS; i++)
+
+	for (player = 0; player < MAX_PLAYERS; ++player)
 	{
 		STRUCTURE *psCurr, *psNext;
-		
-		for (psCurr = apsStructLists[i]; psCurr; psCurr = psNext)
+
+		for (psCurr = apsStructLists[player]; psCurr; psCurr = psNext)
 		{
 			// Save the next structure in the list
 			psNext = psCurr->psNext;
-			
+
 			// We are only interested in structures accruing
 			if (psCurr->status == SS_BEING_BUILT
 			 && psCurr->currentPowerAccrued < structPowerToBuild(psCurr))
 			{
 				DROID *psDroid;
-				bool beingBuilt = false;	
-				
+				bool beingBuilt = false;
+
 				// See is there are any droids building it
-				for (psDroid = apsDroidLists[i];
+				for (psDroid = apsDroidLists[player];
 				     psDroid;
 				     psDroid = psDroid->psNext)
 				{
@@ -1210,7 +1212,7 @@ void handleAbandonedStructures()
 						break;
 					}
 				}
-				
+
 				// Being worked on, nothing to see here
 				if (beingBuilt)
 				{
@@ -1219,13 +1221,15 @@ void handleAbandonedStructures()
 				// Abandoned
 				else
 				{
+					int reductionAmount = 8;
+
 					// Work out how much power to deduct
 					CLIP(reductionAmount, 0, psCurr->currentPowerAccrued);
-					
+
 					// Do the reduction
 					psCurr->currentPowerAccrued -= reductionAmount;
-					addPower(i, reductionAmount);
-					
+					addPower(player, reductionAmount);
+
 					// Remove the structure if no power is accrued
 					if (!psCurr->currentPowerAccrued)
 					{
@@ -5133,7 +5137,7 @@ SDWORD getStructStatFromName(char *pName)
 {
 	UDWORD				inc;
 	STRUCTURE_STATS		*psStat;
-	
+
 	for (inc = 0; inc < numStructureStats; inc++)
 	{
 		psStat = &asStructureStats[inc];
@@ -6191,7 +6195,7 @@ BOOL electronicDamage(BASE_OBJECT *psTarget, UDWORD damage, UBYTE attackPlayer)
 				if (bMultiPlayer)
 				{
 					uint8_t giftType = DROID_GIFT, droid_count = 1;
-					
+
 					NETbeginEncode(NET_GIFT, NET_ALL_PLAYERS);
 					{
 						// We need to distinguish between gift types
@@ -6855,10 +6859,10 @@ void factoryProdAdjust(STRUCTURE *psStructure, DROID_TEMPLATE *psTemplate, BOOL 
 	{
 		if (asProductionRun[factoryType][factoryInc][inc].psTemplate == psTemplate)
 		{
-			//adjust the prod run 
+			//adjust the prod run
 			if (add)	//user left clicked, so increase # in queue
 			{
-				// Allows us to queue up more units up to MAX_IN_RUN instead of ignoring how many we have built from that queue 
+				// Allows us to queue up more units up to MAX_IN_RUN instead of ignoring how many we have built from that queue
 				quantity = ++asProductionRun[factoryType][factoryInc][inc].quantity;
 				built = asProductionRun[factoryType][factoryInc][inc].built;
 				remaining = quantity - built;

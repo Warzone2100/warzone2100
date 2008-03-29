@@ -71,7 +71,7 @@ extern UDWORD updateExtractedPower(STRUCTURE	*psBuilding);
 extern void updatePlayerPower(UDWORD player);
 
 /** Used in multiplayer to force power levels. */
-extern void setPower(UDWORD player, UDWORD avail); 
+extern void setPower(UDWORD player, UDWORD avail);
 
 /** Get the amount of power current held by the given player. */
 extern UDWORD getPower(UDWORD player);

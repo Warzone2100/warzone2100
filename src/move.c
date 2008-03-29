@@ -1931,7 +1931,7 @@ SDWORD moveCalcDroidSpeed(DROID *psDroid)
 	speed = (MAX_SPEED_PITCH - pitch) * speed / MAX_SPEED_PITCH;
 	if (speed <= 0)
 	{
-		// Very nasty hack to deal with buggy maps, where some cliffs are 
+		// Very nasty hack to deal with buggy maps, where some cliffs are
 		// not properly marked as being cliffs, but too steep to drive over.
 		// This confuses the heck out of the path-finding code! - Per
 		speed = 10;

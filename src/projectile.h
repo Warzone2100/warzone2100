@@ -59,7 +59,7 @@ PROJECTILE *	proj_GetFirst( void );
 PROJECTILE *	proj_GetNext( void );
 
 void	proj_FreeAllProjectiles( void );
-BOOL	proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, int tarX, int tarY, int tarZ, 
+BOOL	proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, int tarX, int tarY, int tarZ,
                             BASE_OBJECT *psTarget, BOOL bVisible, BOOL bPenetrate, int weapon_slot);
 
 // return whether a weapon is direct or indirect

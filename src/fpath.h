@@ -64,7 +64,7 @@ extern void fpathSetBlockingTile( UBYTE ubPropulsionType );
 extern void fpathSetCurrentObject( BASE_OBJECT *psDroid );
 
 /**
- *	Set direct path to position. Plan a path from psObj's current position to given position 
+ *	Set direct path to position. Plan a path from psObj's current position to given position
  *	without taking obstructions into consideration. Used for instance by VTOLs.
  */
 extern void fpathSetDirectRoute(BASE_OBJECT *psObj, SDWORD targetX, SDWORD targetY);
