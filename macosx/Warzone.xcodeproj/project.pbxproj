@@ -550,6 +550,13 @@
 		027F9E360D0322CE00FA2030 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0246A3BC0BD3CD2B004D1C70 /* OpenGL.framework */; };
 		027F9E370D0322D300FA2030 /* libfreetype.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 027F9E1F0D03229500FA2030 /* libfreetype.dylib */; };
 		027F9E380D0322D400FA2030 /* libfontconfig.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 02EA22450CFE494000EA65A0 /* libfontconfig.dylib */; };
+		02AAD1430D9ED28C00248B0F /* file.h in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 02AAD13F0D9ED28C00248B0F /* file.h */; };
+		02AAD1440D9ED28C00248B0F /* i18n.c in Sources */ = {isa = PBXBuildFile; fileRef = 02AAD1400D9ED28C00248B0F /* i18n.c */; };
+		02AAD1450D9ED28C00248B0F /* i18n.h in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 02AAD1410D9ED28C00248B0F /* i18n.h */; };
+		02AAD1460D9ED28C00248B0F /* physfs_ext.h in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 02AAD1420D9ED28C00248B0F /* physfs_ext.h */; };
+		02AAD14A0D9ED2DB00248B0F /* stats-db.h in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 02AAD1480D9ED2DB00248B0F /* stats-db.h */; };
+		02AAD1600D9ED4B200248B0F /* physfs_vfs.c in Sources */ = {isa = PBXBuildFile; fileRef = 02AAD15E0D9ED4B200248B0F /* physfs_vfs.c */; };
+		02AAD1610D9ED4B200248B0F /* physfs_vfs.h in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 02AAD15F0D9ED4B200248B0F /* physfs_vfs.h */; };
 		02C8AEF80BE68A5600E9D8A7 /* png_util.c in Sources */ = {isa = PBXBuildFile; fileRef = 02C8AEF60BE68A5600E9D8A7 /* png_util.c */; };
 		02C8AEFC0BE68A6800E9D8A7 /* oggvorbis.c in Sources */ = {isa = PBXBuildFile; fileRef = 02C8AEFA0BE68A6800E9D8A7 /* oggvorbis.c */; };
 		02CBED8C0C5B8BEB00316CE2 /* nettypes.c in Sources */ = {isa = PBXBuildFile; fileRef = 02CBED8A0C5B8BEB00316CE2 /* nettypes.c */; };
@@ -825,6 +832,11 @@
 				0235F9100D52BCC7007B8F63 /* math-help.h in Copy frameworks */,
 				026591FB0D7B6E0F00B20A35 /* sqlite3.h in Copy frameworks */,
 				026591FC0D7B6E0F00B20A35 /* sqlite3ext.h in Copy frameworks */,
+				02AAD1430D9ED28C00248B0F /* file.h in Copy frameworks */,
+				02AAD1450D9ED28C00248B0F /* i18n.h in Copy frameworks */,
+				02AAD1460D9ED28C00248B0F /* physfs_ext.h in Copy frameworks */,
+				02AAD14A0D9ED2DB00248B0F /* stats-db.h in Copy frameworks */,
+				02AAD1610D9ED4B200248B0F /* physfs_vfs.h in Copy frameworks */,
 			);
 			name = "Copy frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1173,7 +1185,6 @@
 		0246A1C10BD3CCDB004D1C70 /* console.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = console.h; path = ../src/console.h; sourceTree = SOURCE_ROOT; };
 		0246A1C40BD3CCDB004D1C70 /* data.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = data.c; path = ../src/data.c; sourceTree = SOURCE_ROOT; };
 		0246A1C50BD3CCDB004D1C70 /* data.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = data.h; path = ../src/data.h; sourceTree = SOURCE_ROOT; };
-		0246A1C60BD3CCDB004D1C70 /* deliverance.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = deliverance.h; path = ../src/deliverance.h; sourceTree = SOURCE_ROOT; };
 		0246A1C70BD3CCDB004D1C70 /* design.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = design.c; path = ../src/design.c; sourceTree = SOURCE_ROOT; };
 		0246A1C80BD3CCDB004D1C70 /* design.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = design.h; path = ../src/design.h; sourceTree = SOURCE_ROOT; };
 		0246A1C90BD3CCDB004D1C70 /* difficulty.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = difficulty.c; path = ../src/difficulty.c; sourceTree = SOURCE_ROOT; };
@@ -1552,6 +1563,13 @@
 		026591F80D7B6E0F00B20A35 /* sqlite3.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = sqlite3.h; path = ../lib/sqlite3/sqlite3.h; sourceTree = SOURCE_ROOT; };
 		026591F90D7B6E0F00B20A35 /* sqlite3ext.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = sqlite3ext.h; path = ../lib/sqlite3/sqlite3ext.h; sourceTree = SOURCE_ROOT; };
 		027F9E1F0D03229500FA2030 /* libfreetype.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; name = libfreetype.dylib; path = /Developer/SDKs/MacOSX10.4u.sdk/usr/X11R6/lib/libfreetype.dylib; sourceTree = "<absolute>"; };
+		02AAD13F0D9ED28C00248B0F /* file.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = file.h; path = ../lib/framework/file.h; sourceTree = SOURCE_ROOT; };
+		02AAD1400D9ED28C00248B0F /* i18n.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = i18n.c; path = ../lib/framework/i18n.c; sourceTree = SOURCE_ROOT; };
+		02AAD1410D9ED28C00248B0F /* i18n.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = i18n.h; path = ../lib/framework/i18n.h; sourceTree = SOURCE_ROOT; };
+		02AAD1420D9ED28C00248B0F /* physfs_ext.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = physfs_ext.h; path = ../lib/framework/physfs_ext.h; sourceTree = SOURCE_ROOT; };
+		02AAD1480D9ED2DB00248B0F /* stats-db.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = "stats-db.h"; path = "../src/stats-db.h"; sourceTree = SOURCE_ROOT; };
+		02AAD15E0D9ED4B200248B0F /* physfs_vfs.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = physfs_vfs.c; path = ../lib/sqlite3/physfs_vfs.c; sourceTree = SOURCE_ROOT; };
+		02AAD15F0D9ED4B200248B0F /* physfs_vfs.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = physfs_vfs.h; path = ../lib/sqlite3/physfs_vfs.h; sourceTree = SOURCE_ROOT; };
 		02C8AEF60BE68A5600E9D8A7 /* png_util.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = png_util.c; path = ../lib/ivis_common/png_util.c; sourceTree = SOURCE_ROOT; };
 		02C8AEF70BE68A5600E9D8A7 /* png_util.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = png_util.h; path = ../lib/ivis_common/png_util.h; sourceTree = SOURCE_ROOT; };
 		02C8AEFA0BE68A6800E9D8A7 /* oggvorbis.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = oggvorbis.c; path = ../lib/sound/oggvorbis.c; sourceTree = SOURCE_ROOT; };
@@ -1982,6 +2000,10 @@
 		0246A0D00BD3CBE1004D1C70 /* Framework */ = {
 			isa = PBXGroup;
 			children = (
+				02AAD13F0D9ED28C00248B0F /* file.h */,
+				02AAD1400D9ED28C00248B0F /* i18n.c */,
+				02AAD1410D9ED28C00248B0F /* i18n.h */,
+				02AAD1420D9ED28C00248B0F /* physfs_ext.h */,
 				0235F90F0D52BCC7007B8F63 /* math-help.h */,
 				0223BBB40CFE3CD60056EF85 /* printf_ext.c */,
 				0223BBB50CFE3CD60056EF85 /* printf_ext.h */,
@@ -2202,6 +2224,7 @@
 		0246A1970BD3CCC3004D1C70 /* Warzone */ = {
 			isa = PBXGroup;
 			children = (
+				02AAD1480D9ED2DB00248B0F /* stats-db.h */,
 				02CDDD080D159D5900722688 /* autorevision.h */,
 				0223BBAC0CFE3C380056EF85 /* main.h */,
 				0223BBAD0CFE3C380056EF85 /* version.c */,
@@ -2245,7 +2268,6 @@
 				0246A1C10BD3CCDB004D1C70 /* console.h */,
 				0246A1C40BD3CCDB004D1C70 /* data.c */,
 				0246A1C50BD3CCDB004D1C70 /* data.h */,
-				0246A1C60BD3CCDB004D1C70 /* deliverance.h */,
 				0246A1C70BD3CCDB004D1C70 /* design.c */,
 				0246A1C80BD3CCDB004D1C70 /* design.h */,
 				0246A1C90BD3CCDB004D1C70 /* difficulty.c */,
@@ -2627,6 +2649,8 @@
 		026591F40D7B6DE200B20A35 /* SQLite */ = {
 			isa = PBXGroup;
 			children = (
+				02AAD15E0D9ED4B200248B0F /* physfs_vfs.c */,
+				02AAD15F0D9ED4B200248B0F /* physfs_vfs.h */,
 				026591F70D7B6E0F00B20A35 /* sqlite3.c */,
 				026591F80D7B6E0F00B20A35 /* sqlite3.h */,
 				026591F90D7B6E0F00B20A35 /* sqlite3ext.h */,
@@ -3937,6 +3961,8 @@
 				02CDDD1C0D159E2F00722688 /* openal_error.c in Sources */,
 				020A7E670D246D2B009C29F5 /* sequence.c in Sources */,
 				026591FA0D7B6E0F00B20A35 /* sqlite3.c in Sources */,
+				02AAD1440D9ED28C00248B0F /* i18n.c in Sources */,
+				02AAD1600D9ED4B200248B0F /* physfs_vfs.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
