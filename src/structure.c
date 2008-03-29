@@ -1166,6 +1166,76 @@ BOOL structureStatsShutDown(void)
 	return true;
 }
 
+// TODO: The abandoned code needs to be factored out, see: saveMissionData
+void handleAbandonedStructures()
+{
+	static int lastHandled = 0;
+	int reductionAmount = 8;
+	int i;
+	
+	// We only need to run once every two seconds (2000ms)
+	if (gameTime - lastHandled < 2000)
+	{
+		return;
+	}
+	
+	// Update when we last ran
+	lastHandled = gameTime;
+	
+	for (i = 0; i < MAX_PLAYERS; i++)
+	{
+		STRUCTURE *psCurr, *psNext;
+		
+		for (psCurr = apsStructLists[i]; psCurr; psCurr = psNext)
+		{
+			// Save the next structure in the list
+			psNext = psCurr->psNext;
+			
+			// We are only interested in structures accruing
+			if (psCurr->status == SS_BEING_BUILT
+			 && psCurr->currentPowerAccrued < structPowerToBuild(psCurr))
+			{
+				DROID *psDroid;
+				bool beingBuilt = false;	
+				
+				// See is there are any droids building it
+				for (psDroid = apsDroidLists[i];
+				     psDroid;
+				     psDroid = psDroid->psNext)
+				{
+					// The droid is working on it and therefore not abandoned
+					if ((STRUCTURE *) orderStateObj(psDroid, DORDER_BUILD) == psCurr)
+					{
+						beingBuilt = true;
+						break;
+					}
+				}
+				
+				// Being worked on, nothing to see here
+				if (beingBuilt)
+				{
+					continue;
+				}
+				// Abandoned
+				else
+				{
+					// Work out how much power to deduct
+					CLIP(reductionAmount, 0, psCurr->currentPowerAccrued);
+					
+					// Do the reduction
+					psCurr->currentPowerAccrued -= reductionAmount;
+					addPower(i, reductionAmount);
+					
+					// Remove the structure if no power is accrued
+					if (!psCurr->currentPowerAccrued)
+					{
+						removeStruct(psCurr, true);
+					}
+				}
+			}
+		}
+	}
+}
 
 /* Deals damage to a Structure.
  * \param psStructure structure to deal damage to

@@ -94,6 +94,8 @@ extern REARM_UPGRADE		asReArmUpgrade[MAX_PLAYERS];
 extern STRUCTSTRENGTH_MODIFIER		asStructStrengthModifier[WE_NUMEFFECTS][
 													NUM_STRUCT_STRENGTH];
 
+extern void handleAbandonedStructures(void);
+
 extern BOOL IsPlayerDroidLimitReached(UDWORD PlayerNumber);
 extern BOOL IsPlayerStructureLimitReached(UDWORD PlayerNumber);
 extern BOOL CheckHaltOnMaxUnitsReached(STRUCTURE *psStructure);

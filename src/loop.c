@@ -219,6 +219,9 @@ GAMECODE gameLoop(void)
 			// check all flag positions for duplicate delivery points
 			checkFactoryFlags();
 #endif
+			// Update abandoned structures
+			handleAbandonedStructures();
+			
 			//handles callbacks for positioning of DP's
 			process3DBuilding();
 
