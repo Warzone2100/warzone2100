@@ -3,6 +3,8 @@
    * Fix: Dull radar player colors were replaced by brighter colors.
  * Aivolution AI:
    * Fix: Using "go <player>" command makes Aivolution send its units to the proper player now.
+ * Balancing (Multiplayer):
+   * Change: Tank Killer now fires four projectiles instead of two, total firepower is unaffected.
 
 2008-03-16: Version 2.1_beta2
  * General:
