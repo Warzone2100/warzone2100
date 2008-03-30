@@ -620,6 +620,7 @@ BOOL saveConfig(void)
 	setWarzoneKeyNumeric("radarTerrainMode",(SDWORD)radarDrawMode);
 	setWarzoneKeyNumeric("trapCursor", war_GetTrapCursor());
 	setWarzoneKeyNumeric("textureSize", getTextureSize());
+	setWarzoneKeyNumeric("PauseOnFocusLoss", war_GetPauseOnFocusLoss());
 
 	if(!bMultiPlayer)
 	{
