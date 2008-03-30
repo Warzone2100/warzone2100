@@ -106,7 +106,7 @@ class GameDB:
 			for game in self.getGames():
 				if not game.check():
 					logging.debug("Removing unreachable game: %s" % game)
-					self.__remove(g)
+					self.__remove(game)
 	
 	def listGames(self):
 		with gamedblock:
