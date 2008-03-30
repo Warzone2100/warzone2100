@@ -1275,6 +1275,16 @@ float structureDamage(STRUCTURE *psStructure, UDWORD damage, UDWORD weaponClass,
 	}
 }
 
+float getStructureDamage(const STRUCTURE* psStructure)
+{
+	float health;
+	CHECK_STRUCTURE(psStructure);
+
+	health = (float)psStructure->body / (float)structureBody(psStructure);
+	CLIP(health, 0., 1.f);
+
+	return 1. - health;
+}
 
 /* Set the type of droid for a factory to build */
 BOOL structSetManufacture(STRUCTURE *psStruct, DROID_TEMPLATE *psTempl, UBYTE quantity)
@@ -3672,12 +3682,16 @@ static BOOL canSmoke(STRUCTURE *psStruct)
 	}
 }
 
+static float CalcStructureSmokeInterval(float damage)
+{
+	return (((1. - damage) + 0.1) * 10) * STRUCTURE_DAMAGE_SCALING;
+}
 
 /* The main update routine for all Structures */
 void structureUpdate(STRUCTURE *psBuilding)
 {
 	UDWORD widthScatter,breadthScatter;
-	UDWORD percentDamage, emissionInterval, iPointsToAdd, iPointsRequired;
+	UDWORD emissionInterval, iPointsToAdd, iPointsRequired;
 	Vector3i dv;
 
 	//update the manufacture/research of the building once complete
@@ -3700,15 +3714,12 @@ void structureUpdate(STRUCTURE *psBuilding)
 	/* Only add smoke if they're visible and they can 'burn' */
 	if(psBuilding->visible[selectedPlayer] && canSmoke(psBuilding))
 	{
-		percentDamage = (100 - PERCENT(psBuilding->body, structureBody(psBuilding)));
+		const float damage = getStructureDamage(psBuilding);
+
 		// Is there any damage?
-		if(percentDamage!=0)
+		if (damage > 0.)
 		{
-			if(percentDamage>=100)
-			{
-				percentDamage = 99;
-			}
-			emissionInterval = CALC_STRUCTURE_SMOKE_INTERVAL(percentDamage);
+			emissionInterval = CalcStructureSmokeInterval(damage);
 			if(gameTime > (psBuilding->lastEmission + emissionInterval))
 			{
 				widthScatter = ((psBuilding->pStructureType->baseWidth) * TILE_UNITS/2)/3;

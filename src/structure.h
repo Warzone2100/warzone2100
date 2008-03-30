@@ -32,7 +32,6 @@
 
 #define	STRUCTURE_DAMAGE_SCALING	400
 // This should really be logarithmic
-#define	CALC_STRUCTURE_SMOKE_INTERVAL(x) ((((100-x)+10)/10) * STRUCTURE_DAMAGE_SCALING)
 #define	STRUCTURE_HEIGHT_SCATTER	(rand()%300)
 
 /* explosion data for when a structure is blown up - used by features as well*/
@@ -268,6 +267,8 @@ extern BOOL validStructResistance(STRUCTURE *psStruct);
 /*checks to see if a specific structure type exists -as opposed to a structure
 stat type*/
 extern BOOL checkSpecificStructExists(UDWORD structInc, UDWORD player);
+
+extern float getStructureDamage(const STRUCTURE* psStructure);
 
 /*Access functions for the upgradeable stats of a structure*/
 extern UDWORD	structureBody(const STRUCTURE *psStruct);
