@@ -128,7 +128,7 @@ bool runningMultiplayer(void)
 
 static void noMPCheatMsg(void)
 {
-	addConsoleMessage(_("Sorry, that cheat is disabled in multiplayer games."), DEFAULT_JUSTIFY, CONSOLE_SYSTEM);
+	addConsoleMessage(_("Sorry, that cheat is disabled in multiplayer games."), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 }
 
 // --------------------------------------------------------------------------
@@ -139,13 +139,13 @@ void	kf_ToggleMissionTimer( void )
 
 void	kf_ToggleShowGateways(void)
 {
-	addConsoleMessage("Gateways toggled.", DEFAULT_JUSTIFY,  CONSOLE_SYSTEM);
+	addConsoleMessage("Gateways toggled.", DEFAULT_JUSTIFY,  SYSTEM_MESSAGE);
 	showGateways = !showGateways;
 }
 
 void	kf_ToggleShowPath(void)
 {
-	addConsoleMessage("Path display toggled.", DEFAULT_JUSTIFY, CONSOLE_SYSTEM);
+	addConsoleMessage("Path display toggled.", DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 	showPath = !showPath;
 }
 
@@ -192,9 +192,9 @@ void kf_ToggleSensorDisplay( void )
 	rangeOnScreen = !rangeOnScreen;
 
 	if (rangeOnScreen)
-		addConsoleMessage(_("Lets us see what you see!"), LEFT_JUSTIFY, CONSOLE_SYSTEM);        //added this message... Yeah, its lame. :)
+		addConsoleMessage(_("Lets us see what you see!"), LEFT_JUSTIFY, SYSTEM_MESSAGE);        //added this message... Yeah, its lame. :)
 	else
-		addConsoleMessage(_("Fine, sensor display is off!"), LEFT_JUSTIFY, CONSOLE_SYSTEM);     //added this message... Yeah, its lame. :)
+		addConsoleMessage(_("Fine, sensor display is off!"), LEFT_JUSTIFY, SYSTEM_MESSAGE);     //added this message... Yeah, its lame. :)
 }
 //===================================================
 /* Halves all the heights of the map tiles */
@@ -292,7 +292,7 @@ void	kf_SetKillerLevel( void )
 	}
 
 	setDifficultyLevel(DL_KILLER);
-	addConsoleMessage(_("Hard as nails!!!"), LEFT_JUSTIFY, CONSOLE_SYSTEM);
+	addConsoleMessage(_("Hard as nails!!!"), LEFT_JUSTIFY, SYSTEM_MESSAGE);
 }
 // --------------------------------------------------------------------------
 void	kf_SetEasyLevel( void )
@@ -305,7 +305,7 @@ void	kf_SetEasyLevel( void )
 	}
 
 	setDifficultyLevel(DL_EASY);
-	addConsoleMessage(_("Takings thing easy!"), LEFT_JUSTIFY, CONSOLE_SYSTEM);
+	addConsoleMessage(_("Takings thing easy!"), LEFT_JUSTIFY, SYSTEM_MESSAGE);
 }
 
 // --------------------------------------------------------------------------
@@ -319,7 +319,7 @@ void	kf_UpThePower( void )
 	}
 
 	asPower[selectedPlayer].currentPower+=1000;
-	addConsoleMessage(_("1000 big ones!!!"), LEFT_JUSTIFY, CONSOLE_SYSTEM);
+	addConsoleMessage(_("1000 big ones!!!"), LEFT_JUSTIFY, SYSTEM_MESSAGE);
 }
 
 // --------------------------------------------------------------------------
@@ -333,7 +333,7 @@ void	kf_MaxPower( void )
 	}
 
 	asPower[selectedPlayer].currentPower = SDWORD_MAX / 2;
-	addConsoleMessage(_("Power overwhelming"), LEFT_JUSTIFY, CONSOLE_SYSTEM);
+	addConsoleMessage(_("Power overwhelming"), LEFT_JUSTIFY, SYSTEM_MESSAGE);
 }
 
 // --------------------------------------------------------------------------
@@ -347,7 +347,7 @@ void	kf_SetNormalLevel( void )
 	}
 
 	setDifficultyLevel(DL_NORMAL);
-	addConsoleMessage(_("Back to normality!"), LEFT_JUSTIFY, CONSOLE_SYSTEM);
+	addConsoleMessage(_("Back to normality!"), LEFT_JUSTIFY, SYSTEM_MESSAGE);
 }
 // --------------------------------------------------------------------------
 void	kf_SetHardLevel( void )
@@ -360,7 +360,7 @@ void	kf_SetHardLevel( void )
 	}
 
 	setDifficultyLevel(DL_HARD);
-	addConsoleMessage(_("Getting tricky!"), LEFT_JUSTIFY, CONSOLE_SYSTEM);
+	addConsoleMessage(_("Getting tricky!"), LEFT_JUSTIFY, SYSTEM_MESSAGE);
 }
 // --------------------------------------------------------------------------
 void	kf_SetToughUnitsLevel( void )
@@ -373,7 +373,7 @@ void	kf_SetToughUnitsLevel( void )
 	}
 
 	setDifficultyLevel(DL_TOUGH);
-	addConsoleMessage(_("Twice as nice!"), LEFT_JUSTIFY, CONSOLE_SYSTEM);
+	addConsoleMessage(_("Twice as nice!"), LEFT_JUSTIFY, SYSTEM_MESSAGE);
 }
 // --------------------------------------------------------------------------
 void kf_ToggleFPS(void) //This shows *just FPS* and is always visable (when active) -Q.
@@ -435,7 +435,7 @@ void kf_ShowNumObjects( void )
 void	kf_ToggleRadar( void )
 {
   		radarOnScreen = !radarOnScreen;
-//		addConsoleMessage("Radar display toggled",DEFAULT_JUSTIFY, CONSOLE_SYSTEM);
+//		addConsoleMessage("Radar display toggled",DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 }
 
 // --------------------------------------------------------------------------
@@ -455,12 +455,12 @@ void	kf_TogglePower( void )
 	powerCalculated = !powerCalculated;
 	if (powerCalculated)
 	{
-		addConsoleMessage(_("Infinite power disabled"), DEFAULT_JUSTIFY, CONSOLE_SYSTEM);
+		addConsoleMessage(_("Infinite power disabled"), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 		powerCalc(true);
 	}
 	else
 	{
-		addConsoleMessage(_("Infinite power enabled"), DEFAULT_JUSTIFY, CONSOLE_SYSTEM);
+		addConsoleMessage(_("Infinite power enabled"), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 	}
 }
 
@@ -470,7 +470,7 @@ void	kf_TogglePower( void )
 void	kf_RecalcLighting( void )
 {
         initLighting(0, 0, mapWidth, mapHeight);
-		addConsoleMessage("Lighting values for all tiles recalculated",DEFAULT_JUSTIFY,CONSOLE_SYSTEM);
+		addConsoleMessage("Lighting values for all tiles recalculated",DEFAULT_JUSTIFY,SYSTEM_MESSAGE);
 }
 
 // --------------------------------------------------------------------------
@@ -513,7 +513,7 @@ void	kf_AllAvailable( void )
 		return;
 	}
 #endif
-	addConsoleMessage(_("All items made available"), DEFAULT_JUSTIFY, CONSOLE_SYSTEM);
+	addConsoleMessage(_("All items made available"), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 	makeAllAvailable();
 }
 
@@ -525,7 +525,7 @@ void	kf_TriFlip( void )
 	MAPTILE	*psTile;
 	psTile = mapTile(mouseTileX,mouseTileY);
 	TOGGLE_TRIFLIP(psTile);
-//	addConsoleMessage("Triangle flip status toggled",DEFAULT_JUSTIFY,CONSOLE_SYSTEM);
+//	addConsoleMessage("Triangle flip status toggled",DEFAULT_JUSTIFY,SYSTEM_MESSAGE);
 }
 
 // --------------------------------------------------------------------------
@@ -538,7 +538,7 @@ void	kf_TileInfo(void)
 	debug(LOG_ERROR, "Tile position=(%d, %d) Terrain=%hhu Texture=%u Height=%hhu Illumination=%hhu",
 	      mouseTileX, mouseTileY, terrainType(psTile), TileNumber_tile(psTile->texture), psTile->height,
 	      psTile->illumination);
-	addConsoleMessage("Tile info dumped into log", DEFAULT_JUSTIFY, CONSOLE_SYSTEM);
+	addConsoleMessage("Tile info dumped into log", DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 }
 
 // --------------------------------------------------------------------------
@@ -605,13 +605,13 @@ void	kf_ToggleFog( void )
 			fogEnabled = false;
 			pie_SetFogStatus(false);
 			pie_EnableFog(fogEnabled);
-			addConsoleMessage(_("Fog off"), DEFAULT_JUSTIFY, CONSOLE_SYSTEM);
+			addConsoleMessage(_("Fog off"), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 		}
 		else
 		{
 			fogEnabled = true;
 			pie_EnableFog(fogEnabled);
-			addConsoleMessage(_("Fog on"), DEFAULT_JUSTIFY, CONSOLE_SYSTEM);
+			addConsoleMessage(_("Fog on"), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 		}
 }
 
@@ -628,7 +628,7 @@ void	kf_ToggleWidgets( void )
 	{
 		setWidgetsStatus(true);
 	}
-//	addConsoleMessage("Widgets display toggled",DEFAULT_JUSTIFY,CONSOLE_SYSTEM);
+//	addConsoleMessage("Widgets display toggled",DEFAULT_JUSTIFY,SYSTEM_MESSAGE);
 }
 
 // --------------------------------------------------------------------------
@@ -646,7 +646,7 @@ void	kf_ToggleCamera( void )
 /* Toggle 'watch' window on/off */
 void kf_ToggleWatchWindow( void )
 {
-	addConsoleMessage("WATCH WINDOW!", LEFT_JUSTIFY, CONSOLE_SYSTEM); // what is this? - per
+	addConsoleMessage("WATCH WINDOW!", LEFT_JUSTIFY, SYSTEM_MESSAGE); // what is this? - per
 	(void)addDebugMenu(!DebugMenuUp);
 }
 
@@ -1206,7 +1206,7 @@ void	kf_TogglePauseMode( void )
 
 		/* And stop the clock */
 		gameTimeStop();
-		addConsoleMessage(_("PAUSED"),CENTRE_JUSTIFY, CONSOLE_SYSTEM);
+		addConsoleMessage(_("PAUSED"),CENTRE_JUSTIFY, SYSTEM_MESSAGE);
 
 	}
 	else
@@ -1269,14 +1269,14 @@ void	kf_FinishResearch( void )
 //void	kf_ToggleRadarAllign( void )
 //{
 //	toggleRadarAllignment();
-//	addConsoleMessage("Radar allignment toggled",LEFT_JUSTIFY, CONSOLE_SYSTEM);
+//	addConsoleMessage("Radar allignment toggled",LEFT_JUSTIFY, SYSTEM_MESSAGE);
 //}
 
 // --------------------------------------------------------------------------
 void	kf_ToggleEnergyBars( void )
 {
 	toggleEnergyBars();
-	addConsoleMessage(_("Energy bars display toggled"), LEFT_JUSTIFY, CONSOLE_SYSTEM);
+	addConsoleMessage(_("Energy bars display toggled"), LEFT_JUSTIFY, SYSTEM_MESSAGE);
 }
 
 // --------------------------------------------------------------------------
@@ -1294,7 +1294,7 @@ void	kf_ToggleDemoMode( void )
 		flushConsoleMessages();
 		setConsolePermanence(false,true);
 		permitNewConsoleMessages(true);
-		addConsoleMessage(_("Demo mode off - Returning to normal game mode"), LEFT_JUSTIFY, CONSOLE_SYSTEM);
+		addConsoleMessage(_("Demo mode off - Returning to normal game mode"), LEFT_JUSTIFY, SYSTEM_MESSAGE);
 		if(getWarCamStatus())
 		{
 			camToggleStatus();
@@ -1341,7 +1341,7 @@ SDWORD	xJump,yJump;
 	}
 	else
 	{
-		addConsoleMessage(_("Unable to locate any resource extractors!"),LEFT_JUSTIFY, CONSOLE_SYSTEM);
+		addConsoleMessage(_("Unable to locate any resource extractors!"),LEFT_JUSTIFY, SYSTEM_MESSAGE);
 	}
 
 }
@@ -1481,7 +1481,7 @@ void	kf_ChooseCancel( void )
 // --------------------------------------------------------------------------
 void	kf_ToggleDrivingMode( void )
 {
-	addConsoleMessage("Toggle driver mode", LEFT_JUSTIFY, CONSOLE_SYSTEM); // what does this do? - per
+	addConsoleMessage("Toggle driver mode", LEFT_JUSTIFY, SYSTEM_MESSAGE); // what does this do? - per
 
 	/* No point unless we're tracking */
 	if(getWarCamStatus())
@@ -1489,20 +1489,20 @@ void	kf_ToggleDrivingMode( void )
 		if(getDrivingStatus())
 		{
 			StopDriverMode();
-			addConsoleMessage("DriverMode off", LEFT_JUSTIFY, CONSOLE_SYSTEM);
+			addConsoleMessage("DriverMode off", LEFT_JUSTIFY, SYSTEM_MESSAGE);
 		}
 		else
 		{	// removed the MP check for this, so you can now play with in in MP games.
 			if(	(driveModeActive() == false) &&	(demoGetStatus() == false) ) // && !bMultiPlayer)
 			{
 				StartDriverMode( NULL );
-				addConsoleMessage("DriverMode on", LEFT_JUSTIFY, CONSOLE_SYSTEM);
+				addConsoleMessage("DriverMode on", LEFT_JUSTIFY, SYSTEM_MESSAGE);
 			}
 		}
 	}
 	else
 	{
-		addConsoleMessage("DriverMode disabled. Must be in tracking mode. Hit space bar with a unit selected.", LEFT_JUSTIFY, CONSOLE_SYSTEM);
+		addConsoleMessage("DriverMode disabled. Must be in tracking mode. Hit space bar with a unit selected.", LEFT_JUSTIFY, SYSTEM_MESSAGE);
 	}
 }
 
@@ -1564,19 +1564,19 @@ void	kf_ToggleWeather( void )
 	if(atmosGetWeatherType() == WT_NONE)
 	{
 		atmosSetWeatherType(WT_SNOWING);
-		addConsoleMessage(_("Oh, the weather outside is frightful... SNOW"), LEFT_JUSTIFY, CONSOLE_SYSTEM);
+		addConsoleMessage(_("Oh, the weather outside is frightful... SNOW"), LEFT_JUSTIFY, SYSTEM_MESSAGE);
 
 	}
 	else if(atmosGetWeatherType() == WT_SNOWING)
 	{
 		atmosSetWeatherType(WT_RAINING);
-		addConsoleMessage(_("Singing in the rain, I'm singing in the rain... RAIN"), LEFT_JUSTIFY, CONSOLE_SYSTEM);
+		addConsoleMessage(_("Singing in the rain, I'm singing in the rain... RAIN"), LEFT_JUSTIFY, SYSTEM_MESSAGE);
 	}
 	else
 	{
 		atmosInitSystem();
 		atmosSetWeatherType(WT_NONE);
-		addConsoleMessage(_("Forecast : Clear skies for all areas... NO WEATHER"), LEFT_JUSTIFY, CONSOLE_SYSTEM);
+		addConsoleMessage(_("Forecast : Clear skies for all areas... NO WEATHER"), LEFT_JUSTIFY, SYSTEM_MESSAGE);
 	}
 }
 
@@ -1753,12 +1753,10 @@ void kf_SendTextMessage(void)
 			else
 			{
 				//show the message we sent on our local console as well (even in skirmish, to see console commands)
-				//sprintf(tmp,"%d",selectedPlayer);
-
 				strlcpy(tmp, getPlayerName(selectedPlayer), sizeof(tmp));
 				strlcat(tmp, " : ", sizeof(tmp));        // seperator
 				strlcat(tmp, sTextToSend, sizeof(tmp));  // add message
-				addConsoleMessage(tmp,DEFAULT_JUSTIFY, CONSOLE_USER);
+				addConsoleMessage(tmp,DEFAULT_JUSTIFY, selectedPlayer);
 
 				//in skirmish send directly to AIs, for command and chat procesing
 				for(i=0; i<game.maxPlayers; i++)		//don't use MAX_PLAYERS here, although possible
@@ -1881,7 +1879,7 @@ void kf_SendTextMessage(void)
 	}
 
 //	flushConsoleMessages();								//clear
-//	addConsoleMessage(sTextToSend,DEFAULT_JUSTIFY, CONSOLE_SYSTEM);		//display
+//	addConsoleMessage(sTextToSend,DEFAULT_JUSTIFY, SYSTEM_MESSAGE);		//display
 //	iV_DrawText(sTextToSend,16+D_W,RADTLY+D_H-16);
 }
 // --------------------------------------------------------------------------
@@ -2110,7 +2108,7 @@ DROID	*psOther;
 void	kf_ScatterDroids( void )
 {
 	// to be written!
-	addConsoleMessage("Scatter droids - not written yet!",LEFT_JUSTIFY, CONSOLE_SYSTEM);
+	addConsoleMessage("Scatter droids - not written yet!",LEFT_JUSTIFY, SYSTEM_MESSAGE);
 }
 
 // --------------------------------------------------------------------------
@@ -2137,7 +2135,7 @@ UDWORD		xJump = 0, yJump = 0;
 	/* If we found it, then jump to it! */
 	if(bGotHQ)
 	{
-		addConsoleMessage(_("Centered on player HQ, direction NORTH"),LEFT_JUSTIFY, CONSOLE_SYSTEM);
+		addConsoleMessage(_("Centered on player HQ, direction NORTH"),LEFT_JUSTIFY, SYSTEM_MESSAGE);
 		player.p.x = xJump;
 		player.p.z = yJump;
 		player.r.y = 0; // face north
@@ -2149,7 +2147,7 @@ UDWORD		xJump = 0, yJump = 0;
 	}
 	else
 	{
-		addConsoleMessage(_("Unable to locate HQ!"),LEFT_JUSTIFY, CONSOLE_SYSTEM);
+		addConsoleMessage(_("Unable to locate HQ!"),LEFT_JUSTIFY, SYSTEM_MESSAGE);
 	}
 }
 
@@ -2165,11 +2163,11 @@ void kf_ToggleFormationSpeedLimiting( void )
 
 	if ( moveFormationSpeedLimitingOn() )
 	{
-		addConsoleMessage(_("Formation speed limiting OFF"),LEFT_JUSTIFY, CONSOLE_SYSTEM);
+		addConsoleMessage(_("Formation speed limiting OFF"),LEFT_JUSTIFY, SYSTEM_MESSAGE);
 	}
 	else
 	{
-		addConsoleMessage(_("Formation speed limiting ON"),LEFT_JUSTIFY, CONSOLE_SYSTEM);
+		addConsoleMessage(_("Formation speed limiting ON"),LEFT_JUSTIFY, SYSTEM_MESSAGE);
 	}
 	moveToggleFormationSpeedLimiting();
 }

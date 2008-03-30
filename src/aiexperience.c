@@ -141,7 +141,7 @@ BOOL SavePlayerAIExperience(SDWORD nPlayer, BOOL bNotify)
 		{
 			debug(LOG_ERROR,"SavePlayerAIExperience - failed to save exper");
 
-			//addConsoleMessage("Failed to save experience.",RIGHT_JUSTIFY,CONSOLE_SYSTEM);
+			//addConsoleMessage("Failed to save experience.",RIGHT_JUSTIFY,SYSTEM_MESSAGE);
 			console("Failed to save experience for player %d.", nPlayer);
 			return false;
 		}
@@ -777,7 +777,7 @@ BOOL StoreBaseDefendLoc(SDWORD x, SDWORD y, SDWORD nPlayer)
 		{
 			if(baseDefendLocation[nPlayer][i][0] < 0)	//not initialized yet
 			{
-				//addConsoleMessage("Base defense location - NEW LOCATION.", RIGHT_JUSTIFY,CONSOLE_SYSTEM);
+				//addConsoleMessage("Base defense location - NEW LOCATION.", RIGHT_JUSTIFY,SYSTEM_MESSAGE);
 
 				baseDefendLocation[nPlayer][i][0] = x;
 				baseDefendLocation[nPlayer][i][1] = y;
@@ -790,12 +790,12 @@ BOOL StoreBaseDefendLoc(SDWORD x, SDWORD y, SDWORD nPlayer)
 			}
 		}
 
-		addConsoleMessage("Base defense location - NO SPACE LEFT.",RIGHT_JUSTIFY,CONSOLE_SYSTEM);
+		addConsoleMessage("Base defense location - NO SPACE LEFT.",RIGHT_JUSTIFY,SYSTEM_MESSAGE);
 		return false;		//not enough space to store
 	}
 	else		//this one already stored
 	{
-		//addConsoleMessage("Base defense location - INCREASED PRIORITY.",CONSOLE_SYSTEM);
+		//addConsoleMessage("Base defense location - INCREASED PRIORITY.",SYSTEM_MESSAGE);
 
 		baseDefendLocPrior[nPlayer][index]++;	//higher the priority
 
@@ -928,7 +928,7 @@ BOOL StoreOilDefendLoc(SDWORD x, SDWORD y, SDWORD nPlayer)
 		{
 			if(oilDefendLocation[nPlayer][i][0] < 0)	//not initialized yet
 			{
-				//addConsoleMessage("Oil defense location - NEW LOCATION.", CONSOLE_SYSTEM);
+				//addConsoleMessage("Oil defense location - NEW LOCATION.", SYSTEM_MESSAGE);
 
 				oilDefendLocation[nPlayer][i][0] = x;
 				oilDefendLocation[nPlayer][i][1] = y;
@@ -941,12 +941,12 @@ BOOL StoreOilDefendLoc(SDWORD x, SDWORD y, SDWORD nPlayer)
 			}
 		}
 
-		addConsoleMessage("Oil defense location - NO SPACE LEFT.",RIGHT_JUSTIFY,CONSOLE_SYSTEM);
+		addConsoleMessage("Oil defense location - NO SPACE LEFT.",RIGHT_JUSTIFY,SYSTEM_MESSAGE);
 		return false;		//not enough space to store
 	}
 	else		//this one already stored
 	{
-		//addConsoleMessage("Oil defense location - INCREASED PRIORITY.",CONSOLE_SYSTEM);
+		//addConsoleMessage("Oil defense location - INCREASED PRIORITY.",SYSTEM_MESSAGE);
 
 		oilDefendLocPrior[nPlayer][index]++;	//higher the priority
 

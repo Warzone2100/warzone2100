@@ -271,7 +271,7 @@ void runLimitScreen(void)
 			// make some noize.
 			if(!ingame.localOptionsReceived)
 			{
-				addConsoleMessage("Limits Reset To Default Values",DEFAULT_JUSTIFY, CONSOLE_SYSTEM);
+				addConsoleMessage("Limits Reset To Default Values",DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 			}
 			else
 			{

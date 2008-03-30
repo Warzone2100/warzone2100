@@ -1857,7 +1857,7 @@ BOOL updateTransporter(DROID *psTransporter)
             //play reinforcements have arrived message
 			audio_QueueTrackPos( ID_SOUND_TRANSPORT_LANDING,
 					psTransporter->pos.x, psTransporter->pos.y, psTransporter->pos.z );
-			addConsoleMessage(_("Reinforcements landing"),LEFT_JUSTIFY,CONSOLE_SYSTEM);
+			addConsoleMessage(_("Reinforcements landing"),LEFT_JUSTIFY,SYSTEM_MESSAGE);
 			//reset the data for the transporter timer
 			widgSetUserData(psWScreen, IDTRANTIMER_DISPLAY, (void*)NULL);
 			return true;

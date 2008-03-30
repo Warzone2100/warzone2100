@@ -225,7 +225,7 @@ BOOL MultiPlayerLeave( UDWORD dp)
 
 		turnOffMultiMsg(false);
 
-		addConsoleMessage(buf,DEFAULT_JUSTIFY, CONSOLE_SYSTEM);
+		addConsoleMessage(buf,DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 
 		if(widgGetFromID(psWScreen,IDRET_FORM))
 		{
@@ -322,7 +322,7 @@ void setupNewPlayer(UDWORD dpid, UDWORD player)
 	setMultiStats(player2dpid[player],getMultiStats(player,false),true);  // get the players score from the ether.
 
 	sprintf( buf,_("%s is Joining the Game"),getPlayerName(player) );
-	addConsoleMessage(buf,DEFAULT_JUSTIFY, CONSOLE_SYSTEM);
+	addConsoleMessage(buf,DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 }
 
 // ////////////////////////////////////////////////////////////////////////////

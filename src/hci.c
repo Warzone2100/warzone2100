@@ -1505,7 +1505,7 @@ static void intProcessEditStats(UDWORD id)
 			psTForm->majorT = temp;
 #ifdef  DEBUG_SCROLLTABS
 		sprintf(buf,"[debug menu]Clicked LT %d tab #=%d",psTForm->TabMultiplier,psTForm->majorT);
-		addConsoleMessage(buf,DEFAULT_JUSTIFY,CONSOLE_SYSTEM);
+		addConsoleMessage(buf,DEFAULT_JUSTIFY,SYSTEM_MESSAGE);
 #endif
 	}
 	else if (id == IDSTAT_TABSCRL_RIGHT) // user hit right scroll tab from DEBUG menu
@@ -1531,7 +1531,7 @@ static void intProcessEditStats(UDWORD id)
 		}
 #ifdef  DEBUG_SCROLLTABS		//for debuging
 		sprintf(buf, "[debug menu]Clicked RT %d numtabs %d tab # %d", psTForm->TabMultiplier, numTabs, psTForm->majorT);
-		addConsoleMessage(buf, DEFAULT_JUSTIFY,CONSOLE_SYSTEM);
+		addConsoleMessage(buf, DEFAULT_JUSTIFY,SYSTEM_MESSAGE);
 #endif
 	}
 //	else		//Do we add this or does it not matter?
@@ -1675,7 +1675,7 @@ INT_RETVAL intRunWidgets(void)
 				{
 					if (saveGame(sRequestResult, GTYPE_SAVE_START))
 					{
-						addConsoleMessage(_("GAME SAVED!"), LEFT_JUSTIFY,CONSOLE_SYSTEM);
+						addConsoleMessage(_("GAME SAVED!"), LEFT_JUSTIFY,SYSTEM_MESSAGE);
 
 						if(widgGetFromID(psWScreen,IDMISSIONRES_SAVE))
 						{
@@ -3037,7 +3037,7 @@ static void intProcessStats(UDWORD id)
 			psTForm->majorT = temp;
 #ifdef  DEBUG_SCROLLTABS
 		sprintf(buf, "[build menu]Clicked LT %d tab #=%d", psTForm->TabMultiplier, psTForm->majorT);
-		addConsoleMessage(buf, DEFAULT_JUSTIFY,CONSOLE_SYSTEM);
+		addConsoleMessage(buf, DEFAULT_JUSTIFY,SYSTEM_MESSAGE);
 #endif
 	}
 	else if (id == IDSTAT_TABSCRL_RIGHT)	// user hit right scroll tab from BUILD menu
@@ -3063,7 +3063,7 @@ static void intProcessStats(UDWORD id)
 		}
 #ifdef  DEBUG_SCROLLTABS		//for debuging
 		sprintf(buf, "[build menu]Clicked RT %d numtabs %d tab # %d", psTForm->TabMultiplier, numTabs, psTForm->majorT);
-		addConsoleMessage(buf, DEFAULT_JUSTIFY,CONSOLE_SYSTEM);
+		addConsoleMessage(buf, DEFAULT_JUSTIFY,SYSTEM_MESSAGE);
 #endif
 
 	}
@@ -6230,7 +6230,7 @@ static BOOL setResearchStats(BASE_OBJECT *psObj, BASE_STATS *psStats)
 		{
 			if (!usePower(selectedPlayer, pResearch->researchPower))
 			{
-				addConsoleMessage("Research: No Power",DEFAULT_JUSTIFY,CONSOLE_SYSTEM);
+				addConsoleMessage("Research: No Power",DEFAULT_JUSTIFY,SYSTEM_MESSAGE);
 				return false;
 			}
 		}*/

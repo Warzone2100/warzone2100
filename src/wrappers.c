@@ -370,9 +370,9 @@ BOOL displayGameOver(BOOL bDidit)
 //	setConsolePermanence(true,true);
 //	flushConsoleMessages( );
 
-//	addConsoleMessage(" ", CENTRE_JUSTIFY, CONSOLE_SYSTEM);
-//	addConsoleMessage(_("Game Over"), CENTRE_JUSTIFY, CONSOLE_SYSTEM);
-//	addConsoleMessage(" ", CENTRE_JUSTIFY, CONSOLE_SYSTEM);
+//	addConsoleMessage(" ", CENTRE_JUSTIFY, SYSTEM_MESSAGE);
+//	addConsoleMessage(_("Game Over"), CENTRE_JUSTIFY, SYSTEM_MESSAGE);
+//	addConsoleMessage(" ", CENTRE_JUSTIFY, SYSTEM_MESSAGE);
 
 	if(bDidit)
 	{

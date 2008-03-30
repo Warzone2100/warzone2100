@@ -1847,11 +1847,11 @@ void researchResult(UDWORD researchIndex, UBYTE player, BOOL bDisplay,
 		if (pResearch->pViewData != NULL)
 		{
 			snprintf(consoleMsg, MAX_RESEARCH_MSG_SIZE, _("Research completed: %s"), *pResearch->pViewData->ppTextMsg);
-			addConsoleMessage(consoleMsg, LEFT_JUSTIFY, CONSOLE_SYSTEM);
+			addConsoleMessage(consoleMsg, LEFT_JUSTIFY, SYSTEM_MESSAGE);
 		}
 		else
 		{
-			addConsoleMessage(_("Research Completed"), LEFT_JUSTIFY, CONSOLE_SYSTEM);
+			addConsoleMessage(_("Research Completed"), LEFT_JUSTIFY, SYSTEM_MESSAGE);
 		}
 	}
 

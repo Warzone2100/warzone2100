@@ -100,7 +100,7 @@ BOOL attemptCheatCode(const char* cheat_name)
 		strlcpy(errorString, cheat_name, sizeof(errorString));
 		strlcat(errorString, "?", sizeof(errorString));
 
-		addConsoleMessage(errorString, LEFT_JUSTIFY,CONSOLE_SYSTEM);
+		addConsoleMessage(errorString, LEFT_JUSTIFY,SYSTEM_MESSAGE);
 	}
 	return(false);
 }

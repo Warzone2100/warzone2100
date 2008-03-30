@@ -3030,7 +3030,7 @@ BOOL scrShowConsoleText(void)
 	if (player == (SDWORD)selectedPlayer)
 	{
 		permitNewConsoleMessages(true);
-		addConsoleMessage(pText, CENTRE_JUSTIFY, CONSOLE_SYSTEM);
+		addConsoleMessage(pText, CENTRE_JUSTIFY, SYSTEM_MESSAGE);
 	}
 
 	return true;
@@ -3058,7 +3058,7 @@ BOOL scrAddConsoleText(void)
 	{
 		permitNewConsoleMessages(true);
 		setConsolePermanence(true,true);
-		addConsoleMessage(pText, CENTRE_JUSTIFY, CONSOLE_SYSTEM);
+		addConsoleMessage(pText, CENTRE_JUSTIFY, SYSTEM_MESSAGE);
 		permitNewConsoleMessages(false);
 	}
 
@@ -3089,7 +3089,7 @@ BOOL scrTagConsoleText(void)
 	{
 		permitNewConsoleMessages(true);
 		setConsolePermanence(true,false);
-		addConsoleMessage(pText, CENTRE_JUSTIFY, CONSOLE_SYSTEM);
+		addConsoleMessage(pText, CENTRE_JUSTIFY, SYSTEM_MESSAGE);
 		permitNewConsoleMessages(false);
 	}
 
@@ -6642,7 +6642,7 @@ BOOL scrConsole(void)
 		return false;
 	}
 
-	addConsoleMessage(strParam1,DEFAULT_JUSTIFY, CONSOLE_SYSTEM);
+	addConsoleMessage(strParam1,DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 
 	return true;
 }
@@ -6702,7 +6702,7 @@ BOOL scrMsg(void)
 	if(playerFrom == selectedPlayer)
 	{
 		sprintf(tmp,"[%d-%d] : %s",playerFrom, playerTo, strParam1);											// add message
-		addConsoleMessage(tmp, RIGHT_JUSTIFY, CONSOLE_USER);
+		addConsoleMessage(tmp, RIGHT_JUSTIFY, playerFrom);
 	}
 
 	return true;
@@ -6722,7 +6722,7 @@ BOOL scrDbg(void)
 	{
 		char	sTmp[255];
 		sprintf(sTmp,"%d) %s",player,strParam1);
-		addConsoleMessage(sTmp,DEFAULT_JUSTIFY, CONSOLE_DEBUG);
+		addConsoleMessage(sTmp,DEFAULT_JUSTIFY, player);
 	}
 
 	return true;
@@ -10890,7 +10890,7 @@ BOOL scrASSERT(void)
 		if(!bExpression)
 		{
 			sprintf(sTmp,"%d) %s",player,strParam1);
-			addConsoleMessage(sTmp,RIGHT_JUSTIFY,CONSOLE_DEBUG);
+			addConsoleMessage(sTmp,RIGHT_JUSTIFY,player);
 		}
 	}
 #endif

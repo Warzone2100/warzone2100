@@ -440,7 +440,7 @@ void draw3DScene( void )
 		flushConsoleMessages();
 		setConsolePermanence(true, true);
 		permitNewConsoleMessages(true);
-		addConsoleMessage("Warzone 2100 : Pumpkin Studios ", RIGHT_JUSTIFY,CONSOLE_SYSTEM);
+		addConsoleMessage("Warzone 2100 : Pumpkin Studios ", RIGHT_JUSTIFY,SYSTEM_MESSAGE);
 		permitNewConsoleMessages(false);
 	}
 

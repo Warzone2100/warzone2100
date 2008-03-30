@@ -1797,7 +1797,7 @@ BOOL droidUpdateRestore( DROID *psDroid )
 	}
 	else
 	{
-		addConsoleMessage(_("Structure Restored") ,DEFAULT_JUSTIFY,CONSOLE_SYSTEM);
+		addConsoleMessage(_("Structure Restored") ,DEFAULT_JUSTIFY,SYSTEM_MESSAGE);
 		//psStruct->resistance = psStruct->pStructureType->resistance;
 		psStruct->resistance = (UWORD)structureResistance(psStruct->pStructureType,
 			psStruct->player);
@@ -3671,7 +3671,7 @@ char	groupInfo[255];
 		unsigned int num_selected = selNumSelected(selectedPlayer);
 
 		snprintf(groupInfo, sizeof(groupInfo), ngettext("Group %u selected - %u Unit", "Group %u selected - %u Units", num_selected), groupNumber, num_selected);
-		addConsoleMessage(groupInfo,RIGHT_JUSTIFY,CONSOLE_SYSTEM);
+		addConsoleMessage(groupInfo,RIGHT_JUSTIFY,SYSTEM_MESSAGE);
 //	}
 
 }
@@ -3685,7 +3685,7 @@ char	groupInfo[255];
 		unsigned int num_selected = selNumSelected(selectedPlayer);
 
 		snprintf(groupInfo, sizeof(groupInfo), ngettext("%u unit assigned to Group %u", "%u units assigned to Group %u", num_selected), num_selected, groupNumber);
-		addConsoleMessage(groupInfo,RIGHT_JUSTIFY,CONSOLE_SYSTEM);
+		addConsoleMessage(groupInfo,RIGHT_JUSTIFY,SYSTEM_MESSAGE);
 	}
 
 }
@@ -3703,7 +3703,7 @@ void	groupConsoleInformOfCentering( UDWORD groupNumber )
 	{
 		snprintf(groupInfo, sizeof(groupInfo), ngettext("Aligning with Group %u - %u Unit", "Aligning with Group %u - %u Units", num_selected), groupNumber, num_selected);
 	}
-		addConsoleMessage(groupInfo,RIGHT_JUSTIFY,CONSOLE_SYSTEM);
+		addConsoleMessage(groupInfo,RIGHT_JUSTIFY,SYSTEM_MESSAGE);
 
 }
 

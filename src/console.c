@@ -107,7 +107,7 @@ char ConsoleString[MAX_CONSOLE_TMP_STRING_LENGTH];
 /* MODULE CONSOLE PROTOTYPES */
 void	consolePrintf				( char *layout, ... );
 void	setConsoleSizePos			( UDWORD x, UDWORD y, UDWORD width );
-BOOL	addConsoleMessage			( const char *messageText, CONSOLE_TEXT_JUSTIFICATION jusType, CONSOLE_TEXT_TYPE textType );
+BOOL	addConsoleMessage			( const char *messageText, CONSOLE_TEXT_JUSTIFICATION jusType, SDWORD player );
 void	updateConsoleMessages		( void );
 void	displayConsoleMessages		( void );
 void	initConsoleMessages			( void );
@@ -124,7 +124,7 @@ void	setConsoleLineInfo			( UDWORD vis );
 UDWORD	getConsoleLineInfo			( void );
 void	permitNewConsoleMessages	( BOOL allow);
 int		displayOldMessages			( void );
-void	setConsoleTextColor			( CONSOLE_TEXT_TYPE type );
+void	setConsoleTextColor			( SDWORD player );
 
 /** Sets the system up */
 void	initConsoleMessages( void )
@@ -197,7 +197,7 @@ void	toggleConsoleDrop( void )
 
 /** Add a string to the console. */
 static BOOL _addConsoleMessage(const char *messageText, CONSOLE_TEXT_JUSTIFICATION jusType,
-							   CONSOLE_TEXT_TYPE textType)
+							   SDWORD player)
 {
 	int textLength;
 	CONSOLE_MESSAGE	*psMessage;
@@ -227,7 +227,7 @@ static BOOL _addConsoleMessage(const char *messageText, CONSOLE_TEXT_JUSTIFICATI
 		jusType = defJustification;
 	}
 
-	consoleStorage[messageIndex].textType = textType;
+	consoleStorage[messageIndex].player = player;
 
 	/* Precalculate and store (quicker!) the indent for justified text */
 	switch(jusType)
@@ -295,9 +295,9 @@ static BOOL _addConsoleMessage(const char *messageText, CONSOLE_TEXT_JUSTIFICATI
 
 /// Wrapper for _addConsoleMessage
 BOOL addConsoleMessage(const char *messageText, CONSOLE_TEXT_JUSTIFICATION jusType,
-					   CONSOLE_TEXT_TYPE textType)
+					   SDWORD player)
 {
-	return _addConsoleMessage(messageText, jusType, textType);
+	return _addConsoleMessage(messageText, jusType, player);
 }
 
 /// \return The number of console messages currently active
@@ -411,53 +411,33 @@ void	flushConsoleMessages( void )
 	messageId = 0;
 }
 
-/** Choose an appropriate message type, which will result in
-  appropriate console text color, depending on current radar
-  type and whether source and destination players are in alliance. */
-CONSOLE_TEXT_TYPE pickConsolePlayerTextType(UDWORD player1, UDWORD player2)
+/** Sets console text color depending on message type */
+void setConsoleTextColor(SDWORD player)
 {
-	// don't use friend-foe colors in the lobby
-	if(bEnemyAllyRadarColor && (GetGameMode() == GS_NORMAL))
+	// System messages
+	if(player == SYSTEM_MESSAGE)
 	{
-		if(aiCheckAlliances(player1,player2))
+		iV_SetTextColour(WZCOL_CONS_TEXT_SYSTEM);
+	}
+	else
+	{
+		// Don't use friend-foe colors in the lobby
+		if(bEnemyAllyRadarColor && (GetGameMode() == GS_NORMAL))
 		{
-			return CONSOLE_USER_ALLY;
+			if(aiCheckAlliances(player,selectedPlayer))
+			{
+				iV_SetTextColour(WZCOL_CONS_TEXT_USER_ALLY);
+			}
+			else
+			{
+				iV_SetTextColour(WZCOL_CONS_TEXT_USER_ENEMY);
+			}
 		}
 		else
 		{
-			return CONSOLE_USER_ENEMY;
+			// Friend-foe is off
+			iV_SetTextColour(WZCOL_CONS_TEXT_USER);
 		}
-	}
-
-	return CONSOLE_USER;	// pick a default color if friend-foe radar colors are off
-}
-
-/** Sets console text color depending on message type */
-void setConsoleTextColor(CONSOLE_TEXT_TYPE type)
-{
-	switch(type) // run relevant title screen code.
-	{
-		// System message: 'research complete' etc
-		case CONSOLE_SYSTEM:
-			iV_SetTextColour(WZCOL_CONS_TEXT_SYSTEM);
-			break;
-		// Human or AI Chat messages
-		case CONSOLE_USER:
-			iV_SetTextColour(WZCOL_CONS_TEXT_USER);
-			break;
-		case CONSOLE_USER_ALLY:
-			iV_SetTextColour(WZCOL_CONS_TEXT_USER_ALLY);
-			break;
-		case CONSOLE_USER_ENEMY:
-			iV_SetTextColour(WZCOL_CONS_TEXT_USER_ENEMY);
-			break;
-		// Currently debug output from scripts
-		case CONSOLE_DEBUG:
-			iV_SetTextColour(WZCOL_CONS_TEXT_USER);
-			break;
-		default:
-			debug( LOG_ERROR, "unknown console message type" );
-			abort();
 	}
 }
 
@@ -545,7 +525,7 @@ void	displayConsoleMessages( void )
 	{
 
 		/* Set text color depending on message type */
-		setConsoleTextColor(psMessage->textType);
+		setConsoleTextColor(psMessage->player);
 
  		/* Draw the text string */
 		MesY = iV_DrawFormattedText(psMessage->text, mainConsole.topX, MesY,
@@ -644,7 +624,7 @@ int displayOldMessages()
 	for(i=count-1; i>0; i--)
 	{
 		/* Set text color depending on message type */
-		setConsoleTextColor(consoleStorage[history[i]].textType);
+		setConsoleTextColor(consoleStorage[history[i]].player);
 
 		/* Draw the text string */
 		MesY = iV_DrawFormattedText(consoleStorage[history[i]].text,
@@ -655,7 +635,7 @@ int displayOldMessages()
 	}
 
 	/* Set text color depending on message type */
-	setConsoleTextColor(consoleStorage[history[0]].textType);
+	setConsoleTextColor(consoleStorage[history[0]].player);
 
 	/* Draw the top one */
 	iV_DrawFormattedText(consoleStorage[history[0]].text,
@@ -789,7 +769,7 @@ va_list	arguments;		// Formatting info
 	consoleString[sizeof(consoleString) - 1] = '\0';
 
 	/* Add the message through the normal channels! */
-	addConsoleMessage(consoleString,DEFAULT_JUSTIFY,CONSOLE_SYSTEM);
+	addConsoleMessage(consoleString,DEFAULT_JUSTIFY,SYSTEM_MESSAGE);
 
 	/* Close arguments */
 	va_end(arguments);
@@ -824,7 +804,7 @@ void printf_console(const char *pFormat, ...)
 
 	/* Output it */
 
-	addConsoleMessage(aBuffer,RIGHT_JUSTIFY,CONSOLE_SYSTEM);		//debug messages are displayed right-aligned
+	addConsoleMessage(aBuffer,RIGHT_JUSTIFY,SYSTEM_MESSAGE);		//debug messages are displayed right-aligned
 #endif
 }
 
@@ -843,6 +823,6 @@ void console(const char *pFormat, ...)
 	aBuffer[sizeof(aBuffer) - 1] = '\0';
 
 	/* Output it */
-	addConsoleMessage(aBuffer,DEFAULT_JUSTIFY,CONSOLE_SYSTEM);
+	addConsoleMessage(aBuffer,DEFAULT_JUSTIFY,SYSTEM_MESSAGE);
 
 }

@@ -49,15 +49,8 @@ typedef struct _console
 	BOOL	permanent;
 } CONSOLE;
 
-/* Console text type */
-typedef enum
-{
-	CONSOLE_SYSTEM,
-	CONSOLE_USER,			// Human or AI Chat messages
-	CONSOLE_USER_ALLY,
-	CONSOLE_USER_ENEMY,
-	CONSOLE_DEBUG
-}CONSOLE_TEXT_TYPE;
+/* ID to use for addConsoleMessage() in case of a system message */
+#define	SYSTEM_MESSAGE				(-1)
 
 /* Definition of a message */
 typedef struct	_console_message
@@ -67,14 +60,14 @@ typedef struct	_console_message
 	//UDWORD			screenIndex;							// Info for justification
 	UDWORD				JustifyType;
 	UDWORD				id;
-	CONSOLE_TEXT_TYPE	textType;									// Text type, ie a chat message, system message etc
+	SDWORD				player;						// Player who sent this message or SYSTEM_MESSAGE
 	struct _console_message *psNext;
 } CONSOLE_MESSAGE;
 
 extern char ConsoleString[MAX_CONSOLE_TMP_STRING_LENGTH];
 
 extern void	consolePrintf				( char *layout, ... );
-extern BOOL	addConsoleMessage			( const char *messageText, CONSOLE_TEXT_JUSTIFICATION jusType, CONSOLE_TEXT_TYPE textType );
+extern BOOL	addConsoleMessage			( const char *messageText, CONSOLE_TEXT_JUSTIFICATION jusType, SDWORD player );
 extern void	updateConsoleMessages		( void );
 extern void	initConsoleMessages			( void );
 extern void	setConsoleMessageDuration	( UDWORD time );
@@ -95,7 +88,6 @@ extern void	permitNewConsoleMessages		( BOOL allow);
 extern	void	toggleConsoleDrop( void );
 extern void printf_console(const char *pFormat, ...); /// Print to the ingame console in debug mode only
 extern void console(const char *pFormat, ...); /// Print allways to the ingame console
-extern CONSOLE_TEXT_TYPE pickConsolePlayerTextType(UDWORD player1, UDWORD player2);
 
 /* Basic wrapper to sprintf - allows convenient printf style game info to be displayed */
 
@@ -128,12 +120,12 @@ extern CONSOLE_TEXT_TYPE pickConsolePlayerTextType(UDWORD player1, UDWORD player
 
 #define CONPRINTF(s,x) \
 	sprintf x; \
-	addConsoleMessage(s,DEFAULT_JUSTIFY,CONSOLE_SYSTEM)
+	addConsoleMessage(s,DEFAULT_JUSTIFY,SYSTEM_MESSAGE)
 
 #ifdef DEBUG
 #define DBCONPRINTF(s,x) \
 	sprintf x; \
-	addConsoleMessage(s,DEFAULT_JUSTIFY,CONSOLE_SYSTEM)
+	addConsoleMessage(s,DEFAULT_JUSTIFY,SYSTEM_MESSAGE)
 #else
 #define DBCONPRINTF(s,x)
 #endif
