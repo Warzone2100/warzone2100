@@ -155,10 +155,16 @@ bool ParseCommandLineEarly(int argc, const char** argv)
 #endif /* WZ_OS_MAC && DEBUG */
 
 	/* loop through command line */
-	while ((iOption = poptGetNextOpt(poptCon)) > 0)
+	while ((iOption = poptGetNextOpt(poptCon)) > 0 || iOption == POPT_ERROR_BADOPT)
 	{
 		CLI_OPTIONS option = iOption;
 		const char* token;
+
+		if (iOption == POPT_ERROR_BADOPT)
+		{
+			debug(LOG_ERROR, "Unrecognized option: %s", poptBadOption(poptCon, 0));
+			exit(1);
+		}
 
 		switch (option)
 		{
