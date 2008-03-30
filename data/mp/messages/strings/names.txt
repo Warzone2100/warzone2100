@@ -1098,8 +1098,6 @@ R-Wpn-MG-Damage06				_("Tungsten-Tipped MG Bullets Mk2")
 R-Wpn-MG-Damage07				_("Tungsten-Tipped MG Bullets Mk3")
 R-Wpn-MG-Damage08				_("Depleted Uranium MG Bullets")
 R-Wpn-MG-Damage09				_("Depleted Uranium MG Bullets Mk2")
-//R-Wpn-MG-Damage10				_("C-60 MG Bullets Mk3")
-R-Wpn-MG-Damage11				_("R-Wpn-MG-Damage11")
 
 R-Wpn-MG-ROF01				_("Chaingun Upgrade")
 R-Wpn-MG-ROF02				_("Rapid Fire Chaingun")
@@ -1508,7 +1506,6 @@ Sk-CobraBBHover				_("Cobra Bunker Buster Hover")
 
 R-Sys-Sensor-Upgrade02			_("Sensor Upgrade")
 R-Struc-Power-Upgrade03			_("Power Upgrade")
-R-Struc-Power-Cam2			_("R-Struc-Power-Cam2")
 MP-Cyb-ATmiss-GRD			_("Scourge")
 MP-Cyb-Laser1-GRD			_("Flashlight Gunner")
 
