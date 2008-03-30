@@ -1,5 +1,6 @@
 0000-00-00: SVN
  * General:
+   * New: Support for coloured mouse cursors (ingame only, not in menus), controlled by configuration option "ColouredCursor".
    * Fix: Dull radar player colors were replaced by brighter colors.
    * Change: Effect of skirmish modifier slider increased by 20%.
    * Change: 'ENTER' key brings up the chat dialog instead of 'T'.

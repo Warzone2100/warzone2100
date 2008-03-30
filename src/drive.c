@@ -673,7 +673,7 @@ void driveProcessAquireButton(void)
 		BASE_OBJECT	*psObj;
 		psObj = targetAquireNearestObjView((BASE_OBJECT*)psDrivenDroid);
 //		driveMarkTarget();
-//		frameSetCursorFromRes(111); //IDC_ATTACK = 111 defined in display.c
+//		pie_SetMouse(CURSOR_ATTACK, true);
 	}
 }
 

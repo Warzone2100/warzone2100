@@ -28,6 +28,7 @@
 #include "lib/framework/frame.h"
 #include "lib/framework/input.h"
 #include "lib/framework/strres.h"
+#include "lib/ivis_common/piestate.h"
 
 #include "display.h"
 #include "map.h"
@@ -74,6 +75,7 @@
 #include "transporter.h"
 #include "intorder.h"
 #include "multiplay.h"
+#include "warzoneconfig.h"
 
 #define	SHAKE_TIME	(1500)
 
@@ -236,7 +238,6 @@ static UDWORD screenShakeLength;
 static BOOL bSensorAssigned;
 //used to determine if the player has selected a Las Sat structure
 static BOOL bLasSatStruct;
-
 // Local prototypes
 static MOUSE_TARGET	itemUnderMouse(BASE_OBJECT **ppObjUnderCursor);
 static BOOL	bShakingPermitted = true;
@@ -727,7 +728,7 @@ void processMouseClickInput(void)
 	BOOL OverRadar = OverRadarAndNotDragging();
 
 	// These four functions were embedded in this function but I moved them out for readability. In the
-// absense of any comments I had a guess as to there use and named them accordingly PD 28/05/98.
+	// absense of any comments I had a guess as to there use and named them accordingly PD 28/05/98.
 	//ignoreOrder = CheckFinishedWallDrag(); - this name is misleading since called for all Structures AB
 	ignoreOrder = CheckFinishedFindPosition();
 
@@ -931,8 +932,7 @@ void processMouseClickInput(void)
 			{
 				item = MT_BLOCKING;
 			}
-
-			frameSetCursor((SWORD)arnMPointers[item][selection]);
+			pie_SetMouse(arnMPointers[item][selection], war_GetColouredCursor());
 		}
 	}
 	else
@@ -947,19 +947,20 @@ void processMouseClickInput(void)
 			if (item == MT_ENEMYDROID || item == MT_ENEMYSTR || item == MT_DAMFEATURE)
 			{
 				//display attack cursor
-				frameSetCursor(CURSOR_ATTACK);
+				pie_SetMouse(CURSOR_ATTACK, war_GetColouredCursor());
 			}
 			else
 			{
 				//display block cursor
-				frameSetCursor(CURSOR_NOTPOSSIBLE);
+				pie_SetMouse(CURSOR_NOTPOSSIBLE, war_GetColouredCursor());
 			}
 		}
 		else
 		{
-			frameSetCursor(CURSOR_DEFAULT);
+			pie_SetMouse(CURSOR_DEFAULT, war_GetColouredCursor());
 		}
 	}
+	pie_DrawMouse(mouseX(), mouseY());
 
 	CurrentItemUnderMouse= item;
 }

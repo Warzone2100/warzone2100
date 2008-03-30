@@ -596,7 +596,9 @@ BOOL frontendInitialise(const char *ResourceFile)
 	keyClearMappings();
 	keyInitMappings(false);
 
-	frameSetCursor(CURSOR_DEFAULT);
+	// Set the default uncoloured cursor here, since it looks slightly
+	// better for menus and such.
+	pie_SetMouse(CURSOR_DEFAULT, false);
 
 	SetFormAudioIDs(-1,ID_SOUND_WINDOWCLOSE);			// disable the open noise since distorted in 3dfx builds.
 
@@ -928,7 +930,9 @@ BOOL stageTwoInitialise(void)
 	keyInitMappings(false);
 	LOADBARCALLBACK();	//	loadingScreenCallback();
 
-	frameSetCursor(CURSOR_DEFAULT);
+	// Set the default uncoloured cursor here, since it looks slightly
+	// better for menus and such.
+	pie_SetMouse(CURSOR_DEFAULT, false);
 
 	SetFormAudioIDs(ID_SOUND_WINDOWOPEN,ID_SOUND_WINDOWCLOSE);
 

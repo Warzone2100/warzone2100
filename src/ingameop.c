@@ -276,8 +276,9 @@ static BOOL _intAddInGameOptions(void)
 	intMode		= INT_INGAMEOP;			// change interface mode.
 	InGameOpUp	= true;					// inform interface.
 
-	// TODO: find out if the line below is needed (may be for old csnap stuff)
-	frameSetCursor(CURSOR_DEFAULT);						// reset cursor	(sw)
+	// Set the default uncoloured cursor here, since it looks slightly
+	// better for menus and such.
+	pie_SetMouse(CURSOR_DEFAULT, false);
 
 	return true;
 }

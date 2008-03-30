@@ -120,7 +120,9 @@ TITLECODE titleLoop(void)
 
 		changeTitleMode(TITLE);
 
-		frameSetCursor(CURSOR_DEFAULT); // reset cursor (sw)
+		// Set the default uncoloured cursor here, since it looks slightly
+		// better for menus and such.
+		pie_SetMouse(CURSOR_DEFAULT, false);
 	}
 
 	switch(titleMode) // run relevant title screen code.

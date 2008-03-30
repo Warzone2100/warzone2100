@@ -3206,7 +3206,9 @@ void intRemoveMissionResultNoAnim(void)
 
 void intRunMissionResult(void)
 {
-	frameSetCursor(CURSOR_DEFAULT);
+	// Set the default uncoloured cursor here, since it looks slightly
+	// better for menus and such.
+	pie_SetMouse(CURSOR_DEFAULT, false);
 
 	if(bLoadSaveUp)
 	{

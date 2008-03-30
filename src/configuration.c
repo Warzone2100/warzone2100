@@ -523,6 +523,16 @@ BOOL loadRenderMode(void)
 		war_setFullscreen(true);
 	}
 
+	if (getWarzoneKeyNumeric("ColouredCursor", &val))
+	{
+		war_SetColouredCursor(val);
+	}
+	else
+	{
+		war_SetColouredCursor(true);
+		setWarzoneKeyNumeric("ColouredCursor", true);
+	}
+
 	if (getWarzoneKeyNumeric("trapCursor", &val))
 	{
 		war_SetTrapCursor(val);
@@ -621,6 +631,7 @@ BOOL saveConfig(void)
 	setWarzoneKeyNumeric("trapCursor", war_GetTrapCursor());
 	setWarzoneKeyNumeric("textureSize", getTextureSize());
 	setWarzoneKeyNumeric("PauseOnFocusLoss", war_GetPauseOnFocusLoss());
+	setWarzoneKeyNumeric("ColouredCursor", war_GetColouredCursor());
 
 	if(!bMultiPlayer)
 	{

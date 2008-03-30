@@ -63,6 +63,8 @@ extern void war_SetHeight(UDWORD height);
 extern UDWORD war_GetHeight(void);
 extern void war_SetPauseOnFocusLoss(bool enabled);
 extern bool war_GetPauseOnFocusLoss(void);
+extern bool war_GetColouredCursor(void);
+extern void war_SetColouredCursor(bool enabled);
 
 /**
  * Enable or disable sound initialization

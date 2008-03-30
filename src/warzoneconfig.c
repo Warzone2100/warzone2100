@@ -54,6 +54,7 @@ typedef struct _warzoneGlobals
 	UDWORD		width;
 	UDWORD		height;
 	bool            pauseOnFocusLoss;
+	bool            ColouredCursor;
 } WARZONE_GLOBALS;
 
 /***************************************************************************/
@@ -82,6 +83,7 @@ void war_SetDefaultStates(void)//Sets all states
 	war_SetPlayAudioCDs(true);
 	war_setSoundEnabled( true );
 	war_SetPauseOnFocusLoss(true);
+	war_SetColouredCursor(true);
 }
 
 void war_SetPlayAudioCDs(BOOL b) {
@@ -188,6 +190,16 @@ void war_SetPauseOnFocusLoss(bool enabled)
 bool war_GetPauseOnFocusLoss()
 {
 	return warGlobs.pauseOnFocusLoss;
+}
+
+void war_SetColouredCursor(bool enabled)
+{
+	warGlobs.ColouredCursor = enabled;
+}
+
+bool war_GetColouredCursor(void)
+{
+	return warGlobs.ColouredCursor;
 }
 
 void war_setSoundEnabled( BOOL soundEnabled )

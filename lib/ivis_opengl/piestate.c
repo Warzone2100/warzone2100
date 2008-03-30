@@ -25,15 +25,23 @@
 
 #include <SDL.h>
 #include <SDL_opengl.h>
+#include <SDL_mouse.h>
 
 #include "lib/ivis_common/piestate.h"
 #include "lib/ivis_common/piedef.h"
 #include "lib/ivis_common/tex.h"
 #include "lib/ivis_common/piepalette.h"
+#include "lib/ivis_common/rendmode.h"
 
 /*
  *	Global Variables
  */
+
+// Variables for the coloured mouse cursor
+static CURSOR MouseCursor = 0;
+static bool ColouredMouse = false;
+static IMAGEFILE* MouseCursors = NULL;
+static uint16_t MouseCursorIDs[CURSOR_MAX];
 
 extern RENDER_STATE	rendStates;
 
@@ -206,4 +214,40 @@ void pie_SetGammaValue(float val)
 {
 	debug(LOG_VIDEO, "%s(%f)", __FUNCTION__, val);
 	SDL_SetGamma(val, val, val);
+}
+
+void pie_InitColourMouse(IMAGEFILE* img, const uint16_t cursorIDs[CURSOR_MAX])
+{
+	MouseCursors = img;
+	memcpy(MouseCursorIDs, cursorIDs, sizeof(MouseCursorIDs));
+}
+
+/** Selects the given mouse cursor.
+ *  \param cursor   mouse cursor to render
+ *  \param coloured wether a coloured or black&white cursor should be used
+ */
+void pie_SetMouse(CURSOR cursor, bool coloured)
+{
+	ASSERT(cursor < CURSOR_MAX, "Attempting to load non-existent cursor: %u", (unsigned int)cursor);
+
+	MouseCursor = cursor;
+
+	SDL_ShowCursor(ColouredMouse ? SDL_DISABLE : SDL_ENABLE);
+	frameSetCursor(MouseCursor);
+	ColouredMouse = coloured;
+}
+
+/** Draws the current mouse cursor at the given coordinates
+ *  \param X,Y mouse coordinates
+ */
+void pie_DrawMouse(unsigned int X, unsigned int Y)
+{
+	SDL_ShowCursor(ColouredMouse ? SDL_DISABLE : SDL_ENABLE);
+
+	if (!ColouredMouse)
+		return;
+
+	ASSERT(MouseCursors != NULL, "Drawing coloured mouse cursor while no coloured mouse cursors have been loaded yet!");
+
+	iV_DrawImage(MouseCursors, MouseCursorIDs[MouseCursor], X, Y);
 }
