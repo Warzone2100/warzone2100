@@ -53,7 +53,7 @@
 #include "seqdisp.h"
 // FIXME Direct iVis implementation include!
 #include "lib/ivis_common/rendmode.h"
-#include "resource.h"
+#include "lib/framework/cursors.h"
 #include "lib/netplay/netplay.h"	// multiplayer
 #include "multiplay.h"
 #include "multiint.h"
@@ -120,7 +120,7 @@ TITLECODE titleLoop(void)
 
 		changeTitleMode(TITLE);
 
-		frameSetCursorFromRes(IDC_DEFAULT); // reset cursor (sw)
+		frameSetCursorFromRes(CURSOR_DEFAULT); // reset cursor (sw)
 	}
 
 	switch(titleMode) // run relevant title screen code.

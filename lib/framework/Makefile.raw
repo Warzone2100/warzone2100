@@ -2,6 +2,9 @@ MAKERULES=../../makerules
 include $(MAKERULES)/configure.mk
 
 SRC=configfile.c \
+	cursors.c \
+	cursors16.c \
+	cursors32.c \
 	debug.c \
 	exceptionhandler.c \
 	frame.c \

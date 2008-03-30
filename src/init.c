@@ -82,7 +82,7 @@
 #include "projectile.h"
 #include "radar.h"
 #include "raycast.h"
-#include "resource.h"
+#include "lib/framework/cursors.h"
 #include "scriptextern.h"
 #include "scripttabs.h"
 #include "scriptvals.h"
@@ -596,7 +596,7 @@ BOOL frontendInitialise(const char *ResourceFile)
 	keyClearMappings();
 	keyInitMappings(false);
 
-	frameSetCursorFromRes(IDC_DEFAULT);
+	frameSetCursorFromRes(CURSOR_DEFAULT);
 
 	SetFormAudioIDs(-1,ID_SOUND_WINDOWCLOSE);			// disable the open noise since distorted in 3dfx builds.
 
@@ -928,7 +928,7 @@ BOOL stageTwoInitialise(void)
 	keyInitMappings(false);
 	LOADBARCALLBACK();	//	loadingScreenCallback();
 
-	frameSetCursorFromRes(IDC_DEFAULT);
+	frameSetCursorFromRes(CURSOR_DEFAULT);
 
 	SetFormAudioIDs(ID_SOUND_WINDOWOPEN,ID_SOUND_WINDOWCLOSE);
 

@@ -37,16 +37,19 @@
 #include "input.h"
 #include "SDL_framerate.h"
 
+#include "cursors.h"
+
+static const enum CURSOR_TYPE cursor_type =
 #ifdef __APPLE__
-#  include "cursors16.h"
+	CURSOR_16;
 #else
-#  include "cursors.h"
+	CURSOR_32;
 #endif
 
 /* Linux specific stuff */
 
 static UWORD currentCursorResID = UWORD_MAX;
-SDL_Cursor *aCursors[MAX_CURSORS];
+static SDL_Cursor* aCursors[CURSOR_MAX];
 
 FOCUS_STATE focusState = FOCUS_IN;
 
@@ -155,13 +158,12 @@ UDWORD	frameGetFrameNumber(void)
 /** Set the current cursor from a Resource ID */
 void frameSetCursorFromRes(SWORD resID)
 {
-	ASSERT( resID >= CURSOR_OFFSET, "frameSetCursorFromRes: bad resource ID" );
-	ASSERT( resID < CURSOR_OFFSET + MAX_CURSORS, "frameSetCursorFromRes: bad resource ID" );
+	ASSERT(resID < CURSOR_MAX, "frameSetCursorFromRes: bad resource ID" );
 
 	//If we are already using this cursor then  return
 	if (resID != currentCursorResID)
         {
-		SDL_SetCursor(aCursors[resID - CURSOR_OFFSET]);
+		SDL_SetCursor(aCursors[resID]);
 		currentCursorResID = resID;
         }
 }
@@ -169,41 +171,41 @@ void frameSetCursorFromRes(SWORD resID)
 
 static void initCursors(void)
 {
-	aCursors[CURSOR_ARROW - CURSOR_OFFSET] = init_system_cursor(cursor_arrow);
-	aCursors[CURSOR_DEST - CURSOR_OFFSET] = init_system_cursor(cursor_dest);
-	aCursors[CURSOR_SIGHT - CURSOR_OFFSET] = init_system_cursor(cursor_sight);
-	aCursors[CURSOR_TARGET - CURSOR_OFFSET] = init_system_cursor(cursor_target);
-	aCursors[CURSOR_LARROW - CURSOR_OFFSET] = init_system_cursor(cursor_larrow);
-	aCursors[CURSOR_RARROW - CURSOR_OFFSET] = init_system_cursor(cursor_rarrow);
-	aCursors[CURSOR_DARROW - CURSOR_OFFSET] = init_system_cursor(cursor_darrow);
-	aCursors[CURSOR_UARROW - CURSOR_OFFSET] = init_system_cursor(cursor_uarrow);
-	aCursors[CURSOR_DEFAULT - CURSOR_OFFSET] = init_system_cursor(cursor_default);
-	aCursors[CURSOR_EDGEOFMAP - CURSOR_OFFSET] = init_system_cursor(cursor_default);
-	aCursors[CURSOR_ATTACH - CURSOR_OFFSET] = init_system_cursor(cursor_attach);
-	aCursors[CURSOR_ATTACK - CURSOR_OFFSET] = init_system_cursor(cursor_attack);
-	aCursors[CURSOR_BOMB - CURSOR_OFFSET] = init_system_cursor(cursor_bomb);
-	aCursors[CURSOR_BRIDGE - CURSOR_OFFSET] = init_system_cursor(cursor_bridge);
-	aCursors[CURSOR_BUILD - CURSOR_OFFSET] = init_system_cursor(cursor_build);
-	aCursors[CURSOR_EMBARK - CURSOR_OFFSET] = init_system_cursor(cursor_embark);
-	aCursors[CURSOR_FIX - CURSOR_OFFSET] = init_system_cursor(cursor_fix);
-	aCursors[CURSOR_GUARD - CURSOR_OFFSET] = init_system_cursor(cursor_guard);
-	aCursors[CURSOR_JAM - CURSOR_OFFSET] = init_system_cursor(cursor_jam);
-	aCursors[CURSOR_LOCKON - CURSOR_OFFSET] = init_system_cursor(cursor_lockon);
-	aCursors[CURSOR_MENU - CURSOR_OFFSET] = init_system_cursor(cursor_menu);
-	aCursors[CURSOR_MOVE - CURSOR_OFFSET] = init_system_cursor(cursor_move);
-	aCursors[CURSOR_NOTPOSSIBLE - CURSOR_OFFSET] = init_system_cursor(cursor_notpossible);
-	aCursors[CURSOR_PICKUP - CURSOR_OFFSET] = init_system_cursor(cursor_pickup);
-	aCursors[CURSOR_SEEKREPAIR - CURSOR_OFFSET] = init_system_cursor(cursor_seekrepair);
-	aCursors[CURSOR_SELECT - CURSOR_OFFSET] = init_system_cursor(cursor_select);
+	aCursors[CURSOR_ARROW]       = init_system_cursor(CURSOR_ARROW, cursor_type);
+	aCursors[CURSOR_DEST]        = init_system_cursor(CURSOR_DEST, cursor_type);
+	aCursors[CURSOR_SIGHT]       = init_system_cursor(CURSOR_SIGHT, cursor_type);
+	aCursors[CURSOR_TARGET]      = init_system_cursor(CURSOR_TARGET, cursor_type);
+	aCursors[CURSOR_LARROW]      = init_system_cursor(CURSOR_LARROW, cursor_type);
+	aCursors[CURSOR_RARROW]      = init_system_cursor(CURSOR_RARROW, cursor_type);
+	aCursors[CURSOR_DARROW]      = init_system_cursor(CURSOR_DARROW, cursor_type);
+	aCursors[CURSOR_UARROW]      = init_system_cursor(CURSOR_UARROW, cursor_type);
+	aCursors[CURSOR_DEFAULT]     = init_system_cursor(CURSOR_DEFAULT, cursor_type);
+	aCursors[CURSOR_EDGEOFMAP]   = init_system_cursor(CURSOR_EDGEOFMAP, cursor_type);
+	aCursors[CURSOR_ATTACH]      = init_system_cursor(CURSOR_ATTACH, cursor_type);
+	aCursors[CURSOR_ATTACK]      = init_system_cursor(CURSOR_ATTACK, cursor_type);
+	aCursors[CURSOR_BOMB]        = init_system_cursor(CURSOR_BOMB, cursor_type);
+	aCursors[CURSOR_BRIDGE]      = init_system_cursor(CURSOR_BRIDGE, cursor_type);
+	aCursors[CURSOR_BUILD]       = init_system_cursor(CURSOR_BUILD, cursor_type);
+	aCursors[CURSOR_EMBARK]      = init_system_cursor(CURSOR_EMBARK, cursor_type);
+	aCursors[CURSOR_FIX]         = init_system_cursor(CURSOR_FIX, cursor_type);
+	aCursors[CURSOR_GUARD]       = init_system_cursor(CURSOR_GUARD, cursor_type);
+	aCursors[CURSOR_JAM]         = init_system_cursor(CURSOR_JAM, cursor_type);
+	aCursors[CURSOR_LOCKON]      = init_system_cursor(CURSOR_LOCKON, cursor_type);
+	aCursors[CURSOR_MENU]        = init_system_cursor(CURSOR_MENU, cursor_type);
+	aCursors[CURSOR_MOVE]        = init_system_cursor(CURSOR_MOVE, cursor_type);
+	aCursors[CURSOR_NOTPOSSIBLE] = init_system_cursor(CURSOR_NOTPOSSIBLE, cursor_type);
+	aCursors[CURSOR_PICKUP]      = init_system_cursor(CURSOR_PICKUP, cursor_type);
+	aCursors[CURSOR_SEEKREPAIR]  = init_system_cursor(CURSOR_SEEKREPAIR, cursor_type);
+	aCursors[CURSOR_SELECT]      = init_system_cursor(CURSOR_SELECT, cursor_type);
 }
 
 
 static void freeCursors(void)
 {
-	unsigned int i = 0;
-	for( ; i < MAX_CURSORS; i++ )
+	unsigned int i;
+	for(i = 0 ; i < ARRAY_SIZE(aCursors); ++i)
 	{
-		SDL_FreeCursor( aCursors[i] );
+		SDL_FreeCursor(aCursors[i]);
 	}
 }
 

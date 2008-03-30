@@ -53,7 +53,6 @@
 #include "move.h"
 #include "visibility.h"
 #include "geometry.h"
-#include "resource.h"
 #include "messagedef.h"
 #include "miscimd.h"
 #include "effects.h"

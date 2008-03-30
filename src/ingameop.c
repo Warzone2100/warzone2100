@@ -39,7 +39,7 @@
 #include "intdisplay.h"
 #include "hci.h"			// for wFont def.& intmode.
 #include "loop.h"
-#include "resource.h"
+#include "lib/framework/cursors.h"
 #include "frontend.h"		// for textdisplay function
 #include "loadsave.h"		// for textdisplay function
 #include "console.h"		// to add console message
@@ -277,7 +277,7 @@ static BOOL _intAddInGameOptions(void)
 	InGameOpUp	= true;					// inform interface.
 
 	// TODO: find out if the line below is needed (may be for old csnap stuff)
-	frameSetCursorFromRes(IDC_DEFAULT);						// reset cursor	(sw)
+	frameSetCursorFromRes(CURSOR_DEFAULT);						// reset cursor	(sw)
 
 	return true;
 }

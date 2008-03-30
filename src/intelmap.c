@@ -36,7 +36,7 @@
 #include "lib/ivis_common/piepalette.h"
 
 #include "display3d.h"
-#include "resource.h"
+#include "lib/framework/cursors.h"
 #include "map.h"
 #include "intdisplay.h"
 #include "objects.h"
@@ -1480,7 +1480,7 @@ void displayImmediateMessage(MESSAGE *psMessage)
 	/* so we lied about definately not starting the intelligence screen */
 	addIntelScreen();
 	/* reset mouse cursor, since addIntelScreen() doesn't do that */
-	frameSetCursorFromRes(IDC_DEFAULT);
+	frameSetCursorFromRes(CURSOR_DEFAULT);
 	/* addIntelScreen() (via addIntelMap()) actually starts
 	 * playing psCurrentMsg automatically */
 	return;
