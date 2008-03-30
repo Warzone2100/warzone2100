@@ -37,6 +37,7 @@
 #include "i18n.h"
 #include "treap.h"
 #include "trig.h"
+#include "cursors.h"
 
 extern UDWORD selectedPlayer;
 #define MAX_PLAYERS	8	/**< Maximum number of players in the game. */
@@ -81,12 +82,7 @@ extern int getFramerateLimit(void);
  */
 extern void frameUpdate(void);
 
-/** Set the current cursor from a Resource ID
- * This is the same as calling:
- *       frameSetCursor(LoadCursor(MAKEINTRESOURCE(resID)));
- * but with a bit of extra error checking.
- */
-extern void frameSetCursorFromRes(SWORD resID);
+extern void frameSetCursor(CURSOR cur);
 
 /** Returns the current frame we're on - used to establish whats on screen. */
 extern UDWORD frameGetFrameNumber(void);

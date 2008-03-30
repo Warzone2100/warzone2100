@@ -211,7 +211,7 @@ GAMECODE gameLoop(void)
 						 && CoordInRadar(mouseX(), mouseY())
 						 && getHQExists(selectedPlayer) ) ) )
 			{
-				frameSetCursorFromRes(CURSOR_DEFAULT);
+				frameSetCursor(CURSOR_DEFAULT);
 				intRetVal = INT_INTERCEPT;
 			}
 

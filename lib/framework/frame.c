@@ -48,7 +48,7 @@ static const enum CURSOR_TYPE cursor_type =
 
 /* Linux specific stuff */
 
-static UWORD currentCursorResID = UWORD_MAX;
+static CURSOR currentCursor = ~(CURSOR)0;
 static SDL_Cursor* aCursors[CURSOR_MAX];
 
 FOCUS_STATE focusState = FOCUS_IN;
@@ -155,16 +155,17 @@ UDWORD	frameGetFrameNumber(void)
 }
 
 
-/** Set the current cursor from a Resource ID */
-void frameSetCursorFromRes(SWORD resID)
+/** Set the current cursor from a Resource ID
+ */
+void frameSetCursor(CURSOR cur)
 {
-	ASSERT(resID < CURSOR_MAX, "frameSetCursorFromRes: bad resource ID" );
+	ASSERT(cur < CURSOR_MAX, "frameSetCursorFromRes: bad resource ID" );
 
 	//If we are already using this cursor then  return
-	if (resID != currentCursorResID)
+	if (cur != currentCursor)
         {
-		SDL_SetCursor(aCursors[resID]);
-		currentCursorResID = resID;
+		SDL_SetCursor(aCursors[cur]);
+		currentCursor = cur;
         }
 }
 

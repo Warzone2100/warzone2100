@@ -932,7 +932,7 @@ void processMouseClickInput(void)
 				item = MT_BLOCKING;
 			}
 
-			frameSetCursorFromRes((SWORD)arnMPointers[item][selection]);
+			frameSetCursor((SWORD)arnMPointers[item][selection]);
 		}
 	}
 	else
@@ -947,17 +947,17 @@ void processMouseClickInput(void)
 			if (item == MT_ENEMYDROID || item == MT_ENEMYSTR || item == MT_DAMFEATURE)
 			{
 				//display attack cursor
-				frameSetCursorFromRes(CURSOR_ATTACK);
+				frameSetCursor(CURSOR_ATTACK);
 			}
 			else
 			{
 				//display block cursor
-				frameSetCursorFromRes(CURSOR_NOTPOSSIBLE);
+				frameSetCursor(CURSOR_NOTPOSSIBLE);
 			}
 		}
 		else
 		{
-			frameSetCursorFromRes(CURSOR_DEFAULT);
+			frameSetCursor(CURSOR_DEFAULT);
 		}
 	}
 

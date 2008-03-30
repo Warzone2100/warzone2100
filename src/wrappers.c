@@ -120,7 +120,7 @@ TITLECODE titleLoop(void)
 
 		changeTitleMode(TITLE);
 
-		frameSetCursorFromRes(CURSOR_DEFAULT); // reset cursor (sw)
+		frameSetCursor(CURSOR_DEFAULT); // reset cursor (sw)
 	}
 
 	switch(titleMode) // run relevant title screen code.

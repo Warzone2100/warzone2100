@@ -277,7 +277,7 @@ static BOOL _intAddInGameOptions(void)
 	InGameOpUp	= true;					// inform interface.
 
 	// TODO: find out if the line below is needed (may be for old csnap stuff)
-	frameSetCursorFromRes(CURSOR_DEFAULT);						// reset cursor	(sw)
+	frameSetCursor(CURSOR_DEFAULT);						// reset cursor	(sw)
 
 	return true;
 }

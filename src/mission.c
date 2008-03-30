@@ -3206,7 +3206,7 @@ void intRemoveMissionResultNoAnim(void)
 
 void intRunMissionResult(void)
 {
-	frameSetCursorFromRes(CURSOR_DEFAULT);
+	frameSetCursor(CURSOR_DEFAULT);
 
 	if(bLoadSaveUp)
 	{
