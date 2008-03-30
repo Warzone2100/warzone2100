@@ -960,7 +960,6 @@ void processMouseClickInput(void)
 			pie_SetMouse(CURSOR_DEFAULT, war_GetColouredCursor());
 		}
 	}
-	pie_DrawMouse(mouseX(), mouseY());
 
 	CurrentItemUnderMouse= item;
 }

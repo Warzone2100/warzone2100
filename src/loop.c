@@ -554,6 +554,8 @@ GAMECODE gameLoop(void)
 		}
 		pie_SetDepthBufferStatus(DEPTH_CMP_LEQ_WRT_ON);
 		pie_SetFogStatus(true);
+
+		pie_DrawMouse(mouseX(), mouseY());
 	}
 
 	/* Check for toggling video playbackmode */
