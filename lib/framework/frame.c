@@ -53,6 +53,8 @@ static SDL_Cursor* aCursors[CURSOR_MAX];
 
 FOCUS_STATE focusState = FOCUS_IN;
 
+bool selfTest = false;
+
 /************************************************************************************
  *
  *	Player globals

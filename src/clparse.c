@@ -78,6 +78,7 @@ typedef enum
 	CLI_NOSHADOWS,
 	CLI_SOUND,
 	CLI_NOSOUND,
+	CLI_SELFTEST,
 } CLI_OPTIONS;
 
 static const struct poptOption* getOptionsTable()
@@ -105,6 +106,7 @@ static const struct poptOption* getOptionsTable()
 		{ "noshadows",  '\0', POPT_ARG_NONE,   NULL, CLI_NOSHADOWS,  N_("Disable shadows"),                   NULL },
 		{ "sound",      '\0', POPT_ARG_NONE,   NULL, CLI_SOUND,      N_("Enable sound"),                      NULL },
 		{ "nosound",    '\0', POPT_ARG_NONE,   NULL, CLI_NOSOUND,    N_("Disable sound"),                     NULL },
+		{ "selftest",	'\0', POPT_ARG_NONE,   NULL, CLI_SELFTEST,   N_("Activate self-test"),                NULL },
 
 		// Terminating entry
 		{ NULL,         '\0', 0,               NULL,          0,              NULL,                                    NULL },
@@ -429,6 +431,10 @@ bool ParseCommandLine(int argc, const char** argv)
 
 			case CLI_NOSOUND:
 				war_setSoundEnabled(false);
+				break;
+
+			case CLI_SELFTEST:
+				selfTest = true;
 				break;
 		};
 	}

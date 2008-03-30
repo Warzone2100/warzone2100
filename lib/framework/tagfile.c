@@ -1385,4 +1385,5 @@ void tagTest()
 	tagReadLeave(0x02);
 	assert(tagRead(0x04) == 9);
 	tagClose();
+	fprintf(stdout, "\tTagfile self-test: PASSED\n");
 }

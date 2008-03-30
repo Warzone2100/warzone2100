@@ -950,3 +950,19 @@ BOOL levLoadData(char *pName, char *pSaveName, SDWORD saveType)
 
 	return true;
 }
+
+void levTest(void)
+{
+	fprintf(stdout, "\tLevels self-test...\n");
+	levLoadData("CAM_1A", NULL, 0);		levReleaseAll();
+	fprintf(stdout, "\t\tLoaded: CAM_1A\n");
+	levLoadData("CAM_2A", NULL, 0);		levReleaseAll();
+	fprintf(stdout, "\t\tLoaded: CAM_2A\n");
+	levLoadData("CAM_3A", NULL, 0);		levReleaseAll();
+	fprintf(stdout, "\t\tLoaded: CAM_3A\n");
+	levLoadData("FASTPLAY", NULL, 0);	levReleaseAll();
+	fprintf(stdout, "\t\tLoaded: FASTPLAY\n");
+	levLoadData("TUTORIAL3", NULL, 0);	levReleaseAll();
+	fprintf(stdout, "\t\tLoaded: TUTORIAL3\n");
+	fprintf(stdout, "\tLevels self-test: PASSED\n");
+}

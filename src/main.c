@@ -116,7 +116,6 @@
 # define WZ_WRITEDIR ".warzone2100-2.1"
 #endif
 
-
 char datadir[PATH_MAX] = "\0"; // Global that src/clparse.c:ParseCommandLine can write to, so it can override the default datadir on runtime. Needs to be \0 on startup for ParseCommandLine to work!
 char configdir[PATH_MAX] = "\0"; // specifies custom USER directory.  Same rules apply as datadir above.
 
@@ -914,12 +913,6 @@ int main(int argc, char *argv[])
 	// SQLite's VFS system as the default (non-zero=default, zero=default).
 	sqlite3_register_physfs_vfs(1);
 
-#ifdef DEBUG
-	/* Runtime unit testing */
-	NETtest();
-	tagTest();
-#endif
-
 	NETinit(true);
 
 	if (!frameInitialise( "Warzone 2100", pie_GetVideoBufferWidth(), pie_GetVideoBufferHeight(), pie_GetVideoBufferDepth(), war_getFullscreen() ))
@@ -946,6 +939,18 @@ int main(int argc, char *argv[])
 
 	//set all the pause states to false
 	setAllPauseStates(false);
+
+	/* Runtime unit testing */
+	if (selfTest)
+	{
+		memset(enabled_debug, 0, sizeof(*enabled_debug) * LOG_LAST);
+		fprintf(stdout, "Carrying out self-test:\n");
+		NETtest();
+		tagTest();
+		levTest();
+		fprintf(stdout, "All tests PASSED!\n");
+		exit(0);
+	}
 
 	// Do the game mode specific initialisation.
 	switch(GetGameMode())

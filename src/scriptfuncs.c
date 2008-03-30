@@ -1211,10 +1211,14 @@ BOOL scrAddReticuleButton(void)
 {
 	SDWORD	val;
 
-
 	if (!stackPopParams(1, VAL_INT, &val))
 	{
 		return false;
+	}
+
+	if (selfTest)
+	{
+		return true;	// hack to prevent crashing in self-test
 	}
 
 	//set the appropriate flag to 'draw' the button
@@ -1258,16 +1262,17 @@ BOOL scrAddReticuleButton(void)
 BOOL scrRemoveReticuleButton(void)
 {
 	SDWORD	val;
-
 	BOOL	bReset;
-
-
 
 	if (!stackPopParams(2, VAL_INT, &val,VAL_BOOL, &bReset))
 	{
 		return false;
 	}
 
+	if (selfTest)
+	{
+		return true;
+	}
 
 	if(bInTutorial)
 	{
@@ -1365,7 +1370,7 @@ BOOL scrAddMessage(void)
 			}
 		}
 
-		if (playImmediate)
+		if (playImmediate && !selfTest)
 		{
 			displayImmediateMessage(psMessage);
 			stopReticuleButtonFlash(IDRET_INTEL_MAP);

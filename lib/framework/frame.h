@@ -51,6 +51,8 @@ extern BOOL frameInitialise(
 					BOOL fullScreen		// Whether to start full screen or windowed
 					);
 
+extern bool selfTest;
+
 /** Shut down the framework library.
  * This clears up all the Direct Draw stuff and ensures
  * that Windows gets restored properly after Full screen mode.

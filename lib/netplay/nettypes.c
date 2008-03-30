@@ -467,6 +467,7 @@ void NETtest()
 	memcpy(&cmp, &NetMsg, sizeof(cmp));
 	NETcoder(PACKET_DECODE);
 	ASSERT(memcmp(&cmp, &NetMsg, sizeof(cmp)) == 0, "nettypes unit test failed");
+	fprintf(stdout, "\tNETtypes self-test: PASSED\n");
 }
 
 int NETgetSource()

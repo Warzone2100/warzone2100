@@ -100,4 +100,6 @@ extern SDWORD getLevelLoadType(void);
 
 extern char *getLevelName( void );
 
+extern void levTest(void);
+
 #endif // __INCLUDED_SRC_LEVELS_H__
