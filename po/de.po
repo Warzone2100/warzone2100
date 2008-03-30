@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: de\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2008-03-24 16:52+0100\n"
+"POT-Creation-Date: 2008-03-30 15:28+0200\n"
 "PO-Revision-Date: 2008-03-24 10:27+0100\n"
 "Last-Translator: Steven 'Kreuvf' Koenig <translations@kreuvf.de>\n"
 "Language-Team: Deutsch <warzone-dev@gna.org>\n"
@@ -10441,149 +10441,149 @@ msgstr "Sound aktivieren"
 msgid "Disable sound"
 msgstr "Sound deaktivieren"
 
-#: src/configuration.c:364
-#: src/configuration.c:365
+#: src/configuration.c:374
+#: src/configuration.c:375
 #: src/multistat.c:132
 msgid "Player"
 msgstr "Spieler"
 
 #: src/design.c:453
-#: src/design.c:473
-#: src/design.c:3547
+#: src/design.c:474
+#: src/design.c:3549
 msgid "New Vehicle"
 msgstr "Neues Fahrzeug"
 
-#: src/design.c:520
+#: src/design.c:521
 msgid "Vehicle Body"
 msgstr "Fahrzeugrumpf"
 
-#: src/design.c:542
+#: src/design.c:543
 msgid "Vehicle Propulsion"
 msgstr "Fahrzeugantrieb"
 
-#: src/design.c:565
-#: src/design.c:590
-#: src/design.c:616
+#: src/design.c:566
+#: src/design.c:591
+#: src/design.c:617
 msgid "Vehicle Turret"
 msgstr "Fahrzeugturm"
 
-#: src/design.c:637
+#: src/design.c:638
 msgid "Delete Design"
 msgstr "Entwurf löschen"
 
-#: src/design.c:691
-#: src/design.c:739
+#: src/design.c:692
+#: src/design.c:740
 msgid "Kinetic Armour"
 msgstr "Kinetische Panzerung"
 
-#: src/design.c:700
-#: src/design.c:750
+#: src/design.c:701
+#: src/design.c:751
 msgid "Thermal Armour"
 msgstr "Thermalpanzerung"
 
-#: src/design.c:716
-#: src/design.c:770
+#: src/design.c:717
+#: src/design.c:771
 msgid "Engine Output"
 msgstr "Motorleistung"
 
-#: src/design.c:724
-#: src/design.c:779
-#: src/design.c:1590
-#: src/design.c:1631
-#: src/design.c:1656
-#: src/design.c:1674
-#: src/design.c:1699
-#: src/design.c:1717
-#: src/design.c:1759
-#: src/design.c:1794
-#: src/design.c:1930
-#: src/design.c:1947
-#: src/design.c:1982
-#: src/design.c:2018
+#: src/design.c:725
+#: src/design.c:780
+#: src/design.c:1591
+#: src/design.c:1632
+#: src/design.c:1657
+#: src/design.c:1675
+#: src/design.c:1700
+#: src/design.c:1718
+#: src/design.c:1760
+#: src/design.c:1795
+#: src/design.c:1931
+#: src/design.c:1948
+#: src/design.c:1983
+#: src/design.c:2019
 msgid "Weight"
 msgstr "Gewicht"
 
-#: src/design.c:810
-#: src/design.c:830
+#: src/design.c:811
+#: src/design.c:831
 msgid "Total Power Required"
 msgstr "Benötigte Gesamtenergie"
 
-#: src/design.c:843
-#: src/design.c:864
+#: src/design.c:844
+#: src/design.c:865
 msgid "Total Body Points"
 msgstr "Gesamte Rumpfpunkte"
 
-#: src/design.c:1060
-#: src/design.c:1092
+#: src/design.c:1061
+#: src/design.c:1093
 msgid "Power Usage"
 msgstr "Energieverbrauch"
 
-#: src/design.c:1344
+#: src/design.c:1345
 msgid "Transporter"
 msgstr "Transporter"
 
-#: src/design.c:1572
+#: src/design.c:1573
 msgid "Sensor Range"
 msgstr "Sensorreichweite"
 
-#: src/design.c:1581
+#: src/design.c:1582
 #, fuzzy
 msgid "Sensor Power"
 msgstr "Sensorenergie"
 
-#: src/design.c:1622
+#: src/design.c:1623
 #, fuzzy
 msgid "ECM Power"
 msgstr "ECM Energie"
 
-#: src/design.c:1648
-#: src/design.c:1665
-#: src/design.c:1691
-#: src/design.c:1708
+#: src/design.c:1649
+#: src/design.c:1666
+#: src/design.c:1692
+#: src/design.c:1709
 #, fuzzy
 msgid "Build Points"
 msgstr "Konstruktionspunkte"
 
-#: src/design.c:1735
-#: src/design.c:1767
+#: src/design.c:1736
+#: src/design.c:1768
 msgid "Range"
 msgstr "Reichweite"
 
-#: src/design.c:1743
-#: src/design.c:1776
+#: src/design.c:1744
+#: src/design.c:1777
 msgid "Damage"
 msgstr "Schaden"
 
-#: src/design.c:1751
-#: src/design.c:1785
+#: src/design.c:1752
+#: src/design.c:1786
 msgid "Rate-of-Fire"
 msgstr "Feuerrate"
 
-#: src/design.c:1922
-#: src/design.c:1938
+#: src/design.c:1923
+#: src/design.c:1939
 msgid "Air Speed"
 msgstr "Fluggeschwindigkeit"
 
-#: src/design.c:1958
-#: src/design.c:1991
+#: src/design.c:1959
+#: src/design.c:1992
 msgid "Road Speed"
 msgstr "Straßengeschwindigkeit"
 
-#: src/design.c:1966
-#: src/design.c:2000
+#: src/design.c:1967
+#: src/design.c:2001
 msgid "Off-Road Speed"
 msgstr "Geländegeschwindigkeit"
 
-#: src/design.c:1974
-#: src/design.c:2009
+#: src/design.c:1975
+#: src/design.c:2010
 msgid "Water Speed"
 msgstr "Wassergeschwindigkeit"
 
-#: src/design.c:2143
+#: src/design.c:2144
 msgid "Weapons"
 msgstr "Waffen"
 
-#: src/design.c:2167
+#: src/design.c:2168
 msgid "Systems"
 msgstr "Systeme"
 
@@ -10604,72 +10604,72 @@ msgstr "LKW wurde beauftragt, einen Ölbohrturm zu bauen"
 msgid "Unit Lost!"
 msgstr "Einheit verloren!"
 
-#: src/droid.c:1802
+#: src/droid.c:1800
 msgid "Structure Restored"
 msgstr "Gebäude wiederhergestellt"
 
-#: src/droid.c:3630
+#: src/droid.c:3673
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
 msgstr[0] "Gruppe %u ausgewählt - %u Einheit"
 msgstr[1] "Gruppe %u ausgewählt - %u Einheiten"
 
-#: src/droid.c:3644
+#: src/droid.c:3687
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
 msgstr[0] "%u Einheit zur Gruppe %u hinzugefügt"
 msgstr[1] "%u Einheiten zur Gruppe %u hinzugefügt"
 
-#: src/droid.c:3657
+#: src/droid.c:3700
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
 msgstr[0] "Auf Gruppe %u zentriert - %u Einheit"
 msgstr[1] "Auf Gruppe %u zentriert - %u Einheiten"
 
-#: src/droid.c:3661
+#: src/droid.c:3704
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] "An Gruppe %u ausgerichtet - %u Einheit"
 msgstr[1] "An Gruppe %u ausgerichtet - %u Einheiten"
 
-#: src/droid.c:3886
+#: src/droid.c:3929
 msgid "Rookie"
 msgstr "Anfänger"
 
-#: src/droid.c:3887
+#: src/droid.c:3930
 msgctxt "rank"
 msgid "Green"
 msgstr "Neuling"
 
-#: src/droid.c:3888
+#: src/droid.c:3931
 msgid "Trained"
 msgstr "Geübter"
 
-#: src/droid.c:3889
+#: src/droid.c:3932
 msgid "Regular"
 msgstr "Durchschnitt"
 
-#: src/droid.c:3890
+#: src/droid.c:3933
 msgid "Professional"
 msgstr "Profi"
 
-#: src/droid.c:3891
+#: src/droid.c:3934
 msgid "Veteran"
 msgstr "Veteran"
 
-#: src/droid.c:3892
+#: src/droid.c:3935
 msgid "Elite"
 msgstr "Elite"
 
-#: src/droid.c:3893
+#: src/droid.c:3936
 msgid "Special"
 msgstr "Spezialist"
 
-#: src/droid.c:3894
+#: src/droid.c:3937
 msgid "Hero"
 msgstr "Held"
 
@@ -10956,8 +10956,8 @@ msgid "Close"
 msgstr "Schließen"
 
 #: src/hci.c:1678
-#: src/loop.c:469
-#: src/loop.c:481
+#: src/loop.c:472
+#: src/loop.c:484
 #: src/mission.c:3222
 msgid "GAME SAVED!"
 msgstr "SPIEL GESPEICHERT!"
@@ -11091,7 +11091,7 @@ msgid "Power Accrued"
 msgstr "Energie angesammelt"
 
 #: src/intelmap.c:242
-#: src/keybind.c:1210
+#: src/keybind.c:1209
 msgid "PAUSED"
 msgstr "PAUSIERT"
 
@@ -11208,182 +11208,182 @@ msgstr "Unterstützungsfeuer zuweisen"
 msgid "Assign VTOL Factory Production"
 msgstr "VTOL-Fabrikproduktion zuweisen"
 
-#: src/keybind.c:132
+#: src/keybind.c:131
 msgid "Sorry, that cheat is disabled in multiplayer games."
 msgstr "Entschuldige, dieser Cheat ist in Mehrspieler-Spielen deaktiviert."
 
-#: src/keybind.c:196
+#: src/keybind.c:195
 msgid "Lets us see what you see!"
 msgstr "Lass' uns sehen was du siehst!"
 
-#: src/keybind.c:198
+#: src/keybind.c:197
 msgid "Fine, sensor display is off!"
 msgstr "Toll, Sensoranzeige ist aus!"
 
-#: src/keybind.c:296
+#: src/keybind.c:295
 msgid "Hard as nails!!!"
 msgstr "Hammerhart!!!"
 
-#: src/keybind.c:309
+#: src/keybind.c:308
 msgid "Takings thing easy!"
 msgstr "Die Dinge leicht nehmen!"
 
-#: src/keybind.c:323
+#: src/keybind.c:322
 msgid "1000 big ones!!!"
 msgstr "1000 Riesenviecher!!!"
 
 # Ursprünglich kenne ich das nur als Cheat aus StarCraft und das sollte imho nicht übersetzt werden -Kreuvf
-#: src/keybind.c:337
+#: src/keybind.c:336
 msgid "Power overwhelming"
 msgstr "Power overwhelming"
 
-#: src/keybind.c:351
+#: src/keybind.c:350
 msgid "Back to normality!"
 msgstr "Zurück zur Normalität!"
 
-#: src/keybind.c:364
+#: src/keybind.c:363
 msgid "Getting tricky!"
 msgstr "Es wird kompliziert!"
 
-#: src/keybind.c:377
+#: src/keybind.c:376
 msgid "Twice as nice!"
 msgstr "Doppelt so gut!"
 
-#: src/keybind.c:387
+#: src/keybind.c:386
 msgid "FPS display is enabled."
 msgstr "FPS-Anzeige ist aktiviert."
 
-#: src/keybind.c:391
+#: src/keybind.c:390
 msgid "FPS display is disabled."
 msgstr "FPS-Anzeige ist deaktiviert."
 
-#: src/keybind.c:404
+#: src/keybind.c:403
 #, c-format
 msgid "FPS %d; FPS-Limit: %d; PIEs %d; polys %d; Terr. polys %d; States %d"
 msgstr "FPS %d; FPS-Grenze: %d; PIEs %d; Polys %d; Terr. polys %d; States %d"
 
-#: src/keybind.c:459
+#: src/keybind.c:458
 msgid "Infinite power disabled"
 msgstr "Unbegrenzte Energie deaktiviert"
 
-#: src/keybind.c:464
+#: src/keybind.c:463
 msgid "Infinite power enabled"
 msgstr "Unbegrenzte Energie aktiviert"
 
-#: src/keybind.c:517
+#: src/keybind.c:516
 msgid "All items made available"
 msgstr "Alle Gegenstände wurden verfügbar gemacht"
 
-#: src/keybind.c:609
+#: src/keybind.c:608
 msgid "Fog off"
 msgstr "Nebel aus"
 
-#: src/keybind.c:615
+#: src/keybind.c:614
 msgid "Fog on"
 msgstr "Nebel an"
 
-#: src/keybind.c:1181
+#: src/keybind.c:1180
 msgid "View Aligned to North"
 msgstr "Sicht nach Norden ausgerichtet"
 
-#: src/keybind.c:1249
+#: src/keybind.c:1248
 msgid "Researched EVERYTHING for you!"
 msgstr "ALLES für Sie erforscht!"
 
-#: src/keybind.c:1280
+#: src/keybind.c:1279
 msgid "Energy bars display toggled"
 msgstr "Anzeige der Energiebalken umgeschaltet"
 
-#: src/keybind.c:1298
+#: src/keybind.c:1297
 msgid "Demo mode off - Returning to normal game mode"
 msgstr "Demonstrationsmodus deaktiviert - kehre zum normalen Spiel zurück"
 
 # Ressourcenextraktoren hört sich übelst gestelzt und hochtrabend an -Kreuvf
-#: src/keybind.c:1345
+#: src/keybind.c:1344
 msgid "Unable to locate any resource extractors!"
 msgstr "Keine Ölförderanlagen auffindbar!"
 
 # Let it snow, let it snow, let it snow..
 # Von daher sollte das unübersetzt bleiben -Kreuvf
-#: src/keybind.c:1568
+#: src/keybind.c:1567
 msgid "Oh, the weather outside is frightful... SNOW"
 msgstr "Oh, the weather outside if frightful... SCHNEE"
 
 # Das Lied ist im Original Englisch --> bleibt unübersetzt -Kreuvf
-#: src/keybind.c:1574
+#: src/keybind.c:1573
 msgid "Singing in the rain, I'm singing in the rain... RAIN"
 msgstr "Singing in the rain, I'm singing in the rain... REGEN"
 
-#: src/keybind.c:1580
+#: src/keybind.c:1579
 msgid "Forecast : Clear skies for all areas... NO WEATHER"
 msgstr "Vorhersage: Klarer Himmel in allen Gebieten... KEIN WETTER"
 
-#: src/keybind.c:1613
+#: src/keybind.c:1612
 msgid "Enemy destroyed by cheating!"
 msgstr "Feind via Cheat vernichtet!"
 
-#: src/keybind.c:2141
+#: src/keybind.c:2140
 msgid "Centered on player HQ, direction NORTH"
 msgstr "Auf Kommandozentrale des Spielers zentriert, Blickrichtung Norden"
 
-#: src/keybind.c:2153
+#: src/keybind.c:2152
 msgid "Unable to locate HQ!"
 msgstr "Kann Kommandozentrale nicht finden!"
 
 # Statt Formationsgeschwindigkeitsbegrenzungen AUS -Kreuvf
-#: src/keybind.c:2169
+#: src/keybind.c:2168
 msgid "Formation speed limiting OFF"
 msgstr "Geschwindigkeitsbegrenzung für Formationen deaktiviert"
 
-#: src/keybind.c:2173
+#: src/keybind.c:2172
 msgid "Formation speed limiting ON"
 msgstr "Geschwindigkeitsbegrenzung für Formationen aktiviert"
 
-#: src/keybind.c:2306
-#: src/keybind.c:2347
-#: src/keybind.c:2369
+#: src/keybind.c:2305
+#: src/keybind.c:2346
+#: src/keybind.c:2368
 msgid "Game Speed Reset"
 msgstr "Spielgeschwindigkeit zurückgesetzt"
 
-#: src/keybind.c:2310
+#: src/keybind.c:2309
 #, c-format
 msgid "Game Speed Increased to %3.1f"
 msgstr "Spielgeschwindigkeit auf %3.1f erhöht"
 
-#: src/keybind.c:2351
+#: src/keybind.c:2350
 #, c-format
 msgid "Game Speed Reduced to %3.1f"
 msgstr "Spielgeschwindigkeit auf %3.1f gesenkt"
 
-#: src/keybind.c:2381
+#: src/keybind.c:2380
 msgid "Build menu will reopen"
 msgstr "Konstruktionsmenü wird sich wieder öffnen"
 
-#: src/keybind.c:2385
+#: src/keybind.c:2384
 msgid "Build menu will not reopen"
 msgstr "Konstruktionsmenü wird sich nicht wieder öffnen"
 
-#: src/keybind.c:2397
+#: src/keybind.c:2396
 msgid "Radar showing friend-foe colors"
 msgstr "Radar zeigt Freund-Feind-Farben"
 
-#: src/keybind.c:2401
+#: src/keybind.c:2400
 msgid "Radar showing player colors"
 msgstr "Radar zeigt Spielerfarben"
 
-#: src/keybind.c:2418
+#: src/keybind.c:2417
 msgid "Radar showing only objects"
 msgstr "Radar zeigt nur Objekte"
 
-#: src/keybind.c:2421
+#: src/keybind.c:2420
 msgid "Radar blending terrain and height"
 msgstr "Radar zeigt Gelände und Höheninformation überlagert"
 
-#: src/keybind.c:2424
+#: src/keybind.c:2423
 msgid "Radar showing terrain"
 msgstr "Radar zeigt Gelände"
 
-#: src/keybind.c:2427
+#: src/keybind.c:2426
 msgid "Radar showing height"
 msgstr "Radar zeigt Höheninformation"
 
@@ -11988,17 +11988,17 @@ msgstr "Der Spielleiter hat %s aus dem Spiel geworfen!"
 msgid "Players"
 msgstr "Spieler"
 
-#: src/multijoin.c:97
 #: src/multijoin.c:98
+#: src/multijoin.c:99
 msgid "Players Still Joining"
 msgstr "Es treten noch Spieler bei"
 
-#: src/multijoin.c:219
+#: src/multijoin.c:220
 #, c-format
 msgid "%s has Left the Game"
 msgstr "%s hat das Spiel verlassen"
 
-#: src/multijoin.c:322
+#: src/multijoin.c:324
 #, c-format
 msgid "%s is Joining the Game"
 msgstr "%s ist dem Spiel beigetreten"
@@ -12253,61 +12253,61 @@ msgstr "Kann keine Sensoreinheit finden!"
 msgid "Unable to locate any Commanders!"
 msgstr "Kann keine Commander finden!"
 
-#: src/structure.c:2798
+#: src/structure.c:2834
 msgid "Command Control Limit Reached - Production Halted"
 msgstr "Commandereinheit hat Kontrollgrenze erreicht - Produktion angehalten"
 
 # nix Gruppe! -Kreuvf
-#: src/structure.c:5898
-#: src/structure.c:5920
+#: src/structure.c:5928
+#: src/structure.c:5950
 #, c-format
 msgid "%s - %u Unit assigned"
 msgid_plural "%s - %u Units assigned"
 msgstr[0] "%s - %u Einheit hinzugefügt"
 msgstr[1] "%s - %u Einheiten hinzugefügt"
 
-#: src/structure.c:5957
+#: src/structure.c:5987
 #, c-format
 msgid "%s - Connected %u of %u"
 msgstr "%s - %u von %u verbunden"
 
-#: src/structure.c:5972
+#: src/structure.c:6002
 #, c-format
 msgid "%s - Damage %u%%"
 msgstr "%s - Schaden %u%%"
 
-#: src/structure.c:6091
-#: src/structure.c:6142
+#: src/structure.c:6121
+#: src/structure.c:6172
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - Elektronisch beschädigt"
 
 # Reward ist zwar nicht Beute, aber im Krieg erbeutet man eben Dinge -Kreuvf
-#: src/structure.c:6377
+#: src/structure.c:6407
 msgid "Electronic Reward - Visibility Report"
 msgstr "Elektronische Beute - Sichtbarkeitsbericht"
 
-#: src/structure.c:6417
+#: src/structure.c:6447
 msgid "Factory Reward - Propulsion"
 msgstr "Fabrikbeute - Antrieb"
 
-#: src/structure.c:6441
+#: src/structure.c:6471
 msgid "Factory Reward - Body"
 msgstr "Fabrikbeute - Rumpf"
 
-#: src/structure.c:6465
+#: src/structure.c:6495
 msgid "Factory Reward - Weapon"
 msgstr "Fabrikbeute - Waffe"
 
-#: src/structure.c:6474
+#: src/structure.c:6504
 msgid "Factory Reward - Nothing"
 msgstr "Fabrikbeute - Nichts"
 
-#: src/structure.c:6502
+#: src/structure.c:6532
 msgid "Repair Facility Award - Repair"
 msgstr "Beute aus Reparatureinrichtung - Reparatur"
 
-#: src/structure.c:6509
+#: src/structure.c:6539
 msgid "Repair Facility Award - Nothing"
 msgstr "Beute aus Reparatureinrichtung - Nichts"
 
