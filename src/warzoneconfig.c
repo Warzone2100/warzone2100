@@ -53,6 +53,7 @@ typedef struct _warzoneGlobals
 	BOOL		trapCursor;
 	UDWORD		width;
 	UDWORD		height;
+	bool            pauseOnFocusLoss;
 } WARZONE_GLOBALS;
 
 /***************************************************************************/
@@ -80,6 +81,7 @@ void war_SetDefaultStates(void)//Sets all states
 	war_SetFog(false);
 	war_SetPlayAudioCDs(true);
 	war_setSoundEnabled( true );
+	war_SetPauseOnFocusLoss(true);
 }
 
 void war_SetPlayAudioCDs(BOOL b) {
@@ -178,6 +180,15 @@ SEQ_MODE war_GetSeqMode(void)
 	return  warGlobs.seqMode;
 }
 
+void war_SetPauseOnFocusLoss(bool enabled)
+{
+	warGlobs.pauseOnFocusLoss = enabled;
+}
+
+bool war_GetPauseOnFocusLoss()
+{
+	return warGlobs.pauseOnFocusLoss;
+}
 
 void war_setSoundEnabled( BOOL soundEnabled )
 {

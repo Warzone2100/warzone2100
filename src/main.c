@@ -736,40 +736,41 @@ static void handleActiveEvent(SDL_ActiveEvent * activeEvent)
 {
 	// Ignore focus loss through SDL_APPMOUSEFOCUS, since it mostly happens accidentialy
 	// active.state is a bitflag! Mixed events (eg. APPACTIVE|APPMOUSEFOCUS) will thus not be ignored.
-	if ( activeEvent->state != SDL_APPMOUSEFOCUS )
+	if ( activeEvent->state == SDL_APPMOUSEFOCUS )
+		return;
+
+	if ( activeEvent->gain == 1 )
 	{
-		if ( activeEvent->gain == 1 )
+		debug( LOG_NEVER, "WM_SETFOCUS\n");
+		if (focusState != FOCUS_IN)
 		{
-			debug( LOG_NEVER, "WM_SETFOCUS\n");
-			if (focusState != FOCUS_IN)
-			{
-				focusState = FOCUS_IN;
+			focusState = FOCUS_IN;
 
-				gameTimeStart();
-				// Should be: audio_ResumeAll();
-			}
-
-			// Resume playing audio.
-			cdAudio_Resume();
+			gameTimeStart();
+			// Should be: audio_ResumeAll();
 		}
-		else
+
+		// Resume playing audio.
+		cdAudio_Resume();
+	}
+	// Only loose focus when the config settings allow us to
+	else if (war_GetPauseOnFocusLoss())
+	{
+		debug( LOG_NEVER, "WM_KILLFOCUS\n");
+		if (focusState != FOCUS_OUT)
 		{
-			debug( LOG_NEVER, "WM_KILLFOCUS\n");
-			if (focusState != FOCUS_OUT)
-			{
-				focusState = FOCUS_OUT;
+			focusState = FOCUS_OUT;
 
-				gameTimeStop();
-				// Should be: audio_PauseAll();
-				audio_StopAll();
-			}
-			/* Have to tell the input system that we've lost focus */
-			inputLooseFocus();
-
-			// Need to pause playing to prevent the audio code from
-			// thinking playing has finished.
-			cdAudio_Pause();
+			gameTimeStop();
+			// Should be: audio_PauseAll();
+			audio_StopAll();
 		}
+		/* Have to tell the input system that we've lost focus */
+		inputLooseFocus();
+
+		// Need to pause playing to prevent the audio code from
+		// thinking playing has finished.
+		cdAudio_Pause();
 	}
 }
 

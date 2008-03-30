@@ -223,6 +223,16 @@ BOOL loadConfig(void)
 		setWarzoneKeyNumeric("mouseflip", true);
 	}
 
+	if (getWarzoneKeyNumeric("PauseOnFocusLoss", &val))
+	{
+		war_SetPauseOnFocusLoss(val);
+	}
+	else
+	{
+		war_SetPauseOnFocusLoss(true);
+		setWarzoneKeyNumeric("PauseOnFocusLoss", true);
+	}
+
 	if (getWarzoneKeyString("masterserver_name", sBuf))
 	{
 		NETsetMasterserverName(sBuf);
