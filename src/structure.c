@@ -1552,7 +1552,8 @@ static void buildFlatten(STRUCTURE_STATS *pStructureType, UDWORD atx, UDWORD aty
 STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, UDWORD player, BOOL FromSave)
 {
 	UDWORD		mapX, mapY, mapH;
-	UDWORD		width, breadth, weapon, capacity, bodyDiff = 0;
+	UDWORD		width, breadth, weapon, capacity;
+	float bodyDiff = 0.f;
 	SDWORD		wallType = 0, preScrollMinX = 0, preScrollMinY = 0, preScrollMaxX = 0, preScrollMaxY = 0;
 	int			i;
 	STRUCTURE	*psBuilding = NULL;
@@ -1953,7 +1954,7 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 			if (psBuilding->pFunctionality->factory.capacity < SIZE_SUPER_HEAVY)
 			{
 				//store the % difference in body points before upgrading
-				bodyDiff = PERCENT(psBuilding->body, structureBody(psBuilding));
+				bodyDiff = 1. - getStructureDamage(psBuilding);
 
 				++psBuilding->pFunctionality->factory.capacity;
 				bUpgraded = true;
@@ -2015,7 +2016,7 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 			if (psBuilding->pFunctionality->researchFacility.capacity < NUM_RESEARCH_MODULES)
 			{
 				//store the % difference in body points before upgrading
-				bodyDiff = PERCENT(psBuilding->body, structureBody(psBuilding));
+				bodyDiff = 1. - getStructureDamage(psBuilding);
 
 				//add all the research modules in one go AB 24/06/98
 				//((RESEARCH_FACILITY*)psBuilding->pFunctionality)->capacity++;
@@ -2060,7 +2061,7 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 			if (psBuilding->pFunctionality->powerGenerator.capacity < NUM_POWER_MODULES)
 			{
 				//store the % difference in body points before upgrading
-				bodyDiff = PERCENT(psBuilding->body, structureBody(psBuilding));
+				bodyDiff = 1. - getStructureDamage(psBuilding);
 
 				//increment the power output, multiplier and capacity
 				//add all the research modules in one go AB 24/06/98
@@ -2097,7 +2098,7 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 		if (bUpgraded)
 		{
 			//calculate the new body points of the owning structure
-			psBuilding->body = (UWORD)(structureBody(psBuilding) * bodyDiff / 100);
+			psBuilding->body = (UWORD)(structureBody(psBuilding) * bodyDiff);
 
 			//initialise the build points
 			psBuilding->currentBuildPts = 0;
@@ -6003,16 +6004,14 @@ void printStructureInfo(STRUCTURE *psStructure)
 #ifdef DEBUG
 		if (getDebugMappingStatus())
 		{
-			CONPRINTF(ConsoleString, (ConsoleString, "%s - Damage %u%% - Unique ID %u",
-			          getStatName(psStructure->pStructureType), 100 - PERCENT(psStructure->body,
-			          structureBody(psStructure)), psStructure->id));
+			CONPRINTF(ConsoleString, (ConsoleString, "%s - Damage % 3.2f%% - Unique ID %u",
+			          getStatName(psStructure->pStructureType), getStructureDamage(psStructure) * 100.f, psStructure->id));
 		}
 		else
 #endif
 		{
-			CONPRINTF(ConsoleString, (ConsoleString, _("%s - Damage %u%%"),
-			          getStatName(psStructure->pStructureType), 100 - PERCENT(psStructure->body,
-			          structureBody(psStructure))));
+			CONPRINTF(ConsoleString, (ConsoleString, _("%s - Damage %3.0f%%"),
+			          getStatName(psStructure->pStructureType), getStructureDamage(psStructure) * 100.f));
 		}
 		break;
 	}
