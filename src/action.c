@@ -2003,7 +2003,7 @@ void actionUpdateDroid(DROID *psDroid)
 						(SDWORD)psDroid->orderX,(SDWORD)psDroid->orderY, psDroid->psTarStats))
 		{
 //			psDroid->action = DACTION_MOVETOBUILD;
-			moveDroidToNoFormation(psDroid, psDroid->actionX,psDroid->actionY);
+			moveDroidToNoFormation(psDroid, psDroid->orderX, psDroid->orderY);
 		}
 		else if (!DROID_STOPPED(psDroid) &&
 				psDroid->sMove.Status != MOVETURNTOTARGET &&
