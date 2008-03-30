@@ -1328,7 +1328,7 @@ renderAnimComponent( const COMPONENT_OBJECT *psObj )
 			Vector2i s = {0, 0};
 			STRUCTURE *psStructure = (STRUCTURE*)psParentObj;
 
-			brightness = pal_SetBrightness(200 - (100 - PERCENT(psStructure->body, structureBody(psStructure))));
+			brightness = pal_SetBrightness(200 - 100 * getStructureDamage(psStructure));
 
 			pie_RotateProject( &zero, &s );
 			psStructure->sDisplay.screenX = s.x;
@@ -1976,7 +1976,7 @@ void	renderStructure(STRUCTURE *psStructure)
 		bHitByElectronic = true;
 	}
 
-	buildingBrightness = pal_SetBrightness(200 - (100 - PERCENT(psStructure->body, structureBody(psStructure))));
+	buildingBrightness = pal_SetBrightness(200 - 100 * getStructureDamage(psStructure));
 
 	/* If it's selected, then it's brighter */
 	if (psStructure->selected)
@@ -2341,7 +2341,7 @@ static BOOL	renderWallSection(STRUCTURE *psStructure)
 		/* Get it's x and y coordinates so we don't have to deref. struct later */
 		structX = psStructure->pos.x;
 		structY = psStructure->pos.y;
-		buildingBrightness = pal_SetBrightness(200 - (100 - PERCENT(psStructure->body, structureBody(psStructure))));
+		buildingBrightness = pal_SetBrightness(200 - 100 * getStructureDamage(psStructure));
 
 		if(psStructure->selected)
 		{
@@ -2659,7 +2659,7 @@ static void drawWeaponReloadBar(BASE_OBJECT *psObj, WEAPON *psWeap, int weapon_s
 			break;
 		case OBJ_STRUCTURE:
 			psStruct = (STRUCTURE *)psObj;
-			damLevel = PERCENT(psStruct->body, structureBody(psStruct));
+			damLevel = (1. - getStructureDamage(psStruct)) * 100;
 			scale = MAX(psStruct->pStructureType->baseWidth, psStruct->pStructureType->baseBreadth);
 			scrY += scale * 10 - 1;
 			scrR = scale * 20;
@@ -2757,7 +2757,7 @@ static void	drawStructureSelections( void )
 				else
 				{
 					//show body points
-					health = PERCENT(psStruct->body, structureBody(psStruct));
+					health = (1. - getStructureDamage(psStruct)) * 100;
 				}
 				if(health>100) health =100;
 
@@ -2790,7 +2790,7 @@ static void	drawStructureSelections( void )
 					scrX = psStruct->sDisplay.screenX;
 					scrY = psStruct->sDisplay.screenY + (scale*10);
 					scrR = width;
-					health =  PERCENT(psStruct->currentBuildPts ,
+					health = PERCENT(psStruct->currentBuildPts ,
 					psStruct->pStructureType->buildPoints);
 					if (health >= 100)
 					{
@@ -2868,7 +2868,7 @@ static void	drawStructureSelections( void )
 				else
 				{
 					//show body points
-					health = PERCENT(psStruct->body, structureBody(psStruct));
+					health = (1. - getStructureDamage(psStruct)) * 100;
 				}
 				if (health > REPAIRLEV_HIGH)
 				{
