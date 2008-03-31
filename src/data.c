@@ -195,6 +195,19 @@ static BOOL bufferSPROPLoad(const char *pBuffer, UDWORD size, void **ppData)
 	return true;
 }
 
+static BOOL dataDBPROPLoad(const char* filename, void **ppData)
+{
+	if (!loadPropulsionStatsFromDB(filename)
+	 || !allocComponentList(COMP_PROPULSION, numPropulsionStats))
+	{
+		return false;
+	}
+
+	// not interested in this value
+	*ppData = NULL;
+	return true;
+}
+
 /* Load the Sensor stats */
 static BOOL bufferSSENSORLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
@@ -990,6 +1003,7 @@ static const RES_TYPE_MIN_FILE FileResourceTypes[] =
 	{"DBWEAPON", dataDBWEAPONLoad, NULL},
 	{"DBBODY", dataDBBODYLoad, dataReleaseStats},
 	{"DBBRAIN", dataDBBRAINLoad, NULL},
+	{"DBPROP", dataDBPROPLoad, NULL},
 	{"WAV", dataAudioLoad, (RES_FREE)sound_ReleaseTrack},
 	{"AUDIOCFG", dataAudioCfgLoad, NULL},
 	{"ANI", dataAnimLoad, dataAnimRelease},

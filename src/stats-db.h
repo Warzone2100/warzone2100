@@ -30,5 +30,6 @@
 extern bool loadWeaponStatsFromDB(const char* filename);
 extern bool loadBodyStatsFromDB(const char* filename);
 extern bool loadBrainStatsFromDB(const char* filename);
+extern bool loadPropulsionStatsFromDB(const char* filename);
 
 #endif // __INCLUDED_STATS_DB_H__
