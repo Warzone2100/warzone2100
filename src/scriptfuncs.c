@@ -10101,25 +10101,17 @@ BOOL addHelpBlip(SDWORD locX, SDWORD locY, SDWORD forPlayer, SDWORD sender, char
 	MESSAGE			*psMessage;
 	VIEWDATA		*pTempData;
 
-	//debug(LOG_WZ, "addHelpBlip: forPlayer=%d, sender=%d", forPlayer, sender);
-
 	if (forPlayer >= MAX_PLAYERS)
 	{
 		debug(LOG_ERROR, "addHelpBlip: player number is too high");
 		return false;
 	}
 
-	//add the beacon for the sender so he can see where he put it
-	//but only if he's not already adding this one for himself
-	//if(forPlayer != sender)
-	//	addHelpBlip(locX, locY, sender, sender, textMsg);
-
 	//find the message if was already added previously
 	psMessage = findHelpMsg(forPlayer, sender);
 	if (psMessage)
 	{
 		//remove it
-		//debug(LOG_WZ, "addHelpBlip: removing previous message from sender=%d",sender);
 		removeMessage(psMessage, forPlayer);
 	}
 
@@ -10127,8 +10119,6 @@ BOOL addHelpBlip(SDWORD locX, SDWORD locY, SDWORD forPlayer, SDWORD sender, char
 	psMessage = addMessage(MSG_PROXIMITY, false, forPlayer);
 	if (psMessage)
 	{
-		//debug(LOG_WZ, "created new blip for player %d from %d", forPlayer, sender);
-
 		//set the data
 		pTempData = HelpViewData(sender, textMsg, locX, locY);
 		ASSERT(pTempData != NULL, "Empty help data for radar beacon");
@@ -10160,6 +10150,9 @@ BOOL addHelpBlip(SDWORD locX, SDWORD locY, SDWORD forPlayer, SDWORD sender, char
 			debug(LOG_ERROR, "addHelpBlip() - msgStackPush - stack failed");
 			return false;
 		}
+
+		// play audio
+		audio_QueueTrackPos( ID_SOUND_BEACON, locX, locY, 0);
 	}
 
 	return true;

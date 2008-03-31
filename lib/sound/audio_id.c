@@ -491,6 +491,7 @@ static AUDIO_ID_MAP asAudioID[] =
 {ID_SOUND_PLASMA_FLAMER,                       "plasflm.ogg"},
 {ID_SOUND_UPLINK,                              "uplink.ogg"},
 {ID_SOUND_LAS_SAT_COUNTDOWN,                   "lasstrk.ogg"},
+{ID_SOUND_BEACON,								"beacon.ogg"},
 };
 
 /***************************************************************************/
