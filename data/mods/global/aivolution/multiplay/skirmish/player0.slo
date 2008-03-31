@@ -6349,7 +6349,7 @@ function bool manageOilSite(DROID _truck, STRUCTURE _derrick)
 		if(!_bThreat)
 		{
 			// build defenses near enemy derrick => destroy it
-			if(buildDerrickDefence(_derrick, _truck))
+			if(buildDerrickDefence(_enemyDerrick, _truck))
 			{
 				dbg("ATTACKING ENEMY DERRICK WITH DEFENSES!!!", me);
 				return true;
