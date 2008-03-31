@@ -201,6 +201,10 @@
 #define	TAUNT_FAILURE					1
 #define	TAUNT_POSSESSION_LOSS			2
 #define	TAUNT_GAME_LOSS					3
+#define	TAUNT_BASE_DEFENSE				4
+#define	TAUNT_BASE_OK					5
+#define	TAUNT_REDISCOVERED_BASE			6
+#define	TAUNT_LOST_BASE					7
 
 #define	NONE							(-1)
 
@@ -1396,10 +1400,10 @@ event checkLost(inactive)
 	// FIXME: might consider reactivating
 	//if((getDroidCount(me) == 0) and
 	//	not (multiPlayerGameType == SKIRMISH and multiPlayerAlliancesType == ALLIANCES_TEAMS))
-		
+
 	if(getDroidCount(me) == 0)
 	{
-		taunt(NONE, TAUNT_GAME_LOSS, 80);
+		taunt(NONE, TAUNT_GAME_LOSS, 60);
 		shutDown();
 	}
 }
@@ -10422,6 +10426,8 @@ function void checkBaseThreat()
 				//TODO: with _attacker = playerDominanceInArea() find out if attacker's base is closer than our own base
 				//and attack enemy base instead
 
+				taunt(_counterEnemy, TAUNT_BASE_DEFENSE, 50);
+
 				startDefending(_counterEnemy);
 				requestHelp();
 			}
@@ -10437,8 +10443,8 @@ function void checkBaseThreat()
 
 			_counterEnemy = counterEnemy;
 			stopDefending();
-			
-			taunt(NONE, TAUNT_SUCCESS, 55);
+
+			taunt(_counterEnemy, TAUNT_BASE_OK, 55);
 
 			notifyAllies("i'm ok", FALSE);		//tell allies we are ok now
 
@@ -10613,7 +10619,7 @@ function void notifyIdle(bool bAfterFailure)
 
 function void taunt(int targetPlayer, int type, int tauntProbability)
 {
-	local	string		sTargetName;
+	local	string		sTarget,sPlayer;
 
 	if(random(100) >= tauntProbability)
 	{
@@ -10623,7 +10629,8 @@ function void taunt(int targetPlayer, int type, int tauntProbability)
 	// see if we are refering to some player
 	if(targetPlayer != NONE)
 	{
-		sTargetName = getPlayerName(targetPlayer) &  ", ";
+		sPlayer = getPlayerName(targetPlayer);
+		sTarget = getPlayerName(targetPlayer) &  ", ";
 	}
 
 	dice = random(10);
@@ -10632,7 +10639,7 @@ function void taunt(int targetPlayer, int type, int tauntProbability)
 	{
 		if(dice < 3)
 		{
-			notifyAll(sTargetName & "you suck.");
+			notifyAll(sTarget & "you suck.");
 		}
 		else if(dice < 7)
 		{
@@ -10646,19 +10653,19 @@ function void taunt(int targetPlayer, int type, int tauntProbability)
 	else if(type == TAUNT_FAILURE)	// state failed
 	{
 		if(dice < 5){
-			notifyAll(sTargetName & "screw you!!");
+			notifyAll(sTarget & "screw you!!");
 		}else{
-			notifyAll(sTargetName & "stop turtling");
+			notifyAll(sTarget & "stop turtling");
 		}
 	}
 	else if(type == TAUNT_POSSESSION_LOSS)		// lost a derrick etc
 	{
 		if(dice < 5){
-			notifyAll(sTargetName & "I didn't need it anyway");
+			notifyAll(sTarget & "I didn't need it anyway");
 		}else if(dice < 8){
-			notifyAll(sTargetName & "next time i'll kick your ass!");
+			notifyAll(sTarget & "next time i'll kick your ass!");
 		}else{
-			notifyAll(sTargetName & "i'll get it back");
+			notifyAll(sTarget & "i'll get it back");
 		}
 	}
 	else if(type == TAUNT_GAME_LOSS)
@@ -10670,7 +10677,55 @@ function void taunt(int targetPlayer, int type, int tauntProbability)
 		}else if(dice < 9){
 			notifyAll("I can do better");
 		}else{
-			notifyAll("it's just not my day..");
+			notifyAll("it's not my day..");
+		}
+	}
+	else if(type == TAUNT_BASE_DEFENSE)
+	{
+		if(dice < 7){
+			notifyAll(sTarget & "bring it on!");
+		}else{
+			notifyAll(sTarget & "I've been waiting for you");
+		}
+	}
+	else if(type == TAUNT_BASE_OK)
+	{
+		if(dice < 4){
+			notifyAll(sPlayer & " is a noob");
+		}else if(dice < 6){
+			notifyAll(sTarget & "maybe next time");
+		}else if(dice < 8){
+			notifyAll(sTarget & "so how did you like it?");
+		}else if(dice < 9){
+			notifyAll(sTarget & "ain't I good?");
+		}else{
+			notifyAll(sTarget & "is that all you got?");
+		}
+	}
+	else if(type == TAUNT_REDISCOVERED_BASE)
+	{
+		if(dice < 4){
+			notifyAll(sTarget & "found ya");
+		}else if(dice < 6){
+			notifyAll(sTarget & "there you are");
+		}else if(dice < 8){
+			notifyAll(sTarget & "let me finish you..");
+		}else if(dice < 9){
+			notifyAll(sTarget & "you thought I wouldn't find you?");
+		}else{
+			notifyAll(sTarget & "you can run but you can't hide");
+		}
+	}
+	else if(type == TAUNT_LOST_BASE)
+	{
+		if(dice < 4){
+			notifyAll(sTarget & "do you have anything left?");
+		}else if(dice < 6){
+			notifyAll(sTarget & "that felt good");
+		}else if(dice < 8){
+			notifyAll(sTarget & "you can't hide forever");
+		}else{
+			notifyAll("like a knife through butter");
 		}
 	}
 }
@@ -12519,6 +12574,8 @@ function void doAttack()
 	{
 		dbg("after revealing found enemy base again, attack (!!!!!!!!!!!!)", me);
 		phase = phMoveToLoc;	//go to the new enemy base location
+
+		taunt(enemy, TAUNT_REDISCOVERED_BASE, 40);
 	}
 
 	//--------------------------------------------------
@@ -12546,6 +12603,8 @@ function void doAttack()
 			{
 				dbg("ATTACK: No visible enemy structures left, revealing territory !!!!!", me);
 				phase = phSearchingForBase;
+
+				taunt(enemy, TAUNT_REDISCOVERED_BASE, 40);
 			}
 		}
 	}
@@ -13124,11 +13183,11 @@ event coordinatePhases(inactive)
 			groupSizeCmds(attackGr,true,false,true)) < minOilAttackers)
 		{
 			dbg("TAKE OIL: little attackers left, cancel", me);
-			
+
 			taunt(enemy, TAUNT_FAILURE, 30);
-			
+
 			stopTakingOil();
-			
+
 			exit;
 		}
 
@@ -13136,11 +13195,11 @@ event coordinatePhases(inactive)
 		if(!_bStopped and (phase == phGuardingPos) and (timeGuardPos <= 0))		//guarding oil long enough
 		{
 			dbg("TAKE OIL: waiting time is up!!!!!!!!!!!!!", me);
-			
+
 			taunt(enemy, TAUNT_SUCCESS, 20);
-			
+
 			stopTakingOil();
-			
+
 			exit;
 		}
 
@@ -13148,7 +13207,7 @@ event coordinatePhases(inactive)
 		if(!_bStopped and tTakeOil <= 0)
 		{
 			dbg("TAKE OIL: takeoil timeout!!!!!!!!!!!!!", me);
-			
+
 			stopTakingOil();
 			exit;
 		}
@@ -13172,9 +13231,9 @@ event coordinatePhases(inactive)
 			numEnemyWeapObjInRange(me, sendForceX, sendForceY, (8 * 128), false, true))
 		{
 			dbg("TAKE OIL: they have more than us", me);
-			
+
 			taunt(enemy, TAUNT_FAILURE, 40);
-			
+
 			stopTakingOil();
 			exit;
 		}
@@ -13189,7 +13248,7 @@ event coordinatePhases(inactive)
 				if(groupSizeCmds(attackGr,true,false,true) > 0)	//if we reached destination
 				{
 					taunt(enemy, TAUNT_SUCCESS, 40);
-			
+
 					dbg("TAKE OIL: no enemies, started guarding", me);
 					timeGuardPos = maxTimeGuardPos;
 					phase = phGuardingPos;
@@ -13236,7 +13295,7 @@ event coordinatePhases(inactive)
 			groupSizeCmds(attackGr,true,false,true)) < MIN_OIL_DEFENDERS)
 		{
 			dbg("DEFENDING OIL: little attackers left, cancel", me);
-			
+
 			taunt(enemy, TAUNT_POSSESSION_LOSS, 50);
 
 			stopDefendingOil();
@@ -14365,7 +14424,7 @@ function void processCommand(string _message, int _sender, bool _bBlipMessage)
 	debug(me & ") processCommand: '" & _message & "' from " & _sender);
 	dbg("processCommand: '" & _message & "' from " & _sender, me);
 	dbg("got " & _numMsgs & " commands", me);
-	
+
 	if(_message == "are you aiv?" or _message == "are you aivolution?")
 	{
 		notifyAll("yes");
