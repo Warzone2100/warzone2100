@@ -63,6 +63,29 @@ static inline int arrayMinIndex(const int *array, const size_t n, int *value)
 	return minIdx;
 }
 
+static inline int arrayMinIndexF(const float *array, const size_t n, float *value)
+{
+	int i, minIdx;
+	
+	// Find the index of the minimum value
+	for (i = minIdx = 0; i < n; i++)
+	{
+		if (array[i] < array[minIdx])
+		{
+			minIdx = i;
+		}
+	}
+	
+	// If requested, store the minimum value
+	if (value != NULL)
+	{
+		*value = array[minIdx];
+	}
+	
+	// Return the array
+	return minIdx;
+}
+
 /*
    defines for ONEINX
    Use: if (ONEINX) { code... }
