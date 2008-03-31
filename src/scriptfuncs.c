@@ -10151,12 +10151,15 @@ BOOL addHelpBlip(SDWORD locX, SDWORD locY, SDWORD forPlayer, SDWORD sender, char
 			return false;
 		}
 
-		// show console message
-		CONPRINTF(ConsoleString,(ConsoleString, _("Beacon received from %s!"),
-			getPlayerName(sender)));
+		if(selectedPlayer == forPlayer)
+		{
+			// show console message
+			CONPRINTF(ConsoleString,(ConsoleString, _("Beacon received from %s!"),
+				getPlayerName(sender)));
 
-		// play audio
-		audio_QueueTrackPos( ID_SOUND_BEACON, locX, locY, 0);
+			// play audio
+			audio_QueueTrackPos( ID_SOUND_BEACON, locX, locY, 0);
+		}
 	}
 
 	return true;
@@ -10290,9 +10293,6 @@ BOOL scrDropBeacon(void)
 		debug(LOG_ERROR,"scrDropBeacon failed to pop parameters");
 		return false;
 	}
-
-	if(!addHelpBlip(locX, locY, sender, sender, strParam1))
-		debug(LOG_ERROR,"scrDropBeacon: addHelpBlip failed");
 
 	sprintf(ssval2, "%s : %s", getPlayerName(sender), strParam1);	//temporary solution
 
