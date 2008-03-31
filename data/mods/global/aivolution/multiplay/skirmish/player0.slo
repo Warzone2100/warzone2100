@@ -9337,6 +9337,12 @@ function bool canStartAttack(int _enemy)
 		return(FALSE);
 	}
 
+	// make sure we found enemy base
+	if(curBase[_enemy][0] < 0 or curBase[_enemy][1] < 0)
+	{
+		return false;
+	}
+
 	return(TRUE);
 }
 
@@ -12316,7 +12322,13 @@ function void prepareAttackers(bool _bHighPriorityTask)
 
 function void startAttack(int _enemy, int _x, int _y)
 {
-	if(_enemy < 0){MsgBox("startAttack - _enemy < 0"); return;}
+	if(_enemy < 0)
+	{
+		stopAttack();
+		MsgBox("startAttack - enemy (" & _enemy & ") < 0");
+		return;
+	}
+
 	if((_x <= 0) or (_y <= 0)){MsgBox("startAttack - enemy coords < 0"); return;}
 	//if(not knowBase[enemy]){MsgBox("startAttack - knowBase[enemy] == FALSE"); return;}
 
@@ -12556,7 +12568,7 @@ function void doAttack()
 		return;
 	}
 
-	if((curBase[enemy][0] <= 0) or (curBase[enemy][1] <= 0)){MsgBox("doAttack - enemy coords < 0"); return;}
+	if((curBase[enemy][0] <= 0) or (curBase[enemy][1] <= 0)){MsgBox("doAttack - enemy (" & enemy & ")coords < 0"); return;}
 
 
 
