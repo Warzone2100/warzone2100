@@ -2943,21 +2943,26 @@ UDWORD calcDroidBaseSpeed(DROID_TEMPLATE *psTemplate, UDWORD weight, UBYTE playe
 
 
 /* Calculate the speed of a droid over a terrain */
-UDWORD calcDroidSpeed(UDWORD baseSpeed, UDWORD terrainType, UDWORD propIndex)
+UDWORD calcDroidSpeed(UDWORD baseSpeed, UDWORD terrainType, UDWORD propIndex, UDWORD level)
 {
-    UDWORD  droidSpeed;
-//	return baseSpeed * getSpeedFactor(terrainType,
-//		(asPropulsionStats + propIndex)->propulsionType) / 100;
+	PROPULSION_STATS	*propulsion = asPropulsionStats + propIndex;
+	UDWORD				speed;
 
-    //need to ensure doesn't go over the max speed possible for this propulsion
-    droidSpeed = baseSpeed * getSpeedFactor(terrainType,
-		(asPropulsionStats + propIndex)->propulsionType) / 100;
-    if (droidSpeed > (asPropulsionStats + propIndex)->maxSpeed)
-    {
-        droidSpeed = (asPropulsionStats + propIndex)->maxSpeed;
-    }
+    speed  = baseSpeed;
+    // Factor in terrain
+    speed *= getSpeedFactor(terrainType, propulsion->propulsionType);
+    speed /= 100; 
+    // Factor in experience
+    speed *= (100 + EXP_SPEED_BONUS * level);
+    speed /= 100;
 
-    return droidSpeed;
+	// Need to ensure doesn't go over the max speed possible for this propulsion
+	if (speed > propulsion->maxSpeed)
+	{
+		speed = propulsion->maxSpeed;
+	}
+	
+	return speed;
 }
 
 /* Calculate the points required to build the template - used to calculate time*/

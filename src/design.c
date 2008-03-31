@@ -3221,7 +3221,7 @@ static UDWORD intCalcSpeed(TYPE_OF_TERRAIN type, PROPULSION_STATS *psProp)
 
 
 	return calcDroidSpeed(calcDroidBaseSpeed(&sCurrDesign, weight,
-		(UBYTE)selectedPlayer), type, psProp - asPropulsionStats);
+		(UBYTE)selectedPlayer), type, psProp - asPropulsionStats, 0);
 }
 
 

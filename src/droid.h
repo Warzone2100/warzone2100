@@ -62,6 +62,7 @@ extern bool runningMultiplayer(void);
 /* Experience modifies */
 #define EXP_REDUCE_DAMAGE		6		// damage of a droid is reduced by this value per experience level, in %
 #define EXP_ACCURACY_BONUS		5		// accuracy of a droid is increased by this value per experience level, in %
+#define EXP_SPEED_BONUS			5		// speed of a droid is increased by this value per experience level, in %
 
 /* Misc accuracy modifiers */
 #define	FOM_PARTIAL_ACCURACY_PENALTY	50	// penalty for not being fully able to fire while moving, in %
@@ -137,7 +138,7 @@ extern UDWORD calcDroidBaseBody(DROID *psDroid);
 extern UDWORD calcDroidBaseSpeed(DROID_TEMPLATE *psTemplate, UDWORD weight, UBYTE player);
 
 /* Calculate the speed of a droid over a terrain */
-extern UDWORD calcDroidSpeed(UDWORD baseSpeed, UDWORD terrainType, UDWORD propIndex);
+extern UDWORD calcDroidSpeed(UDWORD baseSpeed, UDWORD terrainType, UDWORD propIndex, UDWORD level);
 
 /* Calculate the points required to build the template */
 extern UDWORD calcTemplateBuild(DROID_TEMPLATE *psTemplate);

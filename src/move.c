@@ -1916,7 +1916,8 @@ SDWORD moveCalcDroidSpeed(DROID *psDroid)
 	mapX = map_coord(psDroid->pos.x);
 	mapY = map_coord(psDroid->pos.y);
 	speed = (SDWORD) calcDroidSpeed(psDroid->baseSpeed, terrainType(mapTile(mapX,mapY)),
-							  psDroid->asBits[COMP_PROPULSION].nStat);
+							  psDroid->asBits[COMP_PROPULSION].nStat,
+							  getDroidEffectiveLevel(psDroid));
 
 	pitch = psDroid->pitch;
 	if (pitch > MAX_SPEED_PITCH)
