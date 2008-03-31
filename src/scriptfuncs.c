@@ -10151,6 +10151,10 @@ BOOL addHelpBlip(SDWORD locX, SDWORD locY, SDWORD forPlayer, SDWORD sender, char
 			return false;
 		}
 
+		// show console message
+		CONPRINTF(ConsoleString,(ConsoleString, _("Beacon received from %s!"),
+			getPlayerName(sender)));
+
 		// play audio
 		audio_QueueTrackPos( ID_SOUND_BEACON, locX, locY, 0);
 	}
