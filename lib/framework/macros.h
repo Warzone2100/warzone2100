@@ -40,7 +40,7 @@
 /**
  * Returns the index of the lowest value in the array.
  */
-static inline int arrayMinIndex(const int *array, const size_t n, int *value)
+static inline int arrayMin(const int *array, const size_t n, int *index)
 {
 	int i, minIdx;
 	
@@ -53,17 +53,17 @@ static inline int arrayMinIndex(const int *array, const size_t n, int *value)
 		}
 	}
 	
-	// If requested, store the minimum value
-	if (value != NULL)
+	// If requested, store the index of the minimum value
+	if (index != NULL)
 	{
-		*value = array[minIdx];
+		*index = minIdx;
 	}
 	
-	// Return the array
-	return minIdx;
+	// Return the value
+	return array[minIdx];
 }
 
-static inline int arrayMinIndexF(const float *array, const size_t n, float *value)
+static inline float arrayMinF(const float *array, const size_t n, int *index)
 {
 	int i, minIdx;
 	
@@ -76,14 +76,60 @@ static inline int arrayMinIndexF(const float *array, const size_t n, float *valu
 		}
 	}
 	
-	// If requested, store the minimum value
-	if (value != NULL)
+	// If requested, store the index of the minimum value
+	if (index != NULL)
 	{
-		*value = array[minIdx];
+		*index = minIdx;
 	}
 	
-	// Return the array
-	return minIdx;
+	// Return the value
+	return array[minIdx];
+}
+
+static inline int arrayMax(const int *array, const size_t n, int *index)
+{
+	int i, maxIdx;
+	
+	// Find the index of the maximum value
+	for (i = maxIdx = 0; i < n; i++)
+	{
+		if (array[i] > array[maxIdx])
+		{
+			maxIdx = i;
+		}
+	}
+	
+	// If requested, store the index of the maximum value
+	if (index != NULL)
+	{
+		*index = maxIdx;
+	}
+	
+	// Return the value
+	return array[maxIdx];
+}
+
+static inline float arrayMaxF(const float *array, const size_t n, int *index)
+{
+	int i, maxIdx;
+	
+	// Find the index of the maximum value
+	for (i = maxIdx = 0; i < n; i++)
+	{
+		if (array[i] > array[maxIdx])
+		{
+			maxIdx = i;
+		}
+	}
+	
+	// If requested, store the index of the maximum value
+	if (index != NULL)
+	{
+		*index = maxIdx;
+	}
+	
+	// Return the value
+	return array[maxIdx];
 }
 
 /*
