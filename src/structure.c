@@ -1265,14 +1265,14 @@ float structureDamage(STRUCTURE *psStructure, UDWORD damage, UDWORD weaponClass,
 	{
 		debug(LOG_ATTACK, "structureDamage(%d): DESTROYED", psStructure->id);
 		destroyStruct(psStructure);
-		return relativeDamage * -1.0f;
 	}
 	else
 	{
 		// Survived
 		CHECK_STRUCTURE(psStructure);
-		return relativeDamage;
 	}
+	
+	return relativeDamage;
 }
 
 float getStructureDamage(const STRUCTURE* psStructure)

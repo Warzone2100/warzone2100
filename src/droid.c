@@ -172,8 +172,6 @@ float droidDamage(DROID *psDroid, UDWORD damage, UDWORD weaponClass, UDWORD weap
 		orderHealthCheck(psDroid);
 
 		CHECK_DROID(psDroid);
-
-		return relativeDamage;
 	}
 	else if (relativeDamage < 0.0f)
 	{
@@ -212,13 +210,9 @@ float droidDamage(DROID *psDroid, UDWORD damage, UDWORD weaponClass, UDWORD weap
 			debug(LOG_DEATH, "droidDamage: Droid %d beyond repair", (int)psDroid->id);
 			destroyDroid(psDroid);
 		}
-
-		return relativeDamage * -1.0f;
 	}
-	else
-	{
-		return 0.0f;	// undamaged
-	}
+	
+	return relativeDamage;
 }
 
 // Check that psVictimDroid is not referred to by any other object in the game
