@@ -40,9 +40,9 @@
 /**
  * Returns the index of the lowest value in the array.
  */
-static inline int arrayMin(const int *array, const size_t n, int *index)
+static inline int arrayMin(const int *array, const size_t n, size_t *index)
 {
-	int i, minIdx;
+	size_t i, minIdx;
 	
 	// Find the index of the minimum value
 	for (i = minIdx = 0; i < n; i++)
@@ -63,9 +63,9 @@ static inline int arrayMin(const int *array, const size_t n, int *index)
 	return array[minIdx];
 }
 
-static inline float arrayMinF(const float *array, const size_t n, int *index)
+static inline float arrayMinF(const float *array, const size_t n, size_t *index)
 {
-	int i, minIdx;
+	size_t i, minIdx;
 	
 	// Find the index of the minimum value
 	for (i = minIdx = 0; i < n; i++)
@@ -86,9 +86,9 @@ static inline float arrayMinF(const float *array, const size_t n, int *index)
 	return array[minIdx];
 }
 
-static inline int arrayMax(const int *array, const size_t n, int *index)
+static inline int arrayMax(const int *array, const size_t n, size_t *index)
 {
-	int i, maxIdx;
+	size_t i, maxIdx;
 	
 	// Find the index of the maximum value
 	for (i = maxIdx = 0; i < n; i++)
@@ -109,9 +109,9 @@ static inline int arrayMax(const int *array, const size_t n, int *index)
 	return array[maxIdx];
 }
 
-static inline float arrayMaxF(const float *array, const size_t n, int *index)
+static inline float arrayMaxF(const float *array, const size_t n, size_t *index)
 {
-	int i, maxIdx;
+	size_t i, maxIdx;
 	
 	// Find the index of the maximum value
 	for (i = maxIdx = 0; i < n; i++)
