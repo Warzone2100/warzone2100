@@ -190,10 +190,11 @@ static inline int32_t map_coord(int32_t worldCoord)
  */
 static inline void clip_world_offmap(int* worldX, int* worldY)
 {
-	*worldX = MAX(0, *worldX);
-	*worldY = MAX(0, *worldY);
-	*worldX = MIN(world_coord(mapWidth), *worldX);
-	*worldY = MIN(world_coord(mapHeight), *worldY);
+	// x,y must be > 0
+	*worldX = MAX(1, *worldX);
+	*worldY = MAX(1, *worldY);
+	*worldX = MIN(world_coord(mapWidth) - 1, *worldX);
+	*worldY = MIN(world_coord(mapHeight) - 1, *worldY);
 }
 
 /* maps a position down to the corner of a tile */
