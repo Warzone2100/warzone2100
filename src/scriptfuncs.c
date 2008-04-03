@@ -3191,16 +3191,15 @@ BOOL scrAnyDroidsLeft(void)
 //
 BOOL scrGameOverMessage(void)
 {
-	BOOL			gameOver;
+	BOOL			gameWon;
 	MESSAGE			*psMessage;
 	MESSAGE_TYPE		msgType;
 	SDWORD			player;
 	VIEWDATA		*psViewData;
-	//UDWORD			height;
 
 
 	if (!stackPopParams(4, ST_INTMESSAGE, &psViewData , VAL_INT, &msgType,
-				VAL_INT, &player, VAL_BOOL, &gameOver))
+				VAL_INT, &player, VAL_BOOL, &gameWon))
 	{
 		return false;
 	}
@@ -3212,7 +3211,14 @@ BOOL scrGameOverMessage(void)
 		return false;
 	}
 
-	// stop the game time??
+	if(gameWon)
+	{
+		addConsoleMessage(_("YOU ARE VICTORIOUS!"),DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+	}
+	else
+	{
+		addConsoleMessage(_("YOU WERE DEFEATED!"),DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+	}
 
 	//create the message
 	psMessage = addMessage(msgType, false, player);
@@ -3222,7 +3228,7 @@ BOOL scrGameOverMessage(void)
 	if (psMessage)
 	{
 		//we need to set this here so the VIDEO_QUIT callback is not called
-		setScriptWinLoseVideo((UBYTE)(gameOver ? PLAY_WIN : PLAY_LOSE));
+		setScriptWinLoseVideo((UBYTE)(gameWon ? PLAY_WIN : PLAY_LOSE));
 
 		//set the data
 		psMessage->pViewData = (MSG_VIEWDATA *)psViewData;
@@ -3239,7 +3245,7 @@ BOOL scrGameOverMessage(void)
 
     // this should be called when the video Quit is processed
     // not always is tough, so better be sure
-	displayGameOver(gameOver);
+	displayGameOver(gameWon);
 
 	return true;
 }

@@ -176,7 +176,6 @@ event checkEndConditions (endConditions)
 
 		if(gameLost)
 		{
-			console("YOU WERE DEFEATED!");
 			gameOverMessage(endMsg, MISS_MSG, 0, FALSE);
 			setEventTrigger(checkEndConditions, inactive);
 		}
@@ -233,7 +232,6 @@ event checkEndConditions (endConditions)
 
 	if(gamewon == TRUE)
 	{
-		console("YOU ARE VICTORIOUS!");
 		gameOverMessage(winMsg, MISS_MSG, 0, TRUE);
 		setEventTrigger(checkEndConditions, inactive);
 	}	
