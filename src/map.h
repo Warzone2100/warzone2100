@@ -185,8 +185,8 @@ static inline int32_t map_coord(int32_t worldCoord)
 /** Clip world coordinates to make sure they're inside the map's boundaries
  *  \param worldX a pointer to a X coordinate inside the map
  *  \param worldY a pointer to a Y coordinate inside the map
- *  \post 0 <= *worldX <= world_coord(mapWidth) and
- *        0 <= *worldy <= world_coord(mapHeight)
+ *  \post 1 <= *worldX <= world_coord(mapWidth)-1 and
+ *        1 <= *worldy <= world_coord(mapHeight)-1
  */
 static inline void clip_world_offmap(int* worldX, int* worldY)
 {
