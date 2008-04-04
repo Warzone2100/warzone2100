@@ -730,8 +730,6 @@ void updateDroidOrientation(DROID *psDroid)
 	double dx, dy;
 	double direction, pitch, roll;
 
-	CHECK_DROID(psDroid);
-
 	if(psDroid->droidType == DROID_PERSON || cyborgDroid(psDroid) || psDroid->droidType == DROID_TRANSPORTER)
 	{
 		/* These guys always stand upright */
@@ -781,7 +779,6 @@ void updateDroidOrientation(DROID *psDroid)
 	roll = cos(direction) * dx - sin(direction) * dy;
 	roll = atan(roll);
 	psDroid->roll = (UWORD)((roll * 180) / M_PI);
-	CHECK_DROID(psDroid);
 }
 
 
