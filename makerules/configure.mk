@@ -112,10 +112,10 @@ LDFLAGS+=-lSDL -lSDL_net -lpng12 -lphysfs -lz -lvorbisfile -lvorbis -logg -lpopt
 # Additional platform-dependend libs
 
 ifeq ($(strip $(PLATFORM)),windows)
-LDFLAGS+=-lGLC -lglu32 -lopengl32 -lopenal32 -ldbghelp -lshfolder -lwinmm -lwsock32
+LDFLAGS+=-lGLC -lglu32 -lopengl32 -lopenal32 -ldbghelp -lshfolder -lwinmm -lwsock32 -lbfd -liberty
 else
 ifeq ($(strip $(PLATFORM)),mingw32)
-LDFLAGS+=-lGLC -lglu32 -lopengl32 -lopenal32 -ldbghelp -lshfolder -lwinmm -lwsock32
+LDFLAGS+=-lGLC -lglu32 -lopengl32 -lopenal32 -ldbghelp -lshfolder -lwinmm -lwsock32 -lbfd -liberty
 else
 LDFLAGS+=-lGLC -lGLU -lGL -lopenal
 endif

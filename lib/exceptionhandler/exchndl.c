@@ -1,12 +1,26 @@
 /*
- * exchndl.c
- *
- * Author:
- *   José Fonseca <j_r_fonseca@yahoo.co.uk>
- *
- * Originally based on Matt Pietrek's MSJEXHND.CPP in Microsoft Systems
- * Journal, April 1997.
- */
+	This file is part of Warzone 2100.
+	Copyright (C) 1997-XXXX  José Fonseca <j_r_fonseca@yahoo.co.uk>
+	 * Originally based on Matt Pietrek's MSJEXHND.CPP in Microsoft Systems Journal, April 1997.
+	Copyright (C) 2008       Giel van Schijndel
+	Copyright (C) 2008       Warzone Resurrection Project
+
+	Warzone 2100 is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation; either version 2 of the License, or
+	(at your option) any later version.
+
+	Warzone 2100 is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with Warzone 2100; if not, write to the Free Software
+	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
+*/
+
+#include "exchndl.h"
 
 #include <assert.h>
 #include <windows.h>
@@ -54,9 +68,9 @@ DWORD GetModuleBase(DWORD dwAddress)
 #ifdef HAVE_BFD
 
 #include <bfd.h>
-#include <demangle.h>
-#include "coff/internal.h"
-#include "libcoff.h"
+#include "include/demangle.h"
+#include "include/coff/internal.h"
+#include "include/libcoff.h"
 
 // Read in the symbol table.
 static bfd_boolean
@@ -1116,9 +1130,7 @@ LONG WINAPI TopLevelExceptionFilter(PEXCEPTION_POINTERS pExceptionInfo)
 		return EXCEPTION_CONTINUE_SEARCH;
 }
 
-static void OnStartup(void) __attribute__((constructor));
-
-void OnStartup(void)
+void ExchndlSetup()
 {
 	// Install the unhandled exception filter function
 	prevExceptionFilter = SetUnhandledExceptionFilter(TopLevelExceptionFilter);
@@ -1144,27 +1156,10 @@ void OnStartup(void)
 	}	
 }
 
-static void OnExit(void) __attribute__((destructor));
-
-void OnExit(void)
+void ExchndlShutdown(void)
 {
-	SetUnhandledExceptionFilter(prevExceptionFilter);
-}
+	if (prevExceptionFilter)
+		SetUnhandledExceptionFilter(prevExceptionFilter);
 
-#if 0
-BOOL APIENTRY DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved)
-{
-	switch (dwReason)
-	{
-		case DLL_PROCESS_ATTACH:
-			OnStartup();
-			break;
-
-		case DLL_PROCESS_DETACH:
-			OnExit();
-			break;
-	}
-	
-	return TRUE;
+	prevExceptionFilter = NULL;
 }
-#endif

@@ -23,6 +23,7 @@
 #if defined(WZ_OS_WIN)
 
 # include "dbghelp.h"
+# include "exchndl.h"
 
 
 /**
@@ -582,6 +583,7 @@ void setupExceptionHandler(const char * programCommand)
 {
 #if defined(WZ_OS_WIN)
 	SetUnhandledExceptionFilter(windowsExceptionHandler);
+	ExchndlSetup();
 #elif defined(WZ_OS_UNIX) && !defined(WZ_OS_MAC)
 	// Prepare 'which' command for popen
 	char whichProgramCommand[PATH_MAX] = {'\0'};
