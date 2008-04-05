@@ -39,7 +39,6 @@
 					<Add library="pthread" />
 					<Add library="GL" />
 					<Add library="GLU" />
-					<Add library="GLC" />
 				</Linker>
 				<ExtraCommands>
 					<Add before="build_tools/autorevision/autorevision +cstr . src/autorevision.h" />
@@ -69,7 +68,6 @@
 					<Add library="pthread" />
 					<Add library="GL" />
 					<Add library="GLU" />
-					<Add library="GLC" />
 				</Linker>
 				<ExtraCommands>
 					<Add before="build_tools/autorevision/autorevision +cstr . src/autorevision.h" />
@@ -101,12 +99,17 @@
 					<Add library="gdi32" />
 					<Add library="opengl32" />
 					<Add library="glu32" />
-					<Add library="glc32" />
 					<Add library="openal32" />
 					<Add library="dbghelp" />
 					<Add library="winmm" />
 					<Add library="wsock32" />
 					<Add library="intl" />
+					<Add library="freetype" />
+					<Add library="fontconfig" />
+					<Add library="expat" />
+					<Add library="iconv" />
+					<Add library="bfd" />
+					<Add library="iberty" />
 					<Add directory="$(#warzone_devpkg.lib)" />
 				</Linker>
 				<ExtraCommands>
@@ -122,6 +125,7 @@
 				<Option parameters="--datadir data" />
 				<Compiler>
 					<Add option="-O2" />
+					<Add option="-g" />
 					<Add option="-DNDEBUG" />
 					<Add option='-DPACKAGE_DISTRIBUTOR=\&quot;UNKNOWN\&quot;' />
 					<Add option='-DPACKAGE_VERSION=\&quot;TRUNK\&quot;' />
@@ -133,19 +137,23 @@
 					<Add directory="$(#warzone_devpkg.include)/SDL" />
 				</Compiler>
 				<Linker>
-					<Add option="-s" />
 					<Add library="mingw32" />
 					<Add library="SDLmain" />
 					<Add library="z" />
 					<Add library="gdi32" />
 					<Add library="opengl32" />
 					<Add library="glu32" />
-					<Add library="glc32" />
 					<Add library="openal32" />
 					<Add library="dbghelp" />
 					<Add library="winmm" />
 					<Add library="wsock32" />
 					<Add library="intl" />
+					<Add library="freetype" />
+					<Add library="fontconfig" />
+					<Add library="expat" />
+					<Add library="iconv" />
+					<Add library="bfd" />
+					<Add library="iberty" />
 					<Add directory="$(#warzone_devpkg.lib)" />
 				</Linker>
 				<ExtraCommands>
@@ -177,6 +185,7 @@
 			<Add library="vorbisfile" />
 			<Add library="vorbis" />
 			<Add library="ogg" />
+			<Add library="GLC" />
 		</Linker>
 		<Unit filename="build_tools/autorevision/autorevision.cpp">
 			<Option target="AutoRevision" />
