@@ -38,7 +38,7 @@ static TCHAR szLogFileName[MAX_PATH] = _T("");
 static LPTOP_LEVEL_EXCEPTION_FILTER prevExceptionFilter = NULL;
 static HANDLE hReportFile;
 
-static 
+static
 int __cdecl rprintf(const TCHAR * format, ...)
 {
 	TCHAR szBuff[4096];
@@ -55,12 +55,12 @@ int __cdecl rprintf(const TCHAR * format, ...)
 	return retValue;
 }
 
-// The GetModuleBase function retrieves the base address of the module that contains the specified address. 
-static 
+// The GetModuleBase function retrieves the base address of the module that contains the specified address.
+static
 DWORD GetModuleBase(DWORD dwAddress)
 {
 	MEMORY_BASIC_INFORMATION Buffer;
-	
+
 	return VirtualQuery((LPCVOID) dwAddress, &Buffer, sizeof(Buffer)) ? (DWORD) Buffer.AllocationBase : 0;
 }
 
@@ -90,7 +90,7 @@ slurp_symtab (bfd *abfd, asymbol ***syms, long *symcount)
 
 	if((*symcount = bfd_canonicalize_symtab (abfd, *syms)) < 0)
 		return FALSE;
-	
+
 	return TRUE;
 }
 
@@ -105,7 +105,7 @@ struct find_handle
 	bfd_boolean found;
 };
 
-// Look for an address in a section.  This is called via  bfd_map_over_sections. 
+// Look for an address in a section.  This is called via  bfd_map_over_sections.
 static void find_address_in_section (bfd *abfd, asection *section, PTR data)
 {
 	struct find_handle *info = (struct find_handle *) data;
@@ -120,7 +120,7 @@ static void find_address_in_section (bfd *abfd, asection *section, PTR data)
 
 	vma = bfd_get_section_vma (abfd, section);
 	size = bfd_get_section_size (section);
-	
+
 	if (info->pc < (vma = bfd_get_section_vma (abfd, section)))
 		return;
 
@@ -134,9 +134,9 @@ static
 BOOL BfdDemangleSymName(LPCTSTR lpName, LPTSTR lpDemangledName, DWORD nSize)
 {
 	char *res;
-	
+
 	assert(lpName != NULL);
-	
+
 	if((res = cplus_demangle(lpName, DMGL_ANSI /*| DMGL_PARAMS*/)) == NULL)
 	{
 		lstrcpyn(lpDemangledName, lpName, nSize);
@@ -155,10 +155,10 @@ BOOL BfdGetSymFromAddr(bfd *abfd, asymbol **syms, long symcount, DWORD dwAddress
 {
 	HMODULE hModule;
 	struct find_handle info;
-	
+
 	if(!(hModule = (HMODULE) GetModuleBase(dwAddress)))
 		return FALSE;
-	
+
 	info.pc = dwAddress;
 
 	if(!(bfd_get_file_flags (abfd) & HAS_SYMS) || !symcount)
@@ -171,10 +171,10 @@ BOOL BfdGetSymFromAddr(bfd *abfd, asymbol **syms, long symcount, DWORD dwAddress
 		return FALSE;
 
 	assert(lpSymName);
-	
+
 	if(info.functionname == NULL && *info.functionname == '\0')
-		return FALSE;		
-	
+		return FALSE;
+
 	lstrcpyn(lpSymName, info.functionname, nSize);
 
 	return TRUE;
@@ -185,10 +185,10 @@ BOOL BfdGetLineFromAddr(bfd *abfd, asymbol **syms, long symcount, DWORD dwAddres
 {
 	HMODULE hModule;
 	struct find_handle info;
-	
+
 	if(!(hModule = (HMODULE) GetModuleBase(dwAddress)))
 		return FALSE;
-	
+
 	info.pc = dwAddress;
 
 	if(!(bfd_get_file_flags (abfd) & HAS_SYMS) || !symcount)
@@ -312,15 +312,15 @@ static PFNSTACKWALK pfnStackWalk = NULL;
 
 static
 BOOL WINAPI j_StackWalk(
-	DWORD MachineType, 
-	HANDLE hProcess, 
-	HANDLE hThread, 
-	LPSTACKFRAME StackFrame, 
-	PVOID ContextRecord, 
-	PREAD_PROCESS_MEMORY_ROUTINE ReadMemoryRoutine,  
+	DWORD MachineType,
+	HANDLE hProcess,
+	HANDLE hThread,
+	LPSTACKFRAME StackFrame,
+	PVOID ContextRecord,
+	PREAD_PROCESS_MEMORY_ROUTINE ReadMemoryRoutine,
 	PFUNCTION_TABLE_ACCESS_ROUTINE FunctionTableAccessRoutine,
-	PGET_MODULE_BASE_ROUTINE GetModuleBaseRoutine, 
-	PTRANSLATE_ADDRESS_ROUTINE TranslateAddress 
+	PGET_MODULE_BASE_ROUTINE GetModuleBaseRoutine,
+	PTRANSLATE_ADDRESS_ROUTINE TranslateAddress
 )
 {
 	if(
@@ -328,15 +328,15 @@ BOOL WINAPI j_StackWalk(
 		(pfnStackWalk || (pfnStackWalk = (PFNSTACKWALK) GetProcAddress(hModule_Imagehlp, "StackWalk")))
 	)
 		return pfnStackWalk(
-			MachineType, 
-			hProcess, 
-			hThread, 
-			StackFrame, 
-			ContextRecord, 
-			ReadMemoryRoutine,  
+			MachineType,
+			hProcess,
+			hThread,
+			StackFrame,
+			ContextRecord,
+			ReadMemoryRoutine,
 			FunctionTableAccessRoutine,
-			GetModuleBaseRoutine, 
-			TranslateAddress 
+			GetModuleBaseRoutine,
+			TranslateAddress
 		);
 	else
 		return FALSE;
@@ -379,7 +379,7 @@ BOOL ImagehlpDemangleSymName(LPCTSTR lpName, LPTSTR lpDemangledName, DWORD nSize
 	PIMAGEHLP_SYMBOL pSymbol = (PIMAGEHLP_SYMBOL) symbolBuffer;
 
 	memset( symbolBuffer, 0, sizeof(symbolBuffer) );
-	
+
 	pSymbol->SizeOfStruct = sizeof(symbolBuffer);
 	pSymbol->MaxNameLength = 512;
 
@@ -387,7 +387,7 @@ BOOL ImagehlpDemangleSymName(LPCTSTR lpName, LPTSTR lpDemangledName, DWORD nSize
 
 	if(!j_SymUnDName(pSymbol, lpDemangledName, nSize))
 		return FALSE;
-		
+
 	return TRUE;
 }
 
@@ -401,7 +401,7 @@ BOOL ImagehlpGetSymFromAddr(HANDLE hProcess, DWORD dwAddress, LPTSTR lpSymName, 
 	// So...make a buffer that's big enough, and make a pointer
 	// to the buffer.  We also need to initialize not one, but TWO
 	// members of the structure before it can be used.
-	
+
 	BYTE symbolBuffer[sizeof(IMAGEHLP_SYMBOL) + 512];
 	PIMAGEHLP_SYMBOL pSymbol = (PIMAGEHLP_SYMBOL) symbolBuffer;
 	DWORD dwDisplacement = 0;  // Displacement of the input address, relative to the start of the symbol
@@ -410,7 +410,7 @@ BOOL ImagehlpGetSymFromAddr(HANDLE hProcess, DWORD dwAddress, LPTSTR lpSymName, 
 	pSymbol->MaxNameLength = 512;
 
 	assert(bSymInitialized);
-	
+
 	if(!j_SymGetSymFromAddr(hProcess, dwAddress, &dwDisplacement, pSymbol))
 		return FALSE;
 
@@ -428,7 +428,7 @@ BOOL ImagehlpGetLineFromAddr(HANDLE hProcess, DWORD dwAddress,  LPTSTR lpFileNam
 	// Do the source and line lookup.
 	memset(&Line, 0, sizeof(IMAGEHLP_LINE));
 	Line.SizeOfStruct = sizeof(IMAGEHLP_LINE);
-	
+
 	assert(bSymInitialized);
 
 #if 1
@@ -440,10 +440,10 @@ BOOL ImagehlpGetLineFromAddr(HANDLE hProcess, DWORD dwAddress,  LPTSTR lpFileNam
 		DWORD dwTempDisp = 0 ;
 		while (dwTempDisp < 100 && !j_SymGetLineFromAddr(hProcess, dwAddress - dwTempDisp, &dwDisplacement, &Line))
 			++dwTempDisp;
-		
+
 		if(dwTempDisp >= 100)
 			return FALSE;
-			
+
 		// It was found and the source line information is correct so
 		//  change the displacement if it was looked up multiple times.
 		if (dwTempDisp < 100 && dwTempDisp != 0 )
@@ -455,10 +455,10 @@ BOOL ImagehlpGetLineFromAddr(HANDLE hProcess, DWORD dwAddress,  LPTSTR lpFileNam
 #endif
 
 	assert(lpFileName && lpLineNumber);
-	
+
 	lstrcpyn(lpFileName, Line.FileName, nSize);
 	*lpLineNumber = Line.LineNumber;
-	
+
 	return TRUE;
 }
 
@@ -474,24 +474,24 @@ BOOL PEGetSymFromAddr(HANDLE hProcess, DWORD dwAddress, LPTSTR lpSymName, DWORD 
 
 	if(!(hModule = (HMODULE) GetModuleBase(dwAddress)))
 		return FALSE;
-	
+
 	{
 		PIMAGE_DOS_HEADER pDosHdr;
 		LONG e_lfanew;
-		
+
 		// Point to the DOS header in memory
 		pDosHdr = (PIMAGE_DOS_HEADER)hModule;
-		
+
 		// From the DOS header, find the NT (PE) header
 		if(!ReadProcessMemory(hProcess, &pDosHdr->e_lfanew, &e_lfanew, sizeof(e_lfanew), NULL))
 			return FALSE;
-		
+
 		pNtHdr = (PIMAGE_NT_HEADERS)((DWORD)hModule + (DWORD)e_lfanew);
-	
+
 		if(!ReadProcessMemory(hProcess, pNtHdr, &NtHdr, sizeof(IMAGE_NT_HEADERS), NULL))
 			return FALSE;
 	}
-	
+
 	pSection = (PIMAGE_SECTION_HEADER) ((DWORD)pNtHdr + sizeof(DWORD) + sizeof(IMAGE_FILE_HEADER) + NtHdr.FileHeader.SizeOfOptionalHeader);
 
 	// Look for export section
@@ -500,10 +500,10 @@ BOOL PEGetSymFromAddr(HANDLE hProcess, DWORD dwAddress, LPTSTR lpSymName, DWORD 
 		IMAGE_SECTION_HEADER Section;
 		PIMAGE_EXPORT_DIRECTORY pExportDir = NULL;
 		BYTE ExportSectionName[IMAGE_SIZEOF_SHORT_NAME] = {'.', 'e', 'd', 'a', 't', 'a', '\0', '\0'};
-		
+
 		if(!ReadProcessMemory(hProcess, pSection, &Section, sizeof(IMAGE_SECTION_HEADER), NULL))
 			return FALSE;
-    	
+
 		if(memcmp(Section.Name, ExportSectionName, IMAGE_SIZEOF_SHORT_NAME) == 0)
 			pExportDir = (PIMAGE_EXPORT_DIRECTORY) Section.VirtualAddress;
 		else if ((NtHdr.OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_EXPORT].VirtualAddress >= Section.VirtualAddress) && (NtHdr.OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_EXPORT].VirtualAddress < (Section.VirtualAddress + Section.SizeOfRawData)))
@@ -512,39 +512,39 @@ BOOL PEGetSymFromAddr(HANDLE hProcess, DWORD dwAddress, LPTSTR lpSymName, DWORD 
 		if(pExportDir)
 		{
 			IMAGE_EXPORT_DIRECTORY ExportDir;
-			
+
 			if(!ReadProcessMemory(hProcess, (PVOID)((DWORD)hModule + (DWORD)pExportDir), &ExportDir, sizeof(IMAGE_EXPORT_DIRECTORY), NULL))
 				return FALSE;
-			
+
 			{
 				PDWORD *AddressOfFunctions = alloca(ExportDir.NumberOfFunctions*sizeof(PDWORD));
 				int j;
-	
+
 				if(!ReadProcessMemory(hProcess, (PVOID)((DWORD)hModule + (DWORD)ExportDir.AddressOfFunctions), AddressOfFunctions, ExportDir.NumberOfFunctions*sizeof(PDWORD), NULL))
 						return FALSE;
-				
+
 				for(j = 0; j < ExportDir.NumberOfNames; ++j)
 				{
 					DWORD pFunction = (DWORD)hModule + (DWORD)AddressOfFunctions[j];
 					//ReadProcessMemory(hProcess, (DWORD) hModule + (DWORD) (&ExportDir.AddressOfFunctions[j]), &pFunction, sizeof(pFunction), NULL);
-					
+
 					if(pFunction <= dwAddress && pFunction > dwNearestAddress)
 					{
 						dwNearestAddress = pFunction;
-						
+
 						if(!ReadProcessMemory(hProcess, (PVOID)((DWORD)hModule + (DWORD)(&ExportDir.AddressOfNames)[j]), &dwNearestName, sizeof(dwNearestName), NULL))
 							return FALSE;
-							
+
 						dwNearestName = (DWORD) hModule + dwNearestName;
 					}
 				}
 			}
-		}		
+		}
     }
 
 	if(!dwNearestAddress)
 		return FALSE;
-		
+
 	if(!ReadProcessMemory(hProcess, (PVOID)dwNearestName, lpSymName, nSize, NULL))
 		return FALSE;
 	lpSymName[nSize - 1] = 0;
@@ -554,26 +554,26 @@ BOOL PEGetSymFromAddr(HANDLE hProcess, DWORD dwAddress, LPTSTR lpSymName, DWORD 
 
 static
 BOOL WINAPI IntelStackWalk(
-	DWORD MachineType, 
-	HANDLE hProcess, 
-	HANDLE hThread, 
-	LPSTACKFRAME StackFrame, 
-	PCONTEXT ContextRecord, 
-	PREAD_PROCESS_MEMORY_ROUTINE ReadMemoryRoutine,  
+	DWORD MachineType,
+	HANDLE hProcess,
+	HANDLE hThread,
+	LPSTACKFRAME StackFrame,
+	PCONTEXT ContextRecord,
+	PREAD_PROCESS_MEMORY_ROUTINE ReadMemoryRoutine,
 	PFUNCTION_TABLE_ACCESS_ROUTINE FunctionTableAccessRoutine,
-	PGET_MODULE_BASE_ROUTINE GetModuleBaseRoutine, 
-	PTRANSLATE_ADDRESS_ROUTINE TranslateAddress 
+	PGET_MODULE_BASE_ROUTINE GetModuleBaseRoutine,
+	PTRANSLATE_ADDRESS_ROUTINE TranslateAddress
 )
 {
 	assert(MachineType == IMAGE_FILE_MACHINE_I386);
-	
+
 	if(ReadMemoryRoutine == NULL)
 		ReadMemoryRoutine = ReadProcessMemory;
-	
+
 	if(!StackFrame->Reserved[0])
 	{
 		StackFrame->Reserved[0] = 1;
-		
+
 		StackFrame->AddrPC.Mode = AddrModeFlat;
 		StackFrame->AddrPC.Offset = ContextRecord->Eip;
 		StackFrame->AddrStack.Mode = AddrModeFlat;
@@ -596,8 +596,8 @@ BOOL WINAPI IntelStackWalk(
 	}
 
 	ReadMemoryRoutine(hProcess, (LPCVOID) (StackFrame->AddrFrame.Offset + 2*sizeof(DWORD)), StackFrame->Params, sizeof(StackFrame->Params), NULL);
-	
-	return TRUE;	
+
+	return TRUE;
 }
 
 static
@@ -606,7 +606,7 @@ BOOL StackBackTrace(HANDLE hProcess, HANDLE hThread, PCONTEXT pContext)
 	STACKFRAME StackFrame;
 
 	HMODULE hModule = NULL;
-	TCHAR szModule[MAX_PATH]; 
+	TCHAR szModule[MAX_PATH];
 
 #ifdef HAVE_BFD
 	bfd *abfd = NULL;
@@ -619,7 +619,7 @@ BOOL StackBackTrace(HANDLE hProcess, HANDLE hThread, PCONTEXT pContext)
 	j_SymSetOptions(/* SYMOPT_UNDNAME | */ SYMOPT_LOAD_LINES);
 	if(j_SymInitialize(hProcess, NULL, TRUE))
 		bSymInitialized = TRUE;
-	
+
 	memset( &StackFrame, 0, sizeof(StackFrame) );
 
 	// Initialize the STACKFRAME structure for the first call.  This is only
@@ -677,19 +677,19 @@ BOOL StackBackTrace(HANDLE hProcess, HANDLE hThread, PCONTEXT pContext)
 				)
 			)
 				break;
-		}			
-		
+		}
+
 		// Basic sanity check to make sure  the frame is OK.  Bail if not.
-		if ( 0 == StackFrame.AddrFrame.Offset ) 
+		if ( 0 == StackFrame.AddrFrame.Offset )
 			break;
-		
+
 		if(0)
 		{
 			rprintf(
 				_T("%08lX   %08lX   %08lX   %08lX\r\n"),
 				StackFrame.AddrPC.Offset,
 				StackFrame.AddrReturn.Offset,
-				StackFrame.AddrFrame.Offset, 
+				StackFrame.AddrFrame.Offset,
 				StackFrame.AddrStack.Offset
 			);
 			rprintf(
@@ -699,17 +699,17 @@ BOOL StackBackTrace(HANDLE hProcess, HANDLE hThread, PCONTEXT pContext)
 				StackFrame.Params[2],
 				StackFrame.Params[3]
 			);
-		}			
+		}
 
 		rprintf( _T("%08lX"), StackFrame.AddrPC.Offset);
-		
+
 		if((hModule = (HMODULE) GetModuleBase(StackFrame.AddrPC.Offset)) && GetModuleFileName(hModule, szModule, sizeof(szModule)))
 		{
 #ifndef HAVE_BFD
 			rprintf( _T("  %s:ModulBase %08lX"), szModule, hModule);
 #else /* HAVE_BFD */
 			rprintf( _T("  %s:%08lX"), szModule, StackFrame.AddrPC.Offset);
-		
+
 			if(hModule != hPrevModule)
 			{
 				if(syms)
@@ -718,35 +718,35 @@ BOOL StackBackTrace(HANDLE hProcess, HANDLE hThread, PCONTEXT pContext)
 					syms = NULL;
 					symcount = 0;
 				}
-				
+
 				if(abfd)
 					bfd_close(abfd);
-				
+
 				if((abfd = bfd_openr (szModule, NULL)))
 					if(bfd_check_format(abfd, bfd_object))
 					{
 						bfd_vma adjust_section_vma = 0;
-			
+
 						/* If we are adjusting section VMA's, change them all now.  Changing
 						the BFD information is a hack.  However, we must do it, or
 						bfd_find_nearest_line will not do the right thing.  */
 						if ((adjust_section_vma = (bfd_vma) hModule - pe_data(abfd)->pe_opthdr.ImageBase))
 						{
 							asection *s;
-						
+
 							for (s = abfd->sections; s != NULL; s = s->next)
 							{
 								s->vma += adjust_section_vma;
 								s->lma += adjust_section_vma;
 							}
 						}
-						
+
 						if(bfd_get_file_flags(abfd) & HAS_SYMS)
 							/* Read in the symbol table.  */
 							slurp_symtab(abfd, &syms, &symcount);
 					}
 			}
-			
+
 			if(!bSuccess && abfd && syms && symcount)
 				if((bSuccess = BfdGetSymFromAddr(abfd, syms, symcount, StackFrame.AddrPC.Offset, szSymName, 512)))
 				{
@@ -754,23 +754,23 @@ BOOL StackBackTrace(HANDLE hProcess, HANDLE hThread, PCONTEXT pContext)
 					framepointer = StackFrame.AddrFrame.Offset;
 					hprocess = hProcess;
 					*/
-	
+
 					BfdDemangleSymName(szSymName, szSymName, 512);
-					
+
 					rprintf( _T("  %s"), szSymName);
-					
+
 					if(BfdGetLineFromAddr(abfd, syms, symcount, StackFrame.AddrPC.Offset, szFileName, MAX_PATH, &LineNumber))
 						rprintf( _T("  %s:%ld"), szFileName, LineNumber);
 				}
 #endif /* HAVE_BFD */
-			
+
 			if(!bSuccess && bSymInitialized)
 				if((bSuccess = ImagehlpGetSymFromAddr(hProcess, StackFrame.AddrPC.Offset, szSymName, 512)))
 				{
 					rprintf( _T("  %s"), szSymName);
-					
+
 					ImagehlpDemangleSymName(szSymName, szSymName, 512);
-				
+
 					if(ImagehlpGetLineFromAddr(hProcess, StackFrame.AddrPC.Offset, szFileName, MAX_PATH, &LineNumber))
 						rprintf( _T("  %s:%ld"), szFileName, LineNumber);
 				}
@@ -790,19 +790,19 @@ BOOL StackBackTrace(HANDLE hProcess, HANDLE hThread, PCONTEXT pContext)
 		syms = NULL;
 		symcount = 0;
 	}
-	
+
 	if(abfd)
 		bfd_close(abfd);
 #endif /* HAVE_BFD */
-	
+
 	if(bSymInitialized)
 	{
 		if(!j_SymCleanup(hProcess))
 			assert(0);
-		
+
 		bSymInitialized = FALSE;
 	}
-	
+
 	return TRUE;
 }
 
@@ -813,10 +813,10 @@ void GenerateExceptionReport(PEXCEPTION_POINTERS pExceptionInfo)
 	TCHAR szModule[MAX_PATH];
 	HMODULE hModule;
 	PCONTEXT pContext;
-	
+
 	// Start out with a banner
 	rprintf(_T("-------------------\r\n\r\n"));
-	
+
 	{
 		TCHAR *lpDayOfWeek[] = {
 			_T("Sunday"),
@@ -843,8 +843,8 @@ void GenerateExceptionReport(PEXCEPTION_POINTERS pExceptionInfo)
 			_T("December")
 		};
 		SYSTEMTIME SystemTime;
-		
-		GetLocalTime(&SystemTime);	
+
+		GetLocalTime(&SystemTime);
 		rprintf(_T("Error occured on %s, %s %i, %i at %02i:%02i:%02i.\r\n\r\n"),
 			lpDayOfWeek[SystemTime.wDayOfWeek],
 			lpMonth[SystemTime.wMonth],
@@ -863,47 +863,47 @@ void GenerateExceptionReport(PEXCEPTION_POINTERS pExceptionInfo)
 		case EXCEPTION_ACCESS_VIOLATION:
 			rprintf(_T("an Access Violation"));
 			break;
-	
+
 		case EXCEPTION_ARRAY_BOUNDS_EXCEEDED:
 			rprintf(_T("an Array Bound Exceeded"));
 			break;
-	
+
 		case EXCEPTION_BREAKPOINT:
 			rprintf(_T("a Breakpoint"));
 			break;
-	
+
 		case EXCEPTION_DATATYPE_MISALIGNMENT:
 			rprintf(_T("a Datatype Misalignment"));
 			break;
-	
+
 		case EXCEPTION_FLT_DENORMAL_OPERAND:
 			rprintf(_T("a Float Denormal Operand"));
 			break;
-	
+
 		case EXCEPTION_FLT_DIVIDE_BY_ZERO:
 			rprintf(_T("a Float Divide By Zero"));
 			break;
-	
+
 		case EXCEPTION_FLT_INEXACT_RESULT:
 			rprintf(_T("a Float Inexact Result"));
 			break;
-	
+
 		case EXCEPTION_FLT_INVALID_OPERATION:
 			rprintf(_T("a Float Invalid Operation"));
 			break;
-	
+
 		case EXCEPTION_FLT_OVERFLOW:
 			rprintf(_T("a Float Overflow"));
 			break;
-	
+
 		case EXCEPTION_FLT_STACK_CHECK:
 			rprintf(_T("a Float Stack Check"));
 			break;
-	
+
 		case EXCEPTION_FLT_UNDERFLOW:
 			rprintf(_T("a Float Underflow"));
 			break;
-	
+
 		case EXCEPTION_GUARD_PAGE:
 			rprintf(_T("a Guard Page"));
 			break;
@@ -911,23 +911,23 @@ void GenerateExceptionReport(PEXCEPTION_POINTERS pExceptionInfo)
 		case EXCEPTION_ILLEGAL_INSTRUCTION:
 			rprintf(_T("an Illegal Instruction"));
 			break;
-	
+
 		case EXCEPTION_IN_PAGE_ERROR:
 			rprintf(_T("an In Page Error"));
 			break;
-	
+
 		case EXCEPTION_INT_DIVIDE_BY_ZERO:
 			rprintf(_T("an Integer Divide By Zero"));
 			break;
-	
+
 		case EXCEPTION_INT_OVERFLOW:
 			rprintf(_T("an Integer Overflow"));
 			break;
-	
+
 		case EXCEPTION_INVALID_DISPOSITION:
 			rprintf(_T("an Invalid Disposition"));
 			break;
-	
+
 		case EXCEPTION_INVALID_HANDLE:
 			rprintf(_T("an Invalid Handle"));
 			break;
@@ -939,11 +939,11 @@ void GenerateExceptionReport(PEXCEPTION_POINTERS pExceptionInfo)
 		case EXCEPTION_PRIV_INSTRUCTION:
 			rprintf(_T("a Privileged Instruction"));
 			break;
-	
+
 		case EXCEPTION_SINGLE_STEP:
 			rprintf(_T("a Single Step"));
 			break;
-	
+
 		case EXCEPTION_STACK_OVERFLOW:
 			rprintf(_T("a Stack Overflow"));
 			break;
@@ -951,34 +951,34 @@ void GenerateExceptionReport(PEXCEPTION_POINTERS pExceptionInfo)
 		case DBG_CONTROL_C:
 			rprintf(_T("a Control+C"));
 			break;
-	
+
 		case DBG_CONTROL_BREAK:
 			rprintf(_T("a Control+Break"));
 			break;
-	
+
 		case DBG_TERMINATE_THREAD:
 			rprintf(_T("a Terminate Thread"));
 			break;
-	
+
 		case DBG_TERMINATE_PROCESS:
 			rprintf(_T("a Terminate Process"));
 			break;
-	
+
 		case RPC_S_UNKNOWN_IF:
 			rprintf(_T("an Unknown Interface"));
 			break;
-	
+
 		case RPC_S_SERVER_UNAVAILABLE:
 			rprintf(_T("a Server Unavailable"));
 			break;
-	
+
 		default:
 			/*
 			static TCHAR szBuffer[512] = { 0 };
-		
+
 			// If not one of the "known" exceptions, try to get the string
 			// from NTDLL.DLL's message table.
-		
+
 			FormatMessage(FORMAT_MESSAGE_IGNORE_INSERTS | FORMAT_MESSAGE_FROM_HMODULE,
 							GetModuleHandle(_T("NTDLL.DLL")),
 							dwCode, 0, szBuffer, sizeof(szBuffer), 0);
@@ -992,13 +992,13 @@ void GenerateExceptionReport(PEXCEPTION_POINTERS pExceptionInfo)
 	rprintf(_T(" at location %08x"), (DWORD) pExceptionRecord->ExceptionAddress);
 	if((hModule = (HMODULE) GetModuleBase((DWORD) pExceptionRecord->ExceptionAddress)) && GetModuleFileName(hModule, szModule, sizeof(szModule)))
 		rprintf(_T(" in module %s"), szModule);
-	
+
 	// If the exception was an access violation, print out some additional information, to the error log and the debugger.
 	if(pExceptionRecord->ExceptionCode == EXCEPTION_ACCESS_VIOLATION && pExceptionRecord->NumberParameters >= 2)
 		rprintf(" %s location %08x", pExceptionRecord->ExceptionInformation[0] ? "Writing to" : "Reading from", pExceptionRecord->ExceptionInformation[1]);
 
-	rprintf(".\r\n\r\n");		
-	
+	rprintf(".\r\n\r\n");
+
 	pContext = pExceptionInfo->ContextRecord;
 
 	#ifdef _M_IX86	// Intel Only!
@@ -1072,60 +1072,60 @@ void GenerateExceptionReport(PEXCEPTION_POINTERS pExceptionInfo)
 
 
 // Entry point where control comes on an unhandled exception
-static 
+static
 LONG WINAPI TopLevelExceptionFilter(PEXCEPTION_POINTERS pExceptionInfo)
 {
 	static BOOL bBeenHere = FALSE;
-	
+
 	if(!bBeenHere)
 	{
 		UINT fuOldErrorMode;
 
 		bBeenHere = TRUE;
-		
+
 		fuOldErrorMode = SetErrorMode(SEM_FAILCRITICALERRORS | SEM_NOGPFAULTERRORBOX | SEM_NOOPENFILEERRORBOX);
 
 		hReportFile = CreateFile(
 			szLogFileName,
-			GENERIC_WRITE, 
-			0, 
-			0, 
-			OPEN_ALWAYS, 
+			GENERIC_WRITE,
+			0,
+			0,
+			OPEN_ALWAYS,
 			FILE_FLAG_WRITE_THROUGH,
 			0
 		);
-			
+
 #ifdef HAVE_BFD
 		bfd_set_error_handler((bfd_error_handler_type) rprintf);
 #endif /* HAVE_BFD */
-	
+
 		if (hReportFile)
 		{
 			SetFilePointer(hReportFile, 0, 0, FILE_END);
-	
+
 			GenerateExceptionReport(pExceptionInfo);
-	
+
 			CloseHandle(hReportFile);
 			hReportFile = 0;
 		}
-		
+
 		if(fuOldErrorMode & SEM_NOGPFAULTERRORBOX)
 		{
 			TCHAR szBuffer[4196];
-			
+
 			wsprintf(szBuffer, _T("An unhandled exception ocurred\r\nSee %s for more details\r\n"), szLogFileName);
-			
+
 			MessageBox(
-				NULL, 
+				NULL,
 				szBuffer,
 				_T("Error"),
 				MB_OK | MB_ICONERROR
 			);
 		}
-		
+
 		SetErrorMode(fuOldErrorMode);
 	}
-	
+
 	if(prevExceptionFilter)
 		return prevExceptionFilter(pExceptionInfo);
 	else
@@ -1136,12 +1136,12 @@ void ExchndlSetup()
 {
 	// Install the unhandled exception filter function
 	prevExceptionFilter = SetUnhandledExceptionFilter(TopLevelExceptionFilter);
-	
+
 	// Figure out what the report file will be named, and store it away
 	if(GetModuleFileName(NULL, szLogFileName, MAX_PATH))
 	{
 		LPTSTR lpszDot;
-		
+
 		// Look for the '.' before the "EXE" extension.  Replace the extension
 		// with "RPT"
 		if((lpszDot = _tcsrchr(szLogFileName, _T('.'))))
@@ -1155,7 +1155,7 @@ void ExchndlSetup()
 	else if(GetWindowsDirectory(szLogFileName, MAX_PATH))
 	{
 		_tcscat(szLogFileName, _T("EXCHNDL.RPT"));
-	}	
+	}
 }
 
 void ExchndlShutdown(void)
