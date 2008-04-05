@@ -1274,6 +1274,16 @@ float structureDamage(STRUCTURE *psStructure, UDWORD damage, UDWORD weaponClass,
 	return (float) actualDamage / originalBody;
 }
 
+float getStructureDamage(const STRUCTURE* psStructure)
+{
+	float health;
+	CHECK_STRUCTURE(psStructure);
+
+	health = (float)psStructure->body / (float)structureBody(psStructure);
+	CLIP(health, 0., 1.f);
+
+	return 1. - health;
+}
 
 /* Set the type of droid for a factory to build */
 BOOL structSetManufacture(STRUCTURE *psStruct, DROID_TEMPLATE *psTempl, UBYTE quantity)
@@ -1541,7 +1551,8 @@ void buildFlatten(STRUCTURE_STATS *pStructureType, UDWORD atx, UDWORD aty,UDWORD
 STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, UDWORD player, BOOL FromSave)
 {
 	UDWORD		mapX, mapY, mapH;
-	UDWORD		width, breadth, weapon, capacity, bodyDiff = 0;
+	UDWORD		width, breadth, weapon, capacity;
+	float bodyDiff = 0.f;
 	SDWORD		wallType = 0, preScrollMinX = 0, preScrollMinY = 0, preScrollMaxX = 0, preScrollMaxY = 0;
 	int			i;
 	STRUCTURE	*psBuilding = NULL;
@@ -1942,7 +1953,7 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 			if (psBuilding->pFunctionality->factory.capacity < SIZE_SUPER_HEAVY)
 			{
 				//store the % difference in body points before upgrading
-				bodyDiff = PERCENT(psBuilding->body, structureBody(psBuilding));
+				bodyDiff = 1. - getStructureDamage(psBuilding);
 
 				++psBuilding->pFunctionality->factory.capacity;
 				bUpgraded = TRUE;
@@ -2004,7 +2015,7 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 			if (psBuilding->pFunctionality->researchFacility.capacity < NUM_RESEARCH_MODULES)
 			{
 				//store the % difference in body points before upgrading
-				bodyDiff = PERCENT(psBuilding->body, structureBody(psBuilding));
+				bodyDiff = 1. - getStructureDamage(psBuilding);
 
 				//add all the research modules in one go AB 24/06/98
 				//((RESEARCH_FACILITY*)psBuilding->pFunctionality)->capacity++;
@@ -2049,7 +2060,7 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 			if (psBuilding->pFunctionality->powerGenerator.capacity < NUM_POWER_MODULES)
 			{
 				//store the % difference in body points before upgrading
-				bodyDiff = PERCENT(psBuilding->body, structureBody(psBuilding));
+				bodyDiff = 1. - getStructureDamage(psBuilding);
 
 				//increment the power output, multiplier and capacity
 				//add all the research modules in one go AB 24/06/98
@@ -2086,7 +2097,7 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 		if (bUpgraded)
 		{
 			//calculate the new body points of the owning structure
-			psBuilding->body = (UWORD)(structureBody(psBuilding) * bodyDiff / 100);
+			psBuilding->body = (UWORD)(structureBody(psBuilding) * bodyDiff);
 
 			//initialise the build points
 			psBuilding->currentBuildPts = 0;
@@ -3671,12 +3682,16 @@ static BOOL canSmoke(STRUCTURE *psStruct)
 	}
 }
 
+static float CalcStructureSmokeInterval(float damage)
+{
+	return (((1. - damage) + 0.1) * 10) * STRUCTURE_DAMAGE_SCALING;
+}
 
 /* The main update routine for all Structures */
 void structureUpdate(STRUCTURE *psBuilding)
 {
 	UDWORD widthScatter,breadthScatter;
-	UDWORD percentDamage, emissionInterval, iPointsToAdd, iPointsRequired;
+	UDWORD emissionInterval, iPointsToAdd, iPointsRequired;
 	Vector3i dv;
 
 	//update the manufacture/research of the building once complete
@@ -3699,15 +3714,12 @@ void structureUpdate(STRUCTURE *psBuilding)
 	/* Only add smoke if they're visible and they can 'burn' */
 	if(psBuilding->visible[selectedPlayer] && canSmoke(psBuilding))
 	{
-		percentDamage = (100 - PERCENT(psBuilding->body, structureBody(psBuilding)));
+		const float damage = getStructureDamage(psBuilding);
+
 		// Is there any damage?
-		if(percentDamage!=0)
+		if (damage > 0.)
 		{
-			if(percentDamage>=100)
-			{
-				percentDamage = 99;
-			}
-			emissionInterval = CALC_STRUCTURE_SMOKE_INTERVAL(percentDamage);
+			emissionInterval = CalcStructureSmokeInterval(damage);
 			if(gameTime > (psBuilding->lastEmission + emissionInterval))
 			{
 				widthScatter = ((psBuilding->pStructureType->baseWidth) * TILE_UNITS/2)/3;
@@ -5999,16 +6011,14 @@ void printStructureInfo(STRUCTURE *psStructure)
 #ifdef DEBUG
 		if (getDebugMappingStatus())
 		{
-			CONPRINTF(ConsoleString, (ConsoleString, "%s - Damage %u%% - Unique ID %u",
-			          getStatName(psStructure->pStructureType), 100 - PERCENT(psStructure->body,
-			          structureBody(psStructure)), psStructure->id));
+			CONPRINTF(ConsoleString, (ConsoleString, "%s - Damage % 3.2f%% - Unique ID %u",
+			          getStatName(psStructure->pStructureType), getStructureDamage(psStructure) * 100.f, psStructure->id));
 		}
 		else
 #endif
 		{
-			CONPRINTF(ConsoleString, (ConsoleString, _("%s - Damage %u%%"),
-			          getStatName(psStructure->pStructureType), 100 - PERCENT(psStructure->body,
-			          structureBody(psStructure))));
+			CONPRINTF(ConsoleString, (ConsoleString, _("%s - Damage %3.0f%%"),
+			          getStatName(psStructure->pStructureType), getStructureDamage(psStructure) * 100.f));
 		}
 		break;
 	}

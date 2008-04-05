@@ -89,7 +89,7 @@ char								playerName[MAX_PLAYERS][MAX_STR_LENGTH];	//Array to store all player
 /////////////////////////////////////
 /* multiplayer message stack stuff */
 /////////////////////////////////////
-#define MAX_MSG_STACK	50
+#define MAX_MSG_STACK	100				// must be *at least* 64
 #define MAX_STR			MAX_STR_LENGTH
 
 static char msgStr[MAX_MSG_STACK][MAX_STR];
