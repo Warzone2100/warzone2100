@@ -375,6 +375,16 @@
 
 
 /*!
+ * \def WZ_DECL_RESTRICT
+ */
+#if WZ_CC_GNU_PREREQ(4,1) && !defined(WZ_CC_INTEL)
+#  define WZ_DECL_RESTRICT restrict
+#else
+#  define WZ_DECL_RESTRICT
+#endif
+
+
+/*!
  * \def WZ_DECL_CONST
  * "Many functions do not examine any values except their arguments, and have no effects except the return value. Basically this is just slightly more strict class than the pure attribute below, since function is not allowed to read global memory."
  */

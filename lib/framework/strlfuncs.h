@@ -1,22 +1,18 @@
 /*
-	This file is part of Warzone 2100.
-	Copyright (C) 2007  Giel van Schijndel
-	Copyright (C) 2007  Warzone Resurrection Project
-
-	Warzone 2100 is free software; you can redistribute it and/or modify
-	it under the terms of the GNU General Public License as published by
-	the Free Software Foundation; either version 2 of the License, or
-	(at your option) any later version.
-
-	Warzone 2100 is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-	GNU General Public License for more details.
-
-	You should have received a copy of the GNU General Public License
-	along with Warzone 2100; if not, write to the Free Software
-	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
-*/
+ * Copyright (c) 1998 Todd C. Miller <Todd.Miller@courtesan.com>
+ *
+ * Permission to use, copy, modify, and distribute this software for any
+ * purpose with or without fee is hereby granted, provided that the above
+ * copyright notice and this permission notice appear in all copies.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+ * WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+ * MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+ * ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+ * WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+ * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+ * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+ */
 
 #ifndef __INCLUDED_FRAMEWORK_STRLFUNCS_H__
 #define __INCLUDED_FRAMEWORK_STRLFUNCS_H__
@@ -24,45 +20,82 @@
 #include <string.h>
 #include <stddef.h>
 
-/*
- *  The "original" strlcpy() and strlcat() functions will return the amount
- *  of characters the destination string would be long, if no truncation has
- *  occurred.
+/** 
+ *	A safer variant of \c strncpy and its completely unsafe variant \c strcpy.
+ *	Copy src to string dst of size siz.  At most siz-1 characters
+ *	will be copied.  Always NUL terminates (unless siz == 0).
+ *	Returns strlen(src); if retval >= siz, truncation occurred.
  */
-
-/** A safer variant of \c strncpy and its completely unsafe variant \c strcpy.
- *  This function will guarantee that (as long as the destination buffer is at
- *  least 1 byte large), the destination buffer will hold a valid C string
- *  (with zero termination).
- *  \param dest a pointer to the destination buffer
- *  \param src the source string to copy into the \c dest buffer
- *  \param size the buffer size (in bytes) of buffer \c dest
- */
-static inline size_t strlcpy(char* dest, const char* src, size_t size)
+static inline size_t strlcpy(char *WZ_DECL_RESTRICT dst, const char *WZ_DECL_RESTRICT src, size_t siz)
 {
-	strncpy(dest, src, size - 1);
+	char *d = dst;
+	const char *s = src;
+	size_t n = siz;
 
-	// Guarantee to nul-terminate
-	dest[size - 1] = '\0';
+	/* Copy as many bytes as will fit */
+	if (n != 0)
+	{
+		while (--n != 0)
+		{
+			if ((*d++ = *s++) == '\0')
+			{
+				break;
+			}
+		}
+	}
 
-	return strlen(src);
+	/* Not enough room in dst, add NUL and traverse rest of src */
+	if (n == 0)
+	{
+		if (siz != 0)
+		{
+			*d = '\0';                /* NUL-terminate dst */
+		}
+		while (*s++) ;
+	}
+
+	return(s - src - 1);        /* count does not include NUL */
 }
 
-/** A safer variant of \c strncpy and its completely unsafe variant \c strcpy.
- *  This function will guarantee that (as long as the destination buffer is at
- *  least 1 byte large), the destination buffer will hold a valid C string
- *  (with zero termination).
- *  \param dest a pointer to the destination buffer
- *  \param src the source string to concatenate to the \c dest buffer
- *  \param size the buffer size (in bytes) of buffer \c dest
+/** 
+ *	A safer variant of \c strncat and its completely unsafe variant \c strcat.
+ *	Appends src to string dst of size siz (unlike strncat, siz is the
+ *	full size of dst, not space left).  At most siz-1 characters
+ *	will be copied.  Always NUL terminates (unless siz <= strlen(dst)).
+ *	Returns strlen(src) + MIN(siz, strlen(initial dst)).
+ *	If retval >= siz, truncation occurred.
  */
-static inline size_t strlcat(char* dest, const char* src, size_t size)
+static inline size_t strlcat(char *WZ_DECL_RESTRICT dst, const char *WZ_DECL_RESTRICT src, size_t siz)
 {
-	size_t dest_len = strlen(dest);
+	char *d = dst;
+	const char *s = src;
+	size_t n = siz;
+	size_t dlen;
 
-	strncat(dest, src, size - dest_len - 1);
+	/* Find the end of dst and adjust bytes left but don't go past end */
+	while (n-- != 0 && *d != '\0')
+	{
+		d++;
+	}
+	dlen = d - dst;
+	n = siz - dlen;
 
-	return strlen(src) + dest_len;
+	if (n == 0)
+	{
+                return(dlen + strlen(s));
+	}
+	while (*s != '\0')
+	{
+		if (n != 1)
+		{
+			*d++ = *s;
+			n--;
+		}
+		s++;
+	}
+	*d = '\0';
+
+	return(dlen + (s - src));        /* count does not include NUL */
 }
 
 #endif // __INCLUDED_FRAMEWORK_STRLFUNCS_H__
