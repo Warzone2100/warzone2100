@@ -25,12 +25,10 @@
 #include "mission.h"
 
 #include "lib/framework/frame.h"
-#include "lib/framework/strres.h"
 #include "lib/framework/math-help.h"
 #include "lib/ivis_common/bitimage.h"
 #include "lib/ivis_common/textdraw.h"
 #include "lib/ivis_common/piestate.h"
-#include "lib/ivis_common/piefunc.h"
 #include "lib/ivis_common/pieblitfunc.h"
 #include "lib/gamelib/gtime.h"
 #include "lib/script/script.h"
@@ -52,7 +50,6 @@
 #include "display3d.h"
 #include "effects.h"
 #include "radar.h"
-#include "lib/framework/cursors.h"		// for mousecursors
 #include "transporter.h"
 #include "group.h"
 #include "frontend.h"		// for displaytextoption.
@@ -66,11 +63,9 @@
 #include "wrappers.h"
 #include "console.h"
 #include "droid.h"
-
 #include "data.h"
 #include "multiplay.h"
 #include "environ.h"
-
 #include "loop.h"
 #include "levels.h"
 #include "visibility.h"
@@ -80,74 +75,40 @@
 #include "selection.h"
 #include "scores.h"
 #include "keymap.h"
-
 #include "texture.h"
 
-
-//DEFINES**************
-//#define		IDTIMER_FORM			11000		// has to be in the header..boohoo
-//#define		IDTIMER_DISPLAY			11001
-//#define		IDMISSIONRES_FORM		11002		// has to be in the header..boohoo
-
 #define		IDMISSIONRES_TXT		11004
-#define     IDMISSIONRES_LOAD		11005
-//#define     IDMISSIONRES_SAVE		11006
-//#define     IDMISSIONRES_QUIT		11007			//has to be in the header. bummer.
-#define     IDMISSIONRES_CONTINUE	11008
-
-//#define		IDTRANSTIMER_FORM		11009		//form for transporter timer
-//#define		IDTRANTIMER_DISPLAY		11010		//timer display for transporter timer
-//#define		IDTRANTIMER_BUTTON		11012		//transporter button on timer display
-
-#define		IDMISSIONRES_BACKFORM	11013
+#define		IDMISSIONRES_LOAD		11005
+#define		IDMISSIONRES_CONTINUE		11008
+#define		IDMISSIONRES_BACKFORM		11013
 #define		IDMISSIONRES_TITLE		11014
 
-/*mission timer position*/
-
-
-#define		TIMER_X					(568 + E_W)
-//#define		TIMER_Y					22
-//#define		TIMER_WIDTH				38
-//#define		TIMER_HEIGHT			20
+/* Mission timer label position */
 #define		TIMER_LABELX			15
 #define		TIMER_LABELY			0
-/*Transporter Timer form position */
-#define		TRAN_FORM_X				STAT_X
-#define		TRAN_FORM_Y				TIMER_Y
+
+/* Transporter Timer form position */
+#define		TRAN_FORM_X			STAT_X
+#define		TRAN_FORM_Y			TIMER_Y
 #define		TRAN_FORM_WIDTH			75
 #define		TRAN_FORM_HEIGHT		25
 
-
-
-/*Transporter Timer position */
+/* Transporter Timer position */
 #define		TRAN_TIMER_X			4
 #define		TRAN_TIMER_Y			TIMER_LABELY
 #define		TRAN_TIMER_WIDTH		25
-//#define		TRAN_TIMER_HEIGHT		TRAN_FORM_HEIGHT
-/*Transporter Timer button position */
-//#define		TRAN_BUTTON_X			(TRAN_TIMER_X + TRAN_TIMER_WIDTH + TRAN_TIMER_X)
-//#define		TRAN_BUTTON_Y			TRAN_TIMER_Y
-//#define		TRAN_BUTTON_WIDTH		20
-//#define		TRAN_BUTTON_HEIGHT		20
 
-
-
-
-
-#define		MISSION_1_X				5						// pos of text options in box.
-#define		MISSION_1_Y				15
-#define		MISSION_2_X				5
-#define		MISSION_2_Y				35
-#define		MISSION_3_X				5
-#define		MISSION_3_Y				55
+#define		MISSION_1_X			5	// pos of text options in box.
+#define		MISSION_1_Y			15
+#define		MISSION_2_X			5
+#define		MISSION_2_Y			35
+#define		MISSION_3_X			5
+#define		MISSION_3_Y			55
 
 #define		MISSION_TEXT_W			MISSIONRES_W-10
 #define		MISSION_TEXT_H			16
 
-
-
-//these are used for mission countdown
-
+// These are used for mission countdown
 #define TEN_MINUTES         (10 * 60 * GAME_TICKS_PER_SEC)
 #define FIVE_MINUTES        (5 * 60 * GAME_TICKS_PER_SEC)
 #define FOUR_MINUTES        (4 * 60 * GAME_TICKS_PER_SEC)
@@ -248,50 +209,34 @@ BOOL missionIsOffworld(void)
 //returns true if the correct type of mission for reinforcements
 BOOL missionForReInforcements(void)
 {
-    if ( (mission.type == LDS_CAMSTART)
-		|| missionIsOffworld()
-		|| (mission.type == LDS_CAMCHANGE)
-		)
-    {
-        return true;
-    }
-    else
-    {
-        return false;
-    }
-
+	if (mission.type == LDS_CAMSTART || missionIsOffworld() || mission.type == LDS_CAMCHANGE)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
 }
 
 //returns true if the correct type of mission and a reinforcement time has been set
 BOOL missionCanReEnforce(void)
 {
-//	return missionIsOffworld() && (mission.ETA >= 0);
-    if (mission.ETA >= 0)
-    {
-        //added CAMSTART for when load up a save game on Cam2A - AB 17/12/98
-        //if (missionIsOffworld() || (mission.type == LDS_CAMCHANGE) ||
-        //    (mission.type == LDS_CAMSTART))
-        if (missionForReInforcements())
-        {
-            return true;
-        }
-    }
-    return false;
+	if (mission.ETA >= 0)
+	{
+		if (missionForReInforcements())
+		{
+			return true;
+		}
+	}
+	return false;
 }
 
 //returns true if the mission is a Limbo Expand mission
 BOOL missionLimboExpand(void)
 {
-    if (mission.type == LDS_EXPAND_LIMBO)
-    {
-        return true;
-    }
-    else
-    {
-        return false;
-    }
+	return (mission.type == LDS_EXPAND_LIMBO);
 }
-
 
 // mission initialisation game code
 void initMission(void)
@@ -348,12 +293,10 @@ void resetVTOLLandingPos(void)
 //this is called everytime the game is quit
 void releaseMission(void)
 {
-    /*mission.apsDroidLists may contain some droids that have been transferred
-    from one campaign to the next*/
+	/* mission.apsDroidLists may contain some droids that have been transferred from one campaign to the next */
 	freeAllMissionDroids();
 
-    /*apsLimboDroids may contain some droids that have been saved
-    at the end of one mission and not yet used*/
+	/* apsLimboDroids may contain some droids that have been saved at the end of one mission and not yet used */
 	freeAllLimboDroids();
 }
 
@@ -374,9 +317,6 @@ BOOL missionShutDown(void)
 		freeAllFeatures();
 		releaseAllProxDisp();
 		gwShutDown();
-		//flag positions go with structs
-//		free(psMapTiles);
-		//free(aMapLinePoints);
 
 		for (inc = 0; inc < MAX_PLAYERS; inc++)
 		{
@@ -420,9 +360,8 @@ void setMissionCountDown(void)
 		timeRemaining = 0;
 	}
 
-    //need to init the countdown played each time the mission time is changed
-    missionCountDown = NOT_PLAYED_ONE | NOT_PLAYED_TWO | NOT_PLAYED_THREE |
-        NOT_PLAYED_FIVE | NOT_PLAYED_TEN | NOT_PLAYED_ACTIVATED;
+	// Need to init the countdown played each time the mission time is changed
+	missionCountDown = NOT_PLAYED_ONE | NOT_PLAYED_TWO | NOT_PLAYED_THREE | NOT_PLAYED_FIVE | NOT_PLAYED_TEN | NOT_PLAYED_ACTIVATED;
 
     if (timeRemaining < TEN_MINUTES - 1)
     {
@@ -1405,15 +1344,12 @@ BOOL startMissionCampaignExpandLimbo(char *pGame)
 		return false;
 	}
 
-    	//call after everything has been loaded up - done on stageThreeInit
-	//gridReset();
-
 	offWorldKeepLists = false;
 
 	return true;
 }
 
-BOOL startMissionBetween(void)
+static BOOL startMissionBetween(void)
 {
 	offWorldKeepLists = false;
 
@@ -1421,7 +1357,7 @@ BOOL startMissionBetween(void)
 }
 
 //check no units left with any settings that are invalid
-void clearCampaignUnits(void)
+static void clearCampaignUnits(void)
 {
 	DROID       *psDroid;
 
@@ -1704,8 +1640,6 @@ void endMissionCamChange(void)
 void endMissionOffClear(void)
 {
 	processMission();
-	//called in setUpMission now - AB 6/4/98
-	//intAddMissionResult(result);// ajl. fire up interface.
 	restoreMissionData();
 
 	//reset variables in Droids
@@ -1715,8 +1649,6 @@ void endMissionOffClear(void)
 void endMissionOffKeep(void)
 {
 	processMission();
-	//called in setUpMission now - AB 6/4/98
-	//intAddMissionResult(result);// ajl. fire up interface.
 	restoreMissionData();
 
 	//reset variables in Droids
@@ -1727,11 +1659,11 @@ void endMissionOffKeep(void)
 for use in a future mission (expand type) */
 void endMissionOffKeepLimbo(void)
 {
-    //save any droids left 'alive'
+	// Save any droids left 'alive'
 	processMissionLimbo();
 
-    //set the lists back to the home base lists
-    restoreMissionData();
+	// Set the lists back to the home base lists
+	restoreMissionData();
 
 	//reset variables in Droids
 	missionResetDroids();
@@ -2023,13 +1955,8 @@ void missionStructureUpdate(STRUCTURE *psBuilding)
 	ASSERT( psBuilding != NULL,
 		"structureUpdate: Invalid Structure pointer" );
 
-	//update the manufacture/research of the building
-//	if (psBuilding->pStructureType->type == REF_FACTORY ||
-//		psBuilding->pStructureType->type == REF_CYBORG_FACTORY ||
-//		psBuilding->pStructureType->type == REF_VTOL_FACTORY ||
-//		psBuilding->pStructureType->type == REF_RESEARCH)
-	if(StructIsFactory(psBuilding) ||
-		psBuilding->pStructureType->type == REF_RESEARCH)
+	// Update the manufacture/research of the building
+	if (StructIsFactory(psBuilding) || psBuilding->pStructureType->type == REF_RESEARCH)
 	{
 		if (psBuilding->status == SS_BUILT)
 		{
@@ -2074,16 +2001,14 @@ void missionDroidUpdate(DROID *psDroid)
 	//NO move update
 }
 
-//reset variables in Droids such as order and position
-void missionResetDroids(void)
+// Reset variables in Droids such as order and position
+static void missionResetDroids(void)
 {
 	UDWORD			player;
 	DROID			*psDroid, *psNext;
 	STRUCTURE		*psStruct;
 	FACTORY			*psFactory = NULL;
-//	UDWORD			mapX, mapY;
 	BOOL			placed;
-	UDWORD			x, y;
 	PICKTILE		pickRes;
 
 	debug(LOG_SAVEGAME, "missionResetDroids: called");
@@ -2094,19 +2019,18 @@ void missionResetDroids(void)
 		{
 			psNext = psDroid->psNext;
 
-			//reset order - unless constructor droid that is mid-build
-            //if (psDroid->droidType == DROID_CONSTRUCT && orderStateObj(psDroid,
-            if ((psDroid->droidType == DROID_CONSTRUCT
-	      || psDroid->droidType == DROID_CYBORG_CONSTRUCT)
-	     && (psStruct = (STRUCTURE*)orderStateObj(psDroid, DORDER_BUILD)))
-            {
-                //need to set the action time to ignore the previous mission time
-                psDroid->actionStarted = gameTime;
-            }
-            else
-            {
-			    orderDroid(psDroid, DORDER_STOP);
-            }
+			// Reset order - unless constructor droid that is mid-build
+			if ((psDroid->droidType == DROID_CONSTRUCT
+			     || psDroid->droidType == DROID_CYBORG_CONSTRUCT)
+			    && (psStruct = (STRUCTURE*)orderStateObj(psDroid, DORDER_BUILD)))
+			{
+				// Need to set the action time to ignore the previous mission time
+				psDroid->actionStarted = gameTime;
+			}
+			else
+			{
+				orderDroid(psDroid, DORDER_STOP);
+			}
 
 			//KILL OFF TRANSPORTER
 			if (psDroid->droidType == DROID_TRANSPORTER)
@@ -2116,99 +2040,52 @@ void missionResetDroids(void)
 		}
 	}
 
-    //don't need to implement this hack now since using pickATile - oh what a wonderful routine...
-	//only need to look through the selected players list
-	/*need to put all the droids that were built whilst off on the mission into
-	a temp list so can add them back into the world one by one so that the
-	path blocking routines do not fail*/
-	/*for (psDroid = apsDroidLists[selectedPlayer]; psDroid != NULL; psDroid =
-		psNext)
+	for (psDroid = apsDroidLists[selectedPlayer]; psDroid != NULL; psDroid = psDroid->psNext)
 	{
 		psNext = psDroid->psNext;
 		//for all droids that have never left home base
 		if (psDroid->pos.x == INVALID_XY && psDroid->pos.y == INVALID_XY)
 		{
-			if (droidRemove(psDroid, apsDroidLists))
-            {
-			    addDroid(psDroid, mission.apsDroidLists);
-            }
-		}
-	}*/
+			UDWORD	x, y;
 
-	for (psDroid = apsDroidLists[selectedPlayer]; psDroid != NULL; psDroid =
-		psDroid->psNext)
-	//for (psDroid = mission.apsDroidLists[selectedPlayer]; psDroid != NULL;
-	//	psDroid = psNext)
-	{
-		psNext = psDroid->psNext;
-		//for all droids that have never left home base
-		if (psDroid->pos.x == INVALID_XY && psDroid->pos.y == INVALID_XY)
-		{
-            //this is now stored as the baseStruct when the droid is built...
-			//find which factory produced the droid
-			/*psFactory = NULL;
-			for (psStruct = apsStructLists[psDroid->player]; psStruct !=
-				NULL; psStruct = psStruct->psNext)
+			psStruct = psDroid->psBaseStruct;
+			if (psStruct && StructIsFactory(psStruct))
 			{
-				if(StructIsFactory(psStruct))
-				{
-					if (((FACTORY *)psStruct->pFunctionality)->psGroup ==
-						psDroid->psGroup)
-					{
-						//found the right factory
-						psFactory = (FACTORY *)psStruct->pFunctionality;
-						break;
-					}
-				}
-			}*/
-            psStruct = psDroid->psBaseStruct;
-            if (psStruct && StructIsFactory(psStruct))
-            {
-                psFactory = (FACTORY *)psStruct->pFunctionality;
-            }
+				psFactory = (FACTORY *)psStruct->pFunctionality;
+			}
 			placed = false;
 			//find a location next to the factory
 			if (psStruct)
 			{
-				/*placed = placeDroid(psStruct, &x, &y);
-				if (placed)
+
+				// Use factory DP if one
+				if (psFactory->psAssemblyPoint)
 				{
-					psDroid->pos.x = (UWORD)world_coord(x);
-					psDroid->pos.y = (UWORD)world_coord(y);
+					x = map_coord(psFactory->psAssemblyPoint->coords.x);
+					y = map_coord(psFactory->psAssemblyPoint->coords.y);
 				}
 				else
 				{
+					x = map_coord(psStruct->pos.x);
+					y = map_coord(psStruct->pos.y);
+				}
+				pickRes = pickHalfATile(&x, &y,LOOK_FOR_EMPTY_TILE);
+				if (pickRes == NO_FREE_TILE )
+				{
+					ASSERT( false, "missionResetUnits: Unable to find a free location" );
 					psStruct = NULL;
-				}*/
-                //use pickATile now - yipeee!
-                //use factory DP if one
-                if (psFactory->psAssemblyPoint)
-                {
-                    x = (UWORD)map_coord(psFactory->psAssemblyPoint->coords.x);
-                    y = (UWORD)map_coord(psFactory->psAssemblyPoint->coords.y);
-                }
-                else
-                {
-                    x = (UWORD)map_coord(psStruct->pos.x);
-                    y = (UWORD)map_coord(psStruct->pos.y);
-                }
-		        pickRes = pickHalfATile(&x, &y,LOOK_FOR_EMPTY_TILE);
-		        if (pickRes == NO_FREE_TILE )
-		        {
-			        ASSERT( false, "missionResetUnits: Unable to find a free location" );
-                    psStruct = NULL;
-		        }
-                else
-                {
-    		        psDroid->pos.x = (UWORD)world_coord(x);
-	    	        psDroid->pos.y = (UWORD)world_coord(y);
-		            if (pickRes == HALF_FREE_TILE )
-		            {
-			            psDroid->pos.x += TILE_UNITS;
-			            psDroid->pos.y += TILE_UNITS;
-		            }
-                    placed = true;
-                }
+				}
+				else
+				{
+					psDroid->pos.x = world_coord(x);
+					psDroid->pos.y = world_coord(y);
+					if (pickRes == HALF_FREE_TILE )
+					{
+						psDroid->pos.x += TILE_UNITS;
+						psDroid->pos.y += TILE_UNITS;
+					}
+					placed = true;
+				}
 			}
 			//if couldn't find the factory - hmmm
 			if (!psStruct)
@@ -2219,31 +2096,27 @@ void missionResetDroids(void)
 				{
 					if (psStruct->pStructureType->type == REF_HQ)
 					{
-						/*psDroid->pos.x = (UWORD)(psStruct->pos.x + 128);
-						psDroid->pos.y = (UWORD)(psStruct->pos.y + 128);
-						placed = true;
-						break;*/
-                        //use pickATile again...
-                        x = (UWORD)map_coord(psStruct->pos.x);
-                        y = (UWORD)map_coord(psStruct->pos.y);
-		                pickRes = pickHalfATile(&x, &y,LOOK_FOR_EMPTY_TILE);
-		                if (pickRes == NO_FREE_TILE )
-		                {
-			                ASSERT( false, "missionResetUnits: Unable to find a free location" );
-                            psStruct = NULL;
-		                }
-                        else
-                        {
-    		                psDroid->pos.x = (UWORD)world_coord(x);
-	    	                psDroid->pos.y = (UWORD)world_coord(y);
-		                    if (pickRes == HALF_FREE_TILE )
-		                    {
-			                    psDroid->pos.x += TILE_UNITS;
-			                    psDroid->pos.y += TILE_UNITS;
-		                    }
-                            placed = true;
-                        }
-                        break;
+						// Use pickATile again...
+						x = map_coord(psStruct->pos.x);
+						y = map_coord(psStruct->pos.y);
+						pickRes = pickHalfATile(&x, &y, LOOK_FOR_EMPTY_TILE);
+						if (pickRes == NO_FREE_TILE )
+						{
+							ASSERT( false, "missionResetUnits: Unable to find a free location" );
+							psStruct = NULL;
+						}
+						else
+						{
+							psDroid->pos.x = world_coord(x);
+							psDroid->pos.y = world_coord(y);
+							if (pickRes == HALF_FREE_TILE )
+							{
+								psDroid->pos.x += TILE_UNITS;
+								psDroid->pos.y += TILE_UNITS;
+							}
+							placed = true;
+						}
+						break;
 					}
 				}
 			}
@@ -2255,7 +2128,7 @@ void missionResetDroids(void)
 				    TILE_UNITS) - TILE_UNITS ||	psDroid->pos.y <= TILE_UNITS ||
 				    psDroid->pos.y >= (mapHeight * TILE_UNITS) - TILE_UNITS)
 				{
-					debug(LOG_SAVEGAME, "missionResetUnits: unit too close to edge of map - removing");
+					debug(LOG_ERROR, "missionResetUnits: unit too close to edge of map - removing");
 					vanishDroid(psDroid);
 					continue;
 				}
@@ -2302,21 +2175,6 @@ void unloadTransporter(DROID *psTransporter, UDWORD x, UDWORD y, BOOL goingHome)
 		ppStoredList = mission.apsDroidLists;
 	}
 
-	//look through the stored list of droids to see if there any transporters
-	/*for (psTransporter = ppStoredList[selectedPlayer]; psTransporter != NULL; psTransporter =
-		psTransporter->psNext)
-	{
-		if (psTransporter->droidType == DROID_TRANSPORTER)
-		{
-			//remove out of stored list and add to current Droid list
-			removeDroid(psTransporter, ppStoredList);
-			addDroid(psTransporter, ppCurrentList);
-			//need to put the Transporter down at a specified location
-			psTransporter->pos.x = x;
-			psTransporter->pos.y = y;
-		}
-	}*/
-
 	//unload all the droids from within the current Transporter
 	if (psTransporter->droidType == DROID_TRANSPORTER)
 	{
@@ -2335,14 +2193,7 @@ void unloadTransporter(DROID *psTransporter, UDWORD x, UDWORD y, BOOL goingHome)
 
 			//add it back into current droid lists
 			addDroid(psDroid, ppCurrentList);
-			//hack in the starting point!
-			/*psDroid->pos.x = x;
-			psDroid->pos.y = y;
-			if (!goingHome)
-			{
-				//send the droids off to a starting location
-				orderSelectedLoc(psDroid->player, x + 3*TILE_UNITS, y + 3*TILE_UNITS);
-			}*/
+
 			//starting point...based around the value passed in
 			droidX = map_coord(x);
 			droidY = map_coord(y);
@@ -2375,7 +2226,7 @@ void unloadTransporter(DROID *psTransporter, UDWORD x, UDWORD y, BOOL goingHome)
 			orderDroid(psDroid, DORDER_STOP);
 			gridAddObject((BASE_OBJECT *)psDroid);
 			psDroid->selected = false;
-            //this is mainly for VTOLs
+			// This is mainly for VTOLs
 			setDroidBase(psDroid, NULL);
 			psDroid->cluster = 0;
 			if (goingHome)
@@ -2384,11 +2235,11 @@ void unloadTransporter(DROID *psTransporter, UDWORD x, UDWORD y, BOOL goingHome)
 				swapMissionPointers();
 			}
 
-            //inform all other players
-            if (bMultiPlayer)
-            {
-                sendDroidDisEmbark(psDroid);
-            }
+			// Inform all other players
+			if (bMultiPlayer)
+			{
+				sendDroidDisEmbark(psDroid);
+			}
 		}
 
 		/* trigger script callback detailing group about to disembark */
@@ -2405,22 +2256,23 @@ void unloadTransporter(DROID *psTransporter, UDWORD x, UDWORD y, BOOL goingHome)
 		}
 	}
 
-    //don't do this in multiPlayer
-    if (!bMultiPlayer)
-    {
-	    //send all transporter Droids back to home base if off world
-	    if (!goingHome)
-	    {
-		    /* stop the camera following the transporter */
-		    psTransporter->selected = false;
+	// Don't do this in multiPlayer
+	if (!bMultiPlayer)
+	{
+		// Send all transporter Droids back to home base if off world
+		if (!goingHome)
+		{
+			/* Stop the camera following the transporter */
+			psTransporter->selected = false;
 
-		    /* send transporter offworld */
-		    missionGetTransporterExit( psTransporter->player, &iX, &iY );
-		    orderDroidLoc(psTransporter, DORDER_TRANSPORTRETURN, iX, iY );
-            //set the launch time so the transporter doesn't just disappear for CAMSTART/CAMCHANGE
-            transporterSetLaunchTime(gameTime);
-        }
-    }
+			/* Send transporter offworld */
+			missionGetTransporterExit( psTransporter->player, &iX, &iY );
+			orderDroidLoc(psTransporter, DORDER_TRANSPORTRETURN, iX, iY );
+
+			// Set the launch time so the transporter doesn't just disappear for CAMSTART/CAMCHANGE
+			transporterSetLaunchTime(gameTime);
+        	}
+	}
 }
 
 void missionMoveTransporterOffWorld( DROID *psTransporter )
@@ -2512,12 +2364,10 @@ BOOL intAddMissionTimer(void)
 	sFormInit.UserData = PACKDWORD_TRI(0,IMAGE_MISSION_CLOCK,IMAGE_MISSION_CLOCK_UP);;
 	sFormInit.pDisplay = intDisplayMissionClock;
 
-
 	if (!widgAddForm(psWScreen, &sFormInit))
 	{
 		return false;
 	}
-
 
 	//add labels for the time display
 	memset(&sLabInit,0,sizeof(W_LABINIT));
@@ -2537,8 +2387,6 @@ BOOL intAddMissionTimer(void)
 		return false;
 	}
 
-
-
 	return true;
 }
 
@@ -2549,8 +2397,8 @@ BOOL intAddTransporterTimer(void)
 	W_FORMINIT		sFormInit;
 	W_LABINIT		sLabInit;
 
-    //make sure that Transporter Launch button isn't up as well
-    intRemoveTransporterLaunch();
+	// Make sure that Transporter Launch button isn't up as well
+	intRemoveTransporterLaunch();
 
 	//check to see if it exists already
 	if (widgGetFromID(psWScreen, IDTRANTIMER_BUTTON) != NULL)
@@ -2569,8 +2417,7 @@ BOOL intAddTransporterTimer(void)
 	sFormInit.height = iV_GetImageHeight(IntImages,IMAGE_TRANSETA_UP);
 	sFormInit.pTip = _("Load Transport");
 	sFormInit.pDisplay = intDisplayImageHilight;
-	sFormInit.UserData = PACKDWORD_TRI(0,IMAGE_TRANSETA_DOWN,
-		IMAGE_TRANSETA_UP);
+	sFormInit.UserData = PACKDWORD_TRI(0, IMAGE_TRANSETA_DOWN, IMAGE_TRANSETA_UP);
 
 	if (!widgAddForm(psWScreen, &sFormInit))
 	{
@@ -2610,82 +2457,8 @@ BOOL intAddTransporterTimer(void)
 		return false;
 	}
 
-
 	return true;
 }
-
-
-/*
-//add the Transporter timer into the top left hand corner of the screen
-BOOL intAddTransporterTimer(void)
-{
-	W_FORMINIT		sFormInit;
-	W_LABINIT		sLabInit;
-	W_BUTINIT		sButInit;
-
-	// Add the background - invisible since the button image caters for this
-	memset(&sFormInit, 0, sizeof(W_FORMINIT));
-	sFormInit.formID = 0;
-	sFormInit.id = IDTRANSTIMER_FORM;
-	sFormInit.style = WFORM_PLAIN | WFORM_INVISIBLE;
-	sFormInit.x = TRAN_FORM_X;
-	sFormInit.y = TRAN_FORM_Y;
-	sFormInit.width = iV_GetImageWidth(IntImages,IMAGE_TRANSETA_UP);//TRAN_FORM_WIDTH;
-	sFormInit.height = iV_GetImageHeight(IntImages,IMAGE_TRANSETA_UP);//TRAN_FORM_HEIGHT;
-	//sFormInit.pDisplay = intDisplayPlainForm;
-
-	if (!widgAddForm(psWScreen, &sFormInit))
-	{
-		return false;
-	}
-
-	//add labels for the time display
-	memset(&sLabInit,0,sizeof(W_LABINIT));
-	sLabInit.formID = IDTRANSTIMER_FORM;
-	sLabInit.id = IDTRANTIMER_DISPLAY;
-	sLabInit.style = WLAB_PLAIN | WIDG_HIDDEN;
-	sLabInit.x = TRAN_TIMER_X;
-	sLabInit.y = TRAN_TIMER_Y;
-	sLabInit.width = TRAN_TIMER_WIDTH;
-	sLabInit.height = sFormInit.height;//TRAN_TIMER_HEIGHT;
-	//sLabInit.pText = "00.00";
-	//if (mission.ETA < 0)
-	//{
-	//	sLabInit.pText = "00:00";
-	//}
-	//else
-	//{
-	//	fillTimeDisplay(sLabInit.pText, mission.ETA);
-	}
-	sLabInit.FontID = font_regular;
-	sLabInit.pCallback = intUpdateTransporterTimer;
-	if (!widgAddLabel(psWScreen, &sLabInit))
-	{
-		return false;
-	}
-
-	//set up button data
-	memset(&sButInit, 0, sizeof(W_BUTINIT));
-	sButInit.formID = IDTRANSTIMER_FORM;
-	sButInit.id = IDTRANTIMER_BUTTON;
-	sButInit.x = 0;//TRAN_FORM_X;
-	sButInit.y = 0;//TRAN_FORM_Y;
-	sButInit.width = sFormInit.width;
-	sButInit.height = sFormInit.height;
-	sButInit.FontID = font_regular;
-	sButInit.style = WBUT_PLAIN;
-	//sButInit.pText = "T";
-	sButInit.pTip = _("Load Transport");
-	sButInit.pDisplay = intDisplayImageHilight;
-	sButInit.pUserData = (void*)PACKDWORD_TRI(0,IMAGE_TRANSETA_DOWN,
-		IMAGE_TRANSETA_UP);
-	if (!widgAddButton(psWScreen, &sButInit))
-	{
-		return false;
-	}
-	return true;
-}
-*/
 
 void missionSetReinforcementTime( UDWORD iTime )
 {
@@ -2700,9 +2473,7 @@ UDWORD  missionGetReinforcementTime(void)
 //fills in a hours(if bHours = true), minutes and seconds display for a given time in 1000th sec
 void fillTimeDisplay(char *psText, UDWORD time, BOOL bHours)
 {
-	UDWORD		calcTime, inc;
-
-    inc = 0;
+	UDWORD		calcTime, inc = 0;
 
     //this is only for the transporter timer - never have hours!
     if (time == LZ_COMPROMISED_TIME)
@@ -2950,8 +2721,6 @@ static void intDisplayMissionBackDrop(WIDGET *psWidget, UDWORD xOffset, UDWORD y
 	scoreDataToScreen();
 }
 
-
-
 static void missionResetInGameState( void )
 {
 	//stop the game if in single player mode
@@ -2967,8 +2736,6 @@ static void missionResetInGameState( void )
 	forceHidePowerBar();
 	intRemoveReticule();
 	intRemoveMissionTimer();
-
-
 }
 
 static BOOL _intAddMissionResult(BOOL result, BOOL bPlaySuccess)
@@ -2976,7 +2743,6 @@ static BOOL _intAddMissionResult(BOOL result, BOOL bPlaySuccess)
 	W_FORMINIT		sFormInit;
 	W_LABINIT		sLabInit;
 	W_BUTINIT		sButInit;
-//	UDWORD			fileSize=0;
 
 	missionResetInGameState();
 
@@ -3139,10 +2905,8 @@ BOOL intAddMissionResult(BOOL result, BOOL bPlaySuccess)
 	/* save result */
 	g_bMissionResult = result;
 
-
 	return _intAddMissionResult(result, bPlaySuccess);
 }
-
 
 void intRemoveMissionResultNoAnim(void)
 {
@@ -3150,9 +2914,7 @@ void intRemoveMissionResultNoAnim(void)
 	widgDelete(psWScreen, IDMISSIONRES_FORM);
 	widgDelete(psWScreen, IDMISSIONRES_BACKFORM);
 
-
-	 cdAudio_Stop();
-
+	cdAudio_Stop();
 
 	MissionResUp	 	= false;
 	ClosingMissionRes   = false;
@@ -3161,14 +2923,10 @@ void intRemoveMissionResultNoAnim(void)
 	//reset the pauses
 	resetMissionPauseState();
 
-
 	// add back the reticule and power bar.
 	intAddReticule();
 
 	intShowPowerBar();
-
-//	EnableMouseDraw(true);
-//	MouseMovement(true);
 }
 
 
@@ -3377,16 +3135,6 @@ BOOL setUpMission(UDWORD type)
 		loopMissionState = LMS_SAVECONTINUE;
 	}
 
-	//if current mission is 'between' then don't give option to save/continue again
-	/*if (oldMission != MISSION_BETWEEN)
-	{
-		//give the option of save/continue
-		if (!intAddMissionResult(true))
-		{
-			return false;
-		}
-	}*/
-
 	return true;
 }
 
@@ -3433,20 +3181,14 @@ void setMissionPauseState(void)
 /*resets the pause states */
 void resetMissionPauseState(void)
 {
-
 	if (!bMultiPlayer)
 	{
-
-
 		setGameUpdatePause(false);
 		setAudioPause(false);
 		setScriptPause(false);
 		setConsolePause(false);
 		gameTimeStart();
-
-
 	}
-
 }
 
 //gets the coords for a no go area

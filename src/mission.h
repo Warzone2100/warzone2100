@@ -95,7 +95,8 @@ extern void swapMissionPointers(void);
 //timer display for transporter timer
 #define		IDTRANTIMER_DISPLAY		11010
 
-//position defines
+// Timer position defines
+#define		TIMER_X					(568 + E_W)
 #define		TIMER_Y					22
 
 // status of the mission result screens.
