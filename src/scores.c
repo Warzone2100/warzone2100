@@ -560,7 +560,7 @@ bool writeScoreData(const char* fileName)
 {
 	if (!tagOpenWrite(ScoreData_tag_definition, fileName))
 	{
-		debug(LOG_ERROR, "readFXData: error while opening file (%s)", fileName);
+		ASSERT(false, "writeScoreData: error while opening file (%s)", fileName);
 		return false;
 	}
 

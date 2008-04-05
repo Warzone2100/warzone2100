@@ -3240,7 +3240,7 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 		{
 			//load in the message list file
 			aFileName[fileExten] = '\0';
-			strlcat(aFileName, "score.tag", sizeof(aFileName));
+			strcat(aFileName, "score.tag");
 
 			// Load the fx data from the chosen file
 			if (!readScoreData(aFileName))
@@ -3711,7 +3711,7 @@ BOOL saveGame(char *aFileName, SDWORD saveType)
 	//added at V15 save
 	//create the message filename
 	aFileName[fileExtension] = '\0';
-	strlcat(aFileName, "score.tag", sizeof(aFileName));
+	strcat(aFileName, "score.tag");
 	/*Write the data to the file*/
 	if (!writeScoreData(aFileName))
 	{
