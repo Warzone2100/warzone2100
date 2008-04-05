@@ -84,7 +84,7 @@ typedef struct { UBYTE r, g, b, a; } PIELIGHTBYTES;
 
 /** Our basic colour type. Use whenever you want to define a colour.
  *  Set bytes separetely, and do not assume a byte order between the components. */
-typedef union  { PIELIGHTBYTES byte; UDWORD argb; UBYTE vector[4]; } PIELIGHT;
+typedef union  { PIELIGHTBYTES byte; UDWORD rgba; UBYTE vector[4]; } PIELIGHT;
 
 typedef struct
 {

@@ -159,7 +159,7 @@ void war_SetFog(BOOL val)
 		PIELIGHT black;
 
 		setRevealStatus(true);
-		black.argb = 0;
+		black.rgba = 0;
 		black.byte.a = 255;
 		pie_SetFogColour(black);
 	}

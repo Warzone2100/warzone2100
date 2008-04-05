@@ -155,7 +155,7 @@ GAMECODE gameLoop(void)
 
 		// set the fog color to black (RGB)
 		// the fogbox will get this color
-		black.argb = 0;
+		black.rgba = 0;
 		black.byte.a = 255;
 		pie_SetFogColour(black);
 	}

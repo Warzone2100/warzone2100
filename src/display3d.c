@@ -4608,9 +4608,9 @@ static void addConstructionLine(DROID *psDroid, STRUCTURE *psStructure)
 		colour.byte.r = 0;
 		colour.byte.g = 0;
 	}
-	pts[0].light.argb = 0xff000000;
-	pts[1].light.argb = 0xff000000;
-	pts[2].light.argb = 0xff000000;
+	pts[0].light.rgba = 0xff000000;
+	pts[1].light.rgba = 0xff000000;
+	pts[2].light.rgba = 0xff000000;
 
 	pts[0].u = 0;
 	pts[0].v = 0;

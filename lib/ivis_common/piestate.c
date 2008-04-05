@@ -30,7 +30,7 @@ void pie_SetDefaultStates(void)//Sets all states
 	rendStates.fogEnabled = false;// enable fog before renderer
 	rendStates.fog = false;//to force reset to false
 	pie_SetFogStatus(false);
-	black.argb = 0;
+	black.rgba = 0;
 	black.byte.a = 255;
 	pie_SetFogColour(black);//nicks colour
 
@@ -74,7 +74,7 @@ void pie_EnableFog(BOOL val)
 		{
 			PIELIGHT black;
 
-			black.argb = 0;
+			black.rgba = 0;
 			black.byte.a = 255;
 			pie_SetFogColour(black); // clear background to black
 		}

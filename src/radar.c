@@ -352,7 +352,7 @@ static void ClearRadar(UDWORD *screen)
 	{
 		for (j = 0; j < RadarHeight; j++)
 		{
-			*pScr++ = WZCOL_RADAR_BACKGROUND.argb;
+			*pScr++ = WZCOL_RADAR_BACKGROUND.rgba;
 		}
 	}
 }
@@ -441,9 +441,9 @@ static void DrawRadarTiles(UDWORD *screen,UDWORD Modulus,UWORD boxSizeH,UWORD bo
 			{
 				if (!getRevealStatus() || TEST_TILE_VISIBLE(selectedPlayer, WTile) || godMode)
 				{
-					*WScr = appliedRadarColour(radarDrawMode, WTile).argb;
+					*WScr = appliedRadarColour(radarDrawMode, WTile).rgba;
 				} else {
-					*WScr = WZCOL_RADAR_BACKGROUND.argb;
+					*WScr = WZCOL_RADAR_BACKGROUND.rgba;
 				}
 				/* Next pixel, next tile */
 				WScr++;
@@ -471,7 +471,7 @@ static void DrawRadarTiles(UDWORD *screen,UDWORD Modulus,UWORD boxSizeH,UWORD bo
 					col.byte.r = sqrtf(col.byte.r * WTile->illumination);
 					col.byte.b = sqrtf(col.byte.b * WTile->illumination);
 					col.byte.g = sqrtf(col.byte.g * WTile->illumination);
-					Val = col.argb;
+					Val = col.rgba;
 
    					for(c=0; c<SizeV; c++)
    					{
@@ -479,7 +479,7 @@ static void DrawRadarTiles(UDWORD *screen,UDWORD Modulus,UWORD boxSizeH,UWORD bo
 
    						for(d=0; d<SizeH; d++)
    						{
-							*WPtr = appliedRadarColour(radarDrawMode, WTile).argb;
+							*WPtr = appliedRadarColour(radarDrawMode, WTile).rgba;
    							WPtr++;
    						}
    						Ptr += Modulus;
@@ -496,7 +496,7 @@ static void DrawRadarTiles(UDWORD *screen,UDWORD Modulus,UWORD boxSizeH,UWORD bo
 
    						for(d=0; d<SizeH; d++)
    						{
-   							*WPtr = WZCOL_RADAR_BACKGROUND.argb;
+   							*WPtr = WZCOL_RADAR_BACKGROUND.rgba;
    							WPtr++;
    						}
    						Ptr += Modulus;
@@ -597,7 +597,7 @@ static void DrawRadarObjects(UDWORD *screen,UDWORD Modulus,UWORD boxSizeH,UWORD 
    							WPtr = Ptr;
    							for(d=0; d<SizeH; d++)
    							{
-								*WPtr = col.argb;
+								*WPtr = col.rgba;
    								WPtr++;
    							}
 							Ptr += Modulus;
@@ -696,7 +696,7 @@ static void DrawRadarObjects(UDWORD *screen,UDWORD Modulus,UWORD boxSizeH,UWORD 
    							WPtr = Ptr;
    							for(d=0; d<SSizeH; d++)
    							{
-   								*WPtr = col.argb;
+   								*WPtr = col.rgba;
    								WPtr++;
    							}
 							Ptr += Modulus;
@@ -849,7 +849,7 @@ static void drawViewingWindow( UDWORD x, UDWORD y, UDWORD boxSizeH, UDWORD boxSi
 		colour.byte.b = 0x3f;
 	default:
 		// black
-		colour.argb = 0;
+		colour.rgba = 0;
 		colour.byte.a = 0x3f;
 		break;
 
