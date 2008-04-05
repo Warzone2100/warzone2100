@@ -24,13 +24,6 @@
 
 PIELIGHT psPalette[WZCOL_MAX];
 
-//*************************************************************************
-//*** calculate primary colours for current palette (store in COL_ ..
-//*
-//* on exit	_iVCOLS[0..15] contain colour values matched
-//*			COL_.. below access _iVCOLS[0..15]
-//******
-
 void pal_Init(void)
 {
 	// TODO: Read these from file so that mod-makers can change them
