@@ -73,10 +73,10 @@
 
 //#define DEBUG_SCROLLTABS 	//enable to see tab scroll button info for buttons
 
+// Empty edit window
 //#define EDIT_OPTIONS
-#ifdef EDIT_OPTIONS
+
 static UDWORD		newMapWidth, newMapHeight;
-#endif
 
 #define RETXOFFSET (0)// Reticule button offset
 #define RETYOFFSET (0)
@@ -1026,6 +1026,7 @@ static void intRemoveEdit(void)
 	widgDelete(psWScreen, IDED_FORM);
 //	widgStartScreen(psWScreen);
 }
+#endif
 
 
 /* Get  and validate the new map size from the options screen */
@@ -1129,7 +1130,6 @@ static void intGetMapSize(void)
 		widgSetString(psWScreen, IDOPT_MAPHEIGHT, aText);
 	}
 }
-#endif
 
 
 /* Reset the widget screen to just the reticule */
@@ -1342,7 +1342,6 @@ static void intProcessOptions(UDWORD id)
 	{
 		switch (id)
 		{
-#ifdef EDIT_OPTIONS
 		case IDOPT_MAPLOAD:
 			debug(LOG_ERROR, "We should call loadFile and mapLoad here");
 			{
@@ -1375,6 +1374,7 @@ static void intProcessOptions(UDWORD id)
 		case IDOPT_MAPHEIGHT:
 			intGetMapSize();
 			break;
+#ifdef EDIT_OPTIONS
 		case IDOPT_EDIT:
 			intRemoveOptions();
 			intAddEdit();
@@ -3947,9 +3947,7 @@ BOOL intAddOptions(void)
 	W_BUTINIT	sButInit;
 	W_LABINIT	sLabInit;
 	UDWORD		player;
-#ifdef EDIT_OPTIONS
 	char		aText[WIDG_MAXSTR];
-#endif
 
 //	widgEndScreen(psWScreen);
 
@@ -3990,7 +3988,6 @@ BOOL intAddOptions(void)
 		return false;
 	}
 
-
 	/* Add the close box */
 	sButInit.formID = IDOPT_FORM;
 	sButInit.id = IDOPT_CLOSE;
@@ -4007,7 +4004,6 @@ BOOL intAddOptions(void)
 		return false;
 	}
 
-#ifdef EDIT_OPTIONS
 	/* Add the map form */
 	sFormInit.formID = IDOPT_FORM;
 	sFormInit.id = IDOPT_MAPFORM;
@@ -4089,7 +4085,6 @@ BOOL intAddOptions(void)
 	{
 		return false;
 	}
-#endif
 
 	/* Add the edit button */
 	sButInit.formID = IDOPT_FORM;
