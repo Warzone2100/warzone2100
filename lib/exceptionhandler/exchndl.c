@@ -20,7 +20,11 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
+#include "lib/framework/frame.h"
+#include "lib/framework/debug.h"
 #include "exchndl.h"
+// FIXME: #include from src/
+#include "src/version.h"
 
 #include <assert.h>
 #include <windows.h>
@@ -28,6 +32,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <malloc.h>
+#include <limits.h>
 
 
 #define HAVE_BFD	1
@@ -37,6 +42,7 @@
 static TCHAR szLogFileName[MAX_PATH] = _T("");
 static LPTOP_LEVEL_EXCEPTION_FILTER prevExceptionFilter = NULL;
 static HANDLE hReportFile;
+static char* formattedVersionString = NULL;
 
 static
 int __cdecl rprintf(const TCHAR * format, ...)
@@ -856,6 +862,21 @@ void GenerateExceptionReport(PEXCEPTION_POINTERS pExceptionInfo)
 		);
 	}
 
+	rprintf(_T("Program: %s (%s)\r\n"), GetModuleFileName(NULL, szModule, MAX_PATH) ? szModule : "", PACKAGE);
+	rprintf(_T("Version: %s\r\n"), formattedVersionString ? formattedVersionString : PACKAGE_VERSION);
+	rprintf(_T("Compiled by: %s\r\n"),
+#if defined(WZ_CC_GNU) && !defined(WZ_CC_INTEL)
+	           "GCC " __VERSION__
+#elif defined(WZ_CC_INTEL)
+	// Intel includes the compiler name within the version string
+	           __VERSION__
+#else
+	          "UNKNOWN"
+#endif
+	);
+
+	rprintf(_T("Pointers: %s\r\n\r\n"), sizeof(void*) == (32 / CHAR_BIT) ? "32bit" : (sizeof(void*) == (64 / CHAR_BIT) ? "64bit" : "Unknown"));
+
 	// First print information about the type of fault
 	rprintf(_T("%s caused "),  GetModuleFileName(NULL, szModule, MAX_PATH) ? szModule : "Application");
 	switch(pExceptionRecord->ExceptionCode)
@@ -999,6 +1020,8 @@ void GenerateExceptionReport(PEXCEPTION_POINTERS pExceptionInfo)
 
 	rprintf(".\r\n\r\n");
 
+	dumpLog(hReportFile);
+
 	pContext = pExceptionInfo->ContextRecord;
 
 	#ifdef _M_IX86	// Intel Only!
@@ -1137,6 +1160,9 @@ void ExchndlSetup()
 	// Install the unhandled exception filter function
 	prevExceptionFilter = SetUnhandledExceptionFilter(TopLevelExceptionFilter);
 
+	// Retrieve the current version
+	formattedVersionString = strdup(version_getFormattedVersionString());
+
 	// Figure out what the report file will be named, and store it away
 	if(GetModuleFileName(NULL, szLogFileName, MAX_PATH))
 	{
@@ -1156,6 +1182,8 @@ void ExchndlSetup()
 	{
 		_tcscat(szLogFileName, _T("EXCHNDL.RPT"));
 	}
+
+	atexit(ExchndlShutdown);
 }
 
 void ExchndlShutdown(void)
@@ -1164,4 +1192,6 @@ void ExchndlShutdown(void)
 		SetUnhandledExceptionFilter(prevExceptionFilter);
 
 	prevExceptionFilter = NULL;
+	free(formattedVersionString);
+	formattedVersionString = NULL;
 }
