@@ -189,10 +189,11 @@ static void parse_args(int argc, char **argv)
 	if (argc < 2 + i)
 	{
 		fprintf(stderr, "Syntax: 3ds2wzm [-y] [-r] [-i] [-t] input_filename output_filename\n");
-		fprintf(stderr, "  -y  Do not swap Y and Z axis. Exporter uses Y-axis as \"up\".\n");
-		fprintf(stderr, "  -r  Do not reverse winding of all polygons.\n");
-		fprintf(stderr, "  -i  Do not invert the vertical texture coordinates.\n");
-		fprintf(stderr, "  -t  Use two sided polygons (slower; unused in WRP).\n");
+		fprintf(stderr, "  -y    Do not swap Y and Z axis. Exporter uses Y-axis as \"up\".\n");
+		fprintf(stderr, "  -r    Do not reverse winding of all polygons.\n");
+		fprintf(stderr, "  -i    Do not invert the vertical texture coordinates.\n");
+		fprintf(stderr, "  -t    Use two sided polygons (slower; deprecated).\n");
+		fprintf(stderr, "  -s N  Scale model points by N before converting.\n");
 		exit(1);
 	}
 	input_file = argv[i++];
