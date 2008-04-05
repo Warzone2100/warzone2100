@@ -189,9 +189,17 @@
 			<Option target="NDBGWindows" />
 		</Unit>
 		<Unit filename="lib/exceptionhandler/exceptionhandler.h">
-			<Option compilerVar="CC" />
 			<Option target="DBGUnix" />
 			<Option target="NDBGUnix" />
+			<Option target="DBGWindows" />
+			<Option target="NDBGWindows" />
+		</Unit>
+		<Unit filename="lib/exceptionhandler/exchndl.c">
+			<Option compilerVar="CC" />
+			<Option target="DBGWindows" />
+			<Option target="NDBGWindows" />
+		</Unit>
+		<Unit filename="lib/exceptionhandler/exchndl.h">
 			<Option target="DBGWindows" />
 			<Option target="NDBGWindows" />
 		</Unit>
