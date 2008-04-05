@@ -161,7 +161,6 @@
 #define NOT_PLAYED_TEN          0x10
 #define NOT_PLAYED_ACTIVATED    0x20
 
-
 MISSION		mission;
 
 BOOL		offWorldKeepLists;
@@ -174,11 +173,6 @@ only be selectedPlayer's droids but have possibility for MAX_PLAYERS -
 also saves writing out list functions to cater for just one player*/
 DROID       *apsLimboDroids[MAX_PLAYERS];
 
-
-/**********TEST************/
-//static  UDWORD      addCount = 0;
-
-//STATICS***************
 //Where the Transporter lands for player 0 (sLandingZone[0]), and the rest are
 //a list of areas that cannot be built on, used for landing the enemy transporters
 static LANDING_ZONE		sLandingZone[MAX_NOGO_AREAS];
@@ -192,11 +186,9 @@ static BOOL				g_bMissionResult;
 // return positions for vtols
 Vector2i asVTOLReturnPos[MAX_PLAYERS];
 
-
 static UBYTE   missionCountDown;
 //flag to indicate whether the coded mission countdown is played
 static UBYTE   bPlayCountDown;
-
 
 //FUNCTIONS**************
 static void addLandingLights( UDWORD x, UDWORD y);
@@ -229,34 +221,19 @@ static void adjustMissionPower(void);
 static void saveMissionPower(void);
 static UDWORD getHomeLandingX(void);
 static UDWORD getHomeLandingY(void);
-void swapMissionPointers(void);
 static void fillTimeDisplay(char	*psText, UDWORD time, BOOL bHours);
 static void processPreviousCampDroids(void);
 static BOOL intAddTransporterTimer(void);
 static void clearCampaignUnits(void);
-
 static void emptyTransporters(BOOL bOffWorld);
 
-//result screen functions
-BOOL intAddMissionResult(BOOL result, BOOL bPlaySucess);
-//void intRemoveMissionResult			(void);
-//void intRemoveMissionResultNoAnim	(void);
-//void intRunMissionResult			(void);
-//void intProcessMissionResult		(UDWORD id);
-
-BOOL MissionResUp		= false;
+BOOL MissionResUp	= false;
 BOOL ClosingMissionRes	= false;
 
 static SDWORD		g_iReinforceTime = 0;
-//static DROID_GROUP	*g_CurrentScriptGroup = NULL;
 
 /* Which campaign are we dealing with? */
 static	UDWORD	camNumber = 1;
-
-//static iSprite *pMissionBackDrop; //pointer to backdrop piccy
-
-
-
 
 
 //returns true if on an off world mission
@@ -328,7 +305,6 @@ void initMission(void)
 		mission.apsStructLists[inc] = NULL;
 		mission.apsDroidLists[inc] = NULL;
 		mission.apsFeatureLists[inc] = NULL;
-		//mission.apsProxDisp[inc] = NULL;
 		mission.apsFlagPosLists[inc] = NULL;
 		apsLimboDroids[inc] = NULL;
 	}
@@ -410,7 +386,6 @@ BOOL missionShutDown(void)
 			mission.apsStructLists[inc] = NULL;
 			apsFeatureLists[inc] = mission.apsFeatureLists[inc];
 			mission.apsFeatureLists[inc] = NULL;
-			//apsProxDisp[inc] = mission.apsProxDisp[inc];
 			apsFlagPosLists[inc] = mission.apsFlagPosLists[inc];
 			mission.apsFlagPosLists[inc] = NULL;
 		}
@@ -924,7 +899,6 @@ void saveMissionData(void)
 		mission.apsStructLists[inc] = apsStructLists[inc];
 		mission.apsDroidLists[inc] = apsDroidLists[inc];
 		mission.apsFeatureLists[inc] = apsFeatureLists[inc];
-		//mission.apsProxDisp[inc] = apsProxDisp[inc];
 		mission.apsFlagPosLists[inc] = apsFlagPosLists[inc];
 	}
 
@@ -970,10 +944,6 @@ void restoreMissionData(void)
 	freeAllFeatures();
 	gwShutDown();
 	mapShutdown();
-//	free(psMapTiles);
-	//free(aMapLinePoints);
-	//releaseAllProxDisp();
-	//flag positions go with structs
 
 	//restore the game pointers
 	for (inc = 0; inc < MAX_PLAYERS; inc++)
@@ -1002,8 +972,6 @@ void restoreMissionData(void)
 
 		apsFlagPosLists[inc] = mission.apsFlagPosLists[inc];
 		mission.apsFlagPosLists[inc] = NULL;
-		//apsProxDisp[inc] = mission.apsProxDisp[inc];
-		//mission.apsProxDisp[inc] = NULL;
 		//asPower[inc].usedPower = mission.usedPower[inc];
 		//init the next structure to be powered
 		asPower[inc].psLastPowered = NULL;
