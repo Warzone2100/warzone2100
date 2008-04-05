@@ -1,4 +1,4 @@
-AM_CPPFLAGS = $(WZ_CPPFLAGS)
+AM_CPPFLAGS = $(SDL_CFLAGS) $(WZ_CPPFLAGS)
 AM_CFLAGS = $(WZ_CFLAGS)
 noinst_LIBRARIES = libexceptionhandler.a
 noinst_HEADERS = exceptionhandler.h exchndl.h
