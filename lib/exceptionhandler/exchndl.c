@@ -639,7 +639,9 @@ BOOL StackBackTrace(HANDLE hProcess, HANDLE hThread, PCONTEXT pContext)
 	while ( 1 )
 	{
 		BOOL bSuccess = FALSE;
-		HMODULE hPrevModule = hModule;
+#ifdef HAVE_BFD
+		const HMODULE hPrevModule = hModule;
+#endif /* HAVE_BFD */
 		TCHAR szSymName[512] = _T("");
 		TCHAR szFileName[MAX_PATH] = _T("");
 		DWORD LineNumber = 0;
