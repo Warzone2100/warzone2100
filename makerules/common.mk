@@ -1,11 +1,11 @@
 %.o: %.rc
-	$(WINDRES) -o$@ $<
+	$(WINDRES) $(CPPFLAGS) -o$@ $<
 
 %.o: %.c
-	$(CC) $(CFLAGS) -c -o$@ $<
+	$(CC) $(CPPFLAGS) $(CFLAGS) -c -o$@ $<
 
 %.o: %.cpp
-	$(CXX) $(CXXFLAGS) -c -o$@ $<
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c -o$@ $<
 
 %.lex.c: %.l
 	$(FLEX) $(FLEXFLAGS) -o$@ $<
