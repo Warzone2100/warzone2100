@@ -25,6 +25,7 @@
 # include "dbghelp.h"
 # include "exchndl.h"
 
+static LPTOP_LEVEL_EXCEPTION_FILTER prevExceptionHandler = NULL;
 
 /**
  * Exception handling on Windows.
@@ -95,7 +96,10 @@ static LONG WINAPI windowsExceptionHandler(PEXCEPTION_POINTERS pExceptionInfo)
 		MessageBoxA( NULL, resultMessage, applicationName, MB_OK );
 	}
 
-	return EXCEPTION_CONTINUE_SEARCH;
+	if (prevExceptionHandler)
+		return prevExceptionHandler(pExceptionInfo);
+	else
+		return EXCEPTION_CONTINUE_SEARCH;
 }
 
 #elif defined(WZ_OS_UNIX) && !defined(WZ_OS_MAC)
@@ -585,7 +589,7 @@ void setupExceptionHandler(const char * programCommand)
 # if defined(WZ_CC_MINGW)
 	ExchndlSetup();
 # else
-	SetUnhandledExceptionFilter(windowsExceptionHandler);
+	prevExceptionHandler = SetUnhandledExceptionFilter(windowsExceptionHandler);
 # endif // !defined(WZ_CC_MINGW)
 #elif defined(WZ_OS_UNIX) && !defined(WZ_OS_MAC)
 	// Prepare 'which' command for popen
