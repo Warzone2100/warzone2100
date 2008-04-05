@@ -32,7 +32,7 @@ enum internal_types
 // A definition group
 typedef struct _define
 {
-	int16_t vm; //! value multiple
+	unsigned int vm; //! value multiple
 	uint8_t element; //! tag number
 	char vr[2]; //! value representation (type)
 	struct _define *parent;	//! parent group
@@ -127,7 +127,7 @@ void tf_print_nested_groups(unsigned int level, define_t *group)
 	{
 		debug(LOG_ERROR, "Group trace:");
 	}
-	debug(LOG_ERROR, "  #%u: %#04x %2.2s %5u default:%s", level, (unsigned int)group->element, group->vr, (unsigned int)group->vm, bool2string(group->defaultval));
+	debug(LOG_ERROR, "  #%u: %#04x %2.2s %5u default:%s", level, (unsigned int)group->element, group->vr, group->vm, bool2string(group->defaultval));
 
 	if (group->parent != NULL)
 	{
@@ -182,7 +182,7 @@ static bool scan_defines(define_t *node, define_t *group)
 			continue; // check empty lines and whitespace again
 		}
 
-		retval = sscanf(bufptr, "%x %2s %hd%n", &readelem, (char *)&vr, &node->vm, &count);
+		retval = sscanf(bufptr, "%x %2s %u%n", &readelem, (char *)&vr, &node->vm, &count);
 		node->element = readelem;
 		while (retval <= 0 && *bufptr != '\n' && *bufptr != '\0') /// TODO: WTF?
 		{
@@ -1276,7 +1276,7 @@ bool tagWriteString(element_t tag, const char *buffer)
 	size = strlen(buffer) + 1;
 	if (size > current->vm && current->vm != 0)
 	{
-		TF_ERROR("Given string is too long (size %d > limit %d)", (int)size, (int)current->vm);
+		TF_ERROR("Given string is too long (size %d > limit %u)", (int)size, current->vm);
 		return false;
 	}
 	(void) PHYSFS_writeUBE8(handle, TF_INT_U8_ARRAY);

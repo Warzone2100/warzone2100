@@ -42,11 +42,11 @@ bool tagOpenWrite(const char *definition, const char *datafile);
 bool tagOpenRead(const char *definition, const char *datafile);
 
 /** Clean up and close the tagfile system down. */
-void tagClose();
+void tagClose(void);
 
 /** Report last error, then zeroes the internal error variable. If it
  * returns false, there is no error. */
-bool tagGetError();
+bool tagGetError(void);
 
 /** Built-in unit test. */
 void tagTest(void);
@@ -60,7 +60,7 @@ bool tagWriteEnter(element_t tag, uint16_t elements);
 bool tagWriteLeave(element_t tag);
 
 /** Start writing a new instance of a group. */
-bool tagWriteNext();
+bool tagWriteNext(void);
 
 /* Write methods */
 bool tagWrite(element_t tag, uint32_t val);
@@ -83,7 +83,7 @@ void tagReadLeave(element_t tag);
 
 /** Start reading a new instance of a group. Returns false if no more entities
  * to read, which can be used for iteration, if desired. */
-bool tagReadNext();
+bool tagReadNext(void);
 
 /* Read methods */
 uint32_t tagRead(element_t tag);

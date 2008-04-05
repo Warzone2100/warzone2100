@@ -230,7 +230,7 @@ static void swap_charp(char** a, char** b)
 	*b = tmp;
 }
 
-static void PlayList_Shuffle()
+static void PlayList_Shuffle(void)
 {
 	if (playlist[current_track].shuffle)
 	{

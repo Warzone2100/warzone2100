@@ -63,7 +63,7 @@ static PHYSFS_file* pReadFile = NULL;
 			} \
 		}
 
-static inline int PHYSFS_getc()
+static inline int PHYSFS_getc(void)
 {
 	char read_char;
 

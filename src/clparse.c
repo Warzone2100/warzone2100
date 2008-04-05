@@ -81,7 +81,7 @@ typedef enum
 	CLI_SELFTEST,
 } CLI_OPTIONS;
 
-static const struct poptOption* getOptionsTable()
+static const struct poptOption* getOptionsTable(void)
 {
 	static const struct poptOption optionsTable[] =
 	{

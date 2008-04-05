@@ -109,7 +109,7 @@ extern PLAYER_RESEARCH*		asPlayerResList[MAX_PLAYERS];
 // ////////////////////////////////////////////////////////////////////////////
 // Local Prototypes
 
-static BOOL recvBeacon();
+static BOOL recvBeacon(void);
 static BOOL recvDestroyTemplate(void);
 static BOOL recvResearch(void);
 
@@ -1878,7 +1878,7 @@ BOOL msgStackFireTop(void)
 	return true;
 }
 
-static BOOL recvBeacon()
+static BOOL recvBeacon(void)
 {
 	int32_t sender, receiver,locX, locY;
 	char    msg[MAX_CONSOLE_STRING_LENGTH];

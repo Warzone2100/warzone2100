@@ -50,7 +50,7 @@ BOOL NETnull(void);
 BOOL NETstring(char *str, uint16_t maxlen);
 BOOL NETbin(char *str, uint16_t maxlen);
 
-PACKETDIR NETgetPacketDir();
+PACKETDIR NETgetPacketDir(void);
 
 #if defined(__cplusplus)
 template <typename EnumT>
