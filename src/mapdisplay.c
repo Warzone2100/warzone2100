@@ -51,13 +51,6 @@
 
 #define ROTATE_TIME	(2*GAME_TICKS_PER_SEC)
 
-/* ----------------------------------------------------------------------------------------- */
-
-#define MAX_INTEL_SHADES		20
-
-//colours used to 'paint' the background of 3D view
-UDWORD	intelColours[MAX_INTEL_SHADES];
-
 /* renders the Research IMDs into the surface - used by message display in
 Intelligence Map */
 void renderResearchToBuffer(RESEARCH *psResearch,
