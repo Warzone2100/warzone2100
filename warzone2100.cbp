@@ -181,6 +181,20 @@
 		<Unit filename="build_tools/autorevision/autorevision.cpp">
 			<Option target="AutoRevision" />
 		</Unit>
+		<Unit filename="lib/exceptionhandler/exceptionhandler.c">
+			<Option compilerVar="CC" />
+			<Option target="DBGUnix" />
+			<Option target="NDBGUnix" />
+			<Option target="DBGWindows" />
+			<Option target="NDBGWindows" />
+		</Unit>
+		<Unit filename="lib/exceptionhandler/exceptionhandler.h">
+			<Option compilerVar="CC" />
+			<Option target="DBGUnix" />
+			<Option target="NDBGUnix" />
+			<Option target="DBGWindows" />
+			<Option target="NDBGWindows" />
+		</Unit>
 		<Unit filename="lib/framework/SDL_framerate.c">
 			<Option compilerVar="CC" />
 			<Option target="DBGUnix" />
@@ -254,13 +268,6 @@
 			<Option target="NDBGWindows" />
 		</Unit>
 		<Unit filename="lib/framework/debug.h">
-			<Option target="DBGUnix" />
-			<Option target="NDBGUnix" />
-			<Option target="DBGWindows" />
-			<Option target="NDBGWindows" />
-		</Unit>
-		<Unit filename="lib/framework/exceptionhandler.c">
-			<Option compilerVar="CC" />
 			<Option target="DBGUnix" />
 			<Option target="NDBGUnix" />
 			<Option target="DBGWindows" />
