@@ -1,0 +1,8 @@
+MAKERULES=../../makerules
+include $(MAKERULES)/configure.mk
+
+SRC=exceptionhandler.c
+
+LIB=exceptionhandler
+
+include $(MAKERULES)/lib.mk

@@ -6,7 +6,6 @@ SRC=configfile.c \
 	cursors16.c \
 	cursors32.c \
 	debug.c \
-	exceptionhandler.c \
 	frame.c \
 	frameresource.c \
 	input.c \

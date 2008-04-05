@@ -179,6 +179,4 @@ static inline void endian_fract(float *fract) {
 # define endian_fract(x) ((void) (x))
 #endif
 
-void setupExceptionHandler(const char * programCommand);
-
 #endif

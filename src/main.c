@@ -64,6 +64,7 @@
 #include "lib/framework/input.h"
 #include "lib/framework/physfs_ext.h"
 #include "lib/framework/tagfile.h"
+#include "lib/exceptionhandler/exceptionhandler.h"
 
 #include "lib/gamelib/gtime.h"
 #include "lib/ivis_common/piestate.h"

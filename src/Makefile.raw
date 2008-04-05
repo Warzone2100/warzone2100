@@ -116,6 +116,7 @@ LIBS=../lib/libgamelib.a \
 	../lib/libsound.a \
 	../lib/libwidget.a \
 	../lib/libframework.a \
+	../lib/libexceptionhandler.a \
 	../lib/libsqlite3.a
 
 ifeq ($(strip $(PLATFORM)),windows)

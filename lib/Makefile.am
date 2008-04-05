@@ -1,4 +1,5 @@
 SUBDIRS = framework	\
+	exceptionhandler \
 	script		\
 	sequence	\
 	ivis_common	\
