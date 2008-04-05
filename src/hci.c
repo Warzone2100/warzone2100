@@ -185,6 +185,7 @@ BOOL Refreshing = false;
 #define IDOPT_DROID			1037		// The place droid button
 #define IDOPT_STRUCT		1038		// The place struct button
 #define IDOPT_FEATURE		1039		// The place feature button
+#define IDOPT_TILE		1040		// The place tile button
 
 /* Edit screen IDs */
 #define IDED_FORM			2000		// The edit form
@@ -289,14 +290,6 @@ BOOL				outlineTile = false;
 UDWORD				intLastWidget;
 
 INTMODE intMode;
-
-/* Which type of object is being displayed on the edit stats screen */
-enum _edit_obj_mode
-{
-	IED_DROID,		// Droids
-	IED_STRUCT,		// Structures
-	IED_FEATURE,	// Features
-} editObjMode;
 
 /* Status of the positioning for the object placement */
 enum _edit_pos_mode
@@ -1425,6 +1418,10 @@ static void intProcessOptions(UDWORD id)
 //			widgSetButtonState(psWScreen, IDRET_OPTIONS, 0);
 			break;
 			/* Close window buttons */
+		case IDOPT_TILE:
+			intRemoveOptions();
+			intMode = INT_NORMAL;
+			break;
 		case IDOPT_CLOSE:
 			intRemoveOptions();
 			intMode = INT_NORMAL;
@@ -4086,14 +4083,25 @@ BOOL intAddOptions(void)
 		return false;
 	}
 
-	/* Add the edit button */
+	/* Add the edit buttons */
 	sButInit.formID = IDOPT_FORM;
-	sButInit.id = IDOPT_EDIT;
-	sButInit.x = OPT_GAP;
-	sButInit.y = OPT_EDITY;
 	sButInit.width = OPT_BUTWIDTH;
 	sButInit.height = OPT_BUTHEIGHT;
+	sButInit.x = OPT_GAP;
+	sButInit.y = OPT_EDITY;
+	sButInit.id = IDOPT_TILE;
+	sButInit.pText = _("Tile");
+	sButInit.pTip = _("Place tiles on map");
+	if (!widgAddButton(psWScreen, &sButInit))
+	{
+		return false;
+	}
+
 #ifdef EDIT_OPTIONS
+	/* Open the edit window - whatever that is supposed to be */
+	sButInit.x = OPT_GAP;
+	sButInit.y = OPT_EDITY + OPT_BUTHEIGHT;
+	sButInit.id = IDOPT_EDIT;
 	sButInit.pText = "Edit";
 	sButInit.pTip = "Start Edit Mode";
 	if (!widgAddButton(psWScreen, &sButInit))
