@@ -5565,3 +5565,13 @@ BOOL droidOnMap(const DROID *psDroid)
 	return (worldOnMap(psDroid->sMove.fx, psDroid->sMove.fy)
 	        && worldOnMap(psDroid->pos.x, psDroid->pos.y));
 }
+
+/** Teleport a droid to a new position on the map */
+void droidSetPosition(DROID *psDroid, int x, int y)
+{
+	psDroid->pos.x = x;
+	psDroid->pos.y = y;
+	psDroid->pos.z = map_Height(psDroid->pos.x, psDroid->pos.y);
+	initDroidMovement(psDroid);
+	visTilesUpdate((BASE_OBJECT *)psDroid);
+}

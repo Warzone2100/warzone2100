@@ -407,6 +407,8 @@ BOOL droidCheckReferences(DROID *psVictimDroid);
 /** Check if droid is in a legal world position and is not on its way to drive off the map. */
 BOOL droidOnMap(const DROID *psDroid);
 
+void droidSetPosition(DROID *psDroid, int x, int y);
+
 #define droidSensorRange(_psDroid) objSensorRange((BASE_OBJECT *)_psDroid)
 #define droidSensorPower(_psDroid) objSensorPower((BASE_OBJECT *)_psDroid)
 #define droidJammerRange(_psDroid) objJammerRange((BASE_OBJECT *)_psDroid)

@@ -1365,6 +1365,7 @@ static void clearCampaignUnits(void)
 	{
 		orderDroid(psDroid, DORDER_STOP);
 		setDroidBase(psDroid, NULL);
+		CHECK_DROID(psDroid);
 	}
 }
 
@@ -1386,6 +1387,8 @@ static void processMission(void)
 		//remove out of stored list and add to current Droid list
 		if (droidRemove(psDroid, apsDroidLists))
 		{
+			int	x, y;
+
 			addDroid(psDroid, mission.apsDroidLists);
 			droidX = getHomeLandingX();
 			droidY = getHomeLandingY();
@@ -1394,15 +1397,15 @@ static void processMission(void)
 
 			pickRes = pickHalfATile(&droidX, &droidY,LOOK_FOR_EMPTY_TILE);
 			ASSERT(pickRes != NO_FREE_TILE, "processMission: Unable to find a free location" );
-			psDroid->pos.x = (UWORD)world_coord(droidX);
-			psDroid->pos.y = (UWORD)world_coord(droidY);
+			x = (UWORD)world_coord(droidX);
+			y = (UWORD)world_coord(droidY);
 			if (pickRes == HALF_FREE_TILE )
 			{
-				psDroid->pos.x += TILE_UNITS;
-				psDroid->pos.y += TILE_UNITS;
+				x += TILE_UNITS;
+				y += TILE_UNITS;
 			}
+			droidSetPosition(psDroid, x, y);
 			ASSERT(worldOnMap(psDroid->pos.x,psDroid->pos.y), "the droid is not on the map");
-			psDroid->pos.z = map_Height(psDroid->pos.x, psDroid->pos.y);
 			updateDroidOrientation(psDroid);
 			// Swap the droid and map pointers back again
 			swapMissionPointers();
@@ -1410,8 +1413,6 @@ static void processMission(void)
 			// This is mainly for VTOLs
 			setDroidBase(psDroid, NULL);
 			psDroid->cluster = 0;
-			// Initialise the movement data
-			initDroidMovement(psDroid);
 		}
 	}
 }
@@ -2006,10 +2007,6 @@ static void missionResetDroids(void)
 {
 	UDWORD			player;
 	DROID			*psDroid, *psNext;
-	STRUCTURE		*psStruct;
-	FACTORY			*psFactory = NULL;
-	BOOL			placed;
-	PICKTILE		pickRes;
 
 	debug(LOG_SAVEGAME, "missionResetDroids: called");
 
@@ -2022,7 +2019,7 @@ static void missionResetDroids(void)
 			// Reset order - unless constructor droid that is mid-build
 			if ((psDroid->droidType == DROID_CONSTRUCT
 			     || psDroid->droidType == DROID_CYBORG_CONSTRUCT)
-			    && (psStruct = (STRUCTURE*)orderStateObj(psDroid, DORDER_BUILD)))
+			    && orderStateObj(psDroid, DORDER_BUILD))
 			{
 				// Need to set the action time to ignore the previous mission time
 				psDroid->actionStarted = gameTime;
@@ -2042,21 +2039,25 @@ static void missionResetDroids(void)
 
 	for (psDroid = apsDroidLists[selectedPlayer]; psDroid != NULL; psDroid = psDroid->psNext)
 	{
+		BOOL	placed = false;
+
 		psNext = psDroid->psNext;
+
 		//for all droids that have never left home base
 		if (psDroid->pos.x == INVALID_XY && psDroid->pos.y == INVALID_XY)
 		{
-			UDWORD	x, y;
+			STRUCTURE	*psStruct = psDroid->psBaseStruct;
+			FACTORY		*psFactory = NULL;
 
-			psStruct = psDroid->psBaseStruct;
 			if (psStruct && StructIsFactory(psStruct))
 			{
 				psFactory = (FACTORY *)psStruct->pFunctionality;
 			}
-			placed = false;
 			//find a location next to the factory
 			if (psStruct)
 			{
+				PICKTILE	pickRes;
+				UDWORD		x, y;
 
 				// Use factory DP if one
 				if (psFactory->psAssemblyPoint)
@@ -2077,29 +2078,28 @@ static void missionResetDroids(void)
 				}
 				else
 				{
-					psDroid->pos.x = world_coord(x);
-					psDroid->pos.y = world_coord(y);
+					int wx = world_coord(x);
+					int wy = world_coord(y);
+
 					if (pickRes == HALF_FREE_TILE )
 					{
-						psDroid->pos.x += TILE_UNITS;
-						psDroid->pos.y += TILE_UNITS;
+						wx += TILE_UNITS;
+						wy += TILE_UNITS;
 					}
+					droidSetPosition(psDroid, wx, wy);
 					placed = true;
 				}
 			}
-			//if couldn't find the factory - hmmm
-			if (!psStruct)
+			else // if couldn't find the factory - try to place near HQ instead
 			{
-				//just stick them near the HQ
-				for (psStruct = apsStructLists[psDroid->player]; psStruct !=
-					NULL; psStruct = psStruct->psNext)
+				for (psStruct = apsStructLists[psDroid->player]; psStruct != NULL; psStruct = psStruct->psNext)
 				{
 					if (psStruct->pStructureType->type == REF_HQ)
 					{
-						// Use pickATile again...
-						x = map_coord(psStruct->pos.x);
-						y = map_coord(psStruct->pos.y);
-						pickRes = pickHalfATile(&x, &y, LOOK_FOR_EMPTY_TILE);
+						UDWORD		x = map_coord(psStruct->pos.x);
+						UDWORD		y = map_coord(psStruct->pos.y);
+						PICKTILE	pickRes = pickHalfATile(&x, &y, LOOK_FOR_EMPTY_TILE);
+
 						if (pickRes == NO_FREE_TILE )
 						{
 							ASSERT( false, "missionResetUnits: Unable to find a free location" );
@@ -2107,13 +2107,15 @@ static void missionResetDroids(void)
 						}
 						else
 						{
-							psDroid->pos.x = world_coord(x);
-							psDroid->pos.y = world_coord(y);
+							int wx = world_coord(x);
+							int wy = world_coord(y);
+
 							if (pickRes == HALF_FREE_TILE )
 							{
-								psDroid->pos.x += TILE_UNITS;
-								psDroid->pos.y += TILE_UNITS;
+								wx += TILE_UNITS;
+								wy += TILE_UNITS;
 							}
+							droidSetPosition(psDroid, wx, wy);
 							placed = true;
 						}
 						break;
@@ -2132,15 +2134,12 @@ static void missionResetDroids(void)
 					vanishDroid(psDroid);
 					continue;
 				}
-				// Set droid height
-				psDroid->pos.z = map_Height(psDroid->pos.x, psDroid->pos.y);
 
 				// People always stand upright
 				if (psDroid->droidType != DROID_PERSON && !cyborgDroid(psDroid))
 				{
 					updateDroidOrientation(psDroid);
 				}
-				visTilesUpdate((BASE_OBJECT *)psDroid);
 				// Reset the selected flag
 				psDroid->selected = false;
 			}
@@ -2206,9 +2205,7 @@ void unloadTransporter(DROID *psTransporter, UDWORD x, UDWORD y, BOOL goingHome)
 			{
 				ASSERT( false, "unloadTransporter: Unable to find a valid location" );
 			}
-			psDroid->pos.x = (UWORD)world_coord(droidX);
-			psDroid->pos.y = (UWORD)world_coord(droidY);
-			psDroid->pos.z = map_Height(psDroid->pos.x, psDroid->pos.y);
+			droidSetPosition(psDroid, world_coord(droidX), world_coord(droidY));
 			updateDroidOrientation(psDroid);
 			// a commander needs to get it's group back
 			if (psDroid->droidType == DROID_COMMAND)
@@ -2220,8 +2217,6 @@ void unloadTransporter(DROID *psTransporter, UDWORD x, UDWORD y, BOOL goingHome)
 				clearCommandDroidFactory(psDroid);
 			}
 
-			//initialise the movement data
-			initDroidMovement(psDroid);
 			//reset droid orders
 			orderDroid(psDroid, DORDER_STOP);
 			gridAddObject((BASE_OBJECT *)psDroid);
@@ -3636,9 +3631,6 @@ void moveDroidsToSafety(DROID *psTransporter)
     //move the transporter into the mission list also
     if (droidRemove(psTransporter, apsDroidLists))
     {
-		//cam change add droid - done in missionDroidUpdate()
-		//psDroid->pos.x = INVALID_XY;
-		//psDroid->pos.y = INVALID_XY;
         addDroid(psTransporter, mission.apsDroidLists);
     }
 }
