@@ -185,7 +185,11 @@ static inline void objTraceDisable(void) { traceID = 0; }
 #endif
 
 /** Dump last two debug log calls into given file descriptor. For exception handler. */
-void dumpLog(int filedesc);
+#if defined(WZ_OS_WIN)
+extern void dumpLog(HANDLE file);
+#else
+extern void dumpLog(int file);
+#endif
 
 /** Checks if a particular debub flag was enabled */
 extern bool debugPartEnabled(code_part codePart);
