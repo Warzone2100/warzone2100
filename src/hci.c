@@ -4588,11 +4588,9 @@ static BOOL intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,B
 				if (Droid->droidType == DROID_CONSTRUCT ||
                     Droid->droidType == DROID_CYBORG_CONSTRUCT)
 				{
-			   		ASSERT( Droid->asBits[COMP_CONSTRUCT].nStat,"intUpdateProgressBar: invalid droid type" );
+			   		ASSERT( Droid->asBits[COMP_CONSTRUCT].nStat,"intAddObjectWindow: invalid droid type" );
 					psStats = (BASE_STATS*)(asConstructStats + Droid->asBits[COMP_CONSTRUCT].nStat);
-					//sBarInit2.size = (UWORD)((CONSTRUCT_STATS*)psStats)->constructPoints;	// Need to scale? YEP!
-					sBarInit2.size = (UWORD)constructorPoints((CONSTRUCT_STATS*)psStats,
-						Droid->player);
+					sBarInit2.size = (UWORD)constructorPoints((CONSTRUCT_STATS*)psStats, Droid->player);
 					if (sBarInit2.size > WBAR_SCALE)
 					{
 						sBarInit2.size = WBAR_SCALE;

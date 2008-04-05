@@ -33,7 +33,7 @@
 
 
 #if defined(WZ_OS_WIN)
-const static struct
+static const struct
 {
 	const char * language;
 	const char * name;
@@ -54,7 +54,7 @@ const static struct
 #  endif
 };
 #else
-const static struct
+static const struct
 {
 	const char *language;
 	const char *name;

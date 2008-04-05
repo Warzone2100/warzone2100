@@ -55,7 +55,7 @@
 #include "projectile.h"
 
 static void unsetMatrix(void);
-static void setMatrix(Vector3i *Position, Vector3i *Rotation, Vector3i *CameraPos, BOOL RotXYZ);
+static void setMatrix(Vector3i *Position, Vector3i *Rotation, BOOL RotXYZ);
 
 #define BLIP_ANIM_DURATION			200
 #define	DEFAULT_COMPONENT_TRANSLUCENCY	128
@@ -128,7 +128,7 @@ void updateLightLevels(void)
 }
 
 
-static void setMatrix(Vector3i *Position, Vector3i *Rotation, Vector3i *CameraPos, BOOL RotXYZ)
+static void setMatrix(Vector3i *Position, Vector3i *Rotation, BOOL RotXYZ)
 {
 	pie_PerspectiveBegin();
    	pie_MatBegin();
@@ -251,9 +251,7 @@ UDWORD getStructureStatHeight(STRUCTURE_STATS *psStat)
 
 void displayIMDButton(iIMDShape *IMDShape, Vector3i *Rotation, Vector3i *Position, BOOL RotXYZ, SDWORD scale)
 {
-	Vector3i TmpCamPos = {0,0,0};
-
-	setMatrix(Position,Rotation,&TmpCamPos,RotXYZ);
+	setMatrix(Position, Rotation, RotXYZ);
 	pie_MatScale(scale);
 
 	pie_SetFogStatus(false);
@@ -269,7 +267,6 @@ void displayStructureButton(STRUCTURE *psStructure, Vector3i *Rotation, Vector3i
 	iIMDShape *mountImd[STRUCT_MAXWEAPS];
 	iIMDShape *weaponImd[STRUCT_MAXWEAPS];
 	UDWORD			nWeaponStat;
-	Vector3i TmpCamPos = {0,0,0};
 	int		i;
 
 	/*HACK HACK HACK!
@@ -281,9 +278,8 @@ void displayStructureButton(STRUCTURE *psStructure, Vector3i *Rotation, Vector3i
 		Position->y -= 20;
 	}
 
-	setMatrix(Position,Rotation,&TmpCamPos,RotXYZ);
+	setMatrix(Position, Rotation, RotXYZ);
 	pie_MatScale(scale);
-
 
 	/* Draw the building's base first */
 	baseImd = psStructure->pStructureType->pBaseIMD;
@@ -420,8 +416,6 @@ void displayStructureStatButton(STRUCTURE_STATS *Stats,UDWORD Player, Vector3i *
 	iIMDShape		*baseImd,*strImd;//*mountImd,*weaponImd;
 	iIMDShape *mountImd[STRUCT_MAXWEAPS];
 	iIMDShape *weaponImd[STRUCT_MAXWEAPS];
-	Vector3i TmpCamPos = {0,0,0};
-	//UDWORD			nWeaponStat;
 	UBYTE	i;
 
 	/*HACK HACK HACK!
@@ -433,7 +427,7 @@ void displayStructureStatButton(STRUCTURE_STATS *Stats,UDWORD Player, Vector3i *
 		Position->y -= 20;
 	}
 
-	setMatrix(Position,Rotation,&TmpCamPos,RotXYZ);
+	setMatrix(Position, Rotation, RotXYZ);
 	pie_MatScale(scale);
 
 	/* Draw the building's base first */
@@ -584,9 +578,8 @@ void displayComponentButton(BASE_STATS *Stat, Vector3i *Rotation, Vector3i *Posi
 	iIMDShape *ComponentIMD = NULL;
 	iIMDShape *MountIMD = NULL;
 	SDWORD compID;
-	Vector3i TmpCamPos = {0,0,0};
 
-	setMatrix(Position,Rotation,&TmpCamPos,RotXYZ);
+	setMatrix(Position, Rotation, RotXYZ);
 	pie_MatScale(scale);
 
 	compID = StatIsComponent(Stat);
@@ -626,11 +619,10 @@ void displayResearchButton(BASE_STATS *Stat, Vector3i *Rotation, Vector3i *Posit
 {
 	iIMDShape *ResearchIMD = ((RESEARCH *)Stat)->pIMD;
 	iIMDShape *MountIMD = ((RESEARCH *)Stat)->pIMD2;
-	Vector3i TmpCamPos = {0,0,0};
 
 	if(ResearchIMD)
 	{
-		setMatrix(Position,Rotation,&TmpCamPos,RotXYZ);
+		setMatrix(Position, Rotation, RotXYZ);
 		pie_MatScale(scale);
 
 		if(MountIMD) {
@@ -654,12 +646,11 @@ void displayComponentButtonTemplate(DROID_TEMPLATE *psTemplate, Vector3i *Rotati
 {
 	static DROID Droid;	// Made static to reduce stack usage.
 	SDWORD difference;
- 	Vector3i TmpCamPos = {0,0,0};
 
 	/* init to NULL */
 	memset( &Droid, 0, sizeof(DROID) );
 
-	setMatrix(Position,Rotation,&TmpCamPos,RotXYZ);
+	setMatrix(Position, Rotation, RotXYZ);
 	pie_MatScale(scale);
 
 // Decide how to sort it.
@@ -693,9 +684,8 @@ void displayComponentButtonTemplate(DROID_TEMPLATE *psTemplate, Vector3i *Rotati
 void displayComponentButtonObject(DROID *psDroid, Vector3i *Rotation, Vector3i *Position, BOOL RotXYZ, SDWORD scale)
 {
 	SDWORD		difference;
- 	Vector3i TmpCamPos = {0,0,0};
 
-	setMatrix(Position,Rotation,&TmpCamPos,RotXYZ);
+	setMatrix(Position, Rotation, RotXYZ);
 	pie_MatScale(scale);
 
 // Decide how to sort it.
