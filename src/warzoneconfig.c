@@ -83,7 +83,7 @@ void war_SetDefaultStates(void)//Sets all states
 	war_SetPlayAudioCDs(true);
 	war_setSoundEnabled( true );
 	war_SetPauseOnFocusLoss(true);
-	war_SetColouredCursor(true);
+	war_SetColouredCursor(false);
 }
 
 void war_SetPlayAudioCDs(BOOL b) {
