@@ -13,6 +13,15 @@
   04 FP 03  -       # RETIRED (had unknown usage)
   05 US 500 -       # Long unsigned byte array
   06 US 500 -       # Long unsigned byte array
+  07 GR 00 -        # Write-only group
+    01 US 01 0      # Simple value
+    02 US 01 0      # Simple value
+    03 GR 00 -      # Another nested group
+      01 US 01 0    # Default value
+      FF EN 00 -
+    FF EN 00 -
+  08 GR 00 -        # Empty group
+    FF EN 00 -
   09 GR 00  -       # Droid weapon group
     01 US 01  -     # Weapon type
     02 US 01 10     # Ammo left

@@ -372,7 +372,7 @@ bool tagGetError()
 }
 
 
-// skip ahead to given element
+// skip ahead in definition list to given element
 static bool scan_to(element_t tag)
 {
 	if (tag == TAG_SEPARATOR)
@@ -407,6 +407,7 @@ static bool scanforward(element_t tag)
 	uint8_t tag_type;
 	PHYSFS_sint64 readsize = 0, fpos;
 	uint16_t array_size;
+	int groupskip = 0;	// levels of nested groups to skip
 
 	assert(readmode);
 	if (tag_error || current == NULL || !readmode)
@@ -422,17 +423,24 @@ static bool scanforward(element_t tag)
 	readsize = PHYSFS_read(handle, &read_tag, 1, 1);
 	while (readsize == 1) // Read from file till we've reached the destination
 	{
-		if (read_tag == tag)
+		if (read_tag == tag && groupskip <= 0)
 		{
 			assert(current->element == tag || tag == TAG_SEPARATOR);
 			return true;
 		}
-		else if (read_tag == TAG_GROUP_END
-			 || read_tag == TAG_SEPARATOR
-			 || read_tag > tag)
+		else if (read_tag == TAG_GROUP_END || read_tag == TAG_SEPARATOR)
 		{
-			// did not find it
-			break;
+			if (read_tag == TAG_GROUP_END)
+			{
+				groupskip--;
+			}
+			/* New element ready already, repeat loop */
+			readsize = PHYSFS_read(handle, &read_tag, 1, 1);
+			continue;	// no type, no payload
+		}
+		else if (read_tag > tag && groupskip <= 0)
+		{
+			break;	// did not find it
 		}
 
 		/* If we got down here, we found something that we need to skip */
@@ -452,10 +460,9 @@ static bool scanforward(element_t tag)
 		case TF_INT_FLOAT_ARRAY:
 		case TF_INT_U8_ARRAY:
 		case TF_INT_S32_ARRAY:
-			readsize = PHYSFS_read(handle, &array_size, 1, 1);
-			if (readsize != 1)
+			if (!PHYSFS_readUBE16(handle, &array_size))
 			{
-				TF_ERROR("Error reading tag length when skipping: %s", PHYSFS_getLastError());
+				TF_ERROR("Error reading array length when skipping: %s", PHYSFS_getLastError());
 				return false;
 			}
 			break;
@@ -477,7 +484,7 @@ static bool scanforward(element_t tag)
 		case TF_INT_U32:
 		case TF_INT_S32_ARRAY:
 		case TF_INT_S32: fpos += 4 * array_size; break;
-		case TF_INT_GROUP: fpos += 2; break;
+		case TF_INT_GROUP: fpos += 2; groupskip++; break;
 		default:
 			TF_ERROR("Invalid value type in buffer");
 			return false;
@@ -1305,7 +1312,6 @@ void tagTest()
 	// Set our testing blob to a bunch of 0x01 bytes
 	memset(blob, 1, BLOB_SIZE); // 1111111...
 
-
 	tagOpenWrite(virtual_definition, writename);
 	tagWrites(0x05, 11);
 	tagWriteString(0x06, cformat);
@@ -1337,6 +1343,15 @@ void tagTest()
 		tagWritefv(0x03, 3, fv);
 		tagWrite8v(0x05, BLOB_SIZE, blob);
 		tagWrite8v(0x06, BLOB_SIZE, blob);
+		tagWriteEnter(0x07, 1);		// group to test skipping
+			tagWrite(0x01, 0);	// using default
+			tagWrite(0x02, 1);
+			tagWriteEnter(0x03, 1);
+			tagWriteLeave(0x03);
+		tagWriteLeave(0x07);
+		tagWriteEnter(0x08, 1);
+			// empty, skipped group
+		tagWriteLeave(0x08);
 		tagWriteEnter(0x09, 1);
 		{
 			int32_t v[3] = { -1, 0, 1 };
