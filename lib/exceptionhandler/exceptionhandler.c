@@ -1,7 +1,6 @@
 /*
 	This file is part of Warzone 2100.
-	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2007  Warzone Resurrection Project
+	Copyright (C) 2007-2008  Warzone Resurrection Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -17,13 +16,16 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-#include "frame.h"
 
+#include "lib/framework/frame.h"
+#include "exceptionhandler.h"
 
 #if defined(WZ_OS_WIN)
 
 # include "dbghelp.h"
+# include "exchndl.h"
 
+static LPTOP_LEVEL_EXCEPTION_FILTER prevExceptionHandler = NULL;
 
 /**
  * Exception handling on Windows.
@@ -63,7 +65,7 @@ static LONG WINAPI windowsExceptionHandler(PEXCEPTION_POINTERS pExceptionInfo)
 		{
 			MINIDUMP_USER_STREAM uStream = { LastReservedStream+1, strlen(PACKAGE_VERSION), PACKAGE_VERSION };
 			MINIDUMP_USER_STREAM_INFORMATION uInfo = { 1, &uStream };
-			MINIDUMP_EXCEPTION_INFORMATION eInfo = { GetCurrentThreadId(), pExceptionInfo, FALSE };
+			MINIDUMP_EXCEPTION_INFORMATION eInfo = { GetCurrentThreadId(), pExceptionInfo, false };
 
 			if ( MiniDumpWriteDump(
 				 	GetCurrentProcess(),
@@ -94,7 +96,10 @@ static LONG WINAPI windowsExceptionHandler(PEXCEPTION_POINTERS pExceptionInfo)
 		MessageBoxA( NULL, resultMessage, applicationName, MB_OK );
 	}
 
-	return EXCEPTION_CONTINUE_SEARCH;
+	if (prevExceptionHandler)
+		return prevExceptionHandler(pExceptionInfo);
+	else
+		return EXCEPTION_CONTINUE_SEARCH;
 }
 
 #elif defined(WZ_OS_UNIX) && !defined(WZ_OS_MAC)
@@ -135,7 +140,7 @@ static struct sigaction oldAction[NSIG];
 
 
 static struct utsname sysInfo;
-static BOOL gdbIsAvailable = FALSE, programIsAvailable = FALSE, sysInfoValid = FALSE;
+static BOOL gdbIsAvailable = false, programIsAvailable = false, sysInfoValid = false;
 static char
 	executionDate[MAX_DATE_STRING] = {'\0'},
 	programPID[MAX_PID_STRING] = {'\0'},
@@ -507,9 +512,8 @@ static void posixExceptionHandler(int signum, siginfo_t * siginfo, WZ_DECL_UNUSE
 			pid = fork();
 			if (pid == (pid_t)0)
 			{
-				const char
-					* gdbArgv[] = { gdbPath, programPath, programPID, NULL },
-					* gdbEnv[] = {NULL};
+				char *gdbArgv[] = { gdbPath, programPath, programPID, NULL };
+				char *gdbEnv[] = { NULL };
 
 				close(gdbPipe[1]); // No output to pipe
 
@@ -519,7 +523,7 @@ static void posixExceptionHandler(int signum, siginfo_t * siginfo, WZ_DECL_UNUSE
 				write(dumpFile, "GDB extended backtrace:\n",
 					  strlen("GDB extended backtrace:\n"));
 
-				execve(gdbPath, (char**)gdbArgv, (char**)gdbEnv);
+				execve(gdbPath, (char **)gdbArgv, (char **)gdbEnv);
 			}
 			else if (pid > (pid_t)0)
 			{
@@ -582,7 +586,11 @@ static void posixExceptionHandler(int signum, siginfo_t * siginfo, WZ_DECL_UNUSE
 void setupExceptionHandler(const char * programCommand)
 {
 #if defined(WZ_OS_WIN)
-	SetUnhandledExceptionFilter(windowsExceptionHandler);
+# if defined(WZ_CC_MINGW)
+	ExchndlSetup();
+# else
+	prevExceptionHandler = SetUnhandledExceptionFilter(windowsExceptionHandler);
+# endif // !defined(WZ_CC_MINGW)
 #elif defined(WZ_OS_UNIX) && !defined(WZ_OS_MAC)
 	// Prepare 'which' command for popen
 	char whichProgramCommand[PATH_MAX] = {'\0'};
@@ -596,7 +604,7 @@ void setupExceptionHandler(const char * programCommand)
 	// Were we able to find ourselves?
 	if (strlen(programPath) > 0)
 	{
-		programIsAvailable = TRUE;
+		programIsAvailable = true;
 		*(strrchr(programPath, '\n')) = '\0'; // `which' adds a \n which confuses exec()
 		debug(LOG_WZ, "Found us at %s", programPath);
 	}
@@ -613,7 +621,7 @@ void setupExceptionHandler(const char * programCommand)
 	// Did we find GDB?
 	if (strlen(gdbPath) > 0)
 	{
-		gdbIsAvailable = TRUE;
+		gdbIsAvailable = true;
 		*(strrchr(gdbPath, '\n')) = '\0'; // `which' adds a \n which confuses exec()
 		debug(LOG_WZ, "Found gdb at %s", gdbPath);
 	}

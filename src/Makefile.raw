@@ -115,7 +115,8 @@ LIBS=../lib/libgamelib.a \
 	../lib/libsequence.a \
 	../lib/libsound.a \
 	../lib/libwidget.a \
-	../lib/libframework.a
+	../lib/libframework.a \
+	../lib/libexceptionhandler.a
 
 ifeq ($(strip $(PLATFORM)),windows)
 LIBS += ../win32/warzone2100.o

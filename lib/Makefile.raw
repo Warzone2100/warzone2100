@@ -1,4 +1,5 @@
 SUBDIRS=framework \
+	exceptionhandler \
 	gamelib \
 	ivis_common \
 	ivis_opengl \

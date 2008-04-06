@@ -198,8 +198,6 @@ static inline void endian_fract(float *fract) {
 # define endian_fract(x) ((void) (x))
 #endif
 
-void setupExceptionHandler(const char * programCommand);
-
 #define PHYSFS_APPEND 1
 #define PHYSFS_PREPEND 0
 

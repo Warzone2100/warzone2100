@@ -261,6 +261,7 @@ AC_CONFIG_FILES([Makefile
 		win32/Makefile
 		lib/Makefile
 		lib/framework/Makefile
+		lib/exceptionhandler/Makefile
 		lib/gamelib/Makefile
 		lib/ivis_opengl/Makefile
 		lib/ivis_common/Makefile

@@ -15,7 +15,7 @@ noinst_HEADERS = configfile.h cursors.h cursors16.h debug.h frame.h frameint.h \
 	strlfuncs.h strnlen1.h strres.h strresly.h treap.h treapint.h trig.h \
 	types.h tagfile.h i18n.h
 
-libframework_a_SOURCES = SDL_framerate.c configfile.c debug.c exceptionhandler.c \
-	frame.c frameresource.c input.c printf_ext.c resource_lexer.lex.c \
+libframework_a_SOURCES = SDL_framerate.c configfile.c debug.c frame.c \
+	frameresource.c input.c printf_ext.c resource_lexer.lex.c \
 	resource_parser.tab.c strnlen1.c strres.c strres_lexer.lex.c \
 	strres_parser.tab.c treap.c trig.c tagfile.c i18n.c

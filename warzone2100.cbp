@@ -36,7 +36,6 @@
 					<Add library="pthread" />
 					<Add library="GL" />
 					<Add library="GLU" />
-					<Add library="GLC" />
 					<Add library="openal" />
 				</Linker>
 				<ExtraCommands>
@@ -63,7 +62,6 @@
 					<Add library="pthread" />
 					<Add library="GL" />
 					<Add library="GLU" />
-					<Add library="GLC" />
 					<Add library="openal" />
 					<Add option="-s" />
 				</Linker>
@@ -96,11 +94,16 @@
 					<Add library="gdi32" />
 					<Add library="opengl32" />
 					<Add library="glu32" />
-					<Add library="glc32" />
 					<Add library="openal32" />
 					<Add library="dbghelp" />
 					<Add library="winmm" />
 					<Add library="wsock32" />
+					<Add library="freetype" />
+					<Add library="fontconfig" />
+					<Add library="expat" />
+					<Add library="iconv" />
+					<Add library="bfd" />
+					<Add library="iberty" />
 					<Add directory="$(#warzone_devpkg.lib)" />
 				</Linker>
 				<ExtraCommands>
@@ -116,6 +119,7 @@
 				<Option parameters="--datadir data" />
 				<Compiler>
 					<Add option="-O2" />
+					<Add option="-g" />
 					<Add option="-DNDEBUG" />
 					<Add option='-DPACKAGE_VERSION=\&quot;TRUNK\&quot;' />
 					<Add option='-DLOCALEDIR=\&quot;\&quot;' />
@@ -132,11 +136,16 @@
 					<Add library="gdi32" />
 					<Add library="opengl32" />
 					<Add library="glu32" />
-					<Add library="glc32" />
 					<Add library="openal32" />
 					<Add library="dbghelp" />
 					<Add library="winmm" />
 					<Add library="wsock32" />
+					<Add library="freetype" />
+					<Add library="fontconfig" />
+					<Add library="expat" />
+					<Add library="iconv" />
+					<Add library="bfd" />
+					<Add library="iberty" />
 					<Add directory="$(#warzone_devpkg.lib)" />
 					<Add option="-s" />
 				</Linker>
@@ -170,9 +179,32 @@
 			<Add library="vorbisfile" />
 			<Add library="vorbis" />
 			<Add library="ogg" />
+			<Add library="GLC" />
 		</Linker>
 		<Unit filename="build_tools\autorevision\autorevision.cpp">
 			<Option target="AutoRevision" />
+		</Unit>
+		<Unit filename="lib/exceptionhandler/exceptionhandler.c">
+			<Option compilerVar="CC" />
+			<Option target="DBGUnix" />
+			<Option target="NDBGUnix" />
+			<Option target="DBGWindows" />
+			<Option target="NDBGWindows" />
+		</Unit>
+		<Unit filename="lib/exceptionhandler/exceptionhandler.h">
+			<Option target="DBGUnix" />
+			<Option target="NDBGUnix" />
+			<Option target="DBGWindows" />
+			<Option target="NDBGWindows" />
+		</Unit>
+		<Unit filename="lib/exceptionhandler/exchndl.c">
+			<Option compilerVar="CC" />
+			<Option target="DBGWindows" />
+			<Option target="NDBGWindows" />
+		</Unit>
+		<Unit filename="lib/exceptionhandler/exchndl.h">
+			<Option target="DBGWindows" />
+			<Option target="NDBGWindows" />
 		</Unit>
 		<Unit filename="lib/framework/SDL_framerate.c">
 			<Option compilerVar="CC" />
@@ -232,13 +264,6 @@
 			<Option target="NDBGWindows" />
 		</Unit>
 		<Unit filename="lib/framework/debug.h">
-			<Option target="DBGUnix" />
-			<Option target="NDBGUnix" />
-			<Option target="DBGWindows" />
-			<Option target="NDBGWindows" />
-		</Unit>
-		<Unit filename="lib/framework/exceptionhandler.c">
-			<Option compilerVar="CC" />
 			<Option target="DBGUnix" />
 			<Option target="NDBGUnix" />
 			<Option target="DBGWindows" />
