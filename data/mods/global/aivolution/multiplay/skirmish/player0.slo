@@ -843,12 +843,6 @@ function void oneTimeInitialize(bool bAIControlled)
 		bigMap = true;
 	}
 
-	/* only change name if not human */
-	if(not isHumanPlayer(me))
-	{
-		setPlayerName(me, myName);
-	}
-
 	fixGroups();
 
 	//assign all dorids to an approriate group
@@ -1273,6 +1267,12 @@ function void mainInitialize()
 {
 	bRunning = TRUE;	//remember this AI is active
 
+	/* only change name if not human */
+	if(not isHumanPlayer(me))
+	{
+		setPlayerName(me, myName);
+	}
+	
 	reInitialize();		//assign variables
 	showVersion();
 	startEnemyScout();
