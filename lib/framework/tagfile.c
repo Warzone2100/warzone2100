@@ -428,19 +428,19 @@ static bool scanforward(element_t tag)
 			assert(current->element == tag || tag == TAG_SEPARATOR);
 			return true;
 		}
-		else if (read_tag == TAG_GROUP_END || read_tag == TAG_SEPARATOR)
+		else if (read_tag == TAG_GROUP_END || (read_tag == TAG_SEPARATOR && groupskip > 0))
 		{
+			/* New element ready already, repeat loop */
 			if (read_tag == TAG_GROUP_END)
 			{
 				groupskip--;
 			}
-			/* New element ready already, repeat loop */
 			readsize = PHYSFS_read(handle, &read_tag, 1, 1);
 			continue;	// no type, no payload
 		}
-		else if (read_tag > tag && groupskip <= 0)
+		else if (read_tag == TAG_SEPARATOR || (read_tag > tag && groupskip <= 0 && tag != TAG_SEPARATOR))
 		{
-			break;	// did not find it
+			break; // did not find it
 		}
 
 		/* If we got down here, we found something that we need to skip */
@@ -1348,6 +1348,14 @@ void tagTest()
 			tagWrite(0x02, 1);
 			tagWriteEnter(0x03, 1);
 			tagWriteLeave(0x03);
+			tagWriteNext();
+			tagWrite(0x01, 1);
+			tagWrite(0x02, 0);
+			tagWriteEnter(0x03, 1);
+				tagWrite(0x01, 1);
+				tagWriteNext();
+			tagWriteLeave(0x03);
+			// deliberately no 'next' here
 		tagWriteLeave(0x07);
 		tagWriteEnter(0x08, 1);
 			// empty, skipped group
