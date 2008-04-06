@@ -71,8 +71,10 @@ extern BOOL audioPaused(void);
 extern BOOL scriptPaused(void);
 extern BOOL scrollPaused(void);
 extern BOOL consolePaused(void);
+extern BOOL editPaused(void);
 
 extern void setGameUpdatePause(BOOL state);
+extern void setEditPause(bool state);
 extern void setAudioPause(BOOL state);
 extern void setScriptPause(BOOL state);
 extern void setScrollPause(BOOL state);

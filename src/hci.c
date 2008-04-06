@@ -77,6 +77,7 @@
 //#define EDIT_OPTIONS
 
 static UDWORD		newMapWidth, newMapHeight;
+static bool		editPause = false;
 
 #define RETXOFFSET (0)// Reticule button offset
 #define RETYOFFSET (0)
@@ -186,6 +187,7 @@ BOOL Refreshing = false;
 #define IDOPT_STRUCT		1038		// The place struct button
 #define IDOPT_FEATURE		1039		// The place feature button
 #define IDOPT_TILE		1040		// The place tile button
+#define IDOPT_PAUSE		1041		// The edit pause button
 
 /* Edit screen IDs */
 #define IDED_FORM			2000		// The edit form
@@ -1356,6 +1358,9 @@ static void intProcessOptions(UDWORD id)
 			intGetMapSize();
 			if (mapNew(newMapWidth, newMapHeight))
 			{
+				// Set pause
+				editPause = true;
+				setEditPause(true);
 				/* Managed to create a new map so quit the option screen */
 				intRemoveOptions();
 				intMode = INT_NORMAL;
@@ -1421,6 +1426,20 @@ static void intProcessOptions(UDWORD id)
 		case IDOPT_TILE:
 			intRemoveOptions();
 			intMode = INT_NORMAL;
+			break;
+		case IDOPT_PAUSE:
+			if (editPause)
+			{
+				widgSetButtonState(psWScreen, IDOPT_PAUSE, 0);
+				editPause = false;
+				setEditPause(false);
+			}
+			else
+			{
+				widgSetButtonState(psWScreen, IDOPT_PAUSE, WBUT_CLICKLOCK);
+				editPause = true;
+				setEditPause(true);
+			}
 			break;
 		case IDOPT_CLOSE:
 			intRemoveOptions();
@@ -4097,19 +4116,6 @@ BOOL intAddOptions(void)
 		return false;
 	}
 
-#ifdef EDIT_OPTIONS
-	/* Open the edit window - whatever that is supposed to be */
-	sButInit.x = OPT_GAP;
-	sButInit.y = OPT_EDITY + OPT_BUTHEIGHT;
-	sButInit.id = IDOPT_EDIT;
-	sButInit.pText = "Edit";
-	sButInit.pTip = "Start Edit Mode";
-	if (!widgAddButton(psWScreen, &sButInit))
-	{
-		return false;
-	}
-#endif
-
 	/* Add the add object buttons */
 	sButInit.id = IDOPT_DROID;
 	sButInit.x += OPT_GAP + OPT_BUTWIDTH;
@@ -4137,6 +4143,33 @@ BOOL intAddOptions(void)
 	{
 		return false;
 	}
+
+	/* Edit pause */
+	sButInit.x = OPT_GAP;
+	sButInit.y = OPT_EDITY + OPT_BUTHEIGHT + OPT_GAP;
+	sButInit.id = IDOPT_PAUSE;
+	sButInit.pText = "Pause";
+	sButInit.pTip = _("Pause or unpause the game");
+	if (!widgAddButton(psWScreen, &sButInit))
+	{
+		return false;
+	}
+	if (editPause)
+	{
+		widgSetButtonState(psWScreen, IDOPT_PAUSE, WBUT_CLICKLOCK);
+	}
+
+#ifdef EDIT_OPTIONS
+	/* Open the edit window - whatever that is supposed to be */
+	sButInit.x += OPT_GAP;
+	sButInit.id = IDOPT_EDIT;
+	sButInit.pText = "Edit";
+	sButInit.pTip = "Start Edit Mode";
+	if (!widgAddButton(psWScreen, &sButInit))
+	{
+		return false;
+	}
+#endif
 
 	/* Add the quit button */
 	sButInit.formID = IDOPT_FORM;

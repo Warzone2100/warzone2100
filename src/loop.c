@@ -42,7 +42,6 @@
 #include "lib/sound/mixer.h"
 
 #include "loop.h"
-
 #include "objects.h"
 #include "display.h"
 #include "map.h"
@@ -68,7 +67,7 @@
 #include "loadsave.h"
 #include "game.h"
 #include "multijoin.h"
-
+#include "lighting.h"
 #include "intimage.h"
 #include "lib/framework/cursors.h"
 #include "seqdisp.h"
@@ -118,6 +117,7 @@ typedef struct _pause_state
 	unsigned scriptPause		: 1;
 	unsigned scrollPause		: 1;
 	unsigned consolePause		: 1;
+	unsigned editPause		: 1;
 } PAUSE_STATE;
 
 static PAUSE_STATE	pauseState;
@@ -176,7 +176,7 @@ GAMECODE gameLoop(void)
 
 	if (!paused)
 	{
-		if (!scriptPaused())
+		if (!scriptPaused() && !editPaused())
 		{
 			/* Update the event system */
 			if (!bInTutorial)
@@ -222,8 +222,11 @@ GAMECODE gameLoop(void)
 			// check all flag positions for duplicate delivery points
 			checkFactoryFlags();
 #endif
-			// Update abandoned structures
-			handleAbandonedStructures();
+			if (!editPaused())
+			{
+				// Update abandoned structures
+				handleAbandonedStructures();
+			}
 			
 			//handles callbacks for positioning of DP's
 			process3DBuilding();
@@ -237,18 +240,23 @@ GAMECODE gameLoop(void)
 			// do the grid garbage collection
 			gridGarbageCollect();
 
-			//update the findpath system
-			fpathUpdate();
+			if (!editPaused())
+			{
+				//update the findpath system
+				fpathUpdate();
+			}
 
 			// update the cluster system
 			clusterUpdate();
 
-			// update the command droids
-			cmdDroidUpdate();
-
-			if(getDrivingStatus())
+			if (!editPaused())
 			{
-				driveUpdate();
+				// update the command droids
+				cmdDroidUpdate();
+				if(getDrivingStatus())
+				{
+					driveUpdate();
+				}
 			}
 
 			//ajl. get the incoming netgame messages and process them.
@@ -256,6 +264,9 @@ GAMECODE gameLoop(void)
 			{
 				multiPlayerLoop();
 			}
+
+			if (!editPaused())
+			{
 
 			fireWaitingCallbacks(); //Now is the good time to fire waiting callbacks (since interpreter is off now)
 
@@ -414,6 +425,28 @@ GAMECODE gameLoop(void)
 			{
 				psNFeat = psCFeat->psNext;
 				featureUpdate(psCFeat);
+			}
+
+			}
+			else // if editPaused()
+			{
+				for (i = 0; i < MAX_PLAYERS; i++)
+				{
+					for(psCurr = apsDroidLists[i]; psCurr; psCurr = psNext)
+					{
+						/* Copy the next pointer - not 100% sure if the droid could get destroyed
+						but this covers us anyway */
+						psNext = psCurr->psNext;
+						processVisibility((BASE_OBJECT *)psCurr);
+						calcDroidIllumination(psCurr);
+					}
+					for (psCBuilding = apsStructLists[i]; psCBuilding; psCBuilding = psNBuilding)
+					{
+						/* Copy the next pointer - not 100% sure if the structure could get destroyed but this covers us anyway */
+						psNBuilding = psCBuilding->psNext;
+						processVisibility((BASE_OBJECT *)psCBuilding);
+					}
+				}
 			}
 
 			/* update animations */
@@ -808,6 +841,16 @@ SDWORD loop_GetVideoMode(void)
 BOOL loop_GetVideoStatus(void)
 {
 	return video;
+}
+
+BOOL editPaused(void)
+{
+	return pauseState.editPause;
+}
+
+void setEditPause(bool state)
+{
+	pauseState.editPause = state;
 }
 
 BOOL gamePaused( void )
