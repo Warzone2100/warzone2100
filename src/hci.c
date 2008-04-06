@@ -2091,7 +2091,6 @@ INT_RETVAL intRunWidgets(void)
 					}
 					else
 					{
-						const char* msg;
 						psStructure = buildStructure(psBuilding, structX, structY,
 						                             selectedPlayer, false);
 						/* NOTE: if this was a regular buildprocess we would
@@ -2100,15 +2099,11 @@ INT_RETVAL intRunWidgets(void)
 						 * building though. So we cannot fill out the <droid>
 						 * part.
 						 */
-
-						// Send a text message to all players, notifying them of
-						// the fact that we're cheating ourselves a new
-						// structure.
-						sasprintf((char**)&msg, _("Player %u is cheating (debug menu) him/herself a new structure: %s."), selectedPlayer, psStructure->pStructureType->pName);
-						sendTextMessage(msg, true);
 					}
 					if (psStructure)
 					{
+						const char* msg;
+
 						psStructure->status = SS_BUILT;
 						buildingComplete(psStructure);
 
@@ -2116,6 +2111,12 @@ INT_RETVAL intRunWidgets(void)
 						// other players, telling them a new structure has been
 						// placed.
 						SendBuildFinished(psStructure);
+						// Send a text message to all players, notifying them of
+						// the fact that we're cheating ourselves a new
+						// structure.
+						sasprintf((char**)&msg, _("Player %u is cheating (debug menu) him/herself a new structure: %s."), 
+						          selectedPlayer, psStructure->pStructureType->pName);
+						sendTextMessage(msg, true);
 					}
 				}
 				else if (psPositionStats->ref >= REF_FEATURE_START &&
