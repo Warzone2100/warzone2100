@@ -24,40 +24,7 @@
 #include "frame.h"
 #include "cursors.h"
 
-#define CURSOR_OFFSET 100
-#define MAX_CURSORS 26 
-
-/* must match with IDC_* from resource.h */
-#define CURSOR_ARROW                       100  // this is the internal cursor, not from IDC_
-#define CURSOR_DEST                        101
-#define CURSOR_SIGHT                       102
-#define CURSOR_TARGET                      103
-#define CURSOR_LARROW                      104
-#define CURSOR_RARROW                      105
-#define CURSOR_DARROW                      106
-#define CURSOR_UARROW                      107
-#define CURSOR_DEFAULT                     108
-#define CURSOR_EDGEOFMAP                   109
-#define CURSOR_ATTACH                      110
-#define CURSOR_ATTACK                      111
-#define CURSOR_BOMB                        112
-#define CURSOR_BRIDGE                      113
-#define CURSOR_BUILD                       114
-#define CURSOR_EMBARK                      115
-#define CURSOR_FIX                         116
-#define CURSOR_GUARD                       117
-#define CURSOR_JAM                         118
-#define CURSOR_LOCKON                      119
-#define CURSOR_MENU                        120
-#define CURSOR_MOVE                        121
-#define CURSOR_NOTPOSSIBLE                 122
-#define CURSOR_PICKUP                      123
-#define CURSOR_SEEKREPAIR                  124
-#define CURSOR_SELECT                      125
-
 /* TODO: do bridge and attach need swapping? */
-
-
 static const char *cursor_arrow[] = {
   /* width height num_colors chars_per_pixel */
   "    16    16        3            1",
