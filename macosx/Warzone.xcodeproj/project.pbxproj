@@ -163,7 +163,6 @@
 		0246A05D0BD3C975004D1C70 /* Warzone.icns in Resources */ = {isa = PBXBuildFile; fileRef = 0246A05C0BD3C975004D1C70 /* Warzone.icns */; };
 		0246A0C10BD3CBD5004D1C70 /* configfile.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A09A0BD3CBD5004D1C70 /* configfile.c */; };
 		0246A0C20BD3CBD5004D1C70 /* debug.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A09F0BD3CBD5004D1C70 /* debug.c */; };
-		0246A0C30BD3CBD5004D1C70 /* exceptionhandler.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A0A10BD3CBD5004D1C70 /* exceptionhandler.c */; };
 		0246A0C40BD3CBD5004D1C70 /* frame.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A0A30BD3CBD5004D1C70 /* frame.c */; };
 		0246A0C50BD3CBD5004D1C70 /* frameresource.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A0A60BD3CBD5004D1C70 /* frameresource.c */; };
 		0246A0C70BD3CBD5004D1C70 /* input.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A0AB0BD3CBD5004D1C70 /* input.c */; };
@@ -557,6 +556,11 @@
 		02AAD14A0D9ED2DB00248B0F /* stats-db.h in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 02AAD1480D9ED2DB00248B0F /* stats-db.h */; };
 		02AAD1600D9ED4B200248B0F /* physfs_vfs.c in Sources */ = {isa = PBXBuildFile; fileRef = 02AAD15E0D9ED4B200248B0F /* physfs_vfs.c */; };
 		02AAD1610D9ED4B200248B0F /* physfs_vfs.h in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 02AAD15F0D9ED4B200248B0F /* physfs_vfs.h */; };
+		02B2132D0DA8755F0059E864 /* cursors.c in Sources */ = {isa = PBXBuildFile; fileRef = 02B2132A0DA8755F0059E864 /* cursors.c */; };
+		02B2132E0DA8755F0059E864 /* cursors16.c in Sources */ = {isa = PBXBuildFile; fileRef = 02B2132B0DA8755F0059E864 /* cursors16.c */; };
+		02B2132F0DA8755F0059E864 /* cursors32.c in Sources */ = {isa = PBXBuildFile; fileRef = 02B2132C0DA8755F0059E864 /* cursors32.c */; };
+		02BBB2090DA874F6002D438B /* exceptionhandler.c in Sources */ = {isa = PBXBuildFile; fileRef = 02BBB2070DA874F6002D438B /* exceptionhandler.c */; };
+		02BBB20A0DA874F6002D438B /* exceptionhandler.h in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 02BBB2080DA874F6002D438B /* exceptionhandler.h */; };
 		02C8AEF80BE68A5600E9D8A7 /* png_util.c in Sources */ = {isa = PBXBuildFile; fileRef = 02C8AEF60BE68A5600E9D8A7 /* png_util.c */; };
 		02C8AEFC0BE68A6800E9D8A7 /* oggvorbis.c in Sources */ = {isa = PBXBuildFile; fileRef = 02C8AEFA0BE68A6800E9D8A7 /* oggvorbis.c */; };
 		02CBED8C0C5B8BEB00316CE2 /* nettypes.c in Sources */ = {isa = PBXBuildFile; fileRef = 02CBED8A0C5B8BEB00316CE2 /* nettypes.c */; };
@@ -837,6 +841,7 @@
 				02AAD1460D9ED28C00248B0F /* physfs_ext.h in Copy frameworks */,
 				02AAD14A0D9ED2DB00248B0F /* stats-db.h in Copy frameworks */,
 				02AAD1610D9ED4B200248B0F /* physfs_vfs.h in Copy frameworks */,
+				02BBB20A0DA874F6002D438B /* exceptionhandler.h in Copy frameworks */,
 			);
 			name = "Copy frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1011,10 +1016,8 @@
 		0246A09A0BD3CBD5004D1C70 /* configfile.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = configfile.c; path = ../lib/framework/configfile.c; sourceTree = SOURCE_ROOT; };
 		0246A09B0BD3CBD5004D1C70 /* configfile.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = configfile.h; path = ../lib/framework/configfile.h; sourceTree = SOURCE_ROOT; };
 		0246A09C0BD3CBD5004D1C70 /* cursors.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = cursors.h; path = ../lib/framework/cursors.h; sourceTree = SOURCE_ROOT; };
-		0246A09D0BD3CBD5004D1C70 /* cursors16.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = cursors16.h; path = ../lib/framework/cursors16.h; sourceTree = SOURCE_ROOT; };
 		0246A09F0BD3CBD5004D1C70 /* debug.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = debug.c; path = ../lib/framework/debug.c; sourceTree = SOURCE_ROOT; };
 		0246A0A00BD3CBD5004D1C70 /* debug.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = debug.h; path = ../lib/framework/debug.h; sourceTree = SOURCE_ROOT; };
-		0246A0A10BD3CBD5004D1C70 /* exceptionhandler.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = exceptionhandler.c; path = ../lib/framework/exceptionhandler.c; sourceTree = SOURCE_ROOT; };
 		0246A0A30BD3CBD5004D1C70 /* frame.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = frame.c; path = ../lib/framework/frame.c; sourceTree = SOURCE_ROOT; };
 		0246A0A40BD3CBD5004D1C70 /* frame.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = frame.h; path = ../lib/framework/frame.h; sourceTree = SOURCE_ROOT; };
 		0246A0A50BD3CBD5004D1C70 /* frameint.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = frameint.h; path = ../lib/framework/frameint.h; sourceTree = SOURCE_ROOT; };
@@ -1325,7 +1328,6 @@
 		0246A25B0BD3CCDB004D1C70 /* research.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = research.c; path = ../src/research.c; sourceTree = SOURCE_ROOT; };
 		0246A25C0BD3CCDB004D1C70 /* research.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = research.h; path = ../src/research.h; sourceTree = SOURCE_ROOT; };
 		0246A25D0BD3CCDB004D1C70 /* researchdef.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = researchdef.h; path = ../src/researchdef.h; sourceTree = SOURCE_ROOT; };
-		0246A25E0BD3CCDB004D1C70 /* resource.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = resource.h; path = ../src/resource.h; sourceTree = SOURCE_ROOT; };
 		0246A25F0BD3CCDB004D1C70 /* scores.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = scores.c; path = ../src/scores.c; sourceTree = SOURCE_ROOT; };
 		0246A2600BD3CCDB004D1C70 /* scores.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = scores.h; path = ../src/scores.h; sourceTree = SOURCE_ROOT; };
 		0246A2610BD3CCDB004D1C70 /* scriptai.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = scriptai.c; path = ../src/scriptai.c; sourceTree = SOURCE_ROOT; };
@@ -1570,6 +1572,11 @@
 		02AAD1480D9ED2DB00248B0F /* stats-db.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = "stats-db.h"; path = "../src/stats-db.h"; sourceTree = SOURCE_ROOT; };
 		02AAD15E0D9ED4B200248B0F /* physfs_vfs.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = physfs_vfs.c; path = ../lib/sqlite3/physfs_vfs.c; sourceTree = SOURCE_ROOT; };
 		02AAD15F0D9ED4B200248B0F /* physfs_vfs.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = physfs_vfs.h; path = ../lib/sqlite3/physfs_vfs.h; sourceTree = SOURCE_ROOT; };
+		02B2132A0DA8755F0059E864 /* cursors.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = cursors.c; path = ../lib/framework/cursors.c; sourceTree = SOURCE_ROOT; };
+		02B2132B0DA8755F0059E864 /* cursors16.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = cursors16.c; path = ../lib/framework/cursors16.c; sourceTree = SOURCE_ROOT; };
+		02B2132C0DA8755F0059E864 /* cursors32.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = cursors32.c; path = ../lib/framework/cursors32.c; sourceTree = SOURCE_ROOT; };
+		02BBB2070DA874F6002D438B /* exceptionhandler.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = exceptionhandler.c; path = ../lib/exceptionhandler/exceptionhandler.c; sourceTree = SOURCE_ROOT; };
+		02BBB2080DA874F6002D438B /* exceptionhandler.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = exceptionhandler.h; path = ../lib/exceptionhandler/exceptionhandler.h; sourceTree = SOURCE_ROOT; };
 		02C8AEF60BE68A5600E9D8A7 /* png_util.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = png_util.c; path = ../lib/ivis_common/png_util.c; sourceTree = SOURCE_ROOT; };
 		02C8AEF70BE68A5600E9D8A7 /* png_util.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = png_util.h; path = ../lib/ivis_common/png_util.h; sourceTree = SOURCE_ROOT; };
 		02C8AEFA0BE68A6800E9D8A7 /* oggvorbis.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = oggvorbis.c; path = ../lib/sound/oggvorbis.c; sourceTree = SOURCE_ROOT; };
@@ -1982,6 +1989,7 @@
 		0246A0980BD3CB97004D1C70 /* Warzone sources */ = {
 			isa = PBXGroup;
 			children = (
+				02BBB2060DA874CF002D438B /* Exception Handler */,
 				026591F40D7B6DE200B20A35 /* SQLite */,
 				0246A1970BD3CCC3004D1C70 /* Warzone */,
 				0246A1790BD3CCAB004D1C70 /* Widget */,
@@ -2000,6 +2008,9 @@
 		0246A0D00BD3CBE1004D1C70 /* Framework */ = {
 			isa = PBXGroup;
 			children = (
+				02B2132A0DA8755F0059E864 /* cursors.c */,
+				02B2132B0DA8755F0059E864 /* cursors16.c */,
+				02B2132C0DA8755F0059E864 /* cursors32.c */,
 				02AAD13F0D9ED28C00248B0F /* file.h */,
 				02AAD1400D9ED28C00248B0F /* i18n.c */,
 				02AAD1410D9ED28C00248B0F /* i18n.h */,
@@ -2016,10 +2027,8 @@
 				0246A09A0BD3CBD5004D1C70 /* configfile.c */,
 				0246A09B0BD3CBD5004D1C70 /* configfile.h */,
 				0246A09C0BD3CBD5004D1C70 /* cursors.h */,
-				0246A09D0BD3CBD5004D1C70 /* cursors16.h */,
 				0246A09F0BD3CBD5004D1C70 /* debug.c */,
 				0246A0A00BD3CBD5004D1C70 /* debug.h */,
-				0246A0A10BD3CBD5004D1C70 /* exceptionhandler.c */,
 				0246A0A30BD3CBD5004D1C70 /* frame.c */,
 				0246A0A40BD3CBD5004D1C70 /* frame.h */,
 				0246A0A50BD3CBD5004D1C70 /* frameint.h */,
@@ -2408,7 +2417,6 @@
 				0246A25B0BD3CCDB004D1C70 /* research.c */,
 				0246A25C0BD3CCDB004D1C70 /* research.h */,
 				0246A25D0BD3CCDB004D1C70 /* researchdef.h */,
-				0246A25E0BD3CCDB004D1C70 /* resource.h */,
 				0246A25F0BD3CCDB004D1C70 /* scores.c */,
 				0246A2600BD3CCDB004D1C70 /* scores.h */,
 				0246A2610BD3CCDB004D1C70 /* scriptai.c */,
@@ -2656,6 +2664,15 @@
 				026591F90D7B6E0F00B20A35 /* sqlite3ext.h */,
 			);
 			name = SQLite;
+			sourceTree = "<group>";
+		};
+		02BBB2060DA874CF002D438B /* Exception Handler */ = {
+			isa = PBXGroup;
+			children = (
+				02BBB2070DA874F6002D438B /* exceptionhandler.c */,
+				02BBB2080DA874F6002D438B /* exceptionhandler.h */,
+			);
+			name = "Exception Handler";
 			sourceTree = "<group>";
 		};
 		02CDDCFD0D159BE700722688 /* Autorevision sources */ = {
@@ -3784,7 +3801,6 @@
 			files = (
 				0246A0C10BD3CBD5004D1C70 /* configfile.c in Sources */,
 				0246A0C20BD3CBD5004D1C70 /* debug.c in Sources */,
-				0246A0C30BD3CBD5004D1C70 /* exceptionhandler.c in Sources */,
 				0246A0C40BD3CBD5004D1C70 /* frame.c in Sources */,
 				0246A0C50BD3CBD5004D1C70 /* frameresource.c in Sources */,
 				0246A0C70BD3CBD5004D1C70 /* input.c in Sources */,
@@ -3963,6 +3979,10 @@
 				026591FA0D7B6E0F00B20A35 /* sqlite3.c in Sources */,
 				02AAD1440D9ED28C00248B0F /* i18n.c in Sources */,
 				02AAD1600D9ED4B200248B0F /* physfs_vfs.c in Sources */,
+				02BBB2090DA874F6002D438B /* exceptionhandler.c in Sources */,
+				02B2132D0DA8755F0059E864 /* cursors.c in Sources */,
+				02B2132E0DA8755F0059E864 /* cursors16.c in Sources */,
+				02B2132F0DA8755F0059E864 /* cursors32.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
