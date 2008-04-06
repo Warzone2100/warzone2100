@@ -32,5 +32,5 @@ FLAMER,Legged,150
 FLAMER,Wheeled,120
 FLAMER,Hover,160
 FLAMER,Half-Tracked,90
-FLAMER,Tracked,80
+FLAMER,Tracked,75
 FLAMER,Lift,25
