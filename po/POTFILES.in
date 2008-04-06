@@ -9,9 +9,13 @@ data/messages/strings/scrstrings.txt
 data/messages/strings/tutstrings.txt
 data/mp/messages/strings/names.txt
 data/mp/messages/strings/resstrings.txt
+lib/exceptionhandler/exceptionhandler.c
+lib/exceptionhandler/exchndl.c
 lib/framework/configfile.c
+lib/framework/cursors16.c
+lib/framework/cursors32.c
+lib/framework/cursors.c
 lib/framework/debug.c
-lib/framework/exceptionhandler.c
 lib/framework/frame.c
 lib/framework/frameresource.c
 lib/framework/i18n.c
