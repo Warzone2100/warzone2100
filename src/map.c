@@ -43,7 +43,7 @@
 #include "formationdef.h"
 #include "gateway.h"
 #include "wrappers.h"
-
+#include "mapgrid.h"
 
 //scroll min and max values
 SDWORD		scrollMinX, scrollMaxX, scrollMinY, scrollMaxY;
@@ -124,6 +124,7 @@ UBYTE terrainTypes[MAX_TILE_TEXTURES];
 /* Create a new map of a specified size */
 BOOL mapNew(UDWORD width, UDWORD height)
 {
+	MAPTILE *psTile;
 	UDWORD	i;
 
 	/* See if a map has already been allocated */
@@ -150,6 +151,17 @@ BOOL mapNew(UDWORD width, UDWORD height)
 	psMapTiles = calloc(width * height, sizeof(MAPTILE));
 	ASSERT(psMapTiles != NULL, "mapNew: Out of memory")
 
+	psTile = psMapTiles;
+	for (i = 0; i < width * height; i++)
+	{
+		psTile->height = MAX_HEIGHT / 4;
+		psTile->illumination = 255;
+		psTile->level = psTile->illumination;
+		psTile->bMaxed = true;
+		psTile->colour= WZCOL_WHITE;
+		psTile++;
+	}
+
 	mapWidth = width;
 	mapHeight = height;
 
@@ -166,6 +178,8 @@ BOOL mapNew(UDWORD width, UDWORD height)
 	scrollMinX = scrollMinY = 0;
 	scrollMaxX = mapWidth;
 	scrollMaxY = mapHeight;
+
+	gridReset();
 
 	return true;
 }
