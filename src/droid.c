@@ -1127,8 +1127,6 @@ BOOL droidStartBuild(DROID *psDroid)
 			intBuildFinished(psDroid);
 			return false;
 		}
-		//add one to current quantity for this player
-		structLimit->currentQuantity++;
 
 		//commented out for demo - 2/1/98
 		//ASSERT( droidNextToStruct(psDroid, (BASE_OBJECT *)psStruct),

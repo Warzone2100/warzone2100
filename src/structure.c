@@ -845,12 +845,19 @@ void initStructLimits(void)
 	for (player = 0; player < MAX_PLAYERS; player++)
 	{
 		STRUCTURE_LIMITS	*psStructLimits = asStructLimits[player];
+		STRUCTURE_STATS		*psStat = asStructureStats;
 
-		for (i=0; i < numStructureStats; i++)
+		for (i = 0; i < numStructureStats; i++)
 		{
 			psStructLimits[i].limit = LOTS_OF;
 			psStructLimits[i].currentQuantity = 0;
 			psStructLimits[i].globalLimit = LOTS_OF;
+			if (isLasSat(psStat) || psStat->type == REF_SAT_UPLINK)
+			{
+				psStructLimits[i].limit = 1;
+				psStructLimits[i].globalLimit = 1;
+			}
+			psStat++;
 		}
 	}
 }
@@ -1571,45 +1578,12 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 			ASSERT(!"invalid structure type", "buildStructure: Invalid structure type");
 			return NULL;
 		}
-
-		if (player == selectedPlayer)
+		// Don't allow more than interface limits
+		if (asStructLimits[player][max].currentQuantity + 1 > asStructLimits[player][max].limit)
 		{
-			//don't allow more than interface limits of certain structures
-			if (pStructureType->type == REF_FACTORY ||
-				pStructureType->type == REF_CYBORG_FACTORY ||
-				pStructureType->type == REF_VTOL_FACTORY)
-			{
-				//NEVER EVER EVER WANT MORE THAN 5 FACTORIES
-				if (asStructLimits[selectedPlayer][max].currentQuantity > MAX_FACTORY)
-				{
-					ASSERT(!"attempting to construct too many factories", "buildStructure: trying to build too many factories (%d max)", MAX_FACTORY);
-					return NULL;
-				}
-			}
-			if (pStructureType->type == REF_RESEARCH)
-			{
-				//can only cope with MAX_OBJECTS research facilities
-				if (asStructLimits[selectedPlayer][max].currentQuantity > MAX_OBJECTS)
-				{
-					ASSERT(!"attempting to construct too many research facilities", "buildStructure: trying to build too many research facilities (%d max)", MAX_OBJECTS);
-					return NULL;
-				}
-			}
-			//HARD_CODE don't ever want more than one Las Sat structure
-			if (isLasSat(pStructureType) && getLasSatExists(selectedPlayer))
-			{
-				ASSERT(!"attempting to build more than 1 Las Sat center", "buildStructure: trying to build too many Las Sat (1 max)");
-				return NULL;
-			}
-			//HARD_CODE don't ever want more than one Sat Uplink structure
-			if (pStructureType->type == REF_SAT_UPLINK)
-			{
-				if (asStructLimits[selectedPlayer][max].currentQuantity > 0)
-				{
-					ASSERT(!"attempting to build more than 1 Sat Uplink", "buildStructure: trying to build too many Sat Uplinks (1 max)");
-					return NULL;
-				}
-			}
+			debug(LOG_ERROR, "Player %u: Building %s could not be built due to building limits!", 
+			      player, pStructureType->pName);
+			return NULL;
 		}
 
 		// snap the coords to a tile
@@ -1929,6 +1903,7 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 		gridAddObject((BASE_OBJECT *)psBuilding);
 
 		clustNewStruct(psBuilding);
+		asStructLimits[player][max].currentQuantity++;
 	}
 	else //its an upgrade
 	{
@@ -4846,8 +4821,7 @@ BOOL removeStruct(STRUCTURE *psDel, BOOL bDestroy)
 	}
 
 	//subtract one from the structLimits list so can build another - don't allow to go less than zero!
-	if (asStructLimits[psDel->player][psDel->pStructureType - asStructureStats].
-		currentQuantity)
+	if (asStructLimits[psDel->player][psDel->pStructureType - asStructureStats].currentQuantity)
 	{
 		asStructLimits[psDel->player][psDel->pStructureType - asStructureStats].currentQuantity--;
 	}

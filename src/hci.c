@@ -2093,6 +2093,10 @@ INT_RETVAL intRunWidgets(void)
 					{
 						psStructure = buildStructure(psBuilding, structX, structY,
 						                             selectedPlayer, false);
+						if (!psStructure)
+						{
+							addConsoleMessage(_("Failed to create building"), LEFT_JUSTIFY, SYSTEM_MESSAGE);
+						}
 						/* NOTE: if this was a regular buildprocess we would
 						 * have to call sendBuildStarted(psStructure, <droid>);
 						 * In this case there is no droid working on the

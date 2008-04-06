@@ -195,7 +195,6 @@ BOOL recvBuildFinished()
 	UDWORD	type,typeindex;
 	UBYTE	player;
 
-
 	NETbeginDecode(NET_BUILDFINISHED);
 		NETuint32_t(&structId);	// get the struct id.
 		NETuint32_t(&type); 	// Kind of building.
@@ -244,8 +243,7 @@ BOOL recvBuildFinished()
 		}
 	}
 	// Build the structure
-	psStruct = buildStructure(&(asStructureStats[typeindex]),	// Build the structure.
-	                          x, y, player,true);
+	psStruct = buildStructure(&(asStructureStats[typeindex]), x, y, player, true);
 	
 	if (psStruct)
 	{
