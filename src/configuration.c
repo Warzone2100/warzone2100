@@ -529,7 +529,7 @@ BOOL loadRenderMode(void)
 	}
 	else
 	{
-		war_SetColouredCursor(true);
+		war_SetColouredCursor(false);
 		setWarzoneKeyNumeric("ColouredCursor", false);
 	}
 
