@@ -839,7 +839,7 @@ BOOL mapSaveTagged(char *pFileName)
 		tagWrite(0x04, psTile->texture & TILE_XFLIP);
 		tagWrite(0x05, psTile->texture & TILE_YFLIP);
 		tagWrite(0x06, TILE_IS_NOTBLOCKING(psTile));
-		tagWrite(0x08, psTile->height); // should multiply by ELEVATION_SCALE? If so, use map_TileHeight()
+		tagWrite(0x08, psTile->height);
 		tagWrite(0x09, psTile->tileVisBits);
 		tagWrite(0x0a, psTile->tileInfoBits);
 
@@ -1104,6 +1104,7 @@ BOOL mapLoadTagged(char *pFileName)
 	int count, i, mapx, mapy;
 	float cam[3];
 	const char *definition = "tagdefinitions/savegame/map.def";
+	MAPTILE	*psTile;
 
 	if (!tagOpenRead(definition, pFileName))
 	{
@@ -1116,6 +1117,8 @@ BOOL mapLoadTagged(char *pFileName)
 	mapx = tagRead(0x01);
 	mapy = tagRead(0x02);
 	debug(LOG_MAP, " * Map size: %d, %d", (int)mapx, (int)mapy);
+	ASSERT(mapx == mapWidth && mapy == mapHeight, "mapLoadTagged: Wrong map size");
+	ASSERT(mapWidth * mapHeight <= MAP_MAXAREA, "mapLoadTagged: Map too large");
 	tagReadLeave(0x03);
 
 	tagReadEnter(0x04); // camera info group
@@ -1133,6 +1136,28 @@ BOOL mapLoadTagged(char *pFileName)
 		tagReadNext();
 	}
 	tagReadLeave(0x05);
+
+	i = tagReadEnter(0x0a); // tile group
+	ASSERT(i == mapWidth * mapHeight, "Map size (%d, %d) is not equal to number of tiles (%d) in mapLoadTagged()!",
+	       (int)mapWidth, (int)mapHeight, i);
+	psTile = psMapTiles;
+	for (i = 0; i < mapWidth * mapHeight; i++)
+	{
+		BOOL triflip, notblock, xflip, yflip;
+		int texture, height, terrain;
+
+		terrain = tagRead(0x01); ASSERT(terrainType(psTile) == terrain, "Wrong terrain");
+		texture = tagRead(0x02); ASSERT(TileNumber_tile(psTile->texture) == texture, "Wrong texture");
+		triflip = tagRead(0x03);
+		xflip = tagRead(0x04);
+		yflip = tagRead(0x05);
+		notblock = tagRead(0x06);
+		height = tagRead(0x08); ASSERT(psTile->height == height, "Wrong height");
+
+		psTile++;
+		tagReadNext();
+	}
+	tagReadLeave(0x0a);
 
 	tagClose();
 	return true;
