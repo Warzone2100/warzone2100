@@ -6,7 +6,6 @@
 	ProjectGUID="{33979915-684A-4885-BFEA-2A4CCC5A5FD6}"
 	RootNamespace="framework"
 	Keyword="Win32Proj"
-	TargetFrameworkVersion="131072"
 	>
 	<Platforms>
 		<Platform
@@ -171,11 +170,19 @@
 				>
 			</File>
 			<File
-				RelativePath=".\debug.c"
+				RelativePath=".\cursors.c"
 				>
 			</File>
 			<File
-				RelativePath=".\exceptionhandler.c"
+				RelativePath=".\cursors16.c"
+				>
+			</File>
+			<File
+				RelativePath=".\cursors32.c"
+				>
+			</File>
+			<File
+				RelativePath=".\debug.c"
 				>
 			</File>
 			<File
@@ -187,11 +194,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\input.c"
+				RelativePath=".\i18n.c"
 				>
 			</File>
 			<File
-				RelativePath=".\i18n.c"
+				RelativePath=".\input.c"
 				>
 			</File>
 			<File
@@ -219,18 +226,6 @@
 						XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
 					/>
 				</FileConfiguration>
-			</File>
-			<File
-				RelativePath=".\cursors.c"
-				>
-			</File>
-			<File
-				RelativePath=".\cursors16.c"
-				>
-			</File>
-			<File
-				RelativePath=".\cursors32.c"
-				>
 			</File>
 			<File
 				RelativePath=".\resource_parser.tab.c"
@@ -307,11 +302,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\input.h"
+				RelativePath=".\i18n.h"
 				>
 			</File>
 			<File
-				RelativePath=".\i18n.h"
+				RelativePath=".\input.h"
 				>
 			</File>
 			<File

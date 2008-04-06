@@ -153,6 +153,10 @@
 				RelativePath=".\exceptionhandler.c"
 				>
 			</File>
+			<File
+				RelativePath=".\exchndl.c"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"

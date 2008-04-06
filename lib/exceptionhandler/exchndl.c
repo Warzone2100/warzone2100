@@ -35,8 +35,9 @@
 #include <limits.h>
 
 
+#if !defined(WZ_CC_MSVC)
 #define HAVE_BFD	1
-
+#endif
 
 // Declare the static variables
 static TCHAR szLogFileName[MAX_PATH] = _T("");
