@@ -157,6 +157,9 @@ typedef struct {
 	uint32_t        bHost;				// true if we are hosting the session
 } NETPLAY;
 
+/// This is the hardcoded dpid (player ID) value for the hosting player.
+#define HOST_DPID 1
+
 // ////////////////////////////////////////////////////////////////////////
 // variables
 

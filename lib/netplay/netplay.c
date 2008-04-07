@@ -97,9 +97,6 @@ typedef struct
 	unsigned int	bytes;
 } NETBUFSOCKET;
 
-/// This is the hardcoded dpid (player ID) value for the hosting player.
-#define HOST_DPID 1
-
 #define PLAYER_HOST		1
 
 // ////////////////////////////////////////////////////////////////////////

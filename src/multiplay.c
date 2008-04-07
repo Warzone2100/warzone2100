@@ -487,7 +487,6 @@ BOOL isHumanPlayer(UDWORD player)
 UDWORD  whosResponsible(UDWORD player)
 {
 	UDWORD c;
-	SDWORD i;
 
     c = ANYPLAYER;
 	if (isHumanPlayer(player))
@@ -502,26 +501,16 @@ UDWORD  whosResponsible(UDWORD player)
 
 	else
 	{
-		// crawl down array to find a responsible fellow,
-		for(i=player; i>=0; i--)
-		{
-			if(isHumanPlayer(i))
-			{
-				c = i;
-			}
-		}
-		// else crawl up to find a responsible fellow
-		if(c == ANYPLAYER)
-		{
-			for(i=player; i<MAX_PLAYERS; i++)
-			{
-				if(isHumanPlayer(i))
-				{
-					c = i;
-				}
-			}
-		}
+		SDWORD player;
 
+		// find the host using HOST_DPID
+		for(player=0;player <= MAX_PLAYERS && c == ANYPLAYER;player++)
+		{
+			if(player2dpid[player] == HOST_DPID)
+			{
+				c = player;
+			}
+		}
 	}
 	if(c == ANYPLAYER)
 	{
