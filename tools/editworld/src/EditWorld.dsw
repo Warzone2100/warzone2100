@@ -3,14 +3,10 @@ Microsoft Developer Studio Workspace File, Format Version 6.00
 
 ###############################################################################
 
-Project: "EditWorld"=.\EditWorld.dsp - Package Owner=<4>
+Project: "EditWorld"=".\EditWorld.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
-    begin source code control
-    "$/Tools/EditWorld", KNBAAAAA
-    .
-    end source code control
 }}}
 
 Package=<4>
