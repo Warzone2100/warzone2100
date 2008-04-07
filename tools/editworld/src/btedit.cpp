@@ -35,6 +35,7 @@
 #include <string.h>
 #include <string>
 #include <boost/scoped_array.hpp>
+#include "winapi.hpp"
 
 using std::string;
 using boost::scoped_array;
@@ -82,7 +83,7 @@ void CBTEditCommandLineInfo::ParseParam(const char* param, BOOL flag, BOOL bLast
 //		}
 		m_bMapSizePower2 = FALSE;
 	}
-	CCommandLineInfo::ParseParam(pszParam, bFlag, bLast);
+	CCommandLineInfo::ParseParam(param, flag, bLast);
 }
 
 /////////////////////////////////////////////////////////////////////////////

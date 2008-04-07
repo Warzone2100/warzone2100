@@ -25,6 +25,7 @@
 //
 
 #include "stdafx.h"
+#include "winapi.hpp"
 #include "btedit.h"
 #include "grdland.h"
 #include "mainframe.h"
@@ -4550,14 +4551,12 @@ BOOL CBTEditDoc::SelectAndLoadDataSet(void)
 {
 	char	FullPath[256];
 	char	FileName[256];
-	char	CurrentDir[1024];
-
-	GetCurrentDirectory(sizeof(CurrentDir),CurrentDir);
+	const string CurrentDir = Win::GetCurrentDirectory();
 
 	if(GetFilePath((char*)FeatureSetFilters,"eds","*.eds",TRUE,NULL,FileName,FullPath)) {
 		OnFileNew();
 		LoadDataSet(FullPath);
-	   	SetCurrentDirectory(CurrentDir);
+	   	SetCurrentDirectory(CurrentDir.c_str());
 		InvalidateRect(NULL,NULL,NULL);
 		return TRUE;
 	}

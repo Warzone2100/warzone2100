@@ -148,6 +148,8 @@ namespace Win
         return ShellExecute(hwnd, operation, fileName, parameters, directory, showCmd);
     }
 
+    // Apparently MSVC6 has trouble with the template instantation required for this function
+#if 0
     /** An easier interface to the ShellExecute functions allowing to use std::string as parameters.
      */
     template<typename charT, typename traits, typename Allocator>
@@ -165,6 +167,7 @@ namespace Win
 
         return ShellExecute(hwnd, op, file, params, dir, showCmd);
     }
+#endif
 }
 
 #endif // __INCLUDED_WINAPI_HPP__

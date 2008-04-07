@@ -124,9 +124,9 @@ class CEdgeBrush : public CChnkIO
 		void SeedFill(int x, int y, FRect *win, Pixel nv,DWORD Type,DWORD Flags);
 
 	public:
-		int m_HeightMode;
-		int m_Height;
-		int m_RandomRange;
+		int _HeightMode;
+		int _Height;
+		int _RandomRange;
 
 	private:
 		CHeightMap* m_HeightMap;

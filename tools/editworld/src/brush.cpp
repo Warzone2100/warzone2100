@@ -120,9 +120,9 @@ CEdgeBrush::CEdgeBrush(CHeightMap* HeightMap,DWORD TextureWidth,DWORD TextureHei
 
 
 //	m_SetHeight = TRUE;
-	m_HeightMode = EB_HM_NOSET;
-	m_Height = 128;
-	m_RandomRange = 0;
+	_HeightMode = EB_HM_NOSET;
+	_Height = 128;
+	_RandomRange = 0;
 
 	m_ID = m_NumInstances;
 
@@ -252,8 +252,8 @@ BOOL CEdgeBrush::Paint(DWORD XCoord,DWORD YCoord,BOOL SetHeight)
 
 	int BaseHeight;	// = (int)m_HeightMap->GetVertexHeight(XCoord + (YCoord * (int)mw),0);
 
-	if(m_RandomRange != 0) {
-		BaseHeight = rand()%m_RandomRange;
+	if(_RandomRange != 0) {
+		BaseHeight = rand()%_RandomRange;
 	}
 
 
@@ -290,7 +290,7 @@ BOOL CEdgeBrush::Paint(DWORD XCoord,DWORD YCoord,BOOL SetHeight)
 
 			int Height;
 
-			switch(m_HeightMode) {
+			switch(_HeightMode) {
 				case EB_HM_SEALEVEL:
 					// Use sea level
 					Height = m_HeightMap->GetSeaLevel();
@@ -298,15 +298,15 @@ BOOL CEdgeBrush::Paint(DWORD XCoord,DWORD YCoord,BOOL SetHeight)
 
 				case EB_HM_SETABB:
 					// Set absolute height
-					Height = m_Height;
+					Height = _Height;
 					break;
 //
 //				case EB_HM_SETADD:
 //					// Set addative height
-//					Height0 = BaseHeight0 + m_Height;
-//					Height1 = BaseHeight1 + m_Height;
-//					Height2 = BaseHeight2 + m_Height;
-//					Height3 = BaseHeight3 + m_Height;
+//					Height0 = BaseHeight0 + _Height;
+//					Height1 = BaseHeight1 + _Height;
+//					Height2 = BaseHeight2 + _Height;
+//					Height3 = BaseHeight3 + _Height;
 //					if(Height0 > 255) Height0 = 255;
 //					if(Height1 > 255) Height1 = 255;
 //					if(Height2 > 255) Height2 = 255;
@@ -315,8 +315,8 @@ BOOL CEdgeBrush::Paint(DWORD XCoord,DWORD YCoord,BOOL SetHeight)
 //					break;
 			}
 
-			if(m_RandomRange != 0) {
-				Height = Height + BaseHeight;	//rand()%m_RandomRange;
+			if(_RandomRange != 0) {
+				Height = Height + BaseHeight;	//rand()%_RandomRange;
 			}
 
 			if(Height > 255) {
@@ -324,8 +324,8 @@ BOOL CEdgeBrush::Paint(DWORD XCoord,DWORD YCoord,BOOL SetHeight)
 			}
 
 			if(m_BrushSize) {
-				if( (ox == 0) && (oy == 0) && (m_HeightMode != EB_HM_NOSET) ) {
-//					if(m_HeightMode == EB_HM_SETADD) {
+				if( (ox == 0) && (oy == 0) && (_HeightMode != EB_HM_NOSET) ) {
+//					if(_HeightMode == EB_HM_SETADD) {
 //						m_HeightMap->SetVertexHeight(Edge,0,(float)Height0);
 //						m_HeightMap->SetVertexHeight(Edge,1,(float)Height1);
 //						m_HeightMap->SetVertexHeight(Edge,2,(float)Height2);
@@ -336,7 +336,7 @@ BOOL CEdgeBrush::Paint(DWORD XCoord,DWORD YCoord,BOOL SetHeight)
 					ChangedHeights = TRUE;
 				}
 			} else {
-				if(m_HeightMode != EB_HM_NOSET) {
+				if(_HeightMode != EB_HM_NOSET) {
 					switch(i) {
 						case 9:
 							m_HeightMap->SetVertexHeight(Edge,2,(float)Height);
@@ -709,9 +709,9 @@ void CEdgeBrush::SetButtonState(int Index,int State)
 
 void CEdgeBrush::SetBrushDirect(int Index,int HeightMode,int Height,int RandomRange,int Tid,int Flags)
 {
-	m_HeightMode = HeightMode;
-	m_Height = Height;
-	m_RandomRange = RandomRange;
+	_HeightMode = HeightMode;
+	_Height = Height;
+	_RandomRange = RandomRange;
 	m_BrushMap[Index].Tid = Tid;
 	m_BrushMap[Index].TFlags = Flags&255;
 }
@@ -721,9 +721,9 @@ BOOL CEdgeBrush::Write(FILE* Stream)
 {
 	fprintf(Stream,"        ");
 
-	fprintf(Stream,"%d ",m_HeightMode);
-	fprintf(Stream,"%d ",m_Height);
-	fprintf(Stream,"%d ",m_RandomRange);
+	fprintf(Stream,"%d ",_HeightMode);
+	fprintf(Stream,"%d ",_Height);
+	fprintf(Stream,"%d ",_RandomRange);
 
 	for(int i=0; i<16; i++) {
 		fprintf(Stream,"%d ",m_EdgeTable[i].Tid);
@@ -757,11 +757,11 @@ BOOL CEdgeBrush::ReadV2(FILE* Stream)
 	LONG Tmp;
 
 	CHECKTRUE(ReadLong(Stream,NULL,(long*)&Tmp));
-	m_HeightMode = (int)Tmp;
+	_HeightMode = (int)Tmp;
 	CHECKTRUE(ReadLong(Stream,NULL,(long*)&Tmp));
-	m_Height = (int)Tmp;
+	_Height = (int)Tmp;
 	CHECKTRUE(ReadLong(Stream,NULL,(long*)&Tmp));
-	m_RandomRange = (int)Tmp;
+	_RandomRange = (int)Tmp;
 
 	for(int i=0; i<16; i++) {
 		LONG Tid;

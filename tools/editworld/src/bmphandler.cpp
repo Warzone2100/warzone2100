@@ -105,7 +105,6 @@ bool BMPHandler::Create(unsigned int Width, unsigned int Height, unsigned int BP
 	}
 
 	BYTE	*Dst=(BYTE*)_DIBBits;
-	BYTE	*Src;
 
 	switch(BPP)
 	{

@@ -57,7 +57,7 @@ CBrushProp::CBrushProp(CView* view) :
 	_RandomRange(0),
 	_BrushID(0),
 	_BrushSize(1),
-	_HeightSetting(0),
+	_HeightSetting(0)
 {
 
 	m_pDoc = ((CWFView*)_View)->GetDocument();
