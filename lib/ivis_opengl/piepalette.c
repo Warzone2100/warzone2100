@@ -27,7 +27,6 @@ PIELIGHT psPalette[WZCOL_MAX];
 void pal_Init(void)
 {
 	// TODO: Read these from file so that mod-makers can change them
-
 	WZCOL_WHITE = pal_Colour(UBYTE_MAX, UBYTE_MAX, UBYTE_MAX);
 	WZCOL_BLACK = pal_Colour(1, 1, 1);
 	WZCOL_GREEN = pal_Colour(0, UBYTE_MAX, 0);
@@ -93,6 +92,8 @@ void pal_Init(void)
 	WZCOL_CONS_TEXT_USER_ALLY = WZCOL_YELLOW;
 	WZCOL_CONS_TEXT_USER_ENEMY = WZCOL_RED;
 	WZCOL_CONS_TEXT_DEBUG = pal_Colour(150, 150, 150);
+	WZCOL_MAP_PREVIEW_AIPLAYER = pal_Colour(0, 0x7f, 0);
+	WZCOL_GREY = pal_Colour(0x55, 0x55, 0x55);
 }
 
 void pal_ShutDown(void)

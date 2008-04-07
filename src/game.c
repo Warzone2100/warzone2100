@@ -11674,8 +11674,10 @@ BOOL plotStructurePreview16(char *backDropSprite, UBYTE scale, UDWORD offX, UDWO
 	STRUCT_SAVEHEADER		*psHeader;
 	char			aFileName[256];
 	UDWORD			xx,yy,x,y,count,fileSize,sizeOfSaveStruture;
+	UDWORD	playerid =0;
 	char			*pFileData = NULL;
 	LEVEL_DATASET	*psLevel;
+	PIELIGHT color = WZCOL_BLACK ;
 
 	levFindDataSet(game.map, &psLevel);
 	strcpy(aFileName,psLevel->apDataFiles[0]);
@@ -11765,6 +11767,7 @@ BOOL plotStructurePreview16(char *backDropSprite, UBYTE scale, UDWORD offX, UDWO
 
 			xx = map_coord(psSaveStructure2->x);
 			yy = map_coord(psSaveStructure2->y);
+			playerid = psSaveStructure2->player;
 		}
 		else if (psHeader->version < VERSION_14)
 		{
@@ -11799,6 +11802,7 @@ BOOL plotStructurePreview16(char *backDropSprite, UBYTE scale, UDWORD offX, UDWO
 
 			xx = map_coord(psSaveStructure12->x);
 			yy = map_coord(psSaveStructure12->y);
+			playerid = psSaveStructure12->player;
 		}
 		else if (psHeader->version <= VERSION_14)
 		{
@@ -11834,6 +11838,7 @@ BOOL plotStructurePreview16(char *backDropSprite, UBYTE scale, UDWORD offX, UDWO
 
 			xx = map_coord(psSaveStructure14->x);
 			yy = map_coord(psSaveStructure14->y);
+			playerid = psSaveStructure14->player;
 		}
 		else if (psHeader->version <= VERSION_16)
 		{
@@ -11870,6 +11875,7 @@ BOOL plotStructurePreview16(char *backDropSprite, UBYTE scale, UDWORD offX, UDWO
 
 			xx = map_coord(psSaveStructure15->x);
 			yy = map_coord(psSaveStructure15->y);
+			playerid = psSaveStructure15->player;
 		}
 		else if (psHeader->version <= VERSION_19)
 		{
@@ -11908,6 +11914,7 @@ BOOL plotStructurePreview16(char *backDropSprite, UBYTE scale, UDWORD offX, UDWO
 
 			xx = map_coord(psSaveStructure17->x);
 			yy = map_coord(psSaveStructure17->y);
+			playerid = psSaveStructure17->player;
 		}
 		else if (psHeader->version <= VERSION_20)
 		{
@@ -11943,6 +11950,7 @@ BOOL plotStructurePreview16(char *backDropSprite, UBYTE scale, UDWORD offX, UDWO
 
 			xx = map_coord(psSaveStructure20->x);
 			yy = map_coord(psSaveStructure20->y);
+			playerid = psSaveStructure20->player;
 		}
 		else
 		{
@@ -11981,16 +11989,32 @@ BOOL plotStructurePreview16(char *backDropSprite, UBYTE scale, UDWORD offX, UDWO
 
 			xx = map_coord(psSaveStructure->x);
 			yy = map_coord(psSaveStructure->y);
+			playerid = psSaveStructure->player;
+		}
+		// if human player, then use clan color.  If AI, then use something else.
+		if( isHumanPlayer(playerid) )
+		{
+			playerid = (UDWORD) getPlayerColour(playerid);
+			color.rgba = clanColours[playerid].rgba;
+			// kludge to fix black, so you can see it on some maps.
+			if ( playerid == 3 )	// in this case 3 = pallete entry for black.
+			{	
+	
+				color = WZCOL_GREY;
+			}
+		}
+		else
+		{	// Use a dark green color for the AI
+			color = WZCOL_MAP_PREVIEW_AIPLAYER ;
 		}
 
 		for(x = (xx*scale);x < (xx*scale)+scale ;x++)
 		{
 			for(y = (yy*scale);y< (yy*scale)+scale ;y++)
 			{
-				// 0xff0000 = red. use COL_LIGHTRED instead?
-				backDropSprite[3 * (((offY + y) * BACKDROP_HACK_WIDTH) + x + offX)] = 0xff;
-				backDropSprite[3 * (((offY + y) * BACKDROP_HACK_WIDTH) + x + offX) + 1] = 0x0;
-				backDropSprite[3 * (((offY + y) * BACKDROP_HACK_WIDTH) + x + offX) + 2] = 0x0;
+				backDropSprite[3 * (((offY + y) * BACKDROP_HACK_WIDTH) + x + offX)] = color.byte.r;	 
+				backDropSprite[3 * (((offY + y) * BACKDROP_HACK_WIDTH) + x + offX) + 1] = color.byte.g;
+				backDropSprite[3 * (((offY + y) * BACKDROP_HACK_WIDTH) + x + offX) + 2] = color.byte.b;
 			}
 		}
 	}

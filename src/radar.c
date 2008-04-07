@@ -66,7 +66,7 @@ RADAR_DRAW_MODE	radarDrawMode = RADAR_MODE_DEFAULT;
 static PIELIGHT		tileColours[MAX_TILES];
 static UDWORD		*radarBuffer;
 
-static PIELIGHT clanColours[MAX_PLAYERS]=
+PIELIGHT clanColours[MAX_PLAYERS]=
 {	// see frontend2.png for team color order.
 	// [r,g,b,a]
 	{{0,255,0,255}},		// green  Player 0

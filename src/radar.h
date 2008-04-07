@@ -50,5 +50,6 @@ extern BOOL		bEnemyAllyRadarColor;		//enemy/ally radar color
 extern RADAR_DRAW_MODE	radarDrawMode;		//current mini-map mode
 
 extern void radarInitVars(void);
+extern PIELIGHT clanColours[MAX_PLAYERS];
 
 #endif // __INCLUDED_SRC_RADAR_H__

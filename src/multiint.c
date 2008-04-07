@@ -87,6 +87,7 @@
 #include "init.h"
 #include "levels.h"
 
+#define MAP_PREVIEW_DISPLAY_TIME 2500	// number of milliseconds to show map in preview
 // ////////////////////////////////////////////////////////////////////////////
 // vars
 extern char	MultiCustomMapsPath[PATH_MAX];
@@ -825,6 +826,11 @@ static void addGameOptions(BOOL bRedo)
 			break;
 		}
 	}
+	addBlueForm(MULTIOP_OPTIONS, MULTIOP_MAP_PREVIEW, _("Map Preview"), MCOL0, MROW9, MULTIOP_BLUEFORMW, 27);
+						//hilight correct entry
+	addMultiBut(psWScreen,MULTIOP_MAP_PREVIEW,MULTIOP_MAP_BUT,MCOL4-8,2,MULTIOP_BUTW,MULTIOP_BUTH,
+				_("Click to see Map"), IMAGE_FOG_OFF,IMAGE_FOG_OFF_HI,true);
+			widgSetButtonState(psWScreen, MULTIOP_MAP_BUT,0); //1 = OFF  0=ON 
 
 	// cancel
 	addMultiBut(psWScreen,MULTIOP_OPTIONS,CON_CANCEL,
@@ -1572,6 +1578,9 @@ static void processMultiopWidgets(UDWORD id)
 			strcpy(game.map,widgGetString(psWScreen, MULTIOP_MAP));
 			addGameOptions(false);
 			break;
+		case MULTIOP_MAP_BUT:
+			loadMapPreview();
+			break;
 		}
 	}
 
@@ -1827,7 +1836,9 @@ static void processMultiopWidgets(UDWORD id)
 	case CON_CANCEL:
 		stopJoining();
 		break;
-
+	case MULTIOP_MAP_BUT:
+		loadMapPreview();
+		break;
 	default:
 		break;
 	}
@@ -2214,10 +2225,12 @@ void runMultiOptions(void)
 
 		if(hideTime != 0)
 		{
-			if(gameTime-hideTime <1500)
+			// we abort the 'hidetime' on press of a mouse button.
+			if(gameTime-hideTime < MAP_PREVIEW_DISPLAY_TIME && !mousePressed(MOUSE_LMB) && !mousePressed(MOUSE_RMB))
 			{
 				return;
 			}
+			inputLooseFocus();	// remove the mousepress from the input stream.
 			hideTime = 0;
 		}
 

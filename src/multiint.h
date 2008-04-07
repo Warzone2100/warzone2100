@@ -262,6 +262,9 @@ void loadMapPreview(void);
 
 #define MULTIOP_PLAYCHOOSER		10321
 #define MULTIOP_PLAYCHOOSER_END	10330
+
+#define MULTIOP_MAP_PREVIEW 920000
+#define MULTIOP_MAP_BUT		920002
 // ///////////////////////////////
 // Many Button Variations..
 
