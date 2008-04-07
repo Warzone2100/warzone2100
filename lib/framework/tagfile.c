@@ -63,6 +63,7 @@ static int countGroups = 0;		// check group recursion count while reading defini
 static char saveDefine[PATH_MAX];	// save define file for error messages
 static char saveTarget[PATH_MAX];	// save binary file for error messages
 
+#undef DEBUG_TAGFILE
 
 static void tf_error(const char * fmt, ...) WZ_DECL_FORMAT(printf, 1, 2);
 static void tf_print_nested_groups(unsigned int level, define_t *group);
@@ -325,6 +326,9 @@ static bool init(const char *definition, const char *datafile, bool write)
 	}
 	readmode = !write;
 	current = first;
+#ifdef DEBUG_TAGFILE
+	debug(LOG_ERROR, "opening %s", datafile);
+#endif
 	return true;
 }
 
@@ -475,6 +479,7 @@ static bool scanforward(element_t tag)
 		{
 		case TF_INT_U8_ARRAY:
 		case TF_INT_U8:
+		case TF_INT_BOOL:
 		case TF_INT_S8: fpos += 1 * array_size; break;
 		case TF_INT_FLOAT:
 		case TF_INT_U16_ARRAY:
@@ -484,7 +489,13 @@ static bool scanforward(element_t tag)
 		case TF_INT_U32:
 		case TF_INT_S32_ARRAY:
 		case TF_INT_S32: fpos += 4 * array_size; break;
-		case TF_INT_GROUP: fpos += 2; groupskip++; break;
+		case TF_INT_GROUP: 
+			fpos += 2;
+			groupskip++;
+#ifdef DEBUG_TAGFILE
+			debug(LOG_ERROR, "skipping group 0x%02x (groupskip==%d)", (unsigned int)read_tag, groupskip);
+#endif
+			break;
 		default:
 			TF_ERROR("Invalid value type in buffer");
 			return false;
@@ -571,6 +582,9 @@ uint16_t tagReadEnter(element_t tag)
 		TF_ERROR("Cannot enter group, none defined for element %x!", (unsigned int)current->element);
 		return 0;
 	}
+#ifdef DEBUG_TAGFILE
+	debug(LOG_ERROR, "entering 0x%02x", (unsigned int)tag);
+#endif
 	assert(current->group->parent != NULL);
 	assert(current->element == tag);
 	current->group->expectedItems = elements;	// for debugging and consistency checking
