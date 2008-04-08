@@ -2,7 +2,7 @@ SUBDIRS = mods
 
 BASELIST = anims audio components effects features tagdefinitions \
 	gamedesc.lev images messages misc multiplay novideo.rpl script \
-	sequenceaudio stats structs texpages wrf
+	sequenceaudio stats stats-sql structs texpages wrf
 PATCHLIST = addon.lev anims components effects \
 	messages multiplay stats structs wrf
 
