@@ -42,7 +42,7 @@
 #include "atmos.h"
 
 #define NUM_BUCKETS		1000
-#define NUM_OBJECTS		2000
+#define NUM_OBJECTS		4000
 #define BUCKET_OFFSET	0
 #define BUCKET_RANGE	32000
 
