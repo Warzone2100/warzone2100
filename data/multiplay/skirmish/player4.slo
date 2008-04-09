@@ -2423,7 +2423,10 @@ event managePower(managePowerTr)
 
 event difficultyModifier(difficultyModifierTr)
 {
-	skDifficultyModifier(me);
+	if(not isHumanPlayer(me))
+	{
+		skDifficultyModifier(me);
+	}
 }
 
 /////////////////////////////////////////////////////////////////////
