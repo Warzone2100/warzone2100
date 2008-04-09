@@ -35,14 +35,10 @@ extern	void	runMultiOptions			(void);
 extern	BOOL	startMultiOptions		(BOOL bReenter);
 extern	void	frontendMultiMessages	(void);
 
-extern	void	runForceSelect			(void);
-extern	BOOL	startForceSelect		(void);
-
 extern	BOOL	chooseColour			(UDWORD);
 
 extern BOOL addMultiBut(W_SCREEN *screen, UDWORD formid, UDWORD id, UDWORD x, UDWORD y, UDWORD width, UDWORD height, const char* tipres, UDWORD norm, UDWORD hi, BOOL showmouseover);
 
-extern  char	sForceName[256];
 extern	char	sPlayer[128];
 extern	SDWORD	playerTeamGUI[MAX_PLAYERS];
 extern	SDWORD	playerTeam[MAX_PLAYERS];

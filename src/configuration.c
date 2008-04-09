@@ -441,18 +441,6 @@ BOOL loadConfig(void)
 		setWarzoneKeyNumeric("alliance", game.alliance);
 	}
 
-	// force name
-	if(getWarzoneKeyString("forceName", sBuf))
-	{
-		strlcpy(sForceName, sBuf, sizeof(sForceName));
-	}
-	else
-	{
-		strlcpy(sForceName, "Default", sizeof(sForceName));
-		setWarzoneKeyString("forceName", sForceName);
-	}
-
-
 	// favourite phrases
 	if(getWarzoneKeyString("phrase0", ingame.phrases[0]))
 	{
@@ -650,7 +638,6 @@ BOOL saveConfig(void)
 		setWarzoneKeyNumeric("base", game.base);				// size of base
 		setWarzoneKeyNumeric("fog", game.fog);				// fog 'o war
 		setWarzoneKeyNumeric("alliance", game.alliance);			// allow alliances
-		setWarzoneKeyString("forceName", sForceName);			// force
 		setWarzoneKeyString("playerName",(char*)sPlayer);		// player name
 		setWarzoneKeyString("phrase0", ingame.phrases[0]);	// phrases
 		setWarzoneKeyString("phrase1", ingame.phrases[1]);
