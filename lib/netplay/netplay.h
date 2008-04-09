@@ -88,6 +88,7 @@ typedef enum
 	NET_PLAYER_JOINED,		//55 notice about player joining
 	NET_PLAYER_LEFT,		//56 notice about player leaving
 	NET_GAME_FLAGS,			//57 game flags
+	NET_READY_REQUEST,				//58 player ready to start an mp game
 	NUM_GAME_PACKETS
 } MESSAGE_TYPES;
 

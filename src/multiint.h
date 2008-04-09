@@ -42,6 +42,7 @@ extern BOOL addMultiBut(W_SCREEN *screen, UDWORD formid, UDWORD id, UDWORD x, UD
 extern	char	sPlayer[128];
 extern	SDWORD	playerTeamGUI[MAX_PLAYERS];
 extern	SDWORD	playerTeam[MAX_PLAYERS];
+extern	BOOL	bPlayerReadyGUI[MAX_PLAYERS];
 
 void    kickPlayer                      (uint32_t dpid);
 UDWORD  addPlayerBox            (BOOL);                         // players (mid) box
@@ -142,6 +143,14 @@ void loadMapPreview(void);
 #define MULTIOP_TEAMCHOOSER_FORM	102800
 #define MULTIOP_TEAMCHOOSER			102810
 #define MULTIOP_TEAMCHOOSER_END		102817
+
+// 'Ready' button
+#define MULTIOP_READY_START			102900
+#define MULTIOP_READY_WIDTH			41
+#define MULTIOP_READY_HEIGHT		36
+#define MULTIOP_READY_IMG_OFFSET_X	158
+#define MULTIOP_READY_IMG_OFFSET_Y	8
+#define	MULTIOP_READY_END			102907
 
 #define MULTIOP_PLAYERWIDTH		230
 #define	MULTIOP_PLAYERHEIGHT		36

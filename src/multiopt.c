@@ -135,6 +135,12 @@ void sendOptions(uint32_t dest, uint32_t play)
 		NETuint8_t(&ingame.pStructureLimits[i].limit);
 	}
 
+	// Send ready status of all players
+	for (i = 0; i < MAX_PLAYERS; i++)
+	{
+		NETbool(&bPlayerReadyGUI[i]);
+	}
+
 	NETend();
 }
 
@@ -248,6 +254,12 @@ void recvOptions()
 		NETuint8_t(&ingame.pStructureLimits[i].limit);
 	}
 
+	// Receive ready status of all players
+	for (i = 0; i < MAX_PLAYERS; i++)
+	{
+		NETbool(&bPlayerReadyGUI[i]);
+	}
+
 	NETend();
 
 	// Post process
@@ -334,6 +346,8 @@ BOOL hostCampaign(char *sGame, char *sPlayer)
 	loadMultiStats(sPlayer,&playerStats);				// stats stuff
 	setMultiStats(NetPlay.dpidPlayer,playerStats,false);
 	setMultiStats(NetPlay.dpidPlayer,playerStats,true);
+
+	bPlayerReadyGUI[0] = false;
 
 	if(!NetPlay.bComms)
 	{

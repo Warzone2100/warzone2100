@@ -111,6 +111,9 @@ static BOOL recvBeacon(void);
 static BOOL recvDestroyTemplate(void);
 static BOOL recvResearch(void);
 
+bool		multiplayPlayersReady		(bool bNotifyStatus);
+void		startMultiplayerGame		(void);
+
 // ////////////////////////////////////////////////////////////////////////////
 // temporarily disable multiplayer mode.
 BOOL turnOffMultiMsg(BOOL bDoit)
@@ -749,6 +752,15 @@ BOOL recvMessage(void)
 			break;
 		case NET_TEAMREQUEST:
 			recvTeamRequest();
+			break;
+		case NET_READY_REQUEST:
+			recvReadyRequest();
+
+			// if hosting try to start the game if everyone is ready
+			if(NetPlay.bHost && multiplayPlayersReady(false))
+			{
+				startMultiplayerGame();
+			}
 			break;
 		case NET_ARTIFACTS:
 			recvMultiPlayerRandomArtifacts();

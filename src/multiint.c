@@ -113,6 +113,8 @@ static BOOL					safeSearch		= false;				// allow auto game finding.
 
 static UDWORD hideTime=0;
 
+BOOL						bPlayerReadyGUI[MAX_PLAYERS] = {false};
+
 #define DEFAULTCAMPAIGNMAP	"Rush"
 #define DEFAULTSKIRMISHMAP	"Sk-Rush"
 
@@ -132,6 +134,7 @@ void		intDisplayFeBox				(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIEL
 void		displayRemoteGame			(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
 void		displayPlayer				(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
 void		displayTeamChooser			(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
+void		displayMultiReady			(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
 void		displayMultiEditBox			(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
 void		setLockedTeamsMode			(void);
 
@@ -147,7 +150,6 @@ void		runConnectionScreen		(void);
 BOOL		startConnectionScreen	(void);
 
 // Game option functions
-static	void	addOkBut			(void);
 static	void	addGameOptions		(BOOL bRedo);				// options (rhs) boxV
 UDWORD	addPlayerBox		(BOOL);				// players (mid) box
 static	void	addChatBox			(void);
@@ -167,6 +169,7 @@ static void		closeTeamChooser	(void);
 static BOOL		SendColourRequest	(UBYTE player, UBYTE col,UBYTE chosenPlayer);
 static BOOL		safeToUseColour		(UDWORD player,UDWORD col);
 BOOL			chooseColour		(UDWORD);
+static BOOL		changeReadyStatus	(UBYTE player, BOOL bReady);
 
 // ////////////////////////////////////////////////////////////////////////////
 // map previews..
@@ -923,6 +926,9 @@ static void addColourChooser(UDWORD player)
 	// detele team chooser botton
 	widgDelete(psWScreen,MULTIOP_TEAMS_START+player);
 
+	// detele 'ready' button
+	widgDelete(psWScreen,MULTIOP_READY_START+player);
+
 	// add form.
 	addBlueForm(MULTIOP_PLAYERS,MULTIOP_COLCHOOSER_FORM,"",
 				10,
@@ -1022,6 +1028,60 @@ BOOL recvTeamRequest()
 	}
 
 	changeTeam(player, team);
+
+	return true;
+}
+
+static BOOL SendReadyRequest(UBYTE player, BOOL bReady)
+{
+	if(NetPlay.bHost)			// do or request the change.
+	{
+		return changeReadyStatus(player, bReady);
+	}
+	else
+	{
+		NETbeginEncode(NET_READY_REQUEST, NET_ALL_PLAYERS);
+			NETuint8_t(&player);
+			NETbool(&bReady);
+		NETend();
+	}
+	return true;
+}
+
+BOOL recvReadyRequest()
+{
+	UBYTE	player;
+	BOOL	bReady;
+
+	if(!NetPlay.bHost)							//only host should act.
+	{
+		return true;
+	}
+
+	NETbeginDecode(NET_READY_REQUEST);
+		NETuint8_t(&player);
+		NETbool(&bReady);
+	NETend();
+
+	if (player > MAX_PLAYERS)
+	{
+		debug(LOG_ERROR, "Invalid NET_READY_REQUEST from player %d: player id = %d",
+		      NETgetSource(), (int)player);
+		return false;
+	}
+
+	return changeReadyStatus((UBYTE)player, bReady);
+}
+
+static BOOL changeReadyStatus(UBYTE player, BOOL bReady)
+{
+	unsigned int playerGUI_ID;
+
+	for(playerGUI_ID=0;(playerGUI_ID <= game.maxPlayers) &&
+		(player2dpid[player] != NetPlay.players[playerGUI_ID].dpid);playerGUI_ID++);
+
+	bPlayerReadyGUI[playerGUI_ID] = bReady;
+	sendOptions(player2dpid[player], player);	// tell everyone && update requesting player.
 
 	return true;
 }
@@ -1127,6 +1187,9 @@ static void addTeamChooser(UDWORD player)
 
 	// delete that players box
 	widgDelete(psWScreen,MULTIOP_PLAYER_START+player);
+
+	// delete 'ready' button
+	widgDelete(psWScreen,MULTIOP_READY_START+player);
 
 	// add form.
 	addBlueForm(MULTIOP_PLAYERS,MULTIOP_TEAMCHOOSER_FORM,"",
@@ -1263,7 +1326,7 @@ UDWORD addPlayerBox(BOOL players)
 				sButInit.style = WBUT_PLAIN;
 				sButInit.x = 10 + MULTIOP_TEAMSWIDTH;
 				sButInit.y = (UWORD)(( (MULTIOP_PLAYERHEIGHT+5)*i)+4);
-				sButInit.width = MULTIOP_PLAYERWIDTH - MULTIOP_TEAMSWIDTH;
+				sButInit.width = MULTIOP_PLAYERWIDTH - MULTIOP_TEAMSWIDTH - MULTIOP_READY_WIDTH;
 				sButInit.height = MULTIOP_PLAYERHEIGHT;
 				sButInit.pTip = NULL;//Players[i].name;
 				sButInit.FontID = font_regular;
@@ -1280,6 +1343,29 @@ UDWORD addPlayerBox(BOOL players)
 					widgAddButton(psWScreen, &sButInit);
 				}
 
+				// add 'ready' button
+				memset(&sButInit, 0, sizeof(W_BUTINIT));
+				sButInit.formID = MULTIOP_PLAYERS;
+				sButInit.id = MULTIOP_READY_START+i;
+				sButInit.style = WBUT_PLAIN;
+				sButInit.x = 10 + MULTIOP_PLAYERWIDTH - MULTIOP_READY_WIDTH;
+				sButInit.y = (UWORD)(( (MULTIOP_PLAYERHEIGHT+5)*i)+4);
+				sButInit.width = MULTIOP_READY_WIDTH;
+				sButInit.height = MULTIOP_READY_HEIGHT;
+				sButInit.FontID = font_regular;
+				sButInit.pDisplay = displayMultiReady;
+				sButInit.UserData = i;
+
+				if(bPlayerReadyGUI[i])
+				{
+					sButInit.pTip = "Ready";
+				}
+				else
+				{
+					sButInit.pTip = "Click when ready";
+				}
+
+				widgAddButton(psWScreen, &sButInit);
 			}
 			else if(game.type == SKIRMISH)	// skirmish player
 			{
@@ -1328,16 +1414,6 @@ void kickPlayer(uint32_t player_id)
 	NETbeginEncode(NET_KICK, NET_ALL_PLAYERS);
 		NETuint32_t(&player_id);
 	NETend();
-}
-
-
-static void addOkBut(void)
-{
-	addMultiBut(psWScreen, MULTIOP_OPTIONS,CON_OK,
-		MULTIOP_OKX,MULTIOP_OKY,
-		iV_GetImageWidth(FrontImages,IMAGE_BIGOK),
-		iV_GetImageHeight(FrontImages,IMAGE_BIGOK),
-		_("Accept Settings"),IMAGE_BIGOK,IMAGE_BIGOK,false);
 }
 
 static void addChatBox(void)
@@ -1616,7 +1692,6 @@ static void processMultiopWidgets(UDWORD id)
 			{
 				sendOptions(0,0);
 				disableMultiButs();
-				addOkBut();
 			}
 			break;
 
@@ -1627,7 +1702,6 @@ static void processMultiopWidgets(UDWORD id)
 			{
 				disableMultiButs();
 				sendOptions(0,0);
-				addOkBut();
 			}
 			break;
 
@@ -1638,7 +1712,6 @@ static void processMultiopWidgets(UDWORD id)
 			{
 				sendOptions(0,0);
 				disableMultiButs();
-				addOkBut();
 			}
 			break;
 
@@ -1762,7 +1835,6 @@ static void processMultiopWidgets(UDWORD id)
 
 		addGameOptions(false);									// update game options box.
 		addChatBox();
-		addOkBut();
 
 		disableMultiButs();
 
@@ -1795,42 +1867,6 @@ static void processMultiopWidgets(UDWORD id)
 
 		sendTextMessage(widgGetString(psWScreen, MULTIOP_CHATEDIT),true);					//send
 		widgSetString(psWScreen, MULTIOP_CHATEDIT, "");										// clear box
-		break;
-
-	case CON_OK:
-		decideWRF();										// set up swrf & game.map
-		bMultiPlayer = true;
-
-		if(NetPlay.bHost)
-		{
-
-			///////////
-			//
-			if(game.type == SKIRMISH)
-			{
-				chooseSkirmishColours();
-				sendOptions(0,0);
-			}
-			// end of skirmish col choose
-			////////
-
-			NEThaltJoining();							// stop new players entering.
-			SendFireUp();								//bcast a fireup message
-		}
-
-		// set the fog correctly..
-		setRevealStatus(game.fog);
-		war_SetFog(!game.fog);
-
-		changeTitleMode(STARTGAME);
-
-		bHosted = false;
-
-		if(NetPlay.bHost)
-		{
-			sendTextMessage(_("Host is Starting Game"),true);
-		}
-		return;
 		break;
 
 	case CON_CANCEL:
@@ -1893,6 +1929,23 @@ static void processMultiopWidgets(UDWORD id)
 			addConsoleMessage(msg,DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 		}
 	}
+
+	// 'ready' button
+	if((id >= MULTIOP_READY_START) && (id <= MULTIOP_READY_END))	// clicked on a player
+	{
+		UBYTE player = (UBYTE)(id-MULTIOP_READY_START);
+		if(NetPlay.players[player].dpid == player2dpid[selectedPlayer] )
+		{
+			SendReadyRequest(selectedPlayer, !bPlayerReadyGUI[player]);
+
+			// if hosting try to start the game if everyone is ready
+			if(NetPlay.bHost && multiplayPlayersReady(false))
+			{
+				startMultiplayerGame();
+			}
+		}
+	}
+		
 
 	if((id >= MULTIOP_PLAYER_START) && (id <= MULTIOP_PLAYER_END))	// clicked on a player
 	{
@@ -1971,6 +2024,38 @@ static void processMultiopWidgets(UDWORD id)
 
 }
 
+/* Start a multiplayer or skirmish game */
+void startMultiplayerGame(void)
+{
+	decideWRF();										// set up swrf & game.map
+	bMultiPlayer = true;
+
+	if(NetPlay.bHost)
+	{
+		if(game.type == SKIRMISH)
+		{
+			chooseSkirmishColours();
+			sendOptions(0,0);
+		}
+
+		NEThaltJoining();							// stop new players entering.
+		SendFireUp();								//bcast a fireup message
+	}
+
+	// set the fog correctly..
+	setRevealStatus(game.fog);
+	war_SetFog(!game.fog);
+
+	changeTitleMode(STARTGAME);
+
+	bHosted = false;
+
+	if(NetPlay.bHost)
+	{
+		sendTextMessage(_("Host is Starting Game"),true);
+	}
+}
+
 // ////////////////////////////////////////////////////////////////////////////
 // Net message handling
 
@@ -2012,6 +2097,16 @@ void frontendMultiMessages(void)
 
 		case NET_TEAMREQUEST:
 			recvTeamRequest();
+			break;
+
+		case NET_READY_REQUEST:
+			recvReadyRequest();
+
+			// if hosting try to start the game if everyone is ready
+			if(NetPlay.bHost && multiplayPlayersReady(false))
+			{
+				startMultiplayerGame();
+			}
 			break;
 
 		case NET_PING:						// diagnostic ping msg.
@@ -2301,7 +2396,6 @@ BOOL startMultiOptions(BOOL bReenter)
 	if(bReenter && bHosted)
 	{
 		disableMultiButs();
-		addOkBut();
 	}
 
 	return true;
@@ -2431,6 +2525,21 @@ static UDWORD bestPlayer(UDWORD player)
 	}
 
 	return count;
+}
+
+void displayMultiReady(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
+{
+	UDWORD		x = xOffset+psWidget->x;
+	UDWORD		y = yOffset+psWidget->y;
+	BOOL		Hilight = false;
+
+	if( ((W_BUTTON*)psWidget)->state & (WBUTS_HILITE| WCLICK_DOWN | WCLICK_LOCKED | WCLICK_CLICKLOCK))
+	{
+		Hilight = true;
+	}
+
+	//bluboxes.
+	drawBlueBox(x,y,psWidget->width,psWidget->height);							// right
 }
 
 void displayTeamChooser(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
@@ -2674,6 +2783,18 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *p
 		//unknown bugfix
 //		game.skirmishPlayers[i] =true;	// don't clear this one!
 		game.skDiff[i]=UBYTE_MAX;	// don't clear this one!
+
+		// draw 'ready' button state
+		if(bPlayerReadyGUI[i])
+		{
+			iV_DrawImage(FrontImages,IMAGE_OK,x+MULTIOP_READY_IMG_OFFSET_X,
+				y+MULTIOP_READY_IMG_OFFSET_Y);
+		}
+		else
+		{
+			iV_DrawImage(FrontImages,IMAGE_NO,x+MULTIOP_READY_IMG_OFFSET_X,
+				y+MULTIOP_READY_IMG_OFFSET_Y);
+		}
 	}
 	else
 	{
@@ -2900,4 +3021,31 @@ void setLockedTeamsMode(void)
 	{
 		sendOptions(0,0);
 	}
+}
+
+/* Returns true if all human players clicked on the 'ready' button */
+bool multiplayPlayersReady(bool bNotifyStatus)
+{
+	unsigned int	player,playerID;
+	bool			bReady;
+
+	bReady = true;
+
+	for(player = 0; player < game.maxPlayers; player++)
+	{
+		// check if this human player is ready, ignore AIs
+		if(NetPlay.players[player].dpid && !bPlayerReadyGUI[player])
+		{
+			if(bNotifyStatus)
+			{
+				for(playerID=0;(playerID <= game.maxPlayers) && (player2dpid[playerID] != NetPlay.players[player].dpid);playerID++);
+
+				console("%s is not ready", getPlayerName(playerID));
+			}
+
+			bReady = false;
+		}
+	}
+
+	return bReady;
 }

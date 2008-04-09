@@ -65,5 +65,6 @@ extern BOOL	recvMapFileRequested		(void);
 
 extern BOOL recvTextMessageAI		(void);		//AI multiplayer message
 extern BOOL	recvTeamRequest		(void);
+extern BOOL	recvReadyRequest		(void);
 
 #endif // __INCLUDED_SRC_MULTIRECV_H__

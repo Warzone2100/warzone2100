@@ -288,6 +288,8 @@ BOOL MultiPlayerJoin(UDWORD dpid)
 		setupNewPlayer(dpid,i);						// setup all the guff for that player.
 		sendOptions(dpid,i);
 
+		bPlayerReadyGUI[dpid] = false;
+
 		// if skirmish and game full, then kick...
 		if(game.type == SKIRMISH && NetPlay.playercount > game.maxPlayers )
 		{
