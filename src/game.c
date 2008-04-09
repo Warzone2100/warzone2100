@@ -2764,6 +2764,7 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 		}
 
 		//load in the mission structures
+		initStructLimits();
 		aFileName[fileExten] = '\0';
 		strcat(aFileName, "mstruct.bjo");
 		/* Load in the chosen file data */
@@ -3083,6 +3084,7 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 
 	//load in the structures
 	LOADBARCALLBACK();	//	loadingScreenCallback();
+	initStructLimits();
 	aFileName[fileExten] = '\0';
 	strcat(aFileName, "struct.bjo");
 	/* Load in the chosen file data */
@@ -3330,10 +3332,6 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 	}
 	else
 	{
-		//load in the structure limits
-		//load the data into structLimits DONE IN SCRIPTS NOW so just init
-		initStructLimits();
-
 		//set up the structure Limits
 		setCurrentStructQuantity(true);
 	}

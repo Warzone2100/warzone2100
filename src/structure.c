@@ -1581,8 +1581,9 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 		// Don't allow more than interface limits
 		if (asStructLimits[player][max].currentQuantity + 1 > asStructLimits[player][max].limit)
 		{
-			debug(LOG_ERROR, "Player %u: Building %s could not be built due to building limits!", 
-			      player, pStructureType->pName);
+			debug(LOG_ERROR, "Player %u: Building %s could not be built due to building limits (has %d, max %d)!", 
+			      player, pStructureType->pName, asStructLimits[player][max].currentQuantity, 
+			      asStructLimits[player][max].limit);
 			return NULL;
 		}
 
