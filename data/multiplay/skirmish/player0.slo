@@ -3034,7 +3034,6 @@ function void shutDownAI()
 	setEventTrigger(formHumanAlliances,	inactive);
 	setEventTrigger(consolidateEvent,	inactive);
 	setEventTrigger(managePower,	inactive);
-	setEventTrigger(difficultyModifier,	inactive);
 	setEventTrigger(vtolStructs,inactive);
 	setEventTrigger(buildVtols,inactive);
 	setEventTrigger(vtolAttack,inactive);
@@ -3094,7 +3093,6 @@ function void reassignAI()
 	setEventTrigger(breakAllianceEvent,breakAllianceEventTr);
 	setEventTrigger(consolidateEvent,consolidateEventTr);
 	setEventTrigger(managePower,managePowerTr);
-	setEventTrigger(difficultyModifier,difficultyModifierTr);
 	setEventTrigger(vtolStructs,inactive);
 	setEventTrigger(buildVtols,inactive);
 	//setEventTrigger(vtolAttack,inactive);
