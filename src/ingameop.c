@@ -50,6 +50,7 @@
 #include "mission.h"
 #include "transporter.h"
 #include "main.h"
+#include "warzoneconfig.h"
 
 //status bools.(for hci.h)
 BOOL	ClosingInGameOp	= false;
@@ -276,9 +277,8 @@ static BOOL _intAddInGameOptions(void)
 	intMode		= INT_INGAMEOP;			// change interface mode.
 	InGameOpUp	= true;					// inform interface.
 
-	// Set the default uncoloured cursor here, since it looks slightly
-	// better for menus and such.
-	pie_SetMouse(CURSOR_DEFAULT, false);
+	// Using software cursors (when on) for these menus due to a bug in SDL's SDL_ShowCursor()
+	pie_SetMouse(CURSOR_DEFAULT, war_GetColouredCursor());
 
 	return true;
 }

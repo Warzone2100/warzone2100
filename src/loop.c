@@ -211,9 +211,8 @@ GAMECODE gameLoop(void)
 						 && CoordInRadar(mouseX(), mouseY())
 						 && getHQExists(selectedPlayer) ) ) )
 			{
-				// Set the default uncoloured cursor here, since it looks slightly
-				// better for menus and such.
-				pie_SetMouse(CURSOR_DEFAULT, false);
+				// Using software cursors (when on) for these menus due to a bug in SDL's SDL_ShowCursor()
+				pie_SetMouse(CURSOR_DEFAULT, war_GetColouredCursor());
 
 				intRetVal = INT_INTERCEPT;
 			}
@@ -466,9 +465,8 @@ GAMECODE gameLoop(void)
 	}
 	else // paused
 	{
-		// Set the default uncoloured cursor here, since it looks slightly
-		// better for menus and such.
-		pie_SetMouse(CURSOR_DEFAULT, false);
+		// Using software cursors (when on) for these menus due to a bug in SDL's SDL_ShowCursor()
+		pie_SetMouse(CURSOR_DEFAULT, war_GetColouredCursor());
 
 		intRetVal = INT_NONE;
 		if (loop_GetVideoStatus())

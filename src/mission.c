@@ -76,6 +76,7 @@
 #include "scores.h"
 #include "keymap.h"
 #include "texture.h"
+#include "warzoneconfig.h"
 
 #define		IDMISSIONRES_TXT		11004
 #define		IDMISSIONRES_LOAD		11005
@@ -2927,9 +2928,8 @@ void intRemoveMissionResultNoAnim(void)
 
 void intRunMissionResult(void)
 {
-	// Set the default uncoloured cursor here, since it looks slightly
-	// better for menus and such.
-	pie_SetMouse(CURSOR_DEFAULT, false);
+	// Using software cursors (when on) for these menus due to a bug in SDL's SDL_ShowCursor()
+	pie_SetMouse(CURSOR_DEFAULT, war_GetColouredCursor());
 
 	if(bLoadSaveUp)
 	{

@@ -59,6 +59,7 @@
 #include "multiint.h"
 #include "multistat.h"
 #include "multilimit.h"
+#include "warzoneconfig.h"
 
 typedef struct _star
 {
@@ -120,9 +121,8 @@ TITLECODE titleLoop(void)
 
 		changeTitleMode(TITLE);
 
-		// Set the default uncoloured cursor here, since it looks slightly
-		// better for menus and such.
-		pie_SetMouse(CURSOR_DEFAULT, false);
+		// Using software cursors (when on) for these menus due to a bug in SDL's SDL_ShowCursor()
+		pie_SetMouse(CURSOR_DEFAULT, war_GetColouredCursor());
 	}
 
 	switch(titleMode) // run relevant title screen code.

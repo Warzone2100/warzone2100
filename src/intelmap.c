@@ -53,7 +53,7 @@
 #include "loop.h"
 #include "lib/script/script.h"
 #include "scripttabs.h"
-
+#include "warzoneconfig.h"
 #include "seqdisp.h"
 #include "mission.h"
 
@@ -1480,9 +1480,8 @@ void displayImmediateMessage(MESSAGE *psMessage)
 	/* so we lied about definately not starting the intelligence screen */
 	addIntelScreen();
 
-	// Set the default uncoloured cursor here, since it looks slightly
-	// better for menus and such.
-	pie_SetMouse(CURSOR_DEFAULT, false);
+	// Using software cursors (when on) for these menus due to a bug in SDL's SDL_ShowCursor()
+	pie_SetMouse(CURSOR_DEFAULT, war_GetColouredCursor());
 
 	/* addIntelScreen() (via addIntelMap()) actually starts
 	 * playing psCurrentMsg automatically */
