@@ -286,7 +286,7 @@ static BOOL _intAddInGameOptions(void)
 
 BOOL intAddInGameOptions(void)
 {
-
+	sliderEnableDrag(true);
 	return _intAddInGameOptions();
 }
 

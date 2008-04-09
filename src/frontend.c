@@ -517,6 +517,8 @@ BOOL runMultiPlayerMenu(void)
 // Options Menu
 BOOL startOptionsMenu(void)
 {
+	sliderEnableDrag(true);
+
 	addBackdrop();
 	addTopForm();
 	addBottomForm();
