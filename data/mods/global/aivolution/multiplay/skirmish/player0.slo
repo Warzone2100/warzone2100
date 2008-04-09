@@ -1312,12 +1312,6 @@ function void mainInitialize()
 	setEventTrigger(startNewResearch, researchCompleteTr);
 	setEventTrigger(startAllResearch, startAllResearchTr);
 	setEventTrigger(evUpdateMapRevealFactor, updateMapRevealFactorTr);
-
-	//if(me != selectedPlayer)
-	if(modifierOn)
-	{
-		setEventTrigger(diffMod, diffModTr);
-	}
 }
 
 //---------------------------------------------------------
@@ -2135,9 +2129,12 @@ function void fixGroups()
 	}
 }
 
-event diffMod(inactive)
+event diffMod(diffModTr)
 {
-	skDifficultyModifier(me);
+	if(not isHumanPlayer(me) and modifierOn)
+	{
+		skDifficultyModifier(me);
+	}
 }
 
 function void goRTB()
