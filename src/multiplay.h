@@ -214,7 +214,10 @@ extern BOOL msgStackGetDroid(DROID **ppsDroid);
 extern BOOL sendBeacon(int32_t locX, int32_t locY, int32_t forPlayer, int32_t sender, const char* pStr);
 extern BOOL msgStackFireTop(void);
 
-extern	bool multiplayPlayersReady(bool bNotifyStatus);
-extern	void startMultiplayerGame(void);
+extern	bool multiplayPlayersReady	(bool bNotifyStatus);
+extern	void startMultiplayerGame	(void);
+extern	void resetReadyStatus		(bool bSendOptions);
+
+extern	BOOL bPlayerReadyGUI[MAX_PLAYERS];
 
 #endif // __INCLUDED_SRC_MULTIPLAY_H__

@@ -113,8 +113,6 @@ static BOOL					safeSearch		= false;				// allow auto game finding.
 
 static UDWORD hideTime=0;
 
-BOOL						bPlayerReadyGUI[MAX_PLAYERS] = {false};
-
 #define DEFAULTCAMPAIGNMAP	"Rush"
 #define DEFAULTSKIRMISHMAP	"Sk-Rush"
 
@@ -170,6 +168,7 @@ static BOOL		SendColourRequest	(UBYTE player, UBYTE col,UBYTE chosenPlayer);
 static BOOL		safeToUseColour		(UDWORD player,UDWORD col);
 BOOL			chooseColour		(UDWORD);
 static BOOL		changeReadyStatus	(UBYTE player, BOOL bReady);
+void			resetReadyStatus	(bool bSendOptions);
 
 // ////////////////////////////////////////////////////////////////////////////
 // map previews..
@@ -1027,6 +1026,8 @@ BOOL recvTeamRequest()
 		return false;
 	}
 
+	resetReadyStatus(false);
+
 	changeTeam(player, team);
 
 	return true;
@@ -1167,6 +1168,8 @@ BOOL recvColourRequest()
 		      NETgetSource(), (int)player, (int)chosenPlayer);
 		return false;
 	}
+
+	resetReadyStatus(false);
 
 	return changeColour(player, col, chosenPlayer);
 }
@@ -1669,6 +1672,9 @@ static void processMultiopWidgets(UDWORD id)
 			widgSetButtonState(psWScreen, MULTIOP_FOG_ON,WBUT_LOCK);
 			widgSetButtonState(psWScreen, MULTIOP_FOG_OFF,0);
 			game.fog = true;
+
+			resetReadyStatus(false);
+
 			if(bHosted)
 			{
 				sendOptions(0,0);
@@ -1679,6 +1685,9 @@ static void processMultiopWidgets(UDWORD id)
 			widgSetButtonState(psWScreen, MULTIOP_FOG_ON,0);
 			widgSetButtonState(psWScreen, MULTIOP_FOG_OFF,WBUT_LOCK);
 			game.fog = false;
+
+			resetReadyStatus(false);
+
 			if(bHosted)
 			{
 				sendOptions(0,0);
@@ -1688,6 +1697,9 @@ static void processMultiopWidgets(UDWORD id)
 		case MULTIOP_CLEAN:
 			game.base = CAMP_CLEAN;
 			addGameOptions(false);
+
+			resetReadyStatus(false);
+
 			if(bHosted)
 			{
 				sendOptions(0,0);
@@ -1698,6 +1710,9 @@ static void processMultiopWidgets(UDWORD id)
 		case MULTIOP_BASE:
 			game.base = CAMP_BASE;
 			addGameOptions(false);
+
+			resetReadyStatus(false);
+
 			if(bHosted)
 			{
 				disableMultiButs();
@@ -1708,6 +1723,9 @@ static void processMultiopWidgets(UDWORD id)
 		case MULTIOP_DEFENCE:
 			game.base = CAMP_WALLS;
 			addGameOptions(false);
+
+			resetReadyStatus(false);
+
 			if(bHosted)
 			{
 				sendOptions(0,0);
@@ -1722,6 +1740,9 @@ static void processMultiopWidgets(UDWORD id)
 			widgSetButtonState(psWScreen, MULTIOP_ALLIANCE_TEAMS,0);
 
 			game.alliance = NO_ALLIANCES;	//0;
+
+			resetReadyStatus(false);
+
 			if(bHosted)
 			{
 				sendOptions(0,0);
@@ -1735,6 +1756,9 @@ static void processMultiopWidgets(UDWORD id)
 			widgSetButtonState(psWScreen, MULTIOP_ALLIANCE_Y,WBUT_LOCK);
 
 			game.alliance = ALLIANCES;	//1;
+
+			resetReadyStatus(false);
+
 			if(bHosted)
 			{
 				sendOptions(0,0);
@@ -1742,6 +1766,7 @@ static void processMultiopWidgets(UDWORD id)
 			break;
 
 		case MULTIOP_ALLIANCE_TEAMS:	//locked teams
+			resetReadyStatus(false);
 			setLockedTeamsMode();
 			break;
 
@@ -1750,6 +1775,9 @@ static void processMultiopWidgets(UDWORD id)
 			widgSetButtonState(psWScreen, MULTIOP_POWLEV_MED,0);
 			widgSetButtonState(psWScreen, MULTIOP_POWLEV_HI ,0);
 			game.power = LEV_LOW;
+
+			resetReadyStatus(false);
+
 			if(bHosted)
 			{
 				sendOptions(0,0);
@@ -1761,6 +1789,9 @@ static void processMultiopWidgets(UDWORD id)
 			widgSetButtonState(psWScreen, MULTIOP_POWLEV_MED,WBUT_LOCK);
 			widgSetButtonState(psWScreen, MULTIOP_POWLEV_HI ,0);
 			game.power = LEV_MED;
+
+			resetReadyStatus(false);
+
 			if(bHosted)
 			{
 				sendOptions(0,0);
@@ -1772,6 +1803,9 @@ static void processMultiopWidgets(UDWORD id)
 			widgSetButtonState(psWScreen, MULTIOP_POWLEV_MED,0);
 			widgSetButtonState(psWScreen, MULTIOP_POWLEV_HI ,WBUT_LOCK);
 			game.power = LEV_HI;
+
+			resetReadyStatus(false);
+
 			if(bHosted)
 			{
 				sendOptions(0,0);
@@ -1822,6 +1856,8 @@ static void processMultiopWidgets(UDWORD id)
 		strcpy((char*)game.name,widgGetString(psWScreen, MULTIOP_GNAME));	// game name
 		strcpy((char*)sPlayer,widgGetString(psWScreen, MULTIOP_PNAME));	// pname
 		strcpy((char*)game.map,widgGetString(psWScreen, MULTIOP_MAP));		// add the name
+
+		resetReadyStatus(false);
 
 		removeWildcards((char*)sPlayer);
 
@@ -1910,6 +1946,8 @@ static void processMultiopWidgets(UDWORD id)
 		ASSERT((id - MULTIOP_TEAMCHOOSER) >= 0
 			&& (id - MULTIOP_TEAMCHOOSER) < MAX_PLAYERS, "processMultiopWidgets: wrong id - MULTIOP_TEAMCHOOSER value (%d)", id - MULTIOP_TEAMCHOOSER);
 
+		resetReadyStatus(false);		// will reset only locally if not a host
+
 		SendTeamRequest(teamChooserUp(),(UBYTE)id-MULTIOP_TEAMCHOOSER);
 
 		//playerTeamGUI[teamChooserUp()] = id - MULTIOP_TEAMCHOOSER;
@@ -1923,6 +1961,7 @@ static void processMultiopWidgets(UDWORD id)
 		//-----------------------------
 		if(game.alliance != ALLIANCES_TEAMS && bHosted)		//only if host
 		{
+			resetReadyStatus(false);
 			setLockedTeamsMode();		//update GUI
 
 			sprintf( msg,"'%s' mode enabled", _("Locked Teams") );
@@ -1971,6 +2010,8 @@ static void processMultiopWidgets(UDWORD id)
 					sasprintf(&msg, _("The host has kicked %s from the game!"), getPlayerName(j));
 					sendTextMessage(msg, true);
 					kickPlayer(victim);
+
+					resetReadyStatus(true);		//reset and send notification to all clients
 				}
 			}
 		}
@@ -2003,12 +2044,16 @@ static void processMultiopWidgets(UDWORD id)
 			addPlayerBox(  !ingame.bHostSetup || bHosted);	//restore initial options screen
 		}
 
+		resetReadyStatus(false);
+
 		sendOptions(0,0);
 	}
 
 	// don't kill last player
 	if((id >= MULTIOP_COLCHOOSER) && (id <= MULTIOP_COLCHOOSER_END)) // chose a new colour.
 	{
+		resetReadyStatus(false);		// will reset only locally if not a host
+
 		SendColourRequest(selectedPlayer,id-MULTIOP_COLCHOOSER,UBYTE_MAX);
 		closeColourChooser();
 		addPlayerBox(  !ingame.bHostSetup || bHosted);
@@ -2017,11 +2062,12 @@ static void processMultiopWidgets(UDWORD id)
 	// request a player number.
 	if((id >= MULTIOP_PLAYCHOOSER) && (id <= MULTIOP_PLAYCHOOSER_END)) // chose a new colour.
 	{
+		resetReadyStatus(false);		// will reset only locally if not a host
+
 		SendColourRequest(selectedPlayer,UBYTE_MAX,id-MULTIOP_PLAYCHOOSER);
 		closeColourChooser();
 		addPlayerBox(  !ingame.bHostSetup || bHosted);
 	}
-
 }
 
 /* Start a multiplayer or skirmish game */
@@ -2118,6 +2164,8 @@ void frontendMultiMessages(void)
 			BOOL host;
 			uint32_t player_id;
 
+			resetReadyStatus(false);
+
 			NETbeginDecode(NET_LEAVING);
 			{
 				NETuint32_t(&player_id);
@@ -2134,6 +2182,8 @@ void frontendMultiMessages(void)
 		case NET_PLAYERRESPONDING:			// remote player is now playing.
 		{
 			uint32_t player_id;
+
+			resetReadyStatus(false);
 
 			NETbeginDecode(NET_PLAYERRESPONDING);
 				// the player that has just responded

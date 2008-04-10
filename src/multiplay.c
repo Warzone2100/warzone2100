@@ -83,6 +83,7 @@ BOOL						bSendingMap					= false;	// map broadcasting.
 char						tempString[12];
 char						beaconReceiveMsg[MAX_PLAYERS][MAX_CONSOLE_STRING_LENGTH];	//beacon msg for each player
 char								playerName[MAX_PLAYERS][MAX_STR_LENGTH];	//Array to store all player names (humans and AIs)
+BOOL						bPlayerReadyGUI[MAX_PLAYERS] = {false};
 
 /////////////////////////////////////
 /* multiplayer message stack stuff */
@@ -709,6 +710,8 @@ BOOL recvMessage(void)
 			uint32_t player_id;
 			BOOL host;
 
+			resetReadyStatus(false);
+
 			NETbeginDecode(NET_LEAVING);
 				NETuint32_t(&player_id);
 				NETbool(&host);                 // Added to check for host quit here -- Buggy
@@ -733,6 +736,8 @@ BOOL recvMessage(void)
 		case NET_PLAYERRESPONDING:			// remote player is now playing
 		{
 			uint32_t player_id;
+
+			resetReadyStatus(false);
 
 			NETbeginDecode(NET_PLAYERRESPONDING);
 				// the player that has just responded
@@ -1945,4 +1950,21 @@ SDWORD dpidToPlayer(SDWORD dpid)
 	}
 
 	return i;
+}
+
+/* Reset ready status for all players */
+void resetReadyStatus(bool bSendOptions)
+{
+	unsigned int player;
+
+	for(player = 0; player < MAX_PLAYERS; player++)
+	{
+		bPlayerReadyGUI[player] = false;
+	}
+
+	// notify all clients if needed
+	if(bSendOptions)
+	{
+		sendOptions(player2dpid[selectedPlayer], selectedPlayer);
+	}
 }

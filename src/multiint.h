@@ -42,7 +42,6 @@ extern BOOL addMultiBut(W_SCREEN *screen, UDWORD formid, UDWORD id, UDWORD x, UD
 extern	char	sPlayer[128];
 extern	SDWORD	playerTeamGUI[MAX_PLAYERS];
 extern	SDWORD	playerTeam[MAX_PLAYERS];
-extern	BOOL	bPlayerReadyGUI[MAX_PLAYERS];
 
 void    kickPlayer                      (uint32_t dpid);
 UDWORD  addPlayerBox            (BOOL);                         // players (mid) box

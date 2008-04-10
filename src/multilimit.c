@@ -280,6 +280,7 @@ void runLimitScreen(void)
 
 			break;
 		case IDLIMITS_OK:
+			resetReadyStatus(false);
 			createLimitSet();
 			changeTitleMode(MULTIOPTION);
 			break;
