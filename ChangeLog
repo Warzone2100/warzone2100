@@ -1,14 +1,61 @@
 0000-00-00: SVN
  * General:
-   * New: Support for coloured mouse cursors (ingame only, not in menus), controlled by configuration option "ColouredCursor".
-   * Fix: Dull radar player colors were replaced by brighter colors.
+   * New: An error will be shown if an invalid command line option is used.
+   * New: "Map Preview" button added to the multiplayer/skirmish lobby, including ability to preview starting positions (patch #1040).
+   * New: A 'Ready' button that all players must press in order to start a multiplayer game.
+   * Change: Game speed is limited to 0.3-1.5 range in non-debug mode.
+   * Change: Oil pumping and power generator hum sounds are quieter.
+   * Fix: Building limits apply correctly (bug #11293).
+   * Fix: Game won't crash when commander units are used.
+   * Fix: The sky does not disappear anymore when a tooltip is shown (bug #11216).
+   * Fix: Translation-related bug in the structure limits screen fixed (bug #11345).
+   * Fix: Placing a beacon on map will not result in memory corruption and a crash anymore (bug #10955).
+   * Fix: Invalid group orders during multiplayer games are ignored (bug #11358).
+   * Fix: Smoking structures (bug #11348).
+   * Fix: AIs are now always run on Host's machine during multiplayer games.
+   * Fix: Derricks do not disappear or blink anymore (bug #11357).
+   * Fix: Save games will load properly when trying to load them when a game is already in progress (bug #11467).
+ * Gameplay:
+   * New: Support for coloured mouse cursors (ingame only, not in menus), controlled by configuration option "ColouredCursor". Turned off by default. (patch #956)
+   * New: Human player console messages are rendered using brighter color. Friend-foe colors are can be turned on using Shift+Tab key combination.
+   * New: Prevent structure 'painting' exploit by making unfinished structures return power with time and disappear when all power was given back (patch #1030).
+   * New: Units gain speed increase with experience (patch #906).
+   * New: A sound is played and a notification is shown on the console when placing a beacon on the map. F12 key can be used to jump to the beacon location.
    * Change: Effect of skirmish modifier slider increased by 20%.
-   * Change: 'ENTER' key brings up the chat dialog instead of 'T'.
+   * Change: 'ENTER' key is now the default key for bringing up the chat dialog instead of 'T' (key configuration must be reset in the 'Key Mappings' dialog).
    * Change: Removed lowest power level, added a higher power level.
- * Aivolution AI:
-   * Fix: Using "go <player>" command makes Aivolution send its units to the proper player now.
- * Balancing (Multiplayer):
+   * Fix: Dull mini-map player colors were replaced by brighter colors.
+   * Fix: Rocket Autoloader research does not appear before lancer is researched and has "HEAT Rocket Warhead" as a prerequisite, instead of "HEAP Mini-Rockets" (bug #11312).
+   * Fix: When cheating is on AIs get power boost on client's machines too, fixes "Not enough power to build droid" warning.
+ * Balancing (Multiplayer Only):
    * Change: Tank Killer now fires four projectiles instead of two, total firepower is unaffected.
+   * Change: AA Projectiles fly faster which increases accuracy.
+   * Change: Hitpoints of Hardpoints, Fortresses and Walls slightly increased. Hitpoints of other structures doubled.
+   * Change: All cyborgs are produced faster by 10-15%.
+   * Change: Mini-pod's accuracy decreased by 10%.
+   * Change: Mini-Rocket Artillery short range accuracy increased by 10%, long range accuracy decreased by 15%.
+   * Change: Super Heavy-Gunner, Super HPV Cyborg, Super Auto-Cannon Cyborg and Tank-Killer Cyborg have more firepower.
+   * Change: Cost of Super Rail-Gunner, Super HPV Cyborg slightly decreased. Cost of Super Pulse Laser Cyborg, Super Heavy-Gunner and Super Auto-Cannon Cyborg halved to match their firepower.
+   * Change: Super Scourge Cyborg's cost increased by 10%.
+   * Change: Super HPV Cyborg has longer range, Super Auto-Cannon Cyborg's range slightly decreased.
+   * Change: Super Cyborg's build time slightly decreased.
+   * Change: Flamers Rate of Fire decreased, damage increased. The resulting damage in the game is not affected.
+   * Change: Inferno weapon fires two jets instead of one.
+   * Change: All flamers are 5% less effective against tracked units.
+   * Change: Rate of Fire of Hyper Velocity Cannon decreased, damage increased. The resulting damage in the game is not affected.
+   * Change: Bunker Buster's damage increased by 30% to make it competitive against flamers.
+   * Change: Anti-tank weapons are 15% more effective against hardpoints.
+ * Aivolution AI:
+   * New: Different taunts.
+   * New: To find out what AI players are using Aivolution AI type "are you aiv?" in the game.
+   * Fix: Using "go <player>" command makes Aivolution send its units to the proper player now.
+   * Fix: Division by zero error fixed.
+   * Fix: Won't ask allies for help when already defeated.
+   * Fix: Assert when trying to find out player name based on incorrect player number.
+   * Fix: All dialogs between allied AIs are visible to all allies.
+   * Fix: A beacon is always placed on map before initializing a command.
+   * Fix: Several Aivolution AIs sending chat messages at the same time will not result in an infinite loop anymore.
+   * Fix: Undefended enemy derricks will now be properly attacked with defenses by trucks.
 
 2008-03-16: Version 2.1_beta2
  * General:
