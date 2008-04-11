@@ -62,6 +62,34 @@
 
 extern void registry_clear(void); // from configfile.c
 
+void	setSinglePlayerFrameLimit		(SDWORD limit);
+SDWORD	getSinglePlayerFrameLimit		(void);
+void	setDefaultFrameRateLimit		(void);
+
+// current frame limit for single player modes
+SDWORD	spFrameLimit = SP_FRAME_LIMIT;
+
+void setSinglePlayerFrameLimit(SDWORD limit)
+{
+	spFrameLimit = limit;
+}
+
+SDWORD getSinglePlayerFrameLimit(void)
+{
+	return spFrameLimit;
+}
+
+void setDefaultFrameRateLimit(void)
+{
+	if(bMultiPlayer && NetPlay.bComms)
+	{
+		setFramerateLimit(MP_FRAME_LIMIT);		// true multiplayer
+	}
+	else
+	{
+		setFramerateLimit(getSinglePlayerFrameLimit());		// single player
+	}
+}
 
 // ////////////////////////////////////////////////////////////////////////////
 BOOL loadConfig(void)
@@ -120,14 +148,15 @@ BOOL loadConfig(void)
 		setWarzoneKeyNumeric("debugmode", bAllowDebugMode);
 	}
 
-	if (getWarzoneKeyNumeric("framerate", &val))
+	if (getWarzoneKeyNumeric("SinglePlayerFPS", &val))
 	{
-		setFramerateLimit(val);
+		setSinglePlayerFrameLimit(val);
+		setFramerateLimit(getSinglePlayerFrameLimit());
 	}
 	else
 	{
-		setFramerateLimit(60);
-		setWarzoneKeyNumeric("framerate", 60);
+		setFramerateLimit(getSinglePlayerFrameLimit());
+		setWarzoneKeyNumeric("SinglePlayerFPS", getSinglePlayerFrameLimit());
 	}
 
 	if (getWarzoneKeyString("language", sBuf))

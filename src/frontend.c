@@ -66,6 +66,7 @@
 #include "main.h"
 #include "wrappers.h"
 #include "version.h"
+#include "configuration.h"
 
 static int StartWithGame = 1; // New game starts in Cam 1.
 
@@ -218,6 +219,9 @@ void changeTitleMode(tMode mode)
 		abort();
 		break;
 	}
+
+	/* Set default frame rate limit */
+	setDefaultFrameRateLimit();
 
 	return;
 }
