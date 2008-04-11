@@ -956,8 +956,8 @@ BOOL recvPowerCheck()
 	power2 = getPower(player);
 	if (power != power2)
 	{
-		debug(LOG_NET, "NET_CHECK_POWER: Adjusting power for player %d from %u to %u",
-		      (int)player, power2, power);
+		debug(LOG_NET, "NET_CHECK_POWER: Adjusting power for player %d (%s) from %u to %u",
+		      (int)player, isHumanPlayer(player) ? "Human" : "AI", power2, power);
 		setPower(player, power);
 	}
 	return true;
