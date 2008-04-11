@@ -948,6 +948,8 @@ BOOL recvPowerCheck()
 	if (player >= MAX_PLAYERS)
 	{
 		debug(LOG_ERROR, "Bad NET_CHECK_POWER packet: player is %d", (int)player);
+		debug(LOG_ERROR, "Bad NET_CHECK_POWER packet: player is %d : %s", 
+		      (int)player, isHumanPlayer(player) ? "Human" : "AI");
 		return false;
 	}
 

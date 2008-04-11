@@ -401,7 +401,7 @@ static void NETsendGAMESTRUCT(TCPsocket socket, const GAMESTRUCT* game)
 	// A buffer that's guaranteed to have the correct size (i.e. it
 	// circumvents struct padding, which could pose a problem).
 	char buf[sizeof(game->name) + sizeof(game->desc.host) + sizeof(int32_t) * 8];
-	char* buffer = buf;;
+	char *buffer = buf;
 
 	// Now dump the data into the buffer
 	// Copy a string
@@ -442,14 +442,20 @@ static bool NETrecvGAMESTRUCT(GAMESTRUCT* game)
 	// circumvents struct padding, which could pose a problem).
 	char buf[sizeof(game->name) + sizeof(game->desc.host) + sizeof(int32_t) * 8];
 	char* buffer = buf;
+	int result = 0;
 
 	// Read a GAMESTRUCT from the connection
 	if (tcp_socket == NULL
 	 || socket_set == NULL
 	 || SDLNet_CheckSockets(socket_set, 1000) <= 0
 	 || !SDLNet_SocketReady(tcp_socket)
-	 || SDLNet_TCP_Recv(tcp_socket, buf, sizeof(buf)) != sizeof(buf))
+	 || (result = SDLNet_TCP_Recv(tcp_socket, buf, sizeof(buf))) != sizeof(buf))
 	{
+		if (result < 0)
+		{
+			debug(LOG_WARNING, "SDLNet_TCP_Recv error: %s tcp_socket %p is now invalid", SDLNet_GetError(), tcp_socket);
+			tcp_socket = NULL;  //SDLnet docs say to 'disconnect' here. Dunno how. :S
+		}
 		return false;
 	}
 
@@ -487,7 +493,7 @@ static bool NETrecvGAMESTRUCT(GAMESTRUCT* game)
 
 // ////////////////////////////////////////////////////////////////////////
 // setup stuff
-BOOL NETinit(BOOL bFirstCall)
+int NETinit(BOOL bFirstCall)
 {
 	UDWORD i;
 	debug( LOG_NET, "NETinit" );
@@ -512,16 +518,16 @@ BOOL NETinit(BOOL bFirstCall)
 	if (SDLNet_Init() == -1)
 	{
 		debug(LOG_ERROR, "SDLNet_Init: %s", SDLNet_GetError());
-		return false;
+		return -1;
 	}
 
-	return true;
+	return 0;
 }
 
 
 // ////////////////////////////////////////////////////////////////////////
 // SHUTDOWN THE CONNECTION.
-BOOL NETshutdown(void)
+int NETshutdown(void)
 {
 	debug( LOG_NET, "NETshutdown" );
 
@@ -532,9 +538,10 @@ BOOL NETshutdown(void)
 
 // ////////////////////////////////////////////////////////////////////////
 //close the open game..
-BOOL NETclose(void)
+int NETclose(void)
 {
 	unsigned int i;
+	int result;
 
 	debug(LOG_NET, "NETclose");
 
@@ -547,15 +554,17 @@ BOOL NETclose(void)
 		bsocket=NULL;
 	}
 
-	for(i=0;i<MAX_CONNECTED_PLAYERS;i++) {
-		if(connected_bsocket[i]) {
+	for(i = 0; i < MAX_CONNECTED_PLAYERS; i++)
+	{
+		if (connected_bsocket[i])
+		{
 			NET_destroyBufferedSocket(connected_bsocket[i]);
 			connected_bsocket[i]=NULL;
 		}
 		NET_DestroyPlayer(i);
 	}
 
-	if(tmp_socket_set)
+	if (tmp_socket_set)
 	{
 		SDLNet_FreeSocketSet(tmp_socket_set);
 		tmp_socket_set=NULL;
@@ -572,16 +581,23 @@ BOOL NETclose(void)
 
 	if (socket_set)
 	{
+		// checking to make sure tcp_socket is still valid
+		result = SDLNet_TCP_DelSocket(socket_set, tcp_socket);
+		if (result == -1)
+		{
+			debug(LOG_NET,"SDLNet_DelSocket error: %s", SDLNet_GetError());
+			tcp_socket = NULL;
+		}
 		SDLNet_FreeSocketSet(socket_set);
 		socket_set=NULL;
 	}
-
 	if (tcp_socket)
 	{
 		SDLNet_TCP_Close(tcp_socket);
 		tcp_socket=NULL;
 	}
-	return false;
+
+	return 0;
 }
 
 
@@ -673,6 +689,7 @@ UDWORD NETgetPacketsRecvd(void)
 BOOL NETsend(NETMSG *msg, UDWORD player)
 {
 	int size;
+	int result = 0;
 
 	if(!NetPlay.bComms)
 	{
@@ -692,19 +709,37 @@ BOOL NETsend(NETMSG *msg, UDWORD player)
 		if (   player < MAX_CONNECTED_PLAYERS
 		    && connected_bsocket[player] != NULL
 		    && connected_bsocket[player]->socket != NULL
-		    && SDLNet_TCP_Send(connected_bsocket[player]->socket,
-				       msg, size) == size)
+		    && (result = SDLNet_TCP_Send(connected_bsocket[player]->socket,
+				       msg, size) == size))
 		{
 			nStats.bytesSent   += size;
 			nStats.packetsSent += 1;
 			return true;
 		}
-	} else {
-		if (   tcp_socket
-		    && SDLNet_TCP_Send(tcp_socket, msg, size) == size)
+		else
 		{
-			return true;
+			if (result < size)
+			{
+				debug(LOG_NET, "SDLNet_TCP_Send returned: %d error: %s", result, SDLNet_GetError());
+				connected_bsocket[player]->socket = NULL ; // It is invalid,  Unknown how to handle.
+			}
 		}
+	}
+	else
+	{
+			if (tcp_socket && (result = SDLNet_TCP_Send(tcp_socket, msg, size) == size))
+			{
+				return true;
+			}
+			else
+			{
+				if (result < size)
+				{
+					debug(LOG_NET, "SDLNet_TCP_Send returned: %d, error: %s", result, SDLNet_GetError());
+					tcp_socket = NULL; // unknow how to handle when invalid.
+				}
+			}
+
 	}
 
 	return false;
@@ -715,6 +750,7 @@ BOOL NETsend(NETMSG *msg, UDWORD player)
 BOOL NETbcast(NETMSG *msg)
 {
 	int size;
+	int result = 0;
 
 	if(!NetPlay.bComms)
 	{
@@ -737,14 +773,31 @@ BOOL NETbcast(NETMSG *msg)
 			if (   connected_bsocket[i] != NULL
 			    && connected_bsocket[i]->socket != NULL)
 			{
-				SDLNet_TCP_Send(connected_bsocket[i]->socket, msg, size);
+				result = SDLNet_TCP_Send(connected_bsocket[i]->socket, msg, size);
+			}
+			else
+			{
+				if (result < size)
+				{
+					debug(LOG_NET, "SDLNet_TCP_Send returned: %d, error: %s",result, SDLNet_GetError());
+					connected_bsocket[i]->socket = NULL; // Unsure how to handle invalid sockets.
+				}
 			}
 		}
 
-	} else {
-		if (   tcp_socket == NULL
-		    || SDLNet_TCP_Send(tcp_socket, msg, size) < size)
+	}
+	else
+	{
+		if (tcp_socket == NULL)
 		{
+			return false;
+		}
+
+		result = SDLNet_TCP_Send(tcp_socket, msg, size);
+		if (result < size)
+		{
+			debug(LOG_WARNING, "SDLNet_TCP_Send returned: %d, error %s tcp_socket %p is now invalid.", result, SDLNet_GetError(), tcp_socket);
+			tcp_socket = NULL; // unsure how to handle invalid sockets.
 			return false;
 		}
 	}
@@ -819,6 +872,7 @@ static BOOL NETprocessSystemMessage(void)
 		case NET_PLAYER_LEFT:
 		{
 			uint32_t dpid;
+
 			NETbeginDecode(NET_PLAYER_LEFT);
 				NETuint32_t(&dpid);
 			NETend();
@@ -937,8 +991,8 @@ receive_message:
 							NETuint32_t(&i);
 						NETend();
 
-						NET_DestroyPlayer(i);
 						MultiPlayerLeave(i);
+						NET_DestroyPlayer(i);
 					}
 
 					if (++i == MAX_CONNECTED_PLAYERS)
@@ -1233,6 +1287,7 @@ static void NETallowJoining(void)
 			return;
 		}
 		SDLNet_TCP_AddSocket(tmp_socket_set, tcp_socket);
+		debug(LOG_NET,"TCP_AddSocket using %p set, socket %p", tmp_socket_set, tcp_socket);
 	}
 
 	if (SDLNet_CheckSockets(tmp_socket_set, NET_READ_TIMEOUT) > 0)
@@ -1366,10 +1421,10 @@ BOOL NEThostGame(const char* SessionName, const char* PlayerName,
 	if(!tcp_socket) tcp_socket = SDLNet_TCP_Open(&ip);
 	if(tcp_socket == NULL)
 	{
-		printf("NEThostGame: Cannot connect to master self: %s", SDLNet_GetError());
+		debug(LOG_ERROR, "NEThostGame: Cannot connect to master self: %s", SDLNet_GetError());
 		return false;
 	}
-
+	debug(LOG_NET, "New tcp_socket = %p", tcp_socket);
 	if(!socket_set) socket_set = SDLNet_AllocSocketSet(MAX_CONNECTED_PLAYERS);
 	if (socket_set == NULL)
 	{
@@ -1431,7 +1486,7 @@ BOOL NETfindGame(void)
 	uint32_t gamesavailable;
 	IPaddress ip;
 	unsigned int port = (hostname == masterserver_name) ? masterserver_port : gameserver_port;
-
+	int result = 0;
 	debug(LOG_NET, "NETfindGame");
 
 	NetPlay.games[0].desc.dwSize = 0;
@@ -1454,6 +1509,7 @@ BOOL NETfindGame(void)
 	if (tcp_socket != NULL)
 	{
 		SDLNet_TCP_Close(tcp_socket);
+		tcp_socket = NULL;
 	}
 
 	tcp_socket = SDLNet_TCP_Open(&ip);
@@ -1462,7 +1518,7 @@ BOOL NETfindGame(void)
 		debug(LOG_ERROR, "NETfindGame: Cannot connect to \"%s:%d\": %s", hostname, port, SDLNet_GetError());
 		return false;
 	}
-
+	debug(LOG_NET, "New tcp_socket = %p", tcp_socket);
 	socket_set = SDLNet_AllocSocketSet(1);
 	if (socket_set == NULL)
 	{
@@ -1475,12 +1531,18 @@ BOOL NETfindGame(void)
 
 	if (SDLNet_CheckSockets(socket_set, 1000) > 0
 	 && SDLNet_SocketReady(tcp_socket)
-	 && SDLNet_TCP_Recv(tcp_socket, &gamesavailable, sizeof(gamesavailable)))
+	 && (result = SDLNet_TCP_Recv(tcp_socket, &gamesavailable, sizeof(gamesavailable))))
 	{
 		gamesavailable = SDL_SwapBE32(gamesavailable);
 	}
 	else
 	{
+		if (result < 0)
+		{
+			debug(LOG_NET, "SDLNet_TCP_Recv returned %d, error: %s - tcp_socket %p is now invalid.",
+			      result, SDLNet_GetError(), tcp_socket);
+			tcp_socket = NULL; // unsure how to handle invalid sockets?
+		}
 		// when we fail to receive a game count, bail out
 		return false;
 	}
