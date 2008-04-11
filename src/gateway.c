@@ -365,7 +365,8 @@ void gwCheckZoneSizes(void)
 
 			if (inzone > FPATH_LOOP_LIMIT)
 			{
-				debug(LOG_ERROR, "gwCheckZoneSizes: warning zone %d at (%d,%d) is too large %d tiles (max %d)", zone, cx, cy, inzone, FPATH_LOOP_LIMIT);
+				debug(LOG_GATEWAY, "gwCheckZoneSizes: warning zone %d at (%d,%d) is too large %d tiles (max %d)",
+				      zone, cx, cy, inzone, FPATH_LOOP_LIMIT);
 			}
 		}
 	}
