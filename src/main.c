@@ -135,7 +135,6 @@ char	MultiForcesPath[PATH_MAX];
 char	MultiCustomMapsPath[PATH_MAX];
 char	MultiPlayersPath[PATH_MAX];
 char	KeyMapPath[PATH_MAX];
-char	UserMusicPath[PATH_MAX];
 
 // Start game in title mode:
 static GS_GAMEMODE gameStatus = GS_TITLE_SCREEN;
@@ -888,7 +887,6 @@ int main(int argc, char *argv[])
 	/* Put these files in the writedir root */
 	setRegistryFilePath("config");
 	strlcpy(KeyMapPath, "keymap.map", sizeof(KeyMapPath));
-	strlcpy(UserMusicPath, "music", sizeof(UserMusicPath));
 
 	// initialise all the command line states
 	war_SetDefaultStates();

@@ -95,7 +95,7 @@
 
 static void	initMiscVars(void);
 
-extern char UserMusicPath[];
+static const char UserMusicPath[] = "music";
 
 extern char * global_mods[];
 extern char * campaign_mods[];
