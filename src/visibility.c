@@ -292,6 +292,8 @@ BOOL visibleObject(BASE_OBJECT *psViewer, BASE_OBJECT *psTarget)
 	SDWORD		tarG, top;
 	STRUCTURE	*psStruct;
 
+	ASSERT(psViewer != NULL, "Invalid viewer pointer!");
+
 	/* Get the sensor Range and power */
 	switch (psViewer->type)
 	{
