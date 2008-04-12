@@ -422,40 +422,36 @@ BOOL visibleObjWallBlock(BASE_OBJECT *psViewer, BASE_OBJECT *psTarget)
 }
 
 // Find the wall that is blocking LOS to a target (if any)
-BOOL visGetBlockingWall(BASE_OBJECT *psViewer, BASE_OBJECT *psTarget, STRUCTURE **ppsWall)
+STRUCTURE* visGetBlockingWall(BASE_OBJECT* psViewer, BASE_OBJECT* psTarget)
 {
-	SDWORD		tileX, tileY, player;
-	STRUCTURE	*psCurr, *psWall;
-
 	blockingWall = true;
 	numWalls = 0;
 	visibleObject(psViewer, psTarget);
 	blockingWall = false;
 
 	// see if there was a wall in the way
-	psWall = NULL;
 	if (numWalls == 1)
 	{
-		tileX = map_coord(wallX);
-		tileY = map_coord(wallY);
-		for(player=0; player<MAX_PLAYERS; player += 1)
+		const int tileX = map_coord(wallX);
+		const int tileY = map_coord(wallY);
+		unsigned int player;
+
+		for (player = 0; player < MAX_PLAYERS; ++player)
 		{
-			for(psCurr = apsStructLists[player]; psCurr; psCurr = psCurr->psNext)
+			STRUCTURE* psWall;
+
+			for (psWall = apsStructLists[player]; psWall; psWall = psWall->psNext)
 			{
-				if (map_coord(psCurr->pos.x) == tileX
-				 && map_coord(psCurr->pos.y) == tileY)
+				if (map_coord(psWall->pos.x) == tileX
+				 && map_coord(psWall->pos.y) == tileY)
 				{
-					psWall = psCurr;
-					goto found;
+					return psWall;
 				}
 			}
 		}
 	}
 
-found:
-	*ppsWall = psWall;
-
-	return psWall != NULL;;
+	return NULL;
 }
 
 /* Find out what can see this object */

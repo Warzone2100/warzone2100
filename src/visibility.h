@@ -48,7 +48,7 @@ extern BOOL visibleObjectBlock(BASE_OBJECT *psViewer, BASE_OBJECT *psTarget,
 extern BOOL visibleObjWallBlock(BASE_OBJECT *psViewer, BASE_OBJECT *psTarget);
 
 // Find the wall that is blocking LOS to a target (if any)
-extern BOOL visGetBlockingWall(BASE_OBJECT *psViewer, BASE_OBJECT *psTarget, STRUCTURE **ppsWall);
+extern STRUCTURE* visGetBlockingWall(BASE_OBJECT* psViewer, BASE_OBJECT* psTarget);
 
 extern void	processVisibility(BASE_OBJECT *psCurr);
 

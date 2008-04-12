@@ -741,11 +741,11 @@ void orderUpdateDroid(DROID *psDroid)
 			// that the unit will fire on other things while moving
 			actionDroidLoc(psDroid, DACTION_MOVE, psDroid->psTarget->pos.x, psDroid->psTarget->pos.y);
 		}
-		else if (!vtolDroid(psDroid) &&
-				(psDroid->psTarget == psDroid->psActionTarget[0]) &&
-				 actionInRange(psDroid, psDroid->psTarget, 0)  &&
-				 visGetBlockingWall((BASE_OBJECT *)psDroid, psDroid->psTarget, &psWall) &&
-				 (psWall->player != psDroid->player))
+		else if (!vtolDroid(psDroid)
+		      && psDroid->psTarget == psDroid->psActionTarget[0]
+		      && actionInRange(psDroid, psDroid->psTarget, 0)
+		      && (psWall = visGetBlockingWall((BASE_OBJECT *)psDroid, psDroid->psTarget))
+		      && psWall->player != psDroid->player)
 		{
 			// there is a wall in the way - attack that
 			actionDroidObj(psDroid, DACTION_ATTACK, (BASE_OBJECT *)psWall);
