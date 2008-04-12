@@ -66,6 +66,7 @@
 
 /* Choose randomly from this number of available templates */
 #define	MAX_CHOICE_DROIDS				3
+#define	MAX_CHOICE_LIGHT_CYB			2
 
 /* All objects inside this base range are treated as if they were belonging to the base */
 #define	COUNT_BASE_OBJECTS_RANGE		max((35 * TILE), (baseRange + defendCorridor))
@@ -213,9 +214,9 @@ public	int				player,numLego,numTemplates[2],numBaseStructs,numDef,numRes[2],
 						numGatewayDef,numAA,numRepairTmpl,maxDamageLevels,damageLevel[4],
 						numBranches,techTanks,techAir,numVtolTemplates,numVitalStructs,
 						numMinimalStruct[10],maxVitalBuilders[10],numCmdTmpl,numTruckTmpl,
-						numBBTempl;
+						numBBTempl,numLightCyborgs;
 public	TEMPLATE		truck[3],tmpl[2][40],tmplOK[8],tmplBB[3],tmplRep[5],
-						vtoltmpl[2][5],tmplCmd[4],cybEngineer,cybMechanic;
+						vtoltmpl[2][5],tmplCmd[4],cybEngineer,cybMechanic,cybTempl[6];
 public	STRUCTURESTAT	fac,derrick,powGen,vtolfac,resFac,powMod,facMod,resMod,cmdCenter,
 						baseStructs[10],def[10],gatewayDef[6],wall,AA[5],HQ,uplink,lasSat,
 						minimalStruct[10],cybfac;
@@ -306,6 +307,9 @@ private FEATURE			feature,feature2,retFeature,tempFeature;
 private BASEOBJ			obj,obj2,tempObj,retObj,baseDefendObj;
 private string			cstr,sVer,myName;
 private	RESEARCHSTAT	newResearch;
+
+private	int				maxAttackCyborgs;
+private	bool			bBuildCyborgs;
 
 private	STRUCTURESTAT	ghostStat[120];
 
@@ -483,6 +487,7 @@ function bool	canBuildTanks();
 function void	buildTanks();
 function void	buildVTOLs();
 function void	buildBaseDefenses();
+function void	cybFactorBuildCyborg(STRUCTURE _factory);
 function void	buildInitialDefenses(bool _bForceBuild);
 function void	stopInitialDefenses();
 function void	buildAA();
@@ -748,6 +753,7 @@ function void	updateMapRevealFactor();
 function bool	buildOilDefenseFromExperience(int _index, DROID _truck);
 function bool	buildOilDefense(int _buildX, int _buildY, int _oilx, int _oily, DROID _truck);
 function DROID	closestEnemyDroidByType(int _x, int _y, int _range, int _type);
+function int	numDroidsByType(int _player, int _droidType);
 
 //=====================================================================
 //	Events
@@ -1261,6 +1267,8 @@ function void oneTimeInitialize(bool bAIControlled)
 	{
 		minReinforcements = minReinforcements + random(2) + 3;
 	}
+	
+	maxAttackCyborgs = 40;
 }
 
 function void mainInitialize()
@@ -7906,8 +7914,70 @@ function void buildTanks()
 		}
 		_factory = enumStruct();
 	}
+	
+	// Build cyborgs
+	initEnumStruct(false,cybfac,me,me);
+	_factory = enumStruct();
+	while(_factory != NULLOBJECT)
+	{
+		// make sure we won't build too many of them
+		if( (numDroidsByType(me, DROID_CYBORG) + numDroidsByType(me, DROID_CYBORG_SUPER)) < maxAttackCyborgs)
+		{
+			if( structureIdle(_factory) )
+			{
+				cybFactorBuildCyborg(_factory);
+			}
+		}
+		_factory = enumStruct();
+	}
 
 	//dbg(" " & me & ")  End buildTanks()");
+}
+
+function int numDroidsByType(int _player, int _droidType)
+{
+	local	int		_numDroids;
+	local	DROID	_droid;
+
+	InitEnumDroids(_player,me);
+	_droid = EnumDroid();
+	while(_droid != NULLOBJECT)
+	{
+		if(_droid.droidType == _droidType)
+		{
+			_numDroids++;
+		}
+		_droid = EnumDroid();
+	}
+	
+	return _numDroids;
+}
+
+function void cybFactorBuildCyborg(STRUCTURE _factory)
+{
+	local	int		_tmplIndex,_tmplChosenIndex;
+
+	if(_factory == NULLOBJECT){
+		dbg("cybFactorBuildCyborg: factory is NULLOBJECT", me);
+		return;
+	}
+
+	_tmplIndex = numLightCyborgs - 1;
+	_tmplChosenIndex = 0;
+	while( (_tmplIndex >= 0) and (_tmplChosenIndex < MAX_CHOICE_LIGHT_CYB) )
+	{
+		if( skCanBuildTemplate(me,_factory, cybTempl[_tmplIndex]) )
+		{
+			tmplOK[_tmplChosenIndex] = cybTempl[_tmplIndex];
+			_tmplChosenIndex++;
+		}
+		_tmplIndex--;
+	}
+	if(_tmplChosenIndex > 0)
+	{
+		buildDroid(tmplOK[random(_tmplChosenIndex)], _factory, me, 1);
+	}
+
 }
 
 // calculate how many repairers we still need

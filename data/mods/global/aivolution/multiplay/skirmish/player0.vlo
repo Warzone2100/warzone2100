@@ -435,5 +435,14 @@ run
 	tmplCmd[1]		TEMPLATE	"Scorp-Trk-Com"
 	tmplCmd[2]		TEMPLATE	"Mantis-Trk-Com"
 	//PythonComTracks
+	
+	// cyborg templates
+	numLightCyborgs	int			6
+	cybTempl[0]		TEMPLATE	"CyborgChain01Ground"
+	cybTempl[1]		TEMPLATE	"CyborgCannon01Grd"		//heavy gunner
+	cybTempl[2]		TEMPLATE	"CyborgFlamer01Grd"
+	cybTempl[3]		TEMPLATE	"CyborgRkt01Ground"
+	cybTempl[4]		TEMPLATE	"MP-Cyb-Needle-GRD"
+	cybTempl[5]		TEMPLATE	"MP-Cyb-Needle-GRD"
 
 }
