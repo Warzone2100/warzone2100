@@ -67,7 +67,7 @@ SDWORD	getSinglePlayerFrameLimit		(void);
 void	setDefaultFrameRateLimit		(void);
 
 // current frame limit for single player modes
-SDWORD	spFrameLimit = SP_FRAME_LIMIT;
+static SDWORD	spFrameLimit = SP_FRAME_LIMIT;
 
 void setSinglePlayerFrameLimit(SDWORD limit)
 {

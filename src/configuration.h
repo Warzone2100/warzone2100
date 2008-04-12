@@ -38,6 +38,4 @@ extern void setDefaultFrameRateLimit(void);
 /* Default frame limit for single player: skirmish ans campaign */
 #define	SP_FRAME_LIMIT	60
 
-extern SDWORD spFrameLimit;
-
 #endif // __INCLUDED_SRC_CONFIGURATION_H__
