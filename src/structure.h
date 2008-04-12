@@ -339,18 +339,18 @@ extern BOOL structSensorDroidWeapon(STRUCTURE *psStruct, DROID *psDroid);
 
 /*checks if the structure has a Counter Battery sensor attached - returns
 true if it has*/
-extern BOOL structCBSensor(STRUCTURE *psStruct);
+extern BOOL structCBSensor(const STRUCTURE* psStruct);
 /*checks if the structure has a Standard Turret sensor attached - returns
 true if it has*/
-extern BOOL structStandardSensor(STRUCTURE *psStruct);
+extern BOOL structStandardSensor(const STRUCTURE* psStruct);
 
 /*checks if the structure has a VTOL Intercept sensor attached - returns
 true if it has*/
-extern BOOL structVTOLSensor(STRUCTURE *psStruct);
+extern BOOL structVTOLSensor(const STRUCTURE* psStruct);
 
 /*checks if the structure has a VTOL Counter Battery sensor attached - returns
 true if it has*/
-extern BOOL structVTOLCBSensor(STRUCTURE *psStruct);
+extern BOOL structVTOLCBSensor(const STRUCTURE* psStruct);
 
 // return the nearest rearm pad
 // if bClear is true it tries to find the nearest clear rearm pad in

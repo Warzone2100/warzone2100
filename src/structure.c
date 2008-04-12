@@ -7270,72 +7270,68 @@ BOOL structSensorDroidWeapon(STRUCTURE *psStruct, DROID *psDroid)
 
 /*checks if the structure has a Counter Battery sensor attached - returns
 true if it has*/
-BOOL structCBSensor(STRUCTURE *psStruct)
+BOOL structCBSensor(const STRUCTURE* psStruct)
 {
-	if (psStruct->pStructureType->pSensor)
+	// Super Sensor works as any type
+	if (psStruct->pStructureType->pSensor
+	 && (psStruct->pStructureType->pSensor->type == INDIRECT_CB_SENSOR
+	  || psStruct->pStructureType->pSensor->type == SUPER_SENSOR)
+	 && psStruct->pStructureType->pSensor->location == LOC_TURRET)
 	{
-		//Super Sensor works as any type
-		if ((psStruct->pStructureType->pSensor->type == INDIRECT_CB_SENSOR ||
-			psStruct->pStructureType->pSensor->type == SUPER_SENSOR) &&
-			psStruct->pStructureType->pSensor->location == LOC_TURRET)
-		{
-			return true;
-		}
+		return true;
 	}
+
 	return false;
 }
 
 
 /*checks if the structure has a Standard Turret sensor attached - returns
 true if it has*/
-BOOL structStandardSensor(STRUCTURE *psStruct)
+BOOL structStandardSensor(const STRUCTURE* psStruct)
 {
-	if (psStruct->pStructureType->pSensor)
+	// Super Sensor works as any type
+	if (psStruct->pStructureType->pSensor
+	 && (psStruct->pStructureType->pSensor->type == STANDARD_SENSOR
+	  || psStruct->pStructureType->pSensor->type == SUPER_SENSOR)
+	 && psStruct->pStructureType->pSensor->location == LOC_TURRET)
 	{
-		/*Super Sensor works as any type*/
-		if ((psStruct->pStructureType->pSensor->type == STANDARD_SENSOR ||
-			psStruct->pStructureType->pSensor->type == SUPER_SENSOR) &&
-			psStruct->pStructureType->pSensor->location == LOC_TURRET)
-		{
-			return true;
-		}
+		return true;
 	}
+
 	return false;
 }
 
 
 /*checks if the structure has a VTOL Intercept sensor attached - returns
 true if it has*/
-BOOL structVTOLSensor(STRUCTURE *psStruct)
+BOOL structVTOLSensor(const STRUCTURE* psStruct)
 {
-	if (psStruct->pStructureType->pSensor)
+	// Super Sensor works as any type
+	if (psStruct->pStructureType->pSensor
+	 && (psStruct->pStructureType->pSensor->type == VTOL_INTERCEPT_SENSOR
+	  || psStruct->pStructureType->pSensor->type == SUPER_SENSOR)
+	 && psStruct->pStructureType->pSensor->location == LOC_TURRET)
 	{
-		//Super Sensor works as any type
-		if ((psStruct->pStructureType->pSensor->type == VTOL_INTERCEPT_SENSOR ||
-			psStruct->pStructureType->pSensor->type == SUPER_SENSOR) &&
-			psStruct->pStructureType->pSensor->location == LOC_TURRET)
-		{
-			return true;
-		}
+		return true;
 	}
+
 	return false;
 }
 
 
 /*checks if the structure has a VTOL Counter Battery sensor attached - returns
 true if it has*/
-BOOL structVTOLCBSensor(STRUCTURE *psStruct)
+BOOL structVTOLCBSensor(const STRUCTURE* psStruct)
 {
-	if (psStruct->pStructureType->pSensor)
+	// Super Sensor works as any type
+	if (psStruct->pStructureType->pSensor
+	 && (psStruct->pStructureType->pSensor->type == VTOL_CB_SENSOR
+	  || psStruct->pStructureType->pSensor->type == SUPER_SENSOR)
+	 && psStruct->pStructureType->pSensor->location == LOC_TURRET)
 	{
-		//Super Sensor works as any type
-		if ((psStruct->pStructureType->pSensor->type == VTOL_CB_SENSOR ||
-			psStruct->pStructureType->pSensor->type == SUPER_SENSOR) &&
-			psStruct->pStructureType->pSensor->location == LOC_TURRET)
-		{
-			return true;
-		}
+		return true;
 	}
+
 	return false;
 }
 

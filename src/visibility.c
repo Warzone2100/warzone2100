@@ -98,7 +98,7 @@ void visUpdateLevel(void)
 	visLevelDecAcc -= visLevelDec;
 }
 
-static SDWORD visObjHeight(BASE_OBJECT *psObject)
+static SDWORD visObjHeight(const BASE_OBJECT * const psObject)
 {
 	SDWORD	height;
 
@@ -284,13 +284,12 @@ void visTilesUpdate(BASE_OBJECT *psObj)
  * psTarget can be any type of BASE_OBJECT (e.g. a tree).
  * struckBlock controls whether structures block LOS
  */
-BOOL visibleObject(BASE_OBJECT *psViewer, BASE_OBJECT *psTarget)
+BOOL visibleObject(const BASE_OBJECT* psViewer, const BASE_OBJECT* psTarget)
 {
 	SDWORD		x,y, ray;
 	SDWORD		xdiff,ydiff, rangeSquared;
 	SDWORD		range = objSensorRange(psViewer);
 	SDWORD		tarG, top;
-	STRUCTURE	*psStruct;
 
 	ASSERT(psViewer != NULL, "Invalid viewer pointer!");
 
@@ -298,13 +297,18 @@ BOOL visibleObject(BASE_OBJECT *psViewer, BASE_OBJECT *psTarget)
 	switch (psViewer->type)
 	{
 	case OBJ_DROID:
-		if (((DROID*)psViewer)->droidType == DROID_COMMAND)
+	{
+		const DROID * const psDroid = (const DROID *)psViewer;
+
+		if (psDroid->droidType == DROID_COMMAND)
 		{
 			range = 3 * range / 2;
 		}
 		break;
+	}
 	case OBJ_STRUCTURE:
-		psStruct = (STRUCTURE *)psViewer;
+	{
+		const STRUCTURE * const psStruct = (const STRUCTURE *)psViewer;
 
 		// a structure that is being built cannot see anything
 		if (psStruct->status != SS_BUILT)
@@ -312,15 +316,15 @@ BOOL visibleObject(BASE_OBJECT *psViewer, BASE_OBJECT *psTarget)
 			return false;
 		}
 
-		if ((psStruct->pStructureType->type == REF_WALL) ||
-			(psStruct->pStructureType->type == REF_WALLCORNER))
+		if (psStruct->pStructureType->type == REF_WALL
+		 || psStruct->pStructureType->type == REF_WALLCORNER)
 		{
 			return false;
 		}
 
-		if ((structCBSensor((STRUCTURE *)psViewer) ||
-			 structVTOLCBSensor((STRUCTURE *)psViewer)) &&
-			 ((STRUCTURE *)psViewer)->psTarget[0] == psTarget)
+		if ((structCBSensor(psStruct)
+		  || structVTOLCBSensor(psStruct))
+		 && psStruct->psTarget[0] == psTarget)
 		{
 			// if a unit is targetted by a counter battery sensor
 			// it is automatically seen
@@ -329,13 +333,14 @@ BOOL visibleObject(BASE_OBJECT *psViewer, BASE_OBJECT *psTarget)
 
 		// increase the sensor range for AA sites
 		// AA sites are defensive structures that can only shoot in the air
-		if ( (psStruct->pStructureType->type == REF_DEFENSE) &&
-			 (asWeaponStats[psStruct->asWeaps[0].nStat].surfaceToAir == SHOOT_IN_AIR) )
+		if (psStruct->pStructureType->type == REF_DEFENSE
+		 && asWeaponStats[psStruct->asWeaps[0].nStat].surfaceToAir == SHOOT_IN_AIR)
 		{
 			range = 3 * range / 2;
 		}
 
 		break;
+	}
 	default:
 		ASSERT( false,
 			"visibleObject: visibility checking is only implemented for"
@@ -351,7 +356,7 @@ BOOL visibleObject(BASE_OBJECT *psViewer, BASE_OBJECT *psTarget)
 	}
 
 	/* First see if the target is in sensor range */
-	x = (SDWORD)psViewer->pos.x;
+	x = psViewer->pos.x;
 	xdiff = x - (SDWORD)psTarget->pos.x;
 	if (xdiff < 0)
 	{
@@ -363,7 +368,7 @@ BOOL visibleObject(BASE_OBJECT *psViewer, BASE_OBJECT *psTarget)
 		return false;
 	}
 
-	y = (SDWORD)psViewer->pos.y;
+	y = psViewer->pos.y;
 	ydiff = y - (SDWORD)psTarget->pos.y;
 	if (ydiff < 0)
 	{
@@ -422,7 +427,7 @@ BOOL visibleObjWallBlock(BASE_OBJECT *psViewer, BASE_OBJECT *psTarget)
 }
 
 // Find the wall that is blocking LOS to a target (if any)
-STRUCTURE* visGetBlockingWall(BASE_OBJECT* psViewer, BASE_OBJECT* psTarget)
+STRUCTURE* visGetBlockingWall(const BASE_OBJECT* psViewer, const BASE_OBJECT* psTarget)
 {
 	blockingWall = true;
 	numWalls = 0;

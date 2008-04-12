@@ -36,7 +36,7 @@ extern void visTilesUpdate(BASE_OBJECT *psObj);
  * currently droids and structures.
  * psTarget can be any type of BASE_OBJECT (e.g. a tree).
  */
-extern BOOL visibleObject(BASE_OBJECT *psViewer, BASE_OBJECT *psTarget);
+extern BOOL visibleObject(const BASE_OBJECT* psViewer, const BASE_OBJECT* psTarget);
 
 /* Check whether psViewer can see psTarget.
  * struckBlock controls whether structures block LOS
@@ -48,7 +48,7 @@ extern BOOL visibleObjectBlock(BASE_OBJECT *psViewer, BASE_OBJECT *psTarget,
 extern BOOL visibleObjWallBlock(BASE_OBJECT *psViewer, BASE_OBJECT *psTarget);
 
 // Find the wall that is blocking LOS to a target (if any)
-extern STRUCTURE* visGetBlockingWall(BASE_OBJECT* psViewer, BASE_OBJECT* psTarget);
+extern STRUCTURE* visGetBlockingWall(const BASE_OBJECT* psViewer, const BASE_OBJECT* psTarget);
 
 extern void	processVisibility(BASE_OBJECT *psCurr);
 
@@ -99,27 +99,27 @@ static inline BOOL visObjInRange(BASE_OBJECT *psObj1, BASE_OBJECT *psObj2, SDWOR
 	return true;
 }
 
-static inline int objSensorRange(BASE_OBJECT *psObj)
+static inline int objSensorRange(const BASE_OBJECT* psObj)
 {
 	return psObj->sensorRange;
 }
 
-static inline int objSensorPower(BASE_OBJECT *psObj)
+static inline int objSensorPower(const BASE_OBJECT* psObj)
 {
 	return psObj->sensorPower;
 }
 
-static inline int objJammerPower(BASE_OBJECT *psObj)
+static inline int objJammerPower(const BASE_OBJECT* psObj)
 {
 	return 0;
 }
 
-static inline int objJammerRange(BASE_OBJECT *psObj)
+static inline int objJammerRange(const BASE_OBJECT* psObj)
 {
 	return 0;
 }
 
-static inline int objConcealment(BASE_OBJECT *psObj)
+static inline int objConcealment(const BASE_OBJECT* psObj)
 {
 	return psObj->ECMMod;
 }
