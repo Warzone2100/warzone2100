@@ -312,6 +312,8 @@ BOOL visibleObject(BASE_OBJECT *psViewer, BASE_OBJECT *psTarget)
 	SDWORD		tarG, top;
 	STRUCTURE	*psStruct;
 
+	ASSERT(psViewer != NULL, "Invalid viewer pointer!");
+
 	/* Get the sensor Range and power */
 	switch (psViewer->type)
 	{
@@ -366,6 +368,8 @@ BOOL visibleObject(BASE_OBJECT *psViewer, BASE_OBJECT *psTarget)
 		return FALSE;
 		break;
 	}
+
+	ASSERT(psTarget != NULL, "Invalid target pointer!");
 
 	/* Get the target's ecm power (if it has one)
 	 * or that of a nearby ECM droid.
