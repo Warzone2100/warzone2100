@@ -26,6 +26,7 @@
 
 #include "objectdef.h"
 #include "structuredef.h"
+#include "visibility.h"
 
 // how long to wait between CALL_STRUCT_ATTACKED's - plus how long to flash on radar for
 #define ATTACK_CB_PAUSE		5000
@@ -399,11 +400,30 @@ extern BOOL lasSatStructSelected(STRUCTURE *psStruct);
 
 BOOL structureCheckReferences(STRUCTURE *psVictimStruct);
 
-#define structSensorRange(_psObj) objSensorRange((BASE_OBJECT *)_psObj)
-#define structSensorPower(_psObj) objSensorPower((BASE_OBJECT *)_psObj)
-#define structJammerRange(_psObj) objJammerRange((BASE_OBJECT *)_psObj)
-#define structJammerPower(_psObj) objJammerPower((BASE_OBJECT *)_psObj)
-#define structConcealment(_psObj) objConcealment((BASE_OBJECT *)_psObj)
+static inline int structSensorRange(const STRUCTURE* psObj)
+{
+	return objSensorRange((const BASE_OBJECT*)psObj);
+}
+
+static inline int structSensorPower(const STRUCTURE* psObj)
+{
+	return objSensorPower((const BASE_OBJECT*)psObj);
+}
+
+static inline int structJammerRange(const STRUCTURE* psObj)
+{
+	return objJammerRange((const BASE_OBJECT*)psObj);
+}
+
+static inline int structJammerPower(const STRUCTURE* psObj)
+{
+	return objJammerPower((const BASE_OBJECT*)psObj);
+}
+
+static inline int structConcealment(const STRUCTURE* psObj)
+{
+	return objConcealment((const BASE_OBJECT*)psObj);
+}
 
 #define setStructureTarget(_psBuilding, _psNewTarget, _idx) _setStructureTarget(_psBuilding, _psNewTarget, _idx, __LINE__, __FUNCTION__)
 static inline void _setStructureTarget(STRUCTURE *psBuilding, BASE_OBJECT *psNewTarget, UWORD idx, int line, const char *func)

@@ -27,6 +27,7 @@
 #include "objectdef.h"
 #include "lib/gamelib/gtime.h"
 #include "stats.h"
+#include "visibility.h"
 
 #define OFF_SCREEN 9999		// world->screen check - alex
 
@@ -409,11 +410,30 @@ BOOL droidOnMap(const DROID *psDroid);
 
 void droidSetPosition(DROID *psDroid, int x, int y);
 
-#define droidSensorRange(_psDroid) objSensorRange((BASE_OBJECT *)_psDroid)
-#define droidSensorPower(_psDroid) objSensorPower((BASE_OBJECT *)_psDroid)
-#define droidJammerRange(_psDroid) objJammerRange((BASE_OBJECT *)_psDroid)
-#define droidJammerPower(_psDroid) objJammerPower((BASE_OBJECT *)_psDroid)
-#define droidConcealment(_psDroid) objConcealment((BASE_OBJECT *)_psDroid)
+static inline int droidSensorRange(const DROID* psDroid)
+{
+	return objSensorRange((const BASE_OBJECT*)psDroid);
+}
+
+static inline int droidSensorPower(const DROID* psDroid)
+{
+	return objSensorPower((const BASE_OBJECT*)psDroid);
+}
+
+static inline int droidJammerRange(const DROID* psDroid)
+{
+	return objJammerRange((const BASE_OBJECT*)psDroid);
+}
+
+static inline int droidJammerPower(const DROID* psDroid)
+{
+	return objJammerPower((const BASE_OBJECT*)psDroid);
+}
+
+static inline int droidConcealment(const DROID* psDroid)
+{
+	return objConcealment((const BASE_OBJECT*)psDroid);
+}
 
 /*
  * Component stat helper functions
