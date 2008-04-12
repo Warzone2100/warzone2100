@@ -2787,15 +2787,15 @@ static BOOL maxDroidsByTypeReached(STRUCTURE *psStructure)
 
 	CHECK_STRUCTURE(psStructure);
 
-	if ( (droidTemplateType((DROID_TEMPLATE *)psFact->psSubject) == DROID_COMMAND) &&
-		(getNumCommandDroids(psStructure->player) >= MAX_COMMAND_DROIDS) )
+	if (droidTemplateType((DROID_TEMPLATE *)psFact->psSubject) == DROID_COMMAND
+	 && getNumCommandDroids(psStructure->player) >= MAX_COMMAND_DROIDS)
 	{
 		return true;
 	}
 
-	if ( (droidTemplateType((DROID_TEMPLATE *)psFact->psSubject) == DROID_CONSTRUCT ||
-		droidTemplateType((DROID_TEMPLATE *)psFact->psSubject) == DROID_CYBORG_CONSTRUCT) &&
-		(getNumConstructorDroids(psStructure->player) >= MAX_CONSTRUCTOR_DROIDS) )
+	if ((droidTemplateType((DROID_TEMPLATE *)psFact->psSubject) == DROID_CONSTRUCT
+	  || droidTemplateType((DROID_TEMPLATE *)psFact->psSubject) == DROID_CYBORG_CONSTRUCT)
+	 && getNumConstructorDroids(psStructure->player) >= MAX_CONSTRUCTOR_DROIDS)
 	{
 		return true;
 	}
