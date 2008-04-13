@@ -2378,27 +2378,27 @@ BOOL loadDroidTemplates(const char *pDroidData, UDWORD bufferSize)
 		{
 			pDroidDesign->droidType = DROID_PERSON;
 		}
-		if (!strcmp(componentName, "CYBORG"))
+		else if (!strcmp(componentName, "CYBORG"))
 		{
 			pDroidDesign->droidType = DROID_CYBORG;
 		}
-		if (!strcmp(componentName, "CYBORG_SUPER"))
+		else if (!strcmp(componentName, "CYBORG_SUPER"))
 		{
 			pDroidDesign->droidType = DROID_CYBORG_SUPER;
 		}
-		if (!strcmp(componentName, "CYBORG_CONSTRUCT"))
+		else if (!strcmp(componentName, "CYBORG_CONSTRUCT"))
 		{
 			pDroidDesign->droidType = DROID_CYBORG_CONSTRUCT;
 		}
-		if (!strcmp(componentName, "CYBORG_REPAIR"))
+		else if (!strcmp(componentName, "CYBORG_REPAIR"))
 		{
 			pDroidDesign->droidType = DROID_CYBORG_REPAIR;
 		}
-		if (!strcmp(componentName, "TRANSPORTER"))
+		else if (!strcmp(componentName, "TRANSPORTER"))
 		{
 			pDroidDesign->droidType = DROID_TRANSPORTER;
 		}
-		if (!strcmp(componentName, "ZNULLDROID"))
+		else if (!strcmp(componentName, "ZNULLDROID"))
 		{
 			pDroidDesign->droidType = DROID_DEFAULT;
 			bDefaultTemplateFound = true;
