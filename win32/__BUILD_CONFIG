@@ -1,3 +1,4 @@
+#!/bin/sh
 PREFIX="${HOME}/Documents/Projects/Warzone/devpkg/devpkg"
 PKG_CONFIG_PATH="${PREFIX}/lib/pkgconfig"
 PATH="${PREFIX}/bin:${PATH}"
@@ -8,3 +9,5 @@ CPPFLAGS="-I${PREFIX}/include"
 LDFLAGS="-L${PREFIX}/lib"
 
 INSTALLER_VERSION="2.0.8.0"
+
+CROSSCOMPILETARGET=mingw32
