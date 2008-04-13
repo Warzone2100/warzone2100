@@ -17,5 +17,6 @@ fi
     CPPFLAGS="${CPPFLAGS}" \
     LDFLAGS="${LDFLAGS}" \
     CC_FOR_BUILD="gcc" \
-    CXX_FOR_BUILD="g++" || exit 1
+    CXX_FOR_BUILD="g++" \
+    CPPFLAGS_FOR_BUILD=" " || exit 1
 make -j3 || exit 1

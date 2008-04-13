@@ -1,5 +1,6 @@
 CC = @CC_FOR_BUILD@
 CXX = @CXX_FOR_BUILD@
+CPPFLAGS = @CPPFLAGS_FOR_BUILD@
 
 noinst_PROGRAMS = autorevision
 autorevision_SOURCES = autorevision.cpp
