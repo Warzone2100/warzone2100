@@ -15,5 +15,7 @@ fi
 	${CONF_EXTRA_FLAGS} \
     CFLAGS="${CFLAGS}" \
     CPPFLAGS="${CPPFLAGS}" \
-    LDFLAGS="${LDFLAGS}" || exit 1
+    LDFLAGS="${LDFLAGS}" \
+    CC_FOR_BUILD="gcc" \
+    CXX_FOR_BUILD="g++" || exit 1
 make -j3 || exit 1
