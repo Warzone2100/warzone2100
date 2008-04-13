@@ -189,7 +189,7 @@ static int playerXTile, playerZTile;
 static BOOL	mouseLocated = true;
 
 /* The box used for multiple selection - present screen coordinates */
-UDWORD currentGameFrame;
+static UDWORD currentGameFrame;
 static UDWORD numTiles = 0;
 static SDWORD tileZ = 8000;
 static QUAD dragQuad;

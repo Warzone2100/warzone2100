@@ -469,7 +469,6 @@ ORDERBUTTONS OrderButtons[NUM_ORDERS]=
 
 extern BOOL ClosingOrder;
 extern W_SCREEN *psWScreen;
-extern UDWORD currentGameFrame;
 extern void intDisplayPlainForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
 
 static BOOL BuildSelectedDroidList(void);
@@ -1155,7 +1154,6 @@ static BOOL BuildSelectedDroidList(void)
 	DROID *psDroid;
 
 	for(psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext) {
-//		if(psDroid->selected && psDroid->sDisplay.frameNumber == currentGameFrame) {
 		if(psDroid->selected) {
 			if(NumSelectedDroids < MAX_SELECTED_DROIDS) {
 				SelectedDroids[NumSelectedDroids] = psDroid;
@@ -1163,8 +1161,6 @@ static BOOL BuildSelectedDroidList(void)
 			}
 		}
 	}
-
-//	DBPRINTF(("%d droids selected\n",NumSelectedDroids));
 
 	if(NumSelectedDroids) {
 		return true;
