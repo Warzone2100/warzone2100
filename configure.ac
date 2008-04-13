@@ -107,6 +107,12 @@ AM_CONDITIONAL(INSTALLER, test "x$enable_installer" = "xyes")
 AC_MSG_CHECKING([whether to build NSIS installer])
 AC_MSG_RESULT([${enable_installer}])
 
+AC_ARG_ENABLE([static],
+	AS_HELP_STRING([--enable-static], [Link statically [no]]),
+	[ enable_static=${enableval} ], [ enable_static=no ])
+if test "x$enable_static" = "xyes" ; then
+    PKG_CONFIG="${PKG_CONFIG} --static"
+fi
 
 AC_ARG_WITH(distributor,
 	AS_HELP_STRING([--with-distributor],[Name of distributor compiling this package]))
