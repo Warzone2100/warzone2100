@@ -190,9 +190,10 @@ GAMECODE gameLoop(void)
 		}
 
 		/* Run the in game interface and see if it grabbed any mouse clicks */
-	  	if( (!rotActive) && getWidgetsStatus() &&
-			(dragBox3D.status != DRAG_DRAGGING) &&
-			(wallDrag.status != DRAG_DRAGGING) )
+	  	if (!rotActive
+		 && getWidgetsStatus()
+		 && dragBox3D.status != DRAG_DRAGGING
+		 && wallDrag.status != DRAG_DRAGGING)
 		{
 			intRetVal = intRunWidgets();
 		}
@@ -259,7 +260,7 @@ GAMECODE gameLoop(void)
 			}
 
 			//ajl. get the incoming netgame messages and process them.
-			if(bMultiPlayer)
+			if (bMultiPlayer)
 			{
 				multiPlayerLoop();
 			}
