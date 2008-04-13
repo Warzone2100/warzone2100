@@ -25,6 +25,7 @@
 # include "dbghelp.h"
 # include "exchndl.h"
 
+#if !defined(WZ_CC_MINGW)
 static LPTOP_LEVEL_EXCEPTION_FILTER prevExceptionHandler = NULL;
 
 /**
@@ -101,6 +102,7 @@ static LONG WINAPI windowsExceptionHandler(PEXCEPTION_POINTERS pExceptionInfo)
 	else
 		return EXCEPTION_CONTINUE_SEARCH;
 }
+#endif
 
 #elif defined(WZ_OS_UNIX) && !defined(WZ_OS_MAC)
 

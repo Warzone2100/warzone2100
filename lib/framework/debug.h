@@ -149,6 +149,10 @@ void debug_callback_file_exit(void **data);
 
 void debug_callback_stderr(void **data, const char *outputBuffer);
 
+#if defined WIN32 && defined DEBUG
+void debug_callback_win32debug(void** data, const char* outputBuffer);
+#endif
+
 /**
  * Toggle debug output for part associated with str
  *
