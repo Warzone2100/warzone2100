@@ -197,6 +197,10 @@ fi
 
 # Checks for modules:
 
+if test "x$PKGCONFIG_PREFIX" != "x" ; then
+	PKG_CONFIG="${PKG_CONFIG} --define-variable=prefix=${PKGCONFIG_PREFIX}"
+fi
+
 PKG_CHECK_MODULES([SDL], [sdl >= 1.2])
 PKG_CHECK_MODULES([OPENAL], [openal >= 0.0.8])
 PKG_CHECK_MODULES([PNG], [libpng >= 1.2])
