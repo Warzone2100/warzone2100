@@ -9,11 +9,11 @@ elif [[ "x$1" = "xinstaller" ]] ; then
 		--with-installer-extdir=\"${PREFIX}/bin\" --with-installer-version=${INSTALLER_VERSION}"
 fi
 
-./autogen.sh
+./autogen.sh || exit 1
 ./configure --target=mingw32 --host=mingw32 --enable-static --disable-shared \
     --prefix="${PREFIX}" \
 	${CONF_EXTRA_FLAGS} \
     CFLAGS="${CFLAGS}" \
     CPPFLAGS="${CPPFLAGS}" \
-    LDFLAGS="${LDFLAGS}"
-make -j3
+    LDFLAGS="${LDFLAGS}" || exit 1
+make -j3 || exit 1
