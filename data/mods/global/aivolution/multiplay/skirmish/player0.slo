@@ -755,6 +755,8 @@ function bool	buildOilDefense(int _buildX, int _buildY, int _oilx, int _oily, DR
 function DROID	closestEnemyDroidByType(int _x, int _y, int _range, int _type);
 function int	numDroidsByType(int _player, int _droidType);
 
+function string	strGratitude();
+
 //=====================================================================
 //	Events
 //=====================================================================
@@ -6550,6 +6552,7 @@ event droidTakeOverEv(inactive)
 		if(droid.player == me)
 		{
 			assignDroid(droid);
+			notifyAllies(strGratitude(), false);
 		}
 	}
 	else
@@ -15993,3 +15996,20 @@ function DROID closestEnemyDroidByType(int _x, int _y, int _range, int _type)
 
 	return _closestDroid;
 }
+
+/* Thank someone */
+function string	strGratitude()
+{
+	dice = random(10);
+
+	if(dice < 5){
+		return "thanks";
+	}else if(dice < 7){
+		return "thanks!!";
+	}else{
+		return "thank you";
+	}
+	
+	return "thanks";
+}
+
