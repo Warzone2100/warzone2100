@@ -1964,7 +1964,15 @@ event takeover(takeoverTr)
 {
 	if( droid.player == me )
 	{
-		groupAddDroid( attackGroup, droid );
+		if(droid.droidType == DROID_CONSTRUCT or
+				droid.droidType == DROID_CYBORG_CONSTRUCT)
+		{
+			groupAddDroid( buildGroup, droid );
+		}
+		else
+		{
+			groupAddDroid( attackGroup, droid );
+		}
 	}
 }
 
