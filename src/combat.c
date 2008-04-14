@@ -26,6 +26,7 @@
 
 #include "lib/framework/frame.h"
 #include "lib/framework/math-help.h"
+#include "lib/netplay/netplay.h"
 
 #include "objects.h"
 #include "combat.h"
@@ -504,15 +505,20 @@ float objDamage(BASE_OBJECT *psObj, UDWORD damage, UDWORD originalhp, UDWORD wea
 		return 0;
 	}
 
-	if (psObj->player != selectedPlayer)
+
+	// apply game difficulty setting
+	if(!NetPlay.bComms)		// ignore multiplayer games
 	{
-		// Player inflicting damage on enemy.
-		damage = (UDWORD) modifyForDifficultyLevel(damage,true);
-	}
-	else
-	{
-		// Enemy inflicting damage on player.
-		damage = (UDWORD) modifyForDifficultyLevel(damage,false);
+		if (psObj->player != selectedPlayer)
+		{
+			// Player inflicting damage on enemy.
+			damage = (UDWORD) modifyForDifficultyLevel(damage,true);
+		}
+		else
+		{
+			// Enemy inflicting damage on player.
+			damage = (UDWORD) modifyForDifficultyLevel(damage,false);
+		}
 	}
 
 	armour = psObj->armour[impactSide][weaponClass];
