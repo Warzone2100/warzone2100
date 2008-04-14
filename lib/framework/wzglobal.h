@@ -377,7 +377,7 @@
 /*!
  * \def WZ_DECL_RESTRICT
  */
-#if WZ_CC_GNU_PREREQ(4,1) && !defined(WZ_CC_INTEL)
+#if WZ_CC_GNU_PREREQ(4,1) && !defined(WZ_CC_INTEL) && !defined(__cplusplus)
 #  define WZ_DECL_RESTRICT restrict
 #else
 #  define WZ_DECL_RESTRICT
