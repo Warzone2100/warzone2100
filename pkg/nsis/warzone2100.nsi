@@ -413,6 +413,7 @@ Section "Uninstall"
   Delete "$INSTDIR\fonts\DejaVuSansMono.ttf"
   RMDir "$INSTDIR\fonts"
 
+  Delete "$INSTDIR\mods\global\aivolution.wz"
   Delete "$INSTDIR\mods\global\grim.wz"
   RMDir "$INSTDIR\mods\global"
   RMDir "$INSTDIR\mods"
