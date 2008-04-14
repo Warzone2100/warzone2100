@@ -17,9 +17,12 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/*! \file cursors16.h
+/** @file
  *  \brief Cursor definition (16x16)
  */
+
+#include "frame.h"
+#include "cursors.h"
 
 #define CURSOR_OFFSET 100
 #define MAX_CURSORS 26 
@@ -730,37 +733,81 @@ static const char *cursor_select[] = {
   "7,7"
 };
 
-static SDL_Cursor *init_system_cursor(const char *image[])
+static const struct
 {
-  int i, row, col;
-  Uint8 data[4*16];
-  Uint8 mask[4*16];
-  int hot_x, hot_y;
+	const char** image;
+	CURSOR cursor_num;
+} cursors[CURSOR_MAX] =
+{
+	{ cursor_arrow,         CURSOR_ARROW },
+	{ cursor_dest,          CURSOR_DEST },
+	{ cursor_sight,         CURSOR_SIGHT },
+	{ cursor_target,        CURSOR_TARGET },
+	{ cursor_larrow,        CURSOR_LARROW },
+	{ cursor_rarrow,        CURSOR_RARROW },
+	{ cursor_darrow,        CURSOR_DARROW },
+	{ cursor_uarrow,        CURSOR_UARROW },
+	{ cursor_default,       CURSOR_DEFAULT },
+	{ cursor_default,       CURSOR_EDGEOFMAP },
+	{ cursor_attach,        CURSOR_ATTACH },
+	{ cursor_attack,        CURSOR_ATTACK },
+	{ cursor_bomb,          CURSOR_BOMB },
+	{ cursor_bridge,        CURSOR_BRIDGE },
+	{ cursor_build,         CURSOR_BUILD },
+	{ cursor_embark,        CURSOR_EMBARK },
+	{ cursor_fix,           CURSOR_FIX },
+	{ cursor_guard,         CURSOR_GUARD },
+	{ cursor_jam,           CURSOR_JAM },
+	{ cursor_lockon,        CURSOR_LOCKON },
+	{ cursor_menu,          CURSOR_MENU },
+	{ cursor_move,          CURSOR_MOVE },
+	{ cursor_notpossible,   CURSOR_NOTPOSSIBLE },
+	{ cursor_pickup,        CURSOR_PICKUP },
+	{ cursor_seekrepair,    CURSOR_SEEKREPAIR },
+	{ cursor_select,        CURSOR_SELECT },
+};
 
-  i = -1;
-  for ( row=0; row<16; ++row ) {
-    for ( col=0; col<16; ++col ) {
-      if ( col % 8 ) {
-        data[i] <<= 1;
-        mask[i] <<= 1;
-      } else {
-        ++i;
-        data[i] = mask[i] = 0;
-      }
-      switch (image[4+row][col]) {
-        case 'X':
-          data[i] |= 0x01;
-          mask[i] |= 0x01;
-          break;
-        case '.':
-          mask[i] |= 0x01;
-          break;
-        case ' ':
-          break;
-      }
-    }
-  }
-  sscanf(image[4+row], "%d,%d", &hot_x, &hot_y);
-  return SDL_CreateCursor(data, mask, 16, 16, hot_x, hot_y);
+SDL_Cursor* init_system_cursor16(CURSOR cur)
+{
+	int i, row, col;
+	Uint8 data[4 * 16];
+	Uint8 mask[4 * 16];
+	int hot_x, hot_y;
+	const char** image;
+	ASSERT(cur < CURSOR_MAX, "Attempting to load non-existent cursor: %u", (unsigned int)cur);
+	ASSERT(cursors[cur].cursor_num == cur, "Bad cursor mapping");
+	image = cursors[cur].image;
+
+	i = -1;
+	for (row = 0; row < 16; ++row)
+	{
+		for (col = 0; col < 16; ++col)
+		{
+			if (col % 8)
+			{
+				data[i] <<= 1;
+				mask[i] <<= 1;
+			}
+			else
+			{
+				++i;
+				data[i] = mask[i] = 0;
+			}
+			switch (image[4 + row][col])
+			{
+				case 'X':
+					data[i] |= 0x01;
+					mask[i] |= 0x01;
+					break;
+				case '.':
+					mask[i] |= 0x01;
+					break;
+				case ' ':
+					break;
+			}
+		}
+	}
+	sscanf(image[4 + row], "%d,%d", &hot_x, &hot_y);
+	return SDL_CreateCursor(data, mask, 16, 16, hot_x, hot_y);
 }
 

@@ -220,6 +220,18 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\cursors.c"
+				>
+			</File>
+			<File
+				RelativePath=".\cursors16.c"
+				>
+			</File>
+			<File
+				RelativePath=".\cursors32.c"
+				>
+			</File>
+			<File
 				RelativePath=".\resource_parser.tab.c"
 				>
 			</File>
@@ -267,10 +279,6 @@
 			</File>
 			<File
 				RelativePath=".\cursors.h"
-				>
-			</File>
-			<File
-				RelativePath=".\cursors16.h"
 				>
 			</File>
 			<File

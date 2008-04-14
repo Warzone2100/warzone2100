@@ -52,7 +52,6 @@
 #include "visibility.h"
 #include "geometry.h"
 #include "lib/gamelib/gtime.h"
-#include "resource.h"
 #include "messagedef.h"
 #include "miscimd.h"
 #include "effects.h"

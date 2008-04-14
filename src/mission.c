@@ -43,7 +43,7 @@
 #include "lib/ivis_common/piestate.h"
 #include "effects.h"
 #include "radar.h"
-#include "resource.h"		// for mousecursors
+#include "lib/framework/cursors.h"		// for mousecursors
 #include "transporter.h"
 #include "group.h"
 #include "frontend.h"		// for displaytextoption.
@@ -3213,7 +3213,7 @@ void intRemoveMissionResultNoAnim(void)
 
 void intRunMissionResult(void)
 {
-	frameSetCursorFromRes(IDC_DEFAULT);
+	frameSetCursorFromRes(CURSOR_DEFAULT);
 
 	if(bLoadSaveUp)
 	{

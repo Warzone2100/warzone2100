@@ -71,7 +71,7 @@
 #include "multijoin.h"
 
 #include "intimage.h"
-#include "resource.h"
+#include "lib/framework/cursors.h"
 #include "seqdisp.h"
 #include "lib/sound/cdaudio.h"
 #include "mission.h"
@@ -215,7 +215,7 @@ GAMECODE gameLoop(void)
 						 && CoordInRadar(mouseX(), mouseY())
 						 && getHQExists(selectedPlayer) ) ) )
 			{
-				frameSetCursorFromRes(IDC_DEFAULT);
+				frameSetCursorFromRes(CURSOR_DEFAULT);
 				intRetVal = INT_INTERCEPT;
 			}
 
