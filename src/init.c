@@ -251,7 +251,7 @@ BOOL rebuildSearchPath( searchPathMode mode, BOOL force )
 					debug( LOG_WZ, "rebuildSearchPath: Removing [%s] from search path", curSearchPath->path );
 #endif // DEBUG
 					// Remove maps and mods
-					removeSubdirs( curSearchPath->path, "maps", false );
+					removeSubdirs( curSearchPath->path, "maps", NULL );
 					removeSubdirs( curSearchPath->path, "mods/global", global_mods );
 					removeSubdirs( curSearchPath->path, "mods/campaign", campaign_mods );
 					removeSubdirs( curSearchPath->path, "mods/multiplay", multiplay_mods );
@@ -311,7 +311,7 @@ BOOL rebuildSearchPath( searchPathMode mode, BOOL force )
 #endif // DEBUG
 					// Add maps and global and multiplay mods
 					PHYSFS_addToSearchPath( curSearchPath->path, PHYSFS_APPEND );
-					addSubdirs( curSearchPath->path, "maps", PHYSFS_APPEND, false );
+					addSubdirs( curSearchPath->path, "maps", PHYSFS_APPEND, NULL );
 					addSubdirs( curSearchPath->path, "mods/global", PHYSFS_APPEND, global_mods );
 					addSubdirs( curSearchPath->path, "mods/multiplay", PHYSFS_APPEND, multiplay_mods );
 					PHYSFS_removeFromSearchPath( curSearchPath->path );
