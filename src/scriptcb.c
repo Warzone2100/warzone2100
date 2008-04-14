@@ -94,8 +94,6 @@ BOOL scrCBDroidTaken(void)
 		*ppsDroid = psScrCBDroidTaken;
 	}
 
-	psScrCBDroidTaken = NULL;
-
 	scrFunctionResult.v.bval = triggered;
 	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
 	{
