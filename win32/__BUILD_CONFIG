@@ -17,6 +17,6 @@ LDFLAGS="-L${PREFIX}/lib"
 
 INSTALLER_VERSION="2.0.8.0"
 
-if test "x$CROSSCOMPILETARGET"; then
+if test "x$CROSSCOMPILETARGET" = "x"; then
     CROSSCOMPILETARGET=mingw32
 fi
