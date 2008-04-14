@@ -9,8 +9,11 @@ elif [[ "x$1" = "xinstaller" ]] ; then
 		--with-installer-extdir=\"${PREFIX}/bin\" --with-installer-version=${INSTALLER_VERSION}"
 fi
 
+# Move to the root directory
+cd ..
+
 ./autogen.sh || exit 1
-./configure --target=${CROSSCOMPILETARGET} --host=${CROSSCOMPILETARGET} --enable-static --disable-shared \
+./configure --target=${CROSSCOMPILETARGET} --host=${CROSSCOMPILETARGET} --enable-static --disable-shared --disable-debug \
     --prefix="${PREFIX}" \
 	${CONF_EXTRA_FLAGS} \
     CFLAGS="${CFLAGS}" \
