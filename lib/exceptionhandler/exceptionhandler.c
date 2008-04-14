@@ -19,6 +19,7 @@
 
 #include "lib/framework/frame.h"
 #include "exceptionhandler.h"
+#include "dumpinfo.h"
 
 #if defined(WZ_OS_WIN)
 
@@ -414,74 +415,8 @@ static void posixExceptionHandler(int signum, siginfo_t * siginfo, WZ_DECL_UNUSE
 	}
 
 
-	write(dumpFile, "Program: ", strlen("Program: "));
-	write(dumpFile, programPath, strlen(programPath));
-	write(dumpFile, "\n", 1);
-
-	write(dumpFile, "Version: ", strlen("Version: "));
-	write(dumpFile, PACKAGE_VERSION, strlen(PACKAGE_VERSION));
-	write(dumpFile, "\n", 1);
-
-	write(dumpFile, "Distributor: ", strlen("Distributor: "));
-	write(dumpFile, PACKAGE_DISTRIBUTOR, strlen(PACKAGE_DISTRIBUTOR));
-	write(dumpFile, "\n", 1);
-
-# if defined(DEBUG)
-	write(dumpFile, "Type: Debug\n", strlen("Type: Debug\n"));
-# else
-	write(dumpFile, "Type: Release\n", strlen("Type: Release\n"));
-# endif
-
-	write(dumpFile, "Compiled on: ", strlen("Compiled on: "));
-	write(dumpFile, __DATE__ " " __TIME__, strlen(__DATE__ " " __TIME__));
-	write(dumpFile, "\n", 1);
-
-	write(dumpFile, "Compiled by: ", strlen("Compiled by: "));
-# if defined(WZ_CC_GNU) && !defined(WZ_CC_INTEL)
-	write(dumpFile, "GCC " __VERSION__, strlen("GCC " __VERSION__));
-# elif defined(WZ_CC_INTEL)
-	// Intel includes the compiler name within the version string
-	write(dumpFile, __VERSION__, strlen(__VERSION__));
-# else
-	write(dumpFile, "UNKNOWN", strlen("UNKNOWN"));
-# endif
-	write(dumpFile, "\n", 1);
-
-	write(dumpFile, "Executed on: ", strlen("Executed on: "));
-	write(dumpFile, executionDate, strlen(executionDate));
-	write(dumpFile, "\n", 1);
-
-	if (!sysInfoValid)
-		write(dumpFile, "System information may be invalid!\n",
-			  strlen("System information may be invalid!\n\n"));
-
-	write(dumpFile, "Operating system: ", strlen("Operating system: "));
-	write(dumpFile, sysInfo.sysname, strlen(sysInfo.sysname));
-	write(dumpFile, "\n", 1);
-
-	write(dumpFile, "Node name: ", strlen("Node name: "));
-	write(dumpFile, sysInfo.nodename, strlen(sysInfo.nodename));
-	write(dumpFile, "\n", 1);
-
-	write(dumpFile, "Release: ", strlen("Release: "));
-	write(dumpFile, sysInfo.release, strlen(sysInfo.release));
-	write(dumpFile, "\n", 1);
-
-	write(dumpFile, "Version: ", strlen("Version: "));
-	write(dumpFile, sysInfo.version, strlen(sysInfo.version));
-	write(dumpFile, "\n", 1);
-
-	write(dumpFile, "Machine: ", strlen("Machine: "));
-	write(dumpFile, sysInfo.machine, strlen(sysInfo.machine));
-	write(dumpFile, "\n\n", 2);
-
-
-	if (sizeof(void*) == 4)
-		write(dumpFile, "Pointers: 32bit\n\n", strlen("Pointers: 32bit\n\n"));
-	else if (sizeof(void*) == 8)
-		write(dumpFile, "Pointers: 64bit\n\n", strlen("Pointers: 64bit\n\n"));
-	else
-		write(dumpFile, "Pointers: Unknown\n\n", strlen("Pointers: Unknown\n\n"));
+	// Dump a generic info header
+	dbgDumpHeader(dumpFile);
 
 
 	write(dumpFile, "Dump caused by signal: ", strlen("Dump caused by signal: "));
@@ -587,6 +522,7 @@ static void posixExceptionHandler(int signum, siginfo_t * siginfo, WZ_DECL_UNUSE
  */
 void setupExceptionHandler(const char * programCommand)
 {
+	dbgDumpInit();
 #if defined(WZ_OS_WIN)
 # if defined(WZ_CC_MINGW)
 	ExchndlSetup();
@@ -600,7 +536,7 @@ void setupExceptionHandler(const char * programCommand)
 
 	// Get full path to this program. Needed for gdb to find the binary.
 	FILE * whichProgramStream = popen(whichProgramCommand, "r");
-	fread( programPath, 1, PATH_MAX, whichProgramStream );
+	fread( programPath, 1, sizeof(programPath), whichProgramStream );
 	pclose(whichProgramStream);
 
 	// Were we able to find ourselves?

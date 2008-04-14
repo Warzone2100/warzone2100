@@ -863,7 +863,7 @@ void GenerateExceptionReport(PEXCEPTION_POINTERS pExceptionInfo)
 		);
 	}
 
-	rprintf(_T("Program: %s (%s)\r\n"), GetModuleFileName(NULL, szModule, MAX_PATH) ? szModule : "", PACKAGE);
+	rprintf(_T("Program: %s (" PACKAGE ")\r\n"), GetModuleFileName(NULL, szModule, MAX_PATH) ? szModule : "");
 	rprintf(_T("Version: %s\r\n"), formattedVersionString ? formattedVersionString : PACKAGE_VERSION);
 	rprintf(_T("Compiled by: %s\r\n"),
 #if defined(WZ_CC_GNU) && !defined(WZ_CC_INTEL)
