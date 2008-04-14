@@ -3,7 +3,7 @@ if [ -f __BUILD_CONFIG.USER ]; then
     . __BUILD_CONFIG.USER
 fi
 
-if "x$PREFIX" = "x"; then
+if test "x$PREFIX" = "x"; then
     PREFIX="${HOME}/svn/warzone/devpkg-2.1"
 fi
 
@@ -17,6 +17,6 @@ LDFLAGS="-L${PREFIX}/lib"
 
 INSTALLER_VERSION="2.0.8.0"
 
-if "x$CROSSCOMPILETARGET"; then
+if test "x$CROSSCOMPILETARGET"; then
     CROSSCOMPILETARGET=mingw32
 fi
