@@ -28,7 +28,7 @@
 //String support
 //-----------------------------
 #define MAXSTRLEN	255					//Max len of a single string
-#define MAXSTACKLEN	6000
+#define MAXSTACKLEN	8000
 
 /* Initialise the stack */
 extern BOOL stackInitialise(void);
