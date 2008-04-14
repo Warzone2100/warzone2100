@@ -7,7 +7,7 @@ CONF_EXTRA_FLAGS="--disable-debug"
 if [[ "x$1" = "xdebug" ]] ; then
 	CONF_EXTRA_FLAGS="--enable-debug"
 elif [[ "x$1" = "xinstaller" ]] ; then
-	CONF_EXTRA_FLAGS="--enable-data --enable-installer
+	CONF_EXTRA_FLAGS="--disable-debug --enable-data --enable-installer
 		--with-installer-extdir=\"${PREFIX}/bin\" --with-installer-version=${INSTALLER_VERSION}"
 fi
 
