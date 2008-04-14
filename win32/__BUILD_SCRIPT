@@ -2,6 +2,8 @@
 
 source __BUILD_CONFIG
 
+CONF_EXTRA_FLAGS="--disable-debug"
+
 if [[ "x$1" = "xdebug" ]] ; then
 	CONF_EXTRA_FLAGS="--enable-debug"
 elif [[ "x$1" = "xinstaller" ]] ; then
@@ -13,7 +15,7 @@ fi
 cd ..
 
 ./autogen.sh || exit 1
-./configure --target=${CROSSCOMPILETARGET} --host=${CROSSCOMPILETARGET} --enable-static --disable-shared --disable-debug \
+./configure --target=${CROSSCOMPILETARGET} --host=${CROSSCOMPILETARGET} --enable-static --disable-shared \
     --prefix="${PREFIX}" \
 	${CONF_EXTRA_FLAGS} \
     CFLAGS="${CFLAGS}" \
