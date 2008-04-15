@@ -4092,21 +4092,6 @@ BOOL validLocation(BASE_STATS *psStats, UDWORD x, UDWORD y, UDWORD player,
 				goto failed;
 			}
 
-#ifdef NDEBUG
-			/*God Awful HACK!! - AB 30/04/99 - gets round a problem with
-			UrbanDuel map where an oil derrick cannot be built - when the
-			map has been edited this hack can be removed*/
-			if (psBuilding->type != REF_RESOURCE_EXTRACTOR)
-			{
-				if( gwZoneReachable(gwGetZone(i,j)) == false)
-				{
-					// Can't ever drive there
-					valid = false;
-					goto failed;
-				}
-			}
-#endif
-
 			//don't check tile is visible for placement of a delivery point
 			if (psStats->ref >= REF_STRUCTURE_START &&
 				psStats->ref < (REF_STRUCTURE_START + REF_RANGE))

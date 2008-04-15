@@ -70,7 +70,6 @@
 #include "target.h"
 #include "drive.h"
 #include "cmddroid.h"
-#include "gateway.h"
 #include "selection.h"
 #include "transporter.h"
 #include "intorder.h"
@@ -2203,9 +2202,8 @@ void	dealWithLMB( void )
 			if(godMode && (mouseTileX >= 0) && (mouseTileX < (SDWORD)mapWidth) &&
 				(mouseTileY >= 0) && (mouseTileY < (SDWORD)mapHeight))
 			{
-				DBCONPRINTF(ConsoleString,(ConsoleString,"Tile Coords : %d,%d (%d,%d) Zone :%d", mouseTileX,mouseTileY,
-					mouseTileX*TILE_UNITS + TILE_UNITS/2, mouseTileY*TILE_UNITS + TILE_UNITS/2,
-					gwGetZone(mouseTileX, mouseTileY)));
+				DBCONPRINTF(ConsoleString,(ConsoleString,"Tile Coords : %d,%d (%d,%d)", mouseTileX,mouseTileY,
+					mouseTileX*TILE_UNITS + TILE_UNITS/2, mouseTileY*TILE_UNITS + TILE_UNITS/2));
 			}
 
 			//addConsoleMessage("Droid ordered to new location",DEFAULT_JUSTIFY,SYSTEM_MESSAGE);

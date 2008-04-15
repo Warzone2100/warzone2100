@@ -378,41 +378,6 @@ BOOL fpathTileLOS(SDWORD x1,SDWORD y1, SDWORD x2,SDWORD y2)
 	return !obstruction;
 }
 
-// Optimise the route
-static void fpathOptimise(FP_NODE *psRoute)
-{
-	FP_NODE	*psCurr, *psSearch, *psTest;
-	BOOL	los;
-
-	ASSERT( psRoute != NULL,
-		"fpathOptimise: NULL route pointer" );
-
-	psCurr = psRoute;
-	do
-	{
-		// work down the route looking for a failed LOS
-		los = true;
-		psSearch = psCurr->psRoute;
-		while (psSearch)
-		{
-			psTest = psSearch->psRoute;
-			if (psTest)
-			{
-				los = fpathTileLOS(psCurr->x,psCurr->y, psTest->x,psTest->y);
-			}
-			if (!los)
-			{
-				break;
-			}
-			psSearch = psTest;
-		}
-
-		// store the previous successful point
-		psCurr->psRoute = psSearch;
-		psCurr = psSearch;
-	} while (psCurr);
-}
-
 // A* findpath
 SDWORD fpathAStarRoute(SDWORD routeMode, ASTAR_ROUTE *psRoutePoints,
 					 SDWORD sx, SDWORD sy, SDWORD fx, SDWORD fy)
@@ -579,11 +544,8 @@ static 	FP_NODE		*psNearest, *psRoute;
 		retval = ASR_NEAREST;
 	}
 
-	// optimise the route if one was found
 	if (psRoute)
 	{
-		fpathOptimise(psRoute);
-
 		// get the route in the correct order
 		//	If as I suspect this is to reverse the list, then it's my suspicion that
 		//	we could route from destination to source as opposed to source to

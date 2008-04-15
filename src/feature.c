@@ -52,7 +52,6 @@
 
 #include "mapgrid.h"
 #include "display3d.h"
-#include "gateway.h"
 
 
 /* The statistics for the features */
@@ -277,13 +276,6 @@ FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,BOOL FromSave)
 	}
 	//return the average of max/min height
 	height = (foundationMin + foundationMax) / 2;
-
-	// check you can reach an oil resource
-	if ((psStats->subType == FEAT_OIL_RESOURCE) &&
-		!gwZoneReachable(gwGetZone(startX,startY)))
-	{
-		debug( LOG_NEVER, "Oil resource at (%d,%d) is unreachable", startX, startY );
-	}
 
 	if(FromSave == true) {
 		psFeature->pos.x = (UWORD)x;

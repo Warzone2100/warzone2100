@@ -20,7 +20,7 @@ noinst_HEADERS = action.h advvis.h ai.h aiexperience.h anim_id.h \
 	displaydef.h drive.h droid.h droiddef.h e3demo.h edit3d.h effects.h \
 	environ.h feature.h featuredef.h formation.h formationdef.h fpath.h \
 	frend.h frontend.h function.h functiondef.h game.h gateway.h \
-	gatewaydef.h gatewayroute.h geometry.h group.h hci.h ingameop.h init.h intdisplay.h \
+	gatewaydef.h geometry.h group.h hci.h ingameop.h init.h intdisplay.h \
 	intelmap.h intfac.h intimage.h intorder.h keybind.h keyedit.h keymap.h levelint.h \
 	levels.h lighting.h loadsave.h loop.h map.h mapdisplay.h mapgrid.h mechanics.h \
 	message.h messagedef.h miscimd.h mission.h missiondef.h move.h movedef.h \
@@ -37,7 +37,7 @@ warzone2100_SOURCES = scriptvals_parser.tab.c scriptvals_lexer.lex.c \
 	cheat.c cluster.c cmddroid.c combat.c component.c console.c \
 	data.c design.c difficulty.c display.c droid.c e3demo.c \
 	edit3d.c effects.c environ.c fpath.c feature.c formation.c frontend.c \
-	gateway.c gatewayroute.c geometry.c group.c hci.c init.c \
+	gateway.c geometry.c group.c hci.c init.c \
 	intdisplay.c intimage.c intorder.c intelmap.c keybind.c keymap.c levels.c lighting.c \
 	loop.c main.c map.c mapdisplay.c mapgrid.c mechanics.c message.c miscimd.c \
 	move.c multiint.c multimenu.c multiopt.c multisync.c multibot.c multistat.c \

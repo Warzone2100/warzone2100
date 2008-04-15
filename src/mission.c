@@ -261,13 +261,8 @@ void initMission(void)
 	mission.ETA = -1;
 	mission.startTime = 0;
 	mission.psGateways = NULL;
-	mission.apRLEZones = NULL;
-	mission.gwNumZones = 0;
 	mission.mapHeight = 0;
 	mission.mapWidth = 0;
-	mission.aNumEquiv = NULL;
-	mission.apEquivZones = NULL;
-	mission.aZoneReachable = NULL;
 
 	//init all the landing zones
 	for (inc = 0; inc < MAX_NOGO_AREAS; inc++)
@@ -336,11 +331,6 @@ BOOL missionShutDown(void)
 		mapWidth = mission.mapWidth;
 		mapHeight = mission.mapHeight;
 		psGateways = mission.psGateways;
-		apRLEZones = mission.apRLEZones;
-		gwNumZones = mission.gwNumZones;
-		aNumEquiv = mission.aNumEquiv;
-		apEquivZones = mission.apEquivZones;
-		aZoneReachable = mission.aZoneReachable;
 	}
 
 	// sorry if this breaks something - but it looks like it's what should happen - John
@@ -746,16 +736,6 @@ void saveMissionData(void)
 	mission.scrollMaxY = scrollMaxY;
 	mission.psGateways = psGateways;
 	psGateways = NULL;
-	mission.apRLEZones = apRLEZones;
-	apRLEZones = NULL;
-	mission.gwNumZones = gwNumZones;
-	gwNumZones = 0;
-	mission.aNumEquiv = aNumEquiv;
-	aNumEquiv = NULL;
-	mission.apEquivZones = apEquivZones;
-	apEquivZones = NULL;
-	mission.aZoneReachable = aZoneReachable;
-	aZoneReachable = NULL;
 	// save the selectedPlayer's LZ
 	mission.homeLZ_X = getLandingX(selectedPlayer);
 	mission.homeLZ_Y = getLandingY(selectedPlayer);
@@ -928,11 +908,6 @@ void restoreMissionData(void)
 	scrollMaxX = mission.scrollMaxX;
 	scrollMaxY = mission.scrollMaxY;
 	psGateways = mission.psGateways;
-	apRLEZones = mission.apRLEZones;
-	gwNumZones = mission.gwNumZones;
-	aNumEquiv = mission.aNumEquiv;
-	apEquivZones = mission.apEquivZones;
-	aZoneReachable = mission.aZoneReachable;
 	//and clear the mission pointers
 	mission.psMapTiles	= NULL;
 	mission.aMapLinePoints = NULL;
@@ -943,11 +918,6 @@ void restoreMissionData(void)
 	mission.scrollMaxX	= 0;
 	mission.scrollMaxY	= 0;
 	mission.psGateways	= NULL;
-	mission.apRLEZones	= NULL;
-	mission.gwNumZones	= 0;
-	mission.aNumEquiv	= NULL;
-	mission.apEquivZones = NULL;
-	mission.aZoneReachable = NULL;
 
 	//reset the current structure lists
 	setCurrentStructQuantity(false);
@@ -1467,7 +1437,6 @@ void processMissionLimbo(void)
 void swapMissionPointers(void)
 {
 	void		*pVoid;
-	void		**ppVoid;
 	UDWORD		udwTemp, inc;
 
 	debug(LOG_SAVEGAME, "swapMissionPointers: called");
@@ -1487,21 +1456,6 @@ void swapMissionPointers(void)
 	pVoid = (void*)psGateways;
 	psGateways = mission.psGateways;
 	mission.psGateways = (struct _gateway *)pVoid;
-	ppVoid = (void**)apRLEZones;
-	apRLEZones = mission.apRLEZones;
-	mission.apRLEZones = (UBYTE **)ppVoid;
-	udwTemp = (UDWORD)gwNumZones;
-	gwNumZones = mission.gwNumZones;
-	mission.gwNumZones = (SDWORD)udwTemp;
-	pVoid = (void*)aNumEquiv;
-	aNumEquiv = mission.aNumEquiv;
-	mission.aNumEquiv = (UBYTE *)pVoid;
-	ppVoid = (void**)apEquivZones;
-	apEquivZones = mission.apEquivZones;
-	mission.apEquivZones = (UBYTE **)ppVoid;
-	pVoid = (void*)aZoneReachable;
-	aZoneReachable = mission.aZoneReachable;
-	mission.aZoneReachable = (UBYTE *)pVoid;
 	// Swap scroll limits
 	udwTemp = scrollMinX;
 	scrollMinX = mission.scrollMinX;
