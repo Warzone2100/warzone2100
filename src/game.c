@@ -6702,7 +6702,7 @@ static BOOL buildSaveDroidFromDroid(SAVE_DROID* psSaveDroid, DROID* psCurr, DROI
 
 			//version 21
 			psSaveDroid->commandId = NULL_ID;
-			if (psCurr->psGroup && psCurr->droidType != DROID_COMMAND && psCurr->psGroup->type == GT_COMMAND)
+			if (hasCommander(psCurr))
 			{
 				if (((DROID*)psCurr->psGroup->psCommander)->died <= 1)
 				{

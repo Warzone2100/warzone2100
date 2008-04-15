@@ -3502,9 +3502,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 					// if completely repaired reset order
 					secondarySetState(psDroid, DSO_RETURN_TO_LOC, DSS_NONE);
 
-					if ((psDroid->psGroup != NULL) &&
-						(psDroid->psGroup->type == GT_COMMAND) &&
-						(psDroid->droidType != DROID_COMMAND))
+					if (hasCommander(psDroid))
 					{
 						// return a droid to it's command group
 						DROID	*psCommander = psDroid->psGroup->psCommander;

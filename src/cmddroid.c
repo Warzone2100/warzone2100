@@ -42,6 +42,7 @@ DROID	*apsCmdDesignator[MAX_PLAYERS];
 // whether experience should be boosted due to a multi game
 static BOOL bMultiExpBoost = false;
 
+bool hasCommander(DROID	*psDroid);
 
 // Initialise the command droids
 BOOL cmdDroidInit(void)
@@ -181,12 +182,27 @@ void cmdDroidUpdateKills(DROID *psKiller, float experienceInc)
 	ASSERT( psKiller != NULL,
 		"cmdUnitUpdateKills: invalid Unit pointer" );
 
-	if ( (psKiller->psGroup != NULL) &&
-		 (psKiller->psGroup->type == GT_COMMAND) )
+	if (hasCommander(psKiller))
 	{
 		psCommander = psKiller->psGroup->psCommander;
 		psCommander->experience += experienceInc;
 	}
+}
+
+// returns true if a droid in question is assigned to a commander
+bool hasCommander(DROID	*psDroid)
+{
+	ASSERT( psDroid != NULL,
+		"hasCommander: invalid droid pointer" );
+
+	if (psDroid->droidType != DROID_COMMAND &&
+		psDroid->psGroup != NULL &&
+	    psDroid->psGroup->type == GT_COMMAND)
+	{
+		return true;
+	}
+
+	return false;
 }
 
 // get the level of a droids commander, if any
@@ -199,8 +215,7 @@ unsigned int cmdGetCommanderLevel(DROID *psDroid)
 
 	// If this droid is not the member of a Commander's group
 	// Return an experience level of 0
-	if ((psDroid->psGroup == NULL) ||
-	    (psDroid->psGroup->type != GT_COMMAND))
+	if (!hasCommander(psDroid))
 	{
 		return 0;
 	}
@@ -219,7 +234,7 @@ DROID	*psCurr;
 
 	for (psCurr = apsDroidLists[selectedPlayer]; psCurr; psCurr = psCurr->psNext)
 	{
-		if( (psCurr->psGroup!=NULL) && (psCurr->psGroup->type == GT_COMMAND) )
+		if( hasCommander(psCurr) )
 		{
 			if(psCurr->psGroup->psCommander == psDroid)
 			{

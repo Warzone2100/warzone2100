@@ -314,8 +314,7 @@ void orderUpdateDroid(DROID *psDroid)
 			break;
 		}
 		// if you are in a command group, default to guarding the commander
-		else if (psDroid->droidType != DROID_COMMAND && psDroid->psGroup != NULL &&
-				 psDroid->psGroup->type == GT_COMMAND &&
+		else if (hasCommander(psDroid) &&
 				 (psDroid->psTarStats != (BASE_STATS *) structGetDemolishStat()))  // stop the constructor auto repairing when it is about to demolish
 		{
 			orderDroidObj(psDroid, DORDER_GUARD, (BASE_OBJECT *)psDroid->psGroup->psCommander);
@@ -1160,9 +1159,7 @@ void orderUpdateDroid(DROID *psDroid)
 		}
 
 		// get combat units in a command group to attack the commanders target
-		if ( (psDroid->droidType != DROID_COMMAND) &&
-			psDroid->psGroup && (psDroid->psGroup->type == GT_COMMAND) &&
-			(psDroid->numWeaps > 0) )
+		if ( hasCommander(psDroid) && (psDroid->numWeaps > 0) )
 		{
 			if ((psDroid->psGroup->psCommander->action == DACTION_ATTACK) &&
 				(psDroid->psGroup->psCommander->psActionTarget[0] != NULL) &&
@@ -2752,10 +2749,7 @@ void orderSelectedLocAdd(UDWORD player, UDWORD x, UDWORD y, BOOL add)
 	// remove any units from their command group
 	for(psCurr = apsDroidLists[player]; psCurr; psCurr=psCurr->psNext)
 	{
-		if (psCurr->selected &&
-			(psCurr->droidType != DROID_COMMAND) &&
-			(psCurr->psGroup != NULL) &&
-			psCurr->psGroup->type == GT_COMMAND)
+		if (psCurr->selected && hasCommander(psCurr))
 		{
 			grpLeave(psCurr->psGroup, psCurr);
 		}
@@ -3124,10 +3118,7 @@ void orderSelectedObjAdd(UDWORD player, BASE_OBJECT *psObj, BOOL add)
 	// remove any units from their command group
 	for(psCurr = apsDroidLists[player]; psCurr; psCurr=psCurr->psNext)
 	{
-		if (psCurr->selected &&
-			(psCurr->droidType != DROID_COMMAND) &&
-			(psCurr->psGroup != NULL) &&
-			psCurr->psGroup->type == GT_COMMAND)
+		if (psCurr->selected && hasCommander(psCurr))
 		{
 			grpLeave(psCurr->psGroup, psCurr);
 		}

@@ -3973,7 +3973,14 @@ UDWORD	getDroidLevel(DROID *psDroid)
 UDWORD getDroidEffectiveLevel(DROID *psDroid)
 {
 	UDWORD level = getDroidLevel(psDroid);
-	UDWORD cmdLevel = cmdGetCommanderLevel(psDroid);
+	UDWORD cmdLevel = 0;
+
+	// get commander level
+	if(hasCommander(psDroid))
+	{
+		// Commanders boost unit's effectiveness just by being assigned to it
+		cmdLevel = cmdGetCommanderLevel(psDroid) + 1;
+	}
 
 	return MAX(level, cmdLevel);
 }

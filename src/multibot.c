@@ -743,8 +743,7 @@ BOOL recvGroupOrder()
 		 * If the current order not is a command order and we are not a
 		 * commander yet are in the commander group remove us from it.
 		 */
-		if (!cmdOrder && psDroid->droidType != DROID_COMMAND
-		 && psDroid->psGroup != NULL && psDroid->psGroup->type == GT_COMMAND)
+		if (!cmdOrder && hasCommander(psDroid))
 		{
 			grpLeave(psDroid->psGroup, psDroid);
 		}

@@ -3055,7 +3055,7 @@ static void	drawDroidSelections( void )
 					drawDroidSensorLock(psDroid);
 
 					if ((psDroid->droidType == DROID_COMMAND) ||
-						(psDroid->psGroup != NULL && psDroid->psGroup->type == GT_COMMAND))
+						hasCommander(psDroid))
 					{
 						drawDroidCmndNo(psDroid);
 					}
@@ -3211,7 +3211,7 @@ SDWORD	xShift,yShift;
 	id = id2 = UDWORD_MAX;
 
 	/* Is the unit in a group? */
-	if(psDroid->psGroup && psDroid->psGroup->type == GT_COMMAND)
+	if(hasCommander(psDroid))
 	{
 		id2 = IMAGE_GN_STAR;
 
@@ -3287,7 +3287,7 @@ SDWORD	xShift,yShift, index;
 	{
 		index = cmdDroidGetIndex(psDroid);
 	}
-	else if (psDroid->psGroup && psDroid->psGroup->type == GT_COMMAND)
+	else if (hasCommander(psDroid))
 	{
 		index = cmdDroidGetIndex(psDroid->psGroup->psCommander);
 	}

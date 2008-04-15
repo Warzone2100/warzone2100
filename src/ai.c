@@ -292,9 +292,7 @@ static SDWORD targetAttackWeight(BASE_OBJECT *psTarget, BASE_OBJECT *psAttacker,
 
 
 		//check if this droid is assigned to a commander
-		bCmdAttached = (psAttackerDroid->droidType != DROID_COMMAND &&
-						psAttackerDroid->psGroup != NULL &&
-						psAttackerDroid->psGroup->type == GT_COMMAND);
+		bCmdAttached = hasCommander(psAttackerDroid);
 
 		//find out if current target is targeting our commander
 		if(bCmdAttached)
@@ -944,8 +942,7 @@ void aiUpdateDroid(DROID *psDroid)
 	}
 
 	// don't allow units to start attacking if they will switch to guarding the commander
-	if (psDroid->droidType != DROID_COMMAND && psDroid->psGroup != NULL &&
-		 psDroid->psGroup->type == GT_COMMAND)
+	if(hasCommander(psDroid))
 	{
 		lookForTarget = false;
 		updateTarget = false;
@@ -997,8 +994,7 @@ void aiUpdateDroid(DROID *psDroid)
 	 look for a better target once in a while */
 	if(!lookForTarget && updateTarget)
 	{
-		if((psDroid->numWeaps > 0) && ((psDroid->droidType == DROID_COMMAND) ||
-			!(psDroid->psGroup && (psDroid->psGroup->type == GT_COMMAND))))	//not assigned to commander
+		if((psDroid->numWeaps > 0) && !hasCommander(psDroid))	//not assigned to commander
 		{
 			if((psDroid->id % TARGET_UPD_SKIP_FRAMES) ==
 				(frameGetFrameNumber() % TARGET_UPD_SKIP_FRAMES))

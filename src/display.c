@@ -1559,8 +1559,7 @@ static BOOL droidHasLeader(DROID *psDroid)
 		return false;
 	}
 
-	if (psDroid->psGroup != NULL
-	 && psDroid->psGroup->type == GT_COMMAND)
+	if (hasCommander(psDroid))
 	{
 		psLeader = (BASE_OBJECT *)psDroid->psGroup->psCommander;
 	}
