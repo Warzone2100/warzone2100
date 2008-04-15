@@ -24,6 +24,8 @@
 #ifndef __INCLUDED_SRC_FPATH_H__
 #define __INCLUDED_SRC_FPATH_H__
 
+#include "droiddef.h"
+
 #define FPATH_LOOP_LIMIT	600
 
 /** Return values for routing */
@@ -42,8 +44,8 @@ extern BOOL fpathInitialise(void);
 
 extern void fpathUpdate(void);
 
-/** Find a route for an object to a location. */
-extern FPATH_RETVAL fpathRoute(BASE_OBJECT *psObj, MOVE_CONTROL *psMoveCntl, SDWORD targetX, SDWORD targetY);
+/** Find a route for a droid to a location. */
+extern FPATH_RETVAL fpathRoute(DROID* psDroid, MOVE_CONTROL *psMoveCntl, SDWORD targetX, SDWORD targetY);
 
 extern BOOL (*fpathBlockingTile)(SDWORD x, SDWORD y);
 
@@ -55,13 +57,13 @@ extern BOOL fpathLiftSlideBlockingTile(SDWORD x, SDWORD y);
 /** Set the correct blocking tile function. */
 extern void fpathSetBlockingTile( UBYTE ubPropulsionType );
 
-/** Set pointer for current fpath object - hack. */
-extern void fpathSetCurrentObject( BASE_OBJECT *psDroid );
+/** Set pointer for current fpath droid - hack. */
+extern void fpathSetCurrentDroid(DROID* psDroid);
 
 /**
- *	Set direct path to position. Plan a path from psObj's current position to given position
+ *	Set direct path to position. Plan a path from psDroid's current position to given position
  *	without taking obstructions into consideration. Used for instance by VTOLs.
  */
-extern void fpathSetDirectRoute(BASE_OBJECT *psObj, SDWORD targetX, SDWORD targetY);
+extern void fpathSetDirectRoute(DROID* psDroid, SDWORD targetX, SDWORD targetY);
 
 #endif // __INCLUDED_SRC_FPATH_H__

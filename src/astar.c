@@ -63,7 +63,7 @@ FP_NODE*        apsNodes[FPATH_TABLESIZE] = { NULL };
 
 // Convert a direction into an offset
 // dir 0 => x = 0, y = -1
-static Vector2i aDirOffset[NUM_DIR] =
+static const Vector2i aDirOffset[NUM_DIR] =
 {
 	{ 0, 1},
 	{-1, 1},

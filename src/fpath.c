@@ -62,16 +62,16 @@ static const Vector2i aDirOffset[NUM_DIR] =
 	{ 1, 1},
 };
 
-/* global pointer for object being routed - GJ hack -
+/* global pointer for droid being routed - GJ hack -
  * currently only used in fpathLiftBlockingTile */
-static	BASE_OBJECT	*g_psObjRoute = NULL;
+static DROID* g_psDroidRoute = NULL;
 
 // function pointer for the blocking tile check
 BOOL (*fpathBlockingTile)(SDWORD x, SDWORD y);
 
-// if a route is spread over a number of frames this stores the object
+// if a route is spread over a number of frames this stores the droid
 // the route is being done for
-static BASE_OBJECT *psPartialRouteObj = NULL;
+static DROID* psPartialRouteDroid = NULL;
 
 // coords of the partial route
 static SDWORD partialSX,partialSY, partialTX,partialTY;
@@ -86,24 +86,24 @@ static BOOL fpathLiftBlockingTile(SDWORD x, SDWORD y);
 BOOL fpathInitialise(void)
 {
 	fpathBlockingTile = fpathGroundBlockingTile;
-	psPartialRouteObj = NULL;
+	psPartialRouteDroid = NULL;
 
 	return true;
 }
 
 /** Updates the pathfinding system.
- *  @post Pathfinding jobs for objects that died, aren't waiting for a route
+ *  @post Pathfinding jobs for DROID's that died, aren't waiting for a route
  *        anymore, or the currently calculated route is outdated for, are
  *        removed from the job queue.
  */
 void fpathUpdate(void)
 {
-	if (psPartialRouteObj != NULL
-	 && (psPartialRouteObj->died
-	  || ((DROID*)psPartialRouteObj)->sMove.Status != MOVEWAITROUTE
+	if (psPartialRouteDroid != NULL
+	 && (psPartialRouteDroid->died
+	  || psPartialRouteDroid->sMove.Status != MOVEWAITROUTE
 	  || (lastPartialFrame + 5) < frameGetFrameNumber()))
 	{
-		psPartialRouteObj = NULL;
+		psPartialRouteDroid = NULL;
 	}
 }
 
@@ -170,14 +170,11 @@ static BOOL fpathLiftBlockingTile(SDWORD x, SDWORD y)
 {
 	MAPTILE		*psTile;
 	SDWORD		iLiftHeight, iBlockingHeight;
-	DROID		*psDroid = (DROID *) g_psObjRoute;
 
-	ASSERT( g_psObjRoute != NULL,
-		"fpathLiftBlockingTile: invalid object pointer" );
-	ASSERT( psDroid != NULL,
-		"fpathLiftBlockingTile: invalid droid pointer" );
+	ASSERT( g_psDroidRoute != NULL,
+		"fpathLiftBlockingTile: invalid DROID pointer" );
 
-	if (psDroid->droidType == DROID_TRANSPORTER )
+	if (g_psDroidRoute->droidType == DROID_TRANSPORTER )
 	{
 		if ( x<1 || y<1 || x>=(SDWORD)mapWidth-1 || y>=(SDWORD)mapHeight-1 )
 		{
@@ -209,7 +206,7 @@ static BOOL fpathLiftBlockingTile(SDWORD x, SDWORD y)
 			"fpathLiftBlockingTile: off map" );
 
 	/* no tiles are blocking if returning to rearm */
-	if( psDroid->action == DACTION_MOVETOREARM )
+	if( g_psDroidRoute->action == DACTION_MOVETOREARM )
 	{
 		return false;
 	}
@@ -219,7 +216,7 @@ static BOOL fpathLiftBlockingTile(SDWORD x, SDWORD y)
 	/* consider cliff faces */
 	if ( terrainType(psTile) == TER_CLIFFFACE )
 	{
-		switch ( (asBodyStats + psDroid->asBits[COMP_BODY].nStat)->size )
+		switch ( (asBodyStats + g_psDroidRoute->asBits[COMP_BODY].nStat)->size )
 		{
 			case SIZE_LIGHT:
 				iBlockingHeight = LIFT_BLOCK_HEIGHT_LIGHTBODY;
@@ -236,7 +233,7 @@ static BOOL fpathLiftBlockingTile(SDWORD x, SDWORD y)
 
 		/* approaching cliff face; block if below it */
 		iLiftHeight = (SDWORD) map_Height(world_coord(x), world_coord(y)) -
-					  (SDWORD) map_Height( g_psObjRoute->pos.x, g_psObjRoute->pos.y );
+					  (SDWORD) map_Height( g_psDroidRoute->pos.x, g_psDroidRoute->pos.y );
 		if ( iLiftHeight > iBlockingHeight )
 		{
 			return true;
@@ -317,27 +314,25 @@ static BOOL fpathEndPointCallback(SDWORD x, SDWORD y, SDWORD dist)
 	return true;
 }
 
-/* To plan a path from psObj's current position to 2D position Vector(targetX,targetY)
+/* To plan a path from psDroid's current position to 2D position Vector(targetX,targetY)
 without taking obstructions in to consideration */
-void fpathSetDirectRoute( BASE_OBJECT *psObj, SDWORD targetX, SDWORD targetY )
+void fpathSetDirectRoute(DROID* psDroid, SDWORD targetX, SDWORD targetY)
 {
 	MOVE_CONTROL *psMoveCntl;
 
-	ASSERT(psObj != NULL, "fpathSetDirectRoute: invalid object pointer");
+	ASSERT(psDroid != NULL, "fpathSetDirectRoute: invalid droid pointer");
+	ASSERT(psDroid->type == OBJ_DROID, "We got passed a DROID that isn't a DROID!");
 
-	if ( psObj->type == OBJ_DROID )
-	{
-		psMoveCntl = &((DROID *) psObj)->sMove;
+	psMoveCntl = &psDroid->sMove;
 
-		/* set global pointer for object being routed - GJ hack */
-		fpathSetCurrentObject( psObj );
+	/* set global pointer for DROID being routed - GJ hack */
+	fpathSetCurrentDroid(psDroid);
 
-		psMoveCntl->DestinationX = targetX;
-		psMoveCntl->DestinationY = targetY;
-		psMoveCntl->numPoints = 1;
-		psMoveCntl->asPath[0].x = map_coord(targetX);
-		psMoveCntl->asPath[0].y = map_coord(targetY);
-	}
+	psMoveCntl->DestinationX = targetX;
+	psMoveCntl->DestinationY = targetY;
+	psMoveCntl->numPoints = 1;
+	psMoveCntl->asPath[0].x = map_coord(targetX);
+	psMoveCntl->asPath[0].y = map_coord(targetY);
 }
 
 // append an astar route onto a move-control route
@@ -397,7 +392,7 @@ static BOOL fpathRouteCloser(MOVE_CONTROL *psMoveCntl, ASTAR_ROUTE *psAStarRoute
 }
 
 // create a final route from a gateway route
-static FPATH_RETVAL fpathGatewayRoute(BASE_OBJECT *psObj, SDWORD routeMode, SDWORD sx, SDWORD sy, 
+static FPATH_RETVAL fpathGatewayRoute(DROID* psDroid, SDWORD routeMode, SDWORD sx, SDWORD sy, 
                                       SDWORD fx, SDWORD fy, MOVE_CONTROL *psMoveCntl)
 {
 	static SDWORD	linkx, linky, gwx, gwy, asret, matchPoints;
@@ -441,31 +436,31 @@ static FPATH_RETVAL fpathGatewayRoute(BASE_OBJECT *psObj, SDWORD routeMode, SDWO
 			gwx = fx;
 			gwy = fy;
 
-			objTrace(LOG_MOVEMENT, psObj->id, "fpathGatewayRoute: astar route : (%d,%d) -> (%d,%d)",
+			objTrace(LOG_MOVEMENT, psDroid->id, "fpathGatewayRoute: astar route : (%d,%d) -> (%d,%d)",
 				map_coord(linkx), map_coord(linky),
 				map_coord(gwx), map_coord(gwy));
 			asret = fpathAStarRoute(routeMode, &sAStarRoute, linkx,linky, gwx,gwy);
 			if (asret == ASR_PARTIAL)
 			{
 				// routing hasn't finished yet
-				objTrace(LOG_MOVEMENT, psObj->id, "fpathGatewayRoute: Reschedule");
+				objTrace(LOG_MOVEMENT, psDroid->id, "fpathGatewayRoute: Reschedule");
 				retval = FPR_WAIT;
 				goto exit;
 			}
 			routeMode = ASR_NEWROUTE;
 
 			if ((asret == ASR_NEAREST) &&
-				actionRouteBlockingPos((DROID *)psObj, sAStarRoute.finalX,sAStarRoute.finalY))
+				actionRouteBlockingPos(psDroid, sAStarRoute.finalX,sAStarRoute.finalY))
 			{
 				// found a blocking wall - route to that
-				objTrace(LOG_MOVEMENT, psObj->id, "fpathGatewayRoute: Got blocking wall");
+				objTrace(LOG_MOVEMENT, psDroid->id, "fpathGatewayRoute: Got blocking wall");
 				retval = FPR_OK;
 				goto exit;
 			}
 			else if (asret == ASR_NEAREST)
 			{
 				// all routing was in one zone - this is as good as it's going to be
-				objTrace(LOG_MOVEMENT, psObj->id, "fpathGatewayRoute: Nearest route in same zone");
+				objTrace(LOG_MOVEMENT, psDroid->id, "fpathGatewayRoute: Nearest route in same zone");
 				if (fpathRouteCloser(psMoveCntl, &sAStarRoute, fx,fy))
 				{
 					psMoveCntl->numPoints = 0;
@@ -477,7 +472,7 @@ static FPATH_RETVAL fpathGatewayRoute(BASE_OBJECT *psObj, SDWORD routeMode, SDWO
 			else if (asret == ASR_FAILED)
 			{
 				// all routing was in one zone - can't retry
-				objTrace(LOG_MOVEMENT, psObj->id, "fpathGatewayRoute: Failed route in same zone");
+				objTrace(LOG_MOVEMENT, psDroid->id, "fpathGatewayRoute: Failed route in same zone");
 				retval = FPR_FAILED;
 				goto exit;
 			}
@@ -501,10 +496,10 @@ exit:
 }
 
 
-/* set pointer for current fpath object - GJ hack */
-void fpathSetCurrentObject( BASE_OBJECT *psObj )
+/* set pointer for current fpath droid - GJ hack */
+void fpathSetCurrentDroid(DROID* psDroid)
 {
-	g_psObjRoute = psObj;
+	g_psDroidRoute = psDroid;
 }
 
 // set the correct blocking tile function
@@ -523,41 +518,40 @@ void fpathSetBlockingTile( UBYTE ubPropulsionType )
 	}
 }
 
-// Find a route for an object to a location
-FPATH_RETVAL fpathRoute(BASE_OBJECT *psObj, MOVE_CONTROL *psMoveCntl,
+// Find a route for an DROID to a location
+FPATH_RETVAL fpathRoute(DROID* psDroid, MOVE_CONTROL *psMoveCntl,
 						SDWORD tX, SDWORD tY)
 {
 	SDWORD				startX,startY, targetX,targetY;
 	SDWORD				dir, nearestDir, minDist, tileDist;
 	FPATH_RETVAL		retVal = FPR_OK;
 	PROPULSION_STATS	*psPropStats;
-	DROID			*psDroid = NULL;
 
-	/* set global pointer for object being routed - GJ hack */
-	fpathSetCurrentObject( psObj );
+	ASSERT(psDroid->type == OBJ_DROID, "We got passed a DROID that isn't a DROID!");
 
-	if (psPartialRouteObj == NULL || psPartialRouteObj != psObj)
+	/* set global pointer for DROID being routed - GJ hack */
+	fpathSetCurrentDroid(psDroid);
+
+	if (psPartialRouteDroid == NULL || psPartialRouteDroid != psDroid)
 	{
 		targetX = tX;
 		targetY = tY;
-		startX = (SDWORD)psObj->pos.x;
-		startY = (SDWORD)psObj->pos.y;
+		startX = psDroid->pos.x;
+		startY = psDroid->pos.y;
 	}
-	else if (psObj->type == OBJ_DROID &&
-			 ((DROID *)psObj)->sMove.Status == MOVEWAITROUTE &&
-			 (((DROID *)psObj)->sMove.DestinationX != tX ||
-			  ((DROID *)psObj)->sMove.DestinationX != tX))
+	else if (psDroid->sMove.Status == MOVEWAITROUTE
+	      && psDroid->sMove.DestinationX != tX)
 	{
 		// we have a partial route, but changed destination, so need to recalculate
-		psPartialRouteObj = NULL;
+		psPartialRouteDroid = NULL;
 		targetX = tX;
 		targetY = tY;
-		startX = (SDWORD)psObj->pos.x;
-		startY = (SDWORD)psObj->pos.y;
+		startX = psDroid->pos.x;
+		startY = psDroid->pos.y;
 	}
 	else
 	{
-		// continuing routing for the object
+		// continuing routing for the DROID
 		startX = partialSX;
 		startY = partialSY;
 		targetX = partialTX;
@@ -572,23 +566,18 @@ FPATH_RETVAL fpathRoute(BASE_OBJECT *psObj, MOVE_CONTROL *psMoveCntl,
 	}
 
 	// set the correct blocking tile function
-	if (psObj->type == OBJ_DROID)
-	{
-		psDroid = (DROID *)psObj;
+	psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
+	ASSERT(psPropStats != NULL, "fpathRoute: invalid propulsion stats pointer");
 
-		psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
-		ASSERT(psPropStats != NULL, "fpathRoute: invalid propulsion stats pointer");
+	fpathSetBlockingTile( psPropStats->propulsionType );
 
-		fpathSetBlockingTile( psPropStats->propulsionType );
-	}
-
-	if (psPartialRouteObj == NULL || psPartialRouteObj != psObj)
+	if (psPartialRouteDroid == NULL || psPartialRouteDroid != psDroid)
 	{
 		// check whether the start point of the route
 		// is a blocking tile and find an alternative if it is
 		if (fpathBlockingTile(map_coord(startX), map_coord(startY)))
 		{
-			// find the nearest non blocking tile to the object
+			// find the nearest non blocking tile to the DROID
 			minDist = SDWORD_MAX;
 			nearestDir = NUM_DIR;
 			for(dir=0; dir<NUM_DIR; dir++)
@@ -610,7 +599,7 @@ FPATH_RETVAL fpathRoute(BASE_OBJECT *psObj, MOVE_CONTROL *psMoveCntl,
 			{
 				// surrounded by blocking tiles, give up
 				retVal = FPR_FAILED;
- 				objTrace(LOG_MOVEMENT, psObj->id, "fpathRoute droid %d: route failed (surrouned by blocking)", (int)psObj->id);
+ 				objTrace(LOG_MOVEMENT, psDroid->id, "fpathRoute droid %u: route failed (surrouned by blocking)", (unsigned int)psDroid->id);
 				goto exit;
 			}
 			else
@@ -640,12 +629,12 @@ FPATH_RETVAL fpathRoute(BASE_OBJECT *psObj, MOVE_CONTROL *psMoveCntl,
 		if (!obstruction)
 		{
 			// no obstructions - trivial route
-			fpathSetDirectRoute( psObj, targetX, targetY );
+			fpathSetDirectRoute(psDroid, targetX, targetY);
 			retVal = FPR_OK;
- 			objTrace(LOG_MOVEMENT, psObj->id, "fpathRoute droid %d: trivial route", (int)psObj->id);
-			if (psPartialRouteObj != NULL)
+ 			objTrace(LOG_MOVEMENT, psDroid->id, "fpathRoute droid %u: trivial route", (unsigned int)psDroid->id);
+			if (psPartialRouteDroid != NULL)
 			{
-				objTrace(LOG_MOVEMENT, psObj->id, "Unit %d: trivial route during multi-frame route", (int)psObj->id);
+				objTrace(LOG_MOVEMENT, psDroid->id, "Unit %u: trivial route during multi-frame route", (unsigned int)psDroid->id);
 			}
 			goto exit;
 		}
@@ -658,21 +647,21 @@ FPATH_RETVAL fpathRoute(BASE_OBJECT *psObj, MOVE_CONTROL *psMoveCntl,
 			// Does this code work? - Per
 			targetX = clearX;
 			targetY = clearY;
-			objTrace(LOG_MOVEMENT, psObj->id, "Unit %d: end point is blocked, going to (%d, %d) instead",
-			         (int)psObj->id, (int)clearX, (int)clearY);
+			objTrace(LOG_MOVEMENT, psDroid->id, "Unit %u: end point is blocked, going to (%d, %d) instead",
+			         (unsigned int)psDroid->id, (int)clearX, (int)clearY);
 		}
 
 		// see if there is another unit with a usable route
-		if (fpathFindRoute((DROID *)psDroid, startX,startY, targetX,targetY))
+		if (fpathFindRoute(psDroid, startX,startY, targetX,targetY))
 		{
-			if (psPartialRouteObj != NULL)
+			if (psPartialRouteDroid != NULL)
 			{
-				objTrace(LOG_MOVEMENT, psObj->id, "fpathRoute droid %d: found existing route during multi-frame path",
-				         (int)psObj->id);
+				objTrace(LOG_MOVEMENT, psDroid->id, "fpathRoute droid %u: found existing route during multi-frame path",
+				         (unsigned int)psDroid->id);
 			}
 			else
 			{
- 				objTrace(LOG_MOVEMENT, psObj->id, "fpathRoute droid %d: found existing route", (int)psObj->id);
+ 				objTrace(LOG_MOVEMENT, psDroid->id, "fpathRoute droid %u: found existing route", (unsigned int)psDroid->id);
 			}
 			goto exit;
 		}
@@ -692,20 +681,23 @@ FPATH_RETVAL fpathRoute(BASE_OBJECT *psObj, MOVE_CONTROL *psMoveCntl,
 	if (astarInner > FPATH_LOOP_LIMIT)
 	{
 		// Time out
-		if (psPartialRouteObj == psObj)
+		if (psPartialRouteDroid == psDroid)
 		{
 			retVal = FPR_WAIT;
 			goto exit;
 		}
 		else
 		{
-			objTrace(LOG_MOVEMENT, psObj->id, "fpathRoute droid %d: reschedule", (int)psObj->id);
+			objTrace(LOG_MOVEMENT, psDroid->id, "fpathRoute droid %u: reschedule", (unsigned int)psDroid->id);
 			retVal = FPR_RESCHEDULE;
 			goto exit;
 		}
 	}
-	else if ((psPartialRouteObj != NULL && psPartialRouteObj != psObj)
-	         || (psPartialRouteObj != psObj && psNextRouteDroid != NULL && psNextRouteDroid != (DROID *)psObj))
+	else if ((psPartialRouteDroid != NULL
+	       && psPartialRouteDroid != psDroid)
+	      || (psPartialRouteDroid != psDroid
+	       && psNextRouteDroid != NULL
+	       && psNextRouteDroid != psDroid))
 	{
 		// Not our turn
 		retVal = FPR_RESCHEDULE;
@@ -713,28 +705,28 @@ FPATH_RETVAL fpathRoute(BASE_OBJECT *psObj, MOVE_CONTROL *psMoveCntl,
 	}
 
 	// Now actually create a route
-	if (psPartialRouteObj == NULL)
+	if (psPartialRouteDroid == NULL)
 	{
-		retVal = fpathGatewayRoute(psObj, ASR_NEWROUTE, startX,startY, targetX,targetY, psMoveCntl);
+		retVal = fpathGatewayRoute(psDroid, ASR_NEWROUTE, startX,startY, targetX,targetY, psMoveCntl);
 	}
 	else
 	{
-		objTrace(LOG_MOVEMENT, psObj->id, "Partial Route");
-		psPartialRouteObj = NULL;
-		retVal = fpathGatewayRoute(psObj, ASR_CONTINUE, startX,startY, targetX,targetY, psMoveCntl);
+		objTrace(LOG_MOVEMENT, psDroid->id, "Partial Route");
+		psPartialRouteDroid = NULL;
+		retVal = fpathGatewayRoute(psDroid, ASR_CONTINUE, startX,startY, targetX,targetY, psMoveCntl);
 	}
 	if (retVal == FPR_WAIT)
 	{
-		psPartialRouteObj = psObj;
+		psPartialRouteDroid = psDroid;
 		lastPartialFrame = frameGetFrameNumber();
 		partialSX = startX;
 		partialSY = startY;
 		partialTX = targetX;
 		partialTY = targetY;
 	}
-	else if (retVal == FPR_FAILED && psObj->type == OBJ_DROID && vtolDroid((DROID *)psObj))
+	else if (retVal == FPR_FAILED && psDroid->type == OBJ_DROID && vtolDroid(psDroid))
 	{
-		fpathSetDirectRoute( psObj, targetX, targetY );
+		fpathSetDirectRoute(psDroid, targetX, targetY);
 		retVal = FPR_OK;
 	}
 
@@ -743,8 +735,8 @@ exit:
 	// reset the blocking tile function
 	fpathBlockingTile = fpathGroundBlockingTile;
 
-	/* reset global pointer for object being routed */
-	fpathSetCurrentObject( NULL );
+	/* reset global pointer for DROID being routed */
+	fpathSetCurrentDroid(NULL);
 
 #ifdef DEBUG_MAP
 	{
@@ -803,7 +795,7 @@ static BOOL fpathFindRoute(DROID *psDroid, SDWORD sX,SDWORD sY, SDWORD tX,SDWORD
 	for (psCurr = apsDroidLists[psDroid->player]; psCurr; psCurr = psCurr->psNext)
 	{
 		if (psCurr != psDroid
-		 && psCurr != (DROID *)psPartialRouteObj
+		 && psCurr != psPartialRouteDroid
 		 && psCurr->sMove.psFormation == psFormation
 		 && psCurr->sMove.numPoints > 0)
 		{

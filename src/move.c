@@ -205,7 +205,7 @@ static UDWORD	baseTimes[BASE_FRAMES];
 /* The current base turn rate */
 static float	baseTurn;
 
-// The next object that should get the router when a lot of units are
+// The next DROID that should get the router when a lot of units are
 // in a MOVEROUTE state
 DROID	*psNextRouteDroid;
 
@@ -335,7 +335,7 @@ static BOOL moveDroidToBase(DROID	*psDroid, UDWORD x, UDWORD y, BOOL bFormation)
 	// in multiPlayer make Transporter move like the vtols
 	if ( psDroid->droidType == DROID_TRANSPORTER && game.maxPlayers == 0)
 	{
-		fpathSetDirectRoute((BASE_OBJECT *)psDroid, (SDWORD)x, (SDWORD)y);
+		fpathSetDirectRoute(psDroid, x, y);
 		psDroid->sMove.Status = MOVENAVIGATE;
 		psDroid->sMove.Position=0;
 		psDroid->sMove.psFormation = NULL;
@@ -343,12 +343,12 @@ static BOOL moveDroidToBase(DROID	*psDroid, UDWORD x, UDWORD y, BOOL bFormation)
 	}
 	else if (vtolDroid(psDroid) || (game.maxPlayers > 0 && psDroid->droidType == DROID_TRANSPORTER))
 	{
-		fpathSetDirectRoute((BASE_OBJECT *)psDroid, (SDWORD)x, (SDWORD)y);
+		fpathSetDirectRoute(psDroid, x, y);
 		retVal = FPR_OK;
 	}
 	else
 	{
-		retVal = fpathRoute((BASE_OBJECT *)psDroid, &(psDroid->sMove), (SDWORD)x,(SDWORD)y);
+		retVal = fpathRoute(psDroid, &(psDroid->sMove), (SDWORD)x,(SDWORD)y);
 	}
 
 	/* check formations */
@@ -493,7 +493,7 @@ void moveDroidToDirect(DROID *psDroid, UDWORD x, UDWORD y)
 	ASSERT( psDroid != NULL && vtolDroid(psDroid),
 		"moveUnitToDirect: only valid for a vtol unit" );
 
-	fpathSetDirectRoute((BASE_OBJECT *)psDroid, (SDWORD)x, (SDWORD)y);
+	fpathSetDirectRoute(psDroid, x, y);
 	psDroid->sMove.Status = MOVENAVIGATE;
 	psDroid->sMove.Position=0;
 
@@ -3026,7 +3026,7 @@ void moveUpdateDroid(DROID *psDroid)
 	bStopped = moveDroidStopped( psDroid, 0 );
 
 	fpathSetBlockingTile( psPropStats->propulsionType );
-	fpathSetCurrentObject( (BASE_OBJECT *) psDroid );
+	fpathSetCurrentDroid(psDroid);
 
 	moveSpeed = 0;
 	moveDir = psDroid->direction;
@@ -3415,7 +3415,7 @@ void moveUpdateDroid(DROID *psDroid)
 
 	// reset the blocking tile function and current object
 	fpathBlockingTile = fpathGroundBlockingTile;
-	fpathSetCurrentObject( NULL );
+	fpathSetCurrentDroid(NULL);
 
 	/* If it's sitting in water then it's got to go with the flow! */
 	if (terrainType(mapTile(psDroid->pos.x/TILE_UNITS,psDroid->pos.y/TILE_UNITS)) == TER_WATER)
