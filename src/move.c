@@ -916,60 +916,57 @@ static Vector2i movePeekNextTarget(DROID *psDroid)
 static	int mvPersRad = 20, mvCybRad = 30, mvSmRad = 40, mvMedRad = 50, mvLgRad = 60;
 
 // Get the radius of a base object for collision
-static SDWORD moveObjRadius(BASE_OBJECT *psObj)
+static SDWORD moveObjRadius(const BASE_OBJECT* psObj)
 {
-	SDWORD	radius;
-	BODY_STATS	*psBdyStats;
-
 	switch (psObj->type)
 	{
-	case OBJ_DROID:
-		if ( ((DROID *)psObj)->droidType == DROID_PERSON )
+		case OBJ_DROID:
 		{
-			radius = mvPersRad;
-		}
-		//else if ( ((DROID *)psObj)->droidType == DROID_CYBORG )
-        else if (cyborgDroid((DROID *)psObj))
-		{
-			radius = mvCybRad;
-		}
-		else
-		{
-			radius = psObj->sDisplay.imd->radius;
-			psBdyStats = asBodyStats + ((DROID *)psObj)->asBits[COMP_BODY].nStat;
-			switch (psBdyStats->size)
+			const DROID* psDroid = (const DROID*)psObj;
+			if (psDroid->droidType == DROID_PERSON)
 			{
-			default:
-			case SIZE_LIGHT:
-				radius = mvSmRad;
-				break;
-			case SIZE_MEDIUM:
-				radius = mvMedRad;
-				break;
-			case SIZE_HEAVY:
-				radius = mvLgRad;
-				break;
-			case SIZE_SUPER_HEAVY:
-				radius = 130;
-				break;
+				return mvPersRad;
 			}
-		}
-		break;
-	case OBJ_STRUCTURE:
-//		radius = psObj->sDisplay.imd->visRadius;
-		radius = psObj->sDisplay.imd->radius/2;
-		break;
-	case OBJ_FEATURE:
-//		radius = psObj->sDisplay.imd->visRadius;
-		radius = psObj->sDisplay.imd->radius/2;
-		break;
-	default:
-		ASSERT( false,"moveObjRadius: unknown object type" );
-		radius = 0;
-		break;
-	}
+			//else if (psDroid->droidType == DROID_CYBORG)
+			else if (cyborgDroid(psDroid))
+			{
+				return mvCybRad;
+			}
+			else
+			{
+				const BODY_STATS* psBdyStats = &asBodyStats[psDroid->asBits[COMP_BODY].nStat];
+				switch (psBdyStats->size)
+				{
+					case SIZE_LIGHT:
+						return mvSmRad;
 
-	return radius;
+					case SIZE_MEDIUM:
+						return mvMedRad;
+
+					case SIZE_HEAVY:
+						return mvLgRad;
+
+					case SIZE_SUPER_HEAVY:
+						return 130;
+
+					default:
+						return psDroid->sDisplay.imd->radius;
+				}
+			}
+			break;
+		}
+		case OBJ_STRUCTURE:
+//			return psObj->sDisplay.imd->visRadius;
+			return psObj->sDisplay.imd->radius / 2;
+
+		case OBJ_FEATURE:
+//			return psObj->sDisplay.imd->visRadius;
+			return psObj->sDisplay.imd->radius / 2;
+
+		default:
+			ASSERT(!"Unknown object type", "moveObjRadius: unknown object type");
+			return 0;
+	}
 }
 
 
@@ -1422,9 +1419,9 @@ static void moveCalcDroidSlide(DROID *psDroid, float *pmx, float *pmy)
 	CHECK_DROID(psDroid);
 
 	bLegs = false;
-	if (psDroid->droidType == DROID_PERSON ||
-		//psDroid->droidType == DROID_CYBORG)
-        cyborgDroid(psDroid))
+	if (psDroid->droidType == DROID_PERSON
+//	 || psDroid->droidType == DROID_CYBORG)
+	 || cyborgDroid(psDroid))
 	{
 		bLegs = true;
 	}
@@ -1442,10 +1439,10 @@ static void moveCalcDroidSlide(DROID *psDroid, float *pmx, float *pmy)
 				continue;
 			}
 
-			if (bLegs &&
-				((DROID *)psInfo->psObj)->droidType != DROID_PERSON &&
-				//((DROID *)psInfo->psObj)->droidType != DROID_CYBORG)
-                !cyborgDroid((DROID *)psInfo->psObj))
+			if (bLegs
+			 && ((DROID *)psInfo->psObj)->droidType != DROID_PERSON
+//			 && ((DROID *)psInfo->psObj)->droidType != DROID_CYBORG)
+			 && !cyborgDroid((DROID *)psInfo->psObj))
 			{
 				// cyborgs/people only avoid other cyborgs/people
 				continue;
