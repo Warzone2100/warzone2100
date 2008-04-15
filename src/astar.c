@@ -496,11 +496,7 @@ static 	FP_NODE		*psNearest, *psRoute;
 			}
 		}
 
-//		ASSERT( fpathValidateTree(psOpen),
-//			"fpathAStarRoute: Invalid open tree" );
-
 		// add the current point to the closed nodes
-//		fpathHashRemove(apsOpen, psCurr->pos.x, psCurr->pos.y);
 //		fpathHashAdd(apsClosed, psCurr);
 		psCurr->type = NT_CLOSED;
 // 		debug( LOG_NEVER, "HashAdd - closed : %3d,%3d (%d,%d) = %d\n", psCurr->pos.x, psCurr->pos.y, psCurr->dist, psCurr->est, psCurr->dist+psCurr->est );

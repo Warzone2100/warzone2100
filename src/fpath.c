@@ -393,9 +393,8 @@ static BOOL fpathRouteCloser(MOVE_CONTROL *psMoveCntl, ASTAR_ROUTE *psAStarRoute
 }
 
 // create a final route from a gateway route
-static FPATH_RETVAL fpathGatewayRoute(BASE_OBJECT *psObj, SDWORD routeMode, /*SDWORD GWTerrain,*/
-						 SDWORD sx, SDWORD sy, SDWORD fx, SDWORD fy,
-						 MOVE_CONTROL *psMoveCntl)
+static FPATH_RETVAL fpathGatewayRoute(BASE_OBJECT *psObj, SDWORD routeMode, SDWORD sx, SDWORD sy, 
+                                      SDWORD fx, SDWORD fy, MOVE_CONTROL *psMoveCntl)
 {
 	static SDWORD	linkx, linky, gwx, gwy, asret, matchPoints;
 	static ASTAR_ROUTE		sAStarRoute;
