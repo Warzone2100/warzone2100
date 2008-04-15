@@ -212,11 +212,3 @@
     04 SI 01 -1		# Object being rearmed, if any, -1 if none
     FF EN 00 -
   FF EN 00 -
-10 GR 00 -		# GATEWAY ZONE LINES
-  01 US 01 0		# Size of binary blob.
-  02 US 01 -		# Ugly binary blob of data. Someone please decode me!
-  FF EN 00 -
-11 GR 00 -		# GATEWAY EQUIVALENCY ZONES
-  01 US 01 0		# Size of binary blob.
-  02 US 01 -		# Ugly binary blob of data. Someone please decode me!
-  FF EN 00 -
