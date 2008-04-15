@@ -478,19 +478,6 @@ static FPATH_RETVAL fpathGatewayRoute(BASE_OBJECT *psObj, SDWORD routeMode, /*SD
 				retval = FPR_FAILED;
 				goto exit;
 			}
-			else if ((asret == ASR_FAILED) || (asret == ASR_NEAREST))
-				{
-				// no route found - try ditching this gateway
-				// and trying a new gateway route
-				objTrace(LOG_MOVEMENT, psObj->id, "fpathGatewayRoute: Route failed");
-				if (fpathRouteCloser(psMoveCntl, &sAStarRoute, fx,fy))
-				{
-					psMoveCntl->numPoints = 0;
-					fpathAppendRoute(psMoveCntl, &sAStarRoute);
-				}
-				//bRouting = true;
-				break;
-			}
 
 			linkx = gwx;
 			linky = gwy;
