@@ -37,6 +37,10 @@ extern "C"
 # include <sys/utsname.h>
 #endif
 
+#ifndef PACKAGE_DISTRIBUTOR
+# define PACKAGE_DISTRIBUTOR "UNKNOWN"
+#endif
+
 using std::string;
 using std::vector;
 
@@ -85,7 +89,7 @@ static void initProgramPath(const char* programCommand)
 	}
 #endif
 
-	programPath = buf.data();
+	programPath = &buf[0];
 
 	if (!programPath.empty())
 	{
