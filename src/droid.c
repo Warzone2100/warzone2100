@@ -5176,17 +5176,12 @@ BOOL droidAudioTrackStopped( void *psObj )
 
 
 /*returns true if droid type is one of the Cyborg types*/
-BOOL cyborgDroid(DROID *psDroid)
+BOOL cyborgDroid(const DROID* psDroid)
 {
-    if ( psDroid->droidType == DROID_CYBORG ||
-         psDroid->droidType == DROID_CYBORG_CONSTRUCT ||
-         psDroid->droidType == DROID_CYBORG_REPAIR ||
-         psDroid->droidType == DROID_CYBORG_SUPER        )
-    {
-        return true;
-    }
-
-    return false;
+    return (psDroid->droidType == DROID_CYBORG
+         || psDroid->droidType == DROID_CYBORG_CONSTRUCT
+	 || psDroid->droidType == DROID_CYBORG_REPAIR
+	 || psDroid->droidType == DROID_CYBORG_SUPER);
 }
 
 BOOL droidOnMap(const DROID *psDroid)

@@ -400,7 +400,7 @@ extern UWORD repairPowerPoint(DROID *psDroid);
 extern BOOL droidAudioTrackStopped( void *psObj );
 
 /*returns true if droid type is one of the Cyborg types*/
-extern BOOL cyborgDroid(DROID *psDroid);
+extern BOOL cyborgDroid(const DROID* psDroid);
 
 // check for illegal references to droid we want to release
 BOOL droidCheckReferences(DROID *psVictimDroid);
