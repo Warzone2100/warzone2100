@@ -69,7 +69,7 @@ static void initProgramPath(const char* programCommand)
 	size_t bufsize = PATH_MAX;
 
 #if defined(WZ_OS_WIN)
-	while (GetModuleFileName(NULL, &buf[0], buf.size()) == buf.size())
+	while (GetModuleFileNameA(NULL, &buf[0], buf.size()) == buf.size())
 	{
 		buf.resize(buf.size() * 2);
 	}
