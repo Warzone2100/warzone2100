@@ -40,7 +40,6 @@
 #include "multirecv.h"
 #include "multistat.h"
 #include "multiint.h"
-#include "fpath.h"
 
 extern char	MultiPlayersPath[PATH_MAX];
 

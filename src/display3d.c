@@ -78,7 +78,6 @@
 #include "target.h"
 #include "keymap.h"
 #include "drive.h"
-#include "fpath.h"
 #include "gateway.h"
 #include "transporter.h"
 #include "warzoneconfig.h"

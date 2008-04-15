@@ -39,7 +39,6 @@
 #include "move.h"
 #include "visibility.h"
 #include "map.h"
-#include "fpath.h"
 #include "loop.h"
 #include "geometry.h"
 #include "anim_id.h"

@@ -45,7 +45,6 @@
 #include "advvis.h"
 #include "lib/sound/mixer.h"
 #include "hci.h"
-#include "fpath.h"
 #include "radar.h"
 // HACK bAllowDebugMode shouldn't be in clparse
 #include "clparse.h"

@@ -28,7 +28,6 @@
 
 #include "lib/framework/listmacs.h"
 #include "map.h"
-#include "fpath.h"
 #include "wrappers.h"
 
 #include "gateway.h"
