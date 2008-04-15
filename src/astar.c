@@ -58,7 +58,7 @@ FP_NODE		*psOpen;
 #define FPATH_TABLESIZE		4091
 
 // Hash table for closed nodes
-FP_NODE		**apsNodes=NULL;
+FP_NODE*        apsNodes[FPATH_TABLESIZE] = { NULL };
 
 #define NUM_DIR		8
 
@@ -82,32 +82,6 @@ void astarResetCounters(void)
 	astarInner = 0;
 	astarOuter = 0;
 	astarRemove = 0;
-}
-
-static void ClearAstarNodes(void)
-{
-	assert(apsNodes);
-	memset(apsNodes, 0, sizeof(FP_NODE *) * FPATH_TABLESIZE);
-}
-
-// Initialise the findpath routine
-BOOL astarInitialise(void)
-{
-	apsNodes = (FP_NODE**)malloc(sizeof(FP_NODE *) * FPATH_TABLESIZE);
-	if (!apsNodes)
-	{
-		return false;
-	}
-	ClearAstarNodes();
-
-	return true;
-}
-
-// Shutdown the findpath routine
-void fpathShutDown(void)
-{
-	free(apsNodes);
-	apsNodes = NULL;
 }
 
 // calculate a hash table index
@@ -157,7 +131,7 @@ static SDWORD fpathHashFunc(SDWORD x, SDWORD y)
 		}
 	}
 
-	iHashValue %= FPATH_TABLESIZE;
+	iHashValue %= ARRAY_SIZE(apsNodes);
 
 	return iHashValue;
 }
@@ -192,16 +166,16 @@ static FP_NODE *fpathHashPresent(FP_NODE *apsTable[], SDWORD x, SDWORD y)
 // Reset the hash tables
 static void fpathHashReset(void)
 {
-	SDWORD	i;
+	int i;
 
-	for(i=0; i<FPATH_TABLESIZE; i++)
+	for(i = 0; i< ARRAY_SIZE(apsNodes); ++i)
 	{
 		while (apsNodes[i])
 		{
-			FP_NODE	*psNext = apsNodes[i]->psNext;
+			FP_NODE* toFree = apsNodes[i];
+			apsNodes[i] = apsNodes[i]->psNext;
 
-			free(apsNodes[i]);
-			apsNodes[i] = psNext;
+			free(toFree);
 		}
 	}
 }

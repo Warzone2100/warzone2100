@@ -431,10 +431,6 @@ BOOL systemInitialise(void)
 	{
 		return false;
 	}
-	if (!astarInitialise()) // Initialise the findpath system
-	{
-		return false;
-	}
 
 #ifdef ARROWS
 	arrowInit();
@@ -461,7 +457,6 @@ void systemShutdown(void)
 #endif
 
 	keyClearMappings();
-	fpathShutDown();
 
 	// free up all the load functions (all the data should already have been freed)
 	resReleaseAll();

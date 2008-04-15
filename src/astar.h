@@ -35,12 +35,6 @@ extern SDWORD astarInner;
 // reset the astar counters
 extern void astarResetCounters(void);
 
-// Initialise the findpath routine
-extern BOOL astarInitialise(void);
-
-// Shutdown the findpath routine
-extern void fpathShutDown(void);
-
 // return codes for astar
 enum
 {
