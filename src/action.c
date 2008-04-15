@@ -962,7 +962,8 @@ BOOL actionDroidOnBuildPos(DROID *psDroid, SDWORD x, SDWORD y, BASE_STATS *psSta
 
 
 // return the position of a players home base
-void actionHomeBasePos(SDWORD player, SDWORD *px, SDWORD *py)
+// MAY return an invalid (0, 0) position on MP maps!
+static void actionHomeBasePos(SDWORD player, SDWORD *px, SDWORD *py)
 {
 	STRUCTURE	*psStruct;
 
@@ -1985,6 +1986,12 @@ void actionUpdateDroid(DROID *psDroid)
 						(SDWORD)psDroid->orderX,(SDWORD)psDroid->orderY, psDroid->psTarStats))
 			{
 				actionHomeBasePos(psDroid->player, &pbx,&pby);
+				if (pbx == 0 || pby == 0)
+				{
+					debug(LOG_NEVER, "DACTION_MOVETOBUILD: No HQ, cannot move in that direction.");
+					psDroid->action = DACTION_NONE;
+					break;
+				}
 				moveDroidToNoFormation(psDroid, (UDWORD)pbx,(UDWORD)pby);
 			}
 			else
@@ -2074,6 +2081,12 @@ void actionUpdateDroid(DROID *psDroid)
 						(SDWORD)psDroid->actionX,(SDWORD)psDroid->actionY, psDroid->psTarStats))
 			{
 				actionHomeBasePos(psDroid->player, &pbx,&pby);
+				if (pbx == 0 || pby == 0)
+				{
+					debug(LOG_NEVER, "No HQ - cannot move in that direction.");
+					psDroid->action = DACTION_NONE;
+					break;
+				}
 				moveDroidToNoFormation(psDroid, (UDWORD)pbx,(UDWORD)pby);
 			}
 			else
@@ -2710,6 +2723,12 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 		if (actionDroidOnBuildPos(psDroid, psDroid->orderX, psDroid->orderY, psDroid->psTarStats))
 		{
 			actionHomeBasePos(psDroid->player, &pbx,&pby);
+			if (pbx == 0 || pby == 0)
+			{
+				debug(LOG_NEVER, "DACTION_BUILD: No HQ, cannot move in that direction.");
+				psDroid->action = DACTION_NONE;
+				break;
+			}
 			moveDroidToNoFormation(psDroid, (UDWORD)pbx,(UDWORD)pby);
 		}
 		else
