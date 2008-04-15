@@ -28,6 +28,7 @@
   08 US 01 0		# Height of first corner
   09 US 01 0		# Visibility bits
   0a US 01 0		# Info bits
+  0b US 01 0		# Rotation
   FF EN 00 -
 0b GR 00 -		# GATEWAY GROUP
   01 US 04 -		# (x1, y1, x2, y2) coordinates
