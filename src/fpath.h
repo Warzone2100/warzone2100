@@ -40,11 +40,6 @@ typedef enum _fpath_retval
 /** Initialise the path-finding module. */
 extern BOOL fpathInitialise(void);
 
-/**
- *	Update the findpath system each frame. It checks whether a game object has a
- *	path-finding job that was not finished in the previous frame, and if this
- *	game object is dead, remove it from the job queue.
- */
 extern void fpathUpdate(void);
 
 /** Find a route for an object to a location. */

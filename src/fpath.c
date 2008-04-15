@@ -50,7 +50,7 @@
 #define NUM_DIR		8
 // Convert a direction into an offset
 // dir 0 => x = 0, y = -1
-static Vector2i aDirOffset[NUM_DIR] =
+static const Vector2i aDirOffset[NUM_DIR] =
 {
 	{ 0, 1},
 	{-1, 1},
@@ -91,13 +91,17 @@ BOOL fpathInitialise(void)
 	return true;
 }
 
-// update routine for the findpath system
+/** Updates the pathfinding system.
+ *  @post Pathfinding jobs for objects that died, aren't waiting for a route
+ *        anymore, or the currently calculated route is outdated for, are
+ *        removed from the job queue.
+ */
 void fpathUpdate(void)
 {
-	if ((psPartialRouteObj != NULL) &&
-		((psPartialRouteObj->died) ||
-		 (((DROID*)psPartialRouteObj)->sMove.Status != MOVEWAITROUTE) ||
-		 ((lastPartialFrame + 5) < (SDWORD)frameGetFrameNumber()) ) )
+	if (psPartialRouteObj != NULL
+	 && (psPartialRouteObj->died
+	  || ((DROID*)psPartialRouteObj)->sMove.Status != MOVEWAITROUTE
+	  || (lastPartialFrame + 5) < frameGetFrameNumber()))
 	{
 		psPartialRouteObj = NULL;
 	}
@@ -796,12 +800,12 @@ static BOOL fpathFindRoute(DROID *psDroid, SDWORD sX,SDWORD sY, SDWORD tX,SDWORD
 	}
 
 	// now look for a unit in this formation with a route that can be used
-	for(psCurr = apsDroidLists[psDroid->player]; psCurr; psCurr = psCurr->psNext)
+	for (psCurr = apsDroidLists[psDroid->player]; psCurr; psCurr = psCurr->psNext)
 	{
-		if ((psCurr != psDroid) &&
-			(psCurr != (DROID *)psPartialRouteObj) &&
-			(psCurr->sMove.psFormation == psFormation) &&
-			(psCurr->sMove.numPoints > 0))
+		if (psCurr != psDroid
+		 && psCurr != (DROID *)psPartialRouteObj
+		 && psCurr->sMove.psFormation == psFormation
+		 && psCurr->sMove.numPoints > 0)
 		{
 			// find the first route point
 			if (!fpathFindFirstRoutePoint(&psCurr->sMove, &index, sX,sY, (SDWORD)psCurr->pos.x, (SDWORD)psCurr->pos.y))
