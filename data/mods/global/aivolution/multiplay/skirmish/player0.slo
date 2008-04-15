@@ -19,8 +19,8 @@
 #define	SECONDS_PER_DROID				10
 
 /* Max AA defenses to build on base perimeter, when enemy base location is known */
-#define	MAX_BASE_PERIM_AA_DEF			6
-#define	MAX_BASE_PERIM_AA_DEF			(TILE * 6)
+#define	MAX_BASE_PERIM_AA_DEF			7
+#define	MAX_BASE_PERIM_RANGE			(TILE * 6)
 
 /* Max AA defenses to build near loc attacked by enemy vtols, when enemy base location is unknown */
 #define	MAX_INBASE_AA_DEF				6
@@ -13982,7 +13982,7 @@ function void buildAA()
 	best = findBestAA();
 	if(best == none){return;}
 
-	range = MAX_BASE_PERIM_AA_DEF;	//too many on spot range
+	range = MAX_BASE_PERIM_RANGE;	//too many on spot range
 
 	temp = 0;
 	while(temp < multiPlayerMaxPlayers)
@@ -14484,6 +14484,54 @@ function void processDebugCommand(int _msgPlayer, STRING _cstr)
 	{
 		temp = numBusyByType(resFac);
 		dbg("numres: " & temp, me);
+	}
+	else if(strcmp(cstr, "/knowbase"))
+	{
+		temp = 0;
+		while(temp < multiPlayerMaxPlayers)
+		{
+			if(knowBase[temp])
+			{
+				console(temp & " - yes");
+			}
+			else
+			{
+				console(temp & " - no");
+			}
+			temp++;
+		}
+	}
+	else if(strcmp(cstr, "/dead"))
+	{
+		temp = 0;
+		while(temp < multiPlayerMaxPlayers)
+		{
+			if(dead[temp])
+			{
+				console(temp & " - yes");
+			}
+			else
+			{
+				console(temp & " - no");
+			}
+			temp++;
+		}
+	}
+	else if(strcmp(cstr, "/hasVTOLs"))
+	{
+		temp = 0;
+		while(temp < multiPlayerMaxPlayers)
+		{
+			if(hasVTOLs[temp])
+			{
+				console(temp & " - yes");
+			}
+			else
+			{
+				console(temp & " - no");
+			}
+			temp++;
+		}
 	}
 }
 
