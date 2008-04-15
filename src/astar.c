@@ -34,7 +34,6 @@
 
 static SDWORD	astarOuter, astarRemove;
 SDWORD	astarInner;
-static UWORD seed = 1234; // random seed
 
 // The structure to store a node of the route
 typedef struct _fp_node
@@ -83,11 +82,6 @@ void astarResetCounters(void)
 	astarOuter = 0;
 	astarRemove = 0;
 }
-
-// calculate a hash table index
-#define RAND_MULTI	25173
-#define RAND_INC	13849
-#define RAND_MOD	0xffff
 
 /* next four used in HashPJW */
 #define	BITS_IN_int		32
@@ -213,12 +207,7 @@ static inline SDWORD fpathCompare(FP_NODE *psFirst, FP_NODE *psSecond)
 // make a 50/50 random choice
 static BOOL fpathRandChoice(void)
 {
-	UDWORD	val;
-
-	val = (seed * RAND_MULTI + RAND_INC) & RAND_MOD;
-	seed = (UWORD)val;
-
-	return val & 1;
+	return ONEINTWO;
 }
 
 // Add a node to the open list
