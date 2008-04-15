@@ -47,7 +47,6 @@
 #include "formation.h"
 #include "action.h"
 #include "order.h"
-#include "astar.h"
 #include "combat.h"
 #include "mapgrid.h"
 #include "display.h"

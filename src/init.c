@@ -46,7 +46,6 @@
 #include "init.h"
 
 #include "advvis.h"
-#include "astar.h"
 #include "atmos.h"
 #include "cluster.h"
 #include "cmddroid.h"
