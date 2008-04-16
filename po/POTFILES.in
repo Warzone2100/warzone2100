@@ -114,7 +114,6 @@ src/frontend.c
 src/function.c
 src/game.c
 src/gateway.c
-src/gatewayroute.c
 src/geometry.c
 src/group.c
 src/hci.c
