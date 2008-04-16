@@ -669,9 +669,11 @@ BOOL formationMember(FORMATION *psFormation, const DROID* psDroid)
 
 SDWORD formationObjRadius(const DROID* psDroid)
 {
-	const BODY_STATS* psBdyStats = &asBodyStats[psDroid->asBits[COMP_BODY].nStat];
+	const BODY_STATS* psBdyStats;
 
 	ASSERT(psDroid->type == OBJ_DROID, "We got passed a DROID that isn't a DROID!");
+
+	psBdyStats = &asBodyStats[psDroid->asBits[COMP_BODY].nStat];
 
 	switch (psBdyStats->size)
 	{
