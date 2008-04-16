@@ -66,7 +66,7 @@ static SDWORD	fmLtRad = 80, fmMedRad = 100, fmHvyRad = 110;
 // The list of allocated formations
 static FORMATION	*psFormationList;
 
-static SDWORD formationObjRadius(BASE_OBJECT *psObj);
+static SDWORD formationObjRadius(const DROID* psDroid);
 
 // Initialise the formation system
 BOOL formationInitialise(void)
@@ -184,18 +184,18 @@ BOOL formationFind(FORMATION **ppsFormation, SDWORD x, SDWORD y)
 }
 
 // find formation speed (currently speed of slowest unit)
-static void formationUpdateSpeed( FORMATION *psFormation, BASE_OBJECT *psNew )
+static void formationUpdateSpeed(FORMATION *psFormation, const DROID* psNew)
 {
-	DROID		*psDroid;
 	SDWORD		iUnit;
 	F_MEMBER	*asMembers = psFormation->asMembers;
 
-	if ( psNew != NULL && psNew->type == OBJ_DROID )
+	ASSERT(psNew->type == OBJ_DROID, "We've been passed a DROID that really isn't a DROID");
+
+	if (psNew != NULL)
 	{
-		psDroid = (DROID *) psNew;
-		if ( psFormation->iSpeed > psDroid->baseSpeed )
+		if ( psFormation->iSpeed > psNew->baseSpeed)
 		{
-			psFormation->iSpeed = psDroid->baseSpeed;
+			psFormation->iSpeed = psNew->baseSpeed;
 		}
 	}
 	else
@@ -205,20 +205,16 @@ static void formationUpdateSpeed( FORMATION *psFormation, BASE_OBJECT *psNew )
 
 	for(iUnit=0; iUnit<F_MAXMEMBERS; iUnit++)
 	{
-		if ( asMembers[iUnit].psObj &&
-			 asMembers[iUnit].psObj->type == OBJ_DROID )
+		if (asMembers[iUnit].psDroid
+		 && psFormation->iSpeed > asMembers[iUnit].psDroid->baseSpeed)
 		{
-			psDroid = (DROID *) asMembers[iUnit].psObj;
-			if ( psFormation->iSpeed > psDroid->baseSpeed )
-			{
-				psFormation->iSpeed = psDroid->baseSpeed;
-			}
+			psFormation->iSpeed = asMembers[iUnit].psDroid->baseSpeed;
 		}
 	}
 }
 
 // Associate a unit with a formation
-void formationJoin(FORMATION *psFormation, BASE_OBJECT *psObj)
+void formationJoin(FORMATION *psFormation, const DROID* psDroid)
 {
 	SDWORD	rankDist, size;
 
@@ -229,24 +225,24 @@ void formationJoin(FORMATION *psFormation, BASE_OBJECT *psObj)
 
 	psFormation->refCount += 1;
 
-	rankDist = formationObjRadius(psObj) * 2;
+	rankDist = formationObjRadius(psDroid) * 2;
 	if (psFormation->rankDist < rankDist)
 	{
 		psFormation->rankDist = (SWORD)rankDist;
 	}
 
-	size = formationObjRadius(psObj) * 4;
+	size = formationObjRadius(psDroid) * 4;
 	if (psFormation->size < size)
 	{
 		psFormation->size = (SWORD)size;
 	}
 
 	/* update formation speed */
-	formationUpdateSpeed( psFormation, psObj );
+	formationUpdateSpeed(psFormation, psDroid);
 }
 
 // Remove a unit from a formation
-void formationLeave(FORMATION *psFormation, BASE_OBJECT *psObj)
+void formationLeave(FORMATION *psFormation, const DROID* psDroid)
 {
 	SDWORD		prev, curr, unit, line;
 	F_LINE		*asLines;
@@ -258,14 +254,14 @@ void formationLeave(FORMATION *psFormation, BASE_OBJECT *psObj)
 	ASSERT( psFormation->refCount > 0,
 		"formationLeave: refcount is zero" );
 
-// 	debug( LOG_NEVER, "formationLeave: %p, obj %d\n", psFormation, psObj->id );
+// 	debug( LOG_NEVER, "formationLeave: %p, obj %d\n", psFormation, psDroid->id );
 
 	asMembers = psFormation->asMembers;
 
 	// see if the unit is a member
 	for(unit=0; unit<F_MAXMEMBERS; unit++)
 	{
-		if (asMembers[unit].psObj == psObj)
+		if (asMembers[unit].psDroid == psDroid)
 		{
 			break;
 		}
@@ -293,11 +289,11 @@ void formationLeave(FORMATION *psFormation, BASE_OBJECT *psObj)
 			asMembers[prev].next = asMembers[unit].next;
 		}
 		asMembers[unit].next = psFormation->free;
-		asMembers[unit].psObj = NULL;
+		asMembers[unit].psDroid = NULL;
 		psFormation->free = (SBYTE)unit;
 
 		/* update formation speed */
-		formationUpdateSpeed( psFormation, NULL );
+		formationUpdateSpeed(psFormation, NULL);
 	}
 
 	psFormation->refCount -= 1;
@@ -324,25 +320,13 @@ void formationLeave(FORMATION *psFormation, BASE_OBJECT *psObj)
 // remove all the members from a formation and release it
 void formationReset(FORMATION *psFormation)
 {
-	SDWORD			i;
-	BASE_OBJECT		*psObj;
+	int i;
 
-	for(i=0; i<F_MAXMEMBERS; i++)
+	for(i = 0; i < F_MAXMEMBERS; ++i)
 	{
-		psObj = psFormation->asMembers[i].psObj;
-		if (psObj)
+		if (psFormation->asMembers[i].psDroid)
 		{
-			formationLeave(psFormation, psFormation->asMembers[i].psObj);
-			switch (psObj->type)
-			{
-			case OBJ_DROID:
-				((DROID *)psObj)->sMove.psFormation = NULL;
-				break;
-			default:
-				ASSERT( false,
-					"formationReset: unknown unit type" );
-				break;
-			}
+			formationLeave(psFormation, psFormation->asMembers[i].psDroid);
 		}
 	}
 }
@@ -371,7 +355,7 @@ static void formationCalcPos(FORMATION *psFormation, SDWORD line, SDWORD dist,
 
 
 // assign a unit to a free spot in the formation
-static void formationFindFree(FORMATION *psFormation, BASE_OBJECT *psObj,
+static void formationFindFree(FORMATION *psFormation, DROID* psDroid,
 					   SDWORD	*pX, SDWORD *pY)
 {
 	SDWORD		line, unit, objRadius, radius;
@@ -391,7 +375,7 @@ static void formationFindFree(FORMATION *psFormation, BASE_OBJECT *psObj,
 		return;
 	}
 
-	objRadius = formationObjRadius(psObj);
+	objRadius = formationObjRadius(psDroid);
 
 	*pX = psFormation->x;
 	*pY = psFormation->y;
@@ -414,8 +398,8 @@ static void formationFindFree(FORMATION *psFormation, BASE_OBJECT *psObj,
 
 			if (unit != -1)
 			{
-				// See if the object can fit in the gap between this and the last unit
-				radius = formationObjRadius(asMembers[unit].psObj);
+				// See if the DROID can fit in the gap between this and the last unit
+				radius = formationObjRadius(asMembers[unit].psDroid);
 				if (objRadius*2 <= asMembers[unit].dist - radius - currDist)
 				{
 					found = true;
@@ -455,8 +439,8 @@ static void formationFindFree(FORMATION *psFormation, BASE_OBJECT *psObj,
 		}
 
 		// see if this gap is closer to the unit than the previous one
-		xdiff = x - (SDWORD)psObj->pos.x;
-		ydiff = y - (SDWORD)psObj->pos.y;
+		xdiff = x - psDroid->pos.x;
+		ydiff = y - psDroid->pos.y;
 		dist = xdiff*xdiff + ydiff*ydiff;
 //		dist += psFormation->rankDist*psFormation->rankDist * rank*rank;
 		if (((dist < objDist) && (rank == chosenRank)) ||
@@ -481,7 +465,7 @@ static void formationFindFree(FORMATION *psFormation, BASE_OBJECT *psObj,
 	psFormation->free = asMembers[unit].next;
 	asMembers[unit].line = (SBYTE)chosenLine;
 	asMembers[unit].dist = (SWORD)chosenDist;
-	asMembers[unit].psObj = psObj;
+	asMembers[unit].psDroid = psDroid;
 
 	// insert the unit into the list
 	if (chosenPrev == -1)
@@ -501,9 +485,8 @@ static void formationFindFree(FORMATION *psFormation, BASE_OBJECT *psObj,
 void formationReorder(FORMATION *psFormation)
 {
 	SDWORD		numObj, i,curr,prev;
-	F_MEMBER	*asMembers, asObjects[F_MAXMEMBERS];
+	F_MEMBER	*asMembers, asDroids[F_MAXMEMBERS];
 	SDWORD		xdiff,ydiff, insert;
-	BASE_OBJECT	*psObj;
 	SDWORD		aDist[F_MAXMEMBERS];
 
 	// first find all the units to insert
@@ -511,12 +494,12 @@ void formationReorder(FORMATION *psFormation)
 	numObj = 0;
 	for(i=0; i<F_MAXMEMBERS; i++)
 	{
-		psObj = asMembers[i].psObj;
-		if (psObj != NULL)
+		DROID* psDroid = asMembers[i].psDroid;
+		if (psDroid != NULL)
 		{
-			asObjects[numObj].psObj = psObj;
-			xdiff = (SDWORD)psObj->pos.x - psFormation->x;
-			ydiff = (SDWORD)psObj->pos.y - psFormation->y;
+			asDroids[numObj].psDroid = psDroid;
+			xdiff = psDroid->pos.x - psFormation->x;
+			ydiff = psDroid->pos.y - psFormation->y;
 			aDist[numObj] =  xdiff*xdiff + ydiff*ydiff;
 			numObj += 1;
 		}
@@ -529,13 +512,13 @@ void formationReorder(FORMATION *psFormation)
 		if (insert == -1)
 		{
 			// insert at the start of the list
-			asObjects[i].next = -1;
+			asDroids[i].next = -1;
 			insert = i;
 		}
 		else
 		{
 			prev = -1;
-			for(curr = insert; curr != -1; curr = asObjects[curr].next)
+			for(curr = insert; curr != -1; curr = asDroids[curr].next)
 			{
 				if (aDist[i] < aDist[curr])
 				{
@@ -546,13 +529,13 @@ void formationReorder(FORMATION *psFormation)
 			if (prev == -1)
 			{
 				// insert at the start of the list
-				asObjects[i].next = (SBYTE)insert;
+				asDroids[i].next = (SBYTE)insert;
 				insert = i;
 			}
 			else
 			{
-				asObjects[i].next = asObjects[prev].next;
-				asObjects[prev].next = (SBYTE)i;
+				asDroids[i].next = asDroids[prev].next;
+				asDroids[prev].next = (SBYTE)i;
 			}
 		}
 	}
@@ -573,13 +556,13 @@ void formationReorder(FORMATION *psFormation)
 	// insert each member again
 	while (insert != -1)
 	{
-		formationFindFree(psFormation, asObjects[insert].psObj, &xdiff,&ydiff);
-		insert = asObjects[insert].next;
+		formationFindFree(psFormation, asDroids[insert].psDroid, &xdiff,&ydiff);
+		insert = asDroids[insert].next;
 	}
 }
 
 // get a target position to move into a formation
-BOOL formationGetPos( FORMATION *psFormation, BASE_OBJECT *psObj,
+BOOL formationGetPos( FORMATION *psFormation, DROID* psDroid,
 						SDWORD *pX, SDWORD *pY, BOOL bCheckLOS )
 {
 	SDWORD		xdiff,ydiff,distSq;//,rangeSq;
@@ -596,8 +579,8 @@ BOOL formationGetPos( FORMATION *psFormation, BASE_OBJECT *psObj,
 	}*/
 
 	// see if the unit is close enough to join the formation
-	xdiff = (SDWORD)psFormation->x - (SDWORD)psObj->pos.x;
-	ydiff = (SDWORD)psFormation->y - (SDWORD)psObj->pos.y;
+	xdiff = (SDWORD)psFormation->x - (SDWORD)psDroid->pos.x;
+	ydiff = (SDWORD)psFormation->y - (SDWORD)psDroid->pos.y;
 	distSq = xdiff*xdiff + ydiff*ydiff;
 //	rangeSq = 3*psFormation->size/2;
 //	rangeSq = rangeSq*rangeSq;
@@ -610,7 +593,7 @@ BOOL formationGetPos( FORMATION *psFormation, BASE_OBJECT *psObj,
 	asMembers = psFormation->asMembers;
 	for(member=0; member<F_MAXMEMBERS; member++)
 	{
-		if (asMembers[member].psObj == psObj)
+		if (asMembers[member].psDroid == psDroid)
 		{
 			break;
 		}
@@ -624,15 +607,15 @@ BOOL formationGetPos( FORMATION *psFormation, BASE_OBJECT *psObj,
 	}
 	else if (psFormation->free != -1)
 	{
-		// add the new object to the members
-		psFormation->asMembers[(int)psFormation->free].psObj = psObj;
+		// add the new DROID to the members
+		psFormation->asMembers[(int)psFormation->free].psDroid = psDroid;
 		psFormation->free = psFormation->asMembers[(int)psFormation->free].next;
 		formationReorder(psFormation);
 
-		// find the object
+		// find the DROID
 		for(member=0; member<F_MAXMEMBERS; member++)
 		{
-			if (asMembers[member].psObj == psObj)
+			if (asMembers[member].psDroid == psDroid)
 			{
 				break;
 			}
@@ -642,7 +625,7 @@ BOOL formationGetPos( FORMATION *psFormation, BASE_OBJECT *psObj,
 		formationCalcPos(psFormation, asMembers[member].line, asMembers[member].dist,
 							&x,&y);
 /*		// a unit has just joined the formation - find a location for it
-		formationFindFree(psFormation, psObj, &x,&y);
+		formationFindFree(psFormation, psDroid, &x,&y);
 		debug( LOG_NEVER, "formation new member : (%d, %d)n",
 					x,y));*/
 	}
@@ -652,7 +635,7 @@ BOOL formationGetPos( FORMATION *psFormation, BASE_OBJECT *psObj,
 	}
 
 	// check the unit can get to the formation position
-	if ( bCheckLOS && !fpathTileLOS(map_coord(psObj->pos.x), map_coord(psObj->pos.y),
+	if ( bCheckLOS && !fpathTileLOS(map_coord(psDroid->pos.x), map_coord(psDroid->pos.y),
 									map_coord(x), map_coord(y)))
 	{
 		return false;
@@ -667,7 +650,7 @@ BOOL formationGetPos( FORMATION *psFormation, BASE_OBJECT *psObj,
 
 
 // See if a unit is a member of a formation (i.e. it has a position assigned)
-BOOL formationMember(FORMATION *psFormation, BASE_OBJECT *psObj)
+BOOL formationMember(FORMATION *psFormation, const DROID* psDroid)
 {
 	SDWORD		member;
 	F_MEMBER	*asMembers;
@@ -676,7 +659,7 @@ BOOL formationMember(FORMATION *psFormation, BASE_OBJECT *psObj)
 	asMembers = psFormation->asMembers;
 	for(member=0; member<F_MAXMEMBERS; member++)
 	{
-		if (asMembers[member].psObj == psObj)
+		if (asMembers[member].psDroid == psDroid)
 		{
 			return true;
 		}
@@ -685,46 +668,26 @@ BOOL formationMember(FORMATION *psFormation, BASE_OBJECT *psObj)
 	return false;
 }
 
-SDWORD formationObjRadius(BASE_OBJECT *psObj)
+SDWORD formationObjRadius(const DROID* psDroid)
 {
-	SDWORD		radius;
-	BODY_STATS	*psBdyStats;
+	ASSERT(psDroid->type == OBJ_DROID, "We got passed a DROID that isn't a DROID!");
 
-	switch (psObj->type)
+	const BODY_STATS* psBdyStats = &asBodyStats[psDroid->asBits[COMP_BODY].nStat];
+	switch (psBdyStats->size)
 	{
-	case OBJ_DROID:
-		radius = 3*psObj->sDisplay.imd->radius/2;
-		psBdyStats = asBodyStats + ((DROID *)psObj)->asBits[COMP_BODY].nStat;
-		switch (psBdyStats->size)
-		{
-		default:
 		case SIZE_LIGHT:
-			radius = fmLtRad;
-			break;
-		case SIZE_MEDIUM:
-			radius = fmMedRad;
-			break;
-		case SIZE_HEAVY:
-			radius = fmHvyRad;
-			break;
-		case SIZE_SUPER_HEAVY:
-			radius = 500;
-			break;
-		}
-		break;
-	case OBJ_STRUCTURE:
-//		radius = psObj->sDisplay.imd->visRadius;
-		radius = psObj->sDisplay.imd->radius/2;
-		break;
-	case OBJ_FEATURE:
-//		radius = psObj->sDisplay.imd->visRadius;
-		radius = psObj->sDisplay.imd->radius/2;
-		break;
-	default:
-		ASSERT( false,"formationObjRadius: unknown object type" );
-		radius = 0;
-		break;
-	}
+			return fmLtRad;
 
-	return radius;
+		case SIZE_MEDIUM:
+			return fmMedRad;
+
+		case SIZE_HEAVY:
+			return fmHvyRad;
+
+		case SIZE_SUPER_HEAVY:
+			return 500;
+
+		default:
+			return 3 * psDroid->sDisplay.imd->radius / 2;
+	}
 }

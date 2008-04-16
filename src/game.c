@@ -5728,7 +5728,7 @@ static void LoadDroidMoveControl(DROID * const psDroid, SAVE_DROID const * const
 		// join a formation if it exists at the destination
 		if (formationFind(&psDroid->sMove.psFormation, psSaveDroid->formationX, psSaveDroid->formationY))
 		{
-			formationJoin(psDroid->sMove.psFormation, (BASE_OBJECT *)psDroid);
+			formationJoin(psDroid->sMove.psFormation, psDroid);
 		}
 		else
 		{
@@ -5736,7 +5736,7 @@ static void LoadDroidMoveControl(DROID * const psDroid, SAVE_DROID const * const
 			if (formationNew(&psDroid->sMove.psFormation, FT_LINE, psSaveDroid->formationX, psSaveDroid->formationY,
 					(SDWORD)psSaveDroid->formationDir))
 			{
-				formationJoin(psDroid->sMove.psFormation, (BASE_OBJECT *)psDroid);
+				formationJoin(psDroid->sMove.psFormation, psDroid);
 			}
 		}
 	}

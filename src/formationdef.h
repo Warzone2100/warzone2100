@@ -24,6 +24,8 @@
 #ifndef __INCLUDED_FORMATIONDEF_H__
 #define __INCLUDED_FORMATIONDEF_H__
 
+#include "droiddef.h"
+
 // maximum number of lines in a formation
 #define F_MAXLINES		4
 // maximum number of unit members of a formation (cannot be more that 128)
@@ -46,7 +48,7 @@ typedef struct _f_member
 	SBYTE			line;			// which line this member is on
 	SBYTE			next;			// the next member on this line
 	SWORD			dist;			// distance along the line
-	BASE_OBJECT		*psObj;			// the member unit
+	DROID                   *psDroid;               // the member unit
 } F_MEMBER;
 
 // information about a formation

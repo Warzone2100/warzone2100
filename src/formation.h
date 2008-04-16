@@ -46,10 +46,10 @@ extern BOOL formationNew(FORMATION **ppsFormation, FORMATION_TYPE type,
 extern BOOL formationFind(FORMATION **ppsFormation, SDWORD x, SDWORD y);
 
 // Associate a unit with a formation
-extern void formationJoin(FORMATION *psFormation, BASE_OBJECT *psObj);
+extern void formationJoin(FORMATION *psFormation, const DROID* psDroid);
 
 // Remove a unit from a formation
-extern void formationLeave(FORMATION *psFormation, BASE_OBJECT *psObj);
+extern void formationLeave(FORMATION *psFormation, const DROID* psDroid);
 
 // remove all the members from a formation and release it
 extern void formationReset(FORMATION *psFormation);
@@ -58,11 +58,11 @@ extern void formationReset(FORMATION *psFormation);
 extern void formationReorder(FORMATION *psFormation);
 
 // get a target position to move into a formation
-extern BOOL formationGetPos(FORMATION *psFormation, BASE_OBJECT *psObj,
+extern BOOL formationGetPos(FORMATION *psFormation, DROID* psDroid,
 					 SDWORD *pX, SDWORD *pY, BOOL bCheckLOS);
 
 // See if a unit is a member of a formation (i.e. it has a position assigned)
-extern BOOL formationMember(FORMATION *psFormation, BASE_OBJECT *psObj);
+extern BOOL formationMember(FORMATION *psFormation, const DROID* psDroid);
 
 extern SDWORD formationGetSpeed( FORMATION *psFormation );
 

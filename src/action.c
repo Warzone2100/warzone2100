@@ -1207,7 +1207,7 @@ void actionUpdateDroid(DROID *psDroid)
 		// don't want to be in a formation for this move
 		if (psDroid->sMove.psFormation != NULL)
 		{
-			formationLeave(psDroid->sMove.psFormation, (BASE_OBJECT *)psDroid);
+			formationLeave(psDroid->sMove.psFormation, psDroid);
 			psDroid->sMove.psFormation = NULL;
 		}
 		// move back to the repair facility if necessary
@@ -1461,7 +1461,7 @@ void actionUpdateDroid(DROID *psDroid)
 		// don't wan't formations for this one
 		if (psDroid->sMove.psFormation)
 		{
-			formationLeave(psDroid->sMove.psFormation, (BASE_OBJECT *)psDroid);
+			formationLeave(psDroid->sMove.psFormation, psDroid);
 			psDroid->sMove.psFormation = NULL;
 		}
 
@@ -1664,7 +1664,7 @@ void actionUpdateDroid(DROID *psDroid)
 		// don't wan't formations for this one
 		if (psDroid->sMove.psFormation)
 		{
-			formationLeave(psDroid->sMove.psFormation, (BASE_OBJECT *)psDroid);
+			formationLeave(psDroid->sMove.psFormation, psDroid);
 			psDroid->sMove.psFormation = NULL;
 		}
 
@@ -1830,7 +1830,7 @@ void actionUpdateDroid(DROID *psDroid)
 		// The droid cannot be in a formation
 		if (psDroid->sMove.psFormation != NULL)
 		{
-			formationLeave(psDroid->sMove.psFormation, (BASE_OBJECT *)psDroid);
+			formationLeave(psDroid->sMove.psFormation, psDroid);
 			psDroid->sMove.psFormation = NULL;
 		}
 
@@ -2004,7 +2004,7 @@ void actionUpdateDroid(DROID *psDroid)
 		// The droid cannot be in a formation
 		if (psDroid->sMove.psFormation != NULL)
 		{
-			formationLeave(psDroid->sMove.psFormation, (BASE_OBJECT *)psDroid);
+			formationLeave(psDroid->sMove.psFormation, psDroid);
 			psDroid->sMove.psFormation = NULL;
 		}
 
@@ -2044,7 +2044,7 @@ void actionUpdateDroid(DROID *psDroid)
 		// The droid cannot be in a formation
 		if (psDroid->sMove.psFormation != NULL)
 		{
-			formationLeave(psDroid->sMove.psFormation, (BASE_OBJECT *)psDroid);
+			formationLeave(psDroid->sMove.psFormation, psDroid);
 			psDroid->sMove.psFormation = NULL;
 		}
 
@@ -2172,7 +2172,7 @@ void actionUpdateDroid(DROID *psDroid)
 		// don't want to be in a formation for this move
 		if (psDroid->sMove.psFormation != NULL)
 		{
-			formationLeave(psDroid->sMove.psFormation, (BASE_OBJECT *)psDroid);
+			formationLeave(psDroid->sMove.psFormation, psDroid);
 			psDroid->sMove.psFormation = NULL;
 		}
 		/* moving from front to rear of repair facility or rearm pad */

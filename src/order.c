@@ -791,7 +791,7 @@ void orderUpdateDroid(DROID *psDroid)
 			// don't want the droids to go into a formation for this order
 			if (psDroid->sMove.psFormation != NULL)
 			{
-				formationLeave(psDroid->sMove.psFormation, (BASE_OBJECT *)psDroid);
+				formationLeave(psDroid->sMove.psFormation, psDroid);
 				psDroid->sMove.psFormation = NULL;
 			}
 
@@ -1068,7 +1068,7 @@ void orderUpdateDroid(DROID *psDroid)
 		// don't bother with formations for this order
 		if (psDroid->sMove.psFormation)
 		{
-			formationLeave(psDroid->sMove.psFormation, (BASE_OBJECT *)psDroid);
+			formationLeave(psDroid->sMove.psFormation, psDroid);
 			psDroid->sMove.psFormation = NULL;
 		}
 
@@ -1809,7 +1809,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 				actionDroidLoc(psDroid, DACTION_MOVE, iDX, iDY);
 				if (psDroid->sMove.psFormation)
 				{
-					formationLeave(psDroid->sMove.psFormation, (BASE_OBJECT *)psDroid);
+					formationLeave(psDroid->sMove.psFormation, psDroid);
 					psDroid->sMove.psFormation = NULL;
 				}
 				break;

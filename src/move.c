@@ -381,7 +381,7 @@ static BOOL moveDroidToBase(DROID	*psDroid, UDWORD x, UDWORD y, BOOL bFormation)
 		// leave any old formation
 		if (psDroid->sMove.psFormation)
 		{
-			formationLeave(psDroid->sMove.psFormation, (BASE_OBJECT *)psDroid);
+			formationLeave(psDroid->sMove.psFormation, psDroid);
 			psDroid->sMove.psFormation = NULL;
 		}
 
@@ -390,7 +390,7 @@ static BOOL moveDroidToBase(DROID	*psDroid, UDWORD x, UDWORD y, BOOL bFormation)
 			// join a formation if it exists at the destination
 			if (formationFind(&psDroid->sMove.psFormation, (SDWORD)x,(SDWORD)y))
 			{
-				formationJoin(psDroid->sMove.psFormation, (BASE_OBJECT *)psDroid);
+				formationJoin(psDroid->sMove.psFormation, psDroid);
 			}
 			else
 			{
@@ -416,7 +416,7 @@ static BOOL moveDroidToBase(DROID	*psDroid, UDWORD x, UDWORD y, BOOL bFormation)
 				if (formationNew(&psDroid->sMove.psFormation, FT_LINE, (SDWORD)x,(SDWORD)y,
 						(SDWORD)calcDirection(fmx1,fmy1, fmx2,fmy2)))
 				{
-					formationJoin(psDroid->sMove.psFormation, (BASE_OBJECT *)psDroid);
+					formationJoin(psDroid->sMove.psFormation, psDroid);
 				}
 			}
 		}
@@ -500,7 +500,7 @@ void moveDroidToDirect(DROID *psDroid, UDWORD x, UDWORD y)
 	// leave any old formation
 	if (psDroid->sMove.psFormation)
 	{
-		formationLeave(psDroid->sMove.psFormation, (BASE_OBJECT *)psDroid);
+		formationLeave(psDroid->sMove.psFormation, psDroid);
 		psDroid->sMove.psFormation = NULL;
 	}
 }
@@ -682,7 +682,7 @@ static void moveShuffleDroid(DROID *psDroid, UDWORD shuffleStart, SDWORD sx, SDW
 
 	if (psDroid->sMove.psFormation != NULL)
 	{
-		formationLeave(psDroid->sMove.psFormation, (BASE_OBJECT *)psDroid);
+		formationLeave(psDroid->sMove.psFormation, psDroid);
 		psDroid->sMove.psFormation = NULL;
 	}
 	CHECK_DROID(psDroid);
@@ -1843,7 +1843,7 @@ static BOOL moveReachedWayPoint(DROID *psDroid)
 	// see if this is a formation end point
 	if (psDroid->droidType == DROID_TRANSPORTER ||
 		(psDroid->sMove.psFormation &&
-		 formationMember(psDroid->sMove.psFormation, (BASE_OBJECT *)psDroid)) ||
+		 formationMember(psDroid->sMove.psFormation, psDroid)) ||
 		 (vtolDroid(psDroid) && (psDroid->sMove.numPoints == psDroid->sMove.Position)) )
 //							 && (psDroid->action != DACTION_VTOLATTACK)) )
 	{
@@ -3215,7 +3215,7 @@ void moveUpdateDroid(DROID *psDroid)
 				fpathBlockingTile = fpathGroundBlockingTile;
 			}
 
-			if (formationGetPos(psDroid->sMove.psFormation, (BASE_OBJECT *)psDroid, &fx,&fy,true))
+			if (formationGetPos(psDroid->sMove.psFormation, psDroid, &fx,&fy,true))
 			{
 				psDroid->sMove.targetX = fx;
 				psDroid->sMove.targetY = fy;

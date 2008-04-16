@@ -302,7 +302,7 @@ void droidRelease(DROID *psDroid)
 	// leave the current formation if any
 	if (psDroid->sMove.psFormation)
 	{
-		formationLeave(psDroid->sMove.psFormation, (BASE_OBJECT *)psDroid);
+		formationLeave(psDroid->sMove.psFormation, psDroid);
 	}
 
 	// leave the current group if any
@@ -409,7 +409,7 @@ void	removeDroidBase(DROID *psDel)
 	// leave the current formation if any
 	if (psDel->sMove.psFormation)
 	{
-		formationLeave(psDel->sMove.psFormation, (BASE_OBJECT *)psDel);
+		formationLeave(psDel->sMove.psFormation, psDel);
 		psDel->sMove.psFormation = NULL;
 	}
 
@@ -584,7 +584,7 @@ BOOL droidRemove(DROID *psDroid, DROID *pList[MAX_PLAYERS])
 	// leave the current formation if any
 	if (psDroid->sMove.psFormation)
 	{
-		formationLeave(psDroid->sMove.psFormation, (BASE_OBJECT *)psDroid);
+		formationLeave(psDroid->sMove.psFormation, psDroid);
 		psDroid->sMove.psFormation = NULL;
 	}
 
