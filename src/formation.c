@@ -189,10 +189,9 @@ static void formationUpdateSpeed(FORMATION *psFormation, const DROID* psNew)
 	SDWORD		iUnit;
 	F_MEMBER	*asMembers = psFormation->asMembers;
 
-	ASSERT(psNew->type == OBJ_DROID, "We've been passed a DROID that really isn't a DROID");
-
 	if (psNew != NULL)
 	{
+		ASSERT(psNew->type == OBJ_DROID, "We've been passed a DROID that really isn't a DROID");
 		if ( psFormation->iSpeed > psNew->baseSpeed)
 		{
 			psFormation->iSpeed = psNew->baseSpeed;
