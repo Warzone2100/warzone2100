@@ -345,15 +345,6 @@ BOOL stackPopParams(unsigned int numParams, ...)
 		INTERP_TYPE type = va_arg(args, INTERP_TYPE);
 		void * pData = va_arg(args, void *);
 
-		if (!interpCheckEquiv(type, psVal->type))
-		{
-			ASSERT( false,
-				"stackPopParams: type mismatch (expected %s, got %s)",
-				scriptTypeToString(type), scriptTypeToString(psVal->type) );
-			va_end(args);
-			return false;
-		}
-
 		switch (type)
 		{
 			case VAL_BOOL:
