@@ -313,8 +313,9 @@ private	bool			bBuildCyborgs;
 
 private	STRUCTURESTAT	ghostStat[120];
 
-trigger selftestTr			(every, 50);
-trigger	doScoutTr			(every, 40);
+trigger economySelftestTr	(every, 80);
+trigger militarySelftestTr	(every, 83);
+trigger	doScoutTr			(every, 43);
 trigger droidBuiltTr		(CALL_NEWDROID,me, ref droid,ref structure);
 trigger	structBuiltTr		(CALL_STRUCTBUILT, me, ref droid, ref structure);
 trigger structureAttackedTr	(CALL_STRUCT_ATTACKED, me, ref structure, ref obj);
@@ -327,10 +328,11 @@ trigger beaconTr			(CALL_BEACON, me, ref msgPlayer, ref x, ref y, ref cstr);
 trigger	droidTakeOverTr		(CALL_UNITTAKEOVER, ref droid);
 trigger	defendBaseTr		(every, 42);
 trigger	doResearchTr		(every, 52);
-trigger	defendOilTr			(every, 60);
+trigger	defendOilTr			(every, 63);
 trigger	buildNormalOilDefensesTr	(every, 80);
 trigger	scoutForEnemyTr			(every, 56);
 trigger	everySecTr				(every, 10);
+trigger	halfSecTr				(every, 5);
 trigger	coordinatePhasesTr		(every, 56);
 trigger	repairDefendDroidsTr	(every, 54);
 trigger	manageCMDRepairsTr		(every, 45);
@@ -343,12 +345,13 @@ trigger structDestroyedTr		(CALL_STRUCT_DESTROYED, me, ref structure);
 trigger droidDestroyedTr		(CALL_DROID_DESTROYED, me, ref droid);
 trigger	buildStructureModelTr	(wait, 10);
 trigger	researchCompleteTr		(CALL_RESEARCHCOMPLETED, ref newResearch, ref structure, me);
-trigger	startAllResearchTr		(wait, 10);
+trigger	startAllResearchTr		(wait, 11);
 trigger	updateMapRevealFactorTr	(every, 100);
 //=====================================================================
 //	event declarations
 //=====================================================================
-event	selftest;
+event	mainEconomySelftest;
+event	mainMilitarySelftest;
 event	doScout;
 event	droidBuilt;
 event	structBuilt;
@@ -379,6 +382,7 @@ event	buildStructureModel;
 event	startNewResearch;
 event	startAllResearch;
 event	evUpdateMapRevealFactor;
+event	delayedMainInitialize;
 
 //=====================================================================
 //	function declarations
@@ -833,7 +837,16 @@ event powerup(wait, 5)
 	//only load if AI is active
 	if(bMyRespons)
 	{
+		setEventTrigger(delayedMainInitialize, everySecTr);
+	}
+}
+
+event delayedMainInitialize(inactive)
+{
+	if(GAME_TIME_IN_SECS >= me)
+	{
 		mainInitialize();
+		setEventTrigger(delayedMainInitialize, inactive);
 	}
 }
 
@@ -1286,9 +1299,12 @@ function void mainInitialize()
 	reInitialize();		//assign variables
 	showVersion();
 	startEnemyScout();
-	selftest();			//Misc stuff
+	
+	mainEconomySelftest();
+	mainMilitarySelftest();
 
-	setEventTrigger(selftest, selftestTr);	//Start
+	setEventTrigger(mainEconomySelftest, economySelftestTr);	//Start
+	setEventTrigger(mainMilitarySelftest, militarySelftestTr);
 	setEventTrigger(doScout, doScoutTr);
 	setEventTrigger(doResearchEv, doResearchTr);
 	setEventTrigger(defendOil, defendOilTr);
@@ -1421,7 +1437,8 @@ function void shutDown()
 
 	notifyPlayerDead(me);
 
-	setEventTrigger(selftest, inactive);	//Start
+	setEventTrigger(mainEconomySelftest, inactive);
+	setEventTrigger(mainMilitarySelftest, inactive);
 	setEventTrigger(doScout, inactive);
 	setEventTrigger(doResearchEv, inactive);
 	setEventTrigger(defendOil, inactive);
@@ -1459,14 +1476,17 @@ function void shutDown()
 //---------------------------------------------------------
 //	Deal with basic stuff
 //---------------------------------------------------------
-event selftest(inactive)
+event mainEconomySelftest(inactive)
 {
 	baseDetails();
 	updateBeacons();
 
 	doEconomyMisc();	/* should be done before any other economy tasks */
 	doEconomy();
+}
 
+event mainMilitarySelftest(inactive)
+{
 	doMilitaryMisc();	/* should be done before any other military tasks */
 	doMilitary();
 }
