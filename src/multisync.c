@@ -575,7 +575,7 @@ static void offscreenUpdate(DROID *psDroid,
 
 				psDroid->pos.x		 = (UWORD) fx;					//update move progress
 				psDroid->pos.y		 = (UWORD) fy;
-				gridMoveObject((BASE_OBJECT *)psDroid, (SDWORD)oldx,(SDWORD)oldy);
+				gridMoveDroid(psDroid, (SDWORD)oldx,(SDWORD)oldy);
 
 				psDroid->direction = dir % 360;		// update rotation
 
@@ -593,7 +593,7 @@ static void offscreenUpdate(DROID *psDroid,
 		debug(LOG_MULTISYNC, "Moving droid %d from (%u,%u) to (%u,%u)", (int)psDroid->id, oldx, oldy, (UDWORD)fx, (UDWORD)fy);
 		psDroid->pos.x		 = (UWORD)x;						//update x
 		psDroid->pos.y		 = (UWORD)y;						//update y
-		gridMoveObject((BASE_OBJECT *)psDroid, (SDWORD)oldx,(SDWORD)oldy);
+		gridMoveDroid(psDroid, (SDWORD)oldx,(SDWORD)oldy);
 		psDroid->direction = dir % 360;				// update rotation
 	}
 

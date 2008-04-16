@@ -57,9 +57,9 @@ extern void gridReset(void);
 // add an object to the grid system
 extern void gridAddObject(BASE_OBJECT *psObj);
 
-// move an object within the grid
+// move a DROID within the grid
 // oldX,oldY are the old position of the object in world coords
-extern void gridMoveObject(BASE_OBJECT *psObj, SDWORD oldX, SDWORD oldY);
+extern void gridMoveDroid(DROID* psDroid, SDWORD oldX, SDWORD oldY);
 
 // remove an object from the grid system
 extern void gridRemoveObject(BASE_OBJECT *psObj);
