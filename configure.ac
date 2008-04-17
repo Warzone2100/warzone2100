@@ -126,6 +126,16 @@ fi
 AC_ARG_WITH(makensis,
 	AS_HELP_STRING([--with-makensis],[Path to makensis]))
 
+AC_ARG_WITH(nsis_compression,
+	AS_HELP_STRING([--with-nsis-compression],[Compression method to use when building NSIS [lzma]]))
+if test "x$with_nsis_compression" = "x" ; then
+	# The default compression method is LZMA
+	NSIS_COMPRESSION="lzma"
+else
+	NSIS_COMPRESSION="${with_nsis_compression}"
+fi
+AC_SUBST(NSIS_COMPRESSION)
+
 
 AC_ARG_WITH(installer_libdir,
 	AS_HELP_STRING([--with-installer-extdir],[Path to external data for NSIS script]))

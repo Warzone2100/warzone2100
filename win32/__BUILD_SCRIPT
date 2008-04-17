@@ -9,6 +9,13 @@ if [[ "x$1" = "xdebug" ]] ; then
 elif [[ "x$1" = "xinstaller" ]] ; then
 	CONF_EXTRA_FLAGS="--disable-debug --enable-data --enable-installer
 		--with-installer-extdir=\"${PREFIX}\" --with-installer-version=${INSTALLER_VERSION}"
+	if [[ "x$2" = "xzlib" ]] ; then
+		CONF_EXTRA_FLAGS="${CONF_EXTRA_FLAGS}
+			--with-nsis-compression=zlib"
+	elif [[ "x$2" = "xbzip2" ]] ; then
+		CONF_EXTRA_FLAGS="${CONF_EXTRA_FLAGS}
+			--with-nsis-compression=bzip2"
+	fi
 fi
 
 # Move to the root directory
