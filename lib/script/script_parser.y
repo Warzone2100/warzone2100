@@ -1943,13 +1943,11 @@ static void scriptStoreVarTypes(VAR_SYMBOL *psVar)
 
 %%
 
-script:			header var_list
-				{
-					/* stop parsing here if we are just getting */
-					/* the variables in the script */
-					/* YYACCEPT */
-				}
-						 trigger_list event_list
+/* 
+  The final accepting rule, must always be the first 
+  rule, if not explicitly defined as accepting rule
+*/
+accept_script:			script
 				{
 					unsigned int i;
 					SDWORD			size = 0, debug_i = 0, totalArraySize = 0;
@@ -1960,7 +1958,7 @@ script:			header var_list
 					EVENT_SYMBOL	*psEvent;
 					UDWORD			numVars;
 
-					RULE("script: header var_list");
+					RULE("script: var_list");
 
 					// Calculate the code size
 					for(psTrig = psTriggers; psTrig; psTrig = psTrig->psNext)
@@ -2178,29 +2176,27 @@ script:			header var_list
 						base += arraySize;
 					}
 
-					RULE("END script: header var_list");
+					RULE("END script: var_list");
 				}
 			;
 
-	/**************************************************************************************
-	 *
-	 * Header declarations
-	 */
-
-header:			/* NULL token */
-			|	header_decl
-			|	header header_decl
-			;
-
-header_decl:	LINK TYPE ';'
-					{
-//						if (!scriptAddVariable("owner", $2, ST_PUBLIC, 0))
-//						{
-							// Out of memory - error already given
-//							YYABORT;
-//						}
-					}
-			;
+script:					var_list trigger_list
+						{
+							RULE("script:var_list trigger_list");
+						}
+					|	script event_list
+						{
+							RULE("script:script event_list");
+						}
+					|	script var_list
+						{
+							RULE("script:script var_list");
+						}
+					|	script trigger_list
+						{
+							RULE("script:script trigger_list");
+						}
+					;
 
 var_list:		/* NULL token */
 				{
