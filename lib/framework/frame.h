@@ -25,6 +25,11 @@
 
 #include "wzglobal.h"
 
+// Workaround X11 headers #defining Status
+#ifdef Status
+# undef Status
+#endif
+
 #include "types.h"
 
 // Provides the safer functions strlcpy and strlcat
