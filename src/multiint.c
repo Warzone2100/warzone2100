@@ -2589,7 +2589,21 @@ void displayMultiReady(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGH
 	}
 
 	//bluboxes.
-	drawBlueBox(x,y,psWidget->width,psWidget->height);							// right
+	drawBlueBox(x, y, psWidget->width, psWidget->height);		// right
+
+	// draw 'ready' button state
+	if (bPlayerReadyGUI[psWidget->UserData])
+	{
+		iV_DrawImage(FrontImages, IMAGE_OK, x + MULTIOP_READY_IMG_OFFSET_X, y + MULTIOP_READY_IMG_OFFSET_Y);
+	}
+	else
+	{
+		iV_DrawImage(FrontImages, IMAGE_NO, x + MULTIOP_READY_IMG_OFFSET_X, y + MULTIOP_READY_IMG_OFFSET_Y);
+	}
+	if (Hilight)
+	{
+		iV_DrawImage(FrontImages, IMAGE_HI39, x + MULTIOP_READY_IMG_OFFSET_X, y + MULTIOP_READY_IMG_OFFSET_Y);
+	}
 }
 
 void displayTeamChooser(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
@@ -2833,18 +2847,6 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *p
 		//unknown bugfix
 //		game.skirmishPlayers[i] =true;	// don't clear this one!
 		game.skDiff[i]=UBYTE_MAX;	// don't clear this one!
-
-		// draw 'ready' button state
-		if(bPlayerReadyGUI[i])
-		{
-			iV_DrawImage(FrontImages,IMAGE_OK,x+MULTIOP_READY_IMG_OFFSET_X,
-				y+MULTIOP_READY_IMG_OFFSET_Y);
-		}
-		else
-		{
-			iV_DrawImage(FrontImages,IMAGE_NO,x+MULTIOP_READY_IMG_OFFSET_X,
-				y+MULTIOP_READY_IMG_OFFSET_Y);
-		}
 	}
 	else
 	{
