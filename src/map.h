@@ -137,7 +137,7 @@ typedef struct _maptile
 
 extern UBYTE terrainTypes[MAX_TILE_TEXTURES];
 
-static inline unsigned char terrainType(MAPTILE * tile)
+static inline unsigned char terrainType(const MAPTILE * tile)
 {
 	return terrainTypes[TileNumber_tile(tile->texture)];
 }
