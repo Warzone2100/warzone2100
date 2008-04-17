@@ -829,10 +829,9 @@ static void addGameOptions(BOOL bRedo)
 		}
 	}
 	addBlueForm(MULTIOP_OPTIONS, MULTIOP_MAP_PREVIEW, _("Map Preview"), MCOL0, MROW9, MULTIOP_BLUEFORMW, 27);
-						//hilight correct entry
-	addMultiBut(psWScreen,MULTIOP_MAP_PREVIEW,MULTIOP_MAP_BUT,MCOL4-8,2,MULTIOP_BUTW,MULTIOP_BUTH,
-				_("Click to see Map"), IMAGE_FOG_OFF,IMAGE_FOG_OFF_HI,true);
-			widgSetButtonState(psWScreen, MULTIOP_MAP_BUT,0); //1 = OFF  0=ON 
+	addMultiBut(psWScreen,MULTIOP_MAP_PREVIEW, MULTIOP_MAP_BUT, MCOL2, 2, MULTIOP_BUTW, MULTIOP_BUTH, 
+	            _("Click to see Map"), IMAGE_FOG_OFF, IMAGE_FOG_OFF_HI, true);
+	widgSetButtonState(psWScreen, MULTIOP_MAP_BUT,0); //1 = OFF  0=ON 
 
 	// cancel
 	addMultiBut(psWScreen,MULTIOP_OPTIONS,CON_CANCEL,
