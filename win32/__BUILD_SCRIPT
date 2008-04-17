@@ -19,6 +19,8 @@ for i in $*; do
 	elif [[ "x$i" = "xbzip2" ]] ; then
 		CONF_EXTRA_FLAGS="${CONF_EXTRA_FLAGS}
 			--with-nsis-compression=bzip2"
+	elif [[ "x$i" = "x-j3" ]] ; then
+		MAKE_FLAGS="-j3"
 	fi
 done
 
@@ -39,4 +41,4 @@ cd ..
     CXX_FOR_BUILD="g++" \
     CPPFLAGS_FOR_BUILD=" " \
     PKGCONFIG_PREFIX="${PREFIX}" || exit 1
-make -j3 || exit 1
+make ${MAKE_FLAGS} || exit 1
