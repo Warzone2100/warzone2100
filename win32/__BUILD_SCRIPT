@@ -2,21 +2,26 @@
 
 source __BUILD_CONFIG
 
-CONF_EXTRA_FLAGS="--disable-debug"
+DEBUGFLAG="--disable-debug"
 
-if [[ "x$1" = "xdebug" ]] ; then
-	CONF_EXTRA_FLAGS="--enable-debug"
-elif [[ "x$1" = "xinstaller" ]] ; then
-	CONF_EXTRA_FLAGS="--disable-debug --enable-data --enable-installer
-		--with-installer-extdir=\"${PREFIX}\" --with-installer-version=${INSTALLER_VERSION}"
-	if [[ "x$2" = "xzlib" ]] ; then
+for i in $*; do
+	if [[ "x$i" = "xdebug" ]] ; then
+		DEBUGFLAG="--enable-debug"
+	elif [[ "x$i" = "xinstaller" ]] ; then
+		CONF_EXTRA_FLAGS="${CONF_EXTRA_FLAGS}
+			--enable-data --enable-installer --with-installer-extdir=\"${PREFIX}\"
+			--with-installer-version=${INSTALLER_VERSION}"
+	elif [[ "x$i" = "xzlib" ]] ; then
 		CONF_EXTRA_FLAGS="${CONF_EXTRA_FLAGS}
 			--with-nsis-compression=zlib"
-	elif [[ "x$2" = "xbzip2" ]] ; then
+	elif [[ "x$i" = "xbzip2" ]] ; then
 		CONF_EXTRA_FLAGS="${CONF_EXTRA_FLAGS}
 			--with-nsis-compression=bzip2"
 	fi
-fi
+done
+
+CONF_EXTRA_FLAGS="${CONF_EXTRA_FLAGS}
+	${DEBUGFLAG}"
 
 # Move to the root directory
 cd ..
