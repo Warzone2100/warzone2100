@@ -648,6 +648,11 @@ BOOL actionVisibleTarget(DROID *psDroid, BASE_OBJECT *psTarget, int weapon_slot)
 	WEAPON_STATS	*psStats;
 
 	CHECK_DROID(psDroid);
+	ASSERT(psTarget != NULL, "actionVisibleTarget: Target is NULL");
+	if (!psTarget)
+	{
+		return false;
+	}
 
 	if (psDroid->numWeaps == 0)
 	{
@@ -657,8 +662,7 @@ BOOL actionVisibleTarget(DROID *psDroid, BASE_OBJECT *psTarget, int weapon_slot)
 		}
 	}
 
-	//if (psDroid->numWeaps == 0)
-    if (vtolDroid(psDroid))
+	if (vtolDroid(psDroid))
 	{
 		if ( visibleObject((BASE_OBJECT*)psDroid, psTarget) )
 		{
@@ -1466,14 +1470,14 @@ void actionUpdateDroid(DROID *psDroid)
 		}
 
 		//check the target hasn't become one the same player ID - Electronic Warfare
-		if ((electronicDroid(psDroid) && (psDroid->player == psDroid->psActionTarget[0]->player)))// ||
-//			(secondaryGetState(psDroid, DSO_ATTACK_LEVEL, &state) && (state != DSS_ALEV_ALWAYS)))
+		if ((electronicDroid(psDroid) && (psDroid->player == psDroid->psActionTarget[0]->player)))
 		{
 			for (i = 0;i < psDroid->numWeaps;i++)
 			{
 				setDroidActionTarget(psDroid, NULL, i);
 			}
 			psDroid->action = DACTION_NONE;
+			break;
 		}
 
 		bHasTarget = false;
@@ -1568,8 +1572,7 @@ void actionUpdateDroid(DROID *psDroid)
 				(psDroid->psActionTarget[0] == NULL) ||
 				//check the target hasn't become one the same player ID - Electronic Warfare
 				(electronicDroid(psDroid) && (psDroid->player == psDroid->psActionTarget[0]->player)) ||
-				!validTarget((BASE_OBJECT *)psDroid, psDroid->psActionTarget[0], 0) )// ||
-	//			 (secondaryGetState(psDroid, DSO_ATTACK_LEVEL, &state) && (state != DSS_ALEV_ALWAYS)))
+				!validTarget((BASE_OBJECT *)psDroid, psDroid->psActionTarget[0], 0) )
 			{
 				moveToRearm(psDroid);
 				break;

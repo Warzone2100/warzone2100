@@ -292,6 +292,11 @@ BOOL visibleObject(const BASE_OBJECT* psViewer, const BASE_OBJECT* psTarget)
 	SDWORD		tarG, top;
 
 	ASSERT(psViewer != NULL, "Invalid viewer pointer!");
+	ASSERT(psTarget != NULL, "Invalid viewed pointer!");
+	if (!psViewer || !psTarget)
+	{
+		return false;
+	}
 
 	/* Get the sensor Range and power */
 	switch (psViewer->type)

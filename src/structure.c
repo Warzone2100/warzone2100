@@ -6044,12 +6044,15 @@ BOOL electronicDamage(BASE_OBJECT *psTarget, UDWORD damage, UBYTE attackPlayer)
 	STRUCTURE   *psStructure;
 	DROID       *psDroid;
 	BOOL        bCompleted = true;
-
-	Vector3i pos;
+	Vector3i	pos;
 	UDWORD		i;
 
-	ASSERT( attackPlayer < MAX_PLAYERS,
-		"electronicDamage: invalid player id" );
+	ASSERT(attackPlayer < MAX_PLAYERS, "electronicDamage: invalid player id %d", (int)attackPlayer);
+	ASSERT(psTarget != NULL, "electronicDamage: target is NULL");
+	if (attackPlayer >= MAX_PLAYERS || psTarget == NULL)
+	{
+		return false;
+	}
 
 	//structure electronic damage
 	if (psTarget->type == OBJ_STRUCTURE)
@@ -6057,11 +6060,10 @@ BOOL electronicDamage(BASE_OBJECT *psTarget, UDWORD damage, UBYTE attackPlayer)
 		psStructure = (STRUCTURE *)psTarget;
 		bCompleted = false;
 
-		ASSERT( psStructure != NULL,
-			"electronicDamage: Invalid Structure pointer" );
-
-		ASSERT( psStructure->pStructureType->resistance != 0,
-			"electronicDamage: invalid structure for EW" );
+		if (psStructure->pStructureType->resistance == 0)
+		{
+			return false;	// this structure type cannot be taken over
+		}
 
 		//if resistance is already less than 0 don't do any more
 		if (psStructure->resistance < 0)
@@ -6102,8 +6104,6 @@ BOOL electronicDamage(BASE_OBJECT *psTarget, UDWORD damage, UBYTE attackPlayer)
 	{
 		psDroid = (DROID *)psTarget;
 		bCompleted = false;
-
-		ASSERT(psDroid != NULL, "electronicDamage: Invalid Droid pointer");
 
 		//in multiPlayer cannot attack a Transporter with EW
 		if (bMultiPlayer)
