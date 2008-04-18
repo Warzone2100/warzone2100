@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100 2.1_beta2\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2008-04-06 02:27+0200\n"
-"PO-Revision-Date: 2008-03-21 20:25-0300\n"
+"POT-Creation-Date: 2008-04-18 16:47+0200\n"
+"PO-Revision-Date: 2008-03-22 17:36-0300\n"
 "Last-Translator: Artur <tucalipe@hotmail.com>\n"
 "Language-Team: Portugese <warzone-dev@gna.org>\n"
 "MIME-Version: 1.0\n"
@@ -778,7 +778,7 @@ msgstr "Boa sorte, Comandante."
 
 #: data/messages/strings/cam3strings.txt:3
 msgid "Argle Bargle - Please Remove when some text here!"
-msgstr "Argle Bargle - Remova isso quando houver um texto aqui, ok?"
+msgstr "Argle Bargle - Please Remove when some text here!"
 
 #: data/messages/strings/cam3strings.txt:6
 msgid "TRANSPORT MISSION: Northern Sector"
@@ -2840,7 +2840,7 @@ msgstr "CMuro de NEXUS"
 #: data/messages/strings/names.txt:622
 #: data/mp/messages/strings/names.txt:624
 msgid "CAM1 RESEARCH"
-msgstr "CAM1 PESQUISAS"
+msgstr "CAM1 RESEARCH"
 
 #: data/messages/strings/names.txt:623
 #: data/mp/messages/strings/names.txt:625
@@ -2850,67 +2850,67 @@ msgstr "PESQUISAS AVANÇADAS"
 #: data/messages/strings/names.txt:624
 #: data/mp/messages/strings/names.txt:626
 msgid "CAM1 VEHICLES"
-msgstr "CAM1 VEÍCULOS"
+msgstr "CAM1 VEHICLES"
 
 #: data/messages/strings/names.txt:625
 #: data/mp/messages/strings/names.txt:627
 msgid "CAM1 WEAPONS"
-msgstr "CAM1 ARMAS"
+msgstr "CAM1 WEAPONS"
 
 #: data/messages/strings/names.txt:626
 #: data/mp/messages/strings/names.txt:628
 msgid "CAM1 SYSTEMS"
-msgstr "CAM1 SISTEMAS"
+msgstr "CAM1 SYSTEMS"
 
 #: data/messages/strings/names.txt:627
 #: data/mp/messages/strings/names.txt:629
 msgid "CAM1 DEFENSES"
-msgstr "CAM1 DEFESAS"
+msgstr "CAM1 DEFENSES"
 
 #: data/messages/strings/names.txt:628
 #: data/mp/messages/strings/names.txt:630
 msgid "CAM1 STRUCTURES"
-msgstr "CAM1 ESTRUTURAS"
+msgstr "CAM1 STRUCTURES"
 
 #: data/messages/strings/names.txt:629
 #: data/mp/messages/strings/names.txt:631
 msgid "CAM2 RESEARCH"
-msgstr "CAM2 PESQUISAS"
+msgstr "CAM2 RESEARCH"
 
 #: data/messages/strings/names.txt:630
 #: data/mp/messages/strings/names.txt:632
 msgid "CAM2 VEHICLES"
-msgstr "CAM2 VEÍCULOS"
+msgstr "CAM2 VEHICLES"
 
 #: data/messages/strings/names.txt:631
 #: data/mp/messages/strings/names.txt:633
 msgid "CAM2 CYBORGS"
-msgstr "CAM2 CIBORGUES"
+msgstr "CAM2 CYBORGS"
 
 #: data/messages/strings/names.txt:632
 #: data/mp/messages/strings/names.txt:634
 msgid "CAM2 WEAPONS"
-msgstr "CAM2 ARMAS"
+msgstr "CAM2 WEAPONS"
 
 #: data/messages/strings/names.txt:633
 #: data/mp/messages/strings/names.txt:635
 msgid "CAM2 SYSTEMS"
-msgstr "CAM2 SISTEMAS"
+msgstr "CAM2 SYSTEMS"
 
 #: data/messages/strings/names.txt:634
 #: data/mp/messages/strings/names.txt:636
 msgid "CAM2 DEFENSES"
-msgstr "CAM2 DEFESAS"
+msgstr "CAM2 DEFENSES"
 
 #: data/messages/strings/names.txt:635
 #: data/mp/messages/strings/names.txt:637
 msgid "CAM2 STRUCTURES"
-msgstr "CAM2 ESTRUTURAS"
+msgstr "CAM2 STRUCTURES"
 
 #: data/messages/strings/names.txt:637
 #: data/mp/messages/strings/names.txt:639
 msgid "CAM3 RESEARCH"
-msgstr "CAM3 PESQUISAS"
+msgstr "CAM3 RESEARCH"
 
 #: data/messages/strings/names.txt:648
 #: data/mp/messages/strings/names.txt:650
@@ -5121,7 +5121,7 @@ msgstr "Avanço em Tecnologia de Computador"
 #: data/messages/strings/resstrings.txt:25
 #: data/mp/messages/strings/resstrings.txt:25
 msgid "Synaptic Link allows humans to interface directly with computers"
-msgstr "Conexão Sináptica permite humanos interagirem diretamente com computadores"
+msgstr "Conexão Sináptica permite conexão direta com computadores"
 
 #: data/messages/strings/resstrings.txt:26
 #: data/mp/messages/strings/resstrings.txt:26
@@ -5268,7 +5268,7 @@ msgstr "Materiais do Ciborgue Melhorados"
 #: data/mp/messages/strings/resstrings.txt:74
 #: data/mp/messages/strings/resstrings.txt:1145
 msgid "Layered composite alloys and energy-absorbing fibres"
-msgstr "Compostos em ligas de camadas e fibras absorventes de energia"
+msgstr "Compostos em ligas de camadas e fibras absorventes"
 
 #: data/messages/strings/resstrings.txt:69
 #: data/messages/strings/resstrings.txt:75
@@ -5286,14 +5286,14 @@ msgstr "Aumenta os pontos de vida e a armadura cinética"
 #: data/mp/messages/strings/resstrings.txt:80
 #: data/mp/messages/strings/resstrings.txt:1151
 msgid "Layered dense composite alloys and energy-absorbing fibres"
-msgstr "Compostos densos em ligas de camadas e fibras absorventes de energia"
+msgstr "Compostos densos em ligas de camadas e fibras absorventes"
 
 #: data/messages/strings/resstrings.txt:80
 #: data/messages/strings/resstrings.txt:1060
 #: data/mp/messages/strings/resstrings.txt:86
 #: data/mp/messages/strings/resstrings.txt:1157
 msgid "Superdense composite alloys and energy-absorbing fibres"
-msgstr "Compostos super densos em ligas de camadas e fibras absorventes de energia"
+msgstr "Compostos super densos em ligas de camadas e fibras absorventes"
 
 #: data/messages/strings/resstrings.txt:86
 #: data/messages/strings/resstrings.txt:1066
@@ -6465,7 +6465,7 @@ msgstr "Produção Melhorada"
 #: data/messages/strings/resstrings.txt:628
 #: data/mp/messages/strings/resstrings.txt:706
 msgid "Factory module enables medium and large bodies"
-msgstr "Módulo de Fábrica permite a construção de chassis médios e pesados"
+msgstr "Módulo permite a construção de chassis médios e pesados"
 
 #: data/messages/strings/resstrings.txt:629
 #: data/messages/strings/resstrings.txt:635
@@ -6592,7 +6592,7 @@ msgstr "Aumenta a velocidade de pesquisas"
 #: data/messages/strings/resstrings.txt:678
 #: data/mp/messages/strings/resstrings.txt:756
 msgid "Use a truck to add the module to a research facility"
-msgstr "Use um caminhão para adicionar o módulo a um centro de pesquisas"
+msgstr "Use um caminhão para adicionar o módulo a um centro"
 
 #: data/messages/strings/resstrings.txt:681
 #: data/messages/strings/resstrings.txt:687
@@ -8909,7 +8909,7 @@ msgstr "Alvo: Estruturas"
 #: data/messages/strings/resstrings.txt:1738
 #: data/mp/messages/strings/resstrings.txt:1865
 msgid "High explosive shaped charge missile"
-msgstr "Foguete altamente explosivoè"
+msgstr "Foguete altamente explosivo"
 
 #: data/messages/strings/resstrings.txt:1744
 #: data/mp/messages/strings/resstrings.txt:1871
@@ -9196,7 +9196,7 @@ msgstr "Agora clique no gerador de energia no menu de construção à esquerda"
 
 #: data/messages/strings/tutstrings.txt:35
 msgid "Presently unused"
-msgstr "Atualmente não usado"
+msgstr "Presently unused"
 
 #: data/messages/strings/tutstrings.txt:36
 msgid "Now left click the research facility and position it at your base"
@@ -9310,7 +9310,7 @@ msgstr "Torrete AA Whirlwind"
 
 #: data/mp/messages/strings/names.txt:1103
 msgid "Rapid Fire Chaingun"
-msgstr "Metralhadora de Velodidade"
+msgstr "Melhora da Metralhadora"
 
 #: data/mp/messages/strings/names.txt:1505
 msgid "Cobra Bunker Buster Hover"
@@ -9712,7 +9712,7 @@ msgstr "Hovercraft Canhão Pesado Píton"
 
 #: data/mp/messages/strings/names.txt:1837
 msgid "Python Tracks Heavy Cannon"
-msgstr "Tanque Canhão Pesado Píton"
+msgstr "Tanque Píton Canhão Pesado"
 
 #: data/mp/messages/strings/names.txt:1838
 msgid "Mantis Tracks Railgun"
@@ -10554,11 +10554,11 @@ msgstr "Impossível Construir. Poço de petróleo em chamas."
 #: src/display.c:1825
 #, c-format
 msgid "%s - Damage %d%% - Experience %d, %s"
-msgstr "%s - %d%% danificado - Experiência %d, %s"
+msgstr "%s - %d%% danificado - Mortes %d, %s"
 
 #: src/display.c:2062
 msgid "Truck ordered to build Oil Derrick"
-msgstr "Caminhão desginado a construção de Extrator de Petróleo."
+msgstr "Caminhão desginado à construção de Extrator de Petróleo."
 
 #: src/droid.c:234
 msgid "Unit Lost!"
@@ -10579,8 +10579,8 @@ msgstr[1] "Grupo %u selecionado - %u unidades"
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
-msgstr[0] "% unidade designada para o Grupo %u"
-msgstr[1] "% unidades designada para o Grupo %u"
+msgstr[0] "%u unidade designada para o Grupo %u"
+msgstr[1] "%u unidades designada para o Grupo %u"
 
 #: src/droid.c:3739
 #, c-format
@@ -10671,11 +10671,11 @@ msgstr "APRENDENDO A JOGAR"
 #: src/frontend.c:293
 #: src/frontend.c:349
 #: src/frontend.c:475
-#: src/frontend.c:526
-#: src/frontend.c:687
-#: src/frontend.c:833
-#: src/frontend.c:936
-#: src/frontend.c:1103
+#: src/frontend.c:528
+#: src/frontend.c:689
+#: src/frontend.c:835
+#: src/frontend.c:938
+#: src/frontend.c:1105
 msgctxt "menu"
 msgid "Return"
 msgstr "Voltar"
@@ -10715,186 +10715,186 @@ msgstr "Conectar-se a um jogo"
 msgid "One Player Skirmish"
 msgstr "Confronto Direto (Um jogador)"
 
-#: src/frontend.c:520
-#: src/frontend.c:836
-#: src/frontend.c:1106
-#: src/frontend.c:1126
+#: src/frontend.c:522
+#: src/frontend.c:838
+#: src/frontend.c:1108
+#: src/frontend.c:1128
 msgid "GAME OPTIONS"
 msgstr "OPÇÕES DE JOGO"
 
-#: src/frontend.c:521
+#: src/frontend.c:523
 msgid "Game Options"
 msgstr "Opções de Jogo"
 
-#: src/frontend.c:522
+#: src/frontend.c:524
 msgid "Graphics Options"
 msgstr "Opções de Vídeo"
 
-#: src/frontend.c:524
+#: src/frontend.c:526
 msgid "Audio Options"
 msgstr "Opções de Áudio"
 
-#: src/frontend.c:525
+#: src/frontend.c:527
 msgid "Key Mappings"
 msgstr "Configuração das Teclas"
 
-#: src/frontend.c:597
+#: src/frontend.c:599
 msgid "Reverse Mouse"
 msgstr "Reverter Mouse"
 
-#: src/frontend.c:600
-#: src/frontend.c:612
-#: src/frontend.c:665
-#: src/frontend.c:678
-#: src/frontend.c:710
-#: src/frontend.c:724
-#: src/frontend.c:760
-#: src/frontend.c:769
-#: src/frontend.c:921
-#: src/frontend.c:1005
+#: src/frontend.c:602
+#: src/frontend.c:614
+#: src/frontend.c:667
+#: src/frontend.c:680
+#: src/frontend.c:712
+#: src/frontend.c:726
+#: src/frontend.c:762
+#: src/frontend.c:771
+#: src/frontend.c:923
+#: src/frontend.c:1007
 msgid "On"
 msgstr "Ligado"
 
-#: src/frontend.c:604
-#: src/frontend.c:616
-#: src/frontend.c:661
-#: src/frontend.c:670
-#: src/frontend.c:682
-#: src/frontend.c:705
-#: src/frontend.c:719
-#: src/frontend.c:755
-#: src/frontend.c:773
-#: src/frontend.c:925
-#: src/frontend.c:1000
+#: src/frontend.c:606
+#: src/frontend.c:618
+#: src/frontend.c:663
+#: src/frontend.c:672
+#: src/frontend.c:684
+#: src/frontend.c:707
+#: src/frontend.c:721
+#: src/frontend.c:757
+#: src/frontend.c:775
+#: src/frontend.c:927
+#: src/frontend.c:1002
 msgid "Off"
 msgstr "Desligado"
 
-#: src/frontend.c:609
+#: src/frontend.c:611
 msgid "Screen Shake"
 msgstr "Tremer a Tela"
 
-#: src/frontend.c:621
+#: src/frontend.c:623
 #: src/multiint.c:718
 msgid "Fog"
 msgstr "Névoa"
 
-#: src/frontend.c:624
-#: src/frontend.c:742
+#: src/frontend.c:626
+#: src/frontend.c:744
 msgid "Mist"
 msgstr "Misto"
 
-#: src/frontend.c:628
-#: src/frontend.c:735
+#: src/frontend.c:630
+#: src/frontend.c:737
 #: src/multiint.c:720
 msgid "Fog Of War"
 msgstr "Escuridão Total"
 
-#: src/frontend.c:633
+#: src/frontend.c:635
 msgid "Video Playback"
 msgstr "Tamanho de Vídeo"
 
-#: src/frontend.c:636
-#: src/frontend.c:792
+#: src/frontend.c:638
+#: src/frontend.c:794
 msgid "Full"
 msgstr "Tela Cheia"
 
-#: src/frontend.c:640
-#: src/frontend.c:782
-#: src/frontend.c:908
-#: src/frontend.c:953
+#: src/frontend.c:642
+#: src/frontend.c:784
+#: src/frontend.c:910
+#: src/frontend.c:955
 msgid "Windowed"
 msgstr "Em Janela"
 
-#: src/frontend.c:643
-#: src/frontend.c:787
+#: src/frontend.c:645
+#: src/frontend.c:789
 msgid "Minimal"
 msgstr "Tamaho Mínimo"
 
-#: src/frontend.c:650
-#: src/frontend.c:654
+#: src/frontend.c:652
+#: src/frontend.c:656
 msgid "Subtitles"
 msgstr "Legendas"
 
-#: src/frontend.c:675
+#: src/frontend.c:677
 msgid "Shadows"
 msgstr "Sombras"
 
-#: src/frontend.c:821
+#: src/frontend.c:823
 #: src/ingameop.c:154
 msgid "Voice Volume"
 msgstr "Volume da Voz"
 
-#: src/frontend.c:825
+#: src/frontend.c:827
 #: src/ingameop.c:159
 msgid "FX Volume"
 msgstr "Volume dos Sons"
 
-#: src/frontend.c:829
+#: src/frontend.c:831
 #: src/ingameop.c:164
 msgid "Music Volume"
 msgstr "Volume da Música"
 
-#: src/frontend.c:900
+#: src/frontend.c:902
 msgid "Graphics Mode*"
 msgstr "Modo Gráfico*"
 
-#: src/frontend.c:904
-#: src/frontend.c:958
+#: src/frontend.c:906
+#: src/frontend.c:960
 msgid "Fullscreen"
 msgstr "Tela Cheia"
 
-#: src/frontend.c:912
+#: src/frontend.c:914
 msgid "Resolution*"
 msgstr "Resolução*"
 
-#: src/frontend.c:917
+#: src/frontend.c:919
 msgid "Trap Cursor"
 msgstr "Travar Cursor"
 
-#: src/frontend.c:929
+#: src/frontend.c:931
 msgid "Texture size"
 msgstr "Tamanho da Textura"
 
-#: src/frontend.c:933
+#: src/frontend.c:935
 msgid "* Takes effect on game restart"
 msgstr "* Precisa reiniciar o jogo"
 
-#: src/frontend.c:1066
-#: src/frontend.c:1124
+#: src/frontend.c:1068
+#: src/frontend.c:1126
 msgid "Difficulty"
 msgstr "Dificuldade"
 
-#: src/frontend.c:1070
-#: src/frontend.c:1132
-#: src/frontend.c:1164
+#: src/frontend.c:1072
+#: src/frontend.c:1134
+#: src/frontend.c:1166
 msgid "Easy"
 msgstr "Fácil"
 
-#: src/frontend.c:1073
-#: src/frontend.c:1135
-#: src/frontend.c:1156
+#: src/frontend.c:1075
+#: src/frontend.c:1137
+#: src/frontend.c:1158
 msgid "Normal"
 msgstr "Média"
 
-#: src/frontend.c:1077
-#: src/frontend.c:1138
-#: src/frontend.c:1160
+#: src/frontend.c:1079
+#: src/frontend.c:1140
+#: src/frontend.c:1162
 msgid "Hard"
 msgstr "Difícil"
 
-#: src/frontend.c:1082
-#: src/frontend.c:1125
+#: src/frontend.c:1084
+#: src/frontend.c:1127
 msgid "Scroll Speed"
 msgstr "Velocidade da Tela"
 
-#: src/frontend.c:1096
-#: src/frontend.c:1122
+#: src/frontend.c:1098
+#: src/frontend.c:1124
 #, fuzzy
 msgid "Language"
 msgstr "Longo Alcance"
 
-#: src/frontend.c:1100
-#: src/frontend.c:1123
+#: src/frontend.c:1102
+#: src/frontend.c:1125
 msgid "Unit Colour"
 msgstr "Cor das Unidades"
 
@@ -12252,7 +12252,7 @@ msgstr "Enviar Transporte"
 
 #: src/transporter.c:1859
 msgid "Reinforcements landing"
-msgstr "Reforcos Pousando"
+msgstr "Reforços Pousando"
 
 #: src/version.c:137
 msgid " (modified and switched locally)"
