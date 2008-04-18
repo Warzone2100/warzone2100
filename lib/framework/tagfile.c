@@ -438,6 +438,10 @@ static bool scanforward(element_t tag)
 			if (read_tag == TAG_GROUP_END)
 			{
 				groupskip--;
+				if (groupskip < 0)
+				{
+					break; // tag not found
+				}
 			}
 			readsize = PHYSFS_read(handle, &read_tag, 1, 1);
 			continue;	// no type, no payload
