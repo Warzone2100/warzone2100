@@ -258,8 +258,15 @@ BOOL screen_GetBackDrop(void)
 //bitmap MUST be (BACKDROP_HACK_WIDTH * BACKDROP_HACK_HEIGHT) for now.
 void screen_Upload(const char *newBackDropBmp)
 {
+	static bool processed = false;
+
 	if(newBackDropBmp != NULL)
 	{
+		if (processed)	// lets free a texture when we use a new one.
+		{
+			glDeleteTextures( 1, &backDropTexture );
+		}
+
 		glGenTextures(1, &backDropTexture);
 		pie_SetTexturePage(TEXPAGE_NONE);
 		glBindTexture(GL_TEXTURE_2D, backDropTexture);
@@ -272,6 +279,7 @@ void screen_Upload(const char *newBackDropBmp)
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+		processed = true;
 	}
 
 	glDisable(GL_DEPTH_TEST);
