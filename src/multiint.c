@@ -844,8 +844,9 @@ static void addGameOptions(BOOL bRedo)
 	if(ingame.bHostSetup && !bHosted)
 	{
 		addMultiBut(psWScreen,MULTIOP_OPTIONS,MULTIOP_HOST,MULTIOP_HOSTX,MULTIOP_HOSTY,35,28,
-					_("Start Hosting Game"),IMAGE_HOST,IMAGE_HOST,false);
+					_("Start Hosting Game"), IMAGE_HOST, IMAGE_HOST_HI, IMAGE_HOST_HI);
 	}
+printf( "image_hist=%d image_host_hi=%d",  IMAGE_HOST, IMAGE_HOST_HI );
 
 	// hosted or hosting.
 	// limits button.

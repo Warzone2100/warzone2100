@@ -381,7 +381,7 @@ BOOL startKeyMapEditor(BOOL first)
 				11,45,
 				56,38,
 				_("Select Default"),
-				IMAGE_KEYMAP_DEFAULT, IMAGE_KEYMAP_DEFAULT, false);	// default.
+				IMAGE_KEYMAP_DEFAULT, IMAGE_KEYMAP_DEFAULT_HI, IMAGE_KEYMAP_DEFAULT_HI);	// default.
 
 
 	/* Better be none that come after this...! */
