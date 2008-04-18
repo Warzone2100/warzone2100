@@ -122,7 +122,7 @@ static UDWORD hideTime=0;
 // Function protos
 
 // widget functions
-static BOOL addMultiEditBox(UDWORD formid,UDWORD id,UDWORD x, UDWORD y, const char* tip, char tipres[128],UDWORD icon,UDWORD iconid);
+static BOOL addMultiEditBox(UDWORD formid, UDWORD id, UDWORD x, UDWORD y, const char* tip, char tipres[128], UDWORD icon, UDWORD iconhi, UDWORD iconid);
 static void addBlueForm					(UDWORD parent,UDWORD id, const char *txt,UDWORD x,UDWORD y,UDWORD w,UDWORD h);
 
 // Drawing Functions
@@ -685,8 +685,8 @@ static void addGameOptions(BOOL bRedo)
 
 	addSideText(FRONTEND_SIDETEXT3, MULTIOP_OPTIONSX-3 , MULTIOP_OPTIONSY,_("OPTIONS"));
 
-	addMultiEditBox(MULTIOP_OPTIONS,MULTIOP_GNAME,MCOL0,MROW2,_("Select Game Name"), game.name ,IMAGE_EDIT_GAME,MULTIOP_GNAME_ICON);
-	addMultiEditBox(MULTIOP_OPTIONS,MULTIOP_MAP  ,MCOL0,MROW3,_("Select Map"), game.map ,IMAGE_EDIT_MAP,MULTIOP_MAP_ICON);
+	addMultiEditBox(MULTIOP_OPTIONS, MULTIOP_GNAME, MCOL0, MROW2, _("Select Game Name"), game.name, IMAGE_EDIT_GAME, IMAGE_EDIT_GAME_HI, MULTIOP_GNAME_ICON);
+	addMultiEditBox(MULTIOP_OPTIONS, MULTIOP_MAP  , MCOL0, MROW3, _("Select Map"), game.map, IMAGE_EDIT_MAP, IMAGE_EDIT_MAP_HI, MULTIOP_MAP_ICON);
 
 	// buttons.
 
@@ -716,7 +716,7 @@ static void addGameOptions(BOOL bRedo)
 	}
 
 	//just display the game options.
-	addMultiEditBox(MULTIOP_OPTIONS,MULTIOP_PNAME,MCOL0,MROW1, _("Select Player Name"),(char*) sPlayer,IMAGE_EDIT_PLAYER,MULTIOP_PNAME_ICON);
+	addMultiEditBox(MULTIOP_OPTIONS, MULTIOP_PNAME, MCOL0, MROW1, _("Select Player Name"), (char*) sPlayer, IMAGE_EDIT_PLAYER, IMAGE_EDIT_PLAYER_HI, MULTIOP_PNAME_ICON);
 
 	// Fog type
 	addBlueForm(MULTIOP_OPTIONS,MULTIOP_FOG,_("Fog"),MCOL0,MROW5,MULTIOP_BLUEFORMW,27);
@@ -846,7 +846,6 @@ static void addGameOptions(BOOL bRedo)
 		addMultiBut(psWScreen,MULTIOP_OPTIONS,MULTIOP_HOST,MULTIOP_HOSTX,MULTIOP_HOSTY,35,28,
 					_("Start Hosting Game"), IMAGE_HOST, IMAGE_HOST_HI, IMAGE_HOST_HI);
 	}
-printf( "image_hist=%d image_host_hi=%d",  IMAGE_HOST, IMAGE_HOST_HI );
 
 	// hosted or hosting.
 	// limits button.
@@ -2861,12 +2860,8 @@ void displayMultiEditBox(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELI
 {
 	UDWORD	x = xOffset+psWidget->x;
 	UDWORD	y = yOffset+psWidget->y;
-	UWORD	im = psWidget->UserData;
 
 	drawBlueBox(x,y,psWidget->width,psWidget->height);
-	drawBlueBox(x+psWidget->width,y,psWidget->height,psWidget->height);	// box on end.
-
-	iV_DrawImage(FrontImages,im,x+psWidget->width+2,y+4);			//icon descriptor.
 
 	if( ((W_EDITBOX*)psWidget)->state & WEDBS_DISABLE)					// disabled
 	{
@@ -2893,6 +2888,12 @@ void displayMultiBut(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT 
 	UWORD	im_down = UNPACKDWORD_TRI_B((UDWORD)psWidget->UserData);
 	UWORD	im_hili = UNPACKDWORD_TRI_C((UDWORD)psWidget->UserData);
 	UWORD	hiToUse = im_hili;
+
+	// hack for multieditbox
+	if (im_norm == IMAGE_EDIT_MAP || im_norm == IMAGE_EDIT_GAME || im_norm == IMAGE_EDIT_PLAYER)
+	{
+		drawBlueBox(x - 2, y - 2, psWidget->height, psWidget->height);	// box on end.
+	}
 
 	// evaluate auto-frame
 	if (((W_BUTTON*)psWidget)->state & WBUTS_HILITE)
@@ -2981,7 +2982,7 @@ void displayMultiBut(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT 
 /////////////////////////////////////////////////////////////////////////////////////////
 // common widgets
 
-static BOOL addMultiEditBox(UDWORD formid,UDWORD id,UDWORD x, UDWORD y, const char* tip, char tipres[128],UDWORD icon,UDWORD iconid)
+static BOOL addMultiEditBox(UDWORD formid, UDWORD id, UDWORD x, UDWORD y, const char* tip, char tipres[128], UDWORD icon, UDWORD iconhi, UDWORD iconid)
 {
 	W_EDBINIT		sEdInit;
 
@@ -2995,18 +2996,13 @@ static BOOL addMultiEditBox(UDWORD formid,UDWORD id,UDWORD x, UDWORD y, const ch
 	sEdInit.height = MULTIOP_EDITBOXH;
 	sEdInit.pText = tipres;
 	sEdInit.FontID = font_regular;
-	sEdInit.UserData = icon;
 	sEdInit.pBoxDisplay = displayMultiEditBox;
 	if (!widgAddEditBox(psWScreen, &sEdInit))
 	{
 		return false;
 	}
 
-	// note drawing is done by the editbox draw tho...
-
-	addMultiBut(psWScreen,MULTIOP_OPTIONS ,iconid,(x+MULTIOP_EDITBOXW+2),(y+2) ,
-				 MULTIOP_EDITBOXH, MULTIOP_EDITBOXH, tip,
-				 icon,icon,false);
+	addMultiBut(psWScreen, MULTIOP_OPTIONS, iconid, x + MULTIOP_EDITBOXW + 2, y + 2, MULTIOP_EDITBOXH, MULTIOP_EDITBOXH, tip, icon, iconhi, iconhi);
 	return true;
 }
 
