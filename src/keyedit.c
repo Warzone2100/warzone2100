@@ -375,13 +375,13 @@ BOOL startKeyMapEditor(BOOL first)
 					8,5,
 					iV_GetImageWidth(FrontImages,IMAGE_RETURN),
 					iV_GetImageHeight(FrontImages,IMAGE_RETURN),
-					_("Return To Previous Screen"),IMAGE_RETURN,IMAGE_RETURN_HI,true);
+					_("Return To Previous Screen"), IMAGE_RETURN, IMAGE_RETURN_HI, IMAGE_RETURN_HI);
 
 	addMultiBut(psWScreen,KM_FORM,KM_DEFAULT,
 				11,45,
 				56,38,
 				_("Select Default"),
-				IMAGE_KEYMAP_DEFAULT,IMAGE_KEYMAP_DEFAULT,true);	// default.
+				IMAGE_KEYMAP_DEFAULT, IMAGE_KEYMAP_DEFAULT, false);	// default.
 
 
 	/* Better be none that come after this...! */

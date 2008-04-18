@@ -298,7 +298,7 @@ BOOL startTutorialMenu(void)
 	addTextButton(FRONTEND_FASTPLAY, FRONTEND_POS4X,FRONTEND_POS4Y, _("Fast Play"),false,false);
 	addSideText	 (FRONTEND_SIDETEXT ,FRONTEND_SIDEX,FRONTEND_SIDEY,_("TUTORIALS"));
 	// TRANSLATORS: "Return", in this context, means "return to previous screen/menu"
-	addMultiBut(psWScreen,FRONTEND_BOTFORM,FRONTEND_QUIT,10,10,30,29, P_("menu", "Return"),IMAGE_RETURN,IMAGE_RETURN_HI,true);
+	addMultiBut(psWScreen, FRONTEND_BOTFORM, FRONTEND_QUIT, 10, 10, 30, 29, P_("menu", "Return"), IMAGE_RETURN, IMAGE_RETURN_HI, IMAGE_RETURN_HI);
 
 	return true;
 }
@@ -354,7 +354,7 @@ void startSinglePlayerMenu(void)
 	addTextButton(FRONTEND_NEWGAME,  FRONTEND_POS3X,FRONTEND_POS3Y,_("New Campaign") ,false,false);
 
 	addSideText	 (FRONTEND_SIDETEXT ,FRONTEND_SIDEX,FRONTEND_SIDEY,_("SINGLE PLAYER"));
-	addMultiBut(psWScreen,FRONTEND_BOTFORM,FRONTEND_QUIT,10,10,30,29, P_("menu", "Return"),IMAGE_RETURN,IMAGE_RETURN_HI,true);
+	addMultiBut(psWScreen, FRONTEND_BOTFORM, FRONTEND_QUIT, 10, 10, 30, 29, P_("menu", "Return"), IMAGE_RETURN, IMAGE_RETURN_HI, IMAGE_RETURN_HI);
 }
 
 static void frontEndNewGame( void )
@@ -480,7 +480,7 @@ BOOL startMultiPlayerMenu(void)
 
 	addTextButton(FRONTEND_SKIRMISH, FRONTEND_POS4X,FRONTEND_POS4Y, _("One Player Skirmish"),false,false);
 
-	addMultiBut(psWScreen,FRONTEND_BOTFORM,FRONTEND_QUIT,10,10,30,29, P_("menu", "Return"),IMAGE_RETURN,IMAGE_RETURN_HI,true);
+	addMultiBut(psWScreen, FRONTEND_BOTFORM, FRONTEND_QUIT, 10, 10, 30, 29, P_("menu", "Return"), IMAGE_RETURN, IMAGE_RETURN_HI, IMAGE_RETURN_HI);
 
 	return true;
 }
@@ -533,7 +533,7 @@ BOOL startOptionsMenu(void)
 	addTextButton(FRONTEND_GAMEOPTIONS4, FRONTEND_POS4X,FRONTEND_POS4Y, "Video Options", false, false);
 	addTextButton(FRONTEND_GAMEOPTIONS3,	FRONTEND_POS5X,FRONTEND_POS5Y, _("Audio Options"),false,false);
 	addTextButton(FRONTEND_KEYMAP,		FRONTEND_POS6X,FRONTEND_POS6Y, _("Key Mappings"),false,false);
-	addMultiBut(psWScreen,FRONTEND_BOTFORM,FRONTEND_QUIT,10,10,30,29, P_("menu", "Return"),IMAGE_RETURN,IMAGE_RETURN_HI,true);
+	addMultiBut(psWScreen, FRONTEND_BOTFORM, FRONTEND_QUIT, 10, 10, 30, 29, P_("menu", "Return"), IMAGE_RETURN, IMAGE_RETURN_HI, IMAGE_RETURN_HI);
 
 	return true;
 }
@@ -694,7 +694,7 @@ BOOL startGameOptions2Menu(void)
 
 	////////////
 	// quit.
-	addMultiBut(psWScreen,FRONTEND_BOTFORM,FRONTEND_QUIT,10,10,30,29, P_("menu", "Return"),IMAGE_RETURN,IMAGE_RETURN_HI,true);
+	addMultiBut(psWScreen, FRONTEND_BOTFORM, FRONTEND_QUIT, 10, 10, 30, 29, P_("menu", "Return"), IMAGE_RETURN, IMAGE_RETURN_HI, IMAGE_RETURN_HI);
 
 	return true;
 }
@@ -840,7 +840,7 @@ BOOL startGameOptions3Menu(void)
 	addFESlider(FRONTEND_MUSIC_SL, FRONTEND_BOTFORM, FRONTEND_POS4M, FRONTEND_POS4Y+5, AUDIO_VOL_MAX, (int)(sound_GetMusicVolume() * 100.0), FRONTEND_MUSIC );
 
 	// quit.
-	addMultiBut(psWScreen,FRONTEND_BOTFORM,FRONTEND_QUIT,10,10,30,29, P_("menu", "Return"),IMAGE_RETURN,IMAGE_RETURN_HI,true);
+	addMultiBut(psWScreen, FRONTEND_BOTFORM, FRONTEND_QUIT, 10, 10, 30, 29, P_("menu", "Return"), IMAGE_RETURN, IMAGE_RETURN_HI, IMAGE_RETURN_HI);
 
 	//add some text down the side of the form
 	addSideText	 (FRONTEND_SIDETEXT ,	FRONTEND_SIDEX,FRONTEND_SIDEY, _("GAME OPTIONS"));
@@ -943,7 +943,7 @@ BOOL startGameOptions4Menu(void)
 	addTextButton(FRONTEND_TAKESEFFECT, FRONTEND_POS6X-35, FRONTEND_POS6Y, _("* Takes effect on game restart"), true, true);
 
 	// Quit/return
-	addMultiBut(psWScreen,FRONTEND_BOTFORM,FRONTEND_QUIT,10,10,30,29, P_("menu", "Return"),IMAGE_RETURN,IMAGE_RETURN_HI,true);
+	addMultiBut(psWScreen, FRONTEND_BOTFORM, FRONTEND_QUIT, 10, 10, 30, 29, P_("menu", "Return"), IMAGE_RETURN, IMAGE_RETURN_HI, IMAGE_RETURN_HI);
 
 	return true;
 }
@@ -1106,7 +1106,7 @@ BOOL startGameOptionsMenu(void)
 	addTextButton(FRONTEND_COLOUR, FRONTEND_POS4X-25, FRONTEND_POS4Y, _("Unit Colour"), true, false);
 
 	// Quit
-	addMultiBut(psWScreen, FRONTEND_BOTFORM, FRONTEND_QUIT, 10, 10, 30, 29, P_("menu", "Return"), IMAGE_RETURN, IMAGE_RETURN_HI, true);
+	addMultiBut(psWScreen, FRONTEND_BOTFORM, FRONTEND_QUIT, 10, 10, 30, 29, P_("menu", "Return"), IMAGE_RETURN, IMAGE_RETURN_HI, IMAGE_RETURN_HI);
 
 	// Add some text down the side of the form
 	addSideText(FRONTEND_SIDETEXT, FRONTEND_SIDEX, FRONTEND_SIDEY, _("GAME OPTIONS"));

@@ -385,7 +385,7 @@ BOOL startConnectionScreen(void)
 	addSideText(FRONTEND_SIDETEXT,  FRONTEND_SIDEX, FRONTEND_SIDEY,_("CONNECTION"));
 
 	addMultiBut(psWScreen,FRONTEND_BOTFORM,CON_CANCEL,10,10,MULTIOP_OKW,MULTIOP_OKH,
-		_("Return To Previous Screen"),IMAGE_RETURN,IMAGE_RETURN_HI,true);	// goback buttpn levels
+		_("Return To Previous Screen"), IMAGE_RETURN, IMAGE_RETURN_HI, IMAGE_RETURN_HI);	// goback buttpn levels
 
 	addConnections(0);
 
@@ -427,7 +427,7 @@ void runConnectionScreen(void )
 
 			addBottomForm();
 			addMultiBut(psWScreen,FRONTEND_BOTFORM,CON_CANCEL,10,10,MULTIOP_OKW,MULTIOP_OKH,
-			_("Return To Previous Screen"),IMAGE_RETURN,IMAGE_RETURN_HI,true);	// goback buttpn levels
+			_("Return To Previous Screen"), IMAGE_RETURN, IMAGE_RETURN_HI, IMAGE_RETURN_HI);	// goback buttpn levels
 
 			addConnections(InitialProto);
 			break;
@@ -602,7 +602,7 @@ void startGameFind(void)
 
 	// cancel
 	addMultiBut(psWScreen,FRONTEND_BOTFORM,CON_CANCEL,10,5,MULTIOP_OKW,MULTIOP_OKH,_("Return To Previous Screen"),
-		IMAGE_RETURN,IMAGE_RETURN_HI,true);
+		IMAGE_RETURN, IMAGE_RETURN_HI, IMAGE_RETURN_HI);
 
 	if(!safeSearch)
 	{
@@ -838,7 +838,7 @@ static void addGameOptions(BOOL bRedo)
 		MULTIOP_CANCELX,MULTIOP_CANCELY,
 		iV_GetImageWidth(FrontImages,IMAGE_RETURN),
 		iV_GetImageHeight(FrontImages,IMAGE_RETURN),
-		_("Return To Previous Screen"),IMAGE_RETURN,IMAGE_RETURN_HI,true);
+		_("Return To Previous Screen"), IMAGE_RETURN, IMAGE_RETURN_HI, IMAGE_RETURN_HI);
 
 	// host Games button
 	if(ingame.bHostSetup && !bHosted)
@@ -852,7 +852,7 @@ static void addGameOptions(BOOL bRedo)
 	if(ingame.bHostSetup )
 	{
 		addMultiBut(psWScreen,MULTIOP_OPTIONS,MULTIOP_STRUCTLIMITS,MULTIOP_STRUCTLIMITSX,MULTIOP_STRUCTLIMITSY,
-					35,28, _("Set Structure Limits"),IMAGE_SLIM,IMAGE_SLIM_HI,false);
+		            35, 28, _("Set Structure Limits"), IMAGE_SLIM, IMAGE_SLIM_HI, IMAGE_SLIM_HI);
 	}
 
 	return;
@@ -958,15 +958,13 @@ static void addColourChooser(UDWORD player)
 			23,													  //y
 			iV_GetImageWidth(FrontImages,IMAGE_WEE_GUY)+7,		  //w
 			iV_GetImageHeight(FrontImages,IMAGE_WEE_GUY),		  //h
-			"",IMAGE_WEE_GUY, IMAGE_WEE_GUY,10+i);
+			"", IMAGE_WEE_GUY, IMAGE_WEE_GUY, IMAGE_ASCII48 + i);
 
 			if(isHumanPlayer(i) && i!=selectedPlayer)
 			{
 				widgSetButtonState(psWScreen,MULTIOP_PLAYCHOOSER+i ,WBUT_DISABLE);
 			}
 	}
-
-
 
 	bColourChooserUp = true;
 }
@@ -1202,28 +1200,8 @@ static void addTeamChooser(UDWORD player)
 	// add the teams
 	for (i = 0; i < MAX_PLAYERS; i++)
 	{
-		W_BUTINIT		sButInit;
-
-		memset(&sButInit, 0, sizeof(W_BUTINIT));
-		sButInit.formID = MULTIOP_TEAMCHOOSER_FORM;
-		sButInit.id = MULTIOP_TEAMCHOOSER+i;
-		sButInit.style = WFORM_PLAIN;
-		sButInit.x = (short) (i*(iV_GetImageWidth(FrontImages,IMAGE_TEAM0) + 3)+3);
-		sButInit.y = (short) 6;
-		sButInit.width = (unsigned short) iV_GetImageWidth(FrontImages,IMAGE_TEAM0);
-		sButInit.height= (unsigned short) iV_GetImageHeight(FrontImages,IMAGE_TEAM0);
-
-		sButInit.pTip = "Team";
-
-		sButInit.FontID = font_regular;
-		sButInit.pDisplay = displayMultiBut;
-		sButInit.UserData = PACKDWORD_TRI(false,IMAGE_TEAM0+i , IMAGE_TEAM0+i);
-		sButInit.pText = "Team0";
-
-		if (!widgAddButton(psWScreen, &sButInit))
-		{
-			ASSERT(false,"addTeamChooser: widgAddButton() failed");
-		}
+		addMultiBut(psWScreen, MULTIOP_TEAMCHOOSER_FORM, MULTIOP_TEAMCHOOSER + i, i * (iV_GetImageWidth(FrontImages, IMAGE_TEAM0) + 3) + 3,
+		            6, iV_GetImageWidth(FrontImages, IMAGE_TEAM0), iV_GetImageHeight(FrontImages, IMAGE_TEAM0), _("Team"), IMAGE_TEAM0 + i , IMAGE_TEAM0 + i, 0);
 	}
 
 	bTeamChooserUp[player] = true;
@@ -2909,17 +2887,23 @@ void displayMultiBut(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT 
 	UDWORD	y = yOffset+psWidget->y;
 	BOOL	Hilight = false;
 	UDWORD	Down = 0;
-	UWORD	hiToUse = 0;
 	UDWORD	Grey = 0;
-	UWORD	im = UNPACKDWORD_TRI_B((UDWORD)psWidget->UserData);
-	UWORD	im2= UNPACKDWORD_TRI_C((UDWORD)psWidget->UserData);
-	BOOL	usehl = UNPACKDWORD_TRI_A((UDWORD)psWidget->UserData);
+	UWORD	im_norm = UNPACKDWORD_TRI_A((UDWORD)psWidget->UserData);
+	UWORD	im_down = UNPACKDWORD_TRI_B((UDWORD)psWidget->UserData);
+	UWORD	im_hili = UNPACKDWORD_TRI_C((UDWORD)psWidget->UserData);
+	UWORD	hiToUse = im_hili;
 
-	//evaluate
-	if( (usehl==1) && ((W_BUTTON*)psWidget)->state & WBUTS_HILITE)
+	// evaluate auto-frame
+	if (((W_BUTTON*)psWidget)->state & WBUTS_HILITE)
 	{
 		Hilight = true;
-		switch(iV_GetImageWidth(FrontImages,im))			//pick a hilight.
+	}
+
+	// evaluate auto-frame
+	if (im_hili == 1 && Hilight)
+	{
+		Hilight = true;
+		switch(iV_GetImageWidth(FrontImages, im_norm))			//pick a hilight.
 		{
 		case 30:
 			hiToUse = IMAGE_HI34;
@@ -2944,15 +2928,9 @@ void displayMultiBut(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT 
 			break;
 		default:
 			hiToUse = 0;
-//			DBPRINTF(("no multibut highlight for width = %d",iV_GetImageWidth(FrontImages,im)));
+			debug(LOG_WARNING, "no automatic multibut highlight for width = %d", iV_GetImageWidth(FrontImages, im_norm));
 			break;
 		}
-
-		if(im == IMAGE_RETURN)
-		{
-			hiToUse = IMAGE_RETURN_HI;
-		}
-
 	}
 
 	if( ((W_BUTTON*)psWidget)->state & (WCLICK_DOWN | WCLICK_LOCKED | WCLICK_CLICKLOCK))
@@ -2967,37 +2945,32 @@ void displayMultiBut(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT 
 
 
 	// now display
-	iV_DrawImage(FrontImages,im,x,y);
-
-	// hilight with a number...just for player selector
-	if(usehl >=10)
-	{
-		iV_DrawImage(IntImages,IMAGE_ASCII48-10+usehl,x+11,y+8);
-	}
+	iV_DrawImage(FrontImages, im_norm, x, y);
 
 	// hilights etc..
 	if(Hilight && !Grey)
 	{
-		if(Down)
+		if (Down)
 		{
-			iV_DrawImage(FrontImages,im2,x,y);
+			iV_DrawImage(FrontImages, im_down, x, y);
 		}
 
-		if(hiToUse)
+		if (hiToUse)
 		{
-			iV_DrawImage(FrontImages,hiToUse,x,y);
+			iV_DrawImage(FrontImages, hiToUse, x, y);
 		}
 
 	}
-	else if(Down)
+	else if (Down)
 	{
-		iV_DrawImage(FrontImages,im2,x,y);
+		iV_DrawImage(FrontImages, im_down, x, y);
 	}
 
 
-	if (Grey) {
+	if (Grey)
+	{
 		// disabled, render something over it!
-		iV_TransBoxFill(x,y,x+psWidget->width,y+psWidget->height);
+		iV_TransBoxFill(x, y, x + psWidget->width, y + psWidget->height);
 	}
 }
 
@@ -3038,7 +3011,7 @@ static BOOL addMultiEditBox(UDWORD formid,UDWORD id,UDWORD x, UDWORD y, const ch
 
 /////////////////////////////////////////////////////////////////////////////////////////
 
-BOOL addMultiBut(W_SCREEN *screen, UDWORD formid, UDWORD id, UDWORD x, UDWORD y, UDWORD width, UDWORD height, const char* tipres, UDWORD norm, UDWORD hi, BOOL hiIt)
+BOOL addMultiBut(W_SCREEN *screen, UDWORD formid, UDWORD id, UDWORD x, UDWORD y, UDWORD width, UDWORD height, const char* tipres, UDWORD norm, UDWORD down, UDWORD hi)
 {
 	W_BUTINIT		sButInit;
 
@@ -3053,7 +3026,7 @@ BOOL addMultiBut(W_SCREEN *screen, UDWORD formid, UDWORD id, UDWORD x, UDWORD y,
 	sButInit.pTip = tipres;
 	sButInit.FontID = font_regular;
 	sButInit.pDisplay = displayMultiBut;
-	sButInit.UserData = PACKDWORD_TRI(hiIt,norm , hi);
+	sButInit.UserData = PACKDWORD_TRI(norm, down, hi);
 
 	return widgAddButton(screen, &sButInit);
 }
