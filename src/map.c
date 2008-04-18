@@ -1057,10 +1057,21 @@ BOOL mapSave(char **ppFileData, UDWORD *pFileSize)
 	ZONEMAP_SAVEHEADER *psZoneHeader = NULL;
 	SDWORD	numGateways = 0;
 
+	// find the number of non water gateways
+	for(psCurrGate = gwGetGateways(); psCurrGate; psCurrGate = psCurrGate->psNext)
+	{
+		if (!(psCurrGate->flags & GWR_WATERLINK))
+		{
+			numGateways += 1;
+		}
+	}
+
 	/* Allocate the data buffer */
 	*pFileSize = SAVE_HEADER_SIZE + mapWidth*mapHeight * SAVE_TILE_SIZE;
 	// Add on the size of the gateway data.
 	*pFileSize += sizeof(GATEWAY_SAVEHEADER) + sizeof(GATEWAY_SAVE)*numGateways;
+	// Add on the size of the zone data header. For backwards compatibility.
+	*pFileSize += sizeof(ZONEMAP_SAVEHEADER);
 
 	*ppFileData = (char*)malloc(*pFileSize);
 	if (*ppFileData == NULL)
