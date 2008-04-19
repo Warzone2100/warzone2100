@@ -138,7 +138,7 @@ static bool deserializeSaveGameHeader(PHYSFS_file* fileHandle, GAME_SAVEHEADER* 
 	{
 		// Apparently we don't get a ridiculously high number if we assume
 		// little-endian, so lets assume our version number is 34 at max and return
-		debug(LOG_SAVEGAME, "deserializeSaveGameHeader: Version = %u (little-endian)", serializeHeader->version);
+		debug(LOG_SAVE, "Version = %u (little-endian)", serializeHeader->version);
 
 		return true;
 	}
@@ -153,7 +153,7 @@ static bool deserializeSaveGameHeader(PHYSFS_file* fileHandle, GAME_SAVEHEADER* 
 
 	// Considering that little-endian didn't work we now use big-endian instead
 	serializeHeader->version = PHYSFS_swapUBE32(serializeHeader->version);
-	debug(LOG_SAVEGAME, "deserializeSaveGameHeader: Version %u = (big-endian)", serializeHeader->version);
+	debug(LOG_SAVE, "Version %u = (big-endian)", serializeHeader->version);
 
 	return true;
 }

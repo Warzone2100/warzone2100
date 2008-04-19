@@ -226,7 +226,7 @@ static BOOL sendDroidCheck(void)
 		return true;
 	}
 
-	debug(LOG_MULTISYNC, "sendDroidCheck at tick %u", (unsigned int)gameTime);
+	debug(LOG_SYNC, "sent droid check at tick %u", (unsigned int)gameTime);
 
 	lastSent = gameTime;
 
@@ -320,7 +320,7 @@ BOOL recvDroidCheck()
 	uint8_t		count;
 	int		i;
 
-	debug(LOG_MULTISYNC, "recvDroidCheck");
+	debug(LOG_SYNC, "recvDroidCheck");
 
 	NETbeginDecode(NET_CHECK_DROID);
 
@@ -396,7 +396,7 @@ BOOL recvDroidCheck()
 			if (!IdToDroid(ref, player, &pD))
 			{
 				NETlogEntry("Recvd Unknown droid info. val=player",0,player);
-				debug(LOG_MULTISYNC, "Received checking info for an unknown (as yet) droid. player:%d ref:%d", player, ref);
+				debug(LOG_SYNC, "Received checking info for an unknown (as yet) droid. player:%d ref:%d", player, ref);
 				continue;
 			}
 
@@ -433,7 +433,7 @@ BOOL recvDroidCheck()
 				offscreenUpdate(pD, body, x, y, fx, fy, direction, order);
 			}
 
-			debug(LOG_MULTISYNC, "difference in position for droid %u; was (%d, %d); did %s update",
+			debug(LOG_SYNC, "difference in position for droid %u; was (%d, %d); did %s update",
 			      (unsigned int)pD->id, (int)x - pD->pos.x, (int)y - pD->pos.y,
 			      onscreen ? "onscreen" : "offscreen");
 
@@ -568,7 +568,7 @@ static void offscreenUpdate(DROID *psDroid,
 			{
 				oldx = psDroid->pos.x;
 				oldy = psDroid->pos.y;
-				debug(LOG_MULTISYNC, "Jumping droid %d from (%u,%u) to (%u,%u)", (int)psDroid->id, oldx, oldy, (UDWORD)fx, (UDWORD)fy);
+				debug(LOG_SYNC, "Jumping droid %d from (%u,%u) to (%u,%u)", (int)psDroid->id, oldx, oldy, (UDWORD)fx, (UDWORD)fy);
 
 				psDroid->sMove.fx = fx;							//update x
 				psDroid->sMove.fy = fy;							//update y
@@ -590,7 +590,7 @@ static void offscreenUpdate(DROID *psDroid,
 	{
 		oldx = psDroid->pos.x;
 		oldy = psDroid->pos.y;
-		debug(LOG_MULTISYNC, "Moving droid %d from (%u,%u) to (%u,%u)", (int)psDroid->id, oldx, oldy, (UDWORD)fx, (UDWORD)fy);
+		debug(LOG_SYNC, "Moving droid %d from (%u,%u) to (%u,%u)", (int)psDroid->id, oldx, oldy, (UDWORD)fx, (UDWORD)fy);
 		psDroid->pos.x		 = (UWORD)x;						//update x
 		psDroid->pos.y		 = (UWORD)y;						//update y
 		gridMoveDroid(psDroid, (SDWORD)oldx,(SDWORD)oldy);

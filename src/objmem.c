@@ -94,7 +94,7 @@ static void objmemDestroy(BASE_OBJECT *psObj)
 	switch (psObj->type)
 	{
 		case OBJ_DROID:
-			debug(LOG_MEMORY, "objmemUpdate: freeing droid at %p", psObj);
+			debug(LOG_MEMORY, "freeing droid at %p", psObj);
 			if (!droidCheckReferences((DROID *)psObj))
 			{
 				return;
@@ -103,7 +103,7 @@ static void objmemDestroy(BASE_OBJECT *psObj)
 			break;
 
 		case OBJ_STRUCTURE:
-			debug(LOG_MEMORY, "objmemUpdate: freeing structure at %p", psObj);
+			debug(LOG_MEMORY, "freeing structure at %p", psObj);
 			if (!structureCheckReferences((STRUCTURE *)psObj))
 			{
 				return;
@@ -112,7 +112,7 @@ static void objmemDestroy(BASE_OBJECT *psObj)
 			break;
 
 		case OBJ_FEATURE:
-			debug(LOG_MEMORY, "objmemUpdate: freeing feature at %p", psObj);
+			debug(LOG_MEMORY, "freeing feature at %p", psObj);
 			featureRelease((FEATURE *)psObj);
 			break;
 
@@ -123,7 +123,7 @@ static void objmemDestroy(BASE_OBJECT *psObj)
 	audio_RemoveObj(psObj);
 
 	free(psObj);
-	debug(LOG_MEMORY, "objmemDestroy: BASE_OBJECT* 0x%p is freed.", psObj);
+	debug(LOG_MEMORY, "BASE_OBJECT* 0x%p is freed.", psObj);
 }
 
 /* General housekeeping for the object system */
@@ -229,7 +229,7 @@ static inline BASE_OBJECT* createObject(UDWORD player, OBJECT_TYPE objType)
 
 	if (newObject == NULL)
 	{
-		debug(LOG_ERROR, "createObject: Out of memory");
+		debug(LOG_ERROR, "Out of memory");
 		return NULL;
 	}
 
@@ -596,7 +596,7 @@ BOOL createFlagPosition(FLAG_POSITION **ppsNew, UDWORD player)
 	*ppsNew = malloc(sizeof(FLAG_POSITION));
 	if (*ppsNew == NULL)
 	{
-		debug(LOG_ERROR, "createFlagPosition: Out of memory");
+		debug(LOG_ERROR, "Out of memory");
 		return false;
 	}
 	(*ppsNew)->type = POS_DELIVERY;

@@ -64,8 +64,8 @@ static const char *code_part_names[] = {
 	"sensor",
 	"gui",
 	"map",
-	"savegame",
-	"multisync",
+	"save",
+	"sync",
 	"death",
 	"gateway",
 	"last"
@@ -311,7 +311,7 @@ void dumpLog(int file)
 	dumpEOL(file);
 }
 
-void _debug( code_part part, const char *str, ... )
+void _debug( code_part part, const char *function, const char *str, ... )
 {
 	va_list ap;
 	static char outputBuffer[MAX_LEN_LOG_LINE];
@@ -323,10 +323,12 @@ void _debug( code_part part, const char *str, ... )
 	static unsigned int prev = 0;     /* total on last update */
 
 	va_start(ap, str);
-	vsnprintf(inputBuffer[useInputBuffer1 ? 1 : 0], MAX_LEN_LOG_LINE, str, ap);
+	vsnprintf(outputBuffer, MAX_LEN_LOG_LINE, str, ap);
 	va_end(ap);
 	// Guarantee to nul-terminate
-	inputBuffer[useInputBuffer1 ? 1 : 0][MAX_LEN_LOG_LINE - 1] = '\0';
+	outputBuffer[MAX_LEN_LOG_LINE - 1] = '\0';
+
+	snprintf(inputBuffer[useInputBuffer1 ? 1 : 0], MAX_LEN_LOG_LINE, "[%s] %s", function, outputBuffer);
 
 	if ( strncmp( inputBuffer[0], inputBuffer[1], MAX_LEN_LOG_LINE - 1 ) == 0 ) {
 		// Received again the same line

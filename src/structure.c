@@ -677,7 +677,7 @@ BOOL loadStructureStats(const char *pStructData, UDWORD bufferSize)
 		psStructure->strength = getStructStrength(strength);
 		if (psStructure->strength == INVALID_STRENGTH)
 		{
-			debug( LOG_ERROR, "loadStructureStats: Unknown structure strength for %s", getStatName(psStructure) );
+			debug(LOG_ERROR, "Unknown structure strength for %s", getStatName(psStructure) );
 			abort();
 			return false;
 		}
@@ -733,8 +733,7 @@ BOOL loadStructureStats(const char *pStructData, UDWORD bufferSize)
 				"loadStructureStats: should have a sensor attached to %s!", StructureName );
 			if (psStructure->pSensor->location == LOC_TURRET && numWeaps)
 			{
-				debug( LOG_ERROR, "loadStructureStats: a Turret Sensor and weapon \
-					have been assigned to %s", StructureName );
+				debug(LOG_ERROR, "a Turret Sensor and weapon have been assigned to %s", StructureName);
 				abort();
 			}
 		}
@@ -806,7 +805,7 @@ BOOL loadStructureStats(const char *pStructData, UDWORD bufferSize)
 	}
 	if (iID > numStructureStats)
 	{
-		debug( LOG_ERROR, "intAddObjectStats: destroy structure stat not found\n" );
+		debug(LOG_ERROR, "destroy structure stat not found");
 		abort();
 	}
 	g_psStatDestroyStruct = asStructureStats + iID;
@@ -1111,7 +1110,7 @@ BOOL loadStructureStrengthModifiers(const char *pStrengthModData, UDWORD bufferS
 		effectInc = getWeaponEffect(weaponEffectName);
 		if (effectInc == INVALID_WEAPON_EFFECT)
 		{
-			debug( LOG_ERROR, "loadStructureStrengthModifiers: Invalid Weapon Effect - %s", weaponEffectName );
+			debug(LOG_ERROR, "Invalid Weapon Effect - %s", weaponEffectName);
 			abort();
 			return false;
 		}
@@ -1119,14 +1118,14 @@ BOOL loadStructureStrengthModifiers(const char *pStrengthModData, UDWORD bufferS
 		strengthInc = getStructStrength(strengthName);
 		if (strengthInc == INVALID_STRENGTH)
 		{
-			debug( LOG_ERROR, "loadStructureStrengthModifiers: Invalid Strength type - %s", strengthName );
+			debug(LOG_ERROR, "Invalid Strength type - %s", strengthName);
 			abort();
 			return false;
 		}
 
 		if (modifier > UWORD_MAX)
 		{
-			debug( LOG_ERROR, "loadStructureStrengthModifiers: modifier for effect %s, strength %s is too large", weaponEffectName, strengthName );
+			debug(LOG_ERROR, "modifier for effect %s, strength %s is too large", weaponEffectName, strengthName);
 			abort();
 			return false;
 		}
@@ -1262,7 +1261,7 @@ float structureDamage(STRUCTURE *psStructure, UDWORD damage, UDWORD weaponClass,
 
 	CHECK_STRUCTURE(psStructure);
 
-	debug(LOG_ATTACK, "structureDamage(%d): body %d armour %d damage: %d",
+	debug(LOG_ATTACK, "structure %d, body %d, armour %d, damage: %d",
 	      psStructure->id, psStructure->body, psStructure->armour[impactSide][weaponClass], damage);
 
 	relativeDamage = objDamage((BASE_OBJECT *)psStructure, damage, structureBody(psStructure), weaponClass, weaponSubClass, impactSide);
@@ -1270,7 +1269,7 @@ float structureDamage(STRUCTURE *psStructure, UDWORD damage, UDWORD weaponClass,
 	// If the shell did sufficient damage to destroy the structure
 	if (relativeDamage < 0.0f)
 	{
-		debug(LOG_ATTACK, "structureDamage(%d): DESTROYED", psStructure->id);
+		debug(LOG_ATTACK, "DESTROYED");
 		destroyStruct(psStructure);
 	}
 	else
@@ -1595,14 +1594,14 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 		if (map_coord(x) < TOO_NEAR_EDGE
 		 || map_coord(x) > (mapWidth - TOO_NEAR_EDGE))
 		{
-			debug(LOG_ERROR, "buildStructure: attempting to build too closely to map-edge, "
+			debug(LOG_ERROR, "attempting to build too closely to map-edge, "
 			      "x coord (%u) too near edge (req. distance is %u)", x, TOO_NEAR_EDGE);
 			return NULL;
 		}
 		if (map_coord(y) < TOO_NEAR_EDGE
 		 || map_coord(y) > (mapHeight - TOO_NEAR_EDGE))
 		{
-			debug(LOG_ERROR, "buildStructure: attempting to build too closely to map-edge, "
+			debug(LOG_ERROR, "attempting to build too closely to map-edge, "
 			      "y coord (%u) too near edge (req. distance is %u)", y, TOO_NEAR_EDGE);
 			return NULL;
 		}
@@ -1687,7 +1686,7 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 				else if (TILE_HAS_STRUCTURE(psTile))
 				{
 					debug(LOG_ERROR,
-					       "buildStructure: building %s at (%d, %d) but found %s already at (%d, %d)",
+					       "building %s at (%d, %d) but found %s already at (%d, %d)",
 					       pStructureType->pName, mapX, mapY,
 					       getTileStructure(mapX + width, mapY + breadth)->pStructureType->pName,
 					       mapX + width, mapY + breadth);
@@ -2123,7 +2122,7 @@ BOOL setFunctionality(STRUCTURE	*psBuilding, UDWORD functionType)
 
 			if (psBuilding->pFunctionality == NULL)
 			{
-				debug(LOG_ERROR, "setFunctionality: Out of memory");
+				debug(LOG_ERROR, "Out of memory");
 				abort();
 				return false;
 			}
@@ -2235,7 +2234,7 @@ BOOL setFunctionality(STRUCTURE	*psBuilding, UDWORD functionType)
 
 			if (!grpCreate(&((REPAIR_FACILITY*)psBuilding->pFunctionality)->psGroup))
 			{
-				debug( LOG_NEVER, "setFunctionality: couldn't create repair facility group" );
+				debug(LOG_NEVER, "couldn't create repair facility group");
 			}
 			else
 			{
@@ -2424,7 +2423,7 @@ static BOOL structClearTile(UWORD x, UWORD y)
 	/* Check for a structure */
 	if(fpathBlockingTile(x,y))
 	{
-		debug( LOG_NEVER, "structClearTile: failed\n");
+		debug(LOG_NEVER, "failed - blocked");
 		return false;
 	}
 
@@ -2436,13 +2435,13 @@ static BOOL structClearTile(UWORD x, UWORD y)
 			if (map_coord(psCurr->pos.x) == x
 			 && map_coord(psCurr->pos.y) == y)
 			{
-				debug( LOG_NEVER, "structClearTile: failed\n");
+				debug(LOG_NEVER, "failed - not vacant");
 				return false;
 			}
 		}
 	}
 
-	debug( LOG_NEVER, "structClearTile: succeeded\n");
+	debug(LOG_NEVER, "succeeded");
 	return true;
 }
 
@@ -3490,7 +3489,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 
 				if ( psDroid->body >= psDroid->originalBody )
 				{
-					debug( LOG_NEVER, "aiUpdateStructure: repair completed\n" );
+					debug(LOG_NEVER, "repair completed");
 
 					psRepairFac->psObj = NULL;
 
@@ -3954,8 +3953,7 @@ UDWORD fillStructureList(STRUCTURE_STATS **ppList, UDWORD selectedPlayer, UDWORD
 					}
 				}
 
-				debug( LOG_NEVER, "fillStructureList: adding %s (%x)\n",
-					psBuilding->pName, apStructTypeLists[selectedPlayer][inc]);
+				debug(LOG_NEVER, "adding %s (%x)", psBuilding->pName, apStructTypeLists[selectedPlayer][inc]);
 				ppList[count++] = psBuilding;
 				if (count == limit)
 				{
@@ -5405,12 +5403,7 @@ void structureCompletedCallback(STRUCTURE_STATS *psStructType)
 
 STRUCTURE_STATS * structGetDemolishStat( void )
 {
-	if ( g_psStatDestroyStruct == NULL )
-	{
-		debug( LOG_ERROR, "structGetDemolishStat: stat not initialised1\n" );
-		abort();
-	}
-
+	ASSERT(g_psStatDestroyStruct != NULL , "stat not initialised");
 	return g_psStatDestroyStruct;
 }
 

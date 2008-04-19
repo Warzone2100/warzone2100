@@ -57,9 +57,9 @@ extern char last_called_script_event[MAX_EVENT_NAME_LEN];
  * Arguments:	ASSERT( condition, "Format string with variables: %d, %d", var1, var2 );
  */
 #define ASSERT( expr, ... ) \
-	( (expr) ? (void)0 : (void)_debug( LOG_ERROR, __VA_ARGS__ ) ); \
-	( (expr) ? (void)0 : (void)_debug( LOG_ERROR, "Assert in Warzone: %s:%d : %s (%s), last script event: '%s'", \
-		__FILE__, __LINE__, __FUNCTION__, (#expr), last_called_script_event ) ); \
+	( (expr) ? (void)0 : (void)_debug( LOG_ERROR, __FUNCTION__, __VA_ARGS__ ) ); \
+	( (expr) ? (void)0 : (void)_debug( LOG_ERROR, __FUNCTION__, "Assert in Warzone: %s:%d (%s), last script event: '%s'", \
+		__FILE__, __LINE__, (#expr), last_called_script_event ) ); \
 	assert( expr );
 
 
@@ -100,8 +100,8 @@ typedef enum {
   LOG_SENSOR,
   LOG_GUI,
   LOG_MAP,
-  LOG_SAVEGAME,
-  LOG_MULTISYNC,
+  LOG_SAVE,
+  LOG_SYNC,
   LOG_DEATH,
   LOG_GATEWAY,
   LOG_LAST /**< _must_ be last! */
@@ -168,9 +168,9 @@ BOOL debug_enable_switch(const char *str);
  * \param	part	Code part to associate with this message
  * \param	str		printf style formatstring
  */
-#define debug(part, ...) do { if (enabled_debug[part]) _debug(part, __VA_ARGS__); } while(0)
-void _debug( code_part part, const char *str, ...)
-		WZ_DECL_FORMAT(printf, 2, 3);
+#define debug(part, ...) do { if (enabled_debug[part]) _debug(part, __FUNCTION__, __VA_ARGS__); } while(0)
+void _debug( code_part part, const char *function, const char *str, ...)
+		WZ_DECL_FORMAT(printf, 3, 4);
 
 /** Global to keep track of which game object to trace. */
 extern UDWORD traceID;
@@ -180,7 +180,7 @@ extern UDWORD traceID;
  * has been enabled.
  * @see debug
  */
-#define objTrace(part, id, ...) do { if (enabled_debug[part] && id == traceID) _debug(part, __VA_ARGS__); } while(0)
+#define objTrace(part, id, ...) do { if (enabled_debug[part] && id == traceID) _debug(part, __FUNCTION__, __VA_ARGS__); } while(0)
 static inline void objTraceEnable(UDWORD id) { traceID = id; }
 static inline void objTraceDisable(void) { traceID = 0; }
 
