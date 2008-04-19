@@ -78,12 +78,16 @@ static inline MESSAGE* createMessage(MESSAGE_TYPE msgType, UDWORD player)
 
 	ASSERT(player < MAX_PLAYERS, "createMessage: Bad player");
 	ASSERT(msgType < MSG_TYPES, "createMessage: Bad message");
+	if (player >= MAX_PLAYERS || msgType >= MSG_TYPES)
+	{
+		return NULL;
+	}
 
 	// Allocate memory for the message, and on failure return a NULL pointer
-	newMsg = (MESSAGE*)malloc(sizeof(MESSAGE));
+	newMsg = malloc(sizeof(MESSAGE));
+	ASSERT(newMsg, "Out of memory");
 	if (newMsg == NULL)
 	{
-		ASSERT(false, "createMessage: out of memory");
 		return NULL;
 	}
 
@@ -273,11 +277,11 @@ MESSAGE * addMessage(MESSAGE_TYPE msgType, BOOL proxPos, UDWORD player)
 	//first create a message of the required type
 	MESSAGE* psMsgToAdd = createMessage(msgType, player);
 
-	debug(LOG_WZ, "addMessage: adding message for player %d, type is %d, proximity is %d", player, msgType, proxPos);
+	debug(LOG_MSG, "adding message for player %d, type is %d, proximity is %d", player, msgType, proxPos);
 
+	ASSERT(psMsgToAdd, "createMessage failed");
 	if (!psMsgToAdd)
 	{
-		ASSERT(false, "addMessage: createMessage failed");
 		return NULL;
 	}
 	//then add to the players' list
@@ -299,6 +303,7 @@ static void addProximityDisplay(MESSAGE *psMessage, BOOL proxPos, UDWORD player)
 	PROXIMITY_DISPLAY *psToAdd;
 
 	ASSERT(player < MAX_PLAYERS, "addProximityDisplay: Bad player");
+	debug(LOG_MSG, "Added prox display for player %u (proxPos=%d)", player, (int)proxPos);
 
 	//create the proximity display
 	psToAdd = (PROXIMITY_DISPLAY*)malloc(sizeof(PROXIMITY_DISPLAY));
@@ -342,7 +347,7 @@ void removeMessage(MESSAGE *psDel, UDWORD player)
 {
 	ASSERT(player < MAX_PLAYERS, "removeMessage: Bad player");
 	ASSERT(psDel != NULL, "removeMessage: Bad message");
-	debug(LOG_WZ, "removeMessage: removing message for player %d", player);
+	debug(LOG_MSG, "removeMessage: removing message for player %d", player);
 
 	if (psDel->type == MSG_PROXIMITY)
 	{
@@ -499,25 +504,25 @@ VIEWDATA *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 		//check not loading up too many text strings
 		if (numText > MAX_DATA)
 		{
-			ASSERT(false, "loadViewData: too many text strings for %s", psViewData->pName);
+			ASSERT(false, "too many text strings");
 			return NULL;
 		}
 		psViewData->numText=(UBYTE)numText;
 
 		//allocate storage for the name
- 		psViewData->pName = (char *)malloc((strlen(name))+1);
+ 		psViewData->pName = malloc(strlen(name) + 1);
 		if (psViewData->pName == NULL)
 		{
-			ASSERT(false, "ViewData Name - Out of memory");
+			ASSERT(false, "Out of memory");
 			return NULL;
 		}
-		strcpy(psViewData->pName,name);
+		strcpy(psViewData->pName, name);
+		debug(LOG_MSG, "Loaded %s", psViewData->pName);
 
 		//allocate space for text strings
 		if (psViewData->numText)
 		{
-			psViewData->ppTextMsg = (char **) malloc(psViewData->numText *
-				sizeof(char *));
+			psViewData->ppTextMsg = malloc(psViewData->numText * sizeof(char *));
 		}
 
 		//read in the data for the text strings

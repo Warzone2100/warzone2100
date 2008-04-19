@@ -3117,7 +3117,6 @@ void intDisplayTransportButton(WIDGET *psWidget, UDWORD xOffset,
 void drawRadarBlips(void)
 {
 	PROXIMITY_DISPLAY	*psProxDisp;
-	FEATURE			*psFeature;
 	UWORD			imageID;
 	UDWORD			delay = 150;
 	UDWORD			i;
@@ -3142,7 +3141,7 @@ void drawRadarBlips(void)
 					ASSERT(pViewData->pData != NULL, "Help message without data!");
 					if (pViewData->pData != NULL && (((VIEW_PROXIMITY *)pViewData->pData)->timeAdded + 60000) <= gameTime)
 					{
-						debug(LOG_WZ, "blip timeout for %d, from %d", i, (((VIEW_PROXIMITY *)pViewData->pData)->sender));
+						debug(LOG_MSG, "blip timeout for %d, from %d", i, (((VIEW_PROXIMITY *)pViewData->pData)->sender));
 						removeMessage(psCurr, i);	//remove beacon
 						break;	//there can only be 1 beacon per player
 					}
@@ -3167,8 +3166,10 @@ void drawRadarBlips(void)
 			}
 			else
 			{
-				psFeature = (FEATURE *)psProxDisp->psMessage->pViewData;
-				if (psFeature && psFeature->psStats->subType == FEAT_OIL_RESOURCE)
+				FEATURE *psFeature = (FEATURE *)psProxDisp->psMessage->pViewData;
+
+				ASSERT(psFeature && psFeature->psStats, "Bad feature message")
+				if (psFeature && psFeature->psStats && psFeature->psStats->subType == FEAT_OIL_RESOURCE)
 				{
 					proxType = PROX_RESOURCE;
 				}

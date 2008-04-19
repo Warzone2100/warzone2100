@@ -93,18 +93,16 @@
 
 static INTERP_VAL	scrFunctionResult;	//function return value to be pushed to stack
 
-//used in the set nogoArea and LandingZone functions - use the ones defined in Map.h
-//#define MAX_MAP_WIDTH		192
-//#define MAX_MAP_HEIGHT		128
-
 // If this is defined then check max number of units not reached before adding more.
 #define SCRIPT_CHECK_MAX_UNITS
 
 static SDWORD	bitMask[] = {0x01,0x02,0x04,0x08,0x10,0x20,0x40,0x80};
 static char		strParam1[MAXSTRLEN], strParam2[MAXSTRLEN];		//these should be used as string parameters for stackPopParams()
 
+static VIEWDATA *HelpViewData(SDWORD sender, char *textMsg, UDWORD LocX, UDWORD LocY);
+
 // -----------------------------------------------------------------------------------------
-BOOL	structHasModule(STRUCTURE *psStruct);
+static BOOL	structHasModule(STRUCTURE *psStruct);
 
 /******************************************************************************************/
 /*                 Check for objects in areas                                             */
@@ -1359,6 +1357,7 @@ BOOL scrAddMessage(void)
 	{
 		//set the data
 		psMessage->pViewData = (MSG_VIEWDATA *)psViewData;
+		debug(LOG_MSG, "Adding %s pViewData=%p", psViewData->pName, psMessage->pViewData);
 		if (msgType == MSG_PROXIMITY)
 		{
 			//check the z value is at least the height of the terrain
@@ -1389,30 +1388,28 @@ BOOL scrRemoveMessage(void)
 	SDWORD			player;
 	VIEWDATA		*psViewData;
 
-
-	if (!stackPopParams(3, ST_INTMESSAGE, &psViewData , VAL_INT, &msgType,
-				VAL_INT, &player))
+	if (!stackPopParams(3, ST_INTMESSAGE, &psViewData , VAL_INT, &msgType, VAL_INT, &player))
 	{
 		return false;
 	}
 
-	if (player >= MAX_PLAYERS)
+	ASSERT(player < MAX_PLAYERS && player >= 0, "bad player number");
+	if (player >= MAX_PLAYERS || player < 0)
 	{
-		ASSERT( false, "scrAddMessage:player number is too high" );
 		return false;
 	}
 
 	//find the message
 	psMessage = findMessage((MSG_VIEWDATA *)psViewData, msgType, player);
+	ASSERT(psMessage, "cannot find message - %s", psViewData->pName);
 	if (psMessage)
 	{
 		//delete it
+		debug(LOG_MSG, "Removing %s", psViewData->pName);
 		removeMessage(psMessage, player);
 	}
 	else
 	{
-		ASSERT( false, "scrRemoveMessage:cannot find message - %s",
-			psViewData->pName );
 		return false;
 	}
 
@@ -3242,6 +3239,7 @@ BOOL scrGameOverMessage(void)
 			videoLoop();
 		}*/
 	}
+	debug(LOG_MSG, "Game over message");
 
     // this should be called when the video Quit is processed
     // not always is tough, so better be sure
@@ -5453,7 +5451,7 @@ DROID	*psDroid;
 	return(true);
 }
 // -----------------------------------------------------------------------------------------
-BOOL	structHasModule(STRUCTURE *psStruct)
+static BOOL	structHasModule(STRUCTURE *psStruct)
 {
 STRUCTURE_STATS	*psStats;
 BOOL			bFound;
@@ -10139,10 +10137,11 @@ BOOL addHelpBlip(SDWORD locX, SDWORD locY, SDWORD forPlayer, SDWORD sender, char
 		//{
 			((VIEW_PROXIMITY *)pTempData->pData)->z = height;
 		//}
+		debug(LOG_MSG, "blip added, pViewData=%p", psMessage->pViewData);
 	}
 	else
 	{
-		debug(LOG_WZ, "addHelpBlip: addMessage() failed");
+		debug(LOG_MSG, "call failed");
 	}
 
 	//Received a blip message from a player callback
@@ -10186,7 +10185,7 @@ BOOL sendBeaconToPlayer(SDWORD locX, SDWORD locY, SDWORD forPlayer, SDWORD sende
 }
 
 //prepare viewdata for help blip
-VIEWDATA *HelpViewData(SDWORD sender, char *textMsg, UDWORD LocX, UDWORD LocY)
+static VIEWDATA *HelpViewData(SDWORD sender, char *textMsg, UDWORD LocX, UDWORD LocY)
 {
 	VIEWDATA			*psViewData;
 	SDWORD				audioID;
@@ -10256,6 +10255,7 @@ VIEWDATA *HelpViewData(SDWORD sender, char *textMsg, UDWORD LocX, UDWORD LocY)
 
 	//remember when the message was created so can remove it after some time
 	((VIEW_PROXIMITY *)psViewData->pData)->timeAdded = gameTime;
+	debug(LOG_MSG, "Added message");
 
 	return psViewData;
 }

@@ -68,6 +68,7 @@ static const char *code_part_names[] = {
 	"sync",
 	"death",
 	"gateway",
+	"message",
 	"last"
 };
 

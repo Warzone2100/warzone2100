@@ -104,6 +104,7 @@ typedef enum {
   LOG_SYNC,
   LOG_DEATH,
   LOG_GATEWAY,
+  LOG_MSG,
   LOG_LAST /**< _must_ be last! */
 } code_part;
 

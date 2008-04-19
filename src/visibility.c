@@ -638,6 +638,7 @@ void processVisibility(BASE_OBJECT *psObj)
 					audio_QueueTrackPos( ID_SOUND_RESOURCE_HERE,
 										psObj->pos.x, psObj->pos.y, psObj->pos.z );
 				}
+				debug(LOG_MSG, "Added message for oil well, pViewData=%p", psMessage->pViewData);
 			}
 		}
 
@@ -654,6 +655,7 @@ void processVisibility(BASE_OBJECT *psObj)
 					audio_QueueTrackPos( ID_SOUND_ARTEFACT_DISC,
 									psObj->pos.x, psObj->pos.y, psObj->pos.z );
 				}
+				debug(LOG_MSG, "Added message for artefact, pViewData=%p", psMessage->pViewData);
 			}
 	}
 }
