@@ -45,6 +45,7 @@
 #include "lib/ivis_common/ivi.h"
 #include "lib/script/script.h"
 #include "scripttabs.h"
+#include "research.h"
 
 // minimum type number for a type instruction
 #define MULTI_TYPE_START	10
@@ -951,18 +952,36 @@ BOOL levLoadData(char *pName, char *pSaveName, SDWORD saveType)
 	return true;
 }
 
+static void levTestLoad(char *level)
+{
+	static char savegameName[80];
+	bool retval;
+
+	retval = levLoadData(level, NULL, 0);
+	ASSERT(retval, "levLoadData failed selftest");
+	ASSERT(checkResearchStats(), "checkResearchStats failed selftest");
+	ASSERT(checkStructureStats(), "checkStructureStats failed selftest");
+	fprintf(stdout, "\t\tLoaded: %s\n", level);
+	strcpy(savegameName, "selftest/");
+	PHYSFS_mkdir(savegameName);
+	strcat(savegameName, level);
+	strcat(savegameName, ".gam");
+	retval = saveGame(savegameName, GTYPE_SAVE_START);
+	ASSERT(retval, "saveGame failed selftest");
+	strcpy(savegameName, "selftest/");	// we need to recreate string, because saveGame clobbered it
+	strcat(savegameName, level);
+	strcat(savegameName, ".gam");
+	levReleaseAll();
+	fprintf(stdout, "\t\tSaved: %s\n", savegameName);
+}
+
 void levTest(void)
 {
 	fprintf(stdout, "\tLevels self-test...\n");
-	levLoadData("CAM_1A", NULL, 0);		levReleaseAll();
-	fprintf(stdout, "\t\tLoaded: CAM_1A\n");
-	levLoadData("CAM_2A", NULL, 0);		levReleaseAll();
-	fprintf(stdout, "\t\tLoaded: CAM_2A\n");
-	levLoadData("CAM_3A", NULL, 0);		levReleaseAll();
-	fprintf(stdout, "\t\tLoaded: CAM_3A\n");
-	levLoadData("FASTPLAY", NULL, 0);	levReleaseAll();
-	fprintf(stdout, "\t\tLoaded: FASTPLAY\n");
-	levLoadData("TUTORIAL3", NULL, 0);	levReleaseAll();
-	fprintf(stdout, "\t\tLoaded: TUTORIAL3\n");
+	levTestLoad("CAM_1A");
+	levTestLoad("CAM_2A");
+	levTestLoad("CAM_3A");
+	levTestLoad("FASTPLAY");
+	levTestLoad("TUTORIAL3");
 	fprintf(stdout, "\tLevels self-test: PASSED\n");
 }

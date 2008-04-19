@@ -3538,11 +3538,16 @@ BOOL saveGame(char *aFileName, SDWORD saveType)
 	UDWORD			fileExtension;
 	DROID			*psDroid, *psNext;
 
+	ASSERT(aFileName && strlen(aFileName) > 4, "Bad savegame filename");
+	if (!aFileName || strlen(aFileName) < 4)
+	{
+		return false;
+	}
+
 	debug(LOG_WZ, "saveGame: %s", aFileName);
 
 	fileExtension = strlen(aFileName) - 3;
 	gameTimeStop();
-
 
 	/* Write the data to the file */
 	if (!writeGameFile(aFileName, saveType))
