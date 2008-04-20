@@ -489,6 +489,7 @@ static string GetWorkingDir()
 
     // Retrieve the current working directory
     if (!getcwd(curDir, curDirSize))
+    {
         if (errno == ERANGE)
         {
             delete [] curDir;
@@ -504,6 +505,7 @@ static string GetWorkingDir()
         {
             curDir[0] = '\0';
         }
+    }
 
     string cwd(curDir);
     delete [] curDir;
