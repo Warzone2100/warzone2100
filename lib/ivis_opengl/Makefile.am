@@ -1,5 +1,5 @@
 AM_CPPFLAGS = $(SDL_CFLAGS) $(PNG_CFLAGS) $(OPENGLC_CFLAGS) $(OPENGL_CFLAGS) $(WZ_CPPFLAGS)
-AM_CFLAGS = $(WZ_CFLAGS)
+AM_CFLAGS = $(WZ_CFLAGS) -Wno-missing-declarations
 
 noinst_LIBRARIES = libivis_opengl.a
 noinst_HEADERS = GLee.h piematrix.h screen.h
