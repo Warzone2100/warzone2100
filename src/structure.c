@@ -5296,9 +5296,6 @@ void setFlagPositionInc(FUNCTIONALITY* pFunctionality, UDWORD player, UBYTE fact
 	UBYTE			mask = 1;
 	FACTORY			*psFactory;
 	REPAIR_FACILITY *psRepair;
-#ifdef DEBUG
-	char			*pType;			//if you are going to do this, then make SURE you also do the same to anything
-#endif									//that uses the variable.
 
 	ASSERT( player < MAX_PLAYERS, "setFlagPositionInc: invalid player number" );
 	//find the first vacant slot
@@ -5315,6 +5312,8 @@ void setFlagPositionInc(FUNCTIONALITY* pFunctionality, UDWORD player, UBYTE fact
 	{
 		//this may happen now with electronic warfare
 #ifdef DEBUG
+		const char* pType;
+
 		switch (factoryType)
 		{
 			case FACTORY_FLAG:

@@ -63,7 +63,7 @@ static LEVEL_DATASET	*psBaseData;
 static LEVEL_DATASET	*psCurrLevel;
 
 // dummy level data for single WRF loads
-static LEVEL_DATASET	sSingleWRF;
+static LEVEL_DATASET	sSingleWRF = { 0, 0, 0, 0, 0, { 0 }, 0, 0, 0 };
 
 // return values from the lexer
 char *pLevToken;
@@ -138,7 +138,7 @@ void levError(const char *pError)
 }
 
 // find the level dataset
-BOOL levFindDataSet(char *pName, LEVEL_DATASET **ppsDataSet)
+BOOL levFindDataSet(const char* name, LEVEL_DATASET **ppsDataSet)
 {
 	LEVEL_DATASET	*psNewLevel;
 
@@ -146,7 +146,7 @@ BOOL levFindDataSet(char *pName, LEVEL_DATASET **ppsDataSet)
 	{
 		if (psNewLevel->pName != NULL)
 		{
-			if (strcmp(psNewLevel->pName, pName) == 0)
+			if (strcmp(psNewLevel->pName, name) == 0)
 			{
 				*ppsDataSet = psNewLevel;
 				return true;
@@ -525,14 +525,19 @@ BOOL levReleaseAll(void)
 }
 
 // load up a single wrf file
-static BOOL levLoadSingleWRF(char *pName)
+static BOOL levLoadSingleWRF(const char* name)
 {
 	// free the old data
 	levReleaseAll();
 
 	// create the dummy level data
+	if (sSingleWRF.pName)
+	{
+		free(sSingleWRF.pName);
+	}
+
 	memset(&sSingleWRF, 0, sizeof(LEVEL_DATASET));
-	sSingleWRF.pName = pName;
+	sSingleWRF.pName = strdup(name);
 
 	// load up the WRF
 	if (!stageOneInitialise())
@@ -541,8 +546,8 @@ static BOOL levLoadSingleWRF(char *pName)
 	}
 
 	// load the data
-	debug(LOG_WZ, "levLoadSingleWRF: Loading %s ...", pName);
-	if (!resLoad(pName, 0))
+	debug(LOG_WZ, "levLoadSingleWRF: Loading %s ...", name);
+	if (!resLoad(name, 0))
 	{
 		return false;
 	}
@@ -565,25 +570,25 @@ char *getLevelName( void )
 
 
 // load up the data for a level
-BOOL levLoadData(char *pName, char *pSaveName, SDWORD saveType)
+BOOL levLoadData(const char* name, char *pSaveName, SDWORD saveType)
 {
 	LEVEL_DATASET	*psNewLevel, *psBaseData, *psChangeLevel;
 	SDWORD			i;
 	BOOL            bCamChangeSaveGame;
 
-	debug(LOG_WZ, "Loading level %s (%s)", pName, pSaveName);
+	debug(LOG_WZ, "Loading level %s (%s)", name, pSaveName);
 
 	levelLoadType = saveType;
 
 	// find the level dataset
-	if (!levFindDataSet(pName, &psNewLevel))
+	if (!levFindDataSet(name, &psNewLevel))
 	{
-		debug( LOG_NEVER, "levLoadData: dataset %s not found - trying to load as WRF", pName );
-		return levLoadSingleWRF(pName);
+		debug(LOG_NEVER, "levLoadData: dataset %s not found - trying to load as WRF", name);
+		return levLoadSingleWRF(name);
 	}
 
 	/* Keep a copy of the present level name */
-	strlcpy(currentLevelName, pName, sizeof(currentLevelName));
+	strlcpy(currentLevelName, name, sizeof(currentLevelName));
 
 	bCamChangeSaveGame = false;
 	if (pSaveName && saveType == GTYPE_SAVE_START)
@@ -952,7 +957,7 @@ BOOL levLoadData(char *pName, char *pSaveName, SDWORD saveType)
 	return true;
 }
 
-static void levTestLoad(char *level)
+static void levTestLoad(const char* level)
 {
 	static char savegameName[80];
 	bool retval;

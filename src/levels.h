@@ -84,10 +84,10 @@ extern void levShutDown(void);
 extern BOOL levInitialise(void);
 
 // load up the data for a level
-extern BOOL levLoadData(char *pName, char *pSaveName, SDWORD saveType);
+extern BOOL levLoadData(const char* name, char *pSaveName, SDWORD saveType);
 
 // find the level dataset
-extern BOOL levFindDataSet(char *pName, LEVEL_DATASET **ppsDataSet);
+extern BOOL levFindDataSet(const char* name, LEVEL_DATASET **ppsDataSet);
 
 // free the currently loaded dataset
 extern BOOL levReleaseAll(void);
