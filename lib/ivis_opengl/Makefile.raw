@@ -1,7 +1,8 @@
 MAKERULES=../../makerules
 include $(MAKERULES)/configure.mk
 
-SRC=	ivi.c \
+SRC=GLee.c \
+	ivi.c \
 	pieblitfunc.c \
 	piedraw.c \
 	piefunc.c \

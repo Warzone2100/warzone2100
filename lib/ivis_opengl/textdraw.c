@@ -18,6 +18,7 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
+#include "lib/ivis_opengl/GLee.h"
 #include "lib/framework/frame.h"
 #include <stdlib.h>
 #include <string.h>
@@ -32,7 +33,6 @@
 #include "lib/ivis_common/textdraw.h"
 #include "lib/ivis_common/bitimage.h"
 
-#include <SDL_opengl.h>
 #ifdef WZ_OS_MAC
 # include <QuesoGLC/glc.h>
 #else

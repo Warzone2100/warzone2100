@@ -17,9 +17,10 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
+
+#include "lib/ivis_opengl/GLee.h"
 #include "lib/framework/frame.h"
 
-#include <SDL_opengl.h>
 #ifdef __APPLE__
 #include <opengl/glu.h>
 #else
@@ -106,7 +107,7 @@ int pie_AddTexPage(iV_Image *s, const char* filename, int slot)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 	// Use anisotropic filtering, if available, but only max 4.0 to reduce processor burden
-	if (check_extension("GL_EXT_texture_filter_anisotropic"))
+	if (GLEE_EXT_texture_filter_anisotropic)
 	{
 		GLfloat max;
 

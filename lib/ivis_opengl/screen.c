@@ -24,10 +24,10 @@
  *
  */
 
+#include "lib/ivis_opengl/GLee.h"
 #include "lib/framework/frame.h"
 
 #include <SDL.h>
-#include <SDL_opengl.h>
 #include <physfs.h>
 #include <png.h>
 #include "lib/ivis_common/png_util.h"
@@ -147,20 +147,46 @@ BOOL screenInitialise(
 	{
 		debug( LOG_ERROR, "OpenGL initialization did not give double buffering!" );
 	}
+	// Note that no initialisation of GLee is required, since this is handled automatically.
+
 	debug(LOG_3D, "OpenGL extensions supported:");
-	if (check_extension("GL_ARB_texture_compression"))
+	if (GLEE_VERSION_1_2)
+	{
+		debug(LOG_3D, "  * OpenGL 1.2 is supported!");
+	}
+	if (GLEE_VERSION_1_3)
+	{
+		debug(LOG_3D, "  * OpenGL 1.3 is supported!");
+	}
+	if (GLEE_VERSION_1_4)
+	{
+		debug(LOG_3D, "  * OpenGL 1.4 is supported!");
+	}
+	if (GLEE_VERSION_1_5)
+	{
+		debug(LOG_3D, "  * OpenGL 1.5 is supported!");
+	}
+	if (GLEE_VERSION_2_0)
+	{
+		debug(LOG_3D, "  * OpenGL 2.0 is supported!");
+	}
+	if (GLEE_VERSION_2_1)
+	{
+		debug(LOG_3D, "  * OpenGL 2.1 is supported!");
+	}
+	if (GLEE_ARB_texture_compression)
 	{
 		debug(LOG_3D, "  * Texture compression supported.");
 	}
-	if (check_extension("GL_EXT_stencil_two_side"))
+	if (GLEE_EXT_stencil_two_side)
 	{
 		debug(LOG_3D, "  * Two side stencil supported.");
 	}
-	if (check_extension("GL_EXT_stencil_wrap"))
+	if (GLEE_EXT_stencil_wrap)
 	{
 		debug(LOG_3D, "  * Stencil wrap supported.");
 	}
-	if (check_extension("GL_EXT_texture_filter_anisotropic"))
+	if (GLEE_EXT_texture_filter_anisotropic)
 	{
 		debug(LOG_3D, "  * Anisotropic filtering supported.");
 	}

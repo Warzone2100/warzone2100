@@ -21,9 +21,8 @@
  *  Matrix manipulation functions.
  */
 
+#include "lib/ivis_opengl/GLee.h"
 #include "lib/framework/frame.h"
-
-#include <SDL_opengl.h>
 
 #include "lib/ivis_common/piedef.h"
 #include "lib/ivis_common/pieclip.h"

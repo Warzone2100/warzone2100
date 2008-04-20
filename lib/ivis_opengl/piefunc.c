@@ -21,10 +21,9 @@
  *  Extended render routines for 3D rendering.
  */
 
+#include "lib/ivis_opengl/GLee.h"
 #include "lib/framework/frame.h"
 #include "lib/framework/frameint.h"
-
-#include <SDL_opengl.h>
 
 #include "lib/gamelib/gtime.h"
 #include "lib/ivis_common/piedef.h"

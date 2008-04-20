@@ -763,6 +763,19 @@
 			<Option target="DBGWindows" />
 			<Option target="NDBGWindows" />
 		</Unit>
+		<Unit filename="lib/ivis_opengl/GLee.c">
+			<Option compilerVar="CC" />
+			<Option target="DBGUnix" />
+			<Option target="NDBGUnix" />
+			<Option target="DBGWindows" />
+			<Option target="NDBGWindows" />
+		</Unit>
+		<Unit filename="lib/ivis_opengl/GLee.h">
+			<Option target="DBGUnix" />
+			<Option target="NDBGUnix" />
+			<Option target="DBGWindows" />
+			<Option target="NDBGWindows" />
+		</Unit>
 		<Unit filename="lib/ivis_opengl/ivi.c">
 			<Option compilerVar="CC" />
 			<Option target="DBGUnix" />

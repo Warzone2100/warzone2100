@@ -21,8 +21,8 @@
  *  Render routines for 3D coloured and shaded transparency rendering.
  */
 
+#include "lib/ivis_opengl/GLee.h"
 #include <string.h>
-#include <SDL_opengl.h>
 #include <SDL_video.h>
 
 #include "lib/framework/frame.h"
@@ -52,72 +52,6 @@ static GLfloat *aVertex = NULL;
 static GLuint rowLength;	///< Length of one array table row in tiles
 
 extern BOOL drawing_interface;
-
-/*
- *	OpenGL extensions for shadows
- */
-
-BOOL check_extension(const char *extName)
-{
-	const char *p = (const char *)glGetString(GL_EXTENSIONS);
-	const char *end;
-	size_t extNameLen= strlen(extName);
-
-	end = p + strlen(p);
-	while (p < end)
-	{
-		int n = strcspn(p, " ");
-		if ((extNameLen == n) && (strncmp(extName, p, n) == 0))
-		{
-			return true;
-		}
-		p += (n + 1);
-	}
-	return false;
-}
-
-// EXT_stencil_two_side
-#ifndef GL_EXT_stencil_two_side
-# define GL_EXT_stencil_two_side 1
-# define GL_STENCIL_TEST_TWO_SIDE_EXT      0x8910
-# define GL_ACTIVE_STENCIL_FACE_EXT        0x8911
-typedef void (APIENTRY * PFNGLACTIVESTENCILFACEEXTPROC) (GLenum face);
-#endif
-
-#ifndef WZ_OS_MAC
-PFNGLACTIVESTENCILFACEEXTPROC glActiveStencilFaceEXT;
-#endif
-
-
-/** Check if we can use one-pass stencil in the shadow draw code. */
-static BOOL stencil_one_pass(void)
-{
-	// tribool, -1: uninitialized, 0: false, 1: true
-	static int can_do_stencil_one_pass = -1;
-
-	if (can_do_stencil_one_pass < 0) {
-		can_do_stencil_one_pass = 0; // can't use it until we decide otherwise
-
-		// let's check if we have the needed extensions
-#ifdef WZ_OS_MAC
-		can_do_stencil_one_pass = 1;
-#else
-		if( check_extension("GL_EXT_stencil_two_side")
-		 && check_extension("GL_EXT_stencil_wrap"))
-		{
-			// retrieve the function pointer
-			glActiveStencilFaceEXT = (PFNGLACTIVESTENCILFACEEXTPROC) SDL_GL_GetProcAddress("glActiveStencilFaceEXT");
-			if(glActiveStencilFaceEXT)
-			{
-				// all went well
-				can_do_stencil_one_pass = 1;
-			}
-		}
-#endif /* WZ_OS_MAC */
-	}
-
-	return (1 == can_do_stencil_one_pass); // to get the types right
-}
 
 /*
  *	Local Variables
@@ -705,7 +639,10 @@ static void pie_DrawShadows(void)
 	glDepthMask(GL_FALSE);
 	glEnable(GL_STENCIL_TEST);
 
-	if (stencil_one_pass()) {
+	// Check if we have the required extensions
+	if (GLEE_EXT_stencil_two_side
+	 && GLEE_EXT_stencil_wrap)
+	{
 		glEnable(GL_STENCIL_TEST_TWO_SIDE_EXT);
 		glDisable(GL_CULL_FACE);
 		glStencilMask(~0);
@@ -719,7 +656,9 @@ static void pie_DrawShadows(void)
 		pie_ShadowDrawLoop();
 		glDisable(GL_STENCIL_TEST_TWO_SIDE_EXT);
 
-	} else {
+	}
+	else
+	{
 		// Setup stencil for back faces.
 		glStencilMask(~0);
 		glStencilFunc(GL_ALWAYS, 0, ~0);

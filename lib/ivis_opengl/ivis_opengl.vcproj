@@ -6,7 +6,6 @@
 	ProjectGUID="{4D637147-73F9-4A51-944B-34BF78E6C6DC}"
 	RootNamespace="ivis_opengl"
 	Keyword="Win32Proj"
-	TargetFrameworkVersion="131072"
 	>
 	<Platforms>
 		<Platform
@@ -150,6 +149,10 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
+				RelativePath=".\GLee.c"
+				>
+			</File>
+			<File
 				RelativePath=".\ivi.c"
 				>
 			</File>
@@ -203,6 +206,10 @@
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
+			<File
+				RelativePath=".\GLee.h"
+				>
+			</File>
 			<File
 				RelativePath=".\piematrix.h"
 				>

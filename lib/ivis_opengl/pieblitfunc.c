@@ -26,10 +26,9 @@
  */
 /***************************************************************************/
 
+#include "lib/ivis_opengl/GLee.h"
 #include "lib/framework/frame.h"
-
 #include <time.h>
-#include <SDL_opengl.h>
 
 #include "lib/ivis_common/pieblitfunc.h"
 #include "lib/ivis_common/piedef.h"

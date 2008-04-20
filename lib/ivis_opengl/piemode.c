@@ -26,10 +26,10 @@
  */
 /***************************************************************************/
 
+#include "lib/ivis_opengl/GLee.h"
 #include "lib/framework/frame.h"
 
 #include <SDL.h>
-#include <SDL_opengl.h>
 
 #include "lib/ivis_common/piedef.h"
 #include "lib/ivis_common/piestate.h"
@@ -58,11 +58,13 @@ BOOL pie_Initialise(void)
 	rendSurface.size = 0;
 
 	/* Find texture compression extension */
-	if (check_extension("GL_ARB_texture_compression"))
+	if (GLEE_ARB_texture_compression)
 	{
 		debug(LOG_TEXTURE, "Texture compression: Yes");
 		wz_texture_compression = GL_COMPRESSED_RGBA_ARB;
-	} else {
+	}
+	else
+	{
 		debug(LOG_TEXTURE, "Texture compression: No");
 		wz_texture_compression = GL_RGBA;
 	}

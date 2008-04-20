@@ -25,10 +25,10 @@
  * along with connection and game options.
  */
 
+#include "lib/ivis_opengl/GLee.h"
 #include "lib/framework/frame.h"
 
 #include <time.h>
-#include <SDL_opengl.h>
 
 #include "lib/framework/frameresource.h"
 #include "lib/framework/frameint.h"
