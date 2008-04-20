@@ -334,9 +334,6 @@ extern BOOL scriptLookUpCallback(const char *pIdent, CALLBACK_SYMBOL **ppsCallba
 /* Lookup an event symbol */
 extern BOOL scriptLookUpEvent(const char *pIdent, EVENT_SYMBOL **ppsEvent);
 
-/* Reset the local variable symbol table */
-extern void scriptClearLocalVariables(void);
-
 /* Add a new function symbol */
 extern BOOL scriptStartFunctionDef(const char *pIdent,	// Functions name
 						  INTERP_TYPE		type);		// return type

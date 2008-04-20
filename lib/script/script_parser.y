@@ -101,9 +101,6 @@ static VAR_SYMBOL	*psGlobalVars=NULL;
 /* The list of global arrays */
 static VAR_SYMBOL	*psGlobalArrays=NULL;
 
-/* The list of current local variables */
-static VAR_SYMBOL	*psLocalVars=NULL;
-
 #define			maxEventsLocalVars		1200
 static VAR_SYMBOL	*psLocalVarsB[maxEventsLocalVars];	/* local var storage */
 static UDWORD		numEventLocalVars[maxEventsLocalVars];	/* number of declard local vars for each event */
@@ -5904,20 +5901,6 @@ BOOL scriptLookUpType(const char *pIdent, INTERP_TYPE *pType)
 	return false;
 }
 
-
-/* Reset the local variable symbol table at the end of a function */
-void scriptClearLocalVariables(void)
-{
-	VAR_SYMBOL	*psCurr, *psNext;
-
-	for(psCurr = psLocalVars; psCurr != NULL; psCurr = psNext)
-	{
-		psNext = psCurr->psNext;
-		free(psCurr->pIdent);
-		free(psCurr);
-	}
-}
-
 /* pop passed arguments (if any) */
 BOOL popArguments(INTERP_VAL **ip_temp, SDWORD numParams)
 {
@@ -6063,17 +6046,6 @@ BOOL scriptLookUpVariable(const char *pIdent, VAR_SYMBOL **ppsSym)
 				*ppsSym = psCurr;
 				return true;
 			}
-		}
-	}
-
-	/* See if the symbol is in the local variable list */
-	for(psCurr = psLocalVars; psCurr != NULL; psCurr = psCurr->psNext)
-	{
-		if (strcmp(psCurr->pIdent, pIdent) == 0)
-		{
-			//debug(LOG_SCRIPT, "scriptLookUpVariable: local");
-			*ppsSym = psCurr;
-			return true;
 		}
 	}
 
