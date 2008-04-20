@@ -491,8 +491,11 @@ static inline CODE_ERROR do_ALLOC_VARIDENTDECL(VAR_IDENT_DECL** psDcl, const cha
 }
 
 /* Free a variable declaration block */
-#define FREE_VARIDENTDECL(psDcl) \
-	free(psDcl)
+static void freeVARIDENTDECL(VAR_IDENT_DECL* psDcl)
+{
+	free(psDcl->pIdent);
+	free(psDcl);
+}
 
 /****************************************************************************************
  *
@@ -1638,8 +1641,6 @@ static CODE_ERROR scriptCodeTrigger(char *pIdent, CODE_BLOCK *psCode)
 	UDWORD			line;
 	char			*pDummy;
 
-	pIdent = pIdent;
-
 	// Have to add the exit code to the end of the event
 	//ALLOC_BLOCK(psNewBlock, psCode->size + sizeof(OPCODE));
 	ALLOC_BLOCK(psNewBlock, psCode->size + 1);	//size + opcode
@@ -2116,14 +2117,12 @@ accept_script:			script
 
 						if (genDebugInfo)
 						{
-							psFinalProg->psVarDebug[i].pIdent =
-										malloc(strlen(psCurr->pIdent) + 1);
+							psFinalProg->psVarDebug[i].pIdent = strdup(psCurr->pIdent);
 							if (psFinalProg->psVarDebug[i].pIdent == NULL)
 							{
 								scr_error("Out of memory");
 								YYABORT;
 							}
-							strcpy(psFinalProg->psVarDebug[i].pIdent, psCurr->pIdent);
 							psFinalProg->psVarDebug[i].storage = psCurr->storage;
 						}
 					}
@@ -2143,14 +2142,12 @@ accept_script:			script
 
 						if (genDebugInfo)
 						{
-							psFinalProg->psArrayDebug[i].pIdent =
-										malloc(strlen(psCurr->pIdent) + 1);
+							psFinalProg->psArrayDebug[i].pIdent = strdup(psCurr->pIdent);
 							if (psFinalProg->psArrayDebug[i].pIdent == NULL)
 							{
 								scr_error("Out of memory");
 								YYABORT;
 							}
-							strcpy(psFinalProg->psArrayDebug[i].pIdent, psCurr->pIdent);
 							psFinalProg->psArrayDebug[i].storage = psCurr->storage;
 						}
 					}
@@ -2307,13 +2304,12 @@ variable_ident:		IDENT
 			|
 					IDENT array_sub_decl_list
 					{
-						$2->pIdent = malloc(strlen($1)+1);
+						$2->pIdent = strdup($1);
 						if ($2->pIdent == NULL)
 						{
 							scr_error("Out of memory");
 							YYABORT;
 						}
-						strcpy($2->pIdent, $1);
 
 						$$ = $2;
 					}
@@ -2327,7 +2323,7 @@ variable_decl:	variable_decl_head variable_ident
 							YYABORT;
 						}
 
-						FREE_VARIDENTDECL($2);
+						freeVARIDENTDECL($2);
 
 						/* return the variable type */
 						$$ = $1;
@@ -2340,7 +2336,7 @@ variable_decl:	variable_decl_head variable_ident
 							YYABORT;
 						}
 
-						FREE_VARIDENTDECL($3);
+						freeVARIDENTDECL($3);
 
 						/* return the variable type */
 						$$ = $1;
@@ -2770,7 +2766,7 @@ argument_decl_head:		TYPE variable_ident
 						YYABORT;
 					}
 
-					FREE_VARIDENTDECL($2);
+					freeVARIDENTDECL($2);
 
 					FREE_VARDECL(psCurrVDecl);
 
@@ -2806,7 +2802,7 @@ argument_decl_head:		TYPE variable_ident
 						YYABORT;
 					}
 					//debug(LOG_SCRIPT, "argument_decl_head 11 ");
-					FREE_VARIDENTDECL($4);
+					freeVARIDENTDECL($4);
 					FREE_VARDECL(psCurrVDecl);
 
 					/* return the variable type */
@@ -5740,7 +5736,6 @@ static void scriptResetTables(void)
 	for(psCurr = psGlobalVars; psCurr != NULL; psCurr = psNext)
 	{
 		psNext = psCurr->psNext;
-		free(psCurr->pIdent);
 		free(psCurr);
 	}
 	psGlobalVars = NULL;
@@ -5754,7 +5749,6 @@ static void scriptResetTables(void)
 		for(psCurr = psLocalVarsB[i]; psCurr != NULL; psCurr = psNext)
 		{
 			psNext = psCurr->psNext;
-			free(psCurr->pIdent);
 			free(psCurr);
 		}
 		psLocalVarsB[i] = NULL;
@@ -5764,7 +5758,6 @@ static void scriptResetTables(void)
 	for(psCurr = psGlobalArrays; psCurr != NULL; psCurr = psNext)
 	{
 		psNext = psCurr->psNext;
-		free(psCurr->pIdent);
 		free(psCurr);
 	}
 	psGlobalArrays = NULL;
@@ -5913,24 +5906,20 @@ BOOL scriptAddVariable(VAR_DECL *psStorage, VAR_IDENT_DECL *psVarIdent)
 {
 	VAR_SYMBOL		*psNew;
 	SDWORD			i;
+	char* ident;
 
-	/* Allocate the memory for the symbol structure */
-	psNew = (VAR_SYMBOL *)malloc(sizeof(VAR_SYMBOL));
+	/* Allocate the memory for the symbol structure plus the symbol name */
+	psNew = (VAR_SYMBOL *)malloc(sizeof(VAR_SYMBOL) + strlen(psVarIdent->pIdent) + 1);
 	if (psNew == NULL)
 	{
 		scr_error("Out of memory");
 		return false;
 	}
 
-	psNew->pIdent = psVarIdent->pIdent; //(char *)malloc(strlen(pIdent) + 1);
-/*	if (psNew->pIdent == NULL)
-	{
-		scr_error("Out of memory");
-		return false;
-	}*/
-
-	/* Intialise the symbol structure */
-//	strcpy(psNew->pIdent, pIdent);
+	// This ensures we only need to call free() on the VAR_SYMBOL* pointer and not on its members
+	ident = (char*)(psNew + 1);
+	strcpy(ident, psVarIdent->pIdent);
+	psNew->pIdent = ident;
 
 	psNew->type = psStorage->type;
 	psNew->storage = psStorage->storage;

@@ -130,7 +130,7 @@ typedef struct _var_ident_decl
 /* Type for a variable symbol */
 typedef struct _var_symbol
 {
-	char			*pIdent;	// variable's identifier
+	const char	*pIdent;	// variable's identifier
 	INTERP_TYPE		type;		// variable type
 	STORAGE_TYPE	storage;	// Where the variable is stored
 	INTERP_TYPE		objType;	// The object type if this is an object variable
@@ -187,7 +187,7 @@ typedef struct _objvar_block
 /* Type for a function symbol */
 typedef struct _func_symbol
 {
-	char		*pIdent;	// function's identifier
+	const char	*pIdent;	// function's identifier
 	SCRIPT_FUNC	pFunc;		// Pointer to the instinct function
 	INTERP_TYPE	type;		// function type
 	UDWORD		numParams;	// Number of parameters to the function
