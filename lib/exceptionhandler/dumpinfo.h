@@ -29,7 +29,6 @@ extern "C"
 #include "lib/framework/frame.h"
 
 #if defined(WZ_OS_WIN)
-# include <windows.h>
 typedef HANDLE DumpFileHandle;
 #else
 typedef int DumpFileHandle;
