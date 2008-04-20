@@ -163,6 +163,14 @@ static BOOL inList( char * list[], const char * item )
 	return false;
 }
 
+
+/*!
+ * Tries to mount a list of directories, found in /basedir/subdir/<list>.
+ * \param basedir Base directory
+ * \param subdir A subdirectory of basedir
+ * \param appendToPath Whether to append or prepend
+ * \param checkList List of directories to check. NULL means any.
+ */
 void addSubdirs( const char * basedir, const char * subdir, const BOOL appendToPath, char * checkList[] )
 {
 	char tmpstr[PATH_MAX];
@@ -221,10 +229,12 @@ void printSearchPath( void )
 	PHYSFS_freeList( searchPath );
 }
 
-/** Retrieves the current working directory and copies it into the provided output buffer
- *  \param[out] dest the output buffer to put the current working directory in
- *  \param size the size (in bytes) of \c dest
- *  \return true on success, false if an error occurred (and dest doesn't contain a valid directory)
+
+/*!
+ * Retrieves the current working directory and copies it into the provided output buffer
+ * \param[out] dest the output buffer to put the current working directory in
+ * \param size the size (in bytes) of \c dest
+ * \return true on success, false if an error occurred (and dest doesn't contain a valid directory)
  */
 static bool getCurrentDir(char * const dest, size_t const size)
 {
@@ -276,6 +286,7 @@ static bool getCurrentDir(char * const dest, size_t const size)
 	return true;
 }
 
+
 static void getPlatformUserDir(char * const tmpstr, size_t const size)
 {
 #if defined(WZ_OS_WIN)
@@ -307,6 +318,7 @@ static void getPlatformUserDir(char * const tmpstr, size_t const size)
 	else
 		abort();
 }
+
 
 static void initialize_ConfigDir(void)
 {
@@ -368,9 +380,10 @@ static void initialize_ConfigDir(void)
 	debug(LOG_WZ, "Base dir: %s", PHYSFS_getBaseDir());
 }
 
-/***************************************************************************
-	Initialize the PhysicsFS library.
-***************************************************************************/
+
+/*!
+ * Initialize the PhysicsFS library.
+ */
 static void initialize_PhysicsFS(const char* argv_0)
 {
 	PHYSFS_Version compiled;
@@ -387,8 +400,8 @@ static void initialize_PhysicsFS(const char* argv_0)
 	      linked.major, linked.minor, linked.patch);
 }
 
-/*
- * \fn void scanDataDirs( void )
+
+/*!
  * \brief Adds default data dirs
  *
  * Priority:
@@ -493,6 +506,7 @@ static void scanDataDirs( void )
 		exit(1);
 	}
 }
+
 
 /***************************************************************************
 	Make a directory in write path and set a variable to point to it.

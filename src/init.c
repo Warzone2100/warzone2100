@@ -158,6 +158,7 @@ static BOOL loadLevFile(const char* filename, searchPathMode datadir)
 	return true;
 }
 
+
 void cleanSearchPath( void )
 {
 	wzSearchPath * curSearchPath = searchPathRegistry, * tmpSearchPath = NULL;
@@ -174,7 +175,11 @@ void cleanSearchPath( void )
 	}
 }
 
-// Register searchPath above the path with next lower priority
+
+/*!
+ * Register searchPath above the path with next lower priority
+ * For information about what can be a search path, refer to PhysFS documentation
+ */
 void registerSearchPath( const char path[], unsigned int priority )
 {
 	wzSearchPath * curSearchPath = searchPathRegistry, * tmpSearchPath = NULL;
@@ -216,8 +221,8 @@ void registerSearchPath( const char path[], unsigned int priority )
 		tmpSearchPath->higherPriority->lowerPriority = tmpSearchPath;
 }
 
-/*
- * \fn BOOL rebuildSearchPath( int mode )
+
+/*!
  * \brief Rebuilds the PHYSFS searchPath with mode specific subdirs
  *
  * Priority:
