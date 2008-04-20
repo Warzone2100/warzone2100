@@ -84,50 +84,45 @@ void astarResetCounters(void)
 }
 
 /* next four used in HashPJW */
-#define	BITS_IN_int		32
-#define	THREE_QUARTERS	((UDWORD) ((BITS_IN_int * 3) / 4))
-#define	ONE_EIGHTH		((UDWORD) (BITS_IN_int / 8))
-#define	HIGH_BITS		( ~((UDWORD)(~0) >> ONE_EIGHTH ))
+#define	BITS_IN_int32_t (sizeof(int32_t) * CHAR_BIT)
+#define	THREE_QUARTERS  ((BITS_IN_int32_t * 3) / 4)
+#define	ONE_EIGHTH      (BITS_IN_int32_t / 8)
+#define	HIGH_BITS       (~((int32_t)(~0) >> ONE_EIGHTH))
 
-/***************************************************************************/
-/*
- * HashString
+/** Hash string
+ *  Adaptation of Peter Weinberger's (PJW) generic hashing algorithm listed in
+ *  Binstock+Rex, "Practical Algorithms" p 69.
  *
- * Adaptation of Peter Weinberger's (PJW) generic hashing algorithm listed
- * in Binstock+Rex, "Practical Algorithms" p 69.
- *
- * Accepts string and returns hashed integer.
- *
- * Hack to use coordinates instead of a string by John.
+ *  Hacked to use coordinates instead of a string
  */
-/***************************************************************************/
-static SDWORD fpathHashFunc(SDWORD x, SDWORD y)
+static SDWORD fpathHashFunc(int32_t x, int32_t y)
 {
-	SDWORD	iHashValue, i;
-	char	*c;
-	char	aBuff[8];
+	char    buf[sizeof(x) + sizeof(y)];
+	char   *c;
+	int32_t hashValue = 0;
 
-	memcpy(&aBuff[0], &x, 4);
-	memcpy(&aBuff[4], &y, 4);
-	c = aBuff;
+	memcpy(&buf[0],         &x, sizeof(x));
+	memcpy(&buf[sizeof(x)], &y, sizeof(y));
 
-	for ( iHashValue=0; c < &aBuff[8]; ++c )
+	for (c = &buf[0]; c != &buf[ARRAY_SIZE(buf)]; ++c)
 	{
-		if (*c != 0)
-		{
-			iHashValue = ( iHashValue << ONE_EIGHTH ) + *c;
+		int32_t highBits;
 
-			if ( (i = iHashValue & HIGH_BITS) != 0 )
-			{
-				iHashValue = ( iHashValue ^ ( i >> THREE_QUARTERS ) ) &
-								~HIGH_BITS;
-			}
+		if (*c == 0)
+			continue;
+
+		hashValue = (hashValue << ONE_EIGHTH) + *c;
+		highBits = hashValue & HIGH_BITS;
+
+		if (highBits != 0)
+		{
+			hashValue = (hashValue ^ (highBits >> THREE_QUARTERS)) & ~HIGH_BITS;
 		}
 	}
 
-	iHashValue %= ARRAY_SIZE(apsNodes);
+	hashValue %= ARRAY_SIZE(apsNodes);
 
-	return iHashValue;
+	return hashValue;
 }
 
 // Add a node to the hash table
