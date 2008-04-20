@@ -181,7 +181,6 @@ extern void CancelDeliveryRepos(void);
 extern void StartDeliveryPosition( OBJECT_POSITION *psLocation );
 extern BOOL DeliveryReposValid(void);
 
-extern void StartTacticalScroll(BOOL driveActive);
 extern void StartTacticalScrollObj(BOOL driveActive,BASE_OBJECT *psObj);
 extern void CancelTacticalScroll(void);
 extern void MoveTacticalScroll(SDWORD xVel,SDWORD yVel);

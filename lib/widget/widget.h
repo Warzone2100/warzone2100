@@ -380,7 +380,7 @@ extern void widgSetColour(W_SCREEN *psScreen, UDWORD id, UDWORD colour,
 						  UBYTE red, UBYTE green, UBYTE blue);
 
 // Set the global toop tip text colour.
-extern void	widgSetTipColour(W_SCREEN *psScreen, PIELIGHT colour);
+extern void widgSetTipColour(PIELIGHT colour);
 
 /* Possible states for a button */
 #define WBUT_DISABLE	0x0001		// Disable (grey out) a button

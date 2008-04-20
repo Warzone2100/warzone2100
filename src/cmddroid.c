@@ -60,7 +60,7 @@ void cmdDroidShutDown(void)
 
 
 // Make new command droids available
-void cmdDroidAvailable(BRAIN_STATS *psBrainStats, SDWORD player)
+void cmdDroidAvailable(WZ_DECL_UNUSED BRAIN_STATS *psBrainStats, WZ_DECL_UNUSED SDWORD player)
 {
 }
 

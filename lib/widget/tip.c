@@ -68,7 +68,7 @@ void tipInitialise(void)
 }
 
 // Set the global toop tip text colour.
-void widgSetTipColour(W_SCREEN *psScreen, PIELIGHT colour)
+void widgSetTipColour(PIELIGHT colour)
 {
 	TipColour = colour;
 }

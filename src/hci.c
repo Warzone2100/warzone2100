@@ -513,7 +513,7 @@ BOOL intInitialise(void)
 
 	intInitialiseReticule();
 
-	widgSetTipColour(psWScreen, WZCOL_TOOLTIP_TEXT);
+	widgSetTipColour(WZCOL_TOOLTIP_TEXT);
 
 	if(GetGameMode() == GS_NORMAL) {
 //		WidgSetAudio(WidgetAudioCallback,ID_SOUND_HILIGHTBUTTON,ID_SOUND_SELECT);
@@ -6059,13 +6059,13 @@ static BOOL selectCommand(BASE_OBJECT *psObj)
 }
 
 /* Return the stats for a command droid */
-static BASE_STATS *getCommandStats(BASE_OBJECT *psObj)
+static BASE_STATS *getCommandStats(WZ_DECL_UNUSED BASE_OBJECT *psObj)
 {
 	return NULL;
 }
 
 /* Set the stats for a command droid */
-static BOOL setCommandStats(BASE_OBJECT *psObj, BASE_STATS *psStats)
+static BOOL setCommandStats(WZ_DECL_UNUSED BASE_OBJECT *psObj, WZ_DECL_UNUSED BASE_STATS *psStats)
 {
 	return true;
 }

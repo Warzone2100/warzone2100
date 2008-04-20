@@ -119,7 +119,7 @@ static BOOL dataDBBODYLoad(const char* filename, void **ppData)
 	return true;
 }
 
-static void dataReleaseStats(void *pData)
+static void dataReleaseStats(WZ_DECL_UNUSED void *pData)
 {
 	freeComponentLists();
 	statsShutDown();
@@ -370,7 +370,7 @@ static BOOL bufferSTEMPLLoad(const char *pBuffer, UDWORD size, void **ppData)
 }
 
 // release the templates
-static void dataSTEMPLRelease(void *pData)
+static void dataSTEMPLRelease(WZ_DECL_UNUSED void *pData)
 {
 	//free the storage allocated to the droid templates
 	droidTemplateShutDown();
@@ -404,7 +404,7 @@ static BOOL bufferSSTRUCTLoad(const char *pBuffer, UDWORD size, void **ppData)
 }
 
 // release the structure stats
-static void dataSSTRUCTRelease(void *pData)
+static void dataSSTRUCTRelease(WZ_DECL_UNUSED void *pData)
 {
 	freeStructureLists();
 	structureStatsShutDown();
@@ -463,7 +463,7 @@ static BOOL bufferSFEATLoad(const char *pBuffer, UDWORD size, void **ppData)
 }
 
 // free the feature stats
-static void dataSFEATRelease(void *pData)
+static void dataSFEATRelease(WZ_DECL_UNUSED void *pData)
 {
 	featureStatsShutDown();
 }
@@ -485,13 +485,13 @@ static BOOL bufferSFUNCLoad(const char *pBuffer, UDWORD size, void **ppData)
 }
 
 // release the function stats
-static void dataSFUNCRelease(void *pData)
+static void dataSFUNCRelease(WZ_DECL_UNUSED void *pData)
 {
 	FunctionShutDown();
 }
 
 // release the research stats
-static void dataRESCHRelease(void *pData)
+static void dataRESCHRelease(WZ_DECL_UNUSED void *pData)
 {
 	//free the storage allocated to the stats
 	ResearchShutDown();
@@ -688,7 +688,7 @@ static BOOL dataTERTILESLoad(const char *fileName, void **ppData)
 	return true;
 }
 
-static void dataTERTILESRelease(void *pData)
+static void dataTERTILESRelease(WZ_DECL_UNUSED void *pData)
 {
 	debug(LOG_TEXTURE, "=== dataTERTILESRelease ===");
 	pie_TexShutDown();
@@ -864,7 +864,7 @@ static BOOL dataStrResLoad(const char* fileName, void** ppData)
 	return true;
 }
 
-static void dataStrResRelease(void *pData)
+static void dataStrResRelease(WZ_DECL_UNUSED void *pData)
 {
 	if (psStringRes != NULL)
 	{

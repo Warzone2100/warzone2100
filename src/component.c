@@ -154,13 +154,13 @@ static void unsetMatrix(void)
 }
 
 
-UDWORD getComponentDroidRadius(DROID *psDroid)
+UDWORD getComponentDroidRadius(WZ_DECL_UNUSED DROID *psDroid)
 {
 	return 100;
 }
 
 
-UDWORD getComponentDroidTemplateRadius(DROID_TEMPLATE *psDroid)
+UDWORD getComponentDroidTemplateRadius(WZ_DECL_UNUSED DROID_TEMPLATE *psDroid)
 {
 	return 100;
 }
@@ -411,7 +411,7 @@ void displayStructureButton(STRUCTURE *psStructure, Vector3i *Rotation, Vector3i
 	unsetMatrix();
 }
 
-void displayStructureStatButton(STRUCTURE_STATS *Stats,UDWORD Player, Vector3i *Rotation, Vector3i *Position, BOOL RotXYZ, SDWORD scale)
+void displayStructureStatButton(STRUCTURE_STATS *Stats, UDWORD Player, Vector3i *Rotation, Vector3i *Position, BOOL RotXYZ, SDWORD scale)
 {
 	iIMDShape		*baseImd,*strImd;//*mountImd,*weaponImd;
 	iIMDShape *mountImd[STRUCT_MAXWEAPS];

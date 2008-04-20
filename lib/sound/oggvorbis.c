@@ -118,7 +118,7 @@ static int wz_oggVorbis_seek(void *datasource, ogg_int64_t offset, int whence)
 		return -1;  // failure
 }
 
-static int wz_oggVorbis_close(void *datasource)
+static int wz_oggVorbis_close(WZ_DECL_UNUSED void *datasource)
 {
 	return 0;
 }

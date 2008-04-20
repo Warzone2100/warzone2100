@@ -600,7 +600,7 @@ void intUpdateCommandFact(WIDGET *psWidget, W_CONTEXT *psContext)
 
 // Widget callback to update and display the power bar.
 // !!!!!!!!!!!!!!!!!!!!!!ONLY WORKS ON A SIDEWAYS POWERBAR!!!!!!!!!!!!!!!!!
-void intDisplayPowerBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
+void intDisplayPowerBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
 {
 	W_BARGRAPH *BarGraph = (W_BARGRAPH*)psWidget;
 	SDWORD		x0,y0;
@@ -713,7 +713,7 @@ void intDisplayPowerBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIG
 // Widget callback to display a rendered status button, ie the progress of a manufacturing or
 // building task.
 //
-void intDisplayStatusButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
+void intDisplayStatusButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
 {
 	W_CLICKFORM         *Form = (W_CLICKFORM*)psWidget;
 	BASE_OBJECT         *psObj;
@@ -928,7 +928,7 @@ void intDisplayStatusButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PI
 
 // Widget callback to display a rendered object button.
 //
-void intDisplayObjectButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
+void intDisplayObjectButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
 {
 	W_CLICKFORM *Form = (W_CLICKFORM*)psWidget;
 	BASE_OBJECT *psObj;
@@ -1007,7 +1007,7 @@ void intDisplayObjectButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PI
 
 // Widget callback to display a rendered stats button, ie the job selection window buttons.
 //
-void intDisplayStatsButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
+void intDisplayStatsButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
 {
 	W_CLICKFORM     *Form = (W_CLICKFORM*)psWidget;
 	BASE_STATS      *Stat, *psResGraphic;
@@ -1218,7 +1218,7 @@ void AdjustTabFormSize(W_TABFORM *Form,UDWORD *x0,UDWORD *y0,UDWORD *x1,UDWORD *
 
 // Widget callback function to do the open form animation. Doesn't just open Plain Forms!!
 //
-void intOpenPlainForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
+void intOpenPlainForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
 {
 	W_TABFORM	*Form = (W_TABFORM*)psWidget;
 	UDWORD		Tx0,Ty0,Tx1,Ty1;
@@ -1288,7 +1288,7 @@ void intOpenPlainForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT
 
 // Widget callback function to do the close form animation.
 //
-void intClosePlainForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
+void intClosePlainForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
 {
 	W_TABFORM *Form = (W_TABFORM*)psWidget;
 	UDWORD Tx0,Ty0,Tx1,Ty1;
@@ -1341,7 +1341,7 @@ void intClosePlainForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGH
 
 
 
-void intDisplayPlainForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
+void intDisplayPlainForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
 {
 	W_TABFORM *Form = (W_TABFORM*)psWidget;
 	UDWORD x0,y0,x1,y1;
@@ -1355,7 +1355,7 @@ void intDisplayPlainForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELI
 }
 
 
-void intDisplayStatsForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
+void intDisplayStatsForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
 {
 	W_TABFORM *Form = (W_TABFORM*)psWidget;
 	UDWORD x0,y0,x1,y1;
@@ -1373,7 +1373,7 @@ void intDisplayStatsForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELI
 
 // Display an image for a widget.
 //
-void intDisplayImage(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
+void intDisplayImage(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
 {
 	UDWORD x = xOffset+psWidget->x;
 	UDWORD y = yOffset+psWidget->y;
@@ -1383,7 +1383,7 @@ void intDisplayImage(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT 
 
 
 //draws the mission clock - flashes when below a predefined time
-void intDisplayMissionClock(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
+void intDisplayMissionClock(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
 {
 	UDWORD  x = xOffset+psWidget->x;
 	UDWORD  y = yOffset+psWidget->y;
@@ -1403,7 +1403,7 @@ void intDisplayMissionClock(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PI
 
 // Display one of two images depending on if the widget is hilighted by the mouse.
 //
-void intDisplayImageHilight(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
+void intDisplayImageHilight(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
 {
 	UDWORD x = xOffset+psWidget->x;
 	UDWORD y = yOffset+psWidget->y, flash;
@@ -1521,7 +1521,7 @@ static void GetButtonState(WIDGET *psWidget,BOOL *Hilight,UDWORD *Down,BOOL *Gre
 
 // Display one of two images depending on if the widget is hilighted by the mouse.
 //
-void intDisplayButtonHilight(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
+void intDisplayButtonHilight(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
 {
 	UDWORD x = xOffset+psWidget->x;
 	UDWORD y = yOffset+psWidget->y;
@@ -1547,7 +1547,7 @@ void intDisplayButtonHilight(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, P
 
 // Flash one of two images depending on if the widget is hilighted by the mouse.
 //
-void intDisplayButtonFlash(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
+void intDisplayButtonFlash(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
 {
 	UDWORD x = xOffset+psWidget->x;
 	UDWORD y = yOffset+psWidget->y;
@@ -1583,7 +1583,7 @@ void intDisplayButtonFlash(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIE
 
 }
 
-void intDisplayReticuleButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
+void intDisplayReticuleButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
 {
 	UDWORD	x = xOffset+psWidget->x;
 	UDWORD	y = yOffset+psWidget->y;
@@ -1703,7 +1703,7 @@ void intDisplayTab(WIDGET *psWidget,UDWORD TabType, UDWORD Position,
 // Display one of three images depending on if the widget is currently depressed (ah!).
 //
 void intDisplayButtonPressed(WIDGET *psWidget, UDWORD xOffset,
-							 UDWORD yOffset, PIELIGHT *pColours)
+							 UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
 {
 	W_BUTTON	*psButton = (W_BUTTON*)psWidget;
 	UDWORD		x = xOffset+psButton->x;
@@ -1739,7 +1739,7 @@ void intDisplayButtonPressed(WIDGET *psWidget, UDWORD xOffset,
 
 // Display DP images depending on factory and if the widget is currently depressed
 void intDisplayDPButton(WIDGET *psWidget, UDWORD xOffset,
-						UDWORD yOffset, PIELIGHT *pColours)
+						UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
 {
 	W_BUTTON	*psButton = (W_BUTTON*)psWidget;
 	STRUCTURE	*psStruct = (STRUCTURE*)psButton->pUserData;
@@ -1796,7 +1796,7 @@ void intDisplayDPButton(WIDGET *psWidget, UDWORD xOffset,
 }
 
 
-void intDisplaySlider(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
+void intDisplaySlider(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
 {
 	W_SLIDER *Slider = (W_SLIDER*)psWidget;
 	UDWORD x = xOffset+psWidget->x;
@@ -1813,7 +1813,7 @@ void intDisplaySlider(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT
 
 
 /* display highlighted edit box from left, middle and end edit box graphics */
-void intDisplayEditBox(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
+void intDisplayEditBox(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
 {
 
 	W_EDITBOX	*psEditBox = (W_EDITBOX *) psWidget;
@@ -1856,7 +1856,7 @@ void intDisplayEditBox(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGH
 
 
 
-void intDisplayNumber(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
+void intDisplayNumber(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
 {
 	W_LABEL		*Label = (W_LABEL*)psWidget;
 	UDWORD		x = Label->x + xOffset;
@@ -2913,7 +2913,7 @@ void StatGetResearchImage(BASE_STATS *psStat, SDWORD *Image, iIMDShape **Shape,
 }
 
 /* Draws a stats bar for the design screen */
-void intDisplayStatsBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
+void intDisplayStatsBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
 {
 	W_BARGRAPH		*BarGraph = (W_BARGRAPH*)psWidget;
 	SDWORD			x0, y0, iX, iY;
@@ -2955,7 +2955,7 @@ void intDisplayStatsBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIG
 
 /* Draws a Template Power Bar for the Design Screen */
 void intDisplayDesignPowerBar(WIDGET *psWidget, UDWORD xOffset,
-							  UDWORD yOffset, PIELIGHT *pColours)
+							  UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
 {
 	W_BARGRAPH      *BarGraph = (W_BARGRAPH*)psWidget;
 	SDWORD		    x0, y0, iX, iY;
@@ -3041,7 +3041,7 @@ void WidgetAudioCallback(int AudioID)
 
 // Widget callback to display a contents button for the Transporter
 void intDisplayTransportButton(WIDGET *psWidget, UDWORD xOffset,
-						  UDWORD yOffset, PIELIGHT *pColours)
+						  UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
 {
 	W_CLICKFORM			*Form = (W_CLICKFORM*)psWidget;
 	BOOL				Down;
@@ -3210,8 +3210,8 @@ void drawRadarBlips(void)
 
 
 /*Displays the proximity messages blips over the world*/
-void intDisplayProximityBlips(WIDGET *psWidget, UDWORD xOffset,
-					UDWORD yOffset, PIELIGHT *pColours)
+void intDisplayProximityBlips(WIDGET *psWidget, WZ_DECL_UNUSED UDWORD xOffset,
+					WZ_DECL_UNUSED UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
 {
 	W_CLICKFORM			*psButton = (W_CLICKFORM*)psWidget;
 	PROXIMITY_DISPLAY	*psProxDisp = (PROXIMITY_DISPLAY *)psButton->pUserData;
@@ -3313,7 +3313,7 @@ void intUpdateOptionText(WIDGET *psWidget, W_CONTEXT *psContext)
 
 
 
-void intDisplayResSubGroup(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
+void intDisplayResSubGroup(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
 {
 	W_LABEL		*Label = (W_LABEL*)psWidget;
 	UDWORD		x = Label->x + xOffset;
@@ -3326,7 +3326,7 @@ void intDisplayResSubGroup(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIE
     }
 }
 
-void intDisplayAllyIcon(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
+void intDisplayAllyIcon(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
 {
 	W_LABEL		*Label =  (W_LABEL*)psWidget;
 	UDWORD		x = Label->x + xOffset;

@@ -1433,11 +1433,7 @@ static BOOL ReposValid = false;
 static BOOL BVReposValid = false;
 static FLAG_POSITION *ReposFlag;
 
-void StartTacticalScroll(BOOL driveActive)
-{
-}
-
-void StartTacticalScrollObj(BOOL driveActive,BASE_OBJECT *psObj)
+void StartTacticalScrollObj(WZ_DECL_UNUSED BOOL driveActive, WZ_DECL_UNUSED BASE_OBJECT* psObj)
 {
 }
 

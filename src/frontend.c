@@ -1431,7 +1431,7 @@ void addSideText(UDWORD id,  UDWORD PosX, UDWORD PosY, const char *txt)
 // drawing functions
 
 // show a background piccy
-static void displayTitleBitmap(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
+static void displayTitleBitmap(WZ_DECL_UNUSED WIDGET *psWidget, WZ_DECL_UNUSED UDWORD xOffset, WZ_DECL_UNUSED UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
 {
 	iV_SetFont(font_regular);
 	iV_SetTextColour(WZCOL_TEXT_BRIGHT);
@@ -1441,7 +1441,7 @@ static void displayTitleBitmap(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset,
 
 // ////////////////////////////////////////////////////////////////////////////
 // show warzone logo
-void displayLogo(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
+void displayLogo(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
 {
 	iV_DrawImage(FrontImages,IMAGE_FE_LOGO,xOffset+psWidget->x,yOffset+psWidget->y);
 }
@@ -1450,7 +1450,7 @@ void displayLogo(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pCo
 
 // ////////////////////////////////////////////////////////////////////////////
 // show a text option.
-void displayTextOption(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
+void displayTextOption(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
 {
 	SDWORD			fx,fy, fw;
 	W_BUTTON		*psBut;
@@ -1501,7 +1501,7 @@ void displayTextOption(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGH
 
 // ////////////////////////////////////////////////////////////////////////////
 // show text written on its side.
-void displayTextAt270(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
+void displayTextAt270(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
 {
 	SDWORD		fx,fy;
 	W_LABEL		*psLab;
@@ -1520,7 +1520,7 @@ void displayTextAt270(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT
 
 // ////////////////////////////////////////////////////////////////////////////
 // show, well have a guess..
-static void displayBigSlider(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
+static void displayBigSlider(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
 {
 	W_SLIDER *Slider = (W_SLIDER*)psWidget;
 	UDWORD x = xOffset+psWidget->x;

@@ -1005,10 +1005,10 @@ void sound_SetPlayerPos( SDWORD iX, SDWORD iY, SDWORD iZ )
  * \param iY roll in degree (current function implementation ignores this)
  * \param iZ yaw in degree
  */
-void sound_SetPlayerOrientation( SDWORD iX, SDWORD iY, SDWORD iZ )
+void sound_SetPlayerOrientation(WZ_DECL_UNUSED float x, WZ_DECL_UNUSED float y, float z)
 {
 #ifndef WZ_NOSOUND
-	const float yaw = deg2radf(iZ);
+	const float yaw = deg2radf(z);
 	const float ori[6] = {-sinf( yaw ), cosf( yaw ), 0.0f, 0.0f, 0.0f, 1.0f};
 
 	alListenerfv( AL_ORIENTATION, ori );

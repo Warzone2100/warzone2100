@@ -126,7 +126,7 @@ static transluscent_shape_t* tshapes = NULL;
 static unsigned int tshapes_size = 0;
 static unsigned int nb_tshapes = 0;
 
-static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELIGHT specular, int pieFlag, int pieFlagData)
+static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, WZ_DECL_UNUSED PIELIGHT specular, int pieFlag, int pieFlagData)
 {
 	Vector3f *pVertices, *pPixels, scrPoints[pie_MAX_VERTICES];
 	iIMDPoly *pPolys;

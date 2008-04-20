@@ -4505,7 +4505,7 @@ void intRunDesign(void)
 	}
 }
 
-static void intDisplayStatForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
+static void intDisplayStatForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
 {
 	static UDWORD	iRY = 45;
 
@@ -4548,7 +4548,7 @@ static void intDisplayStatForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset,
 }
 
 /* Displays the 3D view of the droid in a window on the design form */
-static void intDisplayViewForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
+static void intDisplayViewForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
 {
 	W_FORM			*Form = (W_FORM*)psWidget;
 	UDWORD			x0,y0,x1,y1;
@@ -4614,7 +4614,7 @@ static void intDisplayComponentButton(WIDGET *psWidget, UDWORD xOffset, UDWORD y
 }
 
 /* General display window for the design form  SOLID BACKGROUND - NOT TRANSPARENT*/
-void intDisplayDesignForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
+void intDisplayDesignForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
 {
 	W_TABFORM *Form = (W_TABFORM*)psWidget;
 	UDWORD x0,y0,x1,y1;
