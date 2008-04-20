@@ -29,6 +29,9 @@
 
 #include "gettext.h"
 
+// Enable NLS for our parsers when it's enabled for us
+#define YYENABLE_NLS ENABLE_NLS
+
 
 // MSVC doesn't have it, and gettext's wonderful design needs it.
 #if !defined(LC_MESSAGES)
