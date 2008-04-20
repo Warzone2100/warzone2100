@@ -66,5 +66,5 @@ warzone2100_LDADD = \
 warzone2100_LDADD += $(SDL_LIBS) $(SDL_NET_LIBS) $(PHYSFS_LIBS) $(PNG_LIBS) $(OGGVORBIS_LIBS) $(OPENAL_LIBS) $(OPENGLC_LIBS) $(OPENGL_LIBS) $(POPT_LIBS)
 
 if MINGW32
-warzone2100_LDADD += $(top_builddir)/win32/warzone2100.o $(WIN32_LIBS) -lstdc++
+warzone2100_LDADD += $(top_builddir)/win32/warzone2100.o $(WIN32_LIBS)
 endif
