@@ -110,9 +110,6 @@ static UDWORD		numEventLocalVars[maxEventsLocalVars];	/* number of declard local
 static VAR_SYMBOL	*psLocalVarsTemp;			/* temporary storage for local vars, before current event declaration is found */
 EVENT_SYMBOL		*psCurEvent = NULL;		/* stores current event: for local var declaration */
 
-/* The list of function definitions */
-static FUNC_SYMBOL	*psFunctions=NULL;
-
 /* The current object variable context */
 static INTERP_TYPE	objVarContext = (INTERP_TYPE)0;
 
@@ -5736,7 +5733,6 @@ static void scriptResetTables(void)
 	VAR_SYMBOL		*psCurr, *psNext;
 	TRIGGER_SYMBOL	*psTCurr, *psTNext;
 	EVENT_SYMBOL	*psECurr, *psENext;
-	FUNC_SYMBOL		*psFCurr, *psFNext;
 
 	SDWORD			i;
 
@@ -5819,17 +5815,6 @@ static void scriptResetTables(void)
 	}
 	psEvents = NULL;
 	numEvents = 0;
-
-	/* Reset the function symbol table */
-	for(psFCurr = psFunctions; psFCurr != NULL; psFCurr = psFNext)
-	{
-		psFNext = psFCurr->psNext;
-		FREE_DEBUG(psFCurr);
-		free(psFCurr->pIdent);
-		free(psFCurr->pCode);
-		free(psFCurr);
-	}
-	psFunctions = NULL;
 }
 
 /* Compile a script program */
@@ -6440,7 +6425,6 @@ BOOL scriptLookUpConstant(const char *pIdent, CONST_SYMBOL **ppsSym)
 BOOL scriptLookUpFunction(const char *pIdent, FUNC_SYMBOL **ppsSym)
 {
 	UDWORD i;
-	FUNC_SYMBOL	*psCurr;
 
 	//debug(LOG_SCRIPT, "scriptLookUpFunction");
 
@@ -6454,16 +6438,6 @@ BOOL scriptLookUpFunction(const char *pIdent, FUNC_SYMBOL **ppsSym)
 				*ppsSym = asScrInstinctTab + i;
 				return true;
 			}
-		}
-	}
-
-	/* See if the function is defined as a script function */
-	for(psCurr = psFunctions; psCurr != NULL; psCurr = psCurr->psNext)
-	{
-		if (strcmp(psCurr->pIdent, pIdent) == 0)
-		{
-			*ppsSym = psCurr;
-			return true;
 		}
 	}
 
