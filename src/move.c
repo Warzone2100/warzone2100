@@ -254,7 +254,8 @@ static UDWORD dirDiff(SDWORD start, SDWORD end)
 	return retval;
 }
 
-/* Initialise the movement system */
+/** Initialise the movement system
+ */
 BOOL moveInitialise(void)
 {
 	UDWORD i;
@@ -272,7 +273,8 @@ BOOL moveInitialise(void)
 	return true;
 }
 
-/* Update the base speed for all movement */
+/** Update the base speed for all movement
+ */
 void moveUpdateBaseSpeed(void)
 {
 	UDWORD	totalTime=0, i;
@@ -314,9 +316,11 @@ void moveUpdateBaseSpeed(void)
 	}
 }
 
-/* Set a target location for a droid to move to */
-// Now returns a BOOL based on the success of the routing
-// returns true if the routing was successful ... if false then the calling code should not try to route here again for a while
+/** Set a target location for a droid to move to
+ *  @return true if the routing was succesful, if false then the calling code
+ *          should not try to route here again for a while
+ *  @todo Document what "should not try to route here again for a while" means.
+ */
 static BOOL moveDroidToBase(DROID	*psDroid, UDWORD x, UDWORD y, BOOL bFormation)
 {
 	FPATH_RETVAL		retVal = FPR_OK;
@@ -473,22 +477,28 @@ static BOOL moveDroidToBase(DROID	*psDroid, UDWORD x, UDWORD y, BOOL bFormation)
 	return true;
 }
 
-// move a droid to a location, joining a formation
-BOOL moveDroidTo(DROID *psDroid, UDWORD x,UDWORD y)
+/** Move a droid to a location, joining a formation
+ *  @see moveDroidToBase() for the parameter and return value specification
+ */
+BOOL moveDroidTo(DROID* psDroid, UDWORD x, UDWORD y)
 {
 	return moveDroidToBase(psDroid,x,y, true);
 }
 
-// move a droid to a location, not joining a formation
-BOOL moveDroidToNoFormation(DROID *psDroid, UDWORD x,UDWORD y)
+/** Move a droid to a location, not joining a formation
+ *  @see moveDroidToBase() for the parameter and return value specification
+ */
+BOOL moveDroidToNoFormation(DROID* psDroid, UDWORD x, UDWORD y)
 {
 	ASSERT(x > 0 && y > 0, "Bad movement position");
 	return moveDroidToBase(psDroid,x,y, false);
 }
 
 
-// move a droid directly to a location (used by vtols only)
-void moveDroidToDirect(DROID *psDroid, UDWORD x, UDWORD y)
+/** Move a droid directly to a location.
+ *  @note This is (or should be) used for VTOLs only.
+ */
+void moveDroidToDirect(DROID* psDroid, UDWORD x, UDWORD y)
 {
 	ASSERT( psDroid != NULL && vtolDroid(psDroid),
 		"moveUnitToDirect: only valid for a vtol unit" );
@@ -506,7 +516,8 @@ void moveDroidToDirect(DROID *psDroid, UDWORD x, UDWORD y)
 }
 
 
-// Get a droid to turn towards a locaton
+/** Turn a droid towards a given location.
+ */
 void moveTurnDroid(DROID *psDroid, UDWORD x, UDWORD y)
 {
 	SDWORD moveDir = (SDWORD)calcDirection(psDroid->pos.x, psDroid->pos.y, x, y);
@@ -689,7 +700,8 @@ static void moveShuffleDroid(DROID *psDroid, UDWORD shuffleStart, SDWORD sx, SDW
 }
 
 
-/* Stop a droid */
+/** Stop a droid from moving.
+ */
 void moveStopDroid(DROID *psDroid)
 {
 	PROPULSION_STATS	*psPropStats;
@@ -710,7 +722,10 @@ void moveStopDroid(DROID *psDroid)
 	}
 }
 
-/*Stops a droid dead in its tracks - doesn't allow for any little skidding bits*/
+/** Stops a droid dead in its tracks.
+ *  Doesn't allow for any little skidding bits.
+ *  @param psDroid the droid to stop from moving
+ */
 void moveReallyStopDroid(DROID *psDroid)
 {
 	CHECK_DROID(psDroid);
@@ -782,7 +797,9 @@ void updateDroidOrientation(DROID *psDroid)
 }
 
 
-/* Turn a vector into an angle - returns a float (!) */
+/** Turn a vector into an angle
+ *  @return the vector expressed as an angle
+ */
 static float vectorToAngle(float vx, float vy)
 {
 	// Angle in degrees (0->360):
@@ -1898,7 +1915,9 @@ BOOL moveFormationSpeedLimitingOn( void )
 
 #define MAX_SPEED_PITCH  60
 
-// Calculate the new speed for a droid
+/** Calculate the new speed for a droid based on factors like damage and pitch.
+ *  @todo Remove hack for steep slopes not properly marked as blocking on some maps.
+ */
 SDWORD moveCalcDroidSpeed(DROID *psDroid)
 {
 	UDWORD			mapX,mapY, damLevel;
@@ -1977,10 +1996,15 @@ SDWORD moveCalcDroidSpeed(DROID *psDroid)
 	return speed;
 }
 
-static BOOL moveDroidStopped( DROID *psDroid, SDWORD speed )
+/** Determine whether a droid has stopped moving.
+ *  @return true if the droid doesn't move, false if it's moving.
+ */
+static BOOL moveDroidStopped(DROID* psDroid, SDWORD speed)
 {
-	if ((psDroid->sMove.Status == MOVEINACTIVE || psDroid->sMove.Status == MOVEROUTE) &&
-		speed == 0 && psDroid->sMove.speed == 0)
+	if ((psDroid->sMove.Status == MOVEINACTIVE
+	  || psDroid->sMove.Status == MOVEROUTE)
+	 && speed == 0
+	 && psDroid->sMove.speed == 0)
 	{
 		return true;
 	}

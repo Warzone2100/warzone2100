@@ -75,10 +75,6 @@ extern void moveReallyStopDroid(DROID *psDroid);
 /* Get a droid to do a frame's worth of moving */
 extern void moveUpdateDroid(DROID *psDroid);
 
-/**
- * Calculate the new speed for a droid based on factors like damage and pitch.
- * @todo Remove hack for steep slopes not properly marked as blocking on some maps.
- */
 SDWORD moveCalcDroidSpeed(DROID *psDroid);
 
 /* Frame update for the movement of a tracked droid */
