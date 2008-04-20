@@ -474,7 +474,7 @@ WARN_LOGFILE           =
 
 INPUT                  = ./src \
                          ./lib \
-			 ./doc/code
+                         ./doc/code
 
 # This tag can be used to specify the character encoding of the source files that 
 # doxygen parses. Internally doxygen uses the UTF-8 encoding, which is also the default 
@@ -542,7 +542,11 @@ RECURSIVE              = YES
 # excluded from the INPUT source files. This way you can easily exclude a 
 # subdirectory from a directory tree whose root is specified with the INPUT tag.
 
-EXCLUDE                = ./lib/sqlite3
+EXCLUDE                = ./lib/sqlite3/sqlite3.c \
+                         ./lib/sqlite3/sqlite3.h \
+                         ./lib/sqlite3/sqlite3ext.h \
+                         ./lib/ivis_opengl/GLee.c \
+                         ./lib/ivis_opengl/GLee.h
 
 # The EXCLUDE_SYMLINKS tag can be used select whether or not files or 
 # directories that are symbolic links (a Unix filesystem feature) are excluded 
@@ -642,13 +646,13 @@ STRIP_CODE_COMMENTS    = YES
 # then for each documented function all documented 
 # functions referencing it will be listed.
 
-REFERENCED_BY_RELATION = YES
+REFERENCED_BY_RELATION = NO
 
 # If the REFERENCES_RELATION tag is set to YES (the default) 
 # then for each documented function all documented entities 
 # called/used by that function will be listed.
 
-REFERENCES_RELATION    = YES
+REFERENCES_RELATION    = NO
 
 # If the REFERENCES_LINK_SOURCE tag is set to YES (the default)
 # and SOURCE_BROWSER tag is set to YES, then the hyperlinks from
