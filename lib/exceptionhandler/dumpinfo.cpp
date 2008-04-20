@@ -24,16 +24,14 @@
 #include <vector>
 #include <sstream>
 #include "dumpinfo.h"
+
 extern "C"
 {
 // FIXME: #include from src/
 #include "src/version.h"
 }
 
-#if defined(WZ_OS_WIN)
-# define EOL "\r\n"
-#else
-# define EOL "\n"
+#if defined(WZ_OS_UNIX)
 # include <sys/utsname.h>
 #endif
 
@@ -41,13 +39,8 @@ extern "C"
 # define PACKAGE_DISTRIBUTOR "UNKNOWN"
 #endif
 
-using std::string;
-using std::vector;
-
-static const char eol[] = EOL;
-
 static char* dbgHeader = NULL;
-static string programPath;
+static std::string programPath;
 
 static void dumpstr(const DumpFileHandle file, const char * const str)
 {
@@ -64,13 +57,12 @@ void dbgDumpHeader(DumpFileHandle file)
 	if (dbgHeader)
 		dumpstr(file, dbgHeader);
 	else
-		dumpstr(file, "No debug header available (yet)!" EOL);
+		dumpstr(file, "No debug header available (yet)!\n" );
 }
 
 static void initProgramPath(const char* programCommand)
 {
-	vector<char> buf(PATH_MAX);
-	size_t bufsize = PATH_MAX;
+	std::vector<char> buf(PATH_MAX);
 
 #if defined(WZ_OS_WIN)
 	while (GetModuleFileNameA(NULL, &buf[0], buf.size()) == buf.size())
@@ -105,19 +97,20 @@ static void initProgramPath(const char* programCommand)
 static std::string getSysinfo()
 {
 #if defined(WZ_OS_WIN)
-	return string();
+	return std::string();
 #elif defined(WZ_OS_UNIX)
 	struct utsname sysInfo;
 	std::ostringstream os;
 
 	if (uname(&sysInfo) != 0)
-		os << "System information may be invalid!" EOL EOL;
+		os << "System information may be invalid!" << std::endl
+		   << std::endl;
 
-	os << "Operating system: " << sysInfo.sysname  << EOL
-	   << "Node name: "        << sysInfo.nodename << EOL
-	   << "Release: "          << sysInfo.release  << EOL
-	   << "Version: "          << sysInfo.version  << EOL
-	   << "Machine: "          << sysInfo.machine  << EOL;
+	os << "Operating system: " << sysInfo.sysname  << std::endl
+	   << "Node name: "        << sysInfo.nodename << std::endl
+	   << "Release: "          << sysInfo.release  << std::endl
+	   << "Version: "          << sysInfo.version  << std::endl
+	   << "Machine: "          << sysInfo.machine  << std::endl;
 
 	return os.str();
 #endif
@@ -126,26 +119,25 @@ static std::string getSysinfo()
 static void createHeader(void)
 {
 	time_t currentTime = time(NULL);
-	int ret;
 	std::ostringstream os;
 
-	os << "Program: "     << programPath << "(" PACKAGE ")" EOL
-	   << "Version: "     << version_getFormattedVersionString() << EOL
-	   << "Distributor: " PACKAGE_DISTRIBUTOR EOL
-	   << "Compiled on: " __DATE__ " " __TIME__ EOL
+	os << "Program: "     << programPath << "(" PACKAGE ")" << std::endl
+	   << "Version: "     << version_getFormattedVersionString() << std::endl
+	   << "Distributor: " PACKAGE_DISTRIBUTOR << std::endl
+	   << "Compiled on: " __DATE__ " " __TIME__ << std::endl
 	   << "Compiled by: "
 #if defined(WZ_CC_GNU) && !defined(WZ_CC_INTEL)
-	       << "GCC " __VERSION__ EOL
+	       << "GCC " __VERSION__ << std::endl
 #elif defined(WZ_CC_INTEL)
 	// Intel includes the compiler name within the version string
-	       << __VERSION__ EOL
+	       << __VERSION__ << std::endl
 #else
-	       "UNKNOWN" EOL
+	       << "UNKNOWN" << std::endl
 #endif
-	   << "Executed on: " << ctime(&currentTime) << EOL
-	   << getSysinfo() << EOL
-	   << "Pointers: " << (sizeof(void*) * CHAR_BIT) << "bit" EOL
-	   << EOL;
+	   << "Executed on: " << ctime(&currentTime) << std::endl
+	   << getSysinfo() << std::endl
+	   << "Pointers: " << (sizeof(void*) * CHAR_BIT) << "bit" << std::endl
+	   << std::endl;
 
 	dbgHeader = strdup(os.str().c_str());
 	if (dbgHeader == NULL)
