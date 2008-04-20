@@ -2,19 +2,7 @@ Index: GLee.c
 ===================================================================
 --- GLee.c	(revision 4687)
 +++ GLee.c	(working copy)
-@@ -37,6 +37,11 @@
- 	#pragma optimize( "g", off )
- #endif
- 
-+// WORKAROUND: Prevents warnings caused by -Wmissing-declarations.
-+#ifdef __GNUC__
-+	#pragma GCC diagnostic ignored "-Wmissing-declarations"
-+#endif
-+
- #include <stdio.h>
- #include <stdlib.h>
- #include <string.h>
-@@ -9308,7 +9313,7 @@
+@@ -9308,7 +9308,7 @@
  	extList->numNames++;
  }
  
