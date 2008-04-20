@@ -104,7 +104,6 @@ static VAR_SYMBOL	*psGlobalArrays=NULL;
 #define			maxEventsLocalVars		1200
 static VAR_SYMBOL	*psLocalVarsB[maxEventsLocalVars];	/* local var storage */
 static UDWORD		numEventLocalVars[maxEventsLocalVars];	/* number of declard local vars for each event */
-static VAR_SYMBOL	*psLocalVarsTemp;			/* temporary storage for local vars, before current event declaration is found */
 EVENT_SYMBOL		*psCurEvent = NULL;		/* stores current event: for local var declaration */
 
 /* The current object variable context */
@@ -5760,16 +5759,6 @@ static void scriptResetTables(void)
 		}
 		psLocalVarsB[i] = NULL;
 	}
-
-	/* Reset the temp local variable symbol table */
-	for(psCurr = psLocalVarsTemp; psCurr != NULL; psCurr = psNext)
-	{
-		psNext = psCurr->psNext;
-		free(psCurr->pIdent);
-		free(psCurr);
-	}
-	psLocalVarsTemp = NULL;
-
 
 	/* Reset the global array symbol table */
 	for(psCurr = psGlobalArrays; psCurr != NULL; psCurr = psNext)
