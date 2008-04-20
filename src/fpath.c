@@ -782,11 +782,11 @@ static BOOL fpathFindFirstRoutePoint(MOVE_CONTROL *psMove, SDWORD *pIndex, SDWOR
 // See if there is another unit on your side that has a route this unit can use
 static BOOL fpathFindRoute(DROID *psDroid, SDWORD sX,SDWORD sY, SDWORD tX,SDWORD tY)
 {
-	FORMATION	*psFormation;
 	DROID		*psCurr;
 	SDWORD		i, startX,startY, index;
+	FORMATION* psFormation = formationFind(tX, tY);
 
-	if (!formationFind(&psFormation, tX,tY))
+	if (!psFormation)
 	{
 		return false;
 	}

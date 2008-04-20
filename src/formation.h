@@ -43,7 +43,7 @@ extern BOOL formationNew(FORMATION **ppsFormation, FORMATION_TYPE type,
 					SDWORD x, SDWORD y, SDWORD dir);
 
 // Try and find a formation near to a location
-extern BOOL formationFind(FORMATION **ppsFormation, SDWORD x, SDWORD y);
+extern FORMATION* formationFind(int x, int y);
 
 // Associate a unit with a formation
 extern void formationJoin(FORMATION *psFormation, const DROID* psDroid);

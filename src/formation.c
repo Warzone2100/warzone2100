@@ -68,7 +68,8 @@ static FORMATION	*psFormationList;
 
 static SDWORD formationObjRadius(const DROID* psDroid);
 
-// Initialise the formation system
+/** Initialise the formation system
+ */
 BOOL formationInitialise(void)
 {
 	psFormationList = NULL;
@@ -76,7 +77,8 @@ BOOL formationInitialise(void)
 	return true;
 }
 
-// Shutdown the formation system
+/** Shutdown the formation system
+ */
 void formationShutDown(void)
 {
 	FORMATION	*psNext;
@@ -90,7 +92,8 @@ void formationShutDown(void)
 	}
 }
 
-// Create a new formation
+/** Create a new formation
+ */
 BOOL formationNew(FORMATION **ppsFormation, FORMATION_TYPE type,
 					SDWORD x, SDWORD y, SDWORD dir)
 {
@@ -160,30 +163,30 @@ BOOL formationNew(FORMATION **ppsFormation, FORMATION_TYPE type,
 }
 
 
-// Try and find a formation near to a location
-BOOL formationFind(FORMATION **ppsFormation, SDWORD x, SDWORD y)
+/** Try to find a formation near a location
+ */
+FORMATION* formationFind(int x, int y)
 {
-	SDWORD		xdiff,ydiff,distSq;
-	FORMATION	*psCurr;
+	FORMATION* psFormation;
 
-	for(psCurr = psFormationList; psCurr; psCurr=psCurr->psNext)
+	for (psFormation = psFormationList; psFormation; psFormation = psFormation->psNext)
 	{
 		// see if the positioin is close to the formation
-		xdiff = psCurr->x - x;
-		ydiff = psCurr->y - y;
-		distSq = xdiff*xdiff + ydiff*ydiff;
+		const int xdiff = psFormation->x - x;
+		const int ydiff = psFormation->y - y;
+		const int distSq = xdiff*xdiff + ydiff*ydiff;
 		if (distSq < FIND_RANGE*FIND_RANGE)
 		{
-			break;
+			return psFormation;
 		}
 	}
 
-	*ppsFormation = psCurr;
-
-	return psCurr != NULL;
+	return NULL;
 }
 
-// find formation speed (currently speed of slowest unit)
+/** Find formation speed.
+ *  This currently means the speed of the slowest unit.
+ */
 static void formationUpdateSpeed(FORMATION *psFormation, const DROID* psNew)
 {
 	SDWORD		iUnit;
@@ -212,7 +215,8 @@ static void formationUpdateSpeed(FORMATION *psFormation, const DROID* psNew)
 	}
 }
 
-// Associate a unit with a formation
+/** Associate a unit with a formation.
+ */
 void formationJoin(FORMATION *psFormation, const DROID* psDroid)
 {
 	SDWORD	rankDist, size;
@@ -240,7 +244,8 @@ void formationJoin(FORMATION *psFormation, const DROID* psDroid)
 	formationUpdateSpeed(psFormation, psDroid);
 }
 
-// Remove a unit from a formation
+/** Remove a unit from a formation.
+ */
 void formationLeave(FORMATION *psFormation, const DROID* psDroid)
 {
 	SDWORD		prev, curr, unit, line;
@@ -316,7 +321,8 @@ void formationLeave(FORMATION *psFormation, const DROID* psDroid)
 }
 
 
-// remove all the members from a formation and release it
+/** Remove all the members from a formation and release it.
+ */
 void formationReset(FORMATION *psFormation)
 {
 	int i;
@@ -330,7 +336,8 @@ void formationReset(FORMATION *psFormation)
 	}
 }
 
-// calculate the coordinates of a position on a line
+/** Calculate the coordinates of a position on a line
+ */
 static void formationCalcPos(FORMATION *psFormation, SDWORD line, SDWORD dist,
 					  SDWORD *pX, SDWORD *pY)
 {

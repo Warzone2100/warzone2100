@@ -392,9 +392,11 @@ static BOOL moveDroidToBase(DROID	*psDroid, UDWORD x, UDWORD y, BOOL bFormation)
 		if (bFormation)
 		{
 			// join a formation if it exists at the destination
-			if (formationFind(&psDroid->sMove.psFormation, (SDWORD)x,(SDWORD)y))
+			FORMATION* psFormation = formationFind(x, y);
+			if (psFormation)
 			{
-				formationJoin(psDroid->sMove.psFormation, psDroid);
+				psDroid->sMove.psFormation = psFormation;
+				formationJoin(psFormation, psDroid);
 			}
 			else
 			{

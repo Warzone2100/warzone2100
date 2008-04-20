@@ -5726,12 +5726,12 @@ static void LoadDroidMoveControl(DROID * const psDroid, SAVE_DROID const * const
 
 	if (psSaveDroid->sMove.isInFormation)
 	{
-		psDroid->sMove.psFormation = NULL;
+		psDroid->sMove.psFormation = formationFind(psSaveDroid->formationX, psSaveDroid->formationY);
 //		psSaveDroid->formationDir;
 //		psSaveDroid->formationX;
 //		psSaveDroid->formationY;
 		// join a formation if it exists at the destination
-		if (formationFind(&psDroid->sMove.psFormation, psSaveDroid->formationX, psSaveDroid->formationY))
+		if (psDroid->sMove.psFormation)
 		{
 			formationJoin(psDroid->sMove.psFormation, psDroid);
 		}
