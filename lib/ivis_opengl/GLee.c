@@ -37,6 +37,11 @@
 	#pragma optimize( "g", off )
 #endif
 
+// WORKAROUND: Prevents warnings caused by -Wmissing-declarations.
+#ifdef __GNUC__
+	#pragma GCC diagnostic ignored "-Wmissing-declarations"
+#endif
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

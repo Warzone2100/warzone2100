@@ -1,0 +1,32 @@
+Index: GLee.c
+===================================================================
+--- GLee.c	(revision 4687)
++++ GLee.c	(working copy)
+@@ -37,6 +37,11 @@
+ 	#pragma optimize( "g", off )
+ #endif
+ 
++// WORKAROUND: Prevents warnings caused by -Wmissing-declarations.
++#ifdef __GNUC__
++	#pragma GCC diagnostic ignored "-Wmissing-declarations"
++#endif
++
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <string.h>
+Index: GLee.h
+===================================================================
+--- GLee.h	(revision 4687)
++++ GLee.h	(working copy)
+@@ -36,6 +36,11 @@
+ #ifndef __glee_h_
+ #define __glee_h_
+ 
++// WORKAROUND: Prevents warnings caused by -Wstrict-prototypes
++#ifdef __GNUC__
++	#pragma GCC diagnostic ignored "-Wstrict-prototypes"
++#endif
++
+ #ifdef __gl_h_
+ 	#error gl.h included before glee.h
+ #endif

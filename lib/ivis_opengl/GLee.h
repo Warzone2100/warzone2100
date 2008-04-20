@@ -36,6 +36,11 @@
 #ifndef __glee_h_
 #define __glee_h_
 
+// WORKAROUND: Prevents warnings caused by -Wstrict-prototypes
+#ifdef __GNUC__
+	#pragma GCC diagnostic ignored "-Wstrict-prototypes"
+#endif
+
 #ifdef __gl_h_
 	#error gl.h included before glee.h
 #endif
