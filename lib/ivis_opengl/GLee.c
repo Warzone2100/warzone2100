@@ -9313,7 +9313,7 @@ void __GLeeExtList_add(ExtensionList *extList, const char * extName)
 	extList->numNames++;
 }
 
-const char *__GLeeGetExtStrPlat()
+const char *__GLeeGetExtStrPlat(void)
 {
 #ifdef WIN32
 	if (!_GLEE_WGL_ARB_extensions_string)
