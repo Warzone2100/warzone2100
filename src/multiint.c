@@ -941,7 +941,7 @@ static void addColourChooser(UDWORD player)
 			4,/*9,*/													  //y
 			iV_GetImageWidth(FrontImages,IMAGE_PLAYER0),		  //w
 			iV_GetImageHeight(FrontImages,IMAGE_PLAYER0),		  //h
-			"", IMAGE_PLAYER0+i, IMAGE_PLAYER0+i,false);
+			"Player colour", IMAGE_PLAYER0 + i, IMAGE_PLAYER0 + i, false);
 
 			if( !safeToUseColour(selectedPlayer,i))
 			{
@@ -958,7 +958,7 @@ static void addColourChooser(UDWORD player)
 			23,													  //y
 			iV_GetImageWidth(FrontImages,IMAGE_WEE_GUY)+7,		  //w
 			iV_GetImageHeight(FrontImages,IMAGE_WEE_GUY),		  //h
-			"", IMAGE_WEE_GUY, IMAGE_WEE_GUY, IMAGE_ASCII48 + i);
+			"Player number", IMAGE_WEE_GUY, IMAGE_WEE_GUY, 10 + i);
 
 			if(isHumanPlayer(i) && i!=selectedPlayer)
 			{
@@ -2902,7 +2902,7 @@ void displayMultiBut(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT 
 	}
 
 	// evaluate auto-frame
-	if (im_hili == 1 && Hilight)
+	if (im_hili == 1 && Hilight && im_norm != IMAGE_WEE_GUY)
 	{
 		Hilight = true;
 		switch(iV_GetImageWidth(FrontImages, im_norm))			//pick a hilight.
@@ -2933,6 +2933,13 @@ void displayMultiBut(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT 
 			debug(LOG_WARNING, "no automatic multibut highlight for width = %d", iV_GetImageWidth(FrontImages, im_norm));
 			break;
 		}
+	}
+
+	if (im_norm == IMAGE_WEE_GUY)
+	{
+		// fugly hack for adding player number to the wee guy (whoever that is)
+		iV_DrawImage(IntImages, IMAGE_ASCII48 - 10 + im_hili, x + 11, y + 8);
+		Hilight = false;
 	}
 
 	if( ((W_BUTTON*)psWidget)->state & (WCLICK_DOWN | WCLICK_LOCKED | WCLICK_CLICKLOCK))
