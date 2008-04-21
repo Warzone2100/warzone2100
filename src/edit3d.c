@@ -42,7 +42,6 @@ UDWORD	buildState = BUILD3D_NONE;
 BUILDDETAILS	sBuildDetails;
 HIGHLIGHT		buildSite;
 
-
 // Initialisation function for statis & globals in this module.
 //
 void Edit3DInitVars(void)
@@ -50,13 +49,15 @@ void Edit3DInitVars(void)
 	buildState = BUILD3D_NONE;
 }
 
-
-
-
 /* Raises a tile by a #defined height */
-void	raiseTile(UDWORD tile3dX, UDWORD tile3dY)
+void raiseTile(int tile3dX, int tile3dY)
 {
-MAPTILE	*psTile;
+	MAPTILE	*psTile;
+
+	if (tile3dX < 0 || tile3dX > mapWidth - 1 || tile3dY < 0 || tile3dY > mapHeight - 1)
+	{
+		return;
+	}
 
 	psTile = mapTile(tile3dX,tile3dY);
 	adjustTileHeight(psTile,TILE_RAISE);
@@ -69,13 +70,17 @@ MAPTILE	*psTile;
 
 	psTile = mapTile(tile3dX,tile3dY+1);
 	adjustTileHeight(psTile,TILE_RAISE);
-
 }
 
 /* Lowers a tile by a #defined height */
-void	lowerTile(UDWORD tile3dX, UDWORD tile3dY)
+void lowerTile(int tile3dX, int tile3dY)
 {
-MAPTILE	*psTile;
+	MAPTILE	*psTile;
+
+	if (tile3dX < 0 || tile3dX > mapWidth - 1 || tile3dY < 0 || tile3dY > mapHeight - 1)
+	{
+		return;
+	}
 
 	psTile = mapTile(tile3dX,tile3dY);
 	adjustTileHeight(psTile,TILE_LOWER);
@@ -88,13 +93,12 @@ MAPTILE	*psTile;
 
 	psTile = mapTile(tile3dX,tile3dY+1);
 	adjustTileHeight(psTile,TILE_LOWER);
-
 }
 
 /* Ensures any adjustment to tile elevation is within allowed ranges */
 void	adjustTileHeight(MAPTILE *psTile, SDWORD adjust)
 {
-SDWORD	newHeight;
+	SDWORD	newHeight;
 
 	newHeight = psTile->height + adjust;
 	if (newHeight>=MIN_TILE_HEIGHT && newHeight<=MAX_TILE_HEIGHT)
@@ -103,11 +107,9 @@ SDWORD	newHeight;
 	}
 }
 
-
-
 BOOL	inHighlight(UDWORD realX, UDWORD realY)
 {
-BOOL	retVal = false;
+	BOOL	retVal = false;
 
 	if (realX>=buildSite.xTL && realX<=buildSite.xBR)
 	{
@@ -120,9 +122,14 @@ BOOL	retVal = false;
 	return(retVal);
 }
 
-
 void init3DBuilding(BASE_STATS *psStats,BUILDCALLBACK CallBack,void *UserData)
 {
+	ASSERT(psStats, "Bad parameter");
+	if (!psStats)
+	{
+		return;
+	}
+
 	buildState = BUILD3D_POS;
 
 	sBuildDetails.CallBack = CallBack;
@@ -261,7 +268,7 @@ BOOL process3DBuilding(void)
 /* See if a structure location has been found */
 BOOL found3DBuilding(UDWORD *x, UDWORD *y)
 {
-	if (buildState != BUILD3D_FINISHED)
+	if (buildState != BUILD3D_FINISHED || x == NULL || y == NULL)
 	{
 		return false;
 	}
