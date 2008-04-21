@@ -50,7 +50,7 @@ typedef struct _astar_route
 	SDWORD finalX, finalY, numPoints;
 } ASTAR_ROUTE;
 
-// counters for a-star
+// counters for A*
 extern int astarInner;
 
 /** Reset the A* counters
@@ -90,7 +90,8 @@ enum
 extern SDWORD fpathAStarRoute(SDWORD routeMode, ASTAR_ROUTE *psRoutePoints,
 							SDWORD sx, SDWORD sy, SDWORD fx, SDWORD fy);
 
-// Check los between two tiles
+/** Check LOS (Line Of Sight) between two tiles
+ */
 extern BOOL fpathTileLOS(SDWORD x1,SDWORD y1, SDWORD x2,SDWORD y2);
 
 #endif // __INCLUDED_SRC_ASTART_H__

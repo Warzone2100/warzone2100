@@ -43,7 +43,8 @@ static SDWORD	astarOuter, astarRemove;
  */
 int astarInner = 0;
 
-// The structure to store a node of the route
+/** The structure to store a node of the route in the hash table
+ */
 typedef struct _fp_node
 {
 	SWORD	x,y;		// map coords
@@ -58,13 +59,16 @@ typedef struct _fp_node
 #define NT_OPEN		1
 #define NT_CLOSED	2
 
-// List of open nodes
+/** List of open nodes in the hash table
+ */
 FP_NODE		*psOpen;
 
-// Size of closed hash table
+/** Size of closed hash table
+ */
 #define FPATH_TABLESIZE		4091
 
-// Hash table for closed nodes
+/** Hash table for closed nodes
+ */
 FP_NODE*        apsNodes[FPATH_TABLESIZE] = { NULL };
 
 #define NUM_DIR		8
@@ -133,7 +137,11 @@ static SDWORD fpathHashFunc(int32_t x, int32_t y)
 	return hashValue;
 }
 
-// Add a node to the hash table
+/** Add a node to the hash table
+ *
+ *  @param apsTable hash table
+ *  @param psNode to add to the given hash table
+ */
 static void fpathHashAdd(FP_NODE *apsTable[], FP_NODE *psNode)
 {
 	SDWORD	index;
@@ -144,28 +152,37 @@ static void fpathHashAdd(FP_NODE *apsTable[], FP_NODE *psNode)
 	apsTable[index] = psNode;
 }
 
-// See if a node is in the hash table
-static FP_NODE *fpathHashPresent(FP_NODE *apsTable[], SDWORD x, SDWORD y)
+/** See if a node is in the hash table
+ *  Check whether there is a node for the given coordinates in the hash table
+ *
+ *  @param apsTable the hash table to check
+ *  @param x,y the coordinates to check for
+ *  @return a pointer to the node if one could be found, or NULL otherwise.
+ */
+static FP_NODE *fpathHashPresent(FP_NODE *apsTable[], int32_t x, int32_t y)
 {
-	SDWORD		index;
-	FP_NODE		*psFound;
+	FP_NODE *psFound;
 
-	index = fpathHashFunc(x,y);
-	psFound = apsTable[index];
-	while (psFound && !(psFound->x == x && psFound->y == y))
+	for (psFound = apsTable[fpathHashFunc(x, y)]; psFound; psFound = psFound->psNext)
 	{
-		psFound = psFound->psNext;
+		// Check whether we found the node we're looking for
+		if (psFound->x == x
+		 && psFound->y == y)
+		{
+			return psFound;
+		}
 	}
 
-	return psFound;
+	return NULL;
 }
 
-// Reset the hash tables
+/** Reset the hash tables
+ */
 static void fpathHashReset(void)
 {
 	int i;
 
-	for(i = 0; i< ARRAY_SIZE(apsNodes); ++i)
+	for(i = 0; i < ARRAY_SIZE(apsNodes); ++i)
 	{
 		while (apsNodes[i])
 		{
@@ -177,7 +194,8 @@ static void fpathHashReset(void)
 	}
 }
 
-// Compare two nodes
+/** Compare two nodes
+ */
 static inline SDWORD fpathCompare(FP_NODE *psFirst, FP_NODE *psSecond)
 {
 	SDWORD	first,second;
@@ -207,20 +225,23 @@ static inline SDWORD fpathCompare(FP_NODE *psFirst, FP_NODE *psSecond)
 	return 0;
 }
 
-// make a 50/50 random choice
+/** make a 50/50 random choice
+ */
 static BOOL fpathRandChoice(void)
 {
 	return ONEINTWO;
 }
 
-// Add a node to the open list
+/** Add a node to the open list
+ */
 static void fpathOpenAdd(FP_NODE *psNode)
 {
 	psNode->psOpen = psOpen;
 	psOpen = psNode;
 }
 
-// Get the nearest entry in the open list
+/** Get the nearest entry in the open list
+ */
 static FP_NODE *fpathOpenGet(void)
 {
 	FP_NODE	*psNode, *psCurr, *psPrev, *psParent = NULL;
@@ -259,7 +280,8 @@ static FP_NODE *fpathOpenGet(void)
 	return psNode;
 }
 
-// estimate the distance to the target point
+/** Estimate the distance to the target point
+ */
 static SDWORD fpathEstimate(SDWORD x, SDWORD y, SDWORD fx, SDWORD fy)
 {
 	SDWORD xdiff, ydiff;
@@ -273,7 +295,8 @@ static SDWORD fpathEstimate(SDWORD x, SDWORD y, SDWORD fx, SDWORD fy)
 	return xdiff > ydiff ? xdiff + ydiff/2 : xdiff/2 + ydiff;
 }
 
-// Generate a new node
+/** Generate a new node
+ */
 static FP_NODE *fpathNewNode(SDWORD x, SDWORD y, SDWORD dist, FP_NODE *psRoute)
 {
 	FP_NODE	*psNode = malloc(sizeof(FP_NODE));
@@ -297,7 +320,8 @@ static FP_NODE *fpathNewNode(SDWORD x, SDWORD y, SDWORD dist, FP_NODE *psRoute)
 static SDWORD	finalX,finalY, vectorX,vectorY;
 static BOOL		obstruction;
 
-// The visibility ray callback
+/** The visibility ray callback
+ */
 static BOOL fpathVisCallback(SDWORD x, SDWORD y, SDWORD dist)
 {
 	SDWORD	vx,vy;
@@ -322,7 +346,6 @@ static BOOL fpathVisCallback(SDWORD x, SDWORD y, SDWORD dist)
 	return true;
 }
 
-// Check los between two tiles
 BOOL fpathTileLOS(SDWORD x1,SDWORD y1, SDWORD x2,SDWORD y2)
 {
 	// convert to world coords
@@ -344,7 +367,6 @@ BOOL fpathTileLOS(SDWORD x1,SDWORD y1, SDWORD x2,SDWORD y2)
 	return !obstruction;
 }
 
-// A* findpath
 SDWORD fpathAStarRoute(SDWORD routeMode, ASTAR_ROUTE *psRoutePoints,
 					 SDWORD sx, SDWORD sy, SDWORD fx, SDWORD fy)
 {
