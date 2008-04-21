@@ -96,7 +96,7 @@ BOOL fpathInitialise(void)
  *        anymore, or the currently calculated route is outdated for, are
  *        removed from the job queue.
  *
- *  @ingroup
+ *  @ingroup pathfinding
  */
 void fpathUpdate(void)
 {

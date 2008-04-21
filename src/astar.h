@@ -21,6 +21,19 @@
 #ifndef __INCLUDED_SRC_ASTART_H__
 #define __INCLUDED_SRC_ASTART_H__
 
+/** The maximum amount of iterations we want to spend in the inner loop of the
+ *  A* algorithm.
+ *
+ *  If this number is succeeded, we will return ASR_PARTIAL and continue the
+ *  path finding during the next next frame. Function fpathRoute() will return
+ *  FPR_WAIT if it was already working on the currently requested droid.
+ *  FPR_RESCHEDULE indicates that fpathRoute() didn't even get started on the
+ *  current droid and it'll require rescheduling in the next frame.
+ *
+ *  @ingroup pathfinding
+ */
+#define FPATH_LOOP_LIMIT	600
+
 /** The maximum length of an A* computed route, expressed in nodes (aka tiles)
  *
  *  @ingroup pathfinding

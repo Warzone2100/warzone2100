@@ -33,6 +33,14 @@
 #include "astar.h"
 
 static SDWORD	astarOuter, astarRemove;
+
+/** Keeps track of the amount of iterations done in the inner loop of our A*
+ *  implementation.
+ *
+ *  @see FPATH_LOOP_LIMIT
+ *
+ *  @ingroup pathfinding
+ */
 SDWORD	astarInner;
 
 // The structure to store a node of the route

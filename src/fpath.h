@@ -26,8 +26,6 @@
 
 #include "droiddef.h"
 
-#define FPATH_LOOP_LIMIT	600
-
 /** Return values for routing
  *
  *  @ingroup pathfinding
