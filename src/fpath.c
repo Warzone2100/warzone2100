@@ -694,6 +694,8 @@ FPATH_RETVAL fpathRoute(DROID* psDroid, MOVE_CONTROL *psMoveCntl,
 			fpathBlockingTile == fpathLiftBlockingTile,
 			"fpathRoute: invalid blocking function" );
 
+	ASSERT(astarInner >= 0, "astarInner overflowed!");
+
 	if (astarInner > FPATH_LOOP_LIMIT)
 	{
 		// Time out

@@ -51,9 +51,11 @@ typedef struct _astar_route
 } ASTAR_ROUTE;
 
 // counters for a-star
-extern SDWORD astarInner;
+extern int astarInner;
 
 /** Reset the A* counters
+ *
+ *  This function resets astarInner among others.
  *
  *  @ingroup pathfinding
  */

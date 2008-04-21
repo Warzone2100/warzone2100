@@ -41,7 +41,7 @@ static SDWORD	astarOuter, astarRemove;
  *
  *  @ingroup pathfinding
  */
-SDWORD	astarInner;
+int astarInner = 0;
 
 // The structure to store a node of the route
 typedef struct _fp_node
@@ -450,6 +450,8 @@ static 	FP_NODE		*psNearest, *psRoute;
 			}
 
 			astarInner += 1;
+			ASSERT(astarInner >= 0, "astarInner overflowed!");
+
 
 			// Now insert the point into the appropriate list
 			if (!psFound)
