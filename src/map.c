@@ -131,14 +131,18 @@ BOOL mapNew(UDWORD width, UDWORD height)
 	if (psMapTiles != NULL)
 	{
 		/* Clear all the objects off the map and free up the map memory */
+		gwShutDown();
+		releaseAllProxDisp();
 		freeAllDroids();
 		freeAllStructs();
 		freeAllFeatures();
+		freeAllFlagPositions();
 		proj_FreeAllProjectiles();
 		free(aMapLinePoints);
 		aMapLinePoints = NULL;
 		free(psMapTiles);
 		psMapTiles = NULL;
+		initStructLimits();
 	}
 
 	if (width*height > MAP_MAXAREA)
