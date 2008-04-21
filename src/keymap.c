@@ -250,6 +250,7 @@ _keymapsave keyMapSaveTable[] =
 	kf_ToggleDrivingMode,
 	kf_ToggleShowGateways,
 	kf_ToggleShowPath,
+	kf_MapCheck,
 	NULL		// last function!
 };
 
@@ -432,7 +433,7 @@ void	keyInitMappings( BOOL bForceDefaults )
 	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,(KEY_CODE)KEY_MAXSCAN,KEYMAP_PRESSED,kf_ToggleReopenBuildMenu,_("Toggle reopening the build menu"));
 
 	// NOTE THIS!!!!!!!
-	// available: ctrl+k, ctrl+l
+	// available: ctrl+l
 	keyAddMapping(KEYMAP__DEBUG,KEY_LCTRL,KEY_M,KEYMAP_PRESSED,kf_ToggleShowPath,				"Toggle display of droid path");
 	keyAddMapping(KEYMAP__DEBUG,KEY_LCTRL,KEY_E,KEYMAP_PRESSED,kf_ToggleShowGateways,			"Toggle display of gateways");
 	keyAddMapping(KEYMAP___HIDE,KEY_LSHIFT,KEY_BACKSPACE,KEYMAP_PRESSED,kf_ToggleDebugMappings,			"TOGGLE Debug Mappings");
@@ -445,6 +446,7 @@ void	keyInitMappings( BOOL bForceDefaults )
 	keyAddMapping(KEYMAP__DEBUG,KEY_LCTRL,KEY_J,KEYMAP_PRESSED,kf_ToggleFog,					"Toggles All fog");
 	keyAddMapping(KEYMAP__DEBUG,KEY_LCTRL,KEY_Q,KEYMAP_PRESSED,kf_ToggleWeather,				"Trigger some weather");
 	keyAddMapping(KEYMAP__DEBUG,KEY_IGNORE,KEY_K,KEYMAP_PRESSED,kf_TriFlip,					"Flip terrain triangle");
+	keyAddMapping(KEYMAP__DEBUG,KEY_LCTRL,KEY_K,KEYMAP_PRESSED,kf_MapCheck,					"Realign height of all objects on the map");
 
 	//These ones are necessary for debugging
 	keyAddMapping(KEYMAP__DEBUG,KEY_LALT,KEY_A,KEYMAP_PRESSED,kf_AllAvailable,						"Make all items available");

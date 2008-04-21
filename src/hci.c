@@ -70,6 +70,7 @@
 #include "warcam.h"
 #include "main.h"
 #include "wrappers.h"
+#include "keybind.h"
 
 //#define DEBUG_SCROLLTABS 	//enable to see tab scroll button info for buttons
 
@@ -152,18 +153,6 @@ BOOL Refreshing = false;
 /***************************************************************************************/
 /*                  Widget ID numbers                                                  */
 
-/* Reticule ID's */
-//#define IDRET_FORM			1		// The reticule form
-/* defined in HCI.h now
-#define IDRET_OPTIONS		2		// option button
-#define IDRET_BUILD			3		// build button
-#define IDRET_MANUFACTURE	4		// manufacture button
-#define IDRET_RESEARCH		5		// research button
-#define IDRET_INTEL_MAP		6		// intelligence map button
-#define IDRET_DESIGN		7		// design droids button
-#define IDRET_CANCEL		8		// central cancel button
-*/
-
 #define IDPOW_FORM			100		// power bar form
 
 /* Option screen IDs */
@@ -188,14 +177,13 @@ BOOL Refreshing = false;
 #define IDOPT_FEATURE		1039		// The place feature button
 #define IDOPT_TILE		1040		// The place tile button
 #define IDOPT_PAUSE		1041		// The edit pause button
+#define IDOPT_ZALIGN		1042		// The z-align button
 
 /* Edit screen IDs */
 #define IDED_FORM			2000		// The edit form
 #define IDED_LABEL			2001		// The edit screen label
 #define IDED_CLOSE			2002		// The edit screen close box
 #define	IDED_STATFORM		2003		// The edit screen stats form (for droids/structs/features)
-
-
 
 //Design Screen uses		5000
 //Intelligence Map uses		6000
@@ -246,7 +234,6 @@ BOOL Refreshing = false;
 #define ED_GAP			5
 #define ED_BUTWIDTH		60
 #define ED_BUTHEIGHT	20
-
 
 #define	STAT_TABOFFSET			2
 #define STAT_BUTX				4
@@ -1440,6 +1427,9 @@ static void intProcessOptions(UDWORD id)
 				editPause = true;
 				setEditPause(true);
 			}
+			break;
+		case IDOPT_ZALIGN:
+			kf_MapCheck();
 			break;
 		case IDOPT_CLOSE:
 			intRemoveOptions();
@@ -4162,6 +4152,16 @@ BOOL intAddOptions(void)
 	if (editPause)
 	{
 		widgSetButtonState(psWScreen, IDOPT_PAUSE, WBUT_CLICKLOCK);
+	}
+
+	/* Z-align map objects */
+	sButInit.x += OPT_GAP + OPT_BUTWIDTH;
+	sButInit.id = IDOPT_ZALIGN;
+	sButInit.pText = "Z-Align";
+	sButInit.pTip = _("Align height of all map objects");
+	if (!widgAddButton(psWScreen, &sButInit))
+	{
+		return false;
 	}
 
 #ifdef EDIT_OPTIONS

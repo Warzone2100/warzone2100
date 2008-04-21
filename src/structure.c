@@ -1528,10 +1528,8 @@ static SDWORD structChooseWallType(UDWORD player, UDWORD mapX, UDWORD mapY)
 }
 
 
-static void buildFlatten(STRUCTURE_STATS *pStructureType, UDWORD atx, UDWORD aty,UDWORD h )
+void buildFlatten(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y, UDWORD h)
 {
-	UDWORD				x = map_coord(atx);
-	UDWORD				y = map_coord(aty);
 	UBYTE				width;
 	UBYTE				breadth;
 
@@ -1551,13 +1549,44 @@ static void buildFlatten(STRUCTURE_STATS *pStructureType, UDWORD atx, UDWORD aty
 			}
 		}
 	}
-	return ;
+}
+
+void alignStructure(STRUCTURE *psBuilding)
+{
+	int width, breadth;
+	int x = psBuilding->pos.x;
+	int y = psBuilding->pos.y;
+
+	/* DEFENSIVE structures are pulled to the terrain */
+	if (psBuilding->pStructureType->type != REF_DEFENSE)
+	{
+		int mapH = buildFoundation(psBuilding->pStructureType, x, y);
+
+		buildFlatten(psBuilding->pStructureType, map_coord(x), map_coord(y), mapH);
+		psBuilding->pos.z = mapH;
+	}
+	else
+	{
+		psBuilding->pos.z = TILE_MIN_HEIGHT;
+
+		/* Set it at the higher coord */
+		for (width = 0; width < psBuilding->pStructureType->baseWidth; width++)
+		{
+			for (breadth = 0; breadth < psBuilding->pStructureType->baseBreadth; breadth++)
+			{
+				UDWORD tmpMax, tmpMin;
+
+				getTileMaxMin(map_coord(x) + width, map_coord(y) + breadth, &tmpMax, &tmpMin);
+				psBuilding->pos.z = MAX(tmpMax, psBuilding->pos.z);
+			}
+		}
+	}
 }
 
 /*Builds an instance of a Structure - the x/y passed in are in world coords. */
 STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, UDWORD player, BOOL FromSave)
 {
-	UDWORD		mapX, mapY, mapH;
+	UDWORD		mapX, mapY;
 	UDWORD		width, breadth, weapon, capacity;
 	float bodyDiff = 0.f;
 	SDWORD		wallType = 0, preScrollMinX = 0, preScrollMinY = 0, preScrollMaxX = 0, preScrollMaxY = 0;
@@ -1657,7 +1686,6 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 			}
 		}
 
-		mapH = buildFoundation(pStructureType, x, y);
 		for (width = 0; width < pStructureType->baseWidth; width++)
 		{
 			for (breadth = 0; breadth < pStructureType->baseBreadth; breadth++)
@@ -1698,28 +1726,7 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 			}
 		}
 
-		/* DEFENSIVE structures are pulled to the terrain */
-		if(pStructureType->type != REF_DEFENSE)
-		{
-			buildFlatten(pStructureType, world_coord(mapX), world_coord(mapY), mapH);
-			psBuilding->pos.z = (UWORD)mapH;
-		}
-		else
-		{
-			psBuilding->pos.z = TILE_MIN_HEIGHT;
-
-			/* Set it at the higher coord */
-			for (width = 0; width < pStructureType->baseWidth; width++)
-			{
-				for (breadth = 0; breadth < pStructureType->baseBreadth; breadth++)
-				{
-					UDWORD tmpMax, tmpMin;
-
-					getTileMaxMin(mapX + width, mapY + breadth, &tmpMax, &tmpMin);
-					psBuilding->pos.z = MAX(tmpMax, psBuilding->pos.z);
-				}
-			}
-		}
+		alignStructure(psBuilding);
 
 		//set up the rest of the data
 		for (i = 0;i < STRUCT_MAXWEAPS;i++)
@@ -5285,7 +5292,7 @@ void setAssemblyPoint(FLAG_POSITION *psAssemblyPoint, UDWORD x, UDWORD y,
 	psAssemblyPoint->coords.y = y;
 
 	// Deliv Point sits at the height of the tile it's centre is on + arbitary amount!
-	psAssemblyPoint->coords.z = map_Height((UWORD)x, (UWORD)y) + 10;
+	psAssemblyPoint->coords.z = map_Height(x, y) + ASSEMBLY_POINT_Z_PADDING;
 }
 
 

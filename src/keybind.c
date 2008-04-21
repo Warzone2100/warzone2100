@@ -652,10 +652,32 @@ void kf_ToggleWatchWindow( void )
 
 // --------------------------------------------------------------------------
 
+void kf_MapCheck(void)
+{
+	DROID		*psDroid;
+	STRUCTURE	*psStruct;
+	FLAG_POSITION	*psCurrFlag;
+
+	for (psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
+	{
+		psDroid->pos.z = map_Height(psDroid->pos.x, psDroid->pos.y);
+	}
+
+	for (psStruct = apsStructLists[selectedPlayer]; psStruct; psStruct = psStruct->psNext)
+	{
+		alignStructure(psStruct);
+	}
+
+	for (psCurrFlag = apsFlagPosLists[selectedPlayer]; psCurrFlag; psCurrFlag = psCurrFlag->psNext)
+	{
+		psCurrFlag->coords.z = map_Height(psCurrFlag->coords.x, psCurrFlag->coords.y) + ASSEMBLY_POINT_Z_PADDING;
+	}
+}
+
 /* Raises the tile under the mouse */
 void	kf_RaiseTile( void )
 {
-	raiseTile(mouseTileX,mouseTileY);
+	raiseTile(mouseTileX, mouseTileY);
 }
 
 // --------------------------------------------------------------------------
@@ -663,9 +685,7 @@ void	kf_RaiseTile( void )
 /* Lowers the tile under the mouse */
 void	kf_LowerTile( void )
 {
-	lowerTile(mouseTileX,mouseTileY);
-	// Not sure why the below was here of all places - Per
-//	selNextSpecifiedBuilding(REF_FACTORY);
+	lowerTile(mouseTileX, mouseTileY);
 }
 
 // --------------------------------------------------------------------------

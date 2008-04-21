@@ -31,6 +31,9 @@
 // how long to wait between CALL_STRUCT_ATTACKED's - plus how long to flash on radar for
 #define ATTACK_CB_PAUSE		5000
 
+/// Extra z padding for assembly points
+#define ASSEMBLY_POINT_Z_PADDING 10
+
 #define	STRUCTURE_DAMAGE_SCALING	400
 // This should really be logarithmic
 #define	STRUCTURE_HEIGHT_SCATTER	(rand()%300)
@@ -159,6 +162,8 @@ extern BOOL checkWidth(UDWORD maxRange, UDWORD x, UDWORD y, UDWORD *pDroidX, UDW
 extern BOOL checkLength(UDWORD maxRange, UDWORD x, UDWORD y, UDWORD *pDroidX, UDWORD *pDroidY);
 
 extern SWORD buildFoundation(STRUCTURE_STATS *psStructStats, UDWORD x, UDWORD y);
+extern void buildFlatten(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y, UDWORD h);
+extern void alignStructure(STRUCTURE *psBuilding);
 
 //initialise the structure limits structure
 extern void initStructLimits(void);

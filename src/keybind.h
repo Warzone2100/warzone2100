@@ -46,6 +46,7 @@ extern void	kf_ToggleShadows( void );
 extern void	kf_ToggleCamera( void );
 extern void	kf_RaiseTile( void );
 extern void	kf_LowerTile( void );
+extern void	kf_MapCheck( void );
 extern void	kf_SystemClose( void );
 extern void	kf_ZoomOut( void );
 extern void	kf_ZoomIn( void );
