@@ -61,7 +61,7 @@ typedef struct _fp_node
 
 /** List of open nodes in the hash table
  */
-FP_NODE		*psOpen;
+static FP_NODE* psOpen;
 
 /** Size of closed hash table
  */
@@ -69,7 +69,7 @@ FP_NODE		*psOpen;
 
 /** Hash table for closed nodes
  */
-FP_NODE*        apsNodes[FPATH_TABLESIZE] = { NULL };
+static FP_NODE* apsNodes[FPATH_TABLESIZE] = { NULL };
 
 #define NUM_DIR		8
 
