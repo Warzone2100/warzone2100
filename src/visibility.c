@@ -160,17 +160,16 @@ static BOOL rayTerrainCallback(SDWORD x, SDWORD y, SDWORD dist)
 		}
 
 		/* Not true visibility - done on sensor range */
-
-		if(getRevealStatus())
+		if (rayPlayer == selectedPlayer
+		    || (bMultiPlayer && game.alliance == ALLIANCES_TEAMS
+			&& aiCheckAlliances(selectedPlayer, rayPlayer)))
 		{
-			if ((UDWORD)rayPlayer == selectedPlayer
-			    || (bMultiPlayer && game.alliance == ALLIANCES_TEAMS
-				&& aiCheckAlliances(selectedPlayer, rayPlayer)))
+			// can see opponent moving
+			if(getRevealStatus())
 			{
-				// can see opponent moving
 				avInformOfChange(map_coord(x), map_coord(y));		//reveal map
-				psTile->activeSensor = true;
 			}
+			psTile->activeSensor = true;
 		}
 	}
 
