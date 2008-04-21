@@ -1125,7 +1125,8 @@ void intResetScreen(BOOL NoAnim)
 		NoAnim = true;
 	}
 
-	if(ReticuleUp) {
+	if (ReticuleUp)
+	{
 		/* Reset the reticule buttons */
 		widgSetButtonState(psWScreen, IDRET_COMMAND, 0);
 		widgSetButtonState(psWScreen, IDRET_BUILD, 0);
@@ -1781,33 +1782,38 @@ INT_RETVAL intRunWidgets(void)
 		break;
 
 	case IDRET_BUILD:
-		//intResetScreen(false);
-        intResetScreen(true);
+		intResetScreen(true);
 		widgSetButtonState(psWScreen, IDRET_BUILD, WBUT_CLICKLOCK);
-		(void)intAddBuild(NULL);
-//		intMode = INT_OBJECT;
+		if (editPause)
+		{
+			intProcessOptions(IDOPT_STRUCT);
+		}
+		else
+		{
+			(void)intAddBuild(NULL);
+		}
 		break;
 
 	case IDRET_MANUFACTURE:
-//		OrderDroidsToEmbark();
-//		missionDestroyObjects();
-		//intResetScreen(false);
-        intResetScreen(true);
+		intResetScreen(true);
 		widgSetButtonState(psWScreen, IDRET_MANUFACTURE, WBUT_CLICKLOCK);
-		(void)intAddManufacture(NULL);
-//		intMode = INT_OBJECT;
+		if (editPause)
+		{
+			intProcessOptions(IDOPT_DROID);
+		}
+		else
+		{
+			(void)intAddManufacture(NULL);
+		}
 		break;
 
 	case IDRET_RESEARCH:
-		//intResetScreen(false);
-        intResetScreen(true);
+		intResetScreen(true);
 		widgSetButtonState(psWScreen, IDRET_RESEARCH, WBUT_CLICKLOCK);
 		(void)intAddResearch(NULL);
-//		intMode = INT_OBJECT;
 		break;
 
 	case IDRET_INTEL_MAP:
-//		intResetScreen(false);
 //		//check if RMB was clicked
 		if (widgGetButtonKey(psWScreen) & WKEY_SECONDARY)
 		{
@@ -1850,7 +1856,6 @@ INT_RETVAL intRunWidgets(void)
 	case INTINGAMEOP_QUIT_CONFIRM:			// esc quit confrim
 	case IDOPT_QUIT:						// options screen quit
 		intResetScreen(false);
-        //clearMissionWidgets();
 		quitting = true;
 		break;
 
@@ -2439,7 +2444,6 @@ static void intAddObjectStats(BASE_OBJECT *psObj, UDWORD id)
 		}
 	}
 
-//DBPRINTF(("intAddStats(%p,%d,%p,%p)\n",ppsStatsList, numStatsListEntries, psStats, psObj);
 	intAddStats(ppsStatsList, numStatsListEntries, psStats, psObj);
 
     //get the tab positions for the new stat form
@@ -7050,32 +7054,32 @@ void intCheckReticuleButtons(void)
 	int i;
 
 	ReticuleEnabled[RETBUT_CANCEL].Enabled = true;
-	ReticuleEnabled[RETBUT_FACTORY].Enabled = false;
+	ReticuleEnabled[RETBUT_FACTORY].Enabled = editPause;
 	ReticuleEnabled[RETBUT_RESEARCH].Enabled = false;
-	ReticuleEnabled[RETBUT_BUILD].Enabled = false;
-	ReticuleEnabled[RETBUT_DESIGN].Enabled = false;
+	ReticuleEnabled[RETBUT_BUILD].Enabled = editPause;
+	ReticuleEnabled[RETBUT_DESIGN].Enabled = editPause;
 	ReticuleEnabled[RETBUT_INTELMAP].Enabled = true;
 	ReticuleEnabled[RETBUT_COMMAND].Enabled = false;
 
-
-	for (psStruct = interfaceStructList(); psStruct != NULL; psStruct =
-		psStruct->psNext)
+	for (psStruct = interfaceStructList(); psStruct != NULL; psStruct = psStruct->psNext)
 	{
-		if(psStruct->status == SS_BUILT) {
-			switch(psStruct->pStructureType->type) {
+		if (psStruct->status == SS_BUILT)
+		{
+			switch(psStruct->pStructureType->type)
+			{
 				case REF_RESEARCH:
-                    if (!missionLimboExpand())
-                    {
-					    ReticuleEnabled[RETBUT_RESEARCH].Enabled = true;
-                    }
+					if (!missionLimboExpand())
+					{
+						ReticuleEnabled[RETBUT_RESEARCH].Enabled = true;
+					}
 					break;
 				case REF_FACTORY:
 				case REF_CYBORG_FACTORY:
 				case REF_VTOL_FACTORY:
-                    if (!missionLimboExpand())
-                    {
-					    ReticuleEnabled[RETBUT_FACTORY].Enabled = true;
-                    }
+					if (!missionLimboExpand())
+					{
+						ReticuleEnabled[RETBUT_FACTORY].Enabled = true;
+					}
 					break;
 				case REF_HQ:
 					ReticuleEnabled[RETBUT_DESIGN].Enabled = true;
@@ -7089,7 +7093,8 @@ void intCheckReticuleButtons(void)
 	for (psDroid = apsDroidLists[selectedPlayer]; psDroid != NULL; psDroid =
 		psDroid->psNext)
 	{
-		switch(psDroid->droidType) {
+		switch (psDroid->droidType)
+		{
 		case DROID_CONSTRUCT:
 		case DROID_CYBORG_CONSTRUCT:
 			ReticuleEnabled[RETBUT_BUILD].Enabled = true;
@@ -7102,20 +7107,29 @@ void intCheckReticuleButtons(void)
 		}
 	}
 
-	for (i=0; i<NUMRETBUTS; i++) {
+	for (i = 0; i < NUMRETBUTS; i++)
+	{
 		WIDGET *psWidget = widgGetFromID(psWScreen,ReticuleEnabled[i].id);
 
-		if(psWidget != NULL) {
-			if(psWidget->type != WIDG_LABEL) {
-				if(ReticuleEnabled[i].Enabled) {
+		if (psWidget != NULL)
+		{
+			if (psWidget->type != WIDG_LABEL)
+			{
+				if (ReticuleEnabled[i].Enabled)
+				{
 					widgSetButtonState(psWScreen, ReticuleEnabled[i].id, 0);
-				} else {
+				}
+				else
+				{
 					widgSetButtonState(psWScreen, ReticuleEnabled[i].id, WBUT_DISABLE);
 				}
 
-				if(ReticuleEnabled[i].Hidden) {
+				if (ReticuleEnabled[i].Hidden)
+				{
 					widgHide(psWScreen, ReticuleEnabled[i].id);
-				} else {
+				}
+				else
+				{
 					widgReveal(psWScreen, ReticuleEnabled[i].id);
 				}
 			}
