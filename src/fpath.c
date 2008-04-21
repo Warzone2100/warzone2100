@@ -462,8 +462,7 @@ static FPATH_RETVAL fpathGatewayRoute(DROID* psDroid, SDWORD routeMode, SDWORD s
 			{
 				// routing hasn't finished yet
 				objTrace(LOG_MOVEMENT, psDroid->id, "fpathGatewayRoute: Reschedule");
-				retval = FPR_WAIT;
-				goto exit;
+				return FPR_WAIT;
 			}
 			routeMode = ASR_NEWROUTE;
 
@@ -472,8 +471,7 @@ static FPATH_RETVAL fpathGatewayRoute(DROID* psDroid, SDWORD routeMode, SDWORD s
 			{
 				// found a blocking wall - route to that
 				objTrace(LOG_MOVEMENT, psDroid->id, "fpathGatewayRoute: Got blocking wall");
-				retval = FPR_OK;
-				goto exit;
+				return FPR_OK;
 			}
 			else if (asret == ASR_NEAREST)
 			{
@@ -484,15 +482,13 @@ static FPATH_RETVAL fpathGatewayRoute(DROID* psDroid, SDWORD routeMode, SDWORD s
 					psMoveCntl->numPoints = 0;
 					fpathAppendRoute(psMoveCntl, &sAStarRoute);
 				}
-				retval = FPR_OK;
-				goto exit;
+				return FPR_OK;
 			}
 			else if (asret == ASR_FAILED)
 			{
 				// all routing was in one zone - can't retry
 				objTrace(LOG_MOVEMENT, psDroid->id, "fpathGatewayRoute: Failed route in same zone");
-				retval = FPR_FAILED;
-				goto exit;
+				return FPR_FAILED;
 			}
 
 			linkx = gwx;
@@ -507,8 +503,6 @@ static FPATH_RETVAL fpathGatewayRoute(DROID* psDroid, SDWORD routeMode, SDWORD s
 		psMoveCntl->numPoints = 0;
 		fpathAppendRoute(psMoveCntl, &sAStarRoute);
 	}
-
-exit:
 
 	return retval;
 }
