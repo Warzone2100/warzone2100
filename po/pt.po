@@ -12276,4 +12276,3 @@ msgstr " - Finalizado em %s"
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr " Versão %s%s%s%s"
-
