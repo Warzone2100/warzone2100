@@ -41,58 +41,51 @@ is invalid (not currently being used)
 UDWORD	buildState = BUILD3D_NONE;
 BUILDDETAILS	sBuildDetails;
 HIGHLIGHT		buildSite;
+int brushSize = 1;
+bool editMode = false;
 
 // Initialisation function for statis & globals in this module.
 //
 void Edit3DInitVars(void)
 {
 	buildState = BUILD3D_NONE;
+	brushSize = 1;
 }
 
 /* Raises a tile by a #defined height */
 void raiseTile(int tile3dX, int tile3dY)
 {
-	MAPTILE	*psTile;
+	int i, j;
 
 	if (tile3dX < 0 || tile3dX > mapWidth - 1 || tile3dY < 0 || tile3dY > mapHeight - 1)
 	{
 		return;
 	}
-
-	psTile = mapTile(tile3dX,tile3dY);
-	adjustTileHeight(psTile,TILE_RAISE);
-
-	psTile = mapTile(tile3dX+1,tile3dY);
-	adjustTileHeight(psTile,TILE_RAISE);
-
-	psTile = mapTile(tile3dX+1,tile3dY+1);
-	adjustTileHeight(psTile,TILE_RAISE);
-
-	psTile = mapTile(tile3dX,tile3dY+1);
-	adjustTileHeight(psTile,TILE_RAISE);
+	for (i = tile3dX; i <= MIN(mapWidth - 1, tile3dX + brushSize); i++)
+	{
+		for (j = tile3dY; j <= MIN(mapHeight - 1, tile3dY + brushSize); j++)
+		{
+			adjustTileHeight(mapTile(i, j), TILE_RAISE);
+		}
+	}
 }
 
 /* Lowers a tile by a #defined height */
 void lowerTile(int tile3dX, int tile3dY)
 {
-	MAPTILE	*psTile;
+	int i, j;
 
 	if (tile3dX < 0 || tile3dX > mapWidth - 1 || tile3dY < 0 || tile3dY > mapHeight - 1)
 	{
 		return;
 	}
-
-	psTile = mapTile(tile3dX,tile3dY);
-	adjustTileHeight(psTile,TILE_LOWER);
-
-	psTile = mapTile(tile3dX+1,tile3dY);
-	adjustTileHeight(psTile,TILE_LOWER);
-
-	psTile = mapTile(tile3dX+1,tile3dY+1);
-	adjustTileHeight(psTile,TILE_LOWER);
-
-	psTile = mapTile(tile3dX,tile3dY+1);
-	adjustTileHeight(psTile,TILE_LOWER);
+	for (i = tile3dX; i <= MIN(mapWidth - 1, tile3dX + brushSize); i++)
+	{
+		for (j = tile3dY; j <= MIN(mapHeight - 1, tile3dY + brushSize); j++)
+		{
+			adjustTileHeight(mapTile(i, j), TILE_LOWER);
+		}
+	}
 }
 
 /* Ensures any adjustment to tile elevation is within allowed ranges */

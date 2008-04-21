@@ -78,7 +78,6 @@
 //#define EDIT_OPTIONS
 
 static UDWORD		newMapWidth, newMapHeight;
-static bool		editPause = false;
 
 #define RETXOFFSET (0)// Reticule button offset
 #define RETYOFFSET (0)
@@ -1347,7 +1346,7 @@ static void intProcessOptions(UDWORD id)
 			if (mapNew(newMapWidth, newMapHeight))
 			{
 				// Set pause
-				editPause = true;
+				editMode = true;
 				setEditPause(true);
 				/* Managed to create a new map so quit the option screen */
 				intRemoveOptions();
@@ -1416,16 +1415,16 @@ static void intProcessOptions(UDWORD id)
 			intMode = INT_NORMAL;
 			break;
 		case IDOPT_PAUSE:
-			if (editPause)
+			if (editMode)
 			{
 				widgSetButtonState(psWScreen, IDOPT_PAUSE, 0);
-				editPause = false;
+				editMode = false;
 				setEditPause(false);
 			}
 			else
 			{
 				widgSetButtonState(psWScreen, IDOPT_PAUSE, WBUT_CLICKLOCK);
-				editPause = true;
+				editMode = true;
 				setEditPause(true);
 			}
 			break;
@@ -1784,7 +1783,7 @@ INT_RETVAL intRunWidgets(void)
 	case IDRET_BUILD:
 		intResetScreen(true);
 		widgSetButtonState(psWScreen, IDRET_BUILD, WBUT_CLICKLOCK);
-		if (editPause)
+		if (editMode)
 		{
 			intProcessOptions(IDOPT_STRUCT);
 		}
@@ -1797,7 +1796,7 @@ INT_RETVAL intRunWidgets(void)
 	case IDRET_MANUFACTURE:
 		intResetScreen(true);
 		widgSetButtonState(psWScreen, IDRET_MANUFACTURE, WBUT_CLICKLOCK);
-		if (editPause)
+		if (editMode)
 		{
 			intProcessOptions(IDOPT_DROID);
 		}
@@ -4153,7 +4152,7 @@ BOOL intAddOptions(void)
 	{
 		return false;
 	}
-	if (editPause)
+	if (editMode)
 	{
 		widgSetButtonState(psWScreen, IDOPT_PAUSE, WBUT_CLICKLOCK);
 	}
@@ -7054,10 +7053,10 @@ void intCheckReticuleButtons(void)
 	int i;
 
 	ReticuleEnabled[RETBUT_CANCEL].Enabled = true;
-	ReticuleEnabled[RETBUT_FACTORY].Enabled = editPause;
+	ReticuleEnabled[RETBUT_FACTORY].Enabled = editMode;
 	ReticuleEnabled[RETBUT_RESEARCH].Enabled = false;
-	ReticuleEnabled[RETBUT_BUILD].Enabled = editPause;
-	ReticuleEnabled[RETBUT_DESIGN].Enabled = editPause;
+	ReticuleEnabled[RETBUT_BUILD].Enabled = editMode;
+	ReticuleEnabled[RETBUT_DESIGN].Enabled = editMode;
 	ReticuleEnabled[RETBUT_INTELMAP].Enabled = true;
 	ReticuleEnabled[RETBUT_COMMAND].Enabled = false;
 

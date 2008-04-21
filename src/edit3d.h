@@ -70,6 +70,8 @@ extern BUILDDETAILS	sBuildDetails;
 
 extern UDWORD buildState;
 extern UDWORD temp;
+extern bool editMode;
+extern int brushSize;
 
 /*returns true if the build state is not equal to BUILD3D_NONE*/
 extern BOOL   tryingToGetLocation(void);
