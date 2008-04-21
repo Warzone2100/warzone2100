@@ -52,7 +52,7 @@ static PHYSFS_file* pReadFile = NULL;
 			} \
 		}
 
-void audp_error(char *pMessage,...);
+void audp_error(const char* fmt, ...);
 
 %}
 
