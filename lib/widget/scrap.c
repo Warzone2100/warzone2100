@@ -114,10 +114,10 @@ switch (type)
 static int
 convert_data(int type, char *dst, char *src, int srclen)
 {
-int dstlen;
+	int dstlen;
 
-dstlen = 0;
-switch (type)
+	dstlen = 0;
+	switch (type)
 	{
 	case T('T', 'E', 'X', 'T'):
 	if ( dst )
@@ -178,14 +178,14 @@ switch (type)
 	break;
 
 	default:
-	if ( dst )
+		if ( dst )
 		{
-		*(int *)dst = srclen;
-		dst += sizeof(int);
-		memcpy(dst, src, srclen);
+			*(int *)dst = srclen;
+			dst += sizeof(int);
+			memcpy(dst, src, srclen);
 		}
-	dstlen = sizeof(int)+srclen;
-	break;
+		dstlen = sizeof(int)+srclen;
+		break;
 	}
 	return(dstlen);
 }
@@ -312,53 +312,44 @@ if ( SDL_GetWMInfo(&info) )
 return(retval);
 }
 
-int
-lost_scrap(void)
+int lost_scrap(void)
 {
-int retval;
+	int retval;
 
 #if defined(WZ_WS_X11)
-/* * */
-Lock_Display();
-retval = ( XGetSelectionOwner(SDL_Display, XA_PRIMARY) != SDL_Window );
-Unlock_Display();
-
+	Lock_Display();
+	retval = ( XGetSelectionOwner(SDL_Display, XA_PRIMARY) != SDL_Window );
+	Unlock_Display();
 #elif defined(WZ_WS_WIN)
-/* * */
-retval = ( GetClipboardOwner() != SDL_Window );
-
+	retval = ( GetClipboardOwner() != SDL_Window );
 #elif defined(WZ_WS_QNX)
-/* * */
-retval = ( PhInputGroup(NULL) != InputGroup );
-
+	retval = ( PhInputGroup(NULL) != InputGroup );
 #endif /* scrap type */
-
-return(retval);
+	return(retval);
 }
 
 void
 put_scrap(int type, int srclen, char *src)
 {
-scrap_type format;
-int dstlen;
-char *dst;
+	scrap_type format;
+	int dstlen;
+	char *dst;
 
-format = convert_format(type);
-dstlen = convert_data(type, NULL, src, srclen);
+	format = convert_format(type);
+	dstlen = convert_data(type, NULL, src, srclen);
 
 #if defined(WZ_WS_X11)
-/* * */
-dst = (char *)malloc(dstlen);
-if ( dst != NULL )
+	dst = (char *)malloc(dstlen);
+	if ( dst != NULL )
 	{
-	Lock_Display();
-	convert_data(type, dst, src, srclen);
-	XChangeProperty(SDL_Display, DefaultRootWindow(SDL_Display),
-		XA_CUT_BUFFER0, format, 8, PropModeReplace, (unsigned char *)dst, dstlen);
-	free(dst);
-	if ( lost_scrap() )
-		XSetSelectionOwner(SDL_Display, XA_PRIMARY, SDL_Window, CurrentTime);
-	Unlock_Display();
+		Lock_Display();
+		convert_data(type, dst, src, srclen);
+		XChangeProperty(SDL_Display, DefaultRootWindow(SDL_Display),
+			XA_CUT_BUFFER0, format, 8, PropModeReplace, (unsigned char *)dst, dstlen);
+		free(dst);
+		if ( lost_scrap() )
+			XSetSelectionOwner(SDL_Display, XA_PRIMARY, SDL_Window, CurrentTime);
+		Unlock_Display();
 	}
 
 #elif defined(WZ_WS_WIN)
@@ -591,13 +582,14 @@ get_scrap(int type, int *dstlen, char **dst)
 #if defined(WZ_WS_X11)
 static int clipboard_filter(const SDL_Event *event)
 {
-/* Post all non-window manager specific events */
-if ( event->type != SDL_SYSWMEVENT ) {
-	return(1);
-}
+	/* Post all non-window manager specific events */
+	if (event->type != SDL_SYSWMEVENT)
+	{
+		return(1);
+	}
 
-/* Handle window-manager specific clipboard events */
-switch (event->syswm.msg->event.xevent.type) {
+	/* Handle window-manager specific clipboard events */
+	switch (event->syswm.msg->event.xevent.type) {
 	/* Copy the selection from XA_CUT_BUFFER0 to the requested property */
 	case SelectionRequest: {
 	XSelectionRequestEvent *req;
