@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: warzone2100 2.1_beta2\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
 "POT-Creation-Date: 2008-04-18 16:47+0200\n"
-"PO-Revision-Date: 2008-03-22 17:36-0300\n"
+"PO-Revision-Date: 2008-04-18 13:32-0300\n"
 "Last-Translator: Artur <tucalipe@hotmail.com>\n"
 "Language-Team: Portugese <warzone-dev@gna.org>\n"
 "MIME-Version: 1.0\n"
@@ -10234,65 +10234,61 @@ msgstr "Sistema de computador de guerra melhorado"
 
 #: lib/framework/i18n.c:42
 #: lib/framework/i18n.c:64
-#, fuzzy
 msgid "System locale"
-msgstr "Novo Sistema Disponível"
+msgstr "Localização do sistema"
 
 #: lib/framework/i18n.c:44
 #: lib/framework/i18n.c:69
-#, fuzzy
 msgid "Danish"
-msgstr "Mantis"
+msgstr "Dinamarquês"
 
 #: lib/framework/i18n.c:45
 #: lib/framework/i18n.c:68
-#, fuzzy
 msgid "German"
-msgstr "Major"
+msgstr "Alemão"
 
 #: lib/framework/i18n.c:46
 #: lib/framework/i18n.c:66
 msgid "English"
-msgstr ""
+msgstr "Inglês"
 
 #: lib/framework/i18n.c:47
 #: lib/framework/i18n.c:70
 msgid "French"
-msgstr ""
+msgstr "Francês"
 
 #: lib/framework/i18n.c:48
 #: lib/framework/i18n.c:71
-#, fuzzy
 msgid "Italian"
-msgstr "Retaliação"
+msgstr "Italiano"
 
 #: lib/framework/i18n.c:49
 #: lib/framework/i18n.c:73
 msgid "Dutch"
-msgstr ""
+msgstr "Holandês"
 
 #: lib/framework/i18n.c:50
 #: lib/framework/i18n.c:67
 msgid "Norwegian"
-msgstr ""
+msgstr "Norueguês"
 
 #: lib/framework/i18n.c:51
 #: lib/framework/i18n.c:74
 msgid "Portuegese"
-msgstr ""
+msgstr "Português"
 
 #: lib/framework/i18n.c:52
 #: lib/framework/i18n.c:75
 msgid "Russian"
-msgstr ""
+msgstr "Russo"
 
 #: lib/framework/i18n.c:53
 msgid "Swedish"
-msgstr ""
+msgstr "Sueco"
 
 #: lib/framework/i18n.c:72
 msgid "Latin"
-msgstr ""
+msgstr "Latim"
 
 #: src/clparse.c:88
 msgid "Run in cheat mode"
@@ -10889,9 +10885,8 @@ msgstr "Velocidade da Tela"
 
 #: src/frontend.c:1098
 #: src/frontend.c:1124
-#, fuzzy
 msgid "Language"
-msgstr "Longo Alcance"
+msgstr "Idioma"
 
 #: src/frontend.c:1102
 #: src/frontend.c:1125
@@ -12207,9 +12202,9 @@ msgid "%s - Connected %u of %u"
 msgstr "%s - %u de %u conectados"
 
 #: src/structure.c:6020
-#, fuzzy, c-format
+#, c-format
 msgid "%s - Damage %3.0f%%"
-msgstr "%s - %u%% danificado"
+msgstr "%s - Dano %3.0f%%"
 
 #: src/structure.c:6138
 #: src/structure.c:6189
@@ -12282,8 +12277,3 @@ msgstr " - Finalizado em %s"
 msgid "Version %s%s%s%s"
 msgstr " Versão %s%s%s%s"
 
-#~ msgid "R-Wpn-MG-Damage11"
-#~ msgstr "R-Wpn-MG-Damage11"
-
-#~ msgid "R-Struc-Power-Cam2"
-#~ msgstr "R-Struc-Power-Cam2"
