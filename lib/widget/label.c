@@ -156,6 +156,3 @@ void labelHiLiteLost(W_LABEL *psWidget)
 		tipStop((WIDGET *)psWidget);
 	}
 }
-
-
-

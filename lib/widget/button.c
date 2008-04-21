@@ -28,8 +28,9 @@
 #include "button.h"
 #include "form.h"
 #include "tip.h"
-// FIXME Direct iVis implementation include!
 #include "lib/ivis_common/rendmode.h"
+#include "lib/gamelib/gtime.h"
+
 
 /* Initialise the button module */
 BOOL buttonStartUp(void)
@@ -92,7 +93,6 @@ W_BUTTON* buttonCreate(const W_BUTINIT* psInit)
 	psWidget->AudioCallback = WidgGetAudioCallback();
 	psWidget->HilightAudioID = WidgGetHilightAudioID();
 	psWidget->ClickedAudioID = WidgGetClickedAudioID();
-
 
 	if (psInit->pDisplay)
 	{
@@ -205,13 +205,11 @@ void buttonSetState(W_BUTTON *psButton, UDWORD state)
 }
 
 
-extern UDWORD gameTime2;
-
 /* Run a button widget */
 void buttonRun(W_BUTTON *psButton)
 {
-//	(void)psButton;
-	if(psButton->state & WBUTS_FLASH) {
+	if (psButton->state & WBUTS_FLASH)
+	{
 		if (((gameTime2/250) % 2) == 0) {
 			psButton->state &= ~WBUTS_FLASHON;
 		} else {
@@ -301,8 +299,11 @@ void buttonDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *p
 	SDWORD		x0,y0,x1,y1, fx,fy,fw;
 	int			CurrFontID;
 
-	ASSERT( psWidget != NULL,
-		"buttonDisplay: Invalid widget pointer" );
+	ASSERT(psWidget != NULL && pColours != NULL, "Invalid pointers");
+	if (!psWidget || !pColours)
+	{
+		return;
+	}
 
 	psButton = (W_BUTTON *)psWidget;
 	CurrFontID = psButton->FontID;
@@ -384,7 +385,6 @@ void buttonDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *p
 		iV_Line(x0,y1, x1,y1, pColours[WCOL_DARK]);
 		iV_Line(x1,y1, x1,y0, pColours[WCOL_DARK]);
 
-		//if (0)
 		if (psButton->pText)
 		{
 			iV_SetFont(psButton->FontID);

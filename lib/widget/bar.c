@@ -95,7 +95,6 @@ W_BARGRAPH* barGraphCreate(const W_BARINIT* psInit)
 	psWidget->minorSize = psInit->minorSize;
 	psWidget->iRange = psInit->iRange;
 
-
 	/* Set the display function */
 	if (psInit->pDisplay)
 	{
@@ -131,8 +130,7 @@ W_BARGRAPH* barGraphCreate(const W_BARINIT* psInit)
 /* Free the memory used by a barGraph */
 void barGraphFree(W_BARGRAPH *psWidget)
 {
-	ASSERT( psWidget != NULL,
-		"barGraphFree: Invalid widget pointer" );
+	ASSERT(psWidget != NULL,"Invalid widget pointer");
 
 	free(psWidget);
 }
@@ -150,8 +148,7 @@ void widgSetBarSize(W_SCREEN *psScreen, UDWORD id, UDWORD iValue)
 	W_BARGRAPH		*psBGraph;
 	UDWORD			size;
 
-	ASSERT( psScreen != NULL,
-		"widgSetBarSize: Invalid screen pointer" );
+	ASSERT(psScreen != NULL, "Invalid screen pointer");
 
 	psBGraph = (W_BARGRAPH *)widgGetFromID(psScreen, id);
 	if (psBGraph == NULL || psBGraph->type != WIDG_BARGRAPH)
@@ -181,13 +178,12 @@ void widgSetMinorBarSize(W_SCREEN *psScreen, UDWORD id, UDWORD iValue )
 	W_BARGRAPH		*psBGraph;
 	UDWORD			size;
 
-	ASSERT( psScreen != NULL,
-		"widgSetBarSize: Invalid screen pointer" );
+	ASSERT(psScreen != NULL, "Invalid screen pointer");
 
 	psBGraph = (W_BARGRAPH *)widgGetFromID(psScreen, id);
 	if (psBGraph == NULL || psBGraph->type != WIDG_BARGRAPH)
 	{
-		ASSERT( false, "widgSetBarSize: Couldn't find widget from id" );
+		ASSERT(false, "Couldn't find widget from id");
 		return;
 	}
 
@@ -199,26 +195,6 @@ void widgSetMinorBarSize(W_SCREEN *psScreen, UDWORD id, UDWORD iValue )
 
 	psBGraph->minorSize = (UWORD)size;
 }
-
-
-#if 0
-/* Run a barGraph widget */
-void barGraphRun(W_BARGRAPH *psWidget)
-{
-}
-
-
-/* Respond to a mouse click */
-void barGraphClicked(W_BARGRAPH *psWidget)
-{
-}
-
-
-/* Respond to a mouse up */
-void barGraphReleased(W_BARGRAPH *psWidget)
-{
-}
-#endif
 
 
 /* Respond to a mouse moving over a barGraph */
@@ -291,9 +267,7 @@ void barGraphDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT 
 void barGraphDisplayDouble(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
 {
 	SDWORD		x0 = 0, y0 = 0, x1 = 0, y1 = 0, x2 = 0, y2 = 0, x3 = 0, y3 = 0;
-	W_BARGRAPH	*psBGraph;
-
-	psBGraph = (W_BARGRAPH *)psWidget;
+	W_BARGRAPH	*psBGraph = (W_BARGRAPH *)psWidget;
 
 	/* figure out which way the bar graph fills */
 	switch (psBGraph->barPos)
@@ -376,10 +350,8 @@ void barGraphDisplayTrough(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIE
 {
 	SDWORD		x0 = 0, y0 = 0, x1 = 0, y1 = 0;		// Position of the bar
 	SDWORD		tx0 = 0, ty0 = 0, tx1 = 0, ty1 = 0;	// Position of the trough
-	W_BARGRAPH	*psBGraph;
 	BOOL		showBar=true, showTrough=true;
-
-	psBGraph = (W_BARGRAPH *)psWidget;
+	W_BARGRAPH	*psBGraph = (W_BARGRAPH *)psWidget;
 
 	/* figure out which way the bar graph fills */
 	switch (psBGraph->barPos)

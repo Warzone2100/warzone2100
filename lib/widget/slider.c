@@ -27,7 +27,7 @@
 // FIXME Direct iVis implementation include!
 #include "lib/ivis_common/rendmode.h"
 
-BOOL DragEnabled = true;
+static BOOL DragEnabled = true;
 
 void sliderEnableDrag(BOOL Enable)
 {
