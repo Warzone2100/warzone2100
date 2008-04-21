@@ -218,7 +218,7 @@ static void putSelection(char *pBuffer, UDWORD *pPos)
 	if (scraplen > 0 && scraplen < WIDG_MAXSTR-2)
 	{
 		strlcpy(pBuffer, scrap, scraplen);
-		*pPos = scraplen;
+		*pPos = scraplen - 1;
 	}
 }
 
@@ -229,8 +229,7 @@ static void delCharLeft(char *pBuffer, UDWORD *pPos)
 	char	*pSrc, *pDest;
 	UDWORD	len, count;
 
-	ASSERT( *pPos <= strlen(pBuffer),
-		"delCharLeft: Invalid insertion point" );
+	ASSERT(*pPos <= strlen(pBuffer), "Invalid insertion point");
 
 	/* Can't delete if we are at the start of the string */
 	if (*pPos == 0)
@@ -260,8 +259,7 @@ static void delCharRight(char *pBuffer, UDWORD *pPos)
 	char	*pSrc, *pDest;
 	UDWORD	len, count;
 
-	ASSERT( *pPos <= strlen(pBuffer),
-		"delCharLeft: Invalid insertion point" );
+	ASSERT(*pPos <= strlen(pBuffer), "Invalid insertion point" );
 
 	len = strlen(pBuffer);
 
