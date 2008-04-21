@@ -21,8 +21,16 @@
 #ifndef __INCLUDED_SRC_ASTART_H__
 #define __INCLUDED_SRC_ASTART_H__
 
-// the buffer to store a route in
-#define ASTAR_MAXROUTE		50
+/** The maximum length of an A* computed route, expressed in nodes (aka tiles)
+ *
+ *  @ingroup pathfinding
+ */
+#define ASTAR_MAXROUTE  50
+
+/** The buffer to store a route in
+ *
+ *  @ingroup pathfinding
+ */
 typedef struct _astar_route
 {
 	Vector2i asPos[ASTAR_MAXROUTE];
@@ -32,27 +40,38 @@ typedef struct _astar_route
 // counters for a-star
 extern SDWORD astarInner;
 
-// reset the astar counters
+/** Reset the A* counters
+ *
+ *  @ingroup pathfinding
+ */
 extern void astarResetCounters(void);
 
-// return codes for astar
+/** return codes for astar
+ *
+ *  @ingroup pathfinding
+ */
 enum
 {
-	ASR_OK,			// found a route
-	ASR_FAILED,		// no route
-	ASR_PARTIAL,	// routing cannot be finished this frame
-					// and should be continued the next frame
-	ASR_NEAREST,	// found a partial route to a nearby position
+	ASR_OK,         ///< found a route
+	ASR_FAILED,     ///< no route could be found
+	ASR_PARTIAL,    ///< routing cannot be finished this frame, and should be continued the next frame
+	ASR_NEAREST,    ///< found a partial route to a nearby position
 };
 
-// route modes for astar
+/** route modes for astar
+ *
+ *  @ingroup pathfinding
+ */
 enum
 {
-	ASR_NEWROUTE,	// start a new route
-	ASR_CONTINUE,	// continue a route that was partially completed the last frame
+	ASR_NEWROUTE,   ///< start a new route
+	ASR_CONTINUE,   ///< continue a route that was partially completed the last frame
 };
 
-// A* findpath
+/** Use the A* algorithm to find a path
+ *
+ *  @ingroup pathfinding
+ */
 extern SDWORD fpathAStarRoute(SDWORD routeMode, ASTAR_ROUTE *psRoutePoints,
 							SDWORD sx, SDWORD sy, SDWORD fx, SDWORD fy);
 

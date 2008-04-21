@@ -95,6 +95,8 @@ BOOL fpathInitialise(void)
  *  @post Pathfinding jobs for DROID's that died, aren't waiting for a route
  *        anymore, or the currently calculated route is outdated for, are
  *        removed from the job queue.
+ *
+ *  @ingroup
  */
 void fpathUpdate(void)
 {
@@ -165,7 +167,10 @@ BOOL fpathHoverBlockingTile(SDWORD x, SDWORD y)
 	return false;
 }
 
-// Check if the map tile at a location blocks a vtol
+/** Check if the map tile at a location blocks a VTOL droid
+ *
+ *  @ingroup pathfinding
+ */
 static BOOL fpathLiftBlockingTile(SDWORD x, SDWORD y)
 {
 	MAPTILE		*psTile;
@@ -268,7 +273,10 @@ BOOL fpathLiftSlideBlockingTile(SDWORD x, SDWORD y)
 	}
 }
 
-// Calculate the distance to a tile from a point
+/** Calculate the distance to a tile from a point
+ *
+ *  @ingroup pathfinding
+ */
 static inline int fpathDistToTile(int tileX, int tileY, int pointX, int pointY)
 {
 	// get the difference in world coords
@@ -285,7 +293,10 @@ static SDWORD	finalX,finalY, vectorX,vectorY;
 static SDWORD	clearX,clearY;
 static BOOL		obstruction;
 
-// callback to find the first clear tile before an obstructed target
+/** Callback to find the first clear tile before an obstructed target
+ *
+ *  @ingroup pathfinding
+ */
 static BOOL fpathEndPointCallback(SDWORD x, SDWORD y, SDWORD dist)
 {
 	SDWORD	vx,vy;
@@ -314,8 +325,6 @@ static BOOL fpathEndPointCallback(SDWORD x, SDWORD y, SDWORD dist)
 	return true;
 }
 
-/* To plan a path from psDroid's current position to 2D position Vector(targetX,targetY)
-without taking obstructions in to consideration */
 void fpathSetDirectRoute(DROID* psDroid, SDWORD targetX, SDWORD targetY)
 {
 	MOVE_CONTROL *psMoveCntl;
@@ -335,7 +344,10 @@ void fpathSetDirectRoute(DROID* psDroid, SDWORD targetX, SDWORD targetY)
 	psMoveCntl->asPath[0].y = map_coord(targetY);
 }
 
-// append an astar route onto a move-control route
+/** Append an astar route onto a move-control route
+ *
+ *  @ingroup pathfinding
+ */
 static void fpathAppendRoute( MOVE_CONTROL *psMoveCntl, ASTAR_ROUTE *psAStarRoute )
 {
 	SDWORD		mi, ai;
@@ -356,8 +368,11 @@ static void fpathAppendRoute( MOVE_CONTROL *psMoveCntl, ASTAR_ROUTE *psAStarRout
 	psMoveCntl->DestinationY = world_coord(psAStarRoute->finalY) + TILE_UNITS/2;
 }
 
-// check if a new route is closer to the target than the one stored in
-// the droid
+/** Check if a new route is closer to the target than the one stored in the
+ *  droid
+ *
+ *  @ingroup pathfinding
+ */
 static BOOL fpathRouteCloser(MOVE_CONTROL *psMoveCntl, ASTAR_ROUTE *psAStarRoute, SDWORD tx,SDWORD ty)
 {
 	SDWORD	xdiff,ydiff, prevDist, nextDist;
@@ -391,7 +406,10 @@ static BOOL fpathRouteCloser(MOVE_CONTROL *psMoveCntl, ASTAR_ROUTE *psAStarRoute
 	return false;
 }
 
-// create a final route from a gateway route
+/** Create a final route from a gateway route
+ *
+ *  @ingroup pathfinding
+ */
 static FPATH_RETVAL fpathGatewayRoute(DROID* psDroid, SDWORD routeMode, SDWORD sx, SDWORD sy, 
                                       SDWORD fx, SDWORD fy, MOVE_CONTROL *psMoveCntl)
 {
@@ -495,8 +513,6 @@ exit:
 	return retval;
 }
 
-
-/* set pointer for current fpath droid - GJ hack */
 void fpathSetCurrentDroid(DROID* psDroid)
 {
 	g_psDroidRoute = psDroid;
@@ -757,7 +773,10 @@ exit:
 	return retVal;
 }
 
-// find the first point on the route which has both droids on the same side of it
+/** Find the first point on the route which has both droids on the same side of it
+ *
+ *  @ingroup pathfinding
+ */
 static BOOL fpathFindFirstRoutePoint(MOVE_CONTROL *psMove, SDWORD *pIndex, SDWORD x1,SDWORD y1, SDWORD x2,SDWORD y2)
 {
 	SDWORD	vx1,vy1, vx2,vy2;
@@ -779,7 +798,10 @@ static BOOL fpathFindFirstRoutePoint(MOVE_CONTROL *psMove, SDWORD *pIndex, SDWOR
 	return false;
 }
 
-// See if there is another unit on your side that has a route this unit can use
+/** See if there is another unit on your side that has a route this unit can use
+ *
+ *  @ingroup pathfinding
+ */
 static BOOL fpathFindRoute(DROID *psDroid, SDWORD sX,SDWORD sY, SDWORD tX,SDWORD tY)
 {
 	DROID		*psCurr;
