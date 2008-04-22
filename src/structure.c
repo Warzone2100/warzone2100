@@ -1528,7 +1528,7 @@ static SDWORD structChooseWallType(UDWORD player, UDWORD mapX, UDWORD mapY)
 }
 
 
-void buildFlatten(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y, UDWORD h)
+static void buildFlatten(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y, UDWORD h)
 {
 	UBYTE				width;
 	UBYTE				breadth;
@@ -1556,13 +1556,15 @@ void alignStructure(STRUCTURE *psBuilding)
 	int width, breadth;
 	int x = psBuilding->pos.x;
 	int y = psBuilding->pos.y;
+	int mapX = map_coord(x) - (psBuilding->pStructureType->baseWidth / 2);
+	int mapY = map_coord(y) - (psBuilding->pStructureType->baseBreadth / 2);
 
 	/* DEFENSIVE structures are pulled to the terrain */
 	if (psBuilding->pStructureType->type != REF_DEFENSE)
 	{
 		int mapH = buildFoundation(psBuilding->pStructureType, x, y);
 
-		buildFlatten(psBuilding->pStructureType, map_coord(x), map_coord(y), mapH);
+		buildFlatten(psBuilding->pStructureType, mapX, mapY, mapH);
 		psBuilding->pos.z = mapH;
 	}
 	else

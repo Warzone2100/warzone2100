@@ -162,7 +162,6 @@ extern BOOL checkWidth(UDWORD maxRange, UDWORD x, UDWORD y, UDWORD *pDroidX, UDW
 extern BOOL checkLength(UDWORD maxRange, UDWORD x, UDWORD y, UDWORD *pDroidX, UDWORD *pDroidY);
 
 extern SWORD buildFoundation(STRUCTURE_STATS *psStructStats, UDWORD x, UDWORD y);
-extern void buildFlatten(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y, UDWORD h);
 extern void alignStructure(STRUCTURE *psBuilding);
 
 //initialise the structure limits structure
