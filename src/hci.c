@@ -4407,17 +4407,16 @@ static BOOL intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,B
 		}
 		if (!psSelected)
 		{
-			if (apsPreviousObj[objMode] && apsPreviousObj[objMode]->player == selectedPlayer)
+			if (apsPreviousObj[objMode]
+			 && apsPreviousObj[objMode]->player == selectedPlayer)
 			{
 				psSelected = apsPreviousObj[objMode];
 				//it is possible for a structure to change status - building of modules
-				if (psSelected->type == OBJ_STRUCTURE)
+				if (psSelected->type == OBJ_STRUCTURE
+				 && ((STRUCTURE *)psSelected)->status != SS_BUILT)
 				{
-					if (((STRUCTURE *)psSelected)->status != SS_BUILT)
-					{
-						//structure not complete so just set selected to the first valid object
-						psSelected = psFirst;
-					}
+					//structure not complete so just set selected to the first valid object
+					psSelected = psFirst;
 				}
 			}
 			else
