@@ -25,7 +25,6 @@
  */
 
 #include "lib/framework/frame.h"
-#include <SDL_mutex.h>
 
 #include "objects.h"
 #include "map.h"
@@ -83,44 +82,11 @@ static SDWORD	lastPartialFrame;
 static BOOL fpathFindRoute(DROID *psDroid, SDWORD sX,SDWORD sY, SDWORD tX,SDWORD tY);
 static BOOL fpathLiftBlockingTile(SDWORD x, SDWORD y);
 
-static SDL_mutex* globalPathMutex = NULL;
-
-static void LockMutex(void)
-{
-	ASSERT(globalPathMutex != NULL, "No mutex created!");
-
-	if (SDL_LockMutex(globalPathMutex) == -1)
-	{
-		debug(LOG_ERROR, "LockMutex: Failed to lock mutex");
-		abort();
-	}
-}
-
-static void UnlockMutex(void)
-{
-	ASSERT(globalPathMutex != NULL, "No mutex created!");
-
-	if (SDL_UnlockMutex(globalPathMutex) == -1)
-	{
-		debug(LOG_ERROR, "UnlockMutex: Failed to unlock mutex");
-		abort();
-	}
-}
-
 // initialise the findpath module
 BOOL fpathInitialise(void)
 {
-	if (!globalPathMutex)
-	{
-		globalPathMutex = SDL_CreateMutex();
-	}
-
-	LockMutex();
-
 	fpathBlockingTile = fpathGroundBlockingTile;
 	psPartialRouteDroid = NULL;
-
-	UnlockMutex();
 
 	return true;
 }
@@ -134,8 +100,6 @@ BOOL fpathInitialise(void)
  */
 void fpathUpdate(void)
 {
-	LockMutex();
-
 	if (psPartialRouteDroid != NULL
 	 && (psPartialRouteDroid->died
 	  || psPartialRouteDroid->sMove.Status != MOVEWAITROUTE
@@ -143,8 +107,6 @@ void fpathUpdate(void)
 	{
 		psPartialRouteDroid = NULL;
 	}
-
-	UnlockMutex();
 }
 
 #define	VTOL_MAP_EDGE_TILES		1
@@ -155,28 +117,27 @@ BOOL fpathGroundBlockingTile(SDWORD x, SDWORD y)
 	MAPTILE	*psTile;
 
 	/* check VTOL limits if not routing */
-	if (x < scrollMinX + 1
-	 || y < scrollMinY + 1
-	 || x >= scrollMaxX - 1
-	 || y >= scrollMaxY - 1)
 	{
-		// coords off map - auto blocking tile
-		return true;
+		if (x < scrollMinX+1 || y < scrollMinY+1 ||
+			x >= scrollMaxX-1 || y >= scrollMaxY-1)
+		{
+			// coords off map - auto blocking tile
+			return true;
+		}
 	}
 
-	ASSERT(x >= 0 && y >= 0 && x < mapWidth && y < mapHeight, "fpathGroundBlockingTile: off map")
+	ASSERT( !(x <1 || y < 1 ||	x >= (SDWORD)mapWidth-1 || y >= (SDWORD)mapHeight-1),
+		"fpathGroundBlockingTile: off map" );
 
-	psTile = mapTile(x, y);
+	psTile = mapTile((UDWORD)x, (UDWORD)y);
 
-	if (psTile->tileInfoBits & BITS_FPATHBLOCK
-	 || (TILE_OCCUPIED(psTile)
-	  && !TILE_IS_NOTBLOCKING(psTile))
-	 || terrainType(psTile) == TER_CLIFFFACE
-	 || terrainType(psTile) == TER_WATER)
+	if ((psTile->tileInfoBits & BITS_FPATHBLOCK) ||
+		(TILE_OCCUPIED(psTile) && !TILE_IS_NOTBLOCKING(psTile)) ||
+		(terrainType(psTile) == TER_CLIFFFACE) ||
+		(terrainType(psTile) == TER_WATER))
 	{
 		return true;
 	}
-
 	return false;
 }
 
@@ -185,27 +146,24 @@ BOOL fpathHoverBlockingTile(SDWORD x, SDWORD y)
 {
 	MAPTILE	*psTile;
 
-	if (x < scrollMinX + 1
-	 || y < scrollMinY + 1
-	 || x >= scrollMaxX - 1
-	 || y >= scrollMaxY - 1)
+	if (x < scrollMinX+1 || y < scrollMinY+1 ||
+		x >= scrollMaxX-1 || y >= scrollMaxY-1)
 	{
 		// coords off map - auto blocking tile
 		return true;
 	}
 
-	ASSERT(x >= 0 && y >= 0 && x < mapWidth && y < mapHeight, "fpathHoverBlockingTile: off map")
+	ASSERT( !(x <1 || y < 1 ||	x >= (SDWORD)mapWidth-1 || y >= (SDWORD)mapHeight-1),
+		"fpathHoverBlockingTile: off map" );
 
-	psTile = mapTile(x, y);
+	psTile = mapTile((UDWORD)x, (UDWORD)y);
 
-	if (psTile->tileInfoBits & BITS_FPATHBLOCK
-	 || (TILE_OCCUPIED(psTile)
-	  && !TILE_IS_NOTBLOCKING(psTile))
-	 || terrainType(psTile) == TER_CLIFFFACE)
+	if ((psTile->tileInfoBits & BITS_FPATHBLOCK) ||
+		(TILE_OCCUPIED(psTile) && !TILE_IS_NOTBLOCKING(psTile)) ||
+		(terrainType(psTile) == TER_CLIFFFACE))
 	{
 		return true;
 	}
-
 	return false;
 }
 
@@ -218,48 +176,50 @@ static BOOL fpathLiftBlockingTile(SDWORD x, SDWORD y)
 	MAPTILE		*psTile;
 	SDWORD		iLiftHeight, iBlockingHeight;
 
-	ASSERT(g_psDroidRoute != NULL, "fpathLiftBlockingTile: invalid DROID pointer");
+	ASSERT( g_psDroidRoute != NULL,
+		"fpathLiftBlockingTile: invalid DROID pointer" );
 
-	if (g_psDroidRoute->droidType == DROID_TRANSPORTER)
+	if (g_psDroidRoute->droidType == DROID_TRANSPORTER )
 	{
-		// All tiles outside of the map are blocking
-		if (x < 1
-		 || y < 1
-		 || x >= mapWidth - 1
-		 || y >= mapHeight - 1)
+		if ( x<1 || y<1 || x>=(SDWORD)mapWidth-1 || y>=(SDWORD)mapHeight-1 )
 		{
 			return true;
 		}
 
-		psTile = mapTile(x, y);
+		psTile = mapTile((UDWORD)x, (UDWORD)y);
 
-		// Only tall structures are blocking now
-		return TILE_HAS_TALLSTRUCTURE(psTile);
+		if ( TILE_HAS_TALLSTRUCTURE(psTile) )
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
 	}
 
-	if (x < VTOL_MAP_EDGE_TILES
-	 || y < VTOL_MAP_EDGE_TILES
-	 || x >= mapWidth - VTOL_MAP_EDGE_TILES
-	 || y >= mapHeight - VTOL_MAP_EDGE_TILES)
+	if ( x < VTOL_MAP_EDGE_TILES ||
+		 y < VTOL_MAP_EDGE_TILES ||
+		 x >= (SDWORD)mapWidth-VTOL_MAP_EDGE_TILES ||
+		 y >= (SDWORD)mapHeight-VTOL_MAP_EDGE_TILES   )
 	{
 		// coords off map - auto blocking tile
 		return true;
 	}
 
-	ASSERT(x >= 0 && y >= 0 && x < mapWidth && y < mapHeight, "fpathLiftBlockingTile: off map");
+	ASSERT( !(x <1 || y < 1 ||	x >= (SDWORD)mapWidth-1 || y >= (SDWORD)mapHeight-1),
+			"fpathLiftBlockingTile: off map" );
 
 	/* no tiles are blocking if returning to rearm */
-	// FIXME: Do we really want to allow VTOL that needs to reload to fly at
-	//        places where other VTOLs can't go??
-	if (g_psDroidRoute->action == DACTION_MOVETOREARM)
+	if( g_psDroidRoute->action == DACTION_MOVETOREARM )
 	{
 		return false;
 	}
 
-	psTile = mapTile(x, y);
+	psTile = mapTile((UDWORD)x, (UDWORD)y);
 
 	/* consider cliff faces */
-	if (terrainType(psTile) == TER_CLIFFFACE)
+	if ( terrainType(psTile) == TER_CLIFFFACE )
 	{
 		switch ( (asBodyStats + g_psDroidRoute->asBits[COMP_BODY].nStat)->size )
 		{
@@ -279,7 +239,7 @@ static BOOL fpathLiftBlockingTile(SDWORD x, SDWORD y)
 		/* approaching cliff face; block if below it */
 		iLiftHeight = (SDWORD) map_Height(world_coord(x), world_coord(y)) -
 					  (SDWORD) map_Height( g_psDroidRoute->pos.x, g_psDroidRoute->pos.y );
-		if (iLiftHeight > iBlockingHeight)
+		if ( iLiftHeight > iBlockingHeight )
 		{
 			return true;
 		}
@@ -288,10 +248,13 @@ static BOOL fpathLiftBlockingTile(SDWORD x, SDWORD y)
 			return false;
 		}
 	}
+	else if ( TILE_HAS_TALLSTRUCTURE(psTile) )
+	{
+		return true;
+	}
 	else
 	{
-		// Only tall structures are blocking now
-		return TILE_HAS_TALLSTRUCTURE(psTile);
+		return false;
 	}
 }
 
