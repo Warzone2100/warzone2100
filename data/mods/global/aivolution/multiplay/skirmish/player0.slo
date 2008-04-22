@@ -215,7 +215,7 @@ public	int				player,numLego,numTemplates[2],numBaseStructs,numDef,numRes[2],
 						numBranches,techTanks,techAir,numVtolTemplates,numVitalStructs,
 						numMinimalStruct[10],maxVitalBuilders[10],numCmdTmpl,numTruckTmpl,
 						numBBTempl,numLightCyborgs;
-public	TEMPLATE		truck[3],tmpl[2][40],tmplOK[8],tmplBB[3],tmplRep[5],
+public	TEMPLATE		truck[3],tmpl[2][50],tmplOK[8],tmplBB[3],tmplRep[5],
 						vtoltmpl[2][5],tmplCmd[4],cybEngineer,cybMechanic,cybTempl[6];
 public	STRUCTURESTAT	fac,derrick,powGen,vtolfac,resFac,powMod,facMod,resMod,cmdCenter,
 						baseStructs[10],def[10],gatewayDef[6],wall,AA[5],HQ,uplink,lasSat,
