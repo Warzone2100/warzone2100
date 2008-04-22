@@ -1916,3 +1916,6 @@ TigerHvLaserTracks			_("Tiger Heavy Laser Tracks")
 WyvernGaussTracks			_("Wyvern Gauss Cannon Tracks")
 WyvernPulseTracks			_("Wyvern Pulse Laser Tracks")
 WyvernHvLaserTracks			_("Wyvern Heavy Laser Tracks")
+
+ViperLtMGHalfTracks			_("Viper Machinegun Half-Track")
+ViperFlameHalfTracks		_("Viper Flamer Half-Track")
