@@ -10,8 +10,8 @@
  *
  * @subsection step1 Step 1: Read the wiki documentation
  *
- * We have a great deal of documentation on our wiki page at http://wiki.wz2100.net/ which
- * may help get you started. Please also take notice of our style guide!
+ * We have a great deal of documentation on our <a href="http://wiki.wz2100.net/">wiki page</a> which
+ * may help get you started. Please also take notice of our <a href="http://wiki.wz2100.net/Coding_style">style guide</a>!
  *
  * @subsection step2 Step 2: Skim main.c
  *
