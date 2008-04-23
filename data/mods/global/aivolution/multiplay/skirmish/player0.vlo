@@ -268,7 +268,7 @@ run
 	numMinimalStruct[3]		INT				1	// res fac
 	numMinimalStruct[4]		INT				2	// fac
 	numMinimalStruct[5]		INT				1	// HQ
-	numMinimalStruct[6]		INT				1	// cyb factory
+	numMinimalStruct[6]		INT				2	// cyb factory
 
 	//Number of max trucks allowed to build a specific structure type
 	maxVitalBuilders[0]		INT				-1
