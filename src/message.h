@@ -47,8 +47,11 @@ extern BOOL initMessage(void);
 /** Release the message heaps. */
 extern BOOL messageShutdown(void);
 
-/** Add a messgae to the list. */
+/** Add a message to the list. */
 extern MESSAGE * addMessage(MESSAGE_TYPE msgType, BOOL proxPos, UDWORD player);
+
+/** Add a beacon message to the list. */
+extern MESSAGE * addBeaconMessage(MESSAGE_TYPE msgType, BOOL proxPos, UDWORD player);
 
 /** Remove a message. */
 extern void removeMessage(MESSAGE *psDel, UDWORD player);

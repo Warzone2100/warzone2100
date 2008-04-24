@@ -92,6 +92,7 @@ static inline MESSAGE* createMessage(MESSAGE_TYPE msgType, UDWORD player)
 	}
 
 	newMsg->type = msgType;
+	newMsg->dataType = MSG_DATA_DEFAULT;
 	newMsg->id = (msgID << 3) | selectedPlayer;
 	newMsg->pViewData = NULL;
 	newMsg->read = false;
@@ -269,6 +270,19 @@ BOOL messageInitVars(void)
 BOOL initViewData(void)
 {
 	return true;
+}
+
+/* Adds a beacon message. A wrapper for addMessage() */
+MESSAGE * addBeaconMessage(MESSAGE_TYPE msgType, BOOL proxPos, UDWORD player)
+{
+	MESSAGE* psBeaconMsgToAdd = addMessage(msgType, proxPos, player);
+
+	ASSERT(psBeaconMsgToAdd, "addBeaconMessage: createMessage failed");
+
+	// remember we are storing beacon data in this message
+	psBeaconMsgToAdd->dataType = MSG_DATA_BEACON;
+
+	return psBeaconMsgToAdd;
 }
 
 /*Add a message to the list */
@@ -952,7 +966,7 @@ void displayProximityMessage(PROXIMITY_DISPLAY *psProxDisp)
 		//display text - if any
 		if (psViewData->ppTextMsg)
 		{
-			if (psViewData->type != VIEW_HELP)
+			if (psViewData->type != VIEW_BEACON)
 			{
 				addConsoleMessage(psViewData->ppTextMsg[0], DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 			}

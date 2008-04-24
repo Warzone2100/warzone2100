@@ -43,7 +43,7 @@ typedef enum _view_type
 	VIEW_PROX,			// proximity view - no view really!
 	VIEW_RPLX,			// full screen view sequence - flic.	extended format
 
-	VIEW_HELP,			// Beacon message
+	VIEW_BEACON,			// Beacon message
 
 	VIEW_TYPES,
 } VIEW_TYPE;
@@ -117,6 +117,12 @@ typedef struct _viewdata
 
 typedef void* MSG_VIEWDATA;
 
+typedef enum _msg_data_type
+{
+	MSG_DATA_DEFAULT,		// Message's pViewData has a BASE_OBJECT stored
+	MSG_DATA_BEACON,		// Message's pViewData has beacon data stored
+} MSG_DATA_TYPE;
+
 //base structure for each message
 typedef struct _message
 {
@@ -125,6 +131,8 @@ typedef struct _message
 	MSG_VIEWDATA	*pViewData;				//Pointer to view data - if any - should be some!
 	BOOL			read;					//flag to indicate whether message has been read
 	UDWORD			player;					//which player this message belongs to
+	MSG_DATA_TYPE	dataType;				//stores actual type of data pViewData points to
+											//only relevant for messages of type MSG_PROXIMITY
 
 	struct _message *psNext;				//pointer to the next in the list
 } MESSAGE;

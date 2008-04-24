@@ -1757,7 +1757,7 @@ void renderProximityMsg(PROXIMITY_DISPLAY *psProxDisp)
 			dv.y = pViewProximity->z + 64;
 
 			/* in case of a beacon message put above objects */
-			if(((VIEWDATA *)psProxDisp->psMessage->pViewData)->type == VIEW_HELP)
+			if(((VIEWDATA *)psProxDisp->psMessage->pViewData)->type == VIEW_BEACON)
 			{
 				if(TILE_OCCUPIED(mapTile(msgX / TILE_UNITS,msgY / TILE_UNITS)))
 					dv.y = pViewProximity->z + 150;

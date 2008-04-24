@@ -99,7 +99,7 @@ static INTERP_VAL	scrFunctionResult;	//function return value to be pushed to sta
 static SDWORD	bitMask[] = {0x01,0x02,0x04,0x08,0x10,0x20,0x40,0x80};
 static char		strParam1[MAXSTRLEN], strParam2[MAXSTRLEN];		//these should be used as string parameters for stackPopParams()
 
-static VIEWDATA *HelpViewData(SDWORD sender, char *textMsg, UDWORD LocX, UDWORD LocY);
+VIEWDATA *CreateBeaconViewData(SDWORD sender, UDWORD LocX, UDWORD LocY);
 
 // -----------------------------------------------------------------------------------------
 static BOOL	structHasModule(STRUCTURE *psStruct);
@@ -10099,20 +10099,19 @@ BOOL scrLoadPlayerAIExperience(void)
 
 
 /* Add a beacon (blip) */
-BOOL addHelpBlip(SDWORD locX, SDWORD locY, SDWORD forPlayer, SDWORD sender, char * textMsg)
+BOOL addBeaconBlip(SDWORD locX, SDWORD locY, SDWORD forPlayer, SDWORD sender, char * textMsg)
 {
-	UDWORD			height;
 	MESSAGE			*psMessage;
 	VIEWDATA		*pTempData;
 
 	if (forPlayer >= MAX_PLAYERS)
 	{
-		debug(LOG_ERROR, "addHelpBlip: player number is too high");
+		debug(LOG_ERROR, "addBeaconBlip: player number is too high");
 		return false;
 	}
 
 	//find the message if was already added previously
-	psMessage = findHelpMsg(forPlayer, sender);
+	psMessage = findBeaconMsg(forPlayer, sender);
 	if (psMessage)
 	{
 		//remove it
@@ -10120,23 +10119,15 @@ BOOL addHelpBlip(SDWORD locX, SDWORD locY, SDWORD forPlayer, SDWORD sender, char
 	}
 
 	//create new message
-	psMessage = addMessage(MSG_PROXIMITY, false, forPlayer);
+	psMessage = addBeaconMessage(MSG_PROXIMITY, false, forPlayer);
 	if (psMessage)
 	{
-		//set the data
-		pTempData = HelpViewData(sender, textMsg, locX, locY);
+		pTempData = CreateBeaconViewData(sender, locX, locY);
+
 		ASSERT(pTempData != NULL, "Empty help data for radar beacon");
 
 		psMessage->pViewData = (MSG_VIEWDATA *)pTempData;
 
-		//check the z value is at least the height of the terrain
-		height = map_Height(((VIEW_PROXIMITY *)pTempData->pData)->x,
-			((VIEW_PROXIMITY *)pTempData->pData)->y);
-
-		//if (((VIEW_PROXIMITY *)pTempData->pData)->pos.z < height)
-		//{
-			((VIEW_PROXIMITY *)pTempData->pData)->z = height;
-		//}
 		debug(LOG_MSG, "blip added, pViewData=%p", psMessage->pViewData);
 	}
 	else
@@ -10152,7 +10143,7 @@ BOOL addHelpBlip(SDWORD locX, SDWORD locY, SDWORD forPlayer, SDWORD sender, char
 	{
 		if(!msgStackPush(CALL_BEACON,sender,forPlayer,textMsg,locX,locY,NULL))
 		{
-			debug(LOG_ERROR, "addHelpBlip() - msgStackPush - stack failed");
+			debug(LOG_ERROR, "addBeaconBlip() - msgStackPush - stack failed");
 			return false;
 		}
 
@@ -10175,7 +10166,7 @@ BOOL sendBeaconToPlayer(SDWORD locX, SDWORD locY, SDWORD forPlayer, SDWORD sende
 	if(sender == forPlayer || myResponsibility(forPlayer))	//if destination player is on this machine
 	{
 		debug(LOG_WZ,"sending beacon to player %d (local player) from %d", forPlayer, sender);
-		return addHelpBlip(locX, locY, forPlayer, sender, beaconMsg);
+		return addBeaconBlip(locX, locY, forPlayer, sender, beaconMsg);
 	}
 	else
 	{
@@ -10185,10 +10176,12 @@ BOOL sendBeaconToPlayer(SDWORD locX, SDWORD locY, SDWORD forPlayer, SDWORD sende
 }
 
 //prepare viewdata for help blip
-static VIEWDATA *HelpViewData(SDWORD sender, char *textMsg, UDWORD LocX, UDWORD LocY)
+VIEWDATA *CreateBeaconViewData(SDWORD sender, UDWORD LocX, UDWORD LocY)
 {
+	UDWORD				height;
 	VIEWDATA			*psViewData;
 	SDWORD				audioID;
+	char				name[MAXSTRLEN];
 
 	//allocate message space
 	psViewData = (VIEWDATA *)malloc(sizeof(VIEWDATA));
@@ -10202,22 +10195,18 @@ static VIEWDATA *HelpViewData(SDWORD sender, char *textMsg, UDWORD LocX, UDWORD 
 
 	psViewData->numText = 1;
 
-	//allocate storage for the name
- 	psViewData->pName = strdup("help");
-	if (psViewData->pName == NULL)
-	{
-		ASSERT(false, "prepairHelpViewData() - ViewData Name - Out of memory");
-		return NULL;
-	}
+	//store name
+	sprintf(name, _("Beacon %d"), sender);
+ 	psViewData->pName = name;
 
 	//allocate space for text strings
 	psViewData->ppTextMsg = (char **) malloc(sizeof(char *));
 
-	//store text message pointer
-	psViewData->ppTextMsg[0] = textMsg;
+	//store text message, hardcoded for now
+	psViewData->ppTextMsg[0] = strdup(getPlayerName(sender));
 
 	//store message type
-	psViewData->type = VIEW_HELP;	//was VIEW_PROX
+	psViewData->type = VIEW_BEACON;
 
 	//allocate memory for blip location etc
 	psViewData->pData = (VIEW_PROXIMITY *) malloc(sizeof(VIEW_PROXIMITY));
@@ -10247,6 +10236,11 @@ static VIEWDATA *HelpViewData(SDWORD sender, char *textMsg, UDWORD LocX, UDWORD 
 	((VIEW_PROXIMITY *)psViewData->pData)->x = (UDWORD)LocX;
 	((VIEW_PROXIMITY *)psViewData->pData)->y = (UDWORD)LocY;
 
+	//check the z value is at least the height of the terrain
+	height = map_Height(LocX, LocY);
+
+	((VIEW_PROXIMITY *)psViewData->pData)->z = height;
+
 	//store prox message type
 	((VIEW_PROXIMITY *)psViewData->pData)->proxType = PROX_ENEMY; //PROX_ENEMY for now
 
@@ -10260,22 +10254,22 @@ static VIEWDATA *HelpViewData(SDWORD sender, char *textMsg, UDWORD LocX, UDWORD 
 	return psViewData;
 }
 
-/* Looks through the players list of messages to find VIEW_HELP (one per player!) pointer */
-MESSAGE * findHelpMsg(UDWORD player, SDWORD sender)
+/* Looks through the players list of messages to find VIEW_BEACON (one per player!) pointer */
+MESSAGE * findBeaconMsg(UDWORD player, SDWORD sender)
 {
 	MESSAGE					*psCurr;
 
 	for (psCurr = apsMessages[player]; psCurr != NULL; psCurr = psCurr->psNext)
 	{
-		//look for VIEW_HELP, should only be 1 per player
-		if (psCurr->type == MSG_PROXIMITY)
+		//look for VIEW_BEACON, should only be 1 per player
+		if (psCurr->dataType == MSG_DATA_BEACON)
 		{
-			if(((VIEWDATA *)psCurr->pViewData)->type == VIEW_HELP)
+			if(((VIEWDATA *)psCurr->pViewData)->type == VIEW_BEACON)
 			{
-				debug(LOG_WZ, "findHelpMsg: %d ALREADY HAS A MESSAGE STORED", player);
+				debug(LOG_WZ, "findBeaconMsg: %d ALREADY HAS A MESSAGE STORED", player);
 				if(((VIEW_PROXIMITY *)((VIEWDATA *)psCurr->pViewData)->pData)->sender == sender)
 				{
-					debug(LOG_WZ, "findHelpMsg: %d ALREADY HAS A MESSAGE STORED from %d", player, sender);
+					debug(LOG_WZ, "findBeaconMsg: %d ALREADY HAS A MESSAGE STORED from %d", player, sender);
 					return psCurr;
 				}
 			}
@@ -10330,7 +10324,7 @@ BOOL scrRemoveBeacon(void)
 	}
 
 	//find the message
-	psMessage = findHelpMsg(player, sender);
+	psMessage = findBeaconMsg(player, sender);
 	if (psMessage)
 	{
 		//delete it

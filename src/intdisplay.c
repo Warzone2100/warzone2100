@@ -3129,20 +3129,20 @@ void drawRadarBlips(void)
 		/* Go through all the proximity Displays*/
 		for (psProxDisp = apsProxDisp[i]; psProxDisp != NULL; psProxDisp = psProxDisp->psNext)
 		{
-			if(psProxDisp->psMessage->type == MSG_PROXIMITY)
+			if(psProxDisp->psMessage->dataType == MSG_DATA_BEACON)
 			{
-				MESSAGE		*psCurr = psProxDisp->psMessage;
-				VIEWDATA	*pViewData = (VIEWDATA *)psCurr->pViewData;
+				MESSAGE		*psCurrMsg = psProxDisp->psMessage;
+				VIEWDATA	*pViewData = (VIEWDATA *)psCurrMsg->pViewData;
 
 				ASSERT(pViewData != NULL, "Message without data!");
 
-				if (pViewData->type == VIEW_HELP)
+				if (pViewData->type == VIEW_BEACON)
 				{
 					ASSERT(pViewData->pData != NULL, "Help message without data!");
 					if (pViewData->pData != NULL && (((VIEW_PROXIMITY *)pViewData->pData)->timeAdded + 60000) <= gameTime)
 					{
 						debug(LOG_MSG, "blip timeout for %d, from %d", i, (((VIEW_PROXIMITY *)pViewData->pData)->sender));
-						removeMessage(psCurr, i);	//remove beacon
+						removeMessage(psCurrMsg, i);	//remove beacon
 						break;	//there can only be 1 beacon per player
 					}
 				}

@@ -1900,7 +1900,7 @@ static BOOL recvBeacon(void)
 	strlcat(msg, NetPlay.players[sender].name, sizeof(msg));    // name
 	strlcpy(beaconReceiveMsg[sender], msg, sizeof(beaconReceiveMsg[sender]));
 
-	return addHelpBlip(locX, locY, receiver, sender, beaconReceiveMsg[sender]);
+	return addBeaconBlip(locX, locY, receiver, sender, beaconReceiveMsg[sender]);
 }
 
 static const char* playerColors[] =

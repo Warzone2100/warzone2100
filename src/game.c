@@ -78,6 +78,7 @@
 #include "scriptextern.h"
 #include "multistat.h"
 #include "wrappers.h"
+#include "scriptfuncs.h"
 
 
 #define MAX_SAVE_NAME_SIZE_V19	40
@@ -2001,6 +2002,19 @@ typedef struct _save_message
 
 } SAVE_MESSAGE;
 
+typedef struct _save_message_v36
+{
+	MESSAGE_TYPE	type;			//The type of message
+	BOOL			bObj;
+	char			name[MAX_GAME_STR_SIZE];
+	UDWORD			objId;					//Id for Proximity messages!
+	BOOL			read;					//flag to indicate whether message has been read
+	UDWORD			player;					//which player this message belongs to
+	MSG_DATA_TYPE	dataType;				//actual type of pViewData
+	UDWORD			locX,locY;
+	SDWORD			sender;					//sender of the message
+} SAVE_MESSAGE_36;
+
 typedef struct _save_flag_v18
 {
 	POSITION_TYPE	type;				/*the type of position obj - FlagPos or ProxDisp*/
@@ -2172,6 +2186,7 @@ static BOOL writeResearchFile(char *pFileName);
 
 static BOOL loadSaveMessage(char *pFileData, UDWORD filesize, SWORD levelType);
 static BOOL loadSaveMessageV(char *pFileData, UDWORD filesize, UDWORD numMessages, UDWORD version, SWORD levelType);
+static BOOL loadSaveMessage36(char *pFileData, UDWORD filesize, UDWORD numMessages, UDWORD version, SWORD levelType);
 static BOOL writeMessageFile(char *pFileName);
 
 static BOOL loadSaveFlag(char *pFileData, UDWORD filesize);
@@ -10448,9 +10463,19 @@ BOOL loadSaveMessage(char *pFileData, UDWORD filesize, SWORD levelType)
 	pFileData += MESSAGE_HEADER_SIZE;
 
 	/* Check the file version */
-	if (!loadSaveMessageV(pFileData, filesize, psHeader->quantity, psHeader->version, levelType))
+	if(psHeader->version <= VERSION_35)
 	{
-		return false;
+		if (!loadSaveMessageV(pFileData, filesize, psHeader->quantity, psHeader->version, levelType))
+		{
+			return false;
+		}
+	}
+	else
+	{
+		if (!loadSaveMessage36(pFileData, filesize, psHeader->quantity, psHeader->version, levelType))
+		{
+			return false;
+		}
 	}
 	return true;
 }
@@ -10568,12 +10593,144 @@ BOOL loadSaveMessageV(char *pFileData, UDWORD filesize, UDWORD numMessages, UDWO
 	return true;
 }
 
+BOOL loadSaveMessage36(char *pFileData, UDWORD filesize, UDWORD numMessages, UDWORD version, SWORD levelType)
+{
+	SAVE_MESSAGE_36	*psSaveMessage;
+	MESSAGE			*psMessage;
+	VIEWDATA		*psViewData = NULL;
+	UDWORD			i, height;
+
+	//clear any messages put in during level loads
+	//freeMessages();
+
+    //only clear the messages if its a mid save game
+	if (gameType == GTYPE_SAVE_MIDMISSION)
+    {
+        freeMessages();
+    }
+    else if (gameType == GTYPE_SAVE_START)
+    {
+        //if we're loading in a CamStart or a CamChange then we're not interested in any saved messages
+        if (levelType == LDS_CAMSTART || levelType == LDS_CAMCHANGE)
+        {
+            return true;
+        }
+
+    }
+
+	//check file
+	if ((sizeof(SAVE_MESSAGE_36) * numMessages + MESSAGE_HEADER_SIZE) >
+		filesize)
+	{
+		debug( LOG_ERROR, "loadSaveMessage: unexpected end of file" );
+		abort();
+		return false;
+	}
+
+	// Load the data
+	for (i = 0; i < numMessages; i++, pFileData += sizeof(SAVE_MESSAGE_36))
+	{
+		psSaveMessage = (SAVE_MESSAGE_36 *) pFileData;
+
+		/* SAVE_MESSAGE_36 */
+		endian_sdword((SDWORD*)&psSaveMessage->type);	/* FIXME: enum may not be this type! */
+		endian_sdword((SDWORD*)&psSaveMessage->dataType);
+		endian_udword(&psSaveMessage->objId);
+		endian_udword(&psSaveMessage->player);
+
+		if (psSaveMessage->type == MSG_PROXIMITY)
+		{
+            //only load proximity if a mid-mission save game
+            if (gameType == GTYPE_SAVE_MIDMISSION)
+            {
+			    if (psSaveMessage->bObj)
+			    {
+				    //proximity object so create get the obj from saved idy
+				    psMessage = addMessage(psSaveMessage->type, true, psSaveMessage->player);
+				    if (psMessage)
+				    {
+					    psMessage->pViewData = (MSG_VIEWDATA *)getBaseObjFromId(psSaveMessage->objId);
+				    }
+			    }
+			    else
+			    {
+				    //proximity position so get viewdata pointer from the name
+					psMessage = addMessage(psSaveMessage->type, false, psSaveMessage->player);
+
+					if (psMessage)
+				    {
+						if(psSaveMessage->dataType == MSG_DATA_BEACON)
+						{
+							UDWORD locX,locY;
+							SDWORD sender;
+
+							endian_udword(&psSaveMessage->locX);
+							locX = psSaveMessage->locX;
+							endian_udword(&psSaveMessage->locY);
+							locY = psSaveMessage->locY;
+							endian_sdword(&psSaveMessage->sender);
+							sender = psSaveMessage->sender;
+
+							psViewData = CreateBeaconViewData(sender, locX, locY);
+						}
+						else
+						{
+							psViewData = (VIEWDATA *)getViewData(psSaveMessage->name);
+						}
+
+						if (psViewData == NULL)
+                        {
+                            //skip this message
+                            continue;
+                        }
+					    psMessage->pViewData = (MSG_VIEWDATA *)psViewData;
+				    }
+				    //check the z value is at least the height of the terrain
+				    height = map_Height(((VIEW_PROXIMITY *)psViewData->pData)->x,
+					    ((VIEW_PROXIMITY *)psViewData->pData)->y);
+				    if (((VIEW_PROXIMITY *)psViewData->pData)->z < height)
+				    {
+					    ((VIEW_PROXIMITY *)psViewData->pData)->z = height;
+				    }
+			    }
+            }
+		}
+		else
+		{
+            //only load Campaign/Mission if a mid-mission save game
+            if (psSaveMessage->type == MSG_CAMPAIGN || psSaveMessage->type == MSG_MISSION)
+            {
+                if (gameType == GTYPE_SAVE_MIDMISSION)
+                {
+    			    // Research message // Campaign message // Mission Report messages
+    	    		psMessage = addMessage(psSaveMessage->type, false, psSaveMessage->player);
+	    	    	if (psMessage)
+		    	    {
+			    	    psMessage->pViewData = (MSG_VIEWDATA *)getViewData(psSaveMessage->name);
+			        }
+                }
+            }
+            else
+            {
+    			// Research message
+    	    	psMessage = addMessage(psSaveMessage->type, false, psSaveMessage->player);
+	    	    if (psMessage)
+		    	{
+			    	psMessage->pViewData = (MSG_VIEWDATA *)getViewData(psSaveMessage->name);
+			    }
+            }
+		}
+	}
+
+	return true;
+}
+
 // -----------------------------------------------------------------------------------------
 // Write out the current messages per player
 static BOOL writeMessageFile(char *pFileName)
 {
 	MESSAGE_SAVEHEADER		*psHeader;
-	SAVE_MESSAGE			*psSaveMessage;
+	SAVE_MESSAGE_36			*psSaveMessage;
 	char *pFileData;
 	UDWORD					fileSize, player;
 	MESSAGE					*psMessage;
@@ -10592,7 +10749,7 @@ static BOOL writeMessageFile(char *pFileName)
 
 	}
 
-	fileSize = MESSAGE_HEADER_SIZE + (sizeof(SAVE_MESSAGE) *
+	fileSize = MESSAGE_HEADER_SIZE + (sizeof(SAVE_MESSAGE_36) *
 		numMessages);
 
 
@@ -10614,7 +10771,7 @@ static BOOL writeMessageFile(char *pFileName)
 	psHeader->version = CURRENT_VERSION_NUM;
 	psHeader->quantity = numMessages;
 
-	psSaveMessage = (SAVE_MESSAGE *) (pFileData + MESSAGE_HEADER_SIZE);
+	psSaveMessage = (SAVE_MESSAGE_36 *) (pFileData + MESSAGE_HEADER_SIZE);
 	//save each type of reesearch
 	for (player = 0; player < MAX_PLAYERS; player++)
 	{
@@ -10622,6 +10779,8 @@ static BOOL writeMessageFile(char *pFileName)
 		for(psMessage = apsMessages[player]; psMessage != NULL;psMessage = psMessage->psNext)
 		{
 			psSaveMessage->type = psMessage->type;	//The type of message
+			psSaveMessage->dataType = psMessage->dataType;
+
 			if (psMessage->type == MSG_PROXIMITY)
 			{
 				//get the matching proximity message
@@ -10642,6 +10801,19 @@ static BOOL writeMessageFile(char *pFileName)
 					pViewData = (VIEWDATA*)psMessage->pViewData;
 					ASSERT( strlen(pViewData->pName) < MAX_GAME_STR_SIZE,"writeMessageFile; viewdata pName Error" );
 					strcpy(psSaveMessage->name,pViewData->pName);	//Pointer to view data - if any - should be some!
+
+					// save beacon data
+					if(psMessage->dataType == MSG_DATA_BEACON)
+					{
+						VIEW_PROXIMITY * viewData = (VIEW_PROXIMITY *)((VIEWDATA *)psMessage->pViewData)->pData;
+
+						psSaveMessage->locX =  viewData->x;
+						endian_udword(psSaveMessage->locX);
+						psSaveMessage->locY =  viewData->y;
+						endian_udword(psSaveMessage->locY);
+						psSaveMessage->sender = viewData->sender;
+						endian_sdword(psSaveMessage->sender);
+					}
 				}
 				else
 				{
@@ -10662,10 +10834,11 @@ static BOOL writeMessageFile(char *pFileName)
 			psSaveMessage->player = psMessage->player;		//which player this message belongs to
 
 			endian_sdword((SDWORD*)&psSaveMessage->type); /* FIXME: enum may be different type! */
+			endian_sdword((SDWORD*)&psSaveMessage->dataType);
 			endian_udword(&psSaveMessage->objId);
 			endian_udword(&psSaveMessage->player);
 
-			psSaveMessage = (SAVE_MESSAGE *)((char *)psSaveMessage + 	sizeof(SAVE_MESSAGE));
+			psSaveMessage = (SAVE_MESSAGE_36 *)((char *)psSaveMessage + 	sizeof(SAVE_MESSAGE_36));
 		}
 	}
 
