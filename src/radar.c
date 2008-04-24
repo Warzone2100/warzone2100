@@ -62,10 +62,8 @@ BOOL bEnemyAllyRadarColor = false;     //enemy/ally radar color
 //current mini-map mode
 RADAR_DRAW_MODE	radarDrawMode = RADAR_MODE_DEFAULT;
 
-// colours for each clan on the radar map.
-
 static PIELIGHT		tileColours[MAX_TILES];
-static UDWORD		*radarBuffer;
+static UDWORD		*radarBuffer = NULL;
 
 PIELIGHT clanColours[MAX_PLAYERS]=
 {	// see frontend2.png for team color order.
@@ -153,6 +151,8 @@ BOOL InitRadar(void)
 
 BOOL ShutdownRadar(void)
 {
+	ASSERT(radarBuffer != NULL, "Radar not yet initialized!");
+
 	pie_ShutdownRadar();
 
 	free(radarBuffer);
@@ -216,8 +216,8 @@ void CalcRadarPosition(UDWORD mX,UDWORD mY,UDWORD *PosX,UDWORD *PosY)
 	{
 		sPosY = scrollMaxY;
 	}
-	*PosX = (UDWORD)sPosX;
-	*PosY = (UDWORD)sPosY;
+	*PosX = sPosX;
+	*PosY = sPosY;
 }
 
 

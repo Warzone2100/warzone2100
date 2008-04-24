@@ -3113,15 +3113,13 @@ void intDisplayTransportButton(WIDGET *psWidget, UDWORD xOffset,
 }
 
 
-/*draws blips on radar to represent Proximity Display and damaged structures*/
+/* Draws blips on radar to represent Proximity Display and damaged structures */
 void drawRadarBlips(float pixSizeH, float pixSizeV, int RadarOffsetX, int RadarOffsetY)
 {
 	PROXIMITY_DISPLAY	*psProxDisp;
 	UWORD			imageID;
 	UDWORD			delay = 150;
 	UDWORD			i;
-	UDWORD			VisWidth = RADWIDTH;
-	UDWORD			VisHeight = RADHEIGHT;
 
 	// Check if it's time to remove beacons
 	for (i = 0; i < MAX_PLAYERS; i++)
@@ -3153,13 +3151,7 @@ void drawRadarBlips(float pixSizeH, float pixSizeV, int RadarOffsetX, int RadarO
 	/* Go through all the proximity Displays */
 	for (psProxDisp = apsProxDisp[selectedPlayer]; psProxDisp != NULL; psProxDisp = psProxDisp->psNext)
 	{
-		PROX_TYPE		proxType;
-
-		// Check it is within the radar coords
-		if (psProxDisp->radarX <= 0 || psProxDisp->radarX >= VisWidth || psProxDisp->radarY <= 0 || psProxDisp->radarY >= VisHeight)
-		{
-			continue;
-		}
+		PROX_TYPE	proxType;
 
 		if (psProxDisp->type == POS_PROXDATA)
 		{
