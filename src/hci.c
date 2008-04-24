@@ -1313,6 +1313,7 @@ static void intProcessOptions(UDWORD id)
 {
 	UDWORD i;
 	DROID_TEMPLATE *psTempl;
+	char saveName[PATH_MAX];
 
 	if (id >= IDOPT_PLAYERSTART && id <= IDOPT_PLAYEREND)
 	{
@@ -1333,9 +1334,10 @@ static void intProcessOptions(UDWORD id)
 			}
 			break;
 		case IDOPT_MAPSAVE:
-			debug(LOG_ERROR, "We should call writeMapFile here");
+			strcpy(saveName, "maps/builtin-test.gam");
+			if (saveGame(saveName, GTYPE_SAVE_START))
 			{
-				/* Managed to save so quit the option screen */
+				addConsoleMessage(_("GAME SAVED!"), LEFT_JUSTIFY,SYSTEM_MESSAGE);
 				intRemoveOptions();
 				intMode = INT_NORMAL;
 			}
