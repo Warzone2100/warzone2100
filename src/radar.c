@@ -109,7 +109,7 @@ static void CalcRadarScroll(UWORD boxSizeH,UWORD boxSizeV);
 static void ClearRadar(UDWORD *screen);
 static void DrawRadarTiles(UDWORD *screen,UDWORD Modulus,UWORD boxSizeH,UWORD boxSizeV);
 static void DrawRadarObjects(UDWORD *screen,UDWORD Modulus,UWORD boxSizeH,UWORD boxSizeV);
-static void DrawRadarExtras(UWORD boxSizeH,UWORD boxSizeV);
+static void DrawRadarExtras(UWORD boxSizeH, UWORD boxSizeV);
 
 
 void radarInitVars(void)
@@ -771,40 +771,36 @@ static void RotateVector2D(Vector3i *Vector, Vector3i *TVector, Vector3i *Pos, i
 	}
 }
 
-
 static SDWORD getDistanceAdjust( void )
 {
-UDWORD	origDistance;
-SDWORD	dif;
+	UDWORD	origDistance = MAXDISTANCE;
+	SDWORD	dif = MAX(origDistance - distance, 0);
 
-	origDistance = MAXDISTANCE;
-	dif = origDistance-distance;
-	if(dif <0 ) dif = 0;
-	dif/=100;
-	return(dif);
+	return dif / 100;
 }
 
 static SDWORD getLengthAdjust( void )
 {
-SDWORD	pitch;
-UDWORD	lookingDown,lookingFar;
-SDWORD	dif;
+	SDWORD	pitch;
+	UDWORD	lookingDown,lookingFar;
+	SDWORD	dif;
 
 	pitch = 360 - (player.r.x/DEG_1);
 
 	// Max at
-	lookingDown = (0-MIN_PLAYER_X_ANGLE);
-	lookingFar = (0-MAX_PLAYER_X_ANGLE);
-	dif = pitch-lookingFar;
-	if(dif <0) dif = 0;
-	if(dif>(lookingDown-lookingFar)) dif = (lookingDown-lookingFar);
+	lookingDown = (0 - MIN_PLAYER_X_ANGLE);
+	lookingFar = (0 - MAX_PLAYER_X_ANGLE);
+	dif = MAX(pitch - lookingFar, 0);
+	if (dif > (lookingDown - lookingFar)) 
+	{
+		dif = (lookingDown - lookingFar);
+	}
 
-	return(dif/2);
+	return dif / 2;
 }
 
-
 /* Draws a Myth/FF7 style viewing window */
-static void drawViewingWindow( UDWORD x, UDWORD y, UDWORD boxSizeH, UDWORD boxSizeV )
+static void drawViewingWindow(UDWORD x, UDWORD y, UDWORD pixSizeH, UDWORD pixSizeV)
 {
 	Vector3i v[4], tv[4], centre;
 	int	shortX, longX, yDrop, yDropVar;
@@ -812,10 +808,10 @@ static void drawViewingWindow( UDWORD x, UDWORD y, UDWORD boxSizeH, UDWORD boxSi
 	int	dif2 = getLengthAdjust();
 	PIELIGHT colour;
 
-	shortX = ((visibleTiles.x/4)-(dif/6)) * boxSizeH;
-	longX = ((visibleTiles.x/2)-(dif/4)) * boxSizeH;
-	yDropVar = ((visibleTiles.y/2)-(dif2/3)) * boxSizeV;
-	yDrop = ((visibleTiles.y/2)-dif2/3) * boxSizeV;
+	shortX = ((visibleTiles.x / 4) - (dif / 6)) * pixSizeH;
+	longX = ((visibleTiles.x / 2) - (dif / 4)) * pixSizeH;
+	yDropVar = ((visibleTiles.y / 2) - (dif2 / 3)) * pixSizeV;
+	yDrop = ((visibleTiles.y / 2) - dif2 / 3) * pixSizeV;
 
  	v[0].x = longX;
 	v[0].y = -yDropVar;
@@ -829,8 +825,8 @@ static void drawViewingWindow( UDWORD x, UDWORD y, UDWORD boxSizeH, UDWORD boxSi
 	v[3].x = -shortX;
 	v[3].y = yDrop;
 
-	centre.x = RADTLX+x+(visibleTiles.x*boxSizeH)/2;
-	centre.y = RADTLY+y+(visibleTiles.y*boxSizeV)/2;
+	centre.x = RADTLX + x + (visibleTiles.x * pixSizeH) / 2;
+	centre.y = RADTLY + y + (visibleTiles.y * pixSizeV) / 2;
 
 	RotateVector2D(v,tv,&centre,player.r.y,4);
 
@@ -862,19 +858,15 @@ static void drawViewingWindow( UDWORD x, UDWORD y, UDWORD boxSizeH, UDWORD boxSi
 	pie_DrawViewingWindow(tv,RADTLX,RADTLY,RADTLX+RADWIDTH,RADTLY+RADHEIGHT,colour);
 }
 
-static void DrawRadarExtras(UWORD boxSizeH,UWORD boxSizeV)
+static void DrawRadarExtras(UWORD boxSizeH, UWORD boxSizeV)
 {
-	SDWORD	viewX,viewY;
-
-	viewX = ((player.p.x/TILE_UNITS)-RadarScrollX-RadarMapOriginX)*boxSizeH;
-	viewY = ((player.p.z/TILE_UNITS)-RadarScrollY-RadarMapOriginY)*boxSizeV;
-	viewX += RadarOffsetX;
-	viewY += RadarOffsetY;
+	SDWORD	viewX = ((player.p.x / TILE_UNITS) - RadarScrollX - RadarMapOriginX) * boxSizeH + RadarOffsetX;
+	SDWORD	viewY = ((player.p.z / TILE_UNITS) - RadarScrollY - RadarMapOriginY) * boxSizeV + RadarOffsetY;
 
 	viewX = viewX&(~(boxSizeH-1));
 	viewY = viewY&(~(boxSizeV-1));
 
-	drawViewingWindow(viewX,viewY,boxSizeH,boxSizeV);
+	drawViewingWindow(viewX, viewY, boxSizeH, boxSizeV);
 	RenderWindowFrame(FRAME_RADAR, RADTLX - 1, RADTLY - 1, RADWIDTH + 2, RADHEIGHT + 2);
 }
 
@@ -882,11 +874,8 @@ static void DrawRadarExtras(UWORD boxSizeH,UWORD boxSizeV)
 //
 BOOL CoordInRadar(int x,int y)
 {
-	if( (x >=RADTLX -1 ) &&
-		(x < RADTLX +RADWIDTH+1) &&
-		(y >=RADTLY -1) &&
-		(y < RADTLY +RADHEIGHT+1) ) {
-
+	if (x >= RADTLX - 1 && x < RADTLX + RADWIDTH + 1 && y >= RADTLY - 1 && y < RADTLY + RADHEIGHT + 1)
+	{
 		return true;
 	}
 
