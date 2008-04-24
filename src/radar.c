@@ -43,6 +43,7 @@
 #include "display.h"
 #include "mission.h"
 #include "multiplay.h"
+#include "intdisplay.h"
 #include "texture.h"
 
 #define HIT_NOTIFICATION	(GAME_TICKS_PER_SEC*2)
@@ -334,10 +335,12 @@ void drawRadar(void)
 	}
 	frameSkip--;
 
+	pie_ClipBegin(RADTLX, RADTLY, RADTLX + RADWIDTH, RADTLY + RADHEIGHT);
 	iV_TransBoxFill( RADTLX,RADTLY, RADTLX + RADWIDTH, RADTLY + RADHEIGHT);
-
 	pie_RenderRadar(RADTLX, RADTLY, RADWIDTH, RADHEIGHT);
 	DrawRadarExtras(boxSizeH,boxSizeV);
+	drawRadarBlips(boxSizeH, boxSizeV, RadarOffsetX, RadarOffsetY);
+	pie_ClipEnd();
 }
 
 

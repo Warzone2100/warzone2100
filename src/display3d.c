@@ -131,7 +131,6 @@ static void	drawDroidCmndNo(DROID *psDroid);
 static void	drawDroidRank(DROID *psDroid);
 static void	drawDroidSensorLock(DROID *psDroid);
 static void	calcAverageTerrainHeight(iView *player);
-BOOL	doWeDrawRadarBlips(void);
 BOOL	doWeDrawProximitys(void);
 
 static void drawTerrainTile(UDWORD i, UDWORD j, BOOL onWaterEdge);
@@ -143,8 +142,7 @@ static void drawTerrainWaterTile(UDWORD i, UDWORD j);
 BOOL	bRender3DOnly;
 static BOOL	bRangeDisplay = false;
 static SDWORD	rangeCenterX,rangeCenterY,rangeRadius;
-static BOOL	bDrawBlips=true;
-static BOOL	bDrawProximitys=true;
+static BOOL	bDrawProximitys = true;
 BOOL	godMode;
 BOOL	showGateways = false;
 BOOL	showPath = false;
@@ -350,12 +348,6 @@ void draw3DScene( void )
 		pie_SetDepthBufferStatus(DEPTH_CMP_ALWAYS_WRT_ON);
 		pie_SetFogStatus(false);
 		drawRadar();
-		if(doWeDrawRadarBlips())
-		{
-#ifndef RADAR_ROT
-			drawRadarBlips();
-#endif
-		}
 		pie_SetDepthBufferStatus(DEPTH_CMP_LEQ_WRT_ON);
 		pie_SetFogStatus(true);
 	}
@@ -501,19 +493,9 @@ static void displayTerrain(void)
 }
 
 /***************************************************************************/
-BOOL	doWeDrawRadarBlips( void )
-{
-	return(bDrawBlips);
-}
-/***************************************************************************/
 BOOL	doWeDrawProximitys( void )
 {
 	return(bDrawProximitys);
-}
-/***************************************************************************/
-void	setBlipDraw(BOOL val)
-{
-	bDrawBlips = val;
 }
 /***************************************************************************/
 void	setProximityDraw(BOOL val)

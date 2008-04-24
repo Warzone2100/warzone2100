@@ -74,9 +74,7 @@ extern void displayDelivPoints(void);
 extern void calcScreenCoords(DROID *psDroid);
 extern void toggleEnergyBars( void );
 
-extern BOOL doWeDrawRadarBlips( void );
 extern BOOL doWeDrawProximitys( void );
-extern void setBlipDraw(BOOL val);
 extern void setProximityDraw(BOOL val);
 extern void renderShadow( DROID *psDroid, iIMDShape *psShadowIMD );
 

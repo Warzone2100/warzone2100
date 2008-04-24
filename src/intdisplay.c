@@ -3114,7 +3114,7 @@ void intDisplayTransportButton(WIDGET *psWidget, UDWORD xOffset,
 
 
 /*draws blips on radar to represent Proximity Display and damaged structures*/
-void drawRadarBlips(void)
+void drawRadarBlips(float pixSizeH, float pixSizeV, int RadarOffsetX, int RadarOffsetY)
 {
 	PROXIMITY_DISPLAY	*psProxDisp;
 	UWORD			imageID;
@@ -3123,8 +3123,8 @@ void drawRadarBlips(void)
 	UDWORD			VisWidth = RADWIDTH;
 	UDWORD			VisHeight = RADHEIGHT;
 
-	//check if it's time to remove beacons
-	for(i=0; i<MAX_PLAYERS; i++)
+	// Check if it's time to remove beacons
+	for (i = 0; i < MAX_PLAYERS; i++)
 	{
 		/* Go through all the proximity Displays*/
 		for (psProxDisp = apsProxDisp[i]; psProxDisp != NULL; psProxDisp = psProxDisp->psNext)
@@ -3150,61 +3150,57 @@ void drawRadarBlips(void)
 		}
 	}
 
-	/* Go through all the proximity Displays*/
-	for (psProxDisp = apsProxDisp[selectedPlayer]; psProxDisp != NULL;
-		psProxDisp = psProxDisp->psNext)
+	/* Go through all the proximity Displays */
+	for (psProxDisp = apsProxDisp[selectedPlayer]; psProxDisp != NULL; psProxDisp = psProxDisp->psNext)
 	{
-		//check it is within the radar coords
-		if (psProxDisp->radarX > 0 && psProxDisp->radarX < VisWidth &&
-			psProxDisp->radarY > 0 && psProxDisp->radarY < VisHeight)
+		PROX_TYPE		proxType;
+
+		// Check it is within the radar coords
+		if (psProxDisp->radarX <= 0 || psProxDisp->radarX >= VisWidth || psProxDisp->radarY <= 0 || psProxDisp->radarY >= VisHeight)
 		{
-			PROX_TYPE		proxType;
-
-			if (psProxDisp->type == POS_PROXDATA)
-			{
-				proxType = ((VIEW_PROXIMITY*)((VIEWDATA *)psProxDisp->psMessage->pViewData)->pData)->proxType;
-			}
-			else
-			{
-				FEATURE *psFeature = (FEATURE *)psProxDisp->psMessage->pViewData;
-
-				ASSERT(psFeature && psFeature->psStats, "Bad feature message")
-				if (psFeature && psFeature->psStats && psFeature->psStats->subType == FEAT_OIL_RESOURCE)
-				{
-					proxType = PROX_RESOURCE;
-				}
-				else
-				{
-					proxType = PROX_ARTEFACT;
-				}
-			}
-
-			//draw the 'blips' on the radar - use same timings as radar blips
-			//if the message is read - don't animate
-			if (psProxDisp->psMessage->read)
-			{
-				imageID = (UWORD)(IMAGE_RAD_ENM3 + (proxType * (NUM_PULSES + 1)));
-			}
-			else
-			{
-				//draw animated
-				if ((gameTime2 - psProxDisp->timeLastDrawn) > delay)
-				{
-					psProxDisp->strobe++;
-					if (psProxDisp->strobe > (NUM_PULSES-1))
-					{
-						psProxDisp->strobe = 0;
-					}
-					psProxDisp->timeLastDrawn = gameTime2;
-				}
-				imageID = (UWORD)(IMAGE_RAD_ENM1 + psProxDisp->strobe + (
-					proxType * (NUM_PULSES + 1)));
-
-			}
-			//draw the 'blip'
-			iV_DrawImage(IntImages,imageID, psProxDisp->radarX + RADTLX,
-							psProxDisp->radarY + RADTLY);
+			continue;
 		}
+
+		if (psProxDisp->type == POS_PROXDATA)
+		{
+			proxType = ((VIEW_PROXIMITY*)((VIEWDATA *)psProxDisp->psMessage->pViewData)->pData)->proxType;
+		}
+		else
+		{
+			FEATURE *psFeature = (FEATURE *)psProxDisp->psMessage->pViewData;
+
+			ASSERT(psFeature && psFeature->psStats, "Bad feature message")
+			if (psFeature && psFeature->psStats && psFeature->psStats->subType == FEAT_OIL_RESOURCE)
+			{
+				proxType = PROX_RESOURCE;
+			}
+			else
+			{
+				proxType = PROX_ARTEFACT;
+			}
+		}
+
+		// Draw the 'blips' on the radar - use same timings as radar blips if the message is read - don't animate
+		if (psProxDisp->psMessage->read)
+		{
+			imageID = IMAGE_RAD_ENM3 + (proxType * (NUM_PULSES + 1));
+		}
+		else
+		{
+			// Draw animated
+			if ((gameTime2 - psProxDisp->timeLastDrawn) > delay)
+			{
+				psProxDisp->strobe++;
+				if (psProxDisp->strobe > (NUM_PULSES-1))
+				{
+					psProxDisp->strobe = 0;
+				}
+				psProxDisp->timeLastDrawn = gameTime2;
+			}
+			imageID = (UWORD)(IMAGE_RAD_ENM1 + psProxDisp->strobe + (proxType * (NUM_PULSES + 1)));
+		}
+		// Draw the 'blip'
+		iV_DrawImage(IntImages, imageID, psProxDisp->radarX + RADTLX, psProxDisp->radarY + RADTLY);
 	}
 }
 

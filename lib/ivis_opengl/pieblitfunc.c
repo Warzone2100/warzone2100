@@ -52,7 +52,7 @@
 #define pie_FILLBLUE	128
 #define pie_FILLTRANS	128
 
-static UDWORD radarTexture;
+static GLuint radarTexture;
 
 /***************************************************************************/
 /*

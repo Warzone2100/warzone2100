@@ -207,7 +207,7 @@ static DROID	*psSelectedVtol;
 static DROID	*psDominantSelected;
 static BOOL bRadarDragging = false;
 
-UWORD	RadarZoomLevel = 0;
+float	RadarZoomLevel = 0;
 int gammaValue = 20;
 BOOL	rotActive = false;
 BOOL	gameStats = false;
@@ -340,7 +340,7 @@ static void shakeUpdate(void)
 /* Initialise the display system */
 BOOL dispInitialise(void)
 {
-	RadarZoomLevel = 0;
+	RadarZoomLevel = 0.0f;
 
 	return true;
 }

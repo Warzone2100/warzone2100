@@ -39,4 +39,7 @@ extern void pie_DrawSkybox(float scale, int u, int v, int w, int h);
 extern void pie_DrawFogBox(float left, float right, float front, float back, float height, float wider);
 extern void pie_DrawViewingWindow( Vector3i *v, UDWORD x1, UDWORD y1, UDWORD x2, UDWORD y2, PIELIGHT colour);
 
+void pie_ClipBegin(int x1, int y1, int x2, int y2);
+void pie_ClipEnd(void);
+
 #endif // _piedef_h

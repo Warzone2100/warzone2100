@@ -172,7 +172,6 @@ extern void	kf_JumpToConstructorUnits( void );
 extern void	kf_JumpToCommandUnits( void );
 extern void	kf_JumpToSensorUnits( void );
 extern void	kf_AddHelpBlip( void );				//Add a beacon
-extern void	kf_ToggleBlips( void );
 extern void	kf_ToggleProximitys( void );
 
 extern void	kf_JumpToUnassignedUnits( void );

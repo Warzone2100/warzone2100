@@ -99,8 +99,6 @@ static INTERP_VAL	scrFunctionResult;	//function return value to be pushed to sta
 static SDWORD	bitMask[] = {0x01,0x02,0x04,0x08,0x10,0x20,0x40,0x80};
 static char		strParam1[MAXSTRLEN], strParam2[MAXSTRLEN];		//these should be used as string parameters for stackPopParams()
 
-VIEWDATA *CreateBeaconViewData(SDWORD sender, UDWORD LocX, UDWORD LocY);
-
 // -----------------------------------------------------------------------------------------
 static BOOL	structHasModule(STRUCTURE *psStruct);
 

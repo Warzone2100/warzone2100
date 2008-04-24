@@ -161,7 +161,7 @@ MT_NOTARGET		//leave as last one
 
 extern BOOL		gameStats;
 extern BOOL		godMode;
-extern UWORD	RadarZoomLevel;
+extern float		RadarZoomLevel;
 
 // reset the input state
 void resetInput(void);

@@ -1331,12 +1331,6 @@ void	kf_ChooseOptions( void )
 	intAddOptions();
 }
 
-
-// --------------------------------------------------------------------------
-void	kf_ToggleBlips( void )
-{
-	setBlipDraw(!doWeDrawRadarBlips());
-}
 // --------------------------------------------------------------------------
 void	kf_ToggleProximitys( void )
 {

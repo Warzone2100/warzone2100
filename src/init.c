@@ -879,13 +879,6 @@ BOOL stageTwoInitialise(void)
 
 	LOADBARCALLBACK();	//	loadingScreenCallback();
 
-	if(!InitRadar()) 	// After resLoad cause it needs the game palette initialised.
-	{
-		return false;
-	}
-
-	LOADBARCALLBACK();	//	loadingScreenCallback();
-
 	if(!initMiscImds())			/* Set up the explosions */
 	{
 		iV_ShutDown();
@@ -975,10 +968,6 @@ BOOL stageTwoShutDown(void)
 	}
 
 
-	if(!ShutdownRadar()) {
-		return false;
-	}
-
 	intShutDown();
 
 	cmdDroidShutDown();
@@ -1028,6 +1017,13 @@ BOOL stageThreeInitialise(void)
 		//ensure single player games do not have this set
 		game.maxPlayers = 0;
 	}
+
+	if (!InitRadar()) 	// After resLoad cause it needs the game palette initialised.
+	{
+		return false;
+	}
+
+	LOADBARCALLBACK();	//	loadingScreenCallback();
 
 	preProcessVisibility();
 	closeLoadingScreen();			// reset the loading screen.
@@ -1156,6 +1152,11 @@ BOOL stageThreeShutDown(void)
 	else
 	{
 		initPlayerColours();		// reset colours leaving multiplayer game.
+	}
+
+	if (!ShutdownRadar())
+	{
+		return false;
 	}
 
 	setScriptWinLoseVideo(PLAY_NONE);
