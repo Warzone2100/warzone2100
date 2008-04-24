@@ -18,7 +18,7 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 /**
- * @file bucket3D.c
+ * @file bucket3d.c
  *
  * Stores object render calls in a linked list renders after bucket sorting objects.
  */

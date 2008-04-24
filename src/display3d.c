@@ -18,7 +18,7 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 /**
- * @file display3D.c
+ * @file display3d.c
  * Draws the 3D terrain view. Both the 3D and pseudo-3D components - textured tiles.
 
 	-------------------------------------------------------------------
