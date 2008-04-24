@@ -670,33 +670,33 @@ BOOL droidUsesPower(DROID *psDroid)
 //this is a check cos there is a problem with the power but not sure where!!
 void powerCheck(BOOL bBeforePowerUsed, UBYTE player)
 {
-    static  BASE_OBJECT     *psLastPowered = NULL;
-    static  BOOL            bPowerBefore = false;
+	static BASE_OBJECT	*psLastPowered = NULL;
+	static BOOL		bPowerBefore = false;
 
 	ASSERT(player < MAX_PLAYERS, "powerCheck: Bad player (%u)", (unsigned int)player);
 
-    if (bBeforePowerUsed)
-    {
-        //set what the lastPowered object is before using any power
-        psLastPowered = asPower[player].psLastPowered;
-        bPowerBefore = false;
-        //check that there is power available at start of loop
-        if (asPower[player].currentPower > POWER_PER_CYCLE)
-        {
-            bPowerBefore = true;
-        }
-
-    }
-    else
-    {
-        /*check to see if we've been thru the whole list of structures and
-        droids and not reset the lastPowered object in the power structure and
-        there was some power at the start of the loop to use*/
-        if (psLastPowered != NULL && psLastPowered == asPower[player].psLastPowered && bPowerBefore)
-        {
-            ASSERT( false, "powerCheck: trouble at mill!" );
-            //initialise so something can have some power next cycle
-            asPower[player].psLastPowered = NULL;
-        }
-    }
+	if (bBeforePowerUsed)
+	{
+		// Set what the lastPowered object is before using any power
+		psLastPowered = asPower[player].psLastPowered;
+		bPowerBefore = false;
+		// Check that there is power available at start of loop
+		if (asPower[player].currentPower > POWER_PER_CYCLE)
+		{
+			bPowerBefore = true;
+		}
+	}
+	else
+	{
+		/* Check to see if we've been thru the whole list of structures and
+		 * droids and not reset the lastPowered object in the power structure and
+		 * there was some power at the start of the loop to use. */
+		if (psLastPowered != NULL && psLastPowered == asPower[player].psLastPowered && bPowerBefore)
+		{
+			ASSERT(false, "Trouble at mill! bBeforePowerUsed=%d psLastPowered=%p asPower[%d].psLastPowered=%p", 
+			       (int)bBeforePowerUsed, psLastPowered, player, asPower[player].psLastPowered );
+			// Initialise so something can have some power next cycle
+			asPower[player].psLastPowered = NULL;
+		}
+	}
 }
