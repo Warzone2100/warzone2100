@@ -17,9 +17,6 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/** @file
- *  Projectile types and function headers
- */
 
 #ifndef __INCLUDED_SRC_PROJECTILE_H__
 #define __INCLUDED_SRC_PROJECTILE_H__
@@ -30,46 +27,46 @@
 #include "movedef.h"
 #include "lib/gamelib/anim.h"
 
+/**
+ *	@file projectile.h
+ *	Projectile types and function headers
+ *	@defgroup Projectile Projectile system
+ *	@{
+ */
+
 /***************************************************************************/
 
-// the last unit that did damage - used by script functions
-extern	BASE_OBJECT		*g_pProjLastAttacker;
-extern UDWORD	selectedPlayer;
+extern	BASE_OBJECT	*g_pProjLastAttacker;	///< The last unit that did damage - used by script functions
 
-/** Whether an object is in a fire. */
-#define IN_FIRE		0x01
-
-/** Whether an object has just left the fire, but is still burning. */
-#define BURNING		0x02
-
-/** How long an object burns for after leaving a fire. */
-#define BURN_TIME	10000
-
-/** How much damaga a second an object takes when it is burning. */
-#define BURN_DAMAGE	15
+#define IN_FIRE		0x01	///< Whether an object is in a fire.
+#define BURNING		0x02	///< Whether an object has just left the fire, but is still burning.
+#define BURN_TIME	10000	///< How long an object burns for after leaving a fire.
+#define BURN_DAMAGE	15	///< How much damaga a second an object takes when it is burning.
 
 /** How long to display a single electronic warfare shimmmer. */
 #define ELEC_DAMAGE_DURATION    (GAME_TICKS_PER_SEC/5)
 
-BOOL	proj_InitSystem( void );
-void	proj_UpdateAll( void );
-BOOL	proj_Shutdown( void );
+BOOL	proj_InitSystem(void);	///< Initialize projectiles subsystem.
+void	proj_UpdateAll(void);	///< Frame update for projectiles.
+BOOL	proj_Shutdown(void);	///< Shut down projectile subsystem.
 
-PROJECTILE *	proj_GetFirst( void );
-PROJECTILE *	proj_GetNext( void );
+PROJECTILE *proj_GetFirst(void);	///< Get first projectile in the list.
+PROJECTILE *proj_GetNext(void);		///< Get next projectile in the list.
 
-void	proj_FreeAllProjectiles( void );
+void	proj_FreeAllProjectiles(void);	///< Free all projectiles in the list.
+
+/** Send a single projectile against the given target. */
 BOOL	proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, int tarX, int tarY, int tarZ,
                             BASE_OBJECT *psTarget, BOOL bVisible, BOOL bPenetrate, int weapon_slot);
 
-// return whether a weapon is direct or indirect
+/** Return whether a weapon is direct or indirect. */
 bool proj_Direct(const WEAPON_STATS* psStats);
 
-// return the maximum range for a weapon
+/** Return the maximum range for a weapon. */
 SDWORD	proj_GetLongRange(const WEAPON_STATS* psStats);
 
 // Watermelon:neighbour info ripped from droiddef.h
-/* Info stored for each projectile neighbour */
+/** Info stored for each projectile neighbour */
 typedef struct _proj_naybor_info
 {
 	BASE_OBJECT		*psObj;			// The neighbouring object
@@ -77,28 +74,12 @@ typedef struct _proj_naybor_info
 	//UDWORD			dist;			// The distance to the object
 } PROJ_NAYBOR_INFO;
 
-extern UDWORD calcDamage(UDWORD baseDamage, WEAPON_EFFECT weaponEffect,
-						 BASE_OBJECT *psTarget);
+extern UDWORD calcDamage(UDWORD baseDamage, WEAPON_EFFECT weaponEffect, BASE_OBJECT *psTarget);
 extern BOOL gfxVisible(PROJECTILE *psObj);
 
 /***************************************************************************/
 
-extern BOOL	justBeenHitByEW		( BASE_OBJECT *psObj );
 extern void	objectShimmy	( BASE_OBJECT *psObj );
-
-// Watermelon:naybor related functions
-extern void projGetNaybors(PROJECTILE *psObj);
-
-//used for passing data to the checkBurnDamage function
-typedef struct _fire_box
-{
-	SWORD	x1, y1;
-	SWORD	x2, y2;
-	SWORD	rad;
-} FIRE_BOX;
-
-/*Apply the damage to an object due to fire range*/
-extern void checkBurnDamage(BASE_OBJECT* apsList, PROJECTILE* psBullet, FIRE_BOX* pFireBox);
 
 static inline void setProjectileDestination(PROJECTILE *psProj, BASE_OBJECT *psObj)
 {
@@ -114,6 +95,8 @@ static inline void setProjectileDamaged(PROJECTILE *psProj, BASE_OBJECT *psObj)
 {
 	psProj->psDamaged = psObj;
 }
+
+/* @} */
 
 /* assert if projectile is bad */
 #define CHECK_PROJECTILE(object) \

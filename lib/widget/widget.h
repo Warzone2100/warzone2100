@@ -20,7 +20,7 @@
 /** 
  *	@file widget.h
  *	Definitions for the Widget library
- *	@defgroup Widget
+ *	@defgroup Widget Widget system
  *	Warzone uses a pixel layout, callback based widget code. While it has several
  *	fallbacks for drawing standard widgets, usually you want to specify your
  *	own drawing callbacks.

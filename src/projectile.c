@@ -67,6 +67,14 @@
 #define NOMINAL_DAMAGE	5
 #define VTOL_HITBOX_MODIFICATOR 100
 
+/** Used for passing data to the checkBurnDamage function */
+typedef struct
+{
+	SWORD   x1, y1;
+	SWORD   x2, y2;
+	SWORD   rad;
+} FIRE_BOX;
+
 // Watermelon:they are from droid.c
 /* The range for neighbouring objects */
 #define PROJ_NAYBOR_RANGE		(TILE_UNITS*4)
@@ -105,6 +113,9 @@ static void	proj_Free(PROJECTILE *psObj);
 
 static float objectDamage(BASE_OBJECT *psObj, UDWORD damage, UDWORD weaponClass,UDWORD weaponSubClass, HIT_SIDE impactSide);
 static HIT_SIDE getHitSide (PROJECTILE *psObj, BASE_OBJECT *psTarget);
+
+static void projGetNaybors(PROJECTILE *psObj);
+
 
 /***************************************************************************/
 BOOL gfxVisible(PROJECTILE *psObj)
@@ -640,8 +651,7 @@ BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, in
 
 /***************************************************************************/
 
-void
-proj_InFlightDirectFunc( PROJECTILE *psObj )
+static void proj_InFlightDirectFunc( PROJECTILE *psObj )
 {
 	WEAPON_STATS	*psStats;
 	SDWORD			timeSoFar;
@@ -947,8 +957,7 @@ proj_InFlightDirectFunc( PROJECTILE *psObj )
 
 /***************************************************************************/
 
-void
-proj_InFlightIndirectFunc( PROJECTILE *psObj )
+static void proj_InFlightIndirectFunc( PROJECTILE *psObj )
 {
 	WEAPON_STATS	*psStats;
 	SDWORD			iTime, iRad, iDist, dx, dy, dz, iX, iY;
@@ -1201,8 +1210,7 @@ proj_InFlightIndirectFunc( PROJECTILE *psObj )
 
 /***************************************************************************/
 
-void
-proj_ImpactFunc( PROJECTILE *psObj )
+static void proj_ImpactFunc( PROJECTILE *psObj )
 {
 	WEAPON_STATS	*psStats;
 	SDWORD			i, iAudioImpactID;
@@ -1624,8 +1632,7 @@ proj_ImpactFunc( PROJECTILE *psObj )
 
 /***************************************************************************/
 
-void
-proj_PostImpactFunc( PROJECTILE *psObj )
+static void proj_PostImpactFunc( PROJECTILE *psObj )
 {
 	WEAPON_STATS	*psStats;
 	SDWORD			i, age;
@@ -1672,8 +1679,7 @@ proj_PostImpactFunc( PROJECTILE *psObj )
 
 /***************************************************************************/
 
-static void
-proj_Update( PROJECTILE *psObj )
+static void proj_Update(PROJECTILE *psObj)
 {
 	CHECK_PROJECTILE(psObj);
 
@@ -1721,8 +1727,7 @@ proj_Update( PROJECTILE *psObj )
 /***************************************************************************/
 
 // iterate through all projectiles and update their status
-void
-proj_UpdateAll( void )
+void proj_UpdateAll()
 {
 	PROJECTILE	*psObj, *psPrev;
 
@@ -1762,9 +1767,7 @@ proj_UpdateAll( void )
 
 /***************************************************************************/
 
-void
-proj_checkBurnDamage( BASE_OBJECT *apsList, PROJECTILE *psProj,
-						FIRE_BOX *pFireBox )
+static void proj_checkBurnDamage( BASE_OBJECT *apsList, PROJECTILE *psProj, FIRE_BOX *pFireBox )
 {
 	BASE_OBJECT		*psCurr, *psNext;
 	SDWORD			xDiff,yDiff;
@@ -1886,13 +1889,11 @@ SDWORD proj_GetLongRange(const WEAPON_STATS* psStats)
 
 
 /***************************************************************************/
-//Watemelon:added case for OBJ_PROJECTILE
-UDWORD	establishTargetRadius( BASE_OBJECT *psTarget )
+static UDWORD	establishTargetRadius(BASE_OBJECT *psTarget)
 {
-UDWORD		radius;
-STRUCTURE	*psStructure;
-FEATURE		*psFeat;
-//Watermelon:droid pointer
+	UDWORD		radius;
+	STRUCTURE	*psStructure;
+	FEATURE		*psFeat;
 
 	CHECK_OBJECT(psTarget);
 	radius = 0;
@@ -1988,7 +1989,7 @@ UDWORD	calcDamage(UDWORD baseDamage, WEAPON_EFFECT weaponEffect, BASE_OBJECT *ps
  *  - Should sufficient damage be done to destroy/kill a unit then the value is
  *    multiplied by -1, resulting in a negative number.
  */
-float objectDamage(BASE_OBJECT *psObj, UDWORD damage, UDWORD weaponClass,UDWORD weaponSubClass, HIT_SIDE impactSide)
+static float objectDamage(BASE_OBJECT *psObj, UDWORD damage, UDWORD weaponClass,UDWORD weaponSubClass, HIT_SIDE impactSide)
 {
 	switch (psObj->type)
 	{
@@ -2071,7 +2072,7 @@ static HIT_SIDE getHitSide(PROJECTILE *psObj, BASE_OBJECT *psTarget)
 }
 
 /* Returns true if an object has just been hit by an electronic warfare weapon*/
-BOOL	justBeenHitByEW( BASE_OBJECT *psObj )
+static BOOL	justBeenHitByEW(BASE_OBJECT *psObj)
 {
 DROID		*psDroid;
 FEATURE		*psFeature;
@@ -2189,7 +2190,7 @@ static void addProjNaybor(BASE_OBJECT *psObj, UDWORD distSqr)
 
 //Watermelon: projGetNaybors ripped from droid.c
 /* Find all the objects close to the projectile */
-void projGetNaybors(PROJECTILE *psObj)
+static void projGetNaybors(PROJECTILE *psObj)
 {
 	SDWORD		xdiff, ydiff;
 	UDWORD		dx,dy, distSqr;
@@ -2252,7 +2253,7 @@ void projGetNaybors(PROJECTILE *psObj)
 	}
 }
 
-UDWORD	establishTargetHeight( BASE_OBJECT *psTarget )
+static UDWORD	establishTargetHeight(BASE_OBJECT *psTarget)
 {
 	UDWORD		height;
 	UDWORD		utilityHeight = 0, yMax = 0, yMin = 0; // Temporaries for addition of utility's height to total height
