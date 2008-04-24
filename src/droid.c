@@ -3703,8 +3703,13 @@ UDWORD getDroidEffectiveLevel(DROID *psDroid)
 	// get commander level
 	if(hasCommander(psDroid))
 	{
+		cmdLevel = cmdGetCommanderLevel(psDroid);
+
 		// Commanders boost unit's effectiveness just by being assigned to it
-		cmdLevel = cmdGetCommanderLevel(psDroid) + 1;
+		if(bMultiPlayer)
+		{
+			cmdLevel++;
+		}
 	}
 
 	return MAX(level, cmdLevel);
