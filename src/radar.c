@@ -151,8 +151,6 @@ BOOL InitRadar(void)
 
 BOOL ShutdownRadar(void)
 {
-	ASSERT(radarBuffer != NULL, "Radar not yet initialized!");
-
 	pie_ShutdownRadar();
 
 	free(radarBuffer);
