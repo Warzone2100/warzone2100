@@ -180,10 +180,13 @@ widget *widgetFindById(widget *self, const char *id)
  */
 bool widgetAddChildImpl(widget *self, widget *child)
 {
-	// FIXME: We need to do some arbitration
+	// TODO: We need to assert that id is unique;
+	// widgetFindById(widgetGetRoot(self), child->id) == NULL should do
 	
 	// Add the widget
 	vectorAdd(self->children, child);
+	
+	// FIXME: We need to do some arbitration
 	
 	// Set ourself as its parent
 	child->parent = self;
@@ -217,12 +220,13 @@ void widgetRemoveChildImpl(widget *self, widget *child)
 /*
  * 
  */
-int widgetAddEventHandlerImpl(widget *self, eventType type, callback handler)
+int widgetAddEventHandlerImpl(widget *self, eventType type, callback handler, void *userData)
 {
 	eventTableEntry *entry = malloc(sizeof(eventTableEntry));
 	
 	entry->type		= type;
 	entry->callback = handler;
+	entry->userData	= userData;
 	
 	// Add the handler to the table
 	vectorAdd(self->eventVtbl, entry);
@@ -249,7 +253,7 @@ bool widgetFireCallbacksImpl(widget *self, event *evt)
 		
 		if (handler->type == evt->type)
 		{
-			handler->callback(self, evt);
+			handler->callback(self, evt, handler->userData);
 		}
 	}
 	
@@ -433,9 +437,10 @@ void widgetRemoveChild(widget *self, widget *child)
 	WIDGET_GET_VTBL(self)->removeChild(self, child);
 }
 
-int widgetAddEventHandler(widget *self, eventType type, callback handler)
+int widgetAddEventHandler(widget *self, eventType type,
+                          callback handler, void *userData)
 {
-	return WIDGET_GET_VTBL(self)->addEventHandler(self, type, handler);
+	return WIDGET_GET_VTBL(self)->addEventHandler(self, type, handler, userData);
 }
 
 void widgetRemoveEventHandler(widget *self, int id)
