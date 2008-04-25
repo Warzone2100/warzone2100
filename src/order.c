@@ -2680,6 +2680,12 @@ DROID_ORDER chooseOrderLoc(DROID *psDroid, UDWORD x,UDWORD y)
 	// default to move
 	order = DORDER_MOVE;
 
+	// scout if shift was pressed
+	if(keyDown(KEY_LSHIFT) || keyDown(KEY_RSHIFT))
+	{
+		order = DORDER_SCOUT;
+	}
+
 	/*if(psDroid->droidType == DROID_TRANSPORTER)
 	{
 		order = DORDER_NONE;

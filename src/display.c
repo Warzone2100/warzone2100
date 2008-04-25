@@ -2179,7 +2179,7 @@ void	dealWithLMB( void )
 	if (psLocation == NULL || driveModeActive() || selNumSelected(selectedPlayer))
 	{
 		// now changed to use the multiple order stuff
-		if(ctrlShiftDown())		// shift clicked a destination, add an order
+		if(keyDown(KEY_LCTRL) || keyDown(KEY_RCTRL))		// ctrl clicked a destination, add an order
 		{
 			orderSelectedLocAdd(selectedPlayer,
 								mouseTileX*TILE_UNITS+TILE_UNITS/2,
