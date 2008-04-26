@@ -65,7 +65,7 @@ static SDWORD			eventTraceLevel=3;
 #ifdef DEBUG
 #define DB_TRACE(x, level) \
 	if (eventTraceLevel >= (level)) \
-		debug(LOG_WARNING, x)
+		debug(LOG_SCRIPT, x)
 #else
 #define DB_TRACE(x,level)
 #endif
@@ -144,7 +144,7 @@ void eventReset(void)
 
 	if (count > 0)
 	{
-		debug(LOG_WARNING, "eventReset: %d contexts still allocated at reset", count);
+		debug(LOG_SCRIPT, "eventReset: %d contexts still allocated at reset", count);
 	}
 }
 
@@ -292,13 +292,13 @@ BOOL eventInitValueFuncs(SDWORD maxType)
 	asCreateFuncs = malloc(sizeof(VAL_CREATE_FUNC) * maxType);
 	if (!asCreateFuncs)
 	{
-		debug(LOG_ERROR, "eventInitValueFuncs: Out of memory");
+		debug(LOG_SCRIPT, "eventInitValueFuncs: Out of memory");
 		return false;
 	}
 	asReleaseFuncs = (VAL_RELEASE_FUNC *)malloc(sizeof(VAL_RELEASE_FUNC) * maxType);
 	if (!asReleaseFuncs)
 	{
-		debug(LOG_ERROR, "eventInitValueFuncs: Out of memory");
+		debug(LOG_SCRIPT, "eventInitValueFuncs: Out of memory");
 		return false;
 	}
 
@@ -757,7 +757,6 @@ BOOL eventSetContextVar(SCRIPT_CONTEXT *psContext, UDWORD index, INTERP_VAL *dat
 // Add a trigger to the list in order
 static void eventAddTrigger(ACTIVE_TRIGGER *psTrigger)
 {
-	ACTIVE_TRIGGER	*psCurr, *psPrev=NULL;
 	UDWORD	testTime = psTrigger->testTime;
 
 	if (psTrigger->type >= TR_CALLBACKSTART)
@@ -775,8 +774,9 @@ static void eventAddTrigger(ACTIVE_TRIGGER *psTrigger)
 		}
 		else
 		{
-			for(psCurr=psCallbackList; psCurr && psCurr->type < psTrigger->type;
-				psCurr=psCurr->psNext)
+			ACTIVE_TRIGGER *psCurr, *psPrev = NULL;
+
+			for(psCurr = psCallbackList; psCurr && psCurr->type < psTrigger->type; psCurr = psCurr->psNext)
 			{
 				psPrev = psCurr;
 			}
@@ -796,8 +796,9 @@ static void eventAddTrigger(ACTIVE_TRIGGER *psTrigger)
 	}
 	else
 	{
-		for(psCurr=psTrigList; psCurr && psCurr->testTime < testTime;
-			psCurr=psCurr->psNext)
+		ACTIVE_TRIGGER *psCurr, *psPrev = NULL;
+
+		for(psCurr = psTrigList; psCurr && psCurr->testTime < testTime; psCurr = psCurr->psNext)
 		{
 			psPrev = psCurr;
 		}
