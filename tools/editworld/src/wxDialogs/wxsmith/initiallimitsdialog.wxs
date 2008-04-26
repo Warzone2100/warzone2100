@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8" ?>
-<wxsmith>
-	<resource_extra>
-		<object root="1" />
-		<object name="ID_STATICTEXT1" class="wxStaticText" variable="StaticText1" member="no" />
-		<object name="ID_CHOICE_INITIALLIMITS" class="wxChoice" variable="InitialLimits_Choice" member="yes" />
-	</resource_extra>
-</wxsmith>
