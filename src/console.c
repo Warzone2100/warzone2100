@@ -757,22 +757,16 @@ UDWORD getConsoleLineInfo(void)
 /// Function with printf arguments to print to the console
 void	consolePrintf(char *layout, ...)
 {
-char	consoleString[MAX_CONSOLE_STRING_LENGTH];
-va_list	arguments;		// Formatting info
-
-	/* Boot off the argument List */
-	va_start(arguments,layout);
+	char	consoleString[MAX_CONSOLE_STRING_LENGTH];
+	va_list	arguments;		// Formatting info
 
 	/* 'print' it out into our buffer */
+	va_start(arguments,layout);
 	vsnprintf(consoleString, sizeof(consoleString), layout, arguments);
-	// Guarantee to nul-terminate
-	consoleString[sizeof(consoleString) - 1] = '\0';
+	va_end(arguments);
 
 	/* Add the message through the normal channels! */
 	addConsoleMessage(consoleString,DEFAULT_JUSTIFY,SYSTEM_MESSAGE);
-
-	/* Close arguments */
-	va_end(arguments);
 }
 
 /// Set if new messages may be added to the console
@@ -792,15 +786,12 @@ void printf_console(const char *pFormat, ...)
 {
 #ifdef DEBUG
 	char		aBuffer[500];   // Output string buffer
-    va_list		pArgs;					  // Format arguments
-
-	/* Initialise the argument list */
-	va_start(pArgs, pFormat);
+	va_list		pArgs;					  // Format arguments
 
 	/* Print out the string */
+	va_start(pArgs, pFormat);
 	vsnprintf(aBuffer, sizeof(aBuffer), pFormat, pArgs);
-	// Guarantee to nul-terminate
-	aBuffer[sizeof(aBuffer) - 1] = '\0';
+	va_end(pArgs);
 
 	/* Output it */
 
@@ -812,15 +803,12 @@ void printf_console(const char *pFormat, ...)
 void console(const char *pFormat, ...)
 {
 	char		aBuffer[500];   // Output string buffer
-    va_list		pArgs;					  // Format arguments
-
-	/* Initialise the argument list */
-	va_start(pArgs, pFormat);
+	va_list		pArgs;					  // Format arguments
 
 	/* Print out the string */
+	va_start(pArgs, pFormat);
 	vsnprintf(aBuffer, sizeof(aBuffer), pFormat, pArgs);
-	// Guarantee to nul-terminate
-	aBuffer[sizeof(aBuffer) - 1] = '\0';
+	va_end(pArgs);
 
 	/* Output it */
 	addConsoleMessage(aBuffer,DEFAULT_JUSTIFY,SYSTEM_MESSAGE);

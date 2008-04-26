@@ -347,8 +347,6 @@ BOOL setWarzoneKeyNumeric( const char *pName, SDWORD val )
 	//~~~~~~~~~~~~
 
 	snprintf(buf, sizeof(buf), "%i", val);
-	// Guarantee to nul-terminate
-	buf[sizeof(buf) - 1] = '\0';
 
 	registry_set_key( pName, buf );
 	return true;

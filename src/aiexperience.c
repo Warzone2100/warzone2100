@@ -205,9 +205,6 @@ BOOL SetUpInputFile(SDWORD nPlayer)
 	/* Assemble dir */
 	snprintf(sPlayer, sizeof(sPlayer), "%d", nPlayer);
 
-	// Guarantee to nul-terminate
-	sPlayer[sizeof(sPlayer) - 1] = '\0';
-
 	astrlcat(SaveDir, "player");
 	astrlcat(SaveDir, sPlayer);
 	astrlcat(SaveDir, "/");		// like "multiplay\learndata\player0\"

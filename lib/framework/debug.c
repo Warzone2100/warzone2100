@@ -326,8 +326,6 @@ void _debug( code_part part, const char *function, const char *str, ... )
 	va_start(ap, str);
 	vsnprintf(outputBuffer, MAX_LEN_LOG_LINE, str, ap);
 	va_end(ap);
-	// Guarantee to nul-terminate
-	outputBuffer[MAX_LEN_LOG_LINE - 1] = '\0';
 
 	snprintf(inputBuffer[useInputBuffer1 ? 1 : 0], MAX_LEN_LOG_LINE, "[%s] %s", function, outputBuffer);
 

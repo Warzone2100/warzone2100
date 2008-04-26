@@ -94,8 +94,6 @@ switch (type)
 		char format[sizeof(FORMAT_PREFIX)+8+1];
 
 		snprintf(format, sizeof(format), "%s%08lx", FORMAT_PREFIX, (unsigned long)type);
-		// Guarantee to nul-terminate
-		format[sizeof(format) - 1] = '\0';
 
 #if defined(WZ_WS_X11)
 /* * */

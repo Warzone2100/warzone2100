@@ -1091,8 +1091,6 @@ BOOL intAddTemplateButtons(UDWORD formID, UDWORD formWidth, UDWORD formHeight,
 			if(sBarInit.size > WBAR_SCALE) sBarInit.size = WBAR_SCALE;
 
 			snprintf(TempString, sizeof(TempString), "%s - %d",_("Power Usage"), psTempl->powerPoints);
-			// Guarantee to nul-terminate
-			TempString[sizeof(TempString) - 1] = '\0';
 
 			ASSERT(BufferPos + strlen(TempString) + 1 < sizeof(StringBuffer), "String Buffer Overflow");
 			strlcpy(&StringBuffer[BufferPos], TempString, sizeof(StringBuffer) - BufferPos);

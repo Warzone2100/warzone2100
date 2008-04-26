@@ -706,24 +706,18 @@ BOOL stackBinaryOp(OPCODE opcode)
 			{
 			case VAL_INT:		//first value isn't string, but can be converted to string
 				snprintf(tempstr1, sizeof(tempstr1), "%d", psV1->v.ival);	//int->string
-				// Guarantee to nul-terminate
-				tempstr1[sizeof(tempstr1) - 1] = '\0';
 				psV1->type = VAL_STRING;			//Mark as string
 				psV1->v.sval =  (char*)malloc(MAXSTRLEN);				//allocate space for the string, since the result (string) of concatenation will be saved here
 				break;
 
 			case VAL_BOOL:
 				snprintf(tempstr1, sizeof(tempstr1), "%d",psV1->v.bval);	//bool->string
-				// Guarantee to nul-terminate
-				tempstr1[sizeof(tempstr1) - 1] = '\0';
 				psV1->type = VAL_STRING;			//Mark as string
 				psV1->v.sval =  (char*)malloc(MAXSTRLEN);				//allocate space for the string, since the result (string) of concatenation will be saved here
 				break;
 
 			case VAL_FLOAT:
 				snprintf(tempstr1, sizeof(tempstr1), "%f", psV1->v.fval);	//float->string
-				// Guarantee to nul-terminate
-				tempstr1[sizeof(tempstr1) - 1] = '\0';
 				psV1->type = VAL_STRING;			//Mark as string
 				psV1->v.sval =  (char*)malloc(MAXSTRLEN);				//allocate space for the string, since the result (string) of concatenation will be saved here
 				break;
@@ -743,20 +737,14 @@ BOOL stackBinaryOp(OPCODE opcode)
 			{
 			case VAL_INT:
 				snprintf(tempstr2, sizeof(tempstr2), "%d", psV2->v.ival);		//int->string
-				// Guarantee to nul-terminate
-				tempstr2[sizeof(tempstr2) - 1] = '\0';
 				break;
 
 			case VAL_BOOL:
 				snprintf(tempstr2, sizeof(tempstr2), "%d", psV2->v.bval);		//bool->string
-				// Guarantee to nul-terminate
-				tempstr2[sizeof(tempstr2) - 1] = '\0';
 				break;
 
 			case VAL_FLOAT:
 				snprintf(tempstr2, sizeof(tempstr2), "%f", psV2->v.fval);		//float->string
-				// Guarantee to nul-terminate
-				tempstr2[sizeof(tempstr2) - 1] = '\0';
 				break;
 
 			case VAL_STRING:

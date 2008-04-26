@@ -124,8 +124,6 @@ BOOL NETstartLogging(void)
 		return false;
 	}
 	snprintf(buf, sizeof(buf), "NETPLAY log: %s\n", asctime(newtime));
-	// Guarantee to nul-terminate
-	buf[sizeof(buf) - 1] = '\0';
 	PHYSFS_write( pFileHandle, buf, strlen( buf ), 1 );
 	return true;
 }
@@ -140,8 +138,6 @@ BOOL NETstopLogging(void)
 	{
 		snprintf(buf, sizeof(buf), "%s: received %u times, %u bytes; sent %u times, %u bytes\n", packetname[i],
 			packetcount[0][i], packetsize[0][i], packetcount[1][i], packetsize[1][i]);
-		// Guarantee to nul-terminate
-		buf[sizeof(buf) - 1] = '\0';
 		PHYSFS_write(pFileHandle, buf, strlen(buf), 1);
 	}
 
@@ -198,9 +194,6 @@ BOOL NETlogEntry(const char *str,UDWORD a,UDWORD b)
 		snprintf(buf, sizeof(buf), "%s \t: %s \t:%d\t\t%s", str, packetname[a], b, asctime(newtime));
 	else
 		snprintf(buf, sizeof(buf), "%s \t:%d \t\t\t:%d\t\t%s", str, a, b, asctime(newtime));
-
-	// Guarantee to nul-terminate
-	buf[sizeof(buf) - 1] = '\0';
 
 	if (a == 18) // NET_LEAVING
 		// Write a starry line above NET_LEAVING messages

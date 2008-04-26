@@ -1566,9 +1566,6 @@ BOOL NETfindGame(void)
 				(int)(address[1]),
 				(int)(address[2]),
 				(int)(address[3]));
-
-			// Guarantee to nul-terminate
-			NetPlay.games[gamecount].desc.host[sizeof(NetPlay.games[gamecount].desc.host) - 1] = '\0';
 		}
 
 		++gamecount;
