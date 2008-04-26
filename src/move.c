@@ -708,8 +708,6 @@ void moveStopDroid(DROID *psDroid)
 {
 	PROPULSION_STATS	*psPropStats;
 
-	CHECK_DROID(psDroid);
-
 	psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
 	ASSERT( psPropStats != NULL,
 			"moveUpdateUnit: invalid propulsion stats pointer" );
