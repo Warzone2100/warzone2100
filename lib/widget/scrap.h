@@ -17,8 +17,12 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
+/** @file
+ *  Handle clipboard text and data in arbitrary formats
+ */
 
-/* Handle clipboard text and data in arbitrary formats */
+#ifndef __INCLUDED_LIB_WIDGET_SCRAP_H__
+#define __INCLUDED_LIB_WIDGET_SCRAP_H__
 
 /* Miscellaneous defines */
 #define T(A, B, C, D)	(int)((A<<24)|(B<<16)|(C<<8)|(D<<0))
@@ -27,3 +31,5 @@ extern int init_scrap(void);
 extern int lost_scrap(void);
 extern void put_scrap(int type, int srclen, char *src);
 extern void get_scrap(int type, int *dstlen, char **dst);
+
+#endif // __INCLUDED_LIB_WIDGET_SCRAP_H__

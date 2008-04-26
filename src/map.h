@@ -24,7 +24,6 @@
 #ifndef __INCLUDED_SRC_MAP_H__
 #define __INCLUDED_SRC_MAP_H__
 
-#include <stdio.h>
 #include "lib/framework/frame.h"
 #include "objects.h"
 
@@ -51,7 +50,7 @@ typedef enum _terrain_type
 #define	TERRAIN_TYPES	TER_MAX
 
 #define TALLOBJECT_YMAX		(200)
-#define TALLOBJECT_ADJUST	(200)
+#define TALLOBJECT_ADJUST	(300)
 
 /* Flags for whether texture tiles are flipped in X and Y or rotated */
 #define TILE_XFLIP		0x8000
@@ -138,7 +137,7 @@ typedef struct _maptile
 
 extern UBYTE terrainTypes[MAX_TILE_TEXTURES];
 
-static inline unsigned char terrainType(MAPTILE * tile)
+static inline unsigned char terrainType(const MAPTILE * tile)
 {
 	return terrainTypes[TileNumber_tile(tile->texture)];
 }
@@ -186,8 +185,8 @@ static inline int32_t map_coord(int32_t worldCoord)
 /** Clip world coordinates to make sure they're inside the map's boundaries
  *  \param worldX a pointer to a X coordinate inside the map
  *  \param worldY a pointer to a Y coordinate inside the map
- *  \post 0 <= *worldX <= world_coord(mapWidth) and
- *        0 <= *worldy <= world_coord(mapHeight)
+ *  \post 1 <= *worldX <= world_coord(mapWidth)-1 and
+ *        1 <= *worldy <= world_coord(mapHeight)-1
  */
 static inline void clip_world_offmap(int* worldX, int* worldY)
 {
@@ -281,9 +280,9 @@ typedef struct _tile_coord
 extern TILE_COORD	*aMapLinePoints;
 
 /* Return height of x,y */
-extern SWORD map_Height(UDWORD x, UDWORD y);
+extern SWORD map_Height(int x, int y);
 
-/* returns TRUE if object is above ground */
+/* returns true if object is above ground */
 extern BOOL mapObjIsAboveGround( BASE_OBJECT *psObj );
 
 /* returns the max and min height of a tile by looking at the four corners

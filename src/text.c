@@ -40,10 +40,10 @@ BOOL stringsInitialise(void)
 {
 	if (!strresCreate(&psStringRes, STRING_INIT, STRING_EXT))
 	{
-		return FALSE;
+		return false;
 	}
 
-	return TRUE;
+	return true;
 }
 
 

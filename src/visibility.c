@@ -22,9 +22,13 @@
  * Handles object visibility.
  * Pumpkin Studios, Eidos Interactive 1996.
  */
+#include "lib/framework/frame.h"
 
-#include <stdio.h>
-#include <string.h>
+#include "lib/gamelib/gtime.h"
+#include "lib/sound/audio.h"
+#include "lib/sound/audio_id.h"
+
+#include "visibility.h"
 
 #include "objects.h"
 #include "map.h"
@@ -32,18 +36,14 @@
 #include "raycast.h"
 #include "geometry.h"
 #include "hci.h"
-#include "lib/gamelib/gtime.h"
 #include "mapgrid.h"
 #include "cluster.h"
-#include "lib/sound/audio.h"
-#include "lib/sound/audio_id.h"
 #include "scriptextern.h"
 #include "structure.h"
 
-#include "visibility.h"
-
 #include "multiplay.h"
 #include "advvis.h"
+
 
 // accuracy for the height gradient
 #define GRAD_MUL	10000
@@ -60,11 +60,6 @@ static float			visLevelIncAcc, visLevelDecAcc;
 
 // integer amount to change visiblility this turn
 static SDWORD			visLevelInc, visLevelDec;
-
-// percentage of power over which objects start to be visible
-// UNUSED. What for? - Per
-#define VIS_LEVEL_START		100
-#define VIS_LEVEL_RANGE		60
 
 // alexl's sensor range.
 BOOL bDisplaySensorRange;
@@ -89,21 +84,21 @@ BOOL visInitialise(void)
 	visLevelInc = 0;
 	visLevelDec = 0;
 
-	return TRUE;
+	return true;
 }
 
 // update the visibility change levels
 void visUpdateLevel(void)
 {
-	visLevelIncAcc += timeAdjustedIncrement(VIS_LEVEL_INC, TRUE);
+	visLevelIncAcc += timeAdjustedIncrement(VIS_LEVEL_INC, true);
 	visLevelInc = visLevelIncAcc;
 	visLevelIncAcc -= visLevelInc;
-	visLevelDecAcc += timeAdjustedIncrement(VIS_LEVEL_DEC, TRUE);
+	visLevelDecAcc += timeAdjustedIncrement(VIS_LEVEL_DEC, true);
 	visLevelDec = visLevelDecAcc;
 	visLevelDecAcc -= visLevelDec;
 }
 
-static SDWORD visObjHeight(BASE_OBJECT *psObject)
+static SDWORD visObjHeight(const BASE_OBJECT * const psObject)
 {
 	SDWORD	height;
 
@@ -120,7 +115,7 @@ static SDWORD visObjHeight(BASE_OBJECT *psObject)
 		height = psObject->sDisplay.imd->max.y;
 		break;
 	default:
-		ASSERT( FALSE,"visObjHeight: unknown object type" );
+		ASSERT( false,"visObjHeight: unknown object type" );
 		height = 0;
 		break;
 	}
@@ -165,21 +160,20 @@ static BOOL rayTerrainCallback(SDWORD x, SDWORD y, SDWORD dist)
 		}
 
 		/* Not true visibility - done on sensor range */
-
-		if(getRevealStatus())
+		if (rayPlayer == selectedPlayer
+		    || (bMultiPlayer && game.alliance == ALLIANCES_TEAMS
+			&& aiCheckAlliances(selectedPlayer, rayPlayer)))
 		{
-			if ((UDWORD)rayPlayer == selectedPlayer
-			    || (bMultiPlayer && game.alliance == ALLIANCES_TEAMS
-				&& aiCheckAlliances(selectedPlayer, rayPlayer)))
+			// can see opponent moving
+			if(getRevealStatus())
 			{
-				// can see opponent moving
 				avInformOfChange(map_coord(x), map_coord(y));		//reveal map
-				psTile->activeSensor = TRUE;
 			}
+			psTile->activeSensor = true;
 		}
 	}
 
-	return TRUE;
+	return true;
 }
 
 /* The los ray callback */
@@ -200,7 +194,7 @@ static BOOL rayLOSCallback(SDWORD x, SDWORD y, SDWORD dist)
 
 	if (rayStart)
 	{
-		rayStart = FALSE;
+		rayStart = false;
 	}
 	else
 	{
@@ -216,7 +210,7 @@ static BOOL rayLOSCallback(SDWORD x, SDWORD y, SDWORD dist)
 	if (distSq >= tarDist)
 	{
 		lastD = dist;
-		return FALSE;
+		return false;
 	}
 	else
 	{
@@ -234,7 +228,7 @@ static BOOL rayLOSCallback(SDWORD x, SDWORD y, SDWORD dist)
 				numWalls += 1;
 				wallX = x;
 				wallY = y;
-	//			return FALSE;
+	//			return false;
 			}
 			else
 			{
@@ -248,7 +242,7 @@ static BOOL rayLOSCallback(SDWORD x, SDWORD y, SDWORD dist)
 		lastD = dist;
 	}
 
-	return TRUE;
+	return true;
 }
 
 #define VTRAYSTEP	(NUM_RAYS/120)
@@ -264,37 +258,23 @@ BOOL visTilesPending(BASE_OBJECT *psObj)
 /* Check which tiles can be seen by an object */
 void visTilesUpdate(BASE_OBJECT *psObj)
 {
-	SDWORD	range;
+	SDWORD	range = objSensorRange(psObj);
 	SDWORD	ray;
 
-	// Get the sensor Range and power
-	switch (psObj->type)
-	{
-	case OBJ_DROID:	// Done whenever a droid is built or moves to a new tile.
-		range = ((DROID *)psObj)->sensorRange;
-		break;
-	case OBJ_STRUCTURE:	// Only done when structure initialy built.
-		range = ((STRUCTURE *)psObj)->sensorRange;
-		break;
-	default:
-		ASSERT( FALSE,
-			"visTilesUpdate: visibility checking is only implemented for"
-			"units and structures" );
-		return;
-	}
+	ASSERT(psObj->type != OBJ_FEATURE, "visTilesUpdate: visibility updates are not for features!");
 
 	rayPlayer = psObj->player;
 
-		// Do the whole circle.
-		for(ray=0; ray < NUM_RAYS; ray += NUM_RAYS/80)
-		{
-			// initialise the callback variables
-			startH = psObj->pos.z + visObjHeight(psObj);
-			currG = -UBYTE_MAX * GRAD_MUL;
+	// Do the whole circle.
+	for(ray = 0; ray < NUM_RAYS; ray += NUM_RAYS / 80)
+	{
+		// initialise the callback variables
+		startH = psObj->pos.z + visObjHeight(psObj);
+		currG = -UBYTE_MAX * GRAD_MUL;
 
-			// Cast the rays from the viewer
-			rayCast(psObj->pos.x,psObj->pos.y,ray, range, rayTerrainCallback);
-		}
+		// Cast the rays from the viewer
+		rayCast(psObj->pos.x, psObj->pos.y,ray, range, rayTerrainCallback);
+	}
 }
 
 /* Check whether psViewer can see psTarget.
@@ -303,101 +283,84 @@ void visTilesUpdate(BASE_OBJECT *psObj)
  * psTarget can be any type of BASE_OBJECT (e.g. a tree).
  * struckBlock controls whether structures block LOS
  */
-BOOL visibleObject(BASE_OBJECT *psViewer, BASE_OBJECT *psTarget)
+BOOL visibleObject(const BASE_OBJECT* psViewer, const BASE_OBJECT* psTarget)
 {
 	SDWORD		x,y, ray;
 	SDWORD		xdiff,ydiff, rangeSquared;
-	SDWORD		range;
-	UDWORD		senPower, ecmPower;
+	SDWORD		range = objSensorRange(psViewer);
 	SDWORD		tarG, top;
-	STRUCTURE	*psStruct;
 
 	ASSERT(psViewer != NULL, "Invalid viewer pointer!");
+	ASSERT(psTarget != NULL, "Invalid viewed pointer!");
+	if (!psViewer || !psTarget)
+	{
+		return false;
+	}
 
 	/* Get the sensor Range and power */
 	switch (psViewer->type)
 	{
 	case OBJ_DROID:
-		range = ((DROID *)psViewer)->sensorRange;
-		senPower = ((DROID *)psViewer)->sensorPower;
-		if (((DROID*)psViewer)->droidType == DROID_COMMAND)
+	{
+		const DROID * const psDroid = (const DROID *)psViewer;
+
+		if (psDroid->droidType == DROID_COMMAND)
 		{
 			range = 3 * range / 2;
 		}
 		break;
+	}
 	case OBJ_STRUCTURE:
-		psStruct = (STRUCTURE *)psViewer;
+	{
+		const STRUCTURE * const psStruct = (const STRUCTURE *)psViewer;
 
 		// a structure that is being built cannot see anything
 		if (psStruct->status != SS_BUILT)
 		{
-			return FALSE;
+			return false;
 		}
 
-		if ((psStruct->pStructureType->type == REF_WALL) ||
-			(psStruct->pStructureType->type == REF_WALLCORNER))
+		if (psStruct->pStructureType->type == REF_WALL
+		 || psStruct->pStructureType->type == REF_WALLCORNER)
 		{
-			return FALSE;
+			return false;
 		}
 
-		if ((structCBSensor((STRUCTURE *)psViewer) ||
-			 structVTOLCBSensor((STRUCTURE *)psViewer)) &&
-			 ((STRUCTURE *)psViewer)->psTarget[0] == psTarget)
+		if ((structCBSensor(psStruct)
+		  || structVTOLCBSensor(psStruct))
+		 && psStruct->psTarget[0] == psTarget)
 		{
 			// if a unit is targetted by a counter battery sensor
 			// it is automatically seen
-			return TRUE;
+			return true;
 		}
-
-		range = ((STRUCTURE *)psViewer)->sensorRange;
-		senPower = ((STRUCTURE *)psViewer)->sensorPower;
 
 		// increase the sensor range for AA sites
 		// AA sites are defensive structures that can only shoot in the air
-		if ( (psStruct->pStructureType->type == REF_DEFENSE) &&
-			 (asWeaponStats[psStruct->asWeaps[0].nStat].surfaceToAir == SHOOT_IN_AIR) )
+		if (psStruct->pStructureType->type == REF_DEFENSE
+		 && asWeaponStats[psStruct->asWeaps[0].nStat].surfaceToAir == SHOOT_IN_AIR)
 		{
 			range = 3 * range / 2;
 		}
 
 		break;
+	}
 	default:
-		ASSERT( FALSE,
+		ASSERT( false,
 			"visibleObject: visibility checking is only implemented for"
 			"units and structures" );
-		return FALSE;
+		return false;
 		break;
 	}
 
-	ASSERT(psTarget != NULL, "Invalid target pointer!");
-
-	/* Get the target's ecm power (if it has one)
-	 * or that of a nearby ECM droid.
-	 */
-	switch (psTarget->type)
+	// Structures can be seen from further away
+	if (psTarget->type == OBJ_STRUCTURE)
 	{
-	case OBJ_DROID:
-		ecmPower = ((DROID *)psTarget)->ECMMod;
-		break;
-	case OBJ_STRUCTURE:
-		ecmPower = ((STRUCTURE *)psTarget)->ecmPower;
 		range = 4 * range / 3;
-		break;
-	default:
-		/* No ecm so zero power */
-		ecmPower = 0;
-		break;
-	}
-
-	/* Implement ECM by making sensor range two thirds of normal when
-	 * enemy's ECM rating is higher than our sensor power rating. */
-	if (ecmPower > senPower)
-	{
-		range = range * 2 / 3;
 	}
 
 	/* First see if the target is in sensor range */
-	x = (SDWORD)psViewer->pos.x;
+	x = psViewer->pos.x;
 	xdiff = x - (SDWORD)psTarget->pos.x;
 	if (xdiff < 0)
 	{
@@ -406,10 +369,10 @@ BOOL visibleObject(BASE_OBJECT *psViewer, BASE_OBJECT *psTarget)
 	if (xdiff > range)
 	{
 		// too far away, reject
-		return FALSE;
+		return false;
 	}
 
-	y = (SDWORD)psViewer->pos.y;
+	y = psViewer->pos.y;
 	ydiff = y - (SDWORD)psTarget->pos.y;
 	if (ydiff < 0)
 	{
@@ -418,20 +381,20 @@ BOOL visibleObject(BASE_OBJECT *psViewer, BASE_OBJECT *psTarget)
 	if (ydiff > range)
 	{
 		// too far away, reject
-		return FALSE;
+		return false;
 	}
 
 	rangeSquared = xdiff*xdiff + ydiff*ydiff;
 	if (rangeSquared > (range*range))
 	{
 		/* Out of sensor range */
-		return FALSE;
+		return false;
 	}
 
 	if (rangeSquared == 0)
 	{
 		// Should never be on top of each other, but ...
-		return TRUE;
+		return true;
 	}
 
 	// initialise the callback variables
@@ -439,7 +402,7 @@ BOOL visibleObject(BASE_OBJECT *psViewer, BASE_OBJECT *psTarget)
 	startH += visObjHeight(psViewer);
 	currG = -UBYTE_MAX * GRAD_MUL * ELEVATION_SCALE;
 	tarDist = rangeSquared;
-	rayStart = TRUE;
+	rayStart = true;
 	currObj = 0;
 	ray = NUM_RAYS-1 - calcDirection(psViewer->pos.x,psViewer->pos.y, psTarget->pos.x,psTarget->pos.y);
 	finalX = map_coord(psTarget->pos.x);
@@ -460,107 +423,55 @@ BOOL visibleObjWallBlock(BASE_OBJECT *psViewer, BASE_OBJECT *psTarget)
 {
 	BOOL	result;
 
-	blockingWall = TRUE;
+	blockingWall = true;
 	result = visibleObject(psViewer,psTarget);
-	blockingWall = FALSE;
+	blockingWall = false;
 
 	return result;
 }
 
 // Find the wall that is blocking LOS to a target (if any)
-BOOL visGetBlockingWall(BASE_OBJECT *psViewer, BASE_OBJECT *psTarget, STRUCTURE **ppsWall)
+STRUCTURE* visGetBlockingWall(const BASE_OBJECT* psViewer, const BASE_OBJECT* psTarget)
 {
-	SDWORD		tileX, tileY, player;
-	STRUCTURE	*psCurr, *psWall;
-
-	blockingWall = TRUE;
+	blockingWall = true;
 	numWalls = 0;
 	visibleObject(psViewer, psTarget);
-	blockingWall = FALSE;
+	blockingWall = false;
 
 	// see if there was a wall in the way
-	psWall = NULL;
 	if (numWalls == 1)
 	{
-		tileX = map_coord(wallX);
-		tileY = map_coord(wallY);
-		for(player=0; player<MAX_PLAYERS; player += 1)
+		const int tileX = map_coord(wallX);
+		const int tileY = map_coord(wallY);
+		unsigned int player;
+
+		for (player = 0; player < MAX_PLAYERS; ++player)
 		{
-			for(psCurr = apsStructLists[player]; psCurr; psCurr = psCurr->psNext)
+			STRUCTURE* psWall;
+
+			for (psWall = apsStructLists[player]; psWall; psWall = psWall->psNext)
 			{
-				if (map_coord(psCurr->pos.x) == tileX
-				 && map_coord(psCurr->pos.y) == tileY)
+				if (map_coord(psWall->pos.x) == tileX
+				 && map_coord(psWall->pos.y) == tileY)
 				{
-					psWall = psCurr;
-					goto found;
+					return psWall;
 				}
 			}
 		}
 	}
 
-found:
-	*ppsWall = psWall;
-
-	return psWall != NULL;;
+	return NULL;
 }
 
 /* Find out what can see this object */
 void processVisibility(BASE_OBJECT *psObj)
 {
-	DROID		*psDroid;
-	STRUCTURE	*psBuilding;
-	UDWORD		i, maxPower, ecmPoints;
-	ECM_STATS	*psECMStats;
+	UDWORD		i;
 	BOOL		prevVis[MAX_PLAYERS], currVis[MAX_PLAYERS];
 	SDWORD		visLevel;
 	BASE_OBJECT	*psViewer;
 	MESSAGE		*psMessage;
 	UDWORD		player, ally;
-
-	// calculate the ecm power for the object based on other ECM's in the area
-
-	maxPower = 0;
-
-	// set the current ecm power
-	switch (psObj->type)
-	{
-	case OBJ_DROID:
-		psDroid = (DROID *)psObj;
-		psECMStats = asECMStats + psDroid->asBits[COMP_ECM].nStat;
-		ecmPoints = ecmPower(psECMStats, psDroid->player);
-		if (ecmPoints < maxPower)
-		{
-			psDroid->ECMMod = maxPower;
-		}
-		else
-		{
-			psDroid->ECMMod = ecmPoints;
-			maxPower = psDroid->ECMMod;
-		}
-		// innate cyborg bonus
-		if (cyborgDroid((DROID*)psObj))
-		{
-			psDroid->ECMMod += 500;
-		}
-		break;
-	case OBJ_STRUCTURE:
-		psBuilding = (STRUCTURE *)psObj;
-		psECMStats = psBuilding->pStructureType->pECM;
-		if (psECMStats && psECMStats->power > maxPower)
-		{
-			psBuilding->ecmPower = (UWORD)psECMStats->power;
-		}
-		else
-		{
-			psBuilding->ecmPower = (UWORD)maxPower;
-			maxPower = psBuilding->ecmPower;
-		}
-		break;
-	case OBJ_FEATURE:
-	default:
-		// no ecm's on features
-		break;
-	}
 
 	// initialise the visibility array
 	for (i=0; i<MAX_PLAYERS; i++)
@@ -572,7 +483,7 @@ void processVisibility(BASE_OBJECT *psObj)
 		memset (currVis, 0, sizeof(BOOL) * MAX_PLAYERS);
 
 		// one can trivially see oneself
-		currVis[psObj->player]=TRUE;
+		currVis[psObj->player]=true;
 	}
 	else
 	{
@@ -591,7 +502,7 @@ void processVisibility(BASE_OBJECT *psObj)
 			{
 				if(aiCheckAlliances(player,psObj->player))
 				{
-					currVis[player] = TRUE;
+					currVis[player] = true;
 				}
 			}
 		}
@@ -602,7 +513,7 @@ void processVisibility(BASE_OBJECT *psObj)
 	{
 		if (getSatUplinkExists(player))
 		{
-			currVis[player] = TRUE;
+			currVis[player] = true;
 			if (psObj->visible[player] == 0)
 			{
 				psObj->visible[player] = 1;
@@ -619,7 +530,7 @@ void processVisibility(BASE_OBJECT *psObj)
 			 visibleObject(psViewer, psObj) )
  		{
 			// Tell system that this side can see this object
- 			currVis[psViewer->player]=TRUE;
+ 			currVis[psViewer->player]=true;
 			if (!prevVis[psViewer->player])
 			{
 
@@ -648,7 +559,7 @@ void processVisibility(BASE_OBJECT *psObj)
 			{
 				if (currVis[player] && aiCheckAlliances(player, ally))
 				{
-					currVis[ally] = TRUE;
+					currVis[ally] = true;
 				}
 			}
 		}
@@ -715,7 +626,7 @@ void processVisibility(BASE_OBJECT *psObj)
 			if(!TILE_HAS_STRUCTURE(mapTile(map_coord(psObj->pos.x),
 			                               map_coord(psObj->pos.y))))
 			{
-				psMessage = addMessage(MSG_PROXIMITY, TRUE, selectedPlayer);
+				psMessage = addMessage(MSG_PROXIMITY, true, selectedPlayer);
 				if (psMessage)
 				{
 					psMessage->pViewData = (MSG_VIEWDATA *)psObj;
@@ -726,12 +637,13 @@ void processVisibility(BASE_OBJECT *psObj)
 					audio_QueueTrackPos( ID_SOUND_RESOURCE_HERE,
 										psObj->pos.x, psObj->pos.y, psObj->pos.z );
 				}
+				debug(LOG_MSG, "Added message for oil well, pViewData=%p", psMessage->pViewData);
 			}
 		}
 
 			if (((FEATURE *)psObj)->psStats->subType == FEAT_GEN_ARTE)
 			{
-				psMessage = addMessage(MSG_PROXIMITY, TRUE, selectedPlayer);
+				psMessage = addMessage(MSG_PROXIMITY, true, selectedPlayer);
 				if (psMessage)
 				{
 					psMessage->pViewData = (MSG_VIEWDATA *)psObj;
@@ -742,6 +654,7 @@ void processVisibility(BASE_OBJECT *psObj)
 					audio_QueueTrackPos( ID_SOUND_ARTEFACT_DISC,
 									psObj->pos.x, psObj->pos.y, psObj->pos.z );
 				}
+				debug(LOG_MSG, "Added message for artefact, pViewData=%p", psMessage->pViewData);
 			}
 	}
 }
@@ -804,7 +717,7 @@ void updateSensorDisplay()
 	// clear sensor info
 	for (x = 0; x < mapWidth * mapHeight; x++)
 	{
-		psTile->activeSensor = FALSE;
+		psTile->activeSensor = false;
 		psTile++;
 	}
 

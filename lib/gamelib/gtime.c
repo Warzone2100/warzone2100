@@ -77,7 +77,7 @@ BOOL gameTimeInit(void)
 
 	stopCount = 0;
 
-	return TRUE;
+	return true;
 }
 
 UDWORD	getTimeValueRange(UDWORD tickFrequency, UDWORD requiredRange)

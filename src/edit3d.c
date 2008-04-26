@@ -41,60 +41,57 @@ is invalid (not currently being used)
 UDWORD	buildState = BUILD3D_NONE;
 BUILDDETAILS	sBuildDetails;
 HIGHLIGHT		buildSite;
-
+int brushSize = 1;
+bool editMode = false;
 
 // Initialisation function for statis & globals in this module.
 //
 void Edit3DInitVars(void)
 {
 	buildState = BUILD3D_NONE;
+	brushSize = 1;
 }
 
-
-
-
 /* Raises a tile by a #defined height */
-void	raiseTile(UDWORD tile3dX, UDWORD tile3dY)
+void raiseTile(int tile3dX, int tile3dY)
 {
-MAPTILE	*psTile;
+	int i, j;
 
-	psTile = mapTile(tile3dX,tile3dY);
-	adjustTileHeight(psTile,TILE_RAISE);
-
-	psTile = mapTile(tile3dX+1,tile3dY);
-	adjustTileHeight(psTile,TILE_RAISE);
-
-	psTile = mapTile(tile3dX+1,tile3dY+1);
-	adjustTileHeight(psTile,TILE_RAISE);
-
-	psTile = mapTile(tile3dX,tile3dY+1);
-	adjustTileHeight(psTile,TILE_RAISE);
-
+	if (tile3dX < 0 || tile3dX > mapWidth - 1 || tile3dY < 0 || tile3dY > mapHeight - 1)
+	{
+		return;
+	}
+	for (i = tile3dX; i <= MIN(mapWidth - 1, tile3dX + brushSize); i++)
+	{
+		for (j = tile3dY; j <= MIN(mapHeight - 1, tile3dY + brushSize); j++)
+		{
+			adjustTileHeight(mapTile(i, j), TILE_RAISE);
+		}
+	}
 }
 
 /* Lowers a tile by a #defined height */
-void	lowerTile(UDWORD tile3dX, UDWORD tile3dY)
+void lowerTile(int tile3dX, int tile3dY)
 {
-MAPTILE	*psTile;
+	int i, j;
 
-	psTile = mapTile(tile3dX,tile3dY);
-	adjustTileHeight(psTile,TILE_LOWER);
-
-	psTile = mapTile(tile3dX+1,tile3dY);
-	adjustTileHeight(psTile,TILE_LOWER);
-
-	psTile = mapTile(tile3dX+1,tile3dY+1);
-	adjustTileHeight(psTile,TILE_LOWER);
-
-	psTile = mapTile(tile3dX,tile3dY+1);
-	adjustTileHeight(psTile,TILE_LOWER);
-
+	if (tile3dX < 0 || tile3dX > mapWidth - 1 || tile3dY < 0 || tile3dY > mapHeight - 1)
+	{
+		return;
+	}
+	for (i = tile3dX; i <= MIN(mapWidth - 1, tile3dX + brushSize); i++)
+	{
+		for (j = tile3dY; j <= MIN(mapHeight - 1, tile3dY + brushSize); j++)
+		{
+			adjustTileHeight(mapTile(i, j), TILE_LOWER);
+		}
+	}
 }
 
 /* Ensures any adjustment to tile elevation is within allowed ranges */
 void	adjustTileHeight(MAPTILE *psTile, SDWORD adjust)
 {
-SDWORD	newHeight;
+	SDWORD	newHeight;
 
 	newHeight = psTile->height + adjust;
 	if (newHeight>=MIN_TILE_HEIGHT && newHeight<=MAX_TILE_HEIGHT)
@@ -103,26 +100,29 @@ SDWORD	newHeight;
 	}
 }
 
-
-
 BOOL	inHighlight(UDWORD realX, UDWORD realY)
 {
-BOOL	retVal = FALSE;
+	BOOL	retVal = false;
 
 	if (realX>=buildSite.xTL && realX<=buildSite.xBR)
 	{
 		if (realY>=buildSite.yTL && realY<=buildSite.yBR)
 		{
-			retVal = TRUE;
+			retVal = true;
 		}
 	}
 
 	return(retVal);
 }
 
-
 void init3DBuilding(BASE_STATS *psStats,BUILDCALLBACK CallBack,void *UserData)
 {
+	ASSERT(psStats, "Bad parameter");
+	if (!psStats)
+	{
+		return;
+	}
+
 	buildState = BUILD3D_POS;
 
 	sBuildDetails.CallBack = CallBack;
@@ -179,7 +179,7 @@ BOOL process3DBuilding(void)
 	//if not trying to build ignore
 	if (buildState == BUILD3D_NONE)
   	{
-		return TRUE;
+		return true;
 	}
 
 
@@ -194,7 +194,7 @@ BOOL process3DBuilding(void)
 			bY += 1;
 		}
 
-      	if (validLocation(sBuildDetails.psStats, bX, bY, selectedPlayer, TRUE))
+      	if (validLocation(sBuildDetails.psStats, bX, bY, selectedPlayer, true))
         {
   		   	buildState = BUILD3D_VALID;
         }
@@ -251,19 +251,19 @@ BOOL process3DBuilding(void)
 	{
 		sBuildDetails.CallBack(sBuildDetails.x,sBuildDetails.y,sBuildDetails.UserData);
 		buildState = BUILD3D_NONE;
-		return TRUE;
+		return true;
 	}
 
-	return FALSE;
+	return false;
 }
 
 
 /* See if a structure location has been found */
 BOOL found3DBuilding(UDWORD *x, UDWORD *y)
 {
-	if (buildState != BUILD3D_FINISHED)
+	if (buildState != BUILD3D_FINISHED || x == NULL || y == NULL)
 	{
-		return FALSE;
+		return false;
 	}
 
 	*x = sBuildDetails.x;
@@ -278,7 +278,7 @@ BOOL found3DBuilding(UDWORD *x, UDWORD *y)
 
 	buildState = BUILD3D_NONE;
 
-	return TRUE;
+	return true;
 }
 
 /* See if a second position for a build has been found */
@@ -288,13 +288,13 @@ BOOL found3DBuildLocTwo(UDWORD *px1, UDWORD *py1, UDWORD *px2, UDWORD *py2)
 		  ((STRUCTURE_STATS *)sBuildDetails.psStats)->type != REF_DEFENSE) ||
 		wallDrag.status != DRAG_RELEASED)
 	{
-		return FALSE;
+		return false;
 	}
 
-    //whilst we're still looking for a valid location - return FALSE
+    //whilst we're still looking for a valid location - return false
     if (buildState == BUILD3D_POS)
     {
-        return FALSE;
+        return false;
     }
 
 	wallDrag.status = DRAG_INACTIVE;
@@ -302,7 +302,7 @@ BOOL found3DBuildLocTwo(UDWORD *px1, UDWORD *py1, UDWORD *px2, UDWORD *py2)
 	*py1 = wallDrag.y1;
 	*px2 = wallDrag.x2;
 	*py2 = wallDrag.y2;
-	return TRUE;
+	return true;
 }
 
 /*returns true if the build state is not equal to BUILD3D_NONE*/
@@ -310,10 +310,10 @@ BOOL tryingToGetLocation(void)
 {
     if (buildState == BUILD3D_NONE)
     {
-        return FALSE;
+        return false;
     }
     else
     {
-        return TRUE;
+        return true;
     }
 }

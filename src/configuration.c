@@ -18,7 +18,7 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 /**
- * @file config.c
+ * @file configuration.c
  * Saves your favourite options to the Registry.
  *
  */
@@ -45,7 +45,6 @@
 #include "advvis.h"
 #include "lib/sound/mixer.h"
 #include "hci.h"
-#include "fpath.h"
 #include "radar.h"
 // HACK bAllowDebugMode shouldn't be in clparse
 #include "clparse.h"
@@ -62,6 +61,34 @@
 
 extern void registry_clear(void); // from configfile.c
 
+void	setSinglePlayerFrameLimit		(SDWORD limit);
+SDWORD	getSinglePlayerFrameLimit		(void);
+void	setDefaultFrameRateLimit		(void);
+
+// current frame limit for single player modes
+static SDWORD	spFrameLimit = SP_FRAME_LIMIT;
+
+void setSinglePlayerFrameLimit(SDWORD limit)
+{
+	spFrameLimit = limit;
+}
+
+SDWORD getSinglePlayerFrameLimit(void)
+{
+	return spFrameLimit;
+}
+
+void setDefaultFrameRateLimit(void)
+{
+	if(bMultiPlayer && NetPlay.bComms)
+	{
+		setFramerateLimit(MP_FRAME_LIMIT);		// true multiplayer
+	}
+	else
+	{
+		setFramerateLimit(getSinglePlayerFrameLimit());		// single player
+	}
+}
 
 // ////////////////////////////////////////////////////////////////////////////
 BOOL loadConfig(void)
@@ -113,21 +140,22 @@ BOOL loadConfig(void)
 	else
 	{
 #ifdef DEBUG
-		bAllowDebugMode = TRUE;
+		bAllowDebugMode = true;
 #else
-		bAllowDebugMode = FALSE;
+		bAllowDebugMode = false;
 #endif
 		setWarzoneKeyNumeric("debugmode", bAllowDebugMode);
 	}
 
-	if (getWarzoneKeyNumeric("framerate", &val))
+	if (getWarzoneKeyNumeric("SinglePlayerFPS", &val))
 	{
-		setFramerateLimit(val);
+		setSinglePlayerFrameLimit(val);
+		setFramerateLimit(getSinglePlayerFrameLimit());
 	}
 	else
 	{
-		setFramerateLimit(60);
-		setWarzoneKeyNumeric("framerate", 60);
+		setFramerateLimit(getSinglePlayerFrameLimit());
+		setWarzoneKeyNumeric("SinglePlayerFPS", getSinglePlayerFrameLimit());
 	}
 
 	if (getWarzoneKeyString("language", sBuf))
@@ -141,8 +169,8 @@ BOOL loadConfig(void)
 	}
 	else
 	{
-		showFPS = FALSE;
-		setWarzoneKeyNumeric("showFPS", FALSE);
+		showFPS = false;
+		setWarzoneKeyNumeric("showFPS", false);
 	}
 
 	// //////////////////////////
@@ -183,8 +211,8 @@ BOOL loadConfig(void)
 	}
 	else
 	{
-		setShakeStatus(FALSE);
-		setWarzoneKeyNumeric("shake", FALSE);
+		setShakeStatus(false);
+		setWarzoneKeyNumeric("shake", false);
 	}
 
 	// //////////////////////////
@@ -195,8 +223,8 @@ BOOL loadConfig(void)
 	}
 	else
 	{
-		setDrawShadows(TRUE);
-		setWarzoneKeyNumeric("shadows", TRUE);
+		setDrawShadows(true);
+		setWarzoneKeyNumeric("shadows", true);
 	}
 
 	// //////////////////////////
@@ -207,8 +235,8 @@ BOOL loadConfig(void)
 	}
 	else
 	{
-		war_setSoundEnabled( TRUE );
-		setWarzoneKeyNumeric( "sound", TRUE );
+		war_setSoundEnabled( true );
+		setWarzoneKeyNumeric( "sound", true );
 	}
 
 	// //////////////////////////
@@ -219,8 +247,18 @@ BOOL loadConfig(void)
 	}
 	else
 	{
-		setInvertMouseStatus(TRUE);
-		setWarzoneKeyNumeric("mouseflip", TRUE);
+		setInvertMouseStatus(true);
+		setWarzoneKeyNumeric("mouseflip", true);
+	}
+
+	if (getWarzoneKeyNumeric("PauseOnFocusLoss", &val))
+	{
+		war_SetPauseOnFocusLoss(val);
+	}
+	else
+	{
+		war_SetPauseOnFocusLoss(true);
+		setWarzoneKeyNumeric("PauseOnFocusLoss", true);
 	}
 
 	if (getWarzoneKeyString("masterserver_name", sBuf))
@@ -272,7 +310,7 @@ BOOL loadConfig(void)
 	}
 	else
 	{
-		seq_SetSubtitles(TRUE);
+		seq_SetSubtitles(true);
 	}
 
 	// //////////////////////////
@@ -294,19 +332,19 @@ BOOL loadConfig(void)
 	{
 		if(val)
 		{
-			war_SetFog(FALSE);
-			avSetStatus(TRUE);
+			war_SetFog(false);
+			avSetStatus(true);
 		}
 		else
 		{
-			avSetStatus(FALSE);
-			war_SetFog(TRUE);
+			avSetStatus(false);
+			war_SetFog(true);
 		}
 	}
 	else
 	{
-		avSetStatus(FALSE);
-		war_SetFog(TRUE);
+		avSetStatus(false);
+		war_SetFog(true);
 		setWarzoneKeyNumeric("visfog", 0);
 	}
 
@@ -334,8 +372,8 @@ BOOL loadConfig(void)
 	}
 	else
 	{
-		intReopenBuild(TRUE);
-		setWarzoneKeyNumeric("reopenBuild", TRUE);
+		intReopenBuild(true);
+		setWarzoneKeyNumeric("reopenBuild", true);
 	}
 
 	// /////////////////////////
@@ -345,7 +383,7 @@ BOOL loadConfig(void)
 	// game name
 	if (getWarzoneKeyString("gameName", sBuf))
 	{
-		strlcpy(game.name, sBuf, sizeof(game.name));
+		astrlcpy(game.name, sBuf);
 	}
 	else
 	{
@@ -357,22 +395,22 @@ BOOL loadConfig(void)
 	if (getWarzoneKeyString("playerName", sBuf)
 	 && *sBuf != '\0')
 	{
-		strlcpy(sPlayer, sBuf, sizeof(sPlayer));
+		astrlcpy(sPlayer, sBuf);
 	}
 	else
 	{
 		setWarzoneKeyString("playerName", _("Player"));
-		strlcpy(sPlayer, _("Player"), sizeof(sPlayer));
+		astrlcpy(sPlayer, _("Player"));
 	}
 
 	// map name
 	if(getWarzoneKeyString("mapName", sBuf))
 	{
-		strlcpy(game.map, sBuf, sizeof(game.map));
+		astrlcpy(game.map, sBuf);
 	}
 	else
 	{
-		strlcpy(game.map, DEFAULTMAPNAME, sizeof(game.map));
+		astrlcpy(game.map, DEFAULTMAPNAME);
 		setWarzoneKeyString("mapName", game.map);
 	}
 
@@ -394,7 +432,7 @@ BOOL loadConfig(void)
 	}
 	else
 	{
-		game.fog= TRUE;
+		game.fog= true;
 		setWarzoneKeyNumeric("fog", game.fog);
 	}
 
@@ -420,17 +458,6 @@ BOOL loadConfig(void)
 		setWarzoneKeyNumeric("base", game.base);
 	}
 
-	//maxplay
-	if(getWarzoneKeyNumeric("maxPlay", &val))
-	{
-		game.maxPlayers =(UBYTE)val;
-	}
-	else
-	{
-		game.maxPlayers = 4;
-		setWarzoneKeyNumeric("maxPlay", game.maxPlayers);
-	}
-
 	//alliance
 	if(getWarzoneKeyNumeric("alliance", &val))
 	{
@@ -441,18 +468,6 @@ BOOL loadConfig(void)
 		game.alliance = NO_ALLIANCES;
 		setWarzoneKeyNumeric("alliance", game.alliance);
 	}
-
-	// force name
-	if(getWarzoneKeyString("forceName", sBuf))
-	{
-		strlcpy(sForceName, sBuf, sizeof(sForceName));
-	}
-	else
-	{
-		strlcpy(sForceName, "Default", sizeof(sForceName));
-		setWarzoneKeyString("forceName", sForceName);
-	}
-
 
 	// favourite phrases
 	if(getWarzoneKeyString("phrase0", ingame.phrases[0]))
@@ -477,7 +492,7 @@ BOOL loadConfig(void)
 	{
 		bEnemyAllyRadarColor =(BOOL)val;
 	} else {
-		bEnemyAllyRadarColor = FALSE;
+		bEnemyAllyRadarColor = false;
 		setWarzoneKeyNumeric("radarObjectMode", (SDWORD)bEnemyAllyRadarColor);
 	}
 
@@ -513,15 +528,25 @@ BOOL loadRenderMode(void)
 	bool bad_resolution = false;
 
 	if( !openWarzoneKey() ) {
-		return FALSE;
+		return false;
 	}
 
 	if( getWarzoneKeyNumeric("fullscreen", &val) ) {
 		war_setFullscreen(val);
 	} else {
 		// If no setting is found go to fullscreen by default
-		setWarzoneKeyNumeric("fullscreen", TRUE);
-		war_setFullscreen(TRUE);
+		setWarzoneKeyNumeric("fullscreen", true);
+		war_setFullscreen(true);
+	}
+
+	if (getWarzoneKeyNumeric("ColouredCursor", &val))
+	{
+		war_SetColouredCursor(val);
+	}
+	else
+	{
+		war_SetColouredCursor(false);
+		setWarzoneKeyNumeric("ColouredCursor", false);
 	}
 
 	if (getWarzoneKeyNumeric("trapCursor", &val))
@@ -530,7 +555,7 @@ BOOL loadRenderMode(void)
 	}
 	else
 	{
-		war_SetTrapCursor(FALSE);
+		war_SetTrapCursor(false);
 	}
 
 	// now load the desired res..
@@ -580,7 +605,7 @@ BOOL saveConfig(void)
 
 	if(!openWarzoneKey())
 	{
-		return FALSE;
+		return false;
 	}
 
 	// //////////////////////////
@@ -621,6 +646,8 @@ BOOL saveConfig(void)
 	setWarzoneKeyNumeric("radarTerrainMode",(SDWORD)radarDrawMode);
 	setWarzoneKeyNumeric("trapCursor", war_GetTrapCursor());
 	setWarzoneKeyNumeric("textureSize", getTextureSize());
+	setWarzoneKeyNumeric("PauseOnFocusLoss", war_GetPauseOnFocusLoss());
+	setWarzoneKeyNumeric("ColouredCursor", war_GetColouredCursor());
 
 	if(!bMultiPlayer)
 	{
@@ -638,9 +665,7 @@ BOOL saveConfig(void)
 		setWarzoneKeyNumeric("type", game.type);				// game type
 		setWarzoneKeyNumeric("base", game.base);				// size of base
 		setWarzoneKeyNumeric("fog", game.fog);				// fog 'o war
-		setWarzoneKeyNumeric("maxPlay", game.maxPlayers);		// max no of players
 		setWarzoneKeyNumeric("alliance", game.alliance);			// allow alliances
-		setWarzoneKeyString("forceName", sForceName);			// force
 		setWarzoneKeyString("playerName",(char*)sPlayer);		// player name
 		setWarzoneKeyString("phrase0", ingame.phrases[0]);	// phrases
 		setWarzoneKeyString("phrase1", ingame.phrases[1]);

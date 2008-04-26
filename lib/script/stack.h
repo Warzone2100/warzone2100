@@ -28,7 +28,7 @@
 //String support
 //-----------------------------
 #define MAXSTRLEN	255					//Max len of a single string
-#define MAXSTACKLEN	6000
+#define MAXSTACKLEN	8000
 
 /* Initialise the stack */
 extern BOOL stackInitialise(void);
@@ -71,7 +71,7 @@ extern BOOL stackBinaryOp(OPCODE opcode);
 extern BOOL stackUnaryOp(OPCODE opcode);
 
 /* casts top of the stack to some other data type */
-extern	BOOL castTop(INTERP_TYPE neededType);
+extern BOOL stackCastTop(INTERP_TYPE neededType);
 
 /* Reset the stack to an empty state */
 extern void stackReset(void);

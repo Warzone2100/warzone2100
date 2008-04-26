@@ -24,6 +24,8 @@
 #ifndef __INCLUDED_LIB_WIDGET_BAR_H__
 #define __INCLUDED_LIB_WIDGET_BAR_H__
 
+#include "widget.h"
+
 typedef struct _w_bargraph
 {
 	/* The common widget data */

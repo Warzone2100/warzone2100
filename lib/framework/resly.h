@@ -42,6 +42,6 @@ extern int res_parse(void);
 /* Destroy the lexer */
 extern int res_lex_destroy(void);
 
+void res_error(const char *pMessage, ...);
 
 #endif
-

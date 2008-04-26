@@ -21,10 +21,9 @@
  *  Extended render routines for 3D rendering.
  */
 
+#include "lib/ivis_opengl/GLee.h"
 #include "lib/framework/frame.h"
 #include "lib/framework/frameint.h"
-
-#include <SDL_opengl.h>
 
 #include "lib/gamelib/gtime.h"
 #include "lib/ivis_common/piedef.h"
@@ -38,6 +37,17 @@
 /*
  *	Source
  */
+
+void pie_ClipBegin(int x1, int y1, int x2, int y2)
+{
+	glEnable(GL_SCISSOR_TEST);
+	glScissor(x1, screenHeight - y2, x2 - x1, y2 - y1);
+}
+
+void pie_ClipEnd()
+{
+	glDisable(GL_SCISSOR_TEST);
+}
 
 void pie_DrawViewingWindow(Vector3i *v, UDWORD x1, UDWORD y1, UDWORD x2, UDWORD y2, PIELIGHT colour)
 {
@@ -70,9 +80,6 @@ void pie_DrawViewingWindow(Vector3i *v, UDWORD x1, UDWORD y1, UDWORD x2, UDWORD 
 	pieVrts[3].pos.x = v[3].x;
 	pieVrts[3].pos.y = v[3].y;
 
-	glEnable(GL_SCISSOR_TEST);
-	glScissor(x1, screenHeight - y2, x2 - x1, y2 - y1);
-
 	glColor4ub(colour.byte.r, colour.byte.g, colour.byte.b, colour.byte.a >> 1);
 	glBegin(GL_TRIANGLE_FAN);
 		for (i = 0; i < 5; i++)
@@ -89,8 +96,6 @@ void pie_DrawViewingWindow(Vector3i *v, UDWORD x1, UDWORD y1, UDWORD x2, UDWORD 
 		}
 	glVertex2f(pieVrts[0].pos.x, pieVrts[0].pos.y);
 	glEnd();
-
-	glDisable(GL_SCISSOR_TEST);
 }
 
 void pie_TransColouredTriangle(CLIP_VERTEX *vrt, PIELIGHT c)

@@ -17,8 +17,6 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-#include <stdio.h>
-
 #include "lib/ivis_common/piestate.h"
 #include "lib/ivis_common/piepalette.h"
 #include "lib/ivis_common/rendmode.h"
@@ -26,17 +24,9 @@
 
 PIELIGHT psPalette[WZCOL_MAX];
 
-//*************************************************************************
-//*** calculate primary colours for current palette (store in COL_ ..
-//*
-//* on exit	_iVCOLS[0..15] contain colour values matched
-//*			COL_.. below access _iVCOLS[0..15]
-//******
-
 void pal_Init(void)
 {
 	// TODO: Read these from file so that mod-makers can change them
-
 	WZCOL_WHITE = pal_Colour(UBYTE_MAX, UBYTE_MAX, UBYTE_MAX);
 	WZCOL_BLACK = pal_Colour(1, 1, 1);
 	WZCOL_GREEN = pal_Colour(0, UBYTE_MAX, 0);
@@ -96,6 +86,14 @@ void pal_Init(void)
 	WZCOL_MENU_SCORE_RANK = pal_Colour(199, 127, 103);
 
 	WZCOL_FRAME_BORDER_NORMAL = pal_Colour(145, 0, 195);
+
+	WZCOL_CONS_TEXT_SYSTEM = pal_Colour(200, 200, 200);
+	WZCOL_CONS_TEXT_USER = WZCOL_TEXT_BRIGHT;
+	WZCOL_CONS_TEXT_USER_ALLY = WZCOL_YELLOW;
+	WZCOL_CONS_TEXT_USER_ENEMY = WZCOL_RED;
+	WZCOL_CONS_TEXT_DEBUG = pal_Colour(150, 150, 150);
+	WZCOL_MAP_PREVIEW_AIPLAYER = pal_Colour(0, 0x7f, 0);
+	WZCOL_GREY = pal_Colour(0x55, 0x55, 0x55);
 }
 
 void pal_ShutDown(void)

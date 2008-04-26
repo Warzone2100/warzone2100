@@ -10,6 +10,7 @@ All commands must be entered without quotes.
 "i'm ok"				- notify AI that you don't need his help anymore
 "go <player>"			- tell AI to attack some payer, where <player> is player name (blue, red etc)
 "<player> has vtols"	- inform AI that some player has VTOLs, will make AI build some additional AA defences
+"are you aiv?"			- all AI players running Aivolution will answer with yes. It is a way to find out if Aivolution AI is loaded.
 
 Addressing only certain AI players:
 

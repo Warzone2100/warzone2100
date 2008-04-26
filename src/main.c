@@ -17,40 +17,14 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/**
- * @file main.c
- *
- * The main file that launches the game and starts up everything.
- */
-
-/** @mainpage Warzone2100 Code Documentation
- *
- * @section intro_sec Introduction
- *
- * Welcome to the Warzone2100 Resurrection Project's code library! We are still only starting
- * to document this code base, but it should already be useful for quickly browsing around the
- * code and getting an idea of what exists and how things work.
- *
- * @section install_sec Where to begin
- *
- * @subsection step1 Step 1: Read the wiki documentation
- *
- * We have a great deal of documentation on our wiki page at http://wiki.wz2100.net/ which
- * may help get you started. Please also take notice of our style guide!
- *
- * @subsection step2 Step 2: Skim main.c
- *
- * You may want to begin reading code with main.c, since this is where execution begins,
- * and trace code paths from here.
- *
- * Have fun!
+/** @file
+ *  The main file that launches the game and starts up everything.
  */
 
 // Get platform defines before checking for them!
 #include "lib/framework/frame.h"
 
 #include <SDL.h>
-#include <physfs.h>
 
 #if defined(WZ_OS_WIN)
 // FIXME HACK Workaround DATADIR definition in objbase.h
@@ -63,6 +37,7 @@
 
 #include "lib/framework/configfile.h"
 #include "lib/framework/input.h"
+#include "lib/framework/physfs_ext.h"
 #include "lib/framework/tagfile.h"
 #include "lib/exceptionhandler/exceptionhandler.h"
 
@@ -75,7 +50,7 @@
 #include "lib/script/script.h"
 #include "lib/sound/audio.h"
 #include "lib/sound/cdaudio.h"
-#include "lib/widget/widget.h"
+#include "lib/sqlite3/physfs_vfs.h"
 
 #include "clparse.h"
 #include "configuration.h"
@@ -117,7 +92,6 @@
 # define WZ_WRITEDIR ".warzone2100-2.1"
 #endif
 
-
 char datadir[PATH_MAX] = "\0"; // Global that src/clparse.c:ParseCommandLine can write to, so it can override the default datadir on runtime. Needs to be \0 on startup for ParseCommandLine to work!
 char configdir[PATH_MAX] = "\0"; // specifies custom USER directory.  Same rules apply as datadir above.
 
@@ -129,14 +103,13 @@ char * multiplay_mods[MAX_MODS] = { NULL };
 // Warzone 2100 . Pumpkin Studios
 
 //flag to indicate when initialisation is complete
-BOOL	gameInitialised = FALSE;
+BOOL	gameInitialised = false;
 char	SaveGamePath[PATH_MAX];
 char	ScreenDumpPath[PATH_MAX];
 char	MultiForcesPath[PATH_MAX];
 char	MultiCustomMapsPath[PATH_MAX];
 char	MultiPlayersPath[PATH_MAX];
 char	KeyMapPath[PATH_MAX];
-char	UserMusicPath[PATH_MAX];
 
 // Start game in title mode:
 static GS_GAMEMODE gameStatus = GS_TITLE_SCREEN;
@@ -159,12 +132,20 @@ static BOOL inList( char * list[], const char * item )
 		debug( LOG_NEVER, "inList: Checking for match with: [%s]", list[i] );
 #endif
 		if ( strcmp( list[i], item ) == 0 )
-			return TRUE;
+			return true;
 		i++;
 	}
-	return FALSE;
+	return false;
 }
 
+
+/*!
+ * Tries to mount a list of directories, found in /basedir/subdir/<list>.
+ * \param basedir Base directory
+ * \param subdir A subdirectory of basedir
+ * \param appendToPath Whether to append or prepend
+ * \param checkList List of directories to check. NULL means any.
+ */
 void addSubdirs( const char * basedir, const char * subdir, const BOOL appendToPath, char * checkList[] )
 {
 	char tmpstr[PATH_MAX];
@@ -223,10 +204,12 @@ void printSearchPath( void )
 	PHYSFS_freeList( searchPath );
 }
 
-/** Retrieves the current working directory and copies it into the provided output buffer
- *  \param[out] dest the output buffer to put the current working directory in
- *  \param size the size (in bytes) of \c dest
- *  \return true on success, false if an error occurred (and dest doesn't contain a valid directory)
+
+/*!
+ * Retrieves the current working directory and copies it into the provided output buffer
+ * \param[out] dest the output buffer to put the current working directory in
+ * \param size the size (in bytes) of \c dest
+ * \return true on success, false if an error occurred (and dest doesn't contain a valid directory)
  */
 static bool getCurrentDir(char * const dest, size_t const size)
 {
@@ -278,6 +261,7 @@ static bool getCurrentDir(char * const dest, size_t const size)
 	return true;
 }
 
+
 static void getPlatformUserDir(char * const tmpstr, size_t const size)
 {
 #if defined(WZ_OS_WIN)
@@ -290,7 +274,7 @@ static void getPlatformUserDir(char * const tmpstr, size_t const size)
 	long dir_id;
 	FSSpec fsspec;
 	FSRef fsref;
-	OSErr error = FindFolder(kUserDomain, kApplicationSupportFolderType, FALSE, &vol_ref, &dir_id);
+	OSErr error = FindFolder(kUserDomain, kApplicationSupportFolderType, false, &vol_ref, &dir_id);
 	if (!error)
 		error = FSMakeFSSpec(vol_ref, dir_id, (const unsigned char *) "", &fsspec);
 	if (!error)
@@ -309,6 +293,7 @@ static void getPlatformUserDir(char * const tmpstr, size_t const size)
 	else
 		abort();
 }
+
 
 static void initialize_ConfigDir(void)
 {
@@ -370,9 +355,10 @@ static void initialize_ConfigDir(void)
 	debug(LOG_WZ, "Base dir: %s", PHYSFS_getBaseDir());
 }
 
-/***************************************************************************
-	Initialize the PhysicsFS library.
-***************************************************************************/
+
+/*!
+ * Initialize the PhysicsFS library.
+ */
 static void initialize_PhysicsFS(const char* argv_0)
 {
 	PHYSFS_Version compiled;
@@ -389,8 +375,8 @@ static void initialize_PhysicsFS(const char* argv_0)
 	      linked.major, linked.minor, linked.patch);
 }
 
-/*
- * \fn void scanDataDirs( void )
+
+/*!
  * \brief Adds default data dirs
  *
  * Priority:
@@ -431,7 +417,7 @@ static void scanDataDirs( void )
 
 	// User's home dir
 	registerSearchPath( PHYSFS_getWriteDir(), 2 );
-	rebuildSearchPath( mod_multiplay, TRUE );
+	rebuildSearchPath( mod_multiplay, true );
 
 	if( !PHYSFS_exists("gamedesc.lev") )
 	{
@@ -439,7 +425,7 @@ static void scanDataDirs( void )
 		strlcpy(tmpstr, prefix, sizeof(tmpstr));
 		strlcat(tmpstr, "/data/", sizeof(tmpstr));
 		registerSearchPath( tmpstr, 3 );
-		rebuildSearchPath( mod_multiplay, TRUE );
+		rebuildSearchPath( mod_multiplay, true );
 
 		if( !PHYSFS_exists("gamedesc.lev") )
 		{
@@ -447,19 +433,19 @@ static void scanDataDirs( void )
 			strlcpy(tmpstr, prefix, sizeof(tmpstr));
 			strlcat(tmpstr, "/share/warzone2100/", sizeof(tmpstr));
 			registerSearchPath( tmpstr, 4 );
-			rebuildSearchPath( mod_multiplay, TRUE );
+			rebuildSearchPath( mod_multiplay, true );
 
 			if( !PHYSFS_exists("gamedesc.lev") )
 			{
 				// Program dir
 				registerSearchPath( PHYSFS_getBaseDir(), 5 );
-				rebuildSearchPath( mod_multiplay, TRUE );
+				rebuildSearchPath( mod_multiplay, true );
 
 				if( !PHYSFS_exists("gamedesc.lev") )
 				{
 					// Guessed fallback default datadir on Unix
 					registerSearchPath( DATADIR, 6 );
-					rebuildSearchPath( mod_multiplay, TRUE );
+					rebuildSearchPath( mod_multiplay, true );
 				}
 			}
 		}
@@ -474,7 +460,7 @@ static void scanDataDirs( void )
 							PATH_MAX) ) {
 			chdir( resourcePath );
 			registerSearchPath( "data", 7 );
-			rebuildSearchPath( mod_multiplay, TRUE );
+			rebuildSearchPath( mod_multiplay, true );
 		} else {
 			debug( LOG_ERROR, "Could not change to resources directory." );
 		}
@@ -495,6 +481,7 @@ static void scanDataDirs( void )
 		exit(1);
 	}
 }
+
 
 /***************************************************************************
 	Make a directory in write path and set a variable to point to it.
@@ -592,7 +579,7 @@ static void startGameLoop(void)
 	}
 
 	// set a flag for the trigger/event system to indicate initialisation is complete
-	gameInitialised = TRUE;
+	gameInitialised = true;
 }
 
 
@@ -604,8 +591,8 @@ static void stopGameLoop(void)
 {
 	if (gameLoopStatus != GAMECODE_NEWLEVEL)
 	{
-		initLoadingScreen(TRUE); // returning to f.e. do a loader.render not active
-		pie_EnableFog(FALSE); // dont let the normal loop code set status on
+		initLoadingScreen(true); // returning to f.e. do a loader.render not active
+		pie_EnableFog(false); // dont let the normal loop code set status on
 		fogStatus = 0;
 		if (gameLoopStatus != GAMECODE_LOADGAME)
 		{
@@ -619,7 +606,7 @@ static void stopGameLoop(void)
 		SDL_WM_GrabInput(SDL_GRAB_OFF);
 	}
 
-	gameInitialised = FALSE;
+	gameInitialised = false;
 }
 
 
@@ -717,10 +704,10 @@ static void runTitleLoop(void)
 		case TITLECODE_SHOWINTRO:
 			debug(LOG_MAIN, "TITLECODE_SHOWINTRO");
 			seq_ClearSeqList();
-			seq_AddSeqToList("eidos-logo.rpl", NULL, NULL, FALSE);
-			seq_AddSeqToList("pumpkin.rpl", NULL, NULL, FALSE);
-			seq_AddSeqToList("titles.rpl", NULL, NULL, FALSE);
-			seq_AddSeqToList("devastation.rpl", NULL, "devastation.txa", FALSE);
+			seq_AddSeqToList("eidos-logo.rpl", NULL, NULL, false);
+			seq_AddSeqToList("pumpkin.rpl", NULL, NULL, false);
+			seq_AddSeqToList("titles.rpl", NULL, NULL, false);
+			seq_AddSeqToList("devastation.rpl", NULL, "devastation.txa", false);
 			seq_StartNextFullScreenVideo();
 			break;
 		default:
@@ -737,40 +724,41 @@ static void handleActiveEvent(SDL_ActiveEvent * activeEvent)
 {
 	// Ignore focus loss through SDL_APPMOUSEFOCUS, since it mostly happens accidentialy
 	// active.state is a bitflag! Mixed events (eg. APPACTIVE|APPMOUSEFOCUS) will thus not be ignored.
-	if ( activeEvent->state != SDL_APPMOUSEFOCUS )
+	if ( activeEvent->state == SDL_APPMOUSEFOCUS )
+		return;
+
+	if ( activeEvent->gain == 1 )
 	{
-		if ( activeEvent->gain == 1 )
+		debug( LOG_NEVER, "WM_SETFOCUS\n");
+		if (focusState != FOCUS_IN)
 		{
-			debug( LOG_NEVER, "WM_SETFOCUS\n");
-			if (focusState != FOCUS_IN)
-			{
-				focusState = FOCUS_IN;
+			focusState = FOCUS_IN;
 
-				gameTimeStart();
-				// Should be: audio_ResumeAll();
-			}
-
-			// Resume playing audio.
-			cdAudio_Resume();
+			gameTimeStart();
+			// Should be: audio_ResumeAll();
 		}
-		else
+
+		// Resume playing audio.
+		cdAudio_Resume();
+	}
+	// Only loose focus when the config settings allow us to
+	else if (war_GetPauseOnFocusLoss())
+	{
+		debug( LOG_NEVER, "WM_KILLFOCUS\n");
+		if (focusState != FOCUS_OUT)
 		{
-			debug( LOG_NEVER, "WM_KILLFOCUS\n");
-			if (focusState != FOCUS_OUT)
-			{
-				focusState = FOCUS_OUT;
+			focusState = FOCUS_OUT;
 
-				gameTimeStop();
-				// Should be: audio_PauseAll();
-				audio_StopAll();
-			}
-			/* Have to tell the input system that we've lost focus */
-			inputLooseFocus();
-
-			// Need to pause playing to prevent the audio code from
-			// thinking playing has finished.
-			cdAudio_Pause();
+			gameTimeStop();
+			// Should be: audio_PauseAll();
+			audio_StopAll();
 		}
+		/* Have to tell the input system that we've lost focus */
+		inputLooseFocus();
+
+		// Need to pause playing to prevent the audio code from
+		// thinking playing has finished.
+		cdAudio_Pause();
 	}
 }
 
@@ -783,7 +771,7 @@ static void mainLoop(void)
 {
 	SDL_Event event;
 
-	while (TRUE)
+	while (true)
 	{
 		frameUpdate(); // General housekeeping
 
@@ -888,7 +876,6 @@ int main(int argc, char *argv[])
 	/* Put these files in the writedir root */
 	setRegistryFilePath("config");
 	strlcpy(KeyMapPath, "keymap.map", sizeof(KeyMapPath));
-	strlcpy(UserMusicPath, "music", sizeof(UserMusicPath));
 
 	// initialise all the command line states
 	war_SetDefaultStates();
@@ -910,13 +897,11 @@ int main(int argc, char *argv[])
 	// Find out where to find the data
 	scanDataDirs();
 
-#ifdef DEBUG
-	/* Runtime unit testing */
-	NETtest();
-	tagTest();
-#endif
+	// Register the PhysicsFS implementation of the SQLite VFS class with
+	// SQLite's VFS system as the default (non-zero=default, zero=default).
+	sqlite3_register_physfs_vfs(1);
 
-	NETinit(TRUE);
+	NETinit(true);
 
 	if (!frameInitialise( "Warzone 2100", pie_GetVideoBufferWidth(), pie_GetVideoBufferHeight(), pie_GetVideoBufferDepth(), war_getFullscreen() ))
 	{
@@ -924,14 +909,14 @@ int main(int argc, char *argv[])
 	}
 	atexit(frameShutDown);
 
-	pie_SetFogStatus(FALSE);
+	pie_SetFogStatus(false);
 	pie_ScreenFlip(CLEAR_BLACK);
 
 	pal_Init();
 	atexit(pal_ShutDown);
 
 	pie_LoadBackDrop(SCREEN_RANDOMBDROP);
-	pie_SetFogStatus(FALSE);
+	pie_SetFogStatus(false);
 	pie_ScreenFlip(CLEAR_BLACK);
 
 	if (!systemInitialise())
@@ -941,7 +926,19 @@ int main(int argc, char *argv[])
 	atexit(systemShutdown);
 
 	//set all the pause states to false
-	setAllPauseStates(FALSE);
+	setAllPauseStates(false);
+
+	/* Runtime unit testing */
+	if (selfTest)
+	{
+		memset(enabled_debug, 0, sizeof(*enabled_debug) * LOG_LAST);
+		fprintf(stdout, "Carrying out self-test:\n");
+		NETtest();
+		tagTest();
+		levTest();
+		fprintf(stdout, "All tests PASSED!\n");
+		exit(0);
+	}
 
 	// Do the game mode specific initialisation.
 	switch(GetGameMode())

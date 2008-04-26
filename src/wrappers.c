@@ -22,9 +22,6 @@
  * Frontend loop & also loading screen & game over screen.
  * AlexL. Pumpkin Studios, EIDOS Interactive, 1997
  */
-
-#include <stdio.h>
-
 #include "lib/framework/frame.h"
 #include "lib/framework/frameresource.h"
 #include "lib/framework/strres.h"
@@ -37,7 +34,6 @@
 #include "lib/ivis_common/piefunc.h"
 
 #include "hci.h"		// access to widget screen.
-#include "lib/widget/widget.h"
 #include "wrappers.h"
 #include "main.h"
 #include "objects.h"
@@ -63,6 +59,7 @@
 #include "multiint.h"
 #include "multistat.h"
 #include "multilimit.h"
+#include "warzoneconfig.h"
 
 typedef struct _star
 {
@@ -73,10 +70,10 @@ typedef struct _star
 #define MAX_STARS 20
 static STAR	stars[MAX_STARS];	// quick hack for loading stuff
 
-static BOOL		firstcall = FALSE;
+static BOOL		firstcall = false;
 static UDWORD	loadScreenCallNo=0;
-static BOOL		bPlayerHasLost = FALSE;
-static BOOL		bPlayerHasWon = FALSE;
+static BOOL		bPlayerHasLost = false;
+static BOOL		bPlayerHasWon = false;
 static UBYTE    scriptWinLoseVideo = PLAY_NONE;
 
 void	startCreditsScreen	( void );
@@ -102,10 +99,10 @@ static void initStars(void)
 //
 BOOL frontendInitVars(void)
 {
-	firstcall = TRUE;
+	firstcall = true;
 	initStars();
 
-	return TRUE;
+	return true;
 }
 
 // ///////////////// /////////////////////////////////////////////////
@@ -115,16 +112,17 @@ TITLECODE titleLoop(void)
 	TITLECODE RetCode = TITLECODE_CONTINUE;
 
 	pie_SetDepthBufferStatus(DEPTH_CMP_ALWAYS_WRT_ON);
-	pie_SetFogStatus(FALSE);
+	pie_SetFogStatus(false);
 	screen_RestartBackDrop();
 
 	if (firstcall)
 	{
-		firstcall = FALSE;
+		firstcall = false;
 
 		changeTitleMode(TITLE);
 
-		frameSetCursorFromRes(CURSOR_DEFAULT); // reset cursor (sw)
+		// Using software cursors (when on) for these menus due to a bug in SDL's SDL_ShowCursor()
+		pie_SetMouse(CURSOR_DEFAULT, war_GetColouredCursor());
 	}
 
 	switch(titleMode) // run relevant title screen code.
@@ -191,7 +189,7 @@ TITLECODE titleLoop(void)
 		case GAME3:
 			runGameOptions3Menu();
 			break;
-		
+
 		case GAME4:
 			runGameOptions4Menu();
 			break;
@@ -202,7 +200,7 @@ TITLECODE titleLoop(void)
 
 		case STARTGAME:
 		case LOADSAVEGAME:
-			initLoadingScreen(TRUE);//render active
+			initLoadingScreen(true);//render active
   			if (titleMode == LOADSAVEGAME)
 			{
 				RetCode = TITLECODE_SAVEGAMELOAD;
@@ -214,10 +212,8 @@ TITLECODE titleLoop(void)
 			return RetCode;			// don't flip!
 
 		case SHOWINTRO:
-			pie_SetFogStatus(FALSE);
-			pie_ScreenFlip(CLEAR_BLACK);//flip to clear screen but not here//reshow intro video.
-	  		pie_ScreenFlip(CLEAR_BLACK);//flip to clear screen but not here
-
+			pie_SetFogStatus(false);
+	  		pie_ScreenFlip(CLEAR_BLACK);
 			changeTitleMode(TITLE);
 			RetCode = TITLECODE_SHOWINTRO;
 			break;
@@ -229,7 +225,7 @@ TITLECODE titleLoop(void)
 
 	audio_Update();
 
-	pie_SetFogStatus(FALSE);
+	pie_SetFogStatus(false);
 	pie_ScreenFlip(CLEAR_BLACK);//title loop
 
 	if ((keyDown(KEY_LALT) || keyDown(KEY_RALT))
@@ -309,16 +305,14 @@ void initLoadingScreen( BOOL drawbdrop )
 	{
 		//just init the load bar with the current screen
 		// setup the callback....
-		pie_SetFogStatus(FALSE);
-		pie_ScreenFlip(CLEAR_BLACK);//init loading
-		pie_ScreenFlip(CLEAR_BLACK);//init loading
+		pie_SetFogStatus(false);
+		pie_ScreenFlip(CLEAR_BLACK);
 		resSetLoadCallback(loadingScreenCallback);
 		loadScreenCallNo = 0;
 		return;
 	}
 
-	pie_SetFogStatus(FALSE);
-	pie_ScreenFlip(CLEAR_BLACK);//init loading
+	pie_SetFogStatus(false);
 	pie_ScreenFlip(CLEAR_BLACK);//init loading
 
 	// setup the callback....
@@ -339,8 +333,7 @@ void startCreditsScreen(void)
 
 	pie_LoadBackDrop(screen);
 
-	pie_SetFogStatus(FALSE);
-	pie_ScreenFlip(CLEAR_BLACK);//flip to set back buffer
+	pie_SetFogStatus(false);
 	pie_ScreenFlip(CLEAR_BLACK);//init loading
 }
 
@@ -374,17 +367,17 @@ void closeLoadingScreen(void)
 BOOL displayGameOver(BOOL bDidit)
 {
 // AlexL says take this out......
-//	setConsolePermanence(TRUE,TRUE);
+//	setConsolePermanence(true,true);
 //	flushConsoleMessages( );
 
-//	addConsoleMessage(" ", CENTRE_JUSTIFY );
-//	addConsoleMessage(_("Game Over"), CENTRE_JUSTIFY );
-//	addConsoleMessage(" ", CENTRE_JUSTIFY );
+//	addConsoleMessage(" ", CENTRE_JUSTIFY, SYSTEM_MESSAGE);
+//	addConsoleMessage(_("Game Over"), CENTRE_JUSTIFY, SYSTEM_MESSAGE);
+//	addConsoleMessage(" ", CENTRE_JUSTIFY, SYSTEM_MESSAGE);
 
 	if(bDidit)
 	{
-		setPlayerHasWon(TRUE);
-		multiplayerWinSequence(TRUE);
+		setPlayerHasWon(true);
+		multiplayerWinSequence(true);
 		if(bMultiPlayer)
 		{
 			updateMultiStatsWins();
@@ -392,7 +385,7 @@ BOOL displayGameOver(BOOL bDidit)
 	}
 	else
 	{
-		setPlayerHasLost(TRUE);
+		setPlayerHasLost(true);
 		if(bMultiPlayer)
 		{
 			updateMultiStatsLoses();
@@ -401,9 +394,9 @@ BOOL displayGameOver(BOOL bDidit)
 
 	//clear out any mission widgets - timers etc that may be on the screen
 	clearMissionWidgets();
-	intAddMissionResult(bDidit, TRUE);
+	intAddMissionResult(bDidit, true);
 
-	return TRUE;
+	return true;
 }
 
 

@@ -21,6 +21,8 @@
 #ifndef __INCLUDED_SRC_TARGET_H__
 #define __INCLUDED_SRC_TARGET_H__
 
+#include "basedef.h"
+
 void targetInitialise(void);
 void targetOpenList(BASE_OBJECT *psTargeting);
 void targetCloseList(void);

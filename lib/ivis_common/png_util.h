@@ -28,7 +28,7 @@
  *
  * \param fileName input file to load from
  * \param image Sprite to read into
- * \return TRUE on success, FALSE otherwise
+ * \return true on success, false otherwise
  */
 BOOL iV_loadImage_PNG(const char *fileName, iV_Image *image);
 
@@ -37,7 +37,7 @@ BOOL iV_loadImage_PNG(const char *fileName, iV_Image *image);
  *
  * \param fileName output file to save to
  * \param image Texture to read from
- * \return TRUE on success, FALSE otherwise
+ * \return true on success, false otherwise
  */
 void iV_saveImage_PNG(const char *fileName, const iV_Image *image);
 

@@ -49,7 +49,7 @@ typedef struct _tab_pos
 /* Set default colours for a form */
 static void formSetDefaultColours(W_FORM *psForm)
 {
-	static BOOL bDefaultsSet = FALSE;
+	static BOOL bDefaultsSet = false;
 	static PIELIGHT wcol_bkgrnd;
 	static PIELIGHT wcol_text;
 	static PIELIGHT wcol_light;
@@ -81,7 +81,7 @@ static void formSetDefaultColours(W_FORM *psForm)
 		wcol_tipbkgrnd = pal_Colour(0x30, 0x30, 0x60);
 		wcol_disable   = pal_Colour(0xbf, 0xbf, 0xbf);
 
-		bDefaultsSet   = TRUE;
+		bDefaultsSet   = true;
 
 		psForm->aColours[WCOL_BKGRND]    = wcol_bkgrnd;
 		psForm->aColours[WCOL_TEXT]      = wcol_text;
@@ -223,30 +223,30 @@ static W_TABFORM* formCreateTabbed(const W_FORMINIT* psInit)
 
 	if (psInit->numMajor == 0)
 	{
-		ASSERT(FALSE, "formCreateTabbed: Must have at least one major tab on a tabbed form");
+		ASSERT(false, "formCreateTabbed: Must have at least one major tab on a tabbed form");
 		return NULL;
 	}
 	if (psInit->majorPos != 0
 	 && psInit->majorPos == psInit->minorPos)
 	{
-		ASSERT(FALSE, "formCreateTabbed: Cannot have major and minor tabs on same side");
+		ASSERT(false, "formCreateTabbed: Cannot have major and minor tabs on same side");
 		return NULL;
 	}
 	if (psInit->numMajor >= WFORM_MAXMAJOR)
 	{
-		ASSERT(FALSE, "formCreateTabbed: Too many Major tabs" );
+		ASSERT(false, "formCreateTabbed: Too many Major tabs" );
 		return NULL;
 	}
 	for(major=0; major<psInit->numMajor; major++)
 	{
 		if (psInit->aNumMinors[major] >= WFORM_MAXMINOR)
 		{
-			ASSERT(FALSE, "formCreateTabbed: Too many Minor tabs for Major %u", major);
+			ASSERT(false, "formCreateTabbed: Too many Minor tabs for Major %u", major);
 			return NULL;
 		}
 		if (psInit->aNumMinors[major] == 0)
 		{
-			ASSERT(FALSE, "formCreateTabbed: Must have at least one Minor tab for each major");
+			ASSERT(false, "formCreateTabbed: Must have at least one Minor tab for each major");
 			return NULL;
 		}
 	}
@@ -370,26 +370,26 @@ W_FORM* formCreate(const W_FORMINIT* psInit)
 	                    | WFORM_NOCLICKMOVE | WFORM_NOPRIMARY | WFORM_SECONDARY
 	                    | WIDG_HIDDEN))
 	{
-		ASSERT(FALSE, "formCreate: Unknown style bit");
+		ASSERT(false, "formCreate: Unknown style bit");
 		return NULL;
 	}
 	if ((psInit->style & WFORM_TABBED)
 	 && (psInit->style & (WFORM_INVISIBLE | WFORM_CLICKABLE)))
 	{
-		ASSERT(FALSE, "formCreate: Tabbed form cannot be invisible or clickable");
+		ASSERT(false, "formCreate: Tabbed form cannot be invisible or clickable");
 		return NULL;
 	}
 	if ((psInit->style & WFORM_INVISIBLE)
 	 && (psInit->style & WFORM_CLICKABLE))
 	{
-		ASSERT(FALSE, "formCreate: Cannot have an invisible clickable form");
+		ASSERT(false, "formCreate: Cannot have an invisible clickable form");
 		return NULL;
 	}
 	if (!(psInit->style & WFORM_CLICKABLE)
 	 && ((psInit->style & WFORM_NOPRIMARY)
 	  || (psInit->style & WFORM_SECONDARY)))
 	{
-		ASSERT(FALSE, "formCreate: Cannot set keys if the form isn't clickable");
+		ASSERT(false, "formCreate: Cannot set keys if the form isn't clickable");
 		return NULL;
 	}
 
@@ -446,14 +446,14 @@ BOOL formAddWidget(W_FORM *psForm, WIDGET *psWidget, W_INIT *psInit)
 		psTabForm = (W_TABFORM *)psForm;
 		if (psInit->majorID >= psTabForm->numMajor)
 		{
-			ASSERT( FALSE, "formAddWidget: Major tab does not exist" );
-			return FALSE;
+			ASSERT( false, "formAddWidget: Major tab does not exist" );
+			return false;
 		}
 		psMajor = psTabForm->asMajor + psInit->majorID;
 		if (psInit->minorID >= psMajor->numMinor)
 		{
-			ASSERT( FALSE, "formAddWidget: Minor tab does not exist" );
-			return FALSE;
+			ASSERT( false, "formAddWidget: Minor tab does not exist" );
+			return false;
 		}
 		ppsList = &(psMajor->asMinor[psInit->minorID].psWidgets);
 		psWidget->psNext = *ppsList;
@@ -467,7 +467,7 @@ BOOL formAddWidget(W_FORM *psForm, WIDGET *psWidget, W_INIT *psInit)
 		psForm->psWidgets = psWidget;
 	}
 
-	return TRUE;
+	return true;
 }
 
 
@@ -640,7 +640,7 @@ void widgGetTabs(W_SCREEN *psScreen, UDWORD id, UWORD *pMajor, UWORD *pMinor)
 	if (psForm == NULL || psForm->type != WIDG_FORM ||
 		!(psForm->style & WFORM_TABBED))
 	{
-		ASSERT( FALSE,"widgGetTabs: couldn't find tabbed form from id" );
+		ASSERT( false,"widgGetTabs: couldn't find tabbed form from id" );
 		return;
 	}
 	ASSERT(psForm != NULL, "widgGetTabs: Invalid tab form pointer");
@@ -662,7 +662,7 @@ void widgSetColour(W_SCREEN *psScreen, UDWORD id, UDWORD colour,
 	psForm = (W_TABFORM *)widgGetFromID(psScreen, id);
 	if (psForm == NULL || psForm->type != WIDG_FORM)
 	{
-		ASSERT( FALSE,"widgSetColour: couldn't find form from id" );
+		ASSERT( false,"widgSetColour: couldn't find form from id" );
 		return;
 	}
 	ASSERT( psForm != NULL,
@@ -670,7 +670,7 @@ void widgSetColour(W_SCREEN *psScreen, UDWORD id, UDWORD colour,
 
 	if (colour >= WCOL_MAX)
 	{
-		ASSERT( FALSE, "widgSetColour: Colour id out of range" );
+		ASSERT( false, "widgSetColour: Colour id out of range" );
 		return;
 	}
 	psForm->aColours[colour] = pal_Colour(red,green,blue);
@@ -782,7 +782,7 @@ static BOOL formPickHTab(TAB_POS *psTabPos,
 	if (number == 1)
 	{
 		// Don't have single tabs 
-		return FALSE;
+		return false;
 	}
 #endif
 
@@ -831,14 +831,14 @@ static BOOL formPickHTab(TAB_POS *psTabPos,
 			psTabPos->y = y0;
 			psTabPos->width = width;
 			psTabPos->height = height;
-			return TRUE;
+			return true;
 		}
 
 		x += width + gap;
 	}
 
 	/* Didn't find any  */
-	return FALSE;
+	return false;
 }
 
 // NOTE: This routine is NOT modified to use the tab scroll buttons.
@@ -855,7 +855,7 @@ static BOOL formPickVTab(TAB_POS *psTabPos,
 	if (number == 1)
 	{
 		/* Don't have single tabs */
-		return FALSE;
+		return false;
 	}
 #endif
 
@@ -873,14 +873,14 @@ static BOOL formPickVTab(TAB_POS *psTabPos,
 			psTabPos->y = y;
 			psTabPos->width = width;
 			psTabPos->height = height;
-			return TRUE;
+			return true;
 		}
 
 		y += height + gap;
 	}
 
 	/* Didn't find any */
-	return FALSE;
+	return false;
 }
 
 
@@ -970,7 +970,7 @@ static BOOL formPickTab(W_TABFORM *psForm, UDWORD fx, UDWORD fy,
 					 psForm->majorSize, psForm->tabMajorThickness, psForm->tabMajorGap,
 					 psForm->numMajor, fx, fy))
 		{
-			return TRUE;
+			return true;
 		}
 		yOffset2 = -psForm->tabVertOffset;
 		break;
@@ -979,7 +979,7 @@ static BOOL formPickTab(W_TABFORM *psForm, UDWORD fx, UDWORD fy,
 					 psForm->majorSize, psForm->tabMajorThickness, psForm->tabMajorGap,
 					 psForm->numMajor, fx, fy))
 		{
-			return TRUE;
+			return true;
 		}
 		break;
 	case WFORM_TABLEFT:
@@ -987,7 +987,7 @@ static BOOL formPickTab(W_TABFORM *psForm, UDWORD fx, UDWORD fy,
 					 psForm->tabMajorThickness, psForm->majorSize, psForm->tabMajorGap,
 					 psForm->numMajor, fx, fy))
 		{
-			return TRUE;
+			return true;
 		}
 		xOffset2 = psForm->tabHorzOffset;
 		break;
@@ -996,11 +996,11 @@ static BOOL formPickTab(W_TABFORM *psForm, UDWORD fx, UDWORD fy,
 					 psForm->tabMajorThickness, psForm->majorSize, psForm->tabMajorGap,
 					 psForm->numMajor, fx, fy))
 		{
-			return TRUE;
+			return true;
 		}
 		break;
 	case WFORM_TABNONE:
-		ASSERT( FALSE, "formDisplayTabbed: Cannot have a tabbed form with no major tabs" );
+		ASSERT( false, "formDisplayTabbed: Cannot have a tabbed form with no major tabs" );
 		break;
 	}
 
@@ -1014,7 +1014,7 @@ static BOOL formPickTab(W_TABFORM *psForm, UDWORD fx, UDWORD fy,
 					 psMajor->numMinor, fx, fy))
 		{
 			psTabPos->index += psForm->numMajor;
-			return TRUE;
+			return true;
 		}
 		break;
 	case WFORM_TABBOTTOM:
@@ -1023,7 +1023,7 @@ static BOOL formPickTab(W_TABFORM *psForm, UDWORD fx, UDWORD fy,
 					 psMajor->numMinor, fx, fy))
 		{
 			psTabPos->index += psForm->numMajor;
-			return TRUE;
+			return true;
 		}
 		break;
 	case WFORM_TABLEFT:
@@ -1032,7 +1032,7 @@ static BOOL formPickTab(W_TABFORM *psForm, UDWORD fx, UDWORD fy,
 					 psMajor->numMinor, fx, fy))
 		{
 			psTabPos->index += psForm->numMajor;
-			return TRUE;
+			return true;
 		}
 		break;
 	case WFORM_TABRIGHT:
@@ -1041,13 +1041,13 @@ static BOOL formPickTab(W_TABFORM *psForm, UDWORD fx, UDWORD fy,
 					 psMajor->numMinor, fx, fy))
 		{
 			psTabPos->index += psForm->numMajor;
-			return TRUE;
+			return true;
 		}
 		break;
 	/* case WFORM_TABNONE - no minor tabs so nothing to display */
 	}
 
-	return FALSE;
+	return false;
 }
 
 extern UDWORD gameTime2;
@@ -1632,7 +1632,7 @@ void formDisplayTabbed(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGH
 						 pColours,TAB_MAJOR,psForm->tabMajorGap);
 		break;
 	case WFORM_TABNONE:
-		ASSERT( FALSE, "formDisplayTabbed: Cannot have a tabbed form with no major tabs" );
+		ASSERT( false, "formDisplayTabbed: Cannot have a tabbed form with no major tabs" );
 		break;
 	}
 

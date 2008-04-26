@@ -21,17 +21,15 @@
 /* Alex McLean, Pumpkin Studios, EIDOS Interactive */
 
 #include "lib/framework/frame.h"
-#include <stdio.h>
-#include <stdlib.h>
 
-#include "lib/ivis_common/ivisdef.h" //ivis matrix code
+#include "lib/ivis_common/ivisdef.h"
 #include "lib/ivis_opengl/piematrix.h"
+#include "lib/gamelib/gtime.h"
 
+#include "geometry.h"
 #include "objectdef.h"
 #include "map.h"
 #include "display3d.h"
-#include "geometry.h"
-#include "lib/gamelib/gtime.h"
 #include "hci.h"
 #include "display.h"
 
@@ -44,12 +42,13 @@ static UBYTE sineHeightTable[SIZE_SINE_TABLE];
 
 void initBulletTable( void )
 {
-UDWORD	 i;
-UBYTE	height;
-	for (i=0; i<SIZE_SINE_TABLE; i++)
+	UDWORD i;
+	UBYTE height;
+
+	for (i = 0; i < SIZE_SINE_TABLE; i++)
 	{
-	height = (UBYTE) (AMPLITUDE_HEIGHT*sin(i*deg));
-	sineHeightTable[i] = height;
+		height = AMPLITUDE_HEIGHT * sin(i*deg);
+		sineHeightTable[i] = height;
 	}
 }
 
@@ -93,7 +92,7 @@ UDWORD	bestSoFar;
         if (!vtolDroid(psDroid))
         {
 		    /* Clever (?) bit that reads whether we're interested in droids being selected or not */
-		    if( (bSelected ? psDroid->selected : TRUE ) )
+		    if( (bSelected ? psDroid->selected : true ) )
 		    {
 			    /* Get the differences */
 			    xDif = abs(psDroid->pos.x - x);
@@ -173,7 +172,7 @@ BOOL	droidOnScreen( DROID *psDroid, SDWORD tolerance )
 {
 SDWORD	dX,dY;
 
-	if (DrawnInLastFrame(psDroid->sDisplay.frameNumber)==TRUE)
+	if (DrawnInLastFrame(psDroid->sDisplay.frameNumber)==true)
 		{
 			dX = psDroid->sDisplay.screenX;
 			dY = psDroid->sDisplay.screenY;
@@ -182,8 +181,8 @@ SDWORD	dX,dY;
 				&& dX < (SDWORD)(pie_GetVideoBufferWidth()+tolerance)
 				&& dY < (SDWORD)(pie_GetVideoBufferHeight()+tolerance))
 			{
-				return(TRUE);
+				return(true);
 			}
 		}
-	return(FALSE);
+	return(false);
 }

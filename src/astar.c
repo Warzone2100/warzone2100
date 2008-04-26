@@ -33,10 +33,18 @@
 #include "astar.h"
 
 static SDWORD	astarOuter, astarRemove;
-SDWORD	astarInner;
-static UWORD seed = 1234; // random seed
 
-// The structure to store a node of the route
+/** Keeps track of the amount of iterations done in the inner loop of our A*
+ *  implementation.
+ *
+ *  @see FPATH_LOOP_LIMIT
+ *
+ *  @ingroup pathfinding
+ */
+int astarInner = 0;
+
+/** The structure to store a node of the route in the hash table
+ */
 typedef struct _fp_node
 {
 	SWORD	x,y;		// map coords
@@ -51,20 +59,23 @@ typedef struct _fp_node
 #define NT_OPEN		1
 #define NT_CLOSED	2
 
-// List of open nodes
-FP_NODE		*psOpen;
+/** List of open nodes in the hash table
+ */
+static FP_NODE* psOpen;
 
-// Size of closed hash table
+/** Size of closed hash table
+ */
 #define FPATH_TABLESIZE		4091
 
-// Hash table for closed nodes
-FP_NODE		**apsNodes=NULL;
+/** Hash table for closed nodes
+ */
+static FP_NODE* apsNodes[FPATH_TABLESIZE] = { NULL };
 
 #define NUM_DIR		8
 
 // Convert a direction into an offset
 // dir 0 => x = 0, y = -1
-static Vector2i aDirOffset[NUM_DIR] =
+static const Vector2i aDirOffset[NUM_DIR] =
 {
 	{ 0, 1},
 	{-1, 1},
@@ -84,85 +95,53 @@ void astarResetCounters(void)
 	astarRemove = 0;
 }
 
-static void ClearAstarNodes(void)
-{
-	assert(apsNodes);
-	memset(apsNodes, 0, sizeof(FP_NODE *) * FPATH_TABLESIZE);
-}
-
-// Initialise the findpath routine
-BOOL astarInitialise(void)
-{
-	apsNodes = (FP_NODE**)malloc(sizeof(FP_NODE *) * FPATH_TABLESIZE);
-	if (!apsNodes)
-	{
-		return FALSE;
-	}
-	ClearAstarNodes();
-
-	return TRUE;
-}
-
-// Shutdown the findpath routine
-void fpathShutDown(void)
-{
-	free(apsNodes);
-	apsNodes = NULL;
-}
-
-// calculate a hash table index
-#define RAND_MULTI	25173
-#define RAND_INC	13849
-#define RAND_MOD	0xffff
-
 /* next four used in HashPJW */
-#define	BITS_IN_int		32
-#define	THREE_QUARTERS	((UDWORD) ((BITS_IN_int * 3) / 4))
-#define	ONE_EIGHTH		((UDWORD) (BITS_IN_int / 8))
-#define	HIGH_BITS		( ~((UDWORD)(~0) >> ONE_EIGHTH ))
+#define	BITS_IN_int32_t (sizeof(int32_t) * CHAR_BIT)
+#define	THREE_QUARTERS  ((BITS_IN_int32_t * 3) / 4)
+#define	ONE_EIGHTH      (BITS_IN_int32_t / 8)
+#define	HIGH_BITS       (~((int32_t)(~0) >> ONE_EIGHTH))
 
-/***************************************************************************/
-/*
- * HashString
+/** Hash string
+ *  Adaptation of Peter Weinberger's (PJW) generic hashing algorithm listed in
+ *  Binstock+Rex, "Practical Algorithms" p 69.
  *
- * Adaptation of Peter Weinberger's (PJW) generic hashing algorithm listed
- * in Binstock+Rex, "Practical Algorithms" p 69.
- *
- * Accepts string and returns hashed integer.
- *
- * Hack to use coordinates instead of a string by John.
+ *  Hacked to use coordinates instead of a string
  */
-/***************************************************************************/
-static SDWORD fpathHashFunc(SDWORD x, SDWORD y)
+static SDWORD fpathHashFunc(int32_t x, int32_t y)
 {
-	SDWORD	iHashValue, i;
-	char	*c;
-	char	aBuff[8];
+	char    buf[sizeof(x) + sizeof(y)];
+	char   *c;
+	int32_t hashValue = 0;
 
-	memcpy(&aBuff[0], &x, 4);
-	memcpy(&aBuff[4], &y, 4);
-	c = aBuff;
+	memcpy(&buf[0],         &x, sizeof(x));
+	memcpy(&buf[sizeof(x)], &y, sizeof(y));
 
-	for ( iHashValue=0; c < &aBuff[8]; ++c )
+	for (c = &buf[0]; c != &buf[ARRAY_SIZE(buf)]; ++c)
 	{
-		if (*c != 0)
-		{
-			iHashValue = ( iHashValue << ONE_EIGHTH ) + *c;
+		int32_t highBits;
 
-			if ( (i = iHashValue & HIGH_BITS) != 0 )
-			{
-				iHashValue = ( iHashValue ^ ( i >> THREE_QUARTERS ) ) &
-								~HIGH_BITS;
-			}
+		if (*c == 0)
+			continue;
+
+		hashValue = (hashValue << ONE_EIGHTH) + *c;
+		highBits = hashValue & HIGH_BITS;
+
+		if (highBits != 0)
+		{
+			hashValue = (hashValue ^ (highBits >> THREE_QUARTERS)) & ~HIGH_BITS;
 		}
 	}
 
-	iHashValue %= FPATH_TABLESIZE;
+	hashValue %= ARRAY_SIZE(apsNodes);
 
-	return iHashValue;
+	return hashValue;
 }
 
-// Add a node to the hash table
+/** Add a node to the hash table
+ *
+ *  @param apsTable hash table
+ *  @param psNode to add to the given hash table
+ */
 static void fpathHashAdd(FP_NODE *apsTable[], FP_NODE *psNode)
 {
 	SDWORD	index;
@@ -173,40 +152,50 @@ static void fpathHashAdd(FP_NODE *apsTable[], FP_NODE *psNode)
 	apsTable[index] = psNode;
 }
 
-// See if a node is in the hash table
-static FP_NODE *fpathHashPresent(FP_NODE *apsTable[], SDWORD x, SDWORD y)
+/** See if a node is in the hash table
+ *  Check whether there is a node for the given coordinates in the hash table
+ *
+ *  @param apsTable the hash table to check
+ *  @param x,y the coordinates to check for
+ *  @return a pointer to the node if one could be found, or NULL otherwise.
+ */
+static FP_NODE *fpathHashPresent(FP_NODE *apsTable[], int32_t x, int32_t y)
 {
-	SDWORD		index;
-	FP_NODE		*psFound;
+	FP_NODE *psFound;
 
-	index = fpathHashFunc(x,y);
-	psFound = apsTable[index];
-	while (psFound && !(psFound->x == x && psFound->y == y))
+	for (psFound = apsTable[fpathHashFunc(x, y)]; psFound; psFound = psFound->psNext)
 	{
-		psFound = psFound->psNext;
+		// Check whether we found the node we're looking for
+		if (psFound->x == x
+		 && psFound->y == y)
+		{
+			return psFound;
+		}
 	}
 
-	return psFound;
+	return NULL;
 }
 
-// Reset the hash tables
+/** Reset the hash tables
+ */
 static void fpathHashReset(void)
 {
-	SDWORD	i;
+	int i;
 
-	for(i=0; i<FPATH_TABLESIZE; i++)
+	for(i = 0; i < ARRAY_SIZE(apsNodes); ++i)
 	{
 		while (apsNodes[i])
 		{
-			FP_NODE	*psNext = apsNodes[i]->psNext;
+			FP_NODE* toFree = apsNodes[i];
+			apsNodes[i] = apsNodes[i]->psNext;
 
-			free(apsNodes[i]);
-			apsNodes[i] = psNext;
+			free(toFree);
 		}
 	}
 }
 
-// Compare two nodes
+/** Compare two nodes
+ */
 static inline SDWORD fpathCompare(FP_NODE *psFirst, FP_NODE *psSecond)
 {
 	SDWORD	first,second;
@@ -236,25 +225,23 @@ static inline SDWORD fpathCompare(FP_NODE *psFirst, FP_NODE *psSecond)
 	return 0;
 }
 
-// make a 50/50 random choice
+/** make a 50/50 random choice
+ */
 static BOOL fpathRandChoice(void)
 {
-	UDWORD	val;
-
-	val = (seed * RAND_MULTI + RAND_INC) & RAND_MOD;
-	seed = (UWORD)val;
-
-	return val & 1;
+	return ONEINTWO;
 }
 
-// Add a node to the open list
+/** Add a node to the open list
+ */
 static void fpathOpenAdd(FP_NODE *psNode)
 {
 	psNode->psOpen = psOpen;
 	psOpen = psNode;
 }
 
-// Get the nearest entry in the open list
+/** Get the nearest entry in the open list
+ */
 static FP_NODE *fpathOpenGet(void)
 {
 	FP_NODE	*psNode, *psCurr, *psPrev, *psParent = NULL;
@@ -293,7 +280,8 @@ static FP_NODE *fpathOpenGet(void)
 	return psNode;
 }
 
-// estimate the distance to the target point
+/** Estimate the distance to the target point
+ */
 static SDWORD fpathEstimate(SDWORD x, SDWORD y, SDWORD fx, SDWORD fy)
 {
 	SDWORD xdiff, ydiff;
@@ -307,7 +295,8 @@ static SDWORD fpathEstimate(SDWORD x, SDWORD y, SDWORD fx, SDWORD fy)
 	return xdiff > ydiff ? xdiff + ydiff/2 : xdiff/2 + ydiff;
 }
 
-// Generate a new node
+/** Generate a new node
+ */
 static FP_NODE *fpathNewNode(SDWORD x, SDWORD y, SDWORD dist, FP_NODE *psRoute)
 {
 	FP_NODE	*psNode = malloc(sizeof(FP_NODE));
@@ -331,7 +320,8 @@ static FP_NODE *fpathNewNode(SDWORD x, SDWORD y, SDWORD dist, FP_NODE *psRoute)
 static SDWORD	finalX,finalY, vectorX,vectorY;
 static BOOL		obstruction;
 
-// The visibility ray callback
+/** The visibility ray callback
+ */
 static BOOL fpathVisCallback(SDWORD x, SDWORD y, SDWORD dist)
 {
 	SDWORD	vx,vy;
@@ -343,20 +333,19 @@ static BOOL fpathVisCallback(SDWORD x, SDWORD y, SDWORD dist)
 	vy = y - finalY;
 	if (vx*vectorX + vy*vectorY <=0)
 	{
-		return FALSE;
+		return false;
 	}
 
 	if (fpathBlockingTile(map_coord(x), map_coord(y)))
 	{
 		// found an obstruction
-		obstruction = TRUE;
-		return FALSE;
+		obstruction = true;
+		return false;
 	}
 
-	return TRUE;
+	return true;
 }
 
-// Check los between two tiles
 BOOL fpathTileLOS(SDWORD x1,SDWORD y1, SDWORD x2,SDWORD y2)
 {
 	// convert to world coords
@@ -370,7 +359,7 @@ BOOL fpathTileLOS(SDWORD x1,SDWORD y1, SDWORD x2,SDWORD y2)
 	finalY = y2;
 	vectorX = x1 - x2;
 	vectorY = y1 - y2;
-	obstruction = FALSE;
+	obstruction = false;
 
 	rayCast(x1,y1, rayPointsToAngle(x1,y1,x2,y2),
 			RAY_MAXLEN, fpathVisCallback);
@@ -378,42 +367,6 @@ BOOL fpathTileLOS(SDWORD x1,SDWORD y1, SDWORD x2,SDWORD y2)
 	return !obstruction;
 }
 
-// Optimise the route
-static void fpathOptimise(FP_NODE *psRoute)
-{
-	FP_NODE	*psCurr, *psSearch, *psTest;
-	BOOL	los;
-
-	ASSERT( psRoute != NULL,
-		"fpathOptimise: NULL route pointer" );
-
-	psCurr = psRoute;
-	do
-	{
-		// work down the route looking for a failed LOS
-		los = TRUE;
-		psSearch = psCurr->psRoute;
-		while (psSearch)
-		{
-			psTest = psSearch->psRoute;
-			if (psTest)
-			{
-				los = fpathTileLOS(psCurr->x,psCurr->y, psTest->x,psTest->y);
-			}
-			if (!los)
-			{
-				break;
-			}
-			psSearch = psTest;
-		}
-
-		// store the previous successful point
-		psCurr->psRoute = psSearch;
-		psCurr = psSearch;
-	} while (psCurr);
-}
-
-// A* findpath
 SDWORD fpathAStarRoute(SDWORD routeMode, ASTAR_ROUTE *psRoutePoints,
 					 SDWORD sx, SDWORD sy, SDWORD fx, SDWORD fy)
 {
@@ -519,6 +472,8 @@ static 	FP_NODE		*psNearest, *psRoute;
 			}
 
 			astarInner += 1;
+			ASSERT(astarInner >= 0, "astarInner overflowed!");
+
 
 			// Now insert the point into the appropriate list
 			if (!psFound)
@@ -557,11 +512,7 @@ static 	FP_NODE		*psNearest, *psRoute;
 			}
 		}
 
-//		ASSERT( fpathValidateTree(psOpen),
-//			"fpathAStarRoute: Invalid open tree" );
-
 		// add the current point to the closed nodes
-//		fpathHashRemove(apsOpen, psCurr->pos.x, psCurr->pos.y);
 //		fpathHashAdd(apsClosed, psCurr);
 		psCurr->type = NT_CLOSED;
 // 		debug( LOG_NEVER, "HashAdd - closed : %3d,%3d (%d,%d) = %d\n", psCurr->pos.x, psCurr->pos.y, psCurr->dist, psCurr->est, psCurr->dist+psCurr->est );
@@ -579,11 +530,8 @@ static 	FP_NODE		*psNearest, *psRoute;
 		retval = ASR_NEAREST;
 	}
 
-	// optimise the route if one was found
 	if (psRoute)
 	{
-		fpathOptimise(psRoute);
-
 		// get the route in the correct order
 		//	If as I suspect this is to reverse the list, then it's my suspicion that
 		//	we could route from destination to source as opposed to source to

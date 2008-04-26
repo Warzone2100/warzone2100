@@ -1,0 +1,12 @@
+************************************DRAFT***************************************
+
+This directory (will) contain all sorts of Warzone 2100 related tools.
+
+ * Each of these tools will have to be Warzone specific.
+ * Every independend tool should have one directory of its own
+ * No tool should depend on others for compilation or linking.
+ * Each of these tools *must* have a "COPYING" file with it in its directory.
+  - This file should contain the full licensing conditions applied to the entire tool.
+  - If parts of this tool are licensed differently this *must* be made note of in this file.
+  - Preferrably all tools should be licensed GPL (or maybe LGPL if it's easily reusable for other projects?).
+  - In case the GPL is used it is best copied from /trunk/COPYING using the `svn copy` command.

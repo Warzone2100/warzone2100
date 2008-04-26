@@ -24,7 +24,9 @@
 #ifndef __INCLUDED_LIB_WIDGET_BUTTON_H__
 #define __INCLUDED_LIB_WIDGET_BUTTON_H__
 
+#include "widget.h"
 #include "widgbase.h"
+#include "lib/ivis_common/textdraw.h"
 
 /* Button states */
 #define WBUTS_NORMAL	0x0000
@@ -47,7 +49,7 @@ typedef struct _w_button
 	SWORD HilightAudioID;				// Audio ID for form clicked sound
 	SWORD ClickedAudioID;				// Audio ID for form hilighted sound
 	WIDGET_AUDIOCALLBACK AudioCallback;	// Pointer to audio callback function
-	int FontID;
+	enum iV_fonts FontID;
 } W_BUTTON;
 
 /* Initialise the button module */

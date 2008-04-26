@@ -52,7 +52,7 @@ static PHYSFS_file* pReadFile = NULL;
 			} \
 		}
 
-void audp_error(char *pMessage,...);
+void audp_error(const char* fmt, ...);
 
 %}
 
@@ -127,13 +127,13 @@ ANIMOBJECT						{	return ANIMOBJECT;		}
 int
 audp_wrap( void )
 {
-	if ( g_bParsingSubFile == TRUE )
+	if ( g_bParsingSubFile == true )
 	{
 		/* close current file and restore old file pointer */
 		fclose( audp_in );
 		audp_in = g_fpOld;
 
-		g_bParsingSubFile = FALSE;
+		g_bParsingSubFile = false;
 
 		return 0;
 	}
@@ -166,9 +166,11 @@ parseGetErrorData(int *pLine, char **ppText)
 /* Older GNU Flex versions don't define yylex_destroy()
  * (and neither define a subminor version)
  */
-#if !defined(YY_FLEX_SUBMINOR_VERSION) || (YY_FLEX_SUBMINOR_VERSION < 30)
+#if !defined(YY_FLEX_SUBMINOR_VERSION) || (YY_FLEX_SUBMINOR_VERSION < 9)
 int audp_lex_destroy(void)
 {
+	/* For non-reentrant C scanner only. */
+	yy_delete_buffer(YY_CURRENT_BUFFER);
+	yy_init = 1;
 }
 #endif
-

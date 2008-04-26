@@ -83,14 +83,11 @@ extern void levShutDown(void);
 
 extern BOOL levInitialise(void);
 
-// load up the base data set for a level (used by savegames)
-extern BOOL levLoadBaseData(char *pName);
-
 // load up the data for a level
-extern BOOL levLoadData(char *pName, char *pSaveName, SDWORD saveType);
+extern BOOL levLoadData(const char* name, char *pSaveName, SDWORD saveType);
 
 // find the level dataset
-extern BOOL levFindDataSet(char *pName, LEVEL_DATASET **ppsDataSet);
+extern BOOL levFindDataSet(const char* name, LEVEL_DATASET **ppsDataSet);
 
 // free the currently loaded dataset
 extern BOOL levReleaseAll(void);
@@ -102,5 +99,7 @@ extern BOOL levReleaseMissionData(void);
 extern SDWORD getLevelLoadType(void);
 
 extern char *getLevelName( void );
+
+extern void levTest(void);
 
 #endif // __INCLUDED_SRC_LEVELS_H__

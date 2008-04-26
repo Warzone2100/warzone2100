@@ -24,10 +24,6 @@
 #ifndef __INCLUDED_SRC_TEXT_H__
 #define __INCLUDED_SRC_TEXT_H__
 
-//the two defines below are MUTUALLY EXCLUSIVE! don't have both defined...
-//#define RESOURCE_NAMES
-#define	STORE_RESOURCE_ID
-
 /* The string resource object */
 extern STR_RES *psStringRes;
 

@@ -240,6 +240,20 @@ Section $(TEXT_SecAivolutionMod) SecAivolutionMod
 
 SectionEnd
 
+Section $(TEXT_SecMusicMod) SecMusicMod
+
+  SetOutPath "$INSTDIR\mods\global\autoload"
+
+  NSISdl::download "http://download.gna.org/warzone/releases/mods/music_1.0.AUTHORS"          "music_1.0.AUTHORS.txt"
+  NSISdl::download "http://download.gna.org/warzone/releases/mods/music_1.0.wz"               "music_1.0.wz"
+  Pop $R0 ; Get the return value
+  StrCmp $R0 "success" +2
+    MessageBox MB_OK|MB_ICONSTOP "Download of Music mod failed: $R0"
+
+  SetOutPath "$INSTDIR"
+
+SectionEnd
+
 SectionGroupEnd
 
 Section $(TEXT_SecNLS) SecNLS
@@ -307,6 +321,9 @@ FunctionEnd
   LangString TEXT_SecAivolutionMod ${LANG_ENGLISH} "Aivolution"
   LangString DESC_SecAivolutionMod ${LANG_ENGLISH} "Improved artificial intelligence that learns."
 
+  LangString TEXT_SecMusicMod ${LANG_ENGLISH} "Music"
+  LangString DESC_SecMusicMod ${LANG_ENGLISH} "Download and install music."
+
   LangString TEXT_SecNLS ${LANG_ENGLISH} "NLS"
   LangString DESC_SecNLS ${LANG_ENGLISH} "Support for languages other than English."
 
@@ -327,6 +344,9 @@ FunctionEnd
   LangString TEXT_SecAivolutionMod ${LANG_DUTCH} "Aivolution"
   LangString DESC_SecAivolutionMod ${LANG_DUTCH} "Verbeterde kunstmatige intelligentie die leert."
 
+  LangString TEXT_SecMusicMod ${LANG_DUTCH} "Muziek"
+  LangString DESC_SecMusicMod ${LANG_DUTCH} "Muziek downloaden en installeren."
+
   LangString TEXT_SecNLS ${LANG_DUTCH} "NLS"
   LangString DESC_SecNLS ${LANG_DUTCH} "Ondersteuning voor andere talen dan Engels (Nederlands inbegrepen)."
 
@@ -346,6 +366,9 @@ FunctionEnd
 
   LangString TEXT_SecAivolutionMod ${LANG_GERMAN} "Aivolution"
   LangString DESC_SecAivolutionMod ${LANG_GERMAN} "Verbesserte künstliche Intelligenz die erlernt."
+
+  LangString TEXT_SecMusicMod ${LANG_GERMAN} "Musik"
+  LangString DESC_SecMusicMod ${LANG_GERMAN} "Musik herunterladen und installieren."
 
   LangString TEXT_SecNLS ${LANG_GERMAN} "NLS"
   LangString DESC_SecNLS ${LANG_GERMAN} "Unterstützung für Sprachen anders als Englisch (Deutsch inbegriffen)."
@@ -371,6 +394,7 @@ FunctionEnd
     !insertmacro MUI_DESCRIPTION_TEXT ${SecMods} $(DESC_SecMods)
     !insertmacro MUI_DESCRIPTION_TEXT ${SecGrimMod} $(DESC_SecGrimMod)
     !insertmacro MUI_DESCRIPTION_TEXT ${SecAivolutionMod} $(DESC_SecAivolutionMod)
+    !insertmacro MUI_DESCRIPTION_TEXT ${SecMusicMod} $(DESC_SecMusicMod)
 
     !insertmacro MUI_DESCRIPTION_TEXT ${SecNLS} $(DESC_SecNLS)
   !insertmacro MUI_FUNCTION_DESCRIPTION_END
@@ -413,6 +437,11 @@ Section "Uninstall"
   Delete "$INSTDIR\fonts\DejaVuSansMono.ttf"
   RMDir "$INSTDIR\fonts"
 
+  Delete "$INSTDIR\mods\global\autoload\music_1.0.AUTHORS.txt"
+  Delete "$INSTDIR\mods\global\autoload\music_1.0.wz"
+  RMDir "$INSTDIR\mods\global\autoload"
+
+  Delete "$INSTDIR\mods\global\aivolution.wz"
   Delete "$INSTDIR\mods\global\grim.wz"
   RMDir "$INSTDIR\mods\global"
   RMDir "$INSTDIR\mods"

@@ -22,18 +22,10 @@
  *
  * The event management system.
  */
-
-#include <stdio.h>
-#include <string.h>
-
-// event tracing printf's
-#define DEBUG_GROUP0
-// display tested triggers
-//#define DEBUG_GROUP1
 #include "lib/framework/frame.h"
-#include "interp.h"
-#include "script.h"
+
 #include "event.h"
+#include "script.h"
 
 // array to store release functions
 static VAL_CREATE_FUNC		*asCreateFuncs;
@@ -105,65 +97,55 @@ BOOL eventInitialise()
 	asReleaseFuncs = NULL;
 	numFuncs = 0;
 	strcpy(last_called_script_event, "<none>");
-	return TRUE;
+	return true;
 }
 
 
 // reset the event system
 void eventReset(void)
 {
-	ACTIVE_TRIGGER	*psCurr;
-#ifdef DEBUG
 	SDWORD			count=0;
-#endif
 
 	// Free any active triggers and their context's
 	while (psTrigList)
 	{
-		psCurr = psTrigList;
+		ACTIVE_TRIGGER	*psCurr = psTrigList;
+
 		psTrigList = psTrigList->psNext;
-#ifdef DEBUG
 		if (!psCurr->psContext->release)
 		{
 			count += 1;
 		}
-#endif
 		eventRemoveContext(psCurr->psContext);
 		free(psCurr);
 	}
 	// Free any active callback triggers and their context's
 	while (psCallbackList)
 	{
-		psCurr = psCallbackList;
+		ACTIVE_TRIGGER	*psCurr = psCallbackList;
+
 		psCallbackList = psCallbackList->psNext;
-#ifdef DEBUG
 		if (!psCurr->psContext->release)
 		{
 			count += 1;
 		}
-#endif
 		eventRemoveContext(psCurr->psContext);
 		free(psCurr);
 	}
-
-	// Now free any context's that are left
+	// Now free any contexts that are left
 	while (psContList)
 	{
-#ifdef DEBUG
 		if (!psContList->release)
 		{
 			count += 1;
 		}
-#endif
 		eventRemoveContext(psContList);
 	}
 
-#ifdef DEBUG
-	if (count>0)
+	if (count > 0)
 	{
-		debug(LOG_WARNING, "eventReset: %d contexts still allocated at shutdown\n", count );
+		debug(LOG_SCRIPT, "eventReset: %d contexts still allocated at reset", count);
 	}
-#endif
 }
 
 
@@ -231,8 +213,6 @@ const char *eventGetTriggerID(SCRIPT_CODE *psCode, SDWORD trigger)
 	if (psCode->psDebug == NULL || type != TR_CODE)
 	{
 		snprintf(aIDNum, sizeof(aIDNum), "%d (%s)", trigger, pTrigType);
-		// Guarantee to nul-terminate
-		aIDNum[sizeof(aIDNum) - 1] = '\0';
 	}
 	else
 	{
@@ -246,8 +226,6 @@ const char *eventGetTriggerID(SCRIPT_CODE *psCode, SDWORD trigger)
 			}
 		}
 		snprintf(aIDNum, sizeof(aIDNum), "%s (%s)", pID, pTrigType);
-		// Guarantee to nul-terminate
-		aIDNum[sizeof(aIDNum) - 1] = '\0';
 	}
 
 	return aIDNum;
@@ -271,8 +249,6 @@ const char *eventGetEventID(SCRIPT_CODE *psCode, SDWORD event)
 		(event < 0) || (event > psCode->numEvents))
 	{
 		snprintf(aIDNum, sizeof(aIDNum), "%d", event);
-		// Guarantee to nul-terminate
-		aIDNum[sizeof(aIDNum) - 1] = '\0';
 
 		return aIDNum;
 	}
@@ -291,10 +267,9 @@ const char *eventGetEventID(SCRIPT_CODE *psCode, SDWORD event)
 }
 
 // Print out all the info available about a trigger
-void eventPrintTriggerInfo(ACTIVE_TRIGGER *psTrigger)
+static void eventPrintTriggerInfo(ACTIVE_TRIGGER *psTrigger)
 {
 	SCRIPT_CODE *psCode = psTrigger->psContext->psCode;
-//	BOOL		debugInfo = psCode->psDebug != NULL;
 	const char	*pTrigLab, *pEventLab;
 
 	// find the debug info for the trigger
@@ -302,40 +277,36 @@ void eventPrintTriggerInfo(ACTIVE_TRIGGER *psTrigger)
 	// find the debug info for the event
 	pEventLab = eventGetEventID(psCode, psTrigger->event);
 
-	debug(LOG_SCRIPT, "trigger %s at %d -> %s", pTrigLab, psTrigger->testTime, pEventLab);
+	debug(LOG_WARNING, "trigger %s at %d -> %s", pTrigLab, psTrigger->testTime, pEventLab);
 	if (psTrigger->offset != 0)
 	{
-		debug(LOG_SCRIPT, " %d", psTrigger->offset);
+		debug(LOG_WARNING, " %d", psTrigger->offset);
 	}
 }
 
 // Initialise the create/release function array - specify the maximum value type
 BOOL eventInitValueFuncs(SDWORD maxType)
 {
-	if(asReleaseFuncs != NULL)	//<NEW> 13.05.05
-		debug(LOG_ERROR, "eventInitValueFuncs: array already initialised");
+	ASSERT(asReleaseFuncs == NULL, "eventInitValueFuncs: array already initialised");
 
-	ASSERT( asReleaseFuncs == NULL,
-		"eventInitValueFuncs: array already initialised" );
-
-	asCreateFuncs = (VAL_CREATE_FUNC *)malloc(sizeof(VAL_CREATE_FUNC) * maxType);
+	asCreateFuncs = malloc(sizeof(VAL_CREATE_FUNC) * maxType);
 	if (!asCreateFuncs)
 	{
-		debug(LOG_ERROR, "eventInitValueFuncs: Out of memory");
-		return FALSE;
+		debug(LOG_SCRIPT, "eventInitValueFuncs: Out of memory");
+		return false;
 	}
 	asReleaseFuncs = (VAL_RELEASE_FUNC *)malloc(sizeof(VAL_RELEASE_FUNC) * maxType);
 	if (!asReleaseFuncs)
 	{
-		debug(LOG_ERROR, "eventInitValueFuncs: Out of memory");
-		return FALSE;
+		debug(LOG_SCRIPT, "eventInitValueFuncs: Out of memory");
+		return false;
 	}
 
 	memset(asCreateFuncs, 0, sizeof(VAL_CREATE_FUNC) * maxType);
 	memset(asReleaseFuncs, 0, sizeof(VAL_RELEASE_FUNC) * maxType);
 	numFuncs = maxType;
 
-	return TRUE;
+	return true;
 }
 
 // Add a new value create function
@@ -343,14 +314,13 @@ BOOL eventAddValueCreate(INTERP_TYPE type, VAL_CREATE_FUNC create)
 {
 	if (type >= numFuncs)
 	{
-		debug( LOG_ERROR, "eventAddValueCreate: type out of range" );
-		abort();
-		return FALSE;
+		ASSERT(false, "eventAddValueCreate: type out of range");
+		return false;
 	}
 
 	asCreateFuncs[type] = create;
 
-	return TRUE;
+	return true;
 }
 
 // Add a new value release function
@@ -358,14 +328,13 @@ BOOL eventAddValueRelease(INTERP_TYPE type, VAL_RELEASE_FUNC release)
 {
 	if (type >= numFuncs)
 	{
-		debug( LOG_ERROR, "eventAddValueRelease: type out of range" );
-		abort();
-		return FALSE;
+		ASSERT(false, "eventAddValueRelease: type out of range");
+		return false;
 	}
 
 	asReleaseFuncs[type] = release;
 
-	return TRUE;
+	return true;
 }
 
 // Create a new context for a script
@@ -378,15 +347,14 @@ BOOL eventNewContext(SCRIPT_CODE *psCode, CONTEXT_RELEASE release,
 	INTERP_TYPE	type;
 	VAL_CHUNK	*psNewChunk, *psNextChunk;
 
-	ASSERT( psCode != NULL,
-		"eventNewContext: Invalid code pointer" );
+	ASSERT(psCode != NULL, "eventNewContext: Invalid code pointer");
 
 	// Get a new context
 	psContext = malloc(sizeof(SCRIPT_CONTEXT));
 	if (psContext == NULL)
 	{
-		debug(LOG_ERROR, "eventNewContext: Out of memory");
-		return FALSE;
+		ASSERT(false, "eventNewContext: Out of memory");
+		return false;
 	}
 
 	// Initialise the context
@@ -441,7 +409,7 @@ BOOL eventNewContext(SCRIPT_CODE *psCode, CONTEXT_RELEASE release,
 					if (!asCreateFuncs[type](&(psCode->ppsLocalVarVal[i][j]) ))
 					{
 						debug(LOG_ERROR,"eventNewContext: asCreateFuncs failed for local var");
-						return FALSE;
+						return false;
 					}
 				}
 
@@ -471,7 +439,7 @@ BOOL eventNewContext(SCRIPT_CODE *psCode, CONTEXT_RELEASE release,
 				free(psNewChunk);
 			}
 			free(psContext);
-			return FALSE;
+			return false;
 		}
 
 		// Set the value types
@@ -510,7 +478,7 @@ BOOL eventNewContext(SCRIPT_CODE *psCode, CONTEXT_RELEASE release,
 						free(psNewChunk);
 					}
 					free(psContext);
-					return FALSE;
+					return false;
 				}
 			}
 			storeIndex -= 1;
@@ -539,7 +507,7 @@ BOOL eventNewContext(SCRIPT_CODE *psCode, CONTEXT_RELEASE release,
 
 	*ppsContext = psContext;
 
-	return TRUE;
+	return true;
 }
 
 
@@ -556,7 +524,7 @@ BOOL eventCopyContext(SCRIPT_CONTEXT *psContext, SCRIPT_CONTEXT **ppsNew)
 	// Get a new context
 	if (!eventNewContext(psContext->psCode, psContext->release, &psNew))
 	{
-		return FALSE;
+		return false;
 	}
 
 	// Now copy the values over
@@ -574,7 +542,7 @@ BOOL eventCopyContext(SCRIPT_CONTEXT *psContext, SCRIPT_CONTEXT **ppsNew)
 
 	*ppsNew = psNew;
 
-	return TRUE;
+	return true;
 }
 
 
@@ -603,7 +571,7 @@ BOOL eventRunContext(SCRIPT_CONTEXT *psContext, UDWORD time)
 			{
 				if (!interpRunScript(psContext,	IRT_EVENT, event, 0))
 				{
-					return FALSE;
+					return false;
 				}
 			}
 			else
@@ -611,17 +579,16 @@ BOOL eventRunContext(SCRIPT_CONTEXT *psContext, UDWORD time)
 				if (!eventInitTrigger(&psTrigger, psContext, event,
 						psCode->pEventLinks[event], time))
 				{
-					return FALSE;
+					return false;
 				}
 				eventAddTrigger(psTrigger);
 				DB_TRACE(("added "),2);
 				DB_TRIGINF(psTrigger, 2);
-				DB_TRACE(("\n"),2);
 			}
 		}
 	}
 
-	return TRUE;
+	return true;
 }
 
 // Remove an object from the event system
@@ -724,7 +691,7 @@ void eventRemoveContext(SCRIPT_CONTEXT *psContext)
 		}
 		else
 		{
-			ASSERT( FALSE, "eventRemoveContext: context not found" );
+			ASSERT( false, "eventRemoveContext: context not found" );
 		}
 	}
 }
@@ -743,13 +710,13 @@ BOOL eventGetContextVal(SCRIPT_CONTEXT *psContext, UDWORD index, INTERP_VAL **pp
 	}
 	if (!psChunk)
 	{
-		ASSERT( FALSE, "eventGetContextVal: Variable not found" );
-		return FALSE;
+		ASSERT( false, "eventGetContextVal: Variable not found" );
+		return false;
 	}
 
 	*ppsVal = psChunk->asVals + index;
 
-	return TRUE;
+	return true;
 }
 
 // Set a global variable value for a context
@@ -759,13 +726,13 @@ BOOL eventSetContextVar(SCRIPT_CONTEXT *psContext, UDWORD index, INTERP_VAL *dat
 
 	if (!eventGetContextVal(psContext, index, &psVal))
 	{
-		return FALSE;
+		return false;
 	}
 
 	if(!interpCheckEquiv(psVal->type, data->type))
 	{
-		ASSERT( FALSE, "eventSetContextVar: Variable type mismatch (var type: %d, data type: %d)", psVal->type, data->type);
-		return FALSE;
+		ASSERT( false, "eventSetContextVar: Variable type mismatch (var type: %d, data type: %d)", psVal->type, data->type);
+		return false;
 	}
 
 	// Store the data
@@ -784,7 +751,7 @@ BOOL eventSetContextVar(SCRIPT_CONTEXT *psContext, UDWORD index, INTERP_VAL *dat
 		memcpy(psVal, data, sizeof(INTERP_VAL));
 	}
 
-	return TRUE;
+	return true;
 }
 
 // Add a trigger to the list in order
@@ -807,9 +774,9 @@ static void eventAddTrigger(ACTIVE_TRIGGER *psTrigger)
 		}
 		else
 		{
-			ACTIVE_TRIGGER	*psCurr, *psPrev = NULL;
+			ACTIVE_TRIGGER *psCurr, *psPrev = NULL;
 
-			for (psCurr = psCallbackList; psCurr && psCurr->type < psTrigger->type;	psCurr = psCurr->psNext)
+			for(psCurr = psCallbackList; psCurr && psCurr->type < psTrigger->type; psCurr = psCurr->psNext)
 			{
 				psPrev = psCurr;
 			}
@@ -829,10 +796,9 @@ static void eventAddTrigger(ACTIVE_TRIGGER *psTrigger)
 	}
 	else
 	{
-		ACTIVE_TRIGGER	*psCurr, *psPrev = NULL;
+		ACTIVE_TRIGGER *psCurr, *psPrev = NULL;
 
-		for(psCurr=psTrigList; psCurr && psCurr->testTime < testTime;
-			psCurr=psCurr->psNext)
+		for(psCurr = psTrigList; psCurr && psCurr->testTime < testTime; psCurr = psCurr->psNext)
 		{
 			psPrev = psCurr;
 		}
@@ -856,7 +822,7 @@ static BOOL eventInitTrigger(ACTIVE_TRIGGER **ppsTrigger, SCRIPT_CONTEXT *psCont
 		"eventAddTrigger: Trigger out of range" );
 	if (trigger == -1)
 	{
-		return FALSE;
+		return false;
 	}
 
 	// Get a trigger object
@@ -864,7 +830,7 @@ static BOOL eventInitTrigger(ACTIVE_TRIGGER **ppsTrigger, SCRIPT_CONTEXT *psCont
 	if (psNewTrig == NULL)
 	{
 		debug(LOG_ERROR, "eventInitTrigger: Out of memory");
-		return FALSE;
+		return false;
 	}
 
 	// Initialise the trigger
@@ -880,7 +846,7 @@ static BOOL eventInitTrigger(ACTIVE_TRIGGER **ppsTrigger, SCRIPT_CONTEXT *psCont
 
 	*ppsTrigger = psNewTrig;
 
-	return TRUE;
+	return true;
 }
 
 // Load a trigger into the system from a save game
@@ -901,7 +867,7 @@ BOOL eventLoadTrigger(UDWORD time, SCRIPT_CONTEXT *psContext,
 	{
 		debug( LOG_ERROR, "eventLoadTrigger: out of memory" );
 		abort();
-		return FALSE;
+		return false;
 	}
 
 	// Initialise the trigger
@@ -916,7 +882,7 @@ BOOL eventLoadTrigger(UDWORD time, SCRIPT_CONTEXT *psContext,
 
 	eventAddTrigger(psNewTrig);
 
-	return TRUE;
+	return true;
 }
 
 // add a TR_PAUSE trigger to the event system.
@@ -934,7 +900,7 @@ BOOL eventAddPauseTrigger(SCRIPT_CONTEXT *psContext, UDWORD event, UDWORD offset
 	if (psNewTrig == NULL)
 	{
 		debug(LOG_ERROR, "eventAddPauseTrigger: Out of memory");
-		return FALSE;
+		return false;
 	}
 
 	// figure out what type of trigger will go into the system when the pause
@@ -969,9 +935,9 @@ BOOL eventAddPauseTrigger(SCRIPT_CONTEXT *psContext, UDWORD event, UDWORD offset
 	psAddedTriggers = psNewTrig;
 
 	// tell the event system the trigger has been changed
-	triggerChanged = TRUE;
+	triggerChanged = true;
 
-	return TRUE;
+	return true;
 }
 
 
@@ -988,39 +954,31 @@ static void eventFreeTrigger(ACTIVE_TRIGGER *psTrigger)
 
 
 // Activate a callback trigger
-void eventFireCallbackTrigger(int callback)
+void eventFireCallbackTrigger(TRIGGER_TYPE callback)
 {
-	ACTIVE_TRIGGER	*psPrev,*psCurr,*psNext;
+	ACTIVE_TRIGGER	*psPrev = NULL, *psCurr, *psNext;
 	TRIGGER_DATA	*psTrigDat;
-	BOOL			fired;
-
-	// FIXME temporary check
-	// FIXME This needs to be removed as soon as we are sure the transport comes and we don't have any more problems with the VIDEO_QUIT callback !!
-	if(callback == 15)
-		debug(LOG_SCRIPT, "eventFireCallbackTrigger: processing CALL_VIDEO_QUIT");
+	BOOL		fired;
 
 	if (interpProcessorActive())
 	{
-		ASSERT( FALSE,
-			"eventFireCallbackTrigger: script interpreter is already running" );
+		ASSERT(false, "eventFireCallbackTrigger: script interpreter is already running");
 		return;
 	}
 
 	//this can be called from eventProcessTriggers and so will wipe out all the current added ones
 	//psAddedTriggers = NULL;
-	psPrev = NULL;
-	for(psCurr = psCallbackList; psCurr && psCurr->type <= (int)callback; psCurr = psNext)
+	for (psCurr = psCallbackList; psCurr && psCurr->type <= (int)callback; psCurr = psNext)
 	{
 		psNext = psCurr->psNext;
 		if (psCurr->type == (int)callback)
 		{
 			// see if the callback should be fired
-			fired = FALSE;
+			fired = false;
 			if (psCurr->type != TR_PAUSE)
 			{
-				ASSERT( psCurr->trigger >= 0 &&
-						psCurr->trigger < psCurr->psContext->psCode->numTriggers,
-					"eventFireCallbackTrigger: invalid trigger number" );
+				ASSERT(psCurr->trigger >= 0 && psCurr->trigger < psCurr->psContext->psCode->numTriggers,
+				       "eventFireCallbackTrigger: invalid trigger number");
 				psTrigDat = psCurr->psContext->psCode->psTriggerData + psCurr->trigger;
 			}
 			else
@@ -1029,32 +987,31 @@ void eventFireCallbackTrigger(int callback)
 			}
 			if (psTrigDat && psTrigDat->code)
 			{
-				if (!interpRunScript(psCurr->psContext, IRT_TRIGGER,
-							psCurr->trigger, 0))
+				if (!interpRunScript(psCurr->psContext, IRT_TRIGGER, psCurr->trigger, 0))
 				{
-					ASSERT( FALSE, "eventFireCallbackTrigger: trigger %s: code failed",
-							eventGetTriggerID(psCurr->psContext->psCode, psCurr->trigger) );
+					ASSERT(false, "eventFireCallbackTrigger: trigger %s: code failed",
+					       eventGetTriggerID(psCurr->psContext->psCode, psCurr->trigger));
 					psPrev = psCurr;
 					continue;
 				}
 				if (!stackPopParams(1, VAL_BOOL, &fired))
 				{
-					ASSERT( FALSE, "eventFireCallbackTrigger: trigger %s: code failed",
-							eventGetTriggerID(psCurr->psContext->psCode, psCurr->trigger) );
+					ASSERT(false, "eventFireCallbackTrigger: trigger %s: code failed",
+					       eventGetTriggerID(psCurr->psContext->psCode, psCurr->trigger));
 					psPrev = psCurr;
 					continue;
 				}
 			}
 			else
 			{
-				fired = TRUE;
+				fired = true;
 			}
 
 			// run the event
 			if (fired)
 			{
 				DB_TRIGINF(psCurr,1);
-				DB_TRACE((" fired\n"),1);
+				DB_TRACE(" fired",1);
 
 				// remove the trigger from the list
 				if (psPrev == NULL)
@@ -1066,13 +1023,12 @@ void eventFireCallbackTrigger(int callback)
 					psPrev->psNext = psNext;
 				}
 
-				triggerChanged = FALSE;
+				triggerChanged = false;
 				psFiringTrigger = psCurr;
-				if (!interpRunScript(psCurr->psContext,
-								IRT_EVENT, psCurr->event, psCurr->offset)) // this could set triggerChanged
+				if (!interpRunScript(psCurr->psContext, IRT_EVENT, psCurr->event, psCurr->offset)) // this could set triggerChanged
 				{
-					ASSERT( FALSE, "eventFireCallbackTrigger: event %s: code failed",
-						eventGetEventID(psCurr->psContext->psCode, psCurr->event) );
+					ASSERT(false, "eventFireCallbackTrigger: event %s: code failed",
+					       eventGetEventID(psCurr->psContext->psCode, psCurr->event));
 				}
 				if (triggerChanged)
 				{
@@ -1111,11 +1067,10 @@ void eventFireCallbackTrigger(int callback)
 // Run a trigger
 static BOOL eventFireTrigger(ACTIVE_TRIGGER *psTrigger)
 {
-//	TRIGGER_DATA	*psTrigData;
 	BOOL			fired;
 	INTERP_VAL		sResult;
 
-	fired = FALSE;
+	fired = false;
 
 
 	// If this is a code trigger see if it fires
@@ -1125,48 +1080,45 @@ static BOOL eventFireTrigger(ACTIVE_TRIGGER *psTrigger)
 		if (!interpRunScript(psTrigger->psContext,
 						IRT_TRIGGER, psTrigger->trigger, 0))
 		{
-			ASSERT( FALSE, "eventFireTrigger: trigger %s: code failed",
+			ASSERT( false, "eventFireTrigger: trigger %s: code failed",
 					eventGetTriggerID(psTrigger->psContext->psCode, psTrigger->trigger) );
-			return FALSE;
+			return false;
 		}
 		// Get the result
 		sResult.type = VAL_BOOL;
 		if (!stackPopType(&sResult))
 		{
-			return FALSE;
+			return false;
 		}
 		fired = sResult.v.bval;
 	}
 	else
 	{
-		fired = TRUE;
+		fired = true;
 	}
 
 	// If it fired run the event
 	if (fired)
 	{
 		DB_TRIGINF(psTrigger,1);
-		DB_TRACE((" fired\n"),1);
-		if (!interpRunScript(psTrigger->psContext,
-						IRT_EVENT, psTrigger->event, psTrigger->offset))
+		DB_TRACE(" fired", 1);
+		if (!interpRunScript(psTrigger->psContext, IRT_EVENT, psTrigger->event, psTrigger->offset))
 		{
-			DB_TRACE(("\n\n********  script failed  *********\n"), 0);
+			DB_TRACE(("********  script failed  *********"), 0);
 			DB_TRIGINF(psTrigger,0);
-			DB_TRACE(("\n"),0);
-			ASSERT( FALSE, "eventFireTrigger: event %s: code failed",
-				eventGetEventID(psTrigger->psContext->psCode, psTrigger->event) );
-			return FALSE;
+			ASSERT(false, "eventFireTrigger: event %s: code failed",
+			       eventGetEventID(psTrigger->psContext->psCode, psTrigger->event));
+			return false;
 		}
 	}
 #ifdef DEBUG
 	else
 	{
 		DB_TRIGINF(psTrigger,3);
-		DB_TRACE(("\n"),3);
 	}
 #endif
 
-	return TRUE;
+	return true;
 }
 
 
@@ -1187,7 +1139,7 @@ void eventProcessTriggers(UDWORD currTime)
 		// Store the trigger so that I can tell if the event changes
 		// the trigger assigned to it
 		psFiringTrigger = psCurr;
-		triggerChanged = FALSE;
+		triggerChanged = false;
 
 		// Run the trigger
 		if (eventFireTrigger(psCurr))	// This might set triggerChanged
@@ -1298,7 +1250,7 @@ BOOL eventSetTrigger(void)
 
 	if (!stackPopParams(2, VAL_EVENT, &event, VAL_TRIGGER, &trigger))
 	{
-		return FALSE;
+		return false;
 	}
 
 #ifdef REALLY_DEBUG_THIS
@@ -1311,7 +1263,7 @@ BOOL eventSetTrigger(void)
 	psContext = psFiringTrigger->psContext;
 	if (psFiringTrigger->event == event)
 	{
-		triggerChanged = TRUE;
+		triggerChanged = true;
 	}
 	else
 	{
@@ -1319,73 +1271,6 @@ BOOL eventSetTrigger(void)
 		eventRemoveTriggerFromList(&psTrigList, psContext, event, &trigger);
 		eventRemoveTriggerFromList(&psCallbackList, psContext, event, &trigger);
 		eventRemoveTriggerFromList(&psAddedTriggers, psContext, event, &trigger);
-/*		if (psTrigList &&
-			psTrigList->event == event &&
-			psTrigList->psContext == psContext)
-		{
-			if (psTrigList->type == TR_PAUSE)
-			{
-				// pause trigger, don't remove it,
-				// just note the type for when the pause finishes
-				psTrigList->trigger = (SWORD)trigger;
-				trigger = -1;
-			}
-			else
-			{
-				psCurr = psTrigList;
-				psTrigList = psTrigList->psNext;
-				free(psCurr);
-			}
-		}
-		else
-		{
-			for(psCurr=psTrigList; psCurr; psCurr=psCurr->psNext)
-			{
-				if (psCurr->event == event &&
-					psTrigList->psContext == psContext)
-				{
-					break;
-				}
-				psPrev = psCurr;
-			}
-			if (psCurr && psCurr->type == TR_PAUSE)
-			{
-				// pause trigger, don't remove it,
-				// just note the type for when the pause finishes
-				psCurr->trigger = (SWORD)trigger;
-				trigger = -1;
-			}
-			else if (psCurr)
-			{
-				psPrev->psNext = psCurr->psNext;
-				free(psCurr);
-			}
-		}
-		// Remove any old callback trigger from the list
-		if (psCallbackList && psCallbackList->event == event &&
-			psCallbackList->psContext == psContext)
-		{
-			psCurr = psCallbackList;
-			psCallbackList = psCallbackList->psNext;
-			free(psCurr);
-		}
-		else
-		{
-			for(psCurr=psCallbackList; psCurr; psCurr=psCurr->psNext)
-			{
-				if (psCurr->psContext == psContext &&
-					psCurr->event == event)
-				{
-					break;
-				}
-				psPrev = psCurr;
-			}
-			if (psCurr)
-			{
-				psPrev->psNext = psCurr->psNext;
-				free(psCurr);
-			}
-		}*/
 	}
 
 	// Create a new trigger if necessary
@@ -1394,13 +1279,13 @@ BOOL eventSetTrigger(void)
 		if (!eventInitTrigger(&psTrigger, psFiringTrigger->psContext,
 							event, trigger, updateTime))
 		{
-			return FALSE;
+			return false;
 		}
 		psTrigger->psNext = psAddedTriggers;
 		psAddedTriggers = psTrigger;
 	}
 
-	return TRUE;
+	return true;
 }
 
 
@@ -1411,7 +1296,7 @@ BOOL eventSetTraceLevel(void)
 
 	if (!stackPopParams(1, VAL_INT, &level))
 	{
-		return FALSE;
+		return false;
 	}
 
 	if (level < 0)
@@ -1425,5 +1310,5 @@ BOOL eventSetTraceLevel(void)
 
 	eventTraceLevel = level;
 
-	return TRUE;
+	return true;
 }

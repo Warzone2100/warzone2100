@@ -55,7 +55,7 @@ BOOL	sound_SampleIsFinished( AUDIO_SAMPLE * psSample );
 BOOL	sound_QueueSamplePlaying( void );
 
 void	sound_SetPlayerPos( SDWORD iX, SDWORD iY, SDWORD iZ );
-void	sound_SetPlayerOrientation( SDWORD iX, SDWORD iY, SDWORD iZ );
+void	sound_SetPlayerOrientation(float x, float y, float z);
 void	sound_SetObjectPosition( AUDIO_SAMPLE *psSample );
 
 void *	sound_GetObject( SDWORD iSample );

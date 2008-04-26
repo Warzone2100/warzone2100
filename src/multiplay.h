@@ -95,7 +95,6 @@ extern UBYTE				bDisplayMultiJoiningStatus;	// draw load progress?
 #define CAMP_BASE				1
 #define CAMP_WALLS				2
 
-#define	FORCEEDITPLAYER			0
 #define DEATHMATCHTEMPLATES		4			// game templates are stored in player x.
 #define CAMPAIGNTEMPLATES		5
 
@@ -104,9 +103,9 @@ extern UBYTE				bDisplayMultiJoiningStatus;	// draw load progress?
 #define PING_HI					1200		// this ping is crawlin'.
 #define PING_LIMIT				2000		// if ping is bigger than this, then worry and panic.
 
-#define LEV_LOW					100			// how many points to allocate for res levels???
-#define LEV_MED					400
-#define LEV_HI					700
+#define LEV_LOW					400			// how many points to allocate for res levels???
+#define LEV_MED					700
+#define LEV_HI					1000
 
 #define DIFF_SLIDER_STOPS		20			//max number of stops for the multiplayer difficulty slider
 
@@ -214,5 +213,11 @@ extern BOOL msgStackGetDroid(DROID **ppsDroid);
 
 extern BOOL sendBeacon(int32_t locX, int32_t locY, int32_t forPlayer, int32_t sender, const char* pStr);
 extern BOOL msgStackFireTop(void);
+
+extern	bool multiplayPlayersReady	(bool bNotifyStatus);
+extern	void startMultiplayerGame	(void);
+extern	void resetReadyStatus		(bool bSendOptions);
+
+extern	BOOL bPlayerReadyGUI[MAX_PLAYERS];
 
 #endif // __INCLUDED_SRC_MULTIPLAY_H__

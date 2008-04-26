@@ -28,6 +28,7 @@
   08 US 01 0		# Height of first corner
   09 US 01 0		# Visibility bits
   0a US 01 0		# Info bits
+  0b US 01 0		# Rotation
   FF EN 00 -
 0b GR 00 -		# GATEWAY GROUP
   01 US 04 -		# (x1, y1, x2, y2) coordinates
@@ -211,12 +212,4 @@
     03 US 01 0		# currentPtsAdded
     04 SI 01 -1		# Object being rearmed, if any, -1 if none
     FF EN 00 -
-  FF EN 00 -
-10 GR 00 -		# GATEWAY ZONE LINES
-  01 US 01 0		# Size of binary blob.
-  02 US 01 -		# Ugly binary blob of data. Someone please decode me!
-  FF EN 00 -
-11 GR 00 -		# GATEWAY EQUIVALENCY ZONES
-  01 US 01 0		# Size of binary blob.
-  02 US 01 -		# Ugly binary blob of data. Someone please decode me!
   FF EN 00 -

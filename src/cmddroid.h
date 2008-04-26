@@ -63,6 +63,9 @@ extern void cmdDroidUpdateKills(DROID *psKiller, float experienceInc);
 // get the level of a droids commander, if any
 extern unsigned int cmdGetCommanderLevel(DROID *psDroid);
 
+// returns true if a unit in question has is assigned to a commander
+extern bool hasCommander(DROID	*psDroid);
+
 // Select all droids assigned to the passed in command droids
 extern void	cmdSelectSubDroids(DROID *psDroid);
 

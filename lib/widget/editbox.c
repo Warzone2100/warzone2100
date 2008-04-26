@@ -30,6 +30,7 @@
 #include "form.h"
 // FIXME Direct iVis implementation include!
 #include "lib/ivis_common/rendmode.h"
+#include "lib/ivis_common/textdraw.h"
 #include "scrap.h"
 
 
@@ -59,7 +60,7 @@ W_EDITBOX* editBoxCreate(const W_EDBINIT* psInit)
 
 	if (psInit->style & ~(WEDB_PLAIN | WIDG_HIDDEN | WEDB_DISABLED))
 	{
-		ASSERT( FALSE, "Unknown edit box style" );
+		ASSERT( false, "Unknown edit box style" );
 		return NULL;
 	}
 
@@ -217,7 +218,7 @@ static void putSelection(char *pBuffer, UDWORD *pPos)
 	if (scraplen > 0 && scraplen < WIDG_MAXSTR-2)
 	{
 		strlcpy(pBuffer, scrap, scraplen);
-		*pPos = scraplen;
+		*pPos = scraplen - 1;
 	}
 }
 
@@ -228,8 +229,7 @@ static void delCharLeft(char *pBuffer, UDWORD *pPos)
 	char	*pSrc, *pDest;
 	UDWORD	len, count;
 
-	ASSERT( *pPos <= strlen(pBuffer),
-		"delCharLeft: Invalid insertion point" );
+	ASSERT(*pPos <= strlen(pBuffer), "Invalid insertion point");
 
 	/* Can't delete if we are at the start of the string */
 	if (*pPos == 0)
@@ -259,8 +259,7 @@ static void delCharRight(char *pBuffer, UDWORD *pPos)
 	char	*pSrc, *pDest;
 	UDWORD	len, count;
 
-	ASSERT( *pPos <= strlen(pBuffer),
-		"delCharLeft: Invalid insertion point" );
+	ASSERT(*pPos <= strlen(pBuffer), "Invalid insertion point" );
 
 	len = strlen(pBuffer);
 
@@ -390,7 +389,7 @@ void editBoxRun(W_EDITBOX *psWidget, W_CONTEXT *psContext)
 	iV_SetFont(psWidget->FontID);
 
 	/* Loop through the characters in the input buffer */
-	done = FALSE;
+	done = false;
 	for (key = inputGetKey(); key != 0 && !done; key = inputGetKey())
 	{
 		/* Deal with all the control keys, assume anything else is a printable character */
@@ -681,7 +680,7 @@ void editBoxDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *
 {
 	W_EDITBOX	*psEdBox;
 	SDWORD		x0,y0,x1,y1, fx,fy, cx,cy;
-	int CurrFontID;
+	enum iV_fonts CurrFontID;
 	char		ch, *pInsPoint, *pPrint;
 #if CURSOR_BLINK
 	BOOL		blink;

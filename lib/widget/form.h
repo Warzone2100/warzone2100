@@ -28,7 +28,7 @@
 #define FORM_BASE \
 	WIDGET_BASE;				/* The common widget data */ \
 	\
-	BOOL		disableChildren;	/* Disable all child widgets if TRUE */ \
+	BOOL		disableChildren;	/* Disable all child widgets if true */ \
 	UWORD		Ax0,Ay0,Ax1,Ay1; 	/* Working coords for animations. */ \
 	UDWORD		animCount; 			/* Animation counter. */ \
 	UDWORD		startTime;			/* Animation start time */ \

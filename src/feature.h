@@ -26,9 +26,6 @@
 
 #include "objectdef.h"
 
-#define ONEMIN			(1000 * 60)
-#define WRECK_LIFETIME	(0)	//they're just not there anymore!!!!! Ye ha!
-
 /* The statistics for the features */
 extern FEATURE_STATS	*asFeatureStats;
 extern UDWORD			numFeatureStats;
@@ -65,5 +62,7 @@ wreckage to clear*/
 extern FEATURE	* checkForWreckage(DROID *psDroid);
 
 extern float featureDamage(FEATURE *psFeature, UDWORD damage, UDWORD weaponClass, UDWORD weaponSubClass, HIT_SIDE impactSide);
+
+extern void     featureInitVars(void);
 
 #endif // __INCLUDED_SRC_FEATURE_H__

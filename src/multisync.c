@@ -50,6 +50,7 @@
 #include "frontend.h"								// for titlemode
 #include "multistat.h"
 #include "power.h"									// for power checks
+#include "multirecv.h"
 
 // ////////////////////////////////////////////////////////////////////////////
 // function definitions
@@ -102,10 +103,10 @@ static BOOL okToSend(void)
 	//update checks	& go no further if any exceeded.
 	if (NETgetRecentBytesSent() + NETgetRecentBytesRecvd() >= MAX_BYTESPERSEC)
 	{
-		return FALSE;
+		return false;
 	}
 
-	return TRUE;
+	return true;
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -124,7 +125,7 @@ BOOL sendCheck(void)
 	{
 		if(isHumanPlayer(i) && ingame.JoiningInProgress[i])
 		{
-			return TRUE;
+			return true;
 		}
 	}
 
@@ -148,7 +149,7 @@ BOOL sendCheck(void)
 	{
 		sendDroidCheck();
 	}
-	return TRUE;
+	return true;
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -222,10 +223,10 @@ static BOOL sendDroidCheck(void)
 	// Only send a struct send if not done recently.
 	if (gameTime - lastSent < DROID_FREQUENCY)
 	{
-		return TRUE;
+		return true;
 	}
 
-	debug(LOG_MULTISYNC, "sendDroidCheck at tick %u", (unsigned int)gameTime);
+	debug(LOG_SYNC, "sent droid check at tick %u", (unsigned int)gameTime);
 
 	lastSent = gameTime;
 
@@ -319,7 +320,7 @@ BOOL recvDroidCheck()
 	uint8_t		count;
 	int		i;
 
-	debug(LOG_MULTISYNC, "recvDroidCheck");
+	debug(LOG_SYNC, "recvDroidCheck");
 
 	NETbeginDecode(NET_CHECK_DROID);
 
@@ -395,7 +396,7 @@ BOOL recvDroidCheck()
 			if (!IdToDroid(ref, player, &pD))
 			{
 				NETlogEntry("Recvd Unknown droid info. val=player",0,player);
-				debug(LOG_MULTISYNC, "Received checking info for an unknown (as yet) droid. player:%d ref:%d", player, ref);
+				debug(LOG_SYNC, "Received checking info for an unknown (as yet) droid. player:%d ref:%d", player, ref);
 				continue;
 			}
 
@@ -415,11 +416,11 @@ BOOL recvDroidCheck()
 			 && pD->sDisplay.screenY < pie_GetVideoBufferHeight()
 			 && ingame.PingTimes[player] < PING_LIMIT)
 			{
-				onscreen = TRUE;
+				onscreen = true;
 			}
 			else
 			{
-				onscreen = FALSE;
+				onscreen = false;
 			}
 
 			// Update the droid
@@ -432,7 +433,7 @@ BOOL recvDroidCheck()
 				offscreenUpdate(pD, body, x, y, fx, fy, direction, order);
 			}
 
-			debug(LOG_MULTISYNC, "difference in position for droid %u; was (%d, %d); did %s update",
+			debug(LOG_SYNC, "difference in position for droid %u; was (%d, %d); did %s update",
 			      (unsigned int)pD->id, (int)x - pD->pos.x, (int)y - pD->pos.y,
 			      onscreen ? "onscreen" : "offscreen");
 
@@ -454,7 +455,7 @@ BOOL recvDroidCheck()
 
 	NETend();
 
-	return TRUE;
+	return true;
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -471,9 +472,9 @@ static void highLevelDroidUpdate(DROID *psDroid,UDWORD x, UDWORD y,
 	// remote droid is attacking, not here tho!
 	if(order == DORDER_ATTACK && psDroid->order != DORDER_ATTACK && psTarget)
 	{
-		turnOffMultiMsg(TRUE);
+		turnOffMultiMsg(true);
 		orderDroidObj(psDroid, DORDER_ATTACK, psTarget);
-		turnOffMultiMsg(FALSE);
+		turnOffMultiMsg(false);
 	}
 
 	// secondary orders.
@@ -489,9 +490,9 @@ static void highLevelDroidUpdate(DROID *psDroid,UDWORD x, UDWORD y,
 		if(  (abs(x- psDroid->pos.x)>(TILE_UNITS*2))		// if more than 2 tiles wrong.
 		   ||(abs(y- psDroid->pos.y)>(TILE_UNITS*2)) )
 		{
-			turnOffMultiMsg(TRUE);
+			turnOffMultiMsg(true);
 			orderDroidLoc(psDroid, DORDER_MOVE,x,y);
-			turnOffMultiMsg(FALSE);
+			turnOffMultiMsg(false);
 		}
 	}
 }
@@ -509,14 +510,14 @@ static void onscreenUpdate(DROID *psDroid,
 {
 
 	BASE_OBJECT *psClickedOn;
-	BOOL		bMouseOver = FALSE;
+	BOOL		bMouseOver = false;
 
 	psClickedOn = mouseTarget();
 	if( psClickedOn != NULL && psClickedOn->type == OBJ_DROID)
 	{
 		if(psClickedOn->id == psDroid->id && mouseDown(MOUSE_RMB))
 		{
-			bMouseOver = TRUE;						// override, so you dont see the updates.
+			bMouseOver = true;						// override, so you dont see the updates.
 		}
 	}
 
@@ -567,21 +568,21 @@ static void offscreenUpdate(DROID *psDroid,
 			{
 				oldx = psDroid->pos.x;
 				oldy = psDroid->pos.y;
-				debug(LOG_MULTISYNC, "Jumping droid %d from (%u,%u) to (%u,%u)", (int)psDroid->id, oldx, oldy, (UDWORD)fx, (UDWORD)fy);
+				debug(LOG_SYNC, "Jumping droid %d from (%u,%u) to (%u,%u)", (int)psDroid->id, oldx, oldy, (UDWORD)fx, (UDWORD)fy);
 
 				psDroid->sMove.fx = fx;							//update x
 				psDroid->sMove.fy = fy;							//update y
 
 				psDroid->pos.x		 = (UWORD) fx;					//update move progress
 				psDroid->pos.y		 = (UWORD) fy;
-				gridMoveObject((BASE_OBJECT *)psDroid, (SDWORD)oldx,(SDWORD)oldy);
+				gridMoveDroid(psDroid, (SDWORD)oldx,(SDWORD)oldy);
 
 				psDroid->direction = dir % 360;		// update rotation
 
 				// reroute the droid.
-				turnOffMultiMsg(TRUE);
+				turnOffMultiMsg(true);
 				moveDroidTo(psDroid, psDroid->sMove.DestinationX,psDroid->sMove.DestinationY);
-				turnOffMultiMsg(FALSE);
+				turnOffMultiMsg(false);
 			}
 		}
 	}
@@ -589,10 +590,10 @@ static void offscreenUpdate(DROID *psDroid,
 	{
 		oldx = psDroid->pos.x;
 		oldy = psDroid->pos.y;
-		debug(LOG_MULTISYNC, "Moving droid %d from (%u,%u) to (%u,%u)", (int)psDroid->id, oldx, oldy, (UDWORD)fx, (UDWORD)fy);
+		debug(LOG_SYNC, "Moving droid %d from (%u,%u) to (%u,%u)", (int)psDroid->id, oldx, oldy, (UDWORD)fx, (UDWORD)fy);
 		psDroid->pos.x		 = (UWORD)x;						//update x
 		psDroid->pos.y		 = (UWORD)y;						//update y
-		gridMoveObject((BASE_OBJECT *)psDroid, (SDWORD)oldx,(SDWORD)oldy);
+		gridMoveDroid(psDroid, (SDWORD)oldx,(SDWORD)oldy);
 		psDroid->direction = dir % 360;				// update rotation
 	}
 
@@ -602,9 +603,9 @@ static void offscreenUpdate(DROID *psDroid,
 	if ((order == DORDER_NONE || order == DORDER_GUARD)
 	    && !(psDroid->order == DORDER_NONE || psDroid->order == DORDER_GUARD))
 	{
-		turnOffMultiMsg(TRUE);
+		turnOffMultiMsg(true);
 		moveStopDroid(psDroid);
-		turnOffMultiMsg(FALSE);
+		turnOffMultiMsg(false);
 	}
 
 	// snap droid(if on ground)  to terrain level at x,y.
@@ -693,7 +694,7 @@ static BOOL sendStructureCheck(void)
 
 	if ((gameTime - lastSent) < STRUCT_FREQUENCY)	// Only send a struct send if not done recently
 	{
-		return TRUE;
+		return true;
 	}
 
 	lastSent = gameTime;
@@ -706,7 +707,7 @@ static BOOL sendStructureCheck(void)
 		NETbeginEncode(NET_CHECK_STRUCT, NET_ALL_PLAYERS);
 			NETuint8_t(&pS->player);
 			NETuint32_t(&pS->id);
-			NETuint16_t(&pS->body);
+			NETuint32_t(&pS->body);
 			NETuint32_t(&pS->pStructureType->ref);
 			NETuint16_t(&pS->pos.x);
 			NETuint16_t(&pS->pos.y);
@@ -735,7 +736,7 @@ static BOOL sendStructureCheck(void)
 		NETend();
 	}
 
-	return TRUE;
+	return true;
 }
 
 // receive checking info about a structure and update local world state
@@ -743,18 +744,18 @@ BOOL recvStructureCheck()
 {
 	STRUCTURE		*pS;
 	STRUCTURE_STATS	*psStats;
-	BOOL			hasCapacity = TRUE;
+	BOOL			hasCapacity = true;
 	int				i, j;
 	float			direction;
-	uint8_t			player, ourCapacity, actualCapacity;
-	uint16_t		body;
+	uint8_t			player, ourCapacity;
+	uint32_t		body;
 	uint16_t		x, y, z;
 	uint32_t		ref, type;
 
 	NETbeginDecode(NET_CHECK_STRUCT);
 		NETuint8_t(&player);
 		NETuint32_t(&ref);
-		NETuint16_t(&body);
+		NETuint32_t(&body);
 		NETuint32_t(&type);
 		NETuint16_t(&x);
 		NETuint16_t(&y);
@@ -765,7 +766,7 @@ BOOL recvStructureCheck()
 		{
 			debug(LOG_ERROR, "Bad NET_CHECK_STRUCT received!");
 			NETend();
-			return FALSE;
+			return false;
 		}
 
 		// If the structure exists our job is easy
@@ -812,11 +813,11 @@ BOOL recvStructureCheck()
 					if (psStats->type == REF_WALLCORNER)
 					{
 						NETlogEntry("scheck: fixed wall->cornerwall", 0, 0);
-						removeStruct(pS, TRUE);
+						removeStruct(pS, true);
 
-						powerCalc(FALSE);
-						pS = buildStructure((STRUCTURE_STATS * )psStats, x, y, player, TRUE);
-						powerCalc(TRUE);
+						powerCalc(false);
+						pS = buildStructure((STRUCTURE_STATS * )psStats, x, y, player, true);
+						powerCalc(true);
 
 						if (pS)
 						{
@@ -825,14 +826,14 @@ BOOL recvStructureCheck()
 						else
 						{
 							NETlogEntry("scheck: failed to upgrade wall!", 0, player);
-							return FALSE;
+							return false;
 						}
 					}
 				}
 				else
 				{
 					NETlogEntry("scheck:Tile did not have correct type or player val=player",0,player);
-					return FALSE;
+					return false;
 			    }
 			}
 			// Nothing exists there so lets get building!
@@ -840,9 +841,9 @@ BOOL recvStructureCheck()
 			{
 				NETlogEntry("scheck: didn't find structure at all, building it",0,0);
 
-				powerCalc(FALSE);
-				pS = buildStructure((STRUCTURE_STATS *) psStats, x, y, player, TRUE);
-				powerCalc(TRUE);
+				powerCalc(false);
+				pS = buildStructure((STRUCTURE_STATS *) psStats, x, y, player, true);
+				powerCalc(true);
 			}
 		}
 
@@ -874,19 +875,21 @@ BOOL recvStructureCheck()
 					j = powerModuleStat;
 					break;
 				default:
-					hasCapacity = FALSE;
+					hasCapacity = false;
 					break;
 			}
 
 			// So long as the struct has a capacity fetch it from the packet
 			if (hasCapacity)
 			{
+				uint8_t actualCapacity = 0;
+
 				NETuint8_t(&actualCapacity);
-				
+
 				// If our capacity is different upgrade ourself
 				for (; ourCapacity < actualCapacity; ourCapacity++)
 				{
-					buildStructure(&asStructureStats[j], pS->pos.x, pS->pos.y, pS->player, FALSE);
+					buildStructure(&asStructureStats[j], pS->pos.x, pS->pos.y, pS->player, false);
 
 					// Check it is finished
 					if (pS && pS->status != SS_BUILT)
@@ -900,7 +903,7 @@ BOOL recvStructureCheck()
 		}
 
 	NETend();
-	return TRUE;
+	return true;
 }
 
 
@@ -921,7 +924,7 @@ static BOOL sendPowerCheck()
 	// Only send if not done recently
 	if (gameTime - lastsent < POWER_FREQUENCY)
 	{
-		return TRUE;
+		return true;
 	}
 
 	lastsent = gameTime;
@@ -945,17 +948,19 @@ BOOL recvPowerCheck()
 	if (player >= MAX_PLAYERS)
 	{
 		debug(LOG_ERROR, "Bad NET_CHECK_POWER packet: player is %d", (int)player);
-		return FALSE;
+		debug(LOG_ERROR, "Bad NET_CHECK_POWER packet: player is %d : %s", 
+		      (int)player, isHumanPlayer(player) ? "Human" : "AI");
+		return false;
 	}
 
 	power2 = getPower(player);
 	if (power != power2)
 	{
-		debug(LOG_NET, "NET_CHECK_POWER: Adjusting power for player %d from %u to %u",
-		      (int)player, power2, power);
+		debug(LOG_NET, "NET_CHECK_POWER: Adjusting power for player %d (%s) from %u to %u",
+		      (int)player, isHumanPlayer(player) ? "Human" : "AI", power2, power);
 		setPower(player, power);
 	}
-	return TRUE;
+	return true;
 }
 
 // ////////////////////////////////////////////////////////////////////////
@@ -965,7 +970,7 @@ BOOL sendScoreCheck(void)
 {
 	static UDWORD	lastsent = 0;
 	uint8_t			i;
-	BOOL			isData = FALSE;
+	BOOL			isData = false;
 	PLAYERSTATS		stats;
 
 	if (lastsent > gameTime)
@@ -975,13 +980,13 @@ BOOL sendScoreCheck(void)
 
 	if (gameTime - lastsent < SCORE_FREQUENCY)
 	{
-		return TRUE;
+		return true;
 	}
 
 	lastsent = gameTime;
 
 	// Update local score
-	stats = getMultiStats(selectedPlayer, TRUE);
+	stats = getMultiStats(selectedPlayer, true);
 
 	// Add recently scored points
 	stats.recentKills += stats.killsToAdd;
@@ -993,10 +998,10 @@ BOOL sendScoreCheck(void)
 	stats.killsToAdd = stats.scoreToAdd = 0;
 
 	// Store local version
-	setMultiStats(player2dpid[selectedPlayer], stats, TRUE);
+	setMultiStats(player2dpid[selectedPlayer], stats, true);
 
 	// Send score to the ether
-	setMultiStats(player2dpid[selectedPlayer], stats, FALSE);
+	setMultiStats(player2dpid[selectedPlayer], stats, false);
 
 	// Broadcast any changes in other players, but not in FRONTEND!!!
 	if (titleMode != MULTIOPTION && titleMode != MULTILIMIT)
@@ -1007,7 +1012,7 @@ BOOL sendScoreCheck(void)
 		{
 			if (isHumanPlayer(i) && i != selectedPlayer)
 			{
-				stats = getMultiStats(i, TRUE);
+				stats = getMultiStats(i, true);
 
 				if (stats.killsToAdd || stats.scoreToAdd  )
 				{
@@ -1016,7 +1021,7 @@ BOOL sendScoreCheck(void)
 					NETuint32_t(&stats.killsToAdd);
 					NETuint32_t(&stats.scoreToAdd);
 
-					isData = TRUE;
+					isData = true;
 				}
 			}
 		}
@@ -1038,11 +1043,11 @@ BOOL sendScoreCheck(void)
 	{
 		if (isHumanPlayer(i))
 		{
-			setMultiStats(player2dpid[i], getMultiStats(i, FALSE), TRUE);
+			setMultiStats(player2dpid[i], getMultiStats(i, false), true);
 		}
 	}
 
-	return TRUE;
+	return true;
 }
 
 
@@ -1061,7 +1066,7 @@ BOOL recvScoreSubmission()
 			NETuint32_t(&kills);
 			NETuint32_t(&score);
 
-			stats = getMultiStats(player, TRUE);
+			stats = getMultiStats(player, true);
 			stats.killsToAdd += kills;
 			stats.scoreToAdd += score;
 
@@ -1069,7 +1074,7 @@ BOOL recvScoreSubmission()
 		}
 	}
 
-	return TRUE;
+	return true;
 }
 
 // ////////////////////////////////////////////////////////////////////////
@@ -1096,7 +1101,7 @@ static UDWORD averagePing(void)
 
 BOOL sendPing(void)
 {
-	BOOL			isNew = TRUE;
+	BOOL			isNew = true;
 	uint8_t			player = selectedPlayer;
 	int				i;
 	static UDWORD	lastPing = 0;	// Last time we sent a ping
@@ -1110,7 +1115,7 @@ BOOL sendPing(void)
 
 	if (gameTime - lastPing < PING_FREQUENCY)
 	{
-		return TRUE;
+		return true;
 	}
 
 	lastPing = gameTime;
@@ -1164,7 +1169,7 @@ BOOL sendPing(void)
 		PingSend[i] = gameTime2;
 	}
 
-	return TRUE;
+	return true;
 }
 
 // accept and process incoming ping messages.
@@ -1181,7 +1186,7 @@ BOOL recvPing()
 	if (sender >= MAX_PLAYERS)
 	{
 		debug(LOG_ERROR, "Bad NET_PING packet, sender is %d", (int)sender);
-		return FALSE;
+		return false;
 	}
 
 	// If this is a new ping, respond to it
@@ -1189,7 +1194,7 @@ BOOL recvPing()
 	{
 		NETbeginEncode(NET_PING, player2dpid[sender]);
 			// We are responding to a new ping
-			isNew = FALSE;
+			isNew = false;
 
 			NETuint8_t(&us);
 			NETbool(&isNew);
@@ -1205,5 +1210,5 @@ BOOL recvPing()
 		PingSend[sender] = 0;
 	}
 
-	return TRUE;
+	return true;
 }

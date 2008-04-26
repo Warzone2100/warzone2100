@@ -70,13 +70,14 @@
 #define VERSION_33              33              //skirmish save
 #define VERSION_34              34              //saves AI names for multiplayer (.gam file)
 #define VERSION_35              35              //uses the (de)serialization API for saving/loading games and is big-endian instead of little-endian
+#define VERSION_36              36              //saves beacon properly
 
 
-#define CURRENT_VERSION_NUM     VERSION_35
+#define CURRENT_VERSION_NUM     VERSION_36
 
 //used in the loadGame
-#define KEEPOBJECTS				TRUE
-#define FREEMEM					TRUE
+#define KEEPOBJECTS				true
+#define FREEMEM					true
 
 #define VALIDITYKEY_DATE		0x01
 #define VALIDITYKEY_VERSION		0x02
@@ -122,7 +123,7 @@ typedef struct _score_save_header
  */
 /***************************************************************************/
 
-extern BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL UserSaveGame);	// UserSaveGame is TRUE when the save game is not a new level (User Save Game)
+extern BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL UserSaveGame);	// UserSaveGame is true when the save game is not a new level (User Save Game)
 
 /*This just loads up the .gam file to determine which level data to set up - split up
 so can be called in levLoadData when starting a game from a load save game*/

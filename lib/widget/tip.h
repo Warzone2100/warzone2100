@@ -24,6 +24,8 @@
 #ifndef __INCLUDED_LIB_WIDGET_TIP_H__
 #define __INCLUDED_LIB_WIDGET_TIP_H__
 
+#include "lib/ivis_common/textdraw.h"
+
 /* Initialise the tool tip module */
 extern void tipInitialise(void);
 
@@ -38,7 +40,7 @@ extern void tipInitialise(void);
  * x,y,width,height - specify the position of the button to place the
  * tip by.
  */
-extern void tipStart(WIDGET *psSource, const char *pTip, int NewFontID,
+extern void tipStart(WIDGET *psSource, const char *pTip, enum iV_fonts NewFontID,
                      PIELIGHT *pColours, SDWORD x, SDWORD y, UDWORD width, UDWORD height);
 
 /* Stop a tool tip (e.g. if the hilite is lost on a button).

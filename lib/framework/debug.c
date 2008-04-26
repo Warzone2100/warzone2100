@@ -64,15 +64,16 @@ static const char *code_part_names[] = {
 	"sensor",
 	"gui",
 	"map",
-	"savegame",
-	"multisync",
+	"save",
+	"sync",
 	"death",
 	"gateway",
+	"message",
 	"last"
 };
 
 static char inputBuffer[2][MAX_LEN_LOG_LINE];
-static BOOL useInputBuffer1 = FALSE;
+static BOOL useInputBuffer1 = false;
 
 /**
  * Convert code_part names to enum. Case insensitive.
@@ -205,12 +206,12 @@ void debug_init(void)
 
 	STATIC_ASSERT(ARRAY_SIZE(code_part_names) - 1 == LOG_LAST); // enums start at 0
 
-	memset( enabled_debug, FALSE, sizeof(enabled_debug) );
-	enabled_debug[LOG_ERROR] = TRUE;
+	memset( enabled_debug, false, sizeof(enabled_debug) );
+	enabled_debug[LOG_ERROR] = true;
 	inputBuffer[0][0] = '\0';
 	inputBuffer[1][0] = '\0';
 #ifdef DEBUG
-	enabled_debug[LOG_WARNING] = TRUE;
+	enabled_debug[LOG_WARNING] = true;
 #endif
 }
 
@@ -268,7 +269,7 @@ BOOL debug_enable_switch(const char *str)
 		enabled_debug[part] = !enabled_debug[part];
 	}
 	if (part == LOG_ALL) {
-		memset(enabled_debug, TRUE, sizeof(enabled_debug));
+		memset(enabled_debug, true, sizeof(enabled_debug));
 	}
 	return (part != LOG_LAST);
 }
@@ -311,7 +312,7 @@ void dumpLog(int file)
 	dumpEOL(file);
 }
 
-void _debug( code_part part, const char *str, ... )
+void _debug( code_part part, const char *function, const char *str, ... )
 {
 	va_list ap;
 	static char outputBuffer[MAX_LEN_LOG_LINE];
@@ -323,10 +324,10 @@ void _debug( code_part part, const char *str, ... )
 	static unsigned int prev = 0;     /* total on last update */
 
 	va_start(ap, str);
-	vsnprintf(inputBuffer[useInputBuffer1 ? 1 : 0], MAX_LEN_LOG_LINE, str, ap);
+	vsnprintf(outputBuffer, MAX_LEN_LOG_LINE, str, ap);
 	va_end(ap);
-	// Guarantee to nul-terminate
-	inputBuffer[useInputBuffer1 ? 1 : 0][MAX_LEN_LOG_LINE - 1] = '\0';
+
+	snprintf(inputBuffer[useInputBuffer1 ? 1 : 0], MAX_LEN_LOG_LINE, "[%s] %s", function, outputBuffer);
 
 	if ( strncmp( inputBuffer[0], inputBuffer[1], MAX_LEN_LOG_LINE - 1 ) == 0 ) {
 		// Received again the same line

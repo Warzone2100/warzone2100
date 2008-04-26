@@ -46,13 +46,9 @@ typedef	enum	REND_MODE
 					REND_GOURAUD_TEX,
 					REND_ALPHA_TEX,
 					REND_ADDITIVE_TEX,
-					REND_TEXT,
-					REND_ALPHA_TEXT,
 					REND_FLAT,
 					REND_ALPHA_FLAT,
-					REND_ALPHA_ITERATED,
-					REND_FILTER_FLAT,
-					REND_FILTER_ITERATED
+					REND_ALPHA_ITERATED
 				}
 				REND_MODE;
 
@@ -92,7 +88,6 @@ typedef struct	RENDER_STATE
 					SDWORD				texPage;
 					REND_MODE			rendMode;
 					BOOL				keyingOn;
-					COLOUR_MODE			colourCombine;
 					TRANSLUCENCY_MODE	transMode;
 				}
 				RENDER_STATE;
@@ -133,5 +128,11 @@ extern void pie_UpdateFogDistance(float begin, float end);
 extern void pie_SetTexturePage(SDWORD num);
 extern void pie_SetAlphaTest(BOOL keyingOn);
 extern void pie_SetRendMode(REND_MODE rendMode);
+
+extern void pie_InitColourMouse(IMAGEFILE* img, const uint16_t cursorIDs[CURSOR_MAX]);
+extern void pie_SetMouse(CURSOR cursor, bool coloured);
+extern void pie_DrawMouse(unsigned int X, unsigned int Y);
+
+extern void pie_SetTranslucencyMode(TRANSLUCENCY_MODE transMode);
 
 #endif // _pieState_h

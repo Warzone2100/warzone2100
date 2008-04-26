@@ -22,13 +22,7 @@
 #define __INCLUDED_SRC_INTDISPLAY_H__
 
 #include "lib/widget/widget.h"
-#include "lib/widget/widgint.h"
-#include "lib/widget/bar.h"
 #include "lib/widget/form.h"
-#include "lib/widget/label.h"
-#include "lib/widget/button.h"
-#include "lib/widget/editbox.h"
-#include "lib/widget/slider.h"
 #include "intimage.h"
 #include "droid.h"
 
@@ -84,11 +78,11 @@ typedef struct {
 } BUTTON_SURFACE;
 
 
-#define RENDERBUTTON_INUSE(x)  ((x)->InUse=TRUE)
-#define RENDERBUTTON_NOTINUSE(x)  ((x)->InUse=FALSE)
+#define RENDERBUTTON_INUSE(x)  ((x)->InUse=true)
+#define RENDERBUTTON_NOTINUSE(x)  ((x)->InUse=false)
 
-#define RENDERBUTTON_INITIALISED(x)  ((x)->Initialised=TRUE)
-#define RENDERBUTTON_NOTINITIALISED(x)  ((x)->Initialised=FALSE)
+#define RENDERBUTTON_INITIALISED(x)  ((x)->Initialised=true)
+#define RENDERBUTTON_NOTINITIALISED(x)  ((x)->Initialised=false)
 
 #define IsBufferInitialised(x) ((x)->Initialised)
 #define IsBufferInUse(x) ((x)->InUse)
@@ -290,7 +284,7 @@ extern void WidgetAudioCallback(int AudioID);
 extern void intDisplayTransportButton(WIDGET *psWidget, UDWORD xOffset,
 						  UDWORD yOffset, PIELIGHT *pColours);
 /*draws blips on radar to represent Proximity Display*/
-extern void drawRadarBlips(void);
+extern void drawRadarBlips(float pixSizeH, float pixSizeV, int RadarOffsetX, int RadarOffsetY);
 
 /*Displays the proximity messages blips over the world*/
 extern void intDisplayProximityBlips(WIDGET *psWidget, UDWORD xOffset,

@@ -1,4 +1,4 @@
-SUBDIRS=build_tools po win32 lib src data packaging
+SUBDIRS=build_tools po win32 lib src data pkg
 
 all clean: $(SUBDIRS)
 

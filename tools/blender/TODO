@@ -1,0 +1,39 @@
+FIXES:
+- search_depth option for pie_import.py which will keep looking in parent dirs
+	until it finds ./texpages.
+- still need info about one poly referencing the same point multiple times --
+	grim has informed me that this was done to achieve two-sided rendering
+	instead of (or in addition to) the two-sided poly flag. however, while some
+	instances of this do seem to be consistent with grim's explanation, not all
+	are, which can probably be blamed on bugs in the original 3ds max exporter.
+	since one cannot tell for sure whether it's a bug or not, i'm sticking with
+	the current behavior of generating a fresh point for each duplicate found.
+- exporter makes a bad assumption that there should be one base directory to
+	export each pie to. should be coupled with pie type detection with automatic
+	suggestion of export dirs for each individual pie -- the "base directory"
+	would then point to the general mod directory, from which proper
+	subdirectories would be auto-selected based on pie type.
+
+NEW:
+- add a separate validation script and run it implicitly at the start of an
+	export op.
+- add conf file to configure import/export vertex/poly maximums
+- add a pie_animate script to handle teamcolors and animation -- clone of pie
+	slicer's functionality.
+- add snap-to options for dealing with multiple pies with connectors as a
+	separate script.
+- along with snap-to, try to auto-detect the model's function (turret, body,
+	etc) based on file path and name, but always giving the option to select
+- add an import option that allows the user to skip the texpage selection
+	screen if the right texpage was found.
+- allow for blender-registry customization like the importer does.
+- like in the error display gui, show a "displayed lines" scroll indicator in
+	the exporter's pie selection screen
+
+NEW (low priority):
+- add dirty mesh support.
+- add gridlines if possible: determined values to be .512 spacing, 6 lines
+	(the blender -> python api doesn't seem to support setting these yet)
+- add translation support
+
+# vim: textwidth=79

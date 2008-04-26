@@ -1,0 +1,22 @@
+#!/bin/sh
+if [ -f __BUILD_CONFIG.USER ]; then
+    . __BUILD_CONFIG.USER
+fi
+
+if test "x$PREFIX" = "x"; then
+    PREFIX="${HOME}/svn/warzone/devpkg-2.1"
+fi
+
+export PKG_CONFIG_PATH="${PREFIX}/lib/pkgconfig"
+PATH="${PREFIX}/bin:${PATH}"
+
+CFLAGS="-pipe -m32 -march=i686 -O2 -g"
+CXXFLAGS="${CFLAGS}"
+CPPFLAGS="-I${PREFIX}/include"
+LDFLAGS="-L${PREFIX}/lib"
+
+INSTALLER_VERSION="2.0.8.0"
+
+if test "x$CROSSCOMPILETARGET" = "x"; then
+    CROSSCOMPILETARGET=mingw32
+fi

@@ -23,25 +23,32 @@
  * This is where we do texture atlas generation.
  */
 
+#include "lib/ivis_opengl/GLee.h"
+#include "lib/framework/frame.h"
+
+
 #include <string.h>
 
-#include "lib/framework/frame.h"
-#include "lib/ivis_common/pietypes.h"
-#include "lib/ivis_common/piestate.h"
-#include "lib/ivis_common/tex.h"
-#include "lib/ivis_common/piepalette.h"
-#include "lib/ivis_opengl/screen.h"
-#include "display3ddef.h"
-#include "texture.h"
-#include "radar.h"
-
 #include <physfs.h>
-#include <SDL_opengl.h>
+
 #ifdef __APPLE__
 #include <opengl/glu.h>
 #else
 #include <GL/glu.h>
 #endif
+
+#include "lib/framework/file.h"
+
+#include "lib/ivis_common/pietypes.h"
+#include "lib/ivis_common/piestate.h"
+#include "lib/ivis_common/tex.h"
+#include "lib/ivis_common/piepalette.h"
+#include "lib/ivis_opengl/screen.h"
+
+#include "display3ddef.h"
+#include "texture.h"
+#include "radar.h"
+
 
 #define MIPMAP_LEVELS		4
 #define MIPMAP_MIN		16
@@ -107,7 +114,7 @@ static int newPage(const char *name, int level, int width, int height, int count
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
 	// Use anisotropic filtering, if available, but only max 4.0 to reduce processor burden
-	if (check_extension("GL_EXT_texture_filter_anisotropic"))
+	if (GLEE_EXT_texture_filter_anisotropic)
 	{
 		GLfloat max;
 
@@ -135,7 +142,7 @@ void texLoad(const char *fileName)
 	mipmap_levels = MIPMAP_LEVELS;
 
 	glGetIntegerv(GL_MAX_TEXTURE_SIZE, &glval);
-	
+
 	while (glval < mipmap_max * TILES_IN_PAGE_COLUMN)
 	{
 		mipmap_max /= 2;

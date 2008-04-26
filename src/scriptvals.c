@@ -60,7 +60,7 @@ BOOL scrvInitialise(void)
 	psContextStore = NULL;
 	memset(asBasePointers, 0, sizeof(asBasePointers));
 
-	return TRUE;
+	return true;
 }
 
 // Shut down the script value module
@@ -106,14 +106,14 @@ BOOL scrvAddContext(char *pID, SCRIPT_CONTEXT *psContext, SCRV_TYPE type)
 	{
 		debug( LOG_ERROR, "scrvAddContext: Out of memory" );
 		abort();
-		return FALSE;
+		return false;
 	}
 	psNew->pIDString = (char*)malloc(strlen(pID) + 1);
 	if (!psNew->pIDString)
 	{
 		debug( LOG_ERROR, "scrvAddContext: Out of memory" );
 		abort();
-		return FALSE;
+		return false;
 	}
 	strcpy(psNew->pIDString, pID);
 	psNew->type = type;
@@ -122,7 +122,7 @@ BOOL scrvAddContext(char *pID, SCRIPT_CONTEXT *psContext, SCRV_TYPE type)
 	psNew->psNext = psContextStore;
 	psContextStore = psNew;
 
-	return TRUE;
+	return true;
 }
 
 
@@ -136,12 +136,12 @@ BOOL scrvAddBasePointer(INTERP_VAL *psVal)
 		if (asBasePointers[i] == NULL)
 		{
 			asBasePointers[i] = psVal;
-			return TRUE;
+			return true;
 		}
 	}
 
-	ASSERT(FALSE, "scrvAddBasePointer: not enough base pointers left (total :%d)", MAX_BASEPOINTER);
-	return FALSE;
+	ASSERT(false, "scrvAddBasePointer: not enough base pointers left (total :%d)", MAX_BASEPOINTER);
+	return false;
 }
 
 
@@ -164,16 +164,14 @@ void scrvReleaseBasePointer(INTERP_VAL *psVal)
 // Check all the base pointers to see if they have died
 void scrvUpdateBasePointers(void)
 {
-	SDWORD		i;
-	INTERP_VAL	*psVal;
-	BASE_OBJECT	*psObj;
+	unsigned int i;
 
-	for(i=0; i<MAX_BASEPOINTER; i++)
+	for(i = 0; i < MAX_BASEPOINTER; i++)
 	{
 		if (asBasePointers[i] != NULL)
 		{
-			psVal = asBasePointers[i];
-			psObj = (BASE_OBJECT *)psVal->v.oval;
+			INTERP_VAL *psVal = asBasePointers[i];
+			BASE_OBJECT *psObj = (BASE_OBJECT *)psVal->v.oval;
 
 			if (psObj && isDead(psObj))
 			{
@@ -191,7 +189,7 @@ BOOL scrvNewGroup(INTERP_VAL *psVal)
 
 	if (!grpCreate(&psGroup))
 	{
-		return FALSE;
+		return false;
 	}
 
 	// increment the refcount so the group doesn't get automatically freed when empty
@@ -199,7 +197,7 @@ BOOL scrvNewGroup(INTERP_VAL *psVal)
 
 	psVal->v.oval = psGroup;
 
-	return TRUE;
+	return true;
 }
 
 
@@ -229,13 +227,13 @@ BOOL scrvGetContext(char *pID, SCRIPT_CONTEXT **ppsContext)
 		if (strcmp(psCurr->pIDString, pID) == 0)
 		{
 			*ppsContext = psCurr->psContext;
-			return TRUE;
+			return true;
 		}
 	}
 
 	debug( LOG_ERROR, "scrvGetContext: couldn't find context for id: %s", pID );
 	abort();
-	return FALSE;
+	return false;
 }
 
 
@@ -249,11 +247,11 @@ BOOL scrvGetString(const char *pStringID, char **ppString)
 	{
 		debug( LOG_ERROR, "Cannot find the string id %s ", pStringID );
 		abort();
-		return FALSE;
+		return false;
 	}
 
 	//get the string from the id
 	*ppString = strresGetString(psStringRes, id);
 
-	return TRUE;
+	return true;
 }

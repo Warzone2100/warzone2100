@@ -26,10 +26,9 @@
  */
 /***************************************************************************/
 
+#include "lib/ivis_opengl/GLee.h"
 #include "lib/framework/frame.h"
-
 #include <time.h>
-#include <SDL_opengl.h>
 
 #include "lib/ivis_common/pieblitfunc.h"
 #include "lib/ivis_common/piedef.h"
@@ -53,7 +52,7 @@
 #define pie_FILLBLUE	128
 #define pie_FILLTRANS	128
 
-static UDWORD radarTexture;
+static GLuint radarTexture;
 
 /***************************************************************************/
 /*
@@ -63,9 +62,8 @@ static UDWORD radarTexture;
 
 void pie_Line(int x0, int y0, int x1, int y1, PIELIGHT colour)
 {
-	pie_SetRendMode(REND_FLAT);
 	pie_SetTexturePage(TEXPAGE_NONE);
-	pie_SetAlphaTest(FALSE);
+	pie_SetAlphaTest(false);
 
 	glColor4ubv(colour.vector);
 	glBegin(GL_LINE_STRIP);
@@ -102,7 +100,7 @@ static void pie_DrawRect(SDWORD x0, SDWORD y0, SDWORD x1, SDWORD y1, PIELIGHT co
 		y1 = psRendSurface->clip.bottom;
 	}
 
-	pie_SetAlphaTest(FALSE);
+	pie_SetAlphaTest(false);
 
 	glColor4ubv(colour.vector);
 	glBegin(GL_TRIANGLE_STRIP);
@@ -118,9 +116,8 @@ static void pie_DrawRect(SDWORD x0, SDWORD y0, SDWORD x1, SDWORD y1, PIELIGHT co
 
 void pie_Box(int x0,int y0, int x1, int y1, PIELIGHT colour)
 {
-	pie_SetRendMode(REND_FLAT);
 	pie_SetTexturePage(TEXPAGE_NONE);
-	pie_SetAlphaTest(FALSE);
+	pie_SetAlphaTest(false);
 
 	if (x0>psRendSurface->clip.right || x1<psRendSurface->clip.left ||
 		y0>psRendSurface->clip.bottom || y1<psRendSurface->clip.top)
@@ -190,7 +187,7 @@ void pie_ImageFileID(IMAGEFILE *ImageFile, UWORD ID, int x, int y)
 	Image = &ImageFile->ImageDefs[ID];
 
 	pie_SetRendMode(REND_GOURAUD_TEX);
-	pie_SetAlphaTest(TRUE);
+	pie_SetAlphaTest(true);
 
 	pieImage.texPage = ImageFile->TPageIDs[Image->TPageID];
 	pieImage.tu = Image->Tu;
@@ -216,7 +213,7 @@ void pie_ImageFileIDTile(IMAGEFILE *ImageFile, UWORD ID, int x, int y, int Width
 	Image = &ImageFile->ImageDefs[ID];
 
 	pie_SetRendMode(REND_GOURAUD_TEX);
-	pie_SetAlphaTest(TRUE);
+	pie_SetAlphaTest(true);
 
 	pieImage.texPage = ImageFile->TPageIDs[Image->TPageID];
 	pieImage.tu = Image->Tu;
@@ -292,13 +289,13 @@ void pie_UploadDisplayBuffer()
 BOOL pie_InitRadar(void)
 {
 	glGenTextures(1, &radarTexture);
-	return TRUE;
+	return true;
 }
 
 BOOL pie_ShutdownRadar(void)
 {
 	glDeleteTextures(1, &radarTexture);
-	return TRUE;
+	return true;
 }
 
 void pie_DownLoadRadar(UDWORD *buffer, int width, int height)
@@ -337,21 +334,18 @@ void pie_LoadBackDrop(SCREENTYPE screenType)
 
 	switch (screenType)
 	{
-	case SCREEN_RANDOMBDROP:
-		snprintf(backd, sizeof(backd), "texpages/bdrops/backdrop%i.png", rand() % 7); // Range: 0-6
-		break;
-	case SCREEN_MISSIONEND:
-		snprintf(backd, sizeof(backd), "texpages/bdrops/missionend.png");
-		break;
+		case SCREEN_RANDOMBDROP:
+			snprintf(backd, sizeof(backd), "texpages/bdrops/backdrop%i.png", rand() % 7); // Range: 0-6
+			break;
+		case SCREEN_MISSIONEND:
+			strlcpy(backd, "texpages/bdrops/missionend.png", sizeof(backd));
+			break;
 
-	case SCREEN_CREDITS:
-	default:
-		snprintf(backd, sizeof(backd), "texpages/bdrops/credits.png");
-		break;
+		case SCREEN_CREDITS:
+		default:
+			strlcpy(backd, "texpages/bdrops/credits.png", sizeof(backd));
+			break;
 	}
-
-	// Guarantee to nul-terminate
-	backd[sizeof(backd) - 1] = '\0';
 
 	screen_SetBackDropFromFile(backd);
 }

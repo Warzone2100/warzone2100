@@ -73,7 +73,7 @@ BOOL gridInitialise(void)
 	psIterateGrid = NULL;
 	iterateEntry = 0;
 
-	return TRUE;
+	return true;
 }
 
 //clear the grid of everything on it
@@ -193,29 +193,29 @@ static void gridCalcCoverage(BASE_OBJECT *psObj, SDWORD objx, SDWORD objy, COVER
 void gridAddObject(BASE_OBJECT *psObj)
 {
 	ASSERT(!isDead(psObj), "Added a dead object to the map grid!");
-    gridCalcCoverage(psObj, (SDWORD)psObj->pos.x, (SDWORD)psObj->pos.y, GRID_ADDOBJECT);
+	gridCalcCoverage(psObj, (SDWORD)psObj->pos.x, (SDWORD)psObj->pos.y, GRID_ADDOBJECT);
 }
 
 // move an object within the grid
 // oldX,oldY are the old position of the object in world coords
-void gridMoveObject(BASE_OBJECT *psObj, SDWORD oldX, SDWORD oldY)
+void gridMoveDroid(DROID* psDroid, SDWORD oldX, SDWORD oldY)
 {
-	if (map_coord(psObj->pos.x) == map_coord(oldX)
-	 && map_coord(psObj->pos.y) == map_coord(oldY))
+	if (map_coord(psDroid->pos.x) == map_coord(oldX)
+	 && map_coord(psDroid->pos.y) == map_coord(oldY))
 	{
 		// havn't changed the tile the object is on, don't bother updating
 		return;
 	}
 
-	gridCalcCoverage(psObj, oldX,oldY, GRID_REMOVEOBJECT);
-	gridCalcCoverage(psObj, (SDWORD)psObj->pos.x, (SDWORD)psObj->pos.y, GRID_ADDOBJECT);
+	gridCalcCoverage((BASE_OBJECT*)psDroid, oldX,oldY, GRID_REMOVEOBJECT);
+	gridCalcCoverage((BASE_OBJECT*)psDroid, psDroid->pos.x, psDroid->pos.y, GRID_ADDOBJECT);
 }
 
 
 // remove an object from the grid system
 void gridRemoveObject(BASE_OBJECT *psObj)
 {
-    gridCalcCoverage(psObj, (SDWORD)psObj->pos.x, (SDWORD)psObj->pos.y, GRID_REMOVEOBJECT);
+	gridCalcCoverage(psObj, (SDWORD)psObj->pos.x, (SDWORD)psObj->pos.y, GRID_REMOVEOBJECT);
 
 #if defined(DEBUG)
 	{
@@ -232,7 +232,7 @@ void gridRemoveObject(BASE_OBJECT *psObj)
 					{
 						if (psCurr->apsObjects[i] == psObj)
 						{
-							ASSERT( FALSE,"gridRemoveObject: grid out of sync" );
+							ASSERT( false,"gridRemoveObject: grid out of sync" );
 							psCurr->apsObjects[i] = NULL;
 						}
 					}
@@ -340,7 +340,7 @@ void gridGarbageCollect(void)
 					if ( !((psCurr == psCheck) && (curr == check)) &&
 						(psCurr->apsObjects[curr] == psObj) )
 					{
-						ASSERT( FALSE, "mapGrid integrity check failed" );
+						ASSERT( false, "mapGrid integrity check failed" );
 
 						psCurr->apsObjects[curr] = NULL;
 					}
@@ -531,7 +531,7 @@ void gridDisplayCoverage(BASE_OBJECT *psObj)
 
 // Fast circle rectangle intersection, taken from Graphics Gems I, p51
 // by Clifford A Shaffer
-/* Return TRUE iff rectangle R intersects circle with centerpoint C and
+/* Return true iff rectangle R intersects circle with centerpoint C and
    radius Rad. */
 static BOOL gridIntersect(SDWORD x1,SDWORD y1, SDWORD x2,SDWORD y2,
 				   SDWORD cx,SDWORD cy, SDWORD Rad)
@@ -586,7 +586,7 @@ static BOOL gridIntersect(SDWORD x1,SDWORD y1, SDWORD x2,SDWORD y2,
 		}
    		else 				/* R contains circle centerpoint */
 		{
-     		return(TRUE);
+     		return(true);
 		}
 	}
 }

@@ -24,19 +24,14 @@
  *
  */
 
-#include <stdio.h>
-
 #include "lib/framework/frame.h"
-#include "lib/framework/trig.h"
-
-#include "objects.h"
-#include "map.h"
+#include "lib/framework/math-help.h"
 
 #include "raycast.h"
+#include "objects.h"
+#include "map.h"
 #include "display3d.h"
-//#ifdef ALEXM
 #include "effects.h"
-//#endif
 
 
 // accuracy for the raycast lookup tables
@@ -69,11 +64,11 @@ static SDWORD	rayFPInvCos[NUM_RAYS], rayFPInvSin[NUM_RAYS];
 
 BOOL rayInitialise(void)
 {
-	SDWORD	i;
-	float	angle = 0.f;
-	float	val;
+	SDWORD i;
+	float angle = 0.0f;
+	float val;
 
-	for(i=0; i<NUM_RAYS; i++)
+	for(i = 0; i < NUM_RAYS; i++)
 	{
 		// Set up the fixed offset tables for calculating the intersection points
 		val = tanf(angle);
@@ -101,9 +96,9 @@ BOOL rayInitialise(void)
 		rayFPInvTan[i] = (float)RAY_ACCMUL / val;
 
 		// Set up the trig tables for calculating the offset distances
-		val = (float)sin(angle);
-		if(val == 0) {
-			val = (float)1;
+		val = sinf(angle);
+		if(val == 0.0f) {
+			val = 1.0f;
 		}
 		rayFPInvSin[i] = (float)RAY_ACCMUL / val;
 		if (i >= NUM_RAYS/2)
@@ -115,9 +110,9 @@ BOOL rayInitialise(void)
 			rayVDist[i] = (float)TILE_UNITS / val;
 		}
 
-		val = (float)cos(angle);
-		if(val == 0) {
-			val = (float)1;
+		val = cosf(angle);
+		if(val == 0.0f) {
+			val = 1.0f;
 		}
 		rayFPInvCos[i] = (float)RAY_ACCMUL / val;
 		if (i < NUM_RAYS/4 || i > 3*NUM_RAYS/4)
@@ -132,7 +127,7 @@ BOOL rayInitialise(void)
 		angle += RAY_ANGLE;
 	}
 
-	return TRUE;
+	return true;
 }
 
 
@@ -450,40 +445,28 @@ float	gHPitch;
 //-----------------------------------------------------------------------------------
 static BOOL	getTileHighestCallback(SDWORD x, SDWORD y, SDWORD dist)
 {
-	SDWORD	heightDif;
-	UDWORD	height;
-	//Vector3i	pos;
-
 	if(clipXY(x,y))
 	{
-		height = map_Height(x,y);
+		unsigned int height = map_Height(x,y);
 		if( (height > gHighestHeight) && (dist >= gHMinDist) )
 		{
-			heightDif = height - gHOrigHeight;
-			gHPitch = RAD_TO_DEG(atan2((float)heightDif,
-			                           (float)world_coord(6)));// (float)(dist - world_coord(3))));
+			int heightDif = height - gHOrigHeight;
+			gHPitch = rad2degf(atan2f(heightDif, world_coord(6)));// (float)(dist - world_coord(3))));
 			gHighestHeight = height;
   		}
-//		pos.x = x;
-//		pos.y = height;
-//		pos.z = y;
-//		addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_SMALL,FALSE,NULL,0);
 	}
 	else
 	{
-		return(FALSE);
+		return(false);
 	}
 
-	return(TRUE);
+	return(true);
 
 }
 //-----------------------------------------------------------------------------------
 /* Will return false when we've hit the edge of the grid */
 static BOOL	getTileHeightCallback(SDWORD x, SDWORD y, SDWORD dist)
 {
-	SDWORD	height,heightDif;
-	float	newPitch;
-	BOOL HasTallStructure = FALSE;
 #ifdef TEST_RAY
 	Vector3i pos;
 #endif
@@ -491,9 +474,9 @@ static BOOL	getTileHeightCallback(SDWORD x, SDWORD y, SDWORD dist)
 	/* Are we still on the grid? */
 	if(clipXY(x,y))
 	{
-		HasTallStructure = TILE_HAS_TALLSTRUCTURE(mapTile(map_coord(x), map_coord(y)));
+		BOOL HasTallStructure = TILE_HAS_TALLSTRUCTURE(mapTile(map_coord(x), map_coord(y)));
 
-		if( (dist>TILE_UNITS) || HasTallStructure)
+		if( (dist > TILE_UNITS) || HasTallStructure)
 		{
 		// Only do it the current tile is > TILE_UNITS away from the starting tile. Or..
 		// there is a tall structure  on the current tile and the current tile is not the starting tile.
@@ -501,13 +484,15 @@ static BOOL	getTileHeightCallback(SDWORD x, SDWORD y, SDWORD dist)
 //			( (HasTallStructure = TILE_HAS_TALLSTRUCTURE(mapTile(map_coord(x), map_coord(y)))) &&
 //			((map_coord(x) != gStartTileX) || (map_coord(y) != gStartTileY)) ) ) {
 			/* Get height at this intersection point */
-			height = map_Height(x,y);
+			int height = map_Height(x,y), heightDif;
+			float newPitch;
 
-			if(HasTallStructure) {
-				height += 300;	//TALLOBJECT_ADJUST;
+			if(HasTallStructure)
+			{
+				height += TALLOBJECT_ADJUST;
 			}
 
-			if(height<=gHeight)
+			if(height <= gHeight)
 			{
 				heightDif = 0;
 			}
@@ -517,12 +502,10 @@ static BOOL	getTileHeightCallback(SDWORD x, SDWORD y, SDWORD dist)
 			}
 
 			/* Work out the angle to this point from start point */
-
-			newPitch = RAD_TO_DEG(atan2((float)heightDif, (float)dist));
-
+			newPitch = rad2degf(atan2f(heightDif, dist));
 
 			/* Is this the steepest we've found? */
-			if(newPitch>gPitch)
+			if(newPitch > gPitch)
 			{
 				/* Yes, then keep a record of it */
 				gPitch = newPitch;
@@ -533,24 +516,24 @@ static BOOL	getTileHeightCallback(SDWORD x, SDWORD y, SDWORD dist)
 			pos.x = x;
 			pos.y = height;
 			pos.z = y;
-			addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_SMALL,FALSE,NULL,0);
+			addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_SMALL,false,NULL,0);
 #endif
 	//		if(height > gMaxRayHeight)
 	//		{
 	//			gMaxRayHeight = height;
 	//			gRayDist = dist;
-	//			return(TRUE);
+	//			return(true);
 	//		}
 		}
 	}
 	else
 	{
 		/* We've hit edge of grid - so exit!! */
-		return(FALSE);
+		return(false);
 	}
 
 	/* Not at edge yet - so exit */
-	return(TRUE);
+	return(true);
 }
 
 void	getBestPitchToEdgeOfGrid(UDWORD x, UDWORD y, UDWORD direction, SDWORD *pitch)

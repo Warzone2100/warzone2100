@@ -50,8 +50,8 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\.."
-				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;YY_STATIC;ENABLE_NLS;PACKAGE_VERSION=\&quot;TRUNK\&quot;;PACKAGE=\&quot;warzone2100\&quot;;LOCALEDIR=\&quot;\&quot;;_CRT_SECURE_NO_WARNINGS"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)\..&quot;;&quot;$(SolutionDir)\..\devpkg\include&quot;;&quot;$(SolutionDir)\..\devpkg\include\SDL&quot;"
+				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;YY_STATIC;PACKAGE_VERSION=\&quot;TRUNK\&quot;;PACKAGE=\&quot;warzone2100\&quot;;LOCALEDIR=\&quot;\&quot;;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -120,8 +120,8 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="..\.."
-				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;YY_STATIC;ENABLE_NLS;PACKAGE_VERSION=\&quot;TRUNK\&quot;;PACKAGE=\&quot;warzone2100\&quot;;LOCALEDIR=\&quot;\&quot;;_CRT_SECURE_NO_WARNINGS"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)\..&quot;;&quot;$(SolutionDir)\..\devpkg\include&quot;;&quot;$(SolutionDir)\..\devpkg\include\SDL&quot;"
+				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;YY_STATIC;PACKAGE_VERSION=\&quot;TRUNK\&quot;;PACKAGE=\&quot;warzone2100\&quot;;LOCALEDIR=\&quot;\&quot;;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
@@ -170,11 +170,19 @@
 				>
 			</File>
 			<File
-				RelativePath=".\debug.c"
+				RelativePath=".\cursors.c"
 				>
 			</File>
 			<File
-				RelativePath=".\exceptionhandler.c"
+				RelativePath=".\cursors16.c"
+				>
+			</File>
+			<File
+				RelativePath=".\cursors32.c"
+				>
+			</File>
+			<File
+				RelativePath=".\debug.c"
 				>
 			</File>
 			<File
@@ -218,18 +226,6 @@
 						XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
 					/>
 				</FileConfiguration>
-			</File>
-			<File
-				RelativePath=".\cursors.c"
-				>
-			</File>
-			<File
-				RelativePath=".\cursors16.c"
-				>
-			</File>
-			<File
-				RelativePath=".\cursors32.c"
-				>
 			</File>
 			<File
 				RelativePath=".\resource_parser.tab.c"
@@ -303,6 +299,10 @@
 			</File>
 			<File
 				RelativePath=".\gettext.h"
+				>
+			</File>
+			<File
+				RelativePath=".\i18n.h"
 				>
 			</File>
 			<File

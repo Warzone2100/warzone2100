@@ -21,19 +21,27 @@
  *  Renderer setup and state control routines for 3D rendering.
  */
 
+#include "lib/ivis_opengl/GLee.h"
 #include "lib/framework/frame.h"
 
 #include <SDL.h>
-#include <SDL_opengl.h>
+#include <SDL_mouse.h>
 
 #include "lib/ivis_common/piestate.h"
 #include "lib/ivis_common/piedef.h"
 #include "lib/ivis_common/tex.h"
 #include "lib/ivis_common/piepalette.h"
+#include "lib/ivis_common/rendmode.h"
 
 /*
  *	Global Variables
  */
+
+// Variables for the coloured mouse cursor
+static CURSOR MouseCursor = 0;
+static bool ColouredMouse = false;
+static IMAGEFILE* MouseCursors = NULL;
+static uint16_t MouseCursorIDs[CURSOR_MAX];
 
 extern RENDER_STATE	rendStates;
 
@@ -128,9 +136,9 @@ void pie_SetFogStatus(BOOL val)
 	else
 	{
 		//fog disabled so turn it off if not off already
-		if (rendStates.fog != FALSE)
+		if (rendStates.fog != false)
 		{
-			rendStates.fog = FALSE;
+			rendStates.fog = false;
 		}
 	}
 }
@@ -144,7 +152,6 @@ void pie_SetTexturePage(SDWORD num)
 	// Only bind textures when they're not bound already
 	if (num != rendStates.texPage)
 	{
-		rendStates.texPage = num;
 		switch (num)
 		{
 			case TEXPAGE_NONE:
@@ -155,9 +162,13 @@ void pie_SetTexturePage(SDWORD num)
 				glEnable(GL_TEXTURE_2D);
 				break;
 			default:
-				glEnable(GL_TEXTURE_2D);
+				if (rendStates.texPage == TEXPAGE_NONE || rendStates.texPage == TEXPAGE_FONT)
+				{
+					glEnable(GL_TEXTURE_2D);
+				}
 				glBindTexture(GL_TEXTURE_2D, _TEX_PAGE[num].id);
 		}
+		rendStates.texPage = num;
 	}
 }
 
@@ -168,29 +179,11 @@ void pie_SetAlphaTest(BOOL keyingOn)
 		rendStates.keyingOn = keyingOn;
 		pieStateCount++;
 
-		if (keyingOn == TRUE) {
+		if (keyingOn == true) {
 			glEnable(GL_ALPHA_TEST);
 			glAlphaFunc(GL_GREATER, 0.1f);
 		} else {
 			glDisable(GL_ALPHA_TEST);
-		}
-	}
-}
-
-void pie_SetColourCombine(COLOUR_MODE colCombMode)
-{
-	if (colCombMode != rendStates.colourCombine) {
-		rendStates.colourCombine = colCombMode;
-		pieStateCount++;
-		switch (colCombMode) {
-			case COLOUR_FLAT_CONSTANT:
-			case COLOUR_FLAT_ITERATED:
-				pie_SetTexturePage(-1);
-				break;
-			case COLOUR_TEX_CONSTANT:
-			case COLOUR_TEX_ITERATED:
-			default:
-				break;
 		}
 	}
 }
@@ -208,10 +201,6 @@ void pie_SetTranslucencyMode(TRANSLUCENCY_MODE transMode)
 				glEnable(GL_BLEND);
 				glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 				break;
-			case TRANS_FILTER:
-				glEnable(GL_BLEND);
-				glBlendFunc(GL_SRC_ALPHA, GL_SRC_COLOR);
-				break;
 			default:
 				rendStates.transMode = TRANS_DECAL;
 				glDisable(GL_BLEND);
@@ -225,4 +214,40 @@ void pie_SetGammaValue(float val)
 {
 	debug(LOG_VIDEO, "%s(%f)", __FUNCTION__, val);
 	SDL_SetGamma(val, val, val);
+}
+
+void pie_InitColourMouse(IMAGEFILE* img, const uint16_t cursorIDs[CURSOR_MAX])
+{
+	MouseCursors = img;
+	memcpy(MouseCursorIDs, cursorIDs, sizeof(MouseCursorIDs));
+}
+
+/** Selects the given mouse cursor.
+ *  \param cursor   mouse cursor to render
+ *  \param coloured wether a coloured or black&white cursor should be used
+ */
+void pie_SetMouse(CURSOR cursor, bool coloured)
+{
+	ASSERT(cursor < CURSOR_MAX, "Attempting to load non-existent cursor: %u", (unsigned int)cursor);
+
+	MouseCursor = cursor;
+
+	SDL_ShowCursor(ColouredMouse ? SDL_DISABLE : SDL_ENABLE);
+	frameSetCursor(MouseCursor);
+	ColouredMouse = coloured;
+}
+
+/** Draws the current mouse cursor at the given coordinates
+ *  \param X,Y mouse coordinates
+ */
+void pie_DrawMouse(unsigned int X, unsigned int Y)
+{
+	SDL_ShowCursor(ColouredMouse ? SDL_DISABLE : SDL_ENABLE);
+
+	if (!ColouredMouse)
+		return;
+
+	ASSERT(MouseCursors != NULL, "Drawing coloured mouse cursor while no coloured mouse cursors have been loaded yet!");
+
+	iV_DrawImage(MouseCursors, MouseCursorIDs[MouseCursor], X, Y);
 }

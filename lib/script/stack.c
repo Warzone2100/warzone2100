@@ -67,7 +67,7 @@ static inline BOOL stackRemoveTop(void);
 /* Check if the stack is empty */
 BOOL stackEmpty(void)
 {
-	return psCurrChunk == psStackBase && currEntry == 0;
+	return (psCurrChunk->psPrev == NULL && currEntry == 0);
 }
 
 
@@ -86,14 +86,14 @@ static BOOL stackNewChunk(UDWORD size)
 		psCurrChunk->psNext = (STACK_CHUNK *)malloc(sizeof(STACK_CHUNK));
 		if (!psCurrChunk->psNext)
 		{
-			return FALSE;
+			return false;
 		}
 		psCurrChunk->psNext->aVals = (INTERP_VAL*)malloc(sizeof(INTERP_VAL) * size);
 		if (!psCurrChunk->psNext->aVals)
 		{
 			free(psCurrChunk->psNext);
 			psCurrChunk->psNext = NULL;
-			return FALSE;
+			return false;
 		}
 
 		psCurrChunk->psNext->size = size;
@@ -107,8 +107,9 @@ static BOOL stackNewChunk(UDWORD size)
 		memset(psCurrChunk->psNext->aVals, 0, sizeof(INTERP_VAL) * size);
 	}
 
-	return TRUE;
+	return true;
 }
+
 
 /* Push a value onto the stack */
 BOOL stackPush(INTERP_VAL  *psVal)
@@ -150,11 +151,11 @@ BOOL stackPush(INTERP_VAL  *psVal)
 		{
 			/* Out of memory */
 			debug(LOG_ERROR, "stackPush: Out of memory");
-			return FALSE;
+			return false;
 		}
 	}
 
-	return TRUE;
+	return true;
 }
 
 
@@ -162,11 +163,11 @@ BOOL stackPush(INTERP_VAL  *psVal)
 /* Pop a value off the stack */
 BOOL stackPop(INTERP_VAL  *psVal)
 {
-	if ((psCurrChunk->psPrev == NULL) && (currEntry == 0))
+	if (stackEmpty())
 	{
 		debug(LOG_ERROR, "stackPop: stack empty");
-		ASSERT( FALSE, "stackPop: stack empty" );
-		return FALSE;
+		ASSERT( false, "stackPop: stack empty" );
+		return false;
 	}
 
 	/* move the stack pointer down one */
@@ -184,7 +185,7 @@ BOOL stackPop(INTERP_VAL  *psVal)
 	/* copy the entire value off the stack */
 	memcpy(psVal, &(psCurrChunk->aVals[currEntry]), sizeof(INTERP_VAL));
 
-	return TRUE;
+	return true;
 }
 
 /* Return pointer to the top value without poping it */
@@ -193,8 +194,8 @@ BOOL stackPeekTop(INTERP_VAL  **ppsVal)
 	if ((psCurrChunk->psPrev == NULL) && (currEntry == 0))
 	{
 		debug(LOG_ERROR, "stackPeekTop: stack empty");
-		ASSERT( FALSE, "stackPeekTop: stack empty" );
-		return FALSE;
+		ASSERT( false, "stackPeekTop: stack empty" );
+		return false;
 	}
 
 	if (currEntry == 0)
@@ -213,7 +214,7 @@ BOOL stackPeekTop(INTERP_VAL  **ppsVal)
 		*ppsVal = &(psCurrChunk->aVals[currEntry - 1]);
 	}
 
-	return TRUE;
+	return true;
 }
 
 
@@ -225,8 +226,8 @@ BOOL stackPopType(INTERP_VAL  *psVal)
 	if ((psCurrChunk->psPrev == NULL) && (currEntry == 0))
 	{
 		debug(LOG_ERROR, "stackPopType: stack empty");
-		ASSERT( FALSE, "stackPopType: stack empty" );
-		return FALSE;
+		ASSERT( false, "stackPopType: stack empty" );
+		return false;
 	}
 
 	/* move the stack pointer down one */
@@ -262,7 +263,7 @@ BOOL stackPopType(INTERP_VAL  *psVal)
 					break;
 				default:
 					debug(LOG_ERROR, "stackPopType: trying to assign an incompatible data type to a string variable (type: %d)", psTop->type);
-					return FALSE;
+					return false;
 					break;
 			}
 		}
@@ -277,37 +278,31 @@ BOOL stackPopType(INTERP_VAL  *psVal)
 		{
 			debug(LOG_ERROR, "stackPopType: type mismatch: %d/%d", psVal->type, psTop->type);
 			ASSERT( !"type mismatch", "stackPopType: type mismatch: %d/%d", psVal->type, psTop->type);
-			return FALSE;
+			return false;
 		}
 
 		/* copy the entire union off the stack */
 		memcpy(&(psVal->v), &(psTop->v), sizeof(psTop->v));
 	}
 
-	return TRUE;
+	return true;
 }
 
 
 /* Pop a number of values off the stack checking their types
  * This is used by instinct functions to get their parameters
  */
-BOOL stackPopParams(SDWORD numParams, ...)
+BOOL stackPopParams(unsigned int numParams, ...)
 {
-	va_list		args;
-	SDWORD		i;
-	INTERP_TYPE	type;
-	void		*pData;
-	INTERP_VAL	*psVal;
-	UDWORD		index, params;
-	STACK_CHUNK	*psCurr;
-
-	//debug(LOG_SCRIPT,"stackPopParams");
+	va_list args;
+	unsigned int i, index;
+	STACK_CHUNK *psCurr;
 
 	va_start(args, numParams);
 
 	// Find the position of the first parameter, and set
 	// the stack top to it
-	if ((UDWORD)numParams <= currEntry)
+	if (numParams <= currEntry)
 	{
 		// parameters are all on current chunk
 		currEntry = currEntry - numParams;
@@ -316,7 +311,7 @@ BOOL stackPopParams(SDWORD numParams, ...)
 	else
 	{
 		// Have to work down the previous chunks to find the first param
-		params = numParams - currEntry;
+		unsigned int params = numParams - currEntry;
 
 		for(psCurr = psCurrChunk->psPrev; psCurr != NULL; psCurr = psCurr->psPrev)
 		{
@@ -336,91 +331,80 @@ BOOL stackPopParams(SDWORD numParams, ...)
 
 	if (!psCurr)
 	{
-		debug(LOG_ERROR,"stackPopParams: not enough parameters on stack");
-		ASSERT( FALSE, "stackPopParams: not enough parameters on stack" );
-		return FALSE;
+		debug( LOG_ERROR, "stackPopParams: not enough parameters on stack" );
+		ASSERT( false, "stackPopParams: not enough parameters on stack" );
+		va_end(args);
+		return false;
 	}
 
 	// Get the values, checking their types
 	index = currEntry;
-	for (i=0; i< numParams; i++)
+	for (i = 0; i < numParams; i++)
 	{
-		type = (INTERP_TYPE)(va_arg(args, int));
-		pData = va_arg(args, void *);
+		INTERP_VAL *psVal = psCurr->aVals + index;
+		INTERP_TYPE type = va_arg(args, INTERP_TYPE);
+		void * pData = va_arg(args, void *);
 
-		psVal = psCurr->aVals + index;
-
-		if(type == VAL_FLOAT)		//expecting a float
+		switch (type)
 		{
-			/* if (!interpCheckEquiv(type,psVal->type))
-			{
-				ASSERT( FALSE, "stackPopParams: type mismatch (%d/%d)" , type, psVal->type);
-				va_end(args);
-				return FALSE;
-			} */
-			*((float*)pData) = psVal->v.fval;
-		}
-		else if(type != VAL_STRING)	//anything (including references)
-		{
-			if (!interpCheckEquiv(type,psVal->type))
-			{
-				ASSERT( FALSE, "stackPopParams: type mismatch" );
-				va_end(args);
-				return FALSE;
-			}
-			if (scriptTypeIsPointer(psVal->type))
-			{
-				if(psVal->type >= VAL_REF)	//if it's a reference
-				{
-					INTERP_VAL	*refVal;
-
-					refVal = (INTERP_VAL*)psVal->v.oval;	//oval is a pointer to INTERP_VAL in this case
-
-					/* doublecheck types */
-					ASSERT(interpCheckEquiv(type & ~VAL_REF, refVal->type), "stackPopParams: type mismatch for a reference: %d/%d",
-						type & ~VAL_REF, refVal->type);		//type of provided container and type of the INTERP_VAL pointed by psVal->v.oval
-
-					*((void**)pData) = &(refVal->v.ival);		/* get pointer to the union */
-				}
-				else		//some pointer type
-				{
-					*((void**)pData) = psVal->v.oval;
-				}
-			}
-			else
-			{
-				*((SDWORD*)pData) = psVal->v.ival;
-			}
-		}
-		else	//TODO: allow only compatible types
-		{
-			if(psVal->type == VAL_STRING)	//Passing a String
-			{
-				//*((char **)pData) = psVal->v.sval;
-				strcpy(((char *)pData), psVal->v.sval);		//COPY string
-			}
-			else		//Integer or float
-			{
+			case VAL_BOOL:
+				*(BOOL*)pData = psVal->v.bval;
+				break;
+			case VAL_INT:
+				*(int*)pData = psVal->v.ival;
+				break;
+			case VAL_FLOAT:
+				*(float*)pData = psVal->v.fval;
+				break;
+			case VAL_STRING:
 				switch (psVal->type)
 				{
-				case VAL_INT:
-					sprintf(((char *)pData), "%d", psVal->v.ival);
-					break;
-				case VAL_FLOAT:
-					sprintf(((char *)pData), "%f", psVal->v.fval);
-					break;
-				case VAL_BOOL:
-					sprintf(((char *)pData), "%d", psVal->v.bval);
-					break;
-				default:
-					ASSERT(FALSE, "StackPopParam - wrong data type being converted to string (type: %d)", psVal->type);
-					break;
+					case VAL_BOOL:
+						sprintf((char*)pData, "%d", psVal->v.bval);
+						break;
+					case VAL_INT:
+						sprintf((char*)pData, "%d", psVal->v.ival);
+						break;
+					case VAL_FLOAT:
+						sprintf((char*)pData, "%f", psVal->v.fval);
+						break;
+					case VAL_STRING:
+						strcpy((char*)pData, psVal->v.sval);
+						break;
+					default:
+						ASSERT(false,
+							"StackPopParam - wrong data type being converted to string (type: %s)",
+							scriptTypeToString(psVal->type));
+						break;
 				}
-				//*((char **)pData) = psVal->v.sval;
-			}
+				break;
+			default: // anything (including references)
+				if (scriptTypeIsPointer(psVal->type))
+				{
+					if (psVal->type >= VAL_REF) // if it's a reference
+					{
+						INTERP_VAL *refVal = psVal->v.oval; // oval is a pointer to INTERP_VAL in this case
+
+						/* doublecheck types */
+						ASSERT(interpCheckEquiv(type & ~VAL_REF, refVal->type),
+							"stackPopParams: type mismatch for a reference (expected %s, got %s)",
+							scriptTypeToString(type & ~VAL_REF), scriptTypeToString(refVal->type));
+						// type of provided container and type of the INTERP_VAL pointed by psVal->v.oval
+
+						*(void**)pData = &(refVal->v); /* get pointer to the union */
+					}
+					else // some pointer type
+					{
+						*(void**)pData = psVal->v.oval;
+					}
+				}
+				else
+				{
+					*(int*)pData = psVal->v.ival;
+				}
 		}
 
-		index += 1;
+		index++;
 		if (index >= psCurr->size)
 		{
 			psCurr = psCurr->psNext;
@@ -429,7 +413,7 @@ BOOL stackPopParams(SDWORD numParams, ...)
 	}
 
 	va_end(args);
-	return TRUE;
+	return true;
 }
 
 
@@ -474,11 +458,11 @@ BOOL stackPushResult(INTERP_TYPE type, INTERP_VAL *result)
 		if (!stackNewChunk(EXT_SIZE))
 		{
 			// Out of memory
-			return FALSE;
+			return false;
 		}
 	}
 
-	return TRUE;
+	return true;
 }
 
 
@@ -494,7 +478,7 @@ BOOL stackPeek(INTERP_VAL *psVal, UDWORD index)
 	{
 		/* Looking at entry on current chunk */
 		memcpy(psVal, &(psCurrChunk->aVals[currEntry - index - 1]), sizeof(INTERP_VAL));
-		return TRUE;
+		return true;
 	}
 	else
 	{
@@ -507,7 +491,7 @@ BOOL stackPeek(INTERP_VAL *psVal, UDWORD index)
 			{
 				/* found the entry */
 				memcpy(psVal, &(psCurr->aVals[psCurr->size - 1 - index]), sizeof(INTERP_VAL));
-				return TRUE;
+				return true;
 			}
 			else
 			{
@@ -517,18 +501,18 @@ BOOL stackPeek(INTERP_VAL *psVal, UDWORD index)
 	}
 
 	/* If we got here the index is off the bottom of the stack */
-	ASSERT( FALSE, "stackPeek: index too large" );
-	return FALSE;
+	ASSERT( false, "stackPeek: index too large" );
+	return false;
 }
 
 
 /* Print the top value on the stack */
 void stackPrintTop(void)
 {
-	INTERP_VAL	sVal;
+	INTERP_VAL sVal;
 	if (stackPeek(&sVal, 0))
 	{
-		cpPrintVal(&sVal);
+		cpPrintVal(sVal);
 	}
 	else
 	{
@@ -549,8 +533,8 @@ BOOL stackBinaryOp(OPCODE opcode)
 	if (psCurrChunk->psPrev == NULL && currEntry < 2)
 	{
 		debug(LOG_ERROR, "stackBinaryOp: not enough entries on stack");
-		ASSERT( FALSE, "stackBinaryOp: not enough entries on stack" );
-		return FALSE;
+		ASSERT( false, "stackBinaryOp: not enough entries on stack" );
+		return false;
 	}
 
 	if (currEntry > 1)
@@ -581,8 +565,8 @@ BOOL stackBinaryOp(OPCODE opcode)
 		if (!interpCheckEquiv(psV1->type, psV2->type))
 		{
 			debug(LOG_ERROR, "stackBinaryOp: type mismatch");
-			ASSERT( FALSE, "stackBinaryOp: type mismatch" );
-			return FALSE;
+			ASSERT( false, "stackBinaryOp: type mismatch" );
+			return false;
 		}
 
 		/* find out if the result will be a float. Both or neither arguments are floats - should be taken care of by bison*/
@@ -638,7 +622,7 @@ BOOL stackBinaryOp(OPCODE opcode)
 			}
 			else
 			{
-				ASSERT(FALSE, "stackBinaryOp: division by zero (float)");
+				ASSERT(false, "stackBinaryOp: division by zero (float)");
 			}
 		}
 		else
@@ -649,7 +633,7 @@ BOOL stackBinaryOp(OPCODE opcode)
 			}
 			else
 			{
-				ASSERT(FALSE, "stackBinaryOp: division by zero (integer)");
+				ASSERT(false, "stackBinaryOp: division by zero (integer)");
 			}
 		}
 		break;
@@ -722,24 +706,18 @@ BOOL stackBinaryOp(OPCODE opcode)
 			{
 			case VAL_INT:		//first value isn't string, but can be converted to string
 				snprintf(tempstr1, sizeof(tempstr1), "%d", psV1->v.ival);	//int->string
-				// Guarantee to nul-terminate
-				tempstr1[sizeof(tempstr1) - 1] = '\0';
 				psV1->type = VAL_STRING;			//Mark as string
 				psV1->v.sval =  (char*)malloc(MAXSTRLEN);				//allocate space for the string, since the result (string) of concatenation will be saved here
 				break;
 
 			case VAL_BOOL:
 				snprintf(tempstr1, sizeof(tempstr1), "%d",psV1->v.bval);	//bool->string
-				// Guarantee to nul-terminate
-				tempstr1[sizeof(tempstr1) - 1] = '\0';
 				psV1->type = VAL_STRING;			//Mark as string
 				psV1->v.sval =  (char*)malloc(MAXSTRLEN);				//allocate space for the string, since the result (string) of concatenation will be saved here
 				break;
 
 			case VAL_FLOAT:
 				snprintf(tempstr1, sizeof(tempstr1), "%f", psV1->v.fval);	//float->string
-				// Guarantee to nul-terminate
-				tempstr1[sizeof(tempstr1) - 1] = '\0';
 				psV1->type = VAL_STRING;			//Mark as string
 				psV1->v.sval =  (char*)malloc(MAXSTRLEN);				//allocate space for the string, since the result (string) of concatenation will be saved here
 				break;
@@ -750,7 +728,7 @@ BOOL stackBinaryOp(OPCODE opcode)
 
 			default:
 				debug(LOG_ERROR, "stackBinaryOp: OP_CONC: first parameter is not compatible with Strings");
-				return FALSE;
+				return false;
 				break;
 			}
 
@@ -759,20 +737,14 @@ BOOL stackBinaryOp(OPCODE opcode)
 			{
 			case VAL_INT:
 				snprintf(tempstr2, sizeof(tempstr2), "%d", psV2->v.ival);		//int->string
-				// Guarantee to nul-terminate
-				tempstr2[sizeof(tempstr2) - 1] = '\0';
 				break;
 
 			case VAL_BOOL:
 				snprintf(tempstr2, sizeof(tempstr2), "%d", psV2->v.bval);		//bool->string
-				// Guarantee to nul-terminate
-				tempstr2[sizeof(tempstr2) - 1] = '\0';
 				break;
 
 			case VAL_FLOAT:
 				snprintf(tempstr2, sizeof(tempstr2), "%f", psV2->v.fval);		//float->string
-				// Guarantee to nul-terminate
-				tempstr2[sizeof(tempstr2) - 1] = '\0';
 				break;
 
 			case VAL_STRING:
@@ -781,7 +753,7 @@ BOOL stackBinaryOp(OPCODE opcode)
 
 			default:
 				debug(LOG_ERROR, "stackBinaryOp: OP_CONC: first parameter is not compatible with Strings");
-				return FALSE;
+				return false;
 				break;
 			}
 
@@ -793,12 +765,12 @@ BOOL stackBinaryOp(OPCODE opcode)
 
 	default:
 		debug(LOG_ERROR, "stackBinaryOp: unknown opcode");
-		ASSERT( FALSE, "stackBinaryOp: unknown opcode" );
-		return FALSE;
+		ASSERT( false, "stackBinaryOp: unknown opcode" );
+		return false;
 		break;
 	}
 
-	return TRUE;
+	return true;
 }
 
 
@@ -813,8 +785,8 @@ BOOL stackUnaryOp(OPCODE opcode)
 	// Get the value
 	if (psCurrChunk->psPrev == NULL && currEntry == 0)
 	{
-		ASSERT( FALSE, "stackUnaryOp: not enough entries on stack" );
-		return FALSE;
+		ASSERT( false, "stackUnaryOp: not enough entries on stack" );
+		return false;
 	}
 
 	if (currEntry > 0)
@@ -846,13 +818,13 @@ BOOL stackUnaryOp(OPCODE opcode)
 			if (!stackRemoveTop())
 			{
 				debug( LOG_ERROR, "stackUnaryOpcode: OP_INC: could not pop" );
-				return FALSE;
+				return false;
 			}
 
 			break;
 		default:
-			ASSERT( FALSE, "stackUnaryOp: invalid type for OP_INC (type: %d)", psVal->type );
-			return FALSE;
+			ASSERT( false, "stackUnaryOp: invalid type for OP_INC (type: %d)", psVal->type );
+			return false;
 			break;
 		}
 		break;
@@ -871,12 +843,12 @@ BOOL stackUnaryOp(OPCODE opcode)
 			if (!stackRemoveTop())
 			{
 				debug( LOG_ERROR, "stackUnaryOpcode: OP_DEC: could not pop" );
-				return FALSE;
+				return false;
 			}
 			break;
 		default:
-			ASSERT( FALSE, "stackUnaryOp: invalid type for OP_DEC (type: %d)", psVal->type );
-			return FALSE;
+			ASSERT( false, "stackUnaryOp: invalid type for OP_DEC (type: %d)", psVal->type );
+			return false;
 			break;
 		}
 		break;
@@ -891,8 +863,8 @@ BOOL stackUnaryOp(OPCODE opcode)
 			psVal->v.fval = - psVal->v.fval;
 			break;
 		default:
-			ASSERT( FALSE, "stackUnaryOp: invalid type for negation (type: %d)", psVal->type );
-			return FALSE;
+			ASSERT( false, "stackUnaryOp: invalid type for negation (type: %d)", psVal->type );
+			return false;
 			break;
 		}
 		break;
@@ -903,90 +875,78 @@ BOOL stackUnaryOp(OPCODE opcode)
 			psVal->v.bval = !psVal->v.bval;
 			break;
 		default:
-			ASSERT( FALSE, "stackUnaryOp: invalid type for NOT (type: %d)", psVal->type );
-			return FALSE;
+			ASSERT( false, "stackUnaryOp: invalid type for NOT (type: %d)", psVal->type );
+			return false;
 			break;
 		}
 		break;
 	default:
-		ASSERT( FALSE, "stackUnaryOp: unknown opcode (opcode: %d)", opcode );
-		return FALSE;
+		ASSERT( false, "stackUnaryOp: unknown opcode (opcode: %d)", opcode );
+		return false;
 		break;
 	}
 
-	return TRUE;
+	return true;
 }
 
-BOOL castTop(INTERP_TYPE neededType)
+BOOL stackCastTop(INTERP_TYPE neededType)
 {
-	INTERP_VAL	*pTop=NULL;
+	INTERP_VAL *pTop;
 
-	//debug(LOG_WZ, "casting to %d", neededType);
-
-	ASSERT(neededType == VAL_INT || neededType == VAL_FLOAT, "stackCast: can't cast to %d", neededType);
+	ASSERT(neededType == VAL_INT || neededType == VAL_FLOAT,
+		"stackCast: can't cast to %d", neededType);
 
 	if (!stackPeekTop(&pTop) || pTop==NULL)
 	{
-		ASSERT(FALSE, "castTop: failed to peek stack");
-		return FALSE;
+		ASSERT(false, "castTop: failed to peek stack");
+		return false;
 	}
-
-	//debug(LOG_WZ, "castTop: stack type %d", pTop->type);
 
 	/* see if we can cast this data type */
 	switch (pTop->type)
 	{
-	case VAL_BOOL:
+		case VAL_BOOL:
+			switch (neededType)
+			{
+				case VAL_FLOAT:		/* casting from bool to float */
 
-		switch (neededType)
-		{
-		case VAL_FLOAT:		/* casting from bool to float */
-
-			pTop->v.fval = (float)pTop->v.bval;
-			pTop->type = VAL_FLOAT;
-			return TRUE;
-
+					pTop->v.fval = (float)pTop->v.bval;
+					pTop->type = VAL_FLOAT;
+					return true;
+				default:
+					break;
+			}
+			break;
+		case VAL_INT:
+			switch (neededType)
+			{
+				case VAL_FLOAT:		/* casting from int to float */
+					pTop->v.fval = (float)pTop->v.ival;
+					pTop->type = VAL_FLOAT;
+					return true;
+				default:
+					break;
+			}
+			break;
+		case VAL_FLOAT:
+			switch (neededType)
+			{
+				case VAL_INT:		/* casting from float to int */
+					pTop->v.ival = (int)pTop->v.fval;
+					pTop->type = VAL_INT;
+					return true;
+				default:
+					break;
+			}
 			break;
 		default:
-			debug(LOG_ERROR, "cast error %d->%d", pTop->type, neededType);
 			break;
-		}
-		break;
-	case VAL_INT:
-
-		switch (neededType)
-		{
-		case VAL_FLOAT:		/* casting from int to float */
-			pTop->v.fval = (float)pTop->v.ival;
-			pTop->type = VAL_FLOAT;
-			return TRUE;
-			break;
-		default:
-			debug(LOG_ERROR, "cast error %d->%d", pTop->type, neededType);
-			break;
-		}
-		break;
-	case VAL_FLOAT:
-
-		switch (neededType)
-		{
-		case VAL_INT:		/* casting from float to int */
-			pTop->v.ival = (SDWORD)pTop->v.fval;
-			pTop->type = VAL_INT;
-			return TRUE;
-			break;
-		default:
-			debug(LOG_ERROR, "cast error %d->%d", pTop->type, neededType);
-			break;
-		}
-		break;
-
-	default:
-		debug(LOG_ERROR, "can't cast from %d to %d", pTop->type, neededType);
-		break;
 	}
 
-	return FALSE;
+	debug(LOG_ERROR, "can't cast from %s to %s",
+		scriptTypeToString(pTop->type), scriptTypeToString(neededType));
+
+	return false;
 }
 
 
@@ -998,14 +958,14 @@ BOOL stackInitialise(void)
 	{
 		debug( LOG_ERROR, "Out of memory" );
 		abort();
-		return FALSE;
+		return false;
 	}
 	psStackBase->aVals = (INTERP_VAL*)malloc(sizeof(INTERP_VAL) * INIT_SIZE);
 	if (!psStackBase->aVals)
 	{
 		debug( LOG_ERROR, "Out of memory" );
 		abort();
-		return FALSE;
+		return false;
 	}
 
 	psStackBase->size = INIT_SIZE;
@@ -1020,7 +980,7 @@ BOOL stackInitialise(void)
 	//string support
 	CURSTACKSTR = 0;		//initialize string 'stack'
 
-	return TRUE;
+	return true;
 }
 
 
@@ -1069,8 +1029,8 @@ static inline BOOL stackRemoveTop(void)
 	if ((psCurrChunk->psPrev == NULL) && (currEntry == 0))
 	{
 		debug(LOG_ERROR, "stackRemoveTop: stack empty");
-		ASSERT( FALSE, "stackRemoveTop: stack empty" );
-		return FALSE;
+		ASSERT( false, "stackRemoveTop: stack empty" );
+		return false;
 	}
 
 	/* move the stack pointer down one */
@@ -1085,7 +1045,7 @@ static inline BOOL stackRemoveTop(void)
 		currEntry--;
 	}
 
-	return TRUE;
+	return true;
 }
 
 
@@ -1098,184 +1058,3 @@ void stackReset(void)
 	psCurrChunk = psStackBase;
 	currEntry = 0;
 }
-
-
-
-/* Get the first entry on the stack
- * (i.e. the second value for a binary operator).
- */
-/*BOOL stackGetTop(UDWORD *pType, UDWORD *pData)
-{
-	STACK_CHUNK		*psChunk;
-	INTERP_VAL		*psVal;
-
-	if (psCurrChunk->psPrev == NULL && currEntry == 0)
-	{
-		ASSERT( FALSE, "stackGetTop: not enough entries on stack" );
-		return FALSE;
-	}
-
-	if (currEntry == 0)
-	{
-		// Value is on the previous chunk
-		psChunk = psCurrChunk->psPrev;
-		psVal = psChunk->aVals + psChunk->size - 1;
-	}
-	else
-	{
-		psVal = psCurrChunk->aVals + currEntry - 1;
-	}
-
-	// The data could be any type but this will copy it over
-	*pType = (UDWORD)psVal->type;
-	*pData = (UDWORD)psVal->v.ival;
-
-	return TRUE;
-}*/
-
-
-/* Replace the value at the top of the stack */
-/*BOOL stackSetTop(UDWORD type, UDWORD data)
-{
-	STACK_CHUNK		*psChunk;
-	INTERP_VAL		*psVal;
-
-	if (psCurrChunk->psPrev == NULL && currEntry == 0)
-	{
-		ASSERT( FALSE, "stackSetTop: not enough entries on stack" );
-		return FALSE;
-	}
-
-	if (currEntry == 0)
-	{
-		// Value is on the previous chunk
-		psChunk = psCurrChunk->psPrev;
-		psVal = psChunk->aVals + psChunk->size - 1;
-	}
-	else
-	{
-		psVal = psCurrChunk->aVals + currEntry - 1;
-	}
-
-	// The data could be any type but this will copy it over
-	psVal->type = type;
-	psVal->v.ival = (SDWORD)data;
-
-	return TRUE;
-}*/
-
-
-/* Get the second entry on the stack
- * (i.e. the first value for a binary operator).
- */
-/*BOOL stackGetSecond(UDWORD *pType, UDWORD *pData)
-{
-	STACK_CHUNK		*psChunk;
-	INTERP_VAL		*psVal;
-
-	if (psCurrChunk->psPrev == NULL && currEntry < 2)
-	{
-		ASSERT( FALSE, "stackGetSecond: not enough entries on stack" );
-		return FALSE;
-	}
-
-	if (currEntry < 2)
-	{
-		// Value is on the previous chunk
-		psChunk = psCurrChunk->psPrev;
-		psVal = psChunk->aVals + psChunk->size + currEntry - 2;
-	}
-	else
-	{
-		psVal = psCurrChunk->aVals + currEntry - 2;
-	}
-
-	// The data could be any type but this will copy it over
-	*pType = (UDWORD)psVal->type;
-	*pData = (UDWORD)psVal->v.ival;
-
-	return TRUE;
-}*/
-
-
-/* Get pointers to the two top values */
-/*BOOL stackTopTwo(INTERP_VAL **ppsV1, INTERP_VAL **ppsV2)
-{
-	STACK_CHUNK		*psChunk;
-
-	if (psCurrChunk->psPrev == NULL && currEntry < 2)
-	{
-		ASSERT( FALSE, "stackGetSecond: not enough entries on stack" );
-		return FALSE;
-	}
-
-	if (currEntry > 1)
-	{
-		*ppsV1 = psCurrChunk->aVals + currEntry - 2;
-		*ppsV2 = psCurrChunk->aVals + currEntry - 1;
-	}
-	else if (currEntry == 1)
-	{
-		// Value is on the previous chunk, but pop doesn't change the chunk
-		psChunk = psCurrChunk->psPrev;
-		*ppsV1 = psChunk->aVals + psChunk->size - 1;
-		*ppsV2 = psCurrChunk->aVals + currEntry - 1;
-	}
-	else
-	{
-		// both on the previous chunk
-		psChunk = psCurrChunk->psPrev;
-		*ppsV1 = psChunk->aVals + psChunk->size - 2;
-		*ppsV2 = psChunk->aVals + psChunk->size - 1;
-	}
-
-	return TRUE;
-}*/
-
-
-/* Pop the top value from the stack and replace the new top value
- * This is used to return the result of a binary maths operator
- */
-/*BOOL stackPopAndSet(UDWORD type, UDWORD data)
-{
-	STACK_CHUNK		*psChunk;
-	INTERP_VAL		*psVal;
-
-	if (psCurrChunk->psPrev == NULL && currEntry < 2)
-	{
-		ASSERT( FALSE, "stackGetSecond: not enough entries on stack" );
-		return FALSE;
-	}
-
-	if (currEntry > 1)
-	{
-		psVal = psCurrChunk->aVals + currEntry - 2;
-		currEntry -= 1;
-	}
-	else if (currEntry == 1)
-	{
-		// Value is on the previous chunk, but pop doesn't change the chunk
-		psChunk = psCurrChunk->psPrev;
-		psVal = psChunk->aVals + psChunk->size - 1;
-		currEntry -= 1;
-	}
-	else
-	{
-		// pop to the previous chunk
-		psCurrChunk = psCurrChunk->psPrev;
-		psVal = psCurrChunk->aVals + psCurrChunk->size - 2;
-		currEntry = psCurrChunk->size - 1;
-	}
-
-	// The data could be any type but this will copy it over
-	psVal->type = type;
-	psVal->v.ival = (SDWORD)data;
-
-	return TRUE;
-}*/
-
-
-
-
-
-

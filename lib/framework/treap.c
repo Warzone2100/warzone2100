@@ -55,7 +55,7 @@ void treapSetCallPos(const char *pFileName, SDWORD lineNumber)
 }
 
 /* nothing actually uses the default comparison function.... */
-static SDWORD defaultCmp(void *key1, void *key2)
+static SDWORD defaultCmp(const void *key1, const void *key2)
 {
 	if (key1 < key2)
 	{
@@ -70,7 +70,7 @@ static SDWORD defaultCmp(void *key1, void *key2)
 }
 
 /* A useful comparison function - keys are char pointers */
-SDWORD treapStringCmp(void *key1, void *key2)
+SDWORD treapStringCmp(const void *key1, const void *key2)
 {
 	SDWORD result;
 	const char *pStr1 = (const char *)key1;
@@ -90,7 +90,7 @@ BOOL treapCreate(TREAP **ppsTreap, TREAP_CMP cmp)
 	{
 		debug( LOG_ERROR, "treapCreate: Out of memory" );
 		abort();
-		return FALSE;
+		return false;
 	}
 
 	// Store the comparison function if there is one, use the default otherwise
@@ -111,7 +111,7 @@ BOOL treapCreate(TREAP **ppsTreap, TREAP_CMP cmp)
 	(*ppsTreap)->pFile = pCFile;
 	(*ppsTreap)->line = cLine;
 #endif
-	return TRUE;
+	return true;
 }
 
 /* Rotate a tree to the right
@@ -184,7 +184,7 @@ BOOL treapAdd(TREAP *psTreap, void *key, void *pObj)
 	if (psNew == NULL)
 	{
 		debug(LOG_ERROR, "treapAdd: Out of memory");
-		return FALSE;
+		return false;
 	}
 	psNew->priority = (UDWORD)rand();
 	psNew->key = key;
@@ -199,7 +199,7 @@ BOOL treapAdd(TREAP *psTreap, void *key, void *pObj)
 
 	treapAddNode(&psTreap->psRoot, psNew, psTreap->cmp);
 
-	return TRUE;
+	return true;
 }
 
 
@@ -265,7 +265,7 @@ TREAP_NODE *treapDelRec(TREAP_NODE **ppsRoot, void *key, TREAP_CMP cmp)
 		}
 		break;
 	default:
-		ASSERT( FALSE, "treapDelRec: invalid return from comparison" );
+		ASSERT( false, "treapDelRec: invalid return from comparison" );
 		break;
 	}
 	return NULL;
@@ -281,7 +281,7 @@ BOOL treapDel(TREAP *psTreap, void *key)
 	psDel = treapDelRec(&psTreap->psRoot, key, psTreap->cmp);
 	if (!psDel)
 	{
-		return FALSE;
+		return false;
 	}
 
 	// Release the node
@@ -290,12 +290,12 @@ BOOL treapDel(TREAP *psTreap, void *key)
 #endif
 	free(psDel);
 
-	return TRUE;
+	return true;
 }
 
 
 /* Recursively find an object in a treap */
-void *treapFindRec(TREAP_NODE *psRoot, void *key, TREAP_CMP cmp)
+static void *treapFindRec(TREAP_NODE *psRoot, const void *key, TREAP_CMP cmp)
 {
 	if (psRoot == NULL)
 	{
@@ -315,7 +315,7 @@ void *treapFindRec(TREAP_NODE *psRoot, void *key, TREAP_CMP cmp)
 		return treapFindRec(psRoot->psRight, key, cmp);
 		break;
 	default:
-		ASSERT( FALSE, "treapFindRec: invalid return from comparison" );
+		ASSERT( false, "treapFindRec: invalid return from comparison" );
 		break;
 	}
 	return NULL;
@@ -323,7 +323,7 @@ void *treapFindRec(TREAP_NODE *psRoot, void *key, TREAP_CMP cmp)
 
 
 /* Find an object in a treap */
-void *treapFind(TREAP *psTreap, void *key)
+void *treapFind(TREAP *psTreap, const void *key)
 {
 	return treapFindRec(psTreap->psRoot, key, psTreap->cmp);
 }

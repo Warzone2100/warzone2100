@@ -24,17 +24,17 @@
 BOOL seq_Play(char *filename)
 {
 	debug( LOG_WARNING, "Sequence display is currently disabled (%s)", filename);
-	return FALSE;
+	return false;
 }
 
 BOOL seq_Playing()
 {
-	return FALSE;
+	return false;
 }
 
 BOOL seq_Update()
 {
-	return FALSE;
+	return false;
 }
 
 void seq_Shutdown()

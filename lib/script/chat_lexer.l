@@ -26,13 +26,11 @@
  *
  */
 
-#include <stdio.h>
-
 #include "lib/framework/frame.h"
+
 #include "src/basedef.h"
 #include "src/droiddef.h"
 #include "src/structuredef.h"
-//#include "src/scriptfuncs.h"
 #include "lib/script/script.h"
 #include "src/scriptfuncs.h"
 #include "lib/script/chat_processing.h"
@@ -86,10 +84,12 @@ static SDWORD playerIndex;
 "after"						{ return _T_AFTER; }
 "ally"						{ return _T_ALLY; }
 "am"						{ return _T_AM; }
+"an"						{ return _T_AN; }
 "and"						{ return _T_AND; }
 "any"						{ return _T_ANY; }
 "attack"					{ return _T_ATTACK; }
 "attacking"					{ return _T_ATTACKING; }
+"army"						{ return _T_ARMY; }
 "beacon"					{ return _T_BEACON; }
 "building"					{ return _T_BUILDING; }
 "can't"						{ return _T_CANT; }
@@ -99,6 +99,7 @@ static SDWORD playerIndex;
 "do"						{ return _T_DO; }
 "drop"						{ return _T_DROP; }
 "fine"						{ return _T_FINE; }
+"force"						{ return _T_FORCE; }
 "get"						{ return _T_GET; }
 "getting"					{ return _T_GETTING; }
 "go"						{ return _T_GO; }
@@ -115,6 +116,7 @@ static SDWORD playerIndex;
 "lassat"					{ return _T_LASSAT; }
 "let's"						{ return _T_LETS; }
 "me"						{ return _T_ME; }
+"more"						{ return _T_MORE; }
 "need"						{ return _T_NEED; }
 "no"						{ return _T_NO; }
 "now"						{ return _T_NOW; }
@@ -125,6 +127,8 @@ static SDWORD playerIndex;
 "power"						{ return _T_POWER; }
 "pumping"					{ return _T_PUMPING; }
 "put"						{ return _T_PUT; }
+"ready"						{ return _T_READY; }
+"require"					{ return _T_REQUIRE; }
 "roger"						{ return _T_ROGER; }
 "see"						{ return _T_SEE; }
 "some"						{ return _T_SOME; }
@@ -133,6 +137,7 @@ static SDWORD playerIndex;
 "sure"						{ return _T_SURE; }
 "thank you"					{ return _T_THANK_YOU; }
 "thanks"					{ return _T_THANKS; }
+"the"						{ return _T_THE; }
 "u"							{ return _T_U; }
 "units"						{ return _T_UNITS; }
 "vtols"						{ return _T_VTOLS; }
@@ -140,6 +145,7 @@ static SDWORD playerIndex;
 "where"						{ return _T_WHERE; }
 "yea"						{ return _T_YEA; }
 "yeah"						{ return _T_YEAH; }
+"yep"						{ return _T_YEP; }
 "yes"						{ return _T_YES; }
 "you"						{ return _T_YOU; }
 
@@ -196,9 +202,11 @@ int chat_wrap(void)
 /* Older GNU Flex versions don't define yylex_destroy()
  * (and neither define a subminor version)
  */
-#if !defined(YY_FLEX_SUBMINOR_VERSION) || (YY_FLEX_SUBMINOR_VERSION < 30)
+#if !defined(YY_FLEX_SUBMINOR_VERSION) || (YY_FLEX_SUBMINOR_VERSION < 9)
 int chat_lex_destroy(void)
 {
+	/* For non-reentrant C scanner only. */
+	yy_delete_buffer(YY_CURRENT_BUFFER);
+	yy_init = 1;
 }
 #endif
-

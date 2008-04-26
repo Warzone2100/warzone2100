@@ -21,20 +21,12 @@
  *  Handle clipboard text and data in arbitrary formats
  */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <limits.h>
-#include <string.h>
+#include "lib/framework/frame.h"
 
 #include <SDL.h>
 #include <SDL_syswm.h>
 
-#include "lib/framework/frame.h"
 #include "scrap.h"
-
-/* Miscellaneous defines */
-#define PUBLIC
-#define PRIVATE	static
 
 /* System dependent data types */
 #if defined(WZ_WS_X11)
@@ -76,7 +68,7 @@ static unsigned short InputGroup;
 
 #define FORMAT_PREFIX	"SDL_scrap_0x"
 
-PRIVATE scrap_type
+static scrap_type
 convert_format(int type)
 {
 switch (type)
@@ -102,8 +94,6 @@ switch (type)
 		char format[sizeof(FORMAT_PREFIX)+8+1];
 
 		snprintf(format, sizeof(format), "%s%08lx", FORMAT_PREFIX, (unsigned long)type);
-		// Guarantee to nul-terminate
-		format[sizeof(format) - 1] = '\0';
 
 #if defined(WZ_WS_X11)
 /* * */
@@ -119,13 +109,13 @@ switch (type)
 }
 
 /* Convert internal data to scrap format */
-PRIVATE int
+static int
 convert_data(int type, char *dst, char *src, int srclen)
 {
-int dstlen;
+	int dstlen;
 
-dstlen = 0;
-switch (type)
+	dstlen = 0;
+	switch (type)
 	{
 	case T('T', 'E', 'X', 'T'):
 	if ( dst )
@@ -186,20 +176,20 @@ switch (type)
 	break;
 
 	default:
-	if ( dst )
+		if ( dst )
 		{
-		*(int *)dst = srclen;
-		dst += sizeof(int);
-		memcpy(dst, src, srclen);
+			*(int *)dst = srclen;
+			dst += sizeof(int);
+			memcpy(dst, src, srclen);
 		}
-	dstlen = sizeof(int)+srclen;
-	break;
+		dstlen = sizeof(int)+srclen;
+		break;
 	}
 	return(dstlen);
 }
 
 /* Convert scrap data to internal format */
-PRIVATE int
+static int
 convert_scrap(int type, char *dst, char *src, int srclen)
 {
 int dstlen;
@@ -268,10 +258,10 @@ return dstlen;
 
 #if defined(WZ_WS_X11)
 /* The system message filter function -- handle clipboard messages */
-PRIVATE int clipboard_filter(const SDL_Event *event);
+static int clipboard_filter(const SDL_Event *event);
 #endif
 
-PUBLIC int
+int
 init_scrap(void)
 {
 SDL_SysWMinfo info;
@@ -320,53 +310,44 @@ if ( SDL_GetWMInfo(&info) )
 return(retval);
 }
 
-PUBLIC int
-lost_scrap(void)
+int lost_scrap(void)
 {
-int retval;
+	int retval;
 
 #if defined(WZ_WS_X11)
-/* * */
-Lock_Display();
-retval = ( XGetSelectionOwner(SDL_Display, XA_PRIMARY) != SDL_Window );
-Unlock_Display();
-
+	Lock_Display();
+	retval = ( XGetSelectionOwner(SDL_Display, XA_PRIMARY) != SDL_Window );
+	Unlock_Display();
 #elif defined(WZ_WS_WIN)
-/* * */
-retval = ( GetClipboardOwner() != SDL_Window );
-
+	retval = ( GetClipboardOwner() != SDL_Window );
 #elif defined(WZ_WS_QNX)
-/* * */
-retval = ( PhInputGroup(NULL) != InputGroup );
-
+	retval = ( PhInputGroup(NULL) != InputGroup );
 #endif /* scrap type */
-
-return(retval);
+	return(retval);
 }
 
-PUBLIC void
+void
 put_scrap(int type, int srclen, char *src)
 {
-scrap_type format;
-int dstlen;
-char *dst;
+	scrap_type format;
+	int dstlen;
+	char *dst;
 
-format = convert_format(type);
-dstlen = convert_data(type, NULL, src, srclen);
+	format = convert_format(type);
+	dstlen = convert_data(type, NULL, src, srclen);
 
 #if defined(WZ_WS_X11)
-/* * */
-dst = (char *)malloc(dstlen);
-if ( dst != NULL )
+	dst = (char *)malloc(dstlen);
+	if ( dst != NULL )
 	{
-	Lock_Display();
-	convert_data(type, dst, src, srclen);
-	XChangeProperty(SDL_Display, DefaultRootWindow(SDL_Display),
-		XA_CUT_BUFFER0, format, 8, PropModeReplace, (unsigned char *)dst, dstlen);
-	free(dst);
-	if ( lost_scrap() )
-		XSetSelectionOwner(SDL_Display, XA_PRIMARY, SDL_Window, CurrentTime);
-	Unlock_Display();
+		Lock_Display();
+		convert_data(type, dst, src, srclen);
+		XChangeProperty(SDL_Display, DefaultRootWindow(SDL_Display),
+			XA_CUT_BUFFER0, format, 8, PropModeReplace, (unsigned char *)dst, dstlen);
+		free(dst);
+		if ( lost_scrap() )
+			XSetSelectionOwner(SDL_Display, XA_PRIMARY, SDL_Window, CurrentTime);
+		Unlock_Display();
 	}
 
 #elif defined(WZ_WS_WIN)
@@ -444,7 +425,7 @@ if ( OpenClipboard(SDL_Window) )
 #endif /* scrap type */
 }
 
-PUBLIC void
+void
 get_scrap(int type, int *dstlen, char **dst)
 {
 	scrap_type format;
@@ -597,15 +578,16 @@ get_scrap(int type, int *dstlen, char **dst)
 }
 
 #if defined(WZ_WS_X11)
-PRIVATE int clipboard_filter(const SDL_Event *event)
+static int clipboard_filter(const SDL_Event *event)
 {
-/* Post all non-window manager specific events */
-if ( event->type != SDL_SYSWMEVENT ) {
-	return(1);
-}
+	/* Post all non-window manager specific events */
+	if (event->type != SDL_SYSWMEVENT)
+	{
+		return(1);
+	}
 
-/* Handle window-manager specific clipboard events */
-switch (event->syswm.msg->event.xevent.type) {
+	/* Handle window-manager specific clipboard events */
+	switch (event->syswm.msg->event.xevent.type) {
 	/* Copy the selection from XA_CUT_BUFFER0 to the requested property */
 	case SelectionRequest: {
 	XSelectionRequestEvent *req;

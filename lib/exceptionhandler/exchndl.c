@@ -35,8 +35,9 @@
 #include <limits.h>
 
 
+#if !defined(WZ_CC_MSVC)
 #define HAVE_BFD	1
-
+#endif
 
 // Declare the static variables
 static TCHAR szLogFileName[MAX_PATH] = _T("");
@@ -824,7 +825,7 @@ void GenerateExceptionReport(PEXCEPTION_POINTERS pExceptionInfo)
 	rprintf(_T("-------------------\r\n\r\n"));
 
 	{
-		TCHAR *lpDayOfWeek[] = {
+		const TCHAR *lpDayOfWeek[] = {
 			_T("Sunday"),
 			_T("Monday"),
 			_T("Tuesday"),
@@ -833,7 +834,7 @@ void GenerateExceptionReport(PEXCEPTION_POINTERS pExceptionInfo)
 			_T("Friday"),
 			_T("Saturday")
 		};
-		TCHAR *lpMonth[] = {
+		const TCHAR *lpMonth[] = {
 			NULL,
 			_T("January"),
 			_T("February"),

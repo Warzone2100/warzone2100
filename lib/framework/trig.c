@@ -81,7 +81,7 @@ BOOL trigInitialise(void)
 		aSqrt[i]= sqrtf(val);
 	}
 
-	return TRUE;
+	return true;
 }
 
 

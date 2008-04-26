@@ -12,6 +12,9 @@ data/mp/messages/strings/resstrings.txt
 lib/exceptionhandler/exceptionhandler.c
 lib/exceptionhandler/exchndl.c
 lib/framework/configfile.c
+lib/framework/cursors16.c
+lib/framework/cursors32.c
+lib/framework/cursors.c
 lib/framework/debug.c
 lib/framework/frame.c
 lib/framework/frameresource.c
@@ -65,6 +68,8 @@ lib/sound/openal_error.c
 lib/sound/openal_track.c
 lib/sound/playlist.c
 lib/sound/track.c
+lib/sqlite3/physfs_vfs.c
+lib/sqlite3/sqlite3.c
 lib/widget/bar.c
 lib/widget/button.c
 lib/widget/editbox.c
@@ -109,7 +114,6 @@ src/frontend.c
 src/function.c
 src/game.c
 src/gateway.c
-src/gatewayroute.c
 src/geometry.c
 src/group.c
 src/hci.c
@@ -166,6 +170,7 @@ src/scriptvals.c
 src/selection.c
 src/seqdisp.c
 src/stats.c
+src/stats-db.c
 src/structure.c
 src/target.c
 src/text.c

@@ -107,14 +107,15 @@ extern SCRIPT_CODE* scriptCompile(PHYSFS_file* fileHandle, SCR_DEBUGTYPE debugTy
 /* Free a SCRIPT_CODE structure */
 extern void scriptFreeCode(SCRIPT_CODE *psCode);
 
-/* Display the contents of a program in readable form */
-extern void cpPrintProgram(SCRIPT_CODE *psProg);
-
 /* Lookup a script variable */
 extern BOOL scriptGetVarIndex(SCRIPT_CODE *psCode, char *pID, UDWORD *pIndex);
 
 /* returns true if passed INTERP_TYPE is used as a pointer in INTERP_VAL, false otherwise */
 extern BOOL scriptTypeIsPointer(INTERP_TYPE type);
+
+extern const char *scriptTypeToString(INTERP_TYPE type) WZ_DECL_PURE;
+extern const char *scriptOpcodeToString(OPCODE opcode) WZ_DECL_PURE;
+extern const char *scriptFunctionToString(SCRIPT_FUNC function) WZ_DECL_PURE;
 
 /* Run a compiled script */
 extern BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType,
@@ -171,7 +172,7 @@ extern BOOL eventGetContextVal(SCRIPT_CONTEXT *psContext, UDWORD index,
 extern void eventProcessTriggers(UDWORD currTime);
 
 // Activate a callback trigger
-extern void eventFireCallbackTrigger(int callback);
+extern void eventFireCallbackTrigger(TRIGGER_TYPE callback);
 
 /***********************************************************************************
  *
@@ -183,7 +184,7 @@ extern void eventFireCallbackTrigger(int callback);
  * The varargs part is a set of INTERP_TYPE, UDWORD * pairs.
  * The value of the parameter is stored in the DWORD pointed to by the UDWORD *
  */
-extern BOOL stackPopParams(SDWORD numParams, ...);
+extern BOOL stackPopParams(unsigned int numParams, ...);
 
 /* Push a value onto the stack without using a value structure */
 extern BOOL stackPushResult(INTERP_TYPE type, INTERP_VAL *result);

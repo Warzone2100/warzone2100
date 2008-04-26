@@ -33,6 +33,7 @@ extern BOOL dispInitialise(void);
 extern Uint16 mouseXPos, mouseYPos;
 
 extern void shakeStart(void);
+extern void shakeStop(void);
 
 extern void ProcessRadarInput(void);
 
@@ -160,7 +161,7 @@ MT_NOTARGET		//leave as last one
 
 extern BOOL		gameStats;
 extern BOOL		godMode;
-extern UWORD	RadarZoomLevel;
+extern float		RadarZoomLevel;
 
 // reset the input state
 void resetInput(void);
@@ -180,7 +181,6 @@ extern void CancelDeliveryRepos(void);
 extern void StartDeliveryPosition( OBJECT_POSITION *psLocation );
 extern BOOL DeliveryReposValid(void);
 
-extern void StartTacticalScroll(BOOL driveActive);
 extern void StartTacticalScrollObj(BOOL driveActive,BASE_OBJECT *psObj);
 extern void CancelTacticalScroll(void);
 extern void MoveTacticalScroll(SDWORD xVel,SDWORD yVel);

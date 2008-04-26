@@ -26,9 +26,13 @@
 
 #include "objectdef.h"
 #include "structuredef.h"
+#include "visibility.h"
 
 // how long to wait between CALL_STRUCT_ATTACKED's - plus how long to flash on radar for
 #define ATTACK_CB_PAUSE		5000
+
+/// Extra z padding for assembly points
+#define ASSEMBLY_POINT_Z_PADDING 10
 
 #define	STRUCTURE_DAMAGE_SCALING	400
 // This should really be logarithmic
@@ -93,6 +97,8 @@ extern REARM_UPGRADE		asReArmUpgrade[MAX_PLAYERS];
 extern STRUCTSTRENGTH_MODIFIER		asStructStrengthModifier[WE_NUMEFFECTS][
 													NUM_STRUCT_STRENGTH];
 
+extern void handleAbandonedStructures(void);
+
 extern BOOL IsPlayerDroidLimitReached(UDWORD PlayerNumber);
 extern BOOL IsPlayerStructureLimitReached(UDWORD PlayerNumber);
 extern BOOL CheckHaltOnMaxUnitsReached(STRUCTURE *psStructure);
@@ -129,7 +135,7 @@ void structureRelease(STRUCTURE *psBuilding);
 extern BOOL destroyStruct(STRUCTURE *psDel);
 
 // remove a structure from a game without any visible effects
-// bDestroy = TRUE if the object is to be destroyed
+// bDestroy = true if the object is to be destroyed
 // (for example used to change the type of wall at a location)
 BOOL removeStruct(STRUCTURE *psDel, BOOL bDestroy);
 
@@ -156,6 +162,7 @@ extern BOOL checkWidth(UDWORD maxRange, UDWORD x, UDWORD y, UDWORD *pDroidX, UDW
 extern BOOL checkLength(UDWORD maxRange, UDWORD x, UDWORD y, UDWORD *pDroidX, UDWORD *pDroidY);
 
 extern SWORD buildFoundation(STRUCTURE_STATS *psStructStats, UDWORD x, UDWORD y);
+extern void alignStructure(STRUCTURE *psBuilding);
 
 //initialise the structure limits structure
 extern void initStructLimits(void);
@@ -163,7 +170,7 @@ extern void initStructLimits(void);
 extern void setCurrentStructQuantity(BOOL displayError);
 /* get a stat inc based on the name */
 extern SDWORD getStructStatFromName(char *pName);
-/*check to see if the structure is 'doing' anything  - return TRUE if idle*/
+/*check to see if the structure is 'doing' anything  - return true if idle*/
 extern BOOL  structureIdle(STRUCTURE *psBuilding);
 /*checks to see if any structure exists of a specified type with a specified status */
 extern BOOL checkStructureStatus( STRUCTURE_STATS *psStats, UDWORD player, UDWORD status);
@@ -250,7 +257,7 @@ extern unsigned int countAssignedDroids(STRUCTURE *psStructure);
 //print some info at the top of the screen dependant on the structure
 extern void printStructureInfo(STRUCTURE *psStructure);
 
-/*Checks the template type against the factory type - returns FALSE
+/*Checks the template type against the factory type - returns false
 if not a good combination!*/
 extern BOOL validTemplateForFactory(DROID_TEMPLATE *psTemplate, STRUCTURE *psFactory);
 
@@ -336,19 +343,19 @@ FIRE_SUPPORT order can be assigned*/
 extern BOOL structSensorDroidWeapon(STRUCTURE *psStruct, DROID *psDroid);
 
 /*checks if the structure has a Counter Battery sensor attached - returns
-TRUE if it has*/
-extern BOOL structCBSensor(STRUCTURE *psStruct);
+true if it has*/
+extern BOOL structCBSensor(const STRUCTURE* psStruct);
 /*checks if the structure has a Standard Turret sensor attached - returns
-TRUE if it has*/
-extern BOOL structStandardSensor(STRUCTURE *psStruct);
+true if it has*/
+extern BOOL structStandardSensor(const STRUCTURE* psStruct);
 
 /*checks if the structure has a VTOL Intercept sensor attached - returns
-TRUE if it has*/
-extern BOOL structVTOLSensor(STRUCTURE *psStruct);
+true if it has*/
+extern BOOL structVTOLSensor(const STRUCTURE* psStruct);
 
 /*checks if the structure has a VTOL Counter Battery sensor attached - returns
-TRUE if it has*/
-extern BOOL structVTOLCBSensor(STRUCTURE *psStruct);
+true if it has*/
+extern BOOL structVTOLCBSensor(const STRUCTURE* psStruct);
 
 // return the nearest rearm pad
 // if bClear is true it tries to find the nearest clear rearm pad in
@@ -392,10 +399,35 @@ extern BOOL checkFactoryExists(UDWORD player, UDWORD factoryType, UDWORD inc);
 extern BOOL	ptInStructure(STRUCTURE *psStruct, UDWORD x, UDWORD y);
 
 /*checks the structure passed in is a Las Sat structure which is currently
-selected - returns TRUE if valid*/
+selected - returns true if valid*/
 extern BOOL lasSatStructSelected(STRUCTURE *psStruct);
 
 BOOL structureCheckReferences(STRUCTURE *psVictimStruct);
+
+static inline int structSensorRange(const STRUCTURE* psObj)
+{
+	return objSensorRange((const BASE_OBJECT*)psObj);
+}
+
+static inline int structSensorPower(const STRUCTURE* psObj)
+{
+	return objSensorPower((const BASE_OBJECT*)psObj);
+}
+
+static inline int structJammerRange(const STRUCTURE* psObj)
+{
+	return objJammerRange((const BASE_OBJECT*)psObj);
+}
+
+static inline int structJammerPower(const STRUCTURE* psObj)
+{
+	return objJammerPower((const BASE_OBJECT*)psObj);
+}
+
+static inline int structConcealment(const STRUCTURE* psObj)
+{
+	return objConcealment((const BASE_OBJECT*)psObj);
+}
 
 #define setStructureTarget(_psBuilding, _psNewTarget, _idx) _setStructureTarget(_psBuilding, _psNewTarget, _idx, __LINE__, __FUNCTION__)
 static inline void _setStructureTarget(STRUCTURE *psBuilding, BASE_OBJECT *psNewTarget, UWORD idx, int line, const char *func)
@@ -427,5 +459,7 @@ do { \
 		} \
 	} \
 } while (0)
+
+extern void     structureInitVars(void);
 
 #endif // __INCLUDED_SRC_STRUCTURE_H__

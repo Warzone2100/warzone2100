@@ -38,7 +38,7 @@
 static UDWORD avConsidered;
 static UDWORD avCalculated;
 static UDWORD avIgnored;
-static BOOL bRevealActive = FALSE;
+static BOOL bRevealActive = false;
 
 
 // ------------------------------------------------------------------------------------
@@ -71,7 +71,7 @@ SDWORD	lowerX,upperX,lowerY,upperY;
 		{
 			/* tile is off the grid, so force to maximum and finish */
 			psTile->level = psTile->illumination;
-			psTile->bMaxed = TRUE;
+			psTile->bMaxed = true;
 		}
 	}
 	else
@@ -94,11 +94,11 @@ static void processAVTile(UDWORD x, UDWORD y)
 		return;
 	}
 
-	newLevel = psTile->level + timeAdjustedIncrement(FADE_IN_TIME, TRUE);
+	newLevel = psTile->level + timeAdjustedIncrement(FADE_IN_TIME, true);
 	if (newLevel >= psTile->illumination)
 	{
 		psTile->level = psTile->illumination;
-		psTile->bMaxed = TRUE;
+		psTile->bMaxed = true;
 	}
 	else
 	{
@@ -209,13 +209,13 @@ MAPTILE		*psTile;
 			psTile = mapTile(i,j);
 		   	if(TEST_TILE_VISIBLE(selectedPlayer,psTile))
 		  	{
-				psTile->bMaxed = TRUE;
+				psTile->bMaxed = true;
 				psTile->level = psTile->illumination;
 		  	}
 			else
 			{
 			 	psTile->level = -1;
-				psTile->bMaxed = FALSE;
+				psTile->bMaxed = false;
 			}
 		}
 	}

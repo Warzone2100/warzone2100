@@ -41,16 +41,15 @@ BOOL cdAudio_Open(const char* user_musicdir)
 {
 	PlayList_Init();
 
-	if ((user_musicdir == NULL
-	  || !PlayList_Read(user_musicdir))
-	 && !PlayList_Read("music"))
+	if (user_musicdir == NULL
+	 || !PlayList_Read(user_musicdir))
 	{
-		return FALSE;
+		return false;
 	}
 
 	music_initialized = true;
 
-	return TRUE;
+	return true;
 }
 
 static void cdAudio_CloseTrack(void)
@@ -148,7 +147,7 @@ BOOL cdAudio_PlayTrack(SDWORD iTrack)
 			if (filename == NULL)
 			{
 				music_track = 0;
-				return FALSE;
+				return false;
 			}
 			if (cdAudio_OpenTrack(filename))
 			{
@@ -157,14 +156,14 @@ BOOL cdAudio_PlayTrack(SDWORD iTrack)
 			}
 			else
 			{
-				return FALSE; // break out to avoid infinite loops
+				return false; // break out to avoid infinite loops
 			}
 
 			filename = PlayList_NextSong();
 		}
 	}
 
-	return TRUE;
+	return true;
 }
 
 void cdAudio_Stop()

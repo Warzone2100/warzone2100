@@ -4,13 +4,15 @@
 //
 // See header file for documentation.
 
-#include <assert.h>
-#include <stdlib.h>
-#include <string.h>
+// #include <assert.h>
+// #include <stdlib.h>
+// #include <string.h>
 
 #include "frame.h"
 
 #include "tagfile.h"
+
+#include "physfs_ext.h"
 
 // Tags of values 0x0 and 0xFF are reserved as instance separators and group end
 // tags, respectively. You cannot use a separator in your definition file, but
@@ -30,7 +32,7 @@ enum internal_types
 // A definition group
 typedef struct _define
 {
-	int16_t vm; //! value multiple
+	unsigned int vm; //! value multiple
 	uint8_t element; //! tag number
 	char vr[2]; //! value representation (type)
 	struct _define *parent;	//! parent group
@@ -61,6 +63,7 @@ static int countGroups = 0;		// check group recursion count while reading defini
 static char saveDefine[PATH_MAX];	// save define file for error messages
 static char saveTarget[PATH_MAX];	// save binary file for error messages
 
+#undef DEBUG_TAGFILE
 
 static void tf_error(const char * fmt, ...) WZ_DECL_FORMAT(printf, 1, 2);
 static void tf_print_nested_groups(unsigned int level, define_t *group);
@@ -87,10 +90,12 @@ do { \
 } while(0)
 
 
-static const char * bool2string(bool var)
+/*
+static inline WZ_DECL_CONST const char * bool2string(bool var)
 {
 	return (var ? "true" : "false");
 }
+*/
 
 
 void tf_error(const char * fmt, ...)
@@ -103,7 +108,7 @@ void tf_error(const char * fmt, ...)
 	va_start(ap, fmt);
 	vsnprintf(errorBuffer, sizeof(errorBuffer), fmt, ap);
 	va_end(ap);
-	debug(LOG_ERROR, errorBuffer);
+	debug(LOG_ERROR, "%s", errorBuffer);
 
 	tf_print_nested_groups(0, current);
 
@@ -123,7 +128,7 @@ void tf_print_nested_groups(unsigned int level, define_t *group)
 	{
 		debug(LOG_ERROR, "Group trace:");
 	}
-	debug(LOG_ERROR, "  #%u: %#04x %2.2s %5u default:%s", level, (unsigned int)group->element, group->vr, (unsigned int)group->vm, bool2string(group->defaultval));
+	debug(LOG_ERROR, "  #%u: %#04x %2.2s %5u default:%s", level, (unsigned int)group->element, group->vr, group->vm, bool2string(group->defaultval));
 
 	if (group->parent != NULL)
 	{
@@ -178,7 +183,7 @@ static bool scan_defines(define_t *node, define_t *group)
 			continue; // check empty lines and whitespace again
 		}
 
-		retval = sscanf(bufptr, "%x %2s %hd%n", &readelem, (char *)&vr, &node->vm, &count);
+		retval = sscanf(bufptr, "%x %2s %u%n", &readelem, (char *)&vr, &node->vm, &count);
 		node->element = readelem;
 		while (retval <= 0 && *bufptr != '\n' && *bufptr != '\0') /// TODO: WTF?
 		{
@@ -321,6 +326,9 @@ static bool init(const char *definition, const char *datafile, bool write)
 	}
 	readmode = !write;
 	current = first;
+#ifdef DEBUG_TAGFILE
+	debug(LOG_ERROR, "opening %s", datafile);
+#endif
 	return true;
 }
 
@@ -368,7 +376,7 @@ bool tagGetError()
 }
 
 
-// skip ahead to given element
+// skip ahead in definition list to given element
 static bool scan_to(element_t tag)
 {
 	if (tag == TAG_SEPARATOR)
@@ -403,6 +411,7 @@ static bool scanforward(element_t tag)
 	uint8_t tag_type;
 	PHYSFS_sint64 readsize = 0, fpos;
 	uint16_t array_size;
+	int groupskip = 0;	// levels of nested groups to skip
 
 	assert(readmode);
 	if (tag_error || current == NULL || !readmode)
@@ -418,17 +427,28 @@ static bool scanforward(element_t tag)
 	readsize = PHYSFS_read(handle, &read_tag, 1, 1);
 	while (readsize == 1) // Read from file till we've reached the destination
 	{
-		if (read_tag == tag)
+		if (read_tag == tag && groupskip <= 0)
 		{
 			assert(current->element == tag || tag == TAG_SEPARATOR);
 			return true;
 		}
-		else if (read_tag == TAG_GROUP_END
-			 || read_tag == TAG_SEPARATOR
-			 || read_tag > tag)
+		else if (read_tag == TAG_GROUP_END || (read_tag == TAG_SEPARATOR && groupskip > 0))
 		{
-			// did not find it
-			break;
+			/* New element ready already, repeat loop */
+			if (read_tag == TAG_GROUP_END)
+			{
+				groupskip--;
+				if (groupskip < 0)
+				{
+					break; // tag not found
+				}
+			}
+			readsize = PHYSFS_read(handle, &read_tag, 1, 1);
+			continue;	// no type, no payload
+		}
+		else if (read_tag == TAG_SEPARATOR || (read_tag > tag && groupskip <= 0 && tag != TAG_SEPARATOR))
+		{
+			break; // did not find it
 		}
 
 		/* If we got down here, we found something that we need to skip */
@@ -448,10 +468,9 @@ static bool scanforward(element_t tag)
 		case TF_INT_FLOAT_ARRAY:
 		case TF_INT_U8_ARRAY:
 		case TF_INT_S32_ARRAY:
-			readsize = PHYSFS_read(handle, &array_size, 1, 1);
-			if (readsize != 1)
+			if (!PHYSFS_readUBE16(handle, &array_size))
 			{
-				TF_ERROR("Error reading tag length when skipping: %s", PHYSFS_getLastError());
+				TF_ERROR("Error reading array length when skipping: %s", PHYSFS_getLastError());
 				return false;
 			}
 			break;
@@ -464,6 +483,7 @@ static bool scanforward(element_t tag)
 		{
 		case TF_INT_U8_ARRAY:
 		case TF_INT_U8:
+		case TF_INT_BOOL:
 		case TF_INT_S8: fpos += 1 * array_size; break;
 		case TF_INT_FLOAT:
 		case TF_INT_U16_ARRAY:
@@ -473,7 +493,13 @@ static bool scanforward(element_t tag)
 		case TF_INT_U32:
 		case TF_INT_S32_ARRAY:
 		case TF_INT_S32: fpos += 4 * array_size; break;
-		case TF_INT_GROUP: fpos += 2; break;
+		case TF_INT_GROUP: 
+			fpos += 2;
+			groupskip++;
+#ifdef DEBUG_TAGFILE
+			debug(LOG_ERROR, "skipping group 0x%02x (groupskip==%d)", (unsigned int)read_tag, groupskip);
+#endif
+			break;
 		default:
 			TF_ERROR("Invalid value type in buffer");
 			return false;
@@ -560,6 +586,9 @@ uint16_t tagReadEnter(element_t tag)
 		TF_ERROR("Cannot enter group, none defined for element %x!", (unsigned int)current->element);
 		return 0;
 	}
+#ifdef DEBUG_TAGFILE
+	debug(LOG_ERROR, "entering 0x%02x", (unsigned int)tag);
+#endif
 	assert(current->group->parent != NULL);
 	assert(current->element == tag);
 	current->group->expectedItems = elements;	// for debugging and consistency checking
@@ -1272,7 +1301,7 @@ bool tagWriteString(element_t tag, const char *buffer)
 	size = strlen(buffer) + 1;
 	if (size > current->vm && current->vm != 0)
 	{
-		TF_ERROR("Given string is too long (size %d > limit %d)", (int)size, (int)current->vm);
+		TF_ERROR("Given string is too long (size %d > limit %u)", (int)size, current->vm);
 		return false;
 	}
 	(void) PHYSFS_writeUBE8(handle, TF_INT_U8_ARRAY);
@@ -1300,7 +1329,6 @@ void tagTest()
 
 	// Set our testing blob to a bunch of 0x01 bytes
 	memset(blob, 1, BLOB_SIZE); // 1111111...
-
 
 	tagOpenWrite(virtual_definition, writename);
 	tagWrites(0x05, 11);
@@ -1333,6 +1361,23 @@ void tagTest()
 		tagWritefv(0x03, 3, fv);
 		tagWrite8v(0x05, BLOB_SIZE, blob);
 		tagWrite8v(0x06, BLOB_SIZE, blob);
+		tagWriteEnter(0x07, 1);		// group to test skipping
+			tagWrite(0x01, 0);	// using default
+			tagWrite(0x02, 1);
+			tagWriteEnter(0x03, 1);
+			tagWriteLeave(0x03);
+			tagWriteNext();
+			tagWrite(0x01, 1);
+			tagWrite(0x02, 0);
+			tagWriteEnter(0x03, 1);
+				tagWrite(0x01, 1);
+				tagWriteNext();
+			tagWriteLeave(0x03);
+			// deliberately no 'next' here
+		tagWriteLeave(0x07);
+		tagWriteEnter(0x08, 1);
+			// empty, skipped group
+		tagWriteLeave(0x08);
 		tagWriteEnter(0x09, 1);
 		{
 			int32_t v[3] = { -1, 0, 1 };
@@ -1381,4 +1426,5 @@ void tagTest()
 	tagReadLeave(0x02);
 	assert(tagRead(0x04) == 9);
 	tagClose();
+	fprintf(stdout, "\tTagfile self-test: PASSED\n");
 }

@@ -26,15 +26,9 @@
 
 #include "lib/framework/frame.h"
 
-#include <stdio.h>
-
 /* Allow frame header files to be singly included */
 #define FRAME_LIB_INCLUDE
 
-#include <string.h>
-#include "lib/framework/types.h"
-#include "lib/framework/debug.h"
-#include "lib/framework/treap.h"
 #include "lib/framework/strres.h"
 #include "lib/framework/strresly.h"
 
@@ -105,9 +99,9 @@ static PHYSFS_file* pReadFile = NULL;
 [ \t\n\x0d\x0a]						;
 
 	/* Strip comments */
-"/*"						{ inComment=TRUE; BEGIN COMMENT; }
+"/*"						{ inComment=true; BEGIN COMMENT; }
 <COMMENT>"*/" |
-<COMMENT>"*/"\n				{ inComment=FALSE; BEGIN 0; }
+<COMMENT>"*/"\n				{ inComment=false; BEGIN 0; }
 <COMMENT>. |
 <COMMENT>\n					;
 
@@ -151,9 +145,11 @@ int strres_wrap(void)
 /* Older GNU Flex versions don't define yylex_destroy()
  * (and neither define a subminor version)
  */
-#if !defined(YY_FLEX_SUBMINOR_VERSION) || (YY_FLEX_SUBMINOR_VERSION < 30)
+#if !defined(YY_FLEX_SUBMINOR_VERSION) || (YY_FLEX_SUBMINOR_VERSION < 9)
 int strres_lex_destroy(void)
 {
+	/* For non-reentrant C scanner only. */
+	yy_delete_buffer(YY_CURRENT_BUFFER);
+	yy_init = 1;
 }
 #endif
-

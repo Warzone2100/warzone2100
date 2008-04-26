@@ -26,10 +26,10 @@
  */
 /***************************************************************************/
 
+#include "lib/ivis_opengl/GLee.h"
 #include "lib/framework/frame.h"
 
 #include <SDL.h>
-#include <SDL_opengl.h>
 
 #include "lib/ivis_common/piedef.h"
 #include "lib/ivis_common/piestate.h"
@@ -42,12 +42,6 @@
 #include "lib/ivis_common/pieclip.h"
 #include "screen.h"
 
-/***************************************************************************/
-/*
- *	Local ProtoTypes
- */
-/***************************************************************************/
-extern void screenDoDumpToDiskIfRequired(void);
 
 /***************************************************************************/
 /*
@@ -64,11 +58,13 @@ BOOL pie_Initialise(void)
 	rendSurface.size = 0;
 
 	/* Find texture compression extension */
-	if (check_extension("GL_ARB_texture_compression"))
+	if (GLEE_ARB_texture_compression)
 	{
 		debug(LOG_TEXTURE, "Texture compression: Yes");
 		wz_texture_compression = GL_COMPRESSED_RGBA_ARB;
-	} else {
+	}
+	else
+	{
 		debug(LOG_TEXTURE, "Texture compression: No");
 		wz_texture_compression = GL_RGBA;
 	}
@@ -92,7 +88,7 @@ BOOL pie_Initialise(void)
 	pie_SetDefaultStates();
 	iV_RenderAssign(&rendSurface);
 
-	return TRUE;
+	return true;
 }
 
 
@@ -106,33 +102,27 @@ void pie_ShutDown(void) {
 
 /***************************************************************************/
 
-void pie_ScreenFlip(int clearMode) {
+void pie_ScreenFlip(int clearMode)
+{
 	GLbitfield clearFlags = 0;
 
 	screenDoDumpToDiskIfRequired();
 	SDL_GL_SwapBuffers();
-	switch (clearMode&CLEAR_MODE_MASK) {
-		case CLEAR_OFF_AND_NO_BUFFER_DOWNLOAD:
-			break;
-		case CLEAR_BLACK:
-			glDepthMask(GL_TRUE);
-			glClearColor(0.0f,0.0f,0.0f,0.0f);
-			clearFlags = GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT;
-			break;
-		default:
-			glDepthMask(GL_TRUE);
-			clearFlags = GL_DEPTH_BUFFER_BIT;
-			break;
-	}
-	if(clearMode&CLEAR_SHADOW_MASK)
+	if (!(clearMode & CLEAR_OFF_AND_NO_BUFFER_DOWNLOAD))
 	{
-		clearFlags |= GL_STENCIL_BUFFER_BIT;
+		glDepthMask(GL_TRUE);
+		clearFlags = GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT;
+		if (clearMode & CLEAR_SHADOW)
+		{
+			clearFlags |= GL_STENCIL_BUFFER_BIT;
+		}
 	}
-	if(clearFlags)
+	if (clearFlags)
 	{
 		glClear(clearFlags);
 	}
-	if (screen_GetBackDrop()) {
+	if (screen_GetBackDrop())
+	{
 		screen_Upload(NULL);
 	}
 }

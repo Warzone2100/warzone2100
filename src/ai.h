@@ -41,21 +41,21 @@
 /* Weights used for target selection code,
  * target distance is used as 'common currency'
  */
-#define	WEIGHT_DIST_TILE			11						//In points used in weaponmodifier.txt and structuremodifier.txt
+#define	WEIGHT_DIST_TILE			13						//In points used in weaponmodifier.txt and structuremodifier.txt
 #define	WEIGHT_DIST_TILE_DROID		WEIGHT_DIST_TILE		//How much weight a distance of 1 tile (128 world units) has when looking for the best nearest target
 #define	WEIGHT_DIST_TILE_STRUCT		WEIGHT_DIST_TILE
 #define	WEIGHT_HEALTH_DROID			(WEIGHT_DIST_TILE * 10)	//How much weight unit damage has (100% of damage is equaly weighted as 10 tiles distance)
 //~100% damage should be ~8 tiles (max sensor range)
-#define	WEIGHT_HEALTH_STRUCT		(WEIGHT_DIST_TILE * 10)
+#define	WEIGHT_HEALTH_STRUCT		(WEIGHT_DIST_TILE * 7)
 
 #define	WEIGHT_NOT_VISIBLE_F		10						//We really don't like objects we can't see
 
 #define	WEIGHT_SERVICE_DROIDS		(WEIGHT_DIST_TILE_DROID * 5)		//We don't want them to be repairing droids or structures while we are after them
-#define	WEIGHT_WEAPON_DROIDS		(WEIGHT_DIST_TILE_DROID * 3)		//We prefer to go after anything that has a gun and can hurt us
-#define	WEIGHT_COMMAND_DROIDS		(WEIGHT_DIST_TILE_DROID * 7)		//Commanders get a higher priority
+#define	WEIGHT_WEAPON_DROIDS		(WEIGHT_DIST_TILE_DROID * 4)		//We prefer to go after anything that has a gun and can hurt us
+#define	WEIGHT_COMMAND_DROIDS		(WEIGHT_DIST_TILE_DROID * 6)		//Commanders get a higher priority
 #define	WEIGHT_MILITARY_STRUCT		WEIGHT_DIST_TILE_STRUCT				//Droid/cyborg factories, repair facility; shouldn't have too much weight
 #define	WEIGHT_WEAPON_STRUCT		WEIGHT_WEAPON_DROIDS				//Same as weapon droids (?)
-#define	WEIGHT_DERRICK_STRUCT		(WEIGHT_WEAPON_STRUCT +	WEIGHT_DIST_TILE_STRUCT * 4)	//Even if it's 4 tiles further away than defenses we still choose it
+#define	WEIGHT_DERRICK_STRUCT		(WEIGHT_MILITARY_STRUCT + WEIGHT_DIST_TILE_STRUCT * 4)	//Even if it's 4 tiles further away than defenses we still choose it
 
 #define	WEIGHT_STRUCT_NOTBUILT_F	8						//Humans won't fool us anymore!
 

@@ -20,13 +20,12 @@
 // ////////////////////////////////////////////////////////////////////////
 // Includes
 #include "lib/framework/frame.h"
-#include "netplay.h"
-#include "netlog.h"
 
 #include <time.h>
-#include <stdio.h>
 #include <physfs.h>
-#include <string.h>
+
+#include "netlog.h"
+#include "netplay.h"
 
 // ////////////////////////////////////////////////////////////////////////
 // Logging for degug only
@@ -103,7 +102,7 @@ BOOL NETstartLogging(void)
 	time_t aclock;
 	struct tm *newtime;
 	char buf[256];
-	char *filename = "netplay.log";
+	static const char filename[] = "netplay.log";
 	int i;
 
 	for (i = 0; i < NUM_GAME_PACKETS; i++)
@@ -122,13 +121,11 @@ BOOL NETstartLogging(void)
 	{
 		debug(LOG_ERROR, "Could not create net log %s: %s", filename,
 		      PHYSFS_getLastError());
-		return FALSE;
+		return false;
 	}
 	snprintf(buf, sizeof(buf), "NETPLAY log: %s\n", asctime(newtime));
-	// Guarantee to nul-terminate
-	buf[sizeof(buf) - 1] = '\0';
 	PHYSFS_write( pFileHandle, buf, strlen( buf ), 1 );
-	return TRUE;
+	return true;
 }
 
 BOOL NETstopLogging(void)
@@ -141,18 +138,16 @@ BOOL NETstopLogging(void)
 	{
 		snprintf(buf, sizeof(buf), "%s: received %u times, %u bytes; sent %u times, %u bytes\n", packetname[i],
 			packetcount[0][i], packetsize[0][i], packetcount[1][i], packetsize[1][i]);
-		// Guarantee to nul-terminate
-		buf[sizeof(buf) - 1] = '\0';
 		PHYSFS_write(pFileHandle, buf, strlen(buf), 1);
 	}
 
 	if (!PHYSFS_close(pFileHandle))
 	{
 		debug(LOG_ERROR, "Could not close net log: %s", PHYSFS_getLastError());
-		return FALSE;
+		return false;
 	}
 
-	return TRUE;
+	return true;
 }
 
 void NETlogPacket(NETMSG *msg, BOOL received)
@@ -177,7 +172,7 @@ BOOL NETlogEntry(const char *str,UDWORD a,UDWORD b)
 #ifndef MASSIVELOGS
 	if(a ==9 || a==10)
 	{
-		return TRUE;
+		return true;
 	}
 #endif
 
@@ -200,9 +195,6 @@ BOOL NETlogEntry(const char *str,UDWORD a,UDWORD b)
 	else
 		snprintf(buf, sizeof(buf), "%s \t:%d \t\t\t:%d\t\t%s", str, a, b, asctime(newtime));
 
-	// Guarantee to nul-terminate
-	buf[sizeof(buf) - 1] = '\0';
-
 	if (a == 18) // NET_LEAVING
 		// Write a starry line above NET_LEAVING messages
 		PHYSFS_write(pFileHandle, star_line, strlen(star_line), 1);
@@ -214,5 +206,5 @@ BOOL NETlogEntry(const char *str,UDWORD a,UDWORD b)
 		PHYSFS_write(pFileHandle, star_line, strlen(star_line), 1);
 
 	PHYSFS_flush(pFileHandle);
-	return TRUE;
+	return true;
 }

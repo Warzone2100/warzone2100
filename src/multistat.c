@@ -25,24 +25,21 @@
  * load / update / store multiplayer statistics for league tables etc...
  */
 
-#include <stdio.h>
-#include <string.h>
-#include <physfs.h>
-
 #include "lib/framework/frame.h"
 #include "lib/framework/strres.h"
+#include "lib/framework/file.h"
+#include "lib/netplay/netplay.h"
+#include "lib/widget/widget.h"
+
 #include "objmem.h"
 #include "power.h"
 #include "map.h"
-#include "lib/widget/widget.h"
 #include "effects.h"	// for discovery flash
-#include "lib/netplay/netplay.h"
 #include "cmddroid.h"
 #include "multiplay.h"
 #include "multirecv.h"
 #include "multistat.h"
 #include "multiint.h"
-#include "fpath.h"
 
 extern char	MultiPlayersPath[PATH_MAX];
 
@@ -93,7 +90,7 @@ BOOL setMultiStats(SDWORD dp, PLAYERSTATS plStats, BOOL bLocal)
 		NETend();
 	}
 
-	return TRUE;
+	return true;
 }
 
 void recvMultiStats()
@@ -154,7 +151,7 @@ BOOL loadMultiStats(char *sPlayerName, PLAYERSTATS *st)
 
 		if (strncmp(pFileData, "WZ.STA.v3", 9) != 0)
 		{
-			return FALSE; // wrong version or not a stats file
+			return false; // wrong version or not a stats file
 		}
 
 		num = sscanf(pFileData, "WZ.STA.v3\n%u %u %u %u %u",
@@ -179,7 +176,7 @@ BOOL loadMultiStats(char *sPlayerName, PLAYERSTATS *st)
 		ingame.skScores[size][1] =0;
 	}
 
-	return TRUE;
+	return true;
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -197,7 +194,7 @@ BOOL saveMultiStats(const char *sFileName, const char *sPlayerName, const PLAYER
 
 	saveFile(fileName, buffer, strlen(buffer));
 
-	return TRUE;
+	return true;
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -210,7 +207,7 @@ void updateMultiStatsDamage(UDWORD attacker, UDWORD defender, UDWORD inflicted)
 
 	if(isHumanPlayer(attacker))
 	{
-		st = getMultiStats(attacker,TRUE);	// get stats
+		st = getMultiStats(attacker,true);	// get stats
 		if(NetPlay.bComms)
 		{
 			st.scoreToAdd += (2*inflicted);
@@ -219,7 +216,7 @@ void updateMultiStatsDamage(UDWORD attacker, UDWORD defender, UDWORD inflicted)
 		{
 			st.recentScore += (2*inflicted);
 		}
-		setMultiStats(player2dpid[attacker], st, TRUE);
+		setMultiStats(player2dpid[attacker], st, true);
 	}
 	else
 	{
@@ -229,7 +226,7 @@ void updateMultiStatsDamage(UDWORD attacker, UDWORD defender, UDWORD inflicted)
 
 	if(isHumanPlayer(defender))
 	{
-		st = getMultiStats(defender,TRUE);	// get stats
+		st = getMultiStats(defender,true);	// get stats
 		if(NetPlay.bComms)
 		{
 			st.scoreToAdd  -= inflicted;
@@ -238,7 +235,7 @@ void updateMultiStatsDamage(UDWORD attacker, UDWORD defender, UDWORD inflicted)
 		{
 			st.recentScore  -= inflicted;
 		}
-		setMultiStats(player2dpid[defender], st, TRUE);
+		setMultiStats(player2dpid[defender], st, true);
 	}
 	else
 	{
@@ -251,27 +248,27 @@ void updateMultiStatsGames(void)
 {
 	PLAYERSTATS	st;
 
-	st  = getMultiStats(selectedPlayer,TRUE);
+	st  = getMultiStats(selectedPlayer,true);
 	st.played ++;
-	setMultiStats(player2dpid[selectedPlayer], st, TRUE);
+	setMultiStats(player2dpid[selectedPlayer], st, true);
 }
 
 // games won
 void updateMultiStatsWins(void)
 {
 	PLAYERSTATS	st;
-	st  = getMultiStats(selectedPlayer,TRUE);
+	st  = getMultiStats(selectedPlayer,true);
 	st.wins ++;
-	setMultiStats(player2dpid[selectedPlayer], st, TRUE);
+	setMultiStats(player2dpid[selectedPlayer], st, true);
 }
 
 //games lost.
 void updateMultiStatsLoses(void)
 {
 	PLAYERSTATS	st;
-	st  = getMultiStats(selectedPlayer,TRUE);
+	st  = getMultiStats(selectedPlayer,true);
 	++st.losses;
-	setMultiStats(player2dpid[selectedPlayer], st, TRUE);
+	setMultiStats(player2dpid[selectedPlayer], st, true);
 }
 
 // update kills
@@ -281,7 +278,7 @@ void updateMultiStatsKills(BASE_OBJECT *psKilled,UDWORD player)
 
 	if(isHumanPlayer(player))
 	{
-		st  = getMultiStats(player,TRUE);
+		st  = getMultiStats(player,true);
 
 		if(NetPlay.bComms)
 		{
@@ -291,7 +288,7 @@ void updateMultiStatsKills(BASE_OBJECT *psKilled,UDWORD player)
 		{
 			st.recentKills++;
 		}
-		setMultiStats(player2dpid[player], st, TRUE);
+		setMultiStats(player2dpid[player], st, true);
 	}
 	else
 	{

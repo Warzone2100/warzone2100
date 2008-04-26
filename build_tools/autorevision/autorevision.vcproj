@@ -6,6 +6,7 @@
 	ProjectGUID="{32FC4941-5ADF-483F-BD90-CDEBC50BA4AE}"
 	RootNamespace="autorevision"
 	Keyword="Win32Proj"
+	TargetFrameworkVersion="131072"
 	>
 	<Platforms>
 		<Platform
@@ -40,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;_CRT_SECURE_NO_DEPRECATE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -84,12 +85,9 @@
 				Name="VCAppVerifierTool"
 			/>
 			<Tool
-				Name="VCWebDeploymentTool"
-			/>
-			<Tool
 				Name="VCPostBuildEventTool"
 				Description="* Updating &amp; copying $(TargetFileName) into correct directory. *"
-				CommandLine="del $(SolutionDir)\..\$(TargetFileName)&#x0D;&#x0A;copy /Y $(OutDir)\$(TargetFileName) $(SolutionDir)..\$(TargetFileName)"
+				CommandLine="del $(SolutionDir)\..\$(TargetFileName)&#x0D;&#x0A;copy /Y $(OutDir)\$(TargetFileName) $(SolutionDir)..\$(TargetFileName)&#x0D;&#x0A;"
 			/>
 		</Configuration>
 		<Configuration
@@ -117,7 +115,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
+				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;_CRT_SECURE_NO_DEPRECATE"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
@@ -161,12 +159,9 @@
 				Name="VCAppVerifierTool"
 			/>
 			<Tool
-				Name="VCWebDeploymentTool"
-			/>
-			<Tool
 				Name="VCPostBuildEventTool"
 				Description="* Updating &amp; copying $(TargetFileName) into correct directory. *"
-				CommandLine="del $(SolutionDir)\..\$(TargetFileName)&#x0D;&#x0A;copy /Y $(OutDir)\$(TargetFileName) $(SolutionDir)..\$(TargetFileName)"
+				CommandLine="del $(SolutionDir)\..\$(TargetFileName)&#x0D;&#x0A;copy /Y $(OutDir)\$(TargetFileName) $(SolutionDir)..\$(TargetFileName)&#x0D;&#x0A;"
 			/>
 		</Configuration>
 	</Configurations>

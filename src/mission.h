@@ -77,7 +77,7 @@ extern BOOL missionIsOffworld(void);
 extern BOOL missionCanReEnforce(void);
 
 extern BOOL missionForReInforcements(void);
-//returns TRUE if the mission is a Limbo Expand mission
+//returns true if the mission is a Limbo Expand mission
 extern BOOL missionLimboExpand(void);
 
 //this is called mid Limbo mission via the script
@@ -95,7 +95,8 @@ extern void swapMissionPointers(void);
 //timer display for transporter timer
 #define		IDTRANTIMER_DISPLAY		11010
 
-//position defines
+// Timer position defines
+#define		TIMER_X					(568 + E_W)
 #define		TIMER_Y					22
 
 // status of the mission result screens.
@@ -193,7 +194,7 @@ void resetVTOLLandingPos(void);
 //this is called via a script function to place the Limbo droids once the mission has started
 extern void placeLimboDroids(void);
 
-//bCheating = TRUE == start of cheat, bCheating = FALSE == end of cheat
+//bCheating = true == start of cheat, bCheating = false == end of cheat
 extern void setMissionCheatTime(BOOL bCheating);
 
 

@@ -59,7 +59,7 @@ extern BOOL gameTimeInit(void);
 /** Call this each loop to update the game timer. */
 extern void gameTimeUpdate(void);
 
-/* Returns TRUE if gameTime is stopped. */
+/* Returns true if gameTime is stopped. */
 extern BOOL gameTimeIsStopped(void);
 
 /** Call this to stop the game timer. */

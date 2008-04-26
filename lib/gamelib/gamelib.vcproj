@@ -6,6 +6,7 @@
 	ProjectGUID="{EFE011B6-4C0B-40AA-9F18-5AD599E70D28}"
 	RootNamespace="gamelib"
 	Keyword="Win32Proj"
+	TargetFrameworkVersion="131072"
 	>
 	<Platforms>
 		<Platform
@@ -50,8 +51,8 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\framework;..\sound;..\ivis_opengl;..\ivis_common;..\.."
-				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;YY_STATIC;_CRT_SECURE_NO_WARNINGS"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)\..&quot;;&quot;$(SolutionDir)\..\devpkg\include&quot;;&quot;$(SolutionDir)\..\devpkg\include\SDL&quot;"
+				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;YY_STATIC;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -120,8 +121,8 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="..\framework;..\sound;..\ivis_opengl;..\ivis_common;..\.."
-				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;YY_STATIC;_CRT_SECURE_NO_WARNINGS"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)\..&quot;;&quot;$(SolutionDir)\..\devpkg\include&quot;;&quot;$(SolutionDir)\..\devpkg\include\SDL&quot;"
+				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;YY_STATIC;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"

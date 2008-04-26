@@ -24,9 +24,6 @@
  * lexer for loading level description files
  *
  */
-
-#include <stdio.h>
-
 #include "lib/framework/frame.h"
 
 #include "src/levels.h"
@@ -41,7 +38,7 @@
 static char aText[YYLMAX];
 
 // Note if we are in a comment
-static BOOL inComment = FALSE;
+static BOOL inComment = false;
 
 /* Pointer to the input buffer */
 static const char *pInputBuffer = NULL;
@@ -110,9 +107,9 @@ miss_clear					return LTK_MCLEAR;
 [ \t\n\x0d\x0a]						;
 
 	/* Strip comments */
-"/*"						{ inComment=TRUE; BEGIN COMMENT; }
+"/*"						{ inComment=true; BEGIN COMMENT; }
 <COMMENT>"*/" |
-<COMMENT>"*/"\n				{ inComment=FALSE; BEGIN 0; }
+<COMMENT>"*/"\n				{ inComment=false; BEGIN 0; }
 <COMMENT>. |
 <COMMENT>\n					;
 
@@ -134,7 +131,7 @@ void levSetInputBuffer(char *pBuffer, UDWORD size)
 
 	/* Reset the lexer incase it's been used before */
 	lev__flush_buffer(YY_CURRENT_BUFFER);
-	inComment = FALSE;
+	inComment = false;
 }
 
 void levGetErrorData(int *pLine, char **ppText)
@@ -157,9 +154,11 @@ int lev_wrap(void)
 /* Older GNU Flex versions don't define yylex_destroy()
  * (and neither define a subminor version)
  */
-#if !defined(YY_FLEX_SUBMINOR_VERSION) || (YY_FLEX_SUBMINOR_VERSION < 30)
+#if !defined(YY_FLEX_SUBMINOR_VERSION) || (YY_FLEX_SUBMINOR_VERSION < 9)
 int lev_lex_destroy(void)
 {
+	/* For non-reentrant C scanner only. */
+	yy_delete_buffer(YY_CURRENT_BUFFER);
+	yy_init = 1;
 }
 #endif
-

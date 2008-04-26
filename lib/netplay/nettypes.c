@@ -54,7 +54,7 @@ void NETbeginEncode(uint8_t type, uint8_t player)
 	NETsetPacketDir(PACKET_ENCODE);
 	NetMsg.type = type;
 	NetMsg.size = 0;
-	NetMsg.status = TRUE;
+	NetMsg.status = true;
 	NetMsg.destination = player;
 	memset(&NetMsg.body, '\0', MaxMsgSize);
 }
@@ -64,23 +64,23 @@ void NETbeginDecode(uint8_t type)
 	NETsetPacketDir(PACKET_DECODE);
 	assert(type == NetMsg.type);
 	NetMsg.size = 0;
-	NetMsg.status = TRUE;
+	NetMsg.status = true;
 }
 
 BOOL NETend(void)
 {
 	assert(NETgetPacketDir() != PACKET_INVALID);
 
-	// If we are decoding just return TRUE
+	// If we are decoding just return true
 	if (NETgetPacketDir() == PACKET_DECODE)
 	{
-		return TRUE;
+		return true;
 	}
 
 	// If the packet is invalid or failed to compile
 	if (NETgetPacketDir() != PACKET_ENCODE || !NetMsg.status)
 	{
-		return FALSE;
+		return false;
 	}
 
 	// We have sent the packet, so make it invalid (to prevent re-sending)
@@ -89,11 +89,11 @@ BOOL NETend(void)
 	// Send the packet, updating the send functions is on my todo list!
 	if (NetMsg.destination == NET_ALL_PLAYERS)
 	{
-		return NETbcast(&NetMsg, TRUE);
+		return NETbcast(&NetMsg);
 	}
 	else
 	{
-		return NETsend(&NetMsg, NetMsg.destination, TRUE);
+		return NETsend(&NetMsg, NetMsg.destination);
 	}
 }
 
@@ -109,7 +109,7 @@ BOOL NETint8_t(int8_t *ip)
 	// Make sure there is enough data/space left in the packet
 	if (sizeof(int8_t) + NetMsg.size > MaxMsgSize || !NetMsg.status)
 	{
-		return NetMsg.status = FALSE;
+		return NetMsg.status = false;
 	}
 
 	// 8-bit (1 byte) integers need no endian-swapping!
@@ -125,7 +125,7 @@ BOOL NETint8_t(int8_t *ip)
 	// Increment the size of the message
 	NetMsg.size += sizeof(int8_t);
 
-	return TRUE;
+	return true;
 }
 
 BOOL NETuint8_t(uint8_t *ip)
@@ -135,7 +135,7 @@ BOOL NETuint8_t(uint8_t *ip)
 	// Make sure there is enough data/space left in the packet
 	if (sizeof(uint8_t) + NetMsg.size > MaxMsgSize || !NetMsg.status)
 	{
-		return NetMsg.status = FALSE;
+		return NetMsg.status = false;
 	}
 
 	// 8-bit (1 byte) integers need no endian-swapping!
@@ -151,7 +151,7 @@ BOOL NETuint8_t(uint8_t *ip)
 	// Increment the size of the message
 	NetMsg.size += sizeof(uint8_t);
 
-	return TRUE;
+	return true;
 }
 
 BOOL NETint16_t(int16_t *ip)
@@ -161,7 +161,7 @@ BOOL NETint16_t(int16_t *ip)
 	// Make sure there is enough data/space left in the packet
 	if (sizeof(int16_t) + NetMsg.size > MaxMsgSize || !NetMsg.status)
 	{
-		return NetMsg.status = FALSE;
+		return NetMsg.status = false;
 	}
 
 	// Convert the integer into the network byte order (big endian)
@@ -177,7 +177,7 @@ BOOL NETint16_t(int16_t *ip)
 	// Increment the size of the message
 	NetMsg.size += sizeof(int16_t);
 
-	return TRUE;
+	return true;
 }
 
 BOOL NETuint16_t(uint16_t *ip)
@@ -187,7 +187,7 @@ BOOL NETuint16_t(uint16_t *ip)
 	// Make sure there is enough data/space left in the packet
 	if (sizeof(uint16_t) + NetMsg.size > MaxMsgSize || !NetMsg.status)
 	{
-		return NetMsg.status = FALSE;
+		return NetMsg.status = false;
 	}
 
 	// Convert the integer into the network byte order (big endian)
@@ -203,7 +203,7 @@ BOOL NETuint16_t(uint16_t *ip)
 	// Increment the size of the message
 	NetMsg.size += sizeof(uint16_t);
 
-	return TRUE;
+	return true;
 }
 
 BOOL NETint32_t(int32_t *ip)
@@ -213,7 +213,7 @@ BOOL NETint32_t(int32_t *ip)
 	// Make sure there is enough data/space left in the packet
 	if (sizeof(int32_t) + NetMsg.size > MaxMsgSize || !NetMsg.status)
 	{
-		return NetMsg.status = FALSE;
+		return NetMsg.status = false;
 	}
 
 	// Convert the integer into the network byte order (big endian)
@@ -229,7 +229,7 @@ BOOL NETint32_t(int32_t *ip)
 	// Increment the size of the message
 	NetMsg.size += sizeof(int32_t);
 
-	return TRUE;
+	return true;
 }
 
 BOOL NETuint32_t(uint32_t *ip)
@@ -239,7 +239,7 @@ BOOL NETuint32_t(uint32_t *ip)
 	// Make sure there is enough data/space left in the packet
 	if (sizeof(uint32_t) + NetMsg.size > MaxMsgSize || !NetMsg.status)
 	{
-		return NetMsg.status = FALSE;
+		return NetMsg.status = false;
 	}
 
 	// Convert the integer into the network byte order (big endian)
@@ -255,7 +255,7 @@ BOOL NETuint32_t(uint32_t *ip)
 	// Increment the size of the message
 	NetMsg.size += sizeof(uint32_t);
 
-	return TRUE;
+	return true;
 }
 
 BOOL NETfloat(float *fp)
@@ -307,6 +307,20 @@ BOOL NETnull()
 	return NETuint32_t(&zero);
 }
 
+/** Sends or receives a string to or from the current network package.
+ *  \param str    When encoding a packet this is the (NUL-terminated string to
+ *                be sent in the current network package. When decoding this
+ *                is the buffer to decode the string from the network package
+ *                into. When decoding this string is guaranteed to be
+ *                NUL-terminated provided that this buffer is at least 1 byte
+ *                large.
+ *  \param maxlen The buffer size of \c str. For static buffers this means
+ *                sizeof(\c str), for dynamically allocated buffers this is
+ *                whatever number you passed to malloc().
+ *  \note If while decoding \c maxlen is smaller than the actual length of the
+ *        string being decoded, the resulting string (in \c str) will be
+ *        truncated.
+ */
 BOOL NETstring(char *str, uint16_t maxlen)
 {
 	/*
@@ -327,7 +341,7 @@ BOOL NETstring(char *str, uint16_t maxlen)
 	// Make sure there is enough data/space left in the packet
 	if (len + NetMsg.size > MaxMsgSize || !NetMsg.status)
 	{
-		return NetMsg.status = FALSE;
+		return NetMsg.status = false;
 	}
 
 	if (NETgetPacketDir() == PACKET_ENCODE)
@@ -344,12 +358,14 @@ BOOL NETstring(char *str, uint16_t maxlen)
 			len = maxlen;
 		}
 		memcpy(str, store, len);
+		// Guarantee NUL-termination
+		str[len - 1] = '\0';
 	}
 
 	// Increment the size of the message
 	NetMsg.size += sizeof(len) + len;
 
-	return TRUE;
+	return true;
 }
 
 BOOL NETbin(char *str, uint16_t maxlen)
@@ -372,7 +388,7 @@ BOOL NETbin(char *str, uint16_t maxlen)
 	// Make sure there is enough data/space left in the packet
 	if (len + NetMsg.size > MaxMsgSize || !NetMsg.status)
 	{
-		return NetMsg.status = FALSE;
+		return NetMsg.status = false;
 	}
 
 	if (NETgetPacketDir() == PACKET_ENCODE)
@@ -394,7 +410,7 @@ BOOL NETbin(char *str, uint16_t maxlen)
 	// Increment the size of the message
 	NetMsg.size += sizeof(len) + len;
 
-	return TRUE;
+	return true;
 }
 
 BOOL NETVector3uw(Vector3uw* vp)
@@ -404,17 +420,24 @@ BOOL NETVector3uw(Vector3uw* vp)
 	     && NETuint16_t(&vp->z));
 }
 
+typedef enum
+{
+	test_a,
+	test_b,
+} test_enum;
+
 static void NETcoder(PACKETDIR dir)
 {
-	char str[100];
-	char *original = "THIS IS A TEST STRING";
-	BOOL b = TRUE;
+	static const char original[] = "THIS IS A TEST STRING";
+	char str[sizeof(original)];
+	BOOL b = true;
 	uint32_t u32 = 32;
 	uint16_t u16 = 16;
 	uint8_t u8 = 8;
 	int32_t i32 = -32;
 	int16_t i16 = -16;
 	int8_t i8 = -8;
+	test_enum te = test_b;
 
 	strlcpy(str, original, sizeof(str));
 
@@ -422,14 +445,15 @@ static void NETcoder(PACKETDIR dir)
 		NETbeginEncode(0, 0);
 	else
 		NETbeginDecode(0);
-	NETbool(&b);			assert(b == TRUE);
+	NETbool(&b);			assert(b == true);
 	NETuint32_t(&u32);  assert(u32 == 32);
 	NETuint16_t(&u16);  assert(u16 == 16);
 	NETuint8_t(&u8);    assert(u8 == 8);
 	NETint32_t(&i32);   assert(i32 == -32);
 	NETint16_t(&i16);   assert(i16 == -16);
 	NETint8_t(&i8);     assert(i8 == -8);
-	NETstring(str, 99); assert(strncmp(str, original, 99) == 0);
+	NETstring(str, sizeof(str)); assert(strncmp(str, original, sizeof(str) - 1) == 0);
+	NETenum(&te);       assert(te == test_b);
 	NETend();
 }
 
@@ -443,6 +467,7 @@ void NETtest()
 	memcpy(&cmp, &NetMsg, sizeof(cmp));
 	NETcoder(PACKET_DECODE);
 	ASSERT(memcmp(&cmp, &NetMsg, sizeof(cmp)) == 0, "nettypes unit test failed");
+	fprintf(stdout, "\tNETtypes self-test: PASSED\n");
 }
 
 int NETgetSource()

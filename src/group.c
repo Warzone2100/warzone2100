@@ -33,7 +33,7 @@
 #include "multiplay.h"
 
 static DROID_GROUP *firstGroup = NULL;
-static BOOL grpInitialized = FALSE;
+static BOOL grpInitialized = false;
 
 // sizes for the group heap
 #define GRP_HEAP_INIT	45
@@ -43,8 +43,8 @@ static BOOL grpInitialized = FALSE;
 BOOL grpInitialise(void)
 {
 	firstGroup = NULL;
-	grpInitialized = TRUE;
-	return TRUE;
+	grpInitialized = true;
+	return true;
 }
 
 // shutdown the group system
@@ -61,7 +61,7 @@ void grpShutDown(void)
 		free(psDel);
 	}
 	firstGroup = NULL;
-	grpInitialized = FALSE;
+	grpInitialized = false;
 }
 
 // create a new group
@@ -72,7 +72,7 @@ BOOL grpCreate(DROID_GROUP	**ppsGroup)
 	if (*ppsGroup == NULL)
 	{
 		debug(LOG_ERROR, "grpCreate: Out of memory");
-		return FALSE;
+		return false;
 	}
 
 	// Add node to beginning of list
@@ -95,7 +95,7 @@ BOOL grpCreate(DROID_GROUP	**ppsGroup)
 	(*ppsGroup)->psList = NULL;
 	(*ppsGroup)->psCommander = NULL;
 
-	return TRUE;
+	return true;
 }
 
 // add a droid to a group
@@ -113,7 +113,7 @@ void grpJoin(DROID_GROUP *psGroup, DROID *psDroid)
 	{
 		if (psGroup->psList && psDroid->player != psGroup->psList->player)
 		{
-			ASSERT( FALSE,"grpJoin: Cannot have more than one players droids in a group" );
+			ASSERT( false,"grpJoin: Cannot have more than one players droids in a group" );
 			return;
 		}
 
@@ -164,7 +164,7 @@ void grpJoinEnd(DROID_GROUP *psGroup, DROID *psDroid)
 	{
 		if (psGroup->psList && psDroid->player != psGroup->psList->player)
 		{
-			ASSERT( FALSE,"grpJoin: Cannot have more than one players droids in a group" );
+			ASSERT( false,"grpJoin: Cannot have more than one players droids in a group" );
 			return;
 		}
 
@@ -214,7 +214,7 @@ void grpLeave(DROID_GROUP *psGroup, DROID *psDroid)
 
 	if (psDroid != NULL && psDroid->psGroup != psGroup)
 	{
-		ASSERT( FALSE, "grpLeave: droid group does not match" );
+		ASSERT( false, "grpLeave: droid group does not match" );
 		return;
 	}
 
@@ -347,14 +347,14 @@ void orderGroupLoc(DROID_GROUP *psGroup, DROID_ORDER order, UDWORD x, UDWORD y)
 	if(bMultiPlayer)
 	{
 		SendGroupOrderGroup(psGroup,order,x,y,NULL);
-		bMultiPlayer = FALSE;
+		bMultiPlayer = false;
 
 		for(psCurr=psGroup->psList; psCurr; psCurr = psCurr->psGrpNext)
 		{
 			orderDroidLoc(psCurr, order, x,y);
 		}
 
-		bMultiPlayer = TRUE;
+		bMultiPlayer = true;
 	}
 	else
 	{
@@ -376,14 +376,14 @@ void orderGroupObj(DROID_GROUP *psGroup, DROID_ORDER order, BASE_OBJECT *psObj)
 	if(bMultiPlayer)
 	{
 		SendGroupOrderGroup(psGroup,order,0,0,psObj);
-		bMultiPlayer = FALSE;
+		bMultiPlayer = false;
 
 		for(psCurr = psGroup->psList; psCurr; psCurr = psCurr->psGrpNext)
 		{
 			orderDroidObj(psCurr, order, (BASE_OBJECT *)psObj);
 		}
 
-		bMultiPlayer = TRUE;
+		bMultiPlayer = true;
 	}
 	else
 	{

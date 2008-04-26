@@ -76,7 +76,7 @@ static BOOL eventSaveContext(char *pBuffer, UDWORD *pSize)
 		{
 			debug( LOG_ERROR, "eventSaveContext: couldn't find script resource id" );
 			abort();
-			return FALSE;
+			return false;
 		}
 		numVars = psCCont->psCode->numGlobals + psCCont->psCode->arraySize;
 
@@ -178,7 +178,7 @@ static BOOL eventSaveContext(char *pBuffer, UDWORD *pSize)
 					{
 						debug( LOG_ERROR, "eventSaveContext: couldn't get variable value size" );
 						abort();
-						return FALSE;
+						return false;
 					}
 
 					if (pBuffer != NULL)
@@ -213,7 +213,7 @@ static BOOL eventSaveContext(char *pBuffer, UDWORD *pSize)
 	}
 	*pSize = size;
 
-	return TRUE;
+	return true;
 }
 
 // load the context information for the script system
@@ -262,7 +262,7 @@ static BOOL eventLoadContext(SDWORD version, char *pBuffer, UDWORD *pSize, BOOL 
 		{
 			debug( LOG_ERROR, "eventLoadContext: number of context variables does not match the script code" );
 			abort();
-			return FALSE;
+			return false;
 		}
 		pPos += sizeof(SWORD);
 
@@ -272,7 +272,7 @@ static BOOL eventLoadContext(SDWORD version, char *pBuffer, UDWORD *pSize, BOOL 
 		// create the context
 		if (!eventNewContext(psCode, release, &psCCont))
 		{
-			return FALSE;
+			return false;
 		}
 
 		// bit of a hack this - note the id of the context to link it to the triggers
@@ -351,7 +351,7 @@ static BOOL eventLoadContext(SDWORD version, char *pBuffer, UDWORD *pSize, BOOL 
 					size += sizeof(SCRIPT_FUNC);
 					break;
 				default:
-					ASSERT( FALSE, "eventLoadContext: invalid internal type" );
+					ASSERT( false, "eventLoadContext: invalid internal type" );
 				}
 
 				// set the value in the context
@@ -359,7 +359,7 @@ static BOOL eventLoadContext(SDWORD version, char *pBuffer, UDWORD *pSize, BOOL 
 				{
 					debug( LOG_ERROR, "eventLoadContext: couldn't set variable value" );
 					abort();
-					return FALSE;
+					return false;
 				}
 			}
 			else
@@ -382,14 +382,14 @@ static BOOL eventLoadContext(SDWORD version, char *pBuffer, UDWORD *pSize, BOOL 
 				{
 					debug( LOG_ERROR, "eventLoadContext: couldn't find variable in context" );
 					abort();
-					return FALSE;
+					return false;
 				}
 
 				if (!loadFunc(version, psVal, pPos, valSize))
 				{
 					debug( LOG_ERROR, "eventLoadContext: couldn't get variable value" );
 					abort();
-					return FALSE;
+					return false;
 				}
 
 				pPos += valSize;
@@ -400,7 +400,7 @@ static BOOL eventLoadContext(SDWORD version, char *pBuffer, UDWORD *pSize, BOOL 
 
 	*pSize = size;
 
-	return TRUE;
+	return true;
 }
 
 // return the index of a context
@@ -415,12 +415,12 @@ static BOOL eventGetContextIndex(SCRIPT_CONTEXT *psContext, SDWORD *pIndex)
 		if (psCurr == psContext)
 		{
 			*pIndex = index;
-			return TRUE;
+			return true;
 		}
 		index += 1;
 	}
 
-	return FALSE;
+	return false;
 }
 
 // find a context from it's id number
@@ -433,11 +433,11 @@ static BOOL eventFindContext(SDWORD id, SCRIPT_CONTEXT **ppsContext)
 		if (psCurr->id == id)
 		{
 			*ppsContext = psCurr;
-			return TRUE;
+			return true;
 		}
 	}
 
-	return FALSE;
+	return false;
 }
 
 // save a list of triggers
@@ -473,7 +473,7 @@ static BOOL eventSaveTriggerList(ACTIVE_TRIGGER *psList, char *pBuffer, UDWORD *
 			{
 				debug( LOG_ERROR, "eventSaveTriggerList: couldn't find context" );
 				abort();
-				return FALSE;
+				return false;
 			}
 			*((SWORD*)pPos) = (SWORD)context;
 			endian_sword((SWORD*)pPos);
@@ -501,7 +501,7 @@ static BOOL eventSaveTriggerList(ACTIVE_TRIGGER *psList, char *pBuffer, UDWORD *
 
 	*pSize = size;
 
-	return TRUE;
+	return true;
 }
 
 
@@ -537,7 +537,7 @@ static BOOL eventLoadTriggerList(SDWORD version, char *pBuffer, UDWORD *pSize)
 		{
 			debug( LOG_ERROR, "eventLoadTriggerList: couldn't find context" );
 			abort();
-			return FALSE;
+			return false;
 		}
 
 		endian_sword((SWORD*)pPos);
@@ -560,13 +560,13 @@ static BOOL eventLoadTriggerList(SDWORD version, char *pBuffer, UDWORD *pSize)
 
 		if (!eventLoadTrigger(time, psContext, type, trigger, event, offset))
 		{
-			return FALSE;
+			return false;
 		}
 	}
 
 	*pSize = size;
 
-	return TRUE;
+	return true;
 }
 
 
@@ -582,21 +582,21 @@ BOOL eventSaveState(SDWORD version, char **ppBuffer, UDWORD *pFileSize)
 	// find the size of the context save
 	if (!eventSaveContext(NULL, &size))
 	{
-		return FALSE;
+		return false;
 	}
 	totalSize += size;
 
 	// find the size of the trigger save
 	if (!eventSaveTriggerList(psTrigList, NULL, &size))
 	{
-		return FALSE;
+		return false;
 	}
 	totalSize += size;
 
 	// find the size of the callback trigger save
 	if (!eventSaveTriggerList(psCallbackList, NULL, &size))
 	{
-		return FALSE;
+		return false;
 	}
 	totalSize += size;
 
@@ -608,7 +608,7 @@ BOOL eventSaveState(SDWORD version, char **ppBuffer, UDWORD *pFileSize)
 	{
 		debug( LOG_ERROR, "eventSaveState: out of memory" );
 		abort();
-		return FALSE;
+		return false;
 	}
 	pPos = pBuffer;
 
@@ -628,28 +628,28 @@ BOOL eventSaveState(SDWORD version, char **ppBuffer, UDWORD *pFileSize)
 	// save the contexts
 	if (!eventSaveContext(pPos, &size))
 	{
-		return FALSE;
+		return false;
 	}
 	pPos += size;
 
 	// save the triggers
 	if (!eventSaveTriggerList(psTrigList, pPos, &size))
 	{
-		return FALSE;
+		return false;
 	}
 	pPos += size;
 
 	// save the callback triggers
 	if (!eventSaveTriggerList(psCallbackList, pPos, &size))
 	{
-		return FALSE;
+		return false;
 	}
 	pPos += size;
 
 	*ppBuffer = pBuffer;
 	*pFileSize = totalSize;
 
-	return TRUE;
+	return true;
 }
 
 
@@ -671,13 +671,13 @@ BOOL eventLoadState(char *pBuffer, UDWORD fileSize, BOOL bHashed)
 	{
 		debug( LOG_ERROR, "eventLoadState: invalid file header" );
 		abort();
-		return FALSE;
+		return false;
 	}
 /*	if ((psHdr->version != 1) &&
 		(psHdr->version != 2))
 	{
 		DBERROR(("eventLoadState: invalid file version"));
-		return FALSE;
+		return false;
 	}*/
 	version = psHdr->version;
 	pPos += sizeof(EVENT_SAVE_HDR);
@@ -687,7 +687,7 @@ BOOL eventLoadState(char *pBuffer, UDWORD fileSize, BOOL bHashed)
 	// load the event contexts
 	if (!eventLoadContext(version, pPos, &size, bHashed))
 	{
-		return FALSE;
+		return false;
 	}
 
 	pPos += size;
@@ -696,7 +696,7 @@ BOOL eventLoadState(char *pBuffer, UDWORD fileSize, BOOL bHashed)
 	// load the normal triggers
 	if (!eventLoadTriggerList(version, pPos, &size))
 	{
-		return FALSE;
+		return false;
 	}
 	pPos += size;
 	totalSize += size;
@@ -704,7 +704,7 @@ BOOL eventLoadState(char *pBuffer, UDWORD fileSize, BOOL bHashed)
 	// load the callback triggers
 	if (!eventLoadTriggerList(version, pPos, &size))
 	{
-		return FALSE;
+		return false;
 	}
 	pPos += size;
 	totalSize += size;
@@ -713,8 +713,8 @@ BOOL eventLoadState(char *pBuffer, UDWORD fileSize, BOOL bHashed)
 	{
 		debug( LOG_ERROR, "eventLoadState: corrupt save file" );
 		abort();
-		return FALSE;
+		return false;
 	}
 
-	return TRUE;
+	return true;
 }

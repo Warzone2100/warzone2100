@@ -24,21 +24,19 @@
  * yacc grammar for loading script variable values
  *
  */
-
-#include <stdio.h>
-#include <string.h>
-
 #include "lib/framework/frame.h"
 #include "lib/framework/frameresource.h"
+
+#include "lib/gamelib/gtime.h"
 #include "lib/script/script.h"
+#include "lib/sound/audio.h"
+
 #include "src/scripttabs.h"
 #include "src/scriptvals.h"
 #include "src/objects.h"
-#include "lib/gamelib/gtime.h"
 #include "src/droid.h"
 #include "src/structure.h"
 #include "src/message.h"
-#include "lib/sound/audio.h"
 #include "src/levels.h"
 #include "src/research.h"
 
@@ -55,25 +53,25 @@ static SCRIPT_CONTEXT	*psCurrContext;
 static ARRAY_INDEXES	sCurrArrayIndexes;
 
 // check that an array index is valid
-BOOL scrvCheckArrayIndex(SDWORD base, ARRAY_INDEXES *psIndexes, UDWORD *pIndex)
+static BOOL scrvCheckArrayIndex(SDWORD base, ARRAY_INDEXES *psIndexes, UDWORD *pIndex)
 {
 	SDWORD	i, size;
 
 	if (!psCurrScript || psCurrScript->psDebug == NULL)
 	{
-		return FALSE;
+		return false;
 	}
 
 	if (base < 0 || base >= psCurrScript->numArrays)
 	{
 		scrv_error("Array index out of range");
-		return FALSE;
+		return false;
 	}
 
 	if (psIndexes->dimensions != psCurrScript->psArrayInfo[base].dimensions)
 	{
 		scrv_error("Invalid number of dimensions for array initialiser");
-		return FALSE;
+		return false;
 	}
 
 	for(i=0; i<psCurrScript->psArrayInfo[base].dimensions; i++)
@@ -82,7 +80,7 @@ BOOL scrvCheckArrayIndex(SDWORD base, ARRAY_INDEXES *psIndexes, UDWORD *pIndex)
 			(psIndexes->elements[i] >= psCurrScript->psArrayInfo[base].elements[i]))
 		{
 			scrv_error("Invalid index for dimension %d", i);
-			return FALSE;
+			return false;
 		}
 	}
 
@@ -96,7 +94,7 @@ BOOL scrvCheckArrayIndex(SDWORD base, ARRAY_INDEXES *psIndexes, UDWORD *pIndex)
 
 	*pIndex += psCurrScript->psArrayInfo[base].base;
 
-	return TRUE;
+	return true;
 }
 
 %}
@@ -188,7 +186,7 @@ script_name:	SCRIPT QTEXT
 					extpos=namelen-3;
 					if (strncmp(&stringname[extpos],"blo",3)==0)
 					{
-						if (resPresent("BLO",stringname)==TRUE)
+						if (resPresent("BLO",stringname)==true)
 						{
 							psCurrScript = (SCRIPT_CODE*)resGetData("BLO",stringname);
 						}
@@ -201,7 +199,7 @@ script_name:	SCRIPT QTEXT
 					}
 					else if (strncmp(&stringname[extpos],"slo",3)==0)
 					{
-						if (resPresent("SCRIPT",stringname)==TRUE)
+						if (resPresent("SCRIPT",stringname)==true)
 						{
 							psCurrScript = (SCRIPT_CODE*)resGetData("SCRIPT",stringname);
 						}
@@ -664,7 +662,7 @@ var_init:		var_entry TYPE var_value
 						if (compIndex == SAMPLE_NOT_FOUND)
 						{
 							/* set track vals */
-							compIndex = audio_SetTrackVals($3.pString, FALSE, 100, 1800);
+							compIndex = audio_SetTrackVals($3.pString, false, 100, 1800);
 						}
 						/* save track ID */
 						data.v.ival = compIndex;
@@ -680,7 +678,7 @@ var_init:		var_entry TYPE var_value
 							scrv_error("Typemismatch for variable %d", $1);
 							YYABORT;
 						}
-						data.v.oval = getResearch($3.pString, TRUE);	/* store pointer */
+						data.v.oval = getResearch($3.pString, true);	/* store pointer */
 						if (data.v.oval == NULL)
 						{
 							scrv_error("Research %s not found", $3.pString);
@@ -772,11 +770,11 @@ BOOL scrvLookUpType(const char *pIdent, INTERP_TYPE *pType)
 		if (strcmp(psCurr->pIdent, pIdent) == 0)
 		{
 			*pType = psCurr->typeID;
-			return TRUE;
+			return true;
 		}
 	}
 
-	return FALSE;
+	return false;
 }
 
 
@@ -787,7 +785,7 @@ BOOL scrvLookUpVar(const char *pIdent, UDWORD *pIndex)
 
 	if (!psCurrScript || psCurrScript->psDebug == NULL)
 	{
-		return FALSE;
+		return false;
 	}
 
 	for(i=0; i<psCurrScript->numGlobals; i++)
@@ -796,11 +794,11 @@ BOOL scrvLookUpVar(const char *pIdent, UDWORD *pIndex)
 			strcmp(psCurrScript->psVarDebug[i].pIdent, pIdent) == 0)
 		{
 			*pIndex = i;
-			return TRUE;
+			return true;
 		}
 	}
 
-	return FALSE;
+	return false;
 }
 
 
@@ -811,7 +809,7 @@ BOOL scrvLookUpArray(const char *pIdent, UDWORD *pIndex)
 
 	if (!psCurrScript || psCurrScript->psDebug == NULL)
 	{
-		return FALSE;
+		return false;
 	}
 
 	for(i=0; i<psCurrScript->numArrays; i++)
@@ -820,11 +818,11 @@ BOOL scrvLookUpArray(const char *pIdent, UDWORD *pIndex)
 			strcmp(psCurrScript->psArrayDebug[i].pIdent, pIdent) == 0)
 		{
 			*pIndex = i;
-			return TRUE;
+			return true;
 		}
 	}
 
-	return FALSE;
+	return false;
 }
 
 
@@ -836,11 +834,11 @@ BOOL scrvLoad(PHYSFS_file* fileHandle)
 	if (scrv_parse() != 0)
 	{
 		scrv_lex_destroy();
-		return FALSE;
+		return false;
 	}
 	scrv_lex_destroy();
 
-	return TRUE;
+	return true;
 }
 
 /* A simple error reporting routine */

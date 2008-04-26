@@ -137,6 +137,9 @@ extern BOOL scrCBPlayerLeft(void);
 extern BOOL scrCBAllianceOffer(void);
 extern UDWORD	CBallFrom,CBallTo;
 
+// player number that left the game
+extern UDWORD	CBPlayerLeft;
+
 //Console callback
 extern BOOL scrCallConsole(void);
 extern BOOL scrCBStructBuilt(void);

@@ -149,43 +149,42 @@ SDWORD aOpSize[] =
 };
 
 /* The type equivalence table */
-static TYPE_EQUIV	*asInterpTypeEquiv;
+static TYPE_EQUIV *asInterpTypeEquiv = NULL;
 
 // whether the interpreter is running
-static BOOL		bInterpRunning = FALSE;
+static BOOL		bInterpRunning = false;
 
 /* Whether to output trace information */
-static BOOL	interpTrace;
+static BOOL	interpTrace = false;
 
 static SCRIPT_CODE *psCurProg = NULL;
-static BOOL bCurCallerIsEvent = FALSE;
+static BOOL bCurCallerIsEvent = false;
 
 /* Print out trace info if tracing is turned on */
-#define TRCPRINTF(...) do { if (interpTrace) { fprintf( stderr, __VA_ARGS__ ); } } while (FALSE)
+#define TRCPRINTF(...) do { if (interpTrace) { fprintf( stderr, __VA_ARGS__ ); } } while (false)
 
 #define TRCPRINTVAL(x) \
 	if (interpTrace) \
 		cpPrintVal(x)
 
-#define TRCPRINTMATHSOP(x) \
+#define TRCPRINTOPCODE(x) \
 	if (interpTrace) \
-		cpPrintMathsOp(x)
+		debug( LOG_NEVER, "%s", scriptOpcodeToString(x) )
 
 #define TRCPRINTSTACKTOP() \
 	if (interpTrace) \
 		stackPrintTop()
 
-
 #define TRCPRINTFUNC(x) \
 	if (interpTrace) \
-		cpPrintFunc(x)
+		debug( LOG_NEVER, "%s", scriptFunctionToString(x) )
 
 #define TRCPRINTVARFUNC(x, data) \
 	if (interpTrace) \
 		cpPrintVarFunc(x, data)
 
 
-// TRUE if the interpreter is currently running
+// true if the interpreter is currently running
 BOOL interpProcessorActive(void)
 {
 	return bInterpRunning;
@@ -227,13 +226,13 @@ static BOOL interpGetArrayVarData(INTERP_VAL **pip, VAL_CHUNK *psGlobals, SCRIPT
 	{
 		debug( LOG_ERROR,
 			"interpGetArrayVarData: array base index out of range" );
-		return FALSE;
+		return false;
 	}
 	if (dimensions != psProg->psArrayInfo[base].dimensions)
 	{
 		debug( LOG_ERROR,
 			"interpGetArrayVarData: dimensions do not match" );
-		return FALSE;
+		return false;
 	}
 
 	// get the number of elements for each dimension
@@ -246,13 +245,13 @@ static BOOL interpGetArrayVarData(INTERP_VAL **pip, VAL_CHUNK *psGlobals, SCRIPT
 	{
 		if (!stackPopParams(1, VAL_INT, &val))
 		{
-			return FALSE;
+			return false;
 		}
 
 		if ( (val < 0) || (val >= elements[i]) )
 		{
 			debug( LOG_ERROR, "interpGetArrayVarData: Array index for dimension %d out of range (passed index = %d, max index = %d)", i , val, elements[i]);
-			return FALSE;
+			return false;
 		}
 
 		index += val * size;
@@ -275,7 +274,7 @@ static BOOL interpGetArrayVarData(INTERP_VAL **pip, VAL_CHUNK *psGlobals, SCRIPT
 	if (index > psProg->arraySize)
 	{
 		debug( LOG_ERROR, "interpGetArrayVarData: Array indexes out of variable space" );
-		return FALSE;
+		return false;
 	}
 
 	// get the variable data
@@ -284,7 +283,7 @@ static BOOL interpGetArrayVarData(INTERP_VAL **pip, VAL_CHUNK *psGlobals, SCRIPT
 	// update the instruction pointer
 	*pip += 1;// + elementDWords;
 
-	return TRUE;
+	return true;
 }
 
 
@@ -293,7 +292,7 @@ BOOL interpInitialise(void)
 {
 	asInterpTypeEquiv = NULL;
 
-	return TRUE;
+	return true;
 }
 
 /* Run a compiled script */
@@ -311,9 +310,9 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 	SDWORD			instructionCount = 0;
 
 	UDWORD			CurEvent = 0;
-	BOOL			bStop = FALSE, bEvent = FALSE;
+	BOOL			bStop = false, bEvent = false;
 	UDWORD			callDepth = 0;
-	BOOL			bTraceOn=FALSE;		//enable to debug function/event calls
+	BOOL			bTraceOn=false;		//enable to debug function/event calls
 
 	ASSERT( psContext != NULL,
 		"interpRunScript: invalid context pointer" );
@@ -332,7 +331,7 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 	}
 
 	// note that the interpreter is running to stop recursive script calls
-	bInterpRunning = TRUE;
+	bInterpRunning = true;
 
 	// Reset the stack in case another script messed up
 	stackReset();
@@ -341,13 +340,13 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 	retStackReset();
 
 	// Turn off tracing initially
-	interpTrace = FALSE;
+	interpTrace = false;
 
 	/* Get the global variables */
 	numGlobals = psProg->numGlobals;
 	psGlobals = psContext->psGlobals;
 
-	bEvent = FALSE;
+	bEvent = false;
 
 	// Find the code range
 	switch (runType)
@@ -356,14 +355,14 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 		if (index > psProg->numTriggers)
 		{
 			debug(LOG_ERROR,"interpRunScript: trigger index out of range");
-			ASSERT( FALSE, "interpRunScript: trigger index out of range" );
-			return FALSE;
+			ASSERT( false, "interpRunScript: trigger index out of range" );
+			return false;
 		}
 		pCodeBase = psProg->pCode + psProg->pTriggerTab[index];
 		pCodeStart = pCodeBase;
 		pCodeEnd  = psProg->pCode + psProg->pTriggerTab[index+1];
 
-		bCurCallerIsEvent = FALSE;
+		bCurCallerIsEvent = false;
 
 		// find the debug info for the trigger
 		strcpy(last_called_script_event, eventGetTriggerID(psProg, index));
@@ -376,15 +375,15 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 		if (index > psProg->numEvents)
 		{
 			debug(LOG_ERROR,"interpRunScript: trigger index out of range");
-			ASSERT( FALSE, "interpRunScript: trigger index out of range" );
-			return FALSE;
+			ASSERT( false, "interpRunScript: trigger index out of range" );
+			return false;
 		}
 		pCodeBase = psProg->pCode + psProg->pEventTab[index];
 		pCodeStart = pCodeBase + offset;		//offset only used for pause() script function
 		pCodeEnd  = psProg->pCode + psProg->pEventTab[index+1];
 
-		bEvent = TRUE; //remember it's an event
-		bCurCallerIsEvent = TRUE;
+		bEvent = true; //remember it's an event
+		bCurCallerIsEvent = true;
 
 		// remember last called event/function
 		strcpy(last_called_script_event, eventGetEventID(psProg, index));
@@ -395,8 +394,8 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 		break;
 	default:
 		debug(LOG_ERROR,"interpRunScript: unknown run type");
-		ASSERT( FALSE, "interpRunScript: unknown run type" );
-		return FALSE;
+		ASSERT( false, "interpRunScript: unknown run type" );
+		return false;
 	}
 
 	// Get the first opcode
@@ -411,7 +410,7 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 	instructionCount = 0;
 
 	CurEvent = index;
-	bStop = FALSE;
+	bStop = false;
 
 	// create new variable environment for this call
 	if (bEvent)
@@ -444,7 +443,7 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 					if(!retStackPush(CurEvent, (InstrPointer + aOpSize[opcode]))) //Remember where to jump back later
 					{
 						debug( LOG_ERROR, "interpRunScript() - retStackPush() failed.");
-						return FALSE;
+						return false;
 					}
 
 					ASSERT(((INTERP_VAL *)(InstrPointer+1))->type == VAL_EVENT, "wrong value type passed for OP_FUNC: %d", ((INTERP_VAL *)(InstrPointer+1))->type);
@@ -547,8 +546,8 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 				/* get local variable */
 				sVal.v.oval = &(varEnvironment[retStackCallDepth()][data]);
 
-				TRCPRINTF( "PUSHREF     " );
-				TRCPRINTVAL(&sVal);
+				TRCPRINTOPCODE(opcode);
+				TRCPRINTVAL(sVal);
 				TRCPRINTF( "\n" );
 
 				if (!stackPush(&sVal))
@@ -572,8 +571,8 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 				/* copy value */
 				memcpy(&sVal, (INTERP_VAL *)(InstrPointer + 1), sizeof(INTERP_VAL));
 
-				TRCPRINTF( "PUSH        " );
-				TRCPRINTVAL(&sVal);
+				TRCPRINTOPCODE(opcode);
+				TRCPRINTVAL(sVal);
 				TRCPRINTF( "\n" );
 				if (!stackPush(&sVal))
 				{
@@ -590,8 +589,8 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 				// store pointer to INTERP_VAL
 				sVal.v.oval = interpGetVarData(psGlobals, ((INTERP_VAL *)(InstrPointer + 1))->v.ival);
 
-				TRCPRINTF( "PUSHREF     " );
-				TRCPRINTVAL(&sVal);
+				TRCPRINTOPCODE(opcode);
+				TRCPRINTVAL(sVal);
 				TRCPRINTF( "\n" );
 				if (!stackPush(&sVal))
 				{
@@ -605,7 +604,7 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 				ASSERT( InstrPointer->type == VAL_OPCODE,
 					"wrong value type passed for OP_POP: %d", InstrPointer->type);
 
-				TRCPRINTF( "POP\n" );
+				TRCPRINTOPCODE(opcode);
 				if (!stackPop(&sVal))
 				{
 					debug( LOG_ERROR, "interpRunScript: could not do stack pop" );
@@ -617,7 +616,7 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 				ASSERT( InstrPointer->type == VAL_PKOPCODE,
 					"wrong value type passed for OP_BINARYOP: %d", InstrPointer->type);
 
-				TRCPRINTMATHSOP(data);
+				TRCPRINTOPCODE(data);
 				if (!stackBinaryOp((OPCODE)data))
 				{
 					debug( LOG_ERROR, "interpRunScript: could not do binary op" );
@@ -631,7 +630,7 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 				ASSERT( InstrPointer->type == VAL_PKOPCODE,
 					"wrong value type passed for OP_UNARYOP: %d", InstrPointer->type);
 
-				TRCPRINTMATHSOP(data);
+				TRCPRINTOPCODE(data);
 				if (!stackUnaryOp((OPCODE)data))
 				{
 					debug( LOG_ERROR, "interpRunScript: could not do unary op" );
@@ -682,7 +681,7 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 				ASSERT( InstrPointer->type == VAL_PKOPCODE,
 					"wrong value type passed for OP_PUSHARRAYGLOBAL: %d", InstrPointer->type);
 
-				TRCPRINTF( "PUSHARRAYGLOBAL  " );
+				TRCPRINTOPCODE(opcode);
 				if (!interpGetArrayVarData(&InstrPointer, psGlobals, psProg, &psVar))
 				{
 					debug( LOG_ERROR, "interpRunScript: could not get array var data, CurEvent=%d", CurEvent );
@@ -699,7 +698,7 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 				ASSERT( InstrPointer->type == VAL_PKOPCODE,
 					"wrong value type passed for OP_POPARRAYGLOBAL: %d", InstrPointer->type);
 
-				TRCPRINTF( "POPARRAYGLOBAL   " );
+				TRCPRINTOPCODE(opcode);
 				if (!interpGetArrayVarData(&InstrPointer, psGlobals, psProg, &psVar))
 				{
 					debug( LOG_ERROR, "interpRunScript: could not get array var data" );
@@ -763,9 +762,9 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 				ASSERT( InstrPointer->type == VAL_OPCODE,
 					"wrong value type passed for OP_CALL: %d", InstrPointer->type);
 
-				TRCPRINTFUNC( ((INTERP_VAL *)(InstrPointer+1))->v.pFuncExtern );
-				TRCPRINTF( "\n" );
 				scriptFunc = ((INTERP_VAL *)(InstrPointer+1))->v.pFuncExtern;
+				TRCPRINTFUNC( scriptFunc );
+				TRCPRINTF( "\n" );
 				//debug(LOG_SCRIPT, "OP_CALL 1");
 				if (!scriptFunc())
 				{
@@ -780,7 +779,7 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 				ASSERT( InstrPointer->type == VAL_PKOPCODE,
 					"wrong value type passed for OP_VARCALL: %d", InstrPointer->type);
 
-				TRCPRINTF( "VARCALL     " );
+				TRCPRINTOPCODE(opcode);
 				TRCPRINTVARFUNC(  ((INTERP_VAL *)(InstrPointer+1))->v.pObjGetSet, data );
 				TRCPRINTF( "(%d)\n", data );
 
@@ -824,7 +823,7 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 				ASSERT( InstrPointer->type == VAL_OPCODE,
 					"wrong value type passed for OP_TO_FLOAT: %d", InstrPointer->type);
 
-				if(!castTop(VAL_FLOAT))
+				if(!stackCastTop(VAL_FLOAT))
 				{
 					debug( LOG_ERROR, "interpRunScript: OP_TO_FLOAT failed" );
 					goto exit_with_error;
@@ -835,7 +834,7 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 				ASSERT( InstrPointer->type == VAL_OPCODE,
 					"wrong value type passed for OP_TO_INT: %d", InstrPointer->type);
 
-				if(!castTop(VAL_INT))
+				if(!stackCastTop(VAL_INT))
 				{
 					debug( LOG_ERROR, "interpRunScript: OP_TO_INT failed" );
 					goto exit_with_error;
@@ -861,7 +860,7 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 				if (!retStackPop(&CurEvent, &InstrPointer))
 				{
 					debug( LOG_ERROR, "interpRunScript() - retStackPop() failed.");
-					return FALSE;
+					return false;
 				}
 
 				//remember last called event/index
@@ -907,7 +906,7 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 					destroyVarEnvironment(psContext, retStackCallDepth(), CurEvent);
 				}
 
-				bStop = TRUE;		//Stop execution of this event here, no more calling functions stored
+				bStop = true;		//Stop execution of this event here, no more calling functions stored
 			}
 		}
 
@@ -916,8 +915,8 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 	psCurProg = NULL;
 	TRCPRINTF( "%-6d  EXIT\n", (int)(InstrPointer - psProg->pCode) );
 
-	bInterpRunning = FALSE;
-	return TRUE;
+	bInterpRunning = false;
+	return true;
 
 exit_with_error:
 	// Deal with the script crashing or running out of memory
@@ -947,8 +946,8 @@ exit_with_error:
 
 	ASSERT(!"error while executing a script", "interpRunScript: error while executing a script");
 
-	bInterpRunning = FALSE;
-	return FALSE;
+	bInterpRunning = false;
+	return false;
 }
 
 
@@ -969,76 +968,78 @@ void scriptSetTypeEquiv(TYPE_EQUIV *psTypeTab)
 }
 
 
-/* Check if two types are equivalent */
+/* Check if two types are equivalent
+ * Means: Their data can be copied without conversion.
+ * I.e. strings are NOT equivalent to anything but strings, even though they can be converted
+ */
 BOOL interpCheckEquiv(INTERP_TYPE to, INTERP_TYPE from)
 {
-	SDWORD	i,j;
-	BOOL	toRef = FALSE, fromRef = FALSE;
+	BOOL toRef = false, fromRef = false;
 
 	// check for the VAL_REF flag
 	if (to & VAL_REF)
 	{
-		toRef = TRUE;
-		to = (INTERP_TYPE)(to & ~VAL_REF);
+		toRef = true;
+		to &= ~VAL_REF;
 	}
 	if (from & VAL_REF)
 	{
-		fromRef = TRUE;
-		from = (INTERP_TYPE)(from & ~VAL_REF);
+		fromRef = true;
+		from &= ~VAL_REF;
 	}
 	if (toRef != fromRef)
 	{
-		return FALSE;
+		return false;
 	}
 
 	/* Void pointer is compatible with any other type */
-	if(toRef == TRUE && fromRef == TRUE)
+	if (toRef == true && fromRef == true &&
+		(to == VAL_VOID || from == VAL_VOID) )
 	{
-		if(to == VAL_VOID)
-		{
-			return TRUE;
-		}
+		return true;
 	}
 
 	if (to == from)
 	{
-		return TRUE;
+		return true;
 	}
 	else if (asInterpTypeEquiv)
 	{
-		for(i=0; asInterpTypeEquiv[i].base != 0; i++)
+		unsigned int i;
+		for (i = 0; asInterpTypeEquiv[i].base != 0; i++)
 		{
 			if (asInterpTypeEquiv[i].base == to)
 			{
-				for(j=0; j<asInterpTypeEquiv[i].numEquiv; j++)
+				unsigned int j;
+				for (j = 0; j < asInterpTypeEquiv[i].numEquiv; j++)
 				{
 					if (asInterpTypeEquiv[i].aEquivTypes[j] == from)
 					{
-						return TRUE;
+						return true;
 					}
 				}
 			}
 		}
 	}
 
-	return FALSE;
+	return false;
 }
 
 
 /* Instinct function to turn on tracing */
 BOOL interpTraceOn(void)
 {
-	interpTrace = TRUE;
+	interpTrace = true;
 
-	return TRUE;
+	return true;
 }
 
 /* Instinct function to turn off tracing */
 BOOL interpTraceOff(void)
 {
-	interpTrace = FALSE;
+	interpTrace = false;
 
-	return TRUE;
+	return true;
 }
 
 
@@ -1064,15 +1065,15 @@ static inline void retStackReset(void)
 
 static inline BOOL retStackIsEmpty(void)
 {
-	if(retStackPos < 0) return TRUE;
-	return FALSE;
+	if(retStackPos < 0) return true;
+	return false;
 }
 
 
 static inline BOOL retStackIsFull(void)
 {
-	if(retStackPos >= MAX_FUNC_CALLS) return TRUE;
-	return FALSE;
+	if(retStackPos >= MAX_FUNC_CALLS) return true;
+	return false;
 }
 
 
@@ -1081,7 +1082,7 @@ static BOOL retStackPush(UDWORD CallerIndex, INTERP_VAL *ReturnAddress)
 	if (retStackIsFull())
 	{
 		debug( LOG_ERROR, "retStackPush(): return address stack is full");
-		return FALSE; // Stack full
+		return false; // Stack full
 	}
 
 	retStackPos++;
@@ -1090,7 +1091,7 @@ static BOOL retStackPush(UDWORD CallerIndex, INTERP_VAL *ReturnAddress)
 
 	//debug( LOG_SCRIPT, "retStackPush: Event=%i Address=%p, ", CallerIndex, ReturnAddress);
 
-	return TRUE;
+	return true;
 }
 
 
@@ -1099,7 +1100,7 @@ static BOOL retStackPop(UDWORD *CallerIndex, INTERP_VAL **ReturnAddress)
 	if (retStackIsEmpty())
 	{
 		debug( LOG_ERROR, "retStackPop(): return address stack is empty");
-		return FALSE;
+		return false;
 	}
 
 	*CallerIndex = retStack[retStackPos].CallerIndex;
@@ -1108,7 +1109,7 @@ static BOOL retStackPop(UDWORD *CallerIndex, INTERP_VAL **ReturnAddress)
 
 	//debug( LOG_SCRIPT, "retStackPop: Event=%i Address=%p", *EventTrigIndex, *ReturnAddress);
 
-	return TRUE;
+	return true;
 }
 
 
@@ -1211,7 +1212,7 @@ static inline void destroyVarEnvironment(SCRIPT_CONTEXT *psContext, UDWORD envIn
 static void cleanupVarEnvironments(void)
 {
 	UDWORD i;
-	
+
 	for (i = 0; i < retStackCallDepth(); i++)
 	{
 		destroyVarEnvironment(NULL, i, 0);

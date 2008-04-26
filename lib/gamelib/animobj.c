@@ -86,7 +86,7 @@ animObj_Init( ANIMOBJDIEDTESTFUNC pDiedFunc )
 	/* set global died test function */
 	g_pDiedFunc = pDiedFunc;
 
-	return TRUE;
+	return true;
 }
 
 /***************************************************************************/
@@ -99,7 +99,7 @@ animObj_Shutdown( void )
 	g_pAnimObjTable = NULL;
 	g_pDiedFunc = NULL;
 
-	return TRUE;
+	return true;
 }
 
 /***************************************************************************/
@@ -150,7 +150,7 @@ animObj_Update( void )
 
 	while ( psObj != NULL )
 	{
-		bRemove = FALSE;
+		bRemove = false;
 
 		/* test whether parent object has died */
 		if ( g_pDiedFunc != NULL )
@@ -159,7 +159,7 @@ animObj_Update( void )
 		}
 
 		/* remove any expired (non-looping) animations */
-		if ( (bRemove == FALSE) && (psObj->uwCycles != 0) )
+		if ( (bRemove == false) && (psObj->uwCycles != 0) )
 		{
 			dwTime = gameTime - psObj->udwStartTime - psObj->udwStartDelay;
 
@@ -171,15 +171,15 @@ animObj_Update( void )
 					(psObj->pDoneFunc) (psObj);
 				}
 
-				bRemove = TRUE;
+				bRemove = true;
 			}
 		}
 
 		/* remove object if flagged */
-		if ( bRemove == TRUE )
+		if ( bRemove == true )
 		{
 			if ( hashTable_RemoveElement( g_pAnimObjTable, psObj,
-				(intptr_t) psObj->psParent, psObj->psAnim->uwID ) == FALSE )
+				(intptr_t) psObj->psParent, psObj->psAnim->uwID ) == false )
 			{
 				debug( LOG_ERROR, "animObj_Update: couldn't remove anim obj\n" );
 				abort();
@@ -224,7 +224,7 @@ animObj_Add( void *pParentObj, int iAnimID,
 	psObj->udwStartTime   = gameTime;
 	psObj->udwStartDelay  = udwStartDelay;
 	psObj->uwCycles       = uwCycles;
-	psObj->bVisible       = TRUE;
+	psObj->bVisible       = true;
 	psObj->psParent       = pParentObj;
 	psObj->pDoneFunc	  = NULL;
 

@@ -22,22 +22,18 @@
  *
  * Load feature stats
  */
-
-#include <stdio.h>
-#include <assert.h>
-#include <string.h>
-
 #include "lib/framework/frame.h"
 #include "lib/framework/frameresource.h"
 #include "lib/framework/strres.h"
 
+#include "lib/gamelib/gtime.h"
+#include "lib/sound/audio.h"
+#include "lib/sound/audio_id.h"
+
 #include "feature.h"
 #include "map.h"
 #include "hci.h"
-#include "lib/gamelib/gtime.h"
 #include "power.h"
-#include "lib/sound/audio.h"
-#include "lib/sound/audio_id.h"
 #include "objects.h"
 #include "display.h"
 #include "console.h"
@@ -50,13 +46,12 @@
 #include "effects.h"
 #include "geometry.h"
 #include "scores.h"
-
+#include "combat.h"
 #include "multiplay.h"
 #include "advvis.h"
 
 #include "mapgrid.h"
 #include "display3d.h"
-#include "gateway.h"
 
 
 /* The statistics for the features */
@@ -78,7 +73,7 @@ UDWORD			oilResFeature;
 
 struct featureTypeMap
 {
-	char *typeStr;
+	const char *typeStr;
 	FEATURE_TYPE type;
 };
 
@@ -106,71 +101,20 @@ void featureInitVars(void)
 	oilResFeature = 0;
 }
 
-static void featureType(FEATURE_STATS* psFeature, char *pType)
+static void featureType(FEATURE_STATS* psFeature, const char *pType)
 {
-	if (!strcmp(pType,"HOVER WRECK"))
+	int i;
+	
+	for (i = 0; i < sizeof(map) / sizeof(map[0]); i++)
 	{
-		psFeature->subType = FEAT_HOVER;
-		return;
-	}
-	if (!strcmp(pType,"TANK WRECK"))
-	{
-		psFeature->subType = FEAT_TANK;
-		return;
-	}
-	if (!strcmp(pType,"GENERIC ARTEFACT"))
-	{
-		psFeature->subType = FEAT_GEN_ARTE;
-		return;
-	}
-	if (!strcmp(pType,"OIL RESOURCE"))
-	{
-		psFeature->subType = FEAT_OIL_RESOURCE;
-		return;
-	}
-	if (!strcmp(pType,"BOULDER"))
-	{
-		psFeature->subType = FEAT_BOULDER;
-		return;
-	}
-	if (!strcmp(pType,"VEHICLE"))
-	{
-		psFeature->subType = FEAT_VEHICLE;
-		return;
-	}
-	if (!strcmp(pType,"DROID WRECK"))
-	{
-		psFeature->subType = FEAT_DROID;
-		return;
-	}
-	if (!strcmp(pType,"BUILDING WRECK"))
-	{
-		psFeature->subType = FEAT_BUILD_WRECK;
-		return;
-	}
-	if (!strcmp(pType,"BUILDING"))
-	{
-		psFeature->subType = FEAT_BUILDING;
-		return;
+		if (strcmp(pType, map[i].typeStr) == 0)
+		{
+			psFeature->subType = map[i].type;
+			return;
+		}
 	}
 
-	if (!strcmp(pType,"OIL DRUM"))
-	{
-		psFeature->subType = FEAT_OIL_DRUM;
-		return;
-	}
-
-	if (!strcmp(pType,"TREE"))
-	{
-		psFeature->subType = FEAT_TREE;
-		return;
-	}
-	if (!strcmp(pType,"SKYSCRAPER"))
-	{
-		psFeature->subType = FEAT_SKYSCRAPER;
-		return;
-	}
-	ASSERT(!"unknown feature type", "Unknown Feature Type");
+	ASSERT(false, "featureType: Unknown feature type");
 }
 
 /* Load the feature stats */
@@ -189,7 +133,7 @@ BOOL loadFeatureStats(const char *pFeatureData, UDWORD bufferSize)
 	{
 		debug( LOG_ERROR, "Feature Stats - Out of memory" );
 		abort();
-		return FALSE;
+		return false;
 	}
 
 	psFeature = asFeatureStats;
@@ -216,7 +160,7 @@ BOOL loadFeatureStats(const char *pFeatureData, UDWORD bufferSize)
 
 		if (!allocateName(&psFeature->pName, featureName))
 		{
-			return FALSE;
+			return false;
 		}
 
 		//determine the feature type
@@ -234,7 +178,7 @@ BOOL loadFeatureStats(const char *pFeatureData, UDWORD bufferSize)
 		{
 			debug( LOG_ERROR, "Cannot find the feature PIE for record %s",  getName( psFeature->pName ) );
 			abort();
-			return FALSE;
+			return false;
 		}
 
 		psFeature->ref = REF_FEATURE_START + i;
@@ -245,22 +189,12 @@ BOOL loadFeatureStats(const char *pFeatureData, UDWORD bufferSize)
 		psFeature++;
 	}
 
-	return TRUE;
+	return true;
 }
 
 /* Release the feature stats memory */
 void featureStatsShutDown(void)
 {
-#if !defined(RESOURCE_NAMES) && !defined(STORE_RESOURCE_ID)
-	FEATURE_STATS	*psFeature = asFeatureStats;
-	UDWORD			inc;
-
-	for(inc=0; inc < numFeatureStats; inc++, psFeature++)
-	{
-		free(psFeature->pName);
-	}
-#endif
-
 	if(numFeatureStats)
 	{
 		free(asFeatureStats);
@@ -277,44 +211,25 @@ void featureStatsShutDown(void)
  */
 float featureDamage(FEATURE *psFeature, UDWORD damage, UDWORD weaponClass, UDWORD weaponSubClass, HIT_SIDE impactSide)
 {
-	// Do at least one point of damage
-	unsigned int actualDamage = 1;
-	float		body = (float) psFeature->body;
-	float		originalBody = (float) psFeature->psStats->body;
+	float		relativeDamage;
 
-	ASSERT( psFeature != NULL,
-		"featureDamage: Invalid feature pointer" );
+	ASSERT(psFeature != NULL, "featureDamage: Invalid feature pointer");
 
-	debug( LOG_ATTACK, "featureDamage(%d): body %d armour %d damage: %d\n",
-		psFeature->id, psFeature->body, psFeature->armour[impactSide][weaponClass], damage);
+	debug(LOG_ATTACK, "featureDamage(%d): body %d armour %d damage: %d",
+	      psFeature->id, psFeature->body, psFeature->armour[impactSide][weaponClass], damage);
 
-	// EMP cannons do not work on Features
-	if (weaponSubClass == WSC_EMP)
-	{
-		return 0;
-	}
-
-	if (damage > psFeature->armour[impactSide][weaponClass])
-	{
-		// Damage has penetrated - reduce body points
-		actualDamage = damage - psFeature->armour[impactSide][weaponClass];
-		debug( LOG_ATTACK, "        penetrated: %d\n", actualDamage);
-	}
+	relativeDamage = objDamage((BASE_OBJECT *)psFeature, damage, psFeature->psStats->body, weaponClass, weaponSubClass, impactSide);
 
 	// If the shell did sufficient damage to destroy the feature
-	if (actualDamage >= psFeature->body)
+	if (relativeDamage < 0.0f)
 	{
 		destroyFeature(psFeature);
-		return body / originalBody * -1.0f;
+		return relativeDamage * -1.0f;
 	}
-
-	// Substract the dealt damage from the feature's remaining body points
-	psFeature->body -= actualDamage;
-
-	// Set last hit-time to <now>
-	psFeature->timeLastHit = gameTime;
-
-	return (float) actualDamage / originalBody;
+	else
+	{
+		return relativeDamage;
+	}
 }
 
 
@@ -362,14 +277,7 @@ FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,BOOL FromSave)
 	//return the average of max/min height
 	height = (foundationMin + foundationMax) / 2;
 
-	// check you can reach an oil resource
-	if ((psStats->subType == FEAT_OIL_RESOURCE) &&
-		!gwZoneReachable(gwGetZone(startX,startY)))
-	{
-		debug( LOG_NEVER, "Oil resource at (%d,%d) is unreachable", startX, startY );
-	}
-
-	if(FromSave == TRUE) {
+	if(FromSave == true) {
 		psFeature->pos.x = (UWORD)x;
 		psFeature->pos.y = (UWORD)y;
 	} else {
@@ -391,13 +299,15 @@ FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,BOOL FromSave)
 		psFeature->direction = 0;
 	}
 	//psFeature->damage = featureDamage;
-	psFeature->selected = FALSE;
+	psFeature->selected = false;
 	psFeature->psStats = psStats;
 	//psFeature->subType = psStats->subType;
 	psFeature->body = psStats->body;
 	psFeature->player = MAX_PLAYERS+1;	//set the player out of range to avoid targeting confusions
-
-	psFeature->bTargetted = FALSE;
+	psFeature->sensorRange = 0;
+	psFeature->sensorPower = 0;
+	psFeature->ECMMod = 0;
+	psFeature->bTargetted = false;
 	psFeature->timeLastHit = 0;
 
 	// it has never been drawn
@@ -487,7 +397,7 @@ FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,BOOL FromSave)
 				}
 			}
 
-			if( (!psStats->tileDraw) && (FromSave == FALSE) )
+			if( (!psStats->tileDraw) && (FromSave == false) )
 			{
 				psTile->height = (UBYTE)(height / ELEVATION_SCALE);
 			}
@@ -560,7 +470,7 @@ void removeFeature(FEATURE *psDel)
 	if (psDel->died)
 	{
 		// feature has already been killed, quit
-		ASSERT( FALSE,
+		ASSERT( false,
 			"removeFeature: feature already dead" );
 		return;
 	}
@@ -592,7 +502,7 @@ void removeFeature(FEATURE *psDel)
 		pos.x = psDel->pos.x;
 		pos.z = psDel->pos.y;
 		pos.y = map_Height(pos.x,pos.z);
-		addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_DISCOVERY,FALSE,NULL,0);
+		addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_DISCOVERY,false,NULL,0);
 		scoreUpdateVar(WD_ARTEFACTS_FOUND);
 		intRefreshScreen();
 	}
@@ -658,7 +568,7 @@ void destroyFeature(FEATURE *psDel)
 			pos.x = psDel->pos.x + widthScatter - rand()%(2*widthScatter);
 			pos.z = psDel->pos.y + breadthScatter - rand()%(2*breadthScatter);
 			pos.y = psDel->pos.z + 32 + rand()%heightScatter;
-			addEffect(&pos,EFFECT_EXPLOSION,explosionSize,FALSE,NULL,0);
+			addEffect(&pos,EFFECT_EXPLOSION,explosionSize,false,NULL,0);
 		}
 
 //	  	if(psDel->sDisplay.imd->pos.ymax>300)	// WARNING - STATS CHANGE NEEDED!!!!!!!!!!!
@@ -667,7 +577,7 @@ void destroyFeature(FEATURE *psDel)
 			pos.x = psDel->pos.x;
 			pos.z = psDel->pos.y;
 			pos.y = psDel->pos.z;
-			addEffect(&pos,EFFECT_DESTRUCTION,DESTRUCTION_TYPE_SKYSCRAPER,TRUE,psDel->sDisplay.imd,0);
+			addEffect(&pos,EFFECT_DESTRUCTION,DESTRUCTION_TYPE_SKYSCRAPER,true,psDel->sDisplay.imd,0);
 			initPerimeterSmoke(psDel->sDisplay.imd,pos.x,pos.y,pos.z);
 
 			// ----- Flip all the tiles under the skyscraper to a rubble tile
@@ -712,7 +622,7 @@ void destroyFeature(FEATURE *psDel)
 		pos.x = psDel->pos.x;
 		pos.z = psDel->pos.y;
 		pos.y = map_Height(pos.x,pos.z);
-		addEffect(&pos,EFFECT_DESTRUCTION,DESTRUCTION_TYPE_FEATURE,FALSE,NULL,0);
+		addEffect(&pos,EFFECT_DESTRUCTION,DESTRUCTION_TYPE_FEATURE,false,NULL,0);
 
 		//play sound
 		// ffs gj
@@ -736,13 +646,6 @@ SDWORD getFeatureStatFromName( const char *pName )
 {
 	unsigned int inc;
 	FEATURE_STATS *psStat;
-
-#ifdef RESOURCE_NAMES
-	if (!getResourceName(pName))
-	{
-		return -1;
-	}
-#endif
 
 	for (inc = 0; inc < numFeatureStats; inc++)
 	{

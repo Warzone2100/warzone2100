@@ -491,6 +491,8 @@ typedef enum
 	/* added for upgrade - 2/9/99 AB*/
 	ID_SOUND_LAS_SAT_COUNTDOWN,
 
+	ID_SOUND_BEACON,
+
 	/* Last ID */
 	ID_SOUND_NEXT,  // Thanks to this dummy we don't have to redefine ID_MAX_SOUND every time in terms of the preceding enum value
 	ID_MAX_SOUND = ID_SOUND_NEXT - 1,

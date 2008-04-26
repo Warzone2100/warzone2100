@@ -30,20 +30,12 @@
 
 #include "lib/ivis_common/piedef.h"
 
-/***************************************************************************/
-/*
- *	Global Variables
- */
-/***************************************************************************/
+// FIXME DUPLICATE CODE! Already present in trig.c!
+#define SC_TABLESIZE 4096
+#define SIN(X) aSinTable[(Uint16)(X) >> 4]
+#define COS(X) aSinTable[((Uint16)(X) >> 4) + (SC_TABLESIZE/4)]
 
 extern SDWORD aSinTable[];
-
-//*************************************************************************
-
-// FIXME DUPLICATE CODE! Already present in trig.c!
-#define SIN(X) aSinTable[(Uint16)(X) >> 4]
-#define COS(X) aSinTable[((Uint16)(X) >> 4) + 1024]
-
 
 //*************************************************************************
 
@@ -104,7 +96,7 @@ extern void pie_MatBegin(void);
 extern void pie_MatEnd(void);
 extern void pie_MATTRANS(int x, int y, int z);
 extern void pie_TRANSLATE(int x, int y, int z);
-extern void pie_MatScale( UDWORD percent );
+extern void pie_MatScale( unsigned int percent );
 extern void pie_MatRotX(int x);
 extern void pie_MatRotY(int y);
 extern void pie_MatRotZ(int z);

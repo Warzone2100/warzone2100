@@ -23,13 +23,14 @@
  * Game initialisation routines.
  *
  */
+#include "lib/framework/frame.h"
 
-#include <physfs.h>
 #include <string.h>
 
-#include "lib/framework/frame.h"
 #include "lib/framework/frameresource.h"
 #include "lib/framework/input.h"
+#include "lib/framework/file.h"
+#include "lib/framework/physfs_ext.h"
 #include "lib/framework/strres.h"
 #include "lib/ivis_common/piemode.h"
 #include "lib/ivis_common/piestate.h"
@@ -38,13 +39,14 @@
 #include "lib/ivis_common/ivi.h"
 #include "lib/netplay/netplay.h"
 #include "lib/script/script.h"
+#include "lib/sound/audio_id.h"
 #include "lib/sound/cdaudio.h"
 #include "lib/sound/mixer.h"
 
+#include "init.h"
+
 #include "advvis.h"
-#include "astar.h"
 #include "atmos.h"
-#include "lib/sound/audio_id.h"
 #include "cluster.h"
 #include "cmddroid.h"
 #include "component.h"
@@ -64,7 +66,6 @@
 #include "game.h"
 #include "gateway.h"
 #include "hci.h"
-#include "init.h"
 #include "intdisplay.h"
 #include "keymap.h"
 #include "levels.h"
@@ -91,15 +92,9 @@
 #include "main.h"
 #include "wrappers.h"
 
-extern char UserMusicPath[];
+static void	initMiscVars(void);
 
-extern void statsInitVars(void);
-extern void	structureInitVars(void);
-extern BOOL messageInitVars(void);
-extern BOOL researchInitVars(void);
-extern void	featureInitVars(void);
-extern void radarInitVars(void);
-extern void	initMiscVars( void );
+static const char UserMusicPath[] = "music";
 
 extern char * global_mods[];
 extern char * campaign_mods[];
@@ -110,7 +105,7 @@ char fileLoadBuffer[FILE_LOAD_BUFFER_SIZE];
 
 IMAGEFILE *FrontImages;
 
-BOOL DirectControl = FALSE;
+BOOL DirectControl = false;
 
 static wzSearchPath * searchPathRegistry = NULL;
 
@@ -126,19 +121,19 @@ static BOOL InitialiseGlobals(void)
 	structureInitVars();
 	if (!messageInitVars())
 	{
-		return FALSE;
+		return false;
 	}
 	if (!researchInitVars())
 	{
-		return FALSE;
+		return false;
 	}
 	featureInitVars();
 	radarInitVars();
 	Edit3DInitVars();
 
-	driveInitVars(TRUE);
+	driveInitVars(true);
 
-	return TRUE;
+	return true;
 }
 
 
@@ -152,16 +147,17 @@ static BOOL loadLevFile(const char* filename, searchPathMode datadir)
 	if (   !PHYSFS_exists(filename)
 	    || !loadFile(filename, &pBuffer, &size)) {
 		debug(LOG_ERROR, "loadLevFile: File not found: %s\n", filename);
-		return FALSE; // only in NDEBUG case
+		return false; // only in NDEBUG case
 	}
 	if (!levParse(pBuffer, size, datadir)) {
 		debug(LOG_ERROR, "loadLevFile: Parse error in %s\n", filename);
-		return FALSE;
+		return false;
 	}
 	free(pBuffer);
 
-	return TRUE;
+	return true;
 }
+
 
 void cleanSearchPath( void )
 {
@@ -179,7 +175,11 @@ void cleanSearchPath( void )
 	}
 }
 
-// Register searchPath above the path with next lower priority
+
+/*!
+ * Register searchPath above the path with next lower priority
+ * For information about what can be a search path, refer to PhysFS documentation
+ */
 void registerSearchPath( const char path[], unsigned int priority )
 {
 	wzSearchPath * curSearchPath = searchPathRegistry, * tmpSearchPath = NULL;
@@ -221,8 +221,8 @@ void registerSearchPath( const char path[], unsigned int priority )
 		tmpSearchPath->higherPriority->lowerPriority = tmpSearchPath;
 }
 
-/*
- * \fn BOOL rebuildSearchPath( int mode )
+
+/*!
  * \brief Rebuilds the PHYSFS searchPath with mode specific subdirs
  *
  * Priority:
@@ -238,7 +238,7 @@ BOOL rebuildSearchPath( searchPathMode mode, BOOL force )
 	{
 		current_mode = mode;
 
-		rebuildSearchPath( mod_clean, FALSE );
+		rebuildSearchPath( mod_clean, false );
 
 		// Start at the lowest priority
 		while( curSearchPath->lowerPriority )
@@ -348,7 +348,7 @@ BOOL rebuildSearchPath( searchPathMode mode, BOOL force )
 				break;
 			default:
 				debug( LOG_ERROR, "rebuildSearchPath: Can't switch to unknown mods %i", mode );
-				return FALSE;
+				return false;
 		}
 
 		// User's home dir must be first so we allways see what we write
@@ -359,7 +359,7 @@ BOOL rebuildSearchPath( searchPathMode mode, BOOL force )
 		printSearchPath();
 #endif // DEBUG
 	}
-	return TRUE;
+	return true;
 }
 
 
@@ -369,7 +369,7 @@ BOOL buildMapList(void)
 	size_t len;
 
 	if ( !loadLevFile( "gamedesc.lev", mod_campaign ) ) {
-		return FALSE;
+		return false;
 	}
 	loadLevFile( "addon.lev", mod_multiplay );
 
@@ -382,7 +382,7 @@ BOOL buildMapList(void)
 		}
 	}
 	PHYSFS_freeList( filelist );
-	return TRUE;
+	return true;
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -391,41 +391,18 @@ BOOL buildMapList(void)
 //
 BOOL systemInitialise(void)
 {
-	W_HEAPINIT		sWInit;
-
-	memset(&sWInit, 0, sizeof(sWInit));
-
-	sWInit.barInit = 40;
-	sWInit.barExt = 5;
-	sWInit.butInit = 50;		// was 30 ... but what about the virtual keyboard
-	sWInit.butExt = 5;
-	sWInit.edbInit = 2;
-	sWInit.edbExt = 1;
-	sWInit.formInit = 10;
-	sWInit.formExt = 2;
-	sWInit.cFormInit = 50;
-	sWInit.cFormExt = 5;
-	sWInit.tFormInit = 3;
-	sWInit.tFormExt = 2;
-	sWInit.labInit = 15;
-	sWInit.labExt = 3;
-	sWInit.sldInit = 2;
-	sWInit.sldExt = 1;
-
-	if (!widgInitialise(&sWInit))
+	if (!widgInitialise())
 	{
-		return FALSE;
+		return false;
 	}
 
 	buildMapList();
 
-	//loadLevels(DIR_CAMPAIGN);
-
 	// Initialize render engine
-	war_SetFog(FALSE);
+	war_SetFog(false);
 	if (!pie_Initialise()) {
 		debug(LOG_ERROR, "Unable to initialise renderer");
-		return FALSE;
+		return false;
 	}
 
 	pie_SetGammaValue((float)gammaValue / 20.0f);
@@ -446,21 +423,17 @@ BOOL systemInitialise(void)
 
 	if (!dataInitLoadFuncs()) // Pass all the data loading functions to the framework library
 	{
-		return FALSE;
+		return false;
 	}
 
 	if (!rayInitialise()) /* Initialise the ray tables */
 	{
-		return FALSE;
+		return false;
 	}
 
 	if (!fpathInitialise())
 	{
-		return FALSE;
-	}
-	if (!astarInitialise()) // Initialise the findpath system
-	{
-		return FALSE;
+		return false;
 	}
 
 #ifdef ARROWS
@@ -471,9 +444,9 @@ BOOL systemInitialise(void)
 	iV_TextInit();
 
 	iV_Reset();								// Reset the IV library.
-	initLoadingScreen(TRUE);
+	initLoadingScreen(true);
 
-	return TRUE;
+	return true;
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -488,7 +461,6 @@ void systemShutdown(void)
 #endif
 
 	keyClearMappings();
-	fpathShutDown();
 
 	// free up all the load functions (all the data should already have been freed)
 	resReleaseAll();
@@ -506,7 +478,7 @@ void systemShutdown(void)
 		cdAudio_Close();
 	}
 
-	if ( audio_Disabled() == FALSE && !audio_Shutdown() )
+	if ( audio_Disabled() == false && !audio_Shutdown() )
 	{
 		return;
 	}
@@ -530,7 +502,7 @@ init_ObjectDead( void * psObj )
 
 	CHECK_OBJECT(psBaseObj);
 
-	if ( psBaseObj->died == TRUE )
+	if ( psBaseObj->died == true )
 	{
 		switch ( psBaseObj->type )
 		{
@@ -563,57 +535,57 @@ BOOL frontendInitialise(const char *ResourceFile)
 
 	if(!InitialiseGlobals())				// Initialise all globals and statics everywhere.
 	{
-		return FALSE;
+		return false;
 	}
 
 	iV_Reset();								// Reset the IV library.
 
 	if (!scrTabInitialise())				// Initialise the script system
 	{
-		return FALSE;
+		return false;
 	}
 
 	if (!stringsInitialise())				// Initialise the string system
 	{
-		return FALSE;
+		return false;
 	}
 
 	if (!objInitialise())					// Initialise the object system
 	{
-		return FALSE;
+		return false;
 	}
 
 	if (!anim_Init())
 	{
-		return FALSE;
+		return false;
 	}
 
 	if ( !animObj_Init( init_ObjectDead ) )
 	{
-		return FALSE;
+		return false;
 	}
 
 	if (!allocPlayerPower())	 //set up the PlayerPower for each player - this should only be done ONCE now
 	{
-		return FALSE;
+		return false;
 	}
 
 	debug(LOG_MAIN, "frontEndInitialise: loading resource file .....");
 	if (!resLoad(ResourceFile, 0))
 	{
 		//need the object heaps to have been set up before loading in the save game
-		return FALSE;
+		return false;
 	}
 
 	if (!dispInitialise())					// Initialise the display system
 	{
-		return FALSE;
+		return false;
 	}
 
 #ifdef BUCKET
 	if ( !bucketSetupList() )				// reset object list
 	{
-		return FALSE;
+		return false;
 	}
 #endif
 
@@ -622,15 +594,17 @@ BOOL frontendInitialise(const char *ResourceFile)
    		can pick up the stats after they have been loaded */
 	if (!intInitialise())
 	{
-		return FALSE;
+		return false;
 	}
 
 	// keymappings
 	// clear out any existing mappings
 	keyClearMappings();
-	keyInitMappings(FALSE);
+	keyInitMappings(false);
 
-	frameSetCursorFromRes(CURSOR_DEFAULT);
+	// Set the default uncoloured cursor here, since it looks slightly
+	// better for menus and such.
+	pie_SetMouse(CURSOR_DEFAULT, false);
 
 	SetFormAudioIDs(-1,ID_SOUND_WINDOWCLOSE);			// disable the open noise since distorted in 3dfx builds.
 
@@ -644,7 +618,7 @@ BOOL frontendInitialise(const char *ResourceFile)
 		cdAudio_PlayTrack(playlist_frontend); // frontend music
 	}
 
-	return TRUE;
+	return true;
 }
 
 
@@ -656,7 +630,7 @@ BOOL frontendShutdown(void)
 
 	if (!mechShutdown())
 	{
-		return FALSE;
+		return false;
 	}
 
 	releasePlayerPower();
@@ -669,26 +643,26 @@ BOOL frontendShutdown(void)
 
 	if (!objShutdown())
 	{
-		return FALSE;
+		return false;
 	}
 
 	ResearchRelease();
 
 	if ( !anim_Shutdown() )
 	{
-		return FALSE;
+		return false;
 	}
 
 	if ( !animObj_Shutdown() )
 	{
-		return FALSE;
+		return false;
 	}
 
 	debug(LOG_TEXTURE, "=== frontendShutdown ===");
 	pie_TexShutDown();
 	pie_TexInit(); // ready for restart
 
-	return TRUE;
+	return true;
 }
 
 
@@ -704,95 +678,95 @@ BOOL stageOneInitialise(void)
 	// Initialise all globals and statics everwhere.
 	if(!InitialiseGlobals())
 	{
-		return FALSE;
+		return false;
 	}
 
 	iV_Reset(); // Reset the IV library
 
 	if (!stringsInitialise())	/* Initialise the string system */
 	{
-		return FALSE;
+		return false;
 	}
 
 	if (!objInitialise())		/* Initialise the object system */
 	{
-		return FALSE;
+		return false;
 	}
 
 	if (!droidInit())
 	{
-		return FALSE;
+		return false;
 	}
 
 	if (!initViewData())
 	{
-		return FALSE;
+		return false;
 	}
 
 	if (!grpInitialise())
 	{
-		return FALSE;
+		return false;
 	}
 
    	if (!aiInitialise())		/* Initialise the AI system */ // pregame
 	{
-		return FALSE;
+		return false;
 	}
 
 	if (!anim_Init())
 	{
-		return FALSE;
+		return false;
 	}
 
 	if ( !animObj_Init( init_ObjectDead ) )
 	{
-		return FALSE;
+		return false;
 	}
 
 	if (!allocPlayerPower())	/*set up the PlayerPower for each player - this should only be done ONCE now*/
 	{
-		return FALSE;
+		return false;
 	}
 
 	if (!formationInitialise())		// Initialise the formation system
 	{
-		return FALSE;
+		return false;
 	}
 
 	// initialise the visibility stuff
 	if (!visInitialise())
 	{
-		return FALSE;
+		return false;
 	}
 
 	/* Initialise the movement system */
 	if (!moveInitialise())
 	{
-		return FALSE;
+		return false;
 	}
 
 	if (!proj_InitSystem())
 	{
-		return FALSE;
+		return false;
 	}
 
 	if (!scrTabInitialise())	// Initialise the script system
 	{
-		return FALSE;
+		return false;
 	}
 
 	if (!gridInitialise())
 	{
-		return FALSE;
+		return false;
 	}
 
 
     if (!environInit())
     {
-        return FALSE;
+        return false;
     }
 	// reset speed limiter
-	moveSetFormationSpeedLimiting(TRUE);
+	moveSetFormationSpeedLimiting(true);
 
 
 	initMission();
@@ -805,7 +779,7 @@ BOOL stageOneInitialise(void)
     //need to reset the event timer too - AB 14/01/99
     eventTimeReset(gameTime/SCR_TICKRATE);
 
-	return TRUE;
+	return true;
 }
 
 
@@ -816,7 +790,7 @@ BOOL stageOneShutDown(void)
 {
 	debug(LOG_WZ, "== stageOneShutDown ==");
 
-	if ( audio_Disabled() == FALSE )
+	if ( audio_Disabled() == false )
 	{
 		sound_CheckAllUnloaded();
 	}
@@ -827,12 +801,12 @@ BOOL stageOneShutDown(void)
 
 	if (!aiShutdown())
 	{
-		return FALSE;
+		return false;
 	}
 
 	if (!objShutdown())
 	{
-		return FALSE;
+		return false;
 	}
 
 	grpShutDown();
@@ -847,7 +821,7 @@ BOOL stageOneShutDown(void)
 
 	if (!mapShutdown())
 	{
-		return FALSE;
+		return false;
 	}
 
 	scrShutDown();
@@ -856,12 +830,12 @@ BOOL stageOneShutDown(void)
 
 	if ( !anim_Shutdown() )
 	{
-		return FALSE;
+		return false;
 	}
 
 	if ( !animObj_Shutdown() )
 	{
-		return FALSE;
+		return false;
 	}
 
 	debug(LOG_TEXTURE, "=== stageOneShutDown ===");
@@ -870,7 +844,7 @@ BOOL stageOneShutDown(void)
 
 	initMiscVars();
 
-	return TRUE;
+	return true;
 }
 
 
@@ -887,27 +861,27 @@ BOOL stageTwoInitialise(void)
 	// loading a savegame where we are building a lassat
 	for (i = 0; i < MAX_PLAYERS; i++)
 	{
-		setLasSatExists(FALSE, i);
+		setLasSatExists(false, i);
 	}
 
 	if(bMultiPlayer)
 	{
 		if (!multiTemplateSetup())
 		{
-			return FALSE;
+			return false;
 		}
 	}
 
 	if (!dispInitialise())		/* Initialise the display system */
 	{
-		return FALSE;
+		return false;
 	}
 
 	LOADBARCALLBACK();	//	loadingScreenCallback();
 
 	if(!InitRadar()) 	// After resLoad cause it needs the game palette initialised.
 	{
-		return FALSE;
+		return false;
 	}
 
 	LOADBARCALLBACK();	//	loadingScreenCallback();
@@ -917,12 +891,12 @@ BOOL stageTwoInitialise(void)
 		iV_ShutDown();
 		debug( LOG_ERROR, "Can't find all the explosions PCX's" );
 		abort();
-		return FALSE;
+		return false;
 	}
 
 	if (!cmdDroidInit())
 	{
-		return FALSE;
+		return false;
 	}
 
 	LOADBARCALLBACK();	//	loadingScreenCallback();
@@ -930,7 +904,7 @@ BOOL stageTwoInitialise(void)
 #ifdef BUCKET
 	if ( !bucketSetupList() )	/* reset object list */
 	{
-		return FALSE;
+		return false;
 	}
 #endif
 
@@ -941,34 +915,36 @@ BOOL stageTwoInitialise(void)
 
 	if (!intInitialise())
 	{
-		return FALSE;
+		return false;
 	}
 
 	LOADBARCALLBACK();	//	loadingScreenCallback();
 
 	if (!initMessage())			/* Initialise the message heaps */
 	{
-		return FALSE;
+		return false;
 	}
 
 	if (!gwInitialise())
 	{
-		return FALSE;
+		return false;
 	}
 
 	// keymappings
 	LOADBARCALLBACK();	//	loadingScreenCallback();
 	keyClearMappings();
-	keyInitMappings(FALSE);
+	keyInitMappings(false);
 	LOADBARCALLBACK();	//	loadingScreenCallback();
 
-	frameSetCursorFromRes(CURSOR_DEFAULT);
+	// Set the default uncoloured cursor here, since it looks slightly
+	// better for menus and such.
+	pie_SetMouse(CURSOR_DEFAULT, false);
 
 	SetFormAudioIDs(ID_SOUND_WINDOWOPEN,ID_SOUND_WINDOWCLOSE);
 
 	debug(LOG_MAIN, "stageTwoInitialise: done");
 
-	return TRUE;
+	return true;
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -990,17 +966,17 @@ BOOL stageTwoShutDown(void)
 
 	if (!messageShutdown())
 	{
-		return FALSE;
+		return false;
 	}
 
 	if (!mechShutdown())
 	{
-		return FALSE;
+		return false;
 	}
 
 
 	if(!ShutdownRadar()) {
-		return FALSE;
+		return false;
 	}
 
 	intShutDown();
@@ -1012,10 +988,10 @@ BOOL stageTwoShutDown(void)
 
 	if (!mapShutdown())
 	{
-		return FALSE;
+		return false;
 	}
 
-	return TRUE;
+	return true;
 }
 
 BOOL stageThreeInitialise(void)
@@ -1025,7 +1001,7 @@ BOOL stageThreeInitialise(void)
 	DROID		*psDroid;
 
 	debug(LOG_WZ, "== stageThreeInitalise ==");
-	bTrackingTransporter = FALSE;
+	bTrackingTransporter = false;
 
 	loopMissionState = LMS_NORMAL;
 
@@ -1034,7 +1010,7 @@ BOOL stageThreeInitialise(void)
 
 	if (!init3DView())	// Initialise 3d view stuff. After resLoad cause it needs the game palette initialised.
 	{
-		return FALSE;
+		return false;
 	}
 
 	effectResetUpdates();
@@ -1045,7 +1021,7 @@ BOOL stageThreeInitialise(void)
 		// FIXME Is this really needed?
 		debug( LOG_WZ, "multiGameInit()\n" );
 		multiGameInit();
-		cmdDroidMultiExpBoost(TRUE);
+		cmdDroidMultiExpBoost(true);
 	}
 	else
 	{
@@ -1058,7 +1034,7 @@ BOOL stageThreeInitialise(void)
 
 	if (!fpathInitialise())
 	{
-		return FALSE;
+		return false;
 	}
 
 	clustInitialise();
@@ -1075,18 +1051,18 @@ BOOL stageThreeInitialise(void)
 	for(psStr = apsStructLists[selectedPlayer];psStr;psStr=psStr->psNext){
 		if(psStr->pStructureType->type == REF_HQ)
 		{
-			radarOnScreen = TRUE;
-			setHQExists(TRUE,selectedPlayer);
+			radarOnScreen = true;
+			setHQExists(true,selectedPlayer);
 			break;
 		}
 	}
 
 	// Re-inititialise some static variables.
 
-	driveInitVars(FALSE);
+	driveInitVars(false);
 	displayInitVars();
 
-	setAllPauseStates(FALSE);
+	setAllPauseStates(false);
 
 	/* decide if we have to create teams */
 	if(game.alliance == ALLIANCES_TEAMS && game.type == SKIRMISH)
@@ -1121,7 +1097,7 @@ BOOL stageThreeInitialise(void)
 		eventFireCallbackTrigger((TRIGGER_TYPE)CALL_GAMEINIT);
 	}
 
-	return TRUE;
+	return true;
 }
 
 
@@ -1145,7 +1121,7 @@ BOOL stageThreeShutDown(void)
 		multiGameShutdown();
 	}
 
-	cmdDroidMultiExpBoost(FALSE);
+	cmdDroidMultiExpBoost(false);
 
 	eventReset();
 
@@ -1155,13 +1131,13 @@ BOOL stageThreeShutDown(void)
 	//call this here before mission data is released
 	if (!missionShutDown())
 	{
-		return FALSE;
+		return false;
 	}
 
 	/*
 		When this line wasn't at this point. The PSX version always failed on the next script after the tutorial ... unexplained why?
 	*/
-//	bInTutorial=FALSE;
+//	bInTutorial=false;
 	scrExternReset();
 
     //reset the run data so that doesn't need to be initialised in the scripts
@@ -1184,7 +1160,7 @@ BOOL stageThreeShutDown(void)
 
 	setScriptWinLoseVideo(PLAY_NONE);
 
-	return TRUE;
+	return true;
 }
 
 // Reset the game between campaigns
@@ -1193,7 +1169,7 @@ BOOL campaignReset(void)
 	debug(LOG_MAIN, "campaignReset");
 	gwShutDown();
 	mapShutdown();
-	return TRUE;
+	return true;
 }
 
 // Reset the game when loading a save game
@@ -1214,31 +1190,31 @@ BOOL saveGameReset(void)
 
 	//free up the gateway stuff?
 	gwShutDown();
-	intResetScreen(TRUE);
+	intResetScreen(true);
 	intResetPreviousObj();
 
 	if (!mapShutdown())
 	{
-		return FALSE;
+		return false;
 	}
 
     //clear out any messages
     freeMessages();
 
-	return TRUE;
+	return true;
 }
 
 // --- Miscellaneous Initialisation stuff that really should be done each restart
-void	initMiscVars( void )
+static void	initMiscVars(void)
 {
 	selectedPlayer = 0;
-	godMode = FALSE;
+	godMode = false;
 
 	// ffs am
 
-	radarOnScreen = TRUE;
-	enableConsoleDisplay(TRUE);
+	radarOnScreen = true;
+	enableConsoleDisplay(true);
 
 	setSelectedGroup(UBYTE_MAX);
-	processDebugMappings(FALSE);
+	processDebugMappings(false);
 }

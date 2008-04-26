@@ -655,13 +655,15 @@ extern UDWORD playerWeapStructsCostInRange(SDWORD player, SDWORD lookingPlayer, 
 extern UDWORD numEnemyObjInRange(SDWORD player, SDWORD range, SDWORD rangeX, SDWORD rangeY, BOOL bVTOLs, BOOL bFinished);
 extern BOOL addHelpBlip(SDWORD x, SDWORD y, SDWORD forPlayer, SDWORD sender, char * textMsg);
 extern BOOL sendBeaconToPlayer(SDWORD locX, SDWORD locY, SDWORD forPlayer, SDWORD sender, char * beaconMsg);
-extern VIEWDATA *HelpViewData(SDWORD sender, char *textMsg, UDWORD LocX, UDWORD LocY);
-extern MESSAGE * findHelpMsg(UDWORD player, SDWORD sender);
+extern MESSAGE * findBeaconMsg(UDWORD player, SDWORD sender);
 extern SDWORD getNumRepairedBy(DROID *psDroidToCheck, SDWORD player);
 extern BOOL objectInRangeVis(BASE_OBJECT *psList, SDWORD x, SDWORD y, SDWORD range, SDWORD lookingPlayer);
 extern SDWORD getPlayerFromString(char *playerName);
 extern BOOL scrExp(void);
 extern BOOL scrSqrt(void);
 extern BOOL scrLog(void);
+
+extern BOOL addBeaconBlip(SDWORD locX, SDWORD locY, SDWORD forPlayer, SDWORD sender, char * textMsg);
+extern VIEWDATA *CreateBeaconViewData(SDWORD sender, UDWORD LocX, UDWORD LocY);
 
 #endif // __INCLUDED_SRC_SCRIPTFUNCS_H__

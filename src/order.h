@@ -154,6 +154,12 @@ extern void orderDroid(DROID *psDroid, DROID_ORDER order);
 /* Check the order state of a droid */
 extern BOOL orderState(DROID *psDroid, DROID_ORDER order);
 
+/** Check if an order is valid for a location. */
+BOOL validOrderForLoc(DROID_ORDER order);
+
+/** Check if an order is valid for an object. */
+BOOL validOrderForObj(DROID_ORDER order);
+
 /* Give a droid an order with a location target */
 extern void orderDroidLoc(DROID *psDroid, DROID_ORDER order, UDWORD x, UDWORD y);
 
@@ -164,7 +170,7 @@ extern BOOL orderStateLoc(DROID *psDroid, DROID_ORDER order, UDWORD *pX, UDWORD 
 extern void orderDroidObj(DROID *psDroid, DROID_ORDER order, BASE_OBJECT *psObj);
 
 /* Get the state of a droid order with an object */
-extern BOOL orderStateObj(DROID *psDroid, DROID_ORDER order, BASE_OBJECT **ppsObj);
+extern BASE_OBJECT* orderStateObj(DROID *psDroid, DROID_ORDER order);
 
 /* Give a droid an order with a location and a stat */
 extern void orderDroidStatsLoc(DROID *psDroid, DROID_ORDER order,
@@ -208,10 +214,10 @@ void orderSelectedStatsTwoLoc(UDWORD player, DROID_ORDER order,
 // see if a droid supports a secondary order
 extern BOOL secondarySupported(DROID *psDroid, SECONDARY_ORDER sec);
 
-// get the state of a secondary order, return FALSE if unsupported
+// get the state of a secondary order, return false if unsupported
 extern BOOL secondaryGetState(DROID *psDroid, SECONDARY_ORDER sec, SECONDARY_STATE *pState);
 
-// set the state of a secondary order, return FALSE if failed.
+// set the state of a secondary order, return false if failed.
 extern BOOL secondarySetState(DROID *psDroid, SECONDARY_ORDER sec, SECONDARY_STATE State);
 
 // check the damage level of a droid against it's secondary state
@@ -230,7 +236,7 @@ extern const char* getDroidOrderName(DROID_ORDER order);
 
 extern DROID *FindATransporter(void);
 
-/*For a given constructor droid, check if there are any damaged buildings within 
+/*For a given constructor droid, check if there are any damaged buildings within
 a defined range*/
 extern BASE_OBJECT * checkForDamagedStruct(DROID *psDroid, STRUCTURE *psTarget);
 
@@ -238,9 +244,9 @@ extern BASE_OBJECT * checkForDamagedStruct(DROID *psDroid, STRUCTURE *psTarget);
 // do a health check for a droid
 extern void orderHealthCheck(DROID *psDroid);
 
-// set the state of a secondary order for a Factory, return FALSE if failed.
+// set the state of a secondary order for a Factory, return false if failed.
 extern BOOL setFactoryState(STRUCTURE *psStruct, SECONDARY_ORDER sec, SECONDARY_STATE State);
-// get the state of a secondary order for a Factory, return FALSE if unsupported
+// get the state of a secondary order for a Factory, return false if unsupported
 extern BOOL getFactoryState(STRUCTURE *psStruct, SECONDARY_ORDER sec, SECONDARY_STATE *pState);
 
 //lasSat structure can select a target
@@ -257,5 +263,8 @@ static inline void removeDroidOrderTarget(DROID *psDroid, SDWORD idx)
 	assert(idx >= 0 && idx < ORDER_LIST_MAX);
 	psDroid->asOrderList[idx].psOrderTarget = NULL;
 }
+
+extern DROID_ORDER chooseOrderLoc(DROID *psDroid, UDWORD x,UDWORD y);
+extern DROID_ORDER chooseOrderObj(DROID *psDroid, BASE_OBJECT *psObj);
 
 #endif // __INCLUDED_SRC_ORDER_H__

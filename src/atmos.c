@@ -44,7 +44,7 @@
 // Shift all this gubbins into a .h file if it makes it into game
 // -----------------------------------------------------------------------------
 /* Roughly one per tile */
-#define	MAX_ATMOS_PARTICLES		((VISIBLE_XTILES * VISIBLE_YTILES))
+#define	MAX_ATMOS_PARTICLES		(MAP_MAXWIDTH * MAP_MAXHEIGHT)
 #define	SNOW_SPEED_DRIFT		(40 - rand()%80)
 #define SNOW_SPEED_FALL			(0-(rand()%40 + 80))
 #define	RAIN_SPEED_DRIFT		(rand()%50)
@@ -100,19 +100,21 @@ void	atmosUpdateSystem( void )
 	UDWORD	numberToAdd;
 	Vector3i pos;
 
-	for(i=0; i<MAX_ATMOS_PARTICLES; i++)
-	{
-		/* See if it's active */
-		if(asAtmosParts[i].status == APS_ACTIVE)
-		{
-			processParticle(&asAtmosParts[i]);
-		}
-	}
-
-	/* This bit below needs to go into a "precipitation function" */
+	// we don't want to do any of this while paused.
 	if(!gamePaused() && weather!=WT_NONE)
 	{
+		for(i = 0; i < MAX_ATMOS_PARTICLES; i++)
+		{
+			/* See if it's active */
+			if(asAtmosParts[i].status == APS_ACTIVE)
+			{
+				processParticle(&asAtmosParts[i]);
+			}
+		}
+
+		/* This bit below needs to go into a "precipitation function" */
 		numberToAdd = ((weather==WT_SNOWING) ? 2 : 4);
+
 		/* Temporary stuff - just adds a few particles! */
 		for(i=0; i<numberToAdd; i++)
 		{
@@ -160,9 +162,9 @@ void	processParticle( ATPART *psPart )
 	if(!gamePaused())
 	{
 		/* Move the particle - frame rate controlled */
- 		psPart->position.x += timeAdjustedIncrement(psPart->velocity.x, TRUE);
-		psPart->position.y += timeAdjustedIncrement(psPart->velocity.y, TRUE);
-		psPart->position.z += timeAdjustedIncrement(psPart->velocity.z, TRUE);
+ 		psPart->position.x += timeAdjustedIncrement(psPart->velocity.x, true);
+		psPart->position.y += timeAdjustedIncrement(psPart->velocity.y, true);
+		psPart->position.z += timeAdjustedIncrement(psPart->velocity.z, true);
 
 		/* Wrap it around if it's gone off grid... */
 	   	testParticleWrap(psPart);
@@ -200,7 +202,7 @@ void	processParticle( ATPART *psPart )
 						pos.z = psPart->position.z;
 						pos.y = groundHeight;
 						effectSetSize(60);
-						addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_SPECIFIED,TRUE,getImdFromIndex(MI_SPLASH),0);
+						addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_SPECIFIED,true,getImdFromIndex(MI_SPLASH),0);
 					}
 				}
 				return;

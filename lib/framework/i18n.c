@@ -33,7 +33,7 @@
 
 
 #if defined(WZ_OS_WIN)
-const static struct
+static const struct
 {
 	const char * language;
 	const char * name;
@@ -54,7 +54,7 @@ const static struct
 #  endif
 };
 #else
-const static struct
+static const struct
 {
 	const char *language;
 	const char *name;
@@ -153,7 +153,7 @@ const char* getLanguageName(void)
 		}
 	}
 
-	ASSERT(FALSE, "getLanguageName: Unknown language");
+	ASSERT(false, "getLanguageName: Unknown language");
 	return NULL;
 }
 
@@ -199,7 +199,7 @@ static BOOL setLocaleUnix(const char* locale)
 BOOL setLanguage(const char *language)
 {
 #if !defined(ENABLE_NLS)
-	return TRUE;
+	return true;
 #else
 	unsigned int i;
 
@@ -220,7 +220,7 @@ BOOL setLanguage(const char *language)
 
 	debug(LOG_ERROR, "Requested language \"%s\" not supported.", language);
 
-	return FALSE;
+	return false;
 #endif
 }
 

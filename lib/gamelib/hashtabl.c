@@ -61,7 +61,7 @@ hashTable_Create( HASHTABLE **ppsTable, UDWORD udwTableSize,
 	/* set hash function to internal */
 	hashTable_SetHashFunction( (*ppsTable), HashTest );
 
-	return TRUE;
+	return true;
 }
 
 /***************************************************************************/
@@ -248,7 +248,7 @@ void *hashTable_FindElement(HASHTABLE *psTable, intptr_t iKey1, intptr_t iKey2)
 	/* remove node from hash table and return to heap */
 	if ( psNode == NULL )
 	{
-		return FALSE;
+		return false;
 	}
 	else
 	{
@@ -261,7 +261,7 @@ void *hashTable_FindElement(HASHTABLE *psTable, intptr_t iKey1, intptr_t iKey2)
 static void
 hashTable_SetNextNode( HASHTABLE *psTable, BOOL bMoveToNextNode )
 {
-	if ( (bMoveToNextNode == TRUE) && (psTable->psNextNode != NULL) )
+	if ( (bMoveToNextNode == true) && (psTable->psNextNode != NULL) )
 	{
 		/* get next node */
 		psTable->psNextNode = psTable->psNextNode->psNext;
@@ -322,7 +322,7 @@ hashTable_RemoveElement(HASHTABLE *psTable, void *psElement, intptr_t iKey1, int
 	/* remove node from hash table and return to heap */
 	if ( psNode == NULL )
 	{
-		return FALSE;
+		return false;
 	}
 	else
 	{
@@ -343,7 +343,7 @@ hashTable_RemoveElement(HASHTABLE *psTable, void *psElement, intptr_t iKey1, int
 		}
 
 		/* setup next node pointer */
-		hashTable_SetNextNode( psTable, TRUE );
+		hashTable_SetNextNode( psTable, true );
 
 		/* return element to heap */
 		ASSERT( psNode->psElement != NULL,
@@ -355,7 +355,7 @@ hashTable_RemoveElement(HASHTABLE *psTable, void *psElement, intptr_t iKey1, int
 				"hashTable_RemoveElement: node pointer invalid\n" );
 		free(psNode);
 
-		return TRUE;
+		return true;
 	}
 }
 
@@ -378,7 +378,7 @@ hashTable_GetNext( HASHTABLE *psTable )
 		psElement = psTable->psNextNode->psElement;
 
 		/* setup next node pointer */
-		hashTable_SetNextNode( psTable, TRUE );
+		hashTable_SetNextNode( psTable, true );
 
 		return psElement;
 	}
@@ -397,7 +397,7 @@ hashTable_GetFirst( HASHTABLE *psTable )
 	psTable->psNextNode  = psTable->ppsNode[0];
 
 	/* search through table for first allocated node */
-	hashTable_SetNextNode( psTable, FALSE );
+	hashTable_SetNextNode( psTable, false );
 
 	/* return it */
 	return hashTable_GetNext( psTable );

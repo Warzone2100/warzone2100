@@ -25,6 +25,8 @@
 #define __INCLUDED_LIB_WIDGET_WIDGBASE_H__
 
 #include "lib/framework/frame.h"
+#include "lib/ivis_common/piedef.h"
+#include "lib/ivis_common/textdraw.h"
 
 /* Button colours */
 #define WBUTC_TEXT		0			// Colour for button text
@@ -88,7 +90,7 @@ typedef struct _w_screen
 {
 	WIDGET*          psForm;        ///< The root form of the screen
 	WIDGET*          psFocus;       ///< The widget that has keyboard focus
-	int              TipFontID;     ///< ID of the IVIS font to use for tool tips.
+	enum iV_fonts    TipFontID;     ///< ID of the IVIS font to use for tool tips.
 	WIDGET*          psRetWidget;   ///< The widget to be returned by widgRunScreen
 } W_SCREEN;
 

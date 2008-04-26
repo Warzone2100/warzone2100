@@ -205,7 +205,7 @@ trigger vtolAttackTr				(every, 150);
 trigger vtolEnablerTr				(every, 700);
 trigger takeoverTr					(CALL_UNITTAKEOVER, ref droid);
 trigger useLassatTr					(every, 3000);
-trigger reassignTr					(CALL_PLAYERLEFT,count);
+trigger reassignTr					(CALL_PLAYERLEFT,ref count);
 trigger formAllianceEventTr			(every,170);
 trigger breakAllianceEventTr		(every,3000);
 trigger difficultyModifierTr		(every,600);
@@ -1964,7 +1964,15 @@ event takeover(takeoverTr)
 {
 	if( droid.player == me )
 	{
-		groupAddDroid( attackGroup, droid );
+		if(droid.droidType == DROID_CONSTRUCT or
+				droid.droidType == DROID_CYBORG_CONSTRUCT)
+		{
+			groupAddDroid( buildGroup, droid );
+		}
+		else
+		{
+			groupAddDroid( attackGroup, droid );
+		}
 	}
 }
 
@@ -2423,7 +2431,10 @@ event managePower(managePowerTr)
 
 event difficultyModifier(difficultyModifierTr)
 {
-	skDifficultyModifier(me);
+	if(not isHumanPlayer(me))
+	{
+		skDifficultyModifier(me);
+	}
 }
 
 /////////////////////////////////////////////////////////////////////
@@ -3034,7 +3045,6 @@ function void shutDownAI()
 	setEventTrigger(formHumanAlliances,	inactive);
 	setEventTrigger(consolidateEvent,	inactive);
 	setEventTrigger(managePower,	inactive);
-	setEventTrigger(difficultyModifier,	inactive);
 	setEventTrigger(vtolStructs,inactive);
 	setEventTrigger(buildVtols,inactive);
 	setEventTrigger(vtolAttack,inactive);
@@ -3052,7 +3062,10 @@ function void shutDownAI()
 
 event reassignPlayers(reassignTr)
 {
-	reassignAI();
+	if(count == me)
+	{
+		reassignAI();
+	}
 }
 
 function void reassignAI()
@@ -3091,7 +3104,6 @@ function void reassignAI()
 	setEventTrigger(breakAllianceEvent,breakAllianceEventTr);
 	setEventTrigger(consolidateEvent,consolidateEventTr);
 	setEventTrigger(managePower,managePowerTr);
-	setEventTrigger(difficultyModifier,difficultyModifierTr);
 	setEventTrigger(vtolStructs,inactive);
 	setEventTrigger(buildVtols,inactive);
 	//setEventTrigger(vtolAttack,inactive);

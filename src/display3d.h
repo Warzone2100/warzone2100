@@ -53,7 +53,7 @@ extern void setViewPos( UDWORD x, UDWORD y, BOOL Pan);
 extern void getPlayerPos(SDWORD *px, SDWORD *py);
 extern void setPlayerPos(SDWORD x, SDWORD y);
 extern void disp3d_setView(iView *newView);
-extern void disp3d_resetView();
+extern void disp3d_resetView(void);
 extern void disp3d_getView(iView *newView);
 
 extern void draw3DScene (void);
@@ -74,9 +74,7 @@ extern void displayDelivPoints(void);
 extern void calcScreenCoords(DROID *psDroid);
 extern void toggleEnergyBars( void );
 
-extern BOOL doWeDrawRadarBlips( void );
 extern BOOL doWeDrawProximitys( void );
-extern void setBlipDraw(BOOL val);
 extern void setProximityDraw(BOOL val);
 extern void renderShadow( DROID *psDroid, iIMDShape *psShadowIMD );
 
@@ -112,8 +110,9 @@ extern SDWORD	getCentreZ( void );
 extern SDWORD mouseTileX, mouseTileY;
 
 extern BOOL bRender3DOnly;
-
-extern const Vector2i visibleTiles;
+extern BOOL showGateways;
+extern BOOL showPath;
+extern Vector2i visibleTiles;
 
 /*returns the graphic ID for a droid rank*/
 extern UDWORD  getDroidRankGraphic(DROID *psDroid);

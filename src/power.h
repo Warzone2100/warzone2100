@@ -71,7 +71,7 @@ extern UDWORD updateExtractedPower(STRUCTURE	*psBuilding);
 extern void updatePlayerPower(UDWORD player);
 
 /** Used in multiplayer to force power levels. */
-extern void setPower(UDWORD player, UDWORD avail); 
+extern void setPower(UDWORD player, UDWORD avail);
 
 /** Get the amount of power current held by the given player. */
 extern UDWORD getPower(UDWORD player);
@@ -99,20 +99,20 @@ extern void updateLastPowered(BASE_OBJECT *psObject,UBYTE player);
 */
 extern STRUCTURE *getRExtractor(STRUCTURE *psStruct);
 
-/** Checks if the object to be powered next - returns TRUE if power. */
+/** Checks if the object to be powered next - returns true if power. */
 extern BOOL getLastPowered(BASE_OBJECT *psStructure);
 
-/** Defines which structure types draw power - returns TRUE if use power. */
+/** Defines which structure types draw power - returns true if use power. */
 extern BOOL structUsesPower(STRUCTURE *psStruct);
 
-/** Defines which droid types draw power - returns TRUE if use power. */
+/** Defines which droid types draw power - returns true if use power. */
 extern BOOL droidUsesPower(DROID *psDroid);
 
 /** This is a check cos there is a problem with the power but not sure where!! */
 extern void powerCheck(BOOL bBeforePowerUsed, UBYTE player);
 
 /** @todo Wrap access to this global and make it static for easier sanity checking! */
-extern PLAYER_POWER		*asPower[MAX_PLAYERS];
+extern PLAYER_POWER		asPower[MAX_PLAYERS];
 
 /** Flag used to check for power calculations to be done or not. */
 extern	BOOL			powerCalculated;

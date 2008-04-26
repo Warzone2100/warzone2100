@@ -21,6 +21,8 @@
 #ifndef __INCLUDED_SRC_CONSOLE_H__
 #define __INCLUDED_SRC_CONSOLE_H__
 
+#include "lib/ivis_common/piedef.h"
+
 #define MAX_CONSOLE_MESSAGES			(64)
 #define MAX_CONSOLE_STRING_LENGTH		(255)
 #define MAX_CONSOLE_TMP_STRING_LENGTH	(255)
@@ -32,36 +34,40 @@
 
 typedef enum
 {
-LEFT_JUSTIFY,
-RIGHT_JUSTIFY,
-CENTRE_JUSTIFY,
-DEFAULT_JUSTIFY
+	LEFT_JUSTIFY,
+	RIGHT_JUSTIFY,
+	CENTRE_JUSTIFY,
+	DEFAULT_JUSTIFY
 } CONSOLE_TEXT_JUSTIFICATION;
 
 typedef struct _console
 {
-UDWORD	topX;
-UDWORD	topY;
-UDWORD	width;
-UDWORD	textDepth;
-BOOL	permanent;
+	UDWORD	topX;
+	UDWORD	topY;
+	UDWORD	width;
+	UDWORD	textDepth;
+	BOOL	permanent;
 } CONSOLE;
+
+/* ID to use for addConsoleMessage() in case of a system message */
+#define	SYSTEM_MESSAGE				(-1)
 
 /* Definition of a message */
 typedef struct	_console_message
 {
-char	text[MAX_CONSOLE_STRING_LENGTH];		// Text of the message
-UDWORD	timeAdded;								// When was it added to our list?
-//UDWORD	screenIndex;							// Info for justification
-UDWORD JustifyType;
-UDWORD	id;
-struct _console_message *psNext;
+	char				text[MAX_CONSOLE_STRING_LENGTH];		// Text of the message
+	UDWORD				timeAdded;								// When was it added to our list?
+	//UDWORD			screenIndex;							// Info for justification
+	UDWORD				JustifyType;
+	UDWORD				id;
+	SDWORD				player;						// Player who sent this message or SYSTEM_MESSAGE
+	struct _console_message *psNext;
 } CONSOLE_MESSAGE;
 
 extern char ConsoleString[MAX_CONSOLE_TMP_STRING_LENGTH];
 
 extern void	consolePrintf				( char *layout, ... );
-extern BOOL	addConsoleMessage			( const char *messageText, CONSOLE_TEXT_JUSTIFICATION jusType );
+extern BOOL	addConsoleMessage			( const char *messageText, CONSOLE_TEXT_JUSTIFICATION jusType, SDWORD player );
 extern void	updateConsoleMessages		( void );
 extern void	initConsoleMessages			( void );
 extern void	setConsoleMessageDuration	( UDWORD time );
@@ -114,12 +120,12 @@ extern void console(const char *pFormat, ...); /// Print allways to the ingame c
 
 #define CONPRINTF(s,x) \
 	sprintf x; \
-	addConsoleMessage(s,DEFAULT_JUSTIFY); \
+	addConsoleMessage(s,DEFAULT_JUSTIFY,SYSTEM_MESSAGE)
 
 #ifdef DEBUG
 #define DBCONPRINTF(s,x) \
 	sprintf x; \
-	addConsoleMessage(s,DEFAULT_JUSTIFY)
+	addConsoleMessage(s,DEFAULT_JUSTIFY,SYSTEM_MESSAGE)
 #else
 #define DBCONPRINTF(s,x)
 #endif

@@ -28,7 +28,6 @@ SRC=ai.c \
 	formation.c \
 	frontend.c \
 	gateway.c \
-	gatewayroute.c \
 	geometry.c \
 	group.c \
 	hci.c \
@@ -116,7 +115,8 @@ LIBS=../lib/libgamelib.a \
 	../lib/libsound.a \
 	../lib/libwidget.a \
 	../lib/libframework.a \
-	../lib/libexceptionhandler.a
+	../lib/libexceptionhandler.a \
+	../lib/libsqlite3.a
 
 ifeq ($(strip $(PLATFORM)),windows)
 LIBS += ../win32/warzone2100.o

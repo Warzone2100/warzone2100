@@ -46,7 +46,7 @@ extern void intProcessTransporter(UDWORD id);
 
 /*Adds a droid to the transporter, removing it from the world*/
 extern void transporterAddDroid(DROID *psTransporter, DROID *psDroidToAdd);
-/*check to see if the droid can fit on the Transporter - return TRUE if fits*/
+/*check to see if the droid can fit on the Transporter - return true if fits*/
 extern BOOL checkTransporterSpace(DROID *psTransporter, DROID *psAssigned);
 /*calculates how much space is remaining on the transporter - allows droids to take
 up different amount depending on their body size - currently all are set to one!*/
@@ -56,7 +56,7 @@ extern UDWORD calcRemainingCapacity(DROID *psTransporter);
 extern BOOL launchTransporter(DROID *psTransporter);
 
 /*checks how long the transporter has been travelling to see if it should
-have arrived - returns TRUE when there*/
+have arrived - returns true when there*/
 extern BOOL updateTransporter(DROID *psTransporter);
 
 // Order all selected droids to embark all avaialable transporters.

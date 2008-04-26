@@ -24,13 +24,9 @@
  * yacc grammar for multiplayer chat messages
  *
  */
-
-#include <stdio.h>
-#include <string.h>
-
 #include "lib/framework/frame.h"
-#include "lib/framework/frameresource.h"
 
+#include "lib/framework/frameresource.h"
 #include "lib/script/chat_processing.h"
 
 #define MAX_CHAT_ARGUMENTS 10
@@ -70,8 +66,8 @@ static BOOL chat_store_parameter(INTERP_VAL *cmdParam)
 	//if(numMsgParams >= MAX_CHAT_ARGUMENTS)
 	if(chat_msg.numCommands >= MAX_CHAT_COMMANDS)
 	{
-		ASSERT(FALSE, "chat_store_parameter: too many commands in a message");
-		return FALSE;
+		ASSERT(false, "chat_store_parameter: too many commands in a message");
+		return false;
 	}
 
 	numCommands = chat_msg.numCommands;
@@ -80,8 +76,8 @@ static BOOL chat_store_parameter(INTERP_VAL *cmdParam)
 	/* Make sure we still have room for more parameters */
 	if(numCmdParams >= MAX_CHAT_CMD_PARAMS)
 	{
-		ASSERT(FALSE, "chat_store_parameter: out of parameters for command %d", numCommands);
-		return FALSE;
+		ASSERT(false, "chat_store_parameter: out of parameters for command %d", numCommands);
+		return false;
 	}
 
 	/* Store parameter for command we are currently processing */
@@ -90,7 +86,7 @@ static BOOL chat_store_parameter(INTERP_VAL *cmdParam)
 
 	chat_msg.cmdData[numCommands].numCmdParams++;
 
-	return TRUE;
+	return true;
 }
 
 // Store extracted command for use in scripts
@@ -103,7 +99,7 @@ static void chat_store_command(const char *command)
 	/* Make sure we have no overflow */
 	if(chat_msg.numCommands >= MAX_CHAT_COMMANDS)
 	{
-		ASSERT(FALSE, "chat_store_command: too many commands in a message");
+		ASSERT(false, "chat_store_command: too many commands in a message");
 		return;
 	}
 
@@ -113,7 +109,7 @@ static void chat_store_command(const char *command)
 	/* Make sure we still have room for more parameters */
 	if(numCmdParams >= MAX_CHAT_CMD_PARAMS)
 	{
-		ASSERT(FALSE, "chat_store_command: out of parameters for command %d", numCommands);
+		ASSERT(false, "chat_store_command: out of parameters for command %d", numCommands);
 		return;
 	}
 
@@ -133,7 +129,7 @@ static void chat_store_player(SDWORD cmdIndex, SDWORD playerIndex)
 	/* Make sure we have no overflow */
 	if(cmdIndex < 0 || cmdIndex >= MAX_CHAT_COMMANDS)
 	{
-		ASSERT(FALSE, "chat_store_player: command message out of bounds: %d", cmdIndex);
+		ASSERT(false, "chat_store_player: command message out of bounds: %d", cmdIndex);
 		return;
 	}
 
@@ -142,16 +138,16 @@ static void chat_store_player(SDWORD cmdIndex, SDWORD playerIndex)
 		/* Ally players addressed */
 		for(i=0; i<MAX_PLAYERS; i++)
 		{
-			chat_msg.cmdData[cmdIndex].bPlayerAddressed[i] = TRUE;
+			chat_msg.cmdData[cmdIndex].bPlayerAddressed[i] = true;
 		}
 	}
 	else if(playerIndex >= 0 && playerIndex < MAX_PLAYERS)
 	{
-		chat_msg.cmdData[cmdIndex].bPlayerAddressed[playerIndex] = TRUE;
+		chat_msg.cmdData[cmdIndex].bPlayerAddressed[playerIndex] = true;
 	}
 	else	/* Wrong player index */
 	{
-		ASSERT(FALSE, "chat_store_player: wrong player index: %d", playerIndex);
+		ASSERT(false, "chat_store_player: wrong player index: %d", playerIndex);
 		return;
 	}
 }
@@ -167,7 +163,7 @@ static void chat_reset_command(SDWORD cmdIndex)
 
 	for(i=0; i<MAX_PLAYERS; i++)
 	{
-		chat_msg.cmdData[cmdIndex].bPlayerAddressed[i] = FALSE;
+		chat_msg.cmdData[cmdIndex].bPlayerAddressed[i] = false;
 	}
 }
 
@@ -207,10 +203,12 @@ static void chat_reset_command(SDWORD cmdIndex)
 %token _T_AFTER
 %token _T_ALLY
 %token _T_AM
+%token _T_AN
 %token _T_AND
 %token _T_ANY
 %token _T_ATTACK
 %token _T_ATTACKING
+%token _T_ARMY
 %token _T_BEACON
 %token _T_BUILDING
 %token _T_CANT
@@ -220,6 +218,7 @@ static void chat_reset_command(SDWORD cmdIndex)
 %token _T_DO
 %token _T_DROP
 %token _T_FINE
+%token _T_FORCE
 %token _T_GET
 %token _T_GETTING
 %token _T_GO
@@ -236,6 +235,7 @@ static void chat_reset_command(SDWORD cmdIndex)
 %token _T_LASSAT
 %token _T_LETS
 %token _T_ME
+%token _T_MORE
 %token _T_NEED
 %token _T_NO
 %token _T_NOW
@@ -246,6 +246,8 @@ static void chat_reset_command(SDWORD cmdIndex)
 %token _T_POWER
 %token _T_PUMPING
 %token _T_PUT
+%token _T_READY
+%token _T_REQUIRE
 %token _T_ROGER
 %token _T_SEE
 %token _T_SOME
@@ -254,6 +256,7 @@ static void chat_reset_command(SDWORD cmdIndex)
 %token _T_SURE
 %token _T_THANK_YOU
 %token _T_THANKS
+%token _T_THE
 %token _T_U
 %token _T_UNITS
 %token _T_VTOLS
@@ -261,6 +264,7 @@ static void chat_reset_command(SDWORD cmdIndex)
 %token _T_WHERE
 %token _T_YEA
 %token _T_YEAH
+%token _T_YEP
 %token _T_YES
 %token _T_YOU
 %token _T_EOF 0
@@ -421,6 +425,8 @@ R_PLAYER_POSSESSION:			R_PLAYER R_POSSESSION	/* blue's */
  */
 R_A_OR_EMPTY:					/* Empty */
 								|	_T_A
+								|	_T_AN
+								|	_T_THE
 								;
 
 /* Punctuation mark */
@@ -473,7 +479,7 @@ R_INITIATE_ATTACK:					_T_ATTACK
 
 R_PUT_DOWN:						_T_PUT | _T_DROP | _T_PLACE;	/* put */
 
-R_INCREASING_NUMBER:				_T_PUMPING						/* pumping/getting */
+R_CONSTRUCTING:						_T_PUMPING						/* pumping/getting */
 								|	_T_GETTING
 								|	_T_BUILDING
 								;
@@ -511,6 +517,7 @@ R_DO_YOU_HAVE_ANY:								R_DO_YOU R_POSSESSION_Q R_QUANTITY
 R_YES_FORMS:									_T_YES
 											|	_T_YEA
 											|	_T_YEAH
+											|	_T_YEP
 											;
 
 R_CONFIDENCE_EXPRESSION:						_T_SURE
@@ -527,6 +534,12 @@ R_AFFIRMATIVE_FORMS:							R_AGREEMENT_EXPRESSION
 											|	_T_ROGER								/* roger */
 											|	_T_AFFIRMATIVE
 											;
+
+/* Need */
+R_NEED:											_T_NEED
+											|	_T_REQUIRE
+											;
+
 					/*******************************************/
 					/* FINAL RULES, SHOULD BE PART OF R_PHRASE */
 					/*******************************************/
@@ -540,7 +553,10 @@ R_ALLY_OFFER:									_T_ALLY _T_ME R_EOS			/* ally me */
 /* Chech if player is willing
  * to initiate some actions
  */
-R_ASK_READINESS:							_T_GO _T_QM;		/* go? */
+R_ASK_READINESS:								_T_GO _T_QM		/* go? */
+											|	_T_READY R_EOS	/* ready! */
+											|	_T_IM _T_READY R_EOS	/* I'm ready! */
+											;
 
 /* Tell to start some action */
 R_INITIATE_ACTION:							_T_GO R_EOD;			/* go!! */
@@ -554,8 +570,16 @@ R_MEET_CENTER:								_T_GO _T_CENTER R_EOS;		/* go center */
 /* Ask for the current status */
 R_ASK_STATUS:								_T_STATUS R_EOS;				/* status? */
 
+/* Units */
+R_UNIT_ARMY:									R_A_OR_EMPTY _T_FORCE
+											|	R_A_OR_EMPTY _T_ARMY
+											;
+
 /* Player is building units */
-R_BUILDING_UNITS:							R_INCREASING_NUMBER _T_UNITS R_EOD;		/* pumping units */
+R_BUILDING_UNITS:								R_CONSTRUCTING _T_UNITS R_EOD		/* pumping units */
+											|	R_CONSTRUCTING _T_MORE _T_UNITS R_EOD		/* pumping more units */
+											|	R_CONSTRUCTING R_UNIT_ARMY R_EOD		/* building army */
+											;
 
 /* Stop command */
 R_STOP:										_T_STOP R_EOD;			/* stop */
@@ -565,9 +589,10 @@ R_WONDER_IF_HAVE_POWER:						R_DO_YOU_HAVE_ANY _T_POWER R_EOQ;		/* do you have p
 
 /* Ask for help */
 R_DEMAND_HELP:									_T_HELP _T_ME R_EOS		/* help me!!!!! */
-											|	_T_HELP R_EOS				/* help!?!? */
-											|	_T_NEED _T_HELP R_EOS		/* need help */
-											|	_T_I R_DEMAND_HELP			/* I need help */
+											|	_T_HELP R_EOS			/* help!?!? */
+											|	_T_I R_DEMAND_HELP		/* I need help */
+											|	R_NEED _T_HELP R_EOS	/* need help */
+											|	R_NEED R_QUANTITY _T_HELP R_EOS	/* need some help */
 											;
 
 R_GRATITUDE:									_T_THANK_YOU
@@ -687,7 +712,7 @@ BOOL chatLoad(char *pData, UDWORD size)
 	/* Don't parse the same message again for a different player */
 	if(strcmp(pData, &(chat_msg.lastMessage[0])) == 0)	//just parsed this message for some other player
 	{
-		return TRUE;			//keep all the parsed data unmodified
+		return true;			//keep all the parsed data unmodified
 	}
 
 	/* Tell bison what to parse */
@@ -711,10 +736,10 @@ BOOL chatLoad(char *pData, UDWORD size)
 	/* See if we were successfull parsing */
 	if (parseResult != 0)
 	{
-		return FALSE;
+		return false;
 	}
 
-	return TRUE;
+	return true;
 }
 
 /* A simple error reporting routine */
@@ -728,8 +753,6 @@ void chat_error(const char *pMessage,...)
 	va_start(args, pMessage);
 
 	vsnprintf(aTxtBuf, sizeof(aTxtBuf), pMessage, args);
-	// Guarantee to nul-terminate
-	aTxtBuf[sizeof(aTxtBuf) - 1] = '\0';
 	chatGetErrorData(&line, &pText);
 	//debug(LOG_WARNING, "multiplayer message parse error: %s at line %d, token: %d, text: '%s'",
 	//      aTxtBuf, line, chat_char, pText);

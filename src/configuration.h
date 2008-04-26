@@ -28,5 +28,14 @@ extern BOOL loadConfig(void);
 extern BOOL loadRenderMode(void);
 extern BOOL saveConfig(void);
 extern void closeConfig( void );
+extern void setSinglePlayerFrameLimit(SDWORD limit);
+extern SDWORD getSinglePlayerFrameLimit(void);
+extern void setDefaultFrameRateLimit(void);
+
+/* Frame limit for multiplayer games (excluding skirmish and campaign) */
+#define	MP_FRAME_LIMIT	45
+
+/* Default frame limit for single player: skirmish ans campaign */
+#define	SP_FRAME_LIMIT	60
 
 #endif // __INCLUDED_SRC_CONFIGURATION_H__

@@ -43,6 +43,7 @@
 #include "display.h"
 #include "mission.h"
 #include "multiplay.h"
+#include "intdisplay.h"
 #include "texture.h"
 
 #define HIT_NOTIFICATION	(GAME_TICKS_PER_SEC*2)
@@ -56,17 +57,15 @@
 
 static PIELIGHT	colRadarAlly, colRadarMe, colRadarEnemy;
 
-BOOL bEnemyAllyRadarColor = FALSE;     //enemy/ally radar color
+BOOL bEnemyAllyRadarColor = false;     //enemy/ally radar color
 
 //current mini-map mode
 RADAR_DRAW_MODE	radarDrawMode = RADAR_MODE_DEFAULT;
 
-// colours for each clan on the radar map.
-
 static PIELIGHT		tileColours[MAX_TILES];
-static UDWORD		*radarBuffer;
+static UDWORD		*radarBuffer = NULL;
 
-static PIELIGHT clanColours[MAX_PLAYERS]=
+PIELIGHT clanColours[MAX_PLAYERS]=
 {	// see frontend2.png for team color order.
 	// [r,g,b,a]
 	{{0,255,0,255}},		// green  Player 0
@@ -110,7 +109,7 @@ static void CalcRadarScroll(UWORD boxSizeH,UWORD boxSizeV);
 static void ClearRadar(UDWORD *screen);
 static void DrawRadarTiles(UDWORD *screen,UDWORD Modulus,UWORD boxSizeH,UWORD boxSizeV);
 static void DrawRadarObjects(UDWORD *screen,UDWORD Modulus,UWORD boxSizeH,UWORD boxSizeV);
-static void DrawRadarExtras(UWORD boxSizeH,UWORD boxSizeV);
+static void DrawRadarExtras(UWORD boxSizeH, UWORD boxSizeV);
 
 
 void radarInitVars(void)
@@ -135,7 +134,9 @@ BOOL InitRadar(void)
 	radarBuffer = malloc(RADWIDTH * RADHEIGHT * sizeof(UDWORD));
 	if (radarBuffer == NULL)
 	{
-		return FALSE;
+		debug(LOG_ERROR, "Out of memory!");
+		abort();
+		return false;
 	}
 	memset(radarBuffer, 0, RADWIDTH * RADHEIGHT * sizeof(UDWORD));
 
@@ -146,7 +147,7 @@ BOOL InitRadar(void)
 
 	pie_InitRadar();
 
-	return TRUE;
+	return true;
 }
 
 
@@ -157,7 +158,7 @@ BOOL ShutdownRadar(void)
 	free(radarBuffer);
 	radarBuffer = NULL;
 
-	return TRUE;
+	return true;
 }
 
 
@@ -215,8 +216,8 @@ void CalcRadarPosition(UDWORD mX,UDWORD mY,UDWORD *PosX,UDWORD *PosY)
 	{
 		sPosY = scrollMaxY;
 	}
-	*PosX = (UDWORD)sPosX;
-	*PosY = (UDWORD)sPosY;
+	*PosX = sPosX;
+	*PosY = sPosY;
 }
 
 
@@ -318,6 +319,12 @@ void drawRadar(void)
 	UWORD	boxSizeH,boxSizeV;
 	static int frameSkip = 0;
 
+	ASSERT(radarBuffer, "No radar buffer allocated");
+	if (!radarBuffer)
+	{
+		return;
+	}
+
 	CalcRadarPixelSize(&boxSizeH,&boxSizeV);
 	CalcRadarScroll(boxSizeH,boxSizeV);
 
@@ -334,10 +341,12 @@ void drawRadar(void)
 	}
 	frameSkip--;
 
+	pie_ClipBegin(RADTLX, RADTLY, RADTLX + RADWIDTH, RADTLY + RADHEIGHT);
 	iV_TransBoxFill( RADTLX,RADTLY, RADTLX + RADWIDTH, RADTLY + RADHEIGHT);
-
 	pie_RenderRadar(RADTLX, RADTLY, RADWIDTH, RADHEIGHT);
 	DrawRadarExtras(boxSizeH,boxSizeV);
+	drawRadarBlips(boxSizeH, boxSizeV, RadarOffsetX, RadarOffsetY);
+	pie_ClipEnd();
 }
 
 
@@ -352,14 +361,14 @@ static void ClearRadar(UDWORD *screen)
 	{
 		for (j = 0; j < RadarHeight; j++)
 		{
-			*pScr++ = WZCOL_RADAR_BACKGROUND.argb;
+			*pScr++ = WZCOL_RADAR_BACKGROUND.rgba;
 		}
 	}
 }
 
 static PIELIGHT appliedRadarColour(RADAR_DRAW_MODE radarDrawMode, MAPTILE *WTile)
 {
-	PIELIGHT WScr;
+	PIELIGHT WScr = WZCOL_BLACK;	// squelch warning
 
 	switch(radarDrawMode)
 	{
@@ -368,9 +377,9 @@ static PIELIGHT appliedRadarColour(RADAR_DRAW_MODE radarDrawMode, MAPTILE *WTile
 			// draw radar terrain on/off feature
 			PIELIGHT col = tileColours[TileNumber_tile(WTile->texture)];
 
-			col.byte.r = sqrt(col.byte.r * WTile->illumination);
-			col.byte.b = sqrt(col.byte.b * WTile->illumination);
-			col.byte.g = sqrt(col.byte.g * WTile->illumination);
+			col.byte.r = sqrtf(col.byte.r * WTile->illumination);
+			col.byte.b = sqrtf(col.byte.b * WTile->illumination);
+			col.byte.g = sqrtf(col.byte.g * WTile->illumination);
 			WScr = col;
 		}
 		break;
@@ -379,9 +388,9 @@ static PIELIGHT appliedRadarColour(RADAR_DRAW_MODE radarDrawMode, MAPTILE *WTile
 			// draw radar terrain on/off feature
 			PIELIGHT col = tileColours[TileNumber_tile(WTile->texture)];
 
-			col.byte.r = sqrt(col.byte.r * (WTile->illumination + WTile->height) / 2);
-			col.byte.b = sqrt(col.byte.b * (WTile->illumination + WTile->height) / 2);
-			col.byte.g = sqrt(col.byte.g * (WTile->illumination + WTile->height) / 2);
+			col.byte.r = sqrtf(col.byte.r * (WTile->illumination + WTile->height) / 2);
+			col.byte.b = sqrtf(col.byte.b * (WTile->illumination + WTile->height) / 2);
+			col.byte.g = sqrtf(col.byte.g * (WTile->illumination + WTile->height) / 2);
 			WScr = col;
 		}
 		break;
@@ -441,9 +450,9 @@ static void DrawRadarTiles(UDWORD *screen,UDWORD Modulus,UWORD boxSizeH,UWORD bo
 			{
 				if (!getRevealStatus() || TEST_TILE_VISIBLE(selectedPlayer, WTile) || godMode)
 				{
-					*WScr = appliedRadarColour(radarDrawMode, WTile).argb;
+					*WScr = appliedRadarColour(radarDrawMode, WTile).rgba;
 				} else {
-					*WScr = WZCOL_RADAR_BACKGROUND.argb;
+					*WScr = WZCOL_RADAR_BACKGROUND.rgba;
 				}
 				/* Next pixel, next tile */
 				WScr++;
@@ -468,10 +477,10 @@ static void DrawRadarTiles(UDWORD *screen,UDWORD Modulus,UWORD boxSizeH,UWORD bo
 					UDWORD Val, c, d;
 					UDWORD *Ptr = Scr + j + i * Modulus;
 
-					col.byte.r = sqrt(col.byte.r * WTile->illumination);
-					col.byte.b = sqrt(col.byte.b * WTile->illumination);
-					col.byte.g = sqrt(col.byte.g * WTile->illumination);
-					Val = col.argb;
+					col.byte.r = sqrtf(col.byte.r * WTile->illumination);
+					col.byte.b = sqrtf(col.byte.b * WTile->illumination);
+					col.byte.g = sqrtf(col.byte.g * WTile->illumination);
+					Val = col.rgba;
 
    					for(c=0; c<SizeV; c++)
    					{
@@ -479,7 +488,7 @@ static void DrawRadarTiles(UDWORD *screen,UDWORD Modulus,UWORD boxSizeH,UWORD bo
 
    						for(d=0; d<SizeH; d++)
    						{
-							*WPtr = appliedRadarColour(radarDrawMode, WTile).argb;
+							*WPtr = appliedRadarColour(radarDrawMode, WTile).rgba;
    							WPtr++;
    						}
    						Ptr += Modulus;
@@ -496,7 +505,7 @@ static void DrawRadarTiles(UDWORD *screen,UDWORD Modulus,UWORD boxSizeH,UWORD bo
 
    						for(d=0; d<SizeH; d++)
    						{
-   							*WPtr = WZCOL_RADAR_BACKGROUND.argb;
+   							*WPtr = WZCOL_RADAR_BACKGROUND.rgba;
    							WPtr++;
    						}
    						Ptr += Modulus;
@@ -597,7 +606,7 @@ static void DrawRadarObjects(UDWORD *screen,UDWORD Modulus,UWORD boxSizeH,UWORD 
    							WPtr = Ptr;
    							for(d=0; d<SizeH; d++)
    							{
-								*WPtr = col.argb;
+								*WPtr = col.rgba;
    								WPtr++;
    							}
 							Ptr += Modulus;
@@ -622,15 +631,15 @@ static void DrawRadarObjects(UDWORD *screen,UDWORD Modulus,UWORD boxSizeH,UWORD 
 			{
 				playerCol = (aiCheckAlliances(selectedPlayer,clan) ? colRadarAlly: colRadarEnemy);
 			}
-		} 
-		else 
+		}
+		else
 		{
 			//original 8-color mode
 			playerCol = clanColours[getPlayerColour(clan)];
 		}
 
 		flashCol = flashColours[getPlayerColour(clan)];
-		
+
 		/* Go through all structures */
    		for(psStruct = apsStructLists[clan]; psStruct != NULL;
    			psStruct = psStruct->psNext)
@@ -696,7 +705,7 @@ static void DrawRadarObjects(UDWORD *screen,UDWORD Modulus,UWORD boxSizeH,UWORD 
    							WPtr = Ptr;
    							for(d=0; d<SSizeH; d++)
    							{
-   								*WPtr = col.argb;
+   								*WPtr = col.rgba;
    								WPtr++;
    							}
 							Ptr += Modulus;
@@ -753,12 +762,14 @@ static void RotateVector2D(Vector3i *Vector, Vector3i *TVector, Vector3i *Pos, i
 	Vector3i *Vec = Vector;
 	Vector3i *TVec = TVector;
 
-	if(Pos) {
+	if (Pos)
+	{
 		ox = Pos->x;
 		oy = Pos->y;
 	}
 
-	for(i=0; i<Count; i++) {
+	for (i = 0; i < Count; i++)
+	{
 		TVec->x = ( (Vec->x*Cos + Vec->y*Sin) >> FP12_SHIFT ) + ox;
 		TVec->y = ( (Vec->y*Cos - Vec->x*Sin) >> FP12_SHIFT ) + oy;
 		Vec++;
@@ -766,53 +777,49 @@ static void RotateVector2D(Vector3i *Vector, Vector3i *TVector, Vector3i *Pos, i
 	}
 }
 
-
 static SDWORD getDistanceAdjust( void )
 {
-UDWORD	origDistance;
-SDWORD	dif;
+	UDWORD	origDistance = MAXDISTANCE;
+	SDWORD	dif = MAX(origDistance - distance, 0);
 
-	origDistance = MAXDISTANCE;
-	dif = origDistance-distance;
-	if(dif <0 ) dif = 0;
-	dif/=100;
-	return(dif);
+	return dif / 100;
 }
 
 static SDWORD getLengthAdjust( void )
 {
-SDWORD	pitch;
-UDWORD	lookingDown,lookingFar;
-SDWORD	dif;
+	SDWORD	pitch;
+	UDWORD	lookingDown,lookingFar;
+	SDWORD	dif;
 
 	pitch = 360 - (player.r.x/DEG_1);
 
 	// Max at
-	lookingDown = (0-MIN_PLAYER_X_ANGLE);
-	lookingFar = (0-MAX_PLAYER_X_ANGLE);
-	dif = pitch-lookingFar;
-	if(dif <0) dif = 0;
-	if(dif>(lookingDown-lookingFar)) dif = (lookingDown-lookingFar);
+	lookingDown = (0 - MIN_PLAYER_X_ANGLE);
+	lookingFar = (0 - MAX_PLAYER_X_ANGLE);
+	dif = MAX(pitch - lookingFar, 0);
+	if (dif > (lookingDown - lookingFar)) 
+	{
+		dif = (lookingDown - lookingFar);
+	}
 
-	return(dif/2);
+	return dif / 2;
 }
 
-
 /* Draws a Myth/FF7 style viewing window */
-static void drawViewingWindow( UDWORD x, UDWORD y, UDWORD boxSizeH, UDWORD boxSizeV )
+static void drawViewingWindow(UDWORD x, UDWORD y, UDWORD pixSizeH, UDWORD pixSizeV)
 {
 	Vector3i v[4], tv[4], centre;
-	UDWORD	shortX,longX,yDrop,yDropVar;
-	SDWORD	dif = getDistanceAdjust();
-	SDWORD	dif2 = getLengthAdjust();
+	int	shortX, longX, yDrop, yDropVar;
+	int	dif = getDistanceAdjust();
+	int	dif2 = getLengthAdjust();
 	PIELIGHT colour;
 
-	shortX = ((visibleTiles.x/4)-(dif/6)) * boxSizeH;
-	longX = ((visibleTiles.x/2)-(dif/4)) * boxSizeH;
-	yDropVar = ((visibleTiles.y/2)-(dif2/3)) * boxSizeV;
-	yDrop = ((visibleTiles.y/2)-dif2/3) * boxSizeV;
+	shortX = ((visibleTiles.x / 4) - (dif / 6)) * pixSizeH;
+	longX = ((visibleTiles.x / 2) - (dif / 4)) * pixSizeH;
+	yDropVar = ((visibleTiles.y / 2) - (dif2 / 3)) * pixSizeV;
+	yDrop = ((visibleTiles.y / 2) - dif2 / 3) * pixSizeV;
 
- 	v[0].x = longX; // FIXME -unsigned will remain unsigned!!!
+ 	v[0].x = longX;
 	v[0].y = -yDropVar;
 
 	v[1].x = -longX;
@@ -824,8 +831,8 @@ static void drawViewingWindow( UDWORD x, UDWORD y, UDWORD boxSizeH, UDWORD boxSi
 	v[3].x = -shortX;
 	v[3].y = yDrop;
 
-	centre.x = RADTLX+x+(visibleTiles.x*boxSizeH)/2;
-	centre.y = RADTLY+y+(visibleTiles.y*boxSizeV)/2;
+	centre.x = RADTLX + x + (visibleTiles.x * pixSizeH) / 2;
+	centre.y = RADTLY + y + (visibleTiles.y * pixSizeV) / 2;
 
 	RotateVector2D(v,tv,&centre,player.r.y,4);
 
@@ -847,7 +854,7 @@ static void drawViewingWindow( UDWORD x, UDWORD y, UDWORD boxSizeH, UDWORD boxSi
 		colour.byte.b = 0x3f;
 	default:
 		// black
-		colour.argb = 0;
+		colour.rgba = 0;
 		colour.byte.a = 0x3f;
 		break;
 
@@ -857,19 +864,15 @@ static void drawViewingWindow( UDWORD x, UDWORD y, UDWORD boxSizeH, UDWORD boxSi
 	pie_DrawViewingWindow(tv,RADTLX,RADTLY,RADTLX+RADWIDTH,RADTLY+RADHEIGHT,colour);
 }
 
-static void DrawRadarExtras(UWORD boxSizeH,UWORD boxSizeV)
+static void DrawRadarExtras(UWORD boxSizeH, UWORD boxSizeV)
 {
-	SDWORD	viewX,viewY;
-
-	viewX = ((player.p.x/TILE_UNITS)-RadarScrollX-RadarMapOriginX)*boxSizeH;
-	viewY = ((player.p.z/TILE_UNITS)-RadarScrollY-RadarMapOriginY)*boxSizeV;
-	viewX += RadarOffsetX;
-	viewY += RadarOffsetY;
+	SDWORD	viewX = ((player.p.x / TILE_UNITS) - RadarScrollX - RadarMapOriginX) * boxSizeH + RadarOffsetX;
+	SDWORD	viewY = ((player.p.z / TILE_UNITS) - RadarScrollY - RadarMapOriginY) * boxSizeV + RadarOffsetY;
 
 	viewX = viewX&(~(boxSizeH-1));
 	viewY = viewY&(~(boxSizeV-1));
 
-	drawViewingWindow(viewX,viewY,boxSizeH,boxSizeV);
+	drawViewingWindow(viewX, viewY, boxSizeH, boxSizeV);
 	RenderWindowFrame(FRAME_RADAR, RADTLX - 1, RADTLY - 1, RADWIDTH + 2, RADHEIGHT + 2);
 }
 
@@ -877,15 +880,12 @@ static void DrawRadarExtras(UWORD boxSizeH,UWORD boxSizeV)
 //
 BOOL CoordInRadar(int x,int y)
 {
-	if( (x >=RADTLX -1 ) &&
-		(x < RADTLX +RADWIDTH+1) &&
-		(y >=RADTLY -1) &&
-		(y < RADTLY +RADHEIGHT+1) ) {
-
-		return TRUE;
+	if (x >= RADTLX - 1 && x < RADTLX + RADWIDTH + 1 && y >= RADTLY - 1 && y < RADTLY + RADHEIGHT + 1)
+	{
+		return true;
 	}
 
-	return FALSE;
+	return false;
 }
 
 void radarColour(UDWORD tileNumber, uint8_t r, uint8_t g, uint8_t b)

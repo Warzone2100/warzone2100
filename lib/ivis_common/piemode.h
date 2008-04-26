@@ -39,13 +39,8 @@
  *	Global Definitions
  */
 /***************************************************************************/
-#define CLEAR_MODE_MASK                   0x03
-#define CLEAR_OFF                         0x00
 #define CLEAR_OFF_AND_NO_BUFFER_DOWNLOAD  0x01
 #define CLEAR_BLACK                       0x02
-#define CLEAR_FOG                         0x03
-
-#define CLEAR_SHADOW_MASK                 0x04
 #define CLEAR_SHADOW                      0x04
 
 /***************************************************************************/

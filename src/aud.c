@@ -34,6 +34,7 @@
 
 #include "cluster.h"
 #include "lib/sound/aud.h"
+#include "lib/sound/tracklib.h"
 
 /***************************************************************************/
 
@@ -48,56 +49,30 @@ extern UDWORD	viewY;
 
 /***************************************************************************/
 
-BOOL
-audio_ObjectDead( void * psObj )
+BOOL audio_ObjectDead(void * psObj)
 {
-	SIMPLE_OBJECT	*psSimpleObj = (SIMPLE_OBJECT *) psObj;
-	BASE_OBJECT		*psBaseObj;
-	PROJECTILE		*psProj;
+	SIMPLE_OBJECT * const psSimpleObj = (SIMPLE_OBJECT *) psObj;
 
 	/* check is valid simple object pointer */
-	if ( psSimpleObj == NULL )
+	if (psSimpleObj == NULL)
 	{
-		debug( LOG_NEVER, "audio_ObjectDead: simple object pointer invalid\n" );
-		return TRUE;
+		debug( LOG_NEVER, "audio_ObjectDead: simple object pointer invalid" );
+		return true;
 	}
 
 	/* check projectiles */
-	if ( psSimpleObj->type == OBJ_PROJECTILE )
+	if (psSimpleObj->type == OBJ_PROJECTILE)
 	{
-		psProj = (PROJECTILE *) psSimpleObj;
-		if ( psProj == NULL )
-		{
-			debug( LOG_NEVER, "audio_ObjectDead: projectile object pointer invalid\n" );
-			return TRUE;
-		}
-		else
-		{
-			if ( psProj->state == PROJ_POSTIMPACT )
-			{
-				return TRUE;
-			}
-			else
-			{
-				return FALSE;
-			}
-		}
+		PROJECTILE * const psProj = (PROJECTILE *) psSimpleObj;
+
+		return (psProj->state == PROJ_POSTIMPACT);
 	}
 	else
 	{
 		/* check base object */
-		psBaseObj = (BASE_OBJECT *) psObj;
+		BASE_OBJECT *psBaseObj  = (BASE_OBJECT *) psObj;
 
-		/* check is valid pointer */
-		if ( psBaseObj == NULL )
-		{
-			debug( LOG_NEVER, "audio_ObjectDead: base object pointer invalid\n" );
-			return TRUE;
-		}
-		else
-		{
-			return psBaseObj->died;
-		}
+		return psBaseObj->died;
 	}
 }
 

@@ -25,7 +25,10 @@
 
 #include "wzglobal.h"
 
-#include <physfs.h>
+// Workaround X11 headers #defining Status
+#ifdef Status
+# undef Status
+#endif
 
 #include "types.h"
 
@@ -39,6 +42,7 @@
 #include "i18n.h"
 #include "treap.h"
 #include "trig.h"
+#include "cursors.h"
 
 extern UDWORD selectedPlayer;
 #define MAX_PLAYERS	8	/**< Maximum number of players in the game. */
@@ -51,6 +55,8 @@ extern BOOL frameInitialise(
 					UDWORD bitDepth,		// The display bit depth
 					BOOL fullScreen		// Whether to start full screen or windowed
 					);
+
+extern bool selfTest;
 
 /** Shut down the framework library.
  * This clears up all the Direct Draw stuff and ensures
@@ -83,12 +89,7 @@ extern int getFramerateLimit(void);
  */
 extern void frameUpdate(void);
 
-/** Set the current cursor from a Resource ID
- * This is the same as calling:
- *       frameSetCursor(LoadCursor(MAKEINTRESOURCE(resID)));
- * but with a bit of extra error checking.
- */
-extern void frameSetCursorFromRes(SWORD resID);
+extern void frameSetCursor(CURSOR cur);
 
 /** Returns the current frame we're on - used to establish whats on screen. */
 extern UDWORD frameGetFrameNumber(void);
@@ -96,29 +97,14 @@ extern UDWORD frameGetFrameNumber(void);
 /** Return average framerate of the last seconds. */
 extern UDWORD frameGetAverageRate(void);
 
-/*! Open a file for reading */
-extern PHYSFS_file* openLoadFile(const char* fileName, bool hard_fail);
+extern UDWORD HashString( const char *String );
+extern UDWORD HashStringIgnoreCase( const char *String );
 
-/*! Open a file for writing */
-extern PHYSFS_file* openSaveFile(const char* fileName);
 
-/** Load the file with name pointed to by pFileName into a memory buffer. */
-extern BOOL loadFile(const char *pFileName,		// The filename
-              char **ppFileData,	// A buffer containing the file contents
-              UDWORD *pFileSize);	// The size of this buffer
-
-/** Save the data in the buffer into the given file */
-extern BOOL saveFile(const char *pFileName, const char *pFileData, UDWORD fileSize);
-
-/** Load a file from disk into a fixed memory buffer. */
-BOOL loadFileToBuffer(const char *pFileName, char *pFileBuffer, UDWORD bufferSize, UDWORD *pSize);
-
-/** Load a file from disk, but returns quietly if no file found. */
-BOOL loadFileToBufferNoError(const char *pFileName, char *pFileBuffer, UDWORD bufferSize,
-                             UDWORD *pSize);
-
-UDWORD HashString( const char *String );
-UDWORD HashStringIgnoreCase( const char *String );
+static inline WZ_DECL_CONST const char * bool2string(bool var)
+{
+	return (var ? "true" : "false");
+}
 
 
 /* Endianness hacks */
@@ -197,49 +183,5 @@ static inline void endian_fract(float *fract) {
 #else
 # define endian_fract(x) ((void) (x))
 #endif
-
-#define PHYSFS_APPEND 1
-#define PHYSFS_PREPEND 0
-
-static inline bool PHYSFS_writeSBE8(PHYSFS_file* file, int8_t val)
-{
-	return (PHYSFS_write(file, &val, sizeof(int8_t), 1) == 1);
-}
-
-static inline bool PHYSFS_writeUBE8(PHYSFS_file* file, uint8_t val)
-{
-	return (PHYSFS_write(file, &val, sizeof(uint8_t), 1) == 1);
-}
-
-static inline bool PHYSFS_readSBE8(PHYSFS_file* file, int8_t* val)
-{
-	return (PHYSFS_read(file, val, sizeof(int8_t), 1) == 1);
-}
-
-static inline bool PHYSFS_readUBE8(PHYSFS_file* file, uint8_t* val)
-{
-	return (PHYSFS_read(file, val, sizeof(uint8_t), 1) == 1);
-}
-
-static inline bool PHYSFS_writeBEFloat(PHYSFS_file* file, float val)
-{
-	// For the purpose of endian conversions a IEEE754 float can be considered
-	// the same to a 32bit integer.
-	// We're using a union here to prevent type punning of pointers.
-	union {
-		float f;
-		uint32_t i;
-	} writeValue;
-	writeValue.f = val;
-	return (PHYSFS_writeUBE32(file, writeValue.i) != 0);
-}
-
-static inline bool PHYSFS_readBEFloat(PHYSFS_file* file, float* val)
-{
-	// For the purpose of endian conversions a IEEE754 float can be considered
-	// the same to a 32bit integer.
-	uint32_t* readValue = (uint32_t*)val;
-	return (PHYSFS_readUBE32(file, readValue) != 0);
-}
 
 #endif

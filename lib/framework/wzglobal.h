@@ -28,11 +28,9 @@
 #define WZGLOBAL_H
 
 
-#ifdef HAVE_CONFIG_H
+#if defined(HAVE_CONFIG_H)
 #  include "config.h"
-#endif
-
-#ifdef __MACOSX__
+#elif defined(__MACOSX__)
 #  include "config-macosx.h"
 #endif
 
@@ -379,7 +377,7 @@
 /*!
  * \def WZ_DECL_RESTRICT
  */
-#if WZ_CC_GNU_PREREQ(4,1) && !defined(WZ_CC_INTEL)
+#if WZ_CC_GNU_PREREQ(4,1) && !defined(WZ_CC_INTEL) && !defined(__cplusplus)
 #  define WZ_DECL_RESTRICT restrict
 #else
 #  define WZ_DECL_RESTRICT
@@ -408,10 +406,6 @@
 #endif
 
 
-/* ---- Global constants ---- */
-
-#define	MAX_STR_LENGTH          256
-
 /*! \def WZ_DECL_MAY_ALIAS
  * "Accesses to objects with types with this attribute are not subjected to type-based alias analysis, but are instead assumed to be able to alias any other type of objects, just like the char type. See -fstrict-aliasing for more information on aliasing issues."
  */
@@ -420,6 +414,10 @@
 #else
 #  define WZ_DECL_MAY_ALIAS
 #endif
+
+/* ---- Global constants ---- */
+
+#define	MAX_STR_LENGTH          256
 
 /* ---- Platform specific setup ---- */
 
@@ -447,6 +445,13 @@
 #  include <windows.h>
 
 #  if defined(WZ_CC_MSVC)
+//   notify people we are disabling these warning messages.
+#    pragma message (" *** Warnings 4100,4127,4204 & 4244 have been squelched. ***")
+#    pragma warning (disable : 4100) // Shut up: unreferenced formal parameter (FIXME)
+#    pragma warning (disable : 4127) // Shut up: conditional expression is constant (eg. "while(0)")
+#    pragma warning (disable : 4204) // Shut up: non-constant aggregate initializer
+#    pragma warning (disable : 4244) // Shut up: conversion from 'float' to 'int', possible loss of data
+
 #    define strcasecmp _stricmp
 #    define strncasecmp _strnicmp
 #    define inline __inline

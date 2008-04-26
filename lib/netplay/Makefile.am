@@ -1,3 +1,6 @@
+AM_CPPFLAGS = $(SDL_CFLAGS) $(SDL_NET_CFLAGS) $(WZ_CPPFLAGS)
+AM_CFLAGS = $(WZ_CFLAGS)
+
 noinst_LIBRARIES = libnetplay.a
 noinst_HEADERS = netlog.h netplay.h nettypes.h
 

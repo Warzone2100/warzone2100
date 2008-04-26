@@ -88,7 +88,7 @@ BOOL attemptCheatCode(const char* cheat_name)
 			/* We've got our man... */
 			cheatCodes[index].function();	// run it
 			/* And get out of here */
-			return(TRUE);
+			return(true);
 		}
 		index++;
 	}
@@ -97,10 +97,10 @@ BOOL attemptCheatCode(const char* cheat_name)
 	{
 		char	errorString[255];
 
-		strlcpy(errorString, cheat_name, sizeof(errorString));
-		strlcat(errorString, "?", sizeof(errorString));
+		astrlcpy(errorString, cheat_name);
+		astrlcat(errorString, "?");
 
-		addConsoleMessage(errorString, LEFT_JUSTIFY);
+		addConsoleMessage(errorString, LEFT_JUSTIFY,SYSTEM_MESSAGE);
 	}
-	return(FALSE);
+	return(false);
 }

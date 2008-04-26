@@ -26,6 +26,7 @@
 
 #include "lib/framework/frame.h"
 #include "lib/framework/math-help.h"
+#include "lib/netplay/netplay.h"
 
 #include "objects.h"
 #include "combat.h"
@@ -34,6 +35,7 @@
 #include "lib/gamelib/gtime.h"
 #include "map.h"
 #include "move.h"
+#include "cluster.h"
 #include "messagedef.h"
 #include "miscimd.h"
 #include "projectile.h"
@@ -44,6 +46,7 @@
 #include "order.h"
 #include "ai.h"
 #include "action.h"
+#include "difficulty.h"
 
 /* minimum miss distance */
 #define MIN_MISSDIST	(TILE_UNITS/6)
@@ -78,14 +81,14 @@ static BUL_DIR aScatterDir[BUL_MAXSCATTERDIR] =
 /* Initialise the combat system */
 BOOL combInitialise(void)
 {
-	return TRUE;
+	return true;
 }
 
 
 /* Shutdown the combat system */
 BOOL combShutdown(void)
 {
-	return TRUE;
+	return true;
 }
 
 // Watermelon:real projectile
@@ -370,7 +373,7 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 		}
 		debug(LOG_SENSOR, "combFire: Accurate prediction range (%d)", dice);
 		if (!proj_SendProjectile(psWeap, psAttacker, psAttacker->player,
-							predictX, predictY, psTarget->pos.z, psTarget, FALSE, FALSE, weapon_slot))
+							predictX, predictY, psTarget->pos.z, psTarget, false, false, weapon_slot))
 		{
 			/* Out of memory - we can safely ignore this */
 			debug(LOG_ERROR, "Out of memory");
@@ -400,7 +403,7 @@ missed:
 	/* Fire off the bullet to the miss location. The miss is only visible if the player owns
 	 * the target. (Why? - Per) */
 	proj_SendProjectile(psWeap, psAttacker, psAttacker->player, missX,missY, psTarget->pos.z, NULL,
-	                    psTarget->player == selectedPlayer, FALSE, weapon_slot);
+	                    psTarget->player == selectedPlayer, false, weapon_slot);
 
 	return;
 }
@@ -448,10 +451,7 @@ void counterBatteryFire(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget)
 		{
 			psDroid = (DROID *)psViewer;
 			//must be a CB sensor
-			/*if (asSensorStats[psDroid->asBits[COMP_SENSOR].nStat].type ==
-				INDIRECT_CB_SENSOR || asSensorStats[psDroid->asBits[COMP_SENSOR].
-				nStat].type == VTOL_CB_SENSOR)*/
-            if (cbSensorDroid(psDroid))
+			if (cbSensorDroid(psDroid))
 			{
 				sensorRange = asSensorStats[psDroid->asBits[COMP_SENSOR].
 					nStat].range;
@@ -476,4 +476,88 @@ void counterBatteryFire(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget)
 			}
 		}
 	}
+}
+
+/* Deals damage to an object
+ * \param psObj object to deal damage to
+ * \param damage amount of damage to deal
+ * \param weaponClass the class of the weapon that deals the damage
+ * \param weaponSubClass the subclass of the weapon that deals the damage
+ * \param angle angle of impact (from the damage dealing projectile in relation to this object)
+ * \return > 0 when the dealt damage destroys the object, < 0 when the object survives
+ */
+float objDamage(BASE_OBJECT *psObj, UDWORD damage, UDWORD originalhp, UDWORD weaponClass, UDWORD weaponSubClass, HIT_SIDE impactSide)
+{
+	int	actualDamage, armour, level = 1;
+
+	// If the previous hit was by an EMP cannon and this one is not:
+	// don't reset the weapon class and hit time
+	// (Giel: I guess we need this to determine when the EMP-"shock" is over)
+	if (psObj->lastHitWeapon != WSC_EMP || weaponSubClass == WSC_EMP)
+	{
+		psObj->timeLastHit = gameTime;
+		psObj->lastHitWeapon = weaponSubClass;
+	}
+
+	// EMP cannons do no damage, if we are one return now
+	if (weaponSubClass == WSC_EMP)
+	{
+		return 0;
+	}
+
+
+	// apply game difficulty setting
+	if(!NetPlay.bComms)		// ignore multiplayer games
+	{
+		if (psObj->player != selectedPlayer)
+		{
+			// Player inflicting damage on enemy.
+			damage = (UDWORD) modifyForDifficultyLevel(damage,true);
+		}
+		else
+		{
+			// Enemy inflicting damage on player.
+			damage = (UDWORD) modifyForDifficultyLevel(damage,false);
+		}
+	}
+
+	armour = psObj->armour[impactSide][weaponClass];
+
+	debug(LOG_ATTACK, "objDamage(%d): body %d armour %d damage: %d", psObj->id, psObj->body, armour, damage);
+
+	if (psObj->type == OBJ_STRUCTURE || psObj->type == OBJ_DROID)
+	{
+		clustObjectAttacked((BASE_OBJECT *)psObj);
+	}
+
+
+	if (psObj->type == OBJ_DROID)
+	{
+		DROID *psDroid = (DROID *)psObj;
+
+		// Retrieve highest, applicable, experience level
+		level = getDroidEffectiveLevel(psDroid);
+	}
+
+	// Reduce damage taken by EXP_REDUCE_DAMAGE % for each experience level
+	actualDamage = (damage * (100 - EXP_REDUCE_DAMAGE * level)) / 100;
+
+	// You always do at least a third of the experience modified damage
+	actualDamage = MAX(actualDamage - armour, actualDamage / 3);
+
+	// And at least MIN_WEAPON_DAMAGE points
+	actualDamage = MAX(actualDamage, MIN_WEAPON_DAMAGE);
+
+	objTrace(LOG_ATTACK, psObj->id, "objDamage: Penetrated %d", actualDamage);
+
+	// If the shell did sufficient damage to destroy the object, deal with it and return
+	if (actualDamage >= psObj->body)
+	{
+		return (float) psObj->body / (float) originalhp * -1.0f;
+	}
+
+	// Substract the dealt damage from the droid's remaining body points
+	psObj->body -= actualDamage;
+
+	return (float) actualDamage / (float) originalhp;
 }

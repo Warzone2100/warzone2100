@@ -21,11 +21,7 @@
 #ifndef __INCLUDED_SRC_VISIBILITY__
 #define __INCLUDED_SRC_VISIBILITY__
 
-/* Terrain types that could obscure LOS */
-#define LOS_MASK	0 /*TER_STONE*/
-
-/* The distance under which visibility is automatic */
-#define BASE_VISIBILITY  (5*TILE_UNITS/2)
+#include "objectdef.h"
 
 // initialise the visibility stuff
 extern BOOL visInitialise(void);
@@ -40,7 +36,7 @@ extern void visTilesUpdate(BASE_OBJECT *psObj);
  * currently droids and structures.
  * psTarget can be any type of BASE_OBJECT (e.g. a tree).
  */
-extern BOOL visibleObject(BASE_OBJECT *psViewer, BASE_OBJECT *psTarget);
+extern BOOL visibleObject(const BASE_OBJECT* psViewer, const BASE_OBJECT* psTarget);
 
 /* Check whether psViewer can see psTarget.
  * struckBlock controls whether structures block LOS
@@ -52,7 +48,7 @@ extern BOOL visibleObjectBlock(BASE_OBJECT *psViewer, BASE_OBJECT *psTarget,
 extern BOOL visibleObjWallBlock(BASE_OBJECT *psViewer, BASE_OBJECT *psTarget);
 
 // Find the wall that is blocking LOS to a target (if any)
-extern BOOL visGetBlockingWall(BASE_OBJECT *psViewer, BASE_OBJECT *psTarget, STRUCTURE **ppsWall);
+extern STRUCTURE* visGetBlockingWall(const BASE_OBJECT* psViewer, const BASE_OBJECT* psTarget);
 
 extern void	processVisibility(BASE_OBJECT *psCurr);
 
@@ -78,7 +74,7 @@ static inline BOOL visObjInRange(BASE_OBJECT *psObj1, BASE_OBJECT *psObj2, SDWOR
 	if (xdiff > range)
 	{
 		// too far away, reject
-		return FALSE;
+		return false;
 	}
 
 	ydiff = (SDWORD)psObj1->pos.y - (SDWORD)psObj2->pos.y;
@@ -89,7 +85,7 @@ static inline BOOL visObjInRange(BASE_OBJECT *psObj1, BASE_OBJECT *psObj2, SDWOR
 	if (ydiff > range)
 	{
 		// too far away, reject
-		return FALSE;
+		return false;
 	}
 
 	distSq = xdiff*xdiff + ydiff*ydiff;
@@ -97,11 +93,35 @@ static inline BOOL visObjInRange(BASE_OBJECT *psObj1, BASE_OBJECT *psObj2, SDWOR
 	if (distSq > rangeSq)
 	{
 		// too far away, reject
-		return FALSE;
+		return false;
 	}
 
-	return TRUE;
+	return true;
 }
 
+static inline int objSensorRange(const BASE_OBJECT* psObj)
+{
+	return psObj->sensorRange;
+}
+
+static inline int objSensorPower(const BASE_OBJECT* psObj)
+{
+	return psObj->sensorPower;
+}
+
+static inline int objJammerPower(WZ_DECL_UNUSED const BASE_OBJECT* psObj)
+{
+	return 0;
+}
+
+static inline int objJammerRange(WZ_DECL_UNUSED const BASE_OBJECT* psObj)
+{
+	return 0;
+}
+
+static inline int objConcealment(const BASE_OBJECT* psObj)
+{
+	return psObj->ECMMod;
+}
 
 #endif // __INCLUDED_SRC_VISIBILITY__

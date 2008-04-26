@@ -17,12 +17,8 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-#include <stdio.h>
-#include <physfs.h>
-#include <string.h>
-
 #include "lib/framework/frame.h"
-#include "lib/framework/wzglobal.h"
+#include "lib/framework/file.h"
 
 #include "playlist.h"
 #include "cdaudio.h"
@@ -72,7 +68,7 @@ void PlayList_Quit()
 	}
 }
 
-bool PlayList_Read(const char* path) 
+bool PlayList_Read(const char* path)
 {
 	PHYSFS_file* fileHandle;
 	char* path_to_music = NULL;
@@ -234,7 +230,7 @@ static void swap_charp(char** a, char** b)
 	*b = tmp;
 }
 
-static void PlayList_Shuffle()
+static void PlayList_Shuffle(void)
 {
 	if (playlist[current_track].shuffle)
 	{
@@ -289,6 +285,6 @@ const char* PlayList_NextSong()
 	{
 		return NULL;
 	}
-	
+
 	return playlist[current_track].songs[current_song];
 }

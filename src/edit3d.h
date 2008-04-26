@@ -38,8 +38,8 @@ extern	void	kill3DBuilding		( void );
 extern BOOL process3DBuilding(void);
 
 extern void	adjustTileHeight	( MAPTILE *psTile, SDWORD adjust );
-extern void	raiseTile			( UDWORD tile3dX, UDWORD tile3dY );
-extern void	lowerTile			( UDWORD tile3dX, UDWORD tile3dY );
+extern void	raiseTile(int tile3dX, int tile3dY);
+extern void	lowerTile(int tile3dX, int tile3dY);
 BOOL	inHighlight				( UDWORD realX, UDWORD realY );
 
 typedef struct _highlight
@@ -70,6 +70,8 @@ extern BUILDDETAILS	sBuildDetails;
 
 extern UDWORD buildState;
 extern UDWORD temp;
+extern bool editMode;
+extern int brushSize;
 
 /*returns true if the build state is not equal to BUILD3D_NONE*/
 extern BOOL   tryingToGetLocation(void);

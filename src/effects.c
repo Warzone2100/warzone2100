@@ -35,11 +35,6 @@
 	* STILL NEED TO REMOVE SOME MAGIC NUMBERS INTO #DEFINES!!! *
 	************************************************************
 */
-
-#include <stdio.h>
-#include <assert.h>
-#include <string.h>
-
 #include "lib/framework/frame.h"
 #include "lib/framework/frameresource.h"
 #include "lib/framework/input.h"
@@ -51,19 +46,21 @@
 #include "lib/ivis_common/piepalette.h"
 #include "lib/ivis_common/piestate.h"
 #include "lib/ivis_opengl/piematrix.h"
+#include "lib/ivis_common/piemode.h"
+
 #include "lib/gamelib/gtime.h"
+#include "lib/sound/audio.h"
+#include "lib/sound/audio_id.h"
+
 #include "display3d.h"
 #include "map.h"
 #include "bucket3d.h"
 
-#include "lib/ivis_common/piemode.h"
+#include "effects.h"
+
 #include "mission.h"
 
-/*Remove this one!!! :-( */
 #include "miscimd.h"
-#include "effects.h"
-#include "lib/sound/audio.h"
-#include "lib/sound/audio_id.h"
 #include "hci.h"
 #include "lighting.h"
 #include "console.h"
@@ -72,7 +69,75 @@
 #include "multiplay.h"
 #include "game.h"
 
+
+#define MAX_EFFECTS	2500
+
+#define	GRAVITON_GRAVITY	((float)-800)
+#define	EFFECT_X_FLIP		0x1
+#define	EFFECT_Y_FLIP		0x2
+#define	EFFECT_CYCLIC		0x4
+#define EFFECT_ESSENTIAL	0x8
+#define EFFECT_FACING		0x10
+#define	EFFECT_SCALED		0x20
+#define	EFFECT_LIT			0x40
+
+#define	TEST_FLIPPED_X(x)		(x->control & EFFECT_X_FLIP)
+#define	TEST_FLIPPED_Y(x)		(x->control & EFFECT_Y_FLIP)
+#define TEST_ESSENTIAL(x)		(x->control & EFFECT_ESSENTIAL)
+#define TEST_FACING(x)			(x->control & EFFECT_FACING)
+#define TEST_CYCLIC(x)			(x->control & EFFECT_CYCLIC)
+#define TEST_SCALED(x)			(x->control & EFFECT_SCALED)
+#define TEST_LIT(x)				(x->control & EFFECT_LIT)
+
+#define	SET_FLIPPED_X(x)		((x->control) = (UBYTE)(x->control | EFFECT_X_FLIP))
+#define	SET_FLIPPED_Y(x)		((x->control) = (UBYTE)(x->control | EFFECT_Y_FLIP))
+#define SET_ESSENTIAL(x)		((x->control) = (UBYTE)(x->control | EFFECT_ESSENTIAL))
+#define SET_FACING(x)			((x->control) = (UBYTE)(x->control | EFFECT_FACING))
+#define SET_CYCLIC(x)			((x->control) = (UBYTE)(x->control | EFFECT_CYCLIC))
+#define SET_SCALED(x)			((x->control) = (UBYTE)(x->control | EFFECT_SCALED))
+#define SET_LIT(x)				((x->control) = (UBYTE)(x->control | EFFECT_LIT))
+#define SET_LITABS(x)			((x.control) = (UBYTE)(x.control | EFFECT_LIT))
+
+#define MINIMUM_IMPACT_VELOCITY		(16)
+#define	NORMAL_SMOKE_LIFESPAN		(6000 + rand()%3000)
+#define SMALL_SMOKE_LIFESPAN		(3000 + rand()%3000)
+#define	TRAIL_SMOKE_LIFESPAN		(1200)
+#define	CONSTRUCTION_LIFESPAN		(5000)
+
+#define	SMOKE_FRAME_DELAY			(40 + rand()%30)
+#define	EXPLOSION_FRAME_DELAY		(25 + rand()%40)
+#define	EXPLOSION_TESLA_FRAME_DELAY	(65)
+#define	EXPLOSION_PLASMA_FRAME_DELAY	(45)
+#define	BLOOD_FRAME_DELAY			(150)
+#define DESTRUCTION_FRAME_DELAY		(200)
+
+#define	TESLA_SPEED					(170)// + (30 - rand()%60))
+#define	TESLA_SIZE					(100)// + (20 - rand()%40))
+
+#define GRAVITON_FRAME_DELAY		(100 + rand()%50)
+#define GRAVITON_BLOOD_DELAY		(200 + rand()%100)
+
+#define CONSTRUCTION_FRAME_DELAY	(40 + rand()%30)
+
+#define	EXPLOSION_SIZE				(110+(30-rand()%60))
+#define	LIMITED_EXPLOSION_SIZE		(100+(5-rand()%10))
+#define	BLOOD_SIZE					(100+(30-rand()%60))
+#define	BLOOD_FALL_SPEED			(-(20+rand()%20))
+
+#define GRAVITON_INIT_VEL_X			(float)(200 - rand() % 300)
+#define GRAVITON_INIT_VEL_Z			(float)(200 - rand() % 300)
+#define GRAVITON_INIT_VEL_Y			(float)(300 + rand() % 100)
+
+#define GIBLET_INIT_VEL_X			(float)(50 - rand() % 100)
+#define GIBLET_INIT_VEL_Z			(float)(50 - rand() % 100)
+#define GIBLET_INIT_VEL_Y			12.f
+
+#define	DROID_DESTRUCTION_DURATION		(3*GAME_TICKS_PER_SEC/2) // 1.5 seconds
+#define	STRUCTURE_DESTRUCTION_DURATION	((7*GAME_TICKS_PER_SEC)/2)	 // 3.5 seconds
+
+
 extern UWORD OffScreenEffects;
+
 
 /* Our list of all game world effects */
 static EFFECT        asEffectsList[MAX_EFFECTS];
@@ -209,19 +274,19 @@ static BOOL	essentialEffect(EFFECT_GROUP group, EFFECT_TYPE type)
 	case	EFFECT_DESTRUCTION:
 	case	EFFECT_SAT_LASER:
 	case	EFFECT_STRUCTURE:
-		return(TRUE);
+		return(true);
 		break;
 	case	EFFECT_EXPLOSION:
 		if(type == EXPLOSION_TYPE_LAND_LIGHT)
 		{
-			return(TRUE);
+			return(true);
 		}
 		else
 		{
-			return(FALSE);
+			return(false);
 		}
 	default:
-		return(FALSE);
+		return(false);
 		break;
 	}
 }
@@ -233,9 +298,9 @@ static BOOL utterlyReject( EFFECT_GROUP group )
 	case EFFECT_BLOOD:
 	case EFFECT_DUST_BALL:
 	case EFFECT_CONSTRUCTION:
-		return(TRUE);
+		return(true);
 	default:
-		return(FALSE);
+		return(false);
 		break;
 	}
 }
@@ -365,8 +430,7 @@ void	addEffect(Vector3i *pos, EFFECT_GROUP group, EFFECT_TYPE type,BOOL specifie
 	}
 
 	/* Quick optimsation to reject every second non-essential effect if it's off grid */
-//	if(clipXY(pos->pos.x, pos->pos.z) == FALSE)
-	if(clipXY(pos->x, pos->z) == FALSE)
+	if(clipXY(pos->x, pos->z) == false)
 	{
 		/* 	If effect is essentail - then let it through */
 	  	if(!essentialEffect(group,type) )
@@ -380,11 +444,11 @@ void	addEffect(Vector3i *pos, EFFECT_GROUP group, EFFECT_TYPE type,BOOL specifie
 			/* Smoke gets culled more than most off grid effects */
 			if(group == EFFECT_SMOKE)
 			{
-				bSmoke = TRUE;
+				bSmoke = true;
 			}
 			else
 			{
-				bSmoke = FALSE;
+				bSmoke = false;
 			}
 			/* Others intermittently (50/50 for most and 25/100 for smoke */
 			if(bSmoke ? (aeCalls & 0x03) : (aeCalls & 0x01) )
@@ -423,15 +487,14 @@ void	addEffect(Vector3i *pos, EFFECT_GROUP group, EFFECT_TYPE type,BOOL specifie
 	}
 
 	/* Store away it's position - into FRACTS */
-	asEffectsList[freeEffect].position.x = (float)pos->x;
-	asEffectsList[freeEffect].position.y = (float)pos->y;
-	asEffectsList[freeEffect].position.z = (float)pos->z;
-
+	asEffectsList[freeEffect].position.x = pos->x;
+	asEffectsList[freeEffect].position.y = pos->y;
+	asEffectsList[freeEffect].position.z = pos->z;
 
 
 	/* Now, note group and type */
-	asEffectsList[freeEffect].group =(UBYTE) group;
-	asEffectsList[freeEffect].type = (UBYTE) type;
+	asEffectsList[freeEffect].group = group;
+	asEffectsList[freeEffect].type = type;
 
 	/* Set when it entered the world */
 	asEffectsList[freeEffect].birthTime = asEffectsList[freeEffect].lastFrame = gameTime;
@@ -505,7 +568,7 @@ void	addEffect(Vector3i *pos, EFFECT_GROUP group, EFFECT_TYPE type,BOOL specifie
 			effectSetUpFirework(&asEffectsList[freeEffect]);
 			break;
 		default:
-			ASSERT( FALSE,"Weirdy group type for an effect" );
+			ASSERT( false,"Weirdy group type for an effect" );
 			break;
 	}
 
@@ -525,9 +588,9 @@ void	addEffect(Vector3i *pos, EFFECT_GROUP group, EFFECT_TYPE type,BOOL specifie
 	*/
 
 #ifdef DEBUG
-	if ( validatePie( group, asEffectsList[freeEffect].imd ) == FALSE )
+	if ( validatePie( group, asEffectsList[freeEffect].imd ) == false )
 	{
-		ASSERT( FALSE,"No PIE found or specified for an effect" );
+		ASSERT( false,"No PIE found or specified for an effect" );
 	}
 #endif
 
@@ -550,14 +613,14 @@ static BOOL validatePie( EFFECT_GROUP group, iIMDShape *pie )
 		if(group == EFFECT_DESTRUCTION || group == EFFECT_FIRE || group == EFFECT_SAT_LASER)
 		{
 			/* Ok in these cases */
-			return(TRUE);
+			return(true);
 		}
 
-		return(FALSE);
+		return(false);
 	}
 	else
 	{
-		return(TRUE);
+		return(true);
 	}
 }
 // ----------------------------------------------------------------------------------------
@@ -682,9 +745,9 @@ static void updateFirework(EFFECT *psEffect)
 	UDWORD	drop;
 
 	/* Move it */
-	psEffect->position.x += timeAdjustedIncrement(psEffect->velocity.x, TRUE);
-	psEffect->position.y += timeAdjustedIncrement(psEffect->velocity.y, TRUE);
-	psEffect->position.z += timeAdjustedIncrement(psEffect->velocity.z, TRUE);
+	psEffect->position.x += timeAdjustedIncrement(psEffect->velocity.x, true);
+	psEffect->position.y += timeAdjustedIncrement(psEffect->velocity.y, true);
+	psEffect->position.z += timeAdjustedIncrement(psEffect->velocity.z, true);
 
 	if(psEffect->type == FIREWORK_TYPE_LAUNCHER)
 	{
@@ -694,7 +757,7 @@ static void updateFirework(EFFECT *psEffect)
 			dv.x = psEffect->position.x;
    			dv.z = psEffect->position.z;
    			dv.y = psEffect->position.y + (psEffect->radius / 2);
-			addEffect(&dv,EFFECT_EXPLOSION,EXPLOSION_TYPE_MEDIUM,FALSE,NULL,0);
+			addEffect(&dv,EFFECT_EXPLOSION,EXPLOSION_TYPE_MEDIUM,false,NULL,0);
 			audio_PlayStaticTrack(psEffect->position.x, psEffect->position.z, ID_SOUND_EXPLOSION);
 
 			for(dif =0; dif < (psEffect->radius*2); dif+=20)
@@ -719,31 +782,25 @@ static void updateFirework(EFFECT *psEffect)
    					dv.z = psEffect->position.z + yDif;
    					dv.y = psEffect->position.y + dif;
 					effectGiveAuxVar(100);
-   					addEffect(&dv,EFFECT_FIREWORK, FIREWORK_TYPE_STARBURST,FALSE,NULL,0);
+   					addEffect(&dv,EFFECT_FIREWORK, FIREWORK_TYPE_STARBURST,false,NULL,0);
 					dv.x = psEffect->position.x - xDif;
    					dv.z = psEffect->position.z - yDif;
    					dv.y = psEffect->position.y + dif;
 					effectGiveAuxVar(100);
-   					addEffect(&dv,EFFECT_FIREWORK, FIREWORK_TYPE_STARBURST,FALSE,NULL,0);
+   					addEffect(&dv,EFFECT_FIREWORK, FIREWORK_TYPE_STARBURST,false,NULL,0);
 					dv.x = psEffect->position.x + xDif;
    					dv.z = psEffect->position.z - yDif;
    					dv.y = psEffect->position.y + dif;
 					effectGiveAuxVar(100);
-   					addEffect(&dv,EFFECT_FIREWORK, FIREWORK_TYPE_STARBURST,FALSE,NULL,0);
+   					addEffect(&dv,EFFECT_FIREWORK, FIREWORK_TYPE_STARBURST,false,NULL,0);
 					dv.x = psEffect->position.x - xDif;
    					dv.z = psEffect->position.z + yDif;
    					dv.y = psEffect->position.y + dif;
 					effectGiveAuxVar(100);
-   					addEffect(&dv,EFFECT_FIREWORK, FIREWORK_TYPE_STARBURST,FALSE,NULL,0);
-
-					//   			dv.x = dv.x - (2*xDif);
-	//   			dv.z = dv.z - (2*yDif);	// buildings are level!
-	//			effectGiveAuxVar(100);
-	//   			addEffect(&dv,EFFECT_FIREWORK, FIREWORK_TYPE_STARBURST,FALSE,NULL,0);
+   					addEffect(&dv,EFFECT_FIREWORK, FIREWORK_TYPE_STARBURST,false,NULL,0);
 				}
 			}
 			killEffect(psEffect);
-
 		}
 		else
 		{
@@ -753,7 +810,7 @@ static void updateFirework(EFFECT *psEffect)
 			dv.z = psEffect->position.z;
 
 			/* Add a trail graphic */
-			addEffect(&dv,EFFECT_SMOKE,SMOKE_TYPE_TRAIL,FALSE,NULL,0);
+			addEffect(&dv,EFFECT_SMOKE,SMOKE_TYPE_TRAIL,false,NULL,0);
 		}
 	}
 	else	// must be a startburst
@@ -791,10 +848,7 @@ static void updateFirework(EFFECT *psEffect)
 				killEffect(psEffect);
 			}
 		}
-
-
 	}
-
 }
 
 // ----------------------------------------------------------------------------------------
@@ -828,7 +882,7 @@ static void updateSatLaser(EFFECT *psEffect)
 			dv.x = xPos+(200-rand()%400);
 			dv.z = yPos+(200-rand()%400);
 			dv.y = startHeight + rand()%100;
-			addEffect(&dv,EFFECT_EXPLOSION,EXPLOSION_TYPE_MEDIUM,FALSE,NULL,0);
+			addEffect(&dv,EFFECT_EXPLOSION,EXPLOSION_TYPE_MEDIUM,false,NULL,0);
 		}
 		/* Add a sound effect */
   		audio_PlayStaticTrack(psEffect->position.x, psEffect->position.z, ID_SOUND_EXPLOSION);
@@ -837,7 +891,7 @@ static void updateSatLaser(EFFECT *psEffect)
 		dv.x = xPos;
 		dv.z = yPos;
 		dv.y = startHeight+SHOCK_WAVE_HEIGHT;
-		addEffect(&dv,EFFECT_EXPLOSION,EXPLOSION_TYPE_SHOCKWAVE,FALSE,NULL,0);
+		addEffect(&dv,EFFECT_EXPLOSION,EXPLOSION_TYPE_SHOCKWAVE,false,NULL,0);
 
 
 		/* Now, add the column of light */
@@ -855,22 +909,22 @@ static void updateSatLaser(EFFECT *psEffect)
    				dv.z = yPos+yDif;
    				dv.y = startHeight+i;
 				effectGiveAuxVar(100);
-   				addEffect(&dv,EFFECT_EXPLOSION, EXPLOSION_TYPE_MEDIUM,FALSE,NULL,0);
+   				addEffect(&dv,EFFECT_EXPLOSION, EXPLOSION_TYPE_MEDIUM,false,NULL,0);
 				dv.x = xPos-xDif+i/64;
    				dv.z = yPos-yDif;
    				dv.y = startHeight+i;
 				effectGiveAuxVar(100);
-   				addEffect(&dv,EFFECT_EXPLOSION, EXPLOSION_TYPE_MEDIUM,FALSE,NULL,0);
+   				addEffect(&dv,EFFECT_EXPLOSION, EXPLOSION_TYPE_MEDIUM,false,NULL,0);
 				dv.x = xPos+xDif+i/64;
    				dv.z = yPos-yDif;
    				dv.y = startHeight+i;
 				effectGiveAuxVar(100);
-   				addEffect(&dv,EFFECT_EXPLOSION, EXPLOSION_TYPE_MEDIUM,FALSE,NULL,0);
+   				addEffect(&dv,EFFECT_EXPLOSION, EXPLOSION_TYPE_MEDIUM,false,NULL,0);
 				dv.x = xPos-xDif+i/64;
    				dv.z = yPos+yDif;
    				dv.y = startHeight+i;
 				effectGiveAuxVar(100);
-   				addEffect(&dv,EFFECT_EXPLOSION, EXPLOSION_TYPE_MEDIUM,FALSE,NULL,0);
+   				addEffect(&dv,EFFECT_EXPLOSION, EXPLOSION_TYPE_MEDIUM,false,NULL,0);
 			}
 		}
 	}
@@ -946,7 +1000,7 @@ static void updateExplosion(EFFECT *psEffect)
 
 	if(psEffect->type == EXPLOSION_TYPE_SHOCKWAVE)
 	{
-		psEffect->size += timeAdjustedIncrement(SHOCKWAVE_SPEED, TRUE);
+		psEffect->size += timeAdjustedIncrement(SHOCKWAVE_SPEED, true);
 		scaling = (float)psEffect->size / (float)MAX_SHOCKWAVE_SIZE;
 		psEffect->frameNumber = scaling * EffectGetNumFrames(psEffect);
 
@@ -994,7 +1048,7 @@ static void updateExplosion(EFFECT *psEffect)
 		/* Tesla explosions are the only ones that rise, or indeed move */
 		if(psEffect->type == EXPLOSION_TYPE_TESLA)
 		{
-			psEffect->position.y += timeAdjustedIncrement(psEffect->velocity.y, TRUE);
+			psEffect->position.y += timeAdjustedIncrement(psEffect->velocity.y, true);
 		}
 
 	}
@@ -1017,9 +1071,9 @@ static void updateBlood(EFFECT *psEffect)
 		}
 	}
 	/* Move it about in the world */
-	psEffect->position.x += timeAdjustedIncrement(psEffect->velocity.x, TRUE);
-	psEffect->position.y += timeAdjustedIncrement(psEffect->velocity.y, TRUE);
-	psEffect->position.z += timeAdjustedIncrement(psEffect->velocity.z, TRUE);
+	psEffect->position.x += timeAdjustedIncrement(psEffect->velocity.x, true);
+	psEffect->position.y += timeAdjustedIncrement(psEffect->velocity.y, true);
+	psEffect->position.z += timeAdjustedIncrement(psEffect->velocity.z, true);
 }
 
 // ----------------------------------------------------------------------------------------
@@ -1061,9 +1115,9 @@ static void updatePolySmoke(EFFECT *psEffect)
 	}
 
 	/* Update position */
-	psEffect->position.x += timeAdjustedIncrement(psEffect->velocity.x, TRUE);
-	psEffect->position.y += timeAdjustedIncrement(psEffect->velocity.y, TRUE);
-	psEffect->position.z += timeAdjustedIncrement(psEffect->velocity.z, TRUE);
+	psEffect->position.x += timeAdjustedIncrement(psEffect->velocity.x, true);
+	psEffect->position.y += timeAdjustedIncrement(psEffect->velocity.y, true);
+	psEffect->position.z += timeAdjustedIncrement(psEffect->velocity.z, true);
 
 	/* If it doesn't get killed by frame number, then by age */
 	if(TEST_CYCLIC(psEffect))
@@ -1107,9 +1161,9 @@ static void updateGraviton(EFFECT *psEffect)
 	}
 	/* Move it about in the world */
 
-		psEffect->position.x += timeAdjustedIncrement(psEffect->velocity.x, TRUE);
-		psEffect->position.y += timeAdjustedIncrement(psEffect->velocity.y, TRUE);
-		psEffect->position.z += timeAdjustedIncrement(psEffect->velocity.z, TRUE);
+		psEffect->position.x += timeAdjustedIncrement(psEffect->velocity.x, true);
+		psEffect->position.y += timeAdjustedIncrement(psEffect->velocity.y, true);
+		psEffect->position.z += timeAdjustedIncrement(psEffect->velocity.z, true);
 
 	/* If it's bounced/drifted off the map then kill it */
 	if (map_coord(psEffect->position.x) >= mapWidth
@@ -1146,7 +1200,7 @@ static void updateGraviton(EFFECT *psEffect)
 			dv.z = psEffect->position.z;
 
 			/* Add a trail graphic */
-			addEffect(&dv,EFFECT_SMOKE,SMOKE_TYPE_TRAIL,FALSE,NULL,0);
+			addEffect(&dv,EFFECT_SMOKE,SMOKE_TYPE_TRAIL,false,NULL,0);
 		}
 	}
 
@@ -1162,17 +1216,17 @@ static void updateGraviton(EFFECT *psEffect)
 			dv.x = psEffect->position.x;
 			dv.y = psEffect->position.y;
 			dv.z = psEffect->position.z;
-			addEffect(&dv,EFFECT_BLOOD,BLOOD_TYPE_NORMAL,FALSE,NULL,0);
+			addEffect(&dv,EFFECT_BLOOD,BLOOD_TYPE_NORMAL,false,NULL,0);
 		}
 	}
 
 	/* Spin it round a bit */
-	psEffect->rotation.x += timeAdjustedIncrement(psEffect->spin.x, TRUE);
-	psEffect->rotation.y += timeAdjustedIncrement(psEffect->spin.y, TRUE);
-	psEffect->rotation.z += timeAdjustedIncrement(psEffect->spin.z, TRUE);
+	psEffect->rotation.x += timeAdjustedIncrement(psEffect->spin.x, true);
+	psEffect->rotation.y += timeAdjustedIncrement(psEffect->spin.y, true);
+	psEffect->rotation.z += timeAdjustedIncrement(psEffect->spin.z, true);
 
 	/* Update velocity (and retarding of descent) according to present frame rate */
-	accel = timeAdjustedIncrement(GRAVITON_GRAVITY, TRUE);
+	accel = timeAdjustedIncrement(GRAVITON_GRAVITY, true);
 	psEffect->velocity.y += accel;
 
 	/* If it's bounced/drifted off the map then kill it */
@@ -1217,7 +1271,7 @@ static void updateGraviton(EFFECT *psEffect)
 					dv.x = psEffect->position.x;
 					dv.y = psEffect->position.y + 10;
 					dv.z = psEffect->position.z;
-					addEffect(&dv,EFFECT_EXPLOSION,EXPLOSION_TYPE_VERY_SMALL,FALSE,NULL,0);
+					addEffect(&dv,EFFECT_EXPLOSION,EXPLOSION_TYPE_VERY_SMALL,false,NULL,0);
 				}
 				killEffect(psEffect);
 				return;
@@ -1287,7 +1341,7 @@ static void updateDestruction(EFFECT *psEffect)
 			pos.x = psEffect->position.x;
 			pos.z = psEffect->position.z;
 			pos.y = psEffect->position.y;
-			addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_LARGE,FALSE,NULL,0);
+			addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_LARGE,false,NULL,0);
 			killEffect(psEffect);
 			return;
 		}
@@ -1330,7 +1384,7 @@ static void updateDestruction(EFFECT *psEffect)
 			heightScatter = TILE_UNITS/6;
 			break;
 		default:
-			ASSERT( FALSE,"Weirdy destruction type effect" );
+			ASSERT( false,"Weirdy destruction type effect" );
 			break;
 		}
 
@@ -1351,7 +1405,7 @@ static void updateDestruction(EFFECT *psEffect)
 		switch(effectType)
 		{
 		case 0:
-			addEffect(&pos,EFFECT_SMOKE,SMOKE_TYPE_DRIFTING,FALSE,NULL,0);
+			addEffect(&pos,EFFECT_SMOKE,SMOKE_TYPE_DRIFTING,false,NULL,0);
 			break;
 		case 1:
 		case 2:
@@ -1360,16 +1414,16 @@ static void updateDestruction(EFFECT *psEffect)
 		case 5:
 			if(psEffect->type == DESTRUCTION_TYPE_SKYSCRAPER)
 			{
-				addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_LARGE,FALSE,NULL,0);
+				addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_LARGE,false,NULL,0);
 			}
 			/* Only structures get the big explosions */
 			else if(psEffect->type==DESTRUCTION_TYPE_STRUCTURE)
 			{
-				addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_MEDIUM,FALSE,NULL,0);
+				addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_MEDIUM,false,NULL,0);
 			}
 			else
 			{
-				addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_SMALL,FALSE,NULL,0);
+				addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_SMALL,false,NULL,0);
 			}
 			break;
 		case 6:
@@ -1379,19 +1433,19 @@ static void updateDestruction(EFFECT *psEffect)
 		case 10:
 			if(psEffect->type == DESTRUCTION_TYPE_STRUCTURE)
 			{
-				addEffect(&pos,EFFECT_GRAVITON,GRAVITON_TYPE_EMITTING_ST,TRUE,getRandomDebrisImd(),0);
+				addEffect(&pos,EFFECT_GRAVITON,GRAVITON_TYPE_EMITTING_ST,true,getRandomDebrisImd(),0);
 			}
 			else
 			{
-				addEffect(&pos,EFFECT_GRAVITON,GRAVITON_TYPE_EMITTING_DR,TRUE,getRandomDebrisImd(),0);
+				addEffect(&pos,EFFECT_GRAVITON,GRAVITON_TYPE_EMITTING_DR,true,getRandomDebrisImd(),0);
 			}
 			break;
 		case 11:
-			addEffect(&pos,EFFECT_SMOKE,SMOKE_TYPE_DRIFTING,FALSE,NULL,0);
+			addEffect(&pos,EFFECT_SMOKE,SMOKE_TYPE_DRIFTING,false,NULL,0);
 			break;
 		case 12:
 		case 13:
-			addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_SMALL,FALSE,NULL,0);
+			addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_SMALL,false,NULL,0);
 			break;
 		case 14:
 			/* Add sound effect, but only if we're less than 3/4 of the way thru' destruction */
@@ -1437,9 +1491,9 @@ static void updateConstruction(EFFECT *psEffect)
 
 	/* Move it about in the world */
 
-	psEffect->position.x += timeAdjustedIncrement(psEffect->velocity.x, TRUE);
-	psEffect->position.y += timeAdjustedIncrement(psEffect->velocity.y, TRUE);
-	psEffect->position.z += timeAdjustedIncrement(psEffect->velocity.z, TRUE);
+	psEffect->position.x += timeAdjustedIncrement(psEffect->velocity.x, true);
+	psEffect->position.y += timeAdjustedIncrement(psEffect->velocity.y, true);
+	psEffect->position.z += timeAdjustedIncrement(psEffect->velocity.z, true);
 
 
 	/* If it doesn't get killed by frame number, then by height */
@@ -1488,15 +1542,23 @@ static void updateFire(EFFECT *psEffect)
 		psEffect->lastFrame = gameTime;
 		pos.x = (psEffect->position.x + ((rand() % psEffect->radius) - (rand() % (2 * psEffect->radius))));
 		pos.z = (psEffect->position.z + ((rand() % psEffect->radius) - (rand() % (2 * psEffect->radius))));
+		
+		// Effect is off map, no need to update it anymore
+		if(!worldOnMap(pos.x, pos.z))
+		{
+			killEffect(psEffect);
+			return;
+		}
+		
 		pos.y = map_Height(pos.x,pos.z);
 
 		if(psEffect->type == FIRE_TYPE_SMOKY_BLUE)
 		{
-			addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_FLAMETHROWER,FALSE,NULL,0);
+			addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_FLAMETHROWER,false,NULL,0);
 		}
 		else
 		{
-			addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_SMALL,FALSE,NULL,0);
+			addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_SMALL,false,NULL,0);
 		}
 
 		if(psEffect->type == FIRE_TYPE_SMOKY || psEffect->type == FIRE_TYPE_SMOKY_BLUE)
@@ -1504,14 +1566,22 @@ static void updateFire(EFFECT *psEffect)
 			pos.x = (psEffect->position.x + ((rand() % psEffect->radius / 2) - (rand() % (2 * psEffect->radius / 2))));
 			pos.z = (psEffect->position.z + ((rand() % psEffect->radius / 2) - (rand() % (2 * psEffect->radius / 2))));
 			pos.y = map_Height(pos.x,pos.z);
-			addEffect(&pos,EFFECT_SMOKE,SMOKE_TYPE_DRIFTING_HIGH,FALSE,NULL,0);
+			addEffect(&pos,EFFECT_SMOKE,SMOKE_TYPE_DRIFTING_HIGH,false,NULL,0);
 		}
 		else
 		{
 			pos.x = (psEffect->position.x + ((rand() % psEffect->radius) - (rand() % (2 * psEffect->radius))));
 			pos.z = (psEffect->position.z + ((rand() % psEffect->radius) - (rand() % (2 * psEffect->radius))));
+
+			// Effect is off map, no need to update it anymore
+			if(!worldOnMap(pos.x, pos.z))
+			{
+				killEffect(psEffect);
+				return;
+			}
+
 			pos.y = map_Height(pos.x,pos.z);
-			addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_SMALL,FALSE,NULL,0);
+			addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_SMALL,false,NULL,0);
 		}
 
 		/*
@@ -1520,7 +1590,7 @@ static void updateFire(EFFECT *psEffect)
 		pos.z = psEffect->position.z;
 
 		scatter.x = psEffect->radius; scatter.y = 0; scatter.z = psEffect->radius;
-		addMultiEffect(&pos,&scatter,EFFECT_EXPLOSION,EXPLOSION_TYPE_SMALL,FALSE,NULL,2,0,0);
+		addMultiEffect(&pos,&scatter,EFFECT_EXPLOSION,EXPLOSION_TYPE_SMALL,false,NULL,2,0,0);
 		*/
 
 	}
@@ -1674,23 +1744,23 @@ UDWORD	timeSlice;
 	timeSlice = gameTime%2000;
 	if(timeSlice<400)
 	{
-		if(type == LL_MIDDLE) return(FALSE); else return(TRUE);	// reject all expect middle
+		if(type == LL_MIDDLE) return(false); else return(true);	// reject all expect middle
 	}
 	else if(timeSlice<800)
 	{
-		if(type == LL_OUTER) return(TRUE); else return(FALSE);	// reject only outer
+		if(type == LL_OUTER) return(true); else return(false);	// reject only outer
 	}
 	else if(timeSlice<1200)
 	{
-		return(FALSE);	//reject none
+		return(false);	//reject none
 	}
 	else if(timeSlice<1600)
 	{
-		if(type == LL_OUTER) return(TRUE); else return(FALSE);	// reject only outer
+		if(type == LL_OUTER) return(true); else return(false);	// reject only outer
 	}
 	else
 	{
-		if(type == LL_MIDDLE) return(FALSE); else return(TRUE);	// reject all expect middle
+		if(type == LL_MIDDLE) return(false); else return(true);	// reject all expect middle
 	}
 }
 
@@ -2022,7 +2092,7 @@ void	effectSetupSmoke(EFFECT *psEffect)
 		psEffect->baseScale = 25;
 		break;
 	default:
-		ASSERT( FALSE,"Weird smoke type" );
+		ASSERT( false,"Weird smoke type" );
 		break;
 	}
 
@@ -2071,7 +2141,7 @@ void	effectSetupGraviton(EFFECT *psEffect)
 		psEffect->velocity.y = GRAVITON_INIT_VEL_Y;
 		break;
 	default:
-		ASSERT( FALSE,"Weirdy type of graviton" );
+		ASSERT( false,"Weirdy type of graviton" );
 		break;
 
 	}
@@ -2346,11 +2416,11 @@ void	initPerimeterSmoke(iIMDShape *pImd, UDWORD x, UDWORD y, UDWORD z)
 		pos.z = base.z + inStart + shift;
 		if(rand()%6==1)
 		{
-			addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_SMALL,FALSE,NULL,0);
+			addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_SMALL,false,NULL,0);
 		}
 		else
 		{
-			addEffect(&pos,EFFECT_SMOKE,SMOKE_TYPE_BILLOW,FALSE,NULL,0);
+			addEffect(&pos,EFFECT_SMOKE,SMOKE_TYPE_BILLOW,false,NULL,0);
 		}
 
 		pos.x = base.x + i + shift;
@@ -2358,11 +2428,11 @@ void	initPerimeterSmoke(iIMDShape *pImd, UDWORD x, UDWORD y, UDWORD z)
 		pos.z = base.z + inEnd + shift;
 		if(rand()%6==1)
 		{
-			addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_SMALL,FALSE,NULL,0);
+			addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_SMALL,false,NULL,0);
 		}
 		else
 		{
-			addEffect(&pos,EFFECT_SMOKE,SMOKE_TYPE_BILLOW,FALSE,NULL,0);
+			addEffect(&pos,EFFECT_SMOKE,SMOKE_TYPE_BILLOW,false,NULL,0);
 		}
 
 	}
@@ -2383,11 +2453,11 @@ void	initPerimeterSmoke(iIMDShape *pImd, UDWORD x, UDWORD y, UDWORD z)
 		pos.z = base.z + i + shift;
 		if(rand()%6==1)
 		{
-			addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_SMALL,FALSE,NULL,0);
+			addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_SMALL,false,NULL,0);
 		}
 		else
 		{
-	   		addEffect(&pos,EFFECT_SMOKE,SMOKE_TYPE_BILLOW,FALSE,NULL,0);
+	   		addEffect(&pos,EFFECT_SMOKE,SMOKE_TYPE_BILLOW,false,NULL,0);
 		}
 
 
@@ -2396,11 +2466,11 @@ void	initPerimeterSmoke(iIMDShape *pImd, UDWORD x, UDWORD y, UDWORD z)
 		pos.z = base.z + i + shift;
 		if(rand()%6==1)
 		{
-			addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_SMALL,FALSE,NULL,0);
+			addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_SMALL,false,NULL,0);
 		}
 		else
 		{
-			addEffect(&pos,EFFECT_SMOKE,SMOKE_TYPE_BILLOW,FALSE,NULL,0);
+			addEffect(&pos,EFFECT_SMOKE,SMOKE_TYPE_BILLOW,false,NULL,0);
 		}
 	}
 }
@@ -2448,20 +2518,19 @@ void	effectGiveAuxVarSec( UDWORD var)
 /* Runs all the spot effect stuff for the droids - adding of dust and the like... */
 static void effectDroidUpdates(void)
 {
-	UDWORD	i;
-	DROID	*psDroid;
-	UDWORD	partition;
-	Vector3i pos;
-	SDWORD	xBehind,yBehind;
+	unsigned int i;
 
 	/* Go through all players */
-	for(i=0; i<MAX_PLAYERS; i++)
+	for (i = 0; i < MAX_PLAYERS; i++)
 	{
+		DROID *psDroid;
+
 		/* Now go through all their droids */
-		for(psDroid = apsDroidLists[i]; psDroid; psDroid = psDroid->psNext)
+		for (psDroid = apsDroidLists[i]; psDroid; psDroid = psDroid->psNext)
 		{
 			/* Gets it's group number */
-			partition = psDroid->id % EFFECT_DROID_DIVISION;
+			unsigned int partition = psDroid->id % EFFECT_DROID_DIVISION;
+
 			/* Right frame to process? */
 			if(partition == frameGetFrameNumber() % EFFECT_DROID_DIVISION && ONEINFOUR)
 			{
@@ -2476,13 +2545,17 @@ static void effectDroidUpdates(void)
 					*/
 					if( (SDWORD)psDroid->sMove.speed != 0 )
 					{
-				   		/* Present direction is important */
-						xBehind = ( ( 50 * iV_SIN( DEG( (int)psDroid->direction) ) ) >> FP12_SHIFT );
-						yBehind = ( ( 50 * iV_COS( DEG( (int)psDroid->direction) ) ) >> FP12_SHIFT );
-						pos.x = psDroid->pos.x - xBehind;
-						pos.z = psDroid->pos.y - yBehind;
+						/* Present direction is important */
+						Vector2i behind = {
+							( 50 * SIN( DEG( psDroid->direction) ) ) >> FP12_SHIFT,
+							( 50 * COS( DEG( psDroid->direction) ) ) >> FP12_SHIFT
+						};
+						Vector3i pos = {
+							psDroid->pos.x - behind.x,
+							0,
+							psDroid->pos.y - behind.y
+						};
 						pos.y = map_Height(pos.x, pos.z);
-//						addEffect(&pos,EFFECT_SMOKE,SMOKE_TYPE_TRAIL,FALSE,NULL);
 					}
 				}
 			}
@@ -2538,7 +2611,7 @@ static void effectStructureUpdates(void)
 								eventPos.x = psStructure->pos.x+psStructure->sDisplay.imd->connectors->x;
 								eventPos.z = psStructure->pos.y-psStructure->sDisplay.imd->connectors->y;
 								eventPos.y = psStructure->pos.z+psStructure->sDisplay.imd->connectors->z;
-								addEffect(&eventPos,EFFECT_SMOKE,SMOKE_TYPE_STEAM,FALSE,NULL,0);
+								addEffect(&eventPos,EFFECT_SMOKE,SMOKE_TYPE_STEAM,false,NULL,0);
 
 
 								if(selectedPlayer == psStructure->player)
@@ -2569,13 +2642,13 @@ static void effectStructureUpdates(void)
 							/* Add an effect over the central spire - if
 							connected to Res Extractor and it is active*/
 							//look through the list to see if any connected Res Extr
-							active = FALSE;
+							active = false;
 							for (i=0; i < NUM_POWER_MODULES; i++)
 							{
 								if (psPowerGen->apResExtractors[i]
 								 && psPowerGen->apResExtractors[i]->pFunctionality->resourceExtractor.active)
 								{
-									active = TRUE;
+									active = true;
 									break;
 								}
 							}
@@ -2589,7 +2662,7 @@ static void effectStructureUpdates(void)
 							{
 								eventPos.y = psStructure->pos.z + 48;
 								addEffect(&eventPos,EFFECT_EXPLOSION,
-										EXPLOSION_TYPE_TESLA,FALSE,NULL,0);
+										EXPLOSION_TYPE_TESLA,false,NULL,0);
 
 								if(selectedPlayer == psStructure->player)
 								{
@@ -2670,7 +2743,7 @@ bool writeFXData(const char* fileName)
 
 	if (!tagOpenWrite(FXData_tag_definition, fileName))
 	{
-		debug(LOG_ERROR, "writeFXData: error while opening file (%s)", fileName);
+		ASSERT(false, "writeFXData: error while opening file (%s)", fileName);
 		return false;
 	}
 

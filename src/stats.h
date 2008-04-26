@@ -265,7 +265,7 @@ extern SDWORD getCompFromName(UDWORD compType, const char *pName);
 //get the component Inc for a stat based on the Resource name held in Names.txt
 extern SDWORD getCompFromResName(UDWORD compType, const char *pName);
 /*sets the tech level for the stat passed in */
-extern BOOL setTechLevel(BASE_STATS *psStats, char *pLevel);
+extern BOOL setTechLevel(BASE_STATS *psStats, const char *pLevel);
 /*returns the weapon sub class based on the string name passed in */
 extern WEAPON_SUBCLASS getWeaponSubClass(const char *pSubClass);
 /*either gets the name associated with the resource (if one) or allocates space and copies pName*/
@@ -274,7 +274,7 @@ extern BOOL allocateName(char **ppStore, const char *pName);
 extern BOOL getResourceName(const char *pName);
 /*return the name to display for the interface - valid for OBJECTS and STATS*/
 extern const char* getName(const char *pNameID);
-/*sets the store to the body size based on the name passed in - returns FALSE
+/*sets the store to the body size based on the name passed in - returns false
 if doesn't compare with any*/
 extern BOOL getBodySize(const char *pSize, UBYTE *pStore);
 
@@ -301,6 +301,7 @@ extern UDWORD	sensorPower(SENSOR_STATS *psStats, UBYTE player);
 extern UDWORD	sensorRange(SENSOR_STATS *psStats, UBYTE player);
 /*Access functions for the upgradeable stats of a ECM*/
 extern UDWORD	ecmPower(ECM_STATS *psStats, UBYTE player);
+extern UDWORD	ecmRange(ECM_STATS *psStats, UBYTE player);
 /*Access functions for the upgradeable stats of a repair*/
 extern UDWORD	repairPoints(REPAIR_STATS *psStats, UBYTE player);
 /*Access functions for the upgradeable stats of a constructor*/
@@ -323,6 +324,7 @@ extern UDWORD getMaxBodyPoints(void);
 extern UDWORD getMaxSensorRange(void);
 extern UDWORD getMaxSensorPower(void);
 extern UDWORD getMaxECMPower(void);
+extern UDWORD getMaxECMRange(void);
 extern UDWORD getMaxConstPoints(void);
 extern UDWORD getMaxRepairPoints(void);
 extern UDWORD getMaxWeaponRange(void);
@@ -331,5 +333,7 @@ extern UDWORD getMaxWeaponROF(void);
 extern UDWORD getMaxPropulsionSpeed(void);
 
 extern BOOL objHasWeapon(BASE_OBJECT *psObj);
+
+extern void statsInitVars(void);
 
 #endif // __INCLUDED_SRC_STATS_H__

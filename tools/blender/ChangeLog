@@ -1,0 +1,66 @@
+---------- pie_export.py v1.0 ----------
+
+- completely compatible with the data loaded from the import script.
+	conversely, the import script is completely compatible with pie's exported in
+	blender.
+- now handles any number of layers
+- number of teamcolors no longer assumed to be 8 -- supports any number of
+	teamcolors.
+- now exports in either compliant pie 5 (working spec) or pie 2 formats
+- the entirety of the pie spec (versions 2 and 5) are supported during export
+	(as well as import)
+- all valid pie objects can be exported at once
+
+---------- pie_common.py v1.0 ----------
+
+- a lot of shared operations have been abstracted into here, including basic
+	gui support.
+- various gui components now utilize the scroll wheel for handling content
+	longer than can be fit on screen, instead of the previous "page" method.
+
+---------- pie_import.py v1.2 ----------
+
+- uses a more portable ui chaining system that will appear in pie_export.py
+- ui now prefers scrolling with the mousewheel over using a "page" system
+
+---------- pie_import.py v1.1 ----------
+
+- all contents of a pie will be sub-objects of a PIE object.
+- pie 5 texture coords are now considered fully opengl compatible, and the
+	import script supports this specification.
+- fixed some wierd list semantics in the blender code. should've worked before,
+	definitely does now: the texture material is correctly added to the mesh, and
+	thus using blender's rendering operation looks correct now.
+- added framework for general configurability. this conf screen is mostly
+	empty, atm.
+- config options can now be saved in their current state during import, and
+	reverted to either the user-selected defaults or script defaults. options may
+	also be configured in the "Scripts Config Editor" script.
+- layering script can be automatically run by importer now.
+- custom scaling factor can be selected during import. may be useful if the
+	user is editing pies larger in pie slicer for extra precision (a double size
+	model made in pie slicer should get imported with a scale factor of 0.5, for
+	example)
+- now conforms to the "Scripts Config Editor" recommendations, and follows user
+	settings for verbosity.
+- temporary and poorly done fix for per's texpage selection problem -- now
+	looks 3 levels deep for ./texpages if need be.
+- now supports an arbitrary number of team colors
+- fixed a nasty and hard to notice bug that always occured during import where
+	the model got mirrored along the x axis on import. afaict, *all* versions of
+	the import script	always did this.
+- fixed a teamcolor problem where teamcolors would never import correctly.
+
+---------- pie_levels_to_layers.py v0.2 ----------
+- user can now have levels re-layered at will be running a script on any number
+	of objects simultaneously (used to be part of the import script).
+- now applies strictly to selected objects, but will now assign PIE_* and
+	CONNECTOR_* to as many layers as there are selected, descendent levels
+
+---------- pie_common v0.1 ----------
+- fixed bug where not all settings would get saved the first time. namely the
+	ones that didn't appear in the option gui for the import script. note: the
+	names under which options will be saved will likely get to change very soon.
+- added gpl license block
+
+# vim: textwidth=79

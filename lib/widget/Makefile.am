@@ -1,3 +1,6 @@
+AM_CPPFLAGS = $(SDL_CFLAGS) $(WZ_CPPFLAGS)
+AM_CFLAGS = $(WZ_CFLAGS)
+
 noinst_LIBRARIES = libwidget.a
 noinst_HEADERS = bar.h button.h editbox.h form.h label.h scrap.h slider.h tip.h \
 	widgbase.h widget.h widgint.h

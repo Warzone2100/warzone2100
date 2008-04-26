@@ -76,7 +76,7 @@ SDWORD	spin;
 static	KEYMAP_MARKER	qwertyKeyMappings[NUM_QWERTY_KEYS];
 
 
-static	BOOL			bDoingDebugMappings = FALSE;
+static	BOOL			bDoingDebugMappings = false;
 // ----------------------------------------------------------------------------------
 
 // ----------------------------------------------------------------------------------
@@ -88,7 +88,7 @@ UDWORD	numActiveMappings;
 
 /* Last meta and sub key that were recorded */
 static KEY_CODE	lastMetaKey,lastSubKey;
-static BOOL	bKeyProcessing = TRUE;
+static BOOL	bKeyProcessing = true;
 
 static void kf_NOOP(void) {}
 
@@ -248,6 +248,9 @@ _keymapsave keyMapSaveTable[] =
 	kf_LowerGamma,
 	kf_ToggleWatchWindow,
 	kf_ToggleDrivingMode,
+	kf_ToggleShowGateways,
+	kf_ToggleShowPath,
+	kf_MapCheck,
 	NULL		// last function!
 };
 
@@ -263,8 +266,8 @@ void	keyInitMappings( BOOL bForceDefaults )
 	UDWORD	i;
 	keyMappings = NULL;
 	numActiveMappings = 0;
-	bKeyProcessing = TRUE;
-	processDebugMappings(FALSE);
+	bKeyProcessing = true;
+	processDebugMappings(false);
 
 
 	for(i=0; i<NUM_QWERTY_KEYS; i++)
@@ -273,7 +276,7 @@ void	keyInitMappings( BOOL bForceDefaults )
 	}
 
 	// load the mappings.
-	if(!bForceDefaults && loadKeyMap() == TRUE)
+	if(!bForceDefaults && loadKeyMap() == true)
 	{
 		return;
 	}
@@ -387,7 +390,7 @@ void	keyInitMappings( BOOL bForceDefaults )
 	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_Q,KEYMAP_PRESSED,kf_SetDroidMovePatrol ,		_("Patrol"));
 	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_R,KEYMAP_PRESSED,kf_SetDroidGoForRepair ,	_("Return For Repair"));
 	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_S,KEYMAP_PRESSED,kf_SetDroidMoveHold ,		_("Hold Position"));
-	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_T,KEYMAP_PRESSED,kf_SendTextMessage,			_("Send Text Message"));
+	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_RETURN,KEYMAP_PRESSED,kf_SendTextMessage,			_("Send Text Message"));
 	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_U,KEYMAP_PRESSED,kf_SetDroidRangeLong,		_("Long Range"));
 
 	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_LALT,KEY_H,KEYMAP_PRESSED,kf_AddHelpBlip,		"Drop a beacon");
@@ -430,7 +433,9 @@ void	keyInitMappings( BOOL bForceDefaults )
 	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,(KEY_CODE)KEY_MAXSCAN,KEYMAP_PRESSED,kf_ToggleReopenBuildMenu,_("Toggle reopening the build menu"));
 
 	// NOTE THIS!!!!!!!
-	// available: ctrl+e, ctrl+m, ctrl+k, ctrl+l
+	// available: ctrl+l
+	keyAddMapping(KEYMAP__DEBUG,KEY_LCTRL,KEY_M,KEYMAP_PRESSED,kf_ToggleShowPath,				"Toggle display of droid path");
+	keyAddMapping(KEYMAP__DEBUG,KEY_LCTRL,KEY_E,KEYMAP_PRESSED,kf_ToggleShowGateways,			"Toggle display of gateways");
 	keyAddMapping(KEYMAP___HIDE,KEY_LSHIFT,KEY_BACKSPACE,KEYMAP_PRESSED,kf_ToggleDebugMappings,			"TOGGLE Debug Mappings");
 	keyAddMapping(KEYMAP__DEBUG,KEY_IGNORE,KEY_M,KEYMAP_PRESSED,kf_ShowMappings,				"Show all keyboard mappings - use pause!");
 	keyAddMapping(KEYMAP__DEBUG,KEY_IGNORE,KEY_V,KEYMAP_PRESSED,kf_ToggleVisibility,			"Toggle visibility");
@@ -441,6 +446,7 @@ void	keyInitMappings( BOOL bForceDefaults )
 	keyAddMapping(KEYMAP__DEBUG,KEY_LCTRL,KEY_J,KEYMAP_PRESSED,kf_ToggleFog,					"Toggles All fog");
 	keyAddMapping(KEYMAP__DEBUG,KEY_LCTRL,KEY_Q,KEYMAP_PRESSED,kf_ToggleWeather,				"Trigger some weather");
 	keyAddMapping(KEYMAP__DEBUG,KEY_IGNORE,KEY_K,KEYMAP_PRESSED,kf_TriFlip,					"Flip terrain triangle");
+	keyAddMapping(KEYMAP__DEBUG,KEY_LCTRL,KEY_K,KEYMAP_PRESSED,kf_MapCheck,					"Realign height of all objects on the map");
 
 	//These ones are necessary for debugging
 	keyAddMapping(KEYMAP__DEBUG,KEY_LALT,KEY_A,KEYMAP_PRESSED,kf_AllAvailable,						"Make all items available");
@@ -535,7 +541,7 @@ KEY_MAPPING	*newMapping;
 	else if(metaCode == KEY_LSHIFT) {newMapping->altMetaKeyCode = KEY_RSHIFT;}
 
 	/* Set it to be active */
-	newMapping->active = TRUE;
+	newMapping->active = true;
 	/* Add it to the start of the list */
 	newMapping->psNext = keyMappings;
 	keyMappings = newMapping;
@@ -590,7 +596,7 @@ KEY_MAPPING	*psPrev,*psCurr;
 
 	if(psToRemove == NULL)
 	{
-		return(FALSE);
+		return(false);
 	}
 
 	if(psToRemove == keyMappings && keyMappings->psNext == NULL)
@@ -599,7 +605,7 @@ KEY_MAPPING	*psPrev,*psCurr;
 		free(keyMappings);
 		keyMappings = NULL;
 		numActiveMappings = 0;
-		return(TRUE);
+		return(true);
 	}
 
 	/* See if we can find it */
@@ -629,9 +635,9 @@ KEY_MAPPING	*psPrev,*psCurr;
 		/* and then for the mapping itself */
 		free(psCurr);
 		numActiveMappings--;
-		return(TRUE);
+		return(true);
 	}
-	return(FALSE);
+	return(false);
 }
 
 // ----------------------------------------------------------------------------------
@@ -648,7 +654,7 @@ static BOOL checkQwertyKeys( void )
 {
 	KEY_CODE qKey;
 	UDWORD tableEntry;
-	BOOL aquired = FALSE;
+	BOOL aquired = false;
 
 	/* Are we trying to make a new map marker? */
 	if (keyDown(KEY_LALT))
@@ -668,7 +674,7 @@ static BOOL checkQwertyKeys( void )
 			/* Now add the new one for this location */
 			qwertyKeyMappings[tableEntry].psMapping =
 				keyAddMapping(KEYMAP_ALWAYS, KEY_LSHIFT, qKey, KEYMAP_PRESSED, kf_JumpToMapMarker, "Jump to new map marker");
-			aquired = TRUE;
+			aquired = true;
 
 			/* Store away the position and view angle */
 			qwertyKeyMappings[tableEntry].xPos = player.p.x;
@@ -702,18 +708,18 @@ SDWORD		i;
 	if(keyDown(KEY_LCTRL) || keyDown(KEY_RCTRL) || keyDown(KEY_LALT)
 		|| keyDown(KEY_RALT) || keyDown(KEY_LSHIFT) || keyDown(KEY_RSHIFT))
 	{
-		bMetaKeyDown = TRUE;
+		bMetaKeyDown = true;
 	}
 	else
 	{
-		bMetaKeyDown = FALSE;
+		bMetaKeyDown = false;
 	}
 
  	/* Run through all our mappings */
  	for(keyToProcess = keyMappings; keyToProcess!=NULL; keyToProcess = keyToProcess->psNext)
 	{
 		/* We haven't acted upon it */
-		bKeyProcessed = FALSE;
+		bKeyProcessed = false;
 		if(!keyToProcess->active)
 		{
 			/* Get out if it's inactive */
@@ -747,7 +753,7 @@ SDWORD		i;
  					lastSubKey = keyToProcess->subKeyCode;
  					/* Jump to the associated function call */
  					 keyToProcess->function();
-					 bKeyProcessed = TRUE;
+					 bKeyProcessed = true;
  				}
  				break;
  			case KEYMAP_DOWN:
@@ -757,7 +763,7 @@ SDWORD		i;
  					lastSubKey = keyToProcess->subKeyCode;
  					/* Jump to the associated function call */
  					 keyToProcess->function();
-					 bKeyProcessed = TRUE;
+					 bKeyProcessed = true;
  				}
 
  				break;
@@ -768,7 +774,7 @@ SDWORD		i;
  					lastSubKey = keyToProcess->subKeyCode;
  					/* Jump to the associated function call */
  					 keyToProcess->function();
-					 bKeyProcessed = TRUE;
+					 bKeyProcessed = true;
  				}
 
 			break;
@@ -789,7 +795,7 @@ SDWORD		i;
  				lastMetaKey = keyToProcess->metaKeyCode;
  				lastSubKey = keyToProcess->subKeyCode;
  				keyToProcess->function();
-				bKeyProcessed = TRUE;
+				bKeyProcessed = true;
  			}
 			else if (keyToProcess->altMetaKeyCode != KEY_IGNORE)
 			{
@@ -798,7 +804,7 @@ SDWORD		i;
  					lastMetaKey = keyToProcess->metaKeyCode;
  					lastSubKey = keyToProcess->subKeyCode;
  					keyToProcess->function();
-					bKeyProcessed = TRUE;
+					bKeyProcessed = true;
 				}
 			}
  		}
@@ -855,11 +861,11 @@ static void keyShowMapping(KEY_MAPPING *psMapping)
 char	asciiSub[20],asciiMeta[20];
 BOOL	onlySub;
 
-	onlySub = TRUE;
+	onlySub = true;
 	if(psMapping->metaKeyCode!=KEY_IGNORE)
 	{
 		keyScanToString(psMapping->metaKeyCode,(char *)&asciiMeta,20);
-		onlySub = FALSE;
+		onlySub = false;
 	}
 
 	keyScanToString(psMapping->subKeyCode,(char *)&asciiSub,20);
@@ -914,7 +920,7 @@ KEY_MAPPING	*psMapping;
 
 	for(psMapping = keyMappings; psMapping; psMapping = psMapping->psNext)
 	{
-		psMapping->active = FALSE;
+		psMapping->active = false;
 	}
 }
 
@@ -925,7 +931,7 @@ KEY_MAPPING	*psMapping;
 
 	for(psMapping = keyMappings; psMapping; psMapping = psMapping->psNext)
 	{
-		psMapping->active = TRUE;
+		psMapping->active = true;
 	}
 }
 
@@ -986,7 +992,7 @@ UDWORD	asciiKeyCodeToTable(KEY_CODE code)
 	{
 		return (code - KEY_Z) + 19;	// 19 keys before, the 10 from q..p and the 9 from a..l
 	}
-	ASSERT(FALSE, "only pass nonzero key codes from getQwertyKey to this function");
+	ASSERT(false, "only pass nonzero key codes from getQwertyKey to this function");
 	return 0;
 }
 
@@ -1038,7 +1044,7 @@ BOOL	keyReAssignMapping( KEY_CODE origMetaCode, KEY_CODE origSubCode,
 KEY_MAPPING	*psMapping;
 BOOL		bFound;
 
-	for(psMapping = keyMappings,bFound = FALSE; psMapping && !bFound;
+	for(psMapping = keyMappings,bFound = false; psMapping && !bFound;
 		psMapping = psMapping->psNext)
 	{
 		/* Find the original */
@@ -1049,7 +1055,7 @@ BOOL		bFound;
 			{
 				psMapping->metaKeyCode = newMetaCode;
 				psMapping->subKeyCode = newSubCode;
-				bFound = TRUE;
+				bFound = true;
 			}
 		}
 	}
@@ -1063,7 +1069,7 @@ KEY_MAPPING	*getKeyMapFromName(char *pName)
 KEY_MAPPING	*psMapping;
 		for(psMapping = keyMappings; psMapping;	psMapping = psMapping->psNext)
 		{
-			if(strcmp(pName,psMapping->pName) == FALSE)
+			if(strcmp(pName,psMapping->pName) == false)
 			{
 				return(psMapping);
 			}
@@ -1085,9 +1091,9 @@ KEY_MAPPING	*psMapping;
 			(void)keyAddMapping(psMapping->status,newMetaCode,
 			newSubCode, psMapping->action,psMapping->function,psMapping->pName);
 			keyRemoveMappingPt(psMapping);
-			return(TRUE);
+			return(true);
 		}
 	}
-	return(FALSE);
+	return(false);
 }
 // ----------------------------------------------------------------------------------

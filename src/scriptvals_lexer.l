@@ -24,17 +24,16 @@
  * lexer for loading script variable values
  *
  */
-
-#include <stdio.h>
-
 #include "lib/framework/frame.h"
-#include "lib/script/script.h"
-#include "src/scriptvals.h"
 
 #include <physfs.h>
 
+#include "lib/script/script.h"
+#include "src/scriptvals.h"
+
 /* Get the Yacc definitions */
 #include "scriptvals_parser.tab.h"
+
 
 /* Maximum length for any TEXT value */
 #ifndef YYLMAX
@@ -46,7 +45,7 @@ static char aText[TEXT_BUFFERS][YYLMAX];
 static UDWORD currText=0;
 
 // Note if we are in a comment
-static BOOL inComment = FALSE;
+static BOOL inComment = false;
 
 /* Handle to the input file */
 static PHYSFS_file* pReadFile = NULL;
@@ -64,7 +63,7 @@ static PHYSFS_file* pReadFile = NULL;
 			} \
 		}
 
-static inline int PHYSFS_getc()
+static inline int PHYSFS_getc(void)
 {
 	char read_char;
 
@@ -101,10 +100,10 @@ script						return SCRIPT;
 store						return STORE;
 run							return RUN;
 
-true						{ scrv_lval.bval = TRUE;	 return BOOLEAN_T; }
-TRUE						{ scrv_lval.bval = TRUE;	 return BOOLEAN_T; }
-false						{ scrv_lval.bval = FALSE;	 return BOOLEAN_T; }
-FALSE						{ scrv_lval.bval = FALSE;	 return BOOLEAN_T; }
+true						{ scrv_lval.bval = true;	 return BOOLEAN_T; }
+TRUE						{ scrv_lval.bval = true;	 return BOOLEAN_T; }
+false						{ scrv_lval.bval = false;	 return BOOLEAN_T; }
+FALSE						{ scrv_lval.bval = false;	 return BOOLEAN_T; }
 
 	/* Match text values */
 [a-zA-Z][-0-9_a-zA-Z]*		{
@@ -154,9 +153,9 @@ FALSE						{ scrv_lval.bval = FALSE;	 return BOOLEAN_T; }
 [ \t\n\x0d\x0a]						;
 
 	/* Strip comments */
-"/*"						{ inComment=TRUE; BEGIN COMMENT; }
+"/*"						{ inComment=true; BEGIN COMMENT; }
 <COMMENT>"*/" |
-<COMMENT>"*/"\n				{ inComment=FALSE; BEGIN 0; }
+<COMMENT>"*/"\n				{ inComment=false; BEGIN 0; }
 <COMMENT>. |
 <COMMENT>\n					;
 
@@ -177,7 +176,7 @@ void scrvSetInputFile(PHYSFS_file* fileHandle)
 
 	/* Reset the lexer in case it's been used before */
 	scrv__flush_buffer(YY_CURRENT_BUFFER);
-	inComment = FALSE;
+	inComment = false;
 }
 
 void scrvGetErrorData(int *pLine, char **ppText)
@@ -200,8 +199,11 @@ int scrv_wrap(void)
 /* Older GNU Flex versions don't define yylex_destroy()
  * (and neither define a subminor version)
  */
-#if !defined(YY_FLEX_SUBMINOR_VERSION) || (YY_FLEX_SUBMINOR_VERSION < 30)
+#if !defined(YY_FLEX_SUBMINOR_VERSION) || (YY_FLEX_SUBMINOR_VERSION < 9)
 int scrv_lex_destroy(void)
 {
+	/* For non-reentrant C scanner only. */
+	yy_delete_buffer(YY_CURRENT_BUFFER);
+	yy_init = 1;
 }
 #endif

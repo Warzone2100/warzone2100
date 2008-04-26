@@ -24,7 +24,7 @@
 #ifndef __INCLUDED_SRC_MULTIJOIN_H__
 #define __INCLUDED_SRC_MULTIJOIN_H__
 
-#include "lib/netplay/netplay.h"
+#include "droiddef.h"
 
 extern BOOL intDisplayMultiJoiningStatus(UBYTE joinCount);
 extern BOOL MultiPlayerLeave			(UDWORD dp);						// A player has left the game.
@@ -38,7 +38,7 @@ extern void clearPlayer					(UDWORD player, BOOL quietly, BOOL removeOil);// wip
 typedef struct {
 	DROID *psDroid;
 	void  *psNext;
-}DROIDSTORE, *LPDROIDSTORE;
+} DROIDSTORE, *LPDROIDSTORE;
 
 extern DROIDSTORE *tempDroidList;
 

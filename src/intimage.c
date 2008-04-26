@@ -23,16 +23,9 @@
  * Image definitions and related functions.
  *
  */
-
-#include <stdio.h>
-
 #include "lib/framework/frame.h"
 #include "lib/framework/frameresource.h"
-#include "lib/widget/widget.h"
 
-#include "objects.h"
-#include "loop.h"
-#include "map.h"
 /* Includes direct access to render library */
 #include "lib/ivis_common/ivisdef.h"
 #include "lib/ivis_common/piestate.h"
@@ -42,17 +35,9 @@
 #include "lib/ivis_common/rendmode.h"
 #include "lib/ivis_common/bitimage.h"
 
-#include "display3d.h"
-#include "edit3d.h"
-#include "structure.h"
-#include "research.h"
-#include "function.h"
 #include "lib/gamelib/gtime.h"
-#include "hci.h"
-#include "stats.h"
-#include "game.h"
-#include "power.h"
 #include "lib/sound/audio.h"
+#include "lib/widget/widget.h"
 #include "lib/widget/widgint.h"
 #include "lib/widget/bar.h"
 #include "lib/widget/form.h"
@@ -60,10 +45,25 @@
 #include "lib/widget/button.h"
 #include "lib/widget/editbox.h"
 #include "lib/widget/slider.h"
+
+#include "intimage.h"
+
+#include "objects.h"
+#include "loop.h"
+#include "map.h"
+
+#include "display3d.h"
+#include "edit3d.h"
+#include "structure.h"
+#include "research.h"
+#include "function.h"
+#include "hci.h"
+#include "stats.h"
+#include "game.h"
+#include "power.h"
 #include "order.h"
 #include "main.h"
 
-#include "intimage.h"
 
 #define INCEND	(0)
 
@@ -104,6 +104,36 @@ typedef struct {
 } IMAGEFRAME;
 
 IMAGEFILE *IntImages;	// All the 2d graphics for the user interface.
+
+static const uint16_t MousePointerImageIDs[CURSOR_MAX] =
+{
+	IMAGE_CURSOR_DEFAULT,	// CURSOR_ARROW
+	IMAGE_CURSOR_DEST,	// CURSOR_DEST
+	IMAGE_CURSOR_DEFAULT,	// CURSOR_SIGHT
+	IMAGE_CURSOR_DEFAULT,	// CURSOR_TARGET
+	IMAGE_CURSOR_DEFAULT,	// CURSOR_LARROW      
+	IMAGE_CURSOR_DEFAULT,	// CURSOR_RARROW      
+	IMAGE_CURSOR_DEFAULT,	// CURSOR_DARROW      
+	IMAGE_CURSOR_DEFAULT,	// CURSOR_UARROW      
+	IMAGE_CURSOR_DEFAULT,	// CURSOR_DEFAULT     
+	IMAGE_CURSOR_DEFAULT,	// CURSOR_EDGEOFMAP   
+	IMAGE_CURSOR_ATTACH,	// CURSOR_ATTACH      
+	IMAGE_CURSOR_ATTACK,	// CURSOR_ATTACK      
+	IMAGE_CURSOR_DEFAULT,	// CURSOR_BOMB        
+	IMAGE_CURSOR_BRIDGE,	// CURSOR_BRIDGE      
+	IMAGE_CURSOR_BUILD,	// CURSOR_BUILD       
+	IMAGE_CURSOR_EMBARK,	// CURSOR_EMBARK      
+	IMAGE_CURSOR_FIX,	// CURSOR_FIX         
+	IMAGE_CURSOR_GUARD,	// CURSOR_GUARD       
+	IMAGE_CURSOR_ECM,	// CURSOR_JAM         
+	IMAGE_CURSOR_LOCKON,	// CURSOR_LOCKON      
+	IMAGE_CURSOR_DEFAULT,	// CURSOR_MENU        
+	IMAGE_CURSOR_MOVE,	// CURSOR_MOVE        
+	IMAGE_CURSOR_NOTPOS,	// CURSOR_NOTPOSSIBLE 
+	IMAGE_CURSOR_PICKUP,	// CURSOR_PICKUP      
+	IMAGE_CURSOR_REPAIR,	// CURSOR_SEEKREPAIR  
+	IMAGE_CURSOR_SELECT,	// CURSOR_SELECT      
+};
 
 /** Form frame definition for normal frames. */
 IMAGEFRAME FrameNormal = {
@@ -188,13 +218,14 @@ TABDEF	SmallTab = {
 BOOL imageInitBitmaps(void)
 {
 	IntImages = (IMAGEFILE*)resGetData("IMG", "intfac.img");
+	pie_InitColourMouse(IntImages, MousePointerImageIDs);
 
-	return TRUE;
+	return true;
 }
 
 void RenderWindowFrame(FRAMETYPE frame, UDWORD x, UDWORD y, UDWORD Width, UDWORD Height)
 {
-	RenderWindow(frame, x, y, Width, Height, FALSE);
+	RenderWindow(frame, x, y, Width, Height, false);
 }
 
 // Render a window frame.
@@ -211,7 +242,7 @@ void RenderWindow(FRAMETYPE frame, UDWORD x, UDWORD y, UDWORD Width, UDWORD Heig
 	SWORD HBottomLeft = 0;
 	UWORD RectI;
 	FRAMERECT *Rect;
-	BOOL Masked = FALSE;
+	BOOL Masked = false;
 	IMAGEFRAME *Frame;
 
 	if (frame == 0)
@@ -233,11 +264,11 @@ void RenderWindow(FRAMETYPE frame, UDWORD x, UDWORD y, UDWORD Width, UDWORD Heig
 
 		switch(Rect->Type) {
 			case FR_FRAME:
-				if(Opaque==FALSE)
+				if(Opaque==false)
 				{
-					if(Masked == FALSE) {
+					if(Masked == false) {
 						Width &= 0xfffc;	// Software transboxfill needs to be a multiple of 4 pixels.
-						Masked = TRUE;
+						Masked = true;
 					}
 
 
@@ -255,10 +286,10 @@ void RenderWindow(FRAMETYPE frame, UDWORD x, UDWORD y, UDWORD Width, UDWORD Heig
 				break;
 
 			case FR_LEFT:
-				if(Opaque==FALSE) {
-					if(Masked == FALSE) {
+				if(Opaque==false) {
+					if(Masked == false) {
 						Width &= 0xfffc;	// Software transboxfill needs to be a multiple of 4 pixels.
-						Masked = TRUE;
+						Masked = true;
 					}
 					iV_TransBoxFill( x+Rect->TLXOffset,
 									y+Rect->TLYOffset,
@@ -271,10 +302,10 @@ void RenderWindow(FRAMETYPE frame, UDWORD x, UDWORD y, UDWORD Width, UDWORD Heig
 				break;
 
 			case FR_RIGHT:
-				if(Opaque==FALSE) {
-					if(Masked == FALSE) {
+				if(Opaque==false) {
+					if(Masked == false) {
 						Width &= 0xfffc;	// Software transboxfill needs to be a multiple of 4 pixels.
-						Masked = TRUE;
+						Masked = true;
 					}
 					iV_TransBoxFill( x+Width-INCEND+Rect->TLXOffset,
 									y+Rect->TLYOffset,
@@ -288,10 +319,10 @@ void RenderWindow(FRAMETYPE frame, UDWORD x, UDWORD y, UDWORD Width, UDWORD Heig
 				break;
 
 			case FR_TOP:
-				if(Opaque==FALSE) {
-					if(Masked == FALSE) {
+				if(Opaque==false) {
+					if(Masked == false) {
 						Width &= 0xfffc;	// Software transboxfill needs to be a multiple of 4 pixels.
-						Masked = TRUE;
+						Masked = true;
 					}
 					iV_TransBoxFill( x+Rect->TLXOffset,
 									y+Rect->TLYOffset,
@@ -304,12 +335,12 @@ void RenderWindow(FRAMETYPE frame, UDWORD x, UDWORD y, UDWORD Width, UDWORD Heig
 				break;
 
 			case FR_BOTTOM:
-				if(Opaque==FALSE)
+				if(Opaque==false)
 				{
-					if(Masked == FALSE)
+					if(Masked == false)
 					{
 						Width &= 0xfffc;	// Software transboxfill needs to be a multiple of 4 pixels.
-						Masked = TRUE;
+						Masked = true;
 					}
 					iV_TransBoxFill( x+Rect->TLXOffset,
 									y+Height-INCEND+Rect->TLYOffset,
@@ -317,7 +348,7 @@ void RenderWindow(FRAMETYPE frame, UDWORD x, UDWORD y, UDWORD Width, UDWORD Heig
 									y+Height-INCEND+Rect->BRYOffset);
 				} else {
 					pie_BoxFill(x + Rect->TLXOffset, y + Height - INCEND + Rect->TLYOffset,
-					            x + Width - INCEND + Rect->BRXOffset, y + Height - INCEND + Rect->BRYOffset, 
+					            x + Width - INCEND + Rect->BRXOffset, y + Height - INCEND + Rect->BRYOffset,
 					            psPalette[Rect->ColourIndex]);
 				}
 				break;

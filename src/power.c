@@ -58,26 +58,14 @@ static void updateCurrentPower(POWER_GEN *psPowerGen, UDWORD player);
 //returns the relevant list based on OffWorld or OnWorld
 static STRUCTURE* powerStructList(UBYTE player);
 
-PLAYER_POWER		*asPower[MAX_PLAYERS];
+PLAYER_POWER		asPower[MAX_PLAYERS];
 
 /*allocate the space for the playerPower*/
 BOOL allocPlayerPower(void)
 {
-	UDWORD		player;
-
-	//allocate the space for the structure
-	for (player = 0; player < MAX_PLAYERS; player++)
-	{
-		asPower[player] = (PLAYER_POWER *) malloc(sizeof(PLAYER_POWER));
-		if (asPower[player] == NULL)
-		{
-			ASSERT(FALSE, "Out of memory");
-			return FALSE;
-		}
-	}
 	clearPlayerPower();
-	powerCalculated = TRUE;
-	return TRUE;
+	powerCalculated = true;
+	return true;
 }
 
 /*clear the playerPower */
@@ -85,35 +73,16 @@ void clearPlayerPower(void)
 {
 	UDWORD player;
 
-	//check power has been allocated!
-	if (asPower[0] == NULL)
-	{
-		return;
-	}
 	for (player = 0; player < MAX_PLAYERS; player++)
 	{
-		memset(asPower[player], 0, sizeof(PLAYER_POWER));
+		memset(&asPower[player], 0, sizeof(PLAYER_POWER));
 	}
 }
 
 /*Free the space used for playerPower */
 void releasePlayerPower(void)
 {
-	UDWORD player;
-
-	//check power has been allocated!
-	if (asPower[0] == NULL)
-	{
-		return;
-	}
-	for (player = 0; player < MAX_PLAYERS; player++)
-	{
-		if (asPower[player])
-		{
-			free(asPower[player]);
-			asPower[player] = NULL;
-		}
-	}
+	// nothing now
 }
 
 /*check the current power - if enough return true, else return false */
@@ -121,19 +90,17 @@ BOOL checkPower(UDWORD player, UDWORD quantity, BOOL playAudio)
 {
 	ASSERT(player < MAX_PLAYERS, "checkPower: Bad player");
 
-	//if not doing a check on the power - just return TRUE
+	//if not doing a check on the power - just return true
 	if (!powerCalculated)
 	{
-		return TRUE;
+		return true;
 	}
 
-	ASSERT(asPower[player] != NULL, "asPower[player=%u] not allocated", player);
-
-	if (asPower[player]->currentPower >= quantity)
+	if (asPower[player].currentPower >= quantity)
 	{
-		return TRUE;
+		return true;
 	}
-	return FALSE;
+	return false;
 }
 
 /*check the current power - if enough subtracts the amount
@@ -143,37 +110,34 @@ BOOL usePower(UDWORD player, UDWORD quantity)
 {
 	ASSERT(player < MAX_PLAYERS, "usePower: Bad player");
 
-	//if not doing a check on the power - just return TRUE
+	//if not doing a check on the power - just return true
 	if (!powerCalculated)
 	{
-		return TRUE;
+		return true;
 	}
 
-	ASSERT(asPower[player] != NULL, "asPower[player=%u] not allocated", player);
-
 	//check there is enough first
-	if (asPower[player]->currentPower >= quantity)
+	if (asPower[player].currentPower >= quantity)
 	{
-		asPower[player]->currentPower -= quantity;
-		return TRUE;
+		asPower[player].currentPower -= quantity;
+		return true;
 	}
 	else if (player == selectedPlayer)
 	{
 		if(titleMode == FORCESELECT) //|| (titleMode == DESIGNSCREEN))
 		{
-			return FALSE;
+			return false;
 		}
 	}
-	return FALSE;
+	return false;
 }
 
 //return the power when a structure/droid is deliberately destroyed
 void addPower(UDWORD player, UDWORD quantity)
 {
 	ASSERT(player < MAX_PLAYERS, "addPower: Bad player (%u)", player);
-	ASSERT(asPower[player] != NULL, "asPower[player=%u] not allocated", player);
 
-	asPower[player]->currentPower += quantity;
+	asPower[player].currentPower += quantity;
 }
 
 /*resets the power calc flag for all players*/
@@ -181,11 +145,11 @@ void powerCalc(BOOL on)
 {
 	if (on)
 	{
-		powerCalculated = TRUE;
+		powerCalculated = true;
 	}
 	else
 	{
-		powerCalculated = FALSE;
+		powerCalculated = false;
 	}
 }
 
@@ -239,7 +203,7 @@ UDWORD updateExtractedPower(STRUCTURE	*psBuilding)
 			{
 				// If not having unlimited power, put the 2 lines below back in
 				//set the extractor to be inactive
-				//pResExtractor->active = FALSE;
+				//pResExtractor->active = false;
 				//break the link between the power gen and the res extractor
 				//releaseResExtractor(psBuilding);
 
@@ -283,12 +247,10 @@ void updatePlayerPower(UDWORD player)
 		}
 	}
 
-	ASSERT(asPower[player] != NULL, "asPower[player=%u] not allocated", player);
-
 	// Check that the psLastPowered hasn't died
-	if (asPower[player]->psLastPowered && asPower[player]->psLastPowered->died)
+	if (asPower[player].psLastPowered && asPower[player].psLastPowered->died)
 	{
-		asPower[player]->psLastPowered = NULL;
+		asPower[player].psLastPowered = NULL;
 	}
 }
 
@@ -317,14 +279,12 @@ void updateCurrentPower(POWER_GEN *psPowerGen, UDWORD player)
 		}
 	}
 
-	ASSERT(asPower[player] != NULL, "asPower[player=%u] not allocated", player);
-
-	asPower[player]->extractedPower += extractedPower ;
-	power = (asPower[player]->extractedPower * psPowerGen->multiplier) / 100;
+	asPower[player].extractedPower += extractedPower ;
+	power = (asPower[player].extractedPower * psPowerGen->multiplier) / 100;
 	if (power)
 	{
-		asPower[player]->currentPower += power;
-		asPower[player]->extractedPower = 0;
+		asPower[player].currentPower += power;
+		asPower[player].extractedPower = 0;
 	}
 }
 
@@ -332,26 +292,23 @@ void updateCurrentPower(POWER_GEN *psPowerGen, UDWORD player)
 void setPower(UDWORD player, UDWORD avail)
 {
 	ASSERT(player < MAX_PLAYERS, "setPower: Bad player (%u)", player);
-	ASSERT(asPower[player] != NULL, "asPower[player=%u] not allocated", player);
 
-	asPower[player]->currentPower = avail;
+	asPower[player].currentPower = avail;
 }
 
 UDWORD getPower(UDWORD player)
 {
 	ASSERT(player < MAX_PLAYERS, "setPower: Bad player (%u)", player);
-	ASSERT(asPower[player] != NULL, "asPower[player=%u] not allocated", player);
 
-	return asPower[player]->currentPower;
+	return asPower[player].currentPower;
 }
 
 /*sets the initial value for the power*/
 void setPlayerPower(UDWORD power, UDWORD player)
 {
 	ASSERT(player < MAX_PLAYERS, "setPlayerPower: Bad player (%u)", player);
-	ASSERT(asPower[player] != NULL, "asPower[player=%u] not allocated", player);
 
-	asPower[player]->currentPower = power;
+	asPower[player].currentPower = power;
 }
 
 /*Temp function to give all players some power when a new game has been loaded*/
@@ -365,7 +322,7 @@ void newGameInitPower(void)
 	}
 }
 
-/*accrue the power in the facilities that require it - returns TRUE if use some power*/
+/*accrue the power in the facilities that require it - returns true if use some power*/
 BOOL accruePower(BASE_OBJECT *psObject)
 {
 	FACTORY					*psFactory;
@@ -373,7 +330,7 @@ BOOL accruePower(BASE_OBJECT *psObject)
 	REPAIR_FACILITY			*psRepair;
 	SDWORD					powerDiff;
 	UDWORD					count;
-	BOOL					bPowerUsed = FALSE;
+	BOOL					bPowerUsed = false;
 	STRUCTURE			*psStructure;
 	DROID				*psDroid, *psTarget;
 
@@ -406,13 +363,13 @@ BOOL accruePower(BASE_OBJECT *psObject)
 				    {
 					    usePower(psStructure->player, powerDiff);
 					    psFactory->powerAccrued += powerDiff;
-					    bPowerUsed = TRUE;
+					    bPowerUsed = true;
 				    }
 				    else if (powerDiff > POWER_PER_CYCLE)
 				    {
 					    usePower(psStructure->player, POWER_PER_CYCLE);
 					    psFactory->powerAccrued += POWER_PER_CYCLE;
-					    bPowerUsed = TRUE;
+					    bPowerUsed = true;
 				    }
 			    }
     		}
@@ -430,7 +387,7 @@ BOOL accruePower(BASE_OBJECT *psObject)
 		    {
 			    //check the research hasn't been cancelled
 			    count = ((RESEARCH *)psResearch->psSubject)->ref - REF_RESEARCH_START;
-			    if (IsResearchCancelled(asPlayerResList[selectedPlayer] + count)==FALSE)
+			    if (IsResearchCancelled(asPlayerResList[selectedPlayer] + count)==false)
 			    {
 				    //check needs power
 				    powerDiff = ((RESEARCH *)psResearch->psSubject)->researchPower -
@@ -443,13 +400,13 @@ BOOL accruePower(BASE_OBJECT *psObject)
 					    {
 						    usePower(psStructure->player, powerDiff);
 						    psResearch->powerAccrued += powerDiff;
-						    bPowerUsed = TRUE;
+						    bPowerUsed = true;
 					    }
 					    else if (powerDiff > POWER_PER_CYCLE)
 					    {
 						    usePower(psStructure->player, POWER_PER_CYCLE);
 						    psResearch->powerAccrued += POWER_PER_CYCLE;
-						    bPowerUsed = TRUE;
+						    bPowerUsed = true;
 					    }
 				    }
 			    }
@@ -477,20 +434,20 @@ BOOL accruePower(BASE_OBJECT *psObject)
 					    usePower(psStructure->player, powerDiff);
                         //the unit accrues the power so more than one thing can be working on it
 					    psDroid->powerAccrued += (powerDiff * POWER_FACTOR);
-					    bPowerUsed = TRUE;
+					    bPowerUsed = true;
 				    }
 				    else if (powerDiff > POWER_PER_CYCLE)
 				    {
 					    usePower(psStructure->player, POWER_PER_CYCLE);
 					    psDroid->powerAccrued += (POWER_PER_CYCLE * POWER_FACTOR);
-					    bPowerUsed = TRUE;
+					    bPowerUsed = true;
 				    }
 			    }
 		    }
 		    break;
 	    default:
 		    //no need for power
-		    bPowerUsed = FALSE;
+		    bPowerUsed = false;
 		    break;
         }
         break;
@@ -513,14 +470,14 @@ BOOL accruePower(BASE_OBJECT *psObject)
 					    usePower(psDroid->player, powerDiff);
 					    ((STRUCTURE *)psDroid->psTarget)->currentPowerAccrued +=
                             powerDiff;
-					    bPowerUsed = TRUE;
+					    bPowerUsed = true;
 				    }
 				    else if (powerDiff > POWER_PER_CYCLE)
 				    {
 					    usePower(psDroid->player, POWER_PER_CYCLE);
 					    ((STRUCTURE *)psDroid->psTarget)->currentPowerAccrued +=
                             POWER_PER_CYCLE;
-					    bPowerUsed = TRUE;
+					    bPowerUsed = true;
 				    }
 			    }
             }
@@ -560,25 +517,25 @@ BOOL accruePower(BASE_OBJECT *psObject)
 					    usePower(psDroid->player, powerDiff);
                         //the unit accrues the power so more than one thing can be working on it
 					    psTarget->powerAccrued += (powerDiff * POWER_FACTOR);
-					    bPowerUsed = TRUE;
+					    bPowerUsed = true;
 				    }
 				    else if (powerDiff > POWER_PER_CYCLE)
 				    {
 					    usePower(psDroid->player, POWER_PER_CYCLE);
 					    psTarget->powerAccrued += (POWER_PER_CYCLE * POWER_FACTOR);
-					    bPowerUsed = TRUE;
+					    bPowerUsed = true;
 				    }
 			    }
             }
             break;
         default:
 		    //no need for power
-		    bPowerUsed = FALSE;
+		    bPowerUsed = false;
 		    break;
         }
         break;
     default:
-        ASSERT( FALSE, "accruePower: Invalid object type" );
+        ASSERT( false, "accruePower: Invalid object type" );
     }
 
 	return bPowerUsed;
@@ -589,43 +546,40 @@ BOOL accruePower(BASE_OBJECT *psObject)
 void powerDestroyObject(BASE_OBJECT *psObject)
 {
 	ASSERT(psObject != NULL, "invalid object");
-	ASSERT(asPower[psObject->player] != NULL, "asPower[player=%u] not allocated", psObject->player);
 
 	//check that this wasn't the last object that received the power
-	if (asPower[psObject->player]->psLastPowered == psObject)
+	if (asPower[psObject->player].psLastPowered == psObject)
 	{
 		updateLastPowered(NULL, psObject->player);
 	}
 }
 
-/*checks if the Object to be powered next - returns TRUE if power*/
+/*checks if the Object to be powered next - returns true if power*/
 BOOL getLastPowered(BASE_OBJECT *psObject)
 {
 	ASSERT(psObject != NULL, "invalid object");
-	ASSERT(asPower[psObject->player] != NULL, "asPower[player=%u] not allocated", psObject->player);
 
-	if (asPower[psObject->player]->psLastPowered == NULL)
+	if (asPower[psObject->player].psLastPowered == NULL)
 	{
-		return TRUE;
+		return true;
 	}
 	/*if we've got round to the last object again, by setting to NULL will
 	enable the next object to get some power*/
-	if (asPower[psObject->player]->psLastPowered == psObject)
+	if (asPower[psObject->player].psLastPowered == psObject)
 	{
-		asPower[psObject->player]->psLastPowered = NULL;
+		asPower[psObject->player].psLastPowered = NULL;
 	}
-	return FALSE;
+	return false;
 }
 
 /*inform the players power struct that the last object to receive power has changed*/
 void updateLastPowered(BASE_OBJECT *psObject, UBYTE player)
 {
 	ASSERT(player < MAX_PLAYERS, "updateLastPowered: Bad player (%u)", (unsigned int)player);
-	ASSERT(asPower[player] != NULL, "asPower[player=%u] not allocated", (unsigned int)player);
 	ASSERT(psObject == NULL || psObject->died == 0 || psObject->died == NOT_CURRENT_LIST,
 	       "updateLastPowered: Null or dead object");
 
-	asPower[player]->psLastPowered = psObject;
+	asPower[player].psLastPowered = psObject;
 }
 
 STRUCTURE *getRExtractor(STRUCTURE *psStruct)
@@ -634,7 +588,7 @@ STRUCTURE	*psCurr;
 STRUCTURE	*psFirst;
 BOOL		bGonePastIt;
 
-	for(psCurr = apsStructLists[selectedPlayer],psFirst = NULL,bGonePastIt = FALSE;
+	for(psCurr = apsStructLists[selectedPlayer],psFirst = NULL,bGonePastIt = false;
 		psCurr; psCurr = psCurr->psNext)
 	{
 		if( psCurr->pStructureType->type == REF_RESOURCE_EXTRACTOR )
@@ -656,7 +610,7 @@ BOOL		bGonePastIt;
 
 			if(psCurr==psStruct)
 			{
-				bGonePastIt = TRUE;
+				bGonePastIt = true;
 			}
 
 
@@ -665,10 +619,10 @@ BOOL		bGonePastIt;
 	return(psFirst);
 }
 
-/*defines which structure types draw power - returns TRUE if use power*/
+/*defines which structure types draw power - returns true if use power*/
 BOOL structUsesPower(STRUCTURE *psStruct)
 {
-    BOOL    bUsesPower = FALSE;
+    BOOL    bUsesPower = false;
 
 	ASSERT( psStruct != NULL,
 		"structUsesPower: Invalid Structure pointer" );
@@ -680,20 +634,20 @@ BOOL structUsesPower(STRUCTURE *psStruct)
     	case REF_VTOL_FACTORY:
 	    case REF_RESEARCH:
 	    case REF_REPAIR_FACILITY:
-            bUsesPower = TRUE;
+            bUsesPower = true;
             break;
         default:
-            bUsesPower = FALSE;
+            bUsesPower = false;
             break;
     }
 
     return bUsesPower;
 }
 
-/*defines which droid types draw power - returns TRUE if use power*/
+/*defines which droid types draw power - returns true if use power*/
 BOOL droidUsesPower(DROID *psDroid)
 {
-    BOOL    bUsesPower = FALSE;
+    BOOL    bUsesPower = false;
 
 	ASSERT(psDroid != NULL,	"droidUsesPower: Invalid unit pointer" );
 
@@ -703,10 +657,10 @@ BOOL droidUsesPower(DROID *psDroid)
 	    case DROID_REPAIR:
         case DROID_CYBORG_CONSTRUCT:
         case DROID_CYBORG_REPAIR:
-            bUsesPower = TRUE;
+            bUsesPower = true;
             break;
         default:
-            bUsesPower = FALSE;
+            bUsesPower = false;
             break;
     }
 
@@ -716,35 +670,33 @@ BOOL droidUsesPower(DROID *psDroid)
 //this is a check cos there is a problem with the power but not sure where!!
 void powerCheck(BOOL bBeforePowerUsed, UBYTE player)
 {
-    static  BASE_OBJECT     *psLastPowered = NULL;
-    static  BOOL            bPowerBefore = FALSE;
+	static BASE_OBJECT	*psLastPowered = NULL;
+	static BOOL		bPowerBefore = false;
 
 	ASSERT(player < MAX_PLAYERS, "powerCheck: Bad player (%u)", (unsigned int)player);
-	ASSERT(asPower[player] != NULL, "asPower[player=%u] not allocated", (unsigned int)player);
 
-    if (bBeforePowerUsed)
-    {
-        //set what the lastPowered object is before using any power
-        psLastPowered = asPower[player]->psLastPowered;
-        bPowerBefore = FALSE;
-        //check that there is power available at start of loop
-        if (asPower[player]->currentPower > POWER_PER_CYCLE)
-        {
-            bPowerBefore = TRUE;
-        }
-
-    }
-    else
-    {
-        /*check to see if we've been thru the whole list of structures and
-        droids and not reset the lastPowered object in the power structure and
-        there was some power at the start of the loop to use*/
-        if (psLastPowered != NULL && psLastPowered == asPower[player]->
-            psLastPowered && bPowerBefore)
-        {
-            ASSERT( FALSE, "powerCheck: trouble at mill!" );
-            //initialise so something can have some power next cycle
-            asPower[player]->psLastPowered = NULL;
-        }
-    }
+	if (bBeforePowerUsed)
+	{
+		// Set what the lastPowered object is before using any power
+		psLastPowered = asPower[player].psLastPowered;
+		bPowerBefore = false;
+		// Check that there is power available at start of loop
+		if (asPower[player].currentPower > POWER_PER_CYCLE)
+		{
+			bPowerBefore = true;
+		}
+	}
+	else
+	{
+		/* Check to see if we've been thru the whole list of structures and
+		 * droids and not reset the lastPowered object in the power structure and
+		 * there was some power at the start of the loop to use. */
+		if (psLastPowered != NULL && psLastPowered == asPower[player].psLastPowered && bPowerBefore)
+		{
+			ASSERT(false, "Trouble at mill! bBeforePowerUsed=%d psLastPowered=%p asPower[%d].psLastPowered=%p", 
+			       (int)bBeforePowerUsed, psLastPowered, player, asPower[player].psLastPowered );
+			// Initialise so something can have some power next cycle
+			asPower[player].psLastPowered = NULL;
+		}
+	}
 }

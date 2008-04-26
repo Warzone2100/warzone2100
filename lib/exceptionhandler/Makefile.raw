@@ -1,7 +1,8 @@
 MAKERULES=../../makerules
 include $(MAKERULES)/configure.mk
 
-SRC=exceptionhandler.c \
+SRC=dumpinfo.cpp \
+	exceptionhandler.c \
 	exchndl.c
 
 LIB=exceptionhandler

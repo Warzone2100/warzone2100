@@ -59,7 +59,7 @@ char		*pName;
 struct _keyMapping	*psNext;
 } KEY_MAPPING;
 
-extern KEY_MAPPING	*keyAddMapping			( KEY_STATUS status, KEY_CODE metaCode, KEY_CODE subcode, 
+extern KEY_MAPPING	*keyAddMapping			( KEY_STATUS status, KEY_CODE metaCode, KEY_CODE subcode,
 									 KEY_ACTION action, void (*pKeyMapFunc)(void), const char *name );
 extern BOOL	keyRemoveMapping		( KEY_CODE metaCode, KEY_CODE subCode );
 extern	KEY_MAPPING	*keyGetMappingFromFunction(void	*function);
@@ -80,8 +80,8 @@ extern void	keySetMappingStatus		( KEY_MAPPING *psMapping, BOOL state );
 extern void	processDebugMappings	( BOOL val );
 extern BOOL	getDebugMappingStatus	( void );
 extern	BOOL	keyReAssignMappingName(char *pName, KEY_CODE newMetaCode, KEY_CODE newSubCode);
-							
-extern	BOOL	keyReAssignMapping( KEY_CODE origMetaCode, KEY_CODE origSubCode, 
+
+extern	BOOL	keyReAssignMapping( KEY_CODE origMetaCode, KEY_CODE origSubCode,
 							KEY_CODE newMetaCode, KEY_CODE newSubCode );
 extern	KEY_MAPPING	*getKeyMapFromName(char *pName);
 

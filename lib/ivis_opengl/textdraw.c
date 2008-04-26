@@ -18,6 +18,7 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
+#include "lib/ivis_opengl/GLee.h"
 #include "lib/framework/frame.h"
 #include <stdlib.h>
 #include <string.h>
@@ -32,7 +33,6 @@
 #include "lib/ivis_common/textdraw.h"
 #include "lib/ivis_common/bitimage.h"
 
-#include <SDL_opengl.h>
 #ifdef WZ_OS_MAC
 # include <QuesoGLC/glc.h>
 #else
@@ -57,7 +57,7 @@ static GLint _glcFont_Bold = 0;
  */
 /***************************************************************************/
 
-static inline void iV_printFontList()
+static inline void iV_printFontList(void)
 {
 	unsigned int i;
 	unsigned int font_count = glcGeti(GLC_CURRENT_FONT_COUNT);
@@ -83,11 +83,11 @@ static inline void iV_printFontList()
 		snprintf(prBuffer, sizeof(prBuffer), "Font #%d : %s ", font, (const char*)glcGetFontc(font, GLC_FAMILY));
 		prBuffer[sizeof(prBuffer) - 1] = 0;
 		strlcat(prBuffer, glcGetFontFace(font), sizeof(prBuffer));
-		debug(LOG_NEVER, prBuffer);
+		debug(LOG_NEVER, "%s", prBuffer);
 	}
 }
 
-static void iV_initializeGLC()
+static void iV_initializeGLC(void)
 {
 	if (_glcContext)
 	{
@@ -198,7 +198,7 @@ void iV_SetFont(enum iV_fonts FontID)
 	}
 }
 
-static inline float getGLCResolution()
+static inline float getGLCResolution(void)
 {
 	float resolution = glcGetf(GLC_RESOLUTION);
 
@@ -211,7 +211,7 @@ static inline float getGLCResolution()
 	return resolution;
 }
 
-static inline float getGLCPixelSize()
+static inline float getGLCPixelSize(void)
 {
 	float pixel_size = font_size * getGLCResolution() / 72.f;
 	return pixel_size;
@@ -331,7 +331,7 @@ int iV_GetTextLineSize()
 	return (unsigned int)pixel_height;
 }
 
-static float iV_GetMaxCharBaseY()
+static float iV_GetMaxCharBaseY(void)
 {
 	float base_line[4]; // [ xl yl xr yr ]
 

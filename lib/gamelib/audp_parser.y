@@ -30,7 +30,7 @@ static Vector3i vecPos, vecRot, vecScale;
 extern int audp_lex(void);
 extern int audp_lex_destroy(void);
 
-void audp_error(char *pMessage,...);
+void audp_error(const char* fmt, ...);
 
 %}
 
@@ -89,11 +89,11 @@ audio_list:				audio_list audio_track |
 
 audio_track:			AUDIO QTEXT LOOP INTEGER INTEGER
 						{
-							audio_SetTrackVals( $2, TRUE, $4, $5 );
+							audio_SetTrackVals( $2, true, $4, $5 );
 						}
 						| AUDIO QTEXT ONESHOT INTEGER INTEGER
 						{
-							audio_SetTrackVals( $2, FALSE, $4, $5 );
+							audio_SetTrackVals( $2, false, $4, $5 );
 						}
 						;
 
@@ -195,18 +195,16 @@ anim_state:				INTEGER INTEGER INTEGER INTEGER INTEGER INTEGER INTEGER INTEGER I
 /***************************************************************************/
 /* A simple error reporting routine */
 
-void audp_error(char *pMessage,...)
+void audp_error(const char* msg, ...)
 {
 	int		line;
 	char	*pText;
 	char	aTxtBuf[1024];
 	va_list	args;
 
-	va_start(args, pMessage);
-	vsnprintf(aTxtBuf, sizeof(aTxtBuf), pMessage, args);
+	va_start(args, msg);
+	vsnprintf(aTxtBuf, sizeof(aTxtBuf), msg, args);
 	va_end(args);
-	// Guarantee to nul-terminate
-	aTxtBuf[sizeof(aTxtBuf) - 1] = '\0';
 
 	parseGetErrorData( &line, &pText );
 	debug( LOG_ERROR, "RES file parse error:\n%s at line %d\nToken: %d, Text: '%s'\n", aTxtBuf, line, audp_char, pText );
@@ -223,7 +221,7 @@ BOOL ParseResourceFile(PHYSFS_file* fileHandle)
 	audp_parse();
 	audp_lex_destroy();
 
-	return TRUE;
+	return true;
 }
 
 /***************************************************************************/
