@@ -329,8 +329,6 @@ void drawRadar(void)
 
 	if(frameSkip<=0)
 	{
-		ASSERT(radarBuffer != NULL, "Invalid radarBuffer pointer!");
-
 		if (RadVisWidth != RadarWidth || RadVisHeight != RadarHeight)
 		{
 			ClearRadar(radarBuffer);
