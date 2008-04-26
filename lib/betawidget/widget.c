@@ -344,6 +344,13 @@ void widgetBlurImpl(widget *self)
 {
 	widget *current;
 	
+	// Make sure we have focus
+	if (!self->hasFocus)
+	{
+		// TODO: We should log this eventuality
+		return;
+	}
+		
 	// First blur any focused child widgets
 	while ((current = widgetGetCurrentlyFocused(self)) != self)
 	{
