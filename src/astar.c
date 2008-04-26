@@ -547,7 +547,7 @@ static 	FP_NODE		*psNearest, *psRoute;
 
 		psCurr = psRoute;
 		index = psRoutePoints->numPoints;
-		while (psCurr && (index < ASTAR_MAXROUTE))
+		while (psCurr && index < TRAVELSIZE)
 		{
 			psRoutePoints->asPos[index].x =	psCurr->x;
 			psRoutePoints->asPos[index].y =	psCurr->y;

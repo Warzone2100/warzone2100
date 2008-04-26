@@ -34,19 +34,13 @@
  */
 #define FPATH_LOOP_LIMIT	600
 
-/** The maximum length of an A* computed route, expressed in nodes (aka tiles)
- *
- *  @ingroup pathfinding
- */
-#define ASTAR_MAXROUTE  50
-
 /** The buffer to store a route in
  *
  *  @ingroup pathfinding
  */
 typedef struct _astar_route
 {
-	Vector2i asPos[ASTAR_MAXROUTE];
+	Vector2i asPos[TRAVELSIZE];
 	SDWORD finalX, finalY, numPoints;
 } ASTAR_ROUTE;
 
