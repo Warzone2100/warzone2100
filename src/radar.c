@@ -132,9 +132,10 @@ void resetRadarRedraw(void)
 BOOL InitRadar(void)
 {
 	radarBuffer = malloc(RADWIDTH * RADHEIGHT * sizeof(UDWORD));
-	ASSERT(radarBuffer, "Out of memory");
 	if (radarBuffer == NULL)
 	{
+		debug(LOG_ERROR, "Out of memory!");
+		abort();
 		return false;
 	}
 	memset(radarBuffer, 0, RADWIDTH * RADHEIGHT * sizeof(UDWORD));
