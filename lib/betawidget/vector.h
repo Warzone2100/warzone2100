@@ -27,3 +27,4 @@ void vectorRemoveAt(vector *v, int index);
 int vectorSize(vector *v);
 
 #endif /*VECTOR_H_*/
+

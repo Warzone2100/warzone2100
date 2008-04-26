@@ -494,3 +494,4 @@ void widgetDestroy(widget *self)
 {
 	return WIDGET_GET_VTBL(self)->destroy(self);
 }
+

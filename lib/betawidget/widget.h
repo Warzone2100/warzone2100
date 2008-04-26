@@ -421,3 +421,4 @@ void widgetDoDraw(widget *self, cairo_t *cr);
 bool widgetFireCallbacks(widget *self, event *evt);
 
 #endif /*WIDGET_H_*/
+

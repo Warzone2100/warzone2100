@@ -7,3 +7,4 @@ bool pointInRect(point p, rect r)
 		 && r.topLeft.y < p.y
 		 && r.bottomRight.y > p.y);
 }
+

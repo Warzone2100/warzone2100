@@ -102,3 +102,4 @@ int vectorSize(vector *v)
 {
 	return v->head;
 }
+

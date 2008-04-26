@@ -41,3 +41,4 @@ bool pointInRect(point p, rect r);
 
 
 #endif /*GEOM_H_*/
+
