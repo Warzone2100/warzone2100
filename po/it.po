@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Warzone 2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2008-04-26 15:14+0200\n"
+"POT-Creation-Date: 2008-04-26 23:56+0200\n"
 "PO-Revision-Date: 2008-03-20 00:23+0100\n"
 "Last-Translator: Federico Aromolo <miracleblade@hotmail.it>\n"
 "Language-Team: Italian <warzone-dev@gna.org>\n"
@@ -10426,7 +10426,7 @@ msgstr "Giocatore"
 
 #: src/design.c:453
 #: src/design.c:474
-#: src/design.c:3549
+#: src/design.c:3547
 msgid "New Vehicle"
 msgstr "Nuovo veicolo"
 
@@ -10465,18 +10465,18 @@ msgstr "Potenza del Motore"
 
 #: src/design.c:725
 #: src/design.c:780
-#: src/design.c:1591
-#: src/design.c:1632
-#: src/design.c:1657
-#: src/design.c:1675
-#: src/design.c:1700
-#: src/design.c:1718
-#: src/design.c:1760
-#: src/design.c:1795
-#: src/design.c:1931
-#: src/design.c:1948
-#: src/design.c:1983
-#: src/design.c:2019
+#: src/design.c:1589
+#: src/design.c:1630
+#: src/design.c:1655
+#: src/design.c:1673
+#: src/design.c:1698
+#: src/design.c:1716
+#: src/design.c:1758
+#: src/design.c:1793
+#: src/design.c:1929
+#: src/design.c:1946
+#: src/design.c:1981
+#: src/design.c:2017
 msgid "Weight"
 msgstr "Peso"
 
@@ -10495,69 +10495,69 @@ msgstr "Punti Vita totali"
 msgid "Power Usage"
 msgstr "Utilizzo d'Energia"
 
-#: src/design.c:1345
+#: src/design.c:1343
 msgid "Transporter"
 msgstr "Trasportatore"
 
-#: src/design.c:1573
+#: src/design.c:1571
 msgid "Sensor Range"
 msgstr "Raggio dei Sensori"
 
-#: src/design.c:1582
+#: src/design.c:1580
 msgid "Sensor Power"
 msgstr "Potenza dei Sensori"
 
-#: src/design.c:1623
+#: src/design.c:1621
 msgid "ECM Power"
 msgstr "Potenza dell'ECM"
 
-#: src/design.c:1649
-#: src/design.c:1666
-#: src/design.c:1692
-#: src/design.c:1709
+#: src/design.c:1647
+#: src/design.c:1664
+#: src/design.c:1690
+#: src/design.c:1707
 msgid "Build Points"
 msgstr "Punti di Costruzione"
 
-#: src/design.c:1736
-#: src/design.c:1768
+#: src/design.c:1734
+#: src/design.c:1766
 msgid "Range"
 msgstr "Raggio"
 
-#: src/design.c:1744
-#: src/design.c:1777
+#: src/design.c:1742
+#: src/design.c:1775
 msgid "Damage"
 msgstr "Danno"
 
-#: src/design.c:1752
-#: src/design.c:1786
+#: src/design.c:1750
+#: src/design.c:1784
 msgid "Rate-of-Fire"
 msgstr "Rateo di Fuoco"
 
-#: src/design.c:1923
-#: src/design.c:1939
+#: src/design.c:1921
+#: src/design.c:1937
 msgid "Air Speed"
 msgstr "Velocità in Aria"
 
-#: src/design.c:1959
-#: src/design.c:1992
+#: src/design.c:1957
+#: src/design.c:1990
 msgid "Road Speed"
 msgstr "Velocità sulla Strada"
 
-#: src/design.c:1967
-#: src/design.c:2001
+#: src/design.c:1965
+#: src/design.c:1999
 msgid "Off-Road Speed"
 msgstr "Velocità Fuoristrada"
 
-#: src/design.c:1975
-#: src/design.c:2010
+#: src/design.c:1973
+#: src/design.c:2008
 msgid "Water Speed"
 msgstr "Velocità sull'Acqua"
 
-#: src/design.c:2144
+#: src/design.c:2142
 msgid "Weapons"
 msgstr "Armi"
 
-#: src/design.c:2168
+#: src/design.c:2166
 msgid "Systems"
 msgstr "Sistemi"
 
