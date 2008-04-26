@@ -132,6 +132,7 @@ void resetRadarRedraw(void)
 BOOL InitRadar(void)
 {
 	radarBuffer = malloc(RADWIDTH * RADHEIGHT * sizeof(UDWORD));
+	ASSERT(radarBuffer, "Out of memory");
 	if (radarBuffer == NULL)
 	{
 		return false;
@@ -316,6 +317,12 @@ void drawRadar(void)
 {
 	UWORD	boxSizeH,boxSizeV;
 	static int frameSkip = 0;
+
+	ASSERT(radarBuffer, "No radar buffer allocated");
+	if (!radarBuffer)
+	{
+		return;
+	}
 
 	CalcRadarPixelSize(&boxSizeH,&boxSizeV);
 	CalcRadarScroll(boxSizeH,boxSizeV);
