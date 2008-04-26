@@ -2555,8 +2555,6 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 	//Watermelon:added MinRangeResult;
 	UBYTE	i;
 
-	CHECK_DROID(psDroid);
-
 	switch (psAction->action)
 	{
 	case DACTION_NONE:
