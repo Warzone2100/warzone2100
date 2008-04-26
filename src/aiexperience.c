@@ -166,9 +166,8 @@ BOOL SetUpOutputFile(SDWORD nPlayer)
 	/* Assemble dir string */
 	sprintf(sPlayer,"%d",nPlayer);
 
-	strlcat(SaveDir, "player", sizeof(SaveDir));
-	strlcat(SaveDir, sPlayer, sizeof(SaveDir));
-	//strlcat(SaveDir, "/", sizeof(SaveDir));	//like "multiplay/learndata/player0/"
+	astrlcat(SaveDir, "player");
+	astrlcat(SaveDir, sPlayer);
 
 	/* Create dir on disk */
 	if ( !PHYSFS_mkdir(SaveDir))
@@ -177,13 +176,13 @@ BOOL SetUpOutputFile(SDWORD nPlayer)
 		return false;
 	}
 
-	strlcat(SaveDir, "/", sizeof(SaveDir));
+	astrlcat(SaveDir, "/");
 
 	/* Create filename */
-	strlcpy(FileName, SaveDir, sizeof(FileName));
+	astrlcpy(FileName, SaveDir);
 
-	strlcat(FileName, game.map, sizeof(FileName));		//Map name
-	strlcat(FileName, ".lrn", sizeof(FileName));		//Like "multiplay/learndata/player0/Rush.lrn"
+	astrlcat(FileName, game.map);		// Map name
+	astrlcat(FileName, ".lrn");		// Like "multiplay/learndata/player0/Rush.lrn"
 
 	/* Open file */
 	aiSaveFile[nPlayer] = NULL;
@@ -209,15 +208,15 @@ BOOL SetUpInputFile(SDWORD nPlayer)
 	// Guarantee to nul-terminate
 	sPlayer[sizeof(sPlayer) - 1] = '\0';
 
-	strlcat(SaveDir, "player", sizeof(SaveDir));
-	strlcat(SaveDir, sPlayer, sizeof(SaveDir));
-	strlcat(SaveDir, "/", sizeof(SaveDir));	//like "multiplay\learndata\player0\"
+	astrlcat(SaveDir, "player");
+	astrlcat(SaveDir, sPlayer);
+	astrlcat(SaveDir, "/");		// like "multiplay\learndata\player0\"
 
 	/* Create filename */
-	strlcpy(FileName, SaveDir, sizeof(FileName));
+	astrlcpy(FileName, SaveDir);
 
-	strlcat(FileName, game.map, sizeof(FileName));		//map name
-	strlcat(FileName, ".lrn", sizeof(FileName));		//Like "multiplay\learndata\player0\Rush.lrn"
+	astrlcat(FileName, game.map);		// map name
+	astrlcat(FileName, ".lrn");		// Like "multiplay\learndata\player0\Rush.lrn"
 
 	aiSaveFile[nPlayer] = NULL;
 	aiSaveFile[nPlayer] = PHYSFS_openRead(FileName);

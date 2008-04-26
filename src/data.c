@@ -719,7 +719,7 @@ static BOOL dataTexPageLoad(const char *fileName, void **ppData)
 	char texpage[PATH_MAX] = {'\0'};
 
 	// This hackery is needed, because fileName will include the directory name, whilst the LastResourceFilename will not, and we need a short name to identify the texpage
-	strlcpy(texpage, GetLastResourceFilename(), sizeof(texpage));
+	astrlcpy(texpage, GetLastResourceFilename());
 
 	pie_MakeTexPageName(texpage);
 	if (!dataImageLoad(fileName, ppData))

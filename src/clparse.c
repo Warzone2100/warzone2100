@@ -211,7 +211,7 @@ bool ParseCommandLineEarly(int argc, const char** argv)
 					poptFreeContext(poptCon);
 					return false;
 				}
-				strlcpy(configdir, token, sizeof(configdir));
+				astrlcpy(configdir, token);
 				break;
 
 			case CLI_HELP:
@@ -282,7 +282,7 @@ bool ParseCommandLine(int argc, const char** argv)
 					poptFreeContext(poptCon);
 					return false;
 				}
-				strlcpy(datadir, token, sizeof(datadir));
+				astrlcpy(datadir, token);
 				break;
 
 			case CLI_FULLSCREEN:
@@ -306,7 +306,7 @@ bool ParseCommandLine(int argc, const char** argv)
 					fprintf(stderr, "\tCAM_1A\n\tCAM_2A\n\tCAM_3A\n\tTUTORIAL3\n\tFASTPLAY\n");
 					exit(1);
 				}
-				strlcpy(aLevelName, token, sizeof(aLevelName));
+				astrlcpy(aLevelName, token);
 				SetGameMode(GS_NORMAL);
 				break;
 			case CLI_MOD_GLOB:

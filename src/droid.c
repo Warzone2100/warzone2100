@@ -1895,7 +1895,7 @@ BOOL loadDroidTemplates(const char *pDroidData, UDWORD bufferSize)
 			free(pDroidDesign);
 			return false;
 		}
-		strlcpy(pDroidDesign->aName, componentName, sizeof(pDroidDesign->aName));
+		astrlcpy(pDroidDesign->aName, componentName);
 
 		//read in Body Name
 		sscanf(pDroidData, "%[^','],%n", componentName, &cnt);
@@ -3760,7 +3760,7 @@ char *droidGetName(DROID *psDroid)
 //
 void droidSetName(DROID *psDroid,const char *pName)
 {
-	strlcpy(psDroid->aName, pName, sizeof(psDroid->aName));
+	astrlcpy(psDroid->aName, pName);
 }
 
 
@@ -4905,7 +4905,7 @@ DROID * giftSingleDroid(DROID *psD, UDWORD to)
 		templateSetParts(psD, &sTemplate);
 
 		// copy the name across
-		strlcpy(sTemplate.aName, psD->aName, sizeof(sTemplate.aName));
+		astrlcpy(sTemplate.aName, psD->aName);
 
 		x = psD->pos.x;
 		y = psD->pos.y;

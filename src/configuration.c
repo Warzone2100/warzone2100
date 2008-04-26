@@ -383,7 +383,7 @@ BOOL loadConfig(void)
 	// game name
 	if (getWarzoneKeyString("gameName", sBuf))
 	{
-		strlcpy(game.name, sBuf, sizeof(game.name));
+		astrlcpy(game.name, sBuf);
 	}
 	else
 	{
@@ -395,22 +395,22 @@ BOOL loadConfig(void)
 	if (getWarzoneKeyString("playerName", sBuf)
 	 && *sBuf != '\0')
 	{
-		strlcpy(sPlayer, sBuf, sizeof(sPlayer));
+		astrlcpy(sPlayer, sBuf);
 	}
 	else
 	{
 		setWarzoneKeyString("playerName", _("Player"));
-		strlcpy(sPlayer, _("Player"), sizeof(sPlayer));
+		astrlcpy(sPlayer, _("Player"));
 	}
 
 	// map name
 	if(getWarzoneKeyString("mapName", sBuf))
 	{
-		strlcpy(game.map, sBuf, sizeof(game.map));
+		astrlcpy(game.map, sBuf);
 	}
 	else
 	{
-		strlcpy(game.map, DEFAULTMAPNAME, sizeof(game.map));
+		astrlcpy(game.map, DEFAULTMAPNAME);
 		setWarzoneKeyString("mapName", game.map);
 	}
 

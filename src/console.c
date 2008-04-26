@@ -254,7 +254,7 @@ static BOOL _addConsoleMessage(const char *messageText, CONSOLE_TEXT_JUSTIFICATI
 	}
 
 	/* Copy over the text of the message */
-	strlcpy(consoleStorage[messageIndex].text, messageText, sizeof(consoleStorage[messageIndex].text));
+	astrlcpy(consoleStorage[messageIndex].text, messageText);
 
 	/* Set the time when it was added - this might not be needed */
 	consoleStorage[messageIndex].timeAdded = gameTime2;

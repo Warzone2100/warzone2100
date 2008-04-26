@@ -98,4 +98,10 @@ static inline size_t strlcat(char *WZ_DECL_RESTRICT dst, const char *WZ_DECL_RES
 	return(dlen + (s - src));        /* count does not include NUL */
 }
 
+/** Array strlcpy. Even safer because one less parameter to screw up. */
+#define astrlcpy(dest, src) ((void)strlcpy((dest), (src), sizeof(dest)))
+
+/** Array strlcat. Even safer because one less parameter to screw up. */
+#define astrlcat(dest, src) ((void)strlcat((dest), (src), sizeof(dest)))
+
 #endif // __INCLUDED_FRAMEWORK_STRLFUNCS_H__
