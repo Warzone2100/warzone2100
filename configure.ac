@@ -321,7 +321,6 @@ AC_CONFIG_FILES([Makefile
 		lib/script/Makefile
 		lib/sequence/Makefile
 		lib/sound/Makefile
-		lib/sqlite3/Makefile
 		lib/widget/Makefile
 		src/Makefile])
 AC_OUTPUT

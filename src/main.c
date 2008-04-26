@@ -50,7 +50,6 @@
 #include "lib/script/script.h"
 #include "lib/sound/audio.h"
 #include "lib/sound/cdaudio.h"
-#include "lib/sqlite3/physfs_vfs.h"
 
 #include "clparse.h"
 #include "configuration.h"
@@ -896,10 +895,6 @@ int main(int argc, char *argv[])
 
 	// Find out where to find the data
 	scanDataDirs();
-
-	// Register the PhysicsFS implementation of the SQLite VFS class with
-	// SQLite's VFS system as the default (non-zero=default, zero=default).
-	sqlite3_register_physfs_vfs(1);
 
 	NETinit(true);
 

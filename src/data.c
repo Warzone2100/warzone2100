@@ -40,7 +40,6 @@
 
 #include "lib/framework/frameresource.h"
 #include "stats.h"
-#include "stats-db.h"
 #include "structure.h"
 #include "feature.h"
 #include "research.h"
@@ -106,19 +105,6 @@ static BOOL bufferSBODYLoad(const char *pBuffer, UDWORD size, void **ppData)
 	return true;
 }
 
-static BOOL dataDBBODYLoad(const char* filename, void **ppData)
-{
-	if (!loadBodyStatsFromDB(filename)
-	 || !allocComponentList(COMP_BODY, numBodyStats))
-	{
-		return false;
-	}
-
-	// set a dummy value so the release function gets called
-	*ppData = (void *)1;
-	return true;
-}
-
 static void dataReleaseStats(WZ_DECL_UNUSED void *pData)
 {
 	freeComponentLists();
@@ -130,19 +116,6 @@ static void dataReleaseStats(WZ_DECL_UNUSED void *pData)
 static BOOL bufferSWEAPONLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
 	if (!loadWeaponStats(pBuffer, size)
-	 || !allocComponentList(COMP_WEAPON, numWeaponStats))
-	{
-		return false;
-	}
-
-	// not interested in this value
-	*ppData = NULL;
-	return true;
-}
-
-static BOOL dataDBWEAPONLoad(const char* filename, void **ppData)
-{
-	if (!loadWeaponStatsFromDB(filename)
 	 || !allocComponentList(COMP_WEAPON, numWeaponStats))
 	{
 		return false;
@@ -195,19 +168,6 @@ static BOOL bufferSPROPLoad(const char *pBuffer, UDWORD size, void **ppData)
 	return true;
 }
 
-static BOOL dataDBPROPLoad(const char* filename, void **ppData)
-{
-	if (!loadPropulsionStatsFromDB(filename)
-	 || !allocComponentList(COMP_PROPULSION, numPropulsionStats))
-	{
-		return false;
-	}
-
-	// not interested in this value
-	*ppData = NULL;
-	return true;
-}
-
 /* Load the Sensor stats */
 static BOOL bufferSSENSORLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
@@ -240,19 +200,6 @@ static BOOL bufferSREPAIRLoad(const char *pBuffer, UDWORD size, void **ppData)
 static BOOL bufferSBRAINLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
 	if (!loadBrainStats(pBuffer, size)
-	 || !allocComponentList(COMP_BRAIN, numBrainStats))
-	{
-		return false;
-	}
-
-	//not interested in this value
-	*ppData = NULL;
-	return true;
-}
-
-static BOOL dataDBBRAINLoad(const char* filename, void** ppData)
-{
-	if (!loadBrainStatsFromDB(filename)
 	 || !allocComponentList(COMP_BRAIN, numBrainStats))
 	{
 		return false;
@@ -1000,10 +947,6 @@ typedef struct
 
 static const RES_TYPE_MIN_FILE FileResourceTypes[] =
 {
-	{"DBWEAPON", dataDBWEAPONLoad, NULL},
-	{"DBBODY", dataDBBODYLoad, dataReleaseStats},
-	{"DBBRAIN", dataDBBRAINLoad, NULL},
-	{"DBPROP", dataDBPROPLoad, NULL},
 	{"WAV", dataAudioLoad, (RES_FREE)sound_ReleaseTrack},
 	{"AUDIOCFG", dataAudioCfgLoad, NULL},
 	{"ANI", dataAnimLoad, dataAnimRelease},

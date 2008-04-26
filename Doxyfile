@@ -542,10 +542,7 @@ RECURSIVE              = YES
 # excluded from the INPUT source files. This way you can easily exclude a 
 # subdirectory from a directory tree whose root is specified with the INPUT tag.
 
-EXCLUDE                = ./lib/sqlite3/sqlite3.c \
-                         ./lib/sqlite3/sqlite3.h \
-                         ./lib/sqlite3/sqlite3ext.h \
-                         ./lib/ivis_opengl/GLee.c \
+EXCLUDE                = ./lib/ivis_opengl/GLee.c \
                          ./lib/ivis_opengl/GLee.h
 
 # The EXCLUDE_SYMLINKS tag can be used select whether or not files or 

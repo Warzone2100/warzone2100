@@ -68,8 +68,6 @@ lib/sound/openal_error.c
 lib/sound/openal_track.c
 lib/sound/playlist.c
 lib/sound/track.c
-lib/sqlite3/physfs_vfs.c
-lib/sqlite3/sqlite3.c
 lib/widget/bar.c
 lib/widget/button.c
 lib/widget/editbox.c
@@ -170,7 +168,6 @@ src/scriptvals.c
 src/selection.c
 src/seqdisp.c
 src/stats.c
-src/stats-db.c
 src/structure.c
 src/target.c
 src/text.c

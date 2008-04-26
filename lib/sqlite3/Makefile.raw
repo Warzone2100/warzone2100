@@ -1,8 +1,0 @@
-MAKERULES=../../makerules
-include $(MAKERULES)/configure.mk
-
-SRC=physfs_vfs.c sqlite3.c
-
-LIB=sqlite3
-
-include $(MAKERULES)/lib.mk

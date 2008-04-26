@@ -7,7 +7,6 @@ SUBDIRS=framework \
 	script \
 	sequence \
 	sound \
-	sqlite3 \
 	widget
 
 .PHONY: $(SUBDIRS)
