@@ -137,24 +137,25 @@ void levError(const char *pError)
 #endif
 }
 
-// find the level dataset
-BOOL levFindDataSet(const char* name, LEVEL_DATASET **ppsDataSet)
+/** Find a level dataset with the given name.
+ *  @param name the name of the dataset to search for.
+ *  @return a dataset with associated with the given @c name, or NULL if none
+ *          could be found.
+ */
+LEVEL_DATASET* levFindDataSet(const char* name)
 {
-	LEVEL_DATASET	*psNewLevel;
+	LEVEL_DATASET* psNewLevel;
 
-	for(psNewLevel = psLevels; psNewLevel; psNewLevel = psNewLevel->psNext)
+	for (psNewLevel = psLevels; psNewLevel; psNewLevel = psNewLevel->psNext)
 	{
-		if (psNewLevel->pName != NULL)
+		if (psNewLevel->pName != NULL
+		 && strcmp(psNewLevel->pName, name) == 0)
 		{
-			if (strcmp(psNewLevel->pName, name) == 0)
-			{
-				*ppsDataSet = psNewLevel;
-				return true;
-			}
+			return psNewLevel;
 		}
 	}
 
-	return false;
+	return NULL;
 }
 
 // parse a level description data file
@@ -162,13 +163,11 @@ BOOL levParse(char *pBuffer, SDWORD size, searchPathMode datadir)
 {
 	SDWORD			token, state, currData=0;
 	LEVEL_DATASET	*psDataSet = NULL;
-	LEVEL_DATASET	*psFoundData;
 
 	levSetInputBuffer(pBuffer, size);
 
 	state = LP_START;
-	token = lev_lex();
-	while (token != 0)
+	for (token = lev_lex(); token != 0; token = lev_lex())
 	{
 		switch (token)
 		{
@@ -343,8 +342,10 @@ BOOL levParse(char *pBuffer, SDWORD size, searchPathMode datadir)
 			{
 				if (psDataSet->type == LDS_CAMCHANGE)
 				{
-					// campaign change dataset - need to find the full data set
-					if (!levFindDataSet(pLevToken, &psFoundData))
+					// This is a campaign change dataset, we need to find the full data set.
+					LEVEL_DATASET * const psFoundData = levFindDataSet(pLevToken);
+
+					if (psFoundData == NULL)
 					{
 						levError("Cannot find full data set for camchange");
 						return false;
@@ -372,7 +373,9 @@ BOOL levParse(char *pBuffer, SDWORD size, searchPathMode datadir)
 			else if (state == LP_DATASET)
 			{
 				// find the dataset
-				if (!levFindDataSet(pLevToken, &psDataSet->psBaseData))
+				psDataSet->psBaseData = levFindDataSet(pLevToken);
+
+				if (psDataSet->psBaseData == NULL)
 				{
 					levError("Unknown dataset");
 					return false;
@@ -425,9 +428,6 @@ BOOL levParse(char *pBuffer, SDWORD size, searchPathMode datadir)
 			levError("Unexpected token");
 			break;
 		}
-
-		// get the next token
-		token = lev_lex();
 	}
 
 	lev_lex_destroy();
@@ -581,7 +581,8 @@ BOOL levLoadData(const char* name, char *pSaveName, SDWORD saveType)
 	levelLoadType = saveType;
 
 	// find the level dataset
-	if (!levFindDataSet(name, &psNewLevel))
+	psNewLevel = levFindDataSet(name);
+	if (psNewLevel == NULL)
 	{
 		debug(LOG_NEVER, "levLoadData: dataset %s not found - trying to load as WRF", name);
 		return levLoadSingleWRF(name);
