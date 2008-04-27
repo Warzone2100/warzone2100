@@ -65,7 +65,7 @@ static LEVEL_DATASET	sSingleWRF = { 0, 0, 0, 0, 0, { 0 }, 0, 0, 0 };
 // return values from the lexer
 char *pLevToken;
 SDWORD levVal;
-SDWORD levelLoadType;
+static SDWORD levelLoadType;
 // modes for the parser
 enum
 {
