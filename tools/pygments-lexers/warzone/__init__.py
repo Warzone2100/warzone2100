@@ -5,6 +5,7 @@ class WRFLexer(RegexLexer):
     name = 'WRF'
     aliases = ['wrf']
     filenames = ['*.wrf']
+    mimetypes = ['text/x-wrf']
 
     tokens = {
         'root': [
