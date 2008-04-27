@@ -195,7 +195,7 @@ void loadMapPreview(void)
 	}
 
 	// load the terrain types
-	levFindDataSet(game.map, &psLevel);
+	psLevel = levFindDataSet(game.map);
 	rebuildSearchPath(psLevel->dataDir, false);
 	strcpy(aFileName,psLevel->apDataFiles[0]);
 	aFileName[strlen(aFileName)-4] = '\0';

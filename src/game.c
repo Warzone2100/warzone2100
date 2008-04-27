@@ -4295,7 +4295,8 @@ bool gameLoadV7(PHYSFS_file* fileHandle)
 			return false;
 		}
 		// find the level dataset
-		if (!levFindDataSet(aLevelName, &psNewLevel))
+		psNewLevel = levFindDataSet(aLevelName);
+		if (psNewLevel == NULL)
 		{
 			debug( LOG_ERROR, "gameLoadV7: couldn't find level data" );
 			abort();
@@ -4771,7 +4772,8 @@ bool gameLoadV(PHYSFS_file* fileHandle, unsigned int version)
 			return false;
 		}
 		// find the level dataset
-/*		if (!levFindDataSet(aLevelName, &psNewLevel))
+/*		psNewLevel = levFindDataSet(aLevelName);
+		if (psNewLevel == NULL)
 		{
 			DBERROR(("gameLoadV6: couldn't find level data"));
 			return false;
@@ -11855,7 +11857,7 @@ BOOL plotStructurePreview16(char *backDropSprite, UBYTE scale, UDWORD offX, UDWO
 	LEVEL_DATASET	*psLevel;
 	PIELIGHT color = WZCOL_BLACK ;
 
-	levFindDataSet(game.map, &psLevel);
+	psLevel = levFindDataSet(game.map);
 	strcpy(aFileName,psLevel->apDataFiles[0]);
 	aFileName[strlen(aFileName)-4] = '\0';
 	strcat(aFileName, "/struct.bjo");

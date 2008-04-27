@@ -3687,7 +3687,8 @@ BOOL scrStartMission(void)
 	strlcpy(aLevelName, pGame, sizeof(aLevelName));
 
 	// find the level dataset
-	if (!levFindDataSet(pGame, &psNewLevel))
+	psNewLevel = levFindDataSet(pGame);
+	if (psNewLevel == NULL)
 	{
 		debug( LOG_ERROR, "scrStartMission: couldn't find level data" );
 		abort();

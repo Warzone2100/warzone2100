@@ -638,7 +638,8 @@ var_init:		var_entry TYPE var_value
 								YYABORT;
 							}
 							// just check the level exists
-							if (!levFindDataSet($3.pString, &psLevel))
+							psLevel = levFindDataSet($3.pString);
+							if (psLevel == NULL)
 							{
 								scrv_error("Level %s not found", $3.pString);
 								YYABORT;

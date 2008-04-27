@@ -1340,7 +1340,8 @@ BOOL scrValDefLoad(SDWORD version, INTERP_VAL *psVal, char *pBuffer, UDWORD size
 		}
 		else
 		{
-			if (!levFindDataSet(pBuffer, &psLevel))
+			psLevel = levFindDataSet(pBuffer);
+			if (psLevel == NULL)
 			{
 				debug( LOG_ERROR, "scrValDefLoad: couldn't find level dataset %s", pBuffer );
 				abort();
