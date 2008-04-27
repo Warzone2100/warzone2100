@@ -10,6 +10,7 @@ class WRFLexer(RegexLexer):
     tokens = {
         'root': [
             (r'/\*', Comment.Multiline, 'comment'),
+            (r'//.*?$', Comment.Singleline),
             (r'\bdirectory\b', Keyword),
             (r'\bfile\b', Keyword, 'file_line'),
             (r'"[^"]*"', String),
@@ -22,6 +23,6 @@ class WRFLexer(RegexLexer):
         ],
         'file_line': [
             (r'[ \t\n\x0d\x0a]+', Text),
-            (r'[^ \t\n\x0d\x0a]+', Literal, '#pop'),
+            (r'\b.+?\b', Literal, '#pop'),
         ]
     }
