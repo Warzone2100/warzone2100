@@ -93,7 +93,7 @@ miss_clear					return LTK_MCLEAR;
 	/* Match quoted text */
 \"							{ BEGIN QUOTE; }
 <QUOTE>\"					{ BEGIN 0; }
-<QUOTE>\n					{ levError("Unexpected end of line in string"); }
+<QUOTE>\n					{ lev_error("Unexpected end of line in string"); }
 <QUOTE>[^\"]*				{
 								strlcpy(aText, lev_text, sizeof(aText));
 								pLevToken = aText;
@@ -134,10 +134,14 @@ void levSetInputBuffer(char *pBuffer, UDWORD size)
 	inComment = false;
 }
 
-void levGetErrorData(int *pLine, char **ppText)
+int levGetErrorLine()
 {
-	*pLine = lev_lineno;
-	*ppText = lev_text;
+	return lev_lineno;
+}
+
+const char* levGetErrorText()
+{
+	return lev_text;
 }
 
 int lev_wrap(void)

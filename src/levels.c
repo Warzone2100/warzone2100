@@ -123,18 +123,9 @@ void levShutDown(void)
 
 
 // error report function for the level parser
-void levError(const char *pError)
+void lev_error(const char* msg)
 {
-	char	*pText;
-	int		line;
-
-	levGetErrorData(&line, &pText);
-
-#ifdef DEBUG
-	ASSERT( false, "Level File parse error:\n%s at line %d text %s\n", pError, line, pText );
-#else
-	debug( LOG_ERROR, "Level File parse error:\n%s at line %d text %s\n", pError, line, pText );
-#endif
+	ASSERT(!"level parse error", "Level File parse error: `%s` at line `%d` text `%s`", msg, levGetErrorLine(), levGetErrorText());
 }
 
 /** Find a level dataset with the given name.
@@ -187,7 +178,8 @@ BOOL levParse(char *pBuffer, SDWORD size, searchPathMode datadir)
 				psDataSet = (LEVEL_DATASET*)malloc(sizeof(LEVEL_DATASET));
 				if (!psDataSet)
 				{
-					levError("Out of memory");
+					debug(LOG_ERROR, "Out of memory");
+					abort();
 					return false;
 				}
 				memset(psDataSet, 0, sizeof(LEVEL_DATASET));
@@ -237,7 +229,7 @@ BOOL levParse(char *pBuffer, SDWORD size, searchPathMode datadir)
 			}
 			else
 			{
-				levError("Syntax Error");
+				lev_error("Syntax Error");
 				return false;
 			}
 			state = LP_LEVEL;
@@ -250,7 +242,7 @@ BOOL levParse(char *pBuffer, SDWORD size, searchPathMode datadir)
 			}
 			else
 			{
-				levError("Syntax Error");
+				lev_error("Syntax Error");
 				return false;
 			}
 			break;
@@ -261,7 +253,7 @@ BOOL levParse(char *pBuffer, SDWORD size, searchPathMode datadir)
 			}
 			else
 			{
-				levError("Syntax Error");
+				lev_error("Syntax Error");
 				return false;
 			}
 			break;
@@ -274,7 +266,7 @@ BOOL levParse(char *pBuffer, SDWORD size, searchPathMode datadir)
 			{
 				if (levVal < MULTI_TYPE_START)
 				{
-					levError("invalid type number");
+					lev_error("invalid type number");
 					return false;
 				}
 
@@ -282,7 +274,7 @@ BOOL levParse(char *pBuffer, SDWORD size, searchPathMode datadir)
 			}
 			else
 			{
-				levError("Syntax Error");
+				lev_error("Syntax Error");
 				return false;
 			}
 			state = LP_LEVELDONE;
@@ -294,7 +286,7 @@ BOOL levParse(char *pBuffer, SDWORD size, searchPathMode datadir)
 			}
 			else
 			{
-				levError("Syntax Error");
+				lev_error("Syntax Error");
 				return false;
 			}
 			break;
@@ -314,14 +306,14 @@ BOOL levParse(char *pBuffer, SDWORD size, searchPathMode datadir)
 					psDataSet->type == LDS_MKEEP_LIMBO
 					)
 				{
-					levError("Missing dataset command");
+					lev_error("Missing dataset command");
 					return false;
 				}
 				state = LP_DATA;
 			}
 			else
 			{
-				levError("Syntax Error");
+				lev_error("Syntax Error");
 				return false;
 			}
 			break;
@@ -333,7 +325,7 @@ BOOL levParse(char *pBuffer, SDWORD size, searchPathMode datadir)
 			}
 			else
 			{
-				levError("Syntax Error");
+				lev_error("Syntax Error");
 				return false;
 			}
 			break;
@@ -347,13 +339,13 @@ BOOL levParse(char *pBuffer, SDWORD size, searchPathMode datadir)
 
 					if (psFoundData == NULL)
 					{
-						levError("Cannot find full data set for camchange");
+						lev_error("Cannot find full data set for camchange");
 						return false;
 					}
 
 					if (psFoundData->type != LDS_CAMSTART)
 					{
-						levError("Invalid data set name for cam change");
+						lev_error("Invalid data set name for cam change");
 						return false;
 					}
 					psFoundData->psChange = psDataSet;
@@ -362,8 +354,7 @@ BOOL levParse(char *pBuffer, SDWORD size, searchPathMode datadir)
 				psDataSet->pName = strdup(pLevToken);
 				if (psDataSet->pName == NULL)
 				{
-					debug(LOG_ERROR, "levParse: Out of memory!");
-					levError("Out of memory");
+					debug(LOG_ERROR, "Out of memory!");
 					abort();
 					return false;
 				}
@@ -377,14 +368,14 @@ BOOL levParse(char *pBuffer, SDWORD size, searchPathMode datadir)
 
 				if (psDataSet->psBaseData == NULL)
 				{
-					levError("Unknown dataset");
+					lev_error("Unknown dataset");
 					return false;
 				}
 				state = LP_WAITDATA;
 			}
 			else
 			{
-				levError("Syntax Error");
+				lev_error("Syntax Error");
 				return false;
 			}
 			break;
@@ -393,7 +384,7 @@ BOOL levParse(char *pBuffer, SDWORD size, searchPathMode datadir)
 			{
 				if (currData >= LEVEL_MAXFILES)
 				{
-					levError("Too many data files");
+					lev_error("Too many data files");
 					return false;
 				}
 
@@ -407,8 +398,7 @@ BOOL levParse(char *pBuffer, SDWORD size, searchPathMode datadir)
 				psDataSet->apDataFiles[currData] = strdup(pLevToken);
 				if (psDataSet->apDataFiles[currData] == NULL)
 				{
-					debug(LOG_ERROR, "levParse: Out of memory!");
-					levError("Out of memory");
+					debug(LOG_ERROR, "Out of memory!");
 					abort();
 					return false;
 				}
@@ -420,12 +410,12 @@ BOOL levParse(char *pBuffer, SDWORD size, searchPathMode datadir)
 			}
 			else
 			{
-				levError("Syntax Error");
+				lev_error("Syntax Error");
 				return false;
 			}
 			break;
 		default:
-			levError("Unexpected token");
+			lev_error("Unexpected token");
 			break;
 		}
 	}
@@ -434,7 +424,7 @@ BOOL levParse(char *pBuffer, SDWORD size, searchPathMode datadir)
 
 	if (state != LP_WAITDATA || currData == 0)
 	{
-		levError("Unexpected end of file");
+		lev_error("Unexpected end of file");
 		return false;
 	}
 
