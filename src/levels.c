@@ -233,7 +233,7 @@ BOOL levParse(const char* buffer, size_t size, searchPathMode datadir)
 			break;
 		case LTK_PLAYERS:
 			if (state == LP_LEVELDONE &&
-				(psDataSet->type == LDS_COMPLETE || psDataSet->type >= LDS_MULTI_TYPE_START>))
+				(psDataSet->type == LDS_COMPLETE || psDataSet->type >= LDS_MULTI_TYPE_START))
 			{
 				state = LP_PLAYERS;
 			}
@@ -261,7 +261,7 @@ BOOL levParse(const char* buffer, size_t size, searchPathMode datadir)
 			}
 			else if (state == LP_TYPE)
 			{
-				if (levVal < LDS_MULTI_TYPE_START>)
+				if (levVal < LDS_MULTI_TYPE_START)
 				{
 					lev_error("invalid type number");
 					return false;
@@ -775,7 +775,7 @@ BOOL levLoadData(const char* name, char *pSaveName, SDWORD saveType)
 		if (psNewLevel->game == i)
 		{
 			// do some more initialising if necessary
-			if (psNewLevel->type == LDS_COMPLETE || psNewLevel->type >= LDS_MULTI_TYPE_START> || (psBaseData != NULL && !bCamChangeSaveGame))
+			if (psNewLevel->type == LDS_COMPLETE || psNewLevel->type >= LDS_MULTI_TYPE_START || (psBaseData != NULL && !bCamChangeSaveGame))
 			{
 				if (!stageTwoInitialise())
 				{
@@ -875,7 +875,7 @@ BOOL levLoadData(const char* name, char *pSaveName, SDWORD saveType)
 					}
 					break;
 				default:
-					ASSERT( psNewLevel->type >= LDS_MULTI_TYPE_START>,
+					ASSERT( psNewLevel->type >= LDS_MULTI_TYPE_START,
 						"levLoadData: Unexpected mission type" );
 					debug(LOG_WZ, "levLoadData: default (MULTIPLAYER)");
 					if (!startMission(LDS_CAMSTART, psNewLevel->apDataFiles[i]))
