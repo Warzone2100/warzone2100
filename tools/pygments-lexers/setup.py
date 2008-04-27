@@ -12,5 +12,6 @@ setup(
     entry_points = """
         [pygments.lexers]
         wrflexer = warzone:WRFLexer
+        strreslexer = warzone:STRRESLexer
     """
 )

@@ -26,3 +26,26 @@ class WRFLexer(RegexLexer):
             (r'\b.+?\b', Literal, '#pop'),
         ]
     }
+
+class STRRESLexer(RegexLexer):
+    name = 'STRRES'
+    aliases = ['strres']
+    filenames = ['*.txt']
+    mimetypes = ['text/x-strres']
+
+    tokens = {
+        'root': [
+            (r'/\*', Comment.Multiline, 'comment'),
+            (r'//.*?$', Comment.Singleline),
+            (r'"[^"]*"', String),
+            (r'[_a-zA-Z][-0-9_a-zA-Z]*', Literal),
+            (r'[ \t\n\x0d\x0a]+', Text),
+            (r'\(', Punctuation, '#push'),
+            (r'\)', Punctuation, '#pop'),
+        ],
+        'comment': [
+            (r'[^*]+', Comment.Multiline),
+            (r'\*/', Comment.Multiline, '#pop'),
+            (r'\*[^/]', Comment.Multiline),
+        ],
+    }
