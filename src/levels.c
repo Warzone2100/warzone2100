@@ -660,7 +660,7 @@ BOOL levLoadData(const char* name, char *pSaveName, SDWORD saveType)
 	}
 
 	// initialise if necessary
-	if (psNewLevel->type == LDS_COMPLETE || //psNewLevel->type >= LDS_MULTI_TYPE_START> ||
+	if (psNewLevel->type == LDS_COMPLETE || //psNewLevel->type >= LDS_MULTI_TYPE_START ||
 		psBaseData != NULL)
 	{
 		debug(LOG_WZ, "levLoadData: Calling stageOneInitialise!");
