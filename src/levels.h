@@ -48,6 +48,7 @@ typedef enum
 	LDS_MKEEP_LIMBO,    // off map saving any droids (selectedPlayer) at end into apsLimboDroids
 	LDS_NONE,			//flags when not got a mission to go back to or when
 						//already on one - ****LEAVE AS LAST ONE****
+	LDS_MULTI_TYPE_START,           ///< Start number for custom type numbers (as used by a `type` instruction)
 } LEVEL_TYPE;
 
 // the WRF/WDG files needed for a particular level
