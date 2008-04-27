@@ -34,7 +34,7 @@
 // types of level datasets
 
 
-enum _level_type
+typedef enum
 {
 	LDS_COMPLETE,		// all data required for a stand alone level
 	LDS_CAMPAIGN,		// the data set for a campaign (no map data)
@@ -48,10 +48,7 @@ enum _level_type
 	LDS_MKEEP_LIMBO,    // off map saving any droids (selectedPlayer) at end into apsLimboDroids
 	LDS_NONE,			//flags when not got a mission to go back to or when
 						//already on one - ****LEAVE AS LAST ONE****
-};
-
-
-typedef UDWORD LEVEL_TYPE;
+} LEVEL_TYPE;
 
 // the WRF/WDG files needed for a particular level
 // the WRF/WDG files needed for a particular level
