@@ -8,3 +8,11 @@ bool pointInRect(point p, rect r)
 		 && r.bottomRight.y > p.y);
 }
 
+point pointAdd(point p, point q)
+{
+	point r;
+	r.x = p.x + q.x;
+	r.y = p.y + q.y;
+	
+	return r;
+}

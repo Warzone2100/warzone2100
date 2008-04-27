@@ -113,13 +113,27 @@ static void widgetDrawChildren(widget *self, cairo_t *cr)
 		
 		// Translate such that (0,0) is the location of the widget
 		cairo_get_matrix(cr, &current);
-		cairo_translate(cr, child->bounds.topLeft.x, child->bounds.topLeft.y);
+		cairo_translate(cr, child->offset.x, child->offset.y);
 		
 		widgetDraw(child, cr);
 		
 		// Restore the matrix
 		cairo_set_matrix(cr, &current);
 	}
+}
+
+point widgetAbsolutePosition(widget *self)
+{
+	// Get our own offset
+	point pos = self->offset;
+	
+	// Add to this our parents offset
+	if (self->parent != NULL)
+	{
+		pos = pointAdd(pos, widgetAbsolutePosition(self->parent));
+	}
+	
+	return pos;
 }
 
 widget *widgetGetRoot(widget *self)
@@ -394,9 +408,10 @@ bool widgetHandleEventImpl(widget *self, event *evt)
 	switch (evt->type)
 	{
 		case EVT_MOUSE_MOVE:
-		{	
+		{
+			// FIXME: This needs re-working
 			eventMouse evtMouse = *((eventMouse *) evt);
-			bool newHasMouse = pointInRect(evtMouse.loc, self->bounds);
+			bool newHasMouse = false;//pointInRect(evtMouse.loc, self->bounds);
 				
 			// If we have just `got' the mouse
 			if (newHasMouse && !self->hasMouse)
@@ -494,4 +509,3 @@ void widgetDestroy(widget *self)
 {
 	return WIDGET_GET_VTBL(self)->destroy(self);
 }
-

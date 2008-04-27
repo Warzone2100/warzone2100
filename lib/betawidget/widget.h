@@ -206,9 +206,14 @@ struct _widget
 	int userData;
 	
 	/*
-	 * The origin and size of the widget
+	 * The offset of the widget relative to its parent
 	 */
-	rect bounds;
+	point offset;
+	
+	/*
+	 * The size of the widget
+	 */
+	point size;
 	
 	/*
 	 * If the widget currently has keyboard focus
@@ -271,6 +276,15 @@ void widgetDraw(widget *self, cairo_t *cr);
  * @return A pointer to the widget if found, NULL otherwise.
  */
 widget *widgetFindById(widget *self, const char *id);
+
+/**
+ * Returns the absolute position of the widget (ie, a position that is not
+ * relative to any other widget.
+ * 
+ * @param self	The widget to get the position of.
+ * @return The absolute position of self.
+ */
+point widgetAbsolutePosition(widget *self);
 
 /**
  * Transverses up the hierarchy until it finds parent-less widget (known as
