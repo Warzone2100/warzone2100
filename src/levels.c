@@ -150,12 +150,12 @@ LEVEL_DATASET* levFindDataSet(const char* name)
 }
 
 // parse a level description data file
-BOOL levParse(char *pBuffer, SDWORD size, searchPathMode datadir)
+BOOL levParse(const char* buffer, size_t size, searchPathMode datadir)
 {
 	SDWORD			token, state, currData=0;
 	LEVEL_DATASET	*psDataSet = NULL;
 
-	levSetInputBuffer(pBuffer, size);
+	levSetInputBuffer(buffer, size);
 
 	state = LP_START;
 	for (token = lev_lex(); token != 0; token = lev_lex())

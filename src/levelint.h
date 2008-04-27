@@ -59,7 +59,7 @@ extern int lev_lex(void);
 extern int lev_lex_destroy(void);
 
 /* Set the current input buffer for the lexer */
-extern void levSetInputBuffer(char *pBuffer, UDWORD size);
+extern void levSetInputBuffer(const char* buffer, size_t size);
 
 extern int levGetErrorLine(void);
 extern const char* levGetErrorText(void);

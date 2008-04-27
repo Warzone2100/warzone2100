@@ -124,10 +124,10 @@ miss_clear					return LTK_MCLEAR;
 %%
 
 /* Set the current input buffer for the lexer */
-void levSetInputBuffer(char *pBuffer, UDWORD size)
+void levSetInputBuffer(const char* buffer, size_t size)
 {
-	pInputBuffer = pBuffer;
-	pEndBuffer = pBuffer + size;
+	pInputBuffer = buffer;
+	pEndBuffer = &buffer[size];
 
 	/* Reset the lexer incase it's been used before */
 	lev__flush_buffer(YY_CURRENT_BUFFER);
