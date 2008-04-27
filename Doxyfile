@@ -546,7 +546,8 @@ EXCLUDE                = ./lib/sqlite3/sqlite3.c \
                          ./lib/sqlite3/sqlite3.h \
                          ./lib/sqlite3/sqlite3ext.h \
                          ./lib/ivis_opengl/GLee.c \
-                         ./lib/ivis_opengl/GLee.h
+                         ./lib/ivis_opengl/GLee.h \
+			 ./doc/code/html
 
 # The EXCLUDE_SYMLINKS tag can be used select whether or not files or 
 # directories that are symbolic links (a Unix filesystem feature) are excluded 
