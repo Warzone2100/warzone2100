@@ -13,7 +13,7 @@ class WRFLexer(RegexLexer):
             (r'\bdirectory\b', Keyword),
             (r'\bfile\b', Keyword, 'file_line'),
             (r'"[^"]*"', String),
-            (r'[ \t\n\x0d\x0a]+', Whitespace),
+            (r'[ \t\n\x0d\x0a]+', Text),
         ],
         'comment': [
             (r'[^*]+', Comment.Multiline),
@@ -21,7 +21,7 @@ class WRFLexer(RegexLexer):
             (r'\*[^/]', Comment.Multiline),
         ],
         'file_line': [
-            (r'[ \t\n\x0d\x0a]+', Whitespace),
+            (r'[ \t\n\x0d\x0a]+', Text),
             (r'[^ \t\n\x0d\x0a]+', Literal, '#pop'),
         ]
     }
