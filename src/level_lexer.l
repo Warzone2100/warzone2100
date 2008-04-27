@@ -18,16 +18,15 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 %{
-/*
- * Level.l
+/* @file
  *
  * lexer for loading level description files
- *
  */
+
 #include "lib/framework/frame.h"
 
-#include "src/levels.h"
-#include "src/levelint.h"
+#include "levels.h"
+#include "levelint.h"
 
 /* Maximum length for any TEXT value */
 #ifndef YYLMAX
@@ -67,25 +66,25 @@ static const char *pEndBuffer = NULL;
 %%
 
 	/* Keywords */
-level						return LTK_LEVEL;
-players						return LTK_PLAYERS;
-type						return LTK_TYPE;
-data						return LTK_DATA;
-game						return LTK_GAME;
-campaign					return LTK_CAMPAIGN;
-camstart					return LTK_CAMSTART;
-camchange					return LTK_CAMCHANGE;
-dataset						return LTK_DATASET;
-expand						return LTK_EXPAND;
-expand_limbo				return LTK_EXPAND_LIMBO;
-between						return LTK_BETWEEN;
-miss_keep					return LTK_MKEEP;
-miss_keep_limbo				return LTK_MKEEP_LIMBO;
-miss_clear					return LTK_MCLEAR;
+level                                           return LTK_LEVEL;
+players                                         return LTK_PLAYERS;
+type                                            return LTK_TYPE;
+data                                            return LTK_DATA;
+game                                            return LTK_GAME;
+campaign                                        return LTK_CAMPAIGN;
+camstart                                        return LTK_CAMSTART;
+camchange                                       return LTK_CAMCHANGE;
+dataset                                         return LTK_DATASET;
+expand                                          return LTK_EXPAND;
+expand_limbo                                    return LTK_EXPAND_LIMBO;
+between                                         return LTK_BETWEEN;
+miss_keep                                       return LTK_MKEEP;
+miss_keep_limbo                                 return LTK_MKEEP_LIMBO;
+miss_clear                                      return LTK_MCLEAR;
 
 	/* Match text values */
 [a-zA-Z][-0-9_a-zA-Z]*		{
-								strlcpy(aText, lev_text, sizeof(aText));
+								strlcpy(aText, yytext, sizeof(aText));
 								pLevToken = aText;
 								return LTK_IDENT;
 							}
@@ -95,13 +94,13 @@ miss_clear					return LTK_MCLEAR;
 <QUOTE>\"					{ BEGIN 0; }
 <QUOTE>\n					{ lev_error("Unexpected end of line in string"); }
 <QUOTE>[^\"]*				{
-								strlcpy(aText, lev_text, sizeof(aText));
+								strlcpy(aText, yytext, sizeof(aText));
 								pLevToken = aText;
 								return LTK_STRING;
 							}
 
 	/* Match integer numbers */
--?[0-9]+					{ levVal = atol(lev_text); return LTK_INTEGER; }
+-?[0-9]+					{ levVal = atol(yytext); return LTK_INTEGER; }
 
 	/* Skip white space */
 [ \t\n\x0d\x0a]						;
@@ -119,7 +118,7 @@ miss_clear					return LTK_MCLEAR;
 <SLCOMMENT>[^\n]*			;
 
 	/* Match anything that's been missed and pass it as a char */
-.							return lev_text[0];
+.							return yytext[0];
 
 %%
 
@@ -136,12 +135,12 @@ void levSetInputBuffer(const char* buffer, size_t size)
 
 int levGetErrorLine()
 {
-	return lev_lineno;
+	return yylineno;
 }
 
 const char* levGetErrorText()
 {
-	return lev_text;
+	return yytext;
 }
 
 int lev_wrap(void)
