@@ -13,5 +13,6 @@ setup(
         [pygments.lexers]
         wrflexer = warzone:WRFLexer
         strreslexer = warzone:STRRESLexer
+        wzlevellexer = warzone:LevelLexer
     """
 )
