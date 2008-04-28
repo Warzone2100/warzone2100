@@ -47,7 +47,7 @@ int astarInner = 0;
  */
 typedef struct _fp_node
 {
-	SWORD	x,y;		// map coords
+	int     x, y;           // map coords
 	SWORD	dist, est;	// distance so far and estimate to end
 	SWORD	type;		// open or closed node
 	struct _fp_node *psOpen;
@@ -63,13 +63,13 @@ typedef struct _fp_node
  */
 static FP_NODE* psOpen;
 
-/** Size of closed hash table
+/** A map's maximum width & height
  */
-#define FPATH_TABLESIZE		4091
+#define MAX_MAP_SIZE (UINT8_MAX + 1)
 
-/** Hash table for closed nodes
+/** Table of closed nodes
  */
-static FP_NODE* apsNodes[FPATH_TABLESIZE] = { NULL };
+static FP_NODE* nodeArray[MAX_MAP_SIZE][MAX_MAP_SIZE] = { { NULL }, { NULL } };
 
 #define NUM_DIR		8
 
@@ -95,101 +95,54 @@ void astarResetCounters(void)
 	astarRemove = 0;
 }
 
-/* next four used in HashPJW */
-#define	BITS_IN_int32_t (sizeof(int32_t) * CHAR_BIT)
-#define	THREE_QUARTERS  ((BITS_IN_int32_t * 3) / 4)
-#define	ONE_EIGHTH      (BITS_IN_int32_t / 8)
-#define	HIGH_BITS       (~((int32_t)(~0) >> ONE_EIGHTH))
-
-/** Hash string
- *  Adaptation of Peter Weinberger's (PJW) generic hashing algorithm listed in
- *  Binstock+Rex, "Practical Algorithms" p 69.
+/** Add a node to the node table
  *
- *  Hacked to use coordinates instead of a string
+ *  @param psNode to add to the table
  */
-static SDWORD fpathHashFunc(int32_t x, int32_t y)
+static void fpathAddNode(FP_NODE* psNode)
 {
-	char    buf[sizeof(x) + sizeof(y)];
-	char   *c;
-	int32_t hashValue = 0;
+	const int x = psNode->x;
+	const int y = psNode->y;
 
-	memcpy(&buf[0],         &x, sizeof(x));
-	memcpy(&buf[sizeof(x)], &y, sizeof(y));
+	ASSERT(x < ARRAY_SIZE(nodeArray) && y < ARRAY_SIZE(nodeArray[x]), "X (%d) or Y %d) coordinate for path finding node is out of range!", x, y);
 
-	for (c = &buf[0]; c != &buf[ARRAY_SIZE(buf)]; ++c)
+	// Lets not leak memory
+	if (nodeArray[x][y])
 	{
-		int32_t highBits;
-
-		if (*c == 0)
-			continue;
-
-		hashValue = (hashValue << ONE_EIGHTH) + *c;
-		highBits = hashValue & HIGH_BITS;
-
-		if (highBits != 0)
-		{
-			hashValue = (hashValue ^ (highBits >> THREE_QUARTERS)) & ~HIGH_BITS;
-		}
+		free(nodeArray[x][y]);
 	}
 
-	hashValue %= ARRAY_SIZE(apsNodes);
-
-	return hashValue;
+	nodeArray[x][y] = psNode;
 }
 
-/** Add a node to the hash table
+/** See if a node is in the table
+ *  Check whether there is a node for the given coordinates in the table
  *
- *  @param apsTable hash table
- *  @param psNode to add to the given hash table
- */
-static void fpathHashAdd(FP_NODE *apsTable[], FP_NODE *psNode)
-{
-	SDWORD	index;
-
-	index = fpathHashFunc(psNode->x, psNode->y);
-
-	psNode->psNext = apsTable[index];
-	apsTable[index] = psNode;
-}
-
-/** See if a node is in the hash table
- *  Check whether there is a node for the given coordinates in the hash table
- *
- *  @param apsTable the hash table to check
  *  @param x,y the coordinates to check for
  *  @return a pointer to the node if one could be found, or NULL otherwise.
  */
-static FP_NODE *fpathHashPresent(FP_NODE *apsTable[], int32_t x, int32_t y)
+static FP_NODE* fpathGetNode(int x, int y)
 {
-	FP_NODE *psFound;
+	ASSERT(x < ARRAY_SIZE(nodeArray) && y < ARRAY_SIZE(nodeArray[x]), "X (%d) or Y %d) coordinate for path finding node is out of range!", x, y);
 
-	for (psFound = apsTable[fpathHashFunc(x, y)]; psFound; psFound = psFound->psNext)
-	{
-		// Check whether we found the node we're looking for
-		if (psFound->x == x
-		 && psFound->y == y)
-		{
-			return psFound;
-		}
-	}
-
-	return NULL;
+	return nodeArray[x][y];
 }
 
-/** Reset the hash tables
+/** Reset the node table
  */
-static void fpathHashReset(void)
+static void fpathTableReset(void)
 {
-	int i;
+	int x, y;
 
-	for(i = 0; i < ARRAY_SIZE(apsNodes); ++i)
+	for (x = 0; x < ARRAY_SIZE(nodeArray); ++x)
 	{
-		while (apsNodes[i])
+		for (y = 0; y < ARRAY_SIZE(nodeArray); ++y)
 		{
-			FP_NODE* toFree = apsNodes[i];
-			apsNodes[i] = apsNodes[i]->psNext;
-
-			free(toFree);
+			if (nodeArray[x][y])
+			{
+				free(nodeArray[x][y]);
+				nodeArray[x][y] = NULL;
+			}
 		}
 	}
 }
@@ -385,20 +338,20 @@ static 	FP_NODE		*psNearest, *psRoute;
 
 	if (routeMode == ASR_NEWROUTE)
 	{
-		fpathHashReset();
+		fpathTableReset();
 
 		// Add the start point to the open list
 		psCurr = fpathNewNode(tileSX,tileSY, 0, NULL);
 		if (!psCurr)
 		{
-			fpathHashReset();
+			fpathTableReset();
 			return ASR_FAILED;
 		}
 		// estimate the estimated distance/moves
 		psCurr->est = (SWORD)fpathEstimate(psCurr->x, psCurr->y, tileFX, tileFY);
 		psOpen = NULL;
 		fpathOpenAdd(psCurr);
-		fpathHashAdd(apsNodes, psCurr);
+		fpathAddNode(psCurr);
 		psRoute = NULL;
 		psNearest = NULL;
 	}
@@ -455,7 +408,7 @@ static 	FP_NODE		*psNearest, *psRoute;
 
 
 			// See if the node has already been visited
-			psFound = fpathHashPresent(apsNodes, x,y);
+			psFound = fpathGetNode(x, y);
 			if (psFound && psFound->dist <= currDist)
 			{
 				// already visited node by a shorter route
@@ -484,7 +437,7 @@ static 	FP_NODE		*psNearest, *psRoute;
 				{
 					psNew->est = (SWORD)fpathEstimate(x,y, tileFX, tileFY);
 					fpathOpenAdd(psNew);
-					fpathHashAdd(apsNodes, psNew);
+					fpathAddNode(psNew);
 // 					debug( LOG_NEVER, "new              : %3d, %3d (%d,%d) = %d\n", x, y, currDist, psNew->est, currDist + psNew->est );
 				}
 			}
@@ -513,7 +466,7 @@ static 	FP_NODE		*psNearest, *psRoute;
 		}
 
 		// add the current point to the closed nodes
-//		fpathHashAdd(apsClosed, psCurr);
+//		fpathAddNode(psCurr);
 		psCurr->type = NT_CLOSED;
 // 		debug( LOG_NEVER, "HashAdd - closed : %3d,%3d (%d,%d) = %d\n", psCurr->pos.x, psCurr->pos.y, psCurr->dist, psCurr->est, psCurr->dist+psCurr->est );
 	}
@@ -563,6 +516,6 @@ static 	FP_NODE		*psNearest, *psRoute;
 		retval = ASR_FAILED;
 	}
 
-	fpathHashReset();
+	fpathTableReset();
 	return retval;
 }
