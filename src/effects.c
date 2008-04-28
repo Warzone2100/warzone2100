@@ -2550,11 +2550,10 @@ static void effectDroidUpdates(void)
 							( 50 * SIN( DEG( psDroid->direction) ) ) >> FP12_SHIFT,
 							( 50 * COS( DEG( psDroid->direction) ) ) >> FP12_SHIFT
 						};
-						Vector3i pos = {
-							psDroid->pos.x - behind.x,
-							0,
-							psDroid->pos.y - behind.y
-						};
+						Vector3i pos;
+
+						pos.x = MAX(0, psDroid->pos.x - behind.x);
+						pos.z =	MAX(0, psDroid->pos.y - behind.y);
 						pos.y = map_Height(pos.x, pos.z);
 					}
 				}
