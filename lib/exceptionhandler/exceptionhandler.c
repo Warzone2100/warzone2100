@@ -520,14 +520,14 @@ static void posixExceptionHandler(int signum, siginfo_t * siginfo, WZ_DECL_UNUSE
 void setupExceptionHandler(const char * programCommand)
 {
 #if defined(WZ_OS_WIN)
-	dbgDumpInit();
+	dbgDumpInit(programCommand);
 # if defined(WZ_CC_MINGW)
 	ExchndlSetup();
 # else
 	prevExceptionHandler = SetUnhandledExceptionFilter(windowsExceptionHandler);
 # endif // !defined(WZ_CC_MINGW)
 #elif defined(WZ_OS_UNIX) && !defined(WZ_OS_MAC)
-	dbgDumpInit();
+	dbgDumpInit(programCommand);
 	// Prepare 'which' command for popen
 	char whichProgramCommand[PATH_MAX] = {'\0'};
 	snprintf( whichProgramCommand, PATH_MAX, "which %s", programCommand );

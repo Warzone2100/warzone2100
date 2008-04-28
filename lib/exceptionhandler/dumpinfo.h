@@ -36,7 +36,7 @@ typedef int DumpFileHandle;
 
 extern void dbgDumpHeader(DumpFileHandle file);
 
-extern void dbgDumpInit(void);
+extern void dbgDumpInit(const char* programCommand);
 
 #if defined(__cplusplus)
 }

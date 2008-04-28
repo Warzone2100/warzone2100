@@ -40,7 +40,6 @@ extern "C"
 #endif
 
 static char* dbgHeader = NULL;
-static std::string programPath;
 
 static void dumpstr(const DumpFileHandle file, const char * const str)
 {
@@ -60,7 +59,7 @@ void dbgDumpHeader(DumpFileHandle file)
 		dumpstr(file, "No debug header available (yet)!\n" );
 }
 
-static void initProgramPath(const char* programCommand)
+static std::string getProgramPath(const char* programCommand)
 {
 	std::vector<char> buf(PATH_MAX);
 
@@ -81,17 +80,22 @@ static void initProgramPath(const char* programCommand)
 	}
 #endif
 
-	programPath = &buf[0];
+	std::string programPath = &buf[0];
 
 	if (!programPath.empty())
 	{
-		programPath.erase(programPath.find('\n')); // `which' adds a \n which confuses exec()
+		// `which' adds a \n which confuses exec()
+		std::string::size_type eol = programPath.find('\n');
+		if (eol != std::string::npos)
+			programPath.erase(eol); 
 		debug(LOG_WZ, "Found us at %s", programPath.c_str());
 	}
 	else
 	{
 		debug(LOG_WARNING, "Could not retrieve full path to %s, will not create extended backtrace\n", programCommand);
 	}
+
+	return programPath;
 }
 
 static std::string getSysinfo()
@@ -116,12 +120,12 @@ static std::string getSysinfo()
 #endif
 }
 
-static void createHeader(void)
+static void createHeader(const char* programCommand)
 {
 	time_t currentTime = time(NULL);
 	std::ostringstream os;
 
-	os << "Program: "     << programPath << "(" PACKAGE ")" << std::endl
+	os << "Program: "     << getProgramPath(programCommand) << "(" PACKAGE ")" << std::endl
 	   << "Version: "     << version_getFormattedVersionString() << std::endl
 	   << "Distributor: " PACKAGE_DISTRIBUTOR << std::endl
 	   << "Compiled on: " __DATE__ " " __TIME__ << std::endl
@@ -148,7 +152,7 @@ static void createHeader(void)
 	}
 }
 
-void dbgDumpInit()
+void dbgDumpInit(const char* programCommand)
 {
-	createHeader();
+	createHeader(programCommand);
 }
