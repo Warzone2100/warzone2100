@@ -941,7 +941,7 @@ static void addColourChooser(UDWORD player)
 			4,/*9,*/													  //y
 			iV_GetImageWidth(FrontImages,IMAGE_PLAYER0),		  //w
 			iV_GetImageHeight(FrontImages,IMAGE_PLAYER0),		  //h
-			"Player colour", IMAGE_PLAYER0 + i, IMAGE_PLAYER0 + i, false);
+			"Player colour", IMAGE_PLAYER0 + i, IMAGE_PLAYER0_HI + i, IMAGE_PLAYER0_HI + i);
 
 			if( !safeToUseColour(selectedPlayer,i))
 			{
@@ -1201,7 +1201,8 @@ static void addTeamChooser(UDWORD player)
 	for (i = 0; i < MAX_PLAYERS; i++)
 	{
 		addMultiBut(psWScreen, MULTIOP_TEAMCHOOSER_FORM, MULTIOP_TEAMCHOOSER + i, i * (iV_GetImageWidth(FrontImages, IMAGE_TEAM0) + 3) + 3,
-		            6, iV_GetImageWidth(FrontImages, IMAGE_TEAM0), iV_GetImageHeight(FrontImages, IMAGE_TEAM0), _("Team"), IMAGE_TEAM0 + i , IMAGE_TEAM0 + i, 0);
+		            6, iV_GetImageWidth(FrontImages, IMAGE_TEAM0), iV_GetImageHeight(FrontImages, IMAGE_TEAM0), _("Team"), IMAGE_TEAM0 + i , IMAGE_TEAM0_HI + i, 
+		            IMAGE_TEAM0_HI + i);
 	}
 
 	bTeamChooserUp[player] = true;
