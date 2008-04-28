@@ -421,6 +421,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\src\level_parser.tab.c"
+					>
+				</File>
+				<File
 					RelativePath="..\src\levels.c"
 					>
 				</File>
@@ -904,6 +908,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\src\level_parser.tab.h"
+				>
+			</File>
+			<File
+				RelativePath=".\level_parser.tab.h"
+				>
+			</File>
+			<File
 				RelativePath="..\src\levelint.h"
 				>
 			</File>
@@ -1211,6 +1223,10 @@
 			>
 			<File
 				RelativePath="..\src\level_lexer.l"
+				>
+			</File>
+			<File
+				RelativePath="..\src\level_parser.y"
 				>
 			</File>
 			<File
