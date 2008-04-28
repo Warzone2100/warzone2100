@@ -43,7 +43,9 @@ static SDWORD	astarOuter, astarRemove;
  */
 int astarInner = 0;
 
-/** The structure to store a node of the route in the hash table
+/** The structure to store a node of the route in node table
+ *
+ *  @ingroup pathfinding
  */
 typedef struct _fp_node
 {
@@ -59,7 +61,7 @@ typedef struct _fp_node
 #define NT_OPEN		1
 #define NT_CLOSED	2
 
-/** List of open nodes in the hash table
+/** List of open nodes
  */
 static FP_NODE* psOpen;
 
@@ -136,7 +138,7 @@ static void fpathTableReset(void)
 
 	for (x = 0; x < ARRAY_SIZE(nodeArray); ++x)
 	{
-		for (y = 0; y < ARRAY_SIZE(nodeArray); ++y)
+		for (y = 0; y < ARRAY_SIZE(nodeArray[x]); ++y)
 		{
 			if (nodeArray[x][y])
 			{
@@ -486,9 +488,13 @@ static 	FP_NODE		*psNearest, *psRoute;
 	if (psRoute)
 	{
 		// get the route in the correct order
-		//	If as I suspect this is to reverse the list, then it's my suspicion that
-		//	we could route from destination to source as opposed to source to
-		//	destination. We could then save the reversal. to risky to try now...Alex M
+		// If as I suspect this is to reverse the list, then it's my suspicion that
+		// we could route from destination to source as opposed to source to
+		// destination. We could then save the reversal. to risky to try now...Alex M
+		//
+		// The idea is impractical, because you can't guarentee that the target is
+		// reachable. As I see it, this is the reason why psNearest got introduced.
+		// -- Dennis L.
 		psParent = NULL;
 		for(psCurr=psRoute; psCurr; psCurr=psNext)
 		{
