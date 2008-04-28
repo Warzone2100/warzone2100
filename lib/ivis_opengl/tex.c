@@ -163,12 +163,16 @@ static void pie_PrintLoadedTextures(void)
 	}
 }
 
-
-/**************************************************************************
-	Return the texture number for a given texture resource.  We keep
-	textures in a separate data structure _TEX_PAGE apart from the
-	normal resource system.
-**************************************************************************/
+/** Retrieve the texture number for a given texture resource.
+ *
+ *  @NOTE We keep textures in a separate data structure _TEX_PAGE apart from the
+ *        normal resource system.
+ *
+ *  @param filename The filename of the texture page to search for.
+ *
+ *  @return a non-negative index number for the texture, negative if no texture
+ *          with the given filename could be found
+ */
 int iV_GetTexture(const char *filename)
 {
 	unsigned int i = 0;
