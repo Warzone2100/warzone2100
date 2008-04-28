@@ -7206,6 +7206,7 @@ BOOL loadSaveStructureV7(char *pFileData, UDWORD filesize, UDWORD numStructures)
 				psRepair->psDeliveryPoint = NULL;
 				psRepair->psObj = NULL;
 				psRepair->currentPtsAdded = 0;
+				psRepair->droidQueue = 0;
 				break;
 			default:
 				break;

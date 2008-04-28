@@ -2240,6 +2240,7 @@ BOOL setFunctionality(STRUCTURE	*psBuilding, UDWORD functionType)
 
 			psRepairFac->power = pFuncRepair->repairPoints;
 			psRepairFac->psObj = NULL;
+			psRepairFac->droidQueue = 0;
 
 			if (!grpCreate(&((REPAIR_FACILITY*)psBuilding->pFunctionality)->psGroup))
 			{
@@ -3076,13 +3077,12 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 					"aiUpdateStructure: invalid repair facility group pointer" );
 
 				mindist = SDWORD_MAX;
+				psRepairFac->droidQueue = 0;
 				for(psDroid = apsDroidLists[psStructure->player]; psDroid; psDroid = psDroid->psNext)
 				{
 					BASE_OBJECT * const psTarget = orderStateObj(psDroid, DORDER_RTR);
 
-					if (psTarget
-					 && psTarget == (BASE_OBJECT *)psStructure
-					 && psDroid->action == DACTION_WAITFORREPAIR)
+					if (psTarget && psTarget == (BASE_OBJECT *)psStructure && psDroid->action == DACTION_WAITFORREPAIR)
 					{
 						xdiff = (SDWORD)psDroid->pos.x - (SDWORD)psStructure->pos.x;
 						ydiff = (SDWORD)psDroid->pos.y - (SDWORD)psStructure->pos.y;
@@ -3092,18 +3092,48 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 							mindist = currdist;
 							psChosenObj = (BASE_OBJECT *)psDroid;
 						}
+						psRepairFac->droidQueue++;
+					}
+				}
+				psDroid = (DROID *)psChosenObj;
+			}
+
+			/* Steal droid from another repair facility */
+			if (psChosenObj == NULL)
+			{
+				mindist = SDWORD_MAX;
+				psRepairFac->droidQueue = 0;
+				for(psDroid = apsDroidLists[psStructure->player]; psDroid; psDroid = psDroid->psNext)
+				{
+					BASE_OBJECT *const psTarget = orderStateObj(psDroid, DORDER_RTR);
+
+					if (psTarget != (BASE_OBJECT *)psStructure && psDroid->action == DACTION_WAITFORREPAIR)
+					{
+						REPAIR_FACILITY *stealFrom = &((STRUCTURE *)psTarget)->pFunctionality->repairFacility;
+						// make a wild guess about what is a good distance
+						int distLimit = world_coord(stealFrom->droidQueue) * world_coord(stealFrom->droidQueue) * 10;
+
+						xdiff = (SDWORD)psDroid->pos.x - (SDWORD)psStructure->pos.x;
+						ydiff = (SDWORD)psDroid->pos.y - (SDWORD)psStructure->pos.y;
+						currdist = xdiff * xdiff + ydiff * ydiff;
+						if (currdist < mindist && currdist < distLimit)
+						{
+							mindist = currdist;
+							psChosenObj = (BASE_OBJECT *)psDroid;
+							psRepairFac->droidQueue++;	// shared queue
+						}
 					}
 				}
 				psDroid = (DROID *)psChosenObj;
 			}
 
 			// send the droid to be repaired
-			if ( psDroid != NULL &&
-				psDroid->action == DACTION_WAITFORREPAIR )
+			if (psDroid && psDroid->action == DACTION_WAITFORREPAIR)
 			{
 				/* set chosen object */
 				psChosenObj = (BASE_OBJECT *)psDroid;
 				psRepairFac->psObj = (BASE_OBJECT *)psDroid;
+				psDroid->psTarget = (BASE_OBJECT *)psStructure;
 
 				/* move droid to repair point at rear of facility */
 				actionDroidObjLoc( psDroid, DACTION_MOVETOREPAIRPOINT,
@@ -5920,6 +5950,19 @@ void printStructureInfo(STRUCTURE *psStructure)
 
 			CONPRINTF(ConsoleString, (ConsoleString, ngettext("%s - %u Unit assigned", "%s - %u Units assigned", assigned_droids),
 				getStatName(psStructure->pStructureType), assigned_droids));
+		}
+		break;
+	case REF_REPAIR_FACILITY:
+#ifdef DEBUG
+		if (getDebugMappingStatus())
+		{
+			CONPRINTF(ConsoleString,(ConsoleString, "%s - Unique ID %d - Queue %d",
+			          getStatName(psStructure->pStructureType), psStructure->id, psStructure->pFunctionality->repairFacility.droidQueue));
+		}
+		else
+#endif
+		{
+			CONPRINTF(ConsoleString, (ConsoleString, getStatName(psStructure->pStructureType)));
 		}
 		break;
 	case REF_RESOURCE_EXTRACTOR:

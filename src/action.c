@@ -2179,9 +2179,6 @@ void actionUpdateDroid(DROID *psDroid)
 			psDroid->sMove.psFormation = NULL;
 		}
 		/* moving from front to rear of repair facility or rearm pad */
-/*		xdiff = (SDWORD)psDroid->pos.x - ((SDWORD)psDroid->psActionTarget->pos.x + TILE_UNITS);
-		ydiff = (SDWORD)psDroid->pos.y - (SDWORD)psDroid->psActionTarget->pos.y;
-		if (xdiff*xdiff + ydiff*ydiff < (TILE_UNITS/2)*(TILE_UNITS/2))*/
 		if (actionReachedBuildPos(psDroid, psDroid->psActionTarget[0]->pos.x,psDroid->psActionTarget[0]->pos.y,
 							(BASE_STATS *)((STRUCTURE *)psDroid->psActionTarget[0])->pStructureType))
 		{
@@ -2802,8 +2799,8 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 		break;
 	case DACTION_WAITFORREPAIR:
 		psDroid->action = DACTION_WAITFORREPAIR;
-        //set the time so we can tell whether the start the self repair or not
-        psDroid->actionStarted = gameTime;
+		// set the time so we can tell whether the start the self repair or not
+		psDroid->actionStarted = gameTime;
 		break;
 	case DACTION_MOVETOREPAIRPOINT:
 		psDroid->action = psAction->action;

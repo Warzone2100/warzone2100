@@ -251,6 +251,7 @@ typedef struct REPAIR_FACILITY
 	// The group the droids to be repaired by this facility belong to
 	struct _droid_group		*psGroup;
 	struct _droid			*psGrpNext;
+	int				droidQueue;		///< Last count of droid queue for this facility
 } REPAIR_FACILITY;
 
 typedef struct _rearm_pad
