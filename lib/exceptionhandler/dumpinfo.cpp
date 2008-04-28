@@ -84,7 +84,10 @@ static std::string getProgramPath(const char* programCommand)
 
 	if (!programPath.empty())
 	{
-		programPath.erase(programPath.find('\n')); // `which' adds a \n which confuses exec()
+		// `which' adds a \n which confuses exec()
+		std::string::size_type eol = programPath.find('\n');
+		if (eol != std::string::npos)
+			programPath.erase(eol); 
 		debug(LOG_WZ, "Found us at %s", programPath.c_str());
 	}
 	else
