@@ -519,7 +519,7 @@ static void posixExceptionHandler(int signum, siginfo_t * siginfo, WZ_DECL_UNUSE
  */
 void setupExceptionHandler(const char * programCommand)
 {
-	dbgDumpInit();
+	dbgDumpInit(programCommand);
 #if defined(WZ_OS_WIN)
 # if defined(WZ_CC_MINGW)
 	ExchndlSetup();
