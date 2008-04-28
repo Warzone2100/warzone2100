@@ -43,6 +43,12 @@ static SDWORD	astarOuter, astarRemove;
  */
 int astarInner = 0;
 
+/** Counter to implement lazy deletion from nodeArray.
+ *
+ *  @see fpathTableReset
+ */
+static int resetIterationCount = 0;
+
 /** The structure to store a node of the route in node table
  *
  *  @ingroup pathfinding
@@ -55,6 +61,7 @@ typedef struct _fp_node
 	struct _fp_node *psOpen;
 	struct _fp_node	*psRoute;	// Previous point in the route
 	struct _fp_node *psNext;
+	int iteration;
 } FP_NODE;
 
 // types of node
@@ -115,6 +122,11 @@ static void fpathAddNode(FP_NODE* psNode)
 	}
 
 	nodeArray[x][y] = psNode;
+
+	// Assign this node to the current iteration (this node will only remain
+	// valid for as long as it's `iteration` member has the same value as
+	// resetIterationCount.
+	psNode->iteration = resetIterationCount;
 }
 
 /** See if a node is in the table
@@ -125,17 +137,45 @@ static void fpathAddNode(FP_NODE* psNode)
  */
 static FP_NODE* fpathGetNode(int x, int y)
 {
+	FP_NODE * psFound;
+
 	ASSERT(x < ARRAY_SIZE(nodeArray) && y < ARRAY_SIZE(nodeArray[x]), "X (%d) or Y %d) coordinate for path finding node is out of range!", x, y);
 
-	return nodeArray[x][y];
+	psFound = nodeArray[x][y];
+	if (psFound
+	 && psFound->iteration == resetIterationCount)
+	{
+		return psFound;
+	}
+
+	return NULL;
 }
 
 /** Reset the node table
+ *  
+ *  @NOTE The actual implementation does a lazy reset, because resetting the
+ *        entire node table is expensive.
  */
 static void fpathTableReset(void)
 {
 	int x, y;
 
+	// Reset node table, simulate this by incrementing the iteration
+	// counter, which will invalidate all nodes currently in the table. See
+	// the implementation of fpathGetNode().
+	++resetIterationCount;
+
+	// Check to prevent overflows of resetIterationCount
+	if (resetIterationCount < INT_MAX - 1)
+	{
+		ASSERT(resetIterationCount > 0, "Integer overflow occurred!");
+
+		return;
+	}
+
+	// If we're about to overflow resetIterationCount, reset the entire
+	// table for real (not lazy for once in a while) and start counting
+	// at zero (0) again.
 	for (x = 0; x < ARRAY_SIZE(nodeArray); ++x)
 	{
 		for (y = 0; y < ARRAY_SIZE(nodeArray[x]); ++y)
@@ -147,6 +187,8 @@ static void fpathTableReset(void)
 			}
 		}
 	}
+
+	resetIterationCount = 0;
 }
 
 /** Compare two nodes
