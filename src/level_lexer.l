@@ -28,13 +28,13 @@
 #include "levels.h"
 #include "levelint.h"
 
+// Get the parser's definitions
+#include "level_parser.tab.h"
+
 /* Maximum length for any TEXT value */
 #ifndef YYLMAX
 #define YYLMAX	255
 #endif
-
-/* Store for any string values */
-static char aText[YYLMAX];
 
 // Note if we are in a comment
 static BOOL inComment = false;
@@ -66,27 +66,26 @@ static const char *pEndBuffer = NULL;
 %%
 
 	/* Keywords */
-level                                           return LTK_LEVEL;
-players                                         return LTK_PLAYERS;
-type                                            return LTK_TYPE;
-data                                            return LTK_DATA;
-game                                            return LTK_GAME;
-campaign                                        return LTK_CAMPAIGN;
-camstart                                        return LTK_CAMSTART;
-camchange                                       return LTK_CAMCHANGE;
-dataset                                         return LTK_DATASET;
-expand                                          return LTK_EXPAND;
-expand_limbo                                    return LTK_EXPAND_LIMBO;
-between                                         return LTK_BETWEEN;
-miss_keep                                       return LTK_MKEEP;
-miss_keep_limbo                                 return LTK_MKEEP_LIMBO;
-miss_clear                                      return LTK_MCLEAR;
+level                                           return LEVEL;
+players                                         return PLAYERS;
+type                                            return TYPE;
+data                                            return DATA;
+game                                            return GAME;
+campaign                                        return CAMPAIGN;
+camstart                                        return CAMSTART;
+camchange                                       return CAMCHANGE;
+dataset                                         return DATASET;
+expand                                          return EXPAND;
+expand_limbo                                    return EXPAND_LIMBO;
+between                                         return BETWEEN;
+miss_keep                                       return MISS_KEEP;
+miss_keep_limbo                                 return MISS_KEEP_LIMBO;
+miss_clear                                      return MISS_CLEAR;
 
 	/* Match text values */
 [a-zA-Z][-0-9_a-zA-Z]*		{
-								strlcpy(aText, yytext, sizeof(aText));
-								pLevToken = aText;
-								return LTK_IDENT;
+								lev_lval.sval = strdup(yytext);
+								return IDENTIFIER;
 							}
 
 	/* Match quoted text */
@@ -94,13 +93,12 @@ miss_clear                                      return LTK_MCLEAR;
 <QUOTE>\"					{ BEGIN 0; }
 <QUOTE>\n					{ lev_error("Unexpected end of line in string"); }
 <QUOTE>[^\"]*				{
-								strlcpy(aText, yytext, sizeof(aText));
-								pLevToken = aText;
-								return LTK_STRING;
+								lev_lval.sval = strdup(yytext);
+								return QTEXT;
 							}
 
 	/* Match integer numbers */
--?[0-9]+					{ levVal = atol(yytext); return LTK_INTEGER; }
+-?[0-9]+					{ lev_lval.ival = atol(yytext); return INTEGER; }
 
 	/* Skip white space */
 [ \t\n\x0d\x0a]						;

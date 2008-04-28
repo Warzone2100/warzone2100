@@ -38,6 +38,7 @@ SRC=ai.c \
 	intelmap.c \
 	keybind.c \
 	keymap.c \
+	level_parser.tab.c \
 	level_lexer.lex.c \
 	levels.c \
 	lighting.c \
