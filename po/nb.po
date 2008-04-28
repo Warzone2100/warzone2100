@@ -285,7 +285,7 @@ msgstr ""
 
 #: data/messages/strings/cam1strings.txt:105
 msgid "New objective."
-msgstr ""
+msgstr "Nytt mål."
 
 #: data/messages/strings/cam1strings.txt:106
 msgid "We have detected and isolated an intruder program."
@@ -5678,7 +5678,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:277
 #: data/mp/messages/strings/resstrings.txt:283
 msgid "Defenses Improved"
-msgstr ""
+msgstr "Forsvarsverk forsterket"
 
 #: data/messages/strings/resstrings.txt:212
 #: data/mp/messages/strings/resstrings.txt:266
@@ -5856,7 +5856,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:2034
 #: data/mp/messages/strings/resstrings.txt:2082
 msgid "New Defensive Structure Available"
-msgstr ""
+msgstr "Nytt forsvarsverk tilgjengelig"
 
 #: data/messages/strings/resstrings.txt:236
 #: data/mp/messages/strings/resstrings.txt:290
@@ -10413,11 +10413,11 @@ msgstr ""
 
 #: src/clparse.c:105
 msgid "Enable shadows"
-msgstr ""
+msgstr "Slå på skygger"
 
 #: src/clparse.c:106
 msgid "Disable shadows"
-msgstr ""
+msgstr "Slå av skygger"
 
 #: src/clparse.c:107
 msgid "Enable sound"
@@ -10491,7 +10491,7 @@ msgstr ""
 #: src/design.c:1983
 #: src/design.c:2019
 msgid "Weight"
-msgstr ""
+msgstr "Vekt"
 
 #: src/design.c:811
 #: src/design.c:831
@@ -10514,11 +10514,11 @@ msgstr ""
 
 #: src/design.c:1573
 msgid "Sensor Range"
-msgstr ""
+msgstr "Sensorradius"
 
 #: src/design.c:1582
 msgid "Sensor Power"
-msgstr ""
+msgstr "Sensorkraft"
 
 #: src/design.c:1623
 msgid "ECM Power"
@@ -10534,7 +10534,7 @@ msgstr ""
 #: src/design.c:1736
 #: src/design.c:1768
 msgid "Range"
-msgstr ""
+msgstr "Rekkevidde"
 
 #: src/design.c:1744
 #: src/design.c:1777
@@ -11964,11 +11964,11 @@ msgstr ""
 
 #: src/multiint.c:831
 msgid "Map Preview"
-msgstr ""
+msgstr "Forhåndsvisning av kart"
 
 #: src/multiint.c:833
 msgid "Click to see Map"
-msgstr ""
+msgstr "Trykk for å se kartet"
 
 #: src/multiint.c:847
 msgid "Start Hosting Game"
@@ -11993,11 +11993,11 @@ msgstr ""
 #: src/multiint.c:1987
 #, c-format
 msgid "The host has kicked %s from the game!"
-msgstr ""
+msgstr "Verten har sparket %s fra spillet!"
 
 #: src/multiint.c:2078
 msgid "Host is Starting Game"
-msgstr ""
+msgstr "Verten starter spillet"
 
 #: src/multiint.c:2525
 msgid "Players"
@@ -12011,12 +12011,12 @@ msgstr ""
 #: src/multijoin.c:220
 #, c-format
 msgid "%s has Left the Game"
-msgstr ""
+msgstr "%s har forlatt spillet"
 
 #: src/multijoin.c:326
 #, c-format
 msgid "%s is Joining the Game"
-msgstr ""
+msgstr "%s hopper inn på spillet"
 
 #: src/multimenu.c:559
 msgid "Technology level 1"
@@ -12246,11 +12246,11 @@ msgstr ""
 
 #: src/scriptfuncs.c:3211
 msgid "YOU ARE VICTORIOUS!"
-msgstr ""
+msgstr "DU HAR VUNNET!"
 
 #: src/scriptfuncs.c:3215
 msgid "YOU WERE DEFEATED!"
-msgstr ""
+msgstr "DU HAR TAPT!"
 
 #: src/scriptfuncs.c:10151
 #, c-format
@@ -12301,7 +12301,7 @@ msgstr[1] ""
 #: src/structure.c:5958
 #, c-format
 msgid "%s - Connected %u of %u"
-msgstr ""
+msgstr "%s - Forbundet med %u av %u mulige"
 
 #: src/structure.c:5972
 #, c-format
@@ -12345,11 +12345,11 @@ msgstr ""
 #: src/transporter.c:424
 #: src/transporter.c:478
 msgid "Launch Transport"
-msgstr ""
+msgstr "Send transport"
 
 #: src/transporter.c:1860
 msgid "Reinforcements landing"
-msgstr ""
+msgstr "Forsterkninger lander"
 
 #: src/version.c:137
 msgid " (modified and switched locally)"
@@ -12365,19 +12365,19 @@ msgstr ""
 
 #: src/version.c:148
 msgid " - DEBUG"
-msgstr ""
+msgstr " - DEBUG"
 
 #: src/version.c:157
 #, c-format
 msgid " - Built %s"
-msgstr ""
+msgstr " - bygd %s"
 
 #. TRANSLATORS: This string looks as follows when expanded.
 #. "Version <version name/number> <working copy state><BUILD DATE><BUILD TYPE>"
 #: src/version.c:167
 #, c-format
 msgid "Version %s%s%s%s"
-msgstr ""
+msgstr "Versjon %s%s%s%s"
 
 #~ msgid "CONTROL"
 #~ msgstr "KONTROLL"
