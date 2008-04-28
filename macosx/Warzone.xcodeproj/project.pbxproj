@@ -260,7 +260,6 @@
 		0246A2B30BD3CCDC004D1C70 /* function.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A1EF0BD3CCDB004D1C70 /* function.c */; };
 		0246A2B40BD3CCDC004D1C70 /* game.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A1F20BD3CCDB004D1C70 /* game.c */; };
 		0246A2B50BD3CCDC004D1C70 /* gateway.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A1F40BD3CCDB004D1C70 /* gateway.c */; };
-		0246A2B60BD3CCDC004D1C70 /* gatewayroute.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A1F70BD3CCDB004D1C70 /* gatewayroute.c */; };
 		0246A2B80BD3CCDC004D1C70 /* geometry.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A1FA0BD3CCDB004D1C70 /* geometry.c */; };
 		0246A2B90BD3CCDC004D1C70 /* group.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A1FC0BD3CCDB004D1C70 /* group.c */; };
 		0246A2BA0BD3CCDC004D1C70 /* hci.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A1FE0BD3CCDB004D1C70 /* hci.c */; };
@@ -647,6 +646,8 @@
 		02DDA8D10BD3C3600049AB60 /* unix.c in Sources */ = {isa = PBXBuildFile; fileRef = 02DDA8CF0BD3C3600049AB60 /* unix.c */; };
 		02DDA8D40BD3C3820049AB60 /* Zlib.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02356D830BD3BB4100E9A019 /* Zlib.framework */; };
 		02DDA8E10BD3C3CC0049AB60 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02DDA8E00BD3C3CC0049AB60 /* IOKit.framework */; };
+		02DE76060DC3B84900D48F58 /* GLee.c in Sources */ = {isa = PBXBuildFile; fileRef = 02DE76040DC3B84800D48F58 /* GLee.c */; };
+		02DE76070DC3B84900D48F58 /* GLee.h in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 02DE76050DC3B84800D48F58 /* GLee.h */; };
 		02F5CC570D1490620000A2D0 /* database.c in Sources */ = {isa = PBXBuildFile; fileRef = 02F5CC560D1490620000A2D0 /* database.c */; };
 		02F5CC890D1496580000A2D0 /* findme.c in Sources */ = {isa = PBXBuildFile; fileRef = 02F5CC800D1496580000A2D0 /* findme.c */; };
 		02F5CC8A0D1496580000A2D0 /* findme.h in Headers */ = {isa = PBXBuildFile; fileRef = 02F5CC810D1496580000A2D0 /* findme.h */; };
@@ -842,6 +843,7 @@
 				02AAD14A0D9ED2DB00248B0F /* stats-db.h in Copy frameworks */,
 				02AAD1610D9ED4B200248B0F /* physfs_vfs.h in Copy frameworks */,
 				02BBB20A0DA874F6002D438B /* exceptionhandler.h in Copy frameworks */,
+				02DE76070DC3B84900D48F58 /* GLee.h in Copy frameworks */,
 			);
 			name = "Copy frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1230,8 +1232,6 @@
 		0246A1F40BD3CCDB004D1C70 /* gateway.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = gateway.c; path = ../src/gateway.c; sourceTree = SOURCE_ROOT; };
 		0246A1F50BD3CCDB004D1C70 /* gateway.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = gateway.h; path = ../src/gateway.h; sourceTree = SOURCE_ROOT; };
 		0246A1F60BD3CCDB004D1C70 /* gatewaydef.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = gatewaydef.h; path = ../src/gatewaydef.h; sourceTree = SOURCE_ROOT; };
-		0246A1F70BD3CCDB004D1C70 /* gatewayroute.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = gatewayroute.c; path = ../src/gatewayroute.c; sourceTree = SOURCE_ROOT; };
-		0246A1F80BD3CCDB004D1C70 /* gatewayroute.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = gatewayroute.h; path = ../src/gatewayroute.h; sourceTree = SOURCE_ROOT; };
 		0246A1FA0BD3CCDB004D1C70 /* geometry.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = geometry.c; path = ../src/geometry.c; sourceTree = SOURCE_ROOT; };
 		0246A1FB0BD3CCDB004D1C70 /* geometry.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = geometry.h; path = ../src/geometry.h; sourceTree = SOURCE_ROOT; };
 		0246A1FC0BD3CCDB004D1C70 /* group.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = group.c; path = ../src/group.c; sourceTree = SOURCE_ROOT; };
@@ -1667,6 +1667,8 @@
 		02DDA8CE0BD3C3600049AB60 /* posix.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = posix.c; path = external/physfs/platform/posix.c; sourceTree = "<group>"; };
 		02DDA8CF0BD3C3600049AB60 /* unix.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = unix.c; path = external/physfs/platform/unix.c; sourceTree = "<group>"; };
 		02DDA8E00BD3C3CC0049AB60 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = /Developer/SDKs/MacOSX10.4u.sdk/System/Library/Frameworks/IOKit.framework; sourceTree = "<absolute>"; };
+		02DE76040DC3B84800D48F58 /* GLee.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = GLee.c; path = ../lib/ivis_opengl/GLee.c; sourceTree = SOURCE_ROOT; };
+		02DE76050DC3B84800D48F58 /* GLee.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = GLee.h; path = ../lib/ivis_opengl/GLee.h; sourceTree = SOURCE_ROOT; };
 		02EA22450CFE494000EA65A0 /* libfontconfig.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; name = libfontconfig.dylib; path = /Developer/SDKs/MacOSX10.4u.sdk/usr/X11R6/lib/libfontconfig.dylib; sourceTree = "<absolute>"; };
 		02F5CC560D1490620000A2D0 /* database.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = database.c; path = external/quesoglc/src/database.c; sourceTree = "<group>"; };
 		02F5CC6D0D1494AA0000A2D0 /* Popt.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Popt.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -2112,6 +2114,8 @@
 		0246A1090BD3CC2D004D1C70 /* Ivis OpenGL */ = {
 			isa = PBXGroup;
 			children = (
+				02DE76040DC3B84800D48F58 /* GLee.c */,
+				02DE76050DC3B84800D48F58 /* GLee.h */,
 				0246A10B0BD3CC43004D1C70 /* ivi.c */,
 				0246A10C0BD3CC43004D1C70 /* pieblitfunc.c */,
 				0246A10D0BD3CC43004D1C70 /* piedraw.c */,
@@ -2319,8 +2323,6 @@
 				0246A1F40BD3CCDB004D1C70 /* gateway.c */,
 				0246A1F50BD3CCDB004D1C70 /* gateway.h */,
 				0246A1F60BD3CCDB004D1C70 /* gatewaydef.h */,
-				0246A1F70BD3CCDB004D1C70 /* gatewayroute.c */,
-				0246A1F80BD3CCDB004D1C70 /* gatewayroute.h */,
 				0246A1FA0BD3CCDB004D1C70 /* geometry.c */,
 				0246A1FB0BD3CCDB004D1C70 /* geometry.h */,
 				0246A1FC0BD3CCDB004D1C70 /* group.c */,
@@ -3898,7 +3900,6 @@
 				0246A2B30BD3CCDC004D1C70 /* function.c in Sources */,
 				0246A2B40BD3CCDC004D1C70 /* game.c in Sources */,
 				0246A2B50BD3CCDC004D1C70 /* gateway.c in Sources */,
-				0246A2B60BD3CCDC004D1C70 /* gatewayroute.c in Sources */,
 				0246A2B80BD3CCDC004D1C70 /* geometry.c in Sources */,
 				0246A2B90BD3CCDC004D1C70 /* group.c in Sources */,
 				0246A2BA0BD3CCDC004D1C70 /* hci.c in Sources */,
@@ -3983,6 +3984,7 @@
 				02B2132D0DA8755F0059E864 /* cursors.c in Sources */,
 				02B2132E0DA8755F0059E864 /* cursors16.c in Sources */,
 				02B2132F0DA8755F0059E864 /* cursors32.c in Sources */,
+				02DE76060DC3B84900D48F58 /* GLee.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
