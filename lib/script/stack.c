@@ -33,8 +33,6 @@
 #include "codeprint.h"
 #include "script.h"
 
-#include "script_parser.tab.h"
-
 /* number of values in each stack chunk */
 #define INIT_SIZE		30	//15
 #define EXT_SIZE		10	//2
