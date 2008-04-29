@@ -958,9 +958,9 @@
      y="0"
      x="0"
      height="256"
+     xlink:href="frontend2.png"
      width="256"
-     id="image2293"
-     style="fill:url(#linearGradient20867);fill-opacity:1;fill-rule:evenodd;stroke:url(#linearGradient8175);stroke-opacity:1;display:none" />
+     id="image2293" />
   <g
      id="g2304"
      inkscape:groupmode="layer"
