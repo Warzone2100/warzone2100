@@ -35,6 +35,7 @@
 				Name="BisonParser"
 				ExecutionBucket="2"
 				Defines="true"
+				NoGenLineDirectives="true"
 				OutputFile="$(SolutionDir)..\src\$(InputName).tab.c"
 			/>
 			<Tool
