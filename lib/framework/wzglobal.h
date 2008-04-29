@@ -180,6 +180,11 @@
 
 #if defined(_MSC_VER)
 #  define WZ_CC_MSVC
+/* All ISO C89 compliant compilers _should_ define the macro __STDC__, MSVC
+ * however is known _not_ to do this, so work around that here. */
+#  if !defined(__STDC__)
+#    define __STDC__
+#  endif
 /* Visual C++.Net issues for _MSC_VER >= 1300 */
 #  if _MSC_VER >= 1300
 #    define WZ_CC_MSVC_NET
