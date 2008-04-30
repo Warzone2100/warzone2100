@@ -3036,7 +3036,7 @@ DROID* buildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player,
 		{
 			updateDroidOrientation(psDroid);
 		}
-		visTilesUpdate((BASE_OBJECT *)psDroid);
+		visTilesUpdate((BASE_OBJECT *)psDroid, rayTerrainCallback);
 		gridAddObject((BASE_OBJECT *)psDroid);
  		clustNewDroid(psDroid);
 	}
@@ -4854,7 +4854,7 @@ DROID * giftSingleDroid(DROID *psD, UDWORD to)
 		clustNewDroid(psD);
 
 		// Update visibility
-		visTilesUpdate((BASE_OBJECT*)psD);
+		visTilesUpdate((BASE_OBJECT*)psD, rayTerrainCallback);
 
 		// add back into the grid system
 		gridAddObject((BASE_OBJECT *)psD);
@@ -5209,5 +5209,5 @@ void droidSetPosition(DROID *psDroid, int x, int y)
 	psDroid->pos.y = y;
 	psDroid->pos.z = map_Height(psDroid->pos.x, psDroid->pos.y);
 	initDroidMovement(psDroid);
-	visTilesUpdate((BASE_OBJECT *)psDroid);
+	visTilesUpdate((BASE_OBJECT *)psDroid, rayTerrainCallback);
 }

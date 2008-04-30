@@ -22,14 +22,21 @@
 #define __INCLUDED_SRC_VISIBILITY__
 
 #include "objectdef.h"
+#include "raycast.h"
 
 // initialise the visibility stuff
 extern BOOL visInitialise(void);
 
 extern BOOL visTilesPending(BASE_OBJECT *psObj);
 
+/* The terrain revealing ray callback */
+extern BOOL rayTerrainCallback(SDWORD x, SDWORD y, SDWORD dist);
+
+/* Ray callback for scripts */
+extern bool scrRayTerrainCallback(SDWORD x, SDWORD y, SDWORD dist);
+
 /* Check which tiles can be seen by an object */
-extern void visTilesUpdate(BASE_OBJECT *psObj);
+extern void visTilesUpdate(BASE_OBJECT *psObj, RAY_CALLBACK callback);
 
 /* Check whether psViewer can see psTarget
  * psViewer should be an object that has some form of sensor,
@@ -60,6 +67,9 @@ extern	void	setUnderTilesVis(BASE_OBJECT *psObj, UDWORD player);
 // sensor range display
 extern BOOL	bDisplaySensorRange;
 extern void updateSensorDisplay(void);
+
+extern bool scrTileIsVisible(SDWORD player, SDWORD x, SDWORD y);
+extern void scrResetPlayerTileVisibility(SDWORD player);
 
 // fast test for whether obj2 is in range of obj1
 static inline BOOL visObjInRange(BASE_OBJECT *psObj1, BASE_OBJECT *psObj2, SDWORD range)

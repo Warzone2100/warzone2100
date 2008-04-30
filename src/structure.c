@@ -1857,7 +1857,7 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 		psBuilding->visible[player] = UBYTE_MAX;
 
 		// Reveal any tiles that can be seen by the structure
-		visTilesUpdate((BASE_OBJECT *)psBuilding);
+		visTilesUpdate((BASE_OBJECT *)psBuilding, rayTerrainCallback);
 
 		/*if we're coming from a SAVEGAME and we're on an Expand_Limbo mission,
 		any factories that were built previously for the selectedPlayer will

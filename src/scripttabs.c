@@ -1301,6 +1301,9 @@ FUNC_SYMBOL asFuncTable[] =
 		5, { VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT },
 		0, 0, NULL, 0, 0, NULL, NULL },
 
+	{ "droidInRangeVis",		scrDroidInRangeVis,			VAL_BOOL,
+		5, { VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
 	{ "giftRadar",				scrGiftRadar,				VAL_VOID,
 		3, { VAL_INT, VAL_INT, VAL_BOOL },
@@ -1417,6 +1420,14 @@ FUNC_SYMBOL asFuncTable[] =
 
 	{ "getDroidRank",			scrGetDroidLevel,			VAL_INT,
 		1, { (INTERP_TYPE)ST_DROID },
+		0, 0, NULL, 0, 0, NULL, NULL },
+
+	{ "updatePlayerTileVis",	scrUpdateVisibleTiles,		VAL_VOID,
+		1, { VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
+
+	{ "checkVisibleTile",		scrCheckVisibleTile,		VAL_BOOL,
+		3, { VAL_INT, VAL_INT, VAL_INT },
 		0, 0, NULL, 0, 0, NULL, NULL },
 
 	/* END new functions */

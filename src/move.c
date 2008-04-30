@@ -3409,7 +3409,7 @@ void moveUpdateDroid(DROID *psDroid)
 	if (map_coord(oldx) != map_coord(psDroid->pos.x)
 	 || map_coord(oldy) != map_coord(psDroid->pos.y))
 	{
-		visTilesUpdate((BASE_OBJECT *)psDroid);
+		visTilesUpdate((BASE_OBJECT *)psDroid, rayTerrainCallback);
 		gridMoveDroid(psDroid, (SDWORD)oldx,(SDWORD)oldy);
 
 		// object moved from one tile to next, check to see if droid is near stuff.(oil)

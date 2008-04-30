@@ -90,6 +90,7 @@
 #include "multimenu.h"
 #include "lib/script/chat_processing.h"
 #include "keymap.h"
+#include "visibility.h"
 
 static INTERP_VAL	scrFunctionResult;	//function return value to be pushed to stack
 
@@ -99,8 +100,9 @@ static INTERP_VAL	scrFunctionResult;	//function return value to be pushed to sta
 static SDWORD	bitMask[] = {0x01,0x02,0x04,0x08,0x10,0x20,0x40,0x80};
 static char		strParam1[MAXSTRLEN], strParam2[MAXSTRLEN];		//these should be used as string parameters for stackPopParams()
 
-// -----------------------------------------------------------------------------------------
-static BOOL	structHasModule(STRUCTURE *psStruct);
+
+
+static void updateVisibleTiles(SDWORD player);
 
 /******************************************************************************************/
 /*                 Check for objects in areas                                             */
@@ -10441,6 +10443,35 @@ BOOL scrStructInRangeVis(void)
 	return true;
 }
 
+// Check for a droid being within a certain range of a position (must be visible)
+BOOL scrDroidInRangeVis(void)
+{
+	SDWORD		range, player,lookingPlayer, x,y;
+	BOOL		found;
+
+	if (!stackPopParams(5, VAL_INT, &lookingPlayer, VAL_INT, &player , VAL_INT, &x, VAL_INT, &y, VAL_INT, &range))
+	{
+		debug(LOG_ERROR, "scrDroidInRangeVis: failed to pop");
+		return false;
+	}
+
+	if (player < 0 || player >= MAX_PLAYERS)
+	{
+		ASSERT(false, "scrDroidInRangeVis: invalid player number");
+		return false;
+	}
+
+	found = objectInRangeVis((BASE_OBJECT *)apsDroidLists[player], x,y, range, lookingPlayer);
+
+	scrFunctionResult.v.bval = found;
+	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
+	{
+		return false;
+	}
+
+	return true;
+}
+
 // check for a base object being in range of a point
 BOOL objectInRangeVis(BASE_OBJECT *psList, SDWORD x, SDWORD y, SDWORD range, SDWORD lookingPlayer)
 {
@@ -11342,6 +11373,64 @@ BOOL scrGetDroidLevel(void)
 	if (!stackPushResult(VAL_INT, &scrFunctionResult))
 	{
 		debug(LOG_ERROR, "scrGetDroidLevel(): failed to push result");
+		return false;
+	}
+
+	return true;
+}
+
+/*
+ * Updates tile visibility for all map tiles for a given player,
+ * to be used with scrCheckVisibleTile()
+ */
+BOOL scrUpdateVisibleTiles(void)
+{
+	DROID		*psDroid;
+	STRUCTURE	*psStruct;
+	SDWORD		player;
+
+	if (!stackPopParams(1, VAL_INT, &player))
+	{
+		return false;
+	}
+
+	scrResetPlayerTileVisibility(player);
+
+	for(psDroid = apsDroidLists[player];psDroid;psDroid=psDroid->psNext)
+	{
+		visTilesUpdate((BASE_OBJECT*)psDroid, scrRayTerrainCallback);
+	}
+
+	for(psStruct = apsStructLists[player];psStruct;psStruct=psStruct->psNext)
+	{
+		if (psStruct->pStructureType->type != REF_WALL
+ 		    && psStruct->pStructureType->type != REF_WALLCORNER)
+		{
+			visTilesUpdate((BASE_OBJECT*)psStruct, scrRayTerrainCallback);
+		}
+	}
+
+	return true;
+}
+
+/*
+ * Check is a given tile is visible for by a given player.
+ * Should be used after a call to scrUpdateVisibleTiles().
+ */
+BOOL scrCheckVisibleTile(void)
+{
+	int			x,y;
+	SDWORD		player;
+
+	if (!stackPopParams(3, VAL_INT, &player, VAL_INT, &x, VAL_INT, &y))
+	{
+		return false;
+	}
+
+	scrFunctionResult.v.bval = scrTileIsVisible(player, x, y);
+	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
+	{
+		debug(LOG_ERROR, "scrCheckVisibleTile(): failed to push result");
 		return false;
 	}
 

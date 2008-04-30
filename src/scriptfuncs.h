@@ -602,12 +602,12 @@ extern BOOL scrRecallPlayerBaseLoc(void);
 extern BOOL scrRecallPlayerVisibility(void);
 extern BOOL scrCanRememberPlayerBaseLoc(void);
 extern BOOL scrStructInRangeVis(void);
+extern BOOL scrDroidInRangeVis(void);
 extern BOOL scrRecallBaseDefendLoc(void);
 extern BOOL scrRecallOilDefendLoc(void);
 extern BOOL scrGetBaseDefendLocCount(void);
 extern BOOL scrGetOilDefendLocCount(void);
 
-extern BOOL scrStructInRangeVis(void);
 extern BOOL scrGiftRadar(void);
 extern BOOL scrNumAllies(void);
 extern BOOL scrNumAAinRange(void);
@@ -643,6 +643,8 @@ extern BOOL scrDebugModeEnabled(void);
 extern BOOL scrCalcDroidPower(void);
 extern BOOL scrGetDroidLevel(void);
 extern BOOL scrMoveDroidStopped(void);
+extern BOOL scrUpdateVisibleTiles(void);
+extern BOOL scrCheckVisibleTile(void);
 
 
 extern BOOL beingResearchedByAlly(SDWORD resIndex, SDWORD player);
@@ -653,7 +655,7 @@ extern UDWORD numPlayerWeapStructsInRange(SDWORD player, SDWORD lookingPlayer, S
 extern UDWORD playerWeapDroidsCostInRange(SDWORD player, SDWORD lookingPlayer, SDWORD range, SDWORD rangeX, SDWORD rangeY, BOOL bVTOLs);
 extern UDWORD playerWeapStructsCostInRange(SDWORD player, SDWORD lookingPlayer, SDWORD range, SDWORD rangeX, SDWORD rangeY, BOOL bFinished);
 extern UDWORD numEnemyObjInRange(SDWORD player, SDWORD range, SDWORD rangeX, SDWORD rangeY, BOOL bVTOLs, BOOL bFinished);
-extern BOOL addHelpBlip(SDWORD x, SDWORD y, SDWORD forPlayer, SDWORD sender, char * textMsg);
+extern BOOL addBeaconBlip(SDWORD x, SDWORD y, SDWORD forPlayer, SDWORD sender, char * textMsg);
 extern BOOL sendBeaconToPlayer(SDWORD locX, SDWORD locY, SDWORD forPlayer, SDWORD sender, char * beaconMsg);
 extern MESSAGE * findBeaconMsg(UDWORD player, SDWORD sender);
 extern SDWORD getNumRepairedBy(DROID *psDroidToCheck, SDWORD player);

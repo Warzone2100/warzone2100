@@ -76,6 +76,15 @@ static SDWORD		finalX,finalY;			// The final tile of the ray cast
 static SDWORD		numWalls;				// Whether the LOS has hit a wall
 static SDWORD		wallX,wallY;			// the position of a wall if it is on the LOS
 
+BOOL rayTerrainCallback(SDWORD x, SDWORD y, SDWORD dist);
+bool scrRayTerrainCallback(SDWORD x, SDWORD y, SDWORD dist);
+
+// holds information about map tiles visible by droids
+static bool	scrTileVisible[MAX_PLAYERS][UBYTE_MAX][UBYTE_MAX] = {false};
+
+bool scrTileIsVisible(SDWORD player, SDWORD x, SDWORD y);
+void scrResetPlayerTileVisibility(SDWORD player);
+
 // initialise the visibility stuff
 BOOL visInitialise(void)
 {
@@ -124,7 +133,7 @@ static SDWORD visObjHeight(const BASE_OBJECT * const psObject)
 }
 
 /* The terrain revealing ray callback */
-static BOOL rayTerrainCallback(SDWORD x, SDWORD y, SDWORD dist)
+BOOL rayTerrainCallback(SDWORD x, SDWORD y, SDWORD dist)
 {
 	SDWORD		newH, newG;		// The new gradient
 	MAPTILE		*psTile;
@@ -256,7 +265,7 @@ BOOL visTilesPending(BASE_OBJECT *psObj)
 }
 
 /* Check which tiles can be seen by an object */
-void visTilesUpdate(BASE_OBJECT *psObj)
+void visTilesUpdate(BASE_OBJECT *psObj, RAY_CALLBACK callback)
 {
 	SDWORD	range = objSensorRange(psObj);
 	SDWORD	ray;
@@ -273,7 +282,7 @@ void visTilesUpdate(BASE_OBJECT *psObj)
 		currG = -UBYTE_MAX * GRAD_MUL;
 
 		// Cast the rays from the viewer
-		rayCast(psObj->pos.x, psObj->pos.y,ray, range, rayTerrainCallback);
+		rayCast(psObj->pos.x, psObj->pos.y,ray, range, callback);
 	}
 }
 
@@ -726,7 +735,7 @@ void updateSensorDisplay()
 	// units.
 	for(psDroid = apsDroidLists[selectedPlayer];psDroid;psDroid=psDroid->psNext)
 	{
-		visTilesUpdate((BASE_OBJECT*)psDroid);
+		visTilesUpdate((BASE_OBJECT*)psDroid, rayTerrainCallback);
 	}
 
 	// structs.
@@ -735,7 +744,61 @@ void updateSensorDisplay()
 		if (psStruct->pStructureType->type != REF_WALL
  		    && psStruct->pStructureType->type != REF_WALLCORNER)
 		{
-			visTilesUpdate((BASE_OBJECT*)psStruct);
+			visTilesUpdate((BASE_OBJECT*)psStruct, rayTerrainCallback);
 		}
 	}
+}
+
+bool scrRayTerrainCallback(SDWORD x, SDWORD y, SDWORD dist)
+{
+	SDWORD		newH, newG;		// The new gradient
+	MAPTILE		*psTile;
+
+	ASSERT(x >= 0
+	    && x < world_coord(mapWidth)
+	    && y >= 0
+	    && y < world_coord(mapHeight),
+			"rayTerrainCallback: coords off map" );
+
+	ASSERT(rayPlayer >= 0 && rayPlayer < MAX_PLAYERS, "rayScrTerrainCallback: wrong player index");
+
+	psTile = mapTile(map_coord(x), map_coord(y));
+
+	/* Not true visibility - done on sensor range */
+
+	if (dist == 0)
+	{
+		debug(LOG_ERROR, "rayTerrainCallback: dist is 0, which is not a valid distance");
+		dist = 1;
+	}
+
+	newH = psTile->height * ELEVATION_SCALE;
+	newG = (newH - startH) * GRAD_MUL / (SDWORD)dist;
+	if (newG >= currG)
+	{
+		currG = newG;
+
+		scrTileVisible[rayPlayer][map_coord(x)][map_coord(y)] = true;
+	}
+
+	return true;
+}
+
+void scrResetPlayerTileVisibility(SDWORD player)
+{
+	int	x,y;
+
+	// clear script visibility info
+	for (x = 0; x < mapWidth; x++)
+	{
+		for(y = 0; y < mapHeight; y++)
+		{
+			scrTileVisible[player][x][y] = false;
+		}
+	}
+}
+
+bool scrTileIsVisible(SDWORD player, SDWORD x, SDWORD y)
+{
+	return scrTileVisible[player][x][y];
 }
