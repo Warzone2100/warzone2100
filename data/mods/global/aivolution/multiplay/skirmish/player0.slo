@@ -208,6 +208,13 @@
 #define	TAUNT_LOST_BASE					7
 
 #define	NONE							(-1)
+#define	ALL								(-2)
+#define	ANY								(-3)
+
+// reason why we attacked someone
+#define	ATTACK_BASE						1
+#define	ATTACK_COUNTER_ARTY				2
+
 
 
 public	int				player,numLego,numTemplates[2],numBaseStructs,numDef,numRes[2],
@@ -237,7 +244,7 @@ private	int		temp,temp2,temp3,temp4,temp5,temp6,enemyScoutStep,enemyScoutX,enemy
 				enemyScoutRange,maxEnemyScouts,minEnemyScouts,numOilDef,minOilDef,
 				tempX,tempY,numEnemyScouts,intOK[10],best,maxBaseDef,minBaseDef,
 				numBaseDef,reinfTime,maxReinfTime,sendForceX,sendForceY,helpTime,
-				maxHelpTime,state,stNone,stAttacking,stDefending,stHelpingAlly,stJoiningForces,
+				maxHelpTime,state,stNone,stAttacking,stDefendingBase,stHelpingAlly,stJoiningForces,
 				stTakingOil,stDefendingOil,tState,timeGuardPos,maxTimeGuardPos,numOilAttackers,
 				collectX,collectY,minOilAttackers,
 				collectTime,maxCollectTime,stCollecting,numTakeOil,maxTakeOil,countTakeOil,
@@ -308,8 +315,10 @@ private BASEOBJ			obj,obj2,tempObj,retObj,baseDefendObj;
 private string			cstr,sVer,myName;
 private	RESEARCHSTAT	newResearch;
 
-private	int				maxAttackCyborgs;
+private	int				maxAttackCyborgs,attackReason;
 private	bool			bBuildCyborgs;
+private	int				tPhase;
+private	bool			bCheckBaseDebug;
 
 private	STRUCTURESTAT	ghostStat[120];
 
@@ -509,10 +518,10 @@ function void	resetOilDefendCoords();
 function bool	canStartDefendingOil();
 function bool	canStartAttack(int _enemy);
 function bool	canTheoreticallyStartAttack();		//count current attackers as well
-function bool	haveTheoretilcallyMinAttackers(bool _bSafeToSendLittleAttackers);		// have *any* attackers? (count current attackers as well)
+function bool	haveTheoreticallyMinAttackers(bool _bSafeToSendLittleAttackers);		// have *any* attackers? (count current attackers as well)
 function int	numAvailableAttackers();
 function int 	totalWeapUnits();
-function bool	checkFollowAttackRequest(int _attackRequester, bool _bHighPriorityTask);
+function bool	canFollowAttackRequest(int _attackRequester, bool _bHighPriorityTask);
 function int	groupSizeCmds(GROUP _groupToCount, bool _bIncludeUnassigned,
 					bool _bIncludeCmds, bool _bInclDroidsAssignedToCmds);
 
@@ -520,6 +529,8 @@ function void	checkStopAttack();
 function void	doAttack();
 function void	prepareAttackers(bool _bHighPriorityTask);
 function void	startAttack(int _enemy, int _x, int _y);
+function void	startEnemyBaseAttack(int _enemy);
+function void	startArtyCounterAttack(int _enemy, int _x, int _y);
 function void	vStartAttackBase(int _enemy);
 //function void	vAttackBase(int _enemy);
 function int	sortOutBBs();
@@ -559,7 +570,7 @@ function void	startTransportState(GROUP _groupToTransport, int _destinationX, in
 
 function void	stopState();
 function void	stopJoiningForces();
-function void	stopDefending();
+function void	stopDefendingBase();
 function void	stopTakingOil();
 function void	stopDefendingOil();
 function void	stopAttack();
@@ -570,7 +581,7 @@ function void	stopDropState();
 
 function void	cancelState();
 function void	cancelJoiningForces();
-function void	cancelDefending();
+function void	cancelDefendingBase();
 function void	cancelTakingOil();
 function void	cancelDefendingOil();
 function void	cancelAttack();
@@ -580,7 +591,7 @@ function void	cancelTransportState();
 function void	cancelDropState();
 
 function void	endJoiningForces();
-function void	endDefending();
+function void	endDefendingBase();
 function void	endTakingOil();
 function void	endDefendingOil();
 function void	endAttack();
@@ -602,7 +613,8 @@ function bool	finishedCollecting();	//finished gathering
 
 function void	doAlly(int _playerOffered);
 
-function void	requestHelp();
+function bool	canRequestHelp();
+function void	requestHelp(int _x, int _y);
 function void	requestStatus(int _player);
 function void	checkRequestStatus();
 function void	requestStartAttack(int _enemy, int _x, int _y);
@@ -731,7 +743,11 @@ function void	goToPerim(int _centerX, int _centerY, int _fromX, int _fromY, int 
 function bool	droidOrderIdle(DROID _droid);
 function bool	droidActionAttacking(DROID _droid);
 function bool	droidActionDroidRepair(DROID _repairer);
-function bool	defending();
+function bool	defendingBase();
+function bool	counteringArty();
+function bool	attackingEnemyBase(int _enemy);
+function bool	idling();
+function bool	canStartArtyCouterAttack(int _enemy, int _x, int _y);
 function bool	helpingAlly();
 function bool	defendingOil();
 function bool	legoPhase();
@@ -761,6 +777,12 @@ function int	numDroidsByType(int _player, int _droidType);
 
 function string	strGratitude();
 
+function void	setPhase(int _phase, int _timeout);
+function bool	canSeePlayerBase(int _player);
+function bool	canSeeLoc(int _x, int _y);
+function bool	enemyTargetInRange(int _enemy, int _x, int _y, int _range);
+function BASEOBJ findEnemyTargetInRange(int _enemy, int _x, int _y, int _range, bool _bStructures, bool _bDroids);
+
 //=====================================================================
 //	Events
 //=====================================================================
@@ -769,7 +791,7 @@ event powerup(wait, 5)
 {
 	local bool bMyRespons,bNotLost;
 
-	DEBUG_ALL = FALSE;
+	DEBUG_ALL = TRUE;
 
 	DEBUG_MSG = DEBUG_ALL;		//isHumanPlayer(player);
 								/*%!	ID="DEBUG_MSG",
@@ -857,6 +879,8 @@ function void oneTimeInitialize(bool bAIControlled)
 
 	/* Decide what debug info to output to the watch window */
 	watchWindowDebug = WATCH_DEBUG_REINF;
+	
+	attackReason = NONE;
 
 	bigMap = false;
 	if((mapWidth * mapHeight) > (125 * 125))		// > 125*125
@@ -1102,7 +1126,7 @@ function void oneTimeInitialize(bool bAIControlled)
 
 	stNone			= 0;
 	stAttacking		= 1;
-	stDefending		= 2;
+	stDefendingBase	= 2;
 	stDefendingOil	= 3;
 	stHelpingAlly	= 4;
 	stJoiningForces	= 5;
@@ -1351,6 +1375,8 @@ function void reInitialize()
 	//}
 
 	dbg("ACTIVE!!!", me);
+	
+	tPhase = 0;
 
 	unassignedDroids(defendGr, buildGr);		//assign all dorids to an approriate group
 
@@ -1362,8 +1388,7 @@ function void reInitialize()
 
 	debugMenuUp = FALSE;
 
-	phase = phNone;
-
+	setPhase(phNone, NONE);
 
 	setState(stNone);
 	lastState = stNone;
@@ -1552,16 +1577,16 @@ function void doMilitary()
 
 
 	/* Build base defenses */
-	if( ((GAME_TIME_IN_SECS - tLastBaseDefense) >  (SECOND * 30)) or defending())	//wait at least 30 secs
+	if( ((GAME_TIME_IN_SECS - tLastBaseDefense) >  (SECOND * 30)) or defendingBase())	//wait at least 30 secs
 	{
-		// if(not((playerPower(me) <= lowPower) and defending()))		//build defenses only if not low on power and not defending
+		// if(not((playerPower(me) <= lowPower) and defendingBase()))		//build defenses only if not low on power and not defendingBase
 		// {
 			buildBaseDefenses();
 		// }
 	}
 
 	/* build AA defenses */
-/* 	if((!alert and !defending()) or (playerPower(me) > highPower))
+/* 	if((!alert and !defendingBase()) or (playerPower(me) > highPower))
 	{
 		buildAA();
 	} */
@@ -1573,7 +1598,7 @@ function void doMilitary()
 	}
 
 	/* check if tired attacking an enemy and want to try to drop him instead */
-	if(state == stAttacking)
+	if(attackingEnemyBase(enemy))
 	{
 		if((tempReinfCount[enemy] >= maxReinfCount) and (groupSizeCmds(attackGr,true,false,true) <= 1))		//if we attacked too many times and current attack failed too
 		{
@@ -1698,7 +1723,7 @@ function void doMilitary()
 						if(canStartAttack(result))
 						{
 							//enemy = result;
-							startAttack(result, curBase[result][0], curBase[result][1]);
+							startEnemyBaseAttack(result);
 							requestStartAttack(result, curBase[result][0], curBase[result][1]);
 						}
 					}
@@ -1709,7 +1734,7 @@ function void doMilitary()
 				}
 				else if(notifyReadyAttackTime <= 0)	//haven't started countdown already
 				{
-					if(haveTheoretilcallyMinAttackers(false))
+					if(haveTheoreticallyMinAttackers(false))
 					{
 						notifyReadyAttack();		//notify allies and wait for orders
 					}
@@ -1726,11 +1751,11 @@ function void doMilitary()
 	}
 
 	/* remind allies we are in trouble */
-	if(defending())
+	if(defendingBase())
 	{
-		if(requestHelpTime <= 0)
+		if(canRequestHelp())
 		{
-			requestHelp();	//do once in a while
+			requestHelp(baseX, baseY);	//do once in a while
 		}
 	}
 
@@ -1857,7 +1882,7 @@ function void doEconomy()
 	economySelftest();
 
 	/* build AA defenses */
-	if(!defending() or (playerPower(me) > muchoPower))
+	if(!defendingBase() or (playerPower(me) > muchoPower))
 	{
 		buildAA();
 	}
@@ -1902,7 +1927,7 @@ function void doEconomy()
 	//dbg(" " & me & ")  repair");
 
 	// see if we have to repair base structure before some other tasks
-	_bBaseHasHighPriority = defending();
+	_bBaseHasHighPriority = defendingBase();
 	if(_bBaseHasHighPriority and (haveMinTrucks() or !needTrucks()))		//don't send if low on trucks
 	{
 		repairStructures();
@@ -1929,7 +1954,7 @@ function void doEconomy()
 	/* Build derricks */
 	if(not structureLimitReached(derrick, me))	//don't try if can't
 	{
-		buildOil( defending() );	//don't go away from base if in danger and low on trucks
+		buildOil( defendingBase() );	//don't go away from base if in danger and low on trucks
 	}
 
 	/* Build factories and research facilities */
@@ -2086,7 +2111,7 @@ function void updateMaxTrucks()
 
 	// how many trucks to use for a single base defense location
 	maxBaseDefendDefLocTrucks = NUM_BASE_DEF_LOC_TRUCKS;
-	if(defending()){
+	if(defendingBase()){
 		maxBaseDefendDefLocTrucks = MAX_BASE_DEF_LOC_TRUCKS;
 	}
 }
@@ -2178,8 +2203,20 @@ function void goRTB()
 	groupAddGroupCmd(sendAttackGr, attackGr);
 
 	// send to the base perimeter
-	_x = sendForceX;
-	_y = sendForceY;
+	if(sendForceX != baseX and sendForceY != baseY)		// can be equal if were send to defend the base
+	{
+		_x = sendForceX;
+		_y = sendForceY;
+	}
+	else
+	{
+		// send to last defend location
+		if(defendX != NONE and defendY != NONE)
+		{
+			_x = defendX;
+			_y = defendY;
+		}
+	}
 
 	circlePerimPoint(baseX, baseY, ref _x, ref _y, baseRange);	//move locations to the derrick perimeter
 
@@ -2793,9 +2830,9 @@ function void stopState()
 	{
 		stopAttack();
 	}
-	else if(defending())
+	else if(defendingBase())
 	{
-		stopDefending();
+		stopDefendingBase();
 	}
 	else if(defendingOil())
 	{
@@ -2837,9 +2874,9 @@ function void cancelState()
 	{
 		cancelAttack();
 	}
-	else if(state == stDefending)
+	else if(state == stDefendingBase)
 	{
-		cancelDefending();
+		cancelDefendingBase();
 	}
 	else if(defendingOil())
 	{
@@ -2881,9 +2918,9 @@ function void endState()
 	{
 		endAttack();
 	}
-	else if(state == stDefending)
+	else if(state == stDefendingBase)
 	{
-		endDefending();
+		endDefendingBase();
 	}
 	else if(defendingOil())
 	{
@@ -2955,7 +2992,7 @@ function void resumeState()
 			//HACK: resume with curBase[], actually must remember last attack x and y
 			if(knowBase[lastEnemy])
 			{
-				startAttack(lastEnemy, curBase[lastEnemy][0], curBase[lastEnemy][1]);
+				startEnemyBaseAttack(lastEnemy);
 				requestStartAttack(lastEnemy, curBase[lastEnemy][0], curBase[lastEnemy][1]);
 			}
 		}
@@ -2978,7 +3015,7 @@ function int findAllyInTrouble()
 	_temp4 = none;	//ally in trouble
 	while(_temp < multiPlayerMaxPlayers)
 	{
-		if(ally[_temp] and (not dead[_temp]) and (allyState[_temp] == stDefending))
+		if(ally[_temp] and (not dead[_temp]) and (allyState[_temp] == stDefendingBase))
 		{
 			//if(knowBase[_temp])
 			if(curHelpX[_temp] > 0)	//have help location
@@ -2999,15 +3036,15 @@ function int findAllyInTrouble()
 }
 
 //----------------------------------------------------------
-//			stop defending
+//			stop defendingBase
 //----------------------------------------------------------
-function void stopDefending()
+function void stopDefendingBase()
 {
 	local	bool	_busy;
 
 	_busy = FALSE;
 
-	endDefending();
+	endDefendingBase();
 
 	dbg("DEFEND: stopped", me);
 
@@ -3054,26 +3091,27 @@ function void stopDefending()
 	checkRequestStatus();
 }
 
-function void cancelDefending()
+function void cancelDefendingBase()
 {
 	erasePausedState();		//don't resume since cancelled
 
-	endDefending();
+	endDefendingBase();
 
 	goRTB();
 
 	resetSendForceCoords();
 
-	dbg("DEFEND: cancelled defending", me);
+	dbg("DEFEND: cancelled defendingBase", me);
 }
 
-function void endDefending()
+function void endDefendingBase()
 {
 	deselectAllDroids();
 
 	setState(stNone);
 
-	phase = phNone;
+	setPhase(phNone,NONE);
+
 	enemy = none;
 	counterEnemy = none;
 
@@ -3126,7 +3164,8 @@ function void endTakingOil()
 
 	setState(stNone);
 
-	phase = phNone;
+	setPhase(phNone, NONE);
+
 	enemy = none;
 
 	timeGuardPos = 0;
@@ -3165,7 +3204,8 @@ function void endDefendingOil()
 
 	setState(stNone);
 
-	phase = phNone;
+	setPhase(phNone, NONE);
+
 	enemy = none;
 
 	// reset coordinates of the attacked derrick
@@ -3225,7 +3265,8 @@ function void endJoiningForces()
 
 	setState(stNone);
 
-	phase = phNone;
+	setPhase(phNone, NONE);
+
 	enemy = none;
 
 	timeGuardPos = 0;	//reset
@@ -3284,7 +3325,7 @@ function void endAllyDefense()
 
 	setState(stNone);
 
-	phase = phNone; //phRTB;
+	setPhase(phNone, NONE); //phRTB;
 }
 
 //----------------------------------------------------------
@@ -3330,7 +3371,7 @@ function void endAttack()
 
 	enemy = none;
 
-	phase = phNone; //phRTB
+	setPhase(phNone, NONE); //phRTB
 
 	reinfTime = 0;	//timer
 
@@ -3345,8 +3386,7 @@ function void endAttack()
 
 function void resetSendForceCoords()
 {
-	sendForceX = none;
-	sendForceY = none;
+	updateStateCoord(NONE, NONE);
 }
 
 //--------------------------------------
@@ -3356,7 +3396,8 @@ function void stopTransportState()
 {
 	endTransportState();	//first end then load otherwise endTransportState will reset state
 
-	phase = phTransportDone;	//make sure drop state knows that transport finished successfully
+	setPhase(phTransportDone, NONE);	//make sure drop state knows that transport finished successfully
+
 	loadSavedState();
 }
 
@@ -3415,7 +3456,8 @@ function void endTransportState()
 	tWaitLoadDrop = 0;
 
 	setState(stNone);
-	phase = phNone;
+
+	setPhase(phNone, NONE);
 
 	//enemy = none;
 }
@@ -3440,7 +3482,7 @@ function void stopDropState()
 		if(knowBase[enemy])
 		{
 			//HACK resume with curBase[], since didn't save last attack x and y coords
-			startAttack(enemy, curBase[enemy][0], curBase[enemy][1]);
+			startEnemyBaseAttack(enemy);
 			requestStartAttack(enemy, curBase[enemy][0], curBase[enemy][1]);
 		}
 	}
@@ -3463,7 +3505,8 @@ function void cancelDropState()
 function void endDropState()
 {
 	setState(stNone);
-	phase = phNone;
+
+	setPhase(phNone, NONE);
 
 	if(enemy != none)
 	{
@@ -3479,7 +3522,8 @@ function void stopCollecting()
 	collectTime = 0;
 
 	setState(stNone);
-	phase = phNone;
+
+	setPhase(phNone, NONE);
 
 	collectX = none;
 	collectY = none;
@@ -3829,7 +3873,7 @@ function int checkAllyThreat()
 
 function void startDefending(int _counterEnemy)
 {
-	if((state != stNone) and !defending())	//units busy with something else
+	if((state != stNone) and !defendingBase())	//units busy with something else
 	{
 		dbg("BASE: we need our units in the base now, cancel current state", me);
 		cancelState();
@@ -3837,11 +3881,12 @@ function void startDefending(int _counterEnemy)
 
 	requestHelpTime = 0;	//reset since started over
 
-	setState(stDefending);
-	phase = phMoveToLoc;
+	setState(stDefendingBase);
+	
+	setPhase(phMoveToLoc, NONE);
 
-	sendForceX = baseX;	//move to base
-	sendForceY = baseY;
+	//move to base
+	updateStateCoord(baseX,baseY);
 
 	enemy = me;
 	counterEnemy = _counterEnemy;
@@ -3854,8 +3899,8 @@ function void startHelpAlly(int _allyToHelp, int _helpx, int _helpy)
 	enemy = _allyToHelp;		//store it in the enemy var, since he invoked this state
 
 	/* Calculate some place on the base edge (my base -> help dest), so won't block the inner of the base */
-	sendForceX = baseX;
-	sendForceY = baseY;
+	updateStateCoord(baseX,baseY);
+
 	circlePerimPoint(_helpx, _helpy, ref sendForceX, ref sendForceY, sendHelpRange);
 
 	//sendForceX = _helpx;	//curBase[enemy][0];	//allyInThreat
@@ -3868,7 +3913,8 @@ function void startHelpAlly(int _allyToHelp, int _helpx, int _helpy)
 	}
 
 	setState(stHelpingAlly);
-	phase = phMoveToLoc;
+
+	setPhase(phMoveToLoc, NONE);
 
 	helpTime = maxHelpTime;		//limited time we can help this ally or can stuck forever
 
@@ -4177,7 +4223,7 @@ function int findBestDefense()
 //---------------------------------------------------------
 event buildNormalOilDefenses(inactive)
 {
-	if(defending()){exit;}
+	if(defendingBase()){exit;}
 
 	if(idleGroupCmd(buildGr,true,false) == 0){exit;}
 
@@ -4332,7 +4378,7 @@ event defendOil(inactive)
 
 	if(not bLearn){exit;}
 
-	if(defending()){exit;}
+	if(defendingBase()){exit;}
 
 	if(idleGroupCmd(buildGr,true,false) == 0){exit;}	//no trucks
 
@@ -4809,7 +4855,7 @@ function int posWeight(int _owner, int _x, int _y, int _range,
 				_temp3 = 1;
 			}
 
-			if(knowBase[_temp] and seeBase[_temp])	//seeBase[] - otherwise this player might have been destroyed already or not loaded at all
+			if(knowBase[_temp] and canSeePlayerBase(_temp))	//seeBase[] - otherwise this player might have been destroyed already or not loaded at all
 			{
 				_dist2 = distBetweenTwoPoints(curBase[_temp][0], curBase[_temp][1], _x, _y) / 128;
 				if(_dist2 == 0){_dist2 = 1;}
@@ -4861,7 +4907,7 @@ function bool isNearAnyBase(int _x, int _y)
 	_temp = 0;
 	while(_temp < multiPlayerMaxPlayers)
 	{
-		if(knowBase[_temp] and seeBase[_temp])	//seeBase[] - otherwise this player might have been destroyed already or not loaded at all
+		if(knowBase[_temp] and canSeePlayerBase(_temp))	//seeBase[] - otherwise this player might have been destroyed already or not loaded at all
 		{
 			if(distBetweenTwoPoints(curBase[_temp][0], curBase[_temp][1], _x, _y) < _range)
 			{
@@ -4876,25 +4922,27 @@ function bool isNearAnyBase(int _x, int _y)
 
 function bool isNearEnemyBase(int _x, int _y)
 {
-	_range = (25 * 128);
+	local int _enemy,_range;
 
-	_temp = 0;
-	while(_temp < multiPlayerMaxPlayers)
+	_range = (TILE * 25);
+
+	_enemy = 0;
+	while(_enemy < multiPlayerMaxPlayers)
 	{
-		if(not allianceExistsBetween(_temp ,me))
+		if(not allianceExistsBetween(_enemy ,me))
 		{
-			if(knowBase[_temp] and seeBase[_temp])	//seeBase[] - otherwise this player might have been destroyed already or not loaded at all
+			if(!dead[_enemy] and knowBase[_enemy] and canSeePlayerBase(_enemy))	//seeBase[] - otherwise this player might have been destroyed already or not loaded at all
 			{
-				if(distBetweenTwoPoints(curBase[_temp][0], curBase[_temp][1], _x, _y) < _range)
+				if(distBetweenTwoPoints(curBase[_enemy][0], curBase[_enemy][1], _x, _y) < _range)
 				{
-					return(TRUE);
+					return true;
 				}
 			}
 		}
-		_temp = _temp + 1;
+		_enemy = _enemy + 1;
 	}
 
-	return(FALSE);
+	return false;
 }
 
 //---------------------------------------------------------
@@ -5164,7 +5212,7 @@ function void buildTrucks()
 	}
 
 	_maxBuiltMinTrucks = 2;
-	if(defending()){
+	if(defendingBase()){
 		_maxBuiltMinTrucks = 1;
 	}
 
@@ -5443,9 +5491,9 @@ function int calcNeededRes()
 
 	_stateCost = 0;
 	_tStateUrgencyTimeout = (int)fMaxResHold;	//MINUTE * 10;
-											/* 10 mins - when to add at least 1 res, in secs, can't put research on hold forever while defending or helping ally
+											/* 10 mins - when to add at least 1 res, in secs, can't put research on hold forever while defendingBase or helping ally
 											shouldn't lose urgency way too fast, should still put enough power into what we are doing now - flat function*/
-	if(defending() or (state == stHelpingAlly)) {
+	if(defendingBase() or (state == stHelpingAlly)) {
 		//ASSERT(tState != 0, "doResearch: tState == 0", me);
 		_stateCost = max(0, (int)_topicCost * max((_tStateUrgencyTimeout / max(tState, 1) - 1), 0));		//f(x) is +inf at the beginnign of the state, 0 at _tStateUrgencyTimeout, '-' after _tStateUrgencyTimeout
 	}
@@ -5477,8 +5525,8 @@ function int calcNeededRes()
 		_needRes++;
 	}
 
-	// don't do more than fMinResearch reserahces if defending the base
-	if(defending() and (playerPower(me) < highPower)){
+	// don't do more than fMinResearch reserahces if defendingBase the base
+	if(defendingBase() and (playerPower(me) < highPower)){
 		_needRes = min(0, _needRes);
 	}
 	else
@@ -6532,7 +6580,7 @@ event structBuilt(inactive)
 			exit;
 		}
 	}
-	else if(!defending() and structure.stattype == REF_VTOL_FACTORY)	/* vtol factory or vtol factory module */
+	else if(!defendingBase() and structure.stattype == REF_VTOL_FACTORY)	/* vtol factory or vtol factory module */
 	{
 		if( isStructureAvailable(facMod,me) and (skGetFactoryCapacity(structure) < 2 ))
 		{
@@ -6540,7 +6588,7 @@ event structBuilt(inactive)
 			exit;
 		}
 	}
-	else if(!defending() and structure.stattype == REF_POWER_GEN)	/* power generator */
+	else if(!defendingBase() and structure.stattype == REF_POWER_GEN)	/* power generator */
 	{
 		if( isStructureAvailable(powMod,me) and (not testStructureModule(me, structure, 0)))
 		{
@@ -6559,7 +6607,7 @@ event structBuilt(inactive)
 
 	if(structure.stat != derrick){exit;}	//make sure we are going to build defenses for a derrick
 
-	if(defending()){exit;}
+	if(defendingBase()){exit;}
 
 	// make the callback droid build a defence near this oil derrick
 	buildDerrickDefence(structure, droid, NEXT_OIL_RANGE); */
@@ -6692,7 +6740,7 @@ function void assignDroid(DROID _droid)
 				bResult2 = FALSE;
 			}
 
-			if(defending()){
+			if(defendingBase()){
 				bResult2 = false;
 			}
 
@@ -7736,7 +7784,7 @@ function void buildTanks()
 	/* decide if want to use heavy templates */
 	_tmplGroup = 0;
 	// TODO: fix heavy templates
-	// if((playerPower(me) > muchoPower) and !defending())
+	// if((playerPower(me) > muchoPower) and !defendingBase())
 	// {
 		// _tmplGroup = 1;
 	// }
@@ -7764,14 +7812,14 @@ function void buildTanks()
 				if(!_bStartedBuild and bCanUseCommanders and
 						(_numTotalCommanders < MAX_COMMANDERS))
 				{
-					// if( !defending() )
+					// if( !defendingBase() )
 					// {
 						/* Calculate how many commanders we need */
 						_numDroidsNoCmd = max(0, totalWeapUnits() - getTotalCmdsCapacity(NULLOBJECT, true));	//num of droids without commander or 0
 
 						// droids need a new commander if there are more than _minUnassignedDroids of them
 						_minUnassignedDroids = 4;
-						if( defending() ){
+						if( defendingBase() ){
 							_minUnassignedDroids = CMD_INIT_CAPACITY;
 						}
 
@@ -7815,7 +7863,7 @@ function void buildTanks()
 				//------------------
 				if(!_bStartedBuild and haveBB and (groupSizeCmds(defendGr,true,false,true) >= (numDefenders + 4)))		//BB researched and not low on tanks
 				{
-					if(!lowMilitary and !alert and !defending())
+					if(!lowMilitary and !alert and !defendingBase())
 					{
 						_result = numBBsInProduction(me);	//how many already building
 						if(_result < 1)		//not too many already
@@ -8044,7 +8092,7 @@ function void buildVTOLs()
 
 	/* decide if want to use heavy templates */
 	count3 = 0;
-	//if((playerPower(me) > muchoPower) and (state != stDefending))
+	//if((playerPower(me) > muchoPower) and (state != stDefendingBase))
 	//{
 	//	count3 = 1;
 	//}
@@ -8275,7 +8323,7 @@ function void buildInitialDefenses(bool _bForceBuild)	//returns TRUE if finished
 	//_bForceBuild - if returned from callback, truck order is not reste to DORDER_NONE yet, but it's idle
 
 	if(not bLearn){return;}		//only uses learn data so far
-	if(defending()){return;}		//don't waste power
+	if(defendingBase()){return;}		//don't waste power
 
 	/* if no builder, find one */
 	if(initialDefensesTruck == NULLOBJECT)
@@ -8518,8 +8566,9 @@ function int numBaseDefenses()
 
 event objectAttacked(inactive)
 {
-	local	int 		_bucket;
-
+	local	int 		_bucket,_defendersWeaponRange,_maxReachRange;
+	local	bool		_bVtol;
+	
 	if(obj == NULLOBJECT){exit;}
 	if(obj2 == NULLOBJECT){exit;}
 
@@ -8529,25 +8578,90 @@ event objectAttacked(inactive)
 
 	//check if attacked object is in the base
 	//---------------------------------------
-
 	if(distBetweenTwoPoints(baseX, baseY, obj.x, obj.y) < (baseRange + defendCorridor))	//baseRange + corridor where defenders can stay
 	{
-/*
-		if(objectHasIndirectWeapon(obj2))
+		// if this weapon has a big range
+		//if(objectHasIndirectWeapon(obj2) and (obj2.longRange > (TILE * 9)))
+		
+		// check if attacked by a vtol
+		_bVtol = false;
+		if(obj2.type == OBJ_DROID)
 		{
-			dbg("attacked by arty in the base", me);
-
-			if(numEnemyWeapObjInRange(me, obj2.x, obj2.y, (5 * 128), FALSE) < defendGr.members)
+			if(isVtol(objToDroid(obj2)))
 			{
-				dbg("attacking arty", me);
-				orderGroupObj(defendGr, DORDER_ATTACK, obj2);
+				_bVtol = true;
 			}
 		}
-*/
+		
+		// ignore VTOLs
+		if(!_bVtol)
+		{
+			_defendersWeaponRange = TILE * 10;	//longer than lancer
+			_maxReachRange = baseRange + defendCorridor + _defendersWeaponRange;
+			
+			// make sure we can't reach the enemy by staying inside the defence radius
+			// even if it's not arty
+			if(distBetweenTwoPoints(obj2.x, obj2.y, baseX, baseY) > _maxReachRange)
+			{
+				dbg("attacked by long-range weapon in the base", me);
+
+				if(!isNearEnemyBase(obj2.x, obj2.y))	// enemy arty could be too heavily defended
+				{
+					if(canStartArtyCouterAttack(obj2.player, obj2.x, obj2.y))
+					{
+						// make sure not doing anything important
+						if(!defendingBase() and !counteringArty())
+						{
+							// stop what we were doing, if anything
+							if(!idling()){
+								cancelState();
+							}
+							
+							//TODO: take out arty sensors with VTOLs
+
+							startArtyCounterAttack(obj2.player, obj2.x, obj2.y);
+							
+							dbg("attacking arty", me);
+						}
+					}
+
+					// request help if for some reason we couldn't defend ourself against arty
+					if(!counteringArty())
+					{
+						// stop what we were doing, if anything unimportant
+						if(!idling() and !defendingBase())
+						{
+							cancelState();
+						}
+
+						if(canRequestHelp())
+						{
+							// we have not enough firepower, request help
+							requestHelp(obj2.x, obj2.y);
+							
+							dbg("requested help because of arty", me);
+						}
+					}
+				}
+				else
+				{
+					// start attacking attacker's base if can
+					if(idling())
+					{
+						if(canStartAttack(obj2.player))
+						{
+							startEnemyBaseAttack(obj2.player);
+							requestStartAttack(obj2.player, curBase[obj2.player][0], curBase[obj2.player][1]);
+						}
+					}
+				}
+			}
+		}
+
 
 		if(obj2.type == OBJ_DROID)				//attacker is a droid
 		{
-			if(!isVtol(objToDroid(obj2)))		//not vtol
+			if(!_bVtol)						//not vtol
 			{
 				if(bLearn)
 				{
@@ -9287,7 +9401,7 @@ function void updateNumDefenders()
 					else
 					{
 						//Our ally can't help us if he's defending its base
-						if(allyState[_player] != stDefending)
+						if(allyState[_player] != stDefendingBase)
 						{
 							_numActiveAllies++;
 						}
@@ -9436,6 +9550,21 @@ function bool canStartAttack(int _enemy)
 	return(TRUE);
 }
 
+function bool canStartArtyCouterAttack(int _enemy, int _x, int _y)
+{
+	if(!haveTheoreticallyMinAttackers(false))
+	{
+		return false;
+	}
+
+	if(numEnemyWeapObjInRange(me, _x, _y, (TILE * 7), false, true) > numAvailableAttackers())
+	{
+		return false;
+	}
+
+	return true;
+}
+
 //count current attackers as well
 function bool canTheoreticallyStartAttack()
 {
@@ -9448,7 +9577,7 @@ function bool canTheoreticallyStartAttack()
 }
 
 // have *any* attackers? (count current attackers as well)
-function bool haveTheoretilcallyMinAttackers(bool _bSafeToSendLittleAttackers)
+function bool haveTheoreticallyMinAttackers(bool _bSafeToSendLittleAttackers)
 {
 	if(_bSafeToSendLittleAttackers)		//it's ok to send little attackers, for example if joining forces with other players
 	{
@@ -9971,17 +10100,34 @@ function DROID iterateGroupCmd(GROUP _groupToIterate, int _bucket)
 //---------------------------------------------------------------
 function void checkBase(int _player)
 {
+	local bool _bCanSeeBase;
+
 	ASSERT(_player >= 0, "checkBase - _player < 0", me);
 
+	if(bCheckBaseDebug)dbg("--checkBase--", me);
+	
 	if(knowBase[_player])
 	{
+		if(bCheckBaseDebug)dbg("checkBase: know base for " & _player, me);
+
 		if((curBase[_player][0] <= 0) or (curBase[_player][1] <= 0))
 			MsgBox("checkBase() - curBase <= 0");
 
 		if(mapRevealedInRange(curBase[_player][0],curBase[_player][1], (2 * 128), me))		//can tell if it's empty only if visited this place (in case recalled it from memory)
 		{
-			if(not structInRangeVis(me, _player, curBase[_player][0], curBase[_player][1], (2 * 128)) )
+			if(bCheckBaseDebug)dbg("checkBase: for revealed for " & _player, me);
+			
+			// check if base location is inside radar range
+			if((curBase[_player][0] > 0) and (curBase[_player][1] > 0)){
+				_bCanSeeBase = canSeeLoc(curBase[_player][0] / TILE, curBase[_player][1] / TILE);
+			}
+			
+			if(bCheckBaseDebug && _bCanSeeBase)dbg("checkBase: can see loc for player " & _player, me);
+			
+			if(_bCanSeeBase and !enemyTargetInRange(_player, curBase[_player][0], curBase[_player][1], (2 * 128)) )
 			{
+				if(bCheckBaseDebug)dbg("checkBase: have no targets for " & _player, me);
+				
 				//if((curBase[_player][0] == base[_player][0]) and (curBase[_player][1] == base[_player][1]))
 				//{
 				//	dbg(" " & me & ")  recalled location is empty for " & _player & " !!!!!!!!!!!!!!!!!!!!!!!");
@@ -10004,11 +10150,11 @@ function void checkBase(int _player)
 					}
 
 					/* update destination coords if going to this player */
-					if(enemy == _player)
+					if(attackingEnemyBase(_player))
 					{
 						dbg("Enemy cords updated", me);
-						sendForceX = curBase[_player][0];
-						sendForceY = curBase[_player][1];
+
+						updateStateCoord(curBase[_player][0], curBase[_player][1]);
 					}
 
 					seeBase[_player] = TRUE;	//found base
@@ -10038,13 +10184,13 @@ function void checkBase(int _player)
 				{
 					if(_player == enemy)	//attacking this one right now
 					{
-						if(seeBase[_player])		//warn only once, when just lost the base
+						if(canSeePlayerBase(_player))		//warn only once, when just lost the base
 						{
 							dbg("lost current enemy " & getPlayerName(_player) & " !!!!!!!!!!!!!!!!!!!!!", me);
 						}
 
 					}
-					else if(seeBase[_player])	//lost it now
+					else if(canSeePlayerBase(_player))	//lost it now
 					{
 						dbg("lost base loc for enemy " & getPlayerName(_player), me);
 					}
@@ -10056,11 +10202,13 @@ function void checkBase(int _player)
 			}
 			else		//enemy base still there
 			{
+				if(bCheckBaseDebug)dbg("checkBase: still have targets for " & _player, me);
+	
 				if(not allianceExistsBetween(me , _player))	//this player is not our ally
 					noBaseTargets = FALSE;
 
 				/* make sure allies see newly found enemy base */
-				if(not seeBase[_player])	//just found
+				if(not canSeePlayerBase(_player))	//just found
 					refreshAllyRadar();
 
 				seeBase[_player] = TRUE;	//can see base
@@ -10125,7 +10273,7 @@ function void checkBase(int _player)
 
 function bool checkPlayerDead(int _player)
 {
-	if(knowBase[_player] and (not seeBase[_player]))		//know location, but don't see it
+	if(knowBase[_player] and (not canSeePlayerBase(_player)))		//know location, but don't see it
 	{
 		if(mapRevealedInRange(curBase[_player][0],curBase[_player][1], (2 * 128), me))	//make sure can see the location where the base should be
 		{
@@ -10204,7 +10352,7 @@ function int chooseEnemyToDrop()
 	{
 		if((not allianceExistsBetween(temp, me)) and (temp != me))
 		{
-			if((not dead[temp]) and knowBase[temp] and seeBase[temp])	//found player's base and know this player is active since can se him
+			if((not dead[temp]) and knowBase[temp] and canSeePlayerBase(temp))	//found player's base and know this player is active since can se him
 			{
 				temp2 = numAlliesDroppingPlayer(temp);
 
@@ -10254,7 +10402,7 @@ function int chooseEnemy()
 			if((not ally[_enemy]) and (_enemy != me))
 			{
 				if(knowBase[_enemy] and (not dead[_enemy]) and
-					(not killedBase[_enemy]) and seeBase[_enemy])	//found player's base
+					(not killedBase[_enemy]) and canSeePlayerBase(_enemy))	//found player's base
 				{
 					_tileDist = distBetweenTwoPoints(baseX, baseY, curBase[_enemy][0], curBase[_enemy][1]) / 128;
 
@@ -10444,7 +10592,7 @@ function void checkBaseThreat()
 	_enemyStructures = 0;
 
 	// don't reset counterenemy if we are defending
-	if(!defending()) {
+	if(!defendingBase()) {
 		_counterEnemy = -1;
 	}
 
@@ -10469,7 +10617,7 @@ function void checkBaseThreat()
 				_bestEnemyForce = _attackerUnitForce + _attackerStructureForce / STR_UNIT_DEFENSE_FACTOR;
 
 				// don't reset counterenemy if we are defending
-				if(!defending()) {
+				if(!defendingBase()) {
 					_counterEnemy = _attacker;
 				}
 			}
@@ -10493,7 +10641,7 @@ function void checkBaseThreat()
 	/* pre-warn allies (only units _totalEnemies) */
 	if(_enemyUnits >= 7)
 	{
-		if(!defending()) 	//do only once/attack
+		if(!defendingBase()) 	//do only once/attack
 		{
 			if(timeNotifyEnemyInBase <= 0)
 			{
@@ -10512,7 +10660,7 @@ function void checkBaseThreat()
 		{
 			dbg("BASE: too many enemies in the base             !!!!!!", me);
 
-			if(!defending())
+			if(!defendingBase())
 			{
 				if(state != stNone)
 				{
@@ -10525,20 +10673,20 @@ function void checkBaseThreat()
 				taunt(_counterEnemy, TAUNT_BASE_DEFENSE, 50);
 
 				startDefending(_counterEnemy);
-				requestHelp();
+				requestHelp(baseX, baseY);
 			}
 		}
 
 	}
 	/* check if can stop defending */
-	else if(defending() and (_enemyUnits == 0))		//all enemies are gone
+	else if(defendingBase() and (_enemyUnits == 0))		//all enemies are gone
 	{
 		if(groupSizeCmds(defendGr,true,false,true) >= minDefenders)		//make sure can defend on our own
 		{
 			dbg("base is safe again", me);
 
 			_counterEnemy = counterEnemy;
-			stopDefending();
+			stopDefendingBase();
 
 			taunt(_counterEnemy, TAUNT_BASE_OK, 55);
 
@@ -10564,7 +10712,7 @@ function void checkBaseThreat()
 							if(totalWeapUnits() > _counterEnemyForce)
 							{
 								dbg("counterattacking", me);
-								startAttack(_counterEnemy, _enemyX, _enemyY);
+								startEnemyBaseAttack(_counterEnemy);
 								requestStartAttack(_counterEnemy, _enemyX, _enemyY);
 							}
 							else{
@@ -10591,7 +10739,17 @@ function void checkBaseThreat()
 	}
 }
 
-function void requestHelp()
+function bool canRequestHelp()
+{
+	if(requestHelpTime <= 0)
+	{
+		return true;
+	}
+	
+	return false;
+}
+
+function void requestHelp(int _x, int _y)
 {
 	_temp = 0;
 	while(_temp < multiPlayerMaxPlayers)
@@ -10599,7 +10757,7 @@ function void requestHelp()
 		if(allianceExistsBetween(me , _temp))
 		{
 			giftRadar(me, _temp, FALSE);
-			dropBeacon("help", _temp, me, baseX, baseY, 0);
+			dropBeacon("help", _temp, me, _x, _y, 0);
 			msg("help", me, _temp);
 		}
 		_temp = _temp + 1;
@@ -11052,7 +11210,7 @@ function void notifyStatusAll()
 
 function void notifyStatus(int _playerToNotify)
 {
-	if(state == stDefending)
+	if(state == stDefendingBase)
 	{
 		notifyAllies(getPlayerName(_playerToNotify) & ": help" , false);
 	}
@@ -11512,7 +11670,7 @@ function void startCollecting()
 
 function void startCollectingPhase()
 {
-	phase = phCollecting;
+	setPhase(phCollecting, NONE);
 
 	orderGroupLocCmd(sendAttackGr, DORDER_MOVE, collectX, collectY);	//use move, cause far away units may keep attacking forever
 
@@ -11981,7 +12139,7 @@ event transLanded(inactive)
 
 	if(groupSizeCmds(tempGr,true,true,true) == 0){exit;}
 
-	if((state == stNone) or defending())		//not doing anything, so unload to defenders
+	if((state == stNone) or defendingBase())		//not doing anything, so unload to defenders
 	{
 		groupAddGroupCmd(defendGr, tempGr);
 	}
@@ -12118,7 +12276,7 @@ function void updateDropPhase()
 	{
 		//if(researchFinished(resUnitTransporter, me))
 		//{
-			phase = phGettingUnits;
+			setPhase(phGettingUnits, NONE);
 		//}
 	}
 
@@ -12147,7 +12305,7 @@ function void updateDropPhase()
 			prepareTransporters();	//make sure units can reach them
 			tWaitAlliesDrop = tMaxWaitAlliesDrop;		//start wait-for-allies timer
 
-			phase = phWaitAllies;		//wait for others
+			setPhase(phWaitAllies, NONE);	//wait for others
 		}
 	}
 
@@ -12175,7 +12333,8 @@ function void updateTransport()
 	{
 		if(transporterLoaded())				//loaded
 		{
-			phase = phSync;
+			setPhase(phSync, NONE);
+
 			tSyncDrop = tMaxSyncDrop;		//start sync with allies countdown
 			notifyLoadedTransporters();
 			//exit;		//if just finished dropping enemy, give allies time to reset their states, otherwise will think they are still dropping some enemy
@@ -12188,7 +12347,8 @@ function void updateTransport()
 
 			if((temp >= (numDroppers * 30 / 100)) or ((temp2 > 0) and (temp > 0)))				// 30% of all droppers were loaded or not the only one dropping and loaded something
 			{
-				phase = phSync;
+				setPhase(phSync, NONE);
+
 				tSyncDrop = tMaxSyncDrop;		//start sync with allies countdown
 				notifyLoadedTransporters();
 				//exit;		//if just finished dropping enemy, give allies time to reset their states, otherwise will think they are still dropping this enemy
@@ -12218,7 +12378,8 @@ function void updateTransport()
 				dbg("timeToDrop() - time to drop!!!!", me);
 			}
 
-			phase = phSendDrop;		//on the way to the enemy
+			setPhase(phSendDrop, NONE);		//on the way to the enemy
+
 			doDrop();
 		}
 		else
@@ -12263,7 +12424,8 @@ function void startTransportState(GROUP _groupToTransport, int _destinationX, in
 	endState();		//init vars of the original state
 
 	setState(stTransporting);
-	phase = phLoadingTransport;
+	
+	setPhase(phLoadingTransport, NONE);
 
 	tWaitLoadDrop = tMaxWaitLoadDrop;
 
@@ -12339,7 +12501,8 @@ function void startDropPhase()
 	if(not knowBase[enemy]){MsgBox("startDropPhase - knowBase[enemy] == FALSE"); return;}
 
 	setState(stDrop);
-	phase = phGettingTech;
+	
+	setPhase(phGettingTech, NONE);
 
 	tempReinfCount[enemy] = 0;		//reset here
 	dropStartTime = none;
@@ -12353,8 +12516,7 @@ function void startDropPhase()
 
 	dbg("Preparing drop at " & getPlayerName(enemy) & " with " & numDroppers & " units and " & numTransporters & " transporters!!", me);
 
-	sendForceX = curBase[enemy][0];
-	sendForceY = curBase[enemy][1];
+	updateStateCoord(curBase[enemy][0], curBase[enemy][1]);
 
 	resortTransporters();	//resort array
 
@@ -12410,6 +12572,22 @@ function void prepareAttackers(bool _bHighPriorityTask)
 	 *  after commanders have reached destination point and get assigned to the attackGr */
 }
 
+/* Start attacking enemy base - a Wrapper for startAttack() */
+function void startEnemyBaseAttack(int _enemy)
+{
+	attackReason = ATTACK_BASE;
+
+	startAttack(_enemy, curBase[_enemy][0], curBase[_enemy][1]);
+}
+
+/* Start attacking enemy arty - a Wrapper for startAttack() */
+function void startArtyCounterAttack(int _enemy, int _x, int _y)
+{
+	attackReason = ATTACK_COUNTER_ARTY;
+
+	startAttack(_enemy, _x, _y);
+}
+
 function void startAttack(int _enemy, int _x, int _y)
 {
 	if(_enemy < 0)
@@ -12429,8 +12607,8 @@ function void startAttack(int _enemy, int _x, int _y)
 	setState(stAttacking);
 
 	enemy = _enemy;
-	sendForceX = _x;
-	sendForceY = _y;
+
+	updateStateCoord(_x, _y);
 
 	/* Set minimum number of defenders to leave in the base */
 	updateNumDefenders();
@@ -12514,7 +12692,7 @@ function void startMovePhase()
 
 	reinfTime = maxReinfTime;	//start "cancel attack" countdown
 
-	phase = phMoveToLoc;
+	setPhase(phMoveToLoc, NONE);
 
 	dbg("MOVE PHASE: started", me);
 }
@@ -12533,8 +12711,7 @@ function void startTakingOil(STRUCTURE _enemyDerrick)
 	enemy = _enemyDerrick.player;
 	tempReinfCount[enemy] = 0;		//reset
 
-	sendForceX = _enemyDerrick.x;
-	sendForceY = _enemyDerrick.y;
+	updateStateCoord(_enemyDerrick.x, _enemyDerrick.y);
 
 	/* Set minimum number of defenders to leave in the base */
 	updateNumDefenders();
@@ -12605,7 +12782,8 @@ function int sortOutBBs()
 
 function void doAttack()
 {
-	local	int 	_bucket;
+	local	int 		_bucket;
+	local	BASEOBJ		_target;
 
 	//dbg(" " & me & ")  doAttack()");
 
@@ -12665,17 +12843,21 @@ function void doAttack()
 	/* Update coordinates */
 	//if(curBase[enemy][0] > 0 and curBase[enemy][1] > 0)	//only update if set?
 	//{
-		sendForceX = curBase[enemy][0];
-		sendForceY = curBase[enemy][1];
+	
+	// Update current goto location to the new base location of current enemy if we are attacking its base
+	if(attackingEnemyBase(enemy))
+	{
+		updateStateCoord(curBase[enemy][0], curBase[enemy][1]);
+	}
 	//}
 
 	//------------------------------------------------------------------------------
 	//if we lost enemy base, were looking for it and found it, switch back to attack
 	//------------------------------------------------------------------------------
-	if((phase == phSearchingForBase) and (seeBase[enemy]))
+	if((phase == phSearchingForBase) and canSeePlayerBase(enemy))
 	{
 		dbg("after revealing found enemy base again, attack (!!!!!!!!!!!!)", me);
-		phase = phMoveToLoc;	//go to the new enemy base location
+		setPhase(phMoveToLoc, NONE);	//go to the new enemy base location
 
 		taunt(enemy, TAUNT_REDISCOVERED_BASE, 40);
 	}
@@ -12697,16 +12879,34 @@ function void doAttack()
 
 	if(phase != phSearchingForBase)		//not already revealing
 	{
-		if(not seeBase[enemy])	//no targets, check if any unrevealed territory left
+		if((sendForceX > 0) and (sendForceY > 0))
 		{
-			//if this loc is not recalled from memory (loc will be invisible then)
-			//if((curBase[enemy][0] != base[enemy][0]) or (curBase[enemy][1]) != base[enemy][1])
-			if(mapRevealedInRange(sendForceX, sendForceY, (2 * 128), me))		//if revealed so can judge if there's nothing
+			if(canSeeLoc(sendForceX, sendForceY))	//no targets, check if any unrevealed territory left
 			{
-				dbg("ATTACK: No visible enemy structures left, revealing territory !!!!!", me);
-				phase = phSearchingForBase;
+				//if this loc is not recalled from memory (loc will be invisible then)
+				//if((curBase[enemy][0] != base[enemy][0]) or (curBase[enemy][1]) != base[enemy][1])
+				//if(mapRevealedInRange(sendForceX, sendForceY, (2 * 128), me))		//if revealed so can judge if there's nothing
 
-				taunt(enemy, TAUNT_REDISCOVERED_BASE, 40);
+				if(!enemyTargetInRange(enemy, sendForceX, sendForceY, (TILE * 3)))
+				{
+					_target = findEnemyTargetInRange(enemy, sendForceX, sendForceY, (TILE * 13), true, true);
+					
+					// go to that target
+					if(_target != NULLOBJECT)
+					{
+						dbg("found new target at " & _target.x / TILE & " - " & _target.y / TILE, me);
+						
+						updateStateCoord(_target.x, _target.y);
+					}
+					else
+					{
+						dbg("ATTACK: No visible enemy structures left, revealing territory !!!!!", me);
+						
+						setPhase(phSearchingForBase, MINUTE * 2);	// 2 mins max
+						
+						taunt(enemy, TAUNT_LOST_BASE, 40);
+					}
+				}
 			}
 		}
 	}
@@ -12715,7 +12915,7 @@ function void doAttack()
 	//reveal territory near the enemy base
 	if(phase == phSearchingForBase)
 	{
-		range = (16 * 128);		//search for enemy structures in en base range
+		range = (TILE * 16);		//search for enemy structures in en base range
 
 		_bucket = initIterateGroupCmd(attackGr,true,true,true);
 		droid = iterateGroupCmd(attackGr,_bucket);
@@ -12731,7 +12931,7 @@ function void doAttack()
 				else if(phase != phLostBase)
 				{
 					dbg("nothing to reveal anymore, lost enemy base !!!", me);
-					phase = phLostBase;	//no move unrevealed territory
+					setPhase(phLostBase, MINUTE * 1);	//no more unrevealed territory
 				}
 			}
 			droid = iterateGroupCmd(attackGr,_bucket);
@@ -12894,15 +13094,18 @@ function void checkStopAttack()
 	//------------------------------------------------------------------------------
 	//Check we succeeded
 	//------------------------------------------------------------------------------
-	else if((phase == phLostBase) and (not seeBase[enemy]))	//no enemy structures left (found)
+	else if((phase == phLostBase) and (not canSeePlayerBase(enemy)))	//no enemy structures left (found)
 	{
 		dbg("cancelling attack, RTB", me);
 
 		//knowBase[enemy] = FALSE;	//disabled 15.05.05 because phSearchingFor base was skipped because of this
 
-		killedBase[enemy] = TRUE;	//remember this one's done, but doesn't have to be completely dead, so no dead[x] = TRUE;
-
-		notifyPlayerBaseDestroyed(enemy);
+		if(attackingEnemyBase(enemy))
+		{
+			killedBase[enemy] = TRUE;	//remember this one's done, but doesn't have to be completely dead, so no dead[x] = TRUE;
+			
+			notifyPlayerBaseDestroyed(enemy);
+		}
 
 		stopAttack();
 	}
@@ -12997,12 +13200,12 @@ function void joinForces(int _joinPlayer, int _x, int _y)
 
 	setState(stJoiningForces);
 	enemy = _joinPlayer;
-	phase = phMoveToLoc;
+	
+	setPhase(phMoveToLoc, NONE);
 
 	timeGuardPos = 0;		//reset countdown
 
-	sendForceX = _x;
-	sendForceY = _y;
+	updateStateCoord(_x, _y);
 
 	fillAttackers(numAttackersFromPriorty(false));
 
@@ -13147,7 +13350,7 @@ event coordinatePhases(inactive)
 		exit;
 	}
 
-	if(defending())
+	if(defendingBase())
 		exit;		//defenders are sent to defend automatically
 
 	/* make sure sendAttackGr droids are going to the destination */
@@ -13176,7 +13379,8 @@ event coordinatePhases(inactive)
 		if(_bReachedDestination)
 		{
 			dbg("MANAGE UNITS: reached destination !!!!!", me);
-			phase = phAttackingLoc;
+			
+			setPhase(phAttackingLoc, MINUTE * 10);	//shouldn't take more than 10 mins
 		}
 	}
 	/* start action when *most* of the units are there */
@@ -13188,7 +13392,9 @@ event coordinatePhases(inactive)
 			{
 				msg("ok, i'm there" , me, enemy);
 				timeGuardPos = maxTimeGuardPos;
-				phase = phGuardingPos;
+				
+				setPhase(phGuardingPos, NONE);
+
 				//exit;				//must exit since vars are reset
 			}
 		}
@@ -13199,7 +13405,9 @@ event coordinatePhases(inactive)
 		(groupSizeCmds(attackGr,true,false,true) == 0))
 	{
 		dbg("no attackers, phase = phMoveToLoc !!!!!!!!", me);
-		phase = phMoveToLoc;
+		
+		setPhase(phMoveToLoc, NONE);
+		
 		timeGuardPos = 0;		//reset the oil guarding time
 	}
 
@@ -13355,7 +13563,8 @@ event coordinatePhases(inactive)
 
 					dbg("TAKE OIL: no enemies, started guarding", me);
 					timeGuardPos = maxTimeGuardPos;
-					phase = phGuardingPos;
+					
+					setPhase(phGuardingPos, NONE);
 				}
 			}
 		}
@@ -13487,6 +13696,16 @@ function string droidToGroupName(DROID _droid)
 event everySecEv(inactive)
 {
 	local	float		_newCurResUrgency;
+	
+	if(tPhase > 0)
+	{
+		tPhase--;
+		if(tPhase == 0)
+		{
+			stopState();
+			dbg("phase timeout", me);
+		}
+	}
 
 	// if our oil derrick was attacked, remember how long the attack lasts already,
 	// to be able to judge if the derrick is really under attack or whether it was just
@@ -13728,9 +13947,9 @@ event everySecEv(inactive)
 	}
 }
 
-function bool checkFollowAttackRequest(int _attackRequester, bool _bHighPriorityTask)
+function bool canFollowAttackRequest(int _attackRequester, bool _bHighPriorityTask)
 {
-	if(defending() or (state == stAttacking) or
+	if(defendingBase() or (state == stAttacking) or
 		(state == stDrop) or (state == stTransporting) or
 		((state == stHelpingAlly) and (enemy != _attackRequester)))
 	{
@@ -13738,7 +13957,7 @@ function bool checkFollowAttackRequest(int _attackRequester, bool _bHighPriority
 		return(FALSE);
 	}
 
-	if(not haveTheoretilcallyMinAttackers(_bHighPriorityTask))
+	if(not haveTheoreticallyMinAttackers(_bHighPriorityTask))
 	{
 		msg("let me get more units", me, _attackRequester);
 		return(FALSE);
@@ -13754,9 +13973,27 @@ function bool isCurrentOrder(int _state, int _enemy)
 	return ((_state == state) and (enemy == _enemy));
 }
 
-function bool defending()
+/* Check if we are attacking some soecific (or any) enemy base */
+function bool attackingEnemyBase(int _enemy)
 {
-	return (state == stDefending);
+	return ((state == stAttacking) and (attackReason == ATTACK_BASE) and
+			( (enemy == _enemy) or (_enemy == ANY) ));		// match the enemy
+}
+
+/* Returns true if we are attacking enemy arty location */
+function bool counteringArty()
+{
+	return ((state == stAttacking) and (attackReason == ATTACK_COUNTER_ARTY));
+}
+
+function bool idling()
+{
+	return (state == stNone);
+}
+
+function bool defendingBase()
+{
+	return (state == stDefendingBase);
 }
 
 function bool helpingAlly()
@@ -13777,7 +14014,7 @@ function bool canAlly(int _player)
 	}
 
 	/* check if attacked by this player */
-	if(defending())
+	if(defendingBase())
 	{
 		if(numPlayerWeapObjInRange(_player, me, baseX, baseY, baseRange + (5 * 128), false, true) > 5)	//attacking us
 		{
@@ -14088,7 +14325,7 @@ event consoleEv(consoleTr)
 	}
 
 	if(not DEBUG_MSG){exit;}
-	if(msgPlayer2 != me){exit;}
+	if(!debugModeEnabled()){exit;}
 
 	if(strcmp(cstr, "/baserange"))
 	{
@@ -14096,7 +14333,7 @@ event consoleEv(consoleTr)
 	}
 	else if(strcmp(cstr, "/request help"))
 	{
-		requestHelp();
+		requestHelp(baseX, baseY);
 	}
 	else if(strcmp(cstr, "/defendcoord"))
 	{
@@ -14127,7 +14364,7 @@ event consoleEv(consoleTr)
 	else if(strcmp(cstr, "/see enemy?"))
 	{
 		if(enemy >= 0)
-			dbg("seeBase[" & enemy & "] = " & seeBase[enemy], me);
+			dbg("seeBase[" & enemy & "] = " & canSeePlayerBase(enemy), me);
 
 		if(enemy == none)
 			dbg("no enemy", me);
@@ -14219,11 +14456,30 @@ event consoleEv(consoleTr)
 	}
 	else if(strcmp(cstr, "/sendForce"))
 	{
-		dbg("sendForceX: " & sendForceX / 128 & ", sendForceY: " & sendForceX / 128, me);
+		dbg("sendForceX: " & sendForceX / 128 & ", sendForceY: " & sendForceY / 128, me);
 	}
 	else if(strcmp(cstr, "/addpower"))
 	{
 		addPower(3000, me);
+	}
+	else if(strcmp(cstr, "/checkbase on"))
+	{
+		bCheckBaseDebug = true;
+		dbg("bCheckBaseDebug on", me);
+	}
+	else if(strcmp(cstr, "/checkbase off"))
+	{
+		bCheckBaseDebug = false;
+		dbg("bCheckBaseDebug off", me);
+	}
+	else if(strcmp(cstr, "/baseloc"))
+	{
+		count = 0;
+		while(count < multiPlayerMaxPlayers)
+		{
+			dbg(getPlayerName(count) & "'s base " & (curBase[count][0] / TILE) & "/" & (curBase[count][1] / TILE), me);
+			count++;
+		}
 	}
 	else if(strcmp(cstr, "/temp"))
 	{
@@ -14249,7 +14505,7 @@ event consoleEv(consoleTr)
 		count = 0;
 		while(count <= 7)
 		{
-			dbg("seeBase " & getPlayerName(count) & " is = " & seeBase[count], me);
+			dbg("seeBase " & getPlayerName(count) & " is = " & canSeePlayerBase(count), me);
 			count = count + 1;
 		}
 	}
@@ -14450,7 +14706,7 @@ function void processDebugCommand(int _msgPlayer, STRING _cstr)
 	else if(strcmp(cstr, "see enemy?"))
 	{
 		if(enemy >= 0)
-			dbg("seeBase[" & enemy & "] = " & seeBase[enemy], me);
+			dbg("seeBase[" & enemy & "] = " & canSeePlayerBase(enemy), me);
 
 		if(enemy == none)
 			dbg("no enemy", me);
@@ -14624,7 +14880,7 @@ function void processCommand(string _message, int _sender, bool _bBlipMessage)
 				allyEnemy[_sender] = none;
 
 				/* tell him we are busy */
-				if(not checkFollowAttackRequest(_sender, true))
+				if(not canFollowAttackRequest(_sender, true))
 				{
 					return;
 				}
@@ -14635,7 +14891,7 @@ function void processCommand(string _message, int _sender, bool _bBlipMessage)
 			if(_msg == "go center")
 			{
 				/* tell him we are busy */
-				if(not checkFollowAttackRequest(_sender, true))
+				if(not canFollowAttackRequest(_sender, true))
 					return;
 
 				/* cancel current state since not doing anything important */
@@ -14689,7 +14945,7 @@ function void processCommand(string _message, int _sender, bool _bBlipMessage)
 			else if(_msg == "go!")
 			{
 				/* tell him we are busy */
-				if(not checkFollowAttackRequest(_sender, true))
+				if(not canFollowAttackRequest(_sender, true))
 					return;
 
 				/* cancel current state since not doing anything important */
@@ -14713,7 +14969,7 @@ function void processCommand(string _message, int _sender, bool _bBlipMessage)
 
 			else if(_msg == "help me")
 			{
-				allyState[_sender] = stDefending;	//remember he's in trouble
+				allyState[_sender] = stDefendingBase;	//remember he's in trouble
 				allyEnemy[_sender] = none;
 				allyPhase[_sender] = phNone;
 
@@ -14752,7 +15008,7 @@ function void processCommand(string _message, int _sender, bool _bBlipMessage)
 					return;
 				}
 
-				if(defending())
+				if(defendingBase())
 				{
 					//msg("there're after me too, you better help me", me, _sender);	//TODO: temporal solution
 					//msg("there're after me too", me, _sender);
@@ -14794,8 +15050,8 @@ function void processCommand(string _message, int _sender, bool _bBlipMessage)
 				}
 
 				/* remind allies we are in trouble */
-				if(defending())
-					requestHelp();
+				if(defendingBase())
+					requestHelp(baseX, baseY);
 			}
 			else if(_msg == "give vision")
 			{
@@ -14918,7 +15174,7 @@ function void processCommand(string _message, int _sender, bool _bBlipMessage)
 								return;
 							}
 						}		/* we are doing something else already */
-						else if(not checkFollowAttackRequest(_sender, true))
+						else if(not canFollowAttackRequest(_sender, true))
 						{
 							return;
 						}
@@ -14931,7 +15187,7 @@ function void processCommand(string _message, int _sender, bool _bBlipMessage)
 						}
 						else	/* no beacon provided, use the current enemy location */
 						{
-							if(killedBase[_player] and (not seeBase[_player]))	/* we have no idea where the enemy has rebuilt the base */
+							if(killedBase[_player] and (not canSeePlayerBase(_player)))	/* we have no idea where the enemy has rebuilt the base */
 							{
 								notifyAllies(getPlayerName(_sender) & ", drop a beacon", false);
 								return;
@@ -14969,6 +15225,7 @@ function void processCommand(string _message, int _sender, bool _bBlipMessage)
 
 						offeredEnemy = _player;	//remember the offer
 
+						attackReason = ATTACK_BASE;
 						startAttack(_player, _x, _y);
 						notifyAllies("attacking " & getPlayerName(_player), TRUE);
 						return;
@@ -15007,7 +15264,7 @@ function void processCommand(string _message, int _sender, bool _bBlipMessage)
 						}
 
 						/* ignore if busy */
-						if((state != stNone) and (enemy != _sender) and (phase != phGuardingPos))	//not idle and not dealing with this player somehow (defending etc) or psGuardingPos (is low prior)
+						if((state != stNone) and (enemy != _sender) and (phase != phGuardingPos))	//not idle and not dealing with this player somehow (defendingBase etc) or psGuardingPos (is low prior)
 						{
 							return;			//just exit
 						}
@@ -15018,7 +15275,7 @@ function void processCommand(string _message, int _sender, bool _bBlipMessage)
 							return;
 						}
 
-						if(not haveTheoretilcallyMinAttackers(true))
+						if(not haveTheoreticallyMinAttackers(true))
 						{
 							return;		//ignore
 						}
@@ -15031,7 +15288,7 @@ function void processCommand(string _message, int _sender, bool _bBlipMessage)
 						}
 						else	/* no beacon provided, use the current enemy location */
 						{
-							if(killedBase[_player] and (not seeBase[_player]))	/* we have no idea where the enemy has rebuilt the base */
+							if(killedBase[_player] and (not canSeePlayerBase(_player)))	/* we have no idea where the enemy has rebuilt the base */
 							{
 								notifyAllies(getPlayerName(_sender) & ", drop a beacon", false);
 								return;
@@ -15049,6 +15306,7 @@ function void processCommand(string _message, int _sender, bool _bBlipMessage)
 						}
 
 						//enemy = _player;
+						attackReason = ATTACK_BASE;
 						startAttack(_player, _x, _y);
 						notifyAllies("attacking " & getPlayerName(_player), TRUE);
 						return;
@@ -15120,7 +15378,7 @@ function void processCommand(string _message, int _sender, bool _bBlipMessage)
 						}
 
 						/* ignore if busy */
-						if((state != stNone) and (enemy != _sender) and (phase != phGuardingPos))	//not idle and not dealing with this player somehow (defending etc) or psGuardingPos (is low prior)
+						if((state != stNone) and (enemy != _sender) and (phase != phGuardingPos))	//not idle and not dealing with this player somehow (defendingBase etc) or psGuardingPos (is low prior)
 						{
 							return;			//just exit
 						}
@@ -15130,7 +15388,7 @@ function void processCommand(string _message, int _sender, bool _bBlipMessage)
 						if(random(10) <= 6)
 						{
 							/* do we have enough units to start start attacking enemy derrick alone? */
-							if(haveTheoretilcallyMinAttackers(true))	/* don't need too many for the derrick, hence "true" */
+							if(haveTheoreticallyMinAttackers(true))	/* don't need too many for the derrick, hence "true" */
 							{
 								/* find a derrick */
 								structure = findEnemyDerrick(_player);	/* find enemy derrick to attack */
@@ -15150,10 +15408,10 @@ function void processCommand(string _message, int _sender, bool _bBlipMessage)
 						}
 
 						/* didn't start attacking derrick, decide if we want (and can) to attack the base directly */
-						if(knowBase[_player] and haveTheoretilcallyMinAttackers(false))
+						if(knowBase[_player] and haveTheoreticallyMinAttackers(false))
 						{
 							cancelState();	/* stop if doing anything unimportant */
-							startAttack(_player, curBase[_player][0], curBase[_player][1]);
+							startEnemyBaseAttack(_player);
 							dropAllyBeacon("attacking " & getPlayerName(_player), curBase[_player][0], curBase[_player][1]);
 							notifyAllies("attacking " & getPlayerName(_player), TRUE);
 							return;
@@ -15227,6 +15485,17 @@ event	keyPressed(CALL_KEY_PRESSED, ref temp, ref temp2)
 						forceDamageObject(droid, 10);
 					}
 					droid = EnumDroid();
+				}
+			}
+			else if(temp == KEY_U and temp2 == KEY_LCTRL)
+			{
+				if(baseX > 0 and baseY > 0)
+				{
+					updatePlayerTileVis(me);
+					if(checkVisibleTile(me, baseX / TILE, baseY / TILE))
+					{
+						dbg("yes", me);
+					}
 				}
 			}
 
@@ -15504,7 +15773,7 @@ function void dealWithOilAttacked(int _oilx, int _oily)
 
 function bool canStartDefendingOil()
 {
-	//if(!defendingOil() and !helpingAlly() and !defending())		// not busy
+	//if(!defendingOil() and !helpingAlly() and !defendingBase())		// not busy
 	if(state == stNone)		// not busy
 	{
 		if(numAvailableAttackers() >= MIN_OIL_DEFENDERS)
@@ -15548,7 +15817,7 @@ function bool checkOilThreat(int _oilx, int _oily)
 
 function bool canStartTakingOil()
 {
-	//if(!defendingOil() and !helpingAlly() and !defending())		// not busy
+	//if(!defendingOil() and !helpingAlly() and !defendingBase())		// not busy
 	if(numAvailableAttackers() >= numOilAttackers){
 		return true;
 	}
@@ -15607,8 +15876,8 @@ function void startDefendingOil(int _derrickX, int _derrickY, int _maxTime)
 
 	enemy = none;
 
-	sendForceX = _derrickX;
-	sendForceY = _derrickY;
+	updateStateCoord(_derrickX, _derrickY);
+
 	// circlePerimPoint(_derrickX, _derrickY, ref sendForceX, ref sendForceY, (TILE * 4));
 
 	if((sendForceX <= 0) or (sendForceY <= 0))
@@ -15618,7 +15887,8 @@ function void startDefendingOil(int _derrickX, int _derrickY, int _maxTime)
 	}
 
 	setState(stDefendingOil);
-	phase = phMoveToLoc;
+
+	setPhase(phMoveToLoc, NONE);
 
 	maxStateTime = _maxTime;
 
@@ -16083,3 +16353,73 @@ function string	strGratitude()
 	return "thanks";
 }
 
+function void setPhase(int _phase, int _timeout)
+{
+	phase = _phase;
+	tPhase = _timeout;
+}
+
+function bool canSeePlayerBase(int _player)
+{
+	return seeBase[_player];
+}
+
+function bool canSeeLoc(int _x, int _y)
+{
+	updatePlayerTileVis(me);
+	return checkVisibleTile(me, _x, _y);
+}
+
+function bool enemyTargetInRange(int _enemy, int _x, int _y, int _range)
+{
+	local bool _bHaveTarget;
+	
+	_bHaveTarget = structInRangeVis(me, _enemy, _x, _y, _range);
+	
+	if(!_bHaveTarget)
+	{
+		_bHaveTarget = droidInRangeVis(me, _enemy, _x, _y, _range);
+	}
+	
+	return _bHaveTarget;
+}
+
+function BASEOBJ findEnemyTargetInRange(int _enemy, int _x, int _y, int _range, bool _bStructures, bool _bDroids)
+{
+	local BASEOBJ _target;
+	
+	// structures
+	if(_bStructures)
+	{
+		_target = getClosestEnemyStructByType(_x, _y, _range, REF_FACTORY, _enemy);
+
+		if(_target == NULLOBJECT)
+		{
+			_target = getClosestEnemyStructByType(_x, _y, _range, REF_CYBORG_FACTORY, _enemy);
+		}
+		
+		if(_target == NULLOBJECT)
+		{
+			_target = getClosestEnemyStructByType(_x, _y, _range, REF_HQ, _enemy);
+		}
+		
+		if(_target == NULLOBJECT)
+		{
+			_target = getClosestEnemyStructByType(_x, _y, _range, REF_POWER_GEN, _enemy);
+		}
+
+		// find any
+		if(_target == NULLOBJECT)
+		{
+			_target = getClosestEnemyStructByType(_x, _y, _range, NONE, _enemy);
+		}
+	}
+
+	// droids
+	if(_bDroids and _target == NULLOBJECT)
+	{
+		_target = getClosestEnemyDroidByType(_x, _y, _range, NONE, true, _enemy);
+	}
+
+	return _target;
+}
