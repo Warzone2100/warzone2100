@@ -77,10 +77,10 @@ static SDWORD		numWalls;				// Whether the LOS has hit a wall
 static SDWORD		wallX,wallY;			// the position of a wall if it is on the LOS
 
 BOOL rayTerrainCallback(SDWORD x, SDWORD y, SDWORD dist);
-bool scrRayTerrainCallback(SDWORD x, SDWORD y, SDWORD dist);
+BOOL scrRayTerrainCallback(SDWORD x, SDWORD y, SDWORD dist);
 
 // holds information about map tiles visible by droids
-static bool	scrTileVisible[MAX_PLAYERS][UBYTE_MAX][UBYTE_MAX] = {false};
+static bool	scrTileVisible[MAX_PLAYERS][UBYTE_MAX][UBYTE_MAX] = {{{false}}};
 
 bool scrTileIsVisible(SDWORD player, SDWORD x, SDWORD y);
 void scrResetPlayerTileVisibility(SDWORD player);
@@ -749,7 +749,7 @@ void updateSensorDisplay()
 	}
 }
 
-bool scrRayTerrainCallback(SDWORD x, SDWORD y, SDWORD dist)
+BOOL scrRayTerrainCallback(SDWORD x, SDWORD y, SDWORD dist)
 {
 	SDWORD		newH, newG;		// The new gradient
 	MAPTILE		*psTile;

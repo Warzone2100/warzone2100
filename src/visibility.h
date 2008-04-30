@@ -33,7 +33,7 @@ extern BOOL visTilesPending(BASE_OBJECT *psObj);
 extern BOOL rayTerrainCallback(SDWORD x, SDWORD y, SDWORD dist);
 
 /* Ray callback for scripts */
-extern bool scrRayTerrainCallback(SDWORD x, SDWORD y, SDWORD dist);
+extern BOOL scrRayTerrainCallback(SDWORD x, SDWORD y, SDWORD dist);
 
 /* Check which tiles can be seen by an object */
 extern void visTilesUpdate(BASE_OBJECT *psObj, RAY_CALLBACK callback);
