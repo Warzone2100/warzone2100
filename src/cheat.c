@@ -97,8 +97,8 @@ BOOL attemptCheatCode(const char* cheat_name)
 	{
 		char	errorString[255];
 
-		astrlcpy(errorString, cheat_name);
-		astrlcat(errorString, "?");
+		sstrcpy(errorString, cheat_name);
+		sstrcat(errorString, "?");
 
 		addConsoleMessage(errorString, LEFT_JUSTIFY,SYSTEM_MESSAGE);
 	}

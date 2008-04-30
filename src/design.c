@@ -464,15 +464,15 @@ static BOOL _intAddDesign( BOOL bShowCentreScreen )
 	if (psCurrTemplate != NULL)
 	{
 		memcpy(&sCurrDesign, psCurrTemplate, sizeof(DROID_TEMPLATE));
-		astrlcpy(aCurrName, getStatName(psCurrTemplate));
-		astrlcpy(sCurrDesign.aName, aCurrName);
+		sstrcpy(aCurrName, getStatName(psCurrTemplate));
+		sstrcpy(sCurrDesign.aName, aCurrName);
 	}
 	else
 	{
 		memcpy(&sCurrDesign, &sDefaultDesignTemplate, sizeof(DROID_TEMPLATE));
 		sCurrDesign.pName = NULL;
-		astrlcpy(aCurrName, _("New Vehicle"));
-		astrlcpy(sCurrDesign.aName, aCurrName);
+		sstrcpy(aCurrName, _("New Vehicle"));
+		sstrcpy(sCurrDesign.aName, aCurrName);
 	}
 
 	/* Add the design templates form */
@@ -1071,7 +1071,7 @@ BOOL intAddTemplateButtons(UDWORD formID, UDWORD formWidth, UDWORD formHeight,
 
 
 			// On the playstation the tips are additionaly setup when they are displayed ... because we only have one text name buffer
-			astrlcpy(aButText, getTemplateName(psTempl));
+			sstrcpy(aButText, getTemplateName(psTempl));
 			sButInit.pTip = getTemplateName(psTempl);
 
 			BufferID = GetStatBuffer();
@@ -1356,13 +1356,13 @@ static const char *GetDefaultTemplateName(DROID_TEMPLATE *psTemplate)
 		 psTemplate->asParts[COMP_BRAIN]		!= 0    )
 	{
 		const char * pStr = getStatName( psStats );
-		astrlcpy(aCurrName, pStr);
-		astrlcat(aCurrName, " ");
+		sstrcpy(aCurrName, pStr);
+		sstrcat(aCurrName, " ");
 	}
 
 	if ( psTemplate->numWeaps > 1 )
 	{
-		astrlcat(aCurrName, "Hydra ");
+		sstrcat(aCurrName, "Hydra ");
 	}
 
 	psStats = (COMP_BASE_STATS *) (asBodyStats + psTemplate->asParts[COMP_BODY]);
@@ -1376,8 +1376,8 @@ static const char *GetDefaultTemplateName(DROID_TEMPLATE *psTemplate)
 			return NULL;
 		}
 
-		astrlcat(aCurrName, pStr);
-		astrlcat(aCurrName, " ");
+		sstrcat(aCurrName, pStr);
+		sstrcat(aCurrName, " ");
 	}
 
 	psStats = (COMP_BASE_STATS *) (asPropulsionStats + psTemplate->asParts[COMP_PROPULSION]);
@@ -1391,7 +1391,7 @@ static const char *GetDefaultTemplateName(DROID_TEMPLATE *psTemplate)
 			return NULL;
 		}
 
-		astrlcat(aCurrName, pStr);
+		sstrcat(aCurrName, pStr);
 	}
 
 	return aCurrName;
@@ -1404,12 +1404,12 @@ static void intSetEditBoxTextFromTemplate( DROID_TEMPLATE *psTemplate )
 	widgSetString(psWScreen, IDDES_NAMEBOX, getStatName(psTemplate));
 #else
 
-	astrlcpy(aCurrName, "");
+	sstrcpy(aCurrName, "");
 
 	/* show component names if default template else show stat name */
 	if ( psTemplate->droidType != DROID_DEFAULT )
 	{
-		astrlcpy(aCurrName, getTemplateName(psTemplate));
+		sstrcpy(aCurrName, getTemplateName(psTemplate));
 	}
 	else
 	{
@@ -2308,7 +2308,7 @@ static BOOL intAddComponentButtons(COMP_BASE_STATS *psStats, UDWORD size,
 		}
 
 		/* Set the tip and add the button */
-		astrlcpy(aButText, getStatName(psCurrStats));
+		sstrcpy(aButText, getStatName(psCurrStats));
 		sButInit.pTip = getStatName(psCurrStats);
 
 		BufferID = GetObjectBuffer();
@@ -2503,7 +2503,7 @@ static BOOL intAddExtraSystemButtons(UDWORD sensorIndex, UDWORD ecmIndex,
 			}
 
 			// Set the tip and add the button
-			astrlcpy(aButText, getStatName(psCurrStats));
+			sstrcpy(aButText, getStatName(psCurrStats));
 			sButInit.pTip = getStatName(psCurrStats);
 
 			BufferID = sButInit.id-IDDES_EXTRASYSSTART;
@@ -3445,7 +3445,7 @@ static BOOL intValidTemplate(DROID_TEMPLATE *psTempl)
 	psTempl->droidType = droidTemplateType(psTempl);
 
 	/* copy current name into template */
-	astrlcpy(sCurrDesign.aName, aCurrName);
+	sstrcpy(sCurrDesign.aName, aCurrName);
 
 	return true;
 }
@@ -3544,8 +3544,8 @@ void intProcessDesign(UDWORD id)
 		{
 			desCreateDefaultTemplate();
 
-			astrlcpy(aCurrName, _("New Vehicle"));
-			astrlcpy(sCurrDesign.aName, aCurrName);
+			sstrcpy(aCurrName, _("New Vehicle"));
+			sstrcpy(sCurrDesign.aName, aCurrName);
 
 			/* hide body and system component buttons */
 			widgHide( psWScreen, IDDES_SYSTEMBUTTON );
@@ -3583,7 +3583,7 @@ void intProcessDesign(UDWORD id)
 			{
 				/* Set the new template */
 				memcpy(&sCurrDesign, psTempl, sizeof(DROID_TEMPLATE));
-				astrlcpy(aCurrName, getTemplateName(psTempl));
+				sstrcpy(aCurrName, getTemplateName(psTempl));
 
 				/* reveal body and propulsion component buttons */
 				widgReveal( psWScreen, IDDES_BODYBUTTON );
@@ -3857,7 +3857,7 @@ void intProcessDesign(UDWORD id)
 		/* update name if not customised */
 		if ( bTemplateNameCustomised == false )
 		{
-			astrlcpy(sCurrDesign.aName, GetDefaultTemplateName(&sCurrDesign));
+			sstrcpy(sCurrDesign.aName, GetDefaultTemplateName(&sCurrDesign));
 		}
 
 		/* Update the name in the edit box */
@@ -4020,7 +4020,7 @@ void intProcessDesign(UDWORD id)
 		/* update name if not customised */
 		if ( bTemplateNameCustomised == false )
 		{
-			astrlcpy(sCurrDesign.aName, GetDefaultTemplateName(&sCurrDesign));
+			sstrcpy(sCurrDesign.aName, GetDefaultTemplateName(&sCurrDesign));
 		}
 
 		/* Update the name in the edit box */
@@ -4072,8 +4072,8 @@ void intProcessDesign(UDWORD id)
 			break;
 			/* The name edit box */
 		case IDDES_NAMEBOX:
-			astrlcpy(sCurrDesign.aName, widgGetString(psWScreen, IDDES_NAMEBOX));
-			astrlcpy(aCurrName, sCurrDesign.aName);
+			sstrcpy(sCurrDesign.aName, widgGetString(psWScreen, IDDES_NAMEBOX));
+			sstrcpy(aCurrName, sCurrDesign.aName);
 			break;
 		case IDDES_BIN:
 			/* Find the template for the current button */
@@ -4143,7 +4143,7 @@ void intProcessDesign(UDWORD id)
 
 				/* Set the new template */
 				memcpy(&sCurrDesign, psTempl, sizeof(DROID_TEMPLATE));
-				astrlcpy(aCurrName, getTemplateName(psTempl));
+				sstrcpy(aCurrName, getTemplateName(psTempl));
 
 				intSetEditBoxTextFromTemplate( psTempl );
 
@@ -4726,7 +4726,7 @@ static BOOL saveTemplate(void)
 
 		/* Copy the template */
 		memcpy(psTempl, &sCurrDesign, sizeof(DROID_TEMPLATE));
-		astrlcpy(psTempl->aName, aCurrName);
+		sstrcpy(psTempl->aName, aCurrName);
 
 		/* Now update the droid template form */
 		widgDelete(psWScreen, IDDES_TEMPLFORM);
