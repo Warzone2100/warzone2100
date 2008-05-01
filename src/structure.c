@@ -342,118 +342,52 @@ void resetFactoryNumFlag(void)
 	}
 }
 
-static void structureType(STRUCTURE_STATS *pStructure, char *pType)
+static const struct
 {
-	if (!strcmp(pType,"HQ"))
+	const char*     typeName;
+	STRUCTURE_TYPE  type;
+} structureTypeNames[] =
+{
+	{ "HQ",                 REF_HQ                  },
+	{ "FACTORY",            REF_FACTORY             },
+	{ "FACTORY MODULE",     REF_FACTORY_MODULE      },
+	{ "RESEARCH",           REF_RESEARCH            },
+	{ "RESEARCH MODULE",    REF_RESEARCH_MODULE     },
+	{ "POWER GENERATOR",    REF_POWER_GEN           },
+	{ "POWER MODULE",       REF_POWER_MODULE        },
+	{ "RESOURCE EXTRACTOR", REF_RESOURCE_EXTRACTOR  },
+	{ "DEFENSE",            REF_DEFENSE             },
+	{ "WALL",               REF_WALL                },
+	{ "CORNER WALL",        REF_WALLCORNER          },
+	{ "REPAIR FACILITY",    REF_REPAIR_FACILITY     },
+	{ "COMMAND RELAY",      REF_COMMAND_CONTROL     },
+	{ "DEMOLISH",           REF_DEMOLISH            },
+	{ "CYBORG FACTORY",     REF_CYBORG_FACTORY      },
+	{ "VTOL FACTORY",       REF_VTOL_FACTORY        },
+	{ "LAB",                REF_LAB                 },
+	{ "DOOR",               REF_BLASTDOOR           },
+	{ "REARM PAD",          REF_REARM_PAD           },
+	{ "MISSILE SILO",       REF_MISSILE_SILO        },
+	{ "SAT UPLINK",         REF_SAT_UPLINK          },
+};
+
+static STRUCTURE_TYPE structureType(const char* typeName)
+{
+	unsigned int i;
+
+	for (i = 0; i < ARRAY_SIZE(structureTypeNames); ++i)
 	{
-		pStructure->type = REF_HQ;
-		return;
+		if (strcmp(typeName, structureTypeNames[i].typeName) == 0)
+		{
+			return structureTypeNames[i].type;
+		}
 	}
-	if (!strcmp(pType,"FACTORY"))
-	{
-		pStructure->type = REF_FACTORY;
-		return;
-	}
-	if (!strcmp(pType,"FACTORY MODULE"))
-	{
-		pStructure->type = REF_FACTORY_MODULE;
-		return;
-	}
-	if (!strcmp(pType,"RESEARCH"))
-	{
-		pStructure->type = REF_RESEARCH;
-		return;
-	}
-	if (!strcmp(pType,"RESEARCH MODULE"))
-	{
-		pStructure->type = REF_RESEARCH_MODULE;
-		return;
-	}
-	if (!strcmp(pType,"POWER GENERATOR"))
-	{
-		pStructure->type = REF_POWER_GEN;
-		return;
-	}
-	if (!strcmp(pType,"POWER MODULE"))
-	{
-		pStructure->type = REF_POWER_MODULE;
-		return;
-	}
-	if (!strcmp(pType, "RESOURCE EXTRACTOR"))
-	{
-		pStructure->type = REF_RESOURCE_EXTRACTOR;
-		return;
-	}
-	if (!strcmp(pType, "DEFENSE"))
-	{
-		pStructure->type = REF_DEFENSE;
-		return;
-	}
-	if (!strcmp(pType, "WALL"))
-	{
-		pStructure->type = REF_WALL;
-		return;
-	}
-	if (!strcmp(pType, "CORNER WALL"))
-	{
-		pStructure->type = REF_WALLCORNER;
-		return;
-	}
-	if (!strcmp(pType, "REPAIR FACILITY"))
-	{
-		pStructure->type = REF_REPAIR_FACILITY;
-		return;
-	}
-	if (!strcmp(pType, "COMMAND RELAY"))
-	{
-		pStructure->type = REF_COMMAND_CONTROL;
-		return;
-	}
-	if (!strcmp(pType, "DEMOLISH"))
-	{
-		pStructure->type = REF_DEMOLISH;
-		return;
-	}
-	if (!strcmp(pType, "CYBORG FACTORY"))
-	{
-		pStructure->type = REF_CYBORG_FACTORY;
-		return;
-	}
-	if (!strcmp(pType, "VTOL FACTORY"))
-	{
-		pStructure->type = REF_VTOL_FACTORY;
-		return;
-	}
-	if (!strcmp(pType, "LAB"))
-	{
-		pStructure->type = REF_LAB;
-		return;
-	}
-	if (!strcmp(pType, "DOOR"))
-	{
-		pStructure->type = REF_BLASTDOOR;
-		return;
-	}
-	if (!strcmp(pType, "REARM PAD"))
-	{
-		pStructure->type = REF_REARM_PAD;
-		return;
-	}
-	if (!strcmp(pType, "MISSILE SILO"))
-	{
-		pStructure->type = REF_MISSILE_SILO;
-		return;
-	}
-	if (!strcmp(pType, "SAT UPLINK"))
-	{
-		pStructure->type = REF_SAT_UPLINK;
-		return;
-	}
-	ASSERT(!"unknown structure type", "structureType: Unknown Structure Type");
+
+	ASSERT(!"unknown structure type", "Unknown Structure Type (%s)", typeName);
 }
 
 
-static const char *getStructName(STRUCTURE_STATS *psStruct)
+static const char* getStructName(const STRUCTURE_STATS* psStruct)
 {
 	return getName(psStruct->pName);
 }
@@ -665,7 +599,7 @@ BOOL loadStructureStats(const char *pStructData, UDWORD bufferSize)
 		psStructure->ref = REF_STRUCTURE_START + i;
 
 		//determine the structure type
-		structureType(psStructure, type);
+		psStructure->type = structureType(type);
 
 		//determine the tech level
 		if (!setTechLevel((BASE_STATS *)psStructure, techLevel))
