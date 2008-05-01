@@ -155,19 +155,19 @@ run
 	//research[0][35]	RESEARCHSTAT		"R-Defense-AASite-QuadRotMg"	//Whirlwind site - worse than cyclone for stationary use
 
 	research[0][50]	RESEARCHSTAT		"R-Vehicle-Body10"		//vengeance
-	research[0][51]	RESEARCHSTAT		"R-Wpn-Laser02"			//pulse laser
-	research[0][52]	RESEARCHSTAT		"R-Wpn-HvyLaser"		// heavy laser, needs flashlight and pulse laser
 
-	research[0][53]	RESEARCHSTAT		"R-Wpn-AAGun-Accuracy03"
-	research[0][54]	RESEARCHSTAT		"R-Wpn-AAGun-Damage06"	//needs 8th cannon damage
-	research[0][55]	RESEARCHSTAT		"R-Wpn-AAGun-ROF06"
+	research[0][51]	RESEARCHSTAT		"R-Wpn-AAGun-Accuracy03"
+	research[0][52]	RESEARCHSTAT		"R-Wpn-AAGun-Damage06"	//needs 8th cannon damage
+	research[0][53]	RESEARCHSTAT		"R-Wpn-AAGun-ROF06"
 	
 	// Wyvern
-	research[0][56]	RESEARCHSTAT		"R-Vehicle-Body13"		// Wyvern, needs vengeance
+	research[0][54]	RESEARCHSTAT		"R-Vehicle-Body13"		// Wyvern, needs vengeance
 
-	research[0][57]	RESEARCHSTAT		"R-Defense-Rail2"		//rail gun bunker
+	research[0][55]	RESEARCHSTAT		"R-Defense-Rail2"		//rail gun bunker
 
-	research[0][58]	RESEARCHSTAT		"R-Defense-WallTower-Rail3"	//Gauss HP
+	research[0][56]	RESEARCHSTAT		"R-Defense-WallTower-Rail3"	//Gauss HP
+	research[0][57]	RESEARCHSTAT		"R-Wpn-Rail-Accuracy01"	//Gauss Accuracy
+	research[0][58]	RESEARCHSTAT		"R-Wpn-Rail-ROF03"		//Gauss ROF
 
 	research[0][59]	RESEARCHSTAT		"R-Wpn-LasSat"	//includes
 
@@ -334,7 +334,7 @@ run
 	cybEngineer		TEMPLATE			"Cyb-ComEng"
 
 	/* Light Templates */
-	numTemplates[0]	INT		35
+	numTemplates[0]	INT		43
 
 	tmpl[0][0]	TEMPLATE	"ViperFlameWheels"		//Flamer
 	tmpl[0][1]	TEMPLATE	"ViperMG01Wheels"		//MG
@@ -358,31 +358,40 @@ run
 	tmpl[0][18]	TEMPLATE	"CobraLtA-Thalftrack"
 	tmpl[0][19]	TEMPLATE	"CobraLtA-Thalftrack"	//"ViperTrkLancer"
 	tmpl[0][20]	TEMPLATE	"CobraLtA-Thalftrack"
-	tmpl[0][21]	TEMPLATE	"ViperTrkLancer"
 
+	tmpl[0][21]	TEMPLATE	"H-Scorp-Trk-Lancer"
 	tmpl[0][22]	TEMPLATE	"H-Scorp-Trk-Lancer"
-	tmpl[0][23]	TEMPLATE	"H-Scorp-Trk-Lancer"
-	tmpl[0][24]	TEMPLATE	"H-Scorp-Trk-Lancer"	//"SK-Cobra-Hover-Lancer"
+	tmpl[0][23]	TEMPLATE	"H-Scorp-Trk-Lancer"	//"SK-Cobra-Hover-Lancer"
 	
+	tmpl[0][24]	TEMPLATE	"H-Scorp-Trk-HC"		//"Cobra-Hover-HC"
 	tmpl[0][25]	TEMPLATE	"H-Scorp-Trk-HC"		//"Cobra-Hover-HC"
-	tmpl[0][26]	TEMPLATE	"H-Scorp-Trk-HC"		//"Cobra-Hover-HC"
 
 	// Python
-	tmpl[0][27]	TEMPLATE	"Sk-PythonHvCanTrack"		// Python HC
-	tmpl[0][28]	TEMPLATE	"PythonScourgeTracks"		// Python Scourge
-
-	//tmpl[0][23]	TEMPLATE	"PythonGaussTracks"			// Python Gauss
-	//tmpl[0][24]	TEMPLATE	"PythonPulseTracks"			// Python Pulse
+	tmpl[0][26]	TEMPLATE	"A-Python-Trk-Lancer"
+	tmpl[0][27]	TEMPLATE	"PythonMedCanTracks"		// Python MC
+	tmpl[0][28]	TEMPLATE	"Sk-PythonHvCanTrack"		// Python HC
+	tmpl[0][29]	TEMPLATE	"PythonTKTracks"			// Python TK
+	tmpl[0][30]	TEMPLATE	"PythonScourgeTracks"		// Python Scourge
 	
 	// Mantis
-	tmpl[0][29]	TEMPLATE	"MantisTrkHC"
-	tmpl[0][30]	TEMPLATE	"MantisTKTracks"
-	tmpl[0][31]	TEMPLATE	"MantisScourgeTracks"
+	tmpl[0][31]	TEMPLATE	"MantisTrkHC"
+	tmpl[0][32]	TEMPLATE	"MantisTKTracks"
+	tmpl[0][33]	TEMPLATE	"MantisScourgeTracks"
+	
+	// Tiger
+	tmpl[0][34]	TEMPLATE	"SK-Tiger-Track-Hcannon"
+	tmpl[0][35]	TEMPLATE	"SK-Tiger-Track-TK"
+	tmpl[0][36]	TEMPLATE	"SK-Tiger-Track-Scourge"
+	tmpl[0][37]	TEMPLATE	"SK-Tiger-Track-Gauss"
 
-	// Gauss
-	tmpl[0][32]	TEMPLATE	"SK-Tiger-Track-Gauss"		// Tiger Gauss
-	tmpl[0][33]	TEMPLATE	"TigerPulseTracks"			// Tiger Pulse
-	tmpl[0][34]	TEMPLATE	"TigerHvLaserTracks"		// Tiger Heavy Laser
+	// Vengeance
+	tmpl[0][38]	TEMPLATE	"A-Veng-Trk-TK"
+	tmpl[0][39]	TEMPLATE	"SK-Veng-Track-Scourge"
+	tmpl[0][40]	TEMPLATE	"A-Veng-Trk-Rail"
+	tmpl[0][41]	TEMPLATE	"SK-Veng-Track-Gauss"
+	
+	// Wyvern
+	tmpl[0][42]	TEMPLATE	"WyvernGaussTracks"
 
 	/* Heavy Templates */
 	numTemplates[1]	INT		42
