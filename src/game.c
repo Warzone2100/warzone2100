@@ -10420,7 +10420,7 @@ static BOOL writeResearchFile(char *pFileName)
 
 		for (player = 0; player < MAX_PLAYERS; player++)
 		{
-			psSaveResearch->possible[player] = (UBYTE)IsResearchPossible(&asPlayerResList[player][i]);
+			psSaveResearch->possible[player] = IsResearchPossible(&asPlayerResList[player][i]);
 			psSaveResearch->researched[player] = (UBYTE)(asPlayerResList[player][i].ResearchStatus&RESBITS);
 			psSaveResearch->currentPoints[player] = asPlayerResList[player][i].currentPoints;
 		}
