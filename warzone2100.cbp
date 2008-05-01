@@ -277,12 +277,6 @@
 			<Option target="DBGWindows" />
 			<Option target="NDBGWindows" />
 		</Unit>
-		<Unit filename="lib/framework/dbghelp.h">
-			<Option target="DBGUnix" />
-			<Option target="NDBGUnix" />
-			<Option target="DBGWindows" />
-			<Option target="NDBGWindows" />
-		</Unit>
 		<Unit filename="lib/framework/debug.c">
 			<Option compilerVar="CC" />
 			<Option target="DBGUnix" />
@@ -373,12 +367,6 @@
 			<Option target="NDBGWindows" />
 		</Unit>
 		<Unit filename="lib/framework/math-help.h">
-			<Option target="DBGUnix" />
-			<Option target="NDBGUnix" />
-			<Option target="DBGWindows" />
-			<Option target="NDBGWindows" />
-		</Unit>
-		<Unit filename="lib/framework/platform.h">
 			<Option target="DBGUnix" />
 			<Option target="NDBGUnix" />
 			<Option target="DBGWindows" />
