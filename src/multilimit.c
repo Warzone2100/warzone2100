@@ -151,8 +151,8 @@ BOOL startLimitScreen(void)
 	// ok button
 	addMultiBut(psWScreen,IDLIMITS,IDLIMITS_OK,
 					LIMITS_OKX,LIMITS_OKY,
-					iV_GetImageWidth(FrontImages,IMAGE_BIGOK),
-					iV_GetImageHeight(FrontImages,IMAGE_BIGOK),
+					iV_GetImageWidth(FrontImages,IMAGE_OK),
+					iV_GetImageHeight(FrontImages,IMAGE_OK),
 					_("Accept Settings"),IMAGE_OK,IMAGE_OK,true);
 
 	// Count the number of minor tabs needed
