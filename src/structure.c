@@ -171,7 +171,7 @@ static		UBYTE	satUplinkExists[MAX_PLAYERS];
 //flag for when the player has one built - either completely or partially
 static		UBYTE	lasSatExists[MAX_PLAYERS];
 
-static BOOL setFunctionality(STRUCTURE* psBuilding, UDWORD functionType);
+static BOOL setFunctionality(STRUCTURE* psBuilding, STRUCTURE_TYPE functionType);
 static void setFlagPositionInc(FUNCTIONALITY* pFunctionality, UDWORD player, UBYTE factoryType);
 static void informPowerGen(STRUCTURE *psStruct);
 static BOOL electronicReward(STRUCTURE *psStructure, UBYTE attackPlayer);
@@ -2046,7 +2046,7 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 }
 
 
-BOOL setFunctionality(STRUCTURE	*psBuilding, UDWORD functionType)
+BOOL setFunctionality(STRUCTURE	*psBuilding, STRUCTURE_TYPE functionType)
 {
 	CHECK_STRUCTURE(psBuilding);
 
@@ -2061,7 +2061,7 @@ BOOL setFunctionality(STRUCTURE	*psBuilding, UDWORD functionType)
 		case REF_REPAIR_FACILITY:
 		case REF_REARM_PAD:
 			// Allocate space for the buildings functionality
-			psBuilding->pFunctionality = calloc(1, sizeof(FUNCTIONALITY));
+			psBuilding->pFunctionality = calloc(1, sizeof(*psBuilding->pFunctionality));
 
 			if (psBuilding->pFunctionality == NULL)
 			{
@@ -2120,7 +2120,7 @@ BOOL setFunctionality(STRUCTURE	*psBuilding, UDWORD functionType)
 					setFlagPositionInc(psBuilding->pFunctionality, psBuilding->player, VTOL_FLAG);
 					break;
 				default:
-					ASSERT(!"invalid factory type", "setFunctionality: Invalid factory type");
+					ASSERT(!"invalid factory type", "Invalid factory type");
 			}
 
 			// Take advantage of upgrades
@@ -2218,6 +2218,10 @@ BOOL setFunctionality(STRUCTURE	*psBuilding, UDWORD functionType)
 			structureReArmUpgrade(psBuilding);
 			break;
 		}
+
+		// Structure types without a FUNCTIONALITY
+		default:
+			break;
 	}
 
 	return true;
