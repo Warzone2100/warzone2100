@@ -294,4 +294,6 @@ WyvernPulseTracks,Laser2PULSEMk1,NULL,NULL,6
 WyvernHvLaserTracks,HeavyLaser,NULL,NULL,6
 ViperLtMGHalfTracks,MG1Mk1,NULL,NULL,6
 ViperFlameHalfTracks,Flame1Mk1,NULL,NULL,6
+PythonMedCanTracks,Cannon2A-TMk1,NULL,NULL,6
+PythonTKTracks,Rocket-HvyA-T,NULL,NULL,6
 ZNULLDESIGN,ZNULLWEAPON,ZNULLWEAPON,ZNULLWEAPON,0
