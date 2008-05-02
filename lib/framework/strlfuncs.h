@@ -17,6 +17,7 @@
 #ifndef __INCLUDED_FRAMEWORK_STRLFUNCS_H__
 #define __INCLUDED_FRAMEWORK_STRLFUNCS_H__
 
+#include "frame.h"
 #include <string.h>
 #include <stddef.h>
 #include <assert.h>
