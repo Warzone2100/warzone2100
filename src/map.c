@@ -23,6 +23,8 @@
  * Utility functions for the map data structure.
  *
  */
+#include <time.h>
+
 #include "lib/framework/frame.h"
 #include "lib/framework/tagfile.h"
 #include "lib/framework/file.h"
@@ -44,6 +46,9 @@
 #include "gateway.h"
 #include "wrappers.h"
 #include "mapgrid.h"
+#include "astar.h"
+#include "fpath.h"
+#include "levels.h"
 
 //scroll min and max values
 SDWORD		scrollMinX, scrollMaxX, scrollMinY, scrollMaxY;
@@ -168,11 +173,6 @@ BOOL mapNew(UDWORD width, UDWORD height)
 
 	mapWidth = width;
 	mapHeight = height;
-
-	for (i=0; i<MAX_TILE_TEXTURES; i++)
-	{
-		terrainTypes[i] = TER_SANDYBRUSH;
-	}
 
 	intSetMapPos(mapWidth * TILE_UNITS/2, mapHeight * TILE_UNITS/2);
 
@@ -1506,4 +1506,50 @@ bool readVisibilityData(const char* fileName)
 	/* Hopefully everything's just fine by now */
 	return true;
 }
-// -----------------------------------------------------------------------------------
+
+static void astarTest(const char *name, int x1, int y1, int x2, int y2)
+{
+	int		asret, i;
+	ASTAR_ROUTE	route;
+	int		x = world_coord(x1);
+	int		y = world_coord(y1);
+	int		endx = world_coord(x2);
+	int		endy = world_coord(y2);
+	clock_t		stop;
+	clock_t		start = clock();
+	int		iterations;
+	bool		retval;
+
+	retval = levLoadData(name, NULL, 0);
+	ASSERT(retval, "Could not load %s", name);
+	fpathInitialise();
+	for (i = 0; i < 100; i++)
+	{
+		iterations = 1;
+		route.numPoints = 0;
+		astarResetCounters();
+		ASSERT(astarInner == 0, "astarInner not reset");
+		asret = fpathAStarRoute(ASR_NEWROUTE, &route, x, y, endx, endy);
+		while (asret == ASR_PARTIAL)
+		{
+			astarResetCounters();
+			ASSERT(astarInner == 0, "astarInner not reset");
+			asret = fpathAStarRoute(ASR_CONTINUE, &route, x, y, endx, endy);
+			iterations++;
+		}
+	}
+	stop = clock();
+	fprintf(stdout, "\t\tPath-finding timing %s: %.02f (%d nodes, %d iterations)\n", name,
+	        (double)(stop - start) / (double)CLOCKS_PER_SEC, route.numPoints, iterations);
+	levReleaseAll();
+}
+
+void mapTest()
+{
+	fprintf(stdout, "\tMap self-test...\n");
+
+	astarTest("BeggarsKanyon-T1", 16, 5, 119, 182);
+	astarTest("MizaMaze-T3", 5, 5, 108, 112);
+
+	fprintf(stdout, "\tMap self-test: PASSED\n");
+}

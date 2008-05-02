@@ -70,7 +70,7 @@
 #include "main.h"
 #include "wrappers.h"
 #include "version.h"
-
+#include "map.h"
 
 /* Always use fallbacks on Windows */
 #if defined(WZ_OS_WIN)
@@ -936,6 +936,7 @@ int main(int argc, char *argv[])
 		NETtest();
 		tagTest();
 		levTest();
+		mapTest();
 		fprintf(stdout, "All tests PASSED!\n");
 		exit(0);
 	}

@@ -670,5 +670,6 @@ void levTest(void)
 	levTestLoad("CAM_3A");
 	levTestLoad("FASTPLAY");
 	levTestLoad("TUTORIAL3");
+	levTestLoad("BeggarsKanyon-T1");
 	fprintf(stdout, "\tLevels self-test: PASSED\n");
 }

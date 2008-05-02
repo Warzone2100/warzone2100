@@ -297,4 +297,6 @@ extern bool	writeVisibilityData(const char* fileName);
 //scroll min and max values
 extern SDWORD		scrollMinX, scrollMaxX, scrollMinY, scrollMaxY;
 
+extern void mapTest(void);
+
 #endif // __INCLUDED_SRC_MAP_H__
