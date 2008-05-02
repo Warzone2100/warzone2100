@@ -412,98 +412,59 @@ static BOOL fpathRouteCloser(MOVE_CONTROL *psMoveCntl, ASTAR_ROUTE *psAStarRoute
 static FPATH_RETVAL fpathGatewayRoute(DROID* psDroid, SDWORD routeMode, SDWORD sx, SDWORD sy, 
                                       SDWORD fx, SDWORD fy, MOVE_CONTROL *psMoveCntl)
 {
-	static SDWORD	linkx, linky, gwx, gwy, asret, matchPoints;
-	static ASTAR_ROUTE		sAStarRoute;
-	FPATH_RETVAL			retval = FPR_OK;
-	BOOL			bRouting, bFinished;
-	static BOOL		bFirstRoute;
+	static ASTAR_ROUTE	sAStarRoute;
+	int			asret;
 
 	if (routeMode == ASR_NEWROUTE)
 	{
 		// initialise the move control structures
 		psMoveCntl->numPoints = 0;
 		sAStarRoute.numPoints = 0;
-		bFirstRoute = true;
 	}
 
-	// keep trying gateway routes until out of options
-	bRouting = true;
-	while (bRouting)
+	objTrace(LOG_MOVEMENT, psDroid->id, "fpathGatewayRoute: astar route : (%d,%d) -> (%d,%d)",
+		map_coord(sx), map_coord(sy), map_coord(fx), map_coord(fy));
+	asret = fpathAStarRoute(routeMode, &sAStarRoute, sx, sy, fx,fy);
+	if (asret == ASR_PARTIAL)
 	{
-		if (routeMode == ASR_NEWROUTE)
-		{
-			// reset matchPoints so that routing between gateways generated
-			// by the previous gateway route can be reused
-			matchPoints = 0;
-			sAStarRoute.numPoints = 0;
-		}
-		bFirstRoute = false;
-
-		if (routeMode == ASR_NEWROUTE)
-		{
-			linkx = sx;
-			linky = sy;
-		}
-
-		// now generate the route
-		bRouting = false;
-		bFinished = false;
-		while (!bFinished)
-		{
-			gwx = fx;
-			gwy = fy;
-
-			objTrace(LOG_MOVEMENT, psDroid->id, "fpathGatewayRoute: astar route : (%d,%d) -> (%d,%d)",
-				map_coord(linkx), map_coord(linky),
-				map_coord(gwx), map_coord(gwy));
-			asret = fpathAStarRoute(routeMode, &sAStarRoute, linkx,linky, gwx,gwy);
-			if (asret == ASR_PARTIAL)
-			{
-				// routing hasn't finished yet
-				objTrace(LOG_MOVEMENT, psDroid->id, "fpathGatewayRoute: Reschedule");
-				return FPR_WAIT;
-			}
-			routeMode = ASR_NEWROUTE;
-
-			if ((asret == ASR_NEAREST) &&
-				actionRouteBlockingPos(psDroid, sAStarRoute.finalX,sAStarRoute.finalY))
-			{
-				// found a blocking wall - route to that
-				objTrace(LOG_MOVEMENT, psDroid->id, "fpathGatewayRoute: Got blocking wall");
-				return FPR_OK;
-			}
-			else if (asret == ASR_NEAREST)
-			{
-				// all routing was in one zone - this is as good as it's going to be
-				objTrace(LOG_MOVEMENT, psDroid->id, "fpathGatewayRoute: Nearest route in same zone");
-				if (fpathRouteCloser(psMoveCntl, &sAStarRoute, fx,fy))
-				{
-					psMoveCntl->numPoints = 0;
-					fpathAppendRoute(psMoveCntl, &sAStarRoute);
-				}
-				return FPR_OK;
-			}
-			else if (asret == ASR_FAILED)
-			{
-				// all routing was in one zone - can't retry
-				objTrace(LOG_MOVEMENT, psDroid->id, "fpathGatewayRoute: Failed route in same zone");
-				return FPR_FAILED;
-			}
-
-			linkx = gwx;
-			linky = gwy;
-
-			bFinished = true;
-		}
+		// routing hasn't finished yet
+		objTrace(LOG_MOVEMENT, psDroid->id, "fpathGatewayRoute: Reschedule");
+		return FPR_WAIT;
 	}
+	routeMode = ASR_NEWROUTE;
 
-	if (fpathRouteCloser(psMoveCntl, &sAStarRoute, fx,fy))
+	if (asret == ASR_NEAREST && actionRouteBlockingPos(psDroid, sAStarRoute.finalX,sAStarRoute.finalY))
 	{
-		psMoveCntl->numPoints = 0;
-		fpathAppendRoute(psMoveCntl, &sAStarRoute);
+		// found a blocking wall - route to that
+		objTrace(LOG_MOVEMENT, psDroid->id, "fpathGatewayRoute: Got blocking wall");
+		return FPR_OK;
 	}
-
-	return retval;
+	else if (asret == ASR_NEAREST)
+	{
+		// all routing was in one zone - this is as good as it's going to be
+		objTrace(LOG_MOVEMENT, psDroid->id, "fpathGatewayRoute: Nearest route in same zone");
+		if (fpathRouteCloser(psMoveCntl, &sAStarRoute, fx,fy))
+		{
+			psMoveCntl->numPoints = 0;
+			fpathAppendRoute(psMoveCntl, &sAStarRoute);
+		}
+		return FPR_OK;
+	}
+	else if (asret == ASR_FAILED)
+	{
+		// all routing was in one zone - can't retry
+		objTrace(LOG_MOVEMENT, psDroid->id, "fpathGatewayRoute: Failed route in same zone");
+		return FPR_FAILED;
+	}
+	else
+	{
+		if (fpathRouteCloser(psMoveCntl, &sAStarRoute, fx,fy))
+		{
+			psMoveCntl->numPoints = 0;
+			fpathAppendRoute(psMoveCntl, &sAStarRoute);
+		}
+		return FPR_OK;
+	}
 }
 
 void fpathSetCurrentDroid(DROID* psDroid)
