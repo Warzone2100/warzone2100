@@ -90,7 +90,11 @@ void yyerror(const char* msg)
 
 %%
 
-lev_file:               level_entry
+lev_file:               /* Empty to allow empty files */
+					{
+						debug(LOG_WARNING, "Warning level file is empty (this could be intentional though).");
+					}
+                      | level_entry
                       | lev_file level_entry
                         ;
 
