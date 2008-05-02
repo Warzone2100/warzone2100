@@ -327,7 +327,6 @@ BOOL missionShutDown(void)
 		}
 
 		psMapTiles = mission.psMapTiles;
-		aMapLinePoints = mission.aMapLinePoints;
 		mapWidth = mission.mapWidth;
 		mapHeight = mission.mapHeight;
 		psGateways = mission.psGateways;
@@ -727,7 +726,6 @@ void saveMissionData(void)
 
 	//save the mission data
 	mission.psMapTiles = psMapTiles;
-	mission.aMapLinePoints = aMapLinePoints;
 	mission.mapWidth = mapWidth;
 	mission.mapHeight = mapHeight;
 	mission.scrollMinX = scrollMinX;
@@ -900,7 +898,6 @@ void restoreMissionData(void)
 
 	psMapTiles = mission.psMapTiles;
 
-	aMapLinePoints = mission.aMapLinePoints;
 	mapWidth = mission.mapWidth;
 	mapHeight = mission.mapHeight;
 	scrollMinX = mission.scrollMinX;
@@ -910,7 +907,6 @@ void restoreMissionData(void)
 	psGateways = mission.psGateways;
 	//and clear the mission pointers
 	mission.psMapTiles	= NULL;
-	mission.aMapLinePoints = NULL;
 	mission.mapWidth	= 0;
 	mission.mapHeight	= 0;
 	mission.scrollMinX	= 0;

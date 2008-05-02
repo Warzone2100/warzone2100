@@ -46,7 +46,6 @@ typedef struct _mission
 	//MISSION_TYPE		type;							//defines which start and end functions to use
 	UDWORD				type;							//defines which start and end functions to use - see levels_type in levels.h
 	MAPTILE				*psMapTiles;					//the original mapTiles
-	TILE_COORD			*aMapLinePoints;				//the original mapLinePoints
 	UDWORD				mapWidth;						//the original mapWidth
 	UDWORD				mapHeight;						//the original mapHeight
 	struct _gateway		*psGateways;					//the gateway list

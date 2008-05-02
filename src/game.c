@@ -2334,11 +2334,6 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 		{
 //			free(psMapTiles);
 		}
-		if (aMapLinePoints)
-		{
-			free(aMapLinePoints);
-			aMapLinePoints = NULL;
-		}
 		//clear all the messages?
 		releaseAllProxDisp();
 	}
@@ -2732,7 +2727,6 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 
 		//load the map and the droids then swap pointers
 //		psMapTiles = NULL;
-//		aMapLinePoints = NULL;
 		//load in the map file
 		aFileName[fileExten] = '\0';
 		strcat(aFileName, "mission.map");
@@ -2891,7 +2885,6 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 	{
 		LOADBARCALLBACK();	//		loadingScreenCallback();
 		psMapTiles = NULL;
-		aMapLinePoints = NULL;
 		//load in the map file
 		aFileName[fileExten] = '\0';
 		strcat(aFileName, "game.map");
@@ -3515,13 +3508,7 @@ error:
 	{
 //		free(psMapTiles);
 	}
-	if (aMapLinePoints)
-	{
-		free(aMapLinePoints);
-		aMapLinePoints = NULL;
-	}
 	psMapTiles = NULL;
-	aMapLinePoints = NULL;
 
 	/*if (!loadFile("blank.map", &pFileData, &fileSize))
 	{
