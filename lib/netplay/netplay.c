@@ -122,7 +122,7 @@ static int32_t          NetGameFlags[4] = { 0, 0, 0, 0 };
 
 static NETBUFSOCKET* NET_createBufferedSocket(void)
 {
-	NETBUFSOCKET* bs = (NETBUFSOCKET*)malloc(sizeof(NETBUFSOCKET));
+	NETBUFSOCKET* bs = (NETBUFSOCKET*)malloc(sizeof(*bs));
 
 	bs->socket = NULL;
 	bs->buffer = NULL;
@@ -303,7 +303,7 @@ UDWORD NETplayerInfo(void)
 		return 1;
 	}
 
-	memset(NetPlay.players, 0, sizeof(PLAYER) * MAX_PLAYERS);	// reset player info
+	memset(NetPlay.players, 0, sizeof(NetPlay.players));	// reset player info
 
 	for (i = 0; i < MAX_CONNECTED_PLAYERS; ++i)
 	{
@@ -365,7 +365,7 @@ static void NETsendGameFlags(void)
 	NETbeginEncode(NET_GAME_FLAGS, NET_ALL_PLAYERS);
 	{
 		// Send the amount of game flags we're about to send
-		uint8_t i, count = sizeof(NetGameFlags) / sizeof(*NetGameFlags);
+		uint8_t i, count = ARRAY_SIZE(NetGameFlags);
 		NETuint8_t(&count);
 
 		// Send over all game flags
@@ -508,8 +508,8 @@ int NETinit(BOOL bFirstCall)
 
 		for(i = 0; i < MAX_PLAYERS; i++)
 		{
-			memset(&NetPlay.players[i], 0, sizeof(PLAYER));
-			memset(&NetPlay.games[i], 0, sizeof(GAMESTRUCT));
+			memset(&NetPlay.players[i], 0, sizeof(NetPlay.players[i]));
+			memset(&NetPlay.games[i], 0, sizeof(NetPlay.games[i]));
 		}
 		NetPlay.bComms = true;
 		NETstartLogging();
@@ -889,7 +889,7 @@ static BOOL NETprocessSystemMessage(void)
 
 			NETbeginDecode(NET_GAME_FLAGS);
 			{
-				static unsigned int max_flags = sizeof(NetGameFlags) / sizeof(*NetGameFlags);
+				static unsigned int max_flags = ARRAY_SIZE(NetGameFlags);
 				// Retrieve the amount of game flags that we should receive
 				uint8_t i, count;
 				NETuint8_t(&count);
@@ -1309,7 +1309,7 @@ static void NETallowJoining(void)
 			{
 				if(strcmp(buffer, "list")==0)
 				{
-					SDLNet_TCP_Send(tmp_socket[i], &numgames, sizeof(UDWORD));
+					SDLNet_TCP_Send(tmp_socket[i], &numgames, sizeof(numgames));
 					NETsendGAMESTRUCT(tmp_socket[i], &game);
 				}
 				else if (strcmp(buffer, "join") == 0)
@@ -1326,7 +1326,7 @@ static void NETallowJoining(void)
 			if (   tmp_socket[i] != NULL
 			    && SDLNet_SocketReady(tmp_socket[i]) > 0)
 			{
-				int size = SDLNet_TCP_Recv(tmp_socket[i], &NetMsg, sizeof(NETMSG));
+				int size = SDLNet_TCP_Recv(tmp_socket[i], &NetMsg, sizeof(NetMsg));
 
 				if (size <= 0)
 				{
@@ -1439,8 +1439,8 @@ BOOL NEThostGame(const char* SessionName, const char* PlayerName,
 	is_server = true;
 
 	strlcpy(game.name, SessionName, sizeof(game.name));
-	memset(&game.desc, 0, sizeof(SESSIONDESC));
-	game.desc.dwSize = sizeof(SESSIONDESC);
+	memset(&game.desc, 0, sizeof(game.desc));
+	game.desc.dwSize = sizeof(game.desc);
 	//game.desc.guidApplication = GAME_GUID;
 	game.desc.host[0] = '\0';
 	game.desc.dwCurrentPlayers = 1;
