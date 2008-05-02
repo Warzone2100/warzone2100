@@ -20,6 +20,7 @@
 #include <string.h>
 #include <stddef.h>
 
+#ifndef HAVE_STRLCPY
 /** 
  *	A safer variant of \c strncpy and its completely unsafe variant \c strcpy.
  *	Copy src to string dst of size siz.  At most siz-1 characters
@@ -56,7 +57,9 @@ static inline size_t strlcpy(char *WZ_DECL_RESTRICT dst, const char *WZ_DECL_RES
 
 	return(s - src - 1);        /* count does not include NUL */
 }
+#endif
 
+#ifndef HAVE_STRLCAT
 /** 
  *	A safer variant of \c strncat and its completely unsafe variant \c strcat.
  *	Appends src to string dst of size siz (unlike strncat, siz is the
@@ -97,6 +100,7 @@ static inline size_t strlcat(char *WZ_DECL_RESTRICT dst, const char *WZ_DECL_RES
 
 	return(dlen + (s - src));        /* count does not include NUL */
 }
+#endif
 
 /* Static array versions of common string functions. Safer because one less parameter to screw up. 
  * Can only be used on strings longer than the length of a pointer, because we use this for debugging. */
