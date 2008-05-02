@@ -57,6 +57,13 @@ static inline void doCleanUp(void)
 	}
 }
 
+static inline BOOL doParseTest(const char* content, size_t size)
+{
+	BOOL retval = levParse(content, size, mod_clean);
+	doCleanUp();
+	return retval;
+}
+
 #include "parse_test.h"
 
 static const test_files valid_files[] =

@@ -37,12 +37,11 @@ static int TEST_NAME(void)
 	for (i = 0; i < ARRAY_SIZE(valid_files); ++i)
 	{
 		debug(LOG_NEVER, "Testing parsing of valid file \"%s\"", valid_files[i].testname);
-		if (!levParse(valid_files[i].content, strlen(valid_files[i].content), mod_clean))
+		if (!doParseTest(valid_files[i].content, strlen(valid_files[i].content)))
 		{
 			debug(LOG_ERROR, ANSI_COLOUR_RED "Failure while parsing valid test file \"" ANSI_COLOUR_YELLOW "%s" ANSI_COLOUR_RED "\"." ANSI_COLOUR_DEFAULT, valid_files[i].testname);
 			retval = EXIT_FAILURE;
 		}
-		doCleanUp();
 	}
 
 	/*
@@ -51,12 +50,11 @@ static int TEST_NAME(void)
 	for (i = 0; i < ARRAY_SIZE(invalid_files); ++i)
 	{
 		debug(LOG_NEVER, "Testing parsing of invalid file \"%s\" (expect error messages)", invalid_files[i].testname);
-		if (levParse(invalid_files[i].content, strlen(invalid_files[i].content), mod_clean))
+		if (doParseTest(invalid_files[i].content, strlen(invalid_files[i].content)))
 		{
 			debug(LOG_ERROR, ANSI_COLOUR_RED "Parsing of invalid test file \"" ANSI_COLOUR_YELLOW "%s" ANSI_COLOUR_RED "\" was succesfull, it shouldn't have been!" ANSI_COLOUR_DEFAULT, invalid_files[i].testname);
 			retval = EXIT_FAILURE;
 		}
-		doCleanUp();
 	}
 
 	return retval;
