@@ -332,7 +332,8 @@ AC_CONFIG_FILES([Makefile
 		lib/sound/Makefile
 		lib/sqlite3/Makefile
 		lib/widget/Makefile
-		src/Makefile])
+		src/Makefile
+		tests/Makefile])
 AC_OUTPUT
 
 if test "x$enable_debug" = "xyes" ; then
