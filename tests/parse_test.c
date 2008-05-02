@@ -76,5 +76,7 @@ int main()
 	debug_register_callback( debug_callback_win32debug, NULL, NULL, NULL );
 #endif // WZ_OS_WIN && DEBUG_INSANE
 
+	atexit(debug_exit);
+
 	return TEST_NAME();
 }
