@@ -5,6 +5,7 @@ DIE=0
 SRCDIR=`dirname $0`
 BUILDDIR=`pwd`
 srcfile=src/action.c
+package=Warzone2100
 
 debug ()
 # print out a debug message if DEBUG is a defined variable
@@ -82,13 +83,76 @@ version_check ()
   fi
 }
 
+not_version ()
+# check the version of a package
+# first argument : package name (executable)
+# second argument : source download url
+# rest of arguments : major, minor, micro version
+{
+  PACKAGE=$1
+  URL=$2
+  MAJOR=$3
+  MINOR=$4
+  MICRO=$5
+
+  WRONG=
+
+  debug "major $MAJOR minor $MINOR micro $MICRO"
+  VERSION=$MAJOR
+  if [ ! -z "$MINOR" ]; then VERSION=$VERSION.$MINOR; else MINOR=0; fi
+  if [ ! -z "$MICRO" ]; then VERSION=$VERSION.$MICRO; else MICRO=0; fi
+
+  debug "version $VERSION"
+  echo "+ checking for $PACKAGE != $VERSION ... " | tr -d '\n'
+
+  ($PACKAGE --version) < /dev/null > /dev/null 2>&1 ||
+  {
+    echo
+    echo "You must have $PACKAGE installed to compile $package."
+    echo "Download the appropriate package for your distribution,"
+    echo "or get the source tarball at $URL"
+    return 1
+  }
+  # the following line is carefully crafted sed magic
+  pkg_version=`$PACKAGE --version|head -n 1|sed 's/([^)]*)//g;s/^[a-zA-Z\.\ \-\/]*//;s/ .*$//'`
+  debug "pkg_version $pkg_version"
+  pkg_major=`echo $pkg_version | cut -d. -f1`
+  pkg_minor=`echo $pkg_version | sed s/[-,a-z,A-Z].*// | cut -d. -f2`
+  pkg_micro=`echo $pkg_version | sed s/[-,a-z,A-Z].*// | cut -d. -f3`
+  [ -z "$pkg_minor" ] && pkg_minor=0
+  [ -z "$pkg_micro" ] && pkg_micro=0
+
+  debug "found major $pkg_major minor $pkg_minor micro $pkg_micro"
+
+  #start checking the version
+  if [ "$pkg_major" -eq "$MAJOR" ]; then
+   if [ "$pkg_major" -eq "$MINOR" ]; then
+    if [ "$pkg_micro" -eq "$MICRO" ]; then
+      WRONG=1
+    fi
+   fi
+  fi
+
+  if [ ! -z "$WRONG" ]; then
+   echo "found $pkg_version, not ok !"
+   echo
+   echo "Version $PACKAGE $VERSION is known not to work well with $package."
+   echo "Get another (preferably latest) version from <$URL>."
+   echo
+   return 1
+  else
+    echo "not found, good."
+  fi
+}
+
 version_check 1 "pkg-config" "http://pkgconfig.freedesktop.org/" 0 9 || DIE=1
 version_check 1 "xgettext" "ftp://ftp.gnu.org/pub/gnu/gettext/" 0 15 || DIE=1
 version_check 1 "msgfmt" "ftp://ftp.gnu.org/pub/gnu/gettext/" 0 15 || DIE=1
 version_check 1 "autoconf" "ftp://ftp.gnu.org/pub/gnu/autoconf/" 2 56 || DIE=1
 version_check 1 "automake" "ftp://ftp.gnu.org/pub/gnu/automake/" 1 10 || DIE=1
 version_check 1 "bison" "ftp://ftp.gnu.org/pub/gnu/bison/" 1 31 || DIE=1
-version_check 1 "flex" "ftp://ftp.gnu.org/pub/non-gnu/flex" 2 5 35 || DIE=1
+version_check 1 "flex" "ftp://ftp.gnu.org/pub/non-gnu/flex" 2 5 33 || DIE=1
+not_version "flex" "ftp://ftp.gnu.org/pub/non-gnu/flex" 2 5 34 || DIE=1
 if [ "$DIE" -eq 1 ]; then
   exit 1
 fi
