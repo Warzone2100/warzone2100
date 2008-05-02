@@ -20,6 +20,7 @@
 #include <string.h>
 #include <stddef.h>
 
+#ifndef HAVE_STRLCPY
 /** 
  *	A safer variant of \c strncpy and its completely unsafe variant \c strcpy.
  *	Copy src to string dst of size siz.  At most siz-1 characters
@@ -56,7 +57,9 @@ static inline size_t strlcpy(char *WZ_DECL_RESTRICT dst, const char *WZ_DECL_RES
 
 	return(s - src - 1);        /* count does not include NUL */
 }
+#endif
 
+#ifndef HAVE_STRLCAT
 /** 
  *	A safer variant of \c strncat and its completely unsafe variant \c strcat.
  *	Appends src to string dst of size siz (unlike strncat, siz is the
@@ -97,11 +100,20 @@ static inline size_t strlcat(char *WZ_DECL_RESTRICT dst, const char *WZ_DECL_RES
 
 	return(dlen + (s - src));        /* count does not include NUL */
 }
+#endif
 
-/** Array strlcpy. Even safer because one less parameter to screw up. */
-#define astrlcpy(dest, src) ((void)strlcpy((dest), (src), sizeof(dest)))
-
-/** Array strlcat. Even safer because one less parameter to screw up. */
-#define astrlcat(dest, src) ((void)strlcat((dest), (src), sizeof(dest)))
+/* Static array versions of common string functions. Safer because one less parameter to screw up. 
+ * Can only be used on strings longer than the length of a pointer, because we use this for debugging. */
+#ifndef DEBUG
+#define sstrcpy(dest, src) strlcpy((dest), (src), sizeof(dest))
+#define sstrcat(dest, src) strlcat((dest), (src), sizeof(dest))
+#define ssprintf(dest, ...) snprintf((dest), sizeof(dest), __VA_ARGS__)
+#define sstrcmp(str1, str2) strncmp((str1), (str2), sizeof(str1) > sizeof(str2) ? sizeof(str2) : sizeof(str1))
+#else
+#define sstrcpy(dest, src) (assert(sizeof(dest) != sizeof(void*)), strlcpy((dest), (src), sizeof(dest)))
+#define sstrcat(dest, src) (assert(sizeof(dest) != sizeof(void*)), strlcat((dest), (src), sizeof(dest)))
+#define ssprintf(dest, ...) (assert(sizeof(dest) != sizeof(void*)), snprintf((dest), sizeof(dest), __VA_ARGS__))
+#define sstrcmp(str1, str2) (assert(sizeof(str1) != sizeof(void*) && sizeof(str2) != sizeof(void*)), strncmp((str1), (str2), sizeof(str1) > sizeof(str2) ? sizeof(str2) : sizeof(str1)))
+#endif
 
 #endif // __INCLUDED_FRAMEWORK_STRLFUNCS_H__

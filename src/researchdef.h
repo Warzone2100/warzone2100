@@ -24,6 +24,8 @@
 #ifndef __INCLUDED_RESEARCHDEF_H__
 #define __INCLUDED_RESEARCHDEF_H__
 
+#include "lib/framework/frame.h"
+
 /* Research struct type definitions */
 typedef enum
 {
@@ -92,6 +94,7 @@ typedef struct _player_research
 
 	UBYTE		ResearchStatus;			// Bit flags   ...  see below
 
+	bool            possible;                       ///< is the research possible ... so can enable topics vis scripts
 
 
 //	UBYTE		possible;				/* Flag to specify whether the research is possible - so
@@ -104,11 +107,17 @@ typedef struct _player_research
 #define CANCELLED_RESEARCH	0x02		// research has been canceled
 #define RESEARCHED			0x04		// research is complete
 #define RESBITS (STARTED_RESEARCH|CANCELLED_RESEARCH|RESEARCHED)
-#define POSSIBLE			0x80		// is the research possible ... so can enable topics vis scripts
 
+static inline bool IsResearchPossible(const PLAYER_RESEARCH* research)
+{
+	return research->possible;
+}
 
-#define IsResearchPossible(x)   ((x)->ResearchStatus&POSSIBLE)
-#define MakeResearchPossible(x)	((x)->ResearchStatus|=POSSIBLE)
+static inline void MakeResearchPossible(PLAYER_RESEARCH* research)
+{
+	research->possible = true;
+}
+
 #define IsResearchCompleted(x)   ((x)->ResearchStatus&RESEARCHED)
 
 #define MakeResearchCompleted(x)	((x)->ResearchStatus=((x)->ResearchStatus&(~RESBITS))|RESEARCHED  )

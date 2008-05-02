@@ -1895,7 +1895,7 @@ BOOL loadDroidTemplates(const char *pDroidData, UDWORD bufferSize)
 			free(pDroidDesign);
 			return false;
 		}
-		astrlcpy(pDroidDesign->aName, componentName);
+		sstrcpy(pDroidDesign->aName, componentName);
 
 		//read in Body Name
 		sscanf(pDroidData, "%[^','],%n", componentName, &cnt);
@@ -3398,7 +3398,7 @@ void	groupConsoleInformOfSelection( UDWORD groupNumber )
 	char groupInfo[255];
 	unsigned int num_selected = selNumSelected(selectedPlayer);
 
-	snprintf(groupInfo, sizeof(groupInfo), ngettext("Group %u selected - %u Unit", "Group %u selected - %u Units", num_selected), groupNumber, num_selected);
+	ssprintf(groupInfo, ngettext("Group %u selected - %u Unit", "Group %u selected - %u Units", num_selected), groupNumber, num_selected);
 	addConsoleMessage(groupInfo,RIGHT_JUSTIFY,SYSTEM_MESSAGE);
 
 }
@@ -3411,7 +3411,7 @@ void	groupConsoleInformOfCreation( UDWORD groupNumber )
 	{
 		unsigned int num_selected = selNumSelected(selectedPlayer);
 
-		snprintf(groupInfo, sizeof(groupInfo), ngettext("%u unit assigned to Group %u", "%u units assigned to Group %u", num_selected), num_selected, groupNumber);
+		ssprintf(groupInfo, ngettext("%u unit assigned to Group %u", "%u units assigned to Group %u", num_selected), num_selected, groupNumber);
 		addConsoleMessage(groupInfo,RIGHT_JUSTIFY,SYSTEM_MESSAGE);
 	}
 
@@ -3424,11 +3424,11 @@ void	groupConsoleInformOfCentering( UDWORD groupNumber )
 
 	if(!getWarCamStatus())
 	{
-		snprintf(groupInfo, sizeof(groupInfo), ngettext("Centered on Group %u - %u Unit", "Centered on Group %u - %u Units", num_selected), groupNumber, num_selected);
+		ssprintf(groupInfo, ngettext("Centered on Group %u - %u Unit", "Centered on Group %u - %u Units", num_selected), groupNumber, num_selected);
 	}
 	else
 	{
-		snprintf(groupInfo, sizeof(groupInfo), ngettext("Aligning with Group %u - %u Unit", "Aligning with Group %u - %u Units", num_selected), groupNumber, num_selected);
+		ssprintf(groupInfo, ngettext("Aligning with Group %u - %u Unit", "Aligning with Group %u - %u Units", num_selected), groupNumber, num_selected);
 	}
 	
 	addConsoleMessage(groupInfo,RIGHT_JUSTIFY,SYSTEM_MESSAGE);
@@ -3760,7 +3760,7 @@ char *droidGetName(DROID *psDroid)
 //
 void droidSetName(DROID *psDroid,const char *pName)
 {
-	astrlcpy(psDroid->aName, pName);
+	sstrcpy(psDroid->aName, pName);
 }
 
 
@@ -4905,7 +4905,7 @@ DROID * giftSingleDroid(DROID *psD, UDWORD to)
 		templateSetParts(psD, &sTemplate);
 
 		// copy the name across
-		astrlcpy(sTemplate.aName, psD->aName);
+		sstrcpy(sTemplate.aName, psD->aName);
 
 		x = psD->pos.x;
 		y = psD->pos.y;
