@@ -19,6 +19,7 @@
 
 #include <string.h>
 #include <stddef.h>
+#include <assert.h>
 
 #ifndef HAVE_STRLCPY
 /** 
@@ -32,6 +33,9 @@ static inline size_t strlcpy(char *WZ_DECL_RESTRICT dst, const char *WZ_DECL_RES
 	char *d = dst;
 	const char *s = src;
 	size_t n = siz;
+
+	assert(dst != NULL);
+	assert(src != NULL);
 
 	/* Copy as many bytes as will fit */
 	if (n != 0)
@@ -74,6 +78,9 @@ static inline size_t strlcat(char *WZ_DECL_RESTRICT dst, const char *WZ_DECL_RES
 	const char *s = src;
 	size_t n = siz;
 	size_t dlen;
+
+	assert(dst != NULL);
+	assert(src != NULL);
 
 	/* Find the end of dst and adjust bytes left but don't go past end */
 	while (n-- != 0 && *d != '\0')
