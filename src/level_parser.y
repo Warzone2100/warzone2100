@@ -40,7 +40,7 @@ typedef struct
  */
 void yyerror(const char* msg)
 {
-	ASSERT(!"level parse error", "Level File parse error: `%s` at line `%d` text `%s`", msg, levGetErrorLine(), levGetErrorText());
+	debug(LOG_ERROR, "Level File parse error: `%s` at line `%d` text `%s`", msg, levGetErrorLine(), levGetErrorText());
 }
 
 #define YYPARSE_PARAM yyparse_param
