@@ -123,13 +123,7 @@ level_line:             level_rule IDENTIFIER
 					}
 
 					// Store the level name
-					$1->pName = strdup($2);
-					if ($1->pName == NULL)
-					{
-						debug(LOG_ERROR, "Out of memory!");
-						abort();
-						YYABORT;
-					}
+					$1->pName = $2;
 
 					// Make this dataset current to our parsing context
 					yycontext->dataset = $1;
@@ -231,6 +225,7 @@ dataset_directive:      DATASET IDENTIFIER
 
 					// Find the dataset with the given identifier
 					yycontext->dataset->psBaseData = levFindDataSet($2);
+					free($2);
 					if (yycontext->dataset->psBaseData == NULL)
 					{
 						yyerror("unknown dataset");
@@ -250,13 +245,7 @@ data_directive:         data_directives QTEXT
 					}
 
 					// store the data name
-					yycontext->dataset->apDataFiles[yycontext->currData] = strdup($2);
-					if (yycontext->dataset->apDataFiles[yycontext->currData] == NULL)
-					{
-						debug(LOG_ERROR, "Out of memory!");
-						abort();
-						YYABORT;
-					}
+					yycontext->dataset->apDataFiles[yycontext->currData] = $2;
 
 					++yycontext->currData;
 					yycontext->dataLoaded = true;
