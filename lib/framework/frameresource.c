@@ -463,7 +463,10 @@ BOOL resLoadFile(const char *pType, const char *pFile)
 		{
 			debug(LOG_ERROR, "resLoadFile: The load function for resource type \"%s\" failed for file \"%s\"", pType, pFile);
 			FreeResourceFile(Resource);
-			psT->release(pData);
+			if (psT->release != NULL)
+			{
+				psT->release(pData);
+			}
 			return false;
 		}
 
@@ -475,7 +478,10 @@ BOOL resLoadFile(const char *pType, const char *pFile)
 		if (!psT->fileLoad(aFileName, &pData))
 		{
 			debug(LOG_ERROR, "resLoadFile: The load function for resource type \"%s\" failed for file \"%s\"", pType, pFile);
-			psT->release(pData);
+			if (psT->release != NULL)
+			{
+				psT->release(pData);
+			}
 			return false;
 		}
 	}
@@ -494,7 +500,10 @@ BOOL resLoadFile(const char *pType, const char *pFile)
 		psRes = resDataInit( GetLastResourceFilename(), HashStringIgnoreCase(GetLastResourceFilename()), pData, resBlockID );
 		if (!psRes)
 		{
-			psT->release(pData);
+			if (psT->release != NULL)
+			{
+				psT->release(pData);
+			}
 			return false;
 		}
 
