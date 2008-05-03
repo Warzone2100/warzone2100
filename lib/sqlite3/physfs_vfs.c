@@ -52,7 +52,8 @@ static int xClose(sqlite3_file* f)
 	if (file->NOOP)
 		return SQLITE_OK;
 
-	PHYSFS_close(file->file);
+	if (file->file)
+		PHYSFS_close(file->file);
 
 	return SQLITE_OK;
 }
