@@ -67,17 +67,9 @@ typedef enum _droid_type
 	DROID_ANY,              ///< Any droid. Only used as a parameter for intGotoNextDroidType(DROID_TYPE).
 } DROID_TYPE;
 
-#define MAX_STATS (255)
-
 typedef struct _component
 {
-//	UDWORD          nStat;
 	UBYTE           nStat;          ///< Allowing a maximum of 255 stats per file
-//	UDWORD          hitPoints;      // NOT USED?
-
-	/* Possibly a set of function pointers here to be called when
-	 * damage is done to a component, power is low ...
-	 */
 } COMPONENT;
 
 // maximum number of queued orders
@@ -128,12 +120,6 @@ typedef struct _droid
 	char            aName[MAX_STR_LENGTH];
 
 	DROID_TYPE      droidType;                      ///< The type of droid
-
-	/* Possibly a set of function pointers here to be called when
-	 * damage is done to a component, power is low ...
-	 */
-
-//	DROID_TEMPLATE*   pTemplate;                      ///< defines the droids components
 
 	/** Holds the specifics for the component parts - allows damage
 	 *  per part to be calculated. Indexed by COMPONENT_TYPE.
