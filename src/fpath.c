@@ -489,9 +489,9 @@ void fpathSetBlockingTile( UBYTE ubPropulsionType )
 }
 
 // Find a route for an DROID to a location
-FPATH_RETVAL fpathRoute(DROID* psDroid, MOVE_CONTROL *psMoveCntl,
-						SDWORD tX, SDWORD tY)
+FPATH_RETVAL fpathRoute(DROID* psDroid, SDWORD tX, SDWORD tY)
 {
+	MOVE_CONTROL		*psMoveCntl = &psDroid->sMove;
 	SDWORD				startX,startY, targetX,targetY;
 	SDWORD				dir, nearestDir, minDist, tileDist;
 	FPATH_RETVAL		retVal = FPR_OK;
@@ -537,7 +537,7 @@ FPATH_RETVAL fpathRoute(DROID* psDroid, MOVE_CONTROL *psMoveCntl,
 
 	// set the correct blocking tile function
 	psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
-	ASSERT(psPropStats != NULL, "fpathRoute: invalid propulsion stats pointer");
+	ASSERT(psPropStats != NULL, "invalid propulsion stats pointer");
 
 	fpathSetBlockingTile( psPropStats->propulsionType );
 
@@ -569,7 +569,7 @@ FPATH_RETVAL fpathRoute(DROID* psDroid, MOVE_CONTROL *psMoveCntl,
 			{
 				// surrounded by blocking tiles, give up
 				retVal = FPR_FAILED;
- 				objTrace(LOG_MOVEMENT, psDroid->id, "fpathRoute droid %u: route failed (surrouned by blocking)", (unsigned int)psDroid->id);
+ 				objTrace(LOG_MOVEMENT, psDroid->id, "droid %u: route failed (surrouned by blocking)", (unsigned int)psDroid->id);
 				goto exit;
 			}
 			else
@@ -601,7 +601,7 @@ FPATH_RETVAL fpathRoute(DROID* psDroid, MOVE_CONTROL *psMoveCntl,
 			// no obstructions - trivial route
 			fpathSetDirectRoute(psDroid, targetX, targetY);
 			retVal = FPR_OK;
- 			objTrace(LOG_MOVEMENT, psDroid->id, "fpathRoute droid %u: trivial route", (unsigned int)psDroid->id);
+ 			objTrace(LOG_MOVEMENT, psDroid->id, "droid %u: trivial route", (unsigned int)psDroid->id);
 			if (psPartialRouteDroid != NULL)
 			{
 				objTrace(LOG_MOVEMENT, psDroid->id, "Unit %u: trivial route during multi-frame route", (unsigned int)psDroid->id);
@@ -626,12 +626,12 @@ FPATH_RETVAL fpathRoute(DROID* psDroid, MOVE_CONTROL *psMoveCntl,
 		{
 			if (psPartialRouteDroid != NULL)
 			{
-				objTrace(LOG_MOVEMENT, psDroid->id, "fpathRoute droid %u: found existing route during multi-frame path",
+				objTrace(LOG_MOVEMENT, psDroid->id, "droid %u: found existing route during multi-frame path",
 				         (unsigned int)psDroid->id);
 			}
 			else
 			{
- 				objTrace(LOG_MOVEMENT, psDroid->id, "fpathRoute droid %u: found existing route", (unsigned int)psDroid->id);
+ 				objTrace(LOG_MOVEMENT, psDroid->id, "droid %u: found existing route", (unsigned int)psDroid->id);
 			}
 			goto exit;
 		}
@@ -639,14 +639,14 @@ FPATH_RETVAL fpathRoute(DROID* psDroid, MOVE_CONTROL *psMoveCntl,
 
 	ASSERT( startX >= 0 && startX < (SDWORD)mapWidth*TILE_UNITS &&
 			startY >= 0 && startY < (SDWORD)mapHeight*TILE_UNITS,
-			"fpathRoute: start coords off map" );
+			"start coords off map" );
 	ASSERT( targetX >= 0 && targetX < (SDWORD)mapWidth*TILE_UNITS &&
 			targetY >= 0 && targetY < (SDWORD)mapHeight*TILE_UNITS,
-			"fpathRoute: target coords off map" );
+			"target coords off map" );
 	ASSERT( fpathBlockingTile == fpathGroundBlockingTile ||
 			fpathBlockingTile == fpathHoverBlockingTile ||
 			fpathBlockingTile == fpathLiftBlockingTile,
-			"fpathRoute: invalid blocking function" );
+			"invalid blocking function" );
 
 	ASSERT(astarInner >= 0, "astarInner overflowed!");
 
@@ -660,7 +660,7 @@ FPATH_RETVAL fpathRoute(DROID* psDroid, MOVE_CONTROL *psMoveCntl,
 		}
 		else
 		{
-			objTrace(LOG_MOVEMENT, psDroid->id, "fpathRoute droid %u: reschedule", (unsigned int)psDroid->id);
+			objTrace(LOG_MOVEMENT, psDroid->id, "droid %u: reschedule", (unsigned int)psDroid->id);
 			retVal = FPR_RESCHEDULE;
 			goto exit;
 		}
@@ -719,7 +719,7 @@ exit:
 		{
 			if (psTile->tileInfoBits & BITS_FPATHBLOCK)
 			{
-				ASSERT( false,"fpathRoute: blocking flags still in the map" );
+				ASSERT( false,"blocking flags still in the map" );
 			}
 			psTile += 1;
 		}

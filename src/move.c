@@ -352,7 +352,7 @@ static BOOL moveDroidToBase(DROID	*psDroid, UDWORD x, UDWORD y, BOOL bFormation)
 	}
 	else
 	{
-		retVal = fpathRoute(psDroid, &(psDroid->sMove), (SDWORD)x,(SDWORD)y);
+		retVal = fpathRoute(psDroid, x, y);
 	}
 
 	/* check formations */

@@ -50,7 +50,7 @@ extern void fpathUpdate(void);
  *  
  *  @ingroup pathfinding
  */
-extern FPATH_RETVAL fpathRoute(DROID* psDroid, MOVE_CONTROL *psMoveCntl, SDWORD targetX, SDWORD targetY);
+extern FPATH_RETVAL fpathRoute(DROID* psDroid, SDWORD targetX, SDWORD targetY);
 
 /** Function pointer to the currently in-use blocking tile check function.
  *  
