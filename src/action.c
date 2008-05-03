@@ -1074,7 +1074,6 @@ void actionUpdateDroid(DROID *psDroid)
 	UBYTE	 i = 0;
 	//this is a bit field
 	UBYTE	 num_weapons = 0;
-	BASE_OBJECT			*psActionTarget;
 	BASE_OBJECT			*psTargets[DROID_MAXWEAPS];
 	UBYTE	j,iVisible = 1;
 	BOOL	bHasTarget;
@@ -1407,6 +1406,8 @@ void actionUpdateDroid(DROID *psDroid)
 						//Watermelon:to fix a AA-weapon attack ground unit exploit
 						if ( (num_weapons & (1 << (j+1))) )
 						{
+							BASE_OBJECT* psActionTarget;
+
 							if (psDroid->psActionTarget[j])
 							{
 								psActionTarget = psDroid->psActionTarget[j];
@@ -1483,6 +1484,8 @@ void actionUpdateDroid(DROID *psDroid)
 		bHasTarget = false;
 		for(i = 0;i < psDroid->numWeaps;i++)
 		{
+			BASE_OBJECT* psActionTarget;
+
 			//Skip main turret target changes
 			if (i > 0 &&
 				psDroid->psActionTarget[i] == NULL &&
