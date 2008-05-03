@@ -246,6 +246,10 @@ enum {
 	IMAGE_TEAM5_HI,
 	IMAGE_TEAM6_HI,
 	IMAGE_TEAM7_HI,
+	IMAGE_CHECK_OFF,		// checkbox unchecked
+	IMAGE_CHECK_ON,			// checkbox checked
+	IMAGE_CHECK_OFF_HI,		// checkbox unchecked highlighted
+	IMAGE_CHECK_ON_HI,			// checkbox checked highlighted
 };
 
 #endif // __INCLUDED_SRC_FREND_H__
