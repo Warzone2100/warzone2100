@@ -124,6 +124,7 @@ static UDWORD hideTime=0;
 // widget functions
 static BOOL addMultiEditBox(UDWORD formid, UDWORD id, UDWORD x, UDWORD y, const char* tip, char tipres[128], UDWORD icon, UDWORD iconhi, UDWORD iconid);
 static void addBlueForm					(UDWORD parent,UDWORD id, const char *txt,UDWORD x,UDWORD y,UDWORD w,UDWORD h);
+static void drawReadyButton(UDWORD player);
 
 // Drawing Functions
 void		displayChatEdit				(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
@@ -132,7 +133,6 @@ void		intDisplayFeBox				(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIEL
 void		displayRemoteGame			(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
 void		displayPlayer				(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
 void		displayTeamChooser			(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
-void		displayMultiReady			(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
 void		displayMultiEditBox			(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
 void		setLockedTeamsMode			(void);
 
@@ -925,7 +925,7 @@ static void addColourChooser(UDWORD player)
 	widgDelete(psWScreen,MULTIOP_TEAMS_START+player);
 
 	// detele 'ready' button
-	widgDelete(psWScreen,MULTIOP_READY_START+player);
+	widgDelete(psWScreen,MULTIOP_READY_FORM_ID+player);
 
 	// add form.
 	addBlueForm(MULTIOP_PLAYERS,MULTIOP_COLCHOOSER_FORM,"",
@@ -1079,6 +1079,9 @@ static BOOL changeReadyStatus(UBYTE player, BOOL bReady)
 		(player2dpid[player] != NetPlay.players[playerGUI_ID].dpid);playerGUI_ID++);
 
 	bPlayerReadyGUI[playerGUI_ID] = bReady;
+
+	drawReadyButton(playerGUI_ID);
+
 	sendOptions(player2dpid[player], player);	// tell everyone && update requesting player.
 
 	return true;
@@ -1189,7 +1192,7 @@ static void addTeamChooser(UDWORD player)
 	widgDelete(psWScreen,MULTIOP_PLAYER_START+player);
 
 	// delete 'ready' button
-	widgDelete(psWScreen,MULTIOP_READY_START+player);
+	widgDelete(psWScreen,MULTIOP_READY_FORM_ID+player);
 
 	// add form.
 	addBlueForm(MULTIOP_PLAYERS,MULTIOP_TEAMCHOOSER_FORM,"",
@@ -1227,6 +1230,32 @@ static void closeTeamChooser(void)
 	}
 
 	widgDelete(psWScreen,MULTIOP_TEAMCHOOSER_FORM);	//only once!
+}
+
+static void drawReadyButton(UDWORD player)
+{
+	// delete 'ready' botton form
+	widgDelete(psWScreen, MULTIOP_READY_FORM_ID + player);
+
+	// add form to hold 'ready' botton
+	addBlueForm(MULTIOP_PLAYERS,MULTIOP_READY_FORM_ID + player,"",
+				11 + MULTIOP_PLAYERWIDTH - MULTIOP_READY_WIDTH,
+				(UWORD)(( (MULTIOP_PLAYERHEIGHT+5)*player)+4),
+				MULTIOP_READY_WIDTH,MULTIOP_READY_HEIGHT);
+
+	// draw 'ready' button
+	if(bPlayerReadyGUI[player])
+	{
+		addMultiBut(psWScreen, MULTIOP_READY_FORM_ID+player,MULTIOP_READY_START+player,3,
+			(UWORD)(( (MULTIOP_PLAYERHEIGHT+5)*player)+4),MULTIOP_READY_WIDTH,MULTIOP_READY_HEIGHT,
+			_("Waiting for other players"),IMAGE_CHECK_ON,IMAGE_CHECK_ON,true);
+	}
+	else
+	{
+		addMultiBut(psWScreen, MULTIOP_READY_FORM_ID+player,MULTIOP_READY_START+player,3, 
+			(UWORD)(( (MULTIOP_PLAYERHEIGHT+5)*player)+4),MULTIOP_READY_WIDTH,MULTIOP_READY_HEIGHT,
+			_("Click when ready"),IMAGE_CHECK_OFF,IMAGE_CHECK_OFF,true);
+	}
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -1301,6 +1330,9 @@ UDWORD addPlayerBox(BOOL players)
 
 			if(ingame.localOptionsReceived && NetPlay.players[i].dpid)					// only draw if real player!
 			{
+				// add a 'ready' button
+				drawReadyButton(i);
+
 				memset(&sButInit, 0, sizeof(W_BUTINIT));
 				sButInit.formID = MULTIOP_PLAYERS;
 				sButInit.id = MULTIOP_PLAYER_START+i;
@@ -1323,30 +1355,6 @@ UDWORD addPlayerBox(BOOL players)
 				{
 					widgAddButton(psWScreen, &sButInit);
 				}
-
-				// add 'ready' button
-				memset(&sButInit, 0, sizeof(W_BUTINIT));
-				sButInit.formID = MULTIOP_PLAYERS;
-				sButInit.id = MULTIOP_READY_START+i;
-				sButInit.style = WBUT_PLAIN;
-				sButInit.x = 10 + MULTIOP_PLAYERWIDTH - MULTIOP_READY_WIDTH;
-				sButInit.y = (UWORD)(( (MULTIOP_PLAYERHEIGHT+5)*i)+4);
-				sButInit.width = MULTIOP_READY_WIDTH;
-				sButInit.height = MULTIOP_READY_HEIGHT;
-				sButInit.FontID = font_regular;
-				sButInit.pDisplay = displayMultiReady;
-				sButInit.UserData = i;
-
-				if(bPlayerReadyGUI[i])
-				{
-					sButInit.pTip = "Ready";
-				}
-				else
-				{
-					sButInit.pTip = "Click when ready";
-				}
-
-				widgAddButton(psWScreen, &sButInit);
 			}
 			else if(game.type == SKIRMISH)	// skirmish player
 			{
@@ -1951,6 +1959,7 @@ static void processMultiopWidgets(UDWORD id)
 	if((id >= MULTIOP_READY_START) && (id <= MULTIOP_READY_END))	// clicked on a player
 	{
 		UBYTE player = (UBYTE)(id-MULTIOP_READY_START);
+
 		if(NetPlay.players[player].dpid == player2dpid[selectedPlayer] )
 		{
 			SendReadyRequest(selectedPlayer, !bPlayerReadyGUI[player]);
@@ -2553,35 +2562,6 @@ static UDWORD bestPlayer(UDWORD player)
 	}
 
 	return count;
-}
-
-void displayMultiReady(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
-{
-	UDWORD		x = xOffset+psWidget->x;
-	UDWORD		y = yOffset+psWidget->y;
-	BOOL		Hilight = false;
-
-	if( ((W_BUTTON*)psWidget)->state & (WBUTS_HILITE| WCLICK_DOWN | WCLICK_LOCKED | WCLICK_CLICKLOCK))
-	{
-		Hilight = true;
-	}
-
-	//bluboxes.
-	drawBlueBox(x, y, psWidget->width, psWidget->height);		// right
-
-	// draw 'ready' button state
-	if (bPlayerReadyGUI[psWidget->UserData])
-	{
-		iV_DrawImage(FrontImages, IMAGE_OK, x + MULTIOP_READY_IMG_OFFSET_X, y + MULTIOP_READY_IMG_OFFSET_Y);
-	}
-	else
-	{
-		iV_DrawImage(FrontImages, IMAGE_NO, x + MULTIOP_READY_IMG_OFFSET_X, y + MULTIOP_READY_IMG_OFFSET_Y);
-	}
-	if (Hilight)
-	{
-		iV_DrawImage(FrontImages, IMAGE_HI39, x + MULTIOP_READY_IMG_OFFSET_X, y + MULTIOP_READY_IMG_OFFSET_Y);
-	}
 }
 
 void displayTeamChooser(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
