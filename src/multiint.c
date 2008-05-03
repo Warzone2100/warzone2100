@@ -1247,13 +1247,13 @@ static void drawReadyButton(UDWORD player)
 	if(bPlayerReadyGUI[player])
 	{
 		addMultiBut(psWScreen, MULTIOP_READY_FORM_ID+player,MULTIOP_READY_START+player,3,
-			(UWORD)(( (MULTIOP_PLAYERHEIGHT+5)*player)+4),MULTIOP_READY_WIDTH,MULTIOP_READY_HEIGHT,
+			4,MULTIOP_READY_WIDTH,MULTIOP_READY_HEIGHT,
 			_("Waiting for other players"),IMAGE_CHECK_ON,IMAGE_CHECK_ON,true);
 	}
 	else
 	{
 		addMultiBut(psWScreen, MULTIOP_READY_FORM_ID+player,MULTIOP_READY_START+player,3, 
-			(UWORD)(( (MULTIOP_PLAYERHEIGHT+5)*player)+4),MULTIOP_READY_WIDTH,MULTIOP_READY_HEIGHT,
+			4,MULTIOP_READY_WIDTH,MULTIOP_READY_HEIGHT,
 			_("Click when ready"),IMAGE_CHECK_OFF,IMAGE_CHECK_OFF,true);
 	}
 }
