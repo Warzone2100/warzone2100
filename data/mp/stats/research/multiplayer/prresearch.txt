@@ -622,8 +622,8 @@ R-Wpn-Rocket01-LtAT,R-Wpn-Rocket-ROF02,127
 R-Wpn-Rocket01-LtAT,R-Wpn-Rocket-Accuracy01,128
 R-Wpn-Rocket01-LtAT,R-Wpn-Rocket02-MRL,129
 R-Wpn-Rocket02-MRL,R-Wpn-Rocket-Damage02,208
-R-Wpn-Rocket03-HvAT,R-Wpn-Rocket01-LtAT,461
-R-Wpn-Rocket03-HvAT,R-Wpn-RocketSlow-Damage03,461
+R-Wpn-Rocket03-HvAT,R-Struc-Research-Upgrade03,461
+R-Wpn-Rocket03-HvAT,R-Wpn-Rocket-Damage04,461
 R-Wpn-Rocket05-MiniPod,R-Vehicle-Engine01,124
 R-Wpn-Rocket06-IDF,R-Wpn-Rocket02-MRL,295
 R-Wpn-Rocket06-IDF,R-Sys-CBSensor-Tower01,295
