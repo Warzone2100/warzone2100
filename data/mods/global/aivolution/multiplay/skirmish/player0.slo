@@ -10119,7 +10119,7 @@ function void checkBase(int _player)
 			
 			// check if base location is inside radar range
 			if((curBase[_player][0] > 0) and (curBase[_player][1] > 0)){
-				_bCanSeeBase = canSeeLoc(curBase[_player][0] / TILE, curBase[_player][1] / TILE);
+				_bCanSeeBase = canSeeLoc(curBase[_player][0], curBase[_player][1]);
 			}
 			
 			if(bCheckBaseDebug && _bCanSeeBase)dbg("checkBase: can see loc for player " & _player, me);
@@ -16367,7 +16367,7 @@ function bool canSeePlayerBase(int _player)
 function bool canSeeLoc(int _x, int _y)
 {
 	updatePlayerTileVis(me);
-	return checkVisibleTile(me, _x, _y);
+	return checkVisibleTile(me, _x / TILE, _y / TILE);
 }
 
 function bool enemyTargetInRange(int _enemy, int _x, int _y, int _range)
