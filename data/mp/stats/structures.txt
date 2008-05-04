@@ -128,7 +128,7 @@ WallTower-Atmiss,DEFENSE,Level Three,HARD,0,1,1,Concrete,400,2,15,1300,10,350,10
 WallTower-DoubleAAGun,DEFENSE,Level Two,HARD,0,1,1,Concrete,400,2,15,1300,10,400,10,150,255,1,ZNULLECM,DefaultSensor1Mk1,1,BLGUARD1.pie,0,0,1
 WallTower-EMP,DEFENSE,Level All,HARD,0,1,1,Concrete,400,2,15,840,10,350,10,150,255,1,ZNULLECM,DefaultSensor1Mk1,1,BLGUARD1.pie,0,0,1
 WallTower-HPVcannon,DEFENSE,Level Two-Three,HARD,0,1,1,Concrete,400,2,15,1300,10,225,10,150,255,1,ZNULLECM,DefaultSensor1Mk1,1,BLGUARD1.pie,0,0,1
-WallTower-HvATrocket,DEFENSE,Level Two-Three,HARD,0,1,1,Concrete,400,2,15,1300,10,300,10,150,255,1,ZNULLECM,DefaultSensor1Mk1,1,BLGUARD1.pie,0,0,1
+WallTower-HvATrocket,DEFENSE,Level Two-Three,HARD,0,1,1,Concrete,400,2,15,1300,10,275,10,150,255,1,ZNULLECM,DefaultSensor1Mk1,1,BLGUARD1.pie,0,0,1
 WallTower-Projector,DEFENSE,Level Two-Three,HARD,0,1,1,Concrete,400,1,15,1300,10,150,10,150,255,1,ZNULLECM,DefaultSensor1Mk1,1,BLHARDPT.PIE,0,0,1
 WallTower-PulseLas,DEFENSE,Level Three,HARD,0,1,1,Concrete,400,2,15,1300,10,250,10,150,255,1,ZNULLECM,DefaultSensor1Mk1,1,BLGUARD1.pie,0,0,1
 WallTower-QuadRotAAGun,DEFENSE,Level Three,HARD,0,1,1,Concrete,400,2,15,1300,10,400,10,150,255,1,ZNULLECM,DefaultSensor1Mk1,1,BLGUARD1.pie,0,0,1
