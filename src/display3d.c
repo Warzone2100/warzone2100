@@ -4367,10 +4367,15 @@ static void	drawRangeAtPos(SDWORD centerX, SDWORD centerY, SDWORD radius)
 		yDif = yDif/4096;
 		pos.x = centerX - xDif;
 		pos.z = centerY - yDif;
-		pos.y = map_Height(pos.x,pos.z) + 16;
-		effectGiveAuxVar(80);	// half normal plasma size...
 
-		addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_SMALL,false,NULL,0);
+		// don't draw off map
+		if(pos.x >= 0 && pos.z >= 0)
+		{
+			pos.y = map_Height(pos.x,pos.z) + 16;
+			effectGiveAuxVar(80);	// half normal plasma size...
+
+			addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_SMALL,false,NULL,0);
+		}
 	}
 }
 
