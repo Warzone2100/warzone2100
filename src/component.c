@@ -183,10 +183,11 @@ UDWORD getComponentRadius(BASE_STATS *psComponent)
 	}
 
 	/* VTOL bombs are only stats allowed to have NULL ComponentIMD */
-	if ( (StatIsComponent(psComponent) != COMP_WEAPON) ||
-		  ((WEAPON_STATS *)psComponent)->weaponSubClass != WSC_BOMB )
+	if (StatIsComponent(psComponent) != COMP_WEAPON
+	    || (((WEAPON_STATS *)psComponent)->weaponSubClass != WSC_BOMB
+	        && ((WEAPON_STATS *)psComponent)->weaponSubClass != WSC_EMP))
 	{
-		debug(LOG_ERROR, "getComponentRadius: ComponentPIE == NULL");
+		ASSERT(ComponentIMD, "No ComponentIMD!");
 	}
 
 	return COMPONENT_RADIUS;
@@ -593,11 +594,11 @@ void displayComponentButton(BASE_STATS *Stat, Vector3i *Rotation, Vector3i *Posi
 	}
 
 	/* VTOL bombs are only stats allowed to have NULL ComponentIMD */
-	if ( (ComponentIMD == NULL) &&
-		 ((StatIsComponent(Stat) != COMP_WEAPON) ||
-		  ((WEAPON_STATS *)Stat)->weaponSubClass != WSC_BOMB) )
+	if (StatIsComponent(Stat) != COMP_WEAPON
+	    || (((WEAPON_STATS *)Stat)->weaponSubClass != WSC_BOMB
+	        && ((WEAPON_STATS *)Stat)->weaponSubClass != WSC_EMP))
 	{
-		debug(LOG_ERROR, "ComponentPIE == NULL");
+		ASSERT(ComponentIMD, "No ComponentIMD");
 	}
 
 	if(MountIMD)
