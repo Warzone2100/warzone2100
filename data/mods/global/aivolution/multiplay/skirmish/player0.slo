@@ -791,7 +791,7 @@ event powerup(wait, 5)
 {
 	local bool bMyRespons,bNotLost;
 
-	DEBUG_ALL = TRUE;
+	DEBUG_ALL = false;
 
 	DEBUG_MSG = DEBUG_ALL;		//isHumanPlayer(player);
 								/*%!	ID="DEBUG_MSG",
@@ -1258,7 +1258,7 @@ function void oneTimeInitialize(bool bAIControlled)
 
 	minAttackers = 5;
 	maxAttackers = 90;	//(unitLimit - maxTrucks - numDefenders) * 3 / 4;
-	numAttackers = 5 + random(22) + minAttackers;
+	numAttackers = 13 + random(12) + minAttackers;
 
 	attackersIncrease = 4;		// by how many units to increase number of attackers vs a certain player when attack fails
 
