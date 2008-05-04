@@ -3520,7 +3520,7 @@ static void orderFactories(void)
 	SDWORD entry = 0;
 	UDWORD inc = 0, type = FACTORY_FLAG, objectInc = 0;
 
-	ASSERT( numObjects <= NUM_FACTORY_TYPES * MAX_FACTORY, "orderFactories : too many factories!" );
+	ASSERT(numObjects <= NUM_FACTORY_TYPES * MAX_FACTORY, "too many factories!");
 
 	//copy the object list into the list to order
 	memcpy(apsListToOrder, apsObjectList, sizeof(BASE_OBJECT*) * ORDERED_LIST_SIZE);
@@ -3536,7 +3536,7 @@ static void orderFactories(void)
 				psNext = NULL;
 			}
 
-			ASSERT( StructIsFactory(psStruct), "orderFactories: structure is not a factory" );
+			ASSERT(StructIsFactory(psStruct), "structure is not a factory");
 
 			if (((FACTORY*)psStruct->pFunctionality)->psAssemblyPoint->factoryInc == inc
 			    && ((FACTORY*)psStruct->pFunctionality)->psAssemblyPoint->factoryType == type)
@@ -3545,7 +3545,7 @@ static void orderFactories(void)
 				//quick check that don't end up with more!
 				if (entry > numObjects)
 				{
-					ASSERT( false, "orderFactories: too many objects!" );
+					ASSERT(false, "too many objects!");
 					return;
 				}
 				break;
@@ -3562,11 +3562,10 @@ static void orderFactories(void)
 }
 
 
-/*order the objects in the bottom bar according to their type*/
+/** Order the objects in the bottom bar according to their type. */
 static void orderObjectInterface(void)
 {
-
-	if (apsObjectList == NULL)
+	if (!apsObjectList || !apsObjectList[0])
 	{
 		//no objects so nothing to order!
 		return;
@@ -3575,18 +3574,14 @@ static void orderObjectInterface(void)
 	switch(apsObjectList[0]->type)
 	{
 	case OBJ_STRUCTURE:
-		//if (((STRUCTURE *)apsObjectList[0])->pStructureType->type == REF_FACTORY ||
-		//	((STRUCTURE *)apsObjectList[0])->pStructureType->type == REF_CYBORG_FACTORY ||
-		//	((STRUCTURE *)apsObjectList[0])->pStructureType->type == REF_VTOL_FACTORY)
-        if (StructIsFactory((STRUCTURE *)apsObjectList[0]))
+		if (StructIsFactory((STRUCTURE *)apsObjectList[0]))
 		{
 			orderFactories();
 		}
-        else if (((STRUCTURE *)apsObjectList[0])->pStructureType->type ==
-            REF_RESEARCH)
-        {
-            orderResearch();
-        }
+		else if (((STRUCTURE *)apsObjectList[0])->pStructureType->type == REF_RESEARCH)
+		{
+			orderResearch();
+		}
 		break;
 	case OBJ_DROID:
 		orderDroids();
@@ -3602,7 +3597,7 @@ void intManufactureFinished(STRUCTURE *psBuilding)
 {
 	SDWORD		    structureID;
 	STRUCTURE       *psCurr;
-    BASE_OBJECT     *psObj;
+	BASE_OBJECT	*psObj;
 
 	ASSERT( psBuilding != NULL,
 		"intManufactureFinished: Invalid structure pointer" );
@@ -4927,8 +4922,6 @@ static BOOL intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,B
 				debug( LOG_NEVER, "This is just a Warning!\n Max buttons have been allocated" );
 				break;
 			}
-		} else {
-//DBPRINTF(("Skipped dead object\n");
 		}
 	}
 
@@ -4942,12 +4935,10 @@ static BOOL intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,B
 		psSelected = NULL;
 	}
 
-//DBPRINTF(("%p %d\n",psSelected,bForceStats);
 	if (psSelected && (objMode != IOBJ_COMMAND))
 	{
 		if(bForceStats || widgGetFromID(psWScreen,IDSTAT_FORM ) )
 		{
-//DBPRINTF(("intAddObjectStats %p %d\n",psSelected,statID));
 			objStatID = statID;
 			intAddObjectStats(psSelected, statID);
 			intMode = INT_STAT;
@@ -4996,16 +4987,17 @@ static BOOL intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,B
 
 static BOOL intUpdateObject(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,BOOL bForceStats)
 {
-
 	intAddObjectWindow(psObjects,psSelected,bForceStats);
 
 	// if the stats screen is up and..
-	if(StatsUp) {
-		if(psStatsScreenOwner != NULL) {
+	if (StatsUp)
+	{
+		if (psStatsScreenOwner != NULL)
+		{
 			// it's owner is dead then..
-			if(psStatsScreenOwner->died != 0) {
+			if (psStatsScreenOwner->died != 0)
+			{
 				// remove it.
-//DBPRINTF(("psStatsScreenOwner died\n");
 				intRemoveStatsNoAnim();
 			}
 		}
