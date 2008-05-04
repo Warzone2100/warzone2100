@@ -131,9 +131,8 @@ static inline bool TileIsHighlighted(const MAPTILE* tile)
 static inline bool TileHasTallStructure(const MAPTILE* tile)
 {
 	return (TileHasStructure(tile)
-	     && ((STRUCTURE*)tile->psObject)->sDisplay.imd->max.y > TALLOBJECT_YMAX)
-	    || (TileHasFeature(tile)
-	     && ((FEATURE*)tile->psObject)->sDisplay.imd->max.y > TALLOBJECT_YMAX);
+             || TileHasFeature(tile))
+	    && tile->psObject->sDisplay.imd->max.y > TALLOBJECT_YMAX;
 }
 
 static inline bool TileHasSmallStructure(const MAPTILE* tile)
