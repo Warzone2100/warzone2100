@@ -396,14 +396,9 @@
  * \def WZ_DECL_CONST
  * GCC: "Many functions do not examine any values except their arguments, and have no effects except the return value. Basically this is just slightly more strict
  *       class than the pure attribute below, since function is not allowed to read global memory."
- * MSVC: "If a function is annotated as noalias, the optimizer can assume that, in addition to the parameters themselves, only first-level indirections of pointer 
- *        parameters are referenced or modified inside the function."
- * The gcc const attribute does not permit passing values as pointers, unlike the MSVC attribute. The lowest commmon denominator must be used here.
  */
 #if WZ_CC_GNU_PREREQ(2,5) && !defined(WZ_CC_INTEL)
 #  define WZ_DECL_CONST __attribute__((const,warn_unused_result))
-#elif defined(WZ_CC_MSVC) && (_MSC_VER >= 1300)
-#  define __declspec(noalias)
 #else
 #  define WZ_DECL_CONST
 #endif
