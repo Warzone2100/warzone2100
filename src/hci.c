@@ -3599,25 +3599,22 @@ void intManufactureFinished(STRUCTURE *psBuilding)
 	STRUCTURE       *psCurr;
 	BASE_OBJECT	*psObj;
 
-	ASSERT( psBuilding != NULL,
-		"intManufactureFinished: Invalid structure pointer" );
+	ASSERT(psBuilding != NULL, "Invalid structure pointer");
 
-	if ((intMode == INT_OBJECT || intMode == INT_STAT) &&
-		(objMode == IOBJ_MANUFACTURE))
+	if ((intMode == INT_OBJECT || intMode == INT_STAT) && objMode == IOBJ_MANUFACTURE)
 	{
 		/* Find which button the structure is on and clear it's stats */
 		structureID = 0;
-    	numObjects = 0;
-	    memset(apsObjectList, 0, sizeof(BASE_OBJECT *) * MAX_OBJECTS);
-		//for (psCurr = apsStructLists[selectedPlayer]; psCurr; psCurr = psCurr->psNext)
+		numObjects = 0;
+		memset(apsObjectList, 0, sizeof(BASE_OBJECT *) * MAX_OBJECTS);
 		for (psCurr = interfaceStructList(); psCurr; psCurr = psCurr->psNext)
 		{
 			if (objSelectFunc((BASE_OBJECT *)psCurr))
 			{
-                //the list is ordered now so we have to get all possible entries and sort it before checking if this is the one!
-                apsObjectList[numObjects] = (BASE_OBJECT *)psCurr;
-			    numObjects++;
-            }
+				// The list is ordered now so we have to get all possible entries and sort it before checking if this is the one!
+				apsObjectList[numObjects] = (BASE_OBJECT *)psCurr;
+				numObjects++;
+			}
 			// make sure the list doesn't overflow
 			if (numObjects >= MAX_OBJECTS)
 			{
@@ -3634,13 +3631,12 @@ void intManufactureFinished(STRUCTURE *psBuilding)
 			if ((STRUCTURE *)psObj == psBuilding)
 			{
 				intSetStats(structureID + IDOBJ_STATSTART, NULL);
-        		//clear the loop button if interface is up
+				// clear the loop button if interface is up
 				if (widgGetFromID(psWScreen,IDSTAT_LOOP_BUTTON))
 				{
 					widgSetButtonState(psWScreen, IDSTAT_LOOP_BUTTON, 0);
 				}
-
-                break;
+				break;
 			}
 		}
 	}
@@ -4267,7 +4263,7 @@ static BOOL intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,B
 	W_BUTINIT		sButInit;
 	UDWORD			displayForm;
 	UDWORD			i, statID=0;
-    SDWORD          objLoop;
+	SDWORD			objLoop;
 	BASE_OBJECT		*psObj, *psFirst;
 	BASE_STATS		*psStats;
 	SDWORD			BufferID;
@@ -4278,12 +4274,11 @@ static BOOL intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,B
 	W_LABINIT		sLabInitCmdExp;
 	W_LABINIT		sLabInitCmdFac;
 	W_LABINIT		sLabInitCmdFac2;
-//	W_LABINIT		sLabInitCmdFacts;
 	BOOL			IsFactory;
 	BOOL			Animate = true;
 	UWORD           FormX,FormY;
 
-// Is the form already up?
+	// Is the form already up?
 	if(widgGetFromID(psWScreen,IDOBJ_FORM) != NULL) {
 		intRemoveObjectNoAnim();
 		Animate = false;
@@ -4610,7 +4605,6 @@ static BOOL intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,B
 	sLabInitCmdExp.height = 16;
 	sLabInitCmdExp.pText = "@@@@@ - overrun";
 	sLabInitCmdExp.FontID = font_regular;
-
 
 	displayForm = 0;
 	for(i=0; i<(UDWORD)numObjects; i++)
