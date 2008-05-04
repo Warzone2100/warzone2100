@@ -1684,12 +1684,11 @@ BOOL loadPropulsionTypes(const char *pPropTypeData, UDWORD bufferSize)
 BOOL loadTerrainTable(const char *pTerrainTableData, UDWORD bufferSize)
 {
 	const unsigned int NumEntries = numCR(pTerrainTableData, bufferSize);
-	TERRAIN_TABLE *pTerrainTable;
-	unsigned int i = 0, j = 0;
+	unsigned int i;
 	UDWORD			terrainType, propulsionType, speedFactor;
 
 	//allocate storage for the stats
-	asTerrainTable = (TERRAIN_TABLE *)malloc(sizeof(TERRAIN_TABLE) * NUM_PROP_TYPES * TERRAIN_TYPES);
+	asTerrainTable = (TERRAIN_TABLE *)malloc(sizeof(*asTerrainTable) * NUM_PROP_TYPES * TER_MAX);
 
 	if (asTerrainTable == NULL)
 	{
@@ -1699,16 +1698,17 @@ BOOL loadTerrainTable(const char *pTerrainTableData, UDWORD bufferSize)
 	}
 
 	//initialise the storage to 100
-	for (i=0; i < TERRAIN_TYPES; i++)
+	for (i = 0; i < TER_MAX; ++i)
 	{
-		for (j=0; j < NUM_PROP_TYPES; j++)
+		unsigned int j;
+		for (j = 0; j < NUM_PROP_TYPES; j++)
 		{
-			pTerrainTable = asTerrainTable + (i * NUM_PROP_TYPES + j);
+			TERRAIN_TABLE * const pTerrainTable = &asTerrainTable[i * NUM_PROP_TYPES + j];
 			pTerrainTable->speedFactor = 100;
 		}
 	}
 
-	for (i=0; i < NumEntries; i++)
+	for (i = 0; i < NumEntries; ++i)
 	{
 		//read the data into the storage - the data is delimeted using comma's
 		sscanf(pTerrainTableData,"%d,%d,%d",
@@ -1721,11 +1721,12 @@ BOOL loadTerrainTable(const char *pTerrainTableData, UDWORD bufferSize)
 
 	//check that none of the entries are 0 otherwise this will stop a droid dead in its tracks
 	//and it will not be able to move again!
-	for (i=0; i < TERRAIN_TYPES; i++)
+	for (i = 0; i < TER_MAX; ++i)
 	{
-		for (j=0; j < NUM_PROP_TYPES; j++)
+		unsigned int j;
+		for (j = 0; j < NUM_PROP_TYPES; ++j)
 		{
-			pTerrainTable = asTerrainTable + (i * NUM_PROP_TYPES + j);
+			TERRAIN_TABLE * const pTerrainTable = asTerrainTable + (i * NUM_PROP_TYPES + j);
 			if (pTerrainTable->speedFactor == 0)
 			{
 				debug( LOG_ERROR, "loadTerrainTable: Invalid propulsion/terrain table entry" );

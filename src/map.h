@@ -46,9 +46,6 @@ typedef enum _terrain_type
 	TER_MAX,
 } TYPE_OF_TERRAIN;
 
-/* change these if you change above - maybe wrap up in enumerate? */
-#define	TERRAIN_TYPES	TER_MAX
-
 #define TALLOBJECT_YMAX		(200)
 #define TALLOBJECT_ADJUST	(300)
 

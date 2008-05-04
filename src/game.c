@@ -9536,7 +9536,7 @@ BOOL loadTerrainTypeMap(const char *pFileData, UDWORD filesize)
 			return false;
 
 		}
-		if (*pType > TERRAIN_TYPES)
+		if (*pType > TER_MAX)
 		{
 			debug( LOG_ERROR, "loadTerrainTypeMap: terrain type out of range" );
 			abort();
