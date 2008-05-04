@@ -118,10 +118,10 @@ static inline size_t strlcat(char *WZ_DECL_RESTRICT dst, const char *WZ_DECL_RES
 #define ssprintf(dest, ...) snprintf((dest), sizeof(dest), __VA_ARGS__)
 #define sstrcmp(str1, str2) strncmp((str1), (str2), sizeof(str1) > sizeof(str2) ? sizeof(str2) : sizeof(str1))
 #else
-#define sstrcpy(dest, src) (assert(sizeof(dest) != sizeof(void*)), strlcpy((dest), (src), sizeof(dest)))
-#define sstrcat(dest, src) (assert(sizeof(dest) != sizeof(void*)), strlcat((dest), (src), sizeof(dest)))
-#define ssprintf(dest, ...) (assert(sizeof(dest) != sizeof(void*)), snprintf((dest), sizeof(dest), __VA_ARGS__))
-#define sstrcmp(str1, str2) (assert(sizeof(str1) != sizeof(void*) && sizeof(str2) != sizeof(void*)), strncmp((str1), (str2), sizeof(str1) > sizeof(str2) ? sizeof(str2) : sizeof(str1)))
+#define sstrcpy(dest, src) (WZ_ASSERT_STATIC_STRING(dest), strlcpy((dest), (src), sizeof(dest)))
+#define sstrcat(dest, src) (WZ_ASSERT_STATIC_STRING(dest), strlcat((dest), (src), sizeof(dest)))
+#define ssprintf(dest, ...) (WZ_ASSERT_STATIC_STRING(dest), snprintf((dest), sizeof(dest), __VA_ARGS__))
+#define sstrcmp(str1, str2) (WZ_ASSERT_STATIC_STRING(str1), WZ_ASSERT_STATIC_STRING(str2), strncmp((str1), (str2), sizeof(str1) > sizeof(str2) ? sizeof(str2) : sizeof(str1)))
 #endif
 
 #endif // __INCLUDED_FRAMEWORK_STRLFUNCS_H__
