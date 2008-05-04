@@ -96,14 +96,6 @@ extern BOOL fpathLiftSlideBlockingTile(SDWORD x, SDWORD y);
  */
 extern void fpathSetBlockingTile( UBYTE ubPropulsionType );
 
-/** Set pointer for current pathfinding droid
- *
- *  HACK!
- *
- *  @ingroup pathfinding
- */
-extern void fpathSetCurrentDroid(DROID* psDroid);
-
 /** Set a direct path to position.
  *
  *  Plan a path from @c psDroid's current position to given position without

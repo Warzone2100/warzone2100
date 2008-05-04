@@ -62,10 +62,6 @@ static const Vector2i aDirOffset[NUM_DIR] =
 	{ 1, 1},
 };
 
-/* global pointer for droid being routed - GJ hack -
- * currently only used in fpathLiftBlockingTile */
-static DROID* g_psDroidRoute = NULL;
-
 // function pointer for the blocking tile check
 BOOL (*fpathBlockingTile)(SDWORD x, SDWORD y);
 
@@ -176,9 +172,6 @@ BOOL fpathHoverBlockingTile(SDWORD x, SDWORD y)
 static BOOL fpathLiftBlockingTile(SDWORD x, SDWORD y)
 {
 	MAPTILE		*psTile;
-	SDWORD		iLiftHeight, iBlockingHeight;
-
-	ASSERT(g_psDroidRoute != NULL, "fpathLiftBlockingTile: invalid DROID pointer");
 
 	// All tiles outside of the map are blocking
 	if (x < 1 || y < 1 || x >= mapWidth - 1 || y >= mapHeight - 1)
@@ -187,65 +180,15 @@ static BOOL fpathLiftBlockingTile(SDWORD x, SDWORD y)
 	}
 
 	psTile = mapTile(x, y);
-	if (g_psDroidRoute->droidType == DROID_TRANSPORTER)
-	{
-		// Only tall structures are blocking now
-		return TileHasTallStructure(psTile);
-	}
 
-	ASSERT(x >= 0 && y >= 0 && x < mapWidth && y < mapHeight, "fpathLiftBlockingTile: off map");
-
-	/* no tiles are blocking if returning to rearm */
-	// FIXME: Do we really want to allow VTOL that needs to reload to fly at
-	//        places where other VTOLs can't go??
-	if (g_psDroidRoute->action == DACTION_MOVETOREARM)
-	{
-		return false;
-	}
-
-	/* consider cliff faces */
-	if (terrainType(psTile) == TER_CLIFFFACE)
-	{
-		switch ( (asBodyStats + g_psDroidRoute->asBits[COMP_BODY].nStat)->size )
-		{
-			case SIZE_LIGHT:
-				iBlockingHeight = LIFT_BLOCK_HEIGHT_LIGHTBODY;
-				break;
-			case SIZE_MEDIUM:
-				iBlockingHeight = LIFT_BLOCK_HEIGHT_MEDIUMBODY;
-				break;
-			case SIZE_HEAVY:
-				iBlockingHeight = LIFT_BLOCK_HEIGHT_HEAVYBODY;
-				break;
-			default:
-				iBlockingHeight = LIFT_BLOCK_HEIGHT_LIGHTBODY;
-		}
-
-		/* approaching cliff face; block if below it */
-		iLiftHeight = (SDWORD) map_Height(world_coord(x), world_coord(y)) -
-					  (SDWORD) map_Height( g_psDroidRoute->pos.x, g_psDroidRoute->pos.y );
-		if (iLiftHeight > iBlockingHeight)
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
-	}
-	else
-	{
-		// Only tall structures are blocking now
-		return TileHasTallStructure(psTile);
-	}
+	// Only tall structures are blocking now
+	return TileHasTallStructure(psTile);
 }
 
 // Check if an edge map tile blocks a vtol (for sliding at map edge)
 BOOL fpathLiftSlideBlockingTile(SDWORD x, SDWORD y)
 {
-	if ( x < 1 || y < 1 ||
-		 x >= (SDWORD)GetWidthOfMap()-1  ||
-		 y >= (SDWORD)GetHeightOfMap()-1    )
+	if (x < 1 || y < 1 || x >= mapWidth - 1 || y >= mapHeight - 1)
 	{
 		return true;
 	}
@@ -315,9 +258,6 @@ void fpathSetDirectRoute(DROID* psDroid, SDWORD targetX, SDWORD targetY)
 	ASSERT(psDroid->type == OBJ_DROID, "We got passed a DROID that isn't a DROID!");
 
 	psMoveCntl = &psDroid->sMove;
-
-	/* set global pointer for DROID being routed - GJ hack */
-	fpathSetCurrentDroid(psDroid);
 
 	psMoveCntl->DestinationX = targetX;
 	psMoveCntl->DestinationY = targetY;
@@ -450,11 +390,6 @@ static FPATH_RETVAL fpathGatewayRoute(DROID* psDroid, SDWORD routeMode, SDWORD s
 	}
 }
 
-void fpathSetCurrentDroid(DROID* psDroid)
-{
-	g_psDroidRoute = psDroid;
-}
-
 // set the correct blocking tile function
 void fpathSetBlockingTile( UBYTE ubPropulsionType )
 {
@@ -481,9 +416,6 @@ FPATH_RETVAL fpathRoute(DROID* psDroid, SDWORD tX, SDWORD tY)
 	PROPULSION_STATS	*psPropStats;
 
 	ASSERT(psDroid->type == OBJ_DROID, "We got passed a DROID that isn't a DROID!");
-
-	/* set global pointer for DROID being routed - GJ hack */
-	fpathSetCurrentDroid(psDroid);
 
 	if (psPartialRouteDroid == NULL || psPartialRouteDroid != psDroid)
 	{
@@ -689,9 +621,6 @@ exit:
 
 	// reset the blocking tile function
 	fpathBlockingTile = fpathGroundBlockingTile;
-
-	/* reset global pointer for DROID being routed */
-	fpathSetCurrentDroid(NULL);
 
 #ifdef DEBUG_MAP
 	{
