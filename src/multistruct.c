@@ -227,7 +227,7 @@ BOOL recvBuildFinished()
 		typeindex++);
 
 	// Check for similar buildings, to avoid overlaps
-	if (TILE_HAS_STRUCTURE(mapTile(map_coord(x), map_coord(y))))
+	if (TileHasStructure(mapTile(map_coord(x), map_coord(y))))
 	{
 		// Get the current structure
 		psStruct = getTileStructure(map_coord(x), map_coord(y));

@@ -1638,7 +1638,7 @@ void	renderFeature(FEATURE *psFeature)
 		featX = psFeature->pos.x;
 		featY = psFeature->pos.y;
 		/* Daft hack to get around the oild derrick issue */
-		if (!TILE_HAS_FEATURE(mapTile(map_coord(featX), map_coord(featY))))
+		if (!TileHasFeature(mapTile(map_coord(featX), map_coord(featY))))
 		{
 			return;
 		}
@@ -1741,7 +1741,7 @@ void renderProximityMsg(PROXIMITY_DISPLAY *psProxDisp)
 			/* in case of a beacon message put above objects */
 			if(((VIEWDATA *)psProxDisp->psMessage->pViewData)->type == VIEW_BEACON)
 			{
-				if(TILE_OCCUPIED(mapTile(msgX / TILE_UNITS,msgY / TILE_UNITS)))
+				if(TileIsOccupied(mapTile(msgX / TILE_UNITS,msgY / TILE_UNITS)))
 					dv.y = pViewProximity->z + 150;
 			}
 
@@ -3786,7 +3786,7 @@ static void drawTerrainTile(UDWORD i, UDWORD j, BOOL onWaterEdge)
 	}
 
 	/* Is the tile highlighted? Perhaps because there's a building foundation on it */
-	if (psTile && !onWaterEdge && TILE_HIGHLIGHT(psTile))
+	if (psTile && !onWaterEdge && TileIsHighlighted(psTile))
 	{
 		/* Clear it for next time round */
 		CLEAR_TILE_HIGHLIGHT(psTile);

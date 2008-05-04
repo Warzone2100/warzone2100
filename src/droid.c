@@ -1027,7 +1027,7 @@ static BOOL droidNextToStruct(DROID *psDroid, BASE_OBJECT *psStruct)
 	{
 		for(x = minX;x <= maxX; x++)
 		{
-			if (TILE_HAS_STRUCTURE(mapTile((UWORD)x,(UWORD)y)) &&
+			if (TileHasStructure(mapTile((UWORD)x,(UWORD)y)) &&
 				getTileStructure(x,y) == (STRUCTURE *)psStruct)
 
 			{
@@ -3832,7 +3832,7 @@ BOOL sensiblePlace(SDWORD x, SDWORD y)
 		return false;
 
     //check no features there
-	if(TILE_HAS_FEATURE(mapTile(x,y)))
+	if(TileHasFeature(mapTile(x,y)))
 	{
 		return false;
 	}

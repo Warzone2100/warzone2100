@@ -1708,7 +1708,7 @@ BOOL scrGetFeature(void)
 	{
 		if (psFeat->psStats->subType == psFeatureStatToFind[bucket]->subType
 		 && psFeat->visible[playerToEnum[bucket]] != 0
-		 && !TILE_HAS_STRUCTURE(mapTile(map_coord(psFeat->pos.x), map_coord(psFeat->pos.y)))
+		 && !TileHasStructure(mapTile(map_coord(psFeat->pos.x), map_coord(psFeat->pos.y)))
 		 && !fireOnLocation(psFeat->pos.x,psFeat->pos.y)		// not burning.
 		   )
 		{
@@ -1771,7 +1771,7 @@ BOOL scrGetFeatureB(void)
 	{
 		if(	( psCurrEnumFeature[bucket]->psStats->subType == psFeatureStatToFind[bucket]->subType)
 			&&( psCurrEnumFeature[bucket]->visible[playerToEnum[bucket]]	!= 0)
-			&&!TILE_HAS_STRUCTURE(mapTile(map_coord(psCurrEnumFeature[bucket]->pos.x), map_coord(psCurrEnumFeature[bucket]->pos.y)))
+			&&!TileHasStructure(mapTile(map_coord(psCurrEnumFeature[bucket]->pos.x), map_coord(psCurrEnumFeature[bucket]->pos.y)))
 			 /*&&!fireOnLocation(psCurrEnumFeature[bucket]->pos.x,psCurrEnumFeature[bucket]->pos.y )*/		// not burning.
 			)
 		{
@@ -1819,7 +1819,7 @@ BOOL scrGetFeature(void)
 			&&
 			( psCurrEnumFeature[bucket]->visible[playerToEnum[bucket]]	!= 0)
 			&&
-			!TILE_HAS_STRUCTURE(mapTile(map_coord(psCurrEnumFeature[bucket]->pos.x), map_coord(psCurrEnumFeature[bucket]->pos.y)))
+			!TileHasStructure(mapTile(map_coord(psCurrEnumFeature[bucket]->pos.x), map_coord(psCurrEnumFeature[bucket]->pos.y)))
 		   )
 		{
 			if (!stackPushResult(ST_FEATURE,(UDWORD) psCurrEnumFeature[bucket]))			//	push scrFunctionResult
@@ -1930,7 +1930,7 @@ BOOL scrAddStructure(void)
 		iMapY = map_coord(iY);
 
 		/* check for structure already on-tile */
-		if(TILE_HAS_STRUCTURE(mapTile(iMapX,iMapY)))
+		if(TileHasStructure(mapTile(iMapX,iMapY)))
 		{
 			ASSERT( false,
 			"scrAddStructure: tile already occupied by structure\n" );

@@ -230,7 +230,7 @@ static BOOL rayLOSCallback(SDWORD x, SDWORD y, SDWORD dist)
 		if (blockingWall && !((tileX == finalX) && (tileY == finalY)))
 		{
 			psTile = mapTile(tileX, tileY);
-			if (TILE_HAS_WALL(psTile) && !TILE_HAS_SMALLSTRUCTURE(psTile))
+			if (TileHasWall(psTile) && !TileHasSmallStructure(psTile))
 			{
 				lastH = 2*UBYTE_MAX * ELEVATION_SCALE;
 	//			currG = UBYTE_MAX * ELEVATION_SCALE * GRAD_MUL / lastD;
@@ -632,7 +632,7 @@ void processVisibility(BASE_OBJECT *psObj)
 		the selected Player - if there isn't an Resource Extractor on it*/
 		if (((FEATURE *)psObj)->psStats->subType == FEAT_OIL_RESOURCE)
 		{
-			if(!TILE_HAS_STRUCTURE(mapTile(map_coord(psObj->pos.x),
+			if(!TileHasStructure(mapTile(map_coord(psObj->pos.x),
 			                               map_coord(psObj->pos.y))))
 			{
 				psMessage = addMessage(MSG_PROXIMITY, true, selectedPlayer);

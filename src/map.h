@@ -77,22 +77,70 @@ static inline unsigned short TileNumber_texture(unsigned short tilenumber)
 	return tilenumber & ~TILE_NUMMASK;
 }
 
-
 #define BITS_FPATHBLOCK	0x10		// bit set temporarily by find path to mark a blocking tile
 #define BITS_GATEWAY	0x40		// bit set to show a gateway on the tile
 
+/* Information stored with each tile */
+typedef struct _maptile
+{
+	UBYTE			tileInfoBits;
+	uint8_t			tileVisBits;	// COMPRESSED - bit per player
+	UBYTE			height;			// The height at the top left of the tile
+	UBYTE			illumination;	// How bright is this tile?
+	UWORD			texture;		// Which graphics texture is on this tile
+	bool			bMaxed;
+	bool			activeSensor;	// selected player can see through fog of war here
+	float			level;
+	BASE_OBJECT		*psObject;		// Any object sitting on the location (e.g. building)
+	PIELIGHT		colour;
+
+//	TYPE_OF_TERRAIN	type;			// The terrain type for the tile
+} MAPTILE;
+
 #define TILE_IS_NOTBLOCKING(x)	(x->texture & TILE_NOTBLOCKING)
 
-#define TILE_OCCUPIED(x)		(x->psObject)
-#define TILE_HAS_STRUCTURE(x)		(x->psObject && x->psObject->type == OBJ_STRUCTURE)
-#define TILE_HAS_FEATURE(x)		(x->psObject && x->psObject->type == OBJ_FEATURE)
-#define TILE_HAS_WALL(x)		(TILE_HAS_STRUCTURE(x) \
-					&& (((STRUCTURE*)x->psObject)->pStructureType->type == REF_WALL \
-					    || ((STRUCTURE*)x->psObject)->pStructureType->type == REF_WALLCORNER))
-#define TILE_HIGHLIGHT(x)		(x->texture & TILE_HILIGHT)
-#define TILE_HAS_TALLSTRUCTURE(x)	((TILE_HAS_STRUCTURE(x) && ((STRUCTURE*)x->psObject)->sDisplay.imd->max.y > TALLOBJECT_YMAX) \
-                                         || (TILE_HAS_FEATURE(x) && ((FEATURE*)x->psObject)->sDisplay.imd->max.y > TALLOBJECT_YMAX))
-#define TILE_HAS_SMALLSTRUCTURE(x)	(TILE_HAS_STRUCTURE(x) && ((STRUCTURE*)x->psObject)->pStructureType->height == 1)
+static inline bool TileIsOccupied(const MAPTILE* tile)
+{
+	return tile->psObject;
+}
+
+static inline bool TileHasStructure(const MAPTILE* tile)
+{
+	return TileIsOccupied(tile)
+	    && tile->psObject->type == OBJ_STRUCTURE;
+}
+
+static inline bool TileHasFeature(const MAPTILE* tile)
+{
+	return TileIsOccupied(tile)
+	    && tile->psObject->type == OBJ_FEATURE;
+}
+
+static inline bool TileHasWall(const MAPTILE* tile)
+{
+	return TileHasStructure(tile)
+	    && (((STRUCTURE*)tile->psObject)->pStructureType->type == REF_WALL
+	     || ((STRUCTURE*)tile->psObject)->pStructureType->type == REF_WALLCORNER);
+}
+
+static inline bool TileIsHighlighted(const MAPTILE* tile)
+{
+	return tile->texture & TILE_HILIGHT;
+}
+
+static inline bool TileHasTallStructure(const MAPTILE* tile)
+{
+	return (TileHasStructure(tile)
+	     && ((STRUCTURE*)tile->psObject)->sDisplay.imd->max.y > TALLOBJECT_YMAX)
+	    || (TileHasFeature(tile)
+	     && ((FEATURE*)tile->psObject)->sDisplay.imd->max.y > TALLOBJECT_YMAX);
+}
+
+static inline bool TileHasSmallStructure(const MAPTILE* tile)
+{
+	return TileHasStructure(tile)
+	    && ((STRUCTURE*)tile->psObject)->pStructureType->height == 1;
+}
 
 #define SET_TILE_NOTBLOCKING(x)	(x->texture |= TILE_NOTBLOCKING)
 #define CLEAR_TILE_NOTBLOCKING(x)	(x->texture &= ~TILE_NOTBLOCKING)
@@ -116,24 +164,6 @@ static inline unsigned short TileNumber_texture(unsigned short tilenumber)
 
 /* Arbitrary maximum number of terrain textures - used in look up table for terrain type */
 #define MAX_TILE_TEXTURES	255
-
-/* Information stored with each tile */
-typedef struct _maptile
-{
-	UBYTE			tileInfoBits;
-	uint8_t			tileVisBits;	// COMPRESSED - bit per player
-	UBYTE			height;			// The height at the top left of the tile
-	UBYTE			illumination;	// How bright is this tile?
-	UWORD			texture;		// Which graphics texture is on this tile
-	bool			bMaxed;
-	bool			activeSensor;	// selected player can see through fog of war here
-	float			level;
-	BASE_OBJECT		*psObject;		// Any object sitting on the location (e.g. building)
-	PIELIGHT		colour;
-
-//	TYPE_OF_TERRAIN	type;			// The terrain type for the tile
-} MAPTILE;
-
 
 extern UBYTE terrainTypes[MAX_TILE_TEXTURES];
 

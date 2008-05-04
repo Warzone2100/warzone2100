@@ -131,7 +131,7 @@ BOOL fpathGroundBlockingTile(SDWORD x, SDWORD y)
 	psTile = mapTile(x, y);
 
 	if (psTile->tileInfoBits & BITS_FPATHBLOCK
-	 || (TILE_OCCUPIED(psTile)
+	 || (TileIsOccupied(psTile)
 	  && !TILE_IS_NOTBLOCKING(psTile))
 	 || terrainType(psTile) == TER_CLIFFFACE
 	 || terrainType(psTile) == TER_WATER)
@@ -161,7 +161,7 @@ BOOL fpathHoverBlockingTile(SDWORD x, SDWORD y)
 	psTile = mapTile(x, y);
 
 	if (psTile->tileInfoBits & BITS_FPATHBLOCK
-	 || (TILE_OCCUPIED(psTile)
+	 || (TileIsOccupied(psTile)
 	  && !TILE_IS_NOTBLOCKING(psTile))
 	 || terrainType(psTile) == TER_CLIFFFACE)
 	{
@@ -196,7 +196,7 @@ static BOOL fpathLiftBlockingTile(SDWORD x, SDWORD y)
 		psTile = mapTile(x, y);
 
 		// Only tall structures are blocking now
-		return TILE_HAS_TALLSTRUCTURE(psTile);
+		return TileHasTallStructure(psTile);
 	}
 
 	if (x < VTOL_MAP_EDGE_TILES
@@ -253,7 +253,7 @@ static BOOL fpathLiftBlockingTile(SDWORD x, SDWORD y)
 	else
 	{
 		// Only tall structures are blocking now
-		return TILE_HAS_TALLSTRUCTURE(psTile);
+		return TileHasTallStructure(psTile);
 	}
 }
 

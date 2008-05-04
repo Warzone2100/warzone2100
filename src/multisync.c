@@ -785,7 +785,7 @@ BOOL recvStructureCheck()
 			psStats = &asStructureStats[i];
 
 			// Check for similar buildings, to avoid overlaps
-			if (TILE_HAS_STRUCTURE(mapTile(map_coord(x), map_coord(y))))
+			if (TileHasStructure(mapTile(map_coord(x), map_coord(y))))
 			{
 				NETlogEntry("scheck:Tile has structure val=player", 0, player);
 

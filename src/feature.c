@@ -385,7 +385,7 @@ FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,BOOL FromSave)
 
 			if (width != psStats->baseWidth && breadth != psStats->baseBreadth)
 			{
-				ASSERT( !(TILE_HAS_FEATURE(psTile)),
+				ASSERT( !(TileHasFeature(psTile)),
 					"buildFeature - feature- %d already found at %d, %d",
 					psFeature->id, mapX+width,mapY+breadth );
 
@@ -677,7 +677,7 @@ FEATURE	* checkForWreckage(DROID *psDroid)
 		y = startY - incY;
 		for(x = startX - incX; x < (SDWORD)(startX + incX); x++)
 		{
-			if(TILE_HAS_FEATURE(mapTile(x,y)))
+			if(TileHasFeature(mapTile(x,y)))
 			{
 				psFeature = getTileFeature(x, y);
 				if(psFeature && psFeature->psStats->subType == FEAT_BUILD_WRECK)
@@ -690,7 +690,7 @@ FEATURE	* checkForWreckage(DROID *psDroid)
 		x = startX + incX;
 		for(y = startY - incY; y < (SDWORD)(startY + incY); y++)
 		{
-			if(TILE_HAS_FEATURE(mapTile(x,y)))
+			if(TileHasFeature(mapTile(x,y)))
 			{
 				psFeature = getTileFeature(x, y);
 				if(psFeature && psFeature->psStats->subType == FEAT_BUILD_WRECK)
@@ -703,7 +703,7 @@ FEATURE	* checkForWreckage(DROID *psDroid)
 		y = startY + incY;
 		for(x = startX + incX; x > (SDWORD)(startX - incX); x--)
 		{
-			if(TILE_HAS_FEATURE(mapTile(x,y)))
+			if(TileHasFeature(mapTile(x,y)))
 			{
 				psFeature = getTileFeature(x, y);
 				if(psFeature && psFeature->psStats->subType == FEAT_BUILD_WRECK)
@@ -717,7 +717,7 @@ FEATURE	* checkForWreckage(DROID *psDroid)
 		x = startX - incX;
 		for(y = startY + incY; y > (SDWORD)(startY - incY); y--)
 		{
-			if(TILE_HAS_FEATURE(mapTile(x,y)))
+			if(TileHasFeature(mapTile(x,y)))
 			{
 				psFeature = getTileFeature(x, y);
 				if(psFeature && psFeature->psStats->subType == FEAT_BUILD_WRECK)
