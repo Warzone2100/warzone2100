@@ -109,8 +109,6 @@ void fpathUpdate(void)
 	}
 }
 
-#define	VTOL_MAP_EDGE_TILES		1
-
 // Check if the map tile at a location blocks a droid
 BOOL fpathGroundBlockingTile(SDWORD x, SDWORD y)
 {
@@ -182,30 +180,17 @@ static BOOL fpathLiftBlockingTile(SDWORD x, SDWORD y)
 
 	ASSERT(g_psDroidRoute != NULL, "fpathLiftBlockingTile: invalid DROID pointer");
 
-	if (g_psDroidRoute->droidType == DROID_TRANSPORTER)
+	// All tiles outside of the map are blocking
+	if (x < 1 || y < 1 || x >= mapWidth - 1 || y >= mapHeight - 1)
 	{
-		// All tiles outside of the map are blocking
-		if (x < 1
-		 || y < 1
-		 || x >= mapWidth - 1
-		 || y >= mapHeight - 1)
-		{
-			return true;
-		}
-
-		psTile = mapTile(x, y);
-
-		// Only tall structures are blocking now
-		return TileHasTallStructure(psTile);
+		return true;
 	}
 
-	if (x < VTOL_MAP_EDGE_TILES
-	 || y < VTOL_MAP_EDGE_TILES
-	 || x >= mapWidth - VTOL_MAP_EDGE_TILES
-	 || y >= mapHeight - VTOL_MAP_EDGE_TILES)
+	psTile = mapTile(x, y);
+	if (g_psDroidRoute->droidType == DROID_TRANSPORTER)
 	{
-		// coords off map - auto blocking tile
-		return true;
+		// Only tall structures are blocking now
+		return TileHasTallStructure(psTile);
 	}
 
 	ASSERT(x >= 0 && y >= 0 && x < mapWidth && y < mapHeight, "fpathLiftBlockingTile: off map");
@@ -217,8 +202,6 @@ static BOOL fpathLiftBlockingTile(SDWORD x, SDWORD y)
 	{
 		return false;
 	}
-
-	psTile = mapTile(x, y);
 
 	/* consider cliff faces */
 	if (terrainType(psTile) == TER_CLIFFFACE)
