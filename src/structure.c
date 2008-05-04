@@ -2025,6 +2025,7 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 			psBuilding->status = SS_BEING_BUILT;
 			if (psBuilding->player == selectedPlayer)
 			{
+				intResetScreen(false);
 				intRefreshScreen();
 			}
 			//inform power system that won't be needing power until built
