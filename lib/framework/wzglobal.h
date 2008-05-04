@@ -443,7 +443,7 @@
 #if defined(WZ_CC_GNU) || defined(WZ_CC_INTEL)
 #  define WZ_ASSERT_STATIC_STRING(_var) assert(__builtin_types_compatible_p(typeof(_var), char[]))
 #else
-#  define WZ_ASSERT_STATIC_STRING(_var)
+#  define WZ_ASSERT_STATIC_STRING(_var) (void)_var
 #endif
 
 
