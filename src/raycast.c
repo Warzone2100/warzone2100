@@ -42,11 +42,6 @@
 // Get the tile from tile coords
 #define RAY_TILE(x,y) mapTile((x),(y))
 
-// control the type of clip method
-// 0 - clip on ray length (faster but it doesn't always work :-)
-// 1 - clip on coordinates (accurate but possibly a bit slower)
-#define RAY_CLIP	1
-
 // ray point
 typedef struct _ray_point
 {
@@ -151,19 +146,11 @@ void rayCast(UDWORD x, UDWORD y, UDWORD ray, UDWORD length, RAY_CALLBACK callbac
 	SDWORD		hDist, vDist;		// distance to current horizontal and vertical intersectionse
 	RAY_POINT	sVert = { 0, 0 }, sHoriz = { 0, 0 };
 	SDWORD		vdx=0, hdy=0;			// vertical x increment, horiz y inc
-#if RAY_CLIP == 0
-	SDWORD		newLen, clipLen;	// ray length after clipping
-#endif
 
 	// Clipping is done with the position offset by TILE_UNITS/4 to account
 	// for the rounding errors when the intersection length is calculated.
 	// Bit of a hack but I'm pretty sure it doesn't let through anything
 	// that should be clippped.
-
-#if RAY_CLIP == 0
-	// Initial clip length is just the length of the ray
-	clipLen = (SDWORD)length;
-#endif
 
 	// initialise the horizontal intersection calculations
 	// and clip to the top and bottom of the map
@@ -175,31 +162,12 @@ void rayCast(UDWORD x, UDWORD y, UDWORD ray, UDWORD length, RAY_CALLBACK callbac
 			// intersection
 			sHoriz.y = (y & ~TILE_MASK) + TILE_UNITS;
 			hdy = TILE_UNITS;
-
-#if RAY_CLIP == 0
-			// clipping
-			newLen = ((world_coord(mapHeight) - ((SDWORD)y + TILE_UNITS / 4))
-						* rayFPInvCos[ray])	>> RAY_ACC;
-			if (newLen < clipLen)
-			{
-				clipLen = newLen;
-			}
-#endif
 		}
 		else
 		{
 			// intersection
 			sHoriz.y = (y & ~TILE_MASK) - 1;
 			hdy = -TILE_UNITS;
-
-#if RAY_CLIP == 0
-			// clipping
-			newLen = ((TILE_UNITS/4 - (SDWORD)y) * rayFPInvCos[ray]) >> RAY_ACC;
-			if (newLen < clipLen)
-			{
-				clipLen = newLen;
-			}
-#endif
 		}
 
 		// Horizontal x is kept in fixed point form until passed to the callback
@@ -227,31 +195,12 @@ void rayCast(UDWORD x, UDWORD y, UDWORD ray, UDWORD length, RAY_CALLBACK callbac
 			// intersection
 			sVert.x = (x & ~TILE_MASK) + TILE_UNITS;
 			vdx = TILE_UNITS;
-
-#if RAY_CLIP == 0
-			// clipping
-			newLen = ((((SDWORD)x + TILE_UNITS / 4) - world_coord(mapWidth))
-						* rayFPInvSin[ray])	>> RAY_ACC;
-			if (newLen < clipLen)
-			{
-				clipLen = newLen;
-			}
-#endif
 		}
 		else
 		{
 			// intersection
 			sVert.x = (x & ~TILE_MASK) - 1;
 			vdx = -TILE_UNITS;
-
-#if RAY_CLIP == 0
-			// clipping
-			newLen = (((SDWORD)x - TILE_UNITS/4) * rayFPInvSin[ray]) >> RAY_ACC;
-			if (newLen < clipLen)
-			{
-				clipLen = newLen;
-			}
-#endif
 		}
 
 		// Vertical y is kept in fixed point form until passed to the callback
@@ -275,43 +224,6 @@ void rayCast(UDWORD x, UDWORD y, UDWORD ray, UDWORD length, RAY_CALLBACK callbac
 			(vDist == (SDWORD)length || vdInc > 0),
 		"rayCast: negative (or 0) distance increment" );
 
-#if RAY_CLIP == 0
-	while(hDist < clipLen ||
-		  vDist < clipLen)
-	{
-		// choose the next closest intersection
-		if (hDist < vDist)
-		{
-			// pass through the current intersection, converting x from fixed point
-			if (!callback( sHoriz.x >> RAY_ACC,sHoriz.y, hDist))
-			{
-				// callback doesn't want any more points so return
-				return;
-			}
-
-			// update for the next intersection
-			sHoriz.x += rayDX[ray];
-			sHoriz.y += hdy;
-			hDist += hdInc;
-		}
-		else
-		{
-			// pass through the current intersection, converting y from fixed point
-			if (!callback( sVert.x,sVert.y >> RAY_ACC, vDist))
-			{
-				// callback doesn't want any more points so return
-				return;
-			}
-
-			// update for the next intersection
-			sVert.x += vdx;
-			sVert.y += rayDY[ray];
-			vDist += vdInc;
-		}
-		ASSERT( hDist != 0 && vDist != 0,
-			"rayCast: zero distance" );
-	}
-#elif RAY_CLIP == 1
 	while(hDist < (SDWORD)length ||
 		  vDist < (SDWORD)length)
 	{
@@ -361,7 +273,6 @@ void rayCast(UDWORD x, UDWORD y, UDWORD ray, UDWORD length, RAY_CALLBACK callbac
 		ASSERT( hDist != 0 && vDist != 0,
 			"rayCast: zero distance" );
 	}
-#endif
 }
 
 
