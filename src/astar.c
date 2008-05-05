@@ -407,10 +407,10 @@ static 	FP_NODE		*psNearest, *psRoute;
 	SDWORD		dir, x,y, currDist;
 	SDWORD		index;
 	SDWORD		retval;
-	int		tileSX = map_coord(sx);
-	int		tileSY = map_coord(sy);
-	int		tileFX = map_coord(fx);
-	int		tileFY = map_coord(fy);
+	const int       tileSX = map_coord(sx);
+	const int       tileSY = map_coord(sy);
+	const int       tileFX = map_coord(fx);
+	const int       tileFY = map_coord(fy);
 
 	if (routeMode == ASR_NEWROUTE)
 	{
