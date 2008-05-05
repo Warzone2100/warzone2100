@@ -352,7 +352,7 @@ static BOOL moveDroidToBase(DROID	*psDroid, UDWORD x, UDWORD y, BOOL bFormation)
 	}
 	else
 	{
-		retVal = fpathRoute(psDroid, &(psDroid->sMove), (SDWORD)x,(SDWORD)y);
+		retVal = fpathRoute(psDroid, x, y);
 	}
 
 	/* check formations */
@@ -3047,7 +3047,6 @@ void moveUpdateDroid(DROID *psDroid)
 	bStopped = moveDroidStopped( psDroid, 0 );
 
 	fpathSetBlockingTile( psPropStats->propulsionType );
-	fpathSetCurrentDroid(psDroid);
 
 	moveSpeed = 0;
 	moveDir = psDroid->direction;
@@ -3436,7 +3435,6 @@ void moveUpdateDroid(DROID *psDroid)
 
 	// reset the blocking tile function and current object
 	fpathBlockingTile = fpathGroundBlockingTile;
-	fpathSetCurrentDroid(NULL);
 
 	/* If it's sitting in water then it's got to go with the flow! */
 	if (terrainType(mapTile(psDroid->pos.x/TILE_UNITS,psDroid->pos.y/TILE_UNITS)) == TER_WATER)
