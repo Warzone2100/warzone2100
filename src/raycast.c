@@ -56,9 +56,16 @@ typedef struct _ray_point
 /* x and y increments for each ray angle */
 static SDWORD	rayDX[NUM_RAYS], rayDY[NUM_RAYS];
 static SDWORD	rayHDist[NUM_RAYS], rayVDist[NUM_RAYS];
-//static float	rayTan[NUM_RAYS], rayCos[NUM_RAYS], raySin[NUM_RAYS];
 static SDWORD	rayFPTan[NUM_RAYS], rayFPInvTan[NUM_RAYS];
 static SDWORD	rayFPInvCos[NUM_RAYS], rayFPInvSin[NUM_RAYS];
+static SDWORD	gHeight;
+static float	gPitch;
+static UDWORD	gStartTileX;
+static UDWORD	gStartTileY;
+static SDWORD	gHighestHeight, gHOrigHeight;
+static SDWORD	gHMinDist;
+static float	gHPitch;
+
 
 /* Initialise the ray tables */
 
@@ -425,23 +432,6 @@ SDWORD rayPointDist(SDWORD x1,SDWORD y1, SDWORD x2,SDWORD y2,
 /*	Gets the maximum terrain height along a certain direction to the edge of the grid
 	from wherever you specify, as well as the distance away
 */
-// typedef BOOL (*RAY_CALLBACK)(SDWORD x, SDWORD y, SDWORD dist);
-//void rayCast(UDWORD x, UDWORD y, UDWORD ray, UDWORD length, RAY_CALLBACK callback)
-
-//#define TEST_RAY
-
-/* Nasty global vars - put into a structure? */
-//-----------------------------------------------------------------------------------
-SDWORD	gHeight;
-float	gPitch;
-UDWORD	gStartTileX;
-UDWORD	gStartTileY;
-
-SDWORD	gHighestHeight,gHOrigHeight;
-SDWORD	gHMinDist;
-float	gHPitch;
-
-
 //-----------------------------------------------------------------------------------
 static BOOL	getTileHighestCallback(SDWORD x, SDWORD y, SDWORD dist)
 {
