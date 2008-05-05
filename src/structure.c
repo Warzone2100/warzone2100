@@ -1476,7 +1476,7 @@ static void buildFlatten(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y, UD
 			{
 				setTileHeight(x + width, y + breadth, h);//-1
 				// We need to raise features on raised tiles to the new height
-				if(TILE_HAS_FEATURE(mapTile(x+width,y+breadth)))
+				if(TileHasFeature(mapTile(x+width,y+breadth)))
 				{
 					getTileFeature(x+width, y+breadth)->pos.z = (UWORD)h;
 				}
@@ -1630,7 +1630,7 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 
 				/* Remove any walls underneath the building. You can build defense buildings on top
 				 * of walls, you see. This is not the place to test whether we own it! */
-				if (pStructureType->type == REF_DEFENSE && TILE_HAS_WALL(psTile))
+				if (pStructureType->type == REF_DEFENSE && TileHasWall(psTile))
 				{
 					removeStruct((STRUCTURE *)psTile->psObject, true);
 				}
@@ -1638,7 +1638,7 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 				// don't really think this should be done here, but dont know otherwise.alexl
 				if(pStructureType->type == REF_WALLCORNER || pStructureType->type == REF_WALL)
 				{
-					if(TILE_HAS_STRUCTURE(mapTile(mapX+width,mapY+breadth)))
+					if(TileHasStructure(mapTile(mapX+width,mapY+breadth)))
 					{
 						if(getTileStructure(mapX+width,mapY+breadth)->pStructureType->type == REF_WALLCORNER)
 						{
@@ -1647,7 +1647,7 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 					}
 				}
 				// end of dodgy stuff
-				else if (TILE_HAS_STRUCTURE(psTile))
+				else if (TileHasStructure(psTile))
 				{
 					debug(LOG_ERROR,
 					       "building %s at (%d, %d) but found %s already at (%d, %d)",
@@ -2025,7 +2025,7 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 			psBuilding->status = SS_BEING_BUILT;
 			if (psBuilding->player == selectedPlayer)
 			{
-				intResetScreen(false);
+				intResetScreen(false);	// hack to ensure we don't crash if a tab is removed
 				intRefreshScreen();
 			}
 			//inform power system that won't be needing power until built
@@ -4224,7 +4224,7 @@ BOOL validLocation(BASE_STATS *psStats, UDWORD x, UDWORD y, UDWORD player,
 								if (i < site.xTL || i > site.xBR ||
 									j < site.yTL || j > site.yBR)
 								{
-									if (TILE_HAS_STRUCTURE(mapTile(i,j)))
+									if (TileHasStructure(mapTile(i,j)))
 									{
 										psStruct = getTileStructure(i,j);
 										if (psStruct)
@@ -4259,7 +4259,7 @@ BOOL validLocation(BASE_STATS *psStats, UDWORD x, UDWORD y, UDWORD player,
 										}
 									}
 									//cannot build within one tile of a oil resource
-									if(TILE_HAS_FEATURE(mapTile(i,j)))
+									if(TileHasFeature(mapTile(i,j)))
 									{
 										psFeat = getTileFeature(i,j);
 										if (psFeat && psFeat->psStats->subType ==
@@ -4282,9 +4282,9 @@ BOOL validLocation(BASE_STATS *psStats, UDWORD x, UDWORD y, UDWORD player,
 						for (j = site.yTL; j <= site.yBR && valid; j++)
 						{
 							psTile = mapTile(i,j);
-							if (TILE_OCCUPIED(psTile))
+							if (TileIsOccupied(psTile))
 							{
-								if (TILE_HAS_WALL(psTile)
+								if (TileHasWall(psTile)
 								    && (psBuilding->type == REF_DEFENSE ||
 -                                                                       psBuilding->type == REF_WALL))
 								{
@@ -4306,7 +4306,7 @@ BOOL validLocation(BASE_STATS *psStats, UDWORD x, UDWORD y, UDWORD player,
 				break;
 			case REF_FACTORY_MODULE:
 				valid = false;
-				if(TILE_HAS_STRUCTURE(mapTile(x,y)))
+				if(TileHasStructure(mapTile(x,y)))
 				{
 					psStruct = getTileStructure(x,y);
 					if(psStruct && (
@@ -4321,7 +4321,7 @@ BOOL validLocation(BASE_STATS *psStats, UDWORD x, UDWORD y, UDWORD player,
 			case REF_RESEARCH_MODULE:
 				valid = false;
 				//check that there is a research facility at the location
-				if(TILE_HAS_STRUCTURE(mapTile(x,y)))
+				if(TileHasStructure(mapTile(x,y)))
 				{
 					psStruct = getTileStructure(x,y);
 					if(psStruct && psStruct->pStructureType->type == REF_RESEARCH &&
@@ -4334,7 +4334,7 @@ BOOL validLocation(BASE_STATS *psStats, UDWORD x, UDWORD y, UDWORD player,
 				break;
 			case REF_POWER_MODULE:
 				valid = false;
-				if(TILE_HAS_STRUCTURE(mapTile(x,y)))
+				if(TileHasStructure(mapTile(x,y)))
 				{
 					psStruct = getTileStructure(x,y);
 					if(psStruct && psStruct->pStructureType->type == REF_POWER_GEN &&
@@ -4347,7 +4347,7 @@ BOOL validLocation(BASE_STATS *psStats, UDWORD x, UDWORD y, UDWORD player,
 			case REF_RESOURCE_EXTRACTOR:
 				valid = false;
 				//check that there is a oil resource at the location
-				if(TILE_HAS_FEATURE(mapTile(x,y)))
+				if(TileHasFeature(mapTile(x,y)))
 				{
 					psFeat = getTileFeature(x,y);
 					if(psFeat && psFeat->psStats->subType == FEAT_OIL_RESOURCE)
@@ -4635,7 +4635,7 @@ BOOL checkWidth(UDWORD maxRange, UDWORD x, UDWORD y, UDWORD *pDroidX, UDWORD *pD
 
 	for (side = 0; side < maxRange; side++)
 	{
-		if( x+side < mapWidth && y < mapHeight && !TILE_OCCUPIED(mapTile(x+side,y)) )
+		if( x+side < mapWidth && y < mapHeight && !TileIsOccupied(mapTile(x+side,y)) )
 		{
 			*pDroidX = world_coord(x + side);
 			*pDroidY = world_coord(y);
@@ -4656,7 +4656,7 @@ BOOL checkLength(UDWORD maxRange, UDWORD x, UDWORD y, UDWORD *pDroidX, UDWORD *p
 
 	for (side = 0; side < maxRange; side++)
 	{
-		if(y+side < mapHeight && x < mapWidth && !TILE_OCCUPIED(mapTile(x,y+side)) )
+		if(y+side < mapHeight && x < mapWidth && !TileIsOccupied(mapTile(x,y+side)) )
 		{
 			*pDroidX = world_coord(x);
 			*pDroidY = world_coord(y + side);
@@ -4703,7 +4703,7 @@ BOOL removeStruct(STRUCTURE *psDel, BOOL bDestroy)
 	SDWORD		cluster;
 	FLAG_POSITION	*psAssemblyPoint=NULL;
 
-	ASSERT( psDel != NULL, "destroyStruct: invalid structure pointer\n" );
+	ASSERT(psDel != NULL, "invalid structure pointer");
 
 	if (bDestroy)
 	{
@@ -5010,7 +5010,7 @@ SWORD buildFoundation(STRUCTURE_STATS *psStructStats, UDWORD x, UDWORD y)
 	{
 		for (width = 0; width <= psStructStats->baseWidth; width++)
 		{
-			if(TILE_HAS_STRUCTURE(mapTile(startX+width,startY+breadth)))
+			if(TileHasStructure(mapTile(startX+width,startY+breadth)))
 			{
 				return((SWORD)map_TileHeight(startX+width,startY+breadth));
 			}
@@ -6605,8 +6605,7 @@ void cancelProduction(STRUCTURE *psBuilding)
 {
 	FACTORY		*psFactory;
 
-	ASSERT( StructIsFactory(psBuilding),
-		"cancelProduction: structure not a factory" );
+	ASSERT(StructIsFactory(psBuilding), "structure not a factory");
 
 	psFactory = &psBuilding->pFunctionality->factory;
 

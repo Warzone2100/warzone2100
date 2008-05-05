@@ -40,7 +40,22 @@ typedef struct
  */
 void yyerror(const char* msg)
 {
-	ASSERT(!"level parse error", "Level File parse error: `%s` at line `%d` text `%s`", msg, levGetErrorLine(), levGetErrorText());
+	debug(LOG_ERROR, "Level File parse error: `%s` at line `%d` text `%s`", msg, levGetErrorLine(), levGetErrorText());
+}
+
+static void freeDataSet(LEVEL_DATASET * const d)
+{
+	unsigned int i;
+	for (i = 0; i < ARRAY_SIZE(d->apDataFiles); ++i)
+	{
+		if (d->apDataFiles[i] != NULL)
+		{
+			free(d->apDataFiles[i]);
+		}
+	}
+
+	free(d->pName);
+	free(d);
 }
 
 #define YYPARSE_PARAM yyparse_param
@@ -63,7 +78,18 @@ void yyerror(const char* msg)
 %token <sval> QTEXT
 %token <ival> INTEGER
 
-%destructor { free($$); } IDENTIFIER QTEXT
+%destructor {
+	// Force type checking by the compiler
+	char * const s = $$;
+
+	if (s != NULL)
+		free(s);
+} IDENTIFIER QTEXT
+
+%destructor {
+	if ($$ != NULL)
+		freeDataSet($$);
+} level_line level_rule
 
 	/* keywords */
 %token LEVEL
@@ -83,18 +109,25 @@ void yyerror(const char* msg)
 %token MISS_CLEAR
 
 	/* rule types */
-%type <dataset> level_rule
+%type <dataset> level_line level_rule
 %type <ltype>   level_type
 
 %start lev_file
 
 %%
 
-lev_file:               level_entry
+lev_file:               /* Empty to allow empty files */
+					{
+						debug(LOG_WARNING, "Warning level file is empty (this could be intentional though).");
+					}
+                      | level_entry
                       | lev_file level_entry
                         ;
 
 level_entry:            level_line level_directives_1st dataload_directives
+				{
+					LIST_ADDEND(psLevels, $1, LEVEL_DATASET);
+				}
                         ;
 
 level_line:             level_rule IDENTIFIER
@@ -107,28 +140,27 @@ level_line:             level_rule IDENTIFIER
 						if (psFoundData == NULL)
 						{
 							yyerror("Cannot find full data set for `camchange'");
+							freeDataSet($1);
+							free($2);
 							YYABORT;
 						}
 
 						if (psFoundData->type != LDS_CAMSTART)
 						{
 							yyerror("Invalid data set name for `camchange'");
+							freeDataSet($1);
+							free($2);
 							YYABORT;
 						}
 						psFoundData->psChange = $1;
 					}
 
 					// Store the level name
-					$1->pName = strdup($2);
-					if ($1->pName == NULL)
-					{
-						debug(LOG_ERROR, "Out of memory!");
-						abort();
-						YYABORT;
-					}
+					$1->pName = $2;
 
 					// Make this dataset current to our parsing context
 					yycontext->dataset = $1;
+					$$ = $1;
 				}
                         ;
 
@@ -147,7 +179,6 @@ level_rule:            level_type
 					$$->game = -1;
 					$$->dataDir = yycontext->datadir;
 
-					LIST_ADDEND(psLevels, $$, LEVEL_DATASET);
 					yycontext->currData = 0;
 					yycontext->dataLoaded = false;
 
@@ -227,6 +258,7 @@ dataset_directive:      DATASET IDENTIFIER
 
 					// Find the dataset with the given identifier
 					yycontext->dataset->psBaseData = levFindDataSet($2);
+					free($2);
 					if (yycontext->dataset->psBaseData == NULL)
 					{
 						yyerror("unknown dataset");
@@ -246,13 +278,7 @@ data_directive:         data_directives QTEXT
 					}
 
 					// store the data name
-					yycontext->dataset->apDataFiles[yycontext->currData] = strdup($2);
-					if (yycontext->dataset->apDataFiles[yycontext->currData] == NULL)
-					{
-						debug(LOG_ERROR, "Out of memory!");
-						abort();
-						YYABORT;
-					}
+					yycontext->dataset->apDataFiles[yycontext->currData] = $2;
 
 					++yycontext->currData;
 					yycontext->dataLoaded = true;

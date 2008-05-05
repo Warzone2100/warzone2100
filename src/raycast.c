@@ -474,14 +474,14 @@ static BOOL	getTileHeightCallback(SDWORD x, SDWORD y, SDWORD dist)
 	/* Are we still on the grid? */
 	if(clipXY(x,y))
 	{
-		BOOL HasTallStructure = TILE_HAS_TALLSTRUCTURE(mapTile(map_coord(x), map_coord(y)));
+		BOOL HasTallStructure = TileHasTallStructure(mapTile(map_coord(x), map_coord(y)));
 
 		if( (dist > TILE_UNITS) || HasTallStructure)
 		{
 		// Only do it the current tile is > TILE_UNITS away from the starting tile. Or..
 		// there is a tall structure  on the current tile and the current tile is not the starting tile.
 //		if( (dist>TILE_UNITS) ||
-//			( (HasTallStructure = TILE_HAS_TALLSTRUCTURE(mapTile(map_coord(x), map_coord(y)))) &&
+//			( (HasTallStructure = TileHasTallStructure(mapTile(map_coord(x), map_coord(y)))) &&
 //			((map_coord(x) != gStartTileX) || (map_coord(y) != gStartTileY)) ) ) {
 			/* Get height at this intersection point */
 			int height = map_Height(x,y), heightDif;

@@ -1875,7 +1875,7 @@ static BOOL defenseLocation(BOOL variantB)
 			gX = psGate->x1;
 			for(gY=psGate->y1;gY <= psGate->y2; gY++)
 			{
-				if(! TILE_OCCUPIED(mapTile(gX,gY) ))
+				if(! TileIsOccupied(mapTile(gX,gY) ))
 				{
 					count++;
 				}
@@ -1895,7 +1895,7 @@ static BOOL defenseLocation(BOOL variantB)
 			gY = psGate->y1;
 			for(gX=psGate->x1;gX <= psGate->x2; gX++)
 			{
-				if(! TILE_OCCUPIED(mapTile(gX,gY) ))
+				if(! TileIsOccupied(mapTile(gX,gY) ))
 				{
 					count++;
 				}
@@ -1939,7 +1939,7 @@ static BOOL defenseLocation(BOOL variantB)
 		gX = psChosenGate->x1;
 		for(gY=psChosenGate->y1;gY <= psChosenGate->y2; gY++)
 		{
-			if(! TILE_OCCUPIED(mapTile(gX,gY) ))
+			if(! TileIsOccupied(mapTile(gX,gY) ))
 			{
 				y = gY;
 				x = gX;
@@ -1952,7 +1952,7 @@ static BOOL defenseLocation(BOOL variantB)
 		gY = psChosenGate->y1;
 		for(gX=psChosenGate->x1;gX <= psChosenGate->x2; gX++)
 		{
-			if(! TILE_OCCUPIED(mapTile(gX,gY) ))
+			if(! TileIsOccupied(mapTile(gX,gY) ))
 			{
 				y = gY;
 				x = gX;

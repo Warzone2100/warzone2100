@@ -17,8 +17,10 @@
 #ifndef __INCLUDED_FRAMEWORK_STRLFUNCS_H__
 #define __INCLUDED_FRAMEWORK_STRLFUNCS_H__
 
+#include "frame.h"
 #include <string.h>
 #include <stddef.h>
+#include <assert.h>
 
 #ifndef HAVE_STRLCPY
 /** 
@@ -32,6 +34,9 @@ static inline size_t strlcpy(char *WZ_DECL_RESTRICT dst, const char *WZ_DECL_RES
 	char *d = dst;
 	const char *s = src;
 	size_t n = siz;
+
+	assert(dst != NULL);
+	assert(src != NULL);
 
 	/* Copy as many bytes as will fit */
 	if (n != 0)
@@ -75,6 +80,9 @@ static inline size_t strlcat(char *WZ_DECL_RESTRICT dst, const char *WZ_DECL_RES
 	size_t n = siz;
 	size_t dlen;
 
+	assert(dst != NULL);
+	assert(src != NULL);
+
 	/* Find the end of dst and adjust bytes left but don't go past end */
 	while (n-- != 0 && *d != '\0')
 	{
@@ -110,10 +118,10 @@ static inline size_t strlcat(char *WZ_DECL_RESTRICT dst, const char *WZ_DECL_RES
 #define ssprintf(dest, ...) snprintf((dest), sizeof(dest), __VA_ARGS__)
 #define sstrcmp(str1, str2) strncmp((str1), (str2), sizeof(str1) > sizeof(str2) ? sizeof(str2) : sizeof(str1))
 #else
-#define sstrcpy(dest, src) (assert(sizeof(dest) != sizeof(void*)), strlcpy((dest), (src), sizeof(dest)))
-#define sstrcat(dest, src) (assert(sizeof(dest) != sizeof(void*)), strlcat((dest), (src), sizeof(dest)))
-#define ssprintf(dest, ...) (assert(sizeof(dest) != sizeof(void*)), snprintf((dest), sizeof(dest), __VA_ARGS__))
-#define sstrcmp(str1, str2) (assert(sizeof(str1) != sizeof(void*) && sizeof(str2) != sizeof(void*)), strncmp((str1), (str2), sizeof(str1) > sizeof(str2) ? sizeof(str2) : sizeof(str1)))
+#define sstrcpy(dest, src) (WZ_ASSERT_STATIC_STRING(dest), strlcpy((dest), (src), sizeof(dest)))
+#define sstrcat(dest, src) (WZ_ASSERT_STATIC_STRING(dest), strlcat((dest), (src), sizeof(dest)))
+#define ssprintf(dest, ...) (WZ_ASSERT_STATIC_STRING(dest), snprintf((dest), sizeof(dest), __VA_ARGS__))
+#define sstrcmp(str1, str2) (WZ_ASSERT_STATIC_STRING(str1), WZ_ASSERT_STATIC_STRING(str2), strncmp((str1), (str2), sizeof(str1) > sizeof(str2) ? sizeof(str2) : sizeof(str1)))
 #endif
 
 #endif // __INCLUDED_FRAMEWORK_STRLFUNCS_H__

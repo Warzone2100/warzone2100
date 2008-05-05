@@ -82,22 +82,23 @@ SDWORD getLevelLoadType(void)
 // shutdown the level system
 void levShutDown(void)
 {
-	LEVEL_DATASET	*psNext;
-	SDWORD			i;
-
-	while (psLevels)
+	while (psLevels != NULL)
 	{
-		free(psLevels->pName);
-		for(i=0; i<LEVEL_MAXFILES; i++)
+		unsigned int i;
+		LEVEL_DATASET * const toDelete = psLevels;
+
+		psLevels = psLevels->psNext;
+
+		for (i = 0; i < ARRAY_SIZE(toDelete->apDataFiles[i]); ++i)
 		{
-			if (psLevels->apDataFiles[i] != NULL)
+			if (toDelete->apDataFiles[i] != NULL)
 			{
-				free(psLevels->apDataFiles[i]);
+				free(toDelete->apDataFiles[i]);
 			}
 		}
-		psNext = psLevels->psNext;
-		free(psLevels);
-		psLevels = psNext;
+
+		free(toDelete->pName);
+		free(toDelete);
 	}
 }
 

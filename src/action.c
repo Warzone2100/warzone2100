@@ -1014,7 +1014,7 @@ BOOL actionRouteBlockingPos(DROID *psDroid, SDWORD tx, SDWORD ty)
 			if (tileOnMap(i,j))
 			{
 				psTile = mapTile(i,j);
-				if (TILE_HAS_WALL(psTile))
+				if (TileHasWall(psTile))
 				{
 					psWall = getTileStructure((UDWORD)i,(UDWORD)j);
 					//Watermelon:fixes AI try to destroy ally's wall bug
@@ -1074,7 +1074,6 @@ void actionUpdateDroid(DROID *psDroid)
 	UBYTE	 i = 0;
 	//this is a bit field
 	UBYTE	 num_weapons = 0;
-	BASE_OBJECT			*psActionTarget;
 	BASE_OBJECT			*psTargets[DROID_MAXWEAPS];
 	UBYTE	j,iVisible = 1;
 	BOOL	bHasTarget;
@@ -1407,6 +1406,8 @@ void actionUpdateDroid(DROID *psDroid)
 						//Watermelon:to fix a AA-weapon attack ground unit exploit
 						if ( (num_weapons & (1 << (j+1))) )
 						{
+							BASE_OBJECT* psActionTarget;
+
 							if (psDroid->psActionTarget[j])
 							{
 								psActionTarget = psDroid->psActionTarget[j];
@@ -1483,6 +1484,8 @@ void actionUpdateDroid(DROID *psDroid)
 		bHasTarget = false;
 		for(i = 0;i < psDroid->numWeaps;i++)
 		{
+			BASE_OBJECT* psActionTarget;
+
 			//Skip main turret target changes
 			if (i > 0 &&
 				psDroid->psActionTarget[i] == NULL &&
@@ -1862,7 +1865,7 @@ void actionUpdateDroid(DROID *psDroid)
 					debug( LOG_NEVER, "DACTION_MOVETOBUILD: setUpBuildModule\n");
 					setUpBuildModule(psDroid);
 				}
-				else if (TILE_HAS_STRUCTURE(mapTile(map_coord(psDroid->orderX), map_coord(psDroid->orderY))))
+				else if (TileHasStructure(mapTile(map_coord(psDroid->orderX), map_coord(psDroid->orderY))))
 				{
 					// structure on the build location - see if it is the same type
 					psStruct = getTileStructure(map_coord(psDroid->orderX), map_coord(psDroid->orderY));
@@ -1915,10 +1918,10 @@ void actionUpdateDroid(DROID *psDroid)
 				// building a wall.
 				psTile = mapTile(map_coord(psDroid->orderX), map_coord(psDroid->orderY));
 				if (psDroid->psTarget == NULL
-				 && (TILE_HAS_STRUCTURE(psTile)
-				  || TILE_HAS_FEATURE(psTile)))
+				 && (TileHasStructure(psTile)
+				  || TileHasFeature(psTile)))
 				{
-					if (TILE_HAS_STRUCTURE(psTile))
+					if (TileHasStructure(psTile))
 					{
 						// structure on the build location - see if it is the same type
 						psStruct = getTileStructure(map_coord(psDroid->orderX), map_coord(psDroid->orderY));
@@ -2202,10 +2205,10 @@ void actionUpdateDroid(DROID *psDroid)
 			tlx = (SDWORD)psDroid->orderX - (SDWORD)(psStructStats->baseWidth * TILE_UNITS)/2;
 			tly = (SDWORD)psDroid->orderY - (SDWORD)(psStructStats->baseBreadth * TILE_UNITS)/2;
 			if ((psDroid->psTarget == NULL) &&
-				(TILE_HAS_STRUCTURE(psTile) ||
-				TILE_HAS_FEATURE(psTile)))
+				(TileHasStructure(psTile) ||
+				TileHasFeature(psTile)))
 			{
-				if (TILE_HAS_STRUCTURE(psTile))
+				if (TileHasStructure(psTile))
 				{
 					// structure on the build location - see if it is the same type
 					psStruct = getTileStructure(map_coord(psDroid->orderX), map_coord(psDroid->orderY));
@@ -2989,7 +2992,7 @@ static BOOL vtolLandingTile(SDWORD x, SDWORD y)
 	psTile = mapTile(x,y);
 
 	if ((psTile->tileInfoBits & BITS_FPATHBLOCK) ||
-		(TILE_OCCUPIED(psTile)) ||
+		(TileIsOccupied(psTile)) ||
 		(terrainType(psTile) == TER_CLIFFFACE) ||
 		(terrainType(psTile) == TER_WATER))
 	{
