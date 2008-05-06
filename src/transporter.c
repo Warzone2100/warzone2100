@@ -1134,7 +1134,7 @@ static void intSetTransCapacityLabel(char *Label)
 
 /*updates the capacity of the current Transporter*/
 void intUpdateTransCapacity(WIDGET *psWidget, W_CONTEXT *psContext)
-{;
+{
 	W_LABEL		*Label = (W_LABEL*)psWidget;
 
 	intSetTransCapacityLabel(Label->aText);
