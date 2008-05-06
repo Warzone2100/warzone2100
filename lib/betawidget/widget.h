@@ -1,6 +1,9 @@
 #ifndef WIDGET_H_
 #define WIDGET_H_
 
+// TODO: Make this cross platform (MSVC)
+#include <stdint.h>
+
 #include <cairo.h>
 
 #include "vector.h"
@@ -24,6 +27,9 @@ typedef struct _eventMisc		eventMisc;
 typedef bool (*callback)		(widget *widget, event *evt, void *userData);
 
 typedef struct _eventTableEntry eventTableEntry;
+
+typedef enum _hAlign			hAlign;
+typedef enum _vAlign			vAlign;
 
 /*
  * The valid event types
@@ -140,7 +146,27 @@ struct _eventTableEntry
 };
 
 /*
- * The widget classes virtual method table.
+ * The possible horizontal sides a child can be aligned to
+ */
+enum _hAlign
+{
+	LEFT,
+	CENTRE,
+	RIGHT
+};
+
+/*
+ * The possible vertical sides a child can be aligned to
+ */
+enum _vAlign
+{
+	TOP,
+	MIDDLE,
+	BOTTOM
+};
+
+/*
+ * The widget classes virtual method table
  */
 struct _widgetVtbl
 {
@@ -160,7 +186,13 @@ struct _widgetVtbl
 	void	(*enable)				(widget *self);
 	void	(*disable)				(widget *self);
 	
+	point	(*getMinSize)			(widget *self);
+	point	(*getMaxSize)			(widget *self);
+	
+	void	(*setAlign)				(widget *self, vAlign v, hAlign h);
+	
 	void	(*doDraw)				(widget *self, cairo_t *cr);
+	bool	(*doLayout)				(widget *self);
 	
 	void	(*destroy)				(widget *self);
 };
@@ -190,6 +222,22 @@ struct _widget
 	 */
 	widget *parent;
 	
+	/*
+	 * The minimum size the widget can be
+	 */
+	point minSize;
+	
+	/*
+	 * The maximum size the widget can be
+	 */
+	point maxSize;
+	
+	/*
+	 * Child alignment
+	 */
+	vAlign vAlignment;
+	hAlign hAlignment; 
+	
 	//--------------------------------------
 	// Public members
 	//--------------------------------------
@@ -203,7 +251,7 @@ struct _widget
 	 * Arbitary user-defined data
 	 */
 	void *pUserData;
-	int userData;
+	int32_t userData;
 	
 	/*
 	 * The offset of the widget relative to its parent
@@ -236,6 +284,7 @@ struct _widget
  */
 #define WIDGET(self) ((widget *) (self))
 #define WIDGET_GET_VTBL(self) ((WIDGET(self))->vtbl)
+#define WIDGET_CHECK_METHOD(self, method) (assert(WIDGET_GET_VTBL(self)->method))
 
 /*
  * Protected methods
@@ -252,6 +301,10 @@ void widgetEnableImpl(widget *self);
 void widgetDisableImpl(widget *self);
 void widgetFocusImpl(widget *self);
 void widgetBlurImpl(widget *self);
+point widgetGetMinSizeImpl(widget *self);
+point widgetGetMaxSizeImpl(widget *self);
+void widgetSetAlignImpl(widget *self, vAlign v, hAlign h);
+void widgetDoAlignImpl(widget *self);
 
 bool widgetHandleEventImpl(widget *instance, event *evt);
 
@@ -297,8 +350,8 @@ widget *windgetGetRoot(widget *self);
 
 /**
  * Attempts to add child as a child widget of self. The exact location of the
- * widget (as well as its dimensions) are decided during an arbitration process
- * between the self and the child.
+ * widget (as well as its dimensions) are decided based off of the min & max
+ * sizes of the child.
  *
  * @param self	The widget to add the child widget to.
  * @param child	The widget to be added.
@@ -399,13 +452,40 @@ widget *widgetGetCurrentlyFocused(widget *self);
 void widgetFocus(widget *self);
 
 /**
-c * Blurs the current widget (removes keyboard focus from it). Before self is
+ * Blurs the current widget (removes keyboard focus from it). Before self is
  * blurred any child widget with focus is blurred first. Finally the EVT_BLUR
  * event handlers for self are fired.
  *
  * @param self	The widget to blur.
  */
 void widgetBlur(widget *self);
+
+/**
+ * Returns the minimum size that the widget can be.
+ * 
+ * @param self	The widget to return the miniumum size of.
+ * @return The miniumum (x,y) size of the widget.
+ */
+point widgetGetMinSize(widget *self);
+
+/**
+ * Returns the maxiumum size that the widget can be. A value of -1 for either
+ * the x or y co-ordinate means that there is no maximum size.
+ *
+ * @param self	The widget to return the maximum size of.
+ * @return The maximum (x,y) size of the widget.
+ */
+point widgetGetMaxSize(widget *self);
+
+/**
+ * Sets the alignment of child widgets of self. This is used when the maximum
+ * size of the child widgets is less than that of the size of self.
+ * 
+ * @param self	The widget to set the alignment of.
+ * @param v		The vertical alignment of the widget (TOP, MIDDLE, BOTTOM).
+ * @param h		The horizontal alignment of the widget (LEFT, CENTRE, RIGHT).
+ */
+void widgetSetAlign(widget *self, vAlign v, hAlign h);
 
 /**
  * TODO
@@ -427,6 +507,11 @@ bool widgetHandleEvent(widget *self, event *evt);
 void widgetDoDraw(widget *self, cairo_t *cr);
 
 /**
+ *
+ */
+bool widgetDoLayout(widget *self);
+
+/**
  * Fires all of the event handlers registered for evt->type on the widger self.
  *
  * @param self	The widget to fire the callbacks on.
@@ -435,4 +520,3 @@ void widgetDoDraw(widget *self, cairo_t *cr);
 bool widgetFireCallbacks(widget *self, event *evt);
 
 #endif /*WIDGET_H_*/
-

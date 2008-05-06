@@ -34,6 +34,13 @@ static void widgetInitVtbl(widget *self)
 		vtbl.enable				= widgetEnableImpl;
 		vtbl.disable			= widgetDisableImpl;
 		
+		vtbl.getMinSize			= widgetGetMinSizeImpl;
+		vtbl.getMaxSize			= widgetGetMaxSizeImpl;
+		
+		vtbl.setAlign			= widgetSetAlignImpl;
+		
+		vtbl.doLayout			= NULL;
+		
 		vtbl.doDraw		 		= NULL;
 		
 		vtbl.destroy			= widgetDestroyImpl;
@@ -108,7 +115,7 @@ static void widgetDrawChildren(widget *self, cairo_t *cr)
 	// Draw our children
 	for (i = 0; i < vectorSize(self->children); i++)
 	{
-		widget *child = WIDGET(vectorAt(self->children, i));
+		widget *child = vectorAt(self->children, i);
 		cairo_matrix_t current;
 		
 		// Translate such that (0,0) is the location of the widget
@@ -200,12 +207,25 @@ bool widgetAddChildImpl(widget *self, widget *child)
 	// Add the widget
 	vectorAdd(self->children, child);
 	
-	// FIXME: We need to do some arbitration
-	
-	// Set ourself as its parent
-	child->parent = self;
-	
-	return true;
+	// Re-layout ourself
+	if (widgetDoLayout(self))
+	{
+		// Set ourself as its parent
+		child->parent = self;
+		
+		return true;
+	}
+	// Not enough space to fit the widget
+	else
+	{
+		// Remove child
+		widgetRemoveChild(self, child);
+		
+		// Restore the layout
+		widgetDoLayout(self);
+		
+		return false;
+	}
 }
 
 /*
@@ -294,7 +314,7 @@ void widgetEnableImpl(widget *self)
 	// Enable all of our children
 	for (i = 0; i < vectorSize(self->children); i++)
 	{
-		widgetEnable(WIDGET(vectorAt(self->children, i)));
+		widgetEnable(vectorAt(self->children, i));
 	}
 }
 
@@ -378,6 +398,26 @@ void widgetBlurImpl(widget *self)
 	event evt;
 	evt.type = EVT_BLUR;
 	widgetFireCallbacks(self, &evt);
+}
+
+point widgetGetMinSizeImpl(widget *self)
+{
+	return self->minSize;
+}
+
+point widgetGetMaxSizeImpl(widget *self)
+{
+	return self->maxSize;
+}
+
+void widgetSetAlignImpl(widget *self, vAlign v, hAlign h)
+{
+	self->vAlignment = v;
+	self->hAlignment = h;
+	
+	// Re-align our children
+	// TODO: We should check the return value here
+	widgetDoLayout(self);
 }
 
 widget *widgetGetCurrentlyFocused(widget *self)
@@ -495,9 +535,33 @@ void widgetBlur(widget *self)
 	WIDGET_GET_VTBL(self)->blur(self);
 }
 
+point widgetGetMinSize(widget *self)
+{
+	return WIDGET_GET_VTBL(self)->getMinSize(self);
+}
+
+point widgetGetMaxSize(widget *self)
+{
+	return WIDGET_GET_VTBL(self)->getMaxSize(self);
+}
+
+void widgetSetAlign(widget *self, vAlign v, hAlign h)
+{
+	WIDGET_GET_VTBL(self)->setAlign(self, v, h);
+}
+
 void widgetDoDraw(widget *self, cairo_t *cr)
 {
+	WIDGET_CHECK_METHOD(self, doDraw);
+
 	WIDGET_GET_VTBL(self)->doDraw(self, cr);
+}
+
+bool widgetDoLayout(widget *self)
+{
+	WIDGET_CHECK_METHOD(self, doLayout);
+
+	return WIDGET_GET_VTBL(self)->doLayout(self);
 }
 
 bool widgetHandleEvent(widget *self, event *evt)
