@@ -1505,7 +1505,7 @@ bool readVisibilityData(const char* fileName)
 static void astarTest(const char *name, int x1, int y1, int x2, int y2)
 {
 	int		asret, i;
-	ASTAR_ROUTE	route;
+	MOVE_CONTROL	route;
 	int		x = world_coord(x1);
 	int		y = world_coord(y1);
 	int		endx = world_coord(x2);
@@ -1518,6 +1518,7 @@ static void astarTest(const char *name, int x1, int y1, int x2, int y2)
 	retval = levLoadData(name, NULL, 0);
 	ASSERT(retval, "Could not load %s", name);
 	fpathInitialise();
+	route.asPath = NULL;
 	for (i = 0; i < 100; i++)
 	{
 		iterations = 1;
@@ -1532,6 +1533,8 @@ static void astarTest(const char *name, int x1, int y1, int x2, int y2)
 			asret = fpathAStarRoute(ASR_CONTINUE, &route, x, y, endx, endy, WHEELED);
 			iterations++;
 		}
+		free(route.asPath);
+		route.asPath = NULL;
 	}
 	stop = clock();
 	fprintf(stdout, "\t\tPath-finding timing %s: %.02f (%d nodes, %d iterations)\n", name,

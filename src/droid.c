@@ -2858,6 +2858,7 @@ DROID* buildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player,
 		ASSERT(!"out of memory", "Cannot get the memory for the unit");
 		return NULL;
 	}
+	psDroid->sMove.asPath = NULL;
 
 	//fill in other details
 

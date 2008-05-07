@@ -363,47 +363,11 @@ BOOL fpathTileLOS(SDWORD x1,SDWORD y1, SDWORD x2,SDWORD y2)
 	return !obstruction;
 }
 
-// Optimise the route
-static void fpathOptimise(FP_NODE *psRoute)
-{
-	FP_NODE	*psCurr, *psSearch, *psTest;
-	BOOL	los;
-
-	ASSERT( psRoute != NULL,
-		"fpathOptimise: NULL route pointer" );
-
-	psCurr = psRoute;
-	do
-	{
-		// work down the route looking for a failed LOS
-		los = true;
-		psSearch = psCurr->psRoute;
-		while (psSearch)
-		{
-			psTest = psSearch->psRoute;
-			if (psTest)
-			{
-				los = fpathTileLOS(psCurr->x,psCurr->y, psTest->x,psTest->y);
-			}
-			if (!los)
-			{
-				break;
-			}
-			psSearch = psTest;
-		}
-
-		// store the previous successful point
-		psCurr->psRoute = psSearch;
-		psCurr = psSearch;
-	} while (psCurr);
-}
-
-SDWORD fpathAStarRoute(SDWORD routeMode, ASTAR_ROUTE *psRoutePoints, SDWORD sx, SDWORD sy, SDWORD fx, SDWORD fy, PROPULSION_TYPE propulsion)
+SDWORD fpathAStarRoute(SDWORD routeMode, MOVE_CONTROL *psMove, SDWORD sx, SDWORD sy, SDWORD fx, SDWORD fy, PROPULSION_TYPE propulsion)
 {
  	FP_NODE		*psFound, *psCurr, *psNew, *psParent, *psNext;
 static 	FP_NODE		*psNearest, *psRoute;
 	SDWORD		dir, x,y, currDist;
-	SDWORD		index;
 	SDWORD		retval;
 	const int       tileSX = map_coord(sx);
 	const int       tileSY = map_coord(sy);
@@ -558,8 +522,7 @@ static 	FP_NODE		*psNearest, *psRoute;
 
 	if (psRoute)
 	{
-		// optimise the route if one was found
-		fpathOptimise(psRoute);
+		int index, count = psMove->numPoints;
 
 		// get the route in the correct order
 		// If as I suspect this is to reverse the list, then it's my suspicion that
@@ -575,21 +538,23 @@ static 	FP_NODE		*psNearest, *psRoute;
 			psNext = psCurr->psRoute;
 			psCurr->psRoute = psParent;
 			psParent = psCurr;
+			count++;
 		}
 		psRoute = psParent;
 
 		psCurr = psRoute;
-		index = psRoutePoints->numPoints;
-		while (psCurr && index < TRAVELSIZE)
+		psMove->asPath = realloc(psMove->asPath, sizeof(*psMove->asPath) * count);
+		index = psMove->numPoints;
+		while (psCurr && index < count)
 		{
-			psRoutePoints->asPos[index].x =	psCurr->x;
-			psRoutePoints->asPos[index].y =	psCurr->y;
-			index += 1;
+			psMove->asPath[index].x = psCurr->x;
+			psMove->asPath[index].y = psCurr->y;
+			index++;
 			psCurr = psCurr->psRoute;
 		}
-		psRoutePoints->numPoints = index;
-		psRoutePoints->finalX = psRoutePoints->asPos[index-1].x;
-		psRoutePoints->finalY = psRoutePoints->asPos[index-1].y;
+		psMove->numPoints = index;
+		psMove->DestinationX = psMove->asPath[index - 1].x;
+		psMove->DestinationY = psMove->asPath[index - 1].y;
 	}
 	else
 	{

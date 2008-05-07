@@ -1469,6 +1469,13 @@ static bool deserializeSaveGameData(PHYSFS_file* fileHandle, SAVE_GAME* serializ
 #define	SAVE_COMP_PROGRAM	8
 #define SAVE_COMP_WEAPON	9
 
+typedef struct _path_point
+{
+       UBYTE           x,y;
+} PATH_POINT;
+
+#define TRAVELSIZE	100
+
 typedef struct _save_move_control
 {
 	UBYTE	Status;						// Inactive, Navigating or moving point to point status
@@ -1582,7 +1589,6 @@ typedef struct _save_droid_v18
 {
 	DROID_SAVE_V18;
 } SAVE_DROID_V18;
-
 
 //DROID_SAVE_20 replaces all previous saves uses 60 character names
 #define DROID_SAVE_V20		\
@@ -5611,8 +5617,9 @@ static void SaveDroidMoveControl(SAVE_DROID * const psSaveDroid, DROID const * c
 	// Copy over the endian neutral stuff (all UBYTE)
 	psSaveDroid->sMove.Status    = psDroid->sMove.Status;
 	psSaveDroid->sMove.Position  = psDroid->sMove.Position;
-	psSaveDroid->sMove.numPoints = psDroid->sMove.numPoints;
-	memcpy(&psSaveDroid->sMove.asPath, &psDroid->sMove.asPath, sizeof(psSaveDroid->sMove.asPath));
+	psSaveDroid->sMove.numPoints = MIN(psDroid->sMove.numPoints, TRAVELSIZE);
+	memcpy(&psSaveDroid->sMove.asPath, psDroid->sMove.asPath, 
+	       MIN(sizeof(psSaveDroid->sMove.asPath), sizeof(*psDroid->sMove.asPath) * psDroid->sMove.numPoints));
 
 	// Little endian SDWORDs
 	psSaveDroid->sMove.DestinationX = PHYSFS_swapSLE32(psDroid->sMove.DestinationX);
@@ -5679,7 +5686,8 @@ static void LoadDroidMoveControl(DROID * const psDroid, SAVE_DROID const * const
 	psDroid->sMove.Status      = psSaveDroid->sMove.Status;
 	psDroid->sMove.Position    = psSaveDroid->sMove.Position;
 	psDroid->sMove.numPoints   = psSaveDroid->sMove.numPoints;
-	memcpy(&psDroid->sMove.asPath, &psSaveDroid->sMove.asPath, sizeof(psSaveDroid->sMove.asPath));
+	psDroid->sMove.asPath      = malloc(sizeof(*psDroid->sMove.asPath) * psDroid->sMove.numPoints);
+	memcpy(psDroid->sMove.asPath, &psSaveDroid->sMove.asPath, sizeof(*psDroid->sMove.asPath) * psDroid->sMove.numPoints);
 
 	// Little endian SDWORDs
 	psDroid->sMove.DestinationX = PHYSFS_swapSLE32(psSaveDroid->sMove.DestinationX);

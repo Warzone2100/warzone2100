@@ -24,22 +24,15 @@
 #ifndef __INCLUDED_MOVEDEF_H__
 #define __INCLUDED_MOVEDEF_H__
 
-#define TRAVELSIZE			100
-
 //Watermelon:num of VTOL weapons should be same as DROID_MAXWEAPS
 #define VTOL_MAXWEAPS		3
-
-typedef struct _path_point
-{
-	UBYTE		x,y;
-} PATH_POINT;
 
 typedef struct _move_control
 {
 	UBYTE	Status;						// Inactive, Navigating or moving point to point status
 	UBYTE	Position;	   				// Position in asPath
 	UBYTE	numPoints;					// number of points in asPath
-	PATH_POINT	asPath[TRAVELSIZE];		// Pointer to list of block X,Y coordinates.
+	Vector2i *asPath;		// Pointer to list of block X,Y coordinates.
 	SDWORD	DestinationX;				// DestinationX,Y should match objects current X,Y
 	SDWORD	DestinationY;				//		location for this movement to be complete.
 	SDWORD	srcX,srcY,targetX,targetY;

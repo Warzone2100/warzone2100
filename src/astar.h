@@ -34,16 +34,6 @@
  */
 #define FPATH_LOOP_LIMIT	600
 
-/** The buffer to store a route in
- *
- *  @ingroup pathfinding
- */
-typedef struct _astar_route
-{
-	Vector2i asPos[TRAVELSIZE];
-	SDWORD finalX, finalY, numPoints;
-} ASTAR_ROUTE;
-
 // counters for A*
 extern int astarInner;
 
@@ -81,7 +71,7 @@ enum
  *
  *  @ingroup pathfinding
  */
-SDWORD fpathAStarRoute(SDWORD routeMode, ASTAR_ROUTE *psRoutePoints, SDWORD sx, SDWORD sy, SDWORD fx, SDWORD fy, PROPULSION_TYPE propulsion);
+SDWORD fpathAStarRoute(SDWORD routeMode, MOVE_CONTROL *psMove, SDWORD sx, SDWORD sy, SDWORD fx, SDWORD fy, PROPULSION_TYPE propulsion);
 
 /** Check LOS (Line Of Sight) between two tiles
  */

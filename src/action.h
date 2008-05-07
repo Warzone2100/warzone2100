@@ -140,9 +140,6 @@ BOOL actionDroidOnBuildPos(DROID *psDroid, SDWORD x, SDWORD y, BASE_STATS *psSta
 return to base*/
 extern void moveToRearm(DROID *psDroid);
 
-// tell the action system of a potential location for walls blocking routing
-extern BOOL actionRouteBlockingPos(DROID *psDroid, SDWORD x, SDWORD y);
-
 // choose a landing position for a VTOL when it goes to rearm
 extern BOOL actionVTOLLandingPos(DROID *psDroid, UDWORD *px, UDWORD *py);
 

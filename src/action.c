@@ -988,68 +988,6 @@ static void actionHomeBasePos(SDWORD player, SDWORD *px, SDWORD *py)
 	*py = getLandingY(player);
 }
 
-
-// tell the action system of a potential location for walls blocking routing
-BOOL actionRouteBlockingPos(DROID *psDroid, SDWORD tx, SDWORD ty)
-{
-	SDWORD		i,j;
-	MAPTILE		*psTile;
-	STRUCTURE	*psWall;
-
-	CHECK_DROID(psDroid);
-
-	if (vtolDroid(psDroid) ||
-		((psDroid->order != DORDER_MOVE) &&
-		 (psDroid->order != DORDER_SCOUT)))
-	{
-		return false;
-	}
-
-	// see if there is a wall to attack around the location
-	psWall = NULL;
-	for(i= tx -1; i <= tx + 1; i++)
-	{
-		for(j= ty -1; j <= ty + 1; j++)
-		{
-			if (tileOnMap(i,j))
-			{
-				psTile = mapTile(i,j);
-				if (TileHasWall(psTile))
-				{
-					psWall = getTileStructure((UDWORD)i,(UDWORD)j);
-					//Watermelon:fixes AI try to destroy ally's wall bug
-					if (psWall->player != psDroid->player &&
-						!aiCheckAlliances(psWall->player, psDroid->player))
-					{
-						goto done;
-					}
-					else
-					{
-						psWall = NULL;
-					}
-				}
-			}
-		}
-	}
-
-done:
-	if (psWall != NULL)
-	{
-		if (psDroid->order == DORDER_MOVE)
-		{
-			psDroid->order = DORDER_MOVE_ATTACKWALL;
-		}
-		else if (psDroid->order == DORDER_SCOUT)
-		{
-			psDroid->order = DORDER_SCOUT_ATTACKWALL;
-		}
-		setDroidTarget(psDroid, (BASE_OBJECT *)psWall);
-		return true;
-	}
-
-	return false;
-}
-
 #define	VTOL_ATTACK_AUDIO_DELAY		(3*GAME_TICKS_PER_SEC)
 
 // Update the action state for a droid

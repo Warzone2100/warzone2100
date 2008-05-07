@@ -200,73 +200,12 @@ void fpathSetDirectRoute(DROID* psDroid, SDWORD targetX, SDWORD targetY)
 
 	psMoveCntl = &psDroid->sMove;
 
+	psMoveCntl->asPath = realloc(psMoveCntl->asPath, sizeof(*psMoveCntl->asPath));
 	psMoveCntl->DestinationX = targetX;
 	psMoveCntl->DestinationY = targetY;
 	psMoveCntl->numPoints = 1;
 	psMoveCntl->asPath[0].x = map_coord(targetX);
 	psMoveCntl->asPath[0].y = map_coord(targetY);
-}
-
-/** Append an astar route onto a move-control route
- *
- *  @ingroup pathfinding
- */
-static void fpathAppendRoute( MOVE_CONTROL *psMoveCntl, ASTAR_ROUTE *psAStarRoute )
-{
-	SDWORD		mi, ai;
-
-	mi = psMoveCntl->numPoints;
-	ai = 0;
-	while ((mi < TRAVELSIZE) && (ai < psAStarRoute->numPoints))
-	{
-		psMoveCntl->asPath[mi].x = (UBYTE)(psAStarRoute->asPos[ai].x);
-		psMoveCntl->asPath[mi].y = (UBYTE)(psAStarRoute->asPos[ai].y);
-
-		ai += 1;
-		mi += 1;
-	}
-
-	psMoveCntl->numPoints = (UBYTE)(psMoveCntl->numPoints + ai);
-	psMoveCntl->DestinationX = world_coord(psAStarRoute->finalX) + TILE_UNITS/2;
-	psMoveCntl->DestinationY = world_coord(psAStarRoute->finalY) + TILE_UNITS/2;
-}
-
-/** Check if a new route is closer to the target than the one stored in the
- *  droid
- *
- *  @ingroup pathfinding
- */
-static BOOL fpathRouteCloser(MOVE_CONTROL *psMoveCntl, ASTAR_ROUTE *psAStarRoute, SDWORD tx,SDWORD ty)
-{
-	SDWORD	xdiff,ydiff, prevDist, nextDist;
-
-	if (psAStarRoute->numPoints == 0)
-	{
-		// no route to copy do nothing
-		return false;
-	}
-
-	if (psMoveCntl->numPoints == 0)
-	{
-		// no previous route - this has to be better
-		return true;
-	}
-
-	// see which route is closest to the final destination
-	xdiff = world_coord(psMoveCntl->asPath[psMoveCntl->numPoints - 1].x) + TILE_UNITS/2 - tx;
-	ydiff = world_coord(psMoveCntl->asPath[psMoveCntl->numPoints - 1].y) + TILE_UNITS/2 - ty;
-	prevDist = xdiff*xdiff + ydiff*ydiff;
-
-	xdiff = world_coord(psAStarRoute->finalX) + TILE_UNITS/2 - tx;
-	ydiff = world_coord(psAStarRoute->finalY) + TILE_UNITS/2 - ty;
-	nextDist = xdiff*xdiff + ydiff*ydiff;
-
-	if (nextDist < prevDist)
-	{
-		return true;
-	}
-
-	return false;
 }
 
 /** Create a final route from a gateway route
@@ -276,42 +215,27 @@ static BOOL fpathRouteCloser(MOVE_CONTROL *psMoveCntl, ASTAR_ROUTE *psAStarRoute
 static FPATH_RETVAL fpathGatewayRoute(DROID* psDroid, SDWORD routeMode, SDWORD sx, SDWORD sy, 
                                       SDWORD fx, SDWORD fy, MOVE_CONTROL *psMoveCntl, PROPULSION_TYPE propulsion)
 {
-	static ASTAR_ROUTE	sAStarRoute;
 	int			asret;
 
 	if (routeMode == ASR_NEWROUTE)
 	{
 		// initialise the move control structures
 		psMoveCntl->numPoints = 0;
-		sAStarRoute.numPoints = 0;
 	}
 
 	objTrace(LOG_MOVEMENT, psDroid->id, "fpathGatewayRoute: astar route : (%d,%d) -> (%d,%d)",
 		map_coord(sx), map_coord(sy), map_coord(fx), map_coord(fy));
-	asret = fpathAStarRoute(routeMode, &sAStarRoute, sx, sy, fx,fy, propulsion);
+	asret = fpathAStarRoute(routeMode, &psDroid->sMove, sx, sy, fx,fy, propulsion);
 	if (asret == ASR_PARTIAL)
 	{
 		// routing hasn't finished yet
 		objTrace(LOG_MOVEMENT, psDroid->id, "fpathGatewayRoute: Reschedule");
 		return FPR_WAIT;
 	}
-	routeMode = ASR_NEWROUTE;
-
-	if (asret == ASR_NEAREST && actionRouteBlockingPos(psDroid, sAStarRoute.finalX,sAStarRoute.finalY))
-	{
-		// found a blocking wall - route to that
-		objTrace(LOG_MOVEMENT, psDroid->id, "fpathGatewayRoute: Got blocking wall");
-		return FPR_OK;
-	}
 	else if (asret == ASR_NEAREST)
 	{
 		// all routing was in one zone - this is as good as it's going to be
 		objTrace(LOG_MOVEMENT, psDroid->id, "fpathGatewayRoute: Nearest route in same zone");
-		if (fpathRouteCloser(psMoveCntl, &sAStarRoute, fx,fy))
-		{
-			psMoveCntl->numPoints = 0;
-			fpathAppendRoute(psMoveCntl, &sAStarRoute);
-		}
 		return FPR_OK;
 	}
 	else if (asret == ASR_FAILED)
@@ -320,15 +244,7 @@ static FPATH_RETVAL fpathGatewayRoute(DROID* psDroid, SDWORD routeMode, SDWORD s
 		objTrace(LOG_MOVEMENT, psDroid->id, "fpathGatewayRoute: Failed route in same zone");
 		return FPR_FAILED;
 	}
-	else
-	{
-		if (fpathRouteCloser(psMoveCntl, &sAStarRoute, fx,fy))
-		{
-			psMoveCntl->numPoints = 0;
-			fpathAppendRoute(psMoveCntl, &sAStarRoute);
-		}
-		return FPR_OK;
-	}
+	return FPR_OK;
 }
 
 // Find a route for an DROID to a location
