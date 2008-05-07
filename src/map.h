@@ -98,7 +98,7 @@ typedef struct _maptile
 
 static inline bool TileIsOccupied(const MAPTILE* tile)
 {
-	return tile->psObject;
+	return (tile->psObject != NULL);
 }
 
 static inline bool TileHasStructure(const MAPTILE* tile)
