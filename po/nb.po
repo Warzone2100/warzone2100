@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Warzone 2100 TRUNK\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2008-04-26 23:56+0200\n"
+"POT-Creation-Date: 2008-05-07 11:53+0200\n"
 "PO-Revision-Date: 2008-01-20 19:26+0100\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -1625,6 +1625,7 @@ msgstr ""
 
 #: data/messages/strings/names.txt:194
 #: data/mp/messages/strings/names.txt:196
+#: data/mp/messages/strings/names.txt:1912
 msgid "Python Medium Cannon Tracks"
 msgstr ""
 
@@ -9933,42 +9934,46 @@ msgid "Python HVC Hover"
 msgstr ""
 
 #: data/mp/messages/strings/names.txt:1911
-msgid "Python Scourge Tracks"
-msgstr ""
-
-#: data/mp/messages/strings/names.txt:1912
-msgid "Python Gauss Cannon Tracks"
+msgid "Python Tank Killer Tracks"
 msgstr ""
 
 #: data/mp/messages/strings/names.txt:1913
-msgid "Python Pulse Laser Tracks"
+msgid "Python Scourge Tracks"
 msgstr ""
 
 #: data/mp/messages/strings/names.txt:1914
-msgid "Tiger Pulse Laser Tracks"
+msgid "Python Gauss Cannon Tracks"
 msgstr ""
 
 #: data/mp/messages/strings/names.txt:1915
-msgid "Tiger Heavy Laser Tracks"
+msgid "Python Pulse Laser Tracks"
 msgstr ""
 
 #: data/mp/messages/strings/names.txt:1916
-msgid "Wyvern Gauss Cannon Tracks"
+msgid "Tiger Pulse Laser Tracks"
 msgstr ""
 
 #: data/mp/messages/strings/names.txt:1917
-msgid "Wyvern Pulse Laser Tracks"
+msgid "Tiger Heavy Laser Tracks"
 msgstr ""
 
 #: data/mp/messages/strings/names.txt:1918
-msgid "Wyvern Heavy Laser Tracks"
+msgid "Wyvern Gauss Cannon Tracks"
+msgstr ""
+
+#: data/mp/messages/strings/names.txt:1919
+msgid "Wyvern Pulse Laser Tracks"
 msgstr ""
 
 #: data/mp/messages/strings/names.txt:1920
+msgid "Wyvern Heavy Laser Tracks"
+msgstr ""
+
+#: data/mp/messages/strings/names.txt:1922
 msgid "Viper Machinegun Half-Track"
 msgstr ""
 
-#: data/mp/messages/strings/names.txt:1921
+#: data/mp/messages/strings/names.txt:1923
 msgid "Viper Flamer Half-Track"
 msgstr ""
 
@@ -10721,8 +10726,8 @@ msgstr "SOLOSPILL"
 
 #: src/frontend.c:436
 #: src/ingameop.c:408
-#: src/mission.c:2830
-#: src/mission.c:2931
+#: src/mission.c:2826
+#: src/mission.c:2927
 msgid "Load Saved Game"
 msgstr ""
 
@@ -10926,10 +10931,10 @@ msgid "Unit Colour"
 msgstr ""
 
 #: src/hci.c:994
-#: src/hci.c:3866
-#: src/hci.c:4017
-#: src/hci.c:4471
-#: src/hci.c:5699
+#: src/hci.c:3857
+#: src/hci.c:4008
+#: src/hci.c:4461
+#: src/hci.c:5685
 #: src/intelmap.c:529
 #: src/intorder.c:659
 #: src/loadsave.c:261
@@ -10937,7 +10942,7 @@ msgstr ""
 #: src/multimenu.c:1250
 #: src/transporter.c:285
 #: src/transporter.c:374
-#: src/transporter.c:872
+#: src/transporter.c:839
 msgid "Close"
 msgstr "Lukk"
 
@@ -10945,7 +10950,7 @@ msgstr "Lukk"
 #: src/hci.c:1686
 #: src/loop.c:511
 #: src/loop.c:523
-#: src/mission.c:2899
+#: src/mission.c:2895
 msgid "GAME SAVED!"
 msgstr "SPILL LAGRET!"
 
@@ -10968,80 +10973,80 @@ msgstr ""
 msgid "Player %u is cheating (debug menu) him/herself a new droid: %s."
 msgstr ""
 
-#: src/hci.c:3768
+#: src/hci.c:3759
 msgid "Commanders (F6)"
 msgstr ""
 
-#: src/hci.c:3784
+#: src/hci.c:3775
 msgid "Intelligence Display (F5)"
 msgstr ""
 
-#: src/hci.c:3800
+#: src/hci.c:3791
 msgid "Manufacture (F1)"
 msgstr ""
 
-#: src/hci.c:3816
+#: src/hci.c:3807
 #, fuzzy
 msgid "Design (F4)"
 msgstr "Design"
 
-#: src/hci.c:3832
+#: src/hci.c:3823
 #, fuzzy
 msgid "Research (F2)"
 msgstr "Forskning"
 
-#: src/hci.c:3848
+#: src/hci.c:3839
 #, fuzzy
 msgid "Build (F3)"
 msgstr "Bygg"
 
-#: src/hci.c:3928
+#: src/hci.c:3919
 #: src/multiint.c:772
 #: src/multiint.c:776
 msgid "Power"
 msgstr "Energi"
 
-#: src/hci.c:4112
+#: src/hci.c:4103
 msgid "Tile"
 msgstr ""
 
-#: src/hci.c:4113
+#: src/hci.c:4104
 msgid "Place tiles on map"
 msgstr ""
 
-#: src/hci.c:4122
+#: src/hci.c:4113
 msgid "Unit"
 msgstr ""
 
-#: src/hci.c:4123
+#: src/hci.c:4114
 msgid "Place Unit on map"
 msgstr ""
 
-#: src/hci.c:4131
+#: src/hci.c:4122
 msgid "Struct"
 msgstr ""
 
-#: src/hci.c:4132
+#: src/hci.c:4123
 msgid "Place Structures on map"
 msgstr ""
 
-#: src/hci.c:4140
+#: src/hci.c:4131
 msgid "Feat"
 msgstr ""
 
-#: src/hci.c:4141
+#: src/hci.c:4132
 msgid "Place Features on map"
 msgstr ""
 
-#: src/hci.c:4152
+#: src/hci.c:4143
 msgid "Pause or unpause the game"
 msgstr ""
 
-#: src/hci.c:4166
+#: src/hci.c:4157
 msgid "Align height of all map objects"
 msgstr ""
 
-#: src/hci.c:4191
+#: src/hci.c:4182
 #: src/ingameop.c:121
 #: src/ingameop.c:254
 #: src/ingameop.c:259
@@ -11049,30 +11054,30 @@ msgstr ""
 msgid "Quit"
 msgstr "Avslutt"
 
-#: src/hci.c:4192
+#: src/hci.c:4183
 msgid "Exit Game"
 msgstr "Avslutt Spill"
 
-#: src/hci.c:4556
+#: src/hci.c:4546
 #: src/intdisplay.c:211
 #: src/intdisplay.c:254
 #: src/intdisplay.c:300
 msgid "Progress Bar"
 msgstr ""
 
-#: src/hci.c:5614
+#: src/hci.c:5600
 msgid "Factory Delivery Point"
 msgstr ""
 
-#: src/hci.c:5633
+#: src/hci.c:5619
 msgid "Loop Production"
 msgstr ""
 
-#: src/hci.c:5724
+#: src/hci.c:5710
 msgid "Tab Scroll left"
 msgstr ""
 
-#: src/hci.c:5741
+#: src/hci.c:5727
 msgid "Tab Scroll right"
 msgstr ""
 
@@ -11089,8 +11094,8 @@ msgstr "Last Spill"
 
 #: src/ingameop.c:273
 #: src/ingameop.c:412
-#: src/mission.c:2820
-#: src/mission.c:2934
+#: src/mission.c:2816
+#: src/mission.c:2930
 msgid "Save Game"
 msgstr ""
 
@@ -11777,25 +11782,25 @@ msgstr ""
 msgid "Toggle reopening the build menu"
 msgstr ""
 
-#: src/mission.c:2368
+#: src/mission.c:2364
 msgid "Load Transport"
 msgstr ""
 
-#: src/mission.c:2767
+#: src/mission.c:2763
 msgid "OBJECTIVE ACHIEVED"
 msgstr ""
 
-#: src/mission.c:2773
+#: src/mission.c:2769
 msgid "OBJECTIVE FAILED"
 msgstr ""
 
-#: src/mission.c:2799
-#: src/mission.c:2836
-#: src/mission.c:2950
+#: src/mission.c:2795
+#: src/mission.c:2832
+#: src/mission.c:2946
 msgid "Quit To Main Menu"
 msgstr "Tilbake til hovedmeny"
 
-#: src/mission.c:2807
+#: src/mission.c:2803
 msgid "Continue Game"
 msgstr "Fortsett spill"
 
@@ -11929,7 +11934,7 @@ msgid "Allow Alliances"
 msgstr ""
 
 #: src/multiint.c:747
-#: src/multiint.c:1944
+#: src/multiint.c:1953
 msgid "Locked Teams"
 msgstr ""
 
@@ -11978,28 +11983,36 @@ msgstr ""
 msgid "Set Structure Limits"
 msgstr ""
 
-#: src/multiint.c:1204
+#: src/multiint.c:1207
 msgid "Team"
 msgstr ""
 
-#: src/multiint.c:1269
+#: src/multiint.c:1251
+msgid "Waiting for other players"
+msgstr ""
+
+#: src/multiint.c:1257
+msgid "Click when ready"
+msgstr ""
+
+#: src/multiint.c:1299
 msgid "PLAYERS"
 msgstr ""
 
-#: src/multiint.c:1427
+#: src/multiint.c:1436
 msgid "CHAT"
 msgstr ""
 
-#: src/multiint.c:1987
+#: src/multiint.c:1997
 #, c-format
 msgid "The host has kicked %s from the game!"
 msgstr ""
 
-#: src/multiint.c:2078
+#: src/multiint.c:2088
 msgid "Host is Starting Game"
 msgstr ""
 
-#: src/multiint.c:2525
+#: src/multiint.c:2535
 msgid "Players"
 msgstr ""
 
@@ -12252,12 +12265,12 @@ msgstr ""
 msgid "YOU WERE DEFEATED!"
 msgstr ""
 
-#: src/scriptfuncs.c:10151
+#: src/scriptfuncs.c:10152
 #, c-format
 msgid "Beacon received from %s!"
 msgstr ""
 
-#: src/scriptfuncs.c:10197
+#: src/scriptfuncs.c:10198
 #, c-format
 msgid "Beacon %d"
 msgstr ""
@@ -12286,68 +12299,68 @@ msgstr ""
 msgid "Unable to locate any Commanders!"
 msgstr ""
 
-#: src/structure.c:2829
+#: src/structure.c:2769
 msgid "Command Control Limit Reached - Production Halted"
 msgstr ""
 
-#: src/structure.c:5899
-#: src/structure.c:5921
+#: src/structure.c:5868
+#: src/structure.c:5890
 #, c-format
 msgid "%s - %u Unit assigned"
 msgid_plural "%s - %u Units assigned"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/structure.c:5958
+#: src/structure.c:5940
 #, c-format
 msgid "%s - Connected %u of %u"
 msgstr ""
 
-#: src/structure.c:5972
+#: src/structure.c:5954
 #, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr ""
 
-#: src/structure.c:6092
-#: src/structure.c:6141
+#: src/structure.c:6074
+#: src/structure.c:6123
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr ""
 
-#: src/structure.c:6376
+#: src/structure.c:6358
 msgid "Electronic Reward - Visibility Report"
 msgstr ""
 
-#: src/structure.c:6416
+#: src/structure.c:6398
 msgid "Factory Reward - Propulsion"
 msgstr ""
 
-#: src/structure.c:6440
+#: src/structure.c:6422
 msgid "Factory Reward - Body"
 msgstr ""
 
-#: src/structure.c:6464
+#: src/structure.c:6446
 msgid "Factory Reward - Weapon"
 msgstr ""
 
-#: src/structure.c:6473
+#: src/structure.c:6455
 msgid "Factory Reward - Nothing"
 msgstr ""
 
-#: src/structure.c:6501
+#: src/structure.c:6483
 msgid "Repair Facility Award - Repair"
 msgstr ""
 
-#: src/structure.c:6508
+#: src/structure.c:6490
 msgid "Repair Facility Award - Nothing"
 msgstr ""
 
-#: src/transporter.c:424
-#: src/transporter.c:478
+#: src/transporter.c:396
+#: src/transporter.c:450
 msgid "Launch Transport"
 msgstr ""
 
-#: src/transporter.c:1860
+#: src/transporter.c:1702
 msgid "Reinforcements landing"
 msgstr ""
 
