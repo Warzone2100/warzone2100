@@ -1431,6 +1431,7 @@ BOOL NEThostGame(const char* SessionName, const char* PlayerName,
 		debug(LOG_ERROR, "NEThostGame: Cannot create socket set: %s", SDLNet_GetError());
 		return false;
 	}
+	SDLNet_TCP_AddSocket(socket_set, tcp_socket);
 	for (i = 0; i < MAX_CONNECTED_PLAYERS; ++i)
 	{
 		connected_bsocket[i] = NET_createBufferedSocket();
