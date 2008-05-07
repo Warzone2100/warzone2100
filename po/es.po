@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2008-04-26 15:14+0200\n"
+"POT-Creation-Date: 2008-05-07 11:12+0200\n"
 "PO-Revision-Date: 2008-04-20 22:47+0000\n"
 "Last-Translator: Samuel G. I. <amuchamu@gmail.com>\n"
 "Language-Team: Spanish <warzone-dev@gna.org>\n"
@@ -10430,7 +10430,7 @@ msgstr "Jugador"
 
 #: src/design.c:453
 #: src/design.c:474
-#: src/design.c:3549
+#: src/design.c:3547
 msgid "New Vehicle"
 msgstr "Nuevo Vehículo"
 
@@ -10469,18 +10469,18 @@ msgstr "Potencia del motor"
 
 #: src/design.c:725
 #: src/design.c:780
-#: src/design.c:1591
-#: src/design.c:1632
-#: src/design.c:1657
-#: src/design.c:1675
-#: src/design.c:1700
-#: src/design.c:1718
-#: src/design.c:1760
-#: src/design.c:1795
-#: src/design.c:1931
-#: src/design.c:1948
-#: src/design.c:1983
-#: src/design.c:2019
+#: src/design.c:1589
+#: src/design.c:1630
+#: src/design.c:1655
+#: src/design.c:1673
+#: src/design.c:1698
+#: src/design.c:1716
+#: src/design.c:1758
+#: src/design.c:1793
+#: src/design.c:1929
+#: src/design.c:1946
+#: src/design.c:1981
+#: src/design.c:2017
 msgid "Weight"
 msgstr "Peso"
 
@@ -10499,69 +10499,69 @@ msgstr "Puntos Estructurales Totales"
 msgid "Power Usage"
 msgstr "Uso de energía"
 
-#: src/design.c:1345
+#: src/design.c:1343
 msgid "Transporter"
 msgstr "Transporte"
 
-#: src/design.c:1573
+#: src/design.c:1571
 msgid "Sensor Range"
 msgstr "Rango del Sensor"
 
-#: src/design.c:1582
+#: src/design.c:1580
 msgid "Sensor Power"
 msgstr "Potencia del sensor"
 
-#: src/design.c:1623
+#: src/design.c:1621
 msgid "ECM Power"
 msgstr "Energía ECM"
 
-#: src/design.c:1649
-#: src/design.c:1666
-#: src/design.c:1692
-#: src/design.c:1709
+#: src/design.c:1647
+#: src/design.c:1664
+#: src/design.c:1690
+#: src/design.c:1707
 msgid "Build Points"
 msgstr "Puntos estructurales"
 
-#: src/design.c:1736
-#: src/design.c:1768
+#: src/design.c:1734
+#: src/design.c:1766
 msgid "Range"
 msgstr "Rango"
 
-#: src/design.c:1744
-#: src/design.c:1777
+#: src/design.c:1742
+#: src/design.c:1775
 msgid "Damage"
 msgstr "Daños"
 
-#: src/design.c:1752
-#: src/design.c:1786
+#: src/design.c:1750
+#: src/design.c:1784
 msgid "Rate-of-Fire"
 msgstr "Cadencia de fuego"
 
-#: src/design.c:1923
-#: src/design.c:1939
+#: src/design.c:1921
+#: src/design.c:1937
 msgid "Air Speed"
 msgstr "Velocidad en el Aire"
 
-#: src/design.c:1959
-#: src/design.c:1992
+#: src/design.c:1957
+#: src/design.c:1990
 msgid "Road Speed"
 msgstr "Velocidad por carretera"
 
-#: src/design.c:1967
-#: src/design.c:2001
+#: src/design.c:1965
+#: src/design.c:1999
 msgid "Off-Road Speed"
 msgstr "Velocidad en campo a través"
 
-#: src/design.c:1975
-#: src/design.c:2010
+#: src/design.c:1973
+#: src/design.c:2008
 msgid "Water Speed"
 msgstr "Velocidad por agua"
 
-#: src/design.c:2144
+#: src/design.c:2142
 msgid "Weapons"
 msgstr "Armas"
 
-#: src/design.c:2168
+#: src/design.c:2166
 msgid "Systems"
 msgstr "Sistemas"
 
@@ -10712,8 +10712,8 @@ msgstr "UN JUGADOR"
 
 #: src/frontend.c:436
 #: src/ingameop.c:408
-#: src/mission.c:2830
-#: src/mission.c:2931
+#: src/mission.c:2826
+#: src/mission.c:2927
 msgid "Load Saved Game"
 msgstr "Cargar Partida Guardada"
 
@@ -10916,10 +10916,10 @@ msgid "Unit Colour"
 msgstr "Color de las unidades"
 
 #: src/hci.c:994
-#: src/hci.c:3866
-#: src/hci.c:4017
-#: src/hci.c:4471
-#: src/hci.c:5699
+#: src/hci.c:3857
+#: src/hci.c:4008
+#: src/hci.c:4461
+#: src/hci.c:5685
 #: src/intelmap.c:529
 #: src/intorder.c:659
 #: src/loadsave.c:261
@@ -10935,7 +10935,7 @@ msgstr "Cerrar"
 #: src/hci.c:1686
 #: src/loop.c:511
 #: src/loop.c:523
-#: src/mission.c:2899
+#: src/mission.c:2895
 msgid "GAME SAVED!"
 msgstr "¡PARTIDA GUARDADA!"
 
@@ -10958,110 +10958,110 @@ msgstr "El jugador %u está haciendo trampas (menú depuración) con una nueva c
 msgid "Player %u is cheating (debug menu) him/herself a new droid: %s."
 msgstr "El jugador %u está haciendo trampas (menú depuración) con un nuevo androide: %s."
 
-#: src/hci.c:3768
+#: src/hci.c:3759
 msgid "Commanders (F6)"
 msgstr "Comandantes (F6)"
 
-#: src/hci.c:3784
+#: src/hci.c:3775
 msgid "Intelligence Display (F5)"
 msgstr "Inteligencia (F5)"
 
-#: src/hci.c:3800
+#: src/hci.c:3791
 msgid "Manufacture (F1)"
 msgstr "Fabricación (F1)"
 
-#: src/hci.c:3816
+#: src/hci.c:3807
 msgid "Design (F4)"
 msgstr "Diseño (F4)"
 
-#: src/hci.c:3832
+#: src/hci.c:3823
 msgid "Research (F2)"
 msgstr "Investigación (F2)"
 
-#: src/hci.c:3848
+#: src/hci.c:3839
 msgid "Build (F3)"
 msgstr "Construcción (F3)"
 
-#: src/hci.c:3928
+#: src/hci.c:3919
 #: src/multiint.c:772
 #: src/multiint.c:776
 msgid "Power"
 msgstr "Energía"
 
-#: src/hci.c:4112
+#: src/hci.c:4103
 #, fuzzy
 msgid "Tile"
 msgstr "fichero"
 
-#: src/hci.c:4113
+#: src/hci.c:4104
 msgid "Place tiles on map"
 msgstr ""
 
-#: src/hci.c:4122
+#: src/hci.c:4113
 msgid "Unit"
 msgstr "Unidad"
 
-#: src/hci.c:4123
+#: src/hci.c:4114
 msgid "Place Unit on map"
 msgstr ""
 
-#: src/hci.c:4131
+#: src/hci.c:4122
 msgid "Struct"
 msgstr "Estructura"
 
-#: src/hci.c:4132
+#: src/hci.c:4123
 #, fuzzy
 msgid "Place Structures on map"
 msgstr "Fijar Límites de Estructuras"
 
-#: src/hci.c:4140
+#: src/hci.c:4131
 msgid "Feat"
 msgstr "Hazaña"
 
-#: src/hci.c:4141
+#: src/hci.c:4132
 msgid "Place Features on map"
 msgstr ""
 
-#: src/hci.c:4152
+#: src/hci.c:4143
 #, fuzzy
 msgid "Pause or unpause the game"
 msgstr "¡El anfitrión ha abandonado la partida!"
 
-#: src/hci.c:4166
+#: src/hci.c:4157
 msgid "Align height of all map objects"
 msgstr ""
 
-#: src/hci.c:4191
+#: src/hci.c:4182
 #: src/ingameop.c:121
 #: src/ingameop.c:254
 #: src/ingameop.c:259
 msgid "Quit"
 msgstr "Salir"
 
-#: src/hci.c:4192
+#: src/hci.c:4183
 msgid "Exit Game"
 msgstr "Salir del Juego"
 
-#: src/hci.c:4556
+#: src/hci.c:4546
 #: src/intdisplay.c:211
 #: src/intdisplay.c:254
 #: src/intdisplay.c:300
 msgid "Progress Bar"
 msgstr "Barra de progreso"
 
-#: src/hci.c:5614
+#: src/hci.c:5600
 msgid "Factory Delivery Point"
 msgstr "Punto de Reparto de la Fábrica"
 
-#: src/hci.c:5633
+#: src/hci.c:5619
 msgid "Loop Production"
 msgstr "Ciclos de Producción"
 
-#: src/hci.c:5724
+#: src/hci.c:5710
 msgid "Tab Scroll left"
 msgstr "Tab Desplazamiento Izquierda"
 
-#: src/hci.c:5741
+#: src/hci.c:5727
 msgid "Tab Scroll right"
 msgstr "Tab Desplazamiento Derecha"
 
@@ -11077,8 +11077,8 @@ msgstr "Cargar Partida"
 
 #: src/ingameop.c:273
 #: src/ingameop.c:412
-#: src/mission.c:2820
-#: src/mission.c:2934
+#: src/mission.c:2816
+#: src/mission.c:2930
 msgid "Save Game"
 msgstr "Guardar Partida"
 
@@ -11764,25 +11764,25 @@ msgstr "Seleccionar Siguiente Fábrica de Cyborgs"
 msgid "Toggle reopening the build menu"
 msgstr "Alternar Reabrir el menú de construción"
 
-#: src/mission.c:2368
+#: src/mission.c:2364
 msgid "Load Transport"
 msgstr "Cargar Transporte"
 
-#: src/mission.c:2767
+#: src/mission.c:2763
 msgid "OBJECTIVE ACHIEVED"
 msgstr "OBJETIVO CUMPLIDO"
 
-#: src/mission.c:2773
+#: src/mission.c:2769
 msgid "OBJECTIVE FAILED"
 msgstr "OBJETIVO FALLADO"
 
-#: src/mission.c:2799
-#: src/mission.c:2836
-#: src/mission.c:2950
+#: src/mission.c:2795
+#: src/mission.c:2832
+#: src/mission.c:2946
 msgid "Quit To Main Menu"
 msgstr "Salir al Menú Principal"
 
-#: src/mission.c:2807
+#: src/mission.c:2803
 msgid "Continue Game"
 msgstr "Continuar Partida"
 
@@ -11915,7 +11915,7 @@ msgid "Allow Alliances"
 msgstr "Permitir Alianzas"
 
 #: src/multiint.c:747
-#: src/multiint.c:1944
+#: src/multiint.c:1953
 msgid "Locked Teams"
 msgstr "Equipos Fijos"
 
@@ -11964,28 +11964,36 @@ msgstr "Comenzar Hospedando un Juego"
 msgid "Set Structure Limits"
 msgstr "Fijar Límites de Estructuras"
 
-#: src/multiint.c:1204
+#: src/multiint.c:1207
 msgid "Team"
 msgstr ""
 
-#: src/multiint.c:1269
+#: src/multiint.c:1251
+msgid "Waiting for other players"
+msgstr ""
+
+#: src/multiint.c:1257
+msgid "Click when ready"
+msgstr ""
+
+#: src/multiint.c:1299
 msgid "PLAYERS"
 msgstr "JUGADORES"
 
-#: src/multiint.c:1427
+#: src/multiint.c:1436
 msgid "CHAT"
 msgstr "CHARLA"
 
-#: src/multiint.c:1987
+#: src/multiint.c:1997
 #, c-format
 msgid "The host has kicked %s from the game!"
 msgstr "¡El anfitrión ha expulsado a %s de la partida!"
 
-#: src/multiint.c:2078
+#: src/multiint.c:2088
 msgid "Host is Starting Game"
 msgstr "Anfitrión Comenzando Partida"
 
-#: src/multiint.c:2525
+#: src/multiint.c:2535
 msgid "Players"
 msgstr "Jugadores"
 
@@ -12239,12 +12247,12 @@ msgstr ""
 msgid "YOU WERE DEFEATED!"
 msgstr "NEXUS DERROTADO"
 
-#: src/scriptfuncs.c:10151
+#: src/scriptfuncs.c:10152
 #, c-format
 msgid "Beacon received from %s!"
 msgstr ""
 
-#: src/scriptfuncs.c:10197
+#: src/scriptfuncs.c:10198
 #, c-format
 msgid "Beacon %d"
 msgstr ""
@@ -12273,59 +12281,59 @@ msgstr "¡Imposible localizar ninguna unidad de sensores!"
 msgid "Unable to locate any Commanders!"
 msgstr "¡Imposible localizar ningún Comandante!"
 
-#: src/structure.c:2829
+#: src/structure.c:2768
 msgid "Command Control Limit Reached - Production Halted"
 msgstr "Alcanzado Límite de Control de Comandantes - Producción Detenida"
 
-#: src/structure.c:5899
-#: src/structure.c:5921
+#: src/structure.c:5838
+#: src/structure.c:5860
 #, c-format
 msgid "%s - %u Unit assigned"
 msgid_plural "%s - %u Units assigned"
 msgstr[0] "%s - %u Unidad asignada"
 msgstr[1] "%s - %u Unidades asignadas"
 
-#: src/structure.c:5958
+#: src/structure.c:5897
 #, c-format
 msgid "%s - Connected %u of %u"
 msgstr "%s - Conectado %u de %u"
 
-#: src/structure.c:5972
+#: src/structure.c:5911
 #, fuzzy, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - Daño %u%%"
 
-#: src/structure.c:6092
-#: src/structure.c:6141
+#: src/structure.c:6031
+#: src/structure.c:6080
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - Dañado Electrónicamente"
 
-#: src/structure.c:6376
+#: src/structure.c:6315
 msgid "Electronic Reward - Visibility Report"
 msgstr "Recompensa de Electrónica - Informe de Visibilidad"
 
-#: src/structure.c:6416
+#: src/structure.c:6355
 msgid "Factory Reward - Propulsion"
 msgstr "Recompensa de Fábrica - Propulsión"
 
-#: src/structure.c:6440
+#: src/structure.c:6379
 msgid "Factory Reward - Body"
 msgstr "Recompensa de Fábrica - Carrocería"
 
-#: src/structure.c:6464
+#: src/structure.c:6403
 msgid "Factory Reward - Weapon"
 msgstr "Recompensa de Fábrica - Arma"
 
-#: src/structure.c:6473
+#: src/structure.c:6412
 msgid "Factory Reward - Nothing"
 msgstr "Recompensa de Fábrica - Nada"
 
-#: src/structure.c:6501
+#: src/structure.c:6440
 msgid "Repair Facility Award - Repair"
 msgstr "Premio de Instalación de Reparación - Reparación"
 
-#: src/structure.c:6508
+#: src/structure.c:6447
 msgid "Repair Facility Award - Nothing"
 msgstr "Premio de Instalación de Reparación - Nada"
 
