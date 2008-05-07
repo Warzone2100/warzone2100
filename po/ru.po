@@ -3,13 +3,14 @@
 # This file is distributed under the same license as the Warzone 2100 package.
 #
 # Alexandr Ivanov <wz2100@mail.ru>, 2008.
+# Stanislav Pererva <stas_ap@inbox.ru>, 2008.
 msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2008-04-26 23:56+0200\n"
-"PO-Revision-Date: 2008-03-15 11:53+0100\n"
-"Last-Translator: Alexandr Ivanov <wz2100@mail.ru>\n"
+"POT-Creation-Date: 2008-05-07 11:53+0200\n"
+"PO-Revision-Date: 2008-05-01 20:47+0300\n"
+"Last-Translator: Stanislav Pererva <stas_ap@inbox.ru>\n"
 "Language-Team: Russian <warzone-dev@gna.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
@@ -25,48 +26,48 @@ msgstr ""
 
 #: data/messages/strings/cam1strings.txt:5
 msgid "OBJECTIVE: Locate and recover neural synapse technology"
-msgstr ""
+msgstr "ЗАДАЧА: Найти и получить нейронную синапс технологию"
 
 #: data/messages/strings/cam1strings.txt:6
 msgid "Establish a base, then search for a Pre-Collapse structure."
-msgstr ""
+msgstr "Основать базу, найти Pre-Collapse сооружения."
 
 #: data/messages/strings/cam1strings.txt:7
 msgid "This structure contains technology vital for the success of the Project."
-msgstr ""
+msgstr "Это сооружение содержит важную технологию для успешного завершения Проекта"
 
 #: data/messages/strings/cam1strings.txt:9
 msgid "ALPHA BASE MISSION: Scavenger Raiders"
-msgstr ""
+msgstr "Миссия на базе Альфа: Мусорные налетчики"
 
 #: data/messages/strings/cam1strings.txt:10
 msgid "Scavenger raiders are approaching our base."
-msgstr ""
+msgstr "Мусорные налетчики приближаются к нашей базе."
 
 #: data/messages/strings/cam1strings.txt:11
 msgid "Defend the base then destroy the Scavenger camps."
-msgstr ""
+msgstr "Необходимо защитить базу, затем уничтожить лагеря мусорщиков."
 
 #: data/messages/strings/cam1strings.txt:13
 #: data/messages/strings/cam1strings.txt:68
 msgid "ALPHA BASE MISSION: Power Surge Detected"
-msgstr ""
+msgstr "Миссия на базе Альфа: Обнаружен выброс энергии."
 
 #: data/messages/strings/cam1strings.txt:14
 msgid "A power surge has been detected to the south of our position."
-msgstr ""
+msgstr "Выброс энергии обнаружен на юге нашей позиции."
 
 #: data/messages/strings/cam1strings.txt:15
 msgid "Investigate and secure the area."
-msgstr ""
+msgstr "Изучить и обеспечить безопасность местности."
 
 #: data/messages/strings/cam1strings.txt:17
 msgid "ALPHA BASE MISSION: The New Paradigm"
-msgstr ""
+msgstr "Миссия на базе Альфа: Новая парадигма (система понятий)"
 
 #: data/messages/strings/cam1strings.txt:18
 msgid "The New Paradigm control superior weapons technology."
-msgstr ""
+msgstr "The New Paradigm контролирует более совершенную оружейную технологию."
 
 #: data/messages/strings/cam1strings.txt:19
 msgid "They may have the synaptic link technology, it's vital we retrieve it."
@@ -74,56 +75,56 @@ msgstr ""
 
 #: data/messages/strings/cam1strings.txt:21
 msgid "TRANSPORT MISSION: Locate and Recover Artifacts"
-msgstr ""
+msgstr "ТРАНСПОРТНАЯ МИССИЯ: Найти и захватить артефакты."
 
 #: data/messages/strings/cam1strings.txt:22
 msgid "Load an attack force into the transport."
-msgstr ""
+msgstr "Погрузить в транспорт штурмовую группу."
 
 #: data/messages/strings/cam1strings.txt:23
 msgid "On landing, explore the ruins and recover any artifacts."
-msgstr ""
+msgstr "После высадки исследовать руины и захватить артефакты."
 
 #: data/messages/strings/cam1strings.txt:25
 msgid "TRANSPORT MISSION: Investigate Research Center"
-msgstr ""
+msgstr "ТРАНСПОРТНАЯ МИССИЯ: Изучить центр исследований"
 
 #: data/messages/strings/cam1strings.txt:26
 msgid "Investigate the area and recover any artifacts present."
-msgstr ""
+msgstr "Изучить местность и захватить все существующие артефакты."
 
 #: data/messages/strings/cam1strings.txt:27
 #: data/messages/strings/cam1strings.txt:170
 msgid "Reinforcements are available."
-msgstr ""
+msgstr "Доступны подкрепления."
 
 #: data/messages/strings/cam1strings.txt:29
 msgid "TRANSPORT MISSION: Encoded Signals Detected"
-msgstr ""
+msgstr "ТРАНСПОРТНАЯ МИССИЯ: Обнаружен зашифрованный сигнал"
 
 #: data/messages/strings/cam1strings.txt:30
 msgid "Take a scout force to investigate these signals."
-msgstr ""
+msgstr "Разведывательному отряду необходимо исследовать эти сигналы."
 
 #: data/messages/strings/cam1strings.txt:31
 msgid "Use your trucks to build defenses at your LZ."
-msgstr ""
+msgstr "Используйте грузовики для постройки защиты вокруг Зоны Высадки."
 
 #: data/messages/strings/cam1strings.txt:33
 msgid "TRANSPORT MISSION: Enemy Transmissions Detected"
-msgstr ""
+msgstr "ТРАНСПОРТНАЯ МИССИЯ: Обнаружена вражеская передача сигнала."
 
 #: data/messages/strings/cam1strings.txt:34
 msgid "Scout the designated area for enemy research facilities."
-msgstr ""
+msgstr "Разведать на обозначенной местности вражеские исследовательские лаборатории."
 
 #: data/messages/strings/cam1strings.txt:35
 msgid "Proceed to LZ#2. Do not engage the enemy at this time."
-msgstr ""
+msgstr "Пройти к Зоне Высадки #2. На этом этапе не входить в контакт с врагами."
 
 #: data/messages/strings/cam1strings.txt:37
 msgid "TRANSPORT MISSION: Synaptic Link Location"
-msgstr ""
+msgstr "ТРАНСПОРТНАЯ МИССИЯ: Synaptic Link Location"
 
 #: data/messages/strings/cam1strings.txt:38
 msgid "The New Paradigm are analyzing synaptic link technology at this location."
@@ -135,64 +136,64 @@ msgstr ""
 
 #: data/messages/strings/cam1strings.txt:41
 msgid "TRANSPORT MISSION: New Objectives"
-msgstr ""
+msgstr "ТРАНСПОРТНАЯ МИССИЯ: Новые задачи"
 
 #: data/messages/strings/cam1strings.txt:42
 msgid "New Paradigm are searching for artifacts in this vicinity."
-msgstr ""
+msgstr "Новая Парадигма ищет артефакты поблизости."
 
 #: data/messages/strings/cam1strings.txt:43
 msgid "Intercept them. Do not let any enemies exit this area."
-msgstr ""
+msgstr "Перехватите их. Не дайте врагам покинуть местность."
 
 #: data/messages/strings/cam1strings.txt:45
 msgid "TRANSPORT MISSION: Enemy Base Under Construction"
-msgstr ""
+msgstr "Миссия на вылете: Строительство вражеской базы"
 
 #: data/messages/strings/cam1strings.txt:46
 msgid "Enemy forces are establishing a forward base at this location."
-msgstr ""
+msgstr "На этой местности вражеские силы установили передовую базу."
 
 #: data/messages/strings/cam1strings.txt:47
 msgid "Eradicate the base and secure the area."
-msgstr ""
+msgstr "Уничтожить базу и зачистить местность."
 
 #: data/messages/strings/cam1strings.txt:50
 #: data/messages/strings/cam1strings.txt:117
 msgid "ALPHA BASE MISSION: Establish a Forward Base"
-msgstr ""
+msgstr "Миссия на базе Альфа: Установить передовую базу"
 
 #: data/messages/strings/cam1strings.txt:51
 msgid "Establish a forward base on the plateau."
-msgstr ""
+msgstr "Установить передовую базу на плато."
 
 #: data/messages/strings/cam1strings.txt:52
 msgid "Build defensive structures."
-msgstr ""
+msgstr "Построить защитные сооружения."
 
 #: data/messages/strings/cam1strings.txt:54
 msgid "ALPHA BASE MISSION: Counter Attack"
-msgstr ""
+msgstr "Миссия на базе Альфа: Встречная атака"
 
 #: data/messages/strings/cam1strings.txt:55
 msgid "Enemy forces are approaching from the east and north."
-msgstr ""
+msgstr "Вражеские силы приближаются с востока и севера."
 
 #: data/messages/strings/cam1strings.txt:56
 msgid "Hold the bases and repulse any attacks."
-msgstr ""
+msgstr "Удержать базу и отразить все атаки."
 
 #: data/messages/strings/cam1strings.txt:58
 msgid "ALPHA BASE MISSION: Incoming Transmission"
-msgstr ""
+msgstr "Миссия на базе Альфа: Входящая передача"
 
 #: data/messages/strings/cam1strings.txt:59
 msgid "We are detecting enemy forces at these locations."
-msgstr ""
+msgstr "Мы обнаружили вражеские силы на местности."
 
 #: data/messages/strings/cam1strings.txt:60
 msgid "This is our chance to defeat the New Paradigm and destroy their base."
-msgstr ""
+msgstr "Это наш шанс одержать попеду над Новой Парадигмой и уничтожить принадлежащую им базу."
 
 #: data/messages/strings/cam1strings.txt:64
 #: data/messages/strings/cam1strings.txt:75
@@ -212,51 +213,51 @@ msgstr ""
 
 #: data/messages/strings/cam1strings.txt:69
 msgid "Congratulations Commander."
-msgstr ""
+msgstr "Поздравляем Командующий."
 
 #: data/messages/strings/cam1strings.txt:70
 msgid "We now have a further task for you."
-msgstr ""
+msgstr "У нас есть дополнтельное задание для тебя."
 
 #: data/messages/strings/cam1strings.txt:73
 msgid "ALPHA BASE MISSION: Locate and Recover Artifacts"
-msgstr ""
+msgstr "Миссия на базе Альфа: Найти и захватить артефакты"
 
 #: data/messages/strings/cam1strings.txt:74
 msgid "The first two zones are now secure."
-msgstr ""
+msgstr "Первые две зоны зачищены."
 
 #: data/messages/strings/cam1strings.txt:78
 msgid "PROJECT TEAM UPDATES"
-msgstr ""
+msgstr "ОБНОВЛЕНИЕ ИНФРОМАЦИИ ПО ПРОЕКТУ"
 
 #: data/messages/strings/cam1strings.txt:81
 msgid "TEAM BETA UPDATE"
-msgstr ""
+msgstr "ОБНОВЛЕНИЯ ОТ КОМАНДЫ \"БЕТА\""
 
 #: data/messages/strings/cam1strings.txt:82
 msgid "We have recovered some artifacts."
-msgstr ""
+msgstr "Мы обнаружили несколько артефактов."
 
 #: data/messages/strings/cam1strings.txt:83
 msgid "There is a better equipped force operating in this area."
-msgstr ""
+msgstr "На этой местоности расположены хорошо вооруженные силы."
 
 #: data/messages/strings/cam1strings.txt:86
 msgid "TEAM GAMMA UPDATE"
-msgstr ""
+msgstr "ОБНОВЛЕНИЯ ОТ КОМАНДЫ \"ГАММА\""
 
 #: data/messages/strings/cam1strings.txt:87
 msgid "Nothing to report."
-msgstr ""
+msgstr "Ничего нет для отчета."
 
 #: data/messages/strings/cam1strings.txt:88
 msgid "We've discovered no artifacts and encountered no hostiles."
-msgstr ""
+msgstr "Мы не обнаружили артефактов и не встретили противника."
 
 #: data/messages/strings/cam1strings.txt:91
 msgid "ALPHA BASE INTELLIGENCE REPORT: Enemy Attack"
-msgstr ""
+msgstr "Отчет разведки базы Альфа: Атака врага"
 
 #: data/messages/strings/cam1strings.txt:92
 msgid "We are detecting an enemy attack force at this location."
@@ -276,19 +277,19 @@ msgstr ""
 
 #: data/messages/strings/cam1strings.txt:100
 msgid "ENEMY LZ"
-msgstr ""
+msgstr "ВРАЖЕСКАЯ ЗОНА ВЫСАДКИ"
 
 #: data/messages/strings/cam1strings.txt:101
 msgid "Destroy this LZ to prevent enemy landings."
-msgstr ""
+msgstr "Уничтожение зоны высадки помешает высадки врагов."
 
 #: data/messages/strings/cam1strings.txt:104
 msgid "ALPHA BASE INTELLIGENCE REPORT: NEXUS"
-msgstr ""
+msgstr "Отчет разведки базы Альфа: НЕКСУС"
 
 #: data/messages/strings/cam1strings.txt:105
 msgid "New objective."
-msgstr ""
+msgstr "Новая задача."
 
 #: data/messages/strings/cam1strings.txt:106
 msgid "We have detected and isolated an intruder program."
@@ -316,31 +317,31 @@ msgstr ""
 
 #: data/messages/strings/cam1strings.txt:122
 msgid "INCOMING TRANSMISSION"
-msgstr ""
+msgstr "Входящая передача"
 
 #: data/messages/strings/cam1strings.txt:123
 msgid "Decoding in progress....."
-msgstr ""
+msgstr "Идет расшифровка..."
 
 #: data/messages/strings/cam1strings.txt:127
 msgid "Commander."
-msgstr ""
+msgstr "Командующий."
 
 #: data/messages/strings/cam1strings.txt:128
 msgid "We have decoded the incoming message to the New Paradigm..."
-msgstr ""
+msgstr "Мы раскодировали входящее сообщение to the New Paradigm..."
 
 #: data/messages/strings/cam1strings.txt:131
 msgid "Destroy Enemy Base"
-msgstr ""
+msgstr "Уничтожить вражескую базу."
 
 #: data/messages/strings/cam1strings.txt:132
 msgid "Assemble an attack force and board the transport."
-msgstr ""
+msgstr "Собрать штурмовую группу и погрузить на транспорт."
 
 #: data/messages/strings/cam1strings.txt:133
 msgid "Destroy the base and recover any artifacts present."
-msgstr ""
+msgstr "Уничтожить базу и захватить любые присутсвующие артефакты."
 
 #: data/messages/strings/cam1strings.txt:137
 msgid "The synaptic link technology has been recovered!"
@@ -368,7 +369,7 @@ msgstr ""
 
 #: data/messages/strings/cam1strings.txt:149
 msgid "Commander"
-msgstr ""
+msgstr "Командующий"
 
 #: data/messages/strings/cam1strings.txt:150
 msgid "Congratulations on defeating the New Paradigm."
@@ -376,7 +377,7 @@ msgstr ""
 
 #: data/messages/strings/cam1strings.txt:151
 msgid "This sector is now secure."
-msgstr ""
+msgstr "Сектор безопасен."
 
 #: data/messages/strings/cam1strings.txt:155
 msgid "When we failed to respond it became threatening."
@@ -396,23 +397,23 @@ msgstr ""
 
 #: data/messages/strings/cam1strings.txt:163
 msgid "POWER MODULE ARTIFACT"
-msgstr ""
+msgstr "АРТЕФАКТ - ЭНЕРЕТИЧЕСКИЙ МОДУЛЬ"
 
 #: data/messages/strings/cam1strings.txt:164
 msgid "Research the power module artifact."
-msgstr ""
+msgstr "Исследовать артефакт \"энергетический модуль\"."
 
 #: data/messages/strings/cam1strings.txt:165
 msgid "Then use a truck to upgrade your power generator with the module."
-msgstr ""
+msgstr "Затем использовать грузовик для обновления энергетического генератора."
 
 #: data/messages/strings/cam1strings.txt:168
 msgid "SCAVENGER BASE DETECTED"
-msgstr ""
+msgstr "ОБНАРУЖЕНА БАЗА МУСОРЩИКОВ"
 
 #: data/messages/strings/cam1strings.txt:169
 msgid "Defeat the scavengers and retrieve any artifacts."
-msgstr ""
+msgstr "Разгромить мусорщиков и захватить все артефакты."
 
 #: data/messages/strings/cam1strings.txt:173
 msgid "Congratulations on defeating the New Paradigm, this sector is now secure."
@@ -436,7 +437,7 @@ msgstr ""
 
 #: data/messages/strings/cam2strings.txt:4
 msgid "BETA BASE MISSION: Eastern Sector"
-msgstr ""
+msgstr "БАЗА \"БЕТА\". МИССИЯ: Восточный сектор"
 
 #: data/messages/strings/cam2strings.txt:5
 msgid "Upon arrival you are to assume command of the base."
@@ -448,7 +449,7 @@ msgstr ""
 
 #: data/messages/strings/cam2strings.txt:9
 msgid "BETA BASE MISSION: Defend and Fortify"
-msgstr ""
+msgstr "БАЗА \"БЕТА\". МИССИЯ: Защита и укрепление"
 
 #: data/messages/strings/cam2strings.txt:10
 #: data/messages/strings/cam2strings.txt:33
@@ -467,7 +468,7 @@ msgstr ""
 #: data/messages/strings/cam2strings.txt:15
 #: data/messages/strings/cam2strings.txt:39
 msgid "Decoding..."
-msgstr ""
+msgstr "Расшифровка..."
 
 #: data/messages/strings/cam2strings.txt:18
 #: data/messages/strings/cam2strings.txt:22
@@ -536,7 +537,7 @@ msgstr ""
 
 #: data/messages/strings/cam2strings.txt:52
 msgid "TRANSPORT MISSION: Intercept convoy."
-msgstr ""
+msgstr "ТРАНСПОРТНАЯ МИССИЯ: Перехватить конвой."
 
 #: data/messages/strings/cam2strings.txt:53
 msgid "Data from the Collective's base indicates the presence of the NEXUS intruder program."
@@ -565,7 +566,7 @@ msgstr ""
 #: data/messages/strings/cam2strings.txt:63
 #: data/messages/strings/cam2strings.txt:68
 msgid "TRANSPORT MISSION: Search for and Destroy Convoy"
-msgstr ""
+msgstr "ТРАНСПОРТНАЯ МИССИЯ: Найти и уничтожить конвой"
 
 #: data/messages/strings/cam2strings.txt:64
 msgid "The shipment you recovered was a decoy."
@@ -647,7 +648,7 @@ msgstr ""
 #: data/messages/strings/cam2strings.txt:101
 #: data/messages/strings/cam2strings.txt:106
 msgid "TRANSPORT MISSION: Destroy Reactor"
-msgstr ""
+msgstr "ТРАНСПОРТНАЯ МИССИЯ: Уничтожить реактор"
 
 #: data/messages/strings/cam2strings.txt:102
 msgid "The Collective are searching for knowledge of nuclear reactors."
@@ -714,7 +715,7 @@ msgstr ""
 
 #: data/messages/strings/cam2strings.txt:136
 msgid "TRANSPORT MISSION: Destroy Enemy SAM Sites"
-msgstr ""
+msgstr "ТРАНСПОРТНАЯ МИССИЯ: Уничтожить вражеский РЗК"
 
 #: data/messages/strings/cam2strings.txt:137
 msgid "If you are to escape, eradicate the surface-to-air missile sites around your base."
@@ -749,7 +750,7 @@ msgstr ""
 #: data/messages/strings/cam2strings.txt:156
 #: data/messages/strings/cam2strings.txt:161
 msgid "BETA BASE MISSION: Evacuate!"
-msgstr ""
+msgstr "Миссия на базе Бета: Эвакуация!"
 
 #: data/messages/strings/cam2strings.txt:152
 msgid "Commander, we have grave news."
@@ -774,7 +775,7 @@ msgstr ""
 #: data/messages/strings/cam2strings.txt:163
 #: data/messages/strings/cam3strings.txt:32
 msgid "Good luck, Commander."
-msgstr ""
+msgstr "Удачи, Командующий."
 
 #: data/messages/strings/cam3strings.txt:3
 msgid "Argle Bargle - Please Remove when some text here!"
@@ -945,7 +946,7 @@ msgstr ""
 
 #: data/messages/strings/cam3strings.txt:83
 msgid "Search and destroy .... "
-msgstr ""
+msgstr "Найти и уничтожить..."
 
 #: data/messages/strings/cam3strings.txt:86
 msgid "TRANSPORT MISSION: Ambush NEXUS Forces"
@@ -1009,7 +1010,7 @@ msgstr ""
 
 #: data/messages/strings/cam3strings.txt:115
 msgid "Incoming Transmission..."
-msgstr ""
+msgstr "Входящая передача..."
 
 #: data/messages/strings/cam3strings.txt:118
 msgid "Elements of Team Gamma have contacted us."
@@ -1081,7 +1082,7 @@ msgstr ""
 
 #: data/messages/strings/cam3strings.txt:147
 msgid "Missile silos captured."
-msgstr ""
+msgstr "Ракетные шахты захвачены."
 
 #: data/messages/strings/cam3strings.txt:150
 #: data/messages/strings/cam3strings.txt:168
@@ -1190,15 +1191,15 @@ msgstr ""
 
 #: data/messages/strings/cam3strings.txt:200
 msgid "Incoming intelligence report... Team Gamma"
-msgstr ""
+msgstr "Входящий отчет разведки... Команда Гамма"
 
 #: data/messages/strings/genstrings.txt:4
 msgid "Briefing Commences:"
-msgstr ""
+msgstr "Начало инструктажа:"
 
 #: data/messages/strings/genstrings.txt:5
 msgid "End Of Briefing."
-msgstr ""
+msgstr "Иструктаж завершен."
 
 #: data/messages/strings/genstrings.txt:8
 msgid "Armed Scavengers Approaching"
@@ -1206,15 +1207,15 @@ msgstr ""
 
 #: data/messages/strings/genstrings.txt:9
 msgid "Scavenger Outpost"
-msgstr ""
+msgstr "Аванпост мусорщиков"
 
 #: data/messages/strings/genstrings.txt:10
 msgid "Power Resource"
-msgstr ""
+msgstr "Энергетический ресурс"
 
 #: data/messages/strings/genstrings.txt:11
 msgid "Unknown Artifact"
-msgstr ""
+msgstr "Неизвестный артефакт"
 
 #: data/messages/strings/genstrings.txt:12
 msgid "Source of Power Surge"
@@ -1222,16 +1223,16 @@ msgstr ""
 
 #: data/messages/strings/genstrings.txt:15
 msgid "Landing Zone"
-msgstr ""
+msgstr "Зона высадки"
 
 #: data/messages/strings/genstrings.txt:16
 msgid "Return to LZ"
-msgstr ""
+msgstr "Вернутся к Зоне Высадки"
 
 #: data/messages/strings/genstrings.txt:17
 #: data/messages/strings/genstrings.txt:27
 msgid "Mission Target"
-msgstr ""
+msgstr "Цели миссии"
 
 #: data/messages/strings/genstrings.txt:18
 msgid "Pre-Collapse Research Center"
@@ -1239,15 +1240,15 @@ msgstr ""
 
 #: data/messages/strings/genstrings.txt:20
 msgid "En-route To Mission Site"
-msgstr ""
+msgstr "Полет на место проведения миссии"
 
 #: data/messages/strings/genstrings.txt:21
 msgid "Mission Failed"
-msgstr ""
+msgstr "Миссия провалена"
 
 #: data/messages/strings/genstrings.txt:22
 msgid "Mission Successful"
-msgstr ""
+msgstr "Миссия выполнена"
 
 #: data/messages/strings/genstrings.txt:25
 msgid "Enemy Landing Zone"
@@ -1255,11 +1256,11 @@ msgstr ""
 
 #: data/messages/strings/genstrings.txt:26
 msgid "Enemy Base"
-msgstr ""
+msgstr "Вражеская база"
 
 #: data/messages/strings/genstrings.txt:30
 msgid "Incoming transmission"
-msgstr ""
+msgstr "Входящая передача"
 
 #: data/messages/strings/genstrings.txt:32
 msgid "Reinforcements are now available"
@@ -1271,39 +1272,39 @@ msgstr ""
 
 #: data/messages/strings/genstrings.txt:38
 msgid "Civilian Rescued"
-msgstr ""
+msgstr "Гражданский спасен"
 
 #: data/messages/strings/genstrings.txt:39
 msgid "Civilians Rescued"
-msgstr ""
+msgstr "Гражданские спасены"
 
 #: data/messages/strings/genstrings.txt:40
 msgid "Unit Rescued"
-msgstr ""
+msgstr "Юнит спасен"
 
 #: data/messages/strings/genstrings.txt:41
 msgid "Units Rescued"
-msgstr ""
+msgstr "Юниты спасены"
 
 #: data/messages/strings/genstrings.txt:42
 msgid "Group Rescued"
-msgstr ""
+msgstr "Группа спасена"
 
 #: data/messages/strings/genstrings.txt:43
 msgid "Unit Captured"
-msgstr ""
+msgstr "Юнит захвачен"
 
 #: data/messages/strings/genstrings.txt:44
 msgid "Group Captured"
-msgstr ""
+msgstr "Группа захвачена"
 
 #: data/messages/strings/genstrings.txt:45
 msgid "Structure Captured"
-msgstr ""
+msgstr "Сооружение захвачено"
 
 #: data/messages/strings/genstrings.txt:46
 msgid "Structure Destroyed"
-msgstr ""
+msgstr "Сооружение уничтожено"
 
 #: data/messages/strings/genstrings.txt:47
 msgid "Objective Captured"
@@ -1339,11 +1340,11 @@ msgstr ""
 
 #: data/messages/strings/genstrings.txt:55
 msgid "Out Of Time"
-msgstr ""
+msgstr "Время вышло"
 
 #: data/messages/strings/genstrings.txt:56
 msgid "Enemy Escaped"
-msgstr ""
+msgstr "Враг сбежал"
 
 #: data/messages/strings/genstrings.txt:57
 msgid "Enemy Escaping"
@@ -1359,55 +1360,55 @@ msgstr ""
 
 #: data/messages/strings/genstrings.txt:61
 msgid "Team Alpha Eradicated"
-msgstr ""
+msgstr "Команда Альфа ликвидирована"
 
 #: data/messages/strings/genstrings.txt:62
 msgid "Team Beta Eradicated"
-msgstr ""
+msgstr "Команда Бета ликвидирована"
 
 #: data/messages/strings/genstrings.txt:63
 msgid "Team Gamma Eradicated"
-msgstr ""
+msgstr "Команда Гамма ликвидирована"
 
 #: data/messages/strings/genstrings.txt:64
 msgid "Team Alpha Rescued"
-msgstr ""
+msgstr "Команда Альфа спасена"
 
 #: data/messages/strings/genstrings.txt:65
 msgid "Team Beta Rescued"
-msgstr ""
+msgstr "Команда Бета спасена"
 
 #: data/messages/strings/genstrings.txt:66
 msgid "Team Gamma Rescued"
-msgstr ""
+msgstr "Команда Гамма спасена"
 
 #: data/messages/strings/genstrings.txt:67
 msgid "Team Alpha Liberated"
-msgstr ""
+msgstr "Команда Альфа освобождена"
 
 #: data/messages/strings/genstrings.txt:68
 msgid "Team Beta Liberated"
-msgstr ""
+msgstr "Команда Бета освобождена"
 
 #: data/messages/strings/genstrings.txt:69
 msgid "Team Gamma Liberated"
-msgstr ""
+msgstr "Команда Гамма освобождена"
 
 #: data/messages/strings/genstrings.txt:70
 msgid "Civilians Eradicated"
-msgstr ""
+msgstr "Гражданские уничтожены"
 
 #: data/messages/strings/genstrings.txt:71
 msgid "Civilians Liberated"
-msgstr ""
+msgstr "Гражданские освобождены"
 
 #: data/messages/strings/genstrings.txt:72
 msgid "Enemy Eradicated"
-msgstr ""
+msgstr "Враг ликвидирован"
 
 #: data/messages/strings/genstrings.txt:73
 msgid "New Paradigm base eradicated"
-msgstr ""
+msgstr "База Новая Парадигма уничтожена"
 
 #: data/messages/strings/genstrings.txt:74
 msgid "Collective base eradicated"
@@ -1415,7 +1416,7 @@ msgstr ""
 
 #: data/messages/strings/genstrings.txt:75
 msgid "Nexus base eradicated"
-msgstr ""
+msgstr "База Нексус уничтожена"
 
 #: data/messages/strings/genstrings.txt:76
 msgid "LasSat firing"
@@ -1435,7 +1436,7 @@ msgstr ""
 
 #: data/messages/strings/genstrings.txt:80
 msgid "Nuclear Reactor"
-msgstr ""
+msgstr "Ядерный реактор"
 
 #: data/messages/strings/genstrings.txt:81
 msgid "SAM Site"
@@ -1447,17 +1448,17 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:1484
 #: data/mp/messages/strings/names.txt:1485
 msgid "Missile Silo"
-msgstr ""
+msgstr "Ракетная шахта"
 
 #: data/messages/strings/names.txt:12
 #: data/mp/messages/strings/names.txt:12
 msgid "New Design"
-msgstr "Новый Дизайн"
+msgstr "Новый дизайн"
 
 #: data/messages/strings/names.txt:15
 #: data/mp/messages/strings/names.txt:15
 msgid "Transport"
-msgstr ""
+msgstr "Транспорт"
 
 #: data/messages/strings/names.txt:16
 #: data/messages/strings/names.txt:153
@@ -1468,7 +1469,7 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:313
 #: data/mp/messages/strings/names.txt:1464
 msgid "Truck"
-msgstr ""
+msgstr "Грузовик"
 
 #: data/messages/strings/names.txt:17
 #: data/mp/messages/strings/names.txt:17
@@ -1575,31 +1576,31 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:185
 #: data/mp/messages/strings/names.txt:1353
 msgid "Cobra Medium Cannon Tracks"
-msgstr ""
+msgstr "Кобра Средняя пушка Гусеницы"
 
 #: data/messages/strings/names.txt:184
 #: data/mp/messages/strings/names.txt:186
 msgid "Cobra Heavy Cannon Tracks"
-msgstr ""
+msgstr "Кобра Тяжелая пушка Гусеницы"
 
 #: data/messages/strings/names.txt:185
 #: data/messages/strings/names.txt:1343
 #: data/mp/messages/strings/names.txt:187
 #: data/mp/messages/strings/names.txt:1351
 msgid "Cobra Truck"
-msgstr ""
+msgstr "Кобра грузовик"
 
 #: data/messages/strings/names.txt:186
 #: data/mp/messages/strings/names.txt:188
 msgid "Cobra Sensor Half-track"
-msgstr ""
+msgstr "Кобра Сенсор Полугусеницы"
 
 #: data/messages/strings/names.txt:187
 #: data/messages/strings/names.txt:1344
 #: data/mp/messages/strings/names.txt:189
 #: data/mp/messages/strings/names.txt:1352
 msgid "Cobra Flamer Tracks"
-msgstr ""
+msgstr "Кобра Огнемет Гусеницы"
 
 #: data/messages/strings/names.txt:188
 #: data/mp/messages/strings/names.txt:190
@@ -1624,12 +1625,13 @@ msgstr ""
 #: data/messages/strings/names.txt:193
 #: data/mp/messages/strings/names.txt:195
 msgid "Python Light Cannon Tracks"
-msgstr ""
+msgstr "Питон Легкая пушка Гусеницы"
 
 #: data/messages/strings/names.txt:194
 #: data/mp/messages/strings/names.txt:196
+#: data/mp/messages/strings/names.txt:1912
 msgid "Python Medium Cannon Tracks"
-msgstr ""
+msgstr "Питон Средняя пушка Гусеницы"
 
 #: data/messages/strings/names.txt:195
 #: data/messages/strings/names.txt:1342
@@ -1637,7 +1639,7 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:1350
 #: data/mp/messages/strings/names.txt:1504
 msgid "Python Heavy Cannon Tracks"
-msgstr ""
+msgstr "Питон Тяжелая пушка Гусеницы"
 
 #: data/messages/strings/names.txt:196
 #: data/mp/messages/strings/names.txt:198
@@ -1647,12 +1649,12 @@ msgstr ""
 #: data/messages/strings/names.txt:199
 #: data/mp/messages/strings/names.txt:201
 msgid "Scavenger"
-msgstr ""
+msgstr "Мусорщик"
 
 #: data/messages/strings/names.txt:200
 #: data/mp/messages/strings/names.txt:202
 msgid "Jeep"
-msgstr ""
+msgstr "Джип"
 
 #: data/messages/strings/names.txt:201
 #: data/mp/messages/strings/names.txt:203
@@ -1662,17 +1664,17 @@ msgstr ""
 #: data/messages/strings/names.txt:202
 #: data/mp/messages/strings/names.txt:204
 msgid "Buggy"
-msgstr ""
+msgstr "Багги"
 
 #: data/messages/strings/names.txt:203
 #: data/mp/messages/strings/names.txt:205
 msgid "Rocket Buggy"
-msgstr ""
+msgstr "Ракетный багги"
 
 #: data/messages/strings/names.txt:204
 #: data/mp/messages/strings/names.txt:206
 msgid "Rocket Jeep"
-msgstr ""
+msgstr "Ракетный джип"
 
 #: data/messages/strings/names.txt:205
 #: data/mp/messages/strings/names.txt:207
@@ -1692,19 +1694,19 @@ msgstr ""
 #: data/messages/strings/names.txt:208
 #: data/mp/messages/strings/names.txt:210
 msgid "School Bus"
-msgstr ""
+msgstr "Школьный автобус"
 
 #: data/messages/strings/names.txt:209
 #: data/mp/messages/strings/names.txt:211
 msgid "Civilian"
-msgstr ""
+msgstr "Гражданский"
 
 #: data/messages/strings/names.txt:212
 #: data/messages/strings/names.txt:218
 #: data/mp/messages/strings/names.txt:214
 #: data/mp/messages/strings/names.txt:220
 msgid "Machinegunner"
-msgstr ""
+msgstr "Пулеметчик"
 
 #: data/messages/strings/names.txt:213
 #: data/messages/strings/names.txt:479
@@ -1717,7 +1719,7 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:678
 #: data/mp/messages/strings/names.txt:1065
 msgid "Flamer"
-msgstr ""
+msgstr "Огнеметчик"
 
 #: data/messages/strings/names.txt:214
 #: data/messages/strings/names.txt:221
@@ -1764,62 +1766,62 @@ msgstr ""
 #: data/messages/strings/names.txt:234
 #: data/mp/messages/strings/names.txt:236
 msgid "Viper"
-msgstr ""
+msgstr "Гадюка"
 
 #: data/messages/strings/names.txt:235
 #: data/mp/messages/strings/names.txt:237
 msgid "Leopard"
-msgstr ""
+msgstr "Леопард"
 
 #: data/messages/strings/names.txt:236
 #: data/mp/messages/strings/names.txt:238
 msgid "Retaliation"
-msgstr ""
+msgstr "Возмездие"
 
 #: data/messages/strings/names.txt:237
 #: data/mp/messages/strings/names.txt:239
 msgid "Bug"
-msgstr ""
+msgstr "Жук"
 
 #: data/messages/strings/names.txt:238
 #: data/mp/messages/strings/names.txt:240
 msgid "Cobra"
-msgstr ""
+msgstr "Кобра"
 
 #: data/messages/strings/names.txt:239
 #: data/mp/messages/strings/names.txt:241
 msgid "Panther"
-msgstr ""
+msgstr "Пантера"
 
 #: data/messages/strings/names.txt:240
 #: data/mp/messages/strings/names.txt:242
 msgid "Retribution"
-msgstr ""
+msgstr "Воздаяние"
 
 #: data/messages/strings/names.txt:241
 #: data/mp/messages/strings/names.txt:243
 msgid "Scorpion"
-msgstr ""
+msgstr "Скропион"
 
 #: data/messages/strings/names.txt:242
 #: data/mp/messages/strings/names.txt:244
 msgid "Tiger"
-msgstr ""
+msgstr "Тигр"
 
 #: data/messages/strings/names.txt:243
 #: data/mp/messages/strings/names.txt:245
 msgid "Vengeance"
-msgstr ""
+msgstr "Мщение"
 
 #: data/messages/strings/names.txt:244
 #: data/mp/messages/strings/names.txt:246
 msgid "Python"
-msgstr ""
+msgstr "Питон"
 
 #: data/messages/strings/names.txt:245
 #: data/mp/messages/strings/names.txt:247
 msgid "Mantis"
-msgstr ""
+msgstr "Богомол"
 
 #: data/messages/strings/names.txt:247
 #: data/mp/messages/strings/names.txt:249
@@ -1850,7 +1852,7 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:309
 #: data/mp/messages/strings/names.txt:393
 msgid "Demolish"
-msgstr ""
+msgstr "Снести"
 
 #: data/messages/strings/names.txt:310
 #: data/mp/messages/strings/names.txt:312
@@ -1865,77 +1867,77 @@ msgstr ""
 #: data/messages/strings/names.txt:315
 #: data/mp/messages/strings/names.txt:317
 msgid "Wheels"
-msgstr ""
+msgstr "Колеса"
 
 #: data/messages/strings/names.txt:316
 #: data/mp/messages/strings/names.txt:318
 msgid "Wheels II"
-msgstr ""
+msgstr "Колеса II"
 
 #: data/messages/strings/names.txt:317
 #: data/mp/messages/strings/names.txt:319
 msgid "Wheels III"
-msgstr ""
+msgstr "Колеса III"
 
 #: data/messages/strings/names.txt:318
 #: data/mp/messages/strings/names.txt:320
 msgid "Tracks"
-msgstr ""
+msgstr "Гусеницы"
 
 #: data/messages/strings/names.txt:319
 #: data/mp/messages/strings/names.txt:321
 msgid "Tracks II"
-msgstr ""
+msgstr "Гусеницы II"
 
 #: data/messages/strings/names.txt:320
 #: data/mp/messages/strings/names.txt:322
 msgid "Tracks III"
-msgstr ""
+msgstr "Гусеницы III"
 
 #: data/messages/strings/names.txt:321
 #: data/mp/messages/strings/names.txt:323
 msgid "Hover"
-msgstr ""
+msgstr "Воздушная подушка"
 
 #: data/messages/strings/names.txt:322
 #: data/mp/messages/strings/names.txt:324
 msgid "Hover II"
-msgstr ""
+msgstr "Воздушная подушка II"
 
 #: data/messages/strings/names.txt:323
 #: data/mp/messages/strings/names.txt:325
 msgid "Hover III"
-msgstr ""
+msgstr "Воздушная подушка III"
 
 #: data/messages/strings/names.txt:324
 #: data/mp/messages/strings/names.txt:326
 msgid "VTOL"
-msgstr ""
+msgstr "Воздушный"
 
 #: data/messages/strings/names.txt:325
 #: data/mp/messages/strings/names.txt:327
 msgid "VTOL II"
-msgstr ""
+msgstr "Воздушный II"
 
 #: data/messages/strings/names.txt:326
 #: data/mp/messages/strings/names.txt:328
 msgid "VTOL III"
-msgstr ""
+msgstr "Воздушный III"
 
 #: data/messages/strings/names.txt:327
 #: data/mp/messages/strings/names.txt:329
 msgid "Half-tracks"
-msgstr ""
+msgstr "Полугусеницы"
 
 #: data/messages/strings/names.txt:328
 #: data/mp/messages/strings/names.txt:330
 msgid "Half-tracks II"
-msgstr ""
+msgstr "Полугусеницы II"
 
 #: data/messages/strings/names.txt:329
 #: data/mp/messages/strings/names.txt:331
 msgid "Half-tracks III"
-msgstr ""
+msgstr "Полугусеницы III"
 
 #: data/messages/strings/names.txt:330
 #: data/messages/strings/names.txt:692
@@ -1978,7 +1980,7 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:347
 #: data/mp/messages/strings/names.txt:889
 msgid "Mobile Repair Turret"
-msgstr ""
+msgstr "Ремонтная башня"
 
 #: data/messages/strings/names.txt:348
 #: data/mp/messages/strings/names.txt:350
@@ -1997,7 +1999,7 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:424
 #: data/mp/messages/strings/names.txt:895
 msgid "Sensor Tower"
-msgstr ""
+msgstr "Сенсорная башня"
 
 #: data/messages/strings/names.txt:367
 #: data/messages/strings/names.txt:423
@@ -2006,7 +2008,7 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:425
 #: data/mp/messages/strings/names.txt:896
 msgid "Hardened Sensor Tower"
-msgstr ""
+msgstr "Усиленная сенсорная башня"
 
 #: data/messages/strings/names.txt:368
 #: data/messages/strings/names.txt:886
@@ -2057,53 +2059,53 @@ msgstr ""
 #: data/messages/strings/names.txt:382
 #: data/mp/messages/strings/names.txt:384
 msgid "Oil Derrick"
-msgstr ""
+msgstr "Нефтяная вышка"
 
 #: data/messages/strings/names.txt:383
 #: data/mp/messages/strings/names.txt:385
 msgid "Command Center"
-msgstr ""
+msgstr "Командный центр"
 
 #: data/messages/strings/names.txt:384
 #: data/mp/messages/strings/names.txt:386
 msgid "Factory"
-msgstr ""
+msgstr "Завод боевой техники"
 
 #: data/messages/strings/names.txt:385
 #: data/messages/strings/names.txt:792
 #: data/mp/messages/strings/names.txt:387
 #: data/mp/messages/strings/names.txt:798
 msgid "Factory Module"
-msgstr ""
+msgstr "Заводской блок"
 
 #: data/messages/strings/names.txt:386
 #: data/mp/messages/strings/names.txt:388
 msgid "Power Generator"
-msgstr ""
+msgstr "Генератор энергии"
 
 #: data/messages/strings/names.txt:387
 #: data/messages/strings/names.txt:815
 #: data/mp/messages/strings/names.txt:389
 #: data/mp/messages/strings/names.txt:821
 msgid "Power Module"
-msgstr ""
+msgstr "Энегертический блок"
 
 #: data/messages/strings/names.txt:388
 #: data/mp/messages/strings/names.txt:390
 msgid "Research Facility"
-msgstr ""
+msgstr "Исследовательская лаборатория"
 
 #: data/messages/strings/names.txt:389
 #: data/messages/strings/names.txt:830
 #: data/mp/messages/strings/names.txt:391
 #: data/mp/messages/strings/names.txt:836
 msgid "Research Module"
-msgstr ""
+msgstr "Исследовательский модуль"
 
 #: data/messages/strings/names.txt:390
 #: data/mp/messages/strings/names.txt:392
 msgid "Demolish Structure"
-msgstr ""
+msgstr "Снести сооружение"
 
 #: data/messages/strings/names.txt:392
 #: data/messages/strings/names.txt:1447
@@ -2132,7 +2134,7 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:399
 #: data/mp/messages/strings/names.txt:855
 msgid "VTOL Factory"
-msgstr ""
+msgstr "VTOL завод"
 
 #: data/messages/strings/names.txt:398
 #: data/messages/strings/names.txt:781
@@ -2141,7 +2143,7 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:787
 #: data/mp/messages/strings/resstrings.txt:676
 msgid "Cyborg Factory"
-msgstr ""
+msgstr "Завод киборгов"
 
 #: data/messages/strings/names.txt:401
 #: data/messages/strings/names.txt:720
@@ -2367,7 +2369,7 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:451
 #: data/mp/messages/strings/names.txt:741
 msgid "Flamer Bunker"
-msgstr ""
+msgstr "Огнеметный бункер"
 
 #: data/messages/strings/names.txt:450
 #: data/messages/strings/names.txt:736
@@ -2383,7 +2385,7 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:457
 #: data/mp/messages/strings/names.txt:757
 msgid "Tank Traps"
-msgstr ""
+msgstr "Танковая ловушка"
 
 #: data/messages/strings/names.txt:454
 #: data/messages/strings/names.txt:456
@@ -2392,7 +2394,7 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:458
 #: data/mp/messages/strings/names.txt:758
 msgid "Dragon's Teeth"
-msgstr ""
+msgstr "Зубы дракона"
 
 #: data/messages/strings/names.txt:459
 #: data/messages/strings/names.txt:841
@@ -2459,21 +2461,21 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:475
 #: data/mp/messages/strings/names.txt:1040
 msgid "Light Cannon"
-msgstr ""
+msgstr "Легкая пушка"
 
 #: data/messages/strings/names.txt:474
 #: data/messages/strings/names.txt:1033
 #: data/mp/messages/strings/names.txt:476
 #: data/mp/messages/strings/names.txt:1041
 msgid "Medium Cannon"
-msgstr ""
+msgstr "Средняя пушка"
 
 #: data/messages/strings/names.txt:475
 #: data/messages/strings/names.txt:1034
 #: data/mp/messages/strings/names.txt:477
 #: data/mp/messages/strings/names.txt:1042
 msgid "Heavy Cannon"
-msgstr ""
+msgstr "Тяжелая пушка"
 
 #: data/messages/strings/names.txt:476
 #: data/messages/strings/names.txt:1035
@@ -2487,19 +2489,19 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:479
 #: data/mp/messages/strings/names.txt:1044
 msgid "Assault Cannon"
-msgstr ""
+msgstr "Штурмовая пушка"
 
 #: data/messages/strings/names.txt:480
 #: data/mp/messages/strings/names.txt:482
 msgid "Inferno"
-msgstr ""
+msgstr "Ад"
 
 #: data/messages/strings/names.txt:482
 #: data/messages/strings/names.txt:1060
 #: data/mp/messages/strings/names.txt:484
 #: data/mp/messages/strings/names.txt:1068
 msgid "Howitzer"
-msgstr ""
+msgstr "Гаубица"
 
 #: data/messages/strings/names.txt:484
 #: data/mp/messages/strings/names.txt:486
@@ -2518,14 +2520,14 @@ msgstr ""
 #: data/messages/strings/names.txt:486
 #: data/mp/messages/strings/names.txt:488
 msgid "Hellstorm"
-msgstr ""
+msgstr "Адский ливень"
 
 #: data/messages/strings/names.txt:491
 #: data/messages/strings/names.txt:1082
 #: data/mp/messages/strings/names.txt:493
 #: data/mp/messages/strings/names.txt:1090
 msgid "Pulse Laser"
-msgstr ""
+msgstr "Импульсный лазер"
 
 #: data/messages/strings/names.txt:494
 #: data/messages/strings/names.txt:539
@@ -2534,28 +2536,28 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:541
 #: data/mp/messages/strings/names.txt:1105
 msgid "Machinegun"
-msgstr ""
+msgstr "Пулемет"
 
 #: data/messages/strings/names.txt:496
 #: data/messages/strings/names.txt:1098
 #: data/mp/messages/strings/names.txt:498
 #: data/mp/messages/strings/names.txt:1106
 msgid "Twin Machinegun"
-msgstr ""
+msgstr "Спареный пулемет"
 
 #: data/messages/strings/names.txt:498
 #: data/messages/strings/names.txt:1099
 #: data/mp/messages/strings/names.txt:500
 #: data/mp/messages/strings/names.txt:1107
 msgid "Heavy Machinegun"
-msgstr ""
+msgstr "Тяжелый пулемет"
 
 #: data/messages/strings/names.txt:500
 #: data/messages/strings/names.txt:1100
 #: data/mp/messages/strings/names.txt:502
 #: data/mp/messages/strings/names.txt:1108
 msgid "Assault Gun"
-msgstr ""
+msgstr "Штурмовое орудие"
 
 #: data/messages/strings/names.txt:503
 #: data/messages/strings/names.txt:1119
@@ -2602,17 +2604,17 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:514
 #: data/mp/messages/strings/names.txt:1145
 msgid "Mortar"
-msgstr ""
+msgstr "Миномет"
 
 #: data/messages/strings/names.txt:513
 #: data/mp/messages/strings/names.txt:515
 msgid "Mortar Emplacement"
-msgstr ""
+msgstr "Минометный окоп"
 
 #: data/messages/strings/names.txt:514
 #: data/mp/messages/strings/names.txt:516
 msgid "Bombard"
-msgstr ""
+msgstr "Бомбарда"
 
 #: data/messages/strings/names.txt:515
 #: data/mp/messages/strings/names.txt:517
@@ -2647,7 +2649,7 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:522
 #: data/mp/messages/strings/names.txt:1151
 msgid "Gauss Cannon"
-msgstr ""
+msgstr "Гаус пушка"
 
 #: data/messages/strings/names.txt:522
 #: data/messages/strings/names.txt:1180
@@ -2676,7 +2678,7 @@ msgstr ""
 #: data/messages/strings/names.txt:527
 #: data/mp/messages/strings/names.txt:529
 msgid "Tank Killer"
-msgstr ""
+msgstr "Убийца танков"
 
 #: data/messages/strings/names.txt:528
 #: data/mp/messages/strings/names.txt:530
@@ -2703,7 +2705,7 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:538
 #: data/mp/messages/strings/names.txt:679
 msgid "Machine Gunner"
-msgstr ""
+msgstr "Пулеметчик"
 
 #: data/messages/strings/names.txt:543
 #: data/messages/strings/names.txt:979
@@ -3167,7 +3169,7 @@ msgstr ""
 #: data/messages/strings/names.txt:729
 #: data/mp/messages/strings/names.txt:735
 msgid "Mortar Pit"
-msgstr ""
+msgstr "Минометный окоп"
 
 #: data/messages/strings/names.txt:730
 #: data/mp/messages/strings/names.txt:736
@@ -3398,7 +3400,7 @@ msgstr ""
 #: data/messages/strings/names.txt:816
 #: data/mp/messages/strings/names.txt:822
 msgid "Gas Turbine Generator"
-msgstr ""
+msgstr "Газовый турбинный генератор"
 
 #: data/messages/strings/names.txt:817
 #: data/mp/messages/strings/names.txt:823
@@ -3410,12 +3412,12 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:825
 #: data/mp/messages/strings/names.txt:1456
 msgid "Repair Facility"
-msgstr ""
+msgstr "Ремонтный блок"
 
 #: data/messages/strings/names.txt:820
 #: data/mp/messages/strings/names.txt:826
 msgid "Automated Repair Facility"
-msgstr ""
+msgstr "Автоматизированная ремонтная фабрика"
 
 #: data/messages/strings/names.txt:821
 #: data/mp/messages/strings/names.txt:827
@@ -3781,109 +3783,109 @@ msgstr ""
 #: data/messages/strings/names.txt:921
 #: data/mp/messages/strings/names.txt:929
 msgid "Thermal Armor"
-msgstr ""
+msgstr "Термоброня"
 
 #: data/messages/strings/names.txt:922
 #: data/mp/messages/strings/names.txt:930
 msgid "Thermal Armor Mk2"
-msgstr ""
+msgstr "Термоброня Mk2"
 
 #: data/messages/strings/names.txt:923
 #: data/mp/messages/strings/names.txt:931
 msgid "Thermal Armor Mk3"
-msgstr ""
+msgstr "Термоброня Mk3"
 
 #: data/messages/strings/names.txt:924
 #: data/mp/messages/strings/names.txt:932
 msgid "High Intensity Thermal Armor"
-msgstr ""
+msgstr "Высокоинтенсивная термоброня"
 
 #: data/messages/strings/names.txt:925
 #: data/mp/messages/strings/names.txt:933
 msgid "High Intensity Thermal Armor Mk2"
-msgstr ""
+msgstr "Высокоинтенсивная термоброня Mk2"
 
 #: data/messages/strings/names.txt:926
 #: data/mp/messages/strings/names.txt:934
 msgid "High Intensity Thermal Armor Mk3"
-msgstr ""
+msgstr "Высокоинтенсивная термоброня Mk3"
 
 #: data/messages/strings/names.txt:928
 #: data/mp/messages/strings/names.txt:936
 msgid "Light Body - Viper"
-msgstr ""
+msgstr "Легкая броня - Гадюка"
 
 #: data/messages/strings/names.txt:929
 #: data/mp/messages/strings/names.txt:937
 msgid "Light Body - Leopard"
-msgstr ""
+msgstr "Легкая броня - Леопард"
 
 #: data/messages/strings/names.txt:930
 #: data/mp/messages/strings/names.txt:938
 msgid "Light Body - Retaliation"
-msgstr ""
+msgstr "Легкая броня - Retaliation"
 
 #: data/messages/strings/names.txt:931
 #: data/mp/messages/strings/names.txt:939
 msgid "Light Body - Bug"
-msgstr ""
+msgstr "Легкая броня - Жук"
 
 #: data/messages/strings/names.txt:932
 #: data/mp/messages/strings/names.txt:940
 msgid "Medium Body - Cobra"
-msgstr ""
+msgstr "Средняя броня - Кобра"
 
 #: data/messages/strings/names.txt:933
 #: data/mp/messages/strings/names.txt:941
 msgid "Medium Body - Panther"
-msgstr ""
+msgstr "Средняя броня - Пантера"
 
 #: data/messages/strings/names.txt:934
 #: data/mp/messages/strings/names.txt:942
 msgid "Medium Body - Retribution"
-msgstr ""
+msgstr "Средняя броня - Retribution"
 
 #: data/messages/strings/names.txt:935
 #: data/mp/messages/strings/names.txt:943
 msgid "Medium Body - Scorpion"
-msgstr ""
+msgstr "Средняя броня - Скропион"
 
 #: data/messages/strings/names.txt:936
 #: data/mp/messages/strings/names.txt:944
 msgid "Heavy Body - Tiger"
-msgstr ""
+msgstr "Тяжелая броня - Тигр"
 
 #: data/messages/strings/names.txt:937
 #: data/mp/messages/strings/names.txt:945
 msgid "Heavy Body - Vengeance"
-msgstr ""
+msgstr "Тяжелая броня - Vengeance"
 
 #: data/messages/strings/names.txt:938
 #: data/mp/messages/strings/names.txt:946
 msgid "Heavy Body - Python"
-msgstr ""
+msgstr "Тяжелая броня - Питон"
 
 #: data/messages/strings/names.txt:939
 #: data/mp/messages/strings/names.txt:947
 msgid "Heavy Body - Mantis"
-msgstr ""
+msgstr "Тяжелая броня - Богомол"
 
 #: data/messages/strings/names.txt:941
 #: data/messages/strings/resstrings.txt:1024
 #: data/mp/messages/strings/names.txt:949
 #: data/mp/messages/strings/resstrings.txt:1121
 msgid "Fuel Injection Engine"
-msgstr ""
+msgstr "Инжекторный двигатель"
 
 #: data/messages/strings/names.txt:942
 #: data/mp/messages/strings/names.txt:950
 msgid "Fuel Injection Engine Mk2"
-msgstr ""
+msgstr "Инжекторный двигатель Mk2"
 
 #: data/messages/strings/names.txt:943
 #: data/mp/messages/strings/names.txt:951
 msgid "Fuel Injection Engine Mk3"
-msgstr ""
+msgstr "Инжекторный двигатель Mk3"
 
 #: data/messages/strings/names.txt:944
 #: data/messages/strings/resstrings.txt:1030
@@ -3907,62 +3909,62 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:955
 #: data/mp/messages/strings/resstrings.txt:1133
 msgid "Gas Turbine Engine"
-msgstr ""
+msgstr "Газотурбинный двигатель"
 
 #: data/messages/strings/names.txt:948
 #: data/mp/messages/strings/names.txt:956
 msgid "Gas Turbine Engine Mk2"
-msgstr ""
+msgstr "Газотурбинный двигатель Mk2"
 
 #: data/messages/strings/names.txt:949
 #: data/mp/messages/strings/names.txt:957
 msgid "Gas Turbine Engine Mk3"
-msgstr ""
+msgstr "Газотурбинный двигатель Mk3"
 
 #: data/messages/strings/names.txt:952
 #: data/mp/messages/strings/names.txt:960
 msgid "Composite Alloys"
-msgstr ""
+msgstr "Композитный сплав"
 
 #: data/messages/strings/names.txt:953
 #: data/mp/messages/strings/names.txt:961
 msgid "Composite Alloys Mk2"
-msgstr ""
+msgstr "Композитный сплав Mk2"
 
 #: data/messages/strings/names.txt:954
 #: data/mp/messages/strings/names.txt:962
 msgid "Composite Alloys Mk3"
-msgstr ""
+msgstr "Композитный сплав Mk3"
 
 #: data/messages/strings/names.txt:955
 #: data/mp/messages/strings/names.txt:963
 msgid "Dense Composite Alloys"
-msgstr ""
+msgstr "Уплотный композитный сплав"
 
 #: data/messages/strings/names.txt:956
 #: data/mp/messages/strings/names.txt:964
 msgid "Dense Composite Alloys Mk2"
-msgstr ""
+msgstr "Уплотный композитный сплав Mk2"
 
 #: data/messages/strings/names.txt:957
 #: data/mp/messages/strings/names.txt:965
 msgid "Dense Composite Alloys Mk3"
-msgstr ""
+msgstr "Уплотный композитный сплав Mk3"
 
 #: data/messages/strings/names.txt:958
 #: data/mp/messages/strings/names.txt:966
 msgid "Superdense Composite Alloys"
-msgstr ""
+msgstr "Сверхплотный композитный материал"
 
 #: data/messages/strings/names.txt:959
 #: data/mp/messages/strings/names.txt:967
 msgid "Superdense Composite Alloys Mk2"
-msgstr ""
+msgstr "Сверхплотный композитный материал Mk2"
 
 #: data/messages/strings/names.txt:960
 #: data/mp/messages/strings/names.txt:968
 msgid "Superdense Composite Alloys Mk3"
-msgstr ""
+msgstr "Сверхплотный композитный материал Mk3"
 
 #: data/messages/strings/names.txt:963
 #: data/mp/messages/strings/names.txt:971
@@ -4094,7 +4096,7 @@ msgstr ""
 #: data/messages/strings/names.txt:1002
 #: data/mp/messages/strings/names.txt:1010
 msgid "Cluster Bombs Bay"
-msgstr ""
+msgstr "Отсек для кластерных бомб"
 
 #: data/messages/strings/names.txt:1003
 #: data/mp/messages/strings/names.txt:1011
@@ -4104,37 +4106,37 @@ msgstr ""
 #: data/messages/strings/names.txt:1004
 #: data/mp/messages/strings/names.txt:1012
 msgid "Phosphor Bomb Bay"
-msgstr ""
+msgstr "Отчек для фосфорных бомб"
 
 #: data/messages/strings/names.txt:1005
 #: data/mp/messages/strings/names.txt:1013
 msgid "Thermite Bomb Bay"
-msgstr ""
+msgstr "Отсек для термитных бомб"
 
 #: data/messages/strings/names.txt:1007
 #: data/mp/messages/strings/names.txt:1015
 msgid "Thermal Imaging Bombsight"
-msgstr ""
+msgstr "Прицел для теплового наведения"
 
 #: data/messages/strings/names.txt:1008
 #: data/mp/messages/strings/names.txt:1016
 msgid "Laser Guided Bombsight"
-msgstr ""
+msgstr "Прицел для лазерного наведения"
 
 #: data/messages/strings/names.txt:1009
 #: data/mp/messages/strings/names.txt:1017
 msgid "Target Acquisition Bombsight"
-msgstr ""
+msgstr "Прицел для захвата цели"
 
 #: data/messages/strings/names.txt:1011
 #: data/mp/messages/strings/names.txt:1019
 msgid "Cannon Laser Rangefinder"
-msgstr ""
+msgstr "Пушечный лазерны дальномер"
 
 #: data/messages/strings/names.txt:1012
 #: data/mp/messages/strings/names.txt:1020
 msgid "Cannon Laser Designator"
-msgstr ""
+msgstr "Пушечнывй лазерный указатель"
 
 #: data/messages/strings/names.txt:1013
 #: data/mp/messages/strings/names.txt:1021
@@ -4783,12 +4785,12 @@ msgstr ""
 #: data/messages/strings/names.txt:1200
 #: data/mp/messages/strings/names.txt:1208
 msgid "Scavenger Factory"
-msgstr ""
+msgstr "Фабрика Мусорщиков"
 
 #: data/messages/strings/names.txt:1201
 #: data/mp/messages/strings/names.txt:1209
 msgid "Scavenger Gun Tower"
-msgstr ""
+msgstr "Пулеметная башня Мусорщиков"
 
 #: data/messages/strings/names.txt:1202
 #: data/mp/messages/strings/names.txt:1210
@@ -4843,42 +4845,42 @@ msgstr ""
 #: data/messages/strings/names.txt:1215
 #: data/mp/messages/strings/names.txt:1223
 msgid " Mortar Pit"
-msgstr ""
+msgstr "Минометный окоп"
 
 #: data/messages/strings/names.txt:1234
 #: data/mp/messages/strings/names.txt:1242
 msgid "Artifact"
-msgstr ""
+msgstr "Артефакт"
 
 #: data/messages/strings/names.txt:1235
 #: data/mp/messages/strings/names.txt:1243
 msgid "Oil Resource"
-msgstr ""
+msgstr "Нефтяной ресурс"
 
 #: data/messages/strings/names.txt:1261
 #: data/mp/messages/strings/names.txt:1269
 msgid "Bridge"
-msgstr ""
+msgstr "Мост"
 
 #: data/messages/strings/names.txt:1264
 #: data/mp/messages/strings/names.txt:1272
 msgid "Ruined Factory"
-msgstr ""
+msgstr "Разрушенная фабрика"
 
 #: data/messages/strings/names.txt:1265
 #: data/mp/messages/strings/names.txt:1273
 msgid "Warehouse"
-msgstr ""
+msgstr "Склад"
 
 #: data/messages/strings/names.txt:1266
 #: data/mp/messages/strings/names.txt:1274
 msgid "Hut"
-msgstr ""
+msgstr "Лачуга"
 
 #: data/messages/strings/names.txt:1274
 #: data/mp/messages/strings/names.txt:1282
 msgid "Oil Drum"
-msgstr ""
+msgstr "Бочка с нефтью"
 
 #: data/messages/strings/names.txt:1292
 #: data/mp/messages/strings/names.txt:1300
@@ -9331,12 +9333,12 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:1606
 #: data/mp/messages/strings/names.txt:1609
 msgid "Grenadier"
-msgstr ""
+msgstr "Минометчик"
 
 #: data/mp/messages/strings/names.txt:1613
 #: data/mp/messages/strings/names.txt:1616
 msgid "Combat Engineer"
-msgstr ""
+msgstr "Военный инженер"
 
 #: data/mp/messages/strings/names.txt:1618
 #: data/mp/messages/strings/names.txt:1621
@@ -9428,7 +9430,7 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:1671
 #: data/mp/messages/strings/names.txt:1672
 msgid "Heavy Laser"
-msgstr ""
+msgstr "Тяжелый лазер"
 
 #: data/mp/messages/strings/names.txt:1673
 #: data/mp/messages/strings/names.txt:1674
@@ -9473,7 +9475,7 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:1705
 #: data/mp/messages/strings/names.txt:1706
 msgid "Plasma Cannon"
-msgstr ""
+msgstr "Плазменная пушка"
 
 #: data/mp/messages/strings/names.txt:1707
 #: data/mp/messages/strings/names.txt:1708
@@ -9509,7 +9511,7 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:1728
 #: data/mp/messages/strings/names.txt:1731
 msgid "EMP Cannon"
-msgstr ""
+msgstr "ЭМИ пушка"
 
 #: data/mp/messages/strings/names.txt:1729
 #: data/mp/messages/strings/names.txt:1730
@@ -9542,7 +9544,7 @@ msgstr ""
 
 #: data/mp/messages/strings/names.txt:1754
 msgid "Wyvern"
-msgstr ""
+msgstr "Виверн"
 
 #: data/mp/messages/strings/names.txt:1756
 msgid "Super Heavy Body - Dragon"
@@ -9550,7 +9552,7 @@ msgstr ""
 
 #: data/mp/messages/strings/names.txt:1757
 msgid "Dragon"
-msgstr ""
+msgstr "Дракон"
 
 #: data/mp/messages/strings/names.txt:1759
 msgid "Superhot Plasmite gel"
@@ -9916,44 +9918,50 @@ msgid "Python HVC Hover"
 msgstr ""
 
 #: data/mp/messages/strings/names.txt:1911
+#, fuzzy
+msgid "Python Tank Killer Tracks"
+msgstr "Питон Легкая пушка Гусеницы"
+
+#: data/mp/messages/strings/names.txt:1913
 msgid "Python Scourge Tracks"
 msgstr ""
 
-#: data/mp/messages/strings/names.txt:1912
+#: data/mp/messages/strings/names.txt:1914
 msgid "Python Gauss Cannon Tracks"
 msgstr ""
 
-#: data/mp/messages/strings/names.txt:1913
+#: data/mp/messages/strings/names.txt:1915
 msgid "Python Pulse Laser Tracks"
 msgstr ""
 
-#: data/mp/messages/strings/names.txt:1914
+#: data/mp/messages/strings/names.txt:1916
 msgid "Tiger Pulse Laser Tracks"
 msgstr ""
 
-#: data/mp/messages/strings/names.txt:1915
+#: data/mp/messages/strings/names.txt:1917
 msgid "Tiger Heavy Laser Tracks"
 msgstr ""
 
-#: data/mp/messages/strings/names.txt:1916
+#: data/mp/messages/strings/names.txt:1918
 msgid "Wyvern Gauss Cannon Tracks"
 msgstr ""
 
-#: data/mp/messages/strings/names.txt:1917
+#: data/mp/messages/strings/names.txt:1919
 msgid "Wyvern Pulse Laser Tracks"
 msgstr ""
 
-#: data/mp/messages/strings/names.txt:1918
+#: data/mp/messages/strings/names.txt:1920
 msgid "Wyvern Heavy Laser Tracks"
 msgstr ""
 
-#: data/mp/messages/strings/names.txt:1920
+#: data/mp/messages/strings/names.txt:1922
 msgid "Viper Machinegun Half-Track"
 msgstr ""
 
-#: data/mp/messages/strings/names.txt:1921
+#: data/mp/messages/strings/names.txt:1923
+#, fuzzy
 msgid "Viper Flamer Half-Track"
-msgstr ""
+msgstr "Кобра Огнемет Гусеницы"
 
 #: data/mp/messages/strings/resstrings.txt:67
 msgid "Cyborg Transport Available"
@@ -10242,9 +10250,8 @@ msgstr ""
 
 #: lib/framework/i18n.c:42
 #: lib/framework/i18n.c:64
-#, fuzzy
 msgid "System locale"
-msgstr "Системы"
+msgstr ""
 
 #: lib/framework/i18n.c:44
 #: lib/framework/i18n.c:69
@@ -10375,7 +10382,7 @@ msgstr "Загрузить Игру"
 
 #: src/clparse.c:99
 msgid "savegame"
-msgstr "Сохраниьт Игру"
+msgstr ""
 
 #: src/clparse.c:102
 msgid "Play in windowed mode"
@@ -10417,21 +10424,21 @@ msgstr ""
 #: src/configuration.c:403
 #: src/multistat.c:131
 msgid "Player"
-msgstr "Игрок"
+msgstr ""
 
 #: src/design.c:453
 #: src/design.c:474
 #: src/design.c:3547
 msgid "New Vehicle"
-msgstr ""
+msgstr "Новая техника"
 
 #: src/design.c:521
 msgid "Vehicle Body"
-msgstr ""
+msgstr "Корпус"
 
 #: src/design.c:543
 msgid "Vehicle Propulsion"
-msgstr ""
+msgstr "Двигатель"
 
 #: src/design.c:566
 #: src/design.c:591
@@ -10441,7 +10448,7 @@ msgstr ""
 
 #: src/design.c:638
 msgid "Delete Design"
-msgstr "Удалить Дизайн"
+msgstr "Удалить дизайн"
 
 #: src/design.c:692
 #: src/design.c:740
@@ -10478,12 +10485,12 @@ msgstr "Вес"
 #: src/design.c:811
 #: src/design.c:831
 msgid "Total Power Required"
-msgstr "Суммарно кол-во Енергии"
+msgstr "Общие затраты энергии"
 
 #: src/design.c:844
 #: src/design.c:865
 msgid "Total Body Points"
-msgstr "Суммарно кол-во Очков обэкта"
+msgstr "Очков жизни"
 
 #: src/design.c:1061
 #: src/design.c:1093
@@ -10504,14 +10511,14 @@ msgstr "Мощность Сенсора"
 
 #: src/design.c:1621
 msgid "ECM Power"
-msgstr "ЕМ Можность"
+msgstr ""
 
 #: src/design.c:1647
 #: src/design.c:1664
 #: src/design.c:1690
 #: src/design.c:1707
 msgid "Build Points"
-msgstr "Очки"
+msgstr ""
 
 #: src/design.c:1734
 #: src/design.c:1766
@@ -10541,7 +10548,7 @@ msgstr "Скорость по дороге"
 #: src/design.c:1965
 #: src/design.c:1999
 msgid "Off-Road Speed"
-msgstr "Внедорожная скорости"
+msgstr "Скорость по бездорожью"
 
 #: src/design.c:1973
 #: src/design.c:2008
@@ -10558,7 +10565,7 @@ msgstr "Системы"
 
 #: src/display.c:1671
 msgid "Cannot Build. Oil Resource Burning."
-msgstr "Немогу строить. Нефть горит."
+msgstr "Нелья строить.Горит нефть."
 
 #: src/display.c:1818
 #, c-format
@@ -10567,7 +10574,7 @@ msgstr "%s - Урон %d%% - Опыт %d, %s"
 
 #: src/display.c:2055
 msgid "Truck ordered to build Oil Derrick"
-msgstr "Грузовику было приказано строить Нефтевышку"
+msgstr "Грузовику приказано строить Нефтевышку"
 
 #: src/droid.c:190
 msgid "Unit Lost!"
@@ -10607,16 +10614,16 @@ msgstr[1] ""
 
 #: src/droid.c:3657
 msgid "Rookie"
-msgstr ""
+msgstr "Новобранец"
 
 #: src/droid.c:3658
 msgctxt "rank"
 msgid "Green"
-msgstr ""
+msgstr "Неопытный"
 
 #: src/droid.c:3659
 msgid "Trained"
-msgstr ""
+msgstr "Обученный"
 
 #: src/droid.c:3660
 msgid "Regular"
@@ -10624,15 +10631,15 @@ msgstr ""
 
 #: src/droid.c:3661
 msgid "Professional"
-msgstr ""
+msgstr "Профессионал"
 
 #: src/droid.c:3662
 msgid "Veteran"
-msgstr ""
+msgstr "Ветеран"
 
 #: src/droid.c:3663
 msgid "Elite"
-msgstr ""
+msgstr "Элита"
 
 #: src/droid.c:3664
 msgid "Special"
@@ -10640,11 +10647,11 @@ msgstr ""
 
 #: src/droid.c:3665
 msgid "Hero"
-msgstr ""
+msgstr "Герой"
 
 #: src/frontend.c:241
 msgid "Single Player Campaign"
-msgstr "Кампания"
+msgstr "Одиночная Кампания"
 
 #: src/frontend.c:242
 msgid "Multi Player Game"
@@ -10662,11 +10669,11 @@ msgstr "Опции"
 
 #: src/frontend.c:246
 msgid "Quit Game"
-msgstr "Выйти нафиг"
+msgstr "Выйти из игры"
 
 #: src/frontend.c:248
 msgid "MAIN MENU"
-msgstr "Главное Меню"
+msgstr "ГЛАВНОЕ МЕНЮ"
 
 #: src/frontend.c:298
 msgid "Fast Play"
@@ -10674,7 +10681,7 @@ msgstr "Быстрая игра"
 
 #: src/frontend.c:299
 msgid "TUTORIALS"
-msgstr "Обучения"
+msgstr "ОБУЧЕНИЕ"
 
 #. TRANSLATORS: "Return", in this context, means "return to previous screen/menu"
 #: src/frontend.c:301
@@ -10691,26 +10698,26 @@ msgstr "Назад"
 
 #: src/frontend.c:353
 msgid "Load Campaign"
-msgstr "Загрузить компанию"
+msgstr "Загрузить кампанию"
 
 #: src/frontend.c:354
 msgid "New Campaign"
-msgstr "Новая компания"
+msgstr "Новая кампания"
 
 #: src/frontend.c:356
 msgid "SINGLE PLAYER"
-msgstr "Одиночная игра"
+msgstr "ОДИНОЧНАЯ ИГРА"
 
 #: src/frontend.c:436
 #: src/ingameop.c:408
-#: src/mission.c:2830
-#: src/mission.c:2931
+#: src/mission.c:2826
+#: src/mission.c:2927
 msgid "Load Saved Game"
 msgstr "Загрузить Игру"
 
 #: src/frontend.c:476
 msgid "MULTI PLAYER"
-msgstr "Мультиплейер"
+msgstr "Мультиплеер"
 
 #: src/frontend.c:478
 msgid "Host Game"
@@ -10722,34 +10729,34 @@ msgstr "Присоединиться"
 
 #: src/frontend.c:481
 msgid "One Player Skirmish"
-msgstr "Играть Против БОТОВ"
+msgstr "One Player Skirmish"
 
 #: src/frontend.c:530
 #: src/frontend.c:846
 #: src/frontend.c:1112
 #: src/frontend.c:1132
 msgid "GAME OPTIONS"
-msgstr "Игравые настройки"
+msgstr "НАСТРОЙКИ ИГРЫ"
 
 #: src/frontend.c:531
 msgid "Game Options"
-msgstr "Игравые НАстройки"
+msgstr "Настройки игры"
 
 #: src/frontend.c:532
 msgid "Graphics Options"
-msgstr "Графика"
+msgstr "Настройки графики"
 
 #: src/frontend.c:534
 msgid "Audio Options"
-msgstr "Звук"
+msgstr "Настройки звука"
 
 #: src/frontend.c:535
 msgid "Key Mappings"
-msgstr "Раскладка Клавы"
+msgstr "Раскладка клавиатуры"
 
 #: src/frontend.c:607
 msgid "Reverse Mouse"
-msgstr "Инверсия мауса"
+msgstr "Инверсия мыши"
 
 #: src/frontend.c:610
 #: src/frontend.c:622
@@ -10780,7 +10787,7 @@ msgstr "Выкл."
 
 #: src/frontend.c:619
 msgid "Screen Shake"
-msgstr "Дродание екрана"
+msgstr "Дрожание экрана"
 
 #: src/frontend.c:631
 #: src/multiint.c:722
@@ -10790,13 +10797,13 @@ msgstr "Туман"
 #: src/frontend.c:634
 #: src/frontend.c:752
 msgid "Mist"
-msgstr "Туман"
+msgstr "Мгла"
 
 #: src/frontend.c:638
 #: src/frontend.c:745
 #: src/multiint.c:724
 msgid "Fog Of War"
-msgstr "Туман Войны"
+msgstr "Туман войны"
 
 #: src/frontend.c:643
 msgid "Video Playback"
@@ -10812,12 +10819,12 @@ msgstr "Полноэкран"
 #: src/frontend.c:918
 #: src/frontend.c:963
 msgid "Windowed"
-msgstr "в Окне"
+msgstr "В окне"
 
 #: src/frontend.c:653
 #: src/frontend.c:797
 msgid "Minimal"
-msgstr "минимум"
+msgstr "Минимум"
 
 #: src/frontend.c:660
 #: src/frontend.c:664
@@ -10831,34 +10838,34 @@ msgstr "Тени"
 #: src/frontend.c:831
 #: src/ingameop.c:155
 msgid "Voice Volume"
-msgstr "Громкость Голоса"
+msgstr "Голос"
 
 #: src/frontend.c:835
 #: src/ingameop.c:160
 msgid "FX Volume"
-msgstr "громкость эффекттов"
+msgstr "Эффекты"
 
 #: src/frontend.c:839
 #: src/ingameop.c:165
 msgid "Music Volume"
-msgstr "Громкость музыки"
+msgstr "Музыка"
 
 #: src/frontend.c:910
 msgid "Graphics Mode*"
-msgstr "Графический режим"
+msgstr "Графический режим*"
 
 #: src/frontend.c:914
 #: src/frontend.c:968
 msgid "Fullscreen"
-msgstr "Полный екран"
+msgstr "Полный экран"
 
 #: src/frontend.c:922
 msgid "Resolution*"
-msgstr "Разрешение"
+msgstr "Разрешение*"
 
 #: src/frontend.c:927
 msgid "Trap Cursor"
-msgstr "Курсор треп"
+msgstr ""
 
 #: src/frontend.c:939
 msgid "Texture size"
@@ -10866,7 +10873,7 @@ msgstr "Размер текстур"
 
 #: src/frontend.c:943
 msgid "* Takes effect on game restart"
-msgstr "Применяеться после перезагрузки игры"
+msgstr "* Вступят в силу после перезагрузки"
 
 #: src/frontend.c:1072
 #: src/frontend.c:1130
@@ -10877,30 +10884,29 @@ msgstr "Сложность"
 #: src/frontend.c:1138
 #: src/frontend.c:1170
 msgid "Easy"
-msgstr "Легко"
+msgstr "Легкая"
 
 #: src/frontend.c:1079
 #: src/frontend.c:1141
 #: src/frontend.c:1162
 msgid "Normal"
-msgstr "Нормально"
+msgstr "Нормальная"
 
 #: src/frontend.c:1083
 #: src/frontend.c:1144
 #: src/frontend.c:1166
 msgid "Hard"
-msgstr "Сложно"
+msgstr "Трудная"
 
 #: src/frontend.c:1088
 #: src/frontend.c:1131
 msgid "Scroll Speed"
-msgstr "Скорость прамотки"
+msgstr "Скорость прокрутки"
 
 #: src/frontend.c:1102
 #: src/frontend.c:1128
-#, fuzzy
 msgid "Language"
-msgstr "Длинный  радиуса действия"
+msgstr "Язык"
 
 #: src/frontend.c:1106
 #: src/frontend.c:1129
@@ -10908,10 +10914,10 @@ msgid "Unit Colour"
 msgstr "Цвет Юнтов"
 
 #: src/hci.c:994
-#: src/hci.c:3866
-#: src/hci.c:4017
-#: src/hci.c:4471
-#: src/hci.c:5699
+#: src/hci.c:3857
+#: src/hci.c:4008
+#: src/hci.c:4461
+#: src/hci.c:5685
 #: src/intelmap.c:529
 #: src/intorder.c:659
 #: src/loadsave.c:261
@@ -10919,7 +10925,7 @@ msgstr "Цвет Юнтов"
 #: src/multimenu.c:1250
 #: src/transporter.c:285
 #: src/transporter.c:374
-#: src/transporter.c:872
+#: src/transporter.c:839
 msgid "Close"
 msgstr "Закрыть"
 
@@ -10927,9 +10933,9 @@ msgstr "Закрыть"
 #: src/hci.c:1686
 #: src/loop.c:511
 #: src/loop.c:523
-#: src/mission.c:2899
+#: src/mission.c:2895
 msgid "GAME SAVED!"
-msgstr "Игра Сохранена"
+msgstr "ИГРА СОХРАНЕНА!"
 
 #: src/hci.c:2094
 msgid "Failed to create building"
@@ -10950,109 +10956,108 @@ msgstr ""
 msgid "Player %u is cheating (debug menu) him/herself a new droid: %s."
 msgstr ""
 
-#: src/hci.c:3768
+#: src/hci.c:3759
 msgid "Commanders (F6)"
 msgstr "Командиры (F6)"
 
-#: src/hci.c:3784
+#: src/hci.c:3775
 msgid "Intelligence Display (F5)"
 msgstr "Дисплей разведки (F5)"
 
-#: src/hci.c:3800
+#: src/hci.c:3791
 msgid "Manufacture (F1)"
 msgstr "Производство (F1)"
 
-#: src/hci.c:3816
+#: src/hci.c:3807
 msgid "Design (F4)"
 msgstr "Дизайн (F4)"
 
-#: src/hci.c:3832
+#: src/hci.c:3823
 msgid "Research (F2)"
 msgstr "Исследования (F2)"
 
-#: src/hci.c:3848
+#: src/hci.c:3839
 msgid "Build (F3)"
-msgstr "Построить (F3)"
+msgstr "Строить (F3)"
 
-#: src/hci.c:3928
+#: src/hci.c:3919
 #: src/multiint.c:772
 #: src/multiint.c:776
 msgid "Power"
-msgstr "Енергия"
+msgstr "Энергия"
 
-#: src/hci.c:4112
+#: src/hci.c:4103
 msgid "Tile"
 msgstr ""
 
-#: src/hci.c:4113
+#: src/hci.c:4104
 msgid "Place tiles on map"
 msgstr ""
 
-#: src/hci.c:4122
+#: src/hci.c:4113
 msgid "Unit"
 msgstr "Юнит"
 
-#: src/hci.c:4123
+#: src/hci.c:4114
 msgid "Place Unit on map"
 msgstr ""
 
-#: src/hci.c:4131
+#: src/hci.c:4122
 msgid "Struct"
 msgstr ""
 
-#: src/hci.c:4132
-#, fuzzy
+#: src/hci.c:4123
 msgid "Place Structures on map"
-msgstr "Установить Лимиты Сооружений"
+msgstr ""
 
-#: src/hci.c:4140
+#: src/hci.c:4131
 msgid "Feat"
 msgstr ""
 
-#: src/hci.c:4141
+#: src/hci.c:4132
 msgid "Place Features on map"
 msgstr ""
 
-#: src/hci.c:4152
+#: src/hci.c:4143
 #, fuzzy
 msgid "Pause or unpause the game"
 msgstr "Хост покинул игру"
 
-#: src/hci.c:4166
+#: src/hci.c:4157
 msgid "Align height of all map objects"
 msgstr ""
 
-#: src/hci.c:4191
+#: src/hci.c:4182
 #: src/ingameop.c:121
 #: src/ingameop.c:254
 #: src/ingameop.c:259
 msgid "Quit"
 msgstr "Выход"
 
-#: src/hci.c:4192
+#: src/hci.c:4183
 msgid "Exit Game"
 msgstr "Выйти из Игры"
 
-#: src/hci.c:4556
+#: src/hci.c:4546
 #: src/intdisplay.c:211
 #: src/intdisplay.c:254
 #: src/intdisplay.c:300
 msgid "Progress Bar"
 msgstr "Панель прогресса"
 
-#: src/hci.c:5614
+#: src/hci.c:5600
 msgid "Factory Delivery Point"
 msgstr "Точка прибития с фабрики"
 
-#: src/hci.c:5633
+#: src/hci.c:5619
 msgid "Loop Production"
 msgstr "Повторное Производство"
 
-#: src/hci.c:5724
+#: src/hci.c:5710
 msgid "Tab Scroll left"
 msgstr ""
 
-#: src/hci.c:5741
+#: src/hci.c:5727
 msgid "Tab Scroll right"
 msgstr ""
 
@@ -11060,7 +11065,7 @@ msgstr ""
 #: src/ingameop.c:152
 #: src/ingameop.c:263
 msgid "Resume Game"
-msgstr "Возвратиться к игре"
+msgstr "Продолжить игру"
 
 #: src/ingameop.c:271
 msgid "Load Game"
@@ -11068,8 +11073,8 @@ msgstr "Загрузить Игру"
 
 #: src/ingameop.c:273
 #: src/ingameop.c:412
-#: src/mission.c:2820
-#: src/mission.c:2934
+#: src/mission.c:2816
+#: src/mission.c:2930
 msgid "Save Game"
 msgstr "Сохранить Игру"
 
@@ -11094,7 +11099,7 @@ msgstr ""
 
 #: src/intelmap.c:410
 msgid "Current Objective"
-msgstr "Данная Цель"
+msgstr "Текущие задачи"
 
 #: src/intorder.c:178
 #: src/keymap.c:388
@@ -11119,12 +11124,12 @@ msgstr "Отступление при среднем уроне"
 #: src/intorder.c:182
 #: src/keymap.c:408
 msgid "Retreat at Heavy Damage"
-msgstr "Отступление при тежолом уроне"
+msgstr "Отступление при тяжелом уроне"
 
 #: src/intorder.c:183
 #: src/keymap.c:409
 msgid "Do or Die!"
-msgstr "Зделай или умри"
+msgstr "Сделай или умри"
 
 #: src/intorder.c:184
 msgid "Fire-At-Will"
@@ -11133,7 +11138,7 @@ msgstr "Произвольный Огонь"
 #: src/intorder.c:185
 #: src/keymap.c:384
 msgid "Return Fire"
-msgstr "Ответный Огонь"
+msgstr "Ответный огонь"
 
 #: src/intorder.c:186
 #: src/keymap.c:382
@@ -11143,7 +11148,7 @@ msgstr "Не Стрелять"
 #: src/intorder.c:187
 #: src/keymap.c:390
 msgid "Patrol"
-msgstr "Патруль"
+msgstr "Патрулировать"
 
 #: src/intorder.c:188
 #: src/keymap.c:389
@@ -11152,7 +11157,7 @@ msgstr "Приследовать"
 
 #: src/intorder.c:189
 msgid "Guard Position"
-msgstr "Охранять"
+msgstr "Охранять позиции"
 
 #: src/intorder.c:190
 #: src/keymap.c:392
@@ -11199,7 +11204,7 @@ msgstr ""
 
 #: src/keybind.c:131
 msgid "Sorry, that cheat is disabled in multiplayer games."
-msgstr "Извените, но читы закрыты в мультиплеере"
+msgstr "Извините, но читы закрыты в мультиплеере"
 
 #: src/keybind.c:195
 msgid "Lets us see what you see!"
@@ -11223,7 +11228,7 @@ msgstr ""
 
 #: src/keybind.c:336
 msgid "Power overwhelming"
-msgstr ""
+msgstr "Неиссякаемая энергия"
 
 #: src/keybind.c:350
 msgid "Back to normality!"
@@ -11276,7 +11281,7 @@ msgstr "Вид выровнен по северу"
 
 #: src/keybind.c:1268
 msgid "Researched EVERYTHING for you!"
-msgstr ""
+msgstr "Все исследования доступны!"
 
 #: src/keybind.c:1299
 msgid "Energy bars display toggled"
@@ -11331,12 +11336,12 @@ msgstr "Скорость Игры Сброшена"
 #: src/keybind.c:2321
 #, c-format
 msgid "Game Speed Increased to %3.1f"
-msgstr ""
+msgstr "Скорость игры увеличина на %3.1f"
 
 #: src/keybind.c:2362
 #, c-format
 msgid "Game Speed Reduced to %3.1f"
-msgstr ""
+msgstr "Скорость игры уменьшена на %3.1f"
 
 #: src/keybind.c:2392
 msgid "Build menu will reopen"
@@ -11372,7 +11377,7 @@ msgstr ""
 
 #: src/keyedit.c:356
 msgid "KEY MAPPING"
-msgstr "Раскладка клавы"
+msgstr "РАСКЛАДКА КЛАВИАТУРЫ"
 
 #: src/keyedit.c:378
 #: src/multiint.c:388
@@ -11393,7 +11398,7 @@ msgstr "Производство"
 
 #: src/keymap.c:293
 msgid "Research"
-msgstr "Исследование"
+msgstr "Исследования"
 
 #: src/keymap.c:294
 msgid "Build"
@@ -11413,15 +11418,15 @@ msgstr "Командиры"
 
 #: src/keymap.c:298
 msgid "Toggle Radar"
-msgstr "Переключить Радар"
+msgstr "Радар Вкл./Выкл."
 
 #: src/keymap.c:299
 msgid "Toggle Console Display"
-msgstr "Консоль"
+msgstr "Консоль Вкл./Выкл."
 
 #: src/keymap.c:300
 msgid "Toggle Damage Bars On/Off"
-msgstr "Переключатель панелей Урона Вкл./Откл."
+msgstr "Переключатель панелей Урона Вкл./Выкл."
 
 #: src/keymap.c:301
 msgid "Take Screen Shot"
@@ -11557,7 +11562,7 @@ msgstr ""
 
 #: src/keymap.c:347
 msgid "Multiplayer Options"
-msgstr ""
+msgstr "Опции Мультиплеера"
 
 #: src/keymap.c:348
 msgid "Start Multiplayer Audio"
@@ -11589,11 +11594,11 @@ msgstr ""
 
 #: src/keymap.c:357
 msgid "Zoom In"
-msgstr ""
+msgstr "Приблизить"
 
 #: src/keymap.c:358
 msgid "Zoom Out"
-msgstr ""
+msgstr "Отдалить"
 
 #: src/keymap.c:359
 msgid "Pitch Forward"
@@ -11617,7 +11622,7 @@ msgstr ""
 
 #: src/keymap.c:364
 msgid "Orders Menu"
-msgstr ""
+msgstr "Меню Приказов"
 
 #: src/keymap.c:365
 msgid "Decrease Game Speed"
@@ -11689,7 +11694,7 @@ msgstr ""
 
 #: src/keymap.c:386
 msgid "Return to HQ"
-msgstr ""
+msgstr "Возврат в Штаб"
 
 #: src/keymap.c:393
 msgid "Send Text Message"
@@ -11713,11 +11718,11 @@ msgstr ""
 
 #: src/keymap.c:419
 msgid "Select all Units on Screen"
-msgstr ""
+msgstr "Выделить всю технику на экране"
 
 #: src/keymap.c:420
 msgid "Select all Tracks"
-msgstr ""
+msgstr "Выделить все грузовики"
 
 #: src/keymap.c:421
 msgid "Select EVERY unit"
@@ -11755,25 +11760,25 @@ msgstr ""
 msgid "Toggle reopening the build menu"
 msgstr ""
 
-#: src/mission.c:2368
+#: src/mission.c:2364
 msgid "Load Transport"
 msgstr "Загрузить Транспорт"
 
-#: src/mission.c:2767
+#: src/mission.c:2763
 msgid "OBJECTIVE ACHIEVED"
-msgstr "Цель Достигнута"
+msgstr "ЗАДАНИЕ ВЫПОЛНЕНО"
 
-#: src/mission.c:2773
+#: src/mission.c:2769
 msgid "OBJECTIVE FAILED"
-msgstr "Цель провалена"
+msgstr "ЗАДАНИЕ ПРОВАЛЕНО"
 
-#: src/mission.c:2799
-#: src/mission.c:2836
-#: src/mission.c:2950
+#: src/mission.c:2795
+#: src/mission.c:2832
+#: src/mission.c:2946
 msgid "Quit To Main Menu"
 msgstr "Выйти в Главное Меню"
 
-#: src/mission.c:2807
+#: src/mission.c:2803
 msgid "Continue Game"
 msgstr "Продолжить Игру"
 
@@ -11842,7 +11847,7 @@ msgstr "СОЕДИНЕНИЕ"
 
 #: src/multiint.c:398
 msgid "Lobby"
-msgstr "On-Line"
+msgstr "Lobby"
 
 #: src/multiint.c:399
 msgid "IP"
@@ -11882,7 +11887,7 @@ msgstr "Кампания"
 
 #: src/multiint.c:698
 msgid "Skirmish"
-msgstr "Мясо с Ботами"
+msgstr "Стычка"
 
 #: src/multiint.c:719
 msgid "Select Player Name"
@@ -11890,7 +11895,7 @@ msgstr "Выбор Имя Игрока"
 
 #: src/multiint.c:725
 msgid "Distance Fog"
-msgstr "Тума на растоянии"
+msgstr "Туман на растоянии"
 
 #: src/multiint.c:738
 #: src/multimenu.c:706
@@ -11906,9 +11911,9 @@ msgid "Allow Alliances"
 msgstr "Позволить Союзы"
 
 #: src/multiint.c:747
-#: src/multiint.c:1944
+#: src/multiint.c:1953
 msgid "Locked Teams"
-msgstr "Закрытые Каманды"
+msgstr "Закрытые Команды"
 
 #: src/multiint.c:779
 msgid "Low Power Levels"
@@ -11955,28 +11960,36 @@ msgstr "Начать Хостинг Игры"
 msgid "Set Structure Limits"
 msgstr "Установить Лимиты Сооружений"
 
-#: src/multiint.c:1204
+#: src/multiint.c:1207
 msgid "Team"
 msgstr ""
 
-#: src/multiint.c:1269
+#: src/multiint.c:1251
+msgid "Waiting for other players"
+msgstr ""
+
+#: src/multiint.c:1257
+msgid "Click when ready"
+msgstr ""
+
+#: src/multiint.c:1299
 msgid "PLAYERS"
 msgstr "ИГРОКИ"
 
-#: src/multiint.c:1427
+#: src/multiint.c:1436
 msgid "CHAT"
 msgstr "ЧАТ"
 
-#: src/multiint.c:1987
+#: src/multiint.c:1997
 #, c-format
 msgid "The host has kicked %s from the game!"
-msgstr ""
+msgstr "Хост кикнул %s из игры!"
 
-#: src/multiint.c:2078
+#: src/multiint.c:2088
 msgid "Host is Starting Game"
 msgstr "Хост Стартует"
 
-#: src/multiint.c:2525
+#: src/multiint.c:2535
 msgid "Players"
 msgstr "Игроки"
 
@@ -12009,19 +12022,19 @@ msgstr ""
 
 #: src/multimenu.c:579
 msgid "Any number of players"
-msgstr ""
+msgstr "Любое количество игроков"
 
 #: src/multimenu.c:586
 msgid "2 players"
-msgstr ""
+msgstr "2 игрока"
 
 #: src/multimenu.c:592
 msgid "4 players"
-msgstr ""
+msgstr "4 игрока"
 
 #: src/multimenu.c:598
 msgid "8 players"
-msgstr ""
+msgstr "8 игроков"
 
 #: src/multimenu.c:707
 msgid "Score"
@@ -12057,7 +12070,7 @@ msgstr "Передать Выбраного Юнита"
 
 #: src/multimenu.c:1062
 msgid "Give Power To Player"
-msgstr "Передать Енергию Игроку"
+msgstr "Передать Энергию Игроку"
 
 #: src/multiplay.c:729
 msgid "The host has left the game!"
@@ -12098,11 +12111,11 @@ msgstr "Голубой"
 #: src/research.c:1849
 #, c-format
 msgid "Research completed: %s"
-msgstr ""
+msgstr "Завершено исследование: %s"
 
 #: src/research.c:1854
 msgid "Research Completed"
-msgstr "Исследование Окончено"
+msgstr "Исследование закончено"
 
 #: src/research.c:2657
 msgid "Research Award"
@@ -12111,37 +12124,37 @@ msgstr ""
 #: src/scores.c:99
 #, c-format
 msgid "Own Units: %u"
-msgstr ""
+msgstr "Наших юнитов: %u"
 
 #: src/scores.c:100
 #, c-format
 msgid "Enemy Units: %u"
-msgstr ""
+msgstr "Вражеских юнитов: %u"
 
 #: src/scores.c:101
 #, c-format
 msgid "Own Structures: %u"
-msgstr ""
+msgstr "Наших сооружений: %u"
 
 #: src/scores.c:102
 #, c-format
 msgid "Enemy Structures: %u"
-msgstr ""
+msgstr "Вражеских сооружений: %u"
 
 #: src/scores.c:103
 #, c-format
 msgid "Units Manufactured: %u"
-msgstr ""
+msgstr "Произведено юнтов: %u"
 
 #: src/scores.c:104
 #, c-format
 msgid "Total Units: %u"
-msgstr ""
+msgstr "Всего Юнитов: %u"
 
 #: src/scores.c:105
 #, c-format
 msgid "Structures Built: %u"
-msgstr ""
+msgstr "Посторено сооружений: %u"
 
 #: src/scores.c:106
 #, c-format
@@ -12151,18 +12164,18 @@ msgstr ""
 #: src/scores.c:108
 #, c-format
 msgid "Rookie: %u"
-msgstr ""
+msgstr "Новобранцев: %u"
 
 #: src/scores.c:109
-#, fuzzy, c-format
+#, c-format
 msgctxt "rank"
 msgid "Green: %u"
-msgstr "Зелёный"
+msgstr "Неопытных: %u"
 
 #: src/scores.c:110
 #, c-format
 msgid "Trained: %u"
-msgstr ""
+msgstr "Обученых: %u"
 
 #: src/scores.c:111
 #, c-format
@@ -12172,17 +12185,17 @@ msgstr ""
 #: src/scores.c:112
 #, c-format
 msgid "Professional: %u"
-msgstr ""
+msgstr "Профессионалов: %u"
 
 #: src/scores.c:113
 #, c-format
 msgid "Veteran: %u"
-msgstr ""
+msgstr "Ветеранов: %u"
 
 #: src/scores.c:114
 #, c-format
 msgid "Elite: %u"
-msgstr ""
+msgstr "Элиты: %u"
 
 #: src/scores.c:115
 #, c-format
@@ -12192,49 +12205,49 @@ msgstr ""
 #: src/scores.c:116
 #, c-format
 msgid "Hero: %u"
-msgstr ""
+msgstr "Героев: %u"
 
 #: src/scores.c:350
 msgid "Unit Losses"
-msgstr "Юнитов Потеряно"
+msgstr "Потери боевой техники"
 
 #: src/scores.c:351
 msgid "Structure Losses"
-msgstr "Сооружений Потеряно"
+msgstr "Сооружений потеряно"
 
 #: src/scores.c:352
 msgid "Force Information"
-msgstr "Информация о Войсках"
+msgstr "Информация о войсках"
 
 #: src/scores.c:432
 #, c-format
 msgid "ARTIFACTS RECOVERED: %d"
-msgstr ""
+msgstr "АРТЕФАКТОВ ЗАХВАЧЕНО: %d"
 
 #: src/scores.c:437
 #, c-format
 msgid "Mission Time - %s"
-msgstr ""
+msgstr "Время миссии - %s"
 
 #: src/scores.c:442
 #, c-format
 msgid "Total Game Time - %s"
-msgstr ""
+msgstr "Общее время игры - %s"
 
 #: src/scriptfuncs.c:3211
 msgid "YOU ARE VICTORIOUS!"
-msgstr ""
+msgstr "ПОБЕДА!"
 
 #: src/scriptfuncs.c:3215
 msgid "YOU WERE DEFEATED!"
 msgstr ""
 
-#: src/scriptfuncs.c:10151
+#: src/scriptfuncs.c:10152
 #, c-format
 msgid "Beacon received from %s!"
 msgstr ""
 
-#: src/scriptfuncs.c:10197
+#: src/scriptfuncs.c:10198
 #, c-format
 msgid "Beacon %d"
 msgstr ""
@@ -12263,70 +12276,70 @@ msgstr ""
 msgid "Unable to locate any Commanders!"
 msgstr ""
 
-#: src/structure.c:2829
+#: src/structure.c:2769
 msgid "Command Control Limit Reached - Production Halted"
 msgstr "Достигнут Предел - Производство Остановлено"
 
-#: src/structure.c:5899
-#: src/structure.c:5921
+#: src/structure.c:5868
+#: src/structure.c:5890
 #, c-format
 msgid "%s - %u Unit assigned"
 msgid_plural "%s - %u Units assigned"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/structure.c:5958
+#: src/structure.c:5940
 #, c-format
 msgid "%s - Connected %u of %u"
-msgstr ""
+msgstr "%s - подключено %u из %u"
 
-#: src/structure.c:5972
+#: src/structure.c:5954
 #, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr ""
 
-#: src/structure.c:6092
-#: src/structure.c:6141
+#: src/structure.c:6074
+#: src/structure.c:6123
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr ""
 
-#: src/structure.c:6376
+#: src/structure.c:6358
 msgid "Electronic Reward - Visibility Report"
 msgstr ""
 
-#: src/structure.c:6416
+#: src/structure.c:6398
 msgid "Factory Reward - Propulsion"
 msgstr ""
 
-#: src/structure.c:6440
+#: src/structure.c:6422
 msgid "Factory Reward - Body"
 msgstr ""
 
-#: src/structure.c:6464
+#: src/structure.c:6446
 msgid "Factory Reward - Weapon"
 msgstr ""
 
-#: src/structure.c:6473
+#: src/structure.c:6455
 msgid "Factory Reward - Nothing"
 msgstr ""
 
-#: src/structure.c:6501
+#: src/structure.c:6483
 msgid "Repair Facility Award - Repair"
 msgstr ""
 
-#: src/structure.c:6508
+#: src/structure.c:6490
 msgid "Repair Facility Award - Nothing"
 msgstr ""
 
-#: src/transporter.c:424
-#: src/transporter.c:478
+#: src/transporter.c:396
+#: src/transporter.c:450
 msgid "Launch Transport"
 msgstr "Запустить Транспорт"
 
-#: src/transporter.c:1860
+#: src/transporter.c:1702
 msgid "Reinforcements landing"
-msgstr "Прибытие подкрепления"
+msgstr "Высадка подкрепления"
 
 #: src/version.c:137
 msgid " (modified and switched locally)"
@@ -12354,4 +12367,4 @@ msgstr ""
 #: src/version.c:167
 #, c-format
 msgid "Version %s%s%s%s"
-msgstr ""
+msgstr "Версия %s%s%s%s"
