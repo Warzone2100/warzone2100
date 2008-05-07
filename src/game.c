@@ -7057,10 +7057,6 @@ BOOL loadSaveStructureV7(char *pFileData, UDWORD filesize, UDWORD numStructures)
 			abort();
 			continue;
 		}
-		/*create the Structure */
-		//psStructure = buildStructure((asStructureStats + psSaveStructure->
-		//	structureInc), psSaveStructure->pos.x, psSaveStructure->pos.y,
-		//	psSaveStructure->player);
 
 		//for modules - need to check the base structure exists
 		if (IsStatExpansionModule(psStats))
@@ -7561,8 +7557,7 @@ BOOL loadSaveStructureV19(char *pFileData, UDWORD filesize, UDWORD numStructures
 				    psModule = getModuleStat(psStructure);
 					capacity = psSaveStructure->capacity;
 					//build the appropriate number of modules
-                    buildStructure(psModule, psStructure->pos.x, psStructure->pos.y, psStructure->player, false);
-//					psStructure->sDisplay.imd = researchModuleIMDs[psSaveStructure->capacity-1];
+					buildStructure(psModule, psStructure->pos.x, psStructure->pos.y, psStructure->player, true);
 				}
 				break;
 			case REF_POWER_GEN:
@@ -7572,8 +7567,7 @@ BOOL loadSaveStructureV19(char *pFileData, UDWORD filesize, UDWORD numStructures
 				    psModule = getModuleStat(psStructure);
 					capacity = psSaveStructure->capacity;
 					//build the appropriate number of modules
-                    buildStructure(psModule, psStructure->pos.x, psStructure->pos.y, psStructure->player, false);
-//					psStructure->sDisplay.imd = powerModuleIMDs[psSaveStructure->capacity-1];
+					buildStructure(psModule, psStructure->pos.x, psStructure->pos.y, psStructure->player, true);
 				}
 				break;
 			case REF_RESOURCE_EXTRACTOR:
@@ -7906,9 +7900,8 @@ BOOL loadSaveStructureV(char *pFileData, UDWORD filesize, UDWORD numStructures, 
 					//build the appropriate number of modules
 					while (capacity)
 					{
-		                buildStructure(psModule, psStructure->pos.x, psStructure->pos.y,
-                            psStructure->player, false);
-                        capacity--;
+						buildStructure(psModule, psStructure->pos.x, psStructure->pos.y, psStructure->player, true);
+						capacity--;
 					}
 
 				}
@@ -7957,7 +7950,7 @@ BOOL loadSaveStructureV(char *pFileData, UDWORD filesize, UDWORD numStructures, 
 					psModule = getModuleStat(psStructure);
 					capacity = psSaveStructure->capacity;
 					//build the appropriate number of modules
-					buildStructure(psModule, psStructure->pos.x, psStructure->pos.y, psStructure->player, false);
+					buildStructure(psModule, psStructure->pos.x, psStructure->pos.y, psStructure->player, true);
 				}
 				//this is set up during module build - if the stats have changed it will also set up with the latest value
 				psResearch->powerAccrued = psSaveStructure->powerAccrued;
@@ -7996,8 +7989,7 @@ BOOL loadSaveStructureV(char *pFileData, UDWORD filesize, UDWORD numStructures, 
 				    psModule = getModuleStat(psStructure);
 					capacity = psSaveStructure->capacity;
 					//build the appropriate number of modules
-                    buildStructure(psModule, psStructure->pos.x, psStructure->pos.y, psStructure->player, false);
-//					psStructure->sDisplay.imd = powerModuleIMDs[psSaveStructure->capacity-1];
+					buildStructure(psModule, psStructure->pos.x, psStructure->pos.y, psStructure->player, true);
 				}
 				break;
 			case REF_RESOURCE_EXTRACTOR:

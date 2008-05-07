@@ -2023,7 +2023,7 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 			psBuilding->currentPowerAccrued = 0;
 			//start building again
 			psBuilding->status = SS_BEING_BUILT;
-			if (psBuilding->player == selectedPlayer)
+			if (psBuilding->player == selectedPlayer && !FromSave)
 			{
 				intResetScreen(false);	// hack to ensure we don't crash if a tab is removed
 				intRefreshScreen();
