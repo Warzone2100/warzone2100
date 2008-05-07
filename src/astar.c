@@ -319,7 +319,7 @@ static BOOL		obstruction;
 
 /** The visibility ray callback
  */
-static BOOL fpathVisCallback(SDWORD x, SDWORD y, SDWORD dist)
+static BOOL fpathVisCallback(SDWORD x, SDWORD y, SDWORD dist, PROPULSION_TYPE propulsion)
 {
 	SDWORD	vx,vy;
 
@@ -333,7 +333,7 @@ static BOOL fpathVisCallback(SDWORD x, SDWORD y, SDWORD dist)
 		return false;
 	}
 
-	if (fpathBlockingTile(map_coord(x), map_coord(y)))
+	if (fpathBlockingTile(map_coord(x), map_coord(y), propulsion))
 	{
 		// found an obstruction
 		obstruction = true;
@@ -358,8 +358,7 @@ BOOL fpathTileLOS(SDWORD x1,SDWORD y1, SDWORD x2,SDWORD y2)
 	vectorY = y1 - y2;
 	obstruction = false;
 
-	rayCast(x1,y1, rayPointsToAngle(x1,y1,x2,y2),
-			RAY_MAXLEN, fpathVisCallback);
+	rayCast(x1, y1, rayPointsToAngle(x1, y1, x2, y2), RAY_MAXLEN, INVALID_PROP_TYPE, fpathVisCallback);
 
 	return !obstruction;
 }
@@ -399,8 +398,7 @@ static void fpathOptimise(FP_NODE *psRoute)
 	} while (psCurr);
 }
 
-SDWORD fpathAStarRoute(SDWORD routeMode, ASTAR_ROUTE *psRoutePoints,
-					 SDWORD sx, SDWORD sy, SDWORD fx, SDWORD fy)
+SDWORD fpathAStarRoute(SDWORD routeMode, ASTAR_ROUTE *psRoutePoints, SDWORD sx, SDWORD sy, SDWORD fx, SDWORD fy, PROPULSION_TYPE propulsion)
 {
  	FP_NODE		*psFound, *psCurr, *psNew, *psParent, *psNext;
 static 	FP_NODE		*psNearest, *psRoute;
@@ -493,7 +491,7 @@ static 	FP_NODE		*psNearest, *psRoute;
 			}
 
 			// If the tile hasn't been visited see if it is a blocking tile
-			if (!psFound && fpathBlockingTile(x,y))
+			if (!psFound && fpathBlockingTile(x, y, propulsion))
 			{
 				// tile is blocked, skip it
 // 				debug( LOG_NEVER, "blocked          : %3d, %3d\n", x, y );

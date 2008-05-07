@@ -264,13 +264,10 @@ extern void templateSetName(DROID_TEMPLATE *psTemplate,char *pName);
 
 // returns true when no droid on x,y square.
 extern BOOL	noDroid					(UDWORD x, UDWORD y);				// true if no droid at x,y
-// returns true if it's a sensible place to put that droid.
-extern BOOL	sensiblePlace			(SDWORD x, SDWORD y);				// true if x,y is an ok place
 // returns an x/y coord to place a droid
 extern BOOL pickATile				(UDWORD *x0,UDWORD *y0, UBYTE numIterations);
 extern PICKTILE pickHalfATile		(UDWORD *x, UDWORD *y, UBYTE numIterations);
 extern BOOL	pickATile2				(UDWORD *x, UDWORD *y, UDWORD numIterations);
-extern	BOOL	normalPAT(UDWORD x, UDWORD y);
 extern	BOOL	zonedPAT(UDWORD x, UDWORD y);
 extern	BOOL	pickATileGen(UDWORD *x, UDWORD *y, UBYTE numIterations,
 					 BOOL (*function)(UDWORD x, UDWORD y));

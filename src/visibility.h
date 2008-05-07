@@ -30,10 +30,10 @@ extern BOOL visInitialise(void);
 extern BOOL visTilesPending(BASE_OBJECT *psObj);
 
 /* The terrain revealing ray callback */
-extern BOOL rayTerrainCallback(SDWORD x, SDWORD y, SDWORD dist);
+extern BOOL rayTerrainCallback(SDWORD x, SDWORD y, SDWORD dist, PROPULSION_TYPE propulsion);
 
 /* Ray callback for scripts */
-extern BOOL scrRayTerrainCallback(SDWORD x, SDWORD y, SDWORD dist);
+extern BOOL scrRayTerrainCallback(SDWORD x, SDWORD y, SDWORD dist, PROPULSION_TYPE propulsion);
 
 /* Check which tiles can be seen by an object */
 extern void visTilesUpdate(BASE_OBJECT *psObj, RAY_CALLBACK callback);

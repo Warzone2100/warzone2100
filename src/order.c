@@ -1565,7 +1565,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 	case DORDER_SCOUT:
 		// can't move vtols to blocking tiles
 		if (vtolDroid(psDroid)
-		 && (fpathGroundBlockingTile(map_coord(psOrder->x), map_coord(psOrder->y))
+		 && (fpathBlockingTile(map_coord(psOrder->x), map_coord(psOrder->y), getPropulsionStats(psDroid)->propulsionType)
 		  || !TEST_TILE_VISIBLE(psDroid->player, mapTile(map_coord(psOrder->x), map_coord(psOrder->y)))))
 		{
 			break;
@@ -1574,11 +1574,8 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		if (game.maxPlayers > 0)
 		{
 			if (psDroid->droidType == DROID_TRANSPORTER
-			 && (fpathGroundBlockingTile(map_coord(psOrder->x),
-			                             map_coord(psOrder->y))
-			  || !TEST_TILE_VISIBLE(psDroid->player,
-			                        mapTile(map_coord(psOrder->x),
-			                        map_coord(psOrder->y)))))
+			    && (fpathBlockingTile(map_coord(psOrder->x), map_coord(psOrder->y), getPropulsionStats(psDroid)->propulsionType)
+			        || !TEST_TILE_VISIBLE(psDroid->player, mapTile(map_coord(psOrder->x), map_coord(psOrder->y)))))
 			{
 				break;
 			}
@@ -2674,11 +2671,20 @@ static BOOL orderDroidObjAdd(DROID *psDroid, DROID_ORDER order, BASE_OBJECT *psO
 /* Choose an order for a droid from a location */
 DROID_ORDER chooseOrderLoc(DROID *psDroid, UDWORD x,UDWORD y)
 {
-	DROID_ORDER		order;
-	SECONDARY_STATE			state;
+	DROID_ORDER		order = DORDER_NONE;
+	SECONDARY_STATE		state;
+	PROPULSION_TYPE		propulsion = getPropulsionStats(psDroid)->propulsionType;
 
-	// default to move
-	order = DORDER_MOVE;
+	// default to move; however, we can only end up on a tile
+	// where can stay, ie VTOLs must be able to land as well
+	if (vtolDroid(psDroid))
+	{
+		propulsion = WHEELED;
+	}
+	if (!fpathBlockingTile(map_coord(x), map_coord(y), propulsion))
+	{
+		order = DORDER_MOVE;
+	}
 
 	// scout if shift was pressed
 	if(keyDown(KEY_LSHIFT) || keyDown(KEY_RSHIFT))
@@ -2686,28 +2692,15 @@ DROID_ORDER chooseOrderLoc(DROID *psDroid, UDWORD x,UDWORD y)
 		order = DORDER_SCOUT;
 	}
 
-	/*if(psDroid->droidType == DROID_TRANSPORTER)
+	// and now we want Transporters to fly! - in multiPlayer!!
+	if (psDroid->droidType == DROID_TRANSPORTER && game.maxPlayers != 0)
 	{
-		order = DORDER_NONE;
-	}*/
-	//VTOL Droids won't move to a location - only to a target object -
-	//this cope with Transporters as well - not any more! AB 16/11/98
-//	if (vtolDroid(psDroid) || psDroid->droidType == DROID_TRANSPORTER)
-
-    //and now we want Transporters to fly! - in multiPlayer!!
-    if (psDroid->droidType == DROID_TRANSPORTER)
-	{
-        //if (!bMultiPlayer)
-        if (game.maxPlayers == 0)
-        {
-		    order = DORDER_NONE;
-        }
-        /*in MultiPlayer - if ALT-key is pressed then need to get the Transporter
-        to fly to location and all units disembark*/
-        else if (keyDown(KEY_LALT) || keyDown(KEY_RALT))
-        {
-            order = DORDER_DISEMBARK;
-        }
+		/* in MultiPlayer - if ALT-key is pressed then need to get the Transporter
+		 * to fly to location and all units disembark */
+		if (keyDown(KEY_LALT) || keyDown(KEY_RALT))
+		{
+			order = DORDER_DISEMBARK;
+		}
 	}
 	else if (secondaryGetState(psDroid, DSO_CIRCLE, &state) &&
 		state == DSS_CIRCLE_SET)
@@ -2733,11 +2726,8 @@ DROID_ORDER chooseOrderLoc(DROID *psDroid, UDWORD x,UDWORD y)
 */
 void orderSelectedLocAdd(UDWORD player, UDWORD x, UDWORD y, BOOL add)
 {
-	DROID			*psCurr;//, *psPrev;
+	DROID			*psCurr;
 	DROID_ORDER		order;
-//	FORMATION		*psFormation = NULL;
-
-//	DBPRINTF(("orderSelectedLoc: player %d -> (%d,%d)\n", player, x,y));
 
 	//if were in build select mode ignore all other clicking
 	if (intBuildSelectMode())
@@ -2745,12 +2735,10 @@ void orderSelectedLocAdd(UDWORD player, UDWORD x, UDWORD y, BOOL add)
 		return;
 	}
 
-
 	if (!add && bMultiPlayer && SendGroupOrderSelected((UBYTE)player,x,y,NULL) )
 	{	// turn off multiplay messages,since we've send a group one instead.
 		turnOffMultiMsg(true);
 	}
-
 
 	// remove any units from their command group
 	for(psCurr = apsDroidLists[player]; psCurr; psCurr=psCurr->psNext)
@@ -2764,23 +2752,19 @@ void orderSelectedLocAdd(UDWORD player, UDWORD x, UDWORD y, BOOL add)
 	// note that an order list graphic needs to be displayed
 	bOrderEffectDisplayed = false;
 
-	//	psPrev = NULL;
 	for(psCurr = apsDroidLists[player]; psCurr; psCurr=psCurr->psNext)
 	{
 		if (psCurr->selected)
 		{
-			order = chooseOrderLoc(psCurr, x,y);
+			order = chooseOrderLoc(psCurr, x, y);
 			// see if the order can be added to the list
-			if (!(add && orderDroidLocAdd(psCurr, order, x,y)))
+			if (order != DORDER_NONE && !(add && orderDroidLocAdd(psCurr, order, x, y)))
 			{
 				// if not just do it straight off
 				orderDroidLoc(psCurr, order, x,y);
 			}
 		}
 	}
-
-	//might be a Delivery Point of a factory
-	//processDeliveryPoint(player,x,y);
 
 	turnOffMultiMsg(false);	// msgs back on...
 }

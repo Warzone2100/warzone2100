@@ -76,9 +76,6 @@ static SDWORD		finalX,finalY;			// The final tile of the ray cast
 static SDWORD		numWalls;				// Whether the LOS has hit a wall
 static SDWORD		wallX,wallY;			// the position of a wall if it is on the LOS
 
-BOOL rayTerrainCallback(SDWORD x, SDWORD y, SDWORD dist);
-BOOL scrRayTerrainCallback(SDWORD x, SDWORD y, SDWORD dist);
-
 // holds information about map tiles visible by droids
 static bool	scrTileVisible[MAX_PLAYERS][UBYTE_MAX][UBYTE_MAX] = {{{false}}};
 
@@ -133,7 +130,7 @@ static SDWORD visObjHeight(const BASE_OBJECT * const psObject)
 }
 
 /* The terrain revealing ray callback */
-BOOL rayTerrainCallback(SDWORD x, SDWORD y, SDWORD dist)
+BOOL rayTerrainCallback(SDWORD x, SDWORD y, SDWORD dist, PROPULSION_TYPE propulsion)
 {
 	SDWORD		newH, newG;		// The new gradient
 	MAPTILE		*psTile;
@@ -186,7 +183,7 @@ BOOL rayTerrainCallback(SDWORD x, SDWORD y, SDWORD dist)
 }
 
 /* The los ray callback */
-static BOOL rayLOSCallback(SDWORD x, SDWORD y, SDWORD dist)
+static BOOL rayLOSCallback(SDWORD x, SDWORD y, SDWORD dist, PROPULSION_TYPE propulsion)
 {
 	SDWORD		newG;		// The new gradient
 	SDWORD		distSq;
@@ -282,7 +279,7 @@ void visTilesUpdate(BASE_OBJECT *psObj, RAY_CALLBACK callback)
 		currG = -UBYTE_MAX * GRAD_MUL;
 
 		// Cast the rays from the viewer
-		rayCast(psObj->pos.x, psObj->pos.y,ray, range, callback);
+		rayCast(psObj->pos.x, psObj->pos.y,ray, range, INVALID_PROP_TYPE, callback);
 	}
 }
 
@@ -418,7 +415,7 @@ BOOL visibleObject(const BASE_OBJECT* psViewer, const BASE_OBJECT* psTarget)
 	finalY = map_coord(psTarget->pos.y);
 
 	// Cast a ray from the viewer to the target
-	rayCast(x,y, ray, range, rayLOSCallback);
+	rayCast(x,y, ray, range, INVALID_PROP_TYPE, rayLOSCallback);
 
 	// See if the target can be seen
 	top = ((SDWORD)psTarget->pos.z + visObjHeight(psTarget) - startH);
@@ -749,7 +746,7 @@ void updateSensorDisplay()
 	}
 }
 
-BOOL scrRayTerrainCallback(SDWORD x, SDWORD y, SDWORD dist)
+BOOL scrRayTerrainCallback(SDWORD x, SDWORD y, SDWORD dist, PROPULSION_TYPE propulsion)
 {
 	SDWORD		newH, newG;		// The new gradient
 	MAPTILE		*psTile;

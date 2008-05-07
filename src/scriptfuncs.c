@@ -5576,38 +5576,42 @@ static BOOL structDoubleCheck(BASE_STATS *psStat,UDWORD xx,UDWORD yy, SDWORD max
 	y = yTL;	// top
 	for(x = xTL;x!=xBR+1;x++)
 	{
-		if(fpathGroundBlockingTile(x,y))
+		if (fpathBlockingTile(x, y, WHEELED))
 		{
 			count++;
 			break;
-		}}
+		}
+	}
 
 	y = yBR;	// bottom
 	for(x = xTL;x!=xBR+1;x++)
 	{
-		if(fpathGroundBlockingTile(x,y))
+		if (fpathBlockingTile(x, y, WHEELED))
 		{
 			count++;
 			break;
-		}}
+		}
+	}
 
 	x = xTL;	// left
 	for(y = yTL+1; y!=yBR; y++)
 	{
-		if(fpathGroundBlockingTile(x,y))
+		if (fpathBlockingTile(x, y, WHEELED))
 		{
 			count++;
 			break;
-		}}
+		}
+	}
 
 	x = xBR;	// right
 	for(y = yTL+1; y!=yBR; y++)
 	{
-		if(fpathGroundBlockingTile(x,y))
+		if (fpathBlockingTile(x, y, WHEELED))
 		{
 			count++;
 			break;
-		}}
+		}
+	}
 
 	//make sure this location is not blocked from too many sides
 	if((count <= maxBlockingTiles) || (maxBlockingTiles == -1))

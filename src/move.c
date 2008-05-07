@@ -600,17 +600,17 @@ static void moveShuffleDroid(DROID *psDroid, UDWORD shuffleStart, SDWORD sx, SDW
 
 	// check for blocking tiles
 	if (fpathBlockingTile(map_coord((SDWORD)psDroid->pos.x + lvx),
-	                      map_coord((SDWORD)psDroid->pos.y + lvy)))
+	                      map_coord((SDWORD)psDroid->pos.y + lvy), getPropulsionStats(psDroid)->propulsionType))
 	{
 		leftClear = false;
 	}
 	else if (fpathBlockingTile(map_coord((SDWORD)psDroid->pos.x + rvx),
-	                           map_coord((SDWORD)psDroid->pos.y + rvy)))
+	                           map_coord((SDWORD)psDroid->pos.y + rvy), getPropulsionStats(psDroid)->propulsionType))
 	{
 		rightClear = false;
 	}
 	else if (fpathBlockingTile(map_coord((SDWORD)psDroid->pos.x + svx),
-	                           map_coord((SDWORD)psDroid->pos.y + svy)))
+	                           map_coord((SDWORD)psDroid->pos.y + svy), getPropulsionStats(psDroid)->propulsionType))
 	{
 		frontClear = false;
 	}
@@ -1161,6 +1161,7 @@ static void moveCalcBlockingSlide(DROID *psDroid, float *pmx, float *pmy, SDWORD
 	SDWORD	horizX,horizY, vertX,vertY;
 	BOOL	blocked;
 	SDWORD	slideDir;
+	PROPULSION_TYPE	propulsion = getPropulsionStats(psDroid)->propulsionType;
 
 	CHECK_DROID(psDroid);
 
@@ -1175,7 +1176,7 @@ static void moveCalcBlockingSlide(DROID *psDroid, float *pmx, float *pmy, SDWORD
 	nty = map_coord(ny);
 
 	// is the new tile blocking?
-	if (fpathBlockingTile(ntx,nty))
+	if (fpathBlockingTile(ntx, nty, propulsion))
 	{
 		blocked = true;
 	}
@@ -1219,7 +1220,7 @@ static void moveCalcBlockingSlide(DROID *psDroid, float *pmx, float *pmy, SDWORD
 		vertX = ntx;
 		vertY = my < 0 ? nty + 1 : nty - 1;
 
-		if (fpathBlockingTile(horizX,horizY) && fpathBlockingTile(vertX,vertY))
+		if (fpathBlockingTile(horizX, horizY, propulsion) && fpathBlockingTile(vertX, vertY, propulsion))
 		{
 			// in a corner - choose an arbitrary slide
 			if (ONEINTWO)
@@ -1233,11 +1234,11 @@ static void moveCalcBlockingSlide(DROID *psDroid, float *pmx, float *pmy, SDWORD
 				*pmy = 0;
 			}
 		}
-		else if (fpathBlockingTile(horizX,horizY))
+		else if (fpathBlockingTile(horizX, horizY, propulsion))
 		{
 			*pmy = 0;
 		}
-		else if (fpathBlockingTile(vertX,vertY))
+		else if (fpathBlockingTile(vertX, vertY, propulsion))
 		{
 			*pmx = 0;
 		}
@@ -1252,7 +1253,7 @@ static void moveCalcBlockingSlide(DROID *psDroid, float *pmx, float *pmy, SDWORD
 		if ((psDroid->pos.y & TILE_MASK) > TILE_UNITS/2)
 		{
 			// top half
-			if (fpathBlockingTile(ntx,nty+1))
+			if (fpathBlockingTile(ntx, nty + 1, propulsion))
 			{
 				*pmx = 0;
 			}
@@ -1264,7 +1265,7 @@ static void moveCalcBlockingSlide(DROID *psDroid, float *pmx, float *pmy, SDWORD
 		else
 		{
 			// bottom half
-			if (fpathBlockingTile(ntx,nty-1))
+			if (fpathBlockingTile(ntx, nty - 1, propulsion))
 			{
 				*pmx = 0;
 			}
@@ -1280,7 +1281,7 @@ static void moveCalcBlockingSlide(DROID *psDroid, float *pmx, float *pmy, SDWORD
 		if ((psDroid->pos.x & TILE_MASK) > TILE_UNITS/2)
 		{
 			// top half
-			if (fpathBlockingTile(ntx+1,nty))
+			if (fpathBlockingTile(ntx + 1, nty, propulsion))
 			{
 				*pmy = 0;
 			}
@@ -1292,7 +1293,7 @@ static void moveCalcBlockingSlide(DROID *psDroid, float *pmx, float *pmy, SDWORD
 		else
 		{
 			// bottom half
-			if (fpathBlockingTile(ntx-1,nty))
+			if (fpathBlockingTile(ntx - 1, nty, propulsion))
 			{
 				*pmy = 0;
 			}
@@ -1316,12 +1317,12 @@ static void moveCalcBlockingSlide(DROID *psDroid, float *pmx, float *pmy, SDWORD
 			if (inty < TILE_UNITS/2)
 			{
 				// top left
-				if ((mx < 0) && fpathBlockingTile(tx-1, ty))
+				if ((mx < 0) && fpathBlockingTile(tx - 1, ty, propulsion))
 				{
 					bJumped = true;
 					jumpy = (jumpy & ~TILE_MASK) -1;
 				}
-				if ((my < 0) && fpathBlockingTile(tx, ty-1))
+				if ((my < 0) && fpathBlockingTile(tx, ty - 1, propulsion))
 				{
 					bJumped = true;
 					jumpx = (jumpx & ~TILE_MASK) -1;
@@ -1330,12 +1331,12 @@ static void moveCalcBlockingSlide(DROID *psDroid, float *pmx, float *pmy, SDWORD
 			else
 			{
 				// bottom left
-				if ((mx < 0) && fpathBlockingTile(tx-1, ty))
+				if ((mx < 0) && fpathBlockingTile(tx - 1, ty, propulsion))
 				{
 					bJumped = true;
 					jumpy = (jumpy & ~TILE_MASK) + TILE_UNITS;
 				}
-				if ((my >= 0) && fpathBlockingTile(tx, ty+1))
+				if ((my >= 0) && fpathBlockingTile(tx, ty + 1, propulsion))
 				{
 					bJumped = true;
 					jumpx = (jumpx & ~TILE_MASK) -1;
@@ -1347,12 +1348,12 @@ static void moveCalcBlockingSlide(DROID *psDroid, float *pmx, float *pmy, SDWORD
 			if (inty < TILE_UNITS/2)
 			{
 				// top right
-				if ((mx >= 0) && fpathBlockingTile(tx+1, ty))
+				if ((mx >= 0) && fpathBlockingTile(tx + 1, ty, propulsion))
 				{
 					bJumped = true;
 					jumpy = (jumpy & ~TILE_MASK) -1;
 				}
-				if ((my < 0) && fpathBlockingTile(tx, ty-1))
+				if ((my < 0) && fpathBlockingTile(tx, ty - 1, propulsion))
 				{
 					bJumped = true;
 					jumpx = (jumpx & ~TILE_MASK) + TILE_UNITS;
@@ -1361,12 +1362,12 @@ static void moveCalcBlockingSlide(DROID *psDroid, float *pmx, float *pmy, SDWORD
 			else
 			{
 				// bottom right
-				if ((mx >= 0) && fpathBlockingTile(tx+1, ty))
+				if ((mx >= 0) && fpathBlockingTile(tx + 1, ty, propulsion))
 				{
 					bJumped = true;
 					jumpy = (jumpy & ~TILE_MASK) + TILE_UNITS;
 				}
-				if ((my >= 0) && fpathBlockingTile(tx, ty+1))
+				if ((my >= 0) && fpathBlockingTile(tx, ty + 1, propulsion))
 				{
 					bJumped = true;
 					jumpx = (jumpx & ~TILE_MASK) + TILE_UNITS;
@@ -1568,11 +1569,9 @@ static void moveGetObstacleVector(DROID *psDroid, float *pX, float *pY)
 	float				omag, ox, oy, ratio;
 	float				avoidX, avoidY;
 	SDWORD				mapX, mapY, tx, ty, td;
-	PROPULSION_STATS	*psPropStats;
+	PROPULSION_STATS		*psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
 
-	psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
-	ASSERT( psPropStats != NULL,
-			"moveUpdateUnit: invalid propulsion stats pointer" );
+	ASSERT(psPropStats, "invalid propulsion stats pointer");
 
 	droidGetNaybors(psDroid);
 
@@ -1640,7 +1639,7 @@ static void moveGetObstacleVector(DROID *psDroid, float *pX, float *pY)
 				// object behind
 				continue;
 			}
-			if (fpathBlockingTile(mapX+xdiff, mapY+ydiff))
+			if (fpathBlockingTile(mapX + xdiff, mapY + ydiff, psPropStats->propulsionType))
 			{
 				tx = world_coord(xdiff);
 				ty = world_coord(ydiff);
@@ -2548,9 +2547,7 @@ static void moveUpdateVtolModel(DROID *psDroid, SDWORD speed, SDWORD direction)
 	/* set slide blocking tile for map edge */
 	if ( psDroid->droidType != DROID_TRANSPORTER )
 	{
-		fpathBlockingTile = fpathLiftSlideBlockingTile;
 		moveCalcBlockingSlide( psDroid, &dx, &dy, direction, &slideDir );
-		fpathBlockingTile = fpathGroundBlockingTile;
 	}
 
 	moveUpdateDroidPos( psDroid, dx, dy );
@@ -3048,8 +3045,6 @@ void moveUpdateDroid(DROID *psDroid)
 	/* save current motion status of droid */
 	bStopped = moveDroidStopped( psDroid, 0 );
 
-	fpathSetBlockingTile( psPropStats->propulsionType );
-
 	moveSpeed = 0;
 	moveDir = psDroid->direction;
 
@@ -3121,7 +3116,6 @@ void moveUpdateDroid(DROID *psDroid)
 
 			turnOffMultiMsg(true);
 			moveDroidTo(psDroid, psDroid->sMove.DestinationX,psDroid->sMove.DestinationY);
-			fpathSetBlockingTile( psPropStats->propulsionType );
 			turnOffMultiMsg(false);
 		}
 		else if ((psDroid->sMove.Status == MOVESHUFFLE) ||
@@ -3165,7 +3159,6 @@ void moveUpdateDroid(DROID *psDroid)
 		break;
 	case MOVEWAITROUTE:
 		moveDroidTo(psDroid, psDroid->sMove.DestinationX,psDroid->sMove.DestinationY);
-		fpathSetBlockingTile( psPropStats->propulsionType );
 		break;
 	case MOVENAVIGATE:
 		// Get the next control point
@@ -3231,15 +3224,8 @@ void moveUpdateDroid(DROID *psDroid)
 			moveCalcBoundary(psDroid);
 		}
 
-		if (psDroid->sMove.psFormation &&
-			psDroid->sMove.Position == psDroid->sMove.numPoints)
+		if (psDroid->sMove.psFormation && psDroid->sMove.Position == psDroid->sMove.numPoints)
 		{
-			if (vtolDroid(psDroid))
-			{
-				// vtols have to use the ground blocking tile when they are going to land
-				fpathBlockingTile = fpathGroundBlockingTile;
-			}
-
 			if (formationGetPos(psDroid->sMove.psFormation, psDroid, &fx,&fy,true))
 			{
 				psDroid->sMove.targetX = fx;
@@ -3434,9 +3420,6 @@ void moveUpdateDroid(DROID *psDroid)
 //			}
 //		}
 //	}
-
-	// reset the blocking tile function and current object
-	fpathBlockingTile = fpathGroundBlockingTile;
 
 	/* If it's sitting in water then it's got to go with the flow! */
 	if (terrainType(mapTile(psDroid->pos.x/TILE_UNITS,psDroid->pos.y/TILE_UNITS)) == TER_WATER)

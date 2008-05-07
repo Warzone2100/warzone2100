@@ -140,7 +140,7 @@ BOOL rayInitialise(void)
  * Sorry about the wacky angle set up but that was what I thought
  * warzone used, but turned out not to be after I wrote it.
  */
-void rayCast(UDWORD x, UDWORD y, UDWORD ray, UDWORD length, RAY_CALLBACK callback)
+void rayCast(UDWORD x, UDWORD y, UDWORD ray, UDWORD length, PROPULSION_TYPE propulsion, RAY_CALLBACK callback)
 {
 	SDWORD		hdInc=0, vdInc=0;		// increases in x and y distance per intersection
 	SDWORD		hDist, vDist;		// distance to current horizontal and vertical intersectionse
@@ -238,7 +238,7 @@ void rayCast(UDWORD x, UDWORD y, UDWORD ray, UDWORD length, RAY_CALLBACK callbac
 			}
 
 			// pass through the current intersection, converting x from fixed point
-			if (!callback( sHoriz.x >> RAY_ACC,sHoriz.y, hDist))
+			if (!callback( sHoriz.x >> RAY_ACC,sHoriz.y, hDist, propulsion))
 			{
 				// callback doesn't want any more points so return
 				return;
@@ -259,7 +259,7 @@ void rayCast(UDWORD x, UDWORD y, UDWORD ray, UDWORD length, RAY_CALLBACK callbac
 			}
 
 			// pass through the current intersection, converting y from fixed point
-			if (!callback( sVert.x,sVert.y >> RAY_ACC, vDist))
+			if (!callback( sVert.x,sVert.y >> RAY_ACC, vDist, propulsion))
 			{
 				// callback doesn't want any more points so return
 				return;
@@ -344,7 +344,7 @@ SDWORD rayPointDist(SDWORD x1,SDWORD y1, SDWORD x2,SDWORD y2,
 	from wherever you specify, as well as the distance away
 */
 //-----------------------------------------------------------------------------------
-static BOOL	getTileHighestCallback(SDWORD x, SDWORD y, SDWORD dist)
+static BOOL	getTileHighestCallback(SDWORD x, SDWORD y, SDWORD dist, PROPULSION_TYPE propulsion)
 {
 	if(clipXY(x,y))
 	{
@@ -364,9 +364,10 @@ static BOOL	getTileHighestCallback(SDWORD x, SDWORD y, SDWORD dist)
 	return(true);
 
 }
+
 //-----------------------------------------------------------------------------------
 /* Will return false when we've hit the edge of the grid */
-static BOOL	getTileHeightCallback(SDWORD x, SDWORD y, SDWORD dist)
+static BOOL	getTileHeightCallback(SDWORD x, SDWORD y, SDWORD dist, PROPULSION_TYPE propulsion)
 {
 #ifdef TEST_RAY
 	Vector3i pos;
@@ -444,10 +445,7 @@ void	getBestPitchToEdgeOfGrid(UDWORD x, UDWORD y, UDWORD direction, SDWORD *pitc
 	gHeight = map_Height(x,y);
 	gStartTileX = map_coord(x);
 	gStartTileY = map_coord(y);
-//#ifdef TEST_RAY
-//DBPRINTF(("%d\n",direction);
-//#endif
-	rayCast(x,y, direction%360,5430,getTileHeightCallback);
+	rayCast(x, y, direction % 360, 5430, INVALID_PROP_TYPE, getTileHeightCallback);
 	*pitch = gPitch;
 }
 
@@ -458,6 +456,6 @@ void	getPitchToHighestPoint( UDWORD x, UDWORD y, UDWORD direction,
 	gHOrigHeight = map_Height(x,y);
 	gHighestHeight = map_Height(x,y);
 	gHMinDist = thresholdDistance;
-	rayCast(x,y,direction%360,3000,getTileHighestCallback);
+	rayCast(x, y, direction % 360, 3000, INVALID_PROP_TYPE, getTileHighestCallback);
 	*pitch = gHPitch;
 }

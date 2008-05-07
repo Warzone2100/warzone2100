@@ -81,8 +81,7 @@ enum
  *
  *  @ingroup pathfinding
  */
-extern SDWORD fpathAStarRoute(SDWORD routeMode, ASTAR_ROUTE *psRoutePoints,
-							SDWORD sx, SDWORD sy, SDWORD fx, SDWORD fy);
+SDWORD fpathAStarRoute(SDWORD routeMode, ASTAR_ROUTE *psRoutePoints, SDWORD sx, SDWORD sy, SDWORD fx, SDWORD fy, PROPULSION_TYPE propulsion);
 
 /** Check LOS (Line Of Sight) between two tiles
  */

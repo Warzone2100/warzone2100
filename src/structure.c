@@ -2370,7 +2370,7 @@ static BOOL structClearTile(UWORD x, UWORD y)
 	DROID	*psCurr;
 
 	/* Check for a structure */
-	if(fpathBlockingTile(x,y))
+	if (fpathBlockingTile(x, y, WHEELED))
 	{
 		debug(LOG_NEVER, "failed - blocked");
 		return false;
@@ -4474,7 +4474,7 @@ BOOL validLocation(BASE_STATS *psStats, UDWORD x, UDWORD y, UDWORD player,
 	{
 		// not positioning a structure
 		valid = true;
-		if (fpathGroundBlockingTile(x,y))
+		if (fpathBlockingTile(x, y, WHEELED))
 		{
 			valid = false;
 		}

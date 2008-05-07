@@ -62,9 +62,6 @@ static const Vector2i aDirOffset[NUM_DIR] =
 	{ 1, 1},
 };
 
-// function pointer for the blocking tile check
-BOOL (*fpathBlockingTile)(SDWORD x, SDWORD y);
-
 // if a route is spread over a number of frames this stores the droid
 // the route is being done for
 static DROID* psPartialRouteDroid = NULL;
@@ -76,12 +73,10 @@ static SDWORD partialSX,partialSY, partialTX,partialTY;
 static SDWORD	lastPartialFrame;
 
 static BOOL fpathFindRoute(DROID *psDroid, SDWORD sX,SDWORD sY, SDWORD tX,SDWORD tY);
-static BOOL fpathLiftBlockingTile(SDWORD x, SDWORD y);
 
 // initialise the findpath module
 BOOL fpathInitialise(void)
 {
-	fpathBlockingTile = fpathGroundBlockingTile;
 	psPartialRouteDroid = NULL;
 
 	return true;
@@ -106,96 +101,42 @@ void fpathUpdate(void)
 }
 
 // Check if the map tile at a location blocks a droid
-BOOL fpathGroundBlockingTile(SDWORD x, SDWORD y)
+BOOL fpathBlockingTile(SDWORD x, SDWORD y, PROPULSION_TYPE propulsion)
 {
 	MAPTILE	*psTile;
 
-	/* check VTOL limits if not routing */
-	if (x < scrollMinX + 1
-	 || y < scrollMinY + 1
-	 || x >= scrollMaxX - 1
-	 || y >= scrollMaxY - 1)
-	{
-		// coords off map - auto blocking tile
-		return true;
-	}
-
-	ASSERT(x >= 0 && y >= 0 && x < mapWidth && y < mapHeight, "fpathGroundBlockingTile: off map")
-
-	psTile = mapTile(x, y);
-
-	if (psTile->tileInfoBits & BITS_FPATHBLOCK
-	 || (TileIsOccupied(psTile)
-	  && !TILE_IS_NOTBLOCKING(psTile))
-	 || terrainType(psTile) == TER_CLIFFFACE
-	 || terrainType(psTile) == TER_WATER)
-	{
-		return true;
-	}
-
-	return false;
-}
-
-// Check if the map tile at a location blocks a droid
-BOOL fpathHoverBlockingTile(SDWORD x, SDWORD y)
-{
-	MAPTILE	*psTile;
-
-	if (x < scrollMinX + 1
-	 || y < scrollMinY + 1
-	 || x >= scrollMaxX - 1
-	 || y >= scrollMaxY - 1)
-	{
-		// coords off map - auto blocking tile
-		return true;
-	}
-
-	ASSERT(x >= 0 && y >= 0 && x < mapWidth && y < mapHeight, "fpathHoverBlockingTile: off map")
-
-	psTile = mapTile(x, y);
-
-	if (psTile->tileInfoBits & BITS_FPATHBLOCK
-	 || (TileIsOccupied(psTile)
-	  && !TILE_IS_NOTBLOCKING(psTile))
-	 || terrainType(psTile) == TER_CLIFFFACE)
-	{
-		return true;
-	}
-
-	return false;
-}
-
-/** Check if the map tile at a location blocks a VTOL droid
- *
- *  @ingroup pathfinding
- */
-static BOOL fpathLiftBlockingTile(SDWORD x, SDWORD y)
-{
-	MAPTILE		*psTile;
-
-	// All tiles outside of the map are blocking
+	/* All tiles outside of the map and on map border are blocking. */
 	if (x < 1 || y < 1 || x >= mapWidth - 1 || y >= mapHeight - 1)
 	{
 		return true;
 	}
 
-	psTile = mapTile(x, y);
-
-	// Only tall structures are blocking now
-	return TileHasTallStructure(psTile);
-}
-
-// Check if an edge map tile blocks a vtol (for sliding at map edge)
-BOOL fpathLiftSlideBlockingTile(SDWORD x, SDWORD y)
-{
-	if (x < 1 || y < 1 || x >= mapWidth - 1 || y >= mapHeight - 1)
+	/* Check scroll limits (used in campaign to partition the map. */
+	if (propulsion != LIFT && (x < scrollMinX + 1 || y < scrollMinY + 1 || x >= scrollMaxX - 1 || y >= scrollMaxY - 1))
 	{
+		// coords off map - auto blocking tile
 		return true;
 	}
-	else
+
+	psTile = mapTile(x, y);
+
+	// Only tall structures are blocking VTOL now
+	if (propulsion == LIFT && !TileHasTallStructure(psTile))
 	{
 		return false;
 	}
+	else if (propulsion == LIFT)
+	{
+		return true;
+	}
+
+	if (psTile->tileInfoBits & BITS_FPATHBLOCK || (TileIsOccupied(psTile) && !TILE_IS_NOTBLOCKING(psTile))
+	    || terrainType(psTile) == TER_CLIFFFACE || (terrainType(psTile) == TER_WATER && propulsion != HOVER))
+	{
+		return true;
+	}
+
+	return false;
 }
 
 /** Calculate the distance to a tile from a point
@@ -222,9 +163,9 @@ static BOOL		obstruction;
  *
  *  @ingroup pathfinding
  */
-static BOOL fpathEndPointCallback(SDWORD x, SDWORD y, SDWORD dist)
+static BOOL fpathEndPointCallback(SDWORD x, SDWORD y, SDWORD dist, PROPULSION_TYPE propulsion)
 {
-	SDWORD	vx,vy;
+	SDWORD			vx, vy;
 
 	dist = dist;
 
@@ -237,7 +178,7 @@ static BOOL fpathEndPointCallback(SDWORD x, SDWORD y, SDWORD dist)
 	}
 
 	// note the last clear tile
-	if (!fpathBlockingTile(map_coord(x), map_coord(y)))
+	if (!fpathBlockingTile(map_coord(x), map_coord(y), propulsion))
 	{
 		clearX = (x & ~TILE_MASK) + TILE_UNITS/2;
 		clearY = (y & ~TILE_MASK) + TILE_UNITS/2;
@@ -333,7 +274,7 @@ static BOOL fpathRouteCloser(MOVE_CONTROL *psMoveCntl, ASTAR_ROUTE *psAStarRoute
  *  @ingroup pathfinding
  */
 static FPATH_RETVAL fpathGatewayRoute(DROID* psDroid, SDWORD routeMode, SDWORD sx, SDWORD sy, 
-                                      SDWORD fx, SDWORD fy, MOVE_CONTROL *psMoveCntl)
+                                      SDWORD fx, SDWORD fy, MOVE_CONTROL *psMoveCntl, PROPULSION_TYPE propulsion)
 {
 	static ASTAR_ROUTE	sAStarRoute;
 	int			asret;
@@ -347,7 +288,7 @@ static FPATH_RETVAL fpathGatewayRoute(DROID* psDroid, SDWORD routeMode, SDWORD s
 
 	objTrace(LOG_MOVEMENT, psDroid->id, "fpathGatewayRoute: astar route : (%d,%d) -> (%d,%d)",
 		map_coord(sx), map_coord(sy), map_coord(fx), map_coord(fy));
-	asret = fpathAStarRoute(routeMode, &sAStarRoute, sx, sy, fx,fy);
+	asret = fpathAStarRoute(routeMode, &sAStarRoute, sx, sy, fx,fy, propulsion);
 	if (asret == ASR_PARTIAL)
 	{
 		// routing hasn't finished yet
@@ -387,22 +328,6 @@ static FPATH_RETVAL fpathGatewayRoute(DROID* psDroid, SDWORD routeMode, SDWORD s
 			fpathAppendRoute(psMoveCntl, &sAStarRoute);
 		}
 		return FPR_OK;
-	}
-}
-
-// set the correct blocking tile function
-void fpathSetBlockingTile( UBYTE ubPropulsionType )
-{
-	switch ( ubPropulsionType )
-	{
-	case HOVER:
-		fpathBlockingTile = fpathHoverBlockingTile;
-		break;
-	case LIFT:
-		fpathBlockingTile = fpathLiftBlockingTile;
-		break;
-	default:
-		fpathBlockingTile = fpathGroundBlockingTile;
 	}
 }
 
@@ -454,13 +379,11 @@ FPATH_RETVAL fpathRoute(DROID* psDroid, SDWORD tX, SDWORD tY)
 	psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
 	ASSERT(psPropStats != NULL, "invalid propulsion stats pointer");
 
-	fpathSetBlockingTile( psPropStats->propulsionType );
-
 	if (psPartialRouteDroid == NULL || psPartialRouteDroid != psDroid)
 	{
 		// check whether the start point of the route
 		// is a blocking tile and find an alternative if it is
-		if (fpathBlockingTile(map_coord(startX), map_coord(startY)))
+		if (fpathBlockingTile(map_coord(startX), map_coord(startY), psPropStats->propulsionType))
 		{
 			// find the nearest non blocking tile to the DROID
 			minDist = SDWORD_MAX;
@@ -469,7 +392,7 @@ FPATH_RETVAL fpathRoute(DROID* psDroid, SDWORD tX, SDWORD tY)
 			{
 				int x = map_coord(startX) + aDirOffset[dir].x;
 				int y = map_coord(startY) + aDirOffset[dir].y;
-				if (!fpathBlockingTile(x,y))
+				if (!fpathBlockingTile(x, y, psPropStats->propulsionType))
 				{
 					tileDist = fpathDistToTile(x,y, startX,startY);
 					if (tileDist < minDist)
@@ -483,9 +406,8 @@ FPATH_RETVAL fpathRoute(DROID* psDroid, SDWORD tX, SDWORD tY)
 			if (nearestDir == NUM_DIR)
 			{
 				// surrounded by blocking tiles, give up
-				retVal = FPR_FAILED;
  				objTrace(LOG_MOVEMENT, psDroid->id, "droid %u: route failed (surrouned by blocking)", (unsigned int)psDroid->id);
-				goto exit;
+				return FPR_FAILED;
 			}
 			else
 			{
@@ -508,25 +430,24 @@ FPATH_RETVAL fpathRoute(DROID* psDroid, SDWORD tX, SDWORD tY)
 		obstruction = false;
 
 		// cast the ray to find the last clear tile before the obstruction
-		rayCast(startX,startY, rayPointsToAngle(startX,startY, finalX, finalY),
-				RAY_MAXLEN, fpathEndPointCallback);
+		rayCast(startX, startY, rayPointsToAngle(startX,startY, finalX, finalY), RAY_MAXLEN, 
+		        psPropStats->propulsionType, fpathEndPointCallback);
 
 		if (!obstruction)
 		{
 			// no obstructions - trivial route
 			fpathSetDirectRoute(psDroid, targetX, targetY);
-			retVal = FPR_OK;
  			objTrace(LOG_MOVEMENT, psDroid->id, "droid %u: trivial route", (unsigned int)psDroid->id);
 			if (psPartialRouteDroid != NULL)
 			{
 				objTrace(LOG_MOVEMENT, psDroid->id, "Unit %u: trivial route during multi-frame route", (unsigned int)psDroid->id);
 			}
-			goto exit;
+			return FPR_OK;
 		}
 
 		// check whether the end point of the route
 		// is a blocking tile and find an alternative if it is
-		if (fpathBlockingTile(map_coord(targetX), map_coord(targetY)))
+		if (fpathBlockingTile(map_coord(targetX), map_coord(targetY), psPropStats->propulsionType))
 		{
 			// route to the last clear tile found by the raycast
 			// Does this code work? - Per
@@ -548,7 +469,7 @@ FPATH_RETVAL fpathRoute(DROID* psDroid, SDWORD tX, SDWORD tY)
 			{
  				objTrace(LOG_MOVEMENT, psDroid->id, "droid %u: found existing route", (unsigned int)psDroid->id);
 			}
-			goto exit;
+			return retVal;
 		}
 	}
 
@@ -558,10 +479,6 @@ FPATH_RETVAL fpathRoute(DROID* psDroid, SDWORD tX, SDWORD tY)
 	ASSERT( targetX >= 0 && targetX < (SDWORD)mapWidth*TILE_UNITS &&
 			targetY >= 0 && targetY < (SDWORD)mapHeight*TILE_UNITS,
 			"target coords off map" );
-	ASSERT( fpathBlockingTile == fpathGroundBlockingTile ||
-			fpathBlockingTile == fpathHoverBlockingTile ||
-			fpathBlockingTile == fpathLiftBlockingTile,
-			"invalid blocking function" );
 
 	ASSERT(astarInner >= 0, "astarInner overflowed!");
 
@@ -570,14 +487,12 @@ FPATH_RETVAL fpathRoute(DROID* psDroid, SDWORD tX, SDWORD tY)
 		// Time out
 		if (psPartialRouteDroid == psDroid)
 		{
-			retVal = FPR_WAIT;
-			goto exit;
+			return FPR_WAIT;
 		}
 		else
 		{
 			objTrace(LOG_MOVEMENT, psDroid->id, "droid %u: reschedule", (unsigned int)psDroid->id);
-			retVal = FPR_RESCHEDULE;
-			goto exit;
+			return FPR_RESCHEDULE;
 		}
 	}
 	else if ((psPartialRouteDroid != NULL
@@ -587,20 +502,19 @@ FPATH_RETVAL fpathRoute(DROID* psDroid, SDWORD tX, SDWORD tY)
 	       && psNextRouteDroid != psDroid))
 	{
 		// Not our turn
-		retVal = FPR_RESCHEDULE;
-		goto exit;
+		return FPR_RESCHEDULE;
 	}
 
 	// Now actually create a route
 	if (psPartialRouteDroid == NULL)
 	{
-		retVal = fpathGatewayRoute(psDroid, ASR_NEWROUTE, startX,startY, targetX,targetY, psMoveCntl);
+		retVal = fpathGatewayRoute(psDroid, ASR_NEWROUTE, startX,startY, targetX,targetY, psMoveCntl, psPropStats->propulsionType);
 	}
 	else
 	{
 		objTrace(LOG_MOVEMENT, psDroid->id, "Partial Route");
 		psPartialRouteDroid = NULL;
-		retVal = fpathGatewayRoute(psDroid, ASR_CONTINUE, startX,startY, targetX,targetY, psMoveCntl);
+		retVal = fpathGatewayRoute(psDroid, ASR_CONTINUE, startX,startY, targetX,targetY, psMoveCntl, psPropStats->propulsionType);
 	}
 	if (retVal == FPR_WAIT)
 	{
@@ -616,11 +530,6 @@ FPATH_RETVAL fpathRoute(DROID* psDroid, SDWORD tX, SDWORD tY)
 		fpathSetDirectRoute(psDroid, targetX, targetY);
 		retVal = FPR_OK;
 	}
-
-exit:
-
-	// reset the blocking tile function
-	fpathBlockingTile = fpathGroundBlockingTile;
 
 #ifdef DEBUG_MAP
 	{
@@ -675,11 +584,15 @@ static BOOL fpathFindRoute(DROID *psDroid, SDWORD sX,SDWORD sY, SDWORD tX,SDWORD
 	DROID		*psCurr;
 	SDWORD		i, startX,startY, index;
 	FORMATION* psFormation = formationFind(tX, tY);
+	PROPULSION_STATS	*psPropStats;
 
 	if (!psFormation)
 	{
 		return false;
 	}
+
+	psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
+	ASSERT(psPropStats != NULL, "invalid propulsion stats pointer");
 
 	// now look for a unit in this formation with a route that can be used
 	for (psCurr = apsDroidLists[psDroid->player]; psCurr; psCurr = psCurr->psNext)
@@ -707,8 +620,8 @@ static BOOL fpathFindRoute(DROID *psDroid, SDWORD sX,SDWORD sY, SDWORD tX,SDWORD
 			obstruction = false;
 
 			// cast the ray to find the last clear tile before the obstruction
-			rayCast(startX,startY, rayPointsToAngle(startX,startY, finalX, finalY),
-					RAY_MAXLEN, fpathEndPointCallback);
+			rayCast(startX, startY, rayPointsToAngle(startX,startY, finalX, finalY), RAY_MAXLEN,
+			        psPropStats->propulsionType, fpathEndPointCallback);
 
 			if (!obstruction)
 			{

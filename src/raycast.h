@@ -24,6 +24,8 @@
 #ifndef __INCLUDED_SRC_RAYCAST_H__
 #define __INCLUDED_SRC_RAYCAST_H__
 
+#include "statsdef.h"
+
 #define NUM_RAYS		360
 
 #define RAY_ANGLE		((float)(2 * M_PI / NUM_RAYS))
@@ -33,17 +35,17 @@
 // maximum length for a visiblity ray
 #define RAY_MAXLEN	0x7ffff
 
+
 /* Initialise the visibility rays */
 extern BOOL rayInitialise(void);
 
 /* The raycast intersection callback.
  * Return false if no more points are required, true otherwise
  */
-typedef BOOL (*RAY_CALLBACK)(SDWORD x, SDWORD y, SDWORD dist);
+typedef BOOL (*RAY_CALLBACK)(SDWORD x, SDWORD y, SDWORD dist, PROPULSION_TYPE propulsion);
 
 /* cast a ray from x,y (world coords) at angle ray (0-NUM_RAYS) */
-extern void rayCast(UDWORD x, UDWORD y, UDWORD ray, UDWORD length,
-					RAY_CALLBACK callback);
+extern void rayCast(UDWORD x, UDWORD y, UDWORD ray, UDWORD length, PROPULSION_TYPE propulsion, RAY_CALLBACK callback);
 
 // Calculate the angle to cast a ray between two points
 extern UDWORD rayPointsToAngle(SDWORD x1,SDWORD y1, SDWORD x2,SDWORD y2);

@@ -434,7 +434,7 @@ static void formationFindFree(FORMATION *psFormation, DROID* psDroid,
 			{
 				// calculate the position on the line
 				formationCalcPos(psFormation, line, currDist+objRadius, &x,&y);
-				if (fpathBlockingTile(map_coord(x), map_coord(y)))
+				if (fpathBlockingTile(map_coord(x), map_coord(y), getPropulsionStats(psDroid)->propulsionType))
 				{
 					// blocked, try the next rank
 					found = false;

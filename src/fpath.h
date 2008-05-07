@@ -62,34 +62,7 @@ extern FPATH_RETVAL fpathRoute(DROID* psDroid, SDWORD targetX, SDWORD targetY);
  *
  *  @ingroup pathfinding
  */
-extern BOOL (*fpathBlockingTile)(SDWORD x, SDWORD y);
-
-/** Check if the map tile at the given location blocks a droid with "normal"
- *  propulsion.
- *
- *  @return true if the given tile is blocking for a "normal" droid
- *
- *  @ingroup pathfinding
- */
-extern BOOL fpathGroundBlockingTile(SDWORD x, SDWORD y);
-
-/** Check if the map tile at the given location blocks a droid with hovercraft
- *  propulsion.
- *
- *  @return true if the given tile is blocking for a hovercraft droid
- *
- *  @ingroup pathfinding
- */
-extern BOOL fpathHoverBlockingTile(SDWORD x, SDWORD y);
-
-/** Check if the map tile at the given location blocks a droid with VTOL
- *  propulsion.
- *
- *  @return true if the given tile is blocking for a VTOL droid
- *
- *  @ingroup pathfinding
- */
-extern BOOL fpathLiftSlideBlockingTile(SDWORD x, SDWORD y);
+extern BOOL fpathBlockingTile(SDWORD x, SDWORD y, PROPULSION_TYPE propulsion);
 
 /** Set the correct blocking tile function.
  *  @ingroup pathfinding

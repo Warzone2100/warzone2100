@@ -3821,7 +3821,7 @@ static BOOL oneDroid(UDWORD x, UDWORD y)
 
 // ////////////////////////////////////////////////////////////////////////////
 // returns true if it's a sensible place to put that droid.
-BOOL sensiblePlace(SDWORD x, SDWORD y)
+static BOOL sensiblePlace(SDWORD x, SDWORD y, PROPULSION_TYPE propulsion)
 {
 	UDWORD count=0;
 
@@ -3831,32 +3831,34 @@ BOOL sensiblePlace(SDWORD x, SDWORD y)
 	if((y < TOO_NEAR_EDGE) || (y > (SDWORD)(mapHeight - TOO_NEAR_EDGE)))
 		return false;
 
-    //check no features there
+	// check no features there
 	if(TileHasFeature(mapTile(x,y)))
 	{
 		return false;
 	}
 
 	// not on a blocking tile.
-	if( fpathBlockingTile(x,y) )
+	if (fpathBlockingTile(x, y, propulsion))
+	{
 		return false;
+	}
 
 	// shouldn't next to more than one blocking tile, to avoid windy paths.
-	if( fpathBlockingTile(x-1 ,y-1) )
+	if (fpathBlockingTile(x - 1, y - 1, propulsion))
 		count++;
-	if( fpathBlockingTile(x,y-1) )
+	if (fpathBlockingTile(x, y - 1, propulsion))
 		count++;
-	if( fpathBlockingTile(x+1,y-1) )
+	if (fpathBlockingTile(x + 1, y - 1, propulsion))
 		count++;
-	if( fpathBlockingTile(x-1,y) )
+	if (fpathBlockingTile(x - 1, y, propulsion))
 		count++;
-	if( fpathBlockingTile(x+1,y) )
+	if (fpathBlockingTile(x + 1, y, propulsion))
 		count++;
-	if( fpathBlockingTile(x-1,y+1) )
+	if (fpathBlockingTile(x -1, y + 1, propulsion))
 		count++;
-	if( fpathBlockingTile(x,y+1) )
+	if (fpathBlockingTile(x, y + 1, propulsion))
 		count++;
-	if( fpathBlockingTile(x+1,y+1) )
+	if (fpathBlockingTile(x +1, y + 1, propulsion))
 		count++;
 
 	if(count > 1)
@@ -3865,24 +3867,11 @@ BOOL sensiblePlace(SDWORD x, SDWORD y)
 	return true;
 }
 
-
 // ------------------------------------------------------------------------------------
-BOOL	normalPAT(UDWORD x, UDWORD y)
-{
-	if(sensiblePlace(x,y) && noDroid(x,y))
-	{
-		return(true);
-	}
-	else
-	{
-		return(false);
-	}
-}
-// ------------------------------------------------------------------------------------
-// Should stop things being placed in inaccessible areas?
+// Should stop things being placed in inaccessible areas? Assume wheeled propulsion.
 BOOL	zonedPAT(UDWORD x, UDWORD y)
 {
-	if (sensiblePlace(x,y) && noDroid(x,y))
+	if (sensiblePlace(x, y, WHEELED) && noDroid(x,y))
 	{
 		return(true);
 	}
@@ -3905,7 +3894,7 @@ BOOL	pickATileGen(UDWORD *x, UDWORD *y, UBYTE numIterations,
 	ASSERT( *y<mapHeight,"y coordinate is off-map for pickATileGen" );
 
 	/* Exit if they're fine! */
-	if(sensiblePlace(*x,*y) && noDroid(*x,*y))
+	if (sensiblePlace(*x, *y, WHEELED) && noDroid(*x,*y))
 	{
 		return(true);
 	}
@@ -4004,7 +3993,7 @@ BOOL	pickATile(UDWORD *x, UDWORD *y, UBYTE numIterations)
 	ASSERT( *y<mapHeight,"y coordinate is off-map for pickATile" );
 
 	/* Exit if they're fine! */
-	if(sensiblePlace(*x,*y) && noDroid(*x,*y))
+	if (sensiblePlace(*x, *y, WHEELED) && noDroid(*x,*y))
 	{
 		return(true);
 	}
@@ -4024,7 +4013,7 @@ BOOL	pickATile(UDWORD *x, UDWORD *y, UBYTE numIterations)
 				if(i==startX || i==endX || j==startY || j==endY)
 				{
 					/* Good enough? */
-					if(sensiblePlace(i,j) && noDroid(i,j))
+					if (sensiblePlace(i, j, WHEELED) && noDroid(i,j))
 					{
 						/* Set exit conditions and get out NOW */
 						*x = i;	*y = j;
@@ -4057,7 +4046,7 @@ PICKTILE pickHalfATile(UDWORD *x, UDWORD *y, UBYTE numIterations)
 	}
 
 	/* Exit if they're fine! */
-	if (sensiblePlace(*x, *y) && oneDroid(*x, *y))
+	if (sensiblePlace(*x, *y, WHEELED) && oneDroid(*x, *y))
 	{
 		return HALF_FREE_TILE;
 	}
@@ -4079,7 +4068,7 @@ PICKTILE pickHalfATile(UDWORD *x, UDWORD *y, UBYTE numIterations)
 				if(i==startX || i==endX || j==startY || j==endY)
 				{
 					/* Good enough? */
-					if(sensiblePlace(i,j) && oneDroid(i,j))
+					if (sensiblePlace(i, j, WHEELED) && oneDroid(i,j))
 					{
 						/* Set exit conditions and get out NOW */
 						*x = i;	*y = j;
