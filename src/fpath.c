@@ -498,10 +498,11 @@ static BOOL fpathFindFirstRoutePoint(MOVE_CONTROL *psMove, SDWORD *pIndex, SDWOR
 static BOOL fpathFindRoute(DROID *psDroid, SDWORD sX,SDWORD sY, SDWORD tX,SDWORD tY)
 {
 	DROID		*psCurr;
-	SDWORD		i, startX,startY, index;
+	SDWORD		startX, startY, index;
 	FORMATION* psFormation = formationFind(tX, tY);
 	PROPULSION_STATS	*psPropStats;
 
+	objTrace(LOG_WARNING, psDroid->id, "Consider recycling a path, formation=%s", psFormation ? "true" : "false");
 	if (!psFormation)
 	{
 		return false;
@@ -518,6 +519,7 @@ static BOOL fpathFindRoute(DROID *psDroid, SDWORD sX,SDWORD sY, SDWORD tX,SDWORD
 		 && psCurr->sMove.psFormation == psFormation
 		 && psCurr->sMove.numPoints > 0)
 		{
+			objTrace(LOG_WARNING, psDroid->id, "Consider using %d's path", (int)psCurr->id);
 			// find the first route point
 			if (!fpathFindFirstRoutePoint(&psCurr->sMove, &index, sX,sY, (SDWORD)psCurr->pos.x, (SDWORD)psCurr->pos.y))
 			{
@@ -542,16 +544,15 @@ static BOOL fpathFindRoute(DROID *psDroid, SDWORD sX,SDWORD sY, SDWORD tX,SDWORD
 			if (!obstruction)
 			{
 				// This route is OK, copy it over
-				for(i=index; i<psCurr->sMove.numPoints; i++)
-				{
-					psDroid->sMove.asPath[i] = psCurr->sMove.asPath[i];
-				}
+				psDroid->sMove.asPath = realloc(psDroid->sMove.asPath, sizeof(*psDroid->sMove.asPath) * psCurr->sMove.numPoints);
+				memcpy(psDroid->sMove.asPath, psCurr->sMove.asPath, sizeof(*psDroid->sMove.asPath) * psCurr->sMove.numPoints);
 				psDroid->sMove.numPoints = psCurr->sMove.numPoints;
-
-				// now see if the route
+				objTrace(LOG_WARNING, psDroid->id, "Using %d's path!", (int)psCurr->id);
+				debug(LOG_ERROR, "DONE" );
 
 				return true;
 			}
+			else objTrace(LOG_WARNING, psDroid->id, "Not using %d's path - found obstruction", (int)psCurr->id);
 		}
 	}
 
