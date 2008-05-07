@@ -1286,6 +1286,7 @@ static void NETallowJoining(void)
 			debug(LOG_ERROR, "NETallowJoining: Cannot create socket set: %s", SDLNet_GetError());
 			return;
 		}
+
 		SDLNet_TCP_AddSocket(tmp_socket_set, tcp_socket);
 		debug(LOG_NET,"TCP_AddSocket using %p set, socket %p", tmp_socket_set, tcp_socket);
 	}
@@ -1431,6 +1432,7 @@ BOOL NEThostGame(const char* SessionName, const char* PlayerName,
 		debug(LOG_ERROR, "NEThostGame: Cannot create socket set: %s", SDLNet_GetError());
 		return false;
 	}
+	SDLNet_TCP_AddSocket(socket_set, tcp_socket);
 	for (i = 0; i < MAX_CONNECTED_PLAYERS; ++i)
 	{
 		connected_bsocket[i] = NET_createBufferedSocket();
