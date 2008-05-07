@@ -1286,6 +1286,7 @@ static void NETallowJoining(void)
 			debug(LOG_ERROR, "NETallowJoining: Cannot create socket set: %s", SDLNet_GetError());
 			return;
 		}
+
 		SDLNet_TCP_AddSocket(tmp_socket_set, tcp_socket);
 		debug(LOG_NET,"TCP_AddSocket using %p set, socket %p", tmp_socket_set, tcp_socket);
 	}
