@@ -64,11 +64,6 @@ extern FPATH_RETVAL fpathRoute(DROID* psDroid, SDWORD targetX, SDWORD targetY);
  */
 extern BOOL fpathBlockingTile(SDWORD x, SDWORD y, PROPULSION_TYPE propulsion);
 
-/** Set the correct blocking tile function.
- *  @ingroup pathfinding
- */
-extern void fpathSetBlockingTile( UBYTE ubPropulsionType );
-
 /** Set a direct path to position.
  *
  *  Plan a path from @c psDroid's current position to given position without
