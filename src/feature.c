@@ -391,6 +391,12 @@ FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,BOOL FromSave)
 
 				psTile->psObject = (BASE_OBJECT*)psFeature;
 
+				// if it's a tall feature then flag it in the map.
+				if (psFeature->sDisplay.imd->max.y > TALLOBJECT_YMAX)
+				{
+					SET_TILE_TALLSTRUCTURE(psTile);
+				}
+
 				if (psStats->subType == FEAT_GEN_ARTE || psStats->subType == FEAT_OIL_DRUM || psStats->subType == FEAT_BUILD_WRECK)// they're there - just can see me
 				{
 					SET_TILE_NOTBLOCKING(psTile);
@@ -493,6 +499,7 @@ void removeFeature(FEATURE *psDel)
 
 			psTile->psObject = NULL;
 
+			CLEAR_TILE_TALLSTRUCTURE(psTile);
 			CLEAR_TILE_NOTBLOCKING(psTile);
 		}
 	}

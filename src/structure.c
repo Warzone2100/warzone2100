@@ -1659,6 +1659,12 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 				}
 
 				psTile->psObject = (BASE_OBJECT*)psBuilding;
+
+				// if it's a tall structure then flag it in the map.
+				if (psBuilding->sDisplay.imd->max.y > TALLOBJECT_YMAX)
+				{
+					SET_TILE_TALLSTRUCTURE(psTile);
+				}
 			}
 		}
 
@@ -4717,6 +4723,7 @@ static void removeStructFromMap(STRUCTURE *psStruct)
 		{
 			psTile = mapTile(mapX+i, mapY+j);
 			psTile->psObject = NULL;
+			CLEAR_TILE_TALLSTRUCTURE(psTile);
 			CLEAR_TILE_NOTBLOCKING(psTile);
 		}
 	}

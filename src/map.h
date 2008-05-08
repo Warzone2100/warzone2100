@@ -76,6 +76,7 @@ static inline unsigned short TileNumber_texture(unsigned short tilenumber)
 
 #define BITS_FPATHBLOCK	0x10		// bit set temporarily by find path to mark a blocking tile
 #define BITS_GATEWAY	0x40		// bit set to show a gateway on the tile
+#define BITS_TALLSTRUCTURE 0x80		// bit set to show a tall structure which camera needs to avoid.
 
 /* Information stored with each tile */
 typedef struct _maptile
@@ -96,23 +97,30 @@ typedef struct _maptile
 
 #define TILE_IS_NOTBLOCKING(x)	(x->texture & TILE_NOTBLOCKING)
 
+/**
+ * Check if tile contains a structure or feature. Function is thread-safe,
+ * but do not rely on the result if you mean to alter the object pointer.
+ */
 static inline bool TileIsOccupied(const MAPTILE* tile)
 {
 	return (tile->psObject != NULL);
 }
 
+/** Check if tile contains a structure. Function is NOT thread-safe. */
 static inline bool TileHasStructure(const MAPTILE* tile)
 {
 	return TileIsOccupied(tile)
 	    && tile->psObject->type == OBJ_STRUCTURE;
 }
 
+/** Check if tile contains a feature. Function is NOT thread-safe. */
 static inline bool TileHasFeature(const MAPTILE* tile)
 {
 	return TileIsOccupied(tile)
 	    && tile->psObject->type == OBJ_FEATURE;
 }
 
+/** Check if tile contains a wall structure. Function is NOT thread-safe. */
 static inline bool TileHasWall(const MAPTILE* tile)
 {
 	return TileHasStructure(tile)
@@ -120,18 +128,19 @@ static inline bool TileHasWall(const MAPTILE* tile)
 	     || ((STRUCTURE*)tile->psObject)->pStructureType->type == REF_WALLCORNER);
 }
 
+/** Check if tile is highlighted by the user. Function is thread-safe. */
 static inline bool TileIsHighlighted(const MAPTILE* tile)
 {
 	return tile->texture & TILE_HILIGHT;
 }
 
-static inline bool TileHasTallStructure(const MAPTILE* tile)
+/** Check if tile contains a tall structure. Function is thread-safe. */
+WZ_DECL_PURE static inline bool TileHasTallStructure(const MAPTILE* tile)
 {
-	return (TileHasStructure(tile)
-             || TileHasFeature(tile))
-	    && tile->psObject->sDisplay.imd->max.y > TALLOBJECT_YMAX;
+	return (tile->tileInfoBits & BITS_TALLSTRUCTURE);
 }
 
+/** Check if tile contains a small structure. Function is NOT thread-safe. */
 static inline bool TileHasSmallStructure(const MAPTILE* tile)
 {
 	return TileHasStructure(tile)
@@ -143,6 +152,8 @@ static inline bool TileHasSmallStructure(const MAPTILE* tile)
 
 #define SET_TILE_HIGHLIGHT(x)	(x->texture = (UWORD)((x)->texture | TILE_HILIGHT))
 #define CLEAR_TILE_HIGHLIGHT(x)	(x->texture = (UWORD)((x)->texture & (~TILE_HILIGHT)))
+#define SET_TILE_TALLSTRUCTURE(x)	(x->tileInfoBits = (UBYTE)((x)->tileInfoBits | BITS_TALLSTRUCTURE))
+#define CLEAR_TILE_TALLSTRUCTURE(x)	(x->tileInfoBits = (UBYTE)((x)->tileInfoBits & (~BITS_TALLSTRUCTURE)))
 
 // Multiplier for the tile height
 #define	ELEVATION_SCALE	2
