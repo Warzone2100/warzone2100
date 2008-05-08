@@ -1088,12 +1088,14 @@ static BOOL moveBlocked(DROID *psDroid)
 		psDroid->sMove.bumpTime = 0;
 		psDroid->sMove.lastBump = 0;
 
+		objTrace(LOG_WARNING, psDroid->id, "BLOCKED");
 		// if the unit cannot see the next way point - reroute it's got stuck
 		if ( ( bMultiPlayer || (psDroid->player == selectedPlayer) ) &&
 			(psDroid->sMove.Position != psDroid->sMove.numPoints) &&
 			!fpathTileLOS(map_coord((SDWORD)psDroid->pos.x), map_coord((SDWORD)psDroid->pos.y),
 						  map_coord(psDroid->sMove.DestinationX), map_coord(psDroid->sMove.DestinationY)))
 		{
+			objTrace(LOG_WARNING, psDroid->id, "Trying to reroute to (%d,%d)", psDroid->sMove.DestinationX, psDroid->sMove.DestinationY);
 			moveDroidTo(psDroid, psDroid->sMove.DestinationX, psDroid->sMove.DestinationY);
 			return false;
 		}
