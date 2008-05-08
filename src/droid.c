@@ -320,7 +320,6 @@ void droidRelease(DROID *psDroid)
 	if (psDroid->sMove.asPath)
 	{
 		free(psDroid->sMove.asPath);
-		debug(LOG_ERROR, "freeing %p", psDroid->sMove.asPath);
 	}
 }
 
