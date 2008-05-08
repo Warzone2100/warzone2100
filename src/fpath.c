@@ -72,8 +72,6 @@ static SDWORD partialSX,partialSY, partialTX,partialTY;
 // the last frame on which the partial route was calculatated
 static SDWORD	lastPartialFrame;
 
-static BOOL fpathFindRoute(DROID *psDroid, SDWORD sX,SDWORD sY, SDWORD tX,SDWORD tY);
-
 // initialise the findpath module
 BOOL fpathInitialise(void)
 {
@@ -372,21 +370,6 @@ FPATH_RETVAL fpathRoute(DROID* psDroid, SDWORD tX, SDWORD tY)
 			objTrace(LOG_MOVEMENT, psDroid->id, "Unit %u: end point is blocked, going to (%d, %d) instead",
 			         (unsigned int)psDroid->id, (int)clearX, (int)clearY);
 		}
-
-		// see if there is another unit with a usable route
-		if (fpathFindRoute(psDroid, startX,startY, targetX,targetY))
-		{
-			if (psPartialRouteDroid != NULL)
-			{
-				objTrace(LOG_MOVEMENT, psDroid->id, "droid %u: found existing route during multi-frame path",
-				         (unsigned int)psDroid->id);
-			}
-			else
-			{
- 				objTrace(LOG_MOVEMENT, psDroid->id, "droid %u: found existing route", (unsigned int)psDroid->id);
-			}
-			return retVal;
-		}
 	}
 
 	ASSERT( startX >= 0 && startX < (SDWORD)mapWidth*TILE_UNITS &&
@@ -464,97 +447,4 @@ FPATH_RETVAL fpathRoute(DROID* psDroid, SDWORD tX, SDWORD tY)
 #endif
 
 	return retVal;
-}
-
-/** Find the first point on the route which has both droids on the same side of it
- *
- *  @ingroup pathfinding
- */
-static BOOL fpathFindFirstRoutePoint(MOVE_CONTROL *psMove, SDWORD *pIndex, SDWORD x1,SDWORD y1, SDWORD x2,SDWORD y2)
-{
-	SDWORD	vx1,vy1, vx2,vy2;
-
-	for(*pIndex = 0; *pIndex < psMove->numPoints; (*pIndex) ++)
-	{
-		vx1 = x1 - psMove->asPath[ *pIndex ].x;
-		vy1 = y1 - psMove->asPath[ *pIndex ].y;
-		vx2 = x2 - psMove->asPath[ *pIndex ].x;
-		vy2 = y2 - psMove->asPath[ *pIndex ].y;
-
-		// found it if the dot products have the same sign
-		if ( (vx1 * vx2 + vy1 * vy2) < 0 )
-		{
-			return true;
-		}
-	}
-
-	return false;
-}
-
-/** See if there is another unit on your side that has a route this unit can use
- *
- *  @ingroup pathfinding
- */
-static BOOL fpathFindRoute(DROID *psDroid, SDWORD sX,SDWORD sY, SDWORD tX,SDWORD tY)
-{
-	DROID		*psCurr;
-	SDWORD		startX, startY, index;
-	FORMATION* psFormation = formationFind(tX, tY);
-	PROPULSION_STATS	*psPropStats;
-
-	objTrace(LOG_WARNING, psDroid->id, "Consider recycling a path, formation=%s", psFormation ? "true" : "false");
-	if (!psFormation)
-	{
-		return false;
-	}
-
-	psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
-	ASSERT(psPropStats != NULL, "invalid propulsion stats pointer");
-
-	// now look for a unit in this formation with a route that can be used
-	for (psCurr = apsDroidLists[psDroid->player]; psCurr; psCurr = psCurr->psNext)
-	{
-		if (psCurr != psDroid
-		 && psCurr != psPartialRouteDroid
-		 && psCurr->sMove.psFormation == psFormation
-		 && psCurr->sMove.numPoints > 0)
-		{
-			objTrace(LOG_WARNING, psDroid->id, "Consider using %d's path", (int)psCurr->id);
-			// find the first route point
-			if (!fpathFindFirstRoutePoint(&psCurr->sMove, &index, sX,sY, (SDWORD)psCurr->pos.x, (SDWORD)psCurr->pos.y))
-			{
-				continue;
-			}
-
-			// initialise the raycast - if there is los to the start of the route
-			startX = (sX & ~TILE_MASK) + TILE_UNITS/2;
-			startY = (sY & ~TILE_MASK) + TILE_UNITS/2;
-			finalX = (psCurr->sMove.asPath[index].x * TILE_UNITS) + TILE_UNITS/2;
-			finalY = (psCurr->sMove.asPath[index].y * TILE_UNITS) + TILE_UNITS/2;
-
-			clearX = finalX; clearY = finalY;
-			vectorX = startX - finalX;
-			vectorY = startY - finalY;
-			obstruction = false;
-
-			// cast the ray to find the last clear tile before the obstruction
-			rayCast(startX, startY, rayPointsToAngle(startX,startY, finalX, finalY), RAY_MAXLEN,
-			        psPropStats->propulsionType, fpathEndPointCallback);
-
-			if (!obstruction)
-			{
-				// This route is OK, copy it over
-				psDroid->sMove.asPath = realloc(psDroid->sMove.asPath, sizeof(*psDroid->sMove.asPath) * psCurr->sMove.numPoints);
-				memcpy(psDroid->sMove.asPath, psCurr->sMove.asPath, sizeof(*psDroid->sMove.asPath) * psCurr->sMove.numPoints);
-				psDroid->sMove.numPoints = psCurr->sMove.numPoints;
-				objTrace(LOG_WARNING, psDroid->id, "Using %d's path!", (int)psCurr->id);
-				debug(LOG_ERROR, "DONE" );
-
-				return true;
-			}
-			else objTrace(LOG_WARNING, psDroid->id, "Not using %d's path - found obstruction", (int)psCurr->id);
-		}
-	}
-
-	return false;
 }
