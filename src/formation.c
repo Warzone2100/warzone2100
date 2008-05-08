@@ -85,7 +85,7 @@ void formationShutDown(void)
 
 	while (psFormationList)
 	{
-		debug( LOG_NEVER, "formation with %d units still attached\n", psFormationList->refCount );
+		debug(LOG_NEVER, "formation with %d units still attached", psFormationList->refCount);
 		psNext = psFormationList->psNext;
 		free(psFormationList);
 		psFormationList = psNext;
@@ -101,13 +101,13 @@ BOOL formationNew(FORMATION **ppsFormation, FORMATION_TYPE type,
 	FORMATION	*psNew = malloc(sizeof(FORMATION));
 
 	// get a heap structure
+	ASSERT(psNew, "Out of memory");
 	if (psNew == NULL)
 	{
-		debug(LOG_ERROR, "formationNew: Out of memory");
 		return false;
 	}
 
-// 	debug( LOG_NEVER, "formationNew: type %d, at (%d,%d), dir %d\n", type, x, y, dir );
+	// debug(LOG_NEVER, "type %d, at (%d,%d), dir %d", type, x, y, dir);
 
 	// initialise it
 	psNew->refCount = 0;
@@ -171,7 +171,7 @@ FORMATION* formationFind(int x, int y)
 
 	for (psFormation = psFormationList; psFormation; psFormation = psFormation->psNext)
 	{
-		// see if the positioin is close to the formation
+		// see if the position is close to the formation
 		const int xdiff = psFormation->x - x;
 		const int ydiff = psFormation->y - y;
 		const int distSq = xdiff*xdiff + ydiff*ydiff;
@@ -224,7 +224,7 @@ void formationJoin(FORMATION *psFormation, const DROID* psDroid)
 	ASSERT( psFormation != NULL,
 		"formationJoin: invalid formation" );
 
-// 	debug( LOG_NEVER, "formationJoin: %p, obj %d\n", psFormation, psObj->id );
+	objTrace(LOG_WARNING, psDroid->id, "joined formation %p", psFormation);
 
 	psFormation->refCount += 1;
 
@@ -258,7 +258,7 @@ void formationLeave(FORMATION *psFormation, const DROID* psDroid)
 	ASSERT( psFormation->refCount > 0,
 		"formationLeave: refcount is zero" );
 
-// 	debug( LOG_NEVER, "formationLeave: %p, obj %d\n", psFormation, psDroid->id );
+	objTrace(LOG_WARNING, psDroid->id, "left formation %p", psFormation);
 
 	asMembers = psFormation->asMembers;
 
@@ -628,12 +628,7 @@ BOOL formationGetPos( FORMATION *psFormation, DROID* psDroid,
 		}
 
 		// calculate its position
-		formationCalcPos(psFormation, asMembers[member].line, asMembers[member].dist,
-							&x,&y);
-/*		// a unit has just joined the formation - find a location for it
-		formationFindFree(psFormation, psDroid, &x,&y);
-		debug( LOG_NEVER, "formation new member : (%d, %d)n",
-					x,y));*/
+		formationCalcPos(psFormation, asMembers[member].line, asMembers[member].dist, &x, &y);
 	}
 	else
 	{
