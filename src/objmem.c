@@ -432,10 +432,6 @@ void killDroid(DROID *psDel)
 		setDroidActionTarget(psDel, NULL, i);
 	}
 	setDroidBase(psDel, NULL);
-	if (psDel->sMove.asPath)
-	{
-		free(psDel->sMove.asPath);
-	}
 
 	destroyObject((BASE_OBJECT**)apsDroidLists, (BASE_OBJECT*)psDel);
 }
