@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2008-05-07 11:12+0200\n"
+"POT-Creation-Date: 2008-05-09 15:50+0200\n"
 "PO-Revision-Date: 2008-04-20 22:47+0000\n"
 "Last-Translator: Samuel G. I. <amuchamu@gmail.com>\n"
 "Language-Team: Spanish <warzone-dev@gna.org>\n"
@@ -3168,7 +3168,9 @@ msgid "Archangel Missile Battery"
 msgstr "Batería de Misiles Arcángel"
 
 #: data/messages/strings/names.txt:729
+#: data/messages/strings/names.txt:1215
 #: data/mp/messages/strings/names.txt:735
+#: data/mp/messages/strings/names.txt:1223
 msgid "Mortar Pit"
 msgstr "Foso Mortero"
 
@@ -4843,11 +4845,6 @@ msgstr "Torre Vigía"
 #: data/mp/messages/strings/names.txt:1219
 msgid "Cannon Tower"
 msgstr "Torre de Cañón"
-
-#: data/messages/strings/names.txt:1215
-#: data/mp/messages/strings/names.txt:1223
-msgid " Mortar Pit"
-msgstr " Foso de Mortero"
 
 #: data/messages/strings/names.txt:1234
 #: data/mp/messages/strings/names.txt:1242
@@ -12373,9 +12370,3 @@ msgstr " - Construido %s"
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "Versión: %s%s%s%s"
-
-#~ msgid "R-Wpn-MG-Damage11"
-#~ msgstr "R-Wpn-MG-Daño11"
-
-#~ msgid "R-Struc-Power-Cam2"
-#~ msgstr "R-Struc-Power-Cam2"

@@ -1212,7 +1212,7 @@ A0CannonTower				_("Cannon Tower")
 A0BaBaGunTowerEND				"*Scavenger End Tower*"
 Barrier					"*Barrier*"
 A0BaBaMortarPit				"*BaBaMortarPit*"
-Emplacement-MortarPit01			_(" Mortar Pit")
+Emplacement-MortarPit01			_("Mortar Pit")
 // MissileBunker				_("Missile Bunker")
 A0BaBaFlameTow				"*A0BaBaFlameTow*"
 

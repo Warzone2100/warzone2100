@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2008-05-07 11:12+0200\n"
+"POT-Creation-Date: 2008-05-09 15:50+0200\n"
 "PO-Revision-Date: 2008-05-01 20:47+0300\n"
 "Last-Translator: Stanislav Pererva <stas_ap@inbox.ru>\n"
 "Language-Team: Russian <warzone-dev@gna.org>\n"
@@ -3166,7 +3166,9 @@ msgid "Archangel Missile Battery"
 msgstr ""
 
 #: data/messages/strings/names.txt:729
+#: data/messages/strings/names.txt:1215
 #: data/mp/messages/strings/names.txt:735
+#: data/mp/messages/strings/names.txt:1223
 msgid "Mortar Pit"
 msgstr "Минометный окоп"
 
@@ -4840,11 +4842,6 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:1219
 msgid "Cannon Tower"
 msgstr ""
-
-#: data/messages/strings/names.txt:1215
-#: data/mp/messages/strings/names.txt:1223
-msgid " Mortar Pit"
-msgstr "Минометный окоп"
 
 #: data/messages/strings/names.txt:1234
 #: data/mp/messages/strings/names.txt:1242

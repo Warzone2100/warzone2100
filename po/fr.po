@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100 2.1_beta1\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2008-05-07 11:12+0200\n"
+"POT-Creation-Date: 2008-05-09 15:50+0200\n"
 "PO-Revision-Date: 2008-04-21 17:09+0100\n"
 "Last-Translator: Guillaume Wilhelm <guillaume.wilhelm@gmail.com>\n"
 "Language-Team: French <warzone-dev@gna.org>\n"
@@ -3167,7 +3167,9 @@ msgid "Archangel Missile Battery"
 msgstr "Batterie de Missiles Archangel"
 
 #: data/messages/strings/names.txt:729
+#: data/messages/strings/names.txt:1215
 #: data/mp/messages/strings/names.txt:735
+#: data/mp/messages/strings/names.txt:1223
 msgid "Mortar Pit"
 msgstr "Mortier Retranché"
 
@@ -4841,11 +4843,6 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:1219
 msgid "Cannon Tower"
 msgstr "Tour à Canon"
-
-#: data/messages/strings/names.txt:1215
-#: data/mp/messages/strings/names.txt:1223
-msgid " Mortar Pit"
-msgstr " Mortier Retranché"
 
 #: data/messages/strings/names.txt:1234
 #: data/mp/messages/strings/names.txt:1242
