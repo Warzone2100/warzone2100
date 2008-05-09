@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2008-05-09 15:50+0200\n"
+"POT-Creation-Date: 2008-05-09 16:06+0200\n"
 "PO-Revision-Date: 2008-05-01 20:47+0300\n"
 "Last-Translator: Stanislav Pererva <stas_ap@inbox.ru>\n"
 "Language-Team: Russian <warzone-dev@gna.org>\n"
@@ -585,15 +585,12 @@ msgid "Enemy VTOLs are likely to be flying close escort."
 msgstr ""
 
 #: data/messages/strings/cam2strings.txt:73
+#: data/messages/strings/cam2strings.txt:77
 msgid "TRANSPORT MISSION: Rescue civilians from Containment Camp"
 msgstr ""
 
 #: data/messages/strings/cam2strings.txt:74
 msgid "The Collective are processing and exterminating civilians at this base."
-msgstr ""
-
-#: data/messages/strings/cam2strings.txt:77
-msgid "TRANSPORT MISSION: Rescue Civilians from Containment Camp "
 msgstr ""
 
 #: data/messages/strings/cam2strings.txt:78

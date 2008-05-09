@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Warzone 2100 TRUNK\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2008-05-09 15:50+0200\n"
+"POT-Creation-Date: 2008-05-09 16:06+0200\n"
 "PO-Revision-Date: 2008-01-20 19:26+0100\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -581,15 +581,12 @@ msgid "Enemy VTOLs are likely to be flying close escort."
 msgstr ""
 
 #: data/messages/strings/cam2strings.txt:73
+#: data/messages/strings/cam2strings.txt:77
 msgid "TRANSPORT MISSION: Rescue civilians from Containment Camp"
 msgstr ""
 
 #: data/messages/strings/cam2strings.txt:74
 msgid "The Collective are processing and exterminating civilians at this base."
-msgstr ""
-
-#: data/messages/strings/cam2strings.txt:77
-msgid "TRANSPORT MISSION: Rescue Civilians from Containment Camp "
 msgstr ""
 
 #: data/messages/strings/cam2strings.txt:78
@@ -12383,6 +12380,3 @@ msgstr " - bygd %s"
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "Versjon %s%s%s%s"
-
-#~ msgid "CONTROL"
-#~ msgstr "KONTROLL"

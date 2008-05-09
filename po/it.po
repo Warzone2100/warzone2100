@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Warzone 2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2008-05-09 15:50+0200\n"
+"POT-Creation-Date: 2008-05-09 16:06+0200\n"
 "PO-Revision-Date: 2008-03-20 00:23+0100\n"
 "Last-Translator: Federico Aromolo <miracleblade@hotmail.it>\n"
 "Language-Team: Italian <warzone-dev@gna.org>\n"
@@ -584,16 +584,13 @@ msgid "Enemy VTOLs are likely to be flying close escort."
 msgstr "VTOL nemici volano probabilmente vicino al convoglio come scorta."
 
 #: data/messages/strings/cam2strings.txt:73
+#: data/messages/strings/cam2strings.txt:77
 msgid "TRANSPORT MISSION: Rescue civilians from Containment Camp"
 msgstr "MISSIONE CON TRASPORTO: Salva i civili dal campo di Contenimento"
 
 #: data/messages/strings/cam2strings.txt:74
 msgid "The Collective are processing and exterminating civilians at this base."
 msgstr "Il Collective sta processando e sterminando civili alla propria base."
-
-#: data/messages/strings/cam2strings.txt:77
-msgid "TRANSPORT MISSION: Rescue Civilians from Containment Camp "
-msgstr "MISSIONE CON TRASPORTO: Salva i Civili dal Campo di Contenimento"
 
 #: data/messages/strings/cam2strings.txt:78
 msgid "You are to rescue the civilians."
@@ -12368,6 +12365,3 @@ msgstr " - Costruito %s"
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "Versione %s%s%s%s"
-
-#~ msgid "R-Struc-Power-Cam2"
-#~ msgstr "R-Struc-Power-Cam2"

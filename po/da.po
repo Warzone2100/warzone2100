@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: da\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2008-05-09 15:50+0200\n"
+"POT-Creation-Date: 2008-05-09 16:06+0200\n"
 "PO-Revision-Date: 2008-01-20 19:26+0100\n"
 "Last-Translator: Christian Vest Hansen <karmazilla@gmail.com>\n"
 "Language-Team: Dansk <en@li.org>\n"
@@ -585,15 +585,12 @@ msgid "Enemy VTOLs are likely to be flying close escort."
 msgstr ""
 
 #: data/messages/strings/cam2strings.txt:73
+#: data/messages/strings/cam2strings.txt:77
 msgid "TRANSPORT MISSION: Rescue civilians from Containment Camp"
 msgstr ""
 
 #: data/messages/strings/cam2strings.txt:74
 msgid "The Collective are processing and exterminating civilians at this base."
-msgstr ""
-
-#: data/messages/strings/cam2strings.txt:77
-msgid "TRANSPORT MISSION: Rescue Civilians from Containment Camp "
 msgstr ""
 
 #: data/messages/strings/cam2strings.txt:78
@@ -12591,55 +12588,3 @@ msgstr ""
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr ""
-
-#, fuzzy
-#~ msgid "Disable fog"
-#~ msgstr "Afstandståge"
-
-#~ msgid "Command Turrets"
-#~ msgstr "Kommandotårn"
-
-#~ msgid "Internet"
-#~ msgstr "Internet"
-
-#, fuzzy
-#~ msgid "%s - Damage %d%% - Serial ID %d - Kills %d order %d action %d, %s"
-#~ msgstr "%s - Skade %d%% - Drab %d, %s"
-
-#, fuzzy
-#~ msgid "Campaign Mode"
-#~ msgstr "Ny kampange"
-
-#, fuzzy
-#~ msgid "Select Force"
-#~ msgstr "Gem styrke"
-
-#~ msgid "Computer"
-#~ msgstr "Computer"
-
-#~ msgid "Computer Opponents"
-#~ msgstr "Computer modstandere"
-
-#~ msgid "No Computer Opponents"
-#~ msgstr "Ingen computer modstandere"
-
-#~ msgid "FORCE"
-#~ msgstr "STYRKE"
-
-#~ msgid "TEMPLATES"
-#~ msgstr "SKABELONER"
-
-#~ msgid "Load Force"
-#~ msgstr "Indlæs styrke"
-
-#~ msgid "Save Force"
-#~ msgstr "Gem styrke"
-
-#~ msgid "CONTROL"
-#~ msgstr "KONTROL"
-
-#~ msgid "Clear Current Force"
-#~ msgstr "Nulstil nuværende styrke"
-
-#~ msgid "Force Editor"
-#~ msgstr "Redigér styrke"
