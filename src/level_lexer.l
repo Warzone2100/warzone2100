@@ -39,16 +39,29 @@
 // Note if we are in a comment
 static BOOL inComment = false;
 
-/* Pointer to the input buffer */
-static const char *pInputBuffer = NULL;
-static const char *pEndBuffer = NULL;
+struct buffer
+{
+	const char* begin;
+	const char* end;
+};
+
+#define YY_EXTRA_TYPE struct buffer *
 
 #define YY_INPUT(buf, result, max_size) \
-      if (pInputBuffer != pEndBuffer) { \
-        buf[0] = *(pInputBuffer++); result = 1; \
-      } else { \
-        buf[0] = EOF; result = YY_NULL; \
-      }
+	if (yyextra->begin != yyextra->end) \
+	{ \
+		buf[0] = *(yyextra->begin++); \
+		result = 1; \
+	} \
+	else \
+	{ \
+		buf[0] = EOF; \
+		result = YY_NULL; \
+	}
+
+#ifndef yyextra
+# define yyextra yyget_extra()
+#endif
 
 %}
 
@@ -117,15 +130,17 @@ miss_clear                                      return MISS_CLEAR;
 
 %%
 
-/* Set the current input buffer for the lexer */
-void levSetInputBuffer(const char* buffer, size_t size)
-{
-	pInputBuffer = buffer;
-	pEndBuffer = &buffer[size];
+static YY_EXTRA_TYPE pBuffer = NULL;
 
-	/* Reset the lexer incase it's been used before */
-	lev__flush_buffer(YY_CURRENT_BUFFER);
+void yyset_extra(YY_EXTRA_TYPE user_defined)
+{
+	pBuffer = user_defined;
 	inComment = false;
+}
+
+YY_EXTRA_TYPE yyget_extra()
+{
+	return pBuffer;
 }
 
 int lev_wrap(void)

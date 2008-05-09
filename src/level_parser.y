@@ -325,11 +325,16 @@ BOOL levParse(const char* buffer, size_t size, searchPathMode datadir)
 {
 	BOOL retval;
 	parser_context context;
+	struct
+	{
+		const char* begin;
+		const char* end;
+	} input = { buffer, &buffer[size] };
 
 	context.datadir = datadir;
 	context.dataset = NULL;
 
-	levSetInputBuffer(buffer, size);
+	lev_set_extra(&input);
 
 	retval = (yyparse(&context) == 0);
 

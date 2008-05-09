@@ -27,7 +27,4 @@
 // error report function for the level parser
 extern void lev_error(const char* msg);
 
-/* Set the current input buffer for the lexer */
-extern void levSetInputBuffer(const char* buffer, size_t size);
-
 #endif // __INCLUDED_SRC_LEVELINT_H__

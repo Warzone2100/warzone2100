@@ -63,11 +63,14 @@ static BOOL inComment = false;
 			} \
 		}
 
+#ifndef yyextra
+# define yyextra yyget_extra()
+#endif
+
 %}
 
-%option yylineno
+%option yylineno nounput
 %option prefix="scrv_"
-%option nounput
 %option header-file="scriptvals_lexer.lex.h"
 
 %x COMMENT
