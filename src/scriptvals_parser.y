@@ -31,6 +31,7 @@
 #include "lib/script/script.h"
 #include "lib/sound/audio.h"
 
+#include "scriptvals_lexer.lex.h"
 #include "src/scripttabs.h"
 #include "src/scriptvals.h"
 #include "src/objects.h"
@@ -845,8 +846,6 @@ BOOL scrvLoad(PHYSFS_file* fileHandle)
 /* A simple error reporting routine */
 void yyerror(const char* fmt, ...)
 {
-	int line;
-	char *pText;
 	char* txtBuf;
 	size_t size;
 	va_list	args;
@@ -861,7 +860,6 @@ void yyerror(const char* fmt, ...)
 	vsprintf(txtBuf, fmt, args);
 	va_end(args);
 
-	scrvGetErrorData(&line, &pText);
 	debug(LOG_ERROR, "VLO parse error: %s at line %d, token: %d, text: '%s'",
-	      txtBuf, line, scrv_char, pText);
+	      txtBuf, scrv_get_lineno(), scrv_char, scrv_get_text());
 }

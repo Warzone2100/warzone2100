@@ -68,6 +68,7 @@ static BOOL inComment = false;
 %option yylineno
 %option prefix="scrv_"
 %option nounput
+%option header-file="scriptvals_lexer.lex.h"
 
 %x COMMENT
 %x SLCOMMENT
@@ -153,22 +154,16 @@ FALSE						{ scrv_lval.bval = false;	 return BOOLEAN_T; }
 
 %%
 
-static PHYSFS_file* pReadFile = NULL;
+static YY_EXTRA_TYPE pReadFile = NULL;
 
-void yyset_extra(PHYSFS_file* user_defined)
+void yyset_extra(YY_EXTRA_TYPE user_defined)
 {
 	pReadFile = user_defined;
 }
 
-PHYSFS_file* yyget_extra()
+YY_EXTRA_TYPE yyget_extra()
 {
 	return pReadFile;
-}
-
-void scrvGetErrorData(int *pLine, char **ppText)
-{
-	*pLine = yyget_lineno();
-	*ppText = yytext;
 }
 
 int scrv_wrap(void)

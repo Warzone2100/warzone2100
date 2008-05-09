@@ -1,7 +1,7 @@
 %.tab.h %.tab.c:: %.y
 	$(YACC) $(YFLAGS) $(AM_YFLAGS) -o$@ $<
 
-%.lex.c:: %.l
+%.lex.h %.lex.c:: %.l
 	$(LEX) $(LFLAGS) $(AM_LFLAGS) -o$@ $<
 
 AM_CPPFLAGS = -DYY_NO_INPUT $(SDL_CFLAGS) $(SDL_NET_CFLAGS) $(PHYSFS_CFLAGS) $(PNG_CFLAGS) $(OGGVORBIS_CFLAGS) $(OPENAL_CFLAGS) $(OPENGLC_CFLAGS) $(OPENGL_CFLAGS) $(POPT_CFLAGS) $(WZ_CPPFLAGS)
