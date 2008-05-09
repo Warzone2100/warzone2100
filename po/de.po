@@ -10,14 +10,15 @@ msgstr ""
 "Project-Id-Version: de\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
 "POT-Creation-Date: 2008-05-09 16:13+0200\n"
-"PO-Revision-Date: 2008-03-24 10:27+0100\n"
-"Last-Translator: Steven 'Kreuvf' Koenig <translations@kreuvf.de>\n"
+"PO-Revision-Date: 2008-04-27 12:56+0000\n"
+"Last-Translator: Steven \"Kreuvf\" Koenig <Unknown>\n"
 "Language-Team: Deutsch <warzone-dev@gna.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.11.4\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Launchpad-Export-Date: 2008-04-28 05:16+0000\n"
+"X-Generator: Launchpad (build Unknown)\n"
 "X-Poedit-Language: German\n"
 "X-Poedit-SourceCharset: utf-8\n"
 "X-Poedit-Basepath: ..\n"
@@ -8393,7 +8394,7 @@ msgstr "Erhöht Schaden durch Laserwaffen"
 #: data/messages/strings/resstrings.txt:1480
 #: data/mp/messages/strings/resstrings.txt:1595
 msgid "Improved Energizer reduces laser recharge time"
-msgstr "Verbesserter Energiespeicher reduziert Laser-Ladezeiten "
+msgstr "Verbesserter Energiespeicher reduziert Laser-Ladezeiten"
 
 #: data/messages/strings/resstrings.txt:1481
 #: data/mp/messages/strings/resstrings.txt:1596
@@ -10263,65 +10264,61 @@ msgstr "Gefechtsfeldcomputersystem verbessert"
 
 #: lib/framework/i18n.c:42
 #: lib/framework/i18n.c:64
-#, fuzzy
 msgid "System locale"
-msgstr "Neues System verfügbar"
+msgstr "Systemsprache"
 
 #: lib/framework/i18n.c:44
 #: lib/framework/i18n.c:69
-#, fuzzy
 msgid "Danish"
-msgstr "Mantis"
+msgstr "Dänisch"
 
 #: lib/framework/i18n.c:45
 #: lib/framework/i18n.c:68
-#, fuzzy
 msgid "German"
-msgstr "Veteran"
+msgstr "Deutsch"
 
 #: lib/framework/i18n.c:46
 #: lib/framework/i18n.c:66
 msgid "English"
-msgstr ""
+msgstr "Englisch"
 
 #: lib/framework/i18n.c:47
 #: lib/framework/i18n.c:70
 msgid "French"
-msgstr ""
+msgstr "Französisch"
 
 #: lib/framework/i18n.c:48
 #: lib/framework/i18n.c:71
-#, fuzzy
 msgid "Italian"
-msgstr "Retaliation"
+msgstr "Italienisch"
 
 #: lib/framework/i18n.c:49
 #: lib/framework/i18n.c:73
 msgid "Dutch"
-msgstr ""
+msgstr "Niederländisch"
 
 #: lib/framework/i18n.c:50
 #: lib/framework/i18n.c:67
 msgid "Norwegian"
-msgstr ""
+msgstr "Norwegisch"
 
 #: lib/framework/i18n.c:51
 #: lib/framework/i18n.c:74
 msgid "Portuegese"
-msgstr ""
+msgstr "Portugiesisch"
 
 #: lib/framework/i18n.c:52
 #: lib/framework/i18n.c:75
 msgid "Russian"
-msgstr ""
+msgstr "Russisch"
 
 #: lib/framework/i18n.c:53
 msgid "Swedish"
-msgstr ""
+msgstr "Schwedisch"
 
 #: lib/framework/i18n.c:72
 msgid "Latin"
-msgstr ""
+msgstr "Latein"
 
 #: src/clparse.c:88
 msgid "Run in cheat mode"
@@ -10373,9 +10370,8 @@ msgid "game-name"
 msgstr "Spielname"
 
 #: src/clparse.c:95
-#, fuzzy
 msgid "Show this help message and exit"
-msgstr "Zeige diese Hilfenachricht und beende das Spiel"
+msgstr "Diese Hilfenachricht anzeigen und Programm beenden"
 
 #: src/clparse.c:96
 msgid "Enable a global mod"
@@ -10408,9 +10404,8 @@ msgid "Play in windowed mode"
 msgstr "Spiele im Fenstermodus"
 
 #: src/clparse.c:103
-#, fuzzy
 msgid "Show version information and exit"
-msgstr "Zeige Versionsinformationen und beende das Spiel"
+msgstr "Versionsinformation anzeigen und Programm beenden"
 
 #: src/clparse.c:104
 msgid "Set the resolution to use"
@@ -10526,20 +10521,17 @@ msgid "Sensor Range"
 msgstr "Sensorreichweite"
 
 #: src/design.c:1580
-#, fuzzy
 msgid "Sensor Power"
-msgstr "Sensorenergie"
+msgstr "Sensorstärke"
 
 #: src/design.c:1621
-#, fuzzy
 msgid "ECM Power"
-msgstr "ECM Energie"
+msgstr "ECM-Stärke"
 
 #: src/design.c:1647
 #: src/design.c:1664
 #: src/design.c:1690
 #: src/design.c:1707
-#, fuzzy
 msgid "Build Points"
 msgstr "Konstruktionspunkte"
 
@@ -10715,7 +10707,6 @@ msgstr "TUTORIALS"
 #: src/frontend.c:843
 #: src/frontend.c:946
 #: src/frontend.c:1109
-#, fuzzy
 msgctxt "menu"
 msgid "Return"
 msgstr "Zurück"
@@ -10929,9 +10920,8 @@ msgstr "Scrollgeschwindigkeit"
 
 #: src/frontend.c:1102
 #: src/frontend.c:1128
-#, fuzzy
 msgid "Language"
-msgstr "Hohe Reichweite"
+msgstr "Sprache"
 
 #: src/frontend.c:1106
 #: src/frontend.c:1129
