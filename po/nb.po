@@ -8,13 +8,15 @@ msgstr ""
 "Project-Id-Version: Warzone 2100 TRUNK\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
 "POT-Creation-Date: 2008-05-09 16:13+0200\n"
-"PO-Revision-Date: 2008-01-20 19:26+0100\n"
-"Last-Translator: Automatically generated\n"
+"PO-Revision-Date: 2008-04-26 12:58+0000\n"
+"Last-Translator: Olav Andreas Lindekleiv <Unknown>\n"
 "Language-Team: none\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Launchpad-Export-Date: 2008-04-28 05:16+0000\n"
+"X-Generator: Launchpad (build Unknown)\n"
 
 #: data/messages/strings/cam1strings.txt:3
 msgid "Campaign One Full Version Test Message"
@@ -201,7 +203,7 @@ msgstr ""
 #: data/messages/strings/cam2strings.txt:118
 #: data/messages/strings/cam3strings.txt:163
 msgid " "
-msgstr ""
+msgstr " "
 
 #: data/messages/strings/cam1strings.txt:65
 msgid "New Paradigm Transmission"
@@ -10254,60 +10256,60 @@ msgstr ""
 #: lib/framework/i18n.c:42
 #: lib/framework/i18n.c:64
 msgid "System locale"
-msgstr ""
+msgstr "Systemspråk"
 
 #: lib/framework/i18n.c:44
 #: lib/framework/i18n.c:69
 msgid "Danish"
-msgstr ""
+msgstr "Dansk"
 
 #: lib/framework/i18n.c:45
 #: lib/framework/i18n.c:68
 msgid "German"
-msgstr ""
+msgstr "Tysk"
 
 #: lib/framework/i18n.c:46
 #: lib/framework/i18n.c:66
 msgid "English"
-msgstr ""
+msgstr "Engelsk"
 
 #: lib/framework/i18n.c:47
 #: lib/framework/i18n.c:70
 msgid "French"
-msgstr ""
+msgstr "Fransk"
 
 #: lib/framework/i18n.c:48
 #: lib/framework/i18n.c:71
 msgid "Italian"
-msgstr ""
+msgstr "Italiensk"
 
 #: lib/framework/i18n.c:49
 #: lib/framework/i18n.c:73
 msgid "Dutch"
-msgstr ""
+msgstr "Nederlandsk"
 
 #: lib/framework/i18n.c:50
 #: lib/framework/i18n.c:67
 msgid "Norwegian"
-msgstr ""
+msgstr "Norsk"
 
 #: lib/framework/i18n.c:51
 #: lib/framework/i18n.c:74
 msgid "Portuegese"
-msgstr ""
+msgstr "Portugisisk"
 
 #: lib/framework/i18n.c:52
 #: lib/framework/i18n.c:75
 msgid "Russian"
-msgstr ""
+msgstr "Russisk"
 
 #: lib/framework/i18n.c:53
 msgid "Swedish"
-msgstr ""
+msgstr "Svensk"
 
 #: lib/framework/i18n.c:72
 msgid "Latin"
-msgstr ""
+msgstr "Latin"
 
 #: src/clparse.c:88
 msgid "Run in cheat mode"
@@ -10583,7 +10585,7 @@ msgstr ""
 
 #: src/droid.c:190
 msgid "Unit Lost!"
-msgstr ""
+msgstr "Enhet Tapt!"
 
 #: src/droid.c:1614
 msgid "Structure Restored"
@@ -10619,40 +10621,40 @@ msgstr[1] ""
 
 #: src/droid.c:3657
 msgid "Rookie"
-msgstr ""
+msgstr "Nybegynner"
 
 #: src/droid.c:3658
 msgctxt "rank"
 msgid "Green"
-msgstr ""
+msgstr "Grønn"
 
 #: src/droid.c:3659
 msgid "Trained"
-msgstr ""
+msgstr "Trent"
 
 #: src/droid.c:3660
 msgid "Regular"
-msgstr ""
+msgstr "Vanlig"
 
 #: src/droid.c:3661
 msgid "Professional"
-msgstr ""
+msgstr "Profesjonell"
 
 #: src/droid.c:3662
 msgid "Veteran"
-msgstr ""
+msgstr "Veteran"
 
 #: src/droid.c:3663
 msgid "Elite"
-msgstr ""
+msgstr "Elite"
 
 #: src/droid.c:3664
 msgid "Special"
-msgstr ""
+msgstr "Spesiell"
 
 #: src/droid.c:3665
 msgid "Hero"
-msgstr ""
+msgstr "Helt"
 
 #: src/frontend.c:241
 msgid "Single Player Campaign"
@@ -10718,7 +10720,7 @@ msgstr "SOLOSPILL"
 #: src/mission.c:2826
 #: src/mission.c:2927
 msgid "Load Saved Game"
-msgstr ""
+msgstr "Last inn spill"
 
 #: src/frontend.c:476
 msgid "MULTI PLAYER"
@@ -10797,7 +10799,7 @@ msgstr ""
 #: src/frontend.c:631
 #: src/multiint.c:722
 msgid "Fog"
-msgstr ""
+msgstr "Tåke"
 
 #: src/frontend.c:634
 #: src/frontend.c:752
@@ -10808,7 +10810,7 @@ msgstr ""
 #: src/frontend.c:745
 #: src/multiint.c:724
 msgid "Fog Of War"
-msgstr ""
+msgstr "Krigståke"
 
 #: src/frontend.c:643
 msgid "Video Playback"
@@ -10972,22 +10974,22 @@ msgstr ""
 
 #: src/hci.c:3791
 msgid "Manufacture (F1)"
-msgstr ""
+msgstr "Produksjon (F1)"
 
 #: src/hci.c:3807
 #, fuzzy
 msgid "Design (F4)"
-msgstr "Design"
+msgstr "Design (F4)"
 
 #: src/hci.c:3823
 #, fuzzy
 msgid "Research (F2)"
-msgstr "Forskning"
+msgstr "Forskning (F2)"
 
 #: src/hci.c:3839
 #, fuzzy
 msgid "Build (F3)"
-msgstr "Bygg"
+msgstr "Bygg (F3)"
 
 #: src/hci.c:3919
 #: src/multiint.c:772
@@ -11005,7 +11007,7 @@ msgstr ""
 
 #: src/hci.c:4113
 msgid "Unit"
-msgstr ""
+msgstr "Enhet"
 
 #: src/hci.c:4114
 msgid "Place Unit on map"
@@ -11016,8 +11018,9 @@ msgid "Struct"
 msgstr ""
 
 #: src/hci.c:4123
+#, fuzzy
 msgid "Place Structures on map"
-msgstr ""
+msgstr "Sett strukturbegrensninger"
 
 #: src/hci.c:4131
 msgid "Feat"
@@ -11028,8 +11031,9 @@ msgid "Place Features on map"
 msgstr ""
 
 #: src/hci.c:4143
+#, fuzzy
 msgid "Pause or unpause the game"
-msgstr ""
+msgstr "Verten har forlatt spillet!"
 
 #: src/hci.c:4157
 msgid "Align height of all map objects"
@@ -11052,11 +11056,11 @@ msgstr "Avslutt Spill"
 #: src/intdisplay.c:254
 #: src/intdisplay.c:300
 msgid "Progress Bar"
-msgstr ""
+msgstr "Framdriftslinje"
 
 #: src/hci.c:5600
 msgid "Factory Delivery Point"
-msgstr ""
+msgstr "Leveringsmål for fabrikk"
 
 #: src/hci.c:5619
 msgid "Loop Production"
@@ -11086,7 +11090,7 @@ msgstr "Last Spill"
 #: src/mission.c:2816
 #: src/mission.c:2930
 msgid "Save Game"
-msgstr ""
+msgstr "Lagre spill"
 
 #: src/intdisplay.c:201
 #: src/intdisplay.c:246
@@ -11214,11 +11218,11 @@ msgstr ""
 
 #: src/keybind.c:131
 msgid "Sorry, that cheat is disabled in multiplayer games."
-msgstr ""
+msgstr "Beklager, den juksekoden er slått av i flerspiller-modus."
 
 #: src/keybind.c:195
 msgid "Lets us see what you see!"
-msgstr ""
+msgstr "Las oss se hva du ser!"
 
 #: src/keybind.c:197
 msgid "Fine, sensor display is off!"
@@ -11254,11 +11258,11 @@ msgstr ""
 
 #: src/keybind.c:386
 msgid "FPS display is enabled."
-msgstr ""
+msgstr "FPS-visning er slått på."
 
 #: src/keybind.c:390
 msgid "FPS display is disabled."
-msgstr ""
+msgstr "FPS-visning er slått av."
 
 #: src/keybind.c:403
 #, c-format
@@ -11267,23 +11271,23 @@ msgstr ""
 
 #: src/keybind.c:458
 msgid "Infinite power disabled"
-msgstr ""
+msgstr "Uendelig energi slått av"
 
 #: src/keybind.c:463
 msgid "Infinite power enabled"
-msgstr ""
+msgstr "Uendelig energi slått på"
 
 #: src/keybind.c:516
 msgid "All items made available"
-msgstr ""
+msgstr "Alle gjenstander er nå tilgjengelige"
 
 #: src/keybind.c:608
 msgid "Fog off"
-msgstr ""
+msgstr "Tåke slått av"
 
 #: src/keybind.c:614
 msgid "Fog on"
-msgstr ""
+msgstr "Tåke slått på"
 
 #: src/keybind.c:1200
 msgid "View Aligned to North"
@@ -11299,7 +11303,7 @@ msgstr ""
 
 #: src/keybind.c:1317
 msgid "Demo mode off - Returning to normal game mode"
-msgstr ""
+msgstr "Demomodus slått av - Går tilbake til normalt spillmodus"
 
 #: src/keybind.c:1358
 msgid "Unable to locate any resource extractors!"
@@ -11307,7 +11311,7 @@ msgstr ""
 
 #: src/keybind.c:1581
 msgid "Oh, the weather outside is frightful... SNOW"
-msgstr ""
+msgstr "Oi, værskifte i vente... SNØ"
 
 #: src/keybind.c:1587
 msgid "Singing in the rain, I'm singing in the rain... RAIN"
@@ -11315,7 +11319,7 @@ msgstr ""
 
 #: src/keybind.c:1593
 msgid "Forecast : Clear skies for all areas... NO WEATHER"
-msgstr ""
+msgstr "Værtmelding: Klar himmel, ingen skyer i vente... IKKE VÆR"
 
 #: src/keybind.c:1626
 msgid "Enemy destroyed by cheating!"
@@ -11327,7 +11331,7 @@ msgstr ""
 
 #: src/keybind.c:2164
 msgid "Unable to locate HQ!"
-msgstr ""
+msgstr "Klarer ikke å finne hovedkvarter!"
 
 #: src/keybind.c:2180
 msgid "Formation speed limiting OFF"
@@ -11346,20 +11350,20 @@ msgstr ""
 #: src/keybind.c:2321
 #, c-format
 msgid "Game Speed Increased to %3.1f"
-msgstr ""
+msgstr "Spillfart øker til %3.1f"
 
 #: src/keybind.c:2362
 #, c-format
 msgid "Game Speed Reduced to %3.1f"
-msgstr ""
+msgstr "Spillfart reduseres til %3.1f"
 
 #: src/keybind.c:2392
 msgid "Build menu will reopen"
-msgstr ""
+msgstr "Byggemenyen vil gjenåpnes"
 
 #: src/keybind.c:2396
 msgid "Build menu will not reopen"
-msgstr ""
+msgstr "Byggemenyen vil ikke gjenåpnes"
 
 #: src/keybind.c:2408
 msgid "Radar showing friend-foe colors"
@@ -11367,11 +11371,11 @@ msgstr ""
 
 #: src/keybind.c:2412
 msgid "Radar showing player colors"
-msgstr ""
+msgstr "Radar viser spillernes farger"
 
 #: src/keybind.c:2429
 msgid "Radar showing only objects"
-msgstr ""
+msgstr "Radar viser kun gjenstander"
 
 #: src/keybind.c:2432
 msgid "Radar blending terrain and height"
@@ -11379,11 +11383,11 @@ msgstr ""
 
 #: src/keybind.c:2435
 msgid "Radar showing terrain"
-msgstr ""
+msgstr "Radar viser terreng"
 
 #: src/keybind.c:2438
 msgid "Radar showing height"
-msgstr ""
+msgstr "Radar viser høyde"
 
 #: src/keyedit.c:356
 msgid "KEY MAPPING"
@@ -11400,7 +11404,7 @@ msgstr ""
 
 #: src/keyedit.c:383
 msgid "Select Default"
-msgstr ""
+msgstr "Bruk forhåndsvalg"
 
 #: src/keymap.c:292
 msgid "Manufacture"
@@ -11799,14 +11803,14 @@ msgid "%s Gives You A Visibility Report"
 msgstr "%s gir deg oversiktskart"
 
 #: src/multigifts.c:188
-#, fuzzy, c-format
+#, c-format
 msgid "%s Gives you a %s"
-msgstr "%s gir deg enheter"
+msgstr "%s gir deg en %s"
 
 #: src/multigifts.c:238
 #, c-format
 msgid "Tried to give away a %s - but this is not allowed."
-msgstr ""
+msgstr "Prøvde å gi bort en %s, men det er ikke lov."
 
 #: src/multigifts.c:297
 #, c-format
@@ -11821,7 +11825,7 @@ msgstr "%s gir deg energi"
 #: src/multigifts.c:355
 #, c-format
 msgid "%s Requests An Alliance With You"
-msgstr "%s spør etter en allianse med deg"
+msgstr "%s ønsker å inngå en allianse med deg"
 
 #: src/multigifts.c:364
 #, c-format
@@ -11846,52 +11850,51 @@ msgstr ""
 #: src/multiint.c:333
 #: src/multilimit.c:156
 msgid "Accept Settings"
-msgstr ""
+msgstr "Aksepter instillinger"
 
 #: src/multiint.c:344
 msgid "IP Address or Machine Name"
-msgstr ""
+msgstr "IP-adresse eller maskinnavn"
 
 #: src/multiint.c:385
 msgid "CONNECTION"
-msgstr ""
+msgstr "TILKOBLING"
 
 #: src/multiint.c:398
 msgid "Lobby"
-msgstr ""
+msgstr "Entré"
 
 #: src/multiint.c:399
 msgid "IP"
-msgstr ""
+msgstr "IP"
 
 #: src/multiint.c:590
 msgid "Searching"
-msgstr ""
+msgstr "Søker"
 
 #: src/multiint.c:601
 msgid "GAMES"
-msgstr ""
+msgstr "SPILL"
 
 #: src/multiint.c:611
 msgid "Refresh Games List"
-msgstr ""
+msgstr "Oppdater Spilliste"
 
 #: src/multiint.c:686
 msgid "OPTIONS"
 msgstr "ALTERNATIVER"
 
 #: src/multiint.c:688
-#, fuzzy
 msgid "Select Game Name"
-msgstr "Nullstill hastighet"
+msgstr "Velg spillnavn"
 
 #: src/multiint.c:689
 msgid "Select Map"
-msgstr ""
+msgstr "Velg kart"
 
 #: src/multiint.c:694
 msgid "Game"
-msgstr ""
+msgstr "Spill"
 
 #: src/multiint.c:696
 msgid "Mayhem"
@@ -11903,7 +11906,7 @@ msgstr ""
 
 #: src/multiint.c:719
 msgid "Select Player Name"
-msgstr ""
+msgstr "Velg spillernavn"
 
 #: src/multiint.c:725
 msgid "Distance Fog"
@@ -11912,49 +11915,49 @@ msgstr ""
 #: src/multiint.c:738
 #: src/multimenu.c:706
 msgid "Alliances"
-msgstr ""
+msgstr "Allianser"
 
 #: src/multiint.c:741
 msgid "No Alliances"
-msgstr ""
+msgstr "Ingen allianser"
 
 #: src/multiint.c:743
 msgid "Allow Alliances"
-msgstr ""
+msgstr "Aktiver allianser"
 
 #: src/multiint.c:747
 #: src/multiint.c:1953
 msgid "Locked Teams"
-msgstr ""
+msgstr "Låste lag"
 
 #: src/multiint.c:779
 msgid "Low Power Levels"
-msgstr ""
+msgstr "Lavt energinivå"
 
 #: src/multiint.c:781
 msgid "Medium Power Levels"
-msgstr ""
+msgstr "Middels energinivå"
 
 #: src/multiint.c:783
 msgid "High Power Levels"
-msgstr ""
+msgstr "Høyt energinivå"
 
 #: src/multiint.c:803
 #: src/multiint.c:807
 msgid "Base"
-msgstr ""
+msgstr "Base"
 
 #: src/multiint.c:810
 msgid "Start with No Bases"
-msgstr ""
+msgstr "Start uten baser"
 
 #: src/multiint.c:812
 msgid "Start with Bases"
-msgstr ""
+msgstr "Start med baser"
 
 #: src/multiint.c:814
 msgid "Start with Advanced Bases"
-msgstr ""
+msgstr "Start med avanserte baser"
 
 #: src/multiint.c:831
 msgid "Map Preview"
@@ -11970,7 +11973,7 @@ msgstr ""
 
 #: src/multiint.c:855
 msgid "Set Structure Limits"
-msgstr ""
+msgstr "Sett strukturbegrensninger"
 
 #: src/multiint.c:1207
 msgid "Team"
@@ -11986,24 +11989,24 @@ msgstr ""
 
 #: src/multiint.c:1299
 msgid "PLAYERS"
-msgstr ""
+msgstr "SPILLERE"
 
 #: src/multiint.c:1436
 msgid "CHAT"
-msgstr ""
+msgstr "PRAT"
 
 #: src/multiint.c:1997
 #, c-format
 msgid "The host has kicked %s from the game!"
-msgstr "Verten har sparket %s fra spillet!"
+msgstr "Verten har kastet ut %s fra spillet!"
 
 #: src/multiint.c:2088
 msgid "Host is Starting Game"
-msgstr "Verten starter spillet"
+msgstr "Vert starter spill"
 
 #: src/multiint.c:2535
 msgid "Players"
-msgstr ""
+msgstr "Spillere"
 
 #: src/multijoin.c:98
 #: src/multijoin.c:99
@@ -12086,7 +12089,7 @@ msgstr ""
 
 #: src/multiplay.c:729
 msgid "The host has left the game!"
-msgstr ""
+msgstr "Verten har forlatt spillet!"
 
 #: src/multiplay.c:1908
 msgid "Green"
@@ -12118,7 +12121,7 @@ msgstr "Rosa"
 
 #: src/multiplay.c:1915
 msgid "Cyan"
-msgstr ""
+msgstr "Cyanblå"
 
 #: src/research.c:1849
 #, fuzzy, c-format
@@ -12268,13 +12271,13 @@ msgstr ""
 #, c-format
 msgid "%u unit selected"
 msgid_plural "%u units selected"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%u enhet valgt"
+msgstr[1] "%u enheter valgt"
 
 #: src/selection.c:434
 #: src/selection.c:521
 msgid "Unable to locate any repair units!"
-msgstr ""
+msgstr "Fant ingen repareringsenheter!"
 
 #: src/selection.c:437
 msgid "Unable to locate any Trucks!"
@@ -12306,15 +12309,15 @@ msgid "%s - Connected %u of %u"
 msgstr "%s - Forbundet med %u av %u mulige"
 
 #: src/structure.c:5911
-#, c-format
+#, fuzzy, c-format
 msgid "%s - Damage %3.0f%%"
-msgstr ""
+msgstr "%s - Skade %u%%"
 
 #: src/structure.c:6031
 #: src/structure.c:6080
 #, c-format
 msgid "%s - Electronically Damaged"
-msgstr ""
+msgstr "%s - Elektrisk skadet"
 
 #: src/structure.c:6315
 msgid "Electronic Reward - Visibility Report"
@@ -12379,4 +12382,4 @@ msgstr " - bygd %s"
 #: src/version.c:167
 #, c-format
 msgid "Version %s%s%s%s"
-msgstr "Versjon %s%s%s%s"
+msgstr "Version %s%s%s%s"
