@@ -8,12 +8,15 @@ msgstr ""
 "Project-Id-Version: Warzone 2100 TRUNK\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
 "POT-Creation-Date: 2008-05-09 16:13+0200\n"
-"PO-Revision-Date: 2008-01-20 19:26+0100\n"
-"Last-Translator: Giel van Schijndel <me@mortis.eu>\n"
+"PO-Revision-Date: 2008-03-30 15:12+0000\n"
+"Last-Translator: Mortis <Unknown>\n"
 "Language-Team: Latin\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Launchpad-Export-Date: 2008-04-28 05:16+0000\n"
+"X-Generator: Launchpad (build Unknown)\n"
 
 #: data/messages/strings/cam1strings.txt:3
 msgid "Campaign One Full Version Test Message"
@@ -200,7 +203,7 @@ msgstr ""
 #: data/messages/strings/cam2strings.txt:118
 #: data/messages/strings/cam3strings.txt:163
 msgid " "
-msgstr ""
+msgstr " "
 
 #: data/messages/strings/cam1strings.txt:65
 msgid "New Paradigm Transmission"
@@ -11790,9 +11793,9 @@ msgid "%s Gives You A Visibility Report"
 msgstr "%s tibi visibilitatem relatum dāt"
 
 #: src/multigifts.c:188
-#, fuzzy, c-format
+#, c-format
 msgid "%s Gives you a %s"
-msgstr "%s dō "
+msgstr ""
 
 #: src/multigifts.c:238
 #, c-format
@@ -11807,7 +11810,7 @@ msgstr ""
 #: src/multigifts.c:335
 #, c-format
 msgid "%s Gives You Power"
-msgstr "%s dō "
+msgstr ""
 
 #: src/multigifts.c:355
 #, c-format
@@ -12177,9 +12180,9 @@ msgid "Green: %u"
 msgstr "Viridum"
 
 #: src/scores.c:110
-#, fuzzy, c-format
+#, c-format
 msgid "Trained: %u"
-msgstr "Exercitum"
+msgstr ""
 
 #: src/scores.c:111
 #, c-format
@@ -12192,9 +12195,9 @@ msgid "Professional: %u"
 msgstr ""
 
 #: src/scores.c:113
-#, fuzzy, c-format
+#, c-format
 msgid "Veteran: %u"
-msgstr "Veteranum"
+msgstr ""
 
 #: src/scores.c:114
 #, c-format
@@ -12207,9 +12210,9 @@ msgid "Special: %u"
 msgstr ""
 
 #: src/scores.c:116
-#, fuzzy, c-format
+#, c-format
 msgid "Hero: %u"
-msgstr "Heros"
+msgstr ""
 
 #: src/scores.c:350
 msgid "Unit Losses"
