@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2008-05-09 16:06+0200\n"
+"POT-Creation-Date: 2008-05-09 16:13+0200\n"
 "PO-Revision-Date: 2008-04-20 22:47+0000\n"
 "Last-Translator: Samuel G. I. <amuchamu@gmail.com>\n"
 "Language-Team: Spanish <warzone-dev@gna.org>\n"
@@ -939,12 +939,12 @@ msgid "Enemy forces are ....... from these coordinates."
 msgstr "Las fuerzas enemigas están ....... de estas coordenadas."
 
 #: data/messages/strings/cam3strings.txt:82
-msgid "Defend the base and ........ the ....... "
-msgstr "Defiende la base y ........ el ....... "
+msgid "Defend the base and ........ the ......."
+msgstr "Defiende la base y ........ el ......."
 
 #: data/messages/strings/cam3strings.txt:83
-msgid "Search and destroy .... "
-msgstr "Busca y destruye .... "
+msgid "Search and destroy ...."
+msgstr "Busca y destruye ...."
 
 #: data/messages/strings/cam3strings.txt:86
 msgid "TRANSPORT MISSION: Ambush NEXUS Forces"
@@ -8365,8 +8365,8 @@ msgstr "Todos los lásers actualizados automáticamente"
 
 #: data/messages/strings/resstrings.txt:1474
 #: data/mp/messages/strings/resstrings.txt:1589
-msgid "Improvement in laser emission density "
-msgstr "Mejora en la densidad de emisión láser "
+msgid "Improvement in laser emission density"
+msgstr "Mejora en la densidad de emisión láser"
 
 #: data/messages/strings/resstrings.txt:1475
 #: data/mp/messages/strings/resstrings.txt:1590

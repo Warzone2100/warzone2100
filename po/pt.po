@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100 2.1_beta2\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2008-05-09 16:06+0200\n"
+"POT-Creation-Date: 2008-05-09 16:13+0200\n"
 "PO-Revision-Date: 2008-05-05 20:25-0300\n"
 "Last-Translator: Artur <tucalipe@hotmail.com>\n"
 "Language-Team: Portugese <warzone-dev@gna.org>\n"
@@ -937,11 +937,11 @@ msgid "Enemy forces are ....... from these coordinates."
 msgstr "Forças inimigas....... dessas coordenadas."
 
 #: data/messages/strings/cam3strings.txt:82
-msgid "Defend the base and ........ the ....... "
+msgid "Defend the base and ........ the ......."
 msgstr "Defenda a base e........ e o .........."
 
 #: data/messages/strings/cam3strings.txt:83
-msgid "Search and destroy .... "
+msgid "Search and destroy ...."
 msgstr "Procure e destrua..........."
 
 #: data/messages/strings/cam3strings.txt:86
@@ -8357,7 +8357,7 @@ msgstr "Todos os lasers melhorados automaticamente"
 
 #: data/messages/strings/resstrings.txt:1474
 #: data/mp/messages/strings/resstrings.txt:1589
-msgid "Improvement in laser emission density "
+msgid "Improvement in laser emission density"
 msgstr "Melhora na densidade na emissão laser"
 
 #: data/messages/strings/resstrings.txt:1475

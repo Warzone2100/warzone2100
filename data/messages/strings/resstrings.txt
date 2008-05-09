@@ -1471,7 +1471,7 @@ RES_LASAC1_MSG4			_("All lasers upgraded automatically")
 
 //R-Won-Energy-Damage01			Hi-Energy Laser Emitter
 RES_LASD1_MSG1			_("Laser Upgrade")
-RES_LASD1_MSG2			_("Improvement in laser emission density ")
+RES_LASD1_MSG2			_("Improvement in laser emission density")
 RES_LASD1_MSG3			_("Increases Laser damage")
 RES_LASD1_MSG4			_("All lasers upgraded automatically")
 
