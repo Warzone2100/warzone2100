@@ -489,6 +489,8 @@ void systemShutdown(void)
 	widgShutDown();
 	pie_TerrainCleanup();
 
+	fpathShutdown();
+
 	return;
 }
 

@@ -80,6 +80,11 @@ BOOL fpathInitialise(void)
 	return true;
 }
 
+void fpathShutdown()
+{
+	fpathHardTableReset();
+}
+
 /** Updates the pathfinding system.
  *  @post Pathfinding jobs for DROID's that died, aren't waiting for a route
  *        anymore, or the currently calculated route is outdated for, are

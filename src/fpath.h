@@ -44,6 +44,12 @@ typedef enum _fpath_retval
  */
 extern BOOL fpathInitialise(void);
 
+/** Shutdown the path-finding module.
+ *
+ *  @ingroup
+ */
+extern void fpathShutdown(void);
+
 extern void fpathUpdate(void);
 
 /** Find a route for a droid to a location.

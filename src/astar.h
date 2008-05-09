@@ -77,4 +77,12 @@ SDWORD fpathAStarRoute(SDWORD routeMode, MOVE_CONTROL *psMove, SDWORD sx, SDWORD
  */
 extern BOOL fpathTileLOS(SDWORD x1,SDWORD y1, SDWORD x2,SDWORD y2);
 
+/** Clean up the path finding node table.
+ *
+ *  @note Call this <em>only</em> on shutdown to prevent memory from leaking.
+ *
+ *  @ingroup pathfinding
+ */
+extern void fpathHardTableReset(void);
+
 #endif // __INCLUDED_SRC_ASTART_H__

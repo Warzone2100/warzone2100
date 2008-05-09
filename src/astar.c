@@ -158,8 +158,6 @@ static FP_NODE* fpathGetNode(int x, int y)
  */
 static void fpathTableReset(void)
 {
-	int x, y;
-
 	// Reset node table, simulate this by incrementing the iteration
 	// counter, which will invalidate all nodes currently in the table. See
 	// the implementation of fpathGetNode().
@@ -176,6 +174,13 @@ static void fpathTableReset(void)
 	// If we're about to overflow resetIterationCount, reset the entire
 	// table for real (not lazy for once in a while) and start counting
 	// at zero (0) again.
+	fpathHardTableReset();
+}
+
+void fpathHardTableReset()
+{
+	int x, y;
+
 	for (x = 0; x < ARRAY_SIZE(nodeArray); ++x)
 	{
 		for (y = 0; y < ARRAY_SIZE(nodeArray[x]); ++y)
