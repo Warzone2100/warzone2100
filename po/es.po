@@ -8,18 +8,18 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
 "POT-Creation-Date: 2008-05-09 16:13+0200\n"
-"PO-Revision-Date: 2008-04-20 22:47+0000\n"
+"PO-Revision-Date: 2008-04-21 13:55+0000\n"
 "Last-Translator: Samuel G. I. <amuchamu@gmail.com>\n"
 "Language-Team: Spanish <warzone-dev@gna.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Launchpad-Export-Date: 2008-04-28 05:16+0000\n"
+"X-Generator: Launchpad (build Unknown)\n"
 "X-Poedit-Language: Spanish\n"
 "X-Poedit-SourceCharset: utf-8\n"
 "X-Poedit-Basepath: ..\n"
-"X-Launchpad-Export-Date: 2008-04-17 06:56+0000\n"
-"X-Generator: Launchpad (build Unknown)\n"
 
 #: data/messages/strings/cam1strings.txt:3
 msgid "Campaign One Full Version Test Message"
@@ -2050,9 +2050,8 @@ msgstr "Enlace NEXUS"
 
 #: data/messages/strings/names.txt:379
 #: data/messages/strings/names.txt:908
-#, fuzzy
 msgid "Scrambler Turret"
-msgstr "Torreta Decodificadora"
+msgstr "Torrete de Interferência"
 
 #: data/messages/strings/names.txt:382
 #: data/mp/messages/strings/names.txt:384
@@ -3747,9 +3746,8 @@ msgstr "Torreta de Golpe ADV"
 
 #: data/messages/strings/names.txt:909
 #: data/mp/messages/strings/names.txt:917
-#, fuzzy
 msgid "Improved Scrambler"
-msgstr "Decodificador Mejorado"
+msgstr "Gerador de Interferência Melhorado"
 
 #: data/messages/strings/names.txt:910
 #: data/mp/messages/strings/names.txt:918
@@ -7084,9 +7082,8 @@ msgstr "Sistema avanzado de reconocimiento de objetivos"
 
 #: data/messages/strings/resstrings.txt:916
 #: data/mp/messages/strings/resstrings.txt:1000
-#, fuzzy
 msgid "Synaptic Link Scrambler technology"
-msgstr "Tecnología Decodificadora de Enlace Sináptico"
+msgstr "Tecnologia de Interferência na Conexão Sináptica"
 
 #: data/messages/strings/resstrings.txt:917
 #: data/mp/messages/strings/resstrings.txt:1001
@@ -7099,9 +7096,8 @@ msgstr "Roba tecnología a los enemigos"
 
 #: data/messages/strings/resstrings.txt:921
 #: data/mp/messages/strings/resstrings.txt:1005
-#, fuzzy
 msgid "Scrambler Improved"
-msgstr "Decodificador Mejorado"
+msgstr "Gerador de Interferência Melhorado"
 
 #: data/messages/strings/resstrings.txt:922
 #: data/mp/messages/strings/resstrings.txt:1006
@@ -7110,15 +7106,13 @@ msgstr "Mejora de la tecnología de enlace sináptico"
 
 #: data/messages/strings/resstrings.txt:923
 #: data/mp/messages/strings/resstrings.txt:1007
-#, fuzzy
 msgid "Increases scrambler rate"
-msgstr "Mejora Velocidad de Decodificación"
+msgstr "Aumenta a velocidade da interferência"
 
 #: data/messages/strings/resstrings.txt:924
 #: data/mp/messages/strings/resstrings.txt:1008
-#, fuzzy
 msgid "All scramblers upgraded automatically"
-msgstr "Todos los decodificadores actualizados automáticamente"
+msgstr "Todos os geradores de interferência melhorados automaticamente"
 
 #: data/messages/strings/resstrings.txt:927
 #: data/messages/strings/resstrings.txt:933
