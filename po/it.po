@@ -8,13 +8,15 @@ msgstr ""
 "Project-Id-Version: Warzone 2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
 "POT-Creation-Date: 2008-05-09 16:13+0200\n"
-"PO-Revision-Date: 2008-03-20 00:23+0100\n"
-"Last-Translator: Federico Aromolo <miracleblade@hotmail.it>\n"
+"PO-Revision-Date: 2008-04-14 11:58+0000\n"
+"Last-Translator: Matteo Ferrabone <Unknown>\n"
 "Language-Team: Italian <warzone-dev@gna.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Launchpad-Export-Date: 2008-04-28 05:16+0000\n"
+"X-Generator: Launchpad (build Unknown)\n"
 "X-Poedit-Language: Italian\n"
 "X-Poedit-SourceCharset: utf-8\n"
 "X-Poedit-Basepath: ..\n"
@@ -719,7 +721,7 @@ msgstr "Se devi scappare, distruggi i missili terra-aria intorno alla tua base."
 
 #: data/messages/strings/cam2strings.txt:138
 msgid "Fly to the LZ, then head overland to destroy the SAM sites."
-msgstr "Vola al Punto di Atterraggio, poi muoviti per via di terra per distruggere i siti SAM. "
+msgstr "Vola al Punto di Atterraggio, poi muoviti per via di terra per distruggere i siti SAM."
 
 #: data/messages/strings/cam2strings.txt:141
 #: data/messages/strings/cam2strings.txt:146
@@ -862,7 +864,7 @@ msgstr "La vallata è la vostra unica speranza di fuga."
 
 #: data/messages/strings/cam3strings.txt:45
 msgid "AWAY TEAM UPDATE"
-msgstr "AGGIORNAMENTO DELLA SQUADRA "
+msgstr "AGGIORNAMENTO DELLA SQUADRA"
 
 #: data/messages/strings/cam3strings.txt:46
 msgid "All communication with the away team was lost after the nuclear explosions."
@@ -1701,7 +1703,7 @@ msgstr "Civile"
 #: data/mp/messages/strings/names.txt:214
 #: data/mp/messages/strings/names.txt:220
 msgid "Machinegunner"
-msgstr ""
+msgstr "Mitragliatrice"
 
 #: data/messages/strings/names.txt:213
 #: data/messages/strings/names.txt:479
@@ -1714,7 +1716,7 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:678
 #: data/mp/messages/strings/names.txt:1065
 msgid "Flamer"
-msgstr ""
+msgstr "Lancia fiamme"
 
 #: data/messages/strings/names.txt:214
 #: data/messages/strings/names.txt:221
@@ -1737,8 +1739,9 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:222
 #: data/mp/messages/strings/names.txt:535
 #: data/mp/messages/strings/names.txt:677
+#, fuzzy
 msgid "Heavy Gunner"
-msgstr ""
+msgstr "Artiglieria Pesante"
 
 #: data/messages/strings/names.txt:219
 #: data/mp/messages/strings/names.txt:221
@@ -10257,12 +10260,12 @@ msgstr "Veterana"
 #: lib/framework/i18n.c:46
 #: lib/framework/i18n.c:66
 msgid "English"
-msgstr ""
+msgstr "Inglese"
 
 #: lib/framework/i18n.c:47
 #: lib/framework/i18n.c:70
 msgid "French"
-msgstr ""
+msgstr "Francese"
 
 #: lib/framework/i18n.c:48
 #: lib/framework/i18n.c:71
@@ -10273,30 +10276,30 @@ msgstr "Retaliation"
 #: lib/framework/i18n.c:49
 #: lib/framework/i18n.c:73
 msgid "Dutch"
-msgstr ""
+msgstr "Olandese"
 
 #: lib/framework/i18n.c:50
 #: lib/framework/i18n.c:67
 msgid "Norwegian"
-msgstr ""
+msgstr "Norvegese"
 
 #: lib/framework/i18n.c:51
 #: lib/framework/i18n.c:74
 msgid "Portuegese"
-msgstr ""
+msgstr "Portoghese"
 
 #: lib/framework/i18n.c:52
 #: lib/framework/i18n.c:75
 msgid "Russian"
-msgstr ""
+msgstr "Russo"
 
 #: lib/framework/i18n.c:53
 msgid "Swedish"
-msgstr ""
+msgstr "Svedese"
 
 #: lib/framework/i18n.c:72
 msgid "Latin"
-msgstr ""
+msgstr "Latino"
 
 #: src/clparse.c:88
 msgid "Run in cheat mode"
@@ -11240,11 +11243,11 @@ msgstr "Due volte più bello!"
 
 #: src/keybind.c:386
 msgid "FPS display is enabled."
-msgstr ""
+msgstr "FPS display è attivato."
 
 #: src/keybind.c:390
 msgid "FPS display is disabled."
-msgstr ""
+msgstr "FPS display è disattivato."
 
 #: src/keybind.c:403
 #, c-format
@@ -11349,15 +11352,15 @@ msgstr "Il menu Costruzione non si riaprirà"
 
 #: src/keybind.c:2408
 msgid "Radar showing friend-foe colors"
-msgstr ""
+msgstr "Il radar mostra i colori Amici-Nemici"
 
 #: src/keybind.c:2412
 msgid "Radar showing player colors"
-msgstr ""
+msgstr "Il radar mostra il colore dei giocatori"
 
 #: src/keybind.c:2429
 msgid "Radar showing only objects"
-msgstr ""
+msgstr "Il radar mostra solo oggetti"
 
 #: src/keybind.c:2432
 msgid "Radar blending terrain and height"
@@ -11365,11 +11368,11 @@ msgstr ""
 
 #: src/keybind.c:2435
 msgid "Radar showing terrain"
-msgstr ""
+msgstr "Il radar mostra il terreno"
 
 #: src/keybind.c:2438
 msgid "Radar showing height"
-msgstr ""
+msgstr "Il radar mostra l'altitudine"
 
 #: src/keyedit.c:356
 msgid "KEY MAPPING"
@@ -12340,15 +12343,15 @@ msgstr "I rinforzi stanno atterrando"
 
 #: src/version.c:137
 msgid " (modified and switched locally)"
-msgstr "(modificato e cambiato localmente)"
+msgstr " (modificato e cambiato localmente)"
 
 #: src/version.c:139
 msgid " (modified locally)"
-msgstr "(modificato localmente)"
+msgstr " (modificato localmente)"
 
 #: src/version.c:141
 msgid " (switched locally)"
-msgstr "(cambiato localmente)"
+msgstr " (cambiato localmente)"
 
 #: src/version.c:148
 msgid " - DEBUG"
