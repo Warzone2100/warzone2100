@@ -50,14 +50,11 @@ static const char *pEndBuffer = NULL;
         buf[0] = EOF; result = YY_NULL; \
       }
 
-#undef lev_getc
-#define lev_getc() (pInputBuffer != pEndBuffer ? *(pInputBuffer++) : EOF)
-
 %}
 
-%option nounput
+%option yylineno nounput
 %option prefix="lev_"
-%option yylineno
+%option header-file="level_lexer.lex.h"
 
 %x COMMENT
 %x SLCOMMENT
@@ -129,16 +126,6 @@ void levSetInputBuffer(const char* buffer, size_t size)
 	/* Reset the lexer incase it's been used before */
 	lev__flush_buffer(YY_CURRENT_BUFFER);
 	inComment = false;
-}
-
-int levGetErrorLine()
-{
-	return yylineno;
-}
-
-const char* levGetErrorText()
-{
-	return yytext;
 }
 
 int lev_wrap(void)

@@ -26,6 +26,7 @@
 #include "lib/framework/listmacs.h"
 #include "levels.h"
 #include "levelint.h"
+#include "level_lexer.lex.h"
 
 typedef struct
 {
@@ -40,7 +41,7 @@ typedef struct
  */
 void yyerror(const char* msg)
 {
-	debug(LOG_ERROR, "Level File parse error: `%s` at line `%d` text `%s`", msg, levGetErrorLine(), levGetErrorText());
+	debug(LOG_ERROR, "Level File parse error: `%s` at line `%d` text `%s`", msg, lev_get_lineno(), lev_get_text());
 }
 
 static void freeDataSet(LEVEL_DATASET * const d)
