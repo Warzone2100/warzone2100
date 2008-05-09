@@ -63,22 +63,6 @@ static PHYSFS_file* pReadFile = NULL;
 			} \
 		}
 
-static inline int PHYSFS_getc(void)
-{
-	char read_char;
-
-	if (PHYSFS_eof(pReadFile))
-		return EOF;
-
-	if (PHYSFS_read(pReadFile, &read_char, 1, 1) != 1)
-		return EOF;
-
-	return read_char;
-}
-
-#undef scrv_getc
-#define scrv_getc PHYSFS_getc
-
 %}
 
 %option yylineno
@@ -111,24 +95,24 @@ FALSE						{ scrv_lval.bval = false;	 return BOOLEAN_T; }
 								UDWORD		index;
 
 								/* See if this is a variable id or a type */
-								if (scrvLookUpType(scrv_text, &type))
+								if (scrvLookUpType(yytext, &type))
 								{
 									scrv_lval.tval = type;
 									return TYPE;
 								}
-								else if (scrvLookUpVar(scrv_text, &index))
+								else if (scrvLookUpVar(yytext, &index))
 								{
 									scrv_lval.vindex = index;
 									return VAR;
 								}
-								else if (scrvLookUpArray(scrv_text, &index))
+								else if (scrvLookUpArray(yytext, &index))
 								{
 									scrv_lval.vindex = index;
 									return ARRAY;
 								}
 								else
 								{
-									strcpy(aText[currText], scrv_text);
+									strcpy(aText[currText], yytext);
 									scrv_lval.sval = aText[currText];
 									currText = (currText + 1) % TEXT_BUFFERS;
 									return IDENT;
@@ -136,14 +120,14 @@ FALSE						{ scrv_lval.bval = false;	 return BOOLEAN_T; }
 							}
 
 	/* Match integer numbers */
--?[0-9]+					{ scrv_lval.ival = atol(scrv_text); return INTEGER; }
+-?[0-9]+					{ scrv_lval.ival = atol(yytext); return INTEGER; }
 
 	/* Match quoted text */
 \"							{ BEGIN QUOTE; }
 <QUOTE>\"					{ BEGIN 0; }
 <QUOTE>\n					{ scrv_error("Unexpected end of line in string"); }
 <QUOTE>[^\"\n]*				{
-								strcpy(aText[currText], scrv_text);
+								strcpy(aText[currText], yytext);
 								scrv_lval.sval = aText[currText];
 								currText = (currText + 1) % TEXT_BUFFERS;
 								return QTEXT;
@@ -165,7 +149,7 @@ FALSE						{ scrv_lval.bval = false;	 return BOOLEAN_T; }
 <SLCOMMENT>[^\n]*			;
 
 	/* Match anything that's been missed and pass it as a char */
-.							return scrv_text[0];
+.							return yytext[0];
 
 %%
 
@@ -181,8 +165,8 @@ void scrvSetInputFile(PHYSFS_file* fileHandle)
 
 void scrvGetErrorData(int *pLine, char **ppText)
 {
-	*pLine = scrv_lineno;
-	*ppText = scrv_text;
+	*pLine = yyget_lineno();
+	*ppText = yytext;
 }
 
 int scrv_wrap(void)
