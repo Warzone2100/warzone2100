@@ -48,15 +48,15 @@ static UDWORD currText=0;
 static BOOL inComment = false;
 
 /* Handle to the input file */
-static PHYSFS_file* pReadFile = NULL;
+#define YY_EXTRA_TYPE PHYSFS_file *
 
 #define YY_INPUT(buf,result,max_size) \
-		if (PHYSFS_eof(pReadFile)) \
+		if (PHYSFS_eof(yyget_extra())) \
 		{ \
 			buf[0] = EOF; result = YY_NULL; \
 		} \
 		else { \
-			result = PHYSFS_read(pReadFile, buf, 1, max_size); \
+			result = PHYSFS_read(yyget_extra(), buf, 1, max_size); \
 			if (result == -1) \
 			{ \
 				buf[0] = EOF; result = YY_NULL; \
@@ -153,14 +153,16 @@ FALSE						{ scrv_lval.bval = false;	 return BOOLEAN_T; }
 
 %%
 
-/* Set the current input file for the lexer */
-void scrvSetInputFile(PHYSFS_file* fileHandle)
-{
-	pReadFile = fileHandle;
+static PHYSFS_file* pReadFile = NULL;
 
-	/* Reset the lexer in case it's been used before */
-	scrv__flush_buffer(YY_CURRENT_BUFFER);
-	inComment = false;
+void yyset_extra(PHYSFS_file* user_defined)
+{
+	pReadFile = user_defined;
+}
+
+PHYSFS_file* yyget_extra()
+{
+	return pReadFile;
 }
 
 void scrvGetErrorData(int *pLine, char **ppText)

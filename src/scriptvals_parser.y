@@ -830,7 +830,7 @@ BOOL scrvLookUpArray(const char *pIdent, UDWORD *pIndex)
 // Load a script value file
 BOOL scrvLoad(PHYSFS_file* fileHandle)
 {
-	scrvSetInputFile(fileHandle);
+	scrv_set_extra(fileHandle);
 
 	if (scrv_parse() != 0)
 	{

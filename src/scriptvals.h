@@ -53,7 +53,7 @@ typedef struct _array_indexes
 } ARRAY_INDEXES;
 
 /* Set the current input buffer for the lexer */
-extern void scrvSetInputFile(PHYSFS_file* fileHandle);
+extern void scrv_set_extra(PHYSFS_file* fileHandle);
 
 extern void scrvGetErrorData(int *pLine, char **ppText);
 
