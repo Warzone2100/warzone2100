@@ -5,6 +5,7 @@
 # Dennis Schridde <devurandom@gna.org>, 2007.
 # Martin Koller <koller@etm.at>, 2007.
 # Martin Koller <m.koller@surfeu.at>, 2007.
+# Steven \"Kreuvf\" Koenig <Unknown>, 2008.
 msgid ""
 msgstr ""
 "Project-Id-Version: de\n"
