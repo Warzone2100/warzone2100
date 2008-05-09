@@ -487,6 +487,7 @@ void systemShutdown(void)
 	iV_ShutDown();
 	levShutDown();
 	widgShutDown();
+	pie_TerrainCleanup();
 
 	return;
 }
@@ -1157,7 +1158,7 @@ BOOL stageThreeShutDown(void)
 	{
 		initPlayerColours();		// reset colours leaving multiplayer game.
 	}
-
+	
 	setScriptWinLoseVideo(PLAY_NONE);
 
 	return true;

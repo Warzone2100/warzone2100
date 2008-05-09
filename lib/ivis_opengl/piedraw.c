@@ -778,6 +778,25 @@ void pie_TerrainInit(int sizex, int sizey)
 	rowLength = sizex;
 }
 
+void pie_TerrainCleanup()
+{
+	if (aColour)
+	{
+		free(aColour);
+	}
+	if (aTexCoord)
+	{
+		free(aTexCoord);
+	}
+	if (aVertex)
+	{
+		free(aVertex);
+	}
+	aColour = NULL;
+	aTexCoord = NULL;
+	aVertex = NULL;
+}
+
 void pie_DrawTerrain(int mapx, int mapy)
 {
 	glEnableClientState(GL_COLOR_ARRAY);
