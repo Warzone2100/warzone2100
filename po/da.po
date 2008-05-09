@@ -10757,29 +10757,29 @@ msgstr "Bygning restoreret"
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
-msgstr[0] "Gruppe %d valgt - %d Enheder"
-msgstr[1] "Gruppe %d valgt - %d Enheder"
+msgstr[0] "Gruppe %u valgt - %u Enheder"
+msgstr[1] "Gruppe %u valgt - %u Enheder"
 
 #: src/droid.c:3414
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
-msgstr[0] "%d Enheder tildelt gruppe %d"
-msgstr[1] "%d Enheder tildelt gruppe %d"
+msgstr[0] "%u Enheder tildelt gruppe %u"
+msgstr[1] "%u Enheder tildelt gruppe %u"
 
 #: src/droid.c:3427
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
-msgstr[0] "Fokuseret på gruppe %d - %d Enheder"
-msgstr[1] "Fokuseret på gruppe %d - %d Enheder"
+msgstr[0] "Fokuseret på gruppe %u - %u Enheder"
+msgstr[1] "Fokuseret på gruppe %u - %u Enheder"
 
 #: src/droid.c:3431
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
-msgstr[0] "Korigerede med gruppe %d - %d Enheder"
-msgstr[1] "Korigerede med gruppe %d - %d Enheder"
+msgstr[0] "Korigerede med gruppe %u - %u Enheder"
+msgstr[1] "Korigerede med gruppe %u - %u Enheder"
 
 #: src/droid.c:3657
 msgid "Rookie"
@@ -12441,8 +12441,8 @@ msgstr ""
 #, c-format
 msgid "%u unit selected"
 msgid_plural "%u units selected"
-msgstr[0] "%d Enheder valgt"
-msgstr[1] "%d Enheder valgt"
+msgstr[0] "%u Enheder valgt"
+msgstr[1] "%u Enheder valgt"
 
 #: src/selection.c:434
 #: src/selection.c:521
@@ -12476,7 +12476,7 @@ msgstr[1] ""
 #: src/structure.c:5897
 #, c-format
 msgid "%s - Connected %u of %u"
-msgstr "%s - Forbundet %d af %d"
+msgstr "%s - Forbundet %u af %u"
 
 #: src/structure.c:5911
 #, c-format
