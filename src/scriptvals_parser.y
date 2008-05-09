@@ -265,7 +265,7 @@ var_init:		var_entry TYPE var_value
 						{
 							if(!eventSetContextVar(psCurrContext, $1, &data))
 							{
-								yyerror("Set Value Failed for %s", $1);
+								yyerror("Set Value Failed for %u", $1);
 								YYABORT;
 							}
 						}
@@ -295,7 +295,7 @@ var_init:		var_entry TYPE var_value
 						{
 							if(!eventSetContextVar(psCurrContext, $1, &data))
 							{
-								yyerror("Set Value Failed for %s", $1);
+								yyerror("Set Value Failed for %u", $1);
 								YYABORT;
 							}
 						}
@@ -324,7 +324,7 @@ var_init:		var_entry TYPE var_value
 						{
 							if(!eventSetContextVar(psCurrContext, $1, &data))
 							{
-								yyerror("Set Value Failed for %s", $1);
+								yyerror("Set Value Failed for %u", $1);
 								YYABORT;
 							}
 						}
@@ -345,7 +345,7 @@ var_init:		var_entry TYPE var_value
 						}
 						if (!eventSetContextVar(psCurrContext, $1, &data))
 						{
-							yyerror("Set Value Failed for %s", $1);
+							yyerror("Set Value Failed for %u", $1);
 							YYABORT;
 						}
 						break;
@@ -372,7 +372,7 @@ var_init:		var_entry TYPE var_value
 						}
 						if (!eventSetContextVar(psCurrContext, $1, &data))
 						{
-							yyerror("Set Value Failed for %s", $1);
+							yyerror("Set Value Failed for %u", $1);
 							YYABORT;
 						}
 						break;
@@ -390,7 +390,7 @@ var_init:		var_entry TYPE var_value
 						}
 						if (!eventSetContextVar(psCurrContext, $1, &data))
 						{
-							yyerror("Set Value Failed for %s", $1);
+							yyerror("Set Value Failed for %u", $1);
 							YYABORT;
 						}
 						break;
@@ -408,7 +408,7 @@ var_init:		var_entry TYPE var_value
 						}
 						if (!eventSetContextVar(psCurrContext, $1, &data))
 						{
-							yyerror("Set Value Failed for %s", $1);
+							yyerror("Set Value Failed for %u", $1);
 							YYABORT;
 						}
 						break;
@@ -426,7 +426,7 @@ var_init:		var_entry TYPE var_value
 						}
 						if (!eventSetContextVar(psCurrContext, $1, &data))
 						{
-							yyerror("Set Value Failed for %s", $1);
+							yyerror("Set Value Failed for %u", $1);
 							YYABORT;
 						}
 						break;
@@ -444,7 +444,7 @@ var_init:		var_entry TYPE var_value
 						}
 						if (!eventSetContextVar(psCurrContext, $1, &data))
 						{
-							yyerror("Set Value Failed for %s", $1);
+							yyerror("Set Value Failed for %u", $1);
 							YYABORT;
 						}
 						break;
@@ -462,7 +462,7 @@ var_init:		var_entry TYPE var_value
 						}
 						if (!eventSetContextVar(psCurrContext, $1, &data))
 						{
-							yyerror("Set Value Failed for %s", $1);
+							yyerror("Set Value Failed for %u", $1);
 							YYABORT;
 						}
 						break;
@@ -480,7 +480,7 @@ var_init:		var_entry TYPE var_value
 						}
 						if (!eventSetContextVar(psCurrContext, $1, &data))
 						{
-							yyerror("Set Value Failed for %s", $1);
+							yyerror("Set Value Failed for %u", $1);
 							YYABORT;
 						}
 						break;
@@ -498,7 +498,7 @@ var_init:		var_entry TYPE var_value
 						}
 						if (!eventSetContextVar(psCurrContext, $1, &data))
 						{
-							yyerror("Set Value Failed for %s", $1);
+							yyerror("Set Value Failed for %u", $1);
 							YYABORT;
 						}
 						break;
@@ -516,7 +516,7 @@ var_init:		var_entry TYPE var_value
 						}
 						if (!eventSetContextVar(psCurrContext, $1, &data))
 						{
-							yyerror("Set Value Failed for %s", $1);
+							yyerror("Set Value Failed for %u", $1);
 							YYABORT;
 						}
 						break;
@@ -534,7 +534,7 @@ var_init:		var_entry TYPE var_value
 						}
 						if (!eventSetContextVar(psCurrContext, $1, &data))
 						{
-							yyerror("Set Value Failed for %s", $1);
+							yyerror("Set Value Failed for %u", $1);
 							YYABORT;
 						}
 						break;
@@ -560,7 +560,7 @@ var_init:		var_entry TYPE var_value
 						{
 							if(!eventSetContextVar(psCurrContext, $1, &data))
 							{
-								yyerror("Set Value Failed for %s", $1);
+								yyerror("Set Value Failed for %u", $1);
 								YYABORT;
 							}
 						}
@@ -587,7 +587,7 @@ var_init:		var_entry TYPE var_value
 						{
 							if(!eventSetContextVar(psCurrContext, $1, &data))
 							{
-								yyerror("Set Value Failed for %s", $1);
+								yyerror("Set Value Failed for %u", $1);
 								YYABORT;
 							}
 						}
@@ -606,7 +606,7 @@ var_init:		var_entry TYPE var_value
 						}
 						if(!eventSetContextVar(psCurrContext, $1, &data))
 						{
-							yyerror("Set Value Failed for %s", $1);
+							yyerror("Set Value Failed for %u", $1);
 							YYABORT;
 						}
 						break;
@@ -624,7 +624,7 @@ var_init:		var_entry TYPE var_value
 						data.v.sval = pString;
 						if (!eventSetContextVar(psCurrContext, $1, &data))
 						{
-							yyerror("Set Value Failed for %s", $1);
+							yyerror("Set Value Failed for %u", $1);
 							YYABORT;
 						}
 						break;
@@ -647,7 +647,7 @@ var_init:		var_entry TYPE var_value
 							data.v.sval = psLevel->pName; /* store string pointer */
 							if (!eventSetContextVar(psCurrContext, $1, &data))
 							{
-								yyerror("Set Value Failed for %s", $1);
+								yyerror("Set Value Failed for %u", $1);
 								YYABORT;
 							}
 						}
@@ -669,7 +669,7 @@ var_init:		var_entry TYPE var_value
 						data.v.ival = compIndex;
 						if (!eventSetContextVar(psCurrContext, $1, &data))
 						{
-							yyerror("Set Value Failed for %s", $1);
+							yyerror("Set Value Failed for %u", $1);
 							YYABORT;
 						}
 						break;
@@ -687,7 +687,7 @@ var_init:		var_entry TYPE var_value
 						}
 						if(!eventSetContextVar(psCurrContext, $1, &data))
 						{
-							yyerror("Set Value Failed for %s", $1);
+							yyerror("Set Value Failed for %u", $1);
 							YYABORT;
 						}
 						break;

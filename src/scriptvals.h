@@ -59,7 +59,7 @@ extern void scrvGetErrorData(int *pLine, char **ppText);
 
 /* A simple error reporting routine */
 
-extern void scrv_error(const char *pMessage,...);
+extern void scrv_error(const char* fmt, ...) WZ_DECL_FORMAT(printf, 1, 2);
 
 
 // parse a value file
