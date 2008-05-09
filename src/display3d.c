@@ -1543,7 +1543,17 @@ void displayDynamicObjects( void )
 					if(psDroid->visible[selectedPlayer] || godMode || demoGetStatus())
 					{
 						psDroid->sDisplay.frameNumber = currentGameFrame;
-						renderDroid( (DROID *) psDroid);
+
+						// NOTE! : anything that has multiple (anim) frames *must* use the bucket to render
+						// In this case, AFAICT only DROID_CYBORG_SUPER had the issue.  (Same issue as oil pump anim)
+						if (psDroid->droidType != DROID_CYBORG_SUPER)
+						{
+							renderDroid(psDroid);
+						}
+						else
+						{	
+							bucketAddTypeToList(RENDER_DROID, psDroid);
+						}
 						/* draw anim if visible */
 						if ( psDroid->psCurAnim != NULL &&
 							psDroid->psCurAnim->bVisible == true &&
