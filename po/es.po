@@ -7,19 +7,19 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2008-05-07 11:53+0200\n"
-"PO-Revision-Date: 2008-04-20 22:47+0000\n"
+"POT-Creation-Date: 2008-05-09 16:13+0200\n"
+"PO-Revision-Date: 2008-04-21 13:55+0000\n"
 "Last-Translator: Samuel G. I. <amuchamu@gmail.com>\n"
 "Language-Team: Spanish <warzone-dev@gna.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Launchpad-Export-Date: 2008-04-28 05:16+0000\n"
+"X-Generator: Launchpad (build Unknown)\n"
 "X-Poedit-Language: Spanish\n"
 "X-Poedit-SourceCharset: utf-8\n"
 "X-Poedit-Basepath: ..\n"
-"X-Launchpad-Export-Date: 2008-04-17 06:56+0000\n"
-"X-Generator: Launchpad (build Unknown)\n"
 
 #: data/messages/strings/cam1strings.txt:3
 msgid "Campaign One Full Version Test Message"
@@ -586,16 +586,13 @@ msgid "Enemy VTOLs are likely to be flying close escort."
 msgstr "Probablemente habrá ADVs enemigos volando escoltando cerca."
 
 #: data/messages/strings/cam2strings.txt:73
+#: data/messages/strings/cam2strings.txt:77
 msgid "TRANSPORT MISSION: Rescue civilians from Containment Camp"
 msgstr "MISIÓN DE TRANPORTE: Rescatar civiles del Campo de Concentración."
 
 #: data/messages/strings/cam2strings.txt:74
 msgid "The Collective are processing and exterminating civilians at this base."
 msgstr "El Colectivo está procesando y exterminando civiles en esta base."
-
-#: data/messages/strings/cam2strings.txt:77
-msgid "TRANSPORT MISSION: Rescue Civilians from Containment Camp "
-msgstr "MISIÓN DE TRANSPORTE: Rescatar Civiles del Campo de Concentración "
 
 #: data/messages/strings/cam2strings.txt:78
 msgid "You are to rescue the civilians."
@@ -942,12 +939,12 @@ msgid "Enemy forces are ....... from these coordinates."
 msgstr "Las fuerzas enemigas están ....... de estas coordenadas."
 
 #: data/messages/strings/cam3strings.txt:82
-msgid "Defend the base and ........ the ....... "
-msgstr "Defiende la base y ........ el ....... "
+msgid "Defend the base and ........ the ......."
+msgstr "Defiende la base y ........ el ......."
 
 #: data/messages/strings/cam3strings.txt:83
-msgid "Search and destroy .... "
-msgstr "Busca y destruye .... "
+msgid "Search and destroy ...."
+msgstr "Busca y destruye ...."
 
 #: data/messages/strings/cam3strings.txt:86
 msgid "TRANSPORT MISSION: Ambush NEXUS Forces"
@@ -1630,7 +1627,6 @@ msgstr "Pitón Cañón Ligero Oruga"
 
 #: data/messages/strings/names.txt:194
 #: data/mp/messages/strings/names.txt:196
-#: data/mp/messages/strings/names.txt:1912
 msgid "Python Medium Cannon Tracks"
 msgstr "Pitón Cañón Medio Oruga"
 
@@ -2054,9 +2050,8 @@ msgstr "Enlace NEXUS"
 
 #: data/messages/strings/names.txt:379
 #: data/messages/strings/names.txt:908
-#, fuzzy
 msgid "Scrambler Turret"
-msgstr "Torreta Decodificadora"
+msgstr "Torrete de Interferência"
 
 #: data/messages/strings/names.txt:382
 #: data/mp/messages/strings/names.txt:384
@@ -3169,7 +3164,9 @@ msgid "Archangel Missile Battery"
 msgstr "Batería de Misiles Arcángel"
 
 #: data/messages/strings/names.txt:729
+#: data/messages/strings/names.txt:1215
 #: data/mp/messages/strings/names.txt:735
+#: data/mp/messages/strings/names.txt:1223
 msgid "Mortar Pit"
 msgstr "Foso Mortero"
 
@@ -3749,9 +3746,8 @@ msgstr "Torreta de Golpe ADV"
 
 #: data/messages/strings/names.txt:909
 #: data/mp/messages/strings/names.txt:917
-#, fuzzy
 msgid "Improved Scrambler"
-msgstr "Decodificador Mejorado"
+msgstr "Gerador de Interferência Melhorado"
 
 #: data/messages/strings/names.txt:910
 #: data/mp/messages/strings/names.txt:918
@@ -4844,11 +4840,6 @@ msgstr "Torre Vigía"
 #: data/mp/messages/strings/names.txt:1219
 msgid "Cannon Tower"
 msgstr "Torre de Cañón"
-
-#: data/messages/strings/names.txt:1215
-#: data/mp/messages/strings/names.txt:1223
-msgid " Mortar Pit"
-msgstr " Foso de Mortero"
 
 #: data/messages/strings/names.txt:1234
 #: data/mp/messages/strings/names.txt:1242
@@ -7091,9 +7082,8 @@ msgstr "Sistema avanzado de reconocimiento de objetivos"
 
 #: data/messages/strings/resstrings.txt:916
 #: data/mp/messages/strings/resstrings.txt:1000
-#, fuzzy
 msgid "Synaptic Link Scrambler technology"
-msgstr "Tecnología Decodificadora de Enlace Sináptico"
+msgstr "Tecnologia de Interferência na Conexão Sináptica"
 
 #: data/messages/strings/resstrings.txt:917
 #: data/mp/messages/strings/resstrings.txt:1001
@@ -7106,9 +7096,8 @@ msgstr "Roba tecnología a los enemigos"
 
 #: data/messages/strings/resstrings.txt:921
 #: data/mp/messages/strings/resstrings.txt:1005
-#, fuzzy
 msgid "Scrambler Improved"
-msgstr "Decodificador Mejorado"
+msgstr "Gerador de Interferência Melhorado"
 
 #: data/messages/strings/resstrings.txt:922
 #: data/mp/messages/strings/resstrings.txt:1006
@@ -7117,15 +7106,13 @@ msgstr "Mejora de la tecnología de enlace sináptico"
 
 #: data/messages/strings/resstrings.txt:923
 #: data/mp/messages/strings/resstrings.txt:1007
-#, fuzzy
 msgid "Increases scrambler rate"
-msgstr "Mejora Velocidad de Decodificación"
+msgstr "Aumenta a velocidade da interferência"
 
 #: data/messages/strings/resstrings.txt:924
 #: data/mp/messages/strings/resstrings.txt:1008
-#, fuzzy
 msgid "All scramblers upgraded automatically"
-msgstr "Todos los decodificadores actualizados automáticamente"
+msgstr "Todos os geradores de interferência melhorados automaticamente"
 
 #: data/messages/strings/resstrings.txt:927
 #: data/messages/strings/resstrings.txt:933
@@ -8372,8 +8359,8 @@ msgstr "Todos los lásers actualizados automáticamente"
 
 #: data/messages/strings/resstrings.txt:1474
 #: data/mp/messages/strings/resstrings.txt:1589
-msgid "Improvement in laser emission density "
-msgstr "Mejora en la densidad de emisión láser "
+msgid "Improvement in laser emission density"
+msgstr "Mejora en la densidad de emisión láser"
 
 #: data/messages/strings/resstrings.txt:1475
 #: data/mp/messages/strings/resstrings.txt:1590
@@ -9925,48 +9912,43 @@ msgid "Python HVC Hover"
 msgstr "Pitón Cañón HV Deslizador"
 
 #: data/mp/messages/strings/names.txt:1911
-#, fuzzy
-msgid "Python Tank Killer Tracks"
-msgstr "Mantis Mata Tanque Oruga"
-
-#: data/mp/messages/strings/names.txt:1913
 msgid "Python Scourge Tracks"
 msgstr "Pitón Azote Oruga"
 
-#: data/mp/messages/strings/names.txt:1914
+#: data/mp/messages/strings/names.txt:1912
 msgid "Python Gauss Cannon Tracks"
 msgstr "Pitón Cañón de Gauss Oruga"
 
-#: data/mp/messages/strings/names.txt:1915
+#: data/mp/messages/strings/names.txt:1913
 msgid "Python Pulse Laser Tracks"
 msgstr "Pitón Láser de Pulsos Oruga"
 
-#: data/mp/messages/strings/names.txt:1916
+#: data/mp/messages/strings/names.txt:1914
 msgid "Tiger Pulse Laser Tracks"
 msgstr "Tigre Láser de Pulsos Oruga"
 
-#: data/mp/messages/strings/names.txt:1917
+#: data/mp/messages/strings/names.txt:1915
 msgid "Tiger Heavy Laser Tracks"
 msgstr "Tigre Láser Pesado Oruga"
 
-#: data/mp/messages/strings/names.txt:1918
+#: data/mp/messages/strings/names.txt:1916
 msgid "Wyvern Gauss Cannon Tracks"
 msgstr "Dragón Heráldico Cañón de Gauss Oruga"
 
-#: data/mp/messages/strings/names.txt:1919
+#: data/mp/messages/strings/names.txt:1917
 msgid "Wyvern Pulse Laser Tracks"
 msgstr "Dragón Heráldico Láser de Pulsos Oruga"
 
-#: data/mp/messages/strings/names.txt:1920
+#: data/mp/messages/strings/names.txt:1918
 msgid "Wyvern Heavy Laser Tracks"
 msgstr "Dragón Heráldico Láser Pesado Oruga"
 
-#: data/mp/messages/strings/names.txt:1922
+#: data/mp/messages/strings/names.txt:1920
 #, fuzzy
 msgid "Viper Machinegun Half-Track"
 msgstr "Víbora Doble Ametralladora Semi-oruga"
 
-#: data/mp/messages/strings/names.txt:1923
+#: data/mp/messages/strings/names.txt:1921
 #, fuzzy
 msgid "Viper Flamer Half-Track"
 msgstr "Víbora Reparador Semi-oruga"
@@ -10933,7 +10915,7 @@ msgstr "Color de las unidades"
 #: src/multimenu.c:1250
 #: src/transporter.c:285
 #: src/transporter.c:374
-#: src/transporter.c:839
+#: src/transporter.c:872
 msgid "Close"
 msgstr "Cerrar"
 
@@ -12287,68 +12269,68 @@ msgstr "¡Imposible localizar ninguna unidad de sensores!"
 msgid "Unable to locate any Commanders!"
 msgstr "¡Imposible localizar ningún Comandante!"
 
-#: src/structure.c:2769
+#: src/structure.c:2768
 msgid "Command Control Limit Reached - Production Halted"
 msgstr "Alcanzado Límite de Control de Comandantes - Producción Detenida"
 
-#: src/structure.c:5868
-#: src/structure.c:5890
+#: src/structure.c:5838
+#: src/structure.c:5860
 #, c-format
 msgid "%s - %u Unit assigned"
 msgid_plural "%s - %u Units assigned"
 msgstr[0] "%s - %u Unidad asignada"
 msgstr[1] "%s - %u Unidades asignadas"
 
-#: src/structure.c:5940
+#: src/structure.c:5897
 #, c-format
 msgid "%s - Connected %u of %u"
 msgstr "%s - Conectado %u de %u"
 
-#: src/structure.c:5954
+#: src/structure.c:5911
 #, fuzzy, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - Daño %u%%"
 
-#: src/structure.c:6074
-#: src/structure.c:6123
+#: src/structure.c:6031
+#: src/structure.c:6080
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - Dañado Electrónicamente"
 
-#: src/structure.c:6358
+#: src/structure.c:6315
 msgid "Electronic Reward - Visibility Report"
 msgstr "Recompensa de Electrónica - Informe de Visibilidad"
 
-#: src/structure.c:6398
+#: src/structure.c:6355
 msgid "Factory Reward - Propulsion"
 msgstr "Recompensa de Fábrica - Propulsión"
 
-#: src/structure.c:6422
+#: src/structure.c:6379
 msgid "Factory Reward - Body"
 msgstr "Recompensa de Fábrica - Carrocería"
 
-#: src/structure.c:6446
+#: src/structure.c:6403
 msgid "Factory Reward - Weapon"
 msgstr "Recompensa de Fábrica - Arma"
 
-#: src/structure.c:6455
+#: src/structure.c:6412
 msgid "Factory Reward - Nothing"
 msgstr "Recompensa de Fábrica - Nada"
 
-#: src/structure.c:6483
+#: src/structure.c:6440
 msgid "Repair Facility Award - Repair"
 msgstr "Premio de Instalación de Reparación - Reparación"
 
-#: src/structure.c:6490
+#: src/structure.c:6447
 msgid "Repair Facility Award - Nothing"
 msgstr "Premio de Instalación de Reparación - Nada"
 
-#: src/transporter.c:396
-#: src/transporter.c:450
+#: src/transporter.c:424
+#: src/transporter.c:478
 msgid "Launch Transport"
 msgstr "Lanzar Transporte"
 
-#: src/transporter.c:1702
+#: src/transporter.c:1860
 msgid "Reinforcements landing"
 msgstr "Refuerzos aterrizando"
 
@@ -12379,9 +12361,3 @@ msgstr " - Construido %s"
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "Versión: %s%s%s%s"
-
-#~ msgid "R-Wpn-MG-Damage11"
-#~ msgstr "R-Wpn-MG-Daño11"
-
-#~ msgid "R-Struc-Power-Cam2"
-#~ msgstr "R-Struc-Power-Cam2"

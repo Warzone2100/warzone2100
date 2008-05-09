@@ -5,16 +5,18 @@
 # Christian Vest Hansen <karmazilla@gmail.com>, 2007.
 msgid ""
 msgstr ""
-"Project-Id-Version: da\n"
+"Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2008-05-07 11:53+0200\n"
-"PO-Revision-Date: 2008-01-20 19:26+0100\n"
-"Last-Translator: Christian Vest Hansen <karmazilla@gmail.com>\n"
+"POT-Creation-Date: 2008-05-09 16:13+0200\n"
+"PO-Revision-Date: 2008-04-02 21:06+0000\n"
+"Last-Translator: carson <Unknown>\n"
 "Language-Team: Dansk <en@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.11.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Launchpad-Export-Date: 2008-04-28 05:16+0000\n"
+"X-Generator: Launchpad (build Unknown)\n"
 
 #: data/messages/strings/cam1strings.txt:3
 msgid "Campaign One Full Version Test Message"
@@ -91,9 +93,8 @@ msgstr ""
 
 #: data/messages/strings/cam1strings.txt:27
 #: data/messages/strings/cam1strings.txt:170
-#, fuzzy
 msgid "Reinforcements are available."
-msgstr "Forstærkninger er ankommet"
+msgstr "Forstærkninger er tilgængelige."
 
 #: data/messages/strings/cam1strings.txt:29
 msgid "TRANSPORT MISSION: Encoded Signals Detected"
@@ -202,7 +203,7 @@ msgstr ""
 #: data/messages/strings/cam2strings.txt:118
 #: data/messages/strings/cam3strings.txt:163
 msgid " "
-msgstr ""
+msgstr " "
 
 #: data/messages/strings/cam1strings.txt:65
 msgid "New Paradigm Transmission"
@@ -322,9 +323,8 @@ msgid "Decoding in progress....."
 msgstr ""
 
 #: data/messages/strings/cam1strings.txt:127
-#, fuzzy
 msgid "Commander."
-msgstr "Kommandører"
+msgstr "Kommandør."
 
 #: data/messages/strings/cam1strings.txt:128
 msgid "We have decoded the incoming message to the New Paradigm..."
@@ -585,15 +585,12 @@ msgid "Enemy VTOLs are likely to be flying close escort."
 msgstr ""
 
 #: data/messages/strings/cam2strings.txt:73
+#: data/messages/strings/cam2strings.txt:77
 msgid "TRANSPORT MISSION: Rescue civilians from Containment Camp"
 msgstr ""
 
 #: data/messages/strings/cam2strings.txt:74
 msgid "The Collective are processing and exterminating civilians at this base."
-msgstr ""
-
-#: data/messages/strings/cam2strings.txt:77
-msgid "TRANSPORT MISSION: Rescue Civilians from Containment Camp "
 msgstr ""
 
 #: data/messages/strings/cam2strings.txt:78
@@ -942,11 +939,11 @@ msgid "Enemy forces are ....... from these coordinates."
 msgstr ""
 
 #: data/messages/strings/cam3strings.txt:82
-msgid "Defend the base and ........ the ....... "
+msgid "Defend the base and ........ the ......."
 msgstr ""
 
 #: data/messages/strings/cam3strings.txt:83
-msgid "Search and destroy .... "
+msgid "Search and destroy ...."
 msgstr ""
 
 #: data/messages/strings/cam3strings.txt:86
@@ -1235,9 +1232,8 @@ msgstr "Tilbagetrækning til HQ"
 
 #: data/messages/strings/genstrings.txt:17
 #: data/messages/strings/genstrings.txt:27
-#, fuzzy
 msgid "Mission Target"
-msgstr "Anvendt tid: %s"
+msgstr "Missionens mål"
 
 #: data/messages/strings/genstrings.txt:18
 msgid "Pre-Collapse Research Center"
@@ -1248,9 +1244,8 @@ msgid "En-route To Mission Site"
 msgstr ""
 
 #: data/messages/strings/genstrings.txt:21
-#, fuzzy
 msgid "Mission Failed"
-msgstr "Anvendt tid: %s"
+msgstr "Mission mislykkedes"
 
 #: data/messages/strings/genstrings.txt:22
 msgid "Mission Successful"
@@ -1269,9 +1264,8 @@ msgid "Incoming transmission"
 msgstr ""
 
 #: data/messages/strings/genstrings.txt:32
-#, fuzzy
 msgid "Reinforcements are now available"
-msgstr "Forstærkninger er ankommet"
+msgstr "Forstærkninger er nu tilgængelige"
 
 #: data/messages/strings/genstrings.txt:35
 msgid "Incoming intelligence report."
@@ -1286,23 +1280,20 @@ msgid "Civilians Rescued"
 msgstr ""
 
 #: data/messages/strings/genstrings.txt:40
-#, fuzzy
 msgid "Unit Rescued"
-msgstr "Tabte enheder"
+msgstr "Enhed reddet"
 
 #: data/messages/strings/genstrings.txt:41
-#, fuzzy
 msgid "Units Rescued"
-msgstr "%d Enheder valgt"
+msgstr "Enheder reddet"
 
 #: data/messages/strings/genstrings.txt:42
 msgid "Group Rescued"
 msgstr ""
 
 #: data/messages/strings/genstrings.txt:43
-#, fuzzy
 msgid "Unit Captured"
-msgstr "Holdfarve"
+msgstr "Enhed fanget"
 
 #: data/messages/strings/genstrings.txt:44
 msgid "Group Captured"
@@ -1361,9 +1352,8 @@ msgid "Enemy Escaped"
 msgstr ""
 
 #: data/messages/strings/genstrings.txt:57
-#, fuzzy
 msgid "Enemy Escaping"
-msgstr "Tastatur indstillinger"
+msgstr "Fjenden flygte"
 
 #: data/messages/strings/genstrings.txt:58
 msgid "Enemy Transport Landing"
@@ -1467,15 +1457,13 @@ msgstr ""
 
 #: data/messages/strings/names.txt:12
 #: data/mp/messages/strings/names.txt:12
-#, fuzzy
 msgid "New Design"
-msgstr "Design"
+msgstr "Nyt design"
 
 #: data/messages/strings/names.txt:15
 #: data/mp/messages/strings/names.txt:15
-#, fuzzy
 msgid "Transport"
-msgstr "Transportskib"
+msgstr "Transport"
 
 #: data/messages/strings/names.txt:16
 #: data/messages/strings/names.txt:153
@@ -1648,7 +1636,6 @@ msgstr ""
 
 #: data/messages/strings/names.txt:194
 #: data/mp/messages/strings/names.txt:196
-#: data/mp/messages/strings/names.txt:1912
 msgid "Python Medium Cannon Tracks"
 msgstr ""
 
@@ -1699,9 +1686,8 @@ msgstr ""
 
 #: data/messages/strings/names.txt:205
 #: data/mp/messages/strings/names.txt:207
-#, fuzzy
 msgid "Fire Truck"
-msgstr "Find næste truck"
+msgstr "Brandbil"
 
 #: data/messages/strings/names.txt:206
 #: data/mp/messages/strings/names.txt:208
@@ -3229,7 +3215,9 @@ msgid "Archangel Missile Battery"
 msgstr ""
 
 #: data/messages/strings/names.txt:729
+#: data/messages/strings/names.txt:1215
 #: data/mp/messages/strings/names.txt:735
+#: data/mp/messages/strings/names.txt:1223
 msgid "Mortar Pit"
 msgstr ""
 
@@ -4937,11 +4925,6 @@ msgstr ""
 #: data/messages/strings/names.txt:1211
 #: data/mp/messages/strings/names.txt:1219
 msgid "Cannon Tower"
-msgstr ""
-
-#: data/messages/strings/names.txt:1215
-#: data/mp/messages/strings/names.txt:1223
-msgid " Mortar Pit"
 msgstr ""
 
 #: data/messages/strings/names.txt:1234
@@ -8507,7 +8490,7 @@ msgstr ""
 
 #: data/messages/strings/resstrings.txt:1474
 #: data/mp/messages/strings/resstrings.txt:1589
-msgid "Improvement in laser emission density "
+msgid "Improvement in laser emission density"
 msgstr ""
 
 #: data/messages/strings/resstrings.txt:1475
@@ -10100,53 +10083,48 @@ msgstr ""
 
 #: data/mp/messages/strings/names.txt:1911
 #, fuzzy
-msgid "Python Tank Killer Tracks"
-msgstr "Kommandører"
-
-#: data/mp/messages/strings/names.txt:1913
-#, fuzzy
 msgid "Python Scourge Tracks"
 msgstr "Vælg alle halv-bælter"
 
-#: data/mp/messages/strings/names.txt:1914
+#: data/mp/messages/strings/names.txt:1912
 #, fuzzy
 msgid "Python Gauss Cannon Tracks"
 msgstr "Kommandører"
 
-#: data/mp/messages/strings/names.txt:1915
+#: data/mp/messages/strings/names.txt:1913
 #, fuzzy
 msgid "Python Pulse Laser Tracks"
 msgstr "Kommandører"
 
-#: data/mp/messages/strings/names.txt:1916
+#: data/mp/messages/strings/names.txt:1914
 #, fuzzy
 msgid "Tiger Pulse Laser Tracks"
 msgstr "Kommandører"
 
-#: data/mp/messages/strings/names.txt:1917
+#: data/mp/messages/strings/names.txt:1915
 #, fuzzy
 msgid "Tiger Heavy Laser Tracks"
 msgstr "Kommandører"
 
-#: data/mp/messages/strings/names.txt:1918
+#: data/mp/messages/strings/names.txt:1916
 msgid "Wyvern Gauss Cannon Tracks"
 msgstr ""
 
-#: data/mp/messages/strings/names.txt:1919
+#: data/mp/messages/strings/names.txt:1917
 msgid "Wyvern Pulse Laser Tracks"
 msgstr ""
 
-#: data/mp/messages/strings/names.txt:1920
+#: data/mp/messages/strings/names.txt:1918
 #, fuzzy
 msgid "Wyvern Heavy Laser Tracks"
 msgstr "Kommandører"
 
-#: data/mp/messages/strings/names.txt:1922
+#: data/mp/messages/strings/names.txt:1920
 #, fuzzy
 msgid "Viper Machinegun Half-Track"
 msgstr "Vælg alle halv-bælter"
 
-#: data/mp/messages/strings/names.txt:1923
+#: data/mp/messages/strings/names.txt:1921
 #, fuzzy
 msgid "Viper Flamer Half-Track"
 msgstr "Vælg alle halv-bælter"
@@ -10444,15 +10422,13 @@ msgstr "Elektronik"
 
 #: lib/framework/i18n.c:44
 #: lib/framework/i18n.c:69
-#, fuzzy
 msgid "Danish"
-msgstr "Afstandståge"
+msgstr "Dansk"
 
 #: lib/framework/i18n.c:45
 #: lib/framework/i18n.c:68
-#, fuzzy
 msgid "German"
-msgstr "Kaptajn"
+msgstr "Tysk"
 
 #: lib/framework/i18n.c:46
 #: lib/framework/i18n.c:66
@@ -10531,16 +10507,15 @@ msgstr ""
 
 #: src/clparse.c:92
 msgid "file"
-msgstr ""
+msgstr "fil"
 
 #: src/clparse.c:93
 msgid "Play in fullscreen mode"
 msgstr ""
 
 #: src/clparse.c:94
-#, fuzzy
 msgid "Load a specific game"
-msgstr "Indlæs gemt spil"
+msgstr "Indlæs et bestemt spil"
 
 #: src/clparse.c:94
 msgid "game-name"
@@ -10569,12 +10544,10 @@ msgid "Enable a multiplay only mod"
 msgstr ""
 
 #: src/clparse.c:99
-#, fuzzy
 msgid "Load a saved game"
-msgstr "Indlæs gemt spil"
+msgstr "Hent et gemt spil"
 
 #: src/clparse.c:99
-#, fuzzy
 msgid "savegame"
 msgstr "Gem spil"
 
@@ -10584,7 +10557,7 @@ msgstr ""
 
 #: src/clparse.c:103
 msgid "Show version information and exit"
-msgstr ""
+msgstr "Vis versionsoplysninger og afslut"
 
 #: src/clparse.c:104
 msgid "Set the resolution to use"
@@ -10604,7 +10577,7 @@ msgstr ""
 
 #: src/clparse.c:107
 msgid "Enable sound"
-msgstr ""
+msgstr "Aktivér lyd"
 
 #: src/clparse.c:108
 msgid "Disable sound"
@@ -10617,9 +10590,8 @@ msgstr ""
 #: src/configuration.c:402
 #: src/configuration.c:403
 #: src/multistat.c:131
-#, fuzzy
 msgid "Player"
-msgstr "Spillere"
+msgstr "Spiller"
 
 #: src/design.c:453
 #: src/design.c:474
@@ -10735,12 +10707,12 @@ msgstr "Kadance"
 #: src/design.c:1921
 #: src/design.c:1937
 msgid "Air Speed"
-msgstr "Luft hastighed"
+msgstr "Lufthastighed"
 
 #: src/design.c:1957
 #: src/design.c:1990
 msgid "Road Speed"
-msgstr "Hastighed på vej"
+msgstr "Vejhastighed"
 
 #: src/design.c:1965
 #: src/design.c:1999
@@ -10750,7 +10722,7 @@ msgstr "Hastighed i terræn"
 #: src/design.c:1973
 #: src/design.c:2008
 msgid "Water Speed"
-msgstr "Sø hastighed"
+msgstr "Vandhastighed"
 
 #: src/design.c:2142
 msgid "Weapons"
@@ -10758,7 +10730,7 @@ msgstr "Våben"
 
 #: src/design.c:2166
 msgid "Systems"
-msgstr "Elektronik"
+msgstr "Systemer"
 
 #: src/display.c:1671
 msgid "Cannot Build. Oil Resource Burning."
@@ -10782,84 +10754,82 @@ msgid "Structure Restored"
 msgstr "Bygning restoreret"
 
 #: src/droid.c:3401
-#, fuzzy, c-format
+#, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
-msgstr[0] "Gruppe %d valgt - %d Enheder"
-msgstr[1] "Gruppe %d valgt - %d Enheder"
+msgstr[0] "Gruppe %u valgt - %u Enheder"
+msgstr[1] "Gruppe %u valgt - %u Enheder"
 
 #: src/droid.c:3414
-#, fuzzy, c-format
+#, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
-msgstr[0] "%d Enheder tildelt gruppe %d"
-msgstr[1] "%d Enheder tildelt gruppe %d"
+msgstr[0] "%u Enheder tildelt gruppe %u"
+msgstr[1] "%u Enheder tildelt gruppe %u"
 
 #: src/droid.c:3427
-#, fuzzy, c-format
+#, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
-msgstr[0] "Fokuseret på gruppe %d - %d Enheder"
-msgstr[1] "Fokuseret på gruppe %d - %d Enheder"
+msgstr[0] "Fokuseret på gruppe %u - %u Enheder"
+msgstr[1] "Fokuseret på gruppe %u - %u Enheder"
 
 #: src/droid.c:3431
-#, fuzzy, c-format
+#, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
-msgstr[0] "Korigerede med gruppe %d - %d Enheder"
-msgstr[1] "Korigerede med gruppe %d - %d Enheder"
+msgstr[0] "Korigerede med gruppe %u - %u Enheder"
+msgstr[1] "Korigerede med gruppe %u - %u Enheder"
 
 #: src/droid.c:3657
 msgid "Rookie"
-msgstr "Menig"
+msgstr "Utrænet"
 
 #: src/droid.c:3658
-#, fuzzy
 msgctxt "rank"
 msgid "Green"
 msgstr "Grøn"
 
 #: src/droid.c:3659
 msgid "Trained"
-msgstr "Sasjant"
+msgstr "Trænet"
 
 #: src/droid.c:3660
 msgid "Regular"
-msgstr "Oversasjant"
+msgstr "Regulær"
 
 #: src/droid.c:3661
 msgid "Professional"
-msgstr "Løjtnant"
+msgstr "Professionel"
 
 #: src/droid.c:3662
 msgid "Veteran"
-msgstr "Kaptajn"
+msgstr "Veteran"
 
 #: src/droid.c:3663
 msgid "Elite"
-msgstr "Major"
+msgstr "Elite"
 
 #: src/droid.c:3664
 msgid "Special"
-msgstr "Oberst"
+msgstr "Speciel"
 
 #: src/droid.c:3665
 msgid "Hero"
-msgstr "General"
+msgstr "Helt"
 
 #: src/frontend.c:241
 msgid "Single Player Campaign"
 msgstr "Solokampange"
 
 #: src/frontend.c:242
-#, fuzzy
 msgid "Multi Player Game"
 msgstr "Flerbruger spil"
 
 #: src/frontend.c:243
 #: src/frontend.c:297
 msgid "Tutorial"
-msgstr "Tutorial"
+msgstr "Gennemgang"
 
 #: src/frontend.c:244
 #: src/ingameop.c:266
@@ -11050,7 +11020,6 @@ msgid "Music Volume"
 msgstr "Musik volume"
 
 #: src/frontend.c:910
-#, fuzzy
 msgid "Graphics Mode*"
 msgstr "Grafik indstillinger"
 
@@ -11107,9 +11076,8 @@ msgstr "Kamera hastighed"
 
 #: src/frontend.c:1102
 #: src/frontend.c:1128
-#, fuzzy
 msgid "Language"
-msgstr "Lang rækkevide"
+msgstr "Sprog"
 
 #: src/frontend.c:1106
 #: src/frontend.c:1129
@@ -11128,7 +11096,7 @@ msgstr "Holdfarve"
 #: src/multimenu.c:1250
 #: src/transporter.c:285
 #: src/transporter.c:374
-#: src/transporter.c:839
+#: src/transporter.c:872
 msgid "Close"
 msgstr "Luk"
 
@@ -11160,9 +11128,8 @@ msgid "Player %u is cheating (debug menu) him/herself a new droid: %s."
 msgstr ""
 
 #: src/hci.c:3759
-#, fuzzy
 msgid "Commanders (F6)"
-msgstr "Kommandører"
+msgstr "Kommandører (F6)"
 
 #: src/hci.c:3775
 #, fuzzy
@@ -11175,30 +11142,27 @@ msgid "Manufacture (F1)"
 msgstr "Fabrikering"
 
 #: src/hci.c:3807
-#, fuzzy
 msgid "Design (F4)"
-msgstr "Design"
+msgstr "Design (F4)"
 
 #: src/hci.c:3823
-#, fuzzy
 msgid "Research (F2)"
-msgstr "Forskning"
+msgstr "Forskning (F2)"
 
 #: src/hci.c:3839
-#, fuzzy
 msgid "Build (F3)"
-msgstr "Konstruktion"
+msgstr "Konstruktion (F3)"
 
 #: src/hci.c:3919
 #: src/multiint.c:772
 #: src/multiint.c:776
 msgid "Power"
-msgstr "Energi"
+msgstr "Kraft"
 
 #: src/hci.c:4103
 #, fuzzy
 msgid "Tile"
-msgstr "Sasjant"
+msgstr "fil"
 
 #: src/hci.c:4104
 msgid "Place tiles on map"
@@ -11206,7 +11170,7 @@ msgstr ""
 
 #: src/hci.c:4113
 msgid "Unit"
-msgstr ""
+msgstr "Enhed"
 
 #: src/hci.c:4114
 msgid "Place Unit on map"
@@ -11232,7 +11196,7 @@ msgstr ""
 #: src/hci.c:4143
 #, fuzzy
 msgid "Pause or unpause the game"
-msgstr "%s har forladt spillet"
+msgstr "Værten har forladt spillet"
 
 #: src/hci.c:4157
 msgid "Align height of all map objects"
@@ -11243,18 +11207,18 @@ msgstr ""
 #: src/ingameop.c:254
 #: src/ingameop.c:259
 msgid "Quit"
-msgstr "Afbryd"
+msgstr "Afslut"
 
 #: src/hci.c:4183
 msgid "Exit Game"
-msgstr "Luk spillet"
+msgstr "Forlad spil"
 
 #: src/hci.c:4546
 #: src/intdisplay.c:211
 #: src/intdisplay.c:254
 #: src/intdisplay.c:300
 msgid "Progress Bar"
-msgstr "Proces bar"
+msgstr "Statuslinje"
 
 #: src/hci.c:5600
 msgid "Factory Delivery Point"
@@ -11276,7 +11240,7 @@ msgstr ""
 #: src/ingameop.c:152
 #: src/ingameop.c:263
 msgid "Resume Game"
-msgstr "Fortsæt spil"
+msgstr "Genoptag spil"
 
 #: src/ingameop.c:271
 msgid "Load Game"
@@ -11335,7 +11299,7 @@ msgstr "Tilbagetræk ved mellem skade"
 #: src/intorder.c:182
 #: src/keymap.c:408
 msgid "Retreat at Heavy Damage"
-msgstr "Tilbagetræk ved sværd skade "
+msgstr "Tilbagetræk ved sværd skade"
 
 #: src/intorder.c:183
 #: src/keymap.c:409
@@ -11368,9 +11332,8 @@ msgid "Pursue"
 msgstr "Forfølg"
 
 #: src/intorder.c:189
-#, fuzzy
 msgid "Guard Position"
-msgstr "Hold position"
+msgstr "Bevogt position"
 
 #: src/intorder.c:190
 #: src/keymap.c:392
@@ -11383,23 +11346,21 @@ msgid "Return For Repair"
 msgstr "Tilbagetrækning for reperation"
 
 #: src/intorder.c:192
-#, fuzzy
 msgid "Return To HQ"
 msgstr "Tilbagetrækning til HQ"
 
 #: src/intorder.c:193
-#, fuzzy
 msgid "Go to Transport"
-msgstr "Fyld transportskib"
+msgstr "Gå til transport"
 
 #: src/intorder.c:194
 #: src/keymap.c:418
 msgid "Return for Recycling"
-msgstr "Send til skrotning"
+msgstr "Retur til genbrug"
 
 #: src/intorder.c:195
 msgid "Recycle"
-msgstr ""
+msgstr "Genbrug"
 
 #: src/intorder.c:196
 #, fuzzy
@@ -11481,7 +11442,6 @@ msgid "Infinite power enabled"
 msgstr ""
 
 #: src/keybind.c:516
-#, fuzzy
 msgid "All items made available"
 msgstr "Forstærkninger er ankommet"
 
@@ -11702,9 +11662,8 @@ msgid "Assign Group 9"
 msgstr "Tildel gruppe 9"
 
 #: src/keymap.c:321
-#, fuzzy
 msgid "Select Group 0"
-msgstr "Vælg gruppe 1"
+msgstr "Vælg gruppe 0"
 
 #: src/keymap.c:322
 msgid "Select Group 1"
@@ -11743,9 +11702,8 @@ msgid "Select Group 9"
 msgstr "Vælg gruppe 9"
 
 #: src/keymap.c:334
-#, fuzzy
 msgid "Select Commander 0"
-msgstr "Vælg kommandør 1"
+msgstr "Vælg kommandør 0"
 
 #: src/keymap.c:335
 msgid "Select Commander 1"
@@ -11813,7 +11771,7 @@ msgstr "Zoom radaen ud"
 
 #: src/keymap.c:356
 msgid "Zoom Radar In"
-msgstr "Zoom radaen ind "
+msgstr "Zoom radaen ind"
 
 #: src/keymap.c:357
 msgid "Zoom In"
@@ -12003,7 +11961,7 @@ msgstr "Tilbage til hovedmenu"
 
 #: src/mission.c:2803
 msgid "Continue Game"
-msgstr "Fortsæt"
+msgstr "Fortsæt spil"
 
 #: src/multigifts.c:168
 #, c-format
@@ -12011,9 +11969,9 @@ msgid "%s Gives You A Visibility Report"
 msgstr "%s Giver dig en rekonniseringsrapport"
 
 #: src/multigifts.c:188
-#, fuzzy, c-format
+#, c-format
 msgid "%s Gives you a %s"
-msgstr "%s Giver dig enheder"
+msgstr ""
 
 #: src/multigifts.c:238
 #, c-format
@@ -12058,7 +12016,7 @@ msgstr "Du opdager plantegninger for %s"
 #: src/multiint.c:333
 #: src/multilimit.c:156
 msgid "Accept Settings"
-msgstr "Acceptér Indstillinger"
+msgstr "Akceptér opsætning"
 
 #: src/multiint.c:344
 msgid "IP Address or Machine Name"
@@ -12074,7 +12032,7 @@ msgstr ""
 
 #: src/multiint.c:399
 msgid "IP"
-msgstr ""
+msgstr "IP"
 
 #: src/multiint.c:590
 msgid "Searching"
@@ -12090,12 +12048,11 @@ msgstr "Opdatér spilliste"
 
 #: src/multiint.c:686
 msgid "OPTIONS"
-msgstr "INDSTILLINGER"
+msgstr "TILVALG"
 
 #: src/multiint.c:688
-#, fuzzy
 msgid "Select Game Name"
-msgstr "Nulstil spillehastighed"
+msgstr "Vælg spilnavn"
 
 #: src/multiint.c:689
 msgid "Select Map"
@@ -12253,19 +12210,16 @@ msgid "Any number of players"
 msgstr ""
 
 #: src/multimenu.c:586
-#, fuzzy
 msgid "2 players"
-msgstr "Spillere"
+msgstr "2 spillere"
 
 #: src/multimenu.c:592
-#, fuzzy
 msgid "4 players"
-msgstr "Spillere"
+msgstr "4 spillere"
 
 #: src/multimenu.c:598
-#, fuzzy
 msgid "8 players"
-msgstr "Spillere"
+msgstr "8 spillere"
 
 #: src/multimenu.c:707
 msgid "Score"
@@ -12304,9 +12258,8 @@ msgid "Give Power To Player"
 msgstr "Forær energi"
 
 #: src/multiplay.c:729
-#, fuzzy
 msgid "The host has left the game!"
-msgstr "%s har forladt spillet"
+msgstr "Værten har forladt spillet"
 
 #: src/multiplay.c:1908
 msgid "Green"
@@ -12334,14 +12287,14 @@ msgstr "Blå"
 
 #: src/multiplay.c:1914
 msgid "Pink"
-msgstr "Pink"
+msgstr "Lyserød"
 
 #: src/multiplay.c:1915
 msgid "Cyan"
-msgstr "Cyan"
+msgstr "Turkis"
 
 #: src/research.c:1849
-#, fuzzy, c-format
+#, c-format
 msgid "Research completed: %s"
 msgstr "Forskning fuldendt: %s"
 
@@ -12359,85 +12312,85 @@ msgid "Own Units: %u"
 msgstr ""
 
 #: src/scores.c:100
-#, fuzzy, c-format
+#, c-format
 msgid "Enemy Units: %u"
-msgstr "Tabte bygninger"
+msgstr ""
 
 #: src/scores.c:101
-#, fuzzy, c-format
+#, c-format
 msgid "Own Structures: %u"
-msgstr "Bygning restoreret"
+msgstr ""
 
 #: src/scores.c:102
-#, fuzzy, c-format
+#, c-format
 msgid "Enemy Structures: %u"
-msgstr "Tabte bygninger"
+msgstr ""
 
 #: src/scores.c:103
-#, fuzzy, c-format
+#, c-format
 msgid "Units Manufactured: %u"
-msgstr "Fabrikering"
+msgstr ""
 
 #: src/scores.c:104
-#, fuzzy, c-format
+#, c-format
 msgid "Total Units: %u"
-msgstr "Tabte bygninger"
+msgstr ""
 
 #: src/scores.c:105
-#, fuzzy, c-format
+#, c-format
 msgid "Structures Built: %u"
-msgstr "Bygning restoreret"
+msgstr ""
 
 #: src/scores.c:106
-#, fuzzy, c-format
+#, c-format
 msgid "Total Structures: %u"
-msgstr "Tabte bygninger"
+msgstr ""
 
 #: src/scores.c:108
-#, fuzzy, c-format
+#, c-format
 msgid "Rookie: %u"
-msgstr "Menig"
+msgstr "Utrænet: %u"
 
 #: src/scores.c:109
 #, fuzzy, c-format
 msgctxt "rank"
 msgid "Green: %u"
-msgstr "Grøn"
+msgstr "Grøn: %u"
 
 #: src/scores.c:110
-#, fuzzy, c-format
+#, c-format
 msgid "Trained: %u"
-msgstr "Sasjant"
+msgstr "Trænet: %u"
 
 #: src/scores.c:111
-#, fuzzy, c-format
+#, c-format
 msgid "Regular: %u"
-msgstr "Oversasjant"
+msgstr "Regulær: %u"
 
 #: src/scores.c:112
-#, fuzzy, c-format
+#, c-format
 msgid "Professional: %u"
-msgstr "Løjtnant"
+msgstr "Professionel: %u"
 
 #: src/scores.c:113
-#, fuzzy, c-format
+#, c-format
 msgid "Veteran: %u"
-msgstr "Kaptajn"
+msgstr "Veteran: %u"
 
 #: src/scores.c:114
-#, fuzzy, c-format
+#, c-format
 msgid "Elite: %u"
-msgstr "Major"
+msgstr "Elite: %u"
 
 #: src/scores.c:115
-#, fuzzy, c-format
+#, c-format
 msgid "Special: %u"
-msgstr "Oberst"
+msgstr "Speciel: %u"
 
 #: src/scores.c:116
-#, fuzzy, c-format
+#, c-format
 msgid "Hero: %u"
-msgstr "General"
+msgstr "Helt: %u"
 
 #: src/scores.c:350
 msgid "Unit Losses"
@@ -12485,11 +12438,11 @@ msgid "Beacon %d"
 msgstr ""
 
 #: src/selection.c:117
-#, fuzzy, c-format
+#, c-format
 msgid "%u unit selected"
 msgid_plural "%u units selected"
-msgstr[0] "%d Enheder valgt"
-msgstr[1] "%d Enheder valgt"
+msgstr[0] "%u Enheder valgt"
+msgstr[1] "%u Enheder valgt"
 
 #: src/selection.c:434
 #: src/selection.c:521
@@ -12508,68 +12461,68 @@ msgstr "Kan ikke finde nogle rekonniseringsenheder!"
 msgid "Unable to locate any Commanders!"
 msgstr "Kan ikke finde nogle kommandører!"
 
-#: src/structure.c:2769
+#: src/structure.c:2768
 msgid "Command Control Limit Reached - Production Halted"
 msgstr "Kommandobegrænsning nået - indstiller produktion"
 
-#: src/structure.c:5868
-#: src/structure.c:5890
-#, fuzzy, c-format
+#: src/structure.c:5838
+#: src/structure.c:5860
+#, c-format
 msgid "%s - %u Unit assigned"
 msgid_plural "%s - %u Units assigned"
-msgstr[0] "%d Enheder tildelt gruppe %d"
-msgstr[1] "%d Enheder tildelt gruppe %d"
+msgstr[0] ""
+msgstr[1] ""
 
-#: src/structure.c:5940
-#, fuzzy, c-format
+#: src/structure.c:5897
+#, c-format
 msgid "%s - Connected %u of %u"
-msgstr "%s - Forbundet %d af %d"
+msgstr "%s - Forbundet %u af %u"
 
-#: src/structure.c:5954
-#, fuzzy, c-format
+#: src/structure.c:5911
+#, c-format
 msgid "%s - Damage %3.0f%%"
-msgstr "%s - Skade %d%% - Drab %d, %s"
+msgstr "%s - Skade %3.0f%%"
 
-#: src/structure.c:6074
-#: src/structure.c:6123
+#: src/structure.c:6031
+#: src/structure.c:6080
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - Elektronisk beskadiget"
 
-#: src/structure.c:6358
+#: src/structure.c:6315
 msgid "Electronic Reward - Visibility Report"
 msgstr "Elektronisk gevinst - Rekonniseringsrapport"
 
-#: src/structure.c:6398
+#: src/structure.c:6355
 msgid "Factory Reward - Propulsion"
 msgstr "Fabriksgevinst - Fremdrift"
 
-#: src/structure.c:6422
+#: src/structure.c:6379
 msgid "Factory Reward - Body"
 msgstr "Fabriksgevinst - Skrog"
 
-#: src/structure.c:6446
+#: src/structure.c:6403
 msgid "Factory Reward - Weapon"
 msgstr "Frabriskgevinst - Våben"
 
-#: src/structure.c:6455
+#: src/structure.c:6412
 msgid "Factory Reward - Nothing"
 msgstr "Fabriksgevinst - Ingen"
 
-#: src/structure.c:6483
+#: src/structure.c:6440
 msgid "Repair Facility Award - Repair"
 msgstr "Reperationsgevinst - Reperation"
 
-#: src/structure.c:6490
+#: src/structure.c:6447
 msgid "Repair Facility Award - Nothing"
 msgstr "Reperationsgevinst - Ingen"
 
-#: src/transporter.c:396
-#: src/transporter.c:450
+#: src/transporter.c:424
+#: src/transporter.c:478
 msgid "Launch Transport"
 msgstr "Afsend transportskib"
 
-#: src/transporter.c:1702
+#: src/transporter.c:1860
 msgid "Reinforcements landing"
 msgstr "Forstærkninger er ankommet"
 
@@ -12600,55 +12553,3 @@ msgstr ""
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr ""
-
-#, fuzzy
-#~ msgid "Disable fog"
-#~ msgstr "Afstandståge"
-
-#~ msgid "Command Turrets"
-#~ msgstr "Kommandotårn"
-
-#~ msgid "Internet"
-#~ msgstr "Internet"
-
-#, fuzzy
-#~ msgid "%s - Damage %d%% - Serial ID %d - Kills %d order %d action %d, %s"
-#~ msgstr "%s - Skade %d%% - Drab %d, %s"
-
-#, fuzzy
-#~ msgid "Campaign Mode"
-#~ msgstr "Ny kampange"
-
-#, fuzzy
-#~ msgid "Select Force"
-#~ msgstr "Gem styrke"
-
-#~ msgid "Computer"
-#~ msgstr "Computer"
-
-#~ msgid "Computer Opponents"
-#~ msgstr "Computer modstandere"
-
-#~ msgid "No Computer Opponents"
-#~ msgstr "Ingen computer modstandere"
-
-#~ msgid "FORCE"
-#~ msgstr "STYRKE"
-
-#~ msgid "TEMPLATES"
-#~ msgstr "SKABELONER"
-
-#~ msgid "Load Force"
-#~ msgstr "Indlæs styrke"
-
-#~ msgid "Save Force"
-#~ msgstr "Gem styrke"
-
-#~ msgid "CONTROL"
-#~ msgstr "KONTROL"
-
-#~ msgid "Clear Current Force"
-#~ msgstr "Nulstil nuværende styrke"
-
-#~ msgid "Force Editor"
-#~ msgstr "Redigér styrke"

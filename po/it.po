@@ -5,16 +5,18 @@
 # Federico Aromolo <miracleblade@hotmail.it>, 2008.
 msgid ""
 msgstr ""
-"Project-Id-Version: Warzone 2100\n"
+"Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2008-05-07 11:53+0200\n"
-"PO-Revision-Date: 2008-03-20 00:23+0100\n"
-"Last-Translator: Federico Aromolo <miracleblade@hotmail.it>\n"
+"POT-Creation-Date: 2008-05-09 16:13+0200\n"
+"PO-Revision-Date: 2008-04-14 11:58+0000\n"
+"Last-Translator: Matteo Ferrabone <Unknown>\n"
 "Language-Team: Italian <warzone-dev@gna.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Launchpad-Export-Date: 2008-04-28 05:16+0000\n"
+"X-Generator: Launchpad (build Unknown)\n"
 "X-Poedit-Language: Italian\n"
 "X-Poedit-SourceCharset: utf-8\n"
 "X-Poedit-Basepath: ..\n"
@@ -584,16 +586,13 @@ msgid "Enemy VTOLs are likely to be flying close escort."
 msgstr "VTOL nemici volano probabilmente vicino al convoglio come scorta."
 
 #: data/messages/strings/cam2strings.txt:73
+#: data/messages/strings/cam2strings.txt:77
 msgid "TRANSPORT MISSION: Rescue civilians from Containment Camp"
 msgstr "MISSIONE CON TRASPORTO: Salva i civili dal campo di Contenimento"
 
 #: data/messages/strings/cam2strings.txt:74
 msgid "The Collective are processing and exterminating civilians at this base."
 msgstr "Il Collective sta processando e sterminando civili alla propria base."
-
-#: data/messages/strings/cam2strings.txt:77
-msgid "TRANSPORT MISSION: Rescue Civilians from Containment Camp "
-msgstr "MISSIONE CON TRASPORTO: Salva i Civili dal Campo di Contenimento"
 
 #: data/messages/strings/cam2strings.txt:78
 msgid "You are to rescue the civilians."
@@ -722,7 +721,7 @@ msgstr "Se devi scappare, distruggi i missili terra-aria intorno alla tua base."
 
 #: data/messages/strings/cam2strings.txt:138
 msgid "Fly to the LZ, then head overland to destroy the SAM sites."
-msgstr "Vola al Punto di Atterraggio, poi muoviti per via di terra per distruggere i siti SAM. "
+msgstr "Vola al Punto di Atterraggio, poi muoviti per via di terra per distruggere i siti SAM."
 
 #: data/messages/strings/cam2strings.txt:141
 #: data/messages/strings/cam2strings.txt:146
@@ -865,7 +864,7 @@ msgstr "La vallata è la vostra unica speranza di fuga."
 
 #: data/messages/strings/cam3strings.txt:45
 msgid "AWAY TEAM UPDATE"
-msgstr "AGGIORNAMENTO DELLA SQUADRA "
+msgstr "AGGIORNAMENTO DELLA SQUADRA"
 
 #: data/messages/strings/cam3strings.txt:46
 msgid "All communication with the away team was lost after the nuclear explosions."
@@ -940,11 +939,11 @@ msgid "Enemy forces are ....... from these coordinates."
 msgstr "Forze nemiche stanno ....... da queste coordinate."
 
 #: data/messages/strings/cam3strings.txt:82
-msgid "Defend the base and ........ the ....... "
+msgid "Defend the base and ........ the ......."
 msgstr "Difendi la base e ....... i ......."
 
 #: data/messages/strings/cam3strings.txt:83
-msgid "Search and destroy .... "
+msgid "Search and destroy ...."
 msgstr "Ricerca e distruggi ...."
 
 #: data/messages/strings/cam3strings.txt:86
@@ -1628,7 +1627,6 @@ msgstr "Python Cannone Leggero Cingoli"
 
 #: data/messages/strings/names.txt:194
 #: data/mp/messages/strings/names.txt:196
-#: data/mp/messages/strings/names.txt:1912
 msgid "Python Medium Cannon Tracks"
 msgstr "Phyton Cannone Medio Cingoli"
 
@@ -1705,7 +1703,7 @@ msgstr "Civile"
 #: data/mp/messages/strings/names.txt:214
 #: data/mp/messages/strings/names.txt:220
 msgid "Machinegunner"
-msgstr ""
+msgstr "Mitragliatrice"
 
 #: data/messages/strings/names.txt:213
 #: data/messages/strings/names.txt:479
@@ -1718,7 +1716,7 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:678
 #: data/mp/messages/strings/names.txt:1065
 msgid "Flamer"
-msgstr ""
+msgstr "Lancia fiamme"
 
 #: data/messages/strings/names.txt:214
 #: data/messages/strings/names.txt:221
@@ -1741,8 +1739,9 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:222
 #: data/mp/messages/strings/names.txt:535
 #: data/mp/messages/strings/names.txt:677
+#, fuzzy
 msgid "Heavy Gunner"
-msgstr ""
+msgstr "Artiglieria Pesante"
 
 #: data/messages/strings/names.txt:219
 #: data/mp/messages/strings/names.txt:221
@@ -3166,7 +3165,9 @@ msgid "Archangel Missile Battery"
 msgstr ""
 
 #: data/messages/strings/names.txt:729
+#: data/messages/strings/names.txt:1215
 #: data/mp/messages/strings/names.txt:735
+#: data/mp/messages/strings/names.txt:1223
 msgid "Mortar Pit"
 msgstr ""
 
@@ -4839,11 +4840,6 @@ msgstr ""
 #: data/messages/strings/names.txt:1211
 #: data/mp/messages/strings/names.txt:1219
 msgid "Cannon Tower"
-msgstr ""
-
-#: data/messages/strings/names.txt:1215
-#: data/mp/messages/strings/names.txt:1223
-msgid " Mortar Pit"
 msgstr ""
 
 #: data/messages/strings/names.txt:1234
@@ -8364,7 +8360,7 @@ msgstr ""
 
 #: data/messages/strings/resstrings.txt:1474
 #: data/mp/messages/strings/resstrings.txt:1589
-msgid "Improvement in laser emission density "
+msgid "Improvement in laser emission density"
 msgstr ""
 
 #: data/messages/strings/resstrings.txt:1475
@@ -9917,48 +9913,43 @@ msgid "Python HVC Hover"
 msgstr ""
 
 #: data/mp/messages/strings/names.txt:1911
-#, fuzzy
-msgid "Python Tank Killer Tracks"
-msgstr "Mantis Tank Killer Cingoli"
-
-#: data/mp/messages/strings/names.txt:1913
 msgid "Python Scourge Tracks"
 msgstr "Python Scourge Cingoli"
 
-#: data/mp/messages/strings/names.txt:1914
+#: data/mp/messages/strings/names.txt:1912
 msgid "Python Gauss Cannon Tracks"
 msgstr "Phyton Cannone Gauss Cingoli"
 
-#: data/mp/messages/strings/names.txt:1915
+#: data/mp/messages/strings/names.txt:1913
 msgid "Python Pulse Laser Tracks"
 msgstr "Python Laser a Impulso Cingoli"
 
-#: data/mp/messages/strings/names.txt:1916
+#: data/mp/messages/strings/names.txt:1914
 msgid "Tiger Pulse Laser Tracks"
 msgstr "Tiger Laser a Impulso Cingoli"
 
-#: data/mp/messages/strings/names.txt:1917
+#: data/mp/messages/strings/names.txt:1915
 msgid "Tiger Heavy Laser Tracks"
 msgstr "Tiger Laser Pesante Cingoli"
 
-#: data/mp/messages/strings/names.txt:1918
+#: data/mp/messages/strings/names.txt:1916
 msgid "Wyvern Gauss Cannon Tracks"
 msgstr "Wyvern Cannone Gauss Cingoli"
 
-#: data/mp/messages/strings/names.txt:1919
+#: data/mp/messages/strings/names.txt:1917
 msgid "Wyvern Pulse Laser Tracks"
 msgstr "Wyvern Cannone a Impulso Cingoli"
 
-#: data/mp/messages/strings/names.txt:1920
+#: data/mp/messages/strings/names.txt:1918
 msgid "Wyvern Heavy Laser Tracks"
 msgstr "Wyvern Laser Pesante Cingoli"
 
-#: data/mp/messages/strings/names.txt:1922
+#: data/mp/messages/strings/names.txt:1920
 #, fuzzy
 msgid "Viper Machinegun Half-Track"
 msgstr "Viper Doppia Mitragliatrice Semicingoli"
 
-#: data/mp/messages/strings/names.txt:1923
+#: data/mp/messages/strings/names.txt:1921
 #, fuzzy
 msgid "Viper Flamer Half-Track"
 msgstr "Viper Torretta Riparatrice Semicingoli"
@@ -10269,12 +10260,12 @@ msgstr "Veterana"
 #: lib/framework/i18n.c:46
 #: lib/framework/i18n.c:66
 msgid "English"
-msgstr ""
+msgstr "Inglese"
 
 #: lib/framework/i18n.c:47
 #: lib/framework/i18n.c:70
 msgid "French"
-msgstr ""
+msgstr "Francese"
 
 #: lib/framework/i18n.c:48
 #: lib/framework/i18n.c:71
@@ -10285,30 +10276,30 @@ msgstr "Retaliation"
 #: lib/framework/i18n.c:49
 #: lib/framework/i18n.c:73
 msgid "Dutch"
-msgstr ""
+msgstr "Olandese"
 
 #: lib/framework/i18n.c:50
 #: lib/framework/i18n.c:67
 msgid "Norwegian"
-msgstr ""
+msgstr "Norvegese"
 
 #: lib/framework/i18n.c:51
 #: lib/framework/i18n.c:74
 msgid "Portuegese"
-msgstr ""
+msgstr "Portoghese"
 
 #: lib/framework/i18n.c:52
 #: lib/framework/i18n.c:75
 msgid "Russian"
-msgstr ""
+msgstr "Russo"
 
 #: lib/framework/i18n.c:53
 msgid "Swedish"
-msgstr ""
+msgstr "Svedese"
 
 #: lib/framework/i18n.c:72
 msgid "Latin"
-msgstr ""
+msgstr "Latino"
 
 #: src/clparse.c:88
 msgid "Run in cheat mode"
@@ -10930,7 +10921,7 @@ msgstr "Colore delle Unità"
 #: src/multimenu.c:1250
 #: src/transporter.c:285
 #: src/transporter.c:374
-#: src/transporter.c:839
+#: src/transporter.c:872
 msgid "Close"
 msgstr "Chiudi"
 
@@ -11252,11 +11243,11 @@ msgstr "Due volte più bello!"
 
 #: src/keybind.c:386
 msgid "FPS display is enabled."
-msgstr ""
+msgstr "FPS display è attivato."
 
 #: src/keybind.c:390
 msgid "FPS display is disabled."
-msgstr ""
+msgstr "FPS display è disattivato."
 
 #: src/keybind.c:403
 #, c-format
@@ -11361,15 +11352,15 @@ msgstr "Il menu Costruzione non si riaprirà"
 
 #: src/keybind.c:2408
 msgid "Radar showing friend-foe colors"
-msgstr ""
+msgstr "Il radar mostra i colori Amici-Nemici"
 
 #: src/keybind.c:2412
 msgid "Radar showing player colors"
-msgstr ""
+msgstr "Il radar mostra il colore dei giocatori"
 
 #: src/keybind.c:2429
 msgid "Radar showing only objects"
-msgstr ""
+msgstr "Il radar mostra solo oggetti"
 
 #: src/keybind.c:2432
 msgid "Radar blending terrain and height"
@@ -11377,11 +11368,11 @@ msgstr ""
 
 #: src/keybind.c:2435
 msgid "Radar showing terrain"
-msgstr ""
+msgstr "Il radar mostra il terreno"
 
 #: src/keybind.c:2438
 msgid "Radar showing height"
-msgstr ""
+msgstr "Il radar mostra l'altitudine"
 
 #: src/keyedit.c:356
 msgid "KEY MAPPING"
@@ -12285,82 +12276,82 @@ msgstr "Impossibile localizzare alcuna Unità Sensoria!"
 msgid "Unable to locate any Commanders!"
 msgstr "Impossibile localizzare alcun Comandante!"
 
-#: src/structure.c:2769
+#: src/structure.c:2768
 msgid "Command Control Limit Reached - Production Halted"
 msgstr "Comando: Limite di Controllo Raggiunto - Produzione Bloccata"
 
-#: src/structure.c:5868
-#: src/structure.c:5890
+#: src/structure.c:5838
+#: src/structure.c:5860
 #, c-format
 msgid "%s - %u Unit assigned"
 msgid_plural "%s - %u Units assigned"
 msgstr[0] "%s - %u Unità Assegnata"
 msgstr[1] "%s - %u Unità Assegnate"
 
-#: src/structure.c:5940
+#: src/structure.c:5897
 #, c-format
 msgid "%s - Connected %u of %u"
 msgstr "%s - Collegati %u di %u"
 
-#: src/structure.c:5954
+#: src/structure.c:5911
 #, fuzzy, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - Danno %u%%"
 
-#: src/structure.c:6074
-#: src/structure.c:6123
+#: src/structure.c:6031
+#: src/structure.c:6080
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - Danneggiato Elettronicamente"
 
-#: src/structure.c:6358
+#: src/structure.c:6315
 msgid "Electronic Reward - Visibility Report"
 msgstr "Premio Elettronico - Rapporto di Visibilità"
 
-#: src/structure.c:6398
+#: src/structure.c:6355
 msgid "Factory Reward - Propulsion"
 msgstr "Premio della Fabbrica - Propulsione"
 
-#: src/structure.c:6422
+#: src/structure.c:6379
 msgid "Factory Reward - Body"
 msgstr "Premio della Fabbrica - Corpo"
 
-#: src/structure.c:6446
+#: src/structure.c:6403
 msgid "Factory Reward - Weapon"
 msgstr "Premio della Fabbrica - Arma"
 
-#: src/structure.c:6455
+#: src/structure.c:6412
 msgid "Factory Reward - Nothing"
 msgstr "Premio della Fabbrica - Niente"
 
-#: src/structure.c:6483
+#: src/structure.c:6440
 msgid "Repair Facility Award - Repair"
 msgstr "Premio della Struttura di Riparazione - Ripara"
 
-#: src/structure.c:6490
+#: src/structure.c:6447
 msgid "Repair Facility Award - Nothing"
 msgstr "Premio della Struttura di Riparazione - Niente"
 
-#: src/transporter.c:396
-#: src/transporter.c:450
+#: src/transporter.c:424
+#: src/transporter.c:478
 msgid "Launch Transport"
 msgstr "Lancia il Trasporto"
 
-#: src/transporter.c:1702
+#: src/transporter.c:1860
 msgid "Reinforcements landing"
 msgstr "I rinforzi stanno atterrando"
 
 #: src/version.c:137
 msgid " (modified and switched locally)"
-msgstr "(modificato e cambiato localmente)"
+msgstr " (modificato e cambiato localmente)"
 
 #: src/version.c:139
 msgid " (modified locally)"
-msgstr "(modificato localmente)"
+msgstr " (modificato localmente)"
 
 #: src/version.c:141
 msgid " (switched locally)"
-msgstr "(cambiato localmente)"
+msgstr " (cambiato localmente)"
 
 #: src/version.c:148
 msgid " - DEBUG"
@@ -12377,6 +12368,3 @@ msgstr " - Costruito %s"
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "Versione %s%s%s%s"
-
-#~ msgid "R-Struc-Power-Cam2"
-#~ msgstr "R-Struc-Power-Cam2"

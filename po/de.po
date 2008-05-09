@@ -5,19 +5,21 @@
 # Dennis Schridde <devurandom@gna.org>, 2007.
 # Martin Koller <koller@etm.at>, 2007.
 # Martin Koller <m.koller@surfeu.at>, 2007.
+# Steven \"Kreuvf\" Koenig <Unknown>, 2008.
 msgid ""
 msgstr ""
-"Project-Id-Version: de\n"
+"Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2008-05-07 11:53+0200\n"
-"PO-Revision-Date: 2008-03-24 10:27+0100\n"
-"Last-Translator: Steven 'Kreuvf' Koenig <translations@kreuvf.de>\n"
+"POT-Creation-Date: 2008-05-09 16:13+0200\n"
+"PO-Revision-Date: 2008-04-27 12:56+0000\n"
+"Last-Translator: Steven \"Kreuvf\" Koenig <Unknown>\n"
 "Language-Team: Deutsch <warzone-dev@gna.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.11.4\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Launchpad-Export-Date: 2008-04-28 05:16+0000\n"
+"X-Generator: Launchpad (build Unknown)\n"
 "X-Poedit-Language: German\n"
 "X-Poedit-SourceCharset: utf-8\n"
 "X-Poedit-Basepath: ..\n"
@@ -587,16 +589,13 @@ msgid "Enemy VTOLs are likely to be flying close escort."
 msgstr "Feindliche VTOLs eskortieren den Transport."
 
 #: data/messages/strings/cam2strings.txt:73
+#: data/messages/strings/cam2strings.txt:77
 msgid "TRANSPORT MISSION: Rescue civilians from Containment Camp"
 msgstr "TRANSPORTERMISSION: Zivilisten aus Sammellager retten"
 
 #: data/messages/strings/cam2strings.txt:74
 msgid "The Collective are processing and exterminating civilians at this base."
 msgstr "Das Kollektiv verarbeitet und vertilgt Zivilisten in dieser Basis."
-
-#: data/messages/strings/cam2strings.txt:77
-msgid "TRANSPORT MISSION: Rescue Civilians from Containment Camp "
-msgstr "TRANSPORTERMISSION: Zivilisten aus Sammellager retten"
 
 #: data/messages/strings/cam2strings.txt:78
 msgid "You are to rescue the civilians."
@@ -943,11 +942,11 @@ msgid "Enemy forces are ....... from these coordinates."
 msgstr "Die feindlichen Truppen kommen .... von diesen Koordinaten."
 
 #: data/messages/strings/cam3strings.txt:82
-msgid "Defend the base and ........ the ....... "
+msgid "Defend the base and ........ the ......."
 msgstr "Verteidigen Sie die Basis ... die ...."
 
 #: data/messages/strings/cam3strings.txt:83
-msgid "Search and destroy .... "
+msgid "Search and destroy ...."
 msgstr "Finden und zerstören ...."
 
 #: data/messages/strings/cam3strings.txt:86
@@ -1631,7 +1630,6 @@ msgstr "Python Leichtes Geschütz Ketten"
 
 #: data/messages/strings/names.txt:194
 #: data/mp/messages/strings/names.txt:196
-#: data/mp/messages/strings/names.txt:1912
 msgid "Python Medium Cannon Tracks"
 msgstr "Python Mittleres Geschütz Ketten"
 
@@ -3178,7 +3176,9 @@ msgid "Archangel Missile Battery"
 msgstr "Archangel-Raketenbatterie"
 
 #: data/messages/strings/names.txt:729
+#: data/messages/strings/names.txt:1215
 #: data/mp/messages/strings/names.txt:735
+#: data/mp/messages/strings/names.txt:1223
 msgid "Mortar Pit"
 msgstr "Mörsergrube"
 
@@ -4857,11 +4857,6 @@ msgstr "Beobachtungsturm"
 #: data/mp/messages/strings/names.txt:1219
 msgid "Cannon Tower"
 msgstr "Geschützturm"
-
-#: data/messages/strings/names.txt:1215
-#: data/mp/messages/strings/names.txt:1223
-msgid " Mortar Pit"
-msgstr "Mörsergrube"
 
 #: data/messages/strings/names.txt:1234
 #: data/mp/messages/strings/names.txt:1242
@@ -8389,7 +8384,7 @@ msgstr "Alle Laser werden automatisch aufgerüstet"
 
 #: data/messages/strings/resstrings.txt:1474
 #: data/mp/messages/strings/resstrings.txt:1589
-msgid "Improvement in laser emission density "
+msgid "Improvement in laser emission density"
 msgstr "Verbesserung der Laseremissionsdichte"
 
 #: data/messages/strings/resstrings.txt:1475
@@ -8400,7 +8395,7 @@ msgstr "Erhöht Schaden durch Laserwaffen"
 #: data/messages/strings/resstrings.txt:1480
 #: data/mp/messages/strings/resstrings.txt:1595
 msgid "Improved Energizer reduces laser recharge time"
-msgstr "Verbesserter Energiespeicher reduziert Laser-Ladezeiten "
+msgstr "Verbesserter Energiespeicher reduziert Laser-Ladezeiten"
 
 #: data/messages/strings/resstrings.txt:1481
 #: data/mp/messages/strings/resstrings.txt:1596
@@ -9942,48 +9937,43 @@ msgid "Python HVC Hover"
 msgstr "Python Hochgeschwindigkeitsgeschütz Hover"
 
 #: data/mp/messages/strings/names.txt:1911
-#, fuzzy
-msgid "Python Tank Killer Tracks"
-msgstr "Mantis Tank Killer Tracks"
-
-#: data/mp/messages/strings/names.txt:1913
 msgid "Python Scourge Tracks"
 msgstr "Python Scourge Ketten"
 
-#: data/mp/messages/strings/names.txt:1914
+#: data/mp/messages/strings/names.txt:1912
 msgid "Python Gauss Cannon Tracks"
 msgstr "Python Gaußkanone Ketten"
 
-#: data/mp/messages/strings/names.txt:1915
+#: data/mp/messages/strings/names.txt:1913
 msgid "Python Pulse Laser Tracks"
 msgstr "Python Pulslaser Ketten"
 
-#: data/mp/messages/strings/names.txt:1916
+#: data/mp/messages/strings/names.txt:1914
 msgid "Tiger Pulse Laser Tracks"
 msgstr "Tiger Pulslaser Ketten"
 
-#: data/mp/messages/strings/names.txt:1917
+#: data/mp/messages/strings/names.txt:1915
 msgid "Tiger Heavy Laser Tracks"
 msgstr "Tiger Schwerer Laser Ketten"
 
-#: data/mp/messages/strings/names.txt:1918
+#: data/mp/messages/strings/names.txt:1916
 msgid "Wyvern Gauss Cannon Tracks"
 msgstr "Wyvern Gaußkanone Ketten"
 
-#: data/mp/messages/strings/names.txt:1919
+#: data/mp/messages/strings/names.txt:1917
 msgid "Wyvern Pulse Laser Tracks"
 msgstr "Wyvern Pulslaser Ketten"
 
-#: data/mp/messages/strings/names.txt:1920
+#: data/mp/messages/strings/names.txt:1918
 msgid "Wyvern Heavy Laser Tracks"
 msgstr "Wyvern Schwerer Laser Ketten"
 
-#: data/mp/messages/strings/names.txt:1922
+#: data/mp/messages/strings/names.txt:1920
 #, fuzzy
 msgid "Viper Machinegun Half-Track"
 msgstr "Viper Zwillings-Maschinengewehr Halbketten"
 
-#: data/mp/messages/strings/names.txt:1923
+#: data/mp/messages/strings/names.txt:1921
 #, fuzzy
 msgid "Viper Flamer Half-Track"
 msgstr "Viper Reparaturarm Halbketten"
@@ -10275,65 +10265,61 @@ msgstr "Gefechtsfeldcomputersystem verbessert"
 
 #: lib/framework/i18n.c:42
 #: lib/framework/i18n.c:64
-#, fuzzy
 msgid "System locale"
-msgstr "Neues System verfügbar"
+msgstr "Systemsprache"
 
 #: lib/framework/i18n.c:44
 #: lib/framework/i18n.c:69
-#, fuzzy
 msgid "Danish"
-msgstr "Mantis"
+msgstr "Dänisch"
 
 #: lib/framework/i18n.c:45
 #: lib/framework/i18n.c:68
-#, fuzzy
 msgid "German"
-msgstr "Veteran"
+msgstr "Deutsch"
 
 #: lib/framework/i18n.c:46
 #: lib/framework/i18n.c:66
 msgid "English"
-msgstr ""
+msgstr "Englisch"
 
 #: lib/framework/i18n.c:47
 #: lib/framework/i18n.c:70
 msgid "French"
-msgstr ""
+msgstr "Französisch"
 
 #: lib/framework/i18n.c:48
 #: lib/framework/i18n.c:71
-#, fuzzy
 msgid "Italian"
-msgstr "Retaliation"
+msgstr "Italienisch"
 
 #: lib/framework/i18n.c:49
 #: lib/framework/i18n.c:73
 msgid "Dutch"
-msgstr ""
+msgstr "Niederländisch"
 
 #: lib/framework/i18n.c:50
 #: lib/framework/i18n.c:67
 msgid "Norwegian"
-msgstr ""
+msgstr "Norwegisch"
 
 #: lib/framework/i18n.c:51
 #: lib/framework/i18n.c:74
 msgid "Portuegese"
-msgstr ""
+msgstr "Portugiesisch"
 
 #: lib/framework/i18n.c:52
 #: lib/framework/i18n.c:75
 msgid "Russian"
-msgstr ""
+msgstr "Russisch"
 
 #: lib/framework/i18n.c:53
 msgid "Swedish"
-msgstr ""
+msgstr "Schwedisch"
 
 #: lib/framework/i18n.c:72
 msgid "Latin"
-msgstr ""
+msgstr "Latein"
 
 #: src/clparse.c:88
 msgid "Run in cheat mode"
@@ -10385,9 +10371,8 @@ msgid "game-name"
 msgstr "Spielname"
 
 #: src/clparse.c:95
-#, fuzzy
 msgid "Show this help message and exit"
-msgstr "Zeige diese Hilfenachricht und beende das Spiel"
+msgstr "Diese Hilfenachricht anzeigen und Programm beenden"
 
 #: src/clparse.c:96
 msgid "Enable a global mod"
@@ -10420,9 +10405,8 @@ msgid "Play in windowed mode"
 msgstr "Spiele im Fenstermodus"
 
 #: src/clparse.c:103
-#, fuzzy
 msgid "Show version information and exit"
-msgstr "Zeige Versionsinformationen und beende das Spiel"
+msgstr "Versionsinformation anzeigen und Programm beenden"
 
 #: src/clparse.c:104
 msgid "Set the resolution to use"
@@ -10538,20 +10522,17 @@ msgid "Sensor Range"
 msgstr "Sensorreichweite"
 
 #: src/design.c:1580
-#, fuzzy
 msgid "Sensor Power"
-msgstr "Sensorenergie"
+msgstr "Sensorstärke"
 
 #: src/design.c:1621
-#, fuzzy
 msgid "ECM Power"
-msgstr "ECM Energie"
+msgstr "ECM-Stärke"
 
 #: src/design.c:1647
 #: src/design.c:1664
 #: src/design.c:1690
 #: src/design.c:1707
-#, fuzzy
 msgid "Build Points"
 msgstr "Konstruktionspunkte"
 
@@ -10727,7 +10708,6 @@ msgstr "TUTORIALS"
 #: src/frontend.c:843
 #: src/frontend.c:946
 #: src/frontend.c:1109
-#, fuzzy
 msgctxt "menu"
 msgid "Return"
 msgstr "Zurück"
@@ -10941,9 +10921,8 @@ msgstr "Scrollgeschwindigkeit"
 
 #: src/frontend.c:1102
 #: src/frontend.c:1128
-#, fuzzy
 msgid "Language"
-msgstr "Hohe Reichweite"
+msgstr "Sprache"
 
 #: src/frontend.c:1106
 #: src/frontend.c:1129
@@ -10962,7 +10941,7 @@ msgstr "Einheitenfarbe"
 #: src/multimenu.c:1250
 #: src/transporter.c:285
 #: src/transporter.c:374
-#: src/transporter.c:839
+#: src/transporter.c:872
 msgid "Close"
 msgstr "Schließen"
 
@@ -12326,70 +12305,70 @@ msgstr "Kann keine Sensoreinheit finden!"
 msgid "Unable to locate any Commanders!"
 msgstr "Kann keine Commander finden!"
 
-#: src/structure.c:2769
+#: src/structure.c:2768
 msgid "Command Control Limit Reached - Production Halted"
 msgstr "Commandereinheit hat Kontrollgrenze erreicht - Produktion angehalten"
 
 # nix Gruppe! -Kreuvf
-#: src/structure.c:5868
-#: src/structure.c:5890
+#: src/structure.c:5838
+#: src/structure.c:5860
 #, c-format
 msgid "%s - %u Unit assigned"
 msgid_plural "%s - %u Units assigned"
 msgstr[0] "%s - %u Einheit hinzugefügt"
 msgstr[1] "%s - %u Einheiten hinzugefügt"
 
-#: src/structure.c:5940
+#: src/structure.c:5897
 #, c-format
 msgid "%s - Connected %u of %u"
 msgstr "%s - %u von %u verbunden"
 
-#: src/structure.c:5954
+#: src/structure.c:5911
 #, fuzzy, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - Schaden %u%%"
 
-#: src/structure.c:6074
-#: src/structure.c:6123
+#: src/structure.c:6031
+#: src/structure.c:6080
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - Elektronisch beschädigt"
 
 # Reward ist zwar nicht Beute, aber im Krieg erbeutet man eben Dinge -Kreuvf
-#: src/structure.c:6358
+#: src/structure.c:6315
 msgid "Electronic Reward - Visibility Report"
 msgstr "Elektronische Beute - Sichtbarkeitsbericht"
 
-#: src/structure.c:6398
+#: src/structure.c:6355
 msgid "Factory Reward - Propulsion"
 msgstr "Fabrikbeute - Antrieb"
 
-#: src/structure.c:6422
+#: src/structure.c:6379
 msgid "Factory Reward - Body"
 msgstr "Fabrikbeute - Rumpf"
 
-#: src/structure.c:6446
+#: src/structure.c:6403
 msgid "Factory Reward - Weapon"
 msgstr "Fabrikbeute - Waffe"
 
-#: src/structure.c:6455
+#: src/structure.c:6412
 msgid "Factory Reward - Nothing"
 msgstr "Fabrikbeute - Nichts"
 
-#: src/structure.c:6483
+#: src/structure.c:6440
 msgid "Repair Facility Award - Repair"
 msgstr "Beute aus Reparatureinrichtung - Reparatur"
 
-#: src/structure.c:6490
+#: src/structure.c:6447
 msgid "Repair Facility Award - Nothing"
 msgstr "Beute aus Reparatureinrichtung - Nichts"
 
-#: src/transporter.c:396
-#: src/transporter.c:450
+#: src/transporter.c:424
+#: src/transporter.c:478
 msgid "Launch Transport"
 msgstr "Transporter starten"
 
-#: src/transporter.c:1702
+#: src/transporter.c:1860
 msgid "Reinforcements landing"
 msgstr "Verstärkung landet"
 

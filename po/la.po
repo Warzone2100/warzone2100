@@ -5,15 +5,18 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Warzone 2100 TRUNK\n"
+"Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2008-05-07 11:53+0200\n"
-"PO-Revision-Date: 2008-01-20 19:26+0100\n"
-"Last-Translator: Giel van Schijndel <me@mortis.eu>\n"
+"POT-Creation-Date: 2008-05-09 16:13+0200\n"
+"PO-Revision-Date: 2008-03-30 15:12+0000\n"
+"Last-Translator: Mortis <Unknown>\n"
 "Language-Team: Latin\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Launchpad-Export-Date: 2008-04-28 05:16+0000\n"
+"X-Generator: Launchpad (build Unknown)\n"
 
 #: data/messages/strings/cam1strings.txt:3
 msgid "Campaign One Full Version Test Message"
@@ -200,7 +203,7 @@ msgstr ""
 #: data/messages/strings/cam2strings.txt:118
 #: data/messages/strings/cam3strings.txt:163
 msgid " "
-msgstr ""
+msgstr " "
 
 #: data/messages/strings/cam1strings.txt:65
 msgid "New Paradigm Transmission"
@@ -580,15 +583,12 @@ msgid "Enemy VTOLs are likely to be flying close escort."
 msgstr ""
 
 #: data/messages/strings/cam2strings.txt:73
+#: data/messages/strings/cam2strings.txt:77
 msgid "TRANSPORT MISSION: Rescue civilians from Containment Camp"
 msgstr ""
 
 #: data/messages/strings/cam2strings.txt:74
 msgid "The Collective are processing and exterminating civilians at this base."
-msgstr ""
-
-#: data/messages/strings/cam2strings.txt:77
-msgid "TRANSPORT MISSION: Rescue Civilians from Containment Camp "
 msgstr ""
 
 #: data/messages/strings/cam2strings.txt:78
@@ -936,11 +936,11 @@ msgid "Enemy forces are ....... from these coordinates."
 msgstr ""
 
 #: data/messages/strings/cam3strings.txt:82
-msgid "Defend the base and ........ the ....... "
+msgid "Defend the base and ........ the ......."
 msgstr ""
 
 #: data/messages/strings/cam3strings.txt:83
-msgid "Search and destroy .... "
+msgid "Search and destroy ...."
 msgstr ""
 
 #: data/messages/strings/cam3strings.txt:86
@@ -1624,7 +1624,6 @@ msgstr ""
 
 #: data/messages/strings/names.txt:194
 #: data/mp/messages/strings/names.txt:196
-#: data/mp/messages/strings/names.txt:1912
 msgid "Python Medium Cannon Tracks"
 msgstr ""
 
@@ -3170,7 +3169,9 @@ msgid "Archangel Missile Battery"
 msgstr ""
 
 #: data/messages/strings/names.txt:729
+#: data/messages/strings/names.txt:1215
 #: data/mp/messages/strings/names.txt:735
+#: data/mp/messages/strings/names.txt:1223
 msgid "Mortar Pit"
 msgstr ""
 
@@ -4843,11 +4844,6 @@ msgstr ""
 #: data/messages/strings/names.txt:1211
 #: data/mp/messages/strings/names.txt:1219
 msgid "Cannon Tower"
-msgstr ""
-
-#: data/messages/strings/names.txt:1215
-#: data/mp/messages/strings/names.txt:1223
-msgid " Mortar Pit"
 msgstr ""
 
 #: data/messages/strings/names.txt:1234
@@ -8369,7 +8365,7 @@ msgstr ""
 
 #: data/messages/strings/resstrings.txt:1474
 #: data/mp/messages/strings/resstrings.txt:1589
-msgid "Improvement in laser emission density "
+msgid "Improvement in laser emission density"
 msgstr ""
 
 #: data/messages/strings/resstrings.txt:1475
@@ -9923,46 +9919,42 @@ msgid "Python HVC Hover"
 msgstr ""
 
 #: data/mp/messages/strings/names.txt:1911
-msgid "Python Tank Killer Tracks"
-msgstr ""
-
-#: data/mp/messages/strings/names.txt:1913
 msgid "Python Scourge Tracks"
 msgstr ""
 
-#: data/mp/messages/strings/names.txt:1914
+#: data/mp/messages/strings/names.txt:1912
 msgid "Python Gauss Cannon Tracks"
 msgstr ""
 
-#: data/mp/messages/strings/names.txt:1915
+#: data/mp/messages/strings/names.txt:1913
 msgid "Python Pulse Laser Tracks"
 msgstr ""
 
-#: data/mp/messages/strings/names.txt:1916
+#: data/mp/messages/strings/names.txt:1914
 msgid "Tiger Pulse Laser Tracks"
 msgstr ""
 
-#: data/mp/messages/strings/names.txt:1917
+#: data/mp/messages/strings/names.txt:1915
 msgid "Tiger Heavy Laser Tracks"
 msgstr ""
 
-#: data/mp/messages/strings/names.txt:1918
+#: data/mp/messages/strings/names.txt:1916
 msgid "Wyvern Gauss Cannon Tracks"
 msgstr ""
 
-#: data/mp/messages/strings/names.txt:1919
+#: data/mp/messages/strings/names.txt:1917
 msgid "Wyvern Pulse Laser Tracks"
 msgstr ""
 
-#: data/mp/messages/strings/names.txt:1920
+#: data/mp/messages/strings/names.txt:1918
 msgid "Wyvern Heavy Laser Tracks"
 msgstr ""
 
-#: data/mp/messages/strings/names.txt:1922
+#: data/mp/messages/strings/names.txt:1920
 msgid "Viper Machinegun Half-Track"
 msgstr ""
 
-#: data/mp/messages/strings/names.txt:1923
+#: data/mp/messages/strings/names.txt:1921
 msgid "Viper Flamer Half-Track"
 msgstr ""
 
@@ -10932,7 +10924,7 @@ msgstr ""
 #: src/multimenu.c:1250
 #: src/transporter.c:285
 #: src/transporter.c:374
-#: src/transporter.c:839
+#: src/transporter.c:872
 msgid "Close"
 msgstr ""
 
@@ -11801,9 +11793,9 @@ msgid "%s Gives You A Visibility Report"
 msgstr "%s tibi visibilitatem relatum dāt"
 
 #: src/multigifts.c:188
-#, fuzzy, c-format
+#, c-format
 msgid "%s Gives you a %s"
-msgstr "%s dō "
+msgstr ""
 
 #: src/multigifts.c:238
 #, c-format
@@ -11818,7 +11810,7 @@ msgstr ""
 #: src/multigifts.c:335
 #, c-format
 msgid "%s Gives You Power"
-msgstr "%s dō "
+msgstr ""
 
 #: src/multigifts.c:355
 #, c-format
@@ -12188,9 +12180,9 @@ msgid "Green: %u"
 msgstr "Viridum"
 
 #: src/scores.c:110
-#, fuzzy, c-format
+#, c-format
 msgid "Trained: %u"
-msgstr "Exercitum"
+msgstr ""
 
 #: src/scores.c:111
 #, c-format
@@ -12203,9 +12195,9 @@ msgid "Professional: %u"
 msgstr ""
 
 #: src/scores.c:113
-#, fuzzy, c-format
+#, c-format
 msgid "Veteran: %u"
-msgstr "Veteranum"
+msgstr ""
 
 #: src/scores.c:114
 #, c-format
@@ -12218,9 +12210,9 @@ msgid "Special: %u"
 msgstr ""
 
 #: src/scores.c:116
-#, fuzzy, c-format
+#, c-format
 msgid "Hero: %u"
-msgstr "Heros"
+msgstr ""
 
 #: src/scores.c:350
 msgid "Unit Losses"
@@ -12291,68 +12283,68 @@ msgstr ""
 msgid "Unable to locate any Commanders!"
 msgstr ""
 
-#: src/structure.c:2769
+#: src/structure.c:2768
 msgid "Command Control Limit Reached - Production Halted"
 msgstr ""
 
-#: src/structure.c:5868
-#: src/structure.c:5890
+#: src/structure.c:5838
+#: src/structure.c:5860
 #, c-format
 msgid "%s - %u Unit assigned"
 msgid_plural "%s - %u Units assigned"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/structure.c:5940
+#: src/structure.c:5897
 #, c-format
 msgid "%s - Connected %u of %u"
 msgstr ""
 
-#: src/structure.c:5954
+#: src/structure.c:5911
 #, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr ""
 
-#: src/structure.c:6074
-#: src/structure.c:6123
+#: src/structure.c:6031
+#: src/structure.c:6080
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr ""
 
-#: src/structure.c:6358
+#: src/structure.c:6315
 msgid "Electronic Reward - Visibility Report"
 msgstr ""
 
-#: src/structure.c:6398
+#: src/structure.c:6355
 msgid "Factory Reward - Propulsion"
 msgstr ""
 
-#: src/structure.c:6422
+#: src/structure.c:6379
 msgid "Factory Reward - Body"
 msgstr ""
 
-#: src/structure.c:6446
+#: src/structure.c:6403
 msgid "Factory Reward - Weapon"
 msgstr ""
 
-#: src/structure.c:6455
+#: src/structure.c:6412
 msgid "Factory Reward - Nothing"
 msgstr ""
 
-#: src/structure.c:6483
+#: src/structure.c:6440
 msgid "Repair Facility Award - Repair"
 msgstr ""
 
-#: src/structure.c:6490
+#: src/structure.c:6447
 msgid "Repair Facility Award - Nothing"
 msgstr ""
 
-#: src/transporter.c:396
-#: src/transporter.c:450
+#: src/transporter.c:424
+#: src/transporter.c:478
 msgid "Launch Transport"
 msgstr ""
 
-#: src/transporter.c:1702
+#: src/transporter.c:1860
 msgid "Reinforcements landing"
 msgstr ""
 
