@@ -51,12 +51,12 @@ static BOOL inComment = false;
 #define YY_EXTRA_TYPE PHYSFS_file *
 
 #define YY_INPUT(buf,result,max_size) \
-		if (PHYSFS_eof(yyget_extra())) \
+		if (PHYSFS_eof(yyextra)) \
 		{ \
 			buf[0] = EOF; result = YY_NULL; \
 		} \
 		else { \
-			result = PHYSFS_read(yyget_extra(), buf, 1, max_size); \
+			result = PHYSFS_read(yyextra, buf, 1, max_size); \
 			if (result == -1) \
 			{ \
 				buf[0] = EOF; result = YY_NULL; \
