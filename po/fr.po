@@ -1,9 +1,10 @@
 # French translations for Warzone 2100 package.
 # Copyright (C) 2008 Warzone Resurrection Project
 # This file is distributed under the same license as the Warzone 2100 package.
-# Automatically generated, 2008.
-# Traduction by qwerty800 (qwerty8034@hotmail.com), (add your name if you participate)
-# Vincent Laviron <vincent.laviron@gmail.com>, 2008
+#
+# qwerty800 <qwerty8034@hotmail.com>, 2008.
+# Vincent Laviron <vincent.laviron@gmail.com>, 2008.
+# Guillaume Wilhelm <guillaume.wilhelm@gmail.com>, 2008.
 msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100 2.1_beta1\n"
@@ -19,7 +20,6 @@ msgstr ""
 "X-Poedit-Language: French\n"
 "X-Poedit-SourceCharset: utf-8\n"
 "X-Poedit-Basepath: ..\n"
-"X-Poedit-Country: FRANCE\n"
 
 #: data/messages/strings/cam1strings.txt:3
 msgid "Campaign One Full Version Test Message"
