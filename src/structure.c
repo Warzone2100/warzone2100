@@ -2031,7 +2031,6 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 			psBuilding->status = SS_BEING_BUILT;
 			if (psBuilding->player == selectedPlayer && !FromSave)
 			{
-				intResetScreen(false);	// hack to ensure we don't crash if a tab is removed
 				intRefreshScreen();
 			}
 			//inform power system that won't be needing power until built

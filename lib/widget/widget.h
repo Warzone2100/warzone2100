@@ -323,6 +323,12 @@ extern void widgSetTabs(W_SCREEN *psScreen, UDWORD id, UWORD major, UWORD minor)
 /** Get the current tabs for a tab form */
 extern void widgGetTabs(W_SCREEN *psScreen, UDWORD id, UWORD *pMajor, UWORD *pMinor);
 
+/** Get the number of major tab in a tab form. */
+int widgGetNumTabMajor(W_SCREEN *psScreen, UDWORD id);
+
+/** Get the number of minor tabs in a tab form. */
+int widgGetNumTabMinor(W_SCREEN *psScreen, UDWORD id, UWORD pMajor);
+
 /** Get the current position of a widget */
 extern void widgGetPos(W_SCREEN *psScreen, UDWORD id, SWORD *pX, SWORD *pY);
 

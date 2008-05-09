@@ -878,9 +878,32 @@ static void intDoScreenRefresh(void)
 			}
 
 			// set the tabs again
+			if (objMajor >= widgGetNumTabMajor(psWScreen, IDOBJ_TABFORM))
+			{
+				objMajor = 0;	// reset
+				objMinor = 0;
+				debug(LOG_ERROR, "Reset tabs since objMajor is too big");
+			}
+			else if (objMinor >= widgGetNumTabMinor(psWScreen, IDOBJ_TABFORM, objMajor))
+			{
+				objMinor = 0;	// reset minor only
+				debug(LOG_ERROR, "Reset minor tabs since objMinor is too big");
+			}
 			if (widgGetFromID(psWScreen, IDOBJ_TABFORM) != NULL)
 			{
 				widgSetTabs(psWScreen, IDOBJ_TABFORM, objMajor, objMinor);
+			}
+
+			if (statMajor >= widgGetNumTabMajor(psWScreen, IDSTAT_TABFORM))
+			{
+				statMajor = 0;	// reset
+				statMinor = 0;
+				debug(LOG_ERROR, "Reset tabs since statMajor is too big");
+			}
+			else if (statMinor >= widgGetNumTabMinor(psWScreen, IDSTAT_TABFORM, statMajor))
+			{
+				statMinor = 0;	// reset minor only
+				debug(LOG_ERROR, "Reset minor tabs since statMinor is too big");
 			}
 			if (widgGetFromID(psWScreen,IDSTAT_TABFORM) != NULL )
 			{

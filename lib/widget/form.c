@@ -631,6 +631,32 @@ void widgSetTabs(W_SCREEN *psScreen, UDWORD id, UWORD major, UWORD minor)
 }
 
 
+int widgGetNumTabMajor(W_SCREEN *psScreen, UDWORD id)
+{
+	W_TABFORM	*psForm = (W_TABFORM *)widgGetFromID(psScreen, id);
+
+	if (psForm == NULL || psForm->type != WIDG_FORM || !(psForm->style & WFORM_TABBED))
+	{
+		ASSERT(false,"couldn't find tabbed form from id");
+		return 0;
+	}
+	return psForm->numMajor;
+}
+
+
+int widgGetNumTabMinor(W_SCREEN *psScreen, UDWORD id, UWORD pMajor)
+{
+	W_TABFORM	*psForm = (W_TABFORM *)widgGetFromID(psScreen, id);
+
+	if (psForm == NULL || psForm->type != WIDG_FORM || !(psForm->style & WFORM_TABBED))
+	{
+		ASSERT(false,"couldn't find tabbed form from id");
+		return 0;
+	}
+	return psForm->asMajor[pMajor].numMinor;
+}
+
+
 /* Get the current tabs for a tab form */
 void widgGetTabs(W_SCREEN *psScreen, UDWORD id, UWORD *pMajor, UWORD *pMinor)
 {
