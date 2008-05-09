@@ -5,7 +5,7 @@
 # Christian Vest Hansen <karmazilla@gmail.com>, 2007.
 msgid ""
 msgstr ""
-"Project-Id-Version: da\n"
+"Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
 "POT-Creation-Date: 2008-05-09 16:13+0200\n"
 "PO-Revision-Date: 2008-04-02 21:06+0000\n"
