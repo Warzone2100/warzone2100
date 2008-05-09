@@ -346,7 +346,7 @@ point widgetAbsolutePosition(widget *self);
  * @param self	The widget to find the root widget of.
  * @return A pointer to the root widget.
  */
-widget *windgetGetRoot(widget *self);
+widget *widgetGetRoot(widget *self);
 
 /**
  * Attempts to add child as a child widget of self. The exact location of the
