@@ -1,4 +1,4 @@
-# Portuguese translations for Warzone 2100 package.
+# Brazilian Portuguese translations for Warzone 2100 package.
 # Copyright (C) 2008 Warzone Resurrection Project
 # This file is distributed under the same license as the Warzone 2100 package.
 # Automatically generated, 2008.
@@ -10,7 +10,7 @@ msgstr ""
 "POT-Creation-Date: 2008-05-09 16:13+0200\n"
 "PO-Revision-Date: 2008-05-05 20:25-0300\n"
 "Last-Translator: Artur <tucalipe@hotmail.com>\n"
-"Language-Team: Portugese <warzone-dev@gna.org>\n"
+"Language-Team: Brazilian Portugese <warzone-dev@gna.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
