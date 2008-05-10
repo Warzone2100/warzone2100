@@ -31,18 +31,15 @@
 #include "lib/script/script.h"
 #include "lib/sound/audio.h"
 
+#include "scriptvals.h"
 #include "scriptvals_lexer.lex.h"
 #include "src/scripttabs.h"
-#include "src/scriptvals.h"
 #include "src/objects.h"
 #include "src/droid.h"
 #include "src/structure.h"
 #include "src/message.h"
 #include "src/levels.h"
 #include "src/research.h"
-
-extern int scrv_lex(void);
-extern int scrv_lex_destroy(void);
 
 // The current script code
 static SCRIPT_CODE		*psCurrScript;
@@ -101,6 +98,8 @@ static BOOL scrvCheckArrayIndex(SDWORD base, ARRAY_INDEXES *psIndexes, UDWORD *p
 %}
 
 %name-prefix="scrv_"
+%defines
+%error-verbose
 
 %union {
 	BOOL			bval;
@@ -860,6 +859,6 @@ void yyerror(const char* fmt, ...)
 	vsprintf(txtBuf, fmt, args);
 	va_end(args);
 
-	debug(LOG_ERROR, "VLO parse error: %s at line %d, token: %d, text: '%s'",
-	      txtBuf, scrv_get_lineno(), scrv_char, scrv_get_text());
+	debug(LOG_ERROR, "VLO parse error: %s at line %d, text: '%s'",
+	      txtBuf, scrv_get_lineno(), scrv_get_text());
 }

@@ -70,6 +70,7 @@ static BOOL inComment = false;
 %}
 
 %option yylineno nounput
+%option warn nodefault
 %option prefix="scrv_"
 %option header-file="scriptvals_lexer.lex.h"
 
