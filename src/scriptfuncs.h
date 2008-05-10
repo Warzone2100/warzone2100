@@ -645,6 +645,13 @@ extern BOOL scrGetDroidLevel(void);
 extern BOOL scrMoveDroidStopped(void);
 extern BOOL scrUpdateVisibleTiles(void);
 extern BOOL scrCheckVisibleTile(void);
+extern BOOL scrAssembleWeaponTemplate(void);
+extern BOOL scrWeaponShortHitUpgrade(void);
+extern BOOL scrWeaponLongHitUpgrade(void);
+extern BOOL scrWeaponDamageUpgrade(void);
+extern BOOL scrWeaponFirePauseUpgrade(void);
+extern BOOL scrIsComponentAvailable(void);
+extern BOOL scrGetBodySize(void);
 
 
 extern BOOL beingResearchedByAlly(SDWORD resIndex, SDWORD player);

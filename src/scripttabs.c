@@ -1430,6 +1430,34 @@ FUNC_SYMBOL asFuncTable[] =
 		3, { VAL_INT, VAL_INT, VAL_INT },
 		0, 0, NULL, 0, 0, NULL, NULL },
 
+	{ "assembleWeaponTemplate",		scrAssembleWeaponTemplate,		ST_TEMPLATE,
+		4, { VAL_INT, (INTERP_TYPE)ST_BODY, (INTERP_TYPE)ST_PROPULSION, (INTERP_TYPE)ST_WEAPON },
+		0, 0, NULL, 0, 0, NULL, NULL },
+
+	{ "weaponShortHitUpgrade",	scrWeaponShortHitUpgrade,	VAL_INT,
+		2, { VAL_INT, (INTERP_TYPE)ST_WEAPON },
+		0, 0, NULL, 0, 0, NULL, NULL },
+
+	{ "weaponLongHitUpgrade",	scrWeaponLongHitUpgrade,	VAL_INT,
+		2, { VAL_INT, (INTERP_TYPE)ST_WEAPON },
+		0, 0, NULL, 0, 0, NULL, NULL },
+
+	{ "weaponDamageUpgrade",	scrWeaponDamageUpgrade,		VAL_INT,
+		2, { VAL_INT, (INTERP_TYPE)ST_WEAPON },
+		0, 0, NULL, 0, 0, NULL, NULL },
+
+	{ "weaponFirePauseUpgrade",	scrWeaponFirePauseUpgrade,	VAL_INT,
+		2, { VAL_INT, (INTERP_TYPE)ST_WEAPON },
+		0, 0, NULL, 0, 0, NULL, NULL },
+
+	{ "isComponentAvailable",	scrIsComponentAvailable,	VAL_BOOL,
+		2, { VAL_INT, (INTERP_TYPE)ST_COMPONENT },
+		0, 0, NULL, 0, 0, NULL, NULL },
+
+	{ "getBodySize",			scrGetBodySize,				VAL_INT,
+		1, { (INTERP_TYPE)ST_BODY },
+		0, 0, NULL, 0, 0, NULL, NULL },
+
 	/* END new functions */
 
     /* This final entry marks the end of the function list */
@@ -1600,38 +1628,39 @@ VAR_SYMBOL asObjTable[] =
 	{ "selected",	VAL_BOOL,	ST_OBJECT,
 		(INTERP_TYPE)ST_DROID,		OBJID_SELECTED,	scrBaseObjGet,	NULL, 0, {0}, NULL },
 
+	/* Weapon Stats */
 
 	//weapon short range
 	{ "shortRange",	VAL_INT,	ST_OBJECT,
-		(INTERP_TYPE)ST_BASEOBJECT,	OBJID_WEAP_SHORT_RANGE,	scrBaseObjGet,	NULL, 0, {0}, NULL },
+		(INTERP_TYPE)ST_WEAPON,	WEAPID_SHORT_RANGE,	scrWeaponObjGet,	NULL, 0, {0}, NULL },
 
 	//weapon long range
 	{ "longRange",	VAL_INT,	ST_OBJECT,
-		(INTERP_TYPE)ST_BASEOBJECT,	OBJID_WEAP_LONG_RANGE,	scrBaseObjGet,	NULL, 0, {0}, NULL },
+		(INTERP_TYPE)ST_WEAPON,	WEAPID_LONG_RANGE,	scrWeaponObjGet,	NULL, 0, {0}, NULL },
 
 	//weapon short hit chance
 	{ "shortHit",	VAL_INT,	ST_OBJECT,
-		(INTERP_TYPE)ST_BASEOBJECT,	OBJID_WEAP_SHORT_HIT,	scrBaseObjGet,	NULL, 0, {0}, NULL },
+		(INTERP_TYPE)ST_WEAPON,	WEAPID_SHORT_HIT,	scrWeaponObjGet,	NULL, 0, {0}, NULL },
 
 	//weapon long hit chance
 	{ "longHit",	VAL_INT,	ST_OBJECT,
-		(INTERP_TYPE)ST_BASEOBJECT,	OBJID_WEAP_LONG_HIT,	scrBaseObjGet,	NULL, 0, {0}, NULL },
+		(INTERP_TYPE)ST_WEAPON,	WEAPID_LONG_HIT,	scrWeaponObjGet,	NULL, 0, {0}, NULL },
 
 	//weapon damage
 	{ "damage",	VAL_INT,	ST_OBJECT,
-		(INTERP_TYPE)ST_BASEOBJECT,	OBJID_WEAP_DAMAGE,	scrBaseObjGet,	NULL, 0, {0}, NULL },
+		(INTERP_TYPE)ST_WEAPON,	WEAPID_DAMAGE,		scrWeaponObjGet,	NULL, 0, {0}, NULL },
 
 	//weapon fire pause
 	{ "firePause",	VAL_INT,	ST_OBJECT,
-		(INTERP_TYPE)ST_BASEOBJECT,	OBJID_WEAP_FIRE_PAUSE,	scrBaseObjGet,	NULL, 0, {0}, NULL },
+		(INTERP_TYPE)ST_WEAPON,	WEAPID_FIRE_PAUSE,	scrWeaponObjGet,	NULL, 0, {0}, NULL },
 
 	//weapon reload time
 	{ "reloadTime",	VAL_INT,	ST_OBJECT,
-		(INTERP_TYPE)ST_BASEOBJECT,	OBJID_WEAP_RELOAD_TIME,	scrBaseObjGet,	NULL, 0, {0}, NULL },
+		(INTERP_TYPE)ST_WEAPON,	WEAPID_RELOAD_TIME,	scrWeaponObjGet,	NULL, 0, {0}, NULL },
 
 	//num of weapon's rounds (salvo fire)
 	{ "numRounds",	VAL_INT,	ST_OBJECT,
-		(INTERP_TYPE)ST_BASEOBJECT,	OBJID_WEAP_NUM_ROUNDS,	scrBaseObjGet,	NULL, 0, {0}, NULL },
+		(INTERP_TYPE)ST_WEAPON,	WEAPID_NUM_ROUNDS,	scrWeaponObjGet,	NULL, 0, {0}, NULL },
 
 	/* This entry marks the end of the variable list */
 	{ NULL, VAL_VOID, (INTERP_TYPE)ST_OBJECT, VAL_VOID, 0, NULL, NULL, 0, {0}, NULL }

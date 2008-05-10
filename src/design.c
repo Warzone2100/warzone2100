@@ -335,7 +335,7 @@ static void intSetPropulsionStats(PROPULSION_STATS *psStats);
 /* Set the shadow bar graphs for the Propulsion stats */
 static void intSetPropulsionShadowStats(PROPULSION_STATS *psStats);
 /* Check whether a droid template is valid */
-static BOOL intValidTemplate(DROID_TEMPLATE *psTempl);
+BOOL intValidTemplate(DROID_TEMPLATE *psTempl, const char *newName);
 /* General display window for the design form */
 void intDisplayDesignForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
 /* Sets the Design Power Bar for a given Template */
@@ -1331,7 +1331,7 @@ intChooseSystemStats( DROID_TEMPLATE *psTemplate )
 /* set SHOWTEMPLATENAME to 0 to show template components in edit box */
 #define SHOWTEMPLATENAME	0
 
-static const char *GetDefaultTemplateName(DROID_TEMPLATE *psTemplate)
+const char *GetDefaultTemplateName(DROID_TEMPLATE *psTemplate)
 {
 	COMP_BASE_STATS *psStats = NULL;
 
@@ -3367,7 +3367,7 @@ static void intSetPropulsionShadowStats(PROPULSION_STATS *psStats)
 
 
 /* Check whether a droid template is valid */
-static BOOL intValidTemplate(DROID_TEMPLATE *psTempl)
+BOOL intValidTemplate(DROID_TEMPLATE *psTempl, const char *newName)
 {
 	UDWORD i;
 
@@ -3444,8 +3444,8 @@ static BOOL intValidTemplate(DROID_TEMPLATE *psTempl)
 	//set the droidtype
 	psTempl->droidType = droidTemplateType(psTempl);
 
-	/* copy current name into template */
-	sstrcpy(sCurrDesign.aName, aCurrName);
+	/* copy name into template */
+	sstrcpy(psTempl->aName, newName);
 
 	return true;
 }
@@ -3864,7 +3864,7 @@ void intProcessDesign(UDWORD id)
 		intSetEditBoxTextFromTemplate( &sCurrDesign );
 
 		/* flash next button if design not complete */
-		if ( intValidTemplate( &sCurrDesign ) == false )
+		if ( intValidTemplate( &sCurrDesign, aCurrName ) == false )
 		{
 			/* reset button states */
 			widgSetButtonState(psWScreen, IDDES_SYSTEMBUTTON, 0);
@@ -4191,7 +4191,7 @@ void intProcessDesign(UDWORD id)
 
 #ifdef FLASH_BUTTONS
 			/* lock button if design complete */
-			if ( intValidTemplate( &sCurrDesign ) == true )
+			if ( intValidTemplate( &sCurrDesign, aCurrName ) == true )
 			{
 				widgSetButtonState(psWScreen, IDDES_SYSTEMBUTTON, WBUT_CLICKLOCK);
 				widgSetButtonState(psWScreen, IDDES_BODYBUTTON,   0);
@@ -4229,7 +4229,7 @@ void intProcessDesign(UDWORD id)
 
 #ifdef FLASH_BUTTONS
 			/* lock button if design complete */
-			if ( intValidTemplate( &sCurrDesign ) == true )
+			if ( intValidTemplate( &sCurrDesign, aCurrName ) == true )
 			{
 				widgSetButtonState(psWScreen, IDDES_SYSTEMBUTTON, 0);
 				widgSetButtonState(psWScreen, IDDES_BODYBUTTON,   0);
@@ -4268,7 +4268,7 @@ void intProcessDesign(UDWORD id)
 
 #ifdef FLASH_BUTTONS
 			/* lock button if design complete */
-			if ( intValidTemplate( &sCurrDesign ) == true )
+			if ( intValidTemplate( &sCurrDesign, aCurrName ) == true )
 			{
 				//Watermelon:enable the 2nd turret button
 				widgSetButtonState(psWScreen, IDDES_WPBBUTTON, WBUT_CLICKLOCK);
@@ -4291,7 +4291,7 @@ void intProcessDesign(UDWORD id)
 
 #ifdef FLASH_BUTTONS
 			/* lock button if design complete */
-			if ( intValidTemplate( &sCurrDesign ) == true )
+			if ( intValidTemplate( &sCurrDesign, aCurrName ) == true )
 			{
 				widgSetButtonState(psWScreen, IDDES_SYSTEMBUTTON, 0);
 				widgSetButtonState(psWScreen, IDDES_BODYBUTTON,   WBUT_CLICKLOCK);
@@ -4311,7 +4311,7 @@ void intProcessDesign(UDWORD id)
 
 #ifdef FLASH_BUTTONS
 			/* lock button if design complete */
-			if ( intValidTemplate( &sCurrDesign ) == true )
+			if ( intValidTemplate( &sCurrDesign, aCurrName ) == true )
 			{
 				widgSetButtonState(psWScreen, IDDES_SYSTEMBUTTON, 0);
 				widgSetButtonState(psWScreen, IDDES_BODYBUTTON,   0);
@@ -4368,7 +4368,7 @@ void intProcessDesign(UDWORD id)
 		widgReveal( psWScreen, IDDES_STATSFORM );
 
 		/* switch automatically to next component type if initial design */
-		if ( !intValidTemplate( &sCurrDesign ) )
+		if ( !intValidTemplate( &sCurrDesign, aCurrName ) )
 		{
 			/* show next component design screen */
 			switch ( desCompMode )
@@ -4668,7 +4668,7 @@ static BOOL saveTemplate(void)
 		}
 	}
 
-	if ( bTemplateFound == true && intValidTemplate( &sCurrDesign ) )
+	if ( bTemplateFound == true && intValidTemplate( &sCurrDesign, aCurrName ) )
 	{
 		/* create new template if button is NULL,
 		 * else store changes to existing template */

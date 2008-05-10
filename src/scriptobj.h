@@ -48,14 +48,14 @@ enum _objids
 	OBJID_SELECTED,		// if droid is selected (humans only)
 	OBJID_TARGET,		// added object->psTarget
 	OBJID_GROUP,		// group a droid belongs to
-	OBJID_WEAP_SHORT_RANGE,		// short range of a weapon
-	OBJID_WEAP_LONG_RANGE,		// short range of a weapon
-	OBJID_WEAP_SHORT_HIT,		// weapon's chance to hit in the short range
-	OBJID_WEAP_LONG_HIT,		// weapon's chance to hit in the long range
-	OBJID_WEAP_FIRE_PAUSE,		// weapon's fire pause
-	OBJID_WEAP_RELOAD_TIME,		// weapon's reload time
-	OBJID_WEAP_NUM_ROUNDS,		// num of weapon's rounds (salvo fire)
-	OBJID_WEAP_DAMAGE,			// weapon's damage
+	WEAPID_SHORT_RANGE,		// short range of a weapon
+	WEAPID_LONG_RANGE,		// short range of a weapon
+	WEAPID_SHORT_HIT,		// weapon's chance to hit in the short range
+	WEAPID_LONG_HIT,		// weapon's chance to hit in the long range
+	WEAPID_FIRE_PAUSE,		// weapon's fire pause
+	WEAPID_RELOAD_TIME,		// weapon's reload time
+	WEAPID_NUM_ROUNDS,		// num of weapon's rounds (salvo fire)
+	WEAPID_DAMAGE,			// weapon's damage
 	OBJID_HITPOINTS,			// doid's health left
 	OBJID_ORIG_HITPOINTS,		// original health of a droid (when not damaged)
 };
@@ -91,6 +91,9 @@ extern BOOL scrObjToFeature(void);
 
 // Get values from a group
 extern BOOL scrGroupObjGet(UDWORD index);
+
+// Get values from a weapon
+extern BOOL scrWeaponObjGet(UDWORD index);
 
 // default value save routine
 extern BOOL scrValDefSave(INTERP_VAL *psVal, char *pBuffer, UDWORD *pSize);

@@ -91,6 +91,7 @@
 #include "lib/script/chat_processing.h"
 #include "keymap.h"
 #include "visibility.h"
+#include "design.h"
 
 static INTERP_VAL	scrFunctionResult;	//function return value to be pushed to stack
 
@@ -101,6 +102,10 @@ static SDWORD	bitMask[] = {0x01,0x02,0x04,0x08,0x10,0x20,0x40,0x80};
 static char		strParam1[MAXSTRLEN], strParam2[MAXSTRLEN];		//these should be used as string parameters for stackPopParams()
 
 static BOOL	structHasModule(STRUCTURE *psStruct);
+
+static DROID_TEMPLATE* scrCheckTemplateExists(SDWORD player, DROID_TEMPLATE *psTempl);
+
+extern	UDWORD				objID;					// unique ID creation thing..
 
 /******************************************************************************************/
 /*                 Check for objects in areas                                             */
@@ -11436,5 +11441,314 @@ BOOL scrCheckVisibleTile(void)
 		return false;
 	}
 
+	return true;
+}
+
+/* Assembles a template from components and returns it */
+BOOL scrAssembleWeaponTemplate(void)
+{
+	SDWORD					player,bodyIndex,weapIndex,propIndex;
+	DROID_TEMPLATE			*pNewTemplate = NULL;
+
+	if (!stackPopParams(4, VAL_INT, &player, ST_BODY, &bodyIndex,
+		ST_PROPULSION, &propIndex, ST_WEAPON, &weapIndex))
+	{
+		return false;
+	}
+
+	pNewTemplate  = malloc(sizeof(DROID_TEMPLATE));
+	if (pNewTemplate == NULL)
+	{
+		debug(LOG_ERROR, "pNewTemplate: Out of memory");
+		return false;
+	}
+
+	memset(pNewTemplate, 0, sizeof(DROID_TEMPLATE));
+
+	// set template body
+	pNewTemplate->asParts[COMP_BODY] = bodyIndex;
+
+	// set template propulsion
+	pNewTemplate->asParts[COMP_PROPULSION] = propIndex;
+
+	// set template weapon (only one)
+	pNewTemplate->asParts[COMP_WEAPON] = weapIndex;
+	pNewTemplate->asWeaps[0] = weapIndex;
+	pNewTemplate->numWeaps = 1;
+
+	// set default components
+	pNewTemplate->asParts[COMP_SENSOR]		= 0;
+	pNewTemplate->asParts[COMP_ECM]			= 0;
+	pNewTemplate->asParts[COMP_CONSTRUCT]	= 0;
+	pNewTemplate->asParts[COMP_REPAIRUNIT]	= 0;
+	pNewTemplate->asParts[COMP_BRAIN]		= 0;
+
+	// set droid type
+	pNewTemplate->droidType = DROID_WEAPON;
+
+	// finalize template and set its name
+	if(!intValidTemplate(pNewTemplate, GetDefaultTemplateName(pNewTemplate)))
+	{
+		return false;
+	}
+
+	// make sure we have a valid weapon
+	if(!checkValidWeaponForProp(pNewTemplate))
+	{
+		scrFunctionResult.v.oval = NULL;		// failure
+	}
+	else
+	{
+		DROID_TEMPLATE *tempTemplate = NULL;
+
+		// check if an identical template already exists for this player
+		tempTemplate = scrCheckTemplateExists(player, pNewTemplate);
+		if(tempTemplate == NULL)
+		{
+			// set template id
+			pNewTemplate->multiPlayerID = (objID<<3)|player;
+			objID++;
+
+			// add template to player template list
+			pNewTemplate->psNext = apsDroidTemplates[player];
+			apsDroidTemplates[player] = pNewTemplate;		//apsTemplateList?
+		
+			if (bMultiPlayer)
+			{
+				sendTemplate(pNewTemplate);
+			}
+		}
+		else
+		{
+			// free resources
+			free(pNewTemplate);
+
+			// already exists, so return it
+			pNewTemplate = tempTemplate;
+		}
+
+		scrFunctionResult.v.oval = pNewTemplate;	// succes
+	}
+
+	// return template to scripts
+	if (!stackPushResult(ST_TEMPLATE, &scrFunctionResult))
+	{
+		return false;
+	}
+
+	return true;
+}
+
+/* Checks if template already exists, returns it if yes */
+static DROID_TEMPLATE* scrCheckTemplateExists(SDWORD player, DROID_TEMPLATE *psTempl)
+{
+	DROID_TEMPLATE    *psCurrent;
+	UDWORD				compType,weaponSlot;
+	bool				bEqual = true;
+
+	psCurrent = apsDroidTemplates[player];
+
+    while(psCurrent != NULL)
+    {
+		// compare components
+		bEqual = true;
+		for(compType = 0; bEqual && compType < DROID_MAXCOMP; compType++)
+		{
+			if(psTempl->asParts[compType] != psCurrent->asParts[compType])
+			{
+				bEqual = false;
+			}
+		}
+
+		// compare weapon count
+		if(bEqual && (psTempl->numWeaps != psCurrent->numWeaps))
+		{
+			bEqual = false;;
+		}
+
+		// compare all weapons separately
+		for(weaponSlot = 0; bEqual && (weaponSlot < psTempl->numWeaps); weaponSlot++)
+		{
+			if(psTempl->asWeaps[weaponSlot] != psCurrent->asWeaps[weaponSlot])
+			{
+				bEqual = false;
+			}
+		}
+
+		// they are equal, so return the current template
+		if(bEqual)
+		{
+			return psCurrent;
+		}
+
+		// try next one
+		psCurrent = psCurrent->psNext;
+    }
+
+	return NULL;
+}
+
+BOOL scrWeaponShortHitUpgrade(void)
+{
+	SDWORD					player,weapIndex;
+	const WEAPON_STATS		*psWeapStats;
+
+	if (!stackPopParams(2, VAL_INT, &player, ST_WEAPON, &weapIndex))
+	{
+		return false;
+	}
+
+	psWeapStats = &asWeaponStats[weapIndex];
+
+	scrFunctionResult.v.ival = asWeaponUpgrade[player][psWeapStats->weaponSubClass].shortHit;
+	if (!stackPushResult(VAL_INT, &scrFunctionResult))
+	{
+		return false;
+	}
+
+	return true;
+}
+
+BOOL scrWeaponLongHitUpgrade(void)
+{
+	SDWORD					player,weapIndex;
+	const WEAPON_STATS		*psWeapStats;
+
+	if (!stackPopParams(2, VAL_INT, &player, ST_WEAPON, &weapIndex))
+	{
+		return false;
+	}
+
+	psWeapStats = &asWeaponStats[weapIndex];
+
+	scrFunctionResult.v.ival = asWeaponUpgrade[player][psWeapStats->weaponSubClass].longHit;
+	if (!stackPushResult(VAL_INT, &scrFunctionResult))
+	{
+		return false;
+	}
+
+	return true;
+}
+
+
+BOOL scrWeaponDamageUpgrade(void)
+{
+	SDWORD					player,weapIndex;
+	const WEAPON_STATS		*psWeapStats;
+
+	if (!stackPopParams(2, VAL_INT, &player, ST_WEAPON, &weapIndex))
+	{
+		return false;
+	}
+
+	psWeapStats = &asWeaponStats[weapIndex];
+
+	scrFunctionResult.v.ival = asWeaponUpgrade[player][psWeapStats->weaponSubClass].damage;
+	if (!stackPushResult(VAL_INT, &scrFunctionResult))
+	{
+		return false;
+	}
+
+	return true;
+}
+
+BOOL scrWeaponFirePauseUpgrade(void)
+{
+	SDWORD					player,weapIndex;
+	const WEAPON_STATS		*psWeapStats;
+
+	if (!stackPopParams(2, VAL_INT, &player, ST_WEAPON, &weapIndex))
+	{
+		return false;
+	}
+
+	psWeapStats = &asWeaponStats[weapIndex];
+
+	scrFunctionResult.v.ival = asWeaponUpgrade[player][psWeapStats->weaponSubClass].firePause;
+	if (!stackPushResult(VAL_INT, &scrFunctionResult))
+	{
+		return false;
+	}
+
+	return true;
+}
+
+
+BOOL scrIsComponentAvailable(void)
+{
+	SDWORD					player;
+	BOOL					bAvailable = false;
+	INTERP_VAL				sVal;
+
+	if (!stackPop(&sVal))
+	{
+		return false;
+	}
+
+	if (!stackPopParams(1, VAL_INT, &player))
+	{
+		return false;
+	}
+
+	if (player >= MAX_PLAYERS)
+	{
+		ASSERT( false, "player number is too high" );
+		return false;
+	}
+
+	switch (sVal.type)
+	{
+	case ST_BODY:
+		bAvailable = (apCompLists[player][COMP_BODY][sVal.v.ival] == AVAILABLE);
+		break;
+	case ST_PROPULSION:
+		bAvailable = (apCompLists[player][COMP_PROPULSION][sVal.v.ival] == AVAILABLE);
+		break;
+	case ST_ECM:
+		bAvailable = (apCompLists[player][COMP_ECM][sVal.v.ival] == AVAILABLE);
+		break;
+	case ST_SENSOR:
+		bAvailable = (apCompLists[player][COMP_SENSOR][sVal.v.ival] == AVAILABLE);
+		break;
+	case ST_CONSTRUCT:
+		bAvailable = (apCompLists[player][COMP_CONSTRUCT][sVal.v.ival] == AVAILABLE);
+		break;
+	case ST_WEAPON:
+		bAvailable = (apCompLists[player][COMP_WEAPON][sVal.v.ival] == AVAILABLE);
+		break;
+	case ST_REPAIR:
+		bAvailable = (apCompLists[player][COMP_REPAIRUNIT][sVal.v.ival] == AVAILABLE);
+		break;
+	case ST_BRAIN:
+		bAvailable = (apCompLists[player][COMP_BRAIN][sVal.v.ival] == AVAILABLE);
+		break;
+	default:
+		ASSERT( false, "unknown component type" );
+		return false;
+	}
+
+	scrFunctionResult.v.bval = bAvailable;
+	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
+	{
+		return false;
+	}
+
+	return true;
+}
+
+BOOL scrGetBodySize(void)
+{
+	SDWORD		bodyIndex;
+
+	if (!stackPopParams(1,ST_BODY, &bodyIndex))
+	{
+		return false;
+	}
+
+	scrFunctionResult.v.ival = asBodyStats[bodyIndex].size;
+	if (!stackPushResult(VAL_INT, &scrFunctionResult))
+	{
+		return false;
+	}
 	return true;
 }

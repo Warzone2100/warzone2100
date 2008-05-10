@@ -3655,6 +3655,14 @@ return_exp:		expression
 					/* $1->type =  */
 					$$ = $1;
 				}
+		|	userexp		/* templates, bodies etc */
+				{
+					RULE( "return_exp: userexp");
+
+					/* Just pass the code up the tree */
+					/* $1->type =  */
+					$$ = $1;
+				}
 		;
 
 
@@ -5373,6 +5381,8 @@ userexp:		VAR
 				}
 			|	user_array_var
 				{
+					RULE("userexp: user_array_var");
+					
 					codeRet = scriptCodeArrayGet($1, &psCurrBlock);
 					CHECK_CODE_ERROR(codeRet);
 
@@ -5387,6 +5397,63 @@ userexp:		VAR
 
 					/* Return the code block */
 					$$ = psCurrBlock;
+				}
+			|	USER_FUNC_CUST '(' param_list ')'
+				{
+						UDWORD line,paramNumber;
+						char *pDummy;
+
+						if($3->numParams != $1->numParams)
+						{
+							debug(LOG_ERROR, "Wrong number of arguments for function call: '%s'. Expected %d parameters instead of  %d.", $1->pIdent, $1->numParams, $3->numParams);
+							scr_error("Wrong number of arguments in function call");
+							return CE_PARSE;
+						}
+
+						if(!$1->bFunction)
+						{
+							debug(LOG_ERROR, "'%s' is not a function", $1->pIdent);
+							scr_error("Can't call an event");
+							return CE_PARSE;
+						}
+
+						/* check if right parameters were passed */
+						paramNumber = checkFuncParamTypes($1, $3);
+						if(paramNumber > 0)
+						{
+							debug(LOG_ERROR, "Parameter mismatch in function call: '%s'. Mismatch in parameter  %d.", $1->pIdent, paramNumber);
+							YYABORT;
+						}
+
+						/* Allocate the code block */
+						ALLOC_BLOCK(psCurrBlock, $3->size + 1 + 1);	//Params + Opcode + event index
+
+						ALLOC_DEBUG(psCurrBlock, 1);
+						ip = psCurrBlock->pCode;
+
+						if($3->numParams > 0)	/* if any parameters declared */
+						{
+							/* Copy in the code for the parameters */
+							PUT_BLOCK(ip, $3);
+							FREE_PBLOCK($3);
+						}
+
+						/* Store the instruction */
+						PUT_OPCODE(ip, OP_FUNC);
+						PUT_EVENT(ip,$1->index);			//Put event index
+
+						/* Add the debugging information */
+						if (genDebugInfo)
+						{
+							psCurrBlock->psDebug[0].offset = 0;
+							scriptGetErrorData((SDWORD *)&line, &pDummy);
+							psCurrBlock->psDebug[0].line = line;
+						}
+
+						/* remember objexp type for further stuff, like myVar = objFunc(); to be able to check type equivalency */
+						psCurrBlock->type = $1->retType;
+
+						$$ = psCurrBlock;
 				}
 			|	TRIG_SYM
 				{
@@ -5565,6 +5632,14 @@ objexp_dot:		objexp '.'
 					// Store the object type for the variable lookup
 					objVarContext = $1->type;
 				}
+			|
+				userexp '.'
+				{
+					RULE( "objexp_dot: userexp '.', type=%d", $1->type);
+
+					// Store the object type for the variable lookup
+					objVarContext = $1->type;
+				}
 			;
 
 	/*
@@ -5699,6 +5774,8 @@ obj_array_var:		OBJ_ARRAY array_index_list
 
 user_array_var:		VAR_ARRAY array_index_list
 					{
+						RULE("user_array_var:		VAR_ARRAY array_index_list");
+						
 						codeRet = scriptCodeArrayVariable($2, $1, &psCurrArrayBlock);
 						CHECK_CODE_ERROR(codeRet);
 

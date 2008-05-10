@@ -58,7 +58,6 @@ BOOL scrBaseObjGet(UDWORD index)
 	DROID			*psDroid;
 	STRUCTURE		*psStruct;
 	FEATURE			*psFeature;
-	SDWORD			temp;
 
 	if (!stackPopParams(1, ST_BASEOBJECT, &psObj))
 	{
@@ -314,229 +313,7 @@ BOOL scrBaseObjGet(UDWORD index)
 		type = (INTERP_TYPE)ST_GROUP;
 		scrFunctionResult.v.oval = ((DROID *)psObj)->psGroup;
 		break;
-	case OBJID_WEAP_SHORT_RANGE:
 
-		type = VAL_INT;
-		temp = -1;		// in case object has no weapon return -1
-
-		if (psObj->type == OBJ_STRUCTURE)
-		{
-			if(((STRUCTURE *)psObj)->asWeaps[0].nStat > 0)
-			{
-				temp = asWeaponStats[((STRUCTURE *)psObj)->asWeaps[0].nStat].shortRange;
-			}
-		}
-		else if (psObj->type == OBJ_DROID)
-		{
-			if(((DROID *)psObj)->asWeaps[0].nStat > 0)
-			{
-				temp = asWeaponStats[((DROID *)psObj)->asWeaps[0].nStat].shortRange;
-			}
-		}
-		else
-		{
-			debug(LOG_ERROR, "scrBaseObjGet(): shortRange: features don't have weapons");
-			return false;
-		}
-
-		scrFunctionResult.v.ival = temp;
-
-		break;
-	case OBJID_WEAP_LONG_RANGE:
-
-		type = VAL_INT;
-		temp = -1;		// in case object has no weapon return -1
-
-		if (psObj->type == OBJ_STRUCTURE)
-		{
-			if(((STRUCTURE *)psObj)->asWeaps[0].nStat > 0)
-			{
-				temp = asWeaponStats[((STRUCTURE *)psObj)->asWeaps[0].nStat].longRange;
-			}
-		}
-		else if (psObj->type == OBJ_DROID)
-		{
-			if(((DROID *)psObj)->asWeaps[0].nStat > 0)
-			{
-				temp = asWeaponStats[((DROID *)psObj)->asWeaps[0].nStat].longRange;
-			}
-		}
-		else
-		{
-			debug(LOG_ERROR, "scrBaseObjGet(): shortRange: features don't have weapons");
-			return false;
-		}
-
-		scrFunctionResult.v.ival = temp;
-
-		break;
-	case OBJID_WEAP_SHORT_HIT:
-		type = VAL_INT;
-		temp = -1;		// in case object has no weapon return -1
-
-		if (psObj->type == OBJ_STRUCTURE)
-		{
-			if(((STRUCTURE *)psObj)->asWeaps[0].nStat > 0)
-			{
-				temp = weaponShortHit(&asWeaponStats[((STRUCTURE *)psObj)->asWeaps[0].nStat], psObj->player);
-			}
-		}
-		else if (psObj->type == OBJ_DROID)
-		{
-			if(((DROID *)psObj)->asWeaps[0].nStat > 0)
-			{
-				temp = weaponShortHit(&asWeaponStats[((DROID *)psObj)->asWeaps[0].nStat], psObj->player);
-			}
-		}
-		else
-		{
-			debug(LOG_ERROR, "scrBaseObjGet(): shortHit: features don't have weapons");
-			return false;
-		}
-
-		scrFunctionResult.v.ival = temp;
-
-		break;
-	case OBJID_WEAP_LONG_HIT:
-
-		type = VAL_INT;
-		temp = -1;		// in case object has no weapon return -1
-
-		if (psObj->type == OBJ_STRUCTURE)
-		{
-			if(((STRUCTURE *)psObj)->asWeaps[0].nStat > 0)
-			{
-				temp = weaponLongHit(&asWeaponStats[((STRUCTURE *)psObj)->asWeaps[0].nStat], psObj->player);
-			}
-		}
-		else if (psObj->type == OBJ_DROID)
-		{
-			if(((DROID *)psObj)->asWeaps[0].nStat > 0)
-			{
-				temp = weaponLongHit(&asWeaponStats[((DROID *)psObj)->asWeaps[0].nStat], psObj->player);
-			}
-		}
-		else
-		{
-			debug(LOG_ERROR, "scrBaseObjGet(): shortHit: features don't have weapons");
-			return false;
-		}
-
-		scrFunctionResult.v.ival = temp;
-
-		break;
-	case OBJID_WEAP_DAMAGE:
-
-		type = VAL_INT;
-		temp = -1;		// in case object has no weapon return -1
-
-		if (psObj->type == OBJ_STRUCTURE)
-		{
-			if(((STRUCTURE *)psObj)->asWeaps[0].nStat > 0)
-			{
-				temp = weaponDamage(&asWeaponStats[((STRUCTURE *)psObj)->asWeaps[0].nStat], psObj->player);
-			}
-		}
-		else if (psObj->type == OBJ_DROID)
-		{
-			if(((DROID *)psObj)->asWeaps[0].nStat > 0)
-			{
-				temp = weaponDamage(&asWeaponStats[((DROID *)psObj)->asWeaps[0].nStat], psObj->player);
-			}
-		}
-		else
-		{
-			debug(LOG_ERROR, "scrBaseObjGet(): shortHit: features don't have weapons");
-			return false;
-		}
-
-		scrFunctionResult.v.ival = temp;
-
-		break;
-	case OBJID_WEAP_FIRE_PAUSE:
-
-		type = VAL_INT;
-		temp = -1;		// in case object has no weapon return -1
-
-		if (psObj->type == OBJ_STRUCTURE)
-		{
-			if(((STRUCTURE *)psObj)->asWeaps[0].nStat > 0)
-			{
-				temp = weaponFirePause(&asWeaponStats[((STRUCTURE *)psObj)->asWeaps[0].nStat], psObj->player);
-			}
-		}
-		else if (psObj->type == OBJ_DROID)
-		{
-			if(((DROID *)psObj)->asWeaps[0].nStat > 0)
-			{
-				temp = weaponFirePause(&asWeaponStats[((DROID *)psObj)->asWeaps[0].nStat], psObj->player);
-			}
-		}
-		else
-		{
-			debug(LOG_ERROR, "scrBaseObjGet(): shortHit: features don't have weapons");
-			return false;
-		}
-
-		scrFunctionResult.v.ival = temp;
-
-		break;
-	case OBJID_WEAP_RELOAD_TIME:
-
-		type = VAL_INT;
-		temp = -1;		// in case object has no weapon return -1
-
-		if (psObj->type == OBJ_STRUCTURE)
-		{
-			if(((STRUCTURE *)psObj)->asWeaps[0].nStat > 0)
-			{
-				temp = asWeaponStats[((STRUCTURE *)psObj)->asWeaps[0].nStat].reloadTime;
-			}
-		}
-		else if (psObj->type == OBJ_DROID)
-		{
-			if(((DROID *)psObj)->asWeaps[0].nStat > 0)
-			{
-				temp = asWeaponStats[((DROID *)psObj)->asWeaps[0].nStat].reloadTime;
-			}
-		}
-		else
-		{
-			debug(LOG_ERROR, "scrBaseObjGet(): shortHit: features don't have weapons");
-			return false;
-		}
-
-		scrFunctionResult.v.ival = temp;
-
-		break;
-	case OBJID_WEAP_NUM_ROUNDS:
-
-		type = VAL_INT;
-		temp = -1;		// in case object has no weapon return -1
-
-		if (psObj->type == OBJ_STRUCTURE)
-		{
-			if(((STRUCTURE *)psObj)->asWeaps[0].nStat > 0)
-			{
-				temp = asWeaponStats[((STRUCTURE *)psObj)->asWeaps[0].nStat].numRounds;
-			}
-		}
-		else if (psObj->type == OBJ_DROID)
-		{
-			if(((DROID *)psObj)->asWeaps[0].nStat > 0)
-			{
-				temp = asWeaponStats[((DROID *)psObj)->asWeaps[0].nStat].numRounds;
-			}
-		}
-		else
-		{
-			debug(LOG_ERROR, "scrBaseObjGet(): shortHit: features don't have weapons");
-			return false;
-		}
-
-		scrFunctionResult.v.ival = temp;
-
-		break;
 	case OBJID_HITPOINTS:
 
 		type = VAL_INT;
@@ -685,6 +462,89 @@ BOOL scrObjToFeature(void)
 // cache all the possible values for the last group to try
 // to speed up access
 static SDWORD		lgX,lgY, lgMembers, lgHealth;
+
+// Get values from a weapon
+BOOL scrWeaponObjGet(UDWORD index)
+{
+	INTERP_TYPE		type;
+	SDWORD			weapIndex;
+
+	if (!stackPopParams(1, ST_WEAPON, &weapIndex))
+	{
+		return false;
+	}
+
+	switch (index)
+	{
+	case WEAPID_SHORT_RANGE:
+
+		type = VAL_INT;
+
+		scrFunctionResult.v.ival = asWeaponStats[weapIndex].shortRange;
+
+		break;
+	case WEAPID_LONG_RANGE:
+
+		type = VAL_INT;
+
+		scrFunctionResult.v.ival = asWeaponStats[weapIndex].longRange;
+
+		break;
+	case WEAPID_SHORT_HIT:
+		type = VAL_INT;
+
+		scrFunctionResult.v.ival = asWeaponStats[weapIndex].shortHit;
+
+		break;
+	case WEAPID_LONG_HIT:
+
+		type = VAL_INT;
+
+		scrFunctionResult.v.ival = asWeaponStats[weapIndex].longHit;
+
+		break;
+	case WEAPID_DAMAGE:
+
+		type = VAL_INT;
+
+		scrFunctionResult.v.ival = asWeaponStats[weapIndex].damage;
+
+		break;
+	case WEAPID_FIRE_PAUSE:
+
+		type = VAL_INT;
+
+		scrFunctionResult.v.ival = asWeaponStats[weapIndex].firePause;
+
+		break;
+	case WEAPID_RELOAD_TIME:
+
+		type = VAL_INT;
+
+		scrFunctionResult.v.ival = asWeaponStats[weapIndex].reloadTime;
+
+		break;
+	case WEAPID_NUM_ROUNDS:
+
+		type = VAL_INT;
+
+		scrFunctionResult.v.ival = asWeaponStats[weapIndex].numRounds;
+
+		break;
+	default:
+		ASSERT( false, "unknown variable index" );
+		return false;
+		break;
+	}
+
+	// Return the value
+	if (!stackPushResult(type, &scrFunctionResult))
+	{
+		return false;
+	}
+
+	return true;
+}
 
 // Get values from a group
 BOOL scrGroupObjGet(UDWORD index)

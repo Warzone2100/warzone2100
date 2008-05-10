@@ -153,4 +153,8 @@ extern void resetDesignPauseState(void);
 
 extern void reverseTemplateList(DROID_TEMPLATE **ppsList);
 
+extern const char *GetDefaultTemplateName(DROID_TEMPLATE *psTemplate);
+
+extern BOOL intValidTemplate(DROID_TEMPLATE *psTempl, const char *newName);
+
 #endif // __INCLUDED_SRC_DESIGN_H__
