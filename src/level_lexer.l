@@ -36,25 +36,7 @@
 #define YYLMAX	255
 #endif
 
-struct buffer
-{
-	const char* begin;
-	const char* end;
-};
-
-#define YY_EXTRA_TYPE struct buffer *
-
-#define YY_INPUT(buf, result, max_size) \
-	if (yyextra->begin != yyextra->end) \
-	{ \
-		buf[0] = *(yyextra->begin++); \
-		result = 1; \
-	} \
-	else \
-	{ \
-		buf[0] = EOF; \
-		result = YY_NULL; \
-	}
+#include "lib/framework/lexer_input.h"
 
 #ifndef yyextra
 # define yyextra yyget_extra()

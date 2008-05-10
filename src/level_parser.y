@@ -26,6 +26,7 @@
 #include "lib/framework/listmacs.h"
 #include "levels.h"
 #include "levelint.h"
+#include "lib/framework/lexer_input.h"
 #include "level_lexer.lex.h"
 
 typedef struct
@@ -325,11 +326,11 @@ BOOL levParse(const char* buffer, size_t size, searchPathMode datadir)
 {
 	BOOL retval;
 	parser_context context;
-	struct
-	{
-		const char* begin;
-		const char* end;
-	} input = { buffer, &buffer[size] };
+	lexerinput_t input;
+
+	input.type = LEXINPUT_BUFFER;
+	input.input.buffer.begin = buffer;
+	input.input.buffer.end = &buffer[size];
 
 	context.datadir = datadir;
 	context.dataset = NULL;
