@@ -133,14 +133,14 @@ Weapon Upgrade,Wpn-Energy-ROF03,ENERGY,60,0,0,0,0,0,0
 Weapon Upgrade,Wpn-MG-Damage07,MACHINE GUN,0,0,0,210,0,0,0
 Weapon Upgrade,Wpn-MG-Damage08,MACHINE GUN,0,0,0,240,0,0,0
 Weapon Upgrade,Wpn-MG-Damage09,MACHINE GUN,0,0,0,255,0,0,0
-Weapon Upgrade,Wpn-Missile-Accuracy01,MISSILE,0,10,10,0,0,0,0
-Weapon Upgrade,Wpn-Missile-Accuracy02,MISSILE,0,20,20,0,0,0,0
+Weapon Upgrade,Wpn-Missile-Accuracy01,MISSILE,0,30,30,0,0,0,0
+Weapon Upgrade,Wpn-Missile-Accuracy02,MISSILE,0,60,60,0,0,0,0
 Weapon Upgrade,Wpn-Missile-Damage01,MISSILE,0,0,0,30,0,0,0
 Weapon Upgrade,Wpn-Missile-Damage02,MISSILE,0,0,0,60,0,0,0
 Weapon Upgrade,Wpn-Missile-Damage03,MISSILE,0,0,0,90,0,0,0
-Weapon Upgrade,Wpn-Missile-ROF01,MISSILE,20,0,0,0,0,0,0
-Weapon Upgrade,Wpn-Missile-ROF02,MISSILE,40,0,0,0,0,0,0
-Weapon Upgrade,Wpn-Missile-ROF03,MISSILE,60,0,0,0,0,0,0
+Weapon Upgrade,Wpn-Missile-ROF01,MISSILE,30,0,0,0,0,0,0
+Weapon Upgrade,Wpn-Missile-ROF02,MISSILE,60,0,0,0,0,0,0
+Weapon Upgrade,Wpn-Missile-ROF03,MISSILE,90,0,0,0,0,0,0
 Weapon Upgrade,Wpn-MissileSlow-Damage01,SLOW MISSILE,0,0,0,30,0,0,0
 Weapon Upgrade,Wpn-MissileSlow-Damage02,SLOW MISSILE,0,0,0,60,0,0,0
 Weapon Upgrade,Wpn-MissileSlow-Damage03,SLOW MISSILE,0,0,0,90,0,0,0
