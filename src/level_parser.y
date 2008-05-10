@@ -27,7 +27,12 @@
 #include "levels.h"
 #include "levelint.h"
 #include "lib/framework/lexer_input.h"
-#include "level_lexer.lex.h"
+
+extern int lev_get_lineno(void);
+extern char* lev_get_text(void);
+extern int lev_lex(void);
+void lev_set_extra(YY_EXTRA_TYPE user_defined);
+int lev_lex_destroy(void);
 
 typedef struct
 {

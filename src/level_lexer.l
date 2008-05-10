@@ -46,7 +46,6 @@
 
 %option yylineno noyywrap nounput
 %option prefix="lev_"
-%option header-file="level_lexer.lex.h"
 
 %x COMMENT
 %x SLCOMMENT
