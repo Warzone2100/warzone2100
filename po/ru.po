@@ -1,6 +1,7 @@
-# Russian translations for Warzone 2100 package.
-# Copyright (C) 2008 Warzone Resurrection Project
-# This file is distributed under the same license as the Warzone 2100 package.
+# Russian translations for warzone2100
+# Copyright (C) 2008 Warzone 2100 Resurrection Project
+# Copyright (c) 2008 Rosetta Contributors and Canonical Ltd 2008
+# This file is distributed under the same license as the warzone2100 package.
 #
 # Alexandr Ivanov <wz2100@mail.ru>, 2008.
 # Stanislav Pererva <stas_ap@inbox.ru>, 2008.
@@ -8,14 +9,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2008-05-09 16:13+0200\n"
-"PO-Revision-Date: 2008-05-01 20:47+0300\n"
+"POT-Creation-Date: 2008-05-10 17:49+0200\n"
+"PO-Revision-Date: 2008-05-09 17:01+0000\n"
 "Last-Translator: Stanislav Pererva <stas_ap@inbox.ru>\n"
 "Language-Team: Russian <warzone-dev@gna.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11) ? 0 : (n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20)) ? 1 : 2;\n"
+"X-Launchpad-Export-Date: 2008-05-10 13:56+0000\n"
+"X-Generator: Launchpad (build Unknown)\n"
 "X-Poedit-Language: Russian\n"
 "X-Poedit-SourceCharset: utf-8\n"
 "X-Poedit-Basepath: ..\n"
@@ -25,16 +28,17 @@ msgid "Campaign One Full Version Test Message"
 msgstr ""
 
 #: data/messages/strings/cam1strings.txt:5
+#, fuzzy
 msgid "OBJECTIVE: Locate and recover neural synapse technology"
-msgstr "ЗАДАЧА: Найти и получить нейронную синапс технологию"
+msgstr "ЦЕЛЬ: Обнаружить и заполучить технологию нейронных импульсов"
 
 #: data/messages/strings/cam1strings.txt:6
 msgid "Establish a base, then search for a Pre-Collapse structure."
-msgstr "Основать базу, найти Pre-Collapse сооружения."
+msgstr "Основать базу, затем найти Pre-Collapse сооружения."
 
 #: data/messages/strings/cam1strings.txt:7
 msgid "This structure contains technology vital for the success of the Project."
-msgstr "Это сооружение содержит важную технологию для успешного завершения Проекта"
+msgstr "Это сооружение содержит жизненно важную технологию для успеха Проекта."
 
 #: data/messages/strings/cam1strings.txt:9
 msgid "ALPHA BASE MISSION: Scavenger Raiders"
@@ -59,121 +63,123 @@ msgstr "Выброс энергии обнаружен на юге нашей п
 
 #: data/messages/strings/cam1strings.txt:15
 msgid "Investigate and secure the area."
-msgstr "Изучить и обеспечить безопасность местности."
+msgstr "Изучить и обезопасить местность."
 
 #: data/messages/strings/cam1strings.txt:17
 msgid "ALPHA BASE MISSION: The New Paradigm"
-msgstr "Миссия на базе Альфа: Новая парадигма (система понятий)"
+msgstr "Миссия на базе Альфа: Новая Парадигма"
 
 #: data/messages/strings/cam1strings.txt:18
 msgid "The New Paradigm control superior weapons technology."
-msgstr "The New Paradigm контролирует более совершенную оружейную технологию."
+msgstr "Новая Парадигма контролирует более совершенную оружейную технологию."
 
 #: data/messages/strings/cam1strings.txt:19
 msgid "They may have the synaptic link technology, it's vital we retrieve it."
-msgstr ""
+msgstr "Они имеют технологию синаптической связи, жизненно важно заполучить ее."
 
 #: data/messages/strings/cam1strings.txt:21
 msgid "TRANSPORT MISSION: Locate and Recover Artifacts"
-msgstr "ТРАНСПОРТНАЯ МИССИЯ: Найти и захватить артефакты."
+msgstr "Миссия на вылете: Найти и захватить артефакты"
 
 #: data/messages/strings/cam1strings.txt:22
 msgid "Load an attack force into the transport."
-msgstr "Погрузить в транспорт штурмовую группу."
+msgstr "Загрузить штурмовую группу в транспорт"
 
 #: data/messages/strings/cam1strings.txt:23
 msgid "On landing, explore the ruins and recover any artifacts."
-msgstr "После высадки исследовать руины и захватить артефакты."
+msgstr "После высадки исследовать руины и захватить любые артефакты"
 
 #: data/messages/strings/cam1strings.txt:25
 msgid "TRANSPORT MISSION: Investigate Research Center"
-msgstr "ТРАНСПОРТНАЯ МИССИЯ: Изучить центр исследований"
+msgstr "Миссия на вылете: Разведать центр исследований"
 
 #: data/messages/strings/cam1strings.txt:26
 msgid "Investigate the area and recover any artifacts present."
-msgstr "Изучить местность и захватить все существующие артефакты."
+msgstr "Разведать местность и заватить любые существующие артефакты"
 
 #: data/messages/strings/cam1strings.txt:27
 #: data/messages/strings/cam1strings.txt:170
 msgid "Reinforcements are available."
-msgstr "Доступны подкрепления."
+msgstr "Пополнения доступы."
 
 #: data/messages/strings/cam1strings.txt:29
 msgid "TRANSPORT MISSION: Encoded Signals Detected"
-msgstr "ТРАНСПОРТНАЯ МИССИЯ: Обнаружен зашифрованный сигнал"
+msgstr "Миссия на вылете: Обнаружен зашифрованный сигнал"
 
 #: data/messages/strings/cam1strings.txt:30
 msgid "Take a scout force to investigate these signals."
-msgstr "Разведывательному отряду необходимо исследовать эти сигналы."
+msgstr "Возьмите разведывательную команду и исследуйте этот сигнал."
 
 #: data/messages/strings/cam1strings.txt:31
 msgid "Use your trucks to build defenses at your LZ."
-msgstr "Используйте грузовики для постройки защиты вокруг Зоны Высадки."
+msgstr "Используйте грузовики для постройки защиты зоны высадки"
 
 #: data/messages/strings/cam1strings.txt:33
 msgid "TRANSPORT MISSION: Enemy Transmissions Detected"
-msgstr "ТРАНСПОРТНАЯ МИССИЯ: Обнаружена вражеская передача сигнала."
+msgstr "Миссия на вылете: Обнаружена вражеская передача"
 
 #: data/messages/strings/cam1strings.txt:34
 msgid "Scout the designated area for enemy research facilities."
-msgstr "Разведать на обозначенной местности вражеские исследовательские лаборатории."
+msgstr "Разведуйте на обозначенной местности вражеские исследовательские лаборатории."
 
 #: data/messages/strings/cam1strings.txt:35
 msgid "Proceed to LZ#2. Do not engage the enemy at this time."
-msgstr "Пройти к Зоне Высадки #2. На этом этапе не входить в контакт с врагами."
+msgstr "Отправляйтесь к зоне высадки #2. Не входите в контакт с врагом."
 
 #: data/messages/strings/cam1strings.txt:37
 msgid "TRANSPORT MISSION: Synaptic Link Location"
-msgstr "ТРАНСПОРТНАЯ МИССИЯ: Synaptic Link Location"
+msgstr "Миссия на вылете: Обнаружение синаптической связи"
 
 #: data/messages/strings/cam1strings.txt:38
 msgid "The New Paradigm are analyzing synaptic link technology at this location."
-msgstr ""
+msgstr "Новая Парадигма занимается анализом технологии синаптической связи в данной зоне."
 
 #: data/messages/strings/cam1strings.txt:39
 msgid "Assemble an attack team and recover the synaptic link technology."
-msgstr ""
+msgstr "Соберите атакующую команду и заполучите технологию синаптической связи."
 
 #: data/messages/strings/cam1strings.txt:41
 msgid "TRANSPORT MISSION: New Objectives"
-msgstr "ТРАНСПОРТНАЯ МИССИЯ: Новые задачи"
+msgstr "Миссия на вылете: Новые задания"
 
 #: data/messages/strings/cam1strings.txt:42
 msgid "New Paradigm are searching for artifacts in this vicinity."
-msgstr "Новая Парадигма ищет артефакты поблизости."
+msgstr "Где-то в этой окрестности Новая Парадигма разыскивает артефакты."
 
 #: data/messages/strings/cam1strings.txt:43
 msgid "Intercept them. Do not let any enemies exit this area."
-msgstr "Перехватите их. Не дайте врагам покинуть местность."
+msgstr "Перехватите их. Не позвольте ни одному противнику покинуть область."
 
 #: data/messages/strings/cam1strings.txt:45
 msgid "TRANSPORT MISSION: Enemy Base Under Construction"
-msgstr "Миссия на вылете: Строительство вражеской базы"
+msgstr "Миссия на вылете: Вражеская база строится"
 
 #: data/messages/strings/cam1strings.txt:46
 msgid "Enemy forces are establishing a forward base at this location."
-msgstr "На этой местности вражеские силы установили передовую базу."
+msgstr "Вражеские силы возводят форпост в этой области."
 
 #: data/messages/strings/cam1strings.txt:47
 msgid "Eradicate the base and secure the area."
-msgstr "Уничтожить базу и зачистить местность."
+msgstr "Уничтожьте базу и обезопасьте район."
 
 #: data/messages/strings/cam1strings.txt:50
 #: data/messages/strings/cam1strings.txt:117
+#, fuzzy
 msgid "ALPHA BASE MISSION: Establish a Forward Base"
-msgstr "Миссия на базе Альфа: Установить передовую базу"
+msgstr "Миссия на базе Альфа: Постройте передовую базу"
 
 #: data/messages/strings/cam1strings.txt:51
+#, fuzzy
 msgid "Establish a forward base on the plateau."
-msgstr "Установить передовую базу на плато."
+msgstr "Постройте передовую базу на плато."
 
 #: data/messages/strings/cam1strings.txt:52
 msgid "Build defensive structures."
-msgstr "Построить защитные сооружения."
+msgstr "Постройте оборонительные сооружения."
 
 #: data/messages/strings/cam1strings.txt:54
 msgid "ALPHA BASE MISSION: Counter Attack"
-msgstr "Миссия на базе Альфа: Встречная атака"
+msgstr "Миссия на базе Альфа: Контратака"
 
 #: data/messages/strings/cam1strings.txt:55
 msgid "Enemy forces are approaching from the east and north."
@@ -181,19 +187,19 @@ msgstr "Вражеские силы приближаются с востока �
 
 #: data/messages/strings/cam1strings.txt:56
 msgid "Hold the bases and repulse any attacks."
-msgstr "Удержать базу и отразить все атаки."
+msgstr "Удерживайте базу и отбивайте атаки."
 
 #: data/messages/strings/cam1strings.txt:58
 msgid "ALPHA BASE MISSION: Incoming Transmission"
-msgstr "Миссия на базе Альфа: Входящая передача"
+msgstr "Миссия на базе Альфа: Входящее сообщение"
 
 #: data/messages/strings/cam1strings.txt:59
 msgid "We are detecting enemy forces at these locations."
-msgstr "Мы обнаружили вражеские силы на местности."
+msgstr "Мы обнаруживаем вражеские войска в этих района."
 
 #: data/messages/strings/cam1strings.txt:60
 msgid "This is our chance to defeat the New Paradigm and destroy their base."
-msgstr "Это наш шанс одержать попеду над Новой Парадигмой и уничтожить принадлежащую им базу."
+msgstr "Это наш шанс разгромить Новую Парадигму и уничтожить их базу."
 
 #: data/messages/strings/cam1strings.txt:64
 #: data/messages/strings/cam1strings.txt:75
@@ -205,27 +211,27 @@ msgstr "Это наш шанс одержать попеду над Новой �
 #: data/messages/strings/cam2strings.txt:118
 #: data/messages/strings/cam3strings.txt:163
 msgid " "
-msgstr ""
+msgstr " "
 
 #: data/messages/strings/cam1strings.txt:65
 msgid "New Paradigm Transmission"
-msgstr ""
+msgstr "Сообщение от Новой Парадигмы"
 
 #: data/messages/strings/cam1strings.txt:69
 msgid "Congratulations Commander."
-msgstr "Поздравляем Командующий."
+msgstr "Поздравляем, Командующий."
 
 #: data/messages/strings/cam1strings.txt:70
 msgid "We now have a further task for you."
-msgstr "У нас есть дополнтельное задание для тебя."
+msgstr "Теперь у нас есть другие задания для вас."
 
 #: data/messages/strings/cam1strings.txt:73
 msgid "ALPHA BASE MISSION: Locate and Recover Artifacts"
-msgstr "Миссия на базе Альфа: Найти и захватить артефакты"
+msgstr "Миссия на базе Альфа: Найдите и заполучите артефакты"
 
 #: data/messages/strings/cam1strings.txt:74
 msgid "The first two zones are now secure."
-msgstr "Первые две зоны зачищены."
+msgstr "Первые две зоны теперь безопасны."
 
 #: data/messages/strings/cam1strings.txt:78
 msgid "PROJECT TEAM UPDATES"
@@ -237,11 +243,11 @@ msgstr "ОБНОВЛЕНИЯ ОТ КОМАНДЫ \"БЕТА\""
 
 #: data/messages/strings/cam1strings.txt:82
 msgid "We have recovered some artifacts."
-msgstr "Мы обнаружили несколько артефактов."
+msgstr "Мы заполучили несколько артефактов."
 
 #: data/messages/strings/cam1strings.txt:83
 msgid "There is a better equipped force operating in this area."
-msgstr "На этой местоности расположены хорошо вооруженные силы."
+msgstr "В этой зоне действуют лучше экипированные войска."
 
 #: data/messages/strings/cam1strings.txt:86
 msgid "TEAM GAMMA UPDATE"
@@ -249,19 +255,19 @@ msgstr "ОБНОВЛЕНИЯ ОТ КОМАНДЫ \"ГАММА\""
 
 #: data/messages/strings/cam1strings.txt:87
 msgid "Nothing to report."
-msgstr "Ничего нет для отчета."
+msgstr "Нечего докладывать."
 
 #: data/messages/strings/cam1strings.txt:88
 msgid "We've discovered no artifacts and encountered no hostiles."
-msgstr "Мы не обнаружили артефактов и не встретили противника."
+msgstr "Мы не нашли никаких артефактов и никаких вражеских сил."
 
 #: data/messages/strings/cam1strings.txt:91
 msgid "ALPHA BASE INTELLIGENCE REPORT: Enemy Attack"
-msgstr "Отчет разведки базы Альфа: Атака врага"
+msgstr "Доклад разведки базы Альфа: Вражеская атака"
 
 #: data/messages/strings/cam1strings.txt:92
 msgid "We are detecting an enemy attack force at this location."
-msgstr ""
+msgstr "Мы обнаруживаем вражеские войска в этом районе."
 
 #: data/messages/strings/cam1strings.txt:96
 msgid "PRIMARY OBJECTIVE"
@@ -1626,6 +1632,7 @@ msgstr "Питон Легкая пушка Гусеницы"
 
 #: data/messages/strings/names.txt:194
 #: data/mp/messages/strings/names.txt:196
+#: data/mp/messages/strings/names.txt:1912
 msgid "Python Medium Cannon Tracks"
 msgstr "Питон Средняя пушка Гусеницы"
 
@@ -9911,42 +9918,48 @@ msgid "Python HVC Hover"
 msgstr ""
 
 #: data/mp/messages/strings/names.txt:1911
+#, fuzzy
+msgid "Python Tank Killer Tracks"
+msgstr "Питон Легкая пушка Гусеницы"
+
+#: data/mp/messages/strings/names.txt:1913
 msgid "Python Scourge Tracks"
 msgstr ""
 
-#: data/mp/messages/strings/names.txt:1912
+#: data/mp/messages/strings/names.txt:1914
 msgid "Python Gauss Cannon Tracks"
 msgstr ""
 
-#: data/mp/messages/strings/names.txt:1913
+#: data/mp/messages/strings/names.txt:1915
 msgid "Python Pulse Laser Tracks"
 msgstr ""
 
-#: data/mp/messages/strings/names.txt:1914
+#: data/mp/messages/strings/names.txt:1916
 msgid "Tiger Pulse Laser Tracks"
 msgstr ""
 
-#: data/mp/messages/strings/names.txt:1915
+#: data/mp/messages/strings/names.txt:1917
 msgid "Tiger Heavy Laser Tracks"
 msgstr ""
 
-#: data/mp/messages/strings/names.txt:1916
+#: data/mp/messages/strings/names.txt:1918
 msgid "Wyvern Gauss Cannon Tracks"
 msgstr ""
 
-#: data/mp/messages/strings/names.txt:1917
+#: data/mp/messages/strings/names.txt:1919
 msgid "Wyvern Pulse Laser Tracks"
 msgstr ""
 
-#: data/mp/messages/strings/names.txt:1918
+#: data/mp/messages/strings/names.txt:1920
 msgid "Wyvern Heavy Laser Tracks"
 msgstr ""
 
-#: data/mp/messages/strings/names.txt:1920
+#: data/mp/messages/strings/names.txt:1922
+#, fuzzy
 msgid "Viper Machinegun Half-Track"
-msgstr ""
+msgstr "Кобра Огнемет Гусеницы"
 
-#: data/mp/messages/strings/names.txt:1921
+#: data/mp/messages/strings/names.txt:1923
 #, fuzzy
 msgid "Viper Flamer Half-Track"
 msgstr "Кобра Огнемет Гусеницы"
@@ -10185,11 +10198,11 @@ msgstr ""
 
 #: data/mp/messages/strings/resstrings.txt:2088
 msgid "Laser AA Gun Available"
-msgstr ""
+msgstr "Лазерная противовоздушная пушка доступна"
 
 #: data/mp/messages/strings/resstrings.txt:2089
 msgid "Twin Medium Anti-Aircraft Laser"
-msgstr ""
+msgstr "Средний спареный противовоздушный лазер"
 
 #: data/mp/messages/strings/resstrings.txt:2100
 msgid "Hardpoint Avenger SAM Site Available"
@@ -10201,7 +10214,7 @@ msgstr ""
 
 #: data/mp/messages/strings/resstrings.txt:2107
 msgid "Quad 80mm Anti-Aircraft machinegun"
-msgstr ""
+msgstr "Счетверенный 80мм противовоздушный пулемет"
 
 #: data/mp/messages/strings/resstrings.txt:2113
 #: data/mp/messages/strings/resstrings.txt:2119
@@ -10228,71 +10241,72 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:2142
 #: data/mp/messages/strings/resstrings.txt:2148
 msgid "Stronger Commander Turret Available for Design"
-msgstr ""
+msgstr "Усиленная командная башня доступна для дизайна"
 
 #: data/mp/messages/strings/resstrings.txt:2137
 #: data/mp/messages/strings/resstrings.txt:2143
 #: data/mp/messages/strings/resstrings.txt:2149
 msgid "Upgraded battlefield computer system"
-msgstr ""
+msgstr "Обновленная боевая компьютерная система"
 
 #: lib/framework/i18n.c:42
 #: lib/framework/i18n.c:64
+#, fuzzy
 msgid "System locale"
-msgstr ""
+msgstr "Системы"
 
 #: lib/framework/i18n.c:44
 #: lib/framework/i18n.c:69
 msgid "Danish"
-msgstr ""
+msgstr "Датский"
 
 #: lib/framework/i18n.c:45
 #: lib/framework/i18n.c:68
 msgid "German"
-msgstr ""
+msgstr "Немецкий"
 
 #: lib/framework/i18n.c:46
 #: lib/framework/i18n.c:66
 msgid "English"
-msgstr ""
+msgstr "Английский"
 
 #: lib/framework/i18n.c:47
 #: lib/framework/i18n.c:70
 msgid "French"
-msgstr ""
+msgstr "Французский"
 
 #: lib/framework/i18n.c:48
 #: lib/framework/i18n.c:71
 msgid "Italian"
-msgstr ""
+msgstr "Итальянский"
 
 #: lib/framework/i18n.c:49
 #: lib/framework/i18n.c:73
 msgid "Dutch"
-msgstr ""
+msgstr "Голландский"
 
 #: lib/framework/i18n.c:50
 #: lib/framework/i18n.c:67
 msgid "Norwegian"
-msgstr ""
+msgstr "Норвежский"
 
 #: lib/framework/i18n.c:51
 #: lib/framework/i18n.c:74
 msgid "Portuegese"
-msgstr ""
+msgstr "Португальский"
 
 #: lib/framework/i18n.c:52
 #: lib/framework/i18n.c:75
 msgid "Russian"
-msgstr ""
+msgstr "Русский"
 
 #: lib/framework/i18n.c:53
 msgid "Swedish"
-msgstr ""
+msgstr "Шведский"
 
 #: lib/framework/i18n.c:72
 msgid "Latin"
-msgstr ""
+msgstr "Латинский"
 
 #: src/clparse.c:88
 msgid "Run in cheat mode"
@@ -10344,7 +10358,7 @@ msgstr "Название Игры"
 
 #: src/clparse.c:95
 msgid "Show this help message and exit"
-msgstr ""
+msgstr "Отобразить данное справочное сообщение и выйти"
 
 #: src/clparse.c:96
 msgid "Enable a global mod"
@@ -10370,7 +10384,7 @@ msgstr "Загрузить Игру"
 
 #: src/clparse.c:99
 msgid "savegame"
-msgstr ""
+msgstr "Сохраниьт Игру"
 
 #: src/clparse.c:102
 msgid "Play in windowed mode"
@@ -10378,31 +10392,31 @@ msgstr "Оконный Режим"
 
 #: src/clparse.c:103
 msgid "Show version information and exit"
-msgstr ""
+msgstr "Показать номер версии и выйти"
 
 #: src/clparse.c:104
 msgid "Set the resolution to use"
-msgstr ""
+msgstr "Установить используемое разрешение"
 
 #: src/clparse.c:104
 msgid "WIDTHxHEIGHT"
-msgstr ""
+msgstr "ШИРИНАхВЫСОТА"
 
 #: src/clparse.c:105
 msgid "Enable shadows"
-msgstr ""
+msgstr "Включить тени"
 
 #: src/clparse.c:106
 msgid "Disable shadows"
-msgstr ""
+msgstr "Отключить тени"
 
 #: src/clparse.c:107
 msgid "Enable sound"
-msgstr ""
+msgstr "Включить звук"
 
 #: src/clparse.c:108
 msgid "Disable sound"
-msgstr ""
+msgstr "Отключить звук"
 
 #: src/clparse.c:109
 msgid "Activate self-test"
@@ -10412,13 +10426,13 @@ msgstr ""
 #: src/configuration.c:403
 #: src/multistat.c:131
 msgid "Player"
-msgstr ""
+msgstr "Игрок"
 
 #: src/design.c:453
 #: src/design.c:474
 #: src/design.c:3547
 msgid "New Vehicle"
-msgstr "Новая техника"
+msgstr "Новый юнит"
 
 #: src/design.c:521
 msgid "Vehicle Body"
@@ -10426,13 +10440,13 @@ msgstr "Корпус"
 
 #: src/design.c:543
 msgid "Vehicle Propulsion"
-msgstr "Двигатель"
+msgstr "Шасси"
 
 #: src/design.c:566
 #: src/design.c:591
 #: src/design.c:617
 msgid "Vehicle Turret"
-msgstr ""
+msgstr "Башня"
 
 #: src/design.c:638
 msgid "Delete Design"
@@ -10473,12 +10487,12 @@ msgstr "Вес"
 #: src/design.c:811
 #: src/design.c:831
 msgid "Total Power Required"
-msgstr "Общие затраты энергии"
+msgstr "Всего требуется энергии"
 
 #: src/design.c:844
 #: src/design.c:865
 msgid "Total Body Points"
-msgstr "Очков жизни"
+msgstr "Общее количество очков"
 
 #: src/design.c:1061
 #: src/design.c:1093
@@ -10499,14 +10513,14 @@ msgstr "Мощность Сенсора"
 
 #: src/design.c:1621
 msgid "ECM Power"
-msgstr ""
+msgstr "ЕМ Можность"
 
 #: src/design.c:1647
 #: src/design.c:1664
 #: src/design.c:1690
 #: src/design.c:1707
 msgid "Build Points"
-msgstr ""
+msgstr "Очки"
 
 #: src/design.c:1734
 #: src/design.c:1766
@@ -10545,7 +10559,7 @@ msgstr "Скорость по воде"
 
 #: src/design.c:2142
 msgid "Weapons"
-msgstr "Оружия"
+msgstr "Вооружение"
 
 #: src/design.c:2166
 msgid "Systems"
@@ -10568,72 +10582,72 @@ msgstr "Грузовику приказано строить Нефтевышк�
 msgid "Unit Lost!"
 msgstr "Юнит Потерян!"
 
-#: src/droid.c:1614
+#: src/droid.c:1619
 msgid "Structure Restored"
 msgstr ""
 
-#: src/droid.c:3401
+#: src/droid.c:3407
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/droid.c:3414
+#: src/droid.c:3420
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/droid.c:3427
+#: src/droid.c:3433
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/droid.c:3431
+#: src/droid.c:3437
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/droid.c:3657
+#: src/droid.c:3663
 msgid "Rookie"
 msgstr "Новобранец"
 
-#: src/droid.c:3658
+#: src/droid.c:3664
 msgctxt "rank"
 msgid "Green"
-msgstr "Неопытный"
+msgstr "Молодой"
 
-#: src/droid.c:3659
+#: src/droid.c:3665
 msgid "Trained"
-msgstr "Обученный"
+msgstr "Тренированный"
 
-#: src/droid.c:3660
+#: src/droid.c:3666
 msgid "Regular"
-msgstr ""
+msgstr "Опытный"
 
-#: src/droid.c:3661
+#: src/droid.c:3667
 msgid "Professional"
 msgstr "Профессионал"
 
-#: src/droid.c:3662
+#: src/droid.c:3668
 msgid "Veteran"
 msgstr "Ветеран"
 
-#: src/droid.c:3663
+#: src/droid.c:3669
 msgid "Elite"
 msgstr "Элита"
 
-#: src/droid.c:3664
+#: src/droid.c:3670
 msgid "Special"
-msgstr ""
+msgstr "Специалист"
 
-#: src/droid.c:3665
+#: src/droid.c:3671
 msgid "Hero"
 msgstr "Герой"
 
@@ -10648,7 +10662,7 @@ msgstr "Мультиплеер"
 #: src/frontend.c:243
 #: src/frontend.c:297
 msgid "Tutorial"
-msgstr "Тренировка"
+msgstr "Обучение"
 
 #: src/frontend.c:244
 #: src/ingameop.c:266
@@ -10724,7 +10738,7 @@ msgstr "One Player Skirmish"
 #: src/frontend.c:1112
 #: src/frontend.c:1132
 msgid "GAME OPTIONS"
-msgstr "НАСТРОЙКИ ИГРЫ"
+msgstr "ПАРАМЕТРЫ ИГРЫ"
 
 #: src/frontend.c:531
 msgid "Game Options"
@@ -10740,7 +10754,7 @@ msgstr "Настройки звука"
 
 #: src/frontend.c:535
 msgid "Key Mappings"
-msgstr "Раскладка клавиатуры"
+msgstr "Расскладка клавиатуры"
 
 #: src/frontend.c:607
 msgid "Reverse Mouse"
@@ -10795,12 +10809,12 @@ msgstr "Туман войны"
 
 #: src/frontend.c:643
 msgid "Video Playback"
-msgstr "Видео-ролики"
+msgstr "Воспроизведение видео"
 
 #: src/frontend.c:646
 #: src/frontend.c:802
 msgid "Full"
-msgstr "Полноэкран"
+msgstr "Полностью"
 
 #: src/frontend.c:650
 #: src/frontend.c:792
@@ -10853,7 +10867,7 @@ msgstr "Разрешение*"
 
 #: src/frontend.c:927
 msgid "Trap Cursor"
-msgstr ""
+msgstr "Захват курсора"
 
 #: src/frontend.c:939
 msgid "Texture size"
@@ -10861,7 +10875,7 @@ msgstr "Размер текстур"
 
 #: src/frontend.c:943
 msgid "* Takes effect on game restart"
-msgstr "* Вступят в силу после перезагрузки"
+msgstr "Применятся после перезагрузки игры"
 
 #: src/frontend.c:1072
 #: src/frontend.c:1130
@@ -10884,7 +10898,7 @@ msgstr "Нормальная"
 #: src/frontend.c:1144
 #: src/frontend.c:1166
 msgid "Hard"
-msgstr "Трудная"
+msgstr "Тяжелая"
 
 #: src/frontend.c:1088
 #: src/frontend.c:1131
@@ -10901,11 +10915,11 @@ msgstr "Язык"
 msgid "Unit Colour"
 msgstr "Цвет Юнтов"
 
-#: src/hci.c:994
-#: src/hci.c:3857
-#: src/hci.c:4008
-#: src/hci.c:4461
-#: src/hci.c:5685
+#: src/hci.c:1017
+#: src/hci.c:3880
+#: src/hci.c:4031
+#: src/hci.c:4484
+#: src/hci.c:5708
 #: src/intelmap.c:529
 #: src/intorder.c:659
 #: src/loadsave.c:261
@@ -10913,139 +10927,141 @@ msgstr "Цвет Юнтов"
 #: src/multimenu.c:1250
 #: src/transporter.c:285
 #: src/transporter.c:374
-#: src/transporter.c:872
+#: src/transporter.c:839
 msgid "Close"
 msgstr "Закрыть"
 
-#: src/hci.c:1340
-#: src/hci.c:1686
+#: src/hci.c:1363
+#: src/hci.c:1709
 #: src/loop.c:511
 #: src/loop.c:523
 #: src/mission.c:2895
 msgid "GAME SAVED!"
 msgstr "ИГРА СОХРАНЕНА!"
 
-#: src/hci.c:2094
+#: src/hci.c:2117
 msgid "Failed to create building"
 msgstr ""
 
-#: src/hci.c:2117
+#: src/hci.c:2140
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new structure: %s."
 msgstr ""
 
-#: src/hci.c:2131
+#: src/hci.c:2154
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new feature: %s."
 msgstr ""
 
-#: src/hci.c:2150
+#: src/hci.c:2173
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new droid: %s."
 msgstr ""
 
-#: src/hci.c:3759
+#: src/hci.c:3782
 msgid "Commanders (F6)"
 msgstr "Командиры (F6)"
 
-#: src/hci.c:3775
+#: src/hci.c:3798
 msgid "Intelligence Display (F5)"
 msgstr "Дисплей разведки (F5)"
 
-#: src/hci.c:3791
+#: src/hci.c:3814
 msgid "Manufacture (F1)"
 msgstr "Производство (F1)"
 
-#: src/hci.c:3807
+#: src/hci.c:3830
 msgid "Design (F4)"
 msgstr "Дизайн (F4)"
 
-#: src/hci.c:3823
+#: src/hci.c:3846
 msgid "Research (F2)"
 msgstr "Исследования (F2)"
 
-#: src/hci.c:3839
+#: src/hci.c:3862
 msgid "Build (F3)"
 msgstr "Строить (F3)"
 
-#: src/hci.c:3919
+#: src/hci.c:3942
 #: src/multiint.c:772
 #: src/multiint.c:776
 msgid "Power"
 msgstr "Энергия"
 
-#: src/hci.c:4103
+#: src/hci.c:4126
+#, fuzzy
 msgid "Tile"
-msgstr ""
+msgstr "Тигр"
 
-#: src/hci.c:4104
+#: src/hci.c:4127
 msgid "Place tiles on map"
 msgstr ""
 
-#: src/hci.c:4113
+#: src/hci.c:4136
 msgid "Unit"
 msgstr "Юнит"
 
-#: src/hci.c:4114
+#: src/hci.c:4137
 msgid "Place Unit on map"
 msgstr ""
 
-#: src/hci.c:4122
+#: src/hci.c:4145
 msgid "Struct"
 msgstr ""
 
-#: src/hci.c:4123
+#: src/hci.c:4146
+#, fuzzy
 msgid "Place Structures on map"
-msgstr ""
+msgstr "Установить Лимиты Сооружений"
 
-#: src/hci.c:4131
+#: src/hci.c:4154
 msgid "Feat"
 msgstr ""
 
-#: src/hci.c:4132
+#: src/hci.c:4155
 msgid "Place Features on map"
 msgstr ""
 
-#: src/hci.c:4143
+#: src/hci.c:4166
 #, fuzzy
 msgid "Pause or unpause the game"
 msgstr "Хост покинул игру"
 
-#: src/hci.c:4157
+#: src/hci.c:4180
 msgid "Align height of all map objects"
 msgstr ""
 
-#: src/hci.c:4182
+#: src/hci.c:4205
 #: src/ingameop.c:121
 #: src/ingameop.c:254
 #: src/ingameop.c:259
 msgid "Quit"
 msgstr "Выход"
 
-#: src/hci.c:4183
+#: src/hci.c:4206
 msgid "Exit Game"
 msgstr "Выйти из Игры"
 
-#: src/hci.c:4546
+#: src/hci.c:4569
 #: src/intdisplay.c:211
 #: src/intdisplay.c:254
 #: src/intdisplay.c:300
 msgid "Progress Bar"
 msgstr "Панель прогресса"
 
-#: src/hci.c:5600
+#: src/hci.c:5623
 msgid "Factory Delivery Point"
 msgstr "Точка прибития с фабрики"
 
-#: src/hci.c:5619
+#: src/hci.c:5642
 msgid "Loop Production"
 msgstr "Повторное Производство"
 
-#: src/hci.c:5710
+#: src/hci.c:5733
 msgid "Tab Scroll left"
 msgstr ""
 
-#: src/hci.c:5727
+#: src/hci.c:5750
 msgid "Tab Scroll right"
 msgstr ""
 
@@ -11163,12 +11179,12 @@ msgstr "Возвратиться к Ком.Центру"
 
 #: src/intorder.c:193
 msgid "Go to Transport"
-msgstr "Ити к транспорту"
+msgstr "Идти к транспорту"
 
 #: src/intorder.c:194
 #: src/keymap.c:418
 msgid "Return for Recycling"
-msgstr "Возвратиться для \tУтилизации"
+msgstr "Возвратиться для Утилизации"
 
 #: src/intorder.c:195
 msgid "Recycle"
@@ -11192,7 +11208,7 @@ msgstr ""
 
 #: src/keybind.c:131
 msgid "Sorry, that cheat is disabled in multiplayer games."
-msgstr "Извините, но читы закрыты в мультиплеере"
+msgstr "Извините, в мультиплеере читы отключены."
 
 #: src/keybind.c:195
 msgid "Lets us see what you see!"
@@ -11200,7 +11216,7 @@ msgstr ""
 
 #: src/keybind.c:197
 msgid "Fine, sensor display is off!"
-msgstr ""
+msgstr "Отлично, сенсорный дисплей выключен!"
 
 #: src/keybind.c:295
 msgid "Hard as nails!!!"
@@ -11232,11 +11248,11 @@ msgstr ""
 
 #: src/keybind.c:386
 msgid "FPS display is enabled."
-msgstr ""
+msgstr "Отображение FPS включено."
 
 #: src/keybind.c:390
 msgid "FPS display is disabled."
-msgstr ""
+msgstr "Отображение FPS выключено."
 
 #: src/keybind.c:403
 #, c-format
@@ -11245,11 +11261,11 @@ msgstr ""
 
 #: src/keybind.c:458
 msgid "Infinite power disabled"
-msgstr ""
+msgstr "Бесконечная энергия отключена"
 
 #: src/keybind.c:463
 msgid "Infinite power enabled"
-msgstr ""
+msgstr "Бесконечная энергия включена"
 
 #: src/keybind.c:516
 msgid "All items made available"
@@ -11257,11 +11273,11 @@ msgstr ""
 
 #: src/keybind.c:608
 msgid "Fog off"
-msgstr "Туман вкл."
+msgstr "Туман выключен"
 
 #: src/keybind.c:614
 msgid "Fog on"
-msgstr "Туман откл."
+msgstr "Туман включен"
 
 #: src/keybind.c:1200
 msgid "View Aligned to North"
@@ -11324,12 +11340,12 @@ msgstr "Скорость Игры Сброшена"
 #: src/keybind.c:2321
 #, c-format
 msgid "Game Speed Increased to %3.1f"
-msgstr "Скорость игры увеличина на %3.1f"
+msgstr "Скорость игры увеличена в %3.1f"
 
 #: src/keybind.c:2362
 #, c-format
 msgid "Game Speed Reduced to %3.1f"
-msgstr "Скорость игры уменьшена на %3.1f"
+msgstr "Скорость игры уменьшена в %3.1f"
 
 #: src/keybind.c:2392
 msgid "Build menu will reopen"
@@ -11341,15 +11357,15 @@ msgstr ""
 
 #: src/keybind.c:2408
 msgid "Radar showing friend-foe colors"
-msgstr ""
+msgstr "Радар отображает цвета свой-чужой"
 
 #: src/keybind.c:2412
 msgid "Radar showing player colors"
-msgstr ""
+msgstr "Радар отображает цвета игрока"
 
 #: src/keybind.c:2429
 msgid "Radar showing only objects"
-msgstr ""
+msgstr "Радар отображает только объекты"
 
 #: src/keybind.c:2432
 msgid "Radar blending terrain and height"
@@ -11357,7 +11373,7 @@ msgstr ""
 
 #: src/keybind.c:2435
 msgid "Radar showing terrain"
-msgstr ""
+msgstr "Радар отображает поверхность"
 
 #: src/keybind.c:2438
 msgid "Radar showing height"
@@ -11365,7 +11381,7 @@ msgstr ""
 
 #: src/keyedit.c:356
 msgid "KEY MAPPING"
-msgstr "РАСКЛАДКА КЛАВИАТУРЫ"
+msgstr "Раскладка клавиатуры"
 
 #: src/keyedit.c:378
 #: src/multiint.c:388
@@ -11398,7 +11414,7 @@ msgstr "Дизайн"
 
 #: src/keymap.c:296
 msgid "Intelligence Display"
-msgstr "Дисплей разведки"
+msgstr "Экран разведки"
 
 #: src/keymap.c:297
 msgid "Commanders"
@@ -11426,131 +11442,131 @@ msgstr ""
 
 #: src/keymap.c:303
 msgid "View Location of Previous Message"
-msgstr "Обзор места предведущего сообщения"
+msgstr "Обзор места предыдущего сообщения"
 
 #: src/keymap.c:308
 msgid "Assign Group 0"
-msgstr ""
+msgstr "Назначить группу 0"
 
 #: src/keymap.c:309
 msgid "Assign Group 1"
-msgstr ""
+msgstr "Назначить группу 1"
 
 #: src/keymap.c:310
 msgid "Assign Group 2"
-msgstr ""
+msgstr "Назначить группу 2"
 
 #: src/keymap.c:311
 msgid "Assign Group 3"
-msgstr ""
+msgstr "Назначить группу 3"
 
 #: src/keymap.c:312
 msgid "Assign Group 4"
-msgstr ""
+msgstr "Назначить группу 4"
 
 #: src/keymap.c:313
 msgid "Assign Group 5"
-msgstr ""
+msgstr "Назначить группу 5"
 
 #: src/keymap.c:314
 msgid "Assign Group 6"
-msgstr ""
+msgstr "Назначить группу 6"
 
 #: src/keymap.c:315
 msgid "Assign Group 7"
-msgstr ""
+msgstr "Назначить группу 7"
 
 #: src/keymap.c:316
 msgid "Assign Group 8"
-msgstr ""
+msgstr "Назначить группу 8"
 
 #: src/keymap.c:317
 msgid "Assign Group 9"
-msgstr ""
+msgstr "Назначить группу 9"
 
 #: src/keymap.c:321
 msgid "Select Group 0"
-msgstr ""
+msgstr "Выделить группу 0"
 
 #: src/keymap.c:322
 msgid "Select Group 1"
-msgstr ""
+msgstr "Выделить группу 1"
 
 #: src/keymap.c:323
 msgid "Select Group 2"
-msgstr ""
+msgstr "Выделить группу 2"
 
 #: src/keymap.c:324
 msgid "Select Group 3"
-msgstr ""
+msgstr "Выделить группу 3"
 
 #: src/keymap.c:325
 msgid "Select Group 4"
-msgstr ""
+msgstr "Выделить группу 4"
 
 #: src/keymap.c:326
 msgid "Select Group 5"
-msgstr ""
+msgstr "Выделить группу 5"
 
 #: src/keymap.c:327
 msgid "Select Group 6"
-msgstr ""
+msgstr "Выделить группу 6"
 
 #: src/keymap.c:328
 msgid "Select Group 7"
-msgstr ""
+msgstr "Выделить группу 7"
 
 #: src/keymap.c:329
 msgid "Select Group 8"
-msgstr ""
+msgstr "Выделить группу 8"
 
 #: src/keymap.c:330
 msgid "Select Group 9"
-msgstr ""
+msgstr "Выделить группу 9"
 
 #: src/keymap.c:334
 msgid "Select Commander 0"
-msgstr ""
+msgstr "Выделить командующего 0"
 
 #: src/keymap.c:335
 msgid "Select Commander 1"
-msgstr ""
+msgstr "Выделить командующего 1"
 
 #: src/keymap.c:336
 msgid "Select Commander 2"
-msgstr ""
+msgstr "Выделить командующего 2"
 
 #: src/keymap.c:337
 msgid "Select Commander 3"
-msgstr ""
+msgstr "Выделить командующего 3"
 
 #: src/keymap.c:338
 msgid "Select Commander 4"
-msgstr ""
+msgstr "Выделить командующего 4"
 
 #: src/keymap.c:339
 msgid "Select Commander 5"
-msgstr ""
+msgstr "Выделить командующего 5"
 
 #: src/keymap.c:340
 msgid "Select Commander 6"
-msgstr ""
+msgstr "Выделить командующего 6"
 
 #: src/keymap.c:341
 msgid "Select Commander 7"
-msgstr ""
+msgstr "Выделить командующего 7"
 
 #: src/keymap.c:342
 msgid "Select Commander 8"
-msgstr ""
+msgstr "Выделить командующего 8"
 
 #: src/keymap.c:343
 msgid "Select Commander 9"
-msgstr ""
+msgstr "Выделить командующего 9"
 
 #: src/keymap.c:347
 msgid "Multiplayer Options"
-msgstr "Опции Мультиплеера"
+msgstr "Настройка многопользовательской игры"
 
 #: src/keymap.c:348
 msgid "Start Multiplayer Audio"
@@ -11574,11 +11590,11 @@ msgstr ""
 
 #: src/keymap.c:355
 msgid "Zoom Radar Out"
-msgstr ""
+msgstr "Отдалить радар"
 
 #: src/keymap.c:356
 msgid "Zoom Radar In"
-msgstr ""
+msgstr "Приблизить радар"
 
 #: src/keymap.c:357
 msgid "Zoom In"
@@ -11594,7 +11610,7 @@ msgstr ""
 
 #: src/keymap.c:360
 msgid "Rotate Left"
-msgstr ""
+msgstr "Повернуть влево"
 
 #: src/keymap.c:361
 msgid "Reset Pitch"
@@ -11602,7 +11618,7 @@ msgstr ""
 
 #: src/keymap.c:362
 msgid "Rotate Right"
-msgstr ""
+msgstr "Повернуть вправо"
 
 #: src/keymap.c:363
 msgid "Pitch Back"
@@ -11610,19 +11626,19 @@ msgstr ""
 
 #: src/keymap.c:364
 msgid "Orders Menu"
-msgstr "Меню Приказов"
+msgstr "Меню приказов"
 
 #: src/keymap.c:365
 msgid "Decrease Game Speed"
-msgstr ""
+msgstr "Уменьшить скорость игры"
 
 #: src/keymap.c:366
 msgid "Increase Game Speed"
-msgstr ""
+msgstr "Увеличить скорость игры"
 
 #: src/keymap.c:367
 msgid "Reset Game Speed"
-msgstr ""
+msgstr "Стандартная скорость игры"
 
 #: src/keymap.c:368
 msgid "View North"
@@ -11642,23 +11658,23 @@ msgstr ""
 
 #: src/keymap.c:372
 msgid "View next Oil Derrick"
-msgstr ""
+msgstr "Отобразить следующую нефтяную вышку"
 
 #: src/keymap.c:373
 msgid "View next Repair Unit"
-msgstr ""
+msgstr "Отобразить следующего ремонтного юнита"
 
 #: src/keymap.c:374
 msgid "View next Truck"
-msgstr ""
+msgstr "Отобразить следующий грузовик"
 
 #: src/keymap.c:375
 msgid "View next Sensor Unit"
-msgstr ""
+msgstr "Отобразить следующего сенсорного юнита"
 
 #: src/keymap.c:376
 msgid "View next Commander"
-msgstr ""
+msgstr "Отобразить следующего командующего"
 
 #: src/keymap.c:377
 msgid "Toggle Overlays"
@@ -11666,7 +11682,7 @@ msgstr ""
 
 #: src/keymap.c:378
 msgid "Console On/Off"
-msgstr ""
+msgstr "Консоль вкл/выкл"
 
 #: src/keymap.c:381
 msgid "Center View on HQ"
@@ -11678,39 +11694,39 @@ msgstr ""
 
 #: src/keymap.c:385
 msgid "Fire at Will"
-msgstr ""
+msgstr "Огонь по желанию"
 
 #: src/keymap.c:386
 msgid "Return to HQ"
-msgstr "Возврат в Штаб"
+msgstr "Вернуться к штабу"
 
 #: src/keymap.c:393
 msgid "Send Text Message"
-msgstr "Чат"
+msgstr "Отправить сообщение"
 
 #: src/keymap.c:413
 msgid "Select all Combat Units"
-msgstr ""
+msgstr "Выделить все боевые юниты"
 
 #: src/keymap.c:414
 msgid "Select all Heavily Damaged Units"
-msgstr ""
+msgstr "Выделить всю сильно поврежденную технику"
 
 #: src/keymap.c:416
 msgid "Select all Half-tracks"
-msgstr ""
+msgstr "Выделить всю технику на полугусеничном ходу"
 
 #: src/keymap.c:417
 msgid "Select all Hovers"
-msgstr ""
+msgstr "Выделить всю технику на воздушной подушке"
 
 #: src/keymap.c:419
 msgid "Select all Units on Screen"
-msgstr "Выделить всю технику на экране"
+msgstr "Выделить все технику на экране"
 
 #: src/keymap.c:420
 msgid "Select all Tracks"
-msgstr "Выделить все грузовики"
+msgstr "Выделить всю технику на гусеничном ходу"
 
 #: src/keymap.c:421
 msgid "Select EVERY unit"
@@ -11718,31 +11734,31 @@ msgstr ""
 
 #: src/keymap.c:422
 msgid "Select all VTOLs"
-msgstr ""
+msgstr "Выделить всю воздушную технику"
 
 #: src/keymap.c:423
 msgid "Select all Wheels"
-msgstr ""
+msgstr "Выделить всю технику на колесах"
 
 #: src/keymap.c:425
 msgid "Select all Similiar Units"
-msgstr ""
+msgstr "Выделить всех похожих юнитов"
 
 #: src/keymap.c:429
 msgid "Select next Factory"
-msgstr ""
+msgstr "Выбрать следующий завод техники"
 
 #: src/keymap.c:430
 msgid "Select next Research Facility"
-msgstr ""
+msgstr "Выбрать следующую исследовательскую лабораторию"
 
 #: src/keymap.c:431
 msgid "Select next Power Generator"
-msgstr ""
+msgstr "Выбрать следующий генератор энергии"
 
 #: src/keymap.c:432
 msgid "Select next Cyborg Factory"
-msgstr ""
+msgstr "Выбрать следующий завод киборгов"
 
 #: src/keymap.c:433
 msgid "Toggle reopening the build menu"
@@ -11778,7 +11794,7 @@ msgstr ""
 #: src/multigifts.c:188
 #, c-format
 msgid "%s Gives you a %s"
-msgstr ""
+msgstr "%s Дает вам %s"
 
 #: src/multigifts.c:238
 #, c-format
@@ -11798,22 +11814,22 @@ msgstr ""
 #: src/multigifts.c:355
 #, c-format
 msgid "%s Requests An Alliance With You"
-msgstr ""
+msgstr "%s предлагает заключить с вами союз"
 
 #: src/multigifts.c:364
 #, c-format
 msgid "You Invite %s To Form An Alliance"
-msgstr ""
+msgstr "Вы предложили %s вступить в союз"
 
 #: src/multigifts.c:384
 #, c-format
 msgid "%s Breaks The Alliance With %s"
-msgstr ""
+msgstr "%s разорвал союз с %s"
 
 #: src/multigifts.c:410
 #, c-format
 msgid "%s Forms An Alliance With %s"
-msgstr ""
+msgstr "%s вступил в союз с %s"
 
 #: src/multigifts.c:801
 #, c-format
@@ -11905,15 +11921,15 @@ msgstr "Закрытые Команды"
 
 #: src/multiint.c:779
 msgid "Low Power Levels"
-msgstr "Низкий Уровень Енергии"
+msgstr "Низкий уровень энергии"
 
 #: src/multiint.c:781
 msgid "Medium Power Levels"
-msgstr "Средний Уровень Енергии"
+msgstr "Средний уровень энергии"
 
 #: src/multiint.c:783
 msgid "High Power Levels"
-msgstr "Высокий Уровень Енергии"
+msgstr "Высокий уровень энергии"
 
 #: src/multiint.c:803
 #: src/multiint.c:807
@@ -11971,7 +11987,7 @@ msgstr "ЧАТ"
 #: src/multiint.c:1997
 #, c-format
 msgid "The host has kicked %s from the game!"
-msgstr "Хост кикнул %s из игры!"
+msgstr "Хост выкинул %s из игры!"
 
 #: src/multiint.c:2088
 msgid "Host is Starting Game"
@@ -11989,12 +12005,12 @@ msgstr "Игроки еще соединяються"
 #: src/multijoin.c:220
 #, c-format
 msgid "%s has Left the Game"
-msgstr ""
+msgstr "%s покинул игру"
 
 #: src/multijoin.c:326
 #, c-format
 msgid "%s is Joining the Game"
-msgstr ""
+msgstr "%s присоединился к игре"
 
 #: src/multimenu.c:559
 msgid "Technology level 1"
@@ -12010,7 +12026,7 @@ msgstr ""
 
 #: src/multimenu.c:579
 msgid "Any number of players"
-msgstr "Любое количество игроков"
+msgstr "Любое число игроков"
 
 #: src/multimenu.c:586
 msgid "2 players"
@@ -12026,7 +12042,7 @@ msgstr "8 игроков"
 
 #: src/multimenu.c:707
 msgid "Score"
-msgstr "Очки"
+msgstr "Счёт"
 
 #: src/multimenu.c:708
 msgid "Kills"
@@ -12054,11 +12070,11 @@ msgstr "Передать Технологии"
 
 #: src/multimenu.c:1056
 msgid "Hand Over Selected Units"
-msgstr "Передать Выбраного Юнита"
+msgstr "Передать выбранных юнитов"
 
 #: src/multimenu.c:1062
 msgid "Give Power To Player"
-msgstr "Передать Энергию Игроку"
+msgstr "Передать энергию  игроку"
 
 #: src/multiplay.c:729
 msgid "The host has left the game!"
@@ -12112,42 +12128,42 @@ msgstr ""
 #: src/scores.c:99
 #, c-format
 msgid "Own Units: %u"
-msgstr "Наших юнитов: %u"
+msgstr "Собственные юниты: %u"
 
 #: src/scores.c:100
 #, c-format
 msgid "Enemy Units: %u"
-msgstr "Вражеских юнитов: %u"
+msgstr "Вражеские юниты: %u"
 
 #: src/scores.c:101
 #, c-format
 msgid "Own Structures: %u"
-msgstr "Наших сооружений: %u"
+msgstr "Собственные строения: %u"
 
 #: src/scores.c:102
 #, c-format
 msgid "Enemy Structures: %u"
-msgstr "Вражеских сооружений: %u"
+msgstr "Вражеские строения: %u"
 
 #: src/scores.c:103
 #, c-format
 msgid "Units Manufactured: %u"
-msgstr "Произведено юнтов: %u"
+msgstr "Произведено техники: %u"
 
 #: src/scores.c:104
 #, c-format
 msgid "Total Units: %u"
-msgstr "Всего Юнитов: %u"
+msgstr "Всего техники: %u"
 
 #: src/scores.c:105
 #, c-format
 msgid "Structures Built: %u"
-msgstr "Посторено сооружений: %u"
+msgstr "Строений возведено: %u"
 
 #: src/scores.c:106
 #, c-format
 msgid "Total Structures: %u"
-msgstr ""
+msgstr "Всего строений: %u"
 
 #: src/scores.c:108
 #, c-format
@@ -12163,12 +12179,12 @@ msgstr "Неопытных: %u"
 #: src/scores.c:110
 #, c-format
 msgid "Trained: %u"
-msgstr "Обученых: %u"
+msgstr "Тренированных: %u"
 
 #: src/scores.c:111
 #, c-format
 msgid "Regular: %u"
-msgstr ""
+msgstr "Опытных: %u"
 
 #: src/scores.c:112
 #, c-format
@@ -12188,7 +12204,7 @@ msgstr "Элиты: %u"
 #: src/scores.c:115
 #, c-format
 msgid "Special: %u"
-msgstr ""
+msgstr "Спецов: %u"
 
 #: src/scores.c:116
 #, c-format
@@ -12197,11 +12213,11 @@ msgstr "Героев: %u"
 
 #: src/scores.c:350
 msgid "Unit Losses"
-msgstr "Потери боевой техники"
+msgstr "Потери техники"
 
 #: src/scores.c:351
 msgid "Structure Losses"
-msgstr "Сооружений потеряно"
+msgstr "Потери сооружений"
 
 #: src/scores.c:352
 msgid "Force Information"
@@ -12210,32 +12226,32 @@ msgstr "Информация о войсках"
 #: src/scores.c:432
 #, c-format
 msgid "ARTIFACTS RECOVERED: %d"
-msgstr "АРТЕФАКТОВ ЗАХВАЧЕНО: %d"
+msgstr "Найдено артефактов: %d"
 
 #: src/scores.c:437
 #, c-format
 msgid "Mission Time - %s"
-msgstr "Время миссии - %s"
+msgstr "Время на миссии: %s"
 
 #: src/scores.c:442
 #, c-format
 msgid "Total Game Time - %s"
-msgstr "Общее время игры - %s"
+msgstr "Общее время игры: %s"
 
-#: src/scriptfuncs.c:3211
+#: src/scriptfuncs.c:3216
 msgid "YOU ARE VICTORIOUS!"
 msgstr "ПОБЕДА!"
 
-#: src/scriptfuncs.c:3215
+#: src/scriptfuncs.c:3220
 msgid "YOU WERE DEFEATED!"
 msgstr ""
 
-#: src/scriptfuncs.c:10152
+#: src/scriptfuncs.c:10161
 #, c-format
 msgid "Beacon received from %s!"
 msgstr ""
 
-#: src/scriptfuncs.c:10198
+#: src/scriptfuncs.c:10207
 #, c-format
 msgid "Beacon %d"
 msgstr ""
@@ -12250,82 +12266,82 @@ msgstr[1] ""
 #: src/selection.c:434
 #: src/selection.c:521
 msgid "Unable to locate any repair units!"
-msgstr ""
+msgstr "Не найдено ни одной ремонтной единицы!"
 
 #: src/selection.c:437
 msgid "Unable to locate any Trucks!"
-msgstr ""
+msgstr "Не найдено ни одного грузовика!"
 
 #: src/selection.c:440
 msgid "Unable to locate any Sensor Units!"
-msgstr ""
+msgstr "Не найдено ни одного сенсорного юнита!"
 
 #: src/selection.c:443
 msgid "Unable to locate any Commanders!"
 msgstr ""
 
-#: src/structure.c:2768
+#: src/structure.c:2774
 msgid "Command Control Limit Reached - Production Halted"
 msgstr "Достигнут Предел - Производство Остановлено"
 
-#: src/structure.c:5838
-#: src/structure.c:5860
+#: src/structure.c:5874
+#: src/structure.c:5896
 #, c-format
 msgid "%s - %u Unit assigned"
 msgid_plural "%s - %u Units assigned"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/structure.c:5897
+#: src/structure.c:5946
 #, c-format
 msgid "%s - Connected %u of %u"
 msgstr "%s - подключено %u из %u"
 
-#: src/structure.c:5911
+#: src/structure.c:5960
 #, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr ""
 
-#: src/structure.c:6031
 #: src/structure.c:6080
+#: src/structure.c:6129
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr ""
 
-#: src/structure.c:6315
+#: src/structure.c:6364
 msgid "Electronic Reward - Visibility Report"
 msgstr ""
 
-#: src/structure.c:6355
+#: src/structure.c:6404
 msgid "Factory Reward - Propulsion"
 msgstr ""
 
-#: src/structure.c:6379
+#: src/structure.c:6428
 msgid "Factory Reward - Body"
 msgstr ""
 
-#: src/structure.c:6403
+#: src/structure.c:6452
 msgid "Factory Reward - Weapon"
 msgstr ""
 
-#: src/structure.c:6412
+#: src/structure.c:6461
 msgid "Factory Reward - Nothing"
 msgstr ""
 
-#: src/structure.c:6440
+#: src/structure.c:6489
 msgid "Repair Facility Award - Repair"
 msgstr ""
 
-#: src/structure.c:6447
+#: src/structure.c:6496
 msgid "Repair Facility Award - Nothing"
 msgstr ""
 
-#: src/transporter.c:424
-#: src/transporter.c:478
+#: src/transporter.c:396
+#: src/transporter.c:450
 msgid "Launch Transport"
 msgstr "Запустить Транспорт"
 
-#: src/transporter.c:1860
+#: src/transporter.c:1702
 msgid "Reinforcements landing"
 msgstr "Высадка подкрепления"
 
@@ -12343,12 +12359,12 @@ msgstr ""
 
 #: src/version.c:148
 msgid " - DEBUG"
-msgstr ""
+msgstr " - ОТЛАДКА"
 
 #: src/version.c:157
 #, c-format
 msgid " - Built %s"
-msgstr ""
+msgstr " Билд - %s"
 
 #. TRANSLATORS: This string looks as follows when expanded.
 #. "Version <version name/number> <working copy state><BUILD DATE><BUILD TYPE>"

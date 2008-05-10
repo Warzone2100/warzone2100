@@ -1,21 +1,22 @@
 # Czech translation for warzone2100
+# Copyright (c) 2008 Warzone 2100 Resurrection Project
 # Copyright (c) 2008 Rosetta Contributors and Canonical Ltd 2008
 # This file is distributed under the same license as the warzone2100 package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2008.
 #
+# Lubos <alvinx12@centrum.cz>, 2008.
 msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2008-05-09 16:13+0200\n"
-"PO-Revision-Date: 2008-04-25 13:06+0000\n"
+"POT-Creation-Date: 2008-05-10 17:49+0200\n"
+"PO-Revision-Date: 2008-05-09 16:05+0000\n"
 "Last-Translator: Lubos <alvinx12@centrum.cz>\n"
 "Language-Team: Czech <cs@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Launchpad-Export-Date: 2008-04-28 05:16+0000\n"
+"X-Launchpad-Export-Date: 2008-05-10 13:56+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: data/messages/strings/cam1strings.txt:3
@@ -1624,6 +1625,7 @@ msgstr ""
 
 #: data/messages/strings/names.txt:194
 #: data/mp/messages/strings/names.txt:196
+#: data/mp/messages/strings/names.txt:1912
 msgid "Python Medium Cannon Tracks"
 msgstr ""
 
@@ -9085,43 +9087,43 @@ msgstr ""
 
 #: data/messages/strings/tutstrings.txt:8
 msgid "To build an oil derrick, select one of your trucks"
-msgstr ""
+msgstr "Abys mohl postavit ropný vrt, vyber jeden ze svých náklaďáků"
 
 #: data/messages/strings/tutstrings.txt:9
 msgid "Left click the oil pool indicated by the radar pulse to order your truck to build"
-msgstr ""
+msgstr "Kliknutím levého tlačítka na ropné ložisko označené radarovým pulzem rozkážeš svému náklaďáku stavět"
 
 #: data/messages/strings/tutstrings.txt:10
 msgid "The oil derrick is currently dormant. Build a power generator to convert the oil into power"
-msgstr ""
+msgstr "Ropný vrt je v současnosti nevyužitý. Postav generátor energie, který přemění ropu na energii"
 
 #: data/messages/strings/tutstrings.txt:11
 msgid "Position the square at your base and left click to start the build process"
-msgstr ""
+msgstr "Umísti čtverec u své základny a kliknutím levého tlačítka zahaj stavbu"
 
 #: data/messages/strings/tutstrings.txt:12
 msgid "To increase your build rate, select your second truck"
-msgstr ""
+msgstr "Pro zvýšení rychlosti stavby použij svůj druhý náklaďák"
 
 #: data/messages/strings/tutstrings.txt:13
 msgid "Use a truck to search for the artifact indicated by the radar pulse"
-msgstr ""
+msgstr "Použij náklaďák k hledání artefaktu označeného radarovým pulzem"
 
 #: data/messages/strings/tutstrings.txt:14
 msgid "A research facility is required to research artifacts"
-msgstr ""
+msgstr "Výzkumná laboratoř je potřebná k probádání artefaktů"
 
 #: data/messages/strings/tutstrings.txt:15
 msgid "The artifact is now being researched by the facility"
-msgstr ""
+msgstr "Artefakt je nyní prozkoumáván laboratoří"
 
 #: data/messages/strings/tutstrings.txt:16
 msgid "The researched machinegun can now be used to design a new vehicle"
-msgstr ""
+msgstr "Objevený kulomet nyní může posloužit ke konstrukci nového vozidla"
 
 #: data/messages/strings/tutstrings.txt:17
 msgid "To start your design, left click the NEW DESIGN icon"
-msgstr ""
+msgstr "Začni novou konstrukci kliknutím levého tlačítka na ikonu NOVÁ KONSTRUKCE"
 
 #: data/messages/strings/tutstrings.txt:18
 msgid "Now left click the Vehicle Body icon"
@@ -9149,43 +9151,43 @@ msgstr ""
 
 #: data/messages/strings/tutstrings.txt:24
 msgid "To finalize your design, left click the CLOSE icon"
-msgstr ""
+msgstr "Konstrukci dokončíš kliknutím levého tlačítka na ikonu ZAVŘÍT"
 
 #: data/messages/strings/tutstrings.txt:25
 msgid "A factory is now required to manufacture your new vehicle"
-msgstr ""
+msgstr "Nyní potřebuješ továrnu, která by vyrobila tvé nové vozidlo"
 
 #: data/messages/strings/tutstrings.txt:26
 msgid "Select a location for your factory"
-msgstr ""
+msgstr "Vyber místo pro svou továrnu"
 
 #: data/messages/strings/tutstrings.txt:27
 msgid "The delivery point is indicated by the number 1"
-msgstr ""
+msgstr "Místo dodání je označeno číslem 1"
 
 #: data/messages/strings/tutstrings.txt:28
 msgid "All new units will drive to this location once built"
-msgstr ""
+msgstr "Všechny nové jednotky budou jezdit na toto místo, jakmile budou vyrobeny"
 
 #: data/messages/strings/tutstrings.txt:29
 msgid "The factory can now be ordered to build a new unit"
-msgstr ""
+msgstr "Nyní můžeš továrně nařídit výrobu nové jednotky"
 
 #: data/messages/strings/tutstrings.txt:30
 msgid "Please wait whilst the factory manufactures the new unit(s)"
-msgstr ""
+msgstr "Počkej prosím, zatímco továrna vyrobí nové jednotky"
 
 #: data/messages/strings/tutstrings.txt:31
 msgid "Congratulations commander - you are ready for your first mission"
-msgstr ""
+msgstr "Blahopřeji veliteli - jsi připraven na svou první misi"
 
 #: data/messages/strings/tutstrings.txt:33
 msgid "Left click the flashing BUILD icon"
-msgstr ""
+msgstr "Levým tlačítkem klikni na blikající ikonu STAVBA"
 
 #: data/messages/strings/tutstrings.txt:34
 msgid "Now left click the power generator in the build menu on the left"
-msgstr ""
+msgstr "Nyní klikni levým tlačítkem na generátor energie v nabídce staveb nalevo"
 
 #: data/messages/strings/tutstrings.txt:35
 msgid "Presently unused"
@@ -9193,67 +9195,67 @@ msgstr ""
 
 #: data/messages/strings/tutstrings.txt:36
 msgid "Now left click the research facility and position it at your base"
-msgstr ""
+msgstr "Nyní klikni levým tlačítkem na výzkumnou laboratoř a umísti ji u své základny"
 
 #: data/messages/strings/tutstrings.txt:37
 msgid "Use your other truck to help build the research facility"
-msgstr ""
+msgstr "Pomoz svým dalším náklaďákem se stavbou výzkumné laboratoře"
 
 #: data/messages/strings/tutstrings.txt:38
 msgid "To research the artifact, left click on the flashing RESEARCH icon"
-msgstr ""
+msgstr "K prozkoumání artefaktu klikni levým tlačítkem na blikající ikonu VÝZKUM"
 
 #: data/messages/strings/tutstrings.txt:39
 msgid "Now left click the machinegun artifact"
-msgstr ""
+msgstr "Nyní klikni levým tlačítkem na artefakt kulometu"
 
 #: data/messages/strings/tutstrings.txt:40
 msgid "Left click the flashing DESIGN icon"
-msgstr ""
+msgstr "Levým tlačítkem klikni na blikající ikonu KONSTRUKCE"
 
 #: data/messages/strings/tutstrings.txt:41
 msgid "Now left click the factory icon and position it at your base"
-msgstr ""
+msgstr "Nyní levým tlačítkem klikni na ikonu továrny a umísti ji u své základny"
 
 #: data/messages/strings/tutstrings.txt:42
 msgid "Left click the flashing MANUFACTURE icon"
-msgstr ""
+msgstr "Levým tlačítkem klikni na blikající ikonu VÝROBA"
 
 #: data/messages/strings/tutstrings.txt:43
 msgid "Now left click the units you want to build from the menu at the left"
-msgstr ""
+msgstr "Nyní klikni levým tlačítkem na jednotky, které chceš vyrobit z nabídky nalevo"
 
 #: data/messages/strings/tutstrings.txt:44
 msgid "The other truck will now help to build the power generator"
-msgstr ""
+msgstr "Další náklaďák bude nyní pomáhat se stavbou generátoru energie"
 
 #: data/messages/strings/tutstrings.txt:45
 msgid "Move the pointer over the artifact and left click to recover it"
-msgstr ""
+msgstr "Přesuň ukazatel nad artefakt a kliknutím levého tlačítka ho získáš"
 
 #: data/messages/strings/tutstrings.txt:46
 msgid "You can move the delivery point at any time by left clicking it"
-msgstr ""
+msgstr "Kdykoli můžeš přesunout místo dodání, když na něj klikneš levým tlačítkem"
 
 #: data/messages/strings/tutstrings.txt:47
 msgid "In this training session you'll learn how to build an effective base"
-msgstr ""
+msgstr "V této tréningové lekci se naučíš jak postavit efektivní základnu"
 
 #: data/messages/strings/tutstrings.txt:48
 msgid "Oil resources are key to your success"
-msgstr ""
+msgstr "Ropné zdroje jsou klíčem k tvému úspěchu"
 
 #: data/messages/strings/tutstrings.txt:49
 msgid "Now click where you want to position the delivery point"
-msgstr ""
+msgstr "Nyní klikni tam, kde chceš umístit dodací místo"
 
 #: data/messages/strings/tutstrings.txt:50
 msgid "Now left click the power generator site"
-msgstr ""
+msgstr "Nyní klikni levým tlačítkem na místo generátoru"
 
 #: data/messages/strings/tutstrings.txt:51
 msgid "During missions you need to locate and recover technologies from before the Collapse"
-msgstr ""
+msgstr "Během misí potřebuješ nalézt a získat technologie z doby před Kolapsem"
 
 #: data/mp/messages/strings/names.txt:144
 msgid "Viper Light Cannon Half-track"
@@ -9909,42 +9911,46 @@ msgid "Python HVC Hover"
 msgstr ""
 
 #: data/mp/messages/strings/names.txt:1911
-msgid "Python Scourge Tracks"
-msgstr ""
-
-#: data/mp/messages/strings/names.txt:1912
-msgid "Python Gauss Cannon Tracks"
+msgid "Python Tank Killer Tracks"
 msgstr ""
 
 #: data/mp/messages/strings/names.txt:1913
-msgid "Python Pulse Laser Tracks"
+msgid "Python Scourge Tracks"
 msgstr ""
 
 #: data/mp/messages/strings/names.txt:1914
-msgid "Tiger Pulse Laser Tracks"
+msgid "Python Gauss Cannon Tracks"
 msgstr ""
 
 #: data/mp/messages/strings/names.txt:1915
-msgid "Tiger Heavy Laser Tracks"
+msgid "Python Pulse Laser Tracks"
 msgstr ""
 
 #: data/mp/messages/strings/names.txt:1916
-msgid "Wyvern Gauss Cannon Tracks"
+msgid "Tiger Pulse Laser Tracks"
 msgstr ""
 
 #: data/mp/messages/strings/names.txt:1917
-msgid "Wyvern Pulse Laser Tracks"
+msgid "Tiger Heavy Laser Tracks"
 msgstr ""
 
 #: data/mp/messages/strings/names.txt:1918
-msgid "Wyvern Heavy Laser Tracks"
+msgid "Wyvern Gauss Cannon Tracks"
+msgstr ""
+
+#: data/mp/messages/strings/names.txt:1919
+msgid "Wyvern Pulse Laser Tracks"
 msgstr ""
 
 #: data/mp/messages/strings/names.txt:1920
+msgid "Wyvern Heavy Laser Tracks"
+msgstr ""
+
+#: data/mp/messages/strings/names.txt:1922
 msgid "Viper Machinegun Half-Track"
 msgstr ""
 
-#: data/mp/messages/strings/names.txt:1921
+#: data/mp/messages/strings/names.txt:1923
 msgid "Viper Flamer Half-Track"
 msgstr ""
 
@@ -10090,7 +10096,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:1987
 #: data/mp/messages/strings/resstrings.txt:1993
 msgid "Plasma Cannon firing plasma"
-msgstr ""
+msgstr "Plazmový kanón střílející plazmu"
 
 #: data/mp/messages/strings/resstrings.txt:1994
 #: data/mp/messages/strings/resstrings.txt:2018
@@ -10099,7 +10105,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:2036
 #: data/mp/messages/strings/resstrings.txt:2042
 msgid "Best Targets : Vehicles"
-msgstr ""
+msgstr "Nejlepší cíle : Vozidla"
 
 #: data/mp/messages/strings/resstrings.txt:1999
 msgid "Armed with Cyborg Scourge Missile Launcher"
@@ -10122,11 +10128,11 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:2031
 #: data/mp/messages/strings/resstrings.txt:2037
 msgid "Defensive Strength : High"
-msgstr ""
+msgstr "Síla obrany : Vysoká"
 
 #: data/mp/messages/strings/resstrings.txt:2023
 msgid "Uses advanced cannon technology"
-msgstr ""
+msgstr "Použivá pokročilou technologii kanónu"
 
 #: data/mp/messages/strings/resstrings.txt:2029
 msgid "Uses advanced rocket gun technology"
@@ -10236,60 +10242,60 @@ msgstr ""
 #: lib/framework/i18n.c:42
 #: lib/framework/i18n.c:64
 msgid "System locale"
-msgstr ""
+msgstr "Systémové místo"
 
 #: lib/framework/i18n.c:44
 #: lib/framework/i18n.c:69
 msgid "Danish"
-msgstr ""
+msgstr "Dánsky"
 
 #: lib/framework/i18n.c:45
 #: lib/framework/i18n.c:68
 msgid "German"
-msgstr ""
+msgstr "Německy"
 
 #: lib/framework/i18n.c:46
 #: lib/framework/i18n.c:66
 msgid "English"
-msgstr ""
+msgstr "Anglicky"
 
 #: lib/framework/i18n.c:47
 #: lib/framework/i18n.c:70
 msgid "French"
-msgstr ""
+msgstr "Francouzsky"
 
 #: lib/framework/i18n.c:48
 #: lib/framework/i18n.c:71
 msgid "Italian"
-msgstr ""
+msgstr "Italsky"
 
 #: lib/framework/i18n.c:49
 #: lib/framework/i18n.c:73
 msgid "Dutch"
-msgstr ""
+msgstr "Holandsky"
 
 #: lib/framework/i18n.c:50
 #: lib/framework/i18n.c:67
 msgid "Norwegian"
-msgstr ""
+msgstr "Norsky"
 
 #: lib/framework/i18n.c:51
 #: lib/framework/i18n.c:74
 msgid "Portuegese"
-msgstr ""
+msgstr "Portugalsky"
 
 #: lib/framework/i18n.c:52
 #: lib/framework/i18n.c:75
 msgid "Russian"
-msgstr ""
+msgstr "Rusky"
 
 #: lib/framework/i18n.c:53
 msgid "Swedish"
-msgstr ""
+msgstr "Švédsky"
 
 #: lib/framework/i18n.c:72
 msgid "Latin"
-msgstr ""
+msgstr "Latinsky"
 
 #: src/clparse.c:88
 msgid "Run in cheat mode"
@@ -10333,11 +10339,12 @@ msgstr "Spustit hru v celoobrazovkovém režimu"
 
 #: src/clparse.c:94
 msgid "Load a specific game"
-msgstr ""
+msgstr "Nahrát určitou hru"
 
 #: src/clparse.c:94
+#, fuzzy
 msgid "game-name"
-msgstr ""
+msgstr "Jméno-hry"
 
 #: src/clparse.c:95
 msgid "Show this help message and exit"
@@ -10415,40 +10422,41 @@ msgstr "Hráč"
 #: src/design.c:474
 #: src/design.c:3547
 msgid "New Vehicle"
-msgstr ""
+msgstr "Nové vozidlo"
 
 #: src/design.c:521
 msgid "Vehicle Body"
-msgstr ""
+msgstr "Tělo vozidla"
 
 #: src/design.c:543
 msgid "Vehicle Propulsion"
-msgstr ""
+msgstr "Pohon vozidla"
 
 #: src/design.c:566
 #: src/design.c:591
 #: src/design.c:617
 msgid "Vehicle Turret"
-msgstr ""
+msgstr "Věž vozidla"
 
 #: src/design.c:638
 msgid "Delete Design"
-msgstr ""
+msgstr "Smazat náčrtek"
 
 #: src/design.c:692
 #: src/design.c:740
 msgid "Kinetic Armour"
-msgstr ""
+msgstr "Pohybové brnění"
 
 #: src/design.c:701
 #: src/design.c:751
 msgid "Thermal Armour"
-msgstr ""
+msgstr "Tepelné brnění"
 
 #: src/design.c:717
 #: src/design.c:771
+#, fuzzy
 msgid "Engine Output"
-msgstr ""
+msgstr "Výfuk"
 
 #: src/design.c:725
 #: src/design.c:780
@@ -10470,7 +10478,7 @@ msgstr "Hmotnost"
 #: src/design.c:811
 #: src/design.c:831
 msgid "Total Power Required"
-msgstr ""
+msgstr "Celkem požadovaná energie"
 
 #: src/design.c:844
 #: src/design.c:865
@@ -10480,7 +10488,7 @@ msgstr ""
 #: src/design.c:1061
 #: src/design.c:1093
 msgid "Power Usage"
-msgstr ""
+msgstr "Použitá energie"
 
 #: src/design.c:1343
 msgid "Transporter"
@@ -10488,7 +10496,7 @@ msgstr "Transportér"
 
 #: src/design.c:1571
 msgid "Sensor Range"
-msgstr ""
+msgstr "Dosah snímačů"
 
 #: src/design.c:1580
 msgid "Sensor Power"
@@ -10508,7 +10516,7 @@ msgstr ""
 #: src/design.c:1734
 #: src/design.c:1766
 msgid "Range"
-msgstr ""
+msgstr "Rozsah"
 
 #: src/design.c:1742
 #: src/design.c:1775
@@ -10558,18 +10566,20 @@ msgid "%s - Damage %d%% - Experience %d, %s"
 msgstr "%s - Poškození %d%% - Zkušenosti %d, %s"
 
 #: src/display.c:2055
+#, fuzzy
 msgid "Truck ordered to build Oil Derrick"
-msgstr ""
+msgstr "Nákladní auto dostalo rozkaz postavit ropnou věž"
 
 #: src/droid.c:190
 msgid "Unit Lost!"
 msgstr "Jednotka ztracena!"
 
-#: src/droid.c:1614
+#: src/droid.c:1619
+#, fuzzy
 msgid "Structure Restored"
-msgstr ""
+msgstr "Budova obnovena"
 
-#: src/droid.c:3401
+#: src/droid.c:3407
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
@@ -10577,7 +10587,7 @@ msgstr[0] "Skupina %u vybrána - %u Jednotka"
 msgstr[1] "Skupina %u vybrána - %u Jednotky"
 msgstr[2] "Skupina %u vybrána - %u Jednotek"
 
-#: src/droid.c:3414
+#: src/droid.c:3420
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
@@ -10585,54 +10595,57 @@ msgstr[0] "%u jednotka začleněna do Skupiny %u"
 msgstr[1] "%u jednotky začleněny do Skupiny %u"
 msgstr[2] "%u jednotek začleněno do Skupiny %u"
 
-#: src/droid.c:3427
-#, c-format
+#: src/droid.c:3433
+#, fuzzy, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Zameřeno na skupinu %u - %u jednotka"
+msgstr[1] "Zameřeno na skupinu %u - %u jednotky"
+msgstr[2] "Zameřeno na skupinu %u - %u jednotek"
 
-#: src/droid.c:3431
-#, c-format
+#: src/droid.c:3437
+#, fuzzy, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Vyrovnání se skupinou %u - %u jednotka"
+msgstr[1] "Vyrovnání se skupinou %u - %u jednotky"
+msgstr[2] "Vyrovnání se skupinou %u - %u jednotek"
 
-#: src/droid.c:3657
+#: src/droid.c:3663
 msgid "Rookie"
 msgstr "Nováček"
 
-#: src/droid.c:3658
+#: src/droid.c:3664
 msgctxt "rank"
 msgid "Green"
 msgstr "Zelenáč"
 
-#: src/droid.c:3659
-msgid "Trained"
-msgstr ""
-
-#: src/droid.c:3660
-msgid "Regular"
-msgstr ""
-
-#: src/droid.c:3661
-msgid "Professional"
-msgstr ""
-
-#: src/droid.c:3662
-msgid "Veteran"
-msgstr ""
-
-#: src/droid.c:3663
-msgid "Elite"
-msgstr ""
-
-#: src/droid.c:3664
-msgid "Special"
-msgstr ""
-
 #: src/droid.c:3665
+#, fuzzy
+msgid "Trained"
+msgstr "Trénovaný"
+
+#: src/droid.c:3666
+msgid "Regular"
+msgstr "Běžný"
+
+#: src/droid.c:3667
+msgid "Professional"
+msgstr "Profesionální"
+
+#: src/droid.c:3668
+msgid "Veteran"
+msgstr "Veterán"
+
+#: src/droid.c:3669
+msgid "Elite"
+msgstr "Elita"
+
+#: src/droid.c:3670
+msgid "Special"
+msgstr "Speciální"
+
+#: src/droid.c:3671
 msgid "Hero"
 msgstr "Hrdina"
 
@@ -10712,7 +10725,7 @@ msgstr ""
 
 #: src/frontend.c:479
 msgid "Join Game"
-msgstr ""
+msgstr "Připojit se ke hře"
 
 #: src/frontend.c:481
 msgid "One Player Skirmish"
@@ -10784,22 +10797,22 @@ msgstr "Mlha"
 #: src/frontend.c:634
 #: src/frontend.c:752
 msgid "Mist"
-msgstr ""
+msgstr "Mlha"
 
 #: src/frontend.c:638
 #: src/frontend.c:745
 #: src/multiint.c:724
 msgid "Fog Of War"
-msgstr ""
+msgstr "Válečná mlha"
 
 #: src/frontend.c:643
 msgid "Video Playback"
-msgstr ""
+msgstr "Přehrávání videa"
 
 #: src/frontend.c:646
 #: src/frontend.c:802
 msgid "Full"
-msgstr ""
+msgstr "Plný"
 
 #: src/frontend.c:650
 #: src/frontend.c:792
@@ -10811,7 +10824,7 @@ msgstr ""
 #: src/frontend.c:653
 #: src/frontend.c:797
 msgid "Minimal"
-msgstr ""
+msgstr "Minimální"
 
 #: src/frontend.c:660
 #: src/frontend.c:664
@@ -10844,7 +10857,7 @@ msgstr "Grafický mód*"
 #: src/frontend.c:914
 #: src/frontend.c:968
 msgid "Fullscreen"
-msgstr ""
+msgstr "Celá obrazovka"
 
 #: src/frontend.c:922
 msgid "Resolution*"
@@ -10888,7 +10901,7 @@ msgstr "Těžká"
 #: src/frontend.c:1088
 #: src/frontend.c:1131
 msgid "Scroll Speed"
-msgstr ""
+msgstr "Rychlost rolování"
 
 #: src/frontend.c:1102
 #: src/frontend.c:1128
@@ -10900,11 +10913,11 @@ msgstr "Jazyk"
 msgid "Unit Colour"
 msgstr "Barva jednotky"
 
-#: src/hci.c:994
-#: src/hci.c:3857
-#: src/hci.c:4008
-#: src/hci.c:4461
-#: src/hci.c:5685
+#: src/hci.c:1017
+#: src/hci.c:3880
+#: src/hci.c:4031
+#: src/hci.c:4484
+#: src/hci.c:5708
 #: src/intelmap.c:529
 #: src/intorder.c:659
 #: src/loadsave.c:261
@@ -10912,140 +10925,144 @@ msgstr "Barva jednotky"
 #: src/multimenu.c:1250
 #: src/transporter.c:285
 #: src/transporter.c:374
-#: src/transporter.c:872
+#: src/transporter.c:839
 msgid "Close"
 msgstr "Zavřít"
 
-#: src/hci.c:1340
-#: src/hci.c:1686
+#: src/hci.c:1363
+#: src/hci.c:1709
 #: src/loop.c:511
 #: src/loop.c:523
 #: src/mission.c:2895
 msgid "GAME SAVED!"
 msgstr "HRA ULOŽENA!"
 
-#: src/hci.c:2094
+#: src/hci.c:2117
 msgid "Failed to create building"
 msgstr ""
 
-#: src/hci.c:2117
-#, c-format
+#: src/hci.c:2140
+#, fuzzy, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new structure: %s."
-msgstr ""
+msgstr "Hráč %u podvádí ( ladící menu ) sebe sama novou budovou: %s"
 
-#: src/hci.c:2131
+#: src/hci.c:2154
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new feature: %s."
 msgstr ""
 
-#: src/hci.c:2150
+#: src/hci.c:2173
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new droid: %s."
 msgstr ""
 
-#: src/hci.c:3759
+#: src/hci.c:3782
 msgid "Commanders (F6)"
 msgstr "Velitelé (F6)"
 
-#: src/hci.c:3775
+#: src/hci.c:3798
 msgid "Intelligence Display (F5)"
 msgstr "Zpravodajský display (F5)"
 
-#: src/hci.c:3791
+#: src/hci.c:3814
 msgid "Manufacture (F1)"
 msgstr "Výroba (F1)"
 
-#: src/hci.c:3807
+#: src/hci.c:3830
 msgid "Design (F4)"
 msgstr "Konstrukce (F4)"
 
-#: src/hci.c:3823
+#: src/hci.c:3846
 msgid "Research (F2)"
 msgstr "Výzkum (F2)"
 
-#: src/hci.c:3839
+#: src/hci.c:3862
 msgid "Build (F3)"
 msgstr "Stavba (F3)"
 
-#: src/hci.c:3919
+#: src/hci.c:3942
 #: src/multiint.c:772
 #: src/multiint.c:776
 msgid "Power"
 msgstr "Energie"
 
-#: src/hci.c:4103
+#: src/hci.c:4126
 #, fuzzy
 msgid "Tile"
 msgstr "soubor"
 
-#: src/hci.c:4104
+#: src/hci.c:4127
+#, fuzzy
 msgid "Place tiles on map"
-msgstr ""
+msgstr "Nastavení limitu budov"
 
-#: src/hci.c:4113
+#: src/hci.c:4136
 msgid "Unit"
 msgstr "Jednotka"
 
-#: src/hci.c:4114
+#: src/hci.c:4137
+#, fuzzy
 msgid "Place Unit on map"
-msgstr ""
+msgstr "Nastavení limitu budov"
 
-#: src/hci.c:4122
+#: src/hci.c:4145
 msgid "Struct"
-msgstr ""
+msgstr "Stavba"
 
-#: src/hci.c:4123
+#: src/hci.c:4146
 #, fuzzy
 msgid "Place Structures on map"
 msgstr "Nastavení limitu budov"
 
-#: src/hci.c:4131
+#: src/hci.c:4154
 msgid "Feat"
 msgstr ""
 
-#: src/hci.c:4132
+#: src/hci.c:4155
+#, fuzzy
 msgid "Place Features on map"
-msgstr ""
+msgstr "Nastavení limitu budov"
 
-#: src/hci.c:4143
+#: src/hci.c:4166
+#, fuzzy
 msgid "Pause or unpause the game"
-msgstr ""
+msgstr "Hostitel opustil hru!"
 
-#: src/hci.c:4157
+#: src/hci.c:4180
 msgid "Align height of all map objects"
 msgstr ""
 
-#: src/hci.c:4182
+#: src/hci.c:4205
 #: src/ingameop.c:121
 #: src/ingameop.c:254
 #: src/ingameop.c:259
 msgid "Quit"
 msgstr "Ukončit"
 
-#: src/hci.c:4183
+#: src/hci.c:4206
 msgid "Exit Game"
 msgstr "Ukončit hru"
 
-#: src/hci.c:4546
+#: src/hci.c:4569
 #: src/intdisplay.c:211
 #: src/intdisplay.c:254
 #: src/intdisplay.c:300
 msgid "Progress Bar"
-msgstr ""
+msgstr "Panel průběhu"
 
-#: src/hci.c:5600
+#: src/hci.c:5623
 msgid "Factory Delivery Point"
 msgstr ""
 
-#: src/hci.c:5619
+#: src/hci.c:5642
 msgid "Loop Production"
-msgstr "Opakuj produkci"
+msgstr "Opakovat výrobu"
 
-#: src/hci.c:5710
+#: src/hci.c:5733
 msgid "Tab Scroll left"
 msgstr ""
 
-#: src/hci.c:5727
+#: src/hci.c:5750
 msgid "Tab Scroll right"
 msgstr ""
 
@@ -11091,18 +11108,19 @@ msgstr ""
 
 #: src/intorder.c:178
 #: src/keymap.c:388
+#, fuzzy
 msgid "Short Range"
-msgstr ""
+msgstr "Krátký dostřel"
 
 #: src/intorder.c:179
 #: src/keymap.c:394
 msgid "Long Range"
-msgstr ""
+msgstr "Dlouhý dostřel"
 
 #: src/intorder.c:180
 #: src/keymap.c:387
 msgid "Optimum Range"
-msgstr ""
+msgstr "optimální dostřel"
 
 #: src/intorder.c:181
 #: src/keymap.c:407
@@ -11192,23 +11210,26 @@ msgstr ""
 
 #: src/keybind.c:131
 msgid "Sorry, that cheat is disabled in multiplayer games."
-msgstr ""
+msgstr "Omlouváme se, ale tento podvod je vypnutý ve hře pro více hráčů."
 
 #: src/keybind.c:195
 msgid "Lets us see what you see!"
-msgstr ""
+msgstr "Ukaž nám co vidíš!"
 
 #: src/keybind.c:197
+#, fuzzy
 msgid "Fine, sensor display is off!"
-msgstr ""
+msgstr "Fine, snímač displeje je vypnutý!"
 
 #: src/keybind.c:295
+#, fuzzy
 msgid "Hard as nails!!!"
-msgstr ""
+msgstr "jako ocel"
 
 #: src/keybind.c:308
+#, fuzzy
 msgid "Takings thing easy!"
-msgstr ""
+msgstr "Věci jdou lehce!"
 
 #: src/keybind.c:322
 msgid "1000 big ones!!!"
@@ -11216,11 +11237,11 @@ msgstr ""
 
 #: src/keybind.c:336
 msgid "Power overwhelming"
-msgstr ""
+msgstr "Ohromující výkon"
 
 #: src/keybind.c:350
 msgid "Back to normality!"
-msgstr ""
+msgstr "Zpátky do normálu!"
 
 #: src/keybind.c:363
 msgid "Getting tricky!"
@@ -11232,11 +11253,11 @@ msgstr ""
 
 #: src/keybind.c:386
 msgid "FPS display is enabled."
-msgstr ""
+msgstr "Zobrazení FPS je zapnuté."
 
 #: src/keybind.c:390
 msgid "FPS display is disabled."
-msgstr ""
+msgstr "Zobrazení FPS je vypnuté."
 
 #: src/keybind.c:403
 #, c-format
@@ -11256,12 +11277,13 @@ msgid "All items made available"
 msgstr ""
 
 #: src/keybind.c:608
+#, fuzzy
 msgid "Fog off"
-msgstr ""
+msgstr "Vypnutá mlha"
 
 #: src/keybind.c:614
 msgid "Fog on"
-msgstr ""
+msgstr "Zapnutá mlha"
 
 #: src/keybind.c:1200
 msgid "View Aligned to North"
@@ -11280,8 +11302,9 @@ msgid "Demo mode off - Returning to normal game mode"
 msgstr ""
 
 #: src/keybind.c:1358
+#, fuzzy
 msgid "Unable to locate any resource extractors!"
-msgstr ""
+msgstr "Nelze lokalizovat žádný sběrač surovin!"
 
 #: src/keybind.c:1581
 msgid "Oh, the weather outside is frightful... SNOW"
@@ -11297,7 +11320,7 @@ msgstr ""
 
 #: src/keybind.c:1626
 msgid "Enemy destroyed by cheating!"
-msgstr ""
+msgstr "Nepřítel zničen podváděním!"
 
 #: src/keybind.c:2152
 msgid "Centered on player HQ, direction NORTH"
@@ -11305,7 +11328,7 @@ msgstr ""
 
 #: src/keybind.c:2164
 msgid "Unable to locate HQ!"
-msgstr ""
+msgstr "Nelze nalézt HQ!"
 
 #: src/keybind.c:2180
 msgid "Formation speed limiting OFF"
@@ -11318,8 +11341,9 @@ msgstr ""
 #: src/keybind.c:2317
 #: src/keybind.c:2358
 #: src/keybind.c:2380
+#, fuzzy
 msgid "Game Speed Reset"
-msgstr ""
+msgstr "Restartování herní rychlosti"
 
 #: src/keybind.c:2321
 #, c-format
@@ -11345,11 +11369,11 @@ msgstr ""
 
 #: src/keybind.c:2412
 msgid "Radar showing player colors"
-msgstr ""
+msgstr "Radar ukazuje barvy hráčů"
 
 #: src/keybind.c:2429
 msgid "Radar showing only objects"
-msgstr ""
+msgstr "Radar ukazuje pouze objekty"
 
 #: src/keybind.c:2432
 msgid "Radar blending terrain and height"
@@ -11357,11 +11381,11 @@ msgstr ""
 
 #: src/keybind.c:2435
 msgid "Radar showing terrain"
-msgstr ""
+msgstr "Radar ukazuje terén"
 
 #: src/keybind.c:2438
 msgid "Radar showing height"
-msgstr ""
+msgstr "Radar ukazuje výšku"
 
 #: src/keyedit.c:356
 msgid "KEY MAPPING"
@@ -11386,15 +11410,15 @@ msgstr ""
 
 #: src/keymap.c:293
 msgid "Research"
-msgstr ""
+msgstr "Výzkum"
 
 #: src/keymap.c:294
 msgid "Build"
-msgstr ""
+msgstr "Stavět"
 
 #: src/keymap.c:295
 msgid "Design"
-msgstr ""
+msgstr "Návrh"
 
 #: src/keymap.c:296
 msgid "Intelligence Display"
@@ -11426,47 +11450,56 @@ msgstr ""
 
 #: src/keymap.c:303
 msgid "View Location of Previous Message"
-msgstr ""
+msgstr "Zobrazit pozici předchozí zprávy"
 
 #: src/keymap.c:308
+#, fuzzy
 msgid "Assign Group 0"
-msgstr ""
+msgstr "Přiřadit skupině 0"
 
 #: src/keymap.c:309
+#, fuzzy
 msgid "Assign Group 1"
-msgstr ""
+msgstr "Přiřadit skupině 1"
 
 #: src/keymap.c:310
 msgid "Assign Group 2"
-msgstr ""
+msgstr "Přiřadit skupině 2"
 
 #: src/keymap.c:311
+#, fuzzy
 msgid "Assign Group 3"
-msgstr ""
+msgstr "Přiřadit skupině 3"
 
 #: src/keymap.c:312
+#, fuzzy
 msgid "Assign Group 4"
-msgstr ""
+msgstr "Přiřadit skupině 4"
 
 #: src/keymap.c:313
+#, fuzzy
 msgid "Assign Group 5"
-msgstr ""
+msgstr "Přiřadit skupině 5"
 
 #: src/keymap.c:314
+#, fuzzy
 msgid "Assign Group 6"
-msgstr ""
+msgstr "Přiřadit skupině 6"
 
 #: src/keymap.c:315
+#, fuzzy
 msgid "Assign Group 7"
-msgstr ""
+msgstr "Přiřadit skupině 7"
 
 #: src/keymap.c:316
+#, fuzzy
 msgid "Assign Group 8"
-msgstr ""
+msgstr "Přiřadit skupině 8"
 
 #: src/keymap.c:317
+#, fuzzy
 msgid "Assign Group 9"
-msgstr ""
+msgstr "Přiřadit skupině 9"
 
 #: src/keymap.c:321
 msgid "Select Group 0"
@@ -11614,35 +11647,36 @@ msgstr ""
 
 #: src/keymap.c:365
 msgid "Decrease Game Speed"
-msgstr ""
+msgstr "Snížit rychlost hry"
 
 #: src/keymap.c:366
 msgid "Increase Game Speed"
-msgstr ""
+msgstr "Zvýšit rychlost hry"
 
 #: src/keymap.c:367
 msgid "Reset Game Speed"
-msgstr ""
+msgstr "Resetovat rychlost hry"
 
 #: src/keymap.c:368
 msgid "View North"
-msgstr ""
+msgstr "Pohled na sever"
 
 #: src/keymap.c:369
 msgid "View South"
-msgstr ""
+msgstr "Pohled na jih"
 
 #: src/keymap.c:370
 msgid "View East"
-msgstr ""
+msgstr "Pohled na východ"
 
 #: src/keymap.c:371
 msgid "View West"
-msgstr ""
+msgstr "Pohled na západ"
 
 #: src/keymap.c:372
+#, fuzzy
 msgid "View next Oil Derrick"
-msgstr ""
+msgstr "Zobrazit další ropnou věž"
 
 #: src/keymap.c:373
 msgid "View next Repair Unit"
@@ -11682,11 +11716,11 @@ msgstr ""
 
 #: src/keymap.c:386
 msgid "Return to HQ"
-msgstr ""
+msgstr "Zpět na HQ"
 
 #: src/keymap.c:393
 msgid "Send Text Message"
-msgstr ""
+msgstr "Poslat textovou zprávu"
 
 #: src/keymap.c:413
 msgid "Select all Combat Units"
@@ -11738,7 +11772,7 @@ msgstr "Vybrat další Výzkumné Zařízení"
 
 #: src/keymap.c:431
 msgid "Select next Power Generator"
-msgstr ""
+msgstr "Vybrat další generátor energie"
 
 #: src/keymap.c:432
 msgid "Select next Cyborg Factory"
@@ -11754,11 +11788,11 @@ msgstr "Naložit transport"
 
 #: src/mission.c:2763
 msgid "OBJECTIVE ACHIEVED"
-msgstr ""
+msgstr "CÍL SPLNĚN"
 
 #: src/mission.c:2769
 msgid "OBJECTIVE FAILED"
-msgstr ""
+msgstr "SELHÁNÍ"
 
 #: src/mission.c:2795
 #: src/mission.c:2832
@@ -11771,44 +11805,44 @@ msgid "Continue Game"
 msgstr "Pokračovat ve hře"
 
 #: src/multigifts.c:168
-#, c-format
+#, fuzzy, c-format
 msgid "%s Gives You A Visibility Report"
-msgstr ""
+msgstr "%s dá ti viditelnou zprávu"
 
 #: src/multigifts.c:188
-#, c-format
+#, fuzzy, c-format
 msgid "%s Gives you a %s"
-msgstr ""
+msgstr "%s ti dá %s"
 
 #: src/multigifts.c:238
-#, c-format
+#, fuzzy, c-format
 msgid "Tried to give away a %s - but this is not allowed."
-msgstr ""
+msgstr "Zkouší dát pryč %s - ale to není umožněno"
 
 #: src/multigifts.c:297
-#, c-format
+#, fuzzy, c-format
 msgid "%s Gives You Technology Documents"
-msgstr ""
+msgstr "%s ti á technickou dokumentaci"
 
 #: src/multigifts.c:335
-#, c-format
+#, fuzzy, c-format
 msgid "%s Gives You Power"
-msgstr ""
+msgstr "%s dá ti sílu"
 
 #: src/multigifts.c:355
-#, c-format
+#, fuzzy, c-format
 msgid "%s Requests An Alliance With You"
-msgstr ""
+msgstr "%s požaduje s tebou spolčení"
 
 #: src/multigifts.c:364
-#, c-format
+#, fuzzy, c-format
 msgid "You Invite %s To Form An Alliance"
-msgstr ""
+msgstr "Jsi pozván %s ze spolku"
 
 #: src/multigifts.c:384
 #, c-format
 msgid "%s Breaks The Alliance With %s"
-msgstr ""
+msgstr "%s přerušil spolek s %s"
 
 #: src/multigifts.c:410
 #, c-format
@@ -11859,7 +11893,7 @@ msgstr "NASTAVENÍ"
 
 #: src/multiint.c:688
 msgid "Select Game Name"
-msgstr "Pojmenuj hru"
+msgstr "Vyber jméno hry"
 
 #: src/multiint.c:689
 msgid "Select Map"
@@ -11871,19 +11905,21 @@ msgstr "Hra"
 
 #: src/multiint.c:696
 msgid "Mayhem"
-msgstr ""
+msgstr "Mayhem"
 
 #: src/multiint.c:698
+#, fuzzy
 msgid "Skirmish"
-msgstr ""
+msgstr "Šarvátka"
 
 #: src/multiint.c:719
 msgid "Select Player Name"
 msgstr "Vyber jméno hráče"
 
 #: src/multiint.c:725
+#, fuzzy
 msgid "Distance Fog"
-msgstr ""
+msgstr "vzdálená mlha"
 
 #: src/multiint.c:738
 #: src/multimenu.c:706
@@ -11904,16 +11940,19 @@ msgid "Locked Teams"
 msgstr "Pevné Týmy"
 
 #: src/multiint.c:779
+#, fuzzy
 msgid "Low Power Levels"
-msgstr ""
+msgstr "Nízkoenergetické úrovně"
 
 #: src/multiint.c:781
+#, fuzzy
 msgid "Medium Power Levels"
-msgstr ""
+msgstr "Středně energetické úrovně"
 
 #: src/multiint.c:783
+#, fuzzy
 msgid "High Power Levels"
-msgstr ""
+msgstr "Vysokoenergetické úrovně"
 
 #: src/multiint.c:803
 #: src/multiint.c:807
@@ -11941,8 +11980,9 @@ msgid "Click to see Map"
 msgstr ""
 
 #: src/multiint.c:847
+#, fuzzy
 msgid "Start Hosting Game"
-msgstr ""
+msgstr "Začni hostovat hru"
 
 #: src/multiint.c:855
 msgid "Set Structure Limits"
@@ -11971,11 +12011,11 @@ msgstr "CHAT"
 #: src/multiint.c:1997
 #, c-format
 msgid "The host has kicked %s from the game!"
-msgstr ""
+msgstr "Hostitel vyhodil %s ze hry!"
 
 #: src/multiint.c:2088
 msgid "Host is Starting Game"
-msgstr ""
+msgstr "Host začíná hru"
 
 #: src/multiint.c:2535
 msgid "Players"
@@ -12062,7 +12102,7 @@ msgstr ""
 
 #: src/multiplay.c:729
 msgid "The host has left the game!"
-msgstr ""
+msgstr "Hostitel opustil hru!"
 
 #: src/multiplay.c:1908
 msgid "Green"
@@ -12152,7 +12192,7 @@ msgstr "Celkem Budov: %u"
 #: src/scores.c:108
 #, c-format
 msgid "Rookie: %u"
-msgstr ""
+msgstr "Bažant: %u"
 
 #: src/scores.c:109
 #, fuzzy, c-format
@@ -12163,37 +12203,37 @@ msgstr "Zelená"
 #: src/scores.c:110
 #, c-format
 msgid "Trained: %u"
-msgstr ""
+msgstr "Trénovaný: %u"
 
 #: src/scores.c:111
-#, c-format
+#, fuzzy, c-format
 msgid "Regular: %u"
-msgstr ""
+msgstr "Obvyklý: %u"
 
 #: src/scores.c:112
 #, c-format
 msgid "Professional: %u"
-msgstr ""
+msgstr "Profesionál: %u"
 
 #: src/scores.c:113
 #, c-format
 msgid "Veteran: %u"
-msgstr ""
+msgstr "Veterán: %u"
 
 #: src/scores.c:114
 #, c-format
 msgid "Elite: %u"
-msgstr ""
+msgstr "Elita: %u"
 
 #: src/scores.c:115
 #, c-format
 msgid "Special: %u"
-msgstr ""
+msgstr "Speciální: %u"
 
 #: src/scores.c:116
 #, c-format
 msgid "Hero: %u"
-msgstr ""
+msgstr "Hrdina: %u"
 
 #: src/scores.c:350
 msgid "Unit Losses"
@@ -12222,20 +12262,20 @@ msgstr "Čas Mise - %s"
 msgid "Total Game Time - %s"
 msgstr "Celkový Čas Hry - %s"
 
-#: src/scriptfuncs.c:3211
+#: src/scriptfuncs.c:3216
 msgid "YOU ARE VICTORIOUS!"
 msgstr ""
 
-#: src/scriptfuncs.c:3215
+#: src/scriptfuncs.c:3220
 msgid "YOU WERE DEFEATED!"
 msgstr ""
 
-#: src/scriptfuncs.c:10152
+#: src/scriptfuncs.c:10161
 #, c-format
 msgid "Beacon received from %s!"
 msgstr ""
 
-#: src/scriptfuncs.c:10198
+#: src/scriptfuncs.c:10207
 #, c-format
 msgid "Beacon %d"
 msgstr ""
@@ -12265,68 +12305,68 @@ msgstr "Nemohu nalézt žádnou senzorovou jednotku!"
 msgid "Unable to locate any Commanders!"
 msgstr "Nemohu nalézt žádného velitele!"
 
-#: src/structure.c:2768
+#: src/structure.c:2774
 msgid "Command Control Limit Reached - Production Halted"
 msgstr ""
 
-#: src/structure.c:5838
-#: src/structure.c:5860
-#, c-format
+#: src/structure.c:5874
+#: src/structure.c:5896
+#, fuzzy, c-format
 msgid "%s - %u Unit assigned"
 msgid_plural "%s - %u Units assigned"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Jednotka přiřazena"
+msgstr[1] "Jednotky přiřazeny"
 
-#: src/structure.c:5897
-#, c-format
+#: src/structure.c:5946
+#, fuzzy, c-format
 msgid "%s - Connected %u of %u"
-msgstr ""
+msgstr "%s - Připojeno %u z %u"
 
-#: src/structure.c:5911
+#: src/structure.c:5960
 #, fuzzy, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - Poškození %u%%"
 
-#: src/structure.c:6031
 #: src/structure.c:6080
+#: src/structure.c:6129
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr ""
 
-#: src/structure.c:6315
+#: src/structure.c:6364
 msgid "Electronic Reward - Visibility Report"
 msgstr ""
 
-#: src/structure.c:6355
+#: src/structure.c:6404
 msgid "Factory Reward - Propulsion"
 msgstr ""
 
-#: src/structure.c:6379
+#: src/structure.c:6428
 msgid "Factory Reward - Body"
 msgstr ""
 
-#: src/structure.c:6403
+#: src/structure.c:6452
 msgid "Factory Reward - Weapon"
 msgstr ""
 
-#: src/structure.c:6412
+#: src/structure.c:6461
 msgid "Factory Reward - Nothing"
 msgstr ""
 
-#: src/structure.c:6440
+#: src/structure.c:6489
 msgid "Repair Facility Award - Repair"
 msgstr ""
 
-#: src/structure.c:6447
+#: src/structure.c:6496
 msgid "Repair Facility Award - Nothing"
 msgstr ""
 
-#: src/transporter.c:424
-#: src/transporter.c:478
+#: src/transporter.c:396
+#: src/transporter.c:450
 msgid "Launch Transport"
-msgstr "Start transportu"
+msgstr "Spustit transport"
 
-#: src/transporter.c:1860
+#: src/transporter.c:1702
 msgid "Reinforcements landing"
 msgstr "Posily přistály"
 

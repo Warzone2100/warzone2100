@@ -1,21 +1,22 @@
 # Polish translation for warzone2100
+# Copyright (c) 2008 Warzone 2100 Resurrection Project
 # Copyright (c) 2008 Rosetta Contributors and Canonical Ltd 2008
 # This file is distributed under the same license as the warzone2100 package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2008.
 #
+# komornik <kom997@gmail.com>, 2008.
 msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2008-05-09 16:13+0200\n"
-"PO-Revision-Date: 2008-04-23 04:59+0000\n"
+"POT-Creation-Date: 2008-05-10 17:49+0200\n"
+"PO-Revision-Date: 2008-05-09 16:56+0000\n"
 "Last-Translator: komornik <kom997@gmail.com>\n"
 "Language-Team: Polish <pl@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n%10>=2) && (n%10<=4) && ((n%100<10) || (n%100>=20)) ? 1 : 2;\n"
-"X-Launchpad-Export-Date: 2008-04-28 05:16+0000\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n%10>=2) && (n%10<=4) && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Launchpad-Export-Date: 2008-05-10 13:56+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: data/messages/strings/cam1strings.txt:3
@@ -203,7 +204,7 @@ msgstr ""
 #: data/messages/strings/cam2strings.txt:118
 #: data/messages/strings/cam3strings.txt:163
 msgid " "
-msgstr ""
+msgstr " "
 
 #: data/messages/strings/cam1strings.txt:65
 msgid "New Paradigm Transmission"
@@ -1624,6 +1625,7 @@ msgstr ""
 
 #: data/messages/strings/names.txt:194
 #: data/mp/messages/strings/names.txt:196
+#: data/mp/messages/strings/names.txt:1912
 msgid "Python Medium Cannon Tracks"
 msgstr ""
 
@@ -9909,42 +9911,46 @@ msgid "Python HVC Hover"
 msgstr ""
 
 #: data/mp/messages/strings/names.txt:1911
-msgid "Python Scourge Tracks"
-msgstr ""
-
-#: data/mp/messages/strings/names.txt:1912
-msgid "Python Gauss Cannon Tracks"
+msgid "Python Tank Killer Tracks"
 msgstr ""
 
 #: data/mp/messages/strings/names.txt:1913
-msgid "Python Pulse Laser Tracks"
+msgid "Python Scourge Tracks"
 msgstr ""
 
 #: data/mp/messages/strings/names.txt:1914
-msgid "Tiger Pulse Laser Tracks"
+msgid "Python Gauss Cannon Tracks"
 msgstr ""
 
 #: data/mp/messages/strings/names.txt:1915
-msgid "Tiger Heavy Laser Tracks"
+msgid "Python Pulse Laser Tracks"
 msgstr ""
 
 #: data/mp/messages/strings/names.txt:1916
-msgid "Wyvern Gauss Cannon Tracks"
+msgid "Tiger Pulse Laser Tracks"
 msgstr ""
 
 #: data/mp/messages/strings/names.txt:1917
-msgid "Wyvern Pulse Laser Tracks"
+msgid "Tiger Heavy Laser Tracks"
 msgstr ""
 
 #: data/mp/messages/strings/names.txt:1918
-msgid "Wyvern Heavy Laser Tracks"
+msgid "Wyvern Gauss Cannon Tracks"
+msgstr ""
+
+#: data/mp/messages/strings/names.txt:1919
+msgid "Wyvern Pulse Laser Tracks"
 msgstr ""
 
 #: data/mp/messages/strings/names.txt:1920
+msgid "Wyvern Heavy Laser Tracks"
+msgstr ""
+
+#: data/mp/messages/strings/names.txt:1922
 msgid "Viper Machinegun Half-Track"
 msgstr ""
 
-#: data/mp/messages/strings/names.txt:1921
+#: data/mp/messages/strings/names.txt:1923
 msgid "Viper Flamer Half-Track"
 msgstr ""
 
@@ -10566,27 +10572,27 @@ msgstr "Ciężarówka zobligowana do wybudowania platformy wiertniczej"
 msgid "Unit Lost!"
 msgstr "Jednostka utracona!"
 
-#: src/droid.c:1614
+#: src/droid.c:1619
 msgid "Structure Restored"
 msgstr "Struktura odbudowana"
 
-#: src/droid.c:3401
+#: src/droid.c:3407
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
-msgstr[0] ""
+msgstr[0] "Grupa %u wybrana - Oddział %u"
 msgstr[1] "Grupa %u wybrana - Oddział %u"
 msgstr[2] "Grupa %u wybrana - Oddziały %u"
 
-#: src/droid.c:3414
+#: src/droid.c:3420
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
-msgstr[0] ""
+msgstr[0] "Oddział %u przypisany do Grupy %u"
 msgstr[1] "Oddział %u przypisany do Grupy %u"
 msgstr[2] "Oddziały %u przypisany do Grupy %u"
 
-#: src/droid.c:3427
+#: src/droid.c:3433
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
@@ -10594,48 +10600,47 @@ msgstr[0] ""
 msgstr[1] "Wybrano Grupę %u - Oddział %u"
 msgstr[2] "Wybrano Grupę %u - Oddziały %u"
 
-#: src/droid.c:3431
+#: src/droid.c:3437
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] ""
 msgstr[1] ""
-msgstr[2] ""
 
-#: src/droid.c:3657
+#: src/droid.c:3663
 msgid "Rookie"
 msgstr "Nowicjusz"
 
-#: src/droid.c:3658
+#: src/droid.c:3664
 msgctxt "rank"
 msgid "Green"
 msgstr "Zielony"
 
-#: src/droid.c:3659
+#: src/droid.c:3665
 msgid "Trained"
 msgstr "Wyszkolony"
 
-#: src/droid.c:3660
+#: src/droid.c:3666
 msgid "Regular"
 msgstr "Zawodowy"
 
-#: src/droid.c:3661
+#: src/droid.c:3667
 msgid "Professional"
 msgstr "Profesjonalny"
 
-#: src/droid.c:3662
+#: src/droid.c:3668
 msgid "Veteran"
 msgstr "Weteran"
 
-#: src/droid.c:3663
+#: src/droid.c:3669
 msgid "Elite"
 msgstr "Elita"
 
-#: src/droid.c:3664
+#: src/droid.c:3670
 msgid "Special"
 msgstr "Specjalny"
 
-#: src/droid.c:3665
+#: src/droid.c:3671
 msgid "Hero"
 msgstr "Bohater"
 
@@ -10903,11 +10908,11 @@ msgstr "Język"
 msgid "Unit Colour"
 msgstr "Kolor jednostki"
 
-#: src/hci.c:994
-#: src/hci.c:3857
-#: src/hci.c:4008
-#: src/hci.c:4461
-#: src/hci.c:5685
+#: src/hci.c:1017
+#: src/hci.c:3880
+#: src/hci.c:4031
+#: src/hci.c:4484
+#: src/hci.c:5708
 #: src/intelmap.c:529
 #: src/intorder.c:659
 #: src/loadsave.c:261
@@ -10915,143 +10920,146 @@ msgstr "Kolor jednostki"
 #: src/multimenu.c:1250
 #: src/transporter.c:285
 #: src/transporter.c:374
-#: src/transporter.c:872
+#: src/transporter.c:839
 msgid "Close"
 msgstr "Zamknij"
 
-#: src/hci.c:1340
-#: src/hci.c:1686
+#: src/hci.c:1363
+#: src/hci.c:1709
 #: src/loop.c:511
 #: src/loop.c:523
 #: src/mission.c:2895
 msgid "GAME SAVED!"
 msgstr "Gra zapisana!"
 
-#: src/hci.c:2094
+#: src/hci.c:2117
 msgid "Failed to create building"
 msgstr ""
 
-#: src/hci.c:2117
+#: src/hci.c:2140
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new structure: %s."
 msgstr "Gracz %u używa kodu (debug menu) by zdobyć nową budowlę: %s."
 
-#: src/hci.c:2131
+#: src/hci.c:2154
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new feature: %s."
 msgstr "Gracz %u używa kodu (debug menu) by zdobyć nową cechę: %s."
 
-#: src/hci.c:2150
+#: src/hci.c:2173
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new droid: %s."
 msgstr "Gracz %u używa kodu (debug menu) by zdobyć nowego droida: %s."
 
-#: src/hci.c:3759
+#: src/hci.c:3782
 msgid "Commanders (F6)"
 msgstr "Dowódcy (F6)"
 
-#: src/hci.c:3775
+#: src/hci.c:3798
 msgid "Intelligence Display (F5)"
 msgstr "Dane wywiadu (F5)"
 
-#: src/hci.c:3791
+#: src/hci.c:3814
 msgid "Manufacture (F1)"
 msgstr "Produkcja (F1)"
 
-#: src/hci.c:3807
+#: src/hci.c:3830
 msgid "Design (F4)"
 msgstr "Design (F4)"
 
-#: src/hci.c:3823
+#: src/hci.c:3846
 msgid "Research (F2)"
 msgstr "Badania (F2)"
 
-#: src/hci.c:3839
+#: src/hci.c:3862
 msgid "Build (F3)"
 msgstr "Budynki (F3)"
 
-#: src/hci.c:3919
+#: src/hci.c:3942
 #: src/multiint.c:772
 #: src/multiint.c:776
 msgid "Power"
 msgstr "Moc"
 
-#: src/hci.c:4103
+#: src/hci.c:4126
 #, fuzzy
 msgid "Tile"
 msgstr "plik"
 
-#: src/hci.c:4104
+#: src/hci.c:4127
+#, fuzzy
 msgid "Place tiles on map"
-msgstr ""
+msgstr "Ustaw limit budowli"
 
-#: src/hci.c:4113
+#: src/hci.c:4136
 msgid "Unit"
 msgstr "Jednostka"
 
-#: src/hci.c:4114
+#: src/hci.c:4137
+#, fuzzy
 msgid "Place Unit on map"
-msgstr ""
+msgstr "Ustaw limit budowli"
 
-#: src/hci.c:4122
+#: src/hci.c:4145
 msgid "Struct"
 msgstr "Konstrukcje"
 
-#: src/hci.c:4123
+#: src/hci.c:4146
 #, fuzzy
 msgid "Place Structures on map"
 msgstr "Ustaw limit budowli"
 
-#: src/hci.c:4131
+#: src/hci.c:4154
 #, fuzzy
 msgid "Feat"
 msgstr "Cecha"
 
-#: src/hci.c:4132
+#: src/hci.c:4155
+#, fuzzy
 msgid "Place Features on map"
-msgstr ""
+msgstr "Ustaw limit budowli"
 
-#: src/hci.c:4143
+#: src/hci.c:4166
 #, fuzzy
 msgid "Pause or unpause the game"
 msgstr "Gospodarz opuścił grę!"
 
-#: src/hci.c:4157
+#: src/hci.c:4180
 msgid "Align height of all map objects"
 msgstr ""
 
-#: src/hci.c:4182
+#: src/hci.c:4205
 #: src/ingameop.c:121
 #: src/ingameop.c:254
 #: src/ingameop.c:259
 msgid "Quit"
 msgstr "Wyjdź"
 
-#: src/hci.c:4183
+#: src/hci.c:4206
 msgid "Exit Game"
 msgstr "Zakończ grę"
 
-#: src/hci.c:4546
+#: src/hci.c:4569
 #: src/intdisplay.c:211
 #: src/intdisplay.c:254
 #: src/intdisplay.c:300
 msgid "Progress Bar"
 msgstr "Pasek postępu"
 
-#: src/hci.c:5600
+#: src/hci.c:5623
 msgid "Factory Delivery Point"
 msgstr "Punkt dostaw fabryki"
 
-#: src/hci.c:5619
+#: src/hci.c:5642
 msgid "Loop Production"
 msgstr "Zapętlona produkcja"
 
-#: src/hci.c:5710
+#: src/hci.c:5733
 #, fuzzy
 msgid "Tab Scroll left"
 msgstr "Tab Scroll lewy"
 
-#: src/hci.c:5727
+#: src/hci.c:5750
 #, fuzzy
 msgid "Tab Scroll right"
 msgstr "Tab Scroll prawy"
@@ -11206,16 +11214,19 @@ msgid "Lets us see what you see!"
 msgstr "Zobaczmy to co ty widzisz!"
 
 #: src/keybind.c:197
+#, fuzzy
 msgid "Fine, sensor display is off!"
-msgstr ""
+msgstr "Spoko, wyłączam pokazywanie sensorów!"
 
 #: src/keybind.c:295
+#, fuzzy
 msgid "Hard as nails!!!"
-msgstr ""
+msgstr "Twarde jak gwoździe!!!"
 
 #: src/keybind.c:308
+#, fuzzy
 msgid "Takings thing easy!"
-msgstr ""
+msgstr "Na luzie!"
 
 #: src/keybind.c:322
 msgid "1000 big ones!!!"
@@ -11230,8 +11241,9 @@ msgid "Back to normality!"
 msgstr "Powrót do normalności!"
 
 #: src/keybind.c:363
+#, fuzzy
 msgid "Getting tricky!"
-msgstr ""
+msgstr "Oszukujemy!"
 
 #: src/keybind.c:376
 msgid "Twice as nice!"
@@ -11842,7 +11854,7 @@ msgstr "POŁĄCZENIE"
 
 #: src/multiint.c:398
 msgid "Lobby"
-msgstr ""
+msgstr "Lobby"
 
 #: src/multiint.c:399
 msgid "IP"
@@ -12232,26 +12244,26 @@ msgstr "Czas misji - %s"
 msgid "Total Game Time - %s"
 msgstr "Całkowity czas gry - %s"
 
-#: src/scriptfuncs.c:3211
+#: src/scriptfuncs.c:3216
 msgid "YOU ARE VICTORIOUS!"
 msgstr ""
 
-#: src/scriptfuncs.c:3215
+#: src/scriptfuncs.c:3220
 msgid "YOU WERE DEFEATED!"
 msgstr ""
 
-#: src/scriptfuncs.c:10152
+#: src/scriptfuncs.c:10161
 #, c-format
 msgid "Beacon received from %s!"
 msgstr ""
 
-#: src/scriptfuncs.c:10198
+#: src/scriptfuncs.c:10207
 #, c-format
 msgid "Beacon %d"
 msgstr ""
 
 #: src/selection.c:117
-#, fuzzy, c-format
+#, c-format
 msgid "%u unit selected"
 msgid_plural "%u units selected"
 msgstr[0] "%u wybrana jednostka"
@@ -12275,69 +12287,69 @@ msgstr ""
 msgid "Unable to locate any Commanders!"
 msgstr ""
 
-#: src/structure.c:2768
+#: src/structure.c:2774
 msgid "Command Control Limit Reached - Production Halted"
 msgstr ""
 
-#: src/structure.c:5838
-#: src/structure.c:5860
-#, fuzzy, c-format
+#: src/structure.c:5874
+#: src/structure.c:5896
+#, c-format
 msgid "%s - %u Unit assigned"
 msgid_plural "%s - %u Units assigned"
 msgstr[0] "%s - %u Jednostka przydzielona"
 msgstr[1] "%s - %u Jednostki przydzielone"
 msgstr[2] "%s - %u ???"
 
-#: src/structure.c:5897
+#: src/structure.c:5946
 #, c-format
 msgid "%s - Connected %u of %u"
 msgstr "%s - Połączony %u of %u"
 
-#: src/structure.c:5911
+#: src/structure.c:5960
 #, fuzzy, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - Uszodzenia %u%%"
 
-#: src/structure.c:6031
 #: src/structure.c:6080
+#: src/structure.c:6129
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - Uszkodzony elektronicznie"
 
-#: src/structure.c:6315
+#: src/structure.c:6364
 msgid "Electronic Reward - Visibility Report"
 msgstr ""
 
-#: src/structure.c:6355
+#: src/structure.c:6404
 msgid "Factory Reward - Propulsion"
 msgstr ""
 
-#: src/structure.c:6379
+#: src/structure.c:6428
 msgid "Factory Reward - Body"
 msgstr ""
 
-#: src/structure.c:6403
+#: src/structure.c:6452
 msgid "Factory Reward - Weapon"
 msgstr ""
 
-#: src/structure.c:6412
+#: src/structure.c:6461
 msgid "Factory Reward - Nothing"
 msgstr ""
 
-#: src/structure.c:6440
+#: src/structure.c:6489
 msgid "Repair Facility Award - Repair"
 msgstr ""
 
-#: src/structure.c:6447
+#: src/structure.c:6496
 msgid "Repair Facility Award - Nothing"
 msgstr ""
 
-#: src/transporter.c:424
-#: src/transporter.c:478
+#: src/transporter.c:396
+#: src/transporter.c:450
 msgid "Launch Transport"
 msgstr "Uruchom transport"
 
-#: src/transporter.c:1860
+#: src/transporter.c:1702
 msgid "Reinforcements landing"
 msgstr "Posiłkowy wyładunek"
 

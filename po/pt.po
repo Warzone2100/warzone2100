@@ -1,20 +1,23 @@
-# Portuguese translations for Warzone 2100 package.
-# Copyright (C) 2008 Warzone Resurrection Project
-# This file is distributed under the same license as the Warzone 2100 package.
-# Automatically generated, 2008.
+# Portuguese translations for warzone2100
+# Copyright (C) 2008 Warzone 2100 Resurrection Project
+# Copyright (c) 2008 Rosetta Contributors and Canonical Ltd 2008
+# This file is distributed under the same license as the warzone2100 package.
+#
 # Artur <tucalipe@hotmail.com>, 2008.
 msgid ""
 msgstr ""
-"Project-Id-Version: warzone2100 2.1_beta2\n"
+"Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2008-05-07 11:53+0200\n"
-"PO-Revision-Date: 2008-05-05 20:25-0300\n"
+"POT-Creation-Date: 2008-05-10 17:49+0200\n"
+"PO-Revision-Date: 2008-05-09 17:01+0000\n"
 "Last-Translator: Artur <tucalipe@hotmail.com>\n"
 "Language-Team: Portugese <warzone-dev@gna.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Launchpad-Export-Date: 2008-05-10 13:56+0000\n"
+"X-Generator: Launchpad (build Unknown)\n"
 "X-Poedit-Language: Portuguese\n"
 "X-Poedit-SourceCharset: utf-8\n"
 "X-Poedit-Basepath: ..\n"
@@ -78,7 +81,7 @@ msgstr "MISSÃO-TRANSPORTE: Localizar e Recuperar Artefatos"
 
 #: data/messages/strings/cam1strings.txt:22
 msgid "Load an attack force into the transport."
-msgstr "Designe uma força de ataque e a carregue no transporte. "
+msgstr "Designe uma força de ataque e a carregue no transporte."
 
 #: data/messages/strings/cam1strings.txt:23
 msgid "On landing, explore the ruins and recover any artifacts."
@@ -584,16 +587,13 @@ msgid "Enemy VTOLs are likely to be flying close escort."
 msgstr "Há a alta probabilidade de VTOL's inimigos estarem escoltando."
 
 #: data/messages/strings/cam2strings.txt:73
+#: data/messages/strings/cam2strings.txt:77
 msgid "TRANSPORT MISSION: Rescue civilians from Containment Camp"
 msgstr "MISSÃO-TRANSPORTE: Resgate os civis do Campo de Contenção"
 
 #: data/messages/strings/cam2strings.txt:74
 msgid "The Collective are processing and exterminating civilians at this base."
 msgstr "A Coletividade está processando e exterminando civis nessa base."
-
-#: data/messages/strings/cam2strings.txt:77
-msgid "TRANSPORT MISSION: Rescue Civilians from Containment Camp "
-msgstr "MISSÃO-TRANSPORTE: Resgate os civis do Campo de Contenção"
 
 #: data/messages/strings/cam2strings.txt:78
 msgid "You are to rescue the civilians."
@@ -940,11 +940,11 @@ msgid "Enemy forces are ....... from these coordinates."
 msgstr "Forças inimigas....... dessas coordenadas."
 
 #: data/messages/strings/cam3strings.txt:82
-msgid "Defend the base and ........ the ....... "
+msgid "Defend the base and ........ the ......."
 msgstr "Defenda a base e........ e o .........."
 
 #: data/messages/strings/cam3strings.txt:83
-msgid "Search and destroy .... "
+msgid "Search and destroy ...."
 msgstr "Procure e destrua..........."
 
 #: data/messages/strings/cam3strings.txt:86
@@ -3166,7 +3166,9 @@ msgid "Archangel Missile Battery"
 msgstr "Bateria de Mísseis Archangel"
 
 #: data/messages/strings/names.txt:729
+#: data/messages/strings/names.txt:1215
 #: data/mp/messages/strings/names.txt:735
+#: data/mp/messages/strings/names.txt:1223
 msgid "Mortar Pit"
 msgstr "Vala de Morteiro"
 
@@ -3316,7 +3318,7 @@ msgstr "Produção Automatizada da Fábrica Mk3"
 #: data/messages/strings/names.txt:796
 #: data/mp/messages/strings/names.txt:802
 msgid "Robotic Factory Production"
-msgstr "Produção Robótica da Fábrica "
+msgstr "Produção Robótica da Fábrica"
 
 #: data/messages/strings/names.txt:797
 #: data/mp/messages/strings/names.txt:803
@@ -3333,7 +3335,7 @@ msgstr "Produção Robótica da Fábrica Mk3"
 #: data/mp/messages/strings/names.txt:805
 #: data/mp/messages/strings/resstrings.txt:724
 msgid "Advanced Factory Production"
-msgstr "Produção Avançada da Fábrica "
+msgstr "Produção Avançada da Fábrica"
 
 #: data/messages/strings/names.txt:800
 #: data/mp/messages/strings/names.txt:806
@@ -3367,7 +3369,7 @@ msgstr "Materiais Base de Estruturas Reforçado Mk3"
 #: data/mp/messages/strings/names.txt:813
 #: data/mp/messages/strings/resstrings.txt:784
 msgid "Hardened Base Structure Materials"
-msgstr "Materiais Base de Estruturas Melhorado "
+msgstr "Materiais Base de Estruturas Melhorado"
 
 #: data/messages/strings/names.txt:808
 #: data/mp/messages/strings/names.txt:814
@@ -4430,7 +4432,7 @@ msgstr "Balas de Metralhadora de Urânio Empobrecido"
 #: data/messages/strings/names.txt:1092
 #: data/mp/messages/strings/names.txt:1100
 msgid "Depleted Uranium MG Bullets Mk2"
-msgstr "Balas de Metralhadora de Urânio Empobrecido Mk2 "
+msgstr "Balas de Metralhadora de Urânio Empobrecido Mk2"
 
 #: data/messages/strings/names.txt:1094
 #: data/mp/messages/strings/names.txt:1102
@@ -4689,7 +4691,7 @@ msgstr "Mini-Foguetes de Lançamento Rápido Mk3"
 #: data/messages/strings/names.txt:1166
 #: data/mp/messages/strings/names.txt:1174
 msgid "Improved Rocket Wire Guidance"
-msgstr "Melhora no Direcionamento dos Foguetes "
+msgstr "Melhora no Direcionamento dos Foguetes"
 
 #: data/messages/strings/names.txt:1167
 #: data/mp/messages/strings/names.txt:1175
@@ -4840,11 +4842,6 @@ msgstr "Torre de Vigia"
 #: data/mp/messages/strings/names.txt:1219
 msgid "Cannon Tower"
 msgstr "Torre de Canhão"
-
-#: data/messages/strings/names.txt:1215
-#: data/mp/messages/strings/names.txt:1223
-msgid " Mortar Pit"
-msgstr "Vala de Morteiro"
 
 #: data/messages/strings/names.txt:1234
 #: data/mp/messages/strings/names.txt:1242
@@ -8364,7 +8361,7 @@ msgstr "Todos os lasers melhorados automaticamente"
 
 #: data/messages/strings/resstrings.txt:1474
 #: data/mp/messages/strings/resstrings.txt:1589
-msgid "Improvement in laser emission density "
+msgid "Improvement in laser emission density"
 msgstr "Melhora na densidade na emissão laser"
 
 #: data/messages/strings/resstrings.txt:1475
@@ -9391,7 +9388,7 @@ msgstr "Armadura Térmica Veícular Superdensa"
 
 #: data/mp/messages/strings/names.txt:1645
 msgid "Vehicle Superdense Thermal Armor Mk2"
-msgstr "Armadura Térmica Veícular Superdensa Mk2 "
+msgstr "Armadura Térmica Veícular Superdensa Mk2"
 
 #: data/mp/messages/strings/names.txt:1646
 msgid "Vehicle Superdense Thermal Armor Mk3"
@@ -10578,72 +10575,72 @@ msgstr "Caminhão desginado à construção de Extrator de Petróleo."
 msgid "Unit Lost!"
 msgstr "Unidade Perdida!"
 
-#: src/droid.c:1614
+#: src/droid.c:1619
 msgid "Structure Restored"
 msgstr "Estrutura Restaurada"
 
-#: src/droid.c:3401
+#: src/droid.c:3407
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
 msgstr[0] "Grupo %u selecionado - %u unidade"
 msgstr[1] "Grupo %u selecionado - %u unidades"
 
-#: src/droid.c:3414
+#: src/droid.c:3420
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
 msgstr[0] "%u unidade designada para o Grupo %u"
 msgstr[1] "%u unidades designada para o Grupo %u"
 
-#: src/droid.c:3427
+#: src/droid.c:3433
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
 msgstr[0] "Centralizado no Grupo %u - %u Unidade"
 msgstr[1] "Centralizado no Grupo %u - %u Unidades"
 
-#: src/droid.c:3431
+#: src/droid.c:3437
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] "Alinhando Visão com Grupo %u - %u unidade"
 msgstr[1] "Alinhando Visão com Grupo %u - %u unidades"
 
-#: src/droid.c:3657
+#: src/droid.c:3663
 msgid "Rookie"
 msgstr "Cadete"
 
-#: src/droid.c:3658
+#: src/droid.c:3664
 msgctxt "rank"
 msgid "Green"
 msgstr "Soldado"
 
-#: src/droid.c:3659
+#: src/droid.c:3665
 msgid "Trained"
 msgstr "Cabo"
 
-#: src/droid.c:3660
+#: src/droid.c:3666
 msgid "Regular"
 msgstr "Sargento"
 
-#: src/droid.c:3661
+#: src/droid.c:3667
 msgid "Professional"
 msgstr "Tenente"
 
-#: src/droid.c:3662
+#: src/droid.c:3668
 msgid "Veteran"
 msgstr "Major"
 
-#: src/droid.c:3663
+#: src/droid.c:3669
 msgid "Elite"
 msgstr "Elite"
 
-#: src/droid.c:3664
+#: src/droid.c:3670
 msgid "Special"
 msgstr "Força Especial"
 
-#: src/droid.c:3665
+#: src/droid.c:3671
 msgid "Hero"
 msgstr "Herói"
 
@@ -10911,11 +10908,11 @@ msgstr "Idioma"
 msgid "Unit Colour"
 msgstr "Cor das Unidades"
 
-#: src/hci.c:994
-#: src/hci.c:3857
-#: src/hci.c:4008
-#: src/hci.c:4461
-#: src/hci.c:5685
+#: src/hci.c:1017
+#: src/hci.c:3880
+#: src/hci.c:4031
+#: src/hci.c:4484
+#: src/hci.c:5708
 #: src/intelmap.c:529
 #: src/intorder.c:659
 #: src/loadsave.c:261
@@ -10927,134 +10924,134 @@ msgstr "Cor das Unidades"
 msgid "Close"
 msgstr "Fechar"
 
-#: src/hci.c:1340
-#: src/hci.c:1686
+#: src/hci.c:1363
+#: src/hci.c:1709
 #: src/loop.c:511
 #: src/loop.c:523
 #: src/mission.c:2895
 msgid "GAME SAVED!"
 msgstr "JOGO SALVO"
 
-#: src/hci.c:2094
+#: src/hci.c:2117
 msgid "Failed to create building"
 msgstr "Impossível criar edifício"
 
-#: src/hci.c:2117
+#: src/hci.c:2140
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new structure: %s."
 msgstr "Jogador %u esta trapaceando com uma nova estrutura: %s."
 
-#: src/hci.c:2131
+#: src/hci.c:2154
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new feature: %s."
 msgstr "Jogador %u esta trapaceando com um novo artefato: %s."
 
-#: src/hci.c:2150
+#: src/hci.c:2173
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new droid: %s."
 msgstr "Jogador %u esta trapaceando com um novo dróide: %s."
 
-#: src/hci.c:3759
+#: src/hci.c:3782
 msgid "Commanders (F6)"
 msgstr "Comandantes (F6)"
 
-#: src/hci.c:3775
+#: src/hci.c:3798
 msgid "Intelligence Display (F5)"
 msgstr "Relatórios de Inteligência (F5)"
 
-#: src/hci.c:3791
+#: src/hci.c:3814
 msgid "Manufacture (F1)"
 msgstr "Produção (F1)"
 
-#: src/hci.c:3807
+#: src/hci.c:3830
 msgid "Design (F4)"
 msgstr "Projetos (F4)"
 
-#: src/hci.c:3823
+#: src/hci.c:3846
 msgid "Research (F2)"
 msgstr "Pesquisas (F2)"
 
-#: src/hci.c:3839
+#: src/hci.c:3862
 msgid "Build (F3)"
 msgstr "Construção (F3)"
 
-#: src/hci.c:3919
+#: src/hci.c:3942
 #: src/multiint.c:772
 #: src/multiint.c:776
 msgid "Power"
 msgstr "Energia"
 
-#: src/hci.c:4103
+#: src/hci.c:4126
 msgid "Tile"
 msgstr "Espaço"
 
-#: src/hci.c:4104
+#: src/hci.c:4127
 msgid "Place tiles on map"
 msgstr "Colocar Espaços no mapa"
 
-#: src/hci.c:4113
+#: src/hci.c:4136
 msgid "Unit"
 msgstr "Unidade"
 
-#: src/hci.c:4114
+#: src/hci.c:4137
 msgid "Place Unit on map"
 msgstr "Colocar Unidade no mapa"
 
-#: src/hci.c:4122
+#: src/hci.c:4145
 msgid "Struct"
 msgstr "Estrutura"
 
-#: src/hci.c:4123
+#: src/hci.c:4146
 msgid "Place Structures on map"
 msgstr "Colocar estruturas no mapa"
 
-#: src/hci.c:4131
+#: src/hci.c:4154
 msgid "Feat"
 msgstr "Artefato"
 
-#: src/hci.c:4132
+#: src/hci.c:4155
 msgid "Place Features on map"
 msgstr "Colocar Artefatos no mapa"
 
-#: src/hci.c:4143
+#: src/hci.c:4166
 msgid "Pause or unpause the game"
 msgstr "Pausar ou resumir o jogo"
 
-#: src/hci.c:4157
+#: src/hci.c:4180
 msgid "Align height of all map objects"
 msgstr "Alinhar a altitude dos objetos e do mapa"
 
-#: src/hci.c:4182
+#: src/hci.c:4205
 #: src/ingameop.c:121
 #: src/ingameop.c:254
 #: src/ingameop.c:259
 msgid "Quit"
 msgstr "Sair"
 
-#: src/hci.c:4183
+#: src/hci.c:4206
 msgid "Exit Game"
 msgstr "Sair do Jogo"
 
-#: src/hci.c:4546
+#: src/hci.c:4569
 #: src/intdisplay.c:211
 #: src/intdisplay.c:254
 #: src/intdisplay.c:300
 msgid "Progress Bar"
 msgstr "Barra de Progresso"
 
-#: src/hci.c:5600
+#: src/hci.c:5623
 msgid "Factory Delivery Point"
 msgstr "Ponto de Entrega da Fábrica"
 
-#: src/hci.c:5619
+#: src/hci.c:5642
 msgid "Loop Production"
 msgstr "Repetir Ordem de Produção"
 
-#: src/hci.c:5710
+#: src/hci.c:5733
 msgid "Tab Scroll left"
 msgstr "Página Anterior"
 
-#: src/hci.c:5727
+#: src/hci.c:5750
 msgid "Tab Scroll right"
 msgstr "Próxima Página"
 
@@ -12231,20 +12228,20 @@ msgstr "Duração da Missão - %s"
 msgid "Total Game Time - %s"
 msgstr "Tempo Total de Jogo - %s"
 
-#: src/scriptfuncs.c:3211
+#: src/scriptfuncs.c:3216
 msgid "YOU ARE VICTORIOUS!"
 msgstr "VOCÊ FOI VITORIOSO"
 
-#: src/scriptfuncs.c:3215
+#: src/scriptfuncs.c:3220
 msgid "YOU WERE DEFEATED!"
 msgstr "VOCÊ FOI DERROTADO"
 
-#: src/scriptfuncs.c:10152
+#: src/scriptfuncs.c:10161
 #, c-format
 msgid "Beacon received from %s!"
 msgstr "Sinal recebido de %s!"
 
-#: src/scriptfuncs.c:10198
+#: src/scriptfuncs.c:10207
 #, c-format
 msgid "Beacon %d"
 msgstr "Sinal %d"
@@ -12273,59 +12270,59 @@ msgstr "Impossível localizar Unidades de Sensor!"
 msgid "Unable to locate any Commanders!"
 msgstr "Impossível localizar Comandantes!"
 
-#: src/structure.c:2769
+#: src/structure.c:2774
 msgid "Command Control Limit Reached - Production Halted"
 msgstr "Limite de Unidades Alcancado - Produção Interrompida"
 
-#: src/structure.c:5868
-#: src/structure.c:5890
+#: src/structure.c:5874
+#: src/structure.c:5896
 #, c-format
 msgid "%s - %u Unit assigned"
 msgid_plural "%s - %u Units assigned"
 msgstr[0] "%s - %u Unidade designada"
 msgstr[1] "%s - %u Unidades designadas"
 
-#: src/structure.c:5940
+#: src/structure.c:5946
 #, c-format
 msgid "%s - Connected %u of %u"
 msgstr "%s - %u de %u conectados"
 
-#: src/structure.c:5954
+#: src/structure.c:5960
 #, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - Dano %3.0f%%"
 
-#: src/structure.c:6074
-#: src/structure.c:6123
+#: src/structure.c:6080
+#: src/structure.c:6129
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - Danificado Eletronicamente"
 
-#: src/structure.c:6358
+#: src/structure.c:6364
 msgid "Electronic Reward - Visibility Report"
 msgstr "Prêmio - Relatório de Visibilidade"
 
-#: src/structure.c:6398
+#: src/structure.c:6404
 msgid "Factory Reward - Propulsion"
 msgstr "Prêmio - Propulsão"
 
-#: src/structure.c:6422
+#: src/structure.c:6428
 msgid "Factory Reward - Body"
 msgstr "Prêmio - Chassis"
 
-#: src/structure.c:6446
+#: src/structure.c:6452
 msgid "Factory Reward - Weapon"
 msgstr "Prêmio - Arma"
 
-#: src/structure.c:6455
+#: src/structure.c:6461
 msgid "Factory Reward - Nothing"
 msgstr "Prêmio - Nada"
 
-#: src/structure.c:6483
+#: src/structure.c:6489
 msgid "Repair Facility Award - Repair"
 msgstr "Prêmio - Centro de Reparos"
 
-#: src/structure.c:6490
+#: src/structure.c:6496
 msgid "Repair Facility Award - Nothing"
 msgstr "Prêmio - Nada"
 
@@ -12364,4 +12361,31 @@ msgstr " - Finalizado em %s"
 #: src/version.c:167
 #, c-format
 msgid "Version %s%s%s%s"
-msgstr " Versão %s%s%s%s"
+msgstr "Versão %s%s%s%s"
+
+#~ msgid "%s - Damage %u%%"
+#~ msgstr "%s - %u%% danificado"
+
+#~ msgid "Green: %u"
+#~ msgstr "Soldados: %u"
+
+#~ msgid "TRANSPORT MISSION: Rescue Civilians from Containment Camp "
+#~ msgstr "MISSÃO-TRANSPORTE: Resgate os civis do Campo de Contenção "
+
+#~ msgid "Defend the base and ........ the ....... "
+#~ msgstr "Defenda a base e........ e o .......... "
+
+#~ msgid "Search and destroy .... "
+#~ msgstr "Procure e destrua........... "
+
+#~ msgid "R-Wpn-MG-Damage11"
+#~ msgstr "R-Wpn-MG-Damage11"
+
+#~ msgid " Mortar Pit"
+#~ msgstr " Vala de Morteiro"
+
+#~ msgid "Improvement in laser emission density "
+#~ msgstr "Melhora na densidade na emissão laser "
+
+#~ msgid "R-Struc-Power-Cam2"
+#~ msgstr "R-Struc-Power-Cam2"

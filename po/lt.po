@@ -1,21 +1,22 @@
 # Lithuanian translation for warzone2100
+# Copyright (c) 2008 Warzone 2100 Resurrection Project
 # Copyright (c) 2008 Rosetta Contributors and Canonical Ltd 2008
 # This file is distributed under the same license as the warzone2100 package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2008.
 #
+# Roman <rms200x@gmail.com>, 2008.
 msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2008-05-09 16:13+0200\n"
-"PO-Revision-Date: 2008-04-01 14:07+0000\n"
+"POT-Creation-Date: 2008-05-10 17:49+0200\n"
+"PO-Revision-Date: 2008-05-09 16:42+0000\n"
 "Last-Translator: Roman <rms200x@gmail.com>\n"
 "Language-Team: Lithuanian <lt@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Launchpad-Export-Date: 2008-04-28 05:16+0000\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11) ? 0 : (n%10>=2 && (n%100<10 || n%100>=20)) ? 1 : 2;\n"
+"X-Launchpad-Export-Date: 2008-05-10 13:56+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: data/messages/strings/cam1strings.txt:3
@@ -203,7 +204,7 @@ msgstr ""
 #: data/messages/strings/cam2strings.txt:118
 #: data/messages/strings/cam3strings.txt:163
 msgid " "
-msgstr ""
+msgstr " "
 
 #: data/messages/strings/cam1strings.txt:65
 msgid "New Paradigm Transmission"
@@ -1624,6 +1625,7 @@ msgstr ""
 
 #: data/messages/strings/names.txt:194
 #: data/mp/messages/strings/names.txt:196
+#: data/mp/messages/strings/names.txt:1912
 msgid "Python Medium Cannon Tracks"
 msgstr ""
 
@@ -9909,42 +9911,46 @@ msgid "Python HVC Hover"
 msgstr ""
 
 #: data/mp/messages/strings/names.txt:1911
-msgid "Python Scourge Tracks"
-msgstr ""
-
-#: data/mp/messages/strings/names.txt:1912
-msgid "Python Gauss Cannon Tracks"
+msgid "Python Tank Killer Tracks"
 msgstr ""
 
 #: data/mp/messages/strings/names.txt:1913
-msgid "Python Pulse Laser Tracks"
+msgid "Python Scourge Tracks"
 msgstr ""
 
 #: data/mp/messages/strings/names.txt:1914
-msgid "Tiger Pulse Laser Tracks"
+msgid "Python Gauss Cannon Tracks"
 msgstr ""
 
 #: data/mp/messages/strings/names.txt:1915
-msgid "Tiger Heavy Laser Tracks"
+msgid "Python Pulse Laser Tracks"
 msgstr ""
 
 #: data/mp/messages/strings/names.txt:1916
-msgid "Wyvern Gauss Cannon Tracks"
+msgid "Tiger Pulse Laser Tracks"
 msgstr ""
 
 #: data/mp/messages/strings/names.txt:1917
-msgid "Wyvern Pulse Laser Tracks"
+msgid "Tiger Heavy Laser Tracks"
 msgstr ""
 
 #: data/mp/messages/strings/names.txt:1918
-msgid "Wyvern Heavy Laser Tracks"
+msgid "Wyvern Gauss Cannon Tracks"
+msgstr ""
+
+#: data/mp/messages/strings/names.txt:1919
+msgid "Wyvern Pulse Laser Tracks"
 msgstr ""
 
 #: data/mp/messages/strings/names.txt:1920
+msgid "Wyvern Heavy Laser Tracks"
+msgstr ""
+
+#: data/mp/messages/strings/names.txt:1922
 msgid "Viper Machinegun Half-Track"
 msgstr ""
 
-#: data/mp/messages/strings/names.txt:1921
+#: data/mp/messages/strings/names.txt:1923
 msgid "Viper Flamer Half-Track"
 msgstr ""
 
@@ -10565,11 +10571,11 @@ msgstr "Sunkvežimiui įsakyta sukonstruoti naftos platformą"
 msgid "Unit Lost!"
 msgstr "Prarastas karinis vienetas!"
 
-#: src/droid.c:1614
+#: src/droid.c:1619
 msgid "Structure Restored"
 msgstr "Pastatas atkurtas"
 
-#: src/droid.c:3401
+#: src/droid.c:3407
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
@@ -10577,7 +10583,7 @@ msgstr[0] "Grupė %u priskirtas - %u Kovinis vienetas"
 msgstr[1] "Grupė %u priskirti - %u Koviniai vienetai"
 msgstr[2] "Grupė %u priskirti - %u Koviniai vienetai"
 
-#: src/droid.c:3414
+#: src/droid.c:3420
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
@@ -10585,54 +10591,54 @@ msgstr[0] "%u kovinis vienetas priskirtas Grupei %u"
 msgstr[1] "%u Koviniai vienetai priskirti Grupei %u"
 msgstr[2] "%u Koviniai vienetai priskirti Grupei %u"
 
-#: src/droid.c:3427
+#: src/droid.c:3433
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/droid.c:3431
+#: src/droid.c:3437
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/droid.c:3657
+#: src/droid.c:3663
 msgid "Rookie"
 msgstr ""
 
-#: src/droid.c:3658
+#: src/droid.c:3664
 msgctxt "rank"
 msgid "Green"
 msgstr ""
 
-#: src/droid.c:3659
+#: src/droid.c:3665
 msgid "Trained"
 msgstr ""
 
-#: src/droid.c:3660
+#: src/droid.c:3666
 msgid "Regular"
 msgstr ""
 
-#: src/droid.c:3661
+#: src/droid.c:3667
 msgid "Professional"
 msgstr ""
 
-#: src/droid.c:3662
+#: src/droid.c:3668
 msgid "Veteran"
 msgstr ""
 
-#: src/droid.c:3663
+#: src/droid.c:3669
 msgid "Elite"
 msgstr ""
 
-#: src/droid.c:3664
+#: src/droid.c:3670
 msgid "Special"
 msgstr ""
 
-#: src/droid.c:3665
+#: src/droid.c:3671
 msgid "Hero"
 msgstr ""
 
@@ -10900,11 +10906,11 @@ msgstr ""
 msgid "Unit Colour"
 msgstr ""
 
-#: src/hci.c:994
-#: src/hci.c:3857
-#: src/hci.c:4008
-#: src/hci.c:4461
-#: src/hci.c:5685
+#: src/hci.c:1017
+#: src/hci.c:3880
+#: src/hci.c:4031
+#: src/hci.c:4484
+#: src/hci.c:5708
 #: src/intelmap.c:529
 #: src/intorder.c:659
 #: src/loadsave.c:261
@@ -10912,139 +10918,139 @@ msgstr ""
 #: src/multimenu.c:1250
 #: src/transporter.c:285
 #: src/transporter.c:374
-#: src/transporter.c:872
+#: src/transporter.c:839
 msgid "Close"
 msgstr "Uždaryti"
 
-#: src/hci.c:1340
-#: src/hci.c:1686
+#: src/hci.c:1363
+#: src/hci.c:1709
 #: src/loop.c:511
 #: src/loop.c:523
 #: src/mission.c:2895
 msgid "GAME SAVED!"
 msgstr "Žaidimas išsaugotas"
 
-#: src/hci.c:2094
+#: src/hci.c:2117
 msgid "Failed to create building"
 msgstr ""
 
-#: src/hci.c:2117
+#: src/hci.c:2140
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new structure: %s."
 msgstr "Žaidėjas %u sukčiauja (debug meniu) jam/jai naujas pastatas: %s."
 
-#: src/hci.c:2131
+#: src/hci.c:2154
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new feature: %s."
 msgstr "Žaidėjas %u sukčiauja (debug meniu) jam/jai naujos galimybės: %s."
 
-#: src/hci.c:2150
+#: src/hci.c:2173
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new droid: %s."
 msgstr "Žaidėjas %u sukčiauja (debug meniu) jam/jai naujas droidas: %s."
 
-#: src/hci.c:3759
+#: src/hci.c:3782
 msgid "Commanders (F6)"
 msgstr "Kapitonas (F6)"
 
-#: src/hci.c:3775
+#: src/hci.c:3798
 msgid "Intelligence Display (F5)"
 msgstr "Valdymo skydas (F5)"
 
-#: src/hci.c:3791
+#: src/hci.c:3814
 msgid "Manufacture (F1)"
 msgstr "Pastatai (F1)"
 
-#: src/hci.c:3807
+#: src/hci.c:3830
 msgid "Design (F4)"
 msgstr "Kūrimas (F4)"
 
-#: src/hci.c:3823
+#: src/hci.c:3846
 msgid "Research (F2)"
 msgstr "Išradimas (F2)"
 
-#: src/hci.c:3839
+#: src/hci.c:3862
 msgid "Build (F3)"
 msgstr "Pastatyti (F3)"
 
-#: src/hci.c:3919
+#: src/hci.c:3942
 #: src/multiint.c:772
 #: src/multiint.c:776
 msgid "Power"
 msgstr "Energija"
 
-#: src/hci.c:4103
+#: src/hci.c:4126
 msgid "Tile"
 msgstr ""
 
-#: src/hci.c:4104
+#: src/hci.c:4127
 msgid "Place tiles on map"
 msgstr ""
 
-#: src/hci.c:4113
+#: src/hci.c:4136
 msgid "Unit"
 msgstr "Karinis vienetas"
 
-#: src/hci.c:4114
+#: src/hci.c:4137
 msgid "Place Unit on map"
 msgstr ""
 
-#: src/hci.c:4122
+#: src/hci.c:4145
 msgid "Struct"
 msgstr "Statyti"
 
-#: src/hci.c:4123
+#: src/hci.c:4146
 msgid "Place Structures on map"
 msgstr ""
 
-#: src/hci.c:4131
+#: src/hci.c:4154
 msgid "Feat"
 msgstr "Naujovė"
 
-#: src/hci.c:4132
+#: src/hci.c:4155
 msgid "Place Features on map"
 msgstr ""
 
-#: src/hci.c:4143
+#: src/hci.c:4166
 #, fuzzy
 msgid "Pause or unpause the game"
 msgstr "Hostas paliko žaidimą"
 
-#: src/hci.c:4157
+#: src/hci.c:4180
 msgid "Align height of all map objects"
 msgstr ""
 
-#: src/hci.c:4182
+#: src/hci.c:4205
 #: src/ingameop.c:121
 #: src/ingameop.c:254
 #: src/ingameop.c:259
 msgid "Quit"
 msgstr "Išeiti"
 
-#: src/hci.c:4183
+#: src/hci.c:4206
 msgid "Exit Game"
 msgstr "Išeiti iš žaidimo"
 
-#: src/hci.c:4546
+#: src/hci.c:4569
 #: src/intdisplay.c:211
 #: src/intdisplay.c:254
 #: src/intdisplay.c:300
 msgid "Progress Bar"
 msgstr "Eigos juosta"
 
-#: src/hci.c:5600
+#: src/hci.c:5623
 msgid "Factory Delivery Point"
 msgstr "Gamyklinis išeities taškas"
 
-#: src/hci.c:5619
+#: src/hci.c:5642
 msgid "Loop Production"
 msgstr "Nesibaigianti gamyba"
 
-#: src/hci.c:5710
+#: src/hci.c:5733
 msgid "Tab Scroll left"
 msgstr "Pasukti į kairę"
 
-#: src/hci.c:5727
+#: src/hci.c:5750
 msgid "Tab Scroll right"
 msgstr "Pasukti į dešinę"
 
@@ -12221,20 +12227,20 @@ msgstr ""
 msgid "Total Game Time - %s"
 msgstr ""
 
-#: src/scriptfuncs.c:3211
+#: src/scriptfuncs.c:3216
 msgid "YOU ARE VICTORIOUS!"
 msgstr ""
 
-#: src/scriptfuncs.c:3215
+#: src/scriptfuncs.c:3220
 msgid "YOU WERE DEFEATED!"
 msgstr ""
 
-#: src/scriptfuncs.c:10152
+#: src/scriptfuncs.c:10161
 #, c-format
 msgid "Beacon received from %s!"
 msgstr ""
 
-#: src/scriptfuncs.c:10198
+#: src/scriptfuncs.c:10207
 #, c-format
 msgid "Beacon %d"
 msgstr ""
@@ -12263,68 +12269,68 @@ msgstr ""
 msgid "Unable to locate any Commanders!"
 msgstr ""
 
-#: src/structure.c:2768
+#: src/structure.c:2774
 msgid "Command Control Limit Reached - Production Halted"
 msgstr ""
 
-#: src/structure.c:5838
-#: src/structure.c:5860
+#: src/structure.c:5874
+#: src/structure.c:5896
 #, c-format
 msgid "%s - %u Unit assigned"
 msgid_plural "%s - %u Units assigned"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/structure.c:5897
+#: src/structure.c:5946
 #, c-format
 msgid "%s - Connected %u of %u"
 msgstr ""
 
-#: src/structure.c:5911
+#: src/structure.c:5960
 #, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr ""
 
-#: src/structure.c:6031
 #: src/structure.c:6080
+#: src/structure.c:6129
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr ""
 
-#: src/structure.c:6315
+#: src/structure.c:6364
 msgid "Electronic Reward - Visibility Report"
 msgstr ""
 
-#: src/structure.c:6355
+#: src/structure.c:6404
 msgid "Factory Reward - Propulsion"
 msgstr ""
 
-#: src/structure.c:6379
+#: src/structure.c:6428
 msgid "Factory Reward - Body"
 msgstr ""
 
-#: src/structure.c:6403
+#: src/structure.c:6452
 msgid "Factory Reward - Weapon"
 msgstr ""
 
-#: src/structure.c:6412
+#: src/structure.c:6461
 msgid "Factory Reward - Nothing"
 msgstr ""
 
-#: src/structure.c:6440
+#: src/structure.c:6489
 msgid "Repair Facility Award - Repair"
 msgstr ""
 
-#: src/structure.c:6447
+#: src/structure.c:6496
 msgid "Repair Facility Award - Nothing"
 msgstr ""
 
-#: src/transporter.c:424
-#: src/transporter.c:478
+#: src/transporter.c:396
+#: src/transporter.c:450
 msgid "Launch Transport"
 msgstr "Išleisti transportą"
 
-#: src/transporter.c:1860
+#: src/transporter.c:1702
 msgid "Reinforcements landing"
 msgstr "Pastiprinimas leidžiasi"
 

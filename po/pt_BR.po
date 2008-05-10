@@ -1,20 +1,23 @@
-# Brazilian Portuguese translations for Warzone 2100 package.
-# Copyright (C) 2008 Warzone Resurrection Project
-# This file is distributed under the same license as the Warzone 2100 package.
-# Automatically generated, 2008.
+# Brazilian Portuguese translations for warzone2100
+# Copyright (C) 2008 Warzone 2100 Resurrection Project
+# Copyright (c) 2008 Rosetta Contributors and Canonical Ltd 2008
+# This file is distributed under the same license as the warzone2100 package.
+#
 # Artur <tucalipe@hotmail.com>, 2008.
 msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2008-05-09 16:13+0200\n"
-"PO-Revision-Date: 2008-05-05 20:25-0300\n"
+"POT-Creation-Date: 2008-05-10 17:49+0200\n"
+"PO-Revision-Date: 2008-05-09 16:01+0000\n"
 "Last-Translator: Artur <tucalipe@hotmail.com>\n"
 "Language-Team: Brazilian Portugese <warzone-dev@gna.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Launchpad-Export-Date: 2008-05-10 13:56+0000\n"
+"X-Generator: Launchpad (build Unknown)\n"
 "X-Poedit-Language: Portuguese\n"
 "X-Poedit-SourceCharset: utf-8\n"
 "X-Poedit-Basepath: ..\n"
@@ -78,7 +81,7 @@ msgstr "MISSÃO-TRANSPORTE: Localizar e Recuperar Artefatos"
 
 #: data/messages/strings/cam1strings.txt:22
 msgid "Load an attack force into the transport."
-msgstr "Designe uma força de ataque e a carregue no transporte. "
+msgstr "Designe uma força de ataque e a carregue no transporte."
 
 #: data/messages/strings/cam1strings.txt:23
 msgid "On landing, explore the ruins and recover any artifacts."
@@ -1625,6 +1628,7 @@ msgstr "Tanque Canhão Leve Píton"
 
 #: data/messages/strings/names.txt:194
 #: data/mp/messages/strings/names.txt:196
+#: data/mp/messages/strings/names.txt:1912
 msgid "Python Medium Cannon Tracks"
 msgstr "Tanque Canhão Médio Píton"
 
@@ -3314,7 +3318,7 @@ msgstr "Produção Automatizada da Fábrica Mk3"
 #: data/messages/strings/names.txt:796
 #: data/mp/messages/strings/names.txt:802
 msgid "Robotic Factory Production"
-msgstr "Produção Robótica da Fábrica "
+msgstr "Produção Robótica da Fábrica"
 
 #: data/messages/strings/names.txt:797
 #: data/mp/messages/strings/names.txt:803
@@ -3331,7 +3335,7 @@ msgstr "Produção Robótica da Fábrica Mk3"
 #: data/mp/messages/strings/names.txt:805
 #: data/mp/messages/strings/resstrings.txt:724
 msgid "Advanced Factory Production"
-msgstr "Produção Avançada da Fábrica "
+msgstr "Produção Avançada da Fábrica"
 
 #: data/messages/strings/names.txt:800
 #: data/mp/messages/strings/names.txt:806
@@ -3365,7 +3369,7 @@ msgstr "Materiais Base de Estruturas Reforçado Mk3"
 #: data/mp/messages/strings/names.txt:813
 #: data/mp/messages/strings/resstrings.txt:784
 msgid "Hardened Base Structure Materials"
-msgstr "Materiais Base de Estruturas Melhorado "
+msgstr "Materiais Base de Estruturas Melhorado"
 
 #: data/messages/strings/names.txt:808
 #: data/mp/messages/strings/names.txt:814
@@ -4428,7 +4432,7 @@ msgstr "Balas de Metralhadora de Urânio Empobrecido"
 #: data/messages/strings/names.txt:1092
 #: data/mp/messages/strings/names.txt:1100
 msgid "Depleted Uranium MG Bullets Mk2"
-msgstr "Balas de Metralhadora de Urânio Empobrecido Mk2 "
+msgstr "Balas de Metralhadora de Urânio Empobrecido Mk2"
 
 #: data/messages/strings/names.txt:1094
 #: data/mp/messages/strings/names.txt:1102
@@ -4687,7 +4691,7 @@ msgstr "Mini-Foguetes de Lançamento Rápido Mk3"
 #: data/messages/strings/names.txt:1166
 #: data/mp/messages/strings/names.txt:1174
 msgid "Improved Rocket Wire Guidance"
-msgstr "Melhora no Direcionamento dos Foguetes "
+msgstr "Melhora no Direcionamento dos Foguetes"
 
 #: data/messages/strings/names.txt:1167
 #: data/mp/messages/strings/names.txt:1175
@@ -9384,7 +9388,7 @@ msgstr "Armadura Térmica Veícular Superdensa"
 
 #: data/mp/messages/strings/names.txt:1645
 msgid "Vehicle Superdense Thermal Armor Mk2"
-msgstr "Armadura Térmica Veícular Superdensa Mk2 "
+msgstr "Armadura Térmica Veícular Superdensa Mk2"
 
 #: data/mp/messages/strings/names.txt:1646
 msgid "Vehicle Superdense Thermal Armor Mk3"
@@ -9910,42 +9914,47 @@ msgid "Python HVC Hover"
 msgstr "Hovercraft Canhão de Velocidade Píton"
 
 #: data/mp/messages/strings/names.txt:1911
+#, fuzzy
+msgid "Python Tank Killer Tracks"
+msgstr "Tanque Destruidor de Tanques Mantis"
+
+#: data/mp/messages/strings/names.txt:1913
 msgid "Python Scourge Tracks"
 msgstr "Tanque Scourge Píton"
 
-#: data/mp/messages/strings/names.txt:1912
+#: data/mp/messages/strings/names.txt:1914
 msgid "Python Gauss Cannon Tracks"
 msgstr "Tanque Canhão Gauss Píton"
 
-#: data/mp/messages/strings/names.txt:1913
+#: data/mp/messages/strings/names.txt:1915
 msgid "Python Pulse Laser Tracks"
 msgstr "Tanque Pulso Laser Píton"
 
-#: data/mp/messages/strings/names.txt:1914
+#: data/mp/messages/strings/names.txt:1916
 msgid "Tiger Pulse Laser Tracks"
 msgstr "Tanque Pulso Laser Tigre"
 
-#: data/mp/messages/strings/names.txt:1915
+#: data/mp/messages/strings/names.txt:1917
 msgid "Tiger Heavy Laser Tracks"
 msgstr "Tanque Laser Pesado Tigre"
 
-#: data/mp/messages/strings/names.txt:1916
+#: data/mp/messages/strings/names.txt:1918
 msgid "Wyvern Gauss Cannon Tracks"
 msgstr "Tanque Canhão Gauss Dragonete"
 
-#: data/mp/messages/strings/names.txt:1917
+#: data/mp/messages/strings/names.txt:1919
 msgid "Wyvern Pulse Laser Tracks"
 msgstr "Tanque Pulso Laser Dragonete"
 
-#: data/mp/messages/strings/names.txt:1918
+#: data/mp/messages/strings/names.txt:1920
 msgid "Wyvern Heavy Laser Tracks"
 msgstr "Tanque Laser Pesado Dragonete"
 
-#: data/mp/messages/strings/names.txt:1920
+#: data/mp/messages/strings/names.txt:1922
 msgid "Viper Machinegun Half-Track"
 msgstr "Híbrido Metralhadora Víbora"
 
-#: data/mp/messages/strings/names.txt:1921
+#: data/mp/messages/strings/names.txt:1923
 msgid "Viper Flamer Half-Track"
 msgstr "Híbrido Incendiário Víbora"
 
@@ -10237,7 +10246,7 @@ msgstr "Sistema de computador de guerra melhorado"
 #: lib/framework/i18n.c:42
 #: lib/framework/i18n.c:64
 msgid "System locale"
-msgstr "Localização do sistema"
+msgstr "Localização do Sistema"
 
 #: lib/framework/i18n.c:44
 #: lib/framework/i18n.c:69
@@ -10551,87 +10560,87 @@ msgstr "Sistemas"
 
 #: src/display.c:1671
 msgid "Cannot Build. Oil Resource Burning."
-msgstr "Impossível Construir. Poço de petróleo em chamas."
+msgstr "Não pode construir. Recursos petrolíferos queimados."
 
 #: src/display.c:1818
 #, c-format
 msgid "%s - Damage %d%% - Experience %d, %s"
-msgstr "%s - %d%% danificado - Mortes %d, %s"
+msgstr "%s - Danos %d%% - Experiência %d, %s"
 
 #: src/display.c:2055
 msgid "Truck ordered to build Oil Derrick"
-msgstr "Caminhão desginado à construção de Extrator de Petróleo."
+msgstr "O Caminhão ordenou a construção Oil Derrick"
 
 #: src/droid.c:190
 msgid "Unit Lost!"
-msgstr "Unidade Perdida!"
+msgstr "Unidades Perdidas!"
 
-#: src/droid.c:1614
+#: src/droid.c:1619
 msgid "Structure Restored"
 msgstr "Estrutura Restaurada"
 
-#: src/droid.c:3401
+#: src/droid.c:3407
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
-msgstr[0] "Grupo %u selecionado - %u unidade"
-msgstr[1] "Grupo %u selecionado - %u unidades"
+msgstr[0] "Grupo %u selecionado - %u Unidade"
+msgstr[1] "Grupo %u selecionado - %u Unidades"
 
-#: src/droid.c:3414
+#: src/droid.c:3420
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
-msgstr[0] "%u unidade designada para o Grupo %u"
-msgstr[1] "%u unidades designada para o Grupo %u"
+msgstr[0] "%u unidade atribuída ao Grupo %u"
+msgstr[1] "%u unidades atribuídas ao Grupo %u"
 
-#: src/droid.c:3427
+#: src/droid.c:3433
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
-msgstr[0] "Centralizado no Grupo %u - %u Unidade"
-msgstr[1] "Centralizado no Grupo %u - %u Unidades"
+msgstr[0] "Centrado no Grupo %u - %u Unidade"
+msgstr[1] "Centrado no Grupo %u - %u Unidades"
 
-#: src/droid.c:3431
+#: src/droid.c:3437
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
-msgstr[0] "Alinhando Visão com Grupo %u - %u unidade"
-msgstr[1] "Alinhando Visão com Grupo %u - %u unidades"
+msgstr[0] "Alinhamento com o grupo %u - %u Unidade"
+msgstr[1] "Alinhamento com o grupo %u - %u Unidades"
 
-#: src/droid.c:3657
+#: src/droid.c:3663
 msgid "Rookie"
-msgstr "Cadete"
+msgstr "Recruta"
 
-#: src/droid.c:3658
+#: src/droid.c:3664
 msgctxt "rank"
 msgid "Green"
 msgstr "Soldado"
 
-#: src/droid.c:3659
+#: src/droid.c:3665
 msgid "Trained"
-msgstr "Cabo"
+msgstr "Treinado"
 
-#: src/droid.c:3660
+#: src/droid.c:3666
 msgid "Regular"
-msgstr "Sargento"
+msgstr "Regular"
 
-#: src/droid.c:3661
+#: src/droid.c:3667
 msgid "Professional"
 msgstr "Tenente"
 
-#: src/droid.c:3662
+#: src/droid.c:3668
 msgid "Veteran"
-msgstr "Major"
+msgstr "Veterano"
 
-#: src/droid.c:3663
+#: src/droid.c:3669
 msgid "Elite"
 msgstr "Elite"
 
-#: src/droid.c:3664
+#: src/droid.c:3670
 msgid "Special"
 msgstr "Força Especial"
 
-#: src/droid.c:3665
+#: src/droid.c:3671
 msgid "Hero"
 msgstr "Herói"
 
@@ -10778,7 +10787,7 @@ msgstr "Tremer a Tela"
 #: src/frontend.c:631
 #: src/multiint.c:722
 msgid "Fog"
-msgstr "Névoa"
+msgstr "Nevoeiro"
 
 #: src/frontend.c:634
 #: src/frontend.c:752
@@ -10789,7 +10798,7 @@ msgstr "Misto"
 #: src/frontend.c:745
 #: src/multiint.c:724
 msgid "Fog Of War"
-msgstr "Escuridão Total"
+msgstr "Nevoeiro da Guerra"
 
 #: src/frontend.c:643
 msgid "Video Playback"
@@ -10899,11 +10908,11 @@ msgstr "Idioma"
 msgid "Unit Colour"
 msgstr "Cor das Unidades"
 
-#: src/hci.c:994
-#: src/hci.c:3857
-#: src/hci.c:4008
-#: src/hci.c:4461
-#: src/hci.c:5685
+#: src/hci.c:1017
+#: src/hci.c:3880
+#: src/hci.c:4031
+#: src/hci.c:4484
+#: src/hci.c:5708
 #: src/intelmap.c:529
 #: src/intorder.c:659
 #: src/loadsave.c:261
@@ -10911,140 +10920,140 @@ msgstr "Cor das Unidades"
 #: src/multimenu.c:1250
 #: src/transporter.c:285
 #: src/transporter.c:374
-#: src/transporter.c:872
+#: src/transporter.c:839
 msgid "Close"
 msgstr "Fechar"
 
-#: src/hci.c:1340
-#: src/hci.c:1686
+#: src/hci.c:1363
+#: src/hci.c:1709
 #: src/loop.c:511
 #: src/loop.c:523
 #: src/mission.c:2895
 msgid "GAME SAVED!"
-msgstr "JOGO SALVO"
+msgstr "JOGO SALVO!"
 
-#: src/hci.c:2094
+#: src/hci.c:2117
 msgid "Failed to create building"
 msgstr "Impossível criar edifício"
 
-#: src/hci.c:2117
+#: src/hci.c:2140
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new structure: %s."
-msgstr "Jogador %u esta trapaceando com uma nova estrutura: %s."
+msgstr "Jogador %u é batota (debug menu) ele/ela mesma é uma nova estrutura: %s."
 
-#: src/hci.c:2131
+#: src/hci.c:2154
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new feature: %s."
-msgstr "Jogador %u esta trapaceando com um novo artefato: %s."
+msgstr "Jogador %u é batota (debug menu) ele/ela mesma é uma nova característica: %s."
 
-#: src/hci.c:2150
+#: src/hci.c:2173
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new droid: %s."
-msgstr "Jogador %u esta trapaceando com um novo dróide: %s."
+msgstr "Jogador %u é batota (debug menu) ele/ela mesma é um novo droid: %s."
 
-#: src/hci.c:3759
+#: src/hci.c:3782
 msgid "Commanders (F6)"
-msgstr "Comandantes (F6)"
+msgstr "Comandos (F6)"
 
-#: src/hci.c:3775
+#: src/hci.c:3798
 msgid "Intelligence Display (F5)"
-msgstr "Relatórios de Inteligência (F5)"
+msgstr "Mostrar Inteligência (F5)"
 
-#: src/hci.c:3791
+#: src/hci.c:3814
 msgid "Manufacture (F1)"
-msgstr "Produção (F1)"
+msgstr "Desenvolvedor (F1)"
 
-#: src/hci.c:3807
+#: src/hci.c:3830
 msgid "Design (F4)"
-msgstr "Projetos (F4)"
+msgstr "Padrão (F4)"
 
-#: src/hci.c:3823
+#: src/hci.c:3846
 msgid "Research (F2)"
-msgstr "Pesquisas (F2)"
+msgstr "Pesquisa (F2)"
 
-#: src/hci.c:3839
+#: src/hci.c:3862
 msgid "Build (F3)"
-msgstr "Construção (F3)"
+msgstr "Construir (F3)"
 
-#: src/hci.c:3919
+#: src/hci.c:3942
 #: src/multiint.c:772
 #: src/multiint.c:776
 msgid "Power"
-msgstr "Energia"
+msgstr "Poder"
 
-#: src/hci.c:4103
+#: src/hci.c:4126
 msgid "Tile"
 msgstr "Espaço"
 
-#: src/hci.c:4104
+#: src/hci.c:4127
 msgid "Place tiles on map"
 msgstr "Colocar Espaços no mapa"
 
-#: src/hci.c:4113
+#: src/hci.c:4136
 msgid "Unit"
 msgstr "Unidade"
 
-#: src/hci.c:4114
+#: src/hci.c:4137
 msgid "Place Unit on map"
 msgstr "Colocar Unidade no mapa"
 
-#: src/hci.c:4122
+#: src/hci.c:4145
 msgid "Struct"
 msgstr "Estrutura"
 
-#: src/hci.c:4123
+#: src/hci.c:4146
 msgid "Place Structures on map"
 msgstr "Colocar estruturas no mapa"
 
-#: src/hci.c:4131
+#: src/hci.c:4154
 msgid "Feat"
-msgstr "Artefato"
+msgstr "Feito"
 
-#: src/hci.c:4132
+#: src/hci.c:4155
 msgid "Place Features on map"
 msgstr "Colocar Artefatos no mapa"
 
-#: src/hci.c:4143
+#: src/hci.c:4166
 msgid "Pause or unpause the game"
 msgstr "Pausar ou resumir o jogo"
 
-#: src/hci.c:4157
+#: src/hci.c:4180
 msgid "Align height of all map objects"
 msgstr "Alinhar a altitude dos objetos e do mapa"
 
-#: src/hci.c:4182
+#: src/hci.c:4205
 #: src/ingameop.c:121
 #: src/ingameop.c:254
 #: src/ingameop.c:259
 msgid "Quit"
 msgstr "Sair"
 
-#: src/hci.c:4183
+#: src/hci.c:4206
 msgid "Exit Game"
 msgstr "Sair do Jogo"
 
-#: src/hci.c:4546
+#: src/hci.c:4569
 #: src/intdisplay.c:211
 #: src/intdisplay.c:254
 #: src/intdisplay.c:300
 msgid "Progress Bar"
 msgstr "Barra de Progresso"
 
-#: src/hci.c:5600
+#: src/hci.c:5623
 msgid "Factory Delivery Point"
 msgstr "Ponto de Entrega da Fábrica"
 
-#: src/hci.c:5619
+#: src/hci.c:5642
 msgid "Loop Production"
-msgstr "Repetir Ordem de Produção"
+msgstr "Prender Produção"
 
-#: src/hci.c:5710
+#: src/hci.c:5733
 msgid "Tab Scroll left"
-msgstr "Página Anterior"
+msgstr "Tab mover para esquerda"
 
-#: src/hci.c:5727
+#: src/hci.c:5750
 msgid "Tab Scroll right"
-msgstr "Próxima Página"
+msgstr "Tab mover para direita"
 
 #: src/ingameop.c:118
 #: src/ingameop.c:152
@@ -11072,7 +11081,7 @@ msgstr "Energia Coletada"
 #: src/intelmap.c:242
 #: src/keybind.c:1229
 msgid "PAUSED"
-msgstr "PAUSADO"
+msgstr "PAUSA"
 
 #: src/intelmap.c:403
 msgid "Research Update"
@@ -11189,88 +11198,88 @@ msgstr "Designar Produção de VTOL"
 
 #: src/keybind.c:131
 msgid "Sorry, that cheat is disabled in multiplayer games."
-msgstr "Desculpe, essa trapaça nao funciona em jogos multiplayer."
+msgstr "Desculpe, as trapaças estão desativadas em jogos multiplayer."
 
 #: src/keybind.c:195
 msgid "Lets us see what you see!"
-msgstr "Vamos ver o que voce vê!"
+msgstr "Permite-nos ver o que você vê!"
 
 #: src/keybind.c:197
 msgid "Fine, sensor display is off!"
-msgstr "Esta bem, exibição do sensor desativada!"
+msgstr "Bom, o sensor da tela é desligado!"
 
 #: src/keybind.c:295
 msgid "Hard as nails!!!"
-msgstr "Duro como pedra!!!"
+msgstr "Doer as unhas!!!"
 
 #: src/keybind.c:308
 msgid "Takings thing easy!"
-msgstr "Vamos com calma!"
+msgstr "Rendimento, coisas fácil !"
 
 #: src/keybind.c:322
 msgid "1000 big ones!!!"
-msgstr "1000 grandões!!!"
+msgstr "1000 grandes!!!"
 
 #: src/keybind.c:336
 msgid "Power overwhelming"
-msgstr "Power Overwhelming"
+msgstr "Poder esmagador"
 
 #: src/keybind.c:350
 msgid "Back to normality!"
-msgstr "De volta ao normal!"
+msgstr "Voltar a normalidade!"
 
 #: src/keybind.c:363
 msgid "Getting tricky!"
-msgstr "Esta ficando difícil!"
+msgstr "Obtendo complicado!"
 
 #: src/keybind.c:376
 msgid "Twice as nice!"
-msgstr "Duas vezes melhor!"
+msgstr "Duas vezes mais agradável!"
 
 #: src/keybind.c:386
 msgid "FPS display is enabled."
-msgstr "Quadros por segundo - ativado"
+msgstr "mostrar FPS é ativado."
 
 #: src/keybind.c:390
 msgid "FPS display is disabled."
-msgstr "Quadros por segundo - desativado"
+msgstr "mostrar FPS é desativado."
 
 #: src/keybind.c:403
 #, c-format
 msgid "FPS %d; FPS-Limit: %d; PIEs %d; polys %d; Terr. polys %d; States %d"
-msgstr "QPS %d; QPS-Limit: %d; PIEs %d; polys %d; Polys Terreno %d; States %d"
+msgstr "FPS %d; Limite de FPS: %d; PIEs %d; polys %d; Terr. polys %d; Membros %d"
 
 #: src/keybind.c:458
 msgid "Infinite power disabled"
-msgstr "Energia infinita ativada"
+msgstr "Poder infinito desativado"
 
 #: src/keybind.c:463
 msgid "Infinite power enabled"
-msgstr "Energia infinita desativada"
+msgstr "Poder infinito ativado"
 
 #: src/keybind.c:516
 msgid "All items made available"
-msgstr "Todos os ítens estao disponiveis"
+msgstr "Todos os itens disponibilizados"
 
 #: src/keybind.c:608
 msgid "Fog off"
-msgstr "Névoa desativada"
+msgstr "Nevoeiro desligado"
 
 #: src/keybind.c:614
 msgid "Fog on"
-msgstr "Névoa ativada"
+msgstr "Nevoeiro ligado"
 
 #: src/keybind.c:1200
 msgid "View Aligned to North"
-msgstr "Alinhado ao Norte"
+msgstr "Ver alinhado com o Norte"
 
 #: src/keybind.c:1268
 msgid "Researched EVERYTHING for you!"
-msgstr "TUDO pesquisado para você!"
+msgstr "Pesquisou TUDO para você!"
 
 #: src/keybind.c:1299
 msgid "Energy bars display toggled"
-msgstr "Barras de Energia ligadas/desligadas."
+msgstr "Exibir barra de Energia trocadas"
 
 #: src/keybind.c:1317
 msgid "Demo mode off - Returning to normal game mode"
@@ -11371,7 +11380,7 @@ msgstr "CONFIGURAÇÃO DAS TECLAS"
 #: src/multiint.c:841
 #: src/multilimit.c:148
 msgid "Return To Previous Screen"
-msgstr "Retornar A Tela Anterior"
+msgstr "Return a Tela Anterior"
 
 #: src/keyedit.c:383
 msgid "Select Default"
@@ -11747,21 +11756,21 @@ msgstr "Liga/Desliga a reabertura do menu de construção"
 
 #: src/mission.c:2364
 msgid "Load Transport"
-msgstr "Carregar Transporte"
+msgstr "Carregar Transportes"
 
 #: src/mission.c:2763
 msgid "OBJECTIVE ACHIEVED"
-msgstr "OBJETIVO CUMPRIDO"
+msgstr "OBJETIVO ARQUIVADO"
 
 #: src/mission.c:2769
 msgid "OBJECTIVE FAILED"
-msgstr "OBJETIVO NÃO CUMPRIDO"
+msgstr "FLAHA NO OBJETIVO"
 
 #: src/mission.c:2795
 #: src/mission.c:2832
 #: src/mission.c:2946
 msgid "Quit To Main Menu"
-msgstr "Sair Para O Menu Principal"
+msgstr "Sair para o Menu Principal"
 
 #: src/mission.c:2803
 msgid "Continue Game"
@@ -11770,52 +11779,52 @@ msgstr "Continuar o Jogo"
 #: src/multigifts.c:168
 #, c-format
 msgid "%s Gives You A Visibility Report"
-msgstr "%s Fornece Relatório de Visibilidade"
+msgstr "%s Dar-lhe um relatório de visibilidade"
 
 #: src/multigifts.c:188
 #, c-format
 msgid "%s Gives you a %s"
-msgstr "%s Fornece %s a Você"
+msgstr "%s Dar-lhe um %s"
 
 #: src/multigifts.c:238
 #, c-format
 msgid "Tried to give away a %s - but this is not allowed."
-msgstr "Impossível fornecer %s!"
+msgstr "Tentei dar uma distância do %s  - mas isso não é permitido."
 
 #: src/multigifts.c:297
 #, c-format
 msgid "%s Gives You Technology Documents"
-msgstr "%s Fornece Documentos Tecnológicos a Voce"
+msgstr "%s Dar-lhe documentos de tecnologia"
 
 #: src/multigifts.c:335
 #, c-format
 msgid "%s Gives You Power"
-msgstr "%s Fornece Energia"
+msgstr "%s Dar-lhe Poder"
 
 #: src/multigifts.c:355
 #, c-format
 msgid "%s Requests An Alliance With You"
-msgstr "%s Requer Aliança Com Você"
+msgstr "%s Solicita uma aliança com você"
 
 #: src/multigifts.c:364
 #, c-format
 msgid "You Invite %s To Form An Alliance"
-msgstr "Voce Convidou %s Para Formar uma Aliança"
+msgstr "Você convida %s para formar uma aliança"
 
 #: src/multigifts.c:384
 #, c-format
 msgid "%s Breaks The Alliance With %s"
-msgstr "%s Rompe a Aliança Com %s"
+msgstr "%s Quebrar a allança com %s"
 
 #: src/multigifts.c:410
 #, c-format
 msgid "%s Forms An Alliance With %s"
-msgstr "%s Forma uma Aliança Com %s"
+msgstr "%s Formar uma alliança com %s"
 
 #: src/multigifts.c:801
 #, c-format
 msgid "You Discover Blueprints For %s"
-msgstr "Voce Descobriu o Projeto para %s"
+msgstr "Você descobre projetos para %s"
 
 #: src/multiint.c:333
 #: src/multilimit.c:156
@@ -11824,7 +11833,7 @@ msgstr "Aceitar Configurações"
 
 #: src/multiint.c:344
 msgid "IP Address or Machine Name"
-msgstr "Endereco IP ou Nome da Máquina"
+msgstr "Endereço IP ou Nome da Máquina"
 
 #: src/multiint.c:385
 msgid "CONNECTION"
@@ -11832,7 +11841,7 @@ msgstr "CONEXÃO"
 
 #: src/multiint.c:398
 msgid "Lobby"
-msgstr "Sala de Espera"
+msgstr "Lobby"
 
 #: src/multiint.c:399
 msgid "IP"
@@ -11840,7 +11849,7 @@ msgstr "IP"
 
 #: src/multiint.c:590
 msgid "Searching"
-msgstr "Procurando"
+msgstr "Pesquisando"
 
 #: src/multiint.c:601
 msgid "GAMES"
@@ -11860,7 +11869,7 @@ msgstr "Selecionar Nome do Jogo"
 
 #: src/multiint.c:689
 msgid "Select Map"
-msgstr "Selecionar Mapa"
+msgstr "Selecionar o Mapa"
 
 #: src/multiint.c:694
 msgid "Game"
@@ -11868,19 +11877,19 @@ msgstr "Jogo"
 
 #: src/multiint.c:696
 msgid "Mayhem"
-msgstr "Cada Um Por Si"
+msgstr "Mayhem"
 
 #: src/multiint.c:698
 msgid "Skirmish"
-msgstr "Confronto Direto"
+msgstr "Batalha"
 
 #: src/multiint.c:719
 msgid "Select Player Name"
-msgstr "Selecionar Nome de Jogador"
+msgstr "Selecionar o Nome do Jogador"
 
 #: src/multiint.c:725
 msgid "Distance Fog"
-msgstr "Terreno à mostra"
+msgstr "Distância do Nevoeiro"
 
 #: src/multiint.c:738
 #: src/multimenu.c:706
@@ -11898,19 +11907,19 @@ msgstr "Permitir Alianças"
 #: src/multiint.c:747
 #: src/multiint.c:1953
 msgid "Locked Teams"
-msgstr "Times Travados"
+msgstr "Trancar Times"
 
 #: src/multiint.c:779
 msgid "Low Power Levels"
-msgstr "Baixos Níveis de Energia"
+msgstr "Nível de Poder Baixo"
 
 #: src/multiint.c:781
 msgid "Medium Power Levels"
-msgstr "Medios Níveis de Energia"
+msgstr "Nível de Poder Médio"
 
 #: src/multiint.c:783
 msgid "High Power Levels"
-msgstr "Altos Níveis de Energia"
+msgstr "Nível de Poder Alto"
 
 #: src/multiint.c:803
 #: src/multiint.c:807
@@ -11919,15 +11928,15 @@ msgstr "Bases"
 
 #: src/multiint.c:810
 msgid "Start with No Bases"
-msgstr "Sem Bases Iniciais"
+msgstr "Iniciar sem Bases"
 
 #: src/multiint.c:812
 msgid "Start with Bases"
-msgstr "Bases Iniciais Simples"
+msgstr "Iniciar com Bases"
 
 #: src/multiint.c:814
 msgid "Start with Advanced Bases"
-msgstr "Bases Iniciais Avançadas"
+msgstr "Iniciar com Bases Avançadas"
 
 #: src/multiint.c:831
 msgid "Map Preview"
@@ -11939,11 +11948,11 @@ msgstr "Clique para ver o Mapa"
 
 #: src/multiint.c:847
 msgid "Start Hosting Game"
-msgstr "Iniciar Jogo"
+msgstr "Iniciar Hospedagem de Jogo"
 
 #: src/multiint.c:855
 msgid "Set Structure Limits"
-msgstr "Denifir o Número Limite de Estruturas"
+msgstr "Definir Limites da Estrutura"
 
 #: src/multiint.c:1207
 msgid "Team"
@@ -11963,16 +11972,16 @@ msgstr "JOGADORES"
 
 #: src/multiint.c:1436
 msgid "CHAT"
-msgstr "CONVERSA"
+msgstr "BATE-PAPO"
 
 #: src/multiint.c:1997
 #, c-format
 msgid "The host has kicked %s from the game!"
-msgstr "O Hospedeiro expulsou %s do jogo!"
+msgstr "O Host chutou %s do jogo!"
 
 #: src/multiint.c:2088
 msgid "Host is Starting Game"
-msgstr "O Hospedeiro Está Começando o Jogo"
+msgstr "O Host iniciou o Jogo"
 
 #: src/multiint.c:2535
 msgid "Players"
@@ -12059,7 +12068,7 @@ msgstr "Fornecer Energia"
 
 #: src/multiplay.c:729
 msgid "The host has left the game!"
-msgstr "O Hospedeiro saiu do jogo"
+msgstr "O host deixadou o jogo!"
 
 #: src/multiplay.c:1908
 msgid "Green"
@@ -12219,20 +12228,20 @@ msgstr "Duração da Missão - %s"
 msgid "Total Game Time - %s"
 msgstr "Tempo Total de Jogo - %s"
 
-#: src/scriptfuncs.c:3211
+#: src/scriptfuncs.c:3216
 msgid "YOU ARE VICTORIOUS!"
 msgstr "VOCÊ FOI VITORIOSO"
 
-#: src/scriptfuncs.c:3215
+#: src/scriptfuncs.c:3220
 msgid "YOU WERE DEFEATED!"
 msgstr "VOCÊ FOI DERROTADO"
 
-#: src/scriptfuncs.c:10152
+#: src/scriptfuncs.c:10161
 #, c-format
 msgid "Beacon received from %s!"
 msgstr "Sinal recebido de %s!"
 
-#: src/scriptfuncs.c:10198
+#: src/scriptfuncs.c:10207
 #, c-format
 msgid "Beacon %d"
 msgstr "Sinal %d"
@@ -12261,70 +12270,70 @@ msgstr "Impossível localizar Unidades de Sensor!"
 msgid "Unable to locate any Commanders!"
 msgstr "Impossível localizar Comandantes!"
 
-#: src/structure.c:2768
+#: src/structure.c:2774
 msgid "Command Control Limit Reached - Production Halted"
 msgstr "Limite de Unidades Alcancado - Produção Interrompida"
 
-#: src/structure.c:5838
-#: src/structure.c:5860
+#: src/structure.c:5874
+#: src/structure.c:5896
 #, c-format
 msgid "%s - %u Unit assigned"
 msgid_plural "%s - %u Units assigned"
 msgstr[0] "%s - %u Unidade designada"
 msgstr[1] "%s - %u Unidades designadas"
 
-#: src/structure.c:5897
+#: src/structure.c:5946
 #, c-format
 msgid "%s - Connected %u of %u"
 msgstr "%s - %u de %u conectados"
 
-#: src/structure.c:5911
+#: src/structure.c:5960
 #, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - Dano %3.0f%%"
 
-#: src/structure.c:6031
 #: src/structure.c:6080
+#: src/structure.c:6129
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - Danificado Eletronicamente"
 
-#: src/structure.c:6315
+#: src/structure.c:6364
 msgid "Electronic Reward - Visibility Report"
 msgstr "Prêmio - Relatório de Visibilidade"
 
-#: src/structure.c:6355
+#: src/structure.c:6404
 msgid "Factory Reward - Propulsion"
 msgstr "Prêmio - Propulsão"
 
-#: src/structure.c:6379
+#: src/structure.c:6428
 msgid "Factory Reward - Body"
 msgstr "Prêmio - Chassis"
 
-#: src/structure.c:6403
+#: src/structure.c:6452
 msgid "Factory Reward - Weapon"
 msgstr "Prêmio - Arma"
 
-#: src/structure.c:6412
+#: src/structure.c:6461
 msgid "Factory Reward - Nothing"
 msgstr "Prêmio - Nada"
 
-#: src/structure.c:6440
+#: src/structure.c:6489
 msgid "Repair Facility Award - Repair"
 msgstr "Prêmio - Centro de Reparos"
 
-#: src/structure.c:6447
+#: src/structure.c:6496
 msgid "Repair Facility Award - Nothing"
 msgstr "Prêmio - Nada"
 
-#: src/transporter.c:424
-#: src/transporter.c:478
+#: src/transporter.c:396
+#: src/transporter.c:450
 msgid "Launch Transport"
-msgstr "Enviar Transporte"
+msgstr "Lançar Transportes"
 
-#: src/transporter.c:1860
+#: src/transporter.c:1702
 msgid "Reinforcements landing"
-msgstr "Reforços Pousando"
+msgstr "Reforços de aterragem"
 
 #: src/version.c:137
 msgid " (modified and switched locally)"
@@ -12352,4 +12361,4 @@ msgstr " - Finalizado em %s"
 #: src/version.c:167
 #, c-format
 msgid "Version %s%s%s%s"
-msgstr " Versão %s%s%s%s"
+msgstr "Versão %s%s%s%s"
