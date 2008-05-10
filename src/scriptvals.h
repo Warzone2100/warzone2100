@@ -54,7 +54,7 @@ typedef struct _array_indexes
 
 /* A simple error reporting routine */
 
-extern void scrv_error(const char* fmt, ...) WZ_DECL_FORMAT(printf, 1, 2);
+extern void scrv_error(void*, const char* fmt, ...) WZ_DECL_FORMAT(printf, 2, 3);
 
 // Lookup a type
 extern BOOL scrvLookUpType(const char *pIdent, INTERP_TYPE *pType);

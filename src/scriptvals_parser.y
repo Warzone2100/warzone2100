@@ -53,7 +53,7 @@ static SCRIPT_CONTEXT	*psCurrContext;
 static ARRAY_INDEXES	sCurrArrayIndexes;
 
 // check that an array index is valid
-static BOOL scrvCheckArrayIndex(SDWORD base, ARRAY_INDEXES *psIndexes, UDWORD *pIndex)
+static BOOL scrvCheckArrayIndex(yyscan_t yyscanner, SDWORD base, ARRAY_INDEXES *psIndexes, UDWORD *pIndex)
 {
 	SDWORD	i, size;
 
@@ -64,13 +64,13 @@ static BOOL scrvCheckArrayIndex(SDWORD base, ARRAY_INDEXES *psIndexes, UDWORD *p
 
 	if (base < 0 || base >= psCurrScript->numArrays)
 	{
-		yyerror("Array index out of range");
+		yyerror(yyscanner, "Array index out of range");
 		return false;
 	}
 
 	if (psIndexes->dimensions != psCurrScript->psArrayInfo[base].dimensions)
 	{
-		yyerror("Invalid number of dimensions for array initialiser");
+		yyerror(yyscanner, "Invalid number of dimensions for array initialiser");
 		return false;
 	}
 
@@ -79,7 +79,7 @@ static BOOL scrvCheckArrayIndex(SDWORD base, ARRAY_INDEXES *psIndexes, UDWORD *p
 		if ((psIndexes->elements[i] < 0) ||
 			(psIndexes->elements[i] >= psCurrScript->psArrayInfo[base].elements[i]))
 		{
-			yyerror("Invalid index for dimension %d", i);
+			yyerror(yyscanner, "Invalid index for dimension %d", i);
 			return false;
 		}
 	}
@@ -102,6 +102,8 @@ static BOOL scrvCheckArrayIndex(SDWORD base, ARRAY_INDEXES *psIndexes, UDWORD *p
 %name-prefix="scrv_"
 %defines
 %error-verbose
+%parse-param {yyscan_t yyscanner}
+%lex-param   {yyscan_t yyscanner}
 
 %union {
 	BOOL			bval;
@@ -144,12 +146,12 @@ script_entry:	script_name RUN
 				{
 					if (!eventNewContext(psCurrScript, CR_RELEASE, &psCurrContext))
 					{
-						yyerror("Couldn't create context");
+						yyerror(yyscanner, "Couldn't create context");
 						YYABORT;
 					}
 					if (!scrvAddContext($1, psCurrContext, SCRV_EXEC))
 					{
-						yyerror("Couldn't store context");
+						yyerror(yyscanner, "Couldn't store context");
 						YYABORT;
 					}
 				}
@@ -164,12 +166,12 @@ script_entry:	script_name RUN
 				{
 					if (!eventNewContext(psCurrScript, CR_NORELEASE, &psCurrContext))
 					{
-						yyerror("Couldn't create context");
+						yyerror(yyscanner, "Couldn't create context");
 						YYABORT;
 					}
 					if (!scrvAddContext($3, psCurrContext, SCRV_NOEXEC))
 					{
-						yyerror("Couldn't store context");
+						yyerror(yyscanner, "Couldn't store context");
 						YYABORT;
 					}
 				}
@@ -209,7 +211,7 @@ script_name:	SCRIPT QTEXT
 
 					if (!psCurrScript)
 					{
-						yyerror("Script file %s not found", stringname);
+						yyerror(yyscanner, "Script file %s not found", stringname);
 						YYABORT;
 					}
 
@@ -239,20 +241,20 @@ var_init:		var_entry TYPE var_value
 						if ($3.type != IT_INDEX ||
 							!eventSetContextVar(psCurrContext, $1, &data))
 						{
-							yyerror("Typemismatch for variable %d", $1);
+							yyerror(yyscanner, "Typemismatch for variable %d", $1);
 							YYABORT;
 						}
 						break;
 					case ST_DROID:
 						if ($3.type != IT_INDEX)
 						{
-							yyerror("Typemismatch for variable %d", $1);
+							yyerror(yyscanner, "Typemismatch for variable %d", $1);
 							YYABORT;
 						}
 						psObj = getBaseObjFromId((UDWORD)$3.index);
 						if (!psObj)
 						{
-							yyerror("Droid id %d not found", (UDWORD)$3.index);
+							yyerror(yyscanner, "Droid id %d not found", (UDWORD)$3.index);
 							YYABORT;
 						}
 
@@ -260,14 +262,14 @@ var_init:		var_entry TYPE var_value
 
 						if (psObj->type != OBJ_DROID)
 						{
-							yyerror("Object id %d is not a droid", (UDWORD)$3.index);
+							yyerror(yyscanner, "Object id %d is not a droid", (UDWORD)$3.index);
 							YYABORT;
 						}
 						else
 						{
 							if(!eventSetContextVar(psCurrContext, $1, &data))
 							{
-								yyerror("Set Value Failed for %u", $1);
+								yyerror(yyscanner, "Set Value Failed for %u", $1);
 								YYABORT;
 							}
 						}
@@ -276,13 +278,13 @@ var_init:		var_entry TYPE var_value
 					case ST_STRUCTURE:
 						if ($3.type != IT_INDEX)
 						{
-							yyerror("Typemismatch for variable %d", $1);
+							yyerror(yyscanner, "Typemismatch for variable %d", $1);
 							YYABORT;
 						}
 						psObj = getBaseObjFromId((UDWORD)$3.index);
 						if (!psObj)
 						{
-							yyerror("Structure id %d not found", (UDWORD)$3.index);
+							yyerror(yyscanner, "Structure id %d not found", (UDWORD)$3.index);
 							YYABORT;
 						}
 
@@ -290,14 +292,14 @@ var_init:		var_entry TYPE var_value
 
 						if (psObj->type != OBJ_STRUCTURE)
 						{
-							yyerror("Object id %d is not a structure", (UDWORD)$3.index);
+							yyerror(yyscanner, "Object id %d is not a structure", (UDWORD)$3.index);
 							YYABORT;
 						}
 						else
 						{
 							if(!eventSetContextVar(psCurrContext, $1, &data))
 							{
-								yyerror("Set Value Failed for %u", $1);
+								yyerror(yyscanner, "Set Value Failed for %u", $1);
 								YYABORT;
 							}
 						}
@@ -305,13 +307,13 @@ var_init:		var_entry TYPE var_value
 					case ST_FEATURE:
 						if ($3.type != IT_INDEX)
 						{
-							yyerror("Typemismatch for variable %d", $1);
+							yyerror(yyscanner, "Typemismatch for variable %d", $1);
 							YYABORT;
 						}
 						psObj = getBaseObjFromId((UDWORD)$3.index);
 						if (!psObj)
 						{
-							yyerror("Feature id %d not found", (UDWORD)$3.index);
+							yyerror(yyscanner, "Feature id %d not found", (UDWORD)$3.index);
 							YYABORT;
 						}
 
@@ -319,14 +321,14 @@ var_init:		var_entry TYPE var_value
 
 						if (psObj->type != OBJ_FEATURE)
 						{
-							yyerror("Object id %d is not a feature", (UDWORD)$3.index);
+							yyerror(yyscanner, "Object id %d is not a feature", (UDWORD)$3.index);
 							YYABORT;
 						}
 						else
 						{
 							if(!eventSetContextVar(psCurrContext, $1, &data))
 							{
-								yyerror("Set Value Failed for %u", $1);
+								yyerror(yyscanner, "Set Value Failed for %u", $1);
 								YYABORT;
 							}
 						}
@@ -334,7 +336,7 @@ var_init:		var_entry TYPE var_value
 					case ST_FEATURESTAT:
 						if ($3.type != IT_STRING)
 						{
-							yyerror("Typemismatch for variable %d", $1);
+							yyerror(yyscanner, "Typemismatch for variable %d", $1);
 							YYABORT;
 						}
 
@@ -342,12 +344,12 @@ var_init:		var_entry TYPE var_value
 
 						if (data.v.ival == -1)
 						{
-							yyerror("Feature Stat %s not found", $3.pString);
+							yyerror(yyscanner, "Feature Stat %s not found", $3.pString);
 							YYABORT;
 						}
 						if (!eventSetContextVar(psCurrContext, $1, &data))
 						{
-							yyerror("Set Value Failed for %u", $1);
+							yyerror(yyscanner, "Set Value Failed for %u", $1);
 							YYABORT;
 						}
 						break;
@@ -356,213 +358,213 @@ var_init:		var_entry TYPE var_value
 						if ($3.type != IT_BOOL ||
 							!eventSetContextVar(psCurrContext, $1, &data))
 						{
-							yyerror("Typemismatch for variable %d", $1);
+							yyerror(yyscanner, "Typemismatch for variable %d", $1);
 							YYABORT;
 						}
 						break;
 					case ST_BODY:
 						if ($3.type != IT_STRING)
 						{
-							yyerror("Typemismatch for variable %d", $1);
+							yyerror(yyscanner, "Typemismatch for variable %d", $1);
 							YYABORT;
 						}
 						data.v.ival = getCompFromResName(COMP_BODY, $3.pString);
 						if (data.v.ival == -1)
 						{
-							yyerror("body component %s not found", $3.pString);
+							yyerror(yyscanner, "body component %s not found", $3.pString);
 							YYABORT;
 						}
 						if (!eventSetContextVar(psCurrContext, $1, &data))
 						{
-							yyerror("Set Value Failed for %u", $1);
+							yyerror(yyscanner, "Set Value Failed for %u", $1);
 							YYABORT;
 						}
 						break;
 					case ST_PROPULSION:
 						if ($3.type != IT_STRING)
 						{
-							yyerror("Typemismatch for variable %d", $1);
+							yyerror(yyscanner, "Typemismatch for variable %d", $1);
 							YYABORT;
 						}
 						data.v.ival = getCompFromResName(COMP_PROPULSION, $3.pString);
 						if (data.v.ival == -1)
 						{
-							yyerror("Propulsion component %s not found", $3.pString);
+							yyerror(yyscanner, "Propulsion component %s not found", $3.pString);
 							YYABORT;
 						}
 						if (!eventSetContextVar(psCurrContext, $1, &data))
 						{
-							yyerror("Set Value Failed for %u", $1);
+							yyerror(yyscanner, "Set Value Failed for %u", $1);
 							YYABORT;
 						}
 						break;
 					case ST_ECM:
 						if ($3.type != IT_STRING)
 						{
-							yyerror("Typemismatch for variable %d", $1);
+							yyerror(yyscanner, "Typemismatch for variable %d", $1);
 							YYABORT;
 						}
 						data.v.ival = getCompFromResName(COMP_ECM, $3.pString);
 						if (data.v.ival == -1)
 						{
-							yyerror("ECM component %s not found", $3.pString);
+							yyerror(yyscanner, "ECM component %s not found", $3.pString);
 							YYABORT;
 						}
 						if (!eventSetContextVar(psCurrContext, $1, &data))
 						{
-							yyerror("Set Value Failed for %u", $1);
+							yyerror(yyscanner, "Set Value Failed for %u", $1);
 							YYABORT;
 						}
 						break;
 					case ST_SENSOR:
 						if ($3.type != IT_STRING)
 						{
-							yyerror("Typemismatch for variable %d", $1);
+							yyerror(yyscanner, "Typemismatch for variable %d", $1);
 							YYABORT;
 						}
 						data.v.ival = getCompFromResName(COMP_SENSOR, $3.pString);
 						if (data.v.ival == -1)
 						{
-							yyerror("Sensor component %s not found", $3.pString);
+							yyerror(yyscanner, "Sensor component %s not found", $3.pString);
 							YYABORT;
 						}
 						if (!eventSetContextVar(psCurrContext, $1, &data))
 						{
-							yyerror("Set Value Failed for %u", $1);
+							yyerror(yyscanner, "Set Value Failed for %u", $1);
 							YYABORT;
 						}
 						break;
 					case ST_CONSTRUCT:
 						if ($3.type != IT_STRING)
 						{
-							yyerror("Typemismatch for variable %d", $1);
+							yyerror(yyscanner, "Typemismatch for variable %d", $1);
 							YYABORT;
 						}
 						data.v.ival = getCompFromResName(COMP_CONSTRUCT, $3.pString);
 						if (data.v.ival == -1)
 						{
-							yyerror("Construct component %s not found",	$3.pString);
+							yyerror(yyscanner, "Construct component %s not found",	$3.pString);
 							YYABORT;
 						}
 						if (!eventSetContextVar(psCurrContext, $1, &data))
 						{
-							yyerror("Set Value Failed for %u", $1);
+							yyerror(yyscanner, "Set Value Failed for %u", $1);
 							YYABORT;
 						}
 						break;
 					case ST_REPAIR:
 						if ($3.type != IT_STRING)
 						{
-							yyerror("Typemismatch for variable %d", $1);
+							yyerror(yyscanner, "Typemismatch for variable %d", $1);
 							YYABORT;
 						}
 						data.v.ival = getCompFromResName(COMP_REPAIRUNIT, $3.pString);
 						if (data.v.ival == -1)
 						{
-							yyerror("Repair component %s not found",	$3.pString);
+							yyerror(yyscanner, "Repair component %s not found",	$3.pString);
 							YYABORT;
 						}
 						if (!eventSetContextVar(psCurrContext, $1, &data))
 						{
-							yyerror("Set Value Failed for %u", $1);
+							yyerror(yyscanner, "Set Value Failed for %u", $1);
 							YYABORT;
 						}
 						break;
 					case ST_BRAIN:
 						if ($3.type != IT_STRING)
 						{
-							yyerror("Typemismatch for variable %d", $1);
+							yyerror(yyscanner, "Typemismatch for variable %d", $1);
 							YYABORT;
 						}
 						data.v.ival = getCompFromResName(COMP_BRAIN, $3.pString);
 						if (data.v.ival == -1)
 						{
-							yyerror("Brain component %s not found",	$3.pString);
+							yyerror(yyscanner, "Brain component %s not found",	$3.pString);
 							YYABORT;
 						}
 						if (!eventSetContextVar(psCurrContext, $1, &data))
 						{
-							yyerror("Set Value Failed for %u", $1);
+							yyerror(yyscanner, "Set Value Failed for %u", $1);
 							YYABORT;
 						}
 						break;
 					case ST_WEAPON:
 						if ($3.type != IT_STRING)
 						{
-							yyerror("Typemismatch for variable %d", $1);
+							yyerror(yyscanner, "Typemismatch for variable %d", $1);
 							YYABORT;
 						}
 						data.v.ival = getCompFromResName(COMP_WEAPON, $3.pString);
 						if (data.v.ival == -1)
 						{
-							yyerror("Weapon component %s not found", $3.pString);
+							yyerror(yyscanner, "Weapon component %s not found", $3.pString);
 							YYABORT;
 						}
 						if (!eventSetContextVar(psCurrContext, $1, &data))
 						{
-							yyerror("Set Value Failed for %u", $1);
+							yyerror(yyscanner, "Set Value Failed for %u", $1);
 							YYABORT;
 						}
 						break;
 					case ST_TEMPLATE:
 						if ($3.type != IT_STRING)
 						{
-							yyerror("Typemismatch for variable %d", $1);
+							yyerror(yyscanner, "Typemismatch for variable %d", $1);
 							YYABORT;
 						}
 						data.v.oval = getTemplateFromTranslatedNameNoPlayer($3.pString);	/* store pointer to the template */
 						if (data.v.oval == NULL)
 						{
-							yyerror("Template %s not found", $3.pString);
+							yyerror(yyscanner, "Template %s not found", $3.pString);
 							YYABORT;
 						}
 						if (!eventSetContextVar(psCurrContext, $1, &data))
 						{
-							yyerror("Set Value Failed for %u", $1);
+							yyerror(yyscanner, "Set Value Failed for %u", $1);
 							YYABORT;
 						}
 						break;
 					case ST_STRUCTURESTAT:
 						if ($3.type != IT_STRING)
 						{
-							yyerror("Typemismatch for variable %d", $1);
+							yyerror(yyscanner, "Typemismatch for variable %d", $1);
 							YYABORT;
 						}
 						data.v.ival = getStructStatFromName($3.pString);
 						if (data.v.ival == -1)
 						{
-							yyerror("Structure Stat %s not found", $3.pString);
+							yyerror(yyscanner, "Structure Stat %s not found", $3.pString);
 							YYABORT;
 						}
 						if (!eventSetContextVar(psCurrContext, $1, &data))
 						{
-							yyerror("Set Value Failed for %u", $1);
+							yyerror(yyscanner, "Set Value Failed for %u", $1);
 							YYABORT;
 						}
 						break;
 					case ST_STRUCTUREID:
 						if ($3.type != IT_INDEX)
 						{
-							yyerror("Typemismatch for variable %d", $1);
+							yyerror(yyscanner, "Typemismatch for variable %d", $1);
 							YYABORT;
 						}
 						psObj = getBaseObjFromId((UDWORD)$3.index);
 						if (!psObj)
 						{
-							yyerror("Structure id %d not found", (UDWORD)$3.index);
+							yyerror(yyscanner, "Structure id %d not found", (UDWORD)$3.index);
 							YYABORT;
 						}
 						data.v.ival = $3.index;	/* store structure id */
 						if (psObj->type != OBJ_STRUCTURE)
 						{
-							yyerror("Object id %d is not a structure", (UDWORD)$3.index);
+							yyerror(yyscanner, "Object id %d is not a structure", (UDWORD)$3.index);
 							YYABORT;
 						}
 						else
 						{
 							if(!eventSetContextVar(psCurrContext, $1, &data))
 							{
-								yyerror("Set Value Failed for %u", $1);
+								yyerror(yyscanner, "Set Value Failed for %u", $1);
 								YYABORT;
 							}
 						}
@@ -570,26 +572,26 @@ var_init:		var_entry TYPE var_value
 					case ST_DROIDID:
 						if ($3.type != IT_INDEX)
 						{
-							yyerror("Typemismatch for variable %d", $1);
+							yyerror(yyscanner, "Typemismatch for variable %d", $1);
 							YYABORT;
 						}
 						psObj = getBaseObjFromId((UDWORD)$3.index);
 						if (!psObj)
 						{
-							yyerror("Droid id %d not found", (UDWORD)$3.index);
+							yyerror(yyscanner, "Droid id %d not found", (UDWORD)$3.index);
 							YYABORT;
 						}
 						data.v.ival = $3.index;	/* store id*/
 						if (psObj->type != OBJ_DROID)
 						{
-							yyerror("Object id %d is not a droid", (UDWORD)$3.index);
+							yyerror(yyscanner, "Object id %d is not a droid", (UDWORD)$3.index);
 							YYABORT;
 						}
 						else
 						{
 							if(!eventSetContextVar(psCurrContext, $1, &data))
 							{
-								yyerror("Set Value Failed for %u", $1);
+								yyerror(yyscanner, "Set Value Failed for %u", $1);
 								YYABORT;
 							}
 						}
@@ -597,36 +599,36 @@ var_init:		var_entry TYPE var_value
 					case ST_INTMESSAGE:
 						if ($3.type != IT_STRING)
 						{
-							yyerror("Typemismatch for variable %d", $1);
+							yyerror(yyscanner, "Typemismatch for variable %d", $1);
 							YYABORT;
 						}
 						data.v.oval = getViewData($3.pString);	/* store pointer to the intelligence message */
 						if (data.v.oval == NULL)
 						{
-							yyerror("Message %s not found", $3.pString);
+							yyerror(yyscanner, "Message %s not found", $3.pString);
 							YYABORT;
 						}
 						if(!eventSetContextVar(psCurrContext, $1, &data))
 						{
-							yyerror("Set Value Failed for %u", $1);
+							yyerror(yyscanner, "Set Value Failed for %u", $1);
 							YYABORT;
 						}
 						break;
 					case ST_TEXTSTRING:
 						if ($3.type != IT_STRING)
 						{
-							yyerror("Typemismatch for variable %d", $1);
+							yyerror(yyscanner, "Typemismatch for variable %d", $1);
 							YYABORT;
 						}
 						if (!scrvGetString($3.pString, &pString))
 						{
-							yyerror("String %s not found", $3.pString);
+							yyerror(yyscanner, "String %s not found", $3.pString);
 							YYABORT;
 						}
 						data.v.sval = pString;
 						if (!eventSetContextVar(psCurrContext, $1, &data))
 						{
-							yyerror("Set Value Failed for %u", $1);
+							yyerror(yyscanner, "Set Value Failed for %u", $1);
 							YYABORT;
 						}
 						break;
@@ -636,20 +638,20 @@ var_init:		var_entry TYPE var_value
 
 							if ($3.type != IT_STRING)
 							{
-								yyerror("Typemismatch for variable %d", $1);
+								yyerror(yyscanner, "Typemismatch for variable %d", $1);
 								YYABORT;
 							}
 							// just check the level exists
 							psLevel = levFindDataSet($3.pString);
 							if (psLevel == NULL)
 							{
-								yyerror("Level %s not found", $3.pString);
+								yyerror(yyscanner, "Level %s not found", $3.pString);
 								YYABORT;
 							}
 							data.v.sval = psLevel->pName; /* store string pointer */
 							if (!eventSetContextVar(psCurrContext, $1, &data))
 							{
-								yyerror("Set Value Failed for %u", $1);
+								yyerror(yyscanner, "Set Value Failed for %u", $1);
 								YYABORT;
 							}
 						}
@@ -657,7 +659,7 @@ var_init:		var_entry TYPE var_value
 					case ST_SOUND:
 						if ($3.type != IT_STRING)
 						{
-							yyerror("Typemismatch for variable %d", $1);
+							yyerror(yyscanner, "Typemismatch for variable %d", $1);
 							YYABORT;
 						}
 						/* find audio id */
@@ -671,30 +673,30 @@ var_init:		var_entry TYPE var_value
 						data.v.ival = compIndex;
 						if (!eventSetContextVar(psCurrContext, $1, &data))
 						{
-							yyerror("Set Value Failed for %u", $1);
+							yyerror(yyscanner, "Set Value Failed for %u", $1);
 							YYABORT;
 						}
 						break;
 					case ST_RESEARCH:
 						if ($3.type != IT_STRING)
 						{
-							yyerror("Typemismatch for variable %d", $1);
+							yyerror(yyscanner, "Typemismatch for variable %d", $1);
 							YYABORT;
 						}
 						data.v.oval = getResearch($3.pString, true);	/* store pointer */
 						if (data.v.oval == NULL)
 						{
-							yyerror("Research %s not found", $3.pString);
+							yyerror(yyscanner, "Research %s not found", $3.pString);
 							YYABORT;
 						}
 						if(!eventSetContextVar(psCurrContext, $1, &data))
 						{
-							yyerror("Set Value Failed for %u", $1);
+							yyerror(yyscanner, "Set Value Failed for %u", $1);
 							YYABORT;
 						}
 						break;
 					default:
-						yyerror("Unknown type: %s", asTypeTable[$2].pIdent);
+						yyerror(yyscanner, "Unknown type: %s", asTypeTable[$2].pIdent);
 						YYABORT;
 						break;
 					}
@@ -718,7 +720,7 @@ array_index_list:	array_index
 				{
 					if ($1->dimensions >= VAR_MAX_DIMENSIONS)
 					{
-						yyerror("Too many dimensions for array");
+						yyerror(yyscanner, "Too many dimensions for array");
 						YYABORT;
 					}
 					$1->elements[$1->dimensions] = $3;
@@ -735,7 +737,7 @@ var_entry:		VAR
 				{
 					UDWORD	index;
 
-					if (!scrvCheckArrayIndex($1, $2, &index))
+					if (!scrvCheckArrayIndex(yyscanner, $1, $2, &index))
 					{
 						YYABORT;
 					}
@@ -833,24 +835,26 @@ BOOL scrvLookUpArray(const char *pIdent, UDWORD *pIndex)
 BOOL scrvLoad(PHYSFS_file* fileHandle)
 {
 	lexerinput_t input;
+	yyscan_t scanner;
+	scrv_lex_init(&scanner);
 
 	input.type = LEXINPUT_PHYSFS;
 	input.input.physfsfile = fileHandle;
 
-	scrv_set_extra(&input);
+	scrv_set_extra(&input, scanner);
 
-	if (scrv_parse() != 0)
+	if (scrv_parse(scanner) != 0)
 	{
-		scrv_lex_destroy();
+		scrv_lex_destroy(scanner);
 		return false;
 	}
-	scrv_lex_destroy();
+	scrv_lex_destroy(scanner);
 
 	return true;
 }
 
 /* A simple error reporting routine */
-void yyerror(const char* fmt, ...)
+void yyerror(yyscan_t yyscanner, const char* fmt, ...)
 {
 	char* txtBuf;
 	size_t size;
@@ -867,5 +871,5 @@ void yyerror(const char* fmt, ...)
 	va_end(args);
 
 	debug(LOG_ERROR, "VLO parse error: %s at line %d, text: '%s'",
-	      txtBuf, scrv_get_lineno(), scrv_get_text());
+	      txtBuf, scrv_get_lineno(yyscanner), scrv_get_text(yyscanner));
 }

@@ -49,12 +49,13 @@ static BOOL inComment = false;
 
 #include "lib/framework/lexer_input.h"
 
-#ifndef yyextra
-# define yyextra yyget_extra()
-#endif
+// Forward declarations to suppress warnings due to -Wmissing-declarations
+extern int scrv_get_column(yyscan_t yyscanner);
+extern void scrv_set_column(int column_no, yyscan_t yyscanner);
 
 %}
 
+%option reentrant
 %option yylineno nounput
 %option warn nodefault
 %option prefix="scrv_"
@@ -116,7 +117,7 @@ FALSE						{ scrv_lval.bval = false;	 return BOOLEAN_T; }
 	/* Match quoted text */
 \"							{ BEGIN QUOTE; }
 <QUOTE>\"					{ BEGIN 0; }
-<QUOTE>\n					{ scrv_error("Unexpected end of line in string"); }
+<QUOTE>\n					{ scrv_error(yyscanner, "Unexpected end of line in string"); }
 <QUOTE>[^\"\n]*				{
 								strcpy(aText[currText], yytext);
 								scrv_lval.sval = aText[currText];
@@ -144,19 +145,7 @@ FALSE						{ scrv_lval.bval = false;	 return BOOLEAN_T; }
 
 %%
 
-static YY_EXTRA_TYPE pReadFile = NULL;
-
-void yyset_extra(YY_EXTRA_TYPE user_defined)
-{
-	pReadFile = user_defined;
-}
-
-YY_EXTRA_TYPE yyget_extra()
-{
-	return pReadFile;
-}
-
-int scrv_wrap(void)
+int scrv_wrap(yyscan_t yyscanner)
 {
 	if (inComment)
 	{
