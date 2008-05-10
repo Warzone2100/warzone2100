@@ -221,7 +221,11 @@ public	int				player,numLego,numTemplates[2],numBaseStructs,numDef,numRes[2],
 						numGatewayDef,numAA,numRepairTmpl,maxDamageLevels,damageLevel[4],
 						numBranches,techTanks,techAir,numVtolTemplates,numVitalStructs,
 						numMinimalStruct[10],maxVitalBuilders[10],numCmdTmpl,numTruckTmpl,
-						numBBTempl,numLightCyborgs;
+						numBBTempl,numLightCyborgs,numTankATWeapons,numTankPropulsions,
+						numTankBodies;
+public	WEAPON			tankATWeapon[20];
+public	PROPULSION		tankPropulsion[5];
+public	BODY			tankBody[15];
 public	TEMPLATE		truck[3],tmpl[2][50],tmplOK[8],tmplBB[3],tmplRep[5],
 						vtoltmpl[2][5],tmplCmd[4],cybEngineer,cybMechanic,cybTempl[6];
 public	STRUCTURESTAT	fac,derrick,powGen,vtolfac,resFac,powMod,facMod,resMod,cmdCenter,
@@ -759,6 +763,7 @@ function float	secondLanchasterLaw(float _fAllyStartForce, float _fEnemyStartFor
 function bool	LanchasterVictory(float _fStartForceA, float _fStartForceB, float _fKillRateA, float _fKillRateB);
 function int	LanchasterTimeToWin(float _fStartForceA, float _fStartForceB, float _fKillRateA, float _fKillRateB);
 function float	objBaseDamagePerSec(BASEOBJ _obj);
+function float	weaponDamagePerSec(int _player, WEAPON _weap);
 function float	enemyFirepowerInRange(int _x, int _y, int _range);
 function float	friendlyFirepowerInRange(int _x, int _y, int _range);
 function float	groupFirepower(GROUP _group);
@@ -777,11 +782,17 @@ function int	numDroidsByType(int _player, int _droidType);
 
 function string	strGratitude();
 
+function TEMPLATE getBestTankATTemplate(int _factoryCapacity);
+
 function void	setPhase(int _phase, int _timeout);
 function bool	canSeePlayerBase(int _player);
 function bool	canSeeLoc(int _x, int _y);
 function bool	enemyTargetInRange(int _enemy, int _x, int _y, int _range);
 function BASEOBJ findEnemyTargetInRange(int _enemy, int _x, int _y, int _range, bool _bStructures, bool _bDroids);
+
+function PROPULSION getBestTankPropulsion();
+function BODY getBestTankBody(int _factoryCapacity);
+function WEAPON getBestTankATWeapon();
 
 //=====================================================================
 //	Events
@@ -7773,9 +7784,11 @@ function void buildTanks()
 {
 	local	int			_numTotalCommanders,_index,_numNeedCmds,
 						_result,_result2,_facNum,_tmplGroup,_numDroidsNoCmd,
-						_needTotalRepairers,_minUnassignedDroids,_needBBs;
+						_needTotalRepairers,_minUnassignedDroids,_needBBs,
+						_maxBodySize;
 	local	bool		_bStartedBuild;
 	local	STRUCTURE	_factory;
+	local	TEMPLATE	_bestTankATTemplate;
 
 	//dbg(" " & me & ")  Executing buildTanks()");
 
@@ -7929,29 +7942,28 @@ function void buildTanks()
 				//--------------------
 				if(not _bStartedBuild)		//didn't start building BB or repair unit
 				{
-					//Find best available templates
-					_result = numTemplates[_tmplGroup];
-					_result2 = 0;
-					while((_result > 0) and (_result2 < MAX_CHOICE_DROIDS))
+					// get max template size a factory cab build
+					_maxBodySize = skGetFactoryCapacity(_factory);
+					
+					// find best anti-tank template
+					_bestTankATTemplate = getBestTankATTemplate(_maxBodySize);
+
+					if(_bestTankATTemplate != NULLTEMPLATE)
 					{
-						_result = _result - 1;
-						if(skCanBuildTemplate(me,_factory, tmpl[_tmplGroup][_result]))
+						if(skCanBuildTemplate(me, _factory, _bestTankATTemplate))
 						{
-							tmplOK[_result2] = tmpl[_tmplGroup][_result];
-							_result2 = _result2 + 1;
+							_bStartedBuild = TRUE;
+							buildDroid(_bestTankATTemplate, _factory, me, 1);
+						}
+						else
+						{
+							ASSERT(false, "buildTanks(): factory with size " &
+								_maxBodySize & " can't build template", me);
 						}
 					}
-
-					if(_result2 > 0)		//found a template to build
+					else
 					{
-						_bStartedBuild = TRUE;
-						buildDroid(tmplOK[random(_result2)], _factory, me, 1);
-
-						//if((alert) and (not lowMilitary))
-						//{
-						//	if(
-						//	numTemplatesInProduction(truck,me);
-						//}
+						dbg("found no tank template to build", me);
 					}
 				}
 			}
@@ -15982,47 +15994,71 @@ function int LanchasterTimeToWin(float _fStartForceA, float _fStartForceB,
 	return (int)_fTimeToWin;
 }
 
+function float weaponDamagePerSec(int _player, WEAPON _weap)
+{
+	local	float	_fFirePowerPerSec,_fFireRatePerSec,_fShortRangeDamagePerSec,
+					_fLongRangeDamagePerSec,_fReloadTimeInSecs,_fFirePauseInSecs;
+	
+	local	int		_upgradedShortHit,_upgradedLongHit,_upgradedDamage,
+					_upgradedFirePause;
+					
+	local	int		_tempShortHit;
+
+	_tempShortHit = weaponShortHitUpgrade(_player, _weap);
+			
+	// get upgradable weapon values
+	_upgradedShortHit = _weap.shortHit + (_weap.shortHit * _tempShortHit) / 100;
+	_upgradedLongHit = _weap.longHit + (_weap.longHit * weaponLongHitUpgrade(_player, _weap)) / 100;
+	_upgradedDamage = _weap.damage + (_weap.damage * weaponDamageUpgrade(_player, _weap)) / 100;
+	_upgradedFirePause = _weap.firePause + (_weap.firePause * weaponFirePauseUpgrade(_player, _weap)) / 100;
+
+
+	//debug("weap damage " & _weap.firePause & "," & _weap.reloadTime & "," & _weap.numRounds &
+	//		"," & _weap.damage & "," & _weap.shortHit & "," & _weap.longHit);
+	//debug("weap damage2 " & _upgradedShortHit & "," & _upgradedLongHit & "," & _upgradedDamage &
+	//		"," & _upgradedFirePause);
+	//debug("weap damage3 " & weaponDamageUpgrade(_player, _weap) & "," & weaponShortHitUpgrade(_player, _weap) & "," & weaponLongHitUpgrade(_player, _weap) &
+	//		"," & weaponFirePauseUpgrade(_player, _weap));
+	
+	
+	// avoid division by 0
+	_fFirePauseInSecs = (float)_upgradedFirePause / 1000.0;
+	if(_fFirePauseInSecs == 0.0){
+		_fFirePauseInSecs = 0.001;
+	}
+
+	if(_weap.numRounds > 0){
+
+		// avoid division by 0
+		if(_weap.reloadTime == 0){
+			_fReloadTimeInSecs = 0.001;
+		}else{
+			_fReloadTimeInSecs = (float)_weap.reloadTime / 1000.0;
+		}
+
+		_fFireRatePerSec = 1.0 / ((_fReloadTimeInSecs + (_fFirePauseInSecs * (float)(_weap.numRounds - 1))) / (float)_weap.numRounds);
+	}else{
+		_fFireRatePerSec = 1.0 / _fFirePauseInSecs;
+	}
+
+
+	_fShortRangeDamagePerSec = _fFireRatePerSec * ((float)_upgradedDamage / 100.0 * (float)_upgradedShortHit);
+	_fLongRangeDamagePerSec = _fFireRatePerSec * ((float)_upgradedDamage / 100.0 * (float)_upgradedLongHit);
+
+	_fFirePowerPerSec = (_fShortRangeDamagePerSec + _fLongRangeDamagePerSec) / 2.0;
+
+	return _fFirePowerPerSec;
+}
+
 // firepower of a droid (including upgrades)
 function float objBaseDamagePerSec(BASEOBJ _obj)
 {
-	local	float	_fFirePowerPerSec,_fFireRatePerSec,_fShortRangeDamagePerSec,
-					_fLongRangeDamagePerSec,_fReloadTime,_fFirePause;
-
 	// Make sure droid has a weapon
 	if(_obj.weapon == NULLSTAT){
 		return 0.0;
 	}
 
-	debug(_obj.firePause & "," & _obj.reloadTime & "," & _obj.numRounds &
-			"," & _obj.damage & "," & _obj.shortHit & "," & _obj.longHit);
-
-	// avoid division by 0
-	if(_obj.firePause == 0){
-		_fFirePause = 0.001;
-	}else{
-		_fFirePause = (float)_obj.firePause;
-	}
-
-	if(_obj.numRounds > 0){
-
-		// avoid division by 0
-		if(_obj.reloadTime == 0){
-			_fReloadTime = 0.001;
-		}else{
-			_fReloadTime = (float)_obj.reloadTime;
-		}
-
-		_fFireRatePerSec = (1.0 / (_fReloadTime / 10.0) + ((_fFirePause / 10.0) * (float)(_obj.numRounds - 1))) / (float)_obj.numRounds;
-	}else{
-		_fFireRatePerSec = 1.0 / (_fFirePause / 10.0);
-	}
-
-	_fShortRangeDamagePerSec = _fFireRatePerSec * ((float)_obj.damage / 100.0 * (float)_obj.shortHit);
-	_fLongRangeDamagePerSec = _fFireRatePerSec * ((float)_obj.damage / 100.0 * (float)_obj.longHit);
-
-	_fFirePowerPerSec = (_fShortRangeDamagePerSec + _fLongRangeDamagePerSec) / 2.0;
-
-	return _fFirePowerPerSec;
+	return weaponDamagePerSec(_obj.player, _obj.weapon);
 }
 
 function float enemyFirepowerInRange(int _x, int _y, int _range)
@@ -16422,4 +16458,98 @@ function BASEOBJ findEnemyTargetInRange(int _enemy, int _x, int _y, int _range, 
 	}
 
 	return _target;
+}
+
+function PROPULSION getBestTankPropulsion()
+{
+	local	int 	_index;
+	
+	_index = numTankPropulsions - 1;
+	while(_index >= 0)
+	{
+		if(isComponentAvailable(me, tankPropulsion[_index]))
+		{
+			dbg("best prop index is " & _index, me);
+			return tankPropulsion[_index];
+		}
+		_index--;
+	}
+	
+	dbg("no prop ", me);
+	return NULLSTAT;
+}
+
+function BODY getBestTankBody(int _factoryCapacity)
+{
+	local	int 	_index;
+	
+	_index = numTankBodies - 1;
+	while(_index >= 0)
+	{
+		if(isComponentAvailable(me, tankBody[_index]))
+		{
+			// make sure can be built by factory
+			if(getBodySize(tankBody[_index]) <= _factoryCapacity)
+			{
+				dbg("best body index is " & _index, me);
+				return tankBody[_index];
+			}
+		}
+		_index--;
+	}
+	
+	dbg("no body for size " & _factoryCapacity & " (" & getBodySize(tankBody[0]) & ")", me);
+	return NULLSTAT;
+}
+
+function WEAPON getBestTankATWeapon()
+{
+	local	int 	_index,_bestIndex,_bestDamage,_damage;
+	local	WEAPON	_bestWeapon;
+	
+	_bestDamage = NONE;
+	_bestIndex = NONE;
+	
+	_index = 0;
+	while(_index < numTankATWeapons)
+	{
+		if(isComponentAvailable(me, tankATWeapon[_index]))
+		{
+			_damage = (int)weaponDamagePerSec(me, tankATWeapon[_index]);
+			dbg("damage of " & _index & " is " & _damage, me);
+			if((_damage > _bestDamage) || (_bestIndex == NONE))
+			{
+				dbg("_bestIndex = " & _index , me);
+				_bestIndex = _index;
+				_bestWeapon = tankATWeapon[_index];
+				_bestDamage =_damage;
+			}
+		}
+		_index++;
+	}
+	
+	dbg("best weapon index is " & _bestIndex, me);
+
+	return _bestWeapon;		// can be NULLSTAT
+}
+
+function TEMPLATE getBestTankATTemplate(int _factoryCapacity)
+{
+	local	TEMPLATE	_newTemplate;
+	local	BODY		_bestBody;
+	local	PROPULSION	_bestPropulsion;
+	local	WEAPON		_bestWeapon;
+	
+	_bestBody = getBestTankBody(_factoryCapacity);
+	_bestPropulsion = getBestTankPropulsion();
+	_bestWeapon = getBestTankATWeapon();
+	
+	if(_bestBody != NULLSTAT and
+		_bestPropulsion != NULLSTAT and
+		_bestWeapon != NULLSTAT)
+	{
+		_newTemplate = assembleWeaponTemplate(me, _bestBody, _bestPropulsion, _bestWeapon);
+	}
+
+	return _newTemplate;	//	can be NULLTEMPLATE
 }
