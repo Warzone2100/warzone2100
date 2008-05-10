@@ -56,7 +56,6 @@ static UDWORD currText=0;
 %option yylineno noyywrap nounput
 %option warn nodefault
 %option prefix="scrv_"
-%option header-file="scriptvals_lexer.lex.h"
 
 %x COMMENT
 %x SLCOMMENT

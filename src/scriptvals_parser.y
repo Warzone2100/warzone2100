@@ -34,7 +34,6 @@
 #include "scriptvals.h"
 #include "lib/framework/lexer_input.h"
 #include "scriptvals_parser.tab.h"
-#include "scriptvals_lexer.lex.h"
 #include "src/scripttabs.h"
 #include "src/objects.h"
 #include "src/droid.h"
@@ -45,6 +44,12 @@
 
 // The current script code
 static SCRIPT_CODE		*psCurrScript;
+
+extern int scrv_lex(YYSTYPE * yylval_param);
+extern void scrv_set_extra(YY_EXTRA_TYPE user_defined);
+extern int scrv_lex_destroy(void);
+extern int scrv_get_lineno(void);
+extern char* scrv_get_text(void);
 
 // The current script context
 static SCRIPT_CONTEXT	*psCurrContext;
