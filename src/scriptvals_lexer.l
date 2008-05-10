@@ -47,21 +47,7 @@ static UDWORD currText=0;
 // Note if we are in a comment
 static BOOL inComment = false;
 
-/* Handle to the input file */
-#define YY_EXTRA_TYPE PHYSFS_file *
-
-#define YY_INPUT(buf,result,max_size) \
-		if (PHYSFS_eof(yyextra)) \
-		{ \
-			buf[0] = EOF; result = YY_NULL; \
-		} \
-		else { \
-			result = PHYSFS_read(yyextra, buf, 1, max_size); \
-			if (result == -1) \
-			{ \
-				buf[0] = EOF; result = YY_NULL; \
-			} \
-		}
+#include "lib/framework/lexer_input.h"
 
 #ifndef yyextra
 # define yyextra yyget_extra()

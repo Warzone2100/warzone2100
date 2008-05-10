@@ -10,6 +10,7 @@ SRC=configfile.c \
 	frameresource.c \
 	input.c \
 	i18n.c \
+	lexer_input.c \
 	printf_ext.c \
 	resource_parser.tab.c \
 	resource_lexer.lex.c \

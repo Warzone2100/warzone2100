@@ -32,6 +32,8 @@
 #include "lib/sound/audio.h"
 
 #include "scriptvals.h"
+#include "lib/framework/lexer_input.h"
+#include "scriptvals_parser.tab.h"
 #include "scriptvals_lexer.lex.h"
 #include "src/scripttabs.h"
 #include "src/objects.h"
@@ -830,7 +832,12 @@ BOOL scrvLookUpArray(const char *pIdent, UDWORD *pIndex)
 // Load a script value file
 BOOL scrvLoad(PHYSFS_file* fileHandle)
 {
-	scrv_set_extra(fileHandle);
+	lexerinput_t input;
+
+	input.type = LEXINPUT_PHYSFS;
+	input.input.physfsfile = fileHandle;
+
+	scrv_set_extra(&input);
 
 	if (scrv_parse() != 0)
 	{
