@@ -74,7 +74,7 @@ CAM2_4_MSG			_("TRANSPORT MISSION: Rescue civilians from Containment Camp")
 CAM2_4_MSG2			_("The Collective are processing and exterminating civilians at this base.")
 
 /* Cam2_4 Rescue civilians from containment camp - briefing */
-CAM2_4_MSG3			_("TRANSPORT MISSION: Rescue Civilians from Containment Camp ")
+CAM2_4_MSG3			_("TRANSPORT MISSION: Rescue civilians from Containment Camp")
 CAM2_4_MSG4			_("You are to rescue the civilians.")
 CAM2_4_MSG5			_("Then destroy the camp.")
 

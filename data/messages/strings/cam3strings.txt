@@ -79,8 +79,8 @@ CAM3_AB_MSG4		_("The benefits from researching it could be vast.")
 
 /* Cam3A-B - NEXUS Takes Control - mission brief */
 CAM3_AB_MSG5		_("Enemy forces are ....... from these coordinates.")
-CAM3_AB_MSG6		_("Defend the base and ........ the ....... ")
-CAM3_AB_MSG7		_("Search and destroy .... ")
+CAM3_AB_MSG6		_("Defend the base and ........ the .......")
+CAM3_AB_MSG7		_("Search and destroy ....")
 
 /* Cam3_3 - Ambush Nexus Forces - player ident */
 CAM3_3_MSG1		_("TRANSPORT MISSION: Ambush NEXUS Forces")
