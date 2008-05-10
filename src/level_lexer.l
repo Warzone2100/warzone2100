@@ -36,9 +36,6 @@
 #define YYLMAX	255
 #endif
 
-// Note if we are in a comment
-static BOOL inComment = false;
-
 struct buffer
 {
 	const char* begin;
@@ -65,7 +62,7 @@ struct buffer
 
 %}
 
-%option yylineno nounput
+%option yylineno noyywrap nounput
 %option prefix="lev_"
 %option header-file="level_lexer.lex.h"
 
@@ -114,9 +111,9 @@ miss_clear                                      return MISS_CLEAR;
 [ \t\n\x0d\x0a]						;
 
 	/* Strip comments */
-"/*"						{ inComment=true; BEGIN COMMENT; }
+"/*"						{ BEGIN COMMENT; }
 <COMMENT>"*/" |
-<COMMENT>"*/"\n				{ inComment=false; BEGIN 0; }
+<COMMENT>"*/"\n				{ BEGIN 0; }
 <COMMENT>. |
 <COMMENT>\n					;
 
@@ -135,24 +132,12 @@ static YY_EXTRA_TYPE pBuffer = NULL;
 void yyset_extra(YY_EXTRA_TYPE user_defined)
 {
 	pBuffer = user_defined;
-	inComment = false;
 }
 
 YY_EXTRA_TYPE yyget_extra()
 {
 	return pBuffer;
 }
-
-int lev_wrap(void)
-{
-	if (inComment)
-	{
-		debug( LOG_ERROR, "Warning: reched end of file in a comment" );
-		abort();
-	}
-	return 1;
-}
-
 
 /* Older GNU Flex versions don't define yylex_destroy()
  * (and neither define a subminor version)

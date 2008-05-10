@@ -44,9 +44,6 @@
 static char aText[TEXT_BUFFERS][YYLMAX];
 static UDWORD currText=0;
 
-// Note if we are in a comment
-static BOOL inComment = false;
-
 #include "lib/framework/lexer_input.h"
 
 // Forward declarations to suppress warnings due to -Wmissing-declarations
@@ -56,7 +53,7 @@ extern void scrv_set_column(int column_no, yyscan_t yyscanner);
 %}
 
 %option reentrant bison-bridge
-%option yylineno nounput
+%option yylineno noyywrap nounput
 %option warn nodefault
 %option prefix="scrv_"
 %option header-file="scriptvals_lexer.lex.h"
@@ -129,9 +126,9 @@ FALSE						{ yylval->bval = false;	 return BOOLEAN_T; }
 [ \t\n\x0d\x0a]						;
 
 	/* Strip comments */
-"/*"						{ inComment=true; BEGIN COMMENT; }
+"/*"						{ BEGIN COMMENT; }
 <COMMENT>"*/" |
-<COMMENT>"*/"\n				{ inComment=false; BEGIN 0; }
+<COMMENT>"*/"\n				{ BEGIN 0; }
 <COMMENT>. |
 <COMMENT>\n					;
 
@@ -144,17 +141,6 @@ FALSE						{ yylval->bval = false;	 return BOOLEAN_T; }
 .							return yytext[0];
 
 %%
-
-int scrv_wrap(yyscan_t yyscanner)
-{
-	if (inComment)
-	{
-		debug( LOG_ERROR, "Warning: reached end of file in a comment" );
-		abort();
-	}
-	return 1;
-}
-
 
 /* Older GNU Flex versions don't define yylex_destroy()
  * (and neither define a subminor version)
