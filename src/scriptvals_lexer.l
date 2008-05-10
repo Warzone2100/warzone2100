@@ -50,9 +50,10 @@ static UDWORD currText=0;
 # define yyextra yyget_extra()
 #endif
 
+#define yylval (&scrv_lval)
+
 %}
 
-%option bison-bridge
 %option yylineno noyywrap nounput
 %option warn nodefault
 %option prefix="scrv_"

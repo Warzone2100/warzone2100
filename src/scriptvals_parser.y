@@ -45,7 +45,7 @@
 // The current script code
 static SCRIPT_CODE		*psCurrScript;
 
-extern int scrv_lex(YYSTYPE * yylval_param);
+extern int scrv_lex(void);
 extern void scrv_set_extra(YY_EXTRA_TYPE user_defined);
 extern int scrv_lex_destroy(void);
 extern int scrv_get_lineno(void);
@@ -107,7 +107,6 @@ static BOOL scrvCheckArrayIndex(SDWORD base, ARRAY_INDEXES *psIndexes, UDWORD *p
 %name-prefix="scrv_"
 %defines
 %error-verbose
-%pure-parser
 
 %union {
 	BOOL			bval;
