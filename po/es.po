@@ -1,21 +1,22 @@
 # Spanish translation for warzone2100
-# Copyright (c) 2008 Warzone Resurrection Project
+# Copyright (c) 2008 Warzone 2100 Resurrection Project
+# Copyright (c) 2008 Rosetta Contributors and Canonical Ltd 2008
 # This file is distributed under the same license as the warzone2100 package.
-# Samuel G. I. <amuchamu@gmail.com>, 2008.
 #
+# Samuel G. I. <amuchamu@gmail.com>, 2008.
 msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
 "POT-Creation-Date: 2008-05-09 16:13+0200\n"
-"PO-Revision-Date: 2008-04-21 13:55+0000\n"
+"PO-Revision-Date: 2008-05-09 17:09+0000\n"
 "Last-Translator: Samuel G. I. <amuchamu@gmail.com>\n"
 "Language-Team: Spanish <warzone-dev@gna.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Launchpad-Export-Date: 2008-04-28 05:16+0000\n"
+"X-Launchpad-Export-Date: 2008-05-10 13:56+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 "X-Poedit-Language: Spanish\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -10564,7 +10565,7 @@ msgstr "%s - Daño %d%% - Experiencia %d, %s"
 
 #: src/display.c:2055
 msgid "Truck ordered to build Oil Derrick"
-msgstr "Camión enviado a construir la Torre Petrolífera"
+msgstr "Camión enviado a construir Torre Petrolífera"
 
 #: src/droid.c:190
 msgid "Unit Lost!"
@@ -10982,16 +10983,18 @@ msgid "Tile"
 msgstr "fichero"
 
 #: src/hci.c:4104
+#, fuzzy
 msgid "Place tiles on map"
-msgstr ""
+msgstr "Fijar Límites de Estructuras"
 
 #: src/hci.c:4113
 msgid "Unit"
 msgstr "Unidad"
 
 #: src/hci.c:4114
+#, fuzzy
 msgid "Place Unit on map"
-msgstr ""
+msgstr "Fijar Límites de Estructuras"
 
 #: src/hci.c:4122
 msgid "Struct"
@@ -11007,8 +11010,9 @@ msgid "Feat"
 msgstr "Hazaña"
 
 #: src/hci.c:4132
+#, fuzzy
 msgid "Place Features on map"
-msgstr ""
+msgstr "Fijar Límites de Estructuras"
 
 #: src/hci.c:4143
 #, fuzzy

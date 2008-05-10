@@ -1,21 +1,24 @@
-# Italian translations for Warzone 2100 package.
-# Copyright (C) 2008 Warzone Resurrection Project
-# This file is distributed under the same license as the Warzone 2100 package.
+# Italian translations for warzone2100
+# Copyright (C) 2008 Warzone 2100 Resurrection Project
+# Copyright (c) 2008 Rosetta Contributors and Canonical Ltd 2008
+# This file is distributed under the same license as the warzone2100 package.
 #
 # Federico Aromolo <miracleblade@hotmail.it>, 2008.
+# Matteo Ferrabone <Unknown>, 2008.
+# Alberto <Unknown>, 2008.
 msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
 "POT-Creation-Date: 2008-05-09 16:13+0200\n"
-"PO-Revision-Date: 2008-04-14 11:58+0000\n"
-"Last-Translator: Matteo Ferrabone <Unknown>\n"
+"PO-Revision-Date: 2008-05-09 19:41+0000\n"
+"Last-Translator: Alberto <Unknown>\n"
 "Language-Team: Italian <warzone-dev@gna.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2008-04-28 05:16+0000\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Launchpad-Export-Date: 2008-05-10 13:56+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 "X-Poedit-Language: Italian\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -1729,7 +1732,7 @@ msgstr "Lancia fiamme"
 #: data/mp/messages/strings/names.txt:537
 #: data/mp/messages/strings/names.txt:680
 msgid "Lancer"
-msgstr ""
+msgstr "Lanciere"
 
 #: data/messages/strings/names.txt:215
 #: data/messages/strings/names.txt:220

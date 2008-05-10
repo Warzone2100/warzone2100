@@ -1,21 +1,23 @@
-# English translations for Warzone 2100 package.
-# Copyright (C) 2007 THE Warzone 2100'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the Warzone 2100 package.
-# Automatically generated, 2007.
+# English translations for warzone2100
+# Copyright (c) 2007-2008 Warzone 2100 Resurrection Project
+# Copyright (c) 2008 Rosetta Contributors and Canonical Ltd 2008
+# This file is distributed under the same license as the warzone2100 package.
 #
+# Per I. Mathisen <per@gna.org>, 2007.
+# Olav Andreas Lindekleiv <Unknown>, 2008.
 msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
 "POT-Creation-Date: 2008-05-09 16:13+0200\n"
-"PO-Revision-Date: 2008-04-26 12:58+0000\n"
+"PO-Revision-Date: 2008-05-09 16:54+0000\n"
 "Last-Translator: Olav Andreas Lindekleiv <Unknown>\n"
 "Language-Team: none\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Launchpad-Export-Date: 2008-04-28 05:16+0000\n"
+"X-Launchpad-Export-Date: 2008-05-10 13:56+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: data/messages/strings/cam1strings.txt:3
@@ -11002,16 +11004,18 @@ msgid "Tile"
 msgstr ""
 
 #: src/hci.c:4104
+#, fuzzy
 msgid "Place tiles on map"
-msgstr ""
+msgstr "Sett strukturbegrensninger"
 
 #: src/hci.c:4113
 msgid "Unit"
 msgstr "Enhet"
 
 #: src/hci.c:4114
+#, fuzzy
 msgid "Place Unit on map"
-msgstr ""
+msgstr "Sett strukturbegrensninger"
 
 #: src/hci.c:4122
 msgid "Struct"
@@ -11027,8 +11031,9 @@ msgid "Feat"
 msgstr ""
 
 #: src/hci.c:4132
+#, fuzzy
 msgid "Place Features on map"
-msgstr ""
+msgstr "Sett strukturbegrensninger"
 
 #: src/hci.c:4143
 #, fuzzy
