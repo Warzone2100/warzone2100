@@ -834,6 +834,7 @@ BOOL scrvLookUpArray(const char *pIdent, UDWORD *pIndex)
 // Load a script value file
 BOOL scrvLoad(PHYSFS_file* fileHandle)
 {
+	bool retval;
 	lexerinput_t input;
 	yyscan_t scanner;
 	scrv_lex_init(&scanner);
@@ -843,14 +844,10 @@ BOOL scrvLoad(PHYSFS_file* fileHandle)
 
 	scrv_set_extra(&input, scanner);
 
-	if (scrv_parse(scanner) != 0)
-	{
-		scrv_lex_destroy(scanner);
-		return false;
-	}
+	retval = (scrv_parse(scanner) == 0);
 	scrv_lex_destroy(scanner);
 
-	return true;
+	return retval;
 }
 
 /* A simple error reporting routine */
