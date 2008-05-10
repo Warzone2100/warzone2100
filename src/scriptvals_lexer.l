@@ -46,13 +46,13 @@ static UDWORD currText=0;
 
 #include "lib/framework/lexer_input.h"
 
-// Forward declarations to suppress warnings due to -Wmissing-declarations
-extern int scrv_get_column(yyscan_t yyscanner);
-extern void scrv_set_column(int column_no, yyscan_t yyscanner);
+#ifndef yyextra
+# define yyextra yyget_extra()
+#endif
 
 %}
 
-%option reentrant bison-bridge
+%option bison-bridge
 %option yylineno noyywrap nounput
 %option warn nodefault
 %option prefix="scrv_"
@@ -114,7 +114,7 @@ FALSE						{ yylval->bval = false;	 return BOOLEAN_T; }
 	/* Match quoted text */
 \"							{ BEGIN QUOTE; }
 <QUOTE>\"					{ BEGIN 0; }
-<QUOTE>\n					{ scrv_error(yyscanner, "Unexpected end of line in string"); }
+<QUOTE>\n					{ scrv_error("Unexpected end of line in string"); }
 <QUOTE>[^\"\n]*				{
 								strcpy(aText[currText], yytext);
 								yylval->sval = aText[currText];
@@ -141,6 +141,18 @@ FALSE						{ yylval->bval = false;	 return BOOLEAN_T; }
 .							return yytext[0];
 
 %%
+
+static YY_EXTRA_TYPE pBuffer = NULL;
+
+void yyset_extra(YY_EXTRA_TYPE user_defined)
+{
+	pBuffer = user_defined;
+}
+
+YY_EXTRA_TYPE yyget_extra()
+{
+	return pBuffer;
+}
 
 /* Older GNU Flex versions don't define yylex_destroy()
  * (and neither define a subminor version)
