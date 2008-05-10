@@ -52,6 +52,30 @@ static UDWORD currText=0;
 
 #define yylval (&scrv_lval)
 
+/* Older GNU Flex versions don't define yyget_extra(), yyset_extra(),
+ * yyget_text() and yyget_lineno().
+ * (and neither define a subminor version)
+ */
+#if !defined(YY_FLEX_SUBMINOR_VERSION) || (YY_FLEX_SUBMINOR_VERSION < 9)
+# define yyget_extra  scrv_get_extra
+# define yyset_extra  scrv_set_extra
+# define yyget_lineno scrv_get_lineno
+# define yyget_text   scrv_get_text
+extern void yyset_extra(YY_EXTRA_TYPE user_defined);
+extern YY_EXTRA_TYPE yyget_extra(void);
+extern int yyget_lineno(void);
+int yyget_lineno()
+{
+	return yylineno;
+}
+
+extern char* yyget_text(void);
+char* yyget_text()
+{
+	return yytext;
+}
+#endif
+
 %}
 
 %option yylineno noyywrap nounput
