@@ -102,6 +102,7 @@ static BOOL scrvCheckArrayIndex(yyscan_t yyscanner, SDWORD base, ARRAY_INDEXES *
 %name-prefix="scrv_"
 %defines
 %error-verbose
+%pure-parser
 %parse-param {yyscan_t yyscanner}
 %lex-param   {yyscan_t yyscanner}
 

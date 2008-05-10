@@ -55,7 +55,7 @@ extern void scrv_set_column(int column_no, yyscan_t yyscanner);
 
 %}
 
-%option reentrant
+%option reentrant bison-bridge
 %option yylineno nounput
 %option warn nodefault
 %option prefix="scrv_"
@@ -68,18 +68,18 @@ extern void scrv_set_column(int column_no, yyscan_t yyscanner);
 %%
 
 	/* Keywords */
-int							{ scrv_lval.tval = VAL_INT; return TYPE; }
-INT							{ scrv_lval.tval = VAL_INT; return TYPE; }
-bool						{ scrv_lval.tval = VAL_BOOL; return TYPE; }
-BOOL						{ scrv_lval.tval = VAL_BOOL; return TYPE; }
+int							{ yylval->tval = VAL_INT; return TYPE; }
+INT							{ yylval->tval = VAL_INT; return TYPE; }
+bool						{ yylval->tval = VAL_BOOL; return TYPE; }
+BOOL						{ yylval->tval = VAL_BOOL; return TYPE; }
 script						return SCRIPT;
 store						return STORE;
 run							return RUN;
 
-true						{ scrv_lval.bval = true;	 return BOOLEAN_T; }
-TRUE						{ scrv_lval.bval = true;	 return BOOLEAN_T; }
-false						{ scrv_lval.bval = false;	 return BOOLEAN_T; }
-FALSE						{ scrv_lval.bval = false;	 return BOOLEAN_T; }
+true						{ yylval->bval = true;	 return BOOLEAN_T; }
+TRUE						{ yylval->bval = true;	 return BOOLEAN_T; }
+false						{ yylval->bval = false;	 return BOOLEAN_T; }
+FALSE						{ yylval->bval = false;	 return BOOLEAN_T; }
 
 	/* Match text values */
 [a-zA-Z][-0-9_a-zA-Z]*		{
@@ -89,30 +89,30 @@ FALSE						{ scrv_lval.bval = false;	 return BOOLEAN_T; }
 								/* See if this is a variable id or a type */
 								if (scrvLookUpType(yytext, &type))
 								{
-									scrv_lval.tval = type;
+									yylval->tval = type;
 									return TYPE;
 								}
 								else if (scrvLookUpVar(yytext, &index))
 								{
-									scrv_lval.vindex = index;
+									yylval->vindex = index;
 									return VAR;
 								}
 								else if (scrvLookUpArray(yytext, &index))
 								{
-									scrv_lval.vindex = index;
+									yylval->vindex = index;
 									return ARRAY;
 								}
 								else
 								{
 									strcpy(aText[currText], yytext);
-									scrv_lval.sval = aText[currText];
+									yylval->sval = aText[currText];
 									currText = (currText + 1) % TEXT_BUFFERS;
 									return IDENT;
 								}
 							}
 
 	/* Match integer numbers */
--?[0-9]+					{ scrv_lval.ival = atol(yytext); return INTEGER; }
+-?[0-9]+					{ yylval->ival = atol(yytext); return INTEGER; }
 
 	/* Match quoted text */
 \"							{ BEGIN QUOTE; }
@@ -120,7 +120,7 @@ FALSE						{ scrv_lval.bval = false;	 return BOOLEAN_T; }
 <QUOTE>\n					{ scrv_error(yyscanner, "Unexpected end of line in string"); }
 <QUOTE>[^\"\n]*				{
 								strcpy(aText[currText], yytext);
-								scrv_lval.sval = aText[currText];
+								yylval->sval = aText[currText];
 								currText = (currText + 1) % TEXT_BUFFERS;
 								return QTEXT;
 							}
