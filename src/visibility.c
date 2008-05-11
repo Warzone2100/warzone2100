@@ -797,5 +797,8 @@ void scrResetPlayerTileVisibility(SDWORD player)
 
 bool scrTileIsVisible(SDWORD player, SDWORD x, SDWORD y)
 {
+	ASSERT(x >= 0 && y >= 0 && x < UBYTE_MAX && y < UBYTE_MAX,
+		"invalid tile coordinates");
+
 	return scrTileVisible[player][x][y];
 }
