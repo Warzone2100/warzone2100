@@ -115,13 +115,19 @@ TITLECODE titleLoop(void)
 	pie_SetFogStatus(false);
 	screen_RestartBackDrop();
 
+	// When we first init the game, firstcall is true.
 	if (firstcall)
 	{
 		firstcall = false;
-		if(strlen(iptoconnect))
-			changeTitleMode(GAMEFIND);
+		// We now check to see if we were given a ip/hostname on the command line
+		if(strlen(iptoconnect) )
+		{
+			changeTitleMode(GAMEFIND);		// a ip/hostname was found, so go directly to the GAMEFIND screen
+		}
 		else
-			changeTitleMode(TITLE);
+		{
+			changeTitleMode(TITLE);			// normal game, run main title screen.
+		}
 		// Using software cursors (when on) for these menus due to a bug in SDL's SDL_ShowCursor()
 		pie_SetMouse(CURSOR_DEFAULT, war_GetColouredCursor());
 	}

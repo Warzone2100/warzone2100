@@ -1502,6 +1502,7 @@ BOOL NETfindGame(void)
 		NetPlay.bHost			= true;
 		return true;
 	}
+	// We first check to see if we were given a IP/hostname from the command line
 	if (strlen(iptoconnect) )
 	{
 		if (SDLNet_ResolveHost(&ip, iptoconnect, port) == -1)
@@ -1512,8 +1513,9 @@ BOOL NETfindGame(void)
 		}
 		else
 		{
+			// We got a valid ip now
 			hostname = strdup(iptoconnect);		//copy it
-			memset(iptoconnect,0x0,sizeof(iptoconnect));	//reset it
+			memset(iptoconnect,0x0,sizeof(iptoconnect));	//reset it (so we don't loop back to this routine)
 		}
 	}
 	else if (SDLNet_ResolveHost(&ip, hostname, port) == -1)
