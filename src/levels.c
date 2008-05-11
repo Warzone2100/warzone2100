@@ -227,7 +227,7 @@ static BOOL levLoadSingleWRF(const char* name)
 	}
 
 	// load the data
-	debug(LOG_WZ, "levLoadSingleWRF: Loading %s ...", name);
+	debug(LOG_WZ, "Loading %s ...", name);
 	if (!resLoad(name, 0))
 	{
 		return false;
@@ -257,7 +257,7 @@ BOOL levLoadData(const char* name, char *pSaveName, SDWORD saveType)
 	SDWORD			i;
 	BOOL            bCamChangeSaveGame;
 
-	debug(LOG_WZ, "Loading level %s (%s)", name, pSaveName);
+	debug(LOG_WZ, "Loading level %s (%s, type %d)", name, pSaveName, (int)saveType);
 
 	levelLoadType = saveType;
 
@@ -265,9 +265,10 @@ BOOL levLoadData(const char* name, char *pSaveName, SDWORD saveType)
 	psNewLevel = levFindDataSet(name);
 	if (psNewLevel == NULL)
 	{
-		debug(LOG_NEVER, "levLoadData: dataset %s not found - trying to load as WRF", name);
+		debug(LOG_WZ, "Dataset %s not found - trying to load as WRF", name);
 		return levLoadSingleWRF(name);
 	}
+	debug(LOG_WZ, "** Data set found is %s type %d", psNewLevel->pName, (int)psNewLevel->type);
 
 	/* Keep a copy of the present level name */
 	strlcpy(currentLevelName, name, sizeof(currentLevelName));
@@ -278,6 +279,7 @@ BOOL levLoadData(const char* name, char *pSaveName, SDWORD saveType)
 		if (psNewLevel->psChange != NULL)
 		{
 			bCamChangeSaveGame = true;
+			debug(LOG_WZ, "** CAMCHANGE FOUND");
 		}
 	}
 
@@ -286,7 +288,7 @@ BOOL levLoadData(const char* name, char *pSaveName, SDWORD saveType)
 	if (((psNewLevel->psChange != NULL) && (psCurrLevel != NULL)) || bCamChangeSaveGame)
 	{
 		//store the level name
-		debug( LOG_WZ, "levLoadData: Found CAMCHANGE dataset\n" );
+		debug(LOG_WZ, "Found CAMCHANGE dataset");
 		psChangeLevel = psNewLevel;
 		psNewLevel = psNewLevel->psChange;
 	}
@@ -294,7 +296,7 @@ BOOL levLoadData(const char* name, char *pSaveName, SDWORD saveType)
 	// ensure the correct dataset is loaded
 	if (psNewLevel->type == LDS_CAMPAIGN)
 	{
-		debug( LOG_ERROR, "levLoadData: Cannot load a campaign dataset (%s)", psNewLevel->pName );
+		debug(LOG_ERROR, "Cannot load a campaign dataset (%s)", psNewLevel->pName);
 		return false;
 	}
 	else
@@ -306,12 +308,12 @@ BOOL levLoadData(const char* name, char *pSaveName, SDWORD saveType)
 				(psCurrLevel->type >= LDS_NONE && psNewLevel->type  < LDS_NONE))
 			{
 				// there is a dataset loaded but it isn't the correct one
-				debug(LOG_WZ, "levLoadData: Incorrect base dataset loaded - levReleaseAll()");
+				debug(LOG_WZ, "Incorrect base dataset loaded - levReleaseAll()");
 				levReleaseAll();	// this sets psCurrLevel to NULL
 			}
 			else
 			{
-				debug(LOG_WZ, "levLoadData: Correct base dataset already loaded.");
+				debug(LOG_WZ, "Correct base dataset already loaded.");
 			}
 		}
 
@@ -320,13 +322,13 @@ BOOL levLoadData(const char* name, char *pSaveName, SDWORD saveType)
 		{
 			if (psNewLevel->psBaseData != NULL)
 			{
-				debug(LOG_WZ, "levLoadData: Setting base dataset to load: %s", psNewLevel->psBaseData->pName);
+				debug(LOG_WZ, "Setting base dataset to load: %s", psNewLevel->psBaseData->pName);
 			}
 			psBaseData = psNewLevel->psBaseData;
 		}
 		else
 		{
-			debug(LOG_WZ, "levLoadData: No base dataset to load");
+			debug(LOG_WZ, "No base dataset to load");
 			psBaseData = NULL;
 		}
 	}
@@ -336,7 +338,7 @@ BOOL levLoadData(const char* name, char *pSaveName, SDWORD saveType)
 	// reset the old mission data if necessary
 	if (psCurrLevel != NULL)
 	{
-		debug(LOG_WZ, "levLoadData: reseting old mission data");
+		debug(LOG_WZ, "Reseting old mission data");
 		if (!levReleaseMissionData())
 		{
 			return false;
@@ -357,7 +359,7 @@ BOOL levLoadData(const char* name, char *pSaveName, SDWORD saveType)
 	if (psNewLevel->type == LDS_COMPLETE || //psNewLevel->type >= LDS_MULTI_TYPE_START ||
 		psBaseData != NULL)
 	{
-		debug(LOG_WZ, "levLoadData: Calling stageOneInitialise!");
+		debug(LOG_WZ, "Calling stageOneInitialise!");
 		if (!stageOneInitialise())
 		{
 			return false;
@@ -367,13 +369,13 @@ BOOL levLoadData(const char* name, char *pSaveName, SDWORD saveType)
 	// load up a base dataset if necessary
 	if (psBaseData != NULL)
 	{
-		debug( LOG_NEVER, "levLoadData: loading base dataset %s\n", psBaseData->pName );
+		debug(LOG_WZ, "Loading base dataset %s", psBaseData->pName);
 		for(i=0; i<LEVEL_MAXFILES; i++)
 		{
 			if (psBaseData->apDataFiles[i])
 			{
 				// load the data
-				debug(LOG_WZ, "levLoadData: Loading %s ...", psBaseData->apDataFiles[i]);
+				debug(LOG_WZ, "Loading %s ...", psBaseData->apDataFiles[i]);
 				if (!resLoad(psBaseData->apDataFiles[i], i))
 				{
 					return false;
@@ -392,7 +394,7 @@ BOOL levLoadData(const char* name, char *pSaveName, SDWORD saveType)
 	{
 		ASSERT( psNewLevel->type == LDS_BETWEEN,
 			"levLoadData: only BETWEEN missions do not need a .gam file" );
-		debug( LOG_NEVER, "levLoadData: no .gam file for level: BETWEEN mission\n" );
+		debug(LOG_WZ, "No .gam file for level: BETWEEN mission");
 		if (pSaveName != NULL)
 		{
 			if (psBaseData != NULL)
@@ -406,17 +408,17 @@ BOOL levLoadData(const char* name, char *pSaveName, SDWORD saveType)
 			//set the mission type before the saveGame data is loaded
 			if (saveType == GTYPE_SAVE_MIDMISSION)
 			{
-				debug( LOG_NEVER, "levLoadData: init mission stuff\n" );
+				debug(LOG_WZ, "Init mission stuff");
 				if (!startMissionSave(psNewLevel->type))
 				{
 					return false;
 				}
 
-				debug( LOG_NEVER, "levLoadData: dataSetSaveFlag\n" );
+				debug(LOG_NEVER, "dataSetSaveFlag");
 				dataSetSaveFlag();
 			}
 
-			debug( LOG_NEVER, "levLoadData: loading savegame: %s\n", pSaveName );
+			debug(LOG_NEVER, "Loading savegame: %s", pSaveName);
 			if (!loadGame(pSaveName, false, true,true))
 			{
 				return false;
@@ -426,7 +428,7 @@ BOOL levLoadData(const char* name, char *pSaveName, SDWORD saveType)
 		if ((pSaveName == NULL) ||
 			(saveType == GTYPE_SAVE_START))
 		{
-			debug( LOG_NEVER, "levLoadData: start mission - no .gam\n" );
+			debug(LOG_NEVER, "Start mission - no .gam");
 			if (!startMission(psNewLevel->type, NULL))
 			{
 				return false;
@@ -437,7 +439,6 @@ BOOL levLoadData(const char* name, char *pSaveName, SDWORD saveType)
 	//we need to load up the save game data here for a camchange
 	if (bCamChangeSaveGame)
 	{
-		debug( LOG_NEVER, "levLoadData: no .gam file for level: BETWEEN mission\n" );
 		if (pSaveName != NULL)
 		{
 			if (psBaseData != NULL)
@@ -448,7 +449,7 @@ BOOL levLoadData(const char* name, char *pSaveName, SDWORD saveType)
 				}
 			}
 
-			debug( LOG_NEVER, "levLoadData: loading savegame: %s\n", pSaveName );
+			debug(LOG_NEVER, "loading savegame: %s", pSaveName);
 			if (!loadGame(pSaveName, false, true,true))
 			{
 				return false;
@@ -463,7 +464,7 @@ BOOL levLoadData(const char* name, char *pSaveName, SDWORD saveType)
 
 
 	// load the new data
-	debug( LOG_NEVER, "levLoadData: loading mission dataset: %s\n", psNewLevel->pName );
+	debug(LOG_NEVER, "Loading mission dataset: %s", psNewLevel->pName);
 	for(i=0; i < LEVEL_MAXFILES; i++)
 	{
 		if (psNewLevel->game == i)
@@ -483,17 +484,17 @@ BOOL levLoadData(const char* name, char *pSaveName, SDWORD saveType)
 				//set the mission type before the saveGame data is loaded
 				if (saveType == GTYPE_SAVE_MIDMISSION)
 				{
-					debug( LOG_NEVER, "levLoadData: init mission stuff\n" );
+					debug(LOG_WZ, "Init mission stuff");
 					if (!startMissionSave(psNewLevel->type))
 					{
 						return false;
 					}
 
-					debug( LOG_NEVER, "levLoadData: dataSetSaveFlag\n" );
+					debug(LOG_NEVER, "dataSetSaveFlag");
 					dataSetSaveFlag();
 				}
 
-				debug( LOG_NEVER, "levLoadData: loading save game %s\n", pSaveName );
+				debug(LOG_NEVER, "Loading save game %s", pSaveName);
 				if (!loadGame(pSaveName, false, true,true))
 				{
 					return false;
@@ -509,14 +510,14 @@ BOOL levLoadData(const char* name, char *pSaveName, SDWORD saveType)
 				{
 				case LDS_COMPLETE:
 				case LDS_CAMSTART:
-					debug(LOG_WZ, "levLoadData: LDS_COMPLETE / LDS_CAMSTART");
+					debug(LOG_WZ, "LDS_COMPLETE / LDS_CAMSTART");
 					if (!startMission(LDS_CAMSTART, psNewLevel->apDataFiles[i]))
 					{
 						return false;
 					}
 					break;
 				case LDS_BETWEEN:
-					debug(LOG_WZ, "levLoadData: LDS_BETWEEN");
+					debug(LOG_WZ, "LDS_BETWEEN");
 					if (!startMission(LDS_BETWEEN, psNewLevel->apDataFiles[i]))
 					{
 						return false;
@@ -524,14 +525,14 @@ BOOL levLoadData(const char* name, char *pSaveName, SDWORD saveType)
 					break;
 
 				case LDS_MKEEP:
-					debug(LOG_WZ, "levLoadData: LDS_MKEEP");
+					debug(LOG_WZ, "LDS_MKEEP");
 					if (!startMission(LDS_MKEEP, psNewLevel->apDataFiles[i]))
 					{
 						return false;
 					}
 					break;
 				case LDS_CAMCHANGE:
-					debug(LOG_WZ, "levLoadData: LDS_CAMCHANGE");
+					debug(LOG_WZ, "LDS_CAMCHANGE");
 					if (!startMission(LDS_CAMCHANGE, psNewLevel->apDataFiles[i]))
 					{
 						return false;
@@ -539,14 +540,14 @@ BOOL levLoadData(const char* name, char *pSaveName, SDWORD saveType)
 					break;
 
 				case LDS_EXPAND:
-					debug(LOG_WZ, "levLoadData: LDS_EXPAND");
+					debug(LOG_WZ, "LDS_EXPAND");
 					if (!startMission(LDS_EXPAND, psNewLevel->apDataFiles[i]))
 					{
 						return false;
 					}
 					break;
 				case LDS_EXPAND_LIMBO:
-					debug(LOG_WZ, "levLoadData: LDS_LIMBO");
+					debug(LOG_WZ, "LDS_LIMBO");
 					if (!startMission(LDS_EXPAND_LIMBO, psNewLevel->apDataFiles[i]))
 					{
 						return false;
@@ -554,15 +555,14 @@ BOOL levLoadData(const char* name, char *pSaveName, SDWORD saveType)
 					break;
 
 				case LDS_MCLEAR:
-					debug(LOG_WZ, "levLoadData: LDS_MCLEAR");
+					debug(LOG_WZ, "LDS_MCLEAR");
 					if (!startMission(LDS_MCLEAR, psNewLevel->apDataFiles[i]))
 					{
 						return false;
 					}
 					break;
 				case LDS_MKEEP_LIMBO:
-					debug(LOG_WZ, "levLoadData: LDS_MKEEP_LIMBO");
-					debug( LOG_NEVER, "MKEEP_LIMBO\n" );
+					debug(LOG_WZ, "LDS_MKEEP_LIMBO");
 					if (!startMission(LDS_MKEEP_LIMBO, psNewLevel->apDataFiles[i]))
 					{
 						return false;
@@ -571,7 +571,7 @@ BOOL levLoadData(const char* name, char *pSaveName, SDWORD saveType)
 				default:
 					ASSERT( psNewLevel->type >= LDS_MULTI_TYPE_START,
 						"levLoadData: Unexpected mission type" );
-					debug(LOG_WZ, "levLoadData: default (MULTIPLAYER)");
+					debug(LOG_WZ, "default (MULTIPLAYER)");
 					if (!startMission(LDS_CAMSTART, psNewLevel->apDataFiles[i]))
 					{
 						return false;
@@ -583,7 +583,7 @@ BOOL levLoadData(const char* name, char *pSaveName, SDWORD saveType)
 		else if (psNewLevel->apDataFiles[i])
 		{
 			// load the data
-			debug(LOG_WZ, "levLoadData: Loading %s", psNewLevel->apDataFiles[i]);
+			debug(LOG_WZ, "Loading %s", psNewLevel->apDataFiles[i]);
 			if (!resLoad(psNewLevel->apDataFiles[i], i + CURRENT_DATAID))
 			{
 				return false;
@@ -606,7 +606,7 @@ BOOL levLoadData(const char* name, char *pSaveName, SDWORD saveType)
 	{
 		//load script stuff
 		// load the event system state here for a save game
-		debug( LOG_NEVER, "levLoadData: loading script system state\n" );
+		debug(LOG_NEVER, "Loading script system state");
 		if (!loadScriptState(pSaveName))
 		{
 			return false;
