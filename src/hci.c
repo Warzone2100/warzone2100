@@ -1695,7 +1695,6 @@ INT_RETVAL intRunWidgets(void)
 		{
 			if(strlen(sRequestResult))
 			{
-				debug( LOG_ERROR, "Returned %s", sRequestResult );
 				if(bRequestLoad)
 				{
 //					loadGame(sRequestResult,true,false,true);
