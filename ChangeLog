@@ -1,4 +1,4 @@
-0000-00-00: SVN
+2008-05-11: Version 2.1_beta3
  * General:
    * New: An error will be shown if an invalid command line option is used.
    * New: "Map Preview" button added to the multiplayer/skirmish lobby, including ability to preview starting positions (patch #1040).
@@ -9,12 +9,21 @@
    * Fix: Game won't crash when commander units are used.
    * Fix: The sky does not disappear anymore when a tooltip is shown (bug #11216).
    * Fix: Translation-related bug in the structure limits screen fixed (bug #11345).
-   * Fix: Placing a beacon on map will not result in memory corruption and a crash anymore (bug #10955).
+   * Fix: Placing a beacon on map will not result in memory corruption and a crash anymore (bug #10955, #11373, and #11005).
    * Fix: Invalid group orders during multiplayer games are ignored (bug #11358).
    * Fix: Smoking structures (bug #11348).
    * Fix: AIs are now always run on Host's machine during multiplayer games.
    * Fix: Derricks do not disappear or blink anymore (bug #11357).
    * Fix: Save games will load properly when trying to load them when a game is already in progress (bug #11467).
+   * Fix: Bad textures after third load of saved game (bug #11641)
+   * Fix: VTOLs do not move over water (bug #11638)
+   * Fix: Multiple Nexus Link crashes (bugs #11500, #11501, and #11444)
+   * Fix: Assert if upgrading building while second building tab open (bugs #9336 and #11446)
+   * Fix: Assert when smoke effects drift off the map (bug #11586)
+   * Fix: Trucks going in circles (bug #11341)
+   * Fix: Render super-cyborgs using the bucket list, to avoid jittery HP bars.
+   * Fix: Bug that would make sliders inactive in multiplayer when not hosting a game.
+   * Fix: Lots of other things that we may have forgotten about. This beta really does contain a lot of bug fixes.
  * Gameplay:
    * New: Support for coloured mouse cursors (ingame only, not in menus), controlled by configuration option "ColouredCursor". Turned off by default. (patch #956)
    * New: Human player console messages are rendered using brighter color. Friend-foe colors are can be turned on using Shift+Tab key combination.
@@ -24,6 +33,7 @@
    * Change: Effect of skirmish modifier slider increased by 20%.
    * Change: 'ENTER' key is now the default key for bringing up the chat dialog instead of 'T' (key configuration must be reset in the 'Key Mappings' dialog).
    * Change: Removed lowest power level, added a higher power level.
+   * Change: VTOL movement rules simplified. No cliff height limitations anymore.
    * Fix: Dull mini-map player colors were replaced by brighter colors.
    * Fix: Rocket Autoloader research does not appear before lancer is researched and has "HEAT Rocket Warhead" as a prerequisite, instead of "HEAP Mini-Rockets" (bug #11312).
    * Fix: When cheating is on AIs get power boost on client's machines too, fixes "Not enough power to build droid" warning.
@@ -56,6 +66,8 @@
    * Fix: A beacon is always placed on map before initializing a command.
    * Fix: Several Aivolution AIs sending chat messages at the same time will not result in an infinite loop anymore.
    * Fix: Undefended enemy derricks will now be properly attacked with defenses by trucks.
+ * Mods:
+   * Change: We no longer use zones for path-finding. If they are present in the map file, they will be ignored. Gateways are only used by AI.
 
 2008-03-16: Version 2.1_beta2
  * General:
