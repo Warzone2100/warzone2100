@@ -258,6 +258,14 @@ BOOL levLoadData(const char* name, char *pSaveName, SDWORD saveType)
 	BOOL            bCamChangeSaveGame;
 
 	debug(LOG_WZ, "Loading level %s (%s, type %d)", name, pSaveName, (int)saveType);
+	if (saveType == GTYPE_SAVE_START || saveType == GTYPE_SAVE_MIDMISSION)
+	{
+		if (!levReleaseAll())
+		{
+			debug(LOG_ERROR, "Failed to unload old data");
+			return false;
+		}
+	}
 
 	levelLoadType = saveType;
 
