@@ -2217,6 +2217,7 @@ static BOOL getNameFromComp(UDWORD compType, char *pDest, UDWORD compIndex);
 
 //adjust the name depending on type of save game and whether resourceNames are used
 static BOOL getSaveObjectName(char *pName);
+static bool gameLoad(const char* fileName);
 
 /* set the global scroll values to use for the save game */
 static void setMapScroll(void);
@@ -2335,15 +2336,9 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 		freeAllStructs();
 		freeAllFeatures();
 
-	//	droidTemplateShutDown();
-		if (psMapTiles)
-		{
-//			free(psMapTiles);
-		}
 		//clear all the messages?
 		releaseAllProxDisp();
 	}
-
 
 	if (!keepObjects)
 	{
@@ -2391,7 +2386,6 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 		memset(asBodyUpgrade, 0, MAX_PLAYERS * sizeof(BODY_UPGRADE) * BODY_TYPE);
 		//JPS 25 feb
 	}
-
 
 	if (saveGameVersion >= VERSION_11)
 	{
@@ -2732,7 +2726,6 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 		}
 
 		//load the map and the droids then swap pointers
-//		psMapTiles = NULL;
 		//load in the map file
 		aFileName[fileExten] = '\0';
 		strcat(aFileName, "mission.map");

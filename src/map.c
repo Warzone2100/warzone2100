@@ -745,6 +745,7 @@ BOOL mapSaveTagged(char *pFileName)
 		tagWrite(0x08, psTile->height);
 		tagWrite(0x09, psTile->tileVisBits);
 		tagWrite(0x0a, psTile->tileInfoBits);
+		tagWrite(0x0b, (psTile->texture & TILE_ROTMASK) >> TILE_ROTSHIFT);
 
 		psTile++;
 		x++;
