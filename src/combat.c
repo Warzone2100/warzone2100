@@ -548,7 +548,7 @@ float objDamage(BASE_OBJECT *psObj, UDWORD damage, UDWORD originalhp, UDWORD wea
 	// And at least MIN_WEAPON_DAMAGE points
 	actualDamage = MAX(actualDamage, MIN_WEAPON_DAMAGE);
 
-	objTrace(LOG_ATTACK, psObj->id, "objDamage: Penetrated %d", actualDamage);
+	objTrace(psObj->id, "objDamage: Penetrated %d", actualDamage);
 
 	// If the shell did sufficient damage to destroy the object, deal with it and return
 	if (actualDamage >= psObj->body)

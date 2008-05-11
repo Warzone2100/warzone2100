@@ -183,7 +183,8 @@ extern UDWORD traceID;
  * has been enabled.
  * @see debug
  */
-#define objTrace(part, id, ...) do { if (enabled_debug[part] && id == traceID) _debug(part, __FUNCTION__, __VA_ARGS__); } while(0)
+#define objTrace(id, ...) do { if (id == traceID) _realObjTrace(id, __FUNCTION__, __VA_ARGS__); } while(0)
+void _realObjTrace(int id, const char *function, const char *str, ...) WZ_DECL_FORMAT(printf, 3, 4);
 static inline void objTraceEnable(UDWORD id) { traceID = id; }
 static inline void objTraceDisable(void) { traceID = 0; }
 

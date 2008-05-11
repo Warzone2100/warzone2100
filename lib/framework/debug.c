@@ -312,13 +312,30 @@ void dumpLog(int file)
 	dumpEOL(file);
 }
 
+void _realObjTrace(int id, const char *function, const char *str, ...)
+{
+	debug_callback * curCallback = callbackRegistry;
+	char vaBuffer[MAX_LEN_LOG_LINE];
+	char outputBuffer[MAX_LEN_LOG_LINE];
+	va_list ap;
+
+	va_start(ap, str);
+	vsnprintf(vaBuffer, MAX_LEN_LOG_LINE, str, ap);
+	va_end(ap);
+
+	snprintf(outputBuffer, MAX_LEN_LOG_LINE, "[%6d]: [%s] %s", id, function, vaBuffer);
+	while (curCallback)
+	{
+		curCallback->callback(&curCallback->data, outputBuffer);
+		curCallback = curCallback->next;
+	}
+}
+
 void _debug( code_part part, const char *function, const char *str, ... )
 {
 	va_list ap;
 	static char outputBuffer[MAX_LEN_LOG_LINE];
-
 	debug_callback * curCallback = callbackRegistry;
-
 	static unsigned int repeated = 0; /* times current message repeated */
 	static unsigned int next = 2;     /* next total to print update */
 	static unsigned int prev = 0;     /* total on last update */

@@ -226,25 +226,25 @@ static FPATH_RETVAL fpathGatewayRoute(DROID* psDroid, SDWORD routeMode, SDWORD s
 		psMoveCntl->numPoints = 0;
 	}
 
-	objTrace(LOG_MOVEMENT, psDroid->id, "fpathGatewayRoute: astar route : (%d,%d) -> (%d,%d)",
+	objTrace(psDroid->id, "fpathGatewayRoute: astar route : (%d,%d) -> (%d,%d)",
 		map_coord(sx), map_coord(sy), map_coord(fx), map_coord(fy));
 	asret = fpathAStarRoute(routeMode, &psDroid->sMove, sx, sy, fx,fy, propulsion);
 	if (asret == ASR_PARTIAL)
 	{
 		// routing hasn't finished yet
-		objTrace(LOG_MOVEMENT, psDroid->id, "fpathGatewayRoute: Reschedule");
+		objTrace(psDroid->id, "fpathGatewayRoute: Reschedule");
 		return FPR_WAIT;
 	}
 	else if (asret == ASR_NEAREST)
 	{
 		// all routing was in one zone - this is as good as it's going to be
-		objTrace(LOG_MOVEMENT, psDroid->id, "fpathGatewayRoute: Nearest route in same zone");
+		objTrace(psDroid->id, "fpathGatewayRoute: Nearest route in same zone");
 		return FPR_OK;
 	}
 	else if (asret == ASR_FAILED)
 	{
 		// all routing was in one zone - can't retry
-		objTrace(LOG_MOVEMENT, psDroid->id, "fpathGatewayRoute: Failed route in same zone");
+		objTrace(psDroid->id, "fpathGatewayRoute: Failed route in same zone");
 		return FPR_FAILED;
 	}
 	return FPR_OK;
@@ -325,7 +325,7 @@ FPATH_RETVAL fpathRoute(DROID* psDroid, SDWORD tX, SDWORD tY)
 			if (nearestDir == NUM_DIR)
 			{
 				// surrounded by blocking tiles, give up
- 				objTrace(LOG_MOVEMENT, psDroid->id, "droid %u: route failed (surrouned by blocking)", (unsigned int)psDroid->id);
+ 				objTrace(psDroid->id, "droid %u: route failed (surrouned by blocking)", (unsigned int)psDroid->id);
 				return FPR_FAILED;
 			}
 			else
@@ -356,10 +356,10 @@ FPATH_RETVAL fpathRoute(DROID* psDroid, SDWORD tX, SDWORD tY)
 		{
 			// no obstructions - trivial route
 			fpathSetDirectRoute(psDroid, targetX, targetY);
- 			objTrace(LOG_MOVEMENT, psDroid->id, "droid %u: trivial route", (unsigned int)psDroid->id);
+ 			objTrace(psDroid->id, "droid %u: trivial route", (unsigned int)psDroid->id);
 			if (psPartialRouteDroid != NULL)
 			{
-				objTrace(LOG_MOVEMENT, psDroid->id, "Unit %u: trivial route during multi-frame route", (unsigned int)psDroid->id);
+				objTrace(psDroid->id, "Unit %u: trivial route during multi-frame route", (unsigned int)psDroid->id);
 			}
 			return FPR_OK;
 		}
@@ -372,7 +372,7 @@ FPATH_RETVAL fpathRoute(DROID* psDroid, SDWORD tX, SDWORD tY)
 			// Does this code work? - Per
 			targetX = clearX;
 			targetY = clearY;
-			objTrace(LOG_MOVEMENT, psDroid->id, "Unit %u: end point is blocked, going to (%d, %d) instead",
+			objTrace(psDroid->id, "Unit %u: end point is blocked, going to (%d, %d) instead",
 			         (unsigned int)psDroid->id, (int)clearX, (int)clearY);
 		}
 	}
@@ -395,7 +395,7 @@ FPATH_RETVAL fpathRoute(DROID* psDroid, SDWORD tX, SDWORD tY)
 		}
 		else
 		{
-			objTrace(LOG_MOVEMENT, psDroid->id, "droid %u: reschedule", (unsigned int)psDroid->id);
+			objTrace(psDroid->id, "droid %u: reschedule", (unsigned int)psDroid->id);
 			return FPR_RESCHEDULE;
 		}
 	}
@@ -416,7 +416,7 @@ FPATH_RETVAL fpathRoute(DROID* psDroid, SDWORD tX, SDWORD tY)
 	}
 	else
 	{
-		objTrace(LOG_MOVEMENT, psDroid->id, "Partial Route");
+		objTrace(psDroid->id, "Partial Route");
 		psPartialRouteDroid = NULL;
 		retVal = fpathGatewayRoute(psDroid, ASR_CONTINUE, startX,startY, targetX,targetY, psMoveCntl, psPropStats->propulsionType);
 	}

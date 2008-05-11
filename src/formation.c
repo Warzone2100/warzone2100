@@ -224,8 +224,6 @@ void formationJoin(FORMATION *psFormation, const DROID* psDroid)
 	ASSERT( psFormation != NULL,
 		"formationJoin: invalid formation" );
 
-	objTrace(LOG_WARNING, psDroid->id, "joined formation %p", psFormation);
-
 	psFormation->refCount += 1;
 
 	rankDist = formationObjRadius(psDroid) * 2;
@@ -257,8 +255,6 @@ void formationLeave(FORMATION *psFormation, const DROID* psDroid)
 		"formationLeave: invalid formation" );
 	ASSERT( psFormation->refCount > 0,
 		"formationLeave: refcount is zero" );
-
-	objTrace(LOG_WARNING, psDroid->id, "left formation %p", psFormation);
 
 	asMembers = psFormation->asMembers;
 
