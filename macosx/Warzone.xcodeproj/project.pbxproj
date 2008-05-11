@@ -552,6 +552,7 @@
 		02B2132D0DA8755F0059E864 /* cursors.c in Sources */ = {isa = PBXBuildFile; fileRef = 02B2132A0DA8755F0059E864 /* cursors.c */; };
 		02B2132E0DA8755F0059E864 /* cursors16.c in Sources */ = {isa = PBXBuildFile; fileRef = 02B2132B0DA8755F0059E864 /* cursors16.c */; };
 		02B2132F0DA8755F0059E864 /* cursors32.c in Sources */ = {isa = PBXBuildFile; fileRef = 02B2132C0DA8755F0059E864 /* cursors32.c */; };
+		02BA7AB10DD78B1A0025A021 /* level_parser.y in Sources */ = {isa = PBXBuildFile; fileRef = 02BA7AB00DD78B1A0025A021 /* level_parser.y */; };
 		02BBB2090DA874F6002D438B /* exceptionhandler.c in Sources */ = {isa = PBXBuildFile; fileRef = 02BBB2070DA874F6002D438B /* exceptionhandler.c */; };
 		02BBB20A0DA874F6002D438B /* exceptionhandler.h in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 02BBB2080DA874F6002D438B /* exceptionhandler.h */; };
 		02C8AEF80BE68A5600E9D8A7 /* png_util.c in Sources */ = {isa = PBXBuildFile; fileRef = 02C8AEF60BE68A5600E9D8A7 /* png_util.c */; };
@@ -1559,6 +1560,7 @@
 		02B2132A0DA8755F0059E864 /* cursors.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = cursors.c; path = ../lib/framework/cursors.c; sourceTree = SOURCE_ROOT; };
 		02B2132B0DA8755F0059E864 /* cursors16.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = cursors16.c; path = ../lib/framework/cursors16.c; sourceTree = SOURCE_ROOT; };
 		02B2132C0DA8755F0059E864 /* cursors32.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = cursors32.c; path = ../lib/framework/cursors32.c; sourceTree = SOURCE_ROOT; };
+		02BA7AB00DD78B1A0025A021 /* level_parser.y */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.yacc; name = level_parser.y; path = ../src/level_parser.y; sourceTree = SOURCE_ROOT; };
 		02BBB2070DA874F6002D438B /* exceptionhandler.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = exceptionhandler.c; path = ../lib/exceptionhandler/exceptionhandler.c; sourceTree = SOURCE_ROOT; };
 		02BBB2080DA874F6002D438B /* exceptionhandler.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = exceptionhandler.h; path = ../lib/exceptionhandler/exceptionhandler.h; sourceTree = SOURCE_ROOT; };
 		02C8AEF60BE68A5600E9D8A7 /* png_util.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = png_util.c; path = ../lib/ivis_common/png_util.c; sourceTree = SOURCE_ROOT; };
@@ -2221,6 +2223,7 @@
 		0246A1970BD3CCC3004D1C70 /* Warzone */ = {
 			isa = PBXGroup;
 			children = (
+				02BA7AB00DD78B1A0025A021 /* level_parser.y */,
 				02CDDD080D159D5900722688 /* autorevision.h */,
 				0223BBAC0CFE3C380056EF85 /* main.h */,
 				0223BBAD0CFE3C380056EF85 /* version.c */,
@@ -3961,6 +3964,7 @@
 				02B2132E0DA8755F0059E864 /* cursors16.c in Sources */,
 				02B2132F0DA8755F0059E864 /* cursors32.c in Sources */,
 				02DE76060DC3B84900D48F58 /* GLee.c in Sources */,
+				02BA7AB10DD78B1A0025A021 /* level_parser.y in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
