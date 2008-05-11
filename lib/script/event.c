@@ -667,6 +667,11 @@ void eventRemoveContext(SCRIPT_CONTEXT *psContext)
 	for(psCChunk = psContext->psGlobals; psCChunk; psCChunk = psNChunk)
 	{
 		psNChunk = psCChunk->psNext;
+		for(i=0;i < CONTEXT_VALS ; i++)
+		{
+			if(psCChunk->asVals[i].type == VAL_STRING && psCChunk->asVals[i].v.sval)
+				free(psCChunk->asVals[i].v.sval);
+		}
 		free(psCChunk);
 	}
 
