@@ -218,6 +218,7 @@ static void chat_reset_command(SDWORD cmdIndex)
 %token _T_DO
 %token _T_DROP
 %token _T_FINE
+%token _T_FOR
 %token _T_FORCE
 %token _T_GET
 %token _T_GETTING
@@ -229,6 +230,7 @@ static void chat_reset_command(SDWORD cmdIndex)
 %token _T_HAVE
 %token _T_HAS
 %token _T_HELP
+%token _T_HOLD
 %token _T_I
 %token _T_IM
 %token _T_IS
@@ -241,6 +243,7 @@ static void chat_reset_command(SDWORD cmdIndex)
 %token _T_NOW
 %token _T_OFCOURSE
 %token _T_OK
+%token _T_ON
 %token _T_PLACE
 %token _T_POSSESSION
 %token _T_POWER
@@ -249,6 +252,8 @@ static void chat_reset_command(SDWORD cmdIndex)
 %token _T_READY
 %token _T_REQUIRE
 %token _T_ROGER
+%token _T_RUSH
+%token _T_SEC
 %token _T_SEE
 %token _T_SOME
 %token _T_STATUS
@@ -392,6 +397,14 @@ R_COMMAND:						R_ALLY_OFFER					/* ally me */
 								|	R_LASSAT_PLAYER				/* lassat red */
 									{
 										chat_store_command("lassat player");
+									}
+								|	R_WAIT_FOR_ME				/* wait for me */
+									{
+										chat_store_command("wait for me");
+									}
+								|	R_RUSH_INITIATION			/* rush? */
+									{
+										chat_store_command("rush");
 									}
 								;
 
@@ -540,6 +553,11 @@ R_NEED:											_T_NEED
 											|	_T_REQUIRE
 											;
 
+R_RUSH_INITIATION:								_T_RUSH R_EOS			/* rush? */
+											|	_T_LETS _T_RUSH R_EOS	/* let's rush */
+											;
+											
+
 					/*******************************************/
 					/* FINAL RULES, SHOULD BE PART OF R_PHRASE */
 					/*******************************************/
@@ -554,7 +572,7 @@ R_ALLY_OFFER:									_T_ALLY _T_ME R_EOS			/* ally me */
  * to initiate some actions
  */
 R_ASK_READINESS:								_T_GO _T_QM		/* go? */
-											|	_T_READY R_EOS	/* ready! */
+											|	_T_READY R_EOS	/* "ready!" or "ready?" */
 											|	_T_IM _T_READY R_EOS	/* I'm ready! */
 											;
 
@@ -702,6 +720,12 @@ R_LASSAT_PLAYER:							_T_LASSAT R_PLAYER R_EOD	/* gonna get blue's derrick */
 													}
 												}
 											;
+
+R_WAIT_FOR_ME:								_T_WAIT R_EOD				/* wait */
+										|	_T_SEC R_EOD				/* sec... */
+										|	_T_WAIT _T_FOR _T_ME R_EOD	/* wait for me */
+										|	_T_HOLD _T_ON R_EOD			/* hold on */
+										;
 %%
 
 /* Initialize Bison and start chat processing */

@@ -99,6 +99,7 @@ static SDWORD playerIndex;
 "do"						{ return _T_DO; }
 "drop"						{ return _T_DROP; }
 "fine"						{ return _T_FINE; }
+"for"						{ return _T_FOR; }
 "force"						{ return _T_FORCE; }
 "get"						{ return _T_GET; }
 "getting"					{ return _T_GETTING; }
@@ -110,6 +111,7 @@ static SDWORD playerIndex;
 "have"						{ return _T_HAVE; }
 "has"						{ return _T_HAS; }
 "help"						{ return _T_HELP; }
+"hold"						{ return _T_HOLD; }
 "i"							{ return _T_I; }
 "i'm"						{ return _T_IM; }
 "is"						{ return _T_IS; }
@@ -122,6 +124,7 @@ static SDWORD playerIndex;
 "now"						{ return _T_NOW; }
 "of course"					{ return _T_OFCOURSE; }
 "ok"+						{ return _T_OK; }
+"on"						{ return _T_ON; }
 "place"						{ return _T_PLACE; }
 "possession"				{ return _T_POSSESSION; }
 "power"						{ return _T_POWER; }
@@ -130,6 +133,8 @@ static SDWORD playerIndex;
 "ready"						{ return _T_READY; }
 "require"					{ return _T_REQUIRE; }
 "roger"						{ return _T_ROGER; }
+"rush"						{ return _T_RUSH; }
+"sec"						{ return _T_SEC; }
 "see"						{ return _T_SEE; }
 "some"						{ return _T_SOME; }
 "status"					{ return _T_STATUS; }
