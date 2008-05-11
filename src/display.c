@@ -2136,7 +2136,8 @@ static inline void dealWithLMBObject(BASE_OBJECT* psClickedOn)
 			break;
 
 		default:
-			ASSERT(!"unknown object type", "Weirdy selection from LMB?!");
+			ASSERT(false, "Weird selection from LMB - type of clicked object is %d", (int)psClickedOn->type);
+			break;
 	}
 }
 
@@ -2497,7 +2498,7 @@ static void dealWithRMB( void )
 		/* And if it's not a feature, then we're in trouble! */
 		else if (psClickedOn->type != OBJ_FEATURE)
 		{
-			ASSERT( false,"Weirdy selection from RMB?!" );
+			ASSERT(false, "Weird selection from RMB - type of clicked object is %d", (int)psClickedOn->type);
 		}
 	}
 	else
