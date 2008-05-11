@@ -1539,7 +1539,8 @@ static void astarTest(const char *name, int x1, int y1, int x2, int y2)
 	stop = clock();
 	fprintf(stdout, "\t\tPath-finding timing %s: %.02f (%d nodes, %d iterations)\n", name,
 	        (double)(stop - start) / (double)CLOCKS_PER_SEC, route.numPoints, iterations);
-	levReleaseAll();
+	retval = levReleaseAll();
+	assert(retval);
 }
 
 void mapTest()

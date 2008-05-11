@@ -27,8 +27,6 @@
 #include <ctype.h>
 #include <string.h>
 
-// levLoadData printf's
-#define DEBUG_GROUP0
 #include "lib/framework/frame.h"
 #include "lib/framework/frameresource.h"
 #include "lib/framework/listmacs.h"
@@ -53,11 +51,11 @@
 static	char	currentLevelName[32];
 
 // the current level descriptions
-LEVEL_DATASET	*psLevels;
+LEVEL_DATASET	*psLevels = NULL;
 
 // the currently loaded data set
-static LEVEL_DATASET	*psBaseData;
-static LEVEL_DATASET	*psCurrLevel;
+static LEVEL_DATASET	*psBaseData = NULL;
+static LEVEL_DATASET	*psCurrLevel = NULL;
 
 // dummy level data for single WRF loads
 static LEVEL_DATASET	sSingleWRF = { 0, 0, 0, 0, 0, { 0 }, 0, 0, 0 };
@@ -100,6 +98,7 @@ void levShutDown(void)
 		free(toDelete->pName);
 		free(toDelete);
 	}
+	psLevels = NULL;
 }
 
 /** Find a level dataset with the given name.
@@ -170,6 +169,7 @@ BOOL levReleaseAll(void)
 	{
 		if (!levReleaseMissionData())
 		{
+			debug(LOG_ERROR, "Failed to unload mission data");
 			return false;
 		}
 
@@ -178,6 +178,7 @@ BOOL levReleaseAll(void)
 		{
 			if (!stageTwoShutDown())
 			{
+				debug(LOG_ERROR, "Failed stage two shutdown");
 				return false;
 			}
 		}
@@ -196,6 +197,7 @@ BOOL levReleaseAll(void)
 
 		if (!stageOneShutDown())
 		{
+			debug(LOG_ERROR, "Failed stage one shutdown");
 			return false;
 		}
 	}
@@ -209,7 +211,10 @@ BOOL levReleaseAll(void)
 static BOOL levLoadSingleWRF(const char* name)
 {
 	// free the old data
-	levReleaseAll();
+	if (!levReleaseAll())
+	{
+		return false;
+	}
 
 	// create the dummy level data
 	if (sSingleWRF.pName)
@@ -251,7 +256,7 @@ char *getLevelName( void )
 
 
 // load up the data for a level
-BOOL levLoadData(const char* name, char *pSaveName, SDWORD saveType)
+BOOL levLoadData(const char* name, char *pSaveName, GAME_TYPE saveType)
 {
 	LEVEL_DATASET	*psNewLevel, *psBaseData, *psChangeLevel;
 	SDWORD			i;
@@ -316,8 +321,12 @@ BOOL levLoadData(const char* name, char *pSaveName, SDWORD saveType)
 				(psCurrLevel->type >= LDS_NONE && psNewLevel->type  < LDS_NONE))
 			{
 				// there is a dataset loaded but it isn't the correct one
-				debug(LOG_WZ, "Incorrect base dataset loaded - levReleaseAll()");
-				levReleaseAll();	// this sets psCurrLevel to NULL
+				debug(LOG_WZ, "Incorrect base dataset loaded (%p != %p, %d - %d)",
+				      psCurrLevel->psBaseData, psNewLevel->psBaseData, (int)psCurrLevel->type, (int)psNewLevel->type);
+				if (!levReleaseAll())	// this sets psCurrLevel to NULL
+				{
+					return false;
+				}
 			}
 			else
 			{
@@ -666,7 +675,8 @@ static void levTestLoad(const char* level)
 	strcpy(savegameName, "selftest/");	// we need to recreate string, because saveGame clobbered it
 	strcat(savegameName, level);
 	strcat(savegameName, ".gam");
-	levReleaseAll();
+	retval = levReleaseAll();
+	assert(retval == true);
 	fprintf(stdout, "\t\tSaved: %s\n", savegameName);
 }
 

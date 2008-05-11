@@ -25,6 +25,7 @@
 #define __INCLUDED_SRC_LEVELS_H__
 
 #include "init.h"
+#include "game.h"
 
 // maximum number of WRF/WDG files
 
@@ -82,7 +83,7 @@ extern void levShutDown(void);
 extern BOOL levInitialise(void);
 
 // load up the data for a level
-extern BOOL levLoadData(const char* name, char *pSaveName, SDWORD saveType);
+extern BOOL levLoadData(const char* name, char *pSaveName, GAME_TYPE saveType);
 
 // find the level dataset
 extern LEVEL_DATASET* levFindDataSet(const char* name);

@@ -168,7 +168,7 @@ static BOOL _addLoadSave(BOOL bLoad, const char *sSearchPath, const char *sExten
 	const char* checkExtension;
 
 	mode = bLoad;
-	debug(LOG_WZ, "_addLoadSave(%d, %s, %s, %s)", bLoad, sSearchPath, sExtension, title);
+	debug(LOG_SAVE, "called (%d, %s, %s, %s)", bLoad, sSearchPath, sExtension, title);
 
 	if ((bLoadSaveMode == LOAD_INGAME) || (bLoadSaveMode == SAVE_INGAME))
 	{
@@ -297,7 +297,7 @@ static BOOL _addLoadSave(BOOL bLoad, const char *sSearchPath, const char *sExten
 	strlcpy(sPath, sSearchPath, sizeof(sPath));  // setup locals.
 	strlcpy(sExt, sExtension, sizeof(sExt));
 
-	debug(LOG_WZ, "_addLoadSave: Searching \"%s\" for savegames", sSearchPath);
+	debug(LOG_SAVE, "Searching \"%s\" for savegames", sSearchPath);
 
 	// Check for an extension like ".ext", not "ext"
 	sasprintf((char**)&checkExtension, ".%s", sExtension);
@@ -317,7 +317,7 @@ static BOOL _addLoadSave(BOOL bLoad, const char *sSearchPath, const char *sExten
 
 		button = (W_BUTTON*)widgGetFromID(psRequestScreen, LOADENTRY_START + slotCount);
 
-		debug(LOG_WZ, "_addLoadSave: We found [%s]", *i);
+		debug(LOG_SAVE, "We found [%s]", *i);
 		/* Set the tip and add the button */
 		(*i)[strlen(*i) - 4] = '\0'; // remove .gam extension
 		strlcpy(sSlots[slotCount], *i, sizeof(sSlots[slotCount]));  //store it!
@@ -398,7 +398,7 @@ void deleteSaveGame(char* saveGameName)
 		// filename to the directory it is in.
 		snprintf(del_file, sizeof(del_file), "%s/%s", saveGameName, *i);
 
-		debug(LOG_WZ, "Deleting [%s].", del_file);
+		debug(LOG_SAVE, "Deleting [%s].", del_file);
 
 		// Delete the file
 		if (!PHYSFS_delete(del_file))
@@ -426,7 +426,7 @@ static BOOL _runLoadSave(BOOL bResetMissionWidgets)
 	UDWORD		id=0;
 	W_EDBINIT	sEdInit;
 	static char     sDelete[PATH_MAX];
-	UDWORD		i;
+	UDWORD		i, campaign;
 	W_CONTEXT		context;
 
 	id = widgRunScreen(psRequestScreen);
@@ -586,7 +586,9 @@ failure:
 
 // success on load.
 success:
-	setCampaignNumber( getCampaign(sRequestResult) );
+	campaign = getCampaign(sRequestResult);
+	setCampaignNumber(campaign);
+	debug(LOG_WZ, "Set campaign for %s to %u", sRequestResult, campaign);
 successforce:
 	closeLoadSave();
 	bRequestLoad = true;

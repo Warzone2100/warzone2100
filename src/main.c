@@ -596,7 +596,10 @@ static void stopGameLoop(void)
 		fogStatus = 0;
 		if (gameLoopStatus != GAMECODE_LOADGAME)
 		{
-			levReleaseAll();
+			if (!levReleaseAll())
+			{
+				debug(LOG_ERROR, "levReleaseAll failed!");
+			}
 		}
 	}
 
