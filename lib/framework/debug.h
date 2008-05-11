@@ -32,6 +32,7 @@
 #endif
 
 #include <assert.h>
+#include "lib/script/interp.h"
 
 #if defined(__cplusplus)
 extern "C"
@@ -57,6 +58,7 @@ extern char last_called_script_event[MAX_EVENT_NAME_LEN];
  * Arguments:	ASSERT( condition, "Format string with variables: %d, %d", var1, var2 );
  */
 #define ASSERT( expr, ... ) \
+	( (expr) ? (void)0 : scrOutputCallTrace() ); \
 	( (expr) ? (void)0 : (void)_debug( LOG_ERROR, __FUNCTION__, __VA_ARGS__ ) ); \
 	( (expr) ? (void)0 : (void)_debug( LOG_ERROR, __FUNCTION__, "Assert in Warzone: %s:%d (%s), last script event: '%s'", \
 		__FILE__, __LINE__, (#expr), last_called_script_event ) ); \
