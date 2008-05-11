@@ -81,7 +81,7 @@ void	runCreditsScreen	( void );
 
 static	UDWORD	lastTick = 0;
 static	UDWORD	lastChange = 0;
-
+extern char iptoconnect[PATH_MAX];		// holds out ip/hostname from the command line
 
 static void initStars(void)
 {
@@ -118,9 +118,10 @@ TITLECODE titleLoop(void)
 	if (firstcall)
 	{
 		firstcall = false;
-
-		changeTitleMode(TITLE);
-
+		if(strlen(iptoconnect))
+			changeTitleMode(GAMEFIND);
+		else
+			changeTitleMode(TITLE);
 		// Using software cursors (when on) for these menus due to a bug in SDL's SDL_ShowCursor()
 		pie_SetMouse(CURSOR_DEFAULT, war_GetColouredCursor());
 	}

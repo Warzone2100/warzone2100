@@ -51,6 +51,7 @@ extern char	configdir[PATH_MAX];
 extern char * global_mods[MAX_MODS];
 extern char * campaign_mods[MAX_MODS];
 extern char * multiplay_mods[MAX_MODS];
+extern char iptoconnect[PATH_MAX];
 
 //! Let the end user into debug mode....
 BOOL	bAllowDebugMode = false;
@@ -79,6 +80,7 @@ typedef enum
 	CLI_SOUND,
 	CLI_NOSOUND,
 	CLI_SELFTEST,
+	CLI_CONNECTTOIP,
 } CLI_OPTIONS;
 
 static const struct poptOption* getOptionsTable(void)
@@ -107,7 +109,7 @@ static const struct poptOption* getOptionsTable(void)
 		{ "sound",      '\0', POPT_ARG_NONE,   NULL, CLI_SOUND,      N_("Enable sound"),                      NULL },
 		{ "nosound",    '\0', POPT_ARG_NONE,   NULL, CLI_NOSOUND,    N_("Disable sound"),                     NULL },
 		{ "selftest",	'\0', POPT_ARG_NONE,   NULL, CLI_SELFTEST,   N_("Activate self-test"),                NULL },
-
+		{ "join",			'\0', POPT_ARG_STRING,   NULL, CLI_CONNECTTOIP, N_("connect directly to IP/hostname"),NULL },
 		// Terminating entry
 		{ NULL,         '\0', 0,               NULL,          0,              NULL,                                    NULL },
 	};
@@ -288,7 +290,18 @@ bool ParseCommandLine(int argc, const char** argv)
 			case CLI_FULLSCREEN:
 				war_setFullscreen(true);
 				break;
-
+			case CLI_CONNECTTOIP:
+				//get the ip we want to connect with
+				token = poptGetOptArg(poptCon);
+				if (token == NULL)
+				{
+					debug(LOG_ERROR, "No IP/hostname given");
+					poptFreeContext(poptCon);
+					abort();
+					return false;
+				}
+				sstrcpy(iptoconnect, token);
+				break;
 			case CLI_GAME:
 				// retrieve the game name
 				token = poptGetOptArg(poptCon);

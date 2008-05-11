@@ -117,6 +117,7 @@ static char*		hostname;
 static NETSTATS		nStats = { 0, 0, 0, 0 };
 static NET_PLAYER	players[MAX_CONNECTED_PLAYERS];
 static int32_t          NetGameFlags[4] = { 0, 0, 0, 0 };
+char iptoconnect[PATH_MAX] = "\0"; // holds IP/hostname from command line
 
 // *********** Socket with buffer that read NETMSGs ******************
 
@@ -720,7 +721,7 @@ BOOL NETsend(NETMSG *msg, UDWORD player)
 		{
 			if (result < size)
 			{
-				debug(LOG_NET, "SDLNet_TCP_Send returned: %d error: %s", result, SDLNet_GetError());
+				debug(LOG_NET, "SDLNet_TCP_Send returned: %d error: %s line %d", result, SDLNet_GetError(),__LINE__);
 				connected_bsocket[player]->socket = NULL ; // It is invalid,  Unknown how to handle.
 			}
 		}
@@ -735,7 +736,7 @@ BOOL NETsend(NETMSG *msg, UDWORD player)
 			{
 				if (result < size)
 				{
-					debug(LOG_NET, "SDLNet_TCP_Send returned: %d, error: %s", result, SDLNet_GetError());
+					debug(LOG_NET, "SDLNet_TCP_Send returned: %d error: %s line %d", result, SDLNet_GetError(),__LINE__);
 					tcp_socket = NULL; // unknow how to handle when invalid.
 				}
 			}
@@ -779,7 +780,7 @@ BOOL NETbcast(NETMSG *msg)
 			{
 				if (result < size)
 				{
-					debug(LOG_NET, "SDLNet_TCP_Send returned: %d, error: %s",result, SDLNet_GetError());
+					debug(LOG_NET, "SDLNet_TCP_Send returned: %d error: %s line %d", result, SDLNet_GetError(),__LINE__);
 					connected_bsocket[i]->socket = NULL; // Unsure how to handle invalid sockets.
 				}
 			}
@@ -1501,8 +1502,21 @@ BOOL NETfindGame(void)
 		NetPlay.bHost			= true;
 		return true;
 	}
-
-	if (SDLNet_ResolveHost(&ip, hostname, port) == -1)
+	if (strlen(iptoconnect) )
+	{
+		if (SDLNet_ResolveHost(&ip, iptoconnect, port) == -1)
+		{
+			debug(LOG_ERROR, "Error connecting to client via hostname provided (%s)",iptoconnect);
+			debug(LOG_ERROR, "NETfindGame: Cannot resolve hostname :%s",SDLNet_GetError());
+			return false;
+		}
+		else
+		{
+			hostname = strdup(iptoconnect);		//copy it
+			memset(iptoconnect,0x0,sizeof(iptoconnect));	//reset it
+		}
+	}
+	else if (SDLNet_ResolveHost(&ip, hostname, port) == -1)
 	{
 		debug(LOG_ERROR, "NETfindGame: Cannot resolve hostname \"%s\": %s", hostname, SDLNet_GetError());
 		return false;
