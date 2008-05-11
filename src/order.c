@@ -1502,20 +1502,16 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 	case DORDER_SCOUT:
 		// can't move vtols to blocking tiles
 		if (vtolDroid(psDroid)
-		 && (fpathBlockingTile(map_coord(psOrder->x), map_coord(psOrder->y), getPropulsionStats(psDroid)->propulsionType)
-		  || !TEST_TILE_VISIBLE(psDroid->player, mapTile(map_coord(psOrder->x), map_coord(psOrder->y)))))
+		    && fpathBlockingTile(map_coord(psOrder->x), map_coord(psOrder->y), getPropulsionStats(psDroid)->propulsionType))
 		{
 			break;
 		}
 		//in multiPlayer, cannot move Transporter to blocking tile either
-		if (game.maxPlayers > 0)
+		if (game.maxPlayers > 0
+		    && psDroid->droidType == DROID_TRANSPORTER
+		    && fpathBlockingTile(map_coord(psOrder->x), map_coord(psOrder->y), getPropulsionStats(psDroid)->propulsionType))
 		{
-			if (psDroid->droidType == DROID_TRANSPORTER
-			    && (fpathBlockingTile(map_coord(psOrder->x), map_coord(psOrder->y), getPropulsionStats(psDroid)->propulsionType)
-			        || !TEST_TILE_VISIBLE(psDroid->player, mapTile(map_coord(psOrder->x), map_coord(psOrder->y)))))
-			{
-				break;
-			}
+			break;
 		}
 		// move a droid to a location
 		psDroid->order = psOrder->order;
