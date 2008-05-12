@@ -81,52 +81,47 @@ res_line:			dir_line
 				|	file_line
 				;
 
-dir_line:			DIRECTORY QTEXT_T		{
-											UDWORD len;
+dir_line:			DIRECTORY QTEXT_T
+				{
+					UDWORD len;
 
-											// set a new input directory
-											debug(LOG_NEVER, "directory: %s", $2);
-											if (strncmp($2, "/:", strlen("/:")) == 0)
-											{
-												// the new dir is rooted
-												strlcpy(aCurrResDir, $2, sizeof(aCurrResDir));
-											}
-											else
-											{
-												strlcpy(aCurrResDir, aResDir, sizeof(aCurrResDir));
-												strlcat(aCurrResDir, $2, sizeof(aCurrResDir));
-											}
-											if (strlen($2) > 0)
-											{
-												// Add a trailing '/'
-												len = strlen(aCurrResDir);
-												aCurrResDir[len] = '/';
-												aCurrResDir[len+1] = 0;
-//												debug( LOG_NEVER, "aCurrResDir: %s\n", aCurrResDir);
-											}
-											free($2);
-										}
+					// set a new input directory
+					debug(LOG_NEVER, "directory: %s", $2);
+					if (strncmp($2, "/:", strlen("/:")) == 0)
+					{
+						// the new dir is rooted
+						strlcpy(aCurrResDir, $2, sizeof(aCurrResDir));
+					}
+					else
+					{
+						strlcpy(aCurrResDir, aResDir, sizeof(aCurrResDir));
+						strlcat(aCurrResDir, $2, sizeof(aCurrResDir));
+					}
+					if (strlen($2) > 0)
+					{
+						// Add a trailing '/'
+						len = strlen(aCurrResDir);
+						aCurrResDir[len] = '/';
+						aCurrResDir[len+1] = 0;
+						debug(LOG_NEVER, "Current resource directory: %s", aCurrResDir);
+					}
+					free($2);
+				}
 				;
 
 
 file_line:			FILETOKEN TEXT_T QTEXT_T
-										{
-											bool succes;
-											/* load a data file */
-											debug(LOG_NEVER, "file: %s %s", $2, $3);
-											succes = resLoadFile($2, $3);
-											free($2);
-											free($3);
+				{
+					bool succes;
+					/* load a data file */
+					debug(LOG_NEVER, "file: %s %s", $2, $3);
+					succes = resLoadFile($2, $3);
+					free($2);
+					free($3);
 
-											if (!succes)
-											{
-												YYABORT;
-											}
-										}
+					if (!succes)
+					{
+						YYABORT;
+					}
+				}
 				;
-
-%%
-
-
-
-
