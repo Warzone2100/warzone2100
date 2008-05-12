@@ -36,9 +36,6 @@
 /* Get the Yacc definitions */
 #include "strres_parser.tab.h"
 
-/* Maximum length for any TEXT_T value */
-#define YYLMAX 8192
-
 #include "lib/framework/lexer_input.h"
 
 #ifndef yyextra
