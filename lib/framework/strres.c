@@ -360,6 +360,8 @@ char *strresGetString(STR_RES *psRes, UDWORD id)
 /* Load a string resource file */
 BOOL strresLoad(STR_RES* psRes, const char* fileName)
 {
+	bool retval = true;
+
 	PHYSFS_file* fileHandle = PHYSFS_openRead(fileName);
 	if (!fileHandle)
 	{
@@ -371,16 +373,12 @@ BOOL strresLoad(STR_RES* psRes, const char* fileName)
 	psCurrRes = psRes;
 
 	strresSetInputFile(fileHandle);
-	if (strres_parse() != 0)
-	{
-		strres_lex_destroy();
-		PHYSFS_close(fileHandle);
-		return false;
-	}
+	retval = (strres_parse() == 0);
+
 	strres_lex_destroy();
 	PHYSFS_close(fileHandle);
 
-	return true;
+	return retval;
 }
 
 /* Copy a char */
