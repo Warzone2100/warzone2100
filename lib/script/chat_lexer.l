@@ -145,9 +145,9 @@ static SDWORD playerIndex;
 "vtols"						{ return _T_VTOLS; }
 "wait"						{ return _T_WAIT; }
 "where"						{ return _T_WHERE; }
-"yea"						{ return _T_YEA; }
-"yeah"						{ return _T_YEAH; }
-"yep"						{ return _T_YEP; }
+"yea"						{ return _T_YES; }
+"yeah"						{ return _T_YES; }
+"yep"						{ return _T_YES; }
 "yes"						{ return _T_YES; }
 "you"						{ return _T_YOU; }
 
