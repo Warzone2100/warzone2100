@@ -18,10 +18,9 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 %{
-/*
- * StrRes.l
+/** @file
  *
- * Lex file for parsing string resource files
+ *  Lexical analyser resource files
  */
 
 #include "lib/framework/frame.h"
@@ -37,38 +36,40 @@
 /* Get the Yacc definitions */
 #include "strres_parser.tab.h"
 
-void strres_error(const char *pMessage,...);
+#include "lib/framework/lexer_input.h"
 
-/* Maximum length for any TEXT_T value */
-#define YYLMAX 8192
+#ifndef yyextra
+# define yyextra yyget_extra()
+#endif
 
-/* Store for any string values */
-extern char aText[TEXT_BUFFERS][YYLMAX];
-static UDWORD currText=0;
+/* Older GNU Flex versions don't define yyget_extra(), yyset_extra(),
+ * yyget_text() and yyget_lineno().
+ * (and neither define a subminor version)
+ */
+#if !defined(YY_FLEX_SUBMINOR_VERSION) || (YY_FLEX_SUBMINOR_VERSION < 9)
+# define yyget_extra  strres_get_extra
+# define yyset_extra  strres_set_extra
+# define yyget_lineno strres_get_lineno
+# define yyget_text   strres_get_text
+extern void yyset_extra(YY_EXTRA_TYPE user_defined);
+extern YY_EXTRA_TYPE yyget_extra(void);
+extern int yyget_lineno(void);
+int yyget_lineno()
+{
+	return yylineno;
+}
 
-// Note if in a comment
-static BOOL inComment;
+extern char* yyget_text(void);
+char* yyget_text()
+{
+	return yytext;
+}
+#endif
 
-/* Handle to the input file */
-static PHYSFS_file* pReadFile = NULL;
-
-#define YY_INPUT(buf,result,max_size) \
-		if (PHYSFS_eof(pReadFile)) \
-		{ \
-			buf[0] = EOF; result = YY_NULL; \
-		} \
-		else { \
-			result = PHYSFS_read(pReadFile, buf, 1, max_size); \
-			if (result == -1) \
-			{ \
-				buf[0] = EOF; result = YY_NULL; \
-			} \
-		}
 %}
 
-%option nounput
+%option yylineno noyywrap nounput
 %option prefix="strres_"
-%option yylineno
 
 %x COMMENT
 %x QUOTE
@@ -78,9 +79,7 @@ static PHYSFS_file* pReadFile = NULL;
 
 	/* Match text values */
 [a-zA-Z][-0-9_a-zA-Z]*		{
-								strlcpy(aText[currText], strres_text, sizeof(aText[currText]));
-								strres_lval.sval = aText[currText];
-								currText = (currText + 1) % TEXT_BUFFERS;
+								strres_lval.sval = strdup(yytext);
 								return TEXT_T;
 							}
 
@@ -89,9 +88,7 @@ static PHYSFS_file* pReadFile = NULL;
 <QUOTE>\"					{ BEGIN 0; }
 <QUOTE>\n					{ strres_error("Unexpected end of line in string"); }
 <QUOTE>[^\"\n]*				{
-								strlcpy(aText[currText], strres_text, sizeof(aText[currText]));
-								strres_lval.sval = aText[currText];
-								currText = (currText + 1) % TEXT_BUFFERS;
+								strres_lval.sval = strdup(yytext);
 								return QTEXT_T;
 							}
 
@@ -99,9 +96,9 @@ static PHYSFS_file* pReadFile = NULL;
 [ \t\n\x0d\x0a]						;
 
 	/* Strip comments */
-"/*"						{ inComment=true; BEGIN COMMENT; }
+"/*"						{ BEGIN COMMENT; }
 <COMMENT>"*/" |
-<COMMENT>"*/"\n				{ inComment=false; BEGIN 0; }
+<COMMENT>"*/"\n				{ BEGIN 0; }
 <COMMENT>. |
 <COMMENT>\n					;
 
@@ -111,36 +108,21 @@ static PHYSFS_file* pReadFile = NULL;
 <SLCOMMENT>[^\n]*			;
 
 	/* Match anything that's been missed and pass it as a char */
-.							return strres_text[0];
+.							return yytext[0];
 
 %%
 
-/* Set the current input file for the lexer */
-void strresSetInputFile(PHYSFS_file* fileHandle)
-{
-	pReadFile = fileHandle;
+static YY_EXTRA_TYPE pBuffer = NULL;
 
-	/* Reset the lexer incase it's been used before */
-	yy_flush_buffer( YY_CURRENT_BUFFER );
+void yyset_extra(YY_EXTRA_TYPE user_defined)
+{
+	pBuffer = user_defined;
 }
 
-void strresGetErrorData(int *pLine, char **ppText)
+YY_EXTRA_TYPE yyget_extra()
 {
-	*pLine = strres_lineno;
-	*ppText = strres_text;
+	return pBuffer;
 }
-
-int strres_wrap(void)
-{
-	if (inComment)
-	{
-		debug( LOG_ERROR, "Warning: reched end of file in a comment" );
-		abort();
-	}
-
-	return 1;
-}
-
 
 /* Older GNU Flex versions don't define yylex_destroy()
  * (and neither define a subminor version)

@@ -18,13 +18,14 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 %{
-/*
- * resource.y
+/** @file
  *
- * Yacc file for parsing RES files
+ *  Parser for RES (*.wrf) files
  */
 
-int res_lex (void);
+extern int res_lex(void);
+extern int res_get_lineno(void);
+extern char* res_get_text(void);
 
 /* Allow frame header files to be singly included */
 #define FRAME_LIB_INCLUDE
@@ -39,18 +40,10 @@ int res_lex (void);
 #include "lib/framework/frameresource.h"
 #include "lib/framework/resly.h"
 
-/*
- * A simple error reporting routine
- */
-
-void res_error(const char *pMessage,...)
+extern void yyerror(const char* msg);
+void yyerror(const char* msg)
 {
-	int	line;
-	char	*pText;
-
-	resGetErrorData(&line, &pText);
-	debug( LOG_ERROR, "RES file parse error:\n%s at line %d\nText: '%s'\n", pMessage, line, pText );
-	abort();
+	debug(LOG_ERROR, "RES file parse error:\n%s at line %d\nText: '%s'\n", msg, res_get_lineno(), res_get_text());
 }
 
 %}
@@ -64,6 +57,14 @@ void res_error(const char *pMessage,...)
 	/* value tokens */
 %token <sval> TEXT_T
 %token <sval> QTEXT_T			/* Text with double quotes surrounding it */
+
+%destructor {
+	// Force type checking by the compiler
+	char * const s = $$;
+
+	if (s)
+		free(s);
+} TEXT_T QTEXT_T
 
 	/* keywords */
 %token DIRECTORY
@@ -79,47 +80,47 @@ res_line:			dir_line
 				|	file_line
 				;
 
-dir_line:			DIRECTORY QTEXT_T		{
-											UDWORD len;
+dir_line:			DIRECTORY QTEXT_T
+				{
+					UDWORD len;
 
-											// set a new input directory
-											debug( LOG_NEVER, "directory: %s\n", $2 );
-											if ($2[1] == ':' ||
-												$2[0] == '/')
-											{
-												// the new dir is rooted
-												strlcpy(aCurrResDir, $2, sizeof(aCurrResDir));
-											}
-											else
-											{
-												strlcpy(aCurrResDir, aResDir, sizeof(aCurrResDir));
-												strlcat(aCurrResDir, $2, sizeof(aCurrResDir));
-											}
-											if (strlen($2) > 0)
-											{
-												// Add a trailing '/'
-												len = strlen(aCurrResDir);
-												aCurrResDir[len] = '/';
-												aCurrResDir[len+1] = 0;
-//												debug( LOG_NEVER, "aCurrResDir: %s\n", aCurrResDir);
-											}
-										}
+					// set a new input directory
+					debug(LOG_NEVER, "directory: %s", $2);
+					if (strncmp($2, "/:", strlen("/:")) == 0)
+					{
+						// the new dir is rooted
+						strlcpy(aCurrResDir, $2, sizeof(aCurrResDir));
+					}
+					else
+					{
+						strlcpy(aCurrResDir, aResDir, sizeof(aCurrResDir));
+						strlcat(aCurrResDir, $2, sizeof(aCurrResDir));
+					}
+					if (strlen($2) > 0)
+					{
+						// Add a trailing '/'
+						len = strlen(aCurrResDir);
+						aCurrResDir[len] = '/';
+						aCurrResDir[len+1] = 0;
+						debug(LOG_NEVER, "Current resource directory: %s", aCurrResDir);
+					}
+					free($2);
+				}
 				;
 
 
 file_line:			FILETOKEN TEXT_T QTEXT_T
-										{
-											/* load a data file */
-											debug( LOG_NEVER, "file: %s %s\n", $2, $3);
-											if (!resLoadFile($2, $3))
-											{
-												YYABORT;
-											}
-										}
+				{
+					bool succes;
+					/* load a data file */
+					debug(LOG_NEVER, "file: %s %s", $2, $3);
+					succes = resLoadFile($2, $3);
+					free($2);
+					free($3);
+
+					if (!succes)
+					{
+						YYABORT;
+					}
+				}
 				;
-
-%%
-
-
-
-

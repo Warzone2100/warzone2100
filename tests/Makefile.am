@@ -2,6 +2,10 @@ AM_CPPFLAGS = -DYY_NO_INPUT $(SDL_CFLAGS) $(WZ_CPPFLAGS)
 AM_CFLAGS = $(WZ_CFLAGS)
 LDADD = $(top_builddir)/lib/framework/libframework.a $(SDL_LIBS) $(PHYSFS_LIBS)
 
+if MINGW32
+LDADD += $(WIN32_LIBS)
+endif
+
 noinst_PROGRAMS = t1000
 
 t1000_SOURCES = t1000.c

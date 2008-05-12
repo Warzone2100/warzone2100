@@ -173,9 +173,6 @@ static void chat_reset_command(SDWORD cmdIndex)
 
 %union {
 	BOOL				bval;
-	INTERP_TYPE		tval;
-	char				*sval;
-	UDWORD			vindex;
 	SDWORD			ival;
 }
 

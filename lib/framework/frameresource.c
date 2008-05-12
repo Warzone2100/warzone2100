@@ -95,8 +95,8 @@ void resSetBaseDir(const char* pResDir)
 /* Parse the res file */
 BOOL resLoad(const char *pResFile, SDWORD blockID)
 {
-	char *pBuffer;
-	UDWORD	size;
+	bool retval = true;
+	lexerinput_t input;
 
 	strlcpy(aCurrResDir, aResDir, sizeof(aCurrResDir));
 
@@ -106,26 +106,25 @@ BOOL resLoad(const char *pResFile, SDWORD blockID)
 	debug(LOG_WZ, "resLoad: loading %s", pResFile);
 
 	// Load the RES file; allocate memory for a wrf, and load it
-	if (!loadFile(pResFile, &pBuffer, &size))
+	input.type = LEXINPUT_PHYSFS;
+	input.input.physfsfile = openLoadFile(pResFile, true);
+	if (!input.input.physfsfile)
 	{
-		debug(LOG_ERROR, "resLoad: failed to load %s", pResFile);
 		return false;
 	}
 
 	// and parse it
-	resSetInputBuffer(pBuffer, size);
+	res_set_extra(&input);
 	if (res_parse() != 0)
 	{
 		debug(LOG_ERROR, "resLoad: failed to parse %s", pResFile);
-		res_lex_destroy();
-		free(pBuffer);
-		return false;
+		retval = false;
 	}
 
 	res_lex_destroy();
-	free(pBuffer);
+	PHYSFS_close(input.input.physfsfile);
 
-	return true;
+	return retval;
 }
 
 

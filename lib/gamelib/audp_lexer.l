@@ -32,36 +32,46 @@
 /* Maximum length for any TEXT value */
 #define YYLMAX	255
 
-/* global variables */
-static	BOOL	g_bParsingSubFile;
-static	FILE	*g_fpOld;
+void audp_error(const char* fmt, ...) WZ_DECL_FORMAT(printf, 1, 2);
 
-/* Handle to the input file */
-static PHYSFS_file* pReadFile = NULL;
+#include "lib/framework/lexer_input.h"
 
-#define YY_INPUT(buf,result,max_size) \
-		if (PHYSFS_eof(pReadFile)) \
-		{ \
-			buf[0] = EOF; result = YY_NULL; \
-		} \
-		else { \
-			result = PHYSFS_read(pReadFile, buf, 1, max_size); \
-			if (result == -1) \
-			{ \
-				buf[0] = EOF; result = YY_NULL; \
-			} \
-		}
+#ifndef yyextra
+# define yyextra yyget_extra()
+#endif
 
-void audp_error(const char* fmt, ...);
+/* Older GNU Flex versions don't define yyget_extra(), yyset_extra(),
+ * yyget_text() and yyget_lineno().
+ * (and neither define a subminor version)
+ */
+#if !defined(YY_FLEX_SUBMINOR_VERSION) || (YY_FLEX_SUBMINOR_VERSION < 9)
+# define yyget_extra  audp_get_extra
+# define yyset_extra  audp_set_extra
+# define yyget_lineno audp_get_lineno
+# define yyget_text   audp_get_text
+extern void yyset_extra(YY_EXTRA_TYPE user_defined);
+extern YY_EXTRA_TYPE yyget_extra(void);
+extern int yyget_lineno(void);
+int yyget_lineno()
+{
+	return yylineno;
+}
+
+extern char* yyget_text(void);
+char* yyget_text()
+{
+	return yytext;
+}
+#endif
 
 %}
 
-%option nounput
+%option yylineno noyywrap nounput
 %option prefix="audp_"
-%option yylineno
 
 %x COMMENT
 %x QUOTE
+%x SLCOMMENT
 
 %%
 	/* Match to key words */
@@ -77,91 +87,62 @@ ANIMOBJECT						{	return ANIMOBJECT;		}
 
 	/* Match floating point numbers */
 	/* This is a problem with the PSX so is disabled
--?[0-9]*"."[0-9]+				{	audp_lval.fval = (float) atof(audp_text);
+-?[0-9]*"."[0-9]+				{	audp_lval.fval = (float) atof(yytext);
 									return FLOAT_T;
 								}
 	*/
 
 	/* Match integer numbers */
--?[0-9]+						{	audp_lval.ival = atoi(audp_text);
+-?[0-9]+						{	audp_lval.ival = atoi(yytext);
 									return INTEGER;
 								}
 
 	/* Match quoted text */
-\"[^\"\n]*[\"\n]				{
-									/* skip opening quote */
-									strcpy( audp_lval.sval, audp_text+1 );
+\"\"				{
+					audp_lval.sval = strdup("");
+					return QTEXT;
+				}
 
-									/* check for unterminated string */
-									if ( audp_text[audp_leng-1] != '"' )
-									{
-										sprintf( audp_lval.sval, "Unterminated string %s\n", audp_lval.sval );
-										audp_error( audp_lval.sval );
-										return (1);
-									}
-
-									/* set final quote in string to blank */
-									audp_lval.sval[audp_leng-2] = (char) '\0';
-
-									return QTEXT;
-								}
+\"				{ BEGIN QUOTE;   }
+<QUOTE>\"			{ BEGIN INITIAL; }
+<QUOTE>\n			{ audp_error("Unexpected end of line in string"); }
+<QUOTE>[^\"\n]*			{
+					audp_lval.sval = strdup(yytext);
+					return QTEXT;
+				}
 
 	/* Skip white space */
 [ \t\n\x0d\x0a]						;
 
 	/* Strip comments */
-"/*"						{ BEGIN COMMENT; }
+"/*"				{ BEGIN COMMENT; }
 <COMMENT>"*/" |
-<COMMENT>"*/"\n				{ BEGIN 0; }
+<COMMENT>"*/"\n			{ BEGIN INITIAL; }
 <COMMENT>. |
-<COMMENT>\n					;
+<COMMENT>\n			;
+
+	/* Strip single line comments */
+"//"				{ BEGIN SLCOMMENT; }
+<SLCOMMENT>\n			{ BEGIN INITIAL;   }
+<SLCOMMENT>[^\n]*		;
 
 	/* Match anything that's been missed and pass it as a char */
-.							return audp_text[0];
+.							return yytext[0];
 
 
 %%
 
-/***************************************************************************/
+static YY_EXTRA_TYPE pBuffer = NULL;
 
-int
-audp_wrap( void )
+void yyset_extra(YY_EXTRA_TYPE user_defined)
 {
-	if ( g_bParsingSubFile == true )
-	{
-		/* close current file and restore old file pointer */
-		fclose( audp_in );
-		audp_in = g_fpOld;
-
-		g_bParsingSubFile = false;
-
-		return 0;
-	}
-	else
-	{
-		return 1;
-	}
+	pBuffer = user_defined;
 }
 
-/***************************************************************************/
-/* Set the current input file for the lexer */
-/***************************************************************************/
-
-void parserSetInputFile(PHYSFS_file* fileHandle)
+YY_EXTRA_TYPE yyget_extra()
 {
-	pReadFile = fileHandle;
+	return pBuffer;
 }
-
-/***************************************************************************/
-
-void
-parseGetErrorData(int *pLine, char **ppText)
-{
-	*pLine  = audp_lineno;
-	*ppText = audp_text;
-}
-
-/***************************************************************************/
 
 /* Older GNU Flex versions don't define yylex_destroy()
  * (and neither define a subminor version)

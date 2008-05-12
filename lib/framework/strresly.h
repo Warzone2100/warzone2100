@@ -23,19 +23,13 @@
 #ifndef _strresly_h
 #define _strresly_h
 
-#include <physfs.h>
-
-/* Maximum number of TEXT items in any one Yacc rule */
-#define TEXT_BUFFERS	10
+#include "lib/framework/lexer_input.h"
 
 /* The string resource currently being loaded */
 extern STR_RES	*psCurrRes;
 
 /* Set the current input buffer for the lexer - used by strresLoad */
-extern void strresSetInputFile(PHYSFS_file* fileHandle);
-
-/* Give access to the line number and current text for error messages */
-extern void strresGetErrorData(int *pLine, char **ppText);
+extern void strres_set_extra(YY_EXTRA_TYPE user_defined);
 
 /* Call the yacc parser */
 extern int strres_parse(void);
@@ -43,7 +37,7 @@ extern int strres_parse(void);
 /* Destroy the lexer */
 extern int strres_lex_destroy(void);
 
-void strres_error(const char *pMessage, ...);
+void strres_error(const char* msg);
 
 /* Store a string */
 extern BOOL strresStoreString(STR_RES *psRes, char *pID, const char *pString);

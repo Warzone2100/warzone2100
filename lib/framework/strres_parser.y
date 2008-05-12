@@ -18,33 +18,22 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 %{
-/*
- * StrRes.y
+/** @file
  *
- * Yacc file for parsing String Resource files
+ *  Parser for string resource files
  */
-
-/* Allow frame header files to be singly included */
-#define FRAME_LIB_INCLUDE
 
 #include "lib/framework/frame.h"
 #include "lib/framework/strres.h"
 #include "lib/framework/strresly.h"
 
-extern int strres_lex (void);
+extern int strres_lex(void);
+extern int strres_get_lineno(void);
+extern char* strres_get_text(void);
 
-/*
- * A simple error reporting routine
- */
-
-void strres_error(const char *pMessage,...)
+void yyerror(const char* msg)
 {
-	int		line;
-	char	*pText;
-
-	strresGetErrorData(&line, &pText);
-	debug( LOG_ERROR, "STRRES file parse error:\n%s at line %d\nText: '%s'\n", pMessage, line, pText );
-	abort();
+	debug(LOG_ERROR, "STRRES file parse error:\n%s at line %d\nText: '%s'", msg, strres_get_lineno(), strres_get_text());
 }
 
 %}
@@ -59,30 +48,42 @@ void strres_error(const char *pMessage,...)
 %token <sval> TEXT_T
 %token <sval> QTEXT_T			/* Text with double quotes surrounding it */
 
+// Rule types
+%type <sval> string
+
+%destructor {
+	// Force type checking by the compiler
+	char * const s = $$;
+
+	if (s)
+		free(s);
+} TEXT_T QTEXT_T string
+
 %%
 
 file:			line
 			|	file line
 			;
 
-line:			TEXT_T QTEXT_T
-							{
-								/* Pass the text string to the string manager */
-								if (!strresStoreString(psCurrRes, $1, $2))
-								{
-									YYABORT;
-								}
-							}
-            | TEXT_T '_' '(' QTEXT_T ')'
-							{
-								/* Pass the text string to the string manager */
-								if (!strresStoreString(psCurrRes, $1, gettext($4)))
-								{
-									YYABORT;
-								}
-							}
+line:			TEXT_T string
+				{
+					/* Pass the text string to the string manager */
+					const bool success = strresStoreString(psCurrRes, $1, $2);
 
+					// Clean up our tokens
+					free($1);
+					free($2);
+
+					if (!success)
+					{
+						YYABORT;
+					}
+				}
 			;
 
-%%
-
+string: 		QTEXT_T
+			| '_' '(' QTEXT_T ')'
+				{
+					$$ = strdup(gettext($3));
+					free($3);
+				}
