@@ -18,10 +18,9 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 %{
-/*
- * StrRes.l
+/** @file
  *
- * Lex file for parsing string resource files
+ *  Lexical analyser resource files
  */
 
 #include "lib/framework/frame.h"
@@ -36,8 +35,6 @@
 
 /* Get the Yacc definitions */
 #include "strres_parser.tab.h"
-
-void strres_error(const char *pMessage,...);
 
 /* Maximum length for any TEXT_T value */
 #define YYLMAX 8192

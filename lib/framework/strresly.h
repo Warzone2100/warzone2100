@@ -43,7 +43,7 @@ extern int strres_parse(void);
 /* Destroy the lexer */
 extern int strres_lex_destroy(void);
 
-void strres_error(const char *pMessage, ...);
+void strres_error(const char* msg);
 
 /* Store a string */
 extern BOOL strresStoreString(STR_RES *psRes, char *pID, const char *pString);

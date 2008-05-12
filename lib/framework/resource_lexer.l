@@ -18,16 +18,12 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 %{
-/*
- * resource.l
+/** @file
  *
- * Lex file for parsing res files
+ *  Lexical analyser for resource (*.wrf) files
  */
 
 #include "lib/framework/frame.h"
-
-/* Allow frame header files to be singly included */
-#define FRAME_LIB_INCLUDE
 
 #include "lib/framework/resly.h"
 
@@ -35,9 +31,6 @@
 #include "resource_parser.tab.h"
 
 extern void res_error(const char* msg);
-
-/* Maximum length for any TEXT_T value */
-#define YYLMAX 8192
 
 #include "lib/framework/lexer_input.h"
 

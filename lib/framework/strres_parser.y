@@ -18,14 +18,10 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 %{
-/*
- * StrRes.y
+/** @file
  *
- * Yacc file for parsing String Resource files
+ *  Parser for string resource files
  */
-
-/* Allow frame header files to be singly included */
-#define FRAME_LIB_INCLUDE
 
 #include "lib/framework/frame.h"
 #include "lib/framework/strres.h"
@@ -33,17 +29,13 @@
 
 extern int strres_lex (void);
 
-/*
- * A simple error reporting routine
- */
-
-void strres_error(const char *pMessage,...)
+void yyerror(const char* msg)
 {
 	int		line;
 	char	*pText;
 
 	strresGetErrorData(&line, &pText);
-	debug( LOG_ERROR, "STRRES file parse error:\n%s at line %d\nText: '%s'\n", pMessage, line, pText );
+	debug(LOG_ERROR, "STRRES file parse error:\n%s at line %d\nText: '%s'", msg, line, pText);
 	abort();
 }
 

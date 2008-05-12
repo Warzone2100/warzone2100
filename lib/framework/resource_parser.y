@@ -18,10 +18,9 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 %{
-/*
- * resource.y
+/** @file
  *
- * Yacc file for parsing RES files
+ *  Parser for RES (*.wrf) files
  */
 
 extern int res_lex(void);
