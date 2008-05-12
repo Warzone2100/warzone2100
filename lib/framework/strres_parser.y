@@ -48,26 +48,42 @@ void yyerror(const char* msg)
 %token <sval> TEXT_T
 %token <sval> QTEXT_T			/* Text with double quotes surrounding it */
 
+// Rule types
+%type <sval> string
+
+%destructor {
+	// Force type checking by the compiler
+	char * const s = $$;
+
+	if (s)
+		free(s);
+} TEXT_T QTEXT_T string
+
 %%
 
 file:			line
 			|	file line
 			;
 
-line:			TEXT_T QTEXT_T
+line:			TEXT_T string
 				{
 					/* Pass the text string to the string manager */
-					if (!strresStoreString(psCurrRes, $1, $2))
-					{
-						YYABORT;
-					}
-				}
-            | TEXT_T '_' '(' QTEXT_T ')'
-				{
-					/* Pass the text string to the string manager */
-					if (!strresStoreString(psCurrRes, $1, gettext($4)))
+					const bool success = strresStoreString(psCurrRes, $1, $2);
+
+					// Clean up our tokens
+					free($1);
+					free($2);
+
+					if (!success)
 					{
 						YYABORT;
 					}
 				}
 			;
+
+string: 		QTEXT_T
+			| '_' '(' QTEXT_T ')'
+				{
+					$$ = strdup(gettext($3));
+					free($3);
+				}

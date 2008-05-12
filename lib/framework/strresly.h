@@ -25,9 +25,6 @@
 
 #include "lib/framework/lexer_input.h"
 
-/* Maximum number of TEXT items in any one Yacc rule */
-#define TEXT_BUFFERS	10
-
 /* The string resource currently being loaded */
 extern STR_RES	*psCurrRes;
 

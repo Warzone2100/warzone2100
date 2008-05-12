@@ -39,10 +39,6 @@
 /* Maximum length for any TEXT_T value */
 #define YYLMAX 8192
 
-/* Store for any string values */
-static char aText[TEXT_BUFFERS][YYLMAX];
-static UDWORD currText = 0;
-
 #include "lib/framework/lexer_input.h"
 
 #ifndef yyextra
@@ -86,9 +82,7 @@ char* yyget_text()
 
 	/* Match text values */
 [a-zA-Z][-0-9_a-zA-Z]*		{
-								strlcpy(aText[currText], yytext, sizeof(aText[currText]));
-								strres_lval.sval = aText[currText];
-								currText = (currText + 1) % TEXT_BUFFERS;
+								strres_lval.sval = strdup(yytext);
 								return TEXT_T;
 							}
 
@@ -97,9 +91,7 @@ char* yyget_text()
 <QUOTE>\"					{ BEGIN 0; }
 <QUOTE>\n					{ strres_error("Unexpected end of line in string"); }
 <QUOTE>[^\"\n]*				{
-								strlcpy(aText[currText], yytext, sizeof(aText[currText]));
-								strres_lval.sval = aText[currText];
-								currText = (currText + 1) % TEXT_BUFFERS;
+								strres_lval.sval = strdup(yytext);
 								return QTEXT_T;
 							}
 
