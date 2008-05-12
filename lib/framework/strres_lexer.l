@@ -43,29 +43,40 @@
 static char aText[TEXT_BUFFERS][YYLMAX];
 static UDWORD currText = 0;
 
-// Note if in a comment
-static BOOL inComment;
+#include "lib/framework/lexer_input.h"
 
-/* Handle to the input file */
-static PHYSFS_file* pReadFile = NULL;
+#ifndef yyextra
+# define yyextra yyget_extra()
+#endif
 
-#define YY_INPUT(buf,result,max_size) \
-		if (PHYSFS_eof(pReadFile)) \
-		{ \
-			buf[0] = EOF; result = YY_NULL; \
-		} \
-		else { \
-			result = PHYSFS_read(pReadFile, buf, 1, max_size); \
-			if (result == -1) \
-			{ \
-				buf[0] = EOF; result = YY_NULL; \
-			} \
-		}
+/* Older GNU Flex versions don't define yyget_extra(), yyset_extra(),
+ * yyget_text() and yyget_lineno().
+ * (and neither define a subminor version)
+ */
+#if !defined(YY_FLEX_SUBMINOR_VERSION) || (YY_FLEX_SUBMINOR_VERSION < 9)
+# define yyget_extra  res_get_extra
+# define yyset_extra  res_set_extra
+# define yyget_lineno res_get_lineno
+# define yyget_text   res_get_text
+extern void yyset_extra(YY_EXTRA_TYPE user_defined);
+extern YY_EXTRA_TYPE yyget_extra(void);
+extern int yyget_lineno(void);
+int yyget_lineno()
+{
+	return yylineno;
+}
+
+extern char* yyget_text(void);
+char* yyget_text()
+{
+	return yytext;
+}
+#endif
+
 %}
 
-%option nounput
+%option yylineno noyywrap nounput
 %option prefix="strres_"
-%option yylineno
 
 %x COMMENT
 %x QUOTE
@@ -96,9 +107,9 @@ static PHYSFS_file* pReadFile = NULL;
 [ \t\n\x0d\x0a]						;
 
 	/* Strip comments */
-"/*"						{ inComment=true; BEGIN COMMENT; }
+"/*"						{ BEGIN COMMENT; }
 <COMMENT>"*/" |
-<COMMENT>"*/"\n				{ inComment=false; BEGIN 0; }
+<COMMENT>"*/"\n				{ BEGIN 0; }
 <COMMENT>. |
 <COMMENT>\n					;
 
@@ -112,13 +123,16 @@ static PHYSFS_file* pReadFile = NULL;
 
 %%
 
-/* Set the current input file for the lexer */
-void strresSetInputFile(PHYSFS_file* fileHandle)
-{
-	pReadFile = fileHandle;
+static YY_EXTRA_TYPE pBuffer = NULL;
 
-	/* Reset the lexer incase it's been used before */
-	yy_flush_buffer( YY_CURRENT_BUFFER );
+void yyset_extra(YY_EXTRA_TYPE user_defined)
+{
+	pBuffer = user_defined;
+}
+
+YY_EXTRA_TYPE yyget_extra()
+{
+	return pBuffer;
 }
 
 void strresGetErrorData(int *pLine, char **ppText)
@@ -126,18 +140,6 @@ void strresGetErrorData(int *pLine, char **ppText)
 	*pLine = strres_lineno;
 	*ppText = strres_text;
 }
-
-int strres_wrap(void)
-{
-	if (inComment)
-	{
-		debug( LOG_ERROR, "Warning: reched end of file in a comment" );
-		abort();
-	}
-
-	return 1;
-}
-
 
 /* Older GNU Flex versions don't define yylex_destroy()
  * (and neither define a subminor version)

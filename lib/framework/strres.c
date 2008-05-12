@@ -361,9 +361,11 @@ char *strresGetString(STR_RES *psRes, UDWORD id)
 BOOL strresLoad(STR_RES* psRes, const char* fileName)
 {
 	bool retval = true;
+	lexerinput_t input;
 
-	PHYSFS_file* fileHandle = PHYSFS_openRead(fileName);
-	if (!fileHandle)
+	input.type = LEXINPUT_PHYSFS;
+	input.input.physfsfile = PHYSFS_openRead(fileName);
+	if (!input.input.physfsfile)
 	{
 		debug(LOG_ERROR, "strresLoadFile: PHYSFS_openRead(\"%s\") failed with error: %s\n", fileName, PHYSFS_getLastError());
 		return false;
@@ -372,11 +374,11 @@ BOOL strresLoad(STR_RES* psRes, const char* fileName)
 	// Set string resource to operate on
 	psCurrRes = psRes;
 
-	strresSetInputFile(fileHandle);
+	strres_set_extra(&input);
 	retval = (strres_parse() == 0);
 
 	strres_lex_destroy();
-	PHYSFS_close(fileHandle);
+	PHYSFS_close(input.input.physfsfile);
 
 	return retval;
 }
