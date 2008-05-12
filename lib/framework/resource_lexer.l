@@ -43,9 +43,6 @@ void res_error(const char *pMessage,...);
 char aText[TEXT_BUFFERS][YYLMAX];		// No longer static ... lets use this area globally
 static UDWORD currText=0;
 
-// Note if we are in a comment
-static BOOL inComment = false;
-
 /* Pointer to the input buffer */
 static const char *pInputBuffer = NULL;
 static const char *pEndBuffer = NULL;
@@ -59,9 +56,8 @@ static const char *pEndBuffer = NULL;
 
 %}
 
-%option nounput
+%option yylineno noyywrap nounput
 %option prefix="res_"
-%option yylineno
 
 %x COMMENT
 %x QUOTE
@@ -102,9 +98,9 @@ file						{ return FILETOKEN; }
 [ \t\n\x0d\x0a]						;
 
 	/* Strip comments */
-"/*"						{ inComment=true; BEGIN COMMENT; }
+"/*"						{ BEGIN COMMENT; }
 <COMMENT>"*/" |
-<COMMENT>"*/"\n				{ inComment=false; BEGIN 0; }
+<COMMENT>"*/"\n				{ BEGIN 0; }
 <COMMENT>. |
 <COMMENT>\n					;
 
@@ -126,23 +122,12 @@ void resSetInputBuffer(char *pBuffer, UDWORD size)
 
 	/* Reset the lexer incase it's been used before */
 	res__flush_buffer(YY_CURRENT_BUFFER);
-	inComment = false;
 }
 
 void resGetErrorData(int *pLine, char **ppText)
 {
 	*pLine = res_lineno;
 	*ppText = res_text;
-}
-
-int res_wrap(void)
-{
-	if (inComment)
-	{
-		debug( LOG_ERROR, "Warning: reached end of file in a comment" );
-		abort();
-	}
-	return 1;
 }
 
 /* Older GNU Flex versions don't define yylex_destroy()
