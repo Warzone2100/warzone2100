@@ -43,16 +43,35 @@ void res_error(const char *pMessage,...);
 char aText[TEXT_BUFFERS][YYLMAX];		// No longer static ... lets use this area globally
 static UDWORD currText=0;
 
-/* Pointer to the input buffer */
-static const char *pInputBuffer = NULL;
-static const char *pEndBuffer = NULL;
+#include "lib/framework/lexer_input.h"
 
-#define YY_INPUT(buf,result,max_size) \
-			if (pInputBuffer != pEndBuffer) { \
-				buf[0] = *(pInputBuffer++); result = 1; \
-			} else { \
-				buf[0] = EOF; result = YY_NULL; \
-			}
+#ifndef yyextra
+# define yyextra yyget_extra()
+#endif
+
+/* Older GNU Flex versions don't define yyget_extra(), yyset_extra(),
+ * yyget_text() and yyget_lineno().
+ * (and neither define a subminor version)
+ */
+#if !defined(YY_FLEX_SUBMINOR_VERSION) || (YY_FLEX_SUBMINOR_VERSION < 9)
+# define yyget_extra  res_get_extra
+# define yyset_extra  res_set_extra
+# define yyget_lineno res_get_lineno
+# define yyget_text   res_get_text
+extern void yyset_extra(YY_EXTRA_TYPE user_defined);
+extern YY_EXTRA_TYPE yyget_extra(void);
+extern int yyget_lineno(void);
+int yyget_lineno()
+{
+	return yylineno;
+}
+
+extern char* yyget_text(void);
+char* yyget_text()
+{
+	return yytext;
+}
+#endif
 
 %}
 
@@ -114,14 +133,16 @@ file						{ return FILETOKEN; }
 
 %%
 
-/* Set the current input buffer for the lexer */
-void resSetInputBuffer(char *pBuffer, UDWORD size)
-{
-	pInputBuffer = pBuffer;
-	pEndBuffer = pBuffer + size;
+static YY_EXTRA_TYPE pBuffer = NULL;
 
-	/* Reset the lexer incase it's been used before */
-	res__flush_buffer(YY_CURRENT_BUFFER);
+void yyset_extra(YY_EXTRA_TYPE user_defined)
+{
+	pBuffer = user_defined;
+}
+
+YY_EXTRA_TYPE yyget_extra()
+{
+	return pBuffer;
 }
 
 void resGetErrorData(int *pLine, char **ppText)

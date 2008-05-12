@@ -305,11 +305,11 @@ PHYSFS_file* openLoadFile(const char* fileName, bool hard_fail)
 	{
 		if (hard_fail)
 		{
-			ASSERT(!"unable to open file", "openLoadFile: file %s could not be opened: %s", fileName, PHYSFS_getLastError());
+			ASSERT(!"unable to open file", "file %s could not be opened: %s", fileName, PHYSFS_getLastError());
 		}
 		else
 		{
-			debug(LOG_WARNING, "openLoadFile: optional file %s could not be opened: %s", fileName, PHYSFS_getLastError());
+			debug(LOG_WARNING, "optional file %s could not be opened: %s", fileName, PHYSFS_getLastError());
 		}
 	}
 

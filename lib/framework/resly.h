@@ -23,6 +23,8 @@
 #ifndef _resly_h
 #define _resly_h
 
+#include "lib/framework/lexer_input.h"
+
 /* Maximum number of TEXT items in any one Yacc rule */
 #define TEXT_BUFFERS	10
 
@@ -30,8 +32,9 @@
 extern char aResDir[PATH_MAX];
 extern char aCurrResDir[PATH_MAX];
 
-/* Set the current input buffer for the lexer - used by resLoad */
-extern void resSetInputBuffer(char *pBuffer, UDWORD size);
+/** Set the current input buffer for the lexer
+ */
+extern void res_set_extra(YY_EXTRA_TYPE user_defined);
 
 /* Give access to the line number and current text for error messages */
 extern void resGetErrorData(int *pLine, char **ppText);
