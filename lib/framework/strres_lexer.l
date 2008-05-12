@@ -86,7 +86,7 @@ char* yyget_text()
 
 	/* Match text values */
 [a-zA-Z][-0-9_a-zA-Z]*		{
-								strlcpy(aText[currText], strres_text, sizeof(aText[currText]));
+								strlcpy(aText[currText], yytext, sizeof(aText[currText]));
 								strres_lval.sval = aText[currText];
 								currText = (currText + 1) % TEXT_BUFFERS;
 								return TEXT_T;
@@ -97,7 +97,7 @@ char* yyget_text()
 <QUOTE>\"					{ BEGIN 0; }
 <QUOTE>\n					{ strres_error("Unexpected end of line in string"); }
 <QUOTE>[^\"\n]*				{
-								strlcpy(aText[currText], strres_text, sizeof(aText[currText]));
+								strlcpy(aText[currText], yytext, sizeof(aText[currText]));
 								strres_lval.sval = aText[currText];
 								currText = (currText + 1) % TEXT_BUFFERS;
 								return QTEXT_T;
@@ -119,7 +119,7 @@ char* yyget_text()
 <SLCOMMENT>[^\n]*			;
 
 	/* Match anything that's been missed and pass it as a char */
-.							return strres_text[0];
+.							return yytext[0];
 
 %%
 
@@ -133,12 +133,6 @@ void yyset_extra(YY_EXTRA_TYPE user_defined)
 YY_EXTRA_TYPE yyget_extra()
 {
 	return pBuffer;
-}
-
-void strresGetErrorData(int *pLine, char **ppText)
-{
-	*pLine = strres_lineno;
-	*ppText = strres_text;
 }
 
 /* Older GNU Flex versions don't define yylex_destroy()

@@ -27,16 +27,13 @@
 #include "lib/framework/strres.h"
 #include "lib/framework/strresly.h"
 
-extern int strres_lex (void);
+extern int strres_lex(void);
+extern int strres_get_lineno(void);
+extern char* strres_get_text(void);
 
 void yyerror(const char* msg)
 {
-	int		line;
-	char	*pText;
-
-	strresGetErrorData(&line, &pText);
-	debug(LOG_ERROR, "STRRES file parse error:\n%s at line %d\nText: '%s'", msg, line, pText);
-	abort();
+	debug(LOG_ERROR, "STRRES file parse error:\n%s at line %d\nText: '%s'", msg, strres_get_lineno(), strres_get_text());
 }
 
 %}
@@ -58,23 +55,19 @@ file:			line
 			;
 
 line:			TEXT_T QTEXT_T
-							{
-								/* Pass the text string to the string manager */
-								if (!strresStoreString(psCurrRes, $1, $2))
-								{
-									YYABORT;
-								}
-							}
+				{
+					/* Pass the text string to the string manager */
+					if (!strresStoreString(psCurrRes, $1, $2))
+					{
+						YYABORT;
+					}
+				}
             | TEXT_T '_' '(' QTEXT_T ')'
-							{
-								/* Pass the text string to the string manager */
-								if (!strresStoreString(psCurrRes, $1, gettext($4)))
-								{
-									YYABORT;
-								}
-							}
-
+				{
+					/* Pass the text string to the string manager */
+					if (!strresStoreString(psCurrRes, $1, gettext($4)))
+					{
+						YYABORT;
+					}
+				}
 			;
-
-%%
-

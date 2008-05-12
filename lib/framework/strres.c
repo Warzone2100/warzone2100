@@ -360,7 +360,7 @@ char *strresGetString(STR_RES *psRes, UDWORD id)
 /* Load a string resource file */
 BOOL strresLoad(STR_RES* psRes, const char* fileName)
 {
-	bool retval = true;
+	bool retval;
 	lexerinput_t input;
 
 	input.type = LEXINPUT_PHYSFS;
