@@ -99,7 +99,7 @@ ANIMOBJECT						{	return ANIMOBJECT;		}
 
 	/* Match quoted text */
 \"\"				{
-					sstrcpy(audp_lval.sval, "");
+					audp_lval.sval = strdup("");
 					return QTEXT;
 				}
 
@@ -107,7 +107,7 @@ ANIMOBJECT						{	return ANIMOBJECT;		}
 <QUOTE>\"			{ BEGIN INITIAL; }
 <QUOTE>\n			{ audp_error("Unexpected end of line in string"); }
 <QUOTE>[^\"\n]*			{
-					sstrcpy(audp_lval.sval, yytext);
+					audp_lval.sval = strdup(yytext);
 					return QTEXT;
 				}
 

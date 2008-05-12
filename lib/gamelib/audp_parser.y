@@ -44,13 +44,21 @@ void yyerror(const char* fmt, ...) WZ_DECL_FORMAT(printf, 1, 2);
 	float		fval;
 	long		ival;
 	bool            bval;
-	char		sval[100];
+	char*		sval;
 }
 
 	/* value tokens */
 %token <fval> FLOAT_T
 %token <ival> INTEGER
 %token <sval> QTEXT /* Text with double quotes surrounding it */
+
+%destructor {
+	// Force type checking by the compiler
+	char * const s = $$;
+
+	if (s)
+		free(s);
+} QTEXT
 
 	/* keywords */
 %token ONESHOT
@@ -95,6 +103,7 @@ audio_list:				audio_list audio_track |
 audio_track:			AUDIO QTEXT looping INTEGER INTEGER
 				{
 					audio_SetTrackVals($2, $3, $4, $5);
+					free($2);
 				}
 				;
 
@@ -131,6 +140,7 @@ anim_config:			QTEXT INTEGER
 						{
 							g_iCurAnimID = $2;
 							anim_SetVals( $1, $2 );
+							free($1);
 						}
 						;
 
@@ -142,6 +152,7 @@ anim_config:			QTEXT INTEGER
 anim_trans:				ANIM3DTRANS QTEXT INTEGER INTEGER INTEGER
 						{
 							anim_Create3D( $2, $3, $4, $5, ANIM_3D_TRANS, g_iCurAnimID );
+							free($2);
 						}
 						'{' anim_obj_list '}'
 						{
@@ -152,6 +163,7 @@ anim_trans:				ANIM3DTRANS QTEXT INTEGER INTEGER INTEGER
 anim_frames:			ANIM3DFRAMES QTEXT INTEGER INTEGER
 						{
 							anim_Create3D( $2, $3, $4, 1, ANIM_3D_FRAMES, g_iCurAnimID );
+							free($2);
 						}
 						'{'
 						{
@@ -171,6 +183,7 @@ anim_obj_list:			anim_obj anim_obj_list |
 anim_obj:				ANIMOBJECT INTEGER QTEXT '{'
 						{
 							anim_BeginScript();
+							free($3);
 						}
 						anim_script '}'
 						{
