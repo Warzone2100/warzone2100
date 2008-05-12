@@ -50,10 +50,10 @@
  * (and neither define a subminor version)
  */
 #if !defined(YY_FLEX_SUBMINOR_VERSION) || (YY_FLEX_SUBMINOR_VERSION < 9)
-# define yyget_extra  res_get_extra
-# define yyset_extra  res_set_extra
-# define yyget_lineno res_get_lineno
-# define yyget_text   res_get_text
+# define yyget_extra  strres_get_extra
+# define yyset_extra  strres_set_extra
+# define yyget_lineno strres_get_lineno
+# define yyget_text   strres_get_text
 extern void yyset_extra(YY_EXTRA_TYPE user_defined);
 extern YY_EXTRA_TYPE yyget_extra(void);
 extern int yyget_lineno(void);
