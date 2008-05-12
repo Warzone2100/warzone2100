@@ -32,10 +32,6 @@
 /* Maximum length for any TEXT value */
 #define YYLMAX	255
 
-/* global variables */
-static	BOOL	g_bParsingSubFile;
-static	FILE	*g_fpOld;
-
 /* Handle to the input file */
 static PHYSFS_file* pReadFile = NULL;
 
@@ -56,9 +52,8 @@ void audp_error(const char* fmt, ...) WZ_DECL_FORMAT(printf, 1, 2);
 
 %}
 
-%option nounput
+%option yylineno noyywrap nounput
 %option prefix="audp_"
-%option yylineno
 
 %x COMMENT
 %x QUOTE
@@ -120,26 +115,6 @@ ANIMOBJECT						{	return ANIMOBJECT;		}
 
 
 %%
-
-/***************************************************************************/
-
-int audp_wrap(void)
-{
-	if ( g_bParsingSubFile == true )
-	{
-		/* close current file and restore old file pointer */
-		fclose(yyin);
-		yyin = g_fpOld;
-
-		g_bParsingSubFile = false;
-
-		return 0;
-	}
-	else
-	{
-		return 1;
-	}
-}
 
 /***************************************************************************/
 /* Set the current input file for the lexer */
