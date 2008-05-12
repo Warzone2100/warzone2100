@@ -594,7 +594,7 @@ BOOL eventRunContext(SCRIPT_CONTEXT *psContext, UDWORD time)
 // Remove an object from the event system
 void eventRemoveContext(SCRIPT_CONTEXT *psContext)
 {
-	ACTIVE_TRIGGER	*psCurr, *psPrev=NULL, *psNext;
+	ACTIVE_TRIGGER *psCurr, *psPrev, *psNext;
 	VAL_CHUNK		*psCChunk, *psNChunk;
 	SCRIPT_CONTEXT	*psCCont, *psPCont=NULL;
 	SDWORD			i, chunkStart;
@@ -607,13 +607,17 @@ void eventRemoveContext(SCRIPT_CONTEXT *psContext)
 		eventFreeTrigger(psTrigList);
 		psTrigList = psNext;
 	}
-	for(psCurr = psTrigList; psCurr; psCurr = psNext)
+
+	for (psPrev = NULL, psCurr = psTrigList; psCurr; psCurr = psNext)
 	{
 		psNext = psCurr->psNext;
 		if (psCurr->psContext == psContext)
 		{
 			eventFreeTrigger(psCurr);
-			psPrev->psNext = psNext;
+			if (psPrev)
+			{
+				psPrev->psNext = psNext;
+			}
 		}
 		else
 		{
@@ -627,13 +631,17 @@ void eventRemoveContext(SCRIPT_CONTEXT *psContext)
 		eventFreeTrigger(psCallbackList);
 		psCallbackList = psNext;
 	}
-	for(psCurr = psCallbackList; psCurr; psCurr = psNext)
+
+	for (psPrev = NULL, psCurr = psCallbackList; psCurr; psCurr = psNext)
 	{
 		psNext = psCurr->psNext;
 		if (psCurr->psContext == psContext)
 		{
 			eventFreeTrigger(psCurr);
-			psPrev->psNext = psNext;
+			if (psPrev)
+			{
+				psPrev->psNext = psNext;
+			}
 		}
 		else
 		{

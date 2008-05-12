@@ -59,6 +59,7 @@ SRC=ai.c \
 	objmem.c \
 	objects.c \
 	order.c \
+	parsetest.c \
 	radar.c \
 	raycast.c \
 	research.c \
