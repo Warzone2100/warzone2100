@@ -39,7 +39,6 @@
 /* Static forward declarations */
 static void strresReleaseIDStrings(STR_RES *psRes);
 static BOOL strresAllocBlock(STR_BLOCK **ppsBlock, UDWORD size);
-static void stringCpy(char *pDest, const char *pSrc);
 
 /* The string resource currently being loaded */
 STR_RES	*psCurrRes;
@@ -258,7 +257,7 @@ BOOL strresStoreString(STR_RES *psRes, char *pID, const char *pString)
 			abort();
 			return false;
 		}
-		psID->pIDStr = (char*)malloc(sizeof(char) * (strlen(pID) + 1));
+		psID->pIDStr = strdup(pID)
 		if (!psID->pIDStr)
 		{
 			debug( LOG_ERROR, "strresStoreString: Out of memory" );
@@ -266,19 +265,18 @@ BOOL strresStoreString(STR_RES *psRes, char *pID, const char *pString)
 			free(psID);
 			return false;
 		}
-		stringCpy(psID->pIDStr, pID);
 		psID->id = psRes->nextID | ID_ALLOC;
 		psRes->nextID += 1;
 		TREAP_ADD(psRes->psIDTreap, (void*)psID->pIDStr, psID);
 	}
-  if (psID->id & ID_ALLOC)
-  {
-    id = psID->id & ~ID_ALLOC;
-  }
-  else
-  {
-    id = psID->id;
-  }
+	if (psID->id & ID_ALLOC)
+	{
+		id = psID->id & ~ID_ALLOC;
+	}
+	else
+	{
+		id = psID->id;
+	}
 
 	// Find the block to store the string in
 	for(psBlock = psRes->psStrings; psBlock->idEnd < id;
@@ -306,14 +304,13 @@ BOOL strresStoreString(STR_RES *psRes, char *pID, const char *pString)
 	}
 
 	// Allocate a copy of the string
-	pNew = (char*)malloc(sizeof(char) * (strlen(pString) + 1));
+	pNew = strdup(pString);
 	if (!pNew)
 	{
 		debug( LOG_ERROR, "strresStoreString: Out of memory" );
 		abort();
 		return false;
 	}
-	stringCpy(pNew, pString);
 	psBlock->apStrings[id - psBlock->idStart] = pNew;
 
 	return true;
@@ -382,16 +379,6 @@ BOOL strresLoad(STR_RES* psRes, const char* fileName)
 
 	return retval;
 }
-
-/* Copy a char */
-static void stringCpy(char *pDest, const char *pSrc)
-{
-	do
-	{
-		*pDest++ = *pSrc;
-	} while (*pSrc++);
-}
-
 
 /* Get the ID number for a string*/
 UDWORD strresGetIDfromString(STR_RES *psRes, const char *pString)
