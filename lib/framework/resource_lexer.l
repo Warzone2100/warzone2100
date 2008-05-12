@@ -96,6 +96,14 @@ file						{ return FILETOKEN; }
 							}
 
 	/* Match quoted text */
+\"\"						{
+								aText[currText][0] = '\0';
+								aText[currText][1] = '\0';
+								res_lval.sval = aText[currText];
+								currText = (currText + 1) % TEXT_BUFFERS;
+								return QTEXT_T;
+							}
+
 \"							{ BEGIN QUOTE; }
 <QUOTE>\"					{ BEGIN 0; }
 <QUOTE>\n					{ res_error("Unexpected end of line in string"); }
@@ -105,14 +113,6 @@ file						{ return FILETOKEN; }
 								currText = (currText + 1) % TEXT_BUFFERS;
 								return QTEXT_T;
 							}
-\"\"						{
-								aText[currText][0] = '\0';
-								aText[currText][1] = '\0';
-								res_lval.sval = aText[currText];
-								currText = (currText + 1) % TEXT_BUFFERS;
-								return QTEXT_T;
-							}
-
 	/* Skip white space */
 [ \t\n\x0d\x0a]						;
 
