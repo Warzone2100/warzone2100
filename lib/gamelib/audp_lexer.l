@@ -71,6 +71,7 @@ char* yyget_text()
 
 %x COMMENT
 %x QUOTE
+%x SLCOMMENT
 
 %%
 	/* Match to key words */
@@ -97,32 +98,33 @@ ANIMOBJECT						{	return ANIMOBJECT;		}
 								}
 
 	/* Match quoted text */
-\"[^\"\n]*[\"\n]				{
-									/* skip opening quote */
-									sstrcpy(audp_lval.sval, &yytext[1]);
+\"\"				{
+					sstrcpy(audp_lval.sval, "");
+					return QTEXT;
+				}
 
-									/* check for unterminated string */
-									if (yytext[yyleng - 1] != '"' )
-									{
-										audp_error("Unterminated string %s\n", audp_lval.sval);
-										return (1);
-									}
-
-									/* set final quote in string to blank */
-									audp_lval.sval[yyleng - 2] = (char)'\0';
-
-									return QTEXT;
-								}
+\"				{ BEGIN QUOTE;   }
+<QUOTE>\"			{ BEGIN INITIAL; }
+<QUOTE>\n			{ audp_error("Unexpected end of line in string"); }
+<QUOTE>[^\"\n]*			{
+					sstrcpy(audp_lval.sval, yytext);
+					return QTEXT;
+				}
 
 	/* Skip white space */
 [ \t\n\x0d\x0a]						;
 
 	/* Strip comments */
-"/*"						{ BEGIN COMMENT; }
+"/*"				{ BEGIN COMMENT; }
 <COMMENT>"*/" |
-<COMMENT>"*/"\n				{ BEGIN 0; }
+<COMMENT>"*/"\n			{ BEGIN INITIAL; }
 <COMMENT>. |
-<COMMENT>\n					;
+<COMMENT>\n			;
+
+	/* Strip single line comments */
+"//"				{ BEGIN SLCOMMENT; }
+<SLCOMMENT>\n			{ BEGIN INITIAL;   }
+<SLCOMMENT>[^\n]*		;
 
 	/* Match anything that's been missed and pass it as a char */
 .							return yytext[0];
