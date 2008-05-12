@@ -18,9 +18,11 @@ static inline bool TEST_NAME(void) \
 	for (i = 0; i < ARRAY_SIZE(valid_files); ++i) \
 	{ \
 		fprintf(stdout, "\t\tTesting parsing of valid file \"%s\"\n", valid_files[i].testname); \
+		fflush(stdout); \
 		if (!doParseTest(valid_files[i].content, strlen(valid_files[i].content))) \
 		{ \
 			fprintf(stdout, "\t\t\t" ANSI_COLOUR_RED "Failure while parsing valid test file \"" ANSI_COLOUR_YELLOW "%s" ANSI_COLOUR_RED "\"." ANSI_COLOUR_DEFAULT "\n", valid_files[i].testname); \
+			fflush(stdout); \
 			retval = false; \
 		} \
 	} \
@@ -31,9 +33,11 @@ static inline bool TEST_NAME(void) \
 	for (i = 0; i < ARRAY_SIZE(invalid_files); ++i) \
 	{ \
 		fprintf(stdout, "\t\tTesting parsing of invalid file \"%s\" (expect error debug-messages)\n", invalid_files[i].testname); \
+		fflush(stdout); \
 		if (doParseTest(invalid_files[i].content, strlen(invalid_files[i].content))) \
 		{ \
 			fprintf(stdout, "\t\t\t" ANSI_COLOUR_RED "Parsing of invalid test file \"" ANSI_COLOUR_YELLOW "%s" ANSI_COLOUR_RED "\" was succesfull, it shouldn't have been!" ANSI_COLOUR_DEFAULT "\n", invalid_files[i].testname); \
+			fflush(stdout); \
 			retval = false; \
 		} \
 	} \
