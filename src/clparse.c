@@ -32,6 +32,7 @@
 #include "frontend.h"
 
 #include "lib/ivis_common/pieclip.h"
+#include "lib/netplay/netplay.h"
 #include "warzoneconfig.h"
 
 #include "clparse.h"
@@ -319,6 +320,7 @@ bool ParseCommandLine(int argc, const char** argv)
 					fprintf(stderr, "\tCAM_1A\n\tCAM_2A\n\tCAM_3A\n\tTUTORIAL3\n\tFASTPLAY\n");
 					exit(1);
 				}
+				NetPlay.bComms = false;
 				sstrcpy(aLevelName, token);
 				SetGameMode(GS_NORMAL);
 				break;
