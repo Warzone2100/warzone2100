@@ -24,7 +24,9 @@
  * Yacc file for parsing RES files
  */
 
-int res_lex (void);
+extern int res_lex(void);
+extern int res_get_lineno(void);
+extern char* res_get_text(void);
 
 /* Allow frame header files to be singly included */
 #define FRAME_LIB_INCLUDE
@@ -39,18 +41,10 @@ int res_lex (void);
 #include "lib/framework/frameresource.h"
 #include "lib/framework/resly.h"
 
-/*
- * A simple error reporting routine
- */
-
-void res_error(const char *pMessage,...)
+extern void yyerror(const char* msg);
+void yyerror(const char* msg)
 {
-	int	line;
-	char	*pText;
-
-	resGetErrorData(&line, &pText);
-	debug( LOG_ERROR, "RES file parse error:\n%s at line %d\nText: '%s'\n", pMessage, line, pText );
-	abort();
+	debug(LOG_ERROR, "RES file parse error:\n%s at line %d\nText: '%s'\n", msg, res_get_lineno(), res_get_text());
 }
 
 %}

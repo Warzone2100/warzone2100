@@ -34,7 +34,7 @@
 /* Get the Yacc definitions */
 #include "resource_parser.tab.h"
 
-void res_error(const char *pMessage,...);
+extern void res_error(const char* msg);
 
 /* Maximum length for any TEXT_T value */
 #define YYLMAX 8192
@@ -143,12 +143,6 @@ void yyset_extra(YY_EXTRA_TYPE user_defined)
 YY_EXTRA_TYPE yyget_extra()
 {
 	return pBuffer;
-}
-
-void resGetErrorData(int *pLine, char **ppText)
-{
-	*pLine = res_lineno;
-	*ppText = res_text;
 }
 
 /* Older GNU Flex versions don't define yylex_destroy()

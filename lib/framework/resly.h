@@ -36,15 +36,10 @@ extern char aCurrResDir[PATH_MAX];
  */
 extern void res_set_extra(YY_EXTRA_TYPE user_defined);
 
-/* Give access to the line number and current text for error messages */
-extern void resGetErrorData(int *pLine, char **ppText);
-
 /* Call the yacc parser */
 extern int res_parse(void);
 
 /* Destroy the lexer */
 extern int res_lex_destroy(void);
-
-void res_error(const char *pMessage, ...);
 
 #endif
