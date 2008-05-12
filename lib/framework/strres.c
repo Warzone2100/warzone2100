@@ -257,7 +257,7 @@ BOOL strresStoreString(STR_RES *psRes, char *pID, const char *pString)
 			abort();
 			return false;
 		}
-		psID->pIDStr = strdup(pID)
+		psID->pIDStr = strdup(pID);
 		if (!psID->pIDStr)
 		{
 			debug( LOG_ERROR, "strresStoreString: Out of memory" );
