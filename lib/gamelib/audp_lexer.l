@@ -52,7 +52,7 @@ static PHYSFS_file* pReadFile = NULL;
 			} \
 		}
 
-void audp_error(const char* fmt, ...);
+void audp_error(const char* fmt, ...) WZ_DECL_FORMAT(printf, 1, 2);
 
 %}
 
@@ -77,31 +77,30 @@ ANIMOBJECT						{	return ANIMOBJECT;		}
 
 	/* Match floating point numbers */
 	/* This is a problem with the PSX so is disabled
--?[0-9]*"."[0-9]+				{	audp_lval.fval = (float) atof(audp_text);
+-?[0-9]*"."[0-9]+				{	audp_lval.fval = (float) atof(yytext);
 									return FLOAT_T;
 								}
 	*/
 
 	/* Match integer numbers */
--?[0-9]+						{	audp_lval.ival = atoi(audp_text);
+-?[0-9]+						{	audp_lval.ival = atoi(yytext);
 									return INTEGER;
 								}
 
 	/* Match quoted text */
 \"[^\"\n]*[\"\n]				{
 									/* skip opening quote */
-									strcpy( audp_lval.sval, audp_text+1 );
+									sstrcpy(audp_lval.sval, &yytext[1]);
 
 									/* check for unterminated string */
-									if ( audp_text[audp_leng-1] != '"' )
+									if (yytext[yyleng - 1] != '"' )
 									{
-										sprintf( audp_lval.sval, "Unterminated string %s\n", audp_lval.sval );
-										audp_error( audp_lval.sval );
+										audp_error("Unterminated string %s\n", audp_lval.sval);
 										return (1);
 									}
 
 									/* set final quote in string to blank */
-									audp_lval.sval[audp_leng-2] = (char) '\0';
+									audp_lval.sval[yyleng - 2] = (char)'\0';
 
 									return QTEXT;
 								}
@@ -117,21 +116,20 @@ ANIMOBJECT						{	return ANIMOBJECT;		}
 <COMMENT>\n					;
 
 	/* Match anything that's been missed and pass it as a char */
-.							return audp_text[0];
+.							return yytext[0];
 
 
 %%
 
 /***************************************************************************/
 
-int
-audp_wrap( void )
+int audp_wrap(void)
 {
 	if ( g_bParsingSubFile == true )
 	{
 		/* close current file and restore old file pointer */
-		fclose( audp_in );
-		audp_in = g_fpOld;
+		fclose(yyin);
+		yyin = g_fpOld;
 
 		g_bParsingSubFile = false;
 
@@ -157,8 +155,8 @@ void parserSetInputFile(PHYSFS_file* fileHandle)
 void
 parseGetErrorData(int *pLine, char **ppText)
 {
-	*pLine  = audp_lineno;
-	*ppText = audp_text;
+	*pLine  = yylineno;
+	*ppText = yytext;
 }
 
 /***************************************************************************/
