@@ -28,26 +28,26 @@
 #include "script.h"
 
 // array to store release functions
-static VAL_CREATE_FUNC		*asCreateFuncs;
-static VAL_RELEASE_FUNC		*asReleaseFuncs;
+static VAL_CREATE_FUNC	*asCreateFuncs = NULL;
+static VAL_RELEASE_FUNC	*asReleaseFuncs = NULL;
 static UDWORD		numFuncs;
 
-// The list of currently active triggers
-ACTIVE_TRIGGER	*psTrigList;
+/** The list of currently active triggers */
+ACTIVE_TRIGGER		*psTrigList = NULL;
 
-// The list of callback triggers
-ACTIVE_TRIGGER	*psCallbackList;
+/** The list of callback triggers */
+ACTIVE_TRIGGER		*psCallbackList = NULL;
 
-// The new triggers added this loop
-static ACTIVE_TRIGGER	*psAddedTriggers;
+/** The new triggers added this loop */
+static ACTIVE_TRIGGER	*psAddedTriggers = NULL;
 
-// The trigger which is currently firing
-static ACTIVE_TRIGGER	*psFiringTrigger;
-static BOOL				triggerChanged;
-static UDWORD			updateTime;
+/** The trigger which is currently firing */
+static ACTIVE_TRIGGER	*psFiringTrigger = NULL;
+static BOOL		triggerChanged;
+static UDWORD		updateTime;
 
-// The currently allocated contexts
-SCRIPT_CONTEXT	*psContList;
+/** The currently allocated contexts */
+SCRIPT_CONTEXT	*psContList = NULL;
 
 // The current event trace level
 static SDWORD			eventTraceLevel=3;
