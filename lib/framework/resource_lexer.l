@@ -89,7 +89,7 @@ file						{ return FILETOKEN; }
 
 	/* Match text values */
 [a-zA-Z][-0-9_a-zA-Z]*		{
-								strlcpy(aText[currText], res_text, sizeof(aText[currText]));
+								strlcpy(aText[currText], yytext, sizeof(aText[currText]));
 								res_lval.sval = aText[currText];
 								currText = (currText + 1) % TEXT_BUFFERS;
 								return TEXT_T;
@@ -108,7 +108,7 @@ file						{ return FILETOKEN; }
 <QUOTE>\"					{ BEGIN 0; }
 <QUOTE>\n					{ res_error("Unexpected end of line in string"); }
 <QUOTE>[^\"\n]*				{
-								strlcpy(aText[currText], res_text, sizeof(aText[currText]));
+								strlcpy(aText[currText], yytext, sizeof(aText[currText]));
 								res_lval.sval = aText[currText];
 								currText = (currText + 1) % TEXT_BUFFERS;
 								return QTEXT_T;
@@ -129,7 +129,7 @@ file						{ return FILETOKEN; }
 <SLCOMMENT>[^\n]*			;
 
 	/* Match anything that's been missed and pass it as a char */
-.							return res_text[0];
+.							return yytext[0];
 
 %%
 
