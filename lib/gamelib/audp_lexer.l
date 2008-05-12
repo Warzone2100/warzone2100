@@ -32,23 +32,37 @@
 /* Maximum length for any TEXT value */
 #define YYLMAX	255
 
-/* Handle to the input file */
-static PHYSFS_file* pReadFile = NULL;
-
-#define YY_INPUT(buf,result,max_size) \
-		if (PHYSFS_eof(pReadFile)) \
-		{ \
-			buf[0] = EOF; result = YY_NULL; \
-		} \
-		else { \
-			result = PHYSFS_read(pReadFile, buf, 1, max_size); \
-			if (result == -1) \
-			{ \
-				buf[0] = EOF; result = YY_NULL; \
-			} \
-		}
-
 void audp_error(const char* fmt, ...) WZ_DECL_FORMAT(printf, 1, 2);
+
+#include "lib/framework/lexer_input.h"
+
+#ifndef yyextra
+# define yyextra yyget_extra()
+#endif
+
+/* Older GNU Flex versions don't define yyget_extra(), yyset_extra(),
+ * yyget_text() and yyget_lineno().
+ * (and neither define a subminor version)
+ */
+#if !defined(YY_FLEX_SUBMINOR_VERSION) || (YY_FLEX_SUBMINOR_VERSION < 9)
+# define yyget_extra  audp_get_extra
+# define yyset_extra  audp_set_extra
+# define yyget_lineno audp_get_lineno
+# define yyget_text   audp_get_text
+extern void yyset_extra(YY_EXTRA_TYPE user_defined);
+extern YY_EXTRA_TYPE yyget_extra(void);
+extern int yyget_lineno(void);
+int yyget_lineno()
+{
+	return yylineno;
+}
+
+extern char* yyget_text(void);
+char* yyget_text()
+{
+	return yytext;
+}
+#endif
 
 %}
 
@@ -116,25 +130,17 @@ ANIMOBJECT						{	return ANIMOBJECT;		}
 
 %%
 
-/***************************************************************************/
-/* Set the current input file for the lexer */
-/***************************************************************************/
+static YY_EXTRA_TYPE pBuffer = NULL;
 
-void parserSetInputFile(PHYSFS_file* fileHandle)
+void yyset_extra(YY_EXTRA_TYPE user_defined)
 {
-	pReadFile = fileHandle;
+	pBuffer = user_defined;
 }
 
-/***************************************************************************/
-
-void
-parseGetErrorData(int *pLine, char **ppText)
+YY_EXTRA_TYPE yyget_extra()
 {
-	*pLine  = yylineno;
-	*ppText = yytext;
+	return pBuffer;
 }
-
-/***************************************************************************/
 
 /* Older GNU Flex versions don't define yylex_destroy()
  * (and neither define a subminor version)

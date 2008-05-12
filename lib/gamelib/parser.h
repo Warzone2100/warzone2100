@@ -17,23 +17,12 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/***************************************************************************/
 
 #ifndef _PARSER_H_
 #define _PARSER_H_
 
-/***************************************************************************/
-
 #include <physfs.h>
 
-/***************************************************************************/
-
-extern void		parserSetInputFile(PHYSFS_file* fileHandle);
-extern BOOL		ParseResourceFile(PHYSFS_file* fileHandle);
-extern void		parseGetErrorData(int *pLine, char **ppText);
-
-/***************************************************************************/
+extern bool ParseResourceFile(PHYSFS_file* fileHandle);
 
 #endif	/* _PARSER_H_ */
-
-/***************************************************************************/

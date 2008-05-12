@@ -23,14 +23,18 @@
 #include "lib/gamelib/parser.h"
 #include "lib/sound/audio.h"
 #include "lib/gamelib/anim.h"
+#include "lib/framework/lexer_input.h"
 
 static int		g_iCurAnimID = 0;
 static Vector3i vecPos, vecRot, vecScale;
 
 extern int audp_lex(void);
 extern int audp_lex_destroy(void);
+extern int audp_get_lineno(void);
+extern char* audp_get_text(void);
+extern void audp_set_extra(YY_EXTRA_TYPE user_defined);
 
-void audp_error(const char* fmt, ...);
+void yyerror(const char* fmt, ...) WZ_DECL_FORMAT(printf, 1, 2);
 
 %}
 
@@ -192,36 +196,38 @@ anim_state:				INTEGER INTEGER INTEGER INTEGER INTEGER INTEGER INTEGER INTEGER I
 
 %%
 
-/***************************************************************************/
 /* A simple error reporting routine */
-
-void audp_error(const char* msg, ...)
+void yyerror(const char* msg, ...)
 {
-	int		line;
-	char	*pText;
-	char	aTxtBuf[1024];
+	char* txtBuf;
 	va_list	args;
+	size_t size;
 
 	va_start(args, msg);
-	vsnprintf(aTxtBuf, sizeof(aTxtBuf), msg, args);
+	size = vsnprintf(NULL, 0, msg, args);
 	va_end(args);
 
-	parseGetErrorData( &line, &pText );
-	debug( LOG_ERROR, "RES file parse error:\n%s at line %d\nToken: %d, Text: '%s'\n", aTxtBuf, line, audp_char, pText );
-	abort();
+	txtBuf = alloca(size + 1);
+	va_start(args, msg);
+	vsprintf(txtBuf, msg, args);
+	va_end(args);
+
+	debug(LOG_ERROR, "RES file parse error:\n%s at line %d\nToken: %d, Text: '%s'\n", txtBuf, audp_get_lineno(), audp_char, audp_get_text());
 }
 
-/***************************************************************************/
-/* Read a resource file */
-BOOL ParseResourceFile(PHYSFS_file* fileHandle)
+/** Read an audio properties file
+ */
+bool ParseResourceFile(PHYSFS_file* fileHandle)
 {
-	// Tell lex about the input file
-	parserSetInputFile(fileHandle);
+	bool retval;
+	lexerinput_t input;
+	input.type = LEXINPUT_PHYSFS;
+	input.input.physfsfile = fileHandle;
 
-	audp_parse();
+	audp_set_extra(&input);
+
+	retval = (audp_parse() == 0);
 	audp_lex_destroy();
 
-	return true;
+	return retval;
 }
-
-/***************************************************************************/
