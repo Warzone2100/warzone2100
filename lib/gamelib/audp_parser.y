@@ -43,7 +43,7 @@ void yyerror(const char* fmt, ...) WZ_DECL_FORMAT(printf, 1, 2);
 %union {
 	float		fval;
 	long		ival;
-	signed char	bval;
+	bool            bval;
 	char		sval[100];
 }
 
@@ -51,10 +51,10 @@ void yyerror(const char* fmt, ...) WZ_DECL_FORMAT(printf, 1, 2);
 %token <fval> FLOAT_T
 %token <ival> INTEGER
 %token <sval> QTEXT /* Text with double quotes surrounding it */
-%token <ival> LOOP
-%token <ival> ONESHOT
 
 	/* keywords */
+%token ONESHOT
+%token LOOP
 %token AUDIO
 %token ANIM3DFRAMES
 %token ANIM3DTRANS
@@ -63,7 +63,8 @@ void yyerror(const char* fmt, ...) WZ_DECL_FORMAT(printf, 1, 2);
 %token ANIM_MODULE
 %token ANIMOBJECT
 
-	/* module names */
+	/* rule types */
+%type <bval> looping
 
 %%
 
@@ -91,15 +92,17 @@ audio_list:				audio_list audio_track |
 	 * unsigned int audio_SetTrackVals(const char* fileName, BOOL loop, unsigned int volume, unsigned int audibleRadius)
 	 */
 
-audio_track:			AUDIO QTEXT LOOP INTEGER INTEGER
-						{
-							audio_SetTrackVals( $2, true, $4, $5 );
-						}
-						| AUDIO QTEXT ONESHOT INTEGER INTEGER
-						{
-							audio_SetTrackVals( $2, false, $4, $5 );
-						}
-						;
+audio_track:			AUDIO QTEXT looping INTEGER INTEGER
+				{
+					audio_SetTrackVals($2, $3, $4, $5);
+				}
+				;
+
+looping:			LOOP
+				{ $$ = true; }
+				| ONESHOT
+				{ $$ = false; }
+				;
 
 anim_module_header:		ANIM_MODULE '{'
 						{
