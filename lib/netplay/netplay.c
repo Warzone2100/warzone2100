@@ -504,8 +504,6 @@ int NETinit(BOOL bFirstCall)
 
 		NetPlay.dpidPlayer		= 0;
 		NetPlay.bHost			= 0;
-		NetPlay.bComms			= true;
-
 		for(i = 0; i < MAX_PLAYERS; i++)
 		{
 			memset(&NetPlay.players[i], 0, sizeof(NetPlay.players[i]));

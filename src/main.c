@@ -886,6 +886,8 @@ int main(int argc, char *argv[])
 	atexit( closeConfig );
 	loadRenderMode(); //get the registry entry for clRendMode
 
+	NETinit(true);
+
 	// parse the command line
 	if (!ParseCommandLine(argc, (const char**)argv)) {
 		return -1;
@@ -896,8 +898,6 @@ int main(int argc, char *argv[])
 
 	// Find out where to find the data
 	scanDataDirs();
-
-	NETinit(true);
 
 	if (!frameInitialise( "Warzone 2100", pie_GetVideoBufferWidth(), pie_GetVideoBufferHeight(), pie_GetVideoBufferDepth(), war_getFullscreen() ))
 	{
