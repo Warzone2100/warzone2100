@@ -36,28 +36,40 @@
 #define YYLMAX	255
 #endif
 
-// Note if we are in a comment
-static BOOL inComment = false;
+#include "lib/framework/lexer_input.h"
 
-/* Pointer to the input buffer */
-static const char *pInputBuffer = NULL;
-static const char *pEndBuffer = NULL;
+#ifndef yyextra
+# define yyextra yyget_extra()
+#endif
 
-#define YY_INPUT(buf, result, max_size) \
-      if (pInputBuffer != pEndBuffer) { \
-        buf[0] = *(pInputBuffer++); result = 1; \
-      } else { \
-        buf[0] = EOF; result = YY_NULL; \
-      }
+/* Older GNU Flex versions don't define yyget_extra(), yyset_extra(),
+ * yyget_text() and yyget_lineno().
+ * (and neither define a subminor version)
+ */
+#if !defined(YY_FLEX_SUBMINOR_VERSION) || (YY_FLEX_SUBMINOR_VERSION < 9)
+# define yyget_extra  lev_get_extra
+# define yyset_extra  lev_set_extra
+# define yyget_lineno lev_get_lineno
+# define yyget_text   lev_get_text
+extern void yyset_extra(YY_EXTRA_TYPE user_defined);
+extern YY_EXTRA_TYPE yyget_extra(void);
+extern int yyget_lineno(void);
+int yyget_lineno()
+{
+	return yylineno;
+}
 
-#undef lev_getc
-#define lev_getc() (pInputBuffer != pEndBuffer ? *(pInputBuffer++) : EOF)
+extern char* yyget_text(void);
+char* yyget_text()
+{
+	return yytext;
+}
+#endif
 
 %}
 
-%option nounput
+%option yylineno noyywrap nounput
 %option prefix="lev_"
-%option yylineno
 
 %x COMMENT
 %x SLCOMMENT
@@ -104,9 +116,9 @@ miss_clear                                      return MISS_CLEAR;
 [ \t\n\x0d\x0a]						;
 
 	/* Strip comments */
-"/*"						{ inComment=true; BEGIN COMMENT; }
+"/*"						{ BEGIN COMMENT; }
 <COMMENT>"*/" |
-<COMMENT>"*/"\n				{ inComment=false; BEGIN 0; }
+<COMMENT>"*/"\n				{ BEGIN 0; }
 <COMMENT>. |
 <COMMENT>\n					;
 
@@ -120,37 +132,17 @@ miss_clear                                      return MISS_CLEAR;
 
 %%
 
-/* Set the current input buffer for the lexer */
-void levSetInputBuffer(const char* buffer, size_t size)
-{
-	pInputBuffer = buffer;
-	pEndBuffer = &buffer[size];
+static YY_EXTRA_TYPE pBuffer = NULL;
 
-	/* Reset the lexer incase it's been used before */
-	lev__flush_buffer(YY_CURRENT_BUFFER);
-	inComment = false;
+void yyset_extra(YY_EXTRA_TYPE user_defined)
+{
+	pBuffer = user_defined;
 }
 
-int levGetErrorLine()
+YY_EXTRA_TYPE yyget_extra()
 {
-	return yylineno;
+	return pBuffer;
 }
-
-const char* levGetErrorText()
-{
-	return yytext;
-}
-
-int lev_wrap(void)
-{
-	if (inComment)
-	{
-		debug( LOG_ERROR, "Warning: reched end of file in a comment" );
-		abort();
-	}
-	return 1;
-}
-
 
 /* Older GNU Flex versions don't define yylex_destroy()
  * (and neither define a subminor version)

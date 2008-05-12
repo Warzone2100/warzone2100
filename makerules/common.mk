@@ -7,7 +7,7 @@
 %.o: %.cpp
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c -o$@ $<
 
-%.lex.c: %.l
+%.lex.h %.lex.c: %.l
 	$(FLEX) $(FLEXFLAGS) -o$@ $<
 
 %.tab.h %.tab.c: %.y

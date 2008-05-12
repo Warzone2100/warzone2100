@@ -52,18 +52,9 @@ typedef struct _array_indexes
 	SDWORD		elements[VAR_MAX_DIMENSIONS];
 } ARRAY_INDEXES;
 
-/* Set the current input buffer for the lexer */
-extern void scrvSetInputFile(PHYSFS_file* fileHandle);
-
-extern void scrvGetErrorData(int *pLine, char **ppText);
-
 /* A simple error reporting routine */
 
-extern void scrv_error(const char *pMessage,...);
-
-
-// parse a value file
-extern int scrv_parse(void);
+extern void scrv_error(const char* fmt, ...) WZ_DECL_FORMAT(printf, 1, 2);
 
 // Lookup a type
 extern BOOL scrvLookUpType(const char *pIdent, INTERP_TYPE *pType);

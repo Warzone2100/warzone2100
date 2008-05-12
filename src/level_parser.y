@@ -26,6 +26,13 @@
 #include "lib/framework/listmacs.h"
 #include "levels.h"
 #include "levelint.h"
+#include "lib/framework/lexer_input.h"
+
+extern int lev_get_lineno(void);
+extern char* lev_get_text(void);
+extern int lev_lex(void);
+void lev_set_extra(YY_EXTRA_TYPE user_defined);
+int lev_lex_destroy(void);
 
 typedef struct
 {
@@ -40,7 +47,7 @@ typedef struct
  */
 void yyerror(const char* msg)
 {
-	debug(LOG_ERROR, "Level File parse error: `%s` at line `%d` text `%s`", msg, levGetErrorLine(), levGetErrorText());
+	debug(LOG_ERROR, "Level File parse error: `%s` at line `%d` text `%s`", msg, lev_get_lineno(), lev_get_text());
 }
 
 static void freeDataSet(LEVEL_DATASET * const d)
@@ -324,11 +331,16 @@ BOOL levParse(const char* buffer, size_t size, searchPathMode datadir)
 {
 	BOOL retval;
 	parser_context context;
+	lexerinput_t input;
+
+	input.type = LEXINPUT_BUFFER;
+	input.input.buffer.begin = buffer;
+	input.input.buffer.end = &buffer[size];
 
 	context.datadir = datadir;
 	context.dataset = NULL;
 
-	levSetInputBuffer(buffer, size);
+	lev_set_extra(&input);
 
 	retval = (yyparse(&context) == 0);
 

@@ -537,6 +537,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\src\parsetest.c"
+					>
+				</File>
+				<File
 					RelativePath="..\src\power.c"
 					>
 				</File>
@@ -1049,6 +1053,10 @@
 			</File>
 			<File
 				RelativePath="..\lib\framework\platform.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\parsetest.h"
 				>
 			</File>
 			<File

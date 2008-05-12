@@ -69,7 +69,8 @@
 #include "main.h"
 #include "wrappers.h"
 #include "version.h"
-
+#include "map.h"
+#include "parsetest.h"
 
 /* Always use fallbacks on Windows */
 #if defined(WZ_OS_WIN)
@@ -930,7 +931,9 @@ int main(int argc, char *argv[])
 		fprintf(stdout, "Carrying out self-test:\n");
 		NETtest();
 		tagTest();
+		parseTest();
 		levTest();
+		mapTest();
 		fprintf(stdout, "All tests PASSED!\n");
 		exit(0);
 	}

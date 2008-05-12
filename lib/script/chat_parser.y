@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
-	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2007  Warzone Resurrection Project
+	Copyright (C) 2006-2008  Roman
+	Copyright (C) 2006-2008  Warzone Resurrection Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -262,9 +262,6 @@ static void chat_reset_command(SDWORD cmdIndex)
 %token _T_VTOLS
 %token _T_WAIT
 %token _T_WHERE
-%token _T_YEA
-%token _T_YEAH
-%token _T_YEP
 %token _T_YES
 %token _T_YOU
 %token _T_EOF 0
@@ -514,17 +511,11 @@ R_DO_YOU_HAVE_ANY:								R_DO_YOU R_POSSESSION_Q R_QUANTITY
 											|	R_QUANTITY											/* any <substantive>? */
 											;
 
-R_YES_FORMS:									_T_YES
-											|	_T_YEA
-											|	_T_YEAH
-											|	_T_YEP
-											;
-
 R_CONFIDENCE_EXPRESSION:						_T_SURE
 											|	_T_OFCOURSE
 											;
 
-R_AGREEMENT_EXPRESSION:							R_YES_FORMS
+R_AGREEMENT_EXPRESSION:							_T_YES
 											|	_T_FINE
 											|	_T_OK
 											;

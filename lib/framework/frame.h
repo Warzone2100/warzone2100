@@ -47,14 +47,17 @@
 extern UDWORD selectedPlayer;
 #define MAX_PLAYERS	8	/**< Maximum number of players in the game. */
 
-/** Initialise the frame work library */
-extern BOOL frameInitialise(
-					const char *pWindowName,// The text to appear in the window title bar
-					UDWORD width,			// The display width
-					UDWORD height,			// The display height
-					UDWORD bitDepth,		// The display bit depth
-					BOOL fullScreen		// Whether to start full screen or windowed
-					);
+/** Initialise the framework library
+ *  @param pWindowName the text to appear in the window title bar
+ *  @param width the display widget
+ *  @param height the display height
+ *  @param bitDepth the display bit depth
+ *  @param fullScreen whether to start full screen or windowed
+ *
+ *  @return true when the framework library is successfully initialised, false
+ *          when a part of the initialisation failed.
+ */
+extern BOOL frameInitialise(const char* pWindowName, UDWORD width, UDWORD height, UDWORD bitDepth, BOOL fullScreen);
 
 extern bool selfTest;
 

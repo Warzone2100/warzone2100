@@ -407,16 +407,13 @@ SDWORD fpathAStarRoute(SDWORD routeMode, ASTAR_ROUTE *psRoutePoints,
 {
  	FP_NODE		*psFound, *psCurr, *psNew, *psParent, *psNext;
 static 	FP_NODE		*psNearest, *psRoute;
-	SDWORD		tileSX,tileSY,tileFX,tileFY;
 	SDWORD		dir, x,y, currDist;
 	SDWORD		index;
 	SDWORD		retval;
-
-	tileSX = map_coord(sx);
-	tileSY = map_coord(sy);
-
-	tileFX = map_coord(fx);
-	tileFY = map_coord(fy);
+	const int       tileSX = map_coord(sx);
+	const int       tileSY = map_coord(sy);
+	const int       tileFX = map_coord(fx);
+	const int       tileFY = map_coord(fy);
 
 	if (routeMode == ASR_NEWROUTE)
 	{
@@ -508,7 +505,6 @@ static 	FP_NODE		*psNearest, *psRoute;
 
 			astarInner += 1;
 			ASSERT(astarInner >= 0, "astarInner overflowed!");
-
 
 			// Now insert the point into the appropriate list
 			if (!psFound)

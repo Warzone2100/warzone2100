@@ -175,8 +175,6 @@ BASE_OBJECT * checkForRepairRange(DROID *psDroid,DROID *psTarget)
 {
 	DROID		*psCurr;
 	SDWORD		xdiff, ydiff;
-	//UDWORD		sRange;
-//	UDWORD		sensorDist;
 
 	ASSERT( psDroid->droidType == DROID_REPAIR || psDroid->droidType ==
         DROID_CYBORG_REPAIR, "checkForRepairRange:Invalid droid type" );
@@ -196,11 +194,6 @@ BASE_OBJECT * checkForRepairRange(DROID *psDroid,DROID *psTarget)
 		return (BASE_OBJECT *)psCurr;
 	}
 
-	/* Used to be a define. Now uses their sensor range */
-	//sRange = asSensorStats[psDroid->asBits[COMP_SENSOR].nStat].range;
-	//sensorDist = (sRange * sRange);
-	//back to the define!
-//	sensorDist = REPAIR_DIST * REPAIR_DIST;
 	if ((psTarget != NULL) &&
 		(psTarget->type == OBJ_DROID) &&
 		(psTarget->player == psDroid->player))
@@ -236,8 +229,7 @@ BASE_OBJECT * checkForDamagedStruct(DROID *psDroid, STRUCTURE *psTarget)
 	STRUCTURE		*psCurr;
 	SDWORD			xdiff, ydiff;
 
-	//ASSERT( psDroid->droidType == DROID_CONSTRUCT,
-    ASSERT( psDroid->droidType == DROID_CONSTRUCT || psDroid->droidType == DROID_CYBORG_CONSTRUCT, "checkForDamagedStruct: Invalid unit type" );
+	ASSERT(psDroid->droidType == DROID_CONSTRUCT || psDroid->droidType == DROID_CYBORG_CONSTRUCT, "Invalid unit type");
 
 	if(psTarget != NULL
 		&& psTarget->died)
@@ -1444,9 +1436,6 @@ static void orderPlayFireSupportAudio( BASE_OBJECT *psObj )
 }
 
 
-
-
-
 /* The base order function */
 void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 {
@@ -1455,49 +1444,6 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 	SDWORD		iDX, iDY;
 	SECONDARY_STATE state;
 	UDWORD		droidX,droidY;
-#ifdef DEBUG_GROUP2
-	static UDWORD lastFrame;
-#endif
-
-#ifdef DEBUG_GROUP2
-	if (lastFrame != frameGetFrameNumber())
-	{
-		lastFrame = frameGetFrameNumber();
-		debug( LOG_NEVER, "\nNEW FRAME %d\n\n", lastFrame);
-	}
-
-	debug( LOG_NEVER, "D %d P %d at (%d,%d) O %d: (%d,%d) (%d,%d)",
-		psDroid->id, psDroid->player, psDroid->pos.x,psDroid->pos.y,
-		psOrder->order, psOrder->pos.x,psOrder->pos.y, psOrder->pos.x2,psOrder->pos.y2);
-	if (psOrder->psObj != NULL)
-	{
-		debug( LOG_NEVER, " T: ");
-		switch (psOrder->psObj.type)
-		{
-		case OBJ_DROID:
-			debug( LOG_NEVER, " D %d P %d", psOrder->psObj.id, psOrder->psObj.player);
-			break;
-		case OBJ_STRUCTURE:
-			debug( LOG_NEVER, " S %d P %d", psOrder->psObj.id, psOrder->psObj.player);
-			break;
-		case OBJ_FEATURE:
-			debug( LOG_NEVER, " F %d P %d", psOrder->psObj.id, psOrder->psObj.player);
-			break;
-		}
-	}
-	if (psOrder->psStats != NULL)
-	{
-		if (psOrder->psStats->pName != NULL)
-		{
-			debug( LOG_NEVER, " TS: %s", psOrder->psStats->pName);
-		}
-		else
-		{
-			debug( LOG_NEVER, " TS: %d", psOrder->psStats->ref);
-		}
-	}
-	debug( LOG_NEVER, "\n");
-#endif
 
 	// deal with a droid receiving a primary order
 	if (secondaryGotPrimaryOrder(psDroid, psOrder->order))
@@ -1551,15 +1497,6 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		psDroid->orderY = 0;
 		psDroid->orderX2 = 0;
 		psDroid->orderY2 = 0;
-
-		/* notify scripts that we were _forced_ to stop */
-		//psScrCBOrderDroid = psDroid;
-		//if(!msgStackPush(CALL_DORDER_STOP,-1,-1,"\0",-1,-1, psDroid))
-		//{
-		//	debug(LOG_ERROR, "msgStackPush: failed to push CALL_DORDER_STOP");
-		//}
-		//psScrCBOrderDroid = NULL;
-
 		break;
 	case DORDER_MOVE:
 	case DORDER_SCOUT:
@@ -1695,8 +1632,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		{
 			break;
 		}
-		ASSERT( psOrder->psStats != NULL,
-			"orderUnitBase: invalid structure stats pointer" );
+		ASSERT(psOrder->psStats != NULL, "Invalid structure stats pointer");
 
 		psDroid->order = DORDER_LINEBUILD;
 		psDroid->orderX = psOrder->x;
@@ -1774,7 +1710,6 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		{
 			orderPlayFireSupportAudio( psOrder->psObj );
 		}
-
 		break;
 	case DORDER_RETREAT:
 	case DORDER_RUNBURN:
@@ -2138,8 +2073,8 @@ void orderDroidLoc(DROID *psDroid, DROID_ORDER order, UDWORD x, UDWORD y)
 {
 	DROID_ORDER_DATA	sOrder;
 
-	ASSERT(psDroid != NULL, "orderUnitLoc: Invalid unit pointer");
-	ASSERT(validOrderForLoc(order), "orderUnitLoc: Invalid order for location");
+	ASSERT(psDroid != NULL, "Invalid unit pointer");
+	ASSERT(validOrderForLoc(order), "Invalid order for location");
 
 	orderClearDroidList(psDroid);
 
@@ -2195,13 +2130,12 @@ BOOL validOrderForObj(DROID_ORDER order)
 }
 
 /* Give a droid an order with an object target */
-//Watermelon:changed psObj to array
 void orderDroidObj(DROID *psDroid, DROID_ORDER order, BASE_OBJECT *psObj)
 {
 	DROID_ORDER_DATA	sOrder;
 
-	ASSERT(psDroid != NULL, "orderUnitObj: Invalid unit pointer");
-	ASSERT(validOrderForObj(order), "orderUnitObj: Invalid order for object");
+	ASSERT(psDroid != NULL, "Invalid unit pointer");
+	ASSERT(validOrderForObj(order), "Invalid order for object");
 
 	orderClearDroidList(psDroid);
 
@@ -2303,15 +2237,12 @@ BASE_OBJECT* orderStateObj(DROID *psDroid, DROID_ORDER order)
 
 
 /* Give a droid an order with a location and a stat */
-void orderDroidStatsLoc(DROID *psDroid, DROID_ORDER order,
-						BASE_STATS *psStats, UDWORD x, UDWORD y)
+void orderDroidStatsLoc(DROID *psDroid, DROID_ORDER order, BASE_STATS *psStats, UDWORD x, UDWORD y)
 {
 	DROID_ORDER_DATA	sOrder;
 
-	ASSERT( psDroid != NULL,
-		"orderUnitStatsLoc: Invalid unit pointer" );
-	ASSERT( order == DORDER_BUILD,
-		"orderUnitStatsLoc: Invalid order for location" );
+	ASSERT(psDroid != NULL, "Invalid unit pointer");
+	ASSERT(order == DORDER_BUILD, "Invalid order for location");
 
 	memset(&sOrder,0,sizeof(DROID_ORDER_DATA));
 	sOrder.order = order;
@@ -2322,13 +2253,11 @@ void orderDroidStatsLoc(DROID *psDroid, DROID_ORDER order,
 }
 
 /* add an order with a location and a stat to the droids order list*/
-void orderDroidStatsLocAdd(DROID *psDroid, DROID_ORDER order,
-						BASE_STATS *psStats, UDWORD x, UDWORD y)
+void orderDroidStatsLocAdd(DROID *psDroid, DROID_ORDER order, BASE_STATS *psStats, UDWORD x, UDWORD y)
 {
 	DROID_ORDER_DATA	sOrder;
 
-	ASSERT( psDroid != NULL,
-		"orderUnitStatsLoc: Invalid unit pointer" );
+	ASSERT(psDroid != NULL, "Invalid unit pointer");
 
 	// can only queue build orders with this function
 	if (order != DORDER_BUILD)
@@ -2346,19 +2275,13 @@ void orderDroidStatsLocAdd(DROID *psDroid, DROID_ORDER order,
 
 
 /* Give a droid an order with a location and a stat */
-void orderDroidStatsTwoLoc(DROID *psDroid, DROID_ORDER order,
-						BASE_STATS *psStats, UDWORD x1, UDWORD y1, UDWORD x2, UDWORD y2)
+void orderDroidStatsTwoLoc(DROID *psDroid, DROID_ORDER order, BASE_STATS *psStats, UDWORD x1, UDWORD y1, UDWORD x2, UDWORD y2)
 {
 	DROID_ORDER_DATA	sOrder;
 
-	ASSERT( psDroid != NULL,
-		"orderUnitStatsTwoLoc: Invalid unit pointer" );
-	ASSERT( order == DORDER_LINEBUILD,
-		"orderUnitStatsTwoLoc: Invalid order for location" );
-	ASSERT( x1 == x2 || y1 == y2,
-		"orderUnitStatsTwoLoc: Invalid locations for LINEBUILD" );
-
-
+	ASSERT(psDroid != NULL,	"Invalid unit pointer");
+	ASSERT(order == DORDER_LINEBUILD, "Invalid order for location");
+	ASSERT(x1 == x2 || y1 == y2, "Invalid locations for LINEBUILD");
 
 	memset(&sOrder,0,sizeof(DROID_ORDER_DATA));
 	sOrder.order = order;
@@ -2376,12 +2299,9 @@ void orderDroidStatsTwoLocAdd(DROID *psDroid, DROID_ORDER order,
 {
 	DROID_ORDER_DATA	sOrder;
 
-	ASSERT( psDroid != NULL,
-		"orderUnitStatsTwoLocAdd: Invalid unit pointer" );
-	ASSERT( order == DORDER_LINEBUILD,
-		"orderUnitStatsTwoLocAdd: Invalid order for location" );
-	ASSERT( x1 == x2 || y1 == y2,
-		"orderUnitStatsTwoLocAdd: Invalid locations for LINEBUILD" );
+	ASSERT(psDroid != NULL, "Invalid unit pointer");
+	ASSERT(order == DORDER_LINEBUILD, "Invalid order for location");
+	ASSERT(x1 == x2 || y1 == y2, "Invalid locations for LINEBUILD");
 
 	memset(&sOrder,0,sizeof(DROID_ORDER_DATA));
 	sOrder.order = order;
@@ -2394,10 +2314,8 @@ void orderDroidStatsTwoLocAdd(DROID *psDroid, DROID_ORDER order,
 }
 
 
-
 /* Get the state of a droid order with a location and a stat */
-BOOL orderStateStatsLoc(DROID *psDroid, DROID_ORDER order,
-						BASE_STATS **ppsStats, UDWORD *pX, UDWORD *pY)
+BOOL orderStateStatsLoc(DROID *psDroid, DROID_ORDER order, BASE_STATS **ppsStats, UDWORD *pX, UDWORD *pY)
 {
 	BOOL	match = false;
 
@@ -2446,11 +2364,9 @@ BOOL orderStateStatsLoc(DROID *psDroid, DROID_ORDER order,
 // add an order to a droids order list
 void orderDroidAdd(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 {
-
 	Vector3i position;
 
-	ASSERT( psDroid != NULL,
-		"orderUnitAdd: invalid unit pointer" );
+	ASSERT(psDroid != NULL, "Invalid unit pointer");
 
 	if (psDroid->listSize >= ORDER_LIST_MAX)
 	{
@@ -2471,11 +2387,11 @@ void orderDroidAdd(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		//psDroid->asOrderList[psDroid->listSize].psObj = psOrder->psObj;
         if (psOrder->order == DORDER_BUILD || psOrder->order == DORDER_LINEBUILD)
         {
-			setDroidOrderTarget(psDroid, (void *)psOrder->psStats, psDroid->listSize);
-		}
+		setDroidOrderTarget(psDroid, psOrder->psStats, psDroid->listSize);
+	}
         else
         {
-			setDroidOrderTarget(psDroid, (void *)psOrder->psObj, psDroid->listSize);
+		setDroidOrderTarget(psDroid, psOrder->psObj, psDroid->listSize);
         }
 		psDroid->asOrderList[psDroid->listSize].x = (UWORD)psOrder->x;
 		psDroid->asOrderList[psDroid->listSize].y = (UWORD)psOrder->y;
@@ -2500,14 +2416,12 @@ void orderDroidAdd(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		addEffect(&position,EFFECT_WAYPOINT,WAYPOINT_TYPE,false,NULL,0);
 		bOrderEffectDisplayed = true;
 	}
-
 }
 
 
 // do the next order from a droids order list
 BOOL orderDroidList(DROID *psDroid)
 {
-
 	DROID_ORDER_DATA	sOrder;
 
 	if (psDroid->listSize > 0)
@@ -2569,16 +2483,13 @@ BOOL orderDroidList(DROID *psDroid)
 // clear all the orders from the list
 void orderClearDroidList(DROID *psDroid)
 {
-		// ffs je
 	psDroid->listSize = 0;
 	memset(psDroid->asOrderList, 0, sizeof(ORDER_LIST)*ORDER_LIST_MAX);
-
 }
 
 // check all the orders in the list for died objects
 void orderCheckList(DROID *psDroid)
 {
-
 	SDWORD	i;
 
 	i=0;
@@ -2856,7 +2767,6 @@ DROID_ORDER chooseOrderObj(DROID *psDroid, BASE_OBJECT *psObj)
 	}
 	// else default to attack if the droid has a weapon
 	else if (psDroid->numWeaps > 0
-    //else if (psDroid->asWeaps[0].nStat > 0
 			&& psObj->player != psDroid->player
 			&& !aiCheckAlliances(psObj->player , psDroid->player) )
 	{
@@ -2865,11 +2775,6 @@ DROID_ORDER chooseOrderObj(DROID *psDroid, BASE_OBJECT *psObj)
         {
             order = DORDER_NONE;
         }
-        //check vtol not empty of ammo - handled in DORDER_ATTACK
-        //else if (vtolEmpty(psDroid))
-		//{
-		//	order = DORDER_NONE;
-		//}
 		else
 		{
 			order = DORDER_ATTACK;

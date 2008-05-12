@@ -44,46 +44,43 @@
 static char aText[TEXT_BUFFERS][YYLMAX];
 static UDWORD currText=0;
 
-// Note if we are in a comment
-static BOOL inComment = false;
+#include "lib/framework/lexer_input.h"
 
-/* Handle to the input file */
-static PHYSFS_file* pReadFile = NULL;
+#ifndef yyextra
+# define yyextra yyget_extra()
+#endif
 
-#define YY_INPUT(buf,result,max_size) \
-		if (PHYSFS_eof(pReadFile)) \
-		{ \
-			buf[0] = EOF; result = YY_NULL; \
-		} \
-		else { \
-			result = PHYSFS_read(pReadFile, buf, 1, max_size); \
-			if (result == -1) \
-			{ \
-				buf[0] = EOF; result = YY_NULL; \
-			} \
-		}
+#define yylval (&scrv_lval)
 
-static inline int PHYSFS_getc(void)
+/* Older GNU Flex versions don't define yyget_extra(), yyset_extra(),
+ * yyget_text() and yyget_lineno().
+ * (and neither define a subminor version)
+ */
+#if !defined(YY_FLEX_SUBMINOR_VERSION) || (YY_FLEX_SUBMINOR_VERSION < 9)
+# define yyget_extra  scrv_get_extra
+# define yyset_extra  scrv_set_extra
+# define yyget_lineno scrv_get_lineno
+# define yyget_text   scrv_get_text
+extern void yyset_extra(YY_EXTRA_TYPE user_defined);
+extern YY_EXTRA_TYPE yyget_extra(void);
+extern int yyget_lineno(void);
+int yyget_lineno()
 {
-	char read_char;
-
-	if (PHYSFS_eof(pReadFile))
-		return EOF;
-
-	if (PHYSFS_read(pReadFile, &read_char, 1, 1) != 1)
-		return EOF;
-
-	return read_char;
+	return yylineno;
 }
 
-#undef scrv_getc
-#define scrv_getc PHYSFS_getc
+extern char* yyget_text(void);
+char* yyget_text()
+{
+	return yytext;
+}
+#endif
 
 %}
 
-%option yylineno
+%option yylineno noyywrap nounput
+%option warn nodefault
 %option prefix="scrv_"
-%option nounput
 
 %x COMMENT
 %x SLCOMMENT
@@ -92,18 +89,18 @@ static inline int PHYSFS_getc(void)
 %%
 
 	/* Keywords */
-int							{ scrv_lval.tval = VAL_INT; return TYPE; }
-INT							{ scrv_lval.tval = VAL_INT; return TYPE; }
-bool						{ scrv_lval.tval = VAL_BOOL; return TYPE; }
-BOOL						{ scrv_lval.tval = VAL_BOOL; return TYPE; }
+int							{ yylval->tval = VAL_INT; return TYPE; }
+INT							{ yylval->tval = VAL_INT; return TYPE; }
+bool						{ yylval->tval = VAL_BOOL; return TYPE; }
+BOOL						{ yylval->tval = VAL_BOOL; return TYPE; }
 script						return SCRIPT;
 store						return STORE;
 run							return RUN;
 
-true						{ scrv_lval.bval = true;	 return BOOLEAN_T; }
-TRUE						{ scrv_lval.bval = true;	 return BOOLEAN_T; }
-false						{ scrv_lval.bval = false;	 return BOOLEAN_T; }
-FALSE						{ scrv_lval.bval = false;	 return BOOLEAN_T; }
+true						{ yylval->bval = true;	 return BOOLEAN_T; }
+TRUE						{ yylval->bval = true;	 return BOOLEAN_T; }
+false						{ yylval->bval = false;	 return BOOLEAN_T; }
+FALSE						{ yylval->bval = false;	 return BOOLEAN_T; }
 
 	/* Match text values */
 [a-zA-Z][-0-9_a-zA-Z]*		{
@@ -111,40 +108,40 @@ FALSE						{ scrv_lval.bval = false;	 return BOOLEAN_T; }
 								UDWORD		index;
 
 								/* See if this is a variable id or a type */
-								if (scrvLookUpType(scrv_text, &type))
+								if (scrvLookUpType(yytext, &type))
 								{
-									scrv_lval.tval = type;
+									yylval->tval = type;
 									return TYPE;
 								}
-								else if (scrvLookUpVar(scrv_text, &index))
+								else if (scrvLookUpVar(yytext, &index))
 								{
-									scrv_lval.vindex = index;
+									yylval->vindex = index;
 									return VAR;
 								}
-								else if (scrvLookUpArray(scrv_text, &index))
+								else if (scrvLookUpArray(yytext, &index))
 								{
-									scrv_lval.vindex = index;
+									yylval->vindex = index;
 									return ARRAY;
 								}
 								else
 								{
-									strcpy(aText[currText], scrv_text);
-									scrv_lval.sval = aText[currText];
+									strcpy(aText[currText], yytext);
+									yylval->sval = aText[currText];
 									currText = (currText + 1) % TEXT_BUFFERS;
 									return IDENT;
 								}
 							}
 
 	/* Match integer numbers */
--?[0-9]+					{ scrv_lval.ival = atol(scrv_text); return INTEGER; }
+-?[0-9]+					{ yylval->ival = atol(yytext); return INTEGER; }
 
 	/* Match quoted text */
 \"							{ BEGIN QUOTE; }
 <QUOTE>\"					{ BEGIN 0; }
 <QUOTE>\n					{ scrv_error("Unexpected end of line in string"); }
 <QUOTE>[^\"\n]*				{
-								strcpy(aText[currText], scrv_text);
-								scrv_lval.sval = aText[currText];
+								strcpy(aText[currText], yytext);
+								yylval->sval = aText[currText];
 								currText = (currText + 1) % TEXT_BUFFERS;
 								return QTEXT;
 							}
@@ -153,9 +150,9 @@ FALSE						{ scrv_lval.bval = false;	 return BOOLEAN_T; }
 [ \t\n\x0d\x0a]						;
 
 	/* Strip comments */
-"/*"						{ inComment=true; BEGIN COMMENT; }
+"/*"						{ BEGIN COMMENT; }
 <COMMENT>"*/" |
-<COMMENT>"*/"\n				{ inComment=false; BEGIN 0; }
+<COMMENT>"*/"\n				{ BEGIN 0; }
 <COMMENT>. |
 <COMMENT>\n					;
 
@@ -165,36 +162,21 @@ FALSE						{ scrv_lval.bval = false;	 return BOOLEAN_T; }
 <SLCOMMENT>[^\n]*			;
 
 	/* Match anything that's been missed and pass it as a char */
-.							return scrv_text[0];
+.							return yytext[0];
 
 %%
 
-/* Set the current input file for the lexer */
-void scrvSetInputFile(PHYSFS_file* fileHandle)
-{
-	pReadFile = fileHandle;
+static YY_EXTRA_TYPE pBuffer = NULL;
 
-	/* Reset the lexer in case it's been used before */
-	scrv__flush_buffer(YY_CURRENT_BUFFER);
-	inComment = false;
+void yyset_extra(YY_EXTRA_TYPE user_defined)
+{
+	pBuffer = user_defined;
 }
 
-void scrvGetErrorData(int *pLine, char **ppText)
+YY_EXTRA_TYPE yyget_extra()
 {
-	*pLine = scrv_lineno;
-	*ppText = scrv_text;
+	return pBuffer;
 }
-
-int scrv_wrap(void)
-{
-	if (inComment)
-	{
-		debug( LOG_ERROR, "Warning: reached end of file in a comment" );
-		abort();
-	}
-	return 1;
-}
-
 
 /* Older GNU Flex versions don't define yylex_destroy()
  * (and neither define a subminor version)
