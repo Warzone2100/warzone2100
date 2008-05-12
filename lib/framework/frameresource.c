@@ -95,6 +95,7 @@ void resSetBaseDir(const char* pResDir)
 /* Parse the res file */
 BOOL resLoad(const char *pResFile, SDWORD blockID)
 {
+	bool retval = true;
 	char *pBuffer;
 	UDWORD	size;
 
@@ -117,15 +118,13 @@ BOOL resLoad(const char *pResFile, SDWORD blockID)
 	if (res_parse() != 0)
 	{
 		debug(LOG_ERROR, "resLoad: failed to parse %s", pResFile);
-		res_lex_destroy();
-		free(pBuffer);
-		return false;
+		retval = false;
 	}
 
 	res_lex_destroy();
 	free(pBuffer);
 
-	return true;
+	return retval;
 }
 
 
