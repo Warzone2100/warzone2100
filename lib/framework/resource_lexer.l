@@ -39,10 +39,6 @@ extern void res_error(const char* msg);
 /* Maximum length for any TEXT_T value */
 #define YYLMAX 8192
 
-/* Store for any string values */
-static char aText[TEXT_BUFFERS][YYLMAX];
-static UDWORD currText = 0;
-
 #include "lib/framework/lexer_input.h"
 
 #ifndef yyextra
@@ -89,18 +85,13 @@ file						{ return FILETOKEN; }
 
 	/* Match text values */
 [a-zA-Z][-0-9_a-zA-Z]*		{
-								strlcpy(aText[currText], yytext, sizeof(aText[currText]));
-								res_lval.sval = aText[currText];
-								currText = (currText + 1) % TEXT_BUFFERS;
+								res_lval.sval = strdup(yytext);
 								return TEXT_T;
 							}
 
 	/* Match quoted text */
 \"\"						{
-								aText[currText][0] = '\0';
-								aText[currText][1] = '\0';
-								res_lval.sval = aText[currText];
-								currText = (currText + 1) % TEXT_BUFFERS;
+								res_lval.sval = strdup("");
 								return QTEXT_T;
 							}
 
@@ -108,9 +99,7 @@ file						{ return FILETOKEN; }
 <QUOTE>\"					{ BEGIN 0; }
 <QUOTE>\n					{ res_error("Unexpected end of line in string"); }
 <QUOTE>[^\"\n]*				{
-								strlcpy(aText[currText], yytext, sizeof(aText[currText]));
-								res_lval.sval = aText[currText];
-								currText = (currText + 1) % TEXT_BUFFERS;
+								res_lval.sval = strdup(yytext);
 								return QTEXT_T;
 							}
 	/* Skip white space */

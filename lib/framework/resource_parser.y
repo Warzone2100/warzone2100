@@ -59,6 +59,14 @@ void yyerror(const char* msg)
 %token <sval> TEXT_T
 %token <sval> QTEXT_T			/* Text with double quotes surrounding it */
 
+%destructor {
+	// Force type checking by the compiler
+	char * const s = $$;
+
+	if (s)
+		free(s);
+} TEXT_T QTEXT_T
+
 	/* keywords */
 %token DIRECTORY
 %token FILETOKEN
@@ -77,9 +85,8 @@ dir_line:			DIRECTORY QTEXT_T		{
 											UDWORD len;
 
 											// set a new input directory
-											debug( LOG_NEVER, "directory: %s\n", $2 );
-											if ($2[1] == ':' ||
-												$2[0] == '/')
+											debug(LOG_NEVER, "directory: %s", $2);
+											if (strncmp($2, "/:", strlen("/:")) == 0)
 											{
 												// the new dir is rooted
 												strlcpy(aCurrResDir, $2, sizeof(aCurrResDir));
@@ -97,15 +104,21 @@ dir_line:			DIRECTORY QTEXT_T		{
 												aCurrResDir[len+1] = 0;
 //												debug( LOG_NEVER, "aCurrResDir: %s\n", aCurrResDir);
 											}
+											free($2);
 										}
 				;
 
 
 file_line:			FILETOKEN TEXT_T QTEXT_T
 										{
+											bool succes;
 											/* load a data file */
-											debug( LOG_NEVER, "file: %s %s\n", $2, $3);
-											if (!resLoadFile($2, $3))
+											debug(LOG_NEVER, "file: %s %s", $2, $3);
+											succes = resLoadFile($2, $3);
+											free($2);
+											free($3);
+
+											if (!succes)
 											{
 												YYABORT;
 											}
