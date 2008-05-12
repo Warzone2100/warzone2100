@@ -409,7 +409,8 @@ BOOL runSinglePlayerMenu(void)
 		switch(id)
 		{
 			case FRONTEND_NEWGAME:
-					frontEndNewGame();
+				frontEndNewGame();
+				NetPlay.bComms = false;
 				break;
 
 			case FRONTEND_LOADCAM2:
@@ -432,7 +433,6 @@ BOOL runSinglePlayerMenu(void)
  #endif
 				break;
 			case FRONTEND_LOADGAME:
-
 				addLoadSave(LOAD_FRONTEND,SaveGamePath,"gam",_("Load Saved Game"));	// change mode when loadsave returns
 				break;
 
