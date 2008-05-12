@@ -40,8 +40,8 @@ extern void res_error(const char* msg);
 #define YYLMAX 8192
 
 /* Store for any string values */
-char aText[TEXT_BUFFERS][YYLMAX];		// No longer static ... lets use this area globally
-static UDWORD currText=0;
+static char aText[TEXT_BUFFERS][YYLMAX];
+static UDWORD currText = 0;
 
 #include "lib/framework/lexer_input.h"
 

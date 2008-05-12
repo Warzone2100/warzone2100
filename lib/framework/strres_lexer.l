@@ -43,8 +43,8 @@ void strres_error(const char *pMessage,...);
 #define YYLMAX 8192
 
 /* Store for any string values */
-extern char aText[TEXT_BUFFERS][YYLMAX];
-static UDWORD currText=0;
+static char aText[TEXT_BUFFERS][YYLMAX];
+static UDWORD currText = 0;
 
 // Note if in a comment
 static BOOL inComment;
