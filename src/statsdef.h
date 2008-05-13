@@ -145,7 +145,7 @@ typedef enum _weapon_subclass
 	WSC_BOMB,
 	WSC_COMMAND,
 	WSC_EMP,
-	WSC_COUNTER,
+	WSC_COUNTER, // Counter missile
 
 	NUM_WEAPON_SUBCLASS,
 

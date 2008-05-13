@@ -55,7 +55,7 @@ typedef struct PROJECTILE
 	UDWORD          tarX, tarY;             ///< The target coordinates
 	SDWORD          vXY, vZ;                ///< axis velocities
 	UDWORD          srcHeight;              ///< Height of origin
-	SDWORD          altChange;              ///<  Change in altitude
+	SDWORD          altChange;              ///< Change in altitude
 	UDWORD          born;
 	UDWORD          targetRadius;           ///< Needed to backtrack the projectiles
 	UDWORD          died;
