@@ -368,6 +368,22 @@ static inline WZ_DECL_CONST BOOL Vector3i_Compare(const Vector3i a, const Vector
 
 
 /*!
+ * Add op2 to op1.
+ * \param op1,op2 Operands
+ * \return Result
+ */
+static inline WZ_DECL_CONST Vector3i Vector3i_Add(const Vector3i op1, const Vector3i op2)
+{
+	Vector3i dest = {
+		op1.x + op2.x,
+		op1.y + op2.y,
+		op1.z + op2.z
+	};
+	return dest;
+}
+
+
+/*!
  * Substract op2 from op1.
  * \param op1,op2 Operands
  * \return Result
@@ -459,6 +475,34 @@ static inline WZ_DECL_CONST BOOL Vector3i_InSphere (const Vector3i v, const Vect
 	// warns about a comparison of a comparison between an unsigned and a
 	// signed integer.
 	return (unsigned int)((delta.x * delta.x) + (delta.y * delta.y) + (delta.z * delta.z)) < (r * r);
+}
+
+
+/*!
+ * Set the vector field by field, same as v = (Vector3i){x, y, z};
+ * Needed for MSVC which doesn't support C99 struct assignments.
+ * \param[out] v Vector to set
+ * \param[in] x,y,z Values to set to
+ */
+static inline void Vector3i_Set(Vector3i* v, const int x, const int y, const int z)
+{
+	v->x = x;
+	v->y = y;
+	v->z = z;
+}
+
+
+/*!
+ * Set the vector field by field, same as v = (Vector3uw){x, y, z};
+ * Needed for MSVC which doesn't support C99 struct assignments.
+ * \param[out] v Vector to set
+ * \param[in] x,y,z Values to set to
+ */
+static inline void Vector3uw_Set(Vector3uw* v, const unsigned int x, const unsigned int y, const unsigned int z)
+{
+	v->x = x;
+	v->y = y;
+	v->z = z;
 }
 
 #endif // __INCLUDED_LIB_IVIS_PIEVECTOR_H__
