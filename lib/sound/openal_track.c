@@ -673,6 +673,8 @@ AUDIO_STREAM* sound_PlayStreamWithBuf(PHYSFS_file* fileHandle, float volume, voi
 	alGenSources(1, &(stream->source));
 	sound_GetError();
 
+	alSourcef(stream->source, AL_GAIN, stream->volume);
+
 	// HACK: this is a workaround for a bug in the 64bit implementation of OpenAL on GNU/Linux
 	// The AL_PITCH value really should be 1.0.
 	alSourcef(stream->source, AL_PITCH, 1.001);
@@ -1152,7 +1154,7 @@ void sound_SetUIVolume(float volume)
 #ifndef WZ_NOSOUND
 	sfx_volume = volume;
 
-    // Keep volume in the range of 0.0 - 1.0
+	// Keep volume in the range of 0.0 - 1.0
 	if (sfx_volume < 0.0)
 	{
 		sfx_volume = 0.0;
@@ -1178,7 +1180,7 @@ void sound_SetEffectsVolume(float volume)
 #ifndef WZ_NOSOUND
 	sfx3d_volume = volume;
 
-    // Keep volume in the range of 0.0 - 1.0
+	// Keep volume in the range of 0.0 - 1.0
 	if (sfx3d_volume < 0.0)
 	{
 		sfx3d_volume = 0.0;

@@ -210,5 +210,5 @@ void sound_SetMusicVolume(float volume)
 		music_volume = 1.0;
 	}
 
-	// @todo Implement code to set the volume of the currently playing stream here
+	/// @TODO Implement code to set the volume of the currently playing stream here
 }
