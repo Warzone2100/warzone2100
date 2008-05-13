@@ -186,7 +186,7 @@ void pie_ImageFileID(IMAGEFILE *ImageFile, UWORD ID, int x, int y)
 	assert(ID < ImageFile->NumImages);
 	Image = &ImageFile->ImageDefs[ID];
 
-	pie_SetRendMode(REND_GOURAUD_TEX);
+	pie_SetRendMode(REND_ALPHA_TEX);
 	pie_SetAlphaTest(true);
 
 	pieImage.texPage = ImageFile->TPageIDs[Image->TPageID];
