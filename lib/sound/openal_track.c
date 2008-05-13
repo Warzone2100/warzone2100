@@ -815,6 +815,33 @@ void sound_ResumeStream(AUDIO_STREAM* stream)
 	sound_GetError();
 }
 
+/** Retrieve the playing volume of the given stream.
+ *
+ *  @param stream the stream to retrieve the volume for.
+ *
+ *  @return a floating point value between 0.f and 1.f, representing this
+ *          stream's volume.
+ */
+float sound_GetStreamVolume(const AUDIO_STREAM* stream)
+{
+	ALfloat volume;
+	alGetSourcef(stream->source, AL_GAIN, &volume);
+
+	return volume;
+}
+
+/** Set the playing volume of the given stream.
+ *
+ *  @param stream the stream to change the volume for.
+ *  @param volume a floating point value between 0.f and 1.f, to use as this
+ *                @c stream's volume.
+ */
+void sound_SetStreamVolume(AUDIO_STREAM* stream, float volume)
+{
+	stream->volume = volume;
+	alSourcef(stream->source, AL_GAIN, stream->volume);
+}
+
 /** Update the given stream by making sure its buffers remain full
  *  \param stream the stream to update
  *  \return true when the stream is still playing, false when it has stopped

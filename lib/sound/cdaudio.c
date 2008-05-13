@@ -210,5 +210,9 @@ void sound_SetMusicVolume(float volume)
 		music_volume = 1.0;
 	}
 
-	/// @TODO Implement code to set the volume of the currently playing stream here
+	// Change the volume of the current stream as well (if any)
+	if (cdStream)
+	{
+		sound_SetStreamVolume(cdStream, music_volume);
+	}
 }
