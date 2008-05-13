@@ -673,6 +673,8 @@ AUDIO_STREAM* sound_PlayStreamWithBuf(PHYSFS_file* fileHandle, float volume, voi
 	alGenSources(1, &(stream->source));
 	sound_GetError();
 
+	alSourcef(stream->source, AL_GAIN, stream->volume);
+
 	// HACK: this is a workaround for a bug in the 64bit implementation of OpenAL on GNU/Linux
 	// The AL_PITCH value really should be 1.0.
 	alSourcef(stream->source, AL_PITCH, 1.001);
@@ -811,6 +813,33 @@ void sound_ResumeStream(AUDIO_STREAM* stream)
 	// Resume playing of this OpenAL source
 	alSourcePlay(stream->source);
 	sound_GetError();
+}
+
+/** Retrieve the playing volume of the given stream.
+ *
+ *  @param stream the stream to retrieve the volume for.
+ *
+ *  @return a floating point value between 0.f and 1.f, representing this
+ *          stream's volume.
+ */
+float sound_GetStreamVolume(const AUDIO_STREAM* stream)
+{
+	ALfloat volume;
+	alGetSourcef(stream->source, AL_GAIN, &volume);
+
+	return volume;
+}
+
+/** Set the playing volume of the given stream.
+ *
+ *  @param stream the stream to change the volume for.
+ *  @param volume a floating point value between 0.f and 1.f, to use as this
+ *                @c stream's volume.
+ */
+void sound_SetStreamVolume(AUDIO_STREAM* stream, float volume)
+{
+	stream->volume = volume;
+	alSourcef(stream->source, AL_GAIN, stream->volume);
 }
 
 /** Update the given stream by making sure its buffers remain full
@@ -1152,7 +1181,7 @@ void sound_SetUIVolume(float volume)
 #ifndef WZ_NOSOUND
 	sfx_volume = volume;
 
-    // Keep volume in the range of 0.0 - 1.0
+	// Keep volume in the range of 0.0 - 1.0
 	if (sfx_volume < 0.0)
 	{
 		sfx_volume = 0.0;
@@ -1178,7 +1207,7 @@ void sound_SetEffectsVolume(float volume)
 #ifndef WZ_NOSOUND
 	sfx3d_volume = volume;
 
-    // Keep volume in the range of 0.0 - 1.0
+	// Keep volume in the range of 0.0 - 1.0
 	if (sfx3d_volume < 0.0)
 	{
 		sfx3d_volume = 0.0;

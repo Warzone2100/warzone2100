@@ -127,6 +127,8 @@ extern void sound_StopStream(AUDIO_STREAM* stream);
 extern void sound_PauseStream(AUDIO_STREAM* stream);
 extern void sound_ResumeStream(AUDIO_STREAM* stream);
 extern AUDIO_STREAM* sound_PlayStreamWithBuf(PHYSFS_file* fileHandle, float volume, void (*onFinished)(void*), void* user_data, size_t streamBufferSize, unsigned int buffer_count);
+extern float sound_GetStreamVolume(const AUDIO_STREAM* stream);
+extern void sound_SetStreamVolume(AUDIO_STREAM* stream, float volume);
 
 #if defined(__cplusplus)
 }
