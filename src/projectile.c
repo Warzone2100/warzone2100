@@ -338,8 +338,7 @@ static void proj_UpdateKills(PROJECTILE *psObj, float experienceInc)
 
 /***************************************************************************/
 
-BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, int tarX, int tarY, int tarZ,
-                         BASE_OBJECT *psTarget, BOOL bVisible, BOOL bPenetrate, int weapon_slot)
+BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, Vector3i target, BASE_OBJECT *psTarget, BOOL bVisible, BOOL bPenetrate, int weapon_slot)
 {
 	PROJECTILE		*psObj = malloc(sizeof(PROJECTILE));
 	SDWORD			tarHeight, srcHeight, iMinSq;
@@ -358,9 +357,7 @@ BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, in
 	{
 		// if there isn't an attacker just start at the target position
 		// NB this is for the script function to fire the las sats
-		muzzle.x = (SDWORD)tarX;
-		muzzle.y = (SDWORD)tarY;
-		muzzle.z = (SDWORD)tarZ;
+		muzzle = target;
 	}
 	else if (psAttacker->type == OBJ_DROID && weapon_slot >= 0)
 	{
@@ -383,13 +380,11 @@ BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, in
 	psObj->type		    = OBJ_PROJECTILE;
 	psObj->state		= PROJ_INFLIGHT;
 	psObj->psWStats		= asWeaponStats + psWeap->nStat;
-	psObj->pos.x			= (UWORD)muzzle.x;
-	psObj->pos.y			= (UWORD)muzzle.y;
-	psObj->pos.z			= (UWORD)muzzle.z;
+	Vector3uw_Set(&psObj->pos, muzzle.x, muzzle.y, muzzle.z);
 	psObj->startX		= muzzle.x;
 	psObj->startY		= muzzle.y;
-	psObj->tarX			= tarX;
-	psObj->tarY			= tarY;
+	psObj->tarX			= target.x;
+	psObj->tarY			= target.y;
 	psObj->targetRadius = (psTarget ? establishTargetRadius(psTarget) : 0); // needed to backtrack FX
 	psObj->born			= gameTime;
 	psObj->player		= (UBYTE)player;
@@ -405,7 +400,7 @@ BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, in
 
 	/* If target is a VTOL or higher than ground, it is an air target. */
 	if ((psTarget != NULL && psTarget->type == OBJ_DROID && vtolDroid((DROID*)psTarget))
-	    || (psTarget == NULL && (SDWORD)tarZ > map_Height(tarX,tarY)))
+	    || (psTarget == NULL && target.z > map_Height(target.x, target.y)))
 	{
 		psObj->airTarget = true;
 	}
@@ -472,7 +467,7 @@ BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, in
 	}
 	else
 	{
-		tarHeight = (SDWORD)tarZ;
+		tarHeight = target.z;
 		scoreUpdateVar(WD_SHOTS_OFF_TARGET);
 	}
 
@@ -872,20 +867,22 @@ static void proj_InFlightDirectFunc( PROJECTILE *psObj )
 
 					if (bPenetrate)
 					{
-						SDWORD TargetX, TargetY;
+						// Determine position to fire a missile at
+						// (must be at least 0 because we don't use signed integers
+						//  this shouldn't be larger than the height and width of the map either)
+						Vector3i target = {
+							psObj->startX + extendRad * dx / rad,
+							psObj->startY + extendRad * dy / rad,
+							psObj->pos.z
+						};
+						target.x = clip(target.x, 0, world_coord(mapWidth - 1));
+						target.y = clip(target.y, 0, world_coord(mapHeight - 1));
 
 						asWeap.nStat = psObj->psWStats - asWeaponStats;
 						//Watermelon:just assume we damaged the chosen target
 						setProjectileDamaged(psObj, psNewTarget);
 
-						// Determine position to fire a missile at
-						// (must be at least 0 because we don't use signed integers
-						//  this shouldn't be larger than the height and width of the map either)
-						TargetX = psObj->startX + extendRad * dx / rad;
-						TargetY = psObj->startY + extendRad * dy / rad;
-						CLIP(TargetX, 0, world_coord(mapWidth - 1));
-						CLIP(TargetY, 0, world_coord(mapHeight - 1));
-						proj_SendProjectile( &asWeap, (BASE_OBJECT*)psObj, psObj->player, TargetX, TargetY, psObj->pos.z, NULL, true, bPenetrate, -1 );
+						proj_SendProjectile( &asWeap, (BASE_OBJECT*)psObj, psObj->player, target, NULL, true, bPenetrate, -1 );
 					}
 					else
 					{
@@ -1120,20 +1117,22 @@ static void proj_InFlightIndirectFunc( PROJECTILE *psObj )
 
 					if (bPenetrate)
 					{
-						SDWORD TargetX, TargetY;
+						// Determine position to fire a missile at
+						// (must be at least 0 because we don't use signed integers
+						//  this shouldn't be larger than the height and width of the map either)
+						Vector3i target = {
+							psObj->startX + extendRad * dx / iRad,
+							psObj->startY + extendRad * dy / iRad,
+							psObj->pos.z
+						};
+						target.x = clip(target.x, 0, world_coord(mapWidth - 1));
+						target.y = clip(target.y, 0, world_coord(mapHeight - 1));
 
 						asWeap.nStat = psObj->psWStats - asWeaponStats;
 						//Watermelon:just assume we damaged the chosen target
 						setProjectileDamaged(psObj, psNewTarget);
 
-						// Determine position to fire a missile at
-						// (must be at least 0 because we don't use signed integers
-						//  this shouldn't be larger than the height and width of the map either)
-						TargetX = MAX(psObj->startX + extendRad * dx / iRad, 0);
-						TargetX = MIN(TargetX, world_coord(mapWidth - 1));
-						TargetY = MAX(psObj->startY + extendRad * dy / iRad, 0);
-						TargetY = MIN(TargetY, world_coord(mapHeight - 1));
-						proj_SendProjectile( &asWeap, (BASE_OBJECT*)psObj, psObj->player, TargetX, TargetY, psObj->pos.z, NULL, true, bPenetrate, -1 );
+						proj_SendProjectile( &asWeap, (BASE_OBJECT*)psObj, psObj->player, target, NULL, true, bPenetrate, -1 );
 					}
 					else
 					{
@@ -1965,7 +1964,7 @@ UDWORD	calcDamage(UDWORD baseDamage, WEAPON_EFFECT weaponEffect, BASE_OBJECT *ps
 	{
 		damage = baseDamage;
 	}
-	
+
     // A little fail safe!
     if (damage == 0 && baseDamage != 0)
     {

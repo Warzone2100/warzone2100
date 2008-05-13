@@ -98,16 +98,12 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 	WEAPON_STATS	*psStats;
 	UDWORD			xDiff, yDiff, distSquared;
 	UDWORD			dice, damLevel;
-	SDWORD			missDir, missDist, missX,missY;
 	SDWORD			resultHitChance=0,baseHitChance=0,fireChance;
 	UDWORD			firePause;
 	SDWORD			targetDir,dirDiff;
 	SDWORD			longRange;
 	DROID			*psDroid = NULL;
 	int				minOffset = 5;
-	//Watermelon:predicted X,Y offset per sec
-	SDWORD			predictX;
-	SDWORD			predictY;
 	SDWORD			dist;
 
 	CHECK_OBJECT(psAttacker);
@@ -351,29 +347,35 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 	// see if we were lucky to hit the target
 	if (dice <= resultHitChance)
 	{
+		//Watermelon:predicted X,Y offset per sec
+		Vector3i predict;
+
 		/* Kerrrbaaang !!!!! a hit */
 		//Watermelon:Target prediction
 		if(psTarget->type == OBJ_DROID)
 		{
-			predictX = (SDWORD)(trigSin( ((DROID *)psTarget)->sMove.moveDir ) * ((DROID *)psTarget)->sMove.speed * dist / psStats->flightSpeed );
-			predictX += psTarget->pos.x;
-			predictY = (SDWORD)(trigCos( ((DROID *)psTarget)->sMove.moveDir ) * ((DROID *)psTarget)->sMove.speed * dist / psStats->flightSpeed );
-			predictY += psTarget->pos.y;
+			predict.x = trigSin( ((DROID *)psTarget)->sMove.moveDir ) * ((DROID *)psTarget)->sMove.speed * dist / psStats->flightSpeed;
+			predict.x += psTarget->pos.x;
+			predict.y = trigCos( ((DROID *)psTarget)->sMove.moveDir ) * ((DROID *)psTarget)->sMove.speed * dist / psStats->flightSpeed;
+			predict.y += psTarget->pos.y;
 
 			// Make sure we don't pass any negative or out of bounds numbers to proj_SendProjectile
-			predictX = MAX(predictX, 0);
-			predictX = MIN(predictX, world_coord(mapWidth - 1));
-			predictY = MAX(predictY, 0);
-			predictY = MIN(predictY, world_coord(mapHeight - 1));
+			predict.x = MAX(predict.x, 0);
+			predict.x = MIN(predict.x, world_coord(mapWidth - 1));
+			predict.y = MAX(predict.y, 0);
+			predict.y = MIN(predict.y, world_coord(mapHeight - 1));
 		}
 		else
 		{
-			predictX = psTarget->pos.x;
-			predictY = psTarget->pos.y;
+			predict.x = psTarget->pos.x;
+			predict.y = psTarget->pos.y;
 		}
+
+		predict.z = psTarget->pos.z;
+
 		debug(LOG_SENSOR, "combFire: Accurate prediction range (%d)", dice);
 		if (!proj_SendProjectile(psWeap, psAttacker, psAttacker->player,
-							predictX, predictY, psTarget->pos.z, psTarget, false, false, weapon_slot))
+							predict, psTarget, false, false, weapon_slot))
 		{
 			/* Out of memory - we can safely ignore this */
 			debug(LOG_ERROR, "Out of memory");
@@ -392,19 +394,20 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 
 missed:
 	/* Deal with a missed shot */
+	{
+		int missDir = rand() % BUL_MAXSCATTERDIR, missDist = 2 * (100 - resultHitChance);
+		Vector3i miss = {
+			aScatterDir[missDir].x * missDist + psTarget->pos.x + minOffset,
+			aScatterDir[missDir].y * missDist + psTarget->pos.y + minOffset,
+			psTarget->pos.z
+		};
 
-	missDist = 2 * (100 - resultHitChance);
-	missDir = rand() % BUL_MAXSCATTERDIR;
-	missX = aScatterDir[missDir].x * missDist + psTarget->pos.x + minOffset;
-	missY = aScatterDir[missDir].y * missDist + psTarget->pos.y + minOffset;
+		debug(LOG_NEVER, "combFire: Missed shot (%d) ended up at (%4d,%4d)", dice, miss.x, miss.y);
 
-	debug(LOG_NEVER, "combFire: Missed shot (%d) ended up at (%4d,%4d)", dice, missX, missY);
-
-	/* Fire off the bullet to the miss location. The miss is only visible if the player owns
-	 * the target. (Why? - Per) */
-	proj_SendProjectile(psWeap, psAttacker, psAttacker->player, missX,missY, psTarget->pos.z, NULL,
-	                    psTarget->player == selectedPlayer, false, weapon_slot);
-
+		/* Fire off the bullet to the miss location. The miss is only visible if the player owns
+		* the target. (Why? - Per) */
+		proj_SendProjectile(psWeap, psAttacker, psAttacker->player, miss, NULL, psTarget->player == selectedPlayer, false, weapon_slot);
+	}
 	return;
 }
 

@@ -6359,11 +6359,11 @@ BOOL scrGetDroidCount(void)
 // fire a weapon stat at an object
 BOOL scrFireWeaponAtObj(void)
 {
-	SDWORD			wIndex;
-	BASE_OBJECT		*psTarget;
-	WEAPON			sWeapon;
+	Vector3i target;
+	BASE_OBJECT *psTarget;
+	WEAPON sWeapon = {0, 0, 0, 0, 0};
 
-	if (!stackPopParams(2, ST_WEAPON, &wIndex, ST_BASEOBJECT, &psTarget))
+	if (!stackPopParams(2, ST_WEAPON, &sWeapon.nStat, ST_BASEOBJECT, &psTarget))
 	{
 		return false;
 	}
@@ -6374,11 +6374,11 @@ BOOL scrFireWeaponAtObj(void)
 		return false;
 	}
 
-	memset(&sWeapon, 0, sizeof(WEAPON));
-	sWeapon.nStat = wIndex;
+	// FIXME HACK Needed since we got those ugly Vector3uw floating around in BASE_OBJECT...
+	Vector3i_Set(&target, psTarget->pos.x, psTarget->pos.y, psTarget->pos.z);
 
 	// send the projectile using the selectedPlayer so that it can always be seen
-	proj_SendProjectile(&sWeapon, NULL, selectedPlayer, psTarget->pos.x,psTarget->pos.y,psTarget->pos.z, psTarget, true, false, 0);
+	proj_SendProjectile(&sWeapon, NULL, selectedPlayer, target, psTarget, true, false, 0);
 
 	return true;
 }
@@ -6386,19 +6386,18 @@ BOOL scrFireWeaponAtObj(void)
 // fire a weapon stat at a location
 BOOL scrFireWeaponAtLoc(void)
 {
-	SDWORD			wIndex, x,y;
-	WEAPON			sWeapon;
+	Vector3i target;
+	WEAPON sWeapon = {0, 0, 0, 0, 0};
 
-	if (!stackPopParams(3, ST_WEAPON, &wIndex, VAL_INT, &x, VAL_INT, &y))
+	if (!stackPopParams(3, ST_WEAPON, &sWeapon.nStat, VAL_INT, &target.x, VAL_INT, &target.y))
 	{
 		return false;
 	}
 
-	memset(&sWeapon, 0, sizeof(WEAPON));
-	sWeapon.nStat = wIndex;
+	target.z = map_Height(target.x, target.y);
 
 	// send the projectile using the selectedPlayer so that it can always be seen
-	proj_SendProjectile(&sWeapon, NULL, selectedPlayer, x,y,map_Height(x,y), NULL, true, false, 0);
+	proj_SendProjectile(&sWeapon, NULL, selectedPlayer, target, NULL, true, false, 0);
 
 	return true;
 }
@@ -11512,7 +11511,7 @@ BOOL scrAssembleWeaponTemplate(void)
 			// add template to player template list
 			pNewTemplate->psNext = apsDroidTemplates[player];
 			apsDroidTemplates[player] = pNewTemplate;		//apsTemplateList?
-		
+
 			if (bMultiPlayer)
 			{
 				sendTemplate(pNewTemplate);

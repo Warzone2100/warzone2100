@@ -55,26 +55,26 @@
 BOOL sendBuildStarted(STRUCTURE *psStruct, DROID *psDroid)
 {
 	NETbeginEncode(NET_BUILD, NET_ALL_PLAYERS);
-	
+
 		// Who is building it
 		NETuint8_t(&psDroid->player);
-		
+
 		// What they are building
 		NETuint32_t(&psDroid->psTarStats->ref);
-		
+
 		// Where it is being built
 		NETuint16_t(&psDroid->orderX);
 		NETuint16_t(&psDroid->orderY);
-		
+
 		// The droid building it
 		NETuint32_t(&psDroid->id);
-		
+
 		// The ID assigned to the structure being built
 		NETuint32_t(&psStruct->id);
-		
+
 		// The droids order
 		NETint32_t(&psDroid->order);
-	
+
 		if (psDroid->psTarget
 		 && psDroid->psTarget->type == OBJ_STRUCTURE)
 		{
@@ -85,7 +85,7 @@ BOOL sendBuildStarted(STRUCTURE *psStruct, DROID *psDroid)
 		{
 			NETnull();
 		}
-	
+
 		// Z coord
 		NETuint16_t(&psStruct->pos.z);
 
@@ -129,16 +129,16 @@ BOOL recvBuildStarted()
 		if (getDroidDestination((BASE_STATS *) psStats, x, y, &actionX, &actionY))
 		{
 			psDroid->order = order;
-			
+
 			if (psDroid->order == DORDER_LINEBUILD)
 			{
 				psDroid->order = DORDER_BUILD;
 			}
-			
+
 			psDroid->orderX = x;
 			psDroid->orderY = y;
 			psDroid->psTarStats = (BASE_STATS *) psStats;
-			
+
 			if (targetId)
 			{
 				setDroidTarget(psDroid, IdToPointer(targetId, ANYPLAYER));
@@ -165,18 +165,18 @@ BOOL recvBuildStarted()
 			((STRUCTURE *) psDroid->psTarget)->id = structId;
 		}
 	}
-	
+
 	return true;
 }
 
 // ////////////////////////////////////////////////////////////////////////////
 // INFORM others that a building has been completed.
 BOOL SendBuildFinished(STRUCTURE *psStruct)
-{	
+{
 	NETbeginEncode(NET_BUILDFINISHED, NET_ALL_PLAYERS);
 		// ID of building
 		NETuint32_t(&psStruct->id);
-		
+
 		// Along with enough info to build it (if needed)
 		NETuint32_t(&psStruct->pStructureType->ref);
 		NETuint16_t(&psStruct->pos.x);
@@ -244,7 +244,7 @@ BOOL recvBuildFinished()
 	}
 	// Build the structure
 	psStruct = buildStructure(&(asStructureStats[typeindex]), x, y, player, true);
-	
+
 	if (psStruct)
 	{
 		psStruct->id		= structId;
@@ -257,7 +257,7 @@ BOOL recvBuildFinished()
 	{
 		NETlogEntry("had to plonk down a building, BUT FAILED OH S**T." ,0,player);
 	}
-	
+
 	return false;
 }
 
@@ -266,8 +266,8 @@ BOOL recvBuildFinished()
 // demolish message.
 BOOL SendDemolishFinished(STRUCTURE *psStruct, DROID *psDroid)
 {
-	NETbeginEncode(NET_DEMOLISH, NET_ALL_PLAYERS);             
-                                                         
+	NETbeginEncode(NET_DEMOLISH, NET_ALL_PLAYERS);
+
 		// Send what is being demolish and who is doing it
 		NETuint32_t(&psStruct->id);
 		NETuint32_t(&psDroid->id);
@@ -303,7 +303,7 @@ BOOL recvDemolishFinished()
 			psDroid->psTarStats = NULL;
 		}
 	}
-	
+
 	return true;
 }
 
@@ -331,7 +331,7 @@ BOOL recvDestroyStructure()
 	NETbeginDecode(NET_STRUCTDEST);
 		NETuint32_t(&structID);
 	NETend();
-								
+
 	// Struct to destory
 	psStruct = IdToStruct(structID,ANYPLAYER);
 
@@ -344,7 +344,7 @@ BOOL recvDestroyStructure()
 		// NOTE: I do not think this should be here!
 		technologyGiveAway(psStruct);
 	}
-	
+
 	return true;
 }
 
@@ -370,7 +370,7 @@ BOOL recvLasSat()
 	UBYTE		player,targetplayer;
 	STRUCTURE	*psStruct;
 	uint32_t	id,targetid;
-	
+
 	NETbeginDecode(NET_LASSAT);
 		NETuint8_t(&player);
 		NETuint32_t(&id);
@@ -378,18 +378,24 @@ BOOL recvLasSat()
 		NETuint8_t(&targetplayer);
 	NETend();
 
-		psStruct = IdToStruct (id, player);
-		psObj	 = IdToPointer(targetid, targetplayer);
-	
-		if( psStruct && psObj)
-		{
-			// Give enemy no quarter, unleash the lasat
-			proj_SendProjectile(&psStruct->asWeaps[0], NULL, player, psObj->pos.x,
-	            psObj->pos.y, psObj->pos.z, psObj, true, false, 0);
-	      	// Play 5 second countdown message
-			audio_QueueTrackPos( ID_SOUND_LAS_SAT_COUNTDOWN, psObj->pos.x, psObj->pos.y,
-	            psObj->pos.z);
-		}
+	psStruct = IdToStruct (id, player);
+	psObj	 = IdToPointer(targetid, targetplayer);
+
+	if( psStruct && psObj)
+	{
+		Vector3i pos;
+
+		// FIXME HACK Needed since we got those ugly Vector3uw floating around in BASE_OBJECT...
+		Vector3i_Set(&pos, psObj->pos.x, psObj->pos.y, psObj->pos.z);
+
+
+		// Give enemy no quarter, unleash the lasat
+		proj_SendProjectile(&psStruct->asWeaps[0], NULL, player, pos, psObj, true, false, 0);
+
+		// Play 5 second countdown message
+		audio_QueueTrackPos( ID_SOUND_LAS_SAT_COUNTDOWN, psObj->pos.x, psObj->pos.y,
+			psObj->pos.z);
+	}
 
 	return true;
 }

@@ -4183,34 +4183,39 @@ BOOL getFactoryState(STRUCTURE *psStruct, SECONDARY_ORDER sec, SECONDARY_STATE *
 //lasSat structure can select a target
 void orderStructureObj(UDWORD player, BASE_OBJECT *psObj)
 {
-    STRUCTURE   *psStruct;
-	UDWORD		firePause, damLevel;
+	STRUCTURE   *psStruct;
 
-    for (psStruct = apsStructLists[player]; psStruct; psStruct = psStruct->psNext)
-    {
-        if (lasSatStructSelected(psStruct))
-        {
-            //there will only be the one!
-            firePause = weaponFirePause(&asWeaponStats[psStruct->asWeaps[0].
-                nStat], (UBYTE)player);
-            damLevel = PERCENT(psStruct->body, structureBody(psStruct));
-	        if (damLevel < HEAVY_DAMAGE_LEVEL)
-	        {
-		        firePause += firePause;
-	        }
-	        if (isHumanPlayer(player)
+	for (psStruct = apsStructLists[player]; psStruct; psStruct = psStruct->psNext)
+	{
+		if (lasSatStructSelected(psStruct))
+		{
+			Vector3i pos;
+			//there will only be the one!
+			unsigned int firePause = weaponFirePause(&asWeaponStats[psStruct->asWeaps[0].nStat], (UBYTE)player);
+			unsigned int damLevel = PERCENT(psStruct->body, structureBody(psStruct));
+
+			// FIXME HACK Needed since we got those ugly Vector3uw floating around in BASE_OBJECT...
+			Vector3i_Set(&pos, psObj->pos.x, psObj->pos.y, psObj->pos.z);
+
+			if (damLevel < HEAVY_DAMAGE_LEVEL)
+			{
+				firePause += firePause;
+			}
+
+			if (isHumanPlayer(player)
 				&& (gameTime - psStruct->asWeaps[0].lastFired <= firePause) )
 			{
-		       /* Too soon to fire again */
-		        break;
+				/* Too soon to fire again */
+				break;
 			}
-            //ok to fire - so fire away
-            proj_SendProjectile(&psStruct->asWeaps[0], NULL,
-                player, psObj->pos.x, psObj->pos.y, psObj->pos.z, psObj, true, false, 0);
-            //set up last fires time
-            psStruct->asWeaps[0].lastFired =  gameTime;
 
-            //play 5 second countdown message
+			//ok to fire - so fire away
+			proj_SendProjectile(&psStruct->asWeaps[0], NULL,
+				player, pos, psObj, true, false, 0);
+			//set up last fires time
+			psStruct->asWeaps[0].lastFired =  gameTime;
+
+		//play 5 second countdown message
 			audio_QueueTrackPos( ID_SOUND_LAS_SAT_COUNTDOWN,
 				psObj->pos.x, psObj->pos.y, psObj->pos.z );
 
@@ -4222,8 +4227,8 @@ void orderStructureObj(UDWORD player, BASE_OBJECT *psObj)
 			}
 
 			break;
-        }
-    }
+		}
+	}
 }
 
 const char* getDroidOrderName(DROID_ORDER order)

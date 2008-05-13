@@ -56,8 +56,7 @@ PROJECTILE *proj_GetNext(void);		///< Get next projectile in the list.
 void	proj_FreeAllProjectiles(void);	///< Free all projectiles in the list.
 
 /** Send a single projectile against the given target. */
-BOOL	proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, int tarX, int tarY, int tarZ,
-                            BASE_OBJECT *psTarget, BOOL bVisible, BOOL bPenetrate, int weapon_slot);
+BOOL	proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, Vector3i target, BASE_OBJECT *psTarget, BOOL bVisible, BOOL bPenetrate, int weapon_slot);
 
 /** Return whether a weapon is direct or indirect. */
 bool proj_Direct(const WEAPON_STATS* psStats);
