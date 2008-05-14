@@ -350,7 +350,7 @@ BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, Ve
 
 	ASSERT( psStats != NULL, "proj_SendProjectile: invalid weapon stats" );
 
-	ASSERT( psTarget != NULL || !psTarget->died, "Aiming at dead target!" );
+	ASSERT( psTarget == NULL || !psTarget->died, "Aiming at dead target!" );
 
 	/* get muzzle offset */
 	if (psAttacker == NULL)
