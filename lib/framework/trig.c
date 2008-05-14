@@ -102,7 +102,7 @@ float trigSin(int angle)
 	{
 		angle = angle % TRIG_DEGREES;
 	}
-	return aSin[angle % TRIG_DEGREES];
+	return aSin[angle];
 }
 
 
@@ -117,7 +117,7 @@ float trigCos(int angle)
 	{
 		angle = angle % TRIG_DEGREES;
 	}
-	return aCos[angle % TRIG_DEGREES];
+	return aCos[angle];
 }
 
 
