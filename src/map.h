@@ -300,11 +300,26 @@ static inline BOOL tileInsideBuildRange(SDWORD x, SDWORD y)
 }
 
 /* Return whether a world coordinate is on the map */
-static inline BOOL worldOnMap(SDWORD x, SDWORD y)
+static inline BOOL worldOnMap(int x, int y)
 {
 	return (x >= 0) && (x < ((SDWORD)mapWidth << TILE_SHIFT)) &&
 		   (y >= 0) && (y < ((SDWORD)mapHeight << TILE_SHIFT));
 }
+
+
+/* Return whether a world coordinate is on the map */
+static inline bool worldOnMap2i(Vector2i pos)
+{
+	return worldOnMap(pos.x, pos.y);
+}
+
+
+/* Return whether a world coordinate is on the map */
+static inline bool worldOnMap3i(Vector3i pos)
+{
+	return worldOnMap(pos.x, pos.y);
+}
+
 
 /* Store a map coordinate and it's associated tile */
 typedef struct _tile_coord
