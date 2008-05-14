@@ -45,6 +45,8 @@ typedef enum _object_type
   x - "right"
   y - "forward"
   z - "up"
+
+  For explanation of yaw/pitch/roll look for "flight dynamics" in your encyclopedia.
 */
 
 #define BASE_ELEMENTS1(pointerType) \
