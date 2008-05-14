@@ -810,10 +810,12 @@ static void proj_InFlightDirectFunc( PROJECTILE *psProj )
 				posTemp = {psTempObj->pos.x, psTempObj->pos.y, psTempObj->pos.z};
 
 			Vector3i diff = Vector3i_Sub(posProj, posTemp);
-			diff.z = abs(diff.z);
 
 			unsigned int targetHeight = establishTargetHeight(psTempObj);
 			unsigned int targetRadius = establishTargetRadius(psTempObj);
+
+			/* Height is always positive */
+			diff.z = abs(diff.z);
 
 			/* We hit! */
 			if ( diff.z < targetHeight &&
