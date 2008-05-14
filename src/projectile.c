@@ -346,9 +346,9 @@ BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, Ve
 	Vector3i muzzle;
 	SDWORD			iRadSq, iPitchLow, iPitchHigh, iTemp;
 	UDWORD			heightVariance;
-	WEAPON_STATS	*psWeapStats = &asWeaponStats[psWeap->nStat];
+	WEAPON_STATS *psStats = &asWeaponStats[psWeap->nStat];
 
-	ASSERT( psWeapStats != NULL,
+	ASSERT( psStats != NULL,
 			"proj_SendProjectile: invalid weapon stats" );
 
 	/* get muzzle offset */
@@ -378,7 +378,7 @@ BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, Ve
 	/* Initialise the structure */
 	psObj->type		    = OBJ_PROJECTILE;
 	psObj->state		= PROJ_INFLIGHT;
-	psObj->psWStats		= asWeaponStats + psWeap->nStat;
+	psObj->psWStats		= psStats;
 	Vector3uw_Set(&psObj->pos, muzzle.x, muzzle.y, muzzle.z);
 	psObj->startX		= muzzle.x;
 	psObj->startY		= muzzle.y;
@@ -486,10 +486,10 @@ BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, Ve
 	/* get target distance */
 	iRadSq = dx*dx + dy*dy + dz*dz;
 	fR = trigIntSqrt( iRadSq );
-	iMinSq = (SDWORD)(psWeapStats->minRange * psWeapStats->minRange);
+	iMinSq = psStats->minRange * psStats->minRange;
 
-	if ( proj_Direct(psObj->psWStats) ||
-		( !proj_Direct(psWeapStats) && (iRadSq <= iMinSq) ) )
+	if ( proj_Direct(psStats) ||
+		( !proj_Direct(psStats) && (iRadSq <= iMinSq) ) )
 	{
 		fR = (double) atan2(dz, fR);
 		if ( fR < 0.0 )
@@ -502,7 +502,7 @@ BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, Ve
 	else
 	{
 		/* indirect */
-		iVelSq = psObj->psWStats->flightSpeed * psObj->psWStats->flightSpeed;
+		iVelSq = psStats->flightSpeed * psStats->flightSpeed;
 
 		fA = ACC_GRAVITY * (double)iRadSq / (2 * iVelSq);
 		fC = 4 * fA * ((double)dz + fA);
@@ -527,7 +527,7 @@ BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, Ve
 		else
 		{
 			/* set velocity to stats value */
-			iVel = psObj->psWStats->flightSpeed;
+			iVel = psStats->flightSpeed;
 
 			/* get floating point square root */
 			fS = trigIntSqrt(fS);
@@ -601,30 +601,30 @@ BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, Ve
 		// note that the projectile is visible
 		psObj->bVisible = true;
 
-		if ( psObj->psWStats->iAudioFireID != NO_SOUND )
+		if ( psStats->iAudioFireID != NO_SOUND )
 		{
 
 			if ( psObj->psSource )
 			{
 				/* firing sound emitted from source */
 				audio_PlayObjDynamicTrack( (BASE_OBJECT *) psObj->psSource,
-									psObj->psWStats->iAudioFireID, NULL );
+									psStats->iAudioFireID, NULL );
 				/* GJ HACK: move howitzer sound with shell */
-				if ( psObj->psWStats->weaponSubClass == WSC_HOWITZERS )
+				if ( psStats->weaponSubClass == WSC_HOWITZERS )
 				{
 					audio_PlayObjDynamicTrack( (BASE_OBJECT *) psObj,
 									ID_SOUND_HOWITZ_FLIGHT, NULL );
 				}
 			}
 			//don't play the sound for a LasSat in multiPlayer
-			else if (!(bMultiPlayer && psWeapStats->weaponSubClass == WSC_LAS_SAT))
+			else if (!(bMultiPlayer && psStats->weaponSubClass == WSC_LAS_SAT))
 			{
-					audio_PlayObjStaticTrack(psObj, psObj->psWStats->iAudioFireID);
+					audio_PlayObjStaticTrack(psObj, psStats->iAudioFireID);
 			}
 		}
 	}
 
-	if ((psAttacker != NULL) && !proj_Direct(psWeapStats))
+	if ((psAttacker != NULL) && !proj_Direct(psStats))
 	{
 		//check for Counter Battery Sensor in range of target
 		counterBatteryFire(psAttacker, psTarget);
