@@ -348,8 +348,9 @@ BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, Ve
 	UDWORD			heightVariance;
 	WEAPON_STATS *psStats = &asWeaponStats[psWeap->nStat];
 
-	ASSERT( psStats != NULL,
-			"proj_SendProjectile: invalid weapon stats" );
+	ASSERT( psStats != NULL, "proj_SendProjectile: invalid weapon stats" );
+
+	ASSERT( psTarget != NULL || !psTarget->died, "Aiming at dead target!" );
 
 	/* get muzzle offset */
 	if (psAttacker == NULL)
@@ -394,8 +395,6 @@ BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, Ve
 	psObj->psDest		= NULL;
 	psObj->died		= 0;
 	setProjectileDestination(psObj, psTarget);
-
-	ASSERT(!psTarget || !psTarget->died, "Aiming at dead target!");
 
 	/* If target is a VTOL or higher than ground, it is an air target. */
 	if ((psTarget != NULL && psTarget->type == OBJ_DROID && vtolDroid((DROID*)psTarget))
