@@ -40,13 +40,20 @@ typedef enum _object_type
 	OBJ_TARGET,     ///< for the camera tracking
 } OBJECT_TYPE;
 
+/*
+ Coordinate system used for objects in Warzone 2100:
+  x - "right"
+  y - "forward"
+  z - "up"
+*/
+
 #define BASE_ELEMENTS1(pointerType) \
 	OBJECT_TYPE     type;                           /**< The type of object */ \
 	UDWORD          id;                             /**< ID number of the object */ \
 	Vector3uw       pos;                            /**< Position of the object */ \
-	float           direction;                      /**< Object's direction +ve rotation about y axis */ \
-	SWORD           pitch;                          /**< Object's pitch +ve nose up */ \
-	SWORD           roll                            /**< Object's roll +ve left up, right down */
+	float           direction;                      /**< Object's yaw +ve rotation around up-axis */ \
+	SWORD           pitch;                          /**< Object's pitch +ve rotation around right-axis (nose up/down) */ \
+	SWORD           roll                            /**< Object's roll +ve rotation around forward-axis (left wing up/down) */
 
 #define BASE_ELEMENTS2(pointerType) \
 	SCREEN_DISP_DATA    sDisplay;                   /**< screen coordinate details */ \
