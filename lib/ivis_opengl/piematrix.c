@@ -381,3 +381,14 @@ void pie_RotateTranslate3iv(const Vector3i *v, Vector3i *s)
 	s->y = ( v->x * psMatrix->c + v->z * psMatrix->f + v->y * psMatrix->i
 			+ psMatrix->l ) / FP12_MULTIPLIER;
 }
+
+
+void pie_RotateTranslate3f(const Vector3f *v, Vector3f *s)
+{
+	s->x = ( v->x * psMatrix->a + v->z * psMatrix->d + v->y * psMatrix->g
+			+ psMatrix->j ) / FP12_MULTIPLIER;
+	s->z = ( v->x * psMatrix->b + v->z * psMatrix->e + v->y * psMatrix->h
+			+ psMatrix->k ) / FP12_MULTIPLIER;
+	s->y = ( v->x * psMatrix->c + v->z * psMatrix->f + v->y * psMatrix->i
+			+ psMatrix->l ) / FP12_MULTIPLIER;
+}

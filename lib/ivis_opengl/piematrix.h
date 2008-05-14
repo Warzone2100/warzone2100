@@ -41,10 +41,20 @@ extern SDWORD aSinTable[];
 
 /*!
  * Rotate and translate v with the worldmatrix. Store the result in s
+ * int variant
  * \param[in] v Vector to translate
  * \param[out] s Resulting vector
  */
 void pie_RotateTranslate3iv(const Vector3i *v, Vector3i *s);
+
+
+/*!
+ * Rotate and translate v with the worldmatrix. Store the result in s
+ * Float variant
+ * \param[in] v Vector to translate
+ * \param[out] s Resulting vector
+ */
+void pie_RotateTranslate3f(const Vector3f *v, Vector3f *s);
 
 
 /*!
@@ -72,7 +82,7 @@ static inline WZ_DECL_CONST WZ_DECL_WARN_UNUSED_RESULT
 	a = Vector3f_Normalise(a);
 	b = Vector3f_Normalise(b);
 
-	{ // MSVC hack
+	{ // MSVC HACK
 		Vector3f
 			v = {
 				(a.y * b.z) - (a.z * b.y),
