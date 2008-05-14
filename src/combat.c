@@ -374,8 +374,7 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 		predict.z = psTarget->pos.z;
 
 		debug(LOG_SENSOR, "combFire: Accurate prediction range (%d)", dice);
-		if (!proj_SendProjectile(psWeap, psAttacker, psAttacker->player,
-							predict, psTarget, false, false, weapon_slot))
+		if (!proj_SendProjectile(psWeap, psAttacker, psAttacker->player, predict, psTarget, false, weapon_slot))
 		{
 			/* Out of memory - we can safely ignore this */
 			debug(LOG_ERROR, "Out of memory");
@@ -406,7 +405,7 @@ missed:
 
 		/* Fire off the bullet to the miss location. The miss is only visible if the player owns
 		* the target. (Why? - Per) */
-		proj_SendProjectile(psWeap, psAttacker, psAttacker->player, miss, NULL, psTarget->player == selectedPlayer, false, weapon_slot);
+		proj_SendProjectile(psWeap, psAttacker, psAttacker->player, miss, NULL, psTarget->player == selectedPlayer, weapon_slot);
 	}
 	return;
 }

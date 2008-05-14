@@ -6378,7 +6378,7 @@ BOOL scrFireWeaponAtObj(void)
 	Vector3i_Set(&target, psTarget->pos.x, psTarget->pos.y, psTarget->pos.z);
 
 	// send the projectile using the selectedPlayer so that it can always be seen
-	proj_SendProjectile(&sWeapon, NULL, selectedPlayer, target, psTarget, true, false, 0);
+	proj_SendProjectile(&sWeapon, NULL, selectedPlayer, target, psTarget, true, 0);
 
 	return true;
 }
@@ -6397,7 +6397,7 @@ BOOL scrFireWeaponAtLoc(void)
 	target.z = map_Height(target.x, target.y);
 
 	// send the projectile using the selectedPlayer so that it can always be seen
-	proj_SendProjectile(&sWeapon, NULL, selectedPlayer, target, NULL, true, false, 0);
+	proj_SendProjectile(&sWeapon, NULL, selectedPlayer, target, NULL, true, 0);
 
 	return true;
 }

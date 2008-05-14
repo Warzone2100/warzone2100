@@ -390,7 +390,7 @@ BOOL recvLasSat()
 
 
 		// Give enemy no quarter, unleash the lasat
-		proj_SendProjectile(&psStruct->asWeaps[0], NULL, player, pos, psObj, true, false, 0);
+		proj_SendProjectile(&psStruct->asWeaps[0], NULL, player, pos, psObj, true, 0);
 
 		// Play 5 second countdown message
 		audio_QueueTrackPos( ID_SOUND_LAS_SAT_COUNTDOWN, psObj->pos.x, psObj->pos.y,

@@ -337,7 +337,7 @@ static void proj_UpdateKills(PROJECTILE *psObj, float experienceInc)
 
 /***************************************************************************/
 
-BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, Vector3i target, BASE_OBJECT *psTarget, BOOL bVisible, BOOL bPenetrate, int weapon_slot)
+BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, Vector3i target, BASE_OBJECT *psTarget, BOOL bVisible, int weapon_slot)
 {
 	PROJECTILE		*psObj = malloc(sizeof(PROJECTILE));
 	SDWORD			tarHeight, srcHeight, iMinSq;
@@ -399,29 +399,21 @@ BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, Ve
 
 	/* If target is a VTOL or higher than ground, it is an air target. */
 	if ((psTarget != NULL && psTarget->type == OBJ_DROID && vtolDroid((DROID*)psTarget))
-	    || (psTarget == NULL && target.z > map_Height(target.x, target.y)))
+		|| (psTarget == NULL && target.z > map_Height(target.x, target.y)))
 	{
 		psObj->airTarget = true;
 	}
 
 	//Watermelon:use the source of the source of psObj :) (psAttacker is a projectile)
-	if (bPenetrate && psAttacker)
+	if (psAttacker && psAttacker->type == OBJ_PROJECTILE)
 	{
 		// psAttacker is a projectile if bPenetrate
 		PROJECTILE *psProj = (PROJECTILE*)psAttacker;
-
-		ASSERT(psProj->type == OBJ_PROJECTILE, "Penetrating but not projectile?");
 
 		if (psProj->psSource && !psProj->psSource->died)
 		{
 			setProjectileSource(psObj, psProj->psSource);
 		}
-
-		if (psProj->psDest && !psProj->psDest->died)
-		{
-			setProjectileDamaged(psObj, psProj->psDest);
-		}
-		psProj->state = PROJ_IMPACT;
 	}
 	else
 	{
@@ -497,7 +489,7 @@ BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, Ve
 	iMinSq = (SDWORD)(psWeapStats->minRange * psWeapStats->minRange);
 
 	if ( proj_Direct(psObj->psWStats) ||
-		 ( !proj_Direct(psWeapStats) && (iRadSq <= iMinSq) ) )
+		( !proj_Direct(psWeapStats) && (iRadSq <= iMinSq) ) )
 	{
 		fR = (double) atan2(dz, fR);
 		if ( fR < 0.0 )
@@ -512,7 +504,7 @@ BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, Ve
 		/* indirect */
 		iVelSq = psObj->psWStats->flightSpeed * psObj->psWStats->flightSpeed;
 
- 		fA = ACC_GRAVITY * (double)iRadSq / (2 * iVelSq);
+		fA = ACC_GRAVITY * (double)iRadSq / (2 * iVelSq);
 		fC = 4 * fA * ((double)dz + fA);
 		fS = (double)iRadSq - fC;
 
@@ -612,23 +604,23 @@ BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, Ve
 		if ( psObj->psWStats->iAudioFireID != NO_SOUND )
 		{
 
-            if ( psObj->psSource )
-            {
+			if ( psObj->psSource )
+			{
 				/* firing sound emitted from source */
-    			audio_PlayObjDynamicTrack( (BASE_OBJECT *) psObj->psSource,
+				audio_PlayObjDynamicTrack( (BASE_OBJECT *) psObj->psSource,
 									psObj->psWStats->iAudioFireID, NULL );
 				/* GJ HACK: move howitzer sound with shell */
 				if ( psObj->psWStats->weaponSubClass == WSC_HOWITZERS )
 				{
-    				audio_PlayObjDynamicTrack( (BASE_OBJECT *) psObj,
+					audio_PlayObjDynamicTrack( (BASE_OBJECT *) psObj,
 									ID_SOUND_HOWITZ_FLIGHT, NULL );
 				}
-            }
+			}
 			//don't play the sound for a LasSat in multiPlayer
-            else if (!(bMultiPlayer && psWeapStats->weaponSubClass == WSC_LAS_SAT))
+			else if (!(bMultiPlayer && psWeapStats->weaponSubClass == WSC_LAS_SAT))
 			{
-                    audio_PlayObjStaticTrack(psObj, psObj->psWStats->iAudioFireID);
-            }
+					audio_PlayObjStaticTrack(psObj, psObj->psWStats->iAudioFireID);
+			}
 		}
 	}
 
@@ -829,7 +821,7 @@ static void proj_InFlightDirectFunc( PROJECTILE *psProj )
 			{
 				setProjectileDestination(psProj, psTempObj);
 
-				/* In case we have a penetrating weapon: */
+				/* Buildings cannot be penetrated and we need a penetrating weapon */
 				if ( psTempObj->type == OBJ_DROID && psStats->penetrate )
 				{
 					WEAPON asWeap = {psStats - asWeaponStats, 0, 0, 0, 0};
@@ -848,13 +840,11 @@ static void proj_InFlightDirectFunc( PROJECTILE *psProj )
 					//Watermelon:just assume we damaged the chosen target
 					setProjectileDamaged(psProj, psTempObj);
 
-					proj_SendProjectile( &asWeap, (BASE_OBJECT*)psProj, psProj->player, newDest, NULL, true, psStats->penetrate, -1 );
+					proj_SendProjectile( &asWeap, (BASE_OBJECT*)psProj, psProj->player, newDest, NULL, true, -1 );
 				}
-				else
-				{
-					/* Buildings cannot be penetrated... */
-					psProj->state = PROJ_IMPACT;
-				}
+
+				psProj->state = PROJ_IMPACT;
+
 				return;
 			}
 		}
@@ -1087,15 +1077,15 @@ static void proj_InFlightIndirectFunc( PROJECTILE *psObj )
 						target.y = clip(target.y, 0, world_coord(mapHeight - 1));
 
 						asWeap.nStat = psObj->psWStats - asWeaponStats;
+
 						//Watermelon:just assume we damaged the chosen target
 						setProjectileDamaged(psObj, psNewTarget);
 
-						proj_SendProjectile( &asWeap, (BASE_OBJECT*)psObj, psObj->player, target, NULL, true, bPenetrate, -1 );
+						proj_SendProjectile( &asWeap, (BASE_OBJECT*)psObj, psObj->player, target, NULL, true, -1 );
 					}
-					else
-					{
-						psObj->state = PROJ_IMPACT;
-					}
+
+					psObj->state = PROJ_IMPACT;
+
 					return;
 				}
 			}
