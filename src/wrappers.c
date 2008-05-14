@@ -81,7 +81,8 @@ void	runCreditsScreen	( void );
 
 static	UDWORD	lastTick = 0;
 static	UDWORD	lastChange = 0;
-extern char iptoconnect[PATH_MAX];		// holds out ip/hostname from the command line
+extern char iptoconnect[PATH_MAX];		// holds our ip/hostname from the command line
+BOOL hostlaunch = false;				// used to detect if we are hosting a game via command line option.
 
 static void initStars(void)
 {
@@ -119,8 +120,14 @@ TITLECODE titleLoop(void)
 	if (firstcall)
 	{
 		firstcall = false;
-		// We now check to see if we were given a ip/hostname on the command line
-		if(strlen(iptoconnect) )
+		// First check to see if --host was given as a command line option, if not,
+		// then check --join and if neither, run the normal game menu.
+		if( hostlaunch )
+		{
+			changeTitleMode(MULTIOPTION);
+			hostlaunch = false;			// reset the bool to default state.
+		}
+		else if(strlen(iptoconnect) )
 		{
 			changeTitleMode(GAMEFIND);		// a ip/hostname was found, so go directly to the GAMEFIND screen
 		}
