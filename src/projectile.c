@@ -474,10 +474,10 @@ BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, Ve
 	/* roll never set */
 	psObj->roll = 0;
 
-	fR = (double) atan2(dx, dy);
+	fR = atan2(dx, dy);
 	if ( fR < 0.0 )
 	{
-		fR += (double) (2 * M_PI);
+		fR += 2.0 * M_PI;
 	}
 	psObj->direction = RAD_TO_DEG(fR);
 
@@ -490,10 +490,10 @@ BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, Ve
 	if ( proj_Direct(psStats) ||
 		( !proj_Direct(psStats) && (iRadSq <= iMinSq) ) )
 	{
-		fR = (double) atan2(dz, fR);
+		fR = atan2(dz, fR);
 		if ( fR < 0.0 )
 		{
-			fR += (double) (2 * M_PI);
+			fR += 2.0 * M_PI;
 		}
 		psObj->pitch = (SWORD)( RAD_TO_DEG(fR) );
 		psObj->pInFlightFunc = proj_InFlightDirectFunc;
@@ -503,24 +503,23 @@ BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, Ve
 		/* indirect */
 		iVelSq = psStats->flightSpeed * psStats->flightSpeed;
 
-		fA = ACC_GRAVITY * (double)iRadSq / (2 * iVelSq);
-		fC = 4 * fA * ((double)dz + fA);
+		fA = ACC_GRAVITY * (double)iRadSq / (2.0 * iVelSq);
+		fC = 4.0 * fA * (dz + fA);
 		fS = (double)iRadSq - fC;
 
 		/* target out of range - increase velocity to hit target */
-		if ( fS < 0. )
+		if ( fS < 0.0 )
 		{
 			/* set optimal pitch */
 			psObj->pitch = PROJ_MAX_PITCH;
 
-			fS = (double)trigSin(PROJ_MAX_PITCH);
-			fC = (double)trigCos(PROJ_MAX_PITCH);
+			fS = trigSin(PROJ_MAX_PITCH);
+			fC = trigCos(PROJ_MAX_PITCH);
 			fT = fS / fC;
 			fS = ACC_GRAVITY * (1. + fT * fT);
-			fS = fS / (2 * (fR * fT - (double)dz));
+			fS = fS / (2.0 * (fR * fT - dz));
 			{
-				double Tmp = fR * fR;
-				iVel = trigIntSqrt(fS * Tmp);
+				iVel = trigIntSqrt(fS * (fR * fR));
 			}
 		}
 		else
@@ -531,20 +530,20 @@ BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, Ve
 			/* get floating point square root */
 			fS = trigIntSqrt(fS);
 
-			fT = (double) atan2(fR + fS, 2 * fA);
+			fT = atan2(fR + fS, 2.0 * fA);
 
 			/* make sure angle positive */
-			if ( fT < 0 )
+			if ( fT < 0.0 )
 			{
-				fT += (double) (2 * M_PI);
+				fT += 2.0 * M_PI;
 			}
 			iPitchLow = RAD_TO_DEG(fT);
 
-			fT = (double) atan2(fR-fS, 2*fA);
+			fT = atan2(fR-fS, 2.0*fA);
 			/* make sure angle positive */
-			if ( fT < 0 )
+			if ( fT < 0.0 )
 			{
-				fT += (double) (2 * M_PI);
+				fT += 2.0 * M_PI;
 			}
 			iPitchHigh = RAD_TO_DEG(fT);
 
