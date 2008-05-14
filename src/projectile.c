@@ -1124,7 +1124,6 @@ static void proj_InFlightIndirectFunc( PROJECTILE *psObj )
 		bOver = true;
 	}
 
-#if CHECK_PROJ_ABOVE_GROUND
 	/* check not trying to travel through terrain - if so count as a miss */
 	if ( mapObjIsAboveGround( (BASE_OBJECT *) psObj ) == false )
 	{
@@ -1133,7 +1132,6 @@ static void proj_InFlightIndirectFunc( PROJECTILE *psObj )
 		setProjectileDestination(psObj, NULL);
 		bOver = true;
 	}
-#endif
 
 	/* Add smoke particle at projectile location (in world coords) */
 	/* Add a trail graphic */
