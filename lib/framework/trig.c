@@ -40,16 +40,11 @@
 #define TRIG_ACCURACY	4096
 #define TRIG_ACCMASK	0x0fff
 
-/* Number of entries in sqrt table */
-#define SQRT_ACCURACY	4096
-#define SQRT_ACCBITS	12
 
-
-static float aSin[TRIG_DEGREES];
-static float aCos[TRIG_DEGREES];
+static float aSin[2*TRIG_DEGREES];
+static float aCos[2*TRIG_DEGREES];
 static float aInvCos[TRIG_ACCURACY];
 static float aInvSin[TRIG_ACCURACY];
-static float aSqrt[SQRT_ACCURACY];
 
 
 /* Initialise the Trig tables */
@@ -63,6 +58,8 @@ BOOL trigInitialise(void)
 	{
 		aSin[i] = sinf(val);
 		aCos[i] = cosf(val);
+		aSin[TRIG_DEGREES+i] = aSin[i];
+		aCos[TRIG_DEGREES+i] = aCos[i];
 		val += inc;
 	}
 
@@ -74,13 +71,6 @@ BOOL trigInitialise(void)
 		aInvCos[i] = acosf(val) * (float)TRIG_DEGREES / (2.0f * (float)M_PI);
 		val += inc;
 	}
-
-	for (i = 0; i < SQRT_ACCURACY; i++)
-	{
-		val = (float)i / (SQRT_ACCURACY / 2);
-		aSqrt[i]= sqrtf(val);
-	}
-
 	return true;
 }
 
@@ -93,31 +83,13 @@ void trigShutDown(void)
 /* Access the trig tables */
 float trigSin(int angle)
 {
-	if (angle < 0)
-	{
-		angle = (-angle) % TRIG_DEGREES;
-		angle = TRIG_DEGREES - angle;
-	}
-	else
-	{
-		angle = angle % TRIG_DEGREES;
-	}
-	return aSin[angle];
+	return aSin[angle % TRIG_DEGREES + TRIG_DEGREES];
 }
 
 
 float trigCos(int angle)
 {
-	if (angle < 0)
-	{
-		angle = (-angle) % TRIG_DEGREES;
-		angle = TRIG_DEGREES - angle;
-	}
-	else
-	{
-		angle = angle % TRIG_DEGREES;
-	}
-	return aCos[angle];
+	return aCos[angle % TRIG_DEGREES + TRIG_DEGREES];
 }
 
 
@@ -140,43 +112,5 @@ float trigInvCos(float val)
 /* Fast lookup sqrt */
 float trigIntSqrt(unsigned int val)
 {
-	UDWORD exp, mask;
-
-	if (val == 0)
-	{
-		return 0.0f;
-	}
-
-	// find the exponent of the number
-	mask = 0x80000000; // set the msb in the mask
-	for(exp = 32; exp != 0; exp--)
-	{
-		if (val & mask)
-		{
-			break;
-		}
-		mask >>= 1;
-	}
-
-	// make all exponents even
-	// odd exponents result in a mantissa of [1..2) rather than [0..1)
-	if (exp & 1)
-	{
-		exp -= 1;
-	}
-
-	// need to shift the top bit to SQRT_BITS - left or right?
-	if (exp >= SQRT_ACCBITS)
-	{
-		val >>= exp - SQRT_ACCBITS + 1;
-	}
-	else
-	{
-		val <<= SQRT_ACCBITS - 1 - exp;
-	}
-
-	// now generate the fractional part for the lookup table
-	ASSERT( val < SQRT_ACCURACY, "trigIntSqrt: table index out of range" );
-
-	return aSqrt[val] * (1 << (exp/2));
+	return sqrtf(val);
 }
