@@ -149,47 +149,22 @@ BOOL screenInitialise(
 	}
 	// Note that no initialisation of GLee is required, since this is handled automatically.
 
-	debug(LOG_3D, "OpenGL extensions supported:");
-	if (GLEE_VERSION_1_2)
-	{
-		debug(LOG_3D, "  * OpenGL 1.2 is supported!");
-	}
-	if (GLEE_VERSION_1_3)
-	{
-		debug(LOG_3D, "  * OpenGL 1.3 is supported!");
-	}
-	if (GLEE_VERSION_1_4)
-	{
-		debug(LOG_3D, "  * OpenGL 1.4 is supported!");
-	}
-	if (GLEE_VERSION_1_5)
-	{
-		debug(LOG_3D, "  * OpenGL 1.5 is supported!");
-	}
-	if (GLEE_VERSION_2_0)
-	{
-		debug(LOG_3D, "  * OpenGL 2.0 is supported!");
-	}
-	if (GLEE_VERSION_2_1)
-	{
-		debug(LOG_3D, "  * OpenGL 2.1 is supported!");
-	}
-	if (GLEE_ARB_texture_compression)
-	{
-		debug(LOG_3D, "  * Texture compression supported.");
-	}
-	if (GLEE_EXT_stencil_two_side)
-	{
-		debug(LOG_3D, "  * Two side stencil supported.");
-	}
-	if (GLEE_EXT_stencil_wrap)
-	{
-		debug(LOG_3D, "  * Stencil wrap supported.");
-	}
-	if (GLEE_EXT_texture_filter_anisotropic)
-	{
-		debug(LOG_3D, "  * Anisotropic filtering supported.");
-	}
+	/* Dump information about OpenGL implementation to the console */
+	debug(LOG_3D, "OpenGL Vendor : %s", glGetString(GL_VENDOR));
+	debug(LOG_3D, "OpenGL Renderer : %s", glGetString(GL_RENDERER));
+	debug(LOG_3D, "OpenGL Version : %s", glGetString(GL_VERSION));
+	debug(LOG_3D, "OpenGL Extensions : %s", glGetString(GL_EXTENSIONS)); // FIXME This is too much for MAX_LEN_LOG_LINE
+	debug(LOG_3D, "Supported OpenGL extensions:");
+	debug(LOG_3D, "  * OpenGL 1.2 %s supported!", GLEE_VERSION_1_2 ? "is" : "is NOT");
+	debug(LOG_3D, "  * OpenGL 1.3 %s supported!", GLEE_VERSION_1_3 ? "is" : "is NOT");
+	debug(LOG_3D, "  * OpenGL 1.4 %s supported!", GLEE_VERSION_1_4 ? "is" : "is NOT");
+	debug(LOG_3D, "  * OpenGL 1.5 %s supported!", GLEE_VERSION_1_5 ? "is" : "is NOT");
+	debug(LOG_3D, "  * OpenGL 2.0 %s supported!", GLEE_VERSION_2_0 ? "is" : "is NOT");
+	debug(LOG_3D, "  * OpenGL 2.1 %s supported!", GLEE_VERSION_2_1 ? "is" : "is NOT");
+	debug(LOG_3D, "  * Texture compression %s supported.", GLEE_ARB_texture_compression ? "is" : "is NOT");
+	debug(LOG_3D, "  * Two side stencil %s supported.", GLEE_EXT_stencil_two_side ? "is" : "is NOT");
+	debug(LOG_3D, "  * Stencil wrap %s supported.", GLEE_EXT_stencil_wrap ? "is" : "is NOT");
+	debug(LOG_3D, "  * Anisotropic filtering %s supported.", GLEE_EXT_texture_filter_anisotropic ? "is" : "is NOT");
 
 	glViewport(0, 0, width, height);
 	glMatrixMode(GL_PROJECTION);
