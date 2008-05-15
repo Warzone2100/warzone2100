@@ -1211,7 +1211,7 @@ float structureDamage(STRUCTURE *psStructure, UDWORD damage, UDWORD weaponClass,
 		// Survived
 		CHECK_STRUCTURE(psStructure);
 	}
-	
+
 	return relativeDamage;
 }
 
@@ -1545,8 +1545,8 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 		// Don't allow more than interface limits
 		if (asStructLimits[player][max].currentQuantity + 1 > asStructLimits[player][max].limit)
 		{
-			debug(LOG_ERROR, "Player %u: Building %s could not be built due to building limits (has %d, max %d)!", 
-			      player, pStructureType->pName, asStructLimits[player][max].currentQuantity, 
+			debug(LOG_ERROR, "Player %u: Building %s could not be built due to building limits (has %d, max %d)!",
+			      player, pStructureType->pName, asStructLimits[player][max].currentQuantity,
 			      asStructLimits[player][max].limit);
 			return NULL;
 		}
@@ -5434,62 +5434,51 @@ BOOL getLasSatExists(UDWORD player)
 
 
 /* calculate muzzle tip location in 3d world */
-BOOL calcStructureMuzzleLocation(STRUCTURE *psStructure, Vector3i *muzzle, int weapon_slot)
+BOOL calcStructureMuzzleLocation(STRUCTURE *psStructure, Vector3f *muzzle, int weapon_slot)
 {
-	Vector3i barrel;
-	iIMDShape		*psShape = psStructure->pStructureType->pIMD, *psWeaponImd = NULL;
+	iIMDShape *psShape = psStructure->pStructureType->pIMD, *psWeaponImd = NULL;
 
 	CHECK_STRUCTURE(psStructure);
 
 	if (psStructure->asWeaps[weapon_slot].nStat > 0)
 	{
-		psWeaponImd =  asWeaponStats[psStructure->asWeaps[weapon_slot].nStat].pIMD;
-	}
-	else
-	{
-		psWeaponImd =  NULL;
+		psWeaponImd = asWeaponStats[psStructure->asWeaps[weapon_slot].nStat].pIMD;
 	}
 
 	if(psShape && psShape->nconnectors)
 	{
+		Vector3f barrel = {0.0f, 0.0f, 0.0f};
+
 		pie_MatBegin();
 
-		pie_TRANSLATE(psStructure->pos.x,-(SDWORD)psStructure->pos.z,psStructure->pos.y);
+		pie_TRANSLATE(psStructure->pos.x, -psStructure->pos.z, psStructure->pos.y);
+
 		//matrix = the center of droid
-		pie_MatRotY( DEG( (SDWORD)psStructure->direction ) );
+		pie_MatRotY( DEG( psStructure->direction ) );
 		pie_MatRotX( DEG( psStructure->pitch ) );
-		pie_MatRotZ( DEG( -(SDWORD)psStructure->roll ) );
+		pie_MatRotZ( DEG( -psStructure->roll ) );
 		pie_TRANSLATE( psShape->connectors[weapon_slot].x, -psShape->connectors[weapon_slot].z,
 					-psShape->connectors[weapon_slot].y);//note y and z flipped
 
 		//matrix = the gun and turret mount on the body
-		pie_MatRotY(DEG((SDWORD)psStructure->turretRotation[weapon_slot]));//+ve anticlockwise
+		pie_MatRotY(DEG(psStructure->turretRotation[weapon_slot]));//+ve anticlockwise
 		pie_MatRotX(DEG(psStructure->turretPitch[weapon_slot]));//+ve up
 		pie_MatRotZ(DEG(0));
+
 		//matrix = the muzzle mount on turret
 		if( psWeaponImd && psWeaponImd->nconnectors )
 		{
-			barrel.x = psWeaponImd->connectors->x;
-			barrel.y = -psWeaponImd->connectors->y;
-			barrel.z = -psWeaponImd->connectors->z;
-		}
-		else
-		{
-			barrel.x = 0;
-			barrel.y = 0;
-			barrel.z = 0;
+			Vector3f_Set(&barrel, psWeaponImd->connectors->x, -psWeaponImd->connectors->y, -psWeaponImd->connectors->z);
 		}
 
-		pie_RotateTranslate3iv(&barrel, muzzle);
+		pie_RotateTranslate3f(&barrel, muzzle);
 		muzzle->z = -muzzle->z;
 
 		pie_MatEnd();
 	}
 	else
 	{
-		muzzle->x = psStructure->pos.x;
-		muzzle->y = psStructure->pos.y;
-		muzzle->z = psStructure->pos.z + psStructure->sDisplay.imd->max.y;
+		Vector3f_Set(muzzle, psStructure->pos.x, psStructure->pos.y, psStructure->pos.z + psStructure->sDisplay.imd->max.y);
 	}
 
 	return true;

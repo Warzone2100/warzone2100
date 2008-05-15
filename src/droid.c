@@ -210,7 +210,7 @@ float droidDamage(DROID *psDroid, UDWORD damage, UDWORD weaponClass, UDWORD weap
 			destroyDroid(psDroid);
 		}
 	}
-	
+
 	return relativeDamage;
 }
 
@@ -720,7 +720,7 @@ static void addNaybor(BASE_OBJECT *psObj, UDWORD distSqr)
 	{
 		return;
 	}
-	
+
 	else if (numNaybors == 0)
 	{
 		// No objects in the list
@@ -874,7 +874,7 @@ void droidUpdate(DROID *psDroid)
 	if((psDroid->visible[selectedPlayer]) && psDroid->droidType != DROID_PERSON)
 	{
 		percentDamage= (100-PERCENT(psDroid->body,psDroid->originalBody));
-		
+
 		// Is there any damage?
 		if(percentDamage>=25)
 		{
@@ -882,9 +882,9 @@ void droidUpdate(DROID *psDroid)
 			{
 				percentDamage = 99;
 			}
-			
+
 			emissionInterval = CALC_DROID_SMOKE_INTERVAL(percentDamage);
-			
+
 			if(gameTime > (psDroid->lastEmission + emissionInterval))
 			{
    				dv.x = psDroid->pos.x + DROID_DAMAGE_SPREAD;
@@ -1282,7 +1282,7 @@ BOOL droidUpdateBuild(DROID *psDroid)
 	{
 		addConstructorEffect(psStruct);
 	}
-	
+
 	return true;
 }
 
@@ -2719,7 +2719,7 @@ UDWORD calcDroidSpeed(UDWORD baseSpeed, UDWORD terrainType, UDWORD propIndex, UD
     speed  = baseSpeed;
     // Factor in terrain
     speed *= getSpeedFactor(terrainType, propulsion->propulsionType);
-    speed /= 100; 
+    speed /= 100;
     // Factor in experience
     speed *= (100 + EXP_SPEED_BONUS * level);
     speed /= 100;
@@ -2729,7 +2729,7 @@ UDWORD calcDroidSpeed(UDWORD baseSpeed, UDWORD terrainType, UDWORD propIndex, UD
 	{
 		speed = propulsion->maxSpeed;
 	}
-	
+
 	return speed;
 }
 
@@ -3412,7 +3412,7 @@ void	groupConsoleInformOfSelection( UDWORD groupNumber )
 void	groupConsoleInformOfCreation( UDWORD groupNumber )
 {
 	char groupInfo[255];
-	
+
 	if (!getWarCamStatus())
 	{
 		unsigned int num_selected = selNumSelected(selectedPlayer);
@@ -3436,7 +3436,7 @@ void	groupConsoleInformOfCentering( UDWORD groupNumber )
 	{
 		ssprintf(groupInfo, ngettext("Aligning with Group %u - %u Unit", "Aligning with Group %u - %u Units", num_selected), groupNumber, num_selected);
 	}
-	
+
 	addConsoleMessage(groupInfo,RIGHT_JUSTIFY,SYSTEM_MESSAGE);
 }
 
@@ -3467,61 +3467,54 @@ void	setSelectedCommander(UDWORD commander)
 /**
  * calculate muzzle tip location in 3d world
  */
-BOOL calcDroidMuzzleLocation(DROID *psDroid, Vector3i *muzzle, int weapon_slot)
+BOOL calcDroidMuzzleLocation(DROID *psDroid, Vector3f *muzzle, int weapon_slot)
 {
-	Vector3i barrel;
- 	iIMDShape *psShape, *psWeapon, *psWeaponMount;
+	iIMDShape *psShape, *psWeaponImd;
 
 	CHECK_DROID(psDroid);
 
-	psShape = BODY_IMD(psDroid,psDroid->player);
+	psShape = BODY_IMD(psDroid, psDroid->player);
+	psWeaponImd = (asWeaponStats[psDroid->asWeaps[weapon_slot].nStat]).pIMD;
 
-	psWeapon	  = (asWeaponStats[psDroid->asWeaps[weapon_slot].nStat]).pIMD;
-	psWeaponMount = (asWeaponStats[psDroid->asWeaps[weapon_slot].nStat]).pMountGraphic;
 	if(psShape && psShape->nconnectors)
 	{
+		Vector3f barrel = {0.0f, 0.0f, 0.0f};
+
 		pie_MatBegin();
 
-		pie_TRANSLATE(psDroid->pos.x,-(SDWORD)psDroid->pos.z,psDroid->pos.y);
+		pie_TRANSLATE(psDroid->pos.x, -psDroid->pos.z, psDroid->pos.y);
+
 		//matrix = the center of droid
-		pie_MatRotY( DEG( (SDWORD)psDroid->direction ) );
+		pie_MatRotY( DEG( psDroid->direction ) );
 		pie_MatRotX( DEG( psDroid->pitch ) );
-		pie_MatRotZ( DEG( -(SDWORD)psDroid->roll ) );
+		pie_MatRotZ( DEG( -psDroid->roll ) );
 		pie_TRANSLATE( psShape->connectors[weapon_slot].x, -psShape->connectors[weapon_slot].z,
 					  -psShape->connectors[weapon_slot].y);//note y and z flipped
 
 		//matrix = the gun and turret mount on the body
-		pie_MatRotY(DEG((SDWORD)psDroid->turretRotation[weapon_slot]));//+ve anticlockwise
+		pie_MatRotY(DEG(psDroid->turretRotation[weapon_slot]));//+ve anticlockwise
 		pie_MatRotX(DEG(psDroid->turretPitch[weapon_slot]));//+ve up
 		pie_MatRotZ(DEG(0));
+
 		//matrix = the muzzle mount on turret
-		if( psWeapon && psWeapon->nconnectors )
+		if( psWeaponImd && psWeaponImd->nconnectors )
 		{
-			barrel.x = psWeapon->connectors->x;
-			barrel.y = -psWeapon->connectors->y;
-			barrel.z = -psWeapon->connectors->z;
-		}
-		else
-		{
-			barrel.x = 0;
-			barrel.y = 0;
-			barrel.z = 0;
+			Vector3f_Set(&barrel, psWeaponImd->connectors->x, -psWeaponImd->connectors->y, -psWeaponImd->connectors->z);
 		}
 
-		pie_RotateTranslate3iv(&barrel, muzzle);
+		pie_RotateTranslate3f(&barrel, muzzle);
 		muzzle->z = -muzzle->z;
 
 		pie_MatEnd();
 	}
 	else
 	{
-		muzzle->x = psDroid->pos.x;
-		muzzle->y = psDroid->pos.y;
-		muzzle->z = psDroid->pos.z+32;
+		Vector3f_Set(muzzle, psDroid->pos.x, psDroid->pos.y, psDroid->pos.z + psDroid->sDisplay.imd->max.y);
 	}
 
 	CHECK_DROID(psDroid);
-  return true;
+
+	return true;
 }
 
 
@@ -3640,14 +3633,14 @@ BOOL selectDroidByID(UDWORD id, UDWORD player)
 			break;
 		}
 	}
-	
+
 	if (psCurr)
 	{
 		clearSelection();
 		SelectDroid(psCurr);
 		return true;
 	}
-	
+
 	return false;
 }
 
