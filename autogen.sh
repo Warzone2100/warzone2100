@@ -126,7 +126,7 @@ not_version ()
 
   #start checking the version
   if [ "$pkg_major" -eq "$MAJOR" ]; then
-   if [ "$pkg_major" -eq "$MINOR" ]; then
+   if [ "$pkg_minor" -eq "$MINOR" ]; then
     if [ "$pkg_micro" -eq "$MICRO" ]; then
       WRONG=1
     fi
