@@ -151,7 +151,7 @@ if test "x$enable_debug" = "xyes" ; then
 		WZ_CPPFLAGS="${WZ_CPPFLAGS} -DDEBUG"
 	fi
 elif test "x$enable_debug" = "xrelaxed" ; then
-	WZ_CFLAGS="${WZ_CFLAGS} -g -Wall -Wextra -Wwrite-strings"
+	WZ_CFLAGS="${WZ_CFLAGS} -g -O0 -Wall -Wextra -Wwrite-strings"
 	WZ_CPPFLAGS="${WZ_CPPFLAGS} -DDEBUG"
 elif test "x$enable_debug" = "xdebugprofile" ; then
 	WZ_CFLAGS="${WZ_CFLAGS} -g -O0 -pg -Wall -Wextra -Wwrite-strings"
