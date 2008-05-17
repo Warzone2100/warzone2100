@@ -107,8 +107,8 @@ extern void pie_DrawImage(PIEIMAGE *image, PIERECT *dest);
 
 void pie_TerrainInit(int sizex, int sizey);
 void pie_TerrainCleanup(void);
-void pie_DrawTerrain(int mapx, int mapy);
-void pie_DrawTerrainTriangle(int index, const TERRAIN_VERTEX *aVrts);
+void pie_DrawTerrain(int x1, int y1, int x2, int y2);
+void pie_DrawTerrainTriangle(int x, int y, int triangle, const TERRAIN_VERTEX *aVrts);
 void pie_DrawWaterTriangle(const TERRAIN_VERTEX *aVrts);
 
 extern void pie_GetResetCounts(unsigned int* pPieCount, unsigned int* pTileCount, unsigned int* pPolyCount, unsigned int* pStateCount);

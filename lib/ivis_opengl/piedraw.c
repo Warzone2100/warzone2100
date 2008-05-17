@@ -49,7 +49,8 @@
 static GLubyte *aColour = NULL;
 static GLfloat *aTexCoord = NULL;
 static GLfloat *aVertex = NULL;
-static GLuint rowLength;	///< Length of one array table row in tiles
+static GLuint allocX = 0, allocY = 0;
+static size_t sizeColour = 0, sizeTexCoord = 0, sizeVertex = 0;
 
 extern BOOL drawing_interface;
 
@@ -767,15 +768,27 @@ void pie_DrawImage(PIEIMAGE *image, PIERECT *dest)
 	glEnd();
 }
 
+static inline void pie_ClearArrays(void)
+{
+	memset(aColour, 0, sizeColour);
+	memset(aVertex, 0, sizeVertex);
+}
+
 void pie_TerrainInit(int sizex, int sizey)
 {
 	int size = sizex * sizey;
 
 	assert(sizex > 0 && sizey > 0);
-	aColour = realloc(aColour, size * sizeof(GLubyte) * COLOUR_COMPONENTS * VERTICES_PER_TILE);
-	aTexCoord = realloc(aTexCoord, size * sizeof(GLfloat) * TEXCOORD_COMPONENTS * VERTICES_PER_TILE);
-	aVertex = realloc(aVertex, size * sizeof(GLfloat) * VERTEX_COMPONENTS * VERTICES_PER_TILE);
-	rowLength = sizex;
+	pie_TerrainCleanup();
+	sizeColour = size * sizeof(GLubyte) * COLOUR_COMPONENTS * VERTICES_PER_TILE;
+	sizeTexCoord = size * sizeof(GLfloat) * TEXCOORD_COMPONENTS * VERTICES_PER_TILE;
+	sizeVertex = size * sizeof(GLfloat) * VERTEX_COMPONENTS * VERTICES_PER_TILE;
+	aColour = malloc(sizeColour);
+	aTexCoord = malloc(sizeTexCoord);
+	aVertex = malloc(sizeVertex);
+	allocX = sizex;
+	allocY = sizey;
+	pie_ClearArrays();	// hack, removes seams
 }
 
 void pie_TerrainCleanup()
@@ -797,8 +810,11 @@ void pie_TerrainCleanup()
 	aVertex = NULL;
 }
 
-void pie_DrawTerrain(int mapx, int mapy)
+void pie_DrawTerrain(int x1, int y1, int x2, int y2)
 {
+	int y;
+
+	assert(x1 >= 0 && y1 >= 0 && x2 < allocX && y2 < allocY);
 	glEnableClientState(GL_COLOR_ARRAY);
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
@@ -807,16 +823,24 @@ void pie_DrawTerrain(int mapx, int mapy)
 	glVertexPointer(VERTEX_COMPONENTS, GL_FLOAT, 0, aVertex);
 	glMatrixMode(GL_TEXTURE);
 	glLoadIdentity();
-	glDrawArrays(GL_TRIANGLES, 0, VERTICES_PER_TRIANGLE * mapx * mapy * 2);
+	for (y = y1; y < y2; y++)
+	{
+		glDrawArrays(GL_TRIANGLES, (y * allocX + x1) * VERTICES_PER_TILE, (x2 - x1) * VERTICES_PER_TILE);
+	}
+	pie_ClearArrays();
 	glDisableClientState(GL_COLOR_ARRAY);
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 }
 
 // index gives us the triangle
-void pie_DrawTerrainTriangle(int index, const TERRAIN_VERTEX *aVrts)
+void pie_DrawTerrainTriangle(int x, int y, int triangle, const TERRAIN_VERTEX *aVrts)
 {
-	unsigned int i = 0, j = index * VERTICES_PER_TRIANGLE;
+	int i, j;
+
+	assert(x >= 0 && y >= 0 && triangle >= 0 && triangle < 3 && aVrts);
+
+	j = (y * allocX + x) * VERTICES_PER_TILE + triangle * VERTICES_PER_TRIANGLE;
 
 	tileCount++;
 
