@@ -3537,7 +3537,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "OUTDIR=quesoglc\nSVNURL=https://quesoglc.svn.sourceforge.net/svnroot/quesoglc/branches/release-0.7.0/quesoglc\nSVNREV=721\n\nPATH=\"/usr/local/bin:${PATH}\"\nexport PATH\n\ncd external\n\nif [ -d \"$OUTDIR\" ]; then\n  echo \"$OUTDIR exists, skipping\"\n  exit 0\nfi\n\nif [ ! -z \"$SVNREV\" ]; then\n  SVNARGS=\"$SVNARGS -r $SVNREV\"\nfi\n\nsvn co $SVNARGS $SVNURL $OUTDIR\n";
+			shellScript = "OUTDIR=quesoglc\nSVNURL=https://quesoglc.svn.sourceforge.net/svnroot/quesoglc/tags/v0_7_1/quesoglc\nSVNREV=762\n\nPATH=\"/usr/local/bin:${PATH}\"\nexport PATH\n\ncd external\n\nif [ -d \"$OUTDIR\" ]; then\n  echo \"$OUTDIR exists, skipping\"\n  exit 0\nfi\n\nif [ ! -z \"$SVNREV\" ]; then\n  SVNARGS=\"$SVNARGS -r $SVNREV\"\nfi\n\nsvn co $SVNARGS $SVNURL $OUTDIR\n";
 		};
 		022B2F290BD55840002E64E3 /* Fetch source */ = {
 			isa = PBXShellScriptBuildPhase;
