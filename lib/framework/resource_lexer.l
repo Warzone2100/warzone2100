@@ -60,6 +60,8 @@ char* yyget_text()
 {
 	return yytext;
 }
+#elif defined(YY_FLEX_SUBMINOR_VERSION) && YY_FLEX_SUBMINOR_VERSION == 33
+extern YY_EXTRA_TYPE yyget_extra(void);
 #endif
 
 %}
