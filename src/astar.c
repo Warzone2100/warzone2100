@@ -373,7 +373,7 @@ SDWORD fpathAStarRoute(SDWORD routeMode, MOVE_CONTROL *psMove, SDWORD sx, SDWORD
  	FP_NODE		*psFound, *psCurr, *psNew, *psParent, *psNext;
 static 	FP_NODE		*psNearest, *psRoute;
 	SDWORD		dir, x,y, currDist;
-	SDWORD		retval;
+	SDWORD		retval = ASR_OK;
 	const int       tileSX = map_coord(sx);
 	const int       tileSY = map_coord(sy);
 	const int       tileFX = map_coord(fx);
@@ -513,11 +513,8 @@ static 	FP_NODE		*psNearest, *psRoute;
 // 		debug( LOG_NEVER, "HashAdd - closed : %3d,%3d (%d,%d) = %d\n", psCurr->pos.x, psCurr->pos.y, psCurr->dist, psCurr->est, psCurr->dist+psCurr->est );
 	}
 
-	retval = ASR_OK;
-
 	// return the nearest route if no actual route was found
 	if (!psRoute && psNearest)
-//		!((psNearest->pos.x == tileSX) && (psNearest->pos.y == tileSY)))
 	{
 		psRoute = psNearest;
 		fx = world_coord(psNearest->x) + TILE_UNITS / 2;
@@ -545,16 +542,29 @@ static 	FP_NODE		*psNearest, *psRoute;
 			psParent = psCurr;
 			count++;
 		}
+		ASSERT(count > 0, "Route has no nodes");
+		if (count <= 0)
+		{
+			fpathHardTableReset();
+			return ASR_FAILED;
+		}
 		psRoute = psParent;
 
 		psCurr = psRoute;
 		psMove->asPath = realloc(psMove->asPath, sizeof(*psMove->asPath) * count);
+		ASSERT(psMove->asPath, "Out of memory");
+		if (!psMove->asPath)
+		{
+			fpathHardTableReset();
+			return ASR_FAILED;
+		}
 		index = psMove->numPoints;
 		while (psCurr && index < count)
 		{
 			psMove->asPath[index].x = psCurr->x;
 			psMove->asPath[index].y = psCurr->y;
 			index++;
+			ASSERT(psCurr->x < mapWidth && psCurr->y < mapHeight, "Bad route generated!");
 			psCurr = psCurr->psRoute;
 		}
 		psMove->numPoints = index;
