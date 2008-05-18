@@ -68,11 +68,6 @@ typedef struct _feature_stats
 	UWORD           baseWidth;              ///< The width of the base in tiles
 	UWORD           baseBreadth;            ///< The breadth of the base in tiles
 
-	//done in script files now
-	/* component type activated if a FEAT_GEN_ARTE */
-	//unsigned int    compType;               ///< type of component activated
-	//unsigned int    compIndex;              ///< index of component
-
 	BOOL            tileDraw;               ///< Whether the tile needs to be drawn
 	BOOL            allowLOS;               ///< Whether the feature allows the LOS. true = can see through the feature
 	BOOL            visibleAtStart;         ///< Whether the feature is visible at the start of the mission
