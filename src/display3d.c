@@ -763,7 +763,8 @@ static void drawTiles(iView *player)
 			drawTerrainTile(i, j, false);
 		}
 	}
-	pie_DrawTerrain(visibleTiles.x,  visibleTiles.y);
+	pie_DrawTerrain(MAX(0, playerXTile), MAX(0, playerZTile),
+                        MIN(playerXTile + visibleTiles.x, mapWidth - 1),  MIN(playerZTile + visibleTiles.y, mapHeight - 1));
 
 	// Update height for water
 	for (i = 0; i < visibleTiles.y + 1; i++)
@@ -3750,10 +3751,7 @@ static void drawTerrainTile(UDWORD i, UDWORD j, BOOL onWaterEdge)
 	colour[1][1] = WZCOL_BLACK;
 
 	/* Let's just get out now if we're not supposed to draw it */
-	if( (actualX < 0) ||
-		(actualY < 0) ||
-		(actualX > mapWidth-1) ||
-		(actualY > mapHeight-1) )
+	if (actualX < 0 || actualY < 0 || actualX > mapWidth - 1 || actualY > mapHeight - 1)
 	{
 		tileNumber = 0;
 	}
@@ -3844,9 +3842,9 @@ static void drawTerrainTile(UDWORD i, UDWORD j, BOOL onWaterEdge)
 	{
 		pie_DrawWaterTriangle(vertices);
 	}
-	else
+	else if (tileOnMap(actualX, actualY))
 	{
-		pie_DrawTerrainTriangle(i * 2 + j * visibleTiles.x * 2, vertices);
+		pie_DrawTerrainTriangle(actualX, actualY, 0, vertices);
 	}
 
 	/* The second triangle */
@@ -3870,9 +3868,9 @@ static void drawTerrainTile(UDWORD i, UDWORD j, BOOL onWaterEdge)
 	{
 		pie_DrawWaterTriangle(vertices);
 	}
-	else
+	else if (tileOnMap(actualX, actualY))
 	{
-		pie_DrawTerrainTriangle(i * 2 + j * visibleTiles.x * 2 + 1, vertices);
+		pie_DrawTerrainTriangle(actualX, actualY, 1, vertices);
 	}
 }
 
