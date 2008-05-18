@@ -147,16 +147,12 @@ level_line:             level_rule IDENTIFIER
 						if (psFoundData == NULL)
 						{
 							yyerror("Cannot find full data set for `camchange'");
-							freeDataSet($1);
-							free($2);
 							YYABORT;
 						}
 
 						if (psFoundData->type != LDS_CAMSTART)
 						{
 							yyerror("Invalid data set name for `camchange'");
-							freeDataSet($1);
-							free($2);
 							YYABORT;
 						}
 						psFoundData->psChange = $1;
