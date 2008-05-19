@@ -403,7 +403,7 @@ void script_debug(const char *pFormat, ...);
 /* Macro to free an object variable block */
 #define FREE_ARRAYBLOCK(psAV) \
 	free((psAV)->pCode); \
-	free(psAV)
+	free((psAV))
 
 /* Allocate a trigger subdecl */
 #define ALLOC_TSUBDECL(psTSub, blockType, blockSize, blockTime) \
@@ -1311,7 +1311,6 @@ static CODE_ERROR scriptCodeBinaryOperator(CODE_BLOCK	*psFirst,	// Code for firs
 								  OPCODE		opcode,		// Operator function
 								  CODE_BLOCK	**ppsBlock) // Generated code
 {
-	//ALLOC_BLOCK(*ppsBlock, psFirst->size + psSecond->size + sizeof(UDWORD));
 	ALLOC_BLOCK(*ppsBlock, psFirst->size + psSecond->size + 1);		//size + size + binary opcode
 	ip = (*ppsBlock)->pCode;
 
@@ -2959,6 +2958,8 @@ return_statement:	return_statement_void
 
 						/* store the type of the exp */
 						psCurrBlock->type = $2->type;
+						
+						FREE_BLOCK($2);
 
 						$$ = psCurrBlock;
 
@@ -3176,7 +3177,6 @@ event_decl:			event_subdecl ';'
 						RULE( "void_funcbody_var_def '{' var_list statement_list '}'");
 
 						/* stays the same if no params (just gets copied) */
-						//ALLOC_BLOCK(psCurrBlock, $4->size + sizeof(OPCODE) + (sizeof(OPCODE) * $1->numParams));
 						ALLOC_BLOCK(psCurrBlock, $4->size + 1 + $1->numParams);	/* statements + opcode + numparams */
 						ip = psCurrBlock->pCode;
 
@@ -3198,6 +3198,7 @@ event_decl:			event_subdecl ';'
 
 						FREE_DEBUG($4);
 						FREE_BLOCK($4);
+						FREE_DEBUG(psCurrBlock);
 						FREE_BLOCK(psCurrBlock);
 
 						/* end of event */
@@ -3281,6 +3282,7 @@ event_decl:			event_subdecl ';'
 						FREE_DEBUG($4);
 						FREE_BLOCK($4);
 						FREE_BLOCK($5);
+						FREE_DEBUG(psCurrBlock);
 						FREE_BLOCK(psCurrBlock);
 
 						/* end of event */
@@ -3433,7 +3435,6 @@ statement:			assignment ';'
 						}
 
 						/* Allocate the code block */
-						//ALLOC_BLOCK(psCurrBlock, $3->size + sizeof(OPCODE) + sizeof(UDWORD));	//Params + Opcode + event index
 						ALLOC_BLOCK(psCurrBlock, $3->size + 1 + 1);	//paramList + opcode + event index
 						ALLOC_DEBUG(psCurrBlock, 1);
 						ip = psCurrBlock->pCode;
@@ -3441,9 +3442,10 @@ statement:			assignment ';'
 						if($3->numParams > 0)	/* if any parameters declared */
 						{
 							/* Copy in the code for the parameters */
-							PUT_BLOCK(ip, $3);		//PUT_BLOCK(ip, psPBlock);
-							FREE_PBLOCK($3);		//FREE_PBLOCK(psPBlock);
+							PUT_BLOCK(ip, $3);
 						}
+
+						FREE_PBLOCK($3);
 
 						/* Store the instruction */
 						PUT_OPCODE(ip, OP_FUNC);
@@ -3488,11 +3490,12 @@ statement:			assignment ';'
 						if($3->numParams > 0)	/* if any parameters declared */
 						{
 							/* Copy in the code for the parameters */
-							PUT_BLOCK(ip, $3);		//PUT_BLOCK(ip, psPBlock);
-							FREE_PBLOCK($3);		//FREE_PBLOCK(psPBlock);
+							PUT_BLOCK(ip, $3);
 						}
 
-						/* Store the instruction */
+						FREE_PBLOCK($3);
+
+							/* Store the instruction */
 						PUT_OPCODE(ip, OP_FUNC);
 						PUT_EVENT(ip,$1->index);			//Put event index as VAL_EVENT
 
@@ -4480,6 +4483,8 @@ expression:		expression '+' expression
 					PUT_BLOCK(ip, $2);
 					PUT_OPCODE(ip, OP_TO_INT);
 
+					FREE_BLOCK($2);		// free floatexp
+
 					$$ = psCurrBlock;
 				}
 			|	NUM_FUNC '(' param_list ')'
@@ -4534,30 +4539,21 @@ expression:		expression '+' expression
 					}
 
 					/* Allocate the code block */
-					//ALLOC_BLOCK(psCurrBlock, $3->size + sizeof(OPCODE) + sizeof(UDWORD));	//Params + Opcode + event index
 					ALLOC_BLOCK(psCurrBlock, $3->size + 1 + 1);	//Params + Opcode + event index
 
-					ALLOC_DEBUG(psCurrBlock, 1);
 					ip = psCurrBlock->pCode;
 
 					if($3->numParams > 0)	/* if any parameters declared */
 					{
 						/* Copy in the code for the parameters */
-						PUT_BLOCK(ip, $3);		//PUT_BLOCK(ip, psPBlock);
-						FREE_PBLOCK($3);		//FREE_PBLOCK(psPBlock);
+						PUT_BLOCK(ip, $3);
 					}
+
+					FREE_PBLOCK($3);
 
 					/* Store the instruction */
 					PUT_OPCODE(ip, OP_FUNC);
 					PUT_EVENT(ip,$1->index);			//Put event index
-
-					/* Add the debugging information */
-					if (genDebugInfo)
-					{
-						psCurrBlock->psDebug[0].offset = 0;
-						scriptGetErrorData((SDWORD *)&line, &pDummy);
-						psCurrBlock->psDebug[0].line = line;
-					}
 
 					$$ = psCurrBlock;
 				}
@@ -4657,18 +4653,18 @@ floatexp:		floatexp '+' floatexp
 					/* perform cast */
 					 $2->type = VAL_FLOAT;
 
-					//ALLOC_BLOCK(psCurrBlock, $4->size + sizeof(OPCODE));
 					ALLOC_BLOCK(psCurrBlock, $2->size + 1);	//size + opcode
 					ip = psCurrBlock->pCode;
 
 					PUT_BLOCK(ip, $2);
 					PUT_OPCODE(ip, OP_TO_FLOAT);
+					
+					FREE_BLOCK($2);		// free 'expression'
 
 					$$ = psCurrBlock;
 				}
 			|	'-' floatexp %prec UMINUS
 				{
-					//ALLOC_BLOCK(psCurrBlock, $2->size + sizeof(OPCODE));
 					ALLOC_BLOCK(psCurrBlock, $2->size + 1);	//size + opcode
 
 					ip = psCurrBlock->pCode;
@@ -4679,7 +4675,7 @@ floatexp:		floatexp '+' floatexp
 					/* Now put a negation operator into the code */
 					PUT_PKOPCODE(ip, OP_UNARYOP, OP_NEG);
 
-					/* Free the two code blocks that have been copied */
+					/* Free the code block that have been copied */
 					FREE_BLOCK($2);
 
 					/* Return the code block */
@@ -4739,7 +4735,6 @@ floatexp:		floatexp '+' floatexp
 						}
 
 						/* Allocate the code block */
-						//ALLOC_BLOCK(psCurrBlock, $3->size + sizeof(OPCODE) + sizeof(UDWORD));	//Params + Opcode + event index
 						ALLOC_BLOCK(psCurrBlock, $3->size + 1 + 1);	//Params + Opcode + event index
 
 						ALLOC_DEBUG(psCurrBlock, 1);
@@ -4749,8 +4744,9 @@ floatexp:		floatexp '+' floatexp
 						{
 							/* Copy in the code for the parameters */
 							PUT_BLOCK(ip, $3);
-							FREE_PBLOCK($3);
 						}
+
+						FREE_PBLOCK($3);
 
 						/* Store the instruction */
 						PUT_OPCODE(ip, OP_FUNC);
@@ -4919,30 +4915,21 @@ stringexp:
 						}
 
 						/* Allocate the code block */
-						//ALLOC_BLOCK(psCurrBlock, $3->size + sizeof(OPCODE) + sizeof(UDWORD));	//Params + Opcode + event index
 						ALLOC_BLOCK(psCurrBlock, $3->size + 1 + 1);	//Params + Opcode + event index
 
-						ALLOC_DEBUG(psCurrBlock, 1);
 						ip = psCurrBlock->pCode;
 
 						if($3->numParams > 0)	/* if any parameters declared */
 						{
 							/* Copy in the code for the parameters */
 							PUT_BLOCK(ip, $3);
-							FREE_PBLOCK($3);
 						}
+
+						FREE_PBLOCK($3);
 
 						/* Store the instruction */
 						PUT_OPCODE(ip, OP_FUNC);
 						PUT_EVENT(ip,$1->index);			//Put event index
-
-						/* Add the debugging information */
-						if (genDebugInfo)
-						{
-							psCurrBlock->psDebug[0].offset = 0;
-							scriptGetErrorData((SDWORD *)&line, &pDummy);
-							psCurrBlock->psDebug[0].line = line;
-						}
 
 						$$ = psCurrBlock;
 				}
@@ -5105,30 +5092,21 @@ boolexp:		boolexp _AND boolexp
 						}
 
 						/* Allocate the code block */
-						//ALLOC_BLOCK(psCurrBlock, $3->size + sizeof(OPCODE) + sizeof(UDWORD));	//Params + Opcode + event index
 						ALLOC_BLOCK(psCurrBlock, $3->size + 1 + 1);	//Params + Opcode + event index
 
-						ALLOC_DEBUG(psCurrBlock, 1);
 						ip = psCurrBlock->pCode;
 
 						if($3->numParams > 0)	/* if any parameters declared */
 						{
 							/* Copy in the code for the parameters */
 							PUT_BLOCK(ip, $3);
-							FREE_PBLOCK($3);
 						}
+
+						FREE_PBLOCK($3);
 
 						/* Store the instruction */
 						PUT_OPCODE(ip, OP_FUNC);
 						PUT_EVENT(ip,$1->index);		//Put event/function index
-
-						/* Add the debugging information */
-						if (genDebugInfo)
-						{
-							psCurrBlock->psDebug[0].offset = 0;
-							scriptGetErrorData((SDWORD *)&line, &pDummy);
-							psCurrBlock->psDebug[0].line = line;
-						}
 
 						$$ = psCurrBlock;
 				}
@@ -5573,30 +5551,21 @@ objexp:			OBJ_VAR
 						}
 
 						/* Allocate the code block */
-						//ALLOC_BLOCK(psCurrBlock, $3->size + sizeof(OPCODE) + sizeof(UDWORD));	//Params + Opcode + event index
 						ALLOC_BLOCK(psCurrBlock, $3->size + 1 + 1);	//Params + Opcode + event index
 
-						ALLOC_DEBUG(psCurrBlock, 1);
 						ip = psCurrBlock->pCode;
 
 						if($3->numParams > 0)	/* if any parameters declared */
 						{
 							/* Copy in the code for the parameters */
 							PUT_BLOCK(ip, $3);
-							FREE_PBLOCK($3);
 						}
+
+						FREE_PBLOCK($3);
 
 						/* Store the instruction */
 						PUT_OPCODE(ip, OP_FUNC);
 						PUT_EVENT(ip,$1->index);			//Put event index
-
-						/* Add the debugging information */
-						if (genDebugInfo)
-						{
-							psCurrBlock->psDebug[0].offset = 0;
-							scriptGetErrorData((SDWORD *)&line, &pDummy);
-							psCurrBlock->psDebug[0].line = line;
-						}
 
 						/* remember objexp type for further stuff, like myVar = objFunc(); to be able to check type equivalency */
 						psCurrBlock->type = $1->retType;
@@ -5726,7 +5695,6 @@ array_index_list:	array_index
 				|
 					array_index_list '[' expression ']'
 					{
-						//ALLOC_ARRAYBLOCK(psCurrArrayBlock, $1->size + $3->size, NULL);
 						ALLOC_ARRAYBLOCK(psCurrArrayBlock, $1->size + $3->size, NULL);
 
 						ip = psCurrArrayBlock->pCode;
