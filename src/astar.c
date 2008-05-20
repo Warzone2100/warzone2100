@@ -505,6 +505,12 @@ static 	FP_NODE		*psNearest, *psRoute;
 			{
 				ASSERT(!"the open and closed lists are fried/wrong", "fpathAStarRoute: the open and closed lists are f***ed");
 			}
+			if (psFound)
+			{
+				// This should not be necessary; something is wrong somewhere else in the code, but we need to release 
+				// 2.1 now and this fixes the immediate problem with nearest paths. - Per
+				psFound->est = (SWORD)fpathEstimate(x,y, tileFX, tileFY);
+			}
 		}
 
 		// add the current point to the closed nodes
