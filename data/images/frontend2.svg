@@ -33,7 +33,9 @@
    width="256"
    height="256"
    version="1.0"
-   inkscape:output_extension="org.inkscape.output.svg.inkscape">
+   inkscape:output_extension="org.inkscape.output.svg.inkscape"
+   sodipodi:docname="frontend2.svg"
+   sodipodi:docbase="/storage/projekte/programmieren/warzone/trunk/data/images">
   <sodipodi:namedview
      inkscape:window-height="949"
      inkscape:window-width="1280"
@@ -48,10 +50,10 @@
      id="base"
      inkscape:zoom="2.75"
      inkscape:cx="161.92593"
-     inkscape:cy="125.03037"
+     inkscape:cy="152.94444"
      inkscape:window-x="0"
      inkscape:window-y="25"
-     inkscape:current-layer="svg2286"
+     inkscape:current-layer="g2304"
      showguides="false"
      inkscape:guide-bbox="true" />
   <metadata
