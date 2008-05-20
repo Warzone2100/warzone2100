@@ -4502,8 +4502,7 @@ expression:		expression '+' expression
 
 			|	NUM_FUNC_CUST '(' param_list ')'
 				{
-					UDWORD line,paramNumber;
-					char *pDummy;
+					UDWORD paramNumber;
 
 					RULE( "expression: NUM_FUNC_CUST '(' param_list ')'");
 
@@ -4887,9 +4886,6 @@ stringexp:
 				}
 			|	STRING_FUNC_CUST '(' param_list ')'
 				{
-						UDWORD line;
-						char *pDummy;
-
 						RULE("stringexp: STRING_FUNC_CUST '(' param_list ')'");
 
 						if($3->numParams != $1->numParams)
@@ -5056,8 +5052,7 @@ boolexp:		boolexp _AND boolexp
 				}
 			|	BOOL_FUNC_CUST '(' param_list ')'
 				{
-						UDWORD line,paramNumber;
-						char *pDummy;
+						UDWORD paramNumber;
 
 						RULE("boolexp: BOOL_FUNC_CUST '(' param_list ')'");
 
@@ -5517,8 +5512,7 @@ objexp:			OBJ_VAR
 				}
 			|	OBJ_FUNC_CUST '(' param_list ')'
 				{
-						UDWORD line,paramNumber;
-						char *pDummy;
+						UDWORD paramNumber;
 
 						if($3->numParams != $1->numParams)
 						{
