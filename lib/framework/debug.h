@@ -183,7 +183,7 @@ extern UDWORD traceID;
  */
 #define objTrace(part, id, ...) do { if (enabled_debug[part] && id == traceID) _debug(part, __FUNCTION__, __VA_ARGS__); } while(0)
 static inline void objTraceEnable(UDWORD id) { traceID = id; }
-static inline void objTraceDisable(void) { traceID = 0; }
+static inline void objTraceDisable(void) { traceID = -1; }
 
 #if defined(__cplusplus)
 }
