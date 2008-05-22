@@ -68,7 +68,7 @@ static inline WZ_DECL_CONST float deg2radf(float x)
  */
 static inline WZ_DECL_CONST float rad2degf(float x)
 {
-	return x * (float)M_PI / 180.0f;
+	return x / (float)M_PI * 180.0f;
 }
 
 /*!
