@@ -4189,13 +4189,12 @@ void orderStructureObj(UDWORD player, BASE_OBJECT *psObj)
 	{
 		if (lasSatStructSelected(psStruct))
 		{
-			Vector3i pos;
-			//there will only be the one!
+			// FIXME HACK Needed since we got those ugly Vector3uw floating around in BASE_OBJECT...
+			Vector3i pos = {psObj->pos.x, psObj->pos.y, psObj->pos.z};
+
+			// Lassats have just one weapon
 			unsigned int firePause = weaponFirePause(&asWeaponStats[psStruct->asWeaps[0].nStat], (UBYTE)player);
 			unsigned int damLevel = PERCENT(psStruct->body, structureBody(psStruct));
-
-			// FIXME HACK Needed since we got those ugly Vector3uw floating around in BASE_OBJECT...
-			Vector3i_Set(&pos, psObj->pos.x, psObj->pos.y, psObj->pos.z);
 
 			if (damLevel < HEAVY_DAMAGE_LEVEL)
 			{
