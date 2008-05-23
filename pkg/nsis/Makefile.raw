@@ -10,7 +10,7 @@ all: $(SETUPFILE)
 endif
 endif
 
-$(SETUPFILE): warzone2100.nsi ../src/warzone2100.exe ../data/warzone.wz ../data/mp.wz ../data/mods/global/grim.wz
+$(SETUPFILE): warzone2100.nsi ../src/warzone2100.exe ../data/base.wz ../data/mp.wz ../data/mods/global/grim.wz
 	$(MAKENSIS) -DPACKAGE="$(PACKAGE)" -DPACKAGE_NAME="$(PACKAGE_NAME)" -DPACKAGE_VERSION="$(VERSION)" -DPACKAGE_BUGREPORT="$(PACKAGE_BUGREPORT)" -DVERSIONNUM="$(INSTALLER_VERSION)" -DEXTDIR="$(DEVDIR)\bin" -DLOCALEDIR=$(LOCALEDIR) $<
 
 clean:
