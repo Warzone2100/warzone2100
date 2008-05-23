@@ -620,7 +620,8 @@ BOOL stackBinaryOp(OPCODE opcode)
 			}
 			else
 			{
-				ASSERT(false, "stackBinaryOp: division by zero (float)");
+				debug(LOG_ERROR, "stackBinaryOp: division by zero (float)");
+				return false;
 			}
 		}
 		else
@@ -631,7 +632,8 @@ BOOL stackBinaryOp(OPCODE opcode)
 			}
 			else
 			{
-				ASSERT(false, "stackBinaryOp: division by zero (integer)");
+				debug(LOG_ERROR, "stackBinaryOp: division by zero (integer)");
+				return false;
 			}
 		}
 		break;
