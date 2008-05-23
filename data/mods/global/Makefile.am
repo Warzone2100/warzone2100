@@ -1,8 +1,12 @@
 SUBDIRS = aivolution/multiplay/skirmish
 
-%.wz: %
-	(cd $(srcdir)/$< && zip -ru0 $(abs_builddir)/$@ $(filter-out $<,$(?:$</%=%)) -x '*svn*')
+stamp:
+	touch stamp
+
+%.wz: % stamp
+	(cd $(srcdir)/$< && zip -ru0 $(abs_builddir)/$@ $(filter-out stamp,$(filter-out $<,$(^:$</%=%))) -x '*svn*' || [ $$? -eq 12 ] && true) # zip returns 12 on "nothing to do"
 	zip -T $@
+	rm -f stamp
 
 AIVOLUTIONLIST = multiplay commands.txt
 GRIMLIST = components structs texpages wrf COPYING
