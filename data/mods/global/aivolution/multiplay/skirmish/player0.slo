@@ -15974,7 +15974,7 @@ function bool LanchasterVictory(float _fStartForceA, float _fStartForceB,
 function int LanchasterTimeToWin(float _fStartForceA, float _fStartForceB,
 								float _fKillRateA, float _fKillRateB)
 {
-	local	float	_fTimeToWin,_fKillFactor;
+	local	float	_fTimeToWin,_fKillFactor,_devisor;
 
 	if(_fStartForceA <= 0.0 or _fStartForceB <= 0.0 or _fKillRateB == 0.0){
 		return 0;
@@ -15988,8 +15988,16 @@ function int LanchasterTimeToWin(float _fStartForceA, float _fStartForceB,
 		return 0;
 	}
 
-	_fTimeToWin = 1.0 / (2.0 * sqrt(_fKillRateA * _fKillRateB)) *
+	// store the result so we can catch division by 0
+	_devisor = (2.0 * sqrt(_fKillRateA * _fKillRateB)) *
 				log ( (1.0 + _fKillFactor) / (1.0 - _fKillFactor) );
+
+	// avoid division by 0
+	if(_devisor == 0.0){
+		return 0;
+	}
+	
+	_fTimeToWin = 1.0 / _devisor;
 
 	return (int)_fTimeToWin;
 }
