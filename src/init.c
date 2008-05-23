@@ -226,7 +226,7 @@ void registerSearchPath( const char path[], unsigned int priority )
  * \brief Rebuilds the PHYSFS searchPath with mode specific subdirs
  *
  * Priority:
- * maps > mods > plain_dir > warzone.wz
+ * maps > mods > base > base.wz
  */
 BOOL rebuildSearchPath( searchPathMode mode, BOOL force )
 {
@@ -271,12 +271,12 @@ BOOL rebuildSearchPath( searchPathMode mode, BOOL force )
 					strlcat(tmpstr, "mp.wz", sizeof(tmpstr));
 					PHYSFS_removeFromSearchPath( tmpstr );
 
-					// Remove plain dir
-					PHYSFS_removeFromSearchPath( curSearchPath->path );
-
-					// Remove warzone.wz
+					// Remove base files 
 					strlcpy(tmpstr, curSearchPath->path, sizeof(tmpstr));
-					strlcat(tmpstr, "warzone.wz", sizeof(tmpstr));
+					strlcat(tmpstr, "base", sizeof(tmpstr));
+					PHYSFS_removeFromSearchPath( tmpstr );
+					strlcpy(tmpstr, curSearchPath->path, sizeof(tmpstr));
+					strlcat(tmpstr, "base.wz", sizeof(tmpstr));
 					PHYSFS_removeFromSearchPath( tmpstr );
 
 					curSearchPath = curSearchPath->higherPriority;
@@ -299,12 +299,12 @@ BOOL rebuildSearchPath( searchPathMode mode, BOOL force )
 					addSubdirs( curSearchPath->path, "mods/campaign/autoload", PHYSFS_APPEND, NULL );
 					PHYSFS_removeFromSearchPath( curSearchPath->path );
 
-					// Add plain dir
-					PHYSFS_addToSearchPath( curSearchPath->path, PHYSFS_APPEND );
-
-					// Add warzone.wz
+					// Add base files
 					strlcpy(tmpstr, curSearchPath->path, sizeof(tmpstr));
-					strlcat(tmpstr, "warzone.wz", sizeof(tmpstr));
+					strlcat(tmpstr, "base", sizeof(tmpstr));
+					PHYSFS_addToSearchPath( tmpstr, PHYSFS_APPEND );
+					strlcpy(tmpstr, curSearchPath->path, sizeof(tmpstr));
+					strlcat(tmpstr, "base.wz", sizeof(tmpstr));
 					PHYSFS_addToSearchPath( tmpstr, PHYSFS_APPEND );
 
 					curSearchPath = curSearchPath->higherPriority;
@@ -335,12 +335,12 @@ BOOL rebuildSearchPath( searchPathMode mode, BOOL force )
 					strlcat( tmpstr, "mp.wz", sizeof(tmpstr));
 					PHYSFS_addToSearchPath( tmpstr, PHYSFS_APPEND );
 
-					// Add plain dir
-					PHYSFS_addToSearchPath( curSearchPath->path, PHYSFS_APPEND );
-
-					// Add warzone.wz
+					// Add base files
 					strlcpy(tmpstr, curSearchPath->path, sizeof(tmpstr));
-					strlcat(tmpstr, "warzone.wz", sizeof(tmpstr));
+					strlcat(tmpstr, "base", sizeof(tmpstr));
+					PHYSFS_addToSearchPath( tmpstr, PHYSFS_APPEND );
+					strlcpy(tmpstr, curSearchPath->path, sizeof(tmpstr));
+					strlcat(tmpstr, "base.wz", sizeof(tmpstr));
 					PHYSFS_addToSearchPath( tmpstr, PHYSFS_APPEND );
 
 					curSearchPath = curSearchPath->higherPriority;

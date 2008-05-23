@@ -148,7 +148,7 @@ Section $(TEXT_SecBase) SecBase
 
   ; Data files
   File "..\..\data\mp.wz"
-  File "..\..\data\warzone.wz"
+  File "..\..\data\base.wz"
 
   ; Information/documentation files
   File "/oname=ChangeLog.txt" "..\..\ChangeLog"
@@ -415,7 +415,7 @@ Section "Uninstall"
   Delete "$INSTDIR\dbghelp.dll.license.txt"
   Delete "$INSTDIR\dbghelp.dll"
 
-  Delete "$INSTDIR\warzone.wz"
+  Delete "$INSTDIR\base.wz"
   Delete "$INSTDIR\mp.wz"
 
   Delete "$INSTDIR\Readme.en.txt"

@@ -6,7 +6,7 @@ BASELIST = anims audio components effects features tagdefinitions \
 PATCHLIST = addon.lev anims components effects \
 	messages multiplay stats structs wrf
 
-BASEARCHIVE=warzone.wz
+BASEARCHIVE=base.wz
 PATCHARCHIVE=mp.wz
 
 CLEANFILES=$(BASEARCHIVE) $(PATCHARCHIVE)
@@ -14,8 +14,8 @@ CLEANFILES=$(BASEARCHIVE) $(PATCHARCHIVE)
 data: $(BASEARCHIVE) $(PATCHARCHIVE)
 	$(MAKE) $(AM_MAKEFLAGS) -C mods data
 
-$(BASEARCHIVE): $(BASELIST)
-	(cd $(srcdir) && zip -ru0 $(abs_builddir)/$@ $(BASELIST) -x *svn*)
+$(BASEARCHIVE): $(BASELIST:%=base/%)
+	(cd $(srcdir)/base && zip -ru0 $(abs_builddir)/$@ $(BASELIST) -x *svn*)
 	zip -T $@
 
 $(PATCHARCHIVE): $(PATCHLIST:%=mp/%)

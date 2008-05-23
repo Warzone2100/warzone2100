@@ -9,7 +9,7 @@ BASELIST = anims audio components effects features tagdefinitions \
 PATCHLIST = addon.lev anims components effects \
 	messages multiplay stats structs wrf
 
-BASEARCHIVE=warzone.wz
+BASEARCHIVE=base.wz
 PATCHARCHIVE=mp.wz
 
 all:
@@ -20,8 +20,8 @@ endif
 $(SUBDIRS):
 	$(MAKE) -f Makefile.raw -C $@ $(MAKECMDGOALS)
 
-$(BASEARCHIVE): $(BASELIST)
-	zip -ru0 $@ $(BASELIST) -x *svn*
+$(BASEARCHIVE): $(BASELIST:%=base/%)
+	cd base && zip -ru0 $@ $(BASELIST) -x *svn*
 	zip -T $@
 
 $(PATCHARCHIVE): $(PATCHLIST:%=mp/%)

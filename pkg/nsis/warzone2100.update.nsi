@@ -153,9 +153,9 @@ Section $(TEXT_SecBase) SecBase
 
   ; Data files
 ;  File "..\..\data\mp.wz"
-;  File "..\..\data\warzone.wz"
+;  File "..\..\data\base.wz"
   !insertmacro VPatchFile "mp.wz.vpatch" "$INSTDIR\mp.wz" "$INSTDIR\mp.wz.tmp"
-  !insertmacro VPatchFile "warzone.wz.vpatch" "$INSTDIR\warzone.wz" "$INSTDIR\warzone.wz.tmp"
+  !insertmacro VPatchFile "base.wz.vpatch" "$INSTDIR\base.wz" "$INSTDIR\base.wz.tmp"
 
   ; Information/documentation files
   File "/oname=ChangeLog.txt" "..\..\ChangeLog"
@@ -321,7 +321,7 @@ Section "Uninstall"
   Delete "$INSTDIR\dbghelp.dll.license.txt"
   Delete "$INSTDIR\dbghelp.dll"
 
-  Delete "$INSTDIR\warzone.wz"
+  Delete "$INSTDIR\base.wz"
   Delete "$INSTDIR\mp.wz"
 
   Delete "$INSTDIR\Readme.txt"
