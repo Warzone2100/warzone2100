@@ -541,6 +541,10 @@ static 	FP_NODE		*psNearest, *psRoute;
 			{
 				ASSERT(!"the open and closed lists are fried/wrong", "fpathAStarRoute: the open and closed lists are f***ed");
 			}
+			if (psFound)
+			{
+				psFound->est = (SWORD)fpathEstimate(x,y, tileFX, tileFY);
+			}
 		}
 
 		// add the current point to the closed nodes
