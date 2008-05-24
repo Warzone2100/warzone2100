@@ -640,8 +640,8 @@ static void proj_InFlightDirectFunc( PROJECTILE *psProj )
 	/* we want a delay between Las-Sats firing and actually hitting in multiPlayer
 	magic number but that's how long the audio countdown message lasts! */
 	const unsigned int LAS_SAT_DELAY = 8;
-	unsigned int timeSoFar;
-	unsigned int distancePercent; /* How far we are 0..100 */
+	int timeSoFar;
+	int distancePercent; /* How far we are 0..100 */
 	float distanceRatio; /* How far we are, 1.0==at target */
 	float distanceExtensionFactor; /* Extended lifespan */
 	Vector3i move;
@@ -652,11 +652,11 @@ static void proj_InFlightDirectFunc( PROJECTILE *psProj )
 
 	CHECK_PROJECTILE(psProj);
 
+	timeSoFar = gameTime - psProj->born;
+
 	psStats = psProj->psWStats;
 	ASSERT( psStats != NULL,
 		"proj_InFlightDirectFunc: Invalid weapon stats pointer" );
-
-	timeSoFar = gameTime - psProj->born;
 
 	/* we want a delay between Las-Sats firing and actually hitting in multiPlayer
 	magic number but that's how long the audio countdown message lasts! */
@@ -665,6 +665,41 @@ static void proj_InFlightDirectFunc( PROJECTILE *psProj )
 	{
 		return;
     }
+
+	/* Calculate extended lifespan where appropriate */
+	switch (psStats->weaponSubClass)
+	{
+		case WSC_MGUN:
+		case WSC_COMMAND:
+			distanceExtensionFactor = 1.2f;
+			break;
+		case WSC_CANNON:
+		case WSC_BOMB:
+		case WSC_ELECTRONIC:
+		case WSC_EMP:
+		case WSC_FLAME:
+		case WSC_ENERGY:
+		case WSC_GAUSS:
+			distanceExtensionFactor = 1.5f;
+			break;
+		case WSC_AAGUN: // No extended distance
+			distanceExtensionFactor = 1.0f;
+			break;
+		case WSC_ROCKET:
+		case WSC_MISSILE:
+		case WSC_SLOWROCKET:
+		case WSC_SLOWMISSILE:
+			bMissile = true; // Take the same extended targetDistance as artillery
+		case WSC_COUNTER:
+		case WSC_MORTARS:
+		case WSC_HOWITZERS:
+		case WSC_LAS_SAT:
+			distanceExtensionFactor = 1.5f;
+			break;
+		default:
+			// NUM_WEAPON_SUBCLASS and INVALID_SUBCLASS
+			break;
+	}
 
 	/* Do movement */
 	{
@@ -708,7 +743,7 @@ static void proj_InFlightDirectFunc( PROJECTILE *psProj )
 			{
 				psProj->state = PROJ_IMPACT;
 				setProjectileDestination(psProj, NULL);
-				debug( LOG_NEVER, "**** projectile off map - removed ****\n" );
+				debug(LOG_NEVER, "**** projectile(%i) off map - removed ****\n", psProj->id);
 				return;
 			}
 
@@ -717,41 +752,7 @@ static void proj_InFlightDirectFunc( PROJECTILE *psProj )
 		}
 	}
 
-	// Calculate extended lifespan where appropriate
-	switch (psStats->weaponSubClass)
-	{
-		case WSC_MGUN:
-		case WSC_COMMAND:
-			distanceExtensionFactor = 1.2f;
-			break;
-		case WSC_CANNON:
-		case WSC_BOMB:
-		case WSC_ELECTRONIC:
-		case WSC_EMP:
-		case WSC_FLAME:
-		case WSC_ENERGY:
-		case WSC_GAUSS:
-			distanceExtensionFactor = 1.5f;
-			break;
-		case WSC_AAGUN: // No extended distance
-			distanceExtensionFactor = 1.0f;
-			break;
-		case WSC_ROCKET:
-		case WSC_MISSILE:
-		case WSC_SLOWROCKET:
-		case WSC_SLOWMISSILE:
-			bMissile = true; // Take the same extended targetDistance as artillery
-		case WSC_COUNTER:
-		case WSC_MORTARS:
-		case WSC_HOWITZERS:
-		case WSC_LAS_SAT:
-			distanceExtensionFactor = 1.5f;
-			break;
-		default:
-			// NUM_WEAPON_SUBCLASS and INVALID_SUBCLASS
-			break;
-	}
-
+	/* Check nearby objects for possible collisions */
 	for (i = 0; i < numProjNaybors; i++)
 	{
 		BASE_OBJECT *psTempObj = asProjNaybors[i].psObj;
@@ -801,6 +802,7 @@ static void proj_InFlightDirectFunc( PROJECTILE *psProj )
 			continue;
 		}
 
+		/* Actual collision test */
 		{
 			// FIXME HACK Needed since we got those ugly Vector3uw floating around in BASE_OBJECT...
 			Vector3i
@@ -837,7 +839,7 @@ static void proj_InFlightDirectFunc( PROJECTILE *psProj )
 					newDest.x = clip(newDest.x, 0, world_coord(mapWidth - 1));
 					newDest.y = clip(newDest.y, 0, world_coord(mapHeight - 1));
 
-					//Watermelon:just assume we damaged the chosen target
+					// Assume we damaged the chosen target
 					setProjectileDamaged(psProj, psTempObj);
 
 					proj_SendProjectile( &asWeap, (BASE_OBJECT*)psProj, psProj->player, newDest, NULL, true, -1 );
@@ -862,13 +864,6 @@ static void proj_InFlightDirectFunc( PROJECTILE *psProj )
 	/* Paint effects if visible */
 	if ( gfxVisible(psProj) )
 	{
-		/* add smoke trail to indirect weapons firing directly */
-		if( !proj_Direct(psStats) && gfxVisible(psProj))
-		{
-			Vector3i pos = { psProj->pos.x, psProj->pos.z+8, psProj->pos.y };
-			addEffect(&pos,EFFECT_SMOKE,SMOKE_TYPE_TRAIL,false,NULL,0);
-		}
-
 		switch (psStats->weaponSubClass)
 		{
 			case WSC_FLAME:
@@ -894,7 +889,13 @@ static void proj_InFlightDirectFunc( PROJECTILE *psProj )
 				addEffect(&pos,EFFECT_SMOKE,SMOKE_TYPE_TRAIL,false,NULL,0);
 			} break;
 			default:
-				/* No effect */
+				/* add smoke trail to indirect weapons firing directly */
+				if (!proj_Direct(psStats))
+				{
+					Vector3i pos = { psProj->pos.x, psProj->pos.z+4, psProj->pos.y };
+					addEffect(&pos, EFFECT_SMOKE, SMOKE_TYPE_TRAIL, false, NULL, 0);
+				}
+				/* Otherwise no effect */
 				break;
 		}
 	}
