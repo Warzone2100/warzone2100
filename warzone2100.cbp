@@ -2034,17 +2034,6 @@
 			<Option target="DBGWindows" />
 			<Option target="NDBGWindows" />
 		</Unit>
-		<Unit filename="src/level_parser.y">
-			<Option compilerVar="CC" />
-			<Option compile="1" />
-			<Option link="1" />
-			<Option weight="10" />
-			<Option compiler="gcc" use="1" buildCommand="bison -y -d -osrc/level_parser.tab.c $file\n$compiler $options $includes -c src/level_parser.tab.c -o $object" />
-			<Option target="DBGUnix" />
-			<Option target="NDBGUnix" />
-			<Option target="DBGWindows" />
-			<Option target="NDBGWindows" />
-		</Unit>
 		<Unit filename="src/levelint.h">
 			<Option target="DBGUnix" />
 			<Option target="NDBGUnix" />

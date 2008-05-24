@@ -8,8 +8,8 @@ AM_CPPFLAGS = -DYY_NO_INPUT $(SDL_CFLAGS) $(SDL_NET_CFLAGS) $(PHYSFS_CFLAGS) $(P
 AM_CFLAGS = $(WZ_CFLAGS)
 AM_LFLAGS = $(FLEX_FLAGS)
 AM_YFLAGS = -d
-BUILT_SOURCES = level_parser.tab.c level_parser.tab.h level_lexer.lex.c scriptvals_lexer.lex.c scriptvals_parser.tab.c scriptvals_parser.tab.h
-CLEANFILES = level_parser.tab.c level_parser.tab.h level_lexer.lex.c scriptvals_lexer.lex.c scriptvals_parser.tab.c scriptvals_parser.tab.h
+BUILT_SOURCES = level_lexer.lex.c scriptvals_lexer.lex.c scriptvals_parser.tab.c scriptvals_parser.tab.h
+CLEANFILES = level_lexer.lex.c scriptvals_lexer.lex.c scriptvals_parser.tab.c scriptvals_parser.tab.h
 
 bin_PROGRAMS = warzone2100
 noinst_HEADERS = action.h advvis.h ai.h aiexperience.h anim_id.h \
@@ -32,7 +32,7 @@ noinst_HEADERS = action.h advvis.h ai.h aiexperience.h anim_id.h \
 	structure.h structuredef.h target.h text.h texture.h transporter.h visibility.h \
 	warcam.h warzoneconfig.h weapondef.h main.h wrappers.h
 
-warzone2100_SOURCES = scriptvals_parser.tab.c scriptvals_lexer.lex.c level_parser.tab.c \
+warzone2100_SOURCES = scriptvals_parser.tab.c scriptvals_lexer.lex.c \
 	level_lexer.lex.c ai.c aiexperience.c astar.c action.c advvis.c atmos.c bridge.c \
 	cheat.c cluster.c cmddroid.c combat.c component.c console.c \
 	data.c design.c difficulty.c display.c droid.c e3demo.c \

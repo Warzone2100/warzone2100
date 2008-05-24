@@ -44,6 +44,13 @@
 #include "lib/script/script.h"
 #include "scripttabs.h"
 #include "research.h"
+#include "lib/framework/lexer_input.h"
+
+extern int lev_get_lineno(void);
+extern char* lev_get_text(void);
+extern int lev_lex(void);
+extern void lev_set_extra(YY_EXTRA_TYPE user_defined);
+extern int lev_lex_destroy(void);
 
 // block ID number start for the current level data (as opposed to a dataset)
 #define CURRENT_DATAID		LEVEL_MAXFILES
@@ -60,7 +67,24 @@ static LEVEL_DATASET	*psCurrLevel = NULL;
 // dummy level data for single WRF loads
 static LEVEL_DATASET	sSingleWRF = { 0, 0, 0, 0, 0, { 0 }, 0, 0, 0 };
 
+// return values from the lexer
+char *pLevToken;
+SDWORD levVal;
 static SDWORD levelLoadType;
+// modes for the parser
+enum
+{
+	LP_START,		// no input received
+	LP_LEVEL,		// level token received
+	LP_LEVELDONE,	// defined a level waiting for players/type/data
+	LP_PLAYERS,		// players token received
+	LP_TYPE,		// type token received
+	LP_DATASET,		// dataset token received
+	LP_WAITDATA,	// defining level data, waiting for data token
+	LP_DATA,		// data token received
+	LP_GAME,		// game token received
+};
+
 
 // initialise the level system
 BOOL levInitialise(void)
@@ -101,6 +125,13 @@ void levShutDown(void)
 	psLevels = NULL;
 }
 
+
+// error report function for the level parser
+void lev_error(const char* msg)
+{
+	ASSERT(!"level parse error", "Level File parse error: `%s` at line `%d` text `%s`", msg, lev_get_lineno(), lev_get_text());
+}
+
 /** Find a level dataset with the given name.
  *  @param name the name of the dataset to search for.
  *  @return a dataset with associated with the given @c name, or NULL if none
@@ -121,6 +152,294 @@ LEVEL_DATASET* levFindDataSet(const char* name)
 
 	return NULL;
 }
+
+// parse a level description data file
+BOOL levParse(const char* buffer, size_t size, searchPathMode datadir)
+{
+	lexerinput_t input;
+	SDWORD			token, state, currData=0;
+	LEVEL_DATASET	*psDataSet = NULL;
+
+	input.type = LEXINPUT_BUFFER;
+	input.input.buffer.begin = buffer;
+	input.input.buffer.end = &buffer[size];
+
+	lev_set_extra(&input);
+
+	state = LP_START;
+	for (token = lev_lex(); token != 0; token = lev_lex())
+	{
+		switch (token)
+		{
+		case LTK_LEVEL:
+		case LTK_CAMPAIGN:
+		case LTK_CAMSTART:
+		case LTK_CAMCHANGE:
+		case LTK_EXPAND:
+		case LTK_BETWEEN:
+		case LTK_MKEEP:
+		case LTK_MCLEAR:
+		case LTK_EXPAND_LIMBO:
+		case LTK_MKEEP_LIMBO:
+			if (state == LP_START || state == LP_WAITDATA)
+			{
+				// start a new level data set
+				psDataSet = (LEVEL_DATASET*)malloc(sizeof(LEVEL_DATASET));
+				if (!psDataSet)
+				{
+					debug(LOG_ERROR, "Out of memory");
+					abort();
+					return false;
+				}
+				memset(psDataSet, 0, sizeof(LEVEL_DATASET));
+				psDataSet->players = 1;
+				psDataSet->game = -1;
+				psDataSet->dataDir = datadir;
+				LIST_ADDEND(psLevels, psDataSet, LEVEL_DATASET);
+				currData = 0;
+
+				// set the dataset type
+				switch (token)
+				{
+				case LTK_LEVEL:
+					psDataSet->type = LDS_COMPLETE;
+					break;
+				case LTK_CAMPAIGN:
+					psDataSet->type = LDS_CAMPAIGN;
+					break;
+				case LTK_CAMSTART:
+					psDataSet->type = LDS_CAMSTART;
+					break;
+				case LTK_BETWEEN:
+					psDataSet->type = LDS_BETWEEN;
+					break;
+				case LTK_MKEEP:
+					psDataSet->type = LDS_MKEEP;
+					break;
+				case LTK_CAMCHANGE:
+					psDataSet->type = LDS_CAMCHANGE;
+					break;
+				case LTK_EXPAND:
+					psDataSet->type = LDS_EXPAND;
+					break;
+				case LTK_MCLEAR:
+					psDataSet->type = LDS_MCLEAR;
+					break;
+				case LTK_EXPAND_LIMBO:
+					psDataSet->type = LDS_EXPAND_LIMBO;
+					break;
+				case LTK_MKEEP_LIMBO:
+					psDataSet->type = LDS_MKEEP_LIMBO;
+					break;
+				default:
+					ASSERT( false,"eh?" );
+					break;
+				}
+			}
+			else
+			{
+				lev_error("Syntax Error");
+				return false;
+			}
+			state = LP_LEVEL;
+			break;
+		case LTK_PLAYERS:
+			if (state == LP_LEVELDONE &&
+				(psDataSet->type == LDS_COMPLETE || psDataSet->type >= LDS_MULTI_TYPE_START))
+			{
+				state = LP_PLAYERS;
+			}
+			else
+			{
+				lev_error("Syntax Error");
+				return false;
+			}
+			break;
+		case LTK_TYPE:
+			if (state == LP_LEVELDONE && psDataSet->type == LDS_COMPLETE)
+			{
+				state = LP_TYPE;
+			}
+			else
+			{
+				lev_error("Syntax Error");
+				return false;
+			}
+			break;
+		case LTK_INTEGER:
+			if (state == LP_PLAYERS)
+			{
+				psDataSet->players = (SWORD)levVal;
+			}
+			else if (state == LP_TYPE)
+			{
+				if (levVal < LDS_MULTI_TYPE_START)
+				{
+					lev_error("invalid type number");
+					return false;
+				}
+
+				psDataSet->type = (SWORD)levVal;
+			}
+			else
+			{
+				lev_error("Syntax Error");
+				return false;
+			}
+			state = LP_LEVELDONE;
+			break;
+		case LTK_DATASET:
+			if (state == LP_LEVELDONE && psDataSet->type != LDS_COMPLETE)
+			{
+				state = LP_DATASET;
+			}
+			else
+			{
+				lev_error("Syntax Error");
+				return false;
+			}
+			break;
+		case LTK_DATA:
+			if (state == LP_WAITDATA)
+			{
+				state = LP_DATA;
+			}
+			else if (state == LP_LEVELDONE)
+			{
+				if (psDataSet->type == LDS_CAMSTART ||
+					psDataSet->type == LDS_MKEEP
+					||psDataSet->type == LDS_CAMCHANGE ||
+					psDataSet->type == LDS_EXPAND ||
+					psDataSet->type == LDS_MCLEAR ||
+					psDataSet->type == LDS_EXPAND_LIMBO ||
+					psDataSet->type == LDS_MKEEP_LIMBO
+					)
+				{
+					lev_error("Missing dataset command");
+					return false;
+				}
+				state = LP_DATA;
+			}
+			else
+			{
+				lev_error("Syntax Error");
+				return false;
+			}
+			break;
+		case LTK_GAME:
+			if ((state == LP_WAITDATA || state == LP_LEVELDONE) &&
+				psDataSet->game == -1 && psDataSet->type != LDS_CAMPAIGN)
+			{
+				state = LP_GAME;
+			}
+			else
+			{
+				lev_error("Syntax Error");
+				return false;
+			}
+			break;
+		case LTK_IDENT:
+			if (state == LP_LEVEL)
+			{
+				if (psDataSet->type == LDS_CAMCHANGE)
+				{
+					// This is a campaign change dataset, we need to find the full data set.
+					LEVEL_DATASET * const psFoundData = levFindDataSet(pLevToken);
+
+					if (psFoundData == NULL)
+					{
+						lev_error("Cannot find full data set for camchange");
+						return false;
+					}
+
+					if (psFoundData->type != LDS_CAMSTART)
+					{
+						lev_error("Invalid data set name for cam change");
+						return false;
+					}
+					psFoundData->psChange = psDataSet;
+				}
+				// store the level name
+				psDataSet->pName = strdup(pLevToken);
+				if (psDataSet->pName == NULL)
+				{
+					debug(LOG_ERROR, "Out of memory!");
+					abort();
+					return false;
+				}
+
+				state = LP_LEVELDONE;
+			}
+			else if (state == LP_DATASET)
+			{
+				// find the dataset
+				psDataSet->psBaseData = levFindDataSet(pLevToken);
+
+				if (psDataSet->psBaseData == NULL)
+				{
+					lev_error("Unknown dataset");
+					return false;
+				}
+				state = LP_WAITDATA;
+			}
+			else
+			{
+				lev_error("Syntax Error");
+				return false;
+			}
+			break;
+		case LTK_STRING:
+			if (state == LP_DATA || state == LP_GAME)
+			{
+				if (currData >= LEVEL_MAXFILES)
+				{
+					lev_error("Too many data files");
+					return false;
+				}
+
+				// note the game index if necessary
+				if (state == LP_GAME)
+				{
+					psDataSet->game = (SWORD)currData;
+				}
+
+				// store the data name
+				psDataSet->apDataFiles[currData] = strdup(pLevToken);
+				if (psDataSet->apDataFiles[currData] == NULL)
+				{
+					debug(LOG_ERROR, "Out of memory!");
+					abort();
+					return false;
+				}
+
+				resToLower(pLevToken);
+
+				currData += 1;
+				state = LP_WAITDATA;
+			}
+			else
+			{
+				lev_error("Syntax Error");
+				return false;
+			}
+			break;
+		default:
+			lev_error("Unexpected token");
+			break;
+		}
+	}
+
+	lev_lex_destroy();
+
+	if (state != LP_WAITDATA || currData == 0)
+	{
+		lev_error("Unexpected end of file");
+		return false;
+	}
+
+	return true;
+}
+
 
 // free the data for the current mission
 BOOL levReleaseMissionData(void)
