@@ -677,11 +677,15 @@ void eventRemoveContext(SCRIPT_CONTEXT *psContext)
 		psNChunk = psCChunk->psNext;
 		for(i=0;i < CONTEXT_VALS ; i++)
 		{
-			if(psCChunk->asVals[i].type == VAL_STRING && psCChunk->asVals[i].v.sval)
+			if (psCChunk->asVals[i].type == VAL_STRING && psCChunk->asVals[i].v.sval)
+			{
 				free(psCChunk->asVals[i].v.sval);
+				psCChunk->asVals[i].v.sval = NULL;
+			}
 		}
 		free(psCChunk);
 	}
+	psContext->psGlobals = NULL;
 
 	// Remove it from the context list
 	if (psContext == psContList)
