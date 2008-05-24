@@ -6,7 +6,6 @@
 	ProjectGUID="{BDDCCB7B-F4F7-4768-A1C3-AE20E9F5FDFC}"
 	RootNamespace="Warzone2100"
 	Keyword="Win32Proj"
-	TargetFrameworkVersion="131072"
 	>
 	<Platforms>
 		<Platform
@@ -418,10 +417,6 @@
 				</File>
 				<File
 					RelativePath="..\src\level_lexer.lex.c"
-					>
-				</File>
-				<File
-					RelativePath="..\src\level_parser.tab.c"
 					>
 				</File>
 				<File
@@ -912,14 +907,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\src\level_parser.tab.h"
-				>
-			</File>
-			<File
-				RelativePath=".\level_parser.tab.h"
-				>
-			</File>
-			<File
 				RelativePath="..\src\levelint.h"
 				>
 			</File>
@@ -1231,10 +1218,6 @@
 			>
 			<File
 				RelativePath="..\src\level_lexer.l"
-				>
-			</File>
-			<File
-				RelativePath="..\src\level_parser.y"
 				>
 			</File>
 			<File
