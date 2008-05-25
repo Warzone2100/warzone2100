@@ -38,6 +38,7 @@
 #include "lib/ivis_common/pieclip.h"
 #include "lib/ivis_common/piefunc.h"
 #include "lib/ivis_common/piepalette.h"
+#include "lib/ivis_common/tex.h"
 #include "piematrix.h"
 #include "screen.h"
 
@@ -288,13 +289,15 @@ void pie_UploadDisplayBuffer()
 
 BOOL pie_InitRadar(void)
 {
-	glGenTextures(1, &radarTexture);
+	radarTexture = _TEX_INDEX;
+	glGenTextures(1, (GLuint *) &_TEX_PAGE[_TEX_INDEX].id);
+	_TEX_INDEX++;
 	return true;
 }
 
 BOOL pie_ShutdownRadar(void)
 {
-	glDeleteTextures(1, &radarTexture);
+	glDeleteTextures(1, &_TEX_PAGE[radarTexture].id);
 	return true;
 }
 
