@@ -184,10 +184,10 @@ void registerSearchPath( const char path[], unsigned int priority )
 {
 	wzSearchPath * curSearchPath = searchPathRegistry, * tmpSearchPath = NULL;
 
-	tmpSearchPath = (wzSearchPath*)malloc(sizeof(wzSearchPath));
-	strcpy( tmpSearchPath->path, path );
-	if( path[strlen(path)-1] != *PHYSFS_getDirSeparator() )
-		strcat( tmpSearchPath->path, PHYSFS_getDirSeparator() );
+	tmpSearchPath = (wzSearchPath*)malloc(sizeof(*tmpSearchPath));
+	sstrcpy(tmpSearchPath->path, path);
+	if (path[strlen(path)-1] != *PHYSFS_getDirSeparator())
+		sstrcat(tmpSearchPath->path, PHYSFS_getDirSeparator());
 	tmpSearchPath->priority = priority;
 
 	debug( LOG_WZ, "registerSearchPath: Registering %s at priority %i", path, priority );
@@ -264,19 +264,19 @@ BOOL rebuildSearchPath( searchPathMode mode, BOOL force )
 					removeSubdirs( curSearchPath->path, "mods/multiplay/autoload", NULL );
 
 					// Remove multiplay patches
-					strlcpy(tmpstr, curSearchPath->path, sizeof(tmpstr));
-					strlcat(tmpstr, "mp", sizeof(tmpstr));
+					sstrcpy(tmpstr, curSearchPath->path);
+					sstrcat(tmpstr, "mp");
 					PHYSFS_removeFromSearchPath( tmpstr );
-					strlcpy(tmpstr, curSearchPath->path, sizeof(tmpstr));
-					strlcat(tmpstr, "mp.wz", sizeof(tmpstr));
+					sstrcpy(tmpstr, curSearchPath->path);
+					sstrcat(tmpstr, "mp.wz");
 					PHYSFS_removeFromSearchPath( tmpstr );
 
 					// Remove base files 
-					strlcpy(tmpstr, curSearchPath->path, sizeof(tmpstr));
-					strlcat(tmpstr, "base", sizeof(tmpstr));
+					sstrcpy(tmpstr, curSearchPath->path);
+					sstrcat(tmpstr, "base");
 					PHYSFS_removeFromSearchPath( tmpstr );
-					strlcpy(tmpstr, curSearchPath->path, sizeof(tmpstr));
-					strlcat(tmpstr, "base.wz", sizeof(tmpstr));
+					sstrcpy(tmpstr, curSearchPath->path);
+					sstrcat(tmpstr, "base.wz");
 					PHYSFS_removeFromSearchPath( tmpstr );
 
 					curSearchPath = curSearchPath->higherPriority;
@@ -300,11 +300,11 @@ BOOL rebuildSearchPath( searchPathMode mode, BOOL force )
 					PHYSFS_removeFromSearchPath( curSearchPath->path );
 
 					// Add base files
-					strlcpy(tmpstr, curSearchPath->path, sizeof(tmpstr));
-					strlcat(tmpstr, "base", sizeof(tmpstr));
+					sstrcpy(tmpstr, curSearchPath->path);
+					sstrcat(tmpstr, "base");
 					PHYSFS_addToSearchPath( tmpstr, PHYSFS_APPEND );
-					strlcpy(tmpstr, curSearchPath->path, sizeof(tmpstr));
-					strlcat(tmpstr, "base.wz", sizeof(tmpstr));
+					sstrcpy(tmpstr, curSearchPath->path);
+					sstrcat(tmpstr, "base.wz");
 					PHYSFS_addToSearchPath( tmpstr, PHYSFS_APPEND );
 
 					curSearchPath = curSearchPath->higherPriority;
@@ -328,19 +328,19 @@ BOOL rebuildSearchPath( searchPathMode mode, BOOL force )
 					PHYSFS_removeFromSearchPath( curSearchPath->path );
 
 					// Add multiplay patches
-					strlcpy(tmpstr, curSearchPath->path, sizeof(tmpstr));
-					strlcat(tmpstr, "mp", sizeof(tmpstr));
+					sstrcpy(tmpstr, curSearchPath->path);
+					sstrcat(tmpstr, "mp");
 					PHYSFS_addToSearchPath( tmpstr, PHYSFS_APPEND );
-					strlcpy( tmpstr, curSearchPath->path, sizeof(tmpstr));
-					strlcat( tmpstr, "mp.wz", sizeof(tmpstr));
+					sstrcpy(tmpstr, curSearchPath->path);
+					sstrcat(tmpstr, "mp.wz");
 					PHYSFS_addToSearchPath( tmpstr, PHYSFS_APPEND );
 
 					// Add base files
-					strlcpy(tmpstr, curSearchPath->path, sizeof(tmpstr));
-					strlcat(tmpstr, "base", sizeof(tmpstr));
+					sstrcpy(tmpstr, curSearchPath->path);
+					sstrcat(tmpstr, "base");
 					PHYSFS_addToSearchPath( tmpstr, PHYSFS_APPEND );
-					strlcpy(tmpstr, curSearchPath->path, sizeof(tmpstr));
-					strlcat(tmpstr, "base.wz", sizeof(tmpstr));
+					sstrcpy(tmpstr, curSearchPath->path);
+					sstrcat(tmpstr, "base.wz");
 					PHYSFS_addToSearchPath( tmpstr, PHYSFS_APPEND );
 
 					curSearchPath = curSearchPath->higherPriority;
