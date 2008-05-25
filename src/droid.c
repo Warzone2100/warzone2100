@@ -230,7 +230,7 @@ BOOL droidCheckReferences(DROID *psVictimDroid)
 			{
 				if ((DROID *)psStruct->psTarget[i] == psVictimDroid)
 				{
-#ifdef NDEBUG
+#ifndef DEBUG
 					debug(LOG_ERROR, "droidCheckReferences: Illegal reference to droid");
 #else
 					ASSERT(!"Illegal reference to droid", "Illegal reference to droid from %s line %d",
@@ -244,7 +244,7 @@ BOOL droidCheckReferences(DROID *psVictimDroid)
 		{
 			if ((DROID *)psDroid->psTarget == psVictimDroid && psVictimDroid != psDroid)
 			{
-#ifdef NDEBUG
+#ifndef DEBUG
 				debug(LOG_ERROR, "droidCheckReferences: Illegal reference to droid");
 #else
 				ASSERT(!"Illegal reference to droid", "Illegal reference to droid from %s line %d",
@@ -256,7 +256,7 @@ BOOL droidCheckReferences(DROID *psVictimDroid)
 			{
 				if ((DROID *)psDroid->psActionTarget[i] == psVictimDroid && psVictimDroid != psDroid)
 				{
-#ifdef NDEBUG
+#ifndef DEBUG
 					debug(LOG_ERROR, "droidCheckReferences: Illegal action reference to droid");
 #else
 					ASSERT(!"Illegal reference to droid", "Illegal action reference to droid from %s line %d",
