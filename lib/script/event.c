@@ -289,21 +289,19 @@ BOOL eventInitValueFuncs(SDWORD maxType)
 {
 	ASSERT(asReleaseFuncs == NULL, "eventInitValueFuncs: array already initialised");
 
-	asCreateFuncs = malloc(sizeof(VAL_CREATE_FUNC) * maxType);
+	asCreateFuncs = calloc(maxType, sizeof(*asCreateFuncs));
 	if (!asCreateFuncs)
 	{
 		debug(LOG_SCRIPT, "eventInitValueFuncs: Out of memory");
 		return false;
 	}
-	asReleaseFuncs = (VAL_RELEASE_FUNC *)malloc(sizeof(VAL_RELEASE_FUNC) * maxType);
+	asReleaseFuncs = calloc(maxType, sizeof(*asReleaseFuncs));
 	if (!asReleaseFuncs)
 	{
 		debug(LOG_SCRIPT, "eventInitValueFuncs: Out of memory");
 		return false;
 	}
 
-	memset(asCreateFuncs, 0, sizeof(VAL_CREATE_FUNC) * maxType);
-	memset(asReleaseFuncs, 0, sizeof(VAL_RELEASE_FUNC) * maxType);
 	numFuncs = maxType;
 
 	return true;
@@ -350,7 +348,7 @@ BOOL eventNewContext(SCRIPT_CODE *psCode, CONTEXT_RELEASE release,
 	ASSERT(psCode != NULL, "eventNewContext: Invalid code pointer");
 
 	// Get a new context
-	psContext = malloc(sizeof(SCRIPT_CONTEXT));
+	psContext = calloc(1, sizeof(*psContext));
 	if (psContext == NULL)
 	{
 		ASSERT(false, "eventNewContext: Out of memory");

@@ -81,12 +81,12 @@ static BOOL stackNewChunk(UDWORD size)
 	else
 	{
 		/* Allocate a new chunk */
-		psCurrChunk->psNext = (STACK_CHUNK *)malloc(sizeof(STACK_CHUNK));
+		psCurrChunk->psNext = calloc(1, sizeof(*psCurrChunk->psNext));
 		if (!psCurrChunk->psNext)
 		{
 			return false;
 		}
-		psCurrChunk->psNext->aVals = (INTERP_VAL*)malloc(sizeof(INTERP_VAL) * size);
+		psCurrChunk->psNext->aVals = calloc(size, sizeof(*psCurrChunk->psNext->aVals));
 		if (!psCurrChunk->psNext->aVals)
 		{
 			free(psCurrChunk->psNext);
@@ -99,10 +99,6 @@ static BOOL stackNewChunk(UDWORD size)
 		psCurrChunk->psNext->psNext = NULL;
 		psCurrChunk = psCurrChunk->psNext;
 		currEntry = 0;
-
-		/* initialize pointers
-		   note: 0 means type == VAL_BOOL */
-		memset(psCurrChunk->psNext->aVals, 0, sizeof(INTERP_VAL) * size);
 	}
 
 	return true;
@@ -953,14 +949,14 @@ BOOL stackCastTop(INTERP_TYPE neededType)
 /* Initialise the stack */
 BOOL stackInitialise(void)
 {
-	psStackBase = (STACK_CHUNK *)malloc(sizeof(STACK_CHUNK));
+	psStackBase = calloc(1, sizeof(*psStackBase));
 	if (psStackBase == NULL)
 	{
 		debug( LOG_ERROR, "Out of memory" );
 		abort();
 		return false;
 	}
-	psStackBase->aVals = (INTERP_VAL*)malloc(sizeof(INTERP_VAL) * INIT_SIZE);
+	psStackBase->aVals = calloc(INIT_SIZE, sizeof(*psStackBase->aVals));
 	if (!psStackBase->aVals)
 	{
 		debug( LOG_ERROR, "Out of memory" );
@@ -972,10 +968,6 @@ BOOL stackInitialise(void)
 	psStackBase->psPrev = NULL;
 	psStackBase->psNext = NULL;
 	psCurrChunk = psStackBase;
-
-	/* initialize pointers
-	   note: this means type == VAL_BOOL */
-	memset(psStackBase->aVals, 0, sizeof(INTERP_VAL) * INIT_SIZE);
 
 	//string support
 	CURSTACKSTR = 0;		//initialize string 'stack'
