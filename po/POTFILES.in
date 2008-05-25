@@ -1,12 +1,12 @@
 # List of source files which contain translatable strings.
-data/messages/strings/cam1strings.txt
-data/messages/strings/cam2strings.txt
-data/messages/strings/cam3strings.txt
-data/messages/strings/genstrings.txt
-data/messages/strings/names.txt
-data/messages/strings/resstrings.txt
-data/messages/strings/scrstrings.txt
-data/messages/strings/tutstrings.txt
+data/base/messages/strings/cam1strings.txt
+data/base/messages/strings/cam2strings.txt
+data/base/messages/strings/cam3strings.txt
+data/base/messages/strings/genstrings.txt
+data/base/messages/strings/names.txt
+data/base/messages/strings/resstrings.txt
+data/base/messages/strings/scrstrings.txt
+data/base/messages/strings/tutstrings.txt
 data/mp/messages/strings/names.txt
 data/mp/messages/strings/resstrings.txt
 lib/exceptionhandler/exceptionhandler.c
@@ -20,6 +20,7 @@ lib/framework/frame.c
 lib/framework/frameresource.c
 lib/framework/i18n.c
 lib/framework/input.c
+lib/framework/lexer_input.c
 lib/framework/printf_ext.c
 lib/framework/SDL_framerate.c
 lib/framework/strnlen1.c
@@ -69,7 +70,6 @@ lib/sound/openal_track.c
 lib/sound/playlist.c
 lib/sound/track.c
 lib/sqlite3/physfs_vfs.c
-lib/sqlite3/sqlite3.c
 lib/widget/bar.c
 lib/widget/button.c
 lib/widget/editbox.c
@@ -154,6 +154,7 @@ src/objects.c
 src/objmem.c
 src/oprint.c
 src/order.c
+src/parsetest.c
 src/power.c
 src/projectile.c
 src/radar.c
