@@ -89,12 +89,12 @@ dir_line:			DIRECTORY QTEXT_T
 					if (strncmp($2, "/:", strlen("/:")) == 0)
 					{
 						// the new dir is rooted
-						strlcpy(aCurrResDir, $2, sizeof(aCurrResDir));
+						sstrcpy(aCurrResDir, $2);
 					}
 					else
 					{
-						strlcpy(aCurrResDir, aResDir, sizeof(aCurrResDir));
-						strlcat(aCurrResDir, $2, sizeof(aCurrResDir));
+						sstrcpy(aCurrResDir, aResDir);
+						sstrcat(aCurrResDir, $2);
 					}
 					if (strlen($2) > 0)
 					{

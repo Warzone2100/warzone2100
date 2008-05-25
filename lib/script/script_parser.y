@@ -4957,7 +4957,7 @@ stringexp:
 					$$ = psCurrBlock;
 
 					/* Manage string stack */
-					strlcpy(STRSTACK[CURSTACKSTR], yyvsp[0].sval, sizeof(STRSTACK[CURSTACKSTR]));
+					sstrcpy(STRSTACK[CURSTACKSTR], yyvsp[0].sval);
 
 					CURSTACKSTR = CURSTACKSTR + 1;		/* Increment 'pointer' to the top of the string stack */
 

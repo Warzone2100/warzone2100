@@ -293,15 +293,15 @@ void loadMapPreview(void)
 static void decideWRF(void)
 {
 	// try and load it from the maps directory first,
-	strlcpy(aLevelName, MultiCustomMapsPath, sizeof(aLevelName));
-	strlcat(aLevelName, game.map, sizeof(aLevelName));
-	strlcat(aLevelName, ".wrf", sizeof(aLevelName));
+	sstrcpy(aLevelName, MultiCustomMapsPath);
+	sstrcat(aLevelName, game.map);
+	sstrcat(aLevelName, ".wrf");
 	debug(LOG_WZ, "decideWRF: %s", aLevelName);
 	//if the file exists in the downloaded maps dir then use that one instead.
 	// FIXME: Try to incorporate this into physfs setup somehow for sane paths
 	if ( !PHYSFS_exists(aLevelName) )
 	{
-		strlcpy(aLevelName, game.map, sizeof(aLevelName));		// doesn't exist, must be a predefined one.
+		sstrcpy(aLevelName, game.map);		// doesn't exist, must be a predefined one.
 	}
 }
 
@@ -2411,7 +2411,7 @@ BOOL startMultiOptions(BOOL bReenter)
 			game.maxPlayers = 4;
 		}
 
-		strlcpy(game.version, buildTime, sizeof(game.version));		// note buildtime.
+		sstrcpy(game.version, buildTime);		// note buildtime.
 
 		ingame.localOptionsReceived = false;
 		if(ingame.numStructureLimits)

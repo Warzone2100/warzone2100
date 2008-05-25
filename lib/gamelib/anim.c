@@ -305,7 +305,7 @@ void anim_SetVals(char szFileName[], UWORD uwAnimID)
 
 	/* set anim vals */
 	psAnim->uwID = uwAnimID;
-	strlcpy(psAnim->szFileName, szFileName, sizeof(psAnim->szFileName));
+	sstrcpy(psAnim->szFileName, szFileName);
 }
 
 /***************************************************************************/

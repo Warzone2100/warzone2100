@@ -82,7 +82,7 @@ static inline void iV_printFontList(void)
 		char prBuffer[1024];
 		snprintf(prBuffer, sizeof(prBuffer), "Font #%d : %s ", font, (const char*)glcGetFontc(font, GLC_FAMILY));
 		prBuffer[sizeof(prBuffer) - 1] = 0;
-		strlcat(prBuffer, glcGetFontFace(font), sizeof(prBuffer));
+		sstrcat(prBuffer, glcGetFontFace(font));
 		debug(LOG_NEVER, "%s", prBuffer);
 	}
 }
@@ -514,7 +514,7 @@ int iV_DrawFormattedText(const char* String, UDWORD x, UDWORD y, UDWORD Width, U
 			FWord[i] = 0;
 
 			// And add it to the output string.
-			strlcat(FString, FWord, sizeof(FString));
+			sstrcat(FString, FWord);
 		}
 
 

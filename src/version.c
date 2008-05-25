@@ -110,7 +110,7 @@ const char* version_getSvnDate()
 
 	if (svn_date[0] == '\0')
 	{
-		strlcpy(svn_date, svn_date_cstr, sizeof(svn_date));
+		sstrcpy(svn_date, svn_date_cstr);
 	}
 
 	return svn_date;

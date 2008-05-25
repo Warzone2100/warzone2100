@@ -338,12 +338,12 @@ void pie_LoadBackDrop(SCREENTYPE screenType)
 			snprintf(backd, sizeof(backd), "texpages/bdrops/backdrop%i.png", rand() % 7); // Range: 0-6
 			break;
 		case SCREEN_MISSIONEND:
-			strlcpy(backd, "texpages/bdrops/missionend.png", sizeof(backd));
+			sstrcpy(backd, "texpages/bdrops/missionend.png");
 			break;
 
 		case SCREEN_CREDITS:
 		default:
-			strlcpy(backd, "texpages/bdrops/credits.png", sizeof(backd));
+			sstrcpy(backd, "texpages/bdrops/credits.png");
 			break;
 	}
 

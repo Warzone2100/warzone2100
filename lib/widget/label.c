@@ -80,7 +80,7 @@ W_LABEL* labelCreate(const W_LABINIT* psInit)
 
 	if (psInit->pText)
 	{
-		strlcpy(psWidget->aText, psInit->pText, sizeof(psWidget->aText));
+		sstrcpy(psWidget->aText, psInit->pText);
 	}
 	else
 	{

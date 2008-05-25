@@ -43,20 +43,20 @@ static LONG WINAPI windowsExceptionHandler(PEXCEPTION_POINTERS pExceptionInfo)
 	char miniDumpPath[PATH_MAX] = {'\0'}, resultMessage[PATH_MAX] = {'\0'};
 
 	// Write to temp dir, to support unprivileged users
-	if (!GetTempPathA( PATH_MAX, miniDumpPath ))
+	if (!GetTempPathA(sizeof(miniDumpPath), miniDumpPath))
 	{
-		strlcpy(miniDumpPath, "c:\\temp\\", sizeof(miniDumpPath));
+		sstrcpy(miniDumpPath, "c:\\temp\\");
 	}
 
 	// Append the filename
-	strlcat(miniDumpPath, "warzone2100.mdmp", sizeof(miniDumpPath));
+	strrcat(miniDumpPath, "warzone2100.mdmp");
 
 	/*
 	Alternative:
 	GetModuleFileName( NULL, miniDumpPath, MAX_PATH );
 
 	// Append extension
-	strlcat(miniDumpPath, ".mdmp", sizeof(miniDumpPath));
+	sstrcat(miniDumpPath, ".mdmp");
 	*/
 
 	if ( MessageBoxA( NULL, "Warzone crashed unexpectedly, would you like to save a diagnostic file?", applicationName, MB_YESNO ) == IDYES )
@@ -569,7 +569,7 @@ void setupExceptionHandler(const char * programCommand)
 	sysInfoValid = (uname(&sysInfo) == 0);
 
 	time_t currentTime = time(NULL);
-	strlcpy(executionDate, ctime(&currentTime), sizeof(executionDate));
+	sstrcpy(executionDate, ctime(&currentTime));
 
 	snprintf(programPID, sizeof(programPID), "%i", getpid());
 

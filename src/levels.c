@@ -603,7 +603,7 @@ BOOL levLoadData(const char* name, char *pSaveName, GAME_TYPE saveType)
 	debug(LOG_WZ, "** Data set found is %s type %d", psNewLevel->pName, (int)psNewLevel->type);
 
 	/* Keep a copy of the present level name */
-	strlcpy(currentLevelName, name, sizeof(currentLevelName));
+	sstrcpy(currentLevelName, name);
 
 	bCamChangeSaveGame = false;
 	if (pSaveName && saveType == GTYPE_SAVE_START)

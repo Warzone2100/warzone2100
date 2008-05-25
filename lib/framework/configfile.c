@@ -260,7 +260,7 @@ static BOOL registry_save( const char *filename )
 
 void setRegistryFilePath(const char* fileName)
 {
-	strlcpy(RegFilePath, fileName, sizeof(RegFilePath));
+	sstrcpy(RegFilePath, fileName);
 }
 
 ///

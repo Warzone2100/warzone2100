@@ -743,7 +743,7 @@ BOOL chatLoad(char *pData, UDWORD size)
 	parseResult = chat_parse();
 
 	/* Remember last message we parsed */
-	strlcpy(chat_msg.lastMessage, pData, sizeof(chat_msg.lastMessage));
+	sstrcpy(chat_msg.lastMessage, pData);
 
 	/* See if we were successfull parsing */
 	if (parseResult != 0)

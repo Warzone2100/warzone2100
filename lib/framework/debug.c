@@ -120,10 +120,10 @@ void debug_callback_win32debug( void ** data, const char * outputBuffer )
 {
 	char tmpStr[MAX_LEN_LOG_LINE];
 
-	strlcpy(tmpStr, outputBuffer, sizeof(tmpStr));
+	sstrcpy(tmpStr, outputBuffer);
 	if (!strchr(tmpStr, '\n'))
 	{
-		strlcat(tmpStr, "\n", sizeof(tmpStr));
+		sstrcat(tmpStr, "\n");
 	}
 
 	OutputDebugStringA( tmpStr );

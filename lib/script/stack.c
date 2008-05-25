@@ -723,7 +723,7 @@ BOOL stackBinaryOp(OPCODE opcode)
 				break;
 
 			case VAL_STRING:
-				strlcpy(tempstr1, psV1->v.sval, sizeof(tempstr1));
+				sstrcpy(tempstr1, psV1->v.sval);
 				break;
 
 			default:
@@ -748,7 +748,7 @@ BOOL stackBinaryOp(OPCODE opcode)
 				break;
 
 			case VAL_STRING:
-				strlcpy(tempstr2, psV2->v.sval, sizeof(tempstr2));
+				sstrcpy(tempstr2, psV2->v.sval);
 				break;
 
 			default:
@@ -757,7 +757,7 @@ BOOL stackBinaryOp(OPCODE opcode)
 				break;
 			}
 
-			strlcat(tempstr1, tempstr2, sizeof(tempstr1));
+			sstrcat(tempstr1, tempstr2);
 
 			strcpy(psV1->v.sval,tempstr1);		//Assign
 		}

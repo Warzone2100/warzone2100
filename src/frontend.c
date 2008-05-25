@@ -311,13 +311,13 @@ BOOL runTutorialMenu(void)
 	switch(id)
 	{
 		case FRONTEND_TUTORIAL:
-			strlcpy(aLevelName, TUTORIAL_LEVEL, sizeof(aLevelName));
+			sstrcpy(aLevelName, TUTORIAL_LEVEL);
 			changeTitleMode(STARTGAME);
 
 			break;
 
 		case FRONTEND_FASTPLAY:
-			strlcpy(aLevelName, "FASTPLAY", sizeof(aLevelName));
+			sstrcpy(aLevelName, "FASTPLAY");
 			changeTitleMode(STARTGAME);
 
 			break;
@@ -361,7 +361,7 @@ static void frontEndNewGame( void )
 {
 	switch(StartWithGame) {
 		case 1:
-			strlcpy(aLevelName, DEFAULT_LEVEL, sizeof(aLevelName));
+			sstrcpy(aLevelName, DEFAULT_LEVEL);
 			seq_ClearSeqList();
 
 			seq_AddSeqToList("cam1/c001.rpl",NULL,"cam1/c001.txa",false);
@@ -370,11 +370,11 @@ static void frontEndNewGame( void )
             break;
 
 		case 2:
-			strlcpy(aLevelName, "CAM_2A", sizeof(aLevelName));
+			sstrcpy(aLevelName, "CAM_2A");
 			break;
 
 		case 3:
-			strlcpy(aLevelName, "CAM_3A", sizeof(aLevelName));
+			sstrcpy(aLevelName, "CAM_3A");
 			break;
 	}
 
@@ -385,7 +385,7 @@ void loadOK( void )
 {
 	if(strlen(sRequestResult))
 	{
-		strlcpy(saveGameName, sRequestResult, sizeof(saveGameName));
+		sstrcpy(saveGameName, sRequestResult);
 		changeTitleMode(LOADSAVEGAME);
 	}
 }
@@ -414,7 +414,7 @@ BOOL runSinglePlayerMenu(void)
 				break;
 
 			case FRONTEND_LOADCAM2:
-				strlcpy(aLevelName, "CAM_2A", sizeof(aLevelName));
+				sstrcpy(aLevelName, "CAM_2A");
 				changeTitleMode(STARTGAME);
  #ifdef LOADINGBACKDROPS
 				AddLoadingBackdrop(true);
@@ -424,7 +424,7 @@ BOOL runSinglePlayerMenu(void)
 				break;
 
 			case FRONTEND_LOADCAM3:
-				strlcpy(aLevelName, "CAM_3A", sizeof(aLevelName));
+				sstrcpy(aLevelName, "CAM_3A");
 				changeTitleMode(STARTGAME);
  #ifdef LOADINGBACKDROPS
 				AddLoadingBackdrop(true);

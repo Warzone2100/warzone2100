@@ -1699,7 +1699,7 @@ INT_RETVAL intRunWidgets(void)
 				{
 //					loadGame(sRequestResult,true,false,true);
 					loopMissionState = LMS_LOADGAME;
-					strlcpy(saveGameName, sRequestResult, sizeof(saveGameName));
+					sstrcpy(saveGameName, sRequestResult);
 				}
 				else
 				{

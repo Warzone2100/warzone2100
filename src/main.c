@@ -319,8 +319,8 @@ static void initialize_ConfigDir(void)
 		}
 
 		// Append the Warzone subdir
-		strlcat(tmpstr, WZ_WRITEDIR, sizeof(tmpstr));
-		strlcat(tmpstr, PHYSFS_getDirSeparator(), sizeof(tmpstr));
+		sstrcat(tmpstr, WZ_WRITEDIR);
+		sstrcat(tmpstr, PHYSFS_getDirSeparator());
 
 		if (!PHYSFS_setWriteDir(tmpstr))
 		{
@@ -331,11 +331,11 @@ static void initialize_ConfigDir(void)
 	}
 	else
 	{
-		strlcpy(tmpstr, configdir, sizeof(tmpstr));
+		sstrcpy(tmpstr, configdir);
 
 		// Make sure that we have a directory separator at the end of the string
 		if (tmpstr[strlen(tmpstr) - 1] != PHYSFS_getDirSeparator()[0])
-			strlcat(tmpstr, PHYSFS_getDirSeparator(), sizeof(tmpstr));
+			sstrcat(tmpstr, PHYSFS_getDirSeparator());
 
 		debug(LOG_WZ, "Using custom configuration directory: %s", tmpstr);
 
@@ -396,7 +396,7 @@ static void scanDataDirs( void )
 	char* separator;
 
 	// Find out which PREFIX we are in...
-	strlcpy(prefix, PHYSFS_getBaseDir(), sizeof(prefix));
+	sstrcpy(prefix, PHYSFS_getBaseDir());
 
 	separator = strrchr(prefix, *PHYSFS_getDirSeparator());
 	if (separator)
@@ -423,16 +423,16 @@ static void scanDataDirs( void )
 	if( !PHYSFS_exists("gamedesc.lev") )
 	{
 		// Data in SVN dir
-		strlcpy(tmpstr, prefix, sizeof(tmpstr));
-		strlcat(tmpstr, "/data/", sizeof(tmpstr));
+		sstrcpy(tmpstr, prefix);
+		sstrcat(tmpstr, "/data/");
 		registerSearchPath( tmpstr, 3 );
 		rebuildSearchPath( mod_multiplay, true );
 
 		if( !PHYSFS_exists("gamedesc.lev") )
 		{
 			// Relocation for AutoPackage
-			strlcpy(tmpstr, prefix, sizeof(tmpstr));
-			strlcat(tmpstr, "/share/warzone2100/", sizeof(tmpstr));
+			sstrcpy(tmpstr, prefix);
+			sstrcat(tmpstr, "/share/warzone2100/");
 			registerSearchPath( tmpstr, 4 );
 			rebuildSearchPath( mod_multiplay, true );
 
@@ -879,7 +879,7 @@ int main(int argc, char *argv[])
 
 	/* Put these files in the writedir root */
 	setRegistryFilePath("config");
-	strlcpy(KeyMapPath, "keymap.map", sizeof(KeyMapPath));
+	sstrcpy(KeyMapPath, "keymap.map");
 
 	// initialise all the command line states
 	war_SetDefaultStates();

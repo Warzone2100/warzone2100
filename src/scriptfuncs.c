@@ -3689,7 +3689,7 @@ BOOL scrStartMission(void)
 
 	// tell the loop that a new level has to be loaded up - not yet!
 	//loopNewLevel = true;
-	strlcpy(aLevelName, pGame, sizeof(aLevelName));
+	sstrcpy(aLevelName, pGame);
 
 	// find the level dataset
 	psNewLevel = levFindDataSet(pGame);
@@ -6570,7 +6570,7 @@ BOOL scrTutorialTemplates(void)
 	char			pName[MAX_STR_LENGTH];
 
 	// find ViperLtMGWheels
-	strlcpy(pName, "ViperLtMGWheels", sizeof(pName));
+	sstrcpy(pName, "ViperLtMGWheels");
 	if (!getResourceName(pName))
 	{
 		debug( LOG_ERROR, "tutorial template setup failed" );

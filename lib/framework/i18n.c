@@ -121,7 +121,7 @@ const char *getLanguage(void)
 		return "";  // Return empty string for system default and errors
 	}
 
-	strlcpy(language, localeName, sizeof(language));
+	sstrcpy(language, localeName);
 
 	delim = strchr(language, '_');
 
@@ -253,8 +253,8 @@ void initI18n(void)
 	{
 		// Retrieve an absolute path to the locale directory
 		char localeDir[PATH_MAX];
-		strlcpy(localeDir, PHYSFS_getBaseDir(), sizeof(localeDir));
-		strlcat(localeDir, "\\" LOCALEDIR, sizeof(localeDir));
+		sstrcpy(localeDir, PHYSFS_getBaseDir());
+		sstrcat(localeDir, "\\" LOCALEDIR);
 
 		// Set locale directory and translation domain name
 		textdomainDirectory = bindtextdomain(PACKAGE, localeDir);

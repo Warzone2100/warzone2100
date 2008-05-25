@@ -294,8 +294,8 @@ static BOOL _addLoadSave(BOOL bLoad, const char *sSearchPath, const char *sExten
 	// fill slots.
 	slotCount = 0;
 
-	strlcpy(sPath, sSearchPath, sizeof(sPath));  // setup locals.
-	strlcpy(sExt, sExtension, sizeof(sExt));
+	sstrcpy(sPath, sSearchPath);  // setup locals.
+	sstrcpy(sExt, sExtension);
 
 	debug(LOG_SAVE, "Searching \"%s\" for savegames", sSearchPath);
 
@@ -320,7 +320,7 @@ static BOOL _addLoadSave(BOOL bLoad, const char *sSearchPath, const char *sExten
 		debug(LOG_SAVE, "We found [%s]", *i);
 		/* Set the tip and add the button */
 		(*i)[strlen(*i) - 4] = '\0'; // remove .gam extension
-		strlcpy(sSlots[slotCount], *i, sizeof(sSlots[slotCount]));  //store it!
+		sstrcpy(sSlots[slotCount], *i);  //store it!
 		button->pTip = sSlots[slotCount];
 		button->pText = sSlots[slotCount];
 		slotCount++;		// goto next but...
@@ -431,7 +431,7 @@ static BOOL _runLoadSave(BOOL bResetMissionWidgets)
 
 	id = widgRunScreen(psRequestScreen);
 
-	strlcpy(sRequestResult, "", sizeof(sRequestResult));					// set returned filename to null;
+	sstrcpy(sRequestResult, "");					// set returned filename to null;
 
 	// cancel this operation...
 	if(id == LOADSAVE_CANCEL || CancelPressed() )
@@ -488,7 +488,7 @@ static BOOL _runLoadSave(BOOL bResetMissionWidgets)
 				}
 				else
 				{
-					strlcpy(sDelete, "", sizeof(sDelete));
+					sstrcpy(sDelete, "");
 				}
 
 				widgHide(psRequestScreen,id);		// hide the old button
@@ -525,7 +525,7 @@ static BOOL _runLoadSave(BOOL bResetMissionWidgets)
 
 		// scan to see if that game exists in another slot, if
 		// so then fail.
-		strlcpy(sTemp, ((W_EDITBOX *)widgGetFromID(psRequestScreen,id))->aText, sizeof(sTemp));
+		sstrcpy(sTemp, ((W_EDITBOX *)widgGetFromID(psRequestScreen,id))->aText);
 
 		for(i=LOADENTRY_START;i<LOADENTRY_END;i++)
 		{
@@ -549,7 +549,7 @@ static BOOL _runLoadSave(BOOL bResetMissionWidgets)
 		// return with this name, as we've edited it.
 		if (strlen(((W_EDITBOX *)widgGetFromID(psRequestScreen,id))->aText))
 		{
-			strlcpy(sTemp, ((W_EDITBOX *)widgGetFromID(psRequestScreen,id))->aText, sizeof(sTemp));
+			sstrcpy(sTemp, ((W_EDITBOX *)widgGetFromID(psRequestScreen,id))->aText);
 			removeWildcards(sTemp);
 			snprintf(sRequestResult, sizeof(sRequestResult), "%s%s.%s", sPath, sTemp, sExt);
 			if (strlen(sDelete) != 0)
@@ -679,7 +679,7 @@ static void displayLoadSlot(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PI
 
 	if(((W_BUTTON *)psWidget)->pTip )
 	{
-		strlcpy(butString, ((W_BUTTON *)psWidget)->pTip, sizeof(butString));
+		sstrcpy(butString, ((W_BUTTON *)psWidget)->pTip);
 
 		iV_SetFont(font_regular);									// font
 		iV_SetTextColour(WZCOL_TEXT_BRIGHT);

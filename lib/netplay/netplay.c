@@ -273,7 +273,7 @@ static unsigned int NET_CreatePlayer(const char* name, unsigned int flags)
 		if (players[i].allocated == false)
 		{
 			players[i].allocated = true;
-			strlcpy(players[i].name, name, sizeof(players[i].name));
+			sstrcpy(players[i].name, name);
 			players[i].flags = flags;
 			NETBroadcastPlayerInfo(i);
 			return i;
@@ -311,7 +311,7 @@ UDWORD NETplayerInfo(void)
 		if (players[i].allocated == true)
 		{
 			NetPlay.players[NetPlay.playercount].dpid = i;
-			strlcpy(NetPlay.players[NetPlay.playercount].name, players[i].name, sizeof(NetPlay.players[NetPlay.playercount].name));
+			sstrcpy(NetPlay.players[NetPlay.playercount].name, players[i].name);
 
 			if (players[i].flags & PLAYER_HOST)
 			{
@@ -335,12 +335,12 @@ BOOL NETchangePlayerName(UDWORD dpid, char *newName)
 {
 	if(!NetPlay.bComms)
 	{
-		strlcpy(NetPlay.players[0].name, newName, sizeof(NetPlay.players[0].name));
+		sstrcpy(NetPlay.players[0].name, newName);
 		return true;
 	}
 	debug(LOG_NET, "Requesting a change of player name for pid=%d to %s", dpid, newName);
 
-	strlcpy(players[dpid].name, newName, sizeof(players[dpid].name));
+	sstrcpy(players[dpid].name, newName);
 
 	NETBroadcastPlayerInfo(dpid);
 
@@ -406,7 +406,7 @@ static void NETsendGAMESTRUCT(TCPsocket socket, const GAMESTRUCT* game)
 
 	// Now dump the data into the buffer
 	// Copy a string
-	strlcpy(buffer, game->name, sizeof(game->name));
+	sstrcpy(buffer, game->name);
 	buffer += sizeof(game->name);
 
 	// Copy 32bit large big endian numbers
@@ -416,7 +416,7 @@ static void NETsendGAMESTRUCT(TCPsocket socket, const GAMESTRUCT* game)
 	buffer += sizeof(int32_t);
 
 	// Copy yet another string
-	strlcpy(buffer, game->desc.host, sizeof(game->desc.host));
+	sstrcpy(buffer, game->desc.host);
 	buffer += sizeof(game->desc.host);
 
 	// Copy 32bit large big endian numbers
@@ -462,7 +462,7 @@ static bool NETrecvGAMESTRUCT(GAMESTRUCT* game)
 
 	// Now dump the data into the game struct
 	// Copy a string
-	strlcpy(game->name, buffer, sizeof(game->name));
+	sstrcpy(game->name, buffer);
 	buffer += sizeof(game->name);
 
 	// Copy 32bit large big endian numbers
@@ -472,7 +472,7 @@ static bool NETrecvGAMESTRUCT(GAMESTRUCT* game)
 	buffer += sizeof(int32_t);
 
 	// Copy yet another string
-	strlcpy(game->desc.host, buffer, sizeof(game->desc.host));
+	sstrcpy(game->desc.host, buffer);
 	buffer += sizeof(game->desc.host);
 
 	// Copy 32bit large big endian numbers
@@ -1439,7 +1439,7 @@ BOOL NEThostGame(const char* SessionName, const char* PlayerName,
 
 	is_server = true;
 
-	strlcpy(game.name, SessionName, sizeof(game.name));
+	sstrcpy(game.name, SessionName);
 	memset(&game.desc, 0, sizeof(game.desc));
 	game.desc.dwSize = sizeof(game.desc);
 	//game.desc.guidApplication = GAME_GUID;
@@ -1686,7 +1686,7 @@ BOOL NETjoinGame(UDWORD gameNumber, const char* playername)
 
 			players[NetPlay.dpidPlayer].allocated = true;
 			players[NetPlay.dpidPlayer].id = NetPlay.dpidPlayer;
-			strlcpy(players[NetPlay.dpidPlayer].name, playername, sizeof(players[NetPlay.dpidPlayer].name));
+			sstrcpy(players[NetPlay.dpidPlayer].name, playername);
 			players[NetPlay.dpidPlayer].flags = 0;
 
 			return true;
@@ -1702,7 +1702,7 @@ BOOL NETjoinGame(UDWORD gameNumber, const char* playername)
  */
 void NETsetMasterserverName(const char* hostname)
 {
-	strlcpy(masterserver_name, hostname, sizeof(masterserver_name));
+	sstrcpy(masterserver_name, hostname);
 }
 
 

@@ -385,7 +385,7 @@ static void storeMacroName(const char *pMacroName)
 	}
 
 	/* Store define macro */
-	strlcpy(scr_macro[scr_num_macros].scr_define_macro, pMacroName, sizeof(scr_macro[scr_num_macros].scr_define_macro));
+	sstrcpy(scr_macro[scr_num_macros].scr_define_macro, pMacroName);
 }
 
 /* Store macro body */
@@ -395,7 +395,7 @@ static void storeMacroBody(const char *pMacroBody)
 		"FLEX: macro count out of bounds: %u", scr_num_macros);
 
 	/* Store macro body */
-	strlcpy(scr_macro[scr_num_macros].scr_define_body, pMacroBody, sizeof(scr_macro[scr_num_macros].scr_define_body));
+	sstrcpy(scr_macro[scr_num_macros].scr_define_body, pMacroBody);
 
 	scr_num_macros++;
 }
@@ -747,7 +747,7 @@ NOT						return _NOT;
 								{
 									RULE( "'%s' is an ident", scr_text);
 
-									strlcpy(aText[currText], scr_text, sizeof(aText[currText]));
+									sstrcpy(aText[currText], scr_text);
 									scr_lval.sval = aText[currText];
 									currText = (currText + 1) % TEXT_BUFFERS;
 									return IDENT;
@@ -762,7 +762,7 @@ NOT						return _NOT;
 \"							{ BEGIN (QUOTE); }
 <QUOTE>\"					{ BEGIN (INITIAL); }
 <QUOTE>[^\"\n]*				{
-								strlcpy(aText[currText], scr_text, sizeof(aText[currText]));
+								sstrcpy(aText[currText], scr_text);
 								scr_lval.sval = aText[currText];
 								currText = (currText + 1) % TEXT_BUFFERS;
 								//debug(LOG_SCRIPT, "%s is QTEXT", scr_text);
