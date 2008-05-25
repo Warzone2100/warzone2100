@@ -991,7 +991,208 @@ in_db_err:
 	return retval;
 }
 
-/** Load the ECM (Electronic Counter Measures stats from the given SQLite
+/** Load the Sensor stats from the given SQLite database file
+ *  \param filename name of the database file to load the propulsion stats
+ *         from.
+ */
+bool loadSensorStatsFromDB(const char* filename)
+{
+	bool retval = false;
+	sqlite3* db;
+	sqlite3_stmt* stmt;
+	int rc;
+
+	if (!openDB(filename, &db))
+		goto in_db_err;
+
+	// Prepare this SQL statement for execution
+	if (!prepareStatement(db, "SELECT MAX(id) FROM `sensor`;", &stmt))
+		goto in_db_err;
+
+	/* Execute and process the results of the above SQL statement to
+	 * determine the amount of propulsions we're about to fetch. Then make
+	 * sure to allocate memory for that amount of propulsions. */
+	rc = sqlite3_step(stmt);
+	if (rc != SQLITE_ROW
+	 || sqlite3_data_count(stmt) != 1
+	 || !statsAllocSensor(sqlite3_column_int(stmt, 0)))
+	{
+		goto in_statement_err;
+	}
+
+	sqlite3_finalize(stmt);
+	if (!prepareStatement(db, "SELECT `id`,"
+	                                 "`name`,"
+	                                 "`techlevel`,"
+	                                 "`buildPower`,"
+	                                 "`buildPoints`,"
+	                                 "`weight`,"
+	                                 "`hitpoints`,"
+	                                 "`systempoints`,"
+	                                 "`body`,"
+	                                 "`GfxFile`,"
+	                                 "`mountGfx`,"
+	                                 "`range`,"
+	                                 "`location`,"
+	                                 "`type`,"
+	                                 "`time`,"
+	                                 "`power`,"
+	                                 "`designable`"
+	                          "FROM `sensor`;", &stmt))
+		goto in_db_err;
+
+	while ((rc = sqlite3_step(stmt)) == SQLITE_ROW)
+	{
+		SENSOR_STATS sStats, * const stats = &sStats;
+		unsigned int colnum = 0;
+		const unsigned int sensor_id = sqlite3_column_int(stmt, colnum++);
+		const char* str;
+
+		memset(stats, 0, sizeof(*stats));
+
+		stats->ref = REF_SENSOR_START + sensor_id - 1;
+
+		// name                  TEXT    NOT NULL, -- Text id name (short language independant name)
+		if (!allocateStatName((BASE_STATS *)stats, (const char*)sqlite3_column_text(stmt, colnum++)))
+		{
+			goto in_statement_err;
+		}
+
+		// techlevel             TEXT    NOT NULL, -- Technology level of this component
+		if (!setTechLevel((BASE_STATS *)stats, (const char*)sqlite3_column_text(stmt, colnum++)))
+		{
+			goto in_statement_err;
+		}
+
+		// buildPower            NUMERIC NOT NULL, -- Power required to build this component
+		stats->buildPower = sqlite3_column_double(stmt, colnum++);
+		// buildPoints           NUMERIC NOT NULL, -- Time required to build this component
+		stats->buildPoints = sqlite3_column_double(stmt, colnum++);
+		// weight                NUMERIC NOT NULL, -- Component's weight (mass?)
+		stats->weight = sqlite3_column_double(stmt, colnum++);
+		// hitpoints             NUMERIC NOT NULL, -- Component's hitpoints - SEEMS TO BE UNUSED
+		stats->hitPoints = sqlite3_column_double(stmt, colnum++);
+		// systempoints          NUMERIC NOT NULL, -- Space the component takes in the droid - SEEMS TO BE UNUSED
+		stats->systemPoints = sqlite3_column_double(stmt, colnum++);
+		// body                  NUMERIC NOT NULL, -- Component's body points
+		stats->body = sqlite3_column_double(stmt, colnum++);
+
+		// Get the IMD for the component
+		// GfxFile               TEXT,             -- The IMD to draw for this component
+		if (sqlite3_column_type(stmt, colnum) != SQLITE_NULL)
+		{
+			stats->pIMD = (iIMDShape *) resGetData("IMD", (const char*)sqlite3_column_text(stmt, colnum++));
+			if (stats->pIMD == NULL)
+			{
+				debug(LOG_ERROR, "Cannot find the propulsion PIE for record %s", getStatName(stats));
+				abort();
+				goto in_statement_err;
+			}
+		}
+		else
+		{
+			stats->pIMD = NULL;
+			++colnum;
+		}
+
+		// Get the rest of the IMDs
+		// mountGfx              TEXT,             -- The turret mount to use
+		if (sqlite3_column_type(stmt, colnum) != SQLITE_NULL)
+		{
+			stats->pMountGraphic = (iIMDShape *) resGetData("IMD", (const char*)sqlite3_column_text(stmt, colnum++));
+			if (stats->pMountGraphic == NULL)
+			{
+				debug(LOG_ERROR, "Cannot find the mount PIE for record %s", getStatName(stats));
+				abort();
+				goto in_statement_err;
+			}
+		}
+		else
+		{
+			stats->pMountGraphic = NULL;
+			++colnum;
+		}
+
+		// range                 NUMERIC NOT NULL, -- Sensor range
+		stats->range = sqlite3_column_double(stmt, colnum++);
+
+		// location              TEXT    NOT NULL, -- specifies whether the Sensor is default or for the Turret
+		str = (const char*)sqlite3_column_text(stmt, colnum++);
+		if (!strcmp(str, "DEFAULT"))
+		{
+			stats->location = LOC_DEFAULT;
+		}
+		else if(!strcmp(str, "TURRET"))
+		{
+			stats->location = LOC_TURRET;
+		}
+		else
+		{
+			ASSERT(!"invalid sensor location", "Invalid sensor location");
+		}
+
+		// type                  TEXT    NOT NULL, -- used for combat
+		str = (const char*)sqlite3_column_text(stmt, colnum++);
+		if (!strcmp(str,"STANDARD"))
+		{
+			stats->type = STANDARD_SENSOR;
+		}
+		else if (!strcmp(str, "INDIRECT CB"))
+		{
+			stats->type = INDIRECT_CB_SENSOR;
+		}
+		else if (!strcmp(str, "VTOL CB"))
+		{
+			stats->type = VTOL_CB_SENSOR;
+		}
+		else if (!strcmp(str, "VTOL INTERCEPT"))
+		{
+			stats->type = VTOL_INTERCEPT_SENSOR;
+		}
+		else if (!strcmp(str, "SUPER"))
+		{
+			stats->type = SUPER_SENSOR;
+		}
+		else
+		{
+			ASSERT(!"invalid sensor type", "Invalid sensor type");
+		}
+
+		// time                  NUMERIC NOT NULL, -- time delay before associated weapon droids 'know' where the attack is from
+		stats->time = sqlite3_column_double(stmt, colnum++);
+
+		// multiply time stats
+		stats->time *= WEAPON_TIME;
+
+		// power                 NUMERIC NOT NULL, -- Sensor power (put against ecm power)
+		stats->power = sqlite3_column_double(stmt, colnum++);
+
+		// designable            NUMERIC NOT NULL  -- flag to indicate whether this component can be used in the design screen
+		stats->design = sqlite3_column_int(stmt, colnum++) ? true : false;
+
+		// set the max stats values for the design screen
+		if (stats->design)
+		{
+			setMaxSensorRange(stats->range);
+			setMaxSensorPower(stats->power);
+			setMaxComponentWeight(stats->weight);
+		}
+
+		//save the stats
+		statsSetSensor(stats, sensor_id - 1);
+	}
+
+	retval = true;
+
+in_statement_err:
+	sqlite3_finalize(stmt);
+in_db_err:
+	sqlite3_close(db);
+
+	return retval;
+}
+
+/** Load the ECM (Electronic Counter Measures) stats from the given SQLite
  *  database file
  *  \param filename name of the database file to load the propulsion stats
  *         from.

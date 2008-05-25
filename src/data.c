@@ -235,6 +235,19 @@ static BOOL bufferSSENSORLoad(const char *pBuffer, UDWORD size, void **ppData)
 	return true;
 }
 
+static BOOL dataDBSENSORLoad(const char* filename, void **ppData)
+{
+	if (!loadSensorStatsFromDB(filename)
+	 || !allocComponentList(COMP_SENSOR, numSensorStats))
+	{
+		return false;
+	}
+
+	//not interested in this value
+	*ppData = NULL;
+	return true;
+}
+
 /* Load the Repair stats */
 static BOOL bufferSREPAIRLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
@@ -1017,6 +1030,7 @@ static const RES_TYPE_MIN_FILE FileResourceTypes[] =
 	{"DBBODY", dataDBBODYLoad, dataReleaseStats},
 	{"DBBRAIN", dataDBBRAINLoad, NULL},
 	{"DBPROP", dataDBPROPLoad, NULL},
+	{"DBSENSOR", dataDBSENSORLoad, NULL},
 	{"DBECM", dataDBECMLoad, NULL},
 	{"WAV", dataAudioLoad, (RES_FREE)sound_ReleaseTrack},
 	{"AUDIOCFG", dataAudioCfgLoad, NULL},
