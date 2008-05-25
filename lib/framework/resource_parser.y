@@ -144,13 +144,14 @@ database_line:			DATABASE QTEXT_T
 				}
 				;
 
-table_line:			TABLE TEXT_T
+table_line:			TABLE TEXT_T QTEXT_T
 				{
 					bool succes;
 					/* load a database table */
 					debug(LOG_NEVER, "table: %s", $2);
-					succes = resLoadTable($2);
+					succes = resLoadTable($2, $3);
 					free($2);
+					free($3);
 
 					if (!succes)
 					{

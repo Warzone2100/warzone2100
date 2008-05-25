@@ -36,6 +36,7 @@ static RES_TYPE *psResTypes=NULL;
 char aResDir[PATH_MAX];
 char aCurrResDir[PATH_MAX];
 static sqlite3* currDB = NULL;
+static char currDBFile[PATH_MAX];
 
 // the current resource block ID
 static SDWORD resBlockID;
@@ -544,7 +545,7 @@ BOOL resLoadFile(const char *pType, const char *pFile)
 	return true;
 }
 
-BOOL resLoadTable(const char* type)
+BOOL resLoadTable(const char* type, const char* tableName)
 {
 	RES_TYPE	*psT;
 	void		*pData;
@@ -569,9 +570,9 @@ BOOL resLoadTable(const char* type)
 	// load the resource
 	if (psT->tableLoad)
 	{
-		if (!psT->tableLoad(currDB, &pData))
+		if (!psT->tableLoad(currDB, tableName, &pData))
 		{
-			debug(LOG_ERROR, "The load function for resource type \"%s\" failed", type);
+			debug(LOG_ERROR, "The load function for resource type \"%s\" failed while loading table \"%s\" from database \"%s\"", type, tableName, currDBFile);
 			if (psT->release != NULL)
 			{
 				psT->release(pData);
@@ -591,8 +592,11 @@ BOOL resLoadTable(const char* type)
 	// Set up the resource structure if there is something to store
 	if (pData != NULL)
 	{
+		char* table;
+		sasprintf(&table, "%s:%s", currDBFile, tableName);
+
 		// LastResourceFilename may have been changed (e.g. by TEXPAGE loading)
-		psRes = resDataInit("database-table", HashStringIgnoreCase("database-table"), pData, resBlockID);
+		psRes = resDataInit(table, HashStringIgnoreCase(table), pData, resBlockID);
 		if (!psRes)
 		{
 			if (psT->release != NULL)
@@ -611,22 +615,20 @@ BOOL resLoadTable(const char* type)
 
 BOOL resOpenDB(const char* filename)
 {
-	char aFileName[PATH_MAX];
-
 	// If we already have a database opened, make sure to close it first.
 	if (currDB)
 	{
 		sqlite3_close(currDB);
 	}
 
-	sstrcpy(aFileName, aCurrResDir);
-	sstrcat(aFileName, filename);
+	sstrcpy(currDBFile, aCurrResDir);
+	sstrcat(currDBFile, filename);
 
-	makeLocaleFile(aFileName);  // check for translated file
+	makeLocaleFile(currDBFile);  // check for translated file
 
-	if (sqlite3_open_v2(aFileName, &currDB, SQLITE_OPEN_READONLY, NULL) != SQLITE_OK)
+	if (sqlite3_open_v2(currDBFile, &currDB, SQLITE_OPEN_READONLY, NULL) != SQLITE_OK)
 	{
-		debug(LOG_ERROR, "Can't open database (%s): %s", aFileName, sqlite3_errmsg(currDB));
+		debug(LOG_ERROR, "Can't open database (%s): %s", currDBFile, sqlite3_errmsg(currDB));
 		currDB = NULL;
 		return false;
 	}

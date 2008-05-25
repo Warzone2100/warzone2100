@@ -46,7 +46,7 @@ typedef BOOL (*RES_BUFFERLOAD)(const char *pBuffer, UDWORD size, void **pData);
 /** Function pointer for a function that loads from a filename. */
 typedef BOOL (*RES_FILELOAD)(const char *pFile, void **pData);
 
-typedef BOOL (*RES_TABLELOAD)(struct sqlite3* db, void** pData);
+typedef BOOL (*RES_TABLELOAD)(struct sqlite3* db, const char* tableName, void** pData);
 
 /** Function pointer for releasing a resource loaded by the above functions. */
 typedef void (*RES_FREE)(void *pData);
@@ -125,7 +125,7 @@ extern BOOL resAddTableLoad(const char* type, RES_TABLELOAD tableLoad, RES_FREE 
 /** Call the load function for a file. */
 extern BOOL resLoadFile(const char *pType, const char *pFile);
 
-extern BOOL resLoadTable(const char* type);
+extern BOOL resLoadTable(const char* type, const char* tableName);
 
 extern BOOL resOpenDB(const char* filename);
 

@@ -30,31 +30,46 @@
 #include "projectile.h"
 #include "lib/sound/audio_id.h"
 #include "lib/sqlite3/sqlite3.h"
+#include <stdarg.h>
 
-static bool prepareStatement(sqlite3* db, const char* statement, sqlite3_stmt** stmt)
+static bool prepareStatement(sqlite3* db, sqlite3_stmt** stmt, const char* fmt, ...)
 {
-	int rc = sqlite3_prepare_v2(db, statement, -1, stmt, NULL);
+	bool retval = true;
+	va_list ap;
+	char* statement;
 
-	if (rc != SQLITE_OK)
+	va_start(ap, fmt);
+		statement = sqlite3_vmprintf(fmt, ap);
+	va_end(ap);
+
+	if (statement == NULL)
 	{
-		debug(LOG_ERROR, "prepareStatement: SQL error: %s", sqlite3_errmsg(db));
+		debug(LOG_ERROR, "Out of memory!");
 		return false;
 	}
 
-	return true;
+	if (sqlite3_prepare_v2(db, statement, -1, stmt, NULL) != SQLITE_OK)
+	{
+		debug(LOG_ERROR, "prepareStatement: SQL error (while preparing statement \"%s\"): %s", statement, sqlite3_errmsg(db));
+		retval = false;
+	}
+
+	// Free the memory from our constructed SQL statement
+	sqlite3_free(statement);
+	return retval;
 }
 
 /** Load the weapon stats from the given SQLite database file
  *  \param filename name of the database file to load the weapon stats from.
  */
-bool loadWeaponStatsFromDB(sqlite3* db)
+bool loadWeaponStatsFromDB(sqlite3* db, const char* tableName)
 {
 	bool retval = false;
 	sqlite3_stmt* stmt;
 	int rc;
 
 	// Prepare this SQL statement for execution
-	if (!prepareStatement(db, "SELECT MAX(id) FROM `weapons`;", &stmt))
+	if (!prepareStatement(db, &stmt, "SELECT MAX(id) FROM `%s`;", tableName))
 		return false;
 
 	/* Execute and process the results of the above SQL statement to
@@ -69,7 +84,8 @@ bool loadWeaponStatsFromDB(sqlite3* db)
 	}
 
 	sqlite3_finalize(stmt);
-	if (!prepareStatement(db, "SELECT `id`,"
+	if (!prepareStatement(db, &stmt,
+	                          "SELECT `id`,"
 	                                 "`name`,"
 	                                 "`techlevel`,"
 	                                 "`buildPower`,"
@@ -123,7 +139,7 @@ bool loadWeaponStatsFromDB(sqlite3* db)
 	                                 "`numAttackRuns`,"
 	                                 "`designable`,"
 	                                 "`penetrate` "
-	                          "FROM `weapons`;", &stmt))
+	                          "FROM `%s`;", tableName))
 		return false;
 
 	while ((rc = sqlite3_step(stmt)) == SQLITE_ROW)
@@ -530,14 +546,14 @@ in_statement_err:
 /** Load the body stats from the given SQLite database file
  *  \param filename name of the database file to load the body stats from.
  */
-bool loadBodyStatsFromDB(sqlite3* db)
+bool loadBodyStatsFromDB(sqlite3* db, const char* tableName)
 {
 	bool retval = false;
 	sqlite3_stmt* stmt;
 	int rc;
 
 	// Prepare this SQL statement for execution
-	if (!prepareStatement(db, "SELECT MAX(id) FROM `body`;", &stmt))
+	if (!prepareStatement(db, &stmt, "SELECT MAX(id) FROM `%s`;", tableName))
 		return false;
 
 	/* Execute and process the results of the above SQL statement to
@@ -552,7 +568,8 @@ bool loadBodyStatsFromDB(sqlite3* db)
 	}
 
 	sqlite3_finalize(stmt);
-	if (!prepareStatement(db, "SELECT `id`,"
+	if (!prepareStatement(db, &stmt,
+	                          "SELECT `id`,"
 	                                 "`name`,"
 	                                 "`techlevel`,"
 	                                 "`size`,"
@@ -578,7 +595,7 @@ bool loadBodyStatsFromDB(sqlite3* db)
 	                                 "`armour_bottom_heat`,"
 	                                 "`flameIMD`,"
 	                                 "`designable`"
-	                          "FROM `body`;", &stmt))
+	                          "FROM `%s`;", tableName))
 		return false;
 
 	while ((rc = sqlite3_step(stmt)) == SQLITE_ROW)
@@ -718,14 +735,14 @@ in_statement_err:
 /** Load the brain stats from the given SQLite database file
  *  \param filename name of the database file to load the brain stats from.
  */
-bool loadBrainStatsFromDB(sqlite3* db)
+bool loadBrainStatsFromDB(sqlite3* db, const char* tableName)
 {
 	bool retval = false;
 	sqlite3_stmt* stmt;
 	int rc;
 
 	// Prepare this SQL statement for execution
-	if (!prepareStatement(db, "SELECT MAX(id) FROM `brain`;", &stmt))
+	if (!prepareStatement(db, &stmt, "SELECT MAX(id) FROM `%s`;", tableName))
 		return false;
 
 	/* Execute and process the results of the above SQL statement to
@@ -740,7 +757,8 @@ bool loadBrainStatsFromDB(sqlite3* db)
 	}
 
 	sqlite3_finalize(stmt);
-	if (!prepareStatement(db, "SELECT `id`,"
+	if (!prepareStatement(db, &stmt,
+	                          "SELECT `id`,"
 	                                 "`name`,"
 	                                 "`techlevel`,"
 	                                 "`buildPower`,"
@@ -750,7 +768,7 @@ bool loadBrainStatsFromDB(sqlite3* db)
 	                                 "`systempoints`,"
 	                                 "`weapon`,"
 	                                 "`program_capacity`"
-	                          "FROM `brain`;", &stmt))
+	                          "FROM `%s`;", tableName))
 		return false;
 
 	while ((rc = sqlite3_step(stmt)) == SQLITE_ROW)
@@ -830,14 +848,14 @@ in_statement_err:
 /** Load the propulsion stats from the given SQLite database file
  *  \param filename name of the database file to load the propulsion stats from.
  */
-bool loadPropulsionStatsFromDB(sqlite3* db)
+bool loadPropulsionStatsFromDB(sqlite3* db, const char* tableName)
 {
 	bool retval = false;
 	sqlite3_stmt* stmt;
 	int rc;
 
 	// Prepare this SQL statement for execution
-	if (!prepareStatement(db, "SELECT MAX(id) FROM `propulsion`;", &stmt))
+	if (!prepareStatement(db, &stmt, "SELECT MAX(id) FROM `%s`;", tableName))
 		return false;
 
 	/* Execute and process the results of the above SQL statement to
@@ -852,7 +870,8 @@ bool loadPropulsionStatsFromDB(sqlite3* db)
 	}
 
 	sqlite3_finalize(stmt);
-	if (!prepareStatement(db, "SELECT `id`,"
+	if (!prepareStatement(db, &stmt,
+	                          "SELECT `id`,"
 	                                 "`name`,"
 	                                 "`techlevel`,"
 	                                 "`buildPower`,"
@@ -865,7 +884,7 @@ bool loadPropulsionStatsFromDB(sqlite3* db)
 					 "`type`,"
 					 "`maxSpeed`,"
 					 "`designable`"
-	                          "FROM `propulsion`;", &stmt))
+	                          "FROM `%s`;", tableName))
 		return false;
 
 	while ((rc = sqlite3_step(stmt)) == SQLITE_ROW)
@@ -958,14 +977,14 @@ in_statement_err:
  *  \param filename name of the database file to load the propulsion stats
  *         from.
  */
-bool loadSensorStatsFromDB(sqlite3* db)
+bool loadSensorStatsFromDB(sqlite3* db, const char* tableName)
 {
 	bool retval = false;
 	sqlite3_stmt* stmt;
 	int rc;
 
 	// Prepare this SQL statement for execution
-	if (!prepareStatement(db, "SELECT MAX(id) FROM `sensor`;", &stmt))
+	if (!prepareStatement(db, &stmt, "SELECT MAX(id) FROM `%s`;", tableName))
 		return false;
 
 	/* Execute and process the results of the above SQL statement to
@@ -980,7 +999,8 @@ bool loadSensorStatsFromDB(sqlite3* db)
 	}
 
 	sqlite3_finalize(stmt);
-	if (!prepareStatement(db, "SELECT `id`,"
+	if (!prepareStatement(db, &stmt,
+	                          "SELECT `id`,"
 	                                 "`name`,"
 	                                 "`techlevel`,"
 	                                 "`buildPower`,"
@@ -997,7 +1017,7 @@ bool loadSensorStatsFromDB(sqlite3* db)
 	                                 "`time`,"
 	                                 "`power`,"
 	                                 "`designable`"
-	                          "FROM `sensor`;", &stmt))
+	                          "FROM `%s`;", tableName))
 		return false;
 
 	while ((rc = sqlite3_step(stmt)) == SQLITE_ROW)
@@ -1154,14 +1174,14 @@ in_statement_err:
  *  \param filename name of the database file to load the propulsion stats
  *         from.
  */
-bool loadECMStatsFromDB(sqlite3* db)
+bool loadECMStatsFromDB(sqlite3* db, const char* tableName)
 {
 	bool retval = false;
 	sqlite3_stmt* stmt;
 	int rc;
 
 	// Prepare this SQL statement for execution
-	if (!prepareStatement(db, "SELECT MAX(id) FROM `ecm`;", &stmt))
+	if (!prepareStatement(db, &stmt, "SELECT MAX(id) FROM `%s`;", tableName))
 		return false;
 
 	/* Execute and process the results of the above SQL statement to
@@ -1176,7 +1196,8 @@ bool loadECMStatsFromDB(sqlite3* db)
 	}
 
 	sqlite3_finalize(stmt);
-	if (!prepareStatement(db, "SELECT `id`,"
+	if (!prepareStatement(db, &stmt,
+	                          "SELECT `id`,"
 	                                 "`name`,"
 	                                 "`techlevel`,"
 	                                 "`buildPower`,"
@@ -1191,7 +1212,7 @@ bool loadECMStatsFromDB(sqlite3* db)
 	                                 "`power`,"
 	                                 "`range`,"
 	                                 "`designable`"
-	                          "FROM `ecm`;", &stmt))
+	                          "FROM `%s`;", tableName))
 		return false;
 
 	while ((rc = sqlite3_step(stmt)) == SQLITE_ROW)

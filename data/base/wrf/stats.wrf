@@ -7,12 +7,12 @@ directory	"messages/strings"
 file		STR_RES	"names.txt"
 directory	"stats-sql"
 database	"stats.db"
-table		DBWEAPON
-table		DBBODY
-table		DBBRAIN
-table		DBPROP
-table		DBSENSOR
-table		DBECM
+table		DBWEAPON	"weapons"
+table		DBBODY	"body"
+table		DBBRAIN	"brain"
+table		DBPROP	"propulsion"
+table		DBSENSOR	"sensor"
+table		DBECM	"ecm"
 directory	"stats"
 file		SREPAIR	"repair.txt"
 file		SCONSTR	"construction.txt"

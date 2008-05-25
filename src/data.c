@@ -105,9 +105,9 @@ static BOOL bufferSBODYLoad(const char *pBuffer, UDWORD size, void **ppData)
 	return true;
 }
 
-static BOOL dataDBBODYLoad(struct sqlite3* db, void **ppData)
+static BOOL dataDBBODYLoad(struct sqlite3* db, const char* tableName, void **ppData)
 {
-	if (!loadBodyStatsFromDB(db)
+	if (!loadBodyStatsFromDB(db, tableName)
 	 || !allocComponentList(COMP_BODY, numBodyStats))
 	{
 		return false;
@@ -139,9 +139,9 @@ static BOOL bufferSWEAPONLoad(const char *pBuffer, UDWORD size, void **ppData)
 	return true;
 }
 
-static BOOL dataDBWEAPONLoad(struct sqlite3* db, void **ppData)
+static BOOL dataDBWEAPONLoad(struct sqlite3* db, const char* tableName, void **ppData)
 {
-	if (!loadWeaponStatsFromDB(db)
+	if (!loadWeaponStatsFromDB(db, tableName)
 	 || !allocComponentList(COMP_WEAPON, numWeaponStats))
 	{
 		return false;
@@ -180,9 +180,9 @@ static BOOL bufferSECMLoad(const char *pBuffer, UDWORD size, void **ppData)
 	return true;
 }
 
-static BOOL dataDBECMLoad(struct sqlite3* db, void **ppData)
+static BOOL dataDBECMLoad(struct sqlite3* db, const char* tableName, void **ppData)
 {
-	if (!loadECMStatsFromDB(db)
+	if (!loadECMStatsFromDB(db, tableName)
 	 || !allocComponentList(COMP_ECM, numECMStats))
 	{
 		return false;
@@ -207,9 +207,9 @@ static BOOL bufferSPROPLoad(const char *pBuffer, UDWORD size, void **ppData)
 	return true;
 }
 
-static BOOL dataDBPROPLoad(struct sqlite3* db, void **ppData)
+static BOOL dataDBPROPLoad(struct sqlite3* db, const char* tableName, void **ppData)
 {
-	if (!loadPropulsionStatsFromDB(db)
+	if (!loadPropulsionStatsFromDB(db, tableName)
 	 || !allocComponentList(COMP_PROPULSION, numPropulsionStats))
 	{
 		return false;
@@ -234,9 +234,9 @@ static BOOL bufferSSENSORLoad(const char *pBuffer, UDWORD size, void **ppData)
 	return true;
 }
 
-static BOOL dataDBSENSORLoad(struct sqlite3* db, void **ppData)
+static BOOL dataDBSENSORLoad(struct sqlite3* db, const char* tableName, void **ppData)
 {
-	if (!loadSensorStatsFromDB(db)
+	if (!loadSensorStatsFromDB(db, tableName)
 	 || !allocComponentList(COMP_SENSOR, numSensorStats))
 	{
 		return false;
@@ -275,9 +275,9 @@ static BOOL bufferSBRAINLoad(const char *pBuffer, UDWORD size, void **ppData)
 	return true;
 }
 
-static BOOL dataDBBRAINLoad(struct sqlite3* db, void** ppData)
+static BOOL dataDBBRAINLoad(struct sqlite3* db, const char* tableName, void** ppData)
 {
-	if (!loadBrainStatsFromDB(db)
+	if (!loadBrainStatsFromDB(db, tableName)
 	 || !allocComponentList(COMP_BRAIN, numBrainStats))
 	{
 		return false;
