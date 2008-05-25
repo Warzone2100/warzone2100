@@ -9,18 +9,17 @@
   <meta name="author" content="Steven Koenig aka Kreuvf"/>
   <link rel="stylesheet" type="text/css" media="screen" href="styles/readme.screen.css"/>
   <link rel="stylesheet" type="text/css" media="print" href="styles/readme.print.css"/>
-  <title>Warzone 2100 GPL - Readme</title>
+  <title>Warzone 2100 - Readme</title>
  </head>
  <body>
   <div id="content">
    <div id="navigation">
-    <a id="top"/>
 
-    <h1>Content</h1>
+    <h1 id="top">Content</h1>
     <ul>
-     <li><a href="#readme">Warzone 2100 GPL - Readme</a>
+     <li><a href="#readme">Warzone 2100 - Readme</a>
       <ul>
-       <li><a href="#contents">Contents of Warzone 2100 GPL</a></li>
+       <li><a href="#contents">Contents of Warzone 2100</a></li>
        <li><a href="#gamestate">State of the game</a>
         <ul>
          <li><a href="#bugreporting">Reporting bugs</a></li>
@@ -42,25 +41,25 @@
    </div>
    <hr/>
 
-   <h1><a id="readme"/>Warzone 2100 GPL - Readme</h1>
+   <h1 id="readme">Warzone 2100 - Readme</h1>
 
-   <h2><a id="contents"></a>Contents of Warzone 2100 GPL</h2>
+   <h2 id="contents">Contents of Warzone 2100</h2>
    <p>Warzone 2100, released in 1999 and developed by Pumpkin Studios, was a groundbreaking and innovative 3D real-time strategy game.</p>
    <p>In 2004 Eidos, in collaboration with Pumpkin Studios, decided to release the source for the game under the terms of the GNU GPL, including everything but the music and in-game video sequences.</p>
-   <p>Additionally all multiplayer-maps that were available in Warzone 2100 1.10, the last official patch by Pumpkin Studios, are available in Warzone 2100 GPL as well.</p>
+   <p>Additionally all multiplayer-maps that were available in Warzone 2100 1.10, the last official patch by Pumpkin Studios, are available in Warzone 2100 as well.</p>
    <div class="rt">
     <p><a href="#top">back to top</a></p>
    </div>
    <hr/>
 
 
-   <h2><a id="gamestate"/>State of the game</h2>
+   <h2 id="gamestate">State of the game</h2>
    <p>After the liberation of the Warzone 2100 source-code on December 6th, 2004, all proprietary technologies had been replaced with open-source-counterparts.</p>
-   <p>Right now supported platforms are GNU/Linux, Mac OS X 10.4 (Tiger) and Windows (98 - XP). There are reports that Warzone 2100 GPL is working on BSD, too. Some people even run it under Windows Vista, which is not directly supported.</p>
+   <p>Right now supported platforms are GNU/Linux, Mac OS X 10.4 (Tiger) and Windows (98 - XP). There are reports that Warzone 2100 is working on BSD, too. Some people even run it under Windows Vista, which is not directly supported.</p>
    <p>The game is still in a beta-state, so do not expect the game to run without any issues.</p>
 
-   <h3><a id="bugreporting"/>Reporting Bugs</h3>
-   <p>This game still has bugs and if you run into one, please use the <a href="https://gna.org/bugs/?group=warzone">bugtracker</a> to report it. In order to fix those bugs faster, the developers require that you follow these rules:</p>
+   <h3 id="bugreporting">Reporting Bugs</h3>
+   <p>This game still has bugs and if you run into one, please use the <a href="https://gna.org/bugs/?group=warzone" title="Bugtracker for Warzone 2100" hreflang="en">bugtracker</a> to report it. In order to fix those bugs faster, the developers require that you follow these rules:</p>
    <ol>
     <li>If the game crashes you may save a memory dump. Please do so and upload it when reporting the bug. (Linux locates that file at /tmp/warzone2100.gdmp) A self created backtrace is just as useful.</li>
     <li>Give as much information about what you were doing before the crash/bug occured.</li>
@@ -74,16 +73,16 @@
    <hr/>
 
 
-   <h2><a id="configuration"/>Configuration</h2>
+   <h2 id="configuration">Configuration</h2>
 
-   <h3><a id="configfile"/>WZ-dir and configuration file</h3>
+   <h3 id="configfile">WZ-dir and configuration file</h3>
    <p>Warzone saves your configuration data in a file named "config". Where this file is located depends on your operating system.</p>
    <h4>Warzone-dir under GNU/Linux</h4>
    <p>It can be found in your home-directory and is called ".warzone2100". The leading dot indicates that it is a hidden folder so depending on your configuration you may not be able to see it. However, you can still access it by typing the path into your address-bar.</p>
    <h4>Warzone-dir under Windows</h4>
    <p>The folder is called "Warzone 2100" and is located in "My Documents".</p>
 
-   <h3><a id="cmdline"/>Command-line options</h3>
+   <h3 id="cmdline">Command-line options</h3>
    <p>Additionally to the configuration-file Warzone can be started with different parameters.</p>
    <p>Note: This parameters all have two dashes (--), not one dash only (-). Trying to use the parameters with one dash only will not work.</p>
    <table>
@@ -129,9 +128,9 @@
     </tr>
    </table>
    <p>Note: All mentioned command-line parameters except --datadir change the appropriate value in your config-file. Starting warzone by double-clicking the executable/binary will then start the game with the settings used last time. So don't wonder, if there is no sound, when you started warzone with --nosound last time.</p>
-   <p>Note: This list is not complete. An extended list and <a href="http://wiki.wz2100.net/command_line_options">further information on command-line options</a> can be found at the <a href="http://wiki.wz2100.net/">Wiki of Warzone Resurrection Project</a>.</p>
+   <p>Note: This list is not complete. An extended list and <a href="http://wiki.wz2100.net/command_line_options" title="Command Line Options for Warzone 2100" hreflang="en">further information on command-line options</a> can be found at the <a href="http://wiki.wz2100.net/" title="Wiki for Warzone 2100" hreflang="en">Wiki of Warzone Resurrection Project</a>.</p>
 
-   <h3><a id="music"/>Music</h3>
+   <h3 id="music">Music</h3>
    <p>As the original game music is part of the data that was not liberated, music is reintroduced in a different way. A playlist-system is used that can point to any *.ogg or *.mp3-file in your warzone-data-path. This is still experimental and we are gradually making this more usable.</p>
    <p>Warzone reads the following two playlists (in the order they are mentioned) and the first playlist found will be used:</p>
    <ul>
@@ -167,7 +166,7 @@ path=.
 neos_symphonie_du_vide.ogg
 </pre>
 
-   <h3><a id="multiplay"/>Multiplaying via internet</h3>
+   <h3 id="multiplay">Multiplaying via internet</h3>
    <p>There are two methods to start a multiplayer-game via internet: using the host's IP or using the lobby-server. Make sure to be able to communicate on TCP-ports 9998 and 9999.</p>
    <p>You can choose whether to connect via Lobby or IP:</p>
    <ul>
@@ -184,7 +183,7 @@ neos_symphonie_du_vide.ogg
    <hr/>
 
 
-   <h2><a id="hotkeys"/>Important hotkeys</h2>
+   <h2 id="hotkeys">Important hotkeys</h2>
    <table>
     <tr>
      <th>Hotkey</th>
@@ -227,11 +226,11 @@ neos_symphonie_du_vide.ogg
    <hr/>
 
 
-   <h2><a id="furtherinfo"/>Additional resources</h2>
+   <h2 id="furtherinfo">Additional resources</h2>
    <ul>
-    <li><a href="http://wz2100.net/">Homepage of the Warzone Resurrection Project</a> (English)</li>
-    <li><a href="https://gna.org/projects/warzone/">Gna!-Project site of Warzone</a> (English)</li>
-    <li><a href="http://wiki.wz2100.net/">Warzone-Wiki</a> (English)</li>
+    <li><a href="http://wz2100.net/" title="Home of the Warzone 2100 Resurrection Project" hreflang="en">Homepage of the Warzone 2100 Resurrection Project</a> (English)</li>
+    <li><a href="https://gna.org/projects/warzone/" title="Gna!-Project site for Warzone 2100" hreflang="en">Gna!-Project site of Warzone</a> (English)</li>
+    <li><a href="http://wiki.wz2100.net/" title="Wiki for Warzone 2100" hreflang="en">Warzone 2100-Wiki</a> (English)</li>
    </ul>
    <div class="rt">
     <p><a href="#top">back to top</a></p>
@@ -240,7 +239,7 @@ neos_symphonie_du_vide.ogg
    <div id="fileinfo">
     <ul>
      <li>AUTHOR: <a href="mailto:kreuvf@warzone2100.de">Kreuvf</a></li>
-     <li>LAST UPDATE: 2007/09/29</li>
+     <li>LAST UPDATE: 2008/05/25</li>
     </ul>
    </div>
   </div>

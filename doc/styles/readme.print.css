@@ -1,12 +1,12 @@
 /*
 AUTHOR:      Steven "Kreuvf" Koenig
 CONTACT:     webmaster@kreuvf.de or kreuvf@warzone2100.de
-LAST UPDATE: 2007/04/14
-DESCRIPTION: CSS-file for print-look of Warzone 2100 GPL-Readme.html
+LAST UPDATE: 2008/05/25
+DESCRIPTION: CSS-file for print-look of Warzone 2100-Readme
 */
 
 body	{
-	font-family: sans;
+	font-family: sans-serif;
 	font-size: 10pt;
 	text-align: justify;
 	}
@@ -17,7 +17,7 @@ h1	{
 	}
 
 h2	{
-	font-size: 19ptem;
+	font-size: 19pt;
 	font-weight: 700;
 	}
 
