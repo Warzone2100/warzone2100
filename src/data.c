@@ -181,6 +181,19 @@ static BOOL bufferSECMLoad(const char *pBuffer, UDWORD size, void **ppData)
 	return true;
 }
 
+static BOOL dataDBECMLoad(const char* filename, void **ppData)
+{
+	if (!loadECMStatsFromDB(filename)
+	 || !allocComponentList(COMP_ECM, numECMStats))
+	{
+		return false;
+	}
+
+	//not interested in this value
+	*ppData = NULL;
+	return true;
+}
+
 /* Load the Propulsion stats */
 static BOOL bufferSPROPLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
@@ -1004,6 +1017,7 @@ static const RES_TYPE_MIN_FILE FileResourceTypes[] =
 	{"DBBODY", dataDBBODYLoad, dataReleaseStats},
 	{"DBBRAIN", dataDBBRAINLoad, NULL},
 	{"DBPROP", dataDBPROPLoad, NULL},
+	{"DBECM", dataDBECMLoad, NULL},
 	{"WAV", dataAudioLoad, (RES_FREE)sound_ReleaseTrack},
 	{"AUDIOCFG", dataAudioCfgLoad, NULL},
 	{"ANI", dataAnimLoad, dataAnimRelease},

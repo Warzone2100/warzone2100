@@ -990,3 +990,172 @@ in_db_err:
 
 	return retval;
 }
+
+/** Load the ECM (Electronic Counter Measures stats from the given SQLite
+ *  database file
+ *  \param filename name of the database file to load the propulsion stats
+ *         from.
+ */
+bool loadECMStatsFromDB(const char* filename)
+{
+	bool retval = false;
+	sqlite3* db;
+	sqlite3_stmt* stmt;
+	int rc;
+
+	if (!openDB(filename, &db))
+		goto in_db_err;
+
+	// Prepare this SQL statement for execution
+	if (!prepareStatement(db, "SELECT MAX(id) FROM `ecm`;", &stmt))
+		goto in_db_err;
+
+	/* Execute and process the results of the above SQL statement to
+	 * determine the amount of propulsions we're about to fetch. Then make
+	 * sure to allocate memory for that amount of propulsions. */
+	rc = sqlite3_step(stmt);
+	if (rc != SQLITE_ROW
+	 || sqlite3_data_count(stmt) != 1
+	 || !statsAllocECM(sqlite3_column_int(stmt, 0)))
+	{
+		goto in_statement_err;
+	}
+
+	sqlite3_finalize(stmt);
+	if (!prepareStatement(db, "SELECT `id`,"
+	                                 "`name`,"
+	                                 "`techlevel`,"
+	                                 "`buildPower`,"
+	                                 "`buildPoints`,"
+	                                 "`weight`,"
+	                                 "`hitpoints`,"
+	                                 "`systempoints`,"
+	                                 "`body`,"
+	                                 "`GfxFile`,"
+	                                 "`mountGfx`,"
+	                                 "`location`,"
+	                                 "`power`,"
+	                                 "`range`,"
+	                                 "`designable`"
+	                          "FROM `ecm`;", &stmt))
+		goto in_db_err;
+
+	while ((rc = sqlite3_step(stmt)) == SQLITE_ROW)
+	{
+		ECM_STATS sStats, * const stats = &sStats;
+		unsigned int colnum = 0;
+		const unsigned int ecm_id = sqlite3_column_int(stmt, colnum++);
+		const char* str;
+
+		memset(stats, 0, sizeof(*stats));
+
+		stats->ref = REF_ECM_START + ecm_id - 1;
+
+		// name                  TEXT    NOT NULL, -- Text id name (short language independant name)
+		if (!allocateStatName((BASE_STATS *)stats, (const char*)sqlite3_column_text(stmt, colnum++)))
+		{
+			goto in_statement_err;
+		}
+
+		// techlevel             TEXT    NOT NULL, -- Technology level of this component
+		if (!setTechLevel((BASE_STATS *)stats, (const char*)sqlite3_column_text(stmt, colnum++)))
+		{
+			goto in_statement_err;
+		}
+
+		// buildPower            NUMERIC NOT NULL, -- Power required to build this component
+		stats->buildPower = sqlite3_column_double(stmt, colnum++);
+		// buildPoints           NUMERIC NOT NULL, -- Time required to build this component
+		stats->buildPoints = sqlite3_column_double(stmt, colnum++);
+		// weight                NUMERIC NOT NULL, -- Component's weight (mass?)
+		stats->weight = sqlite3_column_double(stmt, colnum++);
+		// hitpoints             NUMERIC NOT NULL, -- Component's hitpoints - SEEMS TO BE UNUSED
+		stats->hitPoints = sqlite3_column_double(stmt, colnum++);
+		// systempoints          NUMERIC NOT NULL, -- Space the component takes in the droid - SEEMS TO BE UNUSED
+		stats->systemPoints = sqlite3_column_double(stmt, colnum++);
+		// body                  NUMERIC NOT NULL, -- Component's body points
+		stats->body = sqlite3_column_double(stmt, colnum++);
+
+		// Get the IMD for the component
+		// GfxFile               TEXT,             -- The IMD to draw for this component
+		if (sqlite3_column_type(stmt, colnum) != SQLITE_NULL)
+		{
+			stats->pIMD = (iIMDShape *) resGetData("IMD", (const char*)sqlite3_column_text(stmt, colnum++));
+			if (stats->pIMD == NULL)
+			{
+				debug(LOG_ERROR, "Cannot find the propulsion PIE for record %s", getStatName(stats));
+				abort();
+				goto in_statement_err;
+			}
+		}
+		else
+		{
+			stats->pIMD = NULL;
+			++colnum;
+		}
+
+		// Get the rest of the IMDs
+		// mountGfx              TEXT,             -- The turret mount to use
+		if (sqlite3_column_type(stmt, colnum) != SQLITE_NULL)
+		{
+			stats->pMountGraphic = (iIMDShape *) resGetData("IMD", (const char*)sqlite3_column_text(stmt, colnum++));
+			if (stats->pMountGraphic == NULL)
+			{
+				debug(LOG_ERROR, "Cannot find the mount PIE for record %s", getStatName(stats));
+				abort();
+				goto in_statement_err;
+			}
+		}
+		else
+		{
+			stats->pMountGraphic = NULL;
+			++colnum;
+		}
+
+		// location              TEXT    NOT NULL, -- specifies whether the ECM is default or for the Turret
+		str = (const char*)sqlite3_column_text(stmt, colnum++);
+		if (!strcmp(str, "DEFAULT"))
+		{
+			stats->location = LOC_DEFAULT;
+		}
+		else if(!strcmp(str, "TURRET"))
+		{
+			stats->location = LOC_TURRET;
+		}
+		else
+		{
+			ASSERT(!"invalid ECM location", "Invalid ECM location");
+		}
+
+		// power                 NUMERIC NOT NULL, -- ECM power (put against sensor power)
+		stats->power = sqlite3_column_double(stmt, colnum++);
+
+		// range                 NUMERIC NOT NULL, -- ECM range
+		stats->range = sqlite3_column_double(stmt, colnum++);
+		// set a default ECM range for now
+		stats->range = TILE_UNITS * 8;
+
+		// designable            NUMERIC NOT NULL  -- flag to indicate whether this component can be used in the design screen
+		stats->design = sqlite3_column_int(stmt, colnum++) ? true : false;
+
+		// set the max stats values for the design screen
+		if (stats->design)
+		{
+			setMaxECMPower(stats->power);
+			setMaxECMRange(stats->range);
+			setMaxComponentWeight(stats->weight);
+		}
+
+		//save the stats
+		statsSetECM(stats, ecm_id - 1);
+	}
+
+	retval = true;
+
+in_statement_err:
+	sqlite3_finalize(stmt);
+in_db_err:
+	sqlite3_close(db);
+
+	return retval;
+}
