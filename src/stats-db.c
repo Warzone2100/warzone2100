@@ -31,19 +31,6 @@
 #include "lib/sound/audio_id.h"
 #include "lib/sqlite3/sqlite3.h"
 
-static bool openDB(const char* filename, sqlite3** db)
-{
-	int rc = sqlite3_open_v2(filename, db, SQLITE_OPEN_READONLY, NULL);
-
-	if (rc != SQLITE_OK)
-	{
-		debug(LOG_ERROR, "openDB: Can't open database (%s): %s", filename, sqlite3_errmsg(*db));
-		return false;
-	}
-
-	return true;
-}
-
 static bool prepareStatement(sqlite3* db, const char* statement, sqlite3_stmt** stmt)
 {
 	int rc = sqlite3_prepare_v2(db, statement, -1, stmt, NULL);
@@ -60,19 +47,15 @@ static bool prepareStatement(sqlite3* db, const char* statement, sqlite3_stmt** 
 /** Load the weapon stats from the given SQLite database file
  *  \param filename name of the database file to load the weapon stats from.
  */
-bool loadWeaponStatsFromDB(const char* filename)
+bool loadWeaponStatsFromDB(sqlite3* db)
 {
 	bool retval = false;
-	sqlite3* db;
 	sqlite3_stmt* stmt;
 	int rc;
 
-	if (!openDB(filename, &db))
-		goto in_db_err;
-
 	// Prepare this SQL statement for execution
 	if (!prepareStatement(db, "SELECT MAX(id) FROM `weapons`;", &stmt))
-		goto in_db_err;
+		return false;
 
 	/* Execute and process the results of the above SQL statement to
 	 * determine the amount of weapons we're about to fetch. Then make sure
@@ -141,7 +124,7 @@ bool loadWeaponStatsFromDB(const char* filename)
 	                                 "`designable`,"
 	                                 "`penetrate` "
 	                          "FROM `weapons`;", &stmt))
-		goto in_db_err;
+		return false;
 
 	while ((rc = sqlite3_step(stmt)) == SQLITE_ROW)
 	{
@@ -540,8 +523,6 @@ bool loadWeaponStatsFromDB(const char* filename)
 
 in_statement_err:
 	sqlite3_finalize(stmt);
-in_db_err:
-	sqlite3_close(db);
 
 	return retval;
 }
@@ -549,19 +530,15 @@ in_db_err:
 /** Load the body stats from the given SQLite database file
  *  \param filename name of the database file to load the body stats from.
  */
-bool loadBodyStatsFromDB(const char* filename)
+bool loadBodyStatsFromDB(sqlite3* db)
 {
 	bool retval = false;
-	sqlite3* db;
 	sqlite3_stmt* stmt;
 	int rc;
 
-	if (!openDB(filename, &db))
-		goto in_db_err;
-
 	// Prepare this SQL statement for execution
 	if (!prepareStatement(db, "SELECT MAX(id) FROM `body`;", &stmt))
-		goto in_db_err;
+		return false;
 
 	/* Execute and process the results of the above SQL statement to
 	 * determine the amount of bodies we're about to fetch. Then make sure
@@ -602,7 +579,7 @@ bool loadBodyStatsFromDB(const char* filename)
 	                                 "`flameIMD`,"
 	                                 "`designable`"
 	                          "FROM `body`;", &stmt))
-		goto in_db_err;
+		return false;
 
 	while ((rc = sqlite3_step(stmt)) == SQLITE_ROW)
 	{
@@ -733,8 +710,6 @@ bool loadBodyStatsFromDB(const char* filename)
 
 in_statement_err:
 	sqlite3_finalize(stmt);
-in_db_err:
-	sqlite3_close(db);
 
 	return retval;
 }
@@ -743,19 +718,15 @@ in_db_err:
 /** Load the brain stats from the given SQLite database file
  *  \param filename name of the database file to load the brain stats from.
  */
-bool loadBrainStatsFromDB(const char* filename)
+bool loadBrainStatsFromDB(sqlite3* db)
 {
 	bool retval = false;
-	sqlite3* db;
 	sqlite3_stmt* stmt;
 	int rc;
 
-	if (!openDB(filename, &db))
-		goto in_db_err;
-
 	// Prepare this SQL statement for execution
 	if (!prepareStatement(db, "SELECT MAX(id) FROM `brain`;", &stmt))
-		goto in_db_err;
+		return false;
 
 	/* Execute and process the results of the above SQL statement to
 	 * determine the amount of brains we're about to fetch. Then make sure
@@ -780,7 +751,7 @@ bool loadBrainStatsFromDB(const char* filename)
 	                                 "`weapon`,"
 	                                 "`program_capacity`"
 	                          "FROM `brain`;", &stmt))
-		goto in_db_err;
+		return false;
 
 	while ((rc = sqlite3_step(stmt)) == SQLITE_ROW)
 	{
@@ -852,8 +823,6 @@ bool loadBrainStatsFromDB(const char* filename)
 
 in_statement_err:
 	sqlite3_finalize(stmt);
-in_db_err:
-	sqlite3_close(db);
 
 	return retval;
 }
@@ -861,19 +830,15 @@ in_db_err:
 /** Load the propulsion stats from the given SQLite database file
  *  \param filename name of the database file to load the propulsion stats from.
  */
-bool loadPropulsionStatsFromDB(const char* filename)
+bool loadPropulsionStatsFromDB(sqlite3* db)
 {
 	bool retval = false;
-	sqlite3* db;
 	sqlite3_stmt* stmt;
 	int rc;
 
-	if (!openDB(filename, &db))
-		goto in_db_err;
-
 	// Prepare this SQL statement for execution
 	if (!prepareStatement(db, "SELECT MAX(id) FROM `propulsion`;", &stmt))
-		goto in_db_err;
+		return false;
 
 	/* Execute and process the results of the above SQL statement to
 	 * determine the amount of propulsions we're about to fetch. Then make
@@ -901,7 +866,7 @@ bool loadPropulsionStatsFromDB(const char* filename)
 					 "`maxSpeed`,"
 					 "`designable`"
 	                          "FROM `propulsion`;", &stmt))
-		goto in_db_err;
+		return false;
 
 	while ((rc = sqlite3_step(stmt)) == SQLITE_ROW)
 	{
@@ -985,8 +950,6 @@ bool loadPropulsionStatsFromDB(const char* filename)
 
 in_statement_err:
 	sqlite3_finalize(stmt);
-in_db_err:
-	sqlite3_close(db);
 
 	return retval;
 }
@@ -995,19 +958,15 @@ in_db_err:
  *  \param filename name of the database file to load the propulsion stats
  *         from.
  */
-bool loadSensorStatsFromDB(const char* filename)
+bool loadSensorStatsFromDB(sqlite3* db)
 {
 	bool retval = false;
-	sqlite3* db;
 	sqlite3_stmt* stmt;
 	int rc;
 
-	if (!openDB(filename, &db))
-		goto in_db_err;
-
 	// Prepare this SQL statement for execution
 	if (!prepareStatement(db, "SELECT MAX(id) FROM `sensor`;", &stmt))
-		goto in_db_err;
+		return false;
 
 	/* Execute and process the results of the above SQL statement to
 	 * determine the amount of propulsions we're about to fetch. Then make
@@ -1039,7 +998,7 @@ bool loadSensorStatsFromDB(const char* filename)
 	                                 "`power`,"
 	                                 "`designable`"
 	                          "FROM `sensor`;", &stmt))
-		goto in_db_err;
+		return false;
 
 	while ((rc = sqlite3_step(stmt)) == SQLITE_ROW)
 	{
@@ -1186,8 +1145,6 @@ bool loadSensorStatsFromDB(const char* filename)
 
 in_statement_err:
 	sqlite3_finalize(stmt);
-in_db_err:
-	sqlite3_close(db);
 
 	return retval;
 }
@@ -1197,19 +1154,15 @@ in_db_err:
  *  \param filename name of the database file to load the propulsion stats
  *         from.
  */
-bool loadECMStatsFromDB(const char* filename)
+bool loadECMStatsFromDB(sqlite3* db)
 {
 	bool retval = false;
-	sqlite3* db;
 	sqlite3_stmt* stmt;
 	int rc;
 
-	if (!openDB(filename, &db))
-		goto in_db_err;
-
 	// Prepare this SQL statement for execution
 	if (!prepareStatement(db, "SELECT MAX(id) FROM `ecm`;", &stmt))
-		goto in_db_err;
+		return false;
 
 	/* Execute and process the results of the above SQL statement to
 	 * determine the amount of propulsions we're about to fetch. Then make
@@ -1239,7 +1192,7 @@ bool loadECMStatsFromDB(const char* filename)
 	                                 "`range`,"
 	                                 "`designable`"
 	                          "FROM `ecm`;", &stmt))
-		goto in_db_err;
+		return false;
 
 	while ((rc = sqlite3_step(stmt)) == SQLITE_ROW)
 	{
@@ -1355,8 +1308,6 @@ bool loadECMStatsFromDB(const char* filename)
 
 in_statement_err:
 	sqlite3_finalize(stmt);
-in_db_err:
-	sqlite3_close(db);
 
 	return retval;
 }

@@ -67,6 +67,7 @@
 
 #include "multiplay.h"
 #include "lib/netplay/netplay.h"
+#include "lib/sqlite3/sqlite3.h"
 
 /**********************************************************
  *
@@ -91,6 +92,18 @@ void dataClearSaveFlag(void)
 	saveFlag = false;
 }
 
+static bool openDB(const char* filename, sqlite3** db)
+{
+	int rc = sqlite3_open_v2(filename, db, SQLITE_OPEN_READONLY, NULL);
+
+	if (rc != SQLITE_OK)
+	{
+		debug(LOG_ERROR, "openDB: Can't open database (%s): %s", filename, sqlite3_errmsg(*db));
+		return false;
+	}
+
+	return true;
+}
 
 /* Load the body stats */
 static BOOL bufferSBODYLoad(const char *pBuffer, UDWORD size, void **ppData)
@@ -108,15 +121,26 @@ static BOOL bufferSBODYLoad(const char *pBuffer, UDWORD size, void **ppData)
 
 static BOOL dataDBBODYLoad(const char* filename, void **ppData)
 {
-	if (!loadBodyStatsFromDB(filename)
+	bool retval = false;
+	sqlite3* db;
+
+	if (!openDB(filename, &db))
+		return false;
+
+	if (!loadBodyStatsFromDB(db)
 	 || !allocComponentList(COMP_BODY, numBodyStats))
 	{
-		return false;
+		goto in_db_err;
 	}
 
 	// set a dummy value so the release function gets called
 	*ppData = (void *)1;
-	return true;
+	retval = true;
+
+in_db_err:
+	sqlite3_close(db);
+
+	return retval;
 }
 
 static void dataReleaseStats(WZ_DECL_UNUSED void *pData)
@@ -142,15 +166,26 @@ static BOOL bufferSWEAPONLoad(const char *pBuffer, UDWORD size, void **ppData)
 
 static BOOL dataDBWEAPONLoad(const char* filename, void **ppData)
 {
-	if (!loadWeaponStatsFromDB(filename)
+	bool retval = false;
+	sqlite3* db;
+
+	if (!openDB(filename, &db))
+		return false;
+
+	if (!loadWeaponStatsFromDB(db)
 	 || !allocComponentList(COMP_WEAPON, numWeaponStats))
 	{
-		return false;
+		goto in_db_err;
 	}
 
 	// not interested in this value
 	*ppData = NULL;
-	return true;
+	retval = true;
+
+in_db_err:
+	sqlite3_close(db);
+
+	return retval;
 }
 
 /* Load the constructor stats */
@@ -183,15 +218,26 @@ static BOOL bufferSECMLoad(const char *pBuffer, UDWORD size, void **ppData)
 
 static BOOL dataDBECMLoad(const char* filename, void **ppData)
 {
-	if (!loadECMStatsFromDB(filename)
+	bool retval = false;
+	sqlite3* db;
+
+	if (!openDB(filename, &db))
+		return false;
+
+	if (!loadECMStatsFromDB(db)
 	 || !allocComponentList(COMP_ECM, numECMStats))
 	{
-		return false;
+		goto in_db_err;
 	}
 
 	//not interested in this value
 	*ppData = NULL;
-	return true;
+	retval = true;
+
+in_db_err:
+	sqlite3_close(db);
+
+	return retval;
 }
 
 /* Load the Propulsion stats */
@@ -210,15 +256,26 @@ static BOOL bufferSPROPLoad(const char *pBuffer, UDWORD size, void **ppData)
 
 static BOOL dataDBPROPLoad(const char* filename, void **ppData)
 {
-	if (!loadPropulsionStatsFromDB(filename)
+	bool retval = false;
+	sqlite3* db;
+
+	if (!openDB(filename, &db))
+		return false;
+
+	if (!loadPropulsionStatsFromDB(db)
 	 || !allocComponentList(COMP_PROPULSION, numPropulsionStats))
 	{
-		return false;
+		goto in_db_err;
 	}
 
 	// not interested in this value
 	*ppData = NULL;
-	return true;
+	retval = true;
+
+in_db_err:
+	sqlite3_close(db);
+
+	return retval;
 }
 
 /* Load the Sensor stats */
@@ -237,15 +294,26 @@ static BOOL bufferSSENSORLoad(const char *pBuffer, UDWORD size, void **ppData)
 
 static BOOL dataDBSENSORLoad(const char* filename, void **ppData)
 {
-	if (!loadSensorStatsFromDB(filename)
+	bool retval = false;
+	sqlite3* db;
+
+	if (!openDB(filename, &db))
+		return false;
+
+	if (!loadSensorStatsFromDB(db)
 	 || !allocComponentList(COMP_SENSOR, numSensorStats))
 	{
-		return false;
+		goto in_db_err;
 	}
 
 	//not interested in this value
 	*ppData = NULL;
-	return true;
+	retval = true;
+
+in_db_err:
+	sqlite3_close(db);
+
+	return retval;
 }
 
 /* Load the Repair stats */
@@ -278,15 +346,26 @@ static BOOL bufferSBRAINLoad(const char *pBuffer, UDWORD size, void **ppData)
 
 static BOOL dataDBBRAINLoad(const char* filename, void** ppData)
 {
-	if (!loadBrainStatsFromDB(filename)
+	bool retval = false;
+	sqlite3* db;
+
+	if (!openDB(filename, &db))
+		return false;
+
+	if (!loadBrainStatsFromDB(db)
 	 || !allocComponentList(COMP_BRAIN, numBrainStats))
 	{
-		return false;
+		goto in_db_err;
 	}
 
 	//not interested in this value
 	*ppData = NULL;
-	return true;
+	retval = true;
+
+in_db_err:
+	sqlite3_close(db);
+
+	return retval;
 }
 
 /* Load the PropulsionType stats */
