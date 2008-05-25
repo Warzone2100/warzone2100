@@ -31,6 +31,9 @@ extern "C"
 {
 #endif
 
+// Forward declaration to allow pointers to this type
+struct sqlite3;
+
 /** Maximum number of characters in a resource type. */
 #define RESTYPE_MAXCHAR		20
 
@@ -42,6 +45,8 @@ typedef BOOL (*RES_BUFFERLOAD)(const char *pBuffer, UDWORD size, void **pData);
 
 /** Function pointer for a function that loads from a filename. */
 typedef BOOL (*RES_FILELOAD)(const char *pFile, void **pData);
+
+typedef BOOL (*RES_TABLELOAD)(struct sqlite3* db, void** pData);
 
 /** Function pointer for releasing a resource loaded by the above functions. */
 typedef void (*RES_FREE)(void *pData);
@@ -78,6 +83,7 @@ typedef struct _res_type
 	UDWORD	HashedType;				// hashed version of the name of the id - // a null hashedtype indicates end of list
 
 	RES_FILELOAD	fileLoad;		// This isn't really used any more ?
+	RES_TABLELOAD   tableLoad;
 	struct _res_type	*psNext;
 } RES_TYPE;
 
@@ -114,8 +120,14 @@ extern BOOL	resAddBufferLoad(const char *pType, RES_BUFFERLOAD buffLoad,
 extern BOOL	resAddFileLoad(const char *pType, RES_FILELOAD fileLoad,
 						   RES_FREE release);
 
+extern BOOL resAddTableLoad(const char* type, RES_TABLELOAD tableLoad, RES_FREE release);
+
 /** Call the load function for a file. */
 extern BOOL resLoadFile(const char *pType, const char *pFile);
+
+extern BOOL resLoadTable(const char* type);
+
+extern BOOL resOpenDB(const char* filename);
 
 /** Add data to the resource system. */
 extern BOOL resAddData(char *pType, char *pID, void *pData);

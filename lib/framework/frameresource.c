@@ -27,6 +27,7 @@
 
 #include "file.h"
 #include "resly.h"
+#include "lib/sqlite3/sqlite3.h"
 
 // Local prototypes
 static RES_TYPE *psResTypes=NULL;
@@ -34,6 +35,7 @@ static RES_TYPE *psResTypes=NULL;
 /* The initial resource directory and the current resource directory */
 char aResDir[PATH_MAX];
 char aCurrResDir[PATH_MAX];
+static sqlite3* currDB = NULL;
 
 // the current resource block ID
 static SDWORD resBlockID;
@@ -121,6 +123,13 @@ BOOL resLoad(const char *pResFile, SDWORD blockID)
 		retval = false;
 	}
 
+	// If we have a database opened, make sure to close it
+	if (currDB)
+	{
+		sqlite3_close(currDB);
+		currDB = NULL;
+	}
+
 	res_lex_destroy();
 	PHYSFS_close(input.input.physfsfile);
 
@@ -176,6 +185,7 @@ BOOL resAddBufferLoad(const char *pType, RES_BUFFERLOAD buffLoad,
 
 	psT->buffLoad = buffLoad;
 	psT->fileLoad = NULL;
+	psT->tableLoad = NULL;
 	psT->release = release;
 
 	psT->psNext = psResTypes;
@@ -198,6 +208,27 @@ BOOL resAddFileLoad(const char *pType, RES_FILELOAD fileLoad,
 
 	psT->buffLoad = NULL;
 	psT->fileLoad = fileLoad;
+	psT->tableLoad = NULL;
+	psT->release = release;
+
+	psT->psNext = psResTypes;
+	psResTypes = psT;
+
+	return true;
+}
+
+BOOL resAddTableLoad(const char* type, RES_TABLELOAD tableLoad, RES_FREE release)
+{
+	RES_TYPE* psT = resAlloc(type);
+
+	if (!psT)
+	{
+		return false;
+	}
+
+	psT->buffLoad = NULL;
+	psT->fileLoad = NULL;
+	psT->tableLoad = tableLoad;
 	psT->release = release;
 
 	psT->psNext = psResTypes;
@@ -513,6 +544,95 @@ BOOL resLoadFile(const char *pType, const char *pFile)
 	return true;
 }
 
+BOOL resLoadTable(const char* type)
+{
+	RES_TYPE	*psT;
+	void		*pData;
+	RES_DATA	*psRes;
+	UDWORD HashedType = HashString(type);
+
+	// Find the resource-type
+	for (psT = psResTypes; psT != NULL; psT = psT->psNext)
+	{
+		if (psT->HashedType == HashedType)
+		{
+			break;
+		}
+	}
+
+	if (psT == NULL)
+	{
+		debug(LOG_WZ, "Unknown type: %s", type);
+		return false;
+	}
+
+	// load the resource
+	if (psT->tableLoad)
+	{
+		if (!psT->tableLoad(currDB, &pData))
+		{
+			debug(LOG_ERROR, "The load function for resource type \"%s\" failed", type);
+			if (psT->release != NULL)
+			{
+				psT->release(pData);
+			}
+
+			return false;
+		}
+	}
+	else
+	{
+		debug(LOG_ERROR, "No table load functions for this type (%s)", type);
+		return false;
+	}
+
+	resDoResLoadCallback();		// do callback.
+
+	// Set up the resource structure if there is something to store
+	if (pData != NULL)
+	{
+		// LastResourceFilename may have been changed (e.g. by TEXPAGE loading)
+		psRes = resDataInit("database-table", HashStringIgnoreCase("database-table"), pData, resBlockID);
+		if (!psRes)
+		{
+			if (psT->release != NULL)
+			{
+				psT->release(pData);
+			}
+			return false;
+		}
+
+		// Add the resource to the list
+		psRes->psNext = psT->psRes;
+		psT->psRes = psRes;
+	}
+	return true;
+}
+
+BOOL resOpenDB(const char* filename)
+{
+	char aFileName[PATH_MAX];
+
+	// If we already have a database opened, make sure to close it first.
+	if (currDB)
+	{
+		sqlite3_close(currDB);
+	}
+
+	sstrcpy(aFileName, aCurrResDir);
+	sstrcat(aFileName, filename);
+
+	makeLocaleFile(aFileName);  // check for translated file
+
+	if (sqlite3_open_v2(aFileName, &currDB, SQLITE_OPEN_READONLY, NULL) != SQLITE_OK)
+	{
+		debug(LOG_ERROR, "Can't open database (%s): %s", aFileName, sqlite3_errmsg(currDB));
+		currDB = NULL;
+		return false;
+	}
+
+	return true;
+}
 
 /* Return the resource for a type and hashedname */
 void *resGetDataFromHash(const char *pType, UDWORD HashedID)

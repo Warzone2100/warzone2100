@@ -77,6 +77,8 @@ extern YY_EXTRA_TYPE yyget_extra(void);
 	/* Match to key words */
 directory					{ return DIRECTORY; }
 file						{ return FILETOKEN; }
+database					{ return DATABASE;  }
+table						{ return TABLE;     }
 
 	/* Match text values */
 [a-zA-Z][-0-9_a-zA-Z]*		{

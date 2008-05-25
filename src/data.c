@@ -67,7 +67,6 @@
 
 #include "multiplay.h"
 #include "lib/netplay/netplay.h"
-#include "lib/sqlite3/sqlite3.h"
 
 /**********************************************************
  *
@@ -92,19 +91,6 @@ void dataClearSaveFlag(void)
 	saveFlag = false;
 }
 
-static bool openDB(const char* filename, sqlite3** db)
-{
-	int rc = sqlite3_open_v2(filename, db, SQLITE_OPEN_READONLY, NULL);
-
-	if (rc != SQLITE_OK)
-	{
-		debug(LOG_ERROR, "openDB: Can't open database (%s): %s", filename, sqlite3_errmsg(*db));
-		return false;
-	}
-
-	return true;
-}
-
 /* Load the body stats */
 static BOOL bufferSBODYLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
@@ -119,28 +105,17 @@ static BOOL bufferSBODYLoad(const char *pBuffer, UDWORD size, void **ppData)
 	return true;
 }
 
-static BOOL dataDBBODYLoad(const char* filename, void **ppData)
+static BOOL dataDBBODYLoad(struct sqlite3* db, void **ppData)
 {
-	bool retval = false;
-	sqlite3* db;
-
-	if (!openDB(filename, &db))
-		return false;
-
 	if (!loadBodyStatsFromDB(db)
 	 || !allocComponentList(COMP_BODY, numBodyStats))
 	{
-		goto in_db_err;
+		return false;
 	}
 
 	// set a dummy value so the release function gets called
 	*ppData = (void *)1;
-	retval = true;
-
-in_db_err:
-	sqlite3_close(db);
-
-	return retval;
+	return true;
 }
 
 static void dataReleaseStats(WZ_DECL_UNUSED void *pData)
@@ -164,28 +139,17 @@ static BOOL bufferSWEAPONLoad(const char *pBuffer, UDWORD size, void **ppData)
 	return true;
 }
 
-static BOOL dataDBWEAPONLoad(const char* filename, void **ppData)
+static BOOL dataDBWEAPONLoad(struct sqlite3* db, void **ppData)
 {
-	bool retval = false;
-	sqlite3* db;
-
-	if (!openDB(filename, &db))
-		return false;
-
 	if (!loadWeaponStatsFromDB(db)
 	 || !allocComponentList(COMP_WEAPON, numWeaponStats))
 	{
-		goto in_db_err;
+		return false;
 	}
 
 	// not interested in this value
 	*ppData = NULL;
-	retval = true;
-
-in_db_err:
-	sqlite3_close(db);
-
-	return retval;
+	return true;
 }
 
 /* Load the constructor stats */
@@ -216,28 +180,17 @@ static BOOL bufferSECMLoad(const char *pBuffer, UDWORD size, void **ppData)
 	return true;
 }
 
-static BOOL dataDBECMLoad(const char* filename, void **ppData)
+static BOOL dataDBECMLoad(struct sqlite3* db, void **ppData)
 {
-	bool retval = false;
-	sqlite3* db;
-
-	if (!openDB(filename, &db))
-		return false;
-
 	if (!loadECMStatsFromDB(db)
 	 || !allocComponentList(COMP_ECM, numECMStats))
 	{
-		goto in_db_err;
+		return false;
 	}
 
 	//not interested in this value
 	*ppData = NULL;
-	retval = true;
-
-in_db_err:
-	sqlite3_close(db);
-
-	return retval;
+	return true;
 }
 
 /* Load the Propulsion stats */
@@ -254,28 +207,17 @@ static BOOL bufferSPROPLoad(const char *pBuffer, UDWORD size, void **ppData)
 	return true;
 }
 
-static BOOL dataDBPROPLoad(const char* filename, void **ppData)
+static BOOL dataDBPROPLoad(struct sqlite3* db, void **ppData)
 {
-	bool retval = false;
-	sqlite3* db;
-
-	if (!openDB(filename, &db))
-		return false;
-
 	if (!loadPropulsionStatsFromDB(db)
 	 || !allocComponentList(COMP_PROPULSION, numPropulsionStats))
 	{
-		goto in_db_err;
+		return false;
 	}
 
 	// not interested in this value
 	*ppData = NULL;
-	retval = true;
-
-in_db_err:
-	sqlite3_close(db);
-
-	return retval;
+	return true;
 }
 
 /* Load the Sensor stats */
@@ -292,28 +234,17 @@ static BOOL bufferSSENSORLoad(const char *pBuffer, UDWORD size, void **ppData)
 	return true;
 }
 
-static BOOL dataDBSENSORLoad(const char* filename, void **ppData)
+static BOOL dataDBSENSORLoad(struct sqlite3* db, void **ppData)
 {
-	bool retval = false;
-	sqlite3* db;
-
-	if (!openDB(filename, &db))
-		return false;
-
 	if (!loadSensorStatsFromDB(db)
 	 || !allocComponentList(COMP_SENSOR, numSensorStats))
 	{
-		goto in_db_err;
+		return false;
 	}
 
 	//not interested in this value
 	*ppData = NULL;
-	retval = true;
-
-in_db_err:
-	sqlite3_close(db);
-
-	return retval;
+	return true;
 }
 
 /* Load the Repair stats */
@@ -344,28 +275,17 @@ static BOOL bufferSBRAINLoad(const char *pBuffer, UDWORD size, void **ppData)
 	return true;
 }
 
-static BOOL dataDBBRAINLoad(const char* filename, void** ppData)
+static BOOL dataDBBRAINLoad(struct sqlite3* db, void** ppData)
 {
-	bool retval = false;
-	sqlite3* db;
-
-	if (!openDB(filename, &db))
-		return false;
-
 	if (!loadBrainStatsFromDB(db)
 	 || !allocComponentList(COMP_BRAIN, numBrainStats))
 	{
-		goto in_db_err;
+		return false;
 	}
 
 	//not interested in this value
 	*ppData = NULL;
-	retval = true;
-
-in_db_err:
-	sqlite3_close(db);
-
-	return retval;
+	return true;
 }
 
 /* Load the PropulsionType stats */
@@ -1054,9 +974,9 @@ static BOOL dataScriptLoadVals(const char* fileName, void **ppData)
 // This basically matches the argument list of resAddBufferLoad in frameresource.c
 typedef struct
 {
-	const char *aType;                      // points to the string defining the type (e.g. SCRIPT) - NULL indicates end of list
-	RES_BUFFERLOAD buffLoad;                // routine to process the data for this type
-	RES_FREE release;                       // routine to release the data (NULL indicates none)
+	const char *aType;                      ///< points to the string defining the type (e.g. SCRIPT) - NULL indicates end of list
+	RES_BUFFERLOAD buffLoad;                ///< routine to process the data for this type
+	RES_FREE release;                       ///< routine to release the data (NULL indicates none)
 } RES_TYPE_MIN_BUF;
 
 static const RES_TYPE_MIN_BUF BufferResourceTypes[] =
@@ -1098,19 +1018,13 @@ static const RES_TYPE_MIN_BUF BufferResourceTypes[] =
 
 typedef struct
 {
-	const char *aType;                      // points to the string defining the type (e.g. SCRIPT) - NULL indicates end of list
-	RES_FILELOAD fileLoad;                  // routine to process the data for this type
-	RES_FREE release;                       // routine to release the data (NULL indicates none)
+	const char *aType;                      ///< points to the string defining the type (e.g. SCRIPT) - NULL indicates end of list
+	RES_FILELOAD fileLoad;                  ///< routine to process the data for this type
+	RES_FREE release;                       ///< routine to release the data (NULL indicates none)
 } RES_TYPE_MIN_FILE;
 
 static const RES_TYPE_MIN_FILE FileResourceTypes[] =
 {
-	{"DBWEAPON", dataDBWEAPONLoad, NULL},
-	{"DBBODY", dataDBBODYLoad, dataReleaseStats},
-	{"DBBRAIN", dataDBBRAINLoad, NULL},
-	{"DBPROP", dataDBPROPLoad, NULL},
-	{"DBSENSOR", dataDBSENSORLoad, NULL},
-	{"DBECM", dataDBECMLoad, NULL},
 	{"WAV", dataAudioLoad, (RES_FREE)sound_ReleaseTrack},
 	{"AUDIOCFG", dataAudioCfgLoad, NULL},
 	{"ANI", dataAnimLoad, dataAnimRelease},
@@ -1122,6 +1036,23 @@ static const RES_TYPE_MIN_FILE FileResourceTypes[] =
 	{"SCRIPT", dataScriptLoad, (RES_FREE)scriptFreeCode},
 	{"SCRIPTVAL", dataScriptLoadVals, NULL},
 	{"STR_RES", dataStrResLoad, dataStrResRelease},
+};
+
+typedef struct
+{
+	const char *aType;                      ///< points to the string defining the type (e.g. SCRIPT) - NULL indicates end of list
+	RES_TABLELOAD tableLoad;                ///< routine to process the data for this type
+	RES_FREE release;                       ///< routine to release the data (NULL indicates none)
+} RES_TYPE_MIN_TABLE;
+
+static const RES_TYPE_MIN_TABLE TableResourceTypes[] =
+{
+	{"DBWEAPON", dataDBWEAPONLoad, NULL},
+	{"DBBODY", dataDBBODYLoad, dataReleaseStats},
+	{"DBBRAIN", dataDBBRAINLoad, NULL},
+	{"DBPROP", dataDBPROPLoad, NULL},
+	{"DBSENSOR", dataDBSENSORLoad, NULL},
+	{"DBECM", dataDBECMLoad, NULL},
 };
 
 /* Pass all the data loading functions to the framework library */
@@ -1155,7 +1086,22 @@ BOOL dataInitLoadFuncs(void)
 		{
 			if(!resAddFileLoad(CurrentType->aType, CurrentType->fileLoad, CurrentType->release))
 			{
-				return false; // error whilst adding a buffer load
+				return false; // error whilst adding a file load
+			}
+		}
+	}
+
+	// iterate through table load functions
+	{
+		const RES_TYPE_MIN_TABLE *CurrentType;
+		// Points just past the last item in the list
+		const RES_TYPE_MIN_TABLE * const EndType = &TableResourceTypes[ARRAY_SIZE(TableResourceTypes)];
+
+		for (CurrentType = TableResourceTypes; CurrentType != EndType; ++CurrentType)
+		{
+			if (!resAddTableLoad(CurrentType->aType, CurrentType->tableLoad, CurrentType->release))
+			{
+				return false; // error whilst adding a table load
 			}
 		}
 	}

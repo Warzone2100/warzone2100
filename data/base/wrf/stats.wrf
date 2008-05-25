@@ -6,12 +6,13 @@
 directory	"messages/strings"
 file		STR_RES	"names.txt"
 directory	"stats-sql"
-file		DBWEAPON	"stats.db"
-file		DBBODY	"stats.db"
-file		DBBRAIN	"stats.db"
-file		DBPROP	"stats.db"
-file		DBSENSOR	"stats.db"
-file		DBECM	"stats.db"
+database	"stats.db"
+table		DBWEAPON
+table		DBBODY
+table		DBBRAIN
+table		DBPROP
+table		DBSENSOR
+table		DBECM
 directory	"stats"
 file		SREPAIR	"repair.txt"
 file		SCONSTR	"construction.txt"
