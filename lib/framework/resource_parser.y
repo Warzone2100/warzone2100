@@ -59,11 +59,13 @@ void yyerror(const char* msg)
 %token <sval> QTEXT_T			/* Text with double quotes surrounding it */
 
 %destructor {
+#ifndef WZ_OS_WIN
 	// Force type checking by the compiler
 	char * const s = $$;
 
 	if (s)
 		free(s);
+#endif
 } TEXT_T QTEXT_T
 
 	/* keywords */

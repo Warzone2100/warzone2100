@@ -52,11 +52,13 @@ void yyerror(const char* msg)
 %type <sval> string
 
 %destructor {
+#ifndef WZ_OS_WIN
 	// Force type checking by the compiler
 	char * const s = $$;
 
 	if (s)
 		free(s);
+#endif
 } TEXT_T QTEXT_T string
 
 %%

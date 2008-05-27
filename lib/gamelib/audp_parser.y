@@ -53,11 +53,13 @@ void yyerror(const char* fmt, ...) WZ_DECL_FORMAT(printf, 1, 2);
 %token <sval> QTEXT /* Text with double quotes surrounding it */
 
 %destructor {
+#ifndef WZ_OS_WIN
 	// Force type checking by the compiler
 	char * const s = $$;
 
 	if (s)
 		free(s);
+#endif
 } QTEXT
 
 	/* keywords */
