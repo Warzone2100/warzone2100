@@ -63,8 +63,9 @@
 #define WZCOL_CONS_TEXT_DEBUG		psPalette[38]
 #define WZCOL_GREY					psPalette[39]
 #define WZCOL_MAP_PREVIEW_AIPLAYER  psPalette[40]
+#define WZCOL_MENU_SHADOW	psPalette[41]
 
-#define WZCOL_MAX			41
+#define WZCOL_MAX			42
 
 //*************************************************************************
 
