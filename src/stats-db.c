@@ -141,6 +141,9 @@ typedef struct
 
 static bool compBaseStatColumnNames(SQL_COMP_BASE_STATS* cols, sqlite3_stmt* stmt)
 {
+	if (!baseStatColumnNames(&cols->parent, stmt))
+		return false;
+
 	cols->techlevel    = getColNumByNameA(stmt, "techlevel");
 	cols->buildPower   = getColNumByNameA(stmt, "buildPower");
 	cols->buildPoints  = getColNumByNameA(stmt, "buildPoints");
@@ -157,8 +160,7 @@ static bool compBaseStatColumnNames(SQL_COMP_BASE_STATS* cols, sqlite3_stmt* stm
 	ASSERT(cols->weight       != -1, "No weight in this database query available");
 	ASSERT(cols->systempoints != -1, "No system points in this database query available");
 
-	return baseStatColumnNames(&cols->parent, stmt)
-	    && cols->techlevel    != -1
+	return cols->techlevel    != -1
 	    && cols->buildPower   != -1
 	    && cols->buildPoints  != -1
 	    && cols->weight       != -1
@@ -618,7 +620,8 @@ bool loadWeaponStatsFromDB(sqlite3* db, const char* tableName)
 		return false;
 
 	if ((rc = sqlite3_step(stmt)) == SQLITE_ROW)
-		compBaseStatColumnNames(&cols, stmt);
+		if (!compBaseStatColumnNames(&cols, stmt))
+			goto in_statement_err;
 
 	while (rc == SQLITE_ROW)
 	{
@@ -679,7 +682,8 @@ bool loadBodyStatsFromDB(sqlite3* db, const char* tableName)
 		return false;
 
 	if ((rc = sqlite3_step(stmt)) == SQLITE_ROW)
-		compBaseStatColumnNames(&cols, stmt);
+		if (!compBaseStatColumnNames(&cols, stmt))
+			goto in_statement_err;
 
 	while (rc == SQLITE_ROW)
 	{
@@ -807,7 +811,8 @@ bool loadBrainStatsFromDB(sqlite3* db, const char* tableName)
 		return false;
 
 	if ((rc = sqlite3_step(stmt)) == SQLITE_ROW)
-		compBaseStatColumnNames(&cols, stmt);
+		if (!compBaseStatColumnNames(&cols, stmt))
+			goto in_statement_err;
 
 	while (rc == SQLITE_ROW)
 	{
@@ -894,7 +899,8 @@ bool loadPropulsionStatsFromDB(sqlite3* db, const char* tableName)
 		return false;
 
 	if ((rc = sqlite3_step(stmt)) == SQLITE_ROW)
-		compBaseStatColumnNames(&cols, stmt);
+		if (!compBaseStatColumnNames(&cols, stmt))
+			goto in_statement_err;
 
 	while (rc == SQLITE_ROW)
 	{
@@ -974,7 +980,8 @@ bool loadSensorStatsFromDB(sqlite3* db, const char* tableName)
 		return false;
 
 	if ((rc = sqlite3_step(stmt)) == SQLITE_ROW)
-		compBaseStatColumnNames(&cols, stmt);
+		if (!compBaseStatColumnNames(&cols, stmt))
+			goto in_statement_err;
 
 	while (rc == SQLITE_ROW)
 	{
@@ -1118,7 +1125,8 @@ bool loadECMStatsFromDB(sqlite3* db, const char* tableName)
 		return false;
 
 	if ((rc = sqlite3_step(stmt)) == SQLITE_ROW)
-		compBaseStatColumnNames(&cols, stmt);
+		if (!compBaseStatColumnNames(&cols, stmt))
+			goto in_statement_err;
 
 	while (rc == SQLITE_ROW)
 	{
