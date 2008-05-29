@@ -96,23 +96,76 @@ static int getColNumByName(sqlite3_stmt* stmt, const char* name)
 	return colnum;
 }
 
-static bool loadBaseStats(BASE_STATS* stats, sqlite3_stmt* stmt, unsigned int id)
+typedef struct
 {
-	const int name = getColNumByNameA(stmt, "name");
+	int id;
+	int name;
+} SQL_BASE_STATS;
+
+static bool baseStatColumnNames(SQL_BASE_STATS* cols, sqlite3_stmt* stmt)
+{
+	cols->id   = getColNumByNameA(stmt, "id");
+	cols->name = getColNumByNameA(stmt, "name");
+
+	ASSERT(cols->id   != -1, "No id column available in this database query");
+	ASSERT(cols->name != -1, "No stats name in this database query available");
+
+	return cols->id   != -1
+	    && cols->name != -1;
+}
+
+static bool loadBaseStats(BASE_STATS* stats, SQL_BASE_STATS* cols, sqlite3_stmt* stmt, unsigned int id)
+{
 	stats->ref = id;
 
 	// name                  TEXT    NOT NULL, -- Text id name (short language independant name)
-	ASSERT(name != -1, "No stats name in this database query available");
-	if (name == -1
-	 || !allocateStatName(stats, (const char*)sqlite3_column_text(stmt, name)))
-	{
-		return false;
-	}
+	ASSERT(cols->name != -1, "No stats name in this database query available");
 
-	return true;
+	return cols->name != -1
+	    && allocateStatName(stats, (const char*)sqlite3_column_text(stmt, cols->name));
 }
 
-static bool loadComponentBaseStats(COMP_BASE_STATS* stats, sqlite3_stmt* stmt, unsigned int id)
+typedef struct
+{
+	SQL_BASE_STATS parent;
+	int techlevel;
+	int buildPower;
+	int buildPoints;
+	int weight;
+	int hitpoints;
+	int systempoints;
+	int body;
+	int GfxFile;
+	int designable;
+} SQL_COMP_BASE_STATS;
+
+static bool compBaseStatColumnNames(SQL_COMP_BASE_STATS* cols, sqlite3_stmt* stmt)
+{
+	cols->techlevel    = getColNumByNameA(stmt, "techlevel");
+	cols->buildPower   = getColNumByNameA(stmt, "buildPower");
+	cols->buildPoints  = getColNumByNameA(stmt, "buildPoints");
+	cols->weight       = getColNumByNameA(stmt, "weight");
+	cols->hitpoints    = getColNumByNameA(stmt, "hitpoints");
+	cols->systempoints = getColNumByNameA(stmt, "systempoints");
+	cols->body         = getColNumByNameA(stmt, "body");
+	cols->GfxFile      = getColNumByNameA(stmt, "GfxFile");
+	cols->designable   = getColNumByNameA(stmt, "designable");
+
+	ASSERT(cols->techlevel    != -1, "No tech level in this database query available");
+	ASSERT(cols->buildPower   != -1, "No build power in this database query available");
+	ASSERT(cols->buildPoints  != -1, "No build points in this database query available");
+	ASSERT(cols->weight       != -1, "No weight in this database query available");
+	ASSERT(cols->systempoints != -1, "No system points in this database query available");
+
+	return baseStatColumnNames(&cols->parent, stmt)
+	    && cols->techlevel    != -1
+	    && cols->buildPower   != -1
+	    && cols->buildPoints  != -1
+	    && cols->weight       != -1
+	    && cols->systempoints != -1;
+}
+
+static bool loadComponentBaseStats(COMP_BASE_STATS* stats, SQL_COMP_BASE_STATS* cols, sqlite3_stmt* stmt, unsigned int id)
 {
 	const int techlevel    = getColNumByNameA(stmt, "techlevel");
 	const int buildPower   = getColNumByNameA(stmt, "buildPower");
@@ -124,7 +177,7 @@ static bool loadComponentBaseStats(COMP_BASE_STATS* stats, sqlite3_stmt* stmt, u
 	const int GfxFile      = getColNumByNameA(stmt, "GfxFile");
 	const int designable   = getColNumByNameA(stmt, "designable");
 
-	if (!loadBaseStats((BASE_STATS *)stats, stmt, id))
+	if (!loadBaseStats((BASE_STATS *)stats, &cols->parent, stmt, id))
 	{
 		return false;
 	}
@@ -187,13 +240,13 @@ static bool loadComponentBaseStats(COMP_BASE_STATS* stats, sqlite3_stmt* stmt, u
 	return true;
 }
 
-static bool _loadWeaponStats(WEAPON_STATS* stats, sqlite3_stmt* stmt, int weapon_id)
+static bool _loadWeaponStats(WEAPON_STATS* stats, SQL_COMP_BASE_STATS* cols, sqlite3_stmt* stmt, int weapon_id)
 {
 	const char* str;
 	unsigned int longRange;
 	int colnum;
 
-	if (!loadComponentBaseStats((COMP_BASE_STATS *)stats, stmt, REF_WEAPON_START + weapon_id - 1))
+	if (!loadComponentBaseStats((COMP_BASE_STATS *)stats, cols, stmt, REF_WEAPON_START + weapon_id - 1))
 	{
 		return false;
 	}
@@ -542,6 +595,7 @@ bool loadWeaponStatsFromDB(sqlite3* db, const char* tableName)
 	bool retval = false;
 	sqlite3_stmt* stmt;
 	int rc;
+	SQL_COMP_BASE_STATS cols;
 
 	// Prepare this SQL statement for execution
 	if (!prepareStatement(db, &stmt, "SELECT MAX(id) FROM `%s`;", tableName))
@@ -563,7 +617,10 @@ bool loadWeaponStatsFromDB(sqlite3* db, const char* tableName)
 	                          "SELECT * FROM `%s`;", tableName))
 		return false;
 
-	while ((rc = sqlite3_step(stmt)) == SQLITE_ROW)
+	if ((rc = sqlite3_step(stmt)) == SQLITE_ROW)
+		compBaseStatColumnNames(&cols, stmt);
+
+	while (rc == SQLITE_ROW)
 	{
 		WEAPON_STATS sStats, * const stats = &sStats;
 		const int weapon_id = sqlite3_column_int(stmt, getColNumByName(stmt, "id"));
@@ -571,13 +628,16 @@ bool loadWeaponStatsFromDB(sqlite3* db, const char* tableName)
 		memset(stats, 0, sizeof(*stats));
 
 		// Load stats
-		if (!_loadWeaponStats(stats, stmt, weapon_id))
+		if (!_loadWeaponStats(stats, &cols, stmt, weapon_id))
 		{
 			goto in_statement_err;
 		}
 
 		//save the stats
 		statsSetWeapon(stats, weapon_id - 1);
+
+		// Retrieve next row
+		rc = sqlite3_step(stmt);
 	}
 
 	retval = true;
@@ -596,6 +656,7 @@ bool loadBodyStatsFromDB(sqlite3* db, const char* tableName)
 	bool retval = false;
 	sqlite3_stmt* stmt;
 	int rc;
+	SQL_COMP_BASE_STATS cols;
 
 	// Prepare this SQL statement for execution
 	if (!prepareStatement(db, &stmt, "SELECT MAX(id) FROM `%s`;", tableName))
@@ -617,7 +678,10 @@ bool loadBodyStatsFromDB(sqlite3* db, const char* tableName)
 	                          "SELECT * FROM `%s`;", tableName))
 		return false;
 
-	while ((rc = sqlite3_step(stmt)) == SQLITE_ROW)
+	if ((rc = sqlite3_step(stmt)) == SQLITE_ROW)
+		compBaseStatColumnNames(&cols, stmt);
+
+	while (rc == SQLITE_ROW)
 	{
 		BODY_STATS sStats, * const stats = &sStats;
 		const unsigned int body_id = sqlite3_column_int(stmt, getColNumByName(stmt, "id"));
@@ -625,7 +689,7 @@ bool loadBodyStatsFromDB(sqlite3* db, const char* tableName)
 
 		memset(stats, 0, sizeof(*stats));
 
-		if (!loadComponentBaseStats((COMP_BASE_STATS *)stats, stmt, REF_BODY_START + body_id - 1))
+		if (!loadComponentBaseStats((COMP_BASE_STATS *)stats, &cols, stmt, REF_BODY_START + body_id - 1))
 		{
 			goto in_statement_err;
 		}
@@ -698,6 +762,9 @@ bool loadBodyStatsFromDB(sqlite3* db, const char* tableName)
 
 		//save the stats
 		statsSetBody(stats, body_id - 1);
+
+		// Retrieve next row
+		rc = sqlite3_step(stmt);
 	}
 
 	retval = true;
@@ -717,6 +784,7 @@ bool loadBrainStatsFromDB(sqlite3* db, const char* tableName)
 	bool retval = false;
 	sqlite3_stmt* stmt;
 	int rc;
+	SQL_COMP_BASE_STATS cols;
 
 	// Prepare this SQL statement for execution
 	if (!prepareStatement(db, &stmt, "SELECT MAX(id) FROM `%s`;", tableName))
@@ -738,7 +806,10 @@ bool loadBrainStatsFromDB(sqlite3* db, const char* tableName)
 	                          "SELECT * FROM `%s`;", tableName))
 		return false;
 
-	while ((rc = sqlite3_step(stmt)) == SQLITE_ROW)
+	if ((rc = sqlite3_step(stmt)) == SQLITE_ROW)
+		compBaseStatColumnNames(&cols, stmt);
+
+	while (rc == SQLITE_ROW)
 	{
 		BRAIN_STATS sStats, * const stats = &sStats;
 		const unsigned int brain_id = sqlite3_column_int(stmt, getColNumByName(stmt, "id"));
@@ -746,7 +817,7 @@ bool loadBrainStatsFromDB(sqlite3* db, const char* tableName)
 
 		memset(stats, 0, sizeof(*stats));
 
-		if (!loadComponentBaseStats((COMP_BASE_STATS *)stats, stmt, REF_BRAIN_START + brain_id - 1))
+		if (!loadComponentBaseStats((COMP_BASE_STATS *)stats, &cols, stmt, REF_BRAIN_START + brain_id - 1))
 		{
 			goto in_statement_err;
 		}
@@ -779,6 +850,9 @@ bool loadBrainStatsFromDB(sqlite3* db, const char* tableName)
 
 		// save the stats
 		statsSetBrain(stats, brain_id - 1);
+
+		// Retrieve next row
+		rc = sqlite3_step(stmt);
 	}
 
 	retval = true;
@@ -797,6 +871,7 @@ bool loadPropulsionStatsFromDB(sqlite3* db, const char* tableName)
 	bool retval = false;
 	sqlite3_stmt* stmt;
 	int rc;
+	SQL_COMP_BASE_STATS cols;
 
 	// Prepare this SQL statement for execution
 	if (!prepareStatement(db, &stmt, "SELECT MAX(id) FROM `%s`;", tableName))
@@ -818,14 +893,17 @@ bool loadPropulsionStatsFromDB(sqlite3* db, const char* tableName)
 	                          "SELECT * FROM `%s`;", tableName))
 		return false;
 
-	while ((rc = sqlite3_step(stmt)) == SQLITE_ROW)
+	if ((rc = sqlite3_step(stmt)) == SQLITE_ROW)
+		compBaseStatColumnNames(&cols, stmt);
+
+	while (rc == SQLITE_ROW)
 	{
 		PROPULSION_STATS sStats, * const stats = &sStats;
 		const unsigned int propulsion_id = sqlite3_column_int(stmt, getColNumByName(stmt, "id"));
 
 		memset(stats, 0, sizeof(*stats));
 
-		if (!loadComponentBaseStats((COMP_BASE_STATS *)stats, stmt, REF_PROPULSION_START + propulsion_id - 1))
+		if (!loadComponentBaseStats((COMP_BASE_STATS *)stats, &cols, stmt, REF_PROPULSION_START + propulsion_id - 1))
 		{
 			goto in_statement_err;
 		}
@@ -851,6 +929,9 @@ bool loadPropulsionStatsFromDB(sqlite3* db, const char* tableName)
 
 		//save the stats
 		statsSetPropulsion(stats, propulsion_id - 1);
+
+		// Retrieve next row
+		rc = sqlite3_step(stmt);
 	}
 
 	retval = true;
@@ -870,6 +951,7 @@ bool loadSensorStatsFromDB(sqlite3* db, const char* tableName)
 	bool retval = false;
 	sqlite3_stmt* stmt;
 	int rc;
+	SQL_COMP_BASE_STATS cols;
 
 	// Prepare this SQL statement for execution
 	if (!prepareStatement(db, &stmt, "SELECT MAX(id) FROM `%s`;", tableName))
@@ -891,7 +973,10 @@ bool loadSensorStatsFromDB(sqlite3* db, const char* tableName)
 	                          "SELECT * FROM `%s`;", tableName))
 		return false;
 
-	while ((rc = sqlite3_step(stmt)) == SQLITE_ROW)
+	if ((rc = sqlite3_step(stmt)) == SQLITE_ROW)
+		compBaseStatColumnNames(&cols, stmt);
+
+	while (rc == SQLITE_ROW)
 	{
 		SENSOR_STATS sStats, * const stats = &sStats;
 		const unsigned int sensor_id = sqlite3_column_int(stmt, getColNumByName(stmt, "id"));
@@ -900,7 +985,7 @@ bool loadSensorStatsFromDB(sqlite3* db, const char* tableName)
 
 		memset(stats, 0, sizeof(*stats));
 
-		if (!loadComponentBaseStats((COMP_BASE_STATS *)stats, stmt, REF_SENSOR_START + sensor_id - 1))
+		if (!loadComponentBaseStats((COMP_BASE_STATS *)stats, &cols, stmt, REF_SENSOR_START + sensor_id - 1))
 		{
 			goto in_statement_err;
 		}
@@ -987,6 +1072,9 @@ bool loadSensorStatsFromDB(sqlite3* db, const char* tableName)
 
 		//save the stats
 		statsSetSensor(stats, sensor_id - 1);
+
+		// Retrieve next row
+		rc = sqlite3_step(stmt);
 	}
 
 	retval = true;
@@ -1007,6 +1095,7 @@ bool loadECMStatsFromDB(sqlite3* db, const char* tableName)
 	bool retval = false;
 	sqlite3_stmt* stmt;
 	int rc;
+	SQL_COMP_BASE_STATS cols;
 
 	// Prepare this SQL statement for execution
 	if (!prepareStatement(db, &stmt, "SELECT MAX(id) FROM `%s`;", tableName))
@@ -1028,7 +1117,10 @@ bool loadECMStatsFromDB(sqlite3* db, const char* tableName)
 	                          "SELECT * FROM `%s`;", tableName))
 		return false;
 
-	while ((rc = sqlite3_step(stmt)) == SQLITE_ROW)
+	if ((rc = sqlite3_step(stmt)) == SQLITE_ROW)
+		compBaseStatColumnNames(&cols, stmt);
+
+	while (rc == SQLITE_ROW)
 	{
 		ECM_STATS sStats, * const stats = &sStats;
 		const unsigned int ecm_id = sqlite3_column_int(stmt, getColNumByName(stmt, "id"));
@@ -1037,7 +1129,7 @@ bool loadECMStatsFromDB(sqlite3* db, const char* tableName)
 
 		memset(stats, 0, sizeof(*stats));
 
-		if (!loadComponentBaseStats((COMP_BASE_STATS *)stats, stmt, REF_ECM_START + ecm_id - 1))
+		if (!loadComponentBaseStats((COMP_BASE_STATS *)stats, &cols, stmt, REF_ECM_START + ecm_id - 1))
 		{
 			goto in_statement_err;
 		}
@@ -1093,6 +1185,9 @@ bool loadECMStatsFromDB(sqlite3* db, const char* tableName)
 
 		//save the stats
 		statsSetECM(stats, ecm_id - 1);
+
+		// Retrieve next row
+		rc = sqlite3_step(stmt);
 	}
 
 	retval = true;
