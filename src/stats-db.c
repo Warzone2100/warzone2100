@@ -242,23 +242,163 @@ static bool loadComponentBaseStats(COMP_BASE_STATS* stats, SQL_COMP_BASE_STATS* 
 	return true;
 }
 
-static bool _loadWeaponStats(WEAPON_STATS* stats, SQL_COMP_BASE_STATS* cols, sqlite3_stmt* stmt, int weapon_id)
+typedef struct
+{
+	SQL_COMP_BASE_STATS parent;
+	int mountGfx;
+	int muzzleGfx;
+	int flightGfx;
+	int hitGfx;
+	int missGfx;
+	int waterGfx;
+	int trailGfx;
+	int short_range;
+	int long_range;
+	int short_range_accuracy;
+	int long_range_accuracy;
+	int firePause;
+	int numExplosions;
+	int rounds_per_salvo;
+	int reload_time_per_salvo;
+	int damage;
+	int radius;
+	int radiusHit;
+	int radiusDamage;
+	int incenTime;
+	int incenDamage;
+	int incenRadius;
+	int directLife;
+	int radiusLife;
+	int flightSpeed;
+	int indirectHeight;
+	int fireOnMove;
+	int weaponClass;
+	int weaponSubClass;
+	int movement;
+	int weaponEffect;
+	int rotate;
+	int maxElevation;
+	int minElevation;
+	int facePlayer;
+	int faceInFlight;
+	int recoilValue;
+	int minRange;
+	int lightWorld;
+	int effectSize;
+	int surfaceToAir;
+	int numAttackRuns;
+	int penetrate;
+} SQL_WEAPON_STATS;
+
+static bool weaponStatNames(SQL_WEAPON_STATS* cols, sqlite3_stmt* stmt)
+{
+	if (!compBaseStatColumnNames(&cols->parent, stmt))
+		return false;
+
+	cols->mountGfx = getColNumByNameA(stmt, "mountGfx");
+	cols->muzzleGfx = getColNumByNameA(stmt, "muzzleGfx");
+	cols->flightGfx = getColNumByNameA(stmt, "flightGfx");
+	cols->hitGfx = getColNumByNameA(stmt, "hitGfx");
+	cols->missGfx = getColNumByNameA(stmt, "missGfx");
+	cols->waterGfx = getColNumByNameA(stmt, "waterGfx");
+	cols->trailGfx = getColNumByNameA(stmt, "trailGfx");
+	cols->short_range = getColNumByNameA(stmt, "short_range");
+	cols->long_range = getColNumByNameA(stmt, "long_range");
+	cols->short_range_accuracy = getColNumByNameA(stmt, "short_range_accuracy");
+	cols->long_range_accuracy = getColNumByNameA(stmt, "long_range_accuracy");
+	cols->firePause = getColNumByNameA(stmt, "firePause");
+	cols->numExplosions = getColNumByNameA(stmt, "numExplosions");
+	cols->rounds_per_salvo = getColNumByNameA(stmt, "rounds_per_salvo");
+	cols->reload_time_per_salvo = getColNumByNameA(stmt, "reload_time_per_salvo");
+	cols->damage = getColNumByNameA(stmt, "damage");
+	cols->radius = getColNumByNameA(stmt, "radius");
+	cols->radiusHit = getColNumByNameA(stmt, "radiusHit");
+	cols->radiusDamage = getColNumByNameA(stmt, "radiusDamage");
+	cols->incenTime = getColNumByNameA(stmt, "incenTime");
+	cols->incenDamage = getColNumByNameA(stmt, "incenDamage");
+	cols->incenRadius = getColNumByNameA(stmt, "incenRadius");
+	cols->directLife = getColNumByNameA(stmt, "directLife");
+	cols->radiusLife = getColNumByNameA(stmt, "radiusLife");
+	cols->flightSpeed = getColNumByNameA(stmt, "flightSpeed");
+	cols->indirectHeight = getColNumByNameA(stmt, "indirectHeight");
+	cols->fireOnMove = getColNumByNameA(stmt, "fireOnMove");
+	cols->weaponClass = getColNumByNameA(stmt, "weaponClass");
+	cols->weaponSubClass = getColNumByNameA(stmt, "weaponSubClass");
+	cols->movement = getColNumByNameA(stmt, "movement");
+	cols->weaponEffect = getColNumByNameA(stmt, "weaponEffect");
+	cols->rotate = getColNumByNameA(stmt, "rotate");
+	cols->maxElevation = getColNumByNameA(stmt, "maxElevation");
+	cols->minElevation = getColNumByNameA(stmt, "minElevation");
+	cols->facePlayer = getColNumByNameA(stmt, "facePlayer");
+	cols->faceInFlight = getColNumByNameA(stmt, "faceInFlight");
+	cols->recoilValue = getColNumByNameA(stmt, "recoilValue");
+	cols->minRange = getColNumByNameA(stmt, "minRange");
+	cols->lightWorld = getColNumByNameA(stmt, "lightWorld");
+	cols->effectSize = getColNumByNameA(stmt, "effectSize");
+	cols->surfaceToAir = getColNumByNameA(stmt, "surfaceToAir");
+	cols->numAttackRuns = getColNumByNameA(stmt, "numAttackRuns");
+	cols->penetrate = getColNumByNameA(stmt, "penetrate");
+
+	return cols->mountGfx != -1
+	    && cols->muzzleGfx != -1
+	    && cols->flightGfx != -1
+	    && cols->hitGfx != -1
+	    && cols->missGfx != -1
+	    && cols->waterGfx != -1
+	    && cols->trailGfx != -1
+	    && cols->short_range != -1
+	    && cols->long_range != -1
+	    && cols->short_range_accuracy != -1
+	    && cols->long_range_accuracy != -1
+	    && cols->firePause != -1
+	    && cols->numExplosions != -1
+	    && cols->rounds_per_salvo != -1
+	    && cols->reload_time_per_salvo != -1
+	    && cols->damage != -1
+	    && cols->radius != -1
+	    && cols->radiusHit != -1
+	    && cols->radiusDamage != -1
+	    && cols->incenTime != -1
+	    && cols->incenDamage != -1
+	    && cols->incenRadius != -1
+	    && cols->directLife != -1
+	    && cols->radiusLife != -1
+	    && cols->flightSpeed != -1
+	    && cols->indirectHeight != -1
+	    && cols->fireOnMove != -1
+	    && cols->weaponClass != -1
+	    && cols->weaponSubClass != -1
+	    && cols->movement != -1
+	    && cols->weaponEffect != -1
+	    && cols->rotate != -1
+	    && cols->maxElevation != -1
+	    && cols->minElevation != -1
+	    && cols->facePlayer != -1
+	    && cols->faceInFlight != -1
+	    && cols->recoilValue != -1
+	    && cols->minRange != -1
+	    && cols->lightWorld != -1
+	    && cols->effectSize != -1
+	    && cols->surfaceToAir != -1
+	    && cols->numAttackRuns != -1
+	    && cols->penetrate != -1;
+}
+
+static bool _loadWeaponStats(WEAPON_STATS* stats, SQL_WEAPON_STATS* cols, sqlite3_stmt* stmt, int weapon_id)
 {
 	const char* str;
 	unsigned int longRange;
-	int colnum;
 
-	if (!loadComponentBaseStats((COMP_BASE_STATS *)stats, cols, stmt, REF_WEAPON_START + weapon_id - 1))
+	if (!loadComponentBaseStats((COMP_BASE_STATS *)stats, &cols->parent, stmt, REF_WEAPON_START + weapon_id - 1))
 	{
 		return false;
 	}
 
 	// Get the rest of the IMDs
 	// mountGfx              TEXT,             -- The turret mount to use
-	colnum = getColNumByName(stmt, "mountGfx");
-	if (sqlite3_column_type(stmt, colnum) != SQLITE_NULL)
+	if (sqlite3_column_type(stmt, cols->mountGfx) != SQLITE_NULL)
 	{
-		stats->pMountGraphic = (iIMDShape *) resGetData("IMD", (const char*)sqlite3_column_text(stmt, colnum));
+		stats->pMountGraphic = (iIMDShape *) resGetData("IMD", (const char*)sqlite3_column_text(stmt, cols->mountGfx));
 		if (stats->pMountGraphic == NULL)
 		{
 			debug(LOG_ERROR, "Cannot find the mount PIE for record %s", getStatName(stats));
@@ -274,7 +414,7 @@ static bool _loadWeaponStats(WEAPON_STATS* stats, SQL_COMP_BASE_STATS* cols, sql
 	if (GetGameMode() == GS_NORMAL)
 	{
 		// muzzleGfx             TEXT,             -- The muzzle flash
-		stats->pMuzzleGraphic = (iIMDShape *) resGetData("IMD", (const char*)sqlite3_column_text(stmt, getColNumByName(stmt, "muzzleGfx")));
+		stats->pMuzzleGraphic = (iIMDShape *) resGetData("IMD", (const char*)sqlite3_column_text(stmt, cols->muzzleGfx));
 		if (stats->pMuzzleGraphic == NULL)
 		{
 			debug(LOG_ERROR, "Cannot find the muzzle PIE for record %s", getStatName(stats));
@@ -283,7 +423,7 @@ static bool _loadWeaponStats(WEAPON_STATS* stats, SQL_COMP_BASE_STATS* cols, sql
 		}
 
 		// flightGfx             TEXT,             -- The ammo in flight
-		stats->pInFlightGraphic = (iIMDShape *) resGetData("IMD", (const char*)sqlite3_column_text(stmt, getColNumByName(stmt, "flightGfx")));
+		stats->pInFlightGraphic = (iIMDShape *) resGetData("IMD", (const char*)sqlite3_column_text(stmt, cols->flightGfx));
 		if (stats->pInFlightGraphic == NULL)
 		{
 			debug(LOG_ERROR, "Cannot find the flight PIE for record %s", getStatName(stats));
@@ -292,7 +432,7 @@ static bool _loadWeaponStats(WEAPON_STATS* stats, SQL_COMP_BASE_STATS* cols, sql
 		}
 
 		// hitGfx                TEXT,             -- The ammo hitting a target
-		stats->pTargetHitGraphic = (iIMDShape *) resGetData("IMD", (const char*)sqlite3_column_text(stmt, getColNumByName(stmt, "hitGfx")));
+		stats->pTargetHitGraphic = (iIMDShape *) resGetData("IMD", (const char*)sqlite3_column_text(stmt, cols->hitGfx));
 		if (stats->pTargetHitGraphic == NULL)
 		{
 			debug(LOG_ERROR, "Cannot find the target hit PIE for record %s", getStatName(stats));
@@ -301,7 +441,7 @@ static bool _loadWeaponStats(WEAPON_STATS* stats, SQL_COMP_BASE_STATS* cols, sql
 		}
 
 		// missGfx               TEXT,             -- The ammo missing a target
-		stats->pTargetMissGraphic = (iIMDShape *) resGetData("IMD", (const char*)sqlite3_column_text(stmt, getColNumByName(stmt, "missGfx")));
+		stats->pTargetMissGraphic = (iIMDShape *) resGetData("IMD", (const char*)sqlite3_column_text(stmt, cols->missGfx));
 		if (stats->pTargetMissGraphic == NULL)
 		{
 			debug(LOG_ERROR, "Cannot find the target miss PIE for record %s", getStatName(stats));
@@ -310,7 +450,7 @@ static bool _loadWeaponStats(WEAPON_STATS* stats, SQL_COMP_BASE_STATS* cols, sql
 		}
 
 		// waterGfx              TEXT,             -- The ammo hitting water
-		stats->pWaterHitGraphic = (iIMDShape *) resGetData("IMD", (const char*)sqlite3_column_text(stmt, getColNumByName(stmt, "waterGfx")));
+		stats->pWaterHitGraphic = (iIMDShape *) resGetData("IMD", (const char*)sqlite3_column_text(stmt, cols->waterGfx));
 		if (stats->pWaterHitGraphic == NULL)
 		{
 			debug(LOG_ERROR, "Cannot find the water hit PIE for record %s", getStatName(stats));
@@ -320,10 +460,9 @@ static bool _loadWeaponStats(WEAPON_STATS* stats, SQL_COMP_BASE_STATS* cols, sql
 
 		// trailGfx              TEXT,             -- The trail used for in flight
 		// Trail graphic can be null
-		colnum = getColNumByName(stmt, "trailGfx");
-		if (sqlite3_column_type(stmt, colnum) != SQLITE_NULL)
+		if (sqlite3_column_type(stmt, cols->trailGfx) != SQLITE_NULL)
 		{
-			stats->pTrailGraphic = (iIMDShape *) resGetData("IMD", (const char*)sqlite3_column_text(stmt, colnum));
+			stats->pTrailGraphic = (iIMDShape *) resGetData("IMD", (const char*)sqlite3_column_text(stmt, cols->trailGfx));
 			if (stats->pTrailGraphic == NULL)
 			{
 				debug( LOG_ERROR, "Cannot find the trail PIE for record %s", getStatName(stats) );
@@ -338,44 +477,44 @@ static bool _loadWeaponStats(WEAPON_STATS* stats, SQL_COMP_BASE_STATS* cols, sql
 	}
 
 	// short_range           NUMERIC NOT NULL, -- Max distance to target for short range shot
-	stats->shortRange = sqlite3_column_double(stmt, getColNumByName(stmt, "short_range"));
+	stats->shortRange = sqlite3_column_double(stmt, cols->short_range);
 	// long_range            NUMERIC NOT NULL, -- Max distance to target for long range shot
-	stats->longRange = sqlite3_column_double(stmt, getColNumByName(stmt, "long_range"));
+	stats->longRange = sqlite3_column_double(stmt, cols->long_range);
 	// short_range_accuracy  NUMERIC NOT NULL, -- Chance to hit at short range
-	stats->shortHit = sqlite3_column_double(stmt, getColNumByName(stmt, "short_range_accuracy"));
+	stats->shortHit = sqlite3_column_double(stmt, cols->short_range_accuracy);
 	// long_range_accuracy   NUMERIC NOT NULL, -- Chance to hit at long range
-	stats->longHit = sqlite3_column_double(stmt, getColNumByName(stmt, "long_range_accuracy"));
+	stats->longHit = sqlite3_column_double(stmt, cols->long_range_accuracy);
 	// firePause             NUMERIC NOT NULL, -- Time between each weapon fire
-	stats->firePause = sqlite3_column_double(stmt, getColNumByName(stmt, "firePause"));
+	stats->firePause = sqlite3_column_double(stmt, cols->firePause);
 
 	// numExplosions         INTEGER NOT NULL, -- The number of explosions per shot
-	stats->numExplosions = sqlite3_column_int(stmt, getColNumByName(stmt, "numExplosions"));
+	stats->numExplosions = sqlite3_column_int(stmt, cols->numExplosions);
 	// rounds_per_salvo      INTEGER NOT NULL, -- The number of rounds per salvo(magazine)
-	stats->numRounds = sqlite3_column_int(stmt, getColNumByName(stmt, "rounds_per_salvo"));
+	stats->numRounds = sqlite3_column_int(stmt, cols->rounds_per_salvo);
 
 	// reload_time_per_salvo NUMERIC NOT NULL, -- Time to reload the round of ammo (salvo fire)
-	stats->reloadTime = sqlite3_column_double(stmt, getColNumByName(stmt, "reload_time_per_salvo"));
+	stats->reloadTime = sqlite3_column_double(stmt, cols->reload_time_per_salvo);
 	// damage                NUMERIC NOT NULL, -- How much damage the weapon causes
-	stats->damage = sqlite3_column_double(stmt, getColNumByName(stmt, "damage"));
+	stats->damage = sqlite3_column_double(stmt, cols->damage);
 	// radius                NUMERIC NOT NULL, -- Basic blast radius of weapon
-	stats->radius = sqlite3_column_double(stmt, getColNumByName(stmt, "radius"));
+	stats->radius = sqlite3_column_double(stmt, cols->radius);
 	// radiusHit             NUMERIC NOT NULL, -- Chance to hit in the blast radius
-	stats->radiusHit = sqlite3_column_double(stmt, getColNumByName(stmt, "radiusHit"));
+	stats->radiusHit = sqlite3_column_double(stmt, cols->radiusHit);
 	// radiusDamage          NUMERIC NOT NULL, -- Damage done in the blast radius
-	stats->radiusDamage = sqlite3_column_double(stmt, getColNumByName(stmt, "radiusDamage"));
+	stats->radiusDamage = sqlite3_column_double(stmt, cols->radiusDamage);
 	// incenTime             NUMERIC NOT NULL, -- How long the round burns
-	stats->incenTime = sqlite3_column_double(stmt, getColNumByName(stmt, "incenTime"));
+	stats->incenTime = sqlite3_column_double(stmt, cols->incenTime);
 	// incenDamage           NUMERIC NOT NULL, -- Damage done each burn cycle
-	stats->incenDamage = sqlite3_column_double(stmt, getColNumByName(stmt, "incenDamage"));
+	stats->incenDamage = sqlite3_column_double(stmt, cols->incenDamage);
 	// incenRadius           NUMERIC NOT NULL, -- Burn radius of the round
-	stats->incenRadius = sqlite3_column_double(stmt, getColNumByName(stmt, "incenRadius"));
+	stats->incenRadius = sqlite3_column_double(stmt, cols->incenRadius);
 	// directLife            NUMERIC NOT NULL, -- How long a direct fire weapon is visible. Measured in 1/100 sec.
-	stats->directLife = sqlite3_column_double(stmt, getColNumByName(stmt, "directLife"));
+	stats->directLife = sqlite3_column_double(stmt, cols->directLife);
 	// radiusLife            NUMERIC NOT NULL, -- How long a blast radius is visible
-	stats->radiusLife = sqlite3_column_double(stmt, getColNumByName(stmt, "radiusLife"));
+	stats->radiusLife = sqlite3_column_double(stmt, cols->radiusLife);
 
 	// flightSpeed           NUMERIC NOT NULL, -- speed ammo travels at
-	stats->flightSpeed = sqlite3_column_double(stmt, getColNumByName(stmt, "flightSpeed"));
+	stats->flightSpeed = sqlite3_column_double(stmt, cols->flightSpeed);
 //#ifdef DEBUG
 // Hack to get the current stats working... a zero flight speed value will cause an assert in projectile.c line 957
 //  I'm not sure if this should be on debug only...
@@ -390,10 +529,10 @@ static bool _loadWeaponStats(WEAPON_STATS* stats, SQL_COMP_BASE_STATS* cols, sql
 	}
 
 	// indirectHeight        NUMERIC NOT NULL, -- how high the ammo travels for indirect fire
-	stats->indirectHeight = sqlite3_column_double(stmt, getColNumByName(stmt, "indirectHeight"));
+	stats->indirectHeight = sqlite3_column_double(stmt, cols->indirectHeight);
 
 	// fireOnMove            TEXT    NOT NULL, -- indicates whether the droid has to stop before firing
-	str = (const char*)sqlite3_column_text(stmt, getColNumByName(stmt, "fireOnMove"));
+	str = (const char*)sqlite3_column_text(stmt, cols->fireOnMove);
 	if (!strcmp(str, "NO"))
 	{
 		stats->fireOnMove = FOM_NO;
@@ -414,7 +553,7 @@ static bool _loadWeaponStats(WEAPON_STATS* stats, SQL_COMP_BASE_STATS* cols, sql
 	}
 
 	// weaponClass           TEXT    NOT NULL, -- the class of weapon
-	str = (const char*)sqlite3_column_text(stmt, getColNumByName(stmt, "weaponClass"));
+	str = (const char*)sqlite3_column_text(stmt, cols->weaponClass);
 	if (!strcmp(str, "KINETIC"))
 	{
 		stats->weaponClass = WC_KINETIC;
@@ -441,21 +580,21 @@ static bool _loadWeaponStats(WEAPON_STATS* stats, SQL_COMP_BASE_STATS* cols, sql
 	}
 
 	// weaponSubClass        TEXT    NOT NULL, -- the subclass to which the weapon belongs
-	stats->weaponSubClass = getWeaponSubClass((const char*)sqlite3_column_text(stmt, getColNumByName(stmt, "weaponSubClass")));
+	stats->weaponSubClass = getWeaponSubClass((const char*)sqlite3_column_text(stmt, cols->weaponSubClass));
 	if (stats->weaponSubClass == INVALID_SUBCLASS)
 	{
 		return false;
 	}
 
 	// movement              TEXT    NOT NULL, -- which projectile model to use for the bullet
-	stats->movementModel = getMovementModel((const char*)sqlite3_column_text(stmt, getColNumByName(stmt, "movement")));
+	stats->movementModel = getMovementModel((const char*)sqlite3_column_text(stmt, cols->movement));
 	if (stats->movementModel == INVALID_MOVEMENT)
 	{
 		return false;
 	}
 
 	// weaponEffect          TEXT    NOT NULL, -- which type of warhead is associated with the weapon
-	stats->weaponEffect = getWeaponEffect((const char*)sqlite3_column_text(stmt, getColNumByName(stmt, "weaponEffect")));
+	stats->weaponEffect = getWeaponEffect((const char*)sqlite3_column_text(stmt, cols->weaponEffect));
 	if (stats->weaponEffect == INVALID_WEAPON_EFFECT)
 	{
 		debug(LOG_ERROR, "loadWepaonStats: Invalid weapon effect for weapon %s", getStatName(stats));
@@ -464,63 +603,58 @@ static bool _loadWeaponStats(WEAPON_STATS* stats, SQL_COMP_BASE_STATS* cols, sql
 	}
 
 	// rotate                NUMERIC NOT NULL, -- amount the weapon(turret) can rotate 0 = none
-	colnum = getColNumByName(stmt, "rotate");
-	if (sqlite3_column_int(stmt, colnum) > UBYTE_MAX)
+	if (sqlite3_column_int(stmt, cols->rotate) > UBYTE_MAX)
 	{
 		ASSERT(false, "loadWeaponStats: rotate is greater than %u for weapon %s", (unsigned int)UBYTE_MAX, getStatName(stats));
 		return false;
 	}
-	stats->rotate = sqlite3_column_double(stmt, colnum);
+	stats->rotate = sqlite3_column_double(stmt, cols->rotate);
 
 	// maxElevation          NUMERIC NOT NULL, -- max amount the turret can be elevated up
-	colnum = getColNumByName(stmt, "maxElevation");
-	if (sqlite3_column_int(stmt, colnum) > UBYTE_MAX)
+	if (sqlite3_column_int(stmt, cols->maxElevation) > UBYTE_MAX)
 	{
 		ASSERT(false, "loadWeaponStats: maxElevation is greater than %u for weapon %s", (unsigned int)UBYTE_MAX, getStatName(stats));
 		return false;
 	}
-	stats->maxElevation = sqlite3_column_double(stmt, colnum);
+	stats->maxElevation = sqlite3_column_double(stmt, cols->maxElevation);
 
 	// minElevation          NUMERIC NOT NULL, -- min amount the turret can be elevated down
-	colnum = getColNumByName(stmt, "minElevation");
-	if (sqlite3_column_int(stmt, colnum) > SBYTE_MAX
-	 || sqlite3_column_int(stmt, colnum) < SBYTE_MIN)
+	if (sqlite3_column_int(stmt, cols->minElevation) > SBYTE_MAX
+	 || sqlite3_column_int(stmt, cols->minElevation) < SBYTE_MIN)
 	{
 		ASSERT(false, "loadWeaponStats: minElevation is outside of limits for weapon %s", getStatName(stats));
 		return false;
 	}
-	stats->minElevation = sqlite3_column_double(stmt, colnum);
+	stats->minElevation = sqlite3_column_double(stmt, cols->minElevation);
 
 	// facePlayer            TEXT    NOT NULL, -- flag to make the (explosion) effect face the player when drawn
-	stats->facePlayer = compareYes((const char*)sqlite3_column_text(stmt, getColNumByName(stmt, "facePlayer")), getStatName(stats)) ? true : false;
+	stats->facePlayer = compareYes((const char*)sqlite3_column_text(stmt, cols->facePlayer), getStatName(stats)) ? true : false;
 	// faceInFlight          TEXT    NOT NULL, -- flag to make the inflight effect face the player when drawn
-	stats->faceInFlight = compareYes((const char*)sqlite3_column_text(stmt, getColNumByName(stmt, "faceInFlight")), getStatName(stats)) ? true : false;
+	stats->faceInFlight = compareYes((const char*)sqlite3_column_text(stmt, cols->faceInFlight), getStatName(stats)) ? true : false;
 
 	// recoilValue           NUMERIC NOT NULL, -- used to compare with weight to see if recoils or not
-	stats->recoilValue = sqlite3_column_double(stmt, getColNumByName(stmt, "recoilValue"));
+	stats->recoilValue = sqlite3_column_double(stmt, cols->recoilValue);
 	// minRange              NUMERIC NOT NULL, -- Min distance to target for shot
-	stats->minRange = sqlite3_column_double(stmt, getColNumByName(stmt, "minRange"));
+	stats->minRange = sqlite3_column_double(stmt, cols->minRange);
 
 	// lightWorld            TEXT    NOT NULL, -- flag to indicate whether the effect lights up the world
-	stats->lightWorld = compareYes((const char*)sqlite3_column_text(stmt, getColNumByName(stmt, "lightWorld")), getStatName(stats)) ? true : false;
+	stats->lightWorld = compareYes((const char*)sqlite3_column_text(stmt, cols->lightWorld), getStatName(stats)) ? true : false;
 
 	// effectSize            NUMERIC NOT NULL, -- size of the effect 100 = normal, 50 = half etc
-	colnum = getColNumByName(stmt, "effectSize");
-	if (sqlite3_column_int(stmt, colnum) > UBYTE_MAX)
+	if (sqlite3_column_int(stmt, cols->effectSize) > UBYTE_MAX)
 	{
 		ASSERT(false, "loadWeaponStats: effectSize is greater than %u for weapon %s", (unsigned int)UBYTE_MAX, getStatName(stats));
 		return false;
 	}
-	stats->rotate = sqlite3_column_double(stmt, colnum);
+	stats->rotate = sqlite3_column_double(stmt, cols->effectSize);
 
 	// surfaceToAir          NUMERIC NOT NULL, -- indicates how good in the air - SHOOT_ON_GROUND, SHOOT_IN_AIR or both
-	colnum = getColNumByName(stmt, "surfaceToAir");
-	if (sqlite3_column_int(stmt, colnum) > UBYTE_MAX)
+	if (sqlite3_column_int(stmt, cols->surfaceToAir) > UBYTE_MAX)
 	{
 		ASSERT(false, "loadWeaponStats: surfaceToAir is greater than %u for weapon %s", (unsigned int)UBYTE_MAX, getStatName(stats));
 		return false;
 	}
-	stats->surfaceToAir = sqlite3_column_double(stmt, colnum);
+	stats->surfaceToAir = sqlite3_column_double(stmt, cols->surfaceToAir);
 	if (stats->surfaceToAir == 0)
 	{
 		stats->surfaceToAir = (UBYTE)SHOOT_ON_GROUND;
@@ -535,16 +669,15 @@ static bool _loadWeaponStats(WEAPON_STATS* stats, SQL_COMP_BASE_STATS* cols, sql
 	}
 
 	// numAttackRuns         NUMERIC NOT NULL, -- number of attack runs a VTOL droid can do with this weapon
-	colnum = getColNumByName(stmt, "numAttackRuns");
-	if (sqlite3_column_int(stmt, colnum) > UBYTE_MAX)
+	if (sqlite3_column_int(stmt, cols->numAttackRuns) > UBYTE_MAX)
 	{
 		ASSERT(false, "loadWeaponStats: numAttackRuns is greater than %u for weapon %s", (unsigned int)UBYTE_MAX, getStatName(stats));
 		return false;
 	}
-	stats->vtolAttackRuns = sqlite3_column_double(stmt, colnum);
+	stats->vtolAttackRuns = sqlite3_column_double(stmt, cols->numAttackRuns);
 
 	// penetrate             NUMERIC NOT NULL  -- flag to indicate whether pentrate droid or not
-	stats->penetrate = sqlite3_column_int(stmt, getColNumByName(stmt, "penetrate")) ? true : false;
+	stats->penetrate = sqlite3_column_int(stmt, cols->penetrate) ? true : false;
 
 	// error check the ranges
 	if (stats->flightSpeed > 0
@@ -597,7 +730,7 @@ bool loadWeaponStatsFromDB(sqlite3* db, const char* tableName)
 	bool retval = false;
 	sqlite3_stmt* stmt;
 	int rc;
-	SQL_COMP_BASE_STATS cols;
+	SQL_WEAPON_STATS cols;
 
 	// Prepare this SQL statement for execution
 	if (!prepareStatement(db, &stmt, "SELECT MAX(id) FROM `%s`;", tableName))
@@ -620,7 +753,7 @@ bool loadWeaponStatsFromDB(sqlite3* db, const char* tableName)
 		return false;
 
 	if ((rc = sqlite3_step(stmt)) == SQLITE_ROW)
-		if (!compBaseStatColumnNames(&cols, stmt))
+		if (!weaponStatNames(&cols, stmt))
 			goto in_statement_err;
 
 	while (rc == SQLITE_ROW)
