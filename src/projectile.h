@@ -100,12 +100,14 @@ static inline void setProjectileDamaged(PROJECTILE *psProj, BASE_OBJECT *psObj)
 /* assert if projectile is bad */
 #define CHECK_PROJECTILE(object) \
 do { \
-        assert(object != NULL); \
-        assert(object->type == OBJ_PROJECTILE); \
-        assert(object->player < MAX_PLAYERS); \
-	assert(object->state == PROJ_INFLIGHT || object->state == PROJ_IMPACT \
-	       || object->state == PROJ_POSTIMPACT); \
-        assert(object->direction <= 360.0f && object->direction >= 0.0f); \
+	assert(object != NULL); \
+	assert(object->psWStats != NULL); \
+	assert(object->type == OBJ_PROJECTILE); \
+	assert(object->player < MAX_PLAYERS); \
+	assert(object->state == PROJ_INFLIGHT \
+		|| object->state == PROJ_IMPACT \
+		|| object->state == PROJ_POSTIMPACT); \
+	assert(object->direction <= 360.0f && object->direction >= 0.0f); \
 	if (object->psDest) CHECK_OBJECT(object->psDest); \
 	if (object->psSource) CHECK_OBJECT(object->psSource); \
 	if (object->psDamaged) CHECK_OBJECT(object->psDamaged); \
