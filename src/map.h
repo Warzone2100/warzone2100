@@ -135,7 +135,7 @@ static inline bool TileIsHighlighted(const MAPTILE* tile)
 }
 
 /** Check if tile contains a tall structure. Function is thread-safe. */
-WZ_DECL_PURE static inline bool TileHasTallStructure(const MAPTILE* tile)
+static inline WZ_DECL_PURE bool TileHasTallStructure(const MAPTILE* tile)
 {
 	return (tile->tileInfoBits & BITS_TALLSTRUCTURE);
 }
