@@ -707,16 +707,13 @@ static BOOL dataTERTILESLoad(const char *fileName, void **ppData)
 	texLoad(fileName);
 	debug(LOG_TEXTURE, "HW Tiles loaded");
 
-	// set a dummy value so the release function gets called
-	*ppData = (void *)1;
+	*ppData = NULL;	// don't bother calling cleanup
 
 	return true;
 }
 
 static void dataTERTILESRelease(WZ_DECL_UNUSED void *pData)
 {
-	debug(LOG_TEXTURE, "=== dataTERTILESRelease ===");
-	pie_TexShutDown();
 }
 
 
