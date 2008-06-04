@@ -94,7 +94,7 @@ static int xRead(sqlite3_file* f, void* dst, int iAmt, sqlite3_int64 iOfst)
 /** Dummy write implementation (doesn't do anything at all).
  *  \return SQLITE_IOERR_WRITE
  */
-static int xWrite(sqlite3_file* f, const void* src, int iAmt, sqlite3_int64 iOfst)
+static int xWrite(sqlite3_file* f, WZ_DECL_UNUSED const void* src, WZ_DECL_UNUSED int iAmt, WZ_DECL_UNUSED sqlite3_int64 iOfst)
 {
 	physfs_sqlite3_file * const file = (physfs_sqlite3_file * const)f;
 	assert(&file->SQLite3_file == f);
@@ -108,7 +108,7 @@ static int xWrite(sqlite3_file* f, const void* src, int iAmt, sqlite3_int64 iOfs
 /** Dummy truncate implementation (doesn't do anything at all).
  *  \return SQLITE_IOERR_TRUNCATE
  */
-static int xTruncate(sqlite3_file* f, sqlite3_int64 size)
+static int xTruncate(sqlite3_file* f, WZ_DECL_UNUSED sqlite3_int64 size)
 {
 	physfs_sqlite3_file * const file = (physfs_sqlite3_file * const)f;
 	assert(&file->SQLite3_file == f);
@@ -122,7 +122,7 @@ static int xTruncate(sqlite3_file* f, sqlite3_int64 size)
 /** Dummy sync implementation (doesn't do anything at all).
  *  \return SQLITE_IOERR_FSYNC
  */
-static int xSync(sqlite3_file* f, int flags)
+static int xSync(sqlite3_file* f, WZ_DECL_UNUSED int flags)
 {
 	physfs_sqlite3_file * const file = (physfs_sqlite3_file * const)f;
 	assert(&file->SQLite3_file == f);
@@ -158,7 +158,7 @@ static int xFileSize(sqlite3_file* f, sqlite3_int64* pSize)
 	return SQLITE_OK;
 }
 
-static int xLock(sqlite3_file* f, int level)
+static int xLock(WZ_DECL_UNUSED sqlite3_file* f, int level)
 {
 	switch (level)
 	{
@@ -174,27 +174,27 @@ static int xLock(sqlite3_file* f, int level)
 	}
 }
 
-static int xUnlock(sqlite3_file* f, int level)
+static int xUnlock(WZ_DECL_UNUSED sqlite3_file* f, WZ_DECL_UNUSED int level)
 {
 	return SQLITE_OK;
 }
 
-static int xCheckReservedLock(sqlite3_file* f)
+static int xCheckReservedLock(WZ_DECL_UNUSED sqlite3_file* f)
 {
 	return 0;
 }
 
-static int xFileControl(sqlite3_file* f, int op, void *pArg)
+static int xFileControl(WZ_DECL_UNUSED sqlite3_file* f, WZ_DECL_UNUSED int op, WZ_DECL_UNUSED void *pArg)
 {
 	return 0;
 }
 
-static int xSectorSize(sqlite3_file* f)
+static int xSectorSize(WZ_DECL_UNUSED sqlite3_file* f)
 {
 	return 512;
 }
 
-static int xDeviceCharacteristics(sqlite3_file* f)
+static int xDeviceCharacteristics(WZ_DECL_UNUSED sqlite3_file* f)
 {
 	return 0;
 }
@@ -216,7 +216,7 @@ static const sqlite3_io_methods physfs_sqlite3_io_methods =
 	xDeviceCharacteristics, /**< Returns a bitmask describing the underlying filesystem's characteristics */
 };
 
-static int xOpen(sqlite3_vfs* pVfs, const char* zName, sqlite3_file* f, int flags, int* pOutFlags)
+static int xOpen(WZ_DECL_UNUSED sqlite3_vfs* pVfs, const char* zName, sqlite3_file* f, int flags, int* pOutFlags)
 {
 	physfs_sqlite3_file * const file = (physfs_sqlite3_file * const)f;
 	assert(&file->SQLite3_file == f);
@@ -249,7 +249,7 @@ static int xOpen(sqlite3_vfs* pVfs, const char* zName, sqlite3_file* f, int flag
 	return SQLITE_OK;
 }
 
-static int xDelete(sqlite3_vfs* pVfs, const char* zName, int syncDir)
+static int xDelete(WZ_DECL_UNUSED sqlite3_vfs* pVfs, const char* zName, WZ_DECL_UNUSED int syncDir)
 {
 	if (PHYSFS_delete(zName))
 		return SQLITE_OK;
@@ -257,7 +257,7 @@ static int xDelete(sqlite3_vfs* pVfs, const char* zName, int syncDir)
 		return SQLITE_IOERR_DELETE;
 }
 
-static int xAccess(sqlite3_vfs* pVfs, const char* zName, int flags)
+static int xAccess(WZ_DECL_UNUSED sqlite3_vfs* pVfs, const char* zName, int flags)
 {
 	switch (flags)
 	{
@@ -282,48 +282,48 @@ static int xAccess(sqlite3_vfs* pVfs, const char* zName, int flags)
 	}
 }
 
-static int xGetTempname(sqlite3_vfs* pVfs, int nOut, char* zOut)
+static int xGetTempname(WZ_DECL_UNUSED sqlite3_vfs* pVfs, WZ_DECL_UNUSED int nOut, WZ_DECL_UNUSED char* zOut)
 {
 	return SQLITE_IOERR;
 }
 
 /** \return non-zero when no truncation occurred, zero otherwise.
  */
-static int xFullPathname(sqlite3_vfs* pVfs, const char* zName, int nOut, char* zOut)
+static int xFullPathname(WZ_DECL_UNUSED sqlite3_vfs* pVfs, const char* zName, int nOut, char* zOut)
 {
 	return (strlcpy(zOut, zName, nOut) < nOut) ? SQLITE_OK : SQLITE_IOERR;
 }
 
-static void* xDlOpen(sqlite3_vfs* pVfs, const char* zFilename)
+static void* xDlOpen(WZ_DECL_UNUSED sqlite3_vfs* pVfs, WZ_DECL_UNUSED const char* zFilename)
 {
 	return 0;
 }
 
-static void xDlError(sqlite3_vfs* pVfs, int nByte, char* zErrMsg)
+static void xDlError(WZ_DECL_UNUSED sqlite3_vfs* pVfs, int nByte, char* zErrMsg)
 {
 	strlcpy(zErrMsg, "DlOpen and DlSym API isn't supported for this (PhysicsFS \"physfs\") VFS.", nByte);
 }
 
-static void *xDlSym(sqlite3_vfs* pVfs, void* dl, const char* zSymbol)
+static void *xDlSym(WZ_DECL_UNUSED sqlite3_vfs* pVfs, WZ_DECL_UNUSED void* dl, WZ_DECL_UNUSED const char* zSymbol)
 {
 	return 0;
 }
 
-static void xDlClose(sqlite3_vfs* pVfs, void* dl)
+static void xDlClose(WZ_DECL_UNUSED sqlite3_vfs* pVfs, WZ_DECL_UNUSED void* dl)
 {
 }
 
-static int xRandomness(sqlite3_vfs* pVfs, int nByte, char* zOut)
-{
-	return SQLITE_IOERR;
-}
-
-static int xSleep(sqlite3_vfs* pVfs, int microseconds)
+static int xRandomness(WZ_DECL_UNUSED sqlite3_vfs* pVfs, WZ_DECL_UNUSED int nByte, WZ_DECL_UNUSED char* zOut)
 {
 	return SQLITE_IOERR;
 }
 
-static int xCurrentTime(sqlite3_vfs* pVfs, double* curTime)
+static int xSleep(WZ_DECL_UNUSED sqlite3_vfs* pVfs, WZ_DECL_UNUSED int microseconds)
+{
+	return SQLITE_IOERR;
+}
+
+static int xCurrentTime(WZ_DECL_UNUSED sqlite3_vfs* pVfs, WZ_DECL_UNUSED double* curTime)
 {
 	return SQLITE_IOERR;
 }
