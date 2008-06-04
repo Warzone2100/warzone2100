@@ -116,7 +116,7 @@ void debug_callback_stderr( WZ_DECL_UNUSED void ** data, const char * outputBuff
  * \param	outputBuffer	Buffer containing the preprocessed text to output.
  */
 #if defined WIN32 && defined DEBUG
-void debug_callback_win32debug( void ** data, const char * outputBuffer )
+void debug_callback_win32debug(WZ_DECL_UNUSED void ** data, const char * outputBuffer)
 {
 	char tmpStr[MAX_LEN_LOG_LINE];
 
