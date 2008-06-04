@@ -169,7 +169,7 @@ fi
 
 AC_ARG_WITH([distributor],
 	AS_HELP_STRING([--with-distributor], [Name of distributor compiling this package]),
-	[ with_distributor=${withval} ], [ with_applicationdir="UNKNOWN" ])
+	[ with_distributor=${withval} ], [ with_distributor="UNKNOWN" ])
 AC_DEFINE_UNQUOTED([PACKAGE_DISTRIBUTOR], ["${with_distributor}"], [Name of distributor compiling this package])
 
 AC_ARG_WITH([makensis],
