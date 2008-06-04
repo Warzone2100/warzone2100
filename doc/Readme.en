@@ -15,14 +15,15 @@ Content
 
 1. Contents of Warzone 2100
 ===========================
-Warzone 2100, released in 1999 and developed by Pumpkin Studios,
-was a groundbreaking and innovative 3D real-time strategy game.
+Warzone 2100, released in 1999 and developed by Pumpkin Studios, was a ground-
+breaking and innovative 3D real-time strategy game.
+
 In 2004 Eidos, in collaboration with Pumpkin Studios, decided to release
 the source for the game under the terms of the GNU GPL, including everything
 but the music and in-game video sequences.
 
 Additionally all multiplayer-maps that were available in Warzone 2100 1.10,
-the last official patch by Pumpkin Studios, are available in Warzone 2100 as
+the last official version by Pumpkin Studios, are available in Warzone 2100 as
 well.
 
 2. State of the game
@@ -31,17 +32,17 @@ After the liberation of the Warzone 2100 source-code on December 6th, 2004, all
 proprietary technologies had been replaced with open-source-counterparts.
 
 Right now supported platforms are GNU/Linux, Mac OS X 10.4 (Tiger) and Windows
-(98 - XP). There are reports that Warzone 2100 is working on BSD, too. Some
-people even run it under Windows Vista, which is not directly supported.
+(98 - XP). There are reports that Warzone 2100 is working on BSD, too. While 
+Warzone 2100 may work under Windows Vista it is not supported by us.
 
-The game is still in a beta-state, so do not expect the game to run without any
-issues.
+The game is becoming more and more stable over time, but you should not expect
+the game to run without any issues.
 
 2.1 Reporting Bugs
 ------------------
 This game still has bugs and if you run into one, please use the bugtracker
 (https://gna.org/bugs/?group=warzone) to report this bug. In order to faster fix
-those bugs the developers require that you follow these rules:
+those bugs we require that you follow these rules:
 
    1. If the game crashes you may save a memory dump. Please do so and upload it
       when reporting the bug. (Linux locates that file at /tmp/warzone2100.gdmp)
@@ -206,4 +207,4 @@ Warzone2100.de (German):
 http://warzone2100.de/
 
 AUTHOR: Kreuvf (kreuvf@warzone2100.de)
-LAST UPDATE: 2008/05/25
+LAST UPDATE: 2008/06/04
