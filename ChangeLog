@@ -23,6 +23,7 @@
    * Fix: Trucks going in circles (bug #11341)
    * Fix: Render super-cyborgs using the bucket list, to avoid jittery HP bars.
    * Fix: Bug that would make sliders inactive in multiplayer when not hosting a game.
+   * Fix: Textures missing on first beta away mission (bug #11733)
    * Fix: Lots of other things that we may have forgotten about. This beta really does contain a lot of bug fixes.
  * Gameplay:
    * New: Support for coloured mouse cursors (ingame only, not in menus), controlled by configuration option "ColouredCursor". Turned off by default. (patch #956)
