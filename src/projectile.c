@@ -371,9 +371,7 @@ BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, Ve
 	}
 	else // incase anything wants a projectile
 	{
-		muzzle.x = psAttacker->pos.x;
-		muzzle.y = psAttacker->pos.y;
-		muzzle.z = psAttacker->pos.z;
+		muzzle = Vector3f_New(psAttacker->pos.x, psAttacker->pos.y, psAttacker->pos.z);
 	}
 
 	/* Initialise the structure */
