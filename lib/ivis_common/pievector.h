@@ -245,11 +245,10 @@ static inline WZ_DECL_CONST BOOL Vector3f_Compare(const Vector3f a, const Vector
  * \param[out] v Vector to set
  * \param[in] x,y,z Values to set to
  */
-static inline void Vector3f_Set(Vector3f* v, const float x, const float y, const float z)
+static inline WZ_DECL_CONST Vector3f Vector3f_New(const float x, const float y, const float z)
 {
-	v->x = x;
-	v->y = y;
-	v->z = z;
+	Vector3f dest = { x, y, z };
+	return dest;
 }
 
 
@@ -484,11 +483,10 @@ static inline WZ_DECL_CONST BOOL Vector3i_InSphere (const Vector3i v, const Vect
  * \param[out] v Vector to set
  * \param[in] x,y,z Values to set to
  */
-static inline void Vector3i_Set(Vector3i* v, const int x, const int y, const int z)
+static inline WZ_DECL_CONST Vector3i Vector3i_New(const int x, const int y, const int z)
 {
-	v->x = x;
-	v->y = y;
-	v->z = z;
+	Vector3i dest = { x, y, z };
+	return dest;
 }
 
 
@@ -498,11 +496,10 @@ static inline void Vector3i_Set(Vector3i* v, const int x, const int y, const int
  * \param[out] v Vector to set
  * \param[in] x,y,z Values to set to
  */
-static inline void Vector3uw_Set(Vector3uw* v, const unsigned int x, const unsigned int y, const unsigned int z)
+static inline WZ_DECL_CONST Vector3uw Vector3uw_New(const unsigned int x, const unsigned int y, const unsigned int z)
 {
-	v->x = x;
-	v->y = y;
-	v->z = z;
+	Vector3uw dest = { x, y, z };
+	return dest;
 }
 
 #endif // __INCLUDED_LIB_IVIS_PIEVECTOR_H__

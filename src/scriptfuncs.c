@@ -6375,7 +6375,7 @@ BOOL scrFireWeaponAtObj(void)
 	}
 
 	// FIXME HACK Needed since we got those ugly Vector3uw floating around in BASE_OBJECT...
-	Vector3i_Set(&target, psTarget->pos.x, psTarget->pos.y, psTarget->pos.z);
+	target = Vector3i_New(psTarget->pos.x, psTarget->pos.y, psTarget->pos.z);
 
 	// send the projectile using the selectedPlayer so that it can always be seen
 	proj_SendProjectile(&sWeapon, NULL, selectedPlayer, target, psTarget, true, 0);

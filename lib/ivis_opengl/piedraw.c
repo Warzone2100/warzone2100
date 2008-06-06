@@ -388,7 +388,7 @@ static void pie_DrawShadow(iIMDShape *shape, int flag, int flag_data, Vector3f* 
 			for(j = 0; j < 3; j++)
 			{
 				current = pPolys->pindex[j];
-				Vector3f_Set(&p[j], pVertices[current].x, scale_y(pVertices[current].y, flag, flag_data), pVertices[current].z);
+				p[j] = Vector3f_New(pVertices[current].x, scale_y(pVertices[current].y, flag, flag_data), pVertices[current].z);
 			}
 
 			v[0] = Vector3f_Sub(p[2], p[0]);
