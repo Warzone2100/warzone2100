@@ -39,9 +39,15 @@
 # include <GL/glc.h>
 #endif
 
+#ifdef WZ_OS_MAC
+static const char font_family[] = "Lucida Grande";
+static const char font_face_regular[] = "Regular";
+static const char font_face_bold[] = "Bold";
+#else
 static const char font_family[] = "DejaVu Sans Mono";
 static const char font_face_regular[] = "Book";
 static const char font_face_bold[] = "Bold";
+#endif
 
 static float font_size = 12.f;
 // Contains the font color in the following order: red, green, blue, alpha

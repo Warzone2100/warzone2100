@@ -659,6 +659,10 @@
 		02F5CC900D1496580000A2D0 /* poptparse.c in Sources */ = {isa = PBXBuildFile; fileRef = 02F5CC870D1496580000A2D0 /* poptparse.c */; };
 		02F5CC910D1496580000A2D0 /* system.h in Headers */ = {isa = PBXBuildFile; fileRef = 02F5CC880D1496580000A2D0 /* system.h */; };
 		02F5CCC00D1498A30000A2D0 /* Popt.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02F5CC6D0D1494AA0000A2D0 /* Popt.framework */; };
+		9742E5730DF9975E000A5D41 /* lexer_input.c in Sources */ = {isa = PBXBuildFile; fileRef = 9742E5710DF9975E000A5D41 /* lexer_input.c */; };
+		9742E5740DF9975E000A5D41 /* lexer_input.h in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 9742E5720DF9975E000A5D41 /* lexer_input.h */; };
+		9742E5770DF9979C000A5D41 /* parsetest.c in Sources */ = {isa = PBXBuildFile; fileRef = 9742E5750DF9979C000A5D41 /* parsetest.c */; };
+		9742E5780DF9979C000A5D41 /* parsetest.h in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 9742E5760DF9979C000A5D41 /* parsetest.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXBuildRule section */
@@ -844,6 +848,8 @@
 				02AAD1610D9ED4B200248B0F /* physfs_vfs.h in Copy frameworks */,
 				02BBB20A0DA874F6002D438B /* exceptionhandler.h in Copy frameworks */,
 				02DE76070DC3B84900D48F58 /* GLee.h in Copy frameworks */,
+				9742E5740DF9975E000A5D41 /* lexer_input.h in Copy frameworks */,
+				9742E5780DF9979C000A5D41 /* parsetest.h in Copy frameworks */,
 			);
 			name = "Copy frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1682,6 +1688,10 @@
 		02F5CC860D1496580000A2D0 /* poptint.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = poptint.h; path = external/popt/poptint.h; sourceTree = SOURCE_ROOT; };
 		02F5CC870D1496580000A2D0 /* poptparse.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = poptparse.c; path = external/popt/poptparse.c; sourceTree = SOURCE_ROOT; };
 		02F5CC880D1496580000A2D0 /* system.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = system.h; path = external/popt/system.h; sourceTree = SOURCE_ROOT; };
+		9742E5710DF9975E000A5D41 /* lexer_input.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = lexer_input.c; path = ../lib/framework/lexer_input.c; sourceTree = SOURCE_ROOT; };
+		9742E5720DF9975E000A5D41 /* lexer_input.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = lexer_input.h; path = ../lib/framework/lexer_input.h; sourceTree = SOURCE_ROOT; };
+		9742E5750DF9979C000A5D41 /* parsetest.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = parsetest.c; path = ../src/parsetest.c; sourceTree = SOURCE_ROOT; };
+		9742E5760DF9979C000A5D41 /* parsetest.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = parsetest.h; path = ../src/parsetest.h; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -2010,6 +2020,10 @@
 		0246A0D00BD3CBE1004D1C70 /* Framework */ = {
 			isa = PBXGroup;
 			children = (
+				9742E5750DF9979C000A5D41 /* parsetest.c */,
+				9742E5760DF9979C000A5D41 /* parsetest.h */,
+				9742E5710DF9975E000A5D41 /* lexer_input.c */,
+				9742E5720DF9975E000A5D41 /* lexer_input.h */,
 				02B2132A0DA8755F0059E864 /* cursors.c */,
 				02B2132B0DA8755F0059E864 /* cursors16.c */,
 				02B2132C0DA8755F0059E864 /* cursors32.c */,
@@ -3583,7 +3597,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if [ \"${CONFIGURATION}\" == \"Debug\" ]; then\n    mkdir -p ${TARGET_BUILD_DIR}/Warzone.app/Contents/Resources\n    rm -rf ${TARGET_BUILD_DIR}/Warzone.app/Contents/Resources/data\n    tar -cC .. --exclude .svn --exclude 'Makefile*' data | tar -xC ${TARGET_BUILD_DIR}/Warzone.app/Contents/Resources\nelse\n    mkdir -p ${TARGET_BUILD_DIR}/Warzone.app/Contents/Resources\n    rm -rf ${TARGET_BUILD_DIR}/Warzone.app/Contents/Resources/data\n    mkdir ${TARGET_BUILD_DIR}/Warzone.app/Contents/Resources/data\n    cd ../data/base\n    zip -ru0 ${TARGET_BUILD_DIR}/Warzone.app/Contents/Resources/data/base.wz anims audio components effects features tagdefinitions gamedesc.lev images messages misc multiplay novideo.rpl palette.bin script sequenceaudio stats structs texpages wrf -x *svn*\n    cd ../mp\n    zip -ru0 ${TARGET_BUILD_DIR}/Warzone.app/Contents/Resources/data/mp.wz addon.lev anims components effects messages multiplay stats structs wrf -x *svn*\nfi\n";
+			shellScript = "mkdir -p ${TARGET_BUILD_DIR}/Warzone.app/Contents/Resources\nrm -rf ${TARGET_BUILD_DIR}/Warzone.app/Contents/Resources/data\ntar -cC .. --exclude .svn --exclude 'Makefile*' data | tar -xC ${TARGET_BUILD_DIR}/Warzone.app/Contents/Resources";
 		};
 		02CDDD010D159CA700722688 /* Run autorevision */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -3985,6 +3999,8 @@
 				02B2132E0DA8755F0059E864 /* cursors16.c in Sources */,
 				02B2132F0DA8755F0059E864 /* cursors32.c in Sources */,
 				02DE76060DC3B84900D48F58 /* GLee.c in Sources */,
+				9742E5730DF9975E000A5D41 /* lexer_input.c in Sources */,
+				9742E5770DF9979C000A5D41 /* parsetest.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4384,7 +4400,7 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = "Resources/QuesoGLC-Info.plist";
-				INSTALL_PATH = "$(HOME)/Library/Frameworks";
+				INSTALL_PATH = "@executable_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_1)",
@@ -5092,7 +5108,7 @@
 				);
 				GCC_PREPROCESSOR_DEFINITIONS_QUOTED_1 = "PACKAGE=\\\"popt\\\"";
 				INFOPLIST_FILE = "Resources/Popt-Info.plist";
-				INSTALL_PATH = "$(HOME)/Library/Frameworks";
+				INSTALL_PATH = "@executable_path/../Frameworks";
 				OTHER_LDFLAGS = (
 					"-framework",
 					Carbon,
