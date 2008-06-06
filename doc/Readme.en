@@ -10,8 +10,10 @@ Content
  3.2 Command-line options
  3.3 Music
  3.4 Multiplaying via internet
-4. Important hotkeys
-5. Additional resources
+4. Cheats
+5. Debug-keys
+6. Important hotkeys
+7. Additional resources
 
 1. Contents of Warzone 2100
 ===========================
@@ -63,8 +65,8 @@ those bugs we require that you follow these rules:
 ================
 3.1 WZ-dir and configuration file
 ---------------------------------
-Warzone saves your configuration data in a file named "config". Where this file
-is located depends on your operating system.
+Warzone saves your configuration data in a file named "config". The location of
+this file depends on the operating system.
 
 Warzone-dir under GNU/Linux
 ***************************
@@ -77,41 +79,98 @@ Warzone-dir under Windows
 *************************
 The folder is called "Warzone 2100" and is located in "My Documents".
 
+Warzone-dir under Mac OS X
+**************************
+The folder "Warzone 2100" can be found in your home-directory at:
+~/Library/Application Support/
+
 3.2 Command-line options
 ------------------------
-Additionally to the configuration-file Warzone can be started with different
-parameters.
+Additionally to the configuration-file Warzone 2100 can be started with dif-
+ferent options and arguments.
 
-Note: This parameters all have two dashes (--), not one dash only (-). Trying to
-use the parameters with one dash only will not work.
-Parameter			Effect
---fullscreen 			play in fullscreen-mode
---window 			play in windowed mode
---resolution WIDTHxHEIGHT 	sets the size of the viewport, usable with
-				fullscreen and windowed
---datadir DIR 			sets the default data-dir to DIR
---shadows 			enables shadows
---noshadows 			disables shadows
---sound 			enables sound
---nosound 			disables sound
---cheat 			enables the usage of cheats and debug-keys
+Notes: These options all have two dashes (--), not one dash only (-). Trying to
+use the options with one dash only will not work. The game will display a notice
+when trying to use invalid command-line options. Arguments that need paths need
+them in the form they are used on the operating system.
 
-Note: All mentioned command-line parameters except --datadir change the appro-
-priate value in your config-file. Starting warzone by double-clicking the exe-
-cutable/binary will then start the game with the settings used last time. So
-don't wonder, if there is no sound, when you started warzone with --nosound last
-time.
+--fullscreen
+       Starts the game in fullscreen-mode
 
-Note: This is list is not complete. A complete list and further information on
-command-line options (http://wiki.wz2100.net/command_line_options) can be found
-at the Wiki of Warzone Resurrection Project (http://wiki.wz2100.net/).
+--window
+       Starts the game in windowed mode
+
+--resolution WIDTHxHEIGHT
+       Sets the resolution Warzone 2100 will use; usable for fullscreen mode and
+       windowed mode
+
+--shadows
+       Enables shadows
+
+--noshadows
+       Disables shadows
+
+--sound
+       Enables sound
+
+--nosound
+       Disables sound
+
+--datadir path
+       Sets the data-directory to the path specified
+
+--configdir path
+       Sets the configuration-directory to the path specified
+
+--savegame name
+       Loads a saved game
+
+--cheat
+       Enables the usage of cheats and debug-keys, see cheats and debug-keys
+
+--help
+       Outputs a help message and exits; only useful when run from command-line
+
+--debug option
+       Shows debug information; option can be any of the following: all, main,
+       sound, video, wz, 3d, texture, net, memory, error, script. If you want
+       more than one option, you will have to use another --debug. The option
+       "all" contains every other option.
+
+--debugfile file
+       Directs debug output to the specified file.
+
+--version
+       Outputs the Warzone 2100 version and exits
+
+--mod_ca mod-file
+       Enables the specified campaign mod. You have to specify the full name of
+       the mod-file.
+
+--mod_mp mod-file
+       Enables the specified multiplayer mod. You have to specify the full name
+       of the mod-file.
+
+--mod mod-file
+       Enables the specified mod globally - for campaign and multiplayer. You
+       have to specify the full name of the mod-file. Global mods are only
+       useful when things are changed that affect both, campaign and multi-
+       player.
+
+
+Note: Some options have corresponding entries in the configuration-file and will
+persist from one start of Warzone 2100 to the next. For example starting the
+game with --nosound only once will silence it as long as you do not start it
+with --sound or change the corresponding value in the configuration file. Fur-
+ther information on command-line options can be found at the Wiki of the War-
+zone 2100 Resurrection Project (http://wiki.wz2100.net/command_line_options).
 
 3.3 Music
 ---------
-As the original game music is part of the data that was not liberated, we are
-reintroducing music, but in a different way. We use a playlist system that can
-point to any *.ogg or *.mp3-file in your warzone-data-path. This is still
-experimental and we are gradually making this more usable.
+As the original game music is part of the data that was not liberated, music is
+reintroduced in a different way. A playlist-system is used that can point to any
+*.ogg in your warzone-data-path. This is still experimental and we are gradually
+making this more usable.
 
 Warzone reads the following two playlists (in the order they are mentioned) and
 the first playlist found will be used:
@@ -119,23 +178,29 @@ the first playlist found will be used:
 * Warzone-directory in your personal directory:
 	o for GNU/Linux: ~/.warzone2100/music/music.wpl
 	o for Windows: ~/My Documents/Warzone 2100/music/music.wpl
+   o for Mac OS X: ~/Library/Application Support/Warzone 2100/music/music.wpl
 * Warzone-install-path:
 	o <whereverwarzoneisinstalled>/music/music.wpl
 
 Using the playlist
 ******************
 The playlist contains two sections, [game] and [menu]. For each section you can
-define a list of songs you want to played in-game. Supported file-formats are
-OGG and MP3 as long as all necessary libraries are installed.
+define a list of songs you want to be played in-game. The only supported file-
+format is Ogg/Vorbis as long as all necessary libraries are installed.
 
-With "shuffle=yes" you specify that you want the songs to played in random
-order. You need to set this for each section individually.
+"shuffle=yes" specifies that you want the songs to played in random order. You
+need to set this for each section individually.
 
-Using "path=." you specify that the following files are found in the folder the
-playlist was found. If you do not specify a path all file-names have to be given
-with "absolute" path. This "absolute" path is still relative to your
-warzone-data-dir. All file-names should be lower-case. However file-names have
-to match those in the file-system.
+"path=." specifies that the following files are found in the folder the playlist
+was found. If you do not specify a path all file-names have to be given with
+"absolute" path. This "absolute" path is still relative to your warzone-data-
+dir. File-names have to match those in the file-system and you can not specify
+files outside of the warzone-data-dir.
+
+Note: Since we are using PhysFS we recommend you to use only Latin letters in
+directory and file-names (more exactly this means: A to Z, a to z, 0 to 9, _-+
+and space). You will receive the following error (running with --debug sound) if
+"bad" characters are used: Failed opening [[PATH TO FILE]]: Insecure filename.
 
 This example shows how a playlist-file could look like:
 --------------------------------------------------------------------------------
@@ -152,6 +217,9 @@ neos_indy.ogg
 path=.
 neos_symphonie_du_vide.ogg
 --------------------------------------------------------------------------------
+
+Music replay may be choppy, so you may want to use an external player for your
+music instead.
 
 3.4 Multiplaying via internet
 -----------------------------
@@ -181,7 +249,13 @@ enter "lobby.wz2100.net" when prompted to enter the host's IP or change the
 entry in the config-file back. You will have to restart Warzone 2100 in order
 for config-changes to take effect.
 
-4. Important hotkeys
+4. Cheats
+=========
+
+5. Debug-keys
+=============
+
+6. Important hotkeys
 ====================
 Hotkey                         Effect
 Ctrl + Tab                     Toggle display of terrain in map
@@ -192,7 +266,7 @@ Alt + S                        Toggle shadows
 Shift + Backspace              Allow/disallow usage of cheats
 Ctrl + O                       Display debug-menu
 
-5. Additional resources
+7. Additional resources
 =======================
 Homepage of the Warzone Resurrection Project (English):
 http://wz2100.net/
@@ -207,4 +281,4 @@ Warzone2100.de (German):
 http://warzone2100.de/
 
 AUTHOR: Kreuvf (kreuvf@warzone2100.de)
-LAST UPDATE: 2008/06/04
+LAST UPDATE: 2008/06/06

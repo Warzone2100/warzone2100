@@ -33,6 +33,8 @@
          <li><a href="#multiplay">Multiplaying via internet</a></li>
         </ul>
        </li>
+       <li><a href="#cheats">Cheats</a></li>
+       <li><a href="#debugkeys">Debug-keys</a></li>
        <li><a href="#hotkeys">Important hotkeys</a></li>
        <li><a href="#furtherinfo">Additional resources</a></li>
       </ul>
@@ -76,68 +78,106 @@
    <h2 id="configuration">Configuration</h2>
 
    <h3 id="configfile">WZ-dir and configuration file</h3>
-   <p>Warzone saves your configuration data in a file named "config". Where this file is located depends on your operating system.</p>
+   <p>Warzone saves your configuration data in a file named "config". The location of this file depends on the operating system.</p>
    <h4>Warzone-dir under GNU/Linux</h4>
    <p>It can be found in your home-directory and is called ".warzone2100". The leading dot indicates that it is a hidden folder so depending on your configuration you may not be able to see it. However, you can still access it by typing the path into your address-bar.</p>
    <h4>Warzone-dir under Windows</h4>
    <p>The folder is called "Warzone 2100" and is located in "My Documents".</p>
+   <h4>Warzone-dir under Mac OS X</h4>
+   <p>The folder "Warzone 2100" can be found in your home-directory at: ~/Library/Application Support/</p>
 
    <h3 id="cmdline">Command-line options</h3>
-   <p>Additionally to the configuration-file Warzone can be started with different parameters.</p>
-   <p>Note: This parameters all have two dashes (--), not one dash only (-). Trying to use the parameters with one dash only will not work.</p>
+   <p>Additionally to the configuration-file Warzone 2100 can be started with different options and arguments.</p>
+   <p>Notes: These options all have two dashes (--), not one dash only (-). Trying to use the options with one dash only will not work. The game will display a notice when trying to use invalid command-line options. Arguments that need paths need them in the form they are used on the operating system.</p>
    <table>
     <tr>
-     <th>Parameter</th>
+     <th>Option (<em>with arguments</em>)</th>
      <th>Effect</th>
     </tr>
     <tr>
      <td>--fullscreen</td>
-     <td>play in fullscreen-mode</td>
+     <td>Starts the game in fullscreen-mode</td>
     </tr>
     <tr>
      <td>--window</td>
-     <td>play in windowed mode</td>
+     <td>Starts the game in windowed mode</td>
     </tr>
     <tr>
-     <td>--resolution WIDTHxHEIGHT</td>
-     <td>sets the size of the viewport, usable with fullscreen and windowed</td>
-    </tr>
-    <tr>
-     <td>--datadir DIR</td>
-     <td>sets the default data-dir to DIR</td>
+     <td>--resolution <em>WIDTHxHEIGHT</em></td>
+     <td>Sets the resolution Warzone 2100 will use; usable for fullscreen mode and windowed mode</td>
     </tr>
     <tr>
      <td>--shadows</td>
-     <td>enables shadows</td>
+     <td>Enables shadows</td>
     </tr>
     <tr>
      <td>--noshadows</td>
-     <td>disables shadows</td>
+     <td>Disables shadows</td>
     </tr>
     <tr>
      <td>--sound</td>
-     <td>enables sound</td>
+     <td>Enables sound</td>
     </tr>
     <tr>
      <td>--nosound</td>
-     <td>disables sound</td>
+     <td>Disables sound</td>
+    </tr>
+    <tr>
+     <td>--datadir <em>path</em></td>
+     <td>Sets the data-directory to the path specified</td>
+    </tr>
+    <tr>
+     <td>--configdir <em>path</em></td>
+     <td>Sets the configuration-directory to the path specified</td>
+    </tr>
+    <tr>
+     <td>--savegame <em>name</em></td>
+     <td>Loads a saved game</td>
     </tr>
     <tr>
      <td>--cheat</td>
-     <td>enables the usage of cheats and debug-keys</td>
+     <td>Enables the usage of cheats and debug-keys, see <a href="#cheats" title="Cheats">cheats</a> and <a href="#debugkeys" title="Debug-keys">debug-keys</a></td>
+    </tr>
+    <tr>
+     <td>--help</td>
+     <td>Outputs a help message and exits; only useful when run from command-line</td>
+    </tr>
+    <tr>
+     <td>--debug <em>option</em></td>
+     <td>Shows debug information; <em>option</em> can be any of the following: all, main, sound, video, wz, 3d, texture, net, memory, error, script. If you want more than one option, you will have to use another --debug. The option "all" contains every other option.</td>
+    </tr>
+    <tr>
+     <td>--debugfile <em>file</em></td>
+     <td>Directs debug output to the specified file.</td>
+    </tr>
+    <tr>
+     <td>--version</td>
+     <td>Outputs the Warzone 2100 version and exits</td>
+    </tr>
+    <tr>
+     <td>--mod_ca <em>mod-file</em></td>
+     <td>Enables the specified campaign mod. You have to specify the full name of the mod-file.</td>
+    </tr>
+    <tr>
+     <td>--mod_mp <em>mod-file</em></td>
+     <td>Enables the specified multiplayer mod. You have to specify the full name of the mod-file.</td>
+    </tr>
+    <tr>
+     <td>--mod <em>mod-file</em></td>
+     <td>Enables the specified mod globally - for campaign and multiplayer. You have to specify the full name of the mod-file. Global mods are only useful when things are changed that affect both, campaign and multiplayer.</td>
     </tr>
    </table>
-   <p>Note: All mentioned command-line parameters except --datadir change the appropriate value in your config-file. Starting warzone by double-clicking the executable/binary will then start the game with the settings used last time. So don't wonder, if there is no sound, when you started warzone with --nosound last time.</p>
-   <p>Note: This list is not complete. An extended list and <a href="http://wiki.wz2100.net/command_line_options" title="Command Line Options for Warzone 2100" hreflang="en">further information on command-line options</a> can be found at the <a href="http://wiki.wz2100.net/" title="Wiki for Warzone 2100" hreflang="en">Wiki of Warzone Resurrection Project</a>.</p>
+   <p>Note: Some options have corresponding entries in the configuration-file and will persist from one start of Warzone 2100 to the next. For example starting the game with --nosound only once will silence it as long as you do not start it with --sound or change the corresponding value in the configuration file. <a href="http://wiki.wz2100.net/command_line_options" title="Command Line Options for Warzone 2100" hreflang="en">Further information on command-line options</a> can be found at the <a href="http://wiki.wz2100.net/" title="Wiki for Warzone 2100" hreflang="en">Wiki of the Warzone 2100 Resurrection Project</a>.</p>
 
    <h3 id="music">Music</h3>
-   <p>As the original game music is part of the data that was not liberated, music is reintroduced in a different way. A playlist-system is used that can point to any *.ogg or *.mp3-file in your warzone-data-path. This is still experimental and we are gradually making this more usable.</p>
+   <p>As the original game music is part of the data that was not liberated, music is reintroduced in a different way. A playlist-system is used that can point to any *.ogg in your warzone-data-path. This is still experimental and we are gradually making this more usable.</p>
    <p>Warzone reads the following two playlists (in the order they are mentioned) and the first playlist found will be used:</p>
    <ul>
     <li>Warzone-directory in your personal directory:
      <ul>
       <li>for GNU/Linux: ~/.warzone2100/music/music.wpl</li>
       <li>for Windows: ~/My Documents/Warzone 2100/music/music.wpl</li>
+      <li>for Mac OS X: ~/Library/Application Support/Warzone 2100/music/music.wpl</li>
      </ul>
     </li>
     <li>Warzone-install-path:
@@ -147,9 +187,10 @@
     </li>
    </ul>
    <h4>Using the playlist</h4>
-   <p>The playlist contains two sections, [game] and [menu]. For each section you can define a list of songs you want to be played in-game. Supported file-formats are OGG and MP3 as long as all necessary libraries are installed.</p>
-   <p>With "shuffle=yes" you specify that you want the songs to played in random order. You need to set this for each section individually.</p>
-   <p>Using "path=." you specify that the following files are found in the folder the playlist was found. If you do not specify a path all file-names have to be given with "absolute" path. This "absolute" path is still relative to your warzone-data-dir. File-names have to match those in the file-system and you can not specify files outside of the warzone-data-dir.</p>
+   <p>The playlist contains two sections, [game] and [menu]. For each section you can define a list of songs you want to be played in-game. The only supported file-format is Ogg/Vorbis as long as all necessary libraries are installed.</p>
+   <p>"shuffle=yes" specifies that you want the songs to played in random order. You need to set this for each section individually.</p>
+   <p>"path=." specifies that the following files are found in the folder the playlist was found. If you do not specify a path all file-names have to be given with "absolute" path. This "absolute" path is still relative to your warzone-data-dir. File-names have to match those in the file-system and you can not specify files outside of the warzone-data-dir.</p>
+   <p>Note: Since we are using PhysFS we recommend you to use only Latin letters in directory and file-names (more exactly this means: A to Z, a to z, 0 to 9, _-+ and space). You will receive the following error (running with --debug sound) if "bad" characters are used: Failed opening [[PATH TO FILE]]: Insecure filename.</p>
    <p>This example shows how a playlist-file could look like:</p>
    <pre>
 [game]
@@ -165,18 +206,33 @@ neos_indy.ogg
 path=.
 neos_symphonie_du_vide.ogg
 </pre>
+   <p>Music replay may be choppy, so you may want to use an external player for your music instead.</p>
 
    <h3 id="multiplay">Multiplaying via internet</h3>
-   <p>There are two methods to start a multiplayer-game via internet: using the host's IP or using the lobby-server. Make sure to be able to communicate on TCP-ports 9998 and 9999.</p>
+   <p>There are two methods to start a multiplayer-game via internet: using the host's IP or using the lobby-server. For both you should sure to be able to communicate on TCP-ports 9998 and 9999.</p>
    <p>You can choose whether to connect via Lobby or IP:</p>
    <ul>
-    <li>If you choose IP, Warzone 2100 asks you for the ip-address of the host and will try to connect to that IP.</li>
-    <li>If you choose Lobby, Warzone 2100 will connect to the lobby server, as long as the lobby-server-address in your config-file has not been changed.</li>
+    <li>If you choose IP, Warzone 2100 asks you for the IP-address of the host and will try to connect to that IP.</li>
+    <li>If you choose Lobby, Warzone 2100 will connect to the lobby server, as long as the lobby-server-address in your configuration file has not been changed.</li>
    </ul>
    <p>You will see a list of games from which you can select one.</p>
-   <p>You can kick unwanted players out of not-yet-started game by clicking left on them while holding the right mouse button.</p>
-   <p>When you are hosting a game it will automatically be listed on the lobby-server. If you do not want your games to be listed on the lobby-server, you have to change the entry "masterserver_name=lobby.wz2100.net" in your config to something invalid as "nomasterserverplease".</p>
-   <p>If you then want to see the games that are listed on the lobby-server you may enter "lobby.wz2100.net" when prompted to enter the host's IP or change the entry in the config-file back. You will have to restart Warzone 2100 in order for config-changes to take effect.</p>
+   <p>You can kick unwanted players out of not-yet-started games by clicking left on them while holding the right mouse button.</p>
+   <p>When you are hosting a game it will automatically be listed on the lobby server. If you do not want your games to be listed on the lobby-server, you have to change the entry "masterserver_name=lobby.wz2100.net" in your configuration file to something invalid as "nomasterserverplease".</p>
+   <p>If you then want to see the games that are listed on the lobby server you may enter "lobby.wz2100.net" when prompted to enter the host's IP or change the entry in the configuration file back. You will have to restart Warzone 2100 in order for configuration changes to take effect.</p>
+   <div class="rt">
+    <p><a href="#top">back to top</a></p>
+   </div>
+   <hr/>
+
+
+   <h2 id="cheats">Cheats</h2>
+   <div class="rt">
+    <p><a href="#top">back to top</a></p>
+   </div>
+   <hr/>
+
+
+   <h2 id="debugkeys">Debug-keys</h2>
    <div class="rt">
     <p><a href="#top">back to top</a></p>
    </div>
@@ -239,7 +295,7 @@ neos_symphonie_du_vide.ogg
    <div id="fileinfo">
     <ul>
      <li>AUTHOR: <a href="mailto:kreuvf@warzone2100.de">Kreuvf</a></li>
-     <li>LAST UPDATE: 2008/06/04</li>
+     <li>LAST UPDATE: 2008/06/06</li>
     </ul>
    </div>
   </div>

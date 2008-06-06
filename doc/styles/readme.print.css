@@ -1,7 +1,7 @@
 /*
 AUTHOR:      Steven "Kreuvf" Koenig
 CONTACT:     webmaster@kreuvf.de or kreuvf@warzone2100.de
-LAST UPDATE: 2008/05/25
+LAST UPDATE: 2008/06/05
 DESCRIPTION: CSS-file for print-look of Warzone 2100-Readme
 */
 
@@ -55,6 +55,10 @@ pre	{
 	padding: 4pt 4pt 4pt 4pt;
 	margin: 4pt 4pt 4pt 4pt;
 	}
+
+em {
+   font-style: italic;
+   }
 
 table	{
 	border-collapse: collapse;
