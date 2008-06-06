@@ -23,6 +23,7 @@
    * Fix: Trucks going in circles (bug #11341)
    * Fix: Render super-cyborgs using the bucket list, to avoid jittery HP bars.
    * Fix: Bug that would make sliders inactive in multiplayer when not hosting a game.
+   * Fix: Textures missing on first beta away mission (bug #11733)
    * Fix: Lots of other things that we may have forgotten about. This beta really does contain a lot of bug fixes.
  * Gameplay:
    * New: Support for coloured mouse cursors (ingame only, not in menus), controlled by configuration option "ColouredCursor". Turned off by default. (patch #956)
@@ -36,7 +37,7 @@
    * Change: VTOL movement rules simplified. No cliff height limitations anymore.
    * Fix: Dull mini-map player colors were replaced by brighter colors.
    * Fix: Rocket Autoloader research does not appear before lancer is researched and has "HEAT Rocket Warhead" as a prerequisite, instead of "HEAP Mini-Rockets" (bug #11312).
-   * Fix: When cheating is on AIs get power boost on client's machines too, fixes "Not enough power to build droid" warning.
+   * Fix: When cheating is on AIs get power boost on client's machines too.
  * Balancing (Multiplayer Only):
    * Change: Tank Killer now fires four projectiles instead of two, total firepower is unaffected.
    * Change: AA Projectiles fly faster which increases accuracy.
@@ -55,6 +56,11 @@
    * Change: Rate of Fire of Hyper Velocity Cannon decreased, damage increased. The resulting damage in the game is not affected.
    * Change: Bunker Buster's damage increased by 30% to make it competitive against flamers.
    * Change: Anti-tank weapons are 15% more effective against hardpoints.
+   * Change: Anti-tank weapons effectiveness increased from 110% to 133% against Half-tracked units, decreased from 133% to 110% against Tracked units.
+   * Change: Cost of all bodies (except for 'Viper' body) decreased to reflect body's real value. Later bodies have more value that earlier bodies to justify research cost and time.
+   * Change: Tank-Killer hardpoint cost decreased from 300 to 275.
+   * Change: Range of Mini-Rocket Artillery increased from 7.5 tiles to 8.5 tiles.
+   * Change: Bunker Buster rocket is available earlier and has "Synaptic Link Data Analysis Mk3" and "HEAP Mini-Rockets" as prerequisites instead of Lancer and "HEAT Rocket Warhead Mk3".
  * Aivolution AI:
    * New: Different taunts.
    * New: To find out what AI players are using Aivolution AI type "are you aiv?" in the game.
