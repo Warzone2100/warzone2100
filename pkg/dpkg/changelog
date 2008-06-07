@@ -1,3 +1,83 @@
+warzone2100 (2.1.0~beta3-0) unstable; urgency=low
+
+  * General:
+    * New: An error will be shown if an invalid command line option is used.
+    * New: "Map Preview" button added to the multiplayer/skirmish lobby, including ability to preview starting positions (patch #1040).
+    * New: A 'Ready' button that all players must press in order to start a multiplayer game.
+    * Change: Game speed is limited to 0.3-1.5 range in non-debug mode.
+    * Change: Oil pumping and power generator hum sounds are quieter.
+    * Fix: Building limits apply correctly (bug #11293).
+    * Fix: Game won't crash when commander units are used.
+    * Fix: The sky does not disappear anymore when a tooltip is shown (bug #11216).
+    * Fix: Translation-related bug in the structure limits screen fixed (bug #11345).
+    * Fix: Placing a beacon on map will not result in memory corruption and a crash anymore (bug #10955, #11373, and #11005).
+    * Fix: Invalid group orders during multiplayer games are ignored (bug #11358).
+    * Fix: Smoking structures (bug #11348).
+    * Fix: AIs are now always run on Host's machine during multiplayer games.
+    * Fix: Derricks do not disappear or blink anymore (bug #11357).
+    * Fix: Save games will load properly when trying to load them when a game is already in progress (bug #11467).
+    * Fix: Bad textures after third load of saved game (bug #11641)
+    * Fix: VTOLs do not move over water (bug #11638)
+    * Fix: Multiple Nexus Link crashes (bugs #11500, #11501, and #11444)
+    * Fix: Assert if upgrading building while second building tab open (bugs #9336 and #11446)
+    * Fix: Assert when smoke effects drift off the map (bug #11586)
+    * Fix: Trucks going in circles (bug #11341)
+    * Fix: Render super-cyborgs using the bucket list, to avoid jittery HP bars.
+    * Fix: Bug that would make sliders inactive in multiplayer when not hosting a game.
+    * Fix: Textures missing on first beta away mission (bug #11733)
+    * Fix: Lots of other things that we may have forgotten about. This beta really does contain a lot of bug fixes.
+  * Gameplay:
+    * New: Support for coloured mouse cursors (ingame only, not in menus), controlled by configuration option "ColouredCursor". Turned off by default. (patch #956)
+    * New: Human player console messages are rendered using brighter color. Friend-foe colors are can be turned on using Shift+Tab key combination.
+    * New: Prevent structure 'painting' exploit by making unfinished structures return power with time and disappear when all power was given back (patch #1030).
+    * New: Units gain speed increase with experience (patch #906).
+    * New: A sound is played and a notification is shown on the console when placing a beacon on the map. F12 key can be used to jump to the beacon location.
+    * Change: Effect of skirmish modifier slider increased by 20%.
+    * Change: 'ENTER' key is now the default key for bringing up the chat dialog instead of 'T' (key configuration must be reset in the 'Key Mappings' dialog).
+    * Change: Removed lowest power level, added a higher power level.
+    * Change: VTOL movement rules simplified. No cliff height limitations anymore.
+    * Fix: Dull mini-map player colors were replaced by brighter colors.
+    * Fix: Rocket Autoloader research does not appear before lancer is researched and has "HEAT Rocket Warhead" as a prerequisite, instead of "HEAP Mini-Rockets" (bug #11312).
+    * Fix: When cheating is on AIs get power boost on client's machines too.
+  * Balancing (Multiplayer Only):
+    * Change: Tank Killer now fires four projectiles instead of two, total firepower is unaffected.
+    * Change: AA Projectiles fly faster which increases accuracy.
+    * Change: Hitpoints of Hardpoints, Fortresses and Walls slightly increased. Hitpoints of other structures doubled.
+    * Change: All cyborgs are produced faster by 10-15%.
+    * Change: Mini-pod's accuracy decreased by 10%.
+    * Change: Mini-Rocket Artillery short range accuracy increased by 10%, long range accuracy decreased by 15%.
+    * Change: Super Heavy-Gunner, Super HPV Cyborg, Super Auto-Cannon Cyborg and Tank-Killer Cyborg have more firepower.
+    * Change: Cost of Super Rail-Gunner, Super HPV Cyborg slightly decreased. Cost of Super Pulse Laser Cyborg, Super Heavy-Gunner and Super Auto-Cannon Cyborg halved to match their firepower.
+    * Change: Super Scourge Cyborg's cost increased by 10%.
+    * Change: Super HPV Cyborg has longer range, Super Auto-Cannon Cyborg's range slightly decreased.
+    * Change: Super Cyborg's build time slightly decreased.
+    * Change: Flamers Rate of Fire decreased, damage increased. The resulting damage in the game is not affected.
+    * Change: Inferno weapon fires two jets instead of one.
+    * Change: All flamers are 5% less effective against tracked units.
+    * Change: Rate of Fire of Hyper Velocity Cannon decreased, damage increased. The resulting damage in the game is not affected.
+    * Change: Bunker Buster's damage increased by 30% to make it competitive against flamers.
+    * Change: Anti-tank weapons are 15% more effective against hardpoints.
+    * Change: Anti-tank weapons effectiveness increased from 110% to 133% against Half-tracked units, decreased from 133% to 110% against Tracked units.
+    * Change: Cost of all bodies (except for 'Viper' body) decreased to reflect body's real value. Later bodies have more value that earlier bodies to justify research cost and time.
+    * Change: Tank-Killer hardpoint cost decreased from 300 to 275.
+    * Change: Range of Mini-Rocket Artillery increased from 7.5 tiles to 8.5 tiles.
+    * Change: Bunker Buster rocket is available earlier and has "Synaptic Link Data Analysis Mk3" and "HEAP Mini-Rockets" as prerequisites instead of Lancer and "HEAT Rocket Warhead Mk3".
+  * Aivolution AI:
+    * New: Different taunts.
+    * New: To find out what AI players are using Aivolution AI type "are you aiv?" in the game.
+    * Fix: Using "go <player>" command makes Aivolution send its units to the proper player now.
+    * Fix: Division by zero error fixed.
+    * Fix: Won't ask allies for help when already defeated.
+    * Fix: Assert when trying to find out player name based on incorrect player number.
+    * Fix: All dialogs between allied AIs are visible to all allies.
+    * Fix: A beacon is always placed on map before initializing a command.
+    * Fix: Several Aivolution AIs sending chat messages at the same time will not result in an infinite loop anymore.
+    * Fix: Undefended enemy derricks will now be properly attacked with defenses by trucks.
+  * Mods:
+    * Change: We no longer use zones for path-finding. If they are present in the map file, they will be ignored. Gateways are only used by AI.
+
+ -- Giel van Schijndel <muggenhor@gna.org>  Sat, 07 Jun 2008 14:12:33 +0200
+
 warzone2100 (2.1.0~beta2-0) unstable; urgency=low
 
   * Bump upstream version number: releasing 2.1 beta 1
