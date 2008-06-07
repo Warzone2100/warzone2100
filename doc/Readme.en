@@ -11,6 +11,8 @@ Content
  3.3 Music
  3.4 Multiplaying via internet
 4. Cheats
+ 4.1 Cheat-mode
+ 4.2 Cheats lists
 5. Debug-keys
 6. Important hotkeys
 7. Additional resources
@@ -251,6 +253,119 @@ for config-changes to take effect.
 
 4. Cheats
 =========
+Like many other games Warzone 2100 features a certain set of cheats that can be
+used to have an advantage in the singleplayer-campaign and skirmish-games or to
+just help mod- and map-makers with testing. Cheats do not work in multiplayer-
+mode (except skirmish).
+
+4.1 Cheat-mode
+--------------
+To be able to use cheats in the first place, you will have to start Warzone 2100
+with the option --cheat. While playing, press right shift and backspace simul-
+taneously. An on-screen message should appear telling you that cheat-mode has
+been enabled. You can disable it using the same key combination again. Enab-
+ling/disabling cheat-mode is only possible while playing, not while in the
+menus.
+
+4.2 Cheats lists
+----------------
+After activating cheat-mode cheats can be entered using the normal chat-
+function. Cheats are ordered by their use and where they can be used.
+
+General purpose cheats
+**********************
+General purpose cheats work in both, campaign-mode and skirmish/tutorial/fast-
+play.
+
+biffer baker
+       Your units do more damage and are stronger
+
+double up
+       Your units are twice as strong
+
+give all
+       Allows you to build and research everything
+
+work harder
+       All currently active research topics are instantly researched
+
+research all
+       Everything is researched instantly
+
+
+Note: Using 'give all' will make research topics available which have an
+artifact as 3D-model. Do not click those as this will cause the game to
+instantly crash.
+
+Campaign-only cheats
+********************
+easy
+       Sets difficulty to easy
+
+normal
+       Sets difficulty to normal
+
+hard
+       Sets difficulty to hard
+
+get off my land
+       Removes all enemy units
+
+kill
+       Kills the selected units or building
+
+let me win
+       You win the current mission
+
+time toggle
+       Starts/stops the mission timer
+
+whale fin
+       Toggles infinite power on and off; everything is for free
+
+superpower
+       Gives you maximum power
+
+more power
+       Adds 1000 power to your pool
+
+
+Note: The difficulty cheats do not stack. This means that you cannot make the
+game easier by entering the easy-cheat multiple times.
+
+Miscellaneous cheats
+********************
+Cheats listed here do not have to be advantageous when used. Some are helpful
+for getting specific data or to help with debugging and thus aid people in
+working with the game.
+
+build info
+       Outputs the build-date of the game
+
+count me
+       Outputs the number of objects in the game
+
+deity
+       Toggles the fog of war on and off
+
+demo
+       Starts/stops the demonstration mode
+
+droidinfo
+       Outputs unit information and statistics
+
+john kettley
+       Cycles through different weathers: rain, snow and clear
+
+no faults
+       Plays audio clip: "There are no faults in the renderer at the moment"
+
+sensors
+       Toggles display of the sensor ranges of units and buildings on and off
+
+timedemo
+       Outputs network and renderer information
+
 
 5. Debug-keys
 =============
