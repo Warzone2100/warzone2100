@@ -1,5 +1,5 @@
 AM_CPPFLAGS = $(SDL_CFLAGS) $(WZ_CPPFLAGS)
-AM_CFLAGS = $(subst -Werror,,$(WZ_CFLAGS))
+AM_CFLAGS = $(patsubst -W%,,$(WZ_CFLAGS))
 
 noinst_LIBRARIES = libsqlite3.a
 noinst_HEADERS = physfs_vfs.h sqlite3ext.h sqlite3.h
