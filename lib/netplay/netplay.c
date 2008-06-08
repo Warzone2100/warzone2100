@@ -202,7 +202,7 @@ static BOOL NET_recvMessage(NETBUFSOCKET* bs)
 		goto error;
 	}
 
-	size = message->size + headersize;
+	size = SDL_SwapBE16(message->size) + headersize;
 
 	if (size > bs->bytes)
 	{
@@ -702,6 +702,7 @@ BOOL NETsend(NETMSG *msg, UDWORD player)
 	size = msg->size + sizeof(msg->size) + sizeof(msg->type) + sizeof(msg->destination) + sizeof(msg->source);
 
 	NETlogPacket(msg, false);
+	msg->size = SDL_SwapBE16(msg->size);
 
 	if (is_server)
 	{
@@ -762,6 +763,7 @@ BOOL NETbcast(NETMSG *msg)
 	size = msg->size + sizeof(msg->size) + sizeof(msg->type) + sizeof(msg->destination) + sizeof(msg->source);
 
 	NETlogPacket(msg, false);
+	msg->size = SDL_SwapBE16(msg->size);
 
 	if (is_server)
 	{
