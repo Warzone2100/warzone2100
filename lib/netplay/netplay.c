@@ -406,7 +406,7 @@ static void NETsendGAMESTRUCT(TCPsocket socket, const GAMESTRUCT* game)
 
 	// Now dump the data into the buffer
 	// Copy a string
-	sstrcpy(buffer, game->name);
+	strlcpy(buffer, game->name, sizeof(game->name));
 	buffer += sizeof(game->name);
 
 	// Copy 32bit large big endian numbers
@@ -416,7 +416,7 @@ static void NETsendGAMESTRUCT(TCPsocket socket, const GAMESTRUCT* game)
 	buffer += sizeof(int32_t);
 
 	// Copy yet another string
-	sstrcpy(buffer, game->desc.host);
+	strlcpy(buffer, game->desc.host, sizeof(game->desc.host));
 	buffer += sizeof(game->desc.host);
 
 	// Copy 32bit large big endian numbers
