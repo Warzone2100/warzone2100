@@ -1,0 +1,39 @@
+script "AutoEnable.slo"
+run
+{
+	player			INT					0
+	player1			INT					1
+	player2			INT					2
+	player3			INT					3
+	player4			INT					4
+	player5			INT					5
+	player6			INT					6
+	player7			INT					7 
+
+  	numStrux  INT  16
+ 	Strux[0]  STRUCTURESTAT  "A0BaBaFlameTower"
+  	Strux[1]  STRUCTURESTAT  "A0BaBaGunTower"
+  	Strux[2]  STRUCTURESTAT  "A0BaBaRocketPit"
+  	Strux[3]  STRUCTURESTAT  "A0BaBaBunker" 
+  	Strux[4]  STRUCTURESTAT  "A0BaBaHorizontalWall"
+  	Strux[5]  STRUCTURESTAT  "ContaMine1"
+  	Strux[6]  STRUCTURESTAT  "ContaMine2"
+  	Strux[7]  STRUCTURESTAT  "ContaMine3"
+  	Strux[8]  STRUCTURESTAT  "ContaMine4"
+  	Strux[9]  STRUCTURESTAT  "ContaMine5"
+  	Strux[10]  STRUCTURESTAT  "ContaMine6"
+  	Strux[11]  STRUCTURESTAT  "ContaMine7"
+  	Strux[12]  STRUCTURESTAT  "ContaMine8"
+  	Strux[13]  STRUCTURESTAT  "mineinfo"
+  	Strux[14]  STRUCTURESTAT  "A0CannonTower"
+  	Strux[15]  STRUCTURESTAT  "A0BaBaMortarPit"
+
+	numTemplates	INT		2
+	tmpl[0]		RESEARCHSTAT	"R-Cyb-MineSwp"
+	tmpl[1]		RESEARCHSTAT  	"R-Sys-Engineering01"
+
+	numCompo	INT		3
+	compo[0]	BODY		"FireBody"
+	compo[1]	BODY		"BusBody"
+	compo[2]	BODY		"TruckBody"
+}

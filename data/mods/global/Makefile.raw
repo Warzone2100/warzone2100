@@ -4,14 +4,16 @@ include $(MAKERULES)/configure.mk
 AIVOLUTIONLIST = multiplay commands.txt
 GRIMLIST = components structs texpages wrf COPYING
 NEWST_TILESLIST = texpages COPYING readme.txt
+NTWLIST = addon.lev audio components COPYING doc effects images messages multiplay stats structs texpages wrf
 
 AIVOLUTIONARCHIVE=aivolution.wz
 GRIMARCHIVE=grim.wz
 NEWST_TILESARCHIVE=newst_tiles.wz
+NTWARCHIVE=ntw.wz
 
 all:
 ifdef DATA
-all: $(AIVOLUTIONARCHIVE) $(GRIMARCHIVE) $(NEWST_TILESARCHIVE)
+all: $(AIVOLUTIONARCHIVE) $(GRIMARCHIVE) $(NEWST_TILESARCHIVE) $(NTWARCHIVE)
 endif
 
 $(AIVOLUTIONARCHIVE): $(AIVOLUTIONLIST:%=aivolution/%)
@@ -26,9 +28,14 @@ $(NEWST_TILESARCHIVE): $(NEWST_TILESLIST:%=newst_tiles/%)
 	cd newst_tiles && zip -ru0 ../$@ $(NEWST_TILESLIST) -x *svn*
 	zip -T $@
 
+$(NTWARCHIVE): $(NTWLIST:%=ntw/%)
+	cd ntw && zip -ru0 ../$@ $(NTWLIST) -x *svn*
+	zip -T $@
+
 clean:
 	$(RMF) $(GRIMARCHIVE)
 	$(RMF) $(AIVOLUTIONARCHIVE)
 	$(RMF) $(NEWST_TILESARCHIVE)
+	$(RMF) $(NTWARCHIVE)
 
-.PHONY: all clean $(AIVOLUTIONARCHIVE) $(GRIMARCHIVE)
+.PHONY: all clean $(AIVOLUTIONARCHIVE) $(GRIMARCHIVE) $(NEWST_TILESARCHIVE) $(NTWARCHIVE)

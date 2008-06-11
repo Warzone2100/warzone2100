@@ -1,0 +1,29 @@
+// cam1day.vlo
+// Weather and day/night VLO for Cam3
+// make daytime
+
+script "fog-daynight.slo"
+run
+{
+
+// 24-hour time zone data.  Starts at "midnight" and goes in 2-"hour" increments
+red[0]  int 8	grn[0]  int 12	blu[0]  int 32
+red[1]  int 8	grn[1]  int 16	blu[1]  int 36
+red[2]  int 8	grn[2]  int 24	blu[2]  int 64
+red[3]  int 96	grn[3]  int 96	blu[3]  int 108 // Sunrise
+red[4]  int 176	grn[4]  int 160	blu[4]  int 160
+red[5]  int 224	grn[5]  int 192	blu[5]  int 176
+red[6]  int 224	grn[6]  int 192	blu[6]  int 176 // Noon
+red[7]  int 224	grn[7]  int 192	blu[7]  int 176
+red[8]  int 192	grn[8]  int 160	blu[8]  int 128
+red[9]  int 160	grn[9]  int 128	blu[9]  int 96 // Sunset
+red[10] int 24	grn[10] int 32	blu[10] int 48
+red[11] int 8	grn[11] int 12	blu[11] int 32
+red[12] int 8	grn[12] int 12	blu[12] int 32
+
+// Desert weather conditions.
+      chStay	int	12
+	chClear	int	85
+	chRain	int	3
+	chSnow	int	0
+}

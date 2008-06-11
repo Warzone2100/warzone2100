@@ -1,0 +1,8 @@
+
+directory       "multiplay/script"
+file			SCRIPT		"fog-daynight.slo"
+file			SCRIPT		"setdisk.slo"
+
+directory       "multiplay/script"
+file			SCRIPTVAL	"cam3day.vlo"
+file 			SCRIPTVAL	"disk2.vlo"

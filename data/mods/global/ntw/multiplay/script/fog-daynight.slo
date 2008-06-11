@@ -1,0 +1,127 @@
+// Weather scripting by Strata
+
+
+
+// Color scheme as specified in the VLO files
+public		int	red[13];
+public		int	grn[13];
+public		int	blu[13];
+
+// Weather options
+public	int	chClear;  // %% chance of clear weather
+public	int	chRain;  // %% chance of rain
+public	int	chSnow;  // %% chance of snow
+public	int	chStay;  // %% chance of "no change" in weather
+
+// How long is our day?
+private		int	curType;
+private		int	Clock;
+private		int	zoneTime;
+
+// What time is it?
+private		int	curTime;
+private		int	fogTime;
+
+// Which two fog colors will we be blending today?
+private		int	startZone;
+private		int	endZone;
+
+// What exactly *is* our fog color, anyway?
+private		int	curRed;
+private		int	curGrn;
+private		int	curBlu;
+
+// Misc.
+private		bool	Again;
+private		int	Type;
+
+/***   TRIGGERS   ***/
+
+// We don't need very many trigger types for our script.
+trigger Interval(every, 10);  // 1-second trigger, change the fog colour.
+trigger Weathering(every, 200);  // change weather every 20 seconds.
+
+/***   EVENTS   ***/
+
+
+// (initially) Trigger our first event when the game starts
+event changeFog(CALL_GAMEINIT)
+{
+	if(not Again)
+	{
+		// First run only; initialize the variables & etc.
+
+		Clock = 18000;  // Number of seconds per "day" * 10 (18,000 = 30 minutes).
+		
+		// Seconds per "zone"
+		zoneTime = Clock / 12;
+
+		Again = TRUE;
+
+		setDepthFog(TRUE);
+		setBackgroundFog(TRUE);
+		setFogColour(red[8],grn[8],blu[8]);
+
+		setEventTrigger(changeFog, Interval);
+	}
+
+	// What time is it when wrapped in the first 24-hour range?
+	curTime = gameTime - Clock * (gameTime / Clock);
+
+      // Which two fog colors will we consider?
+	startZone = curTime / zoneTime;
+	endZone = startZone + 1;
+      fogTime = curTime - zoneTime * startZone;
+
+	// Determine the current fog color.
+	curRed = (red[startZone] * (zoneTime - fogTime) + red[endZone] * fogTime) / zoneTime;
+	curGrn = (grn[startZone] * (zoneTime - fogTime) + grn[endZone] * fogTime) / zoneTime;
+	curBlu = (blu[startZone] * (zoneTime - fogTime) + blu[endZone] * fogTime) / zoneTime;
+
+	if (curType > 0) // Snow color adjust
+	{
+		curRed = curRed + 8;
+		curRed = curRed + 8;
+		curRed = curRed + 8;
+	}
+	else if (curType < 0) // Rain color adjust
+	{
+		curRed = curRed - 4;
+		curGrn = curGrn;
+		curBlu = curBlu + 4;
+	}
+
+	if (curRed < 0) { curRed = 0; }
+	else if (curRed > 255) { curRed = 255; }
+	if (curGrn < 0) { curGrn= 0; }
+	else if (curGrn> 255) { curGrn= 255; }
+	if (curBlu< 0) { curBlu= 0; }
+	else if (curBlu > 255) { curBlu= 255; }
+
+	setFogColour(curRed, curGrn, curBlu);
+}
+
+
+// Control the weather, as directed in the VLO
+event DoWeather(Weathering)
+{
+	// Make one random number, test it 3x to alter the weather
+
+	Type = random(chStay + chClear + chRain + chSnow);
+	if (Type < chSnow)
+	{
+		curType = 1;
+            setSnow(TRUE);
+	}
+	else if (Type < chSnow + chRain)
+	{
+		curType = -1;
+		setRain(TRUE);
+	}
+	else if (Type < chSnow + chRain + chClear)
+	{
+		curType = 0;
+		setRain(FALSE);
+		setSnow(FALSE);
+	}
+}
