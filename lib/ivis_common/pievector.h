@@ -32,7 +32,7 @@ typedef struct { uint16_t x, y, z; } Vector3uw; //Only used for basedef.h BASE_E
 
 
 /*!
- * Convert a integer vector to float
+ * Convert an integer vector to float
  * \param v Vector to convert
  * \return Float vector
  */
@@ -231,6 +231,18 @@ static inline WZ_DECL_CONST Vector2f Vector2f_Normalise(const Vector2f v)
 
 
 /*!
+ * Convert a float vector to integer
+ * \param v Vector to convert
+ * \return Float vector
+ */
+static inline WZ_DECL_CONST Vector3i Vector3f_To3i(const Vector3f v)
+{
+	Vector3i dest = { (int)v.x, (int)v.y, (int)v.z };
+	return dest;
+}
+
+
+/*!
  * \return true if both vectors are equal
  */
 static inline WZ_DECL_CONST BOOL Vector3f_Compare(const Vector3f a, const Vector3f b)
@@ -358,6 +370,18 @@ static inline WZ_DECL_CONST Vector3f Vector3f_Normalise(const Vector3f v)
 
 
 /*!
+ * Convert an integer vector to float
+ * \param v Vector to convert
+ * \return Float vector
+ */
+static inline WZ_DECL_CONST Vector3f Vector3i_To3f(const Vector3i v)
+{
+	Vector3f dest = { (float)v.x, (float)v.y, (float)v.z };
+	return dest;
+}
+
+
+/*!
  * \return true if both vectors are equal
  */
 static inline WZ_DECL_CONST BOOL Vector3i_Compare(const Vector3i a, const Vector3i b)
@@ -407,6 +431,19 @@ static inline WZ_DECL_CONST Vector3i Vector3i_Sub(const Vector3i op1, const Vect
 static inline WZ_DECL_CONST Vector3i Vector3i_Mult(const Vector3i v, const int s)
 {
 	Vector3i dest = { v.x * s, v.y * s, v.z * s };
+	return dest;
+}
+
+
+/*!
+ * Divide a vector with a scalar.
+ * \param v Vector
+ * \param s Scalar
+ * \return Product
+ */
+static inline WZ_DECL_CONST Vector3i Vector3i_Div(const Vector3i v, const int s)
+{
+	Vector3i dest = { v.x / s, v.y / s, v.z / s };
 	return dest;
 }
 
