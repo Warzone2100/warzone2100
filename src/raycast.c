@@ -35,29 +35,30 @@
 
 
 // accuracy for the raycast lookup tables
-#define RAY_ACC		12
+#define RAY_ACC 12
 
-#define RAY_ACCMUL	(1<<RAY_ACC)
+#define RAY_ACCMUL (1<<RAY_ACC)
 
-// Get the tile from tile coords
-#define RAY_TILE(x,y) mapTile((x),(y))
 
 /* x and y increments for each ray angle */
 static SDWORD	rayDX[NUM_RAYS], rayDY[NUM_RAYS];
 static SDWORD	rayHDist[NUM_RAYS], rayVDist[NUM_RAYS];
 static SDWORD	rayFPTan[NUM_RAYS], rayFPInvTan[NUM_RAYS];
 static SDWORD	rayFPInvCos[NUM_RAYS], rayFPInvSin[NUM_RAYS];
-static SDWORD	gHeight;
-static float	gPitch;
-static UDWORD	gStartTileX;
-static UDWORD	gStartTileY;
-static SDWORD	gHighestHeight, gHOrigHeight;
-static SDWORD	gHMinDist;
-static float	gHPitch;
+
+typedef struct {
+	const int height;
+	float pitch;
+} HeightCallbackHelp_t;
+
+typedef struct {
+	const int minDist, origHeight;
+	int highestHeight;
+	float pitch;
+} HighestCallbackHelp_t;
 
 
 /* Initialise the ray tables */
-
 BOOL rayInitialise(void)
 {
 	SDWORD i;
@@ -332,71 +333,68 @@ SDWORD rayPointDist(SDWORD x1,SDWORD y1, SDWORD x2,SDWORD y2,
 //-----------------------------------------------------------------------------------
 static BOOL	getTileHighestCallback(SDWORD x, SDWORD y, SDWORD dist, void* data)
 {
-	if(clipXY(x,y))
+	HighestCallbackHelp_t * help = data;
+
+	if (clipXY(x, y))
 	{
 		unsigned int height = map_Height(x,y);
-		if( (height > gHighestHeight) && (dist >= gHMinDist) )
+		if (height > help->highestHeight && dist >= help->minDist)
 		{
-			int heightDif = height - gHOrigHeight;
-			gHPitch = rad2degf(atan2f(heightDif, world_coord(6)));// (float)(dist - world_coord(3))));
-			gHighestHeight = height;
-  		}
-	}
-	else
-	{
-		return(false);
+			int heightDif = height - help->origHeight;
+			help->pitch = rad2degf(atan2f(heightDif, world_coord(6)));// (float)(dist - world_coord(3))));
+			help->highestHeight = height;
+		}
+
+		return true;
 	}
 
-	return(true);
-
+	return false;
 }
 
 //-----------------------------------------------------------------------------------
 /* Will return false when we've hit the edge of the grid */
 static BOOL	getTileHeightCallback(SDWORD x, SDWORD y, SDWORD dist, void* data)
 {
+	HeightCallbackHelp_t * help = data;
 #ifdef TEST_RAY
 	Vector3i pos;
 #endif
 
 	/* Are we still on the grid? */
-	if(clipXY(x,y))
+	if (clipXY(x, y))
 	{
 		BOOL HasTallStructure = TileHasTallStructure(mapTile(map_coord(x), map_coord(y)));
 
-		if( (dist > TILE_UNITS) || HasTallStructure)
+		if (dist > TILE_UNITS || HasTallStructure)
 		{
 		// Only do it the current tile is > TILE_UNITS away from the starting tile. Or..
 		// there is a tall structure  on the current tile and the current tile is not the starting tile.
-//		if( (dist>TILE_UNITS) ||
-//			( (HasTallStructure = TileHasTallStructure(mapTile(map_coord(x), map_coord(y)))) &&
-//			((map_coord(x) != gStartTileX) || (map_coord(y) != gStartTileY)) ) ) {
 			/* Get height at this intersection point */
 			int height = map_Height(x,y), heightDif;
 			float newPitch;
 
-			if(HasTallStructure)
+			if (HasTallStructure)
 			{
 				height += TALLOBJECT_ADJUST;
 			}
 
-			if(height <= gHeight)
+			if (height <= help->height)
 			{
 				heightDif = 0;
 			}
 			else
 			{
-				heightDif = height-gHeight;
+				heightDif = height - help->height;
 			}
 
 			/* Work out the angle to this point from start point */
 			newPitch = rad2degf(atan2f(heightDif, dist));
 
 			/* Is this the steepest we've found? */
-			if(newPitch > gPitch)
+			if (newPitch > help->pitch)
 			{
 				/* Yes, then keep a record of it */
-				gPitch = newPitch;
+				help->pitch = newPitch;
 			}
 			//---
 
@@ -406,42 +404,31 @@ static BOOL	getTileHeightCallback(SDWORD x, SDWORD y, SDWORD dist, void* data)
 			pos.z = y;
 			addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_SMALL,false,NULL,0);
 #endif
-	//		if(height > gMaxRayHeight)
-	//		{
-	//			gMaxRayHeight = height;
-	//			gRayDist = dist;
-	//			return(true);
-	//		}
 		}
-	}
-	else
-	{
-		/* We've hit edge of grid - so exit!! */
-		return(false);
+
+		/* Not at edge yet - so exit */
+		return true;
 	}
 
-	/* Not at edge yet - so exit */
-	return(true);
+	/* We've hit edge of grid - so exit!! */
+	return false;
 }
 
 void	getBestPitchToEdgeOfGrid(UDWORD x, UDWORD y, UDWORD direction, SDWORD *pitch)
 {
-	/* Set global var to clear */
-	gPitch = 0.f;
-	gHeight = map_Height(x,y);
-	gStartTileX = map_coord(x);
-	gStartTileY = map_coord(y);
+	HeightCallbackHelp_t help = { map_Height(x,y), 0.0f };
+
 	rayCast(x, y, direction % NUM_RAYS, 5430, getTileHeightCallback, NULL);
-	*pitch = gPitch;
+
+	*pitch = help.pitch;
 }
 
 void	getPitchToHighestPoint( UDWORD x, UDWORD y, UDWORD direction,
 							   UDWORD thresholdDistance, SDWORD *pitch)
 {
-	gHPitch = 0.f;
-	gHOrigHeight = map_Height(x,y);
-	gHighestHeight = map_Height(x,y);
-	gHMinDist = thresholdDistance;
+	HighestCallbackHelp_t help = { thresholdDistance, map_Height(x,y), map_Height(x,y), 0.0f };
+
 	rayCast(x, y, direction % NUM_RAYS, 3000, getTileHighestCallback, NULL);
-	*pitch = gHPitch;
+
+	*pitch = help.pitch;
 }
