@@ -57,7 +57,6 @@
 #include "action.h"
 #include "intdisplay.h"
 #include "e3demo.h"
-#include "raycast.h"
 #include "display3d.h"
 #include "selection.h"
 

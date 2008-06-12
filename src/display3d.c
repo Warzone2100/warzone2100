@@ -47,7 +47,6 @@
 #include "e3demo.h"
 #include "loop.h"
 #include "atmos.h"
-#include "raycast.h"
 #include "levels.h"
 #include "map.h"
 #include "move.h"
@@ -1550,7 +1549,7 @@ void displayDynamicObjects( void )
 							renderDroid(psDroid);
 						}
 						else
-						{	
+						{
 							bucketAddTypeToList(RENDER_DROID, psDroid);
 						}
 						/* draw anim if visible */

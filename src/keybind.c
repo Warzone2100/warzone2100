@@ -55,7 +55,6 @@
 #include "multiplay.h"
 #include "multimenu.h"
 #include "atmos.h"
-#include "raycast.h"
 #include "advvis.h"
 #include "game.h"
 #include "difficulty.h"
