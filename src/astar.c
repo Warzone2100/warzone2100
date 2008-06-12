@@ -324,21 +324,17 @@ static BOOL		obstruction;
 
 /** The visibility ray callback
  */
-static BOOL fpathVisCallback(SDWORD x, SDWORD y, SDWORD dist, void* data)
+static bool fpathVisCallback(Vector3i pos, int dist, void* data)
 {
-	SDWORD	vx,vy;
-
-	dist = dist;
-
 	// See if this point is past the final point (dot product)
-	vx = x - finalX;
-	vy = y - finalY;
-	if (vx*vectorX + vy*vectorY <=0)
+	int vx = pos.x - finalX, vy = pos.y - finalY;
+
+	if (vx*vectorX + vy*vectorY <= 0)
 	{
 		return false;
 	}
 
-	if (fpathBlockingTile(map_coord(x), map_coord(y), INVALID_PROP_TYPE))
+	if (fpathBlockingTile(map_coord(pos.x), map_coord(pos.y), INVALID_PROP_TYPE))
 	{
 		// found an obstruction
 		obstruction = true;
@@ -351,19 +347,18 @@ static BOOL fpathVisCallback(SDWORD x, SDWORD y, SDWORD dist, void* data)
 BOOL fpathTileLOS(SDWORD x1,SDWORD y1, SDWORD x2,SDWORD y2)
 {
 	// convert to world coords
-	x1 = world_coord(x1) + TILE_UNITS / 2;
-	y1 = world_coord(y1) + TILE_UNITS / 2;
-	x2 = world_coord(x2) + TILE_UNITS / 2;
-	y2 = world_coord(y2) + TILE_UNITS / 2;
+	Vector3i p1 = { world_coord(x1) + TILE_UNITS / 2, world_coord(y1) + TILE_UNITS / 2, 0 };
+	Vector3i p2 = { world_coord(x2) + TILE_UNITS / 2, world_coord(y2) + TILE_UNITS / 2, 0 };
+	Vector3i dir = Vector3i_Sub(p2, p1);
 
 	// Initialise the callback variables
-	finalX = x2;
-	finalY = y2;
-	vectorX = x1 - x2;
-	vectorY = y1 - y2;
+	finalX = p2.x;
+	finalY = p2.y;
+	vectorX = -dir.x;
+	vectorY = -dir.y;
 	obstruction = false;
 
-	rayCast(x1, y1, rayPointsToAngle(x1, y1, x2, y2), RAY_MAXLEN, fpathVisCallback, NULL);
+	rayCast(p1, dir, RAY_MAXLEN, fpathVisCallback, NULL);
 
 	return !obstruction;
 }

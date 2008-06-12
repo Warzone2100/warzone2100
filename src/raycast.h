@@ -26,39 +26,40 @@
 
 #include "lib/ivis_common/pievector.h"
 
-
 #define NUM_RAYS 360
-#define RAY_ANGLE ((float)(2 * M_PI / NUM_RAYS))
+
 // maximum length for a visiblity ray
-#define RAY_MAXLEN	0x7ffff
+#define RAY_MAXLEN INT_MAX
 
 
-/* Initialise the visibility rays */
-extern BOOL rayInitialise(void);
-
-/* The raycast intersection callback.
- * Return false if no more points are required, true otherwise
+/*!
+ * The raycast intersection callback.
+ * \return false if no more points are required, true otherwise
  */
-typedef BOOL (*RAY_CALLBACK)(SDWORD x, SDWORD y, SDWORD dist, void* data);
+typedef bool (*RAY_CALLBACK)(Vector3i pos, int dist, void* data);
 
-/* cast a ray from x,y (world coords) at angle ray (0-NUM_RAYS) */
-extern void rayCast(UDWORD x, UDWORD y, UDWORD ray, UDWORD length, RAY_CALLBACK callback, void *data);
 
-// Calculate the angle to cast a ray between two points
-extern unsigned int rayPointsToAngle(int x1, int y1, int x2, int y2);
+/*!
+ * Cast a ray from a position into a certain direction
+ * \param pos Position to cast from
+ * \param dir Direction to cast into
+ * \param length Maximum length
+ * \param callback Callback to call for each passed tile
+ * \param data Data to pass through to the callback
+ */
+extern void rayCast(Vector3i pos, Vector3i dir, int length, RAY_CALLBACK callback, void * data);
 
-static inline unsigned int rayPointsToAngle3f(Vector3f p1, Vector3f p2)
+
+static inline Vector3i rayAngleToVector3i(float angle)
 {
-	return rayPointsToAngle(p1.x, p1.y, p2.x, p2.y);
+	Vector3i dest = {
+		cosf(deg2radf(angle)) * INT_MAX,
+		sinf(deg2radf(angle)) * INT_MAX,
+		0
+	};
+	return dest;
 }
 
-/* Distance of a point from a line.
- * NOTE: This is not 100% accurate - it approximates to get the square root
- *
- * This is based on Graphics Gems II setion 1.3
- */
-extern SDWORD rayPointDist(SDWORD x1,SDWORD y1, SDWORD x2,SDWORD y2,
-						   SDWORD px,SDWORD py);
 
 // Calculates the maximum height and distance found along a line from any
 // point to the edge of the grid

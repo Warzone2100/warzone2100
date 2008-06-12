@@ -130,18 +130,16 @@ static SDWORD visObjHeight(const BASE_OBJECT * const psObject)
 }
 
 /* The terrain revealing ray callback */
-BOOL rayTerrainCallback(SDWORD x, SDWORD y, SDWORD dist, void * data)
+bool rayTerrainCallback(Vector3i pos, int dist, void * data)
 {
-	SDWORD		newH, newG;		// The new gradient
-	MAPTILE		*psTile;
+	SDWORD newH, newG; // The new gradient
+	MAPTILE *psTile;
 
-	ASSERT(x >= 0
-	    && x < world_coord(mapWidth)
-	    && y >= 0
-	    && y < world_coord(mapHeight),
+	ASSERT(pos.x >= 0 && pos.x < world_coord(mapWidth)
+		&& pos.y >= 0 && pos.y < world_coord(mapHeight),
 			"rayTerrainCallback: coords off map" );
 
-	psTile = mapTile(map_coord(x), map_coord(y));
+	psTile = mapTile(map_coord(pos.x), map_coord(pos.y));
 
 	/* Not true visibility - done on sensor range */
 
@@ -173,7 +171,7 @@ BOOL rayTerrainCallback(SDWORD x, SDWORD y, SDWORD dist, void * data)
 			// can see opponent moving
 			if(getRevealStatus())
 			{
-				avInformOfChange(map_coord(x), map_coord(y));		//reveal map
+				avInformOfChange(map_coord(pos.x), map_coord(pos.y));		//reveal map
 			}
 			psTile->activeSensor = true;
 		}
@@ -183,20 +181,15 @@ BOOL rayTerrainCallback(SDWORD x, SDWORD y, SDWORD dist, void * data)
 }
 
 /* The los ray callback */
-static BOOL rayLOSCallback(SDWORD x, SDWORD y, SDWORD dist, void *data)
+static bool rayLOSCallback(Vector3i pos, int dist, void *data)
 {
-	SDWORD		newG;		// The new gradient
-	SDWORD		distSq;
-	SDWORD		tileX,tileY;
-	MAPTILE		*psTile;
+	int newG; // The new gradient
+	int distSq = dist*dist;
+	MAPTILE *psTile;
 
-	ASSERT(x >= 0
-	    && x < world_coord(mapWidth)
-	    && y >= 0
-	    && y < world_coord(mapHeight),
+	ASSERT(pos.x >= 0 && pos.x < world_coord(mapWidth)
+		&& pos.y >= 0 && pos.y < world_coord(mapHeight),
 			"rayLOSCallback: coords off map" );
-
-	distSq = dist*dist;
 
 	if (rayStart)
 	{
@@ -212,40 +205,30 @@ static BOOL rayLOSCallback(SDWORD x, SDWORD y, SDWORD dist, void *data)
 		}
 	}
 
+	lastD = dist;
+	lastH = map_Height(pos.x, pos.y);
+
 	// See if the ray has reached the target
 	if (distSq >= tarDist)
 	{
-		lastD = dist;
 		return false;
 	}
-	else
-	{
-		// Store the height at this tile for next time round
-		tileX = map_coord(x);
-		tileY = map_coord(y);
 
-		if (blockingWall && !((tileX == finalX) && (tileY == finalY)))
+	// Store the height at this tile for next time round
+	Vector2i tile = { map_coord(pos.x), map_coord(pos.y) };
+
+	if (blockingWall && !((tile.x == finalX) && (tile.y == finalY)))
+	{
+		psTile = mapTile(tile.x, tile.y);
+		if (TileHasWall(psTile) && !TileHasSmallStructure(psTile))
 		{
-			psTile = mapTile(tileX, tileY);
-			if (TileHasWall(psTile) && !TileHasSmallStructure(psTile))
-			{
-				lastH = 2*UBYTE_MAX * ELEVATION_SCALE;
-	//			currG = UBYTE_MAX * ELEVATION_SCALE * GRAD_MUL / lastD;
-				numWalls += 1;
-				wallX = x;
-				wallY = y;
-	//			return false;
-			}
-			else
-			{
-				lastH = map_Height((UDWORD)x, (UDWORD)y);
-			}
+			lastH = 2*UBYTE_MAX * ELEVATION_SCALE;
+//			currG = UBYTE_MAX * ELEVATION_SCALE * GRAD_MUL / lastD;
+			numWalls += 1;
+			wallX = pos.x;
+			wallY = pos.y;
+//			return false;
 		}
-		else
-		{
-			lastH = map_Height((UDWORD)x, (UDWORD)y);
-		}
-		lastD = dist;
 	}
 
 	return true;
@@ -264,22 +247,25 @@ BOOL visTilesPending(BASE_OBJECT *psObj)
 /* Check which tiles can be seen by an object */
 void visTilesUpdate(BASE_OBJECT *psObj, RAY_CALLBACK callback)
 {
-	SDWORD	range = objSensorRange(psObj);
-	SDWORD	ray;
+	Vector3i pos = { psObj->pos.x, psObj->pos.y, 0 };
+	int range = objSensorRange(psObj);
+	int ray;
 
 	ASSERT(psObj->type != OBJ_FEATURE, "visTilesUpdate: visibility updates are not for features!");
 
 	rayPlayer = psObj->player;
 
-	// Do the whole circle.
-	for(ray = 0; ray < NUM_RAYS; ray += NUM_RAYS / 80)
+	// Do the whole circle in 80 steps
+	for (ray = 0; ray < NUM_RAYS; ray += NUM_RAYS / 80)
 	{
+		Vector3i dir = rayAngleToVector3i(ray);
+
 		// initialise the callback variables
 		startH = psObj->pos.z + visObjHeight(psObj);
 		currG = -UBYTE_MAX * GRAD_MUL;
 
 		// Cast the rays from the viewer
-		rayCast(psObj->pos.x, psObj->pos.y,ray, range, callback, NULL);
+		rayCast(pos, dir, range, callback, NULL);
 	}
 }
 
@@ -413,9 +399,11 @@ BOOL visibleObject(const BASE_OBJECT* psViewer, const BASE_OBJECT* psTarget)
 	ray = NUM_RAYS-1 - calcDirection(psViewer->pos.x,psViewer->pos.y, psTarget->pos.x,psTarget->pos.y);
 	finalX = map_coord(psTarget->pos.x);
 	finalY = map_coord(psTarget->pos.y);
+	Vector3i pos = { x, y, 0 };
+	Vector3i dir = rayAngleToVector3i(ray);
 
 	// Cast a ray from the viewer to the target
-	rayCast(x,y, ray, range, rayLOSCallback, NULL);
+	rayCast(pos, dir, range, rayLOSCallback, NULL);
 
 	// See if the target can be seen
 	top = ((SDWORD)psTarget->pos.z + visObjHeight(psTarget) - startH);
@@ -746,20 +734,18 @@ void updateSensorDisplay()
 	}
 }
 
-BOOL scrRayTerrainCallback(SDWORD x, SDWORD y, SDWORD dist, void *data)
+bool scrRayTerrainCallback(Vector3i pos, int dist, void *data)
 {
-	SDWORD		newH, newG;		// The new gradient
-	MAPTILE		*psTile;
+	SDWORD newH, newG; // The new gradient
+	MAPTILE *psTile;
 
-	ASSERT(x >= 0
-	    && x < world_coord(mapWidth)
-	    && y >= 0
-	    && y < world_coord(mapHeight),
+	ASSERT(pos.x >= 0 && pos.x < world_coord(mapWidth)
+		&& pos.y >= 0 && pos.y < world_coord(mapHeight),
 			"rayTerrainCallback: coords off map" );
 
 	ASSERT(rayPlayer >= 0 && rayPlayer < MAX_PLAYERS, "rayScrTerrainCallback: wrong player index");
 
-	psTile = mapTile(map_coord(x), map_coord(y));
+	psTile = mapTile(map_coord(pos.x), map_coord(pos.y));
 
 	/* Not true visibility - done on sensor range */
 
@@ -775,7 +761,7 @@ BOOL scrRayTerrainCallback(SDWORD x, SDWORD y, SDWORD dist, void *data)
 	{
 		currG = newG;
 
-		scrTileVisible[rayPlayer][map_coord(x)][map_coord(y)] = true;
+		scrTileVisible[rayPlayer][map_coord(pos.x)][map_coord(pos.y)] = true;
 	}
 
 	return true;

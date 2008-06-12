@@ -80,7 +80,6 @@
 #include "multiplay.h"
 #include "projectile.h"
 #include "radar.h"
-#include "raycast.h"
 #include "lib/framework/cursors.h"
 #include "scriptextern.h"
 #include "scripttabs.h"
@@ -271,7 +270,7 @@ BOOL rebuildSearchPath( searchPathMode mode, BOOL force )
 					sstrcat(tmpstr, "mp.wz");
 					PHYSFS_removeFromSearchPath( tmpstr );
 
-					// Remove base files 
+					// Remove base files
 					sstrcpy(tmpstr, curSearchPath->path);
 					sstrcat(tmpstr, "base");
 					PHYSFS_removeFromSearchPath( tmpstr );
@@ -422,11 +421,6 @@ BOOL systemInitialise(void)
 	}
 
 	if (!dataInitLoadFuncs()) // Pass all the data loading functions to the framework library
-	{
-		return false;
-	}
-
-	if (!rayInitialise()) /* Initialise the ray tables */
 	{
 		return false;
 	}
@@ -1160,7 +1154,7 @@ BOOL stageThreeShutDown(void)
 	{
 		initPlayerColours();		// reset colours leaving multiplayer game.
 	}
-	
+
 	setScriptWinLoseVideo(PLAY_NONE);
 
 	return true;
