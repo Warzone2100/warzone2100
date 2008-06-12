@@ -152,7 +152,7 @@ static FP_NODE* fpathGetNode(int x, int y)
 }
 
 /** Reset the node table
- *  
+ *
  *  @NOTE The actual implementation does a lazy reset, because resetting the
  *        entire node table is expensive.
  */
@@ -324,7 +324,7 @@ static BOOL		obstruction;
 
 /** The visibility ray callback
  */
-static BOOL fpathVisCallback(SDWORD x, SDWORD y, SDWORD dist, PROPULSION_TYPE propulsion)
+static BOOL fpathVisCallback(SDWORD x, SDWORD y, SDWORD dist, void* data)
 {
 	SDWORD	vx,vy;
 
@@ -338,7 +338,7 @@ static BOOL fpathVisCallback(SDWORD x, SDWORD y, SDWORD dist, PROPULSION_TYPE pr
 		return false;
 	}
 
-	if (fpathBlockingTile(map_coord(x), map_coord(y), propulsion))
+	if (fpathBlockingTile(map_coord(x), map_coord(y), INVALID_PROP_TYPE))
 	{
 		// found an obstruction
 		obstruction = true;
@@ -363,7 +363,7 @@ BOOL fpathTileLOS(SDWORD x1,SDWORD y1, SDWORD x2,SDWORD y2)
 	vectorY = y1 - y2;
 	obstruction = false;
 
-	rayCast(x1, y1, rayPointsToAngle(x1, y1, x2, y2), RAY_MAXLEN, INVALID_PROP_TYPE, fpathVisCallback);
+	rayCast(x1, y1, rayPointsToAngle(x1, y1, x2, y2), RAY_MAXLEN, fpathVisCallback, NULL);
 
 	return !obstruction;
 }
@@ -507,7 +507,7 @@ static 	FP_NODE		*psNearest, *psRoute;
 			}
 			if (psFound)
 			{
-				// This should not be necessary; something is wrong somewhere else in the code, but we need to release 
+				// This should not be necessary; something is wrong somewhere else in the code, but we need to release
 				// 2.1 now and this fixes the immediate problem with nearest paths. - Per
 				psFound->est = (SWORD)fpathEstimate(x,y, tileFX, tileFY);
 			}

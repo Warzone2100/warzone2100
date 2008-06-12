@@ -166,7 +166,7 @@ static BOOL		obstruction;
  *
  *  @ingroup pathfinding
  */
-static BOOL fpathEndPointCallback(SDWORD x, SDWORD y, SDWORD dist, PROPULSION_TYPE propulsion)
+static BOOL fpathEndPointCallback(SDWORD x, SDWORD y, SDWORD dist, void* data)
 {
 	SDWORD			vx, vy;
 
@@ -181,7 +181,7 @@ static BOOL fpathEndPointCallback(SDWORD x, SDWORD y, SDWORD dist, PROPULSION_TY
 	}
 
 	// note the last clear tile
-	if (!fpathBlockingTile(map_coord(x), map_coord(y), propulsion))
+	if (!fpathBlockingTile(map_coord(x), map_coord(y), *(PROPULSION_TYPE*)data))
 	{
 		clearX = (x & ~TILE_MASK) + TILE_UNITS/2;
 		clearY = (y & ~TILE_MASK) + TILE_UNITS/2;
@@ -215,7 +215,7 @@ void fpathSetDirectRoute(DROID* psDroid, SDWORD targetX, SDWORD targetY)
  *
  *  @ingroup pathfinding
  */
-static FPATH_RETVAL fpathGatewayRoute(DROID* psDroid, SDWORD routeMode, SDWORD sx, SDWORD sy, 
+static FPATH_RETVAL fpathGatewayRoute(DROID* psDroid, SDWORD routeMode, SDWORD sx, SDWORD sy,
                                       SDWORD fx, SDWORD fy, MOVE_CONTROL *psMoveCntl, PROPULSION_TYPE propulsion)
 {
 	int			asret;
@@ -349,8 +349,7 @@ FPATH_RETVAL fpathRoute(DROID* psDroid, SDWORD tX, SDWORD tY)
 		obstruction = false;
 
 		// cast the ray to find the last clear tile before the obstruction
-		rayCast(startX, startY, rayPointsToAngle(startX,startY, finalX, finalY), RAY_MAXLEN, 
-		        psPropStats->propulsionType, fpathEndPointCallback);
+		rayCast(startX, startY, rayPointsToAngle(startX,startY, finalX, finalY), RAY_MAXLEN, fpathEndPointCallback, &psPropStats->propulsionType);
 
 		if (!obstruction)
 		{

@@ -42,13 +42,18 @@ extern BOOL rayInitialise(void);
 /* The raycast intersection callback.
  * Return false if no more points are required, true otherwise
  */
-typedef BOOL (*RAY_CALLBACK)(SDWORD x, SDWORD y, SDWORD dist, PROPULSION_TYPE propulsion);
+typedef BOOL (*RAY_CALLBACK)(SDWORD x, SDWORD y, SDWORD dist, void* data);
 
 /* cast a ray from x,y (world coords) at angle ray (0-NUM_RAYS) */
-extern void rayCast(UDWORD x, UDWORD y, UDWORD ray, UDWORD length, PROPULSION_TYPE propulsion, RAY_CALLBACK callback);
+extern void rayCast(UDWORD x, UDWORD y, UDWORD ray, UDWORD length, RAY_CALLBACK callback, void *data);
 
 // Calculate the angle to cast a ray between two points
-extern UDWORD rayPointsToAngle(SDWORD x1,SDWORD y1, SDWORD x2,SDWORD y2);
+extern unsigned int rayPointsToAngle(int x1, int y1, int x2, int y2);
+
+static inline unsigned int rayPointsToAngle3f(Vector3f p1, Vector3f p2)
+{
+	return rayPointsToAngle(p1.x, p1.y, p2.x, p2.y);
+}
 
 /* Distance of a point from a line.
  * NOTE: This is not 100% accurate - it approximates to get the square root

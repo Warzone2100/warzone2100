@@ -42,12 +42,6 @@
 // Get the tile from tile coords
 #define RAY_TILE(x,y) mapTile((x),(y))
 
-// ray point
-typedef struct _ray_point
-{
-	SDWORD	x,y;
-} RAY_POINT;
-
 /* x and y increments for each ray angle */
 static SDWORD	rayDX[NUM_RAYS], rayDY[NUM_RAYS];
 static SDWORD	rayHDist[NUM_RAYS], rayVDist[NUM_RAYS];
@@ -140,12 +134,12 @@ BOOL rayInitialise(void)
  * Sorry about the wacky angle set up but that was what I thought
  * warzone used, but turned out not to be after I wrote it.
  */
-void rayCast(UDWORD x, UDWORD y, UDWORD ray, UDWORD length, PROPULSION_TYPE propulsion, RAY_CALLBACK callback)
+void rayCast(UDWORD x, UDWORD y, UDWORD ray, UDWORD length, RAY_CALLBACK callback, void * data)
 {
-	SDWORD		hdInc=0, vdInc=0;		// increases in x and y distance per intersection
-	SDWORD		hDist, vDist;		// distance to current horizontal and vertical intersectionse
-	RAY_POINT	sVert = { 0, 0 }, sHoriz = { 0, 0 };
-	SDWORD		vdx=0, hdy=0;			// vertical x increment, horiz y inc
+	int hdInc = 0, vdInc = 0; // increases in x and y distance per intersection
+	int hDist, vDist; // distance to current horizontal and vertical intersectionse
+	Vector2i sVert = { 0, 0 }, sHoriz = { 0, 0 };
+	int vdx = 0, hdy = 0; // vertical x increment, horiz y inc
 
 	// Clipping is done with the position offset by TILE_UNITS/4 to account
 	// for the rounding errors when the intersection length is calculated.
@@ -188,7 +182,7 @@ void rayCast(UDWORD x, UDWORD y, UDWORD ray, UDWORD length, PROPULSION_TYPE prop
 	// initialise the vertical intersection calculations
 	// and clip to the left and right of the map
 	// (no vertical intersection for a vertical ray)
-	if (ray != 0 && ray != NUM_RAYS/2)
+	if (ray != 0 && ray != NUM_RAYS/2) // was: 0*NUM_RAYS/4 && 2*NUM_RAYS/2
 	{
 		if (ray >= NUM_RAYS/2)
 		{
@@ -238,7 +232,7 @@ void rayCast(UDWORD x, UDWORD y, UDWORD ray, UDWORD length, PROPULSION_TYPE prop
 			}
 
 			// pass through the current intersection, converting x from fixed point
-			if (!callback( sHoriz.x >> RAY_ACC,sHoriz.y, hDist, propulsion))
+			if (!callback( sHoriz.x >> RAY_ACC,sHoriz.y, hDist, data))
 			{
 				// callback doesn't want any more points so return
 				return;
@@ -259,7 +253,7 @@ void rayCast(UDWORD x, UDWORD y, UDWORD ray, UDWORD length, PROPULSION_TYPE prop
 			}
 
 			// pass through the current intersection, converting y from fixed point
-			if (!callback( sVert.x,sVert.y >> RAY_ACC, vDist, propulsion))
+			if (!callback( sVert.x,sVert.y >> RAY_ACC, vDist, data))
 			{
 				// callback doesn't want any more points so return
 				return;
@@ -277,25 +271,17 @@ void rayCast(UDWORD x, UDWORD y, UDWORD ray, UDWORD length, PROPULSION_TYPE prop
 
 
 // Calculate the angle to cast a ray between two points
-UDWORD rayPointsToAngle(SDWORD x1,SDWORD y1, SDWORD x2,SDWORD y2)
+unsigned int rayPointsToAngle(int x1, int y1, int x2, int y2)
 {
-	SDWORD		xdiff, ydiff;
-	SDWORD		angle;
+	int xdiff = x2 - x1, ydiff = y1 - y2;
+	int angle = (float)(NUM_RAYS / 2) * (1.0f + atan2f(xdiff, ydiff) / (float)M_PI);
 
-	xdiff = x2 - x1;
-	ydiff = y1 - y2;
-
-
-	angle = (SDWORD)((NUM_RAYS / 2) * atan2(xdiff, ydiff) / M_PI);
-
-
-	angle += NUM_RAYS/2;
 	angle = angle % NUM_RAYS;
 
 	ASSERT( angle >= 0 && angle < NUM_RAYS,
 		"rayPointsToAngle: angle out of range" );
 
-	return (UDWORD)angle;
+	return angle;
 }
 
 
@@ -344,7 +330,7 @@ SDWORD rayPointDist(SDWORD x1,SDWORD y1, SDWORD x2,SDWORD y2,
 	from wherever you specify, as well as the distance away
 */
 //-----------------------------------------------------------------------------------
-static BOOL	getTileHighestCallback(SDWORD x, SDWORD y, SDWORD dist, PROPULSION_TYPE propulsion)
+static BOOL	getTileHighestCallback(SDWORD x, SDWORD y, SDWORD dist, void* data)
 {
 	if(clipXY(x,y))
 	{
@@ -367,7 +353,7 @@ static BOOL	getTileHighestCallback(SDWORD x, SDWORD y, SDWORD dist, PROPULSION_T
 
 //-----------------------------------------------------------------------------------
 /* Will return false when we've hit the edge of the grid */
-static BOOL	getTileHeightCallback(SDWORD x, SDWORD y, SDWORD dist, PROPULSION_TYPE propulsion)
+static BOOL	getTileHeightCallback(SDWORD x, SDWORD y, SDWORD dist, void* data)
 {
 #ifdef TEST_RAY
 	Vector3i pos;
@@ -445,7 +431,7 @@ void	getBestPitchToEdgeOfGrid(UDWORD x, UDWORD y, UDWORD direction, SDWORD *pitc
 	gHeight = map_Height(x,y);
 	gStartTileX = map_coord(x);
 	gStartTileY = map_coord(y);
-	rayCast(x, y, direction % 360, 5430, INVALID_PROP_TYPE, getTileHeightCallback);
+	rayCast(x, y, direction % NUM_RAYS, 5430, getTileHeightCallback, NULL);
 	*pitch = gPitch;
 }
 
@@ -456,6 +442,6 @@ void	getPitchToHighestPoint( UDWORD x, UDWORD y, UDWORD direction,
 	gHOrigHeight = map_Height(x,y);
 	gHighestHeight = map_Height(x,y);
 	gHMinDist = thresholdDistance;
-	rayCast(x, y, direction % 360, 3000, INVALID_PROP_TYPE, getTileHighestCallback);
+	rayCast(x, y, direction % NUM_RAYS, 3000, getTileHighestCallback, NULL);
 	*pitch = gHPitch;
 }
