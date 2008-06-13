@@ -22,7 +22,8 @@
  *
  * Store Structure stats.
  * WARNING!!!!!!
- * Something wicked this way comes. This file is almost as evil as HCI.c
+ * By the picking of these code-bombs, something wicked this way comes. This
+ * file is almost as evil as hci.c
  */
 #include <string.h>
 
