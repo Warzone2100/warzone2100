@@ -286,10 +286,13 @@ FPATH_RETVAL fpathRoute(DROID* psDroid, SDWORD tX, SDWORD tY)
 
 	if (psPartialRouteDroid == NULL || psPartialRouteDroid != psDroid)
 	{
+		Vector3i final = { (target.x & ~TILE_MASK) + TILE_UNITS/2, (target.y & ~TILE_MASK) + TILE_UNITS/2, 0 };
+
 		// check whether the start point of the route
 		// is a blocking tile and find an alternative if it is
 		if (fpathBlockingTile(map_coord(start.x), map_coord(start.y), psPropStats->propulsionType))
 		{
+
 			// find the nearest non blocking tile to the DROID
 			int minDist = SDWORD_MAX;
 			int nearestDir = NUM_DIR;
@@ -315,29 +318,28 @@ FPATH_RETVAL fpathRoute(DROID* psDroid, SDWORD tX, SDWORD tY)
  				objTrace(psDroid->id, "droid %u: route failed (surrouned by blocking)", (unsigned int)psDroid->id);
 				return FPR_FAILED;
 			}
-			else
-			{
-				start.x = world_coord(map_coord(start.x) + aDirOffset[nearestDir].x)
-							+ TILE_SHIFT / 2;
-				start.y = world_coord(map_coord(start.y) + aDirOffset[nearestDir].y)
-							+ TILE_SHIFT / 2;
-			}
+
+			start.x = world_coord(map_coord(start.x) + aDirOffset[nearestDir].x)
+				+ TILE_SHIFT / 2;
+			start.y = world_coord(map_coord(start.y) + aDirOffset[nearestDir].y)
+				+ TILE_SHIFT / 2;
 		}
 
 		// initialise the raycast - if there is los to the target, no routing necessary
-		finalX = (target.x & ~TILE_MASK) + TILE_UNITS/2;
-		finalY = (target.y & ~TILE_MASK) + TILE_UNITS/2;
+		finalX = final.x;
+		finalY = final.y;
 		clearX = finalX; clearY = finalY;
 
-		Vector3i final = { finalX, finalY, 0 };
-		Vector3i dir = Vector3i_Sub(final, start);
+		{
+			Vector3i dir = Vector3i_Sub(final, start);
 
-		vectorX = -dir.x;
-		vectorY = -dir.y;
-		obstruction = false;
+			vectorX = -dir.x;
+			vectorY = -dir.y;
+			obstruction = false;
 
-		// cast the ray to find the last clear tile before the obstruction
-		rayCast(start, dir, RAY_MAXLEN, fpathEndPointCallback, &psPropStats->propulsionType);
+			// cast the ray to find the last clear tile before the obstruction
+			rayCast(start, dir, RAY_MAXLEN, fpathEndPointCallback, &psPropStats->propulsionType);
+		}
 
 		if (!obstruction)
 		{

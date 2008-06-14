@@ -214,20 +214,20 @@ static bool rayLOSCallback(Vector3i pos, int dist, void *data)
 		return false;
 	}
 
-	// Store the height at this tile for next time round
-	Vector2i tile = { map_coord(pos.x), map_coord(pos.y) };
-
-	if (blockingWall && !((tile.x == finalX) && (tile.y == finalY)))
 	{
-		psTile = mapTile(tile.x, tile.y);
-		if (TileHasWall(psTile) && !TileHasSmallStructure(psTile))
+		// Store the height at this tile for next time round
+		Vector2i tile = { map_coord(pos.x), map_coord(pos.y) };
+
+		if (blockingWall && !((tile.x == finalX) && (tile.y == finalY)))
 		{
-			lastH = 2*UBYTE_MAX * ELEVATION_SCALE;
-//			currG = UBYTE_MAX * ELEVATION_SCALE * GRAD_MUL / lastD;
-			numWalls += 1;
-			wallX = pos.x;
-			wallY = pos.y;
-//			return false;
+			psTile = mapTile(tile.x, tile.y);
+			if (TileHasWall(psTile) && !TileHasSmallStructure(psTile))
+			{
+				lastH = 2*UBYTE_MAX * ELEVATION_SCALE;
+				numWalls += 1;
+				wallX = pos.x;
+				wallY = pos.y;
+			}
 		}
 	}
 
@@ -277,72 +277,77 @@ void visTilesUpdate(BASE_OBJECT *psObj, RAY_CALLBACK callback)
  */
 BOOL visibleObject(const BASE_OBJECT* psViewer, const BASE_OBJECT* psTarget)
 {
-	SDWORD		x,y, ray;
-	SDWORD		xdiff,ydiff, rangeSquared;
-	SDWORD		range = objSensorRange(psViewer);
-	SDWORD		tarG, top;
+	Vector3i pos, dest, diff;
+	int ray, range, rangeSquared;
+	int tarG, top;
 
 	ASSERT(psViewer != NULL, "Invalid viewer pointer!");
 	ASSERT(psTarget != NULL, "Invalid viewed pointer!");
+
 	if (!psViewer || !psTarget)
 	{
 		return false;
 	}
 
+	pos = Vector3i_New(psViewer->pos.x, psViewer->pos.y, 0);
+	dest = Vector3i_New(psTarget->pos.x, psTarget->pos.y, 0);
+	diff = Vector3i_Sub(pos, dest);
+	range = objSensorRange(psViewer);
+
 	/* Get the sensor Range and power */
 	switch (psViewer->type)
 	{
-	case OBJ_DROID:
-	{
-		const DROID * const psDroid = (const DROID *)psViewer;
-
-		if (psDroid->droidType == DROID_COMMAND)
+		case OBJ_DROID:
 		{
-			range = 3 * range / 2;
+			const DROID * psDroid = (DROID *)psViewer;
+
+			if (psDroid->droidType == DROID_COMMAND)
+			{
+				range = 3 * range / 2;
+			}
+			break;
 		}
-		break;
-	}
-	case OBJ_STRUCTURE:
-	{
-		const STRUCTURE * const psStruct = (const STRUCTURE *)psViewer;
-
-		// a structure that is being built cannot see anything
-		if (psStruct->status != SS_BUILT)
+		case OBJ_STRUCTURE:
 		{
+			const STRUCTURE * psStruct = (STRUCTURE *)psViewer;
+
+			// a structure that is being built cannot see anything
+			if (psStruct->status != SS_BUILT)
+			{
+				return false;
+			}
+
+			if (psStruct->pStructureType->type == REF_WALL
+				|| psStruct->pStructureType->type == REF_WALLCORNER)
+			{
+				return false;
+			}
+
+			if ((structCBSensor(psStruct)
+				|| structVTOLCBSensor(psStruct))
+				&& psStruct->psTarget[0] == psTarget)
+			{
+				// if a unit is targetted by a counter battery sensor
+				// it is automatically seen
+				return true;
+			}
+
+			// increase the sensor range for AA sites
+			// AA sites are defensive structures that can only shoot in the air
+			if (psStruct->pStructureType->type == REF_DEFENSE
+				&& asWeaponStats[psStruct->asWeaps[0].nStat].surfaceToAir == SHOOT_IN_AIR)
+			{
+				range = 3 * range / 2;
+			}
+
+			break;
+		}
+		default:
+			ASSERT( false,
+				"visibleObject: visibility checking is only implemented for"
+				"units and structures" );
 			return false;
-		}
-
-		if (psStruct->pStructureType->type == REF_WALL
-		 || psStruct->pStructureType->type == REF_WALLCORNER)
-		{
-			return false;
-		}
-
-		if ((structCBSensor(psStruct)
-		  || structVTOLCBSensor(psStruct))
-		 && psStruct->psTarget[0] == psTarget)
-		{
-			// if a unit is targetted by a counter battery sensor
-			// it is automatically seen
-			return true;
-		}
-
-		// increase the sensor range for AA sites
-		// AA sites are defensive structures that can only shoot in the air
-		if (psStruct->pStructureType->type == REF_DEFENSE
-		 && asWeaponStats[psStruct->asWeaps[0].nStat].surfaceToAir == SHOOT_IN_AIR)
-		{
-			range = 3 * range / 2;
-		}
-
-		break;
-	}
-	default:
-		ASSERT( false,
-			"visibleObject: visibility checking is only implemented for"
-			"units and structures" );
-		return false;
-		break;
+			break;
 	}
 
 	// Structures can be seen from further away
@@ -352,61 +357,55 @@ BOOL visibleObject(const BASE_OBJECT* psViewer, const BASE_OBJECT* psTarget)
 	}
 
 	/* First see if the target is in sensor range */
-	x = psViewer->pos.x;
-	xdiff = x - (SDWORD)psTarget->pos.x;
-	if (xdiff < 0)
+	if (diff.x < 0)
 	{
-		xdiff = -xdiff;
+		diff.x = -diff.x;
 	}
-	if (xdiff > range)
+	if (diff.x > range)
 	{
 		// too far away, reject
 		return false;
 	}
 
-	y = psViewer->pos.y;
-	ydiff = y - (SDWORD)psTarget->pos.y;
-	if (ydiff < 0)
+	if (diff.y < 0)
 	{
-		ydiff = -ydiff;
+		diff.y = -diff.y;
 	}
-	if (ydiff > range)
+	if (diff.y > range)
 	{
 		// too far away, reject
 		return false;
 	}
 
-	rangeSquared = xdiff*xdiff + ydiff*ydiff;
-	if (rangeSquared > (range*range))
-	{
-		/* Out of sensor range */
-		return false;
-	}
-
+	rangeSquared = Vector3i_ScalarP(diff, diff);
 	if (rangeSquared == 0)
 	{
 		// Should never be on top of each other, but ...
 		return true;
 	}
 
+	if (rangeSquared > (range*range))
+	{
+		/* Out of sensor range */
+		return false;
+	}
+
 	// initialise the callback variables
-	startH = psViewer->pos.z;
+	startH = pos.z;
 	startH += visObjHeight(psViewer);
 	currG = -UBYTE_MAX * GRAD_MUL * ELEVATION_SCALE;
 	tarDist = rangeSquared;
 	rayStart = true;
 	currObj = 0;
-	ray = NUM_RAYS-1 - calcDirection(psViewer->pos.x,psViewer->pos.y, psTarget->pos.x,psTarget->pos.y);
-	finalX = map_coord(psTarget->pos.x);
-	finalY = map_coord(psTarget->pos.y);
-	Vector3i pos = { x, y, 0 };
-	Vector3i dir = rayAngleToVector3i(ray);
+	ray = NUM_RAYS-1 - calcDirection(pos.x, pos.y, dest.x, dest.y);
+	finalX = map_coord(dest.x);
+	finalY = map_coord(dest.y);
 
 	// Cast a ray from the viewer to the target
-	rayCast(pos, dir, range, rayLOSCallback, NULL);
+	rayCast(pos, rayAngleToVector3i(ray), range, rayLOSCallback, NULL);
 
 	// See if the target can be seen
-	top = ((SDWORD)psTarget->pos.z + visObjHeight(psTarget) - startH);
+	top = (dest.z + visObjHeight(psTarget) - startH);
 	tarG = top * GRAD_MUL / lastD;
 
 	return tarG >= currG;
