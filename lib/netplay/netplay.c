@@ -210,6 +210,7 @@ static BOOL NET_recvMessage(NETBUFSOCKET* bs)
 	}
 
 	memcpy(pMsg, message, size);
+	pMsg->size = SDL_SwapBE16(message->size);
 	bs->buffer_start += size;
 	bs->bytes -= size;
 
@@ -1050,8 +1051,8 @@ receive_message:
 					    && connected_bsocket[j] != NULL
 					    && connected_bsocket[j]->socket != NULL)
 					{
-						SDLNet_TCP_Send(connected_bsocket[j]->socket,
-								pMsg, size);
+						pMsg->size = SDL_SwapBE16(pMsg->size);
+						SDLNet_TCP_Send(connected_bsocket[j]->socket, pMsg, size);
 					}
 				}
 			}
@@ -1063,6 +1064,7 @@ receive_message:
 				    && connected_bsocket[pMsg->destination]->socket != NULL)
 				{
 					debug(LOG_NET, "Reflecting message type %hhu to UDWORD %hhu", pMsg->type, pMsg->destination);
+					pMsg->size = SDL_SwapBE16(pMsg->size);
 					SDLNet_TCP_Send(connected_bsocket[pMsg->destination]->socket,
 							pMsg, size);
 				} else {
