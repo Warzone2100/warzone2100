@@ -169,10 +169,7 @@ zone 2100 Resurrection Project (http://wiki.wz2100.net/command_line_options).
 
 3.3 Music
 ---------
-As the original game music is part of the data that was not liberated, music is
-reintroduced in a different way. A playlist-system is used that can point to any
-*.ogg in your warzone-data-path. This is still experimental and we are gradually
-making this more usable.
+A playlist-system is used that can point to any *.ogg in your warzone-data-path. 
 
 Warzone reads the following two playlists (in the order they are mentioned) and
 the first playlist found will be used:
@@ -183,6 +180,8 @@ the first playlist found will be used:
    o for Mac OS X: ~/Library/Application Support/Warzone 2100/music/music.wpl
 * Warzone-install-path:
 	o <whereverwarzoneisinstalled>/music/music.wpl
+
+If no playlist is present, one is created that plays the original game music.
 
 Using the playlist
 ******************

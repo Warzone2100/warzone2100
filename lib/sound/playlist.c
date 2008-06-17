@@ -72,7 +72,6 @@ bool PlayList_Read(const char* path)
 {
 	PHYSFS_file* fileHandle;
 	char* path_to_music = NULL;
-
 	char fileName[PATH_MAX];
 
 	// Construct file name
@@ -80,6 +79,22 @@ bool PlayList_Read(const char* path)
 
 	// Attempt to open the playlist file
 	fileHandle = PHYSFS_openRead(fileName);
+	if (fileHandle == NULL)
+	{
+		// Create default playlist file
+		// This is an ugly HACK which should be FIXME'd into oblivion some other time
+		fileHandle = PHYSFS_openWrite(fileName);
+		if (fileHandle)
+		{
+			const char *gamestr = "[game]\npath=music\nshuffle=yes\ntrack1.ogg\ntrack2.ogg\n\n";
+			const char *menustr = "[menu]\npath=music\nmenu.ogg\n";
+
+			PHYSFS_write(fileHandle, gamestr, strlen(gamestr), 1);
+			PHYSFS_write(fileHandle, menustr, strlen(menustr), 1);
+			PHYSFS_close(fileHandle);
+		}
+		fileHandle = PHYSFS_openRead(fileName);
+	}
 	if (fileHandle == NULL)
 	{
 		debug(LOG_NEVER, "sound_LoadTrackFromFile: PHYSFS_openRead(\"%s\") failed with error: %s\n", fileName, PHYSFS_getLastError());
