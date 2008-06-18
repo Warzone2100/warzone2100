@@ -254,6 +254,19 @@ static inline WZ_DECL_CONST Vector2f Vector2f_Normalise(const Vector2f v)
 
 
 /*!
+ * Set the vector field by field, same as v = (Vector3f){x, y, z};
+ * Needed for MSVC which doesn't support C99 struct assignments.
+ * \param x,y,z Values to set to
+ * \return New vector
+ */
+static inline WZ_DECL_CONST Vector3f Vector3f_New(const float x, const float y, const float z)
+{
+	Vector3f dest = { x, y, z };
+	return dest;
+}
+
+
+/*!
  * Convert a float vector to integer
  * \param v Vector to convert
  * \return Float vector
@@ -271,19 +284,6 @@ static inline WZ_DECL_CONST Vector3i Vector3f_To3i(const Vector3f v)
 static inline WZ_DECL_CONST bool Vector3f_Compare(const Vector3f a, const Vector3f b)
 {
 	return a.x == b.x && a.y == b.y && a.z == b.z;
-}
-
-
-/*!
- * Set the vector field by field, same as v = (Vector3f){x, y, z};
- * Needed for MSVC which doesn't support C99 struct assignments.
- * \param x,y,z Values to set to
- * \return New vector
- */
-static inline WZ_DECL_CONST Vector3f Vector3f_New(const float x, const float y, const float z)
-{
-	Vector3f dest = { x, y, z };
-	return dest;
 }
 
 
@@ -389,6 +389,19 @@ static inline WZ_DECL_CONST Vector3f Vector3f_Normalise(const Vector3f v)
 		Vector3f dest = { v.x / length, v.y / length, v.z / length };
 		return dest;
 	}
+}
+
+
+/*!
+ * Set the vector field by field, same as v = (Vector3i){x, y, z};
+ * Needed for MSVC which doesn't support C99 struct assignments.
+ * \param x,y,z Coordinates
+ * \return New Vector
+ */
+static inline WZ_DECL_CONST Vector3i Vector3i_New(const int x, const int y, const int z)
+{
+	Vector3i dest = { x, y, z };
+	return dest;
 }
 
 
@@ -538,19 +551,6 @@ static inline WZ_DECL_CONST bool Vector3i_InSphere (const Vector3i v, const Vect
 
 
 /*!
- * Set the vector field by field, same as v = (Vector3i){x, y, z};
- * Needed for MSVC which doesn't support C99 struct assignments.
- * \param x,y,z Coordinates
- * \return New Vector
- */
-static inline WZ_DECL_CONST Vector3i Vector3i_New(const int x, const int y, const int z)
-{
-	Vector3i dest = { x, y, z };
-	return dest;
-}
-
-
-/*!
  * Set the vector field by field, same as v = (Vector3uw){x, y, z};
  * Needed for MSVC which doesn't support C99 struct assignments.
  * \param x,y,z Coordinates
@@ -561,5 +561,18 @@ static inline WZ_DECL_CONST Vector3uw Vector3uw_New(const unsigned int x, const 
 	Vector3uw dest = { x, y, z };
 	return dest;
 }
+
+
+/*!
+ * Convert an short vector to int
+ * \param v Vector to convert
+ * \return Short vector
+ */
+static inline WZ_DECL_CONST Vector3i Vector3uw_To3i(const Vector3uw v)
+{
+	Vector3i dest = { (int)v.x, (int)v.y, (int)v.z };
+	return dest;
+}
+
 
 #endif // __INCLUDED_LIB_IVIS_PIEVECTOR_H__
