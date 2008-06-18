@@ -1,0 +1,9 @@
+[game]
+path=music
+shuffle=yes
+track1.ogg
+track2.ogg
+
+[menu]
+path=music
+menu.ogg
