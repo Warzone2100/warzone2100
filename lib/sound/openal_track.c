@@ -53,6 +53,8 @@
 ALuint current_queue_sample = -1;
 #endif
 
+static BOOL openal_initialized = false;
+
 struct __audio_stream
 {
 #ifndef WZ_NOSOUND
@@ -89,7 +91,6 @@ static ALCdevice* device = 0;
 static ALCcontext* context = 0;
 #endif
 
-BOOL openal_initialized = false;
 
 /** Removes the given sample from the "active_samples" linked list
  *  \param previous either NULL (if \c to_remove is the first item in the
@@ -184,6 +185,10 @@ void sound_ShutdownLibrary( void )
 {
 	SAMPLE_LIST * aSample = active_samples, * tmpSample = NULL;
 
+	if ( !openal_initialized )
+	{
+		return;
+	}
 	debug(LOG_SOUND, "sound_ShutdownLibrary: starting shutdown");
 #ifndef WZ_NOSOUND
 	if(context != 0) {
@@ -262,6 +267,11 @@ void sound_Update()
 	SAMPLE_LIST* previous = NULL;
 	ALCenum err;
 
+	if ( !openal_initialized )
+	{
+		return;
+	}
+
 	// Update all streaming audio
 	sound_UpdateStreams();
 
@@ -331,6 +341,10 @@ BOOL sound_QueueSamplePlaying( void )
 #ifndef WZ_NOSOUND
 	ALenum	state;
 
+	if ( !openal_initialized )
+	{
+		return false;
+	}
 	if ( current_queue_sample == (ALuint)AL_INVALID )
 	{
 		return false;
@@ -369,10 +383,14 @@ static inline TRACK* sound_DecodeOggVorbisTrack(TRACK *psTrack, PHYSFS_file* PHY
 #ifndef WZ_NOSOUND
 	ALenum		format;
 	ALuint		buffer;
+	struct OggVorbisDecoderState *decoder;
+	soundDataBuffer	*soundBuffer;
 
-	struct OggVorbisDecoderState* decoder = sound_CreateOggVorbisDecoder(PHYSFS_fileHandle, true);
-	soundDataBuffer* soundBuffer;
-
+	if ( !openal_initialized )
+	{
+		return NULL;
+	}
+	decoder = sound_CreateOggVorbisDecoder(PHYSFS_fileHandle, true);
 	soundBuffer = sound_DecodeOggVorbis(decoder, 0);
 	sound_DestroyOggVorbisDecoder(decoder);
 
@@ -645,8 +663,12 @@ AUDIO_STREAM* sound_PlayStreamWithBuf(PHYSFS_file* fileHandle, float volume, voi
 {
 	AUDIO_STREAM* stream;
 	ALuint*       buffers = alloca(sizeof(ALuint) * buffer_count);
-
 	unsigned int i;
+
+	if ( !openal_initialized )
+	{
+		return NULL;
+	}
 
 	stream = malloc(sizeof(AUDIO_STREAM));
 	if (stream == NULL)
