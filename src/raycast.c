@@ -80,13 +80,13 @@ void rayCast(Vector3i src, Vector3i direction, int length,
  * Gets the maximum terrain height along a certain direction to the edge of the grid
  * from wherever you specify, as well as the distance away
  */
-static bool getTileHighestCallback(Vector3i pos, int dist, void* data)
+static bool getTileHighestCallback(Vector3i pos, int distSq, void* data)
 {
 	HighestCallbackHelp_t * help = data;
 
 	if (clipXY(pos.x, pos.y))
 	{
-		unsigned int height = map_Height(pos.x, pos.y);
+		unsigned int height = map_Height(pos.x, pos.y), dist = sqrtf(distSq);
 		if (height > help->highestHeight && dist >= help->minDist)
 		{
 			int heightDif = height - help->origHeight;
@@ -102,7 +102,7 @@ static bool getTileHighestCallback(Vector3i pos, int dist, void* data)
 
 //-----------------------------------------------------------------------------------
 /* Will return false when we've hit the edge of the grid */
-static bool getTileHeightCallback(Vector3i pos, int dist, void* data)
+static bool getTileHeightCallback(Vector3i pos, int distSq, void* data)
 {
 	HeightCallbackHelp_t * help = data;
 #ifdef TEST_RAY
@@ -112,6 +112,7 @@ static bool getTileHeightCallback(Vector3i pos, int dist, void* data)
 	/* Are we still on the grid? */
 	if (clipXY(pos.x, pos.y))
 	{
+		int dist = sqrtf(distSq);
 		bool HasTallStructure = TileHasTallStructure(mapTile(map_coord(pos.x), map_coord(pos.y)));
 
 		if (dist > TILE_UNITS || HasTallStructure)

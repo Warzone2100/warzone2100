@@ -121,8 +121,9 @@ static int visObjHeight(const BASE_OBJECT * psObject)
 }
 
 /* The terrain revealing ray callback */
-bool rayTerrainCallback(Vector3i pos, int dist, void * data)
+bool rayTerrainCallback(Vector3i pos, int distSq, void * data)
 {
+	int dist = sqrtf(distSq);
 	int newH, newG; // The new gradient
 	MAPTILE *psTile;
 
@@ -172,8 +173,9 @@ bool rayTerrainCallback(Vector3i pos, int dist, void * data)
 }
 
 /* The los ray callback */
-static bool rayLOSCallback(Vector3i pos, int dist, void *data)
+static bool rayLOSCallback(Vector3i pos, int distSq, void *data)
 {
+	int dist = sqrtf(distSq);
 	int newG; // The new gradient
 
 	ASSERT(pos.x >= 0 && pos.x < world_coord(mapWidth)
@@ -268,7 +270,7 @@ void visTilesUpdate(BASE_OBJECT *psObj, RAY_CALLBACK callback)
 BOOL visibleObject(const BASE_OBJECT* psViewer, const BASE_OBJECT* psTarget)
 {
 	Vector3i pos, dest, diff;
-	int ray, range, rangeSquared;
+	int range, rangeSquared;
 	int tarG, top;
 
 	ASSERT(psViewer != NULL, "Invalid viewer pointer!");
@@ -279,9 +281,9 @@ BOOL visibleObject(const BASE_OBJECT* psViewer, const BASE_OBJECT* psTarget)
 		return false;
 	}
 
-	pos = Vector3i_New(psViewer->pos.x, psViewer->pos.y, 0);
-	dest = Vector3i_New(psTarget->pos.x, psTarget->pos.y, 0);
-	diff = Vector3i_Sub(pos, dest);
+	pos = Vector3uw_To3i(psViewer->pos);
+	dest = Vector3uw_To3i(psTarget->pos);
+	diff = Vector3i_Sub(dest, pos);
 	range = objSensorRange(psViewer);
 
 	/* Get the sensor Range and power */
@@ -347,26 +349,6 @@ BOOL visibleObject(const BASE_OBJECT* psViewer, const BASE_OBJECT* psTarget)
 	}
 
 	/* First see if the target is in sensor range */
-	if (diff.x < 0)
-	{
-		diff.x = -diff.x;
-	}
-	if (diff.x > range)
-	{
-		// too far away, reject
-		return false;
-	}
-
-	if (diff.y < 0)
-	{
-		diff.y = -diff.y;
-	}
-	if (diff.y > range)
-	{
-		// too far away, reject
-		return false;
-	}
-
 	rangeSquared = Vector3i_ScalarP(diff, diff);
 	if (rangeSquared == 0)
 	{
@@ -387,12 +369,11 @@ BOOL visibleObject(const BASE_OBJECT* psViewer, const BASE_OBJECT* psTarget)
 	tarDist = rangeSquared;
 	rayStart = true;
 	currObj = 0;
-	ray = NUM_RAYS-1 - calcDirection(pos.x, pos.y, dest.x, dest.y);
 	finalX = map_coord(dest.x);
 	finalY = map_coord(dest.y);
 
 	// Cast a ray from the viewer to the target
-	rayCast(pos, rayAngleToVector3i(ray), range, rayLOSCallback, NULL);
+	rayCast(pos, diff, range, rayLOSCallback, NULL);
 
 	// See if the target can be seen
 	top = (dest.z + visObjHeight(psTarget) - startH);
@@ -715,8 +696,9 @@ void updateSensorDisplay()
 	}
 }
 
-bool scrRayTerrainCallback(Vector3i pos, int dist, void *data)
+bool scrRayTerrainCallback(Vector3i pos, int distSq, void *data)
 {
+	int dist = sqrtf(distSq);
 	int newH, newG; // The new gradient
 	MAPTILE *psTile;
 
