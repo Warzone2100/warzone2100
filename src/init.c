@@ -1058,6 +1058,7 @@ BOOL stageThreeInitialise(void)
 
 	driveInitVars(false);
 	displayInitVars();
+	resizeRadar();
 
 	setAllPauseStates(false);
 

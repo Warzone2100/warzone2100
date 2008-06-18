@@ -712,10 +712,12 @@ void	kf_ZoomOut( void )
 // --------------------------------------------------------------------------
 void	kf_RadarZoomIn( void )
 {
+	float RadarZoomLevel = GetRadarZoom();
+
 	if(RadarZoomLevel < MAX_RADARZOOM)
 	{
-		RadarZoomLevel++;
-	   	SetRadarZoom(RadarZoomLevel);
+		RadarZoomLevel += RADARZOOM_STEP;
+		SetRadarZoom(RadarZoomLevel);
 		audio_PlayTrack( ID_SOUND_BUTTON_CLICK_5 );
    	}
 	else	// at maximum already
@@ -727,9 +729,11 @@ void	kf_RadarZoomIn( void )
 // --------------------------------------------------------------------------
 void	kf_RadarZoomOut( void )
 {
-	if(RadarZoomLevel)
+	float RadarZoomLevel = GetRadarZoom();
+
+	if (RadarZoomLevel > MIN_RADARZOOM)
 	{
-		RadarZoomLevel--;
+		RadarZoomLevel -= RADARZOOM_STEP;
 	   	SetRadarZoom(RadarZoomLevel);
 		audio_PlayTrack( ID_SOUND_BUTTON_CLICK_5 );
 	}

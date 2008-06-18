@@ -142,8 +142,6 @@ typedef struct _proximity_display
 {
 	POSITION_OBJ;
 	MESSAGE			*psMessage;				//message associated with this 'button'
-	UDWORD			radarX;					//Used to store the radar coords - if to be drawn
-	UDWORD			radarY;
 	UDWORD			timeLastDrawn;			//stores the time the 'button' was last drawn for animation
 	UDWORD			strobe;					//id of image last used
 	UDWORD			buttonID;				//id of the button for the interface

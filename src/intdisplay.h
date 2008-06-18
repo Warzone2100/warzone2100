@@ -284,7 +284,7 @@ extern void WidgetAudioCallback(int AudioID);
 extern void intDisplayTransportButton(WIDGET *psWidget, UDWORD xOffset,
 						  UDWORD yOffset, PIELIGHT *pColours);
 /*draws blips on radar to represent Proximity Display*/
-extern void drawRadarBlips(float pixSizeH, float pixSizeV, int RadarOffsetX, int RadarOffsetY);
+extern void drawRadarBlips(int radarX, int radarY, float pixSizeH, float pixSizeV);
 
 /*Displays the proximity messages blips over the world*/
 extern void intDisplayProximityBlips(WIDGET *psWidget, UDWORD xOffset,

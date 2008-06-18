@@ -339,8 +339,6 @@ static void addProximityDisplay(MESSAGE *psMessage, BOOL proxPos, UDWORD player)
 	psToAdd->screenX = 0;
 	psToAdd->screenY = 0;
 	psToAdd->screenR = 0;
-	psToAdd->radarX = 0;
-	psToAdd->radarY = 0;
 	psToAdd->player = player;
 	psToAdd->timeLastDrawn = 0;
 	psToAdd->frameNumber = 0;
