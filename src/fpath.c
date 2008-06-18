@@ -39,6 +39,7 @@
 
 #include "fpath.h"
 
+
 /* Beware: Enabling this will cause significant slow-down. */
 #undef DEBUG_MAP
 
@@ -48,6 +49,8 @@
 #define	LIFT_BLOCK_HEIGHT_HEAVYBODY		 350
 
 #define NUM_DIR		8
+
+
 // Convert a direction into an offset
 // dir 0 => x = 0, y = -1
 static const Vector2i aDirOffset[NUM_DIR] =
@@ -72,6 +75,7 @@ static SDWORD partialSX,partialSY, partialTX,partialTY;
 // the last frame on which the partial route was calculatated
 static SDWORD	lastPartialFrame;
 
+
 // initialise the findpath module
 BOOL fpathInitialise(void)
 {
@@ -80,10 +84,12 @@ BOOL fpathInitialise(void)
 	return true;
 }
 
+
 void fpathShutdown()
 {
 	fpathHardTableReset();
 }
+
 
 /** Updates the pathfinding system.
  *  @post Pathfinding jobs for DROID's that died, aren't waiting for a route
@@ -102,6 +108,7 @@ void fpathUpdate(void)
 		psPartialRouteDroid = NULL;
 	}
 }
+
 
 // Check if the map tile at a location blocks a droid
 BOOL fpathBlockingTile(SDWORD x, SDWORD y, PROPULSION_TYPE propulsion)
@@ -142,6 +149,7 @@ BOOL fpathBlockingTile(SDWORD x, SDWORD y, PROPULSION_TYPE propulsion)
 	return false;
 }
 
+
 /** Calculate the distance to a tile from a point
  *
  *  @ingroup pathfinding
@@ -157,10 +165,30 @@ static inline int fpathDistToTile(int tileX, int tileY, int pointX, int pointY)
 	return trigIntSqrt(xdiff * xdiff + ydiff * ydiff);
 }
 
+
+void fpathSetDirectRoute(DROID* psDroid, SDWORD targetX, SDWORD targetY)
+{
+	MOVE_CONTROL *psMoveCntl;
+
+	ASSERT(psDroid != NULL, "fpathSetDirectRoute: invalid droid pointer");
+	ASSERT(psDroid->type == OBJ_DROID, "We got passed a DROID that isn't a DROID!");
+
+	psMoveCntl = &psDroid->sMove;
+
+	psMoveCntl->asPath = realloc(psMoveCntl->asPath, sizeof(*psMoveCntl->asPath));
+	psMoveCntl->DestinationX = targetX;
+	psMoveCntl->DestinationY = targetY;
+	psMoveCntl->numPoints = 1;
+	psMoveCntl->asPath[0].x = map_coord(targetX);
+	psMoveCntl->asPath[0].y = map_coord(targetY);
+}
+
+
 // Variables for the callback
 static SDWORD	finalX,finalY, vectorX,vectorY;
 static SDWORD	clearX,clearY;
 static BOOL		obstruction;
+
 
 /** Callback to find the first clear tile before an obstructed target
  *
@@ -191,22 +219,6 @@ static bool fpathEndPointCallback(Vector3i pos, int dist, void* data)
 	return true;
 }
 
-void fpathSetDirectRoute(DROID* psDroid, SDWORD targetX, SDWORD targetY)
-{
-	MOVE_CONTROL *psMoveCntl;
-
-	ASSERT(psDroid != NULL, "fpathSetDirectRoute: invalid droid pointer");
-	ASSERT(psDroid->type == OBJ_DROID, "We got passed a DROID that isn't a DROID!");
-
-	psMoveCntl = &psDroid->sMove;
-
-	psMoveCntl->asPath = realloc(psMoveCntl->asPath, sizeof(*psMoveCntl->asPath));
-	psMoveCntl->DestinationX = targetX;
-	psMoveCntl->DestinationY = targetY;
-	psMoveCntl->numPoints = 1;
-	psMoveCntl->asPath[0].x = map_coord(targetX);
-	psMoveCntl->asPath[0].y = map_coord(targetY);
-}
 
 /** Create a final route from a gateway route
  *
@@ -224,7 +236,7 @@ static FPATH_RETVAL fpathGatewayRoute(DROID* psDroid, SDWORD routeMode, SDWORD s
 	}
 
 	objTrace(psDroid->id, "fpathGatewayRoute: astar route : (%d,%d) -> (%d,%d)",
-		map_coord(sx), map_coord(sy), map_coord(fx), map_coord(fy));
+			 map_coord(sx), map_coord(sy), map_coord(fx), map_coord(fy));
 	asret = fpathAStarRoute(routeMode, &psDroid->sMove, sx, sy, fx,fy, propulsion);
 	if (asret == ASR_PARTIAL)
 	{
@@ -246,6 +258,7 @@ static FPATH_RETVAL fpathGatewayRoute(DROID* psDroid, SDWORD routeMode, SDWORD s
 	}
 	return FPR_OK;
 }
+
 
 // Find a route for an DROID to a location
 FPATH_RETVAL fpathRoute(DROID* psDroid, SDWORD tX, SDWORD tY)
