@@ -48,9 +48,6 @@
 // accuracy for the height gradient
 #define GRAD_MUL	10000
 
-// which object is being considered by the callback
-static SDWORD			currObj;
-
 // rate to change visibility level
 const static float VIS_LEVEL_INC = 255 * 2;
 const static float VIS_LEVEL_DEC = 50;
@@ -64,17 +61,28 @@ static SDWORD			visLevelInc, visLevelDec;
 // alexl's sensor range.
 BOOL bDisplaySensorRange;
 
-/* Variables for the visibility callback */
+
+typedef struct {
+	bool rayStart; // Whether this is the first point on the ray
+	const bool wallsBlock; // Whether walls block line of sight
+	const int targetDistSq; // The distance to the ray target, squared
+	const int startHeight; // The height at the view point
+	const Vector2i final; // The final tile of the ray cast
+	int lastHeight, lastDist; // The last height and distance
+	int currGrad; // The current obscuring gradient
+	int numWalls; // Whether the LOS has hit a wall
+	Vector2i wall; // The position of a wall if it is on the LOS
+} VisibleObjectHelp_t;
+
+
+int *gNumWalls = NULL;
+Vector2i * gWall = NULL;
+
+
+/* Variables for the visibility callback / visTilesUpdate */
 static SDWORD		rayPlayer;				// The player the ray is being cast for
 static SDWORD		startH;					// The height at the view point
 static SDWORD		currG;					// The current obscuring gradient
-static SDWORD		lastH, lastD;			// The last height and distance
-static BOOL			rayStart;				// Whether this is the first point on the ray
-static SDWORD		tarDist;				// The distance to the ray target
-static BOOL			blockingWall;			// Whether walls block line of sight
-static SDWORD		finalX,finalY;			// The final tile of the ray cast
-static SDWORD		numWalls;				// Whether the LOS has hit a wall
-static SDWORD		wallX,wallY;			// the position of a wall if it is on the LOS
 
 // holds information about map tiles visible by droids
 static bool	scrTileVisible[MAX_PLAYERS][UBYTE_MAX][UBYTE_MAX] = {{{false}}};
@@ -175,50 +183,49 @@ bool rayTerrainCallback(Vector3i pos, int distSq, void * data)
 /* The los ray callback */
 static bool rayLOSCallback(Vector3i pos, int distSq, void *data)
 {
+	VisibleObjectHelp_t * help = data;
 	int dist = sqrtf(distSq);
-	int newG; // The new gradient
 
 	ASSERT(pos.x >= 0 && pos.x < world_coord(mapWidth)
 		&& pos.y >= 0 && pos.y < world_coord(mapHeight),
 			"rayLOSCallback: coords off map" );
 
-	if (rayStart)
+	if (help->rayStart)
 	{
-		rayStart = false;
+		help->rayStart = false;
 	}
 	else
 	{
 		// Calculate the current LOS gradient
-		newG = (lastH - startH) * GRAD_MUL / lastD;
-		if (newG >= currG)
+		int newGrad = (help->lastHeight - help->startHeight) * GRAD_MUL / help->lastDist;
+		if (newGrad >= help->currGrad)
 		{
-			currG = newG;
+			help->currGrad = newGrad;
 		}
 	}
 
-	lastD = dist;
-	lastH = map_Height(pos.x, pos.y);
+	help->lastDist = dist;
+	help->lastHeight = map_Height(pos.x, pos.y);
 
 	// See if the ray has reached the target
-	if (dist >= tarDist)
+	if (distSq >= help->targetDistSq)
 	{
 		return false;
 	}
 
-	if (blockingWall)
+	if (help->wallsBlock)
 	{
 		// Store the height at this tile for next time round
 		Vector2i tile = { map_coord(pos.x), map_coord(pos.y) };
 
-		if (!((tile.x == finalX) && (tile.y == finalY)))
+		if (!Vector2i_Compare(tile, help->final))
 		{
 			MAPTILE *psTile = mapTile(tile.x, tile.y);
 			if (TileHasWall(psTile) && !TileHasSmallStructure(psTile))
 			{
-				lastH = 2*UBYTE_MAX * ELEVATION_SCALE;
-				wallX = pos.x;
-				wallY = pos.y;
-				numWalls++;
+				help->lastHeight = 2*UBYTE_MAX * ELEVATION_SCALE;
+				help->wall = Vector2i_New(pos.x, pos.y);
+				help->numWalls++;
 			}
 		}
 	}
@@ -267,11 +274,10 @@ void visTilesUpdate(BASE_OBJECT *psObj, RAY_CALLBACK callback)
  * psTarget can be any type of BASE_OBJECT (e.g. a tree).
  * struckBlock controls whether structures block LOS
  */
-BOOL visibleObject(const BASE_OBJECT* psViewer, const BASE_OBJECT* psTarget)
+bool visibleObject(const BASE_OBJECT* psViewer, const BASE_OBJECT* psTarget, bool wallsBlock)
 {
 	Vector3i pos, dest, diff;
-	int range, rangeSquared;
-	int tarG, top;
+	int range, distSq;
 
 	ASSERT(psViewer != NULL, "Invalid viewer pointer!");
 	ASSERT(psTarget != NULL, "Invalid viewed pointer!");
@@ -349,74 +355,71 @@ BOOL visibleObject(const BASE_OBJECT* psViewer, const BASE_OBJECT* psTarget)
 	}
 
 	/* First see if the target is in sensor range */
-	rangeSquared = Vector3i_ScalarP(diff, diff);
-	if (rangeSquared == 0)
+	distSq = Vector3i_ScalarP(diff, diff);
+	if (distSq == 0)
 	{
 		// Should never be on top of each other, but ...
 		return true;
 	}
 
-	if (rangeSquared > (range*range))
+	if (distSq > (range*range))
 	{
 		/* Out of sensor range */
 		return false;
 	}
 
-	// initialise the callback variables
-	startH = pos.z;
-	startH += visObjHeight(psViewer);
-	currG = -UBYTE_MAX * GRAD_MUL * ELEVATION_SCALE;
-	tarDist = rangeSquared;
-	rayStart = true;
-	currObj = 0;
-	finalX = map_coord(dest.x);
-	finalY = map_coord(dest.y);
+	{
+		// initialise the callback variables
+		VisibleObjectHelp_t help = { true, wallsBlock, distSq, pos.z + visObjHeight(psViewer), { map_coord(dest.x), map_coord(dest.y) }, 0, 0, -UBYTE_MAX * GRAD_MUL * ELEVATION_SCALE, 0, { 0, 0 } };
+		int targetGrad, top;
 
-	// Cast a ray from the viewer to the target
-	rayCast(pos, diff, range, rayLOSCallback, NULL);
+		// Cast a ray from the viewer to the target
+		rayCast(pos, diff, range, rayLOSCallback, &help);
 
-	// See if the target can be seen
-	top = (dest.z + visObjHeight(psTarget) - startH);
-	tarG = top * GRAD_MUL / lastD;
+		if (gWall != NULL && gNumWalls != NULL) // Out globals are set
+		{
+			*gWall = help.wall;
+			*gNumWalls = help.numWalls;
+		}
 
-	return tarG >= currG;
+		// See if the target can be seen
+		top = dest.z + visObjHeight(psTarget) - help.startHeight;
+		targetGrad = top * GRAD_MUL / help.lastDist;
+
+		return targetGrad >= help.currGrad;
+	}
 }
 
-// Do visibility check, but with walls completely blocking LOS.
-BOOL visibleObjWallBlock(BASE_OBJECT *psViewer, BASE_OBJECT *psTarget)
-{
-	BOOL	result;
-
-	blockingWall = true;
-	result = visibleObject(psViewer,psTarget);
-	blockingWall = false;
-
-	return result;
-}
 
 // Find the wall that is blocking LOS to a target (if any)
 STRUCTURE* visGetBlockingWall(const BASE_OBJECT* psViewer, const BASE_OBJECT* psTarget)
 {
-	blockingWall = true;
-	numWalls = 0;
-	visibleObject(psViewer, psTarget);
-	blockingWall = false;
+	int numWalls;
+	Vector2i wall;
+
+	// HACK Using globals to not clutter visibleObject() interface too much
+	gNumWalls = &numWalls;
+	gWall = &wall;
+
+	visibleObject(psViewer, psTarget, true);
+
+	gNumWalls = NULL;
+	gWall = NULL;
 
 	// see if there was a wall in the way
-	if (numWalls == 1)
+	if (numWalls > 0)
 	{
-		const int tileX = map_coord(wallX);
-		const int tileY = map_coord(wallY);
+		Vector2i tile = { map_coord(wall.x), map_coord(wall.y) };
 		unsigned int player;
 
-		for (player = 0; player < MAX_PLAYERS; ++player)
+		for (player = 0; player < MAX_PLAYERS; player++)
 		{
 			STRUCTURE* psWall;
 
 			for (psWall = apsStructLists[player]; psWall; psWall = psWall->psNext)
 			{
-				if (map_coord(psWall->pos.x) == tileX
-				 && map_coord(psWall->pos.y) == tileY)
+				if (map_coord(psWall->pos.x) == tile.x
+				 && map_coord(psWall->pos.y) == tile.y)
 				{
 					return psWall;
 				}
@@ -489,7 +492,7 @@ void processVisibility(BASE_OBJECT *psObj)
 		// If we've got ranged line of sight...
 		if ( (psViewer->type != OBJ_FEATURE) &&
 			 !currVis[psViewer->player] &&
-			 visibleObject(psViewer, psObj) )
+			 visibleObject(psViewer, psObj, false) )
  		{
 			// Tell system that this side can see this object
 			currVis[psViewer->player] = true;

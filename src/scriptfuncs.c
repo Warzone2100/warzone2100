@@ -4982,14 +4982,7 @@ BOOL		retVal;
 		return(false);
 	}
 
-	if(bWallsBlock)
-	{
-		retVal = visibleObjWallBlock(psSource,psDest);
-	}
-	else
-	{
-		retVal = visibleObject(psSource,psDest);
-	}
+	retVal = visibleObject(psSource, psDest, bWallsBlock);
 
 	scrFunctionResult.v.bval = retVal;
 	if(!stackPushResult(VAL_BOOL, &scrFunctionResult))

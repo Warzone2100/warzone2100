@@ -656,7 +656,7 @@ BOOL actionVisibleTarget(DROID *psDroid, BASE_OBJECT *psTarget, int weapon_slot)
 
 	if (psDroid->numWeaps == 0)
 	{
-		if ( visibleObject((BASE_OBJECT*)psDroid, psTarget) )
+		if ( visibleObject((BASE_OBJECT*)psDroid, psTarget, false) )
 		{
 			return true;
 		}
@@ -664,7 +664,7 @@ BOOL actionVisibleTarget(DROID *psDroid, BASE_OBJECT *psTarget, int weapon_slot)
 
 	if (vtolDroid(psDroid))
 	{
-		if ( visibleObject((BASE_OBJECT*)psDroid, psTarget) )
+		if ( visibleObject((BASE_OBJECT*)psDroid, psTarget, false) )
 		{
 			return true;
 		}
@@ -674,7 +674,7 @@ BOOL actionVisibleTarget(DROID *psDroid, BASE_OBJECT *psTarget, int weapon_slot)
 	psStats = asWeaponStats + psDroid->asWeaps[weapon_slot].nStat;
 	if (proj_Direct(psStats))
 	{
-		if (visibleObjWallBlock((BASE_OBJECT*)psDroid, psTarget))
+		if (visibleObject((BASE_OBJECT*)psDroid, psTarget, true))
 		{
 			return true;
 		}
@@ -692,7 +692,7 @@ BOOL actionVisibleTarget(DROID *psDroid, BASE_OBJECT *psTarget, int weapon_slot)
 		}
 		else
 		{
-			if (visibleObject((BASE_OBJECT*)psDroid, psTarget))
+			if (visibleObject((BASE_OBJECT*)psDroid, psTarget, false))
 			{
 				return true;
 			}
@@ -1279,7 +1279,7 @@ void actionUpdateDroid(DROID *psDroid)
 			}
 
 			if (psDroid->psActionTarget[i] &&
-				visibleObject((BASE_OBJECT*)psDroid, psDroid->psActionTarget[i]))
+				visibleObject((BASE_OBJECT*)psDroid, psDroid->psActionTarget[i], false))
 			{
 				iVisible += (1 << (i+1));
 			}
@@ -2201,7 +2201,7 @@ void actionUpdateDroid(DROID *psDroid)
 			ydiff = (SDWORD)psDroid->pos.y - (SDWORD)psDroid->psActionTarget[0]->pos.y;
 			rangeSq = droidSensorRange(psDroid);
 			rangeSq = rangeSq * rangeSq;
-			if (!visibleObject((BASE_OBJECT *)psDroid, psDroid->psActionTarget[0]) ||
+			if (!visibleObject((BASE_OBJECT *)psDroid, psDroid->psActionTarget[0], false) ||
 				xdiff*xdiff + ydiff*ydiff >= rangeSq)
 			{
 				psDroid->action = DACTION_MOVETOOBSERVE;
@@ -2215,7 +2215,7 @@ void actionUpdateDroid(DROID *psDroid)
 						&(psDroid->turretRotation[0]), &(psDroid->turretPitch[0]),
 						NULL,false,0);
 
-		if (visibleObject((BASE_OBJECT *)psDroid, psDroid->psActionTarget[0]))
+		if (visibleObject((BASE_OBJECT *)psDroid, psDroid->psActionTarget[0], false))
 		{
 			// make sure the target is within sensor range
 			xdiff = (SDWORD)psDroid->pos.x - (SDWORD)psDroid->psActionTarget[0]->pos.x;
@@ -2413,7 +2413,7 @@ void actionUpdateDroid(DROID *psDroid)
 			break;
 		}
 
-		if (visibleObject((BASE_OBJECT *)psDroid, psDroid->psActionTarget[0]))
+		if (visibleObject((BASE_OBJECT *)psDroid, psDroid->psActionTarget[0], false))
 		{
 			// got close to the rearm pad - now find a clear one
 			debug( LOG_NEVER, "Unit %d: seen rearm pad\n", psDroid->id );

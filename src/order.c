@@ -208,7 +208,7 @@ BASE_OBJECT * checkForRepairRange(DROID *psDroid,DROID *psTarget)
 	{
 		//check for damage
 		if (droidIsDamaged(psCurr) &&
-			visibleObject((BASE_OBJECT *)psDroid, (BASE_OBJECT *)psCurr))
+			visibleObject((BASE_OBJECT *)psDroid, (BASE_OBJECT *)psCurr, false))
 		{
 			//check for within range
 			xdiff = (SDWORD)psDroid->pos.x - (SDWORD)psCurr->pos.x;
@@ -251,7 +251,7 @@ BASE_OBJECT * checkForDamagedStruct(DROID *psDroid, STRUCTURE *psTarget)
 	{
 		//check for damage
 		if (structIsDamaged(psCurr) &&
-			visibleObject((BASE_OBJECT *)psDroid, (BASE_OBJECT *)psCurr))
+			visibleObject((BASE_OBJECT *)psDroid, (BASE_OBJECT *)psCurr, false))
 		{
 			//check for within range
 			xdiff = (SDWORD)psDroid->pos.x - (SDWORD)psCurr->pos.x;

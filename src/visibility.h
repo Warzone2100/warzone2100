@@ -43,26 +43,17 @@ extern void visTilesUpdate(BASE_OBJECT *psObj, RAY_CALLBACK callback);
  * currently droids and structures.
  * psTarget can be any type of BASE_OBJECT (e.g. a tree).
  */
-extern BOOL visibleObject(const BASE_OBJECT* psViewer, const BASE_OBJECT* psTarget);
-
-/* Check whether psViewer can see psTarget.
- * struckBlock controls whether structures block LOS
- */
-extern BOOL visibleObjectBlock(BASE_OBJECT *psViewer, BASE_OBJECT *psTarget,
-							   BOOL structBlock);
-
-// Do visibility check, but with walls completely blocking LOS.
-extern BOOL visibleObjWallBlock(BASE_OBJECT *psViewer, BASE_OBJECT *psTarget);
+extern bool visibleObject(const BASE_OBJECT* psViewer, const BASE_OBJECT* psTarget, bool wallsBlock);
 
 // Find the wall that is blocking LOS to a target (if any)
 extern STRUCTURE* visGetBlockingWall(const BASE_OBJECT* psViewer, const BASE_OBJECT* psTarget);
 
-extern void	processVisibility(BASE_OBJECT *psCurr);
+extern void processVisibility(BASE_OBJECT *psCurr);
 
 // update the visibility reduction
 extern void visUpdateLevel(void);
 
-extern	void	setUnderTilesVis(BASE_OBJECT *psObj, UDWORD player);
+extern void setUnderTilesVis(BASE_OBJECT *psObj, UDWORD player);
 
 // sensor range display
 extern BOOL	bDisplaySensorRange;

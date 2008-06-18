@@ -188,7 +188,7 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 		 (proj_Direct(psStats) ||
 		 actionInsideMinRange(psDroid, psTarget, weapon_slot)) )
 	{
-		if(!visibleObjWallBlock(psAttacker, psTarget))
+		if(!visibleObject(psAttacker, psTarget, true))
 		{
 			// Can't see the target - can't hit it with direct fire
 			debug(LOG_SENSOR, "combFire(%u[%s]->%u): Droid has no direct line of sight to target",
@@ -201,7 +201,7 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 			 proj_Direct(psStats))
 	{
 		// a bunker can't shoot through walls
-		if (!visibleObjWallBlock(psAttacker, psTarget))
+		if (!visibleObject(psAttacker, psTarget, true))
 		{
 			// Can't see the target - can't hit it with direct fire
 			debug(LOG_SENSOR, "combFire(%u[%s]->%u): Structure has no direct line of sight to target",
@@ -212,7 +212,7 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 	else if ( proj_Direct(psStats) )
 	{
 		// VTOL or tall building
-		if (!visibleObject(psAttacker, psTarget))
+		if (!visibleObject(psAttacker, psTarget, false))
 		{
 			// Can't see the target - can't hit it with direct fire
 			debug(LOG_SENSOR, "combFire(%u[%s]->%u): Tall object has no direct line of sight to target",
