@@ -34,7 +34,10 @@
 
 /*!
  * The raycast intersection callback.
- * \return false if no more points are required, true otherwise
+ * \param pos Current position
+ * \param dist Current distance from start
+ * \param data Payload (store intermediate results here)
+ * \return true if ore points are required, false otherwise
  */
 typedef bool (*RAY_CALLBACK)(Vector3i pos, int dist, void* data);
 

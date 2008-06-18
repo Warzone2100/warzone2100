@@ -46,9 +46,8 @@ typedef struct {
 void rayCast(Vector3i src, Vector3i direction, int length,
 	RAY_CALLBACK callback, void * data)
 {
-	unsigned int distSq = (length == RAY_MAXLEN ? RAY_MAXLEN : length*length);
-	unsigned int currDistSq;
-	Vector3i diff, curr = src;
+	unsigned int lengthSq = (length == RAY_MAXLEN ? RAY_MAXLEN : length*length), currLengthSq;
+	Vector3i curr = src, diff;
 	Vector3i step = Vector3f_To3i(
 						Vector3f_Mult(
 							Vector3f_Normalise(Vector3i_To3f(direction)),
@@ -58,8 +57,8 @@ void rayCast(Vector3i src, Vector3i direction, int length,
 
 	while (curr = Vector3i_Add(curr, step),
 		   diff = Vector3i_Sub(curr, src),
-		   currDistSq = Vector3i_ScalarP(diff, diff),
-		   currDistSq < distSq)
+		   currLengthSq = Vector3i_ScalarP(diff, diff),
+		   currLengthSq < lengthSq)
 	{
 		// stop at the edge of the map
 		if (curr.x < 0 || curr.x >= world_coord(mapWidth) ||
@@ -68,7 +67,7 @@ void rayCast(Vector3i src, Vector3i direction, int length,
 			return;
 		}
 
-		if (!callback(curr, currDistSq, data))
+		if (!callback(curr, currLengthSq, data))
 		{
 			// callback doesn't want any more points so return
 			return;
@@ -117,10 +116,10 @@ static bool getTileHeightCallback(Vector3i pos, int dist, void* data)
 
 		if (dist > TILE_UNITS || HasTallStructure)
 		{
-		// Only do it the current tile is > TILE_UNITS away from the starting tile. Or..
-		// there is a tall structure  on the current tile and the current tile is not the starting tile.
+			// Only do it the current tile is > TILE_UNITS away from the starting tile. Or..
+			// there is a tall structure  on the current tile and the current tile is not the starting tile.
 			/* Get height at this intersection point */
-			int height = map_Height(pos.x, pos.y), heightDif;
+			int height = map_Height(pos.x, pos.y), heightDiff;
 			float newPitch;
 
 			if (HasTallStructure)
@@ -130,15 +129,15 @@ static bool getTileHeightCallback(Vector3i pos, int dist, void* data)
 
 			if (height <= help->height)
 			{
-				heightDif = 0;
+				heightDiff = 0;
 			}
 			else
 			{
-				heightDif = height - help->height;
+				heightDiff = height - help->height;
 			}
 
 			/* Work out the angle to this point from start point */
-			newPitch = rad2degf(atan2f(heightDif, dist));
+			newPitch = rad2degf(atan2f(heightDiff, dist));
 
 			/* Is this the steepest we've found? */
 			if (newPitch > help->pitch)

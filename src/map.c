@@ -1178,8 +1178,8 @@ extern SWORD map_Height(int x, int y)
 	ASSERT(x >= 0, "map_Height: Negative x value");
 	ASSERT(y >= 0, "map_Height: Negative y value");
 
-	x = x >= world_coord(mapWidth) ? world_coord(mapWidth - 1) : x;
-	y = y >= world_coord(mapHeight) ? world_coord(mapHeight - 1) : y;
+	x = (x >= world_coord(mapWidth) ? world_coord(mapWidth - 1) : x);
+	y = (y >= world_coord(mapHeight) ? world_coord(mapHeight - 1) : y);
 
 	/* Turn into tile coordinates */
 	tileX = map_coord(x);
