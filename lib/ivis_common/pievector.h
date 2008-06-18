@@ -32,6 +32,19 @@ typedef struct { uint16_t x, y, z; } Vector3uw; //Only used for basedef.h BASE_E
 
 
 /*!
+ * Create a Vector from x and y
+ * Needed for MSVC which doesn't support C99 struct assignments.
+ * \param x,y Coordinates
+ * \return New Vector
+ */
+static inline WZ_DECL_CONST Vector2i Vector2i_New(const int x, const int y)
+{
+	Vector2i dest = { x, y };
+	return dest;
+}
+
+
+/*!
  * Convert an integer vector to float
  * \param v Vector to convert
  * \return Float vector
@@ -40,6 +53,15 @@ static inline WZ_DECL_CONST Vector2f Vector2i_To2f(const Vector2i v)
 {
 	Vector2f dest = { (float)v.x, (float)v.y };
 	return dest;
+}
+
+
+/*!
+ * \return true if both vectors are equal
+ */
+static inline WZ_DECL_CONST bool Vector2i_Compare(const Vector2i a, const Vector2i b)
+{
+	return a.x == b.x && a.y == b.y;
 }
 
 
@@ -120,7 +142,7 @@ static inline WZ_DECL_CONST int Vector2i_Length(const Vector2i v)
  * \param r The radius of the circle
  * \return If v falls within the circle
  */
-static inline WZ_DECL_CONST BOOL Vector2i_InCircle(const Vector2i v, const Vector2i c, const unsigned int r)
+static inline WZ_DECL_CONST bool Vector2i_InCircle(const Vector2i v, const Vector2i c, const unsigned int r)
 {
 	Vector2i delta = Vector2i_Sub(v, c);
 	// Explictily cast to "unsigned int" because this number never can be
@@ -133,6 +155,7 @@ static inline WZ_DECL_CONST BOOL Vector2i_InCircle(const Vector2i v, const Vecto
 
 /*!
  * Create a Vector from x and y
+ * Needed for MSVC which doesn't support C99 struct assignments.
  * \param x,y Coordinates
  * \return New Vector
  */
@@ -245,7 +268,7 @@ static inline WZ_DECL_CONST Vector3i Vector3f_To3i(const Vector3f v)
 /*!
  * \return true if both vectors are equal
  */
-static inline WZ_DECL_CONST BOOL Vector3f_Compare(const Vector3f a, const Vector3f b)
+static inline WZ_DECL_CONST bool Vector3f_Compare(const Vector3f a, const Vector3f b)
 {
 	return a.x == b.x && a.y == b.y && a.z == b.z;
 }
@@ -254,8 +277,8 @@ static inline WZ_DECL_CONST BOOL Vector3f_Compare(const Vector3f a, const Vector
 /*!
  * Set the vector field by field, same as v = (Vector3f){x, y, z};
  * Needed for MSVC which doesn't support C99 struct assignments.
- * \param[out] v Vector to set
- * \param[in] x,y,z Values to set to
+ * \param x,y,z Values to set to
+ * \return New vector
  */
 static inline WZ_DECL_CONST Vector3f Vector3f_New(const float x, const float y, const float z)
 {
@@ -384,7 +407,7 @@ static inline WZ_DECL_CONST Vector3f Vector3i_To3f(const Vector3i v)
 /*!
  * \return true if both vectors are equal
  */
-static inline WZ_DECL_CONST BOOL Vector3i_Compare(const Vector3i a, const Vector3i b)
+static inline WZ_DECL_CONST bool Vector3i_Compare(const Vector3i a, const Vector3i b)
 {
 	return a.x == b.x && a.y == b.y && a.z == b.z;
 }
@@ -503,7 +526,7 @@ static inline WZ_DECL_CONST Vector3i Vector3i_Normalise(const Vector3i v)
  * \param r The radius of the sphere
  * \return If v falls within the sphere
  */
-static inline WZ_DECL_CONST BOOL Vector3i_InSphere (const Vector3i v, const Vector3i c, const unsigned int r)
+static inline WZ_DECL_CONST bool Vector3i_InSphere (const Vector3i v, const Vector3i c, const unsigned int r)
 {
 	Vector3i delta = Vector3i_Sub(v, c);
 	// Explictily cast to "unsigned int" because this number never can be
@@ -517,8 +540,8 @@ static inline WZ_DECL_CONST BOOL Vector3i_InSphere (const Vector3i v, const Vect
 /*!
  * Set the vector field by field, same as v = (Vector3i){x, y, z};
  * Needed for MSVC which doesn't support C99 struct assignments.
- * \param[out] v Vector to set
- * \param[in] x,y,z Values to set to
+ * \param x,y,z Coordinates
+ * \return New Vector
  */
 static inline WZ_DECL_CONST Vector3i Vector3i_New(const int x, const int y, const int z)
 {
@@ -530,8 +553,8 @@ static inline WZ_DECL_CONST Vector3i Vector3i_New(const int x, const int y, cons
 /*!
  * Set the vector field by field, same as v = (Vector3uw){x, y, z};
  * Needed for MSVC which doesn't support C99 struct assignments.
- * \param[out] v Vector to set
- * \param[in] x,y,z Values to set to
+ * \param x,y,z Coordinates
+ * \return New Vector
  */
 static inline WZ_DECL_CONST Vector3uw Vector3uw_New(const unsigned int x, const unsigned int y, const unsigned int z)
 {
