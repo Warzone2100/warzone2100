@@ -287,6 +287,7 @@ bool visibleObject(const BASE_OBJECT* psViewer, const BASE_OBJECT* psTarget, boo
 		return false;
 	}
 
+	// FIXME HACK Needed since we got those ugly Vector3uw floating around in BASE_OBJECT...
 	pos = Vector3uw_To3i(psViewer->pos);
 	dest = Vector3uw_To3i(psTarget->pos);
 	diff = Vector3i_Sub(dest, pos);
