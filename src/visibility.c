@@ -49,8 +49,8 @@
 #define GRAD_MUL	10000
 
 // rate to change visibility level
-const static float VIS_LEVEL_INC = 255 * 2;
-const static float VIS_LEVEL_DEC = 50;
+static const float VIS_LEVEL_INC = 255 * 2;
+static const float VIS_LEVEL_DEC = 50;
 
 // fractional accumulator of how much to change visibility this frame
 static float			visLevelIncAcc, visLevelDecAcc;

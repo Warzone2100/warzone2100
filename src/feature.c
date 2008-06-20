@@ -77,7 +77,7 @@ struct featureTypeMap
 	FEATURE_TYPE type;
 };
 
-const static struct featureTypeMap map[] =
+static const struct featureTypeMap map[] =
 {
 	{ "HOVER WRECK", FEAT_HOVER },
 	{ "TANK WRECK", FEAT_TANK },

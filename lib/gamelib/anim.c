@@ -47,13 +47,13 @@
 /***************************************************************************/
 /* global variables */
 
-struct
+static struct
 {
         BASEANIM                *psAnimList;
         UWORD                   uwCurObj;
 	UWORD			uwCurState;
 }
-static g_animGlobals;
+g_animGlobals;
 
 /***************************************************************************/
 /*
