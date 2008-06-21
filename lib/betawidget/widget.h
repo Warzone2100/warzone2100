@@ -116,6 +116,7 @@ struct _eventKey
 	event event;
 	
 	// The key which was pressed, this should be used for text-input &c
+	// NB: This is only valid for EVT_KEY_DOWN events!
 	int unicode;
 	
 	// The keycode of the key which was pressed
@@ -340,13 +341,21 @@ widget *widgetFindById(widget *self, const char *id);
 point widgetAbsolutePosition(widget *self);
 
 /**
+ * Returns the absolute bounding rectangle of the widget.
+ *
+ * @param self	The widget to get the bounds of.
+ * @return The absolute bounds of self.
+ */
+rect widgetAbsoluteBounds(widget *self);
+
+/**
  * Transverses up the hierarchy until it finds parent-less widget (known as
  * the root widget). A pointer to this widget is returned.
  *
  * @param self	The widget to find the root widget of.
  * @return A pointer to the root widget.
  */
-widget *widgetGetRoot(widget *self);
+widget *windgetGetRoot(widget *self);
 
 /**
  * Attempts to add child as a child widget of self. The exact location of the

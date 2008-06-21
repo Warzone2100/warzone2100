@@ -1,5 +1,15 @@
 #include "geom.h"
 
+rect rectFromPointAndSize(point p, size s)
+{
+	rect r;
+	r.topLeft = p;
+	r.bottomRight.x = p.x + s.x;
+	r.bottomRight.y = p.y + s.y;
+	
+	return r;
+}
+
 bool pointInRect(point p, rect r)
 {
 	return (r.topLeft.x < p.x

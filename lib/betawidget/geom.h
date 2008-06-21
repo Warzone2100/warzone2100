@@ -8,6 +8,7 @@
  * A point
  */
 typedef struct _point point;
+typedef point size;
 
 struct _point
 {
@@ -29,6 +30,15 @@ struct _rect
 /*
  * Method signatures
  */
+
+/**
+ * Creates a rect from an absolute point and a size.
+ *
+ * @param p
+ * @param s
+ * @return A rect.
+ */
+rect rectFromPointAndSize(point p, size s);
 
 /**
  * Checks to see if the point p is inside of the rectangle r.

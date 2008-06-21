@@ -73,6 +73,10 @@ void widgetInit(widget *self, const char *id)
 	
 	// Default parent is none
 	self->parent = NULL;
+	
+	// Focus and mouse are flse by default
+	self->hasFocus = false;
+	self->hasMouse = false;
 }
 
 /*
@@ -143,6 +147,15 @@ point widgetAbsolutePosition(widget *self)
 	return pos;
 }
 
+rect widgetAbsoluteBounds(widget *self)
+{
+	// Get our position
+	point p = widgetAbsolutePosition(self);
+	
+	// Construct and return a rect from this
+	return rectFromPointAndSize(p, self->size);
+}
+
 widget *widgetGetRoot(widget *self)
 {
 	// If we are the root widget, return early
@@ -201,8 +214,12 @@ widget *widgetFindById(widget *self, const char *id)
  */
 bool widgetAddChildImpl(widget *self, widget *child)
 {
-	// TODO: We need to assert that id is unique;
-	// widgetFindById(widgetGetRoot(self), child->id) == NULL should do
+	// Make sure the id of the child is unqie
+	if (widgetFindById(widgetGetRoot(self), child->id) != NULL)
+	{
+		// TODO: An error/debug message is probably required
+		return false;
+	}
 	
 	// Add the widget
 	vectorAdd(self->children, child);
@@ -444,14 +461,16 @@ widget *widgetGetCurrentlyFocused(widget *self)
 }
 
 bool widgetHandleEventImpl(widget *self, event *evt)
-{	
+{
+	// If the event should be passed onto our children
+	bool relevant = true; 
+	
 	switch (evt->type)
 	{
 		case EVT_MOUSE_MOVE:
 		{
-			// FIXME: This needs re-working
 			eventMouse evtMouse = *((eventMouse *) evt);
-			bool newHasMouse = false;//pointInRect(evtMouse.loc, self->bounds);
+			bool newHasMouse = pointInRect(evtMouse.loc, widgetAbsoluteBounds(self));
 				
 			// If we have just `got' the mouse
 			if (newHasMouse && !self->hasMouse)
@@ -477,13 +496,62 @@ bool widgetHandleEventImpl(widget *self, event *evt)
 				// Pass the event as-is
 				widgetFireCallbacks(self, (event *) &evtMouse);
 			}
+			// Of no interest to us (and therefore not to our children either)
+			else
+			{
+				relevant = false;
+			}
 			
 			// Update the status of the mouse
 			self->hasMouse = newHasMouse;
 			break;
 		}
+		case EVT_MOUSE_DOWN:
+		case EVT_MOUSE_UP:
+		{
+			eventMouseBtn evtMouseBtn = *((eventMouseBtn *) evt);
+			
+			if (pointInRect(evtMouseBtn.loc, widgetAbsoluteBounds(self)))
+			{
+				widgetFireCallbacks(self, (event *) &evtMouseBtn);
+				
+				// TODO: Work out how to generate EVT_MOUSE_CLICK events
+			}
+			else
+			{
+				relevant = false;
+			}
+			break;
+		}
+		case EVT_KEY_DOWN:
+		case EVT_KEY_UP:
+		{
+			eventKey evtKey = *((eventKey *) evt);
+			
+			// Only relevant if we have focus
+			if (self->hasFocus)
+			{				
+				widgetFireCallbacks(self, (event *) &evtKey);
+			}
+			else
+			{
+				relevant = false;
+			}
+			break;
+		}
 		default:
 			break;
+	}
+	
+	// If necessary pass the event onto our children
+	if (relevant)
+	{
+		int i;
+		
+		for (i = 0; i < vectorSize(self->children); i++)
+        {
+	        widgetHandleEvent(vectorAt(self->children, i), evt);
+        }
 	}
 	
 	return true;
