@@ -75,25 +75,22 @@ bool PlayList_Read(const char* path)
 
 	while (!PHYSFS_eof(fileHandle))
 	{
-		char line_buf[BUFFER_SIZE];
+		char filename[BUFFER_SIZE];
 		size_t buf_pos = 0;
-		char* filename;
 
-		while (buf_pos < sizeof(line_buf) - 1
-		    && PHYSFS_read(fileHandle, &line_buf[buf_pos], 1, 1)
-		    && line_buf[buf_pos] != '\n'
-		    && line_buf[buf_pos] != '\r')
+		// Read a single line
+		while (buf_pos < sizeof(filename) - 1
+		    && PHYSFS_read(fileHandle, &filename[buf_pos], 1, 1)
+		    && filename[buf_pos] != '\n'
+		    && filename[buf_pos] != '\r')
 		{
 			++buf_pos;
 		}
 
-		// Nul-terminate string
-		line_buf[buf_pos] = '\0';
-		buf_pos = 0;
+		// Nul-terminate string, and trim line endings ('\n' and '\r')
+		filename[buf_pos] = '\0';
 
-		if (line_buf[0] != '\0'
-		    && (filename = strtok(line_buf, "\n")) != NULL
-		    && strlen(filename) != 0)
+		if (filename[0] != '\0' /* strlen(filename) != 0 */)
 		{
 			WZ_TRACK *song = malloc(sizeof(*songList));
 			WZ_TRACK *last = songList;
