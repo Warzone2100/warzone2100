@@ -132,6 +132,13 @@ if test "x$enable_static" = "xyes" ; then
 	PKG_CONFIG="${PKG_CONFIG} --static"
 fi
 
+AC_ARG_ENABLE([sound],
+	AS_HELP_STRING([--disable-sound], [Disable sound [no]]),
+	[ enable_sound="${enableval}" ], [ enable_sound="yes" ])
+if test "x$enable_sound" != "xyes" ; then
+	AC_DEFINE([WZ_NOSOUND], [], [Causes sound to be disabled])
+fi
+
 # -O0 turns off all optimizations; this is necessary for accurate debugging
 # -Wno-unused-label is necessary because flex produces unused labels that we cannot fix
 # Add later for stricter checking: -Wextra -Wmissing-declarations -Wstrict-prototypes
