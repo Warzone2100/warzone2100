@@ -79,6 +79,7 @@ bool PlayList_Read(const char* path)
 
 	while (!PHYSFS_eof(fileHandle))
 	{
+		WZ_TRACK* song;
 		char filename[BUFFER_SIZE];
 		size_t buf_pos = 0;
 
@@ -94,22 +95,25 @@ bool PlayList_Read(const char* path)
 		// Nul-terminate string, and trim line endings ('\n' and '\r')
 		filename[buf_pos] = '\0';
 
-		if (filename[0] != '\0' /* strlen(filename) != 0 */)
+		// Don't add empty filenames to the playlist
+		if (filename[0] == '\0' /* strlen(filename) == 0 */)
 		{
-			WZ_TRACK *song = malloc(sizeof(*songList));
-
-			sstrcpy(song->path, path);
-			sstrcat(song->path, "/");
-			sstrcat(song->path, filename);
-			song->next = NULL;
-
-			// Append this song to the list
-			*last = song;
-			last = &song->next;
-
-			numSongs++;
-			debug(LOG_SOUND, "Added song %s to playlist", filename);
+			continue;
 		}
+
+		song = malloc(sizeof(*songList));
+
+		sstrcpy(song->path, path);
+		sstrcat(song->path, "/");
+		sstrcat(song->path, filename);
+		song->next = NULL;
+
+		// Append this song to the list
+		*last = song;
+		last = &song->next;
+
+		numSongs++;
+		debug(LOG_SOUND, "Added song %s to playlist", filename);
 	}
 	PHYSFS_close(fileHandle);
 	currentSong = songList;
