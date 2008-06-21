@@ -21,7 +21,8 @@ Makefile
 Makefile.in
 /aclocal.m4
 /autom4te.cache/*
-/config*
+/config.*
+/configure
 /depcomp
 /install-sh
 /missing
