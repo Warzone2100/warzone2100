@@ -72,7 +72,7 @@ char *pLevToken;
 SDWORD levVal;
 static SDWORD levelLoadType;
 // modes for the parser
-enum
+typedef enum
 {
 	LP_START,		// no input received
 	LP_LEVEL,		// level token received
@@ -83,7 +83,7 @@ enum
 	LP_WAITDATA,	// defining level data, waiting for data token
 	LP_DATA,		// data token received
 	LP_GAME,		// game token received
-};
+} LEVELPARSER_STATE;
 
 
 // initialise the level system
@@ -129,7 +129,7 @@ void levShutDown(void)
 // error report function for the level parser
 void lev_error(const char* msg)
 {
-	ASSERT(!"level parse error", "Level File parse error: `%s` at line `%d` text `%s`", msg, lev_get_lineno(), lev_get_text());
+	debug(LOG_ERROR, "Level File parse error: `%s` at line `%d` text `%s`", msg, lev_get_lineno(), lev_get_text());
 }
 
 /** Find a level dataset with the given name.
@@ -157,7 +157,8 @@ LEVEL_DATASET* levFindDataSet(const char* name)
 BOOL levParse(const char* buffer, size_t size, searchPathMode datadir)
 {
 	lexerinput_t input;
-	SDWORD			token, state, currData=0;
+	LEVELPARSER_STATE state;
+	int token, currData = -1;
 	LEVEL_DATASET	*psDataSet = NULL;
 
 	input.type = LEXINPUT_BUFFER;
@@ -431,7 +432,10 @@ BOOL levParse(const char* buffer, size_t size, searchPathMode datadir)
 
 	lev_lex_destroy();
 
-	if (state != LP_WAITDATA || currData == 0)
+	// Accept empty files when parsing (indicated by currData < 0)
+	if (currData >= 0
+	 && (state != LP_WAITDATA
+	  || currData == 0))
 	{
 		lev_error("Unexpected end of file");
 		return false;
