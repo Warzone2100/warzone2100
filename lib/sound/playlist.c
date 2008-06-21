@@ -59,6 +59,7 @@ void PlayList_Quit()
 
 bool PlayList_Read(const char* path)
 {
+	WZ_TRACK** last = &songList;
 	PHYSFS_file* fileHandle;
 	char listName[PATH_MAX];
 
@@ -72,6 +73,9 @@ bool PlayList_Read(const char* path)
 		debug(LOG_ERROR, "PHYSFS_openRead(\"%s\") failed with error: %s\n", listName, PHYSFS_getLastError());
 		return false;
 	}
+
+	// Find the end of the songList
+	for (; *last; last = &(*last)->next);
 
 	while (!PHYSFS_eof(fileHandle))
 	{
@@ -93,24 +97,15 @@ bool PlayList_Read(const char* path)
 		if (filename[0] != '\0' /* strlen(filename) != 0 */)
 		{
 			WZ_TRACK *song = malloc(sizeof(*songList));
-			WZ_TRACK *last = songList;
 
 			sstrcpy(song->path, path);
 			sstrcat(song->path, "/");
 			sstrcat(song->path, filename);
 			song->next = NULL;
 
-			// find last
-			for (; last && last->next; last = last->next);
-
-			if (last)
-			{
-				last->next = song;	// add last in list
-			}
-			else
-			{
-				songList = song;	// create list
-			}
+			// Append this song to the list
+			*last = song;
+			last = &song->next;
 
 			numSongs++;
 			debug(LOG_SOUND, "Added song %s to playlist", filename);
