@@ -99,7 +99,7 @@ bool PlayList_Read(const char* path)
 			WZ_TRACK *last = songList;
 
 			sstrcpy(song->path, path);
-			sstrcat(song->path, PHYSFS_getDirSeparator());
+			sstrcat(song->path, "/");
 			sstrcat(song->path, filename);
 			song->next = NULL;
 
