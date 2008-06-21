@@ -416,9 +416,7 @@ BOOL systemInitialise(void)
 		debug( LOG_SOUND, "Sound disabled!" );
 	}
 
-	if (war_GetPlayAudioCDs()) {
-		cdAudio_Open(UserMusicPath);
-	}
+	cdAudio_Open(UserMusicPath);
 
 	if (!dataInitLoadFuncs()) // Pass all the data loading functions to the framework library
 	{
@@ -466,11 +464,9 @@ void systemShutdown(void)
 
 	debug(LOG_MAIN, "shutting down audio subsystems");
 
-	if (war_GetPlayAudioCDs()) {
-		debug(LOG_MAIN, "shutting down CD audio");
-		cdAudio_Stop();
-		cdAudio_Close();
-	}
+	debug(LOG_MAIN, "shutting down CD audio");
+	cdAudio_Stop();
+	cdAudio_Close();
 
 	if ( audio_Disabled() == false && !audio_Shutdown() )
 	{
@@ -610,10 +606,7 @@ BOOL frontendInitialise(const char *ResourceFile)
 	gameTimeInit();
 
 	// hit me with some funky beats....
-	if (war_GetPlayAudioCDs())
-	{
-		cdAudio_PlayTrack(playlist_frontend); // frontend music
-	}
+	cdAudio_PlayTrack(SONG_FRONTEND);
 
 	return true;
 }
@@ -952,9 +945,7 @@ BOOL stageTwoShutDown(void)
 {
 	debug(LOG_WZ, "== stageTwoShutDown ==");
 
-	if (war_GetPlayAudioCDs()) {
-		cdAudio_Stop();
-	}
+	cdAudio_Stop();
 
 	freeAllStructs();
 	freeAllDroids();
@@ -1175,9 +1166,7 @@ BOOL saveGameReset(void)
 {
 	debug(LOG_MAIN, "saveGameReset");
 
-	if (war_GetPlayAudioCDs()) {
-		cdAudio_Stop();
-	}
+	cdAudio_Stop();
 
 	freeAllStructs();
 	freeAllDroids();

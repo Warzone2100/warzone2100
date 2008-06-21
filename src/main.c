@@ -41,6 +41,7 @@
 #include "lib/framework/tagfile.h"
 #include "lib/exceptionhandler/exceptionhandler.h"
 
+#include "lib/sound/playlist.h"
 #include "lib/gamelib/gtime.h"
 #include "lib/ivis_common/piestate.h"
 #include "lib/ivis_common/rendmode.h"
@@ -937,6 +938,7 @@ int main(int argc, char *argv[])
 	{
 		memset(enabled_debug, 0, sizeof(*enabled_debug) * LOG_LAST);
 		fprintf(stdout, "Carrying out self-test:\n");
+		playListTest();
 		NETtest();
 		tagTest();
 		parseTest();

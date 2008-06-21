@@ -169,58 +169,25 @@ zone 2100 Resurrection Project (http://wiki.wz2100.net/command_line_options).
 
 3.3 Music
 ---------
-A playlist-system is used that can point to any *.ogg in your warzone-data-path. 
+A playlist-system is used that can point to any *.ogg in your warzone music path.
 
-Warzone reads the following two playlists (in the order they are mentioned) and
-the first playlist found will be used:
+Warzone reads the playlist from the first location it is found, searching in this 
+order:
 
 * Warzone-directory in your personal directory:
 	o for GNU/Linux: ~/.warzone2100/music/music.wpl
 	o for Windows: ~/My Documents/Warzone 2100/music/music.wpl
-   o for Mac OS X: ~/Library/Application Support/Warzone 2100/music/music.wpl
+	o for Mac OS X: ~/Library/Application Support/Warzone 2100/music/music.wpl
 * Warzone-install-path:
 	o <whereverwarzoneisinstalled>/music/music.wpl
 
-If no playlist is present, one is created that plays the original game music.
-
-Using the playlist
-******************
-The playlist contains two sections, [game] and [menu]. For each section you can
-define a list of songs you want to be played in-game. The only supported file-
-format is Ogg/Vorbis as long as all necessary libraries are installed.
-
-"shuffle=yes" specifies that you want the songs to played in random order. You
-need to set this for each section individually.
-
-"path=." specifies that the following files are found in the folder the playlist
-was found. If you do not specify a path all file-names have to be given with
-"absolute" path. This "absolute" path is still relative to your warzone-data-
-dir. File-names have to match those in the file-system and you can not specify
-files outside of the warzone-data-dir.
+The playlist is just a list of songs you want to be played in-game, one song per
+line. The only supported file format is Ogg Vorbis.
 
 Note: Since we are using PhysFS we recommend you to use only Latin letters in
 directory and file-names (more exactly this means: A to Z, a to z, 0 to 9, _-+
 and space). You will receive the following error (running with --debug sound) if
 "bad" characters are used: Failed opening [[PATH TO FILE]]: Insecure filename.
-
-This example shows how a playlist-file could look like:
---------------------------------------------------------------------------------
-[game]
-path=.
-shuffle=yes
-neos_aurore.ogg
-neos_chocolat.ogg
-neos_down.ogg
-neos_esperance.ogg
-neos_indy.ogg
-
-[menu]
-path=.
-neos_symphonie_du_vide.ogg
---------------------------------------------------------------------------------
-
-Music replay may be choppy, so you may want to use an external player for your
-music instead.
 
 3.4 Multiplaying via internet
 -----------------------------

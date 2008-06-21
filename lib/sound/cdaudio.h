@@ -26,19 +26,15 @@ extern "C"
 {
 #endif
 
-enum
+typedef enum
 {
-	playlist_custom,
-	playlist_ingame,
-	playlist_frontend,
-
-	// Must be the last
-	playlist_last,
-};
+	SONG_FRONTEND,
+	SONG_INGAME,
+} SONG_CONTEXT;
 
 BOOL cdAudio_Open(const char* user_musicdir);
 void cdAudio_Close(void);
-BOOL cdAudio_PlayTrack( SDWORD iTrack );
+BOOL cdAudio_PlayTrack(SONG_CONTEXT context);
 void cdAudio_Stop(void);
 void cdAudio_Pause(void);
 void cdAudio_Resume(void);

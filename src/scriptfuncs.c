@@ -3403,10 +3403,8 @@ BOOL scrPlayBackgroundAudio(void)
 
 BOOL scrPlayIngameCDAudio(void)
 {
-	if (war_GetPlayAudioCDs())
-	{
-		cdAudio_PlayTrack(playlist_ingame);
-	}
+	debug(LOG_SOUND, "Script wanted music to start");
+	cdAudio_PlayTrack(SONG_INGAME);
 
 	return true;
 }
@@ -3414,28 +3412,22 @@ BOOL scrPlayIngameCDAudio(void)
 // -----------------------------------------------------------------------------------------
 BOOL scrStopCDAudio(void)
 {
-	if (war_GetPlayAudioCDs()) {
-		cdAudio_Stop();
-	}
-
+	debug(LOG_SOUND, "Script wanted music to stop");
+	cdAudio_Stop();
 	return true;
 }
 
 // -----------------------------------------------------------------------------------------
 BOOL scrPauseCDAudio(void)
 {
-	if (war_GetPlayAudioCDs()) {
-		cdAudio_Pause();
-	}
+	cdAudio_Pause();
 	return true;
 }
 
 // -----------------------------------------------------------------------------------------
 BOOL scrResumeCDAudio(void)
 {
-	if (war_GetPlayAudioCDs()) {
-		cdAudio_Resume();
-	}
+	cdAudio_Resume();
 	return true;
 }
 

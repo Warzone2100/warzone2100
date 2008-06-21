@@ -129,10 +129,6 @@ BOOL loadConfig(void)
 		sound_SetMusicVolume((float)val / 100.0);
 	}
 
-	if (getWarzoneKeyNumeric("playaudiocds", &val)) {
-		war_SetPlayAudioCDs(val);
-	}
-
 	if (getWarzoneKeyNumeric("debugmode", &val))
 	{
 		bAllowDebugMode = val;
@@ -613,7 +609,6 @@ BOOL saveConfig(void)
 	setWarzoneKeyNumeric("voicevol", (int)(sound_GetUIVolume() * 100.0));
 	setWarzoneKeyNumeric("fxvol", (int)(sound_GetEffectsVolume() * 100.0));
 	setWarzoneKeyNumeric("cdvol", (int)(sound_GetMusicVolume() * 100.0));
-	setWarzoneKeyNumeric("playaudiocds", war_GetPlayAudioCDs());
 
 	setWarzoneKeyNumeric("width", war_GetWidth());
 	setWarzoneKeyNumeric("height", war_GetHeight());

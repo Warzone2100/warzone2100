@@ -317,7 +317,9 @@ event	setupEvent(CALL_GAMEINIT)
 	setStructureLimits(research,1,0);
 
 	// Fire off track one on the CD if it's there...
-	playIngameCDAudio();
+	// playIngameCDAudio();
+	// Actually, let's keep it quiet so that we can hear the tutorial instead - Per
+	stopCDAudio();
 
 	// Cam3daynight has set to cam 3 so reset to cam 1 - GJ
 	setCampaignNumber(1);

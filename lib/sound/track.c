@@ -180,7 +180,7 @@ void sound_CheckAllUnloaded( void )
 
 	for (currTrack = &g_apTrack[0]; currTrack != &g_apTrack[MAX_TRACKS]; ++currTrack)
 	{
-		ASSERT(*currTrack == NULL, "sound_CheckAllUnloaded: a track is not unloaded yet (%s); check audio.cfg for duplicate IDs", (*currTrack)->fileName);
+		ASSERT(*currTrack == NULL, "A track is not unloaded yet (%s); check audio.cfg for duplicate IDs", (*currTrack)->fileName);
 	}
 }
 
@@ -212,13 +212,13 @@ BOOL sound_CheckTrack( SDWORD iTrack )
 {
 	if ( iTrack < 0 || iTrack > g_iCurTracks - 1 )
 	{
-		debug( LOG_SOUND, "sound_CheckTrack: track number %i outside max %i\n", iTrack, g_iCurTracks );
+		debug(LOG_SOUND, "Track number %i outside max %i\n", iTrack, g_iCurTracks);
 		return false;
 	}
 
 	if ( g_apTrack[iTrack] == NULL )
 	{
-		debug( LOG_SOUND, "sound_CheckTrack: track %i NULL\n", iTrack );
+		debug(LOG_SOUND, "Track %i NULL\n", iTrack);
 		return false;
 	}
 
@@ -317,7 +317,7 @@ BOOL sound_Play3DTrack( AUDIO_SAMPLE *psSample )
 //
 void sound_StopTrack( AUDIO_SAMPLE *psSample )
 {
-	ASSERT( psSample != NULL, "sound_StopTrack: sample pointer invalid\n" );
+	ASSERT(psSample != NULL, "Sample pointer invalid");
 
 #ifndef WZ_NOSOUND
 	sound_StopSample(psSample);

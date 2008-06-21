@@ -47,7 +47,6 @@ typedef struct _warzoneGlobals
 	BOOL		bFog;
 	SWORD		effectsLevel;
 	BOOL		allowSubtitles;
-	BOOL		playAudioCDs;
 	BOOL		Fullscreen;
 	BOOL		soundEnabled;
 	BOOL		trapCursor;
@@ -80,18 +79,9 @@ void war_SetDefaultStates(void)//Sets all states
 {
 	//set those here and reset in clParse or loadConfig
 	war_SetFog(false);
-	war_SetPlayAudioCDs(true);
 	war_setSoundEnabled( true );
 	war_SetPauseOnFocusLoss(true);
 	war_SetColouredCursor(false);
-}
-
-void war_SetPlayAudioCDs(BOOL b) {
-	warGlobs.playAudioCDs = b;
-}
-
-BOOL war_GetPlayAudioCDs(void) {
-	return warGlobs.playAudioCDs;
 }
 
 void war_SetAllowSubtitles(BOOL b) {
