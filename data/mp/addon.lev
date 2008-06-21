@@ -1624,3 +1624,67 @@ dataset		MULTI_T3_C2
 game		"multiplay/maps/8c-gridlock.gam"
 data		"wrf/multi/t3-skirmish8.wrf"
 data		"wrf/multi/fog2.wrf"
+
+
+/// New maps added by Warzone2100 Resurrection Team
+
+
+// MultiPlay Tech Level 1
+
+level	cockate-T1
+players	8
+type	12
+dataset	MULTI_CAM_1
+game	"multiplay/maps/8c-cockate.gam"
+data	"wrf/multi/campaign.wrf"
+data	"wrf/multi/fog1.wrf"
+
+// MultiPlay Tech Level 2
+
+level	cockate-T2
+players	8
+type	15
+dataset	MULTI_T2_C1
+game	"multiplay/maps/8c-cockate.gam"
+data	"wrf/multi/campaign.wrf"
+data	"wrf/multi/fog1.wrf"
+
+// MultiPlay Tech Level 3
+
+level	cockate-T3
+players	8
+type	16
+dataset	MULTI_T3_C1
+game	"multiplay/maps/8c-cockate.gam"
+data	"wrf/multi/campaign.wrf"
+data	"wrf/multi/fog1.wrf"
+
+// Skirmish Tech Level 1
+
+level	Sk-cockate-T1
+players	8
+type	14
+dataset	MULTI_CAM_1
+game	"multiplay/maps/8c-cockate.gam"
+data	"wrf/multi/skirmish8.wrf"
+data	"wrf/multi/fog1.wrf"
+
+// Skirmish Tech Level 2
+
+level	Sk-cockate-T2
+players	8
+type	18
+dataset	MULTI_T2_C1
+game	"multiplay/maps/8c-cockate.gam"
+data	"wrf/multi/t2-skirmish8.wrf"
+data	"wrf/multi/fog1.wrf"
+
+// Skirmish Tech Level 3
+
+level	Sk-cockate-T3
+players	8
+type	19
+dataset	MULTI_T3_C1
+game	"multiplay/maps/8c-cockate.gam"
+data	"wrf/multi/t3-skirmish8.wrf"
+data	"wrf/multi/fog1.wrf"
