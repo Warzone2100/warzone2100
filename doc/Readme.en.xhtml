@@ -27,7 +27,8 @@
        </li>
        <li><a href="#configuration" class="locallink">Configuration</a>
         <ul>
-         <li><a href="#configfile" class="locallink">WZ-dir and configuration file</a></li>
+         <li><a href="#wzdir" class="locallink">Warzone directory</a></li>
+         <li><a href="#configfile" class="locallink">Configuration file</a></li>
          <li><a href="#cmdline" class="locallink">Command-line options</a></li>
          <li><a href="#music" class="locallink">Music</a></li>
          <li><a href="#multiplay" class="locallink">Multiplaying via internet</a></li>
@@ -82,15 +83,192 @@
 
    <h2 id="configuration">Configuration</h2>
 
-   <h3 id="configfile">WZ-dir and configuration file</h3>
-   <p>Warzone saves your configuration data in a file named "config". The location of this file depends on the operating system.</p>
-   <h4>Warzone-dir under GNU/Linux</h4>
+   <h3 id="wzdir">Warzone directory</h3>
+   <p>Warzone 2100 uses an own sub-directory in a user's home direcoty to save configuration data, save-games and certain other things. Additionally you can use this directory to place custom maps and mods so the game can find them. The location of this directory depends on the operating system.</p>
+   <h4>Warzone directory under GNU/Linux</h4>
    <p>It can be found in your home-directory and is called ".warzone2100". The leading dot indicates that it is a hidden folder so depending on your configuration you may not be able to see it. However, you can still access it by typing the path into your address-bar.</p>
-   <h4>Warzone-dir under Windows</h4>
+   <h4>Warzone directory under Windows</h4>
    <p>The folder is called "Warzone 2100" and is located in "My Documents".</p>
-   <h4>Warzone-dir under Mac OS X</h4>
+   <h4>Warzone directory under Mac OS X</h4>
    <p>The folder "Warzone 2100" can be found in your home-directory at: ~/Library/Application Support/</p>
 
+   <h3 id="configfile">Configuration file</h3>
+   <p>The configuration file is just called 'config' and contains several configuration options, some of them can be changed by using <a href="#cmdline" class="locallink" title="Command-line options">command-line options</a> or using the in-game menus, others can only be changed by editing the file by hand.</p>
+   <p>If at any point you did something wrong, you may delete the old configuration file and just restart Warzone 2100. Then the game will regenerate a new configuration file with default values. It may be wise to not delete and instead backup your old configuration file in case you want to keep other options.</p>
+   <table>
+    <tr>
+     <th>Option (<em>with default value</em>)</th>
+     <th>Effect</th>
+    </tr>
+    <tr>
+     <td>alliance=<em>0</em></td>
+     <td>Toggles permission to play with allies in Skirmish and multi player mode on (1) and off (0).</td>
+    </tr>
+    <tr>
+     <td>allowSubtitles=<em>0</em></td>
+     <td>Toggles subtitles during video sequences on (1) and off (0).</td>
+    </tr>
+    <tr>
+     <td>base=<em>1</em></td>
+     <td>Sets the level of start bases: No bases (0), bases (1) and advanced bases (2).</td>
+    </tr>
+    <tr>
+     <td>bpp=<em>32</em><!-- not in 2.0.x--></td>
+     <td>Sets the colour depth in bpp = bits per pixel.</td>
+    </tr>
+    <tr>
+     <td>cdvol=<em>50</em></td>
+     <td>Sets the volume for music ranging from 0 (no sound) to 100 (loudest.</td>
+    </tr>
+    <tr>
+     <td>colour=<em>0</em></td>
+     <td>Sets your colour in the single player mode: Green (0), red (4), blue (5), pink (6) and cyan (7).</td>
+    </tr>
+    <tr>
+     <td>debugmode=<em>0</em></td>
+     <td>Toggles debug mode on (1) and off (0). --cheat sets this to 1. In order to unset to 0 the file has be to edited by hand.</td>
+    </tr>
+    <tr>
+     <td>difficulty=<em>1</em></td>
+     <td>Sets the difficulty for campaign game: easy (0), medium (1) or hard (2). This value is not changed by difficulty-cheats.</td>
+    </tr>
+    <tr>
+     <td>fog=<em>1</em></td>
+     <td>Sets fog to fog of war (1) or distance fog (0).</td>
+    </tr>
+    <!--only till 2.1b2<tr>
+     <td>forceName=<em>Default</em></td>
+     <td>Sets the name of the force to use (not longer supported since 2.1.x)</td>
+    </tr>-->
+    <tr>
+     <td>framerate=<em>60</em></td>
+     <td>Sets the frame rate limit.</td>
+    </tr>
+    <tr>
+     <td>fullscreen=<em>1</em></td>
+     <td>Specifies whether to start in fullscreen mode (1) or not (0).</td>
+    </tr>
+    <tr>
+     <td>fxvol=<em>100</em></td>
+     <td>Sets the volume for sound effects (user interface sounds and advisor) ranging from 0 (no sound) to 100 (loudest).</td>
+    </tr>
+    <tr>
+     <td>gameName=<em>My Game</em></td>
+     <td>Sets the game name for skirmish and multi player games; limited to 79 bytes, so beware when using multi-byte characters such as German umlaute or Japanese kanji.</td>
+    </tr>
+    <tr>
+     <td>gameserver_port=<em>9999</em></td>
+     <td>Sets the port Warzone 2100 will listen to when hosting games, so make sure that you can communicate on that port.</td>
+    </tr>
+    <tr>
+     <td>gamma=<em>20</em></td>
+     <td>Sets the gamma value Warzone 2100 will use. This will have an effect on the whole screen, so do not be surprised to see your whole screen getting brighter/darker when playing in windowed mode. Minimum value is 10 and stands for 0.5 times the normal screen intensity, maximum value is 200 and stands for 10 times the normal screen intensity.</td>
+    </tr>
+    <tr>
+     <td>height=<em>480</em></td>
+     <td>Sets the height of the resolution Warzone 2100 will use; equivalent to the height value of --resolution.</td>
+    </tr>
+    <!--rechecking 2.1b2-config this was not found<tr>
+     <td>language=</td>
+     <td>Sets the language Warzone 2100 will use and should be determined correctly on the first start of the game. You may change this using language codes (two-letter codes).</td>
+    </tr>-->
+    <tr>
+     <td>mapName=<em>Rush</em></td>
+     <td>Sets the default map name of the map Warzone 2100 will use when starting skirmish or multi player games.</td>
+    </tr>
+    <tr>
+     <td>masterserver_name=<em>lobby.wz2100.net</em></td>
+     <td>Sets the lobby server Warzone 2100 will use when entering the lobby and for showing your open multi player games.</td>
+    </tr>
+    <tr>
+     <td>masterserver_port=<em>9997</em></td>
+     <td>Sets the port used to communicate with the lobby server specified in 'masterserver_name'.</td>
+    </tr>
+    <tr>
+     <td>mouseflip=<em>1</em></td>
+     <td>Toggles behaviour of camera movement when holding down the right mouse button and moving the mouse up and down. Tilt to the opposite direction of mouse movement (0) or tilt in the same direction of the mouse movement (1).</td>
+    </tr>
+    <tr>
+     <td>phrase0= to phrase4=</td>
+     <td>Sets five predefinable messages used for multi player mode to throw at your opponent. Enter chat mode and then press F1 (phrase0) to F5 (phrase4) to send the corresponding phrase. It is not recommended to use these as it may not always work as expected. These are limited to 79 bytes, so beware if you are using multi-byte characters such as German umlaute or Japanese kanji.</td>
+    </tr>
+    <tr>
+     <td>playaudiocds=<em>1</em></td>
+     <td>Toggles playing of audio CDs on (1) and off (0)</td>
+    </tr>
+    <tr>
+     <td>playername=</td>
+     <td>Sets your name used in skirmish and multi player games. There is a profile for every playername you ever played with in your warzone directory.</td>
+    </tr>
+    <tr>
+     <td>power=<em>400</em></td>
+     <td>Sets the default power level to use. You may choose any value between -2147483648 and 2147483647 (both times inclusively) but Warzone 2100 will recognise exactly three values only and fallback to medium power levels (400), if you specify an unknown value. You can choose from low power levels (100), medium power levels (400) and high power levels (700).</td>
+    </tr>
+    <tr>
+     <td>radarObjectMode=<em>0</em></td>
+     <td>Toggles friend-foe-colours on (1) and off (0). The value is not affected by using Ctrl+Tab.</td>
+    </tr>
+    <tr>
+     <td>radarTerrainMode=<em>0</em></td>
+     <td>Sets the radar mode Warzone 2100 will use: Terrain only (0 or 1), heightmap only (2), terrain and heightmap combined (3) or no terrain and no heightmap (4). Any value greater than or equal to 5 will make the game use terrain only mode.</td>
+    </tr>
+    <tr>
+     <td>reopenBuild=<em>1</em></td>
+     <td>Toggles the reopening of the build menu on (1) and off (0).<!--broken in 2.0.10 (?)--></td>
+    </tr>
+    <tr>
+     <td>scroll=<em>1000</em></td>
+     <td>Defines the maximum scroll speed and scroll speed acceleration. Sane values range from 200 (slow) to 4000 (fast). A value of 0 would stop scrolling at all, which is why a hardcoded default value of 100 is used then. The built-in range of values in the options menu ranges from 100 to 1600.</td>
+    </tr>
+    <tr>
+     <td>sequences=<em>0</em></td>
+     <td>Toggles the replay of video sequences on (1) and off (0). The default value is likely to be changed in future releases as the videos have been liberated.</td>
+    </tr>
+    <tr>
+     <td>shadows=<em>1</em></td>
+     <td>Toggles the rendering of shadows on (1) and off (0). Older graphics cards may be unable to render the game at an acceptable speed while using shadows. This value can be changed by --shadows (1) and --noshadows (0).</td>
+    </tr>
+    <tr>
+     <td>shake=<em>0</em></td>
+     <td>Toggles shaking of the camera when buildings are destroyed on (1) and off (0). This option is not affected by the shakey-cheat.</td>
+    </tr>
+    <tr>
+     <td>showFPS=<em>0</em></td>
+     <td>Toggles the display of the frames per seconds on (1) and off (0).</td>
+    </tr>
+    <tr>
+     <td>sound=<em>1</em></td>
+     <td>Toggles sound on (1) and off (0).</td>
+    </tr>
+    <tr>
+     <td>subtitles=<em>1</em></td>
+     <td>Toggles the display of subtitles during videos on (1) and off (0). Note that subtitles are shown even if the video does not exist.</td>
+    </tr>
+    <tr>
+     <td>textureSize=<em>128</em></td>
+     <td>Sets the texture size of terrain tiles in pixels. Valid values are 32, 64 and 128. Using lower values can increase the game's performance.</td>
+    </tr>
+    <tr>
+     <td>trapCursor=<em>0</em></td>
+     <td>Toggles the trapping of the cursor in the game window. Only useful when playing in windowed mode. It prevents getting off the window and clicking something behind it like another application or the desktop, so the game itself loses the focus or becomes hidden behind another window.</td>
+    </tr>
+    <tr>
+     <td>type=<em>12</em></td>
+     <td>Used for selecting a game-type, do not edit this.</td>
+    </tr>
+    <tr>
+     <td>visfog=<em>1</em></td>
+     <td>Toggles the effect used for unexplored terrain: Black tiles (1) or dimmed tiles (0).<!--in 2.0.10 fog and visfog seem to be linked: fog-value is used to fill in visfog-value; so visfog is the same as fog oO --></td>
+    </tr>
+    <tr>
+     <td>voicevol=<em>100</em></td>
+     <td>Sets the volume for voices (weapon sounds etc.) ranging from 0 (no sound) to 100 (loudest).</td>
+    </tr>
+    <tr>
+     <td>width=<em>640</em></td>
+     <td>Sets the width of the resolution Warzone 2100 will use; equivalent to the WIDTH value of --resolution.</td>
+    </tr>
+   </table>
    <h3 id="cmdline">Command-line options</h3>
    <p>Additionally to the configuration-file Warzone 2100 can be started with different options and arguments.</p>
    <p>Notes: These options all have two dashes (--), not one dash only (-). Trying to use the options with one dash only will not work. The game will display a notice when trying to use invalid command-line options. Arguments that need paths need them in the form they are used on the operating system.</p>
@@ -175,8 +353,8 @@
    <p>Note: Some options have corresponding entries in the configuration-file and will persist from one start of Warzone 2100 to the next. For example starting the game with --nosound only once will silence it as long as you do not start it with --sound or change the corresponding value in the configuration file. <a href="http://wiki.wz2100.net/command_line_options" title="Command Line Options for Warzone 2100" hreflang="en">Further information on command-line options</a> can be found at the <a href="http://wiki.wz2100.net/" title="Wiki for Warzone 2100" hreflang="en">Wiki of the Warzone 2100 Resurrection Project</a>.</p>
 
    <h3 id="music">Music</h3>
-   <p>As the original game music is part of the data that was not liberated, music is reintroduced in a different way. A playlist-system is used that can point to any *.ogg in your warzone-data-path. This is still experimental and we are gradually making this more usable.</p>
-   <p>Warzone reads the following two playlists (in the order they are mentioned) and the first playlist found will be used:</p>
+   <p>A playlist-system is used that can point to any *.ogg in your warzone music path.</p>
+   <p>Warzone 2100 reads the playlist from the first location it is found, searching in this order:</p>
    <ul>
     <li>Warzone-directory in your personal directory:
      <ul>
@@ -191,27 +369,8 @@
      </ul>
     </li>
    </ul>
-   <h4>Using the playlist</h4>
-   <p>The playlist contains two sections, [game] and [menu]. For each section you can define a list of songs you want to be played in-game. The only supported file-format is Ogg/Vorbis as long as all necessary libraries are installed.</p>
-   <p>"shuffle=yes" specifies that you want the songs to played in random order. You need to set this for each section individually.</p>
-   <p>"path=." specifies that the following files are found in the folder the playlist was found. If you do not specify a path all file-names have to be given with "absolute" path. This "absolute" path is still relative to your warzone-data-dir. File-names have to match those in the file-system and you can not specify files outside of the warzone-data-dir.</p>
+   <p>The playlist is just a list of songs you want to be played in-game, one song per line. The only supported file format is Ogg Vorbis.</p>
    <p>Note: Since we are using PhysFS we recommend you to use only Latin letters in directory and file-names (more exactly this means: A to Z, a to z, 0 to 9, _-+ and space). You will receive the following error (running with --debug sound) if "bad" characters are used: Failed opening [[PATH TO FILE]]: Insecure filename.</p>
-   <p>This example shows how a playlist-file could look like:</p>
-   <pre>[game]
-path=.
-shuffle=yes
-neos_aurore.ogg
-neos_chocolat.ogg
-neos_down.ogg
-neos_esperance.ogg
-neos_indy.ogg
-
-[menu]
-path=.
-neos_symphonie_du_vide.ogg
-</pre>
-   <p>Music replay may be choppy, so you may want to use an external player for your music instead.</p>
-
    <h3 id="multiplay">Multiplaying via internet</h3>
    <p>There are two methods to start a multiplayer-game via internet: using the host's IP or using the lobby-server. For both you should sure to be able to communicate on TCP-ports 9998 and 9999.</p>
    <p>You can choose whether to connect via Lobby or IP:</p>
@@ -433,7 +592,7 @@ neos_symphonie_du_vide.ogg
    <div id="fileinfo">
     <ul>
      <li>AUTHOR: <a href="mailto:kreuvf@warzone2100.de">Kreuvf</a></li>
-     <li>LAST UPDATE: 2008/06/08</li>
+     <li>LAST UPDATE: 2008/06/22</li>
     </ul>
    </div>
   </div>
