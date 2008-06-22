@@ -192,6 +192,8 @@ struct _widgetVtbl
 	
 	void	(*setAlign)				(widget *self, vAlign v, hAlign h);
 	
+	void	(*drawChildren)			(widget *self, cairo_t *cr);
+	
 	void	(*doDraw)				(widget *self, cairo_t *cr);
 	bool	(*doLayout)				(widget *self);
 	
@@ -209,17 +211,17 @@ struct _widget
 	widgetVtbl *vtbl;
 	
 	/*
-	 * The list of registered event handlers.
+	 * The list of registered event handlers
 	 */
 	vector *eventVtbl;
 	
 	/*
-	 * The child widgets of ourself.
+	 * The child widgets of ourself
 	 */
 	vector *children;
 	
 	/*
-	 * The widgets parent widget.
+	 * The widgets parent widget
 	 */
 	widget *parent;
 	
@@ -237,7 +239,7 @@ struct _widget
 	 * Child alignment
 	 */
 	vAlign vAlignment;
-	hAlign hAlignment; 
+	hAlign hAlignment;
 	
 	//--------------------------------------
 	// Public members
@@ -305,7 +307,7 @@ void widgetBlurImpl(widget *self);
 point widgetGetMinSizeImpl(widget *self);
 point widgetGetMaxSizeImpl(widget *self);
 void widgetSetAlignImpl(widget *self, vAlign v, hAlign h);
-void widgetDoAlignImpl(widget *self);
+void widgetDrawChildrenImpl(widget *self, cairo_t *cr);
 
 bool widgetHandleEventImpl(widget *instance, event *evt);
 
@@ -355,7 +357,7 @@ rect widgetAbsoluteBounds(widget *self);
  * @param self	The widget to find the root widget of.
  * @return A pointer to the root widget.
  */
-widget *windgetGetRoot(widget *self);
+widget *widgetGetRoot(widget *self);
 
 /**
  * Attempts to add child as a child widget of self. The exact location of the
@@ -504,6 +506,19 @@ bool widgetHandleEvent(widget *self, event *evt);
 /*
  * Protected methods
  */
+
+/**
+ * This method is called by widgetDraw to draw the child widgets of self. The
+ * default implementation just draws each of the child widgets in-turn, which
+ * should be the desired behaviour for most containers.
+ * 
+ * More complex containers can override this method to provide alternative
+ * behaviour.
+ * 
+ * @param self	The widget that should have its children drawn.
+ * @param cr	The context to draw the children to.
+ */
+void widgetDrawChildren(widget *self, cairo_t *cr);
 
 /**
  * A protected `pure virtual' method which is called to draw the widget. The

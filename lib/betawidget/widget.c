@@ -6,11 +6,6 @@
 
 static widgetVtbl vtbl;
 
-/*
- * Forward declarations 
- */
-static void widgetDrawChildren(widget *self, cairo_t *cr);
-
 /**
  * Prepares the widget classes vtable.
  */
@@ -39,8 +34,9 @@ static void widgetInitVtbl(widget *self)
 		
 		vtbl.setAlign			= widgetSetAlignImpl;
 		
-		vtbl.doLayout			= NULL;
+		vtbl.drawChildren		= widgetDrawChildrenImpl;
 		
+		vtbl.doLayout			= NULL;
 		vtbl.doDraw		 		= NULL;
 		
 		vtbl.destroy			= widgetDestroyImpl;
@@ -107,30 +103,6 @@ void widgetDraw(widget *self, cairo_t *cr)
 	
 	// Draw our children
 	widgetDrawChildren(self, cr);
-}
-
-/*
- * Draws the child widgets of self.
- */
-static void widgetDrawChildren(widget *self, cairo_t *cr)
-{
-	int i;
-	
-	// Draw our children
-	for (i = 0; i < vectorSize(self->children); i++)
-	{
-		widget *child = vectorAt(self->children, i);
-		cairo_matrix_t current;
-		
-		// Translate such that (0,0) is the location of the widget
-		cairo_get_matrix(cr, &current);
-		cairo_translate(cr, child->offset.x, child->offset.y);
-		
-		widgetDraw(child, cr);
-		
-		// Restore the matrix
-		cairo_set_matrix(cr, &current);
-	}
 }
 
 point widgetAbsolutePosition(widget *self)
@@ -437,6 +409,27 @@ void widgetSetAlignImpl(widget *self, vAlign v, hAlign h)
 	widgetDoLayout(self);
 }
 
+void widgetDrawChildrenImpl(widget *self, cairo_t *cr)
+{
+	int i;
+	
+	// Draw our children
+	for (i = 0; i < vectorSize(self->children); i++)
+	{
+		widget *child = vectorAt(self->children, i);
+		cairo_matrix_t current;
+		
+		// Translate such that (0,0) is the location of the widget
+		cairo_get_matrix(cr, &current);
+		cairo_translate(cr, child->offset.x, child->offset.y);
+		
+		widgetDraw(child, cr);
+		
+		// Restore the matrix
+		cairo_set_matrix(cr, &current);
+	}	
+}
+
 widget *widgetGetCurrentlyFocused(widget *self)
 {
 	int i;
@@ -616,6 +609,11 @@ point widgetGetMaxSize(widget *self)
 void widgetSetAlign(widget *self, vAlign v, hAlign h)
 {
 	WIDGET_GET_VTBL(self)->setAlign(self, v, h);
+}
+
+void widgetDrawChildren(widget *self, cairo_t *cr)
+{
+	WIDGET_GET_VTBL(self)->drawChildren(self, cr);
 }
 
 void widgetDoDraw(widget *self, cairo_t *cr)
