@@ -126,8 +126,8 @@ static	UDWORD	numMissionDroids[MAX_PLAYERS];
 static	UDWORD	numTransporterDroids[MAX_PLAYERS];
 static	UDWORD	numCommandDroids[MAX_PLAYERS];
 static	UDWORD	numConstructorDroids[MAX_PLAYERS];
-// flag to signal a quick exit from the game
-static SDWORD videoMode;
+
+static SDWORD videoMode = 0;
 
 LOOP_MISSION_STATE		loopMissionState = LMS_NORMAL;
 
@@ -227,7 +227,7 @@ GAMECODE gameLoop(void)
 				// Update abandoned structures
 				handleAbandonedStructures();
 			}
-			
+
 			//handles callbacks for positioning of DP's
 			process3DBuilding();
 
