@@ -6,10 +6,10 @@ typedef void (*destroyCallback) (void *object);
 
 struct _vector
 {
-	void			**mem;
-	int				size;
-	int				head;
-	destroyCallback	destroy;
+	void            **mem;
+	int             size;
+	int             head;
+	destroyCallback destroy;
 };
 
 vector *vectorCreate(destroyCallback destroyCb);

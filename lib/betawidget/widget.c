@@ -12,41 +12,41 @@ static widgetVtbl vtbl;
 static void widgetInitVtbl(widget *self)
 {
 	static bool initialised = false;
-	
+
 	if (!initialised)
 	{
-		vtbl.addChild			= widgetAddChildImpl;
-		vtbl.removeChild		= widgetRemoveChildImpl;
-		
-		vtbl.fireCallbacks		= widgetFireCallbacksImpl;	
-		vtbl.addEventHandler	= widgetAddEventHandlerImpl;
-		vtbl.removeEventHandler	= widgetRemoveEventHandlerImpl;
-		vtbl.handleEvent		= widgetHandleEventImpl;
-		
-		vtbl.focus				= widgetFocusImpl;
-		vtbl.blur				= widgetBlurImpl;
-		
-		vtbl.enable				= widgetEnableImpl;
-		vtbl.disable			= widgetDisableImpl;
-		
-		vtbl.getMinSize			= widgetGetMinSizeImpl;
-		vtbl.getMaxSize			= widgetGetMaxSizeImpl;
-		
-		vtbl.setAlign			= widgetSetAlignImpl;
-		
-		vtbl.drawChildren		= widgetDrawChildrenImpl;
-		
-		vtbl.doLayout			= NULL;
-		vtbl.doDraw		 		= NULL;
-		
-		vtbl.destroy			= widgetDestroyImpl;
-		
+		vtbl.addChild           = widgetAddChildImpl;
+		vtbl.removeChild        = widgetRemoveChildImpl;
+
+		vtbl.fireCallbacks      = widgetFireCallbacksImpl;
+		vtbl.addEventHandler    = widgetAddEventHandlerImpl;
+		vtbl.removeEventHandler = widgetRemoveEventHandlerImpl;
+		vtbl.handleEvent        = widgetHandleEventImpl;
+
+		vtbl.focus              = widgetFocusImpl;
+		vtbl.blur               = widgetBlurImpl;
+
+		vtbl.enable             = widgetEnableImpl;
+		vtbl.disable            = widgetDisableImpl;
+
+		vtbl.getMinSize         = widgetGetMinSizeImpl;
+		vtbl.getMaxSize         = widgetGetMaxSizeImpl;
+
+		vtbl.setAlign           = widgetSetAlignImpl;
+
+		vtbl.drawChildren       = widgetDrawChildrenImpl;
+
+		vtbl.doLayout           = NULL;
+		vtbl.doDraw             = NULL;
+
+		vtbl.destroy            = widgetDestroyImpl;
+
 		initialised = true;
 	}
-	
+
 	// Set the classes vtable
 	self->vtbl = &vtbl;
-	
+
 	// Do any overloading of inherited methods here
 }
 
@@ -54,22 +54,22 @@ static void widgetInitVtbl(widget *self)
  * Widget class constructor
  */
 void widgetInit(widget *self, const char *id)
-{	
+{
 	// Prepare our vtable
 	widgetInitVtbl(self);
-	
+
 	// Prepare our container
 	self->children = vectorCreate((destroyCallback) widgetDestroy);
-	
+
 	// Prepare our events table
 	self->eventVtbl = vectorCreate(free);
-	
+
 	// Copy the ID of the widget
 	self->id = strdup(id);
-	
+
 	// Default parent is none
 	self->parent = NULL;
-	
+
 	// Focus and mouse are false by default
 	self->hasFocus = false;
 	self->hasMouse = false;
@@ -83,13 +83,13 @@ void widgetDestroyImpl(widget *self)
 {
 	// Release the container
 	vectorDestroy(self->children);
-	
+
 	// Release the event handler table
 	vectorDestroy(self->eventVtbl);
-	
+
 	// Free the ID
 	free(self->id);
-	
+
 	// Free ourself
 	free(self);
 }
@@ -101,7 +101,7 @@ void widgetDraw(widget *self, cairo_t *cr)
 {
 	// Draw ourself
 	widgetDoDraw(self, cr);
-	
+
 	// Draw our children
 	widgetDrawChildren(self, cr);
 }
@@ -110,13 +110,13 @@ point widgetAbsolutePosition(widget *self)
 {
 	// Get our own offset
 	point pos = self->offset;
-	
+
 	// Add to this our parents offset
 	if (self->parent != NULL)
 	{
 		pos = pointAdd(pos, widgetAbsolutePosition(self->parent));
 	}
-	
+
 	return pos;
 }
 
@@ -124,7 +124,7 @@ rect widgetAbsoluteBounds(widget *self)
 {
 	// Get our position
 	point p = widgetAbsolutePosition(self);
-	
+
 	// Construct and return a rect from this
 	return rectFromPointAndSize(p, self->size);
 }
@@ -140,15 +140,15 @@ widget *widgetGetRoot(widget *self)
 	else
 	{
 		widget *current;
-		
+
 		for (current = self->parent; current->parent; current = current->parent);
-		
+
 		return current;
 	}
 }
 
 /*
- * 
+ *
  */
 widget *widgetFindById(widget *self, const char *id)
 {
@@ -161,15 +161,15 @@ widget *widgetFindById(widget *self, const char *id)
 	else
 	{
 		int i;
-		
+
 		for (i = 0; i < vectorSize(self->children); i++)
 		{
 			// Get the child widget
 			widget *child = vectorAt(self->children, i);
-			
+
 			// Call its findById method
 			widget *match = widgetFindById(child, id);
-			
+
 			// If it matched, return
 			if (match)
 			{
@@ -177,7 +177,7 @@ widget *widgetFindById(widget *self, const char *id)
 			}
 		}
 	}
-	
+
 	// If we found nothing return NULL
 	return NULL;
 }
@@ -193,16 +193,16 @@ bool widgetAddChildImpl(widget *self, widget *child)
 		// TODO: An error/debug message is probably required
 		return false;
 	}
-	
+
 	// Add the widget
 	vectorAdd(self->children, child);
-	
+
 	// Re-layout ourself
 	if (widgetDoLayout(self))
 	{
 		// Set ourself as its parent
 		child->parent = self;
-		
+
 		return true;
 	}
 	// Not enough space to fit the widget
@@ -210,10 +210,10 @@ bool widgetAddChildImpl(widget *self, widget *child)
 	{
 		// Remove child
 		widgetRemoveChild(self, child);
-		
+
 		// Restore the layout
 		widgetDoLayout(self);
-		
+
 		return false;
 	}
 }
@@ -222,9 +222,9 @@ bool widgetAddChildImpl(widget *self, widget *child)
  *
  */
 void widgetRemoveChildImpl(widget *self, widget *child)
-{ 
+{
 	int i;
-	
+
 	for (i = 0; i < vectorSize(self->children); i++)
 	{
 		// If the child is the to-be-removed widget, remove it
@@ -242,25 +242,25 @@ void widgetRemoveChildImpl(widget *self, widget *child)
 }
 
 /*
- * 
+ *
  */
 int widgetAddEventHandlerImpl(widget *self, eventType type, callback handler, void *userData)
 {
 	eventTableEntry *entry = malloc(sizeof(eventTableEntry));
-	
-	entry->type		= type;
+
+	entry->type     = type;
 	entry->callback = handler;
-	entry->userData	= userData;
-	
+	entry->userData = userData;
+
 	// Add the handler to the table
 	vectorAdd(self->eventVtbl, entry);
-	
+
 	// Offset = size - 1
 	return vectorSize(self->eventVtbl) - 1;
 }
 
 /*
- * 
+ *
  */
 void widgetRemoveEventHandlerImpl(widget *self, int id)
 {
@@ -270,17 +270,17 @@ void widgetRemoveEventHandlerImpl(widget *self, int id)
 bool widgetFireCallbacksImpl(widget *self, event *evt)
 {
 	int i;
-	
+
 	for (i = 0; i < vectorSize(self->eventVtbl); i++)
 	{
 		eventTableEntry *handler = vectorAt(self->eventVtbl, i);
-		
+
 		if (handler->type == evt->type)
 		{
 			handler->callback(self, evt, handler->userData);
 		}
 	}
-	
+
 	// FIXME
 	return true;
 }
@@ -291,16 +291,16 @@ bool widgetFireCallbacksImpl(widget *self, event *evt)
 void widgetEnableImpl(widget *self)
 {
 	int i;
-	
+
 	// First make sure our parent is enabled
 	if (self->parent && !self->parent->isEnabled)
 	{
 		return;
 	}
-	
+
 	// Enable ourself
 	self->isEnabled = true;
-	
+
 	// Enable all of our children
 	for (i = 0; i < vectorSize(self->children); i++)
 	{
@@ -311,16 +311,16 @@ void widgetEnableImpl(widget *self)
 void widgetDisableImpl(widget *self)
 {
 	int i;
-	
+
 	// If we are currently disabled, return
 	if (!self->isEnabled)
 	{
 		return;
 	}
-	
+
 	// Disable ourself
 	self->isEnabled = false;
-	
+
 	// Disable our children
 	for (i = 0; i < vectorSize(self->children); i++)
 	{
@@ -329,35 +329,35 @@ void widgetDisableImpl(widget *self)
 }
 
 void widgetFocusImpl(widget *self)
-{	
+{
 	// Check that we are not currently focused
 	if (self->hasFocus)
 	{
 		int i;
-		
+
 		// Blur any of our currently focused child widgets
 		for (i = 0; i < vectorSize(self->children); i++)
 		{
 			widget *child = vectorAt(self->children, i);
-			
+
 			if (child->hasFocus)
 			{
 				widgetBlur(child);
 			}
-		}	
-		
+		}
+
 		return;
 	}
-	
+
 	// If we have a parent, focus it
 	if (self->parent)
 	{
 		widgetFocus(self->parent);
 	}
-	
+
 	// Focus ourself
 	self->hasFocus = true;
-	
+
 	// Fire our on-focus callbacks
 	event evt;
 	evt.type = EVT_FOCUS;
@@ -367,23 +367,23 @@ void widgetFocusImpl(widget *self)
 void widgetBlurImpl(widget *self)
 {
 	widget *current;
-	
+
 	// Make sure we have focus
 	if (!self->hasFocus)
 	{
 		// TODO: We should log this eventuality
 		return;
 	}
-		
+
 	// First blur any focused child widgets
 	while ((current = widgetGetCurrentlyFocused(self)) != self)
 	{
 		widgetBlur(current);
 	}
-	
+
 	// Blur ourself
 	self->hasFocus = false;
-	
+
 	// Fire off the on-blur callbacks
 	event evt;
 	evt.type = EVT_BLUR;
@@ -404,7 +404,7 @@ void widgetSetAlignImpl(widget *self, vAlign v, hAlign h)
 {
 	self->vAlignment = v;
 	self->hAlignment = h;
-	
+
 	// Re-align our children
 	// TODO: We should check the return value here
 	widgetDoLayout(self);
@@ -413,43 +413,43 @@ void widgetSetAlignImpl(widget *self, vAlign v, hAlign h)
 void widgetDrawChildrenImpl(widget *self, cairo_t *cr)
 {
 	int i;
-	
+
 	// Draw our children
 	for (i = 0; i < vectorSize(self->children); i++)
 	{
 		widget *child = vectorAt(self->children, i);
 		cairo_matrix_t current;
-		
+
 		// Translate such that (0,0) is the location of the widget
 		cairo_get_matrix(cr, &current);
 		cairo_translate(cr, child->offset.x, child->offset.y);
-		
+
 		widgetDraw(child, cr);
-		
+
 		// Restore the matrix
 		cairo_set_matrix(cr, &current);
-	}	
+	}
 }
 
 widget *widgetGetCurrentlyFocused(widget *self)
 {
 	int i;
-	
+
 	if (!self->hasFocus)
 	{
 		return NULL;
 	}
-	
+
 	for (i = 0; i < vectorSize(self->children); i++)
 	{
 		widget *child = vectorAt(self->children, i);
-		
+
 		if (child->hasFocus)
 		{
 			return widgetGetCurrentlyFocused(child);
 		}
 	}
-	
+
 	// None of our children are focused, return ourself
 	return self;
 }
@@ -457,15 +457,15 @@ widget *widgetGetCurrentlyFocused(widget *self)
 bool widgetHandleEventImpl(widget *self, event *evt)
 {
 	// If the event should be passed onto our children
-	bool relevant = true; 
-	
+	bool relevant = true;
+
 	switch (evt->type)
 	{
 		case EVT_MOUSE_MOVE:
 		{
 			eventMouse evtMouse = *((eventMouse *) evt);
 			bool newHasMouse = pointInRect(evtMouse.loc, widgetAbsoluteBounds(self));
-			
+
 			/*
 			 * Mouse motion events should not be dispatched if a mouse button
 			 * is currently `down' on our parent but not ourself.
@@ -475,13 +475,13 @@ bool widgetHandleEventImpl(widget *self, event *evt)
 				relevant = false;
 				break;
 			}
-			
+
 			// If we have just `got' the mouse
 			if (newHasMouse && !self->hasMouse)
 			{
 				// Generate a EVT_MOUSE_ENTER event
 				evtMouse.event.type = EVT_MOUSE_ENTER;
-				
+
 				// Fire the event handler
 				widgetFireCallbacks(self, (event *) &evtMouse);
 			}
@@ -490,7 +490,7 @@ bool widgetHandleEventImpl(widget *self, event *evt)
 			{
 				// Generate a EVT_MOUSE_LEAVE event
 				evtMouse.event.type = EVT_MOUSE_LEAVE;
-				
+
 				// Fire the handler
 				widgetFireCallbacks(self, (event *) &evtMouse);
 			}
@@ -505,7 +505,7 @@ bool widgetHandleEventImpl(widget *self, event *evt)
 			{
 				relevant = false;
 			}
-			
+
 			// Update the status of the mouse
 			self->hasMouse = newHasMouse;
 			break;
@@ -514,7 +514,7 @@ bool widgetHandleEventImpl(widget *self, event *evt)
 		case EVT_MOUSE_UP:
 		{
 			eventMouseBtn evtMouseBtn = *((eventMouseBtn *) evt);
-			
+
 			if (pointInRect(evtMouseBtn.loc, widgetAbsoluteBounds(self)))
 			{
 				// If it is a mouse-down event set hasMouseDown to true
@@ -522,13 +522,13 @@ bool widgetHandleEventImpl(widget *self, event *evt)
 				{
 					self->hasMouseDown = true;
 				}
-				
+
 				widgetFireCallbacks(self, (event *) &evtMouseBtn);
-				
+
 				if (evt->type == EVT_MOUSE_UP && self->hasMouseDown)
 				{
 					evtMouseBtn.event.type = EVT_MOUSE_CLICK;
-					
+
 					widgetFireCallbacks(self, (event *) &evtMouseBtn);
 				}
 			}
@@ -546,10 +546,10 @@ bool widgetHandleEventImpl(widget *self, event *evt)
 		case EVT_KEY_UP:
 		{
 			eventKey evtKey = *((eventKey *) evt);
-			
+
 			// Only relevant if we have focus
 			if (self->hasFocus)
-			{				
+			{
 				widgetFireCallbacks(self, (event *) &evtKey);
 			}
 			else
@@ -561,18 +561,18 @@ bool widgetHandleEventImpl(widget *self, event *evt)
 		default:
 			break;
 	}
-	
+
 	// If necessary pass the event onto our children
 	if (relevant)
 	{
 		int i;
-		
+
 		for (i = 0; i < vectorSize(self->children); i++)
-        {
-	        widgetHandleEvent(vectorAt(self->children, i), evt);
-        }
+		{
+			widgetHandleEvent(vectorAt(self->children, i), evt);
+		}
 	}
-	
+
 	return true;
 }
 
