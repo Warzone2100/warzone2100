@@ -152,7 +152,7 @@ void widgReleaseWidgetList(WIDGET *psWidgets)
 			sliderFree((W_SLIDER *)psCurr);
 			break;
 		default:
-			ASSERT( false,"widgReleaseWidgetList: Unknown widget type" );
+			ASSERT(!"Unknown widget type", "Unknown widget type");
 			break;
 		}
 	}
@@ -194,7 +194,7 @@ static void widgRelease(WIDGET *psWidget)
 		sliderFree((W_SLIDER *)psWidget);
 		break;
 	default:
-		ASSERT( false,"widgRelease: Unknown widget type" );
+		ASSERT(!"Unknown widget type", "Unknown widget type");
 		break;
 	}
 }
@@ -704,7 +704,7 @@ static void widgStartForm(W_FORM *psForm)
 			sliderInitialise((W_SLIDER *)psCurr);
 			break;
 		default:
-			ASSERT( false,"widgStartScreen: Unknown widget type" );
+			ASSERT(!"Unknown widget type", "Unknown widget type");
 			break;
 		}
 
@@ -822,7 +822,7 @@ void widgGetPos(W_SCREEN *psScreen, UDWORD id, SWORD *pX, SWORD *pY)
 	}
 	else
 	{
-		ASSERT( false, "widgGetPos: Couldn't find widget from ID" );
+		ASSERT(!"Couldn't find widget by ID", "Couldn't find widget by ID");
 		*pX = 0;
 		*pY = 0;
 	}
@@ -967,7 +967,7 @@ void widgSetTipText(WIDGET* psWidget, const char* pTip)
 			break;
 
 		default:
-			ASSERT(!"unknown widget type", "widgSetTip: Unknown widget type");
+			ASSERT(!"Unknown widget type", "Unknown widget type");
 			break;
 	}
 }
@@ -993,7 +993,7 @@ UDWORD widgGetButtonState(W_SCREEN *psScreen, UDWORD id)
 	psWidget = widgGetFromID(psScreen, id);
 	if (psWidget == NULL)
 	{
-		ASSERT( false, "widgGetButtonState: Couldn't find button/click form from ID" );
+		ASSERT(!"Couldn't find widget by ID", "Couldn't find button or clickable widget by ID");
 	}
 	else if (psWidget->type == WIDG_BUTTON)
 	{
@@ -1005,7 +1005,7 @@ UDWORD widgGetButtonState(W_SCREEN *psScreen, UDWORD id)
 	}
 	else
 	{
-		ASSERT( false, "widgGetButtonState: Couldn't find button/click form from ID" );
+		ASSERT(!"Couldn't find widget by ID", "Couldn't find button or clickable widget by ID");
 	}
 	return 0;
 }
@@ -1019,7 +1019,7 @@ void widgSetButtonFlash(W_SCREEN *psScreen, UDWORD id)
 	psWidget = widgGetFromID(psScreen, id);
 	if (psWidget == NULL)
 	{
-		ASSERT( false, "widgSetButtonFlash: Couldn't find button/click form from ID" );
+		ASSERT(!"Couldn't find widget by ID", "Couldn't find button or clickable widget by ID");
 	}
 	else if (psWidget->type == WIDG_BUTTON)
 	{
@@ -1035,7 +1035,7 @@ void widgSetButtonFlash(W_SCREEN *psScreen, UDWORD id)
 	}
 	else
 	{
-		ASSERT( false, "widgSetButtonFlash: Couldn't find button/click form from ID" );
+		ASSERT(!"Couldn't find widget by ID", "Couldn't find button or clickable widget by ID");
 	}
 }
 
@@ -1048,7 +1048,7 @@ void widgClearButtonFlash(W_SCREEN *psScreen, UDWORD id)
 	psWidget = widgGetFromID(psScreen, id);
 	if (psWidget == NULL)
 	{
-		ASSERT( false, "widgSetButtonFlash: Couldn't find button/click form from ID" );
+		ASSERT(!"Couldn't find widget by ID", "Couldn't find button or clickable widget by ID");
 	}
 	else if (psWidget->type == WIDG_BUTTON)
 	{
@@ -1063,7 +1063,7 @@ void widgClearButtonFlash(W_SCREEN *psScreen, UDWORD id)
 	}
 	else
 	{
-		ASSERT( false, "widgClearButtonFlash: Couldn't find button/click form from ID" );
+		ASSERT(!"Couldn't find widget by ID", "Couldn't find button or clickable widget by ID");
 	}
 }
 
@@ -1077,7 +1077,7 @@ void widgSetButtonState(W_SCREEN *psScreen, UDWORD id, UDWORD state)
 	psWidget = widgGetFromID(psScreen, id);
 	if (psWidget == NULL)
 	{
-		ASSERT( false, "widgSetButtonState: Couldn't find button/click form from ID" );
+		ASSERT(!"Couldn't find widget by ID", "Couldn't find button or clickable widget by ID");
 	}
 	else if (psWidget->type == WIDG_BUTTON)
 	{
@@ -1093,7 +1093,7 @@ void widgSetButtonState(W_SCREEN *psScreen, UDWORD id, UDWORD state)
 	}
 	else
 	{
-		ASSERT( false, "widgSetButtonState: Couldn't find button/click form from ID" );
+		ASSERT(!"Couldn't find widget by ID", "Couldn't find button or clickable widget by ID");
 	}
 }
 
@@ -1141,14 +1141,14 @@ const char *widgGetString(W_SCREEN *psScreen, UDWORD id)
 				aStringRetBuffer[0] = '\0';
 				break;
 			default:
-				ASSERT( false,"widgGetString: Unknown widget type" );
+				ASSERT(!"Unknown widget type", "Unknown widget type");
 				aStringRetBuffer[0] = '\0';
 				break;
 		}
 	}
 	else
 	{
-		ASSERT( false, "widgGetString: couldn't get widget from id" );
+		ASSERT(!"Couldn't find widget by ID", "widgGetString: couldn't find widget by ID");
 		aStringRetBuffer[0] = '\0';
 	}
 
@@ -1203,7 +1203,7 @@ void widgSetString(W_SCREEN *psScreen, UDWORD id, const char *pText)
 			break;
 
 		default:
-			ASSERT( !"unknown widget type", "widgSetString: Unknown widget type");
+			ASSERT(!"Unknown widget type", "Unknown widget type");
 			break;
 	}
 }
@@ -1562,7 +1562,7 @@ static void widgFocusLost(W_SCREEN* psScreen, WIDGET *psWidget)
 	case WIDG_SLIDER:
 		break;
 	default:
-		ASSERT( false,"widgFocusLost: Unknown widget type" );
+		ASSERT(!"Unknown widget type", "Unknown widget type");
 		break;
 	}
 }
@@ -1613,7 +1613,7 @@ void widgHiLite(WIDGET *psWidget, W_CONTEXT *psContext)
 		sliderHiLite((W_SLIDER *)psWidget);
 		break;
 	default:
-		ASSERT( false,"widgHiLite: Unknown widget type" );
+		ASSERT(!"Unknown widget type", "Unknown widget type");
 		break;
 	}
 }
@@ -1644,7 +1644,7 @@ void widgHiLiteLost(WIDGET *psWidget, W_CONTEXT *psContext)
 		sliderHiLiteLost((W_SLIDER *)psWidget);
 		break;
 	default:
-		ASSERT( false,"widgHiLiteLost: Unknown widget type" );
+		ASSERT(!"Unknown widget type", "Unknown widget type");
 		break;
 	}
 }
@@ -1671,7 +1671,7 @@ static void widgClicked(WIDGET *psWidget, UDWORD key, W_CONTEXT *psContext)
 		sliderClicked((W_SLIDER *)psWidget, psContext);
 		break;
 	default:
-		ASSERT( false,"widgClicked: Unknown widget type" );
+		ASSERT(!"Unknown widget type", "Unknown widget type");
 		break;
 	}
 }
@@ -1699,7 +1699,7 @@ static void widgReleased(WIDGET *psWidget, UDWORD key, W_CONTEXT *psContext)
 		sliderReleased((W_SLIDER *)psWidget);
 		break;
 	default:
-		ASSERT( false,"widgReleased: Unknown widget type" );
+		ASSERT(!"Unknown widget type", "Unknown widget type");
 		break;
 	}
 }
@@ -1727,7 +1727,7 @@ static void widgRun(WIDGET *psWidget, W_CONTEXT *psContext)
 		sliderRun((W_SLIDER *)psWidget, psContext);
 		break;
 	default:
-		ASSERT( false,"widgRun: Unknown widget type" );
+		ASSERT(!"Unknown widget type", "Unknown widget type");
 		break;
 	}
 }
