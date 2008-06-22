@@ -17,24 +17,32 @@
 
     <h1 id="top">Inhalt</h1>
     <ul>
-     <li><a href="#readme">Warzone 2100 - Readme</a>
+     <li><a href="#readme" class="locallink">Warzone 2100 - Readme</a>
       <ul>
-       <li><a href="#contents">Inhalt von Warzone 2100</a></li>
-       <li><a href="#gamestate">Status des Spiels</a>
+       <li><a href="#contents" class="locallink">Inhalt von Warzone 2100</a></li>
+       <li><a href="#gamestate" class="locallink">Status des Spiels</a>
         <ul>
-         <li><a href="#bugreporting">Fehler melden</a></li>
+         <li><a href="#bugreporting" class="locallink">Fehler melden</a></li>
         </ul>
        </li>
-       <li><a href="#configuration">Konfiguration</a>
+       <li><a href="#configuration" class="locallink">Konfiguration</a>
         <ul>
-         <li><a href="#configfile">WZ-Ordner und Konfigurationsdatei</a></li>
-         <li><a href="#cmdline">Kommandozeilenoptionen</a></li>
-         <li><a href="#music">Musik</a></li>
-         <li><a href="#multiplay">Mehrspielermodus über das Internet</a></li>
+         <li><a href="#wzdir" class="locallink">Warzone-Verzeichnis</a></li>
+         <li><a href="#configfile" class="locallink">Konfigurationsdatei</a></li>
+         <li><a href="#cmdline" class="locallink">Kommandozeilenoptionen</a></li>
+         <li><a href="#music" class="locallink">Musik</a></li>
+         <li><a href="#multiplay" class="locallink">Mehrspielermodus über das Internet</a></li>
         </ul>
        </li>
-       <li><a href="#hotkeys">Wichtige Tastenkombinationen</a></li>
-       <li><a href="#furtherinfo">Weitere Ressourcen</a></li>
+       <li><a href="#cheats" class="locallink">Cheats</a>
+        <ul>
+         <li><a href="#cheatmode" class="locallink">Cheatmodus</a></li>
+         <li><a href="#cheatslists" class="locallink">Cheatlisten</a></li>
+        </ul>  
+       </li>
+       <li><a href="#debugkeys" class="locallink">Tastenkombinationen für den Debug-Modus</a></li>
+       <li><a href="#hotkeys" class="locallink">Wichtige Tastenkombinationen</a></li>
+       <li><a href="#furtherinfo" class="locallink">Weitere Ressourcen</a></li>
       </ul>
      </li>
     </ul>
@@ -55,17 +63,17 @@
 
    <h2 id="gamestate">Status des Spiels</h2>
    <p>Nach der Freigabe des Warzone 2100-Quellcodes am 6. Dezember 2004 wurden alle proprietären Technologien durch quelloffene Gegenstücke ersetzt.</p>
-   <p>Zu den derzeit unterstützten Plattformen zählen GNU/Linux, Mac OS X 10.4 (Tiger) und Windows (98 - XP). Berichten zufolge soll Warzone 2100 auch unter BSD laufen. Einige Leute spielen es sogar unter Windows Vista, das nicht direkt unterstützt wird.</p>
-   <p>Das Spiel befindet sich immer noch im Beta-Stadium, also erwarten Sie bitte nicht, dass das Spiel ohne jegliche Probleme läuft.</p>
+   <p>Zu den derzeit unterstützten Plattformen zählen GNU/Linux, Mac OS X 10.4 (Tiger) und Windows (98 - XP). Berichten zufolge soll Warzone 2100 auch unter BSD laufen. Auch wenn Warzone 2100 unter Windows Vista laufen mag, so wird Windows Vista von uns nicht unterstützt.</p>
+   <p>Das Spiel wird mit der Zeit immer stabiler, Sie sollten aber dennoch keinen fehlerfreien Betrieb erwarten.</p>
 
    <h3 id="bugreporting">Fehler melden</h3>
    <p>Das Spiel enthält immer noch Fehler und falls Sie einen finden, berichten Sie uns bitte davon im <a href="https://gna.org/bugs/?group=warzone" title="Bugtracker für Warzone 2100" hreflang="en">Bugtracker</a> (Englisch). Damit die Entwickler einen Fehler schneller beheben können, ist es wichtig, dass Sie beim Melden des Fehlers folgende Regeln beachten:</p>
    <ol>
     <li>Wenn das Spiel abstürzt, kann ein Speicherabbild (memory dump) erzeugt werden. Bitte erzeugen Sie dieses und laden es zusammen mit Ihrem Fehlerbericht hoch. Unter Linux wird dieses unter /tmp/warzone2100.gdmp gespeichert. Auch selbst-erzeugte Backtraces sind nützlich.</li>
-    <li>Geben Sie so viele Informationen über das, was Sie gemacht haben als der Fehler/Absturz auftrat, wie nur möglich.</li>
-    <li>Versuchen Sie den Fehler zu reproduzieren und geben Sie eine Beschreibung für die Reproduktion in ihrem Fehlerbericht an.</li>
-    <li>Sie können sogar Spielstände hochladen. Diese bestehen aus einer oder zwei Datei(en) und einem Ordner. Alle zwei/drei sind nach dem Spielstand benannt (z.B. MeinSpielstand.es, MeinSpielstand.gam und der Ordner MeinSpielstand).</li>
-    <li>Fehlerberichte sind keine "Klick-&amp;-weg"-Berichte. Es kann sein, dass Sie vergessen eine Angabe zu machen oder eine Datei hochzuladen. Es ist also auch in Ihrem Interesse Ihren Fehlerbericht zu verfolgen. Zusätzlich erhalten Sie eine E-Mail über jeden Kommentar zu ihrem Fehlerbericht. Diese Funktionalität wird vom Bugtracker automatisch benutzt.</li>
+    <li>Geben Sie so viele Informationen über das, was Sie gemacht haben, als der Fehler/Absturz auftrat, wie nur möglich.</li>
+    <li>Versuchen Sie den Fehler zu reproduzieren und geben Sie eine Beschreibung für die Reproduktion in Ihrem Fehlerbericht an.</li>
+    <li>Sie können sogar Spielstände hochladen. Diese bestehen aus einer oder zwei Datei(en) und einem Verzeichnis. Alle zwei/drei sind nach dem Spielstand benannt (z.B. MeinSpielstand.es, MeinSpielstand.gam und das Verzeichnis MeinSpielstand).</li>
+    <li>Fehlerberichte sind keine "Klick-&amp;-weg"-Berichte. Es kann sein, dass Sie vergessen eine Angabe zu machen oder eine Datei hochzuladen. Es ist also auch in Ihrem Interesse Ihren Fehlerbericht zu verfolgen. Zusätzlich erhalten Sie eine E-Mail über jeden Kommentar zu Ihrem Fehlerbericht. Diese Funktionalität wird vom Bugtracker automatisch benutzt.</li>
    </ol>
    <div class="rt">
     <p><a href="#top">zurück zum Seitenanfang</a></p>
@@ -75,69 +83,284 @@
 
    <h2 id="configuration">Konfiguration</h2>
 
-   <h3 id="configfile">WZ-Ordner und Konfigurationsdatei</h3>
-   <p>Warzone speichert Ihre Einstellungen in einer Datei namens "config". Wo Sie diese Datei finden hängt vom verwendeten Betriebssystem ab.</p>
-   <h4>Warzone-Ordner unter GNU/Linux</h4>
-   <p>Unter GNU/Linux befindet sich der Warzone-Ordner im home-Verzeichnis und heißt ".warzone2100". Der führende Punkt zeigt an, dass es sich um einen versteckten Ordner handelt, der abhängig von ihren Einstellungen nicht sichtbar sein könnte. Trotzdem lässt sich auf den Ordner über die Adressleiste zugreifen.</p>
-   <h4>Warzone-Ordner unter Windows</h4>
-   <p>Der Ordner heißt "Warzone 2100" und befindet sich in "Eigene Dateien".</p>
+   <h3 id="wzdir">Warzone-Verzeichnis</h3>
+   <p>Warzone 2100 belegt im home-Verzeichnis eines Benutzers ein eigenes Unterverzeichnis zur Ablage von Konfigurationsdaten, Speicherständen und einige andere Dinge. Zusätzlich können Sie dieses Verzeichnis nutzen, um eigene Karten und Modifikationen dort abzulegen, damit das Spiel diese findet. Der Speicherort dieses Verzeichnisses hängt vom Betriebssystem ab.</p>
+   <h4>Warzone-Verzeichnis unter GNU/Linux</h4>
+   <p>Es befindet sich im home-Verzeichnis und heißt ".warzone2100-2.1". Der führende Punkt zeigt an, dass es sich um ein verstecktes Verzeichnis handelt, der abhängig von ihren Einstellungen nicht sichtbar sein könnte. Trotzdem lässt sich auf das Verzeichnis über die Adressleiste zugreifen.</p>
+   <h4>Warzone-Verzeichnis unter Windows</h4>
+   <p>Das Verzeichnis heißt "Warzone 2100 2.1" und befindet sich in "Eigene Dateien".</p>
+   <h4>Warzone-Verzeichnis unter Mac OS X</h4>
+   <p>Das Verzeichnis "Warzone 2100 2.1" befindet sich im home-Verzeichnis in: ~/Library/Application Support/</p>
 
+   <h3 id="configfile">Konfigurationsdatei</h3>
+   <p>Die Konfigurationsdatei heißt einfach "config" und enthält zahlreiche Konfigurationsoptionen. Einige davon können durch Benutzung von <a href="#cmdline" class="locallink" title="Kommandozeilenoptionen">Kommandozeilenoptionen</a> oder die im Spiel befindlichen Menüs geändert werden, andere können nur durch manuelles Editieren der Datei geändert werden.</p>
+   <p>Falls Sie irgendwann etwas falsch gemacht haben, können Sie die alte Konfigurationsdatei löschen und Warzone 2100 einfach neustarten. Das Spiel wird dann eine neue Konfigurationsdatei mit Standardwerten regenerieren. Es könnte sich als klug herausstellen die Datei nicht zu löschen und stattdessen eine Sicherungskopie der alten Konfigurationsdatei anzulegen, falls Sie geänderte Optionen erhalten wollen.</p>
+   <table>
+    <tr>
+     <th>Option (<em>mit Standardwert</em>)</th>
+     <th>Auswirkung</th>
+    </tr>
+    <tr>
+     <td>alliance=<em>0</em></td>
+     <td>Schaltet die Erlaubnis mit Verbündeten im Gefechts- und Mehrspielermodus zu spielen an (1) und aus (0).</td>
+    </tr>
+    <tr>
+     <td>allowSubtitles=<em>0</em></td>
+     <td>Schaltet Untertitel während Videosequenzen an (1) und aus (0).</td>
+    </tr>
+    <tr>
+     <td>base=<em>1</em></td>
+     <td>Setzt den Ausbau der Basen zu Spielbeginn: Keine Basen (0), Basen (1), fortschrittliche Basen (2).</td>
+    </tr>
+    <tr>
+     <td>bpp=<em>32</em><!-- not in 2.0.x--></td>
+     <td>Setzt die Farbtiefe in bpp = Bits pro Pixel.</td>
+    </tr>
+    <tr>
+     <td>cdvol=<em>50</em></td>
+     <td>Setzt die Musiklautstärke im Bereich von 0 (kein Ton) bis 100 (am lautesten).</td>
+    </tr>
+    <tr>
+     <td>colour=<em>0</em></td>
+     <td>Setzt Ihre Farbe im Einzelspielermodus: Grün (0), rot (4), blau (5), pink (6) und cyan (7).</td>
+    </tr>
+    <tr>
+     <td>debugmode=<em>0</em></td>
+     <td>Schaltet den Debug-Modus an (1) und aus (0). --cheat setzt dies auf 1. Um auf 0 zurückzusetzen, muss die Datei von Hand bearbeitet werden.</td>
+    </tr>
+    <tr>
+     <td>difficulty=<em>1</em></td>
+     <td>Setzt den Schwierigkeitsgrad für Kampagnenspiele: Einfach (0), mittel (1) oder schwer (2). Dieser Wert kann durch die Schwierigkeitsgrad-Cheats nicht geändert werden.</td>
+    </tr>
+    <tr>
+     <td>fog=<em>1</em></td>
+     <td>Setzt den Nebel auf Nebel des Krieges (1) oder Entfernungsnebel (0).</td>
+    </tr>
+    <!--only till 2.1b2<tr>
+     <td>forceName=<em>Default</em></td>
+     <td>Sets the name of the force to use (not longer supported since 2.1.x)</td>
+    </tr>-->
+    <tr>
+     <td>framerate=<em>60</em></td>
+     <td>Setzt die Framerate-Begrenzung.</td>
+    </tr>
+    <tr>
+     <td>fullscreen=<em>1</em></td>
+     <td>Gibt an, ob im Vollbildmodus (1) oder nicht (0) gestartet werden soll.</td>
+    </tr>
+    <tr>
+     <td>fxvol=<em>100</em></td>
+     <td>Setzt die Lautstärke für Soundeffekte (Benutzerinterface und Ratgeber) in einem Bereich von 0 (kein Ton) bis 100 (am lautesten).</td>
+    </tr>
+    <tr>
+     <td>gameName=<em>My Game</em></td>
+     <td>Setzt den Spielnamen für Gefechts- und Mehrspielerspiele; begrenzt auf 79 Bytes, also bei der Benutzung von Mehrbytezeichen wie deutschen Umlauten oder japanischen Kanji aufpassen.</td>
+    </tr>
+    <tr>
+     <td>gameserver_port=<em>9999</em></td>
+     <td>Setzt den Port, auf dem Warzone 2100 zur Erstellung von Spielen lauschen wird. Versichern Sie sich also, dass Sie auf diesem Port kommunizieren können.</td>
+    </tr>
+    <tr>
+     <td>gamma=<em>20</em></td>
+     <td>Setzt den Gammewert, den Warzone 2100 benutzen wird. Dies wird einen Einfluss auf den gesamten Bildschirm haben, seien Sie also nicht überrascht, wenn Ihr gesamter Bildschirm heller/dunkler wird, wenn Sie im Fenstermodus spielen. Der kleinste Wert ist 10 und kommt einem 0,5-fachen der normalen Bildschirmintensität gleich, der größte Wert ist 200 und kommt einem 10-fachen der normalen Bildschirmintensität gleich.</td>
+    </tr>
+    <tr>
+     <td>height=<em>480</em></td>
+     <td>Setzt die Höhe der Auflösung, die Warzone 2100 benutzen wird; Äquivalent zur Höhenangabe in --resolution.</td>
+    </tr>
+    <!--rechecking 2.1b2-config this was not found<tr>
+     <td>language=</td>
+     <td>Sets the language Warzone 2100 will use and should be determined correctly on the first start of the game. You may change this using language codes (two-letter codes).</td>
+    </tr>-->
+    <tr>
+     <td>mapName=<em>Rush</em></td>
+     <td>Setzt den Standardkartenmane, den Warzone 2100 für Gefechts- und Mehrspielerspiele benutzen wird.</td>
+    </tr>
+    <tr>
+     <td>masterserver_name=<em>lobby.wz2100.net</em></td>
+     <td>Setzt den Lobbyserver, den Warzone 2100 zum Betreten einer Lobby und der Anzeige Ihrer offenen Mehrspielerspielen benutzen wird.</td>
+    </tr>
+    <tr>
+     <td>masterserver_port=<em>9997</em></td>
+     <td>Setzt den Port, über den mit dem Lobbyserver, der unter "masterserver_name" angegeben wurde, kommuniziert werden soll.</td>
+    </tr>
+    <tr>
+     <td>mouseflip=<em>1</em></td>
+     <td>Schaltet das Verhalten der Kamerabewegung um, wenn die rechte Maustaste gedrückt wird und die Maus dann hoch- und runter bewegt wird. Neigung in die entgegengesetzte Richtung (0) oder Neigung in Richtung der Mausbewegung (1).</td>
+    </tr>
+    <tr>
+     <td>phrase0= to phrase4=</td>
+     <td>Setzt fünf Nachrichten für den Mehrspielermodus, den Sie Ihren Feinden an den Kopf knallen können. Begeben Sie sich in den Chat-Modus und drücken Sie dann F1 (phrase0) bis F5 (phrase4), um die entsprechende Nachricht zu senden. Es wird nicht empfohlen dies zu benutzen, da es nicht immer so funktioniert wie erwartet. Die Nachrichten sind begrenzt auf 79 Bytes, also bei der Benutzung von Mehrbytezeichen wie deutschen Umlauten oder japanischen Kanji aufpassen.</td>
+    </tr>
+    <tr>
+     <td>playaudiocds=<em>1</em></td>
+     <td>Schaltet die Wiedergabe von Audio-CDs an (1) und aus (0).</td>
+    </tr>
+    <tr>
+     <td>playername=</td>
+     <td>Setzt den Namen, der in Gefechts- und Mehrspielerspielen benutzt wird. Für jeden Spielernamen existiert ein eigenes Profil im Warzone-Verzeichnis.</td>
+    </tr>
+    <tr>
+     <td>power=<em>400</em></td>
+     <td>Setzt das standardmäßig zu verwendende Energieniveau. Sie können zwischen Werten zwischen -2147483648 und 2147483647 (jeweils inklusive) wählen, aber Warzone 2100 wird nur genau drei Werte erkennen und auf mittleres Energieniveau zurückfallen (400), falls Sie einen unbekannten Wert angeben. Sie können niedriges Energieniveau (100), mittleres Energieniveau (400) und hohes Energieniveau (700) wählen.</td>
+    </tr>
+    <tr>
+     <td>radarObjectMode=<em>0</em></td>
+     <td>Schaltet Freund-Feind-Farben an (1) und aus (0). Dieser Wert wird durch Benutzung von Strg+Tab nicht verändert.</td>
+    </tr>
+    <tr>
+     <td>radarTerrainMode=<em>0</em></td>
+     <td>Setzt den Radarmodus, den Warzone 2100 benutzen wird: Nur Gelände (0 oder 1), nur Höheninformationen (2), Gelände- und Höheninformationen (3) oder keine Gelände- und keine Höheninformationen (4). Werte größer oder gleich 5 führen zur Benutzung des "nur Gelände"-Modus.</td>
+    </tr>
+    <tr>
+     <td>reopenBuild=<em>1</em></td>
+     <td>Schaltet die Wiederöffnung des Konstruktionsmenüs an (1) und aus (0).<!--broken in 2.0.10 (?)--></td>
+    </tr>
+    <tr>
+     <td>scroll=<em>1000</em></td>
+     <td>Gibt die maximale Scroll-Geschwindigkeit und Scrollbeschleunigung an. Verträgliche Werte reichen von 200 (langsam) bis 4000 (schnell). Ein Wert von 0 würde das Scrollen verhindern, weshalb ein fest ins Spiel integrierter Minimalwert von 100 in diesem Fall benutzt würde. Der über das Optionenmenü vorgegebene Wertebereich geht von 100 bis 1600.</td>
+    </tr>
+    <tr>
+     <td>sequences=<em>0</em></td>
+     <td>Schaltet die Videowiedergabe an (1) und aus (0). Der Standardwerte dürfte sich in zukünftigen Versionen ändern, da die Videos befreit wurden.</td>
+    </tr>
+    <tr>
+     <td>shadows=<em>1</em></td>
+     <td>Schaltet die Darstellung von Schatten an (1) und aus (0). Ältere Grafikkarten könnten Probleme haben das Spiel in einer annehmbaren Geschwindigkeit darzustellen bei der Benutzung von Schatten. Diese Werte können durch --shadows (1) und --noshadows (0) geändert werden.</td>
+    </tr>
+    <tr>
+     <td>shake=<em>0</em></td>
+     <td>Schaltet Kameraerschütterungen bei der Zerstörung von Gebäuden an (1) und aus (0). Die Benutzung des shakey-Cheat hat keinen Einfluss auf diesen Wert.</td>
+    </tr>
+    <tr>
+     <td>showFPS=<em>0</em></td>
+     <td>Schaltet die Anzeige der Frames pro Sekunde an (1) und aus (0).</td>
+    </tr>
+    <tr>
+     <td>sound=<em>1</em></td>
+     <td>Schaltet die Tonwiedergabe an (1) und aus (0).</td>
+    </tr>
+    <tr>
+     <td>subtitles=<em>1</em></td>
+     <td>Schaltet die Darstellung von Untertiteln während Videos an (1) und aus (0). Beachten Sie, dass Untertitel gezeigt werden, selbst wenn die Videos nicht existieren.</td>
+    </tr>
+    <tr>
+     <td>textureSize=<em>128</em></td>
+     <td>Setzt die Texturgröße für Geländeflächen in Pixel. Gültige Werte sind 32, 64 und 128. Niedrigere Werte können die Spielleistung erhöhen.</td>
+    </tr>
+    <tr>
+     <td>trapCursor=<em>0</em></td>
+     <td>Schaltet das Einfangen des Mauszeigers im Spielfenster an (1) und aus (0). Nur im Fenstermodus nützlich. Es verhindert, dass man aus dem Fenster ausbricht und etwas dahinter anklickt wie eine Anwendung oder den Desktop, wodurch das Spiel den Fokus verliert oder von einem anderen Fenster verdeckt wird.</td>
+    </tr>
+    <tr>
+     <td>type=<em>12</em></td>
+     <td>Zur Wahl des Spieltyps benutzt. Ändern Sie dies nicht.</td>
+    </tr>
+    <tr>
+     <td>visfog=<em>1</em></td>
+     <td>Schaltet den für nicht erkundetes Gelände benutzt Effekt um: Schwarze Flächen (1) oder abgedunkelte Flächen (0).<!--in 2.0.10 fog and visfog seem to be linked: fog-value is used to fill in visfog-value; so visfog is the same as fog oO --></td>
+    </tr>
+    <tr>
+     <td>voicevol=<em>100</em></td>
+     <td>Setzt die Lautstärke für Stimmen (Waffengeräusche usw.) von 0 (kein Ton) bis 100 (am lautesten).</td>
+    </tr>
+    <tr>
+     <td>width=<em>640</em></td>
+     <td>Setzt die Breite der Auflösung, die Warzone 2100 benutzen wird; äquivalent zur Breitenangabe in --resolution.</td>
+    </tr>
+   </table>
    <h3 id="cmdline">Kommandozeilenoptionen</h3>
    <p>Zusätzlich zur Konfigurationsdatei kann Warzone mit verschiedenen Parametern gestartet werden.</p>
    <p>Hinweis: Diese Parameter haben alle zwei Bindestriche (--), nicht nur eines (-). Versuche die Parameter mit nur einem Bindestrich zu benutzen werden scheitern.</p>
    <table>
     <tr>
-     <th>Parameter</th>
+     <th>Option (<em>mit Argument</em>)</th>
      <th>Auswirkung</th>
     </tr>
     <tr>
      <td>--fullscreen</td>
-     <td>im Vollbildmodus spielen</td>
+     <td>Startet das Spiel im Vollbildmodus</td>
     </tr>
     <tr>
      <td>--window</td>
-     <td>im Fenstermodus spielen</td>
+     <td>Startet das Spiel im Fenstermodus</td>
     </tr>
     <tr>
-     <td>--resolution WIDTHxHEIGHT</td>
-     <td>setzt die Größe des Viewports (der zur Darstellung genutzten Fläche) fest; verwendbar für Vollbild- und Fenstermodus</td>
-    </tr>
-    <tr>
-     <td>--datadir DIR</td>
-     <td>setzt das Standarddatenverzeichnis auf DIR</td>
+     <td>--resolution <em>BREITExHÖHE</em></td>
+     <td>Setzt die von Warzone 2100 benutzt Auflösung; nutzbar für Vollbild- und Fenstermodus</td>
     </tr>
     <tr>
      <td>--shadows</td>
-     <td>schaltet Schatten an</td>
+     <td>Schaltet Schatten an</td>
     </tr>
     <tr>
      <td>--noshadows</td>
-     <td>schaltet Schatten ab</td>
+     <td>Schaltet Schatten ab</td>
     </tr>
     <tr>
      <td>--sound</td>
-     <td>schaltet Audioausgabe an</td>
+     <td>Schaltet Audioausgabe an</td>
     </tr>
     <tr>
      <td>--nosound</td>
-     <td>schaltet Audioausgabe ab</td>
+     <td>Schaltet Audioausgabe ab</td>
+    </tr>
+    <tr>
+     <td>--datadir <em>Pfad</em></td>
+     <td>Setzt das Standarddatenverzeichnis auf den angegebenen Pfad</td>
+    </tr>
+    <tr>
+     <td>--configdir <em>Pfad</em></td>
+     <td>Setzt das Konfigurationsverzeichnis auf den angegebenen Pfad</td>
+    </tr>
+    <tr>
+     <td>--savegame <em>name</em></td>
+     <td>Lädt einen Spielstand</td>
     </tr>
     <tr>
      <td>--cheat</td>
-     <td>ermöglicht das Benutzen von Cheats und Debug-Tasten</td>
+     <td>Ermöglicht die Verwendung von Cheats und Tastenkombinationen für den Debug-Modus, siehe <a href="#cheats" title="Cheats" class="locallink">Cheats</a> und <a href="#debugkeys" title="Tastenkombinationen für den Debug-Modus" class="locallink">Tastenkombinationen für den Debug-Modus</a></td>
+    </tr>
+    <tr>
+     <td>--help</td>
+     <td>Gibt eine Hilfenachricht aus und beendet das Spiel; nur nützlich, wenn von der Kommandozeile aus benutzt</td>
+    </tr>
+    <tr>
+     <td>--debug <em>Option</em></td>
+     <td>Zeigt Debug-Informationen; <em>Option</em> kann folgende Werte annehmen: all, main, sound, video, wz, 3d, texture, net, memory, error, script. Wenn Sie mehr als eine Option wünschen, so muss ein weiteres --debug benutzt werden. Die Option "all" enthällt jede andere Option.</td>
+    </tr>
+    <tr>
+     <td>--debugfile <em>Datei</em></td>
+     <td>Leitet die Debug-Ausgabe in die angegebene Datei um.</td>
+    </tr>
+    <tr>
+     <td>--version</td>
+     <td>Gibt die Warzone 2100-Version aus und beendet das Spiel</td>
+    </tr>
+    <tr>
+     <td>--mod_ca <em>Modifikationsdatei</em></td>
+     <td>Schaltet die angegebene Kampagnen-Modifikation an. Sie müssen den vollen Namen der Modifikationsdatei angeben.</td>
+    </tr>
+    <tr>
+     <td>--mod_mp <em>Modifikationsdatei</em></td>
+     <td>Schaltet die angegebene Mehrspieler-Modifikation an. Sie müssen den vollen Namen der Modifikationsdatei angeben.</td>
+    </tr>
+    <tr>
+     <td>--mod <em>Modifikationsdatei</em></td>
+     <td>Schaltet die angegebene Modifkation global an - für die Kampagne und den Mehrspielermodus. Sie müssen den vollen Namen der Modifikationsdatei angeben. Globale Modifikationen sind nützlich wenn Dinge geändert wurden, die beides betreffen, Kampagne und Mehrspielermodus.</td>
     </tr>
    </table>
-   <p>Hinweis: Alle genannten Kommandozeilenparameter außer --datadir ändern den entsprechenden Wert in der Konfigurationsdatei. Starten Sie Warzone dann durch Doppelklick auf die ausführbare Datei/Binary, wird das Spiel mit den zuletzt genutzten Einstellungen starten. Also nicht wundern, wenn Sie keine Audioausgabe haben, falls Sie Warzone das letzte Mal mit --nosound gestartet hatten.</p>
-   <p>Hinweis: Diese Liste ist nicht vollständig. Eine vollständige Liste und <a href="http://wiki.wz2100.net/command_line_options" title="Kommandozeilenoptionen für Warzone 2100" hreflang="en">weiterführende Informationen zu den Kommandozeilenoptionen</a> (Englisch) können in der <a href="http://wiki.wz2100.net/" title="Wiki für Warzone 2100" hreflang="en">Wiki des Warzone Resurrection Project</a> (Englisch) gefunden werden.</p>
+   <p>Hinweis: Einige Optionen verfügen über entsprechende Einträge in der Konfigurationsdatei und werden von einem Start zum nächsten von Warzone 2100 überdauern. Starten Sie das Spiel beispielsweise nur einmal mit --nosound, wird es so lange ruhig sein bis Sie mit --sound starten oder den entsprechenden Eintrag in der Konfigurationsdatei ändern. <a href="http://wiki.wz2100.net/command_line_options" title="Command Line Options for Warzone 2100" hreflang="en">Weitere Informationen zu Kommandozeilenparameter</a> (Englisch) können in der <a href="http://wiki.wz2100.net/" title="Wiki for Warzone 2100" hreflang="en">Wiki des Warzone 2100 Resurrection Project</a> gefunden werden.</p>
 
    <h3 id="music">Musik</h3>
-   <p>Da die Original-Musik nicht Teil der freigegebenen Daten ist, führen wir die Musik wieder ein, allerdings auf andere Art und Weise. Wir benutzen ein Playlist-System, das zu jeder *.ogg- oder *.mp3-Datei in Ihrem Warzone-Datenverzeichnis verweisen kann. Dies befindet sich noch in einem experimentellen Stadium und wir sorgen stetig dafür diese Funktionalität benutzbarer zu gestalten.</p>
-   <p>Warzone liest die folgenden zwei Playlisten (in der genannten Reihenfolge) und verwendet die zuerst gefundene Playlist:</p>
+   <p>Wir benutzen ein Playlist-System, das zu jeder *.ogg- oder *.mp3-Datei in Ihrem Warzone-Datenverzeichnis verweisen kann.</p>
+   <p>Warzone liest die folgenden Playlist, die es zuerst findet und sucht in dieser Reihenfolge:</p>
    <ul>
-    <li>Warzone-Verzeichnis im persönlichen Ordner:
+    <li>Warzone-Verzeichnis im persönlichen Verzeichnis:
      <ul>
-      <li>for GNU/Linux: ~/.warzone2100/music/music.wpl</li>
-      <li>for Windows: ~/Eigene Dateien/Warzone 2100/music/music.wpl</li>
+      <li>GNU/Linux: ~/.warzone2100/music/music.wpl</li>
+      <li>Windows: ~/Eigene Dateien/Warzone 2100/music/music.wpl</li>
+      <li>Mac OS X: ~/Library/Application Support/Warzone 2100/music/music.wpl</li>
      </ul>
     </li>
     <li>Warzone-Installationsverzeichnis:
@@ -146,26 +369,8 @@
      </ul>
     </li>
    </ul>
-   <h4>Nutzung der Playlist</h4>
-   <p>Die Playlist enthält zwei Abschnitte, [game] und [menu]. Für jeden Abschnitt können Sie eine Liste von Liedern definieren, die Sie im Spiel hören wollen. Zu den unterstützten Dateiformaten gehören OGG und MP3 solange die dazu benötigten Bibliotheken installiert sind.</p>
-   <p>Mit "shuffle=yes" können Sie angeben, dass Sie die Lieder in zufälliger Reihenfolge hören wollen. Diese Einstellung müssen Sie für jeden Abschnitt neu definieren.</p>
-   <p>Mit "path=." geben Sie an, dass die nachfolgenden Dateien in dem Ordner gefunden werden, in dem die Playlist liegt. Geben Sie nichts an, müssen alle Dateinamen mit ihrem "absoluten" Pfad angegeben werden. Dieser "absolute" Pfad jedoch ist relativ zum Warzone-Datenverzeichnis. Alle Dateinamen müssen denen im Dateisystem gleichen.</p>
-   <p>Dieses Beispiel zeigt wie eine Playlist-Datei aussehen könnte:</p>
-   <pre>
-[game]
-path=.
-shuffle=yes
-neos_aurore.ogg
-neos_chocolat.ogg
-neos_down.ogg
-neos_esperance.ogg
-neos_indy.ogg
-
-[menu]
-path=.
-neos_symphonie_du_vide.ogg
-</pre>
-
+   <p>Die Playlist ist nur eine Liste von Liedern, die Sie während des Spiels hören möchten, ein Lied pro Zeile. Das einzig unterstützte Format ist Ogg Vorbis.</p>
+   <p>Hinweis: Da wir PhysFS benutzen, empfehlen wir Ihnen nur lateinische Buchstaben in Verzeichnis- und Dateinamen zu benutzen (genauer bedeutet dies: A bis Z, a bis z, 0 bis 9, _-+ und Leerzeichen). Sie werden folgenden Fehler erhalten (mit --debug sound starten), wenn "schlechte" Zeichen benutzt werden: Failed opening [[PFAD ZUR DATEI]]: Insecure filename.</p>
    <h3 id="multiplay">Mehrspielermodus über das Internet</h3>
    <p>Es gibt zwei Methoden eine Mehrspielerpartie über das Internet zu starten: über die IP des Hosts oder über den Lobbyserver. Die Kommunikation über die TCP-Ports 9998 und 9999 sollte auf jeden Fall sichergestellt sein.</p>
    <p>Sie können wählen, ob Sie über die Lobby oder über eine IP verbunden werden wollen:</p>
@@ -179,6 +384,154 @@ neos_symphonie_du_vide.ogg
    <p>Wenn Sie die Spiele auf dem Lobbyserver sehen wollen, können Sie auch "lobby.wz2100.net" eingeben, wenn Sie nach der IP-Adresse gefragt werden, oder stellen den ursprünglichen Eintrag in der config-Datei wieder her. Sie werden Warzone 2100 neustarten müssen, damit Änderungen an der config wirksam werden.</p>
    <div class="rt">
     <p><a href="#top">zurück zum Seitenanfang</a></p>
+   </div>
+   <hr/>
+
+
+  <h2 id="cheats">Cheats</h2>
+   <p>Wie viele andere Spiele verfügt auch Warzone 2100 über ein gewisses Spektrum an Cheats, die benutzt werden können, um in der Einzelspielerkampagne oder Gefechtsspielen Vorteile zu erlangen oder einfach zur Hilfe von Mod- und Mapmachern beim Testen. Im Mehrspielermodus funktionieren Cheats nicht (bis auf den Gefechtsmodus).</p>
+   <h3 id="cheatmode">Cheatmodus</h3>
+   <p>Um Cheats überhaupt benutzen zu können, müssen Sie Warzone 2100 mit der Option --cheat starten. Während des Spiels drücken Sie Umschalt- und die Rücktaste gleichzeitig. Auf dem Bildschirm sollte eine Nachricht erscheinen, die Ihnen verkündet, dass der Cheatmodus angeschaltet wurde. Sie können mit der selben Tastenkombination den Cheatmodus wieder verlassen. Das An- und Abschalten des Cheatmodus ist nur während des Spiels, nicht in den Menüs möglich.</p>
+   <h3 id="cheatslists">Cheatlisten</h3>
+   <p>Nach der Aktivierung des Cheatmodus können Cheats über die normale Chatfunktion eingegeben werden. Die Cheats sind nach ihrem Nutzen und wofür Sie angewendet werden geordnet.</p>
+   <h4 id="cheatsgp">Mehrzweckcheats</h4>
+   <p>Mehrzweckcheats funktionieren im Kampagnenmodus und im Gefechts-, Tutorial- und "Schnelles Spiel"-Modus.</p>
+   <table>
+    <tr>
+     <th>Cheat</th>
+     <th>Effekt</th>
+    </tr>
+    <tr>
+     <td>biffer baker</td>
+     <td>Ihre Einheiten verursachen höheren Schaden und sind stärker</td>
+    </tr>
+    <tr>
+     <td>double up</td>
+     <td>Ihre Einheiten sind doppelt so stark</td>
+    </tr>
+    <tr>
+     <td>give all</td>
+     <td>Erlaubt IHnen alles zu bauen und zu forschen</td>
+    </tr>
+    <tr>
+     <td>work harder</td>
+     <td>Alle aktiven Forschungsthemen sind sofort erforscht</td>
+    </tr>
+    <tr>
+     <td>research all<!--not tested for campaign as 2.1-only--></td>
+     <td>Alles ist sofort erforscht</td>
+    </tr>
+   </table>
+   <p>Hinweis: Die Benutzung von "give all" lässt Forschungsthemen mit einem Artifakt als 3D-Modell erscheinen. Klicken Sie diese nicht an, da das Spiel daraufhin sofort abstürzen wird.</p>
+   <h4 id="cheatscampaign">Nur-Kampagnen-Cheats</h4>
+   <table>
+    <tr>
+     <th>Cheat</th>
+     <th>Effekt</th>
+    </tr>
+    <tr>
+     <td>easy</td>
+     <td>Setzt den Schwierigkeitsgrad auf einfach</td>
+    </tr>
+    <tr>
+     <td>normal</td>
+     <td>Setzt den Schwierigkeitsgrad auf mittel</td>
+    </tr>
+    <tr>
+     <td>hard</td>
+     <td>Setzt den Schwierigkeitsgrad auf schwer</td>
+    </tr>
+    <tr>
+     <td>get off my land</td>
+     <td>Entfernt alle feindlichen Einheiten</td>
+    </tr>
+    <tr>
+     <td>kill</td>
+     <td>Vernichtet die ausgewählte Einheit/das ausgewählte Gebäude</td>
+    </tr>
+    <tr>
+     <td>let me win</td>
+     <td>Sie gewinnen die aktuelle Mission</td>
+    </tr>
+    <tr>
+     <td>time toggle</td>
+     <td>Startet/stoppt den Missionstimer</td>
+    </tr>
+    <tr>
+     <td>whale fin</td>
+     <td>Schaltet unbegrenzte Energie an und aus; alles ist kostenlos</td>
+    </tr>
+    <tr>
+     <td>superpower</td>
+     <td>Gibt Ihnen maximale Energie</td>
+    </tr>
+    <tr>
+     <td>more power</td>
+     <td>Fügt 1000 Energie zum Vorrat</td>
+    </tr>
+   </table>
+   <p>Hinweis: Die Schwierigkeitsgrad-Cheats stapeln nicht. Dies bedeutet, dass Sie das Spiel nicht einfacher machen können, indem Sie den easy-Cheat mehrfach eingeben.</p>
+   <h4 id="cheatsmisc">Sonstige Cheats</h4>
+   <p>Hier aufgelistete Cheats müssen keine Vorteile bringen bei ihrer Verwendung. Manche sind hilfreich beim Erlangen bestimmter Daten oder Helfen beim Debugging and damit den Leuten, die mit dem Spiel arbeiten.</p>
+   <table>
+    <tr>
+     <th>Cheat</th>
+     <th>Effekt</th>
+    </tr>
+    <tr>
+     <td>build info</td>
+     <td>Gibt Build-Informationen zum Spiel aus</td>
+    </tr>
+    <tr>
+     <td>count me</td>
+     <td>Gibt die Anzahl der Objekte im Spiel aus</td>
+    </tr>
+    <tr>
+     <td>deity</td>
+     <td>Schaltet den Nebel des Krieges an und aus</td>
+    </tr>
+    <tr>
+     <td>demo</td>
+     <td>Startet/stoppt den Vorführmodus</td>
+    </tr>
+    <tr>
+     <td>droidinfo</td>
+     <td>Gibt Einheiteninformationen und -statistiken aus</td>
+    </tr>
+    <tr>
+     <td>john kettley</td>
+     <td>Schaltet durch verschiedene Wetterlagen: Regen, Schnee und klarer Himmel</td>
+    </tr>
+    <!--<tr>
+     <td>mouseflip</td>
+     <td>Inverts the left and right mouse buttons</td>
+    </tr>-->
+    <tr>
+     <td>no faults</td>
+     <td>Spielt den Audioclip: "There are no faults in the renderer at the moment" (Es sind derzeit keine Fehler im Renderer)</td>
+    </tr>
+    <tr>
+     <td>sensors</td>
+     <td>Schaltet die Anzeige der Sensorreichweiten von Einheiten und Gebäuden an uns aus</td>
+    </tr>
+    <!--<tr>
+     <td>shakey</td>
+     <td>Toggles shaking of the screen on explosions</td>
+    </tr>-->
+    <tr>
+     <td>timedemo</td>
+     <td>Gibt Netzwerk- und Rendererinformationen aus</td>
+    </tr>
+   </table>
+   <div class="rt">
+    <p><a href="#top">back to top</a></p>
+   </div>
+   <hr/>
+
+
+   <h2 id="debugkeys">Tastenkombinationen für den Debug-Modus</h2>
+   <div class="rt">
+    <p><a href="#top">back to top</a></p>
    </div>
    <hr/>
 
@@ -240,7 +593,7 @@ neos_symphonie_du_vide.ogg
    <div id="fileinfo">
     <ul>
      <li>AUTOR: <a href="mailto:kreuvf@warzone2100.de">Kreuvf</a></li>
-     <li>LETZTE ÄNDERUNG: 25.05.2008</li>
+     <li>LETZTE ÄNDERUNG: 22.06.2008</li>
     </ul>
    </div>
   </div>

@@ -76,24 +76,29 @@ location of this directory depends on the operating system.
 Warzone directory under GNU/Linux
 *********************************
 Under GNU/Linux the warzone-dir can be found in your home-directory, it's called
-".warzone2100". The leading dot indicates that it is a hidden folder so
+".warzone2100". The leading dot indicates that it is a hidden directory so
 depending on your configuration you may not be able to see it. However, you can
 still access it by typing the path into your address-bar.
 
 Warzone directory under Windows
 *******************************
-The folder is called "Warzone 2100" and is located in "My Documents".
+The directory is called "Warzone 2100" and is located in "My Documents".
 
 Warzone directory under Mac OS X
 ********************************
-The folder "Warzone 2100" can be found in your home-directory at:
+The directory "Warzone 2100" can be found in your home-directory at:
 ~/Library/Application Support/
 
 3.2 Configuration file
 ----------------------
-The configuration file is just called 'config' and contains several configuration options, some of them can be changed by using command-line options or using the in-game menus, others can only be changed by editing the file by hand.
+The configuration file is just called 'config' and contains several configura-
+tion options, some of them can be changed by using command-line options or using
+the in-game menus, others can only be changed by editing the file by hand.
 
-If at any point you did something wrong, you may delete the old configuration file and just restart Warzone 2100. Then the game will regenerate a new configuration file with default values. It may be wise to not delete and instead backup your old configuration file in case you want to keep other options.
+If at any point you did something wrong, you may delete the old configuration
+file and just restart Warzone 2100. Then the game will regenerate a new configu-
+ration file with default values. It may be wise to not delete and instead backup
+your old configuration file in case you want to keep other options.
 
 The shown values are the default values.
 
@@ -186,7 +191,7 @@ phrase0= to phrase4=
        umlaute or Japanese kanji.
 
 playaudiocds=1
-       Toggles playing of audio CDs on (1) and off (0)
+       Toggles playing of audio CDs on (1) and off (0).
 
 playername=
        Sets your name used in skirmish and multi player games. There is a
@@ -281,41 +286,41 @@ when trying to use invalid command-line options. Arguments that need paths need
 them in the form they are used on the operating system.
 
 --fullscreen
-       Starts the game in fullscreen-mode
+       Starts the game in fullscreen-mode.
 
 --window
-       Starts the game in windowed mode
+       Starts the game in windowed mode.
 
 --resolution WIDTHxHEIGHT
        Sets the resolution Warzone 2100 will use; usable for fullscreen mode and
-       windowed mode
+       windowed mode.
 
 --shadows
-       Enables shadows
+       Enables shadows.
 
 --noshadows
-       Disables shadows
+       Disables shadows.
 
 --sound
-       Enables sound
+       Enables sound.
 
 --nosound
-       Disables sound
+       Disables sound.
 
 --datadir path
-       Sets the data-directory to the path specified
+       Sets the data-directory to the path specified.
 
 --configdir path
-       Sets the configuration-directory to the path specified
+       Sets the configuration-directory to the path specified.
 
 --savegame name
-       Loads a saved game
+       Loads a saved game.
 
 --cheat
-       Enables the usage of cheats and debug-keys, see cheats and debug-keys
+       Enables the usage of cheats and debug-keys, see cheats and debug-keys.
 
 --help
-       Outputs a help message and exits; only useful when run from command-line
+       Outputs a help message and exits; only useful when run from command-line.
 
 --debug option
        Shows debug information; option can be any of the following: all, main,
@@ -327,7 +332,7 @@ them in the form they are used on the operating system.
        Directs debug output to the specified file.
 
 --version
-       Outputs the Warzone 2100 version and exits
+       Outputs the Warzone 2100 version and exits.
 
 --mod_ca mod-file
        Enables the specified campaign mod. You have to specify the full name of
