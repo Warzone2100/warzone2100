@@ -212,7 +212,7 @@ BOOL seq_UpdateFullScreenVideo(int *pbClear)
 	realFrame = (SDL_GetTicks()-time_started)/40; // standard frame is 40 msec
 	for(i=0;i<MAX_TEXT_OVERLAYS;i++)
 	{
-		if (aSeqList[currentPlaySeq].aText[i].pText[0] != 0)
+		if (aSeqList[currentPlaySeq].aText[i].pText[0] != '\0')
 		{
 			if (aSeqList[currentPlaySeq].aText[i].bSubtitle == true)
 			{
@@ -278,7 +278,7 @@ BOOL seq_UpdateFullScreenVideo(int *pbClear)
 	//print any text over the video
 	for(i=0;i<MAX_TEXT_OVERLAYS;i++)
 	{
-		if (aSeqList[currentPlaySeq].aText[i].pText[0] != 0)
+		if (aSeqList[currentPlaySeq].aText[i].pText[0] != '\0')
 		{
 			if ((realFrame >= aSeqList[currentPlaySeq].aText[i].startFrame) && (realFrame <= aSeqList[currentPlaySeq].aText[i].endFrame))
 			{
