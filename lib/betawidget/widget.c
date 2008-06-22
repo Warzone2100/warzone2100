@@ -70,9 +70,10 @@ void widgetInit(widget *self, const char *id)
 	// Default parent is none
 	self->parent = NULL;
 	
-	// Focus and mouse are flse by default
+	// Focus and mouse are false by default
 	self->hasFocus = false;
 	self->hasMouse = false;
+	self->hasMouseDown = false;
 }
 
 /*
@@ -464,7 +465,17 @@ bool widgetHandleEventImpl(widget *self, event *evt)
 		{
 			eventMouse evtMouse = *((eventMouse *) evt);
 			bool newHasMouse = pointInRect(evtMouse.loc, widgetAbsoluteBounds(self));
-				
+			
+			/*
+			 * Mouse motion events should not be dispatched if a mouse button
+			 * is currently `down' on our parent but not ourself.
+			 */
+			if (self->parent && self->parent->hasMouseDown && !self->hasMouseDown)
+			{
+				relevant = false;
+				break;
+			}
+			
 			// If we have just `got' the mouse
 			if (newHasMouse && !self->hasMouse)
 			{
@@ -506,9 +517,24 @@ bool widgetHandleEventImpl(widget *self, event *evt)
 			
 			if (pointInRect(evtMouseBtn.loc, widgetAbsoluteBounds(self)))
 			{
+				// If it is a mouse-down event set hasMouseDown to true
+				if (evt->type == EVT_MOUSE_DOWN)
+				{
+					self->hasMouseDown = true;
+				}
+				
 				widgetFireCallbacks(self, (event *) &evtMouseBtn);
 				
-				// TODO: Work out how to generate EVT_MOUSE_CLICK events
+				if (evt->type == EVT_MOUSE_UP && self->hasMouseDown)
+				{
+					evtMouseBtn.event.type = EVT_MOUSE_CLICK;
+					
+					widgetFireCallbacks(self, (event *) &evtMouseBtn);
+				}
+			}
+			else if (evt->type == EVT_MOUSE_UP && self->hasMouseDown)
+			{
+				self->hasMouseDown = false;
 			}
 			else
 			{

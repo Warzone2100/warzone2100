@@ -241,6 +241,11 @@ struct _widget
 	vAlign vAlignment;
 	hAlign hAlignment;
 	
+	/*
+	 * If a mouse button is currently depressed on the widget
+	 */
+	bool hasMouseDown;
+	
 	//--------------------------------------
 	// Public members
 	//--------------------------------------
