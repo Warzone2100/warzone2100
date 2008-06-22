@@ -281,7 +281,7 @@ bool widgetFireCallbacksImpl(widget *self, event *evt)
 		}
 	}
 	
-	// FIXIME
+	// FIXME
 	return true;
 }
 
