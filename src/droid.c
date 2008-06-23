@@ -4605,6 +4605,9 @@ BOOL  vtolHappy(DROID *psDroid)
 		// Check to see if we're fully repaired
 		return (psDroid->body == psDroid->originalBody);
 	}
+
+	ASSERT(!"Do we ever get here?", "If a crash/abortion occurs here, please attach a backtrace (the crash dump file) to https://gna.org/bugs/?11865 as it will affect the bugfix for that bug.");
+
 	return false;
 }
 
