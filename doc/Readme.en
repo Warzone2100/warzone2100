@@ -76,17 +76,17 @@ location of this directory depends on the operating system.
 Warzone directory under GNU/Linux
 *********************************
 Under GNU/Linux the warzone-dir can be found in your home-directory, it's called
-".warzone2100". The leading dot indicates that it is a hidden directory so
+".warzone2100-2.1". The leading dot indicates that it is a hidden directory so
 depending on your configuration you may not be able to see it. However, you can
 still access it by typing the path into your address-bar.
 
 Warzone directory under Windows
 *******************************
-The directory is called "Warzone 2100" and is located in "My Documents".
+The directory is called "Warzone 2100 2.1" and is located in "My Documents".
 
 Warzone directory under Mac OS X
 ********************************
-The directory "Warzone 2100" can be found in your home-directory at:
+The directory "Warzone 2100 2.1" can be found in your home-directory at:
 ~/Library/Application Support/
 
 3.2 Configuration file
@@ -552,4 +552,4 @@ Warzone2100.de (German):
 http://warzone2100.de/
 
 AUTHOR: Kreuvf (kreuvf@warzone2100.de)
-LAST UPDATE: 2008/06/22
+LAST UPDATE: 2008/06/23
