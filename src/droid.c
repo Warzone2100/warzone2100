@@ -4575,7 +4575,6 @@ BOOL  vtolHappy(DROID *psDroid)
 	UBYTE	i;
 	UBYTE	numVtolWeaps = 0;
 	UBYTE	rearmedWeaps = 0;
-	BOOL	bHappy = true;
 
 	CHECK_DROID(psDroid);
 
@@ -4600,21 +4599,11 @@ BOOL  vtolHappy(DROID *psDroid)
 		for (i = 0;i < psDroid->numWeaps;i++)
 		{
 			if ((numVtolWeaps & (1 << (1 + i))) && !(rearmedWeaps & (1 << (1 + i))))
-			{
-				bHappy = false;
-				break;
-			}
+				return false;
 		}
 
-		if (bHappy &&
-			psDroid->body == psDroid->originalBody)
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
+		// Check to see if we're fully repaired
+		return (psDroid->body == psDroid->originalBody);
 	}
 	return false;
 }
