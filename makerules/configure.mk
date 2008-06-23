@@ -1,107 +1,160 @@
-include $(MAKERULES)/config.mk
+include $(top_builddir)/config.mk
 
 
 # Check for unset config
 
-ifeq ($(strip $(VERSION)),)
-$(error You must set VERSION in $(MAKERULES)/config.mk)
+ifeq ($(MAKELEVEL),0)
+
+$(info Checking config...)
+
+ifeq ($(strip $(PACKAGE)),)
+$(error You must set PACKAGE in $(top_srcdir)/makerules/config.mk)
 else
-$(info VERSION set to $(VERSION))
+$(info PACKAGE := $(PACKAGE))
+endif
+
+ifeq ($(strip $(PACKAGE_NAME)),)
+$(error You must set PACKAGE_NAME in $(top_srcdir)/makerules/config.mk)
+else
+$(info PACKAGE_NAME := $(PACKAGE_NAME))
+endif
+
+ifeq ($(strip $(PACKAGE_VERSION)),)
+$(error You must set PACKAGE_VERSION in $(top_srcdir)/makerules/config.mk)
+else
+$(info PACKAGE_VERSION := $(PACKAGE_VERSION))
+endif
+
+ifeq ($(strip $(PACKAGE_BUGREPORT)),)
+$(error You must set PACKAGE_BUGREPORT in $(top_srcdir)/makerules/config.mk)
+else
+$(info PACKAGE_BUGREPORT := $(PACKAGE_BUGREPORT))
 endif
 
 ifeq ($(strip $(PLATFORM)),)
-$(error You must set PLATFORM in $(MAKERULES)/config.mk)
+$(error You must set PLATFORM in $(top_srcdir)/makerules/config.mk)
 else
-$(info PLATFORM set to $(PLATFORM))
+$(info PLATFORM := $(PLATFORM))
 endif
 
 ifeq ($(strip $(MODE)),)
-$(error You must set MODE in $(MAKERULES)/config.mk)
+$(error You must set MODE in $(top_srcdir)/makerules/config.mk)
 else
-$(info MODE set to $(MODE))
+$(info MODE := $(MODE))
 endif
 
 ifeq ($(strip $(DEVDIR)),)
-$(error You must set DEVDIR in $(MAKERULES)/config.mk)
+$(error You must set DEVDIR in $(top_srcdir)/makerules/config.mk)
 else
-$(info DEVDIR set to $(DEVDIR))
+$(info DEVDIR := $(DEVDIR))
 endif
 
 ifeq ($(strip $(BISON)),)
-$(error You must set BISON in $(MAKERULES)/config.mk)
+$(error You must set BISON in $(top_srcdir)/makerules/config.mk)
 else
-$(info BISON is set to $(BISON))
+$(info BISON := $(BISON))
 endif
 
 ifeq ($(strip $(FLEX)),)
-$(error You must set FLEX in $(MAKERULES)/config.mk)
+$(error You must set FLEX in $(top_srcdir)/makerules/config.mk)
 else
-$(info FLEX is set to $(FLEX))
+$(info FLEX := $(FLEX))
 endif
 
 ifneq ($(strip $(INSTALLER)),)
 ifeq ($(strip $(MAKENSIS)),)
-$(error You must set MAKENSIS in $(MAKERULES)/config.mk)
+$(error You must set MAKENSIS in $(top_srcdir)/makerules/config.mk)
 else
-$(info MAKENSIS is set to $(MAKENSIS))
+$(info MAKENSIS is := $(MAKENSIS))
 endif
 endif
+
+$(info Config seems valid.)
+
+endif
+
+
+# Find ourselves
+
+sub_path:=$(patsubst $(top_builddir)/%,%,$(CURDIR))
+ifneq ($(strip $(sub_path)),$(top_builddir))
+srcdir:=$(top_srcdir)/$(sub_path)
+else
+srcdir:=$(top_srcdir)
+endif
+
+builddir:=$(CURDIR)
 
 
 # Setup paths and static values
 
-CFLAGS+=-DPACKAGE_VERSION=\"$(VERSION)\" -DYY_STATIC -DLOCALEDIR=\"$(LOCALEDIR)\" -DPACKAGE=\"$(PACKAGE)\" -I.. -I../.. -I$(DEVDIR)/include/SDL -I$(DEVDIR)/include/libpng12 -I$(DEVDIR)/include
-CXXFLAGS+=-DPACKAGE_VERSION=\"$(VERSION)\" -DYY_STATIC -DLOCALEDIR=\"$(LOCALEDIR)\" -DPACKAGE=\"$(PACKAGE)\" -I.. -I../.. -I$(DEVDIR)/include/SDL -I$(DEVDIR)/include/libpng12 -I$(DEVDIR)/include
-LDFLAGS+=-L$(DEVDIR)/lib
-
-# Use C99
+CPPFLAGS+=-DPACKAGE=\"$(PACKAGE)\" -DPACKAGE_VERSION=\"$(PACKAGE_VERSION)\" -DYY_STATIC -I$(builddir) -I$(srcdir) -I$(top_srcdir) -I$(DEVDIR)/include/SDL -I$(DEVDIR)/include/libpng12 -I$(DEVDIR)/include/bfd -I$(DEVDIR)/include
 CFLAGS+=-std=gnu99
+CXXFLAGS+=
+LDFLAGS+=-L$(DEVDIR)/lib
 
 # Setup build environment with config values
 
 ifeq ($(strip $(MODE)),debug)
-CFLAGS+=-g -O0 -DDEBUG -Wall -Werror-implicit-function-declaration
-CXXFLAGS+=-g -O0 -DDEBUG -Wall
+CPPFLAGS+=-DDEBUG -Wall -Werror-implicit-function-declaration
+CFLAGS+=-g -O0
+CXXFLAGS+=-g -O0
 else
-CFLAGS+=-DNDEBUG
-CXXFLAGS+=-DNDEBUG
+CPPFLAGS+=-DNDEBUG
 endif
 
-ifeq ($(strip $(USE_GETTEXT)),yes)
-CFLAGS+=-DENABLE_NLS=1
+ifneq ($(strip $(USE_GETTEXT)),)
+CPPFLAGS+=-DENABLE_NLS=1
+ifneq ($(LOCALEDIR),)
+CPPFLAGS+=-DLOCALEDIR=$(LOCALEDIR)
+endif
 endif
 
 ifeq ($(strip $(PLATFORM)),windows)
-DIRSEP=\\
-RMF=del /F
-EXEEXT=.exe
-AR=ar
-CC=gcc
-CXX=g++
-WINDRES=windres
-CFLAGS+=-mwindows -DWIN32
-CXXFLAGS+=-mwindows -DWIN32
+DIRSEP:=\\
+MV:=???
+RM_F:=del /F
+RMDIR:=???
+MKDIR_P:=???
+TEST_D:=???
+EXEEXT:=.exe
+AR:=ar
+CC:=gcc
+CXX:=g++
+WINDRES:=windres
+CPPFLAGS+=-DWIN32
+CFLAGS+=-mwindows
+CXXFLAGS+=-mwindows
 LDFLAGS+=-lmingw32 -lSDLmain
 else
 ifeq ($(strip $(PLATFORM)),mingw32)
-DIRSEP=/
-RMF=rm -f
-EXEEXT=.exe
-AR=mingw32-ar
-CC=mingw32-gcc
-CXX=mingw32-g++
-WINDRES=mingw32-windres
-CFLAGS+=-mwindows -DWIN32
-CXXFLAGS+=-mwindows -DWIN32
+DIRSEP:=/
+MV:=mv
+RM_F:=rm -f
+RMDIR:=rmdir
+MKDIR_P:=mkdir -p
+TEST_D:=test -d
+EXEEXT:=.exe
+AR:=mingw32-ar
+CC:=mingw32-gcc
+CXX:=mingw32-g++
+WINDRES:=mingw32-windres
+CPPFLAGS+=-DWIN32
+CFLAGS+=-mwindows
+CXXFLAGS+=-mwindows
 LDFLAGS+=-lmingw32 -lSDLmain
 else
-DIRSEP=/
-RMF=rm -f
-EXEEXT=
-AR=ar
-CC=gcc
-CXX=g++
-WINDRES=
+DIRSEP:=/
+MV:=mv
+RM_F:=rm -f
+RMDIR:=rmdir
+MKDIR_P:=mkdir -p
+TEST_D:=test -d
+EXEEXT:=
+AR:=ar
+CC:=gcc
+CXX:=g++
+WINDRES:=
 endif
 endif
 
@@ -125,4 +178,4 @@ endif
 
 LDFLAGS+=-liconv -lz -lfreetype -lfontconfig -lexpat
 
-include $(MAKERULES)/common.mk
+include $(top_srcdir)/makerules/common.mk

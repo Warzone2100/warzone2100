@@ -1,3 +1,5 @@
+include $(top_srcdir)/makerules/configure.mk
+
 SUBDIRS=framework \
 	exceptionhandler \
 	gamelib \
@@ -10,18 +12,4 @@ SUBDIRS=framework \
 	sqlite3 \
 	widget
 
-.PHONY: $(SUBDIRS)
-all clean: $(SUBDIRS)
-
-$(SUBDIRS):
-	$(MAKE) -f Makefile.raw -C $@ $(MAKECMDGOALS)
-
-# Dependencies not needed, since no linking done?	
-#gamelib: framework ivis_common ivis_opengl sound
-#ivis_common: framework gamelib
-#ivis_opengl: framework ivis_common gamelib
-#netplay: framework
-#script: framework
-#sequence: framework
-#sound: framework gamelib
-#widget: framework ivis_common
+include $(top_srcdir)/makerules/submake.mk

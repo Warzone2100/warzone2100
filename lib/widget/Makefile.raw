@@ -1,5 +1,4 @@
-MAKERULES=../../makerules
-include $(MAKERULES)/configure.mk
+include $(top_srcdir)/makerules/configure.mk
 
 SRC=bar.c \
 	button.c \
@@ -13,4 +12,4 @@ SRC=bar.c \
 
 LIB=widget
 
-include $(MAKERULES)/lib.mk
+include $(top_srcdir)/makerules/lib.mk

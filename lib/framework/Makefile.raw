@@ -1,5 +1,4 @@
-MAKERULES=../../makerules
-include $(MAKERULES)/configure.mk
+include $(top_srcdir)/makerules/configure.mk
 
 SRC=configfile.c \
 	cursors.c \
@@ -25,4 +24,6 @@ SRC=configfile.c \
 
 LIB=framework
 
-include $(MAKERULES)/lib.mk
+CLEANFILES=strres_parser.tab.h resource_parser.tab.h
+
+include $(top_srcdir)/makerules/lib.mk

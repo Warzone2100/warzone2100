@@ -1,10 +1,18 @@
 SUBDIRS=build_tools po win32 lib src data pkg
 
-all clean: $(SUBDIRS)
+# Figure out top source dir: The Makefile.raw will be in it, and it is relative to this directory
+build_path:=$(patsubst %/Makefile.raw,%,$(lastword $(MAKEFILE_LIST)))
+ifneq ($(strip $(build_path)),Makefile.raw)
+export top_srcdir:=$(CURDIR)/$(build_path)
+else
+export top_srcdir:=$(CURDIR)
+endif
 
-.PHONY: $(SUBDIRS)
-$(SUBDIRS):
-	$(MAKE) -f Makefile.raw -C $@ $(MAKECMDGOALS)
+# Top build dir is this directory
+export top_builddir:=$(CURDIR)
 
-src: win32 lib build_tools
-packaging: data src po
+include $(top_srcdir)/makerules/configure.mk
+include $(top_srcdir)/makerules/submake.mk
+
+src: build_tools win32 lib
+pkg: data src po

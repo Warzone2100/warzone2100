@@ -1,5 +1,4 @@
-MAKERULES=../makerules
-include $(MAKERULES)/configure.mk
+include $(top_srcdir)/makerules/configure.mk
 
 SRC=ai.c \
 	aiexperience.c \
@@ -107,22 +106,24 @@ SRC=ai.c \
 	version.c \
 	warzoneconfig.c
 
-LIBS=../lib/libgamelib.a \
-	../lib/libivis_common.a \
-	../lib/libivis_opengl.a \
-	../lib/libnetplay.a \
-	../lib/libscript.a \
-	../lib/libsequence.a \
-	../lib/libsound.a \
-	../lib/libwidget.a \
-	../lib/libframework.a \
-	../lib/libexceptionhandler.a \
-	../lib/libsqlite3.a
+LIBS=$(top_builddir)/lib/libgamelib.a \
+	$(top_builddir)/lib/libivis_common.a \
+	$(top_builddir)/lib/libivis_opengl.a \
+	$(top_builddir)/lib/libnetplay.a \
+	$(top_builddir)/lib/libscript.a \
+	$(top_builddir)/lib/libsequence.a \
+	$(top_builddir)/lib/libsound.a \
+	$(top_builddir)/lib/libwidget.a \
+	$(top_builddir)/lib/libframework.a \
+	$(top_builddir)/lib/libexceptionhandler.a \
+	$(top_builddir)/lib/libsqlite3.a
 
 ifeq ($(strip $(PLATFORM)),windows)
-LIBS += ../win32/warzone2100.o
+LIBS += $(top_builddir)/win32/warzone2100.o
 endif
 
 EXE=warzone2100
 
-include $(MAKERULES)/exe.mk
+CLEANFILES=scriptvals_parser.tab.h
+
+include $(top_srcdir)/makerules/exe.mk

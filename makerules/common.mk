@@ -1,14 +1,14 @@
-%.o: %.rc
-	$(WINDRES) $(CPPFLAGS) -o$@ $<
+%.o: $(srcdir)/%.rc
+	$(WINDRES) $(CPPFLAGS) -o $@ $<
 
-%.o: %.c
-	$(CC) $(CPPFLAGS) $(CFLAGS) -c -o$@ $<
+%.o: $(srcdir)/%.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) -c -o $@ $<
 
-%.o: %.cpp
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c -o$@ $<
+%.o: $(srcdir)/%.cpp
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c -o $@ $<
 
-%.lex.h %.lex.c: %.l
-	$(FLEX) $(FLEXFLAGS) -o$@ $<
+%.lex.h %.lex.c: $(srcdir)/%.l
+	$(FLEX) $(FLEXFLAGS) -o $@ $<
 
-%.tab.h %.tab.c: %.y
-	$(BISON) -d $(BISONFLAGS) -o$@ $<
+%.tab.h %.tab.c: $(srcdir)/%.y
+	$(BISON) -d $(BISONFLAGS) -o $@ $<

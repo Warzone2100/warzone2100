@@ -1,40 +1,40 @@
-# Version of Warzone you are compiling
-VERSION=TRUNK
-INSTALLER_VERSION=9.9.9.9
-PACKAGE_BUGREPORT=http://wz2100.net/
-PACKAGE_NAME=Warzone 2100
-PACKAGE_VERSION=$(VERSION)
+# Metadata of the version of Warzone 2100 you are compiling
+PACKAGE:=warzone2100
+PACKAGE_NAME:=Warzone 2100
+PACKAGE_VERSION:=TRUNK
+PACKAGE_BUGREPORT:=http://wz2100.net/
+INSTALLER_VERSION:=9.9.9.9
 
 # Platform you are running
-#PLATFORM=windows
-#PLATFORM=linux
-#PLATFORM=mingw32
+#PLATFORM:=windows
+#PLATFORM:=linux
+#PLATFORM:=mingw32
 
 # Compilation mode
-#MODE=debug
-#MODE=release
+#MODE:=debug
+#MODE:=release
 
 # Directory where you store your dev stuff (lib and include)
-#DEVDIR=C:/devpkg
+#DEVDIR:=C:/devpkg
 
 # Remind the user to install Flex and Bison
-#BISON=bison
-#FLEX=flex
+#BISON:=bison
+#FLEX:=flex
 
 ## This is only needed for people planning to distribute this package and/or
 ## create installers from it.
 # Path to makensis
-#MAKENSIS="wine C:/Program\ Files/NSIS/makensis.exe"
-#MAKENSIS=makensis
+#MAKENSIS:="wine C:/Program\ Files/NSIS/makensis.exe"
+#MAKENSIS:=makensis
 
 # Whether to build data package and installer
-#DATA=yes
-#INSTALLER=yes
-#USE_GETTEXT=yes
+#DATA:=yes
+#INSTALLER:=yes
+#USE_GETTEXT:=yes
 
 # Gettext stuff
-#PACKAGE=warzone2100
-#LOCALEDIR=""
-#XGETTEXT="xgettext"
-#MSGMERGE="msgmerge"
-#MSGFMT="msgfmt"
+#PACKAGE:=warzone2100
+#LOCALEDIR:=""
+#XGETTEXT:="xgettext"
+#MSGMERGE:="msgmerge"
+#MSGFMT:="msgfmt"

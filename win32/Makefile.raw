@@ -1,9 +1,8 @@
-MAKERULES=../makerules
-include $(MAKERULES)/configure.mk
+include $(top_srcdir)/makerules/configure.mk
 
 ifeq ($(strip $(PLATFORM)),windows)
 all: warzone2100.o
 endif
 
 clean:
-	$(RMF) warzone2100.o
+	$(RM_F) warzone2100.o

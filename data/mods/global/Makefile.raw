@@ -1,41 +1,49 @@
-MAKERULES=../../../makerules
-include $(MAKERULES)/configure.mk
+include $(top_srcdir)/makerules/configure.mk
 
-AIVOLUTIONLIST = multiplay commands.txt
-GRIMLIST = components structs texpages wrf COPYING
-NEWST_TILESLIST = texpages COPYING readme.txt
-NTWLIST = addon.lev audio components COPYING doc effects images messages multiplay stats structs texpages wrf
+AIVOLUTIONLIST=multiplay commands.txt
+GRIMLIST=components structs texpages wrf COPYING
+NEWST_TILESLIST=texpages COPYING readme.txt
+NTWLIST=addon.lev audio components COPYING doc effects images messages multiplay stats structs texpages wrf
 
 AIVOLUTIONARCHIVE=aivolution.wz
 GRIMARCHIVE=grim.wz
 NEWST_TILESARCHIVE=newst_tiles.wz
 NTWARCHIVE=ntw.wz
 
+CLEANFILES=$(AIVOLUTIONARCHIVE) $(GRIMARCHIVE) $(NEWST_TILESARCHIVE) $(NTWARCHIVE)
+
+.PHONY: all clean $(AIVOLUTIONARCHIVE) $(GRIMARCHIVE) $(NEWST_TILESARCHIVE) $(NTWARCHIVE)
+
 all:
 ifdef DATA
 all: $(AIVOLUTIONARCHIVE) $(GRIMARCHIVE) $(NEWST_TILESARCHIVE) $(NTWARCHIVE)
 endif
 
-$(AIVOLUTIONARCHIVE): $(AIVOLUTIONLIST:%=aivolution/%)
-	cd aivolution && zip -ru0 ../$@ $(AIVOLUTIONLIST) -x *svn*
-	zip -T $@
+stamp:
+	touch stamp
 
-$(GRIMARCHIVE): $(GRIMLIST:%=grim/%)
-	cd grim && zip -ru0 ../$@ $(GRIMLIST) -x *svn*
+$(AIVOLUTIONARCHIVE): $(srcdir)/$(basename $(AIVOLUTIONARCHIVE)) stamp $(patsubst %,$(srcdir)/$(basename $(AIVOLUTIONARCHIVE))/%,$(AIVOLUTIONLIST))
+	(cd $< && zip -ru0 $(builddir)/$@ $(filter-out stamp,$(filter-out $<,$(^:$</%=%))) -x '*svn*' || [ $$? -eq 12 ] && true) # zip returns 12 on "nothing to do"
 	zip -T $@
+	$(RM_F) stamp
 
-$(NEWST_TILESARCHIVE): $(NEWST_TILESLIST:%=newst_tiles/%)
-	cd newst_tiles && zip -ru0 ../$@ $(NEWST_TILESLIST) -x *svn*
+$(GRIMARCHIVE): $(srcdir)/$(basename $(GRIMARCHIVE)) stamp $(patsubst %,$(srcdir)/$(basename $(GRIMARCHIVE))/%,$(GRIMLIST))
+	(cd $< && zip -ru0 $(builddir)/$@ $(filter-out stamp,$(filter-out $<,$(^:$</%=%))) -x '*svn*' || [ $$? -eq 12 ] && true) # zip returns 12 on "nothing to do"
 	zip -T $@
+	$(RM_F) stamp
 
-$(NTWARCHIVE): $(NTWLIST:%=ntw/%)
-	cd ntw && zip -ru0 ../$@ $(NTWLIST) -x *svn*
+$(NEWST_TILESARCHIVE): $(srcdir)/$(basename $(NEWST_TILESARCHIVE)) stamp $(patsubst %,$(srcdir)/$(basename $(NEWST_TILESARCHIVE))/%,$(NEWST_TILESLIST))
+	(cd $< && zip -ru0 $(builddir)/$@ $(filter-out stamp,$(filter-out $<,$(^:$</%=%))) -x '*svn*' || [ $$? -eq 12 ] && true) # zip returns 12 on "nothing to do"
 	zip -T $@
+	$(RM_F) stamp
+
+$(NTWARCHIVE): $(srcdir)/$(basename $(NTWARCHIVE)) stamp $(patsubst %,$(srcdir)/$(basename $(NTWARCHIVE))/%,$(NTWLIST))
+	(cd $< && zip -ru0 $(builddir)/$@ $(filter-out stamp,$(filter-out $<,$(^:$</%=%))) -x '*svn*' || [ $$? -eq 12 ] && true) # zip returns 12 on "nothing to do"
+	zip -T $@
+	$(RM_F) stamp
 
 clean:
-	$(RMF) $(GRIMARCHIVE)
-	$(RMF) $(AIVOLUTIONARCHIVE)
-	$(RMF) $(NEWST_TILESARCHIVE)
-	$(RMF) $(NTWARCHIVE)
-
-.PHONY: all clean $(AIVOLUTIONARCHIVE) $(GRIMARCHIVE) $(NEWST_TILESARCHIVE) $(NTWARCHIVE)
+	$(RM_F) $(GRIMARCHIVE)
+	$(RM_F) $(AIVOLUTIONARCHIVE)
+	$(RM_F) $(NEWST_TILESARCHIVE)
+	$(RM_F) $(NTWARCHIVE)

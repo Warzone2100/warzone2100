@@ -1,26 +1,29 @@
-MAKERULES=../../makerules
-include $(MAKERULES)/configure.mk
-include $(MAKERULES)/common.mk
+include $(top_srcdir)/makerules/configure.mk
+
+# Hacks to build for compiling system, not for target
+CC:=g++
+CXX:=g++
+CPPFLAGS:=$(subst -DWIN32,,$(CPPFLAGS))
+CFLAGS:=$(subst -mwindows,,$(CFLAGS))
+CXXFLAGS:=$(subst -mwindows,,$(CXXFLAGS))
+LDFLAGS:=
+EXEEXT=
 
 SRC=autorevision.cpp
 
 EXE=autorevision
-CXX=g++
 
-DEPS=$(patsubst %.c,%.o, $(SRC:%.cpp=%.o)) $(LIBS)
+include $(top_srcdir)/makerules/exe.mk
+
+.PHONY: all all-local clean clean-local
 
 all: all-local
 
-$(EXE)$(EXEEXT): $(DEPS)
-		$(CXX) -o $@ $<
-
 all-local: $(EXE)$(EXEEXT)
-	$(EXE)$(EXEEXT) +cstr -v ../.. ../../src/autorevision.h
+	$(builddir)$(DIRSEP)$(EXE)$(EXEEXT) +cstr -v $(top_srcdir) $(top_builddir)/src/autorevision.h
 
 clean-local:
-	-$(RMF) ../../src/autorevision.h
+	-$(RM_F) $(top_builddir)/src/autorevision.h
 
-clean:
-	$(RMF) $(DEPS) $(EXE)$(EXEEXT)
-
-.PHONY: all all-local clean
+clean: clean-local
+	$(RM_F) $(DEPS) $(EXE)$(EXEEXT)

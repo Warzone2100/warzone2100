@@ -1,5 +1,4 @@
-MAKERULES=../../makerules
-include $(MAKERULES)/configure.mk
+include $(top_srcdir)/makerules/configure.mk
 
 SRC=audio.c \
 	audio_id.c \
@@ -12,4 +11,4 @@ SRC=audio.c \
 
 LIB=sound
 
-include $(MAKERULES)/lib.mk
+include $(top_srcdir)/makerules/lib.mk

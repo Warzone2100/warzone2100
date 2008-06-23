@@ -1,32 +1,32 @@
-MAKERULES=../makerules
-include $(MAKERULES)/configure.mk
+include $(top_srcdir)/makerules/configure.mk
+
+include $(srcdir)/Makevars
+
+PO_FILES=nb.po de.po da.po nl.po la.po
+MO_FILES=$(patsubst %.po,%.gmo,$(PO_FILES))
 
 .PHONY: all clean update-po po-files mo-files
 
-all:
 ifdef USE_GETTEXT
 all: po-files mo-files
 endif
 
-PO_FILES=nb.po de.po da.po nl.po la.po
-MO_FILES=$(patsubst %.po,%.gmo, $(PO_FILES))
-
-po-files: $(PO_FILES)
+po-files: $(patsubst %,$(srcdir)/%,$(PO_FILES))
 mo-files: $(MO_FILES)
 
 update-po: clean all
 
-$(PACKAGE).pot: POTFILES.in
-	$(XGETTEXT) --default-domain=$(PACKAGE) --directory=.. --add-comments=TRANSLATORS: --keyword=_ --keyword=N_ --keyword=P_:1c,2 --keyword=NP_:1c,2 --files-from=$< --copyright-holder="Warzone Resurrection Project" --msgid-bugs-address="warzone-dev@gna.org"
-	mv $(PACKAGE).po $@
+$(DOMAIN).pot: $(srcdir)/POTFILES.in
+	$(XGETTEXT) $(XGETTEXT_OPTIONS) --default-domain=$(DOMAIN) --copyright-holder=$(COPYRIGHT_HOLDER) --msgid-bugs-address=$(MSGID_BUGS_ADDRESS) --directory=$(top_builddir) --add-comments=TRANSLATORS: --files-from=$<
+	mv $(DOMAIN).po $@
 
-%.po: $(PACKAGE).pot
-	$(MSGMERGE) $@ $(PACKAGE).pot -o $@.new
-	mv $@.new $@
+$(srcdir)/%.po: $(srcdir)/$(DOMAIN).pot
+	$(MSGMERGE) $(MSGMERGE_OPTIONS) $@ $(DOMAIN).pot -o $@.new
+	$(MV) $@.new $@
 
-%.gmo: %.po
+%.gmo: $(srcdir)/%.po
 	$(MSGFMT) -c -o $@ $<
 
 clean:
-	$(RMF) $(PACKAGE).pot
-	$(RMF) $(MO_FILES)
+	$(RM_F) $(PACKAGE).pot
+	$(RM_F) $(MO_FILES)

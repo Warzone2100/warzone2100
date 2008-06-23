@@ -1,11 +1,10 @@
-MAKERULES=../../makerules
-include $(MAKERULES)/configure.mk
+include $(top_srcdir)/makerules/configure.mk
 
-SRC=	netjoin_stub.c \
+SRC=netjoin_stub.c \
 	netlog.c \
 	netplay.c \
 	nettypes.c
 
 LIB=netplay
 
-include $(MAKERULES)/lib.mk
+include $(top_srcdir)/makerules/lib.mk
