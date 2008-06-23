@@ -1096,7 +1096,7 @@ static BOOL moveBlocked(DROID *psDroid)
 						  map_coord(psDroid->sMove.DestinationX), map_coord(psDroid->sMove.DestinationY)))
 		{
 			objTrace(psDroid->id, "Trying to reroute to (%d,%d)", psDroid->sMove.DestinationX, psDroid->sMove.DestinationY);
-			moveDroidTo(psDroid, psDroid->sMove.DestinationX, psDroid->sMove.DestinationY);
+			moveDroidTo(psDroid, world_coord(psDroid->sMove.DestinationX), world_coord(psDroid->sMove.DestinationY));
 			return false;
 		}
 
