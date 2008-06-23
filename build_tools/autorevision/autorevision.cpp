@@ -24,6 +24,7 @@
 #include <sstream>
 
 #include <cstring>
+#include <cstdlib>
 
 using namespace std;
 
