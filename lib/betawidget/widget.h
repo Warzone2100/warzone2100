@@ -12,6 +12,8 @@
 /*
  * Forward declarations
  */
+typedef struct _classInfo classInfo;
+
 typedef struct _widget widget;
 typedef struct _widgetVtbl widgetVtbl;
 
@@ -30,6 +32,15 @@ typedef struct _eventTableEntry eventTableEntry;
 
 typedef enum _hAlign            hAlign;
 typedef enum _vAlign            vAlign;
+
+/*
+ * Information about the `type' (class) of a widget
+ */
+struct _classInfo
+{
+	struct _classInfo *parentType;
+	const char *ourType;
+};
 
 /*
  * The valid event types
@@ -256,6 +267,11 @@ struct _widget
 	char *id;
 
 	/*
+	 * The class (or subclass) that widget is (used for type checking)
+	 */
+	classInfo *classInfo;
+	
+	/*
 	 * Arbitary user-defined data
 	 */
 	void *pUserData;
@@ -288,6 +304,15 @@ struct _widget
 };
 
 /*
+ * Type information
+ */
+const classInfo widgetClassInfo =
+{
+	NULL,		// Root class and therefore no parent
+	"widget"
+};
+
+/*
  * Helper macros
  */
 #define WIDGET(self) ((widget *) (self))
@@ -315,6 +340,20 @@ void widgetSetAlignImpl(widget *self, vAlign v, hAlign h);
 void widgetDrawChildrenImpl(widget *self, cairo_t *cr);
 
 bool widgetHandleEventImpl(widget *instance, event *evt);
+
+/*
+ * Public static methods
+ */
+
+/**
+ * Checks to see if it is legal to cast self to instanceOf. Or, put in OO terms
+ * checks if self `is a' instanceOf instance.
+ * 
+ * @param self	The widget to check the class of.
+ * @param instanceOf	The class we are interested in.
+ * @return True if it is legal to cast, false otherwise.
+ */
+bool widgetIsA(widget *self, classInfo *instanceOf);
 
 /*
  * Public methods

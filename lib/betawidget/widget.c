@@ -6,6 +6,25 @@
 
 static widgetVtbl vtbl;
 
+bool widgetIsA(widget *self, classInfo *instanceOf)
+{
+	classInfo *widgetClass;
+	
+	// Transverse up the hierarchy
+	for (widgetClass = self->classInfo;
+	     widgetClass->parentType;
+	     widgetClass = widgetClass->parentType)
+	{
+		// self `is a' instanceOf
+		if (widgetClass == instanceOf)
+		{
+			return true;
+		}
+	}
+	
+	return false;
+}
+
 /**
  * Prepares the widget classes vtable.
  */
@@ -58,6 +77,9 @@ void widgetInit(widget *self, const char *id)
 	// Prepare our vtable
 	widgetInitVtbl(self);
 
+	// Set our type
+	self->classInfo = &widgetClassInfo;
+	
 	// Prepare our container
 	self->children = vectorCreate((destroyCallback) widgetDestroy);
 
