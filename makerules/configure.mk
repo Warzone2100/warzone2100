@@ -112,11 +112,10 @@ endif
 
 ifeq ($(strip $(PLATFORM)),windows)
 DIRSEP:=\\
-MV:=???
+MV:=move
 RM_F:=del /F
-RMDIR:=???
-MKDIR_P:=???
-TEST_D:=???
+RMDIR:=rmdir
+MKDIR_P:=mkdir
 EXEEXT:=.exe
 AR:=ar
 CC:=gcc
@@ -133,7 +132,6 @@ MV:=mv
 RM_F:=rm -f
 RMDIR:=rmdir
 MKDIR_P:=mkdir -p
-TEST_D:=test -d
 EXEEXT:=.exe
 AR:=mingw32-ar
 CC:=mingw32-gcc
@@ -149,7 +147,6 @@ MV:=mv
 RM_F:=rm -f
 RMDIR:=rmdir
 MKDIR_P:=mkdir -p
-TEST_D:=test -d
 EXEEXT:=
 AR:=ar
 CC:=gcc
