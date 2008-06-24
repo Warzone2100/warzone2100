@@ -159,9 +159,9 @@ fi
 
 
 # Chdir to the srcdir, then run auto* tools.
-cd $SRCDIR
+cd "$SRCDIR"
 
-[ -f $srcfile ] || {
+[ -f "$srcfile" ] || {
   echo "Are you sure $SRCDIR is a valid source directory?"
   exit 1
 }
@@ -193,7 +193,7 @@ automake -a -c --foreign || {
 
 
 # Chdir back to the builddir before the configure step.
-cd $BUILDDIR
+cd "$BUILDDIR"
 
 # now remove the cache, because it can be considered dangerous in this case
 echo "+ removing config.cache ... "
@@ -203,4 +203,3 @@ echo
 echo "Now type './configure && make' to compile."
 
 exit 0
-
