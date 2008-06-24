@@ -3,7 +3,15 @@
 
 #include "vector.h"
 
-const int defaultSize = 4;
+struct _vector
+{
+	void            **mem;
+	int             size;
+	int             head;
+	destroyCallback destroy;
+};
+
+static const int defaultSize = 4;
 
 vector *vectorCreate(destroyCallback cb)
 {
@@ -53,6 +61,7 @@ void *vectorAdd(vector *v, void *object)
 			return NULL;
 		}
 
+		v->mem = newMem;
 		v->size *= 2;
 	}
 

@@ -60,4 +60,3 @@ point pointAdd(point p, point q);
 
 
 #endif /*GEOM_H_*/
-

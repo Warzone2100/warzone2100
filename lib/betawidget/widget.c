@@ -8,7 +8,7 @@ static widgetVtbl vtbl;
 
 bool widgetIsA(widget *self, classInfo *instanceOf)
 {
-	classInfo *widgetClass;
+	const classInfo *widgetClass;
 	
 	// Transverse up the hierarchy
 	for (widgetClass = self->classInfo;

@@ -38,7 +38,7 @@ typedef enum _vAlign            vAlign;
  */
 struct _classInfo
 {
-	struct _classInfo *parentType;
+	const struct _classInfo *parentType;
 	const char *ourType;
 };
 
@@ -269,7 +269,7 @@ struct _widget
 	/*
 	 * The class (or subclass) that widget is (used for type checking)
 	 */
-	classInfo *classInfo;
+	const classInfo *classInfo;
 	
 	/*
 	 * Arbitary user-defined data
