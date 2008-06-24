@@ -1,8 +1,8 @@
 SUBDIRS=build_tools po win32 lib src data pkg
 
 # Figure out top source dir: The Makefile.raw will be in it, and it is relative to this directory
-build_path:=$(patsubst %/Makefile.raw,%,$(lastword $(MAKEFILE_LIST)))
-ifneq ($(strip $(build_path)),Makefile.raw)
+build_path:=$(patsubst %/makefile.raw,%,$(lastword $(MAKEFILE_LIST)))
+ifneq ($(strip $(build_path)),makefile.raw)
 export abs_top_srcdir:=$(CURDIR)/$(build_path)
 else
 export abs_top_srcdir:=$(CURDIR)
