@@ -1,4 +1,4 @@
-include $(abs_top_srcdir)/makerules/configure.mk
+include $(top_srcdir)/makerules/configure.mk
 
 SUBDIRS=framework \
 	exceptionhandler \
@@ -12,4 +12,4 @@ SUBDIRS=framework \
 	sqlite3 \
 	widget
 
-include $(abs_top_srcdir)/makerules/submake.mk
+include $(top_srcdir)/makerules/submake.mk

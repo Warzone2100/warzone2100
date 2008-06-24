@@ -1,4 +1,4 @@
-include $(abs_top_srcdir)/makerules/common.mk
+include $(top_srcdir)/makerules/common.mk
 
 DEPS=$(patsubst %.c,%.o,$(patsubst %.cpp,%.o,$(patsubst %.rc,%.o,$(SRC)))) $(LIBS)
 

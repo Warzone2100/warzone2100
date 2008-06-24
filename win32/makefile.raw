@@ -1,4 +1,4 @@
-include $(abs_top_srcdir)/makerules/configure.mk
+include $(top_srcdir)/makerules/configure.mk
 
 ifeq ($(strip $(PLATFORM)),windows)
 all: warzone2100.o

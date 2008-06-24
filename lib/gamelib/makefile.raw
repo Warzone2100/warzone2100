@@ -1,4 +1,4 @@
-include $(abs_top_srcdir)/makerules/configure.mk
+include $(top_srcdir)/makerules/configure.mk
 
 SRC=anim.c \
 	animobj.c \
@@ -11,4 +11,4 @@ LIB=gamelib
 
 CLEANFILES=audp_parser.tab.h
 
-include $(abs_top_srcdir)/makerules/lib.mk
+include $(top_srcdir)/makerules/lib.mk

@@ -3,18 +3,19 @@ SUBDIRS=build_tools po win32 lib src data pkg
 # Figure out top source dir: The Makefile.raw will be in it, and it is relative to this directory
 build_path:=$(patsubst %/makefile.raw,%,$(lastword $(MAKEFILE_LIST)))
 ifneq ($(strip $(build_path)),makefile.raw)
+export top_srcdir:=$(build_path)
 export abs_top_srcdir:=$(CURDIR)/$(build_path)
 else
+export top_srcdir:=.
 export abs_top_srcdir:=$(CURDIR)
 endif
 
 # Top build dir is this directory
+export top_builddir:=.
 export abs_top_builddir:=$(CURDIR)
 
-# FIXME: Using abs_top_* is affected by whitespace problems
-
-include $(abs_top_srcdir)/makerules/configure.mk
-include $(abs_top_srcdir)/makerules/submake.mk
+include $(top_srcdir)/makerules/configure.mk
+include $(top_srcdir)/makerules/submake.mk
 
 src: build_tools win32 lib
 pkg: data src po

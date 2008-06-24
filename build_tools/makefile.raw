@@ -1,5 +1,5 @@
-include $(abs_top_srcdir)/makerules/configure.mk
+include $(top_srcdir)/makerules/configure.mk
 
 SUBDIRS=autorevision
 
-include $(abs_top_srcdir)/makerules/submake.mk
+include $(top_srcdir)/makerules/submake.mk

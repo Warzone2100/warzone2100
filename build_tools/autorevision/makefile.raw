@@ -1,4 +1,4 @@
-include $(abs_top_srcdir)/makerules/configure.mk
+include $(top_srcdir)/makerules/configure.mk
 
 # Hacks to build for compiling system, not for target
 CC:=g++
@@ -13,17 +13,17 @@ SRC=autorevision.cpp
 
 EXE=autorevision
 
-include $(abs_top_srcdir)/makerules/exe.mk
+include $(top_srcdir)/makerules/exe.mk
 
 .PHONY: all all-local clean clean-local
 
 all: all-local
 
 all-local: $(EXE)$(EXEEXT)
-	$(builddir)$(DIRSEP)$(EXE)$(EXEEXT) +cstr -v $(abs_top_srcdir) $(abs_top_builddir)/src/autorevision.h
+	$(builddir)$(DIRSEP)$(EXE)$(EXEEXT) +cstr -v $(top_srcdir) $(top_builddir)/src/autorevision.h
 
 clean-local:
-	-$(RM_F) $(abs_top_builddir)/src/autorevision.h
+	-$(RM_F) $(top_builddir)/src/autorevision.h
 
 clean: clean-local
 	$(RM_F) $(DEPS) $(EXE)$(EXEEXT)

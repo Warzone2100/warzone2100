@@ -1,4 +1,4 @@
-include $(abs_top_srcdir)/makerules/configure.mk
+include $(top_srcdir)/makerules/configure.mk
 
 SRC=bitimage.c \
 	imd.c \
@@ -9,4 +9,4 @@ SRC=bitimage.c \
 
 LIB=ivis_common
 
-include $(abs_top_srcdir)/makerules/lib.mk
+include $(top_srcdir)/makerules/lib.mk
