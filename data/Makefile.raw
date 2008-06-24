@@ -1,4 +1,4 @@
-include $(top_srcdir)/makerules/configure.mk
+include $(abs_top_srcdir)/makerules/configure.mk
 
 SUBDIRS=mods
 
@@ -13,7 +13,7 @@ PATCHARCHIVE=mp.wz
 
 CLEANFILES=$(BASEARCHIVE) $(PATCHARCHIVE)
 
-include $(top_srcdir)/makerules/submake.mk
+include $(abs_top_srcdir)/makerules/submake.mk
 
 .PHONY: all clean $(BASEARCHIVE) $(PATCHARCHIVE) $(SUBDIRS)
 

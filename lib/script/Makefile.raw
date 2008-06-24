@@ -1,4 +1,4 @@
-include $(top_srcdir)/makerules/configure.mk
+include $(abs_top_srcdir)/makerules/configure.mk
 
 SRC=codeprint.c \
 	event.c \
@@ -15,5 +15,5 @@ LIB=script
 
 CLEANFILES=chat_parser.tab.h script_parser.tab.h
 
-include $(top_srcdir)/makerules/lib.mk
+include $(abs_top_srcdir)/makerules/lib.mk
 

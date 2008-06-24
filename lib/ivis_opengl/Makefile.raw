@@ -1,4 +1,4 @@
-include $(top_srcdir)/makerules/configure.mk
+include $(abs_top_srcdir)/makerules/configure.mk
 
 SRC=GLee.c \
 	ivi.c \
@@ -16,4 +16,4 @@ SRC=GLee.c \
 
 LIB=ivis_opengl
 
-include $(top_srcdir)/makerules/lib.mk
+include $(abs_top_srcdir)/makerules/lib.mk

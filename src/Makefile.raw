@@ -1,4 +1,4 @@
-include $(top_srcdir)/makerules/configure.mk
+include $(abs_top_srcdir)/makerules/configure.mk
 
 SRC=ai.c \
 	aiexperience.c \
@@ -106,24 +106,24 @@ SRC=ai.c \
 	version.c \
 	warzoneconfig.c
 
-LIBS=$(top_builddir)/lib/libgamelib.a \
-	$(top_builddir)/lib/libivis_common.a \
-	$(top_builddir)/lib/libivis_opengl.a \
-	$(top_builddir)/lib/libnetplay.a \
-	$(top_builddir)/lib/libscript.a \
-	$(top_builddir)/lib/libsequence.a \
-	$(top_builddir)/lib/libsound.a \
-	$(top_builddir)/lib/libwidget.a \
-	$(top_builddir)/lib/libframework.a \
-	$(top_builddir)/lib/libexceptionhandler.a \
-	$(top_builddir)/lib/libsqlite3.a
+LIBS=$(abs_top_builddir)/lib/libgamelib.a \
+	$(abs_top_builddir)/lib/libivis_common.a \
+	$(abs_top_builddir)/lib/libivis_opengl.a \
+	$(abs_top_builddir)/lib/libnetplay.a \
+	$(abs_top_builddir)/lib/libscript.a \
+	$(abs_top_builddir)/lib/libsequence.a \
+	$(abs_top_builddir)/lib/libsound.a \
+	$(abs_top_builddir)/lib/libwidget.a \
+	$(abs_top_builddir)/lib/libframework.a \
+	$(abs_top_builddir)/lib/libexceptionhandler.a \
+	$(abs_top_builddir)/lib/libsqlite3.a
 
 ifeq ($(strip $(PLATFORM)),windows)
-LIBS += $(top_builddir)/win32/warzone2100.o
+LIBS += $(abs_top_builddir)/win32/warzone2100.o
 endif
 
 EXE=warzone2100
 
 CLEANFILES=scriptvals_parser.tab.h
 
-include $(top_srcdir)/makerules/exe.mk
+include $(abs_top_srcdir)/makerules/exe.mk

@@ -1,7 +1,7 @@
-include $(top_srcdir)/makerules/configure.mk
+include $(abs_top_srcdir)/makerules/configure.mk
 
 SRC=physfs_vfs.c sqlite3.c
 
 LIB=sqlite3
 
-include $(top_srcdir)/makerules/lib.mk
+include $(abs_top_srcdir)/makerules/lib.mk

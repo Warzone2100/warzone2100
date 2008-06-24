@@ -1,7 +1,7 @@
-include $(top_srcdir)/makerules/configure.mk
+include $(abs_top_srcdir)/makerules/configure.mk
 
 SRC=sequence.c
 
 LIB=sequence
 
-include $(top_srcdir)/makerules/lib.mk
+include $(abs_top_srcdir)/makerules/lib.mk

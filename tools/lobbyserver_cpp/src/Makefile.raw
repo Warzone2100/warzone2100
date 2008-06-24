@@ -14,13 +14,13 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program; if not, write to the Free Software
 #    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-include $(top_srcdir)/makerules/configure.mk
+include $(abs_top_srcdir)/makerules/configure.mk
 
 OBJS=main.o lobby/read_write_mutex.o networking/tcp_server.o lobby/lobby.o lobby/game.o lobby/raii_counter.o lobby/lobby_iterator.o lobby/lobby_gamelock.o requesthandler.o networking/nattester.o
 
 BOOST_DIR=C:/boost_1_33_1
 BOOST_ASIO_DIR=C:/boost_asio_0_3_7
-WARZONE_LIBDIR=$(top_builddir)/lib
+WARZONE_LIBDIR=$(abs_top_builddir)/lib
 
 ifeq ($(RELEASE),)
 BOOST_THREADS=$(BOOST_DIR)/bin/boost/libs/thread/build/libboost_thread.lib/mingw/debug/threading-multi/libboost_thread-mgw-mt-d-1_33_1.lib

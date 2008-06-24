@@ -1,4 +1,4 @@
-include $(top_srcdir)/makerules/configure.mk
+include $(abs_top_srcdir)/makerules/configure.mk
 
 SRC=dumpinfo.cpp \
 	exceptionhandler.c \
@@ -6,4 +6,4 @@ SRC=dumpinfo.cpp \
 
 LIB=exceptionhandler
 
-include $(top_srcdir)/makerules/lib.mk
+include $(abs_top_srcdir)/makerules/lib.mk
