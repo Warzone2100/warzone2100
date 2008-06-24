@@ -32,6 +32,8 @@
 #include "frameint.h"
 #include "strnlen1.h"
 
+#include "lib/gamelib/gtime.h"
+
 #define MAX_LEN_LOG_LINE 512
 
 char last_called_script_event[MAX_EVENT_NAME_LEN];
@@ -387,7 +389,7 @@ void _debug( code_part part, const char *function, const char *str, ... )
 	if (!repeated)
 	{
 		// Assemble the outputBuffer:
-		snprintf( outputBuffer, MAX_LEN_LOG_LINE, "%-8s: %s", code_part_names[part], useInputBuffer1 ? inputBuffer[1] : inputBuffer[0] );
+		snprintf( outputBuffer, MAX_LEN_LOG_LINE, "%-8s|%012u: %s", code_part_names[part], gameTime, useInputBuffer1 ? inputBuffer[1] : inputBuffer[0] );
 
 		while (curCallback) {
 			curCallback->callback( &curCallback->data, outputBuffer );
