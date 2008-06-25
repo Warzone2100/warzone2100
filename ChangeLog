@@ -1,42 +1,44 @@
 2008-05-11: Version 2.1_beta3
  * General:
    * New: An error will be shown if an invalid command line option is used.
-   * New: "Map Preview" button added to the multiplayer/skirmish lobby, including ability to preview starting positions (patch #1040).
+   * New: "Map Preview" button added to the multiplayer/skirmish lobby, including ability to preview starting positions. (patch #1040)
    * New: A 'Ready' button that all players must press in order to start a multiplayer game.
+   * New: Support changing the language via the menu. (patch #1018)
    * Change: Game speed is limited to 0.3-1.5 range in non-debug mode.
    * Change: Oil pumping and power generator hum sounds are quieter.
-   * Fix: Building limits apply correctly (bug #11293).
+   * Fix: Building limits apply correctly. (bug #11293)
    * Fix: Game won't crash when commander units are used.
-   * Fix: The sky does not disappear anymore when a tooltip is shown (bug #11216).
-   * Fix: Translation-related bug in the structure limits screen fixed (bug #11345).
-   * Fix: Placing a beacon on map will not result in memory corruption and a crash anymore (bug #10955, #11373, and #11005).
-   * Fix: Invalid group orders during multiplayer games are ignored (bug #11358).
-   * Fix: Smoking structures (bug #11348).
+   * Fix: The sky does not disappear anymore when a tooltip is shown. (bug #11216)
+   * Fix: Translation-related bug in the structure limits screen fixed. (bug #11345)
+   * Fix: Placing a beacon on map will not result in memory corruption and a crash anymore. (bugs #10955, #11373, and #11005)
+   * Fix: Invalid group orders during multiplayer games are ignored. (bug #11358)
+   * Fix: Smoking structures. (bug #11348)
    * Fix: AIs are now always run on Host's machine during multiplayer games.
-   * Fix: Derricks do not disappear or blink anymore (bug #11357).
-   * Fix: Save games will load properly when trying to load them when a game is already in progress (bug #11467).
-   * Fix: Bad textures after third load of saved game (bug #11641)
-   * Fix: VTOLs do not move over water (bug #11638)
-   * Fix: Multiple Nexus Link crashes (bugs #11500, #11501, and #11444)
-   * Fix: Assert if upgrading building while second building tab open (bugs #9336 and #11446)
-   * Fix: Assert when smoke effects drift off the map (bug #11586)
-   * Fix: Trucks going in circles (bug #11341)
+   * Fix: Derricks do not disappear or blink anymore. (bug #11357)
+   * Fix: Save games will load properly when trying to load them when a game is already in progress. (bug #11467)
+   * Fix: Bad textures after third load of saved game. (bug #11641)
+   * Fix: VTOLs do not move over water. (bug #11638)
+   * Fix: Multiple Nexus Link crashes. (bugs #11500, #11501, and #11444)
+   * Fix: Assert if upgrading building while second building tab open. (bugs #9336 and #11446)
+   * Fix: Assert when smoke effects drift off the map. (bug #11586)
+   * Fix: Trucks going in circles. (bug #11341)
    * Fix: Render super-cyborgs using the bucket list, to avoid jittery HP bars.
    * Fix: Bug that would make sliders inactive in multiplayer when not hosting a game.
-   * Fix: Textures missing on first beta away mission (bug #11733)
+   * Fix: Textures missing on first beta away mission. (bug #11733)
+   * Fix: Translations now completely work on Windows, too.
    * Fix: Lots of other things that we may have forgotten about. This beta really does contain a lot of bug fixes.
  * Gameplay:
    * New: Support for coloured mouse cursors (ingame only, not in menus), controlled by configuration option "ColouredCursor". Turned off by default. (patch #956)
    * New: Human player console messages are rendered using brighter color. Friend-foe colors are can be turned on using Shift+Tab key combination.
-   * New: Prevent structure 'painting' exploit by making unfinished structures return power with time and disappear when all power was given back (patch #1030).
-   * New: Units gain speed increase with experience (patch #906).
+   * New: Prevent structure 'painting' exploit by making unfinished structures return power with time and disappear when all power was given back. (patch #1030)
+   * New: Units gain speed increase with experience. (patch #906)
    * New: A sound is played and a notification is shown on the console when placing a beacon on the map. F12 key can be used to jump to the beacon location.
    * Change: Effect of skirmish modifier slider increased by 20%.
    * Change: 'ENTER' key is now the default key for bringing up the chat dialog instead of 'T' (key configuration must be reset in the 'Key Mappings' dialog).
    * Change: Removed lowest power level, added a higher power level.
    * Change: VTOL movement rules simplified. No cliff height limitations anymore.
    * Fix: Dull mini-map player colors were replaced by brighter colors.
-   * Fix: Rocket Autoloader research does not appear before lancer is researched and has "HEAT Rocket Warhead" as a prerequisite, instead of "HEAP Mini-Rockets" (bug #11312).
+   * Fix: Rocket Autoloader research does not appear before lancer is researched and has "HEAT Rocket Warhead" as a prerequisite, instead of "HEAP Mini-Rockets". (bug #11312)
    * Fix: When cheating is on AIs get power boost on client's machines too.
  * Balancing (Multiplayer Only):
    * Change: Tank Killer now fires four projectiles instead of two, total firepower is unaffected.
