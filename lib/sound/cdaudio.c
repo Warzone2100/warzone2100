@@ -136,6 +136,9 @@ BOOL cdAudio_PlayTrack(SONG_CONTEXT context)
 		{
 			const char *filename = PlayList_CurrentSong();
 
+			if (filename == NULL)
+				return false;
+
 			return cdAudio_OpenTrack(filename);
 		}
 	}
