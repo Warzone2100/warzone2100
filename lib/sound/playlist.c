@@ -146,10 +146,11 @@ const char* PlayList_NextSong()
 	{
 		currentSong = currentSong->next;
 	}
-	if (!currentSong)
+	else
 	{
 		currentSong = songList;
 	}
+
 	return PlayList_CurrentSong();
 }
 
