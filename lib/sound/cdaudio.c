@@ -127,17 +127,20 @@ BOOL cdAudio_PlayTrack(SONG_CONTEXT context)
 {
 	debug(LOG_SOUND, "called(%d)", (int)context);
 
-	if (context == SONG_FRONTEND)
+	switch (context)
 	{
-		return cdAudio_OpenTrack("music/menu.ogg");
-	}
-	else if (context == SONG_INGAME)
-	{
-		const char *filename = PlayList_CurrentSong();
+		case SONG_FRONTEND:
+			return cdAudio_OpenTrack("music/menu.ogg");
 
-		return cdAudio_OpenTrack(filename);
+		case SONG_INGAME:
+		{
+			const char *filename = PlayList_CurrentSong();
+
+			return cdAudio_OpenTrack(filename);
+		}
 	}
-	ASSERT(false, "Bad parameter value");
+
+	ASSERT(!"Invalid songcontext", "Invalid song context specified for playing: %u", (unsigned int)context);
 
 	return false;
 }
