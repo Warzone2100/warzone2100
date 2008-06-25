@@ -3,6 +3,7 @@
    * New: An error will be shown if an invalid command line option is used.
    * New: "Map Preview" button added to the multiplayer/skirmish lobby, including ability to preview starting positions (patch #1040).
    * New: A 'Ready' button that all players must press in order to start a multiplayer game.
+   * New: Support changing the language via the menu. (patch #1018)
    * Change: Game speed is limited to 0.3-1.5 range in non-debug mode.
    * Change: Oil pumping and power generator hum sounds are quieter.
    * Fix: Building limits apply correctly (bug #11293).
@@ -24,6 +25,7 @@
    * Fix: Render super-cyborgs using the bucket list, to avoid jittery HP bars.
    * Fix: Bug that would make sliders inactive in multiplayer when not hosting a game.
    * Fix: Textures missing on first beta away mission (bug #11733)
+   * Fix: Translations now completely work on Windows, too.
    * Fix: Lots of other things that we may have forgotten about. This beta really does contain a lot of bug fixes.
  * Gameplay:
    * New: Support for coloured mouse cursors (ingame only, not in menus), controlled by configuration option "ColouredCursor". Turned off by default. (patch #956)
