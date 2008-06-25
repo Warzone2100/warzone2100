@@ -142,10 +142,13 @@ const char* PlayList_CurrentSong()
 
 const char* PlayList_NextSong()
 {
-	if (currentSong)
+	// If there's a next song in the playlist select it
+	if (currentSong
+	 && currentSong->next)
 	{
 		currentSong = currentSong->next;
 	}
+	// Otherwise jump to the start of the playlist
 	else
 	{
 		currentSong = songList;
