@@ -454,7 +454,6 @@ static void NETcoder(PACKETDIR dir)
 	NETint8_t(&i8);     assert(i8 == -8);
 	NETstring(str, sizeof(str)); assert(strncmp(str, original, sizeof(str) - 1) == 0);
 	NETenum(&te);       assert(te == test_b);
-	NETend();
 }
 
 void NETtest()
