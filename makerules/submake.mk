@@ -3,8 +3,12 @@
 all clean: $(SUBDIRS)
 
 $(SUBDIRS):
-	-@$(MKDIR_P) $@
+ifneq ($(strip $(top_srcdir)),$(strip $(top_builddir)))
+	-$(MKDIR_P) $@
+endif
 	@$(MAKE) -f ../$(srcdir)/$@/makefile.raw -C $@ $(MAKECMDGOALS) top_srcdir=../$(top_srcdir) top_builddir=../$(top_builddir)
 
 clean: $(SUBDIRS)
-	@$(RMDIR) $(SUBDIRS)
+ifneq ($(strip $(top_srcdir)),$(strip $(top_builddir)))
+	$(RMDIR) $(SUBDIRS)
+endif

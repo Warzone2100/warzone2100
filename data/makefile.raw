@@ -36,6 +36,8 @@ $(PATCHARCHIVE): $(srcdir)/$(basename $(BASEARCHIVE)) stamp $(patsubst %,$(srcdi
 	$(RM_F) stamp
 
 clean: $(SUBDIRS)
+ifneq ($(strip $(top_srcdir)),$(strip $(top_builddir)))
 	$(RMDIR) $(SUBDIRS)
+endif
 	$(RM_F) $(BASEARCHIVE)
 	$(RM_F) $(PATCHARCHIVE)
