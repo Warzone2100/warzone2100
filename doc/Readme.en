@@ -250,8 +250,8 @@ subtitles=1
        that subtitles are shown even if the video does not exist.
 
 textureSize=128
-       Sets the texture size of terrain tiles in pixels. Valid values are 32, 64
-       and 128. Using lower values can increase the game's performance.
+       Sets the texture size of terrain tiles in pixels. Valid values are 16,
+       32, 64 and 128. Using lower values can increase the game's performance.
 
 trapCursor=0
        Toggles the trapping of the cursor in the game window. Only useful when
@@ -552,4 +552,4 @@ Warzone2100.de (German):
 http://warzone2100.de/
 
 AUTHOR: Kreuvf (kreuvf@warzone2100.de)
-LAST UPDATE: 2008/06/23
+LAST UPDATE: 2008/06/27
