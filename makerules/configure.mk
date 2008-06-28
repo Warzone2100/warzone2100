@@ -74,23 +74,9 @@ $(info Config seems valid.)
 endif
 
 
-# Find ourselves
-
-sub_path:=$(patsubst $(abs_top_builddir)/%,%,$(CURDIR))
-ifneq ($(strip $(sub_path)),$(abs_top_builddir))
-srcdir:=$(top_srcdir)/$(sub_path)
-abs_srcdir:=$(abs_top_srcdir)/$(sub_path)
-else
-srcdir:=$(top_srcdir)
-abs_srcdir:=$(abs_top_srcdir)
-endif
-
-builddir:=.
-abs_builddir:=$(CURDIR)
-
 # Setup paths and static values
 
-CPPFLAGS+=-DPACKAGE=\"$(PACKAGE)\" -DPACKAGE_VERSION=\"$(PACKAGE_VERSION)\" -DYY_STATIC -I$(srcdir) -I$(top_srcdir) -I$(DEVDIR)/include/SDL -I$(DEVDIR)/include/libpng12 -I$(DEVDIR)/include/bfd -I$(DEVDIR)/include
+CPPFLAGS+=-DPACKAGE=\"$(PACKAGE)\" -DPACKAGE_VERSION=\"$(PACKAGE_VERSION)\" -DYY_STATIC -I$(top_srcdir) -I$(DEVDIR)/include/SDL -I$(DEVDIR)/include/libpng12 -I$(DEVDIR)/include/bfd -I$(DEVDIR)/include
 CFLAGS+=-std=gnu99
 CXXFLAGS+=
 LDFLAGS+=-L$(DEVDIR)/lib
@@ -176,5 +162,6 @@ endif
 # Additionaly link against the deps of our deps
 
 LDFLAGS+=-liconv -lz -lfreetype -lfontconfig -lexpat
+
 
 include $(top_srcdir)/makerules/common.mk

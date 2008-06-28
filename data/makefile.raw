@@ -25,19 +25,16 @@ endif
 stamp:
 	touch stamp
 
-$(BASEARCHIVE): $(srcdir)/$(basename $(BASEARCHIVE)) stamp $(patsubst %,$(srcdir)/$(basename $(BASEARCHIVE))/%,$(BASELIST))
-	(cd $< && zip -ru0 $(abs_builddir)/$@ $(filter-out stamp,$(filter-out $<,$(^:$</%=%))) -x '*svn*' || [ $$? -eq 12 ] && true) # zip returns 12 on "nothing to do"
+$(BASEARCHIVE): $(basename $(BASEARCHIVE)) stamp $(patsubst %,$(basename $(BASEARCHIVE))/%,$(BASELIST))
+	(cd $< && zip -ru0 $@ $(filter-out stamp,$(filter-out $<,$(^:$</%=%))) -x '*svn*' || [ $$? -eq 12 ] && true) # zip returns 12 on "nothing to do"
 	zip -T $@
 	$(RM_F) stamp
 
-$(PATCHARCHIVE): $(srcdir)/$(basename $(BASEARCHIVE)) stamp $(patsubst %,$(srcdir)/$(basename $(PATCHARCHIVE))/%,$(PATCHLIST))
-	(cd $< && zip -ru0 $(abs_builddir)/$@ $(filter-out stamp,$(filter-out $<,$(^:$</%=%))) -x '*svn*' || [ $$? -eq 12 ] && true) # zip returns 12 on "nothing to do"
+$(PATCHARCHIVE): $(basename $(BASEARCHIVE)) stamp $(patsubst %,$(basename $(PATCHARCHIVE))/%,$(PATCHLIST))
+	(cd $< && zip -ru0 $@ $(filter-out stamp,$(filter-out $<,$(^:$</%=%))) -x '*svn*' || [ $$? -eq 12 ] && true) # zip returns 12 on "nothing to do"
 	zip -T $@
 	$(RM_F) stamp
 
 clean: $(SUBDIRS)
-ifneq ($(strip $(top_srcdir)),$(strip $(top_builddir)))
-	$(RMDIR) $(SUBDIRS)
-endif
 	$(RM_F) $(BASEARCHIVE)
 	$(RM_F) $(PATCHARCHIVE)

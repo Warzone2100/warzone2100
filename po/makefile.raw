@@ -1,6 +1,6 @@
 include $(top_srcdir)/makerules/configure.mk
 
-include $(srcdir)/Makevars
+include Makevars
 
 PO_FILES=nb.po de.po da.po nl.po la.po
 MO_FILES=$(patsubst %.po,%.gmo,$(PO_FILES))
@@ -11,20 +11,20 @@ ifdef USE_GETTEXT
 all: po-files mo-files
 endif
 
-po-files: $(patsubst %,$(srcdir)/%,$(PO_FILES))
+po-files: $(PO_FILES)
 mo-files: $(MO_FILES)
 
 update-po: clean all
 
-$(DOMAIN).pot: $(srcdir)/POTFILES.in
+$(DOMAIN).pot: POTFILES.in
 	$(XGETTEXT) $(XGETTEXT_OPTIONS) --default-domain=$(DOMAIN) --copyright-holder=$(COPYRIGHT_HOLDER) --msgid-bugs-address=$(MSGID_BUGS_ADDRESS) --directory=$(top_builddir) --add-comments=TRANSLATORS: --files-from=$<
 	mv $(DOMAIN).po $@
 
-$(srcdir)/%.po: $(srcdir)/$(DOMAIN).pot
+%.po: $(DOMAIN).pot
 	$(MSGMERGE) $(MSGMERGE_OPTIONS) $@ $(DOMAIN).pot -o $@.new
 	$(MV) $@.new $@
 
-%.gmo: $(srcdir)/%.po
+%.gmo: %.po
 	$(MSGFMT) -c -o $@ $<
 
 clean:
