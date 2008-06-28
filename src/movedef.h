@@ -32,9 +32,8 @@ typedef struct _move_control
 	UBYTE	Status;						// Inactive, Navigating or moving point to point status
 	UBYTE	Position;	   				// Position in asPath
 	UBYTE	numPoints;					// number of points in asPath
-	Vector2i *asPath;		// Pointer to list of block X,Y coordinates.
-	SDWORD	DestinationX;				// DestinationX,Y should match objects current X,Y
-	SDWORD	DestinationY;				//		location for this movement to be complete.
+	Vector2i *asPath;					// Pointer to list of block X,Y map coordinates.
+	SDWORD	DestinationX, DestinationY;			// World coordinates of movement destination
 	SDWORD	srcX,srcY,targetX,targetY;
 
 	/* Stuff for John's movement update */

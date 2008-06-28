@@ -563,8 +563,8 @@ static 	FP_NODE		*psNearest, *psRoute;
 			psCurr = psCurr->psRoute;
 		}
 		psMove->numPoints = index;
-		psMove->DestinationX = psMove->asPath[index - 1].x;
-		psMove->DestinationY = psMove->asPath[index - 1].y;
+		psMove->DestinationX = world_coord(psMove->asPath[index - 1].x);
+		psMove->DestinationY = world_coord(psMove->asPath[index - 1].y);
 	}
 	else
 	{
