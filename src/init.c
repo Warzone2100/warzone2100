@@ -408,15 +408,16 @@ BOOL systemInitialise(void)
 
 	if ( war_getSoundEnabled() )
 	{
-		if( !audio_Init(droidAudioTrackStopped) )
-			debug( LOG_SOUND, "Couldn't initialise audio system: continuing without audio\n" );
+		if (!audio_Init(droidAudioTrackStopped))
+		{
+			debug(LOG_SOUND, "Could not initialise audio system: Continuing without audio");
+		}
+		cdAudio_Open(UserMusicPath);
 	}
 	else
 	{
-		debug( LOG_SOUND, "Sound disabled!" );
+		debug(LOG_SOUND, "Sound disabled");
 	}
-
-	cdAudio_Open(UserMusicPath);
 
 	if (!dataInitLoadFuncs()) // Pass all the data loading functions to the framework library
 	{

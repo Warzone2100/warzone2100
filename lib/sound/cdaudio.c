@@ -32,7 +32,7 @@
 
 static const size_t bufferSize = 16 * 1024;
 static const unsigned int buffer_count = 32;
-static bool		music_initialized;
+static bool		music_initialized = false;
 static float		music_volume = 0.5;
 static bool		stopping = true;
 
