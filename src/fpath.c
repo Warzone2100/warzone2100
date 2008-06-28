@@ -379,14 +379,17 @@ FPATH_RETVAL fpathRoute(DROID* psDroid, SDWORD tX, SDWORD tY)
 		}
 	}
 
-	ASSERT( start.x >= 0 && start.x < (SDWORD)mapWidth*TILE_UNITS &&
-			start.y >= 0 && start.y < (SDWORD)mapHeight*TILE_UNITS,
-			"start coords off map" );
-	ASSERT( target.x >= 0 && target.x < (SDWORD)mapWidth*TILE_UNITS &&
-			target.y >= 0 && target.y < (SDWORD)mapHeight*TILE_UNITS,
-			"target coords off map" );
-
+	ASSERT(start.x >= 0 && start.x < mapWidth * TILE_UNITS && start.y >= 0 && start.y < mapHeight * TILE_UNITS,
+	       "start coords (%d, %d) off map (%u, %u)", start.x, start.y, mapWidth * TILE_UNITS, mapHeight * TILE_UNITS);
+	ASSERT(target.x >= 0 && target.x < mapWidth * TILE_UNITS && target.y >= 0 && target.y < mapHeight * TILE_UNITS,
+	       "target coords (%d, %d) off map (%u, %u)", target.x, target.y, mapWidth * TILE_UNITS, mapHeight * TILE_UNITS);
 	ASSERT(astarInner >= 0, "astarInner overflowed!");
+	if (start.x < 0 || start.y < 0 || target.x < 0 || target.y < 0
+	    || start.x >= mapWidth * TILE_UNITS || start.y >= mapHeight * TILE_UNITS
+	    || target.x >= mapWidth * TILE_UNITS || target.y >= mapHeight * TILE_UNITS)
+	{
+		return FPR_FAILED;	// fallback if we play with asserts off
+	}
 
 	if (astarInner > FPATH_LOOP_LIMIT)
 	{

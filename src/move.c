@@ -3015,7 +3015,6 @@ void moveUpdateDroid(DROID *psDroid)
 {
 	float				tangle;		// thats DROID angle and TARGET angle - not some bizzare pun :-)
 									// doesn't matter - they're still shit names...! :-)
-	SDWORD				fx, fy;
 	UDWORD				oldx, oldy, iZ;
 	UBYTE				oldStatus = psDroid->sMove.Status;
 	SDWORD				moveSpeed;
@@ -3229,6 +3228,8 @@ void moveUpdateDroid(DROID *psDroid)
 
 		if (psDroid->sMove.psFormation && psDroid->sMove.Position == psDroid->sMove.numPoints)
 		{
+			SDWORD	fx, fy;
+
 			if (formationGetPos(psDroid->sMove.psFormation, psDroid, &fx,&fy,true))
 			{
 				psDroid->sMove.targetX = fx;
