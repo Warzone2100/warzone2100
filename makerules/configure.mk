@@ -98,9 +98,9 @@ LDFLAGS+=-L$(DEVDIR)/lib
 # Setup build environment with config values
 
 ifeq ($(strip $(MODE)),debug)
-CPPFLAGS+=-DDEBUG -Wall -Werror-implicit-function-declaration
-CFLAGS+=-g -O0
-CXXFLAGS+=-g -O0
+CPPFLAGS+=-DDEBUG
+CFLAGS+=-g -O0 -Wall -Werror-implicit-function-declaration
+CXXFLAGS+=-g -O0 -Wall -Werror-implicit-function-declaration
 else
 CPPFLAGS+=-DNDEBUG
 endif
