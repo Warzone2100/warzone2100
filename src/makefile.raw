@@ -1,4 +1,4 @@
-include $(top_srcdir)/makerules/configure.mk
+include $(top_srcdir)/makerules/common.mk
 
 SRC=ai.c \
 	aiexperience.c \
@@ -118,7 +118,7 @@ LIBS=$(top_builddir)/lib/libgamelib.a \
 	$(top_builddir)/lib/libexceptionhandler.a \
 	$(top_builddir)/lib/libsqlite3.a
 
-ifeq ($(strip $(PLATFORM)),windows)
+ifeq ($(strip $(TARGET)),windows)
 LIBS += $(top_builddir)/win32/warzone2100.o
 endif
 

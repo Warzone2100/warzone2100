@@ -1,4 +1,4 @@
-include $(top_srcdir)/makerules/configure.mk
+include $(top_srcdir)/makerules/common.mk
 
 include Makevars
 
@@ -17,7 +17,7 @@ mo-files: $(MO_FILES)
 update-po: clean all
 
 $(DOMAIN).pot: POTFILES.in
-	$(XGETTEXT) $(XGETTEXT_OPTIONS) --default-domain=$(DOMAIN) --copyright-holder=$(COPYRIGHT_HOLDER) --msgid-bugs-address=$(MSGID_BUGS_ADDRESS) --directory=$(top_builddir) --add-comments=TRANSLATORS: --files-from=$<
+	$(XGETTEXT) $(XGETTEXT_OPTIONS) --default-domain="$(DOMAIN)" --copyright-holder="$(COPYRIGHT_HOLDER)" --msgid-bugs-address="$(MSGID_BUGS_ADDRESS)" --directory="$(top_builddir)" --add-comments=TRANSLATORS: --files-from=$<
 	mv $(DOMAIN).po $@
 
 %.po: $(DOMAIN).pot

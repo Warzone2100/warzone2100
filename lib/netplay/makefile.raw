@@ -1,4 +1,4 @@
-include $(top_srcdir)/makerules/configure.mk
+include $(top_srcdir)/makerules/common.mk
 
 SRC=netjoin_stub.c \
 	netlog.c \

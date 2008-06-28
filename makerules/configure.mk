@@ -3,8 +3,6 @@ include $(top_builddir)/config.mk
 
 # Check for unset config
 
-ifeq ($(MAKELEVEL),0)
-
 $(info Checking config...)
 
 ifeq ($(strip $(PACKAGE)),)
@@ -31,10 +29,16 @@ else
 $(info PACKAGE_BUGREPORT := $(PACKAGE_BUGREPORT))
 endif
 
-ifeq ($(strip $(PLATFORM)),)
-$(error You must set PLATFORM in $(top_srcdir)/makerules/config.mk)
+ifeq ($(strip $(BUILD)),)
+$(error You must set BUILD in $(top_srcdir)/makerules/config.mk)
 else
-$(info PLATFORM := $(PLATFORM))
+$(info BUILD := $(BUILD))
+endif
+
+ifeq ($(strip $(TARGET)),)
+$(error You must set TARGET in $(top_srcdir)/makerules/config.mk)
+else
+$(info TARGET := $(TARGET))
 endif
 
 ifeq ($(strip $(MODE)),)
@@ -49,119 +53,107 @@ else
 $(info DEVDIR := $(DEVDIR))
 endif
 
-ifeq ($(strip $(BISON)),)
-$(error You must set BISON in $(top_srcdir)/makerules/config.mk)
-else
-$(info BISON := $(BISON))
-endif
-
-ifeq ($(strip $(FLEX)),)
-$(error You must set FLEX in $(top_srcdir)/makerules/config.mk)
-else
-$(info FLEX := $(FLEX))
-endif
-
-ifneq ($(strip $(INSTALLER)),)
-ifeq ($(strip $(MAKENSIS)),)
-$(error You must set MAKENSIS in $(top_srcdir)/makerules/config.mk)
-else
-$(info MAKENSIS is := $(MAKENSIS))
-endif
-endif
-
 $(info Config seems valid.)
-
-endif
 
 
 # Setup paths and static values
 
-CPPFLAGS+=-DPACKAGE=\"$(PACKAGE)\" -DPACKAGE_VERSION=\"$(PACKAGE_VERSION)\" -DYY_STATIC -I$(top_srcdir) -I$(DEVDIR)/include/SDL -I$(DEVDIR)/include/libpng12 -I$(DEVDIR)/include/bfd -I$(DEVDIR)/include
-CFLAGS+=-std=gnu99
-CXXFLAGS+=
-LDFLAGS+=-L$(DEVDIR)/lib
+WZ_CPPFLAGS:=-DPACKAGE=\"$(PACKAGE)\" -DPACKAGE_VERSION=\"$(PACKAGE_VERSION)\" -DYY_STATIC -I$(DEVDIR)/include/SDL -I$(DEVDIR)/include/libpng12 -I$(DEVDIR)/include/bfd -I$(DEVDIR)/include
+WZ_CFLAGS:=-std=gnu99
+WZ_CXXFLAGS:=
+WZ_LDFLAGS:=-L$(DEVDIR)/lib
+
 
 # Setup build environment with config values
 
 ifeq ($(strip $(MODE)),debug)
-CPPFLAGS+=-DDEBUG
-CFLAGS+=-g -O0 -Wall -Werror-implicit-function-declaration
-CXXFLAGS+=-g -O0 -Wall -Werror-implicit-function-declaration
+WZ_CPPFLAGS+=-DDEBUG
+WZ_CFLAGS+=-g -O0 -Wall -Werror-implicit-function-declaration
+WZ_CXXFLAGS+=-g -O0 -Wall -Werror-implicit-function-declaration
 else
-CPPFLAGS+=-DNDEBUG
+WZ_CPPFLAGS+=-DNDEBUG
 endif
 
-ifneq ($(strip $(USE_GETTEXT)),)
-CPPFLAGS+=-DENABLE_NLS=1
-ifneq ($(LOCALEDIR),)
-CPPFLAGS+=-DLOCALEDIR=$(LOCALEDIR)
-endif
+ifneq ($(strip $(TRANSLATION)),)
+WZ_CPPFLAGS+=-DENABLE_NLS=1
 endif
 
-ifeq ($(strip $(PLATFORM)),windows)
+ifeq ($(strip $(BUILD)),windows)
 DIRSEP:=\\
 MV:=move
 RM_F:=del /F
 RMDIR:=rmdir
 MKDIR_P:=mkdir
-EXEEXT:=.exe
-AR:=ar
-CC:=gcc
-CXX:=g++
-WINDRES:=windres
-CPPFLAGS+=-DWIN32
-CFLAGS+=-mwindows
-CXXFLAGS+=-mwindows
-LDFLAGS+=-lmingw32 -lSDLmain
+XGETTEXT:=xgettext
+MSGMERGE:=msgmerge
+MSGFMT:=msgfmt
+FLEX:=flex
+BISON:=bison
+MAKENSIS:=makensis
 else
-ifeq ($(strip $(PLATFORM)),mingw32)
 DIRSEP:=/
 MV:=mv
 RM_F:=rm -f
 RMDIR:=rmdir
 MKDIR_P:=mkdir -p
+XGETTEXT:=xgettext
+MSGMERGE:=msgmerge
+MSGFMT:=msgfmt
+FLEX:=flex
+BISON:=bison
+MAKENSIS:=makensis
+endif
+
+ifeq ($(strip $(TARGET)),windows)
 EXEEXT:=.exe
 AR:=mingw32-ar
 CC:=mingw32-gcc
 CXX:=mingw32-g++
 WINDRES:=mingw32-windres
-CPPFLAGS+=-DWIN32
-CFLAGS+=-mwindows
-CXXFLAGS+=-mwindows
-LDFLAGS+=-lmingw32 -lSDLmain
+WZ_CPPFLAGS+=-DWIN32
+WZ_CFLAGS+=-mwindows
+WZ_CXXFLAGS+=-mwindows
+WZ_LDFLAGS+=-lmingw32 -lSDLmain
 else
-DIRSEP:=/
-MV:=mv
-RM_F:=rm -f
-RMDIR:=rmdir
-MKDIR_P:=mkdir -p
 EXEEXT:=
 AR:=ar
 CC:=gcc
 CXX:=g++
 WINDRES:=
 endif
-endif
+
 
 # Generic libs
 
-LDFLAGS+=-lSDL -lSDL_net -lpng12 -lphysfs -lz -lvorbisfile -lvorbis -logg -lpopt -lintl
+WZ_LDFLAGS+=-lSDL -lSDL_net -lpng12 -lphysfs -lz -lvorbisfile -lvorbis -logg -lpopt -lintl
 
-# Additional platform-dependend libs
 
-ifeq ($(strip $(PLATFORM)),windows)
-LDFLAGS+=-lGLC -lglu32 -lopengl32 -lopenal32 -ldbghelp -lshfolder -lwinmm -lwsock32 -lbfd -liberty
+# Additional target-platform-dependend libs
+
+ifeq ($(strip $(TARGET)),windows)
+WZ_LDFLAGS+=-lGLC -lglu32 -lopengl32 -lopenal32 -ldbghelp -lshfolder -lwinmm -lwsock32 -lbfd -liberty
 else
-ifeq ($(strip $(PLATFORM)),mingw32)
-LDFLAGS+=-lGLC -lglu32 -lopengl32 -lopenal32 -ldbghelp -lshfolder -lwinmm -lwsock32 -lbfd -liberty
-else
-LDFLAGS+=-lGLC -lGLU -lGL -lopenal
+WZ_LDFLAGS+=-lGLC -lGLU -lGL -lopenal
 endif
-endif
+
 
 # Additionaly link against the deps of our deps
 
-LDFLAGS+=-liconv -lz -lfreetype -lfontconfig -lexpat
+WZ_LDFLAGS+=-liconv -lz -lfreetype -lfontconfig -lexpat
 
 
-include $(top_srcdir)/makerules/common.mk
+# Import environment variables
+
+CPPFLAGS:=$(WZ_CPPFLAGS) $(CPPFLAGS)
+CFLAGS:=$(WZ_CFLAGS) $(CFLAGS)
+CXXFLAGS:=$(WZ_CXXFLAGS) $(CXXFLAGS)
+LDFLAGS:=$(WZ_LDFLAGS) $(LDFLAGS)
+
+
+# Export to environment
+
+export DIRSEP MV RM_F RMDIR MKDIR_P
+export XGETTEXT MSGMERGE MSGFMT
+export FLEX BISON MAKENSIS
+export EXEEXT AR CC CXX WINDRES
+export CPPFLAGS CFLAGS CXXFLAGS LDFLAGS

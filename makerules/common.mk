@@ -1,11 +1,17 @@
+ifeq ($(MAKELEVEL),0)
+include $(top_srcdir)/makerules/configure.mk
+endif
+
+RM_CPPFLAGS:=-I$(top_srcdir)
+
 %.o: %.rc
-	$(WINDRES) $(CPPFLAGS) -o $(subst /,$(DIRSEP),$@) $(subst /,$(DIRSEP),$<)
+	$(WINDRES) $(RM_CPPFLAGS) $(CPPFLAGS) -o $(subst /,$(DIRSEP),$@) $(subst /,$(DIRSEP),$<)
 
 %.o: %.c
-	$(CC) $(CPPFLAGS) $(CFLAGS) -c -o $(subst /,$(DIRSEP),$@) $(subst /,$(DIRSEP),$<)
+	$(CC) $(RM_CPPFLAGS) $(CPPFLAGS) $(CFLAGS) -c -o $(subst /,$(DIRSEP),$@) $(subst /,$(DIRSEP),$<)
 
 %.o: %.cpp
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c -o $(subst /,$(DIRSEP),$@) $(subst /,$(DIRSEP),$<)
+	$(CXX) $(RM_CPPFLAGS) $(CPPFLAGS) $(CXXFLAGS) -c -o $(subst /,$(DIRSEP),$@) $(subst /,$(DIRSEP),$<)
 
 %.lex.h %.lex.c: %.l
 	$(FLEX) $(FLEXFLAGS) -o $(subst /,$(DIRSEP),$@) $(subst /,$(DIRSEP),$<)

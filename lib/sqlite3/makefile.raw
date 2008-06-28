@@ -1,4 +1,4 @@
-include $(top_srcdir)/makerules/configure.mk
+include $(top_srcdir)/makerules/common.mk
 
 SRC=physfs_vfs.c sqlite3.c
 

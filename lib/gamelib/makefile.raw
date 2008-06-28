@@ -1,4 +1,4 @@
-include $(top_srcdir)/makerules/configure.mk
+include $(top_srcdir)/makerules/common.mk
 
 SRC=anim.c \
 	animobj.c \
