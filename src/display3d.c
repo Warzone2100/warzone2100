@@ -1639,88 +1639,96 @@ void	renderFeature(FEATURE *psFeature)
 	BOOL bForceDraw = ( !getRevealStatus() && psFeature->psStats->visibleAtStart);
 	int shadowFlags = 0;
 
-	if (psFeature->visible[selectedPlayer] || godMode || demoGetStatus() || bForceDraw)
+	if (!psFeature->visible[selectedPlayer] && !godMode && !demoGetStatus() && !bForceDraw)
 	{
-		psFeature->sDisplay.frameNumber = currentGameFrame;
-		/* Get it's x and y coordinates so we don't have to deref. struct later */
-		featX = psFeature->pos.x;
-		featY = psFeature->pos.y;
-		/* Daft hack to get around the oild derrick issue */
-		if (!TileHasFeature(mapTile(map_coord(featX), map_coord(featY))))
-		{
-			return;
-		}
-		dv.x = (featX - player.p.x) - terrainMidX*TILE_UNITS;
-		dv.z = terrainMidY*TILE_UNITS - (featY - player.p.z);
-
-		/* features sits at the height of the tile it's centre is on */
-		dv.y = psFeature->pos.z;
-
-		/* Push the indentity matrix */
-		iV_MatrixBegin();
-
-		/* Translate the feature  - N.B. We can also do rotations here should we require
-		buildings to face different ways - Don't know if this is necessary - should be IMO */
-		iV_TRANSLATE(dv.x,dv.y,dv.z);
-		/* Get the x,z translation components */
-		rx = player.p.x & (TILE_UNITS-1);
-		rz = player.p.z & (TILE_UNITS-1);
-
-		/* Translate */
-		iV_TRANSLATE(rx,0,-rz);
-		rotation = DEG( (int)psFeature->direction );
-
-		iV_MatrixRotateY(-rotation);
-
-		brightness = pal_SetBrightness(200); //? HUH?
-
-		if(psFeature->psStats->subType == FEAT_SKYSCRAPER)
-		{
-			objectShimmy((BASE_OBJECT*)psFeature);
-		}
-
-		if(godMode || demoGetStatus() || bForceDraw)
-		{
-			brightness = pal_SetBrightness(200);
-		}
-		else if(getRevealStatus())
-		{
-			brightness = pal_SetBrightness(avGetObjLightLevel((BASE_OBJECT*)psFeature, brightness.byte.r));
-		}
-
-		if (psFeature->psStats->subType == FEAT_BUILDING || psFeature->psStats->subType == FEAT_SKYSCRAPER
-		    || psFeature->psStats->subType == FEAT_OIL_DRUM)
-		{
-			// these cast a shadow
-			shadowFlags = pie_STATIC_SHADOW;
-		}
-
-		if(psFeature->psStats->subType == FEAT_OIL_RESOURCE)
-		{
-			vecTemp = psFeature->sDisplay.imd->points;
-			flattenImd(psFeature->sDisplay.imd, psFeature->pos.x, psFeature->pos.y, 0);
-			/* currentGameFrame/2 set anim running - GJ hack */
-			pie_Draw3DShape(psFeature->sDisplay.imd, currentGameFrame/2, 0, brightness, WZCOL_BLACK, 0, 0);
-			psFeature->sDisplay.imd->points = vecTemp;
-		}
-		else
-		{
-			pie_Draw3DShape(psFeature->sDisplay.imd, 0, 0, brightness, WZCOL_BLACK, shadowFlags,0);
-		}
-
-		{
-			Vector3i zero = {0, 0, 0};
-			Vector2i s = {0, 0};
-
-			pie_RotateProject( &zero, &s );
-			psFeature->sDisplay.screenX = s.x;
-			psFeature->sDisplay.screenY = s.y;
-
-			targetAdd((BASE_OBJECT*)psFeature);
-		}
-
-		iV_MatrixEnd();
+		return;
 	}
+
+	/* Mark it as having been drawn */
+	psFeature->sDisplay.frameNumber = currentGameFrame;
+
+	/* Get it's x and y coordinates so we don't have to deref. struct later */
+	featX = psFeature->pos.x;
+	featY = psFeature->pos.y;
+
+	/* Daft hack to get around the oild derrick issue */
+	if (!TileHasFeature(mapTile(map_coord(featX), map_coord(featY))))
+	{
+		return;
+	}
+
+	dv = Vector3i_New(
+		(featX - player.p.x) - terrainMidX*TILE_UNITS,
+		dv.y = psFeature->pos.z, // features sits at the height of the tile it's centre is on
+		terrainMidY*TILE_UNITS - (featY - player.p.z)
+	);
+
+	/* Push the indentity matrix */
+	iV_MatrixBegin();
+
+	/* Translate the feature  - N.B. We can also do rotations here should we require
+	buildings to face different ways - Don't know if this is necessary - should be IMO */
+	iV_TRANSLATE(dv.x,dv.y,dv.z);
+
+	/* Get the x,z translation components */
+	rx = player.p.x & (TILE_UNITS-1);
+	rz = player.p.z & (TILE_UNITS-1);
+
+	/* Translate */
+	iV_TRANSLATE(rx,0,-rz);
+	rotation = DEG( (int)psFeature->direction );
+
+	iV_MatrixRotateY(-rotation);
+
+	brightness = pal_SetBrightness(200); //? HUH?
+
+	if (psFeature->psStats->subType == FEAT_SKYSCRAPER)
+	{
+		objectShimmy((BASE_OBJECT*)psFeature);
+	}
+
+	if (godMode || demoGetStatus() || bForceDraw)
+	{
+		brightness = pal_SetBrightness(200);
+	}
+	else if (getRevealStatus())
+	{
+		brightness = pal_SetBrightness(avGetObjLightLevel((BASE_OBJECT*)psFeature, brightness.byte.r));
+	}
+
+	if (psFeature->psStats->subType == FEAT_BUILDING
+		|| psFeature->psStats->subType == FEAT_SKYSCRAPER
+		|| psFeature->psStats->subType == FEAT_OIL_DRUM)
+	{
+		/* these cast a shadow */
+		shadowFlags = pie_STATIC_SHADOW;
+	}
+
+	if (psFeature->psStats->subType == FEAT_OIL_RESOURCE)
+	{
+		vecTemp = psFeature->sDisplay.imd->points;
+		flattenImd(psFeature->sDisplay.imd, psFeature->pos.x, psFeature->pos.y, 0);
+		/* currentGameFrame/2 set anim running - GJ hack */
+		pie_Draw3DShape(psFeature->sDisplay.imd, currentGameFrame/2, 0, brightness, WZCOL_BLACK, 0, 0);
+		psFeature->sDisplay.imd->points = vecTemp;
+	}
+	else
+	{
+		pie_Draw3DShape(psFeature->sDisplay.imd, 0, 0, brightness, WZCOL_BLACK, shadowFlags,0);
+	}
+
+	{
+		Vector3i zero = {0, 0, 0};
+		Vector2i s = {0, 0};
+
+		pie_RotateProject( &zero, &s );
+		psFeature->sDisplay.screenX = s.x;
+		psFeature->sDisplay.screenY = s.y;
+
+		targetAdd((BASE_OBJECT*)psFeature);
+	}
+
+	iV_MatrixEnd();
 }
 
 void renderProximityMsg(PROXIMITY_DISPLAY *psProxDisp)
