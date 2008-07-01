@@ -461,10 +461,16 @@ static void posixExceptionHandler(int signum, siginfo_t * siginfo, WZ_DECL_UNUSE
 			}
 			else if (pid > (pid_t)0)
 			{
+				static const char gdbCommands[] = "backtrace full\n"
+				                                  "frame 3\n"
+				                                  "disassemble\n"
+				                                  "info registers\n"
+				                                  "quit\n";
+
 				close(gdbPipe[0]); // No input from pipe
 
-				write(gdbPipe[1], "backtrace full\n" "quit\n",
-					  strlen("backtrace full\n" "quit\n"));
+				write(gdbPipe[1], gdbCommands,
+					  sizeof(gdbCommands));
 
 				if (waitpid(pid, NULL, 0) < 0)
 				{
