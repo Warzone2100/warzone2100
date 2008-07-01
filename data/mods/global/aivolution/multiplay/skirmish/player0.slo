@@ -15692,7 +15692,7 @@ function bool LanchasterVictory(float _fStartForceA, float _fStartForceB,
 function int LanchasterTimeToWin(float _fStartForceA, float _fStartForceB,
 								float _fKillRateA, float _fKillRateB)
 {
-	local	float	_fTimeToWin,_fKillFactor,_divisor;
+	local	float	_fTimeToWin,_fKillFactor,_devisor;
 
 	if(_fStartForceA <= 0.0 or _fStartForceB <= 0.0 or _fKillRateB == 0.0){
 		return 0;
