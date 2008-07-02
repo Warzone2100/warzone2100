@@ -8,12 +8,11 @@ struct _vector
 	void            **mem;
 	int             size;
 	int             head;
-	destroyCallback destroy;
 };
 
 static const int defaultSize = 4;
 
-vector *vectorCreate(destroyCallback cb)
+vector *vectorCreate()
 {
 	vector *v = malloc(sizeof(vector));
 
@@ -32,20 +31,12 @@ vector *vectorCreate(destroyCallback cb)
 
 	v->size = defaultSize;
 	v->head = 0;
-	v->destroy = cb;
 
 	return v;
 }
 
 void vectorDestroy(vector *v)
 {
-	int i;
-
-	for (i = 0; i < vectorSize(v); i++)
-	{
-		v->destroy(v->mem[i]);
-	}
-
 	free(v->mem);
 	free(v);
 }
@@ -72,7 +63,7 @@ void *vectorAdd(vector *v, void *object)
 
 void *vectorAt(vector *v, int index)
 {
-	return (index <= vectorSize(v)) ? v->mem[index] : NULL;
+	return (index <= v->size) ? v->mem[index] : NULL;
 }
 
 void *vectorSetAt(vector *v, int index, void *object)
@@ -81,9 +72,6 @@ void *vectorSetAt(vector *v, int index, void *object)
 	{
 		return NULL;
 	}
-
-	// Free the current element at index
-	v->destroy(v->mem[index]);
 
 	// Replace the item
 	v->mem[index] = object;
@@ -98,13 +86,26 @@ void vectorRemoveAt(vector *v, int index)
 		return;
 	}
 
-	// Free the element using the provided callback
-	v->destroy(v->mem[index]);
-
 	memmove(&v->mem[index], &v->mem[index + 1],
 	        (v->head - index) * sizeof(void *));
 
 	v->head--;
+}
+
+void vectorMap(vector *v, mapCallback cb)
+{
+	int i;
+	
+	for (i = 0; i < v->size; i++)
+	{
+		cb(v->mem[i]);
+	}
+}
+
+void vectorMapAndDestroy(vector *v, mapCallback cb)
+{
+	vectorMap(v, cb);
+	vectorDestroy(v);
 }
 
 int vectorSize(vector *v)

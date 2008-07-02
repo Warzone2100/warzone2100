@@ -2,7 +2,7 @@
 #define VECTOR_H_
 
 typedef struct _vector vector;
-typedef void (*destroyCallback) (void *object);
+typedef void (*mapCallback) (void *object);
 
 /**
  * Creates a new vector.
@@ -11,7 +11,7 @@ typedef void (*destroyCallback) (void *object);
  * 	                or replaced.
  * @return A pointer to the newly created vector on success; otherwise NULL.
  */
-vector *vectorCreate(destroyCallback destroyCb);
+vector *vectorCreate(void);
 
 /**
  * Destroys the vector v. This is done by first calling the destroy callback
@@ -44,6 +44,16 @@ void *vectorSetAt(vector *v, int index, void *object);
  * 
  */
 void vectorRemoveAt(vector *v, int index);
+
+/**
+ * 
+ */
+void vectorMap(vector *v, mapCallback cb);
+
+/**
+ * 
+ */
+void vectorMapAndDestroy(vector *v, mapCallback cb);
 
 /**
  * 

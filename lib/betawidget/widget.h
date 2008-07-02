@@ -3,6 +3,8 @@
 
 // TODO: Make this cross platform (MSVC)
 #include <stdint.h>
+#include <stdlib.h>
+#include <assert.h>
 
 #include <cairo.h>
 
@@ -29,9 +31,6 @@ typedef struct _eventMisc       eventMisc;
 typedef bool (*callback)        (widget *widget, event *evt, void *userData);
 
 typedef struct _eventTableEntry eventTableEntry;
-
-typedef enum _hAlign            hAlign;
-typedef enum _vAlign            vAlign;
 
 /*
  * Information about the `type' (class) of a widget
@@ -158,26 +157,6 @@ struct _eventTableEntry
 };
 
 /*
- * The possible horizontal sides a child can be aligned to
- */
-enum _hAlign
-{
-	LEFT,
-	CENTRE,
-	RIGHT
-};
-
-/*
- * The possible vertical sides a child can be aligned to
- */
-enum _vAlign
-{
-	TOP,
-	MIDDLE,
-	BOTTOM
-};
-
-/*
  * The widget classes virtual method table
  */
 struct _widgetVtbl
@@ -198,14 +177,14 @@ struct _widgetVtbl
 	void    (*enable)                       (widget *self);
 	void    (*disable)                      (widget *self);
 
-	point   (*getMinSize)                   (widget *self);
-	point   (*getMaxSize)                   (widget *self);
+	size    (*getMinSize)                   (widget *self);
+	size    (*getMaxSize)                   (widget *self);
+	
+	void    (*resize)                       (widget *self, int x, int y);
+	
+	void    (*composite)                    (widget *self, cairo_t *comp);
 
-	void    (*setAlign)                     (widget *self, vAlign v, hAlign h);
-
-	void    (*drawChildren)                 (widget *self, cairo_t *cr);
-
-	void    (*doDraw)                       (widget *self, cairo_t *cr);
+	void    (*doDraw)                       (widget *self);
 	bool    (*doLayout)                     (widget *self);
 
 	void    (*destroy)                      (widget *self);
@@ -237,25 +216,14 @@ struct _widget
 	widget *parent;
 
 	/*
-	 * The minimum size the widget can be
-	 */
-	point minSize;
-
-	/*
-	 * The maximum size the widget can be
-	 */
-	point maxSize;
-
-	/*
-	 * Child alignment
-	 */
-	vAlign vAlignment;
-	hAlign hAlignment;
-
-	/*
 	 * If a mouse button is currently depressed on the widget
 	 */
 	bool hasMouseDown;
+	
+	/*
+	 * The widgets cairo drawing context
+	 */
+	cairo_t *cr;
 
 	//--------------------------------------
 	// Public members
@@ -285,7 +253,7 @@ struct _widget
 	/*
 	 * The size of the widget
 	 */
-	point size;
+	size size;
 
 	/*
 	 * If the widget currently has keyboard focus
@@ -301,16 +269,17 @@ struct _widget
 	 * If the widget is currently enabled or not
 	 */
 	bool isEnabled;
+	
+	/*
+	 * If the widget is dirty (i.e., needs to be re-drawn)
+	 */
+	bool needsRedraw;
 };
 
 /*
  * Type information
  */
-const classInfo widgetClassInfo =
-{
-	NULL,		// Root class and therefore no parent
-	"widget"
-};
+extern const classInfo widgetClassInfo;
 
 /*
  * Helper macros
@@ -334,12 +303,9 @@ void widgetEnableImpl(widget *self);
 void widgetDisableImpl(widget *self);
 void widgetFocusImpl(widget *self);
 void widgetBlurImpl(widget *self);
-point widgetGetMinSizeImpl(widget *self);
-point widgetGetMaxSizeImpl(widget *self);
-void widgetSetAlignImpl(widget *self, vAlign v, hAlign h);
-void widgetDrawChildrenImpl(widget *self, cairo_t *cr);
-
-bool widgetHandleEventImpl(widget *instance, event *evt);
+void widgetResizeImpl(widget *self, int w, int h);
+bool widgetHandleEventImpl(widget *self, event *evt);
+void widgetCompositeImpl(widget *self, cairo_t *comp);
 
 /*
  * Public static methods
@@ -353,7 +319,7 @@ bool widgetHandleEventImpl(widget *instance, event *evt);
  * @param instanceOf	The class we are interested in.
  * @return True if it is legal to cast, false otherwise.
  */
-bool widgetIsA(widget *self, classInfo *instanceOf);
+bool widgetIsA(widget *self, const classInfo *instanceOf);
 
 /*
  * Public methods
@@ -363,9 +329,13 @@ bool widgetIsA(widget *self, classInfo *instanceOf);
  * Draws the widget along with its child widgets.
  *
  * @param self  The widget to be drawn.
- * @param cr    The cairo context the widget should draw itself on.
  */
-void widgetDraw(widget *self, cairo_t *cr);
+void widgetDraw(widget *self);
+
+/**
+ * TODO
+ */
+void widgetComposite(widget *self, cairo_t *comp);
 
 /**
  * Recursively searches the child widgets of self for a widget whose ->id is
@@ -521,26 +491,27 @@ void widgetBlur(widget *self);
  * @param self  The widget to return the miniumum size of.
  * @return The miniumum (x,y) size of the widget.
  */
-point widgetGetMinSize(widget *self);
+size widgetGetMinSize(widget *self);
 
 /**
- * Returns the maxiumum size that the widget can be. A value of -1 for either
- * the x or y co-ordinate means that there is no maximum size.
+ * Returns the maxiumum size that the widget can be.
  *
  * @param self  The widget to return the maximum size of.
  * @return The maximum (x,y) size of the widget.
  */
-point widgetGetMaxSize(widget *self);
+size widgetGetMaxSize(widget *self);
 
 /**
- * Sets the alignment of child widgets of self. This is used when the maximum
- * size of the child widgets is less than that of the size of self.
- *
- * @param self  The widget to set the alignment of.
- * @param v     The vertical alignment of the widget (TOP, MIDDLE, BOTTOM).
- * @param h     The horizontal alignment of the widget (LEFT, CENTRE, RIGHT).
+ * Sets the size of the widget to (x,y). x and y are subject to the following
+ * conditions:
+ *  widgetGetMinSize().x <= x <= widgetGetMaxSize().x and
+ *  widgetGetMinSize().y <= y <= widgetGetMaxSize().y.
+ * 
+ * @param self  The widget to resize.
+ * @param w     The new size of the widget in the x-axis.
+ * @param h     The new size of the widget in the y-axis.
  */
-void widgetSetAlign(widget *self, vAlign v, hAlign h);
+void widgetResize(widget *self, int w, int h);
 
 /**
  * @TODO
@@ -552,27 +523,11 @@ bool widgetHandleEvent(widget *self, event *evt);
  */
 
 /**
- * This method is called by widgetDraw to draw the child widgets of self. The
- * default implementation just draws each of the child widgets in-turn, which
- * should be the desired behaviour for most containers.
- *
- * More complex containers can override this method to provide alternative
- * behaviour.
- *
- * @param self  The widget that should have its children drawn.
- * @param cr    The context to draw the children to.
- */
-void widgetDrawChildren(widget *self, cairo_t *cr);
-
-/**
- * A protected `pure virtual' method which is called to draw the widget. The
- * cairo translation matrix is set-up such that (0,0) is the top-left of the
- * widget.
+ * A protected `pure virtual' method which is called to draw the widget.
  *
  * @param self  The widget that should draw itself.
- * @param cr    The context to draw the widget to.
  */
-void widgetDoDraw(widget *self, cairo_t *cr);
+void widgetDoDraw(widget *self);
 
 /**
  *

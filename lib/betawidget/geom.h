@@ -28,6 +28,12 @@ struct _rect
 };
 
 /*
+ * Helper macros
+ */
+#define MIN(a, b) (((a) < (b)) ? (a) : (b))
+#define MAX(a, b) (((a) > (b)) ? (a) : (b))
+
+/*
  * Method signatures
  */
 

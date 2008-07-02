@@ -1,12 +1,16 @@
-#include <stdlib.h>
 #include <string.h>
-#include <assert.h>
 
 #include "widget.h"
 
+const classInfo widgetClassInfo =
+{
+	NULL,		// Root class and therefore no parent
+	"widget"
+};
+
 static widgetVtbl vtbl;
 
-bool widgetIsA(widget *self, classInfo *instanceOf)
+bool widgetIsA(widget *self, const classInfo *instanceOf)
 {
 	const classInfo *widgetClass;
 	
@@ -48,12 +52,12 @@ static void widgetInitVtbl(widget *self)
 		vtbl.enable             = widgetEnableImpl;
 		vtbl.disable            = widgetDisableImpl;
 
-		vtbl.getMinSize         = widgetGetMinSizeImpl;
-		vtbl.getMaxSize         = widgetGetMaxSizeImpl;
-
-		vtbl.setAlign           = widgetSetAlignImpl;
-
-		vtbl.drawChildren       = widgetDrawChildrenImpl;
+		vtbl.getMinSize         = NULL;
+		vtbl.getMaxSize         = NULL;
+		
+		vtbl.resize				= widgetResizeImpl;
+		
+		vtbl.composite          = widgetCompositeImpl;
 
 		vtbl.doLayout           = NULL;
 		vtbl.doDraw             = NULL;
@@ -65,8 +69,6 @@ static void widgetInitVtbl(widget *self)
 
 	// Set the classes vtable
 	self->vtbl = &vtbl;
-
-	// Do any overloading of inherited methods here
 }
 
 /*
@@ -74,6 +76,8 @@ static void widgetInitVtbl(widget *self)
  */
 void widgetInit(widget *self, const char *id)
 {
+	cairo_surface_t *surface;
+	
 	// Prepare our vtable
 	widgetInitVtbl(self);
 
@@ -81,21 +85,31 @@ void widgetInit(widget *self, const char *id)
 	self->classInfo = &widgetClassInfo;
 	
 	// Prepare our container
-	self->children = vectorCreate((destroyCallback) widgetDestroy);
+	self->children = vectorCreate();
 
 	// Prepare our events table
-	self->eventVtbl = vectorCreate(free);
+	self->eventVtbl = vectorCreate();
 
 	// Copy the ID of the widget
 	self->id = strdup(id);
 
 	// Default parent is none
 	self->parent = NULL;
+	
+	// Create a dummy cairo context (getMin/MaxSize may depend on it)
+	surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 0, 0);
+	self->cr = cairo_create(surface);
+	
+	// `Destroy' the surface (self->cr maintains a reference to it)
+	cairo_surface_destroy(surface);
 
 	// Focus and mouse are false by default
 	self->hasFocus = false;
 	self->hasMouse = false;
 	self->hasMouseDown = false;
+	
+	// By default we need drawing
+	self->needsRedraw = true;
 }
 
 /*
@@ -104,10 +118,13 @@ void widgetInit(widget *self, const char *id)
 void widgetDestroyImpl(widget *self)
 {
 	// Release the container
-	vectorDestroy(self->children);
+	vectorMapAndDestroy(self->children, (mapCallback) widgetDestroy);
 
 	// Release the event handler table
-	vectorDestroy(self->eventVtbl);
+	vectorMapAndDestroy(self->eventVtbl, free);
+
+	// Destroy the cairo context
+	cairo_destroy(self->cr);
 
 	// Free the ID
 	free(self->id);
@@ -119,13 +136,27 @@ void widgetDestroyImpl(widget *self)
 /*
  * Draws and widget and its child widgets
  */
-void widgetDraw(widget *self, cairo_t *cr)
+void widgetDraw(widget *self)
 {
-	// Draw ourself
-	widgetDoDraw(self, cr);
+	int i;
+	
+	// See if we need to be redrawn
+	if (self->needsRedraw)
+	{
+		self->needsRedraw = false;
+		
+		// Redaw ourself
+		widgetDoDraw(self);
+	}
 
-	// Draw our children
-	widgetDrawChildren(self, cr);
+	// Draw our children (even if we did not need redrawing our children might)
+	for (i = 0; i < vectorSize(self->children); i++)
+	{
+		widget *child = vectorAt(self->children, i);
+		
+		// Ask the child to re-draw itself
+		widgetDraw(child);
+	}
 }
 
 point widgetAbsolutePosition(widget *self)
@@ -145,7 +176,7 @@ point widgetAbsolutePosition(widget *self)
 rect widgetAbsoluteBounds(widget *self)
 {
 	// Get our position
-	point p = widgetAbsolutePosition(self);
+	const point p = widgetAbsolutePosition(self);
 
 	// Construct and return a rect from this
 	return rectFromPointAndSize(p, self->size);
@@ -209,7 +240,7 @@ widget *widgetFindById(widget *self, const char *id)
  */
 bool widgetAddChildImpl(widget *self, widget *child)
 {
-	// Make sure the id of the child is unqie
+	// Make sure the id of the child is unquie
 	if (widgetFindById(widgetGetRoot(self), child->id) != NULL)
 	{
 		// TODO: An error/debug message is probably required
@@ -230,8 +261,8 @@ bool widgetAddChildImpl(widget *self, widget *child)
 	// Not enough space to fit the widget
 	else
 	{
-		// Remove child
-		widgetRemoveChild(self, child);
+		// Remove child *without* calling its destructor
+		vectorRemoveAt(self->children, vectorSize(self->children) - 1);
 
 		// Restore the layout
 		widgetDoLayout(self);
@@ -252,7 +283,10 @@ void widgetRemoveChildImpl(widget *self, widget *child)
 		// If the child is the to-be-removed widget, remove it
 		if (vectorAt(self->children, i) == child)
 		{
-			// vectorRemoveAt will take care of calling the widgets destructor
+			// Call the destructor for the widget
+			widgetDestroy(vectorAt(self->children, i));
+			
+			// Remove it from the list of children
 			vectorRemoveAt(self->children, i);
 		}
 		// See if it is one of its children
@@ -292,14 +326,23 @@ void widgetRemoveEventHandlerImpl(widget *self, int id)
 bool widgetFireCallbacksImpl(widget *self, event *evt)
 {
 	int i;
+	bool ret;
 
 	for (i = 0; i < vectorSize(self->eventVtbl); i++)
 	{
 		eventTableEntry *handler = vectorAt(self->eventVtbl, i);
 
+		// If handler is registered to handle evt
 		if (handler->type == evt->type)
 		{
-			handler->callback(self, evt, handler->userData);
+			// Fire the callback
+			ret = handler->callback(self, evt, handler->userData);
+			
+			// Break if the handler returned false
+			if (!ret)
+			{
+				break;
+			}
 		}
 	}
 
@@ -412,44 +455,53 @@ void widgetBlurImpl(widget *self)
 	widgetFireCallbacks(self, &evt);
 }
 
-point widgetGetMinSizeImpl(widget *self)
+void widgetResizeImpl(widget *self, int w, int h)
 {
-	return self->minSize;
+	const size minSize = widgetGetMinSize(self);
+	const size maxSize = widgetGetMaxSize(self);
+	cairo_surface_t *surface;
+	
+	assert(minSize.x < w);
+	assert(minSize.y < h);
+	assert(w < maxSize.x);
+	assert(h < maxSize.y);
+	
+	self->size.x = w;
+	self->size.y = h;
+	
+	// Re-create the cairo context at this new size
+	cairo_destroy(self->cr);
+	surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, w, h);
+	self->cr = cairo_create(surface);
+	cairo_surface_destroy(surface);
+	
+	// Set the needs redraw flag
+	self->needsRedraw = true;
 }
 
-point widgetGetMaxSizeImpl(widget *self)
-{
-	return self->maxSize;
-}
-
-void widgetSetAlignImpl(widget *self, vAlign v, hAlign h)
-{
-	self->vAlignment = v;
-	self->hAlignment = h;
-
-	// Re-align our children
-	// TODO: We should check the return value here
-	widgetDoLayout(self);
-}
-
-void widgetDrawChildrenImpl(widget *self, cairo_t *cr)
+void widgetCompositeImpl(widget *self, cairo_t *comp)
 {
 	int i;
+	
+	// Composite ourself
+	cairo_set_source_surface(comp, cairo_get_target(self->cr), 0, 0);
+	cairo_paint(comp);
 
-	// Draw our children
+	// Now our children
 	for (i = 0; i < vectorSize(self->children); i++)
 	{
 		widget *child = vectorAt(self->children, i);
 		cairo_matrix_t current;
-
+		
 		// Translate such that (0,0) is the location of the widget
-		cairo_get_matrix(cr, &current);
-		cairo_translate(cr, child->offset.x, child->offset.y);
-
-		widgetDraw(child, cr);
-
+		cairo_get_matrix(comp, &current);
+		cairo_translate(comp, child->offset.x, child->offset.y);
+		
+		// Composite
+		widgetComposite(child, comp);
+		
 		// Restore the matrix
-		cairo_set_matrix(cr, &current);
+		cairo_set_matrix(comp, &current);
 	}
 }
 
@@ -492,7 +544,9 @@ bool widgetHandleEventImpl(widget *self, event *evt)
 			 * Mouse motion events should not be dispatched if a mouse button
 			 * is currently `down' on our parent but not ourself.
 			 */
-			if (self->parent && self->parent->hasMouseDown && !self->hasMouseDown)
+			if (self->parent
+			 && self->parent->hasMouseDown
+			 && !self->hasMouseDown)
 			{
 				relevant = false;
 				break;
@@ -537,6 +591,7 @@ bool widgetHandleEventImpl(widget *self, event *evt)
 		{
 			eventMouseBtn evtMouseBtn = *((eventMouseBtn *) evt);
 
+			// If the mouse is inside of the widget
 			if (pointInRect(evtMouseBtn.loc, widgetAbsoluteBounds(self)))
 			{
 				// If it is a mouse-down event set hasMouseDown to true
@@ -545,8 +600,10 @@ bool widgetHandleEventImpl(widget *self, event *evt)
 					self->hasMouseDown = true;
 				}
 
+				// Fire mouse down and mouse up callbacks
 				widgetFireCallbacks(self, (event *) &evtMouseBtn);
 
+				// Check for a click event
 				if (evt->type == EVT_MOUSE_UP && self->hasMouseDown)
 				{
 					evtMouseBtn.event.type = EVT_MOUSE_CLICK;
@@ -554,10 +611,12 @@ bool widgetHandleEventImpl(widget *self, event *evt)
 					widgetFireCallbacks(self, (event *) &evtMouseBtn);
 				}
 			}
+			// If the mouse is no longer down
 			else if (evt->type == EVT_MOUSE_UP && self->hasMouseDown)
 			{
 				self->hasMouseDown = false;
 			}
+			// Of no interest to us or our children
 			else
 			{
 				relevant = false;
@@ -567,12 +626,10 @@ bool widgetHandleEventImpl(widget *self, event *evt)
 		case EVT_KEY_DOWN:
 		case EVT_KEY_UP:
 		{
-			eventKey evtKey = *((eventKey *) evt);
-
 			// Only relevant if we have focus
 			if (self->hasFocus)
 			{
-				widgetFireCallbacks(self, (event *) &evtKey);
+				widgetFireCallbacks(self, evt);
 			}
 			else
 			{
@@ -646,29 +703,33 @@ void widgetBlur(widget *self)
 
 point widgetGetMinSize(widget *self)
 {
+	WIDGET_CHECK_METHOD(self, getMinSize);
+	
 	return WIDGET_GET_VTBL(self)->getMinSize(self);
 }
 
 point widgetGetMaxSize(widget *self)
 {
+	WIDGET_CHECK_METHOD(self, getMaxSize);
+	
 	return WIDGET_GET_VTBL(self)->getMaxSize(self);
 }
 
-void widgetSetAlign(widget *self, vAlign v, hAlign h)
+void widgetResize(widget *self, int x, int y)
 {
-	WIDGET_GET_VTBL(self)->setAlign(self, v, h);
+	WIDGET_GET_VTBL(self)->resize(self, x, y);
 }
 
-void widgetDrawChildren(widget *self, cairo_t *cr)
+void widgetComposite(widget *self, cairo_t *comp)
 {
-	WIDGET_GET_VTBL(self)->drawChildren(self, cr);
+	WIDGET_GET_VTBL(self)->composite(self, comp);
 }
 
-void widgetDoDraw(widget *self, cairo_t *cr)
+void widgetDoDraw(widget *self)
 {
 	WIDGET_CHECK_METHOD(self, doDraw);
 
-	WIDGET_GET_VTBL(self)->doDraw(self, cr);
+	WIDGET_GET_VTBL(self)->doDraw(self);
 }
 
 bool widgetDoLayout(widget *self)
