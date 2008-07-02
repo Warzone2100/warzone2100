@@ -464,10 +464,8 @@ link					return LINK;
 ref						return REF;
 return					return	RET;
 function				return	FUNCTION;
-"("int")"				{ RULE("(int)"); return TO_INT_CAST; }
-"("float")"				{ RULE("(float)"); return TO_FLOAT_CAST; }
-"("INT")"				{ RULE("(INT)"); return TO_INT_CAST; }
-"("FLOAT")"				{ RULE("(FLOAT)"); return TO_FLOAT_CAST; }
+"("int")"|"("INT")"			{ RULE(yytext); return TO_INT_CAST; }
+"("float")"|"("FLOAT")"			{ RULE(yytext); return TO_FLOAT_CAST; }
 public					{ scr_lval.stype = ST_PUBLIC; return STORAGE; }
 private					{ scr_lval.stype = ST_PRIVATE; return STORAGE; }
 local					{ scr_lval.stype = ST_LOCAL; return STORAGE; }
@@ -478,22 +476,15 @@ exit					return EXIT;
 pause					return PAUSE;
 
 	/* Match type keywords */
-void					{ scr_lval.tval = VAL_VOID; return _VOID; }
-VOID					{ scr_lval.tval = VAL_VOID; return _VOID; }
-string					{ scr_lval.tval = VAL_STRING; return TYPE; }
-STRING					{ scr_lval.tval = VAL_STRING; return TYPE; }
-bool					{ scr_lval.tval = VAL_BOOL; return TYPE; }
-BOOL					{ scr_lval.tval = VAL_BOOL; return TYPE; }
-int						{ scr_lval.tval = VAL_INT; return TYPE; }
-INT						{ scr_lval.tval = VAL_INT; return TYPE; }
-float					{ scr_lval.tval = VAL_FLOAT; return TYPE; }
-FLOAT					{ scr_lval.tval = VAL_FLOAT; return TYPE; }
+void|VOID				{ scr_lval.tval = VAL_VOID; return _VOID; }
+string|STRING				{ scr_lval.tval = VAL_STRING; return TYPE; }
+bool|BOOL				{ scr_lval.tval = VAL_BOOL; return TYPE; }
+int|INT					{ scr_lval.tval = VAL_INT; return TYPE; }
+float|FLOAT				{ scr_lval.tval = VAL_FLOAT; return TYPE; }
 
 	/* Match boolean values */
-true					{ scr_lval.bval = true; return BOOLEAN_T; }
-TRUE					{ scr_lval.bval = true; return BOOLEAN_T; }
-false					{ scr_lval.bval = false; return BOOLEAN_T; }
-FALSE					{ scr_lval.bval = false; return BOOLEAN_T; }
+true|TRUE				{ scr_lval.bval = true; return BOOLEAN_T; }
+false|FALSE				{ scr_lval.bval = false; return BOOLEAN_T; }
 
 	/* Match increment/decrement operators */
 "++"					{RULE("++"); return _INC; }
@@ -506,15 +497,9 @@ FALSE					{ scr_lval.bval = false; return BOOLEAN_T; }
 "<="					return LESSEQUAL;
 ">"						return GREATER;
 "<"						return LESS;
-and						return _AND;
-AND						return _AND;
-"&&"					return _AND;
-or						return _OR;
-OR						return _OR;
-"||"					return _OR;
-not						return _NOT;
-NOT						return _NOT;
-"!"						return _NOT;
+and|AND|"&&"				return _AND;
+or|OR|"||"				return _OR;
+not|NOT|"!"				return _NOT;
 
 	/* Start of a #define */
 "#define"[ \t]+				{ BEGIN (_DEF_MACRO); }
