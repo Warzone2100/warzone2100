@@ -127,11 +127,8 @@ sub printStructs()
 {
     my ($structList, $structMap, $enumMap) = @_;
 
-    my @structs = @{$structList};
-
-    while (@structs)
+    foreach my $struct (@{$structList})
     {
-        my $struct = shift(@structs);
         my $name = ${$struct}{"name"};
 
         printComments(${$struct}{"comment"}, 0);
@@ -141,8 +138,7 @@ sub printStructs()
 
         printStruct($struct, \$name, $structMap, $enumMap, 1);
 
-        print ");\n";
-        print "\n" if @structs;
+        print ");\n\n";
     }
 }
 

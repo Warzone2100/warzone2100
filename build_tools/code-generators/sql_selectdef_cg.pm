@@ -124,12 +124,9 @@ sub printEnums()
 sub printStructs()
 {
     my ($structList, $structMap, $enumMap) = @_;
-    my @structs = @{$structList};
 
-    while (@structs)
+    foreach my $struct (@{$structList})
     {
-        my $struct = shift(@structs);
-
         printComments(${$struct}{"comment"}, 0);
 
         # Start printing the select statement
@@ -141,8 +138,7 @@ sub printStructs()
         printBaseStruct($struct, $structMap);
         printStructJoins($struct, $structMap);
 
-        print ";\n";
-        print "\n" if @structs;
+        print ";\n\n";
     }
 }
 

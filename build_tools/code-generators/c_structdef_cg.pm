@@ -161,11 +161,8 @@ sub printStructs()
 {
     my ($structList, $structMap, $enumMap) = @_;
 
-    my @structs = @{$structList};
-
-    while (@structs)
+    foreach my $struct (@{$structList})
     {
-        my $struct = shift(@structs);
         my $name;
         my $prefix = "";
 
@@ -178,8 +175,7 @@ sub printStructs()
 
         $name = $prefix . $name;
 
-        print "} ${name};\n";
-        print "\n" if @structs;
+        print "} ${name};\n\n";
     }
 }
 
@@ -212,7 +208,7 @@ sub endFile()
 {
     my ($name) = @_;
 
-    print "\n#endif // ";
+    print "#endif // ";
     printHdrGuard($name);
     print "\n";
 }
