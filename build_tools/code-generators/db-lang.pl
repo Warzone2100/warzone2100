@@ -134,18 +134,23 @@ while (<>)
     else            { die "Unmatched line: $_\n"; }
 }
 
-CG::startFile($name);
+my $output = "";
+
+CG::startFile(\$output, $name);
 
 # Print all enums
 foreach my $enum (@enumList)
 {
-    CG::printEnum($enum);
+    CG::printEnum(\$output, $enum);
 }
 
 # Print all structs
 foreach my $struct (@structList)
 {
-    CG::printStruct($struct, \%structMap, \%enumMap);
+    CG::printStruct(\$output, $struct, \%structMap, \%enumMap);
 }
 
-CG::endFile($name);
+CG::endFile(\$output, $name);
+
+# Actually print out the output
+print $output;

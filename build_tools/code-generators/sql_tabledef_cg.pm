@@ -8,34 +8,34 @@ use strict;
 
 sub printStructFieldType
 {
-    my ($field) = @_;
+    my ($output, $field) = @_;
 
     $_ = ${$field}{"type"};
 
-    if    (/count/)     { print "INTEGER NOT NULL"; }
-    elsif (/string/)    { print "TEXT NOT NULL"; }
-    elsif (/real/)      { print "NUMERIC NOT NULL"; }
-    elsif (/bool/)      { print "INTEGER NOT NULL"; }
-    elsif (/enum/)      { print "INTEGER NOT NULL"; }
+    if    (/count/)     { $$output .= "INTEGER NOT NULL"; }
+    elsif (/string/)    { $$output .= "TEXT NOT NULL"; }
+    elsif (/real/)      { $$output .= "NUMERIC NOT NULL"; }
+    elsif (/bool/)      { $$output .= "INTEGER NOT NULL"; }
+    elsif (/enum/)      { $$output .= "INTEGER NOT NULL"; }
     else                { die "UKNOWN TYPE: $_"; }
 }
 
 sub printComments
 {
-    my ($comments, $indent) = @_;
+    my ($output, $comments, $indent) = @_;
 
     return unless @{$comments};
 
     foreach my $comment (@{$comments})
     {
-        print "\t" if $indent;
-        print "--${comment}\n";
+        $$output .= "\t" if $indent;
+        $$output .= "--${comment}\n";
     }
 }
 
 sub printStructFields
 {
-    my ($struct, $enumMap) = @_;
+    my ($output, $struct, $enumMap) = @_;
     my @fields = @{${$struct}{"fields"}};
     my @constraints = ();
 
@@ -43,7 +43,7 @@ sub printStructFields
     {
         my $field = shift(@fields);
 
-        printComments ${$field}{"comment"}, 1;
+        printComments($output, ${$field}{"comment"}, 1);
 
         if (${$field}{"type"} and ${$field}{"type"} =~ /set/)
         {
@@ -56,9 +56,9 @@ sub printStructFields
             {
                 my $value = shift(@values);
 
-                print "\t${$field}{\"name\"}_${$value}{\"name\"} INTEGER NOT NULL";
-                print "," if @values or @fields or @constraints or (${$field}{"qualifier"} and ${$field}{"qualifier"} =~ /unique/);
-                print "\n";
+                $$output .= "\t${$field}{\"name\"}_${$value}{\"name\"} INTEGER NOT NULL";
+                $$output .= "," if @values or @fields or @constraints or (${$field}{"qualifier"} and ${$field}{"qualifier"} =~ /unique/);
+                $$output .= "\n";
                 $unique_string .= "${$field}{\"name\"}_${$value}{\"name\"}";
                 $unique_string .= ", " if @values;
             }
@@ -68,28 +68,29 @@ sub printStructFields
         }
         else
         {
-            print "\t${$field}{\"name\"} ";
-            printStructFieldType($field);
-            print " UNIQUE" if ${$field}{"qualifier"} and ${$field}{"qualifier"} =~ /unique/;
-            print ",\n" if @fields or @constraints;
+            $$output .= "\t${$field}{\"name\"} ";
+            printStructFieldType($output, $field);
+            $$output .= " UNIQUE" if ${$field}{"qualifier"} and ${$field}{"qualifier"} =~ /unique/;
+            $$output .= ",\n" if @fields or @constraints;
         }
 
-        print "\n";
+        $$output .= "\n";
     }
 
     while (@constraints)
     {
         my $constraint = shift(@constraints);
 
-        print "\t${constraint}";
-        print ",\n" if @constraints;
-        print "\n";
+        $$output .= "\t${constraint}";
+        $$output .= ",\n" if @constraints;
+        $$output .= "\n";
+
     }
 }
 
 sub printStructContent
 {
-    my ($struct, $name, $structMap, $enumMap, $printFields) = @_;
+    my ($output, $struct, $name, $structMap, $enumMap, $printFields) = @_;
 
     foreach (keys %{${$struct}{"qualifiers"}})
     {
@@ -98,20 +99,20 @@ sub printStructContent
             my $inheritName = ${${$struct}{"qualifiers"}}{"inherit"};
             my $inheritStruct = ${$structMap}{$inheritName};
 
-            printStructContent($inheritStruct, $name, $structMap, $enumMap, 0);
+            printStructContent($output, $inheritStruct, $name, $structMap, $enumMap, 0);
         }
         elsif (/abstract/)
         {
-            print "\t-- Automatically generated ID to link the inheritance hierarchy.\n"
-                 ."\tunique_inheritance_id INTEGER PRIMARY KEY ";
-            print "AUTOINCREMENT " if $printFields;
-            print "NOT NULL,\n\n";
+            $$output .= "\t-- Automatically generated ID to link the inheritance hierarchy.\n";
+                     .  "\tunique_inheritance_id INTEGER PRIMARY KEY ";
+            $$output .= "AUTOINCREMENT " if $printFields;
+            $$output .= "NOT NULL,\n\n";
         }
     }
 
     $$name = ${$struct}{"name"};
 
-    printStructFields($struct, $enumMap) if $printFields;
+    printStructFields($output, $struct, $enumMap) if $printFields;
 }
 
 sub printEnum()
@@ -120,25 +121,25 @@ sub printEnum()
 
 sub printStruct()
 {
-    my ($struct, $structMap, $enumMap) = @_;
+    my ($output, $struct, $structMap, $enumMap) = @_;
     my $name = ${$struct}{"name"};
 
-    printComments(${$struct}{"comment"}, 0);
+    printComments($output, ${$struct}{"comment"}, 0);
 
     # Start printing the structure
-    print "CREATE TABLE `${name}` (\n";
+    $$output .= "CREATE TABLE `${name}` (\n";
 
-    printStructContent($struct, \$name, $structMap, $enumMap, 1);
+    printStructContent($output, $struct, \$name, $structMap, $enumMap, 1);
 
     # Finish printing the structure
-    print ");\n\n";
+    $$output .= ");\n\n";
 }
 
 sub startFile()
 {
-    my ($name) = @_;
+    my ($output, $name) = @_;
 
-    print "-- This file is generated automatically, do not edit, change the source ($name) instead.\n\n";
+    $$output .= "-- This file is generated automatically, do not edit, change the source ($name) instead.\n\n";
 }
 
 sub endFile()

@@ -8,16 +8,16 @@ use strict;
 
 sub printStructFieldType
 {
-    my $field = $_[0];
+    my ($output, $field) = @_;
 
     $_ = ${$field}{"type"};
 
-    if    (/count/)     { print "unsigned int     "; }
-    elsif (/string/)    { print "const char*      "; }
-    elsif (/real/)      { print "float            "; }
-    elsif (/bool/)      { print "bool             "; }
-    elsif (/set/)       { print "bool             "; }
-    elsif (/enum/)      { print "${$field}{\"enum\"} "; }
+    if    (/count/)     { $$output .= "unsigned int     "; }
+    elsif (/string/)    { $$output .= "const char*      "; }
+    elsif (/real/)      { $$output .= "float            "; }
+    elsif (/bool/)      { $$output .= "bool             "; }
+    elsif (/set/)       { $$output .= "bool             "; }
+    elsif (/enum/)      { $$output .= "${$field}{\"enum\"} "; }
     else                { die "UKNOWN TYPE: $_"; }
 }
 
@@ -49,7 +49,7 @@ sub preProcessField
 
 sub postProcessField
 {
-    my ($field, $enumMap) = @_;
+    my ($output, $field, $enumMap) = @_;
     $_ = ${$field}{"type"};
     $_ = "" unless $_;
 
@@ -59,57 +59,58 @@ sub postProcessField
         my $enum = ${$enumMap}{$enumName};
         my $enumSize = @{${$enum}{"values"}};
 
-        print "\[${enumSize}]" if (/set/);
+        $$output .= "\[${enumSize}]" if (/set/);
     }
 }
 
 sub printComments
 {
-    my ($comments, $indent) = @_;
+    my ($output, $comments, $indent) = @_;
 
     return unless @{$comments};
 
-    print "\t" if $indent;
-    print "/**\n";
+    $$output .= "\t" if $indent;
+    $$output .= "/**\n";
 
     foreach my $comment (@{$comments})
     {
-        print "\t" if $indent;
-        print " *${comment}\n";
+        $$output .= "\t" if $indent;
+        $$output .= " *${comment}\n";
     }
 
-    print "\t" if $indent;
-    print " */\n";
+    $$output .= "\t" if $indent;
+    $$output .= " */\n";
 }
 
 sub printStructFields
 {
-    my @fields = @{${$_[0]}{"fields"}};
-    my $enumMap = $_[1];
+    my $output = $_[0];
+    my @fields = @{${$_[1]}{"fields"}};
+    my $enumMap = $_[2];
 
     while (@fields)
     {
         my $field = shift(@fields);
         my @comments = @{${$field}{"comment"}};
 
-        preProcessField $field, \@comments;
+        preProcessField($field, \@comments);
 
-        printComments \@comments, 1;
+        printComments($output, \@comments, 1);
 
-        print "\t";
-        printStructFieldType $field;
-        print ${$field}{"name"};
+        $$output .= "\t";
+        printStructFieldType($output, $field);
+        $$output .= ${$field}{"name"};
 
-        postProcessField $field, $enumMap;
-        print ";\n";
+        postProcessField($output, $field, $enumMap);
+        $$output .= ";\n";
 
-        print "\n" if @fields;
+        $$output .= "\n" if @fields;
     }
 }
 
 sub printStructContent
 {
-    my ($struct, $name, $prefix, $structMap, $enumMap) = @_;
+    my ($output, $struct, $name, $prefix, $structMap, $enumMap) = @_;
 
     foreach (keys %{${$struct}{"qualifiers"}})
     {
@@ -120,24 +121,25 @@ sub printStructContent
             my $inheritName = ${${$struct}{"qualifiers"}}{"inherit"};
             my $inheritStruct = ${$structMap}{$inheritName};
 
-            print "\t/* BEGIN of inherited \"$inheritName\" definition */\n";
-            printStructContent($inheritStruct, $name, $prefix, $structMap, $enumMap);
-            print "\t/* END of inherited \"$inheritName\" definition */\n\n";
+            $$output .= "\t/* BEGIN of inherited \"$inheritName\" definition */\n";
+            printStructContent($output, $inheritStruct, $name, $prefix, $structMap, $enumMap);
+            $$output .= "\t/* END of inherited \"$inheritName\" definition */\n";
         }
     }
 
     $$name = ${$struct}{"name"};
 
-    printStructFields($struct, $enumMap);
+    printStructFields($output, $struct, $enumMap);
 }
 
 sub printEnum()
 {
-    my ($enum) = @_;
+    my ($output, $enum) = @_;
 
-    printComments ${$enum}{"comment"}, 0;
+    printComments($output, ${$enum}{"comment"}, 0);
 
-    print "typedef enum\n{\n";
+    # Start printing the enum
+    $$output .= "typedef enum\n{\n";
 
     my @values = @{${$enum}{"values"}};
 
@@ -146,66 +148,67 @@ sub printEnum()
         my $value = shift(@values);
         my $name = ${$value}{"name"};
 
-        printComments ${$value}{"comment"}, 1;
+        printComments($output, ${$value}{"comment"}, 1);
 
-        print "\t${$enum}{\"name\"}_${name},\n";
+        $$output .= "\t${$enum}{\"name\"}_${name},\n";
 
-        print "\n" if @values;
+        $$output .= "\n" if @values;
     }
 
-    print "} ${$enum}{\"name\"};\n\n";
+    # Finish printing the enum
+    $$output .= "} ${$enum}{\"name\"};\n\n";
 }
 
 sub printStruct()
 {
-    my ($struct, $structMap, $enumMap) = @_;
+    my ($output, $struct, $structMap, $enumMap) = @_;
 
     my $name;
     my $prefix = "";
 
-    printComments ${$struct}{"comment"}, 0;
+    printComments($output, ${$struct}{"comment"}, 0);
 
     # Start printing the structure
-    print "typedef struct\n{\n";
+    $$output .= "typedef struct\n{\n";
 
-    printStructContent($struct, \$name, \$prefix, $structMap, $enumMap);
+    printStructContent($output, $struct, \$name, \$prefix, $structMap, $enumMap);
 
     # Finish printing the structure
-    print "} ${prefix}${name};\n\n";
+    $$output .= "} ${prefix}${name};\n\n";
 }
 
 sub printHdrGuard
 {
-    my ($name) = @_;
+    my ($output, $name) = @_;
 
     $name =~ s/\./_/g;
     $name = uc($name);
 
-    print "__INCLUDED_DB_TEMPLATE_SCHEMA_STRUCTDEF_${name}_H__";
+    $$output .= "__INCLUDED_DB_TEMPLATE_SCHEMA_STRUCTDEF_${name}_H__";
 }
 
 sub startFile()
 {
-    my ($name) = @_;
+    my ($output, $name) = @_;
 
-    print "/* This file is generated automatically, do not edit, change the source ($name) instead. */\n\n";
+    $$output .= "/* This file is generated automatically, do not edit, change the source ($name) instead. */\n\n";
 
-    print "#ifndef ";
-    printHdrGuard($name);
-    print "\n";
+    $$output .= "#ifndef ";
+    printHdrGuard($output, $name);
+    $$output .= "\n";
 
-    print "#define ";
-    printHdrGuard($name);
-    print "\n\n";
+    $$output .= "#define ";
+    printHdrGuard($output, $name);
+    $$output .= "\n\n";
 }
 
 sub endFile()
 {
-    my ($name) = @_;
+    my ($output, $name) = @_;
 
-    print "#endif // ";
-    printHdrGuard($name);
-    print "\n";
+    $$output .= "#endif // ";
+    printHdrGuard($output, $name);
+    $$output .= "\n";
 }
 
 1;

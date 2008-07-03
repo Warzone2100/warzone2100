@@ -8,20 +8,20 @@ use strict;
 
 sub printComments
 {
-    my ($comments, $indent) = @_;
+    my ($output, $comments, $indent) = @_;
 
     return unless @{$comments};
 
     foreach my $comment (@{$comments})
     {
-        print "\t" if $indent;
-        print "--${comment}\n";
+        $$output .= "\t" if $indent;
+        $$output .= "--${comment}\n";
     }
 }
 
 sub printStructFields
 {
-    my ($struct, $enumMap) = @_;
+    my ($output, $struct, $enumMap) = @_;
     my @fields = @{${$struct}{"fields"}};
     my $structName = ${$struct}{"name"};
 
@@ -29,7 +29,7 @@ sub printStructFields
     {
         my $field = shift(@fields);
 
-        printComments ${$field}{"comment"}, 1;
+        printComments($output, ${$field}{"comment"}, 1);
 
         if (${$field}{"type"} and ${$field}{"type"} =~ /set/)
         {
@@ -41,22 +41,22 @@ sub printStructFields
             {
                 my $value = shift(@values);
 
-                print "\t`$structName`.`${$field}{\"name\"}_${$value}{\"name\"}`";
-                print ",\n" if @values;
+                $$output .= "\t`$structName`.`${$field}{\"name\"}_${$value}{\"name\"}`";
+                $$output .= ",\n" if @values;
             }
         }
         else
         {
-            print "\t`$structName`.`${$field}{\"name\"}`";
+            $$output .= "\t`$structName`.`${$field}{\"name\"}`";
         }
 
-        print ",\n\n" if @fields;
+        $$output .= ",\n\n" if @fields;
     }
 }
 
 sub printStructContent
 {
-    my ($struct, $structMap, $enumMap, $first) = @_;
+    my ($output, $struct, $structMap, $enumMap, $first) = @_;
 
     foreach (keys %{${$struct}{"qualifiers"}})
     {
@@ -65,18 +65,18 @@ sub printStructContent
             my $inheritName = ${${$struct}{"qualifiers"}}{"inherit"};
             my $inheritStruct = ${$structMap}{$inheritName};
 
-            printStructContent($inheritStruct, $structMap, $enumMap, 0);
+            printStructContent($output, $inheritStruct, $structMap, $enumMap, 0);
         }
     }
 
-    printStructFields($struct, $enumMap);
-    print ",\n" unless $first;
-    print "\n";
+    printStructFields($output, $struct, $enumMap);
+    $$output .= ",\n" unless $first;
+    $$output .= "\n";
 }
 
 sub printBaseStruct
 {
-    my ($struct, $structMap) = @_;
+    my ($outstr, $struct, $structMap) = @_;
     my $is_base = 1;
 
     foreach (keys %{${$struct}{"qualifiers"}})
@@ -86,22 +86,22 @@ sub printBaseStruct
             my $inheritName = ${${$struct}{"qualifiers"}}{"inherit"};
             my $inheritStruct = ${$structMap}{$inheritName};
 
-            printBaseStruct($inheritStruct, $structMap);
+            printBaseStruct($outstr, $inheritStruct, $structMap);
             $is_base = 0;
         }
         elsif (/abstract/)
         {
-            print "`${$struct}{\"name\"}`";
+            $$outstr .= "`${$struct}{\"name\"}`";
             $is_base = 0;
         }
     }
 
-    print "`${$struct}{\"name\"}`" if $is_base;
+    $$outstr .= "`${$struct}{\"name\"}`" if $is_base;
 }
 
 sub printStructJoins
 {
-    my ($struct, $structMap) = @_;
+    my ($outstr, $struct, $structMap) = @_;
 
     foreach (keys %{${$struct}{"qualifiers"}})
     {
@@ -110,8 +110,8 @@ sub printStructJoins
             my $inheritName = ${${$struct}{"qualifiers"}}{"inherit"};
             my $inheritStruct = ${$structMap}{$inheritName};
 
-            printStructJoins($inheritStruct, $structMap);
-            print " INNER JOIN `${$struct}{\"name\"}` ON `${inheritName}`.`unique_inheritance_id` = `${$struct}{\"name\"}`.`unique_inheritance_id`";
+            printStructJoins($outstr, $inheritStruct, $structMap);
+            $$outstr .= " INNER JOIN `${$struct}{\"name\"}` ON `${inheritName}`.`unique_inheritance_id` = `${$struct}{\"name\"}`.`unique_inheritance_id`";
         }
     }
 }
@@ -122,27 +122,27 @@ sub printEnum()
 
 sub printStruct()
 {
-    my ($struct, $structMap, $enumMap) = @_;
+    my ($output, $struct, $structMap, $enumMap) = @_;
 
-    printComments(${$struct}{"comment"}, 0);
+    printComments($output, ${$struct}{"comment"}, 0);
 
     # Start printing the select statement
-    print "SELECT\n";
+    $$output .= "SELECT\n";
 
-    printStructContent($struct, $structMap, $enumMap, 1);
-    print "FROM ";
+    printStructContent($output, $struct, $structMap, $enumMap, 1);
+    $$output .= "FROM ";
 
-    printBaseStruct($struct, $structMap);
-    printStructJoins($struct, $structMap);
+    printBaseStruct($output, $struct, $structMap);
+    printStructJoins($output, $struct, $structMap);
 
-    print ";\n\n";
+    $$output .= ";\n\n";
 }
 
 sub startFile()
 {
-    my ($name) = @_;
+    my ($output, $name) = @_;
 
-    print "-- This file is generated automatically, do not edit, change the source ($name) instead.\n\n";
+    $$output .= "-- This file is generated automatically, do not edit, change the source ($name) instead.\n\n";
 }
 
 sub endFile()
