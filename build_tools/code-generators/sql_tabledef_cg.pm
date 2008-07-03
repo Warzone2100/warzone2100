@@ -101,9 +101,7 @@ sub printStructContent
             my $inheritName = ${${$struct}{"qualifiers"}}{"inherit"};
             my $inheritStruct = ${$structMap}{$inheritName};
 
-            #print "\t/* BEGIN of inherited \"$inheritName\" definition */\n";
             printStructContent($inheritStruct, $name, $structMap, $enumMap, 0);
-            #print "\t/* END of inherited \"$inheritName\" definition */\n\n";
         }
         elsif (/abstract/)
         {
