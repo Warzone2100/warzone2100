@@ -18,6 +18,7 @@ sub printStructFieldType
     elsif (/bool/)      { $$output .= "bool             "; }
     elsif (/set/)       { $$output .= "bool             "; }
     elsif (/enum/)      { $$output .= "${$field}{\"enum\"} "; }
+    elsif (/IMD_model/) { $$output .= "iIMDShape*       "; }
     else                { die "UKNOWN TYPE: $_"; }
 }
 

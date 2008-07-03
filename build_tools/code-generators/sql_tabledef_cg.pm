@@ -17,6 +17,7 @@ sub printStructFieldType
     elsif (/real/)      { $$output .= "NUMERIC NOT NULL"; }
     elsif (/bool/)      { $$output .= "INTEGER NOT NULL"; }
     elsif (/enum/)      { $$output .= "INTEGER NOT NULL"; }
+    elsif (/IMD_model/) { $$output .= "TEXT NOT NULL"; }
     else                { die "UKNOWN TYPE: $_"; }
 }
 

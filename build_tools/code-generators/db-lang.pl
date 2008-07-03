@@ -93,7 +93,7 @@ sub parseStruct
             }
         }
         # Parse regular field declarations
-        elsif (/^\s*(count|string|real|bool)\s+(unique\s+)?(\w+)\s*;\s*$/)
+        elsif (/^\s*(count|string|real|bool|IMD_model)\s+(unique\s+)?(\w+)\s*;\s*$/)
         {
             my %field = (type=>$1, qualifier=>$2, name=>$3);
 

@@ -44,8 +44,7 @@ struct COMPONENT
     #       We'll name it IMD_model for now.
     #
     # The "base" IMD model representing this component in 3D space.
-    #### IMD_model           baseModel;
-    string              baseModel;
+    IMD_model           baseModel;
 end;
 
 # Will contain all data associated with a body
