@@ -144,4 +144,15 @@ sub printStructs()
     }
 }
 
+sub startFile()
+{
+    my ($name) = @_;
+
+    print "-- This file is generated automatically, do not edit, change the source ($name) instead.\n\n";
+}
+
+sub endFile()
+{
+}
+
 1;

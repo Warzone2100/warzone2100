@@ -119,7 +119,7 @@ sub parseStruct
 my @curComment = ();
 
 # Read and parse the file
-my $name;
+my $name = $ARGV[0];
 while (<>)
 {
     chomp;
@@ -134,5 +134,7 @@ while (<>)
     else            { print "Unmatched line: $_\n"; }
 }
 
+CG::startFile($name);
 CG::printEnums(\@enumList);
 CG::printStructs(\@structList, \%structMap, \%enumMap);
+CG::endFile($name);

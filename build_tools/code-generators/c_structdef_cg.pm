@@ -183,4 +183,38 @@ sub printStructs()
     }
 }
 
+sub printHdrGuard
+{
+    my ($name) = @_;
+
+    $name =~ s/\./_/g;
+    $name = uc($name);
+
+    print "__INCLUDED_DB_TEMPLATE_SCHEMA_STRUCTDEF_${name}_H__";
+}
+
+sub startFile()
+{
+    my ($name) = @_;
+
+    print "/* This file is generated automatically, do not edit, change the source ($name) instead. */\n\n";
+
+    print "#ifndef ";
+    printHdrGuard($name);
+    print "\n";
+
+    print "#define ";
+    printHdrGuard($name);
+    print "\n\n";
+}
+
+sub endFile()
+{
+    my ($name) = @_;
+
+    print "\n#endif // ";
+    printHdrGuard($name);
+    print "\n";
+}
+
 1;
