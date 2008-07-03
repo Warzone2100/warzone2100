@@ -8,14 +8,16 @@ struct BASE
 
     # short name, describing the component, must be translateable
     string          name;
-end struct;
+end;
 
+# Enumerates the different technology levels
 enum TECH_LEVEL
     ONE
     TWO
     THREE
-end enum;
+end;
 
+# Represents a researchable component statistic
 struct COMPONENT
     %inherit BASE;
 
@@ -42,9 +44,11 @@ struct COMPONENT
     #       We'll name it IMD_model for now.
     #
     # The "base" IMD model representing this component in 3D space.
-    IMD_model           baseModel;
-end struct;
+    #### IMD_model           baseModel;
+    string              baseModel;
+end;
 
+# Will contain all data associated with a body
 struct BODY
     %inherit COMPONENT;
 
@@ -53,4 +57,4 @@ struct BODY
 
     # Engine output of this body's engine
     real            powerOutput;
-end struct;
+end;

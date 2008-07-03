@@ -5,147 +5,178 @@ use strict;
 
 # Code generator for C struct definitions
 
-my @structQualifierCount;
-my @structQualifiers;
-my @nestFieldCount;
-my @fieldDecls;
-my @nestNames;
-my @curComment;
-
-sub blankLine()
+sub printStructFieldType
 {
-    print "\n";
+    my $field = $_[0];
+
+    $_ = ${$field}{"type"};
+
+    if    (/count/)     { print "unsigned int     "; }
+    elsif (/string/)    { print "const char*      "; }
+    elsif (/real/)      { print "float            "; }
+    elsif (/bool/)      { print "bool             "; }
+    elsif (/set/)       { print "bool             "; }
+    elsif (/enum/)      { print "${$field}{\"enum\"} "; }
+    else                { die "UKNOWN TYPE: $_"; }
 }
 
-sub beginStructDef()
+sub preProcessQualifiers
 {
-    push @nestNames, $_[0];
-    push @nestFieldCount, 0;
-    push @structQualifierCount, 0;
+    my ($field, $comments) = @_;
+    $_ = ${$field}{"qualifier"};
+    $_ = "" unless $_;
+
+    if    (/unique/)
+    {
+        # Separate this notice from the rest of the comment if there's any
+        push @{$comments}, "" if @{$comments};
+
+        push @{$comments}, " Unique across all instances";
+    }
+    elsif (/set/)
+    {
+        # Separate this notice from the rest of the comment if there's any
+        push @{$comments}, "" if @{$comments};
+
+        push @{$comments}, " \@see ${$field}{\"enum\"} for the meaning of index values";
+    }
 }
 
-sub endStructDef()
+sub postProcessQualifiers
 {
-    my $name = pop(@nestNames);
-    my $fieldCount = pop(@nestFieldCount);
-    my $qualifierCount = pop(@structQualifierCount);
+    my $field = $_[0];
+    my $enumMap = $_[1];
+    $_ = ${$field}{"qualifier"};
+    $_ = "" unless $_;
 
-    # Fetch qualifier list from stack and reverse it
-    my @qualifiers;
-    while ($qualifierCount)
+    if (/set/)
     {
-        push @qualifiers, pop(@structQualifiers);
+        my $enumName = ${$field}{"enum"};
+        my $enum = ${$enumMap}{$enumName};
+        my $enumSize = @{${$enum}{"values"}};
 
-        $qualifierCount--;
+        print "\[${enumSize}]" if (/set/);
+    }
+}
+
+sub printComments
+{
+    my ($comments, $indent) = @_;
+
+    return unless @{$comments};
+
+    print "\t" if $indent;
+    print "/**\n";
+
+    foreach my $comment (@{$comments})
+    {
+        print "\t" if $indent;
+        print " *${comment}\n";
     }
 
-    # Fetch field list from stack and reverse it
-    my @fields;
-    while ($fieldCount)
-    {
-        push @fields, pop(@fieldDecls);
+    print "\t" if $indent;
+    print " */\n";
+}
 
-        $fieldCount--;
-    }
+sub printStructFields
+{
+    my @fields = @{${$_[0]}{"fields"}};
+    my $enumMap = $_[1];
 
-    # Start printing the structure
-    print "typedef struct\n{\n";
-
-    # Process struct qualifiers
-    foreach (@qualifiers)
-    {
-        if    (/^prefix\s+\"([^\"]+)\"$/)
-        {
-            $name = $1 . $name;
-        }
-        elsif (/^abstract$/) {}
-        else
-        {
-            die "Unknown qualifier: `$_'\n";
-        }
-    }
-
-    # Print fields
     while (@fields)
     {
-        print pop(@fields) . "\n";
+        my $field = shift(@fields);
+        my @comments = @{${$field}{"comment"}};
 
-        # Seperate field defintions by blank lines
+        preProcessQualifiers $field, \@comments;
+
+        printComments \@comments, 1;
+
+        print "\t";
+        printStructFieldType $field;
+        print ${$field}{"name"};
+
+        postProcessQualifiers $field, $enumMap;
+        print ";\n";
+
         print "\n" if @fields;
     }
-
-    print "} ${name};\n";
 }
 
-sub addStructQualifier()
+sub printStruct
 {
-    push @structQualifiers, $_[0];
-    $structQualifierCount[@structQualifierCount - 1]++;
-}
+    my ($struct, $name, $prefix, $structMap, $enumMap) = @_;
 
-sub fieldDeclaration()
-{
-    my ($type, $qualifier, $name) = @_;
-
-    my $fieldDecl = "";
-
-    $_ = $type;
-    if    (/count/)     { $type = "unsigned int     "; }
-    elsif (/string/)    { $type = "const char*      "; }
-    elsif (/real/)      { $type = "float            "; }
-    elsif (/bool/)      { $type = "bool             "; }
-    else                { die "UKNOWN TYPE: $_"; }
-
-    my $set = "";
-
-    if ($qualifier)
+    foreach (keys %{${$struct}{"qualifiers"}})
     {
-        foreach ($qualifier)
+        $$prefix = ${${$struct}{"qualifiers"}}{$_} if /prefix/ and not $$prefix;
+
+        if (/inherit/)
         {
-            if    (/set/)
-            {
-                $set = "\[]";
-            }
-            elsif (/unique/)
-            {
-                # Separate this notice from the rest of the comment if there's any
-                push @curComment, "" if @curComment;
-                
-                push @curComment, " Unique across all instances";
-            }
-            else
-            {
-                die "UNKNOWN QUALIFIER: $_";
-            }
+            my $inheritName = ${${$struct}{"qualifiers"}}{"inherit"};
+            my $inheritStruct = ${$structMap}{$inheritName};
+
+            print "\t/* BEGIN of inherited \"$inheritName\" definition */\n";
+            printStruct($inheritStruct, $name, $prefix, $structMap, $enumMap) if /inherit/;
+            print "\t/* END of inherited \"$inheritName\" definition */\n\n";
         }
     }
 
-    # If there's a comment, "open" it
-    $fieldDecl .= "\t/**" if @curComment;
+    $$name = ${$struct}{"name"};
 
-    while (@curComment)
-    {
-        $fieldDecl .= shift(@curComment) . "\n";
-
-        if (@curComment)
-        {
-            $fieldDecl .= "\t * ";
-        }
-        else
-        {
-            $fieldDecl .= "\t */\n";
-        }
-    }
-    
-    $fieldDecl .= "\t${type}${name}${set};";
-
-    push @fieldDecls, $fieldDecl;
-    $nestFieldCount[@nestFieldCount - 1]++;
+    printStructFields($struct, $enumMap);
 }
 
-sub pushComment()
+sub printEnums()
 {
-    push @curComment, substr($_[0], 1);
+    foreach my $enum (@{$_[0]})
+    {
+        printComments ${$enum}{"comment"}, 0;
+
+        print "typedef enum\n{\n";
+
+        my @values = @{${$enum}{"values"}};
+
+        while (@values)
+        {
+            my $value = shift(@values);
+            my $name = ${$value}{"name"};
+
+            printComments ${$value}{"comment"}, 1;
+
+            print "\t${$enum}{\"name\"}_${name},\n";
+
+            print "\n" if @values;
+        }
+
+        print "} ${$enum}{\"name\"};\n\n";
+    }
+}
+
+sub printStructs()
+{
+    my ($structList, $structMap, $enumMap) = @_;
+
+    my @structs = @{$structList};
+
+    while (@structs)
+    {
+        my $struct = shift(@structs);
+        my $name;
+        my $prefix = "";
+
+        printComments ${$struct}{"comment"}, 0;
+
+        # Start printing the structure
+        print "typedef struct\n{\n";
+
+        printStruct($struct, \$name, \$prefix, $structMap, $enumMap);
+
+        $name = $prefix . $name;
+
+        print "} ${name};\n";
+        print "\n" if @structs;
+    }
 }
 
 1;
