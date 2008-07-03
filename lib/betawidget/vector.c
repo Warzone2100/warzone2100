@@ -96,7 +96,7 @@ void vectorMap(vector *v, mapCallback cb)
 {
 	int i;
 	
-	for (i = 0; i < v->size; i++)
+	for (i = 0; i < v->head; i++)
 	{
 		cb(v->mem[i]);
 	}
