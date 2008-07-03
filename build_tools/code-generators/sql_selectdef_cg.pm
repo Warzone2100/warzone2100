@@ -67,10 +67,6 @@ sub printStructContent
 
             printStructContent($inheritStruct, $structMap, $enumMap, 0);
         }
-        elsif (/abstract/)
-        {
-            print "`${$struct}{\"name\"}`.`unique_inheritance_id`,\n\n";
-        }
     }
 
     printStructFields($struct, $enumMap);
@@ -131,7 +127,7 @@ sub printStruct()
     printComments(${$struct}{"comment"}, 0);
 
     # Start printing the select statement
-    print "SELECT ";
+    print "SELECT\n";
 
     printStructContent($struct, $structMap, $enumMap, 1);
     print "FROM ";
