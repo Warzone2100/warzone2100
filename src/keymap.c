@@ -776,11 +776,10 @@ SDWORD		i;
  					 keyToProcess->function();
 					 bKeyProcessed = true;
  				}
-
-			break;
+				break;
 
  			default:
-				debug( LOG_ERROR, "Weirdy action on keymap processing" );
+				debug(LOG_ERROR, "Unknown key action (action code %u) while processing keymap.", (unsigned int)keyToProcess->action);
 				abort();
  				break;
 			}
