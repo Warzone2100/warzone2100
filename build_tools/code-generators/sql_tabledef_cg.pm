@@ -1,143 +1,147 @@
 #!/usr/bin/perl -w
+# vim: set et sts=4 sw=4:
 
 package CG;
 use strict;
 
 # Code generator for SQL table definitions
 
-my @structQualifierCount;
-my @structQualifiers;
-my @nestFieldCount;
-my @fieldDecls;
-my @nestNames;
-my @curComment;
-
-sub blankLine()
+sub printStructFieldType
 {
-    print "\n";
+    my ($field) = @_;
+
+    $_ = ${$field}{"type"};
+
+    if    (/count/)     { print "INTEGER NOT NULL"; }
+    elsif (/string/)    { print "TEXT NOT NULL"; }
+    elsif (/real/)      { print "NUMERIC NOT NULL"; }
+    elsif (/bool/)      { print "INTEGER NOT NULL"; }
+    elsif (/enum/)      { print "INTEGER NOT NULL"; }
+    else                { die "UKNOWN TYPE: $_"; }
 }
 
-sub beginStructDef()
+sub printComments
 {
-    push @nestNames, $_[0];
-    push @nestFieldCount, 0;
-    push @structQualifierCount, 0;
+    my ($comments, $indent) = @_;
+
+    return unless @{$comments};
+
+    foreach my $comment (@{$comments})
+    {
+        print "\t" if $indent;
+        print "--${comment}\n";
+    }
 }
 
-sub endStructDef()
+sub printStructFields
 {
-    my $name = pop(@nestNames);
-    my $fieldCount = pop(@nestFieldCount);
-    my $qualifierCount = pop(@structQualifierCount);
+    my ($struct, $enumMap) = @_;
+    my @fields = @{${$struct}{"fields"}};
+    my @constraints = ();
 
-    # Fetch qualifier list from stack and reverse it
-    my @qualifiers;
-    while ($qualifierCount)
+    while (@fields)
     {
-        push @qualifiers, pop(@structQualifiers);
+        my $field = shift(@fields);
+        my @comments = @{${$field}{"comment"}};
 
-        $qualifierCount--;
+        #preProcessQualifiers $field, \@comments;
+
+        printComments \@comments, 1;
+
+        if (${$field}{"type"} and ${$field}{"type"} =~ /set/)
+        {
+            my $enumName = ${$field}{"enum"};
+            my $enum = ${$enumMap}{$enumName};
+            my @values = @{${$enum}{"values"}};
+            my $unique_string = "UNIQUE(";
+
+            while (@values)
+            {
+                my $value = shift(@values);
+
+                print "\t${$field}{\"name\"}_${$value}{\"name\"} INTEGER NOT NULL";
+                print "," if @values or @fields or @constraints or (${$field}{"qualifier"} and ${$field}{"qualifier"} =~ /unique/);
+                print "\n";
+                $unique_string .= "${$field}{\"name\"}_${$value}{\"name\"}";
+                $unique_string .= ", " if @values;
+            }
+
+            $unique_string .= ")";
+            push @constraints, $unique_string if ${$field}{"qualifier"} and ${$field}{"qualifier"} =~ /unique/;
+        }
+        else
+        {
+            print "\t${$field}{\"name\"} ";
+            printStructFieldType($field);
+            print " UNIQUE" if ${$field}{"qualifier"} and ${$field}{"qualifier"} =~ /unique/;
+            print ",\n" if @fields or @constraints;
+        }
+
+        print "\n";
     }
 
-    # Fetch field list from stack and reverse it
-    my @fields;
-    while ($fieldCount)
+    while (@constraints)
     {
-        push @fields, pop(@fieldDecls);
+        my $constraint = shift(@constraints);
 
-        $fieldCount--;
+        print "\t${constraint}";
+        print ",\n" if @constraints;
+        print "\n";
     }
+}
 
-    # Start printing the structure
-    print "CREATE TABLE `${name}` (\n";
+sub printStruct
+{
+    my ($struct, $name, $structMap, $enumMap, $printFields) = @_;
 
-    # Process struct qualifiers
-    foreach (@qualifiers)
+    foreach (keys %{${$struct}{"qualifiers"}})
     {
-        if    (/^prefix\s+\"([^\"]+)\"$/) {}
-        elsif (/^abstract$/)
+        if (/inherit/)
+        {
+            my $inheritName = ${${$struct}{"qualifiers"}}{"inherit"};
+            my $inheritStruct = ${$structMap}{$inheritName};
+
+            #print "\t/* BEGIN of inherited \"$inheritName\" definition */\n";
+            printStruct($inheritStruct, $name, $structMap, $enumMap, 0);
+            #print "\t/* END of inherited \"$inheritName\" definition */\n\n";
+        }
+        elsif (/abstract/)
         {
             print "\t-- Automatically generated ID to link the inheritance hierarchy.\n"
                  ."\tunique_inheritance_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,\n\n";
         }
-        else
-        {
-            die "Unknown qualifier: `$_'\n";
-        }
     }
 
-    # Print fields
-    while (@fields)
-    {
-        print pop(@fields);
+    $$name = ${$struct}{"name"};
 
-        # Seperate field defintions by commas and blank lines
-        print ",\n" if @fields;
-
-        # Make sure to terminate lines of field definitions
-        print "\n";
-    }
-
-    print ");\n";
+    printStructFields($struct, $enumMap) if $printFields;
 }
 
-sub addStructQualifier()
+sub printEnums()
 {
-    push @structQualifiers, $_[0];
-    $structQualifierCount[@structQualifierCount - 1]++;
 }
 
-sub fieldDeclaration()
+sub printStructs()
 {
-    my ($type, $qualifier, $name) = @_;
+    my ($structList, $structMap, $enumMap) = @_;
 
-    my $fieldDecl = "";
+    my @structs = @{$structList};
 
-    $_ = $type;
-    if    (/count/)     { $type = "INTEGER NOT NULL"; }
-    elsif (/string/)    { $type = "TEXT NOT NULL"; }
-    elsif (/real/)      { $type = "NUMERIC NOT NULL"; }
-    elsif (/bool/)      { $type = "INTEGER NOT NULL"; }
-    else                { die "UKNOWN TYPE: $_"; }
-
-    my $set = "";
-
-    if ($qualifier)
+    while (@structs)
     {
-        foreach ($qualifier)
-        {
-            if    (/set/)
-            {
-                $set = "\[]";
-            }
-            elsif (/unique/)
-            {
-                # Separate this notice from the rest of the comment if there's any
-                push @curComment, "" if @curComment;
+        my $struct = shift(@structs);
+        my $name = ${$struct}{"name"};
 
-                push @curComment, " Unique across all instances";
-            }
-            else
-            {
-                die "UNKNOWN QUALIFIER: $_";
-            }
-        }
+        printComments(${$struct}{"comment"}, 0);
+
+        # Start printing the structure
+        print "CREATE TABLE `${name}` (\n";
+
+        printStruct($struct, \$name, $structMap, $enumMap, 1);
+
+        print ");\n";
+        print "\n" if @structs;
     }
-
-    while (@curComment)
-    {
-        $fieldDecl .= "\t--" . shift(@curComment) . "\n";
-    }
-    
-    $fieldDecl .= "\t${name} ${type}";
-
-    push @fieldDecls, $fieldDecl;
-    $nestFieldCount[@nestFieldCount - 1]++;
-}
-
-sub pushComment()
-{
-    push @curComment, substr($_[0], 1);
 }
 
 1;
