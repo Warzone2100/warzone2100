@@ -52,7 +52,7 @@ sub printStructFields
     }
 }
 
-sub printStruct
+sub printStructContent
 {
     my ($struct, $structMap, $enumMap, $first) = @_;
 
@@ -63,7 +63,7 @@ sub printStruct
             my $inheritName = ${${$struct}{"qualifiers"}}{"inherit"};
             my $inheritStruct = ${$structMap}{$inheritName};
 
-            printStruct($inheritStruct, $structMap, $enumMap, 0);
+            printStructContent($inheritStruct, $structMap, $enumMap, 0);
         }
         elsif (/abstract/)
         {
@@ -117,29 +117,26 @@ sub printStructJoins
     }
 }
 
-sub printEnums()
+sub printEnum()
 {
 }
 
-sub printStructs()
+sub printStruct()
 {
-    my ($structList, $structMap, $enumMap) = @_;
+    my ($struct, $structMap, $enumMap) = @_;
 
-    foreach my $struct (@{$structList})
-    {
-        printComments(${$struct}{"comment"}, 0);
+    printComments(${$struct}{"comment"}, 0);
 
-        # Start printing the select statement
-        print "SELECT ";
+    # Start printing the select statement
+    print "SELECT ";
 
-        printStruct($struct, $structMap, $enumMap, 1);
-        print " FROM ";
+    printStructContent($struct, $structMap, $enumMap, 1);
+    print " FROM ";
 
-        printBaseStruct($struct, $structMap);
-        printStructJoins($struct, $structMap);
+    printBaseStruct($struct, $structMap);
+    printStructJoins($struct, $structMap);
 
-        print ";\n\n";
-    }
+    print ";\n\n";
 }
 
 sub startFile()

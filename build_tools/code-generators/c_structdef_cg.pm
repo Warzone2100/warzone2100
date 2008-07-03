@@ -107,7 +107,7 @@ sub printStructFields
     }
 }
 
-sub printStruct
+sub printStructContent
 {
     my ($struct, $name, $prefix, $structMap, $enumMap) = @_;
 
@@ -121,7 +121,7 @@ sub printStruct
             my $inheritStruct = ${$structMap}{$inheritName};
 
             print "\t/* BEGIN of inherited \"$inheritName\" definition */\n";
-            printStruct($inheritStruct, $name, $prefix, $structMap, $enumMap);
+            printStructContent($inheritStruct, $name, $prefix, $structMap, $enumMap);
             print "\t/* END of inherited \"$inheritName\" definition */\n\n";
         }
     }
@@ -131,52 +131,47 @@ sub printStruct
     printStructFields($struct, $enumMap);
 }
 
-sub printEnums()
+sub printEnum()
 {
-    foreach my $enum (@{$_[0]})
+    my ($enum) = @_;
+
+    printComments ${$enum}{"comment"}, 0;
+
+    print "typedef enum\n{\n";
+
+    my @values = @{${$enum}{"values"}};
+
+    while (@values)
     {
-        printComments ${$enum}{"comment"}, 0;
+        my $value = shift(@values);
+        my $name = ${$value}{"name"};
 
-        print "typedef enum\n{\n";
+        printComments ${$value}{"comment"}, 1;
 
-        my @values = @{${$enum}{"values"}};
+        print "\t${$enum}{\"name\"}_${name},\n";
 
-        while (@values)
-        {
-            my $value = shift(@values);
-            my $name = ${$value}{"name"};
-
-            printComments ${$value}{"comment"}, 1;
-
-            print "\t${$enum}{\"name\"}_${name},\n";
-
-            print "\n" if @values;
-        }
-
-        print "} ${$enum}{\"name\"};\n\n";
+        print "\n" if @values;
     }
+
+    print "} ${$enum}{\"name\"};\n\n";
 }
 
-sub printStructs()
+sub printStruct()
 {
-    my ($structList, $structMap, $enumMap) = @_;
+    my ($struct, $structMap, $enumMap) = @_;
 
-    foreach my $struct (@{$structList})
-    {
-        my $name;
-        my $prefix = "";
+    my $name;
+    my $prefix = "";
 
-        printComments ${$struct}{"comment"}, 0;
+    printComments ${$struct}{"comment"}, 0;
 
-        # Start printing the structure
-        print "typedef struct\n{\n";
+    # Start printing the structure
+    print "typedef struct\n{\n";
 
-        printStruct($struct, \$name, \$prefix, $structMap, $enumMap);
+    printStructContent($struct, \$name, \$prefix, $structMap, $enumMap);
 
-        $name = $prefix . $name;
-
-        print "} ${name};\n\n";
-    }
+    # Finish printing the structure
+    print "} ${prefix}${name};\n\n";
 }
 
 sub printHdrGuard

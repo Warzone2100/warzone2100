@@ -90,7 +90,7 @@ sub printStructFields
     }
 }
 
-sub printStruct
+sub printStructContent
 {
     my ($struct, $name, $structMap, $enumMap, $printFields) = @_;
 
@@ -102,7 +102,7 @@ sub printStruct
             my $inheritStruct = ${$structMap}{$inheritName};
 
             #print "\t/* BEGIN of inherited \"$inheritName\" definition */\n";
-            printStruct($inheritStruct, $name, $structMap, $enumMap, 0);
+            printStructContent($inheritStruct, $name, $structMap, $enumMap, 0);
             #print "\t/* END of inherited \"$inheritName\" definition */\n\n";
         }
         elsif (/abstract/)
@@ -119,27 +119,24 @@ sub printStruct
     printStructFields($struct, $enumMap) if $printFields;
 }
 
-sub printEnums()
+sub printEnum()
 {
 }
 
-sub printStructs()
+sub printStruct()
 {
-    my ($structList, $structMap, $enumMap) = @_;
+    my ($struct, $structMap, $enumMap) = @_;
+    my $name = ${$struct}{"name"};
 
-    foreach my $struct (@{$structList})
-    {
-        my $name = ${$struct}{"name"};
+    printComments(${$struct}{"comment"}, 0);
 
-        printComments(${$struct}{"comment"}, 0);
+    # Start printing the structure
+    print "CREATE TABLE `${name}` (\n";
 
-        # Start printing the structure
-        print "CREATE TABLE `${name}` (\n";
+    printStructContent($struct, \$name, $structMap, $enumMap, 1);
 
-        printStruct($struct, \$name, $structMap, $enumMap, 1);
-
-        print ");\n\n";
-    }
+    # Finish printing the structure
+    print ");\n\n";
 }
 
 sub startFile()

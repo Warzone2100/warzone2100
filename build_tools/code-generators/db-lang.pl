@@ -135,6 +135,17 @@ while (<>)
 }
 
 CG::startFile($name);
-CG::printEnums(\@enumList);
-CG::printStructs(\@structList, \%structMap, \%enumMap);
+
+# Print all enums
+foreach my $enum (@enumList)
+{
+    CG::printEnum($enum);
+}
+
+# Print all structs
+foreach my $struct (@structList)
+{
+    CG::printStruct($struct, \%structMap, \%enumMap);
+}
+
 CG::endFile($name);
