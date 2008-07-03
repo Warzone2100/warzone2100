@@ -108,7 +108,9 @@ sub printStruct
         elsif (/abstract/)
         {
             print "\t-- Automatically generated ID to link the inheritance hierarchy.\n"
-                 ."\tunique_inheritance_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,\n\n";
+                 ."\tunique_inheritance_id INTEGER PRIMARY KEY ";
+            print "AUTOINCREMENT " if $printFields;
+            print "NOT NULL,\n\n";
         }
     }
 
