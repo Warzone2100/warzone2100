@@ -44,7 +44,7 @@ sub parseEnum
             $enumMap{$curEnum{"name"}} = \%curEnum;
             return;
         }
-        else            { print "Unmatched line: $_\n"; }
+        else            { die "Unmatched line: $_\n"; }
     }
 }
 
@@ -112,7 +112,7 @@ sub parseStruct
 
             push @{$curStruct{"fields"}}, \%field;
         }
-        else            { print "Unmatched line: $_\n"; }
+        else            { die "Unmatched line: $_\n"; }
     }
 }
 
@@ -131,7 +131,7 @@ while (<>)
     }
     elsif (/^\s*struct\s+(\w+)\s*$/)                                            { parseStruct($1, \@curComment); }
     elsif (/^\s*enum\s+(\w+)\s*$/)                                              { parseEnum($1, \@curComment); }
-    else            { print "Unmatched line: $_\n"; }
+    else            { die "Unmatched line: $_\n"; }
 }
 
 CG::startFile($name);
