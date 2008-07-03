@@ -42,11 +42,8 @@ sub printStructFields
     while (@fields)
     {
         my $field = shift(@fields);
-        my @comments = @{${$field}{"comment"}};
 
-        #preProcessQualifiers $field, \@comments;
-
-        printComments \@comments, 1;
+        printComments ${$field}{"comment"}, 1;
 
         if (${$field}{"type"} and ${$field}{"type"} =~ /set/)
         {
