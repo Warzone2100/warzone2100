@@ -29,6 +29,8 @@ sub printStructFields
     {
         my $field = shift(@fields);
 
+        printComments ${$field}{"comment"}, 1;
+
         if (${$field}{"type"} and ${$field}{"type"} =~ /set/)
         {
             my $enumName = ${$field}{"enum"};
@@ -39,16 +41,16 @@ sub printStructFields
             {
                 my $value = shift(@values);
 
-                print "`$structName`.`${$field}{\"name\"}_${$value}{\"name\"}`";
-                print ", " if @values;
+                print "\t`$structName`.`${$field}{\"name\"}_${$value}{\"name\"}`";
+                print ",\n" if @values;
             }
         }
         else
         {
-            print "`$structName`.`${$field}{\"name\"}`";
+            print "\t`$structName`.`${$field}{\"name\"}`";
         }
 
-        print ", " if @fields;
+        print ",\n\n" if @fields;
     }
 }
 
@@ -67,12 +69,13 @@ sub printStructContent
         }
         elsif (/abstract/)
         {
-            print "`${$struct}{\"name\"}`.`unique_inheritance_id`, ";
+            print "`${$struct}{\"name\"}`.`unique_inheritance_id`,\n\n";
         }
     }
 
     printStructFields($struct, $enumMap);
-    print ", " unless $first;
+    print ",\n" unless $first;
+    print "\n";
 }
 
 sub printBaseStruct
@@ -131,7 +134,7 @@ sub printStruct()
     print "SELECT ";
 
     printStructContent($struct, $structMap, $enumMap, 1);
-    print " FROM ";
+    print "FROM ";
 
     printBaseStruct($struct, $structMap);
     printStructJoins($struct, $structMap);
