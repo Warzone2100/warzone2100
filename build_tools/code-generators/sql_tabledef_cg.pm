@@ -103,7 +103,7 @@ sub printStructContent
         }
         elsif (/abstract/)
         {
-            $$output .= "\t-- Automatically generated ID to link the inheritance hierarchy.\n";
+            $$output .= "\t-- Automatically generated ID to link the inheritance hierarchy.\n"
                      .  "\tunique_inheritance_id INTEGER PRIMARY KEY ";
             $$output .= "AUTOINCREMENT " if $printFields;
             $$output .= "NOT NULL,\n\n";
