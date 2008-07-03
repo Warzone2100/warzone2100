@@ -103,14 +103,12 @@ sub parseStruct
             push @{$curStruct{"fields"}}, \%field;
         }
         # Parse set and enum field declarations
-        elsif (/^\s*(set|enum)\s+(\w+)\s+(\w+)\s*;\s*$/)
+        elsif (/^\s*(set|enum)\s+(\w+)\s+(unique\s+)?(\w+)\s*;\s*$/)
         {
-            my %field = (type=>$1, enum=>$2, name=>$3);
+            my %field = (type=>$1, enum=>$2, qualifier=>$3, name=>$4);
 
             @{$field{"comment"}} = @curComment;
             @curComment = ();
-
-            $field{"qualifier"} = "set" if ($1 =~ /set/);
 
             push @{$curStruct{"fields"}}, \%field;
         }

@@ -1,4 +1,5 @@
 #!/usr/bin/perl -w
+# vim: set et sts=4 sw=4:
 
 package CG;
 use strict;
@@ -20,7 +21,7 @@ sub printStructFieldType
     else                { die "UKNOWN TYPE: $_"; }
 }
 
-sub preProcessQualifiers
+sub preProcessField
 {
     my ($field, $comments) = @_;
     $_ = ${$field}{"qualifier"};
@@ -33,7 +34,11 @@ sub preProcessQualifiers
 
         push @{$comments}, " Unique across all instances";
     }
-    elsif (/set/)
+
+    $_ = ${$field}{"type"};
+    $_ = "" unless $_;
+
+    if (/set/)
     {
         # Separate this notice from the rest of the comment if there's any
         push @{$comments}, "" if @{$comments};
@@ -42,11 +47,10 @@ sub preProcessQualifiers
     }
 }
 
-sub postProcessQualifiers
+sub postProcessField
 {
-    my $field = $_[0];
-    my $enumMap = $_[1];
-    $_ = ${$field}{"qualifier"};
+    my ($field, $enumMap) = @_;
+    $_ = ${$field}{"type"};
     $_ = "" unless $_;
 
     if (/set/)
@@ -88,7 +92,7 @@ sub printStructFields
         my $field = shift(@fields);
         my @comments = @{${$field}{"comment"}};
 
-        preProcessQualifiers $field, \@comments;
+        preProcessField $field, \@comments;
 
         printComments \@comments, 1;
 
@@ -96,7 +100,7 @@ sub printStructFields
         printStructFieldType $field;
         print ${$field}{"name"};
 
-        postProcessQualifiers $field, $enumMap;
+        postProcessField $field, $enumMap;
         print ";\n";
 
         print "\n" if @fields;
@@ -117,7 +121,7 @@ sub printStruct
             my $inheritStruct = ${$structMap}{$inheritName};
 
             print "\t/* BEGIN of inherited \"$inheritName\" definition */\n";
-            printStruct($inheritStruct, $name, $prefix, $structMap, $enumMap) if /inherit/;
+            printStruct($inheritStruct, $name, $prefix, $structMap, $enumMap);
             print "\t/* END of inherited \"$inheritName\" definition */\n\n";
         }
     }
