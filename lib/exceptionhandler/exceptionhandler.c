@@ -405,7 +405,7 @@ static void posixExceptionHandler(int signum, siginfo_t * siginfo, WZ_DECL_UNUSE
 	int gdbPipe[2] = {0}, dumpFile = open(gdmpPath, O_WRONLY|O_CREAT|O_TRUNC, S_IRUSR|S_IWUSR);
 
 
-	if (!dumpFile)
+	if (dumpFile == -1)
 	{
 		printf("Failed to create dump file '%s'", gdmpPath);
 		return;
