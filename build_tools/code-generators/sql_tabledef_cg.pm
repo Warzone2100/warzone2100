@@ -13,12 +13,23 @@ sub printStructFieldType
     $_ = ${$field}{"type"};
 
     if    (/count/)     { $$output .= "INTEGER NOT NULL"; }
-    elsif (/string/)    { $$output .= "TEXT NOT NULL"; }
     elsif (/real/)      { $$output .= "NUMERIC NOT NULL"; }
     elsif (/bool/)      { $$output .= "INTEGER NOT NULL"; }
     elsif (/enum/)      { $$output .= "INTEGER NOT NULL"; }
-    elsif (/IMD_model/) { $$output .= "TEXT NOT NULL"; }
-    else                { die "UKNOWN TYPE: $_"; }
+    elsif (/string/)
+    {
+        $$output .= "TEXT";
+        $$output .= " NOT NULL" unless grep(/optional/, @{${$field}{"qualifiers"}});
+    }
+    elsif (/IMD_model/)
+    {
+        $$output .= "TEXT";
+        $$output .= " NOT NULL" unless grep(/optional/, @{${$field}{"qualifiers"}});
+    }
+    else
+    {
+        die "UKNOWN TYPE: $_";
+    }
 }
 
 sub printComments

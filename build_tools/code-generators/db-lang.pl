@@ -93,11 +93,25 @@ sub parseStruct
             }
         }
         # Parse regular field declarations
-        elsif (/^\s*(count|string|real|bool|IMD_model)\s+(unique\s+)?(\w+)\s*;\s*$/)
+        elsif (/^\s*(count|real|bool)\s+(unique\s+)?(\w+)\s*;\s*$/)
         {
             my %field = (type=>$1, name=>$3);
 
             push @{$field{"qualifiers"}}, $2 if $2;
+
+            @{$field{"comment"}} = @curComment;
+            @curComment = ();
+
+            push @{$curStruct{"fields"}}, \%field;
+        }
+        # Parse field declarations for types that can have optional values.
+        # Meaning they can be NULL in C.
+        elsif (/^\s*(string|IMD_model)\s+(unique\s+)?(optional\s+)?(\w+)\s*;\s*$/)
+        {
+            my %field = (type=>$1, name=>$4);
+
+            push @{$field{"qualifiers"}}, $2 if $2;
+            push @{$field{"qualifiers"}}, $3 if $3;
 
             @{$field{"comment"}} = @curComment;
             @curComment = ();

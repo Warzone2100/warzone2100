@@ -34,6 +34,14 @@ sub preProcessField
         push @{$comments}, " Unique across all instances";
     }
 
+    if    (grep(/optional/, @{${$field}{"qualifiers"}}))
+    {
+        # Separate this notice from the rest of the comment if there's any
+        push @{$comments}, "" if @{$comments};
+
+        push @{$comments}, " This field is optional and can be NULL to indicate that it has no value";
+    }
+
     $_ = ${$field}{"type"};
     $_ = "" unless $_;
 

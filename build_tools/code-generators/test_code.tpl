@@ -7,7 +7,7 @@ struct BASE
     string unique       id;
 
     # short name, describing the component, must be translateable
-    string              name;
+    string optional     name;
 end;
 
 # Enumerates the different technology levels
@@ -44,7 +44,7 @@ struct COMPONENT
     #       We'll name it IMD_model for now.
     #
     # The "base" IMD model representing this component in 3D space.
-    IMD_model           baseModel;
+    IMD_model optional  baseModel;
 end;
 
 # Will contain all data associated with a body
