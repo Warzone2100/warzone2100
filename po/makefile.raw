@@ -18,7 +18,7 @@ update-po: clean all
 
 $(DOMAIN).pot: POTFILES.in
 	$(XGETTEXT) $(XGETTEXT_OPTIONS) --default-domain="$(DOMAIN)" --copyright-holder="$(COPYRIGHT_HOLDER)" --msgid-bugs-address="$(MSGID_BUGS_ADDRESS)" --directory="$(top_builddir)" --add-comments=TRANSLATORS: --files-from=$<
-	mv $(DOMAIN).po $@
+	$(MV) $(DOMAIN).po $@
 
 %.po: $(DOMAIN).pot
 	$(MSGMERGE) $(MSGMERGE_OPTIONS) $@ $(DOMAIN).pot -o $@.new
