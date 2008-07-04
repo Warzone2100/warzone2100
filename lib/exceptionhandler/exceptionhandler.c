@@ -379,71 +379,20 @@ static void setFatalSignalHandler(SigActionHandler signalHandler)
 #endif // _XOPEN_UNIX
 }
 
-
 /**
- * Exception (signal) handling on POSIX systems.
- * Dumps info about the system incl. backtrace (when GLibC or GDB is present) to /tmp/warzone2100.gdmp
+ * Dumps a backtrace of the stack to the given output stream.
  *
- * \param signum Signal number
- * \param siginfo Signal info
- * \param sigcontext Signal context
+ * @param dumpFile a POSIX file descriptor to write the resulting backtrace to.
  */
-static void posixExceptionHandler(int signum, siginfo_t * siginfo, WZ_DECL_UNUSED void * sigcontext)
+static void gdbExtendedBacktrace(int const dumpFile)
 {
-	static sig_atomic_t allreadyRunning = 0;
-
-	if (allreadyRunning)
-		raise(signum);
-	allreadyRunning = 1;
-
-# if defined(__GLIBC__)
-	void * btBuffer[MAX_BACKTRACE] = {NULL};
-	uint32_t btSize = backtrace(btBuffer, MAX_BACKTRACE);
-# endif
-
-	pid_t pid = 0;
-	int gdbPipe[2] = {0}, dumpFile = open(gdmpPath, O_WRONLY|O_CREAT|O_TRUNC, S_IRUSR|S_IWUSR);
-
-
-	if (dumpFile == -1)
-	{
-		printf("Failed to create dump file '%s'", gdmpPath);
-		return;
-	}
-
-
-	// Dump a generic info header
-	dbgDumpHeader(dumpFile);
-
-
-	write(dumpFile, "Dump caused by signal: ", strlen("Dump caused by signal: "));
-
-	const char * signal = wz_strsignal(siginfo->si_signo, siginfo->si_code);
-	write(dumpFile, signal, strlen(signal));
-	write(dumpFile, "\n\n", 2);
-
-	dumpLog(dumpFile); // dump out the last two log calls
-
-# if defined(__GLIBC__)
-	// Dump raw backtrace in case GDB is not available or fails
-	write(dumpFile, "GLIBC raw backtrace:\n", strlen("GLIBC raw backtrace:\n"));
-	backtrace_symbols_fd(btBuffer, btSize, dumpFile);
-	write(dumpFile, "\n", 1);
-# else
-	write(dumpFile, "GLIBC not available, no raw backtrace dumped\n\n",
-		  strlen("GLIBC not available, no raw backtrace dumped\n\n"));
-# endif
-
-
-	// Make sure everything is written before letting GDB write to it
-	fsync(dumpFile);
-
-
 	if (programIsAvailable && gdbIsAvailable)
 	{
+		int gdbPipe[2];
+
 		if (pipe(gdbPipe) == 0)
 		{
-			pid = fork();
+			const pid_t pid = fork();
 			if (pid == (pid_t)0)
 			{
 				char *gdbArgv[] = { gdbPath, programPath, programPID, NULL };
@@ -465,7 +414,7 @@ static void posixExceptionHandler(int signum, siginfo_t * siginfo, WZ_DECL_UNUSE
 				static const char gdbCommands[] = "backtrace full\n"
 
 				                                  // Move to the stack frame where we triggered the crash
-				                                  "frame 3\n"
+				                                  "frame 4\n"
 
 								  // Show the assembly code associated with that stack frame
 				                                  "disassemble\n"
@@ -511,7 +460,68 @@ static void posixExceptionHandler(int signum, siginfo_t * siginfo, WZ_DECL_UNUSE
 				strlen("- GDB not available\n"));
 		}
 	}
+}
 
+
+/**
+ * Exception (signal) handling on POSIX systems.
+ * Dumps info about the system incl. backtrace (when GLibC or GDB is present) to /tmp/warzone2100.gdmp
+ *
+ * \param signum Signal number
+ * \param siginfo Signal info
+ * \param sigcontext Signal context
+ */
+static void posixExceptionHandler(int signum, siginfo_t * siginfo, WZ_DECL_UNUSED void * sigcontext)
+{
+	static sig_atomic_t allreadyRunning = 0;
+
+	if (allreadyRunning)
+		raise(signum);
+	allreadyRunning = 1;
+
+# if defined(__GLIBC__)
+	void * btBuffer[MAX_BACKTRACE] = {NULL};
+	uint32_t btSize = backtrace(btBuffer, MAX_BACKTRACE);
+# endif
+
+	const int dumpFile = open(gdmpPath, O_WRONLY|O_CREAT|O_TRUNC, S_IRUSR|S_IWUSR);
+
+
+	if (dumpFile == -1)
+	{
+		printf("Failed to create dump file '%s'", gdmpPath);
+		return;
+	}
+
+
+	// Dump a generic info header
+	dbgDumpHeader(dumpFile);
+
+
+	write(dumpFile, "Dump caused by signal: ", strlen("Dump caused by signal: "));
+
+	const char * signal = wz_strsignal(siginfo->si_signo, siginfo->si_code);
+	write(dumpFile, signal, strlen(signal));
+	write(dumpFile, "\n\n", 2);
+
+	dumpLog(dumpFile); // dump out the last two log calls
+
+# if defined(__GLIBC__)
+	// Dump raw backtrace in case GDB is not available or fails
+	write(dumpFile, "GLIBC raw backtrace:\n", strlen("GLIBC raw backtrace:\n"));
+	backtrace_symbols_fd(btBuffer, btSize, dumpFile);
+	write(dumpFile, "\n", 1);
+# else
+	write(dumpFile, "GLIBC not available, no raw backtrace dumped\n\n",
+		  strlen("GLIBC not available, no raw backtrace dumped\n\n"));
+# endif
+
+
+	// Make sure everything is written before letting GDB write to it
+	fsync(dumpFile);
+
+	// Use 'gdb' to provide an "extended" backtrace
+	gdbExtendedBacktrace(dumpFile);
 
 	printf("Saved dump file to '%s'\n", gdmpPath);
 	close(dumpFile);
