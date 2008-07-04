@@ -517,6 +517,50 @@ static void posixExceptionHandler(int signum, siginfo_t * siginfo, WZ_DECL_UNUSE
 
 #endif // WZ_OS_*
 
+#if defined(WZ_OS_UNIX) && !defined(WZ_OS_MAC)
+static bool fetchProgramPath(char * const programPath, size_t const bufSize, const char * const programCommand)
+{
+	// Construct the "which $(programCommand)" string
+	char whichProgramCommand[PATH_MAX];
+	snprintf(whichProgramCommand, sizeof(whichProgramCommand), "which %s", programCommand);
+
+	/* Fill the output buffer with zeroes so that we can rely on the output
+	 * string being NUL-terminated.
+	 */
+	memset(programPath, 0, bufSize);
+
+	/* Execute the "which" command (constructed above) and collect its
+	 * output in programPath.
+	 */
+	FILE * const whichProgramStream = popen(whichProgramCommand, "r");
+	size_t const bytesRead = fread(programPath, 1, bufSize, whichProgramStream);
+	pclose(whichProgramStream);
+
+	// Check whether our buffer is too small, indicate failure if it is
+	if (bytesRead == bufSize)
+	{
+		debug(LOG_WARNING, "Could not retrieve full path to \"%s\", as our buffer is too small. This may prevent creation of an extended backtrace.", programCommand);
+		return false;
+	}
+
+	// Cut of the linefeed (and everything following it) if it's present.
+	char * const linefeed = strchr(programPath, '\n');
+	if (linefeed)
+	{
+		*linefeed = '\0';
+	}
+
+	// Check to see whether we retrieved any meaning ful result
+	if (strlen(programPath) == 0)
+	{
+		debug(LOG_WARNING, "Could not retrieve full path to \"%s\". This may prevent creation of an extended backtrace.", programCommand);
+		return false;
+	}
+
+	debug(LOG_WZ, "Found program \"%s\" at path \"%s\"", programCommand, programPath);
+	return true;
+}
+#endif
 
 /**
  * Setup the exception handler responsible for target OS.
@@ -534,43 +578,12 @@ void setupExceptionHandler(const char * programCommand)
 # endif // !defined(WZ_CC_MINGW)
 #elif defined(WZ_OS_UNIX) && !defined(WZ_OS_MAC)
 	dbgDumpInit(programCommand);
-	// Prepare 'which' command for popen
-	char whichProgramCommand[PATH_MAX] = {'\0'};
-	snprintf( whichProgramCommand, PATH_MAX, "which %s", programCommand );
 
 	// Get full path to this program. Needed for gdb to find the binary.
-	FILE * whichProgramStream = popen(whichProgramCommand, "r");
-	fread( programPath, 1, sizeof(programPath), whichProgramStream );
-	pclose(whichProgramStream);
-
-	// Were we able to find ourselves?
-	if (strlen(programPath) > 0)
-	{
-		programIsAvailable = true;
-		*(strrchr(programPath, '\n')) = '\0'; // `which' adds a \n which confuses exec()
-		debug(LOG_WZ, "Found us at %s", programPath);
-	}
-	else
-	{
-		debug(LOG_WARNING, "Could not retrieve full path to %s, will not create extended backtrace\n", programCommand);
-	}
+	programIsAvailable = fetchProgramPath(programPath, sizeof(programPath), programCommand);
 
 	// Get full path to 'gdb'
-	FILE * whichGDBStream = popen("which gdb", "r");
-	fread( gdbPath, 1, PATH_MAX, whichGDBStream );
-	pclose(whichGDBStream);
-
-	// Did we find GDB?
-	if (strlen(gdbPath) > 0)
-	{
-		gdbIsAvailable = true;
-		*(strrchr(gdbPath, '\n')) = '\0'; // `which' adds a \n which confuses exec()
-		debug(LOG_WZ, "Found gdb at %s", gdbPath);
-	}
-	else
-	{
-		debug(LOG_WARNING, "GDB not available, will not create extended backtrace\n");
-	}
+	gdbIsAvailable = fetchProgramPath(gdbPath, sizeof(gdbPath), "gdb");
 
 	sysInfoValid = (uname(&sysInfo) == 0);
 
