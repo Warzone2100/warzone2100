@@ -25,10 +25,8 @@ sub printStructFieldType
 sub preProcessField
 {
     my ($field, $comments) = @_;
-    $_ = ${$field}{"qualifier"};
-    $_ = "" unless $_;
 
-    if    (/unique/)
+    if    (grep(/unique/, @{${$field}{"qualifiers"}}))
     {
         # Separate this notice from the rest of the comment if there's any
         push @{$comments}, "" if @{$comments};

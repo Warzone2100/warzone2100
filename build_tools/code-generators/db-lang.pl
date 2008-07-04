@@ -95,7 +95,9 @@ sub parseStruct
         # Parse regular field declarations
         elsif (/^\s*(count|string|real|bool|IMD_model)\s+(unique\s+)?(\w+)\s*;\s*$/)
         {
-            my %field = (type=>$1, qualifier=>$2, name=>$3);
+            my %field = (type=>$1, name=>$3);
+
+            push @{$field{"qualifiers"}}, $2 if $2;
 
             @{$field{"comment"}} = @curComment;
             @curComment = ();
@@ -105,7 +107,9 @@ sub parseStruct
         # Parse set and enum field declarations
         elsif (/^\s*(set|enum)\s+(\w+)\s+(unique\s+)?(\w+)\s*;\s*$/)
         {
-            my %field = (type=>$1, enum=>$2, qualifier=>$3, name=>$4);
+            my %field = (type=>$1, enum=>$2, name=>$4);
+
+            push @{$field{"qualifiers"}}, $3 if $3;
 
             @{$field{"comment"}} = @curComment;
             @curComment = ();

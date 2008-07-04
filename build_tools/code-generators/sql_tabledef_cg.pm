@@ -58,20 +58,20 @@ sub printStructFields
                 my $value = shift(@values);
 
                 $$output .= "\t${$field}{\"name\"}_${$value}{\"name\"} INTEGER NOT NULL";
-                $$output .= "," if @values or @fields or @constraints or (${$field}{"qualifier"} and ${$field}{"qualifier"} =~ /unique/);
+                $$output .= "," if @values or @fields or @constraints or grep(/unique/, @{${$field}{"qualifiers"}});
                 $$output .= "\n";
                 $unique_string .= "${$field}{\"name\"}_${$value}{\"name\"}";
                 $unique_string .= ", " if @values;
             }
 
             $unique_string .= ")";
-            push @constraints, $unique_string if ${$field}{"qualifier"} and ${$field}{"qualifier"} =~ /unique/;
+            push @constraints, $unique_string if grep(/unique/, @{${$field}{"qualifiers"}});
         }
         else
         {
             $$output .= "\t${$field}{\"name\"} ";
             printStructFieldType($output, $field);
-            $$output .= " UNIQUE" if ${$field}{"qualifier"} and ${$field}{"qualifier"} =~ /unique/;
+            $$output .= " UNIQUE" if grep(/unique/, @{${$field}{"qualifiers"}});
             $$output .= ",\n" if @fields or @constraints;
         }
 
