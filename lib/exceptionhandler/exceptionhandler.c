@@ -380,14 +380,27 @@ static void setFatalSignalHandler(SigActionHandler signalHandler)
 }
 
 /**
- * Dumps a backtrace of the stack to the given output stream.
+ * Spawn a new GDB process and attach it to the current process.
  *
- * @param dumpFile a POSIX file descriptor to write the resulting backtrace to.
+ * @param dumpFile          a POSIX file descriptor to write GDB's output to,
+ *                          it will also be used to write failure messages to.
+ * @param[out] gdbWritePipe a POSIX file descriptor linked to GDB's stdin.
  *
- * @return false if any failure occurred, preventing a full "extended"
- *               backtrace.
+ * @return 0 if we failed to spawn a new process, a non-zero process ID if we
+ *           successfully spawned a new process.
+ *
+ * @post If the function returned a non-zero process ID a new process has
+ *       successfully been spawned. This doesn't mean that 'gdb' was
+ *       successfully started though. If 'gdb' failed to start the read end of
+ *       the pipe will be closed, also the spawned process will give 1 as its
+ *       return code.
+ *
+ * @post If the function returned a non-zero process ID *gdbWritePipe will
+ *       contain a valid POSIX file descriptor representing GDB's stdin. If the
+ *       function was unsuccessful and returned zero *gdbWritePipe's value will
+ *       be unchanged.
  */
-static bool gdbExtendedBacktrace(int const dumpFile)
+static pid_t execGdb(int const dumpFile, int* gdbWritePipe)
 {
 	/* Check if the "bare minimum" is available: GDB and an absolute path
 	 * to our program's binary.
@@ -409,7 +422,7 @@ static bool gdbExtendedBacktrace(int const dumpFile)
 			         strlen("- GDB not available\n"));
 		}
 
-		return false;
+		return 0;
 	}
 
 	// Create a pipe to use for communication with 'gdb'
@@ -421,7 +434,7 @@ static bool gdbExtendedBacktrace(int const dumpFile)
 
 		printf("Pipe failed\n");
 
-		return false;
+		return 0;
 	}
 
 	// Fork a new child process
@@ -437,37 +450,59 @@ static bool gdbExtendedBacktrace(int const dumpFile)
 		close(gdbPipe[0]);
 		close(gdbPipe[1]);
 
-		return false;
+		return 0;
 	}
 
-	// Check to see if we're the child
+	// Check to see if we're the parent
+	if (pid != 0)
+	{
+		// Return the write end of the pipe
+		*gdbWritePipe = gdbPipe[1];
+
+		return pid;
+	}
+
+	char *gdbArgv[] = { gdbPath, programPath, programPID, NULL };
+	char *gdbEnv[] = { NULL };
+
+	close(gdbPipe[1]); // No output to pipe
+
+	dup2(gdbPipe[0], STDIN_FILENO); // STDIN from pipe
+	dup2(dumpFile, STDOUT_FILENO); // STDOUT to dumpFile
+
+	write(dumpFile, "GDB extended backtrace:\n",
+			strlen("GDB extended backtrace:\n"));
+
+	/* If execve() is successful it effectively prevents further
+	 * execution of this function.
+	 */
+	execve(gdbPath, (char **)gdbArgv, (char **)gdbEnv);
+
+	// If we get here it means that execve failed!
+	write(dumpFile, "execcv(\"gdb\") failed\n",
+	         strlen("execcv(\"gdb\") failed\n"));
+
+	// Terminate the child, indicating failure
+	exit(1);
+}
+
+/**
+ * Dumps a backtrace of the stack to the given output stream.
+ *
+ * @param dumpFile a POSIX file descriptor to write the resulting backtrace to.
+ *
+ * @return false if any failure occurred, preventing a full "extended"
+ *               backtrace.
+ */
+static bool gdbExtendedBacktrace(int const dumpFile)
+{
+	// Spawn a GDB instance and retrieve a pipe to its stdin
+	int gdbPipe;
+	const pid_t pid = execGdb(dumpFile, &gdbPipe);
 	if (pid == 0)
 	{
-		char *gdbArgv[] = { gdbPath, programPath, programPID, NULL };
-		char *gdbEnv[] = { NULL };
-
-		close(gdbPipe[1]); // No output to pipe
-
-		dup2(gdbPipe[0], STDIN_FILENO); // STDIN from pipe
-		dup2(dumpFile, STDOUT_FILENO); // STDOUT to dumpFile
-
-		write(dumpFile, "GDB extended backtrace:\n",
-				strlen("GDB extended backtrace:\n"));
-
-		/* If execve() is successful it effectively prevents further
-		 * execution of this code.
-		 */
-		execve(gdbPath, (char **)gdbArgv, (char **)gdbEnv);
-
-		// If we get here it means that execve failed!
-		write(dumpFile, "execcv(\"gdb\") failed\n",
-		         strlen("execcv(\"gdb\") failed\n"));
-
-		// Terminate the child, indicating failure
-		exit(1);
+		return false;
 	}
-
-	// PARENT: If we get here we're the parent
 
 	                                  // Retrieve a full stack backtrace
 	static const char gdbCommands[] = "backtrace full\n"
@@ -482,21 +517,19 @@ static bool gdbExtendedBacktrace(int const dumpFile)
 	                                  "info registers\n"
 	                                  "quit\n";
 
-	close(gdbPipe[0]); // No input from pipe
-
-	write(gdbPipe[1], gdbCommands, sizeof(gdbCommands));
+	write(gdbPipe, gdbCommands, sizeof(gdbCommands));
 
 	/* Flush our end of the pipe to make sure that GDB has all commands
 	 * directly available to it.
 	 */
-	fsync(gdbPipe[1]);
+	fsync(gdbPipe);
 
 	// Wait for our child to terminate
 	int status;
 	const pid_t wpid = waitpid(pid, &status, 0);
 
 	// Clean up our end of the pipe
-	close(gdbPipe[1]);
+	close(gdbPipe);
 
 	// waitpid(): on error, -1 is returned
 	if (wpid == -1)
