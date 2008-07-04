@@ -461,9 +461,16 @@ static void posixExceptionHandler(int signum, siginfo_t * siginfo, WZ_DECL_UNUSE
 			}
 			else if (pid > (pid_t)0)
 			{
+				                                  // Retrieve a full stack backtrace
 				static const char gdbCommands[] = "backtrace full\n"
+
+				                                  // Move to the stack frame where we triggered the crash
 				                                  "frame 3\n"
+
+								  // Show the assembly code associated with that stack frame
 				                                  "disassemble\n"
+
+								  // Show the content of all registers
 				                                  "info registers\n"
 				                                  "quit\n";
 
