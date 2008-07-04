@@ -569,16 +569,18 @@ static bool fetchProgramPath(char * const programPath, size_t const bufSize, con
  */
 void setupExceptionHandler(const char * programCommand)
 {
-#if defined(WZ_OS_WIN)
+#if !defined(WZ_OS_MAC)
+	// Initialize info required for the debug dumper
 	dbgDumpInit(programCommand);
+#endif
+
+#if defined(WZ_OS_WIN)
 # if defined(WZ_CC_MINGW)
 	ExchndlSetup();
 # else
 	prevExceptionHandler = SetUnhandledExceptionFilter(windowsExceptionHandler);
 # endif // !defined(WZ_CC_MINGW)
 #elif defined(WZ_OS_UNIX) && !defined(WZ_OS_MAC)
-	dbgDumpInit(programCommand);
-
 	// Get full path to this program. Needed for gdb to find the binary.
 	programIsAvailable = fetchProgramPath(programPath, sizeof(programPath), programCommand);
 
