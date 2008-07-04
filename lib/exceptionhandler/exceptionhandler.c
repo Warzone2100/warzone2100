@@ -383,83 +383,114 @@ static void setFatalSignalHandler(SigActionHandler signalHandler)
  * Dumps a backtrace of the stack to the given output stream.
  *
  * @param dumpFile a POSIX file descriptor to write the resulting backtrace to.
+ *
+ * @return false if any failure occurred, preventing a full "extended"
+ *               backtrace.
  */
-static void gdbExtendedBacktrace(int const dumpFile)
+static bool gdbExtendedBacktrace(int const dumpFile)
 {
-	if (programIsAvailable && gdbIsAvailable)
-	{
-		int gdbPipe[2];
-
-		if (pipe(gdbPipe) == 0)
-		{
-			const pid_t pid = fork();
-			if (pid == (pid_t)0)
-			{
-				char *gdbArgv[] = { gdbPath, programPath, programPID, NULL };
-				char *gdbEnv[] = { NULL };
-
-				close(gdbPipe[1]); // No output to pipe
-
-				dup2(gdbPipe[0], STDIN_FILENO); // STDIN from pipe
-				dup2(dumpFile, STDOUT_FILENO); // STDOUT to dumpFile
-
-				write(dumpFile, "GDB extended backtrace:\n",
-					  strlen("GDB extended backtrace:\n"));
-
-				execve(gdbPath, (char **)gdbArgv, (char **)gdbEnv);
-			}
-			else if (pid > (pid_t)0)
-			{
-				                                  // Retrieve a full stack backtrace
-				static const char gdbCommands[] = "backtrace full\n"
-
-				                                  // Move to the stack frame where we triggered the crash
-				                                  "frame 4\n"
-
-								  // Show the assembly code associated with that stack frame
-				                                  "disassemble\n"
-
-								  // Show the content of all registers
-				                                  "info registers\n"
-				                                  "quit\n";
-
-				close(gdbPipe[0]); // No input from pipe
-
-				write(gdbPipe[1], gdbCommands,
-					  sizeof(gdbCommands));
-
-				if (waitpid(pid, NULL, 0) < 0)
-				{
-					printf("GDB failed\n");
-				}
-
-				close(gdbPipe[1]);
-			}
-			else
-			{
-				printf("Fork failed\n");
-			}
-		}
-		else
-		{
-			printf("Pipe failed\n");
-		}
-	}
-	else
+	/* Check if the "bare minimum" is available: GDB and an absolute path
+	 * to our program's binary.
+	 */
+	if (!programIsAvailable
+	 || !gdbIsAvailable)
 	{
 		write(dumpFile, "No extended backtrace dumped:\n",
-			strlen("No extended backtrace dumped:\n"));
+		         strlen("No extended backtrace dumped:\n"));
+
 		if (!programIsAvailable)
 		{
 			write(dumpFile, "- Program path not available\n",
-				strlen("- Program path not available\n"));
+			         strlen("- Program path not available\n"));
 		}
 		if (!gdbIsAvailable)
 		{
 			write(dumpFile, "- GDB not available\n",
-				strlen("- GDB not available\n"));
+			         strlen("- GDB not available\n"));
 		}
+
+		return false;
 	}
+
+	// Create a pipe to use for communication with 'gdb'
+	int gdbPipe[2];
+	if (pipe(gdbPipe) == -1)
+	{
+		write(dumpFile, "Pipe failed\n",
+		         strlen("Pipe failed\n"));
+
+		printf("Pipe failed\n");
+
+		return false;
+	}
+
+	// Fork a new child process
+	const pid_t pid = fork();
+	if (pid == -1)
+	{
+		write(dumpFile, "Fork failed\n",
+		         strlen("Fork failed\n"));
+
+		printf("Fork failed\n");
+
+		// Clean up our pipe
+		close(gdbPipe[0]);
+		close(gdbPipe[1]);
+
+		return false;
+	}
+
+	// Check to see if we're the child
+	if (pid == 0)
+	{
+		char *gdbArgv[] = { gdbPath, programPath, programPID, NULL };
+		char *gdbEnv[] = { NULL };
+
+		close(gdbPipe[1]); // No output to pipe
+
+		dup2(gdbPipe[0], STDIN_FILENO); // STDIN from pipe
+		dup2(dumpFile, STDOUT_FILENO); // STDOUT to dumpFile
+
+		write(dumpFile, "GDB extended backtrace:\n",
+				strlen("GDB extended backtrace:\n"));
+
+		/* If execve() is successful it effectively prevents further
+		 * execution of this code.
+		 */
+		execve(gdbPath, (char **)gdbArgv, (char **)gdbEnv);
+	}
+
+	// PARENT: If we get here we're the parent
+
+	                                  // Retrieve a full stack backtrace
+	static const char gdbCommands[] = "backtrace full\n"
+
+	                                  // Move to the stack frame where we triggered the crash
+	                                  "frame 4\n"
+
+	                                  // Show the assembly code associated with that stack frame
+	                                  "disassemble\n"
+
+	                                  // Show the content of all registers
+	                                  "info registers\n"
+	                                  "quit\n";
+
+	close(gdbPipe[0]); // No input from pipe
+
+	write(gdbPipe[1], gdbCommands, sizeof(gdbCommands));
+
+	/* Close our end of the pipe to force an EOF on GDB's side of the pipe.
+	 * This will prevent any kind of buffering on GDB's end from causing
+	 * infinite blocking on the next waitpid() call.
+	 */
+	close(gdbPipe[1]);
+
+	if (waitpid(pid, NULL, 0) < 0)
+	{
+		printf("GDB failed\n");
+	}
+
+	return true;
 }
 
 
