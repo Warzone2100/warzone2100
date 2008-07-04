@@ -7,7 +7,8 @@ MO_FILES=$(patsubst %.po,%.gmo,$(PO_FILES))
 
 .PHONY: all clean update-po po-files mo-files
 
-ifdef USE_GETTEXT
+all:
+ifdef TRANSLATION
 all: po-files mo-files
 endif
 
