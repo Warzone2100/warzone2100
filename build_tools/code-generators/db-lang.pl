@@ -77,6 +77,8 @@ sub parseStruct
         # Parse struct-level qualifiers
         elsif (/^\s*%(.*)\s*;\s*$/)
         {
+            die "error: Cannot give struct-level qualifiers after defining fields" if exists($curStruct{"fields"});
+
             $_ = $1;
 
             if    (/^prefix\s+\"([^\"]+)\"$/)
@@ -85,10 +87,15 @@ sub parseStruct
             }
             elsif (/^abstract$/)
             {
+                die "error: Cannot declare a struct \"abstract\" if it inherits from another" if exists(${$curStruct{"qualifiers"}}{"inherit"});
+
                 ${$curStruct{"qualifiers"}}{"abstract"} = 1;
             }
             elsif (/^inherit\s+(\w+)$/)
             {
+                die "error: structs declared \"abstract\" cannot inherit" if exists(${$curStruct{"qualifiers"}}{"abstract"});
+                die "error: Cannot inherit from struct \"$1\" as it isn't (fully) declared yet" unless exists($structMap{$1});
+
                 ${$curStruct{"qualifiers"}}{"inherit"} = $1;
             }
         }
