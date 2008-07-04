@@ -4,10 +4,10 @@ struct BASE
 
     # Unique language independant name that can be used to identify a specific
     # stats instance
-    string unique   id;
+    string unique       id;
 
     # short name, describing the component, must be translateable
-    string          name;
+    string              name;
 end;
 
 # Enumerates the different technology levels
