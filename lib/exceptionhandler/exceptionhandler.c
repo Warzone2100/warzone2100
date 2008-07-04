@@ -458,6 +458,13 @@ static bool gdbExtendedBacktrace(int const dumpFile)
 		 * execution of this code.
 		 */
 		execve(gdbPath, (char **)gdbArgv, (char **)gdbEnv);
+
+		// If we get here it means that execve failed!
+		write(dumpFile, "execcv(\"gdb\") failed\n",
+		         strlen("execcv(\"gdb\") failed\n"));
+
+		// Terminate the child, indicating failure
+		exit(1);
 	}
 
 	// PARENT: If we get here we're the parent
@@ -479,15 +486,48 @@ static bool gdbExtendedBacktrace(int const dumpFile)
 
 	write(gdbPipe[1], gdbCommands, sizeof(gdbCommands));
 
-	/* Close our end of the pipe to force an EOF on GDB's side of the pipe.
-	 * This will prevent any kind of buffering on GDB's end from causing
-	 * infinite blocking on the next waitpid() call.
+	/* Flush our end of the pipe to make sure that GDB has all commands
+	 * directly available to it.
 	 */
+	fsync(gdbPipe[1]);
+
+	// Wait for our child to terminate
+	int status;
+	const pid_t wpid = waitpid(pid, &status, 0);
+
+	// Clean up our end of the pipe
 	close(gdbPipe[1]);
 
-	if (waitpid(pid, NULL, 0) < 0)
+	// waitpid(): on error, -1 is returned
+	if (wpid == -1)
 	{
+		write(dumpFile, "GDB failed\n",
+		         strlen("GDB failed\n"));
 		printf("GDB failed\n");
+
+		return false;
+	}
+
+	/* waitpid(): on success, returns the process ID of the child whose
+	 * state has changed
+	 *
+	 * We only have one child, from our fork() call above, thus these PIDs
+	 * should match.
+	 */
+	assert(pid == wpid);
+
+	/* Check wether our child (which presumably was GDB, but doesn't
+	 * necessarily have to be) didn't terminate normally or had a non-zero
+	 * return code.
+	 */
+	if (!WIFEXITED(status)
+	 || WEXITSTATUS(status) != 0)
+	{
+		write(dumpFile, "GDB failed\n",
+		         strlen("GDB failed\n"));
+		printf("GDB failed\n");
+
+		return false;
 	}
 
 	return true;
