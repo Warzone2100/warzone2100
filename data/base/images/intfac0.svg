@@ -35,9 +35,8 @@
    version="1.0"
    sodipodi:docname="intfac0.svg"
    inkscape:output_extension="org.inkscape.output.svg.inkscape"
-   inkscape:export-xdpi="360"
-   inkscape:export-ydpi="360"
-   sodipodi:docbase="/storage/projekte/programmieren/warzone/data/base/images">
+   inkscape:export-xdpi="90"
+   inkscape:export-ydpi="90">
   <metadata
      id="metadata7">
     <rdf:RDF>
@@ -209,9 +208,13 @@
     <linearGradient
        id="linearGradient5004">
       <stop
-         style="stop-color:#2f3357;stop-opacity:1;"
+         style="stop-color:#4e5591;stop-opacity:1;"
          offset="0"
          id="stop5006" />
+      <stop
+         id="stop6166"
+         offset="0.5"
+         style="stop-color:#2f3257;stop-opacity:1;" />
       <stop
          style="stop-color:#3d4485;stop-opacity:1;"
          offset="1"
@@ -2371,8 +2374,8 @@
      pagecolor="#ffffff"
      id="base"
      inkscape:zoom="2.8284271"
-     inkscape:cx="174.43913"
-     inkscape:cy="111.01615"
+     inkscape:cx="159.24129"
+     inkscape:cy="155.4955"
      inkscape:window-x="0"
      inkscape:window-y="25"
      inkscape:current-layer="svg2"
