@@ -1,17 +1,6 @@
 # Metadata of the version of Warzone 2100 you are compiling
-PACKAGE:=warzone2100
-PACKAGE_NAME:=Warzone 2100
 PACKAGE_VERSION:=TRUNK
-PACKAGE_BUGREPORT:=http://wz2100.net/
 INSTALLER_VERSION:=9.9.9.9
-
-# Platform used to build Warzone 2100
-#BUILD:=windows
-#BUILD:=linux
-
-# Platform Warzone 2100 shall run on
-#TARGET:=windows
-#TARGET:=linux
 
 # Compilation mode
 #MODE:=debug
@@ -26,6 +15,6 @@ INSTALLER_VERSION:=9.9.9.9
 #TRANSLATION:=yes
 
 # Make config known throughout the whole buildsystem
-export PACKAGE PACKAGE_NAME PACKAGE_VERSION PACKAGE_BUGREPORT
-export BUILD TARGET MODE DEVDIR
+export PACKAGE_VERSION INSTALLER_VERSION
+export MODE DEVDIR
 export DATA INSTALLER TRANSLATION

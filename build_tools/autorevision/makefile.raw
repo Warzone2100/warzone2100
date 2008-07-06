@@ -20,10 +20,10 @@ include $(top_srcdir)/makerules/exe.mk
 all: all-local
 
 all-local: $(EXE)$(EXEEXT)
-	.$(DIRSEP)$(EXE)$(EXEEXT) +cstr -v $(subst /,$(DIRSEP),$(top_srcdir)) $(subst /,$(DIRSEP),$(top_builddir)/src/autorevision.h)
+	$(EXE)$(EXEEXT) +cstr -v $(subst /,\\,$(top_srcdir)) $(subst /,\\,$(top_builddir)/src/autorevision.h)
 
 clean-local:
-	-$(RM_F) $(subst /,$(DIRSEP),$(top_builddir)/src/autorevision.h)
+	-$(RM_F) $(subst /,\\,$(top_builddir)/src/autorevision.h)
 
 clean: clean-local
 	$(RM_F) $(DEPS) $(EXE)$(EXEEXT)

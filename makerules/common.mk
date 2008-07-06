@@ -5,16 +5,16 @@ endif
 RM_CPPFLAGS:=-I$(top_srcdir)
 
 %.o: %.rc
-	$(WINDRES) $(RM_CPPFLAGS) $(CPPFLAGS) -o $(subst /,$(DIRSEP),$@) $(subst /,$(DIRSEP),$<)
+	$(WINDRES) $(RM_CPPFLAGS) $(CPPFLAGS) -o $(subst /,\\,$@) $(subst /,\\,$<)
 
 %.o: %.c
-	$(CC) $(RM_CPPFLAGS) $(CPPFLAGS) $(CFLAGS) -c -o $(subst /,$(DIRSEP),$@) $(subst /,$(DIRSEP),$<)
+	$(CC) $(RM_CPPFLAGS) $(CPPFLAGS) $(CFLAGS) -c -o $(subst /,\\,$@) $(subst /,\\,$<)
 
 %.o: %.cpp
-	$(CXX) $(RM_CPPFLAGS) $(CPPFLAGS) $(CXXFLAGS) -c -o $(subst /,$(DIRSEP),$@) $(subst /,$(DIRSEP),$<)
+	$(CXX) $(RM_CPPFLAGS) $(CPPFLAGS) $(CXXFLAGS) -c -o $(subst /,\\,$@) $(subst /,\\,$<)
 
 %.lex.h %.lex.c: %.l
-	$(FLEX) $(FLEXFLAGS) -o $(subst /,$(DIRSEP),$@) $(subst /,$(DIRSEP),$<)
+	$(FLEX) $(FLEXFLAGS) -o $(subst /,\\,$@) $(subst /,\\,$<)
 
 %.tab.h %.tab.c: %.y
-	$(BISON) -d $(BISONFLAGS) -o $(subst /,$(DIRSEP),$@) $(subst /,$(DIRSEP),$<)
+	$(BISON) -d $(BISONFLAGS) -o $(subst /,\\,$@) $(subst /,\\,$<)
