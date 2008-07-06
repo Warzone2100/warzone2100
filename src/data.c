@@ -932,6 +932,14 @@ static BOOL dataScriptLoad(const char* fileName, void **ppData)
 	return true;
 }
 
+
+static void dataScriptRelease(void *pData)
+{
+	SCRIPT_CODE *psCode = pData;
+	scriptFreeCode(psCode);
+}
+
+
 // Load a script variable values file
 static BOOL dataScriptLoadVals(const char* fileName, void **ppData)
 {
@@ -1030,7 +1038,7 @@ static const RES_TYPE_MIN_FILE FileResourceTypes[] =
 	{"TERTILES", dataTERTILESLoad, dataTERTILESRelease},
 	{"IMG", dataIMGLoad, dataIMGRelease},
 	{"TEXPAGE", dataTexPageLoad, dataImageRelease},
-	{"SCRIPT", dataScriptLoad, (RES_FREE)scriptFreeCode},
+	{"SCRIPT", dataScriptLoad, dataScriptRelease},
 	{"SCRIPTVAL", dataScriptLoadVals, NULL},
 	{"STR_RES", dataStrResLoad, dataStrResRelease},
 };

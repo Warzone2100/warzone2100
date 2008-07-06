@@ -68,102 +68,73 @@ void scriptShutDown(void)
 /* Free a SCRIPT_CODE structure */
 void scriptFreeCode(SCRIPT_CODE *psCode)
 {
-	UDWORD	i,j;
+	unsigned int i, j;
 
 	debug(LOG_WZ, "Unloading script data");
 
-
 	/* Free local vars */
-	for(i=0; i < psCode->numEvents; i++)
+	for (i = 0; i < psCode->numEvents; i++)
 	{
-		if(psCode->numLocalVars[i] > 0)		//only free if any defined
+		if (psCode->numLocalVars[i] > 0) // only free if any defined
 		{
 			//free strings for event i
-			for(j=0; j < psCode->numLocalVars[i]; j++)
+			for (j = 0; j < psCode->numLocalVars[i]; j++)
 			{
-
-				if(psCode->ppsLocalVarVal[i][j].type == VAL_STRING)	//if a string
+				if (psCode->ppsLocalVarVal[i][j].type == VAL_STRING)
 				{
-					if(psCode->ppsLocalVarVal[i][j].v.sval != NULL)		//doublecheck..
-					{
-						free(psCode->ppsLocalVarVal[i][j].v.sval);		//free string
-					}
+					free(psCode->ppsLocalVarVal[i][j].v.sval);
 				}
 			}
 
 			free(psCode->ppsLocalVars[i]);
-			free(psCode->ppsLocalVarVal[i]);	//free pointer to event i local vars
+			free(psCode->ppsLocalVarVal[i]); // free pointer to event i local vars
 		}
 	}
 
+	free(psCode->numLocalVars);
+	free(psCode->ppsLocalVars);
+	free(psCode->ppsLocalVarVal);
+
 	free(psCode->pCode);
-	if (psCode->pTriggerTab)
-	{
-		free(psCode->pTriggerTab);
-	}
-	if (psCode->psTriggerData)
-	{
-		free(psCode->psTriggerData);
-	}
+
+	free(psCode->pTriggerTab);
+	free(psCode->psTriggerData);
+
 	free(psCode->pEventTab);
 	free(psCode->pEventLinks);
-	if (psCode->pGlobals != NULL)
-	{
-		free(psCode->pGlobals);
-	}
-	if (psCode->psArrayInfo != NULL)
-	{
-		free(psCode->psArrayInfo);
-	}
+
+	free(psCode->pGlobals);
+
+	free(psCode->psArrayInfo);
+
 	if (psCode->psDebug)
 	{
-		for(i=0; i<psCode->debugEntries; i++)
+		for (i = 0; i < psCode->debugEntries; i++)
 		{
-			if (psCode->psDebug[i].pLabel)
-			{
-				free(psCode->psDebug[i].pLabel);
-			}
+			free(psCode->psDebug[i].pLabel);
 		}
 		free(psCode->psDebug);
 	}
+
 	if (psCode->psVarDebug)
 	{
-		for(i=0; i<psCode->numGlobals; i++)
+		for (i = 0; i < psCode->numGlobals; i++)
 		{
-			if (psCode->psVarDebug[i].pIdent)
-			{
-				free(psCode->psVarDebug[i].pIdent);
-			}
+			free(psCode->psVarDebug[i].pIdent);
 		}
 		free(psCode->psVarDebug);
 	}
+
 	if (psCode->psArrayDebug)
 	{
-		for(i=0; i<psCode->numArrays; i++)
+		for (i = 0; i < psCode->numArrays; i++)
 		{
-			if (psCode->psArrayDebug[i].pIdent)
-			{
-				free(psCode->psArrayDebug[i].pIdent);
-			}
+			free(psCode->psArrayDebug[i].pIdent);
 		}
 		free(psCode->psArrayDebug);
 	}
 
-
-
-	if(psCode->numParams != NULL)
-		free(psCode->numParams);
-
-	if(psCode->numLocalVars != NULL)
-		free(psCode->numLocalVars);
-
-	if(psCode->ppsLocalVars != NULL)
-		free(psCode->ppsLocalVars);
-
-	if(psCode->ppsLocalVarVal != NULL)
-		free(psCode->ppsLocalVarVal);
-
-	psCode->numEvents = 0;
+	free(psCode->numParams);
 
 	free(psCode);
 }
