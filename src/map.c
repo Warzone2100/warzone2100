@@ -1101,10 +1101,6 @@ BOOL mapSave(char **ppFileData, UDWORD *pFileSize)
 	psTile = psMapTiles;
 	for(i=0; i<mapWidth*mapHeight; i++)
 	{
-
-		// don't save the noblock flag as it gets set again when the objects are loaded
-		psTileData->texture = (UWORD)(psTile->texture & (UWORD)~TILE_NOTBLOCKING);
-
 		psTileData->height = psTile->height;
 
 		/* MAP_SAVETILEV2 */

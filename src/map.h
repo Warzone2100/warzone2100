@@ -57,9 +57,6 @@ typedef enum _terrain_type
 #define TILE_TRIFLIP	0x0800	// This bit describes the direction the tile is split into 2 triangles (same as triangleFlip)
 #define TILE_HILIGHT	0x0400	// set when the tile has the structure cursor over it
 
-// NASTY - this should be in tileInfoBits but there isn't any room left
-#define TILE_NOTBLOCKING	0x0200	// units can drive on this even if there is a structure or feature on it
-
 #define TILE_NUMMASK	0x01ff
 
 
@@ -74,6 +71,7 @@ static inline unsigned short TileNumber_texture(unsigned short tilenumber)
 	return tilenumber & ~TILE_NUMMASK;
 }
 
+#define BITS_NOTBLOCKING 0x01 // units can drive on this even if there is a structure or feature on it
 #define BITS_FPATHBLOCK	0x10		// bit set temporarily by find path to mark a blocking tile
 #define BITS_GATEWAY	0x40		// bit set to show a gateway on the tile
 #define BITS_TALLSTRUCTURE 0x80		// bit set to show a tall structure which camera needs to avoid.
@@ -81,7 +79,7 @@ static inline unsigned short TileNumber_texture(unsigned short tilenumber)
 /* Information stored with each tile */
 typedef struct _maptile
 {
-	UBYTE			tileInfoBits;
+	uint8_t			tileInfoBits;
 	uint8_t			tileVisBits;	// COMPRESSED - bit per player
 	UBYTE			height;			// The height at the top left of the tile
 	UBYTE			illumination;	// How bright is this tile?
@@ -95,7 +93,6 @@ typedef struct _maptile
 //	TYPE_OF_TERRAIN	type;			// The terrain type for the tile
 } MAPTILE;
 
-#define TILE_IS_NOTBLOCKING(x)	(x->texture & TILE_NOTBLOCKING)
 
 /**
  * Check if tile contains a structure or feature. Function is thread-safe,
@@ -147,8 +144,9 @@ static inline bool TileHasSmallStructure(const MAPTILE* tile)
 	    && ((STRUCTURE*)tile->psObject)->pStructureType->height == 1;
 }
 
-#define SET_TILE_NOTBLOCKING(x)	(x->texture |= TILE_NOTBLOCKING)
-#define CLEAR_TILE_NOTBLOCKING(x)	(x->texture &= ~TILE_NOTBLOCKING)
+#define TILE_IS_NOTBLOCKING(x)	(x->tileInfoBits & BITS_NOTBLOCKING)
+#define SET_TILE_NOTBLOCKING(x)	(x->tileInfoBits |= BITS_NOTBLOCKING)
+#define CLEAR_TILE_NOTBLOCKING(x)	(x->tileInfoBits &= ~BITS_NOTBLOCKING)
 
 #define SET_TILE_HIGHLIGHT(x)	(x->texture = (UWORD)((x)->texture | TILE_HILIGHT))
 #define CLEAR_TILE_HIGHLIGHT(x)	(x->texture = (UWORD)((x)->texture & (~TILE_HILIGHT)))
