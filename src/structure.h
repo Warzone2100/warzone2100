@@ -445,17 +445,17 @@ static inline void _setStructureTarget(STRUCTURE *psBuilding, BASE_OBJECT *psNew
 do { \
 	unsigned int i; \
 \
-	assert(object != NULL); \
-	assert(object->type == OBJ_STRUCTURE); \
-	assert(object->player < MAX_PLAYERS); \
-	assert(object->pStructureType->type < NUM_DIFF_BUILDINGS); \
-	assert(object->numWeaps <= STRUCT_MAXWEAPS); \
+	ASSERT((object) != NULL, "CHECK_STRUCTURE: NULL pointer"); \
+	ASSERT((object)->type == OBJ_STRUCTURE, "CHECK_STRUCTURE: No structure (type num %u)", (unsigned int)(object)->type); \
+	ASSERT((object)->player < MAX_PLAYERS, "CHECK_STRUCTURE: Out of bound player num (%u)", (unsigned int)(object)->player); \
+	ASSERT((object)->pStructureType->type < NUM_DIFF_BUILDINGS, "CHECK_STRUCTURE: Out of bound structure type (%u)", (unsigned int)(object)->pStructureType->type); \
+	ASSERT((object)->numWeaps <= STRUCT_MAXWEAPS, "CHECK_STRUCTURE: Out of bound weapon count (%u)", (unsigned int)(object)->numWeaps); \
 	for (i = 0; i < STRUCT_MAXWEAPS; ++i) \
 	{ \
-		assert(object->turretRotation[i] <= 360); \
-		if (object->psTarget[i]) \
+		ASSERT((object)->turretRotation[i] <= 360, "Out of range turret rotation (turret %u; rotation: %u)", i, (unsigned int)(object)->turretRotation[i]); \
+		if ((object)->psTarget[i]) \
 		{ \
-			CHECK_OBJECT(object->psTarget[i]); \
+			CHECK_OBJECT((object)->psTarget[i]); \
 		} \
 	} \
 } while (0)
