@@ -4588,29 +4588,28 @@ BOOL vtolHappy(const DROID* psDroid)
 	if (psDroid->numWeaps > 0)
 	{
 		unsigned int i;
-		UBYTE numVtolWeaps = 0;
-		UBYTE rearmedWeaps = 0;
+		bool numVtolWeaps[8];
+		bool rearmedWeaps[8];
+
+		memset(numVtolWeaps, 0, sizeof(numVtolWeaps));
+		memset(rearmedWeaps, 0, sizeof(rearmedWeaps));
 
 		for (i = 0; i < psDroid->numWeaps; ++i)
 		{
 			if (asWeaponStats[psDroid->asWeaps[i].nStat].vtolAttackRuns > 0)
 			{
-				const UBYTE curWeap = 1 << (1 + i);
-
-				numVtolWeaps |= curWeap;
+				numVtolWeaps[i] = true;
 				if (psDroid->sMove.iAttackRuns[i] == 0)
 				{
-					rearmedWeaps |= curWeap;
+					rearmedWeaps[i] = true;
 				}
 			}
 		}
 
 		for (i = 0; i < psDroid->numWeaps; ++i)
 		{
-			const UBYTE curWeap = 1 << (1 + i);
-
-			if (numVtolWeaps & curWeap
-			 && !(rearmedWeaps & curWeap))
+			if (numVtolWeaps[i]
+			 && !rearmedWeaps[i])
 				return false;
 		}
 
