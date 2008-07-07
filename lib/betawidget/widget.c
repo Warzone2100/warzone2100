@@ -589,6 +589,12 @@ void widgetResizeImpl(widget *self, int w, int h)
 	
 	// Set the needs redraw flag
 	self->needsRedraw = true;
+	
+	// If we have any children, we need to redo their layout
+	if (vectorSize(self->children))
+	{
+		widgetDoLayout(self);
+	}
 }
 
 void widgetCompositeImpl(widget *self, cairo_t *comp)
