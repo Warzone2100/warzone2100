@@ -129,7 +129,7 @@ BOOL objectInRange(BASE_OBJECT *psList, SDWORD x, SDWORD y, SDWORD range)
 
 		// skip flying vtols
 		if ( (psCurr->type == OBJ_DROID) &&
-			 vtolDroid((DROID *)psCurr) &&
+			 isVtolDroid((DROID *)psCurr) &&
 			 ((DROID *)psCurr)->sMove.Status != MOVEINACTIVE )
 		{
 			continue;
@@ -941,7 +941,7 @@ BOOL scrAddDroid(void)
 		if (psDroid)
 		{
 			addDroid(psDroid, apsDroidLists);
-			if (vtolDroid(psDroid))
+			if (isVtolDroid(psDroid))
 			{
 				// vtols start in the air
 				moveMakeVtolHover(psDroid);
@@ -6536,7 +6536,7 @@ BOOL scrIsVtol(void)
 		ASSERT( false,"scrIsVtol: null droid passed in." );
 	}
 
-	scrFunctionResult.v.bval = vtolDroid(psDroid) ;
+	scrFunctionResult.v.bval = isVtolDroid(psDroid) ;
 	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
 	{
 		return false;
@@ -10493,7 +10493,7 @@ BOOL objectInRangeVis(BASE_OBJECT *psList, SDWORD x, SDWORD y, SDWORD range, SDW
 
 		// skip flying vtols
 		if ( (psCurr->type == OBJ_DROID) &&
-			vtolDroid((DROID *)psCurr) &&
+			isVtolDroid((DROID *)psCurr) &&
 			((DROID *)psCurr)->sMove.Status != MOVEINACTIVE )
 		{
 			continue;

@@ -114,7 +114,7 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 
 	/* Watermelon:dont shoot if the weapon_slot of a vtol is empty */
 	if (psAttacker->type == OBJ_DROID &&
-		vtolDroid(((DROID *)psAttacker)))
+		isVtolDroid(((DROID *)psAttacker)))
 	{
 		if (((DROID *)psAttacker)->sMove.iAttackRuns[weapon_slot] >= getNumAttackRuns(((DROID *)psAttacker), weapon_slot))
 		{
@@ -184,7 +184,7 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 
 	/* Check we can see the target */
 	if ( (psAttacker->type == OBJ_DROID) &&
-		 !vtolDroid((DROID *)psAttacker) &&
+		 !isVtolDroid((DROID *)psAttacker) &&
 		 (proj_Direct(psStats) ||
 		 actionInsideMinRange(psDroid, psTarget, weapon_slot)) )
 	{

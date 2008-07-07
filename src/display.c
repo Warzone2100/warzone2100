@@ -1833,7 +1833,7 @@ static inline void dealWithLMBDroid(DROID* psDroid, SELECTION_TYPE selection)
 					(psCurr->selected)&&
 					(psCurr->asWeaps[0].nStat > 0) &&
 					((!proj_Direct(asWeaponStats + psCurr->asWeaps[0].nStat)) ||
-					vtolDroid(psCurr)) &&
+					isVtolDroid(psCurr)) &&
 					droidSensorDroidWeapon((BASE_OBJECT *)psDroid, psCurr))
 				{
 					bSensorAssigned = true;
@@ -3058,7 +3058,7 @@ BOOL	vtolDroidSelected(UDWORD player)
 
 	for (psCurr = apsDroidLists[player]; psCurr != NULL; psCurr = psCurr->psNext)
 	{
-		if (psCurr->selected && vtolDroid(psCurr))
+		if (psCurr->selected && isVtolDroid(psCurr))
 		{
 			// horrible hack to note one of the selected vtols
 			psSelectedVtol = psCurr;

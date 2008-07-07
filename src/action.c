@@ -543,7 +543,7 @@ BOOL actionTargetTurret(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, UWORD *p
 	tRotation %= 360;
 
 	if ((psAttacker->type == OBJ_DROID) &&
-		vtolDroid((DROID *)psAttacker))
+		isVtolDroid((DROID *)psAttacker))
 	{
 		// limit the rotation for vtols
 		if ((tRotation <= 180) && (tRotation > VTOL_TURRET_LLIMIT))
@@ -662,7 +662,7 @@ BOOL actionVisibleTarget(DROID *psDroid, BASE_OBJECT *psTarget, int weapon_slot)
 		}
 	}
 
-	if (vtolDroid(psDroid))
+	if (isVtolDroid(psDroid))
 	{
 		if ( visibleObject((BASE_OBJECT*)psDroid, psTarget, false) )
 		{
@@ -1052,7 +1052,7 @@ void actionUpdateDroid(DROID *psDroid)
 					{
 						psDroid->action = DACTION_NONE;
 						//if Vtol - return to rearm pad
-						if (vtolDroid(psDroid))
+						if (isVtolDroid(psDroid))
 						{
 							moveToRearm(psDroid);
 						}
@@ -1073,7 +1073,7 @@ void actionUpdateDroid(DROID *psDroid)
 			{
 				psDroid->action = DACTION_NONE;
 				//if Vtol - return to rearm pad
-				if (vtolDroid(psDroid))
+				if (isVtolDroid(psDroid))
 				{
 					moveToRearm(psDroid);
 				}
@@ -1220,7 +1220,7 @@ void actionUpdateDroid(DROID *psDroid)
 
 					//Watermelon:I moved psWeapStats flag update there
 					psWeapStats = asWeaponStats + psDroid->asWeaps[i].nStat;
-					if (!vtolDroid(psDroid) &&
+					if (!isVtolDroid(psDroid) &&
 						psDroid->asWeaps[i].nStat > 0 &&
 						psWeapStats->rotate &&
 						psWeapStats->fireOnMove != FOM_NO &&
@@ -1312,7 +1312,7 @@ void actionUpdateDroid(DROID *psDroid)
 						continue;
 					}
 					//if Vtol - return to rearm pad
-					/*if (vtolDroid(psDroid))
+					/*if (isVtolDroid(psDroid))
 					{
 						moveToRearm(psDroid);
 					}*/
@@ -1390,7 +1390,7 @@ void actionUpdateDroid(DROID *psDroid)
 
 		//check its a VTOL unit since adding Transporter's into multiPlayer
 		/* check vtol attack runs */
-		if (vtolDroid(psDroid))
+		if (isVtolDroid(psDroid))
 		{
 			actionUpdateVtolAttack( psDroid );
 		}
@@ -1488,7 +1488,7 @@ void actionUpdateDroid(DROID *psDroid)
 			   || psDroid->order == DORDER_FIRESUPPORT)
 			  && secondaryGetState(psDroid, DSO_HALTTYPE, &state)
 			  && (state == DSS_HALT_HOLD))
-			 || (!vtolDroid(psDroid)
+			 || (!isVtolDroid(psDroid)
 			  && (psTarget = orderStateObj(psDroid, DORDER_FIRESUPPORT))
 			  && psTarget->type == OBJ_STRUCTURE))
 			{
@@ -1613,7 +1613,7 @@ void actionUpdateDroid(DROID *psDroid)
 		}
 
 		// send vtols back to rearm
-		if (vtolDroid(psDroid) &&
+		if (isVtolDroid(psDroid) &&
 			vtolEmpty(psDroid))
 		{
 			moveToRearm(psDroid);
@@ -1652,7 +1652,7 @@ void actionUpdateDroid(DROID *psDroid)
 						}
 
 						bChaseBloke = false;
-						if (!vtolDroid(psDroid) &&
+						if (!isVtolDroid(psDroid) &&
 							psDroid->psActionTarget[0]->type == OBJ_DROID &&
 							((DROID *)psDroid->psActionTarget[0])->droidType == DROID_PERSON &&
 							psWeapStats->fireOnMove != FOM_NO)
@@ -2242,7 +2242,7 @@ void actionUpdateDroid(DROID *psDroid)
 			"DACTION_FIRESUPPORT: incorrect target type" );
 			//don't move VTOL's
 			// also don't move closer to sensor towers
-			if (!vtolDroid(psDroid) &&
+			if (!isVtolDroid(psDroid) &&
 				(psDroid->psTarget->type != OBJ_STRUCTURE))
 			{
 				//move droids to within short range of the sensor now!!!!
@@ -2569,7 +2569,7 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 		   || psDroid->order == DORDER_FIRESUPPORT)
 		  && secondaryGetState(psDroid, DSO_HALTTYPE, &state)
 		  && (state == DSS_HALT_HOLD))
-		   || (!vtolDroid(psDroid)
+		   || (!isVtolDroid(psDroid)
 		    && (psTarget = orderStateObj(psDroid, DORDER_FIRESUPPORT))
 		    && psTarget->type == OBJ_STRUCTURE))
 		{
@@ -2719,7 +2719,7 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 		break;
 	case DACTION_FIRESUPPORT:
 		psDroid->action = DACTION_FIRESUPPORT;
-		if(!vtolDroid(psDroid) &&
+		if(!isVtolDroid(psDroid) &&
 			!(secondaryGetState(psDroid, DSO_HALTTYPE, &state) && (state == DSS_HALT_HOLD)) &&	// check hold
 			(psDroid->psTarget->type != OBJ_STRUCTURE))
 		{
@@ -2870,7 +2870,7 @@ void moveToRearm(DROID *psDroid)
 
 	CHECK_DROID(psDroid);
 
-	if (!vtolDroid(psDroid))
+	if (!isVtolDroid(psDroid))
 	{
 		return;
 	}

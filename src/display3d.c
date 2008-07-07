@@ -2622,9 +2622,9 @@ static void drawWeaponReloadBar(BASE_OBJECT *psObj, WEAPON *psWeap, int weapon_s
 	}
 	if( (bSalvo && (psStats->reloadTime > GAME_TICKS_PER_SEC)) ||
 		(psStats->firePause > GAME_TICKS_PER_SEC) ||
-		((psObj->type == OBJ_DROID) && vtolDroid((DROID *)psObj)) )
+		((psObj->type == OBJ_DROID) && isVtolDroid((DROID *)psObj)) )
 	{
-		if (psObj->type == OBJ_DROID && vtolDroid((DROID *)psObj))
+		if (psObj->type == OBJ_DROID && isVtolDroid((DROID *)psObj))
 		{
 			//deal with VTOLs
 			firingStage = getNumAttackRuns((DROID *)psObj, weapon_slot) - ((DROID *)psObj)->sMove.iAttackRuns[weapon_slot];

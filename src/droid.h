@@ -334,7 +334,7 @@ a defined range*/
 extern BASE_OBJECT * checkForRepairRange(DROID *psDroid,DROID *psTarget);
 
 //access function
-extern BOOL vtolDroid(const DROID* psDroid);
+extern BOOL isVtolDroid(const DROID* psDroid);
 /*returns true if a VTOL Weapon Droid which has completed all runs*/
 extern BOOL vtolEmpty(DROID *psDroid);
 /*Checks a vtol for being fully armed and fully repaired to see if ready to

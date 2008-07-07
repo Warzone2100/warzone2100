@@ -434,7 +434,7 @@ FPATH_RETVAL fpathRoute(DROID* psDroid, SDWORD tX, SDWORD tY)
 		partialTX = target.x;
 		partialTY = target.y;
 	}
-	else if (retVal == FPR_FAILED && vtolDroid(psDroid))
+	else if (retVal == FPR_FAILED && isVtolDroid(psDroid))
 	{
 		fpathSetDirectRoute(psDroid, target.x, target.y);
 		retVal = FPR_OK;

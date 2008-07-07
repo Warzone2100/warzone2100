@@ -395,7 +395,7 @@ BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, Ve
 	setProjectileDestination(psObj, psTarget);
 
 	/* If target is a VTOL or higher than ground, it is an air target. */
-	if ((psTarget != NULL && psTarget->type == OBJ_DROID && vtolDroid((DROID*)psTarget))
+	if ((psTarget != NULL && psTarget->type == OBJ_DROID && isVtolDroid((DROID*)psTarget))
 		|| (psTarget == NULL && target.z > map_Height(target.x, target.y)))
 	{
 		psObj->airTarget = true;
@@ -792,7 +792,7 @@ static void proj_InFlightDirectFunc(PROJECTILE *psProj)
 		if (psStats->surfaceToAir == SHOOT_IN_AIR &&
 			(psTempObj->type == OBJ_STRUCTURE ||
 				psTempObj->type == OBJ_FEATURE ||
-				(psTempObj->type == OBJ_DROID && !vtolDroid((DROID *)psTempObj))
+				(psTempObj->type == OBJ_DROID && !isVtolDroid((DROID *)psTempObj))
 			))
 		{
 			// AA weapons should not hit buildings and non-vtol droids
@@ -1688,7 +1688,7 @@ static void proj_checkBurnDamage( BASE_OBJECT *apsList, PROJECTILE *psProj, FIRE
 		psNext = psCurr->psNext;
 
 		if ((psCurr->type == OBJ_DROID) &&
-			vtolDroid((DROID*)psCurr) &&
+			isVtolDroid((DROID*)psCurr) &&
 			((DROID *)psCurr)->sMove.Status != MOVEINACTIVE)
 		{
 			// can't set flying vtols on fire
@@ -2183,7 +2183,7 @@ static UDWORD	establishTargetHeight(BASE_OBJECT *psTarget)
 				return height;
 
 			// VTOL's don't have pIMD either it seems...
-			if (vtolDroid(psDroid))
+			if (isVtolDroid(psDroid))
 			{
 				return (height + VTOL_HITBOX_MODIFICATOR);
 			}
