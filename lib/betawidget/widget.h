@@ -185,6 +185,7 @@ struct _widgetVtbl
 	void    (*composite)                    (widget *self, cairo_t *comp);
 
 	void    (*doDraw)                       (widget *self);
+	void	(*doDrawMask)                   (widget *self);
 	bool    (*doLayout)                     (widget *self);
 
 	void    (*destroy)                      (widget *self);
@@ -224,6 +225,11 @@ struct _widget
 	 * The widgets cairo drawing context
 	 */
 	cairo_t *cr;
+	
+	/*
+	 * The widgets mouse-event mask
+	 */
+	cairo_t *maskCr;
 
 	//--------------------------------------
 	// Public members
@@ -274,6 +280,11 @@ struct _widget
 	 * If the widget is dirty (i.e., needs to be re-drawn)
 	 */
 	bool needsRedraw;
+	
+	/*
+	 * If the widget uses an mouse event mask
+	 */
+	bool maskEnabled;
 };
 
 /*
@@ -336,6 +347,20 @@ void widgetDraw(widget *self);
  * TODO
  */
 void widgetComposite(widget *self, cairo_t *comp);
+
+/**
+ * Enables the widgets mask.
+ * 
+ * @param self  The widget whose mask to enable.
+ */
+void widgetEnableMask(widget *self);
+
+/**
+ * Disables the widgets mouse-event mask.
+ * 
+ * @param self	The widget whose mask to disable.
+ */
+void widgetDisableMask(widget *self);
 
 /**
  * Recursively searches the child widgets of self for a widget whose ->id is
@@ -530,6 +555,23 @@ bool widgetHandleEvent(widget *self, event *evt);
 void widgetDoDraw(widget *self);
 
 /**
+ * Configures the mask context (self->maskCr) for drawing and then delegates the
+ * drawing to widgetDoDrawMask. This method is required as the mask context
+ * requires some additional initialisation to a regular Cairo context.
+ * 
+ * @param self  The widget whose mask to draw.
+ */
+void widgetDrawMask(widget *self);
+
+/**
+ * A protected `pure virtual` method which is called to draw the widgets mouse-
+ * event mask.
+ * 
+ * @param self  The widget that should draw its mask.
+ */
+void widgetDoDrawMask(widget *self);
+
+/**
  *
  */
 bool widgetDoLayout(widget *self);
@@ -541,5 +583,15 @@ bool widgetDoLayout(widget *self);
  * @param evt   The event to fire the callbacks for.
  */
 bool widgetFireCallbacks(widget *self, event *evt);
+
+/**
+ * Checks to see if the point loc is masked or not by the widgets mouse-event
+ * mask.
+ * 
+ * @param self  The widget to check the mask of.
+ * @param loc   The point (x,y) to check the mask status of.
+ * @return true if loc is masked; false otherwise;
+ */
+bool widgetPointMasked(widget *self, point loc);
 
 #endif /*WIDGET_H_*/

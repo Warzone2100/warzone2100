@@ -10,6 +10,55 @@ const classInfo widgetClassInfo =
 
 static widgetVtbl vtbl;
 
+/**
+ * Creates a new cairo context and places it in *cr. The context has a format of
+ * format and dimensions of w * h. Should *cr not be NULL it is assumed to be an
+ * existing cairo context and so is destroyed.
+ * 
+ * @param cr    The pointer to the region of memory to create the context in.
+ * @param format    The format of the context; such as CAIRO_FORMAT_ARGB32.
+ * @param w The width of the context in pixels.
+ * @param h The height of the context in pixels.
+ * @return true if the context was created successfully; false otherwise.
+ */
+static bool widgetCairoCreate(cairo_t **cr, cairo_format_t format, int w, int h)
+{
+	cairo_surface_t *surface;
+	
+	// See if a context already exists
+	if (*cr)
+	{
+		// Destroy it
+		cairo_destroy(*cr);
+		
+		// NULL the context
+		*cr = NULL;
+	}
+	
+	// Create the surface
+	surface = cairo_image_surface_create(format, w, h);
+	
+	// Make sure it was created
+	if (!surface)
+	{
+		return false;
+	}
+	
+	// Creatr a context to draw on the surface
+	*cr = cairo_create(surface);
+	
+	// Destroy the surface (*cr still maintains a reference to it)
+	cairo_surface_destroy(surface);
+	
+	// Make sure the context was created
+	if (!*cr)
+	{
+		return false;
+	}
+	
+	return true;
+}
+
 bool widgetIsA(widget *self, const classInfo *instanceOf)
 {
 	const classInfo *widgetClass;
@@ -61,6 +110,7 @@ static void widgetInitVtbl(widget *self)
 
 		vtbl.doLayout           = NULL;
 		vtbl.doDraw             = NULL;
+		vtbl.doDrawMask         = NULL;
 
 		vtbl.destroy            = widgetDestroyImpl;
 
@@ -76,8 +126,6 @@ static void widgetInitVtbl(widget *self)
  */
 void widgetInit(widget *self, const char *id)
 {
-	cairo_surface_t *surface;
-	
 	// Prepare our vtable
 	widgetInitVtbl(self);
 
@@ -97,11 +145,8 @@ void widgetInit(widget *self, const char *id)
 	self->parent = NULL;
 	
 	// Create a dummy cairo context (getMin/MaxSize may depend on it)
-	surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 0, 0);
-	self->cr = cairo_create(surface);
-	
-	// `Destroy' the surface (self->cr maintains a reference to it)
-	cairo_surface_destroy(surface);
+	self->cr = NULL;
+	widgetCairoCreate(&self->cr, CAIRO_FORMAT_ARGB32, 0, 0);
 
 	// Focus and mouse are false by default
 	self->hasFocus = false;
@@ -110,6 +155,10 @@ void widgetInit(widget *self, const char *id)
 	
 	// By default we need drawing
 	self->needsRedraw = true;
+	
+	// By default the mouse-event mask is disabled
+	self->maskCr = NULL;
+	self->maskEnabled = false;
 }
 
 /*
@@ -126,6 +175,12 @@ void widgetDestroyImpl(widget *self)
 	// Destroy the cairo context
 	cairo_destroy(self->cr);
 
+	// If we use a mask, destroy it
+	if (self->maskEnabled)
+	{
+		cairo_destroy(self->maskCr);
+	}
+	
 	// Free the ID
 	free(self->id);
 
@@ -157,6 +212,26 @@ void widgetDraw(widget *self)
 		// Ask the child to re-draw itself
 		widgetDraw(child);
 	}
+}
+
+void widgetDrawMask(widget *self)
+{
+	// Make sure masking is enabled and that the context is valid
+	assert(self->maskEnabled);
+	assert(self->maskCr);
+	
+	// Make the context opaque (so it is all masked)
+	cairo_set_source_rgba(self->maskCr, 0.0, 0.0, 0.0, 1.0);
+	cairo_paint(self->maskCr);
+	
+	// Change the blending mode so that the source overwrites the destination
+	cairo_set_operator(self->maskCr, CAIRO_OPERATOR_SOURCE);
+	
+	// Change the source to transparency
+	cairo_set_source_rgba(self->maskCr, 0.0, 0.0, 0.0, 0.0);
+	
+	// Draw the mask
+	widgetDoDrawMask(self);
 }
 
 point widgetAbsolutePosition(widget *self)
@@ -461,7 +536,6 @@ void widgetResizeImpl(widget *self, int w, int h)
 {
 	const size minSize = widgetGetMinSize(self);
 	const size maxSize = widgetGetMaxSize(self);
-	cairo_surface_t *surface;
 	
 	assert(minSize.x < w);
 	assert(minSize.y < h);
@@ -472,10 +546,16 @@ void widgetResizeImpl(widget *self, int w, int h)
 	self->size.y = h;
 	
 	// Re-create the cairo context at this new size
-	cairo_destroy(self->cr);
-	surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, w, h);
-	self->cr = cairo_create(surface);
-	cairo_surface_destroy(surface);
+	widgetCairoCreate(&self->cr, CAIRO_FORMAT_ARGB32, w, h);
+	
+	// If a mask is enabled; re-create it also
+	if (self->maskEnabled)
+	{
+		widgetCairoCreate(&self->maskCr, CAIRO_FORMAT_A1, w, h);
+		
+		// Re-draw the mask (only done on resize)
+		widgetDrawMask(self);
+	}
 	
 	// Set the needs redraw flag
 	self->needsRedraw = true;
@@ -505,6 +585,43 @@ void widgetCompositeImpl(widget *self, cairo_t *comp)
 		// Restore the matrix
 		cairo_set_matrix(comp, &current);
 	}
+}
+
+void widgetEnableMask(widget *self)
+{	
+	// Check if the mask is already enabled (worth asserting)
+	if (self->maskEnabled)
+	{
+		return;
+	}
+	
+	// Make sure we implement the doDrawMask method
+	WIDGET_CHECK_METHOD(self, doDrawMask);
+	
+	// Prepare the cairo surface
+	widgetCairoCreate(&self->maskCr, CAIRO_FORMAT_A1,
+	                  self->size.x, self->size.y);
+	
+	// Note that the mask is now enabled
+	self->maskEnabled = true;
+	
+	// Draw the mask
+	widgetDrawMask(self);
+}
+
+void widgetDisableMask(widget *self)
+{
+	// NO-OP if the mask is not enabled
+	if (!self->maskEnabled)
+	{
+		return;
+	}
+	
+	// Release the cairo context
+	cairo_destroy(self->maskCr);
+	
+	// Note that the mask is now disabled
+	self->maskEnabled = false;
 }
 
 widget *widgetGetCurrentlyFocused(widget *self)
@@ -540,7 +657,18 @@ bool widgetHandleEventImpl(widget *self, event *evt)
 		case EVT_MOUSE_MOVE:
 		{
 			eventMouse evtMouse = *((eventMouse *) evt);
-			bool newHasMouse = pointInRect(evtMouse.loc, widgetAbsoluteBounds(self));
+			rect bounds = widgetAbsoluteBounds(self);
+			bool newHasMouse = pointInRect(evtMouse.loc, bounds);
+			
+			// If the widget has a mask; ensure the location isn't masked
+			if (newHasMouse && self->maskEnabled)
+			{
+				// Work out where the mouse is relative to the widget
+				point relativeLoc = pointSub(evtMouse.loc, bounds.topLeft);
+				
+				// We have the mouse if the point is NOT masked
+				newHasMouse = !widgetPointMasked(self, relativeLoc);
+			}
 
 			/*
 			 * Mouse motion events should not be dispatched if a mouse button
@@ -594,6 +722,7 @@ bool widgetHandleEventImpl(widget *self, event *evt)
 			eventMouseBtn evtMouseBtn = *((eventMouseBtn *) evt);
 
 			// If the mouse is inside of the widget
+			// TODO: Add mask support
 			if (pointInRect(evtMouseBtn.loc, widgetAbsoluteBounds(self)))
 			{
 				// If it is a mouse-down event set hasMouseDown to true
@@ -655,6 +784,41 @@ bool widgetHandleEventImpl(widget *self, event *evt)
 	}
 
 	return true;
+}
+
+bool widgetPointMasked(widget *self, point loc)
+{
+	/*
+	 * The format of the mask is CAIRO_FORMAT_A1, where:
+	 *  "each pixel is a 1-bit quantity holding an alpha value.
+	 *   Pixels are packed together into 32-bit quantities"
+	 * 
+	 * TODO: An explanation worth reading.
+	 */
+	
+	cairo_surface_t *surface = cairo_get_target(self->maskCr);
+	
+	// The number of bytes to a row
+	const int stride = cairo_image_surface_get_stride(surface);
+	
+	// The mask itself
+	const uint32_t *data = (uint32_t *) cairo_image_surface_get_data(surface);
+	
+	// The 32-bit segment of data we are interested in
+	const uint32_t bits = data[loc.y * (stride / 4) + (loc.x / 32)];
+	
+	// Where in the 32-bit segment the pixel is located
+	const uint32_t pixelMask = 1 << (loc.x % 32);
+	
+	// Check to see if the pixel is set or not
+	if (bits & pixelMask)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
 }
 
 bool widgetAddChild(widget *self, widget *child)
@@ -732,6 +896,13 @@ void widgetDoDraw(widget *self)
 	WIDGET_CHECK_METHOD(self, doDraw);
 
 	WIDGET_GET_VTBL(self)->doDraw(self);
+}
+
+void widgetDoDrawMask(widget *self)
+{
+	WIDGET_CHECK_METHOD(self, doDrawMask);
+	
+	WIDGET_GET_VTBL(self)->doDrawMask(self);
 }
 
 bool widgetDoLayout(widget *self)

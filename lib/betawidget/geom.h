@@ -64,5 +64,14 @@ bool pointInRect(point p, rect r);
  */
 point pointAdd(point p, point q);
 
+/**
+ * Subtracts point q from point p.
+ * 
+ * @param p
+ * @param q
+ * @return p - q.
+ */
+point pointSub(point p, point q);
+
 
 #endif /*GEOM_H_*/

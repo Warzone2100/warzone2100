@@ -26,3 +26,12 @@ point pointAdd(point p, point q)
 
 	return r;
 }
+
+point pointSub(point p, point q)
+{
+	point r;
+	r.x = p.x - q.x;
+	r.y = p.y - q.y;
+	
+	return r;
+}
