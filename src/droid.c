@@ -4591,12 +4591,10 @@ BOOL vtolHappy(const DROID* psDroid)
 
 		for (i = 0; i < psDroid->numWeaps; ++i)
 		{
-			if (asWeaponStats[psDroid->asWeaps[i].nStat].vtolAttackRuns > 0)
+			if (asWeaponStats[psDroid->asWeaps[i].nStat].vtolAttackRuns > 0
+			 && psDroid->sMove.iAttackRuns[i] != 0)
 			{
-				if (psDroid->sMove.iAttackRuns[i] == 0)
-				{
-					return false;
-				}
+				return false;
 			}
 		}
 
