@@ -59,6 +59,36 @@ static bool widgetCairoCreate(cairo_t **cr, cairo_format_t format, int w, int h)
 	return true;
 }
 
+/**
+ * Checks to see if the widget, self, has the mouse over it. This consists of
+ * two checks; firstly seeing if the mouse is inside of the widgets bounding
+ * rectangle; secondly, if the widget has a mask, seeing if the location is
+ * masked or not.
+ * 
+ * @param self  The widget we want to see if the mouse is over.
+ * @param location  The location of the mouse, in absolute terms.
+ * @return True if the mouse is over the widget, false otherwise.
+ */
+static bool widgetHasMouse(widget *self, point location)
+{
+	const rect bounds = widgetAbsoluteBounds(self);
+	
+	// Check to see if it is in the widgets bounding box
+	bool hasMouse = pointInRect(location, bounds);
+	
+	// If the widget has a mask; ensure the location is not masked
+	if (hasMouse && self->maskEnabled)
+	{
+		// Work out where the mouse is relative to the widget
+		const point relativeLocation = pointSub(location, bounds.topLeft);
+		
+		// We have the mouse if the point is NOT masked
+		hasMouse = !widgetPointMasked(self, relativeLocation);
+	}
+	
+	return hasMouse;
+}
+
 bool widgetIsA(widget *self, const classInfo *instanceOf)
 {
 	const classInfo *widgetClass;
@@ -657,18 +687,7 @@ bool widgetHandleEventImpl(widget *self, event *evt)
 		case EVT_MOUSE_MOVE:
 		{
 			eventMouse evtMouse = *((eventMouse *) evt);
-			rect bounds = widgetAbsoluteBounds(self);
-			bool newHasMouse = pointInRect(evtMouse.loc, bounds);
-			
-			// If the widget has a mask; ensure the location isn't masked
-			if (newHasMouse && self->maskEnabled)
-			{
-				// Work out where the mouse is relative to the widget
-				point relativeLoc = pointSub(evtMouse.loc, bounds.topLeft);
-				
-				// We have the mouse if the point is NOT masked
-				newHasMouse = !widgetPointMasked(self, relativeLoc);
-			}
+			bool newHasMouse = widgetHasMouse(self, evtMouse.loc);
 
 			/*
 			 * Mouse motion events should not be dispatched if a mouse button
@@ -722,8 +741,7 @@ bool widgetHandleEventImpl(widget *self, event *evt)
 			eventMouseBtn evtMouseBtn = *((eventMouseBtn *) evt);
 
 			// If the mouse is inside of the widget
-			// TODO: Add mask support
-			if (pointInRect(evtMouseBtn.loc, widgetAbsoluteBounds(self)))
+			if (widgetHasMouse(self, evtMouseBtn.loc))
 			{
 				// If it is a mouse-down event set hasMouseDown to true
 				if (evt->type == EVT_MOUSE_DOWN)
