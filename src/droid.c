@@ -4572,10 +4572,6 @@ UWORD   getNumAttackRuns(DROID *psDroid, int weapon_slot)
 leave reArm pad */
 BOOL vtolHappy(const DROID* psDroid)
 {
-	UBYTE	i;
-	UBYTE	numVtolWeaps = 0;
-	UBYTE	rearmedWeaps = 0;
-
 	CHECK_DROID(psDroid);
 
 	ASSERT(isVtolDroid(psDroid), "not a VTOL droid");
@@ -4584,21 +4580,30 @@ BOOL vtolHappy(const DROID* psDroid)
 	//check full complement of ammo
 	if (psDroid->numWeaps > 0)
 	{
-		for (i = 0;i < psDroid->numWeaps;i++)
+		unsigned int i;
+		UBYTE numVtolWeaps = 0;
+		UBYTE rearmedWeaps = 0;
+
+		for (i = 0; i < psDroid->numWeaps; ++i)
 		{
 			if (asWeaponStats[psDroid->asWeaps[i].nStat].vtolAttackRuns > 0)
 			{
-				numVtolWeaps += (1 << (1 + i));
+				const UBYTE curWeap = 1 << (1 + i);
+
+				numVtolWeaps |= curWeap;
 				if (psDroid->sMove.iAttackRuns[i] == 0)
 				{
-					rearmedWeaps += (1 << (1 + i));
+					rearmedWeaps |= curWeap;
 				}
 			}
 		}
 
-		for (i = 0;i < psDroid->numWeaps;i++)
+		for (i = 0; i < psDroid->numWeaps; ++i)
 		{
-			if ((numVtolWeaps & (1 << (1 + i))) && !(rearmedWeaps & (1 << (1 + i))))
+			const UBYTE curWeap = 1 << (1 + i);
+
+			if (numVtolWeaps & curWeap
+			 && !(rearmedWeaps & curWeap))
 				return false;
 		}
 
