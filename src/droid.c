@@ -4575,6 +4575,13 @@ BOOL vtolHappy(const DROID* psDroid)
 	CHECK_DROID(psDroid);
 
 	ASSERT(isVtolDroid(psDroid), "not a VTOL droid");
+
+	if (psDroid->body <= psDroid->originalBody)
+	{
+		// VTOLs with less health than their original aren't happy
+		return false;
+	}
+
 	ASSERT( psDroid->droidType == DROID_WEAPON, "vtolHappy: not a weapon droid" );
 
 	//check full complement of ammo
@@ -4606,9 +4613,6 @@ BOOL vtolHappy(const DROID* psDroid)
 			 && !(rearmedWeaps & curWeap))
 				return false;
 		}
-
-		// Check to see if we're fully repaired
-		return (psDroid->body == psDroid->originalBody);
 	}
 
 	ASSERT(!"Do we ever get here?", "If a crash/abortion occurs here, please attach a backtrace (the crash dump file) to https://gna.org/bugs/?11865 as it will affect the bugfix for that bug.");
