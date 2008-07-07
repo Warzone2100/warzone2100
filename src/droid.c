@@ -4576,7 +4576,7 @@ BOOL vtolHappy(const DROID* psDroid)
 
 	ASSERT(isVtolDroid(psDroid), "not a VTOL droid");
 
-	if (psDroid->body <= psDroid->originalBody)
+	if (psDroid->body < psDroid->originalBody)
 	{
 		// VTOLs with less health than their original aren't happy
 		return false;
@@ -4613,6 +4613,8 @@ BOOL vtolHappy(const DROID* psDroid)
 			 && !(rearmedWeaps & curWeap))
 				return false;
 		}
+
+		return true;
 	}
 
 	ASSERT(!"Do we ever get here?", "If a crash/abortion occurs here, please attach a backtrace (the crash dump file) to https://gna.org/bugs/?11865 as it will affect the bugfix for that bug.");
