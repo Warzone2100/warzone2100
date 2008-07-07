@@ -4373,10 +4373,10 @@ UBYTE checkCommandExist(UBYTE player)
 }
 
 //access functions for vtols
-BOOL vtolDroid(DROID *psDroid)
+BOOL vtolDroid(const DROID* psDroid)
 {
-	return ((asPropulsionStats[psDroid->asBits[COMP_PROPULSION].nStat].
-		propulsionType == LIFT) && (psDroid->droidType != DROID_TRANSPORTER));
+	return asPropulsionStats[psDroid->asBits[COMP_PROPULSION].nStat].propulsionType == LIFT
+	    && psDroid->droidType != DROID_TRANSPORTER;
 }
 
 /*returns true if a VTOL Weapon Droid which has completed all runs*/
@@ -4570,7 +4570,7 @@ UWORD   getNumAttackRuns(DROID *psDroid, int weapon_slot)
 
 /*Checks a vtol for being fully armed and fully repaired to see if ready to
 leave reArm pad */
-BOOL  vtolHappy(DROID *psDroid)
+BOOL vtolHappy(const DROID* psDroid)
 {
 	UBYTE	i;
 	UBYTE	numVtolWeaps = 0;

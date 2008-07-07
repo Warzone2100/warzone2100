@@ -334,12 +334,12 @@ a defined range*/
 extern BASE_OBJECT * checkForRepairRange(DROID *psDroid,DROID *psTarget);
 
 //access function
-extern BOOL vtolDroid(DROID *psDroid);
+extern BOOL vtolDroid(const DROID* psDroid);
 /*returns true if a VTOL Weapon Droid which has completed all runs*/
 extern BOOL vtolEmpty(DROID *psDroid);
 /*Checks a vtol for being fully armed and fully repaired to see if ready to
 leave reArm pad */
-extern BOOL  vtolHappy(DROID *psDroid);
+extern BOOL  vtolHappy(const DROID* psDroid);
 /*this mends the VTOL when it has been returned to home base whilst on an
 offworld mission*/
 extern void mendVtol(DROID *psDroid);
