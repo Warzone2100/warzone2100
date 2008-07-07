@@ -4572,6 +4572,8 @@ UWORD   getNumAttackRuns(DROID *psDroid, int weapon_slot)
 leave reArm pad */
 BOOL vtolHappy(const DROID* psDroid)
 {
+	unsigned int i;
+
 	CHECK_DROID(psDroid);
 
 	ASSERT(isVtolDroid(psDroid), "not a VTOL droid");
@@ -4582,28 +4584,30 @@ BOOL vtolHappy(const DROID* psDroid)
 		return false;
 	}
 
-	ASSERT( psDroid->droidType == DROID_WEAPON, "vtolHappy: not a weapon droid" );
-
-	//check full complement of ammo
-	if (psDroid->numWeaps > 0)
+	if (psDroid->droidType != DROID_WEAPON)
 	{
-		unsigned int i;
-
-		for (i = 0; i < psDroid->numWeaps; ++i)
-		{
-			if (asWeaponStats[psDroid->asWeaps[i].nStat].vtolAttackRuns > 0
-			 && psDroid->sMove.iAttackRuns[i] != 0)
-			{
-				return false;
-			}
-		}
-
+		// Not an armed droid, so don't check the (non-existent) weapons
 		return true;
 	}
 
-	ASSERT(!"Do we ever get here?", "If a crash/abortion occurs here, please attach a backtrace (the crash dump file) to https://gna.org/bugs/?11865 as it will affect the bugfix for that bug.");
+	/* NOTE: Previous code (r5410) returned false if a droid had no weapon,
+	 *       which IMO isn't correct, but might be expected behaviour. I'm
+	 *       also not sure if weapon droids (see the above droidType check)
+	 *       can even have zero weapons. -- Giel
+	 */
+	ASSERT(psDroid->numWeaps > 0, "VTOL weapon droid without weapons found!");
 
-	return false;
+	//check full complement of ammo
+	for (i = 0; i < psDroid->numWeaps; ++i)
+	{
+		if (asWeaponStats[psDroid->asWeaps[i].nStat].vtolAttackRuns > 0
+		 && psDroid->sMove.iAttackRuns[i] != 0)
+		{
+			return false;
+		}
+	}
+
+	return true;
 }
 
 /*checks if the droid is a VTOL droid and updates the attack runs as required*/
