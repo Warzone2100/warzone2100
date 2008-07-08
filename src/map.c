@@ -1101,6 +1101,7 @@ BOOL mapSave(char **ppFileData, UDWORD *pFileSize)
 	psTile = psMapTiles;
 	for(i=0; i<mapWidth*mapHeight; i++)
 	{
+		psTileData->texture = psTile->texture;
 		psTileData->height = psTile->height;
 
 		/* MAP_SAVETILEV2 */
