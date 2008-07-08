@@ -150,7 +150,7 @@ float droidDamage(DROID *psDroid, UDWORD damage, UDWORD weaponClass, UDWORD weap
 	CHECK_DROID(psDroid);
 
 	// VTOLs on the ground take triple damage
-	if (vtolDroid(psDroid) && psDroid->sMove.Status == MOVEINACTIVE)
+	if (isVtolDroid(psDroid) && psDroid->sMove.Status == MOVEINACTIVE)
 	{
 		damage *= 3;
 	}
@@ -1526,7 +1526,7 @@ void droidSelfRepair(DROID *psDroid)
 {
 	CHECK_DROID(psDroid);
 
-	if (!vtolDroid(psDroid))
+	if (!isVtolDroid(psDroid))
 	{
 		if (psDroid->body < psDroid->originalBody)
 		{
@@ -4385,10 +4385,10 @@ UBYTE checkCommandExist(UBYTE player)
 }
 
 //access functions for vtols
-BOOL vtolDroid(DROID *psDroid)
+BOOL isVtolDroid(const DROID* psDroid)
 {
-	return ((asPropulsionStats[psDroid->asBits[COMP_PROPULSION].nStat].
-		propulsionType == LIFT) && (psDroid->droidType != DROID_TRANSPORTER));
+	return asPropulsionStats[psDroid->asBits[COMP_PROPULSION].nStat].propulsionType == LIFT
+	    && psDroid->droidType != DROID_TRANSPORTER;
 }
 
 /*returns true if a VTOL Weapon Droid which has completed all runs*/
@@ -4401,7 +4401,7 @@ BOOL vtolEmpty(DROID *psDroid)
 
 	CHECK_DROID(psDroid);
 
-	if (!vtolDroid(psDroid))
+	if (!isVtolDroid(psDroid))
 	{
 		return false;
 	}
@@ -4443,8 +4443,8 @@ BOOL vtolReadyToRearm(DROID *psDroid, STRUCTURE *psStruct)
 
 	CHECK_DROID(psDroid);
 
-	if (!vtolDroid(psDroid) ||
-		psDroid->action != DACTION_WAITFORREARM)
+	if (!isVtolDroid(psDroid)
+	 || psDroid->action != DACTION_WAITFORREARM)
 	{
 		return false;
 	}
@@ -4482,7 +4482,7 @@ BOOL vtolRearming(DROID *psDroid)
 {
 	CHECK_DROID(psDroid);
 
-	if (!vtolDroid(psDroid))
+	if (!isVtolDroid(psDroid))
 	{
 		return false;
 	}
@@ -4536,7 +4536,7 @@ BOOL allVtolsRearmed(DROID *psDroid)
 	CHECK_DROID(psDroid);
 
 	// ignore all non vtols
-	if (!vtolDroid(psDroid))
+	if (!isVtolDroid(psDroid))
 	{
 		return true;
 	}
@@ -4563,7 +4563,7 @@ UWORD   getNumAttackRuns(DROID *psDroid, int weapon_slot)
 {
     UWORD   numAttackRuns;
 
-    ASSERT( vtolDroid(psDroid), "numAttackRuns:not a VTOL Droid" );
+    ASSERT(isVtolDroid(psDroid), "not a VTOL Droid");
 
     /*if weapon attached to the droid is a salvo weapon, then number of shots that
     can be fired = vtolAttackRuns*numRounds */
@@ -4582,59 +4582,50 @@ UWORD   getNumAttackRuns(DROID *psDroid, int weapon_slot)
 
 /*Checks a vtol for being fully armed and fully repaired to see if ready to
 leave reArm pad */
-BOOL  vtolHappy(DROID *psDroid)
+BOOL vtolHappy(const DROID* psDroid)
 {
-	UBYTE	i;
-	UBYTE	numVtolWeaps = 0;
-	UBYTE	rearmedWeaps = 0;
-	BOOL	bHappy = true;
+	unsigned int i;
 
 	CHECK_DROID(psDroid);
 
-	ASSERT( vtolDroid(psDroid), "vtolHappy: not a VTOL droid" );
-	ASSERT( psDroid->droidType == DROID_WEAPON, "vtolHappy: not a weapon droid" );
+	ASSERT(isVtolDroid(psDroid), "not a VTOL droid");
+
+	if (psDroid->body < psDroid->originalBody)
+	{
+		// VTOLs with less health than their original aren't happy
+		return false;
+	}
+
+	if (psDroid->droidType != DROID_WEAPON)
+	{
+		// Not an armed droid, so don't check the (non-existent) weapons
+		return true;
+	}
+
+	/* NOTE: Previous code (r5410) returned false if a droid had no weapon,
+	 *       which IMO isn't correct, but might be expected behaviour. I'm
+	 *       also not sure if weapon droids (see the above droidType check)
+	 *       can even have zero weapons. -- Giel
+	 */
+	ASSERT(psDroid->numWeaps > 0, "VTOL weapon droid without weapons found!");
 
 	//check full complement of ammo
-	if (psDroid->numWeaps > 0)
+	for (i = 0; i < psDroid->numWeaps; ++i)
 	{
-		for (i = 0;i < psDroid->numWeaps;i++)
-		{
-			if (asWeaponStats[psDroid->asWeaps[i].nStat].vtolAttackRuns > 0)
-			{
-				numVtolWeaps += (1 << (1 + i));
-				if (psDroid->sMove.iAttackRuns[i] == 0)
-				{
-					rearmedWeaps += (1 << (1 + i));
-				}
-			}
-		}
-
-		for (i = 0;i < psDroid->numWeaps;i++)
-		{
-			if ((numVtolWeaps & (1 << (1 + i))) && !(rearmedWeaps & (1 << (1 + i))))
-			{
-				bHappy = false;
-				break;
-			}
-		}
-
-		if (bHappy &&
-			psDroid->body == psDroid->originalBody)
-		{
-			return true;
-		}
-		else
+		if (asWeaponStats[psDroid->asWeaps[i].nStat].vtolAttackRuns > 0
+		 && psDroid->sMove.iAttackRuns[i] != 0)
 		{
 			return false;
 		}
 	}
-	return false;
+
+	return true;
 }
 
 /*checks if the droid is a VTOL droid and updates the attack runs as required*/
 void updateVtolAttackRun(DROID *psDroid , int weapon_slot)
 {
-    if (vtolDroid(psDroid))
+    if (isVtolDroid(psDroid))
     {
 		if (psDroid->numWeaps > 0)
 		{
@@ -4675,7 +4666,7 @@ void mendVtol(DROID *psDroid)
 //assign rearmPad to the VTOL
 void assignVTOLPad(DROID *psNewDroid, STRUCTURE *psReArmPad)
 {
-    ASSERT( vtolDroid(psNewDroid), "assignVTOLPad: not a vtol droid" );
+    ASSERT(isVtolDroid(psNewDroid), "not a vtol droid");
     ASSERT( psReArmPad->type == OBJ_STRUCTURE &&
 			psReArmPad->pStructureType->type == REF_REARM_PAD,
         "assignVTOLPad: not a ReArm Pad" );
@@ -4732,14 +4723,14 @@ BOOL droidSensorDroidWeapon(BASE_OBJECT *psObj, DROID *psDroid)
 
 	//finally check the right droid/sensor combination
 	// check vtol droid with commander
-	if ((vtolDroid(psDroid) || !proj_Direct(asWeaponStats + psDroid->asWeaps[0].nStat)) &&
+	if ((isVtolDroid(psDroid) || !proj_Direct(asWeaponStats + psDroid->asWeaps[0].nStat)) &&
 		((DROID *)psObj)->droidType == DROID_COMMAND)
 	{
 		return true;
 	}
 
 	//check vtol droid with vtol sensor
-    if (vtolDroid(psDroid) && psDroid->asWeaps[0].nStat > 0)
+    if (isVtolDroid(psDroid) && psDroid->asWeaps[0].nStat > 0)
 	{
 		if (psStats->type == VTOL_INTERCEPT_SENSOR ||
 			psStats->type == VTOL_CB_SENSOR ||

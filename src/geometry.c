@@ -89,7 +89,7 @@ UDWORD	bestSoFar;
 	for(psDroid = apsDroidLists[selectedPlayer],psBestUnit = NULL, bestSoFar = UDWORD_MAX;
 		psDroid; psDroid = psDroid->psNext)
 	{
-        if (!vtolDroid(psDroid))
+        if (!isVtolDroid(psDroid))
         {
 		    /* Clever (?) bit that reads whether we're interested in droids being selected or not */
 		    if( (bSelected ? psDroid->selected : true ) )

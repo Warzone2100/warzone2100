@@ -424,7 +424,7 @@ BOOL recvDroidCheck()
 			}
 
 			// Update the droid
-			if (onscreen || vtolDroid(pD))
+			if (onscreen || isVtolDroid(pD))
 			{
 				onscreenUpdate(pD, body, x, y, fx, fy, direction, order);
 			}
@@ -445,7 +445,7 @@ BOOL recvDroidCheck()
 			}
 
 			// Update the higher level stuff
-			if (!vtolDroid(pD))
+			if (!isVtolDroid(pD))
 			{
 				highLevelDroidUpdate(pD, x, y, secondaryOrder, order, psTarget, experience);
 			}

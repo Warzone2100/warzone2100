@@ -933,7 +933,7 @@ void aiUpdateDroid(DROID *psDroid)
 	// they would switch to the guard order in the order update loop
 	if ((psDroid->order == DORDER_NONE) &&
 		(psDroid->player == selectedPlayer) &&
-		!vtolDroid(psDroid) &&
+		!isVtolDroid(psDroid) &&
 		secondaryGetState(psDroid, DSO_HALTTYPE, &state) &&
 		(state == DSS_HALT_GUARD))
 	{
@@ -948,7 +948,7 @@ void aiUpdateDroid(DROID *psDroid)
 		updateTarget = false;
 	}
 
-	if(bMultiPlayer && vtolDroid(psDroid) && isHumanPlayer(psDroid->player))
+	if(bMultiPlayer && isVtolDroid(psDroid) && isHumanPlayer(psDroid->player))
 	{
 		lookForTarget = false;
 		updateTarget = false;

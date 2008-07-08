@@ -345,7 +345,7 @@ static BOOL moveDroidToBase(DROID	*psDroid, UDWORD x, UDWORD y, BOOL bFormation)
 		psDroid->sMove.psFormation = NULL;
 		return true;
 	}
-	else if (vtolDroid(psDroid) || (game.maxPlayers > 0 && psDroid->droidType == DROID_TRANSPORTER))
+	else if (isVtolDroid(psDroid) || (game.maxPlayers > 0 && psDroid->droidType == DROID_TRANSPORTER))
 	{
 		fpathSetDirectRoute(psDroid, x, y);
 		retVal = FPR_OK;
@@ -502,7 +502,7 @@ BOOL moveDroidToNoFormation(DROID* psDroid, UDWORD x, UDWORD y)
  */
 void moveDroidToDirect(DROID* psDroid, UDWORD x, UDWORD y)
 {
-	ASSERT( psDroid != NULL && vtolDroid(psDroid),
+	ASSERT( psDroid != NULL && isVtolDroid(psDroid),
 		"moveUnitToDirect: only valid for a vtol unit" );
 
 	fpathSetDirectRoute(psDroid, x, y);
@@ -663,7 +663,7 @@ static void moveShuffleDroid(DROID *psDroid, UDWORD shuffleStart, SDWORD sx, SDW
 	// check the location for vtols
 	tarX = (SDWORD)psDroid->pos.x + mx;
 	tarY = (SDWORD)psDroid->pos.y + my;
-	if (vtolDroid(psDroid))
+	if (isVtolDroid(psDroid))
 	{
 		actionVTOLLandingPos(psDroid, (UDWORD *)&tarX,(UDWORD *)&tarY);
 	}
@@ -1195,7 +1195,7 @@ static void moveCalcBlockingSlide(DROID *psDroid, float *pmx, float *pmy, SDWORD
 	}
 
 	// note the bump time and position if necessary
-	if (!vtolDroid(psDroid) &&
+	if (!isVtolDroid(psDroid) &&
 		psDroid->sMove.bumpTime == 0)
 	{
 		psDroid->sMove.bumpTime = gameTime;
@@ -1586,8 +1586,8 @@ static void moveGetObstacleVector(DROID *psDroid, float *pX, float *pY)
 		}
 
 		// vtol droids only avoid each other and don't affect ground droids
-		if ( (vtolDroid(psDroid) && (psObj->type != OBJ_DROID || !vtolDroid((DROID *)psObj))) ||
-			 (!vtolDroid(psDroid) && psObj->type == OBJ_DROID && vtolDroid((DROID *)psObj)) )
+		if ( (isVtolDroid(psDroid) && (psObj->type != OBJ_DROID || !isVtolDroid((DROID *)psObj))) ||
+			 (!isVtolDroid(psDroid) && psObj->type == OBJ_DROID && isVtolDroid((DROID *)psObj)) )
 		{
 			continue;
 		}
@@ -1861,7 +1861,7 @@ static BOOL moveReachedWayPoint(DROID *psDroid)
 	if (psDroid->droidType == DROID_TRANSPORTER ||
 		(psDroid->sMove.psFormation &&
 		 formationMember(psDroid->sMove.psFormation, psDroid)) ||
-		 (vtolDroid(psDroid) && (psDroid->sMove.numPoints == psDroid->sMove.Position)) )
+		 (isVtolDroid(psDroid) && (psDroid->sMove.numPoints == psDroid->sMove.Position)) )
 //							 && (psDroid->action != DACTION_VTOLATTACK)) )
 	{
 		if ( psDroid->droidType == DROID_TRANSPORTER )
@@ -1972,7 +1972,7 @@ SDWORD moveCalcDroidSpeed(DROID *psDroid)
 	}
 
 	/* adjust speed for formation */
-	if(!vtolDroid(psDroid) &&
+	if(!isVtolDroid(psDroid) &&
 		moveFormationSpeedLimitingOn() && psDroid->sMove.psFormation)
 	{
 		SDWORD FrmSpeed = (SDWORD)psDroid->sMove.psFormation->iSpeed;
@@ -1984,7 +1984,7 @@ SDWORD moveCalcDroidSpeed(DROID *psDroid)
 	}
 
 	// slow down shuffling VTOLs
-	if (vtolDroid(psDroid) &&
+	if (isVtolDroid(psDroid) &&
 		(psDroid->sMove.Status == MOVESHUFFLE) &&
 		(speed > MIN_END_SPEED))
 	{
@@ -2187,7 +2187,7 @@ static void moveCheckFinalWaypoint( DROID *psDroid, SDWORD *pSpeed )
 	}
 
 	// don't do this for VTOLs doing attack runs
-	if (vtolDroid(psDroid) && (psDroid->action == DACTION_VTOLATTACK))
+	if (isVtolDroid(psDroid) && (psDroid->action == DACTION_VTOLATTACK))
 	{
 		return;
 	}
@@ -3189,7 +3189,7 @@ void moveUpdateDroid(DROID *psDroid)
 
 		moveCalcBoundary(psDroid);
 
-		if (vtolDroid(psDroid))
+		if (isVtolDroid(psDroid))
 		{
 			psDroid->pitch = 0;
 		}
@@ -3232,7 +3232,7 @@ void moveUpdateDroid(DROID *psDroid)
 		if (psDroid->sMove.psFormation &&
 			psDroid->sMove.Position == psDroid->sMove.numPoints)
 		{
-			if (vtolDroid(psDroid))
+			if (isVtolDroid(psDroid))
 			{
 				// vtols have to use the ground blocking tile when they are going to land
 				fpathBlockingTile = fpathGroundBlockingTile;
