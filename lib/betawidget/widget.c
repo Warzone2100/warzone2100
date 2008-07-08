@@ -575,10 +575,10 @@ void widgetResizeImpl(widget *self, int w, int h)
 	const size minSize = widgetGetMinSize(self);
 	const size maxSize = widgetGetMaxSize(self);
 	
-	assert(minSize.x < w);
-	assert(minSize.y < h);
-	assert(w < maxSize.x);
-	assert(h < maxSize.y);
+	assert(minSize.x <= w);
+	assert(minSize.y <= h);
+	assert(w <= maxSize.x);
+	assert(h <= maxSize.y);
 	
 	self->size.x = w;
 	self->size.y = h;
