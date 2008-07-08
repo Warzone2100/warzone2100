@@ -891,14 +891,14 @@ void widgetBlur(widget *self)
 	WIDGET_GET_VTBL(self)->blur(self);
 }
 
-point widgetGetMinSize(widget *self)
+size widgetGetMinSize(widget *self)
 {
 	WIDGET_CHECK_METHOD(self, getMinSize);
 	
 	return WIDGET_GET_VTBL(self)->getMinSize(self);
 }
 
-point widgetGetMaxSize(widget *self)
+size widgetGetMaxSize(widget *self)
 {
 	WIDGET_CHECK_METHOD(self, getMaxSize);
 	
