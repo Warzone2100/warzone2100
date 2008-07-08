@@ -125,8 +125,8 @@ sub printStructContent
 
         if (/inherit/)
         {
-            my $inheritName = ${${$struct}{"qualifiers"}}{"inherit"};
-            my $inheritStruct = ${$structMap}{$inheritName};
+            my $inheritStruct = ${${$struct}{"qualifiers"}}{"inherit"};
+            my $inheritName = ${$inheritStruct}{"name"};
 
             $$output .= "\t/* BEGIN of inherited \"$inheritName\" definition */\n";
             printStructContent($output, $inheritStruct, $name, $prefix, $structMap, $enumMap);

@@ -62,8 +62,7 @@ sub printStructContent
     {
         if (/inherit/)
         {
-            my $inheritName = ${${$struct}{"qualifiers"}}{"inherit"};
-            my $inheritStruct = ${$structMap}{$inheritName};
+            my $inheritStruct = ${${$struct}{"qualifiers"}}{"inherit"};
 
             printStructContent($output, $inheritStruct, $structMap, $enumMap, 0);
         }
@@ -83,8 +82,7 @@ sub printBaseStruct
     {
         if (/inherit/)
         {
-            my $inheritName = ${${$struct}{"qualifiers"}}{"inherit"};
-            my $inheritStruct = ${$structMap}{$inheritName};
+            my $inheritStruct = ${${$struct}{"qualifiers"}}{"inherit"};
 
             printBaseStruct($outstr, $inheritStruct, $structMap);
             $is_base = 0;
@@ -107,8 +105,8 @@ sub printStructJoins
     {
         if (/inherit/)
         {
-            my $inheritName = ${${$struct}{"qualifiers"}}{"inherit"};
-            my $inheritStruct = ${$structMap}{$inheritName};
+            my $inheritStruct = ${${$struct}{"qualifiers"}}{"inherit"};
+            my $inheritName = ${$inheritStruct}{"name"};
 
             printStructJoins($outstr, $inheritStruct, $structMap);
             $$outstr .= " INNER JOIN `${$struct}{\"name\"}` ON `${inheritName}`.`unique_inheritance_id` = `${$struct}{\"name\"}`.`unique_inheritance_id`";

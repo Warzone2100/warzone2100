@@ -108,8 +108,7 @@ sub printStructContent
     {
         if (/inherit/)
         {
-            my $inheritName = ${${$struct}{"qualifiers"}}{"inherit"};
-            my $inheritStruct = ${$structMap}{$inheritName};
+            my $inheritStruct = ${${$struct}{"qualifiers"}}{"inherit"};
 
             printStructContent($output, $inheritStruct, $name, $structMap, $enumMap, 0);
         }

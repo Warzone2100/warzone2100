@@ -96,7 +96,7 @@ sub parseStruct
                 die "error: structs declared \"abstract\" cannot inherit" if exists(${$curStruct{"qualifiers"}}{"abstract"});
                 die "error: Cannot inherit from struct \"$1\" as it isn't (fully) declared yet" unless exists($structMap{$1});
 
-                ${$curStruct{"qualifiers"}}{"inherit"} = $1;
+                ${$curStruct{"qualifiers"}}{"inherit"} = \%{$structMap{$1}};
             }
         }
         # Parse regular field declarations
