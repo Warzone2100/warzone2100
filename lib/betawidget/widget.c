@@ -230,6 +230,14 @@ void widgetDraw(widget *self)
 	{
 		self->needsRedraw = false;
 		
+		// Clear the current context
+		cairo_set_operator(self->cr, CAIRO_OPERATOR_SOURCE);
+		cairo_set_source_rgba(self->cr, 0.0, 0.0, 0.0, 0.0);
+		cairo_paint(self->cr);
+		
+		// Restore the compositing operator back to the default
+		cairo_set_operator(self->cr, CAIRO_OPERATOR_OVER);
+		
 		// Redaw ourself
 		widgetDoDraw(self);
 	}
