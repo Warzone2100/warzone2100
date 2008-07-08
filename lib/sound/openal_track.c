@@ -50,7 +50,7 @@
 #define ATTENUATION_FACTOR	0.0003f
 
 #ifndef WZ_NOSOUND
-static AUDIO_SAMPLE *current_queue_sample = NULL;
+ALuint current_queue_sample = -1;
 #endif
 
 static BOOL openal_initialized = false;
@@ -346,12 +346,12 @@ BOOL sound_QueueSamplePlaying( void )
 	{
 		return false;
 	}
-	if (!current_queue_sample)
+	if ( current_queue_sample == (ALuint)AL_INVALID )
 	{
 		return false;
 	}
 
-	alGetSourcei(current_queue_sample->iSample, AL_SOURCE_STATE, &state);
+	alGetSourcei(current_queue_sample, AL_SOURCE_STATE, &state);
 
 	// Check whether an error occurred while retrieving the state.
 	// If one did, the state returned is useless. So instead of
@@ -364,26 +364,29 @@ BOOL sound_QueueSamplePlaying( void )
 		return true;
 	}
 
-	SAMPLE_LIST* node = active_samples;
-	SAMPLE_LIST* previous = NULL;
-
-	// We need to remove it from the queue of actively played samples
-	while (node != NULL)
+	if (current_queue_sample != (ALuint)AL_INVALID)
 	{
-		if (node->curr == current_queue_sample)
+		SAMPLE_LIST* node = active_samples;
+		SAMPLE_LIST* previous = NULL;
+
+		// We need to remove it from the queue of actively played samples
+		while (node != NULL)
 		{
-			sound_DestroyIteratedSample(&previous, &node);
-			current_queue_sample = NULL;
-			return false;
+			if (node->curr->iSample == current_queue_sample)
+			{
+				sound_DestroyIteratedSample(&previous, &node);
+				current_queue_sample = AL_INVALID;
+				return false;
+			}
+			previous = node;
+			if (node)
+			{
+				node = node->next;
+			}
 		}
-		previous = node;
-		if (node)
-		{
-			node = node->next;
-		}
+		debug(LOG_ERROR, "Sample %u not deleted because it wasn't in the active queue!", current_queue_sample);
+		current_queue_sample = AL_INVALID;
 	}
-	debug(LOG_ERROR, "Sample %u not deleted because it wasn't in the active queue!", current_queue_sample->iSample);
-	current_queue_sample = NULL;
 #endif
 	return false;
 }
@@ -597,11 +600,11 @@ BOOL sound_Play2DSample( TRACK *psTrack, AUDIO_SAMPLE *psSample, BOOL bQueued )
 	sound_GetError();
 	if ( bQueued )
 	{
-		current_queue_sample = psSample;
+		current_queue_sample = psSample->iSample;
 	}
-	else if ( current_queue_sample == psSample )
+	else if ( current_queue_sample == psSample->iSample )
 	{
-		current_queue_sample = NULL;
+		current_queue_sample = -1;
 	}
 #endif
 
