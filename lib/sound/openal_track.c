@@ -375,6 +375,8 @@ BOOL sound_QueueSamplePlaying( void )
 			if (node->curr->iSample == current_queue_sample)
 			{
 				sound_DestroyIteratedSample(&previous, &node);
+				current_queue_sample = AL_INVALID;
+				return false;
 			}
 			previous = node;
 			if (node)
@@ -382,6 +384,7 @@ BOOL sound_QueueSamplePlaying( void )
 				node = node->next;
 			}
 		}
+		debug(LOG_ERROR, "Sample %u not deleted because it wasn't in the active queue!", current_queue_sample);
 		current_queue_sample = AL_INVALID;
 	}
 #endif
