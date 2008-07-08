@@ -279,6 +279,7 @@ void sound_Update()
 	{
 		ALenum state, err;
 
+		ASSERT(alIsSource(node->curr->iSample), "Not a valid source!");
 		alGetSourcei(node->curr->iSample, AL_SOURCE_STATE, &state);
 
 		// Check whether an error occurred while retrieving the state.
@@ -365,8 +366,22 @@ BOOL sound_QueueSamplePlaying( void )
 
 	if (current_queue_sample != (ALuint)AL_INVALID)
 	{
-		alDeleteSources(1, &current_queue_sample);
-		sound_GetError();
+		SAMPLE_LIST* node = active_samples;
+		SAMPLE_LIST* previous = NULL;
+
+		// We need to remove it from the queue of actively played samples
+		while (node != NULL)
+		{
+			if (node->curr->iSample == current_queue_sample)
+			{
+				sound_DestroyIteratedSample(&previous, &node);
+			}
+			previous = node;
+			if (node)
+			{
+				node = node->next;
+			}
+		}
 		current_queue_sample = AL_INVALID;
 	}
 #endif
