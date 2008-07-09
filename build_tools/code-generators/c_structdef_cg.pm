@@ -62,8 +62,7 @@ sub postProcessField
 
     if (/set/)
     {
-        my $enumName = ${$field}{"enum"};
-        my $enum = ${$enumMap}{$enumName};
+        my $enum = ${$field}{"enum"};
         my $enumSize = @{${$enum}{"values"}};
 
         $$output .= "\[${enumSize}]" if (/set/);

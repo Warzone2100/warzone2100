@@ -59,8 +59,7 @@ sub printStructFields
 
         if (${$field}{"type"} and ${$field}{"type"} =~ /set/)
         {
-            my $enumName = ${$field}{"enum"};
-            my $enum = ${$enumMap}{$enumName};
+            my $enum = ${$field}{"enum"};
             my @values = @{${$enum}{"values"}};
             my $unique_string = "UNIQUE(";
 

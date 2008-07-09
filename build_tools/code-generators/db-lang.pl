@@ -128,7 +128,9 @@ sub parseStruct
         # Parse set and enum field declarations
         elsif (/^\s*(set|enum)\s+(\w+)\s+(unique\s+)?(\w+)\s*;\s*$/)
         {
-            my %field = (type=>$1, enum=>$2, name=>$4);
+            die "error: Cannot use enum \"$2\" as it isn't declared yet" unless exists($enumMap{$2});
+
+            my %field = (type=>$1, enum=>$enumMap{$2}, name=>$4);
 
             push @{$field{"qualifiers"}}, $3 if $3;
 
