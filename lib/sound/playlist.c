@@ -180,5 +180,5 @@ void playListTest()
 		assert(songList);
 		assert(numSongs == 2);
 	}
-	fprintf(stdout, "\tPlayList self-test: PASSED\n");
+	fprintf(stdout, "\tPlaylist self-test: PASSED\n");
 }

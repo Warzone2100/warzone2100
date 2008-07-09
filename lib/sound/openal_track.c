@@ -87,8 +87,8 @@ static AUDIO_STREAM* active_streams = NULL;
 static ALfloat		sfx_volume = 1.0;
 static ALfloat		sfx3d_volume = 1.0;
 
-static ALCdevice* device = 0;
-static ALCcontext* context = 0;
+static ALCdevice* device = NULL;
+static ALCcontext* context = NULL;
 #endif
 
 
@@ -135,11 +135,11 @@ BOOL sound_InitLibrary( void )
 {
 #ifndef WZ_NOSOUND
 	int err;
-	ALfloat listenerVel[3] = { 0.0, 0.0, 0.0 };
-	ALfloat listenerOri[6] = { 0.0, 0.0, 1.0, 0.0, 1.0, 0.0 };
+	const ALfloat listenerVel[3] = { 0.0, 0.0, 0.0 };
+	const ALfloat listenerOri[6] = { 0.0, 0.0, 1.0, 0.0, 1.0, 0.0 };
 
 	device = alcOpenDevice(0);
-	if(device == 0)
+	if (!device)
 	{
 		PrintOpenALVersion(LOG_ERROR);
 		debug(LOG_ERROR, "Couldn't open audio device.");
@@ -147,6 +147,12 @@ BOOL sound_InitLibrary( void )
 	}
 
 	context = alcCreateContext(device, NULL);		//NULL was contextAttributes
+	if (!context)
+	{
+		PrintOpenALVersion(LOG_ERROR);
+		debug(LOG_ERROR, "Couldn't open audio context.");
+		return false;
+	}
 	alcMakeContextCurrent(context);
 
 	err = sound_GetDeviceError(device);
@@ -189,24 +195,18 @@ void sound_ShutdownLibrary( void )
 	{
 		return;
 	}
-	debug(LOG_SOUND, "sound_ShutdownLibrary: starting shutdown");
+	debug(LOG_SOUND, "starting shutdown");
+
 #ifndef WZ_NOSOUND
-	if(context != 0) {
-#ifdef WIN32
-		/* Ifdef'ed out the two lines below on Linux since this caused some versions
-		 * of OpenAL to hang on exit. - Per */
-		debug(LOG_SOUND, "sound_ShutdownLibrary: make default context NULL");
-		alcMakeContextCurrent(NULL);		//this should work now -Q
-#endif
-		debug(LOG_SOUND, "sound_ShutdownLibrary: destroy previous context");
-		alcDestroyContext(context); // this gives a long delay on some impl.
-		context = 0;
-	}
-	debug(LOG_SOUND, "sound_ShutdownLibrary: close device");
-	if(device != 0) {
-		alcCloseDevice(device);
-		device = 0;
-	}
+	/* On Linux since this caused some versions of OpenAL to hang on exit. - Per */
+	debug(LOG_SOUND, "make default context NULL");
+	alcMakeContextCurrent(NULL);
+
+	debug(LOG_SOUND, "destroy previous context");
+	alcDestroyContext(context); // this gives a long delay on some impl.
+
+	debug(LOG_SOUND, "close device");
+	alcCloseDevice(device);
 #endif
 
 	while( aSample )
@@ -1257,4 +1257,16 @@ void sound_SetEffectsVolume(float volume)
 		sfx3d_volume = 1.0;
 	}
 #endif
+}
+
+void soundTest()
+{
+	int i;
+
+	for (i = 0; i < 25; i++)
+	{
+		assert(sound_InitLibrary());
+		sound_ShutdownLibrary();
+	}
+	fprintf(stdout, "\tSound self-test: PASSED\n");
 }

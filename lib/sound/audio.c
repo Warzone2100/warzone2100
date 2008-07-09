@@ -1120,3 +1120,22 @@ void audio_RemoveObj(const void* psObj)
 	if (count)
 		debug(LOG_MEMORY, "audio_RemoveObj: ***Warning! psOBJ %p was found %u times in the list of playing audio samples", psObj, count);
 }
+
+static BOOL dummyCB(void *nada)
+{
+	return true;
+}
+
+void audioTest()
+{
+	int i;
+
+	for (i = 0; i < 50; i++)
+	{
+		assert(audio_Shutdown());
+		assert(audio_Init(dummyCB));
+		assert(!audio_Disabled());
+		audio_Update();
+	}
+	fprintf(stdout, "\tAudio self-test: PASSED\n");
+}

@@ -904,6 +904,17 @@ int main(int argc, char *argv[])
 	// Find out where to find the data
 	scanDataDirs();
 
+	// Must be run before OpenGL driver is properly initialized due to 
+	// strange conflicts - Per
+	if (selfTest)
+	{
+		memset(enabled_debug, 0, sizeof(*enabled_debug) * LOG_LAST);
+		fprintf(stdout, "Carrying out self-test:\n");
+		playListTest();
+		audioTest();
+		soundTest();
+	}
+
 	// Register the PhysicsFS implementation of the SQLite VFS class with
 	// SQLite's VFS system as the default (non-zero=default, zero=default).
 	sqlite3_register_physfs_vfs(1);
@@ -936,9 +947,6 @@ int main(int argc, char *argv[])
 	/* Runtime unit testing */
 	if (selfTest)
 	{
-		memset(enabled_debug, 0, sizeof(*enabled_debug) * LOG_LAST);
-		fprintf(stdout, "Carrying out self-test:\n");
-		playListTest();
 		NETtest();
 		tagTest();
 		parseTest();

@@ -134,4 +134,6 @@ extern void sound_SetStreamVolume(AUDIO_STREAM* stream, float volume);
 }
 #endif
 
+void soundTest(void);
+
 #endif	// __INCLUDED_LIB_SOUND_TRACK_H__
