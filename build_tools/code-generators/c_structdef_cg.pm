@@ -210,13 +210,14 @@ sub printStruct()
               . " *  \@return true if we succesfully loaded all available rows from the table,\n"
               . " *          false otherwise.\n"
               . " */\n"
+              . "extern bool\n"
               . "#line ${${${$struct}{\"qualifiers\"}}{\"loadFunc\"}}{\"line\"} \"$filename\"\n"
-              . "extern bool ${${${$struct}{\"qualifiers\"}}{\"loadFunc\"}}{\"name\"}(struct sqlite3* db);\n";
+              . "${${${$struct}{\"qualifiers\"}}{\"loadFunc\"}}{\"name\"}\n";
 
     my $count = $$output =~ s/\n/\n/sg;
     $count += 2;
     $$output .= "#line $count \"$outfile\"\n"
-              . "\n";
+              . "\t(struct sqlite3* db);\n\n";
 }
 
 sub printHdrGuard

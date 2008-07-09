@@ -70,12 +70,14 @@ sub printFuncHeader
               . " *  \@return true if we succesfully loaded all available rows from the table,\n"
               . " *          false otherwise.\n"
               . " */\n"
+              . "bool\n"
               . "#line ${${${$struct}{\"qualifiers\"}}{\"loadFunc\"}}{\"line\"} \"$filename\"\n"
-              . "bool ${${${$struct}{\"qualifiers\"}}{\"loadFunc\"}}{\"name\"}(sqlite3* db)\n";
+              . "${${${$struct}{\"qualifiers\"}}{\"loadFunc\"}}{\"name\"}\n";
 
     my $line = $$output =~ s/\n/\n/sg;
     $line += 2;
-    $$output .= "#line $line \"$outfile\"\n";
+    $$output .= "#line $line \"$outfile\"\n"
+              . "\t(sqlite3* db)\n";
 }
 
 sub printFuncFooter
