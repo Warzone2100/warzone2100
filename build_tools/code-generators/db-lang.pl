@@ -12,11 +12,12 @@ my @structList;
 
 sub parseEnum
 {
-    my %curEnum = (name => $_[0]);
+    my ($enumName, $comment, $count) = @_;
+    my %curEnum = (name => $enumName);
     my @curComment = ();
 
-    @{$curEnum{"comment"}} = @{$_[1]};
-    @{$_[1]} = ();
+    @{$curEnum{"comment"}} = @$comment;
+    @$comment = ();
 
     while (<>)
     {
@@ -45,12 +46,14 @@ sub parseEnum
             return;
         }
         else            { die "Unmatched line: $_\n"; }
+
+        $$count++;
     }
 }
 
 sub readTillEnd
 {
-    my ($output) = @_;
+    my ($output, $count) = @_;
 
     while (<>)
     {
@@ -63,16 +66,18 @@ sub readTillEnd
         }
 
         push @$output, $_;
+        $$count++;
     }
 }
 
 sub parseStruct
 {
-    my %curStruct = (name => $_[0]);
+    my ($structName, $comment, $count) = @_;
+    my %curStruct = (name => $structName);
     my @curComment = ();
 
-    @{$curStruct{"comment"}} = @{$_[1]};
-    @{$_[1]} = ();
+    @{$curStruct{"comment"}} = @$comment;
+    @$comment = ();
 
     while (<>)
     {
@@ -125,13 +130,13 @@ sub parseStruct
                 push @{${${$curStruct{"qualifiers"}}{"preLoadTable"}}{"parameters"}}, $1 if $1;
                 push @{${${$curStruct{"qualifiers"}}{"preLoadTable"}}{"parameters"}}, $2 if $2;
 
-                readTillEnd(\@{${${$curStruct{"qualifiers"}}{"preLoadTable"}}{"code"}});
+                readTillEnd(\@{${${$curStruct{"qualifiers"}}{"preLoadTable"}}{"code"}}, $count);
             }
             elsif (/^postLoadRow\s+curRow(\s+curId)?\s*$/)
             {
                 push @{${${$curStruct{"qualifiers"}}{"postLoadRow"}}{"parameters"}}, $1 if $1;
 
-                readTillEnd(\@{${${$curStruct{"qualifiers"}}{"postLoadRow"}}{"code"}});
+                readTillEnd(\@{${${$curStruct{"qualifiers"}}{"postLoadRow"}}{"code"}}, $count);
             }
         }
         # Parse regular field declarations
@@ -175,6 +180,8 @@ sub parseStruct
             push @{$curStruct{"fields"}}, \%field;
         }
         else            { die "Unmatched line: $_\n"; }
+
+        $$count++;
     }
 }
 
@@ -184,6 +191,7 @@ my @curComment = ();
 
 # Read and parse the file
 my $name = $ARGV[0];
+my $count = 1;
 while (<>)
 {
     chomp;
@@ -193,9 +201,11 @@ while (<>)
     {
         push @curComment, substr($1, 1) if $1;
     }
-    elsif (/^\s*struct\s+(\w+)\s*$/)                                            { parseStruct($1, \@curComment); }
-    elsif (/^\s*enum\s+(\w+)\s*$/)                                              { parseEnum($1, \@curComment); }
+    elsif (/^\s*struct\s+(\w+)\s*$/)                                            { parseStruct($1, \@curComment, \$count); }
+    elsif (/^\s*enum\s+(\w+)\s*$/)                                              { parseEnum($1, \@curComment, \$count); }
     else            { die "Unmatched line: $_\n"; }
+
+    $count++;
 }
 
 my $output = "";
