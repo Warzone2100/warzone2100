@@ -625,6 +625,7 @@ sub startFile()
     my $header = $name;
     $header =~ s/\.[^.]*$/.h/;
 
+    $$output .= "#line 1 \"$startTpl\"\n";
     open (TEMPL, $startTpl);
     while (<TEMPL>)
     {
@@ -633,6 +634,10 @@ sub startFile()
         $$output .= $_;
     }
     close (TEMPL);
+
+    my $count = $$output =~ s/\n/\n/sg;
+    $count += 2;
+    $$output .= "#line $count \"$outfile\"\n";
 }
 
 sub endFile()
