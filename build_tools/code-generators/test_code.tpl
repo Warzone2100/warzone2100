@@ -24,6 +24,9 @@ struct COMPONENT
     # Weight of this component
     real                weight;
 
+    # Body points of this component
+    real                body;
+
     # Indicates whether this component is "designable" and can thus be used in
     # the design screen.
     bool                designable;
