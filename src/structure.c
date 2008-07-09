@@ -1218,7 +1218,6 @@ float structureDamage(STRUCTURE *psStructure, UDWORD damage, UDWORD weaponClass,
 float getStructureDamage(const STRUCTURE* psStructure)
 {
 	float health;
-	CHECK_STRUCTURE(psStructure);
 
 	health = (float)psStructure->body / (float)structureBody(psStructure);
 	CLIP(health, 0., 1.f);
