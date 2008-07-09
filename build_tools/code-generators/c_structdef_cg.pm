@@ -223,7 +223,8 @@ sub printHdrGuard
 {
     my ($output, $name) = @_;
 
-    $name =~ s/\./_/g;
+    $name =~ tr/\./_/;
+    $name =~ tr/-/_/;
     $name = uc($name);
 
     $$output .= "__INCLUDED_DB_TEMPLATE_SCHEMA_STRUCTDEF_${name}_H__";
