@@ -197,6 +197,26 @@ sub printStruct()
 
     # Finish printing the structure
     $$output .= "} ${prefix}${name};\n\n";
+
+    return unless exists(${${$struct}{"qualifiers"}}{"loadFunc"});
+
+    $$output .= "/* Forward declaration to allow pointers to this type */\n"
+              . "struct sqlite3;\n"
+              . "\n"
+              . "/** Load the contents of the ${$struct}{\"name\"} table from the given SQLite database.\n"
+              . " *\n"
+              . " *  \@param db represents the database to load from\n"
+              . " *\n"
+              . " *  \@return true if we succesfully loaded all available rows from the table,\n"
+              . " *          false otherwise.\n"
+              . " */\n"
+              . "#line ${${${$struct}{\"qualifiers\"}}{\"loadFunc\"}}{\"line\"} \"$filename\"\n"
+              . "extern bool ${${${$struct}{\"qualifiers\"}}{\"loadFunc\"}}{\"name\"}(struct sqlite3* db);\n";
+
+    my $count = $$output =~ s/\n/\n/sg;
+    $count += 2;
+    $$output .= "#line $count \"$outfile\"\n"
+              . "\n";
 }
 
 sub printHdrGuard
