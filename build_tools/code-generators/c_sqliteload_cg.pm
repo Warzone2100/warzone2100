@@ -625,18 +625,25 @@ sub processCmdLine()
 
 sub startFile()
 {
-    my ($output, $name) = @_;
+    my ($output, $name, $outputfile) = @_;
 
     $$output .= "/* This file is generated automatically, do not edit, change the source ($name) instead. */\n\n";
 
     $filename = $name;
-    $outfile = $name;
-    $outfile =~ s/\.[^.]*$/.c/;
+    if ($outputfile)
+    {
+        $outfile = $outputfile;
+    }
+    else
+    {
+        $outfile = $name;
+        $outfile =~ s/\.[^.]*$/.c/;
+    }
 
     return unless $startTpl;
 
     # Replace the extension with ".h" so that we can use it to #include the header
-    my $header = $name;
+    my $header = $outfile;
     $header =~ s/\.[^.]*$/.h/;
 
     $$output .= "#line 1 \"$startTpl\"\n";

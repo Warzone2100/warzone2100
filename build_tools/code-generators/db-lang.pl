@@ -206,6 +206,8 @@ my @curComment = ();
 # Read and parse the file
 my $name = $ARGV[0];
 my $count = 1;
+my $outfile = "";
+$outfile = pop(@ARGV) if @ARGV > 1;
 while (<>)
 {
     chomp;
@@ -224,7 +226,7 @@ while (<>)
 
 my $output = "";
 
-CG::startFile(\$output, $name);
+CG::startFile(\$output, $name, $outfile);
 
 # Print all enums
 foreach my $enum (@enumList)
@@ -241,4 +243,13 @@ foreach my $struct (@structList)
 CG::endFile(\$output, $name);
 
 # Actually print out the output
-print $output;
+if ($outfile)
+{
+    open (OUT, ">$outfile");
+    print OUT $output;
+    close(OUT);
+}
+else
+{
+    print $output;
+}

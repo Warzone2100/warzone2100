@@ -238,22 +238,28 @@ sub processCmdLine()
 
 sub startFile()
 {
-    my ($output, $name) = @_;
+    my ($output, $name, $outputfile) = @_;
 
     $filename = $name;
-    $outfile = $name;
-
-    # Replace the extension with ".h" so that we can use it to #include the header
-    $outfile =~ s/\.[^.]*$/.h/;
+    if ($outputfile)
+    {
+        $outfile = $outputfile;
+    }
+    else
+    {
+        $outfile = $name;
+        # Replace the extension with ".h" so that we can use it to #include the header
+        $outfile =~ s/\.[^.]*$/.h/;
+    }
 
     $$output .= "/* This file is generated automatically, do not edit, change the source ($name) instead. */\n\n";
 
     $$output .= "#ifndef ";
-    printHdrGuard($output, $name);
+    printHdrGuard($output, $outfile);
     $$output .= "\n";
 
     $$output .= "#define ";
-    printHdrGuard($output, $name);
+    printHdrGuard($output, $outfile);
     $$output .= "\n\n";
 
     $$output .= "#line 1 \"$startTpl\"\n";
