@@ -31,7 +31,6 @@ extern "C"
 void PlayList_Init(void);
 void PlayList_Quit(void);
 bool PlayList_Read(const char* path);
-void PlayList_SetTrack(unsigned int t);
 const char* PlayList_CurrentSong(void);
 const char* PlayList_NextSong(void);
 void playListTest(void);
