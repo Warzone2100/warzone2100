@@ -85,6 +85,10 @@ sub parseStruct
             {
                 ${$curStruct{"qualifiers"}}{"prefix"} = $1;
             }
+            elsif (/^loadFunc\s+\"([^\"]+)\"$/)
+            {
+                ${$curStruct{"qualifiers"}}{"loadFunc"} = $1;
+            }
             elsif (/^abstract$/)
             {
                 die "error: Cannot declare a struct \"abstract\" if it inherits from another" if exists(${$curStruct{"qualifiers"}}{"inherit"});

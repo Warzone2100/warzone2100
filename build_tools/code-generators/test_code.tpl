@@ -50,6 +50,7 @@ end;
 # Will contain all data associated with a body
 struct BODY
     %inherit COMPONENT;
+    %loadFunc "loadBodyStatsFromDB";
 
     # The number of available weaponSlots slots on the body
     count           weaponSlots;
