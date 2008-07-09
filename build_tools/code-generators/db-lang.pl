@@ -48,6 +48,24 @@ sub parseEnum
     }
 }
 
+sub readTillEnd
+{
+    my ($output) = @_;
+
+    while (<>)
+    {
+        chomp;
+
+        # See if we've reached the end of this block
+        if (/^\s*end\s*;\s*$/)
+        {
+            return;
+        }
+
+        push @$output, $_;
+    }
+}
+
 sub parseStruct
 {
     my %curStruct = (name => $_[0]);
@@ -101,6 +119,19 @@ sub parseStruct
                 die "error: Cannot inherit from struct \"$1\" as it isn't (fully) declared yet" unless exists($structMap{$1});
 
                 ${$curStruct{"qualifiers"}}{"inherit"} = \%{$structMap{$1}};
+            }
+            elsif (/^preLoadTable(\s+maxId)?(\s+rowCount)?\s*$/)
+            {
+                push @{${${$curStruct{"qualifiers"}}{"preLoadTable"}}{"parameters"}}, $1 if $1;
+                push @{${${$curStruct{"qualifiers"}}{"preLoadTable"}}{"parameters"}}, $2 if $2;
+
+                readTillEnd(\@{${${$curStruct{"qualifiers"}}{"preLoadTable"}}{"code"}});
+            }
+            elsif (/^postLoadRow\s+curRow(\s+curId)?\s*$/)
+            {
+                push @{${${$curStruct{"qualifiers"}}{"postLoadRow"}}{"parameters"}}, $1 if $1;
+
+                readTillEnd(\@{${${$curStruct{"qualifiers"}}{"postLoadRow"}}{"code"}});
             }
         }
         # Parse regular field declarations

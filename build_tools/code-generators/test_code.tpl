@@ -51,6 +51,25 @@ end;
 struct BODY
     %inherit COMPONENT;
     %loadFunc "loadBodyStatsFromDB";
+    %preLoadTable maxId;
+        if (!statsAllocBody($maxId))
+            ABORT;
+    end;
+    %postLoadRow curRow curId;
+        // set the max stat values for the design screen
+        if ($curRow->designable)
+        {
+            // use front armour value to prevent bodyStats corrupt problems
+            setMaxBodyArmour($curRow->armourValue[HIT_SIDE_FRONT][WC_KINETIC]);
+            setMaxBodyArmour($curRow->armourValue[HIT_SIDE_FRONT][WC_HEAT]);
+            setMaxBodyPower($curRow->powerOutput);
+            setMaxBodyPoints($curRow->body);
+            setMaxComponentWeight($curRow->weight);
+        }
+
+        // save the stats
+        statsSetBody($curRow, $curId - 1);
+    end;
 
     # The number of available weaponSlots slots on the body
     count           weaponSlots;
