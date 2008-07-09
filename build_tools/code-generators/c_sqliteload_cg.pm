@@ -598,7 +598,7 @@ sub processCmdLine()
 {
     my ($argv) = @_;
 
-    $startTpl = shift(@$argv);
+    $startTpl = shift(@$argv) if @$argv > 1;
 }
 
 sub startFile()
@@ -607,11 +607,12 @@ sub startFile()
 
     $$output .= "/* This file is generated automatically, do not edit, change the source ($name) instead. */\n\n";
 
+    return unless $startTpl;
+
     # Replace the extension with ".h" so that we can use it to #include the header
     my $header = $name;
     $header =~ s/\.[^.]*$/.h/;
 
-    return unless $startTpl;
     open (TEMPL, $startTpl);
     while (<TEMPL>)
     {
