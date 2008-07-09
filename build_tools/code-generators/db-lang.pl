@@ -18,6 +18,7 @@ sub parseEnum
 
     @{$curEnum{"comment"}} = @$comment;
     @$comment = ();
+    $$count++;
 
     while (<>)
     {
@@ -55,6 +56,8 @@ sub readTillEnd
 {
     my ($output, $count) = @_;
 
+    $$count++;
+
     while (<>)
     {
         chomp;
@@ -78,6 +81,7 @@ sub parseStruct
 
     @{$curStruct{"comment"}} = @$comment;
     @$comment = ();
+    $$count++;
 
     while (<>)
     {
