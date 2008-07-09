@@ -7,6 +7,9 @@ use strict;
 # Code generator for C code to load contents of the SQL tables from an SQLite
 # database into the C struct definitions.
 
+my $filename = "";
+my $outfile = "";
+
 sub printComments
 {
     my ($output, $comments, $indent) = @_;
@@ -67,7 +70,12 @@ sub printFuncHeader
               . " *  \@return true if we succesfully loaded all available rows from the table,\n"
               . " *          false otherwise.\n"
               . " */\n"
-              . "bool ${${$struct}{\"qualifiers\"}}{\"loadFunc\"}(sqlite3* db)";
+              . "#line ${${${$struct}{\"qualifiers\"}}{\"loadFunc\"}}{\"line\"} \"$filename\"\n"
+              . "bool ${${${$struct}{\"qualifiers\"}}{\"loadFunc\"}}{\"name\"}(sqlite3* db)\n";
+
+    my $line = $$output =~ s/\n/\n/sg;
+    $line += 2;
+    $$output .= "#line $line \"$outfile\"\n";
 }
 
 sub printFuncFooter
@@ -537,7 +545,7 @@ sub printLoadFunc
     # Open the function
     $$output .= "\n";
     printFuncHeader($output, $struct, $structName);
-    $$output .= "\n{\n";
+    $$output .= "{\n";
 
     printSqlQueryVariables($output, $struct, $structMap, $enumMap);
 
@@ -606,6 +614,10 @@ sub startFile()
     my ($output, $name) = @_;
 
     $$output .= "/* This file is generated automatically, do not edit, change the source ($name) instead. */\n\n";
+
+    $filename = $name;
+    $outfile = $name;
+    $outfile =~ s/\.[^.]*$/.c/;
 
     return unless $startTpl;
 

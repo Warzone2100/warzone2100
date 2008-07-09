@@ -110,7 +110,9 @@ sub parseStruct
             }
             elsif (/^loadFunc\s+\"([^\"]+)\"$/)
             {
-                ${$curStruct{"qualifiers"}}{"loadFunc"} = $1;
+                my %loadFunc = (name=>$1, line=>$$count);
+
+                ${$curStruct{"qualifiers"}}{"loadFunc"} = \%loadFunc;
             }
             elsif (/^abstract$/)
             {
