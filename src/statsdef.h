@@ -24,7 +24,6 @@
 #ifndef __INCLUDED_STATSDEF_H__
 #define __INCLUDED_STATSDEF_H__
 
-#include "stats-db2.h"
 #include "lib/ivis_common/ivisdef.h"
 
 /* Elements common to all stats structures */
