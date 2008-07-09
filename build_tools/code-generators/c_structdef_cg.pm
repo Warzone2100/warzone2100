@@ -114,26 +114,36 @@ sub printStructFields
     }
 }
 
-sub printStructContent
+sub getStructName
 {
-    my ($output, $struct, $name, $prefix, $structMap, $enumMap) = @_;
+    my ($name, $struct, $structMap, $prefix) = @_;
 
     foreach (keys %{${$struct}{"qualifiers"}})
     {
         $$prefix = ${${$struct}{"qualifiers"}}{$_} if /prefix/ and not $$prefix;
 
+        getStructName($name, ${${$struct}{"qualifiers"}}{"inherit"}, $structMap, $prefix) if /inherit/;
+    }
+
+    $$name = ${$struct}{"name"};
+}
+
+sub printStructContent
+{
+    my ($output, $struct, $structMap, $enumMap) = @_;
+
+    foreach (keys %{${$struct}{"qualifiers"}})
+    {
         if (/inherit/)
         {
             my $inheritStruct = ${${$struct}{"qualifiers"}}{"inherit"};
             my $inheritName = ${$inheritStruct}{"name"};
 
             $$output .= "\t/* BEGIN of inherited \"$inheritName\" definition */\n";
-            printStructContent($output, $inheritStruct, $name, $prefix, $structMap, $enumMap);
+            printStructContent($output, $inheritStruct, $structMap, $enumMap);
             $$output .= "\t/* END of inherited \"$inheritName\" definition */\n";
         }
     }
-
-    $$name = ${$struct}{"name"};
 
     printStructFields($output, $struct, $enumMap);
 }
@@ -145,7 +155,7 @@ sub printEnum()
     printComments($output, ${$enum}{"comment"}, 0);
 
     # Start printing the enum
-    $$output .= "typedef enum\n{\n";
+    $$output .= "typedef enum ${$enum}{\"name\"}\n{\n";
 
     my @values = @{${$enum}{"values"}};
 
@@ -174,10 +184,12 @@ sub printStruct()
 
     printComments($output, ${$struct}{"comment"}, 0);
 
-    # Start printing the structure
-    $$output .= "typedef struct\n{\n";
+    getStructName(\$name, $struct, $structMap, \$prefix);
 
-    printStructContent($output, $struct, \$name, \$prefix, $structMap, $enumMap);
+    # Start printing the structure
+    $$output .= "typedef struct ${prefix}${name}\n{\n";
+
+    printStructContent($output, $struct, $structMap, $enumMap);
 
     # Finish printing the structure
     $$output .= "} ${prefix}${name};\n\n";
