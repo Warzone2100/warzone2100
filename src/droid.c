@@ -2917,7 +2917,6 @@ DROID* buildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player,
 		psDroid->asWeaps[i].nStat = 0;
 		psDroid->asWeaps[i].ammo = 0;
 		psDroid->asWeaps[i].recoilValue = 0;
-		psDroid->asWeaps[i].hitPoints = 0;
 	}
 
 	psDroid->listSize = 0;
@@ -3120,8 +3119,6 @@ void droidSetBits(DROID_TEMPLATE *pTemplate,DROID *psDroid)
 		{
 			psDroid->asWeaps[inc].lastFired=0;
 			psDroid->asWeaps[inc].nStat = pTemplate->asWeaps[inc];
-			psDroid->asWeaps[inc].hitPoints = (asWeaponStats + psDroid->
-				asWeaps[inc].nStat)->hitPoints;
 			psDroid->asWeaps[inc].recoilValue = 0;
 			psDroid->asWeaps[inc].ammo = (asWeaponStats + psDroid->
 				asWeaps[inc].nStat)->numRounds;

@@ -823,7 +823,7 @@ static void proj_InFlightDirectFunc(PROJECTILE *psProj)
 				/* Buildings cannot be penetrated and we need a penetrating weapon */
 				if (psTempObj->type == OBJ_DROID && psStats->penetrate)
 				{
-					WEAPON asWeap = {psStats - asWeaponStats, 0, 0, 0, 0};
+					WEAPON asWeap = {psStats - asWeaponStats, 0, 0, 0};
 					// Determine position to fire a missile at
 					// (must be at least 0 because we don't use signed integers
 					//  this shouldn't be larger than the height and width of the map either)
@@ -1037,7 +1037,7 @@ static void proj_InFlightIndirectFunc(PROJECTILE *psProj)
 				/* Buildings cannot be penetrated and we need a penetrating weapon */
 				if (psTempObj->type == OBJ_DROID && psStats->penetrate)
 				{
-					WEAPON asWeap = {psStats - asWeaponStats, 0, 0, 0, 0};
+					WEAPON asWeap = {psStats - asWeaponStats, 0, 0, 0};
 					// Determine position to fire a missile at
 					// (must be at least 0 because we don't use signed integers
 					//  this shouldn't be larger than the height and width of the map either)

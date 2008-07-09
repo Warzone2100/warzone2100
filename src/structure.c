@@ -1743,8 +1743,6 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 						psBuilding->asWeaps[0].lastFired = gameTime;
 					}
 					psBuilding->asWeaps[weapon].nStat =	pStructureType->psWeapStat[weapon] - asWeaponStats;
-					psBuilding->asWeaps[weapon].hitPoints = (asWeaponStats + psBuilding->
-						asWeaps[weapon].nStat)->hitPoints;
 					psBuilding->asWeaps[weapon].ammo = (asWeaponStats + psBuilding->
 						asWeaps[weapon].nStat)->numRounds;
 					psBuilding->asWeaps[weapon].recoilValue = 0;
@@ -1764,8 +1762,6 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 					psBuilding->asWeaps[0].lastFired = gameTime;
 				}
 				psBuilding->asWeaps[0].nStat =	pStructureType->psWeapStat[0] - asWeaponStats;
-				psBuilding->asWeaps[0].hitPoints = (asWeaponStats + psBuilding->
-					asWeaps[0].nStat)->hitPoints;
 				psBuilding->asWeaps[0].ammo = (asWeaponStats + psBuilding->
 					asWeaps[0].nStat)->numRounds;
 				psBuilding->asWeaps[0].recoilValue = 0;

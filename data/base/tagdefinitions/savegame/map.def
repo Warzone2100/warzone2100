@@ -111,7 +111,7 @@
     01 US 01 -		# Weapon type
     02 US 01 0		# Weapon rotation
     03 US 01 0		# Weapon pitch
-    04 US 01 0		# hitPoints (EXPLAIN ME)
+    04 US 01 0		# hitPoints REMOVED
     05 US 01 0		# Ammo
     06 US 01 0		# Time frame it was last fired
     07 US 01 0		# recoilValue (EXPLAIN ME)

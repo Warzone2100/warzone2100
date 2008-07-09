@@ -128,11 +128,9 @@ static bool loadBaseStats(BASE_STATS* stats, SQL_BASE_STATS* cols, sqlite3_stmt*
 typedef struct
 {
 	SQL_BASE_STATS parent;
-	int techlevel;
 	int buildPower;
 	int buildPoints;
 	int weight;
-	int hitpoints;
 	int systempoints;
 	int body;
 	int GfxFile;
@@ -144,24 +142,20 @@ static bool compBaseStatColumnNames(SQL_COMP_BASE_STATS* cols, sqlite3_stmt* stm
 	if (!baseStatColumnNames(&cols->parent, stmt))
 		return false;
 
-	cols->techlevel    = getColNumByNameA(stmt, "techlevel");
 	cols->buildPower   = getColNumByNameA(stmt, "buildPower");
 	cols->buildPoints  = getColNumByNameA(stmt, "buildPoints");
 	cols->weight       = getColNumByNameA(stmt, "weight");
-	cols->hitpoints    = getColNumByNameA(stmt, "hitpoints");
 	cols->systempoints = getColNumByNameA(stmt, "systempoints");
 	cols->body         = getColNumByNameA(stmt, "body");
 	cols->GfxFile      = getColNumByNameA(stmt, "GfxFile");
 	cols->designable   = getColNumByNameA(stmt, "designable");
 
-	ASSERT(cols->techlevel    != -1, "No tech level in this database query available");
 	ASSERT(cols->buildPower   != -1, "No build power in this database query available");
 	ASSERT(cols->buildPoints  != -1, "No build points in this database query available");
 	ASSERT(cols->weight       != -1, "No weight in this database query available");
 	ASSERT(cols->systempoints != -1, "No system points in this database query available");
 
-	return cols->techlevel    != -1
-	    && cols->buildPower   != -1
+	return cols->buildPower   != -1
 	    && cols->buildPoints  != -1
 	    && cols->weight       != -1
 	    && cols->systempoints != -1;
@@ -172,7 +166,6 @@ static bool loadComponentBaseStats(COMP_BASE_STATS* stats, SQL_COMP_BASE_STATS* 
 	const int buildPower   = getColNumByNameA(stmt, "buildPower");
 	const int buildPoints  = getColNumByNameA(stmt, "buildPoints");
 	const int weight       = getColNumByNameA(stmt, "weight");
-	const int hitpoints    = getColNumByNameA(stmt, "hitpoints");
 	const int systempoints = getColNumByNameA(stmt, "systempoints");
 	const int body         = getColNumByNameA(stmt, "body");
 	const int GfxFile      = getColNumByNameA(stmt, "GfxFile");
@@ -192,10 +185,6 @@ static bool loadComponentBaseStats(COMP_BASE_STATS* stats, SQL_COMP_BASE_STATS* 
 	// weight                NUMERIC NOT NULL, -- Component's weight (mass?)
 	ASSERT(weight != -1, "No weight in this database query available");
 	stats->weight = sqlite3_column_double(stmt, weight);
-
-	// hitpoints             NUMERIC NOT NULL, -- Component's hitpoints - SEEMS TO BE UNUSED
-	if (hitpoints != -1)
-		stats->hitPoints = sqlite3_column_double(stmt, hitpoints);
 
 	// systempoints          NUMERIC NOT NULL, -- Space the component takes in the droid - SEEMS TO BE UNUSED
 	ASSERT(systempoints != -1, "No system points in this database query available");
