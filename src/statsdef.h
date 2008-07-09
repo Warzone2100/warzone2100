@@ -24,6 +24,7 @@
 #ifndef __INCLUDED_STATSDEF_H__
 #define __INCLUDED_STATSDEF_H__
 
+#include "stats-db2.h"
 #include "lib/ivis_common/ivisdef.h"
 
 /* Elements common to all stats structures */
@@ -244,7 +245,7 @@ typedef struct _propulsion_stats
 	COMPONENT_STATS;
 
 	UDWORD          maxSpeed;       ///< Max speed for the droid
-	UBYTE           propulsionType; ///< Type of propulsion used - index into PropulsionTable
+	PROPULSION_TYPE propulsionType; ///< Type of propulsion used - index into PropulsionTable
 } PROPULSION_STATS;
 
 typedef enum _sensor_type
