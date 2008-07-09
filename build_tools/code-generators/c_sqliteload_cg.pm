@@ -516,7 +516,7 @@ sub printRowProcessCode
             $$output .= "${indent}stats->$fieldName = (iIMDShape *) resGetData(\"IMD\", (const char*)sqlite3_column_text(stmt, cols.$fieldName));\n"
                       . "${indent}if (stats->$fieldName == NULL)\n"
                       . "${indent}{\n"
-                      . "${indent}\tdebug(LOG_ERROR, \"Cannot find the flame PIE for record %s\", getStatName(stats));\n"
+                      . "${indent}\tdebug(LOG_ERROR, \"Cannot find the IMD for field \\\"$fieldName\\\" of record num %u\", (unsigned int)sqlite3_column_int(stmt, cols.unique_inheritance_id));\n"
                       . "${indent}\tabort();\n"
                       . "${indent}\tgoto in_statement_err;\n"
                       . "${indent}}\n";
