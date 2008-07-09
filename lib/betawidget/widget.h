@@ -11,6 +11,8 @@
 #include "vector.h"
 #include "geom.h"
 
+#include "keycode.h"
+
 /*
  * Forward declarations
  */
@@ -26,6 +28,7 @@ typedef struct _event           event;
 typedef struct _eventMouse      eventMouse;
 typedef struct _eventMouseBtn   eventMouseBtn;
 typedef struct _eventKey        eventKey;
+typedef struct _eventText		eventText;
 typedef struct _eventMisc       eventMisc;
 
 typedef bool (*callback)        (widget *widget, event *evt, void *userData);
@@ -58,6 +61,9 @@ enum _eventType
 	// Keyboard events
 	EVT_KEY_DOWN,
 	EVT_KEY_UP,
+	
+	// Text input events
+	EVT_TEXT,
 
 	// Misc
 	EVT_FOCUS,
@@ -125,17 +131,24 @@ struct _eventKey
 {
 	event event;
 
-	// The key which was pressed, this should be used for text-input &c
-	// NB: This is only valid for EVT_KEY_DOWN events!
-	int unicode;
-
 	// The keycode of the key which was pressed
-	int keycode;
+	eventKeycode keycode;
 
 	// Active modifier keys
 	bool ctrl;
 	bool shift;
 	bool alt;
+};
+
+/*
+ * The event structure for text input events
+ */
+struct _eventText
+{
+	event event;
+	
+	// The text that was typed, UTF-8 encoded
+	const char *utf8;
 };
 
 /*

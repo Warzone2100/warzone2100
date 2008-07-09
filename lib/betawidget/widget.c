@@ -788,6 +788,7 @@ bool widgetHandleEventImpl(widget *self, event *evt)
 		}
 		case EVT_KEY_DOWN:
 		case EVT_KEY_UP:
+		case EVT_TEXT:
 		{
 			// Only relevant if we have focus
 			if (self->hasFocus)
