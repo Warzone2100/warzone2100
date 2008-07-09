@@ -26,6 +26,10 @@ sub printStructFieldType
         $$output .= "TEXT";
         $$output .= " NOT NULL" unless grep(/optional/, @{${$field}{"qualifiers"}});
     }
+    elsif (/C-only-field/)
+    {
+        #Ignore: this field type is called C-only-field for a reason
+    }
     else
     {
         die "UKNOWN TYPE: $_";

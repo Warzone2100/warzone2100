@@ -65,8 +65,13 @@ struct BODY
     end;
 
     # The number of available weaponSlots slots on the body
-    count           weaponSlots;
+    count               weaponSlots;
 
     # Engine output of this body's engine
-    real            powerOutput;
+    real                powerOutput;
+
+    IMD_model optional  flameModel;
+
+    # list of IMDs to use for propulsion unit - up to numPropulsionStats
+    C-only-field iIMDShape** ppIMDList;
 end;

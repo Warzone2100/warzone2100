@@ -532,6 +532,10 @@ sub printRowProcessCode
                           . "\t\t}\n";
             }
         }
+        elsif (/C-only-field/)
+        {
+            # Ignore: this is a user defined field type, the user code (%postLoadRow) can deal with it
+        }
         else
         {
             die "UKNOWN TYPE: $_";

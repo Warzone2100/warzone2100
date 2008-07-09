@@ -197,6 +197,16 @@ sub parseStruct
 
             push @{$curStruct{"fields"}}, \%field;
         }
+        # Parse C-only fields
+        elsif (/^\s*(C-only-field)\s+(.*)\s+(\w+)\s*;\s*$/)
+        {
+            my %field = (type=>$1, ctype=>$2, name=>$3);
+
+            @{$field{"comment"}} = @curComment;
+            @curComment = ();
+
+            push @{$curStruct{"fields"}}, \%field;
+        }
         else            { die "Unmatched line: $_\n"; }
 
         $$count++;
