@@ -133,16 +133,24 @@ sub parseStruct
             }
             elsif (/^preLoadTable(\s+maxId)?(\s+rowCount)?\s*$/)
             {
-                push @{${${$curStruct{"qualifiers"}}{"preLoadTable"}}{"parameters"}}, $1 if $1;
-                push @{${${$curStruct{"qualifiers"}}{"preLoadTable"}}{"parameters"}}, $2 if $2;
+                my %preLoadTable = (line=>$$count);
 
-                readTillEnd(\@{${${$curStruct{"qualifiers"}}{"preLoadTable"}}{"code"}}, $count);
+                push @{$preLoadTable{"parameters"}}, $1 if $1;
+                push @{$preLoadTable{"parameters"}}, $2 if $2;
+
+                readTillEnd(\@{$preLoadTable{"code"}}, $count);
+
+                ${$curStruct{"qualifiers"}}{"preLoadTable"} = \%preLoadTable;
             }
             elsif (/^postLoadRow\s+curRow(\s+curId)?\s*$/)
             {
-                push @{${${$curStruct{"qualifiers"}}{"postLoadRow"}}{"parameters"}}, $1 if $1;
+                my %postLoadRow = (line=>$$count);
 
-                readTillEnd(\@{${${$curStruct{"qualifiers"}}{"postLoadRow"}}{"code"}}, $count);
+                push @{$postLoadRow{"parameters"}}, $1 if $1;
+
+                readTillEnd(\@{$postLoadRow{"code"}}, $count);
+
+                ${$curStruct{"qualifiers"}}{"postLoadRow"} = \%postLoadRow;
             }
         }
         # Parse regular field declarations

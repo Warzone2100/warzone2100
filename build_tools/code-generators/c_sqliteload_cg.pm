@@ -289,6 +289,8 @@ sub printPreLoadTableCode
 
     return unless exists(${${$struct}{"qualifiers"}}{"preLoadTable"});
 
+    my $line = ${${${$struct}{"qualifiers"}}{"preLoadTable"}}{"line"};
+
     $$output .= "\t{\n";
 
     foreach (@{${${${$struct}{"qualifiers"}}{"preLoadTable"}}{"parameters"}})
@@ -314,6 +316,7 @@ sub printPreLoadTableCode
         printParameterLoadCode($output, $struct, $structMap, $_);
     }
 
+    $$output .= "#line " . ($line + 1) . " \"$filename\"\n";
     foreach (@{${${${$struct}{"qualifiers"}}{"preLoadTable"}}{"code"}})
     {
         s/^        //g;
@@ -325,6 +328,10 @@ sub printPreLoadTableCode
 
         $$output .= "\t\t$_\n";
     }
+
+    $line = $$output =~ s/\n/\n/sg;
+    $line += 2;
+    $$output .= "#line $line \"$outfile\"\n";
 
     $$output .= "\t}\n"
               . "\n";
@@ -568,6 +575,9 @@ sub printLoadFunc
         $$output .= "\t\t\tconst int CUR_ROW_ID = sqlite3_column_int(stmt, cols.unique_inheritance_id);\n" if grep(/curId/, @{${${${$struct}{"qualifiers"}}{"postLoadRow"}}{"parameters"}});
         $$output .= "\n";
 
+        my $line = ${${${$struct}{"qualifiers"}}{"postLoadRow"}}{"line"};
+
+        $$output .= "#line " . ($line + 1) . " \"$filename\"\n";
         foreach (@{${${${$struct}{"qualifiers"}}{"postLoadRow"}}{"code"}})
         {
             s/^        //g;
@@ -579,6 +589,10 @@ sub printLoadFunc
 
             $$output .= "\t\t\t$_\n";
         }
+
+        $line = $$output =~ s/\n/\n/sg;
+        $line += 2;
+        $$output .= "#line $line \"$outfile\"\n";
 
         $$output .= "\t\t}\n"
                   . "\n";
