@@ -135,6 +135,10 @@ sub printStruct()
     $$output .= ";\n\n";
 }
 
+sub processCmdLine()
+{
+}
+
 sub startFile()
 {
     my ($output, $name) = @_;

@@ -143,6 +143,8 @@ sub parseStruct
     }
 }
 
+CG::processCmdLine(\@ARGV);
+
 my @curComment = ();
 
 # Read and parse the file

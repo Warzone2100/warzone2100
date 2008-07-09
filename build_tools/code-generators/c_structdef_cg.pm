@@ -193,6 +193,10 @@ sub printHdrGuard
     $$output .= "__INCLUDED_DB_TEMPLATE_SCHEMA_STRUCTDEF_${name}_H__";
 }
 
+sub processCmdLine()
+{
+}
+
 sub startFile()
 {
     my ($output, $name) = @_;
