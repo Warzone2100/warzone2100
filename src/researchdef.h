@@ -39,7 +39,6 @@ typedef struct research_stats
 	UBYTE			techCode;
 	//char			*pTechnologyName;	/* Text name of the group the research is a
 	//									   member of */
-	TECH_LEVEL		techLevel;			/* technology level of the research topic */
 //	char			*pSubGroupName;		/* Text name of the Subgroup to which the research belongs */
 	UWORD       	subGroup;			/* Subgroup of the item - an iconID from 'Framer' to depict in the button*/
 

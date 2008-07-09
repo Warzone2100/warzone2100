@@ -287,14 +287,9 @@ BOOL loadResearch(const char *pResearchData, UDWORD bufferSize)
 
 		pResearch->ref = REF_RESEARCH_START + i;
 
-		//determine the tech level
+		//determine the tech level (unused, so we don't use the resulting string)
 		ResearchName[0] = '\0';
 		sscanf(pResearchData,"%[^','],", ResearchName);
-		if (!setTechLevel((BASE_STATS *)pResearch, ResearchName))
-		{
-			return false;
-		}
-
 		pResearchData += (strlen(ResearchName)+1);
 
 		ResearchName[0] = '\0';

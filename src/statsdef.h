@@ -58,19 +58,6 @@ typedef enum _component_type
 
 #define NULL_COMP (-1)
 
-//ALL components and structures and research topics have a tech level to which they belong
-typedef enum _tech_level
-{
-	TECH_LEVEL_ONE,
-	TECH_LEVEL_TWO,
-	TECH_LEVEL_THREE,
-	TECH_LEVEL_ONE_TWO,
-	TECH_LEVEL_TWO_THREE,
-	TECH_LEVEL_ALL,
-
-	MAX_TECH_LEVELS
-} TECH_LEVEL;
-
 /*
  * Stats structures type definitions
  */
@@ -78,7 +65,6 @@ typedef enum _tech_level
 /* Stats common to all droid components */
 #define COMPONENT_STATS \
 	STATS_BASE;                             /**< Basic stats */ \
-	TECH_LEVEL      techLevel;              /**< technology level of the component */ \
 	UDWORD          buildPower;             /**< Power required to build the component */ \
 	UDWORD          buildPoints;            /**< Time required to build the component */ \
 	UDWORD          weight;                 /**< Component's weight */ \

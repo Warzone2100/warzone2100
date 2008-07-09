@@ -350,7 +350,7 @@ BOOL loadWeaponStats(const char *pWeaponData, UDWORD bufferSize)
 	char			mountGfx[MAX_STR_LENGTH], flightGfx[MAX_STR_LENGTH],
 					hitGfx[MAX_STR_LENGTH], missGfx[MAX_STR_LENGTH],
 					waterGfx[MAX_STR_LENGTH], muzzleGfx[MAX_STR_LENGTH],
-					trailGfx[MAX_STR_LENGTH], techLevel[MAX_STR_LENGTH];
+					trailGfx[MAX_STR_LENGTH], dummy[MAX_STR_LENGTH];
 	char			fireOnMove[10], weaponClass[15], weaponSubClass[15],
 					weaponEffect[16], movement[15], facePlayer[5],		//weaponEffect[15] caused stack corruption. --Qamly
 					faceInFlight[5],lightWorld[5];
@@ -370,7 +370,6 @@ BOOL loadWeaponStats(const char *pWeaponData, UDWORD bufferSize)
 		memset(psStats, 0, sizeof(WEAPON_STATS));
 
 		WeaponName[0] = '\0';
-		techLevel[0] = '\0';
 		GfxFile[0] = '\0';
 		mountGfx[0] = '\0';
 		muzzleGfx[0] = '\0';
@@ -394,7 +393,7 @@ BOOL loadWeaponStats(const char *pWeaponData, UDWORD bufferSize)
 			%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%[^','],\
 			%[^','],%[^','],%[^','],%[^','],%d,%d,%d,%[^','],%[^','],%d,%d,\
 			%[^','],%d,%d,%d,%d,%d",
-			(char *)&WeaponName, (char *)&techLevel, &psStats->buildPower,&psStats->buildPoints,
+			(char *)&WeaponName, (char *)&dummy, &psStats->buildPower,&psStats->buildPoints,
 			&psStats->weight, &psStats->hitPoints, &psStats->systemPoints,
 			&psStats->body, (char *)&GfxFile, (char *)&mountGfx, (char *)&muzzleGfx, (char *)&flightGfx,
 			(char *)&hitGfx, (char *)&missGfx, (char *)&waterGfx, (char *)&trailGfx, &psStats->shortRange,
@@ -431,12 +430,6 @@ BOOL loadWeaponStats(const char *pWeaponData, UDWORD bufferSize)
 		}
 
 		psStats->ref = REF_WEAPON_START + i;
-
-		//determine the tech level
-		if (!setTechLevel((BASE_STATS *)psStats, techLevel))
-		{
-			return false;
-		}
 
 		//multiply time stats
 		psStats->firePause *= WEAPON_TIME;
@@ -770,7 +763,7 @@ BOOL loadBodyStats(const char *pBodyData, UDWORD bufferSize)
 	const unsigned int NumBody = numCR(pBodyData, bufferSize);
 	unsigned int i, designable;
 	char BodyName[MAX_STR_LENGTH], size[MAX_STR_LENGTH],
-		GfxFile[MAX_STR_LENGTH], techLevel[MAX_STR_LENGTH],
+		GfxFile[MAX_STR_LENGTH], dummy[MAX_STR_LENGTH],
 		flameIMD[MAX_STR_LENGTH];
 
 	if (!statsAllocBody(NumBody))
@@ -783,7 +776,6 @@ BOOL loadBodyStats(const char *pBodyData, UDWORD bufferSize)
 		memset(psStats, 0, sizeof(BODY_STATS));
 
 		BodyName[0] = '\0';
-		techLevel[0] = '\0';
 		size[0] = '\0';
 		GfxFile[0] = '\0';
 		flameIMD[0] = '\0';
@@ -793,7 +785,7 @@ BOOL loadBodyStats(const char *pBodyData, UDWORD bufferSize)
 		sscanf(pBodyData,"%[^','],%[^','],%[^','],%d,%d,%d,%d,%[^','],\
 			%d,%d,%d, \
 			%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%[^','],%d",
-			(char*)&BodyName, (char*)&techLevel, (char*)&size, &psStats->buildPower,&psStats->buildPoints,
+			(char*)&BodyName, (char*)&dummy, (char*)&size, &psStats->buildPower,&psStats->buildPoints,
 			&psStats->weight, &psStats->body, (char*)&GfxFile, &psStats->systemPoints,
 			&psStats->weaponSlots, &psStats->powerOutput,
 			(int*)&psStats->armourValue[HIT_SIDE_FRONT][WC_KINETIC], (int*)&psStats->armourValue[HIT_SIDE_FRONT][WC_HEAT],
@@ -812,12 +804,6 @@ BOOL loadBodyStats(const char *pBodyData, UDWORD bufferSize)
 		}
 
 		psStats->ref = REF_BODY_START + i;
-
-		//determine the tech level
-		if (!setTechLevel((BASE_STATS *)psStats, techLevel))
-		{
-			return false;
-		}
 
 		if (!getBodySize(size, &psStats->size))
 		{
@@ -888,7 +874,7 @@ BOOL loadBrainStats(const char *pBrainData, UDWORD bufferSize)
 	BRAIN_STATS sStats, * const psStats = &sStats;
 	const unsigned int NumBrain = numCR(pBrainData, bufferSize);
 	unsigned int i = 0, weapon = 0;
-	char		BrainName[MAX_STR_LENGTH], techLevel[MAX_STR_LENGTH],
+	char		BrainName[MAX_STR_LENGTH], dummy[MAX_STR_LENGTH],
 				weaponName[MAX_STR_LENGTH];
 
 	if (!statsAllocBrain(NumBrain))
@@ -901,11 +887,10 @@ BOOL loadBrainStats(const char *pBrainData, UDWORD bufferSize)
 		memset(psStats, 0, sizeof(BRAIN_STATS));
 
 		BrainName[0] = '\0';
-		techLevel[0] = '\0';
 		weaponName[0] = '\0';
 		//read the data into the storage - the data is delimeted using comma's
 		sscanf(pBrainData,"%[^','],%[^','],%d,%d,%d,%d,%d,%[^','],%d",
-			(char*)&BrainName, (char*)&techLevel, &psStats->buildPower,&psStats->buildPoints,
+			(char*)&BrainName, (char*)&dummy, &psStats->buildPower,&psStats->buildPoints,
 			&psStats->weight, &psStats->hitPoints, &psStats->systemPoints,
 			(char*)&weaponName, &psStats->progCap); //, &psStats->AICap, &psStats->AISpeed);
 
@@ -915,12 +900,6 @@ BOOL loadBrainStats(const char *pBrainData, UDWORD bufferSize)
 		}
 
 		psStats->ref = REF_BRAIN_START + i;
-
-		//determine the tech level
-		if (!setTechLevel((BASE_STATS *)psStats, techLevel))
-		{
-			return false;
-		}
 
 		//check weapon attached
 		if (!strcmp(weaponName, "0"))
@@ -1020,7 +999,7 @@ BOOL loadPropulsionStats(const char *pPropulsionData, UDWORD bufferSize)
 	PROPULSION_STATS	sStats, * const psStats = &sStats;
 	unsigned int i = 0, designable;
 	char				PropulsionName[MAX_STR_LENGTH], imdName[MAX_STR_LENGTH],
-						techLevel[MAX_STR_LENGTH], type[MAX_STR_LENGTH];
+						dummy[MAX_STR_LENGTH], type[MAX_STR_LENGTH];
 
 	if (!statsAllocPropulsion(NumPropulsion))
 	{
@@ -1032,13 +1011,12 @@ BOOL loadPropulsionStats(const char *pPropulsionData, UDWORD bufferSize)
 		memset(psStats, 0, sizeof(PROPULSION_STATS));
 
 		PropulsionName[0] = '\0';
-		techLevel[0] = '\0';
 		imdName[0] = '\0';
 
 		//read the data into the storage - the data is delimeted using comma's
 		sscanf(pPropulsionData,"%[^','],%[^','],%d,%d,%d,%d,%d,%d,%[^','],\
 			%[^','],%d,%d",
-			(char*)&PropulsionName, (char*)&techLevel, &psStats->buildPower,&psStats->buildPoints,
+			(char*)&PropulsionName, (char*)&dummy, &psStats->buildPower,&psStats->buildPoints,
 			&psStats->weight, &psStats->hitPoints, &psStats->systemPoints,
 			&psStats->body,	(char*)&imdName, (char*)&type, &psStats->maxSpeed, &designable);
 
@@ -1048,12 +1026,6 @@ BOOL loadPropulsionStats(const char *pPropulsionData, UDWORD bufferSize)
 		}
 
 		psStats->ref = REF_PROPULSION_START + i;
-
-		//determine the tech level
-		if (!setTechLevel((BASE_STATS *)psStats, techLevel))
-		{
-			return false;
-		}
 
 		//set design flag
 		psStats->design = (designable != 0);
@@ -1133,7 +1105,7 @@ BOOL loadSensorStats(const char *pSensorData, UDWORD bufferSize)
 	unsigned int i = 0, designable;
 	char			SensorName[MAX_STR_LENGTH], location[MAX_STR_LENGTH],
 					GfxFile[MAX_STR_LENGTH],type[MAX_STR_LENGTH];
-	char			mountGfx[MAX_STR_LENGTH], techLevel[MAX_STR_LENGTH];
+	char			mountGfx[MAX_STR_LENGTH], dummy[MAX_STR_LENGTH];
 
 	if (!statsAllocSensor(NumSensor))
 	{
@@ -1145,7 +1117,6 @@ BOOL loadSensorStats(const char *pSensorData, UDWORD bufferSize)
 		memset(psStats, 0, sizeof(SENSOR_STATS));
 
 		SensorName[0] = '\0';
-		techLevel[0] = '\0';
 		GfxFile[0] = '\0';
 		mountGfx[0] = '\0';
 		location[0] = '\0';
@@ -1153,7 +1124,7 @@ BOOL loadSensorStats(const char *pSensorData, UDWORD bufferSize)
 		//read the data into the storage - the data is delimeted using comma's
 		sscanf(pSensorData,"%[^','],%[^','],%d,%d,%d,%d,%d,%d,%[^','],\
 			%[^','],%d,%[^','],%[^','],%d,%d,%d",
-			(char*)&SensorName, (char*)&techLevel, &psStats->buildPower,&psStats->buildPoints,
+			(char*)&SensorName, (char*)&dummy, &psStats->buildPower,&psStats->buildPoints,
 			&psStats->weight, &psStats->hitPoints, &psStats->systemPoints,
 			&psStats->body,	(char*)&GfxFile,(char*)&mountGfx,
 			&psStats->range, (char*)&location, (char*)&type, &psStats->time, &psStats->power, &designable);
@@ -1164,12 +1135,6 @@ BOOL loadSensorStats(const char *pSensorData, UDWORD bufferSize)
 		}
 
 		psStats->ref = REF_SENSOR_START + i;
-
-		//determine the tech level
-		if (!setTechLevel((BASE_STATS *)psStats, techLevel))
-		{
-			return false;
-		}
 
 		if (!strcmp(location,"DEFAULT"))
 		{
@@ -1271,7 +1236,7 @@ BOOL loadECMStats(const char *pECMData, UDWORD bufferSize)
 	unsigned int i = 0, designable;
 	char		ECMName[MAX_STR_LENGTH], location[MAX_STR_LENGTH],
 				GfxFile[MAX_STR_LENGTH];
-	char		mountGfx[MAX_STR_LENGTH], techLevel[MAX_STR_LENGTH];
+	char		mountGfx[MAX_STR_LENGTH], dummy[MAX_STR_LENGTH];
 
 	if (!statsAllocECM(NumECM))
 	{
@@ -1283,14 +1248,13 @@ BOOL loadECMStats(const char *pECMData, UDWORD bufferSize)
 		memset(psStats, 0, sizeof(ECM_STATS));
 
 		ECMName[0] = '\0';
-		techLevel[0] = '\0';
 		GfxFile[0] = '\0';
 		mountGfx[0] = '\0';
 		location[0] = '\0';
 		//read the data into the storage - the data is delimeted using comma's
 		sscanf(pECMData,"%[^','],%[^','],%d,%d,%d,%d,%d,%d,%[^','],%[^','],\
 			%[^','],%d,%d,%d",
-			(char*)&ECMName, (char*)&techLevel, &psStats->buildPower,&psStats->buildPoints,
+			(char*)&ECMName, (char*)&dummy, &psStats->buildPower,&psStats->buildPoints,
 			&psStats->weight, &psStats->hitPoints, &psStats->systemPoints,
 			&psStats->body,	(char*)&GfxFile, (char*)&mountGfx, (char*)&location, &psStats->power,
 			&psStats->range, &designable);
@@ -1304,12 +1268,6 @@ BOOL loadECMStats(const char *pECMData, UDWORD bufferSize)
 		}
 
 		psStats->ref = REF_ECM_START + i;
-
-		//determine the tech level
-		if (!setTechLevel((BASE_STATS *)psStats, techLevel))
-		{
-			return false;
-		}
 
 		if (!strcmp(location,"DEFAULT"))
 		{
@@ -1383,7 +1341,7 @@ BOOL loadRepairStats(const char *pRepairData, UDWORD bufferSize)
 	const unsigned int NumRepair = numCR(pRepairData, bufferSize);
 	REPAIR_STATS sStats, * const psStats = &sStats;
 	unsigned int i = 0, designable;
-	char			RepairName[MAX_STR_LENGTH], techLevel[MAX_STR_LENGTH],
+	char			RepairName[MAX_STR_LENGTH], dummy[MAX_STR_LENGTH],
 					GfxFile[MAX_STR_LENGTH],	mountGfx[MAX_STR_LENGTH],
 					location[MAX_STR_LENGTH];
 
@@ -1397,7 +1355,6 @@ BOOL loadRepairStats(const char *pRepairData, UDWORD bufferSize)
 		memset(psStats, 0, sizeof(REPAIR_STATS));
 
 		RepairName[0] = '\0';
-		techLevel[0] = '\0';
 		GfxFile[0] = '\0';
 		mountGfx[0] = '\0';
 		location[0] = '\0';
@@ -1405,7 +1362,7 @@ BOOL loadRepairStats(const char *pRepairData, UDWORD bufferSize)
 	//read the data into the storage - the data is delimeted using comma's
 		sscanf(pRepairData,"%[^','],%[^','],%d,%d,%d,%d,%d,%d,%[^','],\
 			%[^','],%[^','],%d,%d,%d",
-			(char*)&RepairName, (char*)&techLevel, &psStats->buildPower,&psStats->buildPoints,
+			(char*)&RepairName, (char*)&dummy, &psStats->buildPower,&psStats->buildPoints,
 			&psStats->weight, &psStats->hitPoints, &psStats->systemPoints,
 			&psStats->repairArmour, (char*)&location, (char*)&GfxFile, (char*)&mountGfx,
 			&psStats->repairPoints, &psStats->time,&designable);
@@ -1416,12 +1373,6 @@ BOOL loadRepairStats(const char *pRepairData, UDWORD bufferSize)
 		}
 
 		psStats->ref = REF_REPAIR_START + i;
-
-		//determine the tech level
-		if (!setTechLevel((BASE_STATS *)psStats, techLevel))
-		{
-			return false;
-		}
 
 		if (!strcmp(location,"DEFAULT"))
 		{
@@ -1509,7 +1460,7 @@ BOOL loadConstructStats(const char *pConstructData, UDWORD bufferSize)
 	CONSTRUCT_STATS sStats, * const psStats = &sStats;
 	unsigned int i = 0, designable;
 	char			ConstructName[MAX_STR_LENGTH], GfxFile[MAX_STR_LENGTH];
-	char			mountGfx[MAX_STR_LENGTH], techLevel[MAX_STR_LENGTH];
+	char			mountGfx[MAX_STR_LENGTH], dummy[MAX_STR_LENGTH];
 
 	if (!statsAllocConstruct(NumConstruct))
 	{
@@ -1521,13 +1472,12 @@ BOOL loadConstructStats(const char *pConstructData, UDWORD bufferSize)
 		memset(psStats, 0, sizeof(CONSTRUCT_STATS));
 
 		ConstructName[0] = '\0';
-		techLevel[0] = '\0';
 		GfxFile[0] = '\0';
 		mountGfx[0] = '\0';
 		//read the data into the storage - the data is delimeted using comma's
 		sscanf(pConstructData,"%[^','],%[^','],%d,%d,%d,%d,%d,%d,%[^','],\
 			%[^','],%d,%d",
-			(char*)&ConstructName, (char*)&techLevel, &psStats->buildPower,&psStats->buildPoints,
+			(char*)&ConstructName, (char*)&dummy, &psStats->buildPower,&psStats->buildPoints,
 			&psStats->weight, &psStats->hitPoints, &psStats->systemPoints,
 			&psStats->body, (char*)&GfxFile, (char*)&mountGfx,
 			&psStats->constructPoints,&designable);
@@ -1538,12 +1488,6 @@ BOOL loadConstructStats(const char *pConstructData, UDWORD bufferSize)
 		}
 
 		psStats->ref = REF_CONSTRUCT_START + i;
-
-		//determine the tech level
-		if (!setTechLevel((BASE_STATS *)psStats, techLevel))
-		{
-			return false;
-		}
 
 		//set design flag
 		if (designable)
@@ -2681,73 +2625,6 @@ const char* getName(const char *pNameID)
 	{
 		return Unknown;
 	}
-}
-
-
-/*sets the tech level for the stat passed in - returns true if set OK*/
-BOOL setTechLevel(BASE_STATS *psStats, const char *pLevel)
-{
-	TECH_LEVEL		techLevel = MAX_TECH_LEVELS;
-
-	if (!strcmp(pLevel,"Level One"))
-	{
-		techLevel = TECH_LEVEL_ONE;
-	}
-	else if (!strcmp(pLevel,"Level Two"))
-	{
-		techLevel = TECH_LEVEL_TWO;
-	}
-	else if (!strcmp(pLevel,"Level Three"))
-	{
-		techLevel = TECH_LEVEL_THREE;
-	}
-	else if (!strcmp(pLevel,"Level One-Two"))
-	{
-		techLevel = TECH_LEVEL_ONE_TWO;
-	}
-	else if (!strcmp(pLevel,"Level Two-Three"))
-	{
-		techLevel = TECH_LEVEL_TWO_THREE;
-	}
-	else if (!strcmp(pLevel,"Level All"))
-	{
-		techLevel = TECH_LEVEL_ALL;
-	}
-	else if (!strcmp(pLevel,"Don't Display"))
-	{
-		techLevel = MAX_TECH_LEVELS;
-	}
-	//invalid tech level passed in
-	else
-	{
-		ASSERT( false, "Unknown Technology Level - %s", pLevel );
-		return false;
-	}
-
-	//store tech level in the appropriate stat
-	if ((psStats->ref >= REF_BODY_START
-	  && psStats->ref <= (REF_WEAPON_START + REF_RANGE))
-	 || (psStats->ref >= REF_CONSTRUCT_START
-	  && psStats->ref <= (REF_CONSTRUCT_START + REF_RANGE)))
-	{
-		((COMP_BASE_STATS *)psStats)->techLevel = techLevel;
-	}
-	else if (psStats->ref >= REF_STRUCTURE_START
-	      && psStats->ref <= (REF_STRUCTURE_START + REF_RANGE))
-	{
-		((STRUCTURE_STATS *)psStats)->techLevel = techLevel;
-	}
-	else if (psStats->ref >= REF_RESEARCH_START
-	      && psStats->ref <= (REF_RESEARCH_START + REF_RANGE))
-	{
-		((RESEARCH *)psStats)->techLevel = techLevel;
-	}
-	else
-	{
-		ASSERT( false, "Invalid stat id for %s", psStats->pName );
-		return false;
-	}
-	return true;
 }
 
 /*sets the store to the body size based on the name passed in - returns false

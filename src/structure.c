@@ -514,7 +514,7 @@ BOOL loadStructureStats(const char *pStructData, UDWORD bufferSize)
 	const unsigned int NumStructures = numCR(pStructData, bufferSize);
 	UDWORD i, inc, player, numWeaps, weapSlots;
 	char				StructureName[MAX_STR_LENGTH], foundation[MAX_STR_LENGTH],
-						type[MAX_STR_LENGTH], techLevel[MAX_STR_LENGTH],
+						type[MAX_STR_LENGTH], dummy[MAX_STR_LENGTH],
 						strength[MAX_STR_LENGTH];
 	char				GfxFile[MAX_STR_LENGTH], baseIMD[MAX_STR_LENGTH];
 	char				ecmType[MAX_STR_LENGTH], sensorType[MAX_STR_LENGTH];
@@ -577,7 +577,7 @@ BOOL loadStructureStats(const char *pStructData, UDWORD bufferSize)
 		sscanf(pStructData,"%[^','],%[^','],%[^','],%[^','],%d,%d,%d,%[^','],\
 			%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%[^','],%[^','],%d,%[^','],%[^','],\
 			%d,%d",
-			StructureName, type, techLevel, strength, &psStructure->terrainType,
+			StructureName, type, dummy, strength, &psStructure->terrainType,
 			&psStructure->baseWidth, &psStructure->baseBreadth, foundation,
 			&psStructure->buildPoints, &psStructure->height,
 			&psStructure->armourValue, &psStructure->bodyPoints,
@@ -601,12 +601,6 @@ BOOL loadStructureStats(const char *pStructData, UDWORD bufferSize)
 
 		//determine the structure type
 		psStructure->type = structureType(type);
-
-		//determine the tech level
-		if (!setTechLevel((BASE_STATS *)psStructure, techLevel))
-		{
-			return false;
-		}
 
 		//set the struct strength
 		psStructure->strength = getStructStrength(strength);

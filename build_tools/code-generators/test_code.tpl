@@ -10,19 +10,9 @@ struct BASE
     string optional     name;
 end;
 
-# Enumerates the different technology levels
-enum TECH_LEVEL
-    ONE
-    TWO
-    THREE
-end;
-
 # Represents a researchable component statistic
 struct COMPONENT
     %inherit BASE;
-
-    # Technology level(s) of this component
-    set TECH_LEVEL      level;
 
     # Power required to build this component
     real                buildPower;

@@ -169,7 +169,6 @@ static bool compBaseStatColumnNames(SQL_COMP_BASE_STATS* cols, sqlite3_stmt* stm
 
 static bool loadComponentBaseStats(COMP_BASE_STATS* stats, SQL_COMP_BASE_STATS* cols, sqlite3_stmt* stmt, unsigned int id)
 {
-	const int techlevel    = getColNumByNameA(stmt, "techlevel");
 	const int buildPower   = getColNumByNameA(stmt, "buildPower");
 	const int buildPoints  = getColNumByNameA(stmt, "buildPoints");
 	const int weight       = getColNumByNameA(stmt, "weight");
@@ -180,14 +179,6 @@ static bool loadComponentBaseStats(COMP_BASE_STATS* stats, SQL_COMP_BASE_STATS* 
 	const int designable   = getColNumByNameA(stmt, "designable");
 
 	if (!loadBaseStats((BASE_STATS *)stats, &cols->parent, stmt, id))
-	{
-		return false;
-	}
-
-	// techlevel             TEXT    NOT NULL, -- Technology level of this component
-	ASSERT(techlevel != -1, "No tech level in this database query available");
-	if (techlevel == -1
-	 || !setTechLevel((BASE_STATS *)stats, (const char*)sqlite3_column_text(stmt, techlevel)))
 	{
 		return false;
 	}
