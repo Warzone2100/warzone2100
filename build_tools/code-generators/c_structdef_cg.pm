@@ -193,8 +193,13 @@ sub printHdrGuard
     $$output .= "__INCLUDED_DB_TEMPLATE_SCHEMA_STRUCTDEF_${name}_H__";
 }
 
+my $startTpl = "";
+
 sub processCmdLine()
 {
+    my ($argv) = @_;
+
+    $startTpl = shift(@$argv) if @$argv > 1;
 }
 
 sub startFile()
@@ -210,6 +215,26 @@ sub startFile()
     $$output .= "#define ";
     printHdrGuard($output, $name);
     $$output .= "\n\n";
+
+    # Replace the extension with ".h" so that we can use it to #include the header
+    my $header = $name;
+    $header =~ s/\.[^.]*$/.h/;
+
+    $$output .= "#line 1 \"$startTpl\"\n";
+    open (TEMPL, $startTpl);
+    while (<TEMPL>)
+    {
+        s/\$name\b/$name/g;
+        s/\$header\b/$header/g;
+        $$output .= $_;
+    }
+    close (TEMPL);
+
+    my $count = $$output =~ s/\n/\n/sg;
+    $count += 2;
+    $$output .= "#line $count \"$header\"\n";
+
+    $$output .= "\n";
 }
 
 sub endFile()

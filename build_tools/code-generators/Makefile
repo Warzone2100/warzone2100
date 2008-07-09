@@ -9,8 +9,8 @@ all: $(C_SOURCES) $(C_HEADERS) $(SQL_TABLES)
 %.c: %.tpl.sql.c %.tpl
 	./db-lang.pl c_sqliteload $^ > $@
 
-%.h: %.tpl
-	./db-lang.pl c_structdef $< > $@
+%.h: %.tpl.struct.h %.tpl
+	./db-lang.pl c_structdef $^ > $@
 
 %.sql: %.tpl
 	./db-lang.pl sql_tabledef $< > $@
