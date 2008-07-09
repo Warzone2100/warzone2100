@@ -6,6 +6,10 @@ use strict;
 
 # Code generator for C struct definitions
 
+my $filename = "";
+my $outfile = "";
+my $startTpl = "";
+
 sub printStructFieldType
 {
     my ($output, $field) = @_;
@@ -205,8 +209,6 @@ sub printHdrGuard
     $$output .= "__INCLUDED_DB_TEMPLATE_SCHEMA_STRUCTDEF_${name}_H__";
 }
 
-my $startTpl = "";
-
 sub processCmdLine()
 {
     my ($argv) = @_;
@@ -218,6 +220,12 @@ sub startFile()
 {
     my ($output, $name) = @_;
 
+    $filename = $name;
+    $outfile = $name;
+
+    # Replace the extension with ".h" so that we can use it to #include the header
+    $outfile =~ s/\.[^.]*$/.h/;
+
     $$output .= "/* This file is generated automatically, do not edit, change the source ($name) instead. */\n\n";
 
     $$output .= "#ifndef ";
@@ -228,25 +236,20 @@ sub startFile()
     printHdrGuard($output, $name);
     $$output .= "\n\n";
 
-    # Replace the extension with ".h" so that we can use it to #include the header
-    my $header = $name;
-    $header =~ s/\.[^.]*$/.h/;
-
     $$output .= "#line 1 \"$startTpl\"\n";
     open (TEMPL, $startTpl);
     while (<TEMPL>)
     {
         s/\$name\b/$name/g;
-        s/\$header\b/$header/g;
+        s/\$header\b/$outfile/g;
         $$output .= $_;
     }
     close (TEMPL);
 
     my $count = $$output =~ s/\n/\n/sg;
     $count += 2;
-    $$output .= "#line $count \"$header\"\n";
-
-    $$output .= "\n";
+    $$output .= "#line $count \"$outfile\"\n"
+              . "\n";
 }
 
 sub endFile()
