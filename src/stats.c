@@ -766,6 +766,7 @@ BOOL loadBodyStats(const char *pBodyData, UDWORD bufferSize)
 	char BodyName[MAX_STR_LENGTH], size[MAX_STR_LENGTH],
 		GfxFile[MAX_STR_LENGTH], dummy[MAX_STR_LENGTH],
 		flameIMD[MAX_STR_LENGTH];
+	UDWORD dummyVal;
 
 	if (!statsAllocBody(NumBody))
 	{
