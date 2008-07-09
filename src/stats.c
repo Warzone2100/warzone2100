@@ -395,7 +395,7 @@ BOOL loadWeaponStats(const char *pWeaponData, UDWORD bufferSize)
 			%[^','],%[^','],%[^','],%[^','],%d,%d,%d,%[^','],%[^','],%d,%d,\
 			%[^','],%d,%d,%d,%d,%d",
 			(char *)&WeaponName, (char *)&dummy, &psStats->buildPower,&psStats->buildPoints,
-			&psStats->weight, &dummyVal, &psStats->systemPoints,
+			&psStats->weight, &dummyVal, &dummyVal,
 			&psStats->body, (char *)&GfxFile, (char *)&mountGfx, (char *)&muzzleGfx, (char *)&flightGfx,
 			(char *)&hitGfx, (char *)&missGfx, (char *)&waterGfx, (char *)&trailGfx, &psStats->shortRange,
 			&psStats->longRange,&psStats->shortHit, &psStats->longHit,
@@ -787,7 +787,7 @@ BOOL loadBodyStats(const char *pBodyData, UDWORD bufferSize)
 			%d,%d,%d, \
 			%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%[^','],%d",
 			(char*)&BodyName, (char*)&dummy, (char*)&size, &psStats->buildPower,&psStats->buildPoints,
-			&psStats->weight, &psStats->body, (char*)&GfxFile, &psStats->systemPoints,
+			&psStats->weight, &psStats->body, (char*)&GfxFile, &dummyVal,
 			&psStats->weaponSlots, &psStats->powerOutput,
 			(int*)&psStats->armourValue[HIT_SIDE_FRONT][WC_KINETIC], (int*)&psStats->armourValue[HIT_SIDE_FRONT][WC_HEAT],
 			(int*)&psStats->armourValue[HIT_SIDE_REAR][WC_KINETIC],  (int*)&psStats->armourValue[HIT_SIDE_REAR][WC_HEAT],
@@ -893,7 +893,7 @@ BOOL loadBrainStats(const char *pBrainData, UDWORD bufferSize)
 		//read the data into the storage - the data is delimeted using comma's
 		sscanf(pBrainData,"%[^','],%[^','],%d,%d,%d,%d,%d,%[^','],%d",
 			(char*)&BrainName, (char*)&dummy, &psStats->buildPower,&psStats->buildPoints,
-			&psStats->weight, &dummyVal, &psStats->systemPoints,
+			&psStats->weight, &dummyVal, &dummyVal,
 			(char*)&weaponName, &psStats->progCap); //, &psStats->AICap, &psStats->AISpeed);
 
 		if (!allocateStatName((BASE_STATS *)psStats, BrainName))
@@ -1020,7 +1020,7 @@ BOOL loadPropulsionStats(const char *pPropulsionData, UDWORD bufferSize)
 		sscanf(pPropulsionData,"%[^','],%[^','],%d,%d,%d,%d,%d,%d,%[^','],\
 			%[^','],%d,%d",
 			(char*)&PropulsionName, (char*)&dummy, &psStats->buildPower,&psStats->buildPoints,
-			&psStats->weight, &dummyVal, &psStats->systemPoints,
+			&psStats->weight, &dummyVal, &dummyVal,
 			&psStats->body,	(char*)&imdName, (char*)&type, &psStats->maxSpeed, &designable);
 
 		if (!allocateStatName((BASE_STATS *)psStats, PropulsionName))
@@ -1129,7 +1129,7 @@ BOOL loadSensorStats(const char *pSensorData, UDWORD bufferSize)
 		sscanf(pSensorData,"%[^','],%[^','],%d,%d,%d,%d,%d,%d,%[^','],\
 			%[^','],%d,%[^','],%[^','],%d,%d,%d",
 			(char*)&SensorName, (char*)&dummy, &psStats->buildPower,&psStats->buildPoints,
-			&psStats->weight, &dummyVal, &psStats->systemPoints,
+			&psStats->weight, &dummyVal, &dummyVal,
 			&psStats->body,	(char*)&GfxFile,(char*)&mountGfx,
 			&psStats->range, (char*)&location, (char*)&type, &psStats->time, &psStats->power, &designable);
 
@@ -1260,7 +1260,7 @@ BOOL loadECMStats(const char *pECMData, UDWORD bufferSize)
 		sscanf(pECMData,"%[^','],%[^','],%d,%d,%d,%d,%d,%d,%[^','],%[^','],\
 			%[^','],%d,%d,%d",
 			(char*)&ECMName, (char*)&dummy, &psStats->buildPower,&psStats->buildPoints,
-			&psStats->weight, &dummyVal, &psStats->systemPoints,
+			&psStats->weight, &dummyVal, &dummyVal,
 			&psStats->body,	(char*)&GfxFile, (char*)&mountGfx, (char*)&location, &psStats->power,
 			&psStats->range, &designable);
 
@@ -1369,7 +1369,7 @@ BOOL loadRepairStats(const char *pRepairData, UDWORD bufferSize)
 		sscanf(pRepairData,"%[^','],%[^','],%d,%d,%d,%d,%d,%d,%[^','],\
 			%[^','],%[^','],%d,%d,%d",
 			(char*)&RepairName, (char*)&dummy, &psStats->buildPower,&psStats->buildPoints,
-			&psStats->weight, &dummyVal, &psStats->systemPoints,
+			&psStats->weight, &dummyVal, &dummyVal,
 			&psStats->repairArmour, (char*)&location, (char*)&GfxFile, (char*)&mountGfx,
 			&psStats->repairPoints, &psStats->time,&designable);
 
@@ -1485,7 +1485,7 @@ BOOL loadConstructStats(const char *pConstructData, UDWORD bufferSize)
 		sscanf(pConstructData,"%[^','],%[^','],%d,%d,%d,%d,%d,%d,%[^','],\
 			%[^','],%d,%d",
 			(char*)&ConstructName, (char*)&dummy, &psStats->buildPower,&psStats->buildPoints,
-			&psStats->weight, &dummyVal, &psStats->systemPoints,
+			&psStats->weight, &dummyVal, &dummyVal,
 			&psStats->body, (char*)&GfxFile, (char*)&mountGfx,
 			&psStats->constructPoints,&designable);
 

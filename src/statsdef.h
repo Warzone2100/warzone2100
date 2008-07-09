@@ -68,7 +68,6 @@ typedef enum _component_type
 	UDWORD          buildPower;             /**< Power required to build the component */ \
 	UDWORD          buildPoints;            /**< Time required to build the component */ \
 	UDWORD          weight;                 /**< Component's weight */ \
-	UDWORD          systemPoints;           /**< Space the component takes in the droid - SEEMS TO BE UNUSED */ \
 	UDWORD          body;                   /**< Component's body points */ \
 	BOOL            design;                 /**< flag to indicate whether this component can be used in the design screen */ \
 	iIMDShape*      pIMD                    /**< The IMD to draw for this component */

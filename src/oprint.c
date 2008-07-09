@@ -61,10 +61,10 @@ static void printComponentInfo(const COMP_BASE_STATS* psStats)
 	psStats = psStats;
 
 	CONPRINTF(ConsoleString,(ConsoleString,"%s ref %d\n"
-			  "   bPwr %d bPnts %d wt %d sp %d bdy %d imd %p\n",
+			  "   bPwr %d bPnts %d wt %d bdy %d imd %p\n",
 			  getStatName(psStats), psStats->ref, psStats->buildPower,
-			  psStats->buildPoints, psStats->weight, psStats->systemPoints,
-			  psStats->body, psStats->pIMD));
+			  psStats->buildPoints, psStats->weight, psStats->body,
+			  psStats->pIMD));
 }
 
 

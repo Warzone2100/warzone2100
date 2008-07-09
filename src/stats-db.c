@@ -131,7 +131,6 @@ typedef struct
 	int buildPower;
 	int buildPoints;
 	int weight;
-	int systempoints;
 	int body;
 	int GfxFile;
 	int designable;
@@ -145,7 +144,6 @@ static bool compBaseStatColumnNames(SQL_COMP_BASE_STATS* cols, sqlite3_stmt* stm
 	cols->buildPower   = getColNumByNameA(stmt, "buildPower");
 	cols->buildPoints  = getColNumByNameA(stmt, "buildPoints");
 	cols->weight       = getColNumByNameA(stmt, "weight");
-	cols->systempoints = getColNumByNameA(stmt, "systempoints");
 	cols->body         = getColNumByNameA(stmt, "body");
 	cols->GfxFile      = getColNumByNameA(stmt, "GfxFile");
 	cols->designable   = getColNumByNameA(stmt, "designable");
@@ -153,12 +151,10 @@ static bool compBaseStatColumnNames(SQL_COMP_BASE_STATS* cols, sqlite3_stmt* stm
 	ASSERT(cols->buildPower   != -1, "No build power in this database query available");
 	ASSERT(cols->buildPoints  != -1, "No build points in this database query available");
 	ASSERT(cols->weight       != -1, "No weight in this database query available");
-	ASSERT(cols->systempoints != -1, "No system points in this database query available");
 
 	return cols->buildPower   != -1
 	    && cols->buildPoints  != -1
-	    && cols->weight       != -1
-	    && cols->systempoints != -1;
+	    && cols->weight       != -1;
 }
 
 static bool loadComponentBaseStats(COMP_BASE_STATS* stats, SQL_COMP_BASE_STATS* cols, sqlite3_stmt* stmt, unsigned int id)
@@ -166,7 +162,6 @@ static bool loadComponentBaseStats(COMP_BASE_STATS* stats, SQL_COMP_BASE_STATS* 
 	const int buildPower   = getColNumByNameA(stmt, "buildPower");
 	const int buildPoints  = getColNumByNameA(stmt, "buildPoints");
 	const int weight       = getColNumByNameA(stmt, "weight");
-	const int systempoints = getColNumByNameA(stmt, "systempoints");
 	const int body         = getColNumByNameA(stmt, "body");
 	const int GfxFile      = getColNumByNameA(stmt, "GfxFile");
 	const int designable   = getColNumByNameA(stmt, "designable");
@@ -185,10 +180,6 @@ static bool loadComponentBaseStats(COMP_BASE_STATS* stats, SQL_COMP_BASE_STATS* 
 	// weight                NUMERIC NOT NULL, -- Component's weight (mass?)
 	ASSERT(weight != -1, "No weight in this database query available");
 	stats->weight = sqlite3_column_double(stmt, weight);
-
-	// systempoints          NUMERIC NOT NULL, -- Space the component takes in the droid - SEEMS TO BE UNUSED
-	ASSERT(systempoints != -1, "No system points in this database query available");
-	stats->systemPoints = sqlite3_column_double(stmt, systempoints);
 
 	// body                  NUMERIC NOT NULL, -- Component's body points
 	if (body != -1)
