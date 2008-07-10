@@ -1,3 +1,6 @@
+top_srcdir=../..
+top_builddir=$(top_srcdir)
+
 include $(top_srcdir)/makerules/common.mk
 
 # Hacks to build for compiling system, not for target

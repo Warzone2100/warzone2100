@@ -72,22 +72,7 @@ WINDRES:=windres
 WZ_CPPFLAGS+=-DWIN32
 WZ_CFLAGS+=-mwindows
 WZ_CXXFLAGS+=-mwindows
-WZ_LDFLAGS+=-lmingw32 -lSDLmain
-
-
-# Generic libs
-
-WZ_LDFLAGS+=-lSDL -lSDL_net -lpng12 -lphysfs -lz -lvorbisfile -lvorbis -logg -lpopt -lintl
-
-
-# Additional target-platform-dependend libs
-
-WZ_LDFLAGS+=-lGLC -lglu32 -lopengl32 -lopenal32 -ldbghelp -lshfolder -lwinmm -lwsock32 -lbfd -liberty
-
-
-# Additionaly link against the deps of our deps
-
-WZ_LDFLAGS+=-liconv -lz -lfreetype -lfontconfig -lexpat
+WZ_LDFLAGS+=-lmingw32 -lSDLmain -lSDL -lSDL_net -lpng12 -lphysfs -lz -lvorbisfile -lvorbis -logg -lpopt -lintl -lGLC -lglu32 -lopengl32 -lopenal32 -ldbghelp -lshfolder -lwinmm -lwsock32 -lbfd -liberty -liconv -lz -lfreetype -lfontconfig -lexpat
 
 
 # Import environment variables

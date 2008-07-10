@@ -1,3 +1,6 @@
+top_srcdir=..
+top_builddir=$(top_srcdir)
+
 include $(top_srcdir)/makerules/common.mk
 
 SUBDIRS=mods
@@ -23,7 +26,7 @@ all: $(BASEARCHIVE) $(PATCHARCHIVE) $(SUBDIRS)
 endif
 
 stamp:
-	touch stamp
+	echo > stamp
 
 $(BASEARCHIVE): $(basename $(BASEARCHIVE)) stamp $(patsubst %,$(basename $(BASEARCHIVE))/%,$(BASELIST))
 	(cd $< && zip -ru0 $@ $(filter-out stamp,$(filter-out $<,$(^:$</%=%))) -x '*svn*' || [ $$? -eq 12 ] && true) # zip returns 12 on "nothing to do"
