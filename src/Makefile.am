@@ -4,12 +4,18 @@
 %.lex.h %.lex.c:: %.l
 	$(LEX) $(LFLAGS) $(AM_LFLAGS) -o$@ $<
 
+%.c: %.tpl.sql.c %.tpl
+	$(top_srcdir)/build_tools/code-generators/db-lang.pl c_sqliteload $^ $@
+
+%.h: %.tpl.struct.h %.tpl
+	$(top_srcdir)/build_tools/code-generators/db-lang.pl c_structdef $^ $@
+
 AM_CPPFLAGS = -DYY_NO_INPUT $(SDL_CFLAGS) $(SDL_NET_CFLAGS) $(PHYSFS_CFLAGS) $(PNG_CFLAGS) $(OGGVORBIS_CFLAGS) $(OPENAL_CFLAGS) $(OPENGLC_CFLAGS) $(OPENGL_CFLAGS) $(POPT_CFLAGS) $(WZ_CPPFLAGS)
 AM_CFLAGS = $(WZ_CFLAGS)
 AM_LFLAGS = $(FLEX_FLAGS)
 AM_YFLAGS = -d
-BUILT_SOURCES = level_lexer.lex.c scriptvals_lexer.lex.c scriptvals_parser.tab.c scriptvals_parser.tab.h
-CLEANFILES = level_lexer.lex.c scriptvals_lexer.lex.c scriptvals_parser.tab.c scriptvals_parser.tab.h
+BUILT_SOURCES = level_lexer.lex.c scriptvals_lexer.lex.c scriptvals_parser.tab.c scriptvals_parser.tab.h stats-db2.h
+CLEANFILES = level_lexer.lex.c scriptvals_lexer.lex.c scriptvals_parser.tab.c scriptvals_parser.tab.h stats-db2.h
 
 bin_PROGRAMS = warzone2100
 noinst_HEADERS = action.h advvis.h ai.h aiexperience.h anim_id.h \

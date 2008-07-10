@@ -24,6 +24,9 @@
 #ifndef __INCLUDED_STATSDEF_H__
 #define __INCLUDED_STATSDEF_H__
 
+// Automatically generated file, which is intended to eventually replace this one
+#include "stats-db2.h"
+
 #include "lib/ivis_common/ivisdef.h"
 
 /* Elements common to all stats structures */
@@ -36,25 +39,6 @@ typedef struct _base_stats
 {
 	STATS_BASE;
 } BASE_STATS;
-
-/*
-if any types are added BEFORE 'COMP_BODY' - then Save/Load Game will have to be
-altered since it loops through the components from 1->MAX_COMP
-*/
-typedef enum _component_type
-{
-	COMP_UNKNOWN,
-	COMP_BODY,
-	COMP_BRAIN,
-	COMP_PROPULSION,
-	COMP_REPAIRUNIT,
-	COMP_ECM,
-	COMP_SENSOR,
-	COMP_CONSTRUCT,
-	COMP_WEAPON,
-
-	COMP_NUMCOMPONENTS
-} COMPONENT_TYPE;
 
 #define NULL_COMP (-1)
 
@@ -77,23 +61,6 @@ typedef struct _comp_base_stats
 {
 	COMPONENT_STATS;
 } COMP_BASE_STATS;
-
-/* LOC used for holding locations for Sensors and ECM's*/
-typedef enum _loc
-{
-	LOC_DEFAULT,
-	LOC_TURRET
-} LOC;
-
-/* SIZE used for specifying body size */
-typedef enum _size
-{
-	SIZE_LIGHT,
-	SIZE_MEDIUM,
-	SIZE_HEAVY,
-
-	SIZE_SUPER_HEAVY
-} BODY_SIZE;
 
 //only using KINETIC and HEAT for now
 typedef enum _weapon_class
@@ -220,21 +187,6 @@ typedef enum _prop_side
 
 	NUM_PROP_SIDES
 } PROP_SIDE;
-
-typedef enum _propulsion_type
-{
-	PROPULSION_TYPE_WHEELED,
-	PROPULSION_TYPE_TRACKED,
-	PROPULSION_TYPE_LEGGED,
-	PROPULSION_TYPE_HOVER,
-	PROPULSION_TYPE_SKI,
-	PROPULSION_TYPE_LIFT,
-	PROPULSION_TYPE_PROPELLOR,
-	PROPULSION_TYPE_HALF_TRACKED,
-	PROPULSION_TYPE_JUMP,
-
-	PROPULSION_TYPE_NUM,
-} PROPULSION_TYPE;
 
 typedef struct _propulsion_stats
 {
