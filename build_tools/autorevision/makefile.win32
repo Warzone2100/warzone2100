@@ -3,15 +3,6 @@ top_builddir=$(top_srcdir)
 
 include $(top_srcdir)/makerules/common.mk
 
-# Hacks to build for compiling system, not for target
-CC:=g++
-CXX:=g++
-CPPFLAGS:=$(subst -DWIN32,,$(CPPFLAGS))
-CFLAGS:=$(subst -mwindows,,$(CFLAGS))
-CXXFLAGS:=$(subst -mwindows,,$(CXXFLAGS))
-LDFLAGS:=
-EXEEXT=
-
 SRC=autorevision.cpp
 
 EXE=autorevision
