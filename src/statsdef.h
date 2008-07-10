@@ -62,47 +62,6 @@ typedef struct _comp_base_stats
 	COMPONENT_STATS;
 } COMP_BASE_STATS;
 
-//only using KINETIC and HEAT for now
-typedef enum _weapon_class
-{
-	WC_KINETIC,             ///< bullets etc
-	//WC_EXPLOSIVE,           ///< rockets etc - classed as WC_KINETIC now to save space in DROID
-	WC_HEAT,                ///< laser etc
-	//WC_MISC,                ///< others we haven't thought of! - classed as WC_HEAT now to save space in DROID
-
-	NUM_WEAPON_CLASS
-} WEAPON_CLASS;
-
-// weapon subclasses used to define which weapons are affected by weapon upgrade functions
-// Watermelon:added a new subclass to do some tests
-typedef enum _weapon_subclass
-{
-	WSC_MGUN,
-	WSC_CANNON,
-	//WSC_ARTILLARY,
-	WSC_MORTARS,
-	WSC_MISSILE,
-	WSC_ROCKET,
-	WSC_ENERGY,
-	WSC_GAUSS,
-	WSC_FLAME,
-	//WSC_CLOSECOMBAT,
-	WSC_HOWITZERS,
-	WSC_ELECTRONIC,
-	WSC_AAGUN,
-	WSC_SLOWMISSILE,
-	WSC_SLOWROCKET,
-	WSC_LAS_SAT,
-	WSC_BOMB,
-	WSC_COMMAND,
-	WSC_EMP,
-	WSC_COUNTER, // Counter missile
-
-	NUM_WEAPON_SUBCLASS,
-
-	INVALID_SUBCLASS
-} WEAPON_SUBCLASS;
-
 // used to define which projectile model to use for the weapon
 typedef enum _movement_model
 {
@@ -162,7 +121,7 @@ typedef struct _body_stats
 
 	UBYTE           size;           ///< How big the body is - affects how hit
 	UDWORD          weaponSlots;    ///< The number of weapon slots on the body
-	UDWORD          armourValue[NUM_HIT_SIDES][NUM_WEAPON_CLASS];   ///< A measure of how much protection the armour provides. Cross referenced with the weapon types.
+	UDWORD          armourValue[NUM_HIT_SIDES][WC_NUM_WEAPON_CLASSES];   ///< A measure of how much protection the armour provides. Cross referenced with the weapon types.
 
 	// A measure of how much energy the power plant outputs
 	UDWORD          powerOutput;    ///< this is the engine output of the body
@@ -382,7 +341,7 @@ typedef struct _body_upgrade
 {
 	UWORD           powerOutput;
 	UWORD           body;
-	UWORD           armourValue[NUM_WEAPON_CLASS];
+	UWORD           armourValue[WC_NUM_WEAPON_CLASSES];
 } BODY_UPGRADE;
 
 #endif // __INCLUDED_STATSDEF_H__

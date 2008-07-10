@@ -56,7 +56,7 @@ static SPECIAL_ABILITY	*asSpecialAbility;
 WEAPON_MODIFIER		asWeaponModifier[WE_NUMEFFECTS][PROPULSION_TYPE_NUM];
 
 //used to hold the current upgrade level per player per weapon subclass
-WEAPON_UPGRADE		asWeaponUpgrade[MAX_PLAYERS][NUM_WEAPON_SUBCLASS];
+WEAPON_UPGRADE		asWeaponUpgrade[MAX_PLAYERS][WSC_NUM_WEAPON_SUBCLASSES];
 SENSOR_UPGRADE		asSensorUpgrade[MAX_PLAYERS];
 ECM_UPGRADE		asECMUpgrade[MAX_PLAYERS];
 REPAIR_UPGRADE		asRepairUpgrade[MAX_PLAYERS];
@@ -187,7 +187,7 @@ void statsInitVars(void)
 	}
 
 	//initialise the upgrade structures
-	memset(asWeaponUpgrade, 0, MAX_PLAYERS * NUM_WEAPON_SUBCLASS * sizeof(WEAPON_UPGRADE));
+	memset(asWeaponUpgrade, 0, MAX_PLAYERS * WSC_NUM_WEAPON_SUBCLASSES * sizeof(WEAPON_UPGRADE));
 	memset(asSensorUpgrade, 0, MAX_PLAYERS * sizeof(SENSOR_UPGRADE));
 	memset(asECMUpgrade, 0, MAX_PLAYERS * sizeof(ECM_UPGRADE));
 	memset(asRepairUpgrade, 0, MAX_PLAYERS * sizeof(REPAIR_UPGRADE));
@@ -577,8 +577,7 @@ BOOL loadWeaponStats(const char *pWeaponData, UDWORD bufferSize)
 		}
 
 		//set the subClass
-		psStats->weaponSubClass = getWeaponSubClass(weaponSubClass);
-		if (psStats->weaponSubClass == INVALID_SUBCLASS)
+		if (!getWeaponSubClass(weaponSubClass, &psStats->weaponSubClass))
 		{
 			return false;
 		}
@@ -2666,80 +2665,83 @@ BOOL getBodySize(const char *pSize, UBYTE *pStore)
 }
 
 /*returns the weapon sub class based on the string name passed in */
-WEAPON_SUBCLASS getWeaponSubClass(const char *pSubClass)
+bool getWeaponSubClass(const char* subClass, WEAPON_SUBCLASS* wclass)
 {
-	if (!strcmp(pSubClass, "CANNON"))
+	if      (strcmp(subClass, "CANNON") == 0)
 	{
-		return WSC_CANNON;
+		*wclass = WSC_CANNON;
 	}
-	if (!strcmp(pSubClass, "MORTARS"))
+	else if (strcmp(subClass, "MORTARS") == 0)
 	{
-		return WSC_MORTARS;
+		*wclass = WSC_MORTARS;
 	}
-	if (!strcmp(pSubClass, "MISSILE"))
+	else if (strcmp(subClass, "MISSILE") == 0)
 	{
-		return WSC_MISSILE;
+		*wclass = WSC_MISSILE;
 	}
-	if (!strcmp(pSubClass, "ROCKET"))
+	else if (strcmp(subClass, "ROCKET") == 0)
 	{
-		return WSC_ROCKET;
+		*wclass = WSC_ROCKET;
 	}
-	if (!strcmp(pSubClass, "ENERGY"))
+	else if (strcmp(subClass, "ENERGY") == 0)
 	{
-		return WSC_ENERGY;
+		*wclass = WSC_ENERGY;
 	}
-	if (!strcmp(pSubClass, "GAUSS"))
+	else if (strcmp(subClass, "GAUSS") == 0)
 	{
-		return WSC_GAUSS;
+		*wclass = WSC_GAUSS;
 	}
-	if (!strcmp(pSubClass, "FLAME"))
+	else if (strcmp(subClass, "FLAME") == 0)
 	{
-		return WSC_FLAME;
+		*wclass = WSC_FLAME;
 	}
-	if (!strcmp(pSubClass, "HOWITZERS"))
+	else if (strcmp(subClass, "HOWITZERS") == 0)
 	{
-		return WSC_HOWITZERS;
+		*wclass = WSC_HOWITZERS;
 	}
-	if (!strcmp(pSubClass, "MACHINE GUN"))
+	else if (strcmp(subClass, "MACHINE GUN") == 0)
 	{
-		return WSC_MGUN;
+		*wclass = WSC_MGUN;
 	}
-	if (!strcmp(pSubClass, "ELECTRONIC"))
+	else if (strcmp(subClass, "ELECTRONIC") == 0)
 	{
-		return WSC_ELECTRONIC;
+		*wclass = WSC_ELECTRONIC;
 	}
-	if (!strcmp(pSubClass, "A-A GUN"))
+	else if (strcmp(subClass, "A-A GUN") == 0)
 	{
-		return WSC_AAGUN;
+		*wclass = WSC_AAGUN;
 	}
-	if (!strcmp(pSubClass, "SLOW MISSILE"))
+	else if (strcmp(subClass, "SLOW MISSILE") == 0)
 	{
-		return WSC_SLOWMISSILE;
+		*wclass = WSC_SLOWMISSILE;
 	}
-	if (!strcmp(pSubClass, "SLOW ROCKET"))
+	else if (strcmp(subClass, "SLOW ROCKET") == 0)
 	{
-		return WSC_SLOWROCKET;
+		*wclass = WSC_SLOWROCKET;
 	}
-	if (!strcmp(pSubClass, "LAS_SAT"))
+	else if (strcmp(subClass, "LAS_SAT") == 0)
 	{
-		return WSC_LAS_SAT;
+		*wclass = WSC_LAS_SAT;
 	}
-	if (!strcmp(pSubClass, "BOMB"))
+	else if (strcmp(subClass, "BOMB") == 0)
 	{
-		return WSC_BOMB;
+		*wclass = WSC_BOMB;
 	}
-	if (!strcmp(pSubClass, "COMMAND"))
+	else if (strcmp(subClass, "COMMAND") == 0)
 	{
-		return WSC_COMMAND;
+		*wclass = WSC_COMMAND;
 	}
-	if (!strcmp(pSubClass, "EMP"))
+	else if (strcmp(subClass, "EMP") == 0)
 	{
-		return WSC_EMP;
+		*wclass = WSC_EMP;
 	}
+        else
+        {
+	    ASSERT(!"Invalid weapon sub class", "Invalid weapon sub class: %s", subClass);
+            return false;
+        }
 
-	//problem if we've got to here
-	ASSERT( false, "Invalid weapon sub class - %s", pSubClass );
-	return INVALID_SUBCLASS;
+	return true;
 }
 
 /*returns the movement model based on the string name passed in */

@@ -45,7 +45,7 @@ extern PROPULSION_TYPES		*asPropulsionTypes;
 extern WEAPON_MODIFIER		asWeaponModifier[WE_NUMEFFECTS][PROPULSION_TYPE_NUM];
 
 //used to hold the current upgrade level per player per weapon subclass
-extern WEAPON_UPGRADE		asWeaponUpgrade[MAX_PLAYERS][NUM_WEAPON_SUBCLASS];
+extern WEAPON_UPGRADE		asWeaponUpgrade[MAX_PLAYERS][WSC_NUM_WEAPON_SUBCLASSES];
 extern SENSOR_UPGRADE		asSensorUpgrade[MAX_PLAYERS];
 extern ECM_UPGRADE			asECMUpgrade[MAX_PLAYERS];
 extern REPAIR_UPGRADE		asRepairUpgrade[MAX_PLAYERS];
@@ -265,7 +265,7 @@ extern SDWORD getCompFromName(UDWORD compType, const char *pName);
 //get the component Inc for a stat based on the Resource name held in Names.txt
 extern SDWORD getCompFromResName(UDWORD compType, const char *pName);
 /*returns the weapon sub class based on the string name passed in */
-extern WEAPON_SUBCLASS getWeaponSubClass(const char *pSubClass);
+extern bool getWeaponSubClass(const char* subClass, WEAPON_SUBCLASS* wclass);
 /*either gets the name associated with the resource (if one) or allocates space and copies pName*/
 extern BOOL allocateName(char **ppStore, const char *pName);
 //converts the name read in from Access into the name which is used in the Stat lists (or ignores it)

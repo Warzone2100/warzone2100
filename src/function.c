@@ -612,8 +612,7 @@ static BOOL loadWeaponUpgradeFunction(const char *pData)
 	//allocate storage for the name
 	storeName((FUNCTION *)psFunction, functionName);
 
-	psFunction->subClass = getWeaponSubClass(weaponSubClass);
-	if (psFunction->subClass == INVALID_SUBCLASS)
+	if (!getWeaponSubClass(weaponSubClass, &psFunction->subClass))
 	{
 		return false;
 	}
@@ -1059,7 +1058,7 @@ void structureArmourUpgrade(FUNCTION *pFunction, STRUCTURE *psBuilding)
 		// TODO: support advanced armour system
 		for (i = 0; i < NUM_HIT_SIDES; i++)
 		{
-			for (j = 0; j < NUM_WEAPON_CLASS; j++)
+			for (j = 0; j < WC_NUM_WEAPON_CLASSES; j++)
 			{
 				psBuilding->armour[i][j] = (UWORD)((psBuilding->armour[i][j] * newBaseArmour) / prevBaseArmour);
 			}
@@ -1425,7 +1424,7 @@ void bodyUpgrade(FUNCTION *pFunction, UBYTE player)
 			asBodyUpgrade[player][DROID_BODY_UPGRADE].body =
 				pUpgrade->body;
 		}
-		for (inc=0; inc < NUM_WEAPON_CLASS; inc++)
+		for (inc=0; inc < WC_NUM_WEAPON_CLASSES; inc++)
 		{
 			if (asBodyUpgrade[player][DROID_BODY_UPGRADE].armourValue[inc] <
 				pUpgrade->armourValue[inc])
@@ -1449,7 +1448,7 @@ void bodyUpgrade(FUNCTION *pFunction, UBYTE player)
 			asBodyUpgrade[player][CYBORG_BODY_UPGRADE].body =
 				pUpgrade->body;
 		}
-		for (inc=0; inc < NUM_WEAPON_CLASS; inc++)
+		for (inc=0; inc < WC_NUM_WEAPON_CLASSES; inc++)
 		{
 			if (asBodyUpgrade[player][CYBORG_BODY_UPGRADE].armourValue[inc] <
 				pUpgrade->armourValue[inc])

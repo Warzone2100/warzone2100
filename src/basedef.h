@@ -75,7 +75,7 @@ typedef enum _object_type
 	SDWORD              sensorPower;		/**< Active sensor power */ \
 	SDWORD              sensorRange;		/**< Range of sensor */ \
 	SDWORD              ECMMod;			/**< Ability to conceal oneself from sensors */ \
-	UDWORD              armour[NUM_HIT_SIDES][NUM_WEAPON_CLASS]
+	UDWORD              armour[NUM_HIT_SIDES][WC_NUM_WEAPON_CLASSES]
 
 #define NEXTOBJ(pointerType) \
 	pointerType     *psNext                         /**< Pointer to the next object in the list */

@@ -694,7 +694,7 @@ static void proj_InFlightDirectFunc(PROJECTILE *psProj)
 			distanceExtensionFactor = 1.5f;
 			break;
 		default:
-			// NUM_WEAPON_SUBCLASS and INVALID_SUBCLASS
+			// WSC_NUM_WEAPON_SUBCLASSES
 			break;
 	}
 

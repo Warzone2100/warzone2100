@@ -31,6 +31,56 @@ enum BODY_SIZE
     SUPER_HEAVY
 end;
 
+# only using KINETIC and HEAT for now
+enum WEAPON_CLASS
+    %max "NUM_WEAPON_CLASSES";
+    %valprefix "WC_";
+
+    # Bullets, etc.
+    KINETIC
+
+    # Rockets, etc. - classed as KINETIC now to save space in DROID
+    #EXPLOSIVE
+
+    # Laser, etc.
+    HEAT
+
+    # others we haven't thought of! - classed as HEAT now to save space in DROID
+    #WC_MISC,                ///< 
+end;
+
+# weapon subclasses used to define which weapons are affected by weapon upgrade
+# functions
+#
+# Watermelon:added a new subclass to do some tests
+enum WEAPON_SUBCLASS
+    %max "NUM_WEAPON_SUBCLASSES";
+    %valprefix "WSC_";
+
+    MGUN
+    CANNON
+    #ARTILLARY
+    MORTARS
+    MISSILE
+    ROCKET
+    ENERGY
+    GAUSS
+    FLAME
+    #CLOSECOMBAT
+    HOWITZERS
+    ELECTRONIC
+    AAGUN
+    SLOWMISSILE
+    SLOWROCKET
+    LAS_SAT
+    BOMB
+    COMMAND
+    EMP
+
+    # Counter missile
+    COUNTER
+end;
+
 enum PROPULSION_TYPE
     %max "NUM";
     WHEELED

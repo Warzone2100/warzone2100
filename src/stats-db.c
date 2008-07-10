@@ -551,8 +551,7 @@ static bool _loadWeaponStats(WEAPON_STATS* stats, SQL_WEAPON_STATS* cols, sqlite
 	}
 
 	// weaponSubClass        TEXT    NOT NULL, -- the subclass to which the weapon belongs
-	stats->weaponSubClass = getWeaponSubClass((const char*)sqlite3_column_text(stmt, cols->weaponSubClass));
-	if (stats->weaponSubClass == INVALID_SUBCLASS)
+	if (!getWeaponSubClass((const char*)sqlite3_column_text(stmt, cols->weaponSubClass), &stats->weaponSubClass))
 	{
 		return false;
 	}

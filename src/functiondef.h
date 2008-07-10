@@ -240,7 +240,7 @@ typedef struct _droidBody_upgrade_function
 {
 	UPGRADE_FUNCTION_STATS;
 	UWORD					body;		//The % to increase the whole vehicle body points by*/
-	UWORD					armourValue[NUM_WEAPON_CLASS];
+	UWORD					armourValue[WC_NUM_WEAPON_CLASSES];
 	UBYTE					cyborg;		//flag to specify the upgrade is valid for cyborgs
 	UBYTE					droid;		/*flag to specify the upgrade is valid
 										  for droids (non cyborgs!)*/

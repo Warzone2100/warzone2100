@@ -2995,7 +2995,7 @@ DROID* buildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player,
 
 	if (cyborgDroid(psDroid))
 	{
-		for (inc = 0; inc < NUM_WEAPON_CLASS; inc++)
+		for (inc = 0; inc < WC_NUM_WEAPON_CLASSES; inc++)
 		{
 			for (impact_side = 0;impact_side < NUM_HIT_SIDES;impact_side=impact_side+1)
 			{
@@ -3006,7 +3006,7 @@ DROID* buildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player,
 	}
 	else
 	{
-		for (inc = 0; inc < NUM_WEAPON_CLASS; inc++)
+		for (inc = 0; inc < WC_NUM_WEAPON_CLASSES; inc++)
 		{
 			for (impact_side = 0;impact_side < NUM_HIT_SIDES;impact_side=impact_side+1)
 			{

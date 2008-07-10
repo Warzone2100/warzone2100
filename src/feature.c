@@ -334,7 +334,7 @@ FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,BOOL FromSave)
 	{
 		int j;
 
-		for (j = 0; j < NUM_WEAPON_CLASS; j++)
+		for (j = 0; j < WC_NUM_WEAPON_CLASSES; j++)
 		{
 			psFeature->armour[i][j] = psFeature->psStats->armourValue;
 		}

@@ -63,6 +63,88 @@ typedef enum BODY_SIZE
 	SIZE_SUPER_HEAVY,
 } BODY_SIZE;
 
+/**
+ * only using KINETIC and HEAT for now
+ */
+typedef enum WEAPON_CLASS
+{
+	/**
+	 * Bullets, etc.
+	 */
+	WC_KINETIC,
+
+	/**
+	 * Rockets, etc. - classed as KINETIC now to save space in DROID
+	 *EXPLOSIVE
+	 * Laser, etc.
+	 */
+	WC_HEAT,
+
+	/**
+	 * The number of enumerators in this enum.
+	 */
+	WC_NUM_WEAPON_CLASSES,
+} WEAPON_CLASS;
+
+/**
+ * weapon subclasses used to define which weapons are affected by weapon upgrade
+ * functions
+ *
+ * Watermelon:added a new subclass to do some tests
+ */
+typedef enum WEAPON_SUBCLASS
+{
+	WSC_MGUN,
+
+	WSC_CANNON,
+
+	/**
+	 *ARTILLARY
+	 */
+	WSC_MORTARS,
+
+	WSC_MISSILE,
+
+	WSC_ROCKET,
+
+	WSC_ENERGY,
+
+	WSC_GAUSS,
+
+	WSC_FLAME,
+
+	/**
+	 *CLOSECOMBAT
+	 */
+	WSC_HOWITZERS,
+
+	WSC_ELECTRONIC,
+
+	WSC_AAGUN,
+
+	WSC_SLOWMISSILE,
+
+	WSC_SLOWROCKET,
+
+	WSC_LAS_SAT,
+
+	WSC_BOMB,
+
+	WSC_COMMAND,
+
+	WSC_EMP,
+
+	/**
+	 * Counter missile
+	 */
+	WSC_COUNTER,
+
+	/**
+	 * The number of enumerators in this enum.
+	 */
+	WSC_NUM_WEAPON_SUBCLASSES,
+} WEAPON_SUBCLASS;
+
 typedef enum PROPULSION_TYPE
 {
 	PROPULSION_TYPE_WHEELED,

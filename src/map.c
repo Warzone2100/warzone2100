@@ -351,7 +351,7 @@ static void objectStatTagged(BASE_OBJECT *psObj, int body, int resistance)
 
 	tagWriteEnter(0x03, 1);
 	tagWrite(0x01, body);
-	tagWrite(0x02, NUM_WEAPON_CLASS);
+	tagWrite(0x02, WC_NUM_WEAPON_CLASSES);
 	tagWriteEnter(0x03, NUM_HIT_SIDES);
 	for (i = 0; i < NUM_HIT_SIDES; i++)
 	{
