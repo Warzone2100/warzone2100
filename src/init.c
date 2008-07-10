@@ -415,7 +415,10 @@ BOOL systemInitialise(void)
 		{
 			debug(LOG_SOUND, "Could not initialise audio system: Continuing without audio");
 		}
-		cdAudio_Open(UserMusicPath);
+		if (war_GetMusicEnabled())
+		{
+			cdAudio_Open(UserMusicPath);
+		}
 	}
 	else
 	{

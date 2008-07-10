@@ -143,6 +143,11 @@ BOOL loadConfig(void)
 		setWarzoneKeyNumeric("debugmode", bAllowDebugMode);
 	}
 
+	if (getWarzoneKeyNumeric("music_enabled", &val))
+	{
+		war_SetMusicEnabled(val);
+	}
+
 	if (getWarzoneKeyNumeric("SinglePlayerFPS", &val))
 	{
 		setSinglePlayerFrameLimit(val);
@@ -609,6 +614,7 @@ BOOL saveConfig(void)
 	setWarzoneKeyNumeric("voicevol", (int)(sound_GetUIVolume() * 100.0));
 	setWarzoneKeyNumeric("fxvol", (int)(sound_GetEffectsVolume() * 100.0));
 	setWarzoneKeyNumeric("cdvol", (int)(sound_GetMusicVolume() * 100.0));
+	setWarzoneKeyNumeric("music_enabled", war_GetMusicEnabled());
 
 	setWarzoneKeyNumeric("width", war_GetWidth());
 	setWarzoneKeyNumeric("height", war_GetHeight());

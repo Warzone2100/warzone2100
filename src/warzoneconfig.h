@@ -63,6 +63,8 @@ extern void war_SetPauseOnFocusLoss(bool enabled);
 extern bool war_GetPauseOnFocusLoss(void);
 extern bool war_GetColouredCursor(void);
 extern void war_SetColouredCursor(bool enabled);
+extern bool war_GetMusicEnabled(void);
+extern void war_SetMusicEnabled(bool enabled);
 
 /**
  * Enable or disable sound initialization
