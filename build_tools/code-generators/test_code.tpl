@@ -31,11 +31,6 @@ struct COMPONENT
     # the design screen.
     bool                designable;
 
-    # @TODO devise some kind of type to refer to IMD models; perhaps just
-    #       filenames will suffice?
-    #
-    #       We'll name it IMD_model for now.
-    #
     # The "base" IMD model representing this component in 3D space.
     IMD_model optional  baseModel;
 end;
@@ -70,6 +65,7 @@ struct BODY
     # Engine output of this body's engine
     real                powerOutput;
 
+    # An IMD model representing this body in burning form
     IMD_model optional  flameModel;
 
     # list of IMDs to use for propulsion unit - up to numPropulsionStats
