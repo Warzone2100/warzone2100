@@ -82,11 +82,7 @@ WZ_LDFLAGS+=-lSDL -lSDL_net -lpng12 -lphysfs -lz -lvorbisfile -lvorbis -logg -lp
 
 # Additional target-platform-dependend libs
 
-ifeq ($(strip $(TARGET)),windows)
 WZ_LDFLAGS+=-lGLC -lglu32 -lopengl32 -lopenal32 -ldbghelp -lshfolder -lwinmm -lwsock32 -lbfd -liberty
-else
-WZ_LDFLAGS+=-lGLC -lGLU -lGL -lopenal
-endif
 
 
 # Additionaly link against the deps of our deps
