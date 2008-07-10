@@ -38,12 +38,12 @@ end;
 # Will contain all data associated with a body
 struct BODY
     %inherit COMPONENT;
-    %loadFunc "loadBodyStatsFromDB";
-    %preLoadTable maxId;
+    #%loadFunc "loadBodyStatsFromDB";
+    %preLoadTable maxId
         if (!statsAllocBody($maxId))
             ABORT;
     end;
-    %postLoadRow curRow curId;
+    %postLoadRow curRow curId
         // set the max stat values for the design screen
         if ($curRow->designable)
         {
