@@ -32,6 +32,18 @@ sub parseEnum
         {
             push @curComment, substr($1, 1) if $1;
         }
+        # Parse struct-level qualifiers
+        elsif (/^\s*%(.*)\s*$/)
+        {
+            die "error: Cannot give enum-level qualifiers after defining fields" if exists($curEnum{"values"});
+
+            $_ = $1;
+
+            if    (/^max\s+\"([^\"]+)\"\s*;$/)
+            {
+                ${$curEnum{"qualifiers"}}{"max"} = $1;
+            }
+        }
         elsif (/^\s*(\w+)\s*$/)
         {
             my %value = (name=>$1);

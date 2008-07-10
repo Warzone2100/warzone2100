@@ -173,7 +173,15 @@ sub printEnum()
 
         $$output .= "\t${$enum}{\"name\"}_${name},\n";
 
-        $$output .= "\n" if @values;
+        $$output .= "\n" if @values or exists(${${$enum}{"qualifiers"}}{"max"});
+    }
+
+    if (exists(${${$enum}{"qualifiers"}}{"max"}))
+    {
+        $$output .= "\t/**\n"
+                  . "\t * The number of enumerators in this enum.\n"
+                  . "\t */\n"
+                  . "\t${$enum}{\"name\"}_${${$enum}{\"qualifiers\"}}{\"max\"},\n";
     }
 
     # Finish printing the enum
