@@ -39,7 +39,7 @@ sub parseEnum
 
             $_ = $1;
 
-            if    (/^valprefix\s+\"([^\"]+)\"\s*;$/)
+            if    (/^valprefix\s+\"([^\"]*)\"\s*;$/)
             {
                 ${$curEnum{"qualifiers"}}{"valprefix"} = $1;
             }
