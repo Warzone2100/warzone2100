@@ -326,6 +326,11 @@ static BOOL		obstruction;
  */
 static bool fpathVisCallback(Vector3i pos, int dist, void* data)
 {
+	/* Has to be -1 to make sure that it doesn't match any enumerated
+	 * constant from PROPULSION_TYPE.
+	 */
+	static const PROPULSION_TYPE prop = (PROPULSION_TYPE)-1;
+
 	// See if this point is past the final point (dot product)
 	int vx = pos.x - finalX, vy = pos.y - finalY;
 
@@ -334,7 +339,7 @@ static bool fpathVisCallback(Vector3i pos, int dist, void* data)
 		return false;
 	}
 
-	if (fpathBlockingTile(map_coord(pos.x), map_coord(pos.y), INVALID_PROP_TYPE))
+	if (fpathBlockingTile(map_coord(pos.x), map_coord(pos.y), prop))
 	{
 		// found an obstruction
 		obstruction = true;

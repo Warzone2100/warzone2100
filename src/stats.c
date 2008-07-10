@@ -953,46 +953,50 @@ BOOL loadBrainStats(const char *pBrainData, UDWORD bufferSize)
 
 
 /*returns the propulsion type based on the string name passed in */
-PROPULSION_TYPE getPropulsionType(const char *pType)
+bool getPropulsionType(const char* typeName, PROPULSION_TYPE* type)
 {
-	if (!strcmp(pType, "Wheeled"))
+	if      (strcmp(typeName, "Wheeled") == 0)
 	{
-		return WHEELED;
+		*type = WHEELED;
 	}
-	if (!strcmp(pType, "Tracked"))
+	else if (strcmp(typeName, "Tracked") == 0)
 	{
-		return TRACKED;
+		*type = TRACKED;
 	}
-	if (!strcmp(pType, "Legged"))
+	else if (strcmp(typeName, "Legged") == 0)
 	{
-		return LEGGED;
+		*type = LEGGED;
 	}
-	if (!strcmp(pType, "Hover"))
+	else if (strcmp(typeName, "Hover") == 0)
 	{
-		return HOVER;
+		*type = HOVER;
 	}
-	if (!strcmp(pType, "Ski"))
+	else if (strcmp(typeName, "Ski") == 0)
 	{
-		return SKI;
+		*type = SKI;
 	}
-	if (!strcmp(pType, "Lift"))
+	else if (strcmp(typeName, "Lift") == 0)
 	{
-		return LIFT;
+		*type = LIFT;
 	}
-	if (!strcmp(pType, "Propellor"))
+	else if (strcmp(typeName, "Propellor") == 0)
 	{
-		return PROPELLOR;
+		*type = PROPELLOR;
 	}
-	if (!strcmp(pType, "Half-Tracked"))
+	else if (strcmp(typeName, "Half-Tracked") == 0)
 	{
-		return HALF_TRACKED;
+		*type = HALF_TRACKED;
 	}
-	if (!strcmp(pType, "Jump"))
+	else if (strcmp(typeName, "Jump") == 0)
 	{
-		return JUMP;
+		*type = JUMP;
+	}
+	else
+	{
+		return false;
 	}
 
-	return INVALID_PROP_TYPE;
+	return true;
 }
 
 /*Load the Propulsion stats from the file exported from Access*/
@@ -1051,8 +1055,7 @@ BOOL loadPropulsionStats(const char *pPropulsionData, UDWORD bufferSize)
 		}
 
 		//set up the stats type
-		psStats->propulsionType = getPropulsionType(type);
-		if (psStats->propulsionType == INVALID_PROP_TYPE)
+		if (!getPropulsionType(type, &psStats->propulsionType))
 		{
 			debug( LOG_ERROR, "loadPropulsionStats: Invalid Propulsion type for %s", getStatName(psStats) );
 			abort();
@@ -1562,7 +1565,8 @@ BOOL loadPropulsionTypes(const char *pPropTypeData, UDWORD bufferSize)
 {
 	const unsigned int NumTypes = NUM_PROP_TYPES;
 	PROPULSION_TYPES *pPropType;
-	unsigned int i, multiplier, type;
+	unsigned int i, multiplier;
+	PROPULSION_TYPE type;
 	char PropulsionName[MAX_STR_LENGTH], flightName[MAX_STR_LENGTH];
 
 	//allocate storage for the stats
@@ -1583,8 +1587,7 @@ BOOL loadPropulsionTypes(const char *pPropTypeData, UDWORD bufferSize)
 			(char*)&PropulsionName, (char*)&flightName, &multiplier);
 
 		//set the pointer for this record based on the name
-		type = getPropulsionType(PropulsionName);
-		if (type == INVALID_PROP_TYPE)
+		if (!getPropulsionType(PropulsionName, &type))
 		{
 			debug( LOG_ERROR, "loadPropulsionTypes: Invalid Propulsion type - %s", PropulsionName );
 			abort();
@@ -2008,8 +2011,7 @@ BOOL loadWeaponModifiers(const char *pWeapModData, UDWORD bufferSize)
 			return false;
 		}
 		//get the propulsion inc
-		propInc = getPropulsionType(propulsionName);
-		if (propInc == INVALID_PROP_TYPE)
+		if (!getPropulsionType(propulsionName, &propInc))
 		{
 			debug( LOG_ERROR, "loadWeaponModifiers: Invalid Propulsion type - %s", propulsionName );
 			abort();
@@ -2042,7 +2044,7 @@ BOOL loadPropulsionSounds(const char *pPropSoundData, UDWORD bufferSize)
 						szIdle[MAX_STR_LENGTH], szMoveOff[MAX_STR_LENGTH],
 						szMove[MAX_STR_LENGTH], szHiss[MAX_STR_LENGTH],
 						szShutDown[MAX_STR_LENGTH];
-	UDWORD				type;
+	PROPULSION_TYPE type;
 	PROPULSION_TYPES	*pPropType;
 
 
@@ -2087,8 +2089,7 @@ BOOL loadPropulsionSounds(const char *pPropSoundData, UDWORD bufferSize)
 			return false;
 		}
 
-		type = getPropulsionType(propulsionName);
-		if (type == INVALID_PROP_TYPE)
+		if (!getPropulsionType(propulsionName, &type))
 		{
 			debug( LOG_ERROR, "loadPropulsionSounds: Invalid Propulsion type - %s", propulsionName );
 			abort();

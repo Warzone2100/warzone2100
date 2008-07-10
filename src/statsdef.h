@@ -234,8 +234,6 @@ typedef enum _propulsion_type
 	JUMP,
 
 	NUM_PROP_TYPES,
-
-	INVALID_PROP_TYPE
 } PROPULSION_TYPE;
 
 typedef struct _propulsion_stats

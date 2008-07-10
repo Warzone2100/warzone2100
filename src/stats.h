@@ -279,8 +279,22 @@ extern BOOL getBodySize(const char *pSize, UBYTE *pStore);
 // Pass in a stat and get its name
 extern const char* getStatName(const void * pStat);
 
-/*returns the propulsion type based on the string name passed in */
-extern PROPULSION_TYPE getPropulsionType(const char *pType);
+/**
+ * Determines the propulsion type indicated by the @c typeName string passed
+ * in.
+ *
+ * @param typeName  name of the propulsion type to determine the enumerated
+ *                  constant for.
+ * @param[out] type Will contain an enumerated constant representing the given
+ *                  propulsion type, if successful (as indicated by the return
+ *                  value).
+ *
+ * @return true if successful, false otherwise. If successful, @c *type will
+ *         contain a valid propulsion type enumerator, otherwise its value will
+ *         be left unchanged.
+ */
+extern bool getPropulsionType(const char* typeName, PROPULSION_TYPE* type);
+
 /*returns the weapon effect based on the string name passed in */
 extern WEAPON_EFFECT getWeaponEffect(const char *pWeaponEffect);
 

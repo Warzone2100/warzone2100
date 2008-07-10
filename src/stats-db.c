@@ -1019,8 +1019,7 @@ bool loadPropulsionStatsFromDB(sqlite3* db, const char* tableName)
 		}
 
 		// type                  TEXT    NOT NULL, -- Type of propulsion
-		stats->propulsionType = getPropulsionType((const char*)sqlite3_column_text(stmt, getColNumByName(stmt, "type")));
-		if (stats->propulsionType == INVALID_PROP_TYPE)
+		if (!getPropulsionType((const char*)sqlite3_column_text(stmt, getColNumByName(stmt, "type")), &stats->propulsionType))
 		{
 			debug(LOG_ERROR, "loadPropulsionStatsFromDB: Invalid Propulsion type for %s", getStatName(stats));
 			abort();
