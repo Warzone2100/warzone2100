@@ -89,4 +89,29 @@ typedef enum PROPULSION_TYPE
 	PROPULSION_TYPE_NUM,
 } PROPULSION_TYPE;
 
+typedef enum FIREONMOVE
+{
+	/**
+	 * no capability - droid must stop
+	 */
+	FOM_NO,
+
+	/**
+	 * partial capability - droid has 50% chance to hit
+	 */
+	FOM_PARTIAL,
+
+	/**
+	 * full capability - droid fires normally on move
+	 */
+	FOM_YES,
+} FIREONMOVE;
+
+typedef enum TRAVEL_MEDIUM
+{
+	GROUND,
+
+	AIR,
+} TRAVEL_MEDIUM;
+
 #endif // __INCLUDED_DB_TEMPLATE_SCHEMA_STRUCTDEF_STATS_DB2_TPL_H__

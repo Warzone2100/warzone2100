@@ -243,13 +243,6 @@ typedef struct _repair_stats
 	iIMDShape*      pMountGraphic;          ///< The turret mount to use
 } REPAIR_STATS;
 
-typedef enum _fireonmove
-{
-	FOM_NO,         ///< no capability - droid must stop
-	FOM_PARTIAL,    ///< partial capability - droid has 50% chance to hit
-	FOM_YES,        ///< full capability - droid fires normally on move
-} FIREONMOVE;
-
 typedef struct _weapon_stats
 {
 	/* Common stats */
@@ -321,12 +314,6 @@ typedef struct _construct_stats
 /************************************************************************************
  * Additional stats tables
  ************************************************************************************/
-
-typedef enum _travel_medium
-{
-	GROUND,
-	AIR
-} TRAVEL_MEDIUM;
 
 typedef struct _propulsion_types
 {

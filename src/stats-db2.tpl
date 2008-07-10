@@ -43,3 +43,23 @@ enum PROPULSION_TYPE
     HALF_TRACKED
     JUMP
 end;
+
+enum FIREONMOVE
+    %valprefix "FOM_";
+
+    # no capability - droid must stop
+    NO
+
+    # partial capability - droid has 50% chance to hit
+    PARTIAL
+
+    # full capability - droid fires normally on move
+    YES
+end;
+
+enum TRAVEL_MEDIUM
+    %valprefix "";
+
+    GROUND
+    AIR
+end;
