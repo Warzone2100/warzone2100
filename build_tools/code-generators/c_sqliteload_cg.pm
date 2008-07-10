@@ -633,7 +633,10 @@ sub startFile()
 {
     my ($output, $name, $outputfile) = @_;
 
-    $$output .= "/* This file is generated automatically, do not edit, change the source ($name) instead. */\n\n";
+    $$output .= "/* This file is generated automatically, do not edit, change the source ($name) instead. */\n"
+              . "\n"
+              . "#include \"lib/sqlite3/sqlite3.h\"\n"
+              . "\n";
 
     $filename = $name;
     if ($outputfile)
