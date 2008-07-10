@@ -106,29 +106,29 @@ sub parseStruct
             return;
         }
         # Parse struct-level qualifiers
-        elsif (/^\s*%(.*)\s*;\s*$/)
+        elsif (/^\s*%(.*)\s*$/)
         {
             die "error: Cannot give struct-level qualifiers after defining fields" if exists($curStruct{"fields"});
 
             $_ = $1;
 
-            if    (/^prefix\s+\"([^\"]+)\"$/)
+            if    (/^prefix\s+\"([^\"]+)\"\s*;$/)
             {
                 ${$curStruct{"qualifiers"}}{"prefix"} = $1;
             }
-            elsif (/^loadFunc\s+\"([^\"]+)\"$/)
+            elsif (/^loadFunc\s+\"([^\"]+)\"\s*;$/)
             {
                 my %loadFunc = (name=>$1, line=>$$count);
 
                 ${$curStruct{"qualifiers"}}{"loadFunc"} = \%loadFunc;
             }
-            elsif (/^abstract$/)
+            elsif (/^abstract\s*;$/)
             {
                 die "error: Cannot declare a struct \"abstract\" if it inherits from another" if exists(${$curStruct{"qualifiers"}}{"inherit"});
 
                 ${$curStruct{"qualifiers"}}{"abstract"} = 1;
             }
-            elsif (/^inherit\s+(\w+)$/)
+            elsif (/^inherit\s+(\w+)\s*;$/)
             {
                 die "error: structs declared \"abstract\" cannot inherit" if exists(${$curStruct{"qualifiers"}}{"abstract"});
                 die "error: Cannot inherit from struct \"$1\" as it isn't (fully) declared yet" unless exists($structMap{$1});
