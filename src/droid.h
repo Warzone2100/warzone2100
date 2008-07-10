@@ -559,10 +559,6 @@ do { \
 \
 	for (i = 0; i < DROID_MAXWEAPS; ++i) \
 		assert(droid->asWeaps[i].lastFired <= gameTime); \
-\
-	for (i = 0; i < DROID_MAXWEAPS; ++i) \
-		if (droid->psActionTarget[i]) \
-			assert(droid->psActionTarget[i]->direction >= 0.0f); \
 } while (0)
 
 // Minimum damage a weapon will deal to its target

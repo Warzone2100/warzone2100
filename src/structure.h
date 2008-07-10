@@ -453,10 +453,6 @@ do { \
 	for (i = 0; i < STRUCT_MAXWEAPS; ++i) \
 	{ \
 		ASSERT((object)->turretRotation[i] <= 360, "Out of range turret rotation (turret %u; rotation: %u)", i, (unsigned int)(object)->turretRotation[i]); \
-		if ((object)->psTarget[i]) \
-		{ \
-			CHECK_OBJECT((object)->psTarget[i]); \
-		} \
 	} \
 } while (0)
 
