@@ -265,6 +265,8 @@ sub startFile()
     printHdrGuard($output, $outfile);
     $$output .= "\n\n";
 
+    return unless $startTpl;
+
     $$output .= "#line 1 \"$startTpl\"\n";
     open (TEMPL, $startTpl);
     while (<TEMPL>)
