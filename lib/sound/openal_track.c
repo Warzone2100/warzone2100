@@ -685,6 +685,7 @@ AUDIO_STREAM* sound_PlayStreamWithBuf(PHYSFS_file* fileHandle, float volume, voi
 
 	if ( !openal_initialized )
 	{
+		debug(LOG_WARNING, "OpenAL isn't initialized, not creating an audio stream");
 		return NULL;
 	}
 
@@ -761,6 +762,8 @@ AUDIO_STREAM* sound_PlayStreamWithBuf(PHYSFS_file* fileHandle, float volume, voi
 	// Bail out if we didn't fill any buffers
 	if (i == 0)
 	{
+		debug(LOG_ERROR, "Failed to fill buffers with decoded audio data!");
+
 		// Destroy the decoder
 		sound_DestroyOggVorbisDecoder(stream->decoder);
 
