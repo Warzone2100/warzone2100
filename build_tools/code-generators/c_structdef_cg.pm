@@ -165,6 +165,9 @@ sub printEnum()
 
     my @values = @{${$enum}{"values"}};
 
+    my $valprefix = "${$enum}{\"name\"}_";
+    $valprefix = ${${$enum}{"qualifiers"}}{"valprefix"} if exists(${${$enum}{"qualifiers"}}{"valprefix"});
+
     while (@values)
     {
         my $value = shift(@values);
@@ -172,7 +175,7 @@ sub printEnum()
 
         printComments($output, ${$value}{"comment"}, 1);
 
-        $$output .= "\t${$enum}{\"name\"}_${name},\n";
+        $$output .= "\t${valprefix}${name},\n";
 
         $$output .= "\n" if @values or exists(${${$enum}{"qualifiers"}}{"max"});
     }
@@ -182,7 +185,7 @@ sub printEnum()
         $$output .= "\t/**\n"
                   . "\t * The number of enumerators in this enum.\n"
                   . "\t */\n"
-                  . "\t${$enum}{\"name\"}_${${$enum}{\"qualifiers\"}}{\"max\"},\n";
+                  . "\t${valprefix}${${$enum}{\"qualifiers\"}}{\"max\"},\n";
     }
 
     # Finish printing the enum

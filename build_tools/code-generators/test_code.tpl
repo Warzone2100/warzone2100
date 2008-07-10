@@ -10,6 +10,21 @@ struct BASE
     string optional     name;
 end;
 
+enum COMPONENT_TYPE
+    %max "NUMCOMPONENTS";
+    %valprefix "COMP_";
+
+    UNKNOWN
+    BODY
+    BRAIN
+    PROPULSION
+    REPAIRUNIT
+    ECM
+    SENSOR
+    CONSTRUCT
+    WEAPON
+end;
+
 # Represents a researchable component statistic
 struct COMPONENT
     %inherit BASE;
