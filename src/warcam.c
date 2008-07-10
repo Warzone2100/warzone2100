@@ -740,7 +740,7 @@ static void updateCameraAcceleration(UBYTE update)
 		const DROID *psDroid = (DROID*)trackingCamera.target;
 		const PROPULSION_STATS *psPropStats = &asPropulsionStats[psDroid->asBits[COMP_PROPULSION].nStat];
 
-		if (psPropStats->propulsionType == LIFT)
+		if (psPropStats->propulsionType == PROPULSION_TYPE_LIFT)
 		{
 			bFlying = true;
 		}
@@ -856,7 +856,7 @@ PROPULSION_STATS	*psPropStats;
 	{
 		psDroid = (DROID*)trackingCamera.target;
 		psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
-		if(psPropStats->propulsionType == LIFT)
+		if(psPropStats->propulsionType == PROPULSION_TYPE_LIFT)
 		{
 			bFlying = true;
 		}
@@ -899,7 +899,7 @@ static void updateCameraRotationAcceleration( UBYTE update )
 	{
 		DROID *psDroid = (DROID*)trackingCamera.target;
 		psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
-		if(psPropStats->propulsionType == LIFT)
+		if(psPropStats->propulsionType == PROPULSION_TYPE_LIFT)
 		{
 			UDWORD	droidHeight, difHeight, droidMapHeight;
 
@@ -1147,7 +1147,7 @@ BOOL	bFlying;
 	{
 		psDroid = (DROID*)trackingCamera.target;
 		psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
-		if (psPropStats->propulsionType == LIFT)
+		if (psPropStats->propulsionType == PROPULSION_TYPE_LIFT)
 		{
 				bFlying = true;
 		}

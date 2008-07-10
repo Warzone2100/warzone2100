@@ -2366,7 +2366,7 @@ static BOOL structClearTile(UWORD x, UWORD y)
 	DROID	*psCurr;
 
 	/* Check for a structure */
-	if (fpathBlockingTile(x, y, WHEELED))
+	if (fpathBlockingTile(x, y, PROPULSION_TYPE_WHEELED))
 	{
 		debug(LOG_NEVER, "failed - blocked");
 		return false;
@@ -4470,7 +4470,7 @@ BOOL validLocation(BASE_STATS *psStats, UDWORD x, UDWORD y, UDWORD player,
 	{
 		// not positioning a structure
 		valid = true;
-		if (fpathBlockingTile(x, y, WHEELED))
+		if (fpathBlockingTile(x, y, PROPULSION_TYPE_WHEELED))
 		{
 			valid = false;
 		}
@@ -5972,7 +5972,7 @@ BOOL validTemplateForFactory(DROID_TEMPLATE *psTemplate, STRUCTURE *psFactory)
 	}
 	//check for VTOL droid
 	else if ((asPropulsionStats + psTemplate->asParts[COMP_PROPULSION])->
-		propulsionType == LIFT)
+		propulsionType == PROPULSION_TYPE_LIFT)
 	{
 		if (psFactory->pStructureType->type != REF_VTOL_FACTORY)
 		{
@@ -5996,7 +5996,7 @@ BOOL validTemplateForFactory(DROID_TEMPLATE *psTemplate, STRUCTURE *psFactory)
 	else if (psFactory->pStructureType->type == REF_VTOL_FACTORY)
 	{
 		if ((asPropulsionStats + psTemplate->asParts[COMP_PROPULSION])->
-			propulsionType != LIFT)
+			propulsionType != PROPULSION_TYPE_LIFT)
 		{
 			return false;
 		}

@@ -3211,7 +3211,7 @@ static UDWORD intCalcSpeed(TYPE_OF_TERRAIN type, PROPULSION_STATS *psProp)
     //we want the design screen to show zero speed over water for all prop types except Hover and Vtol
     if (type == TER_WATER)
     {
-        if (!(psProp->propulsionType == HOVER || psProp->propulsionType == LIFT))
+        if (!(psProp->propulsionType == PROPULSION_TYPE_HOVER || psProp->propulsionType == PROPULSION_TYPE_LIFT))
         {
             return 0;
         }
@@ -4880,11 +4880,11 @@ static BOOL intAddTemplateForm(DROID_TEMPLATE *psSelected)
 	return _intAddTemplateForm(psSelected);
 }
 
-//checks if the template has LIFT propulsion attached - returns true if it does
+//checks if the template has PROPULSION_TYPE_LIFT propulsion attached - returns true if it does
 BOOL checkTemplateIsVtol(DROID_TEMPLATE *psTemplate)
 {
     if (asPropulsionStats[psTemplate->asParts[COMP_PROPULSION]].
-        propulsionType == LIFT)
+        propulsionType == PROPULSION_TYPE_LIFT)
     {
         return true;
     }

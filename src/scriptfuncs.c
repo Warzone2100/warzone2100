@@ -5565,7 +5565,7 @@ static BOOL structDoubleCheck(BASE_STATS *psStat,UDWORD xx,UDWORD yy, SDWORD max
 	y = yTL;	// top
 	for(x = xTL;x!=xBR+1;x++)
 	{
-		if (fpathBlockingTile(x, y, WHEELED))
+		if (fpathBlockingTile(x, y, PROPULSION_TYPE_WHEELED))
 		{
 			count++;
 			break;
@@ -5575,7 +5575,7 @@ static BOOL structDoubleCheck(BASE_STATS *psStat,UDWORD xx,UDWORD yy, SDWORD max
 	y = yBR;	// bottom
 	for(x = xTL;x!=xBR+1;x++)
 	{
-		if (fpathBlockingTile(x, y, WHEELED))
+		if (fpathBlockingTile(x, y, PROPULSION_TYPE_WHEELED))
 		{
 			count++;
 			break;
@@ -5585,7 +5585,7 @@ static BOOL structDoubleCheck(BASE_STATS *psStat,UDWORD xx,UDWORD yy, SDWORD max
 	x = xTL;	// left
 	for(y = yTL+1; y!=yBR; y++)
 	{
-		if (fpathBlockingTile(x, y, WHEELED))
+		if (fpathBlockingTile(x, y, PROPULSION_TYPE_WHEELED))
 		{
 			count++;
 			break;
@@ -5595,7 +5595,7 @@ static BOOL structDoubleCheck(BASE_STATS *psStat,UDWORD xx,UDWORD yy, SDWORD max
 	x = xBR;	// right
 	for(y = yTL+1; y!=yBR; y++)
 	{
-		if (fpathBlockingTile(x, y, WHEELED))
+		if (fpathBlockingTile(x, y, PROPULSION_TYPE_WHEELED))
 		{
 			count++;
 			break;
@@ -7273,7 +7273,7 @@ BOOL ThreatInRange(SDWORD player, SDWORD range, SDWORD rangeX, SDWORD rangeY, BO
 				}
 
 				//if VTOLs are excluded, skip them
-				if(!bVTOLs && ((asPropulsionStats[psDroid->asBits[COMP_PROPULSION].nStat].propulsionType == LIFT) || (psDroid->droidType == DROID_TRANSPORTER)))
+				if(!bVTOLs && ((asPropulsionStats[psDroid->asBits[COMP_PROPULSION].nStat].propulsionType == PROPULSION_TYPE_LIFT) || (psDroid->droidType == DROID_TRANSPORTER)))
 				{
 					continue;
 				}
@@ -7896,7 +7896,7 @@ static UDWORD costOrAmountInRange(SDWORD player, SDWORD lookingPlayer, SDWORD ra
 			}
 
 			//if VTOLs are excluded, skip them
-			if(!bVTOLs && ((asPropulsionStats[psDroid->asBits[COMP_PROPULSION].nStat].propulsionType == LIFT) || (psDroid->droidType == DROID_TRANSPORTER)))
+			if(!bVTOLs && ((asPropulsionStats[psDroid->asBits[COMP_PROPULSION].nStat].propulsionType == PROPULSION_TYPE_LIFT) || (psDroid->droidType == DROID_TRANSPORTER)))
 			{
 				continue;
 			}
@@ -8297,7 +8297,7 @@ UDWORD numEnemyObjInRange(SDWORD player, SDWORD range, SDWORD rangeX, SDWORD ran
 			if(psDroid->visible[player])		//can see this droid?
 			{
 				//if VTOLs are excluded, skip them
-				if(!bVTOLs && ((asPropulsionStats[psDroid->asBits[COMP_PROPULSION].nStat].propulsionType == LIFT) || (psDroid->droidType == DROID_TRANSPORTER)))
+				if(!bVTOLs && ((asPropulsionStats[psDroid->asBits[COMP_PROPULSION].nStat].propulsionType == PROPULSION_TYPE_LIFT) || (psDroid->droidType == DROID_TRANSPORTER)))
 				{
 					continue;
 				}
@@ -8813,7 +8813,7 @@ BOOL scrGetClosestEnemy(void)
 				}
 
 				//if VTOLs are excluded, skip them
-				if(!bVTOLs && ((asPropulsionStats[psDroid->asBits[COMP_PROPULSION].nStat].propulsionType == LIFT) || (psDroid->droidType == DROID_TRANSPORTER)))
+				if(!bVTOLs && ((asPropulsionStats[psDroid->asBits[COMP_PROPULSION].nStat].propulsionType == PROPULSION_TYPE_LIFT) || (psDroid->droidType == DROID_TRANSPORTER)))
 				{
 					continue;
 				}
@@ -9184,7 +9184,7 @@ BOOL scrGetClosestEnemyDroidByType(void)
 		for(psDroid = apsDroidLists[i]; psDroid; psDroid = psDroid->psNext)
 		{
 			//if VTOLs are excluded, skip them (don't check for transporter this time)
-			if(!bVTOLs && (asPropulsionStats[psDroid->asBits[COMP_PROPULSION].nStat].propulsionType == LIFT) )
+			if(!bVTOLs && (asPropulsionStats[psDroid->asBits[COMP_PROPULSION].nStat].propulsionType == PROPULSION_TYPE_LIFT) )
 			{
 				continue;
 			}

@@ -336,7 +336,7 @@ PROPULSION_STATS	*psPropStats;
 					camToggleStatus();
 				}
 				psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
-				if ( psPropStats->propulsionType == LIFT )
+				if ( psPropStats->propulsionType == PROPULSION_TYPE_LIFT )
 				{
 					/* Track vtols for longer */
 					demoCamInterval = 3*DEFAULT_DEMO_INTERVAL;

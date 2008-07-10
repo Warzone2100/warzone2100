@@ -81,19 +81,19 @@ char	selInfo[255];
 		switch(droidType)
 		{
 		case	DST_VTOL:
-			retVal = selSelectAllSameProp(player,LIFT,bOnScreen);
+			retVal = selSelectAllSameProp(player,PROPULSION_TYPE_LIFT,bOnScreen);
 			break;
 		case	DST_HOVER:
-			retVal = selSelectAllSameProp(player,HOVER,bOnScreen);
+			retVal = selSelectAllSameProp(player,PROPULSION_TYPE_HOVER,bOnScreen);
 			break;
 		case	DST_WHEELED:
-			retVal = selSelectAllSameProp(player,WHEELED,bOnScreen);
+			retVal = selSelectAllSameProp(player,PROPULSION_TYPE_WHEELED,bOnScreen);
 			break;
 		case	DST_TRACKED:
-			retVal = selSelectAllSameProp(player,TRACKED,bOnScreen);
+			retVal = selSelectAllSameProp(player,PROPULSION_TYPE_TRACKED,bOnScreen);
 			break;
 		case	DST_HALF_TRACKED:
-			retVal = selSelectAllSameProp(player,HALF_TRACKED,bOnScreen);
+			retVal = selSelectAllSameProp(player,PROPULSION_TYPE_HALF_TRACKED,bOnScreen);
 			break;
 		case	DST_ALL_COMBAT:
 			retVal = selSelectAllCombat(player,bOnScreen);

@@ -1522,12 +1522,12 @@ static void astarTest(const char *name, int x1, int y1, int x2, int y2)
 		route.numPoints = 0;
 		astarResetCounters();
 		ASSERT(astarInner == 0, "astarInner not reset");
-		asret = fpathAStarRoute(ASR_NEWROUTE, &route, x, y, endx, endy, WHEELED);
+		asret = fpathAStarRoute(ASR_NEWROUTE, &route, x, y, endx, endy, PROPULSION_TYPE_WHEELED);
 		while (asret == ASR_PARTIAL)
 		{
 			astarResetCounters();
 			ASSERT(astarInner == 0, "astarInner not reset");
-			asret = fpathAStarRoute(ASR_CONTINUE, &route, x, y, endx, endy, WHEELED);
+			asret = fpathAStarRoute(ASR_CONTINUE, &route, x, y, endx, endy, PROPULSION_TYPE_WHEELED);
 			iterations++;
 		}
 		free(route.asPath);

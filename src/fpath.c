@@ -122,7 +122,7 @@ BOOL fpathBlockingTile(SDWORD x, SDWORD y, PROPULSION_TYPE propulsion)
 	}
 
 	/* Check scroll limits (used in campaign to partition the map. */
-	if (propulsion != LIFT && (x < scrollMinX + 1 || y < scrollMinY + 1 || x >= scrollMaxX - 1 || y >= scrollMaxY - 1))
+	if (propulsion != PROPULSION_TYPE_LIFT && (x < scrollMinX + 1 || y < scrollMinY + 1 || x >= scrollMaxX - 1 || y >= scrollMaxY - 1))
 	{
 		// coords off map - auto blocking tile
 		return true;
@@ -131,17 +131,17 @@ BOOL fpathBlockingTile(SDWORD x, SDWORD y, PROPULSION_TYPE propulsion)
 	psTile = mapTile(x, y);
 
 	// Only tall structures are blocking VTOL now
-	if (propulsion == LIFT && !TileHasTallStructure(psTile))
+	if (propulsion == PROPULSION_TYPE_LIFT && !TileHasTallStructure(psTile))
 	{
 		return false;
 	}
-	else if (propulsion == LIFT)
+	else if (propulsion == PROPULSION_TYPE_LIFT)
 	{
 		return true;
 	}
 
 	if (psTile->tileInfoBits & BITS_FPATHBLOCK || (TileIsOccupied(psTile) && !TILE_IS_NOTBLOCKING(psTile))
-	    || terrainType(psTile) == TER_CLIFFFACE || (terrainType(psTile) == TER_WATER && propulsion != HOVER))
+	    || terrainType(psTile) == TER_CLIFFFACE || (terrainType(psTile) == TER_WATER && propulsion != PROPULSION_TYPE_HOVER))
 	{
 		return true;
 	}

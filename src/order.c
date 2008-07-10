@@ -2586,7 +2586,7 @@ DROID_ORDER chooseOrderLoc(DROID *psDroid, UDWORD x,UDWORD y)
 	// where can stay, ie VTOLs must be able to land as well
 	if (isVtolDroid(psDroid))
 	{
-		propulsion = WHEELED;
+		propulsion = PROPULSION_TYPE_WHEELED;
 	}
 	if (!fpathBlockingTile(map_coord(x), map_coord(y), propulsion))
 	{

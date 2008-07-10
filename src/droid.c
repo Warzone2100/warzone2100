@@ -2688,7 +2688,7 @@ UDWORD calcDroidBaseSpeed(DROID_TEMPLATE *psTemplate, UDWORD weight, UBYTE playe
 	}
 
 	// reduce the speed of medium/heavy VTOLs
-	if (asPropulsionStats[psTemplate->asParts[COMP_PROPULSION]].propulsionType == LIFT)
+	if (asPropulsionStats[psTemplate->asParts[COMP_PROPULSION]].propulsionType == PROPULSION_TYPE_LIFT)
 	{
 		if ((asBodyStats + psTemplate->asParts[COMP_BODY])->size == SIZE_HEAVY)
 		{
@@ -3867,7 +3867,7 @@ static BOOL sensiblePlace(SDWORD x, SDWORD y, PROPULSION_TYPE propulsion)
 // Should stop things being placed in inaccessible areas? Assume wheeled propulsion.
 BOOL	zonedPAT(UDWORD x, UDWORD y)
 {
-	if (sensiblePlace(x, y, WHEELED) && noDroid(x,y))
+	if (sensiblePlace(x, y, PROPULSION_TYPE_WHEELED) && noDroid(x,y))
 	{
 		return(true);
 	}
@@ -3890,7 +3890,7 @@ BOOL	pickATileGen(UDWORD *x, UDWORD *y, UBYTE numIterations,
 	ASSERT( *y<mapHeight,"y coordinate is off-map for pickATileGen" );
 
 	/* Exit if they're fine! */
-	if (sensiblePlace(*x, *y, WHEELED) && noDroid(*x,*y))
+	if (sensiblePlace(*x, *y, PROPULSION_TYPE_WHEELED) && noDroid(*x,*y))
 	{
 		return(true);
 	}
@@ -3989,7 +3989,7 @@ BOOL	pickATile(UDWORD *x, UDWORD *y, UBYTE numIterations)
 	ASSERT( *y<mapHeight,"y coordinate is off-map for pickATile" );
 
 	/* Exit if they're fine! */
-	if (sensiblePlace(*x, *y, WHEELED) && noDroid(*x,*y))
+	if (sensiblePlace(*x, *y, PROPULSION_TYPE_WHEELED) && noDroid(*x,*y))
 	{
 		return(true);
 	}
@@ -4009,7 +4009,7 @@ BOOL	pickATile(UDWORD *x, UDWORD *y, UBYTE numIterations)
 				if(i==startX || i==endX || j==startY || j==endY)
 				{
 					/* Good enough? */
-					if (sensiblePlace(i, j, WHEELED) && noDroid(i,j))
+					if (sensiblePlace(i, j, PROPULSION_TYPE_WHEELED) && noDroid(i,j))
 					{
 						/* Set exit conditions and get out NOW */
 						*x = i;	*y = j;
@@ -4042,7 +4042,7 @@ PICKTILE pickHalfATile(UDWORD *x, UDWORD *y, UBYTE numIterations)
 	}
 
 	/* Exit if they're fine! */
-	if (sensiblePlace(*x, *y, WHEELED) && oneDroid(*x, *y))
+	if (sensiblePlace(*x, *y, PROPULSION_TYPE_WHEELED) && oneDroid(*x, *y))
 	{
 		return HALF_FREE_TILE;
 	}
@@ -4064,7 +4064,7 @@ PICKTILE pickHalfATile(UDWORD *x, UDWORD *y, UBYTE numIterations)
 				if(i==startX || i==endX || j==startY || j==endY)
 				{
 					/* Good enough? */
-					if (sensiblePlace(i, j, WHEELED) && oneDroid(i,j))
+					if (sensiblePlace(i, j, PROPULSION_TYPE_WHEELED) && oneDroid(i,j))
 					{
 						/* Set exit conditions and get out NOW */
 						*x = i;	*y = j;
@@ -4372,7 +4372,7 @@ UBYTE checkCommandExist(UBYTE player)
 //access functions for vtols
 BOOL isVtolDroid(const DROID* psDroid)
 {
-	return asPropulsionStats[psDroid->asBits[COMP_PROPULSION].nStat].propulsionType == LIFT
+	return asPropulsionStats[psDroid->asBits[COMP_PROPULSION].nStat].propulsionType == PROPULSION_TYPE_LIFT
 	    && psDroid->droidType != DROID_TRANSPORTER;
 }
 

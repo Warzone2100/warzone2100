@@ -1025,7 +1025,7 @@ void actionUpdateDroid(DROID *psDroid)
 	/* check whether turret inverted for actionTargetTurret */
 	//if ( psDroid->droidType != DROID_CYBORG &&
 	if ( !cyborgDroid(psDroid) &&
-		psPropStats->propulsionType == LIFT   )
+		psPropStats->propulsionType == PROPULSION_TYPE_LIFT   )
 	{
 		bInvert = true;
 	}
@@ -1669,7 +1669,7 @@ void actionUpdateDroid(DROID *psDroid)
 		//						"moveUpdateUnit: Unit at (0,0)" );
 
 							/* init vtol attack runs count if necessary */
-							if ( psPropStats->propulsionType == LIFT )
+							if ( psPropStats->propulsionType == PROPULSION_TYPE_LIFT )
 							{
 								psDroid->action = DACTION_VTOLATTACK;
 								//actionAddVtolAttackRun( psDroid );

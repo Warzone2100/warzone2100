@@ -1098,27 +1098,27 @@ static UDWORD scrDroidTargetMask(DROID *psDroid)
 	psPStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
 	switch(psPStats->propulsionType)
 	{
-	case WHEELED:
+	case PROPULSION_TYPE_WHEELED:
 		mask |= SCR_DT_WHEEL;
 		break;
-	case TRACKED:
+	case PROPULSION_TYPE_TRACKED:
 		mask |= SCR_DT_TRACK;
 		break;
-	case LEGGED:
-	case JUMP:
+	case PROPULSION_TYPE_LEGGED:
+	case PROPULSION_TYPE_JUMP:
 		mask |= SCR_DT_LEGS;
 		break;
-	case HOVER:
+	case PROPULSION_TYPE_HOVER:
 		mask |= SCR_DT_HOVER;
 		break;
-	case LIFT:
+	case PROPULSION_TYPE_LIFT:
 		mask |= SCR_DT_VTOL;
 		break;
-	case HALF_TRACKED:
+	case PROPULSION_TYPE_HALF_TRACKED:
 		mask |= SCR_DT_HTRACK;
 		break;
-	case PROPELLOR:
-	case SKI:
+	case PROPULSION_TYPE_PROPELLOR:
+	case PROPULSION_TYPE_SKI:
 	default:
 		ASSERT( false,
 			"scrUnitTargetMask: unknown or invalid target unit propulsion type" );
@@ -1705,7 +1705,7 @@ BOOL scrSkVtolEnableCheck(void)
 		// vtol propulsion
 		for(i=0;(i<numPropulsionStats);i++)
 		{
-			if((asPropulsionStats[i].propulsionType == LIFT)
+			if((asPropulsionStats[i].propulsionType == PROPULSION_TYPE_LIFT)
 			 && apCompLists[player][COMP_PROPULSION][i] == AVAILABLE)
 			{
 				scrFunctionResult.v.bval = true;

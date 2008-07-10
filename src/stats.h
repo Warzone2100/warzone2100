@@ -42,7 +42,7 @@ extern CONSTRUCT_STATS		*asConstructStats;
 extern PROPULSION_TYPES		*asPropulsionTypes;
 
 //used to hold the modifiers cross refd by weapon effect and propulsion type
-extern WEAPON_MODIFIER		asWeaponModifier[WE_NUMEFFECTS][NUM_PROP_TYPES];
+extern WEAPON_MODIFIER		asWeaponModifier[WE_NUMEFFECTS][PROPULSION_TYPE_NUM];
 
 //used to hold the current upgrade level per player per weapon subclass
 extern WEAPON_UPGRADE		asWeaponUpgrade[MAX_PLAYERS][NUM_WEAPON_SUBCLASS];

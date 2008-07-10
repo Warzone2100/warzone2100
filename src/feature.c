@@ -79,7 +79,7 @@ struct featureTypeMap
 
 static const struct featureTypeMap map[] =
 {
-	{ "HOVER WRECK", FEAT_HOVER },
+	{ "PROPULSION_TYPE_HOVER WRECK", FEAT_HOVER },
 	{ "TANK WRECK", FEAT_TANK },
 	{ "GENERIC ARTEFACT", FEAT_GEN_ARTE },
 	{ "OIL RESOURCE", FEAT_OIL_RESOURCE },

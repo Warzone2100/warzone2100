@@ -715,7 +715,7 @@ void moveStopDroid(DROID *psDroid)
 	ASSERT( psPropStats != NULL,
 			"moveUpdateUnit: invalid propulsion stats pointer" );
 
-	if ( psPropStats->propulsionType == LIFT )
+	if ( psPropStats->propulsionType == PROPULSION_TYPE_LIFT )
 	{
 		psDroid->sMove.Status = MOVEHOVER;
 	}
@@ -2284,17 +2284,17 @@ static void moveUpdateGroundModel(DROID *psDroid, SDWORD speed, SDWORD direction
 	psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
 	switch (psPropStats->propulsionType)
 	{
-	case HOVER:
+	case PROPULSION_TYPE_HOVER:
 		spinSpeed = psDroid->baseSpeed * hvrTurn;
 		turnSpeed = psDroid->baseSpeed / 3 * hvrTurn;
 		skidDecel = hvrSkid;//HOVER_SKID_DECEL;
 		break;
-	case WHEELED:
+	case PROPULSION_TYPE_WHEELED:
 		spinSpeed = psDroid->baseSpeed * hvrTurn;
 		turnSpeed = psDroid->baseSpeed / 3 * whlTurn;
 		skidDecel = whlSkid;//WHEELED_SKID_DECEL;
 		break;
-	case TRACKED:
+	case PROPULSION_TYPE_TRACKED:
 	default:
 		spinSpeed = psDroid->baseSpeed * hvrTurn;
 		turnSpeed = psDroid->baseSpeed / 3 * trkTurn;
@@ -2676,7 +2676,7 @@ moveUpdateCyborgModel( DROID *psDroid, SDWORD moveSpeed, SDWORD moveDir, UBYTE o
 			"moveUpdateCyborgModel: invalid propulsion stats pointer" );
 
 	/* do vertical movement */
-	if ( psPropStats->propulsionType == JUMP )
+	if ( psPropStats->propulsionType == PROPULSION_TYPE_JUMP )
 	{
 		iDz = timeAdjustedIncrement(psDroid->sMove.iVertSpeed, true);
 		iDroidZ = (SDWORD) psDroid->pos.z;
@@ -2709,7 +2709,7 @@ moveUpdateCyborgModel( DROID *psDroid, SDWORD moveSpeed, SDWORD moveDir, UBYTE o
 	iDist = trigIntSqrt(iDx * iDx + iDy * iDy);
 
 	/* set jumping cyborg walking short distances */
-	if ( (psPropStats->propulsionType != JUMP) ||
+	if ( (psPropStats->propulsionType != PROPULSION_TYPE_JUMP) ||
 		 ((psDroid->sMove.iVertSpeed == 0)      &&
 		  (iDist < CYBORG_MIN_JUMP_DISTANCE))       )
 	{
@@ -2850,7 +2850,7 @@ static void movePlayDroidMoveAudio( DROID *psDroid )
 		psPropType = &asPropulsionTypes[iPropType];
 
 		/* play specific wheeled and transporter or stats-specified noises */
-		if ( iPropType == WHEELED && psDroid->droidType != DROID_CONSTRUCT )
+		if ( iPropType == PROPULSION_TYPE_WHEELED && psDroid->droidType != DROID_CONSTRUCT )
 		{
 			iAudioID = ID_SOUND_TREAD;
 		}
@@ -2858,7 +2858,7 @@ static void movePlayDroidMoveAudio( DROID *psDroid )
 		{
 			iAudioID = ID_SOUND_BLIMP_FLIGHT;
 		}
-		else if (iPropType == LEGGED && cyborgDroid(psDroid))
+		else if (iPropType == PROPULSION_TYPE_LEGGED && cyborgDroid(psDroid))
 		{
 			iAudioID = ID_SOUND_CYBORG_MOVE;
 		}
@@ -2916,7 +2916,7 @@ static void movePlayAudio( DROID *psDroid, BOOL bStarted, BOOL bStoppedBefore, S
 	if ( bStarted )
 	{
 		/* play start audio */
-		if ((propType == WHEELED && psDroid->droidType != DROID_CONSTRUCT)
+		if ((propType == PROPULSION_TYPE_WHEELED && psDroid->droidType != DROID_CONSTRUCT)
 		    || psPropType->startID == NO_SOUND)
 		{
 			movePlayDroidMoveAudio( psDroid );
@@ -2941,7 +2941,7 @@ static void movePlayAudio( DROID *psDroid, BOOL bStarted, BOOL bStoppedBefore, S
 		{
 			iAudioID = ID_SOUND_BLIMP_LAND;
 		}
-		else if ( propType != WHEELED || psDroid->droidType == DROID_CONSTRUCT )
+		else if ( propType != PROPULSION_TYPE_WHEELED || psDroid->droidType == DROID_CONSTRUCT )
 		{
 			iAudioID = psPropType->shutDownID;
 		}
@@ -3130,7 +3130,7 @@ void moveUpdateDroid(DROID *psDroid)
 				{
 					psDroid->sMove.Status = MOVEROUTE;
 				}
-				else if ( psPropStats->propulsionType == LIFT )
+				else if ( psPropStats->propulsionType == PROPULSION_TYPE_LIFT )
 				{
 					psDroid->sMove.Status = MOVEHOVER;
 				}
@@ -3167,7 +3167,7 @@ void moveUpdateDroid(DROID *psDroid)
 		if (!moveNextTarget(psDroid))
 		{
 			// No more waypoints - finish
-			if ( psPropStats->propulsionType == LIFT )
+			if ( psPropStats->propulsionType == PROPULSION_TYPE_LIFT )
 			{
 				psDroid->sMove.Status = MOVEHOVER;
 			}
@@ -3213,7 +3213,7 @@ void moveUpdateDroid(DROID *psDroid)
 			{
 				// No more waypoints - finish
 //				psDroid->sMove.Status = MOVEINACTIVE;
-				if ( psPropStats->propulsionType == LIFT )
+				if ( psPropStats->propulsionType == PROPULSION_TYPE_LIFT )
 				{
 					psDroid->sMove.Status = MOVEHOVER;
 				}
@@ -3284,7 +3284,7 @@ void moveUpdateDroid(DROID *psDroid)
 		}
 		else
 		{
-			if ( psPropStats->propulsionType == LIFT )
+			if ( psPropStats->propulsionType == PROPULSION_TYPE_LIFT )
 			{
 				psDroid->sMove.Status = MOVEPOINTTOPOINT;
 			}
@@ -3299,7 +3299,7 @@ void moveUpdateDroid(DROID *psDroid)
 		moveDir = calcDirection( psDroid->pos.x, psDroid->pos.y, psDroid->sMove.targetX, psDroid->sMove.targetY );
 		if ((int)psDroid->direction == (int)moveDir)
 		{
-			if ( psPropStats->propulsionType == LIFT )
+			if ( psPropStats->propulsionType == PROPULSION_TYPE_LIFT )
 			{
 				psDroid->sMove.Status = MOVEPOINTTOPOINT;
 			}
@@ -3386,7 +3386,7 @@ void moveUpdateDroid(DROID *psDroid)
 	{
 		moveUpdateCyborgModel(psDroid, moveSpeed, moveDir, oldStatus);
 	}
-	else if ( psPropStats->propulsionType == LIFT )
+	else if ( psPropStats->propulsionType == PROPULSION_TYPE_LIFT )
 	{
 		moveUpdateVtolModel(psDroid, moveSpeed, moveDir);
 	}
@@ -3406,7 +3406,7 @@ void moveUpdateDroid(DROID *psDroid)
 	}
 
 	// See if it's got blocked
-	if ( (psPropStats->propulsionType != LIFT) && moveBlocked(psDroid) )
+	if ( (psPropStats->propulsionType != PROPULSION_TYPE_LIFT) && moveBlocked(psDroid) )
 	{
 		objTrace(psDroid->id, "status: id %d blocked", (int)psDroid->id);
 		psDroid->sMove.Status = MOVETURN;

@@ -53,7 +53,7 @@ static TERRAIN_TABLE	*asTerrainTable;
 static SPECIAL_ABILITY	*asSpecialAbility;
 
 //used to hold the modifiers cross refd by weapon effect and propulsion type
-WEAPON_MODIFIER		asWeaponModifier[WE_NUMEFFECTS][NUM_PROP_TYPES];
+WEAPON_MODIFIER		asWeaponModifier[WE_NUMEFFECTS][PROPULSION_TYPE_NUM];
 
 //used to hold the current upgrade level per player per weapon subclass
 WEAPON_UPGRADE		asWeaponUpgrade[MAX_PLAYERS][NUM_WEAPON_SUBCLASS];
@@ -957,39 +957,39 @@ bool getPropulsionType(const char* typeName, PROPULSION_TYPE* type)
 {
 	if      (strcmp(typeName, "Wheeled") == 0)
 	{
-		*type = WHEELED;
+		*type = PROPULSION_TYPE_WHEELED;
 	}
 	else if (strcmp(typeName, "Tracked") == 0)
 	{
-		*type = TRACKED;
+		*type = PROPULSION_TYPE_TRACKED;
 	}
 	else if (strcmp(typeName, "Legged") == 0)
 	{
-		*type = LEGGED;
+		*type = PROPULSION_TYPE_LEGGED;
 	}
 	else if (strcmp(typeName, "Hover") == 0)
 	{
-		*type = HOVER;
+		*type = PROPULSION_TYPE_HOVER;
 	}
 	else if (strcmp(typeName, "Ski") == 0)
 	{
-		*type = SKI;
+		*type = PROPULSION_TYPE_SKI;
 	}
 	else if (strcmp(typeName, "Lift") == 0)
 	{
-		*type = LIFT;
+		*type = PROPULSION_TYPE_LIFT;
 	}
 	else if (strcmp(typeName, "Propellor") == 0)
 	{
-		*type = PROPELLOR;
+		*type = PROPULSION_TYPE_PROPELLOR;
 	}
 	else if (strcmp(typeName, "Half-Tracked") == 0)
 	{
-		*type = HALF_TRACKED;
+		*type = PROPULSION_TYPE_HALF_TRACKED;
 	}
 	else if (strcmp(typeName, "Jump") == 0)
 	{
-		*type = JUMP;
+		*type = PROPULSION_TYPE_JUMP;
 	}
 	else
 	{
@@ -1563,7 +1563,7 @@ BOOL loadConstructStats(const char *pConstructData, UDWORD bufferSize)
 /*Load the Propulsion Types from the file exported from Access*/
 BOOL loadPropulsionTypes(const char *pPropTypeData, UDWORD bufferSize)
 {
-	const unsigned int NumTypes = NUM_PROP_TYPES;
+	const unsigned int NumTypes = PROPULSION_TYPE_NUM;
 	PROPULSION_TYPES *pPropType;
 	unsigned int i, multiplier;
 	PROPULSION_TYPE type;
@@ -1643,7 +1643,7 @@ BOOL loadTerrainTable(const char *pTerrainTableData, UDWORD bufferSize)
 	UDWORD			terrainType, propulsionType, speedFactor;
 
 	//allocate storage for the stats
-	asTerrainTable = (TERRAIN_TABLE *)malloc(sizeof(*asTerrainTable) * NUM_PROP_TYPES * TER_MAX);
+	asTerrainTable = (TERRAIN_TABLE *)malloc(sizeof(*asTerrainTable) * PROPULSION_TYPE_NUM * TER_MAX);
 
 	if (asTerrainTable == NULL)
 	{
@@ -1656,9 +1656,9 @@ BOOL loadTerrainTable(const char *pTerrainTableData, UDWORD bufferSize)
 	for (i = 0; i < TER_MAX; ++i)
 	{
 		unsigned int j;
-		for (j = 0; j < NUM_PROP_TYPES; j++)
+		for (j = 0; j < PROPULSION_TYPE_NUM; j++)
 		{
-			TERRAIN_TABLE * const pTerrainTable = &asTerrainTable[i * NUM_PROP_TYPES + j];
+			TERRAIN_TABLE * const pTerrainTable = &asTerrainTable[i * PROPULSION_TYPE_NUM + j];
 			pTerrainTable->speedFactor = 100;
 		}
 	}
@@ -1679,9 +1679,9 @@ BOOL loadTerrainTable(const char *pTerrainTableData, UDWORD bufferSize)
 	for (i = 0; i < TER_MAX; ++i)
 	{
 		unsigned int j;
-		for (j = 0; j < NUM_PROP_TYPES; ++j)
+		for (j = 0; j < PROPULSION_TYPE_NUM; ++j)
 		{
-			TERRAIN_TABLE * const pTerrainTable = asTerrainTable + (i * NUM_PROP_TYPES + j);
+			TERRAIN_TABLE * const pTerrainTable = asTerrainTable + (i * PROPULSION_TYPE_NUM + j);
 			if (pTerrainTable->speedFactor == 0)
 			{
 				debug( LOG_ERROR, "loadTerrainTable: Invalid propulsion/terrain table entry" );
@@ -1990,7 +1990,7 @@ BOOL loadWeaponModifiers(const char *pWeapModData, UDWORD bufferSize)
 	//initialise to 100%
 	for (i=0; i < WE_NUMEFFECTS; i++)
 	{
-		for (j=0; j < NUM_PROP_TYPES; j++)
+		for (j=0; j < PROPULSION_TYPE_NUM; j++)
 		{
 			asWeaponModifier[i][j] = 100;
 		}
@@ -2331,10 +2331,10 @@ void storeSpeedFactor(UDWORD terrainType, UDWORD propulsionType, UDWORD speedFac
 {
 	TERRAIN_TABLE *pTerrainTable = asTerrainTable;
 
-	ASSERT( propulsionType < NUM_PROP_TYPES,
+	ASSERT( propulsionType < PROPULSION_TYPE_NUM,
 		"The propulsion type is too large" );
 
-	pTerrainTable += (terrainType * NUM_PROP_TYPES + propulsionType);
+	pTerrainTable += (terrainType * PROPULSION_TYPE_NUM + propulsionType);
 	pTerrainTable->speedFactor = speedFactor;
 }
 
@@ -2343,10 +2343,10 @@ UDWORD getSpeedFactor(UDWORD type, UDWORD propulsionType)
 {
 	TERRAIN_TABLE *pTerrainTable = asTerrainTable;
 
-	ASSERT( propulsionType < NUM_PROP_TYPES,
+	ASSERT( propulsionType < PROPULSION_TYPE_NUM,
 		"The propulsion type is too large" );
 
-	pTerrainTable += (type * NUM_PROP_TYPES + propulsionType);
+	pTerrainTable += (type * PROPULSION_TYPE_NUM + propulsionType);
 
 	return pTerrainTable->speedFactor;
 }

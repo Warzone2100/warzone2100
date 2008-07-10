@@ -556,8 +556,8 @@ void driveUpdate(void)
 					if(	(psDroid->selected) &&
 						(psDroid != psDrivenDroid) &&
 						(psDroid->droidType != DROID_TRANSPORTER) &&
-						//((psPropStats->propulsionType != LIFT) || (psDroid->droidType == DROID_CYBORG)) ) {
-                        ((psPropStats->propulsionType != LIFT) || cyborgDroid(psDroid)) )
+						//((psPropStats->propulsionType != PROPULSION_TYPE_LIFT) || (psDroid->droidType == DROID_CYBORG)) ) {
+                        ((psPropStats->propulsionType != PROPULSION_TYPE_LIFT) || cyborgDroid(psDroid)) )
                     {
 						// Send new orders to it's followers.
 						driveMoveFollower(psDroid);

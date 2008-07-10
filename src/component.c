@@ -937,7 +937,7 @@ void displayCompObj(BASE_OBJECT *psObj, BOOL bButton)
 			"moveUpdateUnit: invalid propulsion stats pointer" );
 
 	/* render vtol jet if flying - horrible hack - GJ */
-	if (((psPropStats->propulsionType == LIFT) &&
+	if (((psPropStats->propulsionType == PROPULSION_TYPE_LIFT) &&
 	    //(psDroid->droidType != DROID_CYBORG)) && (!bButton))
 	    (!cyborgDroid(psDroid))) && (!bButton))
 	{
@@ -989,7 +989,7 @@ void displayCompObj(BASE_OBJECT *psObj, BOOL bButton)
 			 * all others to connector 1 */
 			/* Watermelon:VTOL's now skip the first 5 connectors(0 to 4),
 			VTOL's use 5,6,7,8 etc now */
-			if ( (psPropStats->propulsionType == LIFT) &&
+			if ( (psPropStats->propulsionType == PROPULSION_TYPE_LIFT) &&
 				  psDroid->droidType == DROID_WEAPON )
 			{
 				iConnector = VTOL_CONNECTOR_START;
