@@ -21,7 +21,7 @@ sub printStructFieldType
     elsif (/real/)      { $$output .= "float            "; }
     elsif (/bool/)      { $$output .= "bool             "; }
     elsif (/set/)       { $$output .= "bool             "; }
-    elsif (/enum/)      { $$output .= "${$field}{\"enum\"} "; }
+    elsif (/enum/)      { $$output .= "${${$field}{\"enum\"}}{\"name\"} "; }
     elsif (/IMD_model/) { $$output .= "iIMDShape*       "; }
     elsif (/C-only-field/) { $$output .= "${$field}{\"ctype\"} "; }
     else                { die "UKNOWN TYPE: $_"; }
