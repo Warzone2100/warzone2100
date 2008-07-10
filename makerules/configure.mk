@@ -65,9 +65,9 @@ BISON:=bison
 MAKENSIS:=makensis
 
 EXEEXT:=.exe
-AR:=mingw32-ar
-CC:=mingw32-gcc
-CXX:=mingw32-g++
+AR:=ar
+CC:=gcc
+CXX:=g++
 WINDRES:=windres
 WZ_CPPFLAGS+=-DWIN32
 WZ_CFLAGS+=-mwindows
