@@ -47,16 +47,17 @@ sub printEnum()
 
 sub getStructName
 {
-    my ($name, $struct, $structMap, $prefix) = @_;
+    my ($name, $struct, $structMap, $prefix, $suffix) = @_;
 
     foreach (keys %{${$struct}{"qualifiers"}})
     {
         $$prefix = ${${$struct}{"qualifiers"}}{$_} if /prefix/ and not $$prefix;
+        $$suffix = ${${$struct}{"qualifiers"}}{$_} if /suffix/ and not $$suffix;
 
-        getStructName($name, ${${$struct}{"qualifiers"}}{"inherit"}, $structMap, $prefix) if /inherit/;
+        getStructName($name, ${${$struct}{"qualifiers"}}{"inherit"}, $structMap, $prefix, $suffix) if /inherit/;
     }
 
-    $$name = "${$prefix}${$struct}{\"name\"}";
+    $$name = "${$prefix}${$struct}{\"name\"}${$suffix}";
 }
 
 sub printFuncHeader
@@ -553,7 +554,8 @@ sub printLoadFunc
 
     my $structName = "";
     my $prefix = "";
-    getStructName(\$structName, $struct, $structMap, \$prefix);
+    my $suffix = "";
+    getStructName(\$structName, $struct, $structMap, \$prefix, \$suffix);
 
     # Open the function
     $$output .= "\n";

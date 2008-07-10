@@ -1,6 +1,6 @@
 struct BASE
     %abstract;
-    %prefix "STATS_";
+    %suffix "_STATS";
 
     # Unique language independant name that can be used to identify a specific
     # stats instance

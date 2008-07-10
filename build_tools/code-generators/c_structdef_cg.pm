@@ -121,13 +121,14 @@ sub printStructFields
 
 sub getStructName
 {
-    my ($name, $struct, $structMap, $prefix) = @_;
+    my ($name, $struct, $structMap, $prefix, $suffix) = @_;
 
     foreach (keys %{${$struct}{"qualifiers"}})
     {
         $$prefix = ${${$struct}{"qualifiers"}}{$_} if /prefix/ and not $$prefix;
+        $$suffix = ${${$struct}{"qualifiers"}}{$_} if /suffix/ and not $$suffix;
 
-        getStructName($name, ${${$struct}{"qualifiers"}}{"inherit"}, $structMap, $prefix) if /inherit/;
+        getStructName($name, ${${$struct}{"qualifiers"}}{"inherit"}, $structMap, $prefix, $suffix) if /inherit/;
     }
 
     $$name = ${$struct}{"name"};
@@ -194,18 +195,19 @@ sub printStruct()
 
     my $name;
     my $prefix = "";
+    my $suffix = "";
 
     printComments($output, ${$struct}{"comment"}, 0);
 
-    getStructName(\$name, $struct, $structMap, \$prefix);
+    getStructName(\$name, $struct, $structMap, \$prefix, \$suffix);
 
     # Start printing the structure
-    $$output .= "typedef struct ${prefix}${name}\n{\n";
+    $$output .= "typedef struct ${prefix}${name}${suffix}\n{\n";
 
     printStructContent($output, $struct, $structMap, $enumMap);
 
     # Finish printing the structure
-    $$output .= "} ${prefix}${name};\n\n";
+    $$output .= "} ${prefix}${name}${suffix};\n\n";
 
     return unless exists(${${$struct}{"qualifiers"}}{"loadFunc"});
 

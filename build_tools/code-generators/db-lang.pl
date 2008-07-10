@@ -128,6 +128,10 @@ sub parseStruct
             {
                 ${$curStruct{"qualifiers"}}{"prefix"} = $1;
             }
+            elsif (/^suffix\s+\"([^\"]+)\"\s*;$/)
+            {
+                ${$curStruct{"qualifiers"}}{"suffix"} = $1;
+            }
             elsif (/^loadFunc\s+\"([^\"]+)\"\s*;$/)
             {
                 my %loadFunc = (name=>$1, line=>$$count);
