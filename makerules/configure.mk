@@ -1,4 +1,4 @@
-include $(top_builddir)/config.mk
+include $(top_builddir)/makerules/config.mk
 
 
 # Check for unset config
