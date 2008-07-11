@@ -147,7 +147,6 @@ static void orderCheckGuardPosition(DROID *psDroid, SDWORD range)
 	ydiff = (SDWORD)psDroid->pos.y - (SDWORD)psDroid->orderY;
 	if (xdiff*xdiff + ydiff*ydiff > range*range)
 	{
-		turnOffMultiMsg(true);
 		if ((psDroid->sMove.Status != MOVEINACTIVE) &&
 			((psDroid->action == DACTION_MOVE) ||
 			 (psDroid->action == DACTION_MOVEFIRE)))
@@ -163,7 +162,6 @@ static void orderCheckGuardPosition(DROID *psDroid, SDWORD range)
 		{
 			actionDroidLoc(psDroid, DACTION_MOVE, psDroid->orderX, psDroid->orderY);
 		}
-		turnOffMultiMsg(false);
 	}
 }
 
@@ -303,6 +301,10 @@ void orderUpdateDroid(DROID *psDroid)
 			// started a new order, quit
 			break;
 		}
+		else if (!myResponsibility(psDroid->player))
+		{
+			return;
+		}
 		// if you are in a command group, default to guarding the commander
 		else if (hasCommander(psDroid) &&
 				 (psDroid->psTarStats != (BASE_STATS *) structGetDemolishStat()))  // stop the constructor auto repairing when it is about to demolish
@@ -334,9 +336,7 @@ void orderUpdateDroid(DROID *psDroid)
 			UDWORD actionX = psDroid->pos.x;
 			UDWORD actionY = psDroid->pos.y;
 
-			turnOffMultiMsg(true);
 			orderDroidLoc(psDroid, DORDER_GUARD, actionX,actionY);
-			turnOffMultiMsg(false);
 		}
 
 		//repair droids default to repairing droids within a given range
@@ -1079,6 +1079,10 @@ void orderUpdateDroid(DROID *psDroid)
 		{
 			// started a queued order - quit
 			break;
+		}
+		else if (!myResponsibility(psDroid->player))
+		{
+			return;
 		}
 		else if ((psDroid->action == DACTION_NONE) ||
 				 (psDroid->action == DACTION_MOVE) ||
