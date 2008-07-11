@@ -144,6 +144,10 @@ sub parseStruct
             {
                 ${${$curStruct{"qualifiers"}}{"macro"}}{"has"} = 1;
             }
+            elsif (/^nomacro\s*;$/)
+            {
+                ${${$curStruct{"qualifiers"}}{"macro"}}{"has"} = 0;
+            }
             elsif (/^macroprefix\s+\"([^\"]+)\"\s*;$/)
             {
                 ${${$curStruct{"qualifiers"}}{"macro"}}{"prefix"} = $1;

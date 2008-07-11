@@ -245,7 +245,7 @@ sub hasMacro
 {
     my ($struct) = @_;
 
-    return 1 if ${${${$struct}{"qualifiers"}}{"macro"}}{"has"};
+    return ${${${$struct}{"qualifiers"}}{"macro"}}{"has"} if exists(${${${$struct}{"qualifiers"}}{"macro"}}{"has"});
 
     foreach (keys %{${$struct}{"qualifiers"}})
     {
