@@ -218,7 +218,7 @@ sub parseStruct
             push @{$curStruct{"fields"}}, \%field;
         }
         # Parse field declarations with "transition" types (types that should be replaced with others eventually)
-        elsif (/^\s*(UDWORD)\s+(unique\s+)?(\w+)\s*;\s*$/)
+        elsif (/^\s*([US]D?WORD|[US]BYTE)\s+(unique\s+)?(\w+)\s*;\s*$/)
         {
             my %field = (type=>$1, name=>$3);
 

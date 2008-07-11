@@ -467,7 +467,7 @@ sub printRowProcessCode
         {
             $$output .= "\t\tstats->$fieldName = sqlite3_column_int(stmt, cols.$fieldName);\n";
         }
-        elsif (/UDWORD/)
+        elsif (/([US]D?WORD|[US]BYTE)/)
         {
             $$output .= "\t\tstats->$fieldName = sqlite3_column_int(stmt, cols.$fieldName);\n";
         }

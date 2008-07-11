@@ -13,7 +13,7 @@ sub printStructFieldType
     $_ = ${$field}{"type"};
 
     if    (/count/)     { $$output .= "INTEGER NOT NULL"; }
-    elsif (/UDWORD/)    { $$output .= "INTEGER NOT NULL"; } # "transition" type
+    elsif (/([US]D?WORD|[US]BYTE)/) { $$output .= "INTEGER NOT NULL"; } # "transition" type
     elsif (/real/)      { $$output .= "NUMERIC NOT NULL"; }
     elsif (/bool/)      { $$output .= "INTEGER NOT NULL"; }
     elsif (/enum/)      { $$output .= "INTEGER NOT NULL"; }

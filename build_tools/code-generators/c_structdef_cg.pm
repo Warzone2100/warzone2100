@@ -17,7 +17,7 @@ sub printStructFieldType
     $_ = ${$field}{"type"};
 
     if    (/count/)     { $$output .= "unsigned int     "; }
-    elsif (/UDWORD/)    { $$output .= "UDWORD           "; } # "transition" type
+    elsif (/([US]D?WORD|[US]BYTE)/) { $$output .= "$1           "; } # "transition" type
     elsif (/string/)    { $$output .= "char*            "; }
     elsif (/real/)      { $$output .= "float            "; }
     elsif (/bool/)      { $$output .= "bool             "; }
