@@ -1,6 +1,8 @@
 struct BASE
     %abstract;
     %suffix "_STATS";
+    %macro;
+    %macroprefix "STATS_";
 
     # Unique language independant name that can be used to identify a specific
     # stats instance
@@ -53,7 +55,7 @@ end;
 # Will contain all data associated with a body
 struct BODY
     %inherit COMPONENT;
-    #%loadFunc "loadBodyStatsFromDB";
+    %loadFunc "loadBodyStatsFromDB";
     %preLoadTable maxId
         if (!statsAllocBody($maxId))
             ABORT;

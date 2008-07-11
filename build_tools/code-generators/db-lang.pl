@@ -140,6 +140,18 @@ sub parseStruct
             {
                 ${$curStruct{"qualifiers"}}{"suffix"} = $1;
             }
+            elsif (/^macro\s*;$/)
+            {
+                ${${$curStruct{"qualifiers"}}{"macro"}}{"has"} = 1;
+            }
+            elsif (/^macroprefix\s+\"([^\"]+)\"\s*;$/)
+            {
+                ${${$curStruct{"qualifiers"}}{"macro"}}{"prefix"} = $1;
+            }
+            elsif (/^macrosuffix\s+\"([^\"]+)\"\s*;$/)
+            {
+                ${${$curStruct{"qualifiers"}}{"macro"}}{"suffix"} = $1;
+            }
             elsif (/^loadFunc\s+\"([^\"]+)\"\s*;$/)
             {
                 my %loadFunc = (name=>$1, line=>$$count);

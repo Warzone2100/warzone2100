@@ -178,6 +178,82 @@ sub printLoadFunc
               . "\t(struct sqlite3* db);\n\n";
 }
 
+sub getMacroName
+{
+    my ($name, $struct, $prefix, $suffix) = @_;
+
+    foreach (keys %{${$struct}{"qualifiers"}})
+    {
+        if (/macro/)
+        {
+            foreach (keys %{${${$struct}{"qualifiers"}}{"macro"}})
+            {
+                $$prefix = ${${${$struct}{"qualifiers"}}{"macro"}}{$_} if /prefix/ and not $$prefix;
+                $$suffix = ${${${$struct}{"qualifiers"}}{"macro"}}{$_} if /suffix/ and not $$suffix;
+            }
+        }
+
+        getMacroName($name, ${${$struct}{"qualifiers"}}{"inherit"}, $prefix, $suffix) if /inherit/;
+    }
+
+    $$name = "${$prefix}${$struct}{\"name\"}${$suffix}";
+}
+
+sub printMacroStructFields
+{
+    my ($output, $struct, $enumMap, $first) = @_;
+
+    foreach (keys %{${$struct}{"qualifiers"}})
+    {
+        printMacroStructFields($output, ${${$struct}{"qualifiers"}}{"inherit"}, $enumMap, 0) if /inherit/;
+    }
+
+    my @fields = @{${$struct}{"fields"}};
+    while (@fields)
+    {
+        my $field = shift(@fields);
+
+        $$output .= "\t";
+        printStructFieldType($output, $field);
+        $$output .= ${$field}{"name"};
+
+        postProcessField($output, $field, $enumMap);
+        $$output .= "; \\" if @fields or not $first;
+        $$output .= "\n";
+    }
+
+    $$output .= "\n" if $first;
+}
+
+sub printMacro
+{
+    my ($output, $struct, $enumMap) = @_;
+
+    my $prefix = "";
+    my $suffix = "";
+    my $macroName;
+
+    getMacroName(\$macroName, $struct, \$prefix, \$suffix);
+
+    $$output .= "#define $macroName \\\n";
+
+    printMacroStructFields($output, $struct, $enumMap, 1);
+}
+
+sub hasMacro
+{
+    my ($struct) = @_;
+
+    return 1 if ${${${$struct}{"qualifiers"}}{"macro"}}{"has"};
+
+    foreach (keys %{${$struct}{"qualifiers"}})
+    {
+        return hasMacro(${${$struct}{"qualifiers"}}{"inherit"}) if /inherit/;
+    }
+
+    return 0;
+}
+
 sub printEnum()
 {
     my ($output, $enum) = @_;
@@ -241,6 +317,8 @@ sub printStruct()
     $$output .= "} ${prefix}${name}${suffix};\n\n";
 
     printLoadFunc($output, $struct) if exists(${${$struct}{"qualifiers"}}{"loadFunc"});
+
+    printMacro($output, $struct, $enumMap) if hasMacro($struct);
 }
 
 sub printHdrGuard
