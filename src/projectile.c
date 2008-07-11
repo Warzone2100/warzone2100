@@ -1772,7 +1772,6 @@ bool proj_Direct(const WEAPON_STATS* psStats)
 		return false;
 		break;
 	case NUM_MOVEMENT_MODEL:
-	case INVALID_MOVEMENT:
 		break; // error checking in assert above; this is for no-debug case
 	}
 

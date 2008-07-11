@@ -557,15 +557,13 @@ static bool _loadWeaponStats(WEAPON_STATS* stats, SQL_WEAPON_STATS* cols, sqlite
 	}
 
 	// movement              TEXT    NOT NULL, -- which projectile model to use for the bullet
-	stats->movementModel = getMovementModel((const char*)sqlite3_column_text(stmt, cols->movement));
-	if (stats->movementModel == INVALID_MOVEMENT)
+	if (!getMovementModel((const char*)sqlite3_column_text(stmt, cols->movement), &stats->movementModel))
 	{
 		return false;
 	}
 
 	// weaponEffect          TEXT    NOT NULL, -- which type of warhead is associated with the weapon
-	stats->weaponEffect = getWeaponEffect((const char*)sqlite3_column_text(stmt, cols->weaponEffect));
-	if (stats->weaponEffect == INVALID_WEAPON_EFFECT)
+	if (!getWeaponEffect((const char*)sqlite3_column_text(stmt, cols->weaponEffect), &stats->weaponEffect))
 	{
 		debug(LOG_ERROR, "loadWepaonStats: Invalid weapon effect for weapon %s", getStatName(stats));
 		abort();

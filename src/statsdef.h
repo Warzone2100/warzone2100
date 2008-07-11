@@ -62,36 +62,6 @@ typedef struct _comp_base_stats
 	COMPONENT_STATS;
 } COMP_BASE_STATS;
 
-// used to define which projectile model to use for the weapon
-typedef enum _movement_model
-{
-	MM_DIRECT,
-	MM_INDIRECT,
-	MM_HOMINGDIRECT,
-	MM_HOMINGINDIRECT,
-	MM_ERRATICDIRECT,
-	MM_SWEEP,
-
-	NUM_MOVEMENT_MODEL,
-
-	INVALID_MOVEMENT
-} MOVEMENT_MODEL;
-
-//used to modify the damage to a propuslion type (or structure) based on weapon
-typedef enum _weapon_effect
-{
-	WE_ANTI_PERSONNEL,
-	WE_ANTI_TANK,
-	WE_BUNKER_BUSTER,
-	WE_ARTILLERY_ROUND,
-	WE_FLAMER,
-	WE_ANTI_AIRCRAFT,
-
-	WE_NUMEFFECTS,
-
-	INVALID_WEAPON_EFFECT
-} WEAPON_EFFECT;
-
 #define    SHOOT_ON_GROUND  0x01
 #define    SHOOT_IN_AIR     0x02
 

@@ -46,7 +46,7 @@ enum WEAPON_CLASS
     HEAT
 
     # others we haven't thought of! - classed as HEAT now to save space in DROID
-    #WC_MISC,
+    #WC_MISC
 end;
 
 # weapon subclasses used to define which weapons are affected by weapon upgrade
@@ -79,6 +79,31 @@ enum WEAPON_SUBCLASS
 
     # Counter missile
     COUNTER
+end;
+
+# Used to define which projectile model to use for the weapon.
+enum MOVEMENT_MODEL
+    %max "NUM_MOVEMENT_MODEL";
+    %valprefix "MM_";
+    DIRECT
+    INDIRECT
+    HOMINGDIRECT
+    HOMINGINDIRECT
+    ERRATICDIRECT
+    SWEEP
+end;
+
+# Used to modify the damage to a propuslion type (or structure) based on
+# weapon.
+enum WEAPON_EFFECT
+    %max "WE_NUMEFFECTS";
+    %valprefix "WE_";
+    ANTI_PERSONNEL
+    ANTI_TANK
+    BUNKER_BUSTER
+    ARTILLERY_ROUND
+    FLAMER
+    ANTI_AIRCRAFT
 end;
 
 enum PROPULSION_TYPE

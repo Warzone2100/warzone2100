@@ -145,6 +145,53 @@ typedef enum WEAPON_SUBCLASS
 	WSC_NUM_WEAPON_SUBCLASSES,
 } WEAPON_SUBCLASS;
 
+/**
+ * Used to define which projectile model to use for the weapon.
+ */
+typedef enum MOVEMENT_MODEL
+{
+	MM_DIRECT,
+
+	MM_INDIRECT,
+
+	MM_HOMINGDIRECT,
+
+	MM_HOMINGINDIRECT,
+
+	MM_ERRATICDIRECT,
+
+	MM_SWEEP,
+
+	/**
+	 * The number of enumerators in this enum.
+	 */
+	NUM_MOVEMENT_MODEL,
+} MOVEMENT_MODEL;
+
+/**
+ * Used to modify the damage to a propuslion type (or structure) based on
+ * weapon.
+ */
+typedef enum WEAPON_EFFECT
+{
+	WE_ANTI_PERSONNEL,
+
+	WE_ANTI_TANK,
+
+	WE_BUNKER_BUSTER,
+
+	WE_ARTILLERY_ROUND,
+
+	WE_FLAMER,
+
+	WE_ANTI_AIRCRAFT,
+
+	/**
+	 * The number of enumerators in this enum.
+	 */
+	WE_NUMEFFECTS,
+} WEAPON_EFFECT;
+
 typedef enum PROPULSION_TYPE
 {
 	PROPULSION_TYPE_WHEELED,

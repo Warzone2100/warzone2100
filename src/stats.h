@@ -295,8 +295,21 @@ extern const char* getStatName(const void * pStat);
  */
 extern bool getPropulsionType(const char* typeName, PROPULSION_TYPE* type);
 
-/*returns the weapon effect based on the string name passed in */
-extern WEAPON_EFFECT getWeaponEffect(const char *pWeaponEffect);
+/**
+ * Determines the weapon effect indicated by the @c weaponEffect string passed
+ * in.
+ *
+ * @param weaponEffect name of the weapon effect to determine the enumerated
+ *                     constant for.
+ * @param[out] effect  Will contain an enumerated constant representing the
+ *                     given weapon effect, if successful (as indicated by the
+ *                     return value).
+ *
+ * @return true if successful, false otherwise. If successful, @c *effect will
+ *         contain a valid weapon effect enumerator, otherwise its value will
+ *         be left unchanged.
+ */
+extern bool getWeaponEffect(const char* weaponEffect, WEAPON_EFFECT* effect);
 
 extern UWORD weaponROF(WEAPON_STATS *psStat, SBYTE player);
 /*Access functions for the upgradeable stats of a weapon*/

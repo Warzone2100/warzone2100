@@ -97,7 +97,7 @@ UBYTE		*apCompLists[MAX_PLAYERS][COMP_NUMCOMPONENTS];
 UBYTE		*apStructTypeLists[MAX_PLAYERS];
 
 static BOOL compareYes(const char *strToCompare, const char *strOwner);
-static MOVEMENT_MODEL	getMovementModel(const char *pMovement);
+static bool getMovementModel(const char* movementModel, MOVEMENT_MODEL* model);
 
 //Access functions for the max values to be used in the Design Screen
 static void setMaxComponentWeight(UDWORD weight);
@@ -583,15 +583,13 @@ BOOL loadWeaponStats(const char *pWeaponData, UDWORD bufferSize)
 		}
 
 		//set the movement model
-		psStats->movementModel = getMovementModel(movement);
-		if (psStats->movementModel == INVALID_MOVEMENT)
+		if (!getMovementModel(movement, &psStats->movementModel))
 		{
 			return false;
 		}
 
 		//set the weapon effect
-		psStats->weaponEffect = getWeaponEffect(weaponEffect);
-		if (psStats->weaponEffect == INVALID_WEAPON_EFFECT)
+		if (!getWeaponEffect(weaponEffect, &psStats->weaponEffect))
 		{
 			debug( LOG_ERROR, "loadWepaonStats: Invalid weapon effect for weapon %s", getStatName(psStats) );
 			abort();
@@ -2002,8 +2000,7 @@ BOOL loadWeaponModifiers(const char *pWeapModData, UDWORD bufferSize)
 			(char*)&weaponEffectName, (char*)&propulsionName, &modifier);
 
 		//get the weapon effect inc
-		effectInc = getWeaponEffect(weaponEffectName);
-		if (effectInc == INVALID_WEAPON_EFFECT)
+		if (!getWeaponEffect(weaponEffectName, &effectInc))
 		{
 			debug( LOG_ERROR, "loadWeaponModifiers: Invalid Weapon Effect - %s", weaponEffectName );
 			abort();
@@ -2745,68 +2742,75 @@ bool getWeaponSubClass(const char* subClass, WEAPON_SUBCLASS* wclass)
 }
 
 /*returns the movement model based on the string name passed in */
-MOVEMENT_MODEL	getMovementModel(const char *pMovement)
+bool getMovementModel(const char* movementModel, MOVEMENT_MODEL* model)
 {
-	if (!strcmp(pMovement,"DIRECT"))
+	if (strcmp(movementModel,"DIRECT") == 0)
 	{
-		return MM_DIRECT;
+		*model = MM_DIRECT;
 	}
-	if (!strcmp(pMovement,"INDIRECT"))
+	else if (strcmp(movementModel,"INDIRECT") == 0)
 	{
-		return MM_INDIRECT;
+		*model = MM_INDIRECT;
 	}
-	if (!strcmp(pMovement,"HOMING-DIRECT"))
+	else if (strcmp(movementModel,"HOMING-DIRECT") == 0)
 	{
-		return MM_HOMINGDIRECT;
+		*model = MM_HOMINGDIRECT;
 	}
-	if (!strcmp(pMovement,"HOMING-INDIRECT"))
+	else if (strcmp(movementModel,"HOMING-INDIRECT") == 0)
 	{
-		return MM_HOMINGINDIRECT;
+		*model = MM_HOMINGINDIRECT;
 	}
-	if (!strcmp(pMovement,"ERRATIC-DIRECT"))
+	else if (strcmp(movementModel,"ERRATIC-DIRECT") == 0)
 	{
-		return MM_ERRATICDIRECT;
+		*model = MM_ERRATICDIRECT;
 	}
-	if (!strcmp(pMovement,"SWEEP"))
+	else if (strcmp(movementModel,"SWEEP") == 0)
 	{
-		return MM_SWEEP;
+		*model = MM_SWEEP;
 	}
-	//problem if we've got to here
-	ASSERT( false, "Invalid movement model %s", pMovement );
-	return INVALID_MOVEMENT;
+	else
+	{
+		// We've got problem if we got here
+		ASSERT(!"Invalid movement model", "Invalid movement model: %s", movementModel);
+		return false;
+	}
+
+	return true;
 }
 
-
-/*returns the weapon effect based on the string name passed in */
-WEAPON_EFFECT getWeaponEffect(const char *pWeaponEffect)
+bool getWeaponEffect(const char* weaponEffect, WEAPON_EFFECT* effect)
 {
-	if (!strcmp(pWeaponEffect, "ANTI PERSONNEL"))
+	if      (strcmp(weaponEffect, "ANTI PERSONNEL") == 0)
 	{
-		return WE_ANTI_PERSONNEL;
+		*effect = WE_ANTI_PERSONNEL;
 	}
-	else if (!strcmp(pWeaponEffect, "ANTI TANK"))
+	else if (strcmp(weaponEffect, "ANTI TANK") == 0)
 	{
-		return WE_ANTI_TANK;
+		*effect = WE_ANTI_TANK;
 	}
-	else if (!strcmp(pWeaponEffect, "BUNKER BUSTER"))
+	else if (strcmp(weaponEffect, "BUNKER BUSTER") == 0)
 	{
-		return WE_BUNKER_BUSTER;
+		*effect = WE_BUNKER_BUSTER;
 	}
-	else if (!strcmp(pWeaponEffect, "ARTILLERY ROUND"))
+	else if (strcmp(weaponEffect, "ARTILLERY ROUND") == 0)
 	{
-		return WE_ARTILLERY_ROUND;
+		*effect = WE_ARTILLERY_ROUND;
 	}
-	else if (!strcmp(pWeaponEffect, "FLAMER"))
+	else if (strcmp(weaponEffect, "FLAMER") == 0)
 	{
-		return WE_FLAMER;
+		*effect = WE_FLAMER;
 	}
-	else if (!strcmp(pWeaponEffect, "ANTI AIRCRAFT"))
+	else if (strcmp(weaponEffect, "ANTI AIRCRAFT") == 0)
 	{
-		return WE_ANTI_AIRCRAFT;
+		*effect = WE_ANTI_AIRCRAFT;
+	}
+	else
+	{
+		ASSERT(!"Invalid weapon effect", "Invalid weapon effect: %s", weaponEffect);
+		return false;
 	}
 
-	ASSERT(false, "Invalid weapon effect: %s", pWeaponEffect);
-	return INVALID_WEAPON_EFFECT;
+	return true;
 }
 
 
