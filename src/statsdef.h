@@ -65,19 +65,6 @@ typedef struct _comp_base_stats
 #define    SHOOT_ON_GROUND  0x01
 #define    SHOOT_IN_AIR     0x02
 
-
-//Sides used for droid impact
-typedef enum _hit_sides
-{
-	HIT_SIDE_FRONT,
-	HIT_SIDE_REAR,
-	HIT_SIDE_LEFT,
-	HIT_SIDE_RIGHT,
-	HIT_SIDE_TOP,
-	HIT_SIDE_BOTTOM,
-	NUM_HIT_SIDES   // should be the last one
-} HIT_SIDE;
-
 //Special angles representing top or bottom hit
 #define HIT_ANGLE_TOP 361
 #define HIT_ANGLE_BOTTOM 362
@@ -108,15 +95,6 @@ typedef struct _brain_stats
 	struct _weapon_stats* psWeaponStat;     ///< weapon stats associated with this brain - for Command Droids
 } BRAIN_STATS;
 
-//defines the left and right sides for propulsion IMDs
-typedef enum _prop_side
-{
-	LEFT_PROP,
-	RIGHT_PROP,
-
-	NUM_PROP_SIDES
-} PROP_SIDE;
-
 typedef struct _propulsion_stats
 {
 	/* Common stats */
@@ -125,16 +103,6 @@ typedef struct _propulsion_stats
 	UDWORD          maxSpeed;       ///< Max speed for the droid
 	PROPULSION_TYPE propulsionType; ///< Type of propulsion used - index into PropulsionTable
 } PROPULSION_STATS;
-
-typedef enum _sensor_type
-{
-	STANDARD_SENSOR,
-	INDIRECT_CB_SENSOR,
-	VTOL_CB_SENSOR,
-	VTOL_INTERCEPT_SENSOR,
-	SUPER_SENSOR,           ///< works as all of the above together! - new for updates
-} SENSOR_TYPE;
-
 
 typedef struct _sensor_stats
 {

@@ -192,6 +192,44 @@ typedef enum WEAPON_EFFECT
 	WE_NUMEFFECTS,
 } WEAPON_EFFECT;
 
+/**
+ * Sides used for droid impact
+ */
+typedef enum HIT_SIDE
+{
+	HIT_SIDE_FRONT,
+
+	HIT_SIDE_REAR,
+
+	HIT_SIDE_LEFT,
+
+	HIT_SIDE_RIGHT,
+
+	HIT_SIDE_TOP,
+
+	HIT_SIDE_BOTTOM,
+
+	/**
+	 * The number of enumerators in this enum.
+	 */
+	NUM_HIT_SIDES,
+} HIT_SIDE;
+
+/**
+ * Defines the left and right sides for propulsion IMDs
+ */
+typedef enum PROP_SIDE
+{
+	LEFT_PROP,
+
+	RIGHT_PROP,
+
+	/**
+	 * The number of enumerators in this enum.
+	 */
+	NUM_PROP_SIDES,
+} PROP_SIDE;
+
 typedef enum PROPULSION_TYPE
 {
 	PROPULSION_TYPE_WHEELED,
@@ -217,6 +255,22 @@ typedef enum PROPULSION_TYPE
 	 */
 	PROPULSION_TYPE_NUM,
 } PROPULSION_TYPE;
+
+typedef enum SENSOR_TYPE
+{
+	STANDARD_SENSOR,
+
+	INDIRECT_CB_SENSOR,
+
+	VTOL_CB_SENSOR,
+
+	VTOL_INTERCEPT_SENSOR,
+
+	/**
+	 * Works as all of the above together! - new for updates
+	 */
+	SUPER_SENSOR,
+} SENSOR_TYPE;
 
 typedef enum FIREONMOVE
 {

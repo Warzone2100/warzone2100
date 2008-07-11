@@ -85,6 +85,7 @@ end;
 enum MOVEMENT_MODEL
     %max "NUM_MOVEMENT_MODEL";
     %valprefix "MM_";
+
     DIRECT
     INDIRECT
     HOMINGDIRECT
@@ -98,6 +99,7 @@ end;
 enum WEAPON_EFFECT
     %max "WE_NUMEFFECTS";
     %valprefix "WE_";
+
     ANTI_PERSONNEL
     ANTI_TANK
     BUNKER_BUSTER
@@ -106,8 +108,30 @@ enum WEAPON_EFFECT
     ANTI_AIRCRAFT
 end;
 
+# Sides used for droid impact
+enum HIT_SIDE
+    %max "NUM_HIT_SIDES";
+
+    FRONT
+    REAR
+    LEFT
+    RIGHT
+    TOP
+    BOTTOM
+end;
+
+# Defines the left and right sides for propulsion IMDs
+enum PROP_SIDE
+    %max "NUM_PROP_SIDES";
+    %valsuffix "_PROP";
+
+    LEFT
+    RIGHT
+end;
+
 enum PROPULSION_TYPE
     %max "PROPULSION_TYPE_NUM";
+
     WHEELED
     TRACKED
     LEGGED
@@ -117,6 +141,18 @@ enum PROPULSION_TYPE
     PROPELLOR
     HALF_TRACKED
     JUMP
+end;
+
+enum SENSOR_TYPE
+    %valprefix "";
+
+    STANDARD_SENSOR
+    INDIRECT_CB_SENSOR
+    VTOL_CB_SENSOR
+    VTOL_INTERCEPT_SENSOR
+
+    # Works as all of the above together! - new for updates
+    SUPER_SENSOR
 end;
 
 enum FIREONMOVE
