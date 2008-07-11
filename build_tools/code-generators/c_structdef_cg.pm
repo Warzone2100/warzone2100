@@ -17,7 +17,7 @@ sub printStructFieldType
     $_ = ${$field}{"type"};
 
     if    (/count/)     { $$output .= "unsigned int     "; }
-    elsif (/string/)    { $$output .= "const char*      "; }
+    elsif (/string/)    { $$output .= "char*            "; }
     elsif (/real/)      { $$output .= "float            "; }
     elsif (/bool/)      { $$output .= "bool             "; }
     elsif (/set/)       { $$output .= "bool             "; }

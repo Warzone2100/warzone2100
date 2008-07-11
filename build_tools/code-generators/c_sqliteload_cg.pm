@@ -494,15 +494,25 @@ sub printRowProcessCode
             if (grep(/optional/, @{${$field}{"qualifiers"}}))
             {
                 $indent .= "\t";
-                $$output .= "\t\tif (sqlite3_column_type(stmt, cols.$fieldName) != SQLITE_NULL)\n";
+                $$output .= "\t\tif (sqlite3_column_type(stmt, cols.$fieldName) != SQLITE_NULL)\n"
+                          . "\t\t{\n";
             }
 
-            $$output .= "${indent}stats->$fieldName = (const char*)sqlite3_column_text(stmt, cols.$fieldName);\n";
+            $$output .= "${indent}stats->$fieldName = strdup((const char*)sqlite3_column_text(stmt, cols.$fieldName));\n"
+                      . "${indent}if (stats->$fieldName == NULL)\n"
+                      . "${indent}{\n"
+                      . "${indent}\tdebug(LOG_ERROR, \"Out of memory\");\n"
+                      . "${indent}\tabort();\n"
+                      . "${indent}\tgoto in_statement_err;\n"
+                      . "${indent}}\n";
 
             if (grep(/optional/, @{${$field}{"qualifiers"}}))
             {
-                $$output .= "\t\telse\n"
-                          . "\t\t\tstats->$fieldName = NULL;\n";
+                $$output .= "\t\t}\n"
+                          . "\t\telse\n"
+                          . "\t\t{\n"
+                          . "\t\t\tstats->$fieldName = NULL;\n"
+                          . "\t\t}\n";
             }
         }
         elsif (/IMD_model/)
