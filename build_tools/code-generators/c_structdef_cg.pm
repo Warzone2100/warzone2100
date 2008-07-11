@@ -165,10 +165,12 @@ sub printEnum()
 
     my @values = @{${$enum}{"values"}};
 
-    my $valprefix = "${$enum}{\"name\"}_";
+    my $valprefix = "";
     $valprefix = ${${$enum}{"qualifiers"}}{"valprefix"} if exists(${${$enum}{"qualifiers"}}{"valprefix"});
     my $valsuffix = "";
     $valsuffix = ${${$enum}{"qualifiers"}}{"valsuffix"} if exists(${${$enum}{"qualifiers"}}{"valsuffix"});
+
+    $valprefix = "${$enum}{\"name\"}_" if not exists(${${$enum}{"qualifiers"}}{"valprefix"}) and not exists(${${$enum}{"qualifiers"}}{"valsuffix"});
 
     while (@values)
     {
