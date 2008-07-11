@@ -1199,6 +1199,11 @@ BOOL droidUpdateBuild(DROID *psDroid)
 
 	ASSERT( psDroid->action == DACTION_BUILD,
 		"unitUpdateBuild: unit is not building" );
+	ASSERT(psDroid->psTarget, "Trying to update a construction, but no target!");
+	if (!psDroid->psTarget)
+	{
+		return false;
+	}
 	psStruct = (STRUCTURE *)psDroid->psTarget;
 	ASSERT( psStruct->type == OBJ_STRUCTURE,
 		"unitUpdateBuild: target is not a structure" );
