@@ -156,7 +156,7 @@ typedef struct _structure_stats
 									  building*/
 	UDWORD		numWeaps;			/*Number of weapons for default */
 
-	struct _weapon_stats    *psWeapStat[STRUCT_MAXWEAPS];
+	struct WEAPON_STATS    *psWeapStat[STRUCT_MAXWEAPS];
 
 	UDWORD		numFuncs;			/*Number of functions for default*/
 	SDWORD		defaultFunc;		/*The default function*/

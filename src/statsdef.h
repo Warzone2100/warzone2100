@@ -65,67 +65,8 @@ typedef struct _brain_stats
 	STATS_COMPONENT;
 
 	UDWORD          progCap;                ///< Program capacity
-	struct _weapon_stats* psWeaponStat;     ///< weapon stats associated with this brain - for Command Droids
+	struct WEAPON_STATS* psWeaponStat;     ///< weapon stats associated with this brain - for Command Droids
 } BRAIN_STATS;
-
-typedef struct _weapon_stats
-{
-	/* Common stats */
-	STATS_COMPONENT;
-
-	UDWORD          shortRange;             ///< Max distance to target for short range shot
-	UDWORD          longRange;              ///< Max distance to target for long range shot
-	UDWORD          minRange;               ///< Min distance to target for shot
-	UDWORD          shortHit;               ///< Chance to hit at short range
-	UDWORD          longHit;                ///< Chance to hit at long range
-	UDWORD          firePause;              ///< Time between each weapon fire
-	UDWORD          numExplosions;          ///< The number of explosions per shot
-	UBYTE           numRounds;              ///< The number of rounds per salvo(magazine)
-	UDWORD          reloadTime;             ///< Time to reload the round of ammo (salvo fire)
-	UDWORD          damage;                 ///< How much damage the weapon causes
-	UDWORD          radius;                 ///< Basic blast radius of weapon
-	UDWORD          radiusHit;              ///< Chance to hit in the blast radius
-	UDWORD          radiusDamage;           ///< Damage done in the blast radius
-	UDWORD          incenTime;              ///< How long the round burns
-	UDWORD          incenDamage;            ///< Damage done each burn cycle
-	UDWORD          incenRadius;            ///< Burn radius of the round
-	UDWORD          flightSpeed;            ///< speed ammo travels at
-	UDWORD          indirectHeight;         ///< how high the ammo travels for indirect fire
-	FIREONMOVE      fireOnMove;             ///< indicates whether the droid has to stop before firing
-	WEAPON_CLASS    weaponClass;            ///< the class of weapon
-	WEAPON_SUBCLASS weaponSubClass;         ///< the subclass to which the weapon belongs
-
-	MOVEMENT_MODEL  movementModel;          ///< which projectile model to use for the bullet
-	WEAPON_EFFECT   weaponEffect;           ///< which type of warhead is associated with the weapon
-	UDWORD          recoilValue;            ///< used to compare with weight to see if recoils or not
-	UBYTE           rotate;                 ///< amount the weapon(turret) can rotate 0 = none
-	UBYTE           maxElevation;           ///< max amount the turret can be elevated up
-	SBYTE           minElevation;           ///< min amount the turret can be elevated down
-	UBYTE           facePlayer;             ///< flag to make the (explosion) effect face the player when drawn
-	UBYTE           faceInFlight;           ///< flag to make the inflight effect face the player when drawn
-	UBYTE           effectSize;             ///< size of the effect 100 = normal, 50 = half etc
-	BOOL            lightWorld;             ///< flag to indicate whether the effect lights up the world
-	UBYTE           surfaceToAir;           ///< indicates how good in the air - SHOOT_ON_GROUND, SHOOT_IN_AIR or both
-	UBYTE           vtolAttackRuns;         ///< number of attack runs a VTOL droid can do with this weapon
-	BOOL            penetrate;              ///< flag to indicate whether pentrate droid or not
-
-	/* Graphics control stats */
-	UDWORD          directLife;             ///< How long a direct fire weapon is visible. Measured in 1/100 sec.
-	UDWORD          radiusLife;             ///< How long a blast radius is visible
-
-	/* Graphics used for the weapon */
-	iIMDShape*       pMountGraphic;         ///< The turret mount to use
-	iIMDShape*       pMuzzleGraphic;        ///< The muzzle flash
-	iIMDShape*       pInFlightGraphic;      ///< The ammo in flight
-	iIMDShape*       pTargetHitGraphic;     ///< The ammo hitting a target
-	iIMDShape*       pTargetMissGraphic;    ///< The ammo missing a target
-	iIMDShape*       pWaterHitGraphic;      ///< The ammo hitting water
-	iIMDShape*       pTrailGraphic;         ///< The trail used for in flight
-
-	/* Audio */
-	SDWORD          iAudioFireID;
-	SDWORD          iAudioImpactID;
-} WEAPON_STATS;
 
 /************************************************************************************
  * Additional stats tables

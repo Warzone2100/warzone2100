@@ -280,6 +280,109 @@ enum FIREONMOVE
     YES
 end;
 
+struct WEAPON
+    %inherit COMPONENT;
+    %nomacro;
+
+    # Max distance to target for short range shot
+    UDWORD          shortRange;
+    # Max distance to target for long range shot
+    UDWORD          longRange;
+    # Min distance to target for shot
+    UDWORD          minRange;
+    # Chance to hit at short range
+    UDWORD          shortHit;
+    # Chance to hit at long range
+    UDWORD          longHit;
+    # Time between each weapon fire
+    UDWORD          firePause;
+    # The number of explosions per shot
+    UDWORD          numExplosions;
+    # The number of rounds per salvo(magazine)
+    UBYTE           numRounds;
+    # Time to reload the round of ammo (salvo fire)
+    UDWORD          reloadTime;
+    # How much damage the weapon causes
+    UDWORD          damage;
+    # Basic blast radius of weapon
+    UDWORD          radius;
+    # Chance to hit in the blast radius
+    UDWORD          radiusHit;
+    # Damage done in the blast radius
+    UDWORD          radiusDamage;
+    # How long the round burns
+    UDWORD          incenTime;
+    # Damage done each burn cycle
+    UDWORD          incenDamage;
+    # Burn radius of the round
+    UDWORD          incenRadius;
+    # speed ammo travels at
+    UDWORD          flightSpeed;
+    # how high the ammo travels for indirect fire
+    UDWORD          indirectHeight;
+    # indicates whether the droid has to stop before firing
+    enum FIREONMOVE fireOnMove;
+    # the class of weapon
+    enum WEAPON_CLASS weaponClass;
+    # the subclass to which the weapon belongs
+    enum WEAPON_SUBCLASS weaponSubClass;
+
+    # which projectile model to use for the bullet
+    enum MOVEMENT_MODEL movementModel;
+    # which type of warhead is associated with the weapon
+    enum WEAPON_EFFECT weaponEffect;
+    # used to compare with weight to see if recoils or not
+    UDWORD          recoilValue;
+    # amount the weapon(turret) can rotate 0 = none
+    UBYTE           rotate;
+    # max amount the turret can be elevated up
+    UBYTE           maxElevation;
+    # min amount the turret can be elevated down
+    SBYTE           minElevation;
+    # flag to make the (explosion) effect face the player when drawn
+    UBYTE           facePlayer;
+    # flag to make the inflight effect face the player when drawn
+    UBYTE           faceInFlight;
+    # size of the effect 100 = normal, 50 = half etc
+    UBYTE           effectSize;
+    # flag to indicate whether the effect lights up the world
+    bool            lightWorld;
+    # indicates how good in the air - SHOOT_ON_GROUND, SHOOT_IN_AIR or both
+    UBYTE           surfaceToAir;
+    # number of attack runs a VTOL droid can do with this weapon
+    UBYTE           vtolAttackRuns;
+    # flag to indicate whether pentrate droid or not
+    bool            penetrate;
+
+    # Graphics control stats
+
+    # How long a direct fire weapon is visible. Measured in 1/100 sec.
+    UDWORD          directLife;
+    # How long a blast radius is visible
+    UDWORD          radiusLife;
+
+    # Graphics used for the weapon
+
+    # The turret mount to use
+    IMD_model        pMountGraphic;
+    # The muzzle flash
+    IMD_model        pMuzzleGraphic;
+    # The ammo in flight
+    IMD_model        pInFlightGraphic;
+    # The ammo hitting a target
+    IMD_model        pTargetHitGraphic;
+    # The ammo missing a target
+    IMD_model        pTargetMissGraphic;
+    # The ammo hitting water
+    IMD_model        pWaterHitGraphic;
+    # The trail used for in flight
+    IMD_model        pTrailGraphic;
+
+    # Audio
+    SDWORD          iAudioFireID;
+    SDWORD          iAudioImpactID;
+end;
+
 struct CONSTRUCT
     %inherit COMPONENT;
     %nomacro;
