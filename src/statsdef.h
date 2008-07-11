@@ -29,17 +29,6 @@
 
 #include "lib/ivis_common/ivisdef.h"
 
-/* Elements common to all stats structures */
-#define STATS_BASE \
-	UDWORD          ref;    /**< Unique ID of the item */ \
-	char*           pName   /**< pointer to the text id name (i.e. short language-independant name) */
-
-/* Stats common to all stats structs */
-typedef struct _base_stats
-{
-	STATS_BASE;
-} BASE_STATS;
-
 #define NULL_COMP (-1)
 
 /*

@@ -1,3 +1,18 @@
+# Elements common to all stats structures
+struct BASE
+    %abstract;
+    %suffix "_STATS";
+    %macro;
+    %macroprefix "STATS_";
+
+    # Unique ID of the item
+    C-only-field UDWORD ref;
+
+    # Unique language independant name that can be used to identify a specific
+    # stats instance
+    string unique       pName;
+end;
+
 # if any types are added BEFORE 'COMP_BODY' - then Save/Load Game will have to
 # be  altered since it loops through the components from 1->MAX_COMP
 enum COMPONENT_TYPE

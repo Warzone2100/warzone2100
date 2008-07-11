@@ -297,4 +297,27 @@ typedef enum TRAVEL_MEDIUM
 	AIR,
 } TRAVEL_MEDIUM;
 
+/**
+ * Elements common to all stats structures
+ */
+typedef struct BASE_STATS
+{
+	/**
+	 * Unique ID of the item
+	 */
+	UDWORD ref;
+
+	/**
+	 * Unique language independant name that can be used to identify a specific
+	 * stats instance
+	 *
+	 * Unique across all instances
+	 */
+	char*            pName;
+} BASE_STATS;
+
+#define STATS_BASE \
+	UDWORD ref; \
+	char*            pName
+
 #endif // __INCLUDED_DB_TEMPLATE_SCHEMA_STRUCTDEF_STATS_DB2_TPL_H__

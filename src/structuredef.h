@@ -173,12 +173,12 @@ typedef enum _struct_states
 
 typedef struct _research_facility
 {
-	struct _base_stats	*psSubject;		/* the subject the structure is working on*/
+	struct BASE_STATS	*psSubject;		/* the subject the structure is working on*/
 	UDWORD		capacity;				/* Number of upgrade modules added*/
 	UDWORD		timeStarted;			/* The time the building started on the subject*/
 	UDWORD		researchPoints;			/* Research Points produced per research cycle*/
 	UDWORD		timeToResearch;			/* Time taken to research the topic*/
-	struct _base_stats	*psBestTopic;	/* The topic with the most research points
+	struct BASE_STATS	*psBestTopic;	/* The topic with the most research points
 										   that was last performed*/
 	UDWORD		powerAccrued;			/* used to keep track of power before
 										   researching a topic*/
