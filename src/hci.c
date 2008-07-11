@@ -23,6 +23,8 @@
  * Functions for the in game interface.
  * (Human Computer Interface - thanks to Alex for the file name).
  *
+ * Obviously HCI should mean "Hellish Code Incoming" -- Toksyuryel.
+ *
  */
 
 #include <string.h>
