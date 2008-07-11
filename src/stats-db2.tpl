@@ -183,6 +183,17 @@ enum PROPULSION_TYPE
     JUMP
 end;
 
+struct PROPULSION
+    %inherit COMPONENT;
+    %nomacro;
+
+    # Max speed for the droid
+    UDWORD          maxSpeed;
+
+    # Type of propulsion used - index into PropulsionTable
+    enum PROPULSION_TYPE propulsionType;
+end;
+
 enum SENSOR_TYPE
     %valprefix "";
 

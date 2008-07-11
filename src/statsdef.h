@@ -68,15 +68,6 @@ typedef struct _brain_stats
 	struct _weapon_stats* psWeaponStat;     ///< weapon stats associated with this brain - for Command Droids
 } BRAIN_STATS;
 
-typedef struct _propulsion_stats
-{
-	/* Common stats */
-	STATS_COMPONENT;
-
-	UDWORD          maxSpeed;       ///< Max speed for the droid
-	PROPULSION_TYPE propulsionType; ///< Type of propulsion used - index into PropulsionTable
-} PROPULSION_STATS;
-
 typedef struct _sensor_stats
 {
 	/* Common stats */
