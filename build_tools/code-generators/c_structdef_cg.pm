@@ -25,7 +25,7 @@ sub printStructFieldType
     elsif (/enum/)      { $$output .= "${${$field}{\"enum\"}}{\"name\"} "; }
     elsif (/IMD_model/) { $$output .= "iIMDShape*       "; }
     elsif (/C-only-field/) { $$output .= "${$field}{\"ctype\"} "; }
-    else                { die "UKNOWN TYPE: $_"; }
+    else                { die "error:$filename:${$field}{\"line\"}: UKNOWN TYPE: $_"; }
 }
 
 sub preProcessField

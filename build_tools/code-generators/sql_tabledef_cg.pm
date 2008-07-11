@@ -33,7 +33,7 @@ sub printStructFieldType
     }
     else
     {
-        die "UKNOWN TYPE: $_";
+        die "error:$filename:${$field}{\"line\"}: UKNOWN TYPE: $_"; }
     }
 }
 

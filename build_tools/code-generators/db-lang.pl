@@ -58,7 +58,7 @@ sub parseEnum
         }
         elsif (/^\s*(\w+)\s*$/)
         {
-            my %value = (name=>$1);
+            my %value = (name=>$1, line=>$$count);
 
             @{$value{"comment"}} = @curComment;
             @curComment = ();
@@ -208,7 +208,7 @@ sub parseStruct
         # Parse regular field declarations
         elsif (/^\s*(count|real|bool)\s+(unique\s+)?(\w+)\s*;\s*$/)
         {
-            my %field = (type=>$1, name=>$3);
+            my %field = (type=>$1, name=>$3, line=>$$count);
 
             push @{$field{"qualifiers"}}, $2 if $2;
 
@@ -220,7 +220,7 @@ sub parseStruct
         # Parse field declarations with "transition" types (types that should be replaced with others eventually)
         elsif (/^\s*([US]D?WORD|[US]BYTE)\s+(unique\s+)?(\w+)\s*;\s*$/)
         {
-            my %field = (type=>$1, name=>$3);
+            my %field = (type=>$1, name=>$3, line=>$$count);
 
             push @{$field{"qualifiers"}}, $2 if $2;
 
@@ -233,7 +233,7 @@ sub parseStruct
         # Meaning they can be NULL in C.
         elsif (/^\s*(string|IMD_model)\s+(unique\s+)?(optional\s+)?(\w+)\s*;\s*$/)
         {
-            my %field = (type=>$1, name=>$4);
+            my %field = (type=>$1, name=>$4, line=>$$count);
 
             push @{$field{"qualifiers"}}, $2 if $2;
             push @{$field{"qualifiers"}}, $3 if $3;
@@ -248,7 +248,7 @@ sub parseStruct
         {
             die "error: Cannot use enum \"$2\" as it isn't declared yet" unless exists($enumMap{$2});
 
-            my %field = (type=>$1, enum=>$enumMap{$2}, name=>$4);
+            my %field = (type=>$1, enum=>$enumMap{$2}, name=>$4, line=>$$count);
 
             push @{$field{"qualifiers"}}, $3 if $3;
 
@@ -260,7 +260,7 @@ sub parseStruct
         # Parse C-only fields
         elsif (/^\s*(C-only-field)\s+(.*)\s+(\w+)\s*;\s*$/)
         {
-            my %field = (type=>$1, ctype=>$2, name=>$3);
+            my %field = (type=>$1, ctype=>$2, name=>$3, line=>$$count);
 
             @{$field{"comment"}} = @curComment;
             @curComment = ();
