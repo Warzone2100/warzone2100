@@ -154,6 +154,30 @@ sub printStructContent
     printStructFields($output, $struct, $enumMap);
 }
 
+sub printLoadFunc
+{
+    my ($output, $struct) = @_;
+
+    $$output .= "/* Forward declaration to allow pointers to this type */\n"
+              . "struct sqlite3;\n"
+              . "\n"
+              . "/** Load the contents of the ${$struct}{\"name\"} table from the given SQLite database.\n"
+              . " *\n"
+              . " *  \@param db represents the database to load from\n"
+              . " *\n"
+              . " *  \@return true if we succesfully loaded all available rows from the table,\n"
+              . " *          false otherwise.\n"
+              . " */\n"
+              . "extern bool\n"
+              . "#line ${${${$struct}{\"qualifiers\"}}{\"loadFunc\"}}{\"line\"} \"$filename\"\n"
+              . "${${${$struct}{\"qualifiers\"}}{\"loadFunc\"}}{\"name\"}\n";
+
+    my $count = $$output =~ s/\n/\n/sg;
+    $count += 2;
+    $$output .= "#line $count \"$outfile\"\n"
+              . "\t(struct sqlite3* db);\n\n";
+}
+
 sub printEnum()
 {
     my ($output, $enum) = @_;
@@ -216,26 +240,7 @@ sub printStruct()
     # Finish printing the structure
     $$output .= "} ${prefix}${name}${suffix};\n\n";
 
-    return unless exists(${${$struct}{"qualifiers"}}{"loadFunc"});
-
-    $$output .= "/* Forward declaration to allow pointers to this type */\n"
-              . "struct sqlite3;\n"
-              . "\n"
-              . "/** Load the contents of the ${$struct}{\"name\"} table from the given SQLite database.\n"
-              . " *\n"
-              . " *  \@param db represents the database to load from\n"
-              . " *\n"
-              . " *  \@return true if we succesfully loaded all available rows from the table,\n"
-              . " *          false otherwise.\n"
-              . " */\n"
-              . "extern bool\n"
-              . "#line ${${${$struct}{\"qualifiers\"}}{\"loadFunc\"}}{\"line\"} \"$filename\"\n"
-              . "${${${$struct}{\"qualifiers\"}}{\"loadFunc\"}}{\"name\"}\n";
-
-    my $count = $$output =~ s/\n/\n/sg;
-    $count += 2;
-    $$output .= "#line $count \"$outfile\"\n"
-              . "\t(struct sqlite3* db);\n\n";
+    printLoadFunc($output, $struct) if exists(${${$struct}{"qualifiers"}}{"loadFunc"});
 }
 
 sub printHdrGuard
