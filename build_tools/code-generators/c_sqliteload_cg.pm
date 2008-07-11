@@ -467,6 +467,10 @@ sub printRowProcessCode
         {
             $$output .= "\t\tstats->$fieldName = sqlite3_column_int(stmt, cols.$fieldName);\n";
         }
+        elsif (/UDWORD/)
+        {
+            $$output .= "\t\tstats->$fieldName = sqlite3_column_int(stmt, cols.$fieldName);\n";
+        }
         elsif (/real/)
         {
             $$output .= "\t\tstats->$fieldName = sqlite3_column_double(stmt, cols.$fieldName);\n";
@@ -482,10 +486,6 @@ sub printRowProcessCode
 
             $$output .= "\t\tstats->$fieldName = sqlite3_column_int(stmt, cols.$fieldName);\n"
                       . "\t\tASSERT(stats->$fieldName < $enumSize, \"Enum out of range (%u), maximum is $enumSize\", stats->$fieldName);\n";
-        }
-        elsif (/count/)
-        {
-            $$output .= "\t\tstats->$fieldName = sqlite3_column_int(stmt, cols.$fieldName);\n";
         }
         elsif (/string/)
         {

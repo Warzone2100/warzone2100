@@ -205,6 +205,18 @@ sub parseStruct
 
             push @{$curStruct{"fields"}}, \%field;
         }
+        # Parse field declarations with "transition" types (types that should be replaced with others eventually)
+        elsif (/^\s*(UDWORD)\s+(unique\s+)?(\w+)\s*;\s*$/)
+        {
+            my %field = (type=>$1, name=>$3);
+
+            push @{$field{"qualifiers"}}, $2 if $2;
+
+            @{$field{"comment"}} = @curComment;
+            @curComment = ();
+
+            push @{$curStruct{"fields"}}, \%field;
+        }
         # Parse field declarations for types that can have optional values.
         # Meaning they can be NULL in C.
         elsif (/^\s*(string|IMD_model)\s+(unique\s+)?(optional\s+)?(\w+)\s*;\s*$/)
