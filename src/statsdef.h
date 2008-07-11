@@ -35,22 +35,6 @@
  * Stats structures type definitions
  */
 
-/* Stats common to all droid components */
-#define COMPONENT_STATS \
-	STATS_BASE;                             /**< Basic stats */ \
-	UDWORD          buildPower;             /**< Power required to build the component */ \
-	UDWORD          buildPoints;            /**< Time required to build the component */ \
-	UDWORD          weight;                 /**< Component's weight */ \
-	UDWORD          body;                   /**< Component's body points */ \
-	BOOL            design;                 /**< flag to indicate whether this component can be used in the design screen */ \
-	iIMDShape*      pIMD                    /**< The IMD to draw for this component */
-
-/* Stats common to all components */
-typedef struct _comp_base_stats
-{
-	COMPONENT_STATS;
-} COMP_BASE_STATS;
-
 #define    SHOOT_ON_GROUND  0x01
 #define    SHOOT_IN_AIR     0x02
 
@@ -63,7 +47,7 @@ typedef struct _body_stats
 	/* common stats - N.B. system points for a body
 	 * are the limit for all other components
 	 */
-	COMPONENT_STATS;
+	STATS_COMPONENT;
 
 	UBYTE           size;           ///< How big the body is - affects how hit
 	UDWORD          weaponSlots;    ///< The number of weapon slots on the body
@@ -78,7 +62,7 @@ typedef struct _body_stats
 typedef struct _brain_stats
 {
 	/* Common stats */
-	COMPONENT_STATS;
+	STATS_COMPONENT;
 
 	UDWORD          progCap;                ///< Program capacity
 	struct _weapon_stats* psWeaponStat;     ///< weapon stats associated with this brain - for Command Droids
@@ -87,7 +71,7 @@ typedef struct _brain_stats
 typedef struct _propulsion_stats
 {
 	/* Common stats */
-	COMPONENT_STATS;
+	STATS_COMPONENT;
 
 	UDWORD          maxSpeed;       ///< Max speed for the droid
 	PROPULSION_TYPE propulsionType; ///< Type of propulsion used - index into PropulsionTable
@@ -96,7 +80,7 @@ typedef struct _propulsion_stats
 typedef struct _sensor_stats
 {
 	/* Common stats */
-	COMPONENT_STATS;
+	STATS_COMPONENT;
 
 	UDWORD          range;                  ///< Sensor range
 	UDWORD          power;                  ///< Sensor power (put against ecm power)
@@ -109,7 +93,7 @@ typedef struct _sensor_stats
 typedef struct _ecm_stats
 {
 	/* Common stats */
-	COMPONENT_STATS;
+	STATS_COMPONENT;
 
 	UDWORD          range;                  ///< ECM range
 	UDWORD          power;                  ///< ECM power (put against sensor power)
@@ -120,7 +104,7 @@ typedef struct _ecm_stats
 typedef struct _repair_stats
 {
 	/* Common stats */
-	COMPONENT_STATS;
+	STATS_COMPONENT;
 
 	UDWORD          repairPoints;           ///< How much damage is restored to Body Points and armour each Repair Cycle
 	BOOL            repairArmour;           ///< whether armour can be repaired or not
@@ -132,7 +116,7 @@ typedef struct _repair_stats
 typedef struct _weapon_stats
 {
 	/* Common stats */
-	COMPONENT_STATS;
+	STATS_COMPONENT;
 
 	UDWORD          shortRange;             ///< Max distance to target for short range shot
 	UDWORD          longRange;              ///< Max distance to target for long range shot
@@ -191,7 +175,7 @@ typedef struct _weapon_stats
 typedef struct _construct_stats
 {
 	/* Common stats */
-	COMPONENT_STATS;
+	STATS_COMPONENT;
 
 	UDWORD          constructPoints;        ///< The number of points contributed each cycle
 	iIMDShape*      pMountGraphic;          ///< The turret mount to use

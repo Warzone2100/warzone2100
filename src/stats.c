@@ -144,7 +144,7 @@ static void updateMaxConstStats(UWORD maxValue);
 
 /*Macro to Deallocate stats*/
 #define STATS_DEALLOC(list, listSize, type) \
-	statsDealloc((COMP_BASE_STATS*)(list), (listSize), sizeof(type))
+	statsDealloc((COMPONENT_STATS*)(list), (listSize), sizeof(type))
 
 
 void statsInitVars(void)
@@ -202,7 +202,7 @@ void statsInitVars(void)
 
 
 /*Deallocate all the stats assigned from input data*/
-void statsDealloc(COMP_BASE_STATS* pStats, UDWORD listSize, UDWORD structureSize)
+void statsDealloc(COMPONENT_STATS* pStats, UDWORD listSize, UDWORD structureSize)
 {
 	free(pStats);
 }
@@ -696,11 +696,11 @@ BOOL loadWeaponStats(const char *pWeaponData, UDWORD bufferSize)
 		//set design flag
 		if (designable)
 		{
-			psStats->design = true;
+			psStats->designable = true;
 		}
 		else
 		{
-			psStats->design = false;
+			psStats->designable = false;
 		}
 
 		//set penetrate flag
@@ -739,7 +739,7 @@ BOOL loadWeaponStats(const char *pWeaponData, UDWORD bufferSize)
 		statsSetWeapon(psStats, i);
 
 		// Set the max stat values for the design screen
-		if (psStats->design)
+		if (psStats->designable)
 		{
 			setMaxWeaponRange(psStats->longRange);
 			setMaxWeaponDamage(psStats->damage);
@@ -812,7 +812,7 @@ BOOL loadBodyStats(const char *pBodyData, UDWORD bufferSize)
 		}
 
 		//set design flag
-		psStats->design = (designable != 0);
+		psStats->designable = (designable != 0);
 
 		//get the IMD for the component
 		if (strcmp(GfxFile, "0"))
@@ -850,7 +850,7 @@ BOOL loadBodyStats(const char *pBodyData, UDWORD bufferSize)
 		statsSetBody(psStats, i);
 
 		//set the max stat values for the design screen
-		if (psStats->design)
+		if (psStats->designable)
 		{
 			//use front armour value to prevent bodyStats corrupt problems
 			setMaxBodyArmour(psStats->armourValue[HIT_SIDE_FRONT][WC_KINETIC]);
@@ -932,11 +932,11 @@ BOOL loadBrainStats(const char *pBrainData, UDWORD bufferSize)
 		// All brains except ZNULLBRAIN available in design screen
 		if ( strcmp( BrainName, "ZNULLBRAIN" ) == 0 )
 		{
-			psStats->design = false;
+			psStats->designable = false;
 		}
 		else
 		{
-			psStats->design = true;
+			psStats->designable = true;
 		}
 
 		//save the stats
@@ -1033,7 +1033,7 @@ BOOL loadPropulsionStats(const char *pPropulsionData, UDWORD bufferSize)
 		psStats->ref = REF_PROPULSION_START + i;
 
 		//set design flag
-		psStats->design = (designable != 0);
+		psStats->designable = (designable != 0);
 
 		//deal with imd - stored so that got something to see in Design Screen!
 		if (strcmp(imdName, "0"))
@@ -1063,7 +1063,7 @@ BOOL loadPropulsionStats(const char *pPropulsionData, UDWORD bufferSize)
 		statsSetPropulsion(psStats, i);
 
 		//set the max stat values for the design screen
-		if (psStats->design)
+		if (psStats->designable)
 		{
 			setMaxPropulsionSpeed(psStats->maxSpeed);
 			//setMaxComponentWeight(psStats->weight);
@@ -1082,14 +1082,14 @@ BOOL loadPropulsionStats(const char *pPropulsionData, UDWORD bufferSize)
 		for (i = 0; i < numBodyStats; i++)
 		{
 			//check stat is designable
-			if (asBodyStats[i].design)
+			if (asBodyStats[i].designable)
 			{
 				unsigned int j = 0;
 				//check against each propulsion stat
 				for (j = 0; j < numPropulsionStats; j++)
 				{
 					//check stat is designable
-					if (asPropulsionStats[j].design)
+					if (asPropulsionStats[j].designable)
 					{
 						setMaxComponentWeight(asPropulsionStats[j].weight * asBodyStats[i].weight / 100);
 					}
@@ -1183,7 +1183,7 @@ BOOL loadSensorStats(const char *pSensorData, UDWORD bufferSize)
 		psStats->time *= WEAPON_TIME;
 
 		//set design flag
-		psStats->design = (designable != 0);
+		psStats->designable = (designable != 0);
 
 		//get the IMD for the component
 		if (strcmp(mountGfx, "0"))
@@ -1220,7 +1220,7 @@ BOOL loadSensorStats(const char *pSensorData, UDWORD bufferSize)
 		statsSetSensor(psStats, i);
 
         //set the max stat values for the design screen
-        if (psStats->design)
+        if (psStats->designable)
         {
             setMaxSensorRange(psStats->range);
             setMaxSensorPower(psStats->power);
@@ -1289,7 +1289,7 @@ BOOL loadECMStats(const char *pECMData, UDWORD bufferSize)
 		}
 
 		//set design flag
-		psStats->design = (designable != 0);
+		psStats->designable = (designable != 0);
 
 		//get the IMD for the component
 		if (strcmp(GfxFile, "0"))
@@ -1327,7 +1327,7 @@ BOOL loadECMStats(const char *pECMData, UDWORD bufferSize)
 		statsSetECM(psStats, i);
 
 		// Set the max stat values for the design screen
-		if (psStats->design)
+		if (psStats->designable)
 		{
 			setMaxECMPower(psStats->power);
 			setMaxECMRange(psStats->range);
@@ -1408,7 +1408,7 @@ BOOL loadRepairStats(const char *pRepairData, UDWORD bufferSize)
 		}
 
 		//set design flag
-		psStats->design = (designable != 0);
+		psStats->designable = (designable != 0);
 
 		//get the IMD for the component
 		if (strcmp(GfxFile, "0"))
@@ -1446,7 +1446,7 @@ BOOL loadRepairStats(const char *pRepairData, UDWORD bufferSize)
 		statsSetRepair(psStats, i);
 
         //set the max stat values for the design screen
-        if (psStats->design)
+        if (psStats->designable)
         {
             setMaxRepairPoints(psStats->repairPoints);
             setMaxComponentWeight(psStats->weight);
@@ -1500,11 +1500,11 @@ BOOL loadConstructStats(const char *pConstructData, UDWORD bufferSize)
 		//set design flag
 		if (designable)
 		{
-			psStats->design = true;
+			psStats->designable = true;
 		}
 		else
 		{
-			psStats->design = false;
+			psStats->designable = false;
 		}
 
 		//get the IMD for the component
@@ -1543,7 +1543,7 @@ BOOL loadConstructStats(const char *pConstructData, UDWORD bufferSize)
 		statsSetConstruct(psStats, i);
 
 		// Set the max stat values for the design screen
-		if (psStats->design)
+		if (psStats->designable)
 		{
 			setMaxConstPoints(psStats->constructPoints);
 			setMaxComponentWeight(psStats->weight);

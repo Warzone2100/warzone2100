@@ -2823,9 +2823,9 @@ BOOL StatGetComponentIMD(BASE_STATS *Stat, SDWORD compID,iIMDShape **CompIMD,iIM
 	switch (compID)
 	{
 	case COMP_BODY:
-		*CompIMD = ((COMP_BASE_STATS *)Stat)->pIMD;
+		*CompIMD = ((COMPONENT_STATS *)Stat)->pIMD;
 		return true;
-//		return ((COMP_BASE_STATS *)Stat)->pIMD;
+//		return ((COMPONENT_STATS *)Stat)->pIMD;
 
 	case COMP_BRAIN:
 //		ASSERT( ((UBYTE*)Stat >= (UBYTE*)asCommandDroids) &&
@@ -2840,31 +2840,31 @@ BOOL StatGetComponentIMD(BASE_STATS *Stat, SDWORD compID,iIMDShape **CompIMD,iIM
 
 	case COMP_WEAPON:
 		*MountIMD = ((WEAPON_STATS*)Stat)->pMountGraphic;
-		*CompIMD = ((COMP_BASE_STATS *)Stat)->pIMD;
+		*CompIMD = ((COMPONENT_STATS *)Stat)->pIMD;
 		return true;
 
 	case COMP_SENSOR:
 		*MountIMD = ((SENSOR_STATS*)Stat)->pMountGraphic;
-		*CompIMD = ((COMP_BASE_STATS *)Stat)->pIMD;
+		*CompIMD = ((COMPONENT_STATS *)Stat)->pIMD;
 		return true;
 
 	case COMP_ECM:
 		*MountIMD = ((ECM_STATS*)Stat)->pMountGraphic;
-		*CompIMD = ((COMP_BASE_STATS *)Stat)->pIMD;
+		*CompIMD = ((COMPONENT_STATS *)Stat)->pIMD;
 		return true;
 
 	case COMP_CONSTRUCT:
 		*MountIMD = ((CONSTRUCT_STATS*)Stat)->pMountGraphic;
-		*CompIMD = ((COMP_BASE_STATS *)Stat)->pIMD;
+		*CompIMD = ((COMPONENT_STATS *)Stat)->pIMD;
 		return true;
 
 	case COMP_PROPULSION:
-		*CompIMD = ((COMP_BASE_STATS *)Stat)->pIMD;
+		*CompIMD = ((COMPONENT_STATS *)Stat)->pIMD;
 		return true;
 
 	case COMP_REPAIRUNIT:
 		*MountIMD = ((REPAIR_STATS*)Stat)->pMountGraphic;
-		*CompIMD = ((COMP_BASE_STATS *)Stat)->pIMD;
+		*CompIMD = ((COMPONENT_STATS *)Stat)->pIMD;
 		return true;
 
 	default:

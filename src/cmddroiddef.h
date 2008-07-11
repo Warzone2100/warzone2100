@@ -33,7 +33,7 @@
 typedef struct _command_droid
 {
 	// define the command droid as a COMPONENT so it fits into the design screen
-	COMPONENT_STATS;
+	STATS_COMPONENT;
 
 	UDWORD          died;
 	SWORD           aggression;

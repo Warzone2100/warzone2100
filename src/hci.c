@@ -362,9 +362,9 @@ static UWORD			*pSList;
 
 /* Store a list of component stats pointers for the design screen */
 UDWORD			numComponent;
-COMP_BASE_STATS	**apsComponentList;
+COMPONENT_STATS	**apsComponentList;
 UDWORD			numExtraSys;
-COMP_BASE_STATS	**apsExtraSysList;
+COMPONENT_STATS	**apsExtraSysList;
 
 //defined in HCI.h now
 // store the objects that are being used for the object bar
@@ -584,7 +584,7 @@ BOOL intInitialise(void)
 	}
 
 	/* Create storage for the component list */
-	apsComponentList = (COMP_BASE_STATS **)malloc(sizeof(COMP_BASE_STATS *) *
+	apsComponentList = (COMPONENT_STATS **)malloc(sizeof(COMPONENT_STATS *) *
 		MAXCOMPONENT);
 	if (apsComponentList == NULL)
 	{
@@ -594,7 +594,7 @@ BOOL intInitialise(void)
 	}
 
 	/* Create storage for the extra systems list */
-	apsExtraSysList = (COMP_BASE_STATS **)malloc(sizeof(COMP_BASE_STATS *) *
+	apsExtraSysList = (COMPONENT_STATS **)malloc(sizeof(COMPONENT_STATS *) *
 		MAXEXTRASYS);
 	if (apsExtraSysList == NULL)
 	{

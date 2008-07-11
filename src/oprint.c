@@ -56,7 +56,7 @@ static void printBaseObjInfo(const BASE_OBJECT* psObj)
 /** print out information about a general component
  *  \param psStats the component to print the info for
  */
-static void printComponentInfo(const COMP_BASE_STATS* psStats)
+static void printComponentInfo(const COMPONENT_STATS* psStats)
 {
 	psStats = psStats;
 
@@ -183,7 +183,7 @@ static void printWeaponInfo(const WEAPON_STATS* psStats)
 
 
 	CONPRINTF(ConsoleString,(ConsoleString,"Weapon: "));
-	printComponentInfo((COMP_BASE_STATS *)psStats);
+	printComponentInfo((COMPONENT_STATS *)psStats);
 	CONPRINTF(ConsoleString,(ConsoleString,"   sRng %d lRng %d mRng %d %s\n"
 			  "   sHt %d lHt %d pause %d dam %d\n",
 				psStats->shortRange, proj_GetLongRange(psStats), psStats->minRange,
@@ -245,7 +245,7 @@ void printDroidInfo(const DROID* psDroid)
 			{
 				CONPRINTF(ConsoleString,(ConsoleString,"Body: "));
 				psBdyStats = asBodyStats + psDroid->asBits[i].nStat;
-				printComponentInfo((COMP_BASE_STATS *)psBdyStats);
+				printComponentInfo((COMPONENT_STATS *)psBdyStats);
 			}
 			else
 			{
@@ -259,7 +259,7 @@ void printDroidInfo(const DROID* psDroid)
 			{
 				CONPRINTF(ConsoleString,(ConsoleString,"Prop: "));
 				psPropStats = asPropulsionStats + psDroid->asBits[i].nStat;
-				printComponentInfo((COMP_BASE_STATS *)psPropStats);
+				printComponentInfo((COMPONENT_STATS *)psPropStats);
 			}
 			else
 			{
@@ -271,7 +271,7 @@ void printDroidInfo(const DROID* psDroid)
 			{
 				CONPRINTF(ConsoleString,(ConsoleString,"ECM: "));
 				psECMStats = asECMStats + psDroid->asBits[i].nStat;
-				printComponentInfo((COMP_BASE_STATS *)psECMStats);
+				printComponentInfo((COMPONENT_STATS *)psECMStats);
 				CONPRINTF(ConsoleString,(ConsoleString,"   pwr %d loc %d imd %p\n",
 					//psECMStats->power, psECMStats->location, psECMStats->pMountGraphic));
 					ecmPower(psECMStats, psDroid->player), psECMStats->location,
@@ -287,7 +287,7 @@ void printDroidInfo(const DROID* psDroid)
 			{
 				CONPRINTF(ConsoleString,(ConsoleString,"Sensor: "));
 				psSensStats = asSensorStats + psDroid->asBits[i].nStat;
-				printComponentInfo((COMP_BASE_STATS *)psSensStats);
+				printComponentInfo((COMPONENT_STATS *)psSensStats);
 				CONPRINTF(ConsoleString,(ConsoleString,"   rng %d pwr %d loc %d imd %p\n",
 					sensorRange(psSensStats,psDroid->player),
 					sensorPower(psSensStats,psDroid->player),
@@ -303,7 +303,7 @@ void printDroidInfo(const DROID* psDroid)
 			{
 				CONPRINTF(ConsoleString,(ConsoleString,"Construct: "));
 				psConstStats = asConstructStats + psDroid->asBits[i].nStat;
-				printComponentInfo((COMP_BASE_STATS *)psConstStats);
+				printComponentInfo((COMPONENT_STATS *)psConstStats);
 				CONPRINTF(ConsoleString,(ConsoleString,"   cPnts %d imd %p\n",
 					//psConstStats->constructPoints, psConstStats->pMountGraphic));
 					constructorPoints(psConstStats, psDroid->player),
@@ -315,7 +315,7 @@ void printDroidInfo(const DROID* psDroid)
 			{
 				CONPRINTF(ConsoleString,(ConsoleString,"Repair: "));
 				psRepairStats = asRepairStats + psDroid->asBits[i].nStat;
-				printComponentInfo((COMP_BASE_STATS *)psRepairStats);
+				printComponentInfo((COMPONENT_STATS *)psRepairStats);
 				CONPRINTF(ConsoleString,(ConsoleString,"   repPnts %d loc %d imd %p\n",
 					//psRepairStats->repairPoints, psRepairStats->location,
 					repairPoints(psRepairStats, psDroid->player),

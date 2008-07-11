@@ -9766,7 +9766,7 @@ static BOOL writeCompListFile(char *pFileName)
 	char *pFileData;
 	SAVE_COMPLIST			*psSaveCompList;
 	UDWORD					fileSize, totalComp, player, i;
-	COMP_BASE_STATS			*psStats;
+	COMPONENT_STATS			*psStats;
 
 	// Calculate the file size
 	totalComp = (numBodyStats + numWeaponStats + numConstructStats + numECMStats +
@@ -9797,7 +9797,7 @@ static BOOL writeCompListFile(char *pFileName)
 	{
 		for(i = 0; i < numBodyStats; i++)
 		{
-			psStats = (COMP_BASE_STATS *)(asBodyStats + i);
+			psStats = (COMPONENT_STATS *)(asBodyStats + i);
 
 			strcpy(psSaveCompList->name, psStats->pName);
 
@@ -9808,7 +9808,7 @@ static BOOL writeCompListFile(char *pFileName)
 		}
 		for(i = 0; i < numWeaponStats; i++)
 		{
-			psStats = (COMP_BASE_STATS *)(asWeaponStats + i);
+			psStats = (COMPONENT_STATS *)(asWeaponStats + i);
 
 			strcpy(psSaveCompList->name, psStats->pName);
 
@@ -9819,7 +9819,7 @@ static BOOL writeCompListFile(char *pFileName)
 		}
 		for(i = 0; i < numConstructStats; i++)
 		{
-			psStats = (COMP_BASE_STATS *)(asConstructStats + i);
+			psStats = (COMPONENT_STATS *)(asConstructStats + i);
 
 			strcpy(psSaveCompList->name, psStats->pName);
 
@@ -9830,7 +9830,7 @@ static BOOL writeCompListFile(char *pFileName)
 		}
 		for(i = 0; i < numECMStats; i++)
 		{
-			psStats = (COMP_BASE_STATS *)(asECMStats + i);
+			psStats = (COMPONENT_STATS *)(asECMStats + i);
 
 			strcpy(psSaveCompList->name, psStats->pName);
 
@@ -9841,7 +9841,7 @@ static BOOL writeCompListFile(char *pFileName)
 		}
 		for(i = 0; i < numPropulsionStats; i++)
 		{
-			psStats = (COMP_BASE_STATS *)(asPropulsionStats + i);
+			psStats = (COMPONENT_STATS *)(asPropulsionStats + i);
 
 			strcpy(psSaveCompList->name, psStats->pName);
 
@@ -9852,7 +9852,7 @@ static BOOL writeCompListFile(char *pFileName)
 		}
 		for(i = 0; i < numSensorStats; i++)
 		{
-			psStats = (COMP_BASE_STATS *)(asSensorStats + i);
+			psStats = (COMPONENT_STATS *)(asSensorStats + i);
 
 			strcpy(psSaveCompList->name, psStats->pName);
 
@@ -9863,7 +9863,7 @@ static BOOL writeCompListFile(char *pFileName)
 		}
 		for(i = 0; i < numRepairStats; i++)
 		{
-			psStats = (COMP_BASE_STATS *)(asRepairStats + i);
+			psStats = (COMPONENT_STATS *)(asRepairStats + i);
 
 			strcpy(psSaveCompList->name, psStats->pName);
 
@@ -9874,7 +9874,7 @@ static BOOL writeCompListFile(char *pFileName)
 		}
 		for(i = 0; i < numBrainStats; i++)
 		{
-			psStats = (COMP_BASE_STATS *)(asBrainStats + i);
+			psStats = (COMPONENT_STATS *)(asBrainStats + i);
 
 			strcpy(psSaveCompList->name, psStats->pName);
 

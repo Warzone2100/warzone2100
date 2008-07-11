@@ -1913,7 +1913,7 @@ BOOL loadDroidTemplates(const char *pDroidData, UDWORD bufferSize)
 		}
 		else
 		{
-			COMP_BASE_STATS *pStats = (COMP_BASE_STATS *)asBodyStats;
+			COMPONENT_STATS *pStats = (COMPONENT_STATS *)asBodyStats;
 			const size_t size = sizeof(BODY_STATS);
 			unsigned int inc = 0;
 			BOOL found = false;
@@ -1934,7 +1934,7 @@ BOOL loadDroidTemplates(const char *pDroidData, UDWORD bufferSize)
 					found = true;
 					break;
 				}
-				pStats = ((COMP_BASE_STATS*)((UBYTE*)pStats + size));
+				pStats = ((COMPONENT_STATS*)((UBYTE*)pStats + size));
 			}
 			if (!found)
 			{
@@ -1957,7 +1957,7 @@ BOOL loadDroidTemplates(const char *pDroidData, UDWORD bufferSize)
 		}
 		else
 		{
-			COMP_BASE_STATS *pStats = (COMP_BASE_STATS *)asBrainStats;
+			COMPONENT_STATS *pStats = (COMPONENT_STATS *)asBrainStats;
 			const size_t size = sizeof(BRAIN_STATS);
 			unsigned int inc = 0;
 			BOOL found = false;
@@ -1978,7 +1978,7 @@ BOOL loadDroidTemplates(const char *pDroidData, UDWORD bufferSize)
 					found = true;
 					break;
 				}
-				pStats = ((COMP_BASE_STATS*)((UBYTE*)pStats + size));
+				pStats = ((COMPONENT_STATS*)((UBYTE*)pStats + size));
 			}
 			if (!found)
 			{
@@ -2002,7 +2002,7 @@ BOOL loadDroidTemplates(const char *pDroidData, UDWORD bufferSize)
 		}
 		else
 		{
-			COMP_BASE_STATS *pStats = (COMP_BASE_STATS *)asConstructStats;
+			COMPONENT_STATS *pStats = (COMPONENT_STATS *)asConstructStats;
 			const size_t size = sizeof(CONSTRUCT_STATS);
 			unsigned int inc = 0;
 			BOOL found = false;
@@ -2022,7 +2022,7 @@ BOOL loadDroidTemplates(const char *pDroidData, UDWORD bufferSize)
 					found = true;
 					break;
 				}
-				pStats = ((COMP_BASE_STATS*)((UBYTE*)pStats + size));
+				pStats = ((COMPONENT_STATS*)((UBYTE*)pStats + size));
 			}
 			if (!found)
 			{
@@ -2045,7 +2045,7 @@ BOOL loadDroidTemplates(const char *pDroidData, UDWORD bufferSize)
 		}
 		else
 		{
-			COMP_BASE_STATS *pStats = (COMP_BASE_STATS *)asECMStats;
+			COMPONENT_STATS *pStats = (COMPONENT_STATS *)asECMStats;
 			const size_t size = sizeof(ECM_STATS);
 			unsigned int inc = 0;
 			BOOL found = false;
@@ -2065,7 +2065,7 @@ BOOL loadDroidTemplates(const char *pDroidData, UDWORD bufferSize)
 					found = true;
 					break;
 				}
-				pStats = ((COMP_BASE_STATS*)((UBYTE*)pStats + size));
+				pStats = ((COMPONENT_STATS*)((UBYTE*)pStats + size));
 			}
 			if (!found)
 			{
@@ -2101,7 +2101,7 @@ BOOL loadDroidTemplates(const char *pDroidData, UDWORD bufferSize)
 		}
 		else
 		{
-			COMP_BASE_STATS *pStats = (COMP_BASE_STATS *)asPropulsionStats;
+			COMPONENT_STATS *pStats = (COMPONENT_STATS *)asPropulsionStats;
 			const size_t size = sizeof(PROPULSION_STATS);
 			unsigned int inc = 0;
 			BOOL found = false;
@@ -2121,7 +2121,7 @@ BOOL loadDroidTemplates(const char *pDroidData, UDWORD bufferSize)
 					found = true;
 					break;
 				}
-				pStats = ((COMP_BASE_STATS*)((UBYTE*)pStats + size));
+				pStats = ((COMPONENT_STATS*)((UBYTE*)pStats + size));
 			}
 			if (!found)
 			{
@@ -2144,7 +2144,7 @@ BOOL loadDroidTemplates(const char *pDroidData, UDWORD bufferSize)
 		}
 		else
 		{
-			COMP_BASE_STATS *pStats = (COMP_BASE_STATS *)asRepairStats;
+			COMPONENT_STATS *pStats = (COMPONENT_STATS *)asRepairStats;
 			const size_t size = sizeof(REPAIR_STATS);
 			unsigned int inc = 0;
 			BOOL found = false;
@@ -2164,7 +2164,7 @@ BOOL loadDroidTemplates(const char *pDroidData, UDWORD bufferSize)
 					found = true;
 					break;
 				}
-				pStats = ((COMP_BASE_STATS*)((UBYTE*)pStats + size));
+				pStats = ((COMPONENT_STATS*)((UBYTE*)pStats + size));
 			}
 			if (!found)
 			{
@@ -2221,7 +2221,7 @@ BOOL loadDroidTemplates(const char *pDroidData, UDWORD bufferSize)
 		}
 		else
 		{
-			COMP_BASE_STATS *pStats = (COMP_BASE_STATS *)asSensorStats;
+			COMPONENT_STATS *pStats = (COMPONENT_STATS *)asSensorStats;
 			const size_t size = sizeof(SENSOR_STATS);
 			unsigned int inc = 0;
 			BOOL found = false;
@@ -2242,7 +2242,7 @@ BOOL loadDroidTemplates(const char *pDroidData, UDWORD bufferSize)
 					found = true;
 					break;
 				}
-				pStats = ((COMP_BASE_STATS*)((UBYTE*)pStats + size));
+				pStats = ((COMPONENT_STATS*)((UBYTE*)pStats + size));
 			}
 			if (!found)
 			{

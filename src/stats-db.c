@@ -157,7 +157,7 @@ static bool compBaseStatColumnNames(SQL_COMP_BASE_STATS* cols, sqlite3_stmt* stm
 	    && cols->weight       != -1;
 }
 
-static bool loadComponentBaseStats(COMP_BASE_STATS* stats, SQL_COMP_BASE_STATS* cols, sqlite3_stmt* stmt, unsigned int id)
+static bool loadComponentBaseStats(COMPONENT_STATS* stats, SQL_COMP_BASE_STATS* cols, sqlite3_stmt* stmt, unsigned int id)
 {
 	const int buildPower   = getColNumByNameA(stmt, "buildPower");
 	const int buildPoints  = getColNumByNameA(stmt, "buildPoints");
@@ -206,9 +206,9 @@ static bool loadComponentBaseStats(COMP_BASE_STATS* stats, SQL_COMP_BASE_STATS* 
 	// designable            NUMERIC NOT NULL  -- flag to indicate whether this component can be used in the design screen
 	if (designable != -1
 	 && sqlite3_column_int(stmt, designable))
-		stats->design = true;
+		stats->designable = true;
 	else
-		stats->design = false;
+		stats->designable = false;
 
 	return true;
 }
@@ -360,7 +360,7 @@ static bool _loadWeaponStats(WEAPON_STATS* stats, SQL_WEAPON_STATS* cols, sqlite
 	const char* str;
 	unsigned int longRange;
 
-	if (!loadComponentBaseStats((COMP_BASE_STATS *)stats, &cols->parent, stmt, REF_WEAPON_START + weapon_id - 1))
+	if (!loadComponentBaseStats((COMPONENT_STATS *)stats, &cols->parent, stmt, REF_WEAPON_START + weapon_id - 1))
 	{
 		return false;
 	}
@@ -668,7 +668,7 @@ static bool _loadWeaponStats(WEAPON_STATS* stats, SQL_WEAPON_STATS* cols, sqlite
 	}
 
 	// Set the max stat values for the design screen
-	if (stats->design)
+	if (stats->designable)
 	{
 		setMaxWeaponRange(stats->longRange);
 		setMaxWeaponDamage(stats->damage);
@@ -794,7 +794,7 @@ bool loadBodyStatsFromDB(sqlite3* db, const char* tableName)
 
 		memset(stats, 0, sizeof(*stats));
 
-		if (!loadComponentBaseStats((COMP_BASE_STATS *)stats, &cols, stmt, REF_BODY_START + body_id - 1))
+		if (!loadComponentBaseStats((COMPONENT_STATS *)stats, &cols, stmt, REF_BODY_START + body_id - 1))
 		{
 			goto in_statement_err;
 		}
@@ -855,7 +855,7 @@ bool loadBodyStatsFromDB(sqlite3* db, const char* tableName)
 		}
 
 		//set the max stat values for the design screen
-		if (stats->design)
+		if (stats->designable)
 		{
 			//use front armour value to prevent bodyStats corrupt problems
 			setMaxBodyArmour(stats->armourValue[HIT_SIDE_FRONT][WC_KINETIC]);
@@ -923,7 +923,7 @@ bool loadBrainStatsFromDB(sqlite3* db, const char* tableName)
 
 		memset(stats, 0, sizeof(*stats));
 
-		if (!loadComponentBaseStats((COMP_BASE_STATS *)stats, &cols, stmt, REF_BRAIN_START + brain_id - 1))
+		if (!loadComponentBaseStats((COMPONENT_STATS *)stats, &cols, stmt, REF_BRAIN_START + brain_id - 1))
 		{
 			goto in_statement_err;
 		}
@@ -1010,7 +1010,7 @@ bool loadPropulsionStatsFromDB(sqlite3* db, const char* tableName)
 
 		memset(stats, 0, sizeof(*stats));
 
-		if (!loadComponentBaseStats((COMP_BASE_STATS *)stats, &cols, stmt, REF_PROPULSION_START + propulsion_id - 1))
+		if (!loadComponentBaseStats((COMPONENT_STATS *)stats, &cols, stmt, REF_PROPULSION_START + propulsion_id - 1))
 		{
 			goto in_statement_err;
 		}
@@ -1027,7 +1027,7 @@ bool loadPropulsionStatsFromDB(sqlite3* db, const char* tableName)
 		stats->maxSpeed = sqlite3_column_double(stmt, getColNumByName(stmt, "maxSpeed"));
 
 		// set the max stats values for the design screen
-		if (stats->design)
+		if (stats->designable)
 		{
 			setMaxPropulsionSpeed(stats->maxSpeed);
 			//setMaxComponentWeight(stats->weight);
@@ -1092,7 +1092,7 @@ bool loadSensorStatsFromDB(sqlite3* db, const char* tableName)
 
 		memset(stats, 0, sizeof(*stats));
 
-		if (!loadComponentBaseStats((COMP_BASE_STATS *)stats, &cols, stmt, REF_SENSOR_START + sensor_id - 1))
+		if (!loadComponentBaseStats((COMPONENT_STATS *)stats, &cols, stmt, REF_SENSOR_START + sensor_id - 1))
 		{
 			goto in_statement_err;
 		}
@@ -1170,7 +1170,7 @@ bool loadSensorStatsFromDB(sqlite3* db, const char* tableName)
 		stats->power = sqlite3_column_double(stmt, getColNumByName(stmt, "power"));
 
 		// set the max stats values for the design screen
-		if (stats->design)
+		if (stats->designable)
 		{
 			setMaxSensorRange(stats->range);
 			setMaxSensorPower(stats->power);
@@ -1237,7 +1237,7 @@ bool loadECMStatsFromDB(sqlite3* db, const char* tableName)
 
 		memset(stats, 0, sizeof(*stats));
 
-		if (!loadComponentBaseStats((COMP_BASE_STATS *)stats, &cols, stmt, REF_ECM_START + ecm_id - 1))
+		if (!loadComponentBaseStats((COMPONENT_STATS *)stats, &cols, stmt, REF_ECM_START + ecm_id - 1))
 		{
 			goto in_statement_err;
 		}
@@ -1284,7 +1284,7 @@ bool loadECMStatsFromDB(sqlite3* db, const char* tableName)
 		stats->range = TILE_UNITS * 8;
 
 		// set the max stats values for the design screen
-		if (stats->design)
+		if (stats->designable)
 		{
 			setMaxECMPower(stats->power);
 			setMaxECMRange(stats->range);

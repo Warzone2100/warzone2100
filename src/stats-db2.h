@@ -4,10 +4,8 @@
 #define __INCLUDED_DB_TEMPLATE_SCHEMA_STRUCTDEF_STATS_DB2_H_H__
 
 #line 1 "stats-db2.tpl.struct.h"
-/* Dummy file, will be filled later on, but needs to exist for code generation
- * of stats-db2.h to be succesfull.
- */
-#line 11 "stats-db2.h"
+#include "lib/ivis_common/ivisdef.h"
+#line 9 "stats-db2.h"
 
 /**
  * if any types are added BEFORE 'COMP_BODY' - then Save/Load Game will have to
@@ -319,5 +317,69 @@ typedef struct BASE_STATS
 #define STATS_BASE \
 	UDWORD ref; \
 	char*            pName
+
+/**
+ * Stats common to all (droid?) components
+ */
+typedef struct COMPONENT_STATS
+{
+	/* BEGIN of inherited "BASE" definition */
+	/**
+	 * Unique ID of the item
+	 */
+	UDWORD ref;
+
+	/**
+	 * Unique language independant name that can be used to identify a specific
+	 * stats instance
+	 *
+	 * Unique across all instances
+	 */
+	char*            pName;
+	/* END of inherited "BASE" definition */
+	/**
+	 * Power required to build this component
+	 */
+	UDWORD           buildPower;
+
+	/**
+	 * Build points (which are rate-limited in the construction units) required
+	 * to build this component.
+	 */
+	UDWORD           buildPoints;
+
+	/**
+	 * Weight of this component
+	 */
+	UDWORD           weight;
+
+	/**
+	 * Body points of this component
+	 */
+	UDWORD           body;
+
+	/**
+	 * Indicates whether this component is "designable" and can thus be used in
+	 * the design screen.
+	 */
+	bool             designable;
+
+	/**
+	 * The "base" IMD model representing this component in 3D space.
+	 *
+	 * This field is optional and can be NULL to indicate that it has no value
+	 */
+	iIMDShape*       pIMD;
+} COMPONENT_STATS;
+
+#define STATS_COMPONENT \
+	UDWORD ref; \
+	char*            pName; \
+	UDWORD           buildPower; \
+	UDWORD           buildPoints; \
+	UDWORD           weight; \
+	UDWORD           body; \
+	bool             designable; \
+	iIMDShape*       pIMD
 
 #endif // __INCLUDED_DB_TEMPLATE_SCHEMA_STRUCTDEF_STATS_DB2_TPL_H__

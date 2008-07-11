@@ -64,15 +64,15 @@ typedef struct research_stats
 	//UDWORD			*pRedStructs;		/* List of Structures that become redundant */
 	UWORD			*pRedStructs;		/* List of Structures that become redundant */
 	UBYTE			numRedArtefacts;
-	COMP_BASE_STATS	**pRedArtefacts;	/*List of Artefacts that become redundant */
+	COMPONENT_STATS	**pRedArtefacts;	/*List of Artefacts that become redundant */
 	UBYTE			numStructResults;
 	//UDWORD			*pStructureResults;	/*List of Structures that are possible after
 	UWORD			*pStructureResults;	/*List of Structures that are possible after
 										  this research */
 	UBYTE			numArteResults;
-	COMP_BASE_STATS	**pArtefactResults;	/*List of Artefacts that are possible after
+	COMPONENT_STATS	**pArtefactResults;	/*List of Artefacts that are possible after
 										  this research*/
-	COMP_BASE_STATS	**pReplacedArtefacts;/*List of artefacts that are replaced by the above
+	COMPONENT_STATS	**pReplacedArtefacts;/*List of artefacts that are replaced by the above
 										  result - not necessarily any! 1 to 1 relation with
 										  above list */
 	struct _viewdata	*pViewData;		/*data used to display a message in the

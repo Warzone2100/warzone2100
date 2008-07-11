@@ -76,10 +76,10 @@ static UWORD*            pResearchPR;
 static UWORD*            pResearchStructPR;
 static FUNCTION**        pResearchFunc;
 static UWORD*            pResearchStructRed;
-static COMP_BASE_STATS** pResearchArteRed;
+static COMPONENT_STATS** pResearchArteRed;
 static UWORD*            pResearchStructRes;
-static COMP_BASE_STATS** pResearchArteRes;
-static COMP_BASE_STATS** pResearchArteRep;
+static COMPONENT_STATS** pResearchArteRes;
+static COMPONENT_STATS** pResearchArteRep;
 
 static UWORD numResearchPR;
 static UWORD numResearchStructPR;
@@ -100,8 +100,8 @@ UDWORD					aDefaultRepair[MAX_PLAYERS];
 
 //set the iconID based on the name read in in the stats
 static UWORD setIconID(char *pIconName, char *pName);
-static COMP_BASE_STATS * getComponentDetails(char *pName, char *pCompName);
-static void replaceComponent(COMP_BASE_STATS *pNewComponent, COMP_BASE_STATS *pOldComponent,
+static COMPONENT_STATS * getComponentDetails(char *pName, char *pCompName);
+static void replaceComponent(COMPONENT_STATS *pNewComponent, COMPONENT_STATS *pOldComponent,
 					  UBYTE player);
 static BOOL checkResearchName(RESEARCH *psRes, UDWORD numStats);
 
@@ -193,14 +193,14 @@ BOOL researchInitVars(void)
 	}
 	memset(pResearchStructRed, 0, (MAX_RESEARCH_STRUCT_RED * sizeof(UWORD)));
 
-	pResearchArteRed = (COMP_BASE_STATS **) malloc(sizeof(COMP_BASE_STATS *) * MAX_RESEARCH_ARTE_RED);
+	pResearchArteRed = (COMPONENT_STATS **) malloc(sizeof(COMPONENT_STATS *) * MAX_RESEARCH_ARTE_RED);
 	if (pResearchArteRed == NULL)
 	{
 		debug( LOG_ERROR, "Research Stats - Out of memory" );
 		abort();
 		return false;
 	}
-	memset(pResearchArteRed, 0, (MAX_RESEARCH_ARTE_RED * sizeof(COMP_BASE_STATS *)));
+	memset(pResearchArteRed, 0, (MAX_RESEARCH_ARTE_RED * sizeof(COMPONENT_STATS *)));
 
 	pResearchStructRes = (UWORD *) malloc(sizeof(UWORD) * MAX_RESEARCH_STRUCT_RES);
 	if (pResearchStructRes == NULL)
@@ -211,23 +211,23 @@ BOOL researchInitVars(void)
 	}
 	memset(pResearchStructRes, 0, (MAX_RESEARCH_STRUCT_RES * sizeof(UWORD)));
 
-	pResearchArteRes = (COMP_BASE_STATS **) malloc(sizeof(COMP_BASE_STATS *) * MAX_RESEARCH_ARTE_RES);
+	pResearchArteRes = (COMPONENT_STATS **) malloc(sizeof(COMPONENT_STATS *) * MAX_RESEARCH_ARTE_RES);
 	if (pResearchArteRes == NULL)
 	{
 		debug( LOG_ERROR, "Research Stats - Out of memory" );
 		abort();
 		return false;
 	}
-	memset(pResearchArteRes, 0, (MAX_RESEARCH_ARTE_RES * sizeof(COMP_BASE_STATS *)));
+	memset(pResearchArteRes, 0, (MAX_RESEARCH_ARTE_RES * sizeof(COMPONENT_STATS *)));
 
-	pResearchArteRep = (COMP_BASE_STATS **) malloc(sizeof(COMP_BASE_STATS *) * MAX_RESEARCH_ARTE_RES);
+	pResearchArteRep = (COMPONENT_STATS **) malloc(sizeof(COMPONENT_STATS *) * MAX_RESEARCH_ARTE_RES);
 	if (pResearchArteRep == NULL)
 	{
 		debug( LOG_ERROR, "Research Stats - Out of memory" );
 		abort();
 		return false;
 	}
-	memset(pResearchArteRep, 0, (MAX_RESEARCH_ARTE_RES * sizeof(COMP_BASE_STATS *)));
+	memset(pResearchArteRep, 0, (MAX_RESEARCH_ARTE_RES * sizeof(COMPONENT_STATS *)));
 
 	for(i=0; i<MAX_PLAYERS; i++)
 	{
@@ -243,7 +243,7 @@ BOOL loadResearch(const char *pResearchData, UDWORD bufferSize)
 {
 	const unsigned int researchCount = numCR(pResearchData, bufferSize);
 	RESEARCH *pResearch;
-	COMP_BASE_STATS *psComp;
+	COMPONENT_STATS *psComp;
 	SDWORD structID;
 	UDWORD i, keyTopic, techCode, resPoints;
 	char ResearchName[MAX_STR_LENGTH];
@@ -717,7 +717,7 @@ BOOL loadResearchArtefacts(const char *pArteData, UDWORD bufferSize, UDWORD list
 	char				ResearchName[MAX_STR_LENGTH], ArteName[MAX_STR_LENGTH],
 						TypeName[MAX_STR_LENGTH];
 	RESEARCH			*pResearch = asResearch;
-	COMP_BASE_STATS		*pArtefact;
+	COMPONENT_STATS		*pArtefact;
 	UDWORD				newType;
 	UBYTE				maxArtefacts;
 
@@ -1873,7 +1873,7 @@ void researchResult(UDWORD researchIndex, UBYTE player, BOOL bDisplay,
 	    for (inc = 0; inc < numWeaponStats; inc++)
 	    {
 		    if (apCompLists[selectedPlayer][COMP_WEAPON][inc] == AVAILABLE &&
-                asWeaponStats[inc].design)
+                asWeaponStats[inc].designable)
             {
                 if (asWeaponStats[inc].vtolAttackRuns)
                 {
@@ -1921,10 +1921,10 @@ BOOL ResearchShutDown(void)
     memset(pResearchStructPR, 0, (MAX_RESEARCH_STRUCT_PR * sizeof(UWORD)));
     memset(pResearchFunc, 0, (MAX_RESEARCH_FUNC * sizeof(FUNCTION *)));
     memset(pResearchStructRed, 0, (MAX_RESEARCH_STRUCT_RED * sizeof(UWORD)));
-    memset(pResearchArteRed, 0, (MAX_RESEARCH_ARTE_RED * sizeof(COMP_BASE_STATS *)));
+    memset(pResearchArteRed, 0, (MAX_RESEARCH_ARTE_RED * sizeof(COMPONENT_STATS *)));
     memset(pResearchStructRes, 0, (MAX_RESEARCH_STRUCT_RES * sizeof(UWORD)));
-    memset(pResearchArteRes, 0, (MAX_RESEARCH_ARTE_RES * sizeof(COMP_BASE_STATS *)));
-    memset(pResearchArteRep, 0, (MAX_RESEARCH_ARTE_RES * sizeof(COMP_BASE_STATS *)));
+    memset(pResearchArteRes, 0, (MAX_RESEARCH_ARTE_RES * sizeof(COMPONENT_STATS *)));
+    memset(pResearchArteRep, 0, (MAX_RESEARCH_ARTE_RES * sizeof(COMPONENT_STATS *)));
 
     return true;
 }
@@ -2362,10 +2362,10 @@ SDWORD	mapIconToRID(UDWORD iconID)
 }
 
 /* returns a pointer to a component based on the name - used to load in the research */
-COMP_BASE_STATS * getComponentDetails(char *pName, char *pCompName)
+COMPONENT_STATS * getComponentDetails(char *pName, char *pCompName)
 {
 	UDWORD stat, size, quantity, inc;
-	COMP_BASE_STATS		*pArtefact;
+	COMPONENT_STATS		*pArtefact;
 
 	stat = componentType(pName);
 	//get the stat list
@@ -2373,56 +2373,56 @@ COMP_BASE_STATS * getComponentDetails(char *pName, char *pCompName)
 	{
 		case COMP_BODY:
 		{
-			pArtefact = (COMP_BASE_STATS*)asBodyStats;
+			pArtefact = (COMPONENT_STATS*)asBodyStats;
 			size = sizeof(BODY_STATS);
 			quantity = numBodyStats;
 			break;
 		}
 		case COMP_BRAIN:
 		{
-			pArtefact = (COMP_BASE_STATS*)asBrainStats;
+			pArtefact = (COMPONENT_STATS*)asBrainStats;
 			size = sizeof(BRAIN_STATS);
 			quantity = numBrainStats;
 			break;
 		}
 		case COMP_PROPULSION:
 		{
-			pArtefact = (COMP_BASE_STATS*)asPropulsionStats;
+			pArtefact = (COMPONENT_STATS*)asPropulsionStats;
 			size = sizeof(PROPULSION_STATS);
 			quantity = numPropulsionStats;
 			break;
 		}
 		case COMP_REPAIRUNIT:
 		{
-			pArtefact = (COMP_BASE_STATS*)asRepairStats;
+			pArtefact = (COMPONENT_STATS*)asRepairStats;
 			size = sizeof(REPAIR_STATS);
 			quantity = numRepairStats;
 			break;
 		}
 		case COMP_ECM:
 		{
-			pArtefact = (COMP_BASE_STATS*)asECMStats;
+			pArtefact = (COMPONENT_STATS*)asECMStats;
 			size = sizeof(ECM_STATS);
 			quantity = numECMStats;
 			break;
 		}
 		case COMP_SENSOR:
 		{
-			pArtefact = (COMP_BASE_STATS*)asSensorStats;
+			pArtefact = (COMPONENT_STATS*)asSensorStats;
 			size = sizeof(SENSOR_STATS);
 			quantity = numSensorStats;
 			break;
 		}
 		case COMP_WEAPON:
 		{
-			pArtefact = (COMP_BASE_STATS*)asWeaponStats;
+			pArtefact = (COMPONENT_STATS*)asWeaponStats;
 			size = sizeof(WEAPON_STATS);
 			quantity = numWeaponStats;
 			break;
 		}
 		case COMP_CONSTRUCT:
 		{
-			pArtefact = (COMP_BASE_STATS*)asConstructStats;
+			pArtefact = (COMPONENT_STATS*)asConstructStats;
 			size = sizeof(CONSTRUCT_STATS);
 			quantity = numConstructStats;
 			break;
@@ -2442,7 +2442,7 @@ COMP_BASE_STATS * getComponentDetails(char *pName, char *pCompName)
 		{
 			return pArtefact;
 		}
-		pArtefact = (COMP_BASE_STATS*)((char*)pArtefact + size);
+		pArtefact = (COMPONENT_STATS*)((char*)pArtefact + size);
 	}
 
 	debug( LOG_ERROR, "Cannot find component %s", pCompName );
@@ -2481,7 +2481,7 @@ RESEARCH * getResearch(const char *pName, BOOL resName)
 
 /* looks through the players lists of structures and droids to see if any are using
  the old component - if any then replaces them with the new component */
-static void replaceComponent(COMP_BASE_STATS *pNewComponent, COMP_BASE_STATS *pOldComponent,
+static void replaceComponent(COMPONENT_STATS *pNewComponent, COMPONENT_STATS *pOldComponent,
 					  UBYTE player)
 {
 	DROID_TEMPLATE	*psTemplates;

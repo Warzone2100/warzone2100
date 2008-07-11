@@ -30,6 +30,31 @@ enum COMPONENT_TYPE
     WEAPON
 end;
 
+# Stats common to all (droid?) components
+struct COMPONENT
+    %inherit BASE;
+
+    # Power required to build this component
+    UDWORD              buildPower;
+
+    # Build points (which are rate-limited in the construction units) required
+    # to build this component.
+    UDWORD              buildPoints;
+
+    # Weight of this component
+    UDWORD              weight;
+
+    # Body points of this component
+    UDWORD              body;
+
+    # Indicates whether this component is "designable" and can thus be used in
+    # the design screen.
+    bool                designable;
+
+    # The "base" IMD model representing this component in 3D space.
+    IMD_model optional  pIMD;
+end;
+
 # LOC used for holding locations for Sensors and ECM's
 enum LOC
     DEFAULT

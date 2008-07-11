@@ -244,7 +244,7 @@ extern CONSTRUCT_STATS *statsGetConstruct(UDWORD ref);
 extern BOOL statsShutDown(void);
 
 /*Deallocate the stats passed in as parameter */
-extern void statsDealloc(COMP_BASE_STATS* pStats, UDWORD listSize,
+extern void statsDealloc(COMPONENT_STATS* pStats, UDWORD listSize,
 						 UDWORD structureSize);
 
 extern void deallocPropulsionTypes(void);

@@ -282,7 +282,7 @@ static void intSetDesignMode(DES_COMPMODE newCompMode);
 /* Set all the design bar graphs from a design template */
 static void intSetDesignStats(DROID_TEMPLATE *psTemplate);
 /* Set up the system clickable form of the design screen given a set of stats */
-static BOOL intSetSystemForm(COMP_BASE_STATS *psStats);
+static BOOL intSetSystemForm(COMPONENT_STATS *psStats);
 /* Set up the propulsion clickable form of the design screen given a set of stats */
 static BOOL intSetPropulsionForm(PROPULSION_STATS *psStats);
 /* Add the component tab form to the design screen */
@@ -292,20 +292,20 @@ static BOOL intAddTemplateForm(DROID_TEMPLATE *psSelected);
 /* Add the Major system tab form to the design screen */
 // count the number of available components
 static UDWORD intNumAvailable(UBYTE *aAvailable, UDWORD numEntries,
-							  COMP_BASE_STATS *asStats, UDWORD size);
+							  COMPONENT_STATS *asStats, UDWORD size);
 /* Add the system buttons (weapons, command droid, etc) to the design screen */
 static BOOL intAddSystemButtons(SDWORD mode);
 /* Add the component buttons to the main tab of the system or component form */
-static BOOL intAddComponentButtons(COMP_BASE_STATS *psStats, UDWORD size,
+static BOOL intAddComponentButtons(COMPONENT_STATS *psStats, UDWORD size,
 								   UBYTE *aAvailable,	UDWORD numEntries,
 								   UDWORD compID,UDWORD WhichTab);
 /* Add the component buttons to the main tab of the component form */
 static BOOL intAddExtraSystemButtons(UDWORD sensorIndex, UDWORD ecmIndex,
 									 UDWORD constIndex, UDWORD repairIndex, UDWORD brainIndex);
 /* Set the bar graphs for the system clickable */
-static void intSetSystemStats(COMP_BASE_STATS *psStats);
+static void intSetSystemStats(COMPONENT_STATS *psStats);
 /* Set the shadow bar graphs for the system clickable */
-static void intSetSystemShadowStats(COMP_BASE_STATS *psStats);
+static void intSetSystemShadowStats(COMPONENT_STATS *psStats);
 /* Set the bar graphs for the sensor stats */
 static void intSetSensorStats(SENSOR_STATS *psStats);
 /* Set the shadow bar graphs for the sensor stats */
@@ -341,11 +341,11 @@ void intDisplayDesignForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIEL
 /* Sets the Design Power Bar for a given Template */
 static void intSetDesignPower(DROID_TEMPLATE *psTemplate);
 /* Sets the Power shadow Bar for the current Template with new stat*/
-static void intSetTemplatePowerShadowStats(COMP_BASE_STATS *psStats);
+static void intSetTemplatePowerShadowStats(COMPONENT_STATS *psStats);
 /* Sets the Body Points Bar for a given Template */
 static void intSetBodyPoints(DROID_TEMPLATE *psTemplate);
 /* Sets the Body Points shadow Bar for the current Template with new stat*/
-static void intSetTemplateBodyShadowStats(COMP_BASE_STATS *psStats);
+static void intSetTemplateBodyShadowStats(COMPONENT_STATS *psStats);
 /*Function to set the shadow bars for all the stats when the mouse is over
 the Template buttons*/
 static void runTemplateShadowStats(UDWORD id);
@@ -365,10 +365,10 @@ static char			aCurrName[WIDG_MAXSTR];
 /* Store a list of component stats pointers for the design screen */
 extern UDWORD			maxComponent;
 extern UDWORD			numComponent;
-extern COMP_BASE_STATS	**apsComponentList;
+extern COMPONENT_STATS	**apsComponentList;
 extern UDWORD			maxExtraSys;
 extern UDWORD			numExtraSys;
-extern COMP_BASE_STATS	**apsExtraSysList;
+extern COMPONENT_STATS	**apsExtraSysList;
 
 /* The button id of the component that is in the design */
 static UDWORD			desCompID;
@@ -1196,15 +1196,15 @@ static void intSetDesignMode(DES_COMPMODE newCompMode)
 		case IDES_SYSTEM:
 			intAddComponentForm(
 				intNumAvailable(apCompLists[selectedPlayer][COMP_SENSOR], numSensorStats,
-								(COMP_BASE_STATS *)asSensorStats, sizeof(SENSOR_STATS)) +
+								(COMPONENT_STATS *)asSensorStats, sizeof(SENSOR_STATS)) +
 				intNumAvailable(apCompLists[selectedPlayer][COMP_ECM], numECMStats,
-								(COMP_BASE_STATS *)asECMStats, sizeof(ECM_STATS)) +
+								(COMPONENT_STATS *)asECMStats, sizeof(ECM_STATS)) +
 				intNumAvailable(apCompLists[selectedPlayer][COMP_BRAIN], numBrainStats,
-								(COMP_BASE_STATS *)asBrainStats, sizeof(BRAIN_STATS)) +
+								(COMPONENT_STATS *)asBrainStats, sizeof(BRAIN_STATS)) +
 				intNumAvailable(apCompLists[selectedPlayer][COMP_CONSTRUCT], numConstructStats,
-								(COMP_BASE_STATS *)asConstructStats, sizeof(CONSTRUCT_STATS)) +
+								(COMPONENT_STATS *)asConstructStats, sizeof(CONSTRUCT_STATS)) +
 				intNumAvailable(apCompLists[selectedPlayer][COMP_REPAIRUNIT], numRepairStats,
-								(COMP_BASE_STATS *)asRepairStats, sizeof(REPAIR_STATS)));
+								(COMPONENT_STATS *)asRepairStats, sizeof(REPAIR_STATS)));
 			intAddExtraSystemButtons(sCurrDesign.asParts[COMP_SENSOR],
 									 sCurrDesign.asParts[COMP_ECM],
 									 sCurrDesign.asParts[COMP_CONSTRUCT],
@@ -1216,9 +1216,9 @@ static void intSetDesignMode(DES_COMPMODE newCompMode)
 		case IDES_TURRET:
 			intAddComponentForm(
 				intNumAvailable(apCompLists[selectedPlayer][COMP_WEAPON], numWeaponStats,
-								(COMP_BASE_STATS *)asWeaponStats, sizeof(WEAPON_STATS)));
+								(COMPONENT_STATS *)asWeaponStats, sizeof(WEAPON_STATS)));
 			weaponIndex = (sCurrDesign.numWeaps > 0) ? sCurrDesign.asWeaps[0] : 0;
-			intAddComponentButtons((COMP_BASE_STATS *)asWeaponStats,
+			intAddComponentButtons((COMPONENT_STATS *)asWeaponStats,
 								   sizeof(WEAPON_STATS),
 								   apCompLists[selectedPlayer][COMP_WEAPON],
 								   numWeaponStats, weaponIndex,TAB_USEMAJOR);
@@ -1228,8 +1228,8 @@ static void intSetDesignMode(DES_COMPMODE newCompMode)
 		case IDES_BODY:
 			intAddComponentForm(
 				intNumAvailable(apCompLists[selectedPlayer][COMP_BODY], numBodyStats,
-								(COMP_BASE_STATS *)asBodyStats, sizeof(BODY_STATS)));
-			intAddComponentButtons((COMP_BASE_STATS *)asBodyStats,
+								(COMPONENT_STATS *)asBodyStats, sizeof(BODY_STATS)));
+			intAddComponentButtons((COMPONENT_STATS *)asBodyStats,
 								   sizeof(BODY_STATS),
 								   apCompLists[selectedPlayer][COMP_BODY],
 								   numBodyStats, sCurrDesign.asParts[COMP_BODY],TAB_USEMAJOR);
@@ -1238,8 +1238,8 @@ static void intSetDesignMode(DES_COMPMODE newCompMode)
 		case IDES_PROPULSION:
 			intAddComponentForm(
 				intNumAvailable(apCompLists[selectedPlayer][COMP_PROPULSION], numPropulsionStats,
-								(COMP_BASE_STATS *)asPropulsionStats, sizeof(PROPULSION_STATS)));
-			intAddComponentButtons((COMP_BASE_STATS *)asPropulsionStats,
+								(COMPONENT_STATS *)asPropulsionStats, sizeof(PROPULSION_STATS)));
+			intAddComponentButtons((COMPONENT_STATS *)asPropulsionStats,
 								   sizeof(PROPULSION_STATS),
 								   apCompLists[selectedPlayer][COMP_PROPULSION],
 								   //NumComponents, sCurrDesign.asParts[COMP_PROPULSION],TAB_USEMAJOR);
@@ -1250,9 +1250,9 @@ static void intSetDesignMode(DES_COMPMODE newCompMode)
 		case IDES_TURRET_A:
 			intAddComponentForm(
 				intNumAvailable(apCompLists[selectedPlayer][COMP_WEAPON], numWeaponStats,
-								(COMP_BASE_STATS *)asWeaponStats, sizeof(WEAPON_STATS)));
+								(COMPONENT_STATS *)asWeaponStats, sizeof(WEAPON_STATS)));
 			weaponIndex = (sCurrDesign.numWeaps > 1) ? sCurrDesign.asWeaps[1] : 0;
-			intAddComponentButtons((COMP_BASE_STATS *)asWeaponStats,
+			intAddComponentButtons((COMPONENT_STATS *)asWeaponStats,
 								   sizeof(WEAPON_STATS),
 								   apCompLists[selectedPlayer][COMP_WEAPON],
 								   numWeaponStats, weaponIndex,TAB_USEMAJOR);
@@ -1262,9 +1262,9 @@ static void intSetDesignMode(DES_COMPMODE newCompMode)
 		case IDES_TURRET_B:
 			intAddComponentForm(
 				intNumAvailable(apCompLists[selectedPlayer][COMP_WEAPON], numWeaponStats,
-								(COMP_BASE_STATS *)asWeaponStats, sizeof(WEAPON_STATS)));
+								(COMPONENT_STATS *)asWeaponStats, sizeof(WEAPON_STATS)));
 			weaponIndex = (sCurrDesign.numWeaps > 2) ? sCurrDesign.asWeaps[2] : 0;
-			intAddComponentButtons((COMP_BASE_STATS *)asWeaponStats,
+			intAddComponentButtons((COMPONENT_STATS *)asWeaponStats,
 								   sizeof(WEAPON_STATS),
 								   apCompLists[selectedPlayer][COMP_WEAPON],
 								   numWeaponStats, weaponIndex,TAB_USEMAJOR);
@@ -1275,48 +1275,48 @@ static void intSetDesignMode(DES_COMPMODE newCompMode)
 	}
 }
 
-static COMP_BASE_STATS *
+static COMPONENT_STATS *
 intChooseSystemStats( DROID_TEMPLATE *psTemplate )
 {
-	COMP_BASE_STATS		*psStats = NULL;
+	COMPONENT_STATS		*psStats = NULL;
 
 	// Choose correct system stats
 	switch (droidTemplateType(psTemplate))
 	{
 	case DROID_COMMAND:
-		psStats = (COMP_BASE_STATS *)(asBrainStats +
+		psStats = (COMPONENT_STATS *)(asBrainStats +
 								psTemplate->asParts[COMP_BRAIN]);
 		break;
 	case DROID_SENSOR:
-		psStats = (COMP_BASE_STATS *)(asSensorStats +
+		psStats = (COMPONENT_STATS *)(asSensorStats +
 								psTemplate->asParts[COMP_SENSOR]);
 		break;
 	case DROID_ECM:
-		psStats = (COMP_BASE_STATS *)(asECMStats +
+		psStats = (COMPONENT_STATS *)(asECMStats +
 								psTemplate->asParts[COMP_ECM]);
 		break;
 	case DROID_CONSTRUCT:
 	case DROID_CYBORG_CONSTRUCT:
-		psStats = (COMP_BASE_STATS *)(asConstructStats +
+		psStats = (COMPONENT_STATS *)(asConstructStats +
 								psTemplate->asParts[COMP_CONSTRUCT]);
 		break;
 	case DROID_REPAIR:
 	case DROID_CYBORG_REPAIR:
-		psStats = (COMP_BASE_STATS *)(asRepairStats +
+		psStats = (COMPONENT_STATS *)(asRepairStats +
 								psTemplate->asParts[COMP_REPAIRUNIT]);
 		break;
 	case DROID_WEAPON:
 		//Watermelon:this is naming stuff
 		if (psTemplate->numWeaps > 0)
 		{
-			psStats = (COMP_BASE_STATS *)(asWeaponStats +
+			psStats = (COMPONENT_STATS *)(asWeaponStats +
 					psTemplate->asWeaps[0]);
 		}
 	case DROID_PERSON:
 	case DROID_CYBORG:
 	case DROID_CYBORG_SUPER:
 	case DROID_DEFAULT:
-		psStats = (COMP_BASE_STATS *)(asWeaponStats +
+		psStats = (COMPONENT_STATS *)(asWeaponStats +
 								psTemplate->asWeaps[0]);
 		break;
 	default:
@@ -1333,7 +1333,7 @@ intChooseSystemStats( DROID_TEMPLATE *psTemplate )
 
 const char *GetDefaultTemplateName(DROID_TEMPLATE *psTemplate)
 {
-	COMP_BASE_STATS *psStats = NULL;
+	COMPONENT_STATS *psStats = NULL;
 
 	/*
 		First we check for the special cases of the Transporter & Cyborgs
@@ -1365,7 +1365,7 @@ const char *GetDefaultTemplateName(DROID_TEMPLATE *psTemplate)
 		sstrcat(aCurrName, "Hydra ");
 	}
 
-	psStats = (COMP_BASE_STATS *) (asBodyStats + psTemplate->asParts[COMP_BODY]);
+	psStats = (COMPONENT_STATS *) (asBodyStats + psTemplate->asParts[COMP_BODY]);
 	if ( psTemplate->asParts[COMP_BODY] != 0 )
 	{
 		const char * pStr = getStatName( psStats );
@@ -1380,7 +1380,7 @@ const char *GetDefaultTemplateName(DROID_TEMPLATE *psTemplate)
 		sstrcat(aCurrName, " ");
 	}
 
-	psStats = (COMP_BASE_STATS *) (asPropulsionStats + psTemplate->asParts[COMP_PROPULSION]);
+	psStats = (COMPONENT_STATS *) (asPropulsionStats + psTemplate->asParts[COMP_PROPULSION]);
 	if ( psTemplate->asParts[COMP_PROPULSION] != 0 )
 	{
 		const char * pStr = getStatName( psStats );
@@ -1423,7 +1423,7 @@ static void intSetEditBoxTextFromTemplate( DROID_TEMPLATE *psTemplate )
 /* Set all the design bar graphs from a design template */
 static void intSetDesignStats( DROID_TEMPLATE *psTemplate )
 {
-	COMP_BASE_STATS		*psStats = intChooseSystemStats( psTemplate );
+	COMPONENT_STATS		*psStats = intChooseSystemStats( psTemplate );
 
 	/* Set system stats */
 	intSetSystemForm( psStats );
@@ -1439,7 +1439,7 @@ static void intSetDesignStats( DROID_TEMPLATE *psTemplate )
 }
 
 /* Set up the system clickable form of the design screen given a set of stats */
-static BOOL _intSetSystemForm(COMP_BASE_STATS *psStats)
+static BOOL _intSetSystemForm(COMPONENT_STATS *psStats)
 {
 	SENSOR_STATS	*psSensor;
 	ECM_STATS		*psECM;
@@ -2041,22 +2041,22 @@ static BOOL intSetPropulsionForm(PROPULSION_STATS *psStats)
 
 // count the number of available components
 static UDWORD intNumAvailable(UBYTE *aAvailable, UDWORD numEntries,
-							  COMP_BASE_STATS *asStats, UDWORD size)
+							  COMPONENT_STATS *asStats, UDWORD size)
 {
 	UDWORD				numButtons, i;
-	COMP_BASE_STATS		*psCurrStats;
+	COMPONENT_STATS		*psCurrStats;
 
 	numButtons = 0;
 	psCurrStats = asStats;
 	for(i=0; i < numEntries; i++)
 	{
-		if (psCurrStats->design &&
-			(aAvailable[i] & AVAILABLE))
+		if (psCurrStats->designable
+                 && aAvailable[i] & AVAILABLE)
 		{
 			numButtons++;
 		}
 
-		psCurrStats = (COMP_BASE_STATS *)( (UBYTE *)psCurrStats + size );
+		psCurrStats = (COMPONENT_STATS *)( (UBYTE *)psCurrStats + size );
 	}
 
 	return numButtons;
@@ -2194,14 +2194,14 @@ static BOOL intAddSystemButtons(SDWORD mode)
 
 
 /* Add the component buttons to the main tab of the component form */
-static BOOL intAddComponentButtons(COMP_BASE_STATS *psStats, UDWORD size,
+static BOOL intAddComponentButtons(COMPONENT_STATS *psStats, UDWORD size,
 								   UBYTE *aAvailable,	UDWORD numEntries,
 								   UDWORD compID,UDWORD WhichTab)
 {
 	W_FORMINIT			sButInit;
     W_TABFORM           *psTabForm;
 	UDWORD				i, maxComponents;
-	COMP_BASE_STATS		*psCurrStats;
+	COMPONENT_STATS		*psCurrStats;
 	char				aButText[DES_COMPBUTMAXCHAR + 1];
 	SDWORD				BufferID;
 	PROPULSION_STATS	*psPropStats;
@@ -2279,10 +2279,11 @@ static BOOL intAddComponentButtons(COMP_BASE_STATS *psStats, UDWORD size,
 		}
 
 		/* Skip unavailable entries and non-design ones*/
-		if (!(aAvailable[i] & AVAILABLE) || !psCurrStats->design)
+		if (!(aAvailable[i] & AVAILABLE)
+                 || !psCurrStats->designable)
 		{
 			/* Update the stats pointer for the next button */
-			psCurrStats = (COMP_BASE_STATS *)(((UBYTE *)psCurrStats) + size);
+			psCurrStats = (COMPONENT_STATS *)(((UBYTE *)psCurrStats) + size);
 
 			continue;
 		}
@@ -2302,7 +2303,7 @@ static BOOL intAddComponentButtons(COMP_BASE_STATS *psStats, UDWORD size,
 			if ( (bVTol && !bVtolWeapon) || (!bVTol && bVtolWeapon) )
 			{
 				/* Update the stats pointer for the next button */
-				psCurrStats = (COMP_BASE_STATS *)(((UBYTE *)psCurrStats) + size);
+				psCurrStats = (COMPONENT_STATS *)(((UBYTE *)psCurrStats) + size);
 				continue;
 			}
 		}
@@ -2385,7 +2386,7 @@ static BOOL intAddComponentButtons(COMP_BASE_STATS *psStats, UDWORD size,
 		}
 
 		/* Update the stats pointer for the next button */
-		psCurrStats = (COMP_BASE_STATS *)(((UBYTE *)psCurrStats) + size);
+		psCurrStats = (COMPONENT_STATS *)(((UBYTE *)psCurrStats) + size);
 	}
 
     //hack to sort out the tabs on the weapon form
@@ -2411,7 +2412,7 @@ static BOOL intAddExtraSystemButtons(UDWORD sensorIndex, UDWORD ecmIndex,
 	W_FORMINIT		sButInit;
 	UDWORD			i, buttonType, size=0;
 	UDWORD			compIndex=0, numStats=0;
-	COMP_BASE_STATS	*psCurrStats=0;
+	COMPONENT_STATS	*psCurrStats=0;
 	UBYTE			*aAvailable=0;
 	char			aButText[DES_COMPBUTMAXCHAR + 1];
 	SDWORD			BufferID;
@@ -2443,7 +2444,7 @@ static BOOL intAddExtraSystemButtons(UDWORD sensorIndex, UDWORD ecmIndex,
 		{
 		case 0:
 			// Sensor Buttons
-			psCurrStats = (COMP_BASE_STATS *)asSensorStats;
+			psCurrStats = (COMPONENT_STATS *)asSensorStats;
 			size = sizeof(SENSOR_STATS);
 			aAvailable = apCompLists[selectedPlayer][COMP_SENSOR];
 			numStats = numSensorStats;
@@ -2451,7 +2452,7 @@ static BOOL intAddExtraSystemButtons(UDWORD sensorIndex, UDWORD ecmIndex,
 			break;
 		case 1:
 			// ECM Buttons
-			psCurrStats = (COMP_BASE_STATS *)asECMStats;
+			psCurrStats = (COMPONENT_STATS *)asECMStats;
 			size = sizeof(ECM_STATS);
 			aAvailable = apCompLists[selectedPlayer][COMP_ECM];
 			numStats = numECMStats;
@@ -2459,7 +2460,7 @@ static BOOL intAddExtraSystemButtons(UDWORD sensorIndex, UDWORD ecmIndex,
 			break;
 		case 2:
 			// Constructor Buttons
-			psCurrStats = (COMP_BASE_STATS *)asConstructStats;
+			psCurrStats = (COMPONENT_STATS *)asConstructStats;
 			size = sizeof(CONSTRUCT_STATS);
 			aAvailable = apCompLists[selectedPlayer][COMP_CONSTRUCT];
 			numStats = numConstructStats;
@@ -2467,7 +2468,7 @@ static BOOL intAddExtraSystemButtons(UDWORD sensorIndex, UDWORD ecmIndex,
 			break;
 		case 3:
 			// Repair Buttons
-			psCurrStats = (COMP_BASE_STATS *)asRepairStats;
+			psCurrStats = (COMPONENT_STATS *)asRepairStats;
 			size = sizeof(REPAIR_STATS);
 			aAvailable = apCompLists[selectedPlayer][COMP_REPAIRUNIT];
 			numStats = numRepairStats;
@@ -2475,7 +2476,7 @@ static BOOL intAddExtraSystemButtons(UDWORD sensorIndex, UDWORD ecmIndex,
 			break;
 		case 4:
 			// Brain Buttons
-			psCurrStats = (COMP_BASE_STATS *)asBrainStats;
+			psCurrStats = (COMPONENT_STATS *)asBrainStats;
 			size = sizeof(BRAIN_STATS);
 			aAvailable = apCompLists[selectedPlayer][COMP_BRAIN];
 			numStats = numBrainStats;
@@ -2493,11 +2494,11 @@ static BOOL intAddExtraSystemButtons(UDWORD sensorIndex, UDWORD ecmIndex,
 			}
 
 			// Skip unavailable entries or non-design ones
-			if (!(aAvailable[i] & AVAILABLE) ||
-				!psCurrStats->design)
+			if (!(aAvailable[i] & AVAILABLE)
+			 || !psCurrStats->designable)
 			{
 				// Update the stats pointer for the next button
-				psCurrStats = (COMP_BASE_STATS *)(((UBYTE *)psCurrStats) + size);
+				psCurrStats = (COMPONENT_STATS *)(((UBYTE *)psCurrStats) + size);
 
 				continue;
 			}
@@ -2555,7 +2556,7 @@ static BOOL intAddExtraSystemButtons(UDWORD sensorIndex, UDWORD ecmIndex,
 			}
 
 			// Update the stats pointer for the next button
-			psCurrStats = (COMP_BASE_STATS *)(((UBYTE *)psCurrStats) + size);
+			psCurrStats = (COMPONENT_STATS *)(((UBYTE *)psCurrStats) + size);
 		}
 	}
 
@@ -2564,7 +2565,7 @@ static BOOL intAddExtraSystemButtons(UDWORD sensorIndex, UDWORD ecmIndex,
 
 
 /* Set the bar graphs for the system clickable */
-static void intSetSystemStats(COMP_BASE_STATS *psStats)
+static void intSetSystemStats(COMPONENT_STATS *psStats)
 {
 	W_FORM *psForm;
 
@@ -2602,7 +2603,7 @@ static void intSetSystemStats(COMP_BASE_STATS *psStats)
 }
 
 /* Set the shadow bar graphs for the system clickable */
-static void intSetSystemShadowStats(COMP_BASE_STATS *psStats)
+static void intSetSystemShadowStats(COMPONENT_STATS *psStats)
 {
 	/* Set the correct system stats - psStats can be set to NULL if
 	 * desSysMode does not match the type of the stats.
@@ -3031,7 +3032,7 @@ static UDWORD getSystemType(DROID_TEMPLATE* droidTemplate)
 }
 
 /* Set the shadow bar graphs for the template power points - psStats is new hilited stats*/
-static void intSetTemplatePowerShadowStats(COMP_BASE_STATS *psStats)
+static void intSetTemplatePowerShadowStats(COMPONENT_STATS *psStats)
 {
 	UDWORD				type;
 	UDWORD				power, i;
@@ -3118,7 +3119,7 @@ static void intSetBodyPoints(DROID_TEMPLATE *psTemplate)
 }
 
 /* Set the shadow bar graphs for the template Body points - psStats is new hilited stats*/
-static void intSetTemplateBodyShadowStats(COMP_BASE_STATS *psStats)
+static void intSetTemplateBodyShadowStats(COMPONENT_STATS *psStats)
 {
 	UDWORD				type;
 	UDWORD				body, i;
@@ -3827,7 +3828,7 @@ void intProcessDesign(UDWORD id)
                 sCurrDesign.asParts[COMP_CONSTRUCT] = 0;
                 sCurrDesign.asParts[COMP_ECM] = 0;
 				/* Reset the weapon stats on the display */
-				intSetSystemForm((COMP_BASE_STATS *)(asWeaponStats +
+				intSetSystemForm((COMPONENT_STATS *)(asWeaponStats +
 								sCurrDesign.asWeaps[0]));
                 intSetDesignMode(IDES_PROPULSION);
 			}
@@ -4436,7 +4437,7 @@ void intProcessDesign(UDWORD id)
 void intRunDesign(void)
 {
 	UDWORD				statID;
-	COMP_BASE_STATS		*psStats;
+	COMPONENT_STATS		*psStats;
 	BOOL				templateButton;
 
 	/* Find out which button was hilited */
@@ -4756,7 +4757,7 @@ void runTemplateShadowStats(UDWORD id)
 {
 	UDWORD			currID;
 	DROID_TEMPLATE	*psTempl = NULL;
-	COMP_BASE_STATS	*psStats;
+	COMPONENT_STATS	*psStats;
 	DROID_TYPE		templType;
 	UDWORD			i;
 
@@ -4788,23 +4789,23 @@ void runTemplateShadowStats(UDWORD id)
 			switch (templType)
 			{
 			case DROID_WEAPON:
-				psStats = (COMP_BASE_STATS *)(asWeaponStats + psTempl->
+				psStats = (COMPONENT_STATS *)(asWeaponStats + psTempl->
 					asWeaps[0]);
 				break;
 			case DROID_SENSOR:
-				psStats = (COMP_BASE_STATS *)(asSensorStats + psTempl->
+				psStats = (COMPONENT_STATS *)(asSensorStats + psTempl->
 					asParts[COMP_SENSOR]);
 				break;
 			case DROID_ECM:
-				psStats = (COMP_BASE_STATS *)(asECMStats + psTempl->
+				psStats = (COMPONENT_STATS *)(asECMStats + psTempl->
 					asParts[COMP_ECM]);
 				break;
 			case DROID_CONSTRUCT:
-				psStats = (COMP_BASE_STATS *)(asConstructStats + psTempl->
+				psStats = (COMPONENT_STATS *)(asConstructStats + psTempl->
 					asParts[COMP_CONSTRUCT]);
 				break;
 			case DROID_REPAIR:
-				psStats = (COMP_BASE_STATS *)(asRepairStats + psTempl->
+				psStats = (COMPONENT_STATS *)(asRepairStats + psTempl->
 					asParts[COMP_REPAIRUNIT]);
 				break;
 			default:
@@ -4869,7 +4870,7 @@ BOOL intAddDesign( BOOL bShowCentreScreen )
 
 
 /* Set up the system clickable form of the design screen given a set of stats */
-static BOOL intSetSystemForm(COMP_BASE_STATS *psStats)
+static BOOL intSetSystemForm(COMPONENT_STATS *psStats)
 {
 	return _intSetSystemForm(psStats);
 }
