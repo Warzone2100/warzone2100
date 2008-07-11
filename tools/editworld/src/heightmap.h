@@ -401,7 +401,7 @@ typedef struct _save_game
 } SAVE_GAME;
 
 
-typedef enum _component_type
+typedef enum COMPONENT_TYPE
 {
 	//COMP_ARMOUR,
 	COMP_BODY,
