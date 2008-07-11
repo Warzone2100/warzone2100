@@ -51,6 +51,10 @@ sub parseEnum
             {
                 ${$curEnum{"qualifiers"}}{"max"} = $1;
             }
+            else
+            {
+                die "error: line $count: Unrecognized enum-level specifier: %$_";
+            }
         }
         elsif (/^\s*(\w+)\s*$/)
         {
@@ -195,6 +199,10 @@ sub parseStruct
                 readTillEnd(\@{$postLoadRow{"code"}}, $count);
 
                 ${$curStruct{"qualifiers"}}{"postLoadRow"} = \%postLoadRow;
+            }
+            else
+            {
+                die "error: line $count: Unrecognized struct-level specifier: %$_";
             }
         }
         # Parse regular field declarations
