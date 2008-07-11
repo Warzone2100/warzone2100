@@ -1346,7 +1346,7 @@ BOOL loadRepairStats(const char *pRepairData, UDWORD bufferSize)
 {
 	const unsigned int NumRepair = numCR(pRepairData, bufferSize);
 	REPAIR_STATS sStats, * const psStats = &sStats;
-	unsigned int i = 0, designable;
+	unsigned int i = 0, designable, repairArmour;
 	char			RepairName[MAX_STR_LENGTH], dummy[MAX_STR_LENGTH],
 					GfxFile[MAX_STR_LENGTH],	mountGfx[MAX_STR_LENGTH],
 					location[MAX_STR_LENGTH];
@@ -1371,7 +1371,7 @@ BOOL loadRepairStats(const char *pRepairData, UDWORD bufferSize)
 			%[^','],%[^','],%d,%d,%d",
 			(char*)&RepairName, (char*)&dummy, &psStats->buildPower,&psStats->buildPoints,
 			&psStats->weight, &dummyVal, &dummyVal,
-			&psStats->repairArmour, (char*)&location, (char*)&GfxFile, (char*)&mountGfx,
+			&repairArmour, (char*)&location, (char*)&GfxFile, (char*)&mountGfx,
 			&psStats->repairPoints, &psStats->time,&designable);
 
 		if (!allocateStatName((BASE_STATS *)psStats, RepairName))
@@ -1406,6 +1406,8 @@ BOOL loadRepairStats(const char *pRepairData, UDWORD bufferSize)
 
 			psStats->time = 1;
 		}
+
+		psStats->repairArmour = (repairArmour != 0);
 
 		//set design flag
 		psStats->designable = (designable != 0);

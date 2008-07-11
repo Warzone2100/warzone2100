@@ -68,42 +68,6 @@ typedef struct _brain_stats
 	struct _weapon_stats* psWeaponStat;     ///< weapon stats associated with this brain - for Command Droids
 } BRAIN_STATS;
 
-typedef struct _sensor_stats
-{
-	/* Common stats */
-	STATS_COMPONENT;
-
-	UDWORD          range;                  ///< Sensor range
-	UDWORD          power;                  ///< Sensor power (put against ecm power)
-	UDWORD          location;               ///< specifies whether the Sensor is default or for the Turret
-	SENSOR_TYPE     type;                   ///< used for combat
-	UDWORD          time;                   ///< time delay before associated weapon droids 'know' where the attack is from
-	iIMDShape*      pMountGraphic;          ///< The turret mount to use
-} SENSOR_STATS;
-
-typedef struct _ecm_stats
-{
-	/* Common stats */
-	STATS_COMPONENT;
-
-	UDWORD          range;                  ///< ECM range
-	UDWORD          power;                  ///< ECM power (put against sensor power)
-	UDWORD          location;               ///< specifies whether the ECM is default or for the Turret
-	iIMDShape*      pMountGraphic;          ///< The turret mount to use
-} ECM_STATS;
-
-typedef struct _repair_stats
-{
-	/* Common stats */
-	STATS_COMPONENT;
-
-	UDWORD          repairPoints;           ///< How much damage is restored to Body Points and armour each Repair Cycle
-	BOOL            repairArmour;           ///< whether armour can be repaired or not
-	UDWORD          location;               ///< specifies whether the Repair is default or for the Turret
-	UDWORD          time;                   ///< time delay for repair cycle
-	iIMDShape*      pMountGraphic;          ///< The turret mount to use
-} REPAIR_STATS;
-
 typedef struct _weapon_stats
 {
 	/* Common stats */
@@ -162,15 +126,6 @@ typedef struct _weapon_stats
 	SDWORD          iAudioFireID;
 	SDWORD          iAudioImpactID;
 } WEAPON_STATS;
-
-typedef struct _construct_stats
-{
-	/* Common stats */
-	STATS_COMPONENT;
-
-	UDWORD          constructPoints;        ///< The number of points contributed each cycle
-	iIMDShape*      pMountGraphic;          ///< The turret mount to use
-} CONSTRUCT_STATS;
 
 /************************************************************************************
  * Additional stats tables

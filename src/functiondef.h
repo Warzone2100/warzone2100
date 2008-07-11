@@ -322,7 +322,7 @@ typedef struct _function_upgrade
 	//common stats
 //	FUNCTION_STATS;
 
-//	struct _repair_stats*	pRepair;		/*The repair unit to be upgraded*/
+//	struct REPAIR_STATS*	pRepair;		/*The repair unit to be upgraded*/
 //	UDWORD			repairPoints;	/*The percentage to increase the repair points by*/
 //	UDWORD			buildPoints;	/*The number of build points required to upgrade
 //									  the structure*/
@@ -356,8 +356,8 @@ typedef struct _function_upgrade
 //	//common stats
 //	FUNCTION_STATS;
 //
-//	struct _sensor_stats*	pSensor;		/*The Sensor fitted, if any*/
-//	struct _ecm_stats*		pECM;			/*The ECM fitted, if any*/
+//	struct SENSOR_STATS*	pSensor;		/*The Sensor fitted, if any*/
+//	struct ECM_STATS*		pECM;			/*The ECM fitted, if any*/
 //	UDWORD			weaponCapacity;	/*The size of weapon in system points that may
 //									  be added. 0 = no weapons can be added*/
 //} DEFENSIVE_STRUCTURE_FUNCTION;

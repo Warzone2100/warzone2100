@@ -206,6 +206,67 @@ enum SENSOR_TYPE
     SUPER_SENSOR
 end;
 
+struct SENSOR
+    %inherit COMPONENT;
+    %nomacro;
+
+    # Sensor range.
+    UDWORD          range;
+
+    # Sensor power (put against ecm power).
+    UDWORD          power;
+
+    # specifies whether the Sensor is default or for the Turret.
+    UDWORD          location;
+
+    # used for combat
+    enum SENSOR_TYPE type;
+
+    # Time delay before the associated weapon droids 'know' where the attack is
+    # from.
+    UDWORD          time;
+
+    # The turret mount to use.
+    IMD_model       pMountGraphic;
+end;
+
+struct ECM
+    %inherit COMPONENT;
+    %nomacro;
+
+    # ECM range.
+    UDWORD          range;
+
+    # ECM power (put against sensor power).
+    UDWORD          power;
+
+    # Specifies whether the ECM is default or for the Turret.
+    UDWORD          location;
+
+    # The turret mount to use.
+    IMD_model       pMountGraphic;
+end;
+
+struct REPAIR
+    %inherit COMPONENT;
+    %nomacro;
+
+    # How much damage is restored to Body Points and armour each Repair Cycle.
+    UDWORD          repairPoints;
+
+    # Whether armour can be repaired or not.
+    bool            repairArmour;
+
+    # Specifies whether the Repair is default or for the Turret.
+    UDWORD          location;
+
+    # Time delay for repair cycle.
+    UDWORD          time;
+
+    # The turret mount to use.
+    IMD_model       pMountGraphic;
+end;
+
 enum FIREONMOVE
     %valprefix "FOM_";
 
@@ -217,6 +278,17 @@ enum FIREONMOVE
 
     # full capability - droid fires normally on move
     YES
+end;
+
+struct CONSTRUCT
+    %inherit COMPONENT;
+    %nomacro;
+
+    # The number of points contributed each cycle
+    UDWORD          constructPoints;
+
+    # The turret mount to use
+    IMD_model       pMountGraphic;
 end;
 
 enum TRAVEL_MEDIUM

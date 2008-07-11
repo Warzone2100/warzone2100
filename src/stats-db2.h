@@ -444,4 +444,298 @@ typedef struct PROPULSION_STATS
 	PROPULSION_TYPE propulsionType;
 } PROPULSION_STATS;
 
+typedef struct SENSOR_STATS
+{
+	/* BEGIN of inherited "COMPONENT" definition */
+	/* BEGIN of inherited "BASE" definition */
+	/**
+	 * Unique ID of the item
+	 */
+	UDWORD ref;
+
+	/**
+	 * Unique language independant name that can be used to identify a specific
+	 * stats instance
+	 *
+	 * Unique across all instances
+	 */
+	char*            pName;
+	/* END of inherited "BASE" definition */
+	/**
+	 * Power required to build this component
+	 */
+	UDWORD           buildPower;
+
+	/**
+	 * Build points (which are rate-limited in the construction units) required
+	 * to build this component.
+	 */
+	UDWORD           buildPoints;
+
+	/**
+	 * Weight of this component
+	 */
+	UDWORD           weight;
+
+	/**
+	 * Body points of this component
+	 */
+	UDWORD           body;
+
+	/**
+	 * Indicates whether this component is "designable" and can thus be used in
+	 * the design screen.
+	 */
+	bool             designable;
+
+	/**
+	 * The "base" IMD model representing this component in 3D space.
+	 *
+	 * This field is optional and can be NULL to indicate that it has no value
+	 */
+	iIMDShape*       pIMD;
+	/* END of inherited "COMPONENT" definition */
+	/**
+	 * Sensor range.
+	 */
+	UDWORD           range;
+
+	/**
+	 * Sensor power (put against ecm power).
+	 */
+	UDWORD           power;
+
+	/**
+	 * specifies whether the Sensor is default or for the Turret.
+	 */
+	UDWORD           location;
+
+	/**
+	 * used for combat
+	 */
+	SENSOR_TYPE type;
+
+	/**
+	 * Time delay before the associated weapon droids 'know' where the attack is
+	 * from.
+	 */
+	UDWORD           time;
+
+	/**
+	 * The turret mount to use.
+	 */
+	iIMDShape*       pMountGraphic;
+} SENSOR_STATS;
+
+typedef struct ECM_STATS
+{
+	/* BEGIN of inherited "COMPONENT" definition */
+	/* BEGIN of inherited "BASE" definition */
+	/**
+	 * Unique ID of the item
+	 */
+	UDWORD ref;
+
+	/**
+	 * Unique language independant name that can be used to identify a specific
+	 * stats instance
+	 *
+	 * Unique across all instances
+	 */
+	char*            pName;
+	/* END of inherited "BASE" definition */
+	/**
+	 * Power required to build this component
+	 */
+	UDWORD           buildPower;
+
+	/**
+	 * Build points (which are rate-limited in the construction units) required
+	 * to build this component.
+	 */
+	UDWORD           buildPoints;
+
+	/**
+	 * Weight of this component
+	 */
+	UDWORD           weight;
+
+	/**
+	 * Body points of this component
+	 */
+	UDWORD           body;
+
+	/**
+	 * Indicates whether this component is "designable" and can thus be used in
+	 * the design screen.
+	 */
+	bool             designable;
+
+	/**
+	 * The "base" IMD model representing this component in 3D space.
+	 *
+	 * This field is optional and can be NULL to indicate that it has no value
+	 */
+	iIMDShape*       pIMD;
+	/* END of inherited "COMPONENT" definition */
+	/**
+	 * ECM range.
+	 */
+	UDWORD           range;
+
+	/**
+	 * ECM power (put against sensor power).
+	 */
+	UDWORD           power;
+
+	/**
+	 * Specifies whether the ECM is default or for the Turret.
+	 */
+	UDWORD           location;
+
+	/**
+	 * The turret mount to use.
+	 */
+	iIMDShape*       pMountGraphic;
+} ECM_STATS;
+
+typedef struct REPAIR_STATS
+{
+	/* BEGIN of inherited "COMPONENT" definition */
+	/* BEGIN of inherited "BASE" definition */
+	/**
+	 * Unique ID of the item
+	 */
+	UDWORD ref;
+
+	/**
+	 * Unique language independant name that can be used to identify a specific
+	 * stats instance
+	 *
+	 * Unique across all instances
+	 */
+	char*            pName;
+	/* END of inherited "BASE" definition */
+	/**
+	 * Power required to build this component
+	 */
+	UDWORD           buildPower;
+
+	/**
+	 * Build points (which are rate-limited in the construction units) required
+	 * to build this component.
+	 */
+	UDWORD           buildPoints;
+
+	/**
+	 * Weight of this component
+	 */
+	UDWORD           weight;
+
+	/**
+	 * Body points of this component
+	 */
+	UDWORD           body;
+
+	/**
+	 * Indicates whether this component is "designable" and can thus be used in
+	 * the design screen.
+	 */
+	bool             designable;
+
+	/**
+	 * The "base" IMD model representing this component in 3D space.
+	 *
+	 * This field is optional and can be NULL to indicate that it has no value
+	 */
+	iIMDShape*       pIMD;
+	/* END of inherited "COMPONENT" definition */
+	/**
+	 * How much damage is restored to Body Points and armour each Repair Cycle.
+	 */
+	UDWORD           repairPoints;
+
+	/**
+	 * Whether armour can be repaired or not.
+	 */
+	bool             repairArmour;
+
+	/**
+	 * Specifies whether the Repair is default or for the Turret.
+	 */
+	UDWORD           location;
+
+	/**
+	 * Time delay for repair cycle.
+	 */
+	UDWORD           time;
+
+	/**
+	 * The turret mount to use.
+	 */
+	iIMDShape*       pMountGraphic;
+} REPAIR_STATS;
+
+typedef struct CONSTRUCT_STATS
+{
+	/* BEGIN of inherited "COMPONENT" definition */
+	/* BEGIN of inherited "BASE" definition */
+	/**
+	 * Unique ID of the item
+	 */
+	UDWORD ref;
+
+	/**
+	 * Unique language independant name that can be used to identify a specific
+	 * stats instance
+	 *
+	 * Unique across all instances
+	 */
+	char*            pName;
+	/* END of inherited "BASE" definition */
+	/**
+	 * Power required to build this component
+	 */
+	UDWORD           buildPower;
+
+	/**
+	 * Build points (which are rate-limited in the construction units) required
+	 * to build this component.
+	 */
+	UDWORD           buildPoints;
+
+	/**
+	 * Weight of this component
+	 */
+	UDWORD           weight;
+
+	/**
+	 * Body points of this component
+	 */
+	UDWORD           body;
+
+	/**
+	 * Indicates whether this component is "designable" and can thus be used in
+	 * the design screen.
+	 */
+	bool             designable;
+
+	/**
+	 * The "base" IMD model representing this component in 3D space.
+	 *
+	 * This field is optional and can be NULL to indicate that it has no value
+	 */
+	iIMDShape*       pIMD;
+	/* END of inherited "COMPONENT" definition */
+	/**
+	 * The number of points contributed each cycle
+	 */
+	UDWORD           constructPoints;
+
+	/**
+	 * The turret mount to use
+	 */
+	iIMDShape*       pMountGraphic;
+} CONSTRUCT_STATS;
+
 #endif // __INCLUDED_DB_TEMPLATE_SCHEMA_STRUCTDEF_STATS_DB2_TPL_H__

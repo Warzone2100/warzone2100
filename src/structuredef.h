@@ -148,9 +148,9 @@ typedef struct _structure_stats
 	UDWORD		sizeModifier;		/*The larger the target, the easier to hit*/
 	iIMDShape	*pIMD;		/*The IMD to draw for this structure */
 	iIMDShape	*pBaseIMD;	/*The base IMD to draw for this structure */
-	struct _ecm_stats	*pECM;		/*Which ECM is standard for the structure -
+	struct ECM_STATS	*pECM;		/*Which ECM is standard for the structure -
 									  if any*/
-	struct _sensor_stats *pSensor;	/*Which Sensor is standard for the structure -
+	struct SENSOR_STATS *pSensor;	/*Which Sensor is standard for the structure -
 									  if any*/
 	UDWORD		weaponSlots;		/*Number of weapons that can be attached to the
 									  building*/
