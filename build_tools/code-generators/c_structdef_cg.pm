@@ -185,7 +185,7 @@ sub printEnum()
         $$output .= "\t/**\n"
                   . "\t * The number of enumerators in this enum.\n"
                   . "\t */\n"
-                  . "\t${valprefix}${${$enum}{\"qualifiers\"}}{\"max\"},\n";
+                  . "\t${${$enum}{\"qualifiers\"}}{\"max\"},\n";
     }
 
     # Finish printing the enum

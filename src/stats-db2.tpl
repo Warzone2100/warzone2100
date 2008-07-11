@@ -1,7 +1,7 @@
 # if any types are added BEFORE 'COMP_BODY' - then Save/Load Game will have to
 # be  altered since it loops through the components from 1->MAX_COMP
 enum COMPONENT_TYPE
-    %max "NUMCOMPONENTS";
+    %max "COMP_NUMCOMPONENTS";
     %valprefix "COMP_";
 
     UNKNOWN
@@ -33,7 +33,7 @@ end;
 
 # only using KINETIC and HEAT for now
 enum WEAPON_CLASS
-    %max "NUM_WEAPON_CLASSES";
+    %max "WC_NUM_WEAPON_CLASSES";
     %valprefix "WC_";
 
     # Bullets, etc.
@@ -46,7 +46,7 @@ enum WEAPON_CLASS
     HEAT
 
     # others we haven't thought of! - classed as HEAT now to save space in DROID
-    #WC_MISC,                ///< 
+    #WC_MISC,
 end;
 
 # weapon subclasses used to define which weapons are affected by weapon upgrade
@@ -54,7 +54,7 @@ end;
 #
 # Watermelon:added a new subclass to do some tests
 enum WEAPON_SUBCLASS
-    %max "NUM_WEAPON_SUBCLASSES";
+    %max "WSC_NUM_WEAPON_SUBCLASSES";
     %valprefix "WSC_";
 
     MGUN
@@ -82,7 +82,7 @@ enum WEAPON_SUBCLASS
 end;
 
 enum PROPULSION_TYPE
-    %max "NUM";
+    %max "PROPULSION_TYPE_NUM";
     WHEELED
     TRACKED
     LEGGED

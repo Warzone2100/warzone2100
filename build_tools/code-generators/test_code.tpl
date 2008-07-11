@@ -11,7 +11,7 @@ struct BASE
 end;
 
 enum COMPONENT_TYPE
-    %max "NUMCOMPONENTS";
+    %max "COMP_NUMCOMPONENTS";
     %valprefix "COMP_";
 
     UNKNOWN
