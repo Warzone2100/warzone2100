@@ -167,6 +167,8 @@ sub printEnum()
 
     my $valprefix = "${$enum}{\"name\"}_";
     $valprefix = ${${$enum}{"qualifiers"}}{"valprefix"} if exists(${${$enum}{"qualifiers"}}{"valprefix"});
+    my $valsuffix = "";
+    $valsuffix = ${${$enum}{"qualifiers"}}{"valsuffix"} if exists(${${$enum}{"qualifiers"}}{"valsuffix"});
 
     while (@values)
     {
@@ -175,7 +177,7 @@ sub printEnum()
 
         printComments($output, ${$value}{"comment"}, 1);
 
-        $$output .= "\t${valprefix}${name},\n";
+        $$output .= "\t${valprefix}${name}${valsuffix},\n";
 
         $$output .= "\n" if @values or exists(${${$enum}{"qualifiers"}}{"max"});
     }

@@ -43,6 +43,10 @@ sub parseEnum
             {
                 ${$curEnum{"qualifiers"}}{"valprefix"} = $1;
             }
+            elsif (/^valsuffix\s+\"([^\"]+)\"\s*;$/)
+            {
+                ${$curEnum{"qualifiers"}}{"valsuffix"} = $1;
+            }
             elsif (/^max\s+\"([^\"]+)\"\s*;$/)
             {
                 ${$curEnum{"qualifiers"}}{"max"} = $1;
