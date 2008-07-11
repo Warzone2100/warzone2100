@@ -2123,6 +2123,7 @@ void actionUpdateDroid(DROID *psDroid)
 		if (actionReachedBuildPos(psDroid, psDroid->psActionTarget[0]->pos.x,psDroid->psActionTarget[0]->pos.y,
 							(BASE_STATS *)((STRUCTURE *)psDroid->psActionTarget[0])->pStructureType))
 		{
+			objTrace(psDroid->id, "Arrived at repair point - waiting for our turn");
 			moveStopDroid(psDroid);
 			psDroid->action = DACTION_WAITDURINGREPAIR;
 		}
@@ -2416,12 +2417,12 @@ void actionUpdateDroid(DROID *psDroid)
 		if (visibleObject((BASE_OBJECT *)psDroid, psDroid->psActionTarget[0], false))
 		{
 			// got close to the rearm pad - now find a clear one
-			debug( LOG_NEVER, "Unit %d: seen rearm pad\n", psDroid->id );
+			objTrace(psDroid->id, "Seen rearm pad - searching for available one");
 			psStruct = findNearestReArmPad(psDroid, (STRUCTURE *)psDroid->psActionTarget[0], true);
 			if (psStruct != NULL)
 			{
 				// found a clear landing pad - go for it
-				debug( LOG_NEVER, "Found clear rearm pad\n" );
+				objTrace(psDroid->id, "Found clear rearm pad");
 				setDroidActionTarget(psDroid, (BASE_OBJECT *)psStruct, 0);
 			}
 
@@ -2436,7 +2437,7 @@ void actionUpdateDroid(DROID *psDroid)
 			if (!actionVTOLLandingPos(psDroid, &droidX, &droidY))
 			{
 				// totally bunged up - give up
-				debug( LOG_NEVER, "DACTION_MOVETOREARM: couldn't find a clear tile near rearm pad - RTB\n" );
+				objTrace(psDroid->id, "Couldn't find a clear tile near rearm pad - returning to base");
 				orderDroid(psDroid, DORDER_RTB);
 				break;
 			}

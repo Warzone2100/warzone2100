@@ -128,11 +128,9 @@ static void orderCheckGuardPosition(DROID *psDroid, SDWORD range)
 
 	if (psDroid->psTarget != NULL)
 	{
-		//if ((psDroid->droidType != DROID_REPAIR) && // repair droids always follow behind - don't want them jumping into the line of fire
-        // repair droids always follow behind - don't want them jumping into the line of fire
-        if ((!(psDroid->droidType == DROID_REPAIR || psDroid->droidType ==
-            DROID_CYBORG_REPAIR)) && psDroid->psTarget->type == OBJ_DROID &&
-			orderStateLoc((DROID *)psDroid->psTarget, DORDER_MOVE, &x,&y))
+		// repair droids always follow behind - don't want them jumping into the line of fire
+		if ((!(psDroid->droidType == DROID_REPAIR || psDroid->droidType == DROID_CYBORG_REPAIR))
+		    && psDroid->psTarget->type == OBJ_DROID && orderStateLoc((DROID *)psDroid->psTarget, DORDER_MOVE, &x,&y))
 		{
 			// got a moving droid - check against where the unit is going
 			psDroid->orderX = (UWORD)x;
@@ -342,8 +340,7 @@ void orderUpdateDroid(DROID *psDroid)
 		}
 
 		//repair droids default to repairing droids within a given range
-		else if ((psDroid->droidType == DROID_REPAIR || psDroid->droidType ==
-            DROID_CYBORG_REPAIR) &&	!orderState(psDroid, DORDER_GUARD))
+		else if ((psDroid->droidType == DROID_REPAIR || psDroid->droidType == DROID_CYBORG_REPAIR) && !orderState(psDroid, DORDER_GUARD))
 		{
 			psObj = checkForRepairRange(psDroid,NULL);
 			if (psObj && (!bMultiPlayer || myResponsibility(psDroid->player)))
@@ -353,9 +350,7 @@ void orderUpdateDroid(DROID *psDroid)
 		}
 
 		//constructor droids default to repairing structures within a given range
-		//else if ((psDroid->droidType == DROID_CONSTRUCT) &&
-        else if ((psDroid->droidType == DROID_CONSTRUCT ||
-            psDroid->droidType == DROID_CYBORG_CONSTRUCT) &&
+		else if ((psDroid->droidType == DROID_CONSTRUCT || psDroid->droidType == DROID_CYBORG_CONSTRUCT) &&
 				 !orderState(psDroid, DORDER_GUARD) &&
 				 (psDroid->psTarStats != (BASE_STATS *) structGetDemolishStat()))
 		{
