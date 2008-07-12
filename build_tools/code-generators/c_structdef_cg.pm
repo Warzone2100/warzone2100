@@ -23,7 +23,16 @@ sub printStructFieldType
     elsif (/bool/)      { $$output .= "bool             "; }
     elsif (/set/)       { $$output .= "bool             "; }
     elsif (/enum/)      { $$output .= "${${$field}{\"enum\"}}{\"name\"} "; }
-    elsif (/struct/)    { $$output .= "${${$field}{\"struct\"}}{\"name\"}* "; }
+    elsif (/struct/)
+    {
+        my $name;
+        my $prefix = "";
+        my $suffix = "";
+
+        getStructName(\$name, ${$field}{"struct"}, \$prefix, \$suffix);
+
+        $$output .= "${prefix}${name}${suffix}* ";
+    }
     elsif (/IMD_model/) { $$output .= "iIMDShape*       "; }
     elsif (/C-only-field/) { $$output .= "${$field}{\"ctype\"} "; }
     else                { die "error:$filename:${$field}{\"line\"}: UKNOWN TYPE: $_"; }
@@ -123,14 +132,14 @@ sub printStructFields
 
 sub getStructName
 {
-    my ($name, $struct, $structMap, $prefix, $suffix) = @_;
+    my ($name, $struct, $prefix, $suffix) = @_;
 
     foreach (keys %{${$struct}{"qualifiers"}})
     {
         $$prefix = ${${$struct}{"qualifiers"}}{$_} if /prefix/ and not $$prefix;
         $$suffix = ${${$struct}{"qualifiers"}}{$_} if /suffix/ and not $$suffix;
 
-        getStructName($name, ${${$struct}{"qualifiers"}}{"inherit"}, $structMap, $prefix, $suffix) if /inherit/;
+        getStructName($name, ${${$struct}{"qualifiers"}}{"inherit"}, $prefix, $suffix) if /inherit/;
     }
 
     $$name = ${$struct}{"name"};
@@ -308,7 +317,7 @@ sub printStruct()
 
     printComments($output, ${$struct}{"comment"}, 0);
 
-    getStructName(\$name, $struct, $structMap, \$prefix, \$suffix);
+    getStructName(\$name, $struct, \$prefix, \$suffix);
 
     # Start printing the structure
     $$output .= "typedef struct ${prefix}${name}${suffix}\n{\n";
