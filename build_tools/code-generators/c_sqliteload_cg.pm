@@ -549,7 +549,7 @@ sub printRowProcessCode
         }
         else
         {
-            die "UKNOWN TYPE: $_";
+            die "error:$filename:${$field}{\"line\"}: UKNOWN TYPE: $_";
         }
 
         $$output .= "\n";

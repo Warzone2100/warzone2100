@@ -6,6 +6,9 @@ use strict;
 
 # Code generator for SQL table definitions
 
+my $filename = "";
+my $outfile = "";
+
 sub printStructFieldType
 {
     my ($output, $field) = @_;
@@ -33,7 +36,7 @@ sub printStructFieldType
     }
     else
     {
-        die "error:$filename:${$field}{\"line\"}: UKNOWN TYPE: $_"; }
+        die "error:$filename:${$field}{\"line\"}: UKNOWN TYPE: $_";
     }
 }
 
@@ -159,6 +162,17 @@ sub startFile()
     my ($output, $name, $outputfile) = @_;
 
     $$output .= "-- This file is generated automatically, do not edit, change the source ($name) instead.\n\n";
+
+    $filename = $name;
+    if ($outputfile)
+    {
+        $outfile = $outputfile;
+    }
+    else
+    {
+        $outfile = $name;
+        $outfile =~ s/\.[^.]*$/.c/;
+    }
 }
 
 sub endFile()
