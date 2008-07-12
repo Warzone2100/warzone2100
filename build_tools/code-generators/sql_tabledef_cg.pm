@@ -20,6 +20,11 @@ sub printStructFieldType
     elsif (/real/)      { $$output .= "NUMERIC NOT NULL"; }
     elsif (/bool/)      { $$output .= "INTEGER NOT NULL"; }
     elsif (/enum/)      { $$output .= "INTEGER NOT NULL"; }
+    elsif (/struct/)
+    {
+        $$output .= "INTEGER";
+        $$output .= " NOT NULL" unless grep(/optional/, @{${$field}{"qualifiers"}});
+    }
     elsif (/string/)
     {
         $$output .= "TEXT";

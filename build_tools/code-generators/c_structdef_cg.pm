@@ -23,6 +23,7 @@ sub printStructFieldType
     elsif (/bool/)      { $$output .= "bool             "; }
     elsif (/set/)       { $$output .= "bool             "; }
     elsif (/enum/)      { $$output .= "${${$field}{\"enum\"}}{\"name\"} "; }
+    elsif (/struct/)    { $$output .= "${${$field}{\"struct\"}}{\"name\"}* "; }
     elsif (/IMD_model/) { $$output .= "iIMDShape*       "; }
     elsif (/C-only-field/) { $$output .= "${$field}{\"ctype\"} "; }
     else                { die "error:$filename:${$field}{\"line\"}: UKNOWN TYPE: $_"; }

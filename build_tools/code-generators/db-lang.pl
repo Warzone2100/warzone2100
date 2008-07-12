@@ -257,6 +257,21 @@ sub parseStruct
 
             push @{$curStruct{"fields"}}, \%field;
         }
+        # Parse struct reference declarations
+        elsif (/^\s*(struct)\s+(\w+)\s+(unique\s+)?(optional\s+)?(\w+)\s*;\s*$/)
+        {
+            die "error: Cannot use struct \"$2\" as it isn't declared yet" unless exists($structMap{$2});
+
+            my %field = (type=>$1, struct=>$structMap{$2}, name=>$5, line=>$$count);
+
+            push @{$field{"qualifiers"}}, $3 if $3;
+            push @{$field{"qualifiers"}}, $4 if $4;
+
+            @{$field{"comment"}} = @curComment;
+            @curComment = ();
+
+            push @{$curStruct{"fields"}}, \%field;
+        }
         # Parse C-only fields
         elsif (/^\s*(C-only-field)\s+(.*)\s+(\w+)\s*;\s*$/)
         {
