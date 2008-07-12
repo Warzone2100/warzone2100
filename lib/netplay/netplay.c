@@ -781,9 +781,6 @@ BOOL NETbcast(NETMSG *msg)
 			    && connected_bsocket[i]->socket != NULL)
 			{
 				result = SDLNet_TCP_Send(connected_bsocket[i]->socket, msg, size);
-			}
-			else
-			{
 				if (result < size)
 				{
 					debug(LOG_NET, "(server) SDLNet_TCP_Send returned %d < %d, socket %p invalid: %s",
@@ -1070,7 +1067,7 @@ receive_message:
 				    && connected_bsocket[pMsg->destination] != NULL
 				    && connected_bsocket[pMsg->destination]->socket != NULL)
 				{
-					debug(LOG_NET, "Reflecting message type %hhu to UDWORD %hhu", pMsg->type, pMsg->destination);
+					debug(LOG_NET, "Reflecting message type %hhu to %hhu", pMsg->type, pMsg->destination);
 					pMsg->size = SDL_SwapBE16(pMsg->size);
 					SDLNet_TCP_Send(connected_bsocket[pMsg->destination]->socket,
 							pMsg, size);
