@@ -283,6 +283,9 @@ end;
 struct WEAPON
     %inherit COMPONENT;
     %nomacro;
+    %fetchRowById Row Id
+        $Row = statsGetWeapon($Id - 1);
+    end;
 
     # Max distance to target for short range shot
     UDWORD          shortRange;
@@ -381,6 +384,17 @@ struct WEAPON
     # Audio
     SDWORD          iAudioFireID;
     SDWORD          iAudioImpactID;
+end;
+
+struct BRAIN
+    %inherit COMPONENT;
+    %nomacro;
+
+    # Program capacity
+    UDWORD              progCap;
+
+    # Weapon stats associated with this brain - for Command Droids
+    struct WEAPON       psWeaponStat;
 end;
 
 struct CONSTRUCT

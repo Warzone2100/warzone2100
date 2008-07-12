@@ -59,15 +59,6 @@ typedef struct _body_stats
 	iIMDShape*      pFlameIMD;      ///< pointer to which flame graphic to use - for VTOLs only at the moment
 } BODY_STATS;
 
-typedef struct _brain_stats
-{
-	/* Common stats */
-	STATS_COMPONENT;
-
-	UDWORD          progCap;                ///< Program capacity
-	struct WEAPON_STATS* psWeaponStat;     ///< weapon stats associated with this brain - for Command Droids
-} BRAIN_STATS;
-
 /************************************************************************************
  * Additional stats tables
  ************************************************************************************/

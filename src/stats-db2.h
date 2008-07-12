@@ -952,6 +952,68 @@ typedef struct WEAPON_STATS
 	SDWORD           iAudioImpactID;
 } WEAPON_STATS;
 
+typedef struct BRAIN_STATS
+{
+	/* BEGIN of inherited "COMPONENT" definition */
+	/* BEGIN of inherited "BASE" definition */
+	/**
+	 * Unique ID of the item
+	 */
+	UDWORD ref;
+
+	/**
+	 * Unique language independant name that can be used to identify a specific
+	 * stats instance
+	 *
+	 * Unique across all instances
+	 */
+	char*            pName;
+	/* END of inherited "BASE" definition */
+	/**
+	 * Power required to build this component
+	 */
+	UDWORD           buildPower;
+
+	/**
+	 * Build points (which are rate-limited in the construction units) required
+	 * to build this component.
+	 */
+	UDWORD           buildPoints;
+
+	/**
+	 * Weight of this component
+	 */
+	UDWORD           weight;
+
+	/**
+	 * Body points of this component
+	 */
+	UDWORD           body;
+
+	/**
+	 * Indicates whether this component is "designable" and can thus be used in
+	 * the design screen.
+	 */
+	bool             designable;
+
+	/**
+	 * The "base" IMD model representing this component in 3D space.
+	 *
+	 * This field is optional and can be NULL to indicate that it has no value
+	 */
+	iIMDShape*       pIMD;
+	/* END of inherited "COMPONENT" definition */
+	/**
+	 * Program capacity
+	 */
+	UDWORD           progCap;
+
+	/**
+	 * Weapon stats associated with this brain - for Command Droids
+	 */
+	WEAPON_STATS* psWeaponStat;
+} BRAIN_STATS;
+
 typedef struct CONSTRUCT_STATS
 {
 	/* BEGIN of inherited "COMPONENT" definition */
