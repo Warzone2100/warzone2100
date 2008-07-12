@@ -538,13 +538,73 @@ sub printRowProcessCode
                           . "\t\t{\n";
             }
 
-            $$output .= "${indent}stats->$fieldName = (iIMDShape *) resGetData(\"IMD\", (const char*)sqlite3_column_text(stmt, cols.$fieldName));\n"
-                      . "${indent}if (stats->$fieldName == NULL)\n"
-                      . "${indent}{\n"
-                      . "${indent}\tdebug(LOG_ERROR, \"Cannot find the IMD for field \\\"$fieldName\\\" of record num %u\", (unsigned int)sqlite3_column_int(stmt, cols.unique_inheritance_id));\n"
-                      . "${indent}\tabort();\n"
-                      . "${indent}\tgoto in_statement_err;\n"
-                      . "${indent}}\n";
+            $$output .= "${indent}stats->$fieldName = (iIMDShape *) resGetData(\"IMD\", (const char*)sqlite3_column_text(stmt, cols.$fieldName));\n";
+            unless (grep(/optional/, @{${$field}{"qualifiers"}}))
+            {
+                $$output .= "${indent}if (stats->$fieldName == NULL)\n"
+                          . "${indent}{\n"
+                          . "${indent}\tdebug(LOG_ERROR, \"Cannot find the IMD for field \\\"$fieldName\\\" of record num %u\", (unsigned int)sqlite3_column_int(stmt, cols.unique_inheritance_id));\n"
+                          . "${indent}\tabort();\n"
+                          . "${indent}\tgoto in_statement_err;\n"
+                          . "${indent}}\n";
+            }
+
+            if (grep(/optional/, @{${$field}{"qualifiers"}}))
+            {
+                $$output .= "\t\t}\n"
+                          . "\t\telse\n"
+                          . "\t\t{\n"
+                          . "\t\t\tstats->$fieldName = NULL;\n"
+                          . "\t\t}\n";
+            }
+        }
+        elsif (/struct/)
+        {
+            my $struct = ${$field}{"struct"};
+            my $indent = "\t\t";
+
+            if (grep(/optional/, @{${$field}{"qualifiers"}}))
+            {
+                $indent .= "\t";
+                $$output .= "\t\tif (sqlite3_column_type(stmt, cols.$fieldName) != SQLITE_NULL)\n"
+                          . "\t\t{\n";
+            }
+
+            die "error:$outfile:${$field}{\"line\"}: Cannot use struct \"${$struct}{\"name\"}\" as it doesn't have a fetchRowById function declared" unless exists(${${$struct}{"qualifiers"}}{"fetchRowById"});
+
+            $$output .= "${indent}{\n";
+
+            my $line = ${${${$struct}{"qualifiers"}}{"fetchRowById"}}{"line"};
+
+            $$output .= "#line " . ($line + 1) . " \"$filename\"\n";
+            foreach (@{${${${$struct}{"qualifiers"}}{"fetchRowById"}}{"code"}})
+            {
+                s/^        //g;
+                s/    /\t/g;
+                s/\$Id\b/((unsigned int)sqlite3_column_int(stmt, cols.$fieldName))/g;
+                s/\$Row\b/(stats->$fieldName)/g;
+
+                s/\bABORT\b/goto in_statement_err/g;
+
+                $$output .= "${indent}\t$_\n";
+            }
+
+            $line = $$output =~ s/\n/\n/sg;
+            $line += 2;
+            $$output .= "#line $line \"$outfile\"\n";
+
+            $$output .= "${indent}}\n"
+                      . "\n";
+
+            unless (grep(/optional/, @{${$field}{"qualifiers"}}))
+            {
+                $$output .= "${indent}if (stats->$fieldName == NULL)\n"
+                          . "${indent}{\n"
+                          . "${indent}\tdebug(LOG_ERROR, \"User code failed to retrieve struct instance for \\\"$fieldName\\\" with struct ID number %u\", (unsigned int)sqlite3_column_int(stmt, cols.$fieldName));\n"
+                          . "${indent}\tabort();\n"
+                          . "${indent}\tgoto in_statement_err;\n"
+                          . "${indent}}\n";
+            }
 
             if (grep(/optional/, @{${$field}{"qualifiers"}}))
             {

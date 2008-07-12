@@ -179,6 +179,14 @@ sub parseStruct
 
                 ${$curStruct{"qualifiers"}}{"inherit"} = \%{$structMap{$1}};
             }
+            elsif (/^fetchRowById\s+Row\s+Id\s*$/)
+            {
+                my %fetchRowById = (line=>$$count);
+
+                readTillEnd(\@{$fetchRowById{"code"}}, $count);
+
+                ${$curStruct{"qualifiers"}}{"fetchRowById"} = \%fetchRowById;
+            }
             elsif (/^preLoadTable(\s+maxId)?(\s+rowCount)?\s*$/)
             {
                 my %preLoadTable = (line=>$$count);
@@ -260,7 +268,8 @@ sub parseStruct
         # Parse struct reference declarations
         elsif (/^\s*(struct)\s+(\w+)\s+(unique\s+)?(optional\s+)?(\w+)\s*;\s*$/)
         {
-            die "error: Cannot use struct \"$2\" as it isn't declared yet" unless exists($structMap{$2});
+            die "error:$count: Cannot use struct \"$2\" as it isn't declared yet" unless exists($structMap{$2});
+            die "error:$count: Cannot use struct \"$2\" as it doesn't have a fetchRowById function declared" unless exists(${${$structMap{$2}}{"qualifiers"}}{"fetchRowById"});
 
             my %field = (type=>$1, struct=>$structMap{$2}, name=>$5, line=>$$count);
 
