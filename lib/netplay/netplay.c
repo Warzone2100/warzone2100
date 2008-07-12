@@ -1048,6 +1048,8 @@ receive_message:
 			{
 				unsigned int j;
 
+				pMsg->size = SDL_SwapBE16(pMsg->size);
+
 				// we are the host, and have received a broadcast packet; distribute it
 				for (j = 0; j < MAX_CONNECTED_PLAYERS; ++j)
 				{
@@ -1055,7 +1057,6 @@ receive_message:
 					    && connected_bsocket[j] != NULL
 					    && connected_bsocket[j]->socket != NULL)
 					{
-						pMsg->size = SDL_SwapBE16(pMsg->size);
 						SDLNet_TCP_Send(connected_bsocket[j]->socket, pMsg, size);
 					}
 				}
