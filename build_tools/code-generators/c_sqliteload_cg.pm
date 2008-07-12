@@ -125,6 +125,10 @@ sub printColNums
                 $$output .= "\t\tint ${$field}{\"name\"}_${$value}{\"name\"};\n";
             }
         }
+        elsif (${$field}{"type"} and ${$field}{"type"} =~ /C-only-field/)
+        {
+            # Ignore: this is a user defined field type, the user code (%postLoadRow) can deal with it
+        }
         else
         {
             $$output .= "\t\tint $fieldName;\n";
@@ -173,12 +177,16 @@ sub printStructFields
                 $$output .= ",\\n\"\n" if @values;
             }
         }
+        elsif (${$field}{"type"} and ${$field}{"type"} =~ /C-only-field/)
+        {
+            # Ignore: this is a user defined field type, the user code (%postLoadRow) can deal with it
+        }
         else
         {
             $$output .= "$indent\"`$structName`.`${$field}{\"name\"}` AS `${$field}{\"name\"}`";
         }
 
-        $$output .= ",\\n\"\n\n" if @fields;
+        $$output .= ",\\n\"\n\n" if @fields and not (${$field}{"type"} and ${$field}{"type"} =~ /C-only-field/);
     }
 }
 
@@ -381,6 +389,10 @@ sub printSqlColNameFetchCode
             {
                 printSqlFetchColName($output, "${$field}{\"name\"}_${$value}{\"name\"}");
             }
+        }
+        elsif (${$field}{"type"} and ${$field}{"type"} =~ /C-only-field/)
+        {
+            # Ignore: this is a user defined field type, the user code (%postLoadRow) can deal with it
         }
         else
         {

@@ -68,7 +68,7 @@ sub printStructFields
     {
         my $field = shift(@fields);
 
-        printComments($output, ${$field}{"comment"}, 1);
+        printComments($output, ${$field}{"comment"}, 1) unless (${$field}{"type"} and ${$field}{"type"} =~ /C-only-field/);
 
         if (${$field}{"type"} and ${$field}{"type"} =~ /set/)
         {
@@ -90,6 +90,10 @@ sub printStructFields
             $unique_string .= ")";
             push @constraints, $unique_string if grep(/unique/, @{${$field}{"qualifiers"}});
         }
+        elsif (${$field}{"type"} and ${$field}{"type"} =~ /C-only-field/)
+        {
+            # Ignore: this is a user defined field type, the user code (%postLoadRow) can deal with it
+        }
         else
         {
             $$output .= "\t${$field}{\"name\"} ";
@@ -98,7 +102,7 @@ sub printStructFields
             $$output .= ",\n" if @fields or @constraints;
         }
 
-        $$output .= "\n";
+        $$output .= "\n" unless (${$field}{"type"} and ${$field}{"type"} =~ /C-only-field/);
     }
 
     while (@constraints)
