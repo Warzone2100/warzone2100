@@ -404,6 +404,7 @@ static void NETsendGAMESTRUCT(TCPsocket socket, const GAMESTRUCT* game)
 	// circumvents struct padding, which could pose a problem).
 	char buf[sizeof(game->name) + sizeof(game->desc.host) + sizeof(int32_t) * 8];
 	char *buffer = buf;
+	int result;
 
 	// Now dump the data into the buffer
 	// Copy a string
@@ -435,7 +436,11 @@ static void NETsendGAMESTRUCT(TCPsocket socket, const GAMESTRUCT* game)
 	buffer += sizeof(int32_t);
 
 	// Send over the GAMESTRUCT
-	SDLNet_TCP_Send(socket, buf, sizeof(buf));
+	result = SDLNet_TCP_Send(socket, buf, sizeof(buf));
+	if (result != sizeof(buf))
+	{
+		debug(LOG_NET, "Failed to send: %s", SDLNet_GetError());
+	}
 }
 
 static bool NETrecvGAMESTRUCT(GAMESTRUCT* game)
