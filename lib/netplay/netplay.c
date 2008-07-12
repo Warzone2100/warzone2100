@@ -255,7 +255,7 @@ static void NET_InitPlayers(void)
 	}
 }
 
-static void NETBroadcastPlayerInfo(int dpid)
+static void NETBroadcastPlayerInfo(uint32_t dpid)
 {
 	NETbeginEncode(NET_PLAYER_INFO, NET_ALL_PLAYERS);
 		NETuint32_t(&players[dpid].id);
@@ -781,7 +781,8 @@ BOOL NETbcast(NETMSG *msg)
 			{
 				if (result < size)
 				{
-					debug(LOG_NET, "SDLNet_TCP_Send returned: %d error: %s line %d", result, SDLNet_GetError(),__LINE__);
+					debug(LOG_NET, "(server) SDLNet_TCP_Send returned %d < %d, socket %p invalid: %s",
+					      result, size, connected_bsocket[i]->socket, SDLNet_GetError());
 					connected_bsocket[i]->socket = NULL; // Unsure how to handle invalid sockets.
 				}
 			}
@@ -798,7 +799,8 @@ BOOL NETbcast(NETMSG *msg)
 		result = SDLNet_TCP_Send(tcp_socket, msg, size);
 		if (result < size)
 		{
-			debug(LOG_WARNING, "SDLNet_TCP_Send returned: %d, error %s tcp_socket %p is now invalid.", result, SDLNet_GetError(), tcp_socket);
+			debug(LOG_WARNING, "(client) SDLNet_TCP_Send returned %d < %d, tcp_socket %p is now invalid: %s", 
+			      result, size, tcp_socket, SDLNet_GetError());
 			tcp_socket = NULL; // unsure how to handle invalid sockets.
 			return false;
 		}
@@ -1342,7 +1344,7 @@ static void NETallowJoining(void)
 				else if (NetMsg.type == NET_JOIN)
 				{
 					char name[64];
-					int j;
+					uint32_t j;
 					uint8_t dpid;
 
 					NETbeginDecode(NET_JOIN);
