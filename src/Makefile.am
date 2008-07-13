@@ -15,7 +15,7 @@ AM_CFLAGS = $(WZ_CFLAGS)
 AM_LFLAGS = $(FLEX_FLAGS)
 AM_YFLAGS = -d
 BUILT_SOURCES = level_lexer.lex.c scriptvals_lexer.lex.c scriptvals_parser.tab.c scriptvals_parser.tab.h stats-db2.h
-CLEANFILES = level_lexer.lex.c scriptvals_lexer.lex.c scriptvals_parser.tab.c scriptvals_parser.tab.h stats-db2.h
+CLEANFILES = level_lexer.lex.c scriptvals_lexer.lex.c scriptvals_parser.tab.c scriptvals_parser.tab.h
 
 bin_PROGRAMS = warzone2100
 noinst_HEADERS = action.h advvis.h ai.h aiexperience.h anim_id.h \
