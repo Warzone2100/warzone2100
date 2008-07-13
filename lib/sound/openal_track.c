@@ -279,7 +279,7 @@ void sound_Update()
 	{
 		ALenum state, err;
 
-		ASSERT(alIsSource(node->curr->iSample), "Not a valid source!");
+		//ASSERT(alIsSource(node->curr->iSample), "Not a valid source!");
 		alGetSourcei(node->curr->iSample, AL_SOURCE_STATE, &state);
 
 		// Check whether an error occurred while retrieving the state.
