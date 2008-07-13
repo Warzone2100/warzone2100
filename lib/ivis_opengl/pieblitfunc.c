@@ -54,6 +54,8 @@
 #define pie_FILLTRANS	128
 
 static GLuint radarTexture;
+static GLuint radarSizeX, radarSizeY;
+static GLuint radarDisplayX, radarDisplayY;
 
 /***************************************************************************/
 /*
@@ -290,6 +292,10 @@ void pie_UploadDisplayBuffer()
 BOOL pie_InitRadar(void)
 {
 	radarTexture = _TEX_INDEX;
+	radarSizeX = 0;
+	radarSizeY = 0;
+	radarDisplayX = 0;
+	radarDisplayY = 0;
 	glGenTextures(1, (GLuint *) &_TEX_PAGE[_TEX_INDEX].id);
 	_TEX_INDEX++;
 	return true;
@@ -303,9 +309,23 @@ BOOL pie_ShutdownRadar(void)
 
 void pie_DownLoadRadar(UDWORD *buffer, int width, int height)
 {
+	int h = 1, w = 1;
+
+	while (height > (h *= 2));
+	while (width > (w *= 2));
+
 	pie_SetTexturePage(radarTexture);
-	glTexImage2D(GL_TEXTURE_2D, 0, wz_texture_compression, width, height, 0,
-		     GL_RGBA, GL_UNSIGNED_BYTE, buffer);
+	if (radarSizeX != w || radarSizeY != h)
+	{
+		// Allocate texture
+		glTexImage2D(GL_TEXTURE_2D, 0, wz_texture_compression, w, h, 0,
+			     GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+		radarSizeX = w;
+		radarSizeY = h;
+	}
+	radarDisplayX = width;
+	radarDisplayY = height;
+	glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
 	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -316,8 +336,10 @@ void pie_DownLoadRadar(UDWORD *buffer, int width, int height)
 void pie_RenderRadar(int x, int y, int width, int height)
 {
 	// special case function because texture is held outside of texture list
-	PIEIMAGE pieImage = { radarTexture, 0, 0, 256, 256 };
-	PIERECT dest = { x, y, width, height };
+	const float wFract = 256.0 * ((float)radarDisplayX / (float)radarSizeX);
+	const float hFract = 256.0 * ((float)radarDisplayY / (float)radarSizeY);
+	const PIEIMAGE pieImage = { radarTexture, 0, 0, wFract, hFract };
+	const PIERECT dest = { x, y, width, height };
 
 	pie_SetRendMode(REND_GOURAUD_TEX);
 

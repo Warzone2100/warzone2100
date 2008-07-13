@@ -741,7 +741,7 @@ void pie_RemainingPasses(void)
  * replaces all ivis blit functions
  *
  ***************************************************************************/
-void pie_DrawImage(PIEIMAGE *image, PIERECT *dest)
+void pie_DrawImage(const PIEIMAGE *image, const PIERECT *dest)
 {
 	PIELIGHT colour = WZCOL_WHITE;
 

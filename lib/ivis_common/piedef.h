@@ -103,7 +103,7 @@ typedef struct {SDWORD texPage; SWORD tu, tv, tw, th;} PIEIMAGE;	/**< An area of
  */
 /***************************************************************************/
 extern void pie_Draw3DShape(iIMDShape *shape, int frame, int team, PIELIGHT colour, PIELIGHT specular, int pieFlag, int pieData);
-extern void pie_DrawImage(PIEIMAGE *image, PIERECT *dest);
+extern void pie_DrawImage(const PIEIMAGE *image, const PIERECT *dest);
 
 void pie_TerrainInit(int sizex, int sizey);
 void pie_TerrainCleanup(void);
