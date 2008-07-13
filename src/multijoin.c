@@ -206,12 +206,12 @@ static void resetMultiVisibility(UDWORD player)
 // A remote player has left the game
 BOOL MultiPlayerLeave( UDWORD dp)
 {
-	UDWORD	i = 0;
+	unsigned int i = 0;
 	char	buf[255];
 
 	while((player2dpid[i] != dp) && (i<MAX_PLAYERS) )i++;	// find out which!
 
-	debug(LOG_NET, "Player %d is leaving", i);
+	debug(LOG_NET, "Player %u is leaving (dpid=%u)", i, dp);
 
 	if(i != MAX_PLAYERS)									// player not already removed
 	{
