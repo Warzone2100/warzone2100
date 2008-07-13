@@ -25,6 +25,7 @@
 #define __INCLUDED_STRUCTUREDEF_H__
 
 #include "lib/gamelib/animobj.h"
+#include "positiondef.h"
 #include "statsdef.h"
 #include "weapondef.h"
 
@@ -61,29 +62,6 @@ REF_MISSILE_SILO,
 REF_SAT_UPLINK,         //added for updates - AB 8/6/99
 NUM_DIFF_BUILDINGS,		//need to keep a count of how many types for IMD loading
 } STRUCTURE_TYPE;
-
-typedef enum _position_type
-{
-	POS_DELIVERY,		//Delivery Points NOT wayPoints
-	POS_PROXDATA,	//proximity messages that are data generated
-	POS_PROXOBJ,	//proximity messages that are in game generated
-	POS_TEMPDELIVERY //SAVE ONLY delivery point for factory currently assigned to commander
-} POSITION_TYPE;
-
-#define POSITION_OBJ \
-	POSITION_TYPE	type;				/*the type of position obj - FlagPos or ProxDisp*/ \
-	UDWORD			frameNumber;		/*when the Position was last drawn*/ \
-	UDWORD			screenX;			/*screen coords and radius of Position imd */ \
-	UDWORD			screenY; \
-	UDWORD			screenR; \
-	UDWORD			player;				/*which player the Position belongs to*/ \
-	BOOL			selected			/*flag to indicate whether the Position
-										is to be highlighted*/
-
-typedef struct _object_position
-{
-	POSITION_OBJ;
-} OBJECT_POSITION;
 
 typedef struct _flag_position
 {
@@ -205,14 +183,14 @@ typedef struct _factory
 	UDWORD				timeToBuild;		/* Time taken to build one droid */
 	UDWORD				timeStartHold;		/* The time the factory was put on hold*/
 	FLAG_POSITION		*psAssemblyPoint;	/* Place for the new droids to assemble at */
-	struct _droid		*psCommander;	    // command droid to produce droids for (if any)
+	struct DROID		*psCommander;	    // command droid to produce droids for (if any)
     UDWORD              secondaryOrder;     // secondary order state for all units coming out of the factory
                                             // added AB 22/04/99
 
     //these are no longer required - yipee!
 	// The group the droids produced by this factory belong to - used for Missions
 	//struct _droid_group		*psGroup;
-	//struct _droid			*psGrpNext;
+	//struct DROID			*psGrpNext;
 
 } FACTORY;
 
@@ -249,7 +227,7 @@ typedef struct REPAIR_FACILITY
 
 	// The group the droids to be repaired by this facility belong to
 	struct _droid_group		*psGroup;
-	struct _droid			*psGrpNext;
+	struct DROID			*psGrpNext;
 	int				droidQueue;		///< Last count of droid queue for this facility
 } REPAIR_FACILITY;
 

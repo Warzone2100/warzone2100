@@ -7997,7 +7997,7 @@ BOOL loadSaveStructureV(char *pFileData, UDWORD filesize, UDWORD numStructures, 
 /*
 	// The group the droids to be repaired by this facility belong to
 	struct _droid_group		*psGroup;
-	struct _droid			*psGrpNext;
+	struct DROID			*psGrpNext;
 */
 				psRepair = ((REPAIR_FACILITY *)psStructure->pFunctionality);
 

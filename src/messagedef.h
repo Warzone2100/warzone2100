@@ -25,6 +25,8 @@
 #define __INCLUDED_MESSAGEDEF_H__
 
 #include "lib/ivis_common/pietypes.h"
+#include "lib/ivis_common/ivisdef.h"
+#include "positiondef.h"
 
 typedef enum _message_type
 {

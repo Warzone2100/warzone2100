@@ -1048,6 +1048,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\src\positiondef.h"
+				>
+			</File>
+			<File
 				RelativePath="..\src\power.h"
 				>
 			</File>

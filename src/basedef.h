@@ -88,9 +88,9 @@ typedef enum _object_type
 	SIMPLE_ELEMENTS(pointerType); \
 	BASE_ELEMENTS2(pointerType)
 
-typedef struct _base_object
+typedef struct BASE_OBJECT
 {
-	BASE_ELEMENTS( struct _base_object );
+	BASE_ELEMENTS( struct BASE_OBJECT );
 } WZ_DECL_MAY_ALIAS BASE_OBJECT;
 
 typedef struct SIMPLE_OBJECT

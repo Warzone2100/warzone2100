@@ -233,7 +233,7 @@ extern void checkForPowerGen(STRUCTURE *psPowerGen);
 
 // Set the command droid that factory production should go to
 //struct _command_droid;
-extern void assignFactoryCommandDroid(STRUCTURE *psStruct, struct _droid *psCommander);
+extern void assignFactoryCommandDroid(STRUCTURE *psStruct, struct DROID *psCommander);
 
 // remove all factories from a command droid
 void clearCommandDroidFactory(DROID *psDroid);

@@ -25,12 +25,9 @@
 
 #include "lib/framework/frame.h"
 
-#include "src/basedef.h"
-#include "src/droiddef.h"
-#include "src/structuredef.h"
-#include "lib/script/script.h"
+#include "script.h"
 #include "src/scriptfuncs.h"
-#include "lib/script/chat_processing.h"
+#include "chat_processing.h"
 
 /* Get the Yacc definitions */
 #include "chat_parser.tab.h"

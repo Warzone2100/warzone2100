@@ -30,8 +30,12 @@
 // MAX_BLOCKING_TILES on some location
 #define MAX_BLOCKING_TILES		1
 
+/// Forward declarations to allow pointers to these types
+struct BASE_OBJECT;
+struct DROID;
+
 // not used in scripts, but used in code.
-extern  BOOL objectInRange(BASE_OBJECT *psList, SDWORD x, SDWORD y, SDWORD range);
+extern  BOOL objectInRange(struct BASE_OBJECT *psList, SDWORD x, SDWORD y, SDWORD range);
 
 // Check for any player object being within a certain range of a position
 extern BOOL scrObjectInRange(void);
@@ -665,8 +669,8 @@ extern UDWORD numEnemyObjInRange(SDWORD player, SDWORD range, SDWORD rangeX, SDW
 extern BOOL addBeaconBlip(SDWORD x, SDWORD y, SDWORD forPlayer, SDWORD sender, char * textMsg);
 extern BOOL sendBeaconToPlayer(SDWORD locX, SDWORD locY, SDWORD forPlayer, SDWORD sender, char * beaconMsg);
 extern MESSAGE * findBeaconMsg(UDWORD player, SDWORD sender);
-extern SDWORD getNumRepairedBy(DROID *psDroidToCheck, SDWORD player);
-extern BOOL objectInRangeVis(BASE_OBJECT *psList, SDWORD x, SDWORD y, SDWORD range, SDWORD lookingPlayer);
+extern SDWORD getNumRepairedBy(struct DROID *psDroidToCheck, SDWORD player);
+extern BOOL objectInRangeVis(struct BASE_OBJECT *psList, SDWORD x, SDWORD y, SDWORD range, SDWORD lookingPlayer);
 extern SDWORD getPlayerFromString(char *playerName);
 extern BOOL scrExp(void);
 extern BOOL scrSqrt(void);

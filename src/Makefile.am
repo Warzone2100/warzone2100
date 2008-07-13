@@ -31,7 +31,7 @@ noinst_HEADERS = action.h advvis.h ai.h aiexperience.h anim_id.h \
 	levels.h lighting.h loadsave.h loop.h map.h mapdisplay.h mapgrid.h mechanics.h \
 	message.h messagedef.h miscimd.h mission.h missiondef.h move.h movedef.h \
 	multigifts.h multiint.h multijoin.h multilimit.h multimenu.h multiplay.h multirecv.h \
-	multistat.h objectdef.h objects.h objmem.h oprint.h parsetest.h order.h \
+	multistat.h objectdef.h objects.h objmem.h oprint.h parsetest.h positiondef.h order.h \
 	orderdef.h power.h projectile.h radar.h raycast.h research.h \
 	researchdef.h scores.h scriptai.h scriptcb.h scriptextern.h scriptfuncs.h \
 	scriptobj.h scripttabs.h scriptvals.h selection.h seqdisp.h stats.h statsdef.h \

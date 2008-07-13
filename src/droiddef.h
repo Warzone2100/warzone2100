@@ -111,10 +111,10 @@ typedef struct _droid_template
 	struct _droid_template* psNext;             ///< Pointer to next template
 } DROID_TEMPLATE;
 
-typedef struct _droid
+typedef struct DROID
 {
 	/* The common structure elements for all objects */
-	BASE_ELEMENTS(struct _droid);
+	BASE_ELEMENTS(struct DROID);
 
 	/// UTF-8 name of the droid. This is generated from the droid template and cannot be changed by the game player after creation.
 	char            aName[MAX_STR_LENGTH];
@@ -146,7 +146,7 @@ typedef struct _droid
 
 	// The group the droid belongs to
 	struct _droid_group* psGroup;
-	struct _droid*  psGrpNext;
+	struct DROID*  psGrpNext;
 	struct _structure* psBaseStruct;                ///< a structure that this droid might be associated with. For VTOLs this is the rearming pad
 	// queued orders
 	SDWORD          listSize;
