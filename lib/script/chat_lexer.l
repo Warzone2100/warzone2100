@@ -25,8 +25,10 @@
 
 #include "lib/framework/frame.h"
 
-#include "script.h"
+// FIXME: #include from src/
 #include "src/scriptfuncs.h"
+
+#include "script.h"
 #include "chat_processing.h"
 
 /* Get the Yacc definitions */
