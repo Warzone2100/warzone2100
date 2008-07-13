@@ -27,6 +27,9 @@
 
 #include "lib/framework/frame.h"
 
+// Automatically generated file, which is intended to eventually replace this one
+#include "stats-db2.h"
+
 // Forward declaration so that we can use pointers to sqlite3 databases
 struct sqlite3;
 

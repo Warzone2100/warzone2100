@@ -34,7 +34,7 @@ noinst_HEADERS = action.h advvis.h ai.h aiexperience.h anim_id.h \
 	multistat.h objectdef.h objects.h objmem.h oprint.h parsetest.h positiondef.h order.h \
 	orderdef.h power.h projectile.h radar.h raycast.h research.h \
 	researchdef.h scores.h scriptai.h scriptcb.h scriptextern.h scriptfuncs.h \
-	scriptobj.h scripttabs.h scriptvals.h selection.h seqdisp.h stats.h statsdef.h \
+	scriptobj.h scripttabs.h scriptvals.h selection.h seqdisp.h stats.h stats-db2.h statsdef.h \
 	structure.h structuredef.h target.h text.h texture.h transporter.h visibility.h \
 	warcam.h warzoneconfig.h weapondef.h main.h wrappers.h
 
