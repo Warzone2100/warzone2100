@@ -688,11 +688,11 @@ static bool fetchProgramPath(char * const programPath, size_t const bufSize, con
  *
  * \param programCommand Command used to launch this program. Only used for POSIX handler.
  */
-void setupExceptionHandler(const char * programCommand)
+void setupExceptionHandler(int argc, char * argv[])
 {
 #if !defined(WZ_OS_MAC)
 	// Initialize info required for the debug dumper
-	dbgDumpInit(programCommand);
+	dbgDumpInit(argc, argv);
 #endif
 
 #if defined(WZ_OS_WIN)
@@ -702,6 +702,8 @@ void setupExceptionHandler(const char * programCommand)
 	prevExceptionHandler = SetUnhandledExceptionFilter(windowsExceptionHandler);
 # endif // !defined(WZ_CC_MINGW)
 #elif defined(WZ_OS_UNIX) && !defined(WZ_OS_MAC)
+	const char * const programCommand = argv[0];
+
 	// Get full path to this program. Needed for gdb to find the binary.
 	programIsAvailable = fetchProgramPath(programPath, sizeof(programPath), programCommand);
 

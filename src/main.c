@@ -836,7 +836,7 @@ static void mainLoop(void)
 
 int main(int argc, char *argv[])
 {
-	setupExceptionHandler(argv[0]);
+	setupExceptionHandler(argc, argv);
 
 	debug_init();
 	atexit( debug_exit );

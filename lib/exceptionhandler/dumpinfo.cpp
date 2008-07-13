@@ -128,13 +128,23 @@ static std::ostream& writePhysFSVersion(std::ostream& os, PHYSFS_Version const& 
 	   << "." << static_cast<unsigned int>(ver.patch);
 }
 
-static void createHeader(const char* programCommand)
+static void createHeader(int const argc, char* argv[])
 {
 	time_t currentTime = time(NULL);
 	std::ostringstream os;
 
-	os << "Program: "     << getProgramPath(programCommand) << "(" PACKAGE ")" << std::endl
-	   << "Version: "     << version_getFormattedVersionString() << std::endl
+	os << "Program: "     << getProgramPath(argv[0]) << "(" PACKAGE ")\n"
+	   << "Command line: ";
+
+	/* Dump all command line arguments surrounded by double quotes and
+	 * separated by spaces.
+	 */
+	for (int i = 0; i < argc; ++i)
+		os << "\"" << argv[i] << "\" ";
+
+	os << "\n";
+
+	os << "Version: "     << version_getFormattedVersionString() << "\n"
 	   << "Distributor: " PACKAGE_DISTRIBUTOR << std::endl
 	   << "Compiled on: " __DATE__ " " __TIME__ << std::endl
 	   << "Compiled by: "
@@ -171,7 +181,7 @@ static void createHeader(const char* programCommand)
 	}
 }
 
-void dbgDumpInit(const char* programCommand)
+void dbgDumpInit(int argc, char* argv[])
 {
-	createHeader(programCommand);
+	createHeader(argc, argv);
 }
