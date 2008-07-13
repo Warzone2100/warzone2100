@@ -449,7 +449,7 @@ bool widgetFireCallbacksImpl(widget *self, event *evt)
 		if (handler->type == evt->type)
 		{
 			// Fire the callback
-			ret = handler->callback(self, evt, handler->userData);
+			ret = handler->callback(self, evt, i, handler->userData);
 			
 			// Break if the handler returned false
 			if (!ret)

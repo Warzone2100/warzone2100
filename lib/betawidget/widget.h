@@ -31,7 +31,8 @@ typedef struct _eventKey        eventKey;
 typedef struct _eventText		eventText;
 typedef struct _eventMisc       eventMisc;
 
-typedef bool (*callback)        (widget *widget, event *evt, void *userData);
+typedef bool (*callback)        (widget *widget, event *evt, int handlerId,
+                                 void *userData);
 
 typedef struct _eventTableEntry eventTableEntry;
 
