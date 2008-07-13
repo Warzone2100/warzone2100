@@ -23,6 +23,7 @@
 #include <string>
 #include <vector>
 #include <sstream>
+#include <physfs.h>
 #include "dumpinfo.h"
 
 extern "C"
@@ -120,6 +121,13 @@ static std::string getSysinfo()
 #endif
 }
 
+static std::ostream& writePhysFSVersion(std::ostream& os, PHYSFS_Version const& ver)
+{
+	return os << static_cast<unsigned int>(ver.major)
+	   << "." << static_cast<unsigned int>(ver.minor)
+	   << "." << static_cast<unsigned int>(ver.patch);
+}
+
 static void createHeader(const char* programCommand)
 {
 	time_t currentTime = time(NULL);
@@ -140,8 +148,19 @@ static void createHeader(const char* programCommand)
 #endif
 	   << "Executed on: " << ctime(&currentTime) << std::endl
 	   << getSysinfo() << std::endl
-	   << "Pointers: " << (sizeof(void*) * CHAR_BIT) << "bit" << std::endl
-	   << std::endl;
+	   << "Pointers: " << (sizeof(void*) * CHAR_BIT) << "bit\n"
+	   << "\n";
+
+	PHYSFS_Version physfs_version;
+
+	// Determine PhysicsFS compile time version
+	PHYSFS_VERSION(&physfs_version)
+	writePhysFSVersion(os << "Compiled against PhysicsFS version: ", physfs_version) << "\n";
+
+	// Determine PhysicsFS runtime version
+	PHYSFS_getLinkedVersion(&physfs_version);
+	writePhysFSVersion(os << "Running with PhysicsFS version: ", physfs_version) << "\n"
+	   << "\n";
 
 	dbgHeader = strdup(os.str().c_str());
 	if (dbgHeader == NULL)
