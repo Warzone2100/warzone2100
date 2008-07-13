@@ -535,32 +535,10 @@ static inline void setSaveDroidBase(DROID *psSaveDroid, STRUCTURE *psNewBase)
 #endif
 }
 
+void checkDroid(const DROID *droid, const int line, const char *file);
+
 /* assert if droid is bad */
-#define CHECK_DROID(droid) \
-do { \
-	unsigned int i; \
-\
-	assert(droid != NULL); \
-\
-	/* Make sure to know we actually have a droid in our hands */ \
-	assert(droid->type == OBJ_DROID); \
-\
-	assert(droid->direction <= 360.0f && droid->direction >= 0.0f); \
-	assert(droid->numWeaps <= DROID_MAXWEAPS); \
-	assert(droid->listSize <= ORDER_LIST_MAX); \
-	assert(droid->player < MAX_PLAYERS); \
-	assert(droidOnMap(droid)); \
-\
-	for (i = 0; i < DROID_MAXWEAPS; ++i) \
-		assert(droid->turretRotation[i] <= 360); \
-\
-	for (i = 0; i < DROID_MAXWEAPS; ++i) \
-		assert(droid->asWeaps[i].lastFired <= gameTime); \
-\
-	for (i = 0; i < DROID_MAXWEAPS; ++i) \
-		if (droid->psActionTarget[i]) \
-			assert(droid->psActionTarget[i]->direction >= 0.0f); \
-} while (0)
+#define CHECK_DROID(droid) checkDroid(droid, __LINE__, __FILE__)
 
 // Minimum damage a weapon will deal to its target
 #define	MIN_WEAPON_DAMAGE	1

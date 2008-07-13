@@ -5192,3 +5192,26 @@ void droidSetPosition(DROID *psDroid, int x, int y)
 	initDroidMovement(psDroid);
 	visTilesUpdate((BASE_OBJECT *)psDroid, rayTerrainCallback);
 }
+
+/** Check validity of a droid. Crash hard if it fails. */
+void checkDroid(const DROID *droid, const int line, const char *file)
+{
+	int i;
+
+	ASSERT(droid != NULL, "NULL droid pointer coming from %s line %d", file, line);
+	ASSERT(droid != NULL && droid->type == OBJ_DROID, "Not droid (type %d) coming from %s line %d", (int)droid->type, file, line);
+	ASSERT(droid->direction <= 360.0f && droid->direction >= 0.0f, "Bad droid direction %f coming from %s line %d", droid->direction, file, line);
+	ASSERT(droid->numWeaps <= DROID_MAXWEAPS, "Bad number of droid weapons %d coming from %s line %d", (int)droid->numWeaps, file, line);
+	ASSERT(droid->listSize <= ORDER_LIST_MAX, "Bad number of droid orders %d coming from %s line %d", (int)droid->listSize, file, line);
+	ASSERT(droid->player < MAX_PLAYERS, "Bad droid owner %d coming from %s line %d", (int)droid->player, file, line);
+	ASSERT(droidOnMap(droid), "Droid off map coming from %s line %d", file, line);
+	for (i = 0; i < DROID_MAXWEAPS; ++i)
+	{
+		ASSERT(droid->turretRotation[i] <= 360, "Bad turret rotation of turret %u coming from %s line %d", i, file, line);
+		ASSERT(droid->asWeaps[i].lastFired <= gameTime, "Bad last fired time for turret %u coming from %s line %d", i, file, line);
+		if (droid->psActionTarget[i])
+		{
+			ASSERT(droid->psActionTarget[i]->direction >= 0.0f, "Bad direction of turret %u's target coming from %s line %d", i, file, line);
+		}
+	}
+}
