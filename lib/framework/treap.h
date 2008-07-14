@@ -48,24 +48,17 @@
 typedef SDWORD (*TREAP_CMP)(const void *key1, const void *key2);
 
 
-/* The basic elements in the treap node.
- * These are done as macros so that the memory system
- * can use parts of the treap system.
- */
-#define TREAP_NODE_BASE \
-	void				*key;				/* The key to sort the node on */ \
-	UDWORD				priority;			/* Treap priority */ \
-	void				*pObj;				/* The object stored in the treap */ \
-	struct _treap_node	*psLeft, *psRight	/* The sub trees */
-
 /* The debug info */
 #define TREAP_NODE_DEBUG \
 	const char			*pFile;	/* file the node was created in */ \
 	SDWORD				line	/* line the node was created at */
 
-typedef struct _treap_node
+typedef struct TREAP_NODE
 {
-	TREAP_NODE_BASE;
+	void                            *key;                   //< The key to sort the node on
+	UDWORD                          priority;               //< Treap priority
+	void                            *pObj;                  //< The object stored in the treap
+	struct TREAP_NODE               *psLeft, *psRight;      //< The sub trees
 
 #ifdef DEBUG_TREAP
 	TREAP_NODE_DEBUG;
