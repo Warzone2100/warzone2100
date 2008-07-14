@@ -102,7 +102,7 @@ BOOL strresCreate(STR_RES **ppsRes, UDWORD init, UDWORD ext)
 
 	if (!strresAllocBlock(&psRes->psStrings, init))
 	{
-		TREAP_DESTROY(psRes->psIDTreap);
+		treapDestroy(psRes->psIDTreap);
 		free(psRes);
 		return false;
 	}
@@ -126,10 +126,10 @@ static void strresReleaseIDStrings(STR_RES *psRes)
 	ASSERT( psRes != NULL,
 		"strresReleaseIDStrings: Invalid string res pointer" );
 
-	for(psID = (STR_ID*)TREAP_GETSMALLEST(psRes->psIDTreap); psID;
-		psID = (STR_ID*)TREAP_GETSMALLEST(psRes->psIDTreap))
+	for(psID = (STR_ID*)treapGetSmallest(psRes->psIDTreap); psID;
+		psID = (STR_ID*)treapGetSmallest(psRes->psIDTreap))
 	{
-		TREAP_DEL(psRes->psIDTreap, (void*)psID->pIDStr);
+		treapDel(psRes->psIDTreap, (void*)psID->pIDStr);
 		if (psID->id & ID_ALLOC)
 		{
 			free(psID->pIDStr);
@@ -183,7 +183,7 @@ void strresDestroy(STR_RES *psRes)
 	}
 
 	// Release the treap and free the final memory
-	TREAP_DESTROY(psRes->psIDTreap);
+	treapDestroy(psRes->psIDTreap);
 	free(psRes);
 }
 
@@ -196,7 +196,7 @@ BOOL strresGetIDNum(STR_RES *psRes, const char *pIDStr, UDWORD *pIDNum)
 	ASSERT( psRes != NULL,
 		"strresGetIDNum: Invalid string res pointer" );
 
-	psID = (STR_ID*)TREAP_FIND(psRes->psIDTreap, pIDStr);
+	psID = (STR_ID*)treapFind(psRes->psIDTreap, pIDStr);
 	if (!psID)
 	{
 		*pIDNum = 0;
@@ -222,7 +222,7 @@ BOOL strresGetIDString(STR_RES *psRes, const char *pIDStr, char **ppStoredID)
 
 	ASSERT( psRes != NULL, "strresGetIDString: Invalid string res pointer" );
 
-	psID = (STR_ID*)TREAP_FIND(psRes->psIDTreap, pIDStr);
+	psID = (STR_ID*)treapFind(psRes->psIDTreap, pIDStr);
 	if (!psID)
 	{
 		*ppStoredID = NULL;
@@ -246,7 +246,7 @@ BOOL strresStoreString(STR_RES *psRes, char *pID, const char *pString)
 		"strresStoreString: Invalid string res pointer" );
 
 	// Find the id for the string
-	psID = (STR_ID*)TREAP_FIND(psRes->psIDTreap, (void*)pID);
+	psID = (STR_ID*)treapFind(psRes->psIDTreap, (void*)pID);
 	if (!psID)
 	{
 		// No ID yet so generate a new one

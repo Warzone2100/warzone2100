@@ -114,14 +114,8 @@ extern BOOL treapDel(TREAP *psTreap, void *key);
 /* Find an object in a treap */
 extern void *treapFind(TREAP *psTreap, const void *key);
 
-/* Release all the nodes in the treap */
-extern void treapReset(TREAP *psTreap);
-
 /* Destroy a treap and release all the memory associated with it */
 extern void treapDestroy(TREAP *psTreap);
-
-/* Display the treap structure using DBPRINTF */
-extern void treapDisplay(TREAP *psTreap);
 
 /* Return the object with the smallest key in the treap
  * This is useful if the objects in the treap need to be
@@ -149,24 +143,6 @@ extern SDWORD treapStringCmp(const void *key1, const void *key2);
 	(treapSetCallPos(__FILE__, __LINE__), \
 	 treapAdd(psTreap, key, pObject))
 
-#define TREAP_DEL(psTreap, key) \
-	treapDel(psTreap, key)
-
-#define TREAP_FIND(psTreap, key) \
-	treapFind(psTreap, key)
-
-#define TREAP_RESET(psTreap) \
-	treapReset(psTreap)
-
-#define TREAP_DESTROY(psTreap) \
-	treapDestroy(psTreap)
-
-#define TREAP_DISPLAY(psTreap) \
-	treapDisplay(psTreap)
-
-#define TREAP_GETSMALLEST(psTreap) \
-	treapGetSmallest(psTreap)
-
 #else
 
 // release versions of the TREAP calls
@@ -175,23 +151,6 @@ extern SDWORD treapStringCmp(const void *key1, const void *key2);
 
 #define TREAP_ADD(psTreap, key, pObject) \
 	 treapAdd(psTreap, key, pObject)
-
-#define TREAP_DEL(psTreap, key) \
-	treapDel(psTreap, key)
-
-#define TREAP_FIND(psTreap, key) \
-	treapFind(psTreap, key)
-
-#define TREAP_RESET(psTreap) \
-	treapReset(psTreap)
-
-#define TREAP_DESTROY(psTreap) \
-	treapDestroy(psTreap)
-
-#define TREAP_DISPLAY(psTreap)
-
-#define TREAP_GETSMALLEST(psTreap) \
-	treapGetSmallest(psTreap)
 
 #endif
 

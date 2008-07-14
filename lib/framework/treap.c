@@ -337,14 +337,6 @@ static void treapDestroyRec(TREAP_NODE *psRoot)
 }
 
 
-/* Release all the nodes in the treap */
-void treapReset(TREAP *psTreap)
-{
-	treapDestroyRec(psTreap->psRoot);
-	psTreap->psRoot = NULL;
-}
-
-
 /* Destroy a treap and release all the memory associated with it */
 void treapDestroy(TREAP *psTreap)
 {
@@ -359,51 +351,6 @@ void treapDestroy(TREAP *psTreap)
 
 	treapDestroyRec(psTreap->psRoot);
 	free(psTreap);
-}
-
-/* Recursively display the treap structure */
-static void treapDisplayRec(TREAP_NODE *psRoot, UDWORD indent)
-{
-	UDWORD	i;
-
-	// Display the root
-#if DEBUG_TREAP
-	debug( LOG_NEVER, "%s, line %d : %p,%d\n", psRoot->pFile, psRoot->line, psRoot->key, psRoot->priority );
-#else
-	debug( LOG_NEVER, "%p,%d\n", psRoot->key, psRoot->priority );
-#endif
-
-	// Display the left of the tree
-	if (psRoot->psLeft)
-	{
-		for(i=0; i<indent; i++)
-		{
-			debug( LOG_NEVER, "." );
-		}
-		debug( LOG_NEVER, "L" );
-		treapDisplayRec(psRoot->psLeft, indent+1);
-	}
-
-	// Display the right of the tree
-	if (psRoot->psRight)
-	{
-		for(i=0; i<indent; i++)
-		{
-			debug( LOG_NEVER, "." );
-		}
-		debug( LOG_NEVER, "R" );
-		treapDisplayRec(psRoot->psRight, indent+1);
-	}
-}
-
-
-/* Display the treap structure using DBPRINTF */
-void treapDisplay(TREAP *psTreap)
-{
-	if (psTreap->psRoot)
-	{
-		treapDisplayRec(psTreap->psRoot, 0);
-	}
 }
 
 static void *treapGetSmallestRec(TREAP_NODE *psRoot)
