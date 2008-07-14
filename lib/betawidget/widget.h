@@ -165,8 +165,16 @@ struct _eventMisc
  */
 struct _eventTableEntry
 {
+	/// The unique id of the event handler
+	int id;
+	
+	/// The event for which the handler is registered for
 	eventType type;
+	
+	/// The method to call
 	callback callback;
+	
+	/// Pointer to user supplied data to pass to callback
 	void *userData;
 };
 

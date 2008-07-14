@@ -422,6 +422,8 @@ int widgetAddEventHandlerImpl(widget *self, eventType type, callback handler,
 {
 	eventTableEntry *entry = malloc(sizeof(eventTableEntry));
 
+	// Assign the handler an id which is one higher than the current highest
+	entry->id       = ((eventTableEntry *) vectorHead(self->eventVtbl))->id + 1;
 	entry->type     = type;
 	entry->callback = handler;
 	entry->userData = userData;
@@ -438,7 +440,20 @@ int widgetAddEventHandlerImpl(widget *self, eventType type, callback handler,
  */
 void widgetRemoveEventHandlerImpl(widget *self, int id)
 {
-	vectorRemoveAt(self->eventVtbl, id);
+	int i;
+
+	// Search for the handler with the id
+	for (i = 0; i < vectorSize(self->eventVtbl); i++)
+	{
+		eventTableEntry *handler = vectorAt(self->eventVtbl, i);
+
+		// If the handler matches, remove it
+		if (handler->id == id)
+		{
+			vectorRemoveAt(self->eventVtbl, i);
+			break;
+		}
+	}
 }
 
 bool widgetFireCallbacksImpl(widget *self, event *evt)
@@ -454,7 +469,7 @@ bool widgetFireCallbacksImpl(widget *self, event *evt)
 		if (handler->type == evt->type)
 		{
 			// Fire the callback
-			ret = handler->callback(self, evt, i, handler->userData);
+			ret = handler->callback(self, evt, handler->id, handler->userData);
 			
 			// Break if the handler returned false
 			if (!ret)
