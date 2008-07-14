@@ -38,6 +38,11 @@ void *vectorAt(vector *v, int index);
 /**
  * 
  */
+void *vectorHead(vector *v);
+
+/**
+ * 
+ */
 void *vectorSetAt(vector *v, int index, void *object);
 
 /**
