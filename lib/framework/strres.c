@@ -269,14 +269,9 @@ BOOL strresStoreString(STR_RES *psRes, char *pID, const char *pString)
 		psRes->nextID += 1;
 		TREAP_ADD(psRes->psIDTreap, (void*)psID->pIDStr, psID);
 	}
-	if (psID->id & ID_ALLOC)
-	{
-		id = psID->id & ~ID_ALLOC;
-	}
-	else
-	{
-		id = psID->id;
-	}
+
+	// Remove the ID_ALLOC bit
+	id = psID->id & ~ID_ALLOC;
 
 	// Find the block to store the string in
 	for(psBlock = psRes->psStrings; psBlock->idEnd < id;
