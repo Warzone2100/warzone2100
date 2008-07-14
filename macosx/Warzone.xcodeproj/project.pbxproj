@@ -659,6 +659,7 @@
 		02F5CC900D1496580000A2D0 /* poptparse.c in Sources */ = {isa = PBXBuildFile; fileRef = 02F5CC870D1496580000A2D0 /* poptparse.c */; };
 		02F5CC910D1496580000A2D0 /* system.h in Headers */ = {isa = PBXBuildFile; fileRef = 02F5CC880D1496580000A2D0 /* system.h */; };
 		02F5CCC00D1498A30000A2D0 /* Popt.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02F5CC6D0D1494AA0000A2D0 /* Popt.framework */; };
+		2234C2A00E2BE18200E7704C /* positiondef.h in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 2234C29F0E2BE18200E7704C /* positiondef.h */; };
 		9742E5730DF9975E000A5D41 /* lexer_input.c in Sources */ = {isa = PBXBuildFile; fileRef = 9742E5710DF9975E000A5D41 /* lexer_input.c */; };
 		9742E5740DF9975E000A5D41 /* lexer_input.h in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 9742E5720DF9975E000A5D41 /* lexer_input.h */; };
 		9742E5770DF9979C000A5D41 /* parsetest.c in Sources */ = {isa = PBXBuildFile; fileRef = 9742E5750DF9979C000A5D41 /* parsetest.c */; };
@@ -850,6 +851,7 @@
 				02DE76070DC3B84900D48F58 /* GLee.h in Copy frameworks */,
 				9742E5740DF9975E000A5D41 /* lexer_input.h in Copy frameworks */,
 				9742E5780DF9979C000A5D41 /* parsetest.h in Copy frameworks */,
+				2234C2A00E2BE18200E7704C /* positiondef.h in Copy frameworks */,
 			);
 			name = "Copy frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1048,7 +1050,6 @@
 		0246A0B90BD3CBD5004D1C70 /* strresly.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = strresly.h; path = ../lib/framework/strresly.h; sourceTree = SOURCE_ROOT; };
 		0246A0BA0BD3CBD5004D1C70 /* treap.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = treap.c; path = ../lib/framework/treap.c; sourceTree = SOURCE_ROOT; };
 		0246A0BB0BD3CBD5004D1C70 /* treap.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = treap.h; path = ../lib/framework/treap.h; sourceTree = SOURCE_ROOT; };
-		0246A0BC0BD3CBD5004D1C70 /* treapint.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = treapint.h; path = ../lib/framework/treapint.h; sourceTree = SOURCE_ROOT; };
 		0246A0BD0BD3CBD5004D1C70 /* trig.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = trig.c; path = ../lib/framework/trig.c; sourceTree = SOURCE_ROOT; };
 		0246A0BE0BD3CBD5004D1C70 /* trig.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = trig.h; path = ../lib/framework/trig.h; sourceTree = SOURCE_ROOT; };
 		0246A0BF0BD3CBD5004D1C70 /* types.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = types.h; path = ../lib/framework/types.h; sourceTree = SOURCE_ROOT; };
@@ -1688,6 +1689,7 @@
 		02F5CC860D1496580000A2D0 /* poptint.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = poptint.h; path = external/popt/poptint.h; sourceTree = SOURCE_ROOT; };
 		02F5CC870D1496580000A2D0 /* poptparse.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = poptparse.c; path = external/popt/poptparse.c; sourceTree = SOURCE_ROOT; };
 		02F5CC880D1496580000A2D0 /* system.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = system.h; path = external/popt/system.h; sourceTree = SOURCE_ROOT; };
+		2234C29F0E2BE18200E7704C /* positiondef.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = positiondef.h; path = ../src/positiondef.h; sourceTree = SOURCE_ROOT; };
 		9742E5710DF9975E000A5D41 /* lexer_input.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = lexer_input.c; path = ../lib/framework/lexer_input.c; sourceTree = SOURCE_ROOT; };
 		9742E5720DF9975E000A5D41 /* lexer_input.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = lexer_input.h; path = ../lib/framework/lexer_input.h; sourceTree = SOURCE_ROOT; };
 		9742E5750DF9979C000A5D41 /* parsetest.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = parsetest.c; path = ../src/parsetest.c; sourceTree = SOURCE_ROOT; };
@@ -2067,7 +2069,6 @@
 				0246A0B90BD3CBD5004D1C70 /* strresly.h */,
 				0246A0BA0BD3CBD5004D1C70 /* treap.c */,
 				0246A0BB0BD3CBD5004D1C70 /* treap.h */,
-				0246A0BC0BD3CBD5004D1C70 /* treapint.h */,
 				0246A0BD0BD3CBD5004D1C70 /* trig.c */,
 				0246A0BE0BD3CBD5004D1C70 /* trig.h */,
 				0246A0BF0BD3CBD5004D1C70 /* types.h */,
@@ -2257,6 +2258,7 @@
 				0223BBAD0CFE3C380056EF85 /* version.c */,
 				0223BBAE0CFE3C380056EF85 /* version.h */,
 				0246A1980BD3CCDB004D1C70 /* action.c */,
+				2234C29F0E2BE18200E7704C /* positiondef.h */,
 				0246A1990BD3CCDB004D1C70 /* action.h */,
 				0246A19A0BD3CCDB004D1C70 /* advvis.c */,
 				0246A19B0BD3CCDB004D1C70 /* advvis.h */,
