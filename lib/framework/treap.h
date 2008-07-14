@@ -74,7 +74,7 @@ typedef struct _treap_node
 } TREAP_NODE;
 
 /* Treap data structure */
-typedef struct _treap
+typedef struct TREAP
 {
 	TREAP_CMP		cmp;		// comparison function
 	TREAP_NODE		*psRoot;	// root of the tree

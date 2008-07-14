@@ -47,10 +47,10 @@ typedef struct _str_id
 /* A String Resource */
 typedef struct _str_res
 {
-	TREAP			*psIDTreap;		// The treap to store string identifiers
-	STR_BLOCK		*psStrings;		// The store for the strings themselves
-	UDWORD			init,ext;		// Sizes for the string blocks
-	UDWORD			nextID;			// The next free ID
+	struct TREAP*           psIDTreap;             ///< The treap to store string identifiers
+	STR_BLOCK*              psStrings;             ///< The store for the strings themselves
+	UDWORD                  init,ext;               ///< Sizes for the string blocks
+	UDWORD                  nextID;                 ///< The next free ID
 } STR_RES;
 
 /* Create a string resource object */
