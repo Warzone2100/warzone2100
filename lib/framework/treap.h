@@ -45,7 +45,7 @@
  *         1 for more
  *         0 for equal
  */
-typedef SDWORD (*TREAP_CMP)(const void *key1, const void *key2);
+typedef int (*TREAP_CMP)(const void *key1, const void *key2);
 
 /// Forward declaration to allow pointers to this type
 struct TREAP;
@@ -99,7 +99,7 @@ extern void *treapGetSmallest(struct TREAP *psTreap);
 /*                            Comparison Functions                                      */
 
 /* A useful comparison function - keys are char pointers */
-extern SDWORD treapStringCmp(const void *key1, const void *key2);
+extern int treapStringCmp(const void *key1, const void *key2);
 
 /****************************************************************************************/
 /*                            Macro definitions                                         */

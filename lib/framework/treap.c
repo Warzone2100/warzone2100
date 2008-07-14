@@ -37,7 +37,7 @@
 typedef struct TREAP_NODE
 {
 	void                            *key;                   //< The key to sort the node on
-	UDWORD                          priority;               //< Treap priority
+	unsigned int                    priority;               //< Treap priority
 	void                            *pObj;                  //< The object stored in the treap
 	struct TREAP_NODE               *psLeft, *psRight;      //< The sub trees
 
@@ -76,16 +76,19 @@ void treapSetCallPos(const char* fileName, int lineNumber)
 }
 
 /* A useful comparison function - keys are char pointers */
-SDWORD treapStringCmp(const void *key1, const void *key2)
+int treapStringCmp(const void *key1, const void *key2)
 {
-	SDWORD result;
+	int result;
 	const char *pStr1 = (const char *)key1;
 	const char *pStr2 = (const char *)key2;
 
-	result = strcmp(pStr1,pStr2);
-	if (result<0) return -1;
-	if (result>0) return 1;
-	return 0;
+	result = strcmp(pStr1, pStr2);
+	if      (result < 0)
+		return -1;
+	else if (result > 0)
+		return 1;
+	else
+		return 0;
 }
 
 
@@ -186,7 +189,7 @@ BOOL treapAdd(TREAP *psTreap, void *key, void *pObj)
 		debug(LOG_ERROR, "treapAdd: Out of memory");
 		return false;
 	}
-	psNew->priority = (UDWORD)rand();
+	psNew->priority = rand();
 	psNew->key = key;
 	psNew->pObj = pObj;
 	psNew->psLeft = NULL;
