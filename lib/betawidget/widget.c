@@ -117,32 +117,32 @@ static void widgetInitVtbl(widget *self)
 
 	if (!initialised)
 	{
-		vtbl.addChild           = widgetAddChildImpl;
-		vtbl.removeChild        = widgetRemoveChildImpl;
+		vtbl.addChild               = widgetAddChildImpl;
+		vtbl.removeChild            = widgetRemoveChildImpl;
 
-		vtbl.fireCallbacks      = widgetFireCallbacksImpl;
-		vtbl.addEventHandler    = widgetAddEventHandlerImpl;
-		vtbl.removeEventHandler = widgetRemoveEventHandlerImpl;
-		vtbl.handleEvent        = widgetHandleEventImpl;
+		vtbl.fireCallbacks          = widgetFireCallbacksImpl;
+		vtbl.addEventHandler        = widgetAddEventHandlerImpl;
+		vtbl.removeEventHandler     = widgetRemoveEventHandlerImpl;
+		vtbl.handleEvent            = widgetHandleEventImpl;
 
-		vtbl.focus              = widgetFocusImpl;
-		vtbl.blur               = widgetBlurImpl;
+		vtbl.focus                  = widgetFocusImpl;
+		vtbl.blur                   = widgetBlurImpl;
 
-		vtbl.enable             = widgetEnableImpl;
-		vtbl.disable            = widgetDisableImpl;
+		vtbl.enable                 = widgetEnableImpl;
+		vtbl.disable                = widgetDisableImpl;
 
-		vtbl.getMinSize         = NULL;
-		vtbl.getMaxSize         = NULL;
+		vtbl.getMinSize             = NULL;
+		vtbl.getMaxSize             = NULL;
 		
-		vtbl.resize	            = widgetResizeImpl;
+		vtbl.resize	                = widgetResizeImpl;
 		
-		vtbl.composite          = widgetCompositeImpl;
+		vtbl.composite              = widgetCompositeImpl;
 
-		vtbl.doLayout           = NULL;
-		vtbl.doDraw             = NULL;
-		vtbl.doDrawMask         = NULL;
+		vtbl.doLayout               = NULL;
+		vtbl.doDraw                 = NULL;
+		vtbl.doDrawMask             = NULL;
 
-		vtbl.destroy            = widgetDestroyImpl;
+		vtbl.destroy                = widgetDestroyImpl;
 
 		initialised = true;
 	}
@@ -417,7 +417,8 @@ void widgetRemoveChildImpl(widget *self, widget *child)
 /*
  *
  */
-int widgetAddEventHandlerImpl(widget *self, eventType type, callback handler, void *userData)
+int widgetAddEventHandlerImpl(widget *self, eventType type, callback handler,
+                              void *userData)
 {
 	eventTableEntry *entry = malloc(sizeof(eventTableEntry));
 
