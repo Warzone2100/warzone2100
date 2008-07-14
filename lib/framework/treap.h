@@ -47,12 +47,6 @@
  */
 typedef SDWORD (*TREAP_CMP)(const void *key1, const void *key2);
 
-
-/* The debug info */
-#define TREAP_NODE_DEBUG \
-	const char			*pFile;	/* file the node was created in */ \
-	SDWORD				line	/* line the node was created at */
-
 typedef struct TREAP_NODE
 {
 	void                            *key;                   //< The key to sort the node on
@@ -61,7 +55,8 @@ typedef struct TREAP_NODE
 	struct TREAP_NODE               *psLeft, *psRight;      //< The sub trees
 
 #ifdef DEBUG_TREAP
-	TREAP_NODE_DEBUG;
+	const char                      *pFile;                 //< file the node was created in
+	SDWORD                          line                    //< line the node was created at
 #endif
 
 } TREAP_NODE;
