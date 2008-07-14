@@ -43,7 +43,7 @@ typedef struct TREAP_NODE
 
 #ifdef DEBUG_TREAP
 	const char                      *pFile;                 //< file the node was created in
-	int                             line                    //< line the node was created at
+	int                             line;                   //< line the node was created at
 #endif
 
 } TREAP_NODE;
@@ -283,10 +283,6 @@ BOOL treapDel(TREAP *psTreap, void *key)
 		return false;
 	}
 
-	// Release the node
-#ifdef DEBUG_TREAP
-	free(psDel->pFile);
-#endif
 	free(psDel);
 
 	return true;
@@ -334,7 +330,7 @@ static void treapReportRec(TREAP_NODE *psRoot)
 {
 	if (psRoot)
 	{
-		debug( LOG_NEVER, (("   %s, line %d\n", psRoot->pFile, psRoot->line )));
+		debug(LOG_NEVER, "   %s, line %d\n", psRoot->pFile, psRoot->line);
 		treapReportRec(psRoot->psLeft);
 		treapReportRec(psRoot->psRight);
 	}
@@ -368,7 +364,6 @@ void treapDestroy(TREAP *psTreap)
 		debug( LOG_NEVER, "treapDestroy: %s, line %d : nodes still in the tree\n", psTreap->pFile, psTreap->line );
 		treapReportRec(psTreap->psRoot);
 	}
-	free(psTreap->pFile);
 #endif
 
 	treapDestroyRec(psTreap->psRoot);
