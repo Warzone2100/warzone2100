@@ -47,31 +47,8 @@
  */
 typedef SDWORD (*TREAP_CMP)(const void *key1, const void *key2);
 
-typedef struct TREAP_NODE
-{
-	void                            *key;                   //< The key to sort the node on
-	UDWORD                          priority;               //< Treap priority
-	void                            *pObj;                  //< The object stored in the treap
-	struct TREAP_NODE               *psLeft, *psRight;      //< The sub trees
-
-#ifdef DEBUG_TREAP
-	const char                      *pFile;                 //< file the node was created in
-	SDWORD                          line                    //< line the node was created at
-#endif
-
-} TREAP_NODE;
-
-/* Treap data structure */
-typedef struct TREAP
-{
-	TREAP_CMP		cmp;		// comparison function
-	TREAP_NODE		*psRoot;	// root of the tree
-
-#ifdef DEBUG_TREAP
-	const char		*pFile;		// file the treap was created in
-	SDWORD			line;		// line the treap was created at
-#endif
-} TREAP;
+/// Forward declaration to allow pointers to this type
+struct TREAP;
 
 /****************************************************************************************/
 /*                           Function Protoypes                                         */
@@ -82,10 +59,10 @@ typedef struct TREAP
 /**
  * Store the location in C code at which a call to the heap was made
  *
- * \param	pFileName	source filename
+ * \param	fileName	source filename
  * \param	lineNumber	source file line number
  */
-extern void treapSetCallPos(const char *pFileName, SDWORD lineNumber);
+extern void treapSetCallPos(const char* fileName, int lineNumber);
 
 /* Function type for object equality */
 //typedef BOOL (*TREAP_EQUAL)(void *pObj1, void *pObj2);
@@ -97,26 +74,26 @@ extern void treapSetCallPos(const char *pFileName, SDWORD lineNumber);
  * \param	cmp			comparison function to use
  * \return true, if the treap creation was successfull
  */
-extern BOOL treapCreate(TREAP **ppsTreap, TREAP_CMP cmp);
+extern BOOL treapCreate(struct TREAP **ppsTreap, TREAP_CMP cmp);
 
 /* Add an object to a treap
  */
-extern BOOL treapAdd(TREAP *psTreap, void *key, void *pObj);
+extern BOOL treapAdd(struct TREAP *psTreap, void *key, void *pObj);
 
 /* Remove an object from the treap */
-extern BOOL treapDel(TREAP *psTreap, void *key);
+extern BOOL treapDel(struct TREAP *psTreap, void *key);
 
 /* Find an object in a treap */
-extern void *treapFind(TREAP *psTreap, const void *key);
+extern void *treapFind(struct TREAP *psTreap, const void *key);
 
 /* Destroy a treap and release all the memory associated with it */
-extern void treapDestroy(TREAP *psTreap);
+extern void treapDestroy(struct TREAP *psTreap);
 
 /* Return the object with the smallest key in the treap
  * This is useful if the objects in the treap need to be
  * deallocated.  i.e. getSmallest, delete from treap, free memory
  */
-extern void *treapGetSmallest(TREAP *psTreap);
+extern void *treapGetSmallest(struct TREAP *psTreap);
 
 /****************************************************************************************/
 /*                            Comparison Functions                                      */

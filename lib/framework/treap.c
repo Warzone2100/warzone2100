@@ -34,23 +34,45 @@
 #include "debug.h"
 #include "treap.h"
 
-/* Position of the last call */
-static SDWORD	cLine;
-static char *pCFile;
-static char	pCFileNone[] = "None";
+typedef struct TREAP_NODE
+{
+	void                            *key;                   //< The key to sort the node on
+	UDWORD                          priority;               //< Treap priority
+	void                            *pObj;                  //< The object stored in the treap
+	struct TREAP_NODE               *psLeft, *psRight;      //< The sub trees
 
-void treapSetCallPos(const char *pFileName, SDWORD lineNumber)
+#ifdef DEBUG_TREAP
+	const char                      *pFile;                 //< file the node was created in
+	int                             line                    //< line the node was created at
+#endif
+
+} TREAP_NODE;
+
+/** Treap data structure */
+typedef struct TREAP
+{
+	TREAP_CMP                       cmp;                    ///< comparison function
+	TREAP_NODE                      *psRoot;                ///< root of the tree
+
+#ifdef DEBUG_TREAP
+	const char                      *pFile;                 ///< file the treap was created in
+	int                             line;                   ///< line the treap was created at
+#endif
+} TREAP;
+
+/* Position of the last call */
+static int cLine = -1;
+static const char* pCFile = "No file specified";
+
+void treapSetCallPos(const char* fileName, int lineNumber)
 {
 	cLine = lineNumber;
 
-	pCFile = strdup(pFileName);
-	if (pCFile == NULL)
-	{
-		debug(LOG_ERROR, "treapSetCallPos: Out of memory!");
-		abort();
-		pCFile = pCFileNone;
-		return;
-	}
+	/* Assume that fileName originates from a __FILE__ macro, which is
+	 * statically allocated. Thus we can rely on this memory remaining
+	 * available during the entire program execution time.
+	 */
+	pCFile = fileName;
 }
 
 /* A useful comparison function - keys are char pointers */
