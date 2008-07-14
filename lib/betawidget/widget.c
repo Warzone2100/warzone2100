@@ -174,6 +174,10 @@ void widgetInit(widget *self, const char *id)
 	// Default parent is none
 	self->parent = NULL;
 	
+	// Zero the user data
+	self->userData = 0;
+	self->pUserData = NULL;
+	
 	// Create a dummy cairo context (getMin/MaxSize may depend on it)
 	self->cr = NULL;
 	widgetCairoCreate(&self->cr, CAIRO_FORMAT_ARGB32, 0, 0);
