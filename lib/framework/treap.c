@@ -33,7 +33,6 @@
 #include "types.h"
 #include "debug.h"
 #include "treap.h"
-#include "treapint.h"
 
 /* Position of the last call */
 static SDWORD	cLine;
@@ -141,7 +140,7 @@ static void treapRotLeft(TREAP_NODE **ppsRoot)
 }
 
 /* Recursive function to add an object to a tree */
-void treapAddNode(TREAP_NODE **ppsRoot, TREAP_NODE *psNew, TREAP_CMP cmp)
+static void treapAddNode(TREAP_NODE **ppsRoot, TREAP_NODE *psNew, TREAP_CMP cmp)
 {
 	if (*ppsRoot == NULL)
 	{
@@ -202,9 +201,8 @@ BOOL treapAdd(TREAP *psTreap, void *key, void *pObj)
 	return true;
 }
 
-
 /* Recursively find and remove a node from the tree */
-TREAP_NODE *treapDelRec(TREAP_NODE **ppsRoot, void *key, TREAP_CMP cmp)
+static TREAP_NODE *treapDelRec(TREAP_NODE **ppsRoot, void *key, TREAP_CMP cmp)
 {
 	TREAP_NODE	*psFound;
 
@@ -385,8 +383,7 @@ void treapDestroy(TREAP *psTreap)
 }
 
 /* Recursively display the treap structure */
-void treapDisplayRec(TREAP_NODE *psRoot, UDWORD indent);
-void treapDisplayRec(TREAP_NODE *psRoot, UDWORD indent)
+static void treapDisplayRec(TREAP_NODE *psRoot, UDWORD indent)
 {
 	UDWORD	i;
 

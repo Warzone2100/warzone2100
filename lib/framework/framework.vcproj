@@ -374,10 +374,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\treapint.h"
-				>
-			</File>
-			<File
 				RelativePath=".\trig.h"
 				>
 			</File>
