@@ -53,21 +53,6 @@ void treapSetCallPos(const char *pFileName, SDWORD lineNumber)
 	}
 }
 
-/* nothing actually uses the default comparison function.... */
-static SDWORD defaultCmp(const void *key1, const void *key2)
-{
-	if (key1 < key2)
-	{
-		return -1;
-	}
-	else if (key1 > key2)
-	{
-		return 1;
-	}
-
-	return 0;
-}
-
 /* A useful comparison function - keys are char pointers */
 SDWORD treapStringCmp(const void *key1, const void *key2)
 {
@@ -93,14 +78,8 @@ BOOL treapCreate(TREAP **ppsTreap, TREAP_CMP cmp)
 	}
 
 	// Store the comparison function if there is one, use the default otherwise
-	if (cmp)
-	{
-		(*ppsTreap)->cmp = cmp;
-	}
-	else
-	{
-		(*ppsTreap)->cmp = defaultCmp;
-	}
+	ASSERT(cmp != NULL, "No node comparison function provided");
+	(*ppsTreap)->cmp = cmp;
 
 	// Initialise the tree to nothing
 	(*ppsTreap)->psRoot = NULL;
@@ -451,6 +430,3 @@ void *treapGetSmallest(TREAP *psTreap)
 
 	return treapGetSmallestRec(psTreap->psRoot);
 }
-
-
-
