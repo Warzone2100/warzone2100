@@ -165,6 +165,12 @@ BOOL screenInitialise(
 	debug(LOG_3D, "  * Two side stencil %s supported.", GLEE_EXT_stencil_two_side ? "is" : "is NOT");
 	debug(LOG_3D, "  * Stencil wrap %s supported.", GLEE_EXT_stencil_wrap ? "is" : "is NOT");
 	debug(LOG_3D, "  * Anisotropic filtering %s supported.", GLEE_EXT_texture_filter_anisotropic ? "is" : "is NOT");
+	debug(LOG_3D, "  * Rectangular texture %s supported.", GLEE_ARB_texture_rectangle ? "is" : "is NOT");
+
+	if (!GLEE_ARB_texture_rectangle)
+	{
+		debug(LOG_ERROR, "Radar will not be displayed without support for texture rectangle extension!");
+	}
 
 	glViewport(0, 0, width, height);
 	glMatrixMode(GL_PROJECTION);

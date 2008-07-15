@@ -55,7 +55,6 @@
 
 static GLuint radarTexture;
 static GLuint radarSizeX, radarSizeY;
-static GLuint radarDisplayX, radarDisplayY;
 
 /***************************************************************************/
 /*
@@ -292,10 +291,6 @@ void pie_UploadDisplayBuffer()
 BOOL pie_InitRadar(void)
 {
 	radarTexture = _TEX_INDEX;
-	radarSizeX = 0;
-	radarSizeY = 0;
-	radarDisplayX = 0;
-	radarDisplayY = 0;
 	glGenTextures(1, (GLuint *) &_TEX_PAGE[_TEX_INDEX].id);
 	_TEX_INDEX++;
 	return true;
@@ -309,45 +304,52 @@ BOOL pie_ShutdownRadar(void)
 
 void pie_DownLoadRadar(UDWORD *buffer, int width, int height)
 {
-	int h = 1, w = 1;
-
-	while (height > (h *= 2));
-	while (width > (w *= 2));
-
-	pie_SetTexturePage(radarTexture);
-	if (radarSizeX != w || radarSizeY != h)
+	if (!GLEE_ARB_texture_rectangle)
 	{
-		// Allocate texture
-		glTexImage2D(GL_TEXTURE_2D, 0, wz_texture_compression, w, h, 0,
-			     GL_RGBA, GL_UNSIGNED_BYTE, NULL);
-		radarSizeX = w;
-		radarSizeY = h;
+		return;
 	}
-	radarDisplayX = width;
-	radarDisplayY = height;
-	glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
+	pie_SetTexturePage(radarTexture);
+	glDisable(GL_TEXTURE_2D);
+	glEnable(GL_TEXTURE_RECTANGLE_ARB);
+	glBindTexture(GL_TEXTURE_RECTANGLE_ARB, _TEX_PAGE[radarTexture].id);
+	glTexImage2D(GL_TEXTURE_RECTANGLE_ARB, 0, wz_texture_compression, width, height, 0,
+		     GL_RGBA, GL_UNSIGNED_BYTE, buffer);
 	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+	glTexParameteri(GL_TEXTURE_RECTANGLE_ARB, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_RECTANGLE_ARB, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_RECTANGLE_ARB, GL_TEXTURE_WRAP_S, GL_CLAMP);
+	glTexParameteri(GL_TEXTURE_RECTANGLE_ARB, GL_TEXTURE_WRAP_T, GL_CLAMP);
+	radarSizeX = width;
+	radarSizeY = height;
+	glDisable(GL_TEXTURE_RECTANGLE_ARB);
+	glEnable(GL_TEXTURE_2D);
 }
 
 void pie_RenderRadar(int x, int y, int width, int height)
 {
-	// special case function because texture is held outside of texture list
-	const float wFract = 256.0 * ((float)radarDisplayX / (float)radarSizeX);
-	const float hFract = 256.0 * ((float)radarDisplayY / (float)radarSizeY);
-	const PIEIMAGE pieImage = { radarTexture, 0, 0, wFract, hFract };
-	const PIERECT dest = { x, y, width, height };
+	const int tw = radarSizeX * 256;
+	const int th = radarSizeY * 256;
 
+	if (!GLEE_ARB_texture_rectangle)
+	{
+		return;
+	}
+	pie_SetTexturePage(radarTexture);
+	glDisable(GL_TEXTURE_2D);
+	glEnable(GL_TEXTURE_RECTANGLE_ARB);
+	glBindTexture(GL_TEXTURE_RECTANGLE_ARB, _TEX_PAGE[radarTexture].id);
 	pie_SetRendMode(REND_GOURAUD_TEX);
-
-	// enable alpha
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-	pie_DrawImage(&pieImage, &dest);
+	glColor4ubv(WZCOL_WHITE.vector);
+	glBegin(GL_TRIANGLE_STRIP);
+		glTexCoord2f(0, 0);	glVertex2f(x, y);
+		glTexCoord2f(tw, 0);	glVertex2f(x + width, y);
+		glTexCoord2f(0, th);	glVertex2f(x, y + height);
+		glTexCoord2f(tw, th);	glVertex2f(x + width, y + height);
+	glEnd();
+	glDisable(GL_TEXTURE_RECTANGLE_ARB);
+	glEnable(GL_TEXTURE_2D);
 }
 
 void pie_LoadBackDrop(SCREENTYPE screenType)
