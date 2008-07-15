@@ -203,14 +203,8 @@ BOOL strresGetIDNum(STR_RES *psRes, const char *pIDStr, UDWORD *pIDNum)
 		return false;
 	}
 
-	if (psID->id & ID_ALLOC)
-	{
-		*pIDNum = psID->id & ~ID_ALLOC;
-	}
-	else
-	{
-		*pIDNum = psID->id;
-	}
+	*pIDNum = psID->id & ~ID_ALLOC;
+
 	return true;
 }
 
