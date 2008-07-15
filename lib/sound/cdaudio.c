@@ -185,10 +185,8 @@ float sound_GetMusicVolume()
 
 void sound_SetMusicVolume(float volume)
 {
-	music_volume = volume;
-
 	// Keep volume in the range of 0.0 - 1.0
-	music_volume = clipf(music_volume, 0.0f, 1.0f);
+	music_volume = clipf(volume, 0.0f, 1.0f);
 
 	// Change the volume of the current stream as well (if any)
 	if (cdStream)
