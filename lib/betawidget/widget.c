@@ -121,7 +121,10 @@ static void widgetInitVtbl(widget *self)
 		vtbl.removeChild            = widgetRemoveChildImpl;
 
 		vtbl.fireCallbacks          = widgetFireCallbacksImpl;
+		vtbl.fireTimerCallbacks     = widgetFireTimerCallbacksImpl;
+		
 		vtbl.addEventHandler        = widgetAddEventHandlerImpl;
+		vtbl.addTimerEventHandler   = widgetAddTimerEventHandlerImpl;
 		vtbl.removeEventHandler     = widgetRemoveEventHandlerImpl;
 		vtbl.handleEvent            = widgetHandleEventImpl;
 
@@ -421,18 +424,49 @@ int widgetAddEventHandlerImpl(widget *self, eventType type, callback handler,
                               void *userData)
 {
 	eventTableEntry *entry = malloc(sizeof(eventTableEntry));
+	eventTableEntry *lastEntry = vectorHead(self->eventVtbl);
 
+	// Timer events should use addTimerEventHandler
+	assert(type != EVT_TIMER_SINGLE_SHOT && type != EVT_TIMER_PERSISTENT);
+	
 	// Assign the handler an id which is one higher than the current highest
-	entry->id       = ((eventTableEntry *) vectorHead(self->eventVtbl))->id + 1;
+	entry->id       = (lastEntry) ? lastEntry->id + 1 : 1;
 	entry->type     = type;
 	entry->callback = handler;
 	entry->userData = userData;
+	
+	entry->lastCalled   = 0;    // We have never been called
+	entry->interval     = -1;   // We are not a timer event
 
 	// Add the handler to the table
 	vectorAdd(self->eventVtbl, entry);
 
-	// Offset = size - 1
-	return vectorSize(self->eventVtbl) - 1;
+	// Return the id of the handler
+	return entry->id;
+}
+
+int widgetAddTimerEventHandlerImpl(widget *self, eventType type, int interval,
+                                   callback handler, void *userData)
+{
+	eventTableEntry *entry = malloc(sizeof(eventTableEntry));
+	eventTableEntry *lastEntry = vectorHead(self->eventVtbl);
+	
+	// We should only be used to add timer events
+	assert(type == EVT_TIMER_SINGLE_SHOT || type == EVT_TIMER_PERSISTENT);
+	
+	entry->id       = (lastEntry) ? lastEntry->id + 1 : 1;
+	entry->type     = type;
+	entry->callback = handler;
+	entry->userData = userData;
+	
+	entry->lastCalled   = 0;
+	entry->interval     = interval;
+	
+	// Add the handler to the table
+	vectorAdd(self->eventVtbl, entry);
+	
+	// Return the id of the handler
+	return entry->id;
 }
 
 /*
@@ -471,6 +505,9 @@ bool widgetFireCallbacksImpl(widget *self, event *evt)
 			// Fire the callback
 			ret = handler->callback(self, evt, handler->id, handler->userData);
 			
+			// Update the last called time
+			handler->lastCalled = evt->time;
+			
 			// Break if the handler returned false
 			if (!ret)
 			{
@@ -479,6 +516,49 @@ bool widgetFireCallbacksImpl(widget *self, event *evt)
 		}
 	}
 
+	// FIXME
+	return true;
+}
+
+bool widgetFireTimerCallbacksImpl(widget *self, event *evt)
+{
+	int i;
+	bool ret;
+	eventTimer evtTimer = *((eventTimer *) evt);
+	
+	// We should only be passed EVT_TIMER events
+	assert(evt->type == EVT_TIMER);
+	
+	for (i = 0; i < vectorSize(self->eventVtbl); i++)
+	{
+		eventTableEntry *handler = vectorAt(self->eventVtbl, i);
+		
+		// See if the handler is registered to handle timer events
+		if (handler->type == EVT_TIMER_SINGLE_SHOT
+		 || handler->type == EVT_TIMER_PERSISTENT)
+		{
+			// See if the event needs to be fired
+			if (evt->time >= (handler->lastCalled + handler->interval))
+			{
+				// Ensure the type of our custom event matches
+				evtTimer.event.type = evt->type;
+				
+				// Fire the associated callback
+				ret = handler->callback(self, (event *) &evtTimer, handler->id,
+				                        handler->userData);
+				
+				// Update the last called time
+				handler->lastCalled = evt->time;
+				
+				// If the event is single shot then remove it
+				if (handler->type == EVT_TIMER_SINGLE_SHOT)
+				{
+					widgetRemoveEventHandler(self, handler->id);
+				}
+			}
+		}
+	}
+	
 	// FIXME
 	return true;
 }
@@ -821,6 +901,12 @@ bool widgetHandleEventImpl(widget *self, event *evt)
 			}
 			break;
 		}
+		case EVT_TIMER:
+		{
+			// fireTimerCallbacks will handle this
+			widgetFireTimerCallbacks(self, evt);
+			break;
+		}
 		default:
 			break;
 	}
@@ -890,6 +976,13 @@ int widgetAddEventHandler(widget *self, eventType type,
 	return WIDGET_GET_VTBL(self)->addEventHandler(self, type, handler, userData);
 }
 
+int widgetAddTimerEventHandler(widget *self, eventType type, int interval,
+                               callback handler, void *userData)
+{
+	return WIDGET_GET_VTBL(self)->addTimerEventHandler(self, type, interval,
+	                                                   handler, userData);
+}
+
 void widgetRemoveEventHandler(widget *self, int id)
 {
 	WIDGET_GET_VTBL(self)->removeEventHandler(self, id);
@@ -898,6 +991,11 @@ void widgetRemoveEventHandler(widget *self, int id)
 bool widgetFireCallbacks(widget *self, event *evt)
 {
 	return WIDGET_GET_VTBL(self)->fireCallbacks(self, evt);
+}
+
+bool widgetFireTimerCallbacks(widget *self, event *evt)
+{
+	return WIDGET_GET_VTBL(self)->fireTimerCallbacks(self, evt);
 }
 
 void widgetEnable(widget *self)

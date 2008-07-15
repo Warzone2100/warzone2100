@@ -29,6 +29,7 @@ typedef struct _eventMouse      eventMouse;
 typedef struct _eventMouseBtn   eventMouseBtn;
 typedef struct _eventKey        eventKey;
 typedef struct _eventText		eventText;
+typedef struct _eventTimer      eventTimer;
 typedef struct _eventMisc       eventMisc;
 
 typedef bool (*callback)        (widget *widget, event *evt, int handlerId,
@@ -65,6 +66,11 @@ enum _eventType
 	
 	// Text input events
 	EVT_TEXT,
+	
+	// Timer events
+	EVT_TIMER,
+	EVT_TIMER_SINGLE_SHOT,
+	EVT_TIMER_PERSISTENT,
 
 	// Misc
 	EVT_FOCUS,
@@ -153,6 +159,14 @@ struct _eventText
 };
 
 /*
+ * The event structure for timer events
+ */
+struct _eventTimer
+{
+	event event;
+};
+
+/*
  *
  */
 struct _eventMisc
@@ -176,6 +190,12 @@ struct _eventTableEntry
 	
 	/// Pointer to user supplied data to pass to callback
 	void *userData;
+	
+	/// The time when the event was last called (for debugging and timer events)
+	int lastCalled;
+	
+	/// For timer events only; how often the event should fire; in ms
+	int interval;
 };
 
 /*
@@ -189,8 +209,13 @@ struct _widgetVtbl
 	void    (*removeChild)                  (widget *self, widget *child);
 
 	bool    (*fireCallbacks)                (widget *self, event *evt);
+	bool    (*fireTimerCallbacks)           (widget *self, event *evt);
+	
 	int     (*addEventHandler)              (widget *self, eventType type,
 	                                         callback handler, void *userData);
+	int     (*addTimerEventHandler)         (widget *self, eventType type,
+                                             int interval, callback handler,
+                                             void *userData);
 	void    (*removeEventHandler)           (widget *self, int id);
 
 	void    (*focus)                        (widget *self);
@@ -329,8 +354,11 @@ void widgetDestroyImpl(widget *instance);
 bool widgetAddChildImpl(widget *self, widget *child);
 void widgetRemoveChildImpl(widget *self, widget *child);
 bool widgetFireCallbacksImpl(widget *self, event *evt);
+bool widgetFireTimerCallbacksImpl(widget *self, event *evt);
 int widgetAddEventHandlerImpl(widget *self, eventType type,
                               callback handler, void *userData);
+int widgetAddTimerEventHandlerImpl(widget *self, eventType type, int interval,
+                                   callback handler, void *userData);
 void widgetRemoveEventHandlerImpl(widget *self, int id);
 void widgetEnableImpl(widget *self);
 void widgetDisableImpl(widget *self);
@@ -605,6 +633,11 @@ bool widgetDoLayout(widget *self);
  * @param evt   The event to fire the callbacks for.
  */
 bool widgetFireCallbacks(widget *self, event *evt);
+
+/**
+ * 
+ */
+bool widgetFireTimerCallbacks(widget *self, event *evt);
 
 /**
  * Checks to see if the point loc is masked or not by the widgets mouse-event
