@@ -72,6 +72,8 @@ void spacerDestroyImpl(widget *self)
 
 size spacerGetMinSizeImpl(widget *self)
 {
+	(void) self;
+	
 	// We have no minimum size
 	size minSize = { 0, 0 };
 	

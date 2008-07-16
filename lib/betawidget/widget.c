@@ -1071,5 +1071,5 @@ bool widgetHandleEvent(widget *self, event *evt)
 
 void widgetDestroy(widget *self)
 {
-	return WIDGET_GET_VTBL(self)->destroy(self);
+	WIDGET_GET_VTBL(self)->destroy(self);
 }
