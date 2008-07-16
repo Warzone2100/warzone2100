@@ -608,6 +608,8 @@ void widgetDisableImpl(widget *self)
 
 void widgetFocusImpl(widget *self)
 {
+	eventMisc evt;
+	
 	// Check that we are not currently focused
 	if (self->hasFocus)
 	{
@@ -638,7 +640,6 @@ void widgetFocusImpl(widget *self)
 
 	// Fire our on-focus callbacks
 	// FIXME: We need to set the timestamp of the event
-	eventMisc evt;
 	evt.event.type = EVT_FOCUS;
 	widgetFireCallbacks(self, (event *) &evt);
 }
@@ -646,6 +647,7 @@ void widgetFocusImpl(widget *self)
 void widgetBlurImpl(widget *self)
 {
 	widget *current;
+	eventMisc evt;
 
 	// Make sure we have focus
 	if (!self->hasFocus)
@@ -665,7 +667,6 @@ void widgetBlurImpl(widget *self)
 
 	// Fire off the on-blur callbacks
 	// FIXME: We need to set the timestamp of the event
-	eventMisc evt;
 	evt.event.type = EVT_BLUR;
 	widgetFireCallbacks(self, (event *) &evt);
 }
