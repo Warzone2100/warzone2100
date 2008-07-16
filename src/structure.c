@@ -2999,6 +2999,8 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 			    && (!orderState(psDroid, DORDER_RTR)
 			        || psDroid->psTarget != (BASE_OBJECT *)psStructure))
 			{
+				objTrace(psStructure->id, "Dropping repair target %d; wrong order=%d, wrong target=%d", 
+				         (int)psChosenObj->id, (int)(!orderState(psDroid, DORDER_RTR)), (int)(psDroid->psTarget != (BASE_OBJECT *)psStructure));
 				psChosenObj = NULL;
 				psDroid = NULL;
 				psRepairFac->psObj = NULL;
@@ -3030,6 +3032,11 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 					}
 				}
 				psDroid = (DROID *)psChosenObj;
+				if (psDroid)
+				{
+					objTrace(psStructure->id, "Chose to repair droid %d", (int)psDroid->id);
+					objTrace(psDroid->id, "Chosen to be repaired by repair structure %d", (int)psStructure->id);
+				}
 			}
 
 			/* Steal droid from another repair facility */
@@ -3059,6 +3066,11 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 					}
 				}
 				psDroid = (DROID *)psChosenObj;
+				if (psDroid)
+				{
+					objTrace(psStructure->id, "Chose to steal droid %d from another repair queue to repair it", (int)psDroid->id);
+					objTrace(psDroid->id, "Stolen by repair structure %d because current queue too long", (int)psStructure->id);
+				}
 			}
 
 			// send the droid to be repaired
@@ -3070,6 +3082,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 				psDroid->psTarget = (BASE_OBJECT *)psStructure;
 
 				/* move droid to repair point at rear of facility */
+				objTrace(psStructure->id, "Requesting droid %d to come to us", (int)psDroid->id);
 				actionDroidObjLoc( psDroid, DACTION_MOVETOREPAIRPOINT,
 						(BASE_OBJECT *) psStructure, psStructure->pos.x, psStructure->pos.y);
 				/* reset repair started */
@@ -3374,6 +3387,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 						if (!(psDroid->sMove.Status == MOVEINACTIVE &&
 							psDroid->sMove.iVertSpeed == 0))
 						{
+							objTrace(psStructure->id, "Waiting for transporter to land");
 							return;
 						}
 					}
@@ -3384,6 +3398,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 						if (psStructure->resistance < (SWORD)structureResistance(psStructure->
 							pStructureType, psStructure->player))
 						{
+							objTrace(psStructure->id, "Resistance too low for repair");
 							return;
 						}
 					}
@@ -3462,7 +3477,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 
 				if ( psDroid->body >= psDroid->originalBody )
 				{
-					debug(LOG_NEVER, "repair completed");
+					objTrace(psStructure->id, "Repair complete of droid %d", (int)psDroid->id);
 
 					psRepairFac->psObj = NULL;
 
