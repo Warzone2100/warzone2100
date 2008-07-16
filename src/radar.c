@@ -412,7 +412,7 @@ static void DrawRadarObjects(UDWORD *screen)
 			MAPTILE		*psTile = mapTile(x, y);
 			STRUCTURE	*psStruct = (STRUCTURE *)psTile->psObject;
 
-			if (!TileHasTallStructure(psTile))
+			if (!TileHasStructure(psTile))
 			{
 				continue;
 			}
