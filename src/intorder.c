@@ -167,7 +167,8 @@ enum
 	STR_DORD_FACTORY,
 	STR_DORD_CYBORG_FACTORY,
 	STR_DORD_FIREDES,
-	STR_DORD_VTOL_FACTORY
+	STR_DORD_VTOL_FACTORY,
+	STR_DORD_CIRCLE,
 };
 
 // return translated text
@@ -197,6 +198,7 @@ static const char *getDORDDescription(int id)
 			case STR_DORD_CYBORG_FACTORY : return _("Assign Cyborg Factory Production");
 			case STR_DORD_FIREDES        : return _("Assign Fire Support");
 			case STR_DORD_VTOL_FACTORY   : return _("Assign VTOL Factory Production");
+			case STR_DORD_CIRCLE         : return _("Circle");
 
 			default : return "";  // make compiler shut up
 		}
@@ -288,7 +290,7 @@ ORDERBUTTONS OrderButtons[NUM_ORDERS]=
 		{IMAGE_ORD_PATROLUP,	0,	0},
 		{IMAGE_ORD_PATROLUP,	0,	0},
 		{IMAGE_DES_HILIGHT,	0,	0},
-		{STR_DORD_PATROL,	0,	0},
+		{STR_DORD_CIRCLE,	0,	0},
 		{DSS_CIRCLE_SET,	0,	0}
 	},
 
