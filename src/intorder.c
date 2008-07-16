@@ -156,7 +156,7 @@ enum
 	STR_DORD_FIRE2,
 	STR_DORD_FIRE3,
 	STR_DORD_PATROL,
-	STR_DORD_PERSUE,
+	STR_DORD_PURSUE,
 	STR_DORD_GUARD,
 	STR_DORD_HOLDPOS,
 	STR_DORD_RETREPAIR,
@@ -167,7 +167,8 @@ enum
 	STR_DORD_FACTORY,
 	STR_DORD_CYBORG_FACTORY,
 	STR_DORD_FIREDES,
-	STR_DORD_VTOL_FACTORY
+	STR_DORD_VTOL_FACTORY,
+	STR_DORD_CIRCLE,
 };
 
 // return translated text
@@ -185,7 +186,7 @@ static const char *getDORDDescription(int id)
 			case STR_DORD_FIRE2          : return _("Return Fire");
 			case STR_DORD_FIRE3          : return _("Hold Fire");
 			case STR_DORD_PATROL         : return _("Patrol");
-			case STR_DORD_PERSUE         : return _("Pursue");
+			case STR_DORD_PURSUE         : return _("Pursue");
 			case STR_DORD_GUARD          : return _("Guard Position");
 			case STR_DORD_HOLDPOS        : return _("Hold Position");
 			case STR_DORD_RETREPAIR      : return _("Return For Repair");
@@ -197,6 +198,7 @@ static const char *getDORDDescription(int id)
 			case STR_DORD_CYBORG_FACTORY : return _("Assign Cyborg Factory Production");
 			case STR_DORD_FIREDES        : return _("Assign Fire Support");
 			case STR_DORD_VTOL_FACTORY   : return _("Assign VTOL Factory Production");
+			case STR_DORD_CIRCLE         : return _("Circle");
 
 			default : return "";  // make compiler shut up
 		}
@@ -285,10 +287,10 @@ ORDERBUTTONS OrderButtons[NUM_ORDERS]=
 		ORD_JUSTIFY_COMBINE,
 		IDORDER_CIRCLE,
 		1,0,
-		{IMAGE_ORD_PATROLUP,	0,	0},
-		{IMAGE_ORD_PATROLUP,	0,	0},
+		{IMAGE_ORD_CIRCLEUP,	0,	0},
+		{IMAGE_ORD_CIRCLEUP,	0,	0},
 		{IMAGE_DES_HILIGHT,	0,	0},
-		{STR_DORD_PATROL,	0,	0},
+		{STR_DORD_CIRCLE,	0,	0},
 		{DSS_CIRCLE_SET,	0,	0}
 	},
 
@@ -300,11 +302,11 @@ ORDERBUTTONS OrderButtons[NUM_ORDERS]=
 		ORD_JUSTIFY_CENTER | ORD_JUSTIFY_NEWLINE,
 		IDORDER_HALT_TYPE,
 		3,0,
-		{IMAGE_ORD_PERSUEUP,	IMAGE_ORD_GUARDUP,	IMAGE_ORD_HALTUP},
-		{IMAGE_ORD_PERSUEUP,	IMAGE_ORD_GUARDUP,	IMAGE_ORD_HALTUP},
+		{IMAGE_ORD_PURSUEUP,	IMAGE_ORD_GUARDUP,	IMAGE_ORD_HALTUP},
+		{IMAGE_ORD_PURSUEUP,	IMAGE_ORD_GUARDUP,	IMAGE_ORD_HALTUP},
 		{IMAGE_DES_HILIGHT,		IMAGE_DES_HILIGHT,	IMAGE_DES_HILIGHT},
-		{STR_DORD_PERSUE,	STR_DORD_GUARD,	STR_DORD_HOLDPOS},
-		{DSS_HALT_PERSUE,	DSS_HALT_GUARD,	DSS_HALT_HOLD}
+		{STR_DORD_PURSUE,	STR_DORD_GUARD,	STR_DORD_HOLDPOS},
+		{DSS_HALT_PURSUE,	DSS_HALT_GUARD,	DSS_HALT_HOLD}
 	},
 	{
 		ORDBUTCLASS_NORMAL,

@@ -2039,7 +2039,7 @@ void	kf_SetDroidMoveHold( void )
 // --------------------------------------------------------------------------
 void	kf_SetDroidMovePursue( void )
 {
-	kfsf_SetSelectedDroidsState(DSO_HALTTYPE,DSS_HALT_PERSUE);	// ASK?
+	kfsf_SetSelectedDroidsState(DSO_HALTTYPE,DSS_HALT_PURSUE);	// ASK?
 }
 
 // --------------------------------------------------------------------------

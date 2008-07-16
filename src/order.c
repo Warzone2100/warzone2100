@@ -3629,9 +3629,9 @@ BOOL secondarySetState(DROID *psDroid, SECONDARY_ORDER sec, SECONDARY_STATE Stat
 		case DSO_HALTTYPE:
 			switch (State & DSS_HALT_MASK)
 			{
-			case DSS_HALT_PERSUE:
+			case DSS_HALT_PURSUE:
 				CurrState &= ~ DSS_HALT_MASK;
-				CurrState |= DSS_HALT_PERSUE;
+				CurrState |= DSS_HALT_PURSUE;
 				if (orderState(psDroid, DORDER_GUARD))
 				{
 					orderDroid(psDroid, DORDER_STOP);
@@ -4118,9 +4118,9 @@ BOOL setFactoryState(STRUCTURE *psStruct, SECONDARY_ORDER sec, SECONDARY_STATE S
 		case DSO_HALTTYPE:
 			switch (State & DSS_HALT_MASK)
 			{
-			case DSS_HALT_PERSUE:
+			case DSS_HALT_PURSUE:
 				CurrState &= ~ DSS_HALT_MASK;
-				CurrState |= DSS_HALT_PERSUE;
+				CurrState |= DSS_HALT_PURSUE;
 				break;
 			case DSS_HALT_GUARD:
 				CurrState &= ~ DSS_HALT_MASK;
