@@ -314,9 +314,23 @@ void dumpLog(int file)
 	dumpEOL(file);
 }
 
+/** Send the given string to all debug callbacks.
+ *
+ *  @param str The string to send to debug callbacks.
+ */
+static void printToDebugCallbacks(const char * const str)
+{
+	debug_callback * curCallback;
+
+	// Loop over all callbacks, invoking them with the given data string
+	for (curCallback = callbackRegistry; curCallback != NULL; curCallback = curCallback->next)
+	{
+		curCallback->callback(&curCallback->data, str);
+	}
+}
+
 void _realObjTrace(int id, const char *function, const char *str, ...)
 {
-	debug_callback * curCallback = callbackRegistry;
 	char vaBuffer[MAX_LEN_LOG_LINE];
 	char outputBuffer[MAX_LEN_LOG_LINE];
 	va_list ap;
@@ -326,18 +340,13 @@ void _realObjTrace(int id, const char *function, const char *str, ...)
 	va_end(ap);
 
 	ssprintf(outputBuffer, "[%6d]: [%s] %s", id, function, vaBuffer);
-	while (curCallback)
-	{
-		curCallback->callback(&curCallback->data, outputBuffer);
-		curCallback = curCallback->next;
-	}
+	printToDebugCallbacks(outputBuffer);
 }
 
 void _debug( code_part part, const char *function, const char *str, ... )
 {
 	va_list ap;
 	static char outputBuffer[MAX_LEN_LOG_LINE];
-	debug_callback * curCallback = callbackRegistry;
 	static unsigned int repeated = 0; /* times current message repeated */
 	static unsigned int next = 2;     /* next total to print update */
 	static unsigned int prev = 0;     /* total on last update */
@@ -358,11 +367,7 @@ void _debug( code_part part, const char *function, const char *str, ... )
 			} else {
 				ssprintf(outputBuffer, "last message repeated %u times", repeated - prev);
 			}
-			while (curCallback) {
-				curCallback->callback( &curCallback->data, outputBuffer );
-				curCallback = curCallback->next;
-			}
-			curCallback = callbackRegistry;
+			printToDebugCallbacks(outputBuffer);
 			prev = repeated;
 			next *= 2;
 		}
@@ -375,12 +380,7 @@ void _debug( code_part part, const char *function, const char *str, ... )
 			} else {
 				ssprintf(outputBuffer, "last message repeated %u times", repeated - prev);
 			}
-			while (curCallback)
-			{
-				curCallback->callback( &curCallback->data, outputBuffer );
-				curCallback = curCallback->next;
-			}
-			curCallback = callbackRegistry;
+			printToDebugCallbacks(outputBuffer);
 		}
 		repeated = 0;
 		next = 2;
@@ -392,10 +392,7 @@ void _debug( code_part part, const char *function, const char *str, ... )
 		// Assemble the outputBuffer:
 		ssprintf(outputBuffer, "%-8s|%012u: %s", code_part_names[part], gameTime, useInputBuffer1 ? inputBuffer[1] : inputBuffer[0]);
 
-		while (curCallback) {
-			curCallback->callback( &curCallback->data, outputBuffer );
-			curCallback = curCallback->next;
-		}
+		printToDebugCallbacks(outputBuffer);
 	}
 	useInputBuffer1 = !useInputBuffer1; // Swap buffers
 }
