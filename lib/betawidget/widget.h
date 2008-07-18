@@ -487,10 +487,25 @@ void widgetRemoveChild(widget *self, widget *child);
  * @param self          The widget to add the event handler to.
  * @param type          The type of event that handler should respond to.
  * @param handler       The function to call when the event type fires.
+ * @param userData      User specified data pointer to pass to handler.
  * @return The id of the newly added event.
  */
 int widgetAddEventHandler(widget *self, eventType type,
                           callback handler, void *userData);
+
+/**
+ * Similar to widgetAddEventHandler in many respects, except that it is designed
+ * to add timer event handlers (EVT_TIMER_ONE_SHOT and EVT_TIMER_PERSISTENT).
+ * 
+ * @param self          The widget to add the timer event handler to.
+ * @param type          The tyoe of the timer to register the handler for.
+ * @param interval      The duration in ms to wait.
+ * @param handler       The function to call when the event fires.
+ * @param userData      User specified data pointer to pass to handler.
+ * @return The id of the newly added event.
+ */
+int widgetAddTimerEventHandler(widget *self, eventType type, int interval,
+                               callback handler, void *userData);
 
 /**
  * Removes the event from the events table at offset id.
