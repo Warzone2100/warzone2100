@@ -599,28 +599,42 @@ WIDGET *formGetAllWidgets(W_FORMGETALL *psCtrl)
 }
 
 
+static W_TABFORM* widgGetTabbedFormById(W_SCREEN * const psScreen, const UDWORD id)
+{
+	W_TABFORM * const psForm = (W_TABFORM *)widgGetFromID(psScreen, id);
+
+	if (psForm == NULL
+	 || psForm->type != WIDG_FORM
+	 || !(psForm->style & WFORM_TABBED))
+	{
+		return NULL;
+	}
+
+	return psForm;
+}
+
+
 /* Set the current tabs for a tab form */
 void widgSetTabs(W_SCREEN *psScreen, UDWORD id, UWORD major, UWORD minor)
 {
-	W_TABFORM	*psForm;
+	W_TABFORM * const psForm = widgGetTabbedFormById(psScreen, id);
 
-	psForm = (W_TABFORM *)widgGetFromID(psScreen, id);
 	ASSERT(psForm != NULL, "widgSetTabs: Invalid tab form pointer" );
-	ASSERT((psForm->style & WFORM_TABBED), "widgSetTabs: couldn't find tabbed form from id");
-	if (psForm == NULL || !(psForm->style & WFORM_TABBED))
+
+	if (psForm == NULL)
 	{
 		return; /* make us work fine in no assert compiles */
 	}
 
-	ASSERT(major < psForm->numMajor, "widgSetTabs id=%u: invalid major id %u >= max %u", id,
-	       major, psForm->numMajor);
+	ASSERT(major < widgGetNumTabMajor(psScreen, id), "widgSetTabs id=%u: invalid major id %u >= max %u", id,
+	       major, widgGetNumTabMajor(psScreen, id));
 
-	ASSERT(minor < psForm->asMajor[major].numMinor, "widgSetTabs id=%u: invalid minor id %u >= max %u", id,
-	       minor, psForm->asMajor[major].numMinor);
+	ASSERT(minor < widgGetNumTabMinor(psScreen, id, major), "widgSetTabs id=%u: invalid minor id %u >= max %u", id,
+	       minor, widgGetNumTabMinor(psScreen, id, major));
 
 	// Make sure to bail out when we've been passed out-of-bounds major or minor numbers
-	if (major >= psForm->numMajor
-	 || minor >= psForm->asMajor[major].numMinor)
+	if (major >= widgGetNumTabMajor(psScreen, id)
+	 || minor >= widgGetNumTabMinor(psScreen, id, major))
 	{
 		return;
 	}
@@ -630,29 +644,30 @@ void widgSetTabs(W_SCREEN *psScreen, UDWORD id, UWORD major, UWORD minor)
 	psForm->asMajor[major].lastMinor = minor;
 }
 
-
 int widgGetNumTabMajor(W_SCREEN *psScreen, UDWORD id)
 {
-	W_TABFORM	*psForm = (W_TABFORM *)widgGetFromID(psScreen, id);
+	W_TABFORM * const psForm = widgGetTabbedFormById(psScreen, id);
 
-	if (psForm == NULL || psForm->type != WIDG_FORM || !(psForm->style & WFORM_TABBED))
+	ASSERT(psForm == NULL, "Couldn't find a tabbed form with ID %u", id);
+	if (psForm == NULL)
 	{
-		ASSERT(false,"couldn't find tabbed form from id");
 		return 0;
 	}
+
 	return psForm->numMajor;
 }
 
 
 int widgGetNumTabMinor(W_SCREEN *psScreen, UDWORD id, UWORD pMajor)
 {
-	W_TABFORM	*psForm = (W_TABFORM *)widgGetFromID(psScreen, id);
+	W_TABFORM * const psForm = widgGetTabbedFormById(psScreen, id);
 
-	if (psForm == NULL || psForm->type != WIDG_FORM || !(psForm->style & WFORM_TABBED))
+	ASSERT(psForm == NULL, "Couldn't find a tabbed form with ID %u", id);
+	if (psForm == NULL)
 	{
-		ASSERT(false,"couldn't find tabbed form from id");
 		return 0;
 	}
+
 	return psForm->asMajor[pMajor].numMinor;
 }
 
