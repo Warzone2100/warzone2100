@@ -4261,7 +4261,7 @@ bool gameLoadV7(PHYSFS_file* fileHandle)
 
 		IsScenario = false;
 		//copy the level name across
-		strlcpy(aLevelName, saveGame.levelName, sizeof(aLevelName));
+		sstrcpy(aLevelName, saveGame.levelName);
 		//load up the level dataset
 		if (!levLoadData(aLevelName, saveGameName, gameType))
 		{
@@ -4738,7 +4738,7 @@ bool gameLoadV(PHYSFS_file* fileHandle, unsigned int version)
 
 		IsScenario = false;
 		//copy the level name across
-		strlcpy(aLevelName, saveGameData.levelName, sizeof(aLevelName));
+		sstrcpy(aLevelName, saveGameData.levelName);
 		//load up the level dataset
 		if (!levLoadData(aLevelName, saveGameName, gameType))
 		{
@@ -4887,7 +4887,7 @@ static bool writeGameFile(const char* fileName, SDWORD saveType)
 
 		return false;
 	}
-	strlcpy(saveGame.levelName, aLevelName, sizeof(saveGame.levelName));
+	sstrcpy(saveGame.levelName, aLevelName);
 
 	//save out the players power
 	for (i = 0; i < MAX_PLAYERS; ++i)
@@ -5264,7 +5264,7 @@ static DROID* buildDroidFromSaveDroidV11(SAVE_DROID_V11* psSaveDroid)
 	//set up the template
 	//copy the values across
 
-	strlcpy(psTemplate->aName, psSaveDroid->name, sizeof(psTemplate->aName));
+	sstrcpy(psTemplate->aName, psSaveDroid->name);
 	//ignore the first comp - COMP_UNKNOWN
 	found = true;
 	for (i=1; i < DROID_MAXCOMP; i++)
@@ -5371,7 +5371,7 @@ static DROID* buildDroidFromSaveDroidV19(SAVE_DROID_V18* psSaveDroid, UDWORD ver
 	//set up the template
 	//copy the values across
 
-	strlcpy(psTemplate->aName, psSaveDroid->name, sizeof(psTemplate->aName));
+	sstrcpy(psTemplate->aName, psSaveDroid->name);
 
 	//ignore the first comp - COMP_UNKNOWN
 	found = true;
@@ -5757,7 +5757,7 @@ static DROID* buildDroidFromSaveDroid(SAVE_DROID* psSaveDroid, UDWORD version)
 	//set up the template
 	//copy the values across
 
-	strlcpy(psTemplate->aName, psSaveDroid->name, sizeof(psTemplate->aName));
+	sstrcpy(psTemplate->aName, psSaveDroid->name);
 	//ignore the first comp - COMP_UNKNOWN
 	found = true;
 	for (i=1; i < DROID_MAXCOMP; i++)
@@ -6587,7 +6587,7 @@ static BOOL buildSaveDroidFromDroid(SAVE_DROID* psSaveDroid, DROID* psCurr, DROI
 			templates are loaded from Access AND the save game so they should all
 			still exist*/
 			ASSERT(strlen(psCurr->aName) + 1 < sizeof(psSaveDroid->name), "Truncation of droid name occurred! Max droid length (without truncation while saving) is %zu", sizeof(psSaveDroid->name) - 1);
-			strlcpy(psSaveDroid->name, psCurr->aName, sizeof(psSaveDroid->name));
+			sstrcpy(psSaveDroid->name, psCurr->aName);
 
 			// not interested in first comp - COMP_UNKNOWN
 			for (i=1; i < DROID_MAXCOMP; i++)
@@ -6667,7 +6667,7 @@ static BOOL buildSaveDroidFromDroid(SAVE_DROID* psSaveDroid, DROID* psCurr, DROI
 			if (psCurr->psTarStats != NULL)
 			{
 				ASSERT(strlen(psCurr->psTarStats->pName) < sizeof(psSaveDroid->tarStatName), "writeUnitFile; psTarStat pName Error");
-				strlcpy(psSaveDroid->tarStatName, psCurr->psTarStats->pName, sizeof(psSaveDroid->tarStatName));
+				sstrcpy(psSaveDroid->tarStatName, psCurr->psTarStats->pName);
 			}
 			else
 			{
@@ -8269,7 +8269,7 @@ BOOL writeStructFile(char *pFileName)
 						researchId = ((RESEARCH_FACILITY *)psCurr->pFunctionality)->
 							psSubject->ref - REF_RESEARCH_START;
 						ASSERT(strlen(asResearch[researchId].pName) < sizeof(psSaveStruct->researchName), "writeStructData: research name too long");
-						strlcpy(psSaveStruct->researchName, asResearch[researchId].pName, sizeof(psSaveStruct->researchName));
+						sstrcpy(psSaveStruct->researchName, asResearch[researchId].pName);
 						psSaveStruct->timeStarted = ((RESEARCH_FACILITY *)psCurr->
 							pFunctionality)->timeStarted;
 					}
@@ -8952,7 +8952,7 @@ BOOL loadSaveTemplateV7(char *pFileData, UDWORD filesize, UDWORD numTemplates)
 		//copy the values across
 
 		psTemplate->pName = NULL;
-		strlcpy(psTemplate->aName, psSaveTemplate->name, sizeof(psTemplate->aName));
+		sstrcpy(psTemplate->aName, psSaveTemplate->name);
 
 		psTemplate->ref = psSaveTemplate->ref;
 		psTemplate->droidType = psSaveTemplate->droidType;
@@ -9084,7 +9084,7 @@ BOOL loadSaveTemplateV14(char *pFileData, UDWORD filesize, UDWORD numTemplates)
 		//copy the values across
 
 		psTemplate->pName = NULL;
-		strlcpy(psTemplate->aName, psSaveTemplate->name, sizeof(psTemplate->aName));
+		sstrcpy(psTemplate->aName, psSaveTemplate->name);
 
 		psTemplate->ref = psSaveTemplate->ref;
 		psTemplate->droidType = psSaveTemplate->droidType;
@@ -9239,7 +9239,7 @@ BOOL loadSaveTemplateV(char *pFileData, UDWORD filesize, UDWORD numTemplates)
 		//copy the values across
 
 		psTemplate->pName = NULL;
-		strlcpy(psTemplate->aName, psSaveTemplate->name, sizeof(psTemplate->aName));
+		sstrcpy(psTemplate->aName, psSaveTemplate->name);
 
 		psTemplate->ref = psSaveTemplate->ref;
 		psTemplate->droidType = psSaveTemplate->droidType;
@@ -9413,7 +9413,7 @@ BOOL writeTemplateFile(char *pFileName)
 		for(psCurr = apsDroidTemplates[player]; psCurr != NULL; psCurr = psCurr->psNext)
 		{
 			ASSERT(strlen(psCurr->aName) + 1 < sizeof(psSaveTemplate->name), "Truncation of droid name occurred! Max droid length (without truncation while saving) is %zu", sizeof(psSaveTemplate->name) - 1);
-			strlcpy(psSaveTemplate->name, psCurr->aName, sizeof(psSaveTemplate->name));
+			sstrcpy(psSaveTemplate->name, psCurr->aName);
 
 			psSaveTemplate->ref = psCurr->ref;
 			psSaveTemplate->player = player;

@@ -597,7 +597,7 @@ BOOL levLoadData(const char* name, char *pSaveName, SDWORD saveType)
 	}
 
 	/* Keep a copy of the present level name */
-	strlcpy(currentLevelName, name, sizeof(currentLevelName));
+	sstrcpy(currentLevelName, name);
 
 	bCamChangeSaveGame = false;
 	if (pSaveName && saveType == GTYPE_SAVE_START)

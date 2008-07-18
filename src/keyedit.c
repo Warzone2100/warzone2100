@@ -199,7 +199,7 @@ static BOOL pushedKeyCombo(KEY_CODE subkey)
 //	function = selectedKeyMap->function;
 //	action = selectedKeyMap->action;
 //	status = selectedKeyMap->status;
-//	strlcpy(name, selectedKeyMap->pName, sizeof(name));
+//	sstrcpy(name, selectedKeyMap->pName);
 //	keyRemoveMappingPt(selectedKeyMap);
 
 	keyAddMapping(status,metakey,subkey,action,function,name);
@@ -385,7 +385,7 @@ BOOL startKeyMapEditor(BOOL first)
 
 
 	/* Better be none that come after this...! */
-	strlcpy(test, "zzzzzzzzzzzzzzzzzzzzz", sizeof(test));
+	sstrcpy(test, "zzzzzzzzzzzzzzzzzzzzz");
 	psMapping = NULL;
 
 	//count mappings required.
@@ -397,7 +397,7 @@ BOOL startKeyMapEditor(BOOL first)
 			if(strcmp(psMapping->pName,test) < 0)
 			{
 				/* Best one found so far */
-				strlcpy(test, psMapping->pName, sizeof(test));
+				sstrcpy(test, psMapping->pName);
 				psPresent = psMapping;
 			}
 		}
@@ -454,7 +454,7 @@ BOOL startKeyMapEditor(BOOL first)
 	while(bubbleCount<mapcount-1 && !bAtEnd)
 	{
 		/* Same test as before for upper limit */
-	 	strlcpy(test, "zzzzzzzzzzzzzzzzzzzzz", sizeof(test));
+	 	sstrcpy(test, "zzzzzzzzzzzzzzzzzzzzz");
 		for(psMapping = keyMappings,psNext = NULL,bGotOne = false; psMapping; psMapping = psMapping->psNext)
 		{
 			/* Only certain mappings get displayed */
@@ -464,7 +464,7 @@ BOOL startKeyMapEditor(BOOL first)
 				if(strcmp(psMapping->pName,test) < 0 && strcmp(psMapping->pName,psPresent->pName) > 0)
 				{
 					/* Keep a record of it */
-					strlcpy(test, psMapping->pName, sizeof(test));
+					sstrcpy(test, psMapping->pName);
 				   	psNext = psMapping;
 					bGotOne = true;
 				}
@@ -543,7 +543,7 @@ BOOL saveKeyMap(void)
 	{
 		// save this map.
 		// name
-		strlcpy(name, psMapping->pName, sizeof(name));
+		sstrcpy(name, psMapping->pName);
 		WRITE(&name, 128);
 
 		WRITE(&psMapping->status, sizeof(KEY_STATUS));	// status

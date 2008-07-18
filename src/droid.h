@@ -484,7 +484,7 @@ static inline void _setDroidTarget(DROID *psDroid, BASE_OBJECT *psNewTarget, int
 	       "setDroidTarget: Set dead target");
 #ifdef DEBUG
 	psDroid->targetLine = line;
-	strlcpy(psDroid->targetFunc, func, MAX_EVENT_NAME_LEN);
+	sstrcpy(psDroid->targetFunc, func);
 #endif
 }
 
@@ -496,7 +496,7 @@ static inline void _setDroidActionTarget(DROID *psDroid, BASE_OBJECT *psNewTarge
 	       "setDroidActionTarget: Set dead target");
 #ifdef DEBUG
 	psDroid->actionTargetLine[idx] = line;
-	strlcpy(psDroid->actionTargetFunc[idx], func, MAX_EVENT_NAME_LEN);
+	sstrcpy(psDroid->actionTargetFunc[idx], func);
 #endif
 }
 
@@ -507,7 +507,7 @@ static inline void _setDroidBase(DROID *psDroid, STRUCTURE *psNewBase, int line,
 	ASSERT(psNewBase == NULL || !psNewBase->died, "setDroidBase: Set dead target");
 #ifdef DEBUG
 	psDroid->baseLine = line;
-	strlcpy(psDroid->baseFunc, func, MAX_EVENT_NAME_LEN);
+	sstrcpy(psDroid->baseFunc, func);
 #endif
 }
 
@@ -516,7 +516,7 @@ static inline void setSaveDroidTarget(DROID *psSaveDroid, BASE_OBJECT *psNewTarg
 	psSaveDroid->psTarget = psNewTarget;
 #ifdef DEBUG
 	psSaveDroid->targetLine = 0;
-	strlcpy(psSaveDroid->targetFunc, "savegame", MAX_EVENT_NAME_LEN);
+	sstrcpy(psSaveDroid->targetFunc, "savegame");
 #endif
 }
 
@@ -525,7 +525,7 @@ static inline void setSaveDroidActionTarget(DROID *psSaveDroid, BASE_OBJECT *psN
 	psSaveDroid->psActionTarget[idx] = psNewTarget;
 #ifdef DEBUG
 	psSaveDroid->actionTargetLine[idx] = 0;
-	strlcpy(psSaveDroid->actionTargetFunc[idx], "savegame", MAX_EVENT_NAME_LEN);
+	sstrcpy(psSaveDroid->actionTargetFunc[idx], "savegame");
 #endif
 }
 
@@ -534,7 +534,7 @@ static inline void setSaveDroidBase(DROID *psSaveDroid, STRUCTURE *psNewBase)
 	psSaveDroid->psBaseStruct = psNewBase;
 #ifdef DEBUG
 	psSaveDroid->baseLine = 0;
-	strlcpy(psSaveDroid->baseFunc, "savegame", MAX_EVENT_NAME_LEN);
+	sstrcpy(psSaveDroid->baseFunc, "savegame");
 #endif
 }
 

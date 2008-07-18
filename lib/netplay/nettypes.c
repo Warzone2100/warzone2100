@@ -439,7 +439,7 @@ static void NETcoder(PACKETDIR dir)
 	int8_t i8 = -8;
 	test_enum te = test_b;
 
-	strlcpy(str, original, sizeof(str));
+	sstrcpy(str, original);
 
 	if (dir == PACKET_ENCODE)
 		NETbeginEncode(0, 0);

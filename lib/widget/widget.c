@@ -1117,12 +1117,12 @@ const char *widgGetString(W_SCREEN *psScreen, UDWORD id)
 				aStringRetBuffer[0] = '\0';
 				break;
 			case WIDG_LABEL:
-				strlcpy(aStringRetBuffer, ((W_LABEL *)psWidget)->aText, sizeof(aStringRetBuffer));
+				sstrcpy(aStringRetBuffer, ((W_LABEL *)psWidget)->aText);
 				break;
 			case WIDG_BUTTON:
 				if (((W_BUTTON *)psWidget)->pText)
 				{
-					strlcpy(aStringRetBuffer, ((W_BUTTON *)psWidget)->pText, sizeof(aStringRetBuffer));
+					sstrcpy(aStringRetBuffer, ((W_BUTTON *)psWidget)->pText);
 				}
 				else
 				{
@@ -1130,7 +1130,7 @@ const char *widgGetString(W_SCREEN *psScreen, UDWORD id)
 				}
 				break;
 			case WIDG_EDITBOX:
-				strlcpy(aStringRetBuffer, ((W_EDITBOX *)psWidget)->aText, sizeof(aStringRetBuffer));
+				sstrcpy(aStringRetBuffer, ((W_EDITBOX *)psWidget)->aText);
 				break;
 			case WIDG_BARGRAPH:
 				ASSERT( false, "widgGetString: Bar Graphs do not have a string" );
@@ -1179,7 +1179,7 @@ void widgSetString(W_SCREEN *psScreen, UDWORD id, const char *pText)
 			break;
 
 		case WIDG_LABEL:
-			strlcpy(((W_LABEL *)psWidget)->aText, pText, sizeof(((W_LABEL *)psWidget)->aText));
+			sstrcpy(((W_LABEL *)psWidget)->aText, pText);
 			break;
 
 		case WIDG_BUTTON:

@@ -103,7 +103,7 @@ W_EDITBOX* editBoxCreate(const W_EDBINIT* psInit)
 
 	if (psInit->pText)
 	{
-		strlcpy(psWidget->aText, psInit->pText, sizeof(psWidget->aText));
+		sstrcpy(psWidget->aText, psInit->pText);
 	}
 	else
 	{
@@ -573,7 +573,7 @@ void editBoxSetString(W_EDITBOX *psWidget, const char *pText)
 	ASSERT( psWidget != NULL,
 		"editBoxSetString: Invalid edit box pointer" );
 
-	strlcpy(psWidget->aText, pText, sizeof(psWidget->aText));
+	sstrcpy(psWidget->aText, pText);
 
 	psWidget->state = WEDBS_FIXED;
 	psWidget->printStart = 0;

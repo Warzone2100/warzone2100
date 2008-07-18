@@ -437,7 +437,7 @@ static inline void _setStructureTarget(STRUCTURE *psBuilding, BASE_OBJECT *psNew
 	ASSERT(psNewTarget == NULL || !psNewTarget->died, "setStructureTarget set dead target");
 #ifdef DEBUG
 	psBuilding->targetLine[idx] = line;
-	strlcpy(psBuilding->targetFunc[idx], func, MAX_EVENT_NAME_LEN);
+	sstrcpy(psBuilding->targetFunc[idx], func);
 #endif
 }
 

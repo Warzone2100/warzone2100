@@ -561,9 +561,9 @@ void seq_AddSeqToList(const char *pSeqName, const char *pAudioName, const char *
 		//check for a subtitle file
 		strLen = strlen(pSeqName);
 		ASSERT( strLen < MAX_STR_LENGTH,"seq_AddSeqToList: sequence name error" );
-		strlcpy(aSubtitleName, pSeqName, sizeof(aSubtitleName));
+		sstrcpy(aSubtitleName, pSeqName);
 		aSubtitleName[strLen - 4] = 0;
-		strlcat(aSubtitleName, ".txt", sizeof(aSubtitleName));
+		sstrcat(aSubtitleName, ".txt");
 		seq_AddTextFromFile(aSubtitleName, true);//SEQ_TEXT_JUSTIFY);//subtitles centre justified
 	}
 }

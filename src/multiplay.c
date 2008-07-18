@@ -1063,7 +1063,7 @@ BOOL sendTextMessage(const char *pStr, BOOL all)
 	memset(display,0x0, sizeof(display));	//clear buffer
 	memset(msg,0x0, sizeof(display));		//clear buffer
 	memset(sendto,0x0, sizeof(sendto));		//clear private flag
-	strlcpy(msg, pStr, sizeof(msg));
+	sstrcpy(msg, pStr);
 	for(i = 0; ((pStr[i] >= '0' ) && (pStr[i] <= '8' )  && (i < MAX_PLAYERS )); i++)		// for each numeric char encountered..
 	{
 		sendto[ pStr[i]-'0' ] = true;
@@ -1072,8 +1072,8 @@ BOOL sendTextMessage(const char *pStr, BOOL all)
 
 	if (!all && !normal)	// lets user know it is a private message
 	{
-		strlcpy(display,"(private)",sizeof(display));
-		strlcat(display,pStr,sizeof(display));
+		sstrcpy(display, "(private)");
+		sstrcat(display, pStr);
 	}
 
 	if (all)	//broadcast
@@ -1129,9 +1129,9 @@ BOOL sendTextMessage(const char *pStr, BOOL all)
 
 	//This is for local display
 	for(i = 0; NetPlay.players[i].dpid != NetPlay.dpidPlayer; i++);	//findplayer
-	strlcat(display, NetPlay.players[i].name, sizeof(display));		// name
-	strlcat(display, ": ", sizeof(display));						// seperator
-	strlcat(display, pStr, sizeof(display));						// add message
+	sstrcat(display, NetPlay.players[i].name);		// name
+	sstrcat(display, ": ");						// seperator
+	sstrcat(display, pStr);						// add message
 
 	addConsoleMessage(display, DEFAULT_JUSTIFY, selectedPlayer);	// display
 
@@ -1276,11 +1276,11 @@ BOOL recvTextMessage()
 
 	ASSERT(player != MAX_PLAYERS, "recvTextMessage: failed to find owner of dpid %d", dpid);
 
-	strlcpy(msg, NetPlay.players[i].name, sizeof(msg));
+	sstrcpy(msg, NetPlay.players[i].name);
 	// Seperator
-	strlcat(msg, ": ", sizeof(msg));
+	sstrcat(msg, ": ");
 	// Add message
-	strlcat(msg, newmsg, sizeof(msg));
+	sstrcat(msg, newmsg);
 
 	addConsoleMessage(msg, DEFAULT_JUSTIFY, player);
 
@@ -1289,7 +1289,7 @@ BOOL recvTextMessage()
 	MultiMsgPlayerFrom = player;
 	MultiMsgPlayerTo = selectedPlayer;
 
-	strlcpy(MultiplayMsg, newmsg, sizeof(MultiplayMsg));
+	sstrcpy(MultiplayMsg, newmsg);
 	eventFireCallbackTrigger((TRIGGER_TYPE)CALL_AI_MSG);
 
 	// make some noise!
@@ -1318,9 +1318,9 @@ BOOL recvTextMessageAI()
 		NETstring(newmsg,MAX_CONSOLE_STRING_LENGTH);
 	NETend();
 
-	//strlcpy(msg, getPlayerName(sender), sizeof(msg));  // name
-	//strlcat(msg, " : ", sizeof(msg));                  // seperator
-	strlcpy(msg, newmsg, sizeof(msg));
+	//sstrcpy(msg, getPlayerName(sender));  // name
+	//sstrcat(msg, " : ");                  // seperator
+	sstrcpy(msg, newmsg);
 
 	//Display the message and make the script callback
 	displayAIMessage(msg, sender, receiver);
@@ -1555,20 +1555,20 @@ BOOL recvMapFileRequested()
 		bSendingMap = true;
 		addConsoleMessage("Map was requested: SENDING MAP!",DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 
-		strlcpy(mapName, game.map, sizeof(mapName));
+		sstrcpy(mapName, game.map);
 		// chop off the -T1
 		mapName[strlen(game.map)-3] = 0;		// chop off the -T1 etc..
 
 		// chop off the sk- if required.
 		if(strncmp(mapName,"Sk-",3) == 0)
 		{
-			strlcpy(mapStr, &(mapName[3]), sizeof(mapStr));
-			strlcpy(mapName, mapStr, sizeof(mapName));
+			sstrcpy(mapStr, &(mapName[3]));
+			sstrcpy(mapName, mapStr);
 		}
 
 		snprintf(mapStr, sizeof(mapStr), "%dc-%s.wz", game.maxPlayers, mapName);
 		snprintf(fixedname, sizeof(fixedname), "maps/%s", mapStr);		//We know maps are in /maps dir...now. fix for linux -Q
-		strlcpy(mapStr, fixedname, sizeof(mapStr));
+		sstrcpy(mapStr, fixedname);
 		NETsendFile(true,mapStr,0);
 	}
 
@@ -1897,8 +1897,8 @@ static BOOL recvBeacon(void)
 
 	debug(LOG_WZ, "Received beacon for player: %d, from: %d",receiver, sender);
 
-	strlcat(msg, NetPlay.players[sender].name, sizeof(msg));    // name
-	strlcpy(beaconReceiveMsg[sender], msg, sizeof(beaconReceiveMsg[sender]));
+	sstrcat(msg, NetPlay.players[sender].name);    // name
+	sstrcpy(beaconReceiveMsg[sender], msg);
 
 	return addBeaconBlip(locX, locY, receiver, sender, beaconReceiveMsg[sender]);
 }

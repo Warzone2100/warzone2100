@@ -264,8 +264,8 @@ static bool init(const char *definition, const char *datafile, bool write)
 	tag_error = false;
 	line = 1;
 	fp = PHYSFS_openRead(definition);
-	strlcpy(saveDefine, definition, sizeof(saveDefine));
-	strlcpy(saveTarget, datafile, sizeof(saveTarget));
+	sstrcpy(saveDefine, definition);
+	sstrcpy(saveTarget, datafile);
 	if (!fp)
 	{
 		TF_ERROR("Error opening definition file %s: %s", definition, PHYSFS_getLastError());

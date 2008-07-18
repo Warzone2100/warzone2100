@@ -89,7 +89,7 @@ void resShutDown(void)
 // set the base resource directory
 void resSetBaseDir(const char* pResDir)
 {
-	strlcpy(aResDir, pResDir, sizeof(aResDir));
+	sstrcpy(aResDir, pResDir);
 }
 
 /* Parse the res file */
@@ -98,7 +98,7 @@ BOOL resLoad(const char *pResFile, SDWORD blockID)
 	bool retval = true;
 	lexerinput_t input;
 
-	strlcpy(aCurrResDir, aResDir, sizeof(aCurrResDir));
+	sstrcpy(aCurrResDir, aResDir);
 
 	// Note the block id number
 	resBlockID = blockID;
@@ -152,9 +152,9 @@ static RES_TYPE* resAlloc(const char *pType)
 	}
 
 	// setup the structure
-	strlcpy(psT->aType, pType, sizeof(psT->aType));
+	sstrcpy(psT->aType, pType);
 
-	psT->HashedType=HashString(psT->aType);		// store a hased version for super speed !
+	psT->HashedType = HashString(psT->aType); // store a hased version for super speed !
 
 	psT->psRes = NULL;
 
@@ -236,7 +236,7 @@ const char *GetLastResourceFilename(void)
  */
 void SetLastResourceFilename(const char *pName)
 {
-	strlcpy(LastResourceFilename, pName, sizeof(LastResourceFilename));
+	sstrcpy(LastResourceFilename, pName);
 }
 
 
@@ -382,7 +382,7 @@ static void makeLocaleFile(char fileName[])  // given string must have MAX_PATH 
 
 	if ( PHYSFS_exists(localeFile) )
 	{
-		strlcpy(fileName, localeFile, sizeof(localeFile));
+		sstrcpy(fileName, localeFile);
 		debug(LOG_WZ, "Found translated file: %s", fileName);
 	}
 #endif // ENABLE_NLS
@@ -438,8 +438,8 @@ BOOL resLoadFile(const char *pType, const char *pFile)
 		debug(LOG_ERROR, "resLoadFile: Filename too long!! %s%s", aCurrResDir, pFile);
 		return false;
 	}
-	strlcpy(aFileName, aCurrResDir, sizeof(aFileName));
-	strlcat(aFileName, pFile, sizeof(aFileName));
+	sstrcpy(aFileName, aCurrResDir);
+	sstrcat(aFileName, pFile);
 
 	makeLocaleFile(aFileName);  // check for translated file
 
