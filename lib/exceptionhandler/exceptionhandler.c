@@ -405,7 +405,7 @@ static void posixExceptionHandler(int signum, siginfo_t * siginfo, WZ_DECL_UNUSE
 	int gdbPipe[2] = {0}, dumpFile = open(gdmpPath, O_WRONLY|O_CREAT|O_TRUNC, S_IRUSR|S_IWUSR);
 
 
-	if (!dumpFile)
+	if (dumpFile == -1)
 	{
 		printf("Failed to create dump file '%s'", gdmpPath);
 		return;
@@ -519,15 +519,18 @@ static void posixExceptionHandler(int signum, siginfo_t * siginfo, WZ_DECL_UNUSE
  */
 void setupExceptionHandler(const char * programCommand)
 {
-#if defined(WZ_OS_WIN)
+#if !defined(WZ_OS_MAC)
+	// Initialize info required for the debug dumper
 	dbgDumpInit(programCommand);
+#endif
+
+#if defined(WZ_OS_WIN)
 # if defined(WZ_CC_MINGW)
 	ExchndlSetup();
 # else
 	prevExceptionHandler = SetUnhandledExceptionFilter(windowsExceptionHandler);
 # endif // !defined(WZ_CC_MINGW)
 #elif defined(WZ_OS_UNIX) && !defined(WZ_OS_MAC)
-	dbgDumpInit(programCommand);
 	// Prepare 'which' command for popen
 	char whichProgramCommand[PATH_MAX] = {'\0'};
 	snprintf( whichProgramCommand, PATH_MAX, "which %s", programCommand );
