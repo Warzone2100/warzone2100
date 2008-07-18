@@ -322,10 +322,10 @@ void _realObjTrace(int id, const char *function, const char *str, ...)
 	va_list ap;
 
 	va_start(ap, str);
-	vsnprintf(vaBuffer, MAX_LEN_LOG_LINE, str, ap);
+	vssprintf(vaBuffer, str, ap);
 	va_end(ap);
 
-	snprintf(outputBuffer, MAX_LEN_LOG_LINE, "[%6d]: [%s] %s", id, function, vaBuffer);
+	ssprintf(outputBuffer, "[%6d]: [%s] %s", id, function, vaBuffer);
 	while (curCallback)
 	{
 		curCallback->callback(&curCallback->data, outputBuffer);
@@ -343,19 +343,20 @@ void _debug( code_part part, const char *function, const char *str, ... )
 	static unsigned int prev = 0;     /* total on last update */
 
 	va_start(ap, str);
-	vsnprintf(outputBuffer, MAX_LEN_LOG_LINE, str, ap);
+	vssprintf(outputBuffer, str, ap);
 	va_end(ap);
 
-	snprintf(inputBuffer[useInputBuffer1 ? 1 : 0], MAX_LEN_LOG_LINE, "[%s] %s", function, outputBuffer);
+	ssprintf(inputBuffer[useInputBuffer1 ? 1 : 0], "[%s] %s", function, outputBuffer);
 
-	if ( strncmp( inputBuffer[0], inputBuffer[1], MAX_LEN_LOG_LINE - 1 ) == 0 ) {
+	if (sstrcmp(inputBuffer[0], inputBuffer[1]) == 0)
+	{
 		// Received again the same line
 		repeated++;
 		if (repeated == next) {
 			if (repeated > 2) {
-				snprintf( outputBuffer, sizeof(outputBuffer), "last message repeated %u times (total %u repeats)", repeated - prev, repeated );
+				ssprintf(outputBuffer, "last message repeated %u times (total %u repeats)", repeated - prev, repeated);
 			} else {
-				snprintf( outputBuffer, sizeof(outputBuffer), "last message repeated %u times", repeated - prev );
+				ssprintf(outputBuffer, "last message repeated %u times", repeated - prev);
 			}
 			while (curCallback) {
 				curCallback->callback( &curCallback->data, outputBuffer );
@@ -370,9 +371,9 @@ void _debug( code_part part, const char *function, const char *str, ... )
 		if (repeated > 0 && repeated != prev && repeated != 1) {
 			/* just repeat the previous message when only one repeat occurred */
 			if (repeated > 2) {
-				snprintf( outputBuffer, sizeof(outputBuffer), "last message repeated %u times (total %u repeats)", repeated - prev, repeated );
+				ssprintf(outputBuffer, "last message repeated %u times (total %u repeats)", repeated - prev, repeated);
 			} else {
-				snprintf( outputBuffer, sizeof(outputBuffer), "last message repeated %u times", repeated - prev );
+				ssprintf(outputBuffer, "last message repeated %u times", repeated - prev);
 			}
 			while (curCallback)
 			{
@@ -389,7 +390,7 @@ void _debug( code_part part, const char *function, const char *str, ... )
 	if (!repeated)
 	{
 		// Assemble the outputBuffer:
-		snprintf( outputBuffer, MAX_LEN_LOG_LINE, "%-8s|%012u: %s", code_part_names[part], gameTime, useInputBuffer1 ? inputBuffer[1] : inputBuffer[0] );
+		ssprintf(outputBuffer, "%-8s|%012u: %s", code_part_names[part], gameTime, useInputBuffer1 ? inputBuffer[1] : inputBuffer[0]);
 
 		while (curCallback) {
 			curCallback->callback( &curCallback->data, outputBuffer );
