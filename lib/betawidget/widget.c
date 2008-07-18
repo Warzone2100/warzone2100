@@ -185,6 +185,9 @@ void widgetInit(widget *self, const char *id)
 	self->cr = NULL;
 	widgetCairoCreate(&self->cr, CAIRO_FORMAT_ARGB32, 0, 0);
 
+	// Ask OpenGL for a texture id
+	glGenTextures(1, &self->textureId);
+	
 	// Focus and mouse are false by default
 	self->hasFocus = false;
 	self->hasMouse = false;
@@ -212,6 +215,9 @@ void widgetDestroyImpl(widget *self)
 	// Destroy the cairo context
 	cairo_destroy(self->cr);
 
+	// Destroy the texture
+	glDeleteTextures(1, &self->textureId);
+	
 	// If we use a mask, destroy it
 	if (self->maskEnabled)
 	{
@@ -235,6 +241,8 @@ void widgetDraw(widget *self)
 	// See if we need to be redrawn
 	if (self->needsRedraw)
 	{
+		void *bits = cairo_image_surface_get_data(cairo_get_target(self->cr));
+		
 		self->needsRedraw = false;
 		
 		// Clear the current context
@@ -247,6 +255,12 @@ void widgetDraw(widget *self)
 		
 		// Redaw ourself
 		widgetDoDraw(self);
+		
+		// Update the texture
+		glBindTexture(GL_TEXTURE_RECTANGLE_ARB, self->textureId);
+		
+		glTexImage2D(GL_TEXTURE_RECTANGLE_ARB, 0, GL_RGBA, self->size.x,
+		             self->size.y, 0, GL_BGRA, GL_UNSIGNED_BYTE, bits);
 	}
 
 	// Draw our children (even if we did not need redrawing our children might)
@@ -706,29 +720,40 @@ void widgetResizeImpl(widget *self, int w, int h)
 	}
 }
 
-void widgetCompositeImpl(widget *self, cairo_t *comp)
+void widgetCompositeImpl(widget *self)
 {
 	int i;
 	
 	// Composite ourself
-	cairo_set_source_surface(comp, cairo_get_target(self->cr), 0, 0);
-	cairo_paint(comp);
+	glBindTexture(GL_TEXTURE_RECTANGLE_ARB, self->textureId);
+	
+	glBegin(GL_QUADS);
+		glTexCoord2f(0, 0);
+		glVertex2f(0, 0);
+		
+		glTexCoord2f(0, self->size.y);
+		glVertex2f(0, self->size.y);
+		
+		glTexCoord2f(self->size.x, self->size.y);
+		glVertex2f(self->size.x, self->size.y);
+		
+		glTexCoord2f(self->size.x, 0);
+		glVertex2f(self->size.x, 0);
+	glEnd();
 
 	// Now our children
 	for (i = 0; i < vectorSize(self->children); i++)
 	{
 		widget *child = vectorAt(self->children, i);
-		cairo_matrix_t current;
 		
-		// Translate such that (0,0) is the location of the widget
-		cairo_get_matrix(comp, &current);
-		cairo_translate(comp, child->offset.x, child->offset.y);
+		// Translate such that (0,0) is the top-left of the widget
+		glTranslatef(child->offset.x, child->offset.y, 0);
 		
 		// Composite
-		widgetComposite(child, comp);
+		widgetComposite(child);
 		
 		// Restore the matrix
-		cairo_set_matrix(comp, &current);
+		glTranslatef(-child->offset.x, -child->offset.y, 0);
 	}
 }
 
@@ -1038,9 +1063,9 @@ void widgetResize(widget *self, int x, int y)
 	WIDGET_GET_VTBL(self)->resize(self, x, y);
 }
 
-void widgetComposite(widget *self, cairo_t *comp)
+void widgetComposite(widget *self)
 {
-	WIDGET_GET_VTBL(self)->composite(self, comp);
+	WIDGET_GET_VTBL(self)->composite(self);
 }
 
 void widgetDoDraw(widget *self)

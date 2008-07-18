@@ -8,6 +8,9 @@
 
 #include <cairo.h>
 
+#include <GL/gl.h>
+#include <GL/glu.h>
+
 #include "vector.h"
 #include "geom.h"
 
@@ -229,7 +232,7 @@ struct _widgetVtbl
 	
 	void    (*resize)                       (widget *self, int x, int y);
 	
-	void    (*composite)                    (widget *self, cairo_t *comp);
+	void    (*composite)                    (widget *self);
 
 	void    (*doDraw)                       (widget *self);
 	void	(*doDrawMask)                   (widget *self);
@@ -272,6 +275,11 @@ struct _widget
 	 * The widgets cairo drawing context
 	 */
 	cairo_t *cr;
+	
+	/*
+	 * The id of the OpenGL texture to which self->cr is mapped
+	 */
+	GLuint textureId;
 	
 	/*
 	 * The widgets mouse-event mask
@@ -366,7 +374,7 @@ void widgetFocusImpl(widget *self);
 void widgetBlurImpl(widget *self);
 void widgetResizeImpl(widget *self, int w, int h);
 bool widgetHandleEventImpl(widget *self, event *evt);
-void widgetCompositeImpl(widget *self, cairo_t *comp);
+void widgetCompositeImpl(widget *self);
 
 /*
  * Public static methods
@@ -396,7 +404,7 @@ void widgetDraw(widget *self);
 /**
  * TODO
  */
-void widgetComposite(widget *self, cairo_t *comp);
+void widgetComposite(widget *self);
 
 /**
  * Enables the widgets mask.
