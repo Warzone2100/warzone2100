@@ -461,10 +461,23 @@ static void posixExceptionHandler(int signum, siginfo_t * siginfo, WZ_DECL_UNUSE
 			}
 			else if (pid > (pid_t)0)
 			{
+				                                  // Retrieve a full stack backtrace
+				static const char gdbCommands[] = "backtrace full\n"
+
+				                                  // Move to the stack frame where we triggered the crash
+				                                  "frame 3\n"
+
+								  // Show the assembly code associated with that stack frame
+				                                  "disassemble\n"
+
+								  // Show the content of all registers
+				                                  "info registers\n"
+				                                  "quit\n";
+
 				close(gdbPipe[0]); // No input from pipe
 
-				write(gdbPipe[1], "backtrace full\n" "quit\n",
-					  strlen("backtrace full\n" "quit\n"));
+				write(gdbPipe[1], gdbCommands,
+					  sizeof(gdbCommands));
 
 				if (waitpid(pid, NULL, 0) < 0)
 				{
@@ -517,11 +530,11 @@ static void posixExceptionHandler(int signum, siginfo_t * siginfo, WZ_DECL_UNUSE
  *
  * \param programCommand Command used to launch this program. Only used for POSIX handler.
  */
-void setupExceptionHandler(const char * programCommand)
+void setupExceptionHandler(int argc, char * argv[])
 {
 #if !defined(WZ_OS_MAC)
 	// Initialize info required for the debug dumper
-	dbgDumpInit(programCommand);
+	dbgDumpInit(argc, argv);
 #endif
 
 #if defined(WZ_OS_WIN)
@@ -531,6 +544,8 @@ void setupExceptionHandler(const char * programCommand)
 	prevExceptionHandler = SetUnhandledExceptionFilter(windowsExceptionHandler);
 # endif // !defined(WZ_CC_MINGW)
 #elif defined(WZ_OS_UNIX) && !defined(WZ_OS_MAC)
+	const char * const programCommand = argv[0];
+
 	// Prepare 'which' command for popen
 	char whichProgramCommand[PATH_MAX] = {'\0'};
 	snprintf( whichProgramCommand, PATH_MAX, "which %s", programCommand );
