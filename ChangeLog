@@ -6,6 +6,7 @@
    * New: A 'Ready' button that all players must press in order to start a multiplayer game.
    * Change: Game speed is limited to 0.3-1.5 range in non-debug mode.
    * Change: 'ENTER' key is now the default key for bringing up the chat dialog instead of 'T' (key configuration must be reset in the 'Key Mappings' dialog).
+   * Change: All sources and data from the "original" release ("original" here means the open sourcing in december 2004) are now explicitly released under the conditions of the GPL; either version 2, or (at your option) any later version of this license.
    * Fix: Game won't crash when commander units are used.
    * Fix: Placing a beacon on map will not result in memory corruption and a crash anymore. (bugs #10955, #11373, and #11005)
    * Fix: Invalid group orders during multiplayer games are ignored. (bug #11358)
@@ -33,6 +34,18 @@
  * Sound:
    * New: A sound is played and a notification is shown on the console when placing a beacon on the map. F12 key can be used to jump to the beacon location.
    * Change: Oil pumping and power generator hum sounds are quieter.
+   * Fix: Game crashes with SIGABRT when starting mission beta 1 (bug #11580)
+   * Fix: Doesn't disconnect from server port when stopping the game before it starts again (bug #11656)
+   * Fix: Fix GUI crash when loading a specific savegame twice in a row.
+   * Fix: Several memory leaks fixed.
+   * Fix: Bad textures after third load of saved game (bug #11641)
+   * Fix: Rearming non-weapon VTOLs (e.g. sensor, constructor, etc.) causes the game to crash (bug #11865)
+   * Workaround: Crash on first level of campaign (bug #11659)
+   * Workaround: Remove assert check triggered in structure.c (bug #11984; currently still not fully solved)
+ * GUI:
+   * Change: Add proper icons for the 'ready' buttons in the multiplayer/skirmish lobby.
+   * Fix: Fix tooltip for the circle order. Used to read 'patrol'.
+   * Fix: Crash when opening any of the research/manufacture/construct menus in game (bugs #11669 and #12036)
  * Gameplay:
    * New: Prevent structure 'painting' exploit by making unfinished structures return power with time and disappear when all power was given back. (patch #1030)
    * New: Units gain speed increase with experience. (patch #906)
@@ -43,6 +56,15 @@
    * Fix: Rocket Autoloader research does not appear before lancer is researched and has "HEAT Rocket Warhead" as a prerequisite, instead of "HEAP Mini-Rockets". (bug #11312)
    * Fix: When cheating is on AIs get power boost on client's machines too.
    * Fix: VTOLs did not move over water. (bug #11638)
+ * Multiplayer (non-skirmish only):
+   * Change: Make sure that packet size is turned into big endian before we send it. This allows games between big (e.g. PowerPC) and little (e.g. Intel/AMD) endian machines, but breaks network compatibility with previous versions.
+   * Fix: When three players join the multiplayer lobby dialog, one drops (bug #11829)
+   * Fix: "Randomly" exploding droids.
+ * Exception handler (aka crash dumper):
+   * New: Provide assembly and register dumps of the crash site.
+   * New: Add PhysicsFS version information to dumps.
+   * New: Add the used command line to dumps.
+   * New: Dump up to 20 of the last output debug messages.
  * Balancing (Multiplayer Only):
    * Change: Tank Killer now fires four projectiles instead of two, total firepower is unaffected.
    * Change: AA Projectiles fly faster which increases accuracy.
@@ -77,6 +99,7 @@
    * Fix: A beacon is always placed on map before initializing a command.
    * Fix: Several Aivolution AIs sending chat messages at the same time will not result in an infinite loop anymore.
    * Fix: Undefended enemy derricks will now be properly attacked with defenses by trucks.
+   * Fix: Crash when starting skirmish game with aivolution (bug #11930)
  * Mods:
    * Change: We no longer use zones for path-finding. If they are present in the map file, they will be ignored. Gateways are only used by AI.
 
