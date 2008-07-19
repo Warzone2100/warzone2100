@@ -276,44 +276,6 @@ BOOL debug_enable_switch(const char *str)
 	return (part != LOG_LAST);
 }
 
-/* Dump last two debug log calls into file descriptor. For exception handler. */
-#if defined(WZ_OS_WIN)
-static inline void dumpstr(HANDLE file, const char* str)
-{
-	DWORD lNumberOfBytesWritten;
-	WriteFile(file, str, strnlen1(str, MAX_LEN_LOG_LINE) - 1, &lNumberOfBytesWritten, NULL);
-}
-static inline void dumpEOL(HANDLE file)
-{
-	DWORD lNumberOfBytesWritten;
-	WriteFile(file, "\r\n", strlen("\r\n"), &lNumberOfBytesWritten, NULL);
-}
-#else
-static inline void dumpstr(int file, const char* str)
-{
-	write(file, str, strnlen1(str, MAX_LEN_LOG_LINE) - 1);
-}
-static inline void dumpEOL(int file)
-{
-	write(file, "\n", strlen("\n"));
-}
-#endif
-
-#if defined(WZ_OS_WIN)
-void dumpLog(HANDLE file)
-#else
-void dumpLog(int file)
-#endif
-{
-	dumpstr(file, "Log message 1: ");
-	dumpstr(file, inputBuffer[0]);
-	dumpEOL(file);
-	dumpstr(file, "Log message 2: ");
-	dumpstr(file, inputBuffer[1]);
-	dumpEOL(file);
-	dumpEOL(file);
-}
-
 /** Send the given string to all debug callbacks.
  *
  *  @param str The string to send to debug callbacks.
