@@ -36,9 +36,9 @@
 
 typedef struct TREAP_NODE
 {
-	void                            *key;                   //< The key to sort the node on
+	const char*                     key;                    //< The key to sort the node on
 	unsigned int                    priority;               //< Treap priority
-	void                            *pObj;                  //< The object stored in the treap
+	struct STR_ID*                  pObj;                   //< The object stored in the treap
 	struct TREAP_NODE               *psLeft, *psRight;      //< The sub trees
 
 #ifdef DEBUG_TREAP
@@ -51,7 +51,6 @@ typedef struct TREAP_NODE
 /** Treap data structure */
 typedef struct TREAP
 {
-	TREAP_CMP                       cmp;                    ///< comparison function
 	TREAP_NODE                      *psRoot;                ///< root of the tree
 
 #ifdef DEBUG_TREAP
@@ -76,13 +75,11 @@ void treapSetCallPos(const char* fileName, int lineNumber)
 }
 
 /* A useful comparison function - keys are char pointers */
-int treapStringCmp(const void *key1, const void *key2)
+static int treapStringCmp(const char *key1, const char *key2)
 {
 	int result;
-	const char *pStr1 = (const char *)key1;
-	const char *pStr2 = (const char *)key2;
 
-	result = strcmp(pStr1, pStr2);
+	result = strcmp(key1, key2);
 	if      (result < 0)
 		return -1;
 	else if (result > 0)
@@ -92,7 +89,7 @@ int treapStringCmp(const void *key1, const void *key2)
 }
 
 
-BOOL treapCreate(TREAP **ppsTreap, TREAP_CMP cmp)
+BOOL treapCreate(TREAP **ppsTreap)
 {
 	*ppsTreap = (TREAP*)malloc(sizeof(TREAP));
 	if (!(*ppsTreap))
@@ -101,10 +98,6 @@ BOOL treapCreate(TREAP **ppsTreap, TREAP_CMP cmp)
 		abort();
 		return false;
 	}
-
-	// Store the comparison function if there is one, use the default otherwise
-	ASSERT(cmp != NULL, "No node comparison function provided");
-	(*ppsTreap)->cmp = cmp;
 
 	// Initialise the tree to nothing
 	(*ppsTreap)->psRoot = NULL;
@@ -144,17 +137,17 @@ static void treapRotLeft(TREAP_NODE **ppsRoot)
 }
 
 /* Recursive function to add an object to a tree */
-static void treapAddNode(TREAP_NODE **ppsRoot, TREAP_NODE *psNew, TREAP_CMP cmp)
+static void treapAddNode(TREAP_NODE **ppsRoot, TREAP_NODE *psNew)
 {
 	if (*ppsRoot == NULL)
 	{
 		// Make the node the root of the tree
 		*ppsRoot = psNew;
 	}
-	else if (cmp(psNew->key, (*ppsRoot)->key) < 0)
+	else if (treapStringCmp(psNew->key, (*ppsRoot)->key) < 0)
 	{
 		// Node less than root, insert to the left of the tree
-		treapAddNode(&(*ppsRoot)->psLeft, psNew, cmp);
+		treapAddNode(&(*ppsRoot)->psLeft, psNew);
 
 		// Sort the priority
 		if ((*ppsRoot)->priority > (*ppsRoot)->psLeft->priority)
@@ -166,7 +159,7 @@ static void treapAddNode(TREAP_NODE **ppsRoot, TREAP_NODE *psNew, TREAP_CMP cmp)
 	else
 	{
 		// Node greater than root, insert to the right of the tree
-		treapAddNode(&(*ppsRoot)->psRight, psNew, cmp);
+		treapAddNode(&(*ppsRoot)->psRight, psNew);
 
 		// Sort the priority
 		if ((*ppsRoot)->priority > (*ppsRoot)->psRight->priority)
@@ -180,7 +173,7 @@ static void treapAddNode(TREAP_NODE **ppsRoot, TREAP_NODE *psNew, TREAP_CMP cmp)
 
 /* Add an object to a treap
  */
-BOOL treapAdd(TREAP *psTreap, void *key, void *pObj)
+BOOL treapAdd(TREAP *psTreap, const char *key, struct STR_ID* pObj)
 {
 	TREAP_NODE* psNew = malloc(sizeof(TREAP_NODE));
 
@@ -200,13 +193,13 @@ BOOL treapAdd(TREAP *psTreap, void *key, void *pObj)
 	psNew->line = cLine;
 #endif
 
-	treapAddNode(&psTreap->psRoot, psNew, psTreap->cmp);
+	treapAddNode(&psTreap->psRoot, psNew);
 
 	return true;
 }
 
 /* Recursively find and remove a node from the tree */
-static TREAP_NODE *treapDelRec(TREAP_NODE **ppsRoot, void *key, TREAP_CMP cmp)
+static TREAP_NODE *treapDelRec(TREAP_NODE **ppsRoot, const char *key)
 {
 	TREAP_NODE	*psFound;
 
@@ -216,15 +209,15 @@ static TREAP_NODE *treapDelRec(TREAP_NODE **ppsRoot, void *key, TREAP_CMP cmp)
 		return NULL;
 	}
 
-	switch (cmp(key, (*ppsRoot)->key))
+	switch (treapStringCmp(key, (*ppsRoot)->key))
 	{
 	case -1:
 		// less than
-		return treapDelRec(&(*ppsRoot)->psLeft, key, cmp);
+		return treapDelRec(&(*ppsRoot)->psLeft, key);
 		break;
 	case 1:
 		// greater than
-		return treapDelRec(&(*ppsRoot)->psRight, key, cmp);
+		return treapDelRec(&(*ppsRoot)->psRight, key);
 		break;
 	case 0:
 		// equal - either remove or push down the tree to balance it
@@ -256,13 +249,13 @@ static TREAP_NODE *treapDelRec(TREAP_NODE **ppsRoot, void *key, TREAP_CMP cmp)
 			{
 				// rotate right and recurse
 				treapRotLeft(ppsRoot);
-				return treapDelRec(&(*ppsRoot)->psLeft, key, cmp);
+				return treapDelRec(&(*ppsRoot)->psLeft, key);
 			}
 			else
 			{
 				// rotate left and recurse
 				treapRotRight(ppsRoot);
-				return treapDelRec(&(*ppsRoot)->psRight, key, cmp);
+				return treapDelRec(&(*ppsRoot)->psRight, key);
 			}
 		}
 		break;
@@ -275,12 +268,12 @@ static TREAP_NODE *treapDelRec(TREAP_NODE **ppsRoot, void *key, TREAP_CMP cmp)
 
 
 /* Remove an object from the treap */
-BOOL treapDel(TREAP *psTreap, void *key)
+BOOL treapDel(TREAP *psTreap, const char *key)
 {
 	TREAP_NODE	*psDel;
 
 	// Find the node to remove
-	psDel = treapDelRec(&psTreap->psRoot, key, psTreap->cmp);
+	psDel = treapDelRec(&psTreap->psRoot, key);
 	if (!psDel)
 	{
 		return false;
@@ -293,24 +286,24 @@ BOOL treapDel(TREAP *psTreap, void *key)
 
 
 /* Recursively find an object in a treap */
-static void *treapFindRec(TREAP_NODE *psRoot, const void *key, TREAP_CMP cmp)
+static struct STR_ID* treapFindRec(TREAP_NODE *psRoot, const char *key)
 {
 	if (psRoot == NULL)
 	{
 		return NULL;
 	}
 
-	switch (cmp(key, psRoot->key))
+	switch (treapStringCmp(key, psRoot->key))
 	{
 	case 0:
 		// equal
 		return psRoot->pObj;
 		break;
 	case -1:
-		return treapFindRec(psRoot->psLeft, key, cmp);
+		return treapFindRec(psRoot->psLeft, key);
 		break;
 	case 1:
-		return treapFindRec(psRoot->psRight, key, cmp);
+		return treapFindRec(psRoot->psRight, key);
 		break;
 	default:
 		ASSERT( false, "treapFindRec: invalid return from comparison" );
@@ -321,9 +314,9 @@ static void *treapFindRec(TREAP_NODE *psRoot, const void *key, TREAP_CMP cmp)
 
 
 /* Find an object in a treap */
-void *treapFind(TREAP *psTreap, const void *key)
+struct STR_ID* treapFind(TREAP *psTreap, const char *key)
 {
-	return treapFindRec(psTreap->psRoot, key, psTreap->cmp);
+	return treapFindRec(psTreap->psRoot, key);
 }
 
 
@@ -373,7 +366,7 @@ void treapDestroy(TREAP *psTreap)
 	free(psTreap);
 }
 
-static void *treapGetSmallestRec(TREAP_NODE *psRoot)
+static struct STR_ID* treapGetSmallestRec(TREAP_NODE *psRoot)
 {
 	if (psRoot->psLeft == NULL)
 	{
@@ -388,7 +381,7 @@ static void *treapGetSmallestRec(TREAP_NODE *psRoot)
  * This is useful if the objects in the treap need to be
  * deallocated.  i.e. getSmallest, delete from treap, free memory
  */
-void *treapGetSmallest(TREAP *psTreap)
+struct STR_ID* treapGetSmallest(TREAP *psTreap)
 {
 	if (psTreap->psRoot == NULL)
 	{

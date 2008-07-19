@@ -40,15 +40,9 @@
 #endif
 
 
-/* Function type for the object compare
- * return -1 for less
- *         1 for more
- *         0 for equal
- */
-typedef int (*TREAP_CMP)(const void *key1, const void *key2);
-
-/// Forward declaration to allow pointers to this type
+/// Forward declarations to allow pointers to these types
 struct TREAP;
+struct STR_ID;
 
 /****************************************************************************************/
 /*                           Function Protoypes                                         */
@@ -64,27 +58,23 @@ struct TREAP;
  */
 extern void treapSetCallPos(const char* fileName, int lineNumber);
 
-/* Function type for object equality */
-//typedef BOOL (*TREAP_EQUAL)(void *pObj1, void *pObj2);
-
 /**
  * Function to create a treap
  *
  * \param	ppsTreap	out-parameter which holds the created treap
- * \param	cmp			comparison function to use
  * \return true, if the treap creation was successfull
  */
-extern BOOL treapCreate(struct TREAP **ppsTreap, TREAP_CMP cmp);
+extern BOOL treapCreate(struct TREAP **ppsTreap);
 
 /* Add an object to a treap
  */
-extern BOOL treapAdd(struct TREAP *psTreap, void *key, void *pObj);
+extern BOOL treapAdd(struct TREAP *psTreap, const char *key, struct STR_ID* pObj);
 
 /* Remove an object from the treap */
-extern BOOL treapDel(struct TREAP *psTreap, void *key);
+extern BOOL treapDel(struct TREAP *psTreap, const char *key);
 
 /* Find an object in a treap */
-extern void *treapFind(struct TREAP *psTreap, const void *key);
+extern struct STR_ID* treapFind(struct TREAP *psTreap, const char *key);
 
 /* Destroy a treap and release all the memory associated with it */
 extern void treapDestroy(struct TREAP *psTreap);
@@ -93,13 +83,7 @@ extern void treapDestroy(struct TREAP *psTreap);
  * This is useful if the objects in the treap need to be
  * deallocated.  i.e. getSmallest, delete from treap, free memory
  */
-extern void *treapGetSmallest(struct TREAP *psTreap);
-
-/****************************************************************************************/
-/*                            Comparison Functions                                      */
-
-/* A useful comparison function - keys are char pointers */
-extern int treapStringCmp(const void *key1, const void *key2);
+extern struct STR_ID* treapGetSmallest(struct TREAP *psTreap);
 
 /****************************************************************************************/
 /*                            Macro definitions                                         */
@@ -107,9 +91,9 @@ extern int treapStringCmp(const void *key1, const void *key2);
 #ifdef DEBUG_TREAP
 
 // debugging versions of the TREAP calls
-#define TREAP_CREATE(ppsTreap, cmp) \
+#define TREAP_CREATE(ppsTreap) \
 	(treapSetCallPos(__FILE__, __LINE__), \
-	 treapCreate(ppsTreap, cmp))
+	 treapCreate(ppsTreap))
 
 #define TREAP_ADD(psTreap, key, pObject) \
 	(treapSetCallPos(__FILE__, __LINE__), \
@@ -118,8 +102,8 @@ extern int treapStringCmp(const void *key1, const void *key2);
 #else
 
 // release versions of the TREAP calls
-#define TREAP_CREATE(ppsTreap, cmp) \
-	 treapCreate(ppsTreap, cmp)
+#define TREAP_CREATE(ppsTreap) \
+	 treapCreate(ppsTreap)
 
 #define TREAP_ADD(psTreap, key, pObject) \
 	 treapAdd(psTreap, key, pObject)

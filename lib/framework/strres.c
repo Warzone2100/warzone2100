@@ -92,7 +92,7 @@ BOOL strresCreate(STR_RES **ppsRes, UDWORD init, UDWORD ext)
 	psRes->ext = ext;
 	psRes->nextID = 0;
 
-	if (!TREAP_CREATE(&psRes->psIDTreap, treapStringCmp))
+	if (!TREAP_CREATE(&psRes->psIDTreap))
 	{
 		debug( LOG_ERROR, "strresCreate: Out of memory" );
 		abort();
@@ -126,10 +126,10 @@ static void strresReleaseIDStrings(STR_RES *psRes)
 	ASSERT( psRes != NULL,
 		"strresReleaseIDStrings: Invalid string res pointer" );
 
-	for(psID = (STR_ID*)treapGetSmallest(psRes->psIDTreap); psID;
-		psID = (STR_ID*)treapGetSmallest(psRes->psIDTreap))
+	for(psID = treapGetSmallest(psRes->psIDTreap); psID;
+		psID = treapGetSmallest(psRes->psIDTreap))
 	{
-		treapDel(psRes->psIDTreap, (void*)psID->pIDStr);
+		treapDel(psRes->psIDTreap, psID->pIDStr);
 		if (psID->id & ID_ALLOC)
 		{
 			free(psID->pIDStr);
@@ -196,7 +196,7 @@ BOOL strresGetIDNum(STR_RES *psRes, const char *pIDStr, UDWORD *pIDNum)
 	ASSERT( psRes != NULL,
 		"strresGetIDNum: Invalid string res pointer" );
 
-	psID = (STR_ID*)treapFind(psRes->psIDTreap, pIDStr);
+	psID = treapFind(psRes->psIDTreap, pIDStr);
 	if (!psID)
 	{
 		*pIDNum = 0;
@@ -216,7 +216,7 @@ BOOL strresGetIDString(STR_RES *psRes, const char *pIDStr, char **ppStoredID)
 
 	ASSERT( psRes != NULL, "strresGetIDString: Invalid string res pointer" );
 
-	psID = (STR_ID*)treapFind(psRes->psIDTreap, pIDStr);
+	psID = treapFind(psRes->psIDTreap, pIDStr);
 	if (!psID)
 	{
 		*ppStoredID = NULL;
@@ -240,11 +240,11 @@ BOOL strresStoreString(STR_RES *psRes, char *pID, const char *pString)
 		"strresStoreString: Invalid string res pointer" );
 
 	// Find the id for the string
-	psID = (STR_ID*)treapFind(psRes->psIDTreap, (void*)pID);
+	psID = treapFind(psRes->psIDTreap, pID);
 	if (!psID)
 	{
 		// No ID yet so generate a new one
-		psID = (STR_ID*)malloc(sizeof(STR_ID));
+		psID = (STR_ID*)malloc(sizeof(*psID));
 		if (!psID)
 		{
 			debug( LOG_ERROR, "strresStoreString: Out of memory" );
@@ -261,7 +261,7 @@ BOOL strresStoreString(STR_RES *psRes, char *pID, const char *pString)
 		}
 		psID->id = psRes->nextID | ID_ALLOC;
 		psRes->nextID += 1;
-		TREAP_ADD(psRes->psIDTreap, (void*)psID->pIDStr, psID);
+		TREAP_ADD(psRes->psIDTreap, psID->pIDStr, psID);
 	}
 
 	// Remove the ID_ALLOC bit
@@ -393,6 +393,3 @@ UDWORD strresGetIDfromString(STR_RES *psRes, const char *pString)
 	}
 	return 0;
 }
-
-
-

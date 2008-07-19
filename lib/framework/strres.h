@@ -37,7 +37,7 @@ typedef struct _str_block
 } STR_BLOCK;
 
 /* An ID entry */
-typedef struct _str_id
+typedef struct STR_ID
 {
 	UDWORD	id;
 	char	*pIDStr;
@@ -75,4 +75,3 @@ extern BOOL strresLoad(STR_RES* psRes, const char* fileName);
 extern UDWORD strresGetIDfromString(STR_RES *psRes, const char *pString);
 
 #endif
-
