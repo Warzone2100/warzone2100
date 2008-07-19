@@ -648,7 +648,7 @@ int widgGetNumTabMajor(W_SCREEN *psScreen, UDWORD id)
 {
 	W_TABFORM * const psForm = widgGetTabbedFormById(psScreen, id);
 
-	ASSERT(psForm == NULL, "Couldn't find a tabbed form with ID %u", id);
+	ASSERT(psForm != NULL, "Couldn't find a tabbed form with ID %u", id);
 	if (psForm == NULL)
 	{
 		return 0;
@@ -662,7 +662,7 @@ int widgGetNumTabMinor(W_SCREEN *psScreen, UDWORD id, UWORD pMajor)
 {
 	W_TABFORM * const psForm = widgGetTabbedFormById(psScreen, id);
 
-	ASSERT(psForm == NULL, "Couldn't find a tabbed form with ID %u", id);
+	ASSERT(psForm != NULL, "Couldn't find a tabbed form with ID %u", id);
 	if (psForm == NULL)
 	{
 		return 0;
