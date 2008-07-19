@@ -110,21 +110,21 @@ do \
 { \
 	assert(object != NULL); \
 \
-	assert(object->type == OBJ_DROID \
+	ASSERT(object->type == OBJ_DROID \
 	    || object->type == OBJ_STRUCTURE \
 	    || object->type == OBJ_FEATURE \
 	    || object->type == OBJ_PROJECTILE \
-	    || object->type == OBJ_TARGET \
-	    || !"invalid object type"); \
+	    || object->type == OBJ_TARGET, \
+	       "CHECK_OBJECT: Invalid object type (type num %u)", (unsigned int)(object)->type); \
 \
-	assert(object->type == OBJ_FEATURE \
+	ASSERT(object->type == OBJ_FEATURE \
 	    || object->type == OBJ_TARGET \
-	    || object->player < MAX_PLAYERS \
-	    || !"invalid owning player"); \
+	    || object->player < MAX_PLAYERS, \
+	       "CHECK_OBJECT: Out of bound owning player number (%u)", (unsigned int)(object)->player); \
 \
-	assert(object->direction <= 360.0f \
-	    && object->direction >= 0.0f \
-	    && "out of range direction"); \
+	ASSERT(object->direction <= 360.0f \
+	    && object->direction >= 0.0f, \
+	       "CHECK_OBJECT: out of range direction (%f)", (float)(object)->direction); \
 } while (0)
 
 #endif // __INCLUDED_BASEDEF_H__
