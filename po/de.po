@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2008-05-09 16:13+0200\n"
+"POT-Creation-Date: 2008-07-19 21:58+0200\n"
 "PO-Revision-Date: 2008-05-09 16:36+0000\n"
 "Last-Translator: Steven \"Kreuvf\" Koenig <kreuvf@gna.org>\n"
 "Language-Team: Deutsch <warzone-dev@gna.org>\n"
@@ -10322,118 +10322,118 @@ msgstr "Schwedisch"
 msgid "Latin"
 msgstr "Latein"
 
-#: src/clparse.c:88
+#: src/clparse.c:89
 msgid "Run in cheat mode"
 msgstr "Laufe im Cheatmodus"
 
-#: src/clparse.c:89
+#: src/clparse.c:90
 msgid "Set default data directory"
 msgstr "Setze Standard-Datenverzeichnis"
 
-#: src/clparse.c:89
+#: src/clparse.c:90
 msgid "data directory"
 msgstr "Datenverzeichnis"
 
-#: src/clparse.c:90
+#: src/clparse.c:91
 msgid "Set configuration directory"
 msgstr "Setze Konfigurationsverzeichnis"
 
-#: src/clparse.c:90
+#: src/clparse.c:91
 msgid "configuration directory"
 msgstr "Konfigurationsverzeichnis"
 
 # Aus dem Source ist ersichtlich, was mit "level" gemeint ist, kA, ob Sektion gut übersetzt ist -Kreuvf
-#: src/clparse.c:91
+#: src/clparse.c:92
 msgid "Show debug for given level"
 msgstr "Zeige die Debugdaten für die angeforderte Sektion"
 
-#: src/clparse.c:91
+#: src/clparse.c:92
 msgid "debug level"
 msgstr "Debug-Sektion"
 
-#: src/clparse.c:92
+#: src/clparse.c:93
 msgid "Log debug output to file"
 msgstr "Debugausgabe in Datei protokollieren"
 
-#: src/clparse.c:92
+#: src/clparse.c:93
 msgid "file"
 msgstr "Datei"
 
-#: src/clparse.c:93
+#: src/clparse.c:94
 msgid "Play in fullscreen mode"
 msgstr "Spiele im Vollbildmodus"
 
-#: src/clparse.c:94
+#: src/clparse.c:95
 msgid "Load a specific game"
 msgstr "Spielstand laden"
 
-#: src/clparse.c:94
+#: src/clparse.c:95
 msgid "game-name"
 msgstr "Spielname"
 
-#: src/clparse.c:95
+#: src/clparse.c:96
 msgid "Show this help message and exit"
 msgstr "Diese Hilfenachricht anzeigen und Programm beenden"
 
-#: src/clparse.c:96
+#: src/clparse.c:97
 msgid "Enable a global mod"
 msgstr "Eine globale Mod aktivieren"
 
-#: src/clparse.c:96
 #: src/clparse.c:97
 #: src/clparse.c:98
+#: src/clparse.c:99
 msgid "mod"
 msgstr "Mod"
 
-#: src/clparse.c:97
+#: src/clparse.c:98
 msgid "Enable a campaign only mod"
 msgstr "Eine Mod nur für die Kampagnen aktivieren"
 
-#: src/clparse.c:98
+#: src/clparse.c:99
 msgid "Enable a multiplay only mod"
 msgstr "Eine Mod nur für den Mehrspielermodus aktivieren"
 
-#: src/clparse.c:99
+#: src/clparse.c:100
 msgid "Load a saved game"
 msgstr "Spielstand laden"
 
-#: src/clparse.c:99
+#: src/clparse.c:100
 msgid "savegame"
 msgstr "Spielstand"
 
-#: src/clparse.c:102
+#: src/clparse.c:103
 msgid "Play in windowed mode"
 msgstr "Spiele im Fenstermodus"
 
-#: src/clparse.c:103
+#: src/clparse.c:104
 msgid "Show version information and exit"
 msgstr "Versionsinformation anzeigen und Programm beenden"
 
-#: src/clparse.c:104
+#: src/clparse.c:105
 msgid "Set the resolution to use"
 msgstr "Setze die zu benutzende Auflösung"
 
-#: src/clparse.c:104
+#: src/clparse.c:105
 msgid "WIDTHxHEIGHT"
 msgstr "BREITExHÖHE"
 
-#: src/clparse.c:105
+#: src/clparse.c:106
 msgid "Enable shadows"
 msgstr "Schatten aktivieren"
 
-#: src/clparse.c:106
+#: src/clparse.c:107
 msgid "Disable shadows"
 msgstr "Schatten deaktivieren"
 
-#: src/clparse.c:107
+#: src/clparse.c:108
 msgid "Enable sound"
 msgstr "Sound aktivieren"
 
-#: src/clparse.c:108
+#: src/clparse.c:109
 msgid "Disable sound"
 msgstr "Sound deaktivieren"
 
-#: src/clparse.c:109
+#: src/clparse.c:110
 msgid "Activate self-test"
 msgstr ""
 
@@ -10930,155 +10930,155 @@ msgstr "Sprache"
 msgid "Unit Colour"
 msgstr "Einheitenfarbe"
 
-#: src/hci.c:994
-#: src/hci.c:3857
-#: src/hci.c:4008
-#: src/hci.c:4461
-#: src/hci.c:5685
+#: src/hci.c:1017
+#: src/hci.c:3879
+#: src/hci.c:4030
+#: src/hci.c:4483
+#: src/hci.c:5707
 #: src/intelmap.c:529
-#: src/intorder.c:659
+#: src/intorder.c:661
 #: src/loadsave.c:261
 #: src/multimenu.c:431
 #: src/multimenu.c:1250
 #: src/transporter.c:285
 #: src/transporter.c:374
-#: src/transporter.c:872
+#: src/transporter.c:839
 msgid "Close"
 msgstr "Schließen"
 
-#: src/hci.c:1340
-#: src/hci.c:1686
+#: src/hci.c:1363
+#: src/hci.c:1708
 #: src/loop.c:511
 #: src/loop.c:523
 #: src/mission.c:2895
 msgid "GAME SAVED!"
 msgstr "SPIEL GESPEICHERT!"
 
-#: src/hci.c:2094
+#: src/hci.c:2116
 msgid "Failed to create building"
 msgstr ""
 
-#: src/hci.c:2117
+#: src/hci.c:2139
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new structure: %s."
 msgstr "Spieler %u erschummelt (Debugmenü) sich ein neues Gebäude: %s."
 
-#: src/hci.c:2131
+#: src/hci.c:2153
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new feature: %s."
 msgstr "Spieler %u erschummelt (Debugmenü) sich ein neues Feature: %s."
 
-#: src/hci.c:2150
+#: src/hci.c:2172
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new droid: %s."
 msgstr "Spieler %u erschummelt (Debugmenü) sich eine neue Einheit: %s."
 
 # Commander kann als Eigenname im Deutschen allerdings mit deutschem Plural stehen bleiben -Kreuvf
-#: src/hci.c:3759
+#: src/hci.c:3781
 msgid "Commanders (F6)"
 msgstr "Commandermenü"
 
-#: src/hci.c:3775
+#: src/hci.c:3797
 msgid "Intelligence Display (F5)"
 msgstr "Aufklärungsbildschirm"
 
-#: src/hci.c:3791
+#: src/hci.c:3813
 msgid "Manufacture (F1)"
 msgstr "Produktionsmenü"
 
-#: src/hci.c:3807
+#: src/hci.c:3829
 msgid "Design (F4)"
 msgstr "Entwurfmenü"
 
-#: src/hci.c:3823
+#: src/hci.c:3845
 msgid "Research (F2)"
 msgstr "Forschungsmenü"
 
-#: src/hci.c:3839
+#: src/hci.c:3861
 msgid "Build (F3)"
 msgstr "Konstruktionsmenü"
 
-#: src/hci.c:3919
+#: src/hci.c:3941
 #: src/multiint.c:772
 #: src/multiint.c:776
 msgid "Power"
 msgstr "Energie"
 
-#: src/hci.c:4103
+#: src/hci.c:4125
 #, fuzzy
 msgid "Tile"
 msgstr "Datei"
 
-#: src/hci.c:4104
+#: src/hci.c:4126
 #, fuzzy
 msgid "Place tiles on map"
 msgstr "Feature auf der Karte platzieren"
 
-#: src/hci.c:4113
+#: src/hci.c:4135
 msgid "Unit"
 msgstr "Einheit"
 
-#: src/hci.c:4114
+#: src/hci.c:4136
 msgid "Place Unit on map"
 msgstr "Einheit auf der Karte platzieren"
 
-#: src/hci.c:4122
+#: src/hci.c:4144
 msgid "Struct"
 msgstr "Gebäude"
 
-#: src/hci.c:4123
+#: src/hci.c:4145
 msgid "Place Structures on map"
 msgstr "Gebäude auf der Karte platzieren"
 
 # gemäß: http://dict.leo.org/ende?search=Feat -Kreuvf
-#: src/hci.c:4131
+#: src/hci.c:4153
 msgid "Feat"
 msgstr "Leistung"
 
-#: src/hci.c:4132
+#: src/hci.c:4154
 msgid "Place Features on map"
 msgstr "Feature auf der Karte platzieren"
 
-#: src/hci.c:4143
+#: src/hci.c:4165
 #, fuzzy
 msgid "Pause or unpause the game"
 msgstr "Der Spielleiter hat das Spiel verlassen!"
 
-#: src/hci.c:4157
+#: src/hci.c:4179
 msgid "Align height of all map objects"
 msgstr ""
 
-#: src/hci.c:4182
+#: src/hci.c:4204
 #: src/ingameop.c:121
 #: src/ingameop.c:254
 #: src/ingameop.c:259
 msgid "Quit"
 msgstr "Beenden"
 
-#: src/hci.c:4183
+#: src/hci.c:4205
 msgid "Exit Game"
 msgstr "Spiel verlassen"
 
-#: src/hci.c:4546
+#: src/hci.c:4568
 #: src/intdisplay.c:211
 #: src/intdisplay.c:254
 #: src/intdisplay.c:300
 msgid "Progress Bar"
 msgstr "Fortschrittsbalken"
 
-#: src/hci.c:5600
+#: src/hci.c:5622
 msgid "Factory Delivery Point"
 msgstr "Fabrik-Auslieferungspunkt"
 
-#: src/hci.c:5619
+#: src/hci.c:5641
 msgid "Loop Production"
 msgstr "Produktion wiederholen"
 
-#: src/hci.c:5710
+#: src/hci.c:5732
 msgid "Tab Scroll left"
 msgstr "Reiter nach links durchschalten"
 
-#: src/hci.c:5727
+#: src/hci.c:5749
 msgid "Tab Scroll right"
 msgstr "Reiter nach rechts durchschalten"
 
@@ -11122,106 +11122,111 @@ msgstr "Ziele des Projekts"
 msgid "Current Objective"
 msgstr "Aktuelles Missionsziel"
 
-#: src/intorder.c:178
+#: src/intorder.c:179
 #: src/keymap.c:388
 msgid "Short Range"
 msgstr "Kurze Reichweite"
 
-#: src/intorder.c:179
+#: src/intorder.c:180
 #: src/keymap.c:394
 msgid "Long Range"
 msgstr "Hohe Reichweite"
 
-#: src/intorder.c:180
+#: src/intorder.c:181
 #: src/keymap.c:387
 msgid "Optimum Range"
 msgstr "Optimale Reichweite"
 
-#: src/intorder.c:181
+#: src/intorder.c:182
 #: src/keymap.c:407
 msgid "Retreat at Medium Damage"
 msgstr "Rückzug bei mittlerem Schaden"
 
-#: src/intorder.c:182
+#: src/intorder.c:183
 #: src/keymap.c:408
 msgid "Retreat at Heavy Damage"
 msgstr "Rückzug bei schwerem Schaden"
 
-#: src/intorder.c:183
+#: src/intorder.c:184
 #: src/keymap.c:409
 msgid "Do or Die!"
 msgstr "Sieg oder Tod!"
 
-#: src/intorder.c:184
+#: src/intorder.c:185
 msgid "Fire-At-Will"
 msgstr "Feuer nach eigenem Ermessen"
 
-#: src/intorder.c:185
+#: src/intorder.c:186
 #: src/keymap.c:384
 msgid "Return Fire"
 msgstr "Feuer erwidern"
 
-#: src/intorder.c:186
+#: src/intorder.c:187
 #: src/keymap.c:382
 msgid "Hold Fire"
 msgstr "Feuer einstellen"
 
-#: src/intorder.c:187
+#: src/intorder.c:188
 #: src/keymap.c:390
 msgid "Patrol"
 msgstr "Patrouillieren"
 
-#: src/intorder.c:188
+#: src/intorder.c:189
 #: src/keymap.c:389
 msgid "Pursue"
 msgstr "Verfolgen"
 
-#: src/intorder.c:189
+#: src/intorder.c:190
 msgid "Guard Position"
 msgstr "Position bewachen"
 
-#: src/intorder.c:190
+#: src/intorder.c:191
 #: src/keymap.c:392
 msgid "Hold Position"
 msgstr "Position halten"
 
-#: src/intorder.c:191
+#: src/intorder.c:192
 #: src/keymap.c:391
 msgid "Return For Repair"
 msgstr "Rückkehr zwecks Reparatur"
 
-#: src/intorder.c:192
+#: src/intorder.c:193
 msgid "Return To HQ"
 msgstr "Rückkehr zur Kommandozentrale"
 
-#: src/intorder.c:193
+#: src/intorder.c:194
 msgid "Go to Transport"
 msgstr "Zum Transporter"
 
-#: src/intorder.c:194
+#: src/intorder.c:195
 #: src/keymap.c:418
 msgid "Return for Recycling"
 msgstr "Rückkehr zwecks Recycling"
 
-#: src/intorder.c:195
+#: src/intorder.c:196
 msgid "Recycle"
 msgstr "Wirklich recyclen"
 
-#: src/intorder.c:196
+#: src/intorder.c:197
 msgid "Assign Factory Production"
 msgstr "Fabrikproduktion zuweisen"
 
-#: src/intorder.c:197
+#: src/intorder.c:198
 msgid "Assign Cyborg Factory Production"
 msgstr "Cyborg-Fabrikproduktion zuweisen"
 
-#: src/intorder.c:198
+#: src/intorder.c:199
 msgid "Assign Fire Support"
 msgstr "Unterstützungsfeuer zuweisen"
 
-#: src/intorder.c:199
+#: src/intorder.c:200
 msgid "Assign VTOL Factory Production"
 msgstr "VTOL-Fabrikproduktion zuweisen"
+
+#: src/intorder.c:201
+#, fuzzy
+msgid "Circle"
+msgstr "Datei"
 
 #: src/keybind.c:131
 msgid "Sorry, that cheat is disabled in multiplayer games."
@@ -12306,70 +12311,70 @@ msgstr "Kann keine Sensoreinheit finden!"
 msgid "Unable to locate any Commanders!"
 msgstr "Kann keine Commander finden!"
 
-#: src/structure.c:2768
+#: src/structure.c:2766
 msgid "Command Control Limit Reached - Production Halted"
 msgstr "Commandereinheit hat Kontrollgrenze erreicht - Produktion angehalten"
 
 # nix Gruppe! -Kreuvf
-#: src/structure.c:5838
-#: src/structure.c:5860
+#: src/structure.c:5836
+#: src/structure.c:5858
 #, c-format
 msgid "%s - %u Unit assigned"
 msgid_plural "%s - %u Units assigned"
 msgstr[0] "%s - %u Einheit hinzugefügt"
 msgstr[1] "%s - %u Einheiten hinzugefügt"
 
-#: src/structure.c:5897
+#: src/structure.c:5895
 #, c-format
 msgid "%s - Connected %u of %u"
 msgstr "%s - %u von %u verbunden"
 
-#: src/structure.c:5911
+#: src/structure.c:5909
 #, fuzzy, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - Schaden %u%%"
 
-#: src/structure.c:6031
-#: src/structure.c:6080
+#: src/structure.c:6029
+#: src/structure.c:6078
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - Elektronisch beschädigt"
 
 # Reward ist zwar nicht Beute, aber im Krieg erbeutet man eben Dinge -Kreuvf
-#: src/structure.c:6315
+#: src/structure.c:6313
 msgid "Electronic Reward - Visibility Report"
 msgstr "Elektronische Beute - Sichtbarkeitsbericht"
 
-#: src/structure.c:6355
+#: src/structure.c:6353
 msgid "Factory Reward - Propulsion"
 msgstr "Fabrikbeute - Antrieb"
 
-#: src/structure.c:6379
+#: src/structure.c:6377
 msgid "Factory Reward - Body"
 msgstr "Fabrikbeute - Rumpf"
 
-#: src/structure.c:6403
+#: src/structure.c:6401
 msgid "Factory Reward - Weapon"
 msgstr "Fabrikbeute - Waffe"
 
-#: src/structure.c:6412
+#: src/structure.c:6410
 msgid "Factory Reward - Nothing"
 msgstr "Fabrikbeute - Nichts"
 
-#: src/structure.c:6440
+#: src/structure.c:6438
 msgid "Repair Facility Award - Repair"
 msgstr "Beute aus Reparatureinrichtung - Reparatur"
 
-#: src/structure.c:6447
+#: src/structure.c:6445
 msgid "Repair Facility Award - Nothing"
 msgstr "Beute aus Reparatureinrichtung - Nichts"
 
-#: src/transporter.c:424
-#: src/transporter.c:478
+#: src/transporter.c:396
+#: src/transporter.c:450
 msgid "Launch Transport"
 msgstr "Transporter starten"
 
-#: src/transporter.c:1860
+#: src/transporter.c:1702
 msgid "Reinforcements landing"
 msgstr "Verstärkung landet"
 

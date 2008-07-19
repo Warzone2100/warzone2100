@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2008-05-09 16:13+0200\n"
+"POT-Creation-Date: 2008-07-19 21:58+0200\n"
 "PO-Revision-Date: 2008-05-09 19:41+0000\n"
 "Last-Translator: Alberto <Unknown>\n"
 "Language-Team: Italian <warzone-dev@gna.org>\n"
@@ -10304,117 +10304,117 @@ msgstr "Svedese"
 msgid "Latin"
 msgstr "Latino"
 
-#: src/clparse.c:88
+#: src/clparse.c:89
 msgid "Run in cheat mode"
 msgstr "Avvia in modalità Trucchi"
 
-#: src/clparse.c:89
+#: src/clparse.c:90
 msgid "Set default data directory"
 msgstr "Imposta la cartella dei dati di default"
 
-#: src/clparse.c:89
+#: src/clparse.c:90
 msgid "data directory"
 msgstr "cartella dei dati"
 
-#: src/clparse.c:90
+#: src/clparse.c:91
 msgid "Set configuration directory"
 msgstr "Imposta la cartella della configurazione"
 
-#: src/clparse.c:90
+#: src/clparse.c:91
 msgid "configuration directory"
 msgstr "cartella della configurazione"
 
-#: src/clparse.c:91
+#: src/clparse.c:92
 msgid "Show debug for given level"
 msgstr "Mostra il debug per il livello scelto"
 
-#: src/clparse.c:91
+#: src/clparse.c:92
 msgid "debug level"
 msgstr "avvia il debug del livello"
 
-#: src/clparse.c:92
+#: src/clparse.c:93
 msgid "Log debug output to file"
 msgstr "Log del debug su file"
 
-#: src/clparse.c:92
+#: src/clparse.c:93
 msgid "file"
 msgstr "file"
 
-#: src/clparse.c:93
+#: src/clparse.c:94
 msgid "Play in fullscreen mode"
 msgstr "Gioca in modalità fullscreen"
 
-#: src/clparse.c:94
+#: src/clparse.c:95
 msgid "Load a specific game"
 msgstr "Carica una partita specifica"
 
-#: src/clparse.c:94
+#: src/clparse.c:95
 msgid "game-name"
 msgstr "nome partita"
 
-#: src/clparse.c:95
+#: src/clparse.c:96
 msgid "Show this help message and exit"
 msgstr "Mostra questo messaggio di aiuto ed esci"
 
-#: src/clparse.c:96
+#: src/clparse.c:97
 msgid "Enable a global mod"
 msgstr "Abilita un mod globale"
 
-#: src/clparse.c:96
 #: src/clparse.c:97
 #: src/clparse.c:98
+#: src/clparse.c:99
 msgid "mod"
 msgstr "mod"
 
-#: src/clparse.c:97
+#: src/clparse.c:98
 msgid "Enable a campaign only mod"
 msgstr "Abilita un mod per la sola campagna"
 
-#: src/clparse.c:98
+#: src/clparse.c:99
 msgid "Enable a multiplay only mod"
 msgstr "Abilita un mod per la sola modalità giocatore"
 
-#: src/clparse.c:99
+#: src/clparse.c:100
 msgid "Load a saved game"
 msgstr "Carica una partita salvata"
 
-#: src/clparse.c:99
+#: src/clparse.c:100
 msgid "savegame"
 msgstr "salvataggio"
 
-#: src/clparse.c:102
+#: src/clparse.c:103
 msgid "Play in windowed mode"
 msgstr "Gioca in modalità a finestra"
 
-#: src/clparse.c:103
+#: src/clparse.c:104
 msgid "Show version information and exit"
 msgstr "Mostra informazioni sulla versione ed esci"
 
-#: src/clparse.c:104
+#: src/clparse.c:105
 msgid "Set the resolution to use"
 msgstr "Imposta la risoluzione da utilizzare"
 
-#: src/clparse.c:104
+#: src/clparse.c:105
 msgid "WIDTHxHEIGHT"
 msgstr "LARGHEZZAxALTEZZA"
 
-#: src/clparse.c:105
+#: src/clparse.c:106
 msgid "Enable shadows"
 msgstr "Abilita ombre"
 
-#: src/clparse.c:106
+#: src/clparse.c:107
 msgid "Disable shadows"
 msgstr "Disabilita ombre"
 
-#: src/clparse.c:107
+#: src/clparse.c:108
 msgid "Enable sound"
 msgstr "Abilita suoni"
 
-#: src/clparse.c:108
+#: src/clparse.c:109
 msgid "Disable sound"
 msgstr "Disabilita suoni"
 
-#: src/clparse.c:109
+#: src/clparse.c:110
 msgid "Activate self-test"
 msgstr ""
 
@@ -10912,154 +10912,154 @@ msgstr "Lungo Raggio"
 msgid "Unit Colour"
 msgstr "Colore delle Unità"
 
-#: src/hci.c:994
-#: src/hci.c:3857
-#: src/hci.c:4008
-#: src/hci.c:4461
-#: src/hci.c:5685
+#: src/hci.c:1017
+#: src/hci.c:3879
+#: src/hci.c:4030
+#: src/hci.c:4483
+#: src/hci.c:5707
 #: src/intelmap.c:529
-#: src/intorder.c:659
+#: src/intorder.c:661
 #: src/loadsave.c:261
 #: src/multimenu.c:431
 #: src/multimenu.c:1250
 #: src/transporter.c:285
 #: src/transporter.c:374
-#: src/transporter.c:872
+#: src/transporter.c:839
 msgid "Close"
 msgstr "Chiudi"
 
-#: src/hci.c:1340
-#: src/hci.c:1686
+#: src/hci.c:1363
+#: src/hci.c:1708
 #: src/loop.c:511
 #: src/loop.c:523
 #: src/mission.c:2895
 msgid "GAME SAVED!"
 msgstr "PARTITA SALVATA!"
 
-#: src/hci.c:2094
+#: src/hci.c:2116
 msgid "Failed to create building"
 msgstr ""
 
-#: src/hci.c:2117
+#: src/hci.c:2139
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new structure: %s."
 msgstr "Il giocatore %u sta ottenendo una nuova struttura per mezzo di trucchi (debug menu) : %s."
 
-#: src/hci.c:2131
+#: src/hci.c:2153
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new feature: %s."
 msgstr "Il giocatore %u sta ottenendo una nuova caratteristica per mezzo di trucchi (debug menu) : %s."
 
-#: src/hci.c:2150
+#: src/hci.c:2172
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new droid: %s."
 msgstr "Il giocatore %u sta ottenendo una nuova unità per mezzo di trucchi (debug menu) : %s."
 
-#: src/hci.c:3759
+#: src/hci.c:3781
 msgid "Commanders (F6)"
 msgstr "Comandanti (F6)"
 
-#: src/hci.c:3775
+#: src/hci.c:3797
 msgid "Intelligence Display (F5)"
 msgstr "Intelligence (F5)"
 
-#: src/hci.c:3791
+#: src/hci.c:3813
 msgid "Manufacture (F1)"
 msgstr "Produzione (F1)"
 
-#: src/hci.c:3807
+#: src/hci.c:3829
 msgid "Design (F4)"
 msgstr "Progettazione (F4)"
 
-#: src/hci.c:3823
+#: src/hci.c:3845
 msgid "Research (F2)"
 msgstr "Ricerca (F2)"
 
-#: src/hci.c:3839
+#: src/hci.c:3861
 msgid "Build (F3)"
 msgstr "Costruzione (F3)"
 
-#: src/hci.c:3919
+#: src/hci.c:3941
 #: src/multiint.c:772
 #: src/multiint.c:776
 msgid "Power"
 msgstr "Energia"
 
-#: src/hci.c:4103
+#: src/hci.c:4125
 #, fuzzy
 msgid "Tile"
 msgstr "file"
 
-#: src/hci.c:4104
+#: src/hci.c:4126
 #, fuzzy
 msgid "Place tiles on map"
 msgstr "Piazza un' Unità sulla mappa"
 
-#: src/hci.c:4113
+#: src/hci.c:4135
 msgid "Unit"
 msgstr "Unità"
 
-#: src/hci.c:4114
+#: src/hci.c:4136
 msgid "Place Unit on map"
 msgstr "Piazza un' Unità sulla mappa"
 
-#: src/hci.c:4122
+#: src/hci.c:4144
 msgid "Struct"
 msgstr "Struttura"
 
-#: src/hci.c:4123
+#: src/hci.c:4145
 msgid "Place Structures on map"
 msgstr "Piazza Strutture sulla mappa"
 
-#: src/hci.c:4131
+#: src/hci.c:4153
 msgid "Feat"
 msgstr "Caratteristica"
 
-#: src/hci.c:4132
+#: src/hci.c:4154
 #, fuzzy
 msgid "Place Features on map"
 msgstr "Piazza Strutture sulla mappa"
 
-#: src/hci.c:4143
+#: src/hci.c:4165
 #, fuzzy
 msgid "Pause or unpause the game"
 msgstr "L'host ha abbandonato la partita!"
 
-#: src/hci.c:4157
+#: src/hci.c:4179
 msgid "Align height of all map objects"
 msgstr ""
 
-#: src/hci.c:4182
+#: src/hci.c:4204
 #: src/ingameop.c:121
 #: src/ingameop.c:254
 #: src/ingameop.c:259
 msgid "Quit"
 msgstr "Abbandona"
 
-#: src/hci.c:4183
+#: src/hci.c:4205
 msgid "Exit Game"
 msgstr "Esci dal Gioco"
 
-#: src/hci.c:4546
+#: src/hci.c:4568
 #: src/intdisplay.c:211
 #: src/intdisplay.c:254
 #: src/intdisplay.c:300
 msgid "Progress Bar"
 msgstr "Barra del Progresso"
 
-#: src/hci.c:5600
+#: src/hci.c:5622
 msgid "Factory Delivery Point"
 msgstr "Punto di Raduno della Fabbrica"
 
-#: src/hci.c:5619
+#: src/hci.c:5641
 msgid "Loop Production"
 msgstr "Produzione Ciclica"
 
-#: src/hci.c:5710
+#: src/hci.c:5732
 msgid "Tab Scroll left"
 msgstr "Scorri tabella a Sinistra"
 
-#: src/hci.c:5727
+#: src/hci.c:5749
 msgid "Tab Scroll right"
 msgstr "Scorri tabella a Destra"
 
@@ -11103,106 +11103,111 @@ msgstr "Obiettivi del Progetto"
 msgid "Current Objective"
 msgstr "Obiettivo Corrente"
 
-#: src/intorder.c:178
+#: src/intorder.c:179
 #: src/keymap.c:388
 msgid "Short Range"
 msgstr "Corto Raggio"
 
-#: src/intorder.c:179
+#: src/intorder.c:180
 #: src/keymap.c:394
 msgid "Long Range"
 msgstr "Lungo Raggio"
 
-#: src/intorder.c:180
+#: src/intorder.c:181
 #: src/keymap.c:387
 msgid "Optimum Range"
 msgstr "Raggio Ottimale"
 
-#: src/intorder.c:181
+#: src/intorder.c:182
 #: src/keymap.c:407
 msgid "Retreat at Medium Damage"
 msgstr "Ritirata quando i danni sono medi"
 
-#: src/intorder.c:182
+#: src/intorder.c:183
 #: src/keymap.c:408
 msgid "Retreat at Heavy Damage"
 msgstr "Ritirata quando i danni sono gravi"
 
-#: src/intorder.c:183
+#: src/intorder.c:184
 #: src/keymap.c:409
 msgid "Do or Die!"
 msgstr "Nessuna Ritirata"
 
-#: src/intorder.c:184
+#: src/intorder.c:185
 msgid "Fire-At-Will"
 msgstr "Fuoco a volontà"
 
-#: src/intorder.c:185
+#: src/intorder.c:186
 #: src/keymap.c:384
 msgid "Return Fire"
 msgstr "Rispondere al fuoco"
 
-#: src/intorder.c:186
+#: src/intorder.c:187
 #: src/keymap.c:382
 msgid "Hold Fire"
 msgstr "Cessare il fuoco"
 
-#: src/intorder.c:187
+#: src/intorder.c:188
 #: src/keymap.c:390
 msgid "Patrol"
 msgstr "Pattugliare"
 
-#: src/intorder.c:188
+#: src/intorder.c:189
 #: src/keymap.c:389
 msgid "Pursue"
 msgstr "Inseguire"
 
-#: src/intorder.c:189
+#: src/intorder.c:190
 msgid "Guard Position"
 msgstr "Vigliare la Posizione"
 
-#: src/intorder.c:190
+#: src/intorder.c:191
 #: src/keymap.c:392
 msgid "Hold Position"
 msgstr "Tenere al posizione"
 
-#: src/intorder.c:191
+#: src/intorder.c:192
 #: src/keymap.c:391
 msgid "Return For Repair"
 msgstr "Rientrare per riparazioni"
 
-#: src/intorder.c:192
+#: src/intorder.c:193
 msgid "Return To HQ"
 msgstr "Rientrare al QG"
 
-#: src/intorder.c:193
+#: src/intorder.c:194
 msgid "Go to Transport"
 msgstr "Salire sul Trasporto"
 
-#: src/intorder.c:194
+#: src/intorder.c:195
 #: src/keymap.c:418
 msgid "Return for Recycling"
 msgstr "Rientrare per il riciclo"
 
-#: src/intorder.c:195
+#: src/intorder.c:196
 msgid "Recycle"
 msgstr "Ricicla"
 
-#: src/intorder.c:196
+#: src/intorder.c:197
 msgid "Assign Factory Production"
 msgstr "Assegna la produzione della fabbrica"
 
-#: src/intorder.c:197
+#: src/intorder.c:198
 msgid "Assign Cyborg Factory Production"
 msgstr "Assegna produzione della fabbrica di Cyborg"
 
-#: src/intorder.c:198
+#: src/intorder.c:199
 msgid "Assign Fire Support"
 msgstr "Assegna Fuoco di Supporto"
 
-#: src/intorder.c:199
+#: src/intorder.c:200
 msgid "Assign VTOL Factory Production"
 msgstr "Assegna produzione della fabbrica di VTOL"
+
+#: src/intorder.c:201
+#, fuzzy
+msgid "Circle"
+msgstr "file"
 
 #: src/keybind.c:131
 msgid "Sorry, that cheat is disabled in multiplayer games."
@@ -12279,68 +12284,68 @@ msgstr "Impossibile localizzare alcuna Unità Sensoria!"
 msgid "Unable to locate any Commanders!"
 msgstr "Impossibile localizzare alcun Comandante!"
 
-#: src/structure.c:2768
+#: src/structure.c:2766
 msgid "Command Control Limit Reached - Production Halted"
 msgstr "Comando: Limite di Controllo Raggiunto - Produzione Bloccata"
 
-#: src/structure.c:5838
-#: src/structure.c:5860
+#: src/structure.c:5836
+#: src/structure.c:5858
 #, c-format
 msgid "%s - %u Unit assigned"
 msgid_plural "%s - %u Units assigned"
 msgstr[0] "%s - %u Unità Assegnata"
 msgstr[1] "%s - %u Unità Assegnate"
 
-#: src/structure.c:5897
+#: src/structure.c:5895
 #, c-format
 msgid "%s - Connected %u of %u"
 msgstr "%s - Collegati %u di %u"
 
-#: src/structure.c:5911
+#: src/structure.c:5909
 #, fuzzy, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - Danno %u%%"
 
-#: src/structure.c:6031
-#: src/structure.c:6080
+#: src/structure.c:6029
+#: src/structure.c:6078
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - Danneggiato Elettronicamente"
 
-#: src/structure.c:6315
+#: src/structure.c:6313
 msgid "Electronic Reward - Visibility Report"
 msgstr "Premio Elettronico - Rapporto di Visibilità"
 
-#: src/structure.c:6355
+#: src/structure.c:6353
 msgid "Factory Reward - Propulsion"
 msgstr "Premio della Fabbrica - Propulsione"
 
-#: src/structure.c:6379
+#: src/structure.c:6377
 msgid "Factory Reward - Body"
 msgstr "Premio della Fabbrica - Corpo"
 
-#: src/structure.c:6403
+#: src/structure.c:6401
 msgid "Factory Reward - Weapon"
 msgstr "Premio della Fabbrica - Arma"
 
-#: src/structure.c:6412
+#: src/structure.c:6410
 msgid "Factory Reward - Nothing"
 msgstr "Premio della Fabbrica - Niente"
 
-#: src/structure.c:6440
+#: src/structure.c:6438
 msgid "Repair Facility Award - Repair"
 msgstr "Premio della Struttura di Riparazione - Ripara"
 
-#: src/structure.c:6447
+#: src/structure.c:6445
 msgid "Repair Facility Award - Nothing"
 msgstr "Premio della Struttura di Riparazione - Niente"
 
-#: src/transporter.c:424
-#: src/transporter.c:478
+#: src/transporter.c:396
+#: src/transporter.c:450
 msgid "Launch Transport"
 msgstr "Lancia il Trasporto"
 
-#: src/transporter.c:1860
+#: src/transporter.c:1702
 msgid "Reinforcements landing"
 msgstr "I rinforzi stanno atterrando"
 
