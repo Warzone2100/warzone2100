@@ -253,8 +253,14 @@ void widgetDraw(widget *self)
 		// Restore the compositing operator back to the default
 		cairo_set_operator(self->cr, CAIRO_OPERATOR_OVER);
 		
+		// Save (push) the current context
+		cairo_save(self->cr);
+		
 		// Redaw ourself
 		widgetDoDraw(self);
+		
+		// Restore the context
+		cairo_restore(self->cr);
 		
 		// Update the texture
 		glBindTexture(GL_TEXTURE_RECTANGLE_ARB, self->textureId);
