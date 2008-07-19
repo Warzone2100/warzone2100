@@ -22,6 +22,7 @@
 #include <ctime>
 #include <string>
 #include <vector>
+#include <deque>
 #include <sstream>
 #include <physfs.h>
 #include "dumpinfo.h"
@@ -40,24 +41,88 @@ extern "C"
 # define PACKAGE_DISTRIBUTOR "UNKNOWN"
 #endif
 
-static char* dbgHeader = NULL;
+static const std::size_t max_debug_messages = 20;
 
-static void dumpstr(const DumpFileHandle file, const char * const str)
+static char* dbgHeader = NULL;
+static std::deque<std::vector<char> > dbgMessages;
+
+static void dumpstr(const DumpFileHandle file, const char * const str, std::size_t const size)
 {
 #if defined(WZ_OS_WIN)
 	DWORD lNumberOfBytesWritten;
-	WriteFile(file, str, strlen(str), &lNumberOfBytesWritten, NULL);
+	WriteFile(file, str, size, &lNumberOfBytesWritten, NULL);
 #else
-	write(file, str, strlen(str));
+	write(file, str, size);
 #endif
+}
+
+static void dumpstr(const DumpFileHandle file, const char * const str)
+{
+	dumpstr(file, str, strlen(str));
+}
+
+static void dumpEOL(const DumpFileHandle file)
+{
+#if defined(WZ_OS_WIN)
+	dumpstr(file, "\r\n");
+#else
+	dumpstr(file, "\n");
+#endif
+}
+
+static void debug_exceptionhandler_data(void **, const char * const str)
+{
+	ASSERT(str != NULL, "Empty string sent to debug callback");
+
+	// Push this message on the message list
+	const char * last = &str[strlen(str)];
+
+	// Strip finishing newlines
+	while (last != str
+	    && *(last - 1) == '\n')
+	{
+		--last;
+	}
+
+	dbgMessages.push_back(std::vector<char>(str, last));
+
+	// Ensure the message list's maximum size is maintained
+	while (dbgMessages.size() > max_debug_messages)
+	{
+		dbgMessages.pop_front();
+	}
 }
 
 void dbgDumpHeader(DumpFileHandle file)
 {
 	if (dbgHeader)
+	{
 		dumpstr(file, dbgHeader);
+	}
 	else
-		dumpstr(file, "No debug header available (yet)!\n" );
+	{
+		dumpstr(file, "No debug header available (yet)!");
+		dumpEOL(file);
+	}
+}
+
+void dbgDumpLog(DumpFileHandle file)
+{
+	unsigned int line_num = 1;
+
+	// Write all messages to the given file
+	for (std::deque<std::vector<char> >::const_iterator
+	     msg  = dbgMessages.begin();
+	     msg != dbgMessages.end();
+	     ++msg)
+	{
+		dumpstr(file, "Log message: ");
+		dumpstr(file, &(*msg)[0], msg->size());
+		dumpEOL(file);
+	}
+
+	// Terminate with a separating newline
+	dumpEOL(file);
 }
 
 static std::string getProgramPath(const char* programCommand)
@@ -183,5 +248,6 @@ static void createHeader(int const argc, char* argv[])
 
 void dbgDumpInit(int argc, char* argv[])
 {
+	debug_register_callback(&debug_exceptionhandler_data, NULL, NULL, NULL );
 	createHeader(argc, argv);
 }

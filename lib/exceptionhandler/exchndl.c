@@ -1021,7 +1021,7 @@ void GenerateExceptionReport(PEXCEPTION_POINTERS pExceptionInfo)
 
 	rprintf(".\r\n\r\n");
 
-	dumpLog(hReportFile);
+	dbgDumpLog(hReportFile);
 
 	pContext = pExceptionInfo->ContextRecord;
 
