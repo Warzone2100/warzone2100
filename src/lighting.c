@@ -340,8 +340,7 @@ static void calcTileIllum(UDWORD tileX, UDWORD tileY)
 {
 	/* The number or normals that we got is in numNormals*/
 	Vector3f finalVector = {0.0f, 0.0f, 0.0f};
-	unsigned int i, val;
-	int dotProduct;
+	unsigned int i, dotProduct, val;
 
 	unsigned int numNormals = 0; // How many normals have we got?
 	Vector3f normals[8]; // Maximum 8 possible normals
