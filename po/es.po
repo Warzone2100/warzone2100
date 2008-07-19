@@ -9,14 +9,14 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
 "POT-Creation-Date: 2008-07-19 21:58+0200\n"
-"PO-Revision-Date: 2008-05-09 17:09+0000\n"
+"PO-Revision-Date: 2008-05-10 16:49+0000\n"
 "Last-Translator: Samuel G. I. <amuchamu@gmail.com>\n"
 "Language-Team: Spanish <warzone-dev@gna.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Launchpad-Export-Date: 2008-05-10 13:56+0000\n"
+"X-Launchpad-Export-Date: 2008-07-19 19:37+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 "X-Poedit-Language: Spanish\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -12370,3 +12370,27 @@ msgstr " - Construido %s"
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "Versión: %s%s%s%s"
+
+#~ msgid "Green: %u"
+#~ msgstr "Principiante: %u"
+
+#~ msgid "TRANSPORT MISSION: Rescue Civilians from Containment Camp "
+#~ msgstr "MISIÓN DE TRANSPORTE: Rescatar Civiles del Campo de Concentración "
+
+#~ msgid "Defend the base and ........ the ....... "
+#~ msgstr "Defiende la base y ........ el ....... "
+
+#~ msgid "Search and destroy .... "
+#~ msgstr "Busca y destruye .... "
+
+#~ msgid "R-Wpn-MG-Damage11"
+#~ msgstr "R-Wpn-MG-Daño11"
+
+#~ msgid " Mortar Pit"
+#~ msgstr " Foso de Mortero"
+
+#~ msgid "Improvement in laser emission density "
+#~ msgstr "Mejora en la densidad de emisión láser "
+
+#~ msgid "R-Struc-Power-Cam2"
+#~ msgstr "R-Struc-Power-Cam2"

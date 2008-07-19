@@ -9,14 +9,14 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
 "POT-Creation-Date: 2008-07-19 21:58+0200\n"
-"PO-Revision-Date: 2008-05-09 16:56+0000\n"
+"PO-Revision-Date: 2008-07-19 07:28+0000\n"
 "Last-Translator: komornik <kom997@gmail.com>\n"
 "Language-Team: Polish <pl@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n%10>=2) && (n%10<=4) && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Launchpad-Export-Date: 2008-05-10 13:56+0000\n"
+"X-Launchpad-Export-Date: 2008-07-19 19:38+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: data/messages/strings/cam1strings.txt:3
@@ -10372,7 +10372,7 @@ msgstr "zapisz grę"
 
 #: src/clparse.c:103
 msgid "Play in windowed mode"
-msgstr ""
+msgstr "Graj w oknie"
 
 #: src/clparse.c:104
 msgid "Show version information and exit"
@@ -10384,15 +10384,15 @@ msgstr ""
 
 #: src/clparse.c:105
 msgid "WIDTHxHEIGHT"
-msgstr ""
+msgstr "SZEROKOŚĆxWYSOKOŚĆ"
 
 #: src/clparse.c:106
 msgid "Enable shadows"
-msgstr ""
+msgstr "Włącz cienie"
 
 #: src/clparse.c:107
 msgid "Disable shadows"
-msgstr ""
+msgstr "Wyłącz cienie"
 
 #: src/clparse.c:108
 msgid "Enable sound"
@@ -10420,17 +10420,17 @@ msgstr "Nowy pojazd"
 
 #: src/design.c:521
 msgid "Vehicle Body"
-msgstr ""
+msgstr "Kadłub pojazdu"
 
 #: src/design.c:543
 msgid "Vehicle Propulsion"
-msgstr ""
+msgstr "Napęd pojazdu"
 
 #: src/design.c:566
 #: src/design.c:591
 #: src/design.c:617
 msgid "Vehicle Turret"
-msgstr ""
+msgstr "Wieżyczka pojazdu"
 
 #: src/design.c:638
 msgid "Delete Design"
@@ -10439,12 +10439,12 @@ msgstr "Skasuj projekt"
 #: src/design.c:692
 #: src/design.c:740
 msgid "Kinetic Armour"
-msgstr ""
+msgstr "Pancerz kinetyczny"
 
 #: src/design.c:701
 #: src/design.c:751
 msgid "Thermal Armour"
-msgstr ""
+msgstr "Pancerz termiczny"
 
 #: src/design.c:717
 #: src/design.c:771
@@ -10734,7 +10734,7 @@ msgstr "Ustawienia gry"
 
 #: src/frontend.c:532
 msgid "Graphics Options"
-msgstr ""
+msgstr "Ustawienia grafiki"
 
 #: src/frontend.c:534
 msgid "Audio Options"
@@ -11151,7 +11151,7 @@ msgstr "Patrol"
 #: src/intorder.c:189
 #: src/keymap.c:389
 msgid "Pursue"
-msgstr ""
+msgstr "Ścigać"
 
 #: src/intorder.c:190
 msgid "Guard Position"
@@ -11165,11 +11165,11 @@ msgstr "Trzymać pozycję"
 #: src/intorder.c:192
 #: src/keymap.c:391
 msgid "Return For Repair"
-msgstr ""
+msgstr "Powrót Do Naprawy"
 
 #: src/intorder.c:193
 msgid "Return To HQ"
-msgstr ""
+msgstr "Powrót do HQ"
 
 #: src/intorder.c:194
 msgid "Go to Transport"
@@ -11243,7 +11243,7 @@ msgstr "Powrót do normalności!"
 #: src/keybind.c:363
 #, fuzzy
 msgid "Getting tricky!"
-msgstr "Oszukujemy!"
+msgstr "Robi się trudno!"
 
 #: src/keybind.c:376
 msgid "Twice as nice!"
@@ -11316,7 +11316,7 @@ msgstr "Prognoza: Czyste niebo na każdym obszarze... BRAK POGODY"
 
 #: src/keybind.c:1626
 msgid "Enemy destroyed by cheating!"
-msgstr "Przeciwnik zniszczone przy użyciu kodów!"
+msgstr "Przeciwnik zniszczony przy użyciu kodów!"
 
 #: src/keybind.c:2152
 msgid "Centered on player HQ, direction NORTH"
@@ -11332,7 +11332,7 @@ msgstr "Limit szybkości oddziałów wyłączony"
 
 #: src/keybind.c:2184
 msgid "Formation speed limiting ON"
-msgstr "Limit szybkości oddziałów wyłączony"
+msgstr "Limit szybkości oddziałów włączony"
 
 #: src/keybind.c:2317
 #: src/keybind.c:2358
@@ -11364,11 +11364,11 @@ msgstr ""
 
 #: src/keybind.c:2412
 msgid "Radar showing player colors"
-msgstr ""
+msgstr "Radar pokazuje kolory gracza"
 
 #: src/keybind.c:2429
 msgid "Radar showing only objects"
-msgstr ""
+msgstr "Radar pokazuje tylko obiekty"
 
 #: src/keybind.c:2432
 msgid "Radar blending terrain and height"
@@ -11376,11 +11376,11 @@ msgstr ""
 
 #: src/keybind.c:2435
 msgid "Radar showing terrain"
-msgstr ""
+msgstr "Radar pokazuje teren"
 
 #: src/keybind.c:2438
 msgid "Radar showing height"
-msgstr ""
+msgstr "Radar pokazuje wysokość"
 
 #: src/keyedit.c:356
 msgid "KEY MAPPING"
@@ -11397,7 +11397,7 @@ msgstr "Wstecz"
 
 #: src/keyedit.c:383
 msgid "Select Default"
-msgstr ""
+msgstr "Zaznacz Domyślnie"
 
 #: src/keymap.c:292
 msgid "Manufacture"
@@ -12185,7 +12185,7 @@ msgstr "Zielony: %u"
 #: src/scores.c:110
 #, c-format
 msgid "Trained: %u"
-msgstr ""
+msgstr "Wytrenowanych: %u"
 
 #: src/scores.c:111
 #, c-format
@@ -12268,7 +12268,7 @@ msgid "%u unit selected"
 msgid_plural "%u units selected"
 msgstr[0] "%u wybrana jednostka"
 msgstr[1] "%u wybrane jednostki"
-msgstr[2] "%u ???"
+msgstr[2] "%u wybrane jednostki"
 
 #: src/selection.c:434
 #: src/selection.c:521
@@ -12298,7 +12298,7 @@ msgid "%s - %u Unit assigned"
 msgid_plural "%s - %u Units assigned"
 msgstr[0] "%s - %u Jednostka przydzielona"
 msgstr[1] "%s - %u Jednostki przydzielone"
-msgstr[2] "%s - %u ???"
+msgstr[2] "%s - %u Jednostki przydzielone"
 
 #: src/structure.c:5895
 #, c-format
@@ -12380,3 +12380,9 @@ msgstr ""
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr ""
+
+#~ msgid "%s - Damage %u%%"
+#~ msgstr "%s - Uszodzenia %u%%"
+
+#~ msgid "Green: %u"
+#~ msgstr "Zielony: %u"

@@ -9,14 +9,14 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
 "POT-Creation-Date: 2008-07-19 21:58+0200\n"
-"PO-Revision-Date: 2008-05-09 10:33+0000\n"
+"PO-Revision-Date: 2008-05-12 14:43+0000\n"
 "Last-Translator: Lartza <lartza@wippies.com>\n"
 "Language-Team: Finnish <fi@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Launchpad-Export-Date: 2008-05-10 13:56+0000\n"
+"X-Launchpad-Export-Date: 2008-07-19 19:37+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: data/messages/strings/cam1strings.txt:3
@@ -204,7 +204,7 @@ msgstr ""
 #: data/messages/strings/cam2strings.txt:118
 #: data/messages/strings/cam3strings.txt:163
 msgid " "
-msgstr ""
+msgstr " "
 
 #: data/messages/strings/cam1strings.txt:65
 msgid "New Paradigm Transmission"
@@ -10242,55 +10242,55 @@ msgstr ""
 #: lib/framework/i18n.c:44
 #: lib/framework/i18n.c:69
 msgid "Danish"
-msgstr "tanska"
+msgstr "Tanska"
 
 #: lib/framework/i18n.c:45
 #: lib/framework/i18n.c:68
 msgid "German"
-msgstr "saksa"
+msgstr "Saksa"
 
 #: lib/framework/i18n.c:46
 #: lib/framework/i18n.c:66
 msgid "English"
-msgstr "englanti"
+msgstr "Englanti"
 
 #: lib/framework/i18n.c:47
 #: lib/framework/i18n.c:70
 msgid "French"
-msgstr "ranska"
+msgstr "Ranska"
 
 #: lib/framework/i18n.c:48
 #: lib/framework/i18n.c:71
 msgid "Italian"
-msgstr "italia"
+msgstr "Italia"
 
 #: lib/framework/i18n.c:49
 #: lib/framework/i18n.c:73
 msgid "Dutch"
-msgstr "hollanti"
+msgstr "Hollanti"
 
 #: lib/framework/i18n.c:50
 #: lib/framework/i18n.c:67
 msgid "Norwegian"
-msgstr "norja"
+msgstr "Norja"
 
 #: lib/framework/i18n.c:51
 #: lib/framework/i18n.c:74
 msgid "Portuegese"
-msgstr "portugali"
+msgstr "Portugali"
 
 #: lib/framework/i18n.c:52
 #: lib/framework/i18n.c:75
 msgid "Russian"
-msgstr "venäjä"
+msgstr "Venäjä"
 
 #: lib/framework/i18n.c:53
 msgid "Swedish"
-msgstr "ruotsi"
+msgstr "Ruotsi"
 
 #: lib/framework/i18n.c:72
 msgid "Latin"
-msgstr "latina"
+msgstr "Latina"
 
 #: src/clparse.c:89
 msgid "Run in cheat mode"
@@ -10926,7 +10926,7 @@ msgstr "Sulje"
 #: src/loop.c:523
 #: src/mission.c:2895
 msgid "GAME SAVED!"
-msgstr "Peli tallennettu"
+msgstr "PELI TALLENNETTU!"
 
 #: src/hci.c:2116
 msgid "Failed to create building"
@@ -10982,8 +10982,9 @@ msgid "Tile"
 msgstr ""
 
 #: src/hci.c:4126
+#, fuzzy
 msgid "Place tiles on map"
-msgstr ""
+msgstr "Vihollisrakennukset: %u"
 
 #: src/hci.c:4135
 #, fuzzy
@@ -10991,8 +10992,9 @@ msgid "Unit"
 msgstr "Yksikkö"
 
 #: src/hci.c:4136
+#, fuzzy
 msgid "Place Unit on map"
-msgstr ""
+msgstr "Vihollisrakennukset: %u"
 
 #: src/hci.c:4144
 msgid "Struct"
@@ -11008,12 +11010,14 @@ msgid "Feat"
 msgstr ""
 
 #: src/hci.c:4154
+#, fuzzy
 msgid "Place Features on map"
-msgstr ""
+msgstr "Vihollisrakennukset: %u"
 
 #: src/hci.c:4165
+#, fuzzy
 msgid "Pause or unpause the game"
-msgstr ""
+msgstr "Isäntä on jättänyt pelin!"
 
 #: src/hci.c:4179
 msgid "Align height of all map objects"
@@ -12071,7 +12075,7 @@ msgstr ""
 
 #: src/multiplay.c:729
 msgid "The host has left the game!"
-msgstr ""
+msgstr "Isäntä on jättänyt pelin!"
 
 #: src/multiplay.c:1908
 msgid "Green"
@@ -12103,7 +12107,7 @@ msgstr "Pinkki"
 
 #: src/multiplay.c:1915
 msgid "Cyan"
-msgstr "Syaani"
+msgstr "Sinivihreä"
 
 #: src/research.c:1849
 #, c-format

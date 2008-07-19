@@ -5,19 +5,20 @@
 #
 # Alexandr Ivanov <wz2100@mail.ru>, 2008.
 # Stanislav Pererva <stas_ap@inbox.ru>, 2008.
+# Dangaard <dangaard@mail.ru>, 2008.
 msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
 "POT-Creation-Date: 2008-07-19 21:58+0200\n"
-"PO-Revision-Date: 2008-05-09 17:01+0000\n"
-"Last-Translator: Stanislav Pererva <stas_ap@inbox.ru>\n"
+"PO-Revision-Date: 2008-07-12 11:40+0000\n"
+"Last-Translator: Dangaard <dangaard@mail.ru>\n"
 "Language-Team: Russian <warzone-dev@gna.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11) ? 0 : (n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20)) ? 1 : 2;\n"
-"X-Launchpad-Export-Date: 2008-05-10 13:56+0000\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1) && (n%100!=11) ? 0 : (n%10>=2) && (n%10<=4) && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Launchpad-Export-Date: 2008-07-19 19:37+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 "X-Poedit-Language: Russian\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -28,9 +29,8 @@ msgid "Campaign One Full Version Test Message"
 msgstr ""
 
 #: data/messages/strings/cam1strings.txt:5
-#, fuzzy
 msgid "OBJECTIVE: Locate and recover neural synapse technology"
-msgstr "ЦЕЛЬ: Обнаружить и заполучить технологию нейронных импульсов"
+msgstr "ЗАДАЧА: Найти и получить нейронную синапс технологию"
 
 #: data/messages/strings/cam1strings.txt:6
 msgid "Establish a base, then search for a Pre-Collapse structure."
@@ -104,7 +104,7 @@ msgstr "Пополнения доступы."
 
 #: data/messages/strings/cam1strings.txt:29
 msgid "TRANSPORT MISSION: Encoded Signals Detected"
-msgstr "Миссия на вылете: Обнаружен зашифрованный сигнал"
+msgstr "ТРАНСПОРТНАЯ МИССИЯ: Обнаружен зашифрованный сигнал"
 
 #: data/messages/strings/cam1strings.txt:30
 msgid "Take a scout force to investigate these signals."
@@ -116,7 +116,7 @@ msgstr "Используйте грузовики для постройки за
 
 #: data/messages/strings/cam1strings.txt:33
 msgid "TRANSPORT MISSION: Enemy Transmissions Detected"
-msgstr "Миссия на вылете: Обнаружена вражеская передача"
+msgstr "ТРАНСПОРТНАЯ МИССИЯ: Обнаружена вражеская передача сигнала."
 
 #: data/messages/strings/cam1strings.txt:34
 msgid "Scout the designated area for enemy research facilities."
@@ -128,7 +128,7 @@ msgstr "Отправляйтесь к зоне высадки #2. Не вход�
 
 #: data/messages/strings/cam1strings.txt:37
 msgid "TRANSPORT MISSION: Synaptic Link Location"
-msgstr "Миссия на вылете: Обнаружение синаптической связи"
+msgstr "ТРАНСПОРТНАЯ МИССИЯ: Обнаружение синаптической связи"
 
 #: data/messages/strings/cam1strings.txt:38
 msgid "The New Paradigm are analyzing synaptic link technology at this location."
@@ -140,7 +140,7 @@ msgstr "Соберите атакующую команду и заполучит
 
 #: data/messages/strings/cam1strings.txt:41
 msgid "TRANSPORT MISSION: New Objectives"
-msgstr "Миссия на вылете: Новые задания"
+msgstr "ТРАНСПОРТНАЯ МИССИЯ: Новые задачи"
 
 #: data/messages/strings/cam1strings.txt:42
 msgid "New Paradigm are searching for artifacts in this vicinity."
@@ -152,7 +152,7 @@ msgstr "Перехватите их. Не позвольте ни одному �
 
 #: data/messages/strings/cam1strings.txt:45
 msgid "TRANSPORT MISSION: Enemy Base Under Construction"
-msgstr "Миссия на вылете: Вражеская база строится"
+msgstr "ТРАНСПОРТНАЯ МИССИЯ: Строительство вражеской базы"
 
 #: data/messages/strings/cam1strings.txt:46
 msgid "Enemy forces are establishing a forward base at this location."
@@ -247,7 +247,7 @@ msgstr "Мы заполучили несколько артефактов."
 
 #: data/messages/strings/cam1strings.txt:83
 msgid "There is a better equipped force operating in this area."
-msgstr "В этой зоне действуют лучше экипированные войска."
+msgstr "На этой местоности расположены хорошо вооруженные силы."
 
 #: data/messages/strings/cam1strings.txt:86
 msgid "TEAM GAMMA UPDATE"
@@ -271,15 +271,15 @@ msgstr "Мы обнаруживаем вражеские войска в это�
 
 #: data/messages/strings/cam1strings.txt:96
 msgid "PRIMARY OBJECTIVE"
-msgstr ""
+msgstr "ОСНОВНЫЕ ЗАДАЧИ"
 
 #: data/messages/strings/cam1strings.txt:97
 msgid "This structure is your primary objective."
-msgstr ""
+msgstr "Это сооружение ваша основная задача."
 
 #: data/messages/strings/cam1strings.txt:98
 msgid "Search for and recover any artifacts here."
-msgstr ""
+msgstr "Найти и заполучить любые артефакты в этом месте."
 
 #: data/messages/strings/cam1strings.txt:100
 msgid "ENEMY LZ"
@@ -298,8 +298,9 @@ msgid "New objective."
 msgstr "Новая задача."
 
 #: data/messages/strings/cam1strings.txt:106
+#, fuzzy
 msgid "We have detected and isolated an intruder program."
-msgstr ""
+msgstr "Мы обнаружили и изолировали программу захватчик."
 
 #: data/messages/strings/cam1strings.txt:111
 msgid "Supplemental"
@@ -307,11 +308,11 @@ msgstr ""
 
 #: data/messages/strings/cam1strings.txt:112
 msgid "The synaptic link technology was at this location but was removed."
-msgstr ""
+msgstr "Технология синаптической связи находилась в этой области, но была перемещена."
 
 #: data/messages/strings/cam1strings.txt:114
 msgid "Establish a forward base then continue the search for the synaptic link."
-msgstr ""
+msgstr "Построить передовую базу, затем продолжить поиск синаптической связи."
 
 #: data/messages/strings/cam1strings.txt:118
 msgid "The New Paradigm have been driven from this zone."
@@ -351,27 +352,27 @@ msgstr "Уничтожить базу и захватить любые прис�
 
 #: data/messages/strings/cam1strings.txt:137
 msgid "The synaptic link technology has been recovered!"
-msgstr ""
+msgstr "Была получена технология синаптической связи!"
 
 #: data/messages/strings/cam1strings.txt:138
 msgid "Initial research confirms it will be of great benefit to the Project."
-msgstr ""
+msgstr "Начальные исследования показывают, что это будет большим преимуществом для Проекта."
 
 #: data/messages/strings/cam1strings.txt:141
 msgid "Base Beta is under heavy attack, they may need assistance."
-msgstr ""
+msgstr "База Бета подверглась сильной атаке, возможно им требуется поддержка."
 
 #: data/messages/strings/cam1strings.txt:142
 msgid "We will send further updates as they arrive."
-msgstr ""
+msgstr "Мы будем присылать дополнительную информацию по мере появления."
 
 #: data/messages/strings/cam1strings.txt:145
 msgid "This transmission was intercepted a few minutes ago."
-msgstr ""
+msgstr "Это сообщение было перехвачено несколько минут назад."
 
 #: data/messages/strings/cam1strings.txt:146
 msgid "It originates from the east."
-msgstr ""
+msgstr "Источник находится на востоке."
 
 #: data/messages/strings/cam1strings.txt:149
 msgid "Commander"
@@ -379,7 +380,7 @@ msgstr "Командующий"
 
 #: data/messages/strings/cam1strings.txt:150
 msgid "Congratulations on defeating the New Paradigm."
-msgstr ""
+msgstr "Поздравляем с разгромом Новой Парадигмы."
 
 #: data/messages/strings/cam1strings.txt:151
 msgid "This sector is now secure."
@@ -10247,7 +10248,7 @@ msgstr "Обновленная боевая компьютерная систе�
 #: lib/framework/i18n.c:64
 #, fuzzy
 msgid "System locale"
-msgstr "Системы"
+msgstr "Язык"
 
 #: lib/framework/i18n.c:44
 #: lib/framework/i18n.c:69
@@ -10277,7 +10278,7 @@ msgstr "Итальянский"
 #: lib/framework/i18n.c:49
 #: lib/framework/i18n.c:73
 msgid "Dutch"
-msgstr "Голландский"
+msgstr "Датский"
 
 #: lib/framework/i18n.c:50
 #: lib/framework/i18n.c:67
@@ -10988,16 +10989,18 @@ msgid "Tile"
 msgstr "Тигр"
 
 #: src/hci.c:4126
+#, fuzzy
 msgid "Place tiles on map"
-msgstr ""
+msgstr "Установить Лимиты Сооружений"
 
 #: src/hci.c:4135
 msgid "Unit"
 msgstr "Юнит"
 
 #: src/hci.c:4136
+#, fuzzy
 msgid "Place Unit on map"
-msgstr ""
+msgstr "Установить Лимиты Сооружений"
 
 #: src/hci.c:4144
 msgid "Struct"
@@ -11013,8 +11016,9 @@ msgid "Feat"
 msgstr ""
 
 #: src/hci.c:4154
+#, fuzzy
 msgid "Place Features on map"
-msgstr ""
+msgstr "Установить Лимиты Сооружений"
 
 #: src/hci.c:4165
 #, fuzzy
@@ -11093,7 +11097,7 @@ msgstr ""
 
 #: src/intelmap.c:407
 msgid "Project Goals"
-msgstr ""
+msgstr "Задачи проекта"
 
 #: src/intelmap.c:410
 msgid "Current Objective"
@@ -11437,7 +11441,7 @@ msgstr "Скриншот"
 
 #: src/keymap.c:302
 msgid "Toggle Formation Speed Limiting"
-msgstr ""
+msgstr "Установить ограничение скорости подразделений"
 
 #: src/keymap.c:303
 msgid "View Location of Previous Message"
@@ -11640,20 +11644,24 @@ msgid "Reset Game Speed"
 msgstr "Стандартная скорость игры"
 
 #: src/keymap.c:368
+#, fuzzy
 msgid "View North"
-msgstr ""
+msgstr "Взгляд на Север"
 
 #: src/keymap.c:369
+#, fuzzy
 msgid "View South"
-msgstr ""
+msgstr "Взгляд на Юг"
 
 #: src/keymap.c:370
+#, fuzzy
 msgid "View East"
-msgstr ""
+msgstr "Взгляд на Восток"
 
 #: src/keymap.c:371
+#, fuzzy
 msgid "View West"
-msgstr ""
+msgstr "Взгляд на Запад"
 
 #: src/keymap.c:372
 msgid "View next Oil Derrick"
@@ -11721,7 +11729,7 @@ msgstr "Выделить всю технику на воздушной поду�
 
 #: src/keymap.c:419
 msgid "Select all Units on Screen"
-msgstr "Выделить все технику на экране"
+msgstr "Выделить всю технику на экране"
 
 #: src/keymap.c:420
 msgid "Select all Tracks"
@@ -11729,7 +11737,7 @@ msgstr "Выделить всю технику на гусеничном ход�
 
 #: src/keymap.c:421
 msgid "Select EVERY unit"
-msgstr ""
+msgstr "Выделить ВСЮ технику"
 
 #: src/keymap.c:422
 msgid "Select all VTOLs"
@@ -11833,7 +11841,7 @@ msgstr "%s вступил в союз с %s"
 #: src/multigifts.c:801
 #, c-format
 msgid "You Discover Blueprints For %s"
-msgstr ""
+msgstr "Вы обнаружили чертежи %s"
 
 #: src/multiint.c:333
 #: src/multilimit.c:156
@@ -12012,16 +12020,19 @@ msgid "%s is Joining the Game"
 msgstr "%s присоединился к игре"
 
 #: src/multimenu.c:559
+#, fuzzy
 msgid "Technology level 1"
-msgstr ""
+msgstr "Уровень технологий 1"
 
 #: src/multimenu.c:567
+#, fuzzy
 msgid "Technology level 2"
-msgstr ""
+msgstr "Уровень технологий 2"
 
 #: src/multimenu.c:573
+#, fuzzy
 msgid "Technology level 3"
-msgstr ""
+msgstr "Уровень технологий 3"
 
 #: src/multimenu.c:579
 msgid "Any number of players"
@@ -12297,9 +12308,9 @@ msgid "%s - Connected %u of %u"
 msgstr "%s - подключено %u из %u"
 
 #: src/structure.c:5909
-#, c-format
+#, fuzzy, c-format
 msgid "%s - Damage %3.0f%%"
-msgstr ""
+msgstr "%s - Урон %u%%"
 
 #: src/structure.c:6029
 #: src/structure.c:6078
@@ -12371,3 +12382,6 @@ msgstr " Билд - %s"
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "Версия %s%s%s%s"
+
+#~ msgid "Green: %u"
+#~ msgstr "Молодых: %u"

@@ -5,19 +5,20 @@
 #
 # Per I. Mathisen <per@gna.org>, 2007.
 # Olav Andreas Lindekleiv <Unknown>, 2008.
+# Thor Marius K. Høgås <nitrolinken@gmail.com>, 2008.
 msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
 "POT-Creation-Date: 2008-07-19 21:58+0200\n"
-"PO-Revision-Date: 2008-05-09 16:54+0000\n"
-"Last-Translator: Olav Andreas Lindekleiv <Unknown>\n"
+"PO-Revision-Date: 2008-07-10 09:26+0000\n"
+"Last-Translator: Thor Marius K. Høgås <nitrolinken@gmail.com>\n"
 "Language-Team: none\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Launchpad-Export-Date: 2008-05-10 13:56+0000\n"
+"X-Launchpad-Export-Date: 2008-07-19 19:37+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: data/messages/strings/cam1strings.txt:3
@@ -58,8 +59,9 @@ msgid "A power surge has been detected to the south of our position."
 msgstr ""
 
 #: data/messages/strings/cam1strings.txt:15
+#, fuzzy
 msgid "Investigate and secure the area."
-msgstr ""
+msgstr "Undersøk og sikre området."
 
 #: data/messages/strings/cam1strings.txt:17
 msgid "ALPHA BASE MISSION: The New Paradigm"
@@ -95,8 +97,9 @@ msgstr ""
 
 #: data/messages/strings/cam1strings.txt:27
 #: data/messages/strings/cam1strings.txt:170
+#, fuzzy
 msgid "Reinforcements are available."
-msgstr ""
+msgstr "Forsterkninger er tilgjengelig"
 
 #: data/messages/strings/cam1strings.txt:29
 msgid "TRANSPORT MISSION: Encoded Signals Detected"
@@ -264,8 +267,9 @@ msgid "We are detecting an enemy attack force at this location."
 msgstr ""
 
 #: data/messages/strings/cam1strings.txt:96
+#, fuzzy
 msgid "PRIMARY OBJECTIVE"
-msgstr ""
+msgstr "HOVED MÅL"
 
 #: data/messages/strings/cam1strings.txt:97
 msgid "This structure is your primary objective."
@@ -521,7 +525,7 @@ msgstr ""
 
 #: data/messages/strings/cam2strings.txt:44
 msgid "Attack!"
-msgstr ""
+msgstr "Angrip!"
 
 #: data/messages/strings/cam2strings.txt:47
 msgid "BETA BASE MISSION: Hold At All Costs"
@@ -2090,7 +2094,7 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:390
 #, fuzzy
 msgid "Research Facility"
-msgstr "Forskning"
+msgstr "Forskningsfasiliteter"
 
 #: data/messages/strings/names.txt:389
 #: data/messages/strings/names.txt:830
@@ -2098,7 +2102,7 @@ msgstr "Forskning"
 #: data/mp/messages/strings/names.txt:836
 #, fuzzy
 msgid "Research Module"
-msgstr "Forskning ferdig"
+msgstr "Forskningsmodul"
 
 #: data/messages/strings/names.txt:390
 #: data/mp/messages/strings/names.txt:392
@@ -6594,7 +6598,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:773
 #, fuzzy
 msgid "Increases research speed"
-msgstr "Mer spillhastighet"
+msgstr "Øk forskningshastighet"
 
 #: data/messages/strings/resstrings.txt:678
 #: data/mp/messages/strings/resstrings.txt:756
@@ -6609,7 +6613,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:771
 #, fuzzy
 msgid "Research Improved"
-msgstr "Forskning ferdig"
+msgstr "Forskning forbedret"
 
 #: data/messages/strings/resstrings.txt:682
 #: data/mp/messages/strings/resstrings.txt:760
@@ -10315,23 +10319,23 @@ msgstr "Latin"
 
 #: src/clparse.c:89
 msgid "Run in cheat mode"
-msgstr ""
+msgstr "Kjør i juksemodus"
 
 #: src/clparse.c:90
 msgid "Set default data directory"
-msgstr ""
+msgstr "Velg standard datamappe"
 
 #: src/clparse.c:90
 msgid "data directory"
-msgstr ""
+msgstr "datamappe"
 
 #: src/clparse.c:91
 msgid "Set configuration directory"
-msgstr ""
+msgstr "Velg konfigurasjonsmappe"
 
 #: src/clparse.c:91
 msgid "configuration directory"
-msgstr ""
+msgstr "konfigurasjonsmappe"
 
 #: src/clparse.c:92
 msgid "Show debug for given level"
@@ -10347,11 +10351,11 @@ msgstr ""
 
 #: src/clparse.c:93
 msgid "file"
-msgstr ""
+msgstr "fil"
 
 #: src/clparse.c:94
 msgid "Play in fullscreen mode"
-msgstr ""
+msgstr "Spill i fullskjermsmodus"
 
 #: src/clparse.c:95
 #, fuzzy
@@ -10360,11 +10364,11 @@ msgstr "Last Spill"
 
 #: src/clparse.c:95
 msgid "game-name"
-msgstr ""
+msgstr "spillnavn"
 
 #: src/clparse.c:96
 msgid "Show this help message and exit"
-msgstr ""
+msgstr "Vis denne hjelpemeldingen og avslutt"
 
 #: src/clparse.c:97
 msgid "Enable a global mod"
@@ -10385,29 +10389,29 @@ msgid "Enable a multiplay only mod"
 msgstr ""
 
 #: src/clparse.c:100
-#, fuzzy
 msgid "Load a saved game"
-msgstr "Last Spill"
+msgstr "Last et lagret spill"
 
 #: src/clparse.c:100
+#, fuzzy
 msgid "savegame"
-msgstr ""
+msgstr "lagret spill"
 
 #: src/clparse.c:103
 msgid "Play in windowed mode"
-msgstr ""
+msgstr "Spill i vindusmodus"
 
 #: src/clparse.c:104
 msgid "Show version information and exit"
-msgstr ""
+msgstr "Vis versjoninformasjon og avslutt"
 
 #: src/clparse.c:105
 msgid "Set the resolution to use"
-msgstr ""
+msgstr "Velg skjermoppløsning"
 
 #: src/clparse.c:105
 msgid "WIDTHxHEIGHT"
-msgstr ""
+msgstr "BREDDExHØYDE"
 
 #: src/clparse.c:106
 msgid "Enable shadows"
@@ -10419,11 +10423,11 @@ msgstr "Slå av skygger"
 
 #: src/clparse.c:108
 msgid "Enable sound"
-msgstr ""
+msgstr "Aktiver lyd"
 
 #: src/clparse.c:109
 msgid "Disable sound"
-msgstr ""
+msgstr "Deaktiver lyd"
 
 #: src/clparse.c:110
 msgid "Activate self-test"
@@ -10439,7 +10443,7 @@ msgstr "Spiller"
 #: src/design.c:474
 #: src/design.c:3547
 msgid "New Vehicle"
-msgstr ""
+msgstr "Nytt Kjøretøy"
 
 #: src/design.c:521
 msgid "Vehicle Body"
@@ -10457,7 +10461,7 @@ msgstr ""
 
 #: src/design.c:638
 msgid "Delete Design"
-msgstr ""
+msgstr "Slett design"
 
 #: src/design.c:692
 #: src/design.c:740
@@ -10503,8 +10507,9 @@ msgstr ""
 
 #: src/design.c:1061
 #: src/design.c:1093
+#, fuzzy
 msgid "Power Usage"
-msgstr ""
+msgstr "Energibruk"
 
 #: src/design.c:1343
 msgid "Transporter"
@@ -10536,8 +10541,9 @@ msgstr "Rekkevidde"
 
 #: src/design.c:1742
 #: src/design.c:1775
+#, fuzzy
 msgid "Damage"
-msgstr ""
+msgstr "Skade"
 
 #: src/design.c:1750
 #: src/design.c:1784
@@ -10546,8 +10552,9 @@ msgstr ""
 
 #: src/design.c:1921
 #: src/design.c:1937
+#, fuzzy
 msgid "Air Speed"
-msgstr ""
+msgstr "Lufthastighet"
 
 #: src/design.c:1957
 #: src/design.c:1990
@@ -10561,16 +10568,18 @@ msgstr ""
 
 #: src/design.c:1973
 #: src/design.c:2008
+#, fuzzy
 msgid "Water Speed"
-msgstr ""
+msgstr "Vannhastighet"
 
 #: src/design.c:2142
 msgid "Weapons"
-msgstr ""
+msgstr "Våpen"
 
 #: src/design.c:2166
+#, fuzzy
 msgid "Systems"
-msgstr ""
+msgstr "Systemer"
 
 #: src/display.c:1671
 msgid "Cannot Build. Oil Resource Burning."
@@ -10579,40 +10588,41 @@ msgstr "Kan ikke bygge her. Oljeressurs brenner."
 #: src/display.c:1818
 #, c-format
 msgid "%s - Damage %d%% - Experience %d, %s"
-msgstr ""
+msgstr "%s - Skade %d%% - Erfaring %d, %s"
 
 #: src/display.c:2055
 msgid "Truck ordered to build Oil Derrick"
-msgstr ""
+msgstr "Lastebil beordret til å bygge Boretårn"
 
 #: src/droid.c:190
 msgid "Unit Lost!"
 msgstr "Enhet Tapt!"
 
 #: src/droid.c:1614
+#, fuzzy
 msgid "Structure Restored"
-msgstr ""
+msgstr "Konstruksjon gjennopprettet"
 
 #: src/droid.c:3401
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Gruppe %u er markert - %u Enhet"
+msgstr[1] "Gruppe %u er markert - %u Enheter"
 
 #: src/droid.c:3414
-#, c-format
+#, fuzzy, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%u enhet tildelt gruppe %u"
+msgstr[1] "%u enheter tildelt gruppe %u"
 
 #: src/droid.c:3427
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Sentrert på gruppe %u - %u enhet"
+msgstr[1] "Sentrert på gruppe %u - %u enheter"
 
 #: src/droid.c:3431
 #, c-format
@@ -10703,7 +10713,7 @@ msgstr "INTRODUKSJON"
 #: src/frontend.c:1109
 msgctxt "menu"
 msgid "Return"
-msgstr ""
+msgstr "Gå tilbake"
 
 #: src/frontend.c:353
 msgid "Load Campaign"
@@ -10760,12 +10770,14 @@ msgid "Audio Options"
 msgstr "Lydalternativer"
 
 #: src/frontend.c:535
+#, fuzzy
 msgid "Key Mappings"
-msgstr ""
+msgstr "Hurtigtaster"
 
 #: src/frontend.c:607
+#, fuzzy
 msgid "Reverse Mouse"
-msgstr ""
+msgstr "Reverser mus"
 
 #: src/frontend.c:610
 #: src/frontend.c:622
@@ -10806,7 +10818,7 @@ msgstr "Tåke"
 #: src/frontend.c:634
 #: src/frontend.c:752
 msgid "Mist"
-msgstr ""
+msgstr "Tåkedis"
 
 #: src/frontend.c:638
 #: src/frontend.c:745
@@ -10816,33 +10828,35 @@ msgstr "Krigståke"
 
 #: src/frontend.c:643
 msgid "Video Playback"
-msgstr ""
+msgstr "Videoavspilling"
 
 #: src/frontend.c:646
 #: src/frontend.c:802
 msgid "Full"
-msgstr ""
+msgstr "Full"
 
 #: src/frontend.c:650
 #: src/frontend.c:792
 #: src/frontend.c:918
 #: src/frontend.c:963
+#, fuzzy
 msgid "Windowed"
-msgstr ""
+msgstr "Vindumodus"
 
 #: src/frontend.c:653
 #: src/frontend.c:797
+#, fuzzy
 msgid "Minimal"
-msgstr ""
+msgstr "Minimal"
 
 #: src/frontend.c:660
 #: src/frontend.c:664
 msgid "Subtitles"
-msgstr ""
+msgstr "Undertekster"
 
 #: src/frontend.c:685
 msgid "Shadows"
-msgstr ""
+msgstr "Skygger"
 
 #: src/frontend.c:831
 #: src/ingameop.c:155
@@ -10867,11 +10881,11 @@ msgstr "Grafikkalternativer"
 #: src/frontend.c:914
 #: src/frontend.c:968
 msgid "Fullscreen"
-msgstr ""
+msgstr "Fullskjerm"
 
 #: src/frontend.c:922
 msgid "Resolution*"
-msgstr ""
+msgstr "Oppløsning*"
 
 #: src/frontend.c:927
 msgid "Trap Cursor"
@@ -10882,8 +10896,9 @@ msgid "Texture size"
 msgstr ""
 
 #: src/frontend.c:943
+#, fuzzy
 msgid "* Takes effect on game restart"
-msgstr ""
+msgstr "* Trer i kraft etter omstart av spillet"
 
 #: src/frontend.c:1072
 #: src/frontend.c:1130
@@ -10916,12 +10931,13 @@ msgstr ""
 #: src/frontend.c:1102
 #: src/frontend.c:1128
 msgid "Language"
-msgstr ""
+msgstr "Språk"
 
 #: src/frontend.c:1106
 #: src/frontend.c:1129
+#, fuzzy
 msgid "Unit Colour"
-msgstr ""
+msgstr "Enhetsfarge"
 
 #: src/hci.c:1017
 #: src/hci.c:3879
@@ -10952,39 +10968,37 @@ msgid "Failed to create building"
 msgstr ""
 
 #: src/hci.c:2139
-#, c-format
+#, fuzzy, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new structure: %s."
-msgstr ""
+msgstr "Spiller %u jukser (debug menu) til seg en ny konstruksjon: %s."
 
 #: src/hci.c:2153
-#, c-format
+#, fuzzy, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new feature: %s."
-msgstr ""
+msgstr "Spiller %u jukser (debug menu) til seg ett nytt moment : %s."
 
 #: src/hci.c:2172
-#, c-format
+#, fuzzy, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new droid: %s."
-msgstr ""
+msgstr "Spiller %u jukser (debug menu) til seg en ny droide: %s."
 
 #: src/hci.c:3781
 msgid "Commanders (F6)"
-msgstr ""
+msgstr "Kommandører (F6)"
 
 #: src/hci.c:3797
 msgid "Intelligence Display (F5)"
-msgstr ""
+msgstr "Visning av Intelligens (F5)"
 
 #: src/hci.c:3813
 msgid "Manufacture (F1)"
 msgstr "Produksjon (F1)"
 
 #: src/hci.c:3829
-#, fuzzy
 msgid "Design (F4)"
 msgstr "Design (F4)"
 
 #: src/hci.c:3845
-#, fuzzy
 msgid "Research (F2)"
 msgstr "Forskning (F2)"
 
@@ -11000,8 +11014,9 @@ msgid "Power"
 msgstr "Energi"
 
 #: src/hci.c:4125
+#, fuzzy
 msgid "Tile"
-msgstr ""
+msgstr "fil"
 
 #: src/hci.c:4126
 #, fuzzy
@@ -11027,8 +11042,9 @@ msgid "Place Structures on map"
 msgstr "Sett strukturbegrensninger"
 
 #: src/hci.c:4153
+#, fuzzy
 msgid "Feat"
-msgstr ""
+msgstr "bragd"
 
 #: src/hci.c:4154
 #, fuzzy
@@ -11048,7 +11064,6 @@ msgstr ""
 #: src/ingameop.c:121
 #: src/ingameop.c:254
 #: src/ingameop.c:259
-#, fuzzy
 msgid "Quit"
 msgstr "Avslutt"
 
@@ -11068,8 +11083,9 @@ msgid "Factory Delivery Point"
 msgstr "Leveringsmål for fabrikk"
 
 #: src/hci.c:5641
+#, fuzzy
 msgid "Loop Production"
-msgstr ""
+msgstr "Kontinuerlig produksjon"
 
 #: src/hci.c:5732
 msgid "Tab Scroll left"
@@ -11084,7 +11100,7 @@ msgstr ""
 #: src/ingameop.c:263
 #, fuzzy
 msgid "Resume Game"
-msgstr "Nullstill hastighet"
+msgstr "Gjenoppta spill"
 
 #: src/ingameop.c:271
 msgid "Load Game"
@@ -11100,8 +11116,9 @@ msgstr "Lagre spill"
 #: src/intdisplay.c:201
 #: src/intdisplay.c:246
 #: src/intdisplay.c:293
+#, fuzzy
 msgid "Power Accrued"
-msgstr ""
+msgstr "Oppsamlet energi"
 
 #: src/intelmap.c:242
 #: src/keybind.c:1229
@@ -11117,38 +11134,41 @@ msgid "Project Goals"
 msgstr ""
 
 #: src/intelmap.c:410
+#, fuzzy
 msgid "Current Objective"
-msgstr ""
+msgstr "Nåværende mål"
 
 #: src/intorder.c:179
 #: src/keymap.c:388
 msgid "Short Range"
-msgstr ""
+msgstr "Kort Rekkevidde"
 
 #: src/intorder.c:180
 #: src/keymap.c:394
 msgid "Long Range"
-msgstr ""
+msgstr "Lang Rekkevidde"
 
 #: src/intorder.c:181
 #: src/keymap.c:387
+#, fuzzy
 msgid "Optimum Range"
-msgstr ""
+msgstr "Optimal rekkevidde"
 
 #: src/intorder.c:182
 #: src/keymap.c:407
+#, fuzzy
 msgid "Retreat at Medium Damage"
-msgstr ""
+msgstr "Retrett ved medium skade"
 
 #: src/intorder.c:183
 #: src/keymap.c:408
 msgid "Retreat at Heavy Damage"
-msgstr ""
+msgstr "Retrett ved alvorlig skade"
 
 #: src/intorder.c:184
 #: src/keymap.c:409
 msgid "Do or Die!"
-msgstr ""
+msgstr "Gjør det, eller Dø!"
 
 #: src/intorder.c:185
 msgid "Fire-At-Will"
@@ -11167,43 +11187,44 @@ msgstr ""
 #: src/intorder.c:188
 #: src/keymap.c:390
 msgid "Patrol"
-msgstr ""
+msgstr "Patruljér"
 
 #: src/intorder.c:189
 #: src/keymap.c:389
+#, fuzzy
 msgid "Pursue"
-msgstr ""
+msgstr "Forfølge"
 
 #: src/intorder.c:190
 msgid "Guard Position"
-msgstr ""
+msgstr "Vokt Posisjon"
 
 #: src/intorder.c:191
 #: src/keymap.c:392
 msgid "Hold Position"
-msgstr ""
+msgstr "Hold Posisjon"
 
 #: src/intorder.c:192
 #: src/keymap.c:391
 msgid "Return For Repair"
-msgstr ""
+msgstr "Returner for Reparasjon"
 
 #: src/intorder.c:193
 msgid "Return To HQ"
-msgstr ""
+msgstr "Returner til Hovedkvarter"
 
 #: src/intorder.c:194
 msgid "Go to Transport"
-msgstr ""
+msgstr "Gå til Transport"
 
 #: src/intorder.c:195
 #: src/keymap.c:418
 msgid "Return for Recycling"
-msgstr ""
+msgstr "Returner for Gjenvinning"
 
 #: src/intorder.c:196
 msgid "Recycle"
-msgstr ""
+msgstr "Gjenvinn"
 
 #: src/intorder.c:197
 msgid "Assign Factory Production"
@@ -11222,8 +11243,9 @@ msgid "Assign VTOL Factory Production"
 msgstr ""
 
 #: src/intorder.c:201
+#, fuzzy
 msgid "Circle"
-msgstr ""
+msgstr "fil"
 
 #: src/keybind.c:131
 msgid "Sorry, that cheat is disabled in multiplayer games."
@@ -11331,8 +11353,9 @@ msgid "Forecast : Clear skies for all areas... NO WEATHER"
 msgstr "Værtmelding: Klar himmel, ingen skyer i vente... IKKE VÆR"
 
 #: src/keybind.c:1626
+#, fuzzy
 msgid "Enemy destroyed by cheating!"
-msgstr ""
+msgstr "Fiende tilintetgjort av juks!"
 
 #: src/keybind.c:2152
 msgid "Centered on player HQ, direction NORTH"
@@ -11399,8 +11422,9 @@ msgid "Radar showing height"
 msgstr "Radar viser høyde"
 
 #: src/keyedit.c:356
+#, fuzzy
 msgid "KEY MAPPING"
-msgstr ""
+msgstr "Hurtigtaster"
 
 #: src/keyedit.c:378
 #: src/multiint.c:388
@@ -11408,8 +11432,9 @@ msgstr ""
 #: src/multiint.c:604
 #: src/multiint.c:841
 #: src/multilimit.c:148
+#, fuzzy
 msgid "Return To Previous Screen"
-msgstr ""
+msgstr "Gå tilbake til forige skjermbilde"
 
 #: src/keyedit.c:383
 msgid "Select Default"
@@ -11417,7 +11442,7 @@ msgstr "Bruk forhåndsvalg"
 
 #: src/keymap.c:292
 msgid "Manufacture"
-msgstr ""
+msgstr "Produsere"
 
 #: src/keymap.c:293
 msgid "Research"
@@ -11465,84 +11490,83 @@ msgstr ""
 
 #: src/keymap.c:308
 msgid "Assign Group 0"
-msgstr ""
+msgstr "Tildel gruppe 0"
 
 #: src/keymap.c:309
 msgid "Assign Group 1"
-msgstr ""
+msgstr "Tildel gruppe 1"
 
 #: src/keymap.c:310
 msgid "Assign Group 2"
-msgstr ""
+msgstr "Tildel gruppe 2"
 
 #: src/keymap.c:311
 msgid "Assign Group 3"
-msgstr ""
+msgstr "Tildel gruppe 3"
 
 #: src/keymap.c:312
 msgid "Assign Group 4"
-msgstr ""
+msgstr "Tildel gruppe 4"
 
 #: src/keymap.c:313
 msgid "Assign Group 5"
-msgstr ""
+msgstr "Tildel gruppe 5"
 
 #: src/keymap.c:314
 msgid "Assign Group 6"
-msgstr ""
+msgstr "Tildel gruppe 6"
 
 #: src/keymap.c:315
 msgid "Assign Group 7"
-msgstr ""
+msgstr "Tildel gruppe 7"
 
 #: src/keymap.c:316
 msgid "Assign Group 8"
-msgstr ""
+msgstr "Tildel gruppe 8"
 
 #: src/keymap.c:317
 msgid "Assign Group 9"
-msgstr ""
+msgstr "Tildel gruppe 9"
 
 #: src/keymap.c:321
-#, fuzzy
 msgid "Select Group 0"
-msgstr "Nullstill hastighet"
+msgstr "Velg gruppe 0"
 
 #: src/keymap.c:322
 msgid "Select Group 1"
-msgstr ""
+msgstr "Velg gruppe 1"
 
 #: src/keymap.c:323
 msgid "Select Group 2"
-msgstr ""
+msgstr "Velg gruppe 2"
 
 #: src/keymap.c:324
 msgid "Select Group 3"
-msgstr ""
+msgstr "Velg gruppe 3"
 
 #: src/keymap.c:325
 msgid "Select Group 4"
-msgstr ""
+msgstr "Velg gruppe 4"
 
 #: src/keymap.c:326
 msgid "Select Group 5"
-msgstr ""
+msgstr "Velg gruppe 5"
 
 #: src/keymap.c:327
 msgid "Select Group 6"
-msgstr ""
+msgstr "Velg gruppe 6"
 
 #: src/keymap.c:328
 msgid "Select Group 7"
-msgstr ""
+msgstr "Velg gruppe 7"
 
 #: src/keymap.c:329
 msgid "Select Group 8"
-msgstr ""
+msgstr "Velg gruppe 8"
 
 #: src/keymap.c:330
 msgid "Select Group 9"
-msgstr ""
+msgstr "Velg gruppe 9"
 
 #: src/keymap.c:334
 msgid "Select Commander 0"
@@ -11645,8 +11669,9 @@ msgid "Pitch Back"
 msgstr ""
 
 #: src/keymap.c:364
+#, fuzzy
 msgid "Orders Menu"
-msgstr ""
+msgstr "Ordremeny"
 
 #: src/keymap.c:365
 msgid "Decrease Game Speed"
@@ -11726,7 +11751,7 @@ msgstr ""
 
 #: src/keymap.c:413
 msgid "Select all Combat Units"
-msgstr ""
+msgstr "Velg alle kampenheter"
 
 #: src/keymap.c:414
 msgid "Select all Heavily Damaged Units"
@@ -11750,7 +11775,7 @@ msgstr ""
 
 #: src/keymap.c:421
 msgid "Select EVERY unit"
-msgstr ""
+msgstr "Velg ALLE enheter"
 
 #: src/keymap.c:422
 msgid "Select all VTOLs"
@@ -11786,15 +11811,17 @@ msgstr ""
 
 #: src/mission.c:2364
 msgid "Load Transport"
-msgstr ""
+msgstr "Last Transport"
 
 #: src/mission.c:2763
+#, fuzzy
 msgid "OBJECTIVE ACHIEVED"
-msgstr ""
+msgstr "MÅL OPPNÅDD"
 
 #: src/mission.c:2769
+#, fuzzy
 msgid "OBJECTIVE FAILED"
-msgstr ""
+msgstr "MÅL MISLYKKET"
 
 #: src/mission.c:2795
 #: src/mission.c:2832
@@ -11854,7 +11881,7 @@ msgstr "%s går inn i alianse med %s"
 #: src/multigifts.c:801
 #, c-format
 msgid "You Discover Blueprints For %s"
-msgstr ""
+msgstr "Du Finner Planer For %s"
 
 #: src/multiint.c:333
 #: src/multilimit.c:156
@@ -11906,8 +11933,9 @@ msgid "Game"
 msgstr "Spill"
 
 #: src/multiint.c:696
+#, fuzzy
 msgid "Mayhem"
-msgstr ""
+msgstr "Kaos"
 
 #: src/multiint.c:698
 msgid "Skirmish"
@@ -11919,7 +11947,7 @@ msgstr "Velg spillernavn"
 
 #: src/multiint.c:725
 msgid "Distance Fog"
-msgstr ""
+msgstr "Tåke i distansen"
 
 #: src/multiint.c:738
 #: src/multimenu.c:706
@@ -12034,15 +12062,15 @@ msgstr "%s hopper inn på spillet"
 
 #: src/multimenu.c:559
 msgid "Technology level 1"
-msgstr ""
+msgstr "Teknologinivå 1"
 
 #: src/multimenu.c:567
 msgid "Technology level 2"
-msgstr ""
+msgstr "Teknologinivå 2"
 
 #: src/multimenu.c:573
 msgid "Technology level 3"
-msgstr ""
+msgstr "Teknologinivå 3"
 
 #: src/multimenu.c:579
 msgid "Any number of players"
@@ -12050,19 +12078,20 @@ msgstr ""
 
 #: src/multimenu.c:586
 msgid "2 players"
-msgstr ""
+msgstr "2 spillere"
 
 #: src/multimenu.c:592
 msgid "4 players"
-msgstr ""
+msgstr "4 spillere"
 
 #: src/multimenu.c:598
 msgid "8 players"
-msgstr ""
+msgstr "8 spillere"
 
 #: src/multimenu.c:707
+#, fuzzy
 msgid "Score"
-msgstr ""
+msgstr "Poeng"
 
 #: src/multimenu.c:708
 msgid "Kills"
@@ -12070,11 +12099,12 @@ msgstr ""
 
 #: src/multimenu.c:717
 msgid "Ping"
-msgstr ""
+msgstr "Ping"
 
 #: src/multimenu.c:718
+#, fuzzy
 msgid "Played"
-msgstr ""
+msgstr "Spilt"
 
 #: src/multimenu.c:1024
 msgid "Toggle Alliance State"
@@ -12143,52 +12173,52 @@ msgstr "Forskning ferdig"
 
 #: src/research.c:2657
 msgid "Research Award"
-msgstr ""
+msgstr "Forskningsutmerkelse"
 
 #: src/scores.c:99
 #, c-format
 msgid "Own Units: %u"
-msgstr ""
+msgstr "Egne Enheter: %u"
 
 #: src/scores.c:100
 #, c-format
 msgid "Enemy Units: %u"
-msgstr ""
+msgstr "Fiendens Enheter: %u"
 
 #: src/scores.c:101
 #, c-format
 msgid "Own Structures: %u"
-msgstr ""
+msgstr "Egne Bygninger: %u"
 
 #: src/scores.c:102
 #, c-format
 msgid "Enemy Structures: %u"
-msgstr ""
+msgstr "Fiendens Bygninger: %u"
 
 #: src/scores.c:103
 #, c-format
 msgid "Units Manufactured: %u"
-msgstr ""
+msgstr "Produserte Enheter: %u"
 
 #: src/scores.c:104
 #, c-format
 msgid "Total Units: %u"
-msgstr ""
+msgstr "Totalt Antall Enheter: %u"
 
 #: src/scores.c:105
 #, c-format
 msgid "Structures Built: %u"
-msgstr ""
+msgstr "Bygninger Bygget: %u"
 
 #: src/scores.c:106
 #, c-format
 msgid "Total Structures: %u"
-msgstr ""
+msgstr "Totalt Antall Bygninger: %u"
 
 #: src/scores.c:108
-#, c-format
+#, fuzzy, c-format
 msgid "Rookie: %u"
-msgstr ""
+msgstr "Nybegynner: %u"
 
 #: src/scores.c:109
 #, fuzzy, c-format
@@ -12209,35 +12239,35 @@ msgstr ""
 #: src/scores.c:112
 #, c-format
 msgid "Professional: %u"
-msgstr ""
+msgstr "Profesjonell: %u"
 
 #: src/scores.c:113
 #, c-format
 msgid "Veteran: %u"
-msgstr ""
+msgstr "Veteran: %u"
 
 #: src/scores.c:114
 #, c-format
 msgid "Elite: %u"
-msgstr ""
+msgstr "Elite: %u"
 
 #: src/scores.c:115
 #, c-format
 msgid "Special: %u"
-msgstr ""
+msgstr "Spesiell: %u"
 
 #: src/scores.c:116
 #, c-format
 msgid "Hero: %u"
-msgstr ""
+msgstr "Helt: %u"
 
 #: src/scores.c:350
 msgid "Unit Losses"
-msgstr ""
+msgstr "Tapte Enheter"
 
 #: src/scores.c:351
 msgid "Structure Losses"
-msgstr ""
+msgstr "Tapte Bygninger"
 
 #: src/scores.c:352
 msgid "Force Information"
@@ -12251,12 +12281,12 @@ msgstr ""
 #: src/scores.c:437
 #, c-format
 msgid "Mission Time - %s"
-msgstr ""
+msgstr "Oppdragstid - %s"
 
 #: src/scores.c:442
 #, c-format
 msgid "Total Game Time - %s"
-msgstr ""
+msgstr "Total Spilletid - %s"
 
 #: src/scriptfuncs.c:3211
 msgid "YOU ARE VICTORIOUS!"
@@ -12309,8 +12339,8 @@ msgstr ""
 #, c-format
 msgid "%s - %u Unit assigned"
 msgid_plural "%s - %u Units assigned"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%s - %u Enhet tildelt"
+msgstr[1] "%s - %u Enheter tildelt"
 
 #: src/structure.c:5895
 #, c-format
@@ -12392,3 +12422,9 @@ msgstr " - bygd %s"
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "Version %s%s%s%s"
+
+#~ msgid "%s - Damage %u%%"
+#~ msgstr "%s - Skade %u%%"
+
+#~ msgid "Green: %u"
+#~ msgstr "Grønn %u"

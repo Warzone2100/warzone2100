@@ -12,14 +12,14 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
 "POT-Creation-Date: 2008-07-19 21:58+0200\n"
-"PO-Revision-Date: 2008-05-09 16:36+0000\n"
-"Last-Translator: Steven \"Kreuvf\" Koenig <kreuvf@gna.org>\n"
+"PO-Revision-Date: 2008-05-10 16:11+0000\n"
+"Last-Translator: Steven Kreuvf Koenig <Unknown>\n"
 "Language-Team: Deutsch <warzone-dev@gna.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Launchpad-Export-Date: 2008-05-10 13:56+0000\n"
+"X-Launchpad-Export-Date: 2008-07-19 19:37+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 "X-Poedit-Language: German\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -12112,7 +12112,7 @@ msgstr "Der Spielleiter hat das Spiel verlassen!"
 
 #: src/multiplay.c:1908
 msgid "Green"
-msgstr "Grün"
+msgstr "Neuling"
 
 #: src/multiplay.c:1909
 msgid "Orange"
@@ -12405,3 +12405,30 @@ msgstr " - %s gebaut"
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "Version %s%s%s%s"
+
+#~ msgid "%s - Damage %u%%"
+#~ msgstr "%s - Schaden %u%%"
+
+#~ msgid "Green: %u"
+#~ msgstr "Neuling: %u"
+
+#~ msgid "TRANSPORT MISSION: Rescue Civilians from Containment Camp "
+#~ msgstr "TRANSPORTERMISSION: Zivilisten aus Sammellager retten "
+
+#~ msgid "Defend the base and ........ the ....... "
+#~ msgstr "Verteidigen Sie die Basis ... die .... "
+
+#~ msgid "Search and destroy .... "
+#~ msgstr "Finden und zerstören .... "
+
+#~ msgid "R-Wpn-MG-Damage11"
+#~ msgstr "R-Wpn-MG-Damage11"
+
+#~ msgid " Mortar Pit"
+#~ msgstr " Mörsergrube"
+
+#~ msgid "Improvement in laser emission density "
+#~ msgstr "Verbesserung der Laseremissionsdichte "
+
+#~ msgid "R-Struc-Power-Cam2"
+#~ msgstr "R-Struc-Power-Cam2"

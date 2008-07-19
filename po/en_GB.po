@@ -9,14 +9,14 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
 "POT-Creation-Date: 2008-07-19 21:58+0200\n"
-"PO-Revision-Date: 2008-05-05 12:29+0000\n"
+"PO-Revision-Date: 2008-05-10 15:59+0000\n"
 "Last-Translator: Jen Ockwell <jenfraggleubuntu@googlemail.com>\n"
 "Language-Team: English (United Kingdom) <en_GB@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Launchpad-Export-Date: 2008-05-10 13:56+0000\n"
+"X-Launchpad-Export-Date: 2008-07-19 19:37+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: data/messages/strings/cam1strings.txt:3
@@ -939,12 +939,12 @@ msgstr "Enemy forces are ....... from these coordinates."
 #: data/messages/strings/cam3strings.txt:82
 #, fuzzy
 msgid "Defend the base and ........ the ......."
-msgstr "Defend the base and ........ the ....... "
+msgstr "Defend the base and ........ the ......."
 
 #: data/messages/strings/cam3strings.txt:83
 #, fuzzy
 msgid "Search and destroy ...."
-msgstr "Search and destroy .... "
+msgstr "Search and destroy ...."
 
 #: data/messages/strings/cam3strings.txt:86
 msgid "TRANSPORT MISSION: Ambush NEXUS Forces"
@@ -8361,7 +8361,7 @@ msgstr "All lasers upgraded automatically"
 #: data/mp/messages/strings/resstrings.txt:1589
 #, fuzzy
 msgid "Improvement in laser emission density"
-msgstr "Improvement in laser emission density "
+msgstr "Improvement in laser emission density"
 
 #: data/messages/strings/resstrings.txt:1475
 #: data/mp/messages/strings/resstrings.txt:1590
@@ -10983,16 +10983,18 @@ msgid "Tile"
 msgstr "file"
 
 #: src/hci.c:4126
+#, fuzzy
 msgid "Place tiles on map"
-msgstr ""
+msgstr "Set Structure Limits"
 
 #: src/hci.c:4135
 msgid "Unit"
 msgstr "Unit"
 
 #: src/hci.c:4136
+#, fuzzy
 msgid "Place Unit on map"
-msgstr ""
+msgstr "Set Structure Limits"
 
 #: src/hci.c:4144
 msgid "Struct"
@@ -11008,8 +11010,9 @@ msgid "Feat"
 msgstr "Feat"
 
 #: src/hci.c:4154
+#, fuzzy
 msgid "Place Features on map"
-msgstr ""
+msgstr "Set Structure Limits"
 
 #: src/hci.c:4165
 #, fuzzy
@@ -12368,14 +12371,29 @@ msgstr " - Built %s"
 msgid "Version %s%s%s%s"
 msgstr "Version %s%s%s%s"
 
+#~ msgid "%s - Damage %u%%"
+#~ msgstr "%s - Damage %u%%"
+
+#~ msgid "Green: %u"
+#~ msgstr "Green: %u"
+
 #~ msgid "TRANSPORT MISSION: Rescue Civilians from Containment Camp "
 #~ msgstr "TRANSPORT MISSION: Rescue Civilians from Containment Camp "
+
+#~ msgid "Defend the base and ........ the ....... "
+#~ msgstr "Defend the base and ........ the ....... "
+
+#~ msgid "Search and destroy .... "
+#~ msgstr "Search and destroy .... "
 
 #~ msgid "R-Wpn-MG-Damage11"
 #~ msgstr "R-Wpn-MG-Damage11"
 
 #~ msgid " Mortar Pit"
 #~ msgstr " Mortar Pit"
+
+#~ msgid "Improvement in laser emission density "
+#~ msgstr "Improvement in laser emission density "
 
 #~ msgid "R-Struc-Power-Cam2"
 #~ msgstr "R-Struc-Power-Cam2"

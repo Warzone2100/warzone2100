@@ -4,19 +4,20 @@
 # This file is distributed under the same license as the warzone2100 package.
 #
 # Artur <tucalipe@hotmail.com>, 2008.
+# Mario Ancelmo Carvalho da Silva <marioancelmo@gmail.com>, 2008.
 msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
 "POT-Creation-Date: 2008-07-19 21:58+0200\n"
-"PO-Revision-Date: 2008-05-09 16:01+0000\n"
-"Last-Translator: Artur <tucalipe@hotmail.com>\n"
+"PO-Revision-Date: 2008-05-22 16:19+0000\n"
+"Last-Translator: Mario Ancelmo Carvalho da Silva <marioancelmo@gmail.com>\n"
 "Language-Team: Brazilian Portugese <warzone-dev@gna.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Launchpad-Export-Date: 2008-05-10 13:56+0000\n"
+"X-Launchpad-Export-Date: 2008-07-19 19:37+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 "X-Poedit-Language: Portuguese\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -10245,7 +10246,7 @@ msgstr "Localização do Sistema"
 #: lib/framework/i18n.c:44
 #: lib/framework/i18n.c:69
 msgid "Danish"
-msgstr "Dinamarquês"
+msgstr "Espanhol"
 
 #: lib/framework/i18n.c:45
 #: lib/framework/i18n.c:68
@@ -11193,7 +11194,7 @@ msgstr "Designar Produção de VTOL"
 #: src/intorder.c:201
 #, fuzzy
 msgid "Circle"
-msgstr "arquivo"
+msgstr "Espaço"
 
 #: src/keybind.c:131
 msgid "Sorry, that cheat is disabled in multiplayer games."
@@ -12067,7 +12068,7 @@ msgstr "Fornecer Energia"
 
 #: src/multiplay.c:729
 msgid "The host has left the game!"
-msgstr "O host deixadou o jogo!"
+msgstr "O host deixou o jogo!"
 
 #: src/multiplay.c:1908
 msgid "Green"
@@ -12361,3 +12362,28 @@ msgstr " - Finalizado em %s"
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "Versão %s%s%s%s"
+
+#~ msgid "%s - Damage %u%%"
+#~ msgstr "%s - Dano %u%%"
+
+#~ msgid "Green: %u"
+#~ msgstr "Verde: %u"
+
+#, fuzzy
+#~ msgid "TRANSPORT MISSION: Rescue Civilians from Containment Camp "
+#~ msgstr "MISSÃO DE TRANSPORTE: Resgate Civis do Campo de Contenção "
+
+#, fuzzy
+#~ msgid "Defend the base and ........ the ....... "
+#~ msgstr "Defenda a base e ....... o ........ "
+
+#, fuzzy
+#~ msgid "Search and destroy .... "
+#~ msgstr "Localize e destrua ....... "
+
+#~ msgid " Mortar Pit"
+#~ msgstr " Buraco Argamassa"
+
+#, fuzzy
+#~ msgid "Improvement in laser emission density "
+#~ msgstr "Melhorias na densidade do emissor de laser. "

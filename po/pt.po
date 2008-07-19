@@ -4,19 +4,20 @@
 # This file is distributed under the same license as the warzone2100 package.
 #
 # Artur <tucalipe@hotmail.com>, 2008.
+# Tiago Silva <Unknown>, 2008.
 msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
 "POT-Creation-Date: 2008-07-19 21:58+0200\n"
-"PO-Revision-Date: 2008-05-09 17:01+0000\n"
-"Last-Translator: Artur <tucalipe@hotmail.com>\n"
+"PO-Revision-Date: 2008-07-19 11:50+0000\n"
+"Last-Translator: Tiago Silva <Unknown>\n"
 "Language-Team: Portugese <warzone-dev@gna.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Launchpad-Export-Date: 2008-05-10 13:56+0000\n"
+"X-Launchpad-Export-Date: 2008-07-19 19:38+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 "X-Poedit-Language: Portuguese\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -10563,7 +10564,7 @@ msgstr "%s - %d%% danificado - Mortes %d, %s"
 
 #: src/display.c:2055
 msgid "Truck ordered to build Oil Derrick"
-msgstr "Caminhão desginado à construção de Extrator de Petróleo."
+msgstr "Camião ordenado para construir Extrator de Petróleo"
 
 #: src/droid.c:190
 msgid "Unit Lost!"
@@ -11193,7 +11194,7 @@ msgstr "Designar Produção de VTOL"
 #: src/intorder.c:201
 #, fuzzy
 msgid "Circle"
-msgstr "arquivo"
+msgstr "Espaço"
 
 #: src/keybind.c:131
 msgid "Sorry, that cheat is disabled in multiplayer games."
@@ -12067,7 +12068,7 @@ msgstr "Fornecer Energia"
 
 #: src/multiplay.c:729
 msgid "The host has left the game!"
-msgstr "O Hospedeiro saiu do jogo"
+msgstr "O anfitrião saiu do jogo!"
 
 #: src/multiplay.c:1908
 msgid "Green"
@@ -12079,7 +12080,7 @@ msgstr "Laranja"
 
 #: src/multiplay.c:1910
 msgid "Grey"
-msgstr "Cinza"
+msgstr "Cinzento"
 
 #: src/multiplay.c:1911
 msgid "Black"

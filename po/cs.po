@@ -4,19 +4,20 @@
 # This file is distributed under the same license as the warzone2100 package.
 #
 # Lubos <alvinx12@centrum.cz>, 2008.
+# helb <helb@helb.cz>, 2008.
 msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
 "POT-Creation-Date: 2008-07-19 21:58+0200\n"
-"PO-Revision-Date: 2008-05-09 16:05+0000\n"
-"Last-Translator: Lubos <alvinx12@centrum.cz>\n"
+"PO-Revision-Date: 2008-06-24 20:56+0000\n"
+"Last-Translator: helb <helb@helb.cz>\n"
 "Language-Team: Czech <cs@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Launchpad-Export-Date: 2008-05-10 13:56+0000\n"
+"X-Launchpad-Export-Date: 2008-07-19 19:38+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: data/messages/strings/cam1strings.txt:3
@@ -1211,7 +1212,7 @@ msgstr ""
 
 #: data/messages/strings/genstrings.txt:11
 msgid "Unknown Artifact"
-msgstr ""
+msgstr "Neznámý artefakt"
 
 #: data/messages/strings/genstrings.txt:12
 msgid "Source of Power Surge"
@@ -1219,7 +1220,7 @@ msgstr ""
 
 #: data/messages/strings/genstrings.txt:15
 msgid "Landing Zone"
-msgstr ""
+msgstr "Přistávací zóna"
 
 #: data/messages/strings/genstrings.txt:16
 msgid "Return to LZ"
@@ -1228,7 +1229,7 @@ msgstr ""
 #: data/messages/strings/genstrings.txt:17
 #: data/messages/strings/genstrings.txt:27
 msgid "Mission Target"
-msgstr ""
+msgstr "Cíl mise"
 
 #: data/messages/strings/genstrings.txt:18
 msgid "Pre-Collapse Research Center"
@@ -1694,7 +1695,7 @@ msgstr "Školní Autobus"
 #: data/messages/strings/names.txt:209
 #: data/mp/messages/strings/names.txt:211
 msgid "Civilian"
-msgstr ""
+msgstr "Civilista"
 
 #: data/messages/strings/names.txt:212
 #: data/messages/strings/names.txt:218
@@ -10237,7 +10238,7 @@ msgstr ""
 #: lib/framework/i18n.c:42
 #: lib/framework/i18n.c:64
 msgid "System locale"
-msgstr "Systémové místo"
+msgstr "Jazyk systému"
 
 #: lib/framework/i18n.c:44
 #: lib/framework/i18n.c:69
@@ -10451,7 +10452,7 @@ msgstr "Tepelné brnění"
 #: src/design.c:771
 #, fuzzy
 msgid "Engine Output"
-msgstr "Výfuk"
+msgstr "Výkon Motoru"
 
 #: src/design.c:725
 #: src/design.c:780
@@ -12397,3 +12398,9 @@ msgstr ""
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr ""
+
+#~ msgid "%s - Damage %u%%"
+#~ msgstr "%s - Poškození %u%%"
+
+#~ msgid "Green: %u"
+#~ msgstr "Zelenáč: %u"
