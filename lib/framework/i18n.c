@@ -38,19 +38,38 @@ static const struct
 	const char * language;
 	const char * name;
 	USHORT usPrimaryLanguage;
+	USHORT usSubLanguage;
 } map[] = {
-	{ "", N_("System locale"), LANG_NEUTRAL },
+	{ "", N_("System locale"), LANG_NEUTRAL, SUBLANG_DEFAULT },
 #  if defined(ENABLE_NLS)
-	{ "da", N_("Danish"), LANG_DANISH },
-	{ "de", N_("German"), LANG_GERMAN },
-	{ "en", N_("English"), LANG_ENGLISH },
-	{ "fr", N_("French"), LANG_FRENCH },
-	{ "it", N_("Italian"), LANG_ITALIAN },
-	{ "nl", N_("Dutch"), LANG_DUTCH },
-	{ "nb", N_("Norwegian"), LANG_NORWEGIAN },
-	{ "pt", N_("Portuegese"), LANG_PORTUGUESE },
-	{ "ru", N_("Russian"), LANG_RUSSIAN },
-	{ "sv", N_("Swedish"), LANG_SWEDISH },
+	{ "cs", N_("Czech"), LANG_CZECH, SUBLANG_DEFAULT },
+	{ "da", N_("Danish"), LANG_DANISH, SUBLANG_DEFAULT },
+	{ "de", N_("German"), LANG_GERMAN, SUBLANG_DEFAULT },
+	{ "en", N_("English"), LANG_ENGLISH, SUBLANG_DEFAULT },
+	{ "en_GB", N_("English (United Kingdom)"), LANG_ENGLISH, SUBLANG_DEFAULT },
+	{ "es", N_("Spanish"), LANG_SPANISH, SUBLANG_DEFAULT },
+	{ "fi", N_("Finnish"), LANG_FINNISH, SUBLANG_DEFAULT },
+	{ "fr", N_("French"), LANG_FRENCH, SUBLANG_DEFAULT },
+	/* Our Frisian translation is the "West Frisian" variation of it. This
+	 * variation is mostly spoken in the Dutch province Friesland (Fryslân
+	 * in Frisian) and has ISO 639-3 code "fry".
+	 *
+	 * FIXME: We should really use a sub-language code for this. E.g.
+	 *        fy_XX.
+	 */
+	{ "fy", N_("Frisian"), LANG_FRISIAN, SUBLANG_FRISIAN_NETHERLANDS },
+	{ "ga", N_("Irish"), LANG_IRISH, SUBLANG_DEFAULT },
+	{ "it", N_("Italian"), LANG_ITALIAN, SUBLANG_DEFAULT },
+	{ "lt", N_("Lithuanian"), LANG_LITHUANIAN, SUBLANG_DEFAULT },
+	{ "nb", N_("Norwegian"), LANG_NORWEGIAN, SUBLANG_DEFAULT },
+	{ "nl", N_("Dutch"), LANG_DUTCH, SUBLANG_DEFAULT },
+	{ "pl", N_("Polish"), LANG_POLISH, SUBLANG_DEFAULT },
+	{ "pt_BR", N_("Brazilian Portuguese"), LANG_PORTUGUESE, SUBLANG_PORTUGUESE_BRAZILIAN },
+	{ "pt", N_("Portuegese"), LANG_PORTUGUESE, SUBLANG_DEFAULT },
+	{ "ro", N_("Romanian"), LANG_ROMANIAN, SUBLANG_DEFAULT },
+	{ "ru", N_("Russian"), LANG_RUSSIAN, SUBLANG_DEFAULT },
+	{ "sv", N_("Swedish"), LANG_SWEDISH, SUBLANG_DEFAULT },
+	{ "zh_CN", N_("Simplified Chinese"), LANG_CHINESE, SUBLANG_CHINESE_SIMPLIFIED },
 #  endif
 };
 #else
@@ -63,16 +82,35 @@ static const struct
 } map[] = {
 	{ "",   N_("System locale"), "", "" },
 #  if defined(ENABLE_NLS)
-	{ "en", N_("English"), "en_US.UTF-8", "en_US" },
-	{ "nb", N_("Norwegian"), "nb_NO.UTF-8", "nb_NO" },
-	{ "de", N_("German"), "de_DE.UTF-8", "de_DE" },
+	{ "cs", N_("Czech"), "cs.UTF-8", "cs" },
 	{ "da", N_("Danish"), "da_DK.UTF-8", "da_DK" },
+	{ "de", N_("German"), "de_DE.UTF-8", "de_DE" },
+	{ "en", N_("English"), "en_US.UTF-8", "en_US" },
+	{ "en_GB", N_("English (United Kingdom)"), "en_GB.UTF-8", "en_GB" },
+	{ "es", N_("Spanish"), "es.UTF-8", "es" },
+	{ "fi", N_("Finnish"), "fi.UTF-8", "fi" },
 	{ "fr", N_("French"), "fr_FR.UTF-8", "fr_FR" },
+	/* Our Frisian translation is the "West Frisian" variation of it. This
+	 * variation is mostly spoken in the Dutch province Friesland (Fryslân
+	 * in Frisian) and has ISO 639-3 code "fry".
+	 *
+	 * FIXME: We should really use a sub-language code for this. E.g.
+	 *        fy_XX.
+	 */
+	{ "fy", N_("Frisian"), "fy.UTF-8", "fy" },
+	{ "ga", N_("Irish"), "ga.UTF-8", "ga" },
 	{ "it", N_("Italian"), "it_IT.UTF-8", "it_IT" },
 	{ "la", N_("Latin"), "la.UTF-8", "la" },
+	{ "lt", N_("Lithuanian"), "lt.UTF-8", "lt" },
+	{ "nb", N_("Norwegian"), "nb_NO.UTF-8", "nb_NO" },
 	{ "nl", N_("Dutch"), "nl_NL.UTF-8", "nl_NL" },
+	{ "pl", N_("Polish"), "pl.UTF-8", "pl" },
+	{ "pt_BR", N_("Brazilian Portuguese"), "pt_BR.UTF-8", "pt_BR" },
 	{ "pt", N_("Portuegese"), "pt_PT.UTF-8", "pt_PT" },
+	{ "ro", N_("Romanian"), "ro.UTF-8", "ro" },
 	{ "ru", N_("Russian"), "ru_RU.UTF-8", "ru_RU" },
+	{ "sv", N_("Swedish"), "sv.UTF-8", "sv" },
+	{ "zh_CN", N_("Simplified Chinese"), "zh_CN.UTF-8", "zh_CN" },
 #  endif
 };
 #endif
@@ -160,9 +198,9 @@ const char* getLanguageName(void)
 
 #if defined(ENABLE_NLS)
 #  if defined(WZ_OS_WIN)
-static BOOL setLocaleWindows(USHORT usPrimaryLanguage)
+static BOOL setLocaleWindows(USHORT usPrimaryLanguage, USHORT usSubLanguage)
 {
-	BOOL success = SUCCEEDED( SetThreadLocale( MAKELCID( MAKELANGID(usPrimaryLanguage, SUBLANG_DEFAULT), SORT_DEFAULT ) ) );
+	BOOL success = SUCCEEDED( SetThreadLocale( MAKELCID( MAKELANGID(usPrimaryLanguage, usSubLanguage), SORT_DEFAULT ) ) );
 
 	if (!success)
 		debug(LOG_ERROR, "Failed to set locale to \"%d\"", usPrimaryLanguage);
@@ -211,7 +249,7 @@ BOOL setLanguage(const char *language)
 			debug(LOG_WZ, "Setting language to \"%s\" (%s)", map[i].name, map[i].language);
 
 #  if defined(WZ_OS_WIN)
-			return setLocaleWindows(map[i].usPrimaryLanguage);
+			return setLocaleWindows(map[i].usPrimaryLanguage, map[i].usSubLanguage);
 #  else
 			return setLocaleUnix(map[i].locale) || setLocaleUnix(map[i].localeFallback);
 #  endif
