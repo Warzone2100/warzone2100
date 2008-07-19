@@ -1,22 +1,21 @@
-# Latvian translation for warzone2100
-# Copyright (c) 2008 Rosetta Contributors and Canonical Ltd 2008
-# This file is distributed under the same license as the warzone2100 package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2008.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR Warzone Resurrection Project
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: warzone2100\n"
+"Project-Id-Version: Warzone 2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
 "POT-Creation-Date: 2008-07-19 21:58+0200\n"
-"PO-Revision-Date: 2008-07-19 10:47+0000\n"
-"Last-Translator: Kristaps <retail@inbox.lv>\n"
-"Language-Team: Latvian <lv@li.org>\n"
+"PO-Revision-Date: 2008-07-07 19:06+0100\n"
+"Last-Translator: Joakim Söderlund <joakim.soderlund@gmail.com>\n"
+"Language-Team: JockeTF <joakim.soderlund@gmail.com>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : 2;\n"
-"X-Launchpad-Export-Date: 2008-07-19 19:38+0000\n"
-"X-Generator: Launchpad (build Unknown)\n"
+"X-Poedit-Language: Swedish\n"
+"X-Poedit-Country: SWEDEN\n"
 
 #: data/messages/strings/cam1strings.txt:3
 msgid "Campaign One Full Version Test Message"
@@ -94,7 +93,7 @@ msgstr ""
 #: data/messages/strings/cam1strings.txt:27
 #: data/messages/strings/cam1strings.txt:170
 msgid "Reinforcements are available."
-msgstr ""
+msgstr "Förstärkningar finns tillgängliga."
 
 #: data/messages/strings/cam1strings.txt:29
 msgid "TRANSPORT MISSION: Encoded Signals Detected"
@@ -323,7 +322,7 @@ msgstr ""
 
 #: data/messages/strings/cam1strings.txt:127
 msgid "Commander."
-msgstr ""
+msgstr "Kommendör."
 
 #: data/messages/strings/cam1strings.txt:128
 msgid "We have decoded the incoming message to the New Paradigm..."
@@ -367,7 +366,7 @@ msgstr ""
 
 #: data/messages/strings/cam1strings.txt:149
 msgid "Commander"
-msgstr ""
+msgstr "Kommendör"
 
 #: data/messages/strings/cam1strings.txt:150
 msgid "Congratulations on defeating the New Paradigm."
@@ -770,7 +769,7 @@ msgstr ""
 #: data/messages/strings/cam2strings.txt:163
 #: data/messages/strings/cam3strings.txt:32
 msgid "Good luck, Commander."
-msgstr ""
+msgstr "Lycka till, kommendör"
 
 #: data/messages/strings/cam3strings.txt:3
 msgid "Argle Bargle - Please Remove when some text here!"
@@ -1206,7 +1205,7 @@ msgstr ""
 
 #: data/messages/strings/genstrings.txt:10
 msgid "Power Resource"
-msgstr ""
+msgstr "Kraftkälla"
 
 #: data/messages/strings/genstrings.txt:11
 msgid "Unknown Artifact"
@@ -1222,12 +1221,12 @@ msgstr ""
 
 #: data/messages/strings/genstrings.txt:16
 msgid "Return to LZ"
-msgstr ""
+msgstr "Återvänd till LZ"
 
 #: data/messages/strings/genstrings.txt:17
 #: data/messages/strings/genstrings.txt:27
 msgid "Mission Target"
-msgstr ""
+msgstr "Uppdragsmål"
 
 #: data/messages/strings/genstrings.txt:18
 msgid "Pre-Collapse Research Center"
@@ -1239,7 +1238,7 @@ msgstr ""
 
 #: data/messages/strings/genstrings.txt:21
 msgid "Mission Failed"
-msgstr ""
+msgstr "Uppdraget misslyckades"
 
 #: data/messages/strings/genstrings.txt:22
 msgid "Mission Successful"
@@ -1259,7 +1258,7 @@ msgstr ""
 
 #: data/messages/strings/genstrings.txt:32
 msgid "Reinforcements are now available"
-msgstr ""
+msgstr "Förstärkningar finns nu tillgängliga"
 
 #: data/messages/strings/genstrings.txt:35
 msgid "Incoming intelligence report."
@@ -1275,11 +1274,11 @@ msgstr ""
 
 #: data/messages/strings/genstrings.txt:40
 msgid "Unit Rescued"
-msgstr ""
+msgstr "Enhet räddad"
 
 #: data/messages/strings/genstrings.txt:41
 msgid "Units Rescued"
-msgstr ""
+msgstr "Enheter räddade"
 
 #: data/messages/strings/genstrings.txt:42
 msgid "Group Rescued"
@@ -1287,7 +1286,7 @@ msgstr ""
 
 #: data/messages/strings/genstrings.txt:43
 msgid "Unit Captured"
-msgstr ""
+msgstr "Enhet fångad"
 
 #: data/messages/strings/genstrings.txt:44
 msgid "Group Captured"
@@ -1295,11 +1294,11 @@ msgstr ""
 
 #: data/messages/strings/genstrings.txt:45
 msgid "Structure Captured"
-msgstr ""
+msgstr "Byggnad fångad"
 
 #: data/messages/strings/genstrings.txt:46
 msgid "Structure Destroyed"
-msgstr ""
+msgstr "Byggnad förstörd"
 
 #: data/messages/strings/genstrings.txt:47
 msgid "Objective Captured"
@@ -1311,11 +1310,11 @@ msgstr ""
 
 #: data/messages/strings/genstrings.txt:49
 msgid "Structure Infected"
-msgstr ""
+msgstr "Byggnad infekterad"
 
 #: data/messages/strings/genstrings.txt:50
 msgid "Unit Infected"
-msgstr ""
+msgstr "Enhet infekterad"
 
 #: data/messages/strings/genstrings.txt:51
 msgid "Group Infected"
@@ -1448,12 +1447,12 @@ msgstr ""
 #: data/messages/strings/names.txt:12
 #: data/mp/messages/strings/names.txt:12
 msgid "New Design"
-msgstr ""
+msgstr "Ny design"
 
 #: data/messages/strings/names.txt:15
 #: data/mp/messages/strings/names.txt:15
 msgid "Transport"
-msgstr ""
+msgstr "Transportör "
 
 #: data/messages/strings/names.txt:16
 #: data/messages/strings/names.txt:153
@@ -1673,7 +1672,7 @@ msgstr ""
 #: data/messages/strings/names.txt:205
 #: data/mp/messages/strings/names.txt:207
 msgid "Fire Truck"
-msgstr ""
+msgstr "Brandbil"
 
 #: data/messages/strings/names.txt:206
 #: data/mp/messages/strings/names.txt:208
@@ -1993,7 +1992,7 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:424
 #: data/mp/messages/strings/names.txt:895
 msgid "Sensor Tower"
-msgstr ""
+msgstr "Sensortorn"
 
 #: data/messages/strings/names.txt:367
 #: data/messages/strings/names.txt:423
@@ -2053,7 +2052,7 @@ msgstr ""
 #: data/messages/strings/names.txt:382
 #: data/mp/messages/strings/names.txt:384
 msgid "Oil Derrick"
-msgstr ""
+msgstr "Oljekälla"
 
 #: data/messages/strings/names.txt:383
 #: data/mp/messages/strings/names.txt:385
@@ -9314,7 +9313,7 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:1513
 #: data/mp/messages/strings/names.txt:1516
 msgid "Power Upgrade"
-msgstr ""
+msgstr "Kraftuppgradering"
 
 #: data/mp/messages/strings/names.txt:1601
 #: data/mp/messages/strings/names.txt:1604
@@ -10236,64 +10235,64 @@ msgstr ""
 #: lib/framework/i18n.c:42
 #: lib/framework/i18n.c:64
 msgid "System locale"
-msgstr ""
+msgstr "Systemspråk"
 
 #: lib/framework/i18n.c:44
 #: lib/framework/i18n.c:69
 msgid "Danish"
-msgstr ""
+msgstr "Danska"
 
 #: lib/framework/i18n.c:45
 #: lib/framework/i18n.c:68
 msgid "German"
-msgstr ""
+msgstr "Tyska"
 
 #: lib/framework/i18n.c:46
 #: lib/framework/i18n.c:66
 msgid "English"
-msgstr "Angļu"
+msgstr "Engelska"
 
 #: lib/framework/i18n.c:47
 #: lib/framework/i18n.c:70
 msgid "French"
-msgstr "Franču"
+msgstr "Franska"
 
 #: lib/framework/i18n.c:48
 #: lib/framework/i18n.c:71
 msgid "Italian"
-msgstr "Itāļu"
+msgstr "Italienska"
 
 #: lib/framework/i18n.c:49
 #: lib/framework/i18n.c:73
 msgid "Dutch"
-msgstr "Holandiešu"
+msgstr "Holländska"
 
 #: lib/framework/i18n.c:50
 #: lib/framework/i18n.c:67
 msgid "Norwegian"
-msgstr "Norvēģu"
+msgstr "Norska"
 
 #: lib/framework/i18n.c:51
 #: lib/framework/i18n.c:74
 msgid "Portuegese"
-msgstr ""
+msgstr "Portugisiska"
 
 #: lib/framework/i18n.c:52
 #: lib/framework/i18n.c:75
 msgid "Russian"
-msgstr "Krievu"
+msgstr "Ryska"
 
 #: lib/framework/i18n.c:53
 msgid "Swedish"
-msgstr "Zviedru"
+msgstr "Svenska"
 
 #: lib/framework/i18n.c:72
 msgid "Latin"
-msgstr "Latīņu"
+msgstr "Latin"
 
 #: src/clparse.c:89
 msgid "Run in cheat mode"
-msgstr ""
+msgstr "Kör i fuskläge."
 
 #: src/clparse.c:90
 msgid "Set default data directory"
@@ -10317,7 +10316,7 @@ msgstr ""
 
 #: src/clparse.c:92
 msgid "debug level"
-msgstr ""
+msgstr "debugnivå"
 
 #: src/clparse.c:93
 msgid "Log debug output to file"
@@ -10325,101 +10324,101 @@ msgstr ""
 
 #: src/clparse.c:93
 msgid "file"
-msgstr ""
+msgstr "fil"
 
 #: src/clparse.c:94
 msgid "Play in fullscreen mode"
-msgstr ""
+msgstr "Spela i helskärmsläge"
 
 #: src/clparse.c:95
 msgid "Load a specific game"
-msgstr ""
+msgstr "Ladda ett specifikt spel"
 
 #: src/clparse.c:95
 msgid "game-name"
-msgstr ""
+msgstr "Spelnamn"
 
 #: src/clparse.c:96
 msgid "Show this help message and exit"
-msgstr ""
+msgstr "Visa det här meddelandet och avsluta"
 
 #: src/clparse.c:97
 msgid "Enable a global mod"
-msgstr ""
+msgstr "Aktivera en global modifikation"
 
 #: src/clparse.c:97
 #: src/clparse.c:98
 #: src/clparse.c:99
 msgid "mod"
-msgstr ""
+msgstr "modifikation"
 
 #: src/clparse.c:98
 msgid "Enable a campaign only mod"
-msgstr ""
+msgstr "Aktivera en kampanjmodifikation"
 
 #: src/clparse.c:99
 msgid "Enable a multiplay only mod"
-msgstr ""
+msgstr "Aktivera en flerspelarmodifikation"
 
 #: src/clparse.c:100
 msgid "Load a saved game"
-msgstr ""
+msgstr "Ladda ett sparat spel"
 
 #: src/clparse.c:100
 msgid "savegame"
-msgstr ""
+msgstr "SPEL"
 
 #: src/clparse.c:103
 msgid "Play in windowed mode"
-msgstr ""
+msgstr "Spela i fönsterläget"
 
 #: src/clparse.c:104
 msgid "Show version information and exit"
-msgstr ""
+msgstr "Visa versioninformation och avsluta"
 
 #: src/clparse.c:105
 msgid "Set the resolution to use"
-msgstr ""
+msgstr "Väljer upplösning"
 
 #: src/clparse.c:105
 msgid "WIDTHxHEIGHT"
-msgstr ""
+msgstr "HÖJDxBREDD"
 
 #: src/clparse.c:106
 msgid "Enable shadows"
-msgstr ""
+msgstr "Visa skuggor"
 
 #: src/clparse.c:107
 msgid "Disable shadows"
-msgstr ""
+msgstr "Visa inte skuggor"
 
 #: src/clparse.c:108
 msgid "Enable sound"
-msgstr ""
+msgstr "Aktivera ljud"
 
 #: src/clparse.c:109
 msgid "Disable sound"
-msgstr ""
+msgstr "Deaktivera ljud"
 
 #: src/clparse.c:110
 msgid "Activate self-test"
-msgstr ""
+msgstr "Aktivera själv-test"
 
 #: src/configuration.c:402
 #: src/configuration.c:403
 #: src/multistat.c:131
 msgid "Player"
-msgstr "Spēlētājs"
+msgstr "Spelare"
 
 #: src/design.c:453
 #: src/design.c:474
 #: src/design.c:3547
 msgid "New Vehicle"
-msgstr ""
+msgstr "Ny Enhet"
 
 #: src/design.c:521
 msgid "Vehicle Body"
-msgstr ""
+msgstr "Fordonskropp"
 
 #: src/design.c:543
 msgid "Vehicle Propulsion"
@@ -10433,7 +10432,7 @@ msgstr ""
 
 #: src/design.c:638
 msgid "Delete Design"
-msgstr ""
+msgstr "Ta bort design"
 
 #: src/design.c:692
 #: src/design.c:740
@@ -10465,7 +10464,7 @@ msgstr ""
 #: src/design.c:1981
 #: src/design.c:2017
 msgid "Weight"
-msgstr ""
+msgstr "Vikt"
 
 #: src/design.c:811
 #: src/design.c:831
@@ -10480,11 +10479,11 @@ msgstr ""
 #: src/design.c:1061
 #: src/design.c:1093
 msgid "Power Usage"
-msgstr ""
+msgstr "Kraftanvändning"
 
 #: src/design.c:1343
 msgid "Transporter"
-msgstr ""
+msgstr "Transportör "
 
 #: src/design.c:1571
 msgid "Sensor Range"
@@ -10492,7 +10491,7 @@ msgstr ""
 
 #: src/design.c:1580
 msgid "Sensor Power"
-msgstr ""
+msgstr "Sensorkraft"
 
 #: src/design.c:1621
 msgid "ECM Power"
@@ -10513,61 +10512,61 @@ msgstr ""
 #: src/design.c:1742
 #: src/design.c:1775
 msgid "Damage"
-msgstr ""
+msgstr "Skada"
 
 #: src/design.c:1750
 #: src/design.c:1784
 msgid "Rate-of-Fire"
-msgstr ""
+msgstr "Eldgivningfrekvens"
 
 #: src/design.c:1921
 #: src/design.c:1937
 msgid "Air Speed"
-msgstr ""
+msgstr "Lufthastighet"
 
 #: src/design.c:1957
 #: src/design.c:1990
 msgid "Road Speed"
-msgstr ""
+msgstr "Väghastighet"
 
 #: src/design.c:1965
 #: src/design.c:1999
 msgid "Off-Road Speed"
-msgstr ""
+msgstr "Terränghastighet"
 
 #: src/design.c:1973
 #: src/design.c:2008
 msgid "Water Speed"
-msgstr ""
+msgstr "Vattenhastighet"
 
 #: src/design.c:2142
 msgid "Weapons"
-msgstr ""
+msgstr "Vapen"
 
 #: src/design.c:2166
 msgid "Systems"
-msgstr ""
+msgstr "System"
 
 #: src/display.c:1671
 msgid "Cannot Build. Oil Resource Burning."
-msgstr ""
+msgstr "Kan inte bygga. Oljeresursen brinner."
 
 #: src/display.c:1818
 #, c-format
 msgid "%s - Damage %d%% - Experience %d, %s"
-msgstr ""
+msgstr "%s - Skada %d%% - Erfarenhet %d, %s"
 
 #: src/display.c:2055
 msgid "Truck ordered to build Oil Derrick"
-msgstr ""
+msgstr "Truck beordrad till att bygga oljeresurs"
 
 #: src/droid.c:190
 msgid "Unit Lost!"
-msgstr ""
+msgstr "Enhet förlorad!"
 
 #: src/droid.c:1614
 msgid "Structure Restored"
-msgstr ""
+msgstr "Byggnad återställd"
 
 #: src/droid.c:3401
 #, c-format
@@ -10599,66 +10598,66 @@ msgstr[1] ""
 
 #: src/droid.c:3657
 msgid "Rookie"
-msgstr ""
+msgstr "Nybörjare"
 
 #: src/droid.c:3658
 msgctxt "rank"
 msgid "Green"
-msgstr ""
+msgstr "Oerfaren"
 
 #: src/droid.c:3659
 msgid "Trained"
-msgstr ""
+msgstr "Tränad"
 
 #: src/droid.c:3660
 msgid "Regular"
-msgstr ""
+msgstr "Ordinarie"
 
 #: src/droid.c:3661
 msgid "Professional"
-msgstr ""
+msgstr "Professionell"
 
 #: src/droid.c:3662
 msgid "Veteran"
-msgstr ""
+msgstr "Veteran"
 
 #: src/droid.c:3663
 msgid "Elite"
-msgstr ""
+msgstr "Elit"
 
 #: src/droid.c:3664
 msgid "Special"
-msgstr ""
+msgstr "Special"
 
 #: src/droid.c:3665
 msgid "Hero"
-msgstr ""
+msgstr "Hjälte"
 
 #: src/frontend.c:241
 msgid "Single Player Campaign"
-msgstr ""
+msgstr "Enspelarläge"
 
 #: src/frontend.c:242
 msgid "Multi Player Game"
-msgstr ""
+msgstr "Flerspelarläge"
 
 #: src/frontend.c:243
 #: src/frontend.c:297
 msgid "Tutorial"
-msgstr ""
+msgstr "Handledning"
 
 #: src/frontend.c:244
 #: src/ingameop.c:266
 msgid "Options"
-msgstr ""
+msgstr "Inställningar"
 
 #: src/frontend.c:246
 msgid "Quit Game"
-msgstr ""
+msgstr "Avsluta spelet"
 
 #: src/frontend.c:248
 msgid "MAIN MENU"
-msgstr ""
+msgstr "Huvudmeny"
 
 #: src/frontend.c:298
 msgid "Fast Play"
@@ -10666,7 +10665,7 @@ msgstr ""
 
 #: src/frontend.c:299
 msgid "TUTORIALS"
-msgstr ""
+msgstr "Träning"
 
 #. TRANSLATORS: "Return", in this context, means "return to previous screen/menu"
 #: src/frontend.c:301
@@ -10679,38 +10678,38 @@ msgstr ""
 #: src/frontend.c:1109
 msgctxt "menu"
 msgid "Return"
-msgstr ""
+msgstr "Återgå"
 
 #: src/frontend.c:353
 msgid "Load Campaign"
-msgstr ""
+msgstr "Ladda Kampanj"
 
 #: src/frontend.c:354
 msgid "New Campaign"
-msgstr ""
+msgstr "Ny Kampanj"
 
 #: src/frontend.c:356
 msgid "SINGLE PLAYER"
-msgstr ""
+msgstr "Enspelarläge"
 
 #: src/frontend.c:436
 #: src/ingameop.c:408
 #: src/mission.c:2826
 #: src/mission.c:2927
 msgid "Load Saved Game"
-msgstr ""
+msgstr "Ladda sparat spel"
 
 #: src/frontend.c:476
 msgid "MULTI PLAYER"
-msgstr ""
+msgstr "Flerspelarläge"
 
 #: src/frontend.c:478
 msgid "Host Game"
-msgstr ""
+msgstr "Skapa spel"
 
 #: src/frontend.c:479
 msgid "Join Game"
-msgstr ""
+msgstr "Anslut till spel"
 
 #: src/frontend.c:481
 msgid "One Player Skirmish"
@@ -10721,23 +10720,23 @@ msgstr ""
 #: src/frontend.c:1112
 #: src/frontend.c:1132
 msgid "GAME OPTIONS"
-msgstr ""
+msgstr "Spelinställningar"
 
 #: src/frontend.c:531
 msgid "Game Options"
-msgstr ""
+msgstr "Spelinställningar"
 
 #: src/frontend.c:532
 msgid "Graphics Options"
-msgstr ""
+msgstr "Grafikinställningar"
 
 #: src/frontend.c:534
 msgid "Audio Options"
-msgstr ""
+msgstr "Ljudinställningar"
 
 #: src/frontend.c:535
 msgid "Key Mappings"
-msgstr ""
+msgstr "Tangentinställningar"
 
 #: src/frontend.c:607
 msgid "Reverse Mouse"
@@ -10754,7 +10753,7 @@ msgstr ""
 #: src/frontend.c:931
 #: src/frontend.c:1015
 msgid "On"
-msgstr ""
+msgstr "På"
 
 #: src/frontend.c:614
 #: src/frontend.c:626
@@ -10768,21 +10767,21 @@ msgstr ""
 #: src/frontend.c:935
 #: src/frontend.c:1010
 msgid "Off"
-msgstr ""
+msgstr "Av"
 
 #: src/frontend.c:619
 msgid "Screen Shake"
-msgstr ""
+msgstr "Skaka skärmen"
 
 #: src/frontend.c:631
 #: src/multiint.c:722
 msgid "Fog"
-msgstr ""
+msgstr "Dimma"
 
 #: src/frontend.c:634
 #: src/frontend.c:752
 msgid "Mist"
-msgstr ""
+msgstr "Dimma"
 
 #: src/frontend.c:638
 #: src/frontend.c:745
@@ -10792,111 +10791,111 @@ msgstr ""
 
 #: src/frontend.c:643
 msgid "Video Playback"
-msgstr ""
+msgstr "Videouppspelning"
 
 #: src/frontend.c:646
 #: src/frontend.c:802
 msgid "Full"
-msgstr ""
+msgstr "Helskärm"
 
 #: src/frontend.c:650
 #: src/frontend.c:792
 #: src/frontend.c:918
 #: src/frontend.c:963
 msgid "Windowed"
-msgstr ""
+msgstr "Fönster"
 
 #: src/frontend.c:653
 #: src/frontend.c:797
 msgid "Minimal"
-msgstr ""
+msgstr "Minimal"
 
 #: src/frontend.c:660
 #: src/frontend.c:664
 msgid "Subtitles"
-msgstr ""
+msgstr "Undertexter"
 
 #: src/frontend.c:685
 msgid "Shadows"
-msgstr ""
+msgstr "Skuggor"
 
 #: src/frontend.c:831
 #: src/ingameop.c:155
 msgid "Voice Volume"
-msgstr ""
+msgstr "Röstvolym"
 
 #: src/frontend.c:835
 #: src/ingameop.c:160
 msgid "FX Volume"
-msgstr ""
+msgstr "Effektvolym"
 
 #: src/frontend.c:839
 #: src/ingameop.c:165
 msgid "Music Volume"
-msgstr ""
+msgstr "Musikvolym"
 
 #: src/frontend.c:910
 msgid "Graphics Mode*"
-msgstr ""
+msgstr "Grafikläge*"
 
 #: src/frontend.c:914
 #: src/frontend.c:968
 msgid "Fullscreen"
-msgstr ""
+msgstr "Helskärm"
 
 #: src/frontend.c:922
 msgid "Resolution*"
-msgstr ""
+msgstr "Upplösning*"
 
 #: src/frontend.c:927
 msgid "Trap Cursor"
-msgstr ""
+msgstr "Fånga muspekaren"
 
 #: src/frontend.c:939
 msgid "Texture size"
-msgstr ""
+msgstr "Texturstorlek"
 
 #: src/frontend.c:943
 msgid "* Takes effect on game restart"
-msgstr ""
+msgstr "* Ändras vid omstart av spelet."
 
 #: src/frontend.c:1072
 #: src/frontend.c:1130
 msgid "Difficulty"
-msgstr ""
+msgstr "Svårighetsgrad"
 
 #: src/frontend.c:1076
 #: src/frontend.c:1138
 #: src/frontend.c:1170
 msgid "Easy"
-msgstr ""
+msgstr "Lätt"
 
 #: src/frontend.c:1079
 #: src/frontend.c:1141
 #: src/frontend.c:1162
 msgid "Normal"
-msgstr ""
+msgstr "Normal"
 
 #: src/frontend.c:1083
 #: src/frontend.c:1144
 #: src/frontend.c:1166
 msgid "Hard"
-msgstr ""
+msgstr "Svår"
 
 #: src/frontend.c:1088
 #: src/frontend.c:1131
 msgid "Scroll Speed"
-msgstr ""
+msgstr "Panoreringshastighet"
 
 #: src/frontend.c:1102
 #: src/frontend.c:1128
 msgid "Language"
-msgstr ""
+msgstr "Språk"
 
 #: src/frontend.c:1106
 #: src/frontend.c:1129
 msgid "Unit Colour"
-msgstr ""
+msgstr "Enhetsfärg"
 
 #: src/hci.c:1017
 #: src/hci.c:3879
@@ -10912,7 +10911,7 @@ msgstr ""
 #: src/transporter.c:374
 #: src/transporter.c:839
 msgid "Close"
-msgstr ""
+msgstr "Stäng"
 
 #: src/hci.c:1363
 #: src/hci.c:1708
@@ -10920,11 +10919,11 @@ msgstr ""
 #: src/loop.c:523
 #: src/mission.c:2895
 msgid "GAME SAVED!"
-msgstr ""
+msgstr "Spel sparat!"
 
 #: src/hci.c:2116
 msgid "Failed to create building"
-msgstr ""
+msgstr "Misslyckades med att skapa byggnad"
 
 #: src/hci.c:2139
 #, c-format
@@ -10943,33 +10942,33 @@ msgstr ""
 
 #: src/hci.c:3781
 msgid "Commanders (F6)"
-msgstr ""
+msgstr "Kommendörer (F6)"
 
 #: src/hci.c:3797
 msgid "Intelligence Display (F5)"
-msgstr ""
+msgstr "Informationsvisning (F5)"
 
 #: src/hci.c:3813
 msgid "Manufacture (F1)"
-msgstr ""
+msgstr "Tillverka (F1)"
 
 #: src/hci.c:3829
 msgid "Design (F4)"
-msgstr ""
+msgstr "Design (F4)"
 
 #: src/hci.c:3845
 msgid "Research (F2)"
-msgstr ""
+msgstr "Forskning (F2)"
 
 #: src/hci.c:3861
 msgid "Build (F3)"
-msgstr ""
+msgstr "Bygg (F3)"
 
 #: src/hci.c:3941
 #: src/multiint.c:772
 #: src/multiint.c:776
 msgid "Power"
-msgstr ""
+msgstr "Kraft"
 
 #: src/hci.c:4125
 msgid "Tile"
@@ -10981,11 +10980,11 @@ msgstr ""
 
 #: src/hci.c:4135
 msgid "Unit"
-msgstr ""
+msgstr "Enhet"
 
 #: src/hci.c:4136
 msgid "Place Unit on map"
-msgstr ""
+msgstr "Placera enhet på kartan"
 
 #: src/hci.c:4144
 msgid "Struct"
@@ -10993,7 +10992,7 @@ msgstr ""
 
 #: src/hci.c:4145
 msgid "Place Structures on map"
-msgstr ""
+msgstr "Placera byggnader på kartan"
 
 #: src/hci.c:4153
 msgid "Feat"
@@ -11016,18 +11015,18 @@ msgstr ""
 #: src/ingameop.c:254
 #: src/ingameop.c:259
 msgid "Quit"
-msgstr ""
+msgstr "Avsluta"
 
 #: src/hci.c:4205
 msgid "Exit Game"
-msgstr ""
+msgstr "Avsluta spel"
 
 #: src/hci.c:4568
 #: src/intdisplay.c:211
 #: src/intdisplay.c:254
 #: src/intdisplay.c:300
 msgid "Progress Bar"
-msgstr ""
+msgstr "Framstegsmätare"
 
 #: src/hci.c:5622
 msgid "Factory Delivery Point"
@@ -11035,7 +11034,7 @@ msgstr ""
 
 #: src/hci.c:5641
 msgid "Loop Production"
-msgstr ""
+msgstr "Loopa produktion"
 
 #: src/hci.c:5732
 msgid "Tab Scroll left"
@@ -11049,18 +11048,18 @@ msgstr ""
 #: src/ingameop.c:152
 #: src/ingameop.c:263
 msgid "Resume Game"
-msgstr ""
+msgstr "Fortsätt spelet"
 
 #: src/ingameop.c:271
 msgid "Load Game"
-msgstr ""
+msgstr "Ladda spel"
 
 #: src/ingameop.c:273
 #: src/ingameop.c:412
 #: src/mission.c:2816
 #: src/mission.c:2930
 msgid "Save Game"
-msgstr ""
+msgstr "Spara spel"
 
 #: src/intdisplay.c:201
 #: src/intdisplay.c:246
@@ -11071,7 +11070,7 @@ msgstr ""
 #: src/intelmap.c:242
 #: src/keybind.c:1229
 msgid "PAUSED"
-msgstr ""
+msgstr "Pausad"
 
 #: src/intelmap.c:403
 msgid "Research Update"
@@ -11079,7 +11078,7 @@ msgstr ""
 
 #: src/intelmap.c:407
 msgid "Project Goals"
-msgstr ""
+msgstr "Projektmål"
 
 #: src/intelmap.c:410
 msgid "Current Objective"
@@ -11088,32 +11087,32 @@ msgstr ""
 #: src/intorder.c:179
 #: src/keymap.c:388
 msgid "Short Range"
-msgstr ""
+msgstr "Kort skjutavstånd"
 
 #: src/intorder.c:180
 #: src/keymap.c:394
 msgid "Long Range"
-msgstr ""
+msgstr "Långt skjutavstånd"
 
 #: src/intorder.c:181
 #: src/keymap.c:387
 msgid "Optimum Range"
-msgstr ""
+msgstr "Optimalt skjutavstånd"
 
 #: src/intorder.c:182
 #: src/keymap.c:407
 msgid "Retreat at Medium Damage"
-msgstr ""
+msgstr "Återvänd vid medel skada"
 
 #: src/intorder.c:183
 #: src/keymap.c:408
 msgid "Retreat at Heavy Damage"
-msgstr ""
+msgstr "Återvänd vid stor skada"
 
 #: src/intorder.c:184
 #: src/keymap.c:409
 msgid "Do or Die!"
-msgstr ""
+msgstr "Gör eller Dö!"
 
 #: src/intorder.c:185
 msgid "Fire-At-Will"
@@ -11122,7 +11121,7 @@ msgstr ""
 #: src/intorder.c:186
 #: src/keymap.c:384
 msgid "Return Fire"
-msgstr ""
+msgstr "Återge eld"
 
 #: src/intorder.c:187
 #: src/keymap.c:382
@@ -11132,7 +11131,7 @@ msgstr ""
 #: src/intorder.c:188
 #: src/keymap.c:390
 msgid "Patrol"
-msgstr ""
+msgstr "Patrullera"
 
 #: src/intorder.c:189
 #: src/keymap.c:389
@@ -11141,34 +11140,34 @@ msgstr ""
 
 #: src/intorder.c:190
 msgid "Guard Position"
-msgstr ""
+msgstr "Vaktposition"
 
 #: src/intorder.c:191
 #: src/keymap.c:392
 msgid "Hold Position"
-msgstr ""
+msgstr "Håll position"
 
 #: src/intorder.c:192
 #: src/keymap.c:391
 msgid "Return For Repair"
-msgstr ""
+msgstr "Återvänd för reparation"
 
 #: src/intorder.c:193
 msgid "Return To HQ"
-msgstr ""
+msgstr "Återvänd till HQ"
 
 #: src/intorder.c:194
 msgid "Go to Transport"
-msgstr ""
+msgstr "Gå till transport"
 
 #: src/intorder.c:195
 #: src/keymap.c:418
 msgid "Return for Recycling"
-msgstr ""
+msgstr "Återvänd för återanvändning"
 
 #: src/intorder.c:196
 msgid "Recycle"
-msgstr ""
+msgstr "Återvin"
 
 #: src/intorder.c:197
 msgid "Assign Factory Production"
@@ -11187,16 +11186,17 @@ msgid "Assign VTOL Factory Production"
 msgstr ""
 
 #: src/intorder.c:201
+#, fuzzy
 msgid "Circle"
-msgstr ""
+msgstr "fil"
 
 #: src/keybind.c:131
 msgid "Sorry, that cheat is disabled in multiplayer games."
-msgstr ""
+msgstr "Fusket är avstängt i flerspelarläget."
 
 #: src/keybind.c:195
 msgid "Lets us see what you see!"
-msgstr ""
+msgstr "Låt oss se vad du ser!"
 
 #: src/keybind.c:197
 msgid "Fine, sensor display is off!"
@@ -11232,11 +11232,11 @@ msgstr ""
 
 #: src/keybind.c:386
 msgid "FPS display is enabled."
-msgstr ""
+msgstr "FPS-visning påsatt."
 
 #: src/keybind.c:390
 msgid "FPS display is disabled."
-msgstr ""
+msgstr "FPS-visning avstängd."
 
 #: src/keybind.c:403
 #, c-format
@@ -11257,11 +11257,11 @@ msgstr ""
 
 #: src/keybind.c:608
 msgid "Fog off"
-msgstr ""
+msgstr "Dimma av"
 
 #: src/keybind.c:614
 msgid "Fog on"
-msgstr ""
+msgstr "Dimma på"
 
 #: src/keybind.c:1200
 msgid "View Aligned to North"
@@ -11285,15 +11285,15 @@ msgstr ""
 
 #: src/keybind.c:1581
 msgid "Oh, the weather outside is frightful... SNOW"
-msgstr ""
+msgstr "Snö"
 
 #: src/keybind.c:1587
 msgid "Singing in the rain, I'm singing in the rain... RAIN"
-msgstr ""
+msgstr "Regn"
 
 #: src/keybind.c:1593
 msgid "Forecast : Clear skies for all areas... NO WEATHER"
-msgstr ""
+msgstr "Klar himmel"
 
 #: src/keybind.c:1626
 msgid "Enemy destroyed by cheating!"
@@ -11305,7 +11305,7 @@ msgstr ""
 
 #: src/keybind.c:2164
 msgid "Unable to locate HQ!"
-msgstr ""
+msgstr "Kan ej hitta HQ!"
 
 #: src/keybind.c:2180
 msgid "Formation speed limiting OFF"
@@ -11319,17 +11319,17 @@ msgstr ""
 #: src/keybind.c:2358
 #: src/keybind.c:2380
 msgid "Game Speed Reset"
-msgstr ""
+msgstr "Spelhastigheten nollställd"
 
 #: src/keybind.c:2321
 #, c-format
 msgid "Game Speed Increased to %3.1f"
-msgstr ""
+msgstr "Spelhastigheten ökad till %3.1f"
 
 #: src/keybind.c:2362
 #, c-format
 msgid "Game Speed Reduced to %3.1f"
-msgstr ""
+msgstr "Spelhastigheten reducerad till %3.1f"
 
 #: src/keybind.c:2392
 msgid "Build menu will reopen"
@@ -11378,23 +11378,23 @@ msgstr ""
 
 #: src/keyedit.c:383
 msgid "Select Default"
-msgstr ""
+msgstr "Välj standard"
 
 #: src/keymap.c:292
 msgid "Manufacture"
-msgstr ""
+msgstr "Tillverka"
 
 #: src/keymap.c:293
 msgid "Research"
-msgstr ""
+msgstr "Forskning"
 
 #: src/keymap.c:294
 msgid "Build"
-msgstr ""
+msgstr "Bygg"
 
 #: src/keymap.c:295
 msgid "Design"
-msgstr ""
+msgstr "Design"
 
 #: src/keymap.c:296
 msgid "Intelligence Display"
@@ -11402,23 +11402,23 @@ msgstr ""
 
 #: src/keymap.c:297
 msgid "Commanders"
-msgstr ""
+msgstr "Kommendörer"
 
 #: src/keymap.c:298
 msgid "Toggle Radar"
-msgstr ""
+msgstr "Visa eller Dölj radar"
 
 #: src/keymap.c:299
 msgid "Toggle Console Display"
-msgstr ""
+msgstr "Visa ellerDölj konsollen"
 
 #: src/keymap.c:300
 msgid "Toggle Damage Bars On/Off"
-msgstr ""
+msgstr "Visa eller Dölj skademätare"
 
 #: src/keymap.c:301
 msgid "Take Screen Shot"
-msgstr ""
+msgstr "Ta skärmdump"
 
 #: src/keymap.c:302
 msgid "Toggle Formation Speed Limiting"
@@ -11430,139 +11430,139 @@ msgstr ""
 
 #: src/keymap.c:308
 msgid "Assign Group 0"
-msgstr ""
+msgstr "Ange grupp 0"
 
 #: src/keymap.c:309
 msgid "Assign Group 1"
-msgstr ""
+msgstr "Ange grupp 1"
 
 #: src/keymap.c:310
 msgid "Assign Group 2"
-msgstr ""
+msgstr "Ange grupp 2"
 
 #: src/keymap.c:311
 msgid "Assign Group 3"
-msgstr ""
+msgstr "Ange grupp 3"
 
 #: src/keymap.c:312
 msgid "Assign Group 4"
-msgstr ""
+msgstr "Ange grupp 4"
 
 #: src/keymap.c:313
 msgid "Assign Group 5"
-msgstr ""
+msgstr "Ange grupp 5"
 
 #: src/keymap.c:314
 msgid "Assign Group 6"
-msgstr ""
+msgstr "Ange grupp 6"
 
 #: src/keymap.c:315
 msgid "Assign Group 7"
-msgstr ""
+msgstr "Ange grupp 7"
 
 #: src/keymap.c:316
 msgid "Assign Group 8"
-msgstr ""
+msgstr "Ange grupp 8"
 
 #: src/keymap.c:317
 msgid "Assign Group 9"
-msgstr ""
+msgstr "Ange grupp 9"
 
 #: src/keymap.c:321
 msgid "Select Group 0"
-msgstr ""
+msgstr "Välj grupp 0"
 
 #: src/keymap.c:322
 msgid "Select Group 1"
-msgstr ""
+msgstr "Välj grupp 1"
 
 #: src/keymap.c:323
 msgid "Select Group 2"
-msgstr ""
+msgstr "Välj grupp 2"
 
 #: src/keymap.c:324
 msgid "Select Group 3"
-msgstr ""
+msgstr "Välj grupp 3"
 
 #: src/keymap.c:325
 msgid "Select Group 4"
-msgstr ""
+msgstr "Välj grupp 4"
 
 #: src/keymap.c:326
 msgid "Select Group 5"
-msgstr ""
+msgstr "Välj grupp 5"
 
 #: src/keymap.c:327
 msgid "Select Group 6"
-msgstr ""
+msgstr "Välj grupp 6"
 
 #: src/keymap.c:328
 msgid "Select Group 7"
-msgstr ""
+msgstr "Välj grupp 7"
 
 #: src/keymap.c:329
 msgid "Select Group 8"
-msgstr ""
+msgstr "Välj grupp 8"
 
 #: src/keymap.c:330
 msgid "Select Group 9"
-msgstr ""
+msgstr "Välj grupp 9"
 
 #: src/keymap.c:334
 msgid "Select Commander 0"
-msgstr ""
+msgstr "Välj kommendör 0"
 
 #: src/keymap.c:335
 msgid "Select Commander 1"
-msgstr ""
+msgstr "Välj kommendör 1"
 
 #: src/keymap.c:336
 msgid "Select Commander 2"
-msgstr ""
+msgstr "Välj kommendör 2"
 
 #: src/keymap.c:337
 msgid "Select Commander 3"
-msgstr ""
+msgstr "Välj kommendör 3"
 
 #: src/keymap.c:338
 msgid "Select Commander 4"
-msgstr ""
+msgstr "Välj kommendör 4"
 
 #: src/keymap.c:339
 msgid "Select Commander 5"
-msgstr ""
+msgstr "Välj kommendör 5"
 
 #: src/keymap.c:340
 msgid "Select Commander 6"
-msgstr ""
+msgstr "Välj kommendör 6"
 
 #: src/keymap.c:341
 msgid "Select Commander 7"
-msgstr ""
+msgstr "Välj kommendör 7"
 
 #: src/keymap.c:342
 msgid "Select Commander 8"
-msgstr ""
+msgstr "Välj kommendör 8"
 
 #: src/keymap.c:343
 msgid "Select Commander 9"
-msgstr ""
+msgstr "Välj kommendör 9"
 
 #: src/keymap.c:347
 msgid "Multiplayer Options"
-msgstr ""
+msgstr "Flerspelarinställningar"
 
 #: src/keymap.c:348
 msgid "Start Multiplayer Audio"
-msgstr ""
+msgstr "Starta flerspelarljud"
 
 #: src/keymap.c:349
 msgid "Stop Multiplayer Audio"
-msgstr ""
+msgstr "Stoppa flerspelarljud"
 
 #: src/keymap.c:352
 msgid "Snap View to North"
-msgstr ""
+msgstr "Fäst vyn mot norr"
 
 #: src/keymap.c:353
 msgid "Toggle Tracking Camera"
@@ -11570,23 +11570,23 @@ msgstr ""
 
 #: src/keymap.c:354
 msgid "Display In-Game Options"
-msgstr ""
+msgstr "Visa spelmenyn"
 
 #: src/keymap.c:355
 msgid "Zoom Radar Out"
-msgstr ""
+msgstr "Zooma ut radar"
 
 #: src/keymap.c:356
 msgid "Zoom Radar In"
-msgstr ""
+msgstr "Zooma in radar"
 
 #: src/keymap.c:357
 msgid "Zoom In"
-msgstr ""
+msgstr "Zooma in"
 
 #: src/keymap.c:358
 msgid "Zoom Out"
-msgstr ""
+msgstr "Zooma ut"
 
 #: src/keymap.c:359
 msgid "Pitch Forward"
@@ -11594,7 +11594,7 @@ msgstr ""
 
 #: src/keymap.c:360
 msgid "Rotate Left"
-msgstr ""
+msgstr "Rotera till vänster"
 
 #: src/keymap.c:361
 msgid "Reset Pitch"
@@ -11602,7 +11602,7 @@ msgstr ""
 
 #: src/keymap.c:362
 msgid "Rotate Right"
-msgstr ""
+msgstr "Rotera till höger"
 
 #: src/keymap.c:363
 msgid "Pitch Back"
@@ -11614,51 +11614,51 @@ msgstr ""
 
 #: src/keymap.c:365
 msgid "Decrease Game Speed"
-msgstr ""
+msgstr "Minska spelhastigheten"
 
 #: src/keymap.c:366
 msgid "Increase Game Speed"
-msgstr ""
+msgstr "Öka spelhastigheten"
 
 #: src/keymap.c:367
 msgid "Reset Game Speed"
-msgstr ""
+msgstr "Nollställ spelhastigheten"
 
 #: src/keymap.c:368
 msgid "View North"
-msgstr ""
+msgstr "Visa norr"
 
 #: src/keymap.c:369
 msgid "View South"
-msgstr ""
+msgstr "Visa söder"
 
 #: src/keymap.c:370
 msgid "View East"
-msgstr ""
+msgstr "Visa öster"
 
 #: src/keymap.c:371
 msgid "View West"
-msgstr ""
+msgstr "Visa väster"
 
 #: src/keymap.c:372
 msgid "View next Oil Derrick"
-msgstr ""
+msgstr "Visa nästa oljeresurs"
 
 #: src/keymap.c:373
 msgid "View next Repair Unit"
-msgstr ""
+msgstr "Visa nästa reparationsenhet"
 
 #: src/keymap.c:374
 msgid "View next Truck"
-msgstr ""
+msgstr "Visa nästa truck"
 
 #: src/keymap.c:375
 msgid "View next Sensor Unit"
-msgstr ""
+msgstr "Visa nästa sensorenhet"
 
 #: src/keymap.c:376
 msgid "View next Commander"
-msgstr ""
+msgstr "Visa nästa kommendör"
 
 #: src/keymap.c:377
 msgid "Toggle Overlays"
@@ -11666,7 +11666,7 @@ msgstr ""
 
 #: src/keymap.c:378
 msgid "Console On/Off"
-msgstr ""
+msgstr "Konsoll På/Av"
 
 #: src/keymap.c:381
 msgid "Center View on HQ"
@@ -11678,19 +11678,19 @@ msgstr ""
 
 #: src/keymap.c:385
 msgid "Fire at Will"
-msgstr ""
+msgstr "Fri eldgivning"
 
 #: src/keymap.c:386
 msgid "Return to HQ"
-msgstr ""
+msgstr "Återvänd till HQ"
 
 #: src/keymap.c:393
 msgid "Send Text Message"
-msgstr ""
+msgstr "Skicka textmeddelande"
 
 #: src/keymap.c:413
 msgid "Select all Combat Units"
-msgstr ""
+msgstr "Välj alla stridsenheter"
 
 #: src/keymap.c:414
 msgid "Select all Heavily Damaged Units"
@@ -11702,11 +11702,11 @@ msgstr ""
 
 #: src/keymap.c:417
 msgid "Select all Hovers"
-msgstr ""
+msgstr "Välj alla svävare"
 
 #: src/keymap.c:419
 msgid "Select all Units on Screen"
-msgstr ""
+msgstr "Välj alla enheter på skärmen"
 
 #: src/keymap.c:420
 msgid "Select all Tracks"
@@ -11714,11 +11714,11 @@ msgstr ""
 
 #: src/keymap.c:421
 msgid "Select EVERY unit"
-msgstr ""
+msgstr "Välja alla enheter"
 
 #: src/keymap.c:422
 msgid "Select all VTOLs"
-msgstr ""
+msgstr "Välj alla VTOLs"
 
 #: src/keymap.c:423
 msgid "Select all Wheels"
@@ -11726,19 +11726,19 @@ msgstr ""
 
 #: src/keymap.c:425
 msgid "Select all Similiar Units"
-msgstr ""
+msgstr "Välj alla liknande enheter"
 
 #: src/keymap.c:429
 msgid "Select next Factory"
-msgstr ""
+msgstr "Välj nästa fabrik"
 
 #: src/keymap.c:430
 msgid "Select next Research Facility"
-msgstr ""
+msgstr "Välj nästa forskningsbyggnad"
 
 #: src/keymap.c:431
 msgid "Select next Power Generator"
-msgstr ""
+msgstr "Välj nästa kraftgenerator"
 
 #: src/keymap.c:432
 msgid "Select next Cyborg Factory"
@@ -11750,124 +11750,124 @@ msgstr ""
 
 #: src/mission.c:2364
 msgid "Load Transport"
-msgstr ""
+msgstr "Ladda transport"
 
 #: src/mission.c:2763
 msgid "OBJECTIVE ACHIEVED"
-msgstr ""
+msgstr "Uppdraget slutfört"
 
 #: src/mission.c:2769
 msgid "OBJECTIVE FAILED"
-msgstr ""
+msgstr "Uppdraget misslyckades"
 
 #: src/mission.c:2795
 #: src/mission.c:2832
 #: src/mission.c:2946
 msgid "Quit To Main Menu"
-msgstr ""
+msgstr "Avsluta till "
 
 #: src/mission.c:2803
 msgid "Continue Game"
-msgstr ""
+msgstr "Fortsätt spelet"
 
 #: src/multigifts.c:168
 #, c-format
 msgid "%s Gives You A Visibility Report"
-msgstr ""
+msgstr "%s ger dig en visuell rapport"
 
 #: src/multigifts.c:188
 #, c-format
 msgid "%s Gives you a %s"
-msgstr ""
+msgstr "%s ger dig en %s"
 
 #: src/multigifts.c:238
 #, c-format
 msgid "Tried to give away a %s - but this is not allowed."
-msgstr ""
+msgstr "Ville ge en %s - men detta är inte tillåtet."
 
 #: src/multigifts.c:297
 #, c-format
 msgid "%s Gives You Technology Documents"
-msgstr ""
+msgstr "%s ger dig teknologiska dokument"
 
 #: src/multigifts.c:335
 #, c-format
 msgid "%s Gives You Power"
-msgstr ""
+msgstr "%s ger dig kraft"
 
 #: src/multigifts.c:355
 #, c-format
 msgid "%s Requests An Alliance With You"
-msgstr ""
+msgstr "%s vill ingå en allians med dig"
 
 #: src/multigifts.c:364
 #, c-format
 msgid "You Invite %s To Form An Alliance"
-msgstr ""
+msgstr "Du Inbjuder %s till att forma en allians"
 
 #: src/multigifts.c:384
 #, c-format
 msgid "%s Breaks The Alliance With %s"
-msgstr ""
+msgstr "%s Bryter Alliansen med %s"
 
 #: src/multigifts.c:410
 #, c-format
 msgid "%s Forms An Alliance With %s"
-msgstr ""
+msgstr "%s Formar en Allians med %s"
 
 #: src/multigifts.c:801
 #, c-format
 msgid "You Discover Blueprints For %s"
-msgstr ""
+msgstr "Du hittar ritningar för %s"
 
 #: src/multiint.c:333
 #: src/multilimit.c:156
 msgid "Accept Settings"
-msgstr ""
+msgstr "Acceptera inställningar"
 
 #: src/multiint.c:344
 msgid "IP Address or Machine Name"
-msgstr ""
+msgstr "IP Address eller värdnamn"
 
 #: src/multiint.c:385
 msgid "CONNECTION"
-msgstr ""
+msgstr "Anslutning"
 
 #: src/multiint.c:398
 msgid "Lobby"
-msgstr ""
+msgstr "Lobby"
 
 #: src/multiint.c:399
 msgid "IP"
-msgstr ""
+msgstr "IP"
 
 #: src/multiint.c:590
 msgid "Searching"
-msgstr ""
+msgstr "Söker"
 
 #: src/multiint.c:601
 msgid "GAMES"
-msgstr ""
+msgstr "Spel"
 
 #: src/multiint.c:611
 msgid "Refresh Games List"
-msgstr ""
+msgstr "Uppdatera spellistan"
 
 #: src/multiint.c:686
 msgid "OPTIONS"
-msgstr ""
+msgstr "Inställningar"
 
 #: src/multiint.c:688
 msgid "Select Game Name"
-msgstr ""
+msgstr "Välj spelnamn"
 
 #: src/multiint.c:689
 msgid "Select Map"
-msgstr ""
+msgstr "Välj bana"
 
 #: src/multiint.c:694
 msgid "Game"
-msgstr ""
+msgstr "Spel"
 
 #: src/multiint.c:696
 msgid "Mayhem"
@@ -11879,7 +11879,7 @@ msgstr ""
 
 #: src/multiint.c:719
 msgid "Select Player Name"
-msgstr ""
+msgstr "Välj spelarnamn"
 
 #: src/multiint.c:725
 msgid "Distance Fog"
@@ -11888,125 +11888,125 @@ msgstr ""
 #: src/multiint.c:738
 #: src/multimenu.c:706
 msgid "Alliances"
-msgstr ""
+msgstr "Allianser"
 
 #: src/multiint.c:741
 msgid "No Alliances"
-msgstr ""
+msgstr "Inga allianser"
 
 #: src/multiint.c:743
 msgid "Allow Alliances"
-msgstr ""
+msgstr "Tillåt allianser"
 
 #: src/multiint.c:747
 #: src/multiint.c:1953
 msgid "Locked Teams"
-msgstr ""
+msgstr "Låsta lag"
 
 #: src/multiint.c:779
 msgid "Low Power Levels"
-msgstr ""
+msgstr "Låga kraftnivåer"
 
 #: src/multiint.c:781
 msgid "Medium Power Levels"
-msgstr ""
+msgstr "Normala kraftnivåer"
 
 #: src/multiint.c:783
 msgid "High Power Levels"
-msgstr ""
+msgstr "Höga kraftnivåer"
 
 #: src/multiint.c:803
 #: src/multiint.c:807
 msgid "Base"
-msgstr ""
+msgstr "Bas"
 
 #: src/multiint.c:810
 msgid "Start with No Bases"
-msgstr ""
+msgstr "Starta utan baser"
 
 #: src/multiint.c:812
 msgid "Start with Bases"
-msgstr ""
+msgstr "Starta med baser"
 
 #: src/multiint.c:814
 msgid "Start with Advanced Bases"
-msgstr ""
+msgstr "Starta med avancerade baser"
 
 #: src/multiint.c:831
 msgid "Map Preview"
-msgstr ""
+msgstr "Karta"
 
 #: src/multiint.c:833
 msgid "Click to see Map"
-msgstr ""
+msgstr "Klicka för att se kartan"
 
 #: src/multiint.c:847
 msgid "Start Hosting Game"
-msgstr ""
+msgstr "Värden startar nu spelet"
 
 #: src/multiint.c:855
 msgid "Set Structure Limits"
-msgstr ""
+msgstr "Ställ in byggnadsbegränsningar"
 
 #: src/multiint.c:1207
 msgid "Team"
-msgstr ""
+msgstr "Lag"
 
 #: src/multiint.c:1251
 msgid "Waiting for other players"
-msgstr ""
+msgstr "Väntar på fler spelare"
 
 #: src/multiint.c:1257
 msgid "Click when ready"
-msgstr ""
+msgstr "Klicka när du är redo"
 
 #: src/multiint.c:1299
 msgid "PLAYERS"
-msgstr ""
+msgstr "Spelare"
 
 #: src/multiint.c:1436
 msgid "CHAT"
-msgstr ""
+msgstr "Chatt"
 
 #: src/multiint.c:1997
 #, c-format
 msgid "The host has kicked %s from the game!"
-msgstr ""
+msgstr "Spelskaparen har kickat %s från spelet!"
 
 #: src/multiint.c:2088
 msgid "Host is Starting Game"
-msgstr ""
+msgstr "Värden startar spelet"
 
 #: src/multiint.c:2535
 msgid "Players"
-msgstr ""
+msgstr "Spelare"
 
 #: src/multijoin.c:98
 #: src/multijoin.c:99
 msgid "Players Still Joining"
-msgstr ""
+msgstr "Spelare ansluter fortfarande"
 
 #: src/multijoin.c:220
 #, c-format
 msgid "%s has Left the Game"
-msgstr ""
+msgstr "%s har lämnat spelet"
 
 #: src/multijoin.c:326
 #, c-format
 msgid "%s is Joining the Game"
-msgstr ""
+msgstr "%s ansluter till spelet"
 
 #: src/multimenu.c:559
 msgid "Technology level 1"
-msgstr ""
+msgstr "Teknologinivå 1"
 
 #: src/multimenu.c:567
 msgid "Technology level 2"
-msgstr ""
+msgstr "Teknologinivå 2"
 
 #: src/multimenu.c:573
 msgid "Technology level 3"
-msgstr ""
+msgstr "Teknologinivå 3"
 
 #: src/multimenu.c:579
 msgid "Any number of players"
@@ -12014,19 +12014,19 @@ msgstr ""
 
 #: src/multimenu.c:586
 msgid "2 players"
-msgstr ""
+msgstr "2 spelare"
 
 #: src/multimenu.c:592
 msgid "4 players"
-msgstr ""
+msgstr "4 spelare"
 
 #: src/multimenu.c:598
 msgid "8 players"
-msgstr ""
+msgstr "8 spelare"
 
 #: src/multimenu.c:707
 msgid "Score"
-msgstr ""
+msgstr "Poäng"
 
 #: src/multimenu.c:708
 msgid "Kills"
@@ -12034,11 +12034,11 @@ msgstr ""
 
 #: src/multimenu.c:717
 msgid "Ping"
-msgstr ""
+msgstr "Ping"
 
 #: src/multimenu.c:718
 msgid "Played"
-msgstr ""
+msgstr "Spelade"
 
 #: src/multimenu.c:1024
 msgid "Toggle Alliance State"
@@ -12046,166 +12046,166 @@ msgstr ""
 
 #: src/multimenu.c:1043
 msgid "Give Visibility Report"
-msgstr ""
+msgstr "Ge visuell rapport"
 
 #: src/multimenu.c:1049
 msgid "Leak Technology Documents"
-msgstr ""
+msgstr "Läck teknologiska dokument"
 
 #: src/multimenu.c:1056
 msgid "Hand Over Selected Units"
-msgstr ""
+msgstr "Skicka över valda enheter"
 
 #: src/multimenu.c:1062
 msgid "Give Power To Player"
-msgstr ""
+msgstr "Ge kraft till spelare"
 
 #: src/multiplay.c:729
 msgid "The host has left the game!"
-msgstr ""
+msgstr "Spelskaparen har lämnat spelet"
 
 #: src/multiplay.c:1908
 msgid "Green"
-msgstr "Zaļšs"
+msgstr "Grön"
 
 #: src/multiplay.c:1909
 msgid "Orange"
-msgstr "Oranžs"
+msgstr "Orange"
 
 #: src/multiplay.c:1910
 msgid "Grey"
-msgstr "Pelēks"
+msgstr "Grå"
 
 #: src/multiplay.c:1911
 msgid "Black"
-msgstr "Melns"
+msgstr "Svart"
 
 #: src/multiplay.c:1912
 msgid "Red"
-msgstr "Sarkans"
+msgstr "Röd"
 
 #: src/multiplay.c:1913
 msgid "Blue"
-msgstr "Zils"
+msgstr "Blå"
 
 #: src/multiplay.c:1914
 msgid "Pink"
-msgstr "Rozā"
+msgstr "Rosa"
 
 #: src/multiplay.c:1915
 msgid "Cyan"
-msgstr ""
+msgstr "Turkos"
 
 #: src/research.c:1849
 #, c-format
 msgid "Research completed: %s"
-msgstr ""
+msgstr "Forskning klar: %s"
 
 #: src/research.c:1854
 msgid "Research Completed"
-msgstr ""
+msgstr "Forskning klar"
 
 #: src/research.c:2657
 msgid "Research Award"
-msgstr ""
+msgstr "Förskningsbelöning"
 
 #: src/scores.c:99
 #, c-format
 msgid "Own Units: %u"
-msgstr ""
+msgstr "Egna enheter: %u"
 
 #: src/scores.c:100
 #, c-format
 msgid "Enemy Units: %u"
-msgstr ""
+msgstr "Fiendens enheter: %u"
 
 #: src/scores.c:101
 #, c-format
 msgid "Own Structures: %u"
-msgstr ""
+msgstr "Egna byggnader: %u"
 
 #: src/scores.c:102
 #, c-format
 msgid "Enemy Structures: %u"
-msgstr ""
+msgstr "Fientliga byggnader: %u"
 
 #: src/scores.c:103
 #, c-format
 msgid "Units Manufactured: %u"
-msgstr ""
+msgstr "Enheter tillverkade: %u"
 
 #: src/scores.c:104
 #, c-format
 msgid "Total Units: %u"
-msgstr ""
+msgstr "Totala enheter: %u"
 
 #: src/scores.c:105
 #, c-format
 msgid "Structures Built: %u"
-msgstr ""
+msgstr "Byggnader byggda: %u"
 
 #: src/scores.c:106
 #, c-format
 msgid "Total Structures: %u"
-msgstr ""
+msgstr "Totala byggnader: %u"
 
 #: src/scores.c:108
 #, c-format
 msgid "Rookie: %u"
-msgstr ""
+msgstr "Nybörjare; %u"
 
 #: src/scores.c:109
-#, fuzzy, c-format
+#, c-format
 msgctxt "rank"
 msgid "Green: %u"
-msgstr "Zaļšs"
+msgstr "Oerfaren: %u"
 
 #: src/scores.c:110
 #, c-format
 msgid "Trained: %u"
-msgstr ""
+msgstr "Tränad: %u"
 
 #: src/scores.c:111
 #, c-format
 msgid "Regular: %u"
-msgstr ""
+msgstr "Ordinarie; %u"
 
 #: src/scores.c:112
 #, c-format
 msgid "Professional: %u"
-msgstr ""
+msgstr "Professionel: %u"
 
 #: src/scores.c:113
 #, c-format
 msgid "Veteran: %u"
-msgstr ""
+msgstr "Veteran: %u"
 
 #: src/scores.c:114
 #, c-format
 msgid "Elite: %u"
-msgstr ""
+msgstr "Elit: %u"
 
 #: src/scores.c:115
 #, c-format
 msgid "Special: %u"
-msgstr ""
+msgstr "Special: %u"
 
 #: src/scores.c:116
 #, c-format
 msgid "Hero: %u"
-msgstr ""
+msgstr "Hjälte: %u"
 
 #: src/scores.c:350
 msgid "Unit Losses"
-msgstr ""
+msgstr "Enhetsförluster"
 
 #: src/scores.c:351
 msgid "Structure Losses"
-msgstr ""
+msgstr "Byggnadsförluster"
 
 #: src/scores.c:352
 msgid "Force Information"
-msgstr ""
+msgstr "Trupp information"
 
 #: src/scores.c:432
 #, c-format
@@ -12215,54 +12215,54 @@ msgstr ""
 #: src/scores.c:437
 #, c-format
 msgid "Mission Time - %s"
-msgstr ""
+msgstr "Uppdragstid - %s"
 
 #: src/scores.c:442
 #, c-format
 msgid "Total Game Time - %s"
-msgstr ""
+msgstr "Total speltid - %s"
 
 #: src/scriptfuncs.c:3211
 msgid "YOU ARE VICTORIOUS!"
-msgstr ""
+msgstr "Du har vunnit!"
 
 #: src/scriptfuncs.c:3215
 msgid "YOU WERE DEFEATED!"
-msgstr ""
+msgstr "Du blev besegrad!"
 
 #: src/scriptfuncs.c:10152
 #, c-format
 msgid "Beacon received from %s!"
-msgstr ""
+msgstr "Signal mottagen från %s!"
 
 #: src/scriptfuncs.c:10198
 #, c-format
 msgid "Beacon %d"
-msgstr ""
+msgstr "Signal %d"
 
 #: src/selection.c:117
-#, c-format
+#, fuzzy, c-format
 msgid "%u unit selected"
 msgid_plural "%u units selected"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%u Enhet vald"
+msgstr[1] "%u Enhet vald"
 
 #: src/selection.c:434
 #: src/selection.c:521
 msgid "Unable to locate any repair units!"
-msgstr ""
+msgstr "Kunde inte hitta några reparationenheter"
 
 #: src/selection.c:437
 msgid "Unable to locate any Trucks!"
-msgstr ""
+msgstr "Kunde inte hitta några truckar!"
 
 #: src/selection.c:440
 msgid "Unable to locate any Sensor Units!"
-msgstr ""
+msgstr "Kunde inte hitta några sensorenheter!"
 
 #: src/selection.c:443
 msgid "Unable to locate any Commanders!"
-msgstr ""
+msgstr "Kunde inte hitta några kommendörer!"
 
 #: src/structure.c:2766
 msgid "Command Control Limit Reached - Production Halted"
@@ -12279,18 +12279,18 @@ msgstr[1] ""
 #: src/structure.c:5895
 #, c-format
 msgid "%s - Connected %u of %u"
-msgstr ""
+msgstr "%s - Anslutna %u av %u"
 
 #: src/structure.c:5909
 #, c-format
 msgid "%s - Damage %3.0f%%"
-msgstr ""
+msgstr "%s - Skada %3.0f%%"
 
 #: src/structure.c:6029
 #: src/structure.c:6078
 #, c-format
 msgid "%s - Electronically Damaged"
-msgstr ""
+msgstr "%s - Elektroniskt skadad"
 
 #: src/structure.c:6313
 msgid "Electronic Reward - Visibility Report"
@@ -12302,15 +12302,15 @@ msgstr ""
 
 #: src/structure.c:6377
 msgid "Factory Reward - Body"
-msgstr ""
+msgstr "Fabriksbelöning - Kropp"
 
 #: src/structure.c:6401
 msgid "Factory Reward - Weapon"
-msgstr ""
+msgstr "Fabriksbelöning - Vapen"
 
 #: src/structure.c:6410
 msgid "Factory Reward - Nothing"
-msgstr ""
+msgstr "Fabriksbelöning - Inget"
 
 #: src/structure.c:6438
 msgid "Repair Facility Award - Repair"
@@ -12323,36 +12323,66 @@ msgstr ""
 #: src/transporter.c:396
 #: src/transporter.c:450
 msgid "Launch Transport"
-msgstr ""
+msgstr "Skicka iväg transportör"
 
 #: src/transporter.c:1702
 msgid "Reinforcements landing"
-msgstr ""
+msgstr "Förstärkningar landar."
 
 #: src/version.c:137
 msgid " (modified and switched locally)"
-msgstr ""
+msgstr "(lokalt modifierat och bytt)"
 
 #: src/version.c:139
 msgid " (modified locally)"
-msgstr ""
+msgstr "(lokalt modifierad)"
 
 #: src/version.c:141
 msgid " (switched locally)"
-msgstr ""
+msgstr "(lokalt bytt)"
 
 #: src/version.c:148
 msgid " - DEBUG"
-msgstr ""
+msgstr " - DEBUG"
 
 #: src/version.c:157
 #, c-format
 msgid " - Built %s"
-msgstr ""
+msgstr " - Byggt %s"
 
 #. TRANSLATORS: This string looks as follows when expanded.
 #. "Version <version name/number> <working copy state><BUILD DATE><BUILD TYPE>"
 #: src/version.c:167
 #, c-format
 msgid "Version %s%s%s%s"
-msgstr ""
+msgstr "Version %s%s%s%s"
+
+#~ msgid "connect directly to IP/hostname"
+#~ msgstr "Anslut direkt till IP/address"
+
+#~ msgid "go directly to host screen"
+#~ msgstr "Gå direkt till spelskaparmenyn"
+
+#~ msgid "Video Options"
+#~ msgstr "Videoinställningar"
+
+#~ msgid "Campaign Mode"
+#~ msgstr "Kampanjläge"
+
+#~ msgid "Select Force"
+#~ msgstr "Välj trupp"
+
+#~ msgid "Computer"
+#~ msgstr "Dator"
+
+#~ msgid "Computer Opponents"
+#~ msgstr "Datormotståndare"
+
+#~ msgid "FORCE"
+#~ msgstr "TRUPP"
+
+#~ msgid "Load Force"
+#~ msgstr "Ladda trupp"
+
+#~ msgid "Save Force"
+#~ msgstr "Spara trupp"
