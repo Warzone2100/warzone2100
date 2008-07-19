@@ -1,4 +1,4 @@
-2008-05-11: Version 2.1_beta3
+2008-07-19: Version 2.1_beta4
  * General:
    * New: An error will be shown if an invalid command line option is used.
    * New: "Map Preview" button added to the multiplayer/skirmish lobby, including ability to preview starting positions. (patch #1040)
