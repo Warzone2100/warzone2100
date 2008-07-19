@@ -48,6 +48,7 @@ static const struct
 	{ "en", N_("English"), LANG_ENGLISH, SUBLANG_DEFAULT },
 	{ "en_GB", N_("English (United Kingdom)"), LANG_ENGLISH, SUBLANG_DEFAULT },
 	{ "es", N_("Spanish"), LANG_SPANISH, SUBLANG_DEFAULT },
+	{ "eu", N_("Basque"), LANG_BASQUE, SUBLANG_DEFAULT },
 	{ "fi", N_("Finnish"), LANG_FINNISH, SUBLANG_DEFAULT },
 	{ "fr", N_("French"), LANG_FRENCH, SUBLANG_DEFAULT },
 	/* Our Frisian translation is the "West Frisian" variation of it. This
@@ -61,14 +62,24 @@ static const struct
 	{ "ga", N_("Irish"), LANG_IRISH, SUBLANG_DEFAULT },
 	{ "it", N_("Italian"), LANG_ITALIAN, SUBLANG_DEFAULT },
 	{ "lt", N_("Lithuanian"), LANG_LITHUANIAN, SUBLANG_DEFAULT },
+	{ "lv", N_("Latvian"), LANG_LATVIAN, SUBLANG_DEFAULT },
 	{ "nb", N_("Norwegian"), LANG_NORWEGIAN, SUBLANG_DEFAULT },
+	{ "nn", N_("Norwegian (Nynorsk)"), LANG_NORWEGIAN, SUBLANG_NORWEGIAN_NYNORSK },
 	{ "nl", N_("Dutch"), LANG_DUTCH, SUBLANG_DEFAULT },
 	{ "pl", N_("Polish"), LANG_POLISH, SUBLANG_DEFAULT },
 	{ "pt_BR", N_("Brazilian Portuguese"), LANG_PORTUGUESE, SUBLANG_PORTUGUESE_BRAZILIAN },
 	{ "pt", N_("Portuegese"), LANG_PORTUGUESE, SUBLANG_DEFAULT },
 	{ "ro", N_("Romanian"), LANG_ROMANIAN, SUBLANG_DEFAULT },
 	{ "ru", N_("Russian"), LANG_RUSSIAN, SUBLANG_DEFAULT },
+	{ "sl", N_("Slovenian"), LANG_SLOVENIAN, SUBLANG_DEFAULT },
+#if (WINVER >= 0x0600)
+	{ "sv_SE", N_("Swedish (Sweden)"), LANG_SWEDISH, SUBLANG_SWEDISH_SWEDEN },
+#else
+	{ "sv_SE", N_("Swedish (Sweden)"), LANG_SWEDISH, SUBLANG_SWEDISH },
+#endif
 	{ "sv", N_("Swedish"), LANG_SWEDISH, SUBLANG_DEFAULT },
+	{ "tr", N_("Turkish"), LANG_TURKISH, SUBLANG_DEFAULT },
+	{ "uz", N_("Uzbek (Cyrillic)"), LANG_UZBEK, SUBLANG_UZBEK_CYRILLIC },
 	{ "zh_CN", N_("Simplified Chinese"), LANG_CHINESE, SUBLANG_CHINESE_SIMPLIFIED },
 #  endif
 };
@@ -88,6 +99,7 @@ static const struct
 	{ "en", N_("English"), "en_US.UTF-8", "en_US" },
 	{ "en_GB", N_("English (United Kingdom)"), "en_GB.UTF-8", "en_GB" },
 	{ "es", N_("Spanish"), "es.UTF-8", "es" },
+	{ "eu", N_("Basque"), "eu.UTF-8", "eu" },
 	{ "fi", N_("Finnish"), "fi.UTF-8", "fi" },
 	{ "fr", N_("French"), "fr_FR.UTF-8", "fr_FR" },
 	/* Our Frisian translation is the "West Frisian" variation of it. This
@@ -102,14 +114,20 @@ static const struct
 	{ "it", N_("Italian"), "it_IT.UTF-8", "it_IT" },
 	{ "la", N_("Latin"), "la.UTF-8", "la" },
 	{ "lt", N_("Lithuanian"), "lt.UTF-8", "lt" },
+	{ "lv", N_("Latvian"), "lv.UTF-8", "lv" },
 	{ "nb", N_("Norwegian"), "nb_NO.UTF-8", "nb_NO" },
+	{ "nn", N_("Norwegian (Nynorsk)"), "nn.UTF-8", "nn" },
 	{ "nl", N_("Dutch"), "nl_NL.UTF-8", "nl_NL" },
 	{ "pl", N_("Polish"), "pl.UTF-8", "pl" },
 	{ "pt_BR", N_("Brazilian Portuguese"), "pt_BR.UTF-8", "pt_BR" },
 	{ "pt", N_("Portuegese"), "pt_PT.UTF-8", "pt_PT" },
 	{ "ro", N_("Romanian"), "ro.UTF-8", "ro" },
 	{ "ru", N_("Russian"), "ru_RU.UTF-8", "ru_RU" },
+	{ "sl", N_("Slovenian"), "sl.UTF-8", "sl" },
+	{ "sv_SE", N_("Swedish (Sweden)"), "sv_SE.UTF-8", "sv_SE" },
 	{ "sv", N_("Swedish"), "sv.UTF-8", "sv" },
+	{ "tr", N_("Turkish"), "tr.UTF-8", "tr" },
+	{ "uz", N_("Uzbek (Cyrillic)"), "uz.UTF-8", "uz" },
 	{ "zh_CN", N_("Simplified Chinese"), "zh_CN.UTF-8", "zh_CN" },
 #  endif
 };
