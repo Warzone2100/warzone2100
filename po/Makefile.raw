@@ -8,7 +8,7 @@ ifdef USE_GETTEXT
 all: po-files mo-files
 endif
 
-PO_FILES=nb.po de.po da.po nl.po la.po
+PO_FILES=cs.po da.po de.po en_GB.po es.po eu.po fi.po fr.po fy.po ga.po it.po la.po lt.po lv.po nb.po nl.po nn.po pl.po pt.po pt_BR.po ro.po ru.po sl.po sv.po sv_SE.po tr.po uz.po zh_CN.po
 MO_FILES=$(patsubst %.po,%.gmo, $(PO_FILES))
 
 po-files: $(PO_FILES)

@@ -257,6 +257,8 @@ SectionEnd
 SectionGroupEnd
 
 Section $(TEXT_SecNLS) SecNLS
+  SetOutPath "$INSTDIR\locale\cs\LC_MESSAGES"
+  File "/oname=${PACKAGE}.mo" "..\..\po\cs.gmo"
 
   SetOutPath "$INSTDIR\locale\da\LC_MESSAGES"
   File "/oname=${PACKAGE}.mo" "..\..\po\da.gmo"
@@ -264,8 +266,26 @@ Section $(TEXT_SecNLS) SecNLS
   SetOutPath "$INSTDIR\locale\de\LC_MESSAGES"
   File "/oname=${PACKAGE}.mo" "..\..\po\de.gmo"
 
+  SetOutPath "$INSTDIR\locale\en_GB\LC_MESSAGES"
+  File "/oname=${PACKAGE}.mo" "..\..\po\en_GB.gmo"
+
+  SetOutPath "$INSTDIR\locale\es\LC_MESSAGES"
+  File "/oname=${PACKAGE}.mo" "..\..\po\es.gmo"
+
+  SetOutPath "$INSTDIR\locale\eu\LC_MESSAGES"
+  File "/oname=${PACKAGE}.mo" "..\..\po\eu.gmo"
+
+  SetOutPath "$INSTDIR\locale\fi\LC_MESSAGES"
+  File "/oname=${PACKAGE}.mo" "..\..\po\fi.gmo"
+
   SetOutPath "$INSTDIR\locale\fr\LC_MESSAGES"
   File "/oname=${PACKAGE}.mo" "..\..\po\fr.gmo"
+
+  SetOutPath "$INSTDIR\locale\fy\LC_MESSAGES"
+  File "/oname=${PACKAGE}.mo" "..\..\po\fy.gmo"
+
+  SetOutPath "$INSTDIR\locale\ga\LC_MESSAGES"
+  File "/oname=${PACKAGE}.mo" "..\..\po\ga.gmo"
 
   SetOutPath "$INSTDIR\locale\it\LC_MESSAGES"
   File "/oname=${PACKAGE}.mo" "..\..\po\it.gmo"
@@ -273,17 +293,53 @@ Section $(TEXT_SecNLS) SecNLS
   SetOutPath "$INSTDIR\locale\la\LC_MESSAGES"
   File "/oname=${PACKAGE}.mo" "..\..\po\la.gmo"
 
+  SetOutPath "$INSTDIR\locale\lt\LC_MESSAGES"
+  File "/oname=${PACKAGE}.mo" "..\..\po\lt.gmo"
+
+  SetOutPath "$INSTDIR\locale\lv\LC_MESSAGES"
+  File "/oname=${PACKAGE}.mo" "..\..\po\lv.gmo"
+
   SetOutPath "$INSTDIR\locale\nb\LC_MESSAGES"
   File "/oname=${PACKAGE}.mo" "..\..\po\nb.gmo"
 
   SetOutPath "$INSTDIR\locale\nl\LC_MESSAGES"
   File "/oname=${PACKAGE}.mo" "..\..\po\nl.gmo"
 
+  SetOutPath "$INSTDIR\locale\nn\LC_MESSAGES"
+  File "/oname=${PACKAGE}.mo" "..\..\po\nn.gmo"
+
+  SetOutPath "$INSTDIR\locale\pl\LC_MESSAGES"
+  File "/oname=${PACKAGE}.mo" "..\..\po\pl.gmo"
+
   SetOutPath "$INSTDIR\locale\pt\LC_MESSAGES"
   File "/oname=${PACKAGE}.mo" "..\..\po\pt.gmo"
 
+  SetOutPath "$INSTDIR\locale\pt_BR\LC_MESSAGES"
+  File "/oname=${PACKAGE}.mo" "..\..\po\pt_BR.gmo"
+
+  SetOutPath "$INSTDIR\locale\ro\LC_MESSAGES"
+  File "/oname=${PACKAGE}.mo" "..\..\po\ro.gmo"
+
   SetOutPath "$INSTDIR\locale\ru\LC_MESSAGES"
   File "/oname=${PACKAGE}.mo" "..\..\po\ru.gmo"
+
+  SetOutPath "$INSTDIR\locale\sl\LC_MESSAGES"
+  File "/oname=${PACKAGE}.mo" "..\..\po\sl.gmo"
+
+  SetOutPath "$INSTDIR\locale\sv\LC_MESSAGES"
+  File "/oname=${PACKAGE}.mo" "..\..\po\sv.gmo"
+
+  SetOutPath "$INSTDIR\locale\sv_SE\LC_MESSAGES"
+  File "/oname=${PACKAGE}.mo" "..\..\po\sv_SE.gmo"
+
+  SetOutPath "$INSTDIR\locale\tr\LC_MESSAGES"
+  File "/oname=${PACKAGE}.mo" "..\..\po\tr.gmo"
+
+  SetOutPath "$INSTDIR\locale\uz\LC_MESSAGES"
+  File "/oname=${PACKAGE}.mo" "..\..\po\uz.gmo"
+
+  SetOutPath "$INSTDIR\locale\zh_CN\LC_MESSAGES"
+  File "/oname=${PACKAGE}.mo" "..\..\po\zh_CN.gmo"
 
 SectionEnd
 
