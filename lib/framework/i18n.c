@@ -52,8 +52,8 @@ static const struct
 	{ "fi", N_("Finnish"), LANG_FINNISH, SUBLANG_DEFAULT },
 	{ "fr", N_("French"), LANG_FRENCH, SUBLANG_DEFAULT },
 	/* Our Frisian translation is the "West Frisian" variation of it. This
-	 * variation is mostly spoken in the Dutch province Friesland (Fryslân
-	 * in Frisian) and has ISO 639-3 code "fry".
+	 * variation is mostly spoken in the Dutch province Friesland and has
+	 * ISO 639-3 code "fry".
 	 *
 	 * FIXME: We should really use a sub-language code for this. E.g.
 	 *        fy_XX.
@@ -103,8 +103,8 @@ static const struct
 	{ "fi", N_("Finnish"), "fi.UTF-8", "fi" },
 	{ "fr", N_("French"), "fr_FR.UTF-8", "fr_FR" },
 	/* Our Frisian translation is the "West Frisian" variation of it. This
-	 * variation is mostly spoken in the Dutch province Friesland (Fryslân
-	 * in Frisian) and has ISO 639-3 code "fry".
+	 * variation is mostly spoken in the Dutch province Friesland and has
+	 * ISO 639-3 code "fry".
 	 *
 	 * FIXME: We should really use a sub-language code for this. E.g.
 	 *        fy_XX.
