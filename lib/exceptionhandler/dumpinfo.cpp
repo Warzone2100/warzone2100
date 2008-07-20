@@ -158,7 +158,7 @@ static std::string getProgramPath(const char* programCommand)
 	}
 	else
 	{
-		debug(LOG_WARNING, "Could not retrieve full path to %s, will not create extended backtrace\n", programCommand);
+		debug(LOG_WARNING, "Could not retrieve full path to %s, will not create extended backtrace", programCommand);
 	}
 
 	return programPath;
@@ -186,6 +186,34 @@ static std::string getSysinfo()
 #endif
 }
 
+static std::string getCurTime()
+{
+	using std::string;
+
+	// Get the current time
+	const time_t currentTime = time(NULL);
+
+	// Convert it to a string
+	string time(ctime(&currentTime));
+
+	// Mark finishing newlines as NUL characters
+	for (string::reverse_iterator
+	     newline  = time.rbegin();
+	     newline != time.rend()
+	  && *newline == '\n';
+	     ++newline)
+	{
+		*newline = '\0';
+	}
+
+	// Remove everything after, and including, the first NUL character
+	string::size_type newline = time.find_first_of('\0');
+	if (newline != string::npos)
+		time.erase(newline);
+
+	return time;
+}
+
 static std::ostream& writePhysFSVersion(std::ostream& os, PHYSFS_Version const& ver)
 {
 	return os << static_cast<unsigned int>(ver.major)
@@ -195,7 +223,6 @@ static std::ostream& writePhysFSVersion(std::ostream& os, PHYSFS_Version const& 
 
 static void createHeader(int const argc, char* argv[])
 {
-	time_t currentTime = time(NULL);
 	std::ostringstream os;
 
 	os << "Program: "     << getProgramPath(argv[0]) << "(" PACKAGE ")\n"
@@ -221,7 +248,7 @@ static void createHeader(int const argc, char* argv[])
 #else
 	       << "UNKNOWN" << std::endl
 #endif
-	   << "Executed on: " << ctime(&currentTime) << std::endl
+	   << "Executed on: " << getCurTime() << std::endl
 	   << getSysinfo() << std::endl
 	   << "Pointers: " << (sizeof(void*) * CHAR_BIT) << "bit\n"
 	   << "\n";
