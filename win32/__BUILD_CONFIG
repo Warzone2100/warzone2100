@@ -10,7 +10,7 @@ fi
 export PKG_CONFIG_PATH="${PREFIX}/lib/pkgconfig"
 PATH="${PREFIX}/bin:${PATH}"
 
-__BOTHFLAGS="-pipe -m32 -march=i686 -O2 -g ${CFLAGS}"
+__BOTHFLAGS="-pipe -m32 -march=i686 -O2 -g"
 CFLAGS="${__BOTHFLAGS} ${CFLAGS}"
 CXXFLAGS="${__BOTHFLAGS} ${CXXFLAGS}"
 CPPFLAGS="${CPPFLAGS} -I${PREFIX}/include"
