@@ -2,7 +2,7 @@ Warzone 2100 - Readme
 =====================
 Inhalt
 ------
-1. Inhalt von Warzone 2100 GPL
+1. Inhalt von Warzone 2100
 2. Status des Spiels
  2.1 Fehler melden
 3. Konfiguration
@@ -13,8 +13,8 @@ Inhalt
 4. Wichtige Tastenkombinationen
 5. Weitere Ressourcen
 
-1. Inhalt von Warzone 2100 GPL
-==============================
+1. Inhalt von Warzone 2100
+==========================
 Warzone 2100, veröffentlicht im Jahre 1999 und entwickelt von Pumpkin Studios,
 war ein wegweisendes und innovatives 3D Echtzeitstrategiespiel.
 Im Jahr 2004 entschied Eidos, in Zusammenarbeit mit Pumpkin Studios,
@@ -22,8 +22,7 @@ den Quellcode des Spieles unter den Bedingungen der GNU GPL zu veröffentlichen,
 einschließlich allem außer der Musik und den Zwischensequenz-Videos.
 
 Zusätzlich sind alle Mehrspielerkarten, die es schon für Warzone 2100 1.10, dem
-letzten offiziellen Patch von Pumpkin Studios, gab, in Warzone 2100 GPL
-vorhanden.
+letzten offiziellen Patch von Pumpkin Studios, gab, in Warzone 2100 vorhanden.
 
 2. Status des Spiels
 ====================
@@ -31,7 +30,7 @@ Nach der Freigabe des Warzone 2100-Quellcodes am 6. Dezember 2004 wurden alle
 proprietären Technologien durch quelloffene Gegenstücke ersetzt.
 
 Zu den derzeit unterstützten Plattformen zählen GNU/Linux, Mac OS X 10.4 (Tiger)
-und Windows (98 - XP). Berichten zufolge soll Warzone 2100 GPL auch unter BSD
+und Windows (98 - XP). Berichten zufolge soll Warzone 2100 auch unter BSD
 laufen. Einige Leute spielen es sogar unter Windows Vista, das nicht direkt
 unterstützt wird.
 
@@ -223,4 +222,4 @@ Warzone2100.de (Deutsch):
 http://warzone2100.de/
 
 AUTOR: Kreuvf (kreuvf@warzone2100.de)
-LETZTE ÄNDERUNG: 29.09.2007
+LETZTE ÄNDERUNG: 25.05.2008
