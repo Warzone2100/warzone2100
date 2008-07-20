@@ -12298,7 +12298,7 @@ msgstr "%s - Connected %u of %u"
 #: src/structure.c:5909
 #, fuzzy, c-format
 msgid "%s - Damage %3.0f%%"
-msgstr "%s - Damage %u%%"
+msgstr "%s - Damage %3.0f%%"
 
 #: src/structure.c:6029
 #: src/structure.c:6078

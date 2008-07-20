@@ -12306,7 +12306,7 @@ msgstr ""
 #: src/structure.c:5909
 #, fuzzy, c-format
 msgid "%s - Damage %3.0f%%"
-msgstr "%s - Hasarlı %u%%"
+msgstr "%s - Hasarlı %3.0f%%"
 
 #: src/structure.c:6029
 #: src/structure.c:6078
