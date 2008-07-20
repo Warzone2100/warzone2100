@@ -59,9 +59,12 @@ CFLAGS+=-std=gnu99
 
 # Setup build environment with config values
 
+CFLAGS+=-g -Wall -Werror-implicit-function-declaration
+CXXFLAGS+=-g -Wall
+
 ifeq ($(strip $(MODE)),debug)
-CFLAGS+=-g -O0 -DDEBUG -Wall -Werror-implicit-function-declaration
-CXXFLAGS+=-g -O0 -DDEBUG -Wall
+CFLAGS+=-O0 -DDEBUG
+CXXFLAGS+=-O0 -DDEBUG
 else
 CFLAGS+=-DNDEBUG
 CXXFLAGS+=-DNDEBUG

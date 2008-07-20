@@ -7,4 +7,4 @@ $(SUBDIRS):
 	$(MAKE) -f Makefile.raw -C $@ $(MAKECMDGOALS)
 
 src: win32 lib build_tools
-packaging: data src po
+pkg: data src po
