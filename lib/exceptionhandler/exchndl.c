@@ -21,7 +21,7 @@
 */
 
 #include "lib/framework/frame.h"
-#include "lib/framework/debug.h"
+#include "dumpinfo.h"
 #include "exchndl.h"
 // FIXME: #include from src/
 #include "src/version.h"
