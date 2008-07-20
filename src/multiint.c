@@ -197,9 +197,9 @@ void loadMapPreview(void)
 	// load the terrain types
 	psLevel = levFindDataSet(game.map);
 	rebuildSearchPath(psLevel->dataDir, false);
-	strcpy(aFileName,psLevel->apDataFiles[0]);
+	sstrcpy(aFileName,psLevel->apDataFiles[0]);
 	aFileName[strlen(aFileName)-4] = '\0';
-	strcat(aFileName, "/ttypes.ttp");
+	sstrcat(aFileName, "/ttypes.ttp");
 	pFileData = fileLoadBuffer;
 	if (!loadFileToBuffer(aFileName, pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
 	{
@@ -439,7 +439,7 @@ void runConnectionScreen(void )
 			OptionsInet(id);
 			break;
 		case CON_IP: // ip entered
-			strcpy(addr, widgGetString(psConScreen, CON_IP));
+			sstrcpy(addr, widgGetString(psConScreen, CON_IP));
 			break;
 		case CON_OK:
 			if(SettingsUp == true)
@@ -572,7 +572,7 @@ void runGameFind(void )
 
 
 			ingame.localOptionsReceived = false;			// note we are awaiting options
-			strcpy(game.name, NetPlay.games[gameNumber].name);		// store name
+			sstrcpy(game.name, NetPlay.games[gameNumber].name);		// store name
 
 			joinCampaign(gameNumber,(char*)sPlayer);
 
@@ -1606,12 +1606,12 @@ static void processMultiopWidgets(UDWORD id)
 		{
 
 		case MULTIOP_GNAME:										// we get this when nec.
-			strcpy(game.name,widgGetString(psWScreen, MULTIOP_GNAME));
+			sstrcpy(game.name,widgGetString(psWScreen, MULTIOP_GNAME));
 			break;
 
 		case MULTIOP_MAP:
 			widgSetString(psWScreen, MULTIOP_MAP,game.map);
-//			strcpy(game.map,widgGetString(psWScreen, MULTIOP_MAP));
+//			sstrcpy(game.map,widgGetString(psWScreen, MULTIOP_MAP));
 			break;
 
 		case MULTIOP_GNAME_ICON:
@@ -1630,7 +1630,7 @@ static void processMultiopWidgets(UDWORD id)
 			widgSetButtonState(psWScreen, MULTIOP_SKIRMISH,0);
 			game.type = CAMPAIGN;
 			widgSetString(psWScreen, MULTIOP_MAP, DEFAULTCAMPAIGNMAP);
-			strcpy(game.map,widgGetString(psWScreen, MULTIOP_MAP));
+			sstrcpy(game.map,widgGetString(psWScreen, MULTIOP_MAP));
 			game.alliance = NO_ALLIANCES;
 			addGameOptions(false);
 			break;
@@ -1640,7 +1640,7 @@ static void processMultiopWidgets(UDWORD id)
 			widgSetButtonState(psWScreen, MULTIOP_SKIRMISH,WBUT_LOCK);
 			game.type = SKIRMISH;
 			widgSetString(psWScreen, MULTIOP_MAP, DEFAULTSKIRMISHMAP);
-			strcpy(game.map,widgGetString(psWScreen, MULTIOP_MAP));
+			sstrcpy(game.map,widgGetString(psWScreen, MULTIOP_MAP));
 			addGameOptions(false);
 			break;
 		case MULTIOP_MAP_BUT:
@@ -1808,7 +1808,7 @@ static void processMultiopWidgets(UDWORD id)
 		break;
 
 	case MULTIOP_PNAME:
-		strcpy(sPlayer,widgGetString(psWScreen, MULTIOP_PNAME));
+		sstrcpy(sPlayer,widgGetString(psWScreen, MULTIOP_PNAME));
 
 		// chop to 15 chars..
 		while(strlen(sPlayer) > 15)	// clip name.
@@ -1822,7 +1822,7 @@ static void processMultiopWidgets(UDWORD id)
 
 		removeWildcards((char*)sPlayer);
 
-		sprintf(tmp,"-> %s",sPlayer);
+		ssprintf(tmp, "-> %s", sPlayer);
 		sendTextMessage(tmp,true);
 
 		NETchangePlayerName(NetPlay.dpidPlayer, (char*)sPlayer);			// update if joined.
@@ -1839,9 +1839,9 @@ static void processMultiopWidgets(UDWORD id)
 		break;
 
 	case MULTIOP_HOST:
-		strcpy((char*)game.name,widgGetString(psWScreen, MULTIOP_GNAME));	// game name
-		strcpy((char*)sPlayer,widgGetString(psWScreen, MULTIOP_PNAME));	// pname
-		strcpy((char*)game.map,widgGetString(psWScreen, MULTIOP_MAP));		// add the name
+		sstrcpy(game.name, widgGetString(psWScreen, MULTIOP_GNAME));	// game name
+		sstrcpy(sPlayer, widgGetString(psWScreen, MULTIOP_PNAME));	// pname
+		sstrcpy(game.map, widgGetString(psWScreen, MULTIOP_MAP));		// add the name
 
 		resetReadyStatus(false);
 
@@ -1926,8 +1926,6 @@ static void processMultiopWidgets(UDWORD id)
 	//clicked on a team
 	if((id >= MULTIOP_TEAMCHOOSER) && (id <= MULTIOP_TEAMCHOOSER_END))
 	{
-		char msg[255];
-
 		ASSERT(teamChooserUp() >= 0, "processMultiopWidgets: teamChooserUp() < 0");
 		ASSERT((id - MULTIOP_TEAMCHOOSER) >= 0
 			&& (id - MULTIOP_TEAMCHOOSER) < MAX_PLAYERS, "processMultiopWidgets: wrong id - MULTIOP_TEAMCHOOSER value (%d)", id - MULTIOP_TEAMCHOOSER);
@@ -1950,8 +1948,7 @@ static void processMultiopWidgets(UDWORD id)
 			resetReadyStatus(false);
 			setLockedTeamsMode();		//update GUI
 
-			sprintf( msg,"'%s' mode enabled", _("Locked Teams") );
-			addConsoleMessage(msg,DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+			addConsoleMessage(_("'Locked Teams' mode enabled"), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 		}
 	}
 
@@ -2327,10 +2324,10 @@ void runMultiOptions(void)
 			switch(id)
 			{
 			case MULTIOP_PNAME:
-				strcpy((char*)sPlayer,sTemp);
+				sstrcpy(sPlayer, sTemp);
 				widgSetString(psWScreen,MULTIOP_PNAME,sTemp);
 
-				sprintf(sTemp," -> %s",sPlayer);
+				ssprintf(sTemp, " -> %s", sPlayer);
 				sendTextMessage(sTemp,true);
 
 				NETchangePlayerName(NetPlay.dpidPlayer, (char*)sPlayer);
@@ -2339,7 +2336,7 @@ void runMultiOptions(void)
 				setMultiStats(NetPlay.dpidPlayer,playerStats,true);
 				break;
 			case MULTIOP_MAP:
-				strcpy(game.map,sTemp);
+				sstrcpy(game.map, sTemp);
 				game.maxPlayers =(UBYTE) value;
 				loadMapPreview();
 
@@ -2407,7 +2404,7 @@ BOOL startMultiOptions(BOOL bReenter)
 		if(!NetPlay.bComms)			// firce skirmish if no comms.
 		{
 			game.type				= SKIRMISH;
-			strcpy(game.map, DEFAULTSKIRMISHMAP);
+			sstrcpy(game.map, DEFAULTSKIRMISHMAP);
 			game.maxPlayers = 4;
 		}
 
@@ -2533,7 +2530,7 @@ void displayRemoteGame(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGH
 	else
 	{
 		iV_DrawText(_("Players"), x + 5, y + 18);
-		sprintf(tmp,"%d/%d",NetPlay.games[i].desc.dwCurrentPlayers,NetPlay.games[i].desc.dwMaxPlayers);
+		ssprintf(tmp, "%d/%d", NetPlay.games[i].desc.dwCurrentPlayers, NetPlay.games[i].desc.dwMaxPlayers);
 		iV_DrawText(tmp, x + 17, y + 33);
 	}
 

@@ -41,6 +41,13 @@ extern "C"
 # define PACKAGE_DISTRIBUTOR "UNKNOWN"
 #endif
 
+static const char endl[] =
+#if defined(WZ_OS_WIN)
+    "\r\n";
+#else
+    "\n";
+#endif
+
 static const std::size_t max_debug_messages = 20;
 
 static char* dbgHeader = NULL;
@@ -63,11 +70,7 @@ static void dumpstr(const DumpFileHandle file, const char * const str)
 
 static void dumpEOL(const DumpFileHandle file)
 {
-#if defined(WZ_OS_WIN)
-	dumpstr(file, "\r\n");
-#else
-	dumpstr(file, "\n");
-#endif
+	dumpstr(file, endl);
 }
 
 static void debug_exceptionhandler_data(void **, const char * const str)
@@ -158,7 +161,7 @@ static std::string getProgramPath(const char* programCommand)
 	}
 	else
 	{
-		debug(LOG_WARNING, "Could not retrieve full path to %s, will not create extended backtrace\n", programCommand);
+		debug(LOG_WARNING, "Could not retrieve full path to %s, will not create extended backtrace", programCommand);
 	}
 
 	return programPath;
@@ -173,17 +176,45 @@ static std::string getSysinfo()
 	std::ostringstream os;
 
 	if (uname(&sysInfo) != 0)
-		os << "System information may be invalid!" << std::endl
-		   << std::endl;
+		os << "System information may be invalid!" << endl
+		   << endl;
 
-	os << "Operating system: " << sysInfo.sysname  << std::endl
-	   << "Node name: "        << sysInfo.nodename << std::endl
-	   << "Release: "          << sysInfo.release  << std::endl
-	   << "Version: "          << sysInfo.version  << std::endl
-	   << "Machine: "          << sysInfo.machine  << std::endl;
+	os << "Operating system: " << sysInfo.sysname  << endl
+	   << "Node name: "        << sysInfo.nodename << endl
+	   << "Release: "          << sysInfo.release  << endl
+	   << "Version: "          << sysInfo.version  << endl
+	   << "Machine: "          << sysInfo.machine  << endl;
 
 	return os.str();
 #endif
+}
+
+static std::string getCurTime()
+{
+	using std::string;
+
+	// Get the current time
+	const time_t currentTime = time(NULL);
+
+	// Convert it to a string
+	string time(ctime(&currentTime));
+
+	// Mark finishing newlines as NUL characters
+	for (string::reverse_iterator
+	     newline  = time.rbegin();
+	     newline != time.rend()
+	  && *newline == '\n';
+	     ++newline)
+	{
+		*newline = '\0';
+	}
+
+	// Remove everything after, and including, the first NUL character
+	string::size_type newline = time.find_first_of('\0');
+	if (newline != string::npos)
+		time.erase(newline);
+
+	return time;
 }
 
 static std::ostream& writePhysFSVersion(std::ostream& os, PHYSFS_Version const& ver)
@@ -195,10 +226,9 @@ static std::ostream& writePhysFSVersion(std::ostream& os, PHYSFS_Version const& 
 
 static void createHeader(int const argc, char* argv[])
 {
-	time_t currentTime = time(NULL);
 	std::ostringstream os;
 
-	os << "Program: "     << getProgramPath(argv[0]) << "(" PACKAGE ")\n"
+	os << "Program: "     << getProgramPath(argv[0]) << "(" PACKAGE ")" << endl
 	   << "Command line: ";
 
 	/* Dump all command line arguments surrounded by double quotes and
@@ -207,35 +237,35 @@ static void createHeader(int const argc, char* argv[])
 	for (int i = 0; i < argc; ++i)
 		os << "\"" << argv[i] << "\" ";
 
-	os << "\n";
+	os << endl;
 
-	os << "Version: "     << version_getFormattedVersionString() << "\n"
-	   << "Distributor: " PACKAGE_DISTRIBUTOR << std::endl
-	   << "Compiled on: " __DATE__ " " __TIME__ << std::endl
+	os << "Version: "     << version_getFormattedVersionString() << endl
+	   << "Distributor: " PACKAGE_DISTRIBUTOR << endl
+	   << "Compiled on: " __DATE__ " " __TIME__ << endl
 	   << "Compiled by: "
 #if defined(WZ_CC_GNU) && !defined(WZ_CC_INTEL)
-	       << "GCC " __VERSION__ << std::endl
+	       << "GCC " __VERSION__ << endl
 #elif defined(WZ_CC_INTEL)
 	// Intel includes the compiler name within the version string
-	       << __VERSION__ << std::endl
+	       << __VERSION__ << endl
 #else
-	       << "UNKNOWN" << std::endl
+	       << "UNKNOWN" << endl
 #endif
-	   << "Executed on: " << ctime(&currentTime) << std::endl
-	   << getSysinfo() << std::endl
-	   << "Pointers: " << (sizeof(void*) * CHAR_BIT) << "bit\n"
-	   << "\n";
+	   << "Executed on: " << getCurTime() << endl
+	   << getSysinfo() << endl
+	   << "Pointers: " << (sizeof(void*) * CHAR_BIT) << "bit" << endl
+	   << endl;
 
 	PHYSFS_Version physfs_version;
 
 	// Determine PhysicsFS compile time version
 	PHYSFS_VERSION(&physfs_version)
-	writePhysFSVersion(os << "Compiled against PhysicsFS version: ", physfs_version) << "\n";
+	writePhysFSVersion(os << "Compiled against PhysicsFS version: ", physfs_version) << endl;
 
 	// Determine PhysicsFS runtime version
 	PHYSFS_getLinkedVersion(&physfs_version);
-	writePhysFSVersion(os << "Running with PhysicsFS version: ", physfs_version) << "\n"
-	   << "\n";
+	writePhysFSVersion(os << "Running with PhysicsFS version: ", physfs_version) << endl
+	   << endl;
 
 	dbgHeader = strdup(os.str().c_str());
 	if (dbgHeader == NULL)

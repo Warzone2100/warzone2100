@@ -863,20 +863,8 @@ void GenerateExceptionReport(PEXCEPTION_POINTERS pExceptionInfo)
 		);
 	}
 
-	rprintf(_T("Program: %s (%s)\r\n"), GetModuleFileName(NULL, szModule, MAX_PATH) ? szModule : "", PACKAGE);
-	rprintf(_T("Version: %s\r\n"), formattedVersionString ? formattedVersionString : PACKAGE_VERSION);
-	rprintf(_T("Compiled by: %s\r\n"),
-#if defined(WZ_CC_GNU) && !defined(WZ_CC_INTEL)
-	           "GCC " __VERSION__
-#elif defined(WZ_CC_INTEL)
-	// Intel includes the compiler name within the version string
-	           __VERSION__
-#else
-	          "UNKNOWN"
-#endif
-	);
-
-	rprintf(_T("Pointers: %s\r\n\r\n"), sizeof(void*) == (32 / CHAR_BIT) ? "32bit" : (sizeof(void*) == (64 / CHAR_BIT) ? "64bit" : "Unknown"));
+	// Dump a generic info header
+	dbgDumpHeader(hReportFile);
 
 	// First print information about the type of fault
 	rprintf(_T("%s caused "),  GetModuleFileName(NULL, szModule, MAX_PATH) ? szModule : "Application");
