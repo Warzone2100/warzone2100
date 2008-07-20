@@ -12313,7 +12313,7 @@ msgstr "%s - Collegati %u di %u"
 #: src/structure.c:5950
 #, fuzzy, c-format
 msgid "%s - Damage %3.0f%%"
-msgstr "%s - Danno %u%%"
+msgstr "%s - Danno %3.0f%%"
 
 #: src/structure.c:6070
 #: src/structure.c:6119

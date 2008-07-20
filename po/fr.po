@@ -12310,7 +12310,7 @@ msgstr "%s - %u connexions établies sur %u"
 #: src/structure.c:5950
 #, fuzzy, c-format
 msgid "%s - Damage %3.0f%%"
-msgstr "%s - Endommagé à %u%%"
+msgstr "%s - Endommagé à %3.0f%%"
 
 #: src/structure.c:6070
 #: src/structure.c:6119

@@ -12296,7 +12296,7 @@ msgstr "%s - %u fan %u ferbûn"
 #: src/structure.c:5950
 #, fuzzy, c-format
 msgid "%s - Damage %3.0f%%"
-msgstr "%s - Skea %u%%"
+msgstr "%s - Skea %3.0f%%"
 
 #: src/structure.c:6070
 #: src/structure.c:6119
