@@ -20,6 +20,7 @@ lib/framework/frame.c
 lib/framework/frameresource.c
 lib/framework/i18n.c
 lib/framework/input.c
+lib/framework/lexer_input.c
 lib/framework/printf_ext.c
 lib/framework/SDL_framerate.c
 lib/framework/strnlen1.c
@@ -152,6 +153,7 @@ src/objects.c
 src/objmem.c
 src/oprint.c
 src/order.c
+src/parsetest.c
 src/power.c
 src/projectile.c
 src/radar.c
