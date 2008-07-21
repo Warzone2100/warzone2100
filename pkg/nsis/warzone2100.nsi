@@ -168,6 +168,7 @@ Section $(TEXT_SecBase) SecBase
 
   File "${EXTDIR}\etc\fonts\fonts.conf"
   File "${EXTDIR}\etc\fonts\DejaVuSansMono.ttf"
+  File "${EXTDIR}\etc\fonts\DejaVuSansMono-Bold.ttf"
 
   ;Store installation folder
   WriteRegStr HKLM "Software\${PACKAGE_NAME}" "" $INSTDIR
@@ -435,6 +436,7 @@ Section "Uninstall"
 
   Delete "$INSTDIR\fonts\fonts.conf"
   Delete "$INSTDIR\fonts\DejaVuSansMono.ttf"
+  Delete "$INSTDIR\fonts\DejaVuSansMono-Bold.ttf"
   RMDir "$INSTDIR\fonts"
 
   Delete "$INSTDIR\mods\global\autoload\music_1.0.AUTHORS.txt"
