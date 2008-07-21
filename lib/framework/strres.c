@@ -92,9 +92,10 @@ BOOL strresCreate(STR_RES **ppsRes, UDWORD init, UDWORD ext)
 	psRes->ext = ext;
 	psRes->nextID = 0;
 
-	if (!TREAP_CREATE(&psRes->psIDTreap))
+	psRes->psIDTreap = treapCreate();
+	if (!psRes->psIDTreap)
 	{
-		debug( LOG_ERROR, "strresCreate: Out of memory" );
+		debug(LOG_ERROR, "Out of memory");
 		abort();
 		free(psRes);
 		return false;

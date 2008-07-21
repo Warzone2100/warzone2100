@@ -61,10 +61,10 @@ extern void treapSetCallPos(const char* fileName, int lineNumber);
 /**
  * Function to create a treap
  *
- * \param	ppsTreap	out-parameter which holds the created treap
- * \return true, if the treap creation was successfull
+ * \return On success a non-NULL pointer, which holds the created treap. On
+ *         failure NULL is returned.
  */
-extern BOOL treapCreate(struct TREAP **ppsTreap);
+extern struct TREAP* treapCreate(void);
 
 /* Add an object to a treap
  */
@@ -91,10 +91,6 @@ extern struct STR_ID* treapGetSmallest(struct TREAP *psTreap);
 #ifdef DEBUG_TREAP
 
 // debugging versions of the TREAP calls
-#define TREAP_CREATE(ppsTreap) \
-	(treapSetCallPos(__FILE__, __LINE__), \
-	 treapCreate(ppsTreap))
-
 #define TREAP_ADD(psTreap, key, pObject) \
 	(treapSetCallPos(__FILE__, __LINE__), \
 	 treapAdd(psTreap, key, pObject))
@@ -102,9 +98,6 @@ extern struct STR_ID* treapGetSmallest(struct TREAP *psTreap);
 #else
 
 // release versions of the TREAP calls
-#define TREAP_CREATE(ppsTreap) \
-	 treapCreate(ppsTreap)
-
 #define TREAP_ADD(psTreap, key, pObject) \
 	 treapAdd(psTreap, key, pObject)
 

@@ -52,11 +52,6 @@ typedef struct TREAP_NODE
 typedef struct TREAP
 {
 	TREAP_NODE                      *psRoot;                ///< root of the tree
-
-#ifdef DEBUG_TREAP
-	const char                      *pFile;                 ///< file the treap was created in
-	int                             line;                   ///< line the treap was created at
-#endif
 } TREAP;
 
 /* Position of the last call */
@@ -89,25 +84,20 @@ static int treapStringCmp(const char *key1, const char *key2)
 }
 
 
-BOOL treapCreate(TREAP **ppsTreap)
+TREAP* treapCreate()
 {
-	*ppsTreap = (TREAP*)malloc(sizeof(TREAP));
-	if (!(*ppsTreap))
+	TREAP* const psTreap = (TREAP*)malloc(sizeof(*psTreap));
+	if (!psTreap)
 	{
-		debug( LOG_ERROR, "treapCreate: Out of memory" );
+		debug(LOG_ERROR, "Out of memory");
 		abort();
-		return false;
+		return NULL;
 	}
 
 	// Initialise the tree to nothing
-	(*ppsTreap)->psRoot = NULL;
+	psTreap->psRoot = NULL;
 
-#if DEBUG_TREAP
-	// Store the call location
-	(*ppsTreap)->pFile = pCFile;
-	(*ppsTreap)->line = cLine;
-#endif
-	return true;
+	return psTreap;
 }
 
 /* Rotate a tree to the right
@@ -357,7 +347,7 @@ void treapDestroy(TREAP *psTreap)
 #if DEBUG_TREAP
 	if (psTreap->psRoot)
 	{
-		debug( LOG_NEVER, "treapDestroy: %s, line %d : nodes still in the tree\n", psTreap->pFile, psTreap->line );
+		debug(LOG_NEVER, "Nodes still in the tree");
 		treapReportRec(psTreap->psRoot);
 	}
 #endif
