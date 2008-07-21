@@ -262,7 +262,7 @@ BOOL strresStoreString(STR_RES *psRes, char *pID, const char *pString)
 		}
 		psID->id = psRes->nextID | ID_ALLOC;
 		psRes->nextID += 1;
-		TREAP_ADD(psRes->psIDTreap, psID->pIDStr, psID);
+		treapAdd(psRes->psIDTreap, psID->pIDStr, psID);
 	}
 
 	// Remove the ID_ALLOC bit

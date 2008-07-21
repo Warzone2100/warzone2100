@@ -32,31 +32,9 @@
 #include "types.h"
 #include "debug.h"
 
-/* Turn on and off the treap debugging */
-#ifdef DEBUG
-// #define DEBUG_TREAP true
-#else
-#undef DEBUG_TREAP
-#endif
-
-
 /// Forward declarations to allow pointers to these types
 struct TREAP;
 struct STR_ID;
-
-/****************************************************************************************/
-/*                           Function Protoypes                                         */
-/*                                                                                      */
-/*      These should not be called directly - use the macros below                      */
-
-
-/**
- * Store the location in C code at which a call to the heap was made
- *
- * \param	fileName	source filename
- * \param	lineNumber	source file line number
- */
-extern void treapSetCallPos(const char* fileName, int lineNumber);
 
 /**
  * Function to create a treap
@@ -84,24 +62,5 @@ extern void treapDestroy(struct TREAP *psTreap);
  * deallocated.  i.e. getSmallest, delete from treap, free memory
  */
 extern struct STR_ID* treapGetSmallest(struct TREAP *psTreap);
-
-/****************************************************************************************/
-/*                            Macro definitions                                         */
-
-#ifdef DEBUG_TREAP
-
-// debugging versions of the TREAP calls
-#define TREAP_ADD(psTreap, key, pObject) \
-	(treapSetCallPos(__FILE__, __LINE__), \
-	 treapAdd(psTreap, key, pObject))
-
-#else
-
-// release versions of the TREAP calls
-#define TREAP_ADD(psTreap, key, pObject) \
-	 treapAdd(psTreap, key, pObject)
-
-#endif
-
 
 #endif

@@ -40,12 +40,6 @@ typedef struct TREAP_NODE
 	unsigned int                    priority;               //< Treap priority
 	struct STR_ID*                  pObj;                   //< The object stored in the treap
 	struct TREAP_NODE               *psLeft, *psRight;      //< The sub trees
-
-#ifdef DEBUG_TREAP
-	const char                      *pFile;                 //< file the node was created in
-	int                             line;                   //< line the node was created at
-#endif
-
 } TREAP_NODE;
 
 /** Treap data structure */
@@ -53,21 +47,6 @@ typedef struct TREAP
 {
 	TREAP_NODE                      *psRoot;                ///< root of the tree
 } TREAP;
-
-/* Position of the last call */
-static int cLine = -1;
-static const char* pCFile = "No file specified";
-
-void treapSetCallPos(const char* fileName, int lineNumber)
-{
-	cLine = lineNumber;
-
-	/* Assume that fileName originates from a __FILE__ macro, which is
-	 * statically allocated. Thus we can rely on this memory remaining
-	 * available during the entire program execution time.
-	 */
-	pCFile = fileName;
-}
 
 /* A useful comparison function - keys are char pointers */
 static int treapStringCmp(const char *key1, const char *key2)
@@ -177,11 +156,6 @@ BOOL treapAdd(TREAP *psTreap, const char *key, struct STR_ID* pObj)
 	psNew->pObj = pObj;
 	psNew->psLeft = NULL;
 	psNew->psRight = NULL;
-#if DEBUG_TREAP
-	// Store the call location
-	psNew->pFile = pCFile;
-	psNew->line = cLine;
-#endif
 
 	treapAddNode(&psTreap->psRoot, psNew);
 
@@ -310,20 +284,6 @@ struct STR_ID* treapFind(TREAP *psTreap, const char *key)
 }
 
 
-#if DEBUG_TREAP
-/* Recursively print out where the nodes were allocated */
-static void treapReportRec(TREAP_NODE *psRoot)
-{
-	if (psRoot)
-	{
-		debug(LOG_NEVER, "   %s, line %d\n", psRoot->pFile, psRoot->line);
-		treapReportRec(psRoot->psLeft);
-		treapReportRec(psRoot->psRight);
-	}
-}
-#endif
-
-
 /* Recursively free a treap */
 static void treapDestroyRec(TREAP_NODE *psRoot)
 {
@@ -344,13 +304,10 @@ static void treapDestroyRec(TREAP_NODE *psRoot)
 /* Destroy a treap and release all the memory associated with it */
 void treapDestroy(TREAP *psTreap)
 {
-#if DEBUG_TREAP
 	if (psTreap->psRoot)
 	{
 		debug(LOG_NEVER, "Nodes still in the tree");
-		treapReportRec(psTreap->psRoot);
 	}
-#endif
 
 	treapDestroyRec(psTreap->psRoot);
 	free(psTreap);
