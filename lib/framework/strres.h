@@ -29,8 +29,8 @@ typedef struct _str_block
 	char	**apStrings;
 	UDWORD	idStart, idEnd;
 
-#ifdef DEBUG
-	UDWORD	*aUsage;
+#ifdef DEBUG_CHECK_FOR_UNUSED_STRINGS
+	unsigned int*   aUsage;
 #endif
 
 	struct _str_block *psNext;

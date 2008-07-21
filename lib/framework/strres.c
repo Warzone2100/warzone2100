@@ -67,9 +67,8 @@ static BOOL strresAllocBlock(STR_BLOCK **ppsBlock, UDWORD size)
 	}
 	memset((*ppsBlock)->apStrings, 0, sizeof(char *) * size);
 
-#ifdef DEBUG
-	(*ppsBlock)->aUsage = (UDWORD*)malloc(sizeof(UDWORD) * size);
-	memset((*ppsBlock)->aUsage, 0, sizeof(UDWORD) * size);
+#ifdef DEBUG_CHECK_FOR_UNUSED_STRINGS
+	(*ppsBlock)->aUsage = (UDWORD*)calloc(sizeof(*(*ppsBlock)->aUsage) * size);
 #endif
 
 	return true;
@@ -157,11 +156,11 @@ void strresDestroy(STR_RES *psRes)
 	{
 		for(i=psBlock->idStart; i<=psBlock->idEnd; i++)
 		{
-#ifdef DEBUG_GROUP0
+#ifdef DEBUG_CHECK_FOR_UNUSED_STRINGS
 			if (psBlock->aUsage[i - psBlock->idStart] == 0
 				&& i != 0 && i < psRes->nextID)
 			{
-// 				debug( LOG_NEVER, "strresDestroy: String id %d not used:\n               \"%s\"\n", i, psBlock->apStrings[i - psBlock->idStart] );
+ 				debug( LOG_NEVER, "strresDestroy: String id %d not used:\n               \"%s\"\n", i, psBlock->apStrings[i - psBlock->idStart] );
 			}
 #endif
 			if (psBlock->apStrings[i - psBlock->idStart])
@@ -177,7 +176,7 @@ void strresDestroy(STR_RES *psRes)
 		}
 		psNext = psBlock->psNext;
 		free(psBlock->apStrings);
-#ifdef DEBUG
+#ifdef DEBUG_CHECK_FOR_UNUSED_STRINGS
 		free(psBlock->aUsage);
 #endif
 		free(psBlock);
@@ -330,7 +329,7 @@ char *strresGetString(STR_RES *psRes, UDWORD id)
 	ASSERT( psBlock->apStrings[id - psBlock->idStart] != NULL,
 		"strresGetString: String not found" );
 
-#ifdef DEBUG
+#ifdef DEBUG_CHECK_FOR_UNUSED_STRINGS
 	psBlock->aUsage[id - psBlock->idStart] += 1;
 #endif
 
