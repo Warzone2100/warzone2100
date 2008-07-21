@@ -168,6 +168,7 @@ Section $(TEXT_SecBase) SecBase
 
   File "${EXTDIR}\etc\fonts\fonts.conf"
   File "${EXTDIR}\etc\fonts\DejaVuSansMono.ttf"
+  File "${EXTDIR}\etc\fonts\DejaVuSansMono-Bold.ttf"
 
   ;Store installation folder
   WriteRegStr HKLM "Software\${PACKAGE_NAME}" "" $INSTDIR
@@ -260,6 +261,9 @@ Section $(TEXT_SecNLS) SecNLS
   SetOutPath "$INSTDIR\locale\cs\LC_MESSAGES"
   File "/oname=${PACKAGE}.mo" "..\..\po\cs.gmo"
 
+  SetOutPath "$INSTDIR\locale\cs\LC_MESSAGES"
+  File "/oname=${PACKAGE}.mo" "..\..\po\cs.gmo"
+
   SetOutPath "$INSTDIR\locale\da\LC_MESSAGES"
   File "/oname=${PACKAGE}.mo" "..\..\po\da.gmo"
 
@@ -311,11 +315,11 @@ Section $(TEXT_SecNLS) SecNLS
   SetOutPath "$INSTDIR\locale\pl\LC_MESSAGES"
   File "/oname=${PACKAGE}.mo" "..\..\po\pl.gmo"
 
-  SetOutPath "$INSTDIR\locale\pt\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "..\..\po\pt.gmo"
-
   SetOutPath "$INSTDIR\locale\pt_BR\LC_MESSAGES"
   File "/oname=${PACKAGE}.mo" "..\..\po\pt_BR.gmo"
+
+  SetOutPath "$INSTDIR\locale\pt\LC_MESSAGES"
+  File "/oname=${PACKAGE}.mo" "..\..\po\pt.gmo"
 
   SetOutPath "$INSTDIR\locale\ro\LC_MESSAGES"
   File "/oname=${PACKAGE}.mo" "..\..\po\ro.gmo"
@@ -491,6 +495,7 @@ Section "Uninstall"
 
   Delete "$INSTDIR\fonts\fonts.conf"
   Delete "$INSTDIR\fonts\DejaVuSansMono.ttf"
+  Delete "$INSTDIR\fonts\DejaVuSansMono-Bold.ttf"
   RMDir "$INSTDIR\fonts"
 
   Delete "$INSTDIR\mods\global\autoload\music_1.0.AUTHORS.txt"
@@ -502,6 +507,10 @@ Section "Uninstall"
   RMDir "$INSTDIR\mods\global"
   RMDir "$INSTDIR\mods"
 
+  Delete "$INSTDIR\locale\cs\LC_MESSAGES\${PACKAGE}.mo"
+  RMDir "$INSTDIR\locale\cs\LC_MESSAGES"
+  RMDir "$INSTDIR\locale\cs"
+
   Delete "$INSTDIR\locale\da\LC_MESSAGES\${PACKAGE}.mo"
   RMDir "$INSTDIR\locale\da\LC_MESSAGES"
   RMDir "$INSTDIR\locale\da"
@@ -510,9 +519,29 @@ Section "Uninstall"
   RMDir "$INSTDIR\locale\de\LC_MESSAGES"
   RMDir "$INSTDIR\locale\de"
 
+  Delete "$INSTDIR\locale\en_GB\LC_MESSAGES\${PACKAGE}.mo"
+  RMDir "$INSTDIR\locale\en_GB\LC_MESSAGES"
+  RMDir "$INSTDIR\locale\en_GB"
+
+  Delete "$INSTDIR\locale\es\LC_MESSAGES\${PACKAGE}.mo"
+  RMDir "$INSTDIR\locale\es\LC_MESSAGES"
+  RMDir "$INSTDIR\locale\es"
+
+  Delete "$INSTDIR\locale\fi\LC_MESSAGES\${PACKAGE}.mo"
+  RMDir "$INSTDIR\locale\fi\LC_MESSAGES"
+  RMDir "$INSTDIR\locale\fi"
+
   Delete "$INSTDIR\locale\fr\LC_MESSAGES\${PACKAGE}.mo"
   RMDir "$INSTDIR\locale\fr\LC_MESSAGES"
   RMDir "$INSTDIR\locale\fr"
+
+  Delete "$INSTDIR\locale\fy\LC_MESSAGES\${PACKAGE}.mo"
+  RMDir "$INSTDIR\locale\fy\LC_MESSAGES"
+  RMDir "$INSTDIR\locale\fy"
+
+  Delete "$INSTDIR\locale\ga\LC_MESSAGES\${PACKAGE}.mo"
+  RMDir "$INSTDIR\locale\ga\LC_MESSAGES"
+  RMDir "$INSTDIR\locale\ga"
 
   Delete "$INSTDIR\locale\it\LC_MESSAGES\${PACKAGE}.mo"
   RMDir "$INSTDIR\locale\it\LC_MESSAGES"
@@ -522,6 +551,10 @@ Section "Uninstall"
   RMDir "$INSTDIR\locale\la\LC_MESSAGES"
   RMDir "$INSTDIR\locale\la"
 
+  Delete "$INSTDIR\locale\lt\LC_MESSAGES\${PACKAGE}.mo"
+  RMDir "$INSTDIR\locale\lt\LC_MESSAGES"
+  RMDir "$INSTDIR\locale\lt"
+
   Delete "$INSTDIR\locale\nb\LC_MESSAGES\${PACKAGE}.mo"
   RMDir "$INSTDIR\locale\nb\LC_MESSAGES"
   RMDir "$INSTDIR\locale\nb"
@@ -530,13 +563,29 @@ Section "Uninstall"
   RMDir "$INSTDIR\locale\nl\LC_MESSAGES"
   RMDir "$INSTDIR\locale\nl"
 
+  Delete "$INSTDIR\locale\pl\LC_MESSAGES\${PACKAGE}.mo"
+  RMDir "$INSTDIR\locale\pl\LC_MESSAGES"
+  RMDir "$INSTDIR\locale\pl"
+
+  Delete "$INSTDIR\locale\pt_BR\LC_MESSAGES\${PACKAGE}.mo"
+  RMDir "$INSTDIR\locale\pt_BR\LC_MESSAGES"
+  RMDir "$INSTDIR\locale\pt_BR"
+
   Delete "$INSTDIR\locale\pt\LC_MESSAGES\${PACKAGE}.mo"
   RMDir "$INSTDIR\locale\pt\LC_MESSAGES"
   RMDir "$INSTDIR\locale\pt"
 
+  Delete "$INSTDIR\locale\ro\LC_MESSAGES\${PACKAGE}.mo"
+  RMDir "$INSTDIR\locale\ro\LC_MESSAGES"
+  RMDir "$INSTDIR\locale\ro"
+
   Delete "$INSTDIR\locale\ru\LC_MESSAGES\${PACKAGE}.mo"
   RMDir "$INSTDIR\locale\ru\LC_MESSAGES"
   RMDir "$INSTDIR\locale\ru"
+
+  Delete "$INSTDIR\locale\zh_CN\LC_MESSAGES\${PACKAGE}.mo"
+  RMDir "$INSTDIR\locale\zh_CN\LC_MESSAGES"
+  RMDir "$INSTDIR\locale\zh_CN"
 
   RMDir "$INSTDIR\locale"
   RMDir "$INSTDIR"
