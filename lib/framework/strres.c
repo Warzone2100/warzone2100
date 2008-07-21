@@ -68,7 +68,7 @@ static BOOL strresAllocBlock(STR_BLOCK **ppsBlock, UDWORD size)
 	memset((*ppsBlock)->apStrings, 0, sizeof(char *) * size);
 
 #ifdef DEBUG_CHECK_FOR_UNUSED_STRINGS
-	(*ppsBlock)->aUsage = (UDWORD*)calloc(sizeof(*(*ppsBlock)->aUsage) * size);
+	(*ppsBlock)->aUsage = (UDWORD*)calloc(size, sizeof(*(*ppsBlock)->aUsage));
 #endif
 
 	return true;
