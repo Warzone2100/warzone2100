@@ -76,6 +76,7 @@ static const char *code_part_names[] = {
 
 static char inputBuffer[2][MAX_LEN_LOG_LINE];
 static BOOL useInputBuffer1 = false;
+static bool debug_flush_stderr = false;
 
 /**
  * Convert code_part names to enum. Case insensitive.
@@ -107,6 +108,12 @@ void debug_callback_stderr( WZ_DECL_UNUSED void ** data, const char * outputBuff
 		fprintf( stderr, "%s\n", outputBuffer );
 	} else {
 		fprintf( stderr, "%s", outputBuffer );
+	}
+
+	// Make sure that all output is flushed to stderr when requested by the user
+	if (debug_flush_stderr)
+	{
+		fflush(stderr);
 	}
 }
 
@@ -189,6 +196,10 @@ void debug_callback_file_exit( void ** data )
 	*data = NULL;
 }
 
+void debugFlushStderr()
+{
+	debug_flush_stderr = true;
+}
 
 void debug_init(void)
 {

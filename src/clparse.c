@@ -67,6 +67,7 @@ typedef enum
 	CLI_DATADIR,
 	CLI_DEBUG,
 	CLI_DEBUGFILE,
+	CLI_FLUSHDEBUGSTDERR,
 	CLI_FULLSCREEN,
 	CLI_GAME,
 	CLI_HELP,
@@ -96,6 +97,7 @@ static const struct poptOption* getOptionsTable(void)
 		{ "configdir",  '\0', POPT_ARG_STRING, NULL, CLI_CONFIGDIR,  N_("Set configuration directory"),       N_("configuration directory") },
 		{ "debug",      '\0', POPT_ARG_STRING, NULL, CLI_DEBUG,      N_("Show debug for given level"),        N_("debug level") },
 		{ "debugfile",  '\0', POPT_ARG_STRING, NULL, CLI_DEBUGFILE,  N_("Log debug output to file"),          N_("file") },
+		{ "flush-debug-stderr", '\0', POPT_ARG_NONE, NULL, CLI_FLUSHDEBUGSTDERR, N_("Flush all debug output written to stderr"), NULL },
 		{ "fullscreen", '\0', POPT_ARG_NONE,   NULL, CLI_FULLSCREEN, N_("Play in fullscreen mode"),           NULL },
 		{ "game",       '\0', POPT_ARG_STRING, NULL, CLI_GAME,       N_("Load a specific game"),              N_("game-name") },
 		{ "help",       'h',  POPT_ARG_NONE,   NULL, CLI_HELP,       N_("Show this help message and exit"),   NULL },
@@ -209,6 +211,11 @@ bool ParseCommandLineEarly(int argc, const char** argv)
 				debug_register_callback( debug_callback_file, debug_callback_file_init, debug_callback_file_exit, (void*)token );
 				break;
 
+			case CLI_FLUSHDEBUGSTDERR:
+				// Tell the debug stderr output callback to always flush its output
+				debugFlushStderr();
+				break;
+
 			case CLI_CONFIGDIR:
 				// retrieve the configuration directory
 				token = poptGetOptArg(poptCon);
@@ -268,6 +275,7 @@ bool ParseCommandLine(int argc, const char** argv)
 		{
 			case CLI_DEBUG:
 			case CLI_DEBUGFILE:
+			case CLI_FLUSHDEBUGSTDERR:
 			case CLI_CONFIGDIR:
 			case CLI_HELP:
 			case CLI_USAGE:

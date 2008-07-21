@@ -135,6 +135,13 @@ void debug_init( void );
 void debug_exit( void );
 
 /**
+ * Have the stderr output callback flush its output before returning.
+ *
+ * NOTE: This may cause significant slowdowns on some systems.
+ */
+extern void debugFlushStderr(void);
+
+/**
  * Register a callback to be called on every call to debug()
  *
  * \param	callback	Function which does the output
