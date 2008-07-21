@@ -26,7 +26,6 @@
 
 #include <string.h>
 
-//#define DEBUG_GROUP0
 #include "lib/framework/frame.h"
 #include "objects.h"
 #include "map.h"

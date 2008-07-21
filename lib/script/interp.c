@@ -25,7 +25,6 @@
  */
 
 /* Control the execution trace printf's */
-#define DEBUG_GROUP0
 #include "lib/framework/frame.h"
 #include "interp.h"
 #include "stack.h"
