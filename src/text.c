@@ -33,17 +33,14 @@
 
 
 /* The string resource object */
-STR_RES *psStringRes;
+STR_RES* psStringRes = NULL;
 
 /* Initialise the string system */
 BOOL stringsInitialise(void)
 {
-	if (!strresCreate(&psStringRes, STRING_INIT, STRING_EXT))
-	{
-		return false;
-	}
+	psStringRes = strresCreate(STRING_INIT, STRING_EXT);
 
-	return true;
+	return psStringRes != NULL;
 }
 
 

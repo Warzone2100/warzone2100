@@ -82,16 +82,14 @@ static STR_BLOCK* strresAllocBlock(const size_t size)
 
 
 /* Initialise the string system */
-BOOL strresCreate(STR_RES **ppsRes, UDWORD init, UDWORD ext)
+STR_RES* strresCreate(size_t init, size_t ext)
 {
-	STR_RES		*psRes;
-
-	psRes = (STR_RES*)malloc(sizeof(STR_RES));
+	STR_RES* const psRes = (STR_RES*)malloc(sizeof(*psRes));
 	if (!psRes)
 	{
-		debug( LOG_ERROR, "strresCreate: Out of memory" );
+		debug(LOG_ERROR, "Out of memory");
 		abort();
-		return false;
+		return NULL;
 	}
 	psRes->init = init;
 	psRes->ext = ext;
@@ -103,7 +101,7 @@ BOOL strresCreate(STR_RES **ppsRes, UDWORD init, UDWORD ext)
 		debug(LOG_ERROR, "Out of memory");
 		abort();
 		free(psRes);
-		return false;
+		return NULL;
 	}
 
 	psRes->psStrings = strresAllocBlock(init);
@@ -111,15 +109,13 @@ BOOL strresCreate(STR_RES **ppsRes, UDWORD init, UDWORD ext)
 	{
 		treapDestroy(psRes->psIDTreap);
 		free(psRes);
-		return false;
+		return NULL;
 	}
 	psRes->psStrings->psNext = NULL;
 	psRes->psStrings->idStart = 0;
 	psRes->psStrings->idEnd = init-1;
 
-	*ppsRes = psRes;
-
-	return true;
+	return psRes;
 }
 
 

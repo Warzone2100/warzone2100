@@ -49,12 +49,12 @@ typedef struct _str_res
 {
 	struct TREAP_NODE**     psIDTreap;             ///< The treap to store string identifiers
 	STR_BLOCK*              psStrings;             ///< The store for the strings themselves
-	UDWORD                  init,ext;               ///< Sizes for the string blocks
+	size_t                  init, ext;              ///< Sizes for the string blocks
 	UDWORD                  nextID;                 ///< The next free ID
 } STR_RES;
 
 /* Create a string resource object */
-extern BOOL strresCreate(STR_RES **ppsRes, UDWORD init, UDWORD ext);
+extern STR_RES* strresCreate(size_t init, size_t ext);
 
 /* Release a string resource object */
 extern void strresDestroy(STR_RES *psRes);
