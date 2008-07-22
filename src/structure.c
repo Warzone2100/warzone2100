@@ -513,7 +513,7 @@ BOOL loadStructureStats(const char *pStructData, UDWORD bufferSize)
 	const unsigned int NumStructures = numCR(pStructData, bufferSize);
 	UDWORD i, inc, player, numWeaps, weapSlots;
 	char				StructureName[MAX_STR_LENGTH], foundation[MAX_STR_LENGTH],
-						type[MAX_STR_LENGTH], techLevel[MAX_STR_LENGTH],
+						type[MAX_STR_LENGTH], dummy[MAX_STR_LENGTH],
 						strength[MAX_STR_LENGTH];
 	char				GfxFile[MAX_STR_LENGTH], baseIMD[MAX_STR_LENGTH];
 	char				ecmType[MAX_STR_LENGTH], sensorType[MAX_STR_LENGTH];
@@ -576,7 +576,7 @@ BOOL loadStructureStats(const char *pStructData, UDWORD bufferSize)
 		sscanf(pStructData,"%[^','],%[^','],%[^','],%[^','],%d,%d,%d,%[^','],\
 			%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%[^','],%[^','],%d,%[^','],%[^','],\
 			%d,%d",
-			StructureName, type, techLevel, strength, &psStructure->terrainType,
+			StructureName, type, dummy, strength, &psStructure->terrainType,
 			&psStructure->baseWidth, &psStructure->baseBreadth, foundation,
 			&psStructure->buildPoints, &psStructure->height,
 			&psStructure->armourValue, &psStructure->bodyPoints,
@@ -600,12 +600,6 @@ BOOL loadStructureStats(const char *pStructData, UDWORD bufferSize)
 
 		//determine the structure type
 		psStructure->type = structureType(type);
-
-		//determine the tech level
-		if (!setTechLevel((BASE_STATS *)psStructure, techLevel))
-		{
-			return false;
-		}
 
 		//set the struct strength
 		psStructure->strength = getStructStrength(strength);
@@ -1741,8 +1735,6 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 						psBuilding->asWeaps[0].lastFired = gameTime;
 					}
 					psBuilding->asWeaps[weapon].nStat =	pStructureType->psWeapStat[weapon] - asWeaponStats;
-					psBuilding->asWeaps[weapon].hitPoints = (asWeaponStats + psBuilding->
-						asWeaps[weapon].nStat)->hitPoints;
 					psBuilding->asWeaps[weapon].ammo = (asWeaponStats + psBuilding->
 						asWeaps[weapon].nStat)->numRounds;
 					psBuilding->asWeaps[weapon].recoilValue = 0;
@@ -1762,8 +1754,6 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 					psBuilding->asWeaps[0].lastFired = gameTime;
 				}
 				psBuilding->asWeaps[0].nStat =	pStructureType->psWeapStat[0] - asWeaponStats;
-				psBuilding->asWeaps[0].hitPoints = (asWeaponStats + psBuilding->
-					asWeaps[0].nStat)->hitPoints;
 				psBuilding->asWeaps[0].ammo = (asWeaponStats + psBuilding->
 					asWeaps[0].nStat)->numRounds;
 				psBuilding->asWeaps[0].recoilValue = 0;

@@ -124,7 +124,6 @@ typedef struct _structure_stats
 {
 	STATS_BASE;						/* basic stats */
 	STRUCTURE_TYPE	type;				/* the type of structure */
-	TECH_LEVEL	techLevel;			/* technology level of the structure */
 	STRUCT_STRENGTH	strength;		/* strength against the weapon effects */
 	UDWORD		terrainType;		/*The type of terrain the structure has to be
 									  built next to - may be none*/
