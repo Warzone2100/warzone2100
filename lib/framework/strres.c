@@ -38,7 +38,6 @@
 
 /* Static forward declarations */
 static void strresReleaseIDStrings(STR_RES *psRes);
-static BOOL strresAllocBlock(STR_BLOCK **ppsBlock, UDWORD size);
 
 /* The string resource currently being loaded */
 STR_RES	*psCurrRes;
@@ -47,31 +46,38 @@ STR_RES	*psCurrRes;
 #define ID_ALLOC	0x80000000
 
 /* Allocate a string block */
-static BOOL strresAllocBlock(STR_BLOCK **ppsBlock, UDWORD size)
+static STR_BLOCK* strresAllocBlock(const size_t size)
 {
-	*ppsBlock = (STR_BLOCK*)malloc(sizeof(STR_BLOCK));
-	if (!*ppsBlock)
+	STR_BLOCK* const psBlock = (STR_BLOCK*)malloc(sizeof(*psBlock));
+	if (!psBlock)
 	{
-		debug( LOG_ERROR, "strresAllocBlock: Out of memory - 1" );
+		debug(LOG_ERROR, "Out of memory - 1");
 		abort();
-		return false;
+		return NULL;
 	}
 
-	(*ppsBlock)->apStrings = (char**)malloc(sizeof(char *) * size);
-	if (!(*ppsBlock)->apStrings)
+	psBlock->apStrings = (char**)calloc(size, sizeof(*psBlock->apStrings));
+	if (!psBlock->apStrings)
 	{
-		debug( LOG_ERROR, "strresAllocBlock: Out of memory - 2" );
+		debug(LOG_ERROR, "Out of memory - 2");
 		abort();
-		free(*ppsBlock);
-		return false;
+		free(psBlock);
+		return NULL;
 	}
-	memset((*ppsBlock)->apStrings, 0, sizeof(char *) * size);
 
 #ifdef DEBUG_CHECK_FOR_UNUSED_STRINGS
-	(*ppsBlock)->aUsage = (UDWORD*)calloc(size, sizeof(*(*ppsBlock)->aUsage));
+	psBlock->aUsage = (unsigned int*)calloc(size, sizeof(*psBlock->aUsage));
+	if (!psBlock->aUsage)
+	{
+		debug(LOG_ERROR, "Out of memory - 3");
+		abort();
+		free(psBlock->apStrings);
+		free(psBlock);
+		return NULL;
+	}
 #endif
 
-	return true;
+	return psBlock;
 }
 
 
@@ -100,7 +106,8 @@ BOOL strresCreate(STR_RES **ppsRes, UDWORD init, UDWORD ext)
 		return false;
 	}
 
-	if (!strresAllocBlock(&psRes->psStrings, init))
+	psRes->psStrings = strresAllocBlock(init);
+	if (!psRes->psStrings)
 	{
 		treapDestroy(psRes->psIDTreap);
 		free(psRes);
@@ -274,7 +281,8 @@ BOOL strresStoreString(STR_RES *psRes, char *pID, const char *pString)
 		if (!psBlock->psNext)
 		{
 			// Need to allocate a new string block
-			if (!strresAllocBlock(&psBlock->psNext, psRes->ext))
+			psBlock->psNext = strresAllocBlock(psRes->ext);
+			if (!psBlock->psNext)
 			{
 				return false;
 			}
