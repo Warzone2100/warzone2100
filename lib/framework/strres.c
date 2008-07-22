@@ -67,9 +67,8 @@ static BOOL strresAllocBlock(STR_BLOCK **ppsBlock, UDWORD size)
 	}
 	memset((*ppsBlock)->apStrings, 0, sizeof(char *) * size);
 
-#ifdef DEBUG
-	(*ppsBlock)->aUsage = (UDWORD*)malloc(sizeof(UDWORD) * size);
-	memset((*ppsBlock)->aUsage, 0, sizeof(UDWORD) * size);
+#ifdef DEBUG_CHECK_FOR_UNUSED_STRINGS
+	(*ppsBlock)->aUsage = (UDWORD*)calloc(size, sizeof(*(*ppsBlock)->aUsage));
 #endif
 
 	return true;
@@ -102,7 +101,7 @@ BOOL strresCreate(STR_RES **ppsRes, UDWORD init, UDWORD ext)
 
 	if (!strresAllocBlock(&psRes->psStrings, init))
 	{
-		TREAP_DESTROY(psRes->psIDTreap);
+		treapDestroy(psRes->psIDTreap);
 		free(psRes);
 		return false;
 	}
@@ -126,10 +125,10 @@ static void strresReleaseIDStrings(STR_RES *psRes)
 	ASSERT( psRes != NULL,
 		"strresReleaseIDStrings: Invalid string res pointer" );
 
-	for(psID = (STR_ID*)TREAP_GETSMALLEST(psRes->psIDTreap); psID;
-		psID = (STR_ID*)TREAP_GETSMALLEST(psRes->psIDTreap))
+	for(psID = (STR_ID*)treapGetSmallest(psRes->psIDTreap); psID;
+		psID = (STR_ID*)treapGetSmallest(psRes->psIDTreap))
 	{
-		TREAP_DEL(psRes->psIDTreap, (void*)psID->pIDStr);
+		treapDel(psRes->psIDTreap, (void*)psID->pIDStr);
 		if (psID->id & ID_ALLOC)
 		{
 			free(psID->pIDStr);
@@ -156,11 +155,11 @@ void strresDestroy(STR_RES *psRes)
 	{
 		for(i=psBlock->idStart; i<=psBlock->idEnd; i++)
 		{
-#ifdef DEBUG_GROUP0
+#ifdef DEBUG_CHECK_FOR_UNUSED_STRINGS
 			if (psBlock->aUsage[i - psBlock->idStart] == 0
 				&& i != 0 && i < psRes->nextID)
 			{
-// 				debug( LOG_NEVER, "strresDestroy: String id %d not used:\n               \"%s\"\n", i, psBlock->apStrings[i - psBlock->idStart] );
+ 				debug( LOG_NEVER, "strresDestroy: String id %d not used:\n               \"%s\"\n", i, psBlock->apStrings[i - psBlock->idStart] );
 			}
 #endif
 			if (psBlock->apStrings[i - psBlock->idStart])
@@ -176,14 +175,14 @@ void strresDestroy(STR_RES *psRes)
 		}
 		psNext = psBlock->psNext;
 		free(psBlock->apStrings);
-#ifdef DEBUG
+#ifdef DEBUG_CHECK_FOR_UNUSED_STRINGS
 		free(psBlock->aUsage);
 #endif
 		free(psBlock);
 	}
 
 	// Release the treap and free the final memory
-	TREAP_DESTROY(psRes->psIDTreap);
+	treapDestroy(psRes->psIDTreap);
 	free(psRes);
 }
 
@@ -196,21 +195,15 @@ BOOL strresGetIDNum(STR_RES *psRes, const char *pIDStr, UDWORD *pIDNum)
 	ASSERT( psRes != NULL,
 		"strresGetIDNum: Invalid string res pointer" );
 
-	psID = (STR_ID*)TREAP_FIND(psRes->psIDTreap, pIDStr);
+	psID = (STR_ID*)treapFind(psRes->psIDTreap, pIDStr);
 	if (!psID)
 	{
 		*pIDNum = 0;
 		return false;
 	}
 
-	if (psID->id & ID_ALLOC)
-	{
-		*pIDNum = psID->id & ~ID_ALLOC;
-	}
-	else
-	{
-		*pIDNum = psID->id;
-	}
+	*pIDNum = psID->id & ~ID_ALLOC;
+
 	return true;
 }
 
@@ -222,7 +215,7 @@ BOOL strresGetIDString(STR_RES *psRes, const char *pIDStr, char **ppStoredID)
 
 	ASSERT( psRes != NULL, "strresGetIDString: Invalid string res pointer" );
 
-	psID = (STR_ID*)TREAP_FIND(psRes->psIDTreap, pIDStr);
+	psID = (STR_ID*)treapFind(psRes->psIDTreap, pIDStr);
 	if (!psID)
 	{
 		*ppStoredID = NULL;
@@ -246,7 +239,7 @@ BOOL strresStoreString(STR_RES *psRes, char *pID, const char *pString)
 		"strresStoreString: Invalid string res pointer" );
 
 	// Find the id for the string
-	psID = (STR_ID*)TREAP_FIND(psRes->psIDTreap, (void*)pID);
+	psID = (STR_ID*)treapFind(psRes->psIDTreap, (void*)pID);
 	if (!psID)
 	{
 		// No ID yet so generate a new one
@@ -269,14 +262,9 @@ BOOL strresStoreString(STR_RES *psRes, char *pID, const char *pString)
 		psRes->nextID += 1;
 		TREAP_ADD(psRes->psIDTreap, (void*)psID->pIDStr, psID);
 	}
-	if (psID->id & ID_ALLOC)
-	{
-		id = psID->id & ~ID_ALLOC;
-	}
-	else
-	{
-		id = psID->id;
-	}
+
+	// Remove the ID_ALLOC bit
+	id = psID->id & ~ID_ALLOC;
 
 	// Find the block to store the string in
 	for(psBlock = psRes->psStrings; psBlock->idEnd < id;
@@ -340,7 +328,7 @@ char *strresGetString(STR_RES *psRes, UDWORD id)
 	ASSERT( psBlock->apStrings[id - psBlock->idStart] != NULL,
 		"strresGetString: String not found" );
 
-#ifdef DEBUG
+#ifdef DEBUG_CHECK_FOR_UNUSED_STRINGS
 	psBlock->aUsage[id - psBlock->idStart] += 1;
 #endif
 

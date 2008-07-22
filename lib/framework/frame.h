@@ -40,7 +40,6 @@
 #include "debug.h"
 
 #include "i18n.h"
-#include "treap.h"
 #include "trig.h"
 #include "cursors.h"
 

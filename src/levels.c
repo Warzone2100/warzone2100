@@ -28,7 +28,6 @@
 #include <string.h>
 
 // levLoadData printf's
-#define DEBUG_GROUP0
 #include "lib/framework/frame.h"
 #include "lib/framework/frameresource.h"
 #include "lib/framework/listmacs.h"

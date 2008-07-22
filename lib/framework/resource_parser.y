@@ -30,9 +30,6 @@ extern char* res_get_text(void);
 /* Allow frame header files to be singly included */
 #define FRAME_LIB_INCLUDE
 
-// directory printfs
-#define DEBUG_GROUP0
-
 #include "lib/framework/frame.h"
 #include <string.h>
 #include <stdlib.h>
