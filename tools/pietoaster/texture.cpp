@@ -20,7 +20,7 @@
 
 #include <SDL_opengl.h>
 #ifdef __APPLE__
-#include <opengl/glu.h>
+#include <OpenGL/glu.h>
 #else
 #include <GL/glu.h>
 #endif
