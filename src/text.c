@@ -33,7 +33,7 @@
 
 
 /* The string resource object */
-STR_RES* psStringRes = NULL;
+struct STR_RES* psStringRes = NULL;
 
 /* Initialise the string system */
 BOOL stringsInitialise(void)

@@ -36,6 +36,35 @@
 #include "strres.h"
 #include "strresly.h"
 
+/* A string block */
+typedef struct STR_BLOCK
+{
+	char	**apStrings;
+	UDWORD	idStart, idEnd;
+
+#ifdef DEBUG_CHECK_FOR_UNUSED_STRINGS
+	unsigned int*   aUsage;
+#endif
+
+	struct STR_BLOCK* psNext;
+} STR_BLOCK;
+
+/* An ID entry */
+typedef struct STR_ID
+{
+	UDWORD	id;
+	char	*pIDStr;
+} STR_ID;
+
+/* A String Resource */
+typedef struct STR_RES
+{
+	struct TREAP_NODE**     psIDTreap;              ///< The treap to store string identifiers
+	STR_BLOCK*              psStrings;              ///< The store for the strings themselves
+	size_t                  init, ext;              ///< Sizes for the string blocks
+	UDWORD                  nextID;                 ///< The next free ID
+} STR_RES;
+
 /* Static forward declarations */
 static void strresReleaseIDStrings(STR_RES *psRes);
 

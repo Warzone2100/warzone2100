@@ -23,55 +23,28 @@
 #ifndef _strres_h
 #define _strres_h
 
-/* A string block */
-typedef struct _str_block
-{
-	char	**apStrings;
-	UDWORD	idStart, idEnd;
-
-#ifdef DEBUG_CHECK_FOR_UNUSED_STRINGS
-	unsigned int*   aUsage;
-#endif
-
-	struct _str_block *psNext;
-} STR_BLOCK;
-
-/* An ID entry */
-typedef struct STR_ID
-{
-	UDWORD	id;
-	char	*pIDStr;
-} STR_ID;
-
-
-/* A String Resource */
-typedef struct _str_res
-{
-	struct TREAP_NODE**     psIDTreap;             ///< The treap to store string identifiers
-	STR_BLOCK*              psStrings;             ///< The store for the strings themselves
-	size_t                  init, ext;              ///< Sizes for the string blocks
-	UDWORD                  nextID;                 ///< The next free ID
-} STR_RES;
+// Forward declaration to allow pointers to this type
+struct STR_RES;
 
 /* Create a string resource object */
-extern STR_RES* strresCreate(size_t init, size_t ext);
+extern struct STR_RES* strresCreate(size_t init, size_t ext);
 
 /* Release a string resource object */
-extern void strresDestroy(STR_RES *psRes);
+extern void strresDestroy(struct STR_RES *psRes);
 
 /* Return the ID number for an ID string */
-extern BOOL strresGetIDNum(STR_RES *psRes, const char *pIDStr, UDWORD *pIDNum);
+extern BOOL strresGetIDNum(struct STR_RES *psRes, const char *pIDStr, UDWORD *pIDNum);
 
 /* Return the stored ID string that matches the string passed in */
-extern BOOL strresGetIDString(STR_RES *psRes, const char *pIDStr, char **ppStoredID);
+extern BOOL strresGetIDString(struct STR_RES *psRes, const char *pIDStr, char **ppStoredID);
 
 /* Get the string from an ID number */
-extern char *strresGetString(STR_RES *psRes, UDWORD id);
+extern char *strresGetString(struct STR_RES *psRes, UDWORD id);
 
 /* Load a string resource file */
-extern BOOL strresLoad(STR_RES* psRes, const char* fileName);
+extern BOOL strresLoad(struct STR_RES* psRes, const char* fileName);
 
 /* Get the ID number for a string*/
-extern UDWORD strresGetIDfromString(STR_RES *psRes, const char *pString);
+extern UDWORD strresGetIDfromString(struct STR_RES *psRes, const char *pString);
 
 #endif

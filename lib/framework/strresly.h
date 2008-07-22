@@ -26,7 +26,7 @@
 #include "lib/framework/lexer_input.h"
 
 /* The string resource currently being loaded */
-extern STR_RES	*psCurrRes;
+extern struct STR_RES* psCurrRes;
 
 /* Set the current input buffer for the lexer - used by strresLoad */
 extern void strres_set_extra(YY_EXTRA_TYPE user_defined);
@@ -40,7 +40,7 @@ extern int strres_lex_destroy(void);
 void strres_error(const char* msg);
 
 /* Store a string */
-extern BOOL strresStoreString(STR_RES *psRes, char *pID, const char *pString);
+extern BOOL strresStoreString(struct STR_RES *psRes, char *pID, const char *pString);
 
 #endif
 

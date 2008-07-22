@@ -24,8 +24,11 @@
 #ifndef __INCLUDED_SRC_TEXT_H__
 #define __INCLUDED_SRC_TEXT_H__
 
+// Forward declaration to allow pointers to this type
+struct STR_RES;
+
 /* The string resource object */
-extern STR_RES *psStringRes;
+extern struct STR_RES *psStringRes;
 
 /* Initialise the string system */
 extern BOOL stringsInitialise(void);
