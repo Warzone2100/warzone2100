@@ -162,6 +162,7 @@ static void strresReleaseIDStrings(STR_RES *psRes)
 		psID = treapGetSmallest(psRes->psIDTreap))
 	{
 		treapDel(psRes->psIDTreap, psID->pIDStr);
+		ASSERT(psID->id & ID_ALLOC, "This assert should *never* trigger a crash, if it does please open a bugreport or send me (Giel) a mail");
 		if (psID->id & ID_ALLOC)
 		{
 			free(psID->pIDStr);
@@ -235,6 +236,7 @@ BOOL strresGetIDNum(STR_RES *psRes, const char *pIDStr, UDWORD *pIDNum)
 		return false;
 	}
 
+	ASSERT(psID->id & ID_ALLOC, "This assert should *never* trigger a crash, if it does please open a bugreport or send me (Giel) a mail");
 	*pIDNum = psID->id & ~ID_ALLOC;
 
 	return true;
@@ -298,6 +300,8 @@ BOOL strresStoreString(STR_RES *psRes, char *pID, const char *pString)
 
 	// Remove the ID_ALLOC bit
 	id = psID->id & ~ID_ALLOC;
+
+	ASSERT(psID->id & ID_ALLOC, "This assert should *never* trigger a crash, if it does please open a bugreport or send me (Giel) a mail");
 
 	// Find the block to store the string in
 	for(psBlock = psRes->psStrings; psBlock->idEnd < id;
