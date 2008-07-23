@@ -314,7 +314,7 @@ typedef struct _save_component
 typedef struct _save_weapon_v19
 {
 	char				name[MAX_SAVE_NAME_SIZE_V19];
-	UDWORD				hitPoints;  // UNUSED: only here to keep struct size intact
+	UDWORD				hitPoints;  //- remove at some point
 	UDWORD				ammo;
 	UDWORD				lastFired;
 } SAVE_WEAPON_V19;
@@ -322,7 +322,7 @@ typedef struct _save_weapon_v19
 typedef struct _save_weapon
 {
 	char				name[MAX_SAVE_NAME_SIZE];
-	UDWORD				hitPoints;  // UNUSED: only here to keep struct size intact
+	UDWORD				hitPoints;  //- remove at some point
 	UDWORD				ammo;
 	UDWORD				lastFired;
 } SAVE_WEAPON;
@@ -5316,6 +5316,7 @@ static DROID* buildDroidFromSaveDroidV11(SAVE_DROID_V11* psSaveDroid)
 		if (psDroid->asWeaps[i].nStat > 0)
 		{
 			//only one weapon now
+			psDroid->asWeaps[i].hitPoints = psSaveDroid->asWeaps[i].hitPoints;
 			psDroid->asWeaps[i].ammo = psSaveDroid->asWeaps[i].ammo;
 			psDroid->asWeaps[i].lastFired = psSaveDroid->asWeaps[i].lastFired;
 		}
@@ -5451,6 +5452,7 @@ static DROID* buildDroidFromSaveDroidV19(SAVE_DROID_V18* psSaveDroid, UDWORD ver
 	{
 		if (psDroid->asWeaps[i].nStat > 0)
 		{
+			psDroid->asWeaps[i].hitPoints = psSaveDroid->asWeaps[i].hitPoints;
 			psDroid->asWeaps[i].ammo = psSaveDroid->asWeaps[i].ammo;
 			psDroid->asWeaps[i].lastFired = psSaveDroid->asWeaps[i].lastFired;
 		}
@@ -5855,6 +5857,7 @@ static DROID* buildDroidFromSaveDroid(SAVE_DROID* psSaveDroid, UDWORD version)
 	{
 		if (psDroid->asWeaps[i].nStat > 0)
 		{
+			psDroid->asWeaps[i].hitPoints = psSaveDroid->asWeaps[i].hitPoints;
 			psDroid->asWeaps[i].ammo = psSaveDroid->asWeaps[i].ammo;
 			psDroid->asWeaps[i].lastFired = psSaveDroid->asWeaps[i].lastFired;
 		}
@@ -6160,6 +6163,7 @@ BOOL loadSaveDroidV11(char *pFileData, UDWORD filesize, UDWORD numDroids, UDWORD
 		endian_udword(&psSaveDroid->burnDamage);
 		for(i = 0; i < TEMP_DROID_MAXPROGS; i++) {
 			/* SAVE_WEAPON_V19 */
+			endian_udword(&psSaveDroid->asWeaps[i].hitPoints);
 			endian_udword(&psSaveDroid->asWeaps[i].ammo);
 			endian_udword(&psSaveDroid->asWeaps[i].lastFired);
 		}
@@ -6312,6 +6316,7 @@ BOOL loadSaveDroidV19(char *pFileData, UDWORD filesize, UDWORD numDroids, UDWORD
 		endian_udword(&psSaveDroid->burnDamage);
 		for(i = 0; i < TEMP_DROID_MAXPROGS; i++) {
 			/* SAVE_WEAPON_V19 */
+			endian_udword(&psSaveDroid->asWeaps[i].hitPoints);
 			endian_udword(&psSaveDroid->asWeaps[i].ammo);
 			endian_udword(&psSaveDroid->asWeaps[i].lastFired);
 		}
@@ -6503,6 +6508,7 @@ BOOL loadSaveDroidV(char *pFileData, UDWORD filesize, UDWORD numDroids, UDWORD v
 		}
 		for(i = 0; i < TEMP_DROID_MAXPROGS; i++) {
 			/* SAVE_WEAPON */
+			endian_udword(&psSaveDroid->asWeaps[i].hitPoints);
 			endian_udword(&psSaveDroid->asWeaps[i].ammo);
 			endian_udword(&psSaveDroid->asWeaps[i].lastFired);
 		}
@@ -6606,6 +6612,7 @@ static BOOL buildSaveDroidFromDroid(SAVE_DROID* psSaveDroid, DROID* psCurr, DROI
 					if (getNameFromComp(COMP_WEAPON, psSaveDroid->asWeaps[i].name, psCurr->asWeaps[i].nStat))
 
 					{
+    					psSaveDroid->asWeaps[i].hitPoints = psCurr->asWeaps[i].hitPoints;
 	    				psSaveDroid->asWeaps[i].ammo = psCurr->asWeaps[i].ammo;
 		    			psSaveDroid->asWeaps[i].lastFired = psCurr->asWeaps[i].lastFired;
 					}
@@ -6731,6 +6738,7 @@ static BOOL buildSaveDroidFromDroid(SAVE_DROID* psSaveDroid, DROID* psCurr, DROI
 			endian_udword(&psSaveDroid->body);
 			endian_udword(&psSaveDroid->saveType);
 			for(i = 0; i < TEMP_DROID_MAXPROGS; i++) {
+				endian_udword(&psSaveDroid->asWeaps[i].hitPoints);
 				endian_udword(&psSaveDroid->asWeaps[i].ammo);
 				endian_udword(&psSaveDroid->asWeaps[i].lastFired);
 			}

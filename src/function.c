@@ -151,7 +151,7 @@ static BOOL storeName(FUNCTION* pFunction, const char* pNameToStore)
 static BOOL loadProduction(const char *pData)
 {
 	PRODUCTION_FUNCTION*	psFunction;
-	//PROPULSION_TYPE propType;
+	//UBYTE					propType;
 	char					functionName[MAX_STR_LENGTH], bodySize[MAX_STR_LENGTH];
 	UDWORD					productionOutput;
 	//char					propulsionType[MAX_STR_LENGTH];
@@ -206,14 +206,13 @@ static BOOL loadProduction(const char *pData)
 		return false;
 	}
 */
-#if 0
-	if (!getPropulsionType(propulsionType, &propType))
+	/*propType = getPropulsionType(propulsionType);
+	if (propType == INVALID_PROP_TYPE)
 	{
-		ASSERT(!"Unknown propulsion type", "Unknown Propulsion Type: %s", propulsionType);
+		DBERROR(("Unknown Propulsion Type - %s", propulsionType));
 		return false;
 	}
-	psFunction->propulsionType = propType;
-#endif
+	psFunction->propulsionType = propType;*/
 
 	if (!getBodySize(bodySize, (UBYTE*)&psFunction->capacity))
 	{
