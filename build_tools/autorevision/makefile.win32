@@ -3,6 +3,8 @@ top_builddir=$(top_srcdir)
 
 include $(top_srcdir)/makerules/common.mk
 
+LDFLAGS:=$(subst -mwindows,,$(LDFLAGS))
+
 SRC=autorevision.cpp
 
 EXE=autorevision
