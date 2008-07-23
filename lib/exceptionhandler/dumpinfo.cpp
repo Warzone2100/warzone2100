@@ -111,8 +111,6 @@ void dbgDumpHeader(DumpFileHandle file)
 
 void dbgDumpLog(DumpFileHandle file)
 {
-	unsigned int line_num = 1;
-
 	// Write all messages to the given file
 	for (std::deque<std::vector<char> >::const_iterator
 	     msg  = dbgMessages.begin();

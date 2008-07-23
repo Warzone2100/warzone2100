@@ -40,10 +40,13 @@ WZ_LDFLAGS:=-L$(DEVDIR)/lib
 
 # Setup build environment with config values
 
+WZ_CFLAGS+=-g -Wall -Werror-implicit-function-declaration
+WZ_CXXFLAGS+= -g -Wall
+
 ifeq ($(strip $(MODE)),debug)
 WZ_CPPFLAGS+=-DDEBUG
-WZ_CFLAGS+=-g -O0 -Wall -Werror-implicit-function-declaration
-WZ_CXXFLAGS+=-g -O0 -Wall -Werror-implicit-function-declaration
+WZ_CFLAGS+=-O0
+WZ_CXXFLAGS+=-O0
 else
 WZ_CPPFLAGS+=-DNDEBUG
 endif
