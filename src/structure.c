@@ -592,7 +592,8 @@ BOOL loadStructureStats(const char *pStructData, UDWORD bufferSize)
 #endif
 
 		//allocate storage for the name
-		if (!allocateName(&psStructure->pName, StructureName))
+		psStructure->pName = allocateName(StructureName);
+		if (!psStructure->pName)
 		{
 			return false;
 		}

@@ -210,7 +210,9 @@ void statsDealloc(COMPONENT_STATS* pStats, UDWORD listSize, UDWORD structureSize
 
 static BOOL allocateStatName(BASE_STATS* pStat, const char *Name)
 {
-	return (allocateName(&pStat->pName, Name));
+	pStat->pName = allocateName(Name);
+
+	return pStat != NULL;
 }
 
 
@@ -2820,16 +2822,18 @@ bool getWeaponEffect(const char* weaponEffect, WEAPON_EFFECT* effect)
 looks up the name to get the resource associated with it - or allocates space
 and stores the name. Eventually ALL names will be 'resourced' for translation
 */
-BOOL allocateName(char **ppStore, const char *pName)
+char* allocateName(const char* name)
 {
-	//checks the name has been loaded as a resource and gets the storage pointer
-	if (!strresGetIDString(psStringRes, pName, ppStore))
+	char* const storeName = strresGetIDString(psStringRes, name);
+
+	if (!storeName)
 	{
-		debug( LOG_ERROR, "Unable to find string resource for %s", pName );
+		debug(LOG_ERROR, "Unable to find string resource for %s", name);
 		abort();
-		return false;
+		return NULL;
 	}
-	return true;
+
+	return storeName;
 }
 
 

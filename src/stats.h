@@ -267,7 +267,7 @@ extern SDWORD getCompFromResName(UDWORD compType, const char *pName);
 /*returns the weapon sub class based on the string name passed in */
 extern bool getWeaponSubClass(const char* subClass, WEAPON_SUBCLASS* wclass);
 /*either gets the name associated with the resource (if one) or allocates space and copies pName*/
-extern BOOL allocateName(char **ppStore, const char *pName);
+extern char* allocateName(const char* name);
 //converts the name read in from Access into the name which is used in the Stat lists (or ignores it)
 extern BOOL getResourceName(const char *pName);
 /*return the name to display for the interface - valid for OBJECTS and STATS*/

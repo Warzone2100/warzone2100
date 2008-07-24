@@ -903,7 +903,8 @@ static BOOL loadWallFunction(const char *pData)
 
 	//store the structure name - cannot set the stat pointer here because structures
 	//haven't been loaded in yet!
-	if (!allocateName(&psFunction->pStructName, structureName))
+	psFunction->pStructName = allocateName(structureName);
+	if (!psFunction->pStructName)
 	{
 		debug( LOG_ERROR, "Structure Stats Invalid for function - %s", functionName );
 		abort();

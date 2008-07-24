@@ -272,7 +272,8 @@ BOOL loadResearch(const char *pResearchData, UDWORD bufferSize)
 		sscanf(pResearchData,"%[^','],", ResearchName);
 
 		//allocate storage for the name
-		if (!allocateName(&pResearch->pName, ResearchName))
+		pResearch->pName = allocateName(ResearchName);
+		if (!pResearch->pName)
 		{
 			return false;
 		}

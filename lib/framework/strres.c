@@ -233,21 +233,19 @@ BOOL strresGetIDNum(STR_RES *psRes, const char *pIDStr, UDWORD *pIDNum)
 
 
 /* Return the ID stored ID string that matches the string passed in */
-BOOL strresGetIDString(STR_RES *psRes, const char *pIDStr, char **ppStoredID)
+char* strresGetIDString(STR_RES *psRes, const char *pIDStr)
 {
 	STR_ID *psID;
 
-	ASSERT( psRes != NULL, "strresGetIDString: Invalid string res pointer" );
+	ASSERT(psRes != NULL, "Invalid string res pointer");
 
 	psID = treapFind(psRes->psIDTreap, pIDStr);
 	if (!psID)
 	{
-		*ppStoredID = NULL;
-		return false;
+		return NULL;
 	}
 
-	*ppStoredID = psID->pIDStr;
-	return true;
+	return psID->pIDStr;
 }
 
 

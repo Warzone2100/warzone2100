@@ -158,7 +158,8 @@ BOOL loadFeatureStats(const char *pFeatureData, UDWORD bufferSize)
 		psFeature->baseWidth = (UWORD)Width;
 		psFeature->baseBreadth = (UWORD)Breadth;
 
-		if (!allocateName(&psFeature->pName, featureName))
+		psFeature->pName = allocateName(featureName);
+		if (!psFeature->pName)
 		{
 			return false;
 		}
