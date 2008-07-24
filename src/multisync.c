@@ -245,6 +245,11 @@ static BOOL sendDroidCheck(void)
 			{
 				ppD[count++] = pD;
 			}
+			// All droids are synced! (We're done.)
+			else
+			{
+				break;
+			}
 		}
 
 		// Send the number of droids to expect
