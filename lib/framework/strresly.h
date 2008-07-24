@@ -37,7 +37,7 @@ extern int strres_lex_destroy(void);
 void strres_error(const char* msg);
 
 /* Store a string */
-extern BOOL strresStoreString(struct STR_RES *psRes, char *pID, const char *pString);
+extern BOOL strresStoreString(struct STR_RES *psRes, const char* pID, const char* pString);
 
 #endif
 

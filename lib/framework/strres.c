@@ -216,7 +216,7 @@ const char* strresGetIDString(STR_RES *psRes, const char *pIDStr)
 
 
 /* Store a string */
-BOOL strresStoreString(STR_RES *psRes, char *pID, const char *pString)
+BOOL strresStoreString(STR_RES *psRes, const char* pID, const char* pString)
 {
 	STR_ID* psID;
 	STR* psString;
