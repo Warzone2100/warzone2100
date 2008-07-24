@@ -198,27 +198,6 @@ void strresDestroy(STR_RES *psRes)
 }
 
 
-/* Return the ID number for an ID string */
-BOOL strresGetIDNum(STR_RES *psRes, const char *pIDStr, UDWORD *pIDNum)
-{
-	STR_ID	*psID;
-
-	ASSERT( psRes != NULL,
-		"strresGetIDNum: Invalid string res pointer" );
-
-	psID = treapFind(psRes->psIDTreap, pIDStr);
-	if (!psID)
-	{
-		*pIDNum = 0;
-		return false;
-	}
-
-	*pIDNum = psID->id;
-
-	return true;
-}
-
-
 /* Return the ID stored ID string that matches the string passed in */
 const char* strresGetIDString(STR_RES *psRes, const char *pIDStr)
 {
@@ -293,8 +272,7 @@ const char* strresGetString(const STR_RES * psRes, UDWORD id)
 {
 	STR* psString;
 
-	ASSERT( psRes != NULL,
-		"strresGetString: Invalid string res pointer" );
+	ASSERT(psRes != NULL, "Invalid string res pointer" );
 
 	// Find the string in the string list
 	for (psString = psRes->psStrings; psString; psString = psString->psNext)
@@ -316,6 +294,23 @@ const char* strresGetString(const STR_RES * psRes, UDWORD id)
 	return NULL;
 }
 
+const char* strresGetStringByID(const STR_RES* psRes, const char* ID)
+{
+	STR_ID* psID;
+
+	ASSERT(psRes != NULL, "Invalid string resource pointer");
+
+	// First find the ID number of the given ID string
+	psID = treapFind(psRes->psIDTreap, ID);
+	if (!psID)
+	{
+		debug(LOG_ERROR, "Couldn't find string id number for string id \"%s\"", ID);
+		return NULL;
+	}
+
+	// Now find the string associated with the ID number
+	return strresGetString(psRes, psID->id);
+}
 
 /* Load a string resource file */
 BOOL strresLoad(STR_RES* psRes, const char* fileName)

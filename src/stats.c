@@ -2612,28 +2612,18 @@ BOOL getResourceName(const char *pName)
 /*return the name to display for the interface - valid for OBJECTS and STATS*/
 const char* getName(const char *pNameID)
 {
-	UDWORD id;
-	const char* pName;
-	static const char Unknown[] = "Name Unknown";
-
-	/*see if the name has a resource associated with it by trying to get
-	the ID for the string*/
-	if (!strresGetIDNum(psStringRes, pNameID, &id))
+	/* See if the name has a string resource associated with it by trying
+	 * to get the string resource.
+	 */
+	const char * const name = strresGetStringByID(psStringRes, pNameID);
+	if (!name)
 	{
 		debug( LOG_ERROR, "Unable to find string resource for %s", pNameID );
 		abort();
-		return Unknown;
+		return "Name Unknown";
 	}
-	//get the string from the id
-	pName = strresGetString(psStringRes, id);
-	if (pName)
-	{
-		return pName;
-	}
-	else
-	{
-		return Unknown;
-	}
+
+	return name;
 }
 
 /*sets the store to the body size based on the name passed in - returns false

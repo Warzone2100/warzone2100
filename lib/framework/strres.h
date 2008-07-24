@@ -32,9 +32,6 @@ extern struct STR_RES* strresCreate(void);
 /* Release a string resource object */
 extern void strresDestroy(struct STR_RES *psRes);
 
-/* Return the ID number for an ID string */
-extern BOOL strresGetIDNum(struct STR_RES *psRes, const char *pIDStr, UDWORD *pIDNum);
-
 /**
  * @return The stored ID string that matches the string passed in, or NULL if
  *         no ID string could be found.
@@ -43,6 +40,16 @@ extern const char* strresGetIDString(struct STR_RES *psRes, const char *pIDStr);
 
 /* Get the string from an ID number */
 extern const char* strresGetString(const struct STR_RES *psRes, UDWORD id);
+
+/**
+ * Retrieve a resource string from its identifier string.
+ *
+ * @param psRes the string resource to search
+ * @param ID the string ID to search the matching string for
+ * @return the string associated with the given @c ID string, or NULL if none
+ *         could be found.
+ */
+extern const char* strresGetStringByID(const struct STR_RES* psRes, const char* ID);
 
 /* Load a string resource file */
 extern BOOL strresLoad(struct STR_RES* psRes, const char* fileName);

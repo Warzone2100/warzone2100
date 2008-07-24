@@ -4253,21 +4253,18 @@ const char *getDroidName(const DROID *psDroid)
 a string ID or something the user types in*/
 const char* getTemplateName(const DROID_TEMPLATE *psTemplate)
 {
-	const char *pNameID = psTemplate->aName;
-	UDWORD id;
+	/* See if the name has a string resource associated with it by trying
+	 * to get the string resource.
+	 */
+	const char * const pNameID = strresGetStringByID(psStringRes, psTemplate->aName);
 
-	/*see if the name has a resource associated with it by trying to get
-	the ID for the string*/
-	if (strresGetIDNum(psStringRes, pNameID, &id))
+	// If we couldn't find a string resource, return the name passed in
+	if (!pNameID)
 	{
-		//get the string from the id
-		const char *pName = strresGetString(psStringRes, id);
-		if (pName)
-		{
-			return pName;
-		}
+		return psTemplate->aName;
 	}
-	//if haven't found a resource, return the name passed in
+
+	// Return the retrieved resource string
 	return pNameID;
 }
 
@@ -4287,17 +4284,20 @@ BOOL	droidIsDamaged(DROID *psDroid)
 
 BOOL getDroidResourceName(char *pName)
 {
-	UDWORD id;
+	/* See if the name has a string resource associated with it by trying
+	 * to get the string resource.
+	 */
+	const char * const name = strresGetStringByID(psStringRes, pName);
 
-	//see if the name has a resource associated with it by trying to get the ID for the string
-	if (!strresGetIDNum(psStringRes, pName, &id))
+	if (!name)
 	{
-		debug( LOG_ERROR, "Unable to find string resource for %s", pName );
+		debug(LOG_ERROR, "Unable to find string resource for string with ID \"%s\"", pName);
 		abort();
 		return false;
 	}
-	//get the string from the id
-	strcpy(pName, strresGetString(psStringRes, id));
+
+	// Copy the retrieved string into the output parameter
+	strcpy(pName, name);
 
 	return true;
 }

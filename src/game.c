@@ -5164,18 +5164,15 @@ DROID_TEMPLATE *FindDroidTemplate(const char * const name)
 {
 	UDWORD			TempPlayer;
 	DROID_TEMPLATE *Template;
-	UDWORD			id;
-	const char* nameStr;
 
-	//get the name from the resource associated with it
-	if (!strresGetIDNum(psStringRes, name, &id))
+	// get the name from the resource associated with it
+	const char * const nameStr = strresGetStringByID(psStringRes, name);
+	if (!nameStr)
 	{
 		debug( LOG_ERROR, "Cannot find resource for template - %s", name );
 		abort();
 		return NULL;
 	}
-	//get the string from the id
-	nameStr = strresGetString(psStringRes, id);
 
 	for(TempPlayer=0; TempPlayer<MAX_PLAYERS; TempPlayer++) {
 		Template = apsDroidTemplates[TempPlayer];

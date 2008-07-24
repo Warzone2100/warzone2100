@@ -467,7 +467,7 @@ static BOOL addToViewDataList(VIEWDATA *psViewData, UBYTE numData)
 /*load the view data for the messages from the file */
 VIEWDATA *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 {
-	UDWORD				i, id, dataInc, seqInc, numFrames, numData, count, count2;
+	UDWORD				i, dataInc, seqInc, numFrames, numData, count, count2;
 	VIEWDATA			*psViewData, *pData;
 	VIEW_RESEARCH		*psViewRes;
 	VIEW_REPLAY			*psViewReplay;
@@ -544,14 +544,13 @@ VIEWDATA *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 			sscanf(pViewMsgData,",%[^',']%n",name,&cnt);
                         pViewMsgData += cnt;
 
-			//get the ID for the string
-			if (!strresGetIDNum(psStringRes, name, &id))
+			// Get the string from the ID string
+			psViewData->ppTextMsg[dataInc] = strresGetStringByID(psStringRes, name);
+			if (!psViewData->ppTextMsg[dataInc])
 			{
-				ASSERT(false, "Cannot find the view data string id %s ", name);
+				ASSERT(!"Cannot find string resource", "Cannot find the view data string with id \"%s\"", name);
 				return NULL;
 			}
-			//get the string from the id
-			psViewData->ppTextMsg[dataInc] = strresGetString(psStringRes, id);
 		}
 
 		sscanf(pViewMsgData, ",%d%n", &readint, &cnt);
@@ -696,15 +695,14 @@ VIEWDATA *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 					name[0] = '\0';
 					sscanf(pViewMsgData,",%[^',']%n", name,&cnt);
                                         pViewMsgData += cnt;
-					//get the ID for the string
-					if (!strresGetIDNum(psStringRes, name, &id))
+
+					// Get the string from the ID string
+					psViewReplay->pSeqList[dataInc].ppTextMsg[seqInc] = strresGetStringByID(psStringRes, name);
+					if (!psViewReplay->pSeqList[dataInc].ppTextMsg[seqInc])
 					{
-						ASSERT(false, "Cannot find the view data string id %s ", name);
+						ASSERT(!"Cannot find string resource", "Cannot find the view data string with id \"%s\"", name);
 						return NULL;
 					}
-
-					//get the string from the id
-					psViewReplay->pSeqList[dataInc].ppTextMsg[seqInc] = strresGetString(psStringRes, id);
 				}
 				//get the audio text string
 				sscanf(pViewMsgData,",%[^','],%d%n", audioName, &count,&cnt);
