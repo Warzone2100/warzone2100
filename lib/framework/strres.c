@@ -71,9 +71,6 @@ static void strresReleaseIDStrings(STR_RES *psRes);
 /* The string resource currently being loaded */
 STR_RES	*psCurrRes;
 
-/* The id number of ID strings allocated by the system is ORed with this */
-#define ID_ALLOC	0x80000000
-
 /* Allocate a string block */
 static STR_BLOCK* strresAllocBlock(const size_t size)
 {
@@ -162,12 +159,8 @@ static void strresReleaseIDStrings(STR_RES *psRes)
 		psID = treapGetSmallest(psRes->psIDTreap))
 	{
 		treapDel(psRes->psIDTreap, psID->pIDStr);
-		ASSERT(psID->id & ID_ALLOC, "This assert should *never* trigger a crash, if it does please open a bugreport or send me (Giel) a mail");
-		if (psID->id & ID_ALLOC)
-		{
-			free(psID->pIDStr);
-			free(psID);
-		}
+		free(psID->pIDStr);
+		free(psID);
 	}
 }
 
@@ -236,8 +229,7 @@ BOOL strresGetIDNum(STR_RES *psRes, const char *pIDStr, UDWORD *pIDNum)
 		return false;
 	}
 
-	ASSERT(psID->id & ID_ALLOC, "This assert should *never* trigger a crash, if it does please open a bugreport or send me (Giel) a mail");
-	*pIDNum = psID->id & ~ID_ALLOC;
+	*pIDNum = psID->id;
 
 	return true;
 }
@@ -268,7 +260,6 @@ BOOL strresStoreString(STR_RES *psRes, char *pID, const char *pString)
 	STR_ID		*psID;
 	char		*pNew;
 	STR_BLOCK	*psBlock;
-	UDWORD		id;
 
 	ASSERT( psRes != NULL,
 		"strresStoreString: Invalid string res pointer" );
@@ -293,18 +284,13 @@ BOOL strresStoreString(STR_RES *psRes, char *pID, const char *pString)
 			free(psID);
 			return false;
 		}
-		psID->id = psRes->nextID | ID_ALLOC;
+		psID->id = psRes->nextID;
 		psRes->nextID += 1;
 		treapAdd(psRes->psIDTreap, psID->pIDStr, psID);
 	}
 
-	// Remove the ID_ALLOC bit
-	id = psID->id & ~ID_ALLOC;
-
-	ASSERT(psID->id & ID_ALLOC, "This assert should *never* trigger a crash, if it does please open a bugreport or send me (Giel) a mail");
-
 	// Find the block to store the string in
-	for(psBlock = psRes->psStrings; psBlock->idEnd < id;
+	for(psBlock = psRes->psStrings; psBlock->idEnd < psID->id;
 		psBlock = psBlock->psNext)
 	{
 		if (!psBlock->psNext)
@@ -322,7 +308,7 @@ BOOL strresStoreString(STR_RES *psRes, char *pID, const char *pString)
 	}
 
 	// Put the new string in the string block
-	if (psBlock->apStrings[id - psBlock->idStart] != NULL)
+	if (psBlock->apStrings[psID->id - psBlock->idStart] != NULL)
 	{
 		debug( LOG_ERROR, "strresStoreString: Duplicate string for id: %s", psID->pIDStr );
 		abort();
@@ -337,7 +323,7 @@ BOOL strresStoreString(STR_RES *psRes, char *pID, const char *pString)
 		abort();
 		return false;
 	}
-	psBlock->apStrings[id - psBlock->idStart] = pNew;
+	psBlock->apStrings[psID->id - psBlock->idStart] = pNew;
 
 	return true;
 }
