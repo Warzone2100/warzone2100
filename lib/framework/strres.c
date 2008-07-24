@@ -198,23 +198,6 @@ void strresDestroy(STR_RES *psRes)
 }
 
 
-/* Return the ID stored ID string that matches the string passed in */
-const char* strresGetIDString(STR_RES *psRes, const char *pIDStr)
-{
-	STR_ID *psID;
-
-	ASSERT(psRes != NULL, "Invalid string res pointer");
-
-	psID = treapFind(psRes->psIDTreap, pIDStr);
-	if (!psID)
-	{
-		return NULL;
-	}
-
-	return psID->pIDStr;
-}
-
-
 /* Store a string */
 BOOL strresStoreString(STR_RES *psRes, const char* pID, const char* pString)
 {

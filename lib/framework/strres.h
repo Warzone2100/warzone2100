@@ -32,12 +32,6 @@ extern struct STR_RES* strresCreate(void);
 /* Release a string resource object */
 extern void strresDestroy(struct STR_RES *psRes);
 
-/**
- * @return The stored ID string that matches the string passed in, or NULL if
- *         no ID string could be found.
- */
-extern const char* strresGetIDString(struct STR_RES *psRes, const char *pIDStr);
-
 /* Get the string from an ID number */
 extern const char* strresGetString(const struct STR_RES *psRes, UDWORD id);
 
