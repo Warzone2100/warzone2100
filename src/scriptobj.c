@@ -1189,7 +1189,21 @@ BOOL scrValDefLoad(SDWORD version, INTERP_VAL *psVal, char *pBuffer, UDWORD size
 		}
 		else
 		{
-			psVal->v.sval = strresGetString(psStringRes, id);
+			const char * const str = strresGetString(psStringRes, id);
+			if (!str)
+			{
+				debug(LOG_ERROR, "Couldn't find string with id %u", id);
+				abort();
+				return false;
+			}
+
+			psVal->v.sval = strdup(str);
+			if (!psVal->v.sval)
+			{
+				debug(LOG_ERROR, "Out of memory");
+				abort();
+				return false;
+			}
 		}
 		break;
 	case ST_LEVEL:

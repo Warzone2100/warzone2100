@@ -231,7 +231,6 @@ var_init:		var_entry TYPE var_value
 				{
 					INTERP_VAL		data;	/* structure to to hold all types */
 					BASE_OBJECT *psObj;
-					char			*pString;
 					SDWORD   compIndex;
 
 					/* set type */
@@ -618,23 +617,34 @@ var_init:		var_entry TYPE var_value
 						}
 						break;
 					case ST_TEXTSTRING:
+					{
+						const char* pString;
+
 						if ($3.type != IT_STRING)
 						{
 							yyerror("Typemismatch for variable %d", $1);
 							YYABORT;
 						}
-						if (!scrvGetString($3.pString, &pString))
+						pString = scrvGetString($3.pString);
+						if (!pString)
 						{
 							yyerror("String %s not found", $3.pString);
 							YYABORT;
 						}
-						data.v.sval = pString;
+						data.v.sval = strdup(pString);
+						if (!data.v.sval)
+						{
+							debug(LOG_ERROR, "Out of memory");
+							abort();
+							YYABORT;
+						}
 						if (!eventSetContextVar(psCurrContext, $1, &data))
 						{
 							yyerror("Set Value Failed for %u", $1);
 							YYABORT;
 						}
 						break;
+					}
 					case ST_LEVEL:
 						{
 							LEVEL_DATASET	*psLevel;

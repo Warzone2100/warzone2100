@@ -2146,7 +2146,7 @@ static bool writeMapFile(const char* fileName);
 static BOOL loadSaveDroidInitV2(char *pFileData, UDWORD filesize,UDWORD quantity);
 
 static BOOL loadSaveDroidInit(char *pFileData, UDWORD filesize);
-static DROID_TEMPLATE *FindDroidTemplate(char *name,UDWORD player);
+static DROID_TEMPLATE *FindDroidTemplate(const char * const name);
 
 static BOOL loadSaveDroid(char *pFileData, UDWORD filesize, DROID **ppsCurrentDroidLists);
 static BOOL loadSaveDroidV11(char *pFileData, UDWORD filesize, UDWORD numDroids, UDWORD version, DROID **ppsCurrentDroidLists);
@@ -5118,7 +5118,7 @@ BOOL loadSaveDroidInitV2(char *pFileData, UDWORD filesize,UDWORD quantity)
 		}
 
 
-		psTemplate = (DROID_TEMPLATE *)FindDroidTemplate(pDroidInit->name,pDroidInit->player);
+		psTemplate = (DROID_TEMPLATE *)FindDroidTemplate(pDroidInit->name);
 
 		if(psTemplate==NULL)
 		{
@@ -5160,11 +5160,12 @@ BOOL loadSaveDroidInitV2(char *pFileData, UDWORD filesize,UDWORD quantity)
 
 
 // -----------------------------------------------------------------------------------------
-DROID_TEMPLATE *FindDroidTemplate(char *name,UDWORD player)
+DROID_TEMPLATE *FindDroidTemplate(const char * const name)
 {
 	UDWORD			TempPlayer;
 	DROID_TEMPLATE *Template;
 	UDWORD			id;
+	const char* nameStr;
 
 	//get the name from the resource associated with it
 	if (!strresGetIDNum(psStringRes, name, &id))
@@ -5174,15 +5175,15 @@ DROID_TEMPLATE *FindDroidTemplate(char *name,UDWORD player)
 		return NULL;
 	}
 	//get the string from the id
-	name = strresGetString(psStringRes, id);
+	nameStr = strresGetString(psStringRes, id);
 
 	for(TempPlayer=0; TempPlayer<MAX_PLAYERS; TempPlayer++) {
 		Template = apsDroidTemplates[TempPlayer];
 
 		while(Template) {
 
-			//if(strcmp(name,Template->pName)==0) {
-			if(strcmp(name,Template->aName)==0) {
+			//if(strcmp(nameStr,Template->pName)==0) {
+			if(strcmp(nameStr,Template->aName)==0) {
 				return Template;
 			}
 			Template = Template->psNext;

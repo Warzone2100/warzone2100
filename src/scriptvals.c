@@ -238,20 +238,18 @@ BOOL scrvGetContext(char *pID, SCRIPT_CONTEXT **ppsContext)
 
 
 // Find a string from it's (string)id
-BOOL scrvGetString(const char *pStringID, char **ppString)
+const char* scrvGetString(const char* stringID)
 {
 	UDWORD id;
 
 	//get the ID for the string
-	if (!strresGetIDNum(psStringRes, pStringID, &id))
+	if (!strresGetIDNum(psStringRes, stringID, &id))
 	{
-		debug( LOG_ERROR, "Cannot find the string id %s ", pStringID );
+		debug(LOG_ERROR, "Cannot find the string for id \"%s\"", stringID);
 		abort();
-		return false;
+		return NULL;
 	}
 
 	//get the string from the id
-	*ppString = strresGetString(psStringRes, id);
-
-	return true;
+	return strresGetString(psStringRes, id);
 }

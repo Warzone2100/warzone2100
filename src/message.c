@@ -551,7 +551,7 @@ VIEWDATA *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 				return NULL;
 			}
 			//get the string from the id
-			psViewData->ppTextMsg[dataInc] = strresGetString(psStringRes, id);
+			psViewData->ppTextMsg[dataInc] = strdup(strresGetString(psStringRes, id));
 		}
 
 		sscanf(pViewMsgData, ",%d%n", &readint, &cnt);
@@ -704,7 +704,7 @@ VIEWDATA *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 					}
 
 					//get the string from the id
-					psViewReplay->pSeqList[dataInc].ppTextMsg[seqInc] = strresGetString(psStringRes, id);
+					psViewReplay->pSeqList[dataInc].ppTextMsg[seqInc] = strdup(strresGetString(psStringRes, id));
 				}
 				//get the audio text string
 				sscanf(pViewMsgData,",%[^','],%d%n", audioName, &count,&cnt);

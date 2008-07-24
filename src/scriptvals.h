@@ -109,6 +109,6 @@ extern BOOL scrvLoad(PHYSFS_file* fileHandle);
 //extern BOOL scrvLinkValues(void);
 
 // Find a string from it's (string)id
-extern BOOL scrvGetString(const char *pStringID, char **ppString);
+extern const char* scrvGetString(const char* stringID);
 
 #endif // __INCLUDED_SRC_SCRIPTVALS_H__

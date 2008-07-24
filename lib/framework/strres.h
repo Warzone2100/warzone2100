@@ -42,7 +42,7 @@ extern BOOL strresGetIDNum(struct STR_RES *psRes, const char *pIDStr, UDWORD *pI
 extern const char* strresGetIDString(struct STR_RES *psRes, const char *pIDStr);
 
 /* Get the string from an ID number */
-extern char *strresGetString(struct STR_RES *psRes, UDWORD id);
+extern const char* strresGetString(const struct STR_RES *psRes, UDWORD id);
 
 /* Load a string resource file */
 extern BOOL strresLoad(struct STR_RES* psRes, const char* fileName);

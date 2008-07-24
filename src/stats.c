@@ -2613,8 +2613,8 @@ BOOL getResourceName(const char *pName)
 const char* getName(const char *pNameID)
 {
 	UDWORD id;
-	char *pName;
-	static char Unknown[] = "Name Unknown";
+	const char* pName;
+	static const char Unknown[] = "Name Unknown";
 
 	/*see if the name has a resource associated with it by trying to get
 	the ID for the string*/

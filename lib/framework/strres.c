@@ -334,7 +334,7 @@ BOOL strresStoreString(STR_RES *psRes, char *pID, const char *pString)
 
 
 /* Get the string from an ID number */
-char *strresGetString(STR_RES *psRes, UDWORD id)
+const char* strresGetString(const STR_RES * psRes, UDWORD id)
 {
 	STR_BLOCK	*psBlock;
 
