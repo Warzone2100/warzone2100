@@ -36,18 +36,18 @@
 #include "strres.h"
 #include "strresly.h"
 
-/* A string block */
-typedef struct STR_BLOCK
+/* A string */
+typedef struct STR
 {
-	char	**apStrings;
-	UDWORD	idStart, idEnd;
+	const char*     str;
+	unsigned int    id;
 
 #ifdef DEBUG_CHECK_FOR_UNUSED_STRINGS
-	unsigned int*   aUsage;
+	unsigned int    usage;
 #endif
 
-	struct STR_BLOCK* psNext;
-} STR_BLOCK;
+	struct STR* psNext;
+} STR;
 
 /* An ID entry */
 typedef struct STR_ID
@@ -60,47 +60,39 @@ typedef struct STR_ID
 typedef struct STR_RES
 {
 	struct TREAP_NODE**     psIDTreap;              ///< The treap to store string identifiers
-	STR_BLOCK*              psStrings;              ///< The store for the strings themselves
-	size_t                  init, ext;              ///< Sizes for the string blocks
+	STR*                    psStrings;              ///< The store for the strings themselves
+	STR**                   psLastStr;              ///< A pointer to the next pointer of the last string in the list
 	UDWORD                  nextID;                 ///< The next free ID
 } STR_RES;
 
 /* Static forward declarations */
 static void strresReleaseIDStrings(STR_RES *psRes);
 
-/* Allocate a string block */
-static STR_BLOCK* strresAllocBlock(const size_t size)
+static STR* strresAllocString(const char* str, unsigned int id)
 {
-	STR_BLOCK* const psBlock = (STR_BLOCK*)malloc(sizeof(*psBlock));
-	if (!psBlock)
+	/* Over-allocate so that we can put the string in the same chunck of
+	 * memory. Which means a single free() call on the entire STR structure
+	 * will suffice.
+	 */
+	STR* const psStr = (STR*)malloc(sizeof(*psStr) + strlen(str) + 1);
+	if (!psStr)
 	{
 		debug(LOG_ERROR, "Out of memory - 1");
 		abort();
 		return NULL;
 	}
 
-	psBlock->apStrings = (char**)calloc(size, sizeof(*psBlock->apStrings));
-	if (!psBlock->apStrings)
-	{
-		debug(LOG_ERROR, "Out of memory - 2");
-		abort();
-		free(psBlock);
-		return NULL;
-	}
+	// Copy the string into its memory chunk and set the pointer to it
+	psStr->str = strcpy((char*)(psStr + 1), str);
+
+	psStr->id = id;
+	psStr->psNext = NULL;
 
 #ifdef DEBUG_CHECK_FOR_UNUSED_STRINGS
-	psBlock->aUsage = (unsigned int*)calloc(size, sizeof(*psBlock->aUsage));
-	if (!psBlock->aUsage)
-	{
-		debug(LOG_ERROR, "Out of memory - 3");
-		abort();
-		free(psBlock->apStrings);
-		free(psBlock);
-		return NULL;
-	}
+	psStr->usage = 0;
 #endif
 
-	return psBlock;
+	return psStr;
 }
 
 static STR_ID* strresAllocIDStr(unsigned int const id, const char * const str)
@@ -126,7 +118,7 @@ static STR_ID* strresAllocIDStr(unsigned int const id, const char * const str)
 }
 
 /* Initialise the string system */
-STR_RES* strresCreate(size_t init, size_t ext)
+STR_RES* strresCreate()
 {
 	STR_RES* const psRes = (STR_RES*)malloc(sizeof(*psRes));
 	if (!psRes)
@@ -135,8 +127,6 @@ STR_RES* strresCreate(size_t init, size_t ext)
 		abort();
 		return NULL;
 	}
-	psRes->init = init;
-	psRes->ext = ext;
 	psRes->nextID = 0;
 
 	psRes->psIDTreap = treapCreate();
@@ -148,16 +138,8 @@ STR_RES* strresCreate(size_t init, size_t ext)
 		return NULL;
 	}
 
-	psRes->psStrings = strresAllocBlock(init);
-	if (!psRes->psStrings)
-	{
-		treapDestroy(psRes->psIDTreap);
-		free(psRes);
-		return NULL;
-	}
-	psRes->psStrings->psNext = NULL;
-	psRes->psStrings->idStart = 0;
-	psRes->psStrings->idEnd = init-1;
+	psRes->psStrings = NULL;
+	psRes->psLastStr = &psRes->psStrings;
 
 	return psRes;
 }
@@ -185,8 +167,7 @@ static void strresReleaseIDStrings(STR_RES *psRes)
 /* Shutdown the string system */
 void strresDestroy(STR_RES *psRes)
 {
-	STR_BLOCK	*psBlock, *psNext = NULL;
-	UDWORD		i;
+	STR* psString;
 
 	ASSERT( psRes != NULL,
 		"strresDestroy: Invalid string res pointer" );
@@ -195,34 +176,20 @@ void strresDestroy(STR_RES *psRes)
 	strresReleaseIDStrings(psRes);
 
 	// Free the strings themselves
-	for(psBlock = psRes->psStrings; psBlock; psBlock=psNext)
+	psString = psRes->psStrings;
+	while (psString)
 	{
-		for(i=psBlock->idStart; i<=psBlock->idEnd; i++)
+		STR * const toDelete = psString;
+		psString = psString->psNext;
+
+#ifdef DEBUG_CHECK_FOR_UNUSED_STRINGS
+		if (toDelete->usage == 0)
 		{
-#ifdef DEBUG_CHECK_FOR_UNUSED_STRINGS
-			if (psBlock->aUsage[i - psBlock->idStart] == 0
-				&& i != 0 && i < psRes->nextID)
-			{
- 				debug( LOG_NEVER, "strresDestroy: String id %d not used:\n               \"%s\"\n", i, psBlock->apStrings[i - psBlock->idStart] );
-			}
-#endif
-			if (psBlock->apStrings[i - psBlock->idStart])
-			{
-				free(psBlock->apStrings[i - psBlock->idStart]);
-			}
-#ifdef DEBUG
-			else if (i < psRes->nextID)
-			{
-				debug( LOG_NEVER, "strresDestroy: No string loaded for id %d\n", i );
-			}
-#endif
+			debug(LOG_NEVER, "Strind id %u not used: \"%s\"", toDelete->id, toDelete->str);
 		}
-		psNext = psBlock->psNext;
-		free(psBlock->apStrings);
-#ifdef DEBUG_CHECK_FOR_UNUSED_STRINGS
-		free(psBlock->aUsage);
 #endif
-		free(psBlock);
+
+		free(toDelete);
 	}
 
 	// Release the treap and free the final memory
@@ -272,9 +239,8 @@ const char* strresGetIDString(STR_RES *psRes, const char *pIDStr)
 /* Store a string */
 BOOL strresStoreString(STR_RES *psRes, char *pID, const char *pString)
 {
-	STR_ID		*psID;
-	char		*pNew;
-	STR_BLOCK	*psBlock;
+	STR_ID* psID;
+	STR* psString;
 
 	ASSERT( psRes != NULL,
 		"strresStoreString: Invalid string res pointer" );
@@ -293,41 +259,30 @@ BOOL strresStoreString(STR_RES *psRes, char *pID, const char *pString)
 		treapAdd(psRes->psIDTreap, psID->pIDStr, psID);
 	}
 
-	// Find the block to store the string in
-	for(psBlock = psRes->psStrings; psBlock->idEnd < psID->id;
-		psBlock = psBlock->psNext)
+	// Make sure that this ID number hasn't been used before
+	for (psString = psRes->psStrings; psString; psString = psString->psNext)
 	{
-		if (!psBlock->psNext)
+		if (psString->id == psID->id)
 		{
-			// Need to allocate a new string block
-			psBlock->psNext = strresAllocBlock(psRes->ext);
-			if (!psBlock->psNext)
-			{
-				return false;
-			}
-			psBlock->psNext->idStart = psBlock->idEnd+1;
-			psBlock->psNext->idEnd = psBlock->idEnd + psRes->ext;
-			psBlock->psNext->psNext = NULL;
+			debug(LOG_ERROR, "Duplicate string for id: \"%s\"", psID->pIDStr);
+			abort();
+			return false;
 		}
 	}
 
-	// Put the new string in the string block
-	if (psBlock->apStrings[psID->id - psBlock->idStart] != NULL)
+	ASSERT(psRes->psLastStr != NULL, "Invalid last string pointer");
+
+	// Allocate the string into a string block
+	psString = strresAllocString(pString, psID->id);
+	if (!psString)
 	{
-		debug( LOG_ERROR, "strresStoreString: Duplicate string for id: %s", psID->pIDStr );
-		abort();
 		return false;
 	}
 
-	// Allocate a copy of the string
-	pNew = strdup(pString);
-	if (!pNew)
-	{
-		debug( LOG_ERROR, "strresStoreString: Out of memory" );
-		abort();
-		return false;
-	}
-	psBlock->apStrings[psID->id - psBlock->idStart] = pNew;
+	// Place it into the string list
+	*psRes->psLastStr = psString;
+	psRes->psLastStr = &psString->psNext;
+	psString->psNext = NULL;
 
 	return true;
 }
@@ -336,37 +291,29 @@ BOOL strresStoreString(STR_RES *psRes, char *pID, const char *pString)
 /* Get the string from an ID number */
 const char* strresGetString(const STR_RES * psRes, UDWORD id)
 {
-	STR_BLOCK	*psBlock;
+	STR* psString;
 
 	ASSERT( psRes != NULL,
 		"strresGetString: Invalid string res pointer" );
 
-	// find the block the string is in
-	for(psBlock = psRes->psStrings; psBlock && psBlock->idEnd < id;
-		psBlock = psBlock->psNext)
-	{}
-
-	if (!psBlock)
+	// Find the string in the string list
+	for (psString = psRes->psStrings; psString; psString = psString->psNext)
 	{
-		ASSERT( false, "strresGetString: String not found" );
-		// Return the default string
-		return psRes->psStrings->apStrings[0];
-	}
-
-	ASSERT( psBlock->apStrings[id - psBlock->idStart] != NULL,
-		"strresGetString: String not found" );
-
+		if (psString->id == id)
+		{
 #ifdef DEBUG_CHECK_FOR_UNUSED_STRINGS
-	psBlock->aUsage[id - psBlock->idStart] += 1;
+			psString->usage += 1;
 #endif
 
-	if (psBlock->apStrings[id - psBlock->idStart] == NULL)
-	{
-		// Return the default string
-		return psRes->psStrings->apStrings[0];
+			ASSERT(psString->str != NULL, "There's no string in string block %u", psString->id);
+
+			return psString->str;
+		}
 	}
 
-	return psBlock->apStrings[id - psBlock->idStart];
+	ASSERT(!"String not found", "Couldn't find a string with ID number %u", (unsigned int)id);
+
+	return NULL;
 }
 
 
@@ -396,24 +343,21 @@ BOOL strresLoad(STR_RES* psRes, const char* fileName)
 /* Get the ID number for a string*/
 UDWORD strresGetIDfromString(STR_RES *psRes, const char *pString)
 {
-	STR_BLOCK *psBlock, *psNext = NULL;
-	unsigned int i;
+	STR* psString;
 
 	ASSERT( psRes != NULL,
 		"strresGetID: Invalid string res pointer" );
 
-	// Search through all the blocks to find the string
-	for(psBlock = psRes->psStrings; psBlock != NULL; psBlock=psNext)
+	// Find the string in the string list
+	for (psString = psRes->psStrings; psString; psString = psString->psNext)
 	{
-		for(i = psBlock->idStart; i <= psBlock->idEnd; i++)
+		ASSERT(psString->str != NULL, "There's no string in string block %u", psString->id);
+
+		if (strcmp(psString->str, pString) == 0)
 		{
-			if ( psBlock->apStrings[i - psBlock->idStart] &&
-				!strcmp(psBlock->apStrings[i - psBlock->idStart], pString) )
-			{
-				return i;
-			}
+			return psString->id;
 		}
-		psNext = psBlock->psNext;
 	}
+
 	return 0;
 }

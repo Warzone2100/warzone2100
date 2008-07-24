@@ -27,7 +27,7 @@
 struct STR_RES;
 
 /* Create a string resource object */
-extern struct STR_RES* strresCreate(size_t init, size_t ext);
+extern struct STR_RES* strresCreate(void);
 
 /* Release a string resource object */
 extern void strresDestroy(struct STR_RES *psRes);
