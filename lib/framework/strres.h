@@ -39,7 +39,7 @@ extern BOOL strresGetIDNum(struct STR_RES *psRes, const char *pIDStr, UDWORD *pI
  * @return The stored ID string that matches the string passed in, or NULL if
  *         no ID string could be found.
  */
-extern char* strresGetIDString(struct STR_RES *psRes, const char *pIDStr);
+extern const char* strresGetIDString(struct STR_RES *psRes, const char *pIDStr);
 
 /* Get the string from an ID number */
 extern char *strresGetString(struct STR_RES *psRes, UDWORD id);

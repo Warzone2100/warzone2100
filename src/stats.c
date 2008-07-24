@@ -2824,11 +2824,20 @@ and stores the name. Eventually ALL names will be 'resourced' for translation
 */
 char* allocateName(const char* name)
 {
-	char* const storeName = strresGetIDString(psStringRes, name);
+	char const * const idStr = strresGetIDString(psStringRes, name);
+	char * storeName;
 
-	if (!storeName)
+	if (!idStr)
 	{
 		debug(LOG_ERROR, "Unable to find string resource for %s", name);
+		abort();
+		return NULL;
+	}
+
+	storeName = strdup(idStr);
+	if (!storeName)
+	{
+		debug(LOG_ERROR, "Out of memory");
 		abort();
 		return NULL;
 	}

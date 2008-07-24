@@ -233,7 +233,7 @@ BOOL strresGetIDNum(STR_RES *psRes, const char *pIDStr, UDWORD *pIDNum)
 
 
 /* Return the ID stored ID string that matches the string passed in */
-char* strresGetIDString(STR_RES *psRes, const char *pIDStr)
+const char* strresGetIDString(STR_RES *psRes, const char *pIDStr)
 {
 	STR_ID *psID;
 
