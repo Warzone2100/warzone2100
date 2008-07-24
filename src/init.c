@@ -435,10 +435,6 @@ BOOL systemInitialise(void)
 		return false;
 	}
 
-#ifdef ARROWS
-	arrowInit();
-#endif
-
 	// Initialize the iVis text rendering module
 	iV_TextInit();
 
@@ -455,9 +451,6 @@ BOOL systemInitialise(void)
 void systemShutdown(void)
 {
 //	unsigned int i;
-#ifdef ARROWS
-	arrowShutDown();
-#endif
 
 	keyClearMappings();
 

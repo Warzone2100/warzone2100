@@ -876,10 +876,6 @@ static void drawTiles(iView *player)
 	pie_RemainingPasses();
 	pie_EndLighting();
 
-#ifdef ARROWS
-	arrowDrawAll();
-#endif
-
 	targetCloseList();
 
 	if(driveModeActive()) {
