@@ -695,6 +695,10 @@ static void proj_InFlightDirectFunc(PROJECTILE *psProj)
 			break;
 		default:
 			// WSC_NUM_WEAPON_SUBCLASSES
+			/* Uninitialized "marker", this can be used as a
+			 * condition to assert on (i.e. it shouldn't occur).
+			 */
+			distanceExtensionFactor = 0.f;
 			break;
 	}
 
@@ -833,6 +837,8 @@ static void proj_InFlightDirectFunc(PROJECTILE *psProj)
 						psProj->srcHeight + move.z * distanceExtensionFactor
 					};
 
+					ASSERT(distanceExtensionFactor != 0.f, "Unitialized variable used! distanceExtensionFactor is not initialized.");
+
 					newDest.x = clip(newDest.x, 0, world_coord(mapWidth - 1));
 					newDest.y = clip(newDest.y, 0, world_coord(mapHeight - 1));
 
@@ -848,6 +854,8 @@ static void proj_InFlightDirectFunc(PROJECTILE *psProj)
 			}
 		}
 	}
+
+	ASSERT(distanceExtensionFactor != 0.f, "Unitialized variable used! distanceExtensionFactor is not initialized.");
 
 	if (distanceRatio > distanceExtensionFactor || /* We've traveled our maximum range */
 		!mapObjIsAboveGround((BASE_OBJECT*)psProj)) /* trying to travel through terrain */
