@@ -52,8 +52,8 @@ typedef struct STR_BLOCK
 /* An ID entry */
 typedef struct STR_ID
 {
-	UDWORD	id;
-	char	*pIDStr;
+	unsigned int    id;
+	const char*     pIDStr;
 } STR_ID;
 
 /* A String Resource */
@@ -103,6 +103,27 @@ static STR_BLOCK* strresAllocBlock(const size_t size)
 	return psBlock;
 }
 
+static STR_ID* strresAllocIDStr(unsigned int const id, const char * const str)
+{
+	/* Over-allocate so that we can put the string in the same chunck of
+	 * memory. Which means a single free() call on the entire STR_ID
+	 * structure will suffice.
+	 */
+	STR_ID* const psID = (STR_ID*)malloc(sizeof(*psID) + strlen(str) + 1);
+	if (!psID)
+	{
+		debug(LOG_ERROR, "Out of memory");
+		abort();
+		return NULL;
+	}
+
+	// Copy the string into its memory chunk and set the pointer to it
+	psID->pIDStr = strcpy((char*)(psID + 1), str);
+
+	psID->id = id;
+
+	return psID;
+}
 
 /* Initialise the string system */
 STR_RES* strresCreate(size_t init, size_t ext)
@@ -156,7 +177,6 @@ static void strresReleaseIDStrings(STR_RES *psRes)
 		psID = treapGetSmallest(psRes->psIDTreap))
 	{
 		treapDel(psRes->psIDTreap, psID->pIDStr);
-		free(psID->pIDStr);
 		free(psID);
 	}
 }
@@ -264,23 +284,12 @@ BOOL strresStoreString(STR_RES *psRes, char *pID, const char *pString)
 	if (!psID)
 	{
 		// No ID yet so generate a new one
-		psID = (STR_ID*)malloc(sizeof(*psID));
+		psID = strresAllocIDStr(psRes->nextID++, pID);
 		if (!psID)
 		{
-			debug( LOG_ERROR, "strresStoreString: Out of memory" );
-			abort();
 			return false;
 		}
-		psID->pIDStr = strdup(pID);
-		if (!psID->pIDStr)
-		{
-			debug( LOG_ERROR, "strresStoreString: Out of memory" );
-			abort();
-			free(psID);
-			return false;
-		}
-		psID->id = psRes->nextID;
-		psRes->nextID += 1;
+
 		treapAdd(psRes->psIDTreap, psID->pIDStr, psID);
 	}
 
