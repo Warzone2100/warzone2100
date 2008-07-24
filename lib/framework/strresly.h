@@ -25,14 +25,11 @@
 
 #include "lib/framework/lexer_input.h"
 
-/* The string resource currently being loaded */
-extern struct STR_RES* psCurrRes;
-
 /* Set the current input buffer for the lexer - used by strresLoad */
 extern void strres_set_extra(YY_EXTRA_TYPE user_defined);
 
 /* Call the yacc parser */
-extern int strres_parse(void);
+extern int strres_parse(void* psStrRes);
 
 /* Destroy the lexer */
 extern int strres_lex_destroy(void);

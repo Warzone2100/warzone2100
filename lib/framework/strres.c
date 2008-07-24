@@ -68,9 +68,6 @@ typedef struct STR_RES
 /* Static forward declarations */
 static void strresReleaseIDStrings(STR_RES *psRes);
 
-/* The string resource currently being loaded */
-STR_RES	*psCurrRes;
-
 /* Allocate a string block */
 static STR_BLOCK* strresAllocBlock(const size_t size)
 {
@@ -380,11 +377,8 @@ BOOL strresLoad(STR_RES* psRes, const char* fileName)
 		return false;
 	}
 
-	// Set string resource to operate on
-	psCurrRes = psRes;
-
 	strres_set_extra(&input);
-	retval = (strres_parse() == 0);
+	retval = (strres_parse(psRes) == 0);
 
 	strres_lex_destroy();
 	PHYSFS_close(input.input.physfsfile);
