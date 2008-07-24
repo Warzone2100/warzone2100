@@ -10191,7 +10191,7 @@ VIEWDATA *CreateBeaconViewData(SDWORD sender, UDWORD LocX, UDWORD LocY)
  	psViewData->pName = name;
 
 	//allocate space for text strings
-	psViewData->ppTextMsg = (char **) malloc(sizeof(char *));
+	psViewData->ppTextMsg = (const char **) malloc(sizeof(char *));
 
 	//store text message, hardcoded for now
 	psViewData->ppTextMsg[0] = strdup(getPlayerName(sender));

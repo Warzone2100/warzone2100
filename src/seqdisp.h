@@ -63,7 +63,7 @@ extern BOOL seq_StopFullScreenVideo(void);
 //control
 extern BOOL seq_GetVideoSize(SDWORD* pWidth, SDWORD* pHeight);
 //text
-extern BOOL seq_AddTextForVideo(char* pText, SDWORD xOffset, SDWORD yOffset, SDWORD startTime, SDWORD endTime, SDWORD bJustify);
+extern BOOL seq_AddTextForVideo(const char* pText, SDWORD xOffset, SDWORD yOffset, SDWORD startTime, SDWORD endTime, SDWORD bJustify);
 extern BOOL seq_ClearTextForVideo(void);
 //clear the sequence list
 extern void seq_ClearSeqList(void);

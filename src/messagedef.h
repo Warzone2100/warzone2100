@@ -78,7 +78,7 @@ typedef struct _seq_display
 	UBYTE		flag;			//flag data to control video playback 1 = loop till audio finish
 	UBYTE		numText;		//the number of textmessages associated with
 								//this sequence
-	char		**ppTextMsg;	//Pointer to text messages - if any
+	const char**    ppTextMsg;	//Pointer to text messages - if any
 	char		*pAudio;		/*name of audio track to play (for this seq)*/
 	UWORD		numFrames;		/* On PSX if type is VIEW_RPL then
 								this is used as a number_of_frames_in_the_stream
@@ -112,7 +112,7 @@ typedef struct _viewdata
 	char		*pName;		//name ID of the message - used for loading in and identifying
 	VIEW_TYPE	type;		//the type of view
 	UBYTE		numText;	//the number of textmessages associated with this data
-	char		**ppTextMsg;	//Pointer to text messages - if any
+	const char**    ppTextMsg;	//Pointer to text messages - if any
 	void*		pData;		/*the data required to view - either a
 							  VIEW_RESEARCH, VIEW_PROXIMITY or VIEW_REPLAY*/
 } VIEWDATA;

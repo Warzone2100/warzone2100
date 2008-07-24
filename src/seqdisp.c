@@ -356,7 +356,7 @@ BOOL seq_StopFullScreenVideo(void)
 #define MIN_JUSTIFICATION 40
 
 // add a string at x,y or add string below last line if x and y are 0
-BOOL seq_AddTextForVideo(char* pText, SDWORD xOffset, SDWORD yOffset, SDWORD startFrame, SDWORD endFrame, SDWORD bJustify)
+BOOL seq_AddTextForVideo(const char* pText, SDWORD xOffset, SDWORD yOffset, SDWORD startFrame, SDWORD endFrame, SDWORD bJustify)
 {
 	SDWORD sourceLength, currentLength;
 	char* currentText;
