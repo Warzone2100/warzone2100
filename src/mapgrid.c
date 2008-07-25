@@ -55,8 +55,8 @@ typedef enum _coverage_mode
 } COVERAGE_MODE;
 
 // Function prototypes
-static BOOL	gridIntersect(SDWORD x1,SDWORD y1, SDWORD x2,SDWORD y2,
-				   SDWORD cx,SDWORD cy, SDWORD Rad);
+static BOOL gridIntersect(const int x1, const int y1, const int x2, const int y2,
+                          const int cx, const int cy, const int Rad);
 static void	gridAddArrayObject(SDWORD x, SDWORD y, BASE_OBJECT *psObj);
 static void	gridRemoveArrayObject(SDWORD x, SDWORD y, BASE_OBJECT *psObj);
 static void	gridCompactArray(SDWORD x, SDWORD y);
@@ -533,60 +533,62 @@ void gridDisplayCoverage(BASE_OBJECT *psObj)
 // by Clifford A Shaffer
 /* Return true iff rectangle R intersects circle with centerpoint C and
    radius Rad. */
-static BOOL gridIntersect(SDWORD x1,SDWORD y1, SDWORD x2,SDWORD y2,
-				   SDWORD cx,SDWORD cy, SDWORD Rad)
+static BOOL gridIntersect(const int x1, const int y1, const int x2, const int y2,
+                          const int cx, const int cy, const int Rad)
 {
-	SDWORD	Rad2;
-
-	Rad2 = Rad * Rad;
-
-	/* Translate coordinates, placing C at the origin. */
-	x1 -= cx;  y1 -= cy;
-	x2 -= cx;  y2 -= cy;
-
-	if (x2 < 0) 			/* R to left of circle center */
+	// Translate coordinates, placing C at the origin
+	const struct
 	{
-   		if (y2 < 0) 		/* R in lower left corner */
+		int x1, y1,
+		    x2, y2;
+	} rect = { x1 - cy, y1 - cy,
+	           x2 - cy, y2 - cy };
+
+	const int Rad2 = Rad * Rad;
+
+	if (rect.x2 < 0) 			/* R to left of circle center */
+	{
+		if (rect.y2 < 0) 		/* R in lower left corner */
 		{
-     		return ((x2 * x2 + y2 * y2) < Rad2);
+			return ((rect.x2 * rect.x2 + rect.y2 * rect.y2) < Rad2);
 		}
-   		else if (y1 > 0) 	/* R in upper left corner */
+		else if (rect.y1 > 0) 	/* R in upper left corner */
 		{
-   			return ((x2 * x2 + y1 * y1) < Rad2);
+			return ((rect.x2 * rect.x2 + rect.y1 * rect.y1) < Rad2);
 		}
-   		else 					/* R due West of circle */
+		else 					/* R due West of circle */
 		{
-   			return(abs(x2) < Rad);
+			return(abs(rect.x2) < Rad);
 		}
 	}
-	else if (x1 > 0)  	/* R to right of circle center */
+	else if (rect.x1 > 0)  	/* R to right of circle center */
 	{
-   		if (y2 < 0) 	/* R in lower right corner */
+		if (rect.y2 < 0) 	/* R in lower right corner */
 		{
-     		return ((x1 * x1 + y2 * y2) < Rad2);
+			return ((rect.x1 * rect.x1 + rect.y2 * rect.y2) < Rad2);
 		}
-   		else if (y1 > 0)  	/* R in upper right corner */
+		else if (rect.y1 > 0)  	/* R in upper right corner */
 		{
-   			return ((x1 * x1 + y1 * y1) < Rad2);
+			return ((rect.x1 * rect.x1 + rect.y1 * rect.y1) < Rad2);
 		}
-   		else 				/* R due East of circle */
+		else 				/* R due East of circle */
 		{
-     		return (x1 < Rad);
+			return (rect.x1 < Rad);
 		}
 	}
- 	else				/* R on circle vertical centerline */
+	else				/* R on circle vertical centerline */
 	{
-		if (y2 < 0) 	/* R due South of circle */
+		if (rect.y2 < 0) 	/* R due South of circle */
 		{
-     		return (abs(y2) < Rad);
+			return (abs(rect.y2) < Rad);
 		}
-   		else if (y1 > 0)  	/* R due North of circle */
+		else if (rect.y1 > 0)  	/* R due North of circle */
 		{
-     		return (y1 < Rad);
+			return (rect.y1 < Rad);
 		}
-   		else 				/* R contains circle centerpoint */
+		else 				/* R contains circle centerpoint */
 		{
-     		return(true);
+			return(true);
 		}
 	}
 }
