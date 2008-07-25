@@ -60,7 +60,7 @@ static BOOL	gridIntersect(SDWORD x1,SDWORD y1, SDWORD x2,SDWORD y2,
 static void	gridAddArrayObject(SDWORD x, SDWORD y, BASE_OBJECT *psObj);
 static void	gridRemoveArrayObject(SDWORD x, SDWORD y, BASE_OBJECT *psObj);
 static void	gridCompactArray(SDWORD x, SDWORD y);
-static SDWORD	gridObjRange(BASE_OBJECT *psObj);
+static int      gridObjRange(const BASE_OBJECT* psObj);
 
 // initialise the grid system
 BOOL gridInitialise(void)
@@ -591,24 +591,23 @@ static BOOL gridIntersect(SDWORD x1,SDWORD y1, SDWORD x2,SDWORD y2,
 	}
 }
 
-
 // Get the range of effect of an object
-static SDWORD gridObjRange(BASE_OBJECT *psObj)
+static int gridObjRange(const BASE_OBJECT* psObj)
 {
-/*	SDWORD	range;
+#if 0
+	SDWORD	range;
 
 	switch (psObj->type)
 	{
 	case OBJ_DROID:
-		range = ((DROID *)psObj)->sensorRange;
+		range = ((const DROID *)psObj)->sensorRange;
 		break;
 	case OBJ_STRUCTURE:
-		range = ((STRUCTURE *)psObj)->sensorRange;
-		if (structCBSensor((STRUCTURE *)psObj) ||
-			structVTOLCBSensor((STRUCTURE *)psObj))
+		range = ((const STRUCTURE *)psObj)->sensorRange;
+		if (structCBSensor((STRUCTURE *)psObj)
+		 || structVTOLCBSensor((const STRUCTURE *)psObj))
 		{
-			range = MAP_MAXWIDTH > MAP_MAXHEIGHT ?
-				MAP_MAXWIDTH*TILE_UNITS : MAP_MAXHEIGHT*TILE_UNITS;
+			range = MAX(world_coord(MAP_MAXWIDTH), world_coord(MAP_MAXHEIGHT));
 		}
 		break;
 	case OBJ_FEATURE:
@@ -624,7 +623,8 @@ static SDWORD gridObjRange(BASE_OBJECT *psObj)
 		range = NAYBOR_RANGE;
 	}
 
-	return range;*/
+	return range;
+#endif
 
-	return (TILE_UNITS * 20);
+	return world_coord(20);
 }
