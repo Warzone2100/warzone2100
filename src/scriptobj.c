@@ -864,7 +864,16 @@ BOOL scrValDefSave(INTERP_VAL *psVal, char *pBuffer, UDWORD *pSize)
 			}
 			else
 			{
-				*((UDWORD*)pBuffer) = strresGetIDfromString(psStringRes, psVal->v.sval);
+				const int strID = strresGetIDfromString(psStringRes, psVal->v.sval);
+
+				if (strID == -1)
+				{
+					*((UDWORD*)pBuffer) = UDWORD_MAX;
+				}
+				else
+				{
+					*((UDWORD*)pBuffer) = strID;
+				}
 			}
 			endian_udword((UDWORD*)pBuffer);
 		}

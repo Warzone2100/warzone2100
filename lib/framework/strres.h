@@ -33,7 +33,7 @@ extern struct STR_RES* strresCreate(void);
 extern void strresDestroy(struct STR_RES *psRes);
 
 /* Get the string from an ID number */
-extern const char* strresGetString(const struct STR_RES *psRes, UDWORD id);
+extern const char* strresGetString(const struct STR_RES *psRes, int id);
 
 /**
  * Retrieve a resource string from its identifier string.
@@ -48,7 +48,7 @@ extern const char* strresGetStringByID(const struct STR_RES* psRes, const char* 
 /* Load a string resource file */
 extern BOOL strresLoad(struct STR_RES* psRes, const char* fileName);
 
-/* Get the ID number for a string*/
-extern UDWORD strresGetIDfromString(struct STR_RES *psRes, const char *pString);
+/* Get the ID string for a string */
+extern int strresGetIDfromString(struct STR_RES *psRes, const char *pString);
 
 #endif

@@ -34,7 +34,6 @@
 
 /// Forward declarations to allow pointers to these types
 struct TREAP_NODE;
-struct STR_ID;
 
 /**
  * Function to create a treap
@@ -46,21 +45,18 @@ extern struct TREAP_NODE** treapCreate(void);
 
 /* Add an object to a treap
  */
-extern BOOL treapAdd(struct TREAP_NODE** psTreap, const char *key, struct STR_ID* pObj);
-
-/* Remove an object from the treap */
-extern BOOL treapDel(struct TREAP_NODE** psTreap, const char *key);
+extern BOOL treapAdd(struct TREAP_NODE** psTreap, const char *key, const char* string, int id);
 
 /* Find an object in a treap */
-extern struct STR_ID* treapFind(struct TREAP_NODE** psTreap, const char *key);
+extern const char* treapFind(struct TREAP_NODE** psTreap, const char *key);
+
+/** Find the string associated with the given ID number */
+extern const char* treapFindByID(struct TREAP_NODE** psTreap, int id);
+
+/** Find the ID number associated with the given string (if any) */
+extern int treapFindID(struct TREAP_NODE** psTreap, const char* string);
 
 /* Destroy a treap and release all the memory associated with it */
 extern void treapDestroy(struct TREAP_NODE** psTreap);
-
-/* Return the object with the smallest key in the treap
- * This is useful if the objects in the treap need to be
- * deallocated.  i.e. getSmallest, delete from treap, free memory
- */
-extern struct STR_ID* treapGetSmallest(struct TREAP_NODE** psTreap);
 
 #endif
