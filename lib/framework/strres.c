@@ -110,7 +110,7 @@ const char* strresGetStringByID(const STR_RES* psRes, const char* ID)
 	string = treapFind(psRes->psIDTreap, ID);
 	if (!string)
 	{
-		debug(LOG_ERROR, "Couldn't find string for id \"%s\"", ID);
+		debug(LOG_WARNING, "Couldn't find string for id \"%s\"", ID);
 	}
 
 	return string;
