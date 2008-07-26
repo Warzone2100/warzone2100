@@ -59,6 +59,8 @@ case ${host_os} in
 		;;
 	*)
 		AC_DEFINE([_XOPEN_SOURCE], 600, [Enable POSIX extensions if present])
+		# Make sure that backtrace_symbols_fd (GNU raw back trace extension) has some symbols to work  with
+		LDFLAGS="-rdynamic ${LDFLAGS}"
 		;;
 esac
 AM_CONDITIONAL([MINGW32], test "x$host_os_mingw32" = "xyes")
