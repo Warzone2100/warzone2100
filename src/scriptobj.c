@@ -1264,32 +1264,29 @@ BOOL scrValDefLoad(SDWORD version, INTERP_VAL *psVal, char *pBuffer, UDWORD size
 
 		pPos = pBuffer;
 
-		switch (version)
+		if (version < 2)
 		{
-			case 1:
-				members = size / sizeof(UDWORD);
-				break;
-			case 2:
-				members = (size - sizeof(SDWORD)*4) / sizeof(UDWORD);
-				break;
-			case 3:
-				members = (size - sizeof(SDWORD)*6) / sizeof(UDWORD);
+			members = size / sizeof(UDWORD);
+		}
+		else if (version < 3)
+		{
+			members = (size - sizeof(SDWORD)*4) / sizeof(UDWORD);
+		}
+		else
+		{
+			members = (size - sizeof(SDWORD)*6) / sizeof(UDWORD);
 
-				// get saved group member count/nullpointer flag
-				endian_sdword((SDWORD*)pPos);
-				bObjectDefined = ( *((SDWORD *)pPos) != UNALLOCATED_OBJECT );
+			// get saved group member count/nullpointer flag
+			endian_sdword((SDWORD*)pPos);
+			bObjectDefined = ( *((SDWORD *)pPos) != UNALLOCATED_OBJECT );
 
-				if(bObjectDefined)
-				{
-					savedMembers = *((SDWORD *)pPos);	// get number of saved group members
+			if(bObjectDefined)
+			{
+				savedMembers = *((SDWORD *)pPos);	// get number of saved group members
 
-					ASSERT(savedMembers == members, "scrValDefLoad: calculated and saved group member count did not match." );
-				}
-				pPos += sizeof(SDWORD);
-				break;
-			default:
-				members = 0;
-				debug( LOG_ERROR, "scrValDefLoad: unsupported version %i", version);
+				ASSERT(savedMembers == members, "scrValDefLoad: calculated and saved group member count did not match." );
+			}
+			pPos += sizeof(SDWORD);
 		}
 
 		// make sure group was allocated when it was saved (relevant starting from version 3)
