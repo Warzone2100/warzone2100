@@ -295,12 +295,7 @@ static PIELIGHT appliedRadarColour(RADAR_DRAW_MODE radarDrawMode, MAPTILE *WTile
 		case RADAR_MODE_HEIGHT_MAP:
 		{
 			// draw radar terrain on/off feature
-			PIELIGHT col = tileColours[TileNumber_tile(WTile->texture)];
-
-			col.byte.r = (col.byte.r * 3 + WTile->height) / 4;
-			col.byte.b = (col.byte.b * 3 + WTile->height) / 4;
-			col.byte.g = (col.byte.g * 3 + WTile->height) / 4;
-			WScr = col;
+			WScr.byte.r = WScr.byte.g = WScr.byte.b = WTile->height;
 		}
 		break;
 		case RADAR_MODE_NO_TERRAIN:
