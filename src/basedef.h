@@ -98,7 +98,7 @@ typedef struct SIMPLE_OBJECT
 	SIMPLE_ELEMENTS( struct SIMPLE_OBJECT );
 } SIMPLE_OBJECT;
 
-static inline bool isDead(BASE_OBJECT *psObj)
+static inline bool isDead(const BASE_OBJECT* psObj)
 {
 	// See objmem.c for comments on the NOT_CURRENT_LIST hack
 	return (psObj->died > NOT_CURRENT_LIST);
