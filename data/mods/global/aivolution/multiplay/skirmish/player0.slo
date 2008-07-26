@@ -6958,13 +6958,13 @@ function void unassignAllDroidsFromCMD(DROID _commander, GROUP _toGroup)
 function void assignDroidsToBestCommandersFromGroup(GROUP _fromGroup, GROUP _toGroup)
 {
 	local	int		_cmdIndex,_bestCMDKills,_tmpCmdKills,_bestCost,_tmpCost,
-					_bucket;
+					_bucket,_bestCmdMaxDroids;
 	local	DROID	_droid,_bestCMD,_bestDroid;
 	local	bool	_bStop;
 
 	_bStop = false;
 
-	while(!_bStop and
+	while(!_bStop and		// still have more commanders
 		groupSizeCmds(_fromGroup, true, false, false) > 0)	//only count unassigned droids
 	{
 		_cmdIndex = 0;
@@ -6994,7 +6994,10 @@ function void assignDroidsToBestCommandersFromGroup(GROUP _fromGroup, GROUP _toG
 		//Now fill droids for the best found commander
 		if(_bestCMD != NULLOBJECT)
 		{
-			while( (_bestCMD.group.members < cmdDroidMaxGroup(_bestCMD)) and //while commander group not filles
+			//find out how many droid this commander can have assigned
+			_bestCmdMaxDroids = cmdDroidMaxGroup(_bestCMD);
+
+			while( (_bestCMD.group.members < _bestCmdMaxDroids) and 	//while commander group not full
 				(groupSizeCmds(_fromGroup, true, false, false) > 0) )	//while there are still more droids in the _fromGroup group
 			{
 				_bestCost = (-1);
@@ -7017,10 +7020,7 @@ function void assignDroidsToBestCommandersFromGroup(GROUP _fromGroup, GROUP _toG
 				}
 
 				//Add best droid to the best commander
-				if(_bestCMD != NULLOBJECT)
-				{
-					cmdDroidAddDroid(_bestCMD, _bestDroid);
-				}
+				cmdDroidAddDroid(_bestCMD, _bestDroid);
 			}
 		}
 		else
@@ -7874,7 +7874,8 @@ function void buildTanks()
 
 				//Build BBs
 				//------------------
-				if(!_bStartedBuild and haveBB and (groupSizeCmds(defendGr,true,false,true) >= (numDefenders + 4)))		//BB researched and not low on tanks
+				if(!_bStartedBuild and haveBB and (groupSizeCmds(defendGr,true,false,true)
+					>= (numDefenders + 4)))		//BB researched and not low on tanks
 				{
 					if(!lowMilitary and !alert and !defendingBase())
 					{
@@ -7883,9 +7884,8 @@ function void buildTanks()
 						{
 							_result = _result + numDroidsByComponent(weaponBB, me, me);	//num BBs
 
-							_needBBs = min(numBB, _result - numAvailableAttackers() / 9);	//1 bb for 9 droids
+							_needBBs = min(numBB, numAvailableAttackers() / 9 - _result);	//1 bb for 9 droids
 
-							//if(_result < numBB)	//not too many
 							if(_needBBs > 0)	//not too many
 							{
 								//Find best BB template
@@ -9630,6 +9630,11 @@ function int groupSizeCmds(GROUP _groupToCount, bool _bIncludeUnassigned,
 {
 	local	int		_index,_numDroids;
 	local	bool	_bCMDsOnly;
+	
+	// Optimization: equivalent to _groupToCount.members
+	if(_bIncludeUnassigned and !_bIncludeCmds and !_bInclDroidsAssignedToCmds){
+		return _groupToCount.members;
+	}
 
 	//_groupToCount can only be NULL if we are counting commanders only
 	if((_groupToCount == NULLOBJECT) and
