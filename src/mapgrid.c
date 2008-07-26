@@ -541,8 +541,8 @@ static BOOL gridIntersect(const int x1, const int y1, const int x2, const int y2
 	{
 		int x1, y1,
 		    x2, y2;
-	} rect = { x1 - cy, y1 - cy,
-	           x2 - cy, y2 - cy };
+	} rect = { x1 - cx, y1 - cy,
+	           x2 - cx, y2 - cy };
 
 	const int Rad2 = Rad * Rad;
 
