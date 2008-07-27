@@ -3961,7 +3961,6 @@ BOOL validLocation(BASE_STATS *psStats, UDWORD x, UDWORD y, UDWORD player,
 				BOOL bCheckBuildQueue)
 {
 	STRUCTURE			*psStruct;
-	FEATURE				*psFeat;
 	STRUCTURE_STATS		*psBuilding;
 	BOOL				valid = true;
 	SDWORD				i, j;
@@ -4302,7 +4301,8 @@ BOOL validLocation(BASE_STATS *psStats, UDWORD x, UDWORD y, UDWORD player,
 									//cannot build within one tile of a oil resource
 									if(TileHasFeature(mapTile(i,j)))
 									{
-										psFeat = getTileFeature(i,j);
+										FEATURE	*psFeat = getTileFeature(i, j);
+
 										if (psFeat && psFeat->psStats->subType ==
 											FEAT_OIL_RESOURCE)
 										{
@@ -4390,7 +4390,8 @@ BOOL validLocation(BASE_STATS *psStats, UDWORD x, UDWORD y, UDWORD player,
 				//check that there is a oil resource at the location
 				if(TileHasFeature(mapTile(x,y)))
 				{
-					psFeat = getTileFeature(x,y);
+					FEATURE	*psFeat = getTileFeature(x, y);
+
 					if(psFeat && psFeat->psStats->subType == FEAT_OIL_RESOURCE)
 					{
 						valid = true;
@@ -4481,14 +4482,18 @@ BOOL validLocation(BASE_STATS *psStats, UDWORD x, UDWORD y, UDWORD player,
 			}
 		}
 	}
+	else if (psStats->ref >= REF_TEMPLATE_START
+	         && psStats->ref < REF_TEMPLATE_START + REF_RANGE)
+	{
+		DROID_TEMPLATE	*psTemplate = (DROID_TEMPLATE *)psStats;
+		PROPULSION_STATS *psPropStats = asPropulsionStats + psTemplate->asParts[COMP_PROPULSION];
+
+		valid = !fpathBlockingTile(x, y, psPropStats->propulsionType);
+	}
 	else
 	{
-		// not positioning a structure
-		valid = true;
-		if (fpathBlockingTile(x, y, PROPULSION_TYPE_WHEELED))
-		{
-			valid = false;
-		}
+		// not positioning a structure or droid, ie positioning a feature
+		valid = !fpathBlockingTile(x, y, PROPULSION_TYPE_WHEELED);
 	}
 
 failed:
