@@ -627,7 +627,7 @@ var_init:		var_entry TYPE var_value
 							yyerror("Typemismatch for variable %d", $1);
 							YYABORT;
 						}
-						pString = strresGetStringByID(psStringRes, $3.pString);
+						pString = strresGetString(psStringRes, $3.pString);
 						if (!pString)
 						{
 							yyerror("Cannot find the string for id \"%s\"", $3.pString);

@@ -2615,7 +2615,7 @@ const char* getName(const char *pNameID)
 	/* See if the name has a string resource associated with it by trying
 	 * to get the string resource.
 	 */
-	const char * const name = strresGetStringByID(psStringRes, pNameID);
+	const char * const name = strresGetString(psStringRes, pNameID);
 	if (!name)
 	{
 		debug( LOG_ERROR, "Unable to find string resource for %s", pNameID );
@@ -2819,7 +2819,7 @@ char* allocateName(const char* name)
 	/* Check whether the given string has a string resource associated with
 	 * it.
 	 */
-	if (!strresGetStringByID(psStringRes, name))
+	if (!strresGetString(psStringRes, name))
 	{
 		debug(LOG_ERROR, "Unable to find string resource for %s", name);
 		abort();

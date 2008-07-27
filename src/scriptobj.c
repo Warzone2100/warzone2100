@@ -856,29 +856,20 @@ BOOL scrValDefSave(INTERP_VAL *psVal, char *pBuffer, UDWORD *pSize)
 		*pSize = sizeof(UDWORD);
 		break;
 	case ST_TEXTSTRING:
+	{
+		const char * const idStr = psVal->v.sval ? strresGetIDfromString(psStringRes, psVal->v.sval) : NULL;
+		uint16_t len = idStr ? strlen(idStr) + 1 : 0;
+
 		if (pBuffer)
 		{
-			if (psVal->v.sval == NULL)
-			{
-				*((UDWORD*)pBuffer) = UDWORD_MAX;
-			}
-			else
-			{
-				const int strID = strresGetIDfromString(psStringRes, psVal->v.sval);
+			*((uint16_t*)pBuffer) = len;
+			endian_uword((uint16_t*)pBuffer);
 
-				if (strID == -1)
-				{
-					*((UDWORD*)pBuffer) = UDWORD_MAX;
-				}
-				else
-				{
-					*((UDWORD*)pBuffer) = strID;
-				}
-			}
-			endian_udword((UDWORD*)pBuffer);
+			memcpy(pBuffer + sizeof(len), idStr, len);
 		}
-		*pSize = sizeof(UDWORD);
+		*pSize = sizeof(len) + len;
 		break;
+	}
 	case ST_LEVEL:
 		if (psVal->v.sval != NULL)
 		{
@@ -1190,21 +1181,102 @@ BOOL scrValDefLoad(SDWORD version, INTERP_VAL *psVal, char *pBuffer, UDWORD size
 		}
 		break;
 	case ST_TEXTSTRING:
-		id = *((UDWORD *)pBuffer);
-		endian_udword(&id);
-		if (id == UDWORD_MAX)
+		if (version < 4)
 		{
-			psVal->v.sval = '\0';
+			if (size != sizeof(UDWORD))
+			{
+				debug(LOG_ERROR, "Data size is too small, %u is expected, but %u is provided", (unsigned int)(sizeof(UDWORD)), (unsigned int)size);
+				return false;
+			}
+
+			id = *((UDWORD*)pBuffer);
+			endian_udword(&id);
+
+			if (id == UDWORD_MAX)
+			{
+				psVal->v.sval = NULL;
+			}
+			else
+			{
+				/* This code is commented out, because it depends on assigning the
+				 * id-th loaded string from the string resources. And from version
+				 * 4 of this file format onward, we do not count strings anymore.
+				 *
+				 * Thus loading of these strings is practically impossible.
+				 */
+#if 0
+				const char * const str = strresGetString(psStringRes, id);
+				if (!str)
+				{
+					debug(LOG_ERROR, "Couldn't find string with id %u", id);
+					abort();
+					return false;
+				}
+
+				psVal->v.sval = strdup(str);
+				if (!psVal->v.sval)
+				{
+					debug(LOG_ERROR, "Out of memory");
+					abort();
+					return false;
+				}
+#else
+				debug(LOG_ERROR, "Incompatible savegame format version %u, should be at least version 4", (unsigned int)version);
+				return false;
+#endif
+			}
 		}
 		else
 		{
-			const char * const str = strresGetString(psStringRes, id);
-			if (!str)
+			const char* str;
+			char* idStr;
+			uint16_t len;
+
+			if (size < sizeof(len))
 			{
-				debug(LOG_ERROR, "Couldn't find string with id %u", id);
-				abort();
+				debug(LOG_ERROR, "Data size is too small, %u is expected, but %u is provided", (unsigned int)(sizeof(len)), (unsigned int)size);
 				return false;
 			}
+
+			len = *((uint16_t*)pBuffer);
+			endian_uword(&len);
+
+			if (size < sizeof(len) + len)
+			{
+				debug(LOG_ERROR, "Data size is too small, %u is expected, but %u is provided", (unsigned int)(sizeof(len) + len), (unsigned int)size);
+				return false;
+			}
+
+			if (len == 0)
+			{
+				psVal->v.sval = NULL;
+				return true;
+			}
+
+			idStr = malloc(len);
+			if (!idStr)
+			{
+				debug(LOG_ERROR, "Out of memory (tried to allocate %u bytes)", (unsigned int)len);
+				// Don't abort() here, as this might be the result from a bad "len" field in the data
+				return false;
+			}
+
+			memcpy(idStr, pBuffer + sizeof(len), len);
+
+			if (idStr[len - 1] != '\0')
+			{
+				debug(LOG_WARNING, "Non-NUL terminated string encountered!");
+			}
+			idStr[len - 1] = '\0';
+
+			str = strresGetString(psStringRes, idStr);
+			if (!str)
+			{
+				debug(LOG_ERROR, "Couldn't find string with id \"%s\"", idStr);
+				free(idStr);
+				return false;
+			}
+			free(idStr);
 
 			psVal->v.sval = strdup(str);
 			if (!psVal->v.sval)

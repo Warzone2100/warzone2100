@@ -40,7 +40,6 @@
 typedef struct STR_RES
 {
 	struct TREAP_NODE**     psIDTreap;              ///< The treap to store string identifiers
-	int                     nextID;                 ///< The next free ID
 } STR_RES;
 
 /* Initialise the string system */
@@ -53,7 +52,6 @@ STR_RES* strresCreate()
 		abort();
 		return NULL;
 	}
-	psRes->nextID = 0;
 
 	psRes->psIDTreap = treapCreate();
 	if (!psRes->psIDTreap)
@@ -89,19 +87,10 @@ BOOL strresStoreString(STR_RES *psRes, const char* pID, const char* pString)
 		return false;
 	}
 
-	return treapAdd(psRes->psIDTreap, pID, pString, psRes->nextID++);
+	return treapAdd(psRes->psIDTreap, pID, pString);
 }
 
-
-/* Get the string from an ID number */
-const char* strresGetString(const STR_RES * psRes, int id)
-{
-	ASSERT(psRes != NULL, "Invalid string resource pointer");
-
-	return treapFindByID(psRes->psIDTreap, id);
-}
-
-const char* strresGetStringByID(const STR_RES* psRes, const char* ID)
+const char* strresGetString(const STR_RES* psRes, const char* ID)
 {
 	const char * string;
 
@@ -140,9 +129,9 @@ BOOL strresLoad(STR_RES* psRes, const char* fileName)
 }
 
 /* Get the ID number for a string*/
-int strresGetIDfromString(STR_RES *psRes, const char *pString)
+const char* strresGetIDfromString(STR_RES *psRes, const char *pString)
 {
 	ASSERT(psRes != NULL, "Invalid string res pointer");
 
-	return treapFindID(psRes->psIDTreap, pString);
+	return treapFindKey(psRes->psIDTreap, pString);
 }

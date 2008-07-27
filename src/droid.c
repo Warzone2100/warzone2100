@@ -4256,7 +4256,7 @@ const char* getTemplateName(const DROID_TEMPLATE *psTemplate)
 	/* See if the name has a string resource associated with it by trying
 	 * to get the string resource.
 	 */
-	const char * const pNameID = strresGetStringByID(psStringRes, psTemplate->aName);
+	const char * const pNameID = strresGetString(psStringRes, psTemplate->aName);
 
 	// If we couldn't find a string resource, return the name passed in
 	if (!pNameID)
@@ -4287,7 +4287,7 @@ BOOL getDroidResourceName(char *pName)
 	/* See if the name has a string resource associated with it by trying
 	 * to get the string resource.
 	 */
-	const char * const name = strresGetStringByID(psStringRes, pName);
+	const char * const name = strresGetString(psStringRes, pName);
 
 	if (!name)
 	{

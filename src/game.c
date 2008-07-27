@@ -5166,7 +5166,7 @@ DROID_TEMPLATE *FindDroidTemplate(const char * const name)
 	DROID_TEMPLATE *Template;
 
 	// get the name from the resource associated with it
-	const char * const nameStr = strresGetStringByID(psStringRes, name);
+	const char * const nameStr = strresGetString(psStringRes, name);
 	if (!nameStr)
 	{
 		debug( LOG_ERROR, "Cannot find resource for template - %s", name );
@@ -11662,10 +11662,12 @@ BOOL writeFiresupportDesignators(char *pFileName)
 // write the event state to a file on disk
 static BOOL	writeScriptState(char *pFileName)
 {
+	static const int32_t current_event_version = 4;
+
 	char	*pBuffer;
 	UDWORD	fileSize;
 
-	if (!eventSaveState(3, &pBuffer, &fileSize))
+	if (!eventSaveState(current_event_version, &pBuffer, &fileSize))
 	{
 		return false;
 	}

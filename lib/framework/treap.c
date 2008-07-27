@@ -39,7 +39,6 @@ typedef struct TREAP_NODE
 	const char*                     key;                    //< The key to sort the node on
 	unsigned int                    priority;               //< Treap priority
 	const char*                     string;                 //< The string stored in the treap
-	int                             id;                     //< An ID number that can be used to refer to these strings
 	struct TREAP_NODE               *psLeft, *psRight;      //< The sub trees
 } TREAP_NODE;
 
@@ -137,7 +136,7 @@ static void treapAddNode(TREAP_NODE **ppsRoot, TREAP_NODE *psNew)
 
 /* Add an object to a treap
  */
-BOOL treapAdd(TREAP_NODE** psTreap, const char* key, const char* string, int id)
+BOOL treapAdd(TREAP_NODE** psTreap, const char* key, const char* string)
 {
 	/* Over-allocate so that we can put the key and the string in the same
 	 * chunck of memory as the TREAP_NODE struct. Which means a single
@@ -155,8 +154,6 @@ BOOL treapAdd(TREAP_NODE** psTreap, const char* key, const char* string, int id)
 
 	psNew->key    = strcpy((char*)(psNew + 1),            key);
 	psNew->string = strcpy((char*)(psNew + 1) + key_size, string);
-
-	psNew->id = id;
 
 	psNew->priority = rand();
 	psNew->psLeft = NULL;
@@ -204,64 +201,34 @@ const char* treapFind(TREAP_NODE** psTreap, const char *key)
 	return treapFindRec(*psTreap, key);
 }
 
-static const char* treapFindByIDRec(TREAP_NODE const * const psNode, const int id)
+static const char* treapFindKeyRec(TREAP_NODE const * const psNode, const char * const string)
 {
-	const char* str;
+	const char* key;
 
 	if (psNode == NULL)
 	{
 		return NULL;
 	}
 
-	if (psNode->id == id)
-	{
-		return psNode->string;
-	}
-
-	str = treapFindByIDRec(psNode->psLeft, id);
-	if (str)
-	{
-		return str;
-	}
-
-	return treapFindByIDRec(psNode->psRight, id);
-}
-
-const char* treapFindByID(TREAP_NODE** psTreap, int id)
-{
-	ASSERT(psTreap != NULL, "Invalid treap pointer!");
-
-	return treapFindByIDRec(*psTreap, id);
-}
-
-static int treapFindIDRec(TREAP_NODE const * const psNode, const char * const string)
-{
-	int id;
-
-	if (psNode == NULL)
-	{
-		return -1;
-	}
-
 	if (strcmp(psNode->string, string) == 0)
 	{
-		return psNode->id;
+		return psNode->key;
 	}
 
-	id = treapFindIDRec(psNode->psLeft, string);
-	if (id != -1)
+	key = treapFindKeyRec(psNode->psLeft, string);
+	if (key)
 	{
-		return id;
+		return key;
 	}
 
-	return treapFindIDRec(psNode->psRight, string);
+	return treapFindKeyRec(psNode->psLeft, string);
 }
 
-int treapFindID(TREAP_NODE** psTreap, const char* string)
+const char* treapFindKey(TREAP_NODE** psTreap, const char* string)
 {
 	ASSERT(psTreap != NULL, "Invalid treap pointer!");
 
-	return treapFindIDRec(*psTreap, string);
+	return treapFindKeyRec(*psTreap, string);
 }
 
 /* Recursively free a treap */

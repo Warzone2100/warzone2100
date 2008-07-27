@@ -545,7 +545,7 @@ VIEWDATA *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
                         pViewMsgData += cnt;
 
 			// Get the string from the ID string
-			psViewData->ppTextMsg[dataInc] = strresGetStringByID(psStringRes, name);
+			psViewData->ppTextMsg[dataInc] = strresGetString(psStringRes, name);
 			if (!psViewData->ppTextMsg[dataInc])
 			{
 				ASSERT(!"Cannot find string resource", "Cannot find the view data string with id \"%s\"", name);
@@ -697,7 +697,7 @@ VIEWDATA *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
                                         pViewMsgData += cnt;
 
 					// Get the string from the ID string
-					psViewReplay->pSeqList[dataInc].ppTextMsg[seqInc] = strresGetStringByID(psStringRes, name);
+					psViewReplay->pSeqList[dataInc].ppTextMsg[seqInc] = strresGetString(psStringRes, name);
 					if (!psViewReplay->pSeqList[dataInc].ppTextMsg[seqInc])
 					{
 						ASSERT(!"Cannot find string resource", "Cannot find the view data string with id \"%s\"", name);
