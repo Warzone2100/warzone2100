@@ -37,6 +37,41 @@
 #define YYLMAX	255
 #endif
 
+/* Older GNU Flex versions don't define yyget_extra(), yyset_extra(),
+ * yyget_text() and yyget_lineno().
+ * (and neither define a subminor version)
+ */
+#if !defined(YY_FLEX_SUBMINOR_VERSION) || (YY_FLEX_SUBMINOR_VERSION < 9)
+# define yyget_extra  scr_get_extra
+# define yyset_extra  scr_set_extra
+# define yyget_lineno scr_get_lineno
+# define yyget_text   scr_get_text
+extern void yyset_extra(YY_EXTRA_TYPE user_defined);
+extern int yyget_lineno(void);
+int yyget_lineno()
+{
+	return yylineno;
+}
+
+extern char* yyget_text(void);
+char* yyget_text()
+{
+	return yytext;
+}
+#elif defined(YY_FLEX_SUBMINOR_VERSION) && YY_FLEX_SUBMINOR_VERSION == 33
+extern int scr_get_lineno(void);
+extern FILE *scr_get_in(void);
+extern FILE *scr_get_out(void);
+extern int scr_get_leng(void);
+extern char *scr_get_text(void);
+extern void scr_set_lineno(int line_number);
+extern void scr_set_in(FILE* in_str);
+extern void scr_set_out(FILE* out_str);
+extern int scr_get_debug(void);
+extern void scr_set_debug(int bdebug);
+extern int scr_lex_destroy(void);
+#endif
+
 /* Store for any string values */
 static char aText[TEXT_BUFFERS][YYLMAX];
 static UDWORD currText=0;

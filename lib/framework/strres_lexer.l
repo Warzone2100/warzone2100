@@ -66,6 +66,16 @@ char* yyget_text()
 }
 #elif defined(YY_FLEX_SUBMINOR_VERSION) && YY_FLEX_SUBMINOR_VERSION == 33
 extern YY_EXTRA_TYPE yyget_extra(void);
+extern int strres_get_lineno(void);
+extern FILE *strres_get_in(void);
+extern FILE *strres_get_out(void);
+extern int strres_get_leng(void);
+extern char *strres_get_text(void);
+extern void strres_set_lineno(int line_number);
+extern void strres_set_in(FILE* in_str);
+extern void strres_set_out(FILE* out_str);
+extern int strres_get_debug(void);
+extern void strres_set_debug(int bdebug);
 #endif
 
 %}
