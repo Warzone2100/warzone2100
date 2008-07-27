@@ -26,6 +26,7 @@
  */
 #include "lib/framework/frame.h"
 #include "lib/framework/frameresource.h"
+#include "lib/framework/strres.h"
 
 #include "lib/gamelib/gtime.h"
 #include "lib/script/script.h"
@@ -41,6 +42,7 @@
 #include "src/message.h"
 #include "src/levels.h"
 #include "src/research.h"
+#include "text.h"
 
 // The current script code
 static SCRIPT_CODE		*psCurrScript;
@@ -625,10 +627,10 @@ var_init:		var_entry TYPE var_value
 							yyerror("Typemismatch for variable %d", $1);
 							YYABORT;
 						}
-						pString = scrvGetString($3.pString);
+						pString = strresGetStringByID(psStringRes, $3.pString);
 						if (!pString)
 						{
-							yyerror("String %s not found", $3.pString);
+							yyerror("Cannot find the string for id \"%s\"", $3.pString);
 							YYABORT;
 						}
 						data.v.sval = strdup(pString);
