@@ -44,6 +44,7 @@
 #include "scripttabs.h"
 #include "scriptcb.h"
 #include "loop.h"
+#include "transporter.h"
 
 #include "lib/netplay/netplay.h"
 #include "multiplay.h"
@@ -233,9 +234,10 @@ static void sendGiftDroids(uint8_t from, uint8_t to)
 		// Store the next droid in the list as the list may change
 		next = psD->psNext;
 
-		if (psD->droidType == DROID_TRANSPORTER)
+		if (psD->droidType == DROID_TRANSPORTER
+		 && !transporterIsEmpty(psD))
 		{
-			CONPRINTF(ConsoleString, (ConsoleString, _("Tried to give away a %s - but this is not allowed."), psD->aName));
+			CONPRINTF(ConsoleString, (ConsoleString, _("Tried to give away a non-empty %s - but this is not allowed."), psD->aName));
 			continue;
 		}
 		if (psD->selected)

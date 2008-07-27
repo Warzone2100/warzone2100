@@ -52,6 +52,8 @@ extern BOOL checkTransporterSpace(DROID *psTransporter, DROID *psAssigned);
 up different amount depending on their body size - currently all are set to one!*/
 extern UDWORD calcRemainingCapacity(DROID *psTransporter);
 
+extern bool transporterIsEmpty(const DROID* psTransporter);
+
 /*launches the defined transporter to the offworld map*/
 extern BOOL launchTransporter(DROID *psTransporter);
 

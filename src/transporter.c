@@ -1048,6 +1048,17 @@ UDWORD calcRemainingCapacity(DROID *psTransporter)
 	return (UDWORD)capacity;
 }
 
+bool transporterIsEmpty(const DROID* psTransporter)
+{
+	ASSERT(psTransporter->droidType == DROID_TRANSPORTER, "Non-transporter droid given");
+
+	// Assume dead droids and non-transporter droids to be empty
+	return (isDead((const BASE_OBJECT*)psTransporter)
+	     || psTransporter->droidType != DROID_TRANSPORTER
+
+	     || psTransporter->psGroup->psList == NULL
+	     || psTransporter->psGroup->psList == psTransporter);
+}
 
 #define MAX_TRANSPORTERS	8
 
