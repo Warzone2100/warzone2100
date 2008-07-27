@@ -64,6 +64,18 @@ char* yyget_text()
 }
 #elif defined(YY_FLEX_SUBMINOR_VERSION) && YY_FLEX_SUBMINOR_VERSION == 33
 extern YY_EXTRA_TYPE yyget_extra(void);
+extern int audp_get_lineno(void);
+extern FILE *audp_get_in(void);
+extern FILE *audp_get_out(void);
+extern int audp_get_leng(void);
+extern char *audp_get_text(void);
+extern void audp_set_lineno(int line_number);
+extern void audp_set_in(FILE* in_str);
+extern void audp_set_out(FILE* out_str);
+extern int audp_get_debug(void);
+extern void audp_set_debug(int bdebug);
+extern int audp_lex_destroy(void);
+extern void audp_set_extra(YY_EXTRA_TYPE user_defined);
 #endif
 
 %}

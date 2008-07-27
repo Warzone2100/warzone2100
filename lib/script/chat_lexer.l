@@ -39,6 +39,40 @@
 #define YYLMAX	255
 #endif
 
+/* Older GNU Flex versions don't define yyget_extra(), yyset_extra(),
+ * yyget_text() and yyget_lineno().
+ * (and neither define a subminor version)
+ */
+#if !defined(YY_FLEX_SUBMINOR_VERSION) || (YY_FLEX_SUBMINOR_VERSION < 9)
+# define yyget_extra  chat_get_extra
+# define yyset_extra  chat_set_extra
+# define yyget_lineno chat_get_lineno
+# define yyget_text   chat_get_text
+extern int yyget_lineno(void);
+int yyget_lineno()
+{
+	return yylineno;
+}
+
+extern char* yyget_text(void);
+char* yyget_text()
+{
+	return yytext;
+}
+#elif defined(YY_FLEX_SUBMINOR_VERSION) && YY_FLEX_SUBMINOR_VERSION == 33
+extern int chat_get_lineno(void);
+extern FILE *chat_get_in(void);
+extern FILE *chat_get_out(void);
+extern int chat_get_leng(void);
+extern char *chat_get_text(void);
+extern void chat_set_lineno(int line_number);
+extern void chat_set_in(FILE* in_str);
+extern void chat_set_out(FILE* out_str);
+extern int chat_get_debug(void);
+extern void chat_set_debug(int bdebug);
+extern int chat_lex_destroy(void);
+#endif
+
 /* Pointer to the input buffer */
 static const char *pInputBuffer = NULL;
 static const char *pEndBuffer = NULL;
