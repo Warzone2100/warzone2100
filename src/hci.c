@@ -451,8 +451,6 @@ static BOOL intAddCommand(DROID *psSelected);
 static void intStartStructPosition(BASE_STATS *psStats,DROID *psDroid);
 /* Stop looking for a structure location */
 static void intStopStructPosition(void);
-/* See if a structure location has been found */
-static BOOL intGetStructPosition(UDWORD *pX, UDWORD *pY);
 
 static STRUCTURE *CurrentStruct = NULL;
 static SWORD CurrentStructType = 0;
@@ -1981,9 +1979,9 @@ INT_RETVAL intRunWidgets(void)
 						/* Nothing */
 					} else {
 						// Set the droid order
-						if ( (intNumSelectedDroids(DROID_CONSTRUCT) == 0) &&
-                            (intNumSelectedDroids(DROID_CYBORG_CONSTRUCT) == 0) &&
-							 (psObjSelected != NULL) )
+						if (intNumSelectedDroids(DROID_CONSTRUCT) == 0
+						    && intNumSelectedDroids(DROID_CYBORG_CONSTRUCT) == 0
+						    && psObjSelected != NULL)
 						{
 							orderDroidStatsTwoLoc((DROID *)psObjSelected, DORDER_LINEBUILD,
 											   psPositionStats, structX, structY, structX2,structY2);
@@ -1991,8 +1989,8 @@ INT_RETVAL intRunWidgets(void)
 						else
 						{
 							orderSelectedStatsTwoLoc(selectedPlayer, DORDER_LINEBUILD,
-											   psPositionStats, structX, structY, structX2,
-                                               structY2, ctrlShiftDown());
+							                         psPositionStats, structX, structY, structX2,
+							                         structY2, ctrlShiftDown());
 						}
 					}
 				}
@@ -2000,9 +1998,9 @@ INT_RETVAL intRunWidgets(void)
 				// put the build menu up again after the structure position has been chosen
 				//or ctrl/shift is down and we're queing the build orders
 #ifdef DISABLE_BUILD_QUEUE
-                if (bReopenBuildMenu)
+				if (bReopenBuildMenu)
 #else
-                if (bReopenBuildMenu || ctrlShiftDown())
+				if (bReopenBuildMenu || ctrlShiftDown())
 #endif
 				{
 				    intAddBuild(NULL);
@@ -2014,7 +2012,7 @@ INT_RETVAL intRunWidgets(void)
 				}
 
 			}
-			else if (intGetStructPosition(&structX, &structY))//found building
+			else if (found3DBuilding(&structX, &structY))	//found building
 			{
 				//check droid hasn't died
 				if ((psObjSelected == NULL) ||
@@ -2024,8 +2022,6 @@ INT_RETVAL intRunWidgets(void)
 
 					// Send the droid off to build the structure assuming the droid
 					// can get to the location chosen
-//					structX = world_coord(structX);
-//					structY = world_coord(structY);
 					intCalcStructCenter((STRUCTURE_STATS *)psPositionStats, structX,structY,
 												&structX,&structY);
 
@@ -2042,9 +2038,9 @@ INT_RETVAL intRunWidgets(void)
 
 						} else {
 							// Set the droid order
-							if ( (intNumSelectedDroids(DROID_CONSTRUCT) == 0) &&
-                                (intNumSelectedDroids(DROID_CYBORG_CONSTRUCT) == 0) &&
-								 (psObjSelected != NULL) )
+							if (intNumSelectedDroids(DROID_CONSTRUCT) == 0
+							    && intNumSelectedDroids(DROID_CYBORG_CONSTRUCT) == 0
+							    && psObjSelected != NULL)
 							{
 								orderDroidStatsLoc((DROID *)psObjSelected, DORDER_BUILD,
 									   psPositionStats, structX, structY);
@@ -2063,10 +2059,9 @@ INT_RETVAL intRunWidgets(void)
 //				}
 
 				// put the build menu up again after the structure position has been chosen
-                //or ctrl/shift is down and we're queuing the build orders
+				// or ctrl/shift is down and we're queuing the build orders
 #ifdef DISABLE_BUILD_QUEUE
-                if (bReopenBuildMenu)
-
+				if (bReopenBuildMenu)
 				{
 					intAddBuild(NULL);
 				}
@@ -2084,7 +2079,7 @@ INT_RETVAL intRunWidgets(void)
 		else if (intMode == INT_EDITSTAT && editPosMode == IED_POS)
 		{
 			/* Directly positioning some type of object */
-			if (intGetStructPosition(&structX, &structY))
+			if (found3DBuilding(&structX, &structY))
 			{
 				/* See what type of thing is being put down */
 				if (psPositionStats->ref >= REF_STRUCTURE_START &&
@@ -2177,7 +2172,6 @@ INT_RETVAL intRunWidgets(void)
 				}
 				editPosMode = IED_NOPOS;
 			}
-
 		}
 	}
 
@@ -3283,28 +3277,6 @@ static void intStopStructPosition(void)
 	}
 
 	kill3DBuilding();
-}
-
-
-/* See if a structure location has been found */
-static BOOL intGetStructPosition(UDWORD *pX, UDWORD *pY)
-{
-	BOOL	retVal = false;
-
-	retVal = found3DBuilding(pX,pY);
-	if (retVal)
-	{
-#if 0
-//		if (intMode == INT_OBJECT && objMode == IOBJ_BUILDSEL) {
-		if ((intMode == INT_OBJECT || intMode == INT_STAT) && objMode == IOBJ_BUILDSEL)
-		{
-			widgReveal(psWScreen,IDOBJ_TABFORM);	// Reveal the object form.
-			widgReveal(psWScreen,IDOBJ_FORM);
-		}
-#endif
-	}
-
-	return retVal;
 }
 
 
