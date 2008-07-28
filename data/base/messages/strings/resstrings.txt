@@ -42,10 +42,6 @@ RES_CYJ_J01_MSG4			_("Jump Cyborgs can now be researched")
 //RES_CYW_LG1_MSG4			_("All Cyborgs upgraded automatically")
 
 //R-Cyborg-Legs02			Cyborg Propulsion II
-RES_CYW_LG2_MSG1			_("Cyborg Propulsion Improved")
-RES_CYW_LG2_MSG2			_("New armored construction")
-RES_CYW_LG2_MSG3			_("Increases Body Points")
-RES_CYW_LG2_MSG4			_("All Cyborgs upgraded automatically")
 
 //R-Cyborg-Legs03			Cyborg Propulsion III
 RES_CYW_LG3_MSG1			_("Cyborg Propulsion Improved")
@@ -502,10 +498,6 @@ RES_WT12_HAT_MSG3			_("Automatically targets enemies within sensor range")
 RES_WT12_HAT_MSG4			_("Defensive Strength: High")
 
 //R-Defense-WallTower-HPVcannon	Hyper-Velocity Cannon Hardpoint
-RES_WT13_HPV_MSG1			_("New Defensive Structure Available")
-RES_WT13_HPV_MSG2			_("Armored hardpoint with Hyper-Velocity Cannon")
-RES_WT13_HPV_MSG3			_("Automatically targets enemies within sensor range")
-RES_WT13_HPV_MSG4			_("Defensive Strength: High")
 
 //R-Defense-WallTower-PulseLas		Flashlight Hardpoint
 RES_WT14_PLS_MSG1			_("New Defensive Structure Available")
@@ -634,10 +626,6 @@ RES_POWMD1_MSG3			_("Burns oil more efficiently")
 RES_POWMD1_MSG4			_("Use a truck to add the module to a power generator")
 
 //R-Struc-Power-Upgrade01		Gas Turbine Generator
-RES_POWU1_MSG1			_("Improved Power Generator Performance")
-RES_POWU1_MSG2			_("New Power Generation Technology")
-RES_POWU1_MSG3			_("Gas turbine boosts power output")
-RES_POWU1_MSG4			_("All power generators upgraded automatically")
 
 //R-Struc-Power-Upgrade02		Vapor Turbine Generator
 RES_POWU2_MSG1			_("Improved Power Generator Performance")
@@ -738,10 +726,6 @@ RES_ST_VP4_MSG4			_("All rearming pads upgraded automatically")
 //R-Sys-Engineering01			Engineering
 
 //R-Sys-Engineering02			Improved Engineering
-RES_ENGIN2_MSG1			_("Research Breakthrough Improves Construction Rates")
-RES_ENGIN2_MSG2			_("Improved Engineering Techniques")
-RES_ENGIN2_MSG3			_("Increases construction speed")
-RES_ENGIN2_MSG4			_("All trucks upgraded automatically")
 
 //R-Sys-Engineering03			Advanced Engineering
 RES_ENGIN3_MSG1			_("Research Breakthrough Improves Construction Rates")
@@ -802,10 +786,6 @@ RES_SY_CBSTW1_MSG4		_("Counter-battery fire continues until enemy battery is sup
 //R-Sys-CBSensor-Upgrade01		CB Sensor Upgrade
 
 //R-Sys-CBSensor-Upgrade02		CB Sensor Upgrade 2
-RES_SY_CBSU2_MSG1			_("CB Sensor Improved")
-RES_SY_CBSU2_MSG2			_("Improved fire detection systems")
-RES_SY_CBSU2_MSG3			_("Extends CB Range")
-RES_SY_CBSU2_MSG4			_("All CB sensors upgraded automatically")
 
 //R-Sys-CBSensor-Upgrade03		CB Sensor Upgrade 3
 RES_SY_CBSU3_MSG1			_("CB Sensor Improved")
@@ -814,10 +794,6 @@ RES_SY_CBSU3_MSG3			_("Extends CB Range")
 RES_SY_CBSU3_MSG4			_("All CB sensors upgraded automatically")
 
 //R-Sys-VTOLCBS-Tower01		VTOL CB Tower
-RES_SY_VCBSTW1_MSG1		_("New Systems Tower Available")
-RES_SY_VCBSTW1_MSG2		_("VTOL CB Tower detects enemy indirect fire batteries")
-RES_SY_VCBSTW1_MSG3		_("Orders assigned VTOLs to attack the enemy batteries")
-RES_SY_VCBSTW1_MSG4		_("VTOLs attack until enemy battery is suppressed")
 
 //R-Sys-VTOLCBS-Turret01		VTOL CB Turret
 RES_SY_VCBSTU1_MSG1		_("New Systems Turret Available")
@@ -832,10 +808,6 @@ RES_SY_VCBSU1_MSG3		_("Extends VTOL CB Range")
 RES_SY_VCBSU1_MSG4		_("All VTOL CB sensors upgraded automatically")
 
 //R-Sys-VTOLCBS-Upgrade02		VTOL CB Upgrade 2
-RES_SY_VCBSU2_MSG1		_("VTOL CB Improved")
-RES_SY_VCBSU2_MSG2		_("Improved fire detection systems")
-RES_SY_VCBSU2_MSG3		_("Extends VTOL CB Range")
-RES_SY_VCBSU2_MSG4		_("All VTOL CB sensors upgraded automatically")
 
 //R-Sys-VTOLCBS-Upgrade03		VTOL CB Upgrade 3
 RES_SY_VCBSU3_MSG1		_("VTOL CB Improved")
@@ -844,16 +816,8 @@ RES_SY_VCBSU3_MSG3		_("Extends VTOL CB Range")
 RES_SY_VCBSU3_MSG4		_("All VTOL CB sensors upgraded automatically")
 
 //R-Sys-VTOLStrike-Tower01		VTOL Strike Tower
-RES_SY_VSTW1_MSG1			_("New Systems Tower Available")
-RES_SY_VSTW1_MSG2			_("VTOL Strike Tower detects approaching enemies")
-RES_SY_VSTW1_MSG3			_("Assigned VTOLs attack the enemy units")
-RES_SY_VSTW1_MSG4			_("Strike mission continues until enemy destroyed or they retreat")
 
 //R-Sys-VTOLStrike-Turret01		VTOL Strike Turret
-RES_SY_VSTU1_MSG1			_("New Systems Turret Available")
-RES_SY_VSTU1_MSG2			_("VTOL Strike turret used to spot targets")
-RES_SY_VSTU1_MSG3			_("Assigned VTOLs attack the designated targets")
-RES_SY_VSTU1_MSG4			_("Select new targets to continue the VTOL strikes")
 
 //R-Sys-VTOLStrike-Upgrade01		VTOL Strike Upgrade
 RES_SY_VS1_MSG1			_("VTOL Strike Improved")
@@ -862,10 +826,6 @@ RES_SY_VS1_MSG3			_("Extends VTOL Strike Range")
 RES_SY_VS1_MSG4			_("All VTOL Strike sensors upgraded automatically")
 
 //R-Sys-VTOLStrike-Upgrade02		VTOL Strike Upgrade Mk2
-RES_SY_VS2_MSG1			_("VTOL Strike Improved")
-RES_SY_VS2_MSG2			_("Improved target recognition systems")
-RES_SY_VS2_MSG3			_("Extends VTOL Strike Range")
-RES_SY_VS2_MSG4			_("All VTOL Strike sensors upgraded automatically")
 
 //R-Sys-VTOLStrike-Upgrade03		VTOL Strike Upgrade Mk3
 RES_SY_VS3_MSG1			_("VTOL Strike Improved")
@@ -1162,10 +1122,6 @@ RES_AAAC1_MSG3			_("Increases AA accuracy")
 RES_AAAC1_MSG4			_("All AA weapons upgraded automatically")
 
 //R-Wpn-AAGun-Accuracy02		AA Target Acquisition Shells
-RES_AAAC2_MSG1			_("AA Upgrade")
-RES_AAAC2_MSG2			_("Self-guided rocket powered shells")
-RES_AAAC2_MSG3			_("Increases AA accuracy")
-RES_AAAC2_MSG4			_("All AA weapons upgraded automatically")
 
 //R-Wpn-AAGun-Accuracy03		AA Target Prediction Shells
 RES_AAAC3_MSG1			_("AA Upgrade")
@@ -1222,10 +1178,6 @@ RES_BMB2_MSG3			_("Best Targets: Defenses")
 RES_BMB2_MSG4			_("Body Points: Low")
 
 //R-Wpn-Bomb03			Phosphor Bomb Bay
-RES_BMB3_MSG1			_("New Bomb Bay Available")
-RES_BMB3_MSG2			_("Drops incendiary bombs")
-RES_BMB3_MSG3			_("Best Targets: Bunkers and Hardpoints")
-RES_BMB3_MSG4			_("Body Points: Low")
 
 //R-Wpn-Bomb04			Thermite Bomb Bay
 RES_BMB4_MSG1			_("New Bomb Bay Available")
@@ -1240,10 +1192,6 @@ RES_BAC1_MSG3			_("Increases Bombing accuracy")
 RES_BAC1_MSG4			_("All bomb bays upgraded automatically")
 
 //R-Wpn-Bomb-Accuracy02		Laser Guided Bombsight
-RES_BAC2_MSG1			_("Bombsight Upgrade")
-RES_BAC2_MSG2			_("Laser designator paints and guides bombs to the target")
-RES_BAC2_MSG3			_("Increases Bombing accuracy")
-RES_BAC2_MSG4			_("All bomb bays upgraded automatically")
 
 //R-Wpn-Bomb-Accuracy03		Target Acquisition Bombsight
 RES_BAC3_MSG1			_("Bombsight Upgrade")
@@ -1350,10 +1298,6 @@ RES_W_HH1_MSG3			_("Best Targets: Base Structures, infantry, wheeled vehicles")
 RES_W_HH1_MSG4			_("Body Points: Low")
 
 //R-Wpn-Howitzer03-Rot			Rotary Howitzer - Hellstorm
-RES_W_RHOW_MSG1			_("New Indirect Fire Weapon Available")
-RES_W_RHOW_MSG2			_("105mm multi-barrel Howitzer may be assigned to a sensor")
-RES_W_RHOW_MSG3			_("Best Targets: Base Structures, infantry, wheeled vehicles")
-RES_W_RHOW_MSG4			_("Body Points: Low")
 
 //R-Wpn-Howitzer04-Inc			Incendiary Howitzer - Hellfire
 RES_W_IHOW_MSG1			_("New Indirect Fire Weapon Available")
@@ -1442,10 +1386,6 @@ RES_MG2MK1_MSG4			_("Body Points: Low")
 //R-Wpn-MG3Mk1			Heavy Machinegun
 
 //R-Wpn-MG4				Assault Gun
-RES_MG4_MSG1			_("New Weapon Turret Available")
-RES_MG4_MSG2			_("Multi-barrel, rapid-fire machinegun")
-RES_MG4_MSG3			_("Best Targets: Infantry, base structures, wheeled vehicles")
-RES_MG4_MSG4			_("Replaces all machineguns")
 
 //WHAT IS THIS?			???
 //RES_ROFUP1_MSG1			_("Research Breakthrough Improves ROF")
@@ -1492,10 +1432,6 @@ RES_W_MG_ROF2_MSG3		_("Increases Machinegun ROF")
 RES_W_MG_ROF2_MSG4		_("All machineguns upgraded automatically")
 
 //R-Wpn-MG-ROF03			Hyper Fire Chaingun Upgrade
-RES_W_MG_ROF3_MSG1		_("Machinegun Upgrade")
-RES_W_MG_ROF3_MSG2		_("Robotic advances make new chaingun upgrade available")
-RES_W_MG_ROF3_MSG3		_("Increases Machinegun ROF")
-RES_W_MG_ROF3_MSG4		_("All machineguns upgraded automatically")
 
 //R-Wpn-Missile-ASM-AT		Scourge Missile
 RES_ASM_AT_MSG1			_("New Missile Turret Available")
@@ -1580,10 +1516,6 @@ RES_W_M3_MSG4			_("Body Points: Very Low")
 //R-Wpn-Mortar-Acc01			Mortar Targeting Computer
 
 //R-Wpn-Mortar-Acc02			Thermal Imaging Mortar Shells
-RES_W_M_AC2_MSG1			_("Mortar Upgrade")
-RES_W_M_AC2_MSG2			_("Shells detect and home to thermal heat signatures")
-RES_W_M_AC2_MSG3			_("Increases Mortar accuracy")
-RES_W_M_AC2_MSG4			_("All mortars upgraded automatically")
 
 //R-Wpn-Mortar-Acc03			Target Acquisition Mortar Shells
 RES_W_M_AC3_MSG1			_("Mortar Upgrade")
