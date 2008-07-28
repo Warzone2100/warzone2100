@@ -28,6 +28,9 @@
 #include "lib/ivis_common/ivisdef.h"
 #include "positiondef.h"
 
+/// max number of text strings or sequences for VIEWDATA
+static const unsigned int MAX_DATA = 4;
+
 typedef enum _message_type
 {
 	MSG_RESEARCH,		// Research message
@@ -46,8 +49,6 @@ typedef enum _view_type
 	VIEW_RPLX,			// full screen view sequence - flic.	extended format
 
 	VIEW_BEACON,			// Beacon message
-
-	VIEW_TYPES,
 } VIEW_TYPE;
 
 typedef enum _prox_type

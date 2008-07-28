@@ -41,9 +41,6 @@
 
 #include "multiplay.h"
 
-//max number of text strings or sequences for viewdata
-#define MAX_DATA		4
-
 //array of pointers for the view data
 static VIEWDATA_LIST		*apsViewData;
 
@@ -522,13 +519,12 @@ VIEWDATA *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 		psViewData->numText=(UBYTE)numText;
 
 		//allocate storage for the name
- 		psViewData->pName = malloc(strlen(name) + 1);
+		psViewData->pName = strdup(name);
 		if (psViewData->pName == NULL)
 		{
 			ASSERT(false, "Out of memory");
 			return NULL;
 		}
-		strcpy(psViewData->pName, name);
 		debug(LOG_MSG, "Loaded %s", psViewData->pName);
 
 		//allocate space for text strings
@@ -599,13 +595,12 @@ VIEWDATA *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 			if (strcmp(audioName, "0"))
 			{
 				//allocate space
-				psViewRes->pAudio = (char *) malloc(strlen(audioName) + 1);
+				psViewRes->pAudio = strdup(audioName);
 				if (psViewRes->pAudio == NULL)
 				{
 					ASSERT(false, "loadViewData - Out of memory");
 					return NULL;
 				}
-				strcpy(psViewRes->pAudio, audioName);
 			}
 			else
 			{
@@ -715,14 +710,12 @@ VIEWDATA *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 				if (strcmp(audioName, "0"))
 				{
 					//allocate space
-					psViewReplay->pSeqList[dataInc].pAudio = (char *) malloc(
-						strlen(audioName) + 1);
+					psViewReplay->pSeqList[dataInc].pAudio = strdup(audioName);
 					if (psViewReplay->pSeqList[dataInc].pAudio == NULL)
 					{
 						ASSERT(LOG_ERROR, "loadViewData - Out of memory");
 						return NULL;
 					}
-					strcpy(psViewReplay->pSeqList[dataInc].pAudio, audioName);
 				}
 				else
 				{
