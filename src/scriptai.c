@@ -1118,6 +1118,8 @@ static UDWORD scrDroidTargetMask(DROID *psDroid)
 		mask |= SCR_DT_HTRACK;
 		break;
 	case PROPULSION_TYPE_PROPELLOR:
+		mask |= SCR_DT_PROPELLOR;
+		break;
 	case PROPULSION_TYPE_SKI:
 	default:
 		ASSERT( false,

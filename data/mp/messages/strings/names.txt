@@ -333,6 +333,7 @@ CyborgLegs02				_("Cyborg Propulsion II")
 CyborgLegs03				_("Cyborg Propulsion III")
 //CyborgJets02				_("Cyborg Jump Pack II")
 //CyborgJets03				_("Cyborg Jump Pack III")
+Naval					_("Naval")
 
 /*BABARIAN PROPULSIONS*/
 BaBaProp				_("BaBaProp")

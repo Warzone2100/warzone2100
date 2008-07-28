@@ -19,3 +19,4 @@ CyborgLegs02,Level All,10,50,100,1,1,100,0,Legged,400,0
 CyborgLegs,Level All,10,50,100,1,1,50,0,Legged,400,0
 BaBaProp,Level All,0,15,10,1,5,1,0,Wheeled,200,0
 BaBaLegs,Level All,0,15,10,1,5,1,0,Legged,200,0
+Naval,Level All,150,150,300,1,1,300,PRLHOV1.PIE,Propellor,300,1
