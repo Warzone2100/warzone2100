@@ -11747,3 +11747,80 @@ BOOL scrGettext()
 
 	return stackPushResult(ST_TEXTSTRING, &scrFunctionResult);
 }
+
+BOOL scrGettext_noop()
+{
+	if (!stackPopParams(1, VAL_STRING, &strParam1))
+	{
+		return false;
+	}
+
+	scrFunctionResult.v.sval = gettext_noop(strParam1);
+
+	return stackPushResult(VAL_STRING, &scrFunctionResult);
+}
+
+BOOL scrPgettext()
+{
+	char* msg_ctxt_id;
+	char* translation;
+
+	if (!stackPopParams(2, VAL_STRING, &strParam1, VAL_STRING, &strParam2))
+	{
+		return false;
+	}
+
+	asprintf(&msg_ctxt_id, "%s%s%s", strParam1, GETTEXT_CONTEXT_GLUE, strParam2);
+	if (!msg_ctxt_id)
+	{
+		debug(LOG_ERROR, "Out of memory");
+		abort();
+		return false;
+	}
+
+#ifdef DEFAULT_TEXT_DOMAIN
+	translation = dcgettext(DEFAULT_TEXT_DOMAIN, msg_ctxt_id, LC_MESSAGES);
+#else
+	translation = dcgettext(NULL,                msg_ctxt_id, LC_MESSAGES);
+#endif
+
+	/* Due to the way dcgettext works a pointer comparison is enough, hence
+	 * the reason why we free() now.
+	 */
+	free(msg_ctxt_id);
+
+	if (translation == msg_ctxt_id)
+	{
+		scrFunctionResult.v.sval = strParam2;
+	}
+	else
+	{
+		scrFunctionResult.v.sval = translation;
+	}
+
+	return stackPushResult(ST_TEXTSTRING, &scrFunctionResult);
+}
+
+BOOL scrPgettext_expr()
+{
+	if (!stackPopParams(2, VAL_STRING, &strParam1, VAL_STRING, &strParam2))
+	{
+		return false;
+	}
+
+	scrFunctionResult.v.sval = (char*)pgettext_expr(strParam1, strParam2);
+
+	return stackPushResult(ST_TEXTSTRING, &scrFunctionResult);
+}
+
+BOOL scrPgettext_noop()
+{
+	if (!stackPopParams(2, VAL_STRING, &strParam1, VAL_STRING, &strParam2))
+	{
+		return false;
+	}
+
+	scrFunctionResult.v.sval = gettext_noop(strParam1);
+
+	return stackPushResult(VAL_STRING, &scrFunctionResult);
+}

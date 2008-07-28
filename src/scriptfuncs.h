@@ -657,6 +657,10 @@ extern BOOL scrWeaponFirePauseUpgrade(void);
 extern BOOL scrIsComponentAvailable(void);
 extern BOOL scrGetBodySize(void);
 extern BOOL scrGettext(void);
+extern BOOL scrGettext_noop(void);
+extern BOOL scrPgettext(void);
+extern BOOL scrPgettext_expr(void);
+extern BOOL scrPgettext_noop(void);
 
 
 extern BOOL beingResearchedByAlly(SDWORD resIndex, SDWORD player);

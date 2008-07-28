@@ -1467,6 +1467,30 @@ FUNC_SYMBOL asFuncTable[] =
 		1, { VAL_STRING },
 		false, 0, NULL, 0, 0, NULL, NULL },
 
+	{ "N_", scrGettext_noop, VAL_STRING,
+		1, { VAL_STRING },
+		false, 0, NULL, 0, 0, NULL, NULL },
+
+	{ "gettext_noop", scrGettext_noop, VAL_STRING,
+		1, { VAL_STRING },
+		false, 0, NULL, 0, 0, NULL, NULL },
+
+	{ "P_", scrPgettext, (INTERP_TYPE)ST_TEXTSTRING,
+		2, { VAL_STRING, VAL_STRING },
+		false, 0, NULL, 0, 0, NULL, NULL },
+
+	{ "pgettext", scrPgettext, (INTERP_TYPE)ST_TEXTSTRING,
+		2, { VAL_STRING, VAL_STRING },
+		false, 0, NULL, 0, 0, NULL, NULL },
+
+	{ "PE_", scrPgettext_expr, (INTERP_TYPE)ST_TEXTSTRING,
+		2, { VAL_STRING, VAL_STRING },
+		false, 0, NULL, 0, 0, NULL, NULL },
+
+	{ "NP_", scrPgettext_noop, VAL_STRING,
+		2, { VAL_STRING, VAL_STRING },
+		false, 0, NULL, 0, 0, NULL, NULL },
+
 	/* END new functions */
 
     /* This final entry marks the end of the function list */
