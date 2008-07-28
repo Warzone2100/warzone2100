@@ -1,6 +1,0 @@
-MSG1,1,RMG_MSG1,0,MICAPSUL.PIE,0,res_pow.rpl,Structure Research Completed.ogg,0000
-MSG2,1,RMG_MSG2,0,MICAPSUL.PIE,0,res_pow.rpl,Power Research Completed.ogg,0000
-MSG3,1,RMG_MSG3,0,MICAPSUL.PIE,0,res_pow.rpl,Computer Research Completed.ogg,0000
-MSG4,1,RMG_MSG4,0,MICAPSUL.PIE,0,res_pow.rpl,Droid Research Completed.ogg,0000
-MSG5,1,RMG_MSG5,0,MICAPSUL.PIE,0,res_pow.rpl,Systems Research Completed.ogg,0000
-MSG6,1,RMG_MSG6,0,MICAPSUL.PIE,0,res_pow.rpl,Weapon Research Completed.ogg,0000

@@ -3,16 +3,6 @@
 //16/12/98
 //NOTE:  Lines beginning // should not be translated.
 
-/* RESEARCH STRINGS */
-RMG_MSG1				_("Structure Research Completed")
-RMG_MSG2				_("Power Research Completed")
-RMG_MSG3				_("Computer Research Completed")
-RMG_MSG4				_("Unit Research Completed")
-RMG_MSG5				_("Systems Research Completed")
-RMG_MSG6				_("Weapon Research Completed")
-//RMG_MSG7				_("Cyborg Research Completed")
-//RMG_MSG8				_("Defensive Research Completed")
-
 /* COMPUTERS */
 //R-Comp-CommandTurret01		Command Turret
 RES_C_CT1_MSG1			_("New Systems Turret Available for Design")
@@ -340,10 +330,6 @@ RES_EMP_HvAM_MSG3			_("Assigned automatically to nearest sensor or CB tower")
 RES_EMP_HvAM_MSG4			_("Defensive Strength: Medium")
 
 //R-Defense-MortarPit			Mortar Pit
-RES_EMP_MPit_MSG1			_("New Defensive Structure Available")
-RES_EMP_MPit_MSG2			_("Armored Mortar battery pit")
-RES_EMP_MPit_MSG3			_("Assigned automatically to nearest sensor or CB tower")
-RES_EMP_MPit_MSG4			_("Defensive Strength: Medium")
 
 //R-Defense-Mortar-Incendiary	Incendiary Mortar Pit
 RES_EMP_IMP_MSG1			_("New Defensive Structure Available")
@@ -364,10 +350,6 @@ RES_EMP_RotMor_MSG3		_("Assigned automatically to nearest sensor or CB tower")
 RES_EMP_RotMor_MSG4		_("Defensive Strength: Medium")
 
 //R-Defense-MRL			Mini-Rocket Battery
-RES_EMP_MRL_MSG1			_("New Defensive Structure Available")
-RES_EMP_MRL_MSG2			_("Mini-rocket armored strongpoint")
-RES_EMP_MRL_MSG3			_("Assigned automatically to nearest sensor or CB tower")
-RES_EMP_MRL_MSG4			_("Defensive Strength: Medium")
 
 //R-Defense-Howitzer			Howitzer Emplacement
 RES_EMP_HOW_MSG1			_("New Defensive Structure Available")
@@ -540,10 +522,6 @@ RES_PB_ATR_MSG3			_("Automatically targets enemies within sensor range")
 RES_PB_ATR_MSG4			_("Defensive Strength: High")
 
 //R-Defense-WallTower01			Heavy Machinegun Hardpoint
-RES_DF_WT1_MSG1			_("New Defensive Structure Available")
-RES_DF_WT1_MSG2			_("Armored hardpoint with Heavy Machinegun")
-RES_DF_WT1_MSG3			_("Automatically targets enemies within sensor range")
-RES_DF_WT1_MSG4			_("Defensive Strength: High")
 
 //R-Defense-WallTower02			Light Cannon Hardpoint
 RES_WT2_LC_MSG1			_("New Defensive Structure Available")
@@ -570,10 +548,6 @@ RES_WT5_FL_MSG3			_("Automatically targets enemies within sensor range")
 RES_WT5_FL_MSG4			_("Defensive Strength: High")
 
 //R-Defense-WallTower06			Lancer Hardpoint
-RES_WT6_ATR_MSG1			_("New Defensive Structure Available")
-RES_WT6_ATR_MSG2			_("Armored hardpoint with Lancer AT missile")
-RES_WT6_ATR_MSG3			_("Automatically targets enemies within sensor range")
-RES_WT6_ATR_MSG4			_("Defensive Strength: High")
 
 //R-Defense-Wall-RotMg			Assault Gun Hardpoint
 RES_WT7_RMG_MSG1			_("New Defensive Structure Available")
@@ -840,10 +814,6 @@ RES_ST_VP4_MSG4			_("All rearming pads upgraded automatically")
 //RES_SY_SP1MK1_MSG4		_(" ")
 
 //R-Sys-Engineering01			Engineering
-RES_ENGIN1_MSG1			_("Research Breakthrough Improves Construction Rates")
-RES_ENGIN1_MSG2			_("Improved Engineering Techniques")
-RES_ENGIN1_MSG3			_("Increases construction speed")
-RES_ENGIN1_MSG4			_("All trucks upgraded automatically")
 
 //R-Sys-Engineering02			Improved Engineering
 RES_ENGIN2_MSG1			_("Research Breakthrough Improves Construction Rates")
@@ -906,10 +876,6 @@ RES_SY_SU1_MSG3			_("Extends Sensor Range")
 RES_SY_SU1_MSG4			_("All sensors upgraded automatically")
 
 //R-Sys-CBSensor-Turret01		CB Turret
-RES_SY_CBSTU1_MSG1		_("New Systems Turret Available for Design")
-RES_SY_CBSTU1_MSG2		_("Counter-battery turret detects enemy indirect fire batteries")
-RES_SY_CBSTU1_MSG3		_("Orders assigned indirect fire units to fire at the enemy batteries")
-RES_SY_CBSTU1_MSG4		_("Counter-battery fire continues until enemy battery is suppressed")
 
 //R-Sys-CBSensor-Tower01		CB Tower
 RES_SY_CBSTW1_MSG1		_("New Systems Tower Available")
@@ -918,10 +884,6 @@ RES_SY_CBSTW1_MSG3		_("Orders assigned indirect fire units to fire at the enemy 
 RES_SY_CBSTW1_MSG4		_("Counter-battery fire continues until enemy battery is suppressed")
 
 //R-Sys-CBSensor-Upgrade01		CB Sensor Upgrade
-RES_SY_CBSU1_MSG1			_("CB Sensor Improved")
-RES_SY_CBSU1_MSG2			_("New fire detection systems")
-RES_SY_CBSU1_MSG3			_("Extends CB Range")
-RES_SY_CBSU1_MSG4			_("All CB sensors upgraded automatically")
 
 //R-Sys-CBSensor-Upgrade02		CB Sensor Upgrade 2
 RES_SY_CBSU2_MSG1			_("CB Sensor Improved")
@@ -1423,10 +1385,6 @@ RES_W_CN6_T_A_MSG3			_("Best Targets: Vehicles")
 RES_W_CN6_T_A_MSG4			_("Body Points: High")
 
 //R-Wpn-Cannon-Accuracy01		Cannon Laser Rangefinder
-RES_W_CNAC1_MSG1			_("Cannon Upgrade")
-RES_W_CNAC1_MSG2			_("Determines range to target")
-RES_W_CNAC1_MSG3			_("Increases Cannon accuracy")
-RES_W_CNAC1_MSG4			_("All cannons upgraded automatically")
 
 //R-Wpn-Cannon-Accuracy02		Cannon Laser Designator
 RES_W_CNAC2_MSG1			_("Cannon Upgrade")
@@ -1441,10 +1399,6 @@ RES_W_CN_D1_MSG3			_("Increases Cannon damage")
 RES_W_CN_D1_MSG4			_("All cannons upgraded automatically")
 
 //R-Wpn-Cannon-Damage04		APFSDS Cannon Rounds
-RES_W_CN_D4_MSG1			_("Cannon Upgrade")
-RES_W_CN_D4_MSG2			_("Armor-Piercing Fin-Stabilized Discarding Sabot")
-RES_W_CN_D4_MSG3			_("Increases Cannon damage")
-RES_W_CN_D4_MSG4			_("All cannons upgraded automatically")
 
 //R-Wpn-Cannon-Damage07		HVAPFSDS Cannon Rounds
 RES_W_CN_D7_MSG1			_("Cannon Upgrade")
@@ -1453,10 +1407,6 @@ RES_W_CN_D7_MSG3			_("Increases Cannon damage")
 RES_W_CN_D7_MSG4			_("All cannons upgraded automatically")
 
 //R-Wpn-Cannon-ROF01			Cannon Auto-Loader
-RES_W_CN_ROF1_MSG1		_("Cannon Upgrade")
-RES_W_CN_ROF1_MSG2		_("Automatic loading mechanism replaces manual loader")
-RES_W_CN_ROF1_MSG3		_("Increases Cannon ROF")
-RES_W_CN_ROF1_MSG4		_("All cannons upgraded automatically")
 
 //R-Wpn-Cannon-ROF04			Cannon Rapid Loader
 RES_W_CN_ROF4_MSG1		_("Cannon Upgrade")
@@ -1495,10 +1445,6 @@ RES_W_FL_D4_MSG3			_("Increases Flamer damage")
 RES_W_FL_D4_MSG4			_("All flamers upgraded automatically")
 
 //R-Wpn-Flamer-ROF01			Flamer Autoloader
-RES_W_FL_ROF1_MSG1		_("Flamer Upgrade")
-RES_W_FL_ROF1_MSG2		_("Automatic loading mechanism replaces manual loader")
-RES_W_FL_ROF1_MSG3		_("Increases Flamer ROF")
-RES_W_FL_ROF1_MSG4		_("All flamers upgraded automatically")
 
 //R-Wpn-HowitzerMk1			Howitzer
 RES_W_HMK1_MSG1			_("New Indirect Fire Weapon Available")
@@ -1615,10 +1561,6 @@ RES_MG2MK1_MSG3			_("Best Targets: Infantry, base structures, wheeled vehicles")
 RES_MG2MK1_MSG4			_("Body Points: Low")
 
 //R-Wpn-MG3Mk1			Heavy Machinegun
-RES_MG3MK1_MSG1			_("New Weapon Turret Available")
-RES_MG3MK1_MSG2			_(".50-calibre heavy machinegun")
-RES_MG3MK1_MSG3			_("Best Targets: Infantry, base structures, wheeled vehicles")
-RES_MG3MK1_MSG4			_("Body Points: Medium")
 
 //R-Wpn-MG4				Assault Gun
 RES_MG4_MSG1			_("New Weapon Turret Available")
@@ -1663,10 +1605,6 @@ RES_W_MG_D10_MSG3			_("Increases Machinegun damage")
 RES_W_MG_D10_MSG4			_("All machineguns upgraded automatically")
 
 //R-Wpn-MG-ROF01			Chaingun Upgrade
-RES_W_MG_ROF1_MSG1		_("Machinegun Upgrade")
-RES_W_MG_ROF1_MSG2		_("Chaingun mechanism replaces belt-feed")
-RES_W_MG_ROF1_MSG3		_("Increases Machinegun ROF")
-RES_W_MG_ROF1_MSG4		_("All machineguns upgraded automatically")
 
 //R-Wpn-MG-ROF02			Rapid Fire Chaingun
 RES_W_MG_ROF2_MSG1		_("Machinegun Upgrade")
@@ -1753,10 +1691,6 @@ RES_MORTA1_MSG3			_("Best Targets: Base structures, infantry, wheeled vehicles")
 RES_MORTA1_MSG4			_("Body Points: Very Low")
 
 //R-Wpn-Mortar02Hvy			Heavy Mortar - Bombard
-RES_W_M2_MSG1			_("New Indirect Fire Weapon Available")
-RES_W_M2_MSG2			_("May be assigned to a sensor")
-RES_W_M2_MSG3			_("Best Targets: Base structures, infantry, wheeled vehicles")
-RES_W_M2_MSG4			_("Body Points: Very Low")
 
 //R-Wpn-Mortar3				Rotary Mortar - Pepperpot
 RES_W_M3_MSG1			_("New Indirect Fire Weapon Available")
@@ -1771,10 +1705,6 @@ RES_IMORT_MSG3			_("Best Targets: Base structures, infantry, wheeled vehicles")
 RES_IMORT_MSG4			_("Body Points: Very Low")
 
 //R-Wpn-Mortar-Acc01			Mortar Targeting Computer
-RES_W_M_AC1_MSG1			_("Mortar Upgrade")
-RES_W_M_AC1_MSG2			_("Targeting systems compensate for distance and weather conditions")
-RES_W_M_AC1_MSG3			_("Increases Mortar accuracy")
-RES_W_M_AC1_MSG4			_("All mortars upgraded automatically")
 
 //R-Wpn-Mortar-Acc02			Thermal Imaging Mortar Shells
 RES_W_M_AC2_MSG1			_("Mortar Upgrade")
@@ -1801,10 +1731,6 @@ RES_W_M_D4_MSG3			_("Increases Mortar damage")
 RES_W_M_D4_MSG4			_("All mortars upgraded automatically")
 
 //R-Wpn-Mortar-ROF01			Mortar Autoloader
-RES_W_M_ROF1_MSG1			_("Mortar Upgrade")
-RES_W_M_ROF1_MSG2			_("Automatic loader replaces manual feed")
-RES_W_M_ROF1_MSG3			_("Increases Mortar ROF")
-RES_W_M_ROF1_MSG4			_("All mortars upgraded automatically")
 
 //R-Wpn-Mortar-ROF04			Mortar Fast Loader
 RES_W_M_ROF4_MSG1			_("Mortar Upgrade")
@@ -1855,10 +1781,6 @@ RES_W_RK_LTAT1_MSG3		_("Best Targets: Vehicles")
 RES_W_RK_LTAT1_MSG4		_("Body Points: Very Low")
 
 //R-Wpn-Rocket02-MRL			Mini-Rocket Artillery
-RES_W_RK_MRL1_MSG1		_("New Rocket Available")
-RES_W_RK_MRL1_MSG2		_("Fires salvoes of mini-rockets")
-RES_W_RK_MRL1_MSG3		_("Best Targets: Base structures")
-RES_W_RK_MRL1_MSG4		_("Body Points: Very Low")
 
 //R-Wpn-Rocket03-HvAT			Bunker Buster Rocket
 RES_W_RK_HVAT1_MSG1		_("New Rocket Available")
@@ -1873,16 +1795,8 @@ RES_W_RK_MP1_MSG3			_("Best Targets: Wheeled and hover vehicles")
 RES_W_RK_MP1_MSG4			_("Body Points: Very Low")
 
 //R-Wpn-Rocket06-IDF			Ripple Rockets
-RES_W_RK_IDF_MSG1			_("New Rocket Available")
-RES_W_RK_IDF_MSG2			_("Rocket artillery; can be assigned to a sensor")
-RES_W_RK_IDF_MSG3			_("Best Targets: Vehicles and Emplacements")
-RES_W_RK_IDF_MSG4			_("Body Points: Very Low")
 
 //R-Wpn-Rocket07-Tank-Killer		Tank Killer Rocket
-RES_W_RK_HvAT_MSG1		_("New Rocket Available")
-RES_W_RK_HvAT_MSG2		_("Heavy anti-tank rocket")
-RES_W_RK_HvAT_MSG3		_("Best Targets: Vehicles")
-RES_W_RK_HvAT_MSG4		_("Body Points: Very Low")
 
 //R-Wpn-Rocket-Accuracy01		Stabilized Mini-Rockets
 RES_W_RK_AC1_MSG1			_("Mini-Rocket Upgrade")
@@ -1921,10 +1835,6 @@ RES_W_SRK_AC1_MSG3		_("Increases Rocket accuracy")
 RES_W_SRK_AC1_MSG4		_("All rockets upgraded automatically")
 
 //R-Wpn-RocketSlow-Accuracy02		Rocket Laser Designator
-RES_W_SRK_AC2_MSG1		_("Rocket Upgrade")
-RES_W_SRK_AC2_MSG2		_("Rocket tracks the laser designator to the target")
-RES_W_SRK_AC2_MSG3		_("Increases Rocket accuracy")
-RES_W_SRK_AC2_MSG4		_("All rockets upgraded automatically")
 
 //R-Wpn-RocketSlow-Accuracy03		Thermal Imaging Rockets
 RES_W_SRK_AC3_MSG1		_("Rocket Upgrade")
@@ -1945,10 +1855,6 @@ RES_W_SRK_D4_MSG3			_("Increases Rocket damage")
 RES_W_SRK_D4_MSG4			_("All rockets upgraded automatically")
 
 //R-Wpn-RocketSlow-ROF01		Rocket Autoloader
-RES_W_SRK_ROF1_MSG1		_("Rocket Upgrade")
-RES_W_SRK_ROF1_MSG2		_("Autoloader increases reload rate")
-RES_W_SRK_ROF1_MSG3		_("Increases Rocket ROF")
-RES_W_SRK_ROF1_MSG4		_("All rockets upgraded automatically")
 
 //R-Wpn-TUTMG			Machine Gun Artifact
 
