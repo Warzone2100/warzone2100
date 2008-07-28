@@ -47,7 +47,6 @@ public		INTMESSAGE		LZ_MSG;
 public		SOUND			LZSnd;
 public		INTMESSAGE		obj1;
 public		TEXTSTRING		RetLZMsg;
-public		TEXTSTRING		ReinforceMsg;
 public		SOUND			ReinforceSnd;
 public		INT			ReinforceTime;
 public		SOUND			LZComp, LZClear;

@@ -41,7 +41,6 @@ public		INTMESSAGE		LZ_MSG;
 public		SOUND			LZSnd;
 public		INTMESSAGE		obj1;
 public		TEXTSTRING		RetLZMsg;
-public		TEXTSTRING		ReinforceMsg;
 public		SOUND			ReinforceSnd;
 public		INT			ReinforceTime;
 public		SOUND			LZComp, LZClear;
@@ -610,7 +609,7 @@ event reachedLZEvnt(inactive)	//check player has at least one droid in LZ, befor
 	setMissionTime(timeLimit);
 //allow reinforce function to go here
 	setReinforcementTime(ReinforceTime);
-	//addConsoleText(ReinforceMsg, player);
+	//addConsoleText(_("Reinforcements are now available"), player);
 	setEventTrigger(reachedLZEvnt, inactive);
 //set enemy factories producing!!!
 	setEventTrigger(enm1aFactEvnt, enm1aFactTrig);

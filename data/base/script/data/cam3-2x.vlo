@@ -42,7 +42,6 @@ incomingSnd	SOUND		"pcv456.ogg"
 
 badSnd		SOUND		"pcv622.ogg"	//"Objective destroyed"
 ReinforceTime	INT		1800	// (3 minute) number of seconds*10 for transport, -1 for no reinforcements
-reinf_msg	TEXTSTRING	"REINFORCE_MSG"
 
 }
 

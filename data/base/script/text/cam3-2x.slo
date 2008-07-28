@@ -12,7 +12,6 @@ public		int		RegionsX1[2], RegionsY1[2], RegionsX2[2], RegionsY2[2];
 public		INTMESSAGE	MissionBrief1, MissionBrief2; 
 public		SOUND		incomingSnd, badSnd;
 public		INT		ReinforceTime, numDroids, power;
-public		TEXTSTRING	reinf_msg;
 public		DROID		droids[13];
 
 private		int		count, newColour, oldColour, temp;
@@ -116,7 +115,7 @@ event brief2(inactive)
 
 	//allow reinforcements + console message (need audio too!)
 	setReinforcementTime(ReinforceTime);
-	showConsoleText(reinf_msg, player);
+	showConsoleText(_("Reinforcements are now available"), player);
 	setEventTrigger(clearMessage, clearMessageTrig);
 
 	//allow checks for team alpha dead

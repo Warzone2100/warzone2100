@@ -127,7 +127,6 @@ linkVictory	BOOL		TRUE
 fail	[0]	int		0	//DROID # index all got to REGION (no longer a group #)
 fail	[1]	int		10	//REGION index for above (these count as one condition!)
 failSnd	SOUND		"pcv632.ogg"	//"Enemy Escaping" played for failure
-failMsg	TEXTSTRING	"ADD_MSG20"	//"Enemy Escaping" TEXT for failure
 
 /* might use these later if necessary
 fail	[2]	int		-1	//only Player UNITS need to be killed to lose

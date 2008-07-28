@@ -30,7 +30,6 @@ public		int		entryX, entryY, exitX, exitY;
 
 public		TEMPLATE	transporter;	//required for enemy transports landing
 public		SOUND		warnSnd;
-public		TEXTSTRING	badMsg;
 private		DROID		transportDroid, loadDroid;
 private		TEMPLATE	reinforceTemplate;
 private		BOOL		transFlag;	//has transport been triggered?
@@ -912,7 +911,7 @@ event groupTrans(CALL_TRANSPORTER_LANDED, Recovery1, enemy2)
 	}
 	//playSound(warnSnd, player);
 	playSoundPos(warnSnd, player, 1728, 1472, 0);
-	showConsoleText(badMsg, player);	//text version
+	showConsoleText(_("Enemy Escaping"), player);	//text version
 	pause(10);
 }
 

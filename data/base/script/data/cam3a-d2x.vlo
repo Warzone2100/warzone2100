@@ -9,7 +9,6 @@ run
 player		int		0
 enemy		int		3
 
-failed_msg	TEXTSTRING	"ADD_MSG11"	//objective destroyed
 capRange	int		512		//radius that needs to be clear of enemy structures before capturable
 lasSat		WEAPON		"LasSat"	//lassat weapon to be fired
 testStat	STRUCTURESTAT	"UplinkCentre"	//increased size so misses better	//"A0HardcreteMk1Wall"	//used to 'miss' (test if can build this = empty tile)

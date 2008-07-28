@@ -13,7 +13,6 @@
 /* ********************	*/
 
 public		int		player, enemy, capRange;
-public		TEXTSTRING	failed_msg;
 public		WEAPON		lasSat;
 private		STRUCTURE	silo[3];				//Missile silo object
 public		STRUCTURESTAT	testStat, siloStat;
@@ -107,7 +106,7 @@ event captureDeadEvnt(inactive)
 	setEventTrigger(resDone, inactive);
 	setEventTrigger(missileLaunch, inactive);
 //need to play audio if possible
-	addConsoleText(failed_msg, player);
+	addConsoleText(_("Objective Destroyed"), player);
 	playSound(failedSnd, player);
 	pause(20);
 	extraFailFlag = TRUE;

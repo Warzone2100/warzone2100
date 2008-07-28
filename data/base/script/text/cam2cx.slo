@@ -19,7 +19,6 @@ private		DROID		droid;
 //transport stuff
 public		TEMPLATE	transporter;	//required for enemy transports landing
 public		SOUND		warnSnd, rescueSnd, badSnd;
-public		TEXTSTRING	badMsg;
 private		DROID		transportDroid;
 private		BOOL		transFlag;	//is transport on map?
 //rescue struff
@@ -268,7 +267,7 @@ event checkExtra(every, 66)	//may want to wait until all the groups dead or at e
 	if (capturedCivs > escCivs)		//player loses if The Collective transport > 1/2 civilians!
 	{
 		playSound(badSnd, player);	//"enemy escaping"
-		addConsoleText(badMsg, player);	//text version
+		addConsoleText(_("Enemy Escaping"), player);	//text version
 		extraFailFlag = TRUE;
 		setEventTrigger(checkExtra, inactive);
 	}

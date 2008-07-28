@@ -142,7 +142,6 @@ victory[7]	int		-1	//# of EXTRA defences to build in REGION
 fail	[0]	int		0	//droid # index all got to REGION
 fail	[1]	int		4	//2	//REGION index for above (these count as one condition!)
 failSnd	SOUND		"pcv632.ogg"	//"Enemy Escaping" played for failure
-failMsg	TEXTSTRING	"ADD_MSG20"	//"Enemy Escaping" TEXT for failure
 /* might use these later if necessary
 fail	[2]	int		-1	//only Player UNITS need to be killed to lose
 fail	[3]	int		-1	//only Player STRUCTURES need to be killed to lose

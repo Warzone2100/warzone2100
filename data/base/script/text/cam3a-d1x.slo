@@ -14,7 +14,6 @@
 
 public		int		player, enemy, capRange;
 public		STRUCTURE	silo[3];				//Missile silo object
-public		TEXTSTRING	failed_msg, captured_msg;
 public		WEAPON		lasSat;
 public		STRUCTURESTAT	testStat;
 public		SOUND		capturedSnd, warnSatSnd, failedSnd;
@@ -97,7 +96,7 @@ event captureDeadEvnt(captureDeadTrig)
 //don't allow win
 	setEventTrigger(captureEvnt, inactive);
 //need to play audio if possible
-	addConsoleText(failed_msg, player);
+	addConsoleText(_("Objective Destroyed"), player);
 	playSound(failedSnd, player);
 	pause(20);
 	extraFailFlag = TRUE;
@@ -127,7 +126,7 @@ event captureEvnt(captureTrig)
 
 		//need to play Audio if possible?
 		playSound(capturedSnd, player);
-		showConsoleText(captured_msg, player);
+		showConsoleText(_("Objective Captured"), player);
 		pause(20);
 		extraVictoryFlag = TRUE;
 		setEventTrigger(captureEvnt, inactive);

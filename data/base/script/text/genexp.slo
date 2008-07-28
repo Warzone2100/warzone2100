@@ -62,7 +62,6 @@ public		BOOL		linkVictory, linkFail;	//extra victories checked in other scripts
 /* Failure Conditions */
 public		int		fail[2];
 public		SOUND		failSnd;
-public		TEXTSTRING	failMsg;
 
 /* Time Limit */
 public		BOOL		noTimeLimit;	//false = time limit fail OK, True = don't use time limit as fail
@@ -853,7 +852,7 @@ event lostYetEvnt(inactive)	//triggered on (every, 25) now, set at end of start 
 				(droids[fail[0]].y > regionsY1[fail[1]]) and (droids[fail[0]].y < regionsY2[fail[1]]))
 			{
 				playSound(failSnd, player);	//let player know!
-				addConsoleText(failMsg, player);	//text version
+				addConsoleText(_("Enemy Escaping"), player);	//text version
 				temp2 = 1;
 			}
 		}

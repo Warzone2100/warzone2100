@@ -40,7 +40,6 @@ LZ_MSG		INTMESSAGE	"C1-5_LZ"
 obj1		INTMESSAGE	"C1-5_OBJ1"
 LZSnd		SOUND		"pcv427.ogg"
 RetLZMsg	TEXTSTRING	"LZ_MSG2"
-ReinforceMsg	TEXTSTRING	"REINFORCE_MSG"
 ReinforceSnd	SOUND		"pcv440.ogg"
 ReinforceTime	INT		1800	//number of seconds*10 for transport, -1 for no reinforcements
 LZComp		SOUND		"pcv445.ogg"

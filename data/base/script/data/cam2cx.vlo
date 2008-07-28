@@ -37,7 +37,6 @@ transporter	TEMPLATE	"Transporter"	//for enemy transports
 warnSnd		SOUND		"pcv395.ogg"
 rescueSnd		SOUND		"pcv612.ogg"	//"Civilian Rescued"
 badSnd			SOUND		"pcv632.ogg"	//"Enemy escaping"
-badMsg		TEXTSTRING	"ADD_MSG20"		//Text "Enemy escaping"
 
 LZX		int		6464
 LZY		int		10816

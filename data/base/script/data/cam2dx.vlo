@@ -9,8 +9,6 @@ player		int		0
 enemy		int		2
 uplinkPlayer	int		1
 uplink		STRUCTURE	3223
-failed_msg	TEXTSTRING	"ADD_MSG11"	//objective destroyed
-captured_msg	TEXTSTRING	"ADD_MSG10"	//objective captured
 capRange	int		512		//radius that needs to be clear of enemy structures before capturable
 
 goodSnd		SOUND		"pcv621.ogg"	//"Objective captured"
