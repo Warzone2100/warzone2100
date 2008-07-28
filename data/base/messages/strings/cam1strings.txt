@@ -1,7 +1,5 @@
 /* Campaign 1 Mission Briefing text */
 
-CAM1FULL_MSG1			_("Campaign One Full Version Test Message")
-
 CAM1_MSG1			_("OBJECTIVE: Locate and recover neural synapse technology")
 CAM1_MSG2			_("Establish a base, then search for a Pre-Collapse structure.")
 CAM1_MSG3			_("This structure contains technology vital for the success of the Project.")
@@ -62,7 +60,6 @@ CAM1D_MSG3			_("This is our chance to defeat the New Paradigm and destroy their 
 
 /* New Paradigm - incoming transmission */
 NP_MSG2				_(" ")
-NP_MSG3				_("New Paradigm Transmission")
 
 /* Cam 1B Player Ident Congrats */
 P1B_MSG1			_("ALPHA BASE MISSION: Power Surge Detected") 
@@ -113,11 +110,6 @@ SUP_MSG2			_("The synaptic link technology was at this location but was removed.
 /*SUP_MSG2			_("The synaptic link technology was present at this structure.")*/
 SUP_MSG3			_("Establish a forward base then continue the search for the synaptic link.")
 
-/* Map1ca Player ident - forward base */
-CAM1CA_MSG4			_("ALPHA BASE MISSION: Establish a Forward Base")
-CAM1CA_MSG5			_("The New Paradigm have been driven from this zone.")
-CAM1CA_MSG6			_("Establish a forward base near the site of the Research Centre.")
-
 /* Submap1_4 Player ident */
 SUB1_4A_MSG4			_("INCOMING TRANSMISSION")
 SUB1_4A_MSG5			_("Decoding in progress.....")
@@ -133,7 +125,6 @@ SUB1_4B_MSG5			_("Assemble an attack force and board the transport.")
 SUB1_4B_MSG6			_("Destroy the base and recover any artifacts present.")
 
 /* Map1a-c - Player Ident */
-CAM1A-C_MSG4			_(" ")
 CAM1A-C_MSG5			_("The synaptic link technology has been recovered!")
 CAM1A-C_MSG6			_("Initial research confirms it will be of great benefit to the Project.")
 
@@ -144,20 +135,6 @@ SUB1_8_MSG5			_("We will send further updates as they arrive.")
 /* Cam1d Player ident */
 CAM1D_MSG4			_("This transmission was intercepted a few minutes ago.")
 CAM1D_MSG5			_("It originates from the east.")
-
-/* Cam1 outro part 1 - player ident */
-CAM1_OUT_MSG			_("Commander")
-CAM1_OUT_MSG2			_("Congratulations on defeating the New Paradigm.")
-CAM1_OUT_MSG3			_("This sector is now secure.")
-
-/* Cam1 outro part 3 player ident2 */
-CAM1_OUT_MSG4			_(" ")
-CAM1_OUT_MSG5			_("When we failed to respond it became threatening.")
-
-/* Cam1 outro part 5 player ident3 */
-CAM1_OUT_MSG6			_("Nexus removed itself leaving no trace")
-CAM1_OUT_MSG7			_("The Nexus Intruder Program has links with the Reed corporation.")
-CAM1_OUT_MSG8			_("Nexus has technology and weapons and is not friendly.")
 
 /* Cam1b2 power generator */
 CAM1_B2_MSG			_("POWER MODULE ARTIFACT")

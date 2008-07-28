@@ -38,11 +38,6 @@ CAM2_B_MSG1			_("BETA BASE MISSION: Hold at all costs")
 CAM2_B_MSG2			_("We are detecting coded bitstream signals from the Collective.")
 CAM2_B_MSG3			_("Decoding...")
 
-/* Cam2_B - Hold at all costs - collective */
-CAM2_B_MSG4			_("Warriors of the Collective...")
-CAM2_B_MSG5			_("Destroy and kill all who resist the Machine.")
-CAM2_B_MSG6			_("Attack!")
-
 /* Cam2_B - Hold at all costs - briefing*/
 CAM2_B_MSG7			_("BETA BASE MISSION: Hold At All Costs")
 CAM2_B_MSG8			_("We are detecting ground and aerial forces from the north.")
@@ -106,11 +101,6 @@ CAM2_5_MSG3			_("They must be stopped.")
 CAM2_5_MSG4			_("TRANSPORT MISSION: Destroy Reactor")
 CAM2_5_MSG5			_("Proceed from the LZ to the reactor and destroy it.")
 CAM2_5_MSG6			_("Do not allow the Collective to bring the reactor on-line.")
-
-/* Cam2DI Capture NASDA central - player ident */
-CAM2_DI_MSG			_("BETA BASE MISSION: Capture NASDA Central")
-CAM2_DI_MSG1			_("Analysis of the reactor site indicates The Collective")
-CAM2_DI_MSG2			_("were preparing to route its power to this location.")
 
 /* Cam2DI Capture NASDA central - briefing */
 CAM2_DI_MSG3			_("BETA BASE MISSION: Capture NASDA Central")

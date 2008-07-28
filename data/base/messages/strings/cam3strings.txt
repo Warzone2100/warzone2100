@@ -1,7 +1,5 @@
 /* Campaign 3 Mission Briefing text */
 
-DELETE_MSG	_("Argle Bargle - Please Remove when some text here!")
-
 /* Cam3 Intro - player ident */
 CAM3_MSG1		_("TRANSPORT MISSION: Northern Sector")
 CAM3_MSG2		_("Congratulations on your successful evacuation of Beta Base.")
@@ -119,11 +117,6 @@ CAM3_C_MSG11		_("Elements of Team Gamma have contacted us.")
 CAM3_C_MSG12		_("They claim to be free of NEXUS, and offer their base as a site of operations.")
 CAM3_C_MSG13		_("Base coordinates download in progress.")
 
-/* Cam3_C - Beta team #2 Meets up with team Gamma - mission brief */
-CAM3_C_MSG14		_("Proceed with caution. Scout and confirm Gamma are not contaminated.")
-CAM3_C_MSG15		_("Secure this zone.")
-CAM3_C_MSG16		_("A relief force will be sent as soon as the zone is cleared of all enemy.")
-
 /* Cam3A-D1 - Fire from the skies - player ident */
 CAM3A_D1_MSG1		_("NORTHERN SECTOR MISSION: Laser Satellites")
 CAM3A_D1_MSG2		_("We are detecting strong energy surges from orbit.")
@@ -194,7 +187,6 @@ CAM3_4_MSG4		_("We are certain that NEXUS's core systems are located here.")
 /* Cam3_4 Attack NEXUS Final Base - mission briefing */
 CAM3_4_MSG5		_("Establish an LZ.")
 CAM3_4_MSG6		_("Begin your attacks on NEXUS. You must destroy his core systems.")
-CAM3_4_MSG7		_("Be wary of attempts by NEXUS to control and infiltrate your systems.")
 
 /* Cam3_1A Launch Site Coordinates - incoming intelligence report... Team Gamma */
 CAM3_1A_MSG		_("Incoming intelligence report... Team Gamma")

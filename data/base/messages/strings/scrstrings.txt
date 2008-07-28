@@ -1,9 +1,3 @@
-/*some strings used in scripts - are these required?*/
-CAM1B_RPL			"cam1b.rpl"
-PLAYER_RPL			"cam1c.rpl"
-INGAME_WAV			"Smack My Fish Up-44hz St.ogg"
-TUTORIAL_WAV			"zone-1 demo song.ogg"
-
 //these ones are definitely required!
 //video and text sequences for end campaign
 CAM1_END_RPL			"cam1/c001end.rpl"
