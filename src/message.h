@@ -62,8 +62,12 @@ extern void freeMessages(void);
 /** Removes all the proximity displays. */
 extern void releaseAllProxDisp(void);
 
+extern bool addToViewDataList(VIEWDATA* psViewData, unsigned int numData);
+
 /** Load the view data for the messages from the file exported from the world editor. */
 extern VIEWDATA* loadViewData(const char *pViewMsgData, UDWORD bufferSize);
+
+extern VIEWDATA* loadResearchViewData(const char* fileName);
 
 /** Get the view data that contains the text message pointer passed in. */
 extern VIEWDATA* getViewData(const char *pTextMsg);

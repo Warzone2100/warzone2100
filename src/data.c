@@ -653,6 +653,19 @@ static BOOL bufferSMSGLoad(const char *pBuffer, UDWORD size, void **ppData)
 	return true;
 }
 
+/* Load research message viewdata */
+static BOOL dataResearchMsgLoad(const char* fileName, void** ppData)
+{
+	VIEWDATA* pViewData = loadResearchViewData(fileName);
+	if (!pViewData)
+	{
+		return false;
+	}
+
+	// set the pointer so the release function gets called with it
+	*ppData = pViewData;
+	return true;
+}
 
 // release the message viewdata
 static void dataSMSGRelease(void *pData)
@@ -1041,6 +1054,7 @@ static const RES_TYPE_MIN_FILE FileResourceTypes[] =
 	{"SCRIPT", dataScriptLoad, dataScriptRelease},
 	{"SCRIPTVAL", dataScriptLoadVals, NULL},
 	{"STR_RES", dataStrResLoad, dataStrResRelease},
+	{ "RESEARCHMSG", dataResearchMsgLoad, dataSMSGRelease },
 };
 
 typedef struct

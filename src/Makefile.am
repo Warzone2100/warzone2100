@@ -14,8 +14,12 @@ AM_CPPFLAGS = -DYY_NO_INPUT $(SDL_CFLAGS) $(SDL_NET_CFLAGS) $(PHYSFS_CFLAGS) $(P
 AM_CFLAGS = $(WZ_CFLAGS)
 AM_LFLAGS = $(FLEX_FLAGS)
 AM_YFLAGS = -d
-BUILT_SOURCES = level_lexer.lex.c scriptvals_lexer.lex.c scriptvals_parser.tab.c scriptvals_parser.tab.h stats-db2.h
-CLEANFILES = level_lexer.lex.c scriptvals_lexer.lex.c scriptvals_parser.tab.c scriptvals_parser.tab.h
+BUILT_SOURCES = level_lexer.lex.c message_lexer.lex.c message_parser.tab.c
+	message_parser.tab.h scriptvals_lexer.lex.c scriptvals_parser.tab.c \
+	scriptvals_parser.tab.h stats-db2.h
+CLEANFILES = level_lexer.lex.c message_lexer.lex.c message_parser.tab.c \
+	message_parser.tab.h scriptvals_lexer.lex.c scriptvals_parser.tab.c \
+	scriptvals_parser.tab.h
 
 bin_PROGRAMS = warzone2100
 noinst_HEADERS = action.h advvis.h ai.h aiexperience.h anim_id.h \
@@ -29,7 +33,8 @@ noinst_HEADERS = action.h advvis.h ai.h aiexperience.h anim_id.h \
 	gatewaydef.h geometry.h group.h hci.h ingameop.h init.h intdisplay.h \
 	intelmap.h intfac.h intimage.h intorder.h keybind.h keyedit.h keymap.h levelint.h \
 	levels.h lighting.h loadsave.h loop.h map.h mapdisplay.h mapgrid.h mechanics.h \
-	message.h messagedef.h miscimd.h mission.h missiondef.h move.h movedef.h \
+	message.h messagedef.h messagely.h message_parser.tab.h miscimd.h \
+	mission.h missiondef.h move.h movedef.h \
 	multigifts.h multiint.h multijoin.h multilimit.h multimenu.h multiplay.h multirecv.h \
 	multistat.h objectdef.h objects.h objmem.h oprint.h parsetest.h positiondef.h order.h \
 	orderdef.h power.h projectile.h radar.h raycast.h research.h \
@@ -45,7 +50,8 @@ warzone2100_SOURCES = scriptvals_parser.tab.c scriptvals_lexer.lex.c \
 	edit3d.c effects.c environ.c fpath.c feature.c formation.c frontend.c \
 	gateway.c geometry.c group.c hci.c init.c \
 	intdisplay.c intimage.c intorder.c intelmap.c keybind.c keymap.c levels.c lighting.c \
-	loop.c main.c map.c mapdisplay.c mapgrid.c mechanics.c message.c miscimd.c \
+	loop.c main.c map.c mapdisplay.c mapgrid.c mechanics.c message.c \
+	message_lexer.lex.c message_parser.tab.c miscimd.c \
 	move.c multiint.c multimenu.c multiopt.c multisync.c multibot.c multistat.c \
 	objmem.c objects.c order.c parsetest.c radar.c \
 	raycast.c research.c scores.c scriptai.c scriptcb.c scriptextern.c scriptfuncs.c \

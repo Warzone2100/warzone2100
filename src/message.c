@@ -28,6 +28,7 @@
 #include "lib/framework/frame.h"
 #include "lib/framework/strres.h"
 #include "lib/framework/frameresource.h"
+#include "lib/framework/lexer_input.h"
 #include "message.h"
 #include "stats.h"
 #include "text.h"
@@ -38,6 +39,8 @@
 #include "lib/ivis_common/piedef.h"
 #include "objmem.h"
 #include "map.h"
+#include "message_parser.tab.h"
+#include "messagely.h"
 
 #include "multiplay.h"
 
@@ -63,7 +66,6 @@ iIMDShape	*pProximityMsgIMD;
 static void addProximityDisplay(MESSAGE *psMessage, BOOL proxPos, UDWORD player);
 static void removeProxDisp(MESSAGE *psMessage, UDWORD player);
 static void checkMessages(MSG_VIEWDATA *psViewData);
-
 
 /* Creating a new message
  * new is a pointer to a pointer to the new message
@@ -442,7 +444,7 @@ BOOL initMessage(void)
 	return true;
 }
 
-static BOOL addToViewDataList(VIEWDATA *psViewData, UBYTE numData)
+bool addToViewDataList(VIEWDATA* psViewData, unsigned int numData)
 {
 	VIEWDATA_LIST		*psAdd = (VIEWDATA_LIST*)malloc(sizeof(VIEWDATA_LIST));
 
@@ -590,7 +592,7 @@ VIEWDATA *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 			{
 				psViewRes->pIMD2 = NULL;
 			}
-			strcpy(psViewRes->sequenceName, string);
+			sstrcpy(psViewRes->sequenceName, string);
 			//get the audio text string
 			if (strcmp(audioName, "0"))
 			{
@@ -803,6 +805,29 @@ VIEWDATA *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 	}
 
 	return pData;
+}
+
+VIEWDATA* loadResearchViewData(const char* fileName)
+{
+	bool retval;
+	lexerinput_t input;
+	VIEWDATA* psViewData;
+
+	input.type = LEXINPUT_PHYSFS;
+	input.input.physfsfile = PHYSFS_openRead(fileName);
+	if (!input.input.physfsfile)
+	{
+		debug(LOG_ERROR, "PHYSFS_openRead(\"%s\") failed with error: %s\n", fileName, PHYSFS_getLastError());
+		return NULL;
+	}
+
+	message_set_extra(&input);
+	retval = (message_parse(&psViewData) == 0);
+
+	message_lex_destroy();
+	PHYSFS_close(input.input.physfsfile);
+
+	return retval ? psViewData : NULL;
 }
 
 /*get the view data identified by the name */

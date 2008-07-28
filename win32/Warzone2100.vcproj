@@ -461,6 +461,14 @@
 					>
 				</File>
 				<File
+					RelativePath="..\src\message_lexer.lex.c"
+					>
+				</File>
+				<File
+					RelativePath="..\src\message_parser.tab.c"
+					>
+				</File>
+				<File
 					RelativePath="..\src\miscimd.c"
 					>
 				</File>
@@ -952,6 +960,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\src\messagely.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\message_parser.tab.h"
+				>
+			</File>
+			<File
 				RelativePath="..\src\messagedef.h"
 				>
 			</File>
@@ -1223,6 +1239,14 @@
 			>
 			<File
 				RelativePath="..\src\level_lexer.l"
+				>
+			</File>
+			<File
+				RelativePath="..\src\message_lexer.l"
+				>
+			</File>
+			<File
+				RelativePath="..\src\message_parser.y"
 				>
 			</File>
 			<File

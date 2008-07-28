@@ -49,6 +49,8 @@ SRC=ai.c \
 	mapgrid.c \
 	mechanics.c \
 	message.c \
+	message_lexer.lex.c \
+	message_parser.tab.c \
 	miscimd.c \
 	move.c \
 	multiint.c \
@@ -127,6 +129,6 @@ endif
 
 EXE=warzone2100
 
-CLEANFILES=scriptvals_parser.tab.h
+CLEANFILES=message_parser.tab.h scriptvals_parser.tab.h
 
 include $(top_srcdir)/makerules/exe.mk
