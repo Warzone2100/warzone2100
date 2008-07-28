@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2008-06-24 19:52+0200\n"
+"POT-Creation-Date: 2008-07-28 03:03+0200\n"
 "PO-Revision-Date: 2008-05-09 16:01+0000\n"
 "Last-Translator: Artur <tucalipe@hotmail.com>\n"
 "Language-Team: Brazilian Portugese <warzone-dev@gna.org>\n"
@@ -9088,181 +9088,378 @@ msgstr "Autorecarregador aumenta a velocidade de recarga"
 msgid "Increases Rocket ROF"
 msgstr "Aumenta a TDT dos Foguetes"
 
-#: data/base/messages/strings/tutstrings.txt:8
-msgid "To build an oil derrick, select one of your trucks"
-msgstr "Para construir um extrator de petróleo, selecione um de seus caminhões"
-
-#: data/base/messages/strings/tutstrings.txt:9
-msgid "Left click the oil pool indicated by the radar pulse to order your truck to build"
-msgstr "Clique com o botão esquerdo no poço de petróleo indicado pelo ícone no radar para mandar seu caminhão construir"
-
-#: data/base/messages/strings/tutstrings.txt:10
-msgid "The oil derrick is currently dormant. Build a power generator to convert the oil into power"
-msgstr "O extrator está atualmente desativado. Construa um gerador para converter o petróleo em energia"
-
-#: data/base/messages/strings/tutstrings.txt:11
-msgid "Position the square at your base and left click to start the build process"
-msgstr "Posicione o quadrado em sua base e clique com o botão esquerdo para começar o processo de construção"
-
-#: data/base/messages/strings/tutstrings.txt:12
-msgid "To increase your build rate, select your second truck"
-msgstr "Para acelerar a construção, selecione seu outro caminhão"
-
-#: data/base/messages/strings/tutstrings.txt:13
-msgid "Use a truck to search for the artifact indicated by the radar pulse"
-msgstr "Use um caminhão para procurar pelo artefato indicato pelo ícone no radar"
-
-#: data/base/messages/strings/tutstrings.txt:14
-msgid "A research facility is required to research artifacts"
-msgstr "Um centro de pesquisas é necessário para pesquisar os artefatos"
-
-#: data/base/messages/strings/tutstrings.txt:15
-msgid "The artifact is now being researched by the facility"
-msgstr "O artefato está sendo pesquisado pelo centro"
-
-#: data/base/messages/strings/tutstrings.txt:16
-msgid "The researched machinegun can now be used to design a new vehicle"
-msgstr "A metralhadora pesquisada pode ser utilizada para projetar um novo veículo"
-
-#: data/base/messages/strings/tutstrings.txt:17
-msgid "To start your design, left click the NEW DESIGN icon"
-msgstr "Para iniciar o projeto, clique no ícone NOVO PROJETO"
-
-#: data/base/messages/strings/tutstrings.txt:18
-msgid "Now left click the Vehicle Body icon"
-msgstr "Agora clique no ícone Chassis"
-
-#: data/base/messages/strings/tutstrings.txt:19
-msgid "Then left click the Viper body"
-msgstr "E clique no Chassis Víbora"
-
-#: data/base/messages/strings/tutstrings.txt:20
-msgid "Left click the Wheels icon"
-msgstr "Clique no ícone 4x4"
-
-#: data/base/messages/strings/tutstrings.txt:21
-msgid "Now left click the Viper Body"
-msgstr "Agora clique no Chassis Víbora"
-
-#: data/base/messages/strings/tutstrings.txt:22
-msgid "Select the Vehicle Propulsion icon"
-msgstr "Selecione o ícone Propulsão"
-
-#: data/base/messages/strings/tutstrings.txt:23
-msgid "Then left click the machinegun to complete your design"
-msgstr "E clique na metralhadora para terminar seu projeto"
-
-#: data/base/messages/strings/tutstrings.txt:24
-msgid "To finalize your design, left click the CLOSE icon"
-msgstr "Para finalizar seu projeto, clique no botão FECHAR"
-
-#: data/base/messages/strings/tutstrings.txt:25
-msgid "A factory is now required to manufacture your new vehicle"
-msgstr "Uma fábrica é necessáriapara produzir seu novo veículo"
-
-#: data/base/messages/strings/tutstrings.txt:26
-msgid "Select a location for your factory"
-msgstr "Escolha um local para sua fábrica"
-
-#: data/base/messages/strings/tutstrings.txt:27
-msgid "The delivery point is indicated by the number 1"
-msgstr "O ponto de entrega é indicado pelo número 1"
-
-#: data/base/messages/strings/tutstrings.txt:28
-msgid "All new units will drive to this location once built"
-msgstr "Todas as novas unidades irão para esse local ao serem produzidas"
-
-#: data/base/messages/strings/tutstrings.txt:29
-msgid "The factory can now be ordered to build a new unit"
-msgstr "A fábrica agora pode receber as ordens de produção"
-
-#: data/base/messages/strings/tutstrings.txt:30
-msgid "Please wait whilst the factory manufactures the new unit(s)"
-msgstr "Aguarde enquanto a fábrica produz a(s) nova(s) unidade(s)"
-
-#: data/base/messages/strings/tutstrings.txt:31
-msgid "Congratulations commander - you are ready for your first mission"
-msgstr "Congratulações comandante - você está pronto para sua primeira missão"
-
-#: data/base/messages/strings/tutstrings.txt:33
-msgid "Left click the flashing BUILD icon"
-msgstr "Clique no botão piscante CONSTRUIR"
-
-#: data/base/messages/strings/tutstrings.txt:34
-msgid "Now left click the power generator in the build menu on the left"
-msgstr "Agora clique no gerador de energia no menu de construção à esquerda"
-
-#: data/base/messages/strings/tutstrings.txt:35
-msgid "Presently unused"
-msgstr "Presently unused"
-
-#: data/base/messages/strings/tutstrings.txt:36
-msgid "Now left click the research facility and position it at your base"
-msgstr "Agora clique no centro de pesquisas e posicione-o em sua base"
-
-#: data/base/messages/strings/tutstrings.txt:37
-msgid "Use your other truck to help build the research facility"
-msgstr "Use seu outro caminhão para ajudar na construção"
-
-#: data/base/messages/strings/tutstrings.txt:38
-msgid "To research the artifact, left click on the flashing RESEARCH icon"
-msgstr "Para pesquisar o artefato, clique no botão piscante PESQUISAS"
-
-#: data/base/messages/strings/tutstrings.txt:39
-msgid "Now left click the machinegun artifact"
-msgstr "Agora clique no artefato metralhadora"
-
-#: data/base/messages/strings/tutstrings.txt:40
-msgid "Left click the flashing DESIGN icon"
-msgstr "Clique no botão piscante PROJETOS"
-
-#: data/base/messages/strings/tutstrings.txt:41
-msgid "Now left click the factory icon and position it at your base"
-msgstr "Agora clique no ícone da fábrica e posicione-a em sua base"
-
-#: data/base/messages/strings/tutstrings.txt:42
-msgid "Left click the flashing MANUFACTURE icon"
-msgstr "Clique o botão piscante PRODUÇÃO"
-
-#: data/base/messages/strings/tutstrings.txt:43
-msgid "Now left click the units you want to build from the menu at the left"
-msgstr "Agora gere sua ordem de produção clicando nas unidades no menu à esquerda"
-
-#: data/base/messages/strings/tutstrings.txt:44
-msgid "The other truck will now help to build the power generator"
-msgstr "O outro caminhão vai agora ajudar a construir o gerador de energia"
-
-#: data/base/messages/strings/tutstrings.txt:45
-msgid "Move the pointer over the artifact and left click to recover it"
-msgstr "Mosa o mouse sobre o artefato e clique para recolhê-lo"
-
-#: data/base/messages/strings/tutstrings.txt:46
-msgid "You can move the delivery point at any time by left clicking it"
-msgstr "Você pode mover o ponto de entrega clicando com o botão esquerdo"
-
-#: data/base/messages/strings/tutstrings.txt:47
+#: data/base/script/text/tutorial3.slo:291
 msgid "In this training session you'll learn how to build an effective base"
 msgstr "Nessa sessão de treino você aprenderá a construir uma base efetiva"
 
-#: data/base/messages/strings/tutstrings.txt:48
+#: data/base/script/text/tutorial3.slo:306
 msgid "Oil resources are key to your success"
 msgstr "Petróleo é a chave para o sucesso"
 
-#: data/base/messages/strings/tutstrings.txt:49
-msgid "Now click where you want to position the delivery point"
-msgstr "Agora clique onde você quer o ponto de entrega"
+#: data/base/script/text/tutorial3.slo:315
+msgid "To build an oil derrick, select one of your trucks"
+msgstr "Para construir um extrator de petróleo, selecione um de seus caminhões"
 
-#: data/base/messages/strings/tutstrings.txt:50
+#: data/base/script/text/tutorial3.slo:335
+msgid "Left click the oil pool indicated by the radar pulse to order your truck to build"
+msgstr "Clique com o botão esquerdo no poço de petróleo indicado pelo ícone no radar para mandar seu caminhão construir"
+
+#: data/base/script/text/tutorial3.slo:355
+msgid "The oil derrick is currently dormant. Build a power generator to convert the oil into power"
+msgstr "O extrator está atualmente desativado. Construa um gerador para converter o petróleo em energia"
+
+#: data/base/script/text/tutorial3.slo:372
+#: data/base/script/text/tutorial3.slo:578
+#: data/base/script/text/tutorial3.slo:869
+msgid "Left click the flashing BUILD icon"
+msgstr "Clique no botão piscante CONSTRUIR"
+
+#: data/base/script/text/tutorial3.slo:399
+msgid "Now left click the power generator in the build menu on the left"
+msgstr "Agora clique no gerador de energia no menu de construção à esquerda"
+
+#: data/base/script/text/tutorial3.slo:409
+msgid "Position the square at your base and left click to start the build process"
+msgstr "Posicione o quadrado em sua base e clique com o botão esquerdo para começar o processo de construção"
+
+#: data/base/script/text/tutorial3.slo:424
+msgid "To increase your build rate, select your second truck"
+msgstr "Para acelerar a construção, selecione seu outro caminhão"
+
+#: data/base/script/text/tutorial3.slo:459
 msgid "Now left click the power generator site"
 msgstr "Agora clique no gerador de energia"
 
-#: data/base/messages/strings/tutstrings.txt:51
+#: data/base/script/text/tutorial3.slo:474
+msgid "The other truck will now help to build the power generator"
+msgstr "O outro caminhão vai agora ajudar a construir o gerador de energia"
+
+#: data/base/script/text/tutorial3.slo:508
 msgid "During missions you need to locate and recover technologies from before the Collapse"
 msgstr "Durante as missões você terá de recuperar tecnologias de antes do Colapso (Pré-Colapso)"
 
+#: data/base/script/text/tutorial3.slo:518
+msgid "Use a truck to search for the artifact indicated by the radar pulse"
+msgstr "Use um caminhão para procurar pelo artefato indicato pelo ícone no radar"
+
+#: data/base/script/text/tutorial3.slo:521
+msgid "Move the pointer over the artifact and left click to recover it"
+msgstr "Mosa o mouse sobre o artefato e clique para recolhê-lo"
+
+#: data/base/script/text/tutorial3.slo:564
+msgid "A research facility is required to research artifacts"
+msgstr "Um centro de pesquisas é necessário para pesquisar os artefatos"
+
+#: data/base/script/text/tutorial3.slo:606
+msgid "Now left click the research facility and position it at your base"
+msgstr "Agora clique no centro de pesquisas e posicione-o em sua base"
+
+#: data/base/script/text/tutorial3.slo:629
+msgid "Use your other truck to help build the research facility"
+msgstr "Use seu outro caminhão para ajudar na construção"
+
+#: data/base/script/text/tutorial3.slo:652
+msgid "To research the artifact, left click on the flashing RESEARCH icon"
+msgstr "Para pesquisar o artefato, clique no botão piscante PESQUISAS"
+
+#: data/base/script/text/tutorial3.slo:677
+msgid "Now left click the machinegun artifact"
+msgstr "Agora clique no artefato metralhadora"
+
+#: data/base/script/text/tutorial3.slo:690
+msgid "The artifact is now being researched by the facility"
+msgstr "O artefato está sendo pesquisado pelo centro"
+
+#: data/base/script/text/tutorial3.slo:711
+msgid "The researched machinegun can now be used to design a new vehicle"
+msgstr "A metralhadora pesquisada pode ser utilizada para projetar um novo veículo"
+
+#: data/base/script/text/tutorial3.slo:728
+msgid "Left click the flashing DESIGN icon"
+msgstr "Clique no botão piscante PROJETOS"
+
+#: data/base/script/text/tutorial3.slo:744
+msgid "To start your design, left click the NEW DESIGN icon"
+msgstr "Para iniciar o projeto, clique no ícone NOVO PROJETO"
+
+#: data/base/script/text/tutorial3.slo:759
+msgid "Now left click the Vehicle Body icon"
+msgstr "Agora clique no ícone Chassis"
+
+#: data/base/script/text/tutorial3.slo:773
+msgid "Then left click the Viper body"
+msgstr "E clique no Chassis Víbora"
+
+#: data/base/script/text/tutorial3.slo:785
+msgid "Left click the Wheels icon"
+msgstr "Clique no ícone 4x4"
+
+#: data/base/script/text/tutorial3.slo:797
+msgid "Then left click the machinegun to complete your design"
+msgstr "E clique na metralhadora para terminar seu projeto"
+
+#: data/base/script/text/tutorial3.slo:828
+msgid "To finalize your design, left click the CLOSE icon"
+msgstr "Para finalizar seu projeto, clique no botão FECHAR"
+
+#: data/base/script/text/tutorial3.slo:857
+msgid "A factory is now required to manufacture your new vehicle"
+msgstr "Uma fábrica é necessáriapara produzir seu novo veículo"
+
+#: data/base/script/text/tutorial3.slo:892
+msgid "Now left click the factory icon and position it at your base"
+msgstr "Agora clique no ícone da fábrica e posicione-a em sua base"
+
+#: data/base/script/text/tutorial3.slo:912
+msgid "Select a location for your factory"
+msgstr "Escolha um local para sua fábrica"
+
+#: data/base/script/text/tutorial3.slo:931
+msgid "The delivery point is indicated by the number 1"
+msgstr "O ponto de entrega é indicado pelo número 1"
+
+#: data/base/script/text/tutorial3.slo:934
+msgid "All new units will drive to this location once built"
+msgstr "Todas as novas unidades irão para esse local ao serem produzidas"
+
+#: data/base/script/text/tutorial3.slo:936
+msgid "You can move the delivery point at any time by left clicking it"
+msgstr "Você pode mover o ponto de entrega clicando com o botão esquerdo"
+
+#: data/base/script/text/tutorial3.slo:950
+msgid "Now click where you want to position the delivery point"
+msgstr "Agora clique onde você quer o ponto de entrega"
+
+#: data/base/script/text/tutorial3.slo:967
+msgid "The factory can now be ordered to build a new unit"
+msgstr "A fábrica agora pode receber as ordens de produção"
+
+#: data/base/script/text/tutorial3.slo:993
+msgid "Left click the flashing MANUFACTURE icon"
+msgstr "Clique o botão piscante PRODUÇÃO"
+
+#: data/base/script/text/tutorial3.slo:1011
+msgid "Now left click the units you want to build from the menu at the left"
+msgstr "Agora gere sua ordem de produção clicando nas unidades no menu à esquerda"
+
+#: data/base/script/text/tutorial3.slo:1025
+msgid "Please wait whilst the factory manufactures the new unit(s)"
+msgstr "Aguarde enquanto a fábrica produz a(s) nova(s) unidade(s)"
+
+#: data/base/script/text/tutorial3.slo:1050
+msgid "Congratulations commander - you are ready for your first mission"
+msgstr "Congratulações comandante - você está pronto para sua primeira missão"
+
+#: data/mods/global/ntw/messages/strings/names.txt:1283
 #: data/mp/messages/strings/names.txt:144
 msgid "Viper Light Cannon Half-track"
 msgstr "Híbrido Canhão Leve Víbora"
+
+#: data/mods/global/ntw/messages/strings/names.txt:1289
+#: data/mp/messages/strings/names.txt:1811
+msgid "Cobra Hover Heavy-Repair"
+msgstr "Hovercraft Reparo Pesado Cobra"
+
+#: data/mods/global/ntw/messages/strings/names.txt:1290
+#: data/mp/messages/strings/names.txt:1812
+msgid "Viper HMG Wheels"
+msgstr "4x4 Metralhadora Pesada Víbora"
+
+#: data/mods/global/ntw/messages/strings/names.txt:1291
+#: data/mp/messages/strings/names.txt:1813
+msgid "Scourge Mantis Hover"
+msgstr "Hovercraft Scourge Mantis"
+
+#: data/mods/global/ntw/messages/strings/names.txt:1292
+#: data/mp/messages/strings/names.txt:1814
+msgid "TK Mantis Hover"
+msgstr "Hovercraft Destruidor de Tanques Mantis"
+
+#: data/mods/global/ntw/messages/strings/names.txt:1293
+#: data/mp/messages/strings/names.txt:1815
+msgid "Cobra HMG Tracks"
+msgstr "Tanque Metralhadora Pesada Cobra"
+
+#: data/mods/global/ntw/messages/strings/names.txt:1294
+#: data/mp/messages/strings/names.txt:1816
+msgid "Cobra Hover HC"
+msgstr "Hovercraft Canhão Pesado Cobra"
+
+#: data/mods/global/ntw/messages/strings/names.txt:1296
+#: data/mp/messages/strings/names.txt:1873
+msgid "Scorpion Lancer Tracks"
+msgstr "Tanque Lançadeiro Escorpião"
+
+#: data/mods/global/ntw/messages/strings/names.txt:1297
+#: data/mp/messages/strings/names.txt:1874
+msgid "Scorpion Heavy Cannon Tracks"
+msgstr "Tanque Canhão Pesado Escorpião"
+
+#: data/mods/global/ntw/messages/strings/names.txt:1298
+#: data/mp/messages/strings/names.txt:1864
+#: data/mp/messages/strings/names.txt:1875
+msgid "Scorpion Lancer VTOL"
+msgstr "VTOL Lançadeiro Escorpião"
+
+#: data/mods/global/ntw/messages/strings/names.txt:1299
+#: data/mp/messages/strings/names.txt:1876
+msgid "Scorpion BB VTOL"
+msgstr "VTOL Arrasa-Defesas Escorpião"
+
+#: data/mods/global/ntw/messages/strings/names.txt:1301
+#: data/mp/messages/strings/names.txt:1878
+msgid "Viper Command Turret Tracks"
+msgstr "Tanque Comandante Víbora"
+
+#: data/mods/global/ntw/messages/strings/names.txt:1302
+#: data/mp/messages/strings/names.txt:1879
+msgid "Cobra Command Turret Tracks"
+msgstr "Tanque Comandante Cobra"
+
+#: data/mods/global/ntw/messages/strings/names.txt:1303
+#: data/mp/messages/strings/names.txt:1880
+msgid "Scorpion Command Turret Tracks"
+msgstr "Tanque Comandante Escorpião"
+
+#: data/mods/global/ntw/messages/strings/names.txt:1304
+#: data/mp/messages/strings/names.txt:1881
+msgid "mantis Command Turret Tracks"
+msgstr "Tanque Comandante Mantis"
+
+#: data/mods/global/ntw/messages/strings/names.txt:1306
+#: data/mp/messages/strings/names.txt:1883
+msgid "Cobra Lancer Tracks"
+msgstr "Tanque Lançadeiro Cobra"
+
+#: data/mods/global/ntw/messages/strings/names.txt:1307
+#: data/mp/messages/strings/names.txt:1884
+msgid "Mantis Heavy Cannon Tracks"
+msgstr "Tanque Canhão Pesado Mantis"
+
+#: data/mods/global/ntw/messages/strings/names.txt:1308
+#: data/mp/messages/strings/names.txt:1885
+msgid "Mantis Tank Killer Tracks"
+msgstr "Tanque Destruidor de Tanques Mantis"
+
+#: data/mods/global/ntw/messages/strings/names.txt:1309
+#: data/mp/messages/strings/names.txt:1886
+msgid "Mantis Scourge Tracks"
+msgstr "Tanque Scourge Mantis"
+
+#: data/mods/global/ntw/messages/strings/names.txt:1310
+#: data/mp/messages/strings/names.txt:1887
+msgid "Scorpion Heavy Machinegun Tracks"
+msgstr "Tanque Metralhadora Pesada Escorpião"
+
+#: data/mods/global/ntw/messages/strings/names.txt:1312
+#: data/mp/messages/strings/names.txt:1889
+msgid "Scorpion Repair Tracks"
+msgstr "Tanque Reparo Escorpião"
+
+#: data/mods/global/ntw/messages/strings/names.txt:1313
+#: data/mp/messages/strings/names.txt:1890
+msgid "Scorpion Heavy Repair Hover"
+msgstr "Hovercraft Reparos Pesado Escorpião"
+
+#: data/mods/global/ntw/messages/strings/names.txt:1316
+#: data/mp/messages/strings/names.txt:1893
+msgid "Cobra Hover Truck"
+msgstr "Hovercraft Caminhão CObra"
+
+#: data/mods/global/ntw/messages/strings/names.txt:1317
+#: data/mp/messages/strings/names.txt:1894
+msgid "Scorpion Hover Truck"
+msgstr "Hovercraft Caminhão Escorpião"
+
+#: data/mods/global/ntw/messages/strings/names.txt:1318
+#: data/mp/messages/strings/names.txt:1895
+msgid "Mantis Hover Truck"
+msgstr "Hovercraft Caminhão Mantis"
+
+#: data/mods/global/ntw/messages/strings/names.txt:1321
+#: data/mp/messages/strings/names.txt:1898
+msgid "Cobra Bunker Buster Tracks"
+msgstr "Tanque Arrasa-Defesas Cobra"
+
+#: data/mods/global/ntw/messages/strings/names.txt:1322
+#: data/mp/messages/strings/names.txt:1899
+msgid "Scorpion Bunker Buster Tracks"
+msgstr "Tanque Arrasa-Defesas Escorpião"
+
+#: data/mods/global/ntw/messages/strings/names.txt:1323
+#: data/mp/messages/strings/names.txt:1900
+msgid "Mantis Bunker Buster Tracks"
+msgstr "Tanque Arrasa-Defesas Mantis"
+
+#: data/mods/global/ntw/messages/strings/names.txt:1325
+#: data/mp/messages/strings/names.txt:1902
+msgid "Viper Tracks Lancer"
+msgstr "Tanque Lançadeiro Víbora"
+
+#: data/mods/global/ntw/messages/strings/names.txt:1327
+#: data/mp/messages/strings/names.txt:1904
+msgid "Cobra Half-Tracks Mini-Pod"
+msgstr "Híbrido Mini-Foguetes Cobra"
+
+#: data/mods/global/ntw/messages/strings/names.txt:1328
+#: data/mp/messages/strings/names.txt:1905
+msgid "Cobra Tracks Mini-Pod"
+msgstr "Tanque Mini-Foguetes Cobra"
+
+#: data/mods/global/ntw/messages/strings/names.txt:1329
+#: data/mp/messages/strings/names.txt:1906
+msgid "Cobra Tracks Mini-Rocket Artillery"
+msgstr "Tanque Mini-Artilharia Cobra"
+
+#: data/mods/global/ntw/messages/strings/names.txt:1331
+#: data/mp/messages/strings/names.txt:1908
+msgid "Cobra Inferno Half-track"
+msgstr "Híbrido Inferno Cobra"
+
+#: data/mods/global/ntw/messages/strings/names.txt:1332
+#: data/mp/messages/strings/names.txt:1909
+msgid "Python HVC Hover"
+msgstr "Hovercraft Canhão de Velocidade Píton"
+
+#: data/mods/global/ntw/messages/strings/names.txt:1334
+#: data/mp/messages/strings/names.txt:1913
+msgid "Python Scourge Tracks"
+msgstr "Tanque Scourge Píton"
+
+#: data/mods/global/ntw/messages/strings/names.txt:1335
+#: data/mp/messages/strings/names.txt:1914
+msgid "Python Gauss Cannon Tracks"
+msgstr "Tanque Canhão Gauss Píton"
+
+#: data/mods/global/ntw/messages/strings/names.txt:1336
+#: data/mp/messages/strings/names.txt:1915
+msgid "Python Pulse Laser Tracks"
+msgstr "Tanque Pulso Laser Píton"
+
+#: data/mods/global/ntw/messages/strings/names.txt:1337
+#: data/mp/messages/strings/names.txt:1916
+msgid "Tiger Pulse Laser Tracks"
+msgstr "Tanque Pulso Laser Tigre"
+
+#: data/mods/global/ntw/messages/strings/names.txt:1338
+#: data/mp/messages/strings/names.txt:1917
+msgid "Tiger Heavy Laser Tracks"
+msgstr "Tanque Laser Pesado Tigre"
+
+#: data/mods/global/ntw/messages/strings/names.txt:1339
+#: data/mp/messages/strings/names.txt:1918
+msgid "Wyvern Gauss Cannon Tracks"
+msgstr "Tanque Canhão Gauss Dragonete"
+
+#: data/mods/global/ntw/messages/strings/names.txt:1340
+#: data/mp/messages/strings/names.txt:1919
+msgid "Wyvern Pulse Laser Tracks"
+msgstr "Tanque Pulso Laser Dragonete"
+
+#: data/mods/global/ntw/messages/strings/names.txt:1341
+#: data/mp/messages/strings/names.txt:1920
+msgid "Wyvern Heavy Laser Tracks"
+msgstr "Tanque Laser Pesado Dragonete"
 
 #: data/mp/messages/strings/names.txt:381
 #: data/mp/messages/strings/names.txt:916
@@ -9628,30 +9825,6 @@ msgstr "Torrete de Comando Mk3"
 msgid "Command turret MkIV"
 msgstr "Torrete de Comando Mk4"
 
-#: data/mp/messages/strings/names.txt:1811
-msgid "Cobra Hover Heavy-Repair"
-msgstr "Hovercraft Reparo Pesado Cobra"
-
-#: data/mp/messages/strings/names.txt:1812
-msgid "Viper HMG Wheels"
-msgstr "4x4 Metralhadora Pesada Víbora"
-
-#: data/mp/messages/strings/names.txt:1813
-msgid "Scourge Mantis Hover"
-msgstr "Hovercraft Scourge Mantis"
-
-#: data/mp/messages/strings/names.txt:1814
-msgid "TK Mantis Hover"
-msgstr "Hovercraft Destruidor de Tanques Mantis"
-
-#: data/mp/messages/strings/names.txt:1815
-msgid "Cobra HMG Tracks"
-msgstr "Tanque Metralhadora Pesada Cobra"
-
-#: data/mp/messages/strings/names.txt:1816
-msgid "Cobra Hover HC"
-msgstr "Hovercraft Canhão Pesado Cobra"
-
 #: data/mp/messages/strings/names.txt:1821
 msgid "Viper Wheels Machinegun"
 msgstr "4x4 Metralhadora Víbora"
@@ -9784,11 +9957,6 @@ msgstr "VTOL Lançadeiro Inseto"
 msgid "Bug HPV VTOL"
 msgstr "VTOL Canhão de Velocidade Inseto"
 
-#: data/mp/messages/strings/names.txt:1864
-#: data/mp/messages/strings/names.txt:1875
-msgid "Scorpion Lancer VTOL"
-msgstr "VTOL Lançadeiro Escorpião"
-
 #: data/mp/messages/strings/names.txt:1865
 msgid "Scorpion HPV VTOL"
 msgstr "VTOL Canhão de Velocidade Escorpião"
@@ -9809,146 +9977,10 @@ msgstr "Tanque Reparo Cobra"
 msgid "Mantis Repair Tracks"
 msgstr "Tanque Reparo Mantis"
 
-#: data/mp/messages/strings/names.txt:1873
-msgid "Scorpion Lancer Tracks"
-msgstr "Tanque Lançadeiro Escorpião"
-
-#: data/mp/messages/strings/names.txt:1874
-msgid "Scorpion Heavy Cannon Tracks"
-msgstr "Tanque Canhão Pesado Escorpião"
-
-#: data/mp/messages/strings/names.txt:1876
-msgid "Scorpion BB VTOL"
-msgstr "VTOL Arrasa-Defesas Escorpião"
-
-#: data/mp/messages/strings/names.txt:1878
-msgid "Viper Command Turret Tracks"
-msgstr "Tanque Comandante Víbora"
-
-#: data/mp/messages/strings/names.txt:1879
-msgid "Cobra Command Turret Tracks"
-msgstr "Tanque Comandante Cobra"
-
-#: data/mp/messages/strings/names.txt:1880
-msgid "Scorpion Command Turret Tracks"
-msgstr "Tanque Comandante Escorpião"
-
-#: data/mp/messages/strings/names.txt:1881
-msgid "mantis Command Turret Tracks"
-msgstr "Tanque Comandante Mantis"
-
-#: data/mp/messages/strings/names.txt:1883
-msgid "Cobra Lancer Tracks"
-msgstr "Tanque Lançadeiro Cobra"
-
-#: data/mp/messages/strings/names.txt:1884
-msgid "Mantis Heavy Cannon Tracks"
-msgstr "Tanque Canhão Pesado Mantis"
-
-#: data/mp/messages/strings/names.txt:1885
-msgid "Mantis Tank Killer Tracks"
-msgstr "Tanque Destruidor de Tanques Mantis"
-
-#: data/mp/messages/strings/names.txt:1886
-msgid "Mantis Scourge Tracks"
-msgstr "Tanque Scourge Mantis"
-
-#: data/mp/messages/strings/names.txt:1887
-msgid "Scorpion Heavy Machinegun Tracks"
-msgstr "Tanque Metralhadora Pesada Escorpião"
-
-#: data/mp/messages/strings/names.txt:1889
-msgid "Scorpion Repair Tracks"
-msgstr "Tanque Reparo Escorpião"
-
-#: data/mp/messages/strings/names.txt:1890
-msgid "Scorpion Heavy Repair Hover"
-msgstr "Hovercraft Reparos Pesado Escorpião"
-
-#: data/mp/messages/strings/names.txt:1893
-msgid "Cobra Hover Truck"
-msgstr "Hovercraft Caminhão CObra"
-
-#: data/mp/messages/strings/names.txt:1894
-msgid "Scorpion Hover Truck"
-msgstr "Hovercraft Caminhão Escorpião"
-
-#: data/mp/messages/strings/names.txt:1895
-msgid "Mantis Hover Truck"
-msgstr "Hovercraft Caminhão Mantis"
-
-#: data/mp/messages/strings/names.txt:1898
-msgid "Cobra Bunker Buster Tracks"
-msgstr "Tanque Arrasa-Defesas Cobra"
-
-#: data/mp/messages/strings/names.txt:1899
-msgid "Scorpion Bunker Buster Tracks"
-msgstr "Tanque Arrasa-Defesas Escorpião"
-
-#: data/mp/messages/strings/names.txt:1900
-msgid "Mantis Bunker Buster Tracks"
-msgstr "Tanque Arrasa-Defesas Mantis"
-
-#: data/mp/messages/strings/names.txt:1902
-msgid "Viper Tracks Lancer"
-msgstr "Tanque Lançadeiro Víbora"
-
-#: data/mp/messages/strings/names.txt:1904
-msgid "Cobra Half-Tracks Mini-Pod"
-msgstr "Híbrido Mini-Foguetes Cobra"
-
-#: data/mp/messages/strings/names.txt:1905
-msgid "Cobra Tracks Mini-Pod"
-msgstr "Tanque Mini-Foguetes Cobra"
-
-#: data/mp/messages/strings/names.txt:1906
-msgid "Cobra Tracks Mini-Rocket Artillery"
-msgstr "Tanque Mini-Artilharia Cobra"
-
-#: data/mp/messages/strings/names.txt:1908
-msgid "Cobra Inferno Half-track"
-msgstr "Híbrido Inferno Cobra"
-
-#: data/mp/messages/strings/names.txt:1909
-msgid "Python HVC Hover"
-msgstr "Hovercraft Canhão de Velocidade Píton"
-
 #: data/mp/messages/strings/names.txt:1911
 #, fuzzy
 msgid "Python Tank Killer Tracks"
 msgstr "Tanque Destruidor de Tanques Mantis"
-
-#: data/mp/messages/strings/names.txt:1913
-msgid "Python Scourge Tracks"
-msgstr "Tanque Scourge Píton"
-
-#: data/mp/messages/strings/names.txt:1914
-msgid "Python Gauss Cannon Tracks"
-msgstr "Tanque Canhão Gauss Píton"
-
-#: data/mp/messages/strings/names.txt:1915
-msgid "Python Pulse Laser Tracks"
-msgstr "Tanque Pulso Laser Píton"
-
-#: data/mp/messages/strings/names.txt:1916
-msgid "Tiger Pulse Laser Tracks"
-msgstr "Tanque Pulso Laser Tigre"
-
-#: data/mp/messages/strings/names.txt:1917
-msgid "Tiger Heavy Laser Tracks"
-msgstr "Tanque Laser Pesado Tigre"
-
-#: data/mp/messages/strings/names.txt:1918
-msgid "Wyvern Gauss Cannon Tracks"
-msgstr "Tanque Canhão Gauss Dragonete"
-
-#: data/mp/messages/strings/names.txt:1919
-msgid "Wyvern Pulse Laser Tracks"
-msgstr "Tanque Pulso Laser Dragonete"
-
-#: data/mp/messages/strings/names.txt:1920
-msgid "Wyvern Heavy Laser Tracks"
-msgstr "Tanque Laser Pesado Dragonete"
 
 #: data/mp/messages/strings/names.txt:1922
 msgid "Viper Machinegun Half-Track"
@@ -10243,195 +10275,301 @@ msgstr "Torrete de Comando mais reforçado disponível para projeto"
 msgid "Upgraded battlefield computer system"
 msgstr "Sistema de computador de guerra melhorado"
 
-#: lib/framework/i18n.c:42
-#: lib/framework/i18n.c:64
+#: lib/framework/i18n.c:43
+#: lib/framework/i18n.c:94
 msgid "System locale"
 msgstr "Localização do Sistema"
 
-#: lib/framework/i18n.c:44
-#: lib/framework/i18n.c:69
+#: lib/framework/i18n.c:45
+#: lib/framework/i18n.c:96
+msgid "Czech"
+msgstr ""
+
+#: lib/framework/i18n.c:46
+#: lib/framework/i18n.c:97
 msgid "Danish"
 msgstr "Dinamarquês"
 
-#: lib/framework/i18n.c:45
-#: lib/framework/i18n.c:68
+#: lib/framework/i18n.c:47
+#: lib/framework/i18n.c:98
 msgid "German"
 msgstr "Alemão"
 
-#: lib/framework/i18n.c:46
-#: lib/framework/i18n.c:66
+#: lib/framework/i18n.c:48
+#: lib/framework/i18n.c:99
 msgid "English"
 msgstr "Inglês"
 
-#: lib/framework/i18n.c:47
-#: lib/framework/i18n.c:70
+#: lib/framework/i18n.c:49
+#: lib/framework/i18n.c:100
+msgid "English (United Kingdom)"
+msgstr ""
+
+#: lib/framework/i18n.c:50
+#: lib/framework/i18n.c:101
+#, fuzzy
+msgid "Spanish"
+msgstr "Dinamarquês"
+
+#: lib/framework/i18n.c:51
+#: lib/framework/i18n.c:102
+#, fuzzy
+msgid "Basque"
+msgstr "Bases"
+
+#: lib/framework/i18n.c:52
+#: lib/framework/i18n.c:103
+#, fuzzy
+msgid "Finnish"
+msgstr "Dinamarquês"
+
+#: lib/framework/i18n.c:53
+#: lib/framework/i18n.c:104
 msgid "French"
 msgstr "Francês"
 
-#: lib/framework/i18n.c:48
-#: lib/framework/i18n.c:71
+#: lib/framework/i18n.c:61
+#: lib/framework/i18n.c:112
+msgid "Frisian"
+msgstr ""
+
+#: lib/framework/i18n.c:62
+#: lib/framework/i18n.c:113
+#, fuzzy
+msgid "Irish"
+msgstr "Batalha"
+
+#: lib/framework/i18n.c:63
+#: lib/framework/i18n.c:114
 msgid "Italian"
 msgstr "Italiano"
 
-#: lib/framework/i18n.c:49
-#: lib/framework/i18n.c:73
-msgid "Dutch"
-msgstr "Holandês"
+#: lib/framework/i18n.c:64
+#: lib/framework/i18n.c:116
+msgid "Lithuanian"
+msgstr ""
 
-#: lib/framework/i18n.c:50
-#: lib/framework/i18n.c:67
+#: lib/framework/i18n.c:65
+#: lib/framework/i18n.c:117
+#, fuzzy
+msgid "Latvian"
+msgstr "Latim"
+
+#: lib/framework/i18n.c:66
+#: lib/framework/i18n.c:118
 msgid "Norwegian"
 msgstr "Norueguês"
 
-#: lib/framework/i18n.c:51
-#: lib/framework/i18n.c:74
+#: lib/framework/i18n.c:67
+#: lib/framework/i18n.c:119
+#, fuzzy
+msgid "Norwegian (Nynorsk)"
+msgstr "Norueguês"
+
+#: lib/framework/i18n.c:68
+#: lib/framework/i18n.c:120
+msgid "Dutch"
+msgstr "Holandês"
+
+#: lib/framework/i18n.c:69
+#: lib/framework/i18n.c:121
+#, fuzzy
+msgid "Polish"
+msgstr "Demolir"
+
+#: lib/framework/i18n.c:70
+#: lib/framework/i18n.c:122
+#, fuzzy
+msgid "Brazilian Portuguese"
+msgstr "Português"
+
+#: lib/framework/i18n.c:71
+#: lib/framework/i18n.c:123
 msgid "Portuegese"
 msgstr "Português"
 
-#: lib/framework/i18n.c:52
-#: lib/framework/i18n.c:75
+#: lib/framework/i18n.c:72
+#: lib/framework/i18n.c:124
+msgid "Romanian"
+msgstr ""
+
+#: lib/framework/i18n.c:73
+#: lib/framework/i18n.c:125
 msgid "Russian"
 msgstr "Russo"
 
-#: lib/framework/i18n.c:53
+#: lib/framework/i18n.c:74
+#: lib/framework/i18n.c:126
+msgid "Slovenian"
+msgstr ""
+
+#: lib/framework/i18n.c:76
+#: lib/framework/i18n.c:78
+#: lib/framework/i18n.c:127
+#, fuzzy
+msgid "Swedish (Sweden)"
+msgstr "Sueco"
+
+#: lib/framework/i18n.c:80
+#: lib/framework/i18n.c:128
 msgid "Swedish"
 msgstr "Sueco"
 
-#: lib/framework/i18n.c:72
+#: lib/framework/i18n.c:81
+#: lib/framework/i18n.c:129
+#, fuzzy
+msgid "Turkish"
+msgstr "Tanque"
+
+#: lib/framework/i18n.c:82
+#: lib/framework/i18n.c:130
+msgid "Uzbek (Cyrillic)"
+msgstr ""
+
+#: lib/framework/i18n.c:83
+#: lib/framework/i18n.c:131
+msgid "Simplified Chinese"
+msgstr ""
+
+#: lib/framework/i18n.c:115
 msgid "Latin"
 msgstr "Latim"
 
-#: src/clparse.c:94
+#: src/clparse.c:95
 msgid "Run in cheat mode"
 msgstr "Ativar modo de trapaças"
 
-#: src/clparse.c:95
+#: src/clparse.c:96
 msgid "Set default data directory"
 msgstr "Definir diretório de dados padrão"
 
-#: src/clparse.c:95
+#: src/clparse.c:96
 msgid "data directory"
 msgstr "diretório de dados padrão"
 
-#: src/clparse.c:96
+#: src/clparse.c:97
 msgid "Set configuration directory"
 msgstr "Definir diretório de configurações"
 
-#: src/clparse.c:96
+#: src/clparse.c:97
 msgid "configuration directory"
 msgstr "diretório de configurações"
 
-#: src/clparse.c:97
+#: src/clparse.c:98
 msgid "Show debug for given level"
 msgstr "Exibir debug para determinado nivel"
 
-#: src/clparse.c:97
+#: src/clparse.c:98
 msgid "debug level"
 msgstr "nivel de debug"
 
-#: src/clparse.c:98
+#: src/clparse.c:99
 msgid "Log debug output to file"
 msgstr "Salvar relatório de debug em arquivo"
 
-#: src/clparse.c:98
+#: src/clparse.c:99
 msgid "file"
 msgstr "arquivo"
 
-#: src/clparse.c:99
+#: src/clparse.c:100
+msgid "Flush all debug output written to stderr"
+msgstr ""
+
+#: src/clparse.c:101
 msgid "Play in fullscreen mode"
 msgstr "Jogar em modo de Tela-cheia"
 
-#: src/clparse.c:100
+#: src/clparse.c:102
 msgid "Load a specific game"
 msgstr "Carregar um jogo específico"
 
-#: src/clparse.c:100
+#: src/clparse.c:102
 msgid "game-name"
 msgstr "jogo"
 
-#: src/clparse.c:101
+#: src/clparse.c:103
 msgid "Show this help message and exit"
 msgstr "Exibe essa mensagem e sai"
 
-#: src/clparse.c:102
+#: src/clparse.c:104
 msgid "Enable a global mod"
 msgstr "Ativar um mod global"
 
-#: src/clparse.c:102
-#: src/clparse.c:103
 #: src/clparse.c:104
+#: src/clparse.c:105
+#: src/clparse.c:106
 msgid "mod"
 msgstr "mod"
 
-#: src/clparse.c:103
+#: src/clparse.c:105
 msgid "Enable a campaign only mod"
 msgstr "Ativar um mod exlusivo a campanhas"
 
-#: src/clparse.c:104
+#: src/clparse.c:106
 msgid "Enable a multiplay only mod"
 msgstr "Ativar um mod exclusivo ao multiplayer"
 
-#: src/clparse.c:105
+#: src/clparse.c:107
 msgid "Load a saved game"
 msgstr "Carregar jogo salvo"
 
-#: src/clparse.c:105
+#: src/clparse.c:107
 msgid "savegame"
 msgstr "jogo salvo"
 
-#: src/clparse.c:108
+#: src/clparse.c:110
 msgid "Play in windowed mode"
 msgstr "Jogar em modo Janela"
 
-#: src/clparse.c:109
+#: src/clparse.c:111
 msgid "Show version information and exit"
 msgstr "Exibe versão e sai"
 
-#: src/clparse.c:110
+#: src/clparse.c:112
 msgid "Set the resolution to use"
 msgstr "Define a resolução"
 
-#: src/clparse.c:110
+#: src/clparse.c:112
 msgid "WIDTHxHEIGHT"
 msgstr "LARGURAxALTURA"
 
-#: src/clparse.c:111
+#: src/clparse.c:113
 msgid "Enable shadows"
 msgstr "Ativa Sombras"
 
-#: src/clparse.c:112
+#: src/clparse.c:114
 msgid "Disable shadows"
 msgstr "Desativa Sombras"
 
-#: src/clparse.c:113
+#: src/clparse.c:115
 msgid "Enable sound"
 msgstr "Ativar Sons"
 
-#: src/clparse.c:114
+#: src/clparse.c:116
 msgid "Disable sound"
 msgstr "Desativa Sons"
 
-#: src/clparse.c:115
+#: src/clparse.c:117
 msgid "Activate self-test"
 msgstr "Ativar o teste automático"
 
-#: src/clparse.c:116
+#: src/clparse.c:118
 msgid "connect directly to IP/hostname"
 msgstr ""
 
-#: src/clparse.c:117
+#: src/clparse.c:119
 msgid "go directly to host screen"
 msgstr ""
 
-#: src/configuration.c:398
-#: src/configuration.c:399
+#: src/configuration.c:403
+#: src/configuration.c:404
 #: src/multistat.c:131
 msgid "Player"
 msgstr "Jogador"
 
 #: src/design.c:453
 #: src/design.c:474
-#: src/design.c:3547
+#: src/design.c:3548
 msgid "New Vehicle"
 msgstr "Novo Veículo"
 
@@ -10583,72 +10721,72 @@ msgstr "O Caminhão ordenou a construção Oil Derrick"
 msgid "Unit Lost!"
 msgstr "Unidades Perdidas!"
 
-#: src/droid.c:1619
+#: src/droid.c:1624
 msgid "Structure Restored"
 msgstr "Estrutura Restaurada"
 
-#: src/droid.c:3407
+#: src/droid.c:3409
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
 msgstr[0] "Grupo %u selecionado - %u Unidade"
 msgstr[1] "Grupo %u selecionado - %u Unidades"
 
-#: src/droid.c:3420
+#: src/droid.c:3422
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
 msgstr[0] "%u unidade atribuída ao Grupo %u"
 msgstr[1] "%u unidades atribuídas ao Grupo %u"
 
-#: src/droid.c:3433
+#: src/droid.c:3435
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
 msgstr[0] "Centrado no Grupo %u - %u Unidade"
 msgstr[1] "Centrado no Grupo %u - %u Unidades"
 
-#: src/droid.c:3437
+#: src/droid.c:3439
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] "Alinhamento com o grupo %u - %u Unidade"
 msgstr[1] "Alinhamento com o grupo %u - %u Unidades"
 
-#: src/droid.c:3656
+#: src/droid.c:3658
 msgid "Rookie"
 msgstr "Recruta"
 
-#: src/droid.c:3657
+#: src/droid.c:3659
 msgctxt "rank"
 msgid "Green"
 msgstr "Soldado"
 
-#: src/droid.c:3658
+#: src/droid.c:3660
 msgid "Trained"
 msgstr "Treinado"
 
-#: src/droid.c:3659
+#: src/droid.c:3661
 msgid "Regular"
 msgstr "Regular"
 
-#: src/droid.c:3660
+#: src/droid.c:3662
 msgid "Professional"
 msgstr "Tenente"
 
-#: src/droid.c:3661
+#: src/droid.c:3663
 msgid "Veteran"
 msgstr "Veterano"
 
-#: src/droid.c:3662
+#: src/droid.c:3664
 msgid "Elite"
 msgstr "Elite"
 
-#: src/droid.c:3663
+#: src/droid.c:3665
 msgid "Special"
 msgstr "Força Especial"
 
-#: src/droid.c:3664
+#: src/droid.c:3666
 msgid "Hero"
 msgstr "Herói"
 
@@ -10748,6 +10886,11 @@ msgstr "Opções de Jogo"
 #: src/frontend.c:532
 msgid "Graphics Options"
 msgstr "Opções de Vídeo"
+
+#: src/frontend.c:533
+#, fuzzy
+msgid "Video Options"
+msgstr "Opções de Áudio"
 
 #: src/frontend.c:534
 msgid "Audio Options"
@@ -10917,12 +11060,12 @@ msgid "Unit Colour"
 msgstr "Cor das Unidades"
 
 #: src/hci.c:1017
-#: src/hci.c:3879
-#: src/hci.c:4030
-#: src/hci.c:4483
-#: src/hci.c:5707
+#: src/hci.c:3853
+#: src/hci.c:4004
+#: src/hci.c:4457
+#: src/hci.c:5681
 #: src/intelmap.c:529
-#: src/intorder.c:659
+#: src/intorder.c:661
 #: src/loadsave.c:261
 #: src/multimenu.c:431
 #: src/multimenu.c:1250
@@ -10940,126 +11083,126 @@ msgstr "Fechar"
 msgid "GAME SAVED!"
 msgstr "JOGO SALVO!"
 
-#: src/hci.c:2116
+#: src/hci.c:2113
 msgid "Failed to create building"
 msgstr "Impossível criar edifício"
 
-#: src/hci.c:2139
+#: src/hci.c:2136
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new structure: %s."
 msgstr "Jogador %u é batota (debug menu) ele/ela mesma é uma nova estrutura: %s."
 
-#: src/hci.c:2153
+#: src/hci.c:2150
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new feature: %s."
 msgstr "Jogador %u é batota (debug menu) ele/ela mesma é uma nova característica: %s."
 
-#: src/hci.c:2172
+#: src/hci.c:2169
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new droid: %s."
 msgstr "Jogador %u é batota (debug menu) ele/ela mesma é um novo droid: %s."
 
-#: src/hci.c:3781
+#: src/hci.c:3755
 msgid "Commanders (F6)"
 msgstr "Comandos (F6)"
 
-#: src/hci.c:3797
+#: src/hci.c:3771
 msgid "Intelligence Display (F5)"
 msgstr "Mostrar Inteligência (F5)"
 
-#: src/hci.c:3813
+#: src/hci.c:3787
 msgid "Manufacture (F1)"
 msgstr "Desenvolvedor (F1)"
 
-#: src/hci.c:3829
+#: src/hci.c:3803
 msgid "Design (F4)"
 msgstr "Padrão (F4)"
 
-#: src/hci.c:3845
+#: src/hci.c:3819
 msgid "Research (F2)"
 msgstr "Pesquisa (F2)"
 
-#: src/hci.c:3861
+#: src/hci.c:3835
 msgid "Build (F3)"
 msgstr "Construir (F3)"
 
-#: src/hci.c:3941
+#: src/hci.c:3915
 #: src/multiint.c:772
 #: src/multiint.c:776
 msgid "Power"
 msgstr "Poder"
 
-#: src/hci.c:4125
+#: src/hci.c:4099
 msgid "Tile"
 msgstr "Espaço"
 
-#: src/hci.c:4126
+#: src/hci.c:4100
 msgid "Place tiles on map"
 msgstr "Colocar Espaços no mapa"
 
-#: src/hci.c:4135
+#: src/hci.c:4109
 msgid "Unit"
 msgstr "Unidade"
 
-#: src/hci.c:4136
+#: src/hci.c:4110
 msgid "Place Unit on map"
 msgstr "Colocar Unidade no mapa"
 
-#: src/hci.c:4144
+#: src/hci.c:4118
 msgid "Struct"
 msgstr "Estrutura"
 
-#: src/hci.c:4145
+#: src/hci.c:4119
 msgid "Place Structures on map"
 msgstr "Colocar estruturas no mapa"
 
-#: src/hci.c:4153
+#: src/hci.c:4127
 msgid "Feat"
 msgstr "Feito"
 
-#: src/hci.c:4154
+#: src/hci.c:4128
 msgid "Place Features on map"
 msgstr "Colocar Artefatos no mapa"
 
-#: src/hci.c:4165
+#: src/hci.c:4139
 msgid "Pause or unpause the game"
 msgstr "Pausar ou resumir o jogo"
 
-#: src/hci.c:4179
+#: src/hci.c:4153
 msgid "Align height of all map objects"
 msgstr "Alinhar a altitude dos objetos e do mapa"
 
-#: src/hci.c:4204
+#: src/hci.c:4178
 #: src/ingameop.c:121
 #: src/ingameop.c:254
 #: src/ingameop.c:259
 msgid "Quit"
 msgstr "Sair"
 
-#: src/hci.c:4205
+#: src/hci.c:4179
 msgid "Exit Game"
 msgstr "Sair do Jogo"
 
-#: src/hci.c:4568
+#: src/hci.c:4542
 #: src/intdisplay.c:211
 #: src/intdisplay.c:254
 #: src/intdisplay.c:300
 msgid "Progress Bar"
 msgstr "Barra de Progresso"
 
-#: src/hci.c:5622
+#: src/hci.c:5596
 msgid "Factory Delivery Point"
 msgstr "Ponto de Entrega da Fábrica"
 
-#: src/hci.c:5641
+#: src/hci.c:5615
 msgid "Loop Production"
 msgstr "Prender Produção"
 
-#: src/hci.c:5732
+#: src/hci.c:5706
 msgid "Tab Scroll left"
 msgstr "Tab mover para esquerda"
 
-#: src/hci.c:5749
+#: src/hci.c:5723
 msgid "Tab Scroll right"
 msgstr "Tab mover para direita"
 
@@ -11103,106 +11246,111 @@ msgstr "Objetivos do Projeto"
 msgid "Current Objective"
 msgstr "Objetivo Atual"
 
-#: src/intorder.c:178
+#: src/intorder.c:179
 #: src/keymap.c:388
 msgid "Short Range"
 msgstr "Curto Alcance"
 
-#: src/intorder.c:179
+#: src/intorder.c:180
 #: src/keymap.c:394
 msgid "Long Range"
 msgstr "Longo Alcance"
 
-#: src/intorder.c:180
+#: src/intorder.c:181
 #: src/keymap.c:387
 msgid "Optimum Range"
 msgstr "Medio Alcance"
 
-#: src/intorder.c:181
+#: src/intorder.c:182
 #: src/keymap.c:407
 msgid "Retreat at Medium Damage"
 msgstr "Recuar Com Danos Médios"
 
-#: src/intorder.c:182
+#: src/intorder.c:183
 #: src/keymap.c:408
 msgid "Retreat at Heavy Damage"
 msgstr "Recuar Com Danos Pesados"
 
-#: src/intorder.c:183
+#: src/intorder.c:184
 #: src/keymap.c:409
 msgid "Do or Die!"
 msgstr "Não Recuar!"
 
-#: src/intorder.c:184
+#: src/intorder.c:185
 msgid "Fire-At-Will"
 msgstr "Atire A Vontade"
 
-#: src/intorder.c:185
+#: src/intorder.c:186
 #: src/keymap.c:384
 msgid "Return Fire"
 msgstr "Retornar Fogo"
 
-#: src/intorder.c:186
+#: src/intorder.c:187
 #: src/keymap.c:382
 msgid "Hold Fire"
 msgstr "Não Atirar"
 
-#: src/intorder.c:187
+#: src/intorder.c:188
 #: src/keymap.c:390
 msgid "Patrol"
 msgstr "Patrulhar"
 
-#: src/intorder.c:188
+#: src/intorder.c:189
 #: src/keymap.c:389
 msgid "Pursue"
 msgstr "Seguir"
 
-#: src/intorder.c:189
+#: src/intorder.c:190
 msgid "Guard Position"
 msgstr "Defender Posição"
 
-#: src/intorder.c:190
+#: src/intorder.c:191
 #: src/keymap.c:392
 msgid "Hold Position"
 msgstr "Manter Posição"
 
-#: src/intorder.c:191
+#: src/intorder.c:192
 #: src/keymap.c:391
 msgid "Return For Repair"
 msgstr "Retornar para Reparos"
 
-#: src/intorder.c:192
+#: src/intorder.c:193
 msgid "Return To HQ"
 msgstr "Retornar para QG"
 
-#: src/intorder.c:193
+#: src/intorder.c:194
 msgid "Go to Transport"
 msgstr "Ir para Transporte"
 
-#: src/intorder.c:194
+#: src/intorder.c:195
 #: src/keymap.c:418
 msgid "Return for Recycling"
 msgstr "Retornar para Reciclagem"
 
-#: src/intorder.c:195
+#: src/intorder.c:196
 msgid "Recycle"
 msgstr "Reciclar"
 
-#: src/intorder.c:196
+#: src/intorder.c:197
 msgid "Assign Factory Production"
 msgstr "Designar Produção de Fabrica"
 
-#: src/intorder.c:197
+#: src/intorder.c:198
 msgid "Assign Cyborg Factory Production"
 msgstr "Designar Produção de Ciborgues"
 
-#: src/intorder.c:198
+#: src/intorder.c:199
 msgid "Assign Fire Support"
 msgstr "Designar Suporte de Artilharia"
 
-#: src/intorder.c:199
+#: src/intorder.c:200
 msgid "Assign VTOL Factory Production"
 msgstr "Designar Produção de VTOL"
+
+#: src/intorder.c:201
+#, fuzzy
+msgid "Circle"
+msgstr "arquivo"
 
 #: src/keybind.c:130
 msgid "Sorry, that cheat is disabled in multiplayer games."
@@ -11784,52 +11932,52 @@ msgstr "Sair para o Menu Principal"
 msgid "Continue Game"
 msgstr "Continuar o Jogo"
 
-#: src/multigifts.c:168
+#: src/multigifts.c:169
 #, c-format
 msgid "%s Gives You A Visibility Report"
 msgstr "%s Dar-lhe um relatório de visibilidade"
 
-#: src/multigifts.c:188
+#: src/multigifts.c:189
 #, c-format
 msgid "%s Gives you a %s"
 msgstr "%s Dar-lhe um %s"
 
-#: src/multigifts.c:238
-#, c-format
-msgid "Tried to give away a %s - but this is not allowed."
+#: src/multigifts.c:240
+#, fuzzy, c-format
+msgid "Tried to give away a non-empty %s - but this is not allowed."
 msgstr "Tentei dar uma distância do %s  - mas isso não é permitido."
 
-#: src/multigifts.c:297
+#: src/multigifts.c:299
 #, c-format
 msgid "%s Gives You Technology Documents"
 msgstr "%s Dar-lhe documentos de tecnologia"
 
-#: src/multigifts.c:335
+#: src/multigifts.c:337
 #, c-format
 msgid "%s Gives You Power"
 msgstr "%s Dar-lhe Poder"
 
-#: src/multigifts.c:355
+#: src/multigifts.c:357
 #, c-format
 msgid "%s Requests An Alliance With You"
 msgstr "%s Solicita uma aliança com você"
 
-#: src/multigifts.c:364
+#: src/multigifts.c:366
 #, c-format
 msgid "You Invite %s To Form An Alliance"
 msgstr "Você convida %s para formar uma aliança"
 
-#: src/multigifts.c:384
+#: src/multigifts.c:386
 #, c-format
 msgid "%s Breaks The Alliance With %s"
 msgstr "%s Quebrar a allança com %s"
 
-#: src/multigifts.c:410
+#: src/multigifts.c:412
 #, c-format
 msgid "%s Forms An Alliance With %s"
 msgstr "%s Formar uma alliança com %s"
 
-#: src/multigifts.c:801
+#: src/multigifts.c:803
 #, c-format
 msgid "You Discover Blueprints For %s"
 msgstr "Você descobre projetos para %s"
@@ -11913,7 +12061,6 @@ msgid "Allow Alliances"
 msgstr "Permitir Alianças"
 
 #: src/multiint.c:747
-#: src/multiint.c:1953
 msgid "Locked Teams"
 msgstr "Trancar Times"
 
@@ -11982,16 +12129,21 @@ msgstr "JOGADORES"
 msgid "CHAT"
 msgstr "BATE-PAPO"
 
-#: src/multiint.c:1997
+#: src/multiint.c:1951
+#, fuzzy
+msgid "'Locked Teams' mode enabled"
+msgstr "Trancar Times"
+
+#: src/multiint.c:1994
 #, c-format
 msgid "The host has kicked %s from the game!"
 msgstr "O Host chutou %s do jogo!"
 
-#: src/multiint.c:2088
+#: src/multiint.c:2085
 msgid "Host is Starting Game"
 msgstr "O Host iniciou o Jogo"
 
-#: src/multiint.c:2535
+#: src/multiint.c:2532
 msgid "Players"
 msgstr "Jogadores"
 
@@ -12110,16 +12262,16 @@ msgstr "Rosa"
 msgid "Cyan"
 msgstr "Ciano"
 
-#: src/research.c:1849
+#: src/research.c:1845
 #, c-format
 msgid "Research completed: %s"
 msgstr "Pesquisa concluída: %s"
 
-#: src/research.c:1854
+#: src/research.c:1850
 msgid "Research Completed"
 msgstr "Pesquisa Concluída"
 
-#: src/research.c:2657
+#: src/research.c:2653
 msgid "Research Award"
 msgstr "Prêmio - Pesquisa"
 
@@ -12278,59 +12430,59 @@ msgstr "Impossível localizar Unidades de Sensor!"
 msgid "Unable to locate any Commanders!"
 msgstr "Impossível localizar Comandantes!"
 
-#: src/structure.c:2775
+#: src/structure.c:2765
 msgid "Command Control Limit Reached - Production Halted"
 msgstr "Limite de Unidades Alcancado - Produção Interrompida"
 
-#: src/structure.c:5864
-#: src/structure.c:5886
+#: src/structure.c:5874
+#: src/structure.c:5896
 #, c-format
 msgid "%s - %u Unit assigned"
 msgid_plural "%s - %u Units assigned"
 msgstr[0] "%s - %u Unidade designada"
 msgstr[1] "%s - %u Unidades designadas"
 
-#: src/structure.c:5936
+#: src/structure.c:5946
 #, c-format
 msgid "%s - Connected %u of %u"
 msgstr "%s - %u de %u conectados"
 
-#: src/structure.c:5950
+#: src/structure.c:5960
 #, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - Dano %3.0f%%"
 
-#: src/structure.c:6070
-#: src/structure.c:6119
+#: src/structure.c:6080
+#: src/structure.c:6129
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - Danificado Eletronicamente"
 
-#: src/structure.c:6354
+#: src/structure.c:6364
 msgid "Electronic Reward - Visibility Report"
 msgstr "Prêmio - Relatório de Visibilidade"
 
-#: src/structure.c:6394
+#: src/structure.c:6404
 msgid "Factory Reward - Propulsion"
 msgstr "Prêmio - Propulsão"
 
-#: src/structure.c:6418
+#: src/structure.c:6428
 msgid "Factory Reward - Body"
 msgstr "Prêmio - Chassis"
 
-#: src/structure.c:6442
+#: src/structure.c:6452
 msgid "Factory Reward - Weapon"
 msgstr "Prêmio - Arma"
 
-#: src/structure.c:6451
+#: src/structure.c:6461
 msgid "Factory Reward - Nothing"
 msgstr "Prêmio - Nada"
 
-#: src/structure.c:6479
+#: src/structure.c:6489
 msgid "Repair Facility Award - Repair"
 msgstr "Prêmio - Centro de Reparos"
 
-#: src/structure.c:6486
+#: src/structure.c:6496
 msgid "Repair Facility Award - Nothing"
 msgstr "Prêmio - Nada"
 
@@ -12339,7 +12491,7 @@ msgstr "Prêmio - Nada"
 msgid "Launch Transport"
 msgstr "Lançar Transportes"
 
-#: src/transporter.c:1702
+#: src/transporter.c:1713
 msgid "Reinforcements landing"
 msgstr "Reforços de aterragem"
 
@@ -12370,3 +12522,12 @@ msgstr " - Finalizado em %s"
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "Versão %s%s%s%s"
+
+#~ msgid "Now left click the Viper Body"
+#~ msgstr "Agora clique no Chassis Víbora"
+
+#~ msgid "Select the Vehicle Propulsion icon"
+#~ msgstr "Selecione o ícone Propulsão"
+
+#~ msgid "Presently unused"
+#~ msgstr "Presently unused"

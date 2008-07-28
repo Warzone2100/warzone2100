@@ -10,53 +10,10 @@ private INT tutState;
 private	INT	dpMovedCount;
 public	int	initialPowerValue;	//initial power level
 
-public	TEXTSTRING m_msg1;		
-public	TEXTSTRING m_msg2;		
-public	TEXTSTRING m_msg3;		
-public	TEXTSTRING m_msg4;		
-public	TEXTSTRING m_msg5;		
-public	TEXTSTRING m_msg6;		
-public	TEXTSTRING m_msg7;		
-public	TEXTSTRING m_msg8;		
-public	TEXTSTRING m_msg9;		
-public	TEXTSTRING m_msg10;		
-public	TEXTSTRING m_msg11;		
-public	TEXTSTRING m_msg12;		
-public	TEXTSTRING m_msg13;		
-public	TEXTSTRING m_msg14;		
-public	TEXTSTRING m_msg15;		
-public	TEXTSTRING m_msg16;		
-public	TEXTSTRING m_msg17;		
-public	TEXTSTRING m_msg18;		
-public	TEXTSTRING m_msg19;		
-public	TEXTSTRING m_msg20;		
-public	TEXTSTRING m_msg21;		
-public	TEXTSTRING m_msg22;		
-public	TEXTSTRING m_msg23;		
-public	TEXTSTRING m_msg24;		
-
-
-public	TEXTSTRING m_msge1;		
-public	TEXTSTRING m_msge2;		
-public	TEXTSTRING m_msge3;		
-public	TEXTSTRING m_msge4;		
-public	TEXTSTRING m_msge5;		
-public	TEXTSTRING m_msge6;		
-public	TEXTSTRING m_msge7;		
-public	TEXTSTRING m_msge8;		
-public	TEXTSTRING m_msge9;		
-public	TEXTSTRING m_msge10;		
-public	TEXTSTRING m_msge11;		
-public	TEXTSTRING m_msge12;		
-public	TEXTSTRING m_msge13;
-public	TEXTSTRING m_msge14;
-public	TEXTSTRING m_msge15;
-public	TEXTSTRING m_msge16;
-public	TEXTSTRING m_msge17;
-public	TEXTSTRING m_msge18;
-public	TEXTSTRING m_msge19;
-
-public	TEXTSTRING	factoryRPL;
+// Seemingly unused translateable strings
+// m_msg14	_("Now left click the Viper Body")
+// m_msg15	_("Select the Vehicle Propulsion icon")
+// m_msge3	_("Presently unused")
 
 //components
 public	SENSOR				defaultSensor;
@@ -329,7 +286,7 @@ event	setupEvent(CALL_GAMEINIT)
 
 	// needed cos you can't have a pause in CALL_GAMEINIT
 	playSound(SND_TUT1,0);
-	addConsoleText(m_msge15,0);
+	addConsoleText(_("In this training session you'll learn how to build an effective base"), 0);
 
  	// ... and setup the first real event for action
 	setEventTrigger(buildDerrick,tutorialTrigger);
@@ -344,7 +301,7 @@ event	buildDerrick(inactive)
 	//wait 
 	pause(20);
 
-	tagConsoleText(m_msge16,0);
+	tagConsoleText(_("Oil resources are key to your success"), 0);
 	// Playsound "Oil resources are key to your success"
 	playSound(SND_TUT2,0);
 
@@ -353,7 +310,7 @@ event	buildDerrick(inactive)
 
 	pause(40);
 
-	tagConsoleText(m_msg1,0);
+	tagConsoleText(_("To build an oil derrick, select one of your trucks"), 0);
 
 	setEventTrigger(truckSelected,droidSelTrig);
 
@@ -373,7 +330,7 @@ event	truckSelected(inactive)
 	// Wait..
 	pause(10);
 
-	addConsoleText(m_msg2,0);
+	addConsoleText(_("Left click the oil pool indicated by the radar pulse to order your truck to build"), 0);
 
 	// Playsound "then left click the oil pool indicated by the radar pulse"
 	playSound(SND_TUT4,0);
@@ -393,7 +350,7 @@ event	derrickBuilt(CALL_RESEX_BUILT)
 	// Wait for a wee bit...
 	pause(20);
 
-	addConsoleText(m_msg3,0);
+	addConsoleText(_("The oil derrick is currently dormant. Build a power generator to convert the oil into power"), 0);
 
 	// PlaySound "The oil derrick is currently dormant"
 	playSound(SND_TUT5,0);
@@ -410,7 +367,7 @@ event	derrickBuilt(CALL_RESEX_BUILT)
 
 	pause(40);
 
-	tagConsoleText(m_msge1,0);
+	tagConsoleText(_("Left click the flashing BUILD icon"), 0);
 
 	// We want them to build a power generator now, so add the
 	// build button
@@ -437,7 +394,7 @@ event	buildIconChosen(buildlistTrig)
 	// PlaySound "Now left click the power generator in the build menu"
 	playSound(SND_TUT8,0);
 
-	tagConsoleText(m_msge2,0);
+	tagConsoleText(_("Now left click the power generator in the build menu on the left"), 0);
 
 	setEventTrigger(buildItemChosen,buildgridTrig);
 }
@@ -447,7 +404,7 @@ event	buildItemChosen(inactive)
 {
 	tutState = 5;
 
-	addConsoleText(m_msg4,0);
+	addConsoleText(_("Position the square at your base and left click to start the build process"), 0);
 
 	// PlaySound "Position the square at your base then left click
 	// to start the build process
@@ -462,7 +419,7 @@ event	tellToHelpBuild(beingBuilt)
 {
 	tutState = 6;
 
-	addConsoleText(m_msg5,0);
+	addConsoleText(_("To increase your build rate, select your second truck"), 0);
 
 	// PlaySound "To increase your build rate, select your second truck"
 	playSound(SND_TUT10,0);
@@ -497,7 +454,7 @@ event	correctUnit(inactive)
 	// PlaySound "Now left click the power generator site
 	playSound(SND_TUT11,0);
 
-	addConsoleText(m_msge18,0);
+	addConsoleText(_("Now left click the power generator site"), 0);
 
 	// Setup the helped-to-build event
 	setEventTrigger(helpedToBuild,droidHelpTrig);
@@ -512,7 +469,7 @@ event	helpedToBuild(inactive)
 	{
 		tutState = 9;
 		
-		addConsoleText(m_msge12,0);
+		addConsoleText(_("The other truck will now help to build the power generator"), 0);
 
 		// PlaySound "the truck will now help to build the power
 		// generator"
@@ -546,7 +503,7 @@ event	powerGenBuilt(CALL_POWERGEN_BUILT)
 
 	// PlaySound "during missions, you need to ..."
 	playSound(SND_TUT13,0);
-	addConsoleText(m_msge19,0);
+	addConsoleText(_("During missions you need to locate and recover technologies from before the Collapse"), 0);
 
 	// Wait a bit
 	pause(40);
@@ -556,10 +513,10 @@ event	powerGenBuilt(CALL_POWERGEN_BUILT)
 
 	// Wait for a bit
 	pause(20);
-	tagConsoleText(m_msg6,0);
+	tagConsoleText(_("Use a truck to search for the artifact indicated by the radar pulse"), 0);
 
 	pause(20);
-	tagConsoleText(m_msge13,0);
+	tagConsoleText(_("Move the pointer over the artifact and left click to recover it"), 0);
 	
 	// PlaySound "Move the pointer over the artifact"
 	playSound(SND_TUT16,0);
@@ -602,7 +559,7 @@ event	buildResearchCentre(inactive)
 {
 	tutState = 12;
 	
-	addConsoleText(m_msg7,0);
+	addConsoleText(_("A research facility is required to research artifacts"), 0);
 
 	// Remove the artefact
 	destroyFeature(hiddenArtefact);
@@ -616,7 +573,7 @@ event	buildResearchCentre(inactive)
 	// PlaySound "Left click the build icon"
 	playSound(SND_TUT19,0);
 
-	tagConsoleText(m_msge1,0);
+	tagConsoleText(_("Left click the flashing BUILD icon"), 0);
 
 	// Allow them to build research centres
 	enableStructure(research,0);
@@ -644,7 +601,7 @@ event	buildIconChosenResearch(inactive)
 	// PlaySound "Now left click thr research facility.."
 	playSound(SND_TUT20,0);
 
-	tagConsoleText(m_msge4,0);
+	tagConsoleText(_("Now left click the research facility and position it at your base"), 0);
 
 	setEventTrigger(buildIconChosenResearch,inactive);
 }
@@ -667,7 +624,7 @@ event	rfUnderConstruction(researchBeingBuilt)
 	// fire off this event second time on different state number - woohoo!
 	setEventTrigger(helpedToBuild,droidHelpTrig);
 	
-	addConsoleText(m_msge5,0);
+	addConsoleText(_("Use your other truck to help build the research facility"), 0);
 
 	// close event
 	setEventTrigger(rfUnderConstruction,inactive);
@@ -690,7 +647,7 @@ event	researchCentreBuilt(CALL_RESEARCH_BUILT)
 	// PlaySound "to resarch the artefact.."
 	playSound(SND_TUT22,0);
 
-	addConsoleText(m_msge6,0);
+	addConsoleText(_("To research the artifact, left click on the flashing RESEARCH icon"), 0);
 
 	// Better add it then
 	addReticuleButton(RESEARCH);
@@ -715,7 +672,7 @@ event	researchIconSelected(inactive)
 	// PlaySound "Now left click the icon"
 	playSound(SND_TUT23,0);
 
-	tagConsoleText(m_msge7,0);
+	tagConsoleText(_("Now left click the machinegun artifact"), 0);
 
 	// Fire up event
 	setEventTrigger(artefactChosen,researchartTrig);
@@ -728,7 +685,7 @@ event	artefactChosen(inactive)
 {
 	tutState = 17;
 
-	addConsoleText(m_msg8,0);
+	addConsoleText(_("The artifact is now being researched by the facility"), 0);
 
 	// PlaySound "the artefact will now be researched"
 	playSound(SND_TUT24,0);
@@ -749,7 +706,7 @@ event	researchCompleted(CALL_RESEARCHCOMPLETED, ref researchDone, ref structure,
 	// PlaySound "the researched mg can now be used to .."
 
 	playSound(SND_TUT28,0);
-	addConsoleText(m_msg9,0);
+	addConsoleText(_("The researched machinegun can now be used to design a new vehicle"), 0);
 
 	pause(20);
 
@@ -766,7 +723,7 @@ event	researchCompleted(CALL_RESEARCHCOMPLETED, ref researchDone, ref structure,
 	playSound(SND_TUT29,0);
 
 	pause(30);
-	tagConsoleText(m_msge8,0);
+	tagConsoleText(_("Left click the flashing DESIGN icon"), 0);
 
 	// Setup up design event
 	setEventTrigger(designSelected,desTrig);
@@ -782,7 +739,7 @@ event	designSelected(inactive)
 	// Switch off flashing
 	flashOff(IDRET_DESIGN);
 
-   	addConsoleText(m_msg10,0);
+	addConsoleText(_("To start your design, left click the NEW DESIGN icon"), 0);
 
 	// PlaySound "To start your design"
   	playSound(SND_TUT30,0);
@@ -797,7 +754,7 @@ event design1(newdesTrig)
 	tutState = 21;
 
 	clearConsole();
-  	addConsoleText(m_msg11,0);
+	addConsoleText(_("Now left click the Vehicle Body icon"), 0);
 	
 	// PlaySound "Now left click the vehicle body icon"
   	playSound(SND_TUT31,0);
@@ -811,7 +768,7 @@ event design4(bodyTrig)
 {
 	tutState = 22;
 
-	addConsoleText(m_msg12,0);
+	addConsoleText(_("Then left click the Viper body"), 0);
 	playSound(SND_TUT32,0);
 
 	// Kill event
@@ -823,7 +780,7 @@ event design5(bodyTrig2)
 {
 	tutState = 23;
 
-  	addConsoleText(m_msg13,0);
+	addConsoleText(_("Left click the Wheels icon"), 0);
 	// PlaySound "then left click the machine gun  to complete design"
    	playSound(SND_TUT33,0);
 	setEventTrigger(design5, inactive);
@@ -835,7 +792,7 @@ event design7(propTrig2)
 	tutState = 27;
 	
 	// click the machinegun to finalise oyur design
-	addConsoleText(m_msg16,0);
+	addConsoleText(_("Then left click the machinegun to complete your design"), 0);
 	playSound(SND_TUT34,0);
 
 	setEventTrigger(design7, inactive);
@@ -866,7 +823,7 @@ event	droidDesigned(CALL_DROIDDESIGNED)
 	// wait..
 	pause(60);
 
-	addConsoleText(m_msg17,0);
+	addConsoleText(_("To finalize your design, left click the CLOSE icon"), 0);
 
 	// 'to finalise your design'
 	playSound(SND_TUT37,0);
@@ -895,7 +852,7 @@ event	droidCreated(inactive)
 	// Wait for a bit
 	pause(30);
 
-	addConsoleText(m_msg18,0);
+	addConsoleText(_("A factory is now required to manufacture your new vehicle"), 0);
 
 	// PlaySound "A factory is now required to build..."
 	playSound(SND_TUT38,0);
@@ -907,7 +864,7 @@ event	droidCreated(inactive)
 	playSound(SND_TUT39,0);
 	pause(20);
 
-	tagConsoleText(m_msge1,0);
+	tagConsoleText(_("Left click the flashing BUILD icon"), 0);
 
 	
 	// Add the reticule button
@@ -930,7 +887,7 @@ event	buildSelectedFactory(inactive)
 	//playSound "Now left click the factory"
 	playSound(SND_TUT40,0);
 
-	tagConsoleText(m_msge9,0);
+	tagConsoleText(_("Now left click the factory icon and position it at your base"), 0);
 
 	// Setup next event
 	setEventTrigger(buildIconChosenFactory,buildgridTrig);
@@ -950,7 +907,7 @@ event	buildIconChosenFactory(inactive)
 	// Playsound - now position it at your base
 	playSound(SND_TUT41,0);
 
-	addConsoleText(m_msg19,0);
+	addConsoleText(_("Select a location for your factory"), 0);
 
 	// kill event
 	setEventTrigger(buildIconChosenFactory,inactive);
@@ -969,12 +926,12 @@ event	factoryChosen(factoryBeingBuilt)
 
 	playSound(SND_TUT42,0);
 	pause(10);
-	addConsoleText(m_msg20,0);
+	addConsoleText(_("The delivery point is indicated by the number 1"), 0);
 	pause(20);
 	playSound(SND_TUT43,0);
-	tagConsoleText(m_msg21,0);
+	tagConsoleText(_("All new units will drive to this location once built"), 0);
 	pause(40);
-	tagConsoleText(m_msge14,0);
+	tagConsoleText(_("You can move the delivery point at any time by left clicking it"), 0);
 	playSound(SND_TUT44,0);
 
 	// Kill event
@@ -988,7 +945,7 @@ event	delivPointMoved(trigDeliv)
 		tutState = 33;
 		dpMovedCount = 1;
 		playSound(SND_TUT45,0);
-		tagConsoleText(m_msge17,0);
+		tagConsoleText(_("Now click where you want to position the delivery point"), 0);
 
 	}
 	else 
@@ -1005,7 +962,7 @@ event	factoryBuilt(CALL_FACTORY_BUILT)
 {
 	tutState = 34;
 
-	addConsoleText(m_msg22,0);
+	addConsoleText(_("The factory can now be ordered to build a new unit"), 0);
 
 	// get a handle to the built structure
 	factoryStruc = getStructure(factory,0);
@@ -1031,7 +988,7 @@ event	factoryBuilt(CALL_FACTORY_BUILT)
 	// PlaySound "Left click the flashing manufacture icon"
 	playSound(SND_TUT48,0);
 
-	tagConsoleText(m_msge10,0);
+	tagConsoleText(_("Left click the flashing MANUFACTURE icon"), 0);
 
 	// Kill this event
 	setEventTrigger(factoryBuilt,inactive);
@@ -1049,7 +1006,7 @@ event	manufactureChosen(inactive)
 
 	playSound(SND_TUT50,0);
 
-	tagConsoleText(m_msge11,0);
+	tagConsoleText(_("Now left click the units you want to build from the menu at the left"), 0);
 
 	// Set off next event
 	setEventTrigger(manufactureIconChosen,prodrunTrig2);
@@ -1063,7 +1020,7 @@ event	manufactureIconChosen(inactive)
 	tutState = 36;
 
 
-	addConsoleText(m_msg23,0);
+	addConsoleText(_("Please wait whilst the factory manufactures the new unit(s)"), 0);
 
 	// playSoundHere
 	playSound(SND_TUT52,0);
@@ -1083,12 +1040,12 @@ event	firstDroidBuilt(droidBuilt)
 	// Remove Button
 	removeReticuleButton(MANUFACTURE,TRUE);
 
-	//playVideo(factoryRPL,NULLSTRING); // we don't have cut-scenes, to this would cause the bare sky-box to be shown
+	//playVideo((TEXTSTRING)"factory.rpl", NULLSTRING); // we don't have cut-scenes, to this would cause the bare sky-box to be shown
 	
 	//#REGION copied from videoDone(...)
 	pause(20);
 	playSound(SND_TUT81,0);
-	addConsoleText(m_msg24,0);
+	addConsoleText(_("Congratulations commander - you are ready for your first mission"), 0);
 	pause(80);
 	gameOver(TRUE);
 	//#END-REGION
@@ -1101,13 +1058,9 @@ event	videoDone(CALL_VIDEO_QUIT)
 {
 	pause(20);
 	playSound(SND_TUT81,0);
-	addConsoleText(m_msg24,0);
+	addConsoleText(_("Congratulations commander - you are ready for your first mission"), 0);
 	pause(80);
 	gameOver(TRUE);
 	setEventTrigger(videoDone,inactive);
 }
 //*/
-
-
-
-

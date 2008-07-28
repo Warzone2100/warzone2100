@@ -6,7 +6,6 @@ data/base/messages/strings/genstrings.txt
 data/base/messages/strings/names.txt
 data/base/messages/strings/resstrings.txt
 data/base/messages/strings/scrstrings.txt
-data/base/messages/strings/tutstrings.txt
 data/base/multiplay/script/multilim.slo
 data/base/multiplay/script/multiplay.slo
 data/base/multiplay/script/scavfact.slo
