@@ -11735,3 +11735,15 @@ BOOL scrGetBodySize(void)
 	}
 	return true;
 }
+
+BOOL scrGettext()
+{
+	if (!stackPopParams(1, VAL_STRING, &strParam1))
+	{
+		return false;
+	}
+
+	scrFunctionResult.v.sval = gettext(strParam1);
+
+	return stackPushResult(ST_TEXTSTRING, &scrFunctionResult);
+}

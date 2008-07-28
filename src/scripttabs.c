@@ -1458,6 +1458,15 @@ FUNC_SYMBOL asFuncTable[] =
 		1, { (INTERP_TYPE)ST_BODY },
 		0, 0, NULL, 0, 0, NULL, NULL },
 
+	// Gettext functions
+	{ "_", scrGettext, (INTERP_TYPE)ST_TEXTSTRING,
+		1, { VAL_STRING },
+		false, 0, NULL, 0, 0, NULL, NULL },
+
+	{ "gettext", scrGettext, (INTERP_TYPE)ST_TEXTSTRING,
+		1, { VAL_STRING },
+		false, 0, NULL, 0, 0, NULL, NULL },
+
 	/* END new functions */
 
     /* This final entry marks the end of the function list */
