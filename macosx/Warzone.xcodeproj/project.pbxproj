@@ -660,6 +660,9 @@
 		02F5CC910D1496580000A2D0 /* system.h in Headers */ = {isa = PBXBuildFile; fileRef = 02F5CC880D1496580000A2D0 /* system.h */; };
 		02F5CCC00D1498A30000A2D0 /* Popt.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02F5CC6D0D1494AA0000A2D0 /* Popt.framework */; };
 		2234C2A00E2BE18200E7704C /* positiondef.h in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 2234C29F0E2BE18200E7704C /* positiondef.h */; };
+		2244463C0E3EB7CB004D0F1F /* message_lexer.l in Sources */ = {isa = PBXBuildFile; fileRef = 224446390E3EB7CB004D0F1F /* message_lexer.l */; };
+		2244463D0E3EB7CB004D0F1F /* message_parser.y in Sources */ = {isa = PBXBuildFile; fileRef = 2244463A0E3EB7CB004D0F1F /* message_parser.y */; };
+		2244463E0E3EB7CB004D0F1F /* messagely.h in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 2244463B0E3EB7CB004D0F1F /* messagely.h */; };
 		9742E5730DF9975E000A5D41 /* lexer_input.c in Sources */ = {isa = PBXBuildFile; fileRef = 9742E5710DF9975E000A5D41 /* lexer_input.c */; };
 		9742E5740DF9975E000A5D41 /* lexer_input.h in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 9742E5720DF9975E000A5D41 /* lexer_input.h */; };
 		9742E5770DF9979C000A5D41 /* parsetest.c in Sources */ = {isa = PBXBuildFile; fileRef = 9742E5750DF9979C000A5D41 /* parsetest.c */; };
@@ -852,6 +855,7 @@
 				9742E5740DF9975E000A5D41 /* lexer_input.h in Copy frameworks */,
 				9742E5780DF9979C000A5D41 /* parsetest.h in Copy frameworks */,
 				2234C2A00E2BE18200E7704C /* positiondef.h in Copy frameworks */,
+				2244463E0E3EB7CB004D0F1F /* messagely.h in Copy frameworks */,
 			);
 			name = "Copy frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1690,6 +1694,9 @@
 		02F5CC870D1496580000A2D0 /* poptparse.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = poptparse.c; path = external/popt/poptparse.c; sourceTree = SOURCE_ROOT; };
 		02F5CC880D1496580000A2D0 /* system.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = system.h; path = external/popt/system.h; sourceTree = SOURCE_ROOT; };
 		2234C29F0E2BE18200E7704C /* positiondef.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = positiondef.h; path = ../src/positiondef.h; sourceTree = SOURCE_ROOT; };
+		224446390E3EB7CB004D0F1F /* message_lexer.l */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.lex; name = message_lexer.l; path = ../src/message_lexer.l; sourceTree = SOURCE_ROOT; };
+		2244463A0E3EB7CB004D0F1F /* message_parser.y */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.yacc; name = message_parser.y; path = ../src/message_parser.y; sourceTree = SOURCE_ROOT; };
+		2244463B0E3EB7CB004D0F1F /* messagely.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = messagely.h; path = ../src/messagely.h; sourceTree = SOURCE_ROOT; };
 		9742E5710DF9975E000A5D41 /* lexer_input.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = lexer_input.c; path = ../lib/framework/lexer_input.c; sourceTree = SOURCE_ROOT; };
 		9742E5720DF9975E000A5D41 /* lexer_input.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = lexer_input.h; path = ../lib/framework/lexer_input.h; sourceTree = SOURCE_ROOT; };
 		9742E5750DF9979C000A5D41 /* parsetest.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = parsetest.c; path = ../src/parsetest.c; sourceTree = SOURCE_ROOT; };
@@ -2381,6 +2388,9 @@
 				0246A2210BD3CCDB004D1C70 /* mapdisplay.h */,
 				0246A2220BD3CCDB004D1C70 /* mapgrid.c */,
 				0246A2230BD3CCDB004D1C70 /* mapgrid.h */,
+				224446390E3EB7CB004D0F1F /* message_lexer.l */,
+				2244463A0E3EB7CB004D0F1F /* message_parser.y */,
+				2244463B0E3EB7CB004D0F1F /* messagely.h */,
 				0246A2240BD3CCDB004D1C70 /* mechanics.c */,
 				0246A2250BD3CCDB004D1C70 /* mechanics.h */,
 				0246A2260BD3CCDB004D1C70 /* message.c */,
@@ -4003,6 +4013,8 @@
 				02DE76060DC3B84900D48F58 /* GLee.c in Sources */,
 				9742E5730DF9975E000A5D41 /* lexer_input.c in Sources */,
 				9742E5770DF9979C000A5D41 /* parsetest.c in Sources */,
+				2244463C0E3EB7CB004D0F1F /* message_lexer.l in Sources */,
+				2244463D0E3EB7CB004D0F1F /* message_parser.y in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
