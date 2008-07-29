@@ -11743,7 +11743,7 @@ BOOL scrGettext()
 		return false;
 	}
 
-	scrFunctionResult.v.sval = gettext(strParam1);
+	scrFunctionResult.v.sval = (char*)gettext(strParam1);
 
 	return stackPushResult(ST_TEXTSTRING, &scrFunctionResult);
 }
@@ -11779,9 +11779,9 @@ BOOL scrPgettext()
 	}
 
 #ifdef DEFAULT_TEXT_DOMAIN
-	translation = dcgettext(DEFAULT_TEXT_DOMAIN, msg_ctxt_id, LC_MESSAGES);
+	translation = (char*)dcgettext(DEFAULT_TEXT_DOMAIN, msg_ctxt_id, LC_MESSAGES);
 #else
-	translation = dcgettext(NULL,                msg_ctxt_id, LC_MESSAGES);
+	translation = (char*)dcgettext(NULL,                msg_ctxt_id, LC_MESSAGES);
 #endif
 
 	/* Due to the way dcgettext works a pointer comparison is enough, hence
