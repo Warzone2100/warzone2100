@@ -857,89 +857,76 @@ BOOL messageShutdown(void)
 /* Release the viewdata memory */
 void viewDataShutDown(VIEWDATA *psViewData)
 {
-	VIEWDATA_LIST	*psList, *psPrev;
-	UDWORD			seqInc;
-	VIEW_REPLAY		*psViewReplay;
-	VIEW_RESEARCH	*psViewRes;
-	UBYTE			i;
+	VIEWDATA_LIST	*psList, **psPrev;
 
-	psPrev = apsViewData;
-
-	for (psList = apsViewData; psList != NULL; psList = psList->psNext)
+	for (psList = apsViewData, psPrev = &apsViewData; psList != NULL; psPrev = &psList->psNext, psList = psList->psNext)
 	{
-		if (psList->psViewData == psViewData)
+		unsigned int i;
+
+		// Skip non-matching etnries
+		if (psList->psViewData != psViewData)
 		{
-			for (i = 0; i < psList->numViewData; i++)
-			{
-				psViewData = &psList->psViewData[i];
-
-				//check for any messages using this viewdata
-				checkMessages((MSG_VIEWDATA *)psViewData);
-
-				free(psViewData->pName);
-				psViewData->pName = NULL;
-
-				//free the space allocated for the text messages
-				if (psViewData->numText)
-				{
-					free(psViewData->ppTextMsg);
-					psViewData->ppTextMsg = NULL;
-				}
-
-				//free the space allocated for multiple sequences
-				if (psViewData->type == VIEW_RPL)
-				{
-					psViewReplay = (VIEW_REPLAY *)psViewData->pData;
-					if (psViewReplay->numSeq)
-					{
-						for (seqInc = 0; seqInc < psViewReplay->numSeq; seqInc++)
-						{
-							//free the space allocated for the text messages
-							if (psViewReplay->pSeqList[seqInc].numText)
-							{
-								free(psViewReplay->pSeqList[seqInc].ppTextMsg);
-								psViewReplay->pSeqList[seqInc].ppTextMsg = NULL;
-							}
-							if (psViewReplay->pSeqList[seqInc].pAudio)
-							{
-								free(psViewReplay->pSeqList[seqInc].pAudio);
-								psViewReplay->pSeqList[seqInc].pAudio = NULL;
-							}
-						}
-						free(psViewReplay->pSeqList);
-						psViewReplay->pSeqList = NULL;
-					}
-				}
-				else if (psViewData->type == VIEW_RES)
-				{
-					psViewRes = (VIEW_RESEARCH *)psViewData->pData;
-					if (psViewRes->pAudio)
-					{
-						free(psViewRes->pAudio);
-						psViewRes->pAudio = NULL;
-					}
-				}
-				free(psViewData->pData);
-				psViewData->pData = NULL;
-			}
-			free(psList->psViewData);
-			psList->psViewData = NULL;
-
-			//remove viewData list from the heap
-			if (psList == apsViewData)
-			{
-				apsViewData = psList->psNext;
-				free(psList);
-			}
-			else
-			{
-				psPrev->psNext = psList->psNext;
-				free(psList);
-			}
-			break;
+			continue;
 		}
+
+		for (i = 0; i < psList->numViewData; ++i)
+		{
+			psViewData = &psList->psViewData[i];
+
+			//check for any messages using this viewdata
+			checkMessages((MSG_VIEWDATA *)psViewData);
+
+			free(psViewData->pName);
+
+			//free the space allocated for the text messages
+			if (psViewData->numText)
+			{
+				free(psViewData->ppTextMsg);
+			}
+
+			//free the space allocated for multiple sequences
+			if (psViewData->type == VIEW_RPL)
+			{
+				VIEW_REPLAY* const psViewReplay = (VIEW_REPLAY *)psViewData->pData;
+				if (psViewReplay->numSeq)
+				{
+					unsigned int seqInc;
+					for (seqInc = 0; seqInc < psViewReplay->numSeq; ++seqInc)
+					{
+						//free the space allocated for the text messages
+						if (psViewReplay->pSeqList[seqInc].numText)
+						{
+							free(psViewReplay->pSeqList[seqInc].ppTextMsg);
+						}
+						if (psViewReplay->pSeqList[seqInc].pAudio)
+						{
+							free(psViewReplay->pSeqList[seqInc].pAudio);
+						}
+					}
+					free(psViewReplay->pSeqList);
+				}
+			}
+			else if (psViewData->type == VIEW_RES)
+			{
+				VIEW_RESEARCH* const psViewRes = (VIEW_RESEARCH *)psViewData->pData;
+				if (psViewRes->pAudio)
+				{
+					free(psViewRes->pAudio);
+				}
+			}
+			free(psViewData->pData);
+		}
+		free(psList->psViewData);
+
+		// remove viewData list from the list
+		*psPrev = psList->psNext;
+		free(psList);
+
+		/* Although we're a O(n) algorithm, lets not go for fullblown
+		 * O(n) behaviour if not required.
+		 */
+		break;
 	}
-	psPrev = psList;
 }
 
 /* Looks through the players list of messages to find one with the same viewData
