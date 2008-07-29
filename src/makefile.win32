@@ -48,9 +48,9 @@ SRC=ai.c \
 	mapdisplay.c \
 	mapgrid.c \
 	mechanics.c \
-	message.c \
-	message_lexer.lex.c \
 	message_parser.tab.c \
+	message_lexer.lex.c \
+	message.c \
 	miscimd.c \
 	move.c \
 	multiint.c \
