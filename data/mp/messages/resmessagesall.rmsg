@@ -1,71 +1,923 @@
-RES_DF_HCW1,4,RES_DF_HCW1_MSG1,RES_DF_HCW1_MSG2,RES_DF_HCW1_MSG3,RES_DF_HCW1_MSG4,0,MICAPSUL.pie,0,res_struttech.rpl,0,0000
-RES_ST_VF,4,RES_ST_VF_MSG1,RES_ST_VF_MSG2,RES_ST_VF_MSG3,RES_ST_VF_MSG4,0,MICAPSUL.pie,0,res_struttech.rpl,0,0000
-RES_ST_VP,4,RES_ST_VP_MSG1,RES_ST_VP_MSG2,RES_ST_VP_MSG3,RES_ST_VP_MSG4,0,MICAPSUL.pie,0,res_struttech.rpl,0,0000
-RES_REPTU1,4,RES_REPTU1_MSG1,RES_REPTU1_MSG2,RES_REPTU1_MSG3,RES_REPTU1_MSG4,0,MICAPSUL.pie,0,res_systech.rpl,0,0000
-RES_SENSO1,4,RES_SENSO1_MSG1,RES_SENSO1_MSG2,RES_SENSO1_MSG3,RES_SENSO1_MSG4,0,MICAPSUL.pie,0,res_systech.rpl,0,0000
-RES_SY_STW1,4,RES_SY_STW1_MSG1,RES_SY_STW1_MSG2,RES_SY_STW1_MSG3,RES_SY_STW1_MSG4,0,MICAPSUL.PIE,0,res_systech.rpl,0,0000
-RES_SY_SU1,4,RES_SY_SU1_MSG1,RES_SY_SU1_MSG2,RES_SY_SU1_MSG3,RES_SY_SU1_MSG4,0,MICAPSUL.PIE,0,res_systech.rpl,0,0000
-RES_SY_CBSTW1,4,RES_SY_CBSTW1_MSG1,RES_SY_CBSTW1_MSG2,RES_SY_CBSTW1_MSG3,RES_SY_CBSTW1_MSG4,0,MICAPSUL.PIE,0,res_systech.rpl,0,0000
-RES_V_B09,4,RES_V_B09_MSG1,RES_V_B09_MSG2,RES_V_B09_MSG3,RES_V_B09_MSG4,0,MICAPSUL.pie,0,res_droid.rpl,0,0000
-RES_V_P_V1,4,RES_V_P_V1_MSG1,RES_V_P_V1_MSG2,RES_V_P_V1_MSG3,RES_V_P_V1_MSG4,0,MICAPSUL.pie,0,res_droid.rpl,0,0000
-RES_W_SRK_AC3,4,RES_W_SRK_AC3_MSG1,RES_W_SRK_AC3_MSG2,RES_W_SRK_AC3_MSG3,RES_W_SRK_AC3_MSG4,0,MICAPSUL.PIE,0,res_weapons.rpl,0,0000
-RES_W_RK_LTAT1,4,RES_W_RK_LTAT1_MSG1,RES_W_RK_LTAT1_MSG2,RES_W_RK_LTAT1_MSG3,RES_W_RK_LTAT1_MSG4,0,MICAPSUL.PIE,0,res_weapons.rpl,0,0000
-RES_W_RK_HVAT1,4,RES_W_RK_HVAT1_MSG1,RES_W_RK_HVAT1_MSG2,RES_W_RK_HVAT1_MSG3,RES_W_RK_HVAT1_MSG4,0,MICAPSUL.PIE,0,res_weapons.rpl,0,0000
-RES_W_CNAC2,4,RES_W_CNAC2_MSG1,RES_W_CNAC2_MSG2,RES_W_CNAC2_MSG3,RES_W_CNAC2_MSG4,0,MICAPSUL.PIE,0,res_weapons.rpl,0,0000
-RES_CYTRANS,4,RES_CYTRANS_MSG1,RES_CYTRANS_MSG2,RES_CYTRANS_MSG3,RES_CYTRANS_MSG4,0,MICAPSUL.pie,0,res_droid.rpl,0,0000
-RES_EMP_INH,4,RES_EMP_INH_MSG1,RES_EMP_INH_MSG2,RES_EMP_INH_MSG3,RES_EMP_INH_MSG4,0,MICAPSUL.pie,0,res_struttech.rpl,0,0000
-RES_EMP_IMP,4,RES_EMP_IMP_MSG1,RES_EMP_IMP_MSG2,RES_EMP_IMP_MSG3,RES_EMP_IMP_MSG4,0,MICAPSUL.pie,0,res_struttech.rpl,0,0000
-RES_EMP_PFL,4,RES_EMP_PFL_MSG1,RES_EMP_PFL_MSG2,RES_EMP_PFL_MSG3,RES_EMP_PFL_MSG4,0,MICAPSUL.pie,0,res_struttech.rpl,0,0000
-RES_CYW_TFL,4,RES_CYW_TFL_MSG1,RES_CYW_TFL_MSG2,RES_CYW_TFL_MSG3,RES_CYW_TFL_MSG4,0,MICAPSUL.pie,0,res_droid.rpl,0,0000
-RES_CYW_GRN,4,RES_CYW_GRN_MSG1,RES_CYW_GRN_MSG2,RES_CYW_GRN_MSG3,RES_CYW_GRN_MSG4,0,MICAPSUL.pie,0,res_droid.rpl,0,0000
-RES_CYS_CEN,4,RES_CYS_CEN_MSG1,RES_CYS_CEN_MSG2,RES_CYS_CEN_MSG3,RES_CYS_CEN_MSG4,0,MICAPSUL.pie,0,res_droid.rpl,0,0000
-RES_CYS_MCH,4,RES_CYS_MCH_MSG1,RES_CYS_MCH_MSG2,RES_CYS_MCH_MSG3,RES_CYS_MCH_MSG4,0,MICAPSUL.pie,0,res_droid.rpl,0,0000
-RES_W_INH,4,RES_W_INH_MSG1,RES_W_INH_MSG2,RES_W_INH_MSG3,RES_W_INH_MSG4,0,MICAPSUL.PIE,0,res_weapons.rpl,0,0000
-RES_IMORT,4,RES_IMORT_MSG1,RES_IMORT_MSG2,RES_IMORT_MSG3,RES_IMORT_MSG4,0,MICAPSUL.PIE,0,res_weapons.rpl,0,0000
-RES_REPTUHVY,4,RES_REPTUHVY_MSG1,RES_REPTUHVY_MSG2,RES_REPTUHVY_MSG3,RES_REPTUHVY_MSG4,0,MICAPSUL.pie,0,res_systech.rpl,0,0000
-RES_PLFL,4,RES_PLFL_MSG1,RES_PLFL_MSG2,RES_PLFL_MSG3,RES_PLFL_MSG4,0,MICAPSUL.PIE,0,res_weapons.rpl,0,0000
-RES_SY_SPT,4,RES_SY_ST1_MSG1,RES_SY_ST1_MSG2,RES_SY_ST1_MSG3,RES_SY_ST1_MSG4,0,MICAPSUL.PIE,0,res_systech.rpl,0,0000
-RES_SY_RC,4,RES_SY_RC_MSG1,RES_SY_RC_MSG2,RES_SY_RC_MSG3,RES_SY_RC_MSG4,0,MICAPSUL.PIE,0,res_systech.rpl,0,0000
-RES_SY_AR,4,RES_SY_AR_MSG1,RES_SY_AR_MSG2,RES_SY_AR_MSG3,RES_SY_AR_MSG4,0,MICAPSUL.PIE,0,res_systech.rpl,0,0000
-RES_CYW_H_MC,4,RES_CYW_H_MC_MSG1,RES_CYW_H_MC_MSG2,RES_CYW_H_MC_MSG3,RES_CYW_H_MC_MSG4,0,MICAPSUL.pie,0,res_droid.rpl,0,0000
-RES_CYW_H_HPV,4,RES_CYW_H_HPV_MSG1,RES_CYW_H_HPV_MSG2,RES_CYW_H_HPV_MSG3,RES_CYW_H_HPV_MSG4,0,MICAPSUL.pie,0,res_droid.rpl,0,0000
-RES_CYW_H_AC,4,RES_CYW_H_AC_MSG1,RES_CYW_H_AC_MSG2,RES_CYW_H_AC_MSG3,RES_CYW_H_AC_MSG4,0,MICAPSUL.pie,0,res_droid.rpl,0,0000
-RES_CYW_H_TK,4,RES_CYW_H_TK_MSG1,RES_CYW_H_TK_MSG2,RES_CYW_H_TK_MSG3,RES_CYW_H_TK_MSG4,0,MICAPSUL.pie,0,res_droid.rpl,0,0000
-RES_W_HLAS,4,RES_W_HLAS_MSG1,RES_W_HLAS_MSG2,RES_W_HLAS_MSG3,RES_W_HLAS_MSG4,0,MICAPSUL.PIE,0,res_weapons.rpl,0,0000
-RES_W_CN6_T_A,4,RES_W_CN6_T_A_MSG1,RES_W_CN6_T_A_MSG2,RES_W_CN6_T_A_MSG3,RES_W_CN6_T_A_MSG4,0,MICAPSUL.PIE,0,res_weapons.rpl,0,0000
-RES_SY_S_UP,4,RES_SY_S_UP_MSG1,RES_SY_S_UP_MSG2,RES_SY_S_UP_MSG3,RES_SY_S_UP_MSG4,0,MICAPSUL.PIE,0,res_systech.rpl,0,0000
-RES_SY_S_WS,4,RES_SY_S_WS_MSG1,RES_SY_S_WS_MSG2,RES_SY_S_WS_MSG3,RES_SY_S_WS_MSG4,0,MICAPSUL.PIE,0,res_systech.rpl,0,0000
-RES_W_LASSAT,4,RES_W_LASSAT_MSG1,RES_W_LASSAT_MSG2,RES_W_LASSAT_MSG3,RES_W_LASSAT_MSG4,0,MICAPSUL.PIE,0,res_weapons.rpl,0,0000
-RES_SY_SPYT,4,RES_SY_SPYT_MSG1,RES_SY_SPYT_MSG2,RES_SY_SPYT_MSG3,RES_SY_SPYT_MSG4,0,MICAPSUL.PIE,0,res_systech.rpl,0,0000
-RES_W_PLASCAN,4,RES_W_PLASCAN_MSG1,RES_W_PLASCAN_MSG2,RES_W_PLASCAN_MSG3,RES_W_PLASCAN_MSG4,0,MICAPSUL.PIE,0,res_weapons.rpl,0,0000
-RES_EMP_PLASCAN,4,RES_EMP_PLASCAN_MSG1,RES_EMP_PLASCAN_MSG2,RES_EMP_PLASCAN_MSG3,RES_EMP_PLASCAN_MSG4,0,MICAPSUL.PIE,0,res_struttech.rpl,0,0000
-RES_EMP_HEAVYLAS,4,RES_EMP_HEAVYLAS_MSG1,RES_EMP_HEAVYLAS_MSG2,RES_EMP_HEAVYLAS_MSG3,RES_EMP_HEAVYLAS_MSG4,0,MICAPSUL.PIE,0,res_struttech.rpl,0,0000
-RES_DEF_EMP,4,RES_DEF_EMP_MSG1,RES_DEF_EMP_MSG2,RES_DEF_EMP_MSG3,RES_DEF_EMP_MSG4,0,MICAPSUL.pie,0,res_struttech.rpl,0,0000
-RES_CYW_H_PLAS,4,RES_CYW_H_PLAS_MSG1,RES_CYW_H_PLAS_MSG2,RES_CYW_H_PLAS_MSG3,RES_CYW_H_PLAS_MSG4,0,MICAPSUL.pie,0,res_droid.rpl,0,0000
-RES_CYW_H_RG,4,RES_CYW_H_RG_MSG1,RES_CYW_H_RG_MSG2,RES_CYW_H_RG_MSG3,RES_CYW_H_RG_MSG4,0,MICAPSUL.pie,0,res_droid.rpl,0,0000
-RES_CYW_H_AT,4,RES_CYW_H_AT_MSG1,RES_CYW_H_AT_MSG2,RES_CYW_H_AT_MSG3,RES_CYW_H_AT_MSG4,0,MICAPSUL.pie,0,res_droid.rpl,0,0000
-RES_EMP_MD,4,RES_EMP_MD_MSG1,RES_EMP_MD_MSG2,RES_EMP_MD_MSG3,RES_EMP_MD_MSG4,0,MICAPSUL.pie,0,res_struttech.rpl,0,0000
-RES_EMP_CAN,4,RES_EMP_CAN_MSG1,RES_EMP_CAN_MSG2,RES_EMP_CAN_MSG3,RES_EMP_CAN_MSG4,0,MICAPSUL.pie,0,res_struttech.rpl,0,0000
-RES_EMP_RKT,4,RES_EMP_RKT_MSG1,RES_EMP_RKT_MSG2,RES_EMP_RKT_MSG3,RES_EMP_RKT_MSG4,0,MICAPSUL.pie,0,res_struttech.rpl,0,0000
-RES_EMP_MSL,4,RES_EMP_MSL_MSG1,RES_EMP_MSL_MSG2,RES_EMP_MSL_MSG3,RES_EMP_MSL_MSG4,0,MICAPSUL.pie,0,res_struttech.rpl,0,0000
-RES_EMP_CANT,4,RES_EMP_CANT_MSG1,RES_EMP_CANT_MSG2,RES_EMP_CANT_MSG3,RES_EMP_CANT_MSG4,0,MICAPSUL.pie,0,res_weapons.rpl,0,0000
-RES_SY_S_WST,4,RES_SY_S_WST_MSG1,RES_SY_S_WST_MSG2,RES_SY_S_WST_MSG3,RES_SY_S_WST_MSG4,0,MICAPSUL.pie,0,res_systech.rpl,0,0000
-RES_V_B13,4,RES_V_B13_MSG1,RES_V_B13_MSG2,RES_V_B13_MSG3,RES_V_B13_MSG4,0,MICAPSUL.pie,0,res_droid.rpl,0,0000
-RES_V_B14,4,RES_V_B14_MSG1,RES_V_B14_MSG2,RES_V_B14_MSG3,RES_V_B14_MSG4,0,MICAPSUL.pie,0,res_droid.rpl,0,0000
-RES_MS_SAM2WT,4,RES_MS_SAM2WT_MSG1,RES_MS_SAM2WT_MSG2,RES_MS_SAM2WT_MSG3,RES_MS_SAM2WT_MSG4,0,MICAPSUL.pie,0,res_struttech.rpl,0,0000
-RES_WT_QUADAA,4,RES_WT_QUADAA_MSG1,RES_WT_QUADAA_MSG2,RES_WT_QUADAA_MSG3,RES_WT_QUADAA_MSG4,0,MICAPSUL.pie,0,res_struttech.rpl,0,0000
-RES_W_FL_D7,4,RES_W_FL_D7_MSG1,RES_W_FL_D7_MSG2,RES_W_FL_D7_MSG3,RES_W_FL_D7_MSG4,0,MICAPSUL.pie,0,res_weapons.rpl,0,0000
-RES_ST_FU7,4,RES_ST_FU7_MSG1,RES_ST_FU7_MSG2,RES_ST_FU7_MSG3,RES_ST_FU7_MSG4,0,MICAPSUL.pie,0,res_struttech.rpl,0,0000
-RES_ST_FCY7,4,RES_ST_FCY7_MSG1,RES_ST_FCY7_MSG2,RES_ST_FCY7_MSG3,RES_ST_FCY7_MSG4,0,MICAPSUL.pie,0,res_struttech.rpl,0,0000
-RES_DEF_EMPM,4,RES_DEF_EMPM_MSG1,RES_DEF_EMPM_MSG2,RES_DEF_EMPM_MSG3,RES_DEF_EMPM_MSG4,0,MICAPSUL.pie,0,res_struttech.rpl,0,0000
-RES_DEF_AALAS,4,RES_DEF_AALAS_MSG1,RES_DEF_AALAS_MSG2,RES_DEF_AALAS_MSG3,RES_DEF_AALAS_MSG4,0,MICAPSUL.pie,0,res_struttech.rpl,0,0000
-RES_V_AH7,4,RES_V_AH7_MSG1,RES_V_AH7_MSG2,RES_V_AH7_MSG3,RES_V_AH7_MSG4,0,MICAPSUL.pie,0,res_droid.rpl,0,0000
-RES_MS_SAM1WT,4,RES_MS_SAM1WT_MSG1,RES_MS_SAM1WT_MSG2,RES_MS_SAM1WT_MSG3,RES_MS_SAM1WT_MSG4,0,MICAPSUL.pie,0,res_struttech.rpl,0,0000
-RES_WT_DOUBLEAA,4,RES_WT_DOUBLEAA_MSG1,RES_WT_DOUBLEAA_MSG2,RES_WT_DOUBLEAA_MSG3,RES_WT_DOUBLEAA_MSG4,0,MICAPSUL.pie,0,res_struttech.rpl,0,0000
-RES_WT_TWINAGUN,4,RES_WT_TWINAGUN_MSG1,RES_WT_TWINAGUN_MSG2,RES_WT_TWINAGUN_MSG3,RES_WT_TWINAGUN_MSG4,0,MICAPSUL.pie,0,res_weapons.rpl,0,0000
-RES_WT_TWINAGHP,4,RES_WT_TWINAGHP_MSG1,RES_WT_TWINAGHP_MSG2,RES_WT_TWINAGHP_MSG3,RES_WT_TWINAGHP_MSG4,0,MICAPSUL.pie,0,res_struttech.rpl,0,0000
-RES_W_BMB5,4,RES_W_BMB5_MSG1,RES_W_BMB5_MSG2,RES_W_BMB5_MSG3,RES_W_BMB5_MSG4,0,MICAPSUL.pie,0,res_weapons.rpl,0,0000
-RES_W_BMB6,4,RES_W_BMB6_MSG1,RES_W_BMB6_MSG2,RES_W_BMB6_MSG3,RES_W_BMB6_MSG4,0,MICAPSUL.pie,0,res_weapons.rpl,0,0000
-RES_C_CT2,4,RES_C_CT2_MSG1,RES_C_CT2_MSG2,RES_C_CT2_MSG3,RES_C_CT2_MSG4,0,MICAPSUL.pie,0,res_systech.rpl,0,0000
-RES_C_CT3,4,RES_C_CT3_MSG1,RES_C_CT3_MSG2,RES_C_CT3_MSG3,RES_C_CT3_MSG4,0,MICAPSUL.pie,0,res_systech.rpl,0,0000
-RES_C_CT4,4,RES_C_CT4_MSG1,RES_C_CT4_MSG2,RES_C_CT4_MSG3,RES_C_CT4_MSG4,0,MICAPSUL.pie,0,res_systech.rpl,0,0000
+RES_DF_HCW1
+{
+	{
+		_("New Construction Options Available"),
+		_("Titanium-reinforced concrete"),
+		_("Enables Hardcrete walls"),
+		_("Defensive Strength: Medium"),
+	},
+	.imdName = "MICAPSUL.pie",
+	.imdName2 = NULL,
+	.sequenceName = "res_struttech.rpl",
+	.audioName = NULL,
+};
+RES_ST_VF
+{
+	{
+		_("New Base Structure Available"),
+		_("VTOL factory enables VTOL production"),
+		_("VTOL rearming pads required to keep VTOLs flying"),
+		_("May be upgraded using factory modules"),
+	},
+	.imdName = "MICAPSUL.pie",
+	.imdName2 = NULL,
+	.sequenceName = "res_struttech.rpl",
+	.audioName = NULL,
+};
+RES_ST_VP
+{
+	{
+		_("New Base Structure Available"),
+		_("Refuels, rearms and repairs VTOLs"),
+		_("Assign a VTOL by selecting the rearming pad as its target"),
+		_("The VTOL returns to the selected pad for rearming"),
+	},
+	.imdName = "MICAPSUL.pie",
+	.imdName2 = NULL,
+	.sequenceName = "res_struttech.rpl",
+	.audioName = NULL,
+};
+RES_REPTU1
+{
+	{
+		_("New Systems Turret Available"),
+		_("Battlefield repair unit"),
+		_("Automatically Repairs Damaged Units"),
+		_("Or damaged units may be selected as target"),
+	},
+	.imdName = "MICAPSUL.pie",
+	.imdName2 = NULL,
+	.sequenceName = "res_systech.rpl",
+	.audioName = NULL,
+};
+RES_SENSO1
+{
+	{
+		_("New Systems Turret Available For Design"),
+		_("Improved sensor range"),
+		_("Makes excellent scout vehicle"),
+		_("May be assigned as spotter for indirect fire weapons"),
+	},
+	.imdName = "MICAPSUL.pie",
+	.imdName2 = NULL,
+	.sequenceName = "res_systech.rpl",
+	.audioName = NULL,
+};
+RES_SY_STW1
+{
+	{
+		_("New Systems Tower Available"),
+		_("Extended sensor range"),
+		_("Keeps map areas under constant surveillance"),
+		_("May be assigned as spotter for indirect fire weapons"),
+	},
+	.imdName = "MICAPSUL.PIE",
+	.imdName2 = NULL,
+	.sequenceName = "res_systech.rpl",
+	.audioName = NULL,
+};
+RES_SY_SU1
+{
+	{
+		_("Sensors Improved"),
+		_("New Thermal Emissions detection"),
+		_("Extends Sensor Range"),
+		_("All sensors upgraded automatically"),
+	},
+	.imdName = "MICAPSUL.PIE",
+	.imdName2 = NULL,
+	.sequenceName = "res_systech.rpl",
+	.audioName = NULL,
+};
+RES_SY_CBSTW1
+{
+	{
+		_("New Systems Tower Available"),
+		_("Counter-battery tower detects enemy indirect fire batteries"),
+		_("Orders assigned indirect fire units to fire at the enemy batteries"),
+		_("Counter-battery fire continues until enemy battery is suppressed"),
+	},
+	.imdName = "MICAPSUL.PIE",
+	.imdName2 = NULL,
+	.sequenceName = "res_systech.rpl",
+	.audioName = NULL,
+};
+RES_V_B09
+{
+	{
+		_("Collective Heavy Body"),
+		_("More armor and body points than Python"),
+		_("Slower than Python"),
+		_("High power costs and slow to produce"),
+	},
+	.imdName = "MICAPSUL.pie",
+	.imdName2 = NULL,
+	.sequenceName = "res_droid.rpl",
+	.audioName = NULL,
+};
+RES_V_P_V1
+{
+	{
+		_("New Propulsion Available for Design"),
+		_("Vertical Take Off and Landing Propulsion"),
+		_("Speed: VTOL"),
+		_("Body Points: Low"),
+	},
+	.imdName = "MICAPSUL.pie",
+	.imdName2 = NULL,
+	.sequenceName = "res_droid.rpl",
+	.audioName = NULL,
+};
+RES_W_SRK_AC3
+{
+	{
+		_("Rocket Upgrade"),
+		_("Rocket detects and locks on to engine emissions"),
+		_("Increases Rocket accuracy"),
+		_("All rockets upgraded automatically"),
+	},
+	.imdName = "MICAPSUL.PIE",
+	.imdName2 = NULL,
+	.sequenceName = "res_weapons.rpl",
+	.audioName = NULL,
+};
+RES_W_RK_LTAT1
+{
+	{
+		_("New Rocket Available"),
+		_("Anti-tank rocket"),
+		_("Best Targets: Vehicles"),
+		_("Body Points: Very Low"),
+	},
+	.imdName = "MICAPSUL.PIE",
+	.imdName2 = NULL,
+	.sequenceName = "res_weapons.rpl",
+	.audioName = NULL,
+};
+RES_W_RK_HVAT1
+{
+	{
+		_("New Rocket Available"),
+		_("High explosive shaped charge missile"),
+		_("Best Targets: Bunkers and hardpoints"),
+		_("Body Points: Very Low"),
+	},
+	.imdName = "MICAPSUL.PIE",
+	.imdName2 = NULL,
+	.sequenceName = "res_weapons.rpl",
+	.audioName = NULL,
+};
+RES_W_CNAC2
+{
+	{
+		_("Cannon Upgrade"),
+		_("Laser designator paints and guides rounds to the target"),
+		_("Increases Cannon accuracy"),
+		_("All cannons upgraded automatically"),
+	},
+	.imdName = "MICAPSUL.PIE",
+	.imdName2 = NULL,
+	.sequenceName = "res_weapons.rpl",
+	.audioName = NULL,
+};
+RES_CYTRANS
+{
+	{
+		_("Cyborg Transport Available"),
+		_("Armed with Machinegun"),
+		_("Body Points: Medium"),
+		_("Requires heavy VTOL factory to produce"),
+	},
+	.imdName = "MICAPSUL.pie",
+	.imdName2 = NULL,
+	.sequenceName = "res_droid.rpl",
+	.audioName = NULL,
+};
+RES_EMP_INH
+{
+	{
+		_("New Defensive Structure Available"),
+		_("Incendiary howitzer emplacement"),
+		_("Assigned automatically to nearest sensor or CB tower"),
+		_("Defensive Strength: Medium"),
+	},
+	.imdName = "MICAPSUL.pie",
+	.imdName2 = NULL,
+	.sequenceName = "res_struttech.rpl",
+	.audioName = NULL,
+};
+RES_EMP_IMP
+{
+	{
+		_("New Defensive Structure Available"),
+		_("Armored Incendiary Mortar battery pit"),
+		_("Assigned automatically to nearest sensor or CB tower"),
+		_("Defensive Strength: Medium"),
+	},
+	.imdName = "MICAPSUL.pie",
+	.imdName2 = NULL,
+	.sequenceName = "res_struttech.rpl",
+	.audioName = NULL,
+};
+RES_EMP_PFL
+{
+	{
+		_("New Defensive Structure Available"),
+		_("Armored strongpoint with Plasmite Flamer"),
+		_("Automatically targets enemies in range"),
+		_("Defensive Strength: Medium"),
+	},
+	.imdName = "MICAPSUL.pie",
+	.imdName2 = NULL,
+	.sequenceName = "res_struttech.rpl",
+	.audioName = NULL,
+};
+RES_CYW_TFL
+{
+	{
+		_("New Cyborg Available"),
+		_("Armed with Cyborg Thermite Flamer"),
+		_("Body Points: Medium"),
+		_("Requires Cyborg factory to produce"),
+	},
+	.imdName = "MICAPSUL.pie",
+	.imdName2 = NULL,
+	.sequenceName = "res_droid.rpl",
+	.audioName = NULL,
+};
+RES_CYW_GRN
+{
+	{
+		_("New Cyborg Available"),
+		_("Armed with grenades"),
+		_("Body Points: Medium"),
+		_("Requires Cyborg factory to produce"),
+	},
+	.imdName = "MICAPSUL.pie",
+	.imdName2 = NULL,
+	.sequenceName = "res_droid.rpl",
+	.audioName = NULL,
+};
+RES_CYS_CEN
+{
+	{
+		_("New Cyborg Available"),
+		_("Combat engineer with construction ability"),
+		_("Body Points: Medium"),
+		_("Requires Cyborg factory to produce"),
+	},
+	.imdName = "MICAPSUL.pie",
+	.imdName2 = NULL,
+	.sequenceName = "res_droid.rpl",
+	.audioName = NULL,
+};
+RES_CYS_MCH
+{
+	{
+		_("New Cyborg Available"),
+		_("Mechanic with repair ability"),
+		_("Body Points: Medium"),
+		_("Requires Cyborg factory to produce"),
+	},
+	.imdName = "MICAPSUL.pie",
+	.imdName2 = NULL,
+	.sequenceName = "res_droid.rpl",
+	.audioName = NULL,
+};
+RES_W_INH
+{
+	{
+		_("New Indirect Fire Weapon Available"),
+		_("Incendiary Howitzer may be assigned to a sensor"),
+		_("Best Targets: Base Structures, infantry, wheeled vehicles"),
+		_("Body Points: Low"),
+	},
+	.imdName = "MICAPSUL.PIE",
+	.imdName2 = NULL,
+	.sequenceName = "res_weapons.rpl",
+	.audioName = NULL,
+};
+RES_IMORT
+{
+	{
+		_("New Indirect Fire Weapon Available"),
+		_("May be targeted directly or assigned to a sensor turret or tower"),
+		_("Best Targets: Base structures, infantry, wheeled vehicles"),
+		_("Body Points: Very Low"),
+	},
+	.imdName = "MICAPSUL.PIE",
+	.imdName2 = NULL,
+	.sequenceName = "res_weapons.rpl",
+	.audioName = NULL,
+};
+RES_REPTUHVY
+{
+	{
+		_("New Systems Turret Available"),
+		_("Heavy repair unit"),
+		_("Automatically Repairs Damaged Units"),
+		_("Or damaged units may be selected as target"),
+	},
+	.imdName = "MICAPSUL.pie",
+	.imdName2 = NULL,
+	.sequenceName = "res_systech.rpl",
+	.audioName = NULL,
+};
+RES_PLFL
+{
+	{
+		_("New Weapon Turret Available"),
+		_("Plasmite Flame-thrower"),
+		_("Best Targets: Bunkers, wheeled and hover vehicles"),
+		_("Body Points: Very low"),
+	},
+	.imdName = "MICAPSUL.PIE",
+	.imdName2 = NULL,
+	.sequenceName = "res_weapons.rpl",
+	.audioName = NULL,
+};
+RES_SY_SPT
+{
+	{
+		_("New Systems Turret Available"),
+		_("Synaptic Link Scrambler technology"),
+		_("Electronically attacks and disrupts enemy structures"),
+		_("Steals technology from structures and takes control of weapons"),
+	},
+	.imdName = "MICAPSUL.PIE",
+	.imdName2 = NULL,
+	.sequenceName = "res_systech.rpl",
+	.audioName = NULL,
+};
+RES_SY_RC
+{
+	{
+		_("New Electronic Technology Discovered"),
+		_("Synaptic Link technology breakthrough"),
+		_("On-board resistance circuit systems"),
+		_("Enables resistance to Nexus Link technology"),
+	},
+	.imdName = "MICAPSUL.PIE",
+	.imdName2 = NULL,
+	.sequenceName = "res_systech.rpl",
+	.audioName = NULL,
+};
+RES_SY_AR
+{
+	{
+		_("New Repair Technology Discovered"),
+		_("Synaptic Link technology breakthrough"),
+		_("On-board diagnostic and repair systems"),
+		_("Enables self-repair"),
+	},
+	.imdName = "MICAPSUL.PIE",
+	.imdName2 = NULL,
+	.sequenceName = "res_systech.rpl",
+	.audioName = NULL,
+};
+RES_CYW_H_MC
+{
+	{
+		_("New Cyborg Available"),
+		_("Armed with medium cannon"),
+		_("Body Points: Medium"),
+		_("Requires Cyborg factory to produce"),
+	},
+	.imdName = "MICAPSUL.pie",
+	.imdName2 = NULL,
+	.sequenceName = "res_droid.rpl",
+	.audioName = NULL,
+};
+RES_CYW_H_HPV
+{
+	{
+		_("New Cyborg Available"),
+		_("Armed with hyper velocity cannon"),
+		_("Body Points: Medium"),
+		_("Requires Cyborg factory to produce"),
+	},
+	.imdName = "MICAPSUL.pie",
+	.imdName2 = NULL,
+	.sequenceName = "res_droid.rpl",
+	.audioName = NULL,
+};
+RES_CYW_H_AC
+{
+	{
+		_("New Cyborg Available"),
+		_("Armed with hyper velocity cannon"),
+		_("Body Points: Medium"),
+		_("Requires Cyborg factory to produce"),
+	},
+	.imdName = "MICAPSUL.pie",
+	.imdName2 = NULL,
+	.sequenceName = "res_droid.rpl",
+	.audioName = NULL,
+};
+RES_CYW_H_TK
+{
+	{
+		_("New Cyborg Available"),
+		_("Armed with tank killer rockets"),
+		_("Body Points: Medium"),
+		_("Requires Cyborg factory to produce"),
+	},
+	.imdName = "MICAPSUL.pie",
+	.imdName2 = NULL,
+	.sequenceName = "res_droid.rpl",
+	.audioName = NULL,
+};
+RES_W_HLAS
+{
+	{
+		_("New Laser Weapon Available"),
+		_("Fires heavy pulses of laser light"),
+		_("Best Targets: Heavy cyborgs"),
+		_("Body Points: Medium"),
+	},
+	.imdName = "MICAPSUL.PIE",
+	.imdName2 = NULL,
+	.sequenceName = "res_weapons.rpl",
+	.audioName = NULL,
+};
+RES_W_CN6_T_A
+{
+	{
+		_("New Weapon Turret Available"),
+		_("76mm twin-barrel automatic-cannon"),
+		_("Best Targets: Vehicles"),
+		_("Body Points: High"),
+	},
+	.imdName = "MICAPSUL.PIE",
+	.imdName2 = NULL,
+	.sequenceName = "res_weapons.rpl",
+	.audioName = NULL,
+};
+RES_SY_S_UP
+{
+	{
+		_("New Systems Structure Available"),
+		_("Complete battlefield visibility"),
+		_("Keeps map areas under constant surveillance"),
+		_("The ultimate in sensor technology"),
+	},
+	.imdName = "MICAPSUL.PIE",
+	.imdName2 = NULL,
+	.sequenceName = "res_systech.rpl",
+	.audioName = NULL,
+};
+RES_SY_S_WS
+{
+	{
+		_("New Systems Structure Available"),
+		_("Combines standard, counter battery and VTOL sensors"),
+		_("Keeps map areas under constant surveillance"),
+		_("Improved sensor range"),
+	},
+	.imdName = "MICAPSUL.PIE",
+	.imdName2 = NULL,
+	.sequenceName = "res_systech.rpl",
+	.audioName = NULL,
+};
+RES_W_LASSAT
+{
+	{
+		_("New Advanced Weapon Available"),
+		_("Very slow recharge time"),
+		_("Immense damage infliction capability"),
+		_("Narrow area of affect"),
+	},
+	.imdName = "MICAPSUL.PIE",
+	.imdName2 = NULL,
+	.sequenceName = "res_weapons.rpl",
+	.audioName = NULL,
+};
+RES_SY_SPYT
+{
+	{
+		_("New Defensive Structure Available"),
+		_("Armored guard tower with Nexus Link"),
+		_("Automatically targets enemies within sensor range"),
+		_("Defensive Strength: Medium"),
+	},
+	.imdName = "MICAPSUL.PIE",
+	.imdName2 = NULL,
+	.sequenceName = "res_systech.rpl",
+	.audioName = NULL,
+};
+RES_W_PLASCAN
+{
+	{
+		_("New Weapon Turret Available"),
+		_("Plasma Cannon firing plasma"),
+		_("Best Targets: Vehicles"),
+		_("Body Points: Medium"),
+	},
+	.imdName = "MICAPSUL.PIE",
+	.imdName2 = NULL,
+	.sequenceName = "res_weapons.rpl",
+	.audioName = NULL,
+};
+RES_EMP_PLASCAN
+{
+	{
+		_("New Defensive Structure Available"),
+		_("Plasma Cannon firing plasma"),
+		_("Best Targets : Vehicles"),
+		_("Defensive Strength: Medium"),
+	},
+	.imdName = "MICAPSUL.PIE",
+	.imdName2 = NULL,
+	.sequenceName = "res_struttech.rpl",
+	.audioName = NULL,
+};
+RES_EMP_HEAVYLAS
+{
+	{
+		_("New Defensive Structure Available"),
+		_("Armored strongpoint with Heavy Laser"),
+		_("Automatically targets enemies in range"),
+		_("Defensive Strength: Medium"),
+	},
+	.imdName = "MICAPSUL.PIE",
+	.imdName2 = NULL,
+	.sequenceName = "res_struttech.rpl",
+	.audioName = NULL,
+};
+RES_DEF_EMP
+{
+	{
+		_("New Defensive Structure Available"),
+		_("Armored guard tower with EMP Cannon"),
+		_("Automatically targets enemies within sensor range"),
+		_("Defensive Strength: Medium"),
+	},
+	.imdName = "MICAPSUL.pie",
+	.imdName2 = NULL,
+	.sequenceName = "res_struttech.rpl",
+	.audioName = NULL,
+};
+RES_CYW_H_PLAS
+{
+	{
+		_("New Cyborg Available"),
+		_("Armed with Cyborg Pulse Laser"),
+		_("Body Points: Medium"),
+		_("Requires Cyborg factory to produce"),
+	},
+	.imdName = "MICAPSUL.pie",
+	.imdName2 = NULL,
+	.sequenceName = "res_droid.rpl",
+	.audioName = NULL,
+};
+RES_CYW_H_RG
+{
+	{
+		_("New Cyborg Available"),
+		_("Armed with Cyborg Rail Gun"),
+		_("Body Points: Medium"),
+		_("Requires Cyborg factory to produce"),
+	},
+	.imdName = "MICAPSUL.pie",
+	.imdName2 = NULL,
+	.sequenceName = "res_droid.rpl",
+	.audioName = NULL,
+};
+RES_CYW_H_AT
+{
+	{
+		_("New Cyborg Available"),
+		_("Armed with Cyborg Scourge Missile Launcher"),
+		_("Body Points: Medium"),
+		_("Requires Cyborg factory to produce"),
+	},
+	.imdName = "MICAPSUL.pie",
+	.imdName2 = NULL,
+	.sequenceName = "res_droid.rpl",
+	.audioName = NULL,
+};
+RES_EMP_MD
+{
+	{
+		_("New Defensive Structure Available"),
+		_("Uses advanced mass driver railgun technology"),
+		_("Best Targets : Vehicles"),
+		_("Defensive Strength : High"),
+	},
+	.imdName = "MICAPSUL.pie",
+	.imdName2 = NULL,
+	.sequenceName = "res_struttech.rpl",
+	.audioName = NULL,
+};
+RES_EMP_CAN
+{
+	{
+		_("New Defensive Structure Available"),
+		_("Uses advanced cannon technology"),
+		_("Best Targets : Vehicles"),
+		_("Defensive Strength : High"),
+	},
+	.imdName = "MICAPSUL.pie",
+	.imdName2 = NULL,
+	.sequenceName = "res_struttech.rpl",
+	.audioName = NULL,
+};
+RES_EMP_RKT
+{
+	{
+		_("New Defensive Structure Available"),
+		_("Uses advanced rocket gun technology"),
+		_("Best Targets : Vehicles"),
+		_("Defensive Strength : High"),
+	},
+	.imdName = "MICAPSUL.pie",
+	.imdName2 = NULL,
+	.sequenceName = "res_struttech.rpl",
+	.audioName = NULL,
+};
+RES_EMP_MSL
+{
+	{
+		_("New Defensive Structure Available"),
+		_("Uses advanced missile gun technology"),
+		_("Best Targets : Vehicles"),
+		_("Defensive Strength : High"),
+	},
+	.imdName = "MICAPSUL.pie",
+	.imdName2 = NULL,
+	.sequenceName = "res_struttech.rpl",
+	.audioName = NULL,
+};
+RES_EMP_CANT
+{
+	{
+		_("New Weapon Turret Available"),
+		_("Powerful Electronic magnetic pulse weapon"),
+		_("Best Targets : Vehicles"),
+		_("Defensive Strength: Medium"),
+	},
+	.imdName = "MICAPSUL.pie",
+	.imdName2 = NULL,
+	.sequenceName = "res_weapons.rpl",
+	.audioName = NULL,
+};
+RES_SY_S_WST
+{
+	{
+		_("New System Available"),
+		_("Combines standard, counter battery and VTOL sensors"),
+		_("Keeps map areas under constant surveillance"),
+		_("Improved sensor range"),
+	},
+	.imdName = "MICAPSUL.pie",
+	.imdName2 = NULL,
+	.sequenceName = "res_systech.rpl",
+	.audioName = NULL,
+};
+RES_V_B13
+{
+	{
+		_("Medium Super Heavy Body"),
+		_("More armor and body points than Vengance"),
+		_("Slow moving Body"),
+		_("Very expensive to produce"),
+	},
+	.imdName = "MICAPSUL.pie",
+	.imdName2 = NULL,
+	.sequenceName = "res_droid.rpl",
+	.audioName = NULL,
+};
+RES_V_B14
+{
+	{
+		_("Large Super Heavy Body"),
+		_("Maximum armor and body points"),
+		_("Very slow moving Body"),
+		_("Very expensive to produce"),
+	},
+	.imdName = "MICAPSUL.pie",
+	.imdName2 = NULL,
+	.sequenceName = "res_droid.rpl",
+	.audioName = NULL,
+};
+RES_MS_SAM2WT
+{
+	{
+		_("Hardpoint Vindicator SAM Site Available"),
+		_("Heavy surface-to-air missile"),
+		_("Best Targets: Aerial targets only"),
+		_("Body Points: Medium"),
+	},
+	.imdName = "MICAPSUL.pie",
+	.imdName2 = NULL,
+	.sequenceName = "res_struttech.rpl",
+	.audioName = NULL,
+};
+RES_WT_QUADAA
+{
+	{
+		_("Hardpoint Whirlwind AA Gun Available"),
+		_("Quad 30mm Anti-Aircraft machinegun"),
+		_("Aerial targets only"),
+		_("Body Points: Medium"),
+	},
+	.imdName = "MICAPSUL.pie",
+	.imdName2 = NULL,
+	.sequenceName = "res_struttech.rpl",
+	.audioName = NULL,
+};
+RES_W_FL_D7
+{
+	{
+		_("Flamer Upgrade"),
+		_("Propylene Oxide treated to burn at superhot temperatures"),
+		_("Increases Flamer damage"),
+		_("All flamers upgraded automatically"),
+	},
+	.imdName = "MICAPSUL.pie",
+	.imdName2 = NULL,
+	.sequenceName = "res_weapons.rpl",
+	.audioName = NULL,
+};
+RES_ST_FU7
+{
+	{
+		_("Vehicle Production Improved"),
+		_("Advanced Factory Production"),
+		_("Increases factory output"),
+		_("All vehicle factories upgraded automatically"),
+	},
+	.imdName = "MICAPSUL.pie",
+	.imdName2 = NULL,
+	.sequenceName = "res_struttech.rpl",
+	.audioName = NULL,
+};
+RES_ST_FCY7
+{
+	{
+		_("Cyborg Production Improved"),
+		_("Advanced Cyborg Production"),
+		_("Increases Cyborg factory output"),
+		_("All Cyborg factories upgraded automatically"),
+	},
+	.imdName = "MICAPSUL.pie",
+	.imdName2 = NULL,
+	.sequenceName = "res_struttech.rpl",
+	.audioName = NULL,
+};
+RES_DEF_EMPM
+{
+	{
+		_("New Defensive Structure Available"),
+		_("Armored EMP Mortar battery pit"),
+		_("Assigned automatically to nearest sensor or CB tower"),
+		_("Defensive Strength: Medium"),
+	},
+	.imdName = "MICAPSUL.pie",
+	.imdName2 = NULL,
+	.sequenceName = "res_struttech.rpl",
+	.audioName = NULL,
+};
+RES_DEF_AALAS
+{
+	{
+		_("Laser AA Gun Available"),
+		_("Twin Medium Anti-Aircraft Laser"),
+		_("Aerial targets only"),
+		_("Body Points: Medium"),
+	},
+	.imdName = "MICAPSUL.pie",
+	.imdName2 = NULL,
+	.sequenceName = "res_struttech.rpl",
+	.audioName = NULL,
+};
+RES_V_AH7
+{
+	{
+		_("Vehicle Thermal Armor Improved"),
+		_("Heat-resistant armored layers"),
+		_("Increases Thermal Armor"),
+		_("All vehicles upgraded automatically"),
+	},
+	.imdName = "MICAPSUL.pie",
+	.imdName2 = NULL,
+	.sequenceName = "res_droid.rpl",
+	.audioName = NULL,
+};
+RES_MS_SAM1WT
+{
+	{
+		_("Hardpoint Avenger SAM Site Available"),
+		_("Surface-to-air missile"),
+		_("Best Targets: Aerial targets only"),
+		_("Body Points: Medium"),
+	},
+	.imdName = "MICAPSUL.pie",
+	.imdName2 = NULL,
+	.sequenceName = "res_struttech.rpl",
+	.audioName = NULL,
+};
+RES_WT_DOUBLEAA
+{
+	{
+		_("Hardpoint Cyclone AA Gun Available"),
+		_("Quad 80mm Anti-Aircraft machinegun"),
+		_("Aerial targets only"),
+		_("Body Points: Medium"),
+	},
+	.imdName = "MICAPSUL.pie",
+	.imdName2 = NULL,
+	.sequenceName = "res_struttech.rpl",
+	.audioName = NULL,
+};
+RES_WT_TWINAGUN
+{
+	{
+		_("New Weapon Turret Available"),
+		_("Twin Multi-barrel, rapid-fire machinegun"),
+		_("Best Targets: Infantry, base structures, wheeled vehicles"),
+		_("Replaces all machineguns"),
+	},
+	.imdName = "MICAPSUL.pie",
+	.imdName2 = NULL,
+	.sequenceName = "res_weapons.rpl",
+	.audioName = NULL,
+};
+RES_WT_TWINAGHP
+{
+	{
+		_("Hardpoint Twin Assault Gun Available"),
+		_("Twin Multi-barrel, rapid-fire machinegun"),
+		_("Best Targets: Infantry, base structures, wheeled vehicles"),
+		_("Replaces all machineguns"),
+	},
+	.imdName = "MICAPSUL.pie",
+	.imdName2 = NULL,
+	.sequenceName = "res_struttech.rpl",
+	.audioName = NULL,
+};
+RES_W_BMB5
+{
+	{
+		_("New Bomb Bay Available"),
+		_("Drops high intensity Plasmite bombs"),
+		_("Best Targets: Bunkers and hardpoints"),
+		_("Body Points: Low"),
+	},
+	.imdName = "MICAPSUL.pie",
+	.imdName2 = NULL,
+	.sequenceName = "res_weapons.rpl",
+	.audioName = NULL,
+};
+RES_W_BMB6
+{
+	{
+		_("New VTOL Missile Launcher"),
+		_("Fires Electronic Magnetic Pulse Missiles"),
+		_("Best Targets: Vehicles"),
+		_("Body Points: Low"),
+	},
+	.imdName = "MICAPSUL.pie",
+	.imdName2 = NULL,
+	.sequenceName = "res_weapons.rpl",
+	.audioName = NULL,
+};
+RES_C_CT2
+{
+	{
+		_("Stronger Commander Turret Available for Design"),
+		_("Upgraded battlefield computer system"),
+		_("Commander leads groups acts as factory delivery point"),
+		_("Body Points: High"),
+	},
+	.imdName = "MICAPSUL.pie",
+	.imdName2 = NULL,
+	.sequenceName = "res_systech.rpl",
+	.audioName = NULL,
+};
+RES_C_CT3
+{
+	{
+		_("Stronger Commander Turret Available for Design"),
+		_("Upgraded battlefield computer system"),
+		_("Commander leads groups acts as factory delivery point"),
+		_("Body Points: High"),
+	},
+	.imdName = "MICAPSUL.pie",
+	.imdName2 = NULL,
+	.sequenceName = "res_systech.rpl",
+	.audioName = NULL,
+};
+RES_C_CT4
+{
+	{
+		_("Stronger Commander Turret Available for Design"),
+		_("Upgraded battlefield computer system"),
+		_("Commander leads groups acts as factory delivery point"),
+		_("Body Points: High"),
+	},
+	.imdName = "MICAPSUL.pie",
+	.imdName2 = NULL,
+	.sequenceName = "res_systech.rpl",
+	.audioName = NULL,
+};
