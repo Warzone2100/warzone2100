@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
 "POT-Creation-Date: 2008-07-29 20:16+0200\n"
-"PO-Revision-Date: 2008-07-20 07:23+0100\n"
-"Last-Translator: Steven \"Kreuvf\" Koenig <translations@kreuvf.de>\n"
+"PO-Revision-Date: 2008-07-29 20:44+0100\n"
+"Last-Translator: Steven 'Kreuvf' Koenig <translations@kreuvf.de>\n"
 "Language-Team: Deutsch <warzone-dev@gna.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -5274,7 +5274,7 @@ msgstr "Cyborg-Antrieb III"
 #: data/base/messages/strings/names.txt:334
 #: data/mp/messages/strings/names.txt:336
 msgid "Naval"
-msgstr ""
+msgstr "Marine"
 
 #: data/base/messages/strings/names.txt:337
 #: data/mp/messages/strings/names.txt:339
@@ -9571,7 +9571,7 @@ msgstr "Systemsprache"
 #: lib/framework/i18n.c:45
 #: lib/framework/i18n.c:96
 msgid "Czech"
-msgstr ""
+msgstr "Tschechisch"
 
 #: lib/framework/i18n.c:46
 #: lib/framework/i18n.c:97
@@ -9591,25 +9591,22 @@ msgstr "Englisch"
 #: lib/framework/i18n.c:49
 #: lib/framework/i18n.c:100
 msgid "English (United Kingdom)"
-msgstr ""
+msgstr "Englisch (Vereinigtes Königreich)"
 
 #: lib/framework/i18n.c:50
 #: lib/framework/i18n.c:101
-#, fuzzy
 msgid "Spanish"
-msgstr "Dänisch"
+msgstr "Spanisch"
 
 #: lib/framework/i18n.c:51
 #: lib/framework/i18n.c:102
-#, fuzzy
 msgid "Basque"
-msgstr "Basis"
+msgstr "Baskisch"
 
 #: lib/framework/i18n.c:52
 #: lib/framework/i18n.c:103
-#, fuzzy
 msgid "Finnish"
-msgstr "Dänisch"
+msgstr "Finnisch"
 
 #: lib/framework/i18n.c:53
 #: lib/framework/i18n.c:104
@@ -9619,13 +9616,12 @@ msgstr "Französisch"
 #: lib/framework/i18n.c:61
 #: lib/framework/i18n.c:112
 msgid "Frisian"
-msgstr ""
+msgstr "Friesisch"
 
 #: lib/framework/i18n.c:62
 #: lib/framework/i18n.c:113
-#, fuzzy
 msgid "Irish"
-msgstr "Geplänkel"
+msgstr "Irisch"
 
 #: lib/framework/i18n.c:63
 #: lib/framework/i18n.c:114
@@ -9635,13 +9631,12 @@ msgstr "Italienisch"
 #: lib/framework/i18n.c:64
 #: lib/framework/i18n.c:116
 msgid "Lithuanian"
-msgstr ""
+msgstr "Litauisch"
 
 #: lib/framework/i18n.c:65
 #: lib/framework/i18n.c:117
-#, fuzzy
 msgid "Latvian"
-msgstr "Latein"
+msgstr "Lettisch"
 
 #: lib/framework/i18n.c:66
 #: lib/framework/i18n.c:118
@@ -9650,9 +9645,8 @@ msgstr "Norwegisch"
 
 #: lib/framework/i18n.c:67
 #: lib/framework/i18n.c:119
-#, fuzzy
 msgid "Norwegian (Nynorsk)"
-msgstr "Norwegisch"
+msgstr "Norwegisch (Nynorsk)"
 
 #: lib/framework/i18n.c:68
 #: lib/framework/i18n.c:120
@@ -9661,15 +9655,13 @@ msgstr "Niederländisch"
 
 #: lib/framework/i18n.c:69
 #: lib/framework/i18n.c:121
-#, fuzzy
 msgid "Polish"
-msgstr "Abreißen"
+msgstr "Polnisch"
 
 #: lib/framework/i18n.c:70
 #: lib/framework/i18n.c:122
-#, fuzzy
 msgid "Brazilian Portuguese"
-msgstr "Portugiesisch"
+msgstr "Brasilianisches Portugiesisch"
 
 #: lib/framework/i18n.c:71
 #: lib/framework/i18n.c:123
@@ -9679,7 +9671,7 @@ msgstr "Portugiesisch"
 #: lib/framework/i18n.c:72
 #: lib/framework/i18n.c:124
 msgid "Romanian"
-msgstr ""
+msgstr "Rumänisch"
 
 #: lib/framework/i18n.c:73
 #: lib/framework/i18n.c:125
@@ -9689,14 +9681,13 @@ msgstr "Russisch"
 #: lib/framework/i18n.c:74
 #: lib/framework/i18n.c:126
 msgid "Slovenian"
-msgstr ""
+msgstr "Slowenisch"
 
 #: lib/framework/i18n.c:76
 #: lib/framework/i18n.c:78
 #: lib/framework/i18n.c:127
-#, fuzzy
 msgid "Swedish (Sweden)"
-msgstr "Schwedisch"
+msgstr "Schwedisch (Schweden)"
 
 #: lib/framework/i18n.c:80
 #: lib/framework/i18n.c:128
@@ -9705,19 +9696,18 @@ msgstr "Schwedisch"
 
 #: lib/framework/i18n.c:81
 #: lib/framework/i18n.c:129
-#, fuzzy
 msgid "Turkish"
-msgstr "Ketten"
+msgstr "Türkisch"
 
 #: lib/framework/i18n.c:82
 #: lib/framework/i18n.c:130
 msgid "Uzbek (Cyrillic)"
-msgstr ""
+msgstr "Usbekisch (Kyrillisch)"
 
 #: lib/framework/i18n.c:83
 #: lib/framework/i18n.c:131
 msgid "Simplified Chinese"
-msgstr ""
+msgstr "Vereinfachtes Chinesisch"
 
 #: lib/framework/i18n.c:115
 msgid "Latin"
@@ -9762,7 +9752,7 @@ msgstr "Datei"
 
 #: src/clparse.c:100
 msgid "Flush all debug output written to stderr"
-msgstr ""
+msgstr "Leere gesamte Debugausgabe in stderr aus"
 
 #: src/clparse.c:101
 msgid "Play in fullscreen mode"
@@ -10177,9 +10167,8 @@ msgid "Graphics Options"
 msgstr "Grafikeinstellungen"
 
 #: src/frontend.c:533
-#, fuzzy
 msgid "Video Options"
-msgstr "Audioeinstellungen"
+msgstr "Videoeinstellungen"
 
 #: src/frontend.c:534
 msgid "Audio Options"
@@ -10639,9 +10628,8 @@ msgid "Assign VTOL Factory Production"
 msgstr "VTOL-Fabrikproduktion zuweisen"
 
 #: src/intorder.c:201
-#, fuzzy
 msgid "Circle"
-msgstr "Datei"
+msgstr "Kreis"
 
 #: src/keybind.c:130
 msgid "Sorry, that cheat is disabled in multiplayer games."
@@ -10889,43 +10877,43 @@ msgstr "Zeige Ort der letzten Meldung"
 
 #: src/keymap.c:308
 msgid "Assign Group 0"
-msgstr "Gruppe 0 zuteilen"
+msgstr "Gruppe 0 zuweisen"
 
 #: src/keymap.c:309
 msgid "Assign Group 1"
-msgstr "Gruppe 1 zuteilen"
+msgstr "Gruppe 1 zuweisen"
 
 #: src/keymap.c:310
 msgid "Assign Group 2"
-msgstr "Gruppe 2 zuteilen"
+msgstr "Gruppe 2 zuweisen"
 
 #: src/keymap.c:311
 msgid "Assign Group 3"
-msgstr "Gruppe 3 zuteilen"
+msgstr "Gruppe 3 zuweisen"
 
 #: src/keymap.c:312
 msgid "Assign Group 4"
-msgstr "Gruppe 4 zuteilen"
+msgstr "Gruppe 4 zuweisen"
 
 #: src/keymap.c:313
 msgid "Assign Group 5"
-msgstr "Gruppe 5 zuteilen"
+msgstr "Gruppe 5 zuweisen"
 
 #: src/keymap.c:314
 msgid "Assign Group 6"
-msgstr "Gruppe 6 zuteilen"
+msgstr "Gruppe 6 zuweisen"
 
 #: src/keymap.c:315
 msgid "Assign Group 7"
-msgstr "Gruppe 7 zuteilen"
+msgstr "Gruppe 7 zuweisen"
 
 #: src/keymap.c:316
 msgid "Assign Group 8"
-msgstr "Gruppe 8 zuteilen"
+msgstr "Gruppe 8 zuweisen"
 
 #: src/keymap.c:317
 msgid "Assign Group 9"
-msgstr "Gruppe 9 zuteilen"
+msgstr "Gruppe 9 zuweisen"
 
 #: src/keymap.c:321
 msgid "Select Group 0"
@@ -11241,9 +11229,9 @@ msgid "%s Gives you a %s"
 msgstr "%s gibt Ihnen %s"
 
 #: src/multigifts.c:240
-#, fuzzy, c-format
+#, c-format
 msgid "Tried to give away a non-empty %s - but this is not allowed."
-msgstr "Habe versucht ein %s zu übergeben - ist aber nicht gestattet."
+msgstr "Habe versucht nicht-leeren %s zu übergeben - ist aber nicht gestattet."
 
 #: src/multigifts.c:299
 #, c-format
@@ -11418,7 +11406,7 @@ msgstr "Warte auf andere Spieler"
 
 #: src/multiint.c:1257
 msgid "Click when ready"
-msgstr "Klicken, wenn fertig"
+msgstr "Klicken, wenn bereit"
 
 #: src/multiint.c:1299
 msgid "PLAYERS"
@@ -11430,9 +11418,8 @@ msgstr "CHAT"
 
 # festgelegt ungleich fest -Kreuvf
 #: src/multiint.c:1951
-#, fuzzy
 msgid "'Locked Teams' mode enabled"
-msgstr "Feste Teams"
+msgstr "\"Feste Teams\"-Modus aktiviert"
 
 #: src/multiint.c:1994
 #, c-format
@@ -11613,7 +11600,7 @@ msgstr "Gebäude gebaut: %u"
 #: src/scores.c:106
 #, c-format
 msgid "Total Structures: %u"
-msgstr "Gebäude gesamt: %u"
+msgstr "Gebäude insgesamt: %u"
 
 #: src/scores.c:108
 #, c-format
@@ -11827,195 +11814,132 @@ msgstr "Version %s%s%s%s"
 
 #~ msgid "Campaign One Full Version Test Message"
 #~ msgstr "Kampagne Eins Vollversions Testnachricht"
-
 #~ msgid "New Paradigm Transmission"
 #~ msgstr "Übertragung vom New Paradigm"
-
 #~ msgid "The New Paradigm have been driven from this zone."
 #~ msgstr "Das New Paradigm wurde aus dieser Zone vertrieben."
-
 #~ msgid "Establish a forward base near the site of the Research Centre."
 #~ msgstr "Errichten Sie eine vorgelagerte Basis in der Nähe der Forschungsanlage."
-
 #~ msgid "Commander"
 #~ msgstr "Commander"
-
 #~ msgid "Congratulations on defeating the New Paradigm."
 #~ msgstr "Gratulation zu Ihrem Sieg über das New Paradigm."
-
 #~ msgid "This sector is now secure."
 #~ msgstr "Dieser Sektor ist nun sicher."
-
 #~ msgid "When we failed to respond it became threatening."
 #~ msgstr "Als wir nicht darauf antworteten, drohte es uns."
-
 #~ msgid "Nexus removed itself leaving no trace"
 #~ msgstr "NEXUS entfernte sich selbst ohne eine Spur zu hinterlassen."
-
 #~ msgid "The Nexus Intruder Program has links with the Reed corporation."
 #~ msgstr "Das NEXUS-Eindringlingsprogramm steht in Verbindung zur Reed Corporation."
-
 #~ msgid "Nexus has technology and weapons and is not friendly."
 #~ msgstr "NEXUS verfügt über Technologien und Waffen und ist nicht freundlich gesinnt."
-
 #~ msgid "Warriors of the Collective..."
 #~ msgstr "Krieger des Kollektiv..."
-
 #~ msgid "Destroy and kill all who resist the Machine."
 #~ msgstr "Zerstört und tötet alle, die sich der Maschine widersetzen."
-
 #~ msgid "Attack!"
 #~ msgstr "Angriff!"
-
 #~ msgid "Analysis of the reactor site indicates The Collective"
 #~ msgstr "Analysen der Reaktoranlage deuten darauf hin, dass das Kollektiv"
-
 #~ msgid "were preparing to route its power to this location."
 #~ msgstr "einen Energietransfer zu dieser Position vorbereitete."
-
 #~ msgid "Argle Bargle - Please Remove when some text here!"
 #~ msgstr "Argle Bargle - Bitte entfernen wenn Text vorhanden (Ryo: literally translated ...)"
-
 #~ msgid "Proceed with caution. Scout and confirm Gamma are not contaminated."
 #~ msgstr "Rücken Sie vorsichtig vor. Erkunden Sie und stellen Sie sicher, dass Gamma nicht kontaminiert ist."
-
 #~ msgid "Secure this zone."
 #~ msgstr "Sichern Sie diese Zone."
-
 #~ msgid "A relief force will be sent as soon as the zone is cleared of all enemy."
 #~ msgstr "Ein Hilfstrupp wird geschickt, sobald das Gebiet von allen Feinden befreit wurde."
-
 #~ msgid "Be wary of attempts by NEXUS to control and infiltrate your systems."
 #~ msgstr "Nehmen Sie sich vor Infiltrationsversuchen von NEXUS in acht."
-
 #~ msgid "End Of Briefing."
 #~ msgstr "Ende der Missionsbesprechung."
-
 #~ msgid "Armed Scavengers Approaching"
 #~ msgstr "Bewaffnete Scavengers rücken an"
-
 #~ msgid "Civilian Rescued"
 #~ msgstr "Zivilist gerettet"
-
 #~ msgid "Civilians Rescued"
 #~ msgstr "Zivilisten gerettet"
-
 #~ msgid "Unit Rescued"
 #~ msgstr "Einheit gerettet"
-
 #~ msgid "Units Rescued"
 #~ msgstr "Einheiten gerettet"
-
 #~ msgid "Group Rescued"
 #~ msgstr "Gruppe gerettet"
-
 #~ msgid "Unit Captured"
 #~ msgstr "Einheit gekapert"
-
 #~ msgid "Group Captured"
 #~ msgstr "Gruppe gekapert"
-
 #~ msgid "Structure Captured"
 #~ msgstr "Gebäude gekapert"
-
 #~ msgid "Structure Destroyed"
 #~ msgstr "Gebäude zerstört"
-
 #~ msgid "Structure Infected"
 #~ msgstr "Gebäude infiziert"
-
 #~ msgid "Unit Infected"
 #~ msgstr "Einheit infiziert"
-
 #~ msgid "Group Infected"
 #~ msgstr "Gruppe infiziert"
-
 #~ msgid "Primary Objective Completed"
 #~ msgstr "Primäres Missionsziel erfüllt"
-
 #~ msgid "Secondary Objective Completed"
 #~ msgstr "Sekundäres Missionsziel erfüllt"
-
 #~ msgid "Time Limit Exceeded"
 #~ msgstr "Zeitlimit überschritten"
-
 #~ msgid "Out Of Time"
 #~ msgstr "Zeit abgelaufen"
-
 #~ msgid "Enemy Escaped"
 #~ msgstr "Feind geflohen"
-
 #~ msgid "Enemy Transport Landing"
 #~ msgstr "Feindlicher Transporter landet"
-
 #~ msgid "Incoming Airstrike"
 #~ msgstr "Eintreffender Luftangriff"
-
 #~ msgid "Team Alpha Eradicated"
 #~ msgstr "Team Alpha ausgelöscht"
-
 #~ msgid "Team Beta Eradicated"
 #~ msgstr "Team Beta ausgelöscht"
-
 #~ msgid "Team Gamma Eradicated"
 #~ msgstr "Team Gamma ausgelöscht"
-
 #~ msgid "Team Alpha Rescued"
 #~ msgstr "Team Alpha gerettet"
-
 #~ msgid "Team Beta Rescued"
 #~ msgstr "Team Beta gerettet"
-
 #~ msgid "Team Gamma Rescued"
 #~ msgstr "Team Gamma gerettet"
-
 #~ msgid "Team Alpha Liberated"
 #~ msgstr "Team Alpha befreit"
-
 #~ msgid "Team Beta Liberated"
 #~ msgstr "Team Beta befreit"
-
 #~ msgid "Team Gamma Liberated"
 #~ msgstr "Team Gamma befreit"
-
 #~ msgid "Civilians Eradicated"
 #~ msgstr "Zivilisten ausgelöscht"
-
 #~ msgid "Civilians Liberated"
 #~ msgstr "Zivilisten befreit"
-
 #~ msgid "Enemy Eradicated"
 #~ msgstr "Feind ausgelöscht"
-
 #~ msgid "New Paradigm base eradicated"
 #~ msgstr "New Paradigm-Basis ausgelöscht"
-
 #~ msgid "Collective base eradicated"
 #~ msgstr "Basis des Kollektivs ausgelöscht"
-
 #~ msgid "Nexus base eradicated"
 #~ msgstr "NEXUS-Basis ausgelöscht"
-
 #~ msgid "LasSat firing"
 #~ msgstr "Lasersatellit feuert"
-
 #~ msgid "LasSats firing"
 #~ msgstr "Lasersatelliten feuern"
-
 #~ msgid "Satellite Uplink"
 #~ msgstr "Satellitenkontrolle"
-
 #~ msgid "NASDA Central"
 #~ msgstr "NASDA-Zentrale"
-
 #~ msgid "SAM Site"
 #~ msgstr "Boden-Luft-Raketenstellung"
-
 #~ msgid "Now left click the Viper Body"
 #~ msgstr "Machen Sie einen Linksklick auf den Rumpf Viper"
-
 #~ msgid "Select the Vehicle Propulsion icon"
 #~ msgstr "Wählen Sie das Fahrzeugantrieb-Symbol"
-
 #~ msgid "Presently unused"
 #~ msgstr "Derzeit nicht verwendet"
+
