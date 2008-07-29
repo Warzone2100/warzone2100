@@ -30,10 +30,8 @@ droids[9]	DROID	582	//583
 transStruct	STRUCTURE	751	//dummy transport done as a structure
 
 LZSnd		SOUND		"pcv427.ogg"	//return to LZ stuff
-RetLZMsg	TEXTSTRING	"LZ_MSG2"
 LZ_MSG		INTMESSAGE	"C21_LZ"
 
 goodSnd		SOUND		"pcv615.ogg"	//"Units rescued"
 badSnd		SOUND		"pcv622.ogg"	//"Objective destroyed"
 }
-

@@ -31,7 +31,6 @@ public		int		entryX, entryY, exitX, exitY;
 /* LZ Message */
 public	INTMESSAGE		LZ_MSG;
 public	INTMESSAGE		obj1;
-public	TEXTSTRING		RetLZMsg;
 
 /* Briefing stuff */
 public	INTMESSAGE		MissionBrief;
@@ -248,7 +247,7 @@ event art1TakeEvnt(inactive)
 	addMessage(LZ_MSG, PROX_MSG, player, false);
 	// New function to periodically add the LZ message	
 	setEventTrigger(periodicRTLZ,RTLZStart);
-//	addConsoleText(RetLZMsg, player);
+//	addConsoleText(_("Return to LZ"), player);
 	//playSound(LZSnd, player);
 //	playSoundPos(LZSnd, player, 1216, 10816, 0);	//as in prox1-1.txt
 	setEventTrigger(art1TakeEvnt, inactive);
@@ -256,7 +255,7 @@ event art1TakeEvnt(inactive)
 
 event	periodicRTLZ(inactive)
 {
-	showConsoleText(RetLZMsg, player);
+	showConsoleText(_("Return to LZ"), player);
 	//playSound(LZSnd, player);
 	playSoundPos(LZSnd, player, 1216, 10816, 0);	//as in prox1-1.txt
 	setEventTrigger(periodicRTLZ,RTLZFreq);

@@ -40,7 +40,6 @@ public	INTMESSAGE		endMsg;	//, winMsg;
 public		INTMESSAGE		LZ_MSG;
 public		SOUND			LZSnd;
 public		INTMESSAGE		obj1;
-public		TEXTSTRING		RetLZMsg;
 public		SOUND			ReinforceSnd;
 public		INT			ReinforceTime;
 public		SOUND			LZComp, LZClear;
@@ -269,7 +268,7 @@ event startEvnt(CALL_GAMEINIT)
 	setReinforcementTime(-1);
 //changed so give LZ when base spotted! Rather than at start
 	//addMessage(LZ_MSG, PROX_MSG, player, false);
-	//addConsoleText(RetLZMsg, player);
+	//addConsoleText(_("Return to LZ"), player);
 	//playSound(LZSnd, player);
 //Blip Given at start
 	addMessage(obj1, PROX_MSG, player, false);
@@ -443,7 +442,7 @@ event enm2SeenEvnt(enm2SeenTrig)			//base 2 seen
 	playSoundPos(enm2Snd1, player, 3648, 2240, 0);
 //give LZ when base spotted!
 	addMessage(LZ_MSG, PROX_MSG, player, false);
-	//addConsoleText(RetLZMsg, player);
+	//addConsoleText(_("Return to LZ"), player);
 	//playSound(LZSnd, player);
 	//playSoundPos(LZSnd, player, 7488, 4672, 0);
 
@@ -577,7 +576,7 @@ event retLZ(inactive)	//checks for all artifacts
 	   	{
 			//add LZ blip and WAV message
 			addMessage(LZ_MSG, PROX_MSG, player, false);
-//			addConsoleText(RetLZMsg, player);
+//			addConsoleText(_("Return to LZ"), player);
 //			playSound(LZSnd, player);
 			setEventTrigger(periodicRTLZ,RTLZStart);
 			setEventTrigger(retLZ, inactive);
@@ -588,7 +587,7 @@ event retLZ(inactive)	//checks for all artifacts
 
 event	periodicRTLZ(inactive)
 {
-	showConsoleText(RetLZMsg, player);
+	showConsoleText(_("Return to LZ"), player);
 	playSound(LZSnd, player);
 	setEventTrigger(periodicRTLZ,RTLZFreq);
 }

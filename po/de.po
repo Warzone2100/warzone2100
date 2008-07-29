@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2008-07-29 02:29+0200\n"
+"POT-Creation-Date: 2008-07-29 20:16+0200\n"
 "PO-Revision-Date: 2008-07-20 07:23+0100\n"
 "Last-Translator: Steven \"Kreuvf\" Koenig <translations@kreuvf.de>\n"
 "Language-Team: Deutsch <warzone-dev@gna.org>\n"
@@ -4728,47 +4728,43 @@ msgid "Landing Zone"
 msgstr "Landezone"
 
 #: data/base/messages/strings/genstrings.txt:14
-msgid "Return to LZ"
-msgstr "Rückkehr zur Landezone"
-
-#: data/base/messages/strings/genstrings.txt:15
-#: data/base/messages/strings/genstrings.txt:25
+#: data/base/messages/strings/genstrings.txt:24
 msgid "Mission Target"
 msgstr "Missionsziel"
 
-#: data/base/messages/strings/genstrings.txt:16
+#: data/base/messages/strings/genstrings.txt:15
 msgid "Pre-Collapse Research Center"
 msgstr "Forschungszentrum aus der Zeit vor dem Kollaps"
 
-#: data/base/messages/strings/genstrings.txt:18
+#: data/base/messages/strings/genstrings.txt:17
 msgid "En-route To Mission Site"
 msgstr "Auf dem Weg zum Einsatzgebiet"
 
-#: data/base/messages/strings/genstrings.txt:19
+#: data/base/messages/strings/genstrings.txt:18
 msgid "Mission Failed"
 msgstr "Mission fehlgeschlagen"
 
-#: data/base/messages/strings/genstrings.txt:20
+#: data/base/messages/strings/genstrings.txt:19
 msgid "Mission Successful"
 msgstr "Mission erfolgreich"
 
-#: data/base/messages/strings/genstrings.txt:23
+#: data/base/messages/strings/genstrings.txt:22
 msgid "Enemy Landing Zone"
 msgstr "Feindliche Landezone"
 
-#: data/base/messages/strings/genstrings.txt:24
+#: data/base/messages/strings/genstrings.txt:23
 msgid "Enemy Base"
 msgstr "Feindliche Basis"
 
-#: data/base/messages/strings/genstrings.txt:28
+#: data/base/messages/strings/genstrings.txt:27
 msgid "Incoming transmission"
 msgstr "Eintreffende Übertragung"
 
-#: data/base/messages/strings/genstrings.txt:31
+#: data/base/messages/strings/genstrings.txt:30
 msgid "Incoming intelligence report."
 msgstr "Eintreffender Aufklärungsbericht."
 
-#: data/base/messages/strings/genstrings.txt:34
+#: data/base/messages/strings/genstrings.txt:33
 msgid "Nuclear Reactor"
 msgstr "Atomreaktor"
 
@@ -8351,9 +8347,18 @@ msgstr "Robotergestütztes Nachladesystem"
 msgid "Increases Mini-Rocket ROF"
 msgstr "Erhöht Feuerrate von Miniraketen"
 
-#: data/base/script/text/cam1-7.slo:914
+#: data/base/script/fastplay/s-demo.slo:366
+#: data/base/script/text/cam1-1.slo:258
+#: data/base/script/text/cam1-2.slo:382
+#: data/base/script/text/cam1-4a.slo:590
+#: data/base/script/text/cam1-7.slo:506
+#: data/base/script/text/genexp.slo:999
+msgid "Return to LZ"
+msgstr "Rückkehr zur Landezone"
+
+#: data/base/script/text/cam1-7.slo:913
 #: data/base/script/text/cam2cx.slo:270
-#: data/base/script/text/genexp.slo:855
+#: data/base/script/text/genexp.slo:854
 msgid "Enemy Escaping"
 msgstr "Feind entkommt"
 

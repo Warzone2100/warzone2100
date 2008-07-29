@@ -43,7 +43,6 @@ public		SOUND			incomingSnd;
 public		INTMESSAGE		LZ_MSG;
 public		SOUND			LZSnd;
 public		INTMESSAGE		obj1;
-public		TEXTSTRING		RetLZMsg;
 public		INT			ReinforceTime;
 public		SOUND			LZComp, LZClear;
 private		BOOL			playerTransOnMap;
@@ -495,7 +494,7 @@ event retLZ(retLZTrig)	//ALl NP droids dead	(winLoseTrig)
 		//add LZ blip and WAV message
 		addMessage(LZ_MSG, PROX_MSG, player, false);
 		setEventTrigger(periodicRTLZ,RTLZStart);
-//		addConsoleText(RetLZMsg, player);
+//		addConsoleText(_("Return to LZ"), player);
 		//playSound(LZSnd, player);
 //		playSoundPos(LZSnd, player, 960, 7232, 0);
 		setEventTrigger(retLZ, inactive);
@@ -504,7 +503,7 @@ event retLZ(retLZTrig)	//ALl NP droids dead	(winLoseTrig)
 
 event	periodicRTLZ(inactive)
 {
-		showConsoleText(RetLZMsg, player);
+		showConsoleText(_("Return to LZ"), player);
 		playSoundPos(LZSnd, player, 960, 7232, 0);
 		setEventTrigger(periodicRTLZ,RTLZFreq);
 }

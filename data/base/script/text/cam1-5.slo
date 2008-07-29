@@ -46,7 +46,6 @@ public		INTMESSAGE		endMsg;	//, winMsg;
 public		INTMESSAGE		LZ_MSG;
 public		SOUND			LZSnd;
 public		INTMESSAGE		obj1;
-public		TEXTSTRING		RetLZMsg;
 public		SOUND			ReinforceSnd;
 public		INT			ReinforceTime;
 public		SOUND			LZComp, LZClear;
@@ -694,7 +693,7 @@ event retLZ(winLoseTrig)
 	{
 		//add LZ blip and WAV message
 		//addMessage(LZ_MSG, PROX_MSG, player, false);
-		addConsoleText(RetLZMsg, player);
+		addConsoleText(_("Return to LZ"), player);
 		playSound(LZSnd, player);
 		setEventTrigger(retLZ, inactive);
 	}

@@ -92,7 +92,6 @@ private		int		basesDead;
 public		BOOL		retLZFlag;	//must be set to have any affect
 public		SOUND		retLZSnd;	//audio to play
 public		INTMESSAGE	retLZBlip;	//LZ blip
-public		TEXTSTRING	retLZMsg;	//text message "Return to LZ"
 
 /* Groups */
 //these can be for any player!
@@ -977,7 +976,7 @@ event wonYetEvnt(inactive) 	//triggered on (artCollected >= victoryArt) set at e
 				retLZFlag = FALSE;		//turn off checks
 //				playSound(retLZSnd, player);	//tell player to return
 				addMessage(retLZBlip, PROX_MSG, player, false);	//give LZ blip
-//				addConsoleText(retLZMsg, player);
+//				addConsoleText(_("Return to LZ"), player);
 				setEventTrigger(periodicRTLZ,RTLZStart);
 			}
 		}
@@ -997,7 +996,7 @@ event wonYetEvnt(inactive) 	//triggered on (artCollected >= victoryArt) set at e
 event	periodicRTLZ(inactive)
 {
 	playSound(retLZSnd, player);	//tell player to return
-	showConsoleText(retLZMsg, player);
+	showConsoleText(_("Return to LZ"), player);
 	setEventTrigger(periodicRTLZ,RTLZFreq);
 }
 

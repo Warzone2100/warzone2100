@@ -38,7 +38,6 @@ endMsg		INTMESSAGE	"END"
 LZ_MSG		INTMESSAGE	"C1-1_LZ"
 obj1		INTMESSAGE	"C1-1_OBJ1"
 LZSnd		SOUND		"pcv427.ogg"
-RetLZMsg	TEXTSTRING	"LZ_MSG2"
 
 /* Transport exit and entry */
 entryX		int		1

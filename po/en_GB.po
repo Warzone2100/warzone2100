@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2008-07-29 02:29+0200\n"
+"POT-Creation-Date: 2008-07-29 20:16+0200\n"
 "PO-Revision-Date: 2008-05-05 12:29+0000\n"
 "Last-Translator: Jen Ockwell <jenfraggleubuntu@googlemail.com>\n"
 "Language-Team: English (United Kingdom) <en_GB@li.org>\n"
@@ -4716,47 +4716,43 @@ msgid "Landing Zone"
 msgstr "Landing Zone"
 
 #: data/base/messages/strings/genstrings.txt:14
-msgid "Return to LZ"
-msgstr "Return to LZ"
-
-#: data/base/messages/strings/genstrings.txt:15
-#: data/base/messages/strings/genstrings.txt:25
+#: data/base/messages/strings/genstrings.txt:24
 msgid "Mission Target"
 msgstr "Mission Target"
 
-#: data/base/messages/strings/genstrings.txt:16
+#: data/base/messages/strings/genstrings.txt:15
 msgid "Pre-Collapse Research Center"
 msgstr "Pre-Collapse Research Centre"
 
-#: data/base/messages/strings/genstrings.txt:18
+#: data/base/messages/strings/genstrings.txt:17
 msgid "En-route To Mission Site"
 msgstr "En-route To Mission Site"
 
-#: data/base/messages/strings/genstrings.txt:19
+#: data/base/messages/strings/genstrings.txt:18
 msgid "Mission Failed"
 msgstr "Mission Failed"
 
-#: data/base/messages/strings/genstrings.txt:20
+#: data/base/messages/strings/genstrings.txt:19
 msgid "Mission Successful"
 msgstr "Mission Successful"
 
-#: data/base/messages/strings/genstrings.txt:23
+#: data/base/messages/strings/genstrings.txt:22
 msgid "Enemy Landing Zone"
 msgstr "Enemy Landing Zone"
 
-#: data/base/messages/strings/genstrings.txt:24
+#: data/base/messages/strings/genstrings.txt:23
 msgid "Enemy Base"
 msgstr "Enemy Base"
 
-#: data/base/messages/strings/genstrings.txt:28
+#: data/base/messages/strings/genstrings.txt:27
 msgid "Incoming transmission"
 msgstr "Incoming transmission"
 
-#: data/base/messages/strings/genstrings.txt:31
+#: data/base/messages/strings/genstrings.txt:30
 msgid "Incoming intelligence report."
 msgstr "Incoming intelligence report."
 
-#: data/base/messages/strings/genstrings.txt:34
+#: data/base/messages/strings/genstrings.txt:33
 msgid "Nuclear Reactor"
 msgstr "Nuclear Reactor"
 
@@ -8326,9 +8322,18 @@ msgstr "Robotic reload system"
 msgid "Increases Mini-Rocket ROF"
 msgstr "Increases Mini-Rocket ROF"
 
-#: data/base/script/text/cam1-7.slo:914
+#: data/base/script/fastplay/s-demo.slo:366
+#: data/base/script/text/cam1-1.slo:258
+#: data/base/script/text/cam1-2.slo:382
+#: data/base/script/text/cam1-4a.slo:590
+#: data/base/script/text/cam1-7.slo:506
+#: data/base/script/text/genexp.slo:999
+msgid "Return to LZ"
+msgstr "Return to LZ"
+
+#: data/base/script/text/cam1-7.slo:913
 #: data/base/script/text/cam2cx.slo:270
-#: data/base/script/text/genexp.slo:855
+#: data/base/script/text/genexp.slo:854
 msgid "Enemy Escaping"
 msgstr "Enemy Escaping"
 

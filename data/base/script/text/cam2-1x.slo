@@ -15,7 +15,6 @@ private		DROID	objectDroid, viewerDroid;
 public		int		numDroids;
 public		DROID		droids[10];
 public		SOUND		LZSnd;
-public		TEXTSTRING	RetLZMsg;
 public		INTMESSAGE	LZ_MSG;
 public		STRUCTURE	transStruct;
 public		SOUND		goodSnd, badSnd;
@@ -87,7 +86,7 @@ event seen(droidInArea(newPlayer, RegionsX1[0], RegionsY1[0], RegionsX2[0], Regi
 /* no longer need to return
 	//add lz blip & return to LZ message
 	addMessage(LZ_MSG, PROX_MSG, newPlayer, false);
-	//addConsoleText(RetLZMsg, newPlayer);
+	//addConsoleText(_("Return to LZ"), newPlayer);
 	playSoundPos(LZSnd, newPlayer, 960, 7488, 0);	//as in prox2-1.txt
 */
 	setEventTrigger(seen, inactive);

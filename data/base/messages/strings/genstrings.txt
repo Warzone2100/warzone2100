@@ -11,7 +11,6 @@ POWSURGE_MSG			_("Source of Power Surge")
 
 /* LZ stuff */
 LZ_MSG				_("Landing Zone")
-LZ_MSG2				_("Return to LZ")
 RUINS_MSG			_("Mission Target")
 RUINS_MSG2			_("Pre-Collapse Research Center")
 /* In flight brief TEXT */

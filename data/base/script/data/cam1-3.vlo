@@ -50,7 +50,6 @@ LZComp		SOUND		"pcv445.ogg"
 LZClear		SOUND		"lz-clear.ogg"
 reinfSnd	SOUND		"pcv440.ogg"
 
-RetLZMsg	TEXTSTRING	"LZ_MSG2"
 ReinforceTime	INT		1200	//(2 min 0 secs) number of seconds*10 for transport, -1 for no reinforcements
 
 /* Transport exit and entry */

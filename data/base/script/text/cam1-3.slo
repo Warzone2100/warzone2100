@@ -35,7 +35,6 @@ public		int		entryX, entryY, exitX, exitY;
 public		INTMESSAGE		MissionBrief;
 public		INTMESSAGE		NewParadigm_MSG1, NewParadigm_MSG2;
 public		SOUND			incomingSnd;
-public		TEXTSTRING		RetLZMsg;
 public		INTMESSAGE		endMsg;	//, winMsg;
 /* LZ Message */
 public		INTMESSAGE		LZ_MSG;
@@ -624,7 +623,7 @@ event retLZ(winLoseTrig)
 	{
 		//add LZ blip and WAV message
 		addMessage(LZ_MSG, PROX_MSG, player, false);
-		addConsoleText(RetLZMsg, player);
+		addConsoleText(_("Return to LZ"), player);
 		//playSound(LZSnd, player);
 		playSoundPos(LZSnd, player, 704, 704, 0);
 		setEventTrigger(retLZ, inactive);

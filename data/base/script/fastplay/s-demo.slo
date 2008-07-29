@@ -36,7 +36,6 @@ public		SOUND		LZSnd;
 public		INTMESSAGE		LZ_MSG;
 public		SOUND			LZComp, LZClear, reinfSnd;
 public		INTMESSAGE		obj1;
-public		TEXTSTRING		RetLZMsg;
 public		INT			ReinforceTime;
 
 /* Transport Entry/Exit coords */
@@ -364,7 +363,7 @@ event giveLZmess(inactive)	//don't use for demo!
 {
 //add LZ blip and WAV message
 	addMessage(LZ_MSG, PROX_MSG, player, false);
-	addConsoleText(RetLZMsg, player);
+	addConsoleText(_("Return to LZ"), player);
 	//playSound(LZSnd, player);
 	playSoundPos(LZSnd, player, 6848, 7104, 0);
 	setEventTrigger(giveLZmess, inactive);

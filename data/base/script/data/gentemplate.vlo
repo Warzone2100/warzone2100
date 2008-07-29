@@ -554,7 +554,6 @@ threatRange		int			750	//range to check for enemy and player threats
 retLZFlag		BOOL		TRUE				//must be set true to activate
 retLZSnd		SOUND		"pcv427.ogg"		//for victory condition of get all player stuff to region
 retLZBlip		INTMESSAGE	"C22_LZ"			//Blip for LZ
-retLZMsg		TEXTSTRING	"LZ_MSG2"			//Return to LZ text
 /* end of NEW STUFF */
 
 }

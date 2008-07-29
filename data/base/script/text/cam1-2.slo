@@ -35,7 +35,6 @@ public		SOUND		LZSnd;
 public		INTMESSAGE		LZ_MSG;
 public		SOUND			LZComp, LZClear;
 public		INTMESSAGE		obj1;
-public		TEXTSTRING		RetLZMsg;
 public		INT			ReinforceTime;
 private		BOOL		transOnMap;
 
@@ -372,7 +371,7 @@ event giveLZmess(retLZTrig)
 	addMessage(LZ_MSG, PROX_MSG, player, false);
 
 	setEventTrigger(periodicRTLZ,RTLZStart);
-//	addConsoleText(RetLZMsg, player);
+//	addConsoleText(_("Return to LZ"), player);
 	//playSound(LZSnd, player);
 //	playSoundPos(LZSnd, player, 6848, 7104, 0);
 	setEventTrigger(giveLZmess, inactive);
@@ -380,7 +379,7 @@ event giveLZmess(retLZTrig)
 
 event	periodicRTLZ(inactive)
 {		
- 	showConsoleText(RetLZMsg, player);
+	showConsoleText(_("Return to LZ"), player);
 	playSoundPos(LZSnd, player, 6848, 7104, 0);
 	setEventTrigger(periodicRTLZ,RTLZFreq);
 }

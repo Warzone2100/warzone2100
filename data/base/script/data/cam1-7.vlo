@@ -44,7 +44,6 @@ endMsg		INTMESSAGE	"END"
 LZ_MSG		INTMESSAGE	"C1-7_LZ"
 obj1		INTMESSAGE	"C1-7_OBJ1"
 LZSnd		SOUND		"pcv427.ogg"
-RetLZMsg	TEXTSTRING	"LZ_MSG2"
 LZComp		SOUND		"pcv445.ogg"
 LZClear		SOUND		"lz-clear.ogg"
 
