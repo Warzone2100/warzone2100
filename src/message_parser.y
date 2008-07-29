@@ -240,7 +240,6 @@ research_message:	imd_name ',' imd_name2 ',' sequence_name ',' audio_name ','
 
 					$$->pAudio = $7;
 					sstrcpy($$->sequenceName, $5);
-					$$->numFrames = 0;
 					// Get rid of our tokens ASAP (so that the free() lists on errors become shorter)
 					free($5);
 

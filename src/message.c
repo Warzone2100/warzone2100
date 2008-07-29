@@ -466,7 +466,7 @@ bool addToViewDataList(VIEWDATA* psViewData, unsigned int numData)
 /*load the view data for the messages from the file */
 VIEWDATA *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 {
-	UDWORD				i, dataInc, seqInc, numFrames, numData, count, count2;
+	UDWORD				i, dataInc, seqInc, dummy, numData, count, count2;
 	VIEWDATA			*psViewData, *pData;
 	VIEW_RESEARCH		*psViewRes;
 	VIEW_REPLAY			*psViewReplay;
@@ -570,7 +570,7 @@ VIEWDATA *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 			string[0] = '\0';
 			audioName[0] = '\0';
 			sscanf(pViewMsgData,",%[^','],%[^','],%[^','],%[^','],%d%n",
-				imdName, imdName2, string, audioName, &numFrames,&cnt);
+				imdName, imdName2, string, audioName, &dummy, &cnt);
                         pViewMsgData += cnt;
 			psViewRes = (VIEW_RESEARCH *)psViewData->pData;
 			psViewRes->pIMD = (iIMDShape *) resGetData("IMD", imdName);
@@ -608,8 +608,6 @@ VIEWDATA *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 			{
 				psViewRes->pAudio = NULL;
 			}
-			//this is for the PSX only
-			psViewRes->numFrames = (UWORD)numFrames;
 			break;
 		case VIEW_RPL:
 		case VIEW_RPLX:
@@ -702,12 +700,8 @@ VIEWDATA *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 					}
 				}
 				//get the audio text string
-				sscanf(pViewMsgData,",%[^','],%d%n", audioName, &count,&cnt);
+				sscanf(pViewMsgData,",%[^','],%d%n", audioName, &dummy, &cnt);
                                 pViewMsgData += cnt;
-
-				ASSERT( count < UWORD_MAX, "loadViewData: numFrames too high for %s", name );
-
-				psViewReplay->pSeqList[dataInc].numFrames = (UWORD)count;
 
 				if (strcmp(audioName, "0"))
 				{
