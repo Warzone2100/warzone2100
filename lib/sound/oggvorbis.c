@@ -62,16 +62,28 @@ struct OggVorbisDecoderState
 #ifndef WZ_NOSOUND
 static size_t wz_oggVorbis_read(void *ptr, size_t size, size_t nmemb, void *datasource)
 {
-	PHYSFS_file* fileHandle = ((struct OggVorbisDecoderState*)datasource)->fileHandle;
+	PHYSFS_file* fileHandle;
+
+	ASSERT(datasource != NULL, "NULL decoder passed!");
+
+	fileHandle = ((struct OggVorbisDecoderState*)datasource)->fileHandle;
+	ASSERT(fileHandle != NULL, "Bad PhysicsFS file handle passed in");
+
 	return PHYSFS_read(fileHandle, ptr, 1, size*nmemb);
 }
 
 static int wz_oggVorbis_seek(void *datasource, ogg_int64_t offset, int whence)
 {
-	PHYSFS_file* fileHandle = ((struct OggVorbisDecoderState*)datasource)->fileHandle;
-	BOOL allowSeeking = ((struct OggVorbisDecoderState*)datasource)->allowSeeking;
-
+	PHYSFS_file* fileHandle;
+	BOOL allowSeeking;
 	int newPos;
+
+	ASSERT(datasource != NULL, "NULL decoder passed!");
+
+	fileHandle = ((struct OggVorbisDecoderState*)datasource)->fileHandle;
+	ASSERT(fileHandle != NULL, "Bad PhysicsFS file handle passed in");
+
+	allowSeeking = ((struct OggVorbisDecoderState*)datasource)->allowSeeking;
 
 	if (!allowSeeking)
 		return -1;
@@ -125,7 +137,13 @@ static int wz_oggVorbis_close(WZ_DECL_UNUSED void *datasource)
 
 static long wz_oggVorbis_tell(void *datasource)
 {
-	PHYSFS_file* fileHandle = ((struct OggVorbisDecoderState*)datasource)->fileHandle;
+	PHYSFS_file* fileHandle;
+
+	ASSERT(datasource != NULL, "NULL decoder passed!");
+
+	fileHandle = ((struct OggVorbisDecoderState*)datasource)->fileHandle;
+	ASSERT(fileHandle != NULL, "Bad PhysicsFS file handle passed in");
+
 	return PHYSFS_tell(fileHandle);
 }
 
@@ -147,10 +165,12 @@ struct OggVorbisDecoderState* sound_CreateOggVorbisDecoder(PHYSFS_file* PHYSFS_f
 	struct OggVorbisDecoderState* decoder = malloc(sizeof(struct OggVorbisDecoderState));
 	if (decoder == NULL)
 	{
-		debug(LOG_ERROR, "sound_CreateOggVorbisDecoder: Out of memory");
+		debug(LOG_ERROR, "Out of memory");
 		abort();
 		return NULL;
 	}
+
+	ASSERT(PHYSFS_fileHandle != NULL, "Bad PhysicsFS file handle passed in");
 
 	decoder->fileHandle = PHYSFS_fileHandle;
 	decoder->allowSeeking = allowSeeking;
@@ -159,7 +179,7 @@ struct OggVorbisDecoderState* sound_CreateOggVorbisDecoder(PHYSFS_file* PHYSFS_f
 	error = ov_open_callbacks(decoder, &decoder->oggVorbis_stream, NULL, 0, wz_oggVorbis_callbacks);
 	if (error < 0)
 	{
-		debug(LOG_ERROR, "sound_CreateOggVorbisDecoder: ov_open_callbacks failed with errorcode %d", error);
+		debug(LOG_ERROR, "ov_open_callbacks failed with errorcode %d", error);
 		free(decoder);
 		return NULL;
 	}
@@ -173,6 +193,8 @@ struct OggVorbisDecoderState* sound_CreateOggVorbisDecoder(PHYSFS_file* PHYSFS_f
 
 void sound_DestroyOggVorbisDecoder(struct OggVorbisDecoderState* decoder)
 {
+	ASSERT(decoder != NULL, "NULL decoder passed!");
+
 #ifndef WZ_NOSOUND
 	// Close the OggVorbis decoding stream
 	ov_clear(&decoder->oggVorbis_stream);
@@ -184,7 +206,11 @@ void sound_DestroyOggVorbisDecoder(struct OggVorbisDecoderState* decoder)
 static inline unsigned int getSampleCount(struct OggVorbisDecoderState* decoder)
 {
 #ifndef WZ_NOSOUND
-	int numSamples = ov_pcm_total(&decoder->oggVorbis_stream, -1);
+	int numSamples;
+
+	ASSERT(decoder != NULL, "NULL decoder passed!");
+
+	numSamples = ov_pcm_total(&decoder->oggVorbis_stream, -1);
 
 	if (numSamples == OV_EINVAL)
 		return 0;
@@ -198,7 +224,11 @@ static inline unsigned int getSampleCount(struct OggVorbisDecoderState* decoder)
 static inline unsigned int getCurrentSample(struct OggVorbisDecoderState* decoder)
 {
 #ifndef WZ_NOSOUND
-	int samplePos = ov_pcm_tell(&decoder->oggVorbis_stream);
+	int samplePos;
+
+	ASSERT(decoder != NULL, "NULL decoder passed!");
+
+	samplePos = ov_pcm_tell(&decoder->oggVorbis_stream);
 
 	if (samplePos == OV_EINVAL)
 		return 0;
@@ -218,6 +248,8 @@ soundDataBuffer* sound_DecodeOggVorbis(struct OggVorbisDecoderState* decoder, si
 
 	soundDataBuffer* buffer;
 
+	ASSERT(decoder != NULL, "NULL decoder passed!");
+
 #ifndef WZ_NOSOUND
 	if (decoder->allowSeeking)
 	{
@@ -234,7 +266,7 @@ soundDataBuffer* sound_DecodeOggVorbis(struct OggVorbisDecoderState* decoder, si
 	// If we can't seek nor receive any suggested size for our buffer, just quit
 	if (bufferSize == 0)
 	{
-		debug(LOG_ERROR, "sound_DecodeOggVorbis: can't find a proper buffer size\n");
+		debug(LOG_ERROR, "can't find a proper buffer size");
 		return NULL;
 	}
 #else
@@ -244,7 +276,7 @@ soundDataBuffer* sound_DecodeOggVorbis(struct OggVorbisDecoderState* decoder, si
 	buffer = malloc(bufferSize + sizeof(soundDataBuffer));
 	if (buffer == NULL)
 	{
-		debug(LOG_ERROR, "sound_DecodeOggVorbis: couldn't allocate memory (%zu bytes requested)\n", bufferSize + sizeof(soundDataBuffer));
+		debug(LOG_ERROR, "couldn't allocate memory (%zu bytes requested)", bufferSize + sizeof(soundDataBuffer));
 		return NULL;
 	}
 
@@ -265,7 +297,7 @@ soundDataBuffer* sound_DecodeOggVorbis(struct OggVorbisDecoderState* decoder, si
 
 		if (result < 0)
 		{
-			debug(LOG_ERROR, "sound_DecodeOggVorbis: error decoding from OggVorbis file; errorcode from ov_read: %d\n", result);
+			debug(LOG_ERROR, "error decoding from OggVorbis file; errorcode from ov_read: %d", result);
 			free(buffer);
 			return NULL;
 		}
