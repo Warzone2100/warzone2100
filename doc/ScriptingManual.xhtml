@@ -6,2734 +6,1738 @@
 		<meta http-equiv="content-language" content="en" />
 		<meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8" />
 		<meta http-equiv="content-style-type" content="text/css; charset=UTF-8" />
-		<link rel="stylesheet" type="text/css" href="styles/scriptingmanual.css" />
-		<title>Comments</title>
+		<meta name="author" content="Troman"/>
+		<link rel="stylesheet" type="text/css" media="screen" href="styles/readme.screen.css" />
+		<link rel="stylesheet" type="text/css" media="print" href="styles/readme.print.css" />
+		<title>AI scripting language manual for Warzone 2100</title>
 	</head>
 	<body>
-		<p>Warzone2100. Script language notes.</p>
-
-		<p>Original Author: Pumpkin Studios. 1999</p>
-
-		<p>Last Author: $Author$</p>
-
-		<p>Last update: $Date$, $Revision$,	<a href="http://wz2100.net/">WRP</a></p>
-
-		<p>Note from Pumpkin Studios: making any modifications to Warzone 2100 will void any technical support open to you. We will not answer questions or help you in any way if you have modified Warzone 2100. Pumpkin Studios and Eidos will not take responsibility for any damage resulting from modifcation of Warzone 2100.</p>
-
-		<p>Contents:</p>
-
-		<p><a href="#Introduction">Introduction</a></p>
-
-		<p><a href="#Comments">Comments</a></p>
-
-		<p><a href="#Vlo_files_explained">Vlo files explained</a></p>
-
-		<p><a href="#Slo_files_explained">Slo files explained</a></p>
-
-		<p><a href="#Event_trigger_concept_explained">Event/trigger concept explained</a></p>
-
-		<p><a href="#Triggers_explained">Triggers explained</a></p>
-
-		<p><a href="#String_Expressions">String Expressions</a></p>
-
-		<p><a href="#Numeric_Expressions">Numeric Expressions</a></p>
-
-		<p><a href="#Boolean_Expressions">Boolean Expressions</a></p>
-
-		<p><a href="#Floatingpoint_Expressions">Floating-point Expressions</a></p>
-
-		<p><a href="#Assignment">Assignment</a></p>
-
-		<p><a href="#If_statements">If Statements</a></p>
-
-		<p><a href="#While_statements">While Statements</a></p>
-
-		<p><a href="#Casts">Casts</a></p>
-
-		<p><a href="#Custom_Functions">Custom Functions</a></p>
-
-		<p><a href="#Local_Variables">Local Variables</a></p>
-
-		<p><a href="#Data_Types">Data Types</a></p>
-
-		<p><a href="#Script_Functions">Script Functions</a></p>
-
-		<p><a href="#Debugging_Script_Functions">Debugging Script Functions</a></p>
-
-		<p><a href="#Script_Function_Constants">Script Function Constants</a></p>
-
-		<p><a href="#Script_Function_Externals">Script Function Externals</a></p>
-
-		<p><a href="#Script_Function_Callbacks">Script Function Callbacks</a></p>
-
-		<p>Specific skirmish/multiplayer notes:</p>
-
-		<p>Some of the file below doesn't apply to skirmish scripts! Make your changes to player0.slo and vlo -&gt; player7.slo and vlo.</p>
-
-		<p><a id="Introduction">Introduction</a></p>
-
-		<p>In order for Warzone scripts to function properly two files are required: a file with a .sloextension and a file with a	.vloextension.</p>
-
-		<p>A .slo file is the main part of the script and holds executable instructions while the .vlo file holds additional variable declarations necessary for the .slo file to function properly.</p>
-
-		<p>It is common for a script to deal with new or existing game components such as research topics, structures, unit bodies, propulsions, weapons etc. All these components are defined in appropriate text files like body.txt, structure.txt etc. If you want to use any of these components in your script - in your .slo file - like for example if you want to place certain structures on the map using scripts or enable certain research, you must first make these components available to your script by defining them in a .vlo file.</p>
-
-		<p>Roughly said a .slo file is equivalent to a ".c" file and .vlo to a header file in C/C++.</p>
-
-		<p><a id="Comments">Comments</a></p>
-
-		<p>There are two type of comment for the script language. A multi-line comment is started by the characters /* and finishes with */. A single line comment is started by //.</p>
-
-		<p><a id="Vlo_files_explained">Vlo Files Explained</a></p>
-
-		<p>When writing a script it is usually known what data (as defined in data .txt files, located in 'stats' folder) will be used in the script, so it's a good idea to start writing the script with a .vlo file.</p>
-
-		<p>Vlo files are structured as follows:</p>
-
-		<p>script "myScript.slo"</p>
-
-		<p>run</p>
-
-		<p>{</p>
-
-		<p>&lt;variable_definitions&gt;</p>
-
-		<p>}</p>
-
-		<p><br />
- In the first line a .slo file is attached to this particular .vlo file.	variable_definitions	that resides inside the curly braces is the heart of every .vlo file, it contains definitions of the data that will be used in the main script part - the .slo file. Each variable definition starts on a new line and is structured as follows:</p>
-
-		<p>&lt;variable_name&gt; &lt;variable_type&gt; &lt;variable_value&gt;</p>
-
-		<p>NOTE: Available data types are covered later.</p>
-
-		<p>For example if you want to have access to certain droid bodies, like "Python" in your script you have to define it in your .vlo file and assign it to a variable of type BODY with some descriptive name, like:</p>
-
-		<p>myPythonBody BODY "Body11ABT"</p>
-
-		<p>"Body11ABT" is an internal name of the "Python" body used by warzone, it is defined in the body.txt file. Since it is a string it must be put inside quotation marks. All components, be it some research, structure, droid template or a weapon is refered by its internal name in the game and are defined in the appropriate txt data files.</p>
-
-		<p>Each variable definition in a .vlo file starts on the new line and ends at the end of the line.</p>
-
-		<p>It is also possible to define arrays of some data type. For example if you want to use the following 3 research topics in your script you might want to define them like this:</p>
-
-		<p>myResearch[0] RESEARCHSTAt "R-Vehicle-Body11"</p>
-
-		<p>myResearch[1] RESEARCHSTAt "R-Vehicle-Prop-Tracks"</p>
-
-		<p>myResearch[2] RESEARCHSTAt "R-Vehicle-Prop-Hover"</p>
-
-		<p>This defines an array of size 3 of type RESEARCHSTAT.</p>
-
-		<p><a id="Slo_files_explained">Slo Files Explained</a></p>
-
-		<p>As already mentioned .slo file is the heart of every script, it is the place for the executable code. Slo files can be devided into 3 main parts:</p>
-
-		<p><a id="Variable_Declarations">1.</a>Variable declarations</p>
-
-		<p><a id="Variable_declaration"></a><a id="Event_and_function_declaration"></a>2.Event and function declaration</p>
-
-		<p>3.Executable code</p>
-
-		<p>Variables used throughout the script are defined in the	Variable declarationspart, with exception of the local variables, which are explained later.</p>
-
-		<p>For the .slo file to be able to access variables declared in the .vlo file they must be declared as public variables in the corresponding .slo file.</p>
-
-		<p>Coming back to the two examples above you will have to add following lines to the .slo file:</p>
-
-		<p>public BODy myPythonBody;</p>
-
-		<p>public RESEARCHSTAT myResearch[3];</p>
-
-		<p>Keyword	publicsignals that the variable is defined in the corresponding .vlo files. Note that unlike in .vlo files variable declarations in .slo files end with a semicolon and unlike in .vlo files it is possible to declare more than one variable of the same type at once.</p>
-
-		<p>More generally a variable declaration in a .slo file looks like this:</p>
-
-		<p>&lt;storage&gt; &lt;variable_type&gt; &lt;variable_name1&gt; [, &lt;variable_name2&gt; , ...];</p>
-
-		<p>storageis one of "public" or "private". Public means that the variable is declared and defined in the corresponding .vlo file.Private means the value is only used in the .slo file. Unlike local variables public and private variables are global variables that can be access from anywhere in the .slo file.</p>
-
-		<p><em>NOTE: All variables are initialized to their default values when created. STRUCTURE/DROID/FEATURE variables are initialized to NULLOBJECT, STRINGs to "", FLOATs to 0.0, INTs to 0, BOOLs to FALSE etc.</em></p>
-
-		<p><a id="Event_trigger_concept_explained">Event/Trigger Concept Explained</a></p>
-
-		<p>In Warzone scripts executable code consists of	events. An event is a list of instructions activated by some	triggerattached to it. Event defines	what to do, a trigger defines	whento run an event, ie when to execute the code inside an event.</p>
-
-		<p>All events are structured as follows:</p>
-
-		<p>event &lt;event_name&gt;(&lt;trigger&gt;)</p>
-
-		<p>{</p>
-
-		<p>&lt;code&gt;</p>
-
-		<p>}</p>
-
-		<p>Example:</p>
-
-		<p>event myFirstEvent(every, 50)</p>
-
-		<p>{</p>
-
-		<p>console("Hello world!");</p>
-
-		<p>}</p>
-
-		<p>This piece of code will output "Hello world!" to the game console every 5 seconds. Note that triggers are put inside the round braces after the event name while code that is to be executed resides inside the curly braces. The syntax of the executable code is very close to the C/C++ syntax.</p>
-
-		<p>The only difference between a WZ event and a function as used in programming languages like C/C++ is that an event is not called or activated by another function, but rather by a trigger attached to it.</p>
-
-		<p>It is always possible to interrupt execution of an event with the	exitkeyword, which is a counterpart of the	returnkeyword used for functions;	exitkeyword does not deactivate an event.</p>
-
-		<p>Example:</p>
-
-		<p>event myEvent(every, 10) //run every second</p>
-
-		<p>{</p>
-
-		<p>console ( "this text will be printed every second" );</p>
-
-		<p>if( (gameTime / 10) &gt; 60) //did more than a minute pass?</p>
-
-		<p>{</p>
-
-		<p>exit; //anything that comes after 'exit' will not be executed</p>
-
-		<p>console( "this text will only get printed in the first" );</p>
-
-		<p>}</p>
-
-		<p>}</p>
-
-		<p>Events must be defined before they can be referenced. If event definition comes after the place where this event is referenced it is necessary to declare this event beforehand in the	<a href="#Event_and_function_declaration">Event and function declaration</a> section.</p>
-
-		<p>Events are declared like this:</p>
-
-		<p>event &lt;event_name&gt;;</p>
-
-		<p>Such a declaration reserves identifier used as event name.</p>
-
-		<p>Example:</p>
-
-		<p>event myEvent; //declaration of the event</p>
-
-		<p>...</p>
-
-		<p>// another event that references myEvent</p>
-
-		<p>event anotherEvent(wait, 10)</p>
-
-		<p>{</p>
-
-		<p>setEventTrigger(myEvent, inactive); //deactivate myEvent</p>
-
-		<p>}</p>
-
-		<p>...</p>
-
-		<p>// myEvent is defined after being referenced by anotherEvent,</p>
-
-		<p>// but it works, since we declared myEvent beforehand</p>
-
-		<p>event myEvent(wait, 20)</p>
-
-		<p>{</p>
-
-		<p>console("It all compiles, because I was declared beforehand!");</p>
-
-		<p>}</p>
-
-		<p>If	myEventwasn't declared before being referenced by	anotherEventthen this example would not compile.</p>
-
-		<p><a id="Triggers_explained">Triggers Explained</a></p>
-
-		<p>In WZ triggers are usually simple timers that repeartedly trigger execution of events, but triggers can also be callbacks (special events that occur in the game, like destruction of a building) that are listed and explained later.</p>
-
-		<p>Here are avaiable trigger types:</p>
-
-		<p>wait, &lt;time&gt;Run the event after delay &lt;time&gt;.</p>
-
-		<p>every, &lt;time&gt;Run the event at every &lt;time&gt; interval.</p>
-
-		<p>&lt;callback&gt;Run when callback occurs.</p>
-
-		<p>&lt;bool exp&gt;, &lt;time&gt;Run the event if &lt;bool exp&gt; is true, checking every &lt;time&gt; interval.</p>
-
-		<p>initRun the event when the script starts.</p>
-
-		<p>inactiveDo not run the event until a trigger is assigned to it.</p>
-
-		<p>NOTE: all time intervals are in 1/10 of a second.</p>
-
-		<p>For example	every, 10will trigger every second while	wait, 50will only activate once: 5 seconds after the game has started. If an event has	inactiveassigned as a trigger this event will never execute unless its trigger is reassigned by some other event with	setEventTrigger(&lt;event&gt;, &lt;trigger&gt;)function.</p>
-
-		<p>NOTE: complete function and callback listings are given below.</p>
-
-		<p>A few examples:</p>
-
-		<p>// 1. output text to game console every second</p>
-
-		<p>event everySecond(every, 10)</p>
-
-		<p>{</p>
-
-		<p>console("The game has started " + gameTime/10 + " seconds ago");</p>
-
-		<p>}</p>
-
-		<p>// 2. Code inside this event will never execute unless its event is reassigned later</p>
-
-		<p>event inactiveEvent(inactive)</p>
-
-		<p>{</p>
-
-		<p>console("Someone has just reactivated me!");</p>
-
-		<p>}</p>
-
-		<p>// 3. CALL_NEWDROID callback with parameters,</p>
-
-		<p>event droidBuilt(CALL_NEWDROID, 5, ref newDroid, ref myFactory)</p>
-
-		<p>{</p>
-
-		<p>console("We got a new droid at coordinates " &amp;</p>
-
-		<p>newDroid.x &amp; "-" &amp; newDroid.y );</p>
-
-		<p>}</p>
-
-		<p>In the last example	droidBuiltevent will be triggered everytime a factory belonging to player	5produces a new droid.	newDroidvariable refers to the new droid thatb was just built and	myFactoryto the factory that build this droid. This example assumes that	newDroidand	myFactorywere correctly defined in the	<a href="#Variable_declaration">Variable Declarations</a>section. For more callbacks see	<a href="#Script_Function_Callbacks">Script Function Callbacks</a>.</p>
-
-		<p>NOTE:	refkeyword means that a pointer to the provided variable is passed to the interpreter, so that a callback can modify value of the variable.</p>
-
-		<p>It is possible to reuse a trigger for more than one event if a trigger is declared in the	<a href="#Event_and_function_declaration">Event and function declaration</a>. Trigger declaration has following syntax:</p>
-
-		<p>trigger &lt;trigger_name&gt; ( &lt;trigger&gt; );</p>
-
-		<p>Example:</p>
-
-		<p>trigger everySecond ( every, 10 ); //trigger declaration</p>
-
-		<p>...</p>
-
-		<p>event eventOne( everySecond ) // uses the trigger we declared above</p>
-
-		<p>{</p>
-
-		<p>...</p>
-
-		<p>}</p>
-
-		<p>event eventTwo( everySecond ) // uses the trigger we declared above</p>
-
-		<p>{</p>
-
-		<p>...</p>
-
-		<p>}</p>
-
-		<p>In this example	everySecondtrigger is defined outside of an event. Such a trigger can be reused by its name. Note that trigger declaration ends with a semicolon.</p>
-
-		<p><a id="String_Expressions">String Expressions</a></p>
-
-		<p>Strings are put inside quotation marks:	"some text inside quotation marks is a legal string".</p>
-
-		<p>Strings can be easily concatenated using the	&amp;operator.</p>
-
-		<p>For example:	"String1" &amp; "String2"will result in	"String1String2".</p>
-
-		<p>Strings can be compared using	==operator (case insensitive comparison) or	strcmp()function.</p>
-
-		<p>Such data types as integers, booleans and floats are automatically converted to strings when it is required, so given the following variable declaration:</p>
-
-		<p>private float pi;</p>
-
-		<p>private int myInteger;</p>
-
-		<p>private string myString;</p>
-
-		<p>private bool myBool;</p>
-
-		<p>the following line is a valid string expression:</p>
-
-		<p>console("value of pi is " &amp; pi &amp; ", value of myInteger is " &amp; myInteger &amp; ",</p>
-
-		<p>value of myString is " &amp; myString &amp; ", value of myBool is " &amp; myBool);</p>
-
-		<p><a id="Numeric_Expressions">Numeric Expressions</a></p>
-
-		<p>Numeric expressions are made up of int variables, numeric constants and functions that return int values, e.g.:</p>
-
-		<p>power * 32 - basePower</p>
-
-		<p>numDroids(player) + 5</p>
-
-		<p>The possible operators are :</p>
-
-		<p>+ - * /</p>
-
-		<p>Increment and decrement operators can only be applied to the integer variables outside of the expression context:</p>
-
-		<p>myInteger++;</p>
-
-		<p>myInteger--;</p>
-
-		<p>There are also a number of operators that compare numeric expressions to give a boolean</p>
-
-		<p>expression :</p>
-
-		<p>&lt; &gt;	Less than / Greater than</p>
-
-		<p>&lt;= &gt;=	Less or Equal / Greater or Equal</p>
-
-		<p>== !=	Equal / Not Equal</p>
-
-		<p><a id="Boolean_Expressions">Boolean Expressions</a></p>
-
-		<p>Boolean expressions are made up of bool variables, the boolean constants	TRUEand</p>
-
-		<p>FALSEand game functions that return a boolean value e.g.:</p>
-
-		<p>not droidSeen and attackDroid</p>
-
-		<p>The possible operators are:</p>
-
-		<p>and or not == !=</p>
-
-		<p>The operators	==and	!=can also be used with user defined type variables.</p>
-
-		<p><a id="Floatingpoint_Expressions">Floating-point Expressions</a></p>
-
-		<p>Floating-point expressions are very similar to integer expressions. There are some differences though: it is not possible to use increment/decrement operators with floating-point variables. The integral and fractional parts of the float constant must be separated by a dot, even if fractional part is 0.</p>
-
-		<p>Examples:</p>
-
-		<p>myFloat = 1.0 + pi / 2.0 + 3.6;</p>
-
-		<p>Floating point expressions can't be mixed with integer or boolean expressions. To use integers or booleans in floating-point expressions they must be cast to FLOATs first.</p>
-
-		<p>For more information about casts refer to	<a href="#Casts">Casts</a>.</p>
-
-		<p><a id="Assignment">Assignment</a></p>
-
-		<p>The value of a variable or an expression can be assigned to another using the = character,</p>
-
-		<p>e.g.:</p>
-
-		<p>currentDroid = foundDroid;</p>
-
-		<p>index = base + found * 4;</p>
-
-		<p>myString = "some text";</p>
-
-		<p>myFloat = 2.0 + pi / 2.0;</p>
-
-		<p><a id="If_statements">If Statements</a></p>
-
-		<p>If statements are used to control which bits of code are executed. The simplest form is :</p>
-
-		<p>if ( &lt;bool exp&gt; )</p>
-
-		<p>{</p>
-
-		<p>&lt;code&gt;</p>
-
-		<p>}</p>
-
-		<p>In this form if &lt;bool exp&gt; evaluates to true then the script code &lt;code&gt; is executed,</p>
-
-		<p>otherwise the code is ignored.</p>
-
-		<p>Examples:</p>
-
-		<p>if ( &lt;bool exp&gt; )</p>
-
-		<p>{</p>
-
-		<p>&lt;code&gt;</p>
-
-		<p>}</p>
-
-		<p>else</p>
-
-		<p>{</p>
-
-		<p>&lt;code&gt;</p>
-
-		<p>}</p>
-
-		<p>if ( &lt;bool exp&gt; )</p>
-
-		<p>{</p>
-
-		<p>&lt;code&gt;</p>
-
-		<p>}</p>
-
-		<p>else if ( &lt;bool exp&gt; )</p>
-
-		<p>{</p>
-
-		<p>&lt;code&gt;</p>
-
-		<p>}</p>
-
-		<p>else</p>
-
-		<p>{</p>
-
-		<p>&lt;code&gt;</p>
-
-		<p>}</p>
-
-		<p><a id="While_statements">While Statements</a></p>
-
-		<p>While statements allow	&lt;code&gt;to be executed while	&lt;bool exp&gt;evaluates to	TRUE:</p>
-
-		<p>while ( &lt;bool exp&gt; )</p>
-
-		<p>{</p>
-
-		<p>&lt;code&gt;</p>
-
-		<p>}</p>
-
-		<p><a id="Casts">Casts</a></p>
-
-		<p>Casts convert one data type into a different one. In WZ casts are mostly used to convert float to int, int to float and bool to float. To perform a cast write the required data type in paranthesis.</p>
-
-		<p>Examples:</p>
-
-		<p>myFloat = (float)myInteger + 2.3 + (float)500 + 500.0;</p>
-
-		<p>myInteger = 100 + numPlayers + (int)myFloat;</p>
-
-		<p>NOTE: Both	(float)500and	500.0represent the same value. When converting FLOATs to INTs fractional part is discarded.</p>
-
-		<p><a id="Custom_Functions">Custom Functions</a></p>
-
-		<p>It is possible to define custom script functions to reuse certain functionality throughout the script.</p>
-
-		<p>Function have following syntax:</p>
-
-		<p>function &lt;return type&gt; &lt;function name&gt; ( [ &lt;argument type&gt; &lt; argument name&gt; , ... ] )</p>
-
-		<p>{</p>
-
-		<p>&lt;code&gt;</p>
-
-		<p>return ... ;</p>
-
-		<p>}</p>
-
-		<p>Examples:</p>
-
-		<p>function void displayVictoryMessage( int winner )</p>
-
-		<p>{</p>
-
-		<p>console ( "Player " &amp; getPlayerName(winner) &amp; " has won the game" );</p>
-
-		<p>}</p>
-
-		<p>function float calculateMinimum ( float f1, float f2 )</p>
-
-		<p>{</p>
-
-		<p>if ( f1 &lt; f2 )</p>
-
-		<p>{</p>
-
-		<p>return f1;</p>
-
-		<p>}</p>
-
-		<p>return f2;</p>
-
-		<p>}</p>
-
-		<p>Functions look almost identical to their C counterparts, except that the beginning of a function is marked with 'function' keyword.</p>
-
-		<p>It is possible to declare function, like with events it is done in the	<a href="#Event_and_function_declaration">Event and function declaration</a> section:</p>
-
-		<p><a id="Data_Types">function void displayVictoryMessage( int winner );</a></p>
-
-		<p>function float calculateMinimum ( float f1, float f2 );</p>
-
-		<p>Declared this way it is possible to use a function before it is defined later in the script.</p>
-
-		<p>To call a function simply provide its name with parameters in paranthesis:</p>
-
-		<p>displayVictoryMessage(0);</p>
-
-		<p>...</p>
-
-		<p>console("Minimum of 2 and 2.1 is " &amp; calculateMinimum(2.0, 2.1) );</p>
-
-		<p>Like in C</p>
-
-		<p>return &lt;return expression&gt;;</p>
-
-		<p>or for void functions just:</p>
-
-		<p>return;</p>
-
-		<p>returns execution to the caller.</p>
-
-		<p><a id="Local_Variables">Local Variables</a></p>
-
-		<p>Local variables belong either to a function or event where they were declared and are not accessible outside of it. Local variables must be declared at the beginning of the function or event. Like public/private variables local variables of the same type can be declared on the same line separated by a comma.</p>
-
-		<p>Declaration of a local variable looks as follows:</p>
-
-		<p>local &lt;variable type&gt; &lt;variable name&gt; [, &lt;variablename&gt;, ...] ;</p>
-
-		<p>Example:</p>
-
-		<p>event myEvent(myTrigger)</p>
-
-		<p>{</p>
-
-		<p>local int count;</p>
-
-		<p>&lt;code&gt;</p>
-
-		<p>}</p>
-
-		<p>function void myFunction()</p>
-
-		<p>{</p>
-
-		<p>local DROId myDroid1, myDroid2;</p>
-
-		<p>local string myString;</p>
-
-		<p>&lt;code&gt;</p>
-
-		<p>}</p>
-
-		<p>Macros</p>
-
-		<p>Warzone Scripting language supports nested macros (current max depth is 10).</p>
-
-		<p>Macros are defined as follows:</p>
-
-		<p>#define &lt;macro name&gt; &lt;macro body&gt;</p>
-
-		<p>Example:</p>
-
-		<p>#define pi 3.14</p>
-
-		<p>Example of a nested macro:</p>
-
-		<p>#define CURRENT_PLAYER 0</p>
-
-		<p>#define CURRENT_PLAYER_NAMe getPlayerName(CURRENT_PLAYER)</p>
-
-		<p>During the compilation process macro names are replaced with the actual code.</p>
-
-		<p>Parametrized macros are not supported.</p>
-
-		<p>If any other text but "define" follows after # character then anything between # and end of the line is ignored by compiler making it possible to use #region and other tags in your favorite IDE.</p>
-
-		<p>NOTE: "#include" is reserved but not fully supported yet.</p>
-
-		<p>Data Types</p>
-
-		<p>Apart from standard data types like string (string), integer (int), boolean (bool) and floating point (float) there are some warzone-specific data types available:</p>
-
-		<p>INTMESSAGE- (simple) Name of a message as defined in Messages.txt, used mostly for campaign. In most cases it is easier to use a string instead.</p>
-
-		<p>BASEOBJ- (complex) any of a DROID, FEATURE or STRUCTURE. It is a pointer to some droid/feature/structure on the map, can be NULLOBJECT if it wasn't assigned to a particular droid/feature/structure.<br />
- You have access to:</p>
-
-		<p>baseobj.x<br />
- baseobj.y<br />
- baseobj.z<br />
- baseobj.id - unique id number<br />
- baseobj.player - player id<br />
- baseobj.type - one of OBJ_DROID, OBJ_STRUCTURE, OBJ_FEATURE<br />
- baseobj.health - %age number of body points left<br />
- baseobj.clusterID - the cluster the object is a member of</p>
-
-		<p>baseobj.target - target of the object (in case of a multi-turret object returns target of the default weapon)</p>
-
-		<p>NOTE: the functions objToDroid, objToStructure and objToFeature exist to convert a BASEOBJ<br />
- to a droid, structure or feature if the base obj is of the right type.</p>
-
-		<p>DROID- (complex) defined by the Id got from the world editor. It is a pointer to a particular droid on the map, can be NULLOBJECT when no droid is assigned to the DROID variable.<br />
- You have access to :</p>
-
-		<p>all BASEOBJ variables<br />
- droid.order - current order of the droid<br />
- droid.orderx - target location of the droid order<br />
- droid.ordery - target location of the droid order<br />
- droid.action - current action of the droid<br />
- droid.body - the BODY of the droid<br />
- droid.propulsion - the PROPULSION of the droid<br />
- droid.weapon - the WEAPON of the droid DROIDID - (simple) literally just an Id of a droid</p>
-
-		<p>droid.selected - holds TRUE if droid is currently selected<br />
- droid.group - the GROUP droid belongs to</p>
-
-		<p>FEATURE- (complex) defined by the ID got from the world editor. It is a pointer to a map decoration, like a tree, wrecked building, oil resource etc, can be NULLOBJECT.</p>
-
-		<p>You have access to :</p>
-
-		<p>all BASEOBj variables</p>
-
-		<p>FEATURESTAT- (simple) type of a feature as defined in features.txt.</p>
-
-		<p>TEMPLATE- (simple) name of a template as defined in templates.txt</p>
-
-		<p>STRUCTURE- (complex) defined by the ID got from the world editor. It is a pointer to a particular structure on the map, can</p>
-
-		<p>be NULLOBJECt when no structure is assigned to the STRUCTURE variable.</p>
-
-		<p>You have access to :</p>
-
-		<p>all BASEOBJ variables<br />
- structure.stat - the STRUCTURESTAT of the structure, defined in structures.txt</p>
-
-		<p>structure.stattype - structure type (likeREF_HQetc, refer to	<a href="#Script_Function_Constants">Script Function Constants</a>)</p>
-
-		<p>STRUCTUREID- (simple) literally just an ID of a struct<br />
-			STRUCTURESTAT- (simple) type of a structure as defined in structures.txt</p>
-
-		<p>BODY- (simple) name of a body as defined in body.txt<br />
-			PROPULSION- (simple) name of a propulsion as defined in propulsion.txt<br />
-			ECM- (simple) name of a ECM as defined in ecm.txt<br />
-			SENSOR- (simple) name of a sensor as defined in sensor.txt<br />
-			CONSTRUCT- (simple) name of a construct as defined in construct.txt<br />
-			WEAPON- (simple) name of a weapon as defined in weapons.txt<br />
-			REPAIR- (simple) name of a repair type as defined in Repair.txt<br />
-			BRAIN- (simple) name of a brain type as defined in Brain.txt<br />
-			SOUND- (simple) ID of sound used in playSound()<br />
-			LEVEL- ID of a level as defined in GameDesc.lev<br />
-			RESEARCHSTAT- (simple) name of a research topic as defined in research.txt</p>
-
-		<p><br />
-			GROUP- (complex) a group of droids. Don't confuse GROUP with in-game units groups that can be accessed with ctrl-&lt;number&gt;, they have nothing in common. GROUP is an internal structure used to simplify unit management.<br />
- You have access to :</p>
-
-		<p>group.x - average x coord<br />
-			group.y - average y coord<br />
-			group.members - number of units in the group<br />
-			group.health - average %age health of the units</p>
-
-		<p>group.type - type of the group, one of: GT_NORMAL, GT_COMMAND or GT_TRANSPORTER (refer to	<a href="#Script_Function_Constants">Script Function Constants</a>)</p>
-
-		<p>group.commander - commander of the group, if type = GT_COMMAND or NULLOBJECT</p>
-
-		<p>NOTE: transporters and commanders can't be added to a GROUP.</p>
-
-		<p>With a complex object it is possible to access information specific to the instance of this object. Acomplex object is usually a pointer to a C structure in the code. For example a DROID is a complex object - its x,y,z can be queried whereas a DROIDID (a simple object - an integer) is just a placeholder for the numeric value of the ID.</p>
-
-		<p><a id="Script_Functions">Script Functions</a></p>
-
-		<p>setSnow(bool)</p>
-
-		<p>This function switchs snow on or off. TRUE will turn snow on, FALSE will turn snow off. If rain is on when snow is started the rain will be turned off.</p>
-
-		<p>setRain(bool)</p>
-
-		<p>This function switchs rain on or off. TRUe will turn rain on, FALSE will turn rain off. If snow is on when rain is started the snow will be turned off.</p>
-
-		<p>setBackgroundFog(bool)</p>
-
-		<p>This function switchs background fog on or off. This sets the backdrop to the current fogcolour and fogs the edge of the visible world.</p>
-
-		<p>TRUE will turn background fog on, FALSE will turn background fog off.</p>
-
-		<p>setDepthFog(bool)</p>
-
-		<p>This function switchs depth fog on or off. This sets the sets fog ramping up from zero in the middle of the view to full fog at the edge of the visible world. TRUE will turn depth fog on, FALSE will turn depth fog off.</p>
-
-		<p>setFogColour(RED, GREEN, BLUE)</p>
-
-		<p>This function sets the fog colour, to be used when fog is enabled. This colour is also used in the background clear when fog is enabled.</p>
-
-		<p>The colour is specified as RED, GREEN and BLUe components each in the range 0 to 255. This yields a 24 bit colour value.</p>
-
-		<p>Colour values outside the range 0 to 255 will have an indeterminate effect.</p>
-
-		<p>WARNING setting the fog colour to BLACK(0, 0, 0) does not turn fog off and should be avoided.</p>
-
-		<p>Arizona: NEW 204, 149, 70 Nick approved 24/09/98 (Old 176, 143, 95 B08F5F)</p>
-
-		<p>Urban: 201, 146, 15 C9920F</p>
-
-		<p>Rockies: 182, 225, 236 B6E1EC</p>
-
-		<p>enableComponent(COMPONENT, PLAYER)</p>
-
-		<p>This function makes a component found to a player - so that they can research a topic that requires the component COMPONENT is any type of Body, Propulsion, Weapon, ECM, Sensor, Construct etc</p>
-
-		<p>PLAYER is the id of the player who gets the component</p>
-
-		<p>makeComponentAvailable(COMPONENT, PLAYER)</p>
-
-		<p>This function makes a component available to a player - so that they can build Units using this component</p>
-
-		<p>COMPONENT is any type of Body, Propulsion, Weapon, ECM, Sensor, Construct etc</p>
-
-		<p>PLAYER is the id of the player who gets the component</p>
-
-		<p>enableStructure(STRUCTURESTAT, PLAYER)</p>
-
-		<p>This function makes a structure available to a player - so that they can research a topic that requires the structure or build the structure STRUCTURESTAT is defined by the name from Access</p>
-
-		<p>PLAYER is the id of the player who gets the structure</p>
-
-		<p>enableResearch(RESEARCHSTAT, PLAYER)</p>
-
-		<p>This function makes a research topic available to a player regardless of its pre-requisites</p>
-
-		<p>RESEARCHSTAT is defined by the name from Access</p>
-
-		<p>PLAYER is the id of the player who gets the research</p>
-
-		<p>completeResearch(RESEARCHSTAT, PLAYER)</p>
-
-		<p>This function acts as if the research was performed by the player giving them the results</p>
-
-		<p>RESEARCHSTAT is defined by the name from Access</p>
-
-		<p>PLAYER is the id of the player who gets the research</p>
-
-		<p>bool objectInRange(PLAYER, X,Y, RANGE)</p>
-
-		<p>bool droidInRange(PLAYER, X,Y, RANGE)</p>
-
-		<p>bool structInRange(PLAYER, X,Y, RANGE)</p>
-
-		<p>These functions check for when an object/droid/structure belonging to a player is within range of a position</p>
-
-		<p>PLAYER is the id of the player whose unit is checked for in range</p>
-
-		<p>X,Y is the position to check from in world coords</p>
-
-		<p>RANGE is in world coords - 128 units = 1 tile</p>
-
-		<p>bool objectInArea(PLAYER, X1,Y1, X2,Y2)</p>
-
-		<p>bool droidInArea(PLAYER, X1,Y1, X2,Y2)</p>
-
-		<p>bool structInArea(PLAYER, X1,Y1, X2,Y2)</p>
-
-		<p>These functions check for when an object/droid/structure belonging to a player is in a square area</p>
-
-		<p>PLAYER is the id of the player whose droid is checked for in area</p>
-
-		<p>X1,Y1, X2,Y2 is the area to check in world coords</p>
-
-		<p>X1,Y1 should be smaller than X2,Y2</p>
-
-		<p>bool droidHasSeen(OBJECT, PLAYER)</p>
-
-		<p>This functions checks for when a player has seen a given object - either by unit or structure</p>
-
-		<p>OBJECT is any type of DROID, FEATURE, STRUCTURE</p>
-
-		<p>PLAYER is the id of the player to check for having seen</p>
-
-		<p>addDroid(TEMPLATE, X, Y, PLAYER)</p>
-
-		<p>This function adds a unit for the player based on the template passed in.</p>
-
-		<p>The unit is placed at x,y</p>
-
-		<p>TEMPLATE is a valid template (doesn't have to belong to the player!)</p>
-
-		<p>X, Y are in world coords</p>
-
-		<p>PLAYER is the id of the player whose the unit belongs to</p>
-
-		<p>buildDroid(TEMPLATE, STRUCTURE, PLAYER, QUANTITY)</p>
-
-		<p>This function sets a factory defined by STRUCTURE to build units based on the TEMPLATE for the PLAYER.</p>
-
-		<p>TEMPLATE is a valid template (doesn't have to belong to the player!)</p>
-
-		<p>STRUCTURE is a structure defined by ID and MUST BE A FACTORY</p>
-
-		<p>PLAYER is the id of the player whose the unit belongs to</p>
-
-		<p>QUANTITY is the number of units that will be built</p>
-
-		<p>bool buildingDestroyed(STRUCTUREID, PLAYER)</p>
-
-		<p>This function checks that a structure (given by the id) no longer exists for the player</p>
-
-		<p>STRUCTUREID is the id of the structure - Nb this is different to an object of type STRUCTURE</p>
-
-		<p>PLAYER is the id of the player whose list is checked for the building</p>
-
-		<p>bool structureIdle(STRUCTURE)</p>
-
-		<p>This function checks whether the structure is doing anything. Returns TRUE if idle</p>
-
-		<p>STRUCTURE is a valid structure defined by ID</p>
-
-		<p>bool structureBeingBuilt(STRUCTURESTAT, PLAYER)</p>
-
-		<p>This function checks that a structure of type STRUCTURESTAT is currently being built for the specified PLAYER</p>
-
-		<p>STRUCTURESTAT is defined by the name from Access</p>
-
-		<p>PLAYER is the id of the player who gets the structure</p>
-
-		<p>bool structureBuilt(STRUCTURESTAT, PLAYER)</p>
-
-		<p>This function checks that a structure of type STRUCTURESTAT is currently built for the specified PLAYER</p>
-
-		<p>STRUCTURESTAT is defined by the name from Access</p>
-
-		<p>PLAYER is the id of the player who gets the structure</p>
-
-		<p>addReticuleButton(BUTTONID)</p>
-
-		<p>This function adds a reticule button to the interface</p>
-
-		<p>BUTTONID is the id of a button - see	<a href="#Script_Function_Constants">Script Function Constants</a></p>
-
-		<p>removeReticuleButton(BUTTONID)</p>
-
-		<p>This function removes a reticule button from the interface</p>
-
-		<p>BUTTONID is the id of a button - see	<a href="#Script_Function_Constants">Script Function Constants</a></p>
-
-		<p>addMessage(INTMESSAGE, MESSAGETYPE, PLAYER, PLAY_IMMEDIATE)</p>
-
-		<p>This adds a message to the interface for the PLAYER</p>
-
-		<p>INTMESSAGE is a variable defined in the values file</p>
-
-		<p>MESSAGETYPE is a predefined type - see	<a href="#Script_Function_Constants">Script Function Constants</a></p>
-
-		<p>PLAYER is the player who gets the message</p>
-
-		<p>PLAY_IMMEDIATE is a bool for whether to bring the Intelligence Screen up with the message immediately or just store it</p>
-
-		<p>removeMessage(INTMESSAGE, MESSAGETYPE, PLAYER)</p>
-
-		<p>This removes a message from the interface for the PLAYER</p>
-
-		<p>INTMESSAGE is a variable defined in the values file</p>
-
-		<p>MESSAGETYPE is a predefined type - see	<a href="#Script_Function_Constants">Script Function Constants</a></p>
-
-		<p>PLAYER is the player who loses the message</p>
-
-		<p>bool selectDroidByID(DROIDID, PLAYER)</p>
-
-		<p>This selects a unit defined by the ID since we can't guarantee the name! Only the list of units belonging to PLAYER will be checked. This returns TRUE if the unit could be found - it will be worth checking it exists!</p>
-
-		<p>DROIDID is a valid unit defined by ID</p>
-
-		<p>setAssemblyPoint(X, Y, STRUCTURE)</p>
-
-		<p>This sets the location of where new units assemble at for a specific factory</p>
-
-		<p>X, Y are the x and y in world coordinates</p>
-
-		<p>STRUCTURE is a valid structure defined by ID</p>
-
-		<p>FEATURE addFeature( FEATURESTAT, X, Y )</p>
-
-		<p>Builds a feature at position (x,y).</p>
-
-		<p>FEATURESTAT is the name of a feature stat defined in features.txt.</p>
-
-		<p>The feature identifier is returned - this can be used in e.g. destroyFeature.</p>
-
-		<p>destroyFeature(FEATURE)</p>
-
-		<p>This removes the feature from the world</p>
-
-		<p>FEATURE is a feature defined by ID</p>
-
-		<p>centreView(OBJECT)</p>
-
-		<p>This function centres the view on the object supplied</p>
-
-		<p>OBJECT is any type of DROID, FEATURE, STRUCTURE</p>
-
-		<p>STRUCTURE addStructure( STRUCTURESTAT, PLAYER, X, Y )</p>
-
-		<p>Builds a structure belonging to PLAYER centred at (X, Y).</p>
-
-		<p>The structure must be previously enabled via enableStructure().</p>
-
-		<p>The structure identifier is returned - this can be used in e.g. destroyStructure.</p>
-
-		<p>destroyStructure(STRUCTURE)</p>
-
-		<p>This removes the structure from the world</p>
-
-		<p>STRUCTURE is a structure defined by ID</p>
-
-		<p>STRUCTURE getStructure(STRUCTURESTAT, PLAYER)</p>
-
-		<p>This function returns the first STRUCTURe based on the stat for the player it can find.</p>
-
-		<p>To use it create a STRUCTURE variable and assign it to the result of the function call.</p>
-
-		<p>For example:</p>
-
-		<p>STRUCTURe myNewStructure;</p>
-
-		<p>STRUCTURESTAt Factory;</p>
-
-		<p>myNewStructure = getStructure(Factory, 0);</p>
-
-		<p>This will look through the player 0 list of structures to find a Factory and return a variable of type STRUCTURE. You will then be able to access the x, y, and z. If a structure cannot be found than NULL is returned . It will be worth checking that the STRUCTURE does not equal NULL before using it. For example:</p>
-
-		<p>if (myNewStructure == NULLOBJECT)</p>
-
-		<p>{</p>
-
-		<p>do something</p>
-
-		<p>}</p>
-
-		<p>void initEnumStruct(bool any, STRUCTURESTAt type, int targetPlayer, int lookingPlayer)</p>
-
-		<p>STRUCTURE enumStruct()</p>
-
-		<p>Enumerate through visible structures of given 'type' of player 'targetPlayer' that are visible to 'lookingPlayer'. Returns NULLOBJECT when no more exist.</p>
-
-		<p>If 'any' is set to TRUE, then 'type' is ignored and all structure types will be iterated.</p>
-
-		<p>void InitEnumDroids(int targetPlayer, int lookingPlayer)</p>
-
-		<p>DROID EnumDroid()</p>
-
-		<p>Enumerate through all targetPlayer's droids that are visible to 'lookingPlayer'. Returns NULLOBJECT when no more exist.</p>
-
-		<p>TEMPLATE getTemplate(COMPONENT, PLAYER)</p>
-
-		<p>This function returns the first TEMPLATE based on the stat for the player it can find. It can be any type of component. To use it create a TEMPLATE variable and assign it to the result of the function call. For example:</p>
-
-		<p>TEMPLATe myNewTemplate;</p>
-
-		<p>WEAPOn Rocket;</p>
-
-		<p>myNewTemplate = getStructure(Rocket, 0);</p>
-
-		<p>This will look through the player 0 list of template to find one which contains a rocket and then return a variable of type TEMPLATE. You will then be able to access its attributes. If a template cannot be found than NULL is returned . It will be worth checking that the TEMPLATe does not equal NULL before using it. For example:</p>
-
-		<p>if (myNewTemplate == NULLTEMPLATE)</p>
-
-		<p>{</p>
-
-		<p>do something</p>
-
-		<p>}</p>
-
-		<p>setScrollParams(minX, minY, maxX, maxY)</p>
-
-		<p>This literally sets the scroll settings for the current map - be careful not to set the maxX/maxY greater than that possible for the map!</p>
-
-		<p>minX, minY, maxX, maxY are all numbers. These are in TILE COORDINATES!!!!!!</p>
-
-		<p>setScrollMinX(minX)</p>
-
-		<p>This just sets the one variable. These are in TILE COORDINATES!!!!!!</p>
-
-		<p>minX is a number</p>
-
-		<p>setScrollMinY(minY)</p>
-
-		<p>This just sets the one variable. These are in TILE COORDINATES!!!!!!</p>
-
-		<p>minY is a number</p>
-
-		<p>setScrollMaxX(maxX)</p>
-
-		<p>This just sets the one variable. These are in TILE COORDINATES!!!!!!</p>
-
-		<p>maxX is a number</p>
-
-		<p>setScrollMaxY(maxY)</p>
-
-		<p>This just sets the one variable. These are in TILE COORDINATES!!!!!!</p>
-
-		<p>maxY is a number</p>
-
-		<p>setDefaultSensor(SENSOR, PLAYER)</p>
-
-		<p>This sets which sensor will be used as the default when designing units in game for the specified player. The SENSOR must be a valid DEFAULT sensor.</p>
-
-		<p>setDefaultECM(ECM, PLAYER)</p>
-
-		<p>Like the above functionm, this sets which ECm will be used as the default when designing units. Again the ECM must be a valid DEFAULT ECM.</p>
-
-		<p>setStructureLimits(STRUCTURESTAT, LIMIT, PLAYER)</p>
-
-		<p>This sets a limit for a specific structure on how many can be built on a map.</p>
-
-		<p>STRUCTURESTAT is defined by the name from Access</p>
-
-		<p>LIMIT is a number between 0 and 255</p>
-
-		<p>PLAYER is the id of the player</p>
-
-		<p>setAllStructureLimits(LIMIT, PLAYER)</p>
-
-		<p>This sets a limit for all structures on how many can be built on a map.</p>
-
-		<p>LIMIT is a number between 0 and 255</p>
-
-		<p>PLAYER is the id of the player</p>
-
-		<p>playSound( SOUND, PLAYER)</p>
-
-		<p>Plays a '2D' sound ie speech and is audible for the player identified</p>
-
-		<p>SOUND is a defined type.</p>
-
-		<p>PLAYER is the id of the player</p>
-
-		<p>playSoundPos( SOUND, PLAYER, x, y, z)</p>
-
-		<p>Plays a '2D' sound ie speech and is audible for the player identified</p>
-
-		<p>Position of sound is saved so camera can move to object playing sound if required.</p>
-
-		<p>SOUND is a defined type.</p>
-
-		<p>PLAYER is the id of the player</p>
-
-		<p>x, y, z is the position of the object in game units.</p>
-
-		<p>addConsoleText( TEXTSTRING, PLAYER)</p>
-
-		<p>Adds console text to the top of the screen (centre justified) for the player concerned</p>
-
-		<p>TEXTSTRING is a string ID obtained from strings.txt</p>
-
-		<p>PLAYER is the id of the player</p>
-
-		<p>turnPowerOn()</p>
-
-		<p>Literally makes the power calculations be used</p>
-
-		<p>turnPowerOff()</p>
-
-		<p>Literally stops the power calculations being used</p>
-
-		<p>setPowerLevel(POWER, PLAYER)</p>
-
-		<p>sets the power level for a player - this overrides any current setting there is</p>
-
-		<p>POWER is the value to set the player's power to</p>
-
-		<p>PLAYER is the id of the player</p>
-
-		<p>addPower(POWER, PLAYER)</p>
-
-		<p>adds the POWER amount to the PLAYER's current level</p>
-
-		<p>POWER is the value to add to the player's power</p>
-
-		<p>PLAYER is the id of the player</p>
-
-		<p>setLandingZone(x1, y1, x2, y2)</p>
-
-		<p>sets the landing zone for the map. The coords are in tile units and must all be less than 255</p>
-
-		<p>setLimboLanding(x1, y1, x2, y2)</p>
-
-		<p>sets the landing zone for the Limbo Units.The coords are in tile units and must all be less than 255</p>
-
-		<p>The units from the Limbo list are then placed at this location - so call in CALL_GAME_INIT of the mission you want them to appear in</p>
-
-		<p>initAllNoGoAreas()</p>
-
-		<p>initialises all the no go areas to 0. Should be called when a new map is loaded</p>
-
-		<p>setNoGoArea(x1, y1, x2, y2, areaNum)</p>
-
-		<p>defines an area that cannot be built on - used for enemy landing zones.</p>
-
-		<p>areaNum is a number between 0 and 7. If 0, then this function is the same as calling setlandingZone</p>
-
-		<p>setTransporterExit( PLAYER, exitTileX, exitTiley )</p>
-
-		<p>setup transporter exit point on map for PLAYER</p>
-
-		<p>flyTransporterIn( PLAYER, entryTileX, entryTileY, bool bTrackTransporter )</p>
-
-		<p>flys PLAYER's transporter in from entry point on map; set bTrackTransporter true to</p>
-
-		<p>track it onto the map.</p>
-
-		<p>tutorialEnd()</p>
-
-		<p>A bit of a hack to notify the game when the last of the tutorial events has been run</p>
-
-		<p>so that the console messages can be turned back on to how they will appear for</p>
-
-		<p>the rest of the game</p>
-
-		<p>gameOver(bool)</p>
-
-		<p>function to call for ending the game</p>
-
-		<p>bool - true or false depending on whether the player has won or not</p>
-
-		<p>anyDroidsLeft(PLAYER)</p>
-
-		<p>checks the specified player for any units - returns TRUE if some exist, FALSE if</p>
-
-		<p>they have all been destroyed</p>
-
-		<p>anyStructButWallsLeft(PLAYER)</p>
-
-		<p>checks the specified player for any structures except walls - returns TRUE if some</p>
-
-		<p>exist, FALSE if they have all been destroyed</p>
-
-		<p>anyFactoriesLeft(PLAYER)</p>
-
-		<p>returns true if player has a factory/cyborg factory/ vtol factory</p>
-
-		<p>setRetreatPoint(PLAYER, x,y)</p>
-
-		<p>sets the position for a players units to retreat to</p>
-
-		<p>setRetreatForce(int player, int level)</p>
-
-		<p>Sets the percentage of the current force below which units for a side will retreat</p>
-
-		<p>setRetreatLeadership(int player, int level)</p>
-
-		<p>Sets the leadership level (chance to run away) for a player (1-100)</p>
-
-		<p>startMission(MISSION_TYPE, LEVEL)</p>
-
-		<p>Starts a mission for the currently selected player - NB Transporters must be filled if</p>
-
-		<p>you want units to appear on the Mission map</p>
-
-		<p>MISSION_TYPE is a predefined type - see	<a href="#Script_Function_Constants">Script Function Constants</a></p>
-
-		<p>LEVEL is the name of the level to load as defined in GameDesc.lev</p>
-
-		<p>endMission(bool)</p>
-
-		<p>Ends the current mission the selected player is on - returns all Units that have been</p>
-
-		<p>loaded onto the Transporter. False if player lost, true if player won????</p>
-
-		<p>bool allianceExists()</p>
-
-		<p>returns true if two or more players are in alliance. returns false otherwise.</p>
-
-		<p>bool dominatingAlliance()</p>
-
-		<p>returns true if there is a single dominating alliance, using all multi-players.</p>
-
-		<p>bool playerInAlliance()</p>
-
-		<p>returns true if player is in an alliance</p>
-
-		<p>bool myResponsibility(PLAYER)</p>
-
-		<p>returns true if this machine is responsible for 'player' in multiplayer games.</p>
-
-		<p>STRUCTURe structureBuiltInRange(STRUCTURESTAT, X, Y, RANGE, PLAYER)</p>
-
-		<p>Checks to see if a Structure has been built within a specified range of x, y. The first structure</p>
-
-		<p>to be found within this range will be returned. Check the result of the function for being</p>
-
-		<p>NULLOBJECT before using!</p>
-
-		<p>STRUCTURE is a return value (structure defined by ID)</p>
-
-		<p>STRUCTURESTAT is defined by the name from Access</p>
-
-		<p>X, Y, RANGE are all in world coords</p>
-
-		<p>PLAYER is the id of the player whose structure list is searched</p>
-
-		<p>groupAddDroid(GROUP, DROID)</p>
-
-		<p>Add a unit to a group</p>
-
-		<p>groupAddArea(GROUP, PLAYER, X1,Y1, X2,Y2)</p>
-
-		<p>Add all the units inside the rectangle X1,Y1, X2,Y2.</p>
-
-		<p>Only units belonging to player PLAYER are added.</p>
-
-		<p>groupAddAreaNoGroup(GROUP, PLAYER, X1,Y1, X2,Y2)</p>
-
-		<p>as above but doesnt add units that are already grouped.</p>
-
-		<p>groupAddGroup(group1, group2)</p>
-
-		<p>Add all the units in group2 to group1.</p>
-
-		<p>All the units are removed from group2.</p>
-
-		<p>bool hasGroup(DROID droid)</p>
-
-		<p>Returns TRUE if 'droid' belongs to any group, retzrns FALSE otherwise.</p>
-
-		<p>orderDroid(DROID, order)</p>
-
-		<p>Give a unit an order currently one of:</p>
-
-		<p>DORDER_STOp - stop current order</p>
-
-		<p>DORDER_RETREAt - retreat</p>
-
-		<p>DORDER_DESTRUCT - self destruct</p>
-
-		<p>DORDER_RTr - return to repair</p>
-
-		<p>DORDER_RTb - return to base</p>
-
-		<p>DORDER_RUn - run away for a bit (moral failure)</p>
-
-		<p>orderDroidLoc(DROID, order, x,y)</p>
-
-		<p>Give a unit an order with a location :</p>
-
-		<p>DORDER_MOVe - move to location</p>
-
-		<p>orderDroidObj(DROID, order, BASEOBJ)</p>
-
-		<p>Give a unit an order with an object :</p>
-
-		<p>DORDER_ATTACK- attack the object</p>
-
-		<p>DORDER_HELPBUILD- help construct the object</p>
-
-		<p>DORDER_DEMOLISH- demolish structure</p>
-
-		<p>DORDER_REPAIR- repair structure</p>
-
-		<p>DORDER_OBSERVE- (sensor units) keep a target in sensor range</p>
-
-		<p>DORDER_EMBARK- get onto a transporter</p>
-
-		<p>DORDER_FIRESUPPORT- follow this sensor unit and attack anything it DORDER_OBSERVE's</p>
-
-		<p>orderDroidStatsLoc(DROID, int order, STRUCTURESTAT stats, int x, int y)</p>
-
-		<p>Give a unit an order with stats and a location :</p>
-
-		<p>DORDER_BUILD - build a structure at the location</p>
-
-		<p>orderGroup(GROUP, order)</p>
-
-		<p>Give all the units in the group an order</p>
-
-		<p>orderGroupLoc(GROUP, order, x,y)</p>
-
-		<p>Give all the units in the group an order with a location</p>
-
-		<p>orderGroupObj(GROUP, order, BASEOBJ)</p>
-
-		<p>Give all the units in the group an order with an object</p>
-
-		<p>DROID objToDroid(BASEOBJ)</p>
-
-		<p>Convert a BASEOBJ to DROID when BASEOBJ.type == OBJ_DROID. Returns NULLOBJECT otherwise</p>
-
-		<p>STRUCTURE objToStructure(BASEOBJ)</p>
-
-		<p>Convert a BASEOBJ to STRUCTURE when BASEOBJ.type == OBJ_STRUCTURE. Returns NULLOBJECT otherwise</p>
-
-		<p>FEATURE objToFeature(BASEOBJ)</p>
-
-		<p>Convert a BASEOBJ to FEATURE when BASEOBJ.type == OBJ_FEATURE. Returns NULLOBJECT otherwise</p>
-
-		<p>int random(range)</p>
-
-		<p>Return a random number between 0 and range - 1.</p>
-
-		<p>flashOn(int buttonID)</p>
-
-		<p>turn on flashing for a button (id's in	<a href="#Script_Function_Constants">Script Function Constants</a>)</p>
-
-		<p>... now works for all buttons not just reticule buttons</p>
-
-		<p>flashOff(int buttonID)</p>
-
-		<p>turn off flashing for a button</p>
-
-		<p>createAlliance(int player1, int player2)</p>
-
-		<p>Create an alliance between two players</p>
-
-		<p>breakAlliance(int player1, int player2)</p>
-
-		<p>Breake an alliance between two players</p>
-
-		<p>setRadarZoom(int level)</p>
-
-		<p>level is the zoom level between 0 .. 2 on the PC and 0 .. 1 on PSX.</p>
-
-		<p>0 is the most zoomed out, 2 the most zoomed in.</p>
-
-		<p>2 is mapped to 1 if the script is run on the PSX</p>
-
-		<p>centreViewPos(int x, int y)</p>
-
-		<p>center the view on the world coordinates x,y.</p>
-
-		<p>setGroupRetreatForce(GROUP group, int level)</p>
-
-		<p>Sets the percentage of the current force below which units for a side will retreat</p>
-
-		<p>setGroupRetreatLeadership(GROUP group, int level)</p>
-
-		<p>Sets the leadership level (chance to run away) for a player (1-100)</p>
-
-		<p>setGroupRetreatPoint(GROUP group, int x, int y)</p>
-
-		<p>Set the retreat position for a group</p>
-
-		<p>setDroidSecondary(DROID droid, int secondaryOrder, int secondaryState)</p>
-
-		<p>Set the state of a secondary order for a droid (values in	<a href="#Script_Function_Constants">Script Function Constants</a>)</p>
-
-		<p>setGroupSecondary(GROUP group, int secondaryOrder, int secondaryState)</p>
-
-		<p>Set the state of a secondary order for a group (values in	<a href="#Script_Function_Constants">Script Function Constants</a>)</p>
-
-		<p>setMissionTime(int time)</p>
-
-		<p>used to specify how long an OffWorld mission will last for - used in conjunction with the</p>
-
-		<p>callback CALL_MISSION_TIME so that end conditions can be displayed if the player has not</p>
-
-		<p>managed to finish the mission</p>
-
-		<p>If time &lt; 0, there is no limit. time is in 10th of a second</p>
-
-		<p>int missionTimeRemaining()</p>
-
-		<p>Returns how long left for the current mission. If the mission time has not been set it will return 0.</p>
-
-		<p>The value returned is in 10ths of a second</p>
-
-		<p>setReinforcementTime(int time)</p>
-
-		<p>this defines how long it will take for reinforcements to arrive for an OffWorld mission</p>
-
-		<p>If time &lt; 0, there can be no reinforcements. Time is in 10th of a second.</p>
-
-		<p>Set time to LZ_COMPROMISED_TIME to display '--:--' to indicate the Transporter is unable to land</p>
-
-		<p>int idleGroup(GROUP group)</p>
-
-		<p>returns number of units in group not doing anything.</p>
-
-		<p>bool groupMember(GROUP group, DROId droid)</p>
-
-		<p>return whether a unit is a member of a group.</p>
-
-		<p>initIterateGroup(GROUP group)</p>
-
-		<p>Prepare a group to iterate through the units in it.</p>
-
-		<p>DROID iterateGroup(GROUP group)</p>
-
-		<p>Get the next unit from the group. Must be called after an initial initGroupIterate.</p>
-
-		<p>To reset a group back to the start call initGroupIterate.</p>
-
-		<p>droidLeaveGroup(DROID droid)</p>
-
-		<p>Make a unit leave the group it is a member of (if any).</p>
-
-		<p>initGetFeature(STRUCTURESTAT, PLAYER,BUCKET)</p>
-
-		<p>getFeature(BUCKET)</p>
-
-		<p>enumerate features of a single feature type.</p>
-
-		<p>PLAYER is the player to use, Only features visible to that player are returned.</p>
-
-		<p>BUCKET is an int of range 0-MAX_PLAYERS(8), so up to 8 feature enumerations can be going on at any time! (wow)</p>
-
-		<p>getFeature returns NULLOBJECT when no more features are visible.</p>
-
-		<p>bool structButNoWallsInArea(PLAYER, X1,Y1, X2,Y2)</p>
-
-		<p>See if there are any player structures excluding walls in an area.</p>
-
-		<p>int numObjectsInArea(PLAYER, X1,Y1, X2,Y2)</p>
-
-		<p>Return the number of player objects in an area.</p>
-
-		<p>int numDroidsInArea(PLAYER, X1,Y1, X2,Y2)</p>
-
-		<p>Return the number of player units in an area.</p>
-
-		<p>int numStructsInArea(PLAYER, X1,Y1, X2,Y2)</p>
-
-		<p>Return the number of player structures in an area.</p>
-
-		<p>int numStructsButNotWallsInArea(PLAYER, X1,Y1, X2,Y2)</p>
-
-		<p>Return the number of player structures excluding walls in an area.</p>
-
-		<p>randomiseSeed()</p>
-
-		<p>Generate a new random seed for the random number generator.</p>
-
-		<p>int numStructsByTypeInArea(PLAYER, TYPE, X1,Y1, X2,Y2)</p>
-
-		<p>Return the number of structures of a certain type in an area.</p>
-
-		<p>flushConsoleMessages()</p>
-
-		<p>Clear all the console messages</p>
-
-		<p>bool pickStructLocation(STRUCTURESTAT,ref x, ref y, player);</p>
-
-		<p>returns true if structure of type strucutrestat can be built at x,y.</p>
-
-		<p>If a structure can be built nearby then returns true and modifies x and y</p>
-
-		<p>to the coords of acceptable location. Player trying to build - uses this for the visibility</p>
-
-		<p>int playerPower(int player)</p>
-
-		<p>returns aspower[player].currentPower (players current power)</p>
-
-		<p>bool seenStructInArea(int player,int enemy,bool walls,int x1,int y1,int x2,int y2)</p>
-
-		<p>returns true if player has seen a structure belonging to enemy in area specified. Call with</p>
-
-		<p>walls = true/false to include/exclude walls in the search.</p>
-
-		<p>(note similar to StructInArea)</p>
-
-		<p>int distBetweenTwoPoints(int x1, int y1, int x2, int y2)</p>
-
-		<p>Returns the distance between the two points given.</p>
-
-		<p>bool losTwoObjects(BASEOBJ source, BASEOBJ target, bool wallsMatter)</p>
-
-		<p>Decides whether object source can see object target and you can specify whether</p>
-
-		<p>walls matter or not. Note that whilst target can be anything, source needs to be</p>
-
-		<p>something that can actually see - ie - have a sensor like a unit or structure.</p>
-
-		<p>Returns TRUE or FALSE</p>
-
-		<p>void killStructsInArea(int player, int buildingRef (like REF_WALL etc),</p>
-
-		<p>int x1, int y1,int x2, int y2, bool bSeeEffect, bool bTakeFeatures)</p>
-
-		<p>Blows up all the buildings of the specified reference within the specified area.</p>
-
-		<p>If bSeeEffect is set, then you'll see it blow up (provided you can see the building</p>
-
-		<p>in question of course).</p>
-
-		<p>If bTakeFeatures is et, then it will also kill features of type BUILDING.</p>
-
-		<p>Returns 'nowt.</p>
-
-		<p>int getThreatInArea(int playerLooking, int playerTarget, int x1, int y1,</p>
-
-		<p>int x2, int y2, int ldThreat, int mdThreat, int hdThreat)</p>
-
-		<p>Returns the threat value of all units of a specified player within a certain area for a specified player.</p>
-
-		<p>The user can 'calibrate' this threat value by specifying the relative weights attached to the threats of</p>
-
-		<p>small,medium and heavy units respectively as the last three parameters to this function. The final boolean</p>
-
-		<p>parameter allows the user to say whether they care about whether or not the units in question are</p>
-
-		<p>presently visible.. TRUE means they only add to the threat if PlayerLooking can see this unit (owned by</p>
-
-		<p>playerTarget), FALSE means they add to the threat if even they can't see that unit.</p>
-
-		<p>bool getNearestGateway(int x, int y, ref rX, ref rY)</p>
-
-		<p>Puts the coordinates of the nearest gateway into reference variables rX and rY. It might not though</p>
-
-		<p>if there are no gateways on the present map. So make sure you look at the return value. If it's FALSE,</p>
-
-		<p>then the values in rX and rY will be meaningless - unchanged actually, assuming the scripting works</p>
-
-		<p>this way. Otherwise, they'll be the coordinates of the midpoint of the nearest gateway.</p>
-
-		<p>void setWaterTile(int tileNum)</p>
-
-		<p>Sets the tile to use for underwater. Count from the top of the tileset pcx - presently 17 for arizona.</p>
-
-		<p>initIterateCluster(int clusterID)</p>
-
-		<p>get ready to iterate a cluster</p>
-
-		<p>BASEOBJ iterateCluster()</p>
-
-		<p>return the next object in the cluster or NULLOBJ if none left</p>
-
-		<p>cmdDroidAddDroid(DROID commander, DROId droid)</p>
-
-		<p>adds the unit droid to the command group of the command unit commander</p>
-
-		<p>cmdDroidMaxGroup(DROId commander)</p>
-
-		<p>Returns max number of droids 'commander' can have in his group.</p>
-
-		<p>bool testStructureModule(int playeNumber, ST_STRUCTURE structureToTest, int ref)</p>
-
-		<p>Returns true if the structure in question has a module attached - presently the ref id is unused but</p>
-
-		<p>could be later on. At the moment it returns true if the structure has _any_ number of modules attached.</p>
-
-		<p>If the structure pointer that's sent in is NULL (ie - no structure is specified), then it'll return</p>
-
-		<p>TRUE is _any_ of the player's structures possess _any_ module. In all other cases, it'll return FALSE.</p>
-
-		<p>bool addTemplate(TEMPLATE, int player)</p>
-
-		<p>given a template, gives the player the template so that build droid can be used. At least one</p>
-
-		<p>player must have the template.</p>
-
-		<p>void vanishUnit(DROID droid)</p>
-
-		<p>Will remove 'droid' from the world without any graphical hoo ha.</p>
-
-		<p>void forceDamageObject(BASEOBJ obj, int damage)</p>
-
-		<p>Sets 'obj' to be 'damage' percent damaged. Obj must be a feature,droid or structure and damage</p>
-
-		<p>must be &lt;= 100.</p>
-
-		<p>bool getGameStatus(int StatusRequired)</p>
-
-		<p>Gets the status of some of the game TRUE/FALSe variables. Can be used to find if the reticule is up or the</p>
-
-		<p>battle map is open, that sort of thing.</p>
-
-		<p>e.g. getGameStatus(STATUS_ReticuleIsOpen); will return TRUE if the reticule is open (on screen) or FALSE if the reticule is not (disabled)</p>
-
-		<p>or</p>
-
-		<p>getGameStatus(STATUS_BattleMapViewEnabled); will return TRUE if we are in the battle map mode</p>
-
-		<p>or</p>
-
-		<p>getGameStatus(STATUS_DeliveryResposInProgress); will return TRUE if we are repositioning the delivery point</p>
-
-		<p>these are currently the only two options implemented ... for other game modes (like design screen or intelligence map modes)</p>
-
-		<p>use the externed variable intMode</p>
-
-		<p>int getPlayerColour(int player)</p>
-
-		<p>returns the colour of the player</p>
-
-		<p>void setPlayerColour(int colour, int player)</p>
-
-		<p>sets the colour to use for the player specified - colour must be 0 to (MAX_PLAYERS-1)</p>
-
-		<p>DROID takeOverSingleDroid(DROId droidToTakeOver, int playerToGain)</p>
-
-		<p>this replaces the existing droid (droidToTakeOver) by a new one for the playerToGain.</p>
-
-		<p>The new droid is passed back to the script</p>
-
-		<p>****Test for NULLOBJECT BEFORE calling this function****</p>
-
-		<p>int takeOverDroidsInArea(int fromPlayer, int toPlayer, int x1, int y1, int x2, int y2)</p>
-
-		<p>x1,y1,x2,y2 are in world units</p>
-
-		<p>checks for units belonging to fromPlayer and if they are in the area they are 'given' to the toPlayer</p>
-
-		<p>int takeOverDroidsInAreaExp(int fromPlayer, int toPlayer, int x1, int y1,</p>
-
-		<p>int x2, int y2, int level, int max)</p>
-
-		<p>x1,y1,x2,y2 are in world units</p>
-
-		<p>checks for units belonging to fromPlayer and if they are in the area they are 'given' to the toPlayer</p>
-
-		<p>if their experience level is less than or equal to level</p>
-
-		<p>max specifies the maximum number of units to take over</p>
-
-		<p>STRUCTURe takeOverSingleStructure(STRUCTURE structToTakeOver, int playerToGain)</p>
-
-		<p>this replaces the existing structure (structToTakeOver) by a new one for the playerToGain.</p>
-
-		<p>The new structure is passed back to the script</p>
-
-		<p>****Test for NULLOBJECT BEFORE calling this function****</p>
-
-		<p>int takeOverStructsInArea(int fromPlayer, int toPlayer, int x1, int y1,</p>
-
-		<p>int x2, int y2)</p>
-
-		<p>x1,y1,x2,y2 are in world units</p>
-
-		<p>checks for structures belonging to fromPlayer and if they are in the area they are 'given' to the toPlayer</p>
-
-		<p>This will NOT WORK for the selectedPlayer on any Factory. The structure limits will be increased if necessary</p>
-
-		<p>void resetStructTargets()</p>
-
-		<p>reset the structure preferences</p>
-
-		<p>void resetDroidTargets()</p>
-
-		<p>reset the unit preferences</p>
-
-		<p>void setStructTarPref(int type)</p>
-
-		<p>set a prefered structure target type, repeated calls combine the effect</p>
-
-		<p>void setStructTarIgnore(int type)</p>
-
-		<p>set structure target ignore types</p>
-
-		<p>void setDroidTarPref(int type)</p>
-
-		<p>set prefered unit target types</p>
-
-		<p>void setDroidTarIgnore(int type)</p>
-
-		<p>set unit target ignore types</p>
-
-		<p>STRUCTURE structTargetInArea(int targetPlayer, int visibleToPlayer, int x1, int y1, int x2, int y2)</p>
-
-		<p>get a structure target in an area using the preferences</p>
-
-		<p>targetPlayer is the player to choose targets from, visibleToPlayer specifies the</p>
-
-		<p>player that has to be able to see the target or -1 for no visibility check</p>
-
-		<p>STRUCTURE structTargetOnMap(int targetPlayer, int visibleToPlayer)</p>
-
-		<p>get a structure target on the map using the preferences</p>
-
-		<p>DROID droidTargetInArea(int targetPlayer, int visibleToPlayer, int x1, int y1, int x2, int y2)</p>
-
-		<p>get a unit target in an area using the preferences</p>
-
-		<p>DROID droidTargetOnMap(int targetPlayer, int visibleToPlayer)</p>
-
-		<p>get a unit target on the map using the preferences</p>
-
-		<p>BASEOBJ targetInCluster(int clusterID, int visibleToPlayer)</p>
-
-		<p>get a target from a cluster using the preferences</p>
-
-		<p>void fireWeaponAtObj(WEAPON weap, BASEOBJ target)</p>
-
-		<p>fire a single shot of the weapon weap at the object target</p>
-
-		<p>void fireWeaponAtLoc(WEAPON weap, int x, int y)</p>
-
-		<p>fire a single shot of the weapon weap at the location x,y</p>
-
-		<p>bool isStructureAvailable(STRUCTURESTAt stat, int player)</p>
-
-		<p>PC ONLY FOR NOW. returns true if structure is available to player, false otherwise.</p>
-
-		<p>bool structureComplete(STRUCTURE struct)</p>
-
-		<p>PC ONLY FOR NOW. returns true if the structure is completely built.</p>
-
-		<p>int getDroidCount(int player)</p>
-
-		<p>returns the number of units on the current map for the specified player</p>
-
-		<p>setDroidKills(DROID droid, int kills)</p>
-
-		<p>sets the number of kills for a unit. currently the level boudaries are:</p>
-
-		<p>4, 8, 16, 32, 64, 128, 256, 128</p>
-
-		<p>resetPlayerVisibility(int player)</p>
-
-		<p>reset the visibility for a player</p>
-
-		<p>void resetLimboMission(void)</p>
-
-		<p>This can only be called mid Limbo Expand mission - the units that were stored in the</p>
-
-		<p>mission list at the start of the mission are added back into the map, and the mission</p>
-
-		<p>type is changed to an Expand Mission.</p>
-
-		<p>int killDroidsInArea(int x1, int y1, int x2, int y2, int player)</p>
-
-		<p>Kills all the player's units within the area defined. Returns how many it wiped out.</p>
-
-		<p>traceOn()-- view the script debug info to stdout.</p>
-
-		<p>traceOff()</p>
-
-		<p>bool applyLimitSet (void)</p>
-
-		<p>Apply the limits set in the structure limits screen.</p>
-
-		<p>bool isHumanPlayer (int pl)</p>
-
-		<p>Returns true is pl is human.</p>
-
-		<p>void offerAlliance (int p1, int p2)</p>
-
-		<p>Make p1 offer p2 an alliance</p>
-
-		<p>bool allianceExistsBetween (int p1 , int p2)</p>
-
-		<p>True if alliance exists between p1 and p2.</p>
-
-		<p>void skDoResearch ( STRUCTURE str , int pl , int bias)</p>
-
-		<p>Make player pl do some research with structure str.</p>
-
-		<p>BASEOBJECT skLocateEnemy( int pl)</p>
-
-		<p>Return a baseobject of interest belonging to player pl.</p>
-
-		<p>bool skCanBuildTemplate ( int pl, STRUCTURE str, TEMPLATE tem)</p>
-
-		<p>True when player pl can build design tem with structure str.</p>
-
-		<p>bool skVtolEnableCheck( int pl)</p>
-
-		<p>True when player pl is actively using vtols.</p>
-
-		<p>int skGetFactoryCapacity( STRUCTURE str)</p>
-
-		<p>Return the capacity of factory str.</p>
-
-		<p>void skDifficultyModifier( int pl)</p>
-
-		<p>Apply the frontend slider settings to player pl.</p>
-
-		<p>bool skDefenseLocation (ref int x , ref int y , STRUCTURESTAT defenceStat,</p>
-
-		<p>STRUCTURESTAT wallstat, DROID unit, int player)</p>
-
-		<p>Given a starting x and y, make unit 'unit' belonging to 'player' build either a 'defenceStat' or a row of 'wallStat's. returns</p>
-
-		<p>Modified x and y's.</p>
-
-		<p>void skFireLassat (int pl, BASEOBJECT obj)</p>
-
-		<p>Fire lassat of player pl's at object obj.</p>
-
-		<p>void	setEventTrigger(EVENt event, TRIGGER newTrigger)</p>
-
-		<p>Assigns 'newTrigger' as new trigger for event 'event'.</p>
-
-		<p>void dropBeacon (string msg, int forPlayer, int, fromPlayer,</p>
-
-		<p>int x, int y, int z)</p>
-
-		<p>Put a flashing beacon on the map for player 'forPlayer' on position x/y. Unless removed manually the beacon is removed automatically from the map after a timeout.</p>
-
-		<p>void removeBeacon (int forPlayer, int fromPlayer)</p>
-
-		<p>Remove a previously placed beacon from the map.</p>
-
-		<p>int max(int value1, int value2)</p>
-
-		<p>int min(int value1, int value2)</p>
-
-		<p>Returns maximum/minimum of two integer values.</p>
-
-		<p>float fmax(float value1, float value2)</p>
-
-		<p>float fmin(float value1, float value2)</p>
-
-		<p>Returns maximum/minimum of two float values.</p>
-
-		<p>bool fogTileInRange(ref int tileX, ref int tileY, int x, int y,</p>
-
-		<p>int rangeX, int rangeY, int searchRange, int player, int threatRange)</p>
-
-		<p>Fills tileX/tileY with coordinates of the unrevealed location in range with starting location x/y, range 'searchRange' and closest to location x/y. If 'searchRange' is -1, then entire map is being searched. 'Player' is the player who is looking for an unrevealed map location. If 'threatRange' != -1 then also checks for enemy presence. Locations with enemy presence are ignored then.</p>
-
-		<p>Returns TRUE if any locations satisfying the search conditions were found, returns FALSE otherwise.</p>
-
-		<p>bool mapRevealedInRange(int x, int y, int range, int player)</p>
-
-		<p>Returns TRUE if there are no unrevealed tiles left in locations for player 'player' with center x/y and radius 'range'. All coordinates are in world units.</p>
-
-		<p>bool pursueResearch(STRUCTURE resFac, int player, RESEARCH targetResearch)</p>
-
-		<p>Makes 'resFac' start researching the first prerequisite necessary for 'targetResearch'. If no prerequisites are left, then 'targetResearch' will be researched. Must be called again for the next prerequisite. 'resFac' must be a valid research facility.</p>
-
-		<p>Returns TRUE if started researching, FALSe otherwise.</p>
-
-		<p>int numResearchLeft(int player, RESEARCH research)</p>
-
-		<p>Returns number of reserach topics that are left for player 'player' to research in order for a certain research 'research' to become available.</p>
-
-		<p>bool researchFinished(RESEARCh research, int player)</p>
-
-		<p>Returns TRUE if 'player' has researched 'research'.</p>
-
-		<p>bool researchStarted(RESEARCH research, int player)</p>
-
-		<p>Returns TRUE if 'research' is currently being researched by 'player'.</p>
-
-		<p>bool threatInRange(int player, int rangeX, int rangeY, int range, bool includeVTOLs)</p>
-
-		<p>Returns TRUE if there's a danger for 'player' at location x/y within radius 'range'. If includeVTOLs is set to FALSE then VTOLs are ignored. All coordinates are in worls units. If 'range' == -1 then entire map will be searched.</p>
-
-		<p>int numEnemyWeapDroidsInRange(int lookingPlayer, int x, int y,</p>
-
-		<p>int range, bool includeVTOLs)</p>
-
-		<p>int numEnemyWeapStructsInRange(int lookingPlayer, int x, int y, int range, bool onlyFinishedStructs)</p>
-
-		<p>int numEnemyWeapObjInRange(int lookingPlayer, int x, int y,</p>
-
-		<p>int range, bool includeVTOLs, bool onlyFinishedStructs)</p>
-
-		<p>Return total number of enemy military objects (either structures, droids or both) at location x/y and within 'range'. Units belonging to 'lookingPlayer' and his allies are ignored.</p>
-
-		<p>If 'includeVTOLs' is set to FALSE, then VTOLs are ignored.</p>
-
-		<p>If 'onlyFinishedStructs' is set to TRUE, then unfinished structures will be ignored.</p>
-
-		<p>int numFriendlyWeapDroidsInRange(int lookingPlayer, int x, int y,</p>
-
-		<p>int range, bool includeVTOLs)</p>
-
-		<p>int numFriendlyWeapStructsInRange(int lookingPlayer, int x, int y, int range, bool onlyFinishedStructs)</p>
-
-		<p>int numFriendlyWeapObjInRange(int lookingPlayer, int x, int y,</p>
-
-		<p>int range, bool includeVTOLs, bool onlyFinishedStructs)</p>
-
-		<p>Return total number of friendly military objects (either structures, droids or both) at location x/y and within 'range'. Units belonging to enemies of 'lookingPlayer' are ignored.</p>
-
-		<p>If 'includeVTOLs' is set to FALSE, then VTOLs are ignored.</p>
-
-		<p>If 'onlyFinishedStructs' is set to TRUE, then unfinished structures will be ignored.</p>
-
-		<p>int numPlayerWeapDroidsInRange(int targetPlayer, int lookingPlayer,</p>
-
-		<p>int x, int y, int range, bool includeVTOLs)</p>
-
-		<p>int numPlayerWeapStructsInRange(int targetPlayer, int lookingPlayer,</p>
-
-		<p>int x, int y, int range, bool onlyFinishedStructs)</p>
-
-		<p>int numPlayerWeapObjInRange(int targetPlayer, int lookingPlayer,</p>
-
-		<p>int x, int y, int range, bool includeVTOLs, bool onlyFinishedStructs)</p>
-
-		<p>Returns total number of targetPlayer's military objects (either structures, droids or both) at location x/y and within 'range' that are visible visible by 'lookingPlayer'.</p>
-
-		<p>If 'includeVTOLs' is set to FALSE, then VTOLs are ignored.</p>
-
-		<p>If 'onlyFinishedStructs' is set to TRUE, then unfinished structures will be ignored.</p>
-
-		<p>int numEnemyObjInRange(int lookingPlayer, int, x, int y, int range, bool includeVTOLs, bool onlyFinishedStructs)</p>
-
-		<p>Returns total number of enemy objects (structures and units) at location x/y within range 'range' that are visible to 'lookingPlayer'.</p>
-
-		<p>If 'includeVTOLs' is set to FALSE, then VTOLs are ignored.</p>
-
-		<p>If 'onlyFinishedStructs' is set to TRUE, then unfinished structures will be ignored.</p>
-
-		<p>int numAAinRange(int targetPlayer, int lookingPlayer,</p>
-
-		<p>int x, int y, int range)</p>
-
-		<p>Returns number of targetPlayer's AA defences at location x/y within range 'range' that are visible to 'lookingPlayer'.</p>
-
-		<p>bool objHasWeapon(BASEOBJ object)</p>
-
-		<p>Returns TRUE if 'object' has a weapon.</p>
-
-		<p>bool objectHasIndirectWeapon(BASEOBj object)</p>
-
-		<p>Returns TRUE if 'object' has an indirect weapon.</p>
-
-		<p>bool alliancesLocked()</p>
-
-		<p>Returns TRUE if the game doesn't allow to break alliances (ie when team mode is on).</p>
-
-		<p>void selectDroid(DROID droid, bool select)</p>
-
-		<p>Depending on value of 'select' selects or deselects droid 'droid'.</p>
-
-		<p>void selectGroup(GROUP group, bool select)</p>
-
-		<p>Depending on value of 'select' selects or deselects all droids belonging to group 'group'.</p>
-
-		<p>int modulo(int divident, int divisor)</p>
-
-		<p>Returns result of calculation (divident modulo divisor).</p>
-
-		<p>float toPow(float base, float exponent)</p>
-
-		<p>Returns floating-point result of calculation base^exponent.</p>
-
-		<p>float exp(float exponent)</p>
-
-		<p>Exponential function. Returns the result of e^exponent.</p>
-
-		<p>float sqrt(float argument)</p>
-
-		<p>Square root function. Returns square root of the argument: &radic;argument.</p>
-
-		<p>string getPlayerName(int player)</p>
-
-		<p>Returns in-game name of 'player'.</p>
-
-		<p>bool setPlayerName(int player, string newName)</p>
-
-		<p>Set player's name to 'newName'. Returns TRUe on success.</p>
-
-		<p>void console(string message)</p>
-
-		<p>Outputs 'message' to game console.</p>
-
-		<p>void msg(string message, int playerFrom, int playerTo)</p>
-
-		<p>Sends a chat message from 'playerFrom' to 'playerTo'.</p>
-
-		<p>bool strcmp(string string1, string string2)</p>
-
-		<p>Returns TRUE if string1 and string2 are identical. Comparison is case-sensitive.</p>
-
-		<p>int calcDroidPower(DROID droid)</p>
-
-		<p>Returns cost of the 'droid'.</p>
-
-		<p>boolisVtol(DROID droid)</p>
-
-		<p>Returns TRUE if 'droid' is a vtol.</p>
-
-		<p>int enemyWeapObjCostInRange(int lookingPlayer, int rangeX, int rangeY, int range, bool includeVtols, bool onlyFinishedStructs)</p>
-
-		<p>Returns total cost (in power) of enemy objects with a weapon in a certain area.</p>
-
-		<p>If 'includeVTOLs' is set to FALSE, then VTOLs are ignored.</p>
-
-		<p>If 'onlyFinishedStructs' is set to TRUE, then unfinished structures will be ignored.</p>
-
-		<p>int friendlyWeapObjCostInRange(int lookingPlayer, int rangeX, int rangeY, int range, bool includeVtols, bool onlyFinishedStructs)</p>
-
-		<p>Returns total cost (in power) of friendly objects with a weapon in a certain area.</p>
-
-		<p>If 'includeVTOLs' is set to FALSE, then VTOLs are ignored.</p>
-
-		<p>If 'onlyFinishedStructs' is set to TRUE, then unfinished structures will be ignored.</p>
-
-		<p><a id="Debugging_Script_Functions">Debugging Script Functions</a></p>
-
-		<p>The following functions can be used to debug warzone scripts.</p>
-
-		<p>void dbgMsgOn(int player, bool on)</p>
-
-		<p>Depending on the value of 'on' turns on/off debug output of dbg() and ASSERT() function which are listed below.</p>
-
-		<p>void dbg(string debugMessage, int player)</p>
-
-		<p>Outputs 'debugMessage' to the game console if debug output for player 'player' was previously turned on with dbgMsgOn().</p>
-
-		<p>void ASSERT(bool assertExpression, string assertMessage, int player)</p>
-
-		<p>If 'assertExpression' evaluates to FALSE, then 'assertMessage' is output to the game console. Must turn on debug output for 'player' with dbgMsgOn() first.</p>
-
-		<p>NOTE: in debug game builds failed assertation will cause game assertation.</p>
-
-		<p>void debug(string debugText)</p>
-
-		<p>Writes 'debugText' to the standart output (usually a log file).</p>
-
-		<p>void printCallStack()</p>
-
-		<p>Outputs script call stack to the standard log file.</p>
-
-		<p><a id="Script_Function_Constants">Script Function Constants</a></p>
-
-		<p>These values are used to represent numbers that are constant throughout the game.</p>
-
-		<p>NULLOBJECT- used to check that a BASEOBJECT/FEATURE/STRUCTURE has been assigned by a function</p>
-
-		<p>NULLTEMPLATE- used to check that a TEMPLATE has been assigned by a function</p>
-
-		<p>NULLSTAT- used to check that a BASESTAT has been assigned by a function</p>
-
-		<p>BARBARIAN1- this can used to represent enemy1 (PC:player 6, PSX:player2)</p>
-
-		<p>BARBARIAN2- this can used to represent enemy2 (PC:player 7, PSX:player3)</p>
-
-		<p>BUTTONID - these values are used when a particular reticule button needs to be identified</p>
-
-		<p>OPTIONs	- NOTE - this currently references the command button</p>
-
-		<p>CANCEL</p>
-
-		<p>BUILD</p>
-
-		<p>MANUFACTURE</p>
-
-		<p>RESEARCH</p>
-
-		<p>INTELMAP</p>
-
-		<p>DESIGN</p>
-
-		<p>COMMAND</p>
-
-		<p>- When flashing an icon - with scrFlashOn() scrFlashOff()</p>
-
-		<p>you can additional use</p>
-
-		<p>IDRET_OPTIONS</p>
-
-		<p>IDRET_CANCEl</p>
-
-		<p>IDRET_BUILD</p>
-
-		<p>IDRET_MANUFACTURE</p>
-
-		<p>IDRET_RESEARCH</p>
-
-		<p>IDRET_INTEL_MAP</p>
-
-		<p>IDRET_DESIGN</p>
-
-		<p>IDRET_COMMAND</p>
-
-		<p>IDDES_TEMPLSTART</p>
-
-		<p>IDDES_SYSTEMBUTTON</p>
-
-		<p>IDDES_BODYBUTTON</p>
-
-		<p>IDDES_PROPBUTTON</p>
-
-		<p>MESSAGETYPE - these values are used when a type of message needs to be identified</p>
-
-		<p>RES_MSG</p>
-
-		<p>CAMP_MSG</p>
-
-		<p>MISS_MSG</p>
-
-		<p>PROX_MSG</p>
-
-		<p>Multiplayer alliance types:</p>
-
-		<p>NO_ALLIANCES- alliances are disallowed</p>
-
-		<p>ALLIANCES- alliances are allowed</p>
-
-		<p>ALLIANCES_TEAMS- team mode, locked alliances</p>
-
-		<p>MISSIONTYPE - these values are used when a type of mission needs to be identified</p>
-
-		<p>CAMP_START	- used for the starting point of a campaign</p>
-
-		<p>CAMP_EXPAND	- used to expand a current campaign map</p>
-
-		<p>OFF_KEEP	- used to load up an off world map, but keeping access</p>
-
-		<p>to factories and research facilities back at home base</p>
-
-		<p>OFF_CLEAR	- used to load up an off world map, but having no access to home base</p>
-
-		<p>LZ_COMPROMISED_TIME- value to set the reinforcement time with to display '--:--'</p>
-
-		<p>when the Transporter is unable to land</p>
-
-		<p>Droid Orders:</p>
-
-		<p>DORDER_NONE- no order assigned</p>
-
-		<p>DORDER_STOP- stop current order</p>
-
-		<p>DORDER_RETREAT- retreat</p>
-
-		<p>DORDER_DESTRUCT- self destruct</p>
-
-		<p>DORDER_RTR- return to repair</p>
-
-		<p>DORDER_RTB- return to base</p>
-
-		<p>DORDER_RUN- run away for a bit (moral failure)</p>
-
-		<p>DORDER_MOVE- move to location</p>
-
-		<p>DORDER_ATTACK- attack the object</p>
-
-		<p>DORDER_HELPBUILD- help construct the object</p>
-
-		<p>DORDER_DEMOLISH- demolish structure</p>
-
-		<p>DORDER_REPAIR- repair structure</p>
-
-		<p>DORDER_OBSERVE- (sensor units) keep a target in sensor range</p>
-
-		<p>DORDER_EMBARK- get onto a transporter</p>
-
-		<p>DORDER_FIRESUPPORT- follow this sensor unit and attack anything it DORDER_OBSERVE's</p>
-
-		<p>DORDER_SCOUT- same as move, but stop if enemy units are encountered.</p>
-
-		<p>Unit secondary orders:</p>
-
-		<p>DSO_ATTACK_RANGE</p>
-
-		<p>DSO_REPAIR_LEVEL</p>
-
-		<p>DSO_ATTACK_LEVEL</p>
-
-		<p>DSO_RECYCLE</p>
-
-		<p>DSO_PATROL- patrol between current pos and next move target</p>
-
-		<p>DSO_HALTTYPE- what to do when stopped</p>
-
-		<p>DSO_RETURN_TO_LOC- return to various locations</p>
-
-		<p>Unit secondary states:</p>
-
-		<p>DSS_ARANGE_SHORT</p>
-
-		<p>DSS_ARANGE_LONG</p>
-
-		<p>DSS_ARANGE_DEFAULT</p>
-
-		<p>DSS_REPLEV_LOW- Medium Damage Taken</p>
-
-		<p>DSS_REPLEV_HIGH- Heavy Damage Taken</p>
-
-		<p>DSS_REPLEV_NEVER- Never Repair</p>
-
-		<p>DSS_ALEV_ALWAYS</p>
-
-		<p>DSS_ALEV_ATTACKED</p>
-
-		<p>DSS_ALEV_NEVER</p>
-
-		<p>DSS_PATROL_SET(0 to clear)</p>
-
-		<p>DSS_HALT_HOLD</p>
-
-		<p>DSS_HALT_GUARD</p>
-
-		<p>DSS_HALT_PERSUE</p>
-
-		<p>DSS_RECYCLE_SET(0 to clear)</p>
-
-		<p>DSS_RTL_REPAIR(0 to clear)</p>
-
-		<p>DSS_RTL_BASE(0 to clear)</p>
-
-		<p>DSS_RTL_TRANSPORT(0 to clear)</p>
-
-		<p>Button ID's:</p>
-
-		<p>IDRET_OPTIONS- option button</p>
-
-		<p>IDRET_BUILD- build button</p>
-
-		<p>IDRET_MANUFACTURE- manufacture button</p>
-
-		<p>IDRET_RESEARCH- research button</p>
-
-		<p>IDRET_INTEL_MAP- intelligence map button</p>
-
-		<p>IDRET_DESIGN- design units button</p>
-
-		<p>IDRET_CANCEL- central cancel button</p>
-
-		<p>Unit types:</p>
-
-		<p>DROID_WEAPON- Weapon unit</p>
-
-		<p>DROID_SENSOR- Sensor unit</p>
-
-		<p>DROID_ECM- ECM unit</p>
-
-		<p>DROID_CONSTRUCt	- Constructor unit</p>
-
-		<p>DROID_PERSON- person</p>
-
-		<p>DROID_CYBORG- cyborg/super cyborg</p>
-
-		<p>DROID_TRANSPORTER- guess what this is!</p>
-
-		<p>DROID_COMMAND- Command unit</p>
-
-		<p>DROID_REPAIR- Repair Unit</p>
-
-		<p>DROID_CYBORG_CONSTRUCT- Cyborg engineer</p>
-
-		<p>DROID_CYBORG_REPAIR- Cyborg mechanic</p>
-
-		<p>Structure types:</p>
-
-		<p>REF_HQ</p>
-
-		<p>REF_FACTORY</p>
-
-		<p>REF_FACTORY_MODULe</p>
-
-		<p>REF_POWER_GEN</p>
-
-		<p>REF_POWER_MODULE</p>
-
-		<p>REF_RESOURCE_EXTRACTOR</p>
-
-		<p>REF_DEFENSE</p>
-
-		<p>REF_WALL</p>
-
-		<p>REF_WALLCORNER- corner wall - no gun</p>
-
-		<p>REF_RESEARCh</p>
-
-		<p>REF_RESEARCH_MODULe</p>
-
-		<p>REF_REPAIR_FACILITY</p>
-
-		<p>REF_COMMAND_CONTROL- control centre for command units</p>
-
-		<p>REF_CYBORG_FACTORY</p>
-
-		<p>REF_VTOL_FACTORY</p>
-
-		<p>REF_REARM_PAD</p>
-
-		<p>REF_MISSILE_SILO</p>
-
-		<p>Multiplayer Game Types:</p>
-
-		<p>SKIRMISH</p>
-
-		<p>DMATCH</p>
-
-		<p>CAMPAIGN</p>
-
-		<p>TEAMPLAY</p>
-
-		<p>MultiPlayer Base Configurtations:</p>
-
-		<p>CAMP_CLEAN- build units only</p>
-
-		<p>CAMP_BASE- small base</p>
-
-		<p>CAMP_WALLS- defensive base</p>
-
-		<p>Cursor Mode (possible values of cursorType):</p>
-
-		<p>IMAGE_CURSOR_SELECT</p>
-
-		<p>IMAGE_CURSOR_ATTACK</p>
-
-		<p>IMAGE_CURSOR_MOVE</p>
-
-		<p>IMAGE_CURSOR_JAM</p>
-
-		<p>IMAGE_CURSOR_PICKUP</p>
-
-		<p>IMAGE_CURSOR_DEFAULT</p>
-
-		<p>IMAGE_CURSOR_SEEKREPAIR</p>
-
-		<p>IMAGE_CURSOR_BUILD</p>
-
-		<p>IMAGE_CURSOR_GUARD</p>
-
-		<p>IMAGE_CURSOR_BRIDGE</p>
-
-		<p>IMAGE_CURSOR_ATTACH</p>
-
-		<p>IMAGE_CURSOR_LOCKON</p>
-
-		<p>IMAGE_CURSOR_FIX</p>
-
-		<p>IMAGE_CURSOR_EMBARK</p>
-
-		<p>Game mode - possible values for intMode external variable</p>
-
-		<p>int_NORMAL- Standard mode (just the reticule)</p>
-
-		<p>int_OPTION- Option screen</p>
-
-		<p>int_EDITSTAT- Stat screen up for placing objects</p>
-
-		<p>int_EDIT- Edit mode</p>
-
-		<p>int_OBJECT- Object screen</p>
-
-		<p>int_STAT- Object screen with stat screen</p>
-
-		<p>int_CMDORDER- Object screen with command units and orders screen</p>
-
-		<p>int_DESIGN- Design screen</p>
-
-		<p>int_INTELMAP- Intelligence Map</p>
-
-		<p>int_ORDER</p>
-
-		<p>int_INGAMEOP- in game options.</p>
-
-		<p>int_TRANSPORTER- Loading/unloading a Transporter</p>
-
-		<p>int_MISSIONRES- Results of a mission display.</p>
-
-		<p>int_MULTIMENU- multiplayer only, player stats etc...</p>
-
-		<p>Possible options for getGameStatus():</p>
-
-		<p>STATUS_ReticuleIsOpen- returns true is the reticule is open</p>
-
-		<p>STATUS_BattleMapViewEnabled- returns true if we are in battlemap mode</p>
-
-		<p>Possible values for targetedObjectType:</p>
-
-		<p>MT_TERRAIN</p>
-
-		<p>MT_RESOURCE</p>
-
-		<p>MT_BLOCKING</p>
-
-		<p>MT_RIVER</p>
-
-		<p>MT_TRENCH</p>
-
-		<p>MT_OWNSTRDAM</p>
-
-		<p>MT_OWNSTROK</p>
-
-		<p>MT_OWNSTRINCOMP</p>
-
-		<p>MT_REPAIR</p>
-
-		<p>MT_REPAIRDAM</p>
-
-		<p>MT_ENEMYSTR</p>
-
-		<p>MT_TRANDROID</p>
-
-		<p>MT_OWNDROID</p>
-
-		<p>MT_OWNDROIDDAM</p>
-
-		<p>MT_ENEMYDROID</p>
-
-		<p>MT_COMMAND</p>
-
-		<p>MT_ARTIFACT</p>
-
-		<p>MT_DAMFEATURE</p>
-
-		<p>MT_SENSOR</p>
-
-		<p>MT_WRECKFEATURE</p>
-
-		<p>Structure Target preference types:</p>
-
-		<p>ST_HQ</p>
-
-		<p>ST_FACTORY</p>
-
-		<p>ST_POWER_GEN</p>
-
-		<p>ST_RESOURCE_EXTRACTOR</p>
-
-		<p>ST_WALL</p>
-
-		<p>ST_RESEARCH</p>
-
-		<p>ST_REPAIR_FACILITY</p>
-
-		<p>ST_COMMAND_CONTROL</p>
-
-		<p>ST_CYBORG_FACTORY</p>
-
-		<p>ST_VTOL_FACTORY</p>
-
-		<p>ST_REARM_PAD</p>
-
-		<p>ST_SENSOR</p>
-
-		<p>ST_DEF_GROUND</p>
-
-		<p>ST_DEF_AIR</p>
-
-		<p>ST_DEF_IDF</p>
-
-		<p>ST_DEF_ALL- ground/air/idf structures</p>
-
-		<p>Unit target preference types:</p>
-
-		<p>turret types:</p>
-
-		<p>DT_COMMAND</p>
-
-		<p>DT_SENSOR</p>
-
-		<p>DT_CONSTRUCT</p>
-
-		<p>DT_REPAIR</p>
-
-		<p>DT_WEAP_GROUND</p>
-
-		<p>DT_WEAP_AIR</p>
-
-		<p>DT_WEAP_IDF</p>
-
-		<p>DT_WEAP_ALL- ground/air/idf units</p>
-
-		<p>Body types:</p>
-
-		<p>DT_LIGHT</p>
-
-		<p>DT_MEDIUM</p>
-
-		<p>DT_HEAVY</p>
-
-		<p>DT_SUPER_HEAVy	- transporter only</p>
-
-		<p>Propulsion:</p>
-
-		<p>DT_TRACK</p>
-
-		<p>DT_HTRACK</p>
-
-		<p>DT_WHEEL</p>
-
-		<p>DT_LEGS</p>
-
-		<p>DT_GROUND</p>
-
-		<p>DT_VTOL</p>
-
-		<p>DT_HOVER</p>
-
-		<p>Group types:</p>
-
-		<p>GT_NORMAL</p>
-
-		<p>GT_COMMAND</p>
-
-		<p>GT_TRANSPORTER</p>
-
-		<p><a id="Script_Function_Externals">Script Function Externals</a></p>
-
-		<p>These represent variables that are defined in the game which can be accessed in the scripts. It will only be possible to set the value that is held for some of the variables.</p>
-
-		<p>mapWidth- (get) - field to hold the width of the map</p>
-
-		<p>mapHeight- (get) - field to hold the height of the map</p>
-
-		<p>gameInitialised- (get) flag to specify when all initialisation has been performed for the game - use it in place of a bool ie can be considered to equal true or false</p>
-
-		<p>selectedPlayer- (get) field to hold the currently selected player</p>
-
-		<p>gameTime- (get) the current time in the game (in 1/10 sec)</p>
-
-		<p>multiPlayerGameType	- (get) the type of multiplayer game underway.</p>
-
-		<p>multiPlayerMaxPlayers	- max number of human players in this game.(see constants for return values)</p>
-
-		<p>multiPlayerBaseType	- campaign game base type. (see constants for return values)</p>
-
-		<p>multiPlayerAlliancesType- (get) alliance type (eg NO_ALLIANCES etc, see	<a href="#Script_Function_Constants">Script Function Constants</a>)</p>
-
-		<p>scrollX- (get/set) field to hold the starting x coordinate where the player can scroll</p>
-
-		<p>scrollY- (get/set) field to hold the starting y coordinate where the player can scroll</p>
-
-		<p>scrollWidth- (get/set) field to hold the width the player can scroll</p>
-
-		<p>scrollHeight- (get/set) field to hold the height the player can scroll</p>
-
-		<p>cursorType- (get) - Gets the current mode that the cursor is in (e.g. IMAGE_CURSOR_BUILD ... see	<a href="#Script_Function_Constants">Script Function Constants</a>)</p>
-
-		<p>intMode- (get) - Get the current game mode (e.g. int_DESIGN when the design screen is active) ... see	<a href="#Script_Function_Constants">Script Function Constants</a>)</p>
-
-		<p>targetedObjectType- (get) - The type of the object currently under the cursor (one of MT_... see	<a href="#Script_Function_Constants">Script Function Constants</a>)</p>
-
-		<p>boolextraVictoryFlag- use to mark additional victory conditions have been met - reset to FALSE at start of each level</p>
-
-		<p>boolextraFailFlag- use to mark additional failure conditions have been met - reset to FALSE at start of each level</p>
-
-		<p>GameLevel(get/set) - set single player difficulty.</p>
-
-		<p><a id="Script_Function_Callbacks">Script Function Callbacks</a></p>
-
-		<p>These are used in the place of a trigger and are for events that are to be called at specific times in the game. They will cause the event they are associated with to be called every time unless the trigger for the event is set to inactive.</p>
-
-		<p>CALL_GAMEINIT- this is triggered when the game has initialised</p>
-
-		<p>CALL_DROIDDESIGNED- this is triggered when the player saves a template design</p>
-
-		<p>CALL_DROIDBUILT- this is triggered when a unit has been built via a factory</p>
-
-		<p>CALL_POWERGEN_BUILT- this is triggered when a Power generatot has been built</p>
-
-		<p>CALL_RESEX_BUILT- this is triggered when a Resource Extractor has been built</p>
-
-		<p>CALL_RESEARCH_BUILT- this is triggered when a Research Facility has been built</p>
-
-		<p>CALL_FACTORY_BUILT- this is triggered when a Factory has been built</p>
-
-		<p>CALL_MISSION_START- this is triggered when CTRL + 'M' is pressed so that the script can start a mission</p>
-
-		<p>CALL_MISSION_END- this is triggered when CTRL + 'B' is pressed so that the script can end a mission</p>
-
-		<p>CALL_VIDEO_QUIT- this is triggered when the CURRENT video sequence is over - either end of anim or when 'ESC' has been pressed</p>
-
-		<p>CALL_LAUNCH_TRANSPORTER- this is triggered when the 'Launch' button is pressed on the Transporter interface</p>
-
-		<p>CALL_START_NEXT_LEVEL- this is triggered when a new level is desired</p>
-
-		<p>CALL_TRANSPORTER_REINFORCE- this is triggered when a transporter carrying reinforcements for player 0 enters the map</p>
-
-		<p>CALL_MISSION_TIME- this is triggered when the time specified by setMissionTime() has elapsed</p>
-
-		<p>CALL_ELECTRONIC_TAKEOVER- triggered when a unit or a structure for the selectedPlayer are taken over using Electronic weapons</p>
-
-		<p>Callbacks with parameters:</p>
-
-		<p>CALL_RESEARCHCOMPLETED, ref RESEARCHSTAT, ref STRUCTURE</p>
-
-		<p>This is triggered when a research topic is complete - major or minor.</p>
-
-		<p>RESEARCHSTAt is the research topic that was complete, STRUCTURE is research facility that has completed research.</p>
-
-		<p>CALL_NEWDROID, player, ref DROID,ref STRUCTURE</p>
-
-		<p>triggered when a unit for player is built by a factory. DROID is the unit that was built</p>
-
-		<p>structure is the factory that built it, dont assume that the factory is still there!!</p>
-
-		<p>CALL_STRUCT_ATTACKED, player, ref STRUCTURE, ref BASEOBJ</p>
-
-		<p>triggered when a structure for player is attacked. STRUCTURE is the attacked structure,</p>
-
-		<p>BASEOBJ is the unit that attacked the structure (could be NULLOBJECT)</p>
-
-		<p>CALL_DROID_ATTACKED, player, ref DROID, ref BASEOBJ</p>
-
-		<p>triggered when a unit for player is attacked. DROID is the attacked unit,</p>
-
-		<p>BASEOBJ is the unit that attacked (could be NULLOBJECT)</p>
-
-		<p>CALL_ATTACKED, player, ref BASEOBJ, ref BASEOBJ</p>
-
-		<p>triggered when a structure or unit for player is attacked. BASEOBJ is the attacked unit,</p>
-
-		<p>BASEOBJ is the unit that attacked (could be NULLOBJECT)</p>
-
-		<p>CALL_TRANSPORTER_OFFMAP, player</p>
-
-		<p>triggered when a transporter for player exits the map.</p>
-
-		<p>CALL_TRANSPORTER_LANDED, GROUP, player</p>
-
-		<p>triggered when transporter for player lands; units on transporter are unloaded</p>
-
-		<p>into the given GROUP.</p>
-
-		<p>Tutorial Callbacks</p>
-
-		<p>CALL_BUILDLIST- Build structures interface up</p>
-
-		<p>CALL_BUILDGRID- Place structure cursor up</p>
-
-		<p>CALL_RESEARCHLIST- Choose research interface up</p>
-
-		<p>CALL_MANURUN- Number of units to manufacture has changed</p>
-
-		<p>CALL_MANULIST- Choose manufacturing interface up</p>
-
-		<p>CALL_BUTTON_PRESSED, buttonID</p>
-
-		<p>triggered when an interface button with id buttonID is pressed</p>
-
-		<p>CALL_DESIGN_QUIT</p>
-
-		<p>triggered when the design screen is closed</p>
-
-		<p>CALL_OBJ_DESTROYED, int player, ref BASEOBJ object</p>
-
-		<p>triggered when either a unit or a structure for player is destroyed</p>
-
-		<p>CALL_DROID_DESTROYED, int player, ref DROID droid</p>
-
-		<p>triggered when a unit for player is destroyed</p>
-
-		<p>CALL_STRUCT_DESTROYED, int player, ref STRUCTURE structure</p>
-
-		<p>triggered when a structure for player is destroyed</p>
-
-		<p>CALL_FEATURE_DESTROYED, ref FEATURe feature</p>
-
-		<p>triggered when either a unit or a structure for player is destroyed</p>
-
-		<p>CALL_OBJ_SEEN, int player, ref BASEOBj object, ref BASEOBJ viewer</p>
-
-		<p>triggered when either a unit or a structure is seen by a unit belonging to player.</p>
-
-		<p>object is the thing that was seen, viewer is the thing that saw it (may be NULLOBJECT).</p>
-
-		<p>CALL_DROID_SEEN, int player, ref BASEOBJ object, ref BASEOBJ viewer</p>
-
-		<p>triggered when a unit is seen by a unit belonging to player.</p>
-
-		<p>object is the thing that was seen, viewer is the thing that saw it (may be NULLOBJECT).</p>
-
-		<p>CALL_STRUCT_SEEN, int player, ref BASEOBJ object, ref BASEOBJ viewer</p>
-
-		<p>triggered when a structure is seen by a unit belonging to player.</p>
-
-		<p>object is the thing that was seen, viewer is the thing that saw it (may be NULLOBJECT).</p>
-
-		<p>CALL_NO_REINFORCEMENTS_LEFT- called when the player has transferred all reinforcements from one level to the next</p>
-
-		<p>More tutorial callbacks - ALL tutorial only:</p>
-
-		<p>CALL_DESIGN_WEAPON- a weapon button pressed</p>
-
-		<p>CALL_DESIGN_SYSTEM- a system (constructor/ecm/sensor/etc) button pressed</p>
-
-		<p>CALL_DESIGN_COMMAND- a command droid turret pressed</p>
-
-		<p>CALL_DESIGN_BODY- a body selected</p>
-
-		<p>CALL_DESIGN_PROPULSION- a propulsion selected</p>
-
-		<p>CALL_ALL_ONSCREEN_DROIDS_SELECTED- does exactly when it says on the box</p>
-
-		<p>CALL_UNITTAKEOVER, ref unit</p>
-
-		<p>Unit has been taken over by nexus link...</p>
-
-		<p>CALL_PLAYERLEFT, ref int player</p>
-
-		<p>Player has left the multiplayer game.</p>
-
-		<p>CALL_ALLIANCEOFFER, ref int one, ref int two</p>
-
-		<p>One offers two an alliance.</p>
+		<div id="content">
+			<div id="navigation">
+				<h1 id="top">Content</h1>
+				<ul>
+					<li><a href="#aimanual" class="locallink">Warzone 2100 - AI scripting language manual</a>
+						<ul>
+							<li><a href="#introduction" class="locallink">Introduction</a>
+								<ul>
+									<li><a href="#comments" class="locallink">Comments</a></li>
+									<li><a href="#vlo" class="locallink">Vlo files</a></li>
+									<li><a href="#slo" class="locallink">Slo files</a></li>
+									<li><a href="#concept_event_trigger" class="locallink">Event/trigger concept</a></li>
+									<li><a href="#triggers" class="locallink">Triggers</a></li>
+								</ul>
+							</li>
+							<li><a href="#expressions" class="locallink">Expressions</a>
+								<ul>
+									<li><a href="#string_expressions" class="locallink">String expressions</a></li>
+									<li><a href="#numeric_expressions" class="locallink">Numeric expressions</a></li>
+									<li><a href="#boolean_expressions" class="locallink">Boolean expressions</a></li>
+									<li><a href="#floatingpoint_expressions" class="locallink">Floating point expressions</a></li>
+								</ul>
+							</li>
+							<li><a href="#assignment" class="locallink">Assignment</a></li>
+							<li><a href="#if_statements" class="locallink">If statements</a></li>
+							<li><a href="#while_statements" class="locallink">While statements</a></li>
+							<li><a href="#casts" class="locallink">Casts</a></li>
+							<li><a href="#custom_functions" class="locallink">Custom functions</a></li>
+							<li><a href="#local_variables" class="locallink">Local variables</a></li>
+							<li><a href="#macros" class="locallink">Macros</a></li>
+							<li><a href="#data_types" class="locallink">Data types</a></li>
+							<li><a href="#script_functions" class="locallink">Script functions</a>
+								<ul>
+									<li><a href="#debugging_script_functions" class="locallink">Debugging script functions</a></li>
+									<li><a href="#script_function_constants" class="locallink">Script function constants</a></li>
+									<li><a href="#script_function_externals" class="locallink">Script function externals</a></li>
+									<li><a href="#script_function_callbacks" class="locallink">Script function callbacks</a></li>
+								</ul>
+							</li>
+						</ul>
+					</li>
+				</ul>
+			</div>
+			<hr />
+
+			<h1 id="aimanual">Warzone 2100 - AI scripting language manual</h1>
+
+			<h2 id="introduction">Introduction</h2>
+			<p>In order for Warzone scripts to function properly two files are required: a file with a .slo extension and a file with a .vlo extension.</p>
+			<p>A .slo file is the main part of the script and holds executable instructions while the .vlo file holds additional variable declarations necessary for the .slo file to function properly.</p>
+			<p>It is common for a script to deal with new or existing game components such as research topics, structures, unit bodies, propulsions, weapons etc. All these components are defined in appropriate text files like body.txt, structure.txt etc. If you want to use any of these components in your script - in your .slo file - like for example if you want to place certain structures on the map using scripts or enable certain research, you must first make these components available to your script by defining them in a .vlo file.</p>
+			<p>Roughly said a .slo file is equivalent to a ".c" file and .vlo to a header file in C/C++.</p>
+			<p>Specific skirmish/multiplayer notes:</p>
+			<p>Some of the file below doesn't apply to skirmish scripts! Make your changes to player0.slo and vlo -&gt; player7.slo and vlo.</p>
+			<div class="rt">
+				<p><a href="#top">back to top</a></p>
+			</div>
+			<hr/>
+
+			<h3 id="comments">Comments</h3>
+			<p>There are two type of comment for the script language. A multi-line comment is started by the characters /* and finishes with */. A single line comment is started by //.</p>
+			<div class="rt">
+				<p><a href="#top">back to top</a></p>
+			</div>
+			<hr/>
+
+			<h3 id="vlo">Vlo files</h3>
+			<p>When writing a script it is usually known what data (as defined in data .txt files, located in 'stats' folder) will be used in the script, so it's a good idea to start writing the script with a .vlo file.</p>
+			<p>Vlo files are structured as follows:</p>
+			<pre>script "myScript.slo"
+run
+{
+ &lt;variable_definitions&gt;
+}</pre>
+			<p>In the first line a .slo file is attached to this particular .vlo file. variable_definitions that resides inside the curly braces is the heart of every .vlo file, it contains definitions of the data that will be used in the main script part - the .slo file. Each variable definition starts on a new line and is structured as follows:</p>
+			<pre>&lt;variable_name&gt; &lt;variable_type&gt; &lt;variable_value&gt;</pre>
+			<p class="note">NOTE: Available data types are covered later.</p>
+			<p>For example if you want to have access to certain droid bodies, like "Python" in your script you have to define it in your .vlo file and assign it to a variable of type BODY with some descriptive name, like:</p>
+			<pre>myPythonBody BODY "Body11ABT"</pre>
+			<p>"Body11ABT" is an internal name of the "Python" body used by warzone, it is defined in the body.txt file. Since it is a string it must be put inside quotation marks. All components, be it some research, structure, droid template or a weapon is referred by its internal name in the game and are defined in the appropriate txt data files.</p>
+			<p>Each variable definition in a .vlo file starts on the new line and ends at the end of the line.</p>
+			<p>It is also possible to define arrays of some data type. For example if you want to use the following 3 research topics in your script you might want to define them like this:</p>
+			<pre>myResearch[0] RESEARCHSTAt "R-Vehicle-Body11"
+myResearch[1] RESEARCHSTAt "R-Vehicle-Prop-Tracks"
+myResearch[2] RESEARCHSTAt "R-Vehicle-Prop-Hover"</pre>
+			<p>This defines an array of size 3 of type RESEARCHSTAT.</p>
+			<div class="rt">
+				<p><a href="#top">back to top</a></p>
+			</div>
+			<hr/>
+
+			<h3 id="slo">Slo files</h3>
+			<p>As already mentioned .slo file is the heart of every script, it is the place for the executable code. Slo files can be devided into 3 main parts:</p>
+			<ol>
+				<li>Variable declarations</li>
+				<li>Event and function declaration</li>
+				<li>Executable code</li>
+			</ol>
+			<p>Variables used throughout the script are defined in the Variable declarations part, with exception of the local variables, which are explained later.</p>
+			<p>For the .slo file to be able to access variables declared in the .vlo file they must be declared as public variables in the corresponding .slo file.</p>
+			<p>Coming back to the two examples above you will have to add following lines to the .slo file:</p>
+			<pre>public BODy myPythonBody;
+public RESEARCHSTAT myResearch[3];</pre>
+			<p>Keyword <code>public</code> signals that the variable is defined in the corresponding .vlo files. Note that unlike in .vlo files variable declarations in .slo files end with a semicolon and unlike in .vlo files it is possible to declare more than one variable of the same type at once.</p>
+			<p>More generally a variable declaration in a .slo file looks like this:</p>
+			<pre>&lt;storage&gt; &lt;variable_type&gt; &lt;variable_name1&gt; [, &lt;variable_name2&gt; , ...];</pre>
+			<p><code>storage</code> is one of <code>public</code> or <code>private</code>. <code>public</code> means that the variable is declared and defined in the corresponding .vlo file. <code>private</code> means the value is only used in the .slo file. Unlike local variables public and private variables are global variables that can be access from anywhere in the .slo file.</p>
+			<p class="note">NOTE: All variables are initialized to their default values when created. STRUCTURE/DROID/FEATURE variables are initialized to NULLOBJECT, STRINGs to "", FLOATs to 0.0, INTs to 0, BOOLs to FALSE etc.</p>
+			<div class="rt">
+				<p><a href="#top">back to top</a></p>
+			</div>
+			<hr/>
+
+			<h3 id="concept_event_trigger">Event/trigger concept</h3>
+			<p>In Warzone 2100 scripts executable code consists of events. An event is a list of instructions activated by some trigger attached to it. Event defines what to do, a trigger defines when to run an event, i. e. when to execute the code inside an event.</p>
+			<p>All events are structured as follows:</p>
+			<pre>event &lt;event_name&gt;(&lt;trigger&gt;)
+{
+ &lt;code&gt;
+}</pre>
+			<p>Example:</p>
+			<pre>event myFirstEvent(every, 50)
+{
+ console("Hello world!");
+}</pre>
+			<p>This piece of code will output "Hello world!" to the game console every 5 seconds. Note that triggers are put inside the round braces after the event name while code that is to be executed resides inside the curly braces. The syntax of the executable code is very close to the C/C++ syntax.</p>
+			<p>The only difference between a WZ event and a function as used in programming languages like C/C++ is that an event is not called or activated by another function, but rather by a trigger attached to it.</p>
+			<p>It is always possible to interrupt execution of an event with the <code>exit</code> keyword, which is a counterpart of the <code>return</code> keyword used for functions; <code>exit</code> keyword does not deactivate an event.</p>
+			<p>Example:</p>
+			<pre>event myEvent(every, 10) //run every second
+{
+ console ( "this text will be printed every second" );
+ if( (gameTime / 10) &gt; 60) //did more than a minute pass?
+	{
+	 exit; //anything that comes after 'exit' will not be executed
+	 console( "this text will only get printed in the first" );
+	}
+}</pre>
+			<p>Events must be defined before they can be referenced. If event definition comes after the place where this event is referenced it is necessary to declare this event beforehand in the event and function declaration section.</p>
+			<p>Events are declared like this:</p>
+			<pre>event &lt;event_name&gt;;</pre>
+			<p>Such a declaration reserves identifier used as event name.</p>
+			<p>Example:</p>
+			<pre>event myEvent; //declaration of the event
+...
+// another event that references myEvent
+event anotherEvent(wait, 10)
+{
+ setEventTrigger(myEvent, inactive); //deactivate myEvent
+}
+...
+// myEvent is defined after being referenced by anotherEvent,
+// but it works, since we declared myEvent beforehand
+event myEvent(wait, 20)
+{
+ console("It all compiles, because I was declared beforehand!");
+}</pre>
+			<p>If	myEvent wasn't declared before being referenced by anotherEvent then this example would not compile.</p>
+			<div class="rt">
+				<p><a href="#top">back to top</a></p>
+			</div>
+			<hr/>
+
+			<h3 id="triggers">Triggers</h3>
+			<p>In Warzone 2100 triggers are usually simple timers that repeatedly trigger execution of events, but triggers can also be callbacks (special events that occur in the game, like destruction of a building) that are listed and explained later.</p>
+			<p>Here are available trigger types:</p>
+			<table>
+				<tr>
+					<th>Trigger type</th>
+					<th>Effect</th>
+				</tr>
+				<tr>
+					<td><code>wait, &lt;time&gt;</code></td>
+					<td>Run the event after delay <code>&lt;time&gt;</code>.</td>
+				</tr>
+				<tr>
+					<td><code>every, &lt;time&gt;</code></td>
+					<td>Run the event at every <code>&lt;time&gt;</code> interval.</td>
+				</tr>
+				<tr>
+					<td><code>&lt;callback&gt;</code></td>
+					<td>Run when <code>callback</code> occurs.</td>
+				</tr>
+				<tr>
+					<td><code>&lt;bool exp&gt;, &lt;time&gt;</code></td>
+					<td>Run the event if <code>&lt;bool exp&gt;</code> is true, checking every <code>&lt;time&gt;</code> interval.</td>
+				</tr>
+				<tr>
+					<td><code>init</code></td>
+					<td>Run the event when the script starts.</td>
+				</tr>
+				<tr>
+					<td><code>inactive</code></td>
+					<td>Do not run the event until a trigger is assigned to it.</td>
+				</tr>
+			</table>
+			<p class="note">NOTE: All time intervals are in 1/10 of a second.</p>
+			<p>For example <code>every, 10</code> will trigger every second while <code>wait, 50</code> will only activate once: 5 seconds after the game has started. If an event has <code>inactive</code> assigned as a trigger this event will never execute unless its trigger is reassigned by some other event with <code>setEventTrigger(&lt;event&gt;, &lt;trigger&gt;)</code> function.</p>
+			<p class="note">NOTE: Complete function and callback listings are given below.</p>
+			<p>A few examples:</p>
+			<pre>// 1. output text to game console every second
+event everySecond(every, 10)
+{
+ console("The game has started " + gameTime/10 + " seconds ago");
+}
+
+// 2. Code inside this event will never execute unless its event is reassigned later
+event inactiveEvent(inactive)
+{
+ console("Someone has just reactivated me!");
+}
+
+// 3. CALL_NEWDROID callback with parameters
+event droidBuilt(CALL_NEWDROID, 5, ref newDroid, ref myFactory)
+{
+ console("We got a new droid at coordinates " &amp;
+         newDroid.x &amp; "-" &amp; newDroid.y );
+}</pre>
+			<p>In the last example <code>droidBuilt</code> event will be triggered everytime a factory belonging to player 5 produces a new droid. <code>newDroid</code> variable refers to the new droid that was just built and	<code>myFactory</code> to the factory that build this droid. This example assumes that <code>newDroid</code> and	<code>myFactory</code> were correctly defined in the <!--<a href="#Variable_declaration">-->variable declarations<!--</a>--> section. For more callbacks see <a href="#script_function_callbacks">Script function callbacks</a>.</p>
+			<p class="note">NOTE: <code>ref</code> keyword means that a pointer to the provided variable is passed to the interpreter, so that a callback can modify value of the variable.</p>
+			<p>It is possible to reuse a trigger for more than one event if a trigger is declared in the event and function declaration. Trigger declaration has following syntax:</p>
+			<pre>trigger &lt;trigger_name&gt; ( &lt;trigger&gt; );</pre>
+			<p>Example:</p>
+			<pre>trigger everySecond ( every, 10 ); //trigger declaration
+...
+event eventOne( everySecond ) // uses the trigger we declared above
+{
+ ...
+}
+
+event eventTwo( everySecond ) // uses the trigger we declared above
+{
+ ...
+}</pre>
+			<p>In this example <code>everySecond</code> trigger is defined outside of an event. Such a trigger can be reused by its name. Note that trigger declaration ends with a semicolon.</p>
+			<div class="rt">
+				<p><a href="#top">back to top</a></p>
+			</div>
+			<hr/>
+
+			<h2 id="expressions">Expressions</h2>
+			<h3 id="string_Expressions">String expressions</h3>
+			<p>Strings are put inside quotation marks: <code>"some text inside quotation marks is a legal string"</code>.</p>
+			<p>Strings can be easily concatenated using the <code>&amp;</code> operator.</p>
+			<p>For example: <code>"String1" &amp; "String2"</code> will result in "String1String2".</p>
+			<p>Strings can be compared using <code>==</code> operator (case insensitive comparison) or <code>strcmp()</code> function.</p>
+			<p>Such data types as integers, booleans and floats are automatically converted to strings when it is required, so given the following variable declaration:</p>
+			<pre>private float pi;
+private int myInteger;
+private string myString;
+private bool myBool;</pre>
+			<p>The following line is a valid string expression:</p>
+			<pre>console("value of pi is " &amp; pi &amp; ", value of myInteger is " &amp; myInteger &amp; ",
+value of myString is " &amp; myString &amp; ", value of myBool is " &amp; myBool);</pre>
+			<div class="rt">
+				<p><a href="#top">back to top</a></p>
+			</div>
+			<hr/>
+
+			<h3 id="numeric_expressions">Numeric expressions</h3>
+			<p>Numeric expressions are made up of int variables, numeric constants and functions that return int values, e. g.:</p>
+			<pre>power * 32 - basePower
+numDroids(player) + 5</pre>
+			<p>The possible operators are: <code>+</code> <code>-</code> <code>*</code> <code>/</code></p>
+			<p>Increment and decrement operators can only be applied to the integer variables outside of the expression context:</p>
+			<pre>myInteger++;
+myInteger--;</pre>
+			<p>There are also a number of operators that compare numeric expressions to give a boolean</p>
+			<table>
+				<tr>
+					<th>Operator</th>
+					<th>Meaning</th>
+				</tr>
+				<tr>
+					<td>&lt;</td>
+					<td>Less than</td>
+				</tr>
+				<tr>
+					<td>&gt;</td>
+					<td>Greater than</td>
+				</tr>
+				<tr>
+					<td>&lt;=</td>
+					<td>Less than or equal</td>
+				</tr>
+				<tr>
+					<td>&gt;=</td>
+					<td>Greater than or equal</td>
+				</tr>
+				<tr>
+					<td>==</td>
+					<td>Equal</td>
+				</tr>
+				<tr>
+					<td>!=</td>
+					<td>Not equal</td>
+				</tr>
+			</table>
+			<div class="rt">
+				<p><a href="#top">back to top</a></p>
+			</div>
+			<hr/>
+
+			<h3 id="boolean_expressions">Boolean expressions</h3>
+			<p>Boolean expressions are made up of bool variables, the boolean constants TRUE and FALSE and game functions that return a boolean value e.g.:</p>
+			<pre>not droidSeen and attackDroid</pre>
+			<p>The possible operators are:</p>
+			<table>
+				<tr>
+					<th>Operator</th>
+					<th>Meaning</th>
+				</tr>
+				<tr>
+					<td><code>bool1</code> and <code>bool2</code></td>
+					<td>True if <code>bool1</code> and <code>bool2</code> are true</td>
+				</tr>
+				<tr>
+					<td><code>bool1</code> or <code>bool2</code></td>
+					<td>True if at least one of <code>bool1</code> and <code>bool2</code> is true</td>
+				</tr>
+				<tr>
+					<td>not <code>bool1</code></td>
+					<td>True becomes false and false becomes true</td>
+				</tr>
+				<tr>
+					<td>==</td>
+					<td>Can also be used with user defined tyoe variables</td>
+				</tr>
+				<tr>
+					<td>!=</td>
+					<td>Can also be used with user defined tyoe variables</td>
+				</tr>
+			</table>
+			<div class="rt">
+				<p><a href="#top">back to top</a></p>
+			</div>
+			<hr/>
+
+			<h3 id="floatingpoint_expressions">Floating point expressions</h3>
+			<p>Floating point expressions are very similar to integer expressions. There are some differences though: it is not possible to use increment/decrement operators with floating point variables. The integral and fractional parts of the float constant must be separated by a dot, even if fractional part is 0.</p>
+			<p>Examples:</p>
+			<pre>myFloat = 1.0 + pi / 2.0 + 3.6;</pre>
+			<p>Floating point expressions cannot be mixed with integer or boolean expressions. To use integers or booleans in floating point expressions they must be cast to FLOATs first.</p>
+			<p>For more information about casts refer to <a href="#casts">casts</a>.</p>
+			<div class="rt">
+				<p><a href="#top">back to top</a></p>
+			</div>
+			<hr/>
+
+			<h2 id="assignment">Assignment</h2>
+			<p>The value of a variable or an expression can be assigned to another using the = character, e.g.:</p>
+			<pre>currentDroid = foundDroid;
+index = base + found * 4;
+myString = "some text";
+myFloat = 2.0 + pi / 2.0;</pre>
+			<div class="rt">
+				<p><a href="#top">back to top</a></p>
+			</div>
+			<hr/>
+
+			<h2 id="if_statements">If statements</h2>
+			<p>If statements are used to control which bits of code are executed. The simplest form is:</p>
+			<pre>if ( &lt;bool exp&gt; )
+{
+ &lt;code&gt;
+}</pre>
+			<p>In this form if <code>&lt;bool exp&gt;</code> evaluates to true then the script code <code>&lt;code&gt;</code> is executed, otherwise the code is ignored.</p>
+			<p>Examples:</p>
+			<pre>if ( &lt;bool exp&gt; )
+{
+ &lt;code&gt;
+}
+else
+{
+ &lt;other code&gt;
+}
+
+if ( &lt;bool exp&gt; )
+{
+ &lt;code&gt;
+}
+else if ( &lt;other bool exp&gt; )
+{
+ &lt;other code&gt;
+}
+else
+{
+ &lt;yet another code&gt;
+}</pre>
+			<div class="rt">
+				<p><a href="#top">back to top</a></p>
+			</div>
+			<hr/>
+
+			<h2 id="while_statements">While statements</h2>
+			<p>While statements allow <code>&lt;code&gt;</code> to be executed while <code>&lt;bool exp&gt;</code> evaluates to TRUE:</p>
+			<pre>while ( &lt;bool exp&gt; )
+{
+ &lt;code&gt;
+}</pre>
+			<div class="rt">
+				<p><a href="#top">back to top</a></p>
+			</div>
+			<hr/>
+
+			<h2 id="casts">Casts</h2>
+			<p>Casts convert one data type into a different one. In Warzone 2100 casts are mostly used to convert float to int, int to float and bool to float. To perform a cast write the required data type in parenthesis.</p>
+			<p>Examples:</p>
+			<pre>myFloat = (float)myInteger + 2.3 + (float)500 + 500.0;
+myInteger = 100 + numPlayers + (int)myFloat;</pre>
+			<p>NOTE: Both <code>(float)500</code> and <code>500.0</code> represent the same value. When converting FLOATs to INTs fractional part is discarded.</p>
+			<div class="rt">
+				<p><a href="#top">back to top</a></p>
+			</div>
+			<hr/>
+
+			<h2 id="custom_functions">Custom functions</h2>
+			<p>It is possible to define custom script functions to reuse certain functionality throughout the script.</p>
+			<p>Functions have following syntax:</p>
+			<pre>function &lt;return type&gt; &lt;function name&gt; ( [ &lt;argument type&gt; &lt; argument name&gt; , ... ] )
+{
+ &lt;code&gt;
+ return ... ;
+}</pre>
+			<p>Examples:</p>
+			<pre>function void displayVictoryMessage( int winner )
+{
+ console ( "Player " &amp; getPlayerName(winner) &amp; " has won the game" );
+}
+
+function float calculateMinimum ( float f1, float f2 )
+{
+ if ( f1 &lt; f2 )
+ {
+  return f1;
+ }
+ return f2;
+}</pre>
+			<p>Functions look almost identical to their C counterparts, except that the beginning of a function is marked with <code>function</code> keyword.</p>
+			<p>It is possible to declare functions like with events it is done in the event and function declaration section:</p>
+			<pre>function void displayVictoryMessage( int winner );
+function float calculateMinimum ( float f1, float f2 );</pre>
+			<p>Declared this way it is possible to use a function before it is defined later in the script. To call a function simply provide its name with parameters in parenthesis:</p>
+			<pre>displayVictoryMessage(0);
+...
+console("Minimum of 2 and 2.1 is " &amp; calculateMinimum(2.0, 2.1) );</pre>
+			<p>Like in C <code>return &lt;return expression&gt;;</code> or for void functions just <code>return;</code> returns execution to the caller.</p>
+			<div class="rt">
+				<p><a href="#top">back to top</a></p>
+			</div>
+			<hr/>
+
+			<h2 id="local_variables">Local variables</h2>
+			<p>Local variables belong either to a function or event where they were declared and are not accessible outside of it. Local variables must be declared at the beginning of the function or event. Like public/private variables local variables of the same type can be declared on the same line separated by a comma.</p>
+			<p>Declaration of a local variable looks as follows:</p>
+			<pre>local &lt;variable type&gt; &lt;variable name&gt; [, &lt;variablename&gt;, ...] ;</pre>
+			<p>Example:</p>
+			<pre>event myEvent(myTrigger)
+{
+ local int count;
+ &lt;code&gt;
+}
+
+function void myFunction()
+{
+ local DROId myDroid1, myDroid2;
+ local string myString;
+ &lt;code&gt;
+}</pre>
+			<div class="rt">
+				<p><a href="#top">back to top</a></p>
+			</div>
+			<hr/>
+
+			<h2 id="macros">Macros</h2>
+			<p>The Warzone 2100 Scripting language supports nested macros (current max. depth is 10). Parametrized macros are not supported. Macros are defined as follows:</p>
+			<pre>#define &lt;macro name&gt; &lt;macro body&gt;</pre>
+			<p>Example:</p>
+			<pre>#define pi 3.14</pre>
+			<p>Example of a nested macro:</p>
+			<pre>#define CURRENT_PLAYER 0
+#define CURRENT_PLAYER_NAMe getPlayerName(CURRENT_PLAYER)</pre>
+			<p>During the compilation process macro names are replaced with the actual code.</p>
+			<p>If any other text but "define" follows after # character then anything between # and end of the line is ignored by compiler making it possible to use #region and other tags in your favorite IDE.</p>
+			<p class="note">NOTE: "#include" is reserved but not fully supported yet.</p>
+			<div class="rt">
+				<p><a href="#top">back to top</a></p>
+			</div>
+			<hr/>
+
+			<h2 id="data_types">Data types</h2>
+			<p>Apart from standard data types like string (string), integer (int), boolean (bool) and floating point (float) there are some Warzone 2100-specific data types available:</p>
+			<table>
+				<tr>
+					<th>Data type</th>
+					<th>Meaning</th>
+				</tr>
+				<tr>
+					<td>INTMESSAGE</td>
+					<td>Simple. Name of a message as defined in Messages.txt, used mostly for campaign. In most cases it is easier to use a string instead.</td>
+				</tr>
+				<tr>
+					<td>BASEOBJ</td>
+					<td>Complex. Any of a DROID, FEATURE or STRUCTURE. It is a pointer to some droid/feature/structure on the map, can be NULLOBJECT if it wasn't assigned to a particular droid/feature/structure. You have access to the following variables:
+						<ul>
+							<li>baseobj.x</li>
+							<li>baseobj.y</li>
+							<li>baseobj.z</li>
+							<li>baseobj.id - unique ID number</li>
+							<li>baseobj.player - player ID</li>
+							<li>baseobj.type - one of OBJ_DROID, OBJ_STRUCTURE, OBJ_FEATURE</li>
+							<li>baseobj.health - %age number of body points left</li>
+							<li>baseobj.clusterID - the cluster the object is a member of</li>
+							<li>baseobj.target - target of the object (in case of a multi-turret object returns target of the default weapon)</li>
+						</ul>
+					</td>
+				</tr>
+				<tr>
+					<td>DROID</td>
+					<td>Complex. Defined by the ID got from the world editor. It is a pointer to a particular droid on the map, can be NULLOBJECT when no droid is assigned to the DROID variable. You have access to following variables:
+						<ul>
+							<li>droid.x</li>
+							<li>droid.y</li>
+							<li>droid.z</li>
+							<li>droid.id - unique ID number</li>
+							<li>droid.player - player ID</li>
+							<li>droid.type - one of OBJ_DROID, OBJ_STRUCTURE, OBJ_FEATURE</li>
+							<li>droid.health - %age number of body points left</li>
+							<li>droid.clusterID - the cluster the object is a member of</li>
+							<li>droid.target - target of the object (in case of a multi-turret object returns target of the default weapon)</li>
+							<li>droid.order - current order of the droid</li>
+							<li>droid.orderx - target location of the droid order</li>
+							<li>droid.ordery - target location of the droid order</li>
+							<li>droid.action - current action of the droid</li>
+							<li>droid.body - the BODY of the droid</li>
+							<li>droid.propulsion - the PROPULSION of the droid</li>
+							<li>droid.weapon - the WEAPON of the droid DROIDID - (simple) literally just an Id of a droid</li>
+							<li>droid.selected - holds TRUE if droid is currently selected</li>
+							<li>droid.group - the GROUP droid belongs to</li>
+						</ul>
+					</td>
+				</tr>
+				<tr>
+					<td>FEATURE</td>
+					<td>Complex. Defined by the ID got from the world editor. It is a pointer to a map decoration, like a tree, wrecked building, oil resource etc, can be NULLOBJECT. You have access to following variables:
+						<ul>
+							<li>feature.x</li>
+							<li>feature.y</li>
+							<li>feature.z</li>
+							<li>feature.id - unique ID number</li>
+							<li>feature.player - player ID</li>
+							<li>feature.type - one of OBJ_DROID, OBJ_STRUCTURE, OBJ_FEATURE</li>
+							<li>feature.health - %age number of body points left</li>
+							<li>feature.clusterID - the cluster the object is a member of</li>
+							<li>feature.target - target of the object (in case of a multi-turret object returns target of the default weapon)</li>
+						</ul>
+					</td>
+				</tr>
+				<tr>
+					<td>FEATURESTAT</td>
+					<td>Simple. Type of a feature as defined in features.txt.</td>
+				</tr>
+				<tr>
+					<td>TEMPLATE</td>
+					<td>Simple. Name of a template as defined in templates.txt.</td>
+				</tr>
+				<tr>
+					<td>STRUCTURE</td>
+					<td>Complex. Defined by the ID got from the world editor. It is a pointer to a particular structure on the map, can be NULLOBJECT when no structure is assigned to the STRUCTURE variable. You have access to the foillowing variables:
+						<ul>
+							<li>structure.x</li>
+							<li>structure.y</li>
+							<li>structure.z</li>
+							<li>structure.id - unique ID number</li>
+							<li>structure.player - player ID</li>
+							<li>structure.type - one of OBJ_DROID, OBJ_STRUCTURE, OBJ_FEATURE</li>
+							<li>structure.health - %age number of body points left</li>
+							<li>structure.clusterID - the cluster the object is a member of</li>
+							<li>structure.target - target of the object (in case of a multi-turret object returns target of the default weapon)</li>
+							<li>structure.stat - the STRUCTURESTAT of the structure, defined in structures.txt</li>
+							<li>structure.stattype - structure type (likeREF_HQ etc.; refers to <a href="#script_function_constants">Script function constants</a>)</li>
+						</ul>
+					</td>
+				</tr>
+				<tr>
+					<td>STRUCTUREID</td>
+					<td>Simple. Literally just an ID of a struct.</td>
+				</tr>
+				<tr>
+					<td>STRUCTURESTAT</td>
+					<td>Simple. Type of a structure as defined in structures.txt.</td>
+				</tr>
+				<tr>
+					<td>BODY</td>
+					<td>Simple. Name of a body as defined in body.txt.</td>
+				</tr>
+				<tr>
+					<td>PROPULSION</td>
+					<td>Simple. Name of a propulsion as defined in propulsion.txt.</td>
+				</tr>
+				<tr>
+					<td>ECM</td>
+					<td>Simple. Name of an ECM as defined in ecm.txt.</td>
+				</tr>
+				<tr>
+					<td>SENSOR</td>
+					<td>Simple. Name of a sensor as defined in sensor.txt.</td>
+				</tr>
+				<tr>
+					<td>CONSTRUCT</td>
+					<td>Simple. Name of a construct as defined in construct.txt.</td>
+				</tr>
+				<tr>
+					<td>WEAPON</td>
+					<td>Simple. Name of a weapon as defined in weapons.txt.</td>
+				</tr>
+				<tr>
+					<td>REPAIR</td>
+					<td>Simple. Name of a repair type as defined in Repair.txt.</td>
+				</tr>
+				<tr>
+					<td>BRAIN</td>
+					<td>Simple. Name of a brain type as defined in Brain.txt.</td>
+				</tr>
+				<tr>
+					<td>SOUND</td>
+					<td>Simple. ID of sound used in playSound().</td>
+				</tr>
+				<tr>
+					<td>LEVEL</td>
+					<td>Simple. ID of a level as defined in GameDesc.lev.</td>
+				</tr>
+				<tr>
+					<td>RESEARCHSTAT</td>
+					<td>Simple. Name of a research topic as defined in research.txt.</td>
+				</tr>
+				<tr>
+					<td>GROUP</td>
+					<td>Complex. A group of droids. Don't confuse GROUP with in-game units' groups that can be accessed with CTRL-&lt;number&gt;, they have nothing in common. GROUP is an internal structure used to simplify unit management. You have access to following variables:
+						<ul>
+							<li>group.x - average x coord</li>
+							<li>group.y - average y coord</li>
+							<li>group.members - number of units in the group</li>
+							<li>group.health - average %age health of the units</li>
+							<li>group.type - type of the group, one of: GT_NORMAL, GT_COMMAND or GT_TRANSPORTER (refer to <a href="#script_function_constants">Script function constants</a>)</li>
+							<li>group.commander - commander of the group, if type = GT_COMMAND or NULLOBJECT</li>
+						</ul>
+					</td>
+				</tr>
+			</table>
+			<p class="note">NOTE: The functions objToDroid, objToStructure and objToFeature exist to convert a BASEOBJ to a droid, structure or feature if the base obj is of the right type.</p>
+			<p class="note">NOTE: Transporters and commanders can't be added to a GROUP.</p>
+			<p>With a complex object it is possible to access information specific to the instance of this object. Acomplex object is usually a pointer to a C structure in the code. For example a DROID is a complex object - its x,y,z can be queried whereas a DROIDID (a simple object - an integer) is just a placeholder for the numeric value of the ID.</p>
+			<div class="rt">
+				<p><a href="#top">back to top</a></p>
+			</div>
+			<hr/>
+
+			<h2 id="script_functions">Script functions</h2>
+			<h3 id="sf_environment">Environment</h3>
+			<dl>
+				<dt>setSnow(bool)</dt>
+				<dd>This function switches snow on or off. TRUE will turn snow on, FALSE will turn snow off. If rain is on when snow is started the rain will be turned off.</dd>
+				<dt>setRain(bool)</dt>
+				<dd>This function switchs rain on or off. TRUe will turn rain on, FALSE will turn rain off. If snow is on when rain is started the snow will be turned off.</dd>
+				<dt>setBackgroundFog(bool)</dt>
+				<dd>This function switchs background fog on or off. This sets the backdrop to the current fogcolour and fogs the edge of the visible world. TRUE will turn background fog on, FALSE will turn background fog off.</dd>
+				<dt>setDepthFog(bool)</dt>
+				<dd>This function switchs depth fog on or off. This sets the sets fog ramping up from zero in the middle of the view to full fog at the edge of the visible world. TRUE will turn depth fog on, FALSE will turn depth fog off.</dd>
+				<dt>setFogColour(RED, GREEN, BLUE)</dt>
+				<dd>This function sets the fog colour, to be used when fog is enabled. This colour is also used in the background clear when fog is enabled. The colour is specified as RED, GREEN and BLUe components each in the range 0 to 255. This yields a 24 bit colour value. Colour values outside the range 0 to 255 will have an indeterminate effect.</dd>
+				<dd class="warning">Warning: Setting the fog colour to black (0, 0, 0) does not turn fog off and should be avoided.</dd>
+				<dd>Standard values:
+					<ul>
+						<li>Arizona: 204, 149, 70 (CC9546) (old: 176, 143, 95 (B08F5F))</li>
+						<li>Urban: 201, 146, 15 (C9920F)</li>
+						<li>Rockies: 182, 225, 236 (B6E1EC)</li>
+					</ul>
+				</dd>
+			</dl>
+
+			<h4 id="sf_components">Components</h4>
+			<dl>
+				<dt>enableComponent(COMPONENT, PLAYER)</dt>
+				<dd>This function makes a component found to a player - so that they can research a topic that requires the component COMPONENT is any type of Body, Propulsion, Weapon, ECM, Sensor, Construct etc. PLAYER is the id of the player who gets the component.</dd>
+				<dt>makeComponentAvailable(COMPONENT, PLAYER)</dt>
+				<dd>This function makes a component available to a player - so that they can build Units using this component. COMPONENT is any type of Body, Propulsion, Weapon, ECM, Sensor, Construct etc. PLAYER is the id of the player who gets the component</dd>
+				<dt>enableStructure(STRUCTURESTAT, PLAYER)</dt>
+				<dd>This function makes a structure available to a player - so that they can research a topic that requires the structure or build the structure STRUCTURESTAT is defined by the name from Access. PLAYER is the id of the player who gets the structure.</dd>
+			</dl>
+
+			<h4 id="sf_research">Research</h4>
+			<dl>
+				<dt>enableResearch(RESEARCHSTAT, PLAYER)</dt>
+				<dd>This function makes a research topic available to a player regardless of its pre-requisites. RESEARCHSTAT is defined by the name from Access. PLAYER is the id of the player who gets the research</dd>
+				<dt>completeResearch(RESEARCHSTAT, PLAYER)</dt>
+				<dd>This function acts as if the research was performed by the player giving them the results. RESEARCHSTAT is defined by the name from Access. PLAYER is the id of the player who gets the research</dd>
+			</dl>
+			<h4 id="sf_position_visibility">Position and visibility</h4>
+			<dl>
+				<dt>bool objectInRange(PLAYER, X,Y, RANGE)</dt>
+				<dd>This function checks for when an object belonging to a player is within range of a position. PLAYER is the id of the player whose unit is checked for in range. X,Y is the position to check from in world coords. RANGE is in world coords - 128 units = 1 tile.</dd>
+				<dt>bool droidInRange(PLAYER, X,Y, RANGE)</dt>
+				<dd>This function checks for when a droid belonging to a player is within range of a position. PLAYER is the id of the player whose unit is checked for in range. X,Y is the position to check from in world coords. RANGE is in world coords - 128 units = 1 tile.</dd>
+				<dt>bool structInRange(PLAYER, X,Y, RANGE)</dt>
+				<dd>This function checks for when a structure belonging to a player is within range of a position. PLAYER is the id of the player whose unit is checked for in range. X,Y is the position to check from in world coords. RANGE is in world coords - 128 units = 1 tile.</dd>
+				<dt>bool objectInArea(PLAYER, X1,Y1, X2,Y2)</dt>
+				<dd>This function checks for when an object belonging to a player is in a square area. PLAYER is the id of the player whose droid is checked for in area. X1,Y1, X2,Y2 is the area to check in world coords. X1,Y1 should be smaller than X2,Y2</dd>
+				<dt>bool droidInArea(PLAYER, X1,Y1, X2,Y2)</dt>
+				<dd>This function checks for when a droid belonging to a player is in a square area. PLAYER is the id of the player whose droid is checked for in area. X1,Y1, X2,Y2 is the area to check in world coords. X1,Y1 should be smaller than X2,Y2</dd>
+				<dt>bool structInArea(PLAYER, X1,Y1, X2,Y2)</dt>
+				<dd>This function checks for when a structure belonging to a player is in a square area. PLAYER is the id of the player whose droid is checked for in area. X1,Y1, X2,Y2 is the area to check in world coords. X1,Y1 should be smaller than X2,Y2</dd>
+				<dt>bool droidHasSeen(OBJECT, PLAYER)</dt>
+				<dd>This functions checks for when a player has seen a given object - either by unit or structure. OBJECT is any type of DROID, FEATURE, STRUCTURE. PLAYER is the id of the player to check for having seen</dd>
+			</dl>
+			<h4 id="sf_droids">Droids</h4>
+				<p>addDroid(TEMPLATE, X, Y, PLAYER)</p>
+				<p>This function adds a unit for the player based on the template passed in.</p>
+				<p>The unit is placed at x,y</p>
+				<p>TEMPLATE is a valid template (doesn't have to belong to the player!)</p>
+				<p>X, Y are in world coords</p>
+				<p>PLAYER is the id of the player whose the unit belongs to</p>
+
+				<p>buildDroid(TEMPLATE, STRUCTURE, PLAYER, QUANTITY)</p>
+				<p>This function sets a factory defined by STRUCTURE to build units based on the TEMPLATE for the PLAYER.</p>
+				<p>TEMPLATE is a valid template (doesn't have to belong to the player!)</p>
+				<p>STRUCTURE is a structure defined by ID and MUST BE A FACTORY</p>
+				<p>PLAYER is the id of the player whose the unit belongs to</p>
+				<p>QUANTITY is the number of units that will be built</p>
+
+				<p>bool buildingDestroyed(STRUCTUREID, PLAYER)</p>
+				<p>This function checks that a structure (given by the id) no longer exists for the player</p>
+				<p>STRUCTUREID is the id of the structure - Nb this is different to an object of type STRUCTURE</p>
+				<p>PLAYER is the id of the player whose list is checked for the building</p>
+				<p>bool structureIdle(STRUCTURE)</p>
+				<p>This function checks whether the structure is doing anything. Returns TRUE if idle</p>
+				<p>STRUCTURE is a valid structure defined by ID</p>
+				<p>bool structureBeingBuilt(STRUCTURESTAT, PLAYER)</p>
+				<p>This function checks that a structure of type STRUCTURESTAT is currently being built for the specified PLAYER</p>
+				<p>STRUCTURESTAT is defined by the name from Access</p>
+				<p>PLAYER is the id of the player who gets the structure</p>
+				<p>bool structureBuilt(STRUCTURESTAT, PLAYER)</p>
+				<p>This function checks that a structure of type STRUCTURESTAT is currently built for the specified PLAYER</p>
+				<p>STRUCTURESTAT is defined by the name from Access</p>
+				<p>PLAYER is the id of the player who gets the structure</p>
+
+
+				<p>addReticuleButton(BUTTONID)</p>
+				<p>This function adds a reticule button to the interface</p>
+				<p>BUTTONID is the id of a button - see <a href="#script_function_constants">Script function constants</a></p>
+				<p>removeReticuleButton(BUTTONID)</p>
+				<p>This function removes a reticule button from the interface</p>
+				<p>BUTTONID is the id of a button - see <a href="#script_function_constants">Script function constants</a></p>
+				<p>addMessage(INTMESSAGE, MESSAGETYPE, PLAYER, PLAY_IMMEDIATE)</p>
+				<p>This adds a message to the interface for the PLAYER</p>
+				<p>INTMESSAGE is a variable defined in the values file</p>
+				<p>MESSAGETYPE is a predefined type - see <a href="#script_function_constants">Script function constants</a></p>
+				<p>PLAYER is the player who gets the message</p>
+				<p>PLAY_IMMEDIATE is a bool for whether to bring the Intelligence Screen up with the message immediately or just store it</p>
+				<p>removeMessage(INTMESSAGE, MESSAGETYPE, PLAYER)</p>
+				<p>This removes a message from the interface for the PLAYER</p>
+				<p>INTMESSAGE is a variable defined in the values file</p>
+				<p>MESSAGETYPE is a predefined type - see <a href="#script_function_constants">Script function constants</a></p>
+				<p>PLAYER is the player who loses the message</p>
+				<p>bool selectDroidByID(DROIDID, PLAYER)</p>
+				<p>This selects a unit defined by the ID since we can't guarantee the name! Only the list of units belonging to PLAYER will be checked. This returns TRUE if the unit could be found - it will be worth checking it exists!</p>
+				<p>DROIDID is a valid unit defined by ID</p>
+				<p>setAssemblyPoint(X, Y, STRUCTURE)</p>
+				<p>This sets the location of where new units assemble at for a specific factory</p>
+				<p>X, Y are the x and y in world coordinates</p>
+				<p>STRUCTURE is a valid structure defined by ID</p>
+				<p>FEATURE addFeature( FEATURESTAT, X, Y )</p>
+				<p>Builds a feature at position (x,y).</p>
+				<p>FEATURESTAT is the name of a feature stat defined in features.txt.</p>
+				<p>The feature identifier is returned - this can be used in e.g. destroyFeature.</p>
+				<p>destroyFeature(FEATURE)</p>
+				<p>This removes the feature from the world</p>
+				<p>FEATURE is a feature defined by ID</p>
+				<p>centreView(OBJECT)</p>
+				<p>This function centres the view on the object supplied</p>
+				<p>OBJECT is any type of DROID, FEATURE, STRUCTURE</p>
+				<p>STRUCTURE addStructure( STRUCTURESTAT, PLAYER, X, Y )</p>
+				<p>Builds a structure belonging to PLAYER centred at (X, Y).</p>
+				<p>The structure must be previously enabled via enableStructure().</p>
+				<p>The structure identifier is returned - this can be used in e.g. destroyStructure.</p>
+				<p>destroyStructure(STRUCTURE)</p>
+				<p>This removes the structure from the world</p>
+				<p>STRUCTURE is a structure defined by ID</p>
+				<p>STRUCTURE getStructure(STRUCTURESTAT, PLAYER)</p>
+				<p>This function returns the first STRUCTURe based on the stat for the player it can find.</p>
+				<p>To use it create a STRUCTURE variable and assign it to the result of the function call.</p>
+				<p>For example:</p>
+				<p>STRUCTURe myNewStructure;</p>
+				<p>STRUCTURESTAt Factory;</p>
+				<p>myNewStructure = getStructure(Factory, 0);</p>
+				<p>This will look through the player 0 list of structures to find a Factory and return a variable of type STRUCTURE. You will then be able to access the x, y, and z. If a structure cannot be found than NULL is returned . It will be worth checking that the STRUCTURE does not equal NULL before using it. For example:</p>
+				<p>if (myNewStructure == NULLOBJECT)</p>
+				<p>{</p>
+				<p>do something</p>
+				<p>}</p>
+				<p>void initEnumStruct(bool any, STRUCTURESTAt type, int targetPlayer, int lookingPlayer)</p>
+				<p>STRUCTURE enumStruct()</p>
+				<p>Enumerate through visible structures of given 'type' of player 'targetPlayer' that are visible to 'lookingPlayer'. Returns NULLOBJECT when no more exist.</p>
+				<p>If 'any' is set to TRUE, then 'type' is ignored and all structure types will be iterated.</p>
+				<p>void InitEnumDroids(int targetPlayer, int lookingPlayer)</p>
+				<p>DROID EnumDroid()</p>
+				<p>Enumerate through all targetPlayer's droids that are visible to 'lookingPlayer'. Returns NULLOBJECT when no more exist.</p>
+				<p>TEMPLATE getTemplate(COMPONENT, PLAYER)</p>
+				<p>This function returns the first TEMPLATE based on the stat for the player it can find. It can be any type of component. To use it create a TEMPLATE variable and assign it to the result of the function call. For example:</p>
+				<p>TEMPLATe myNewTemplate;</p>
+				<p>WEAPOn Rocket;</p>
+				<p>myNewTemplate = getStructure(Rocket, 0);</p>
+				<p>This will look through the player 0 list of template to find one which contains a rocket and then return a variable of type TEMPLATE. You will then be able to access its attributes. If a template cannot be found than NULL is returned . It will be worth checking that the TEMPLATe does not equal NULL before using it. For example:</p>
+				<p>if (myNewTemplate == NULLTEMPLATE)</p>
+				<p>{</p>
+				<p>do something</p>
+				<p>}</p>
+				<p>setScrollParams(minX, minY, maxX, maxY)</p>
+				<p>This literally sets the scroll settings for the current map - be careful not to set the maxX/maxY greater than that possible for the map!</p>
+				<p>minX, minY, maxX, maxY are all numbers. These are in TILE COORDINATES!!!!!!</p>
+				<p>setScrollMinX(minX)</p>
+				<p>This just sets the one variable. These are in TILE COORDINATES!!!!!!</p>
+				<p>minX is a number</p>
+				<p>setScrollMinY(minY)</p>
+				<p>This just sets the one variable. These are in TILE COORDINATES!!!!!!</p>
+				<p>minY is a number</p>
+				<p>setScrollMaxX(maxX)</p>
+				<p>This just sets the one variable. These are in TILE COORDINATES!!!!!!</p>
+				<p>maxX is a number</p>
+				<p>setScrollMaxY(maxY)</p>
+				<p>This just sets the one variable. These are in TILE COORDINATES!!!!!!</p>
+				<p>maxY is a number</p>
+				<p>setDefaultSensor(SENSOR, PLAYER)</p>
+				<p>This sets which sensor will be used as the default when designing units in game for the specified player. The SENSOR must be a valid DEFAULT sensor.</p>
+				<p>setDefaultECM(ECM, PLAYER)</p>
+				<p>Like the above functionm, this sets which ECm will be used as the default when designing units. Again the ECM must be a valid DEFAULT ECM.</p>
+				<p>setStructureLimits(STRUCTURESTAT, LIMIT, PLAYER)</p>
+				<p>This sets a limit for a specific structure on how many can be built on a map.</p>
+				<p>STRUCTURESTAT is defined by the name from Access</p>
+				<p>LIMIT is a number between 0 and 255</p>
+				<p>PLAYER is the id of the player</p>
+				<p>setAllStructureLimits(LIMIT, PLAYER)</p>
+				<p>This sets a limit for all structures on how many can be built on a map.</p>
+				<p>LIMIT is a number between 0 and 255</p>
+				<p>PLAYER is the id of the player</p>
+				<p>playSound( SOUND, PLAYER)</p>
+				<p>Plays a '2D' sound ie speech and is audible for the player identified</p>
+				<p>SOUND is a defined type.</p>
+				<p>PLAYER is the id of the player</p>
+				<p>playSoundPos( SOUND, PLAYER, x, y, z)</p>
+				<p>Plays a '2D' sound ie speech and is audible for the player identified</p>
+				<p>Position of sound is saved so camera can move to object playing sound if required.</p>
+				<p>SOUND is a defined type.</p>
+				<p>PLAYER is the id of the player</p>
+				<p>x, y, z is the position of the object in game units.</p>
+				<p>addConsoleText( TEXTSTRING, PLAYER)</p>
+				<p>Adds console text to the top of the screen (centre justified) for the player concerned</p>
+				<p>TEXTSTRING is a string ID obtained from strings.txt</p>
+				<p>PLAYER is the id of the player</p>
+				<p>turnPowerOn()</p>
+				<p>Literally makes the power calculations be used</p>
+				<p>turnPowerOff()</p>
+				<p>Literally stops the power calculations being used</p>
+				<p>setPowerLevel(POWER, PLAYER)</p>
+				<p>sets the power level for a player - this overrides any current setting there is</p>
+				<p>POWER is the value to set the player's power to</p>
+				<p>PLAYER is the id of the player</p>
+				<p>addPower(POWER, PLAYER)</p>
+				<p>adds the POWER amount to the PLAYER's current level</p>
+				<p>POWER is the value to add to the player's power</p>
+				<p>PLAYER is the id of the player</p>
+				<p>setLandingZone(x1, y1, x2, y2)</p>
+				<p>sets the landing zone for the map. The coords are in tile units and must all be less than 255</p>
+				<p>setLimboLanding(x1, y1, x2, y2)</p>
+				<p>sets the landing zone for the Limbo Units. The coords are in tile units and must all be less than 255</p>
+				<p>The units from the Limbo list are then placed at this location - so call in CALL_GAME_INIT of the mission you want them to appear in</p>
+				<p>initAllNoGoAreas()</p>
+				<p>initialises all the no go areas to 0. Should be called when a new map is loaded</p>
+				<p>setNoGoArea(x1, y1, x2, y2, areaNum)</p>
+				<p>defines an area that cannot be built on - used for enemy landing zones.</p>
+				<p>areaNum is a number between 0 and 7. If 0, then this function is the same as calling setlandingZone</p>
+				<p>setTransporterExit( PLAYER, exitTileX, exitTiley )</p>
+				<p>setup transporter exit point on map for PLAYER</p>
+				<p>flyTransporterIn( PLAYER, entryTileX, entryTileY, bool bTrackTransporter )</p>
+				<p>flys PLAYER's transporter in from entry point on map; set bTrackTransporter true to</p>
+				<p>track it onto the map.</p>
+				<p>tutorialEnd()</p>
+				<p>A bit of a hack to notify the game when the last of the tutorial events has been run</p>
+				<p>so that the console messages can be turned back on to how they will appear for</p>
+				<p>the rest of the game</p>
+				<p>gameOver(bool)</p>
+				<p>function to call for ending the game</p>
+				<p>bool - true or false depending on whether the player has won or not</p>
+				<p>anyDroidsLeft(PLAYER)</p>
+				<p>checks the specified player for any units - returns TRUE if some exist, FALSE if</p>
+				<p>they have all been destroyed</p>
+				<p>anyStructButWallsLeft(PLAYER)</p>
+				<p>checks the specified player for any structures except walls - returns TRUE if some</p>
+				<p>exist, FALSE if they have all been destroyed</p>
+				<p>anyFactoriesLeft(PLAYER)</p>
+				<p>returns true if player has a factory/cyborg factory/ vtol factory</p>
+				<p>setRetreatPoint(PLAYER, x,y)</p>
+				<p>sets the position for a players units to retreat to</p>
+				<p>setRetreatForce(int player, int level)</p>
+				<p>Sets the percentage of the current force below which units for a side will retreat</p>
+				<p>setRetreatLeadership(int player, int level)</p>
+				<p>Sets the leadership level (chance to run away) for a player (1-100)</p>
+				<p>startMission(MISSION_TYPE, LEVEL)</p>
+				<p>Starts a mission for the currently selected player - NB Transporters must be filled if</p>
+				<p>you want units to appear on the Mission map</p>
+				<p>MISSION_TYPE is a predefined type - see	<a href="#script_function_constants">Script function constants</a></p>
+				<p>LEVEL is the name of the level to load as defined in GameDesc.lev</p>
+				<p>endMission(bool)</p>
+				<p>Ends the current mission the selected player is on - returns all Units that have been</p>
+				<p>loaded onto the Transporter. False if player lost, true if player won????</p>
+				<p>bool allianceExists()</p>
+				<p>returns true if two or more players are in alliance. returns false otherwise.</p>
+				<p>bool dominatingAlliance()</p>
+				<p>returns true if there is a single dominating alliance, using all multi-players.</p>
+				<p>bool playerInAlliance()</p>
+				<p>returns true if player is in an alliance</p>
+				<p>bool myResponsibility(PLAYER)</p>
+				<p>returns true if this machine is responsible for 'player' in multiplayer games.</p>
+				<p>STRUCTURe structureBuiltInRange(STRUCTURESTAT, X, Y, RANGE, PLAYER)</p>
+				<p>Checks to see if a Structure has been built within a specified range of x, y. The first structure</p>
+				<p>to be found within this range will be returned. Check the result of the function for being</p>
+				<p>NULLOBJECT before using!</p>
+				<p>STRUCTURE is a return value (structure defined by ID)</p>
+				<p>STRUCTURESTAT is defined by the name from Access</p>
+				<p>X, Y, RANGE are all in world coords</p>
+				<p>PLAYER is the id of the player whose structure list is searched</p>
+				<p>groupAddDroid(GROUP, DROID)</p>
+				<p>Add a unit to a group</p>
+				<p>groupAddArea(GROUP, PLAYER, X1,Y1, X2,Y2)</p>
+				<p>Add all the units inside the rectangle X1,Y1, X2,Y2.</p>
+				<p>Only units belonging to player PLAYER are added.</p>
+				<p>groupAddAreaNoGroup(GROUP, PLAYER, X1,Y1, X2,Y2)</p>
+				<p>as above but doesnt add units that are already grouped.</p>
+				<p>groupAddGroup(group1, group2)</p>
+				<p>Add all the units in group2 to group1.</p>
+				<p>All the units are removed from group2.</p>
+				<p>bool hasGroup(DROID droid)</p>
+				<p>Returns TRUE if 'droid' belongs to any group, retzrns FALSE otherwise.</p>
+				<p>orderDroid(DROID, order)</p>
+				<p>Give a unit an order currently one of:</p>
+				<p>DORDER_STOp - stop current order</p>
+				<p>DORDER_RETREAt - retreat</p>
+				<p>DORDER_DESTRUCT - self destruct</p>
+				<p>DORDER_RTr - return to repair</p>
+				<p>DORDER_RTb - return to base</p>
+				<p>DORDER_RUn - run away for a bit (moral failure)</p>
+				<p>orderDroidLoc(DROID, order, x,y)</p>
+				<p>Give a unit an order with a location :</p>
+				<p>DORDER_MOVe - move to location</p>
+				<p>orderDroidObj(DROID, order, BASEOBJ)</p>
+				<p>Give a unit an order with an object :</p>
+				<p>DORDER_ATTACK- attack the object</p>
+				<p>DORDER_HELPBUILD- help construct the object</p>
+				<p>DORDER_DEMOLISH- demolish structure</p>
+				<p>DORDER_REPAIR- repair structure</p>
+				<p>DORDER_OBSERVE- (sensor units) keep a target in sensor range</p>
+				<p>DORDER_EMBARK- get onto a transporter</p>
+				<p>DORDER_FIRESUPPORT- follow this sensor unit and attack anything it DORDER_OBSERVE's</p>
+				<p>orderDroidStatsLoc(DROID, int order, STRUCTURESTAT stats, int x, int y)</p>
+				<p>Give a unit an order with stats and a location :</p>
+				<p>DORDER_BUILD - build a structure at the location</p>
+				<p>orderGroup(GROUP, order)</p>
+				<p>Give all the units in the group an order</p>
+				<p>orderGroupLoc(GROUP, order, x,y)</p>
+				<p>Give all the units in the group an order with a location</p>
+				<p>orderGroupObj(GROUP, order, BASEOBJ)</p>
+				<p>Give all the units in the group an order with an object</p>
+				<p>DROID objToDroid(BASEOBJ)</p>
+				<p>Convert a BASEOBJ to DROID when BASEOBJ.type == OBJ_DROID. Returns NULLOBJECT otherwise</p>
+				<p>STRUCTURE objToStructure(BASEOBJ)</p>
+				<p>Convert a BASEOBJ to STRUCTURE when BASEOBJ.type == OBJ_STRUCTURE. Returns NULLOBJECT otherwise</p>
+				<p>FEATURE objToFeature(BASEOBJ)</p>
+				<p>Convert a BASEOBJ to FEATURE when BASEOBJ.type == OBJ_FEATURE. Returns NULLOBJECT otherwise</p>
+				<p>int random(range)</p>
+				<p>Return a random number between 0 and range - 1.</p>
+				<p>flashOn(int buttonID)</p>
+				<p>turn on flashing for a button (id's in	<a href="#script_function_constants">Script function constants</a>)</p>
+				<p>... now works for all buttons not just reticule buttons</p>
+				<p>flashOff(int buttonID)</p>
+				<p>turn off flashing for a button</p>
+				<p>createAlliance(int player1, int player2)</p>
+				<p>Create an alliance between two players</p>
+				<p>breakAlliance(int player1, int player2)</p>
+				<p>Breake an alliance between two players</p>
+				<p>setRadarZoom(int level)</p>
+				<p>level is the zoom level between 0 .. 2 on the PC and 0 .. 1 on PSX.</p>
+				<p>0 is the most zoomed out, 2 the most zoomed in.</p>
+				<p>2 is mapped to 1 if the script is run on the PSX</p>
+				<p>centreViewPos(int x, int y)</p>
+				<p>center the view on the world coordinates x,y.</p>
+				<p>setGroupRetreatForce(GROUP group, int level)</p>
+				<p>Sets the percentage of the current force below which units for a side will retreat</p>
+				<p>setGroupRetreatLeadership(GROUP group, int level)</p>
+				<p>Sets the leadership level (chance to run away) for a player (1-100)</p>
+				<p>setGroupRetreatPoint(GROUP group, int x, int y)</p>
+				<p>Set the retreat position for a group</p>
+				<p>setDroidSecondary(DROID droid, int secondaryOrder, int secondaryState)</p>
+				<p>Set the state of a secondary order for a droid (values in	<a href="#script_function_constants">Script function constants</a>)</p>
+				<p>setGroupSecondary(GROUP group, int secondaryOrder, int secondaryState)</p>
+				<p>Set the state of a secondary order for a group (values in	<a href="#script_function_constants">Script function constants</a>)</p>
+				<p>setMissionTime(int time)</p>
+				<p>used to specify how long an OffWorld mission will last for - used in conjunction with the</p>
+				<p>callback CALL_MISSION_TIME so that end conditions can be displayed if the player has not</p>
+				<p>managed to finish the mission</p>
+				<p>If time &lt; 0, there is no limit. time is in 10th of a second</p>
+				<p>int missionTimeRemaining()</p>
+				<p>Returns how long left for the current mission. If the mission time has not been set it will return 0.</p>
+				<p>The value returned is in 10ths of a second</p>
+				<p>setReinforcementTime(int time)</p>
+				<p>this defines how long it will take for reinforcements to arrive for an OffWorld mission</p>
+				<p>If time &lt; 0, there can be no reinforcements. Time is in 10th of a second.</p>
+				<p>Set time to LZ_COMPROMISED_TIME to display '--:--' to indicate the Transporter is unable to land</p>
+				<p>int idleGroup(GROUP group)</p>
+				<p>returns number of units in group not doing anything.</p>
+				<p>bool groupMember(GROUP group, DROId droid)</p>
+				<p>return whether a unit is a member of a group.</p>
+				<p>initIterateGroup(GROUP group)</p>
+				<p>Prepare a group to iterate through the units in it.</p>
+				<p>DROID iterateGroup(GROUP group)</p>
+				<p>Get the next unit from the group. Must be called after an initial initGroupIterate.</p>
+				<p>To reset a group back to the start call initGroupIterate.</p>
+				<p>droidLeaveGroup(DROID droid)</p>
+				<p>Make a unit leave the group it is a member of (if any).</p>
+				<p>initGetFeature(STRUCTURESTAT, PLAYER,BUCKET)</p>
+				<p>getFeature(BUCKET)</p>
+				<p>enumerate features of a single feature type.</p>
+				<p>PLAYER is the player to use, Only features visible to that player are returned.</p>
+				<p>BUCKET is an int of range 0-MAX_PLAYERS(8), so up to 8 feature enumerations can be going on at any time! (wow)</p>
+				<p>getFeature returns NULLOBJECT when no more features are visible.</p>
+				<p>bool structButNoWallsInArea(PLAYER, X1,Y1, X2,Y2)</p>
+				<p>See if there are any player structures excluding walls in an area.</p>
+				<p>int numObjectsInArea(PLAYER, X1,Y1, X2,Y2)</p>
+				<p>Return the number of player objects in an area.</p>
+				<p>int numDroidsInArea(PLAYER, X1,Y1, X2,Y2)</p>
+				<p>Return the number of player units in an area.</p>
+				<p>int numStructsInArea(PLAYER, X1,Y1, X2,Y2)</p>
+				<p>Return the number of player structures in an area.</p>
+				<p>int numStructsButNotWallsInArea(PLAYER, X1,Y1, X2,Y2)</p>
+				<p>Return the number of player structures excluding walls in an area.</p>
+				<p>randomiseSeed()</p>
+				<p>Generate a new random seed for the random number generator.</p>
+				<p>int numStructsByTypeInArea(PLAYER, TYPE, X1,Y1, X2,Y2)</p>
+				<p>Return the number of structures of a certain type in an area.</p>
+				<p>flushConsoleMessages()</p>
+				<p>Clear all the console messages</p>
+				<p>bool pickStructLocation(STRUCTURESTAT,ref x, ref y, player);</p>
+				<p>returns true if structure of type strucutrestat can be built at x,y.</p>
+				<p>If a structure can be built nearby then returns true and modifies x and y</p>
+				<p>to the coords of acceptable location. Player trying to build - uses this for the visibility</p>
+				<p>int playerPower(int player)</p>
+				<p>returns aspower[player].currentPower (players current power)</p>
+				<p>bool seenStructInArea(int player,int enemy,bool walls,int x1,int y1,int x2,int y2)</p>
+				<p>returns true if player has seen a structure belonging to enemy in area specified. Call with</p>
+				<p>walls = true/false to include/exclude walls in the search.</p>
+				<p>(note similar to StructInArea)</p>
+				<p>int distBetweenTwoPoints(int x1, int y1, int x2, int y2)</p>
+				<p>Returns the distance between the two points given.</p>
+				<p>bool losTwoObjects(BASEOBJ source, BASEOBJ target, bool wallsMatter)</p>
+				<p>Decides whether object source can see object target and you can specify whether</p>
+				<p>walls matter or not. Note that whilst target can be anything, source needs to be</p>
+				<p>something that can actually see - ie - have a sensor like a unit or structure.</p>
+				<p>Returns TRUE or FALSE</p>
+				<p>void killStructsInArea(int player, int buildingRef (like REF_WALL etc),</p>
+				<p>int x1, int y1,int x2, int y2, bool bSeeEffect, bool bTakeFeatures)</p>
+				<p>Blows up all the buildings of the specified reference within the specified area.</p>
+				<p>If bSeeEffect is set, then you'll see it blow up (provided you can see the building</p>
+				<p>in question of course).</p>
+				<p>If bTakeFeatures is et, then it will also kill features of type BUILDING.</p>
+				<p>Returns 'nowt.</p>
+				<p>int getThreatInArea(int playerLooking, int playerTarget, int x1, int y1,</p>
+				<p>int x2, int y2, int ldThreat, int mdThreat, int hdThreat)</p>
+				<p>Returns the threat value of all units of a specified player within a certain area for a specified player.</p>
+				<p>The user can 'calibrate' this threat value by specifying the relative weights attached to the threats of</p>
+				<p>small,medium and heavy units respectively as the last three parameters to this function. The final boolean</p>
+				<p>parameter allows the user to say whether they care about whether or not the units in question are</p>
+				<p>presently visible.. TRUE means they only add to the threat if PlayerLooking can see this unit (owned by</p>
+				<p>playerTarget), FALSE means they add to the threat if even they can't see that unit.</p>
+				<p>bool getNearestGateway(int x, int y, ref rX, ref rY)</p>
+				<p>Puts the coordinates of the nearest gateway into reference variables rX and rY. It might not though</p>
+				<p>if there are no gateways on the present map. So make sure you look at the return value. If it's FALSE,</p>
+				<p>then the values in rX and rY will be meaningless - unchanged actually, assuming the scripting works</p>
+				<p>this way. Otherwise, they'll be the coordinates of the midpoint of the nearest gateway.</p>
+				<p>void setWaterTile(int tileNum)</p>
+				<p>Sets the tile to use for underwater. Count from the top of the tileset pcx - presently 17 for arizona.</p>
+				<p>initIterateCluster(int clusterID)</p>
+				<p>get ready to iterate a cluster</p>
+				<p>BASEOBJ iterateCluster()</p>
+				<p>return the next object in the cluster or NULLOBJ if none left</p>
+				<p>cmdDroidAddDroid(DROID commander, DROId droid)</p>
+				<p>adds the unit droid to the command group of the command unit commander</p>
+				<p>cmdDroidMaxGroup(DROId commander)</p>
+				<p>Returns max number of droids 'commander' can have in his group.</p>
+				<p>bool testStructureModule(int playeNumber, ST_STRUCTURE structureToTest, int ref)</p>
+				<p>Returns true if the structure in question has a module attached - presently the ref id is unused but</p>
+				<p>could be later on. At the moment it returns true if the structure has _any_ number of modules attached.</p>
+				<p>If the structure pointer that's sent in is NULL (ie - no structure is specified), then it'll return</p>
+				<p>TRUE is _any_ of the player's structures possess _any_ module. In all other cases, it'll return FALSE.</p>
+				<p>bool addTemplate(TEMPLATE, int player)</p>
+				<p>given a template, gives the player the template so that build droid can be used. At least one</p>
+				<p>player must have the template.</p>
+				<p>void vanishUnit(DROID droid)</p>
+				<p>Will remove 'droid' from the world without any graphical hoo ha.</p>
+				<p>void forceDamageObject(BASEOBJ obj, int damage)</p>
+				<p>Sets 'obj' to be 'damage' percent damaged. Obj must be a feature,droid or structure and damage</p>
+				<p>must be &lt;= 100.</p>
+				<p>bool getGameStatus(int StatusRequired)</p>
+				<p>Gets the status of some of the game TRUE/FALSe variables. Can be used to find if the reticule is up or the</p>
+				<p>battle map is open, that sort of thing.</p>
+				<p>e.g. getGameStatus(STATUS_ReticuleIsOpen); will return TRUE if the reticule is open (on screen) or FALSE if the reticule is not (disabled)</p>
+				<p>or</p>
+				<p>getGameStatus(STATUS_BattleMapViewEnabled); will return TRUE if we are in the battle map mode</p>
+				<p>or</p>
+				<p>getGameStatus(STATUS_DeliveryResposInProgress); will return TRUE if we are repositioning the delivery point</p>
+				<p>these are currently the only two options implemented ... for other game modes (like design screen or intelligence map modes)</p>
+				<p>use the externed variable intMode</p>
+				<p>int getPlayerColour(int player)</p>
+				<p>returns the colour of the player</p>
+				<p>void setPlayerColour(int colour, int player)</p>
+				<p>sets the colour to use for the player specified - colour must be 0 to (MAX_PLAYERS-1)</p>
+				<p>DROID takeOverSingleDroid(DROId droidToTakeOver, int playerToGain)</p>
+				<p>this replaces the existing droid (droidToTakeOver) by a new one for the playerToGain.</p>
+				<p>The new droid is passed back to the script</p>
+				<p>****Test for NULLOBJECT BEFORE calling this function****</p>
+				<p>int takeOverDroidsInArea(int fromPlayer, int toPlayer, int x1, int y1, int x2, int y2)</p>
+				<p>x1,y1,x2,y2 are in world units</p>
+				<p>checks for units belonging to fromPlayer and if they are in the area they are 'given' to the toPlayer</p>
+				<p>int takeOverDroidsInAreaExp(int fromPlayer, int toPlayer, int x1, int y1,</p>
+				<p>int x2, int y2, int level, int max)</p>
+				<p>x1,y1,x2,y2 are in world units</p>
+				<p>checks for units belonging to fromPlayer and if they are in the area they are 'given' to the toPlayer</p>
+				<p>if their experience level is less than or equal to level</p>
+				<p>max specifies the maximum number of units to take over</p>
+				<p>STRUCTURe takeOverSingleStructure(STRUCTURE structToTakeOver, int playerToGain)</p>
+				<p>this replaces the existing structure (structToTakeOver) by a new one for the playerToGain.</p>
+				<p>The new structure is passed back to the script</p>
+				<p>****Test for NULLOBJECT BEFORE calling this function****</p>
+				<p>int takeOverStructsInArea(int fromPlayer, int toPlayer, int x1, int y1,</p>
+				<p>int x2, int y2)</p>
+				<p>x1,y1,x2,y2 are in world units</p>
+				<p>checks for structures belonging to fromPlayer and if they are in the area they are 'given' to the toPlayer</p>
+				<p>This will NOT WORK for the selectedPlayer on any Factory. The structure limits will be increased if necessary</p>
+				<p>void resetStructTargets()</p>
+				<p>reset the structure preferences</p>
+				<p>void resetDroidTargets()</p>
+				<p>reset the unit preferences</p>
+				<p>void setStructTarPref(int type)</p>
+				<p>set a prefered structure target type, repeated calls combine the effect</p>
+				<p>void setStructTarIgnore(int type)</p>
+				<p>set structure target ignore types</p>
+				<p>void setDroidTarPref(int type)</p>
+				<p>set prefered unit target types</p>
+				<p>void setDroidTarIgnore(int type)</p>
+				<p>set unit target ignore types</p>
+				<p>STRUCTURE structTargetInArea(int targetPlayer, int visibleToPlayer, int x1, int y1, int x2, int y2)</p>
+				<p>get a structure target in an area using the preferences</p>
+				<p>targetPlayer is the player to choose targets from, visibleToPlayer specifies the</p>
+				<p>player that has to be able to see the target or -1 for no visibility check</p>
+				<p>STRUCTURE structTargetOnMap(int targetPlayer, int visibleToPlayer)</p>
+				<p>get a structure target on the map using the preferences</p>
+				<p>DROID droidTargetInArea(int targetPlayer, int visibleToPlayer, int x1, int y1, int x2, int y2)</p>
+				<p>get a unit target in an area using the preferences</p>
+				<p>DROID droidTargetOnMap(int targetPlayer, int visibleToPlayer)</p>
+				<p>get a unit target on the map using the preferences</p>
+				<p>BASEOBJ targetInCluster(int clusterID, int visibleToPlayer)</p>
+				<p>get a target from a cluster using the preferences</p>
+				<p>void fireWeaponAtObj(WEAPON weap, BASEOBJ target)</p>
+				<p>fire a single shot of the weapon weap at the object target</p>
+				<p>void fireWeaponAtLoc(WEAPON weap, int x, int y)</p>
+				<p>fire a single shot of the weapon weap at the location x,y</p>
+				<p>bool isStructureAvailable(STRUCTURESTAt stat, int player)</p>
+				<p>PC ONLY FOR NOW. returns true if structure is available to player, false otherwise.</p>
+				<p>bool structureComplete(STRUCTURE struct)</p>
+				<p>PC ONLY FOR NOW. returns true if the structure is completely built.</p>
+				<p>int getDroidCount(int player)</p>
+				<p>returns the number of units on the current map for the specified player</p>
+				<p>setDroidKills(DROID droid, int kills)</p>
+				<p>sets the number of kills for a unit. currently the level boudaries are:</p>
+				<p>4, 8, 16, 32, 64, 128, 256, 128</p>
+				<p>resetPlayerVisibility(int player)</p>
+				<p>reset the visibility for a player</p>
+				<p>void resetLimboMission(void)</p>
+				<p>This can only be called mid Limbo Expand mission - the units that were stored in the</p>
+				<p>mission list at the start of the mission are added back into the map, and the mission</p>
+				<p>type is changed to an Expand Mission.</p>
+				<p>int killDroidsInArea(int x1, int y1, int x2, int y2, int player)</p>
+				<p>Kills all the player's units within the area defined. Returns how many it wiped out.</p>
+				<p>traceOn()-- view the script debug info to stdout.</p>
+				<p>traceOff()</p>
+				<p>bool applyLimitSet (void)</p>
+				<p>Apply the limits set in the structure limits screen.</p>
+				<p>bool isHumanPlayer (int pl)</p>
+				<p>Returns true is pl is human.</p>
+				<p>void offerAlliance (int p1, int p2)</p>
+				<p>Make p1 offer p2 an alliance</p>
+				<p>bool allianceExistsBetween (int p1 , int p2)</p>
+				<p>True if alliance exists between p1 and p2.</p>
+				<p>void skDoResearch ( STRUCTURE str , int pl , int bias)</p>
+				<p>Make player pl do some research with structure str.</p>
+				<p>BASEOBJECT skLocateEnemy( int pl)</p>
+				<p>Return a baseobject of interest belonging to player pl.</p>
+				<p>bool skCanBuildTemplate ( int pl, STRUCTURE str, TEMPLATE tem)</p>
+				<p>True when player pl can build design tem with structure str.</p>
+				<p>bool skVtolEnableCheck( int pl)</p>
+				<p>True when player pl is actively using vtols.</p>
+				<p>int skGetFactoryCapacity( STRUCTURE str)</p>
+				<p>Return the capacity of factory str.</p>
+				<p>void skDifficultyModifier( int pl)</p>
+				<p>Apply the frontend slider settings to player pl.</p>
+				<p>bool skDefenseLocation (ref int x , ref int y , STRUCTURESTAT defenceStat,</p>
+				<p>STRUCTURESTAT wallstat, DROID unit, int player)</p>
+				<p>Given a starting x and y, make unit 'unit' belonging to 'player' build either a 'defenceStat' or a row of 'wallStat's. returns</p>
+				<p>Modified x and y's.</p>
+				<p>void skFireLassat (int pl, BASEOBJECT obj)</p>
+				<p>Fire lassat of player pl's at object obj.</p>
+				<p>void	setEventTrigger(EVENt event, TRIGGER newTrigger)</p>
+				<p>Assigns 'newTrigger' as new trigger for event 'event'.</p>
+				<p>void dropBeacon (string msg, int forPlayer, int, fromPlayer,</p>
+				<p>int x, int y, int z)</p>
+				<p>Put a flashing beacon on the map for player 'forPlayer' on position x/y. Unless removed manually the beacon is removed automatically from the map after a timeout.</p>
+				<p>void removeBeacon (int forPlayer, int fromPlayer)</p>
+				<p>Remove a previously placed beacon from the map.</p>
+				<p>int max(int value1, int value2)</p>
+				<p>int min(int value1, int value2)</p>
+				<p>Returns maximum/minimum of two integer values.</p>
+				<p>float fmax(float value1, float value2)</p>
+				<p>float fmin(float value1, float value2)</p>
+				<p>Returns maximum/minimum of two float values.</p>
+				<p>bool fogTileInRange(ref int tileX, ref int tileY, int x, int y,</p>
+				<p>int rangeX, int rangeY, int searchRange, int player, int threatRange)</p>
+				<p>Fills tileX/tileY with coordinates of the unrevealed location in range with starting location x/y, range 'searchRange' and closest to location x/y. If 'searchRange' is -1, then entire map is being searched. 'Player' is the player who is looking for an unrevealed map location. If 'threatRange' != -1 then also checks for enemy presence. Locations with enemy presence are ignored then.</p>
+				<p>Returns TRUE if any locations satisfying the search conditions were found, returns FALSE otherwise.</p>
+				<p>bool mapRevealedInRange(int x, int y, int range, int player)</p>
+				<p>Returns TRUE if there are no unrevealed tiles left in locations for player 'player' with center x/y and radius 'range'. All coordinates are in world units.</p>
+				<p>bool pursueResearch(STRUCTURE resFac, int player, RESEARCH targetResearch)</p>
+				<p>Makes 'resFac' start researching the first prerequisite necessary for 'targetResearch'. If no prerequisites are left, then 'targetResearch' will be researched. Must be called again for the next prerequisite. 'resFac' must be a valid research facility.</p>
+				<p>Returns TRUE if started researching, FALSe otherwise.</p>
+				<p>int numResearchLeft(int player, RESEARCH research)</p>
+				<p>Returns number of reserach topics that are left for player 'player' to research in order for a certain research 'research' to become available.</p>
+				<p>bool researchFinished(RESEARCh research, int player)</p>
+				<p>Returns TRUE if 'player' has researched 'research'.</p>
+				<p>bool researchStarted(RESEARCH research, int player)</p>
+				<p>Returns TRUE if 'research' is currently being researched by 'player'.</p>
+				<p>bool threatInRange(int player, int rangeX, int rangeY, int range, bool includeVTOLs)</p>
+				<p>Returns TRUE if there's a danger for 'player' at location x/y within radius 'range'. If includeVTOLs is set to FALSE then VTOLs are ignored. All coordinates are in worls units. If 'range' == -1 then entire map will be searched.</p>
+				<p>int numEnemyWeapDroidsInRange(int lookingPlayer, int x, int y,</p>
+				<p>int range, bool includeVTOLs)</p>
+				<p>int numEnemyWeapStructsInRange(int lookingPlayer, int x, int y, int range, bool onlyFinishedStructs)</p>
+				<p>int numEnemyWeapObjInRange(int lookingPlayer, int x, int y,</p>
+				<p>int range, bool includeVTOLs, bool onlyFinishedStructs)</p>
+				<p>Return total number of enemy military objects (either structures, droids or both) at location x/y and within 'range'. Units belonging to 'lookingPlayer' and his allies are ignored.</p>
+				<p>If 'includeVTOLs' is set to FALSE, then VTOLs are ignored.</p>
+				<p>If 'onlyFinishedStructs' is set to TRUE, then unfinished structures will be ignored.</p>
+				<p>int numFriendlyWeapDroidsInRange(int lookingPlayer, int x, int y,</p>
+				<p>int range, bool includeVTOLs)</p>
+				<p>int numFriendlyWeapStructsInRange(int lookingPlayer, int x, int y, int range, bool onlyFinishedStructs)</p>
+				<p>int numFriendlyWeapObjInRange(int lookingPlayer, int x, int y,</p>
+				<p>int range, bool includeVTOLs, bool onlyFinishedStructs)</p>
+				<p>Return total number of friendly military objects (either structures, droids or both) at location x/y and within 'range'. Units belonging to enemies of 'lookingPlayer' are ignored.</p>
+				<p>If 'includeVTOLs' is set to FALSE, then VTOLs are ignored.</p>
+				<p>If 'onlyFinishedStructs' is set to TRUE, then unfinished structures will be ignored.</p>
+				<p>int numPlayerWeapDroidsInRange(int targetPlayer, int lookingPlayer,</p>
+				<p>int x, int y, int range, bool includeVTOLs)</p>
+				<p>int numPlayerWeapStructsInRange(int targetPlayer, int lookingPlayer,</p>
+				<p>int x, int y, int range, bool onlyFinishedStructs)</p>
+				<p>int numPlayerWeapObjInRange(int targetPlayer, int lookingPlayer,</p>
+				<p>int x, int y, int range, bool includeVTOLs, bool onlyFinishedStructs)</p>
+				<p>Returns total number of targetPlayer's military objects (either structures, droids or both) at location x/y and within 'range' that are visible visible by 'lookingPlayer'.</p>
+				<p>If 'includeVTOLs' is set to FALSE, then VTOLs are ignored.</p>
+				<p>If 'onlyFinishedStructs' is set to TRUE, then unfinished structures will be ignored.</p>
+				<p>int numEnemyObjInRange(int lookingPlayer, int, x, int y, int range, bool includeVTOLs, bool onlyFinishedStructs)</p>
+				<p>Returns total number of enemy objects (structures and units) at location x/y within range 'range' that are visible to 'lookingPlayer'.</p>
+				<p>If 'includeVTOLs' is set to FALSE, then VTOLs are ignored.</p>
+				<p>If 'onlyFinishedStructs' is set to TRUE, then unfinished structures will be ignored.</p>
+				<p>int numAAinRange(int targetPlayer, int lookingPlayer,</p>
+				<p>int x, int y, int range)</p>
+				<p>Returns number of targetPlayer's AA defences at location x/y within range 'range' that are visible to 'lookingPlayer'.</p>
+				<p>bool objHasWeapon(BASEOBJ object)</p>
+				<p>Returns TRUE if 'object' has a weapon.</p>
+				<p>bool objectHasIndirectWeapon(BASEOBj object)</p>
+				<p>Returns TRUE if 'object' has an indirect weapon.</p>
+				<p>bool alliancesLocked()</p>
+				<p>Returns TRUE if the game doesn't allow to break alliances (ie when team mode is on).</p>
+				<p>void selectDroid(DROID droid, bool select)</p>
+				<p>Depending on value of 'select' selects or deselects droid 'droid'.</p>
+				<p>void selectGroup(GROUP group, bool select)</p>
+				<p>Depending on value of 'select' selects or deselects all droids belonging to group 'group'.</p>
+				<p>int modulo(int divident, int divisor)</p>
+				<p>Returns result of calculation (divident modulo divisor).</p>
+				<p>float toPow(float base, float exponent)</p>
+				<p>Returns floating point result of calculation base^exponent.</p>
+				<p>float exp(float exponent)</p>
+				<p>Exponential function. Returns the result of e^exponent.</p>
+				<p>float sqrt(float argument)</p>
+				<p>Square root function. Returns square root of the argument: &radic;argument.</p>
+				<p>string getPlayerName(int player)</p>
+				<p>Returns in-game name of 'player'.</p>
+				<p>bool setPlayerName(int player, string newName)</p>
+				<p>Set player's name to 'newName'. Returns TRUe on success.</p>
+				<p>void console(string message)</p>
+				<p>Outputs 'message' to game console.</p>
+				<p>void msg(string message, int playerFrom, int playerTo)</p>
+				<p>Sends a chat message from 'playerFrom' to 'playerTo'.</p>
+				<p>bool strcmp(string string1, string string2)</p>
+				<p>Returns TRUE if string1 and string2 are identical. Comparison is case-sensitive.</p>
+				<p>int calcDroidPower(DROID droid)</p>
+				<p>Returns cost of the 'droid'.</p>
+				<p>boolisVtol(DROID droid)</p>
+				<p>Returns TRUE if 'droid' is a vtol.</p>
+				<p>int enemyWeapObjCostInRange(int lookingPlayer, int rangeX, int rangeY, int range, bool includeVtols, bool onlyFinishedStructs)</p>
+				<p>Returns total cost (in power) of enemy objects with a weapon in a certain area.</p>
+				<p>If 'includeVTOLs' is set to FALSE, then VTOLs are ignored.</p>
+				<p>If 'onlyFinishedStructs' is set to TRUE, then unfinished structures will be ignored.</p>
+				<p>int friendlyWeapObjCostInRange(int lookingPlayer, int rangeX, int rangeY, int range, bool includeVtols, bool onlyFinishedStructs)</p>
+				<p>Returns total cost (in power) of friendly objects with a weapon in a certain area.</p>
+				<p>If 'includeVTOLs' is set to FALSE, then VTOLs are ignored.</p>
+				<p>If 'onlyFinishedStructs' is set to TRUE, then unfinished structures will be ignored.</p>
+			<div class="rt">
+				<p><a href="#top">back to top</a></p>
+			</div>
+			<hr/>
+
+			<h3 id="debugging_script_functions">Debugging script functions</h3>
+			<p>The following functions can be used to debug Warzone 2100 AI scripts.</p>
+			<dl>
+				<dt><code>void dbgMsgOn(int player, bool on)</code></dt>
+				<dd>Depending on the value of <code>on</code> turns on/off debug output of dbg() and ASSERT() function which are listed below.</dd>
+				<dt><code>void dbg(string debugMessage, int player)</code></dt>
+				<dd>Outputs <code>debugMessage</code> to the game console if debug output for player <code>player</code> was previously turned on with dbgMsgOn().</dd>
+				<dt>void ASSERT(bool assertExpression, string assertMessage, int player)</dt>
+				<dd>If 'assertExpression' evaluates to FALSE, then 'assertMessage' is output to the game console. Must turn on debug output for 'player' with dbgMsgOn() first. <span class="note">NOTE: In debug game builds failed assertion will cause game assertion.</span></dd>
+				<dt>void debug(string debugText)</dt>
+				<dd>Writes 'debugText' to the standart output (usually a log file).</dd>
+				<dt>void printCallStack()</dt>
+				<dd>Outputs script call stack to the standard log file.</dd>
+			</dl>
+			<div class="rt">
+				<p><a href="#top">back to top</a></p>
+			</div>
+			<hr/>
+
+			<h3 id="script_function_constants">Script function constants</h3>
+			<p>These values are used to represent numbers that are constant throughout the game.</p>
+			<p>NULLOBJECT- used to check that a BASEOBJECT/FEATURE/STRUCTURE has been assigned by a function</p>
+			<p>NULLTEMPLATE- used to check that a TEMPLATE has been assigned by a function</p>
+			<p>NULLSTAT- used to check that a BASESTAT has been assigned by a function</p>
+			<p>BARBARIAN1- this can used to represent enemy1 (PC:player 6, PSX:player2)</p>
+			<p>BARBARIAN2- this can used to represent enemy2 (PC:player 7, PSX:player3)</p>
+			<p>BUTTONID - these values are used when a particular reticule button needs to be identified</p>
+			<p>OPTIONs	- NOTE - this currently references the command button</p>
+			<p>CANCEL</p>
+			<p>BUILD</p>
+			<p>MANUFACTURE</p>
+			<p>RESEARCH</p>
+			<p>INTELMAP</p>
+			<p>DESIGN</p>
+			<p>COMMAND</p>
+			<p>- When flashing an icon - with scrFlashOn() scrFlashOff()</p>
+			<p>you can additional use</p>
+			<p>IDRET_OPTIONS</p>
+			<p>IDRET_CANCEl</p>
+			<p>IDRET_BUILD</p>
+			<p>IDRET_MANUFACTURE</p>
+			<p>IDRET_RESEARCH</p>
+			<p>IDRET_INTEL_MAP</p>
+			<p>IDRET_DESIGN</p>
+			<p>IDRET_COMMAND</p>
+			<p>IDDES_TEMPLSTART</p>
+			<p>IDDES_SYSTEMBUTTON</p>
+			<p>IDDES_BODYBUTTON</p>
+			<p>IDDES_PROPBUTTON</p>
+			<p>MESSAGETYPE - these values are used when a type of message needs to be identified</p>
+			<p>RES_MSG</p>
+			<p>CAMP_MSG</p>
+			<p>MISS_MSG</p>
+			<p>PROX_MSG</p>
+			<p>Multiplayer alliance types:</p>
+			<p>NO_ALLIANCES- alliances are disallowed</p>
+			<p>ALLIANCES- alliances are allowed</p>
+			<p>ALLIANCES_TEAMS- team mode, locked alliances</p>
+			<p>MISSIONTYPE - these values are used when a type of mission needs to be identified</p>
+			<p>CAMP_START	- used for the starting point of a campaign</p>
+			<p>CAMP_EXPAND	- used to expand a current campaign map</p>
+			<p>OFF_KEEP	- used to load up an off world map, but keeping access</p>
+			<p>to factories and research facilities back at home base</p>
+			<p>OFF_CLEAR	- used to load up an off world map, but having no access to home base</p>
+			<p>LZ_COMPROMISED_TIME- value to set the reinforcement time with to display '--:--'</p>
+			<p>when the Transporter is unable to land</p>
+			<p>Droid Orders:</p>
+			<p>DORDER_NONE- no order assigned</p>
+			<p>DORDER_STOP- stop current order</p>
+			<p>DORDER_RETREAT- retreat</p>
+			<p>DORDER_DESTRUCT- self destruct</p>
+			<p>DORDER_RTR- return to repair</p>
+			<p>DORDER_RTB- return to base</p>
+			<p>DORDER_RUN- run away for a bit (moral failure)</p>
+			<p>DORDER_MOVE- move to location</p>
+			<p>DORDER_ATTACK- attack the object</p>
+			<p>DORDER_HELPBUILD- help construct the object</p>
+			<p>DORDER_DEMOLISH- demolish structure</p>
+			<p>DORDER_REPAIR- repair structure</p>
+			<p>DORDER_OBSERVE- (sensor units) keep a target in sensor range</p>
+			<p>DORDER_EMBARK- get onto a transporter</p>
+			<p>DORDER_FIRESUPPORT- follow this sensor unit and attack anything it DORDER_OBSERVE's</p>
+			<p>DORDER_SCOUT- same as move, but stop if enemy units are encountered.</p>
+			<p>Unit secondary orders:</p>
+			<p>DSO_ATTACK_RANGE</p>
+			<p>DSO_REPAIR_LEVEL</p>
+			<p>DSO_ATTACK_LEVEL</p>
+			<p>DSO_RECYCLE</p>
+			<p>DSO_PATROL- patrol between current pos and next move target</p>
+			<p>DSO_HALTTYPE- what to do when stopped</p>
+			<p>DSO_RETURN_TO_LOC- return to various locations</p>
+			<p>Unit secondary states:</p>
+			<p>DSS_ARANGE_SHORT</p>
+			<p>DSS_ARANGE_LONG</p>
+			<p>DSS_ARANGE_DEFAULT</p>
+			<p>DSS_REPLEV_LOW- Medium Damage Taken</p>
+			<p>DSS_REPLEV_HIGH- Heavy Damage Taken</p>
+			<p>DSS_REPLEV_NEVER- Never Repair</p>
+			<p>DSS_ALEV_ALWAYS</p>
+			<p>DSS_ALEV_ATTACKED</p>
+			<p>DSS_ALEV_NEVER</p>
+			<p>DSS_PATROL_SET(0 to clear)</p>
+			<p>DSS_HALT_HOLD</p>
+			<p>DSS_HALT_GUARD</p>
+			<p>DSS_HALT_PERSUE</p>
+			<p>DSS_RECYCLE_SET(0 to clear)</p>
+			<p>DSS_RTL_REPAIR(0 to clear)</p>
+			<p>DSS_RTL_BASE(0 to clear)</p>
+			<p>DSS_RTL_TRANSPORT(0 to clear)</p>
+			<p>Button ID's:</p>
+			<p>IDRET_OPTIONS- option button</p>
+			<p>IDRET_BUILD- build button</p>
+			<p>IDRET_MANUFACTURE- manufacture button</p>
+			<p>IDRET_RESEARCH- research button</p>
+			<p>IDRET_INTEL_MAP- intelligence map button</p>
+			<p>IDRET_DESIGN- design units button</p>
+			<p>IDRET_CANCEL- central cancel button</p>
+			<p>Unit types:</p>
+			<p>DROID_WEAPON- Weapon unit</p>
+			<p>DROID_SENSOR- Sensor unit</p>
+			<p>DROID_ECM- ECM unit</p>
+			<p>DROID_CONSTRUCt	- Constructor unit</p>
+			<p>DROID_PERSON- person</p>
+			<p>DROID_CYBORG- cyborg/super cyborg</p>
+			<p>DROID_TRANSPORTER- guess what this is!</p>
+			<p>DROID_COMMAND- Command unit</p>
+			<p>DROID_REPAIR- Repair Unit</p>
+			<p>DROID_CYBORG_CONSTRUCT- Cyborg engineer</p>
+			<p>DROID_CYBORG_REPAIR- Cyborg mechanic</p>
+			<p>Structure types:</p>
+			<p>REF_HQ</p>
+			<p>REF_FACTORY</p>
+			<p>REF_FACTORY_MODULe</p>
+			<p>REF_POWER_GEN</p>
+			<p>REF_POWER_MODULE</p>
+			<p>REF_RESOURCE_EXTRACTOR</p>
+			<p>REF_DEFENSE</p>
+			<p>REF_WALL</p>
+			<p>REF_WALLCORNER- corner wall - no gun</p>
+			<p>REF_RESEARCh</p>
+			<p>REF_RESEARCH_MODULe</p>
+			<p>REF_REPAIR_FACILITY</p>
+			<p>REF_COMMAND_CONTROL- control centre for command units</p>
+			<p>REF_CYBORG_FACTORY</p>
+			<p>REF_VTOL_FACTORY</p>
+			<p>REF_REARM_PAD</p>
+			<p>REF_MISSILE_SILO</p>
+			<p>Multiplayer Game Types:</p>
+			<p>SKIRMISH</p>
+			<p>DMATCH</p>
+			<p>CAMPAIGN</p>
+			<p>TEAMPLAY</p>
+			<p>MultiPlayer Base Configurtations:</p>
+			<p>CAMP_CLEAN- build units only</p>
+			<p>CAMP_BASE- small base</p>
+			<p>CAMP_WALLS- defensive base</p>
+			<p>Cursor Mode (possible values of cursorType):</p>
+			<p>IMAGE_CURSOR_SELECT</p>
+			<p>IMAGE_CURSOR_ATTACK</p>
+			<p>IMAGE_CURSOR_MOVE</p>
+			<p>IMAGE_CURSOR_JAM</p>
+			<p>IMAGE_CURSOR_PICKUP</p>
+			<p>IMAGE_CURSOR_DEFAULT</p>
+			<p>IMAGE_CURSOR_SEEKREPAIR</p>
+			<p>IMAGE_CURSOR_BUILD</p>
+			<p>IMAGE_CURSOR_GUARD</p>
+			<p>IMAGE_CURSOR_BRIDGE</p>
+			<p>IMAGE_CURSOR_ATTACH</p>
+			<p>IMAGE_CURSOR_LOCKON</p>
+			<p>IMAGE_CURSOR_FIX</p>
+			<p>IMAGE_CURSOR_EMBARK</p>
+			<p>Game mode - possible values for intMode external variable</p>
+			<p>int_NORMAL- Standard mode (just the reticule)</p>
+			<p>int_OPTION- Option screen</p>
+			<p>int_EDITSTAT- Stat screen up for placing objects</p>
+			<p>int_EDIT- Edit mode</p>
+			<p>int_OBJECT- Object screen</p>
+			<p>int_STAT- Object screen with stat screen</p>
+			<p>int_CMDORDER- Object screen with command units and orders screen</p>
+			<p>int_DESIGN- Design screen</p>
+			<p>int_INTELMAP- Intelligence Map</p>
+			<p>int_ORDER</p>
+			<p>int_INGAMEOP- in game options.</p>
+			<p>int_TRANSPORTER- Loading/unloading a Transporter</p>
+			<p>int_MISSIONRES- Results of a mission display.</p>
+			<p>int_MULTIMENU- multiplayer only, player stats etc...</p>
+			<p>Possible options for getGameStatus():</p>
+			<p>STATUS_ReticuleIsOpen- returns true is the reticule is open</p>
+			<p>STATUS_BattleMapViewEnabled- returns true if we are in battlemap mode</p>
+			<p>Possible values for targetedObjectType:</p>
+			<p>MT_TERRAIN</p>
+			<p>MT_RESOURCE</p>
+			<p>MT_BLOCKING</p>
+			<p>MT_RIVER</p>
+			<p>MT_TRENCH</p>
+			<p>MT_OWNSTRDAM</p>
+			<p>MT_OWNSTROK</p>
+			<p>MT_OWNSTRINCOMP</p>
+			<p>MT_REPAIR</p>
+			<p>MT_REPAIRDAM</p>
+			<p>MT_ENEMYSTR</p>
+			<p>MT_TRANDROID</p>
+			<p>MT_OWNDROID</p>
+			<p>MT_OWNDROIDDAM</p>
+			<p>MT_ENEMYDROID</p>
+			<p>MT_COMMAND</p>
+			<p>MT_ARTIFACT</p>
+			<p>MT_DAMFEATURE</p>
+			<p>MT_SENSOR</p>
+			<p>MT_WRECKFEATURE</p>
+			<p>Structure Target preference types:</p>
+			<p>ST_HQ</p>
+			<p>ST_FACTORY</p>
+			<p>ST_POWER_GEN</p>
+			<p>ST_RESOURCE_EXTRACTOR</p>
+			<p>ST_WALL</p>
+			<p>ST_RESEARCH</p>
+			<p>ST_REPAIR_FACILITY</p>
+			<p>ST_COMMAND_CONTROL</p>
+			<p>ST_CYBORG_FACTORY</p>
+			<p>ST_VTOL_FACTORY</p>
+			<p>ST_REARM_PAD</p>
+			<p>ST_SENSOR</p>
+			<p>ST_DEF_GROUND</p>
+			<p>ST_DEF_AIR</p>
+			<p>ST_DEF_IDF</p>
+			<p>ST_DEF_ALL- ground/air/idf structures</p>
+			<p>Unit target preference types:</p>
+			<p>turret types:</p>
+			<p>DT_COMMAND</p>
+			<p>DT_SENSOR</p>
+			<p>DT_CONSTRUCT</p>
+			<p>DT_REPAIR</p>
+			<p>DT_WEAP_GROUND</p>
+			<p>DT_WEAP_AIR</p>
+			<p>DT_WEAP_IDF</p>
+			<p>DT_WEAP_ALL- ground/air/idf units</p>
+			<p>Body types:</p>
+			<p>DT_LIGHT</p>
+			<p>DT_MEDIUM</p>
+			<p>DT_HEAVY</p>
+			<p>DT_SUPER_HEAVy	- transporter only</p>
+			<p>Propulsion:</p>
+			<p>DT_TRACK</p>
+			<p>DT_HTRACK</p>
+			<p>DT_WHEEL</p>
+			<p>DT_LEGS</p>
+			<p>DT_GROUND</p>
+			<p>DT_VTOL</p>
+			<p>DT_HOVER</p>
+			<p>Group types:</p>
+			<p>GT_NORMAL</p>
+			<p>GT_COMMAND</p>
+			<p>GT_TRANSPORTER</p>
+			<div class="rt">
+				<p><a href="#top">back to top</a></p>
+			</div>
+			<hr/>
+
+			<h3 id="script_function_externals">Script function externals</h3>
+			<p>These represent variables that are defined in the game which can be accessed in the scripts. It will only be possible to set the value that is held for some of the variables.</p>
+			<p>mapWidth- (get) - field to hold the width of the map</p>
+			<p>mapHeight- (get) - field to hold the height of the map</p>
+			<p>gameInitialised- (get) flag to specify when all initialisation has been performed for the game - use it in place of a bool ie can be considered to equal true or false</p>
+			<p>selectedPlayer- (get) field to hold the currently selected player</p>
+			<p>gameTime- (get) the current time in the game (in 1/10 sec)</p>
+			<p>multiPlayerGameType	- (get) the type of multiplayer game underway.</p>
+			<p>multiPlayerMaxPlayers	- max number of human players in this game.(see constants for return values)</p>
+			<p>multiPlayerBaseType	- campaign game base type. (see constants for return values)</p>
+			<p>multiPlayerAlliancesType- (get) alliance type (eg NO_ALLIANCES etc, see	<a href="#script_function_constants">Script function constants</a>)</p>
+			<p>scrollX- (get/set) field to hold the starting x coordinate where the player can scroll</p>
+			<p>scrollY- (get/set) field to hold the starting y coordinate where the player can scroll</p>
+			<p>scrollWidth- (get/set) field to hold the width the player can scroll</p>
+			<p>scrollHeight- (get/set) field to hold the height the player can scroll</p>
+			<p>cursorType- (get) - Gets the current mode that the cursor is in (e.g. IMAGE_CURSOR_BUILD ... see	<a href="#script_function_constants">Script function constants</a>)</p>
+			<p>intMode- (get) - Get the current game mode (e.g. int_DESIGN when the design screen is active) ... see	<a href="#script_function_constants">Script function constants</a>)</p>
+			<p>targetedObjectType- (get) - The type of the object currently under the cursor (one of MT_... see	<a href="#script_function_constants">Script function constants</a>)</p>
+			<p>boolextraVictoryFlag- use to mark additional victory conditions have been met - reset to FALSE at start of each level</p>
+			<p>boolextraFailFlag- use to mark additional failure conditions have been met - reset to FALSE at start of each level</p>
+			<p>GameLevel(get/set) - set single player difficulty.</p>
+			<div class="rt">
+				<p><a href="#top">back to top</a></p>
+			</div>
+			<hr/>
+
+			<h3 id="script_function_callbacks">Script function callbacks</h3>
+			<p>These are used in the place of a trigger and are for events that are to be called at specific times in the game. They will cause the event they are associated with to be called every time unless the trigger for the event is set to inactive.</p>
+			<dl>
+				<dt><code>CALL_GAMEINIT</code></dt>
+				<dd>this is triggered when the game has initialised</dd>
+				<dt><code>CALL_DROIDDESIGNED</code></dt>
+				<dd>this is triggered when the player saves a template design</dd>
+				<dt><code>CALL_DROIDBUILT</code></dt>
+				<dd>this is triggered when a unit has been built via a factory</dd>
+				<dt><code>CALL_POWERGEN_BUILT</code></dt>
+				<dd>this is triggered when a Power generatot has been built</dd>
+				<dt><code>CALL_RESEX_BUILT</code></dt>
+				<dd>this is triggered when a Resource Extractor has been built</dd>
+				<dt><code>CALL_RESEARCH_BUILT</code></dt>
+				<dd>this is triggered when a Research Facility has been built</dd>
+				<dt><code>CALL_FACTORY_BUILT</code></dt>
+				<dd>this is triggered when a Factory has been built</dd>
+				<dt><code>CALL_MISSION_START</code></dt>
+				<dd>this is triggered when CTRL + 'M' is pressed so that the script can start a mission</dd>
+				<dt><code>CALL_MISSION_END</code></dt>
+				<dd>this is triggered when CTRL + 'B' is pressed so that the script can end a mission</dd>
+				<dt><code>CALL_VIDEO_QUIT</code></dt>
+				<dd>this is triggered when the CURRENT video sequence is over, either end of anim or when 'ESC' has been pressed</dd>
+				<dt><code>CALL_LAUNCH_TRANSPORTER</code></dt>
+				<dd>this is triggered when the 'Launch' button is pressed on the Transporter interface</dd>
+				<dt><code>CALL_START_NEXT_LEVEL</code></dt>
+				<dd>this is triggered when a new level is desired</dd>
+				<dt><code>CALL_TRANSPORTER_REINFORCE</code></dt>
+				<dd>this is triggered when a transporter carrying reinforcements for player 0 enters the map</dd>
+				<dt><code>CALL_MISSION_TIME</code></dt>
+				<dd>this is triggered when the time specified by setMissionTime() has elapsed</dd>
+				<dt><code>CALL_ELECTRONIC_TAKEOVER</code></dt>
+				<dd>triggered when a unit or a structure for the selectedPlayer are taken over using Electronic weapons</dd>
+			</dl>
+			<h4 id="callbacks_with_parameters">Callbacks with parameters</h4>
+			<dl>
+				<dt>CALL_RESEARCHCOMPLETED, ref RESEARCHSTAT, ref STRUCTURE</dt>
+				<dd>This is triggered when a research topic is complete - major or minor.. RESEARCHSTAt is the research topic that was complete, STRUCTURE is research facility that has completed research.</dd>
+				<dt>CALL_NEWDROID, player, ref DROID,ref STRUCTURE</dt>
+				<dd>triggered when a unit for player is built by a factory. DROID is the unit that was built. structure is the factory that built it, dont assume that the factory is still there!!</dd>
+				<dt>CALL_STRUCT_ATTACKED, player, ref STRUCTURE, ref BASEOBJ</dt>
+				<dd>triggered when a structure for player is attacked. STRUCTURE is the attacked structure,. BASEOBJ is the unit that attacked the structure (could be NULLOBJECT)</dd>
+				<dt>CALL_DROID_ATTACKED, player, ref DROID, ref BASEOBJ</dt>
+				<dd>triggered when a unit for player is attacked. DROID is the attacked unit,. BASEOBJ is the unit that attacked (could be NULLOBJECT)</dd>
+				<dt>CALL_ATTACKED, player, ref BASEOBJ, ref BASEOBJ</dt>
+				<dd>triggered when a structure or unit for player is attacked. BASEOBJ is the attacked unit,. BASEOBJ is the unit that attacked (could be NULLOBJECT)</dd>
+				<dt>CALL_TRANSPORTER_OFFMAP, player</dt>
+				<dd>triggered when a transporter for player exits the map.</dd>
+				<dt>CALL_TRANSPORTER_LANDED, GROUP, player</dt>
+				<dd>triggered when transporter for player lands; units on transporter are unloaded. into the given GROUP.</dd>
+			</dl>
+			<h4 id="tutorial_callbacks">Tutorial Callbacks</h4>
+			<dl>
+				<dt>CALL_BUILDLIST</dt>
+				<dd>Build structures interface up</dd>
+				<dt>CALL_BUILDGRID</dt>
+				<dd>Place structure cursor up</dd>
+				<dt>CALL_RESEARCHLIST</dt>
+				<dd>Choose research interface up</dd>
+				<dt>CALL_MANURUN</dt>
+				<dd>Number of units to manufacture has changed</dd>
+				<dt>CALL_MANULIST</dt>
+				<dd>Choose manufacturing interface up</dd>
+				<dt>CALL_BUTTON_PRESSED, buttonID</dt>
+				<dd>triggered when an interface button with id buttonID is pressed</dd>
+				<dt>CALL_DESIGN_QUIT</dt>
+				<dd>triggered when the design screen is closed</dd>
+				<dt>CALL_OBJ_DESTROYED, int player, ref BASEOBJ object</dt>
+				<dd>triggered when either a unit or a structure for player is destroyed</dd>
+				<dt>CALL_DROID_DESTROYED, int player, ref DROID droid</dt>
+				<dd>triggered when a unit for player is destroyed</dd>
+				<dt>CALL_STRUCT_DESTROYED, int player, ref STRUCTURE structure</dt>
+				<dd>triggered when a structure for player is destroyed</dd>
+				<dt>CALL_FEATURE_DESTROYED, ref FEATURe feature</dt>
+				<dd>triggered when either a unit or a structure for player is destroyed</dd>
+				<dt>CALL_OBJ_SEEN, int player, ref BASEOBj object, ref BASEOBJ viewer</dt>
+				<dd>triggered when either a unit or a structure is seen by a unit belonging to player.. object is the thing that was seen, viewer is the thing that saw it (may be NULLOBJECT).</dd>
+				<dt>CALL_DROID_SEEN, int player, ref BASEOBJ object, ref BASEOBJ viewer</dt>
+				<dd>triggered when a unit is seen by a unit belonging to player.. object is the thing that was seen, viewer is the thing that saw it (may be NULLOBJECT).</dd>
+				<dt>CALL_STRUCT_SEEN, int player, ref BASEOBJ object, ref BASEOBJ viewer</dt>
+				<dd>triggered when a structure is seen by a unit belonging to player.. object is the thing that was seen, viewer is the thing that saw it (may be NULLOBJECT).</dd>
+				<dt>CALL_NO_REINFORCEMENTS_LEFT</dt>
+				<dd>called when the player has transferred all reinforcements from one level to the next</dd>
+			</dl>
+			<h4 id="tutorial_callbacks_tutonly">Tutorial callbacks (tutorial only)</h4>
+			<dl>
+				<dt><code>CALL_DESIGN_WEAPON</code></dt>
+				<dd>a weapon button pressed</dd>
+				<dt><code>CALL_DESIGN_SYSTEM</code></dt>
+				<dd>a system (constructor/ecm/sensor/etc) button pressed</dd>
+				<dt><code>CALL_DESIGN_COMMAND</code></dt>
+				<dd>a command droid turret pressed</dd>
+				<dt><code>CALL_DESIGN_BODY</code></dt>
+				<dd>a body selected</dd>
+				<dt><code>CALL_DESIGN_PROPULSION</code></dt>
+				<dd>a propulsion selected</dd>
+				<dt><code>CALL_ALL_ONSCREEN_DROIDS_SELECTED</code></dt>
+				<dd>does exactly when it says on the box</dd>
+				<dt><code>CALL_UNITTAKEOVER, ref unit</code></dt>
+				<dd>Unit has been taken over by nexus link</dd>
+				<dt><code>CALL_PLAYERLEFT, ref int player</code></dt>
+				<dd>Player has left the multiplayer game.</dd>
+				<dt><code>CALL_ALLIANCEOFFER, ref int one, ref int two</code></dt>
+				<dd>One offers two an alliance.</dd>
+			</dl>
+			<div class="rt">
+				<p><a href="#top">back to top</a></p>
+			</div>
+			<hr/>
+
+			<p>Warzone2100. Script language notes.</p>
+			<p>Original Author: Pumpkin Studios. 1999</p>
+			<p>Last Author: $Author$</p>
+			<p>Last update: $Date$, $Revision$,	<a href="http://wz2100.net/">WRP</a></p>
+			<p>Note from Pumpkin Studios: making any modifications to Warzone 2100 will void any technical support open to you. We will not answer questions or help you in any way if you have modified Warzone 2100. Pumpkin Studios and Eidos will not take responsibility for any damage resulting from modifcation of Warzone 2100.</p>
+		</div>
 	</body>
 </html>
