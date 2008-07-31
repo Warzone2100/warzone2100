@@ -7,8 +7,6 @@ typedef void (*mapCallback) (void *object);
 /**
  * Creates a new vector.
  * 
- * @param destroyCb The callback function to call whenever an element is deleted
- * 	                or replaced.
  * @return A pointer to the newly created vector on success; otherwise NULL.
  */
 vector *vectorCreate(void);
