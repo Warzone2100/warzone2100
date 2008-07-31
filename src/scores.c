@@ -393,7 +393,7 @@ UDWORD	width,height;
 				{
 
 					/* Black shadow */
-					pie_BoxFill(x + 1, y + 3, x + length - 1, y + height - 1, WZCOL_MENU_BACKGROUND);
+					pie_BoxFill(x + 1, y + 3, x + length - 1, y + height - 1, WZCOL_MENU_SHADOW);
 
 					/* Solid coloured bit */
 					pie_BoxFill(x + 1, y + 2, x + length - 4, y + height - 4, getColour(index));

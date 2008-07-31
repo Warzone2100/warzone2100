@@ -80,10 +80,10 @@ void pal_Init(void)
 	WZCOL_KEYMAP_ACTIVE = pal_Colour(0, 128, 0);
 	WZCOL_KEYMAP_FIXED = pal_Colour(128, 0, 0);
 
-	WZCOL_MENU_SCORE_LOSS = pal_Colour(43, 43, 43);
-	WZCOL_MENU_SCORE_DESTROYED = pal_Colour(183, 195, 127);
-	WZCOL_MENU_SCORE_BUILT = pal_Colour(81, 167, 156);
-	WZCOL_MENU_SCORE_RANK = pal_Colour(199, 127, 103);
+	WZCOL_MENU_SCORE_LOSS = pal_Colour(255, 35, 0);
+	WZCOL_MENU_SCORE_DESTROYED = pal_Colour(55, 239, 111);
+	WZCOL_MENU_SCORE_BUILT = pal_Colour(39, 49, 185);
+	WZCOL_MENU_SCORE_RANK = pal_Colour(235, 235, 19);
 
 	WZCOL_FRAME_BORDER_NORMAL = pal_Colour(145, 0, 195);
 
@@ -94,6 +94,7 @@ void pal_Init(void)
 	WZCOL_CONS_TEXT_DEBUG = pal_Colour(150, 150, 150);
 	WZCOL_MAP_PREVIEW_AIPLAYER = pal_Colour(0, 0x7f, 0);
 	WZCOL_GREY = pal_Colour(0x55, 0x55, 0x55);
+	WZCOL_MENU_SHADOW = WZCOL_BLACK;
 }
 
 void pal_ShutDown(void)
