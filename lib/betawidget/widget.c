@@ -130,6 +130,9 @@ static void widgetInitVtbl(widget *self)
 
 		vtbl.enable                 = widgetEnableImpl;
 		vtbl.disable                = widgetDisableImpl;
+		
+		vtbl.show                   = widgetShowImpl;
+		vtbl.hide                   = widgetHideImpl;
 
 		vtbl.getMinSize             = NULL;
 		vtbl.getMaxSize             = NULL;
@@ -189,6 +192,9 @@ void widgetInit(widget *self, const char *id)
 	
 	// By default we need drawing
 	self->needsRedraw = true;
+	
+	// Also by default we need to be shown (hence are invisible)
+	self->isVisible = false;
 	
 	// By default the mouse-event mask is disabled
 	self->maskCr = NULL;
@@ -596,6 +602,23 @@ void widgetDisableImpl(widget *self)
 	}
 }
 
+void widgetShowImpl(widget *self)
+{
+	// Make ourself visible
+	self->isVisible = true;
+	
+	// We need redrawing
+	self->needsRedraw = true;
+}
+
+void widgetHideImpl(widget *self)
+{
+	// Make ourself invisible
+	self->isVisible = false;
+	
+	// NB: No effect on redrawing
+}
+
 void widgetFocusImpl(widget *self)
 {
 	eventMisc evt;
@@ -700,6 +723,12 @@ void widgetCompositeImpl(widget *self)
 {
 	int i;
 	
+	// Do not composite unless we are visible
+	if (!self->isVisible)
+	{
+		return;
+	}
+	
 	// Translate such that (0,0) is the top-left of ourself
 	glTranslatef(self->offset.x, self->offset.y, 0.0f);
 	
@@ -798,6 +827,13 @@ bool widgetHandleEventImpl(widget *self, event *evt)
 	// If the event should be passed onto our children
 	bool relevant = true;
 
+	// If we are disabled or invisible then only timer events are relevant
+	if ((!self->isEnabled || !self->isVisible)
+	 && evt->type != EVT_TIMER)
+	{
+		return true;
+	}
+	
 	switch (evt->type)
 	{
 		case EVT_MOUSE_MOVE:
@@ -1008,6 +1044,16 @@ void widgetEnable(widget *self)
 void widgetDisable(widget *self)
 {
 	WIDGET_GET_VTBL(self)->disable(self);
+}
+
+void widgetShow(widget *self)
+{
+	WIDGET_GET_VTBL(self)->show(self);
+}
+
+void widgetHide(widget *self)
+{
+	WIDGET_GET_VTBL(self)->hide(self);
 }
 
 void widgetFocus(widget *self)

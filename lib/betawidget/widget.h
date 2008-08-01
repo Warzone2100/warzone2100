@@ -228,6 +228,9 @@ struct _widgetVtbl
 
 	void    (*enable)                       (widget *self);
 	void    (*disable)                      (widget *self);
+	
+	void    (*show)                         (widget *self);
+	void    (*hide)                         (widget *self);
 
 	size    (*getMinSize)                   (widget *self);
 	size    (*getMaxSize)                   (widget *self);
@@ -334,6 +337,11 @@ struct _widget
 	bool isEnabled;
 	
 	/*
+	 * If the widget is visible or not
+	 */
+	bool isVisible;
+	
+	/*
 	 * If the widget is dirty (i.e., needs to be re-drawn)
 	 */
 	bool needsRedraw;
@@ -372,6 +380,8 @@ int widgetAddTimerEventHandlerImpl(widget *self, eventType type, int interval,
 void widgetRemoveEventHandlerImpl(widget *self, int id);
 void widgetEnableImpl(widget *self);
 void widgetDisableImpl(widget *self);
+void widgetShowImpl(widget *self);
+void widgetHideImpl(widget *self);
 void widgetFocusImpl(widget *self);
 void widgetBlurImpl(widget *self);
 void widgetResizeImpl(widget *self, int w, int h);
@@ -544,6 +554,22 @@ void widgetEnable(widget *self);
  * @param self  The widget to disable.
  */
 void widgetDisable(widget *self);
+
+/**
+ * Shows the current widget (makes it visible). This is a no-op if the widget is
+ * already shown.
+ *
+ * @param self  The widget to show.
+ */
+void widgetShow(widget *self);
+
+/**
+ * Hides the current widget. Again, this is a no-op if the widget is already
+ * hidden.
+ *
+ * @param self  The widget to hide.
+ */
+void widgetHide(widget *self);
 
 /**
  * Destroys the widget and frees *all* memory associated with it.
