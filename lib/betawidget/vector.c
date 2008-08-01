@@ -68,7 +68,7 @@ void *vectorAt(vector *v, int index)
 
 void *vectorHead(vector *v)
 {
-	return vectorAt(v, v->head);
+	return vectorAt(v, v->head - 1);
 }
 
 void *vectorSetAt(vector *v, int index, void *object)
