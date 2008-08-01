@@ -700,6 +700,9 @@ void widgetCompositeImpl(widget *self)
 {
 	int i;
 	
+	// Translate such that (0,0) is the top-left of ourself
+	glTranslatef(self->offset.x, self->offset.y, 0.0f);
+	
 	// Composite ourself
 	glBindTexture(GL_TEXTURE_RECTANGLE_ARB, self->textureId);
 	
@@ -722,15 +725,12 @@ void widgetCompositeImpl(widget *self)
 	{
 		widget *child = vectorAt(self->children, i);
 		
-		// Translate such that (0,0) is the top-left of the widget
-		glTranslatef(child->offset.x, child->offset.y, 0);
-		
 		// Composite
 		widgetComposite(child);
-		
-		// Restore the matrix
-		glTranslatef(-child->offset.x, -child->offset.y, 0);
 	}
+	
+	// Restore the matrix
+	glTranslatef(-self->offset.x, -self->offset.y, 0.0f);
 }
 
 void widgetEnableMask(widget *self)
