@@ -134,7 +134,7 @@ static void widgetInitVtbl(widget *self)
 		vtbl.getMinSize             = NULL;
 		vtbl.getMaxSize             = NULL;
 		
-		vtbl.resize	                = widgetResizeImpl;
+		vtbl.resize                 = widgetResizeImpl;
 		
 		vtbl.composite              = widgetCompositeImpl;
 
