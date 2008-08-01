@@ -1,5 +1,3 @@
-SUBDIRS = aivolution/multiplay/skirmish
-
 stamp:
 	touch stamp
 
