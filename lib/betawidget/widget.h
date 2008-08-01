@@ -29,9 +29,6 @@ typedef struct _classInfo classInfo;
 typedef struct _widget widget;
 typedef struct _widgetVtbl widgetVtbl;
 
-typedef enum _eventType eventType;
-typedef enum _mouseButton mouseButton;
-
 typedef struct _event           event;
 typedef struct _eventMouse      eventMouse;
 typedef struct _eventMouseBtn   eventMouseBtn;
@@ -57,7 +54,7 @@ struct _classInfo
 /*
  * The valid event types
  */
-enum _eventType
+typedef enum
 {
 	// Mouse events
 	EVT_MOUSE_DOWN,
@@ -83,19 +80,19 @@ enum _eventType
 	// Misc
 	EVT_FOCUS,
 	EVT_BLUR
-};
+} eventType;
 
 /*
  * The possible mouse states as understood by the events system
  */
-enum _mouseButton
+typedef enum
 {
 	BUTTON_LEFT,
 	BUTTON_RIGHT,
 	BUTTON_WHEEL_UP,
 	BUTTON_WHEEL_DOWN,
 	BUTTON_OTHER
-};
+} mouseButton;
 
 /*
  * Event structures

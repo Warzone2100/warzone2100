@@ -1,12 +1,10 @@
 #ifndef KEYCODE_H_
 #define KEYCODE_H_
 
-/*
- * Forward declarations
+/**
+ * Contains the list of known keycodes for keyboard input.
  */
-typedef enum _eventKeycode eventKeycode;
-
-enum _eventKeycode
+typedef enum
 {
 	// `Control' keys
 	EVT_KEYCODE_BACKSPACE,
@@ -31,6 +29,6 @@ enum _eventKeycode
 	
 	// Unknown
 	EVT_KEYCODE_UNKNOWN
-};
+} eventKeycode;
 
 #endif /*KEYCODE_H_*/

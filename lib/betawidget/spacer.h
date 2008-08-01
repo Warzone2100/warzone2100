@@ -9,16 +9,14 @@
 typedef struct _spacer spacer;
 typedef struct _spacerVtbl spacerVtbl;
 
-typedef enum _spacerDirection spacerDirection;
-
 /*
  * The directions a spacer can act in
  */
-enum _spacerDirection
+typedef enum 
 {
 	SPACER_DIRECTION_HORIZONTAL,
 	SPACER_DIRECTION_VERTICAL
-};
+} spacerDirection;
 
 struct _spacerVtbl
 {
