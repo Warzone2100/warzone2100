@@ -16,6 +16,7 @@
 # MasterServer v0.1 by Gerard Krol (gerard_) and Tim Perrei (Kamaze)
 #              v1.0 by Freddie Witherden (EvilGuru)
 #              v2.0 by Gerhard Schaden (gschaden)
+#              v2.0a by Buginator  (fixed endian issue)
 # --------------------------------------------------------------------------
 #
 ################################################################################
@@ -26,8 +27,8 @@ from __future__ import with_statement
 ################################################################################
 #
 
-__author__ = "Gerard Krol, Tim Perrei, Freddie Witherden, Gerhard Schaden, Dennis Schridde"
-__version__ = "2.0"
+__author__ = "Gerard Krol, Tim Perrei, Freddie Witherden, Gerhard Schaden, Dennis Schridde, Buginator"
+__version__ = "2.0a"
 __bpydoc__ = """\
 This script runs a Warzone 2100 2.x masterserver
 """
@@ -118,6 +119,8 @@ class GameDB:
 #
 ################################################################################
 # Game class
+# NOTE: This must match exactly what we have defined for GAMESTRUCT in netplay.h
+# The structure MUST be packed network byte order !
 
 class Game:
 	""" class for a single game """
@@ -148,7 +151,7 @@ class Game:
 	
 	def getData(self):
 		""" use local variables and build a c-structure, for sending to the clients"""
-		return struct.pack("64sII16sIIIIII",
+		return struct.pack("!64sII16sIIIIII",
 			self.description.ljust(64, "\x00"),
 			self.size, self.flags,
 			self.host.ljust(16, "\x00"),
