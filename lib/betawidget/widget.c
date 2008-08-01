@@ -108,9 +108,6 @@ bool widgetIsA(widget *self, const classInfo *instanceOf)
 	return false;
 }
 
-/**
- * Prepares the widget classes vtable.
- */
 static void widgetInitVtbl(widget *self)
 {
 	static bool initialised = false;
@@ -154,9 +151,6 @@ static void widgetInitVtbl(widget *self)
 	self->vtbl = &vtbl;
 }
 
-/*
- * Widget class constructor
- */
 void widgetInit(widget *self, const char *id)
 {
 	// Prepare our vtable
@@ -201,9 +195,6 @@ void widgetInit(widget *self, const char *id)
 	self->maskEnabled = false;
 }
 
-/*
- * Widget class destructor (virtual).
- */
 void widgetDestroyImpl(widget *self)
 {
 	// Release the container
@@ -231,9 +222,6 @@ void widgetDestroyImpl(widget *self)
 	free(self);
 }
 
-/*
- * Draws and widget and its child widgets
- */
 void widgetDraw(widget *self)
 {
 	int i;
@@ -340,9 +328,6 @@ widget *widgetGetRoot(widget *self)
 	}
 }
 
-/*
- *
- */
 widget *widgetFindById(widget *self, const char *id)
 {
 	// See if we have that ID
@@ -375,9 +360,6 @@ widget *widgetFindById(widget *self, const char *id)
 	return NULL;
 }
 
-/*
- *
- */
 bool widgetAddChildImpl(widget *self, widget *child)
 {
 	// Make sure the id of the child is unquie
@@ -411,9 +393,6 @@ bool widgetAddChildImpl(widget *self, widget *child)
 	}
 }
 
-/*
- *
- */
 void widgetRemoveChildImpl(widget *self, widget *child)
 {
 	int i;
@@ -437,9 +416,6 @@ void widgetRemoveChildImpl(widget *self, widget *child)
 	}
 }
 
-/*
- *
- */
 int widgetAddEventHandlerImpl(widget *self, eventType type, callback handler,
                               void *userData)
 {
@@ -489,9 +465,6 @@ int widgetAddTimerEventHandlerImpl(widget *self, eventType type, int interval,
 	return entry->id;
 }
 
-/*
- *
- */
 void widgetRemoveEventHandlerImpl(widget *self, int id)
 {
 	int i;
@@ -583,9 +556,6 @@ bool widgetFireTimerCallbacksImpl(widget *self, event *evt)
 	return true;
 }
 
-/*
- *
- */
 void widgetEnableImpl(widget *self)
 {
 	int i;
@@ -734,17 +704,17 @@ void widgetCompositeImpl(widget *self)
 	glBindTexture(GL_TEXTURE_RECTANGLE_ARB, self->textureId);
 	
 	glBegin(GL_QUADS);
-		glTexCoord2f(0, 0);
-		glVertex2f(0, 0);
+		glTexCoord2i(0, 0);
+		glVertex2i(0, 0);
 		
-		glTexCoord2f(0, self->size.y);
-		glVertex2f(0, self->size.y);
+		glTexCoord2i(0, self->size.y);
+		glVertex2i(0, self->size.y);
 		
-		glTexCoord2f(self->size.x, self->size.y);
-		glVertex2f(self->size.x, self->size.y);
+		glTexCoord2i(self->size.x, self->size.y);
+		glVertex2i(self->size.x, self->size.y);
 		
-		glTexCoord2f(self->size.x, 0);
-		glVertex2f(self->size.x, 0);
+		glTexCoord2i(self->size.x, 0);
+		glVertex2i(self->size.x, 0);
 	glEnd();
 
 	// Now our children
