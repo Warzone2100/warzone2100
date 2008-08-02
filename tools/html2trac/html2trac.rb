@@ -124,8 +124,8 @@ module REXML
 				when "br": begin_tag = "[[BR]]\n"
 				when "hr": begin_tag = "\n----\n"
 				when "dl": begin_tag = "\n"
-				when "dt": end_tag = "::\n"
-				when "dd": begin_tag = "  " ; end_tag = "\n" if node.next_element
+				when "dt": begin_tag = " " ; end_tag = "::\n"
+				when "dd": begin_tag = "   " ; end_tag = "\n" if node.next_element
 				when "ol":
 					if node.elements["ancestor::table"]: # Trac does not support lists/linebreaks inside tables!
 						begin_tag = "[[BR]]"
