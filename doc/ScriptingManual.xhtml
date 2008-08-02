@@ -64,10 +64,43 @@
 									<li><a href="#sf_unsorted" class="locallink">Unsorted</a></li>
 								</ul>
 							</li>
-								<li><a href="#debugging_script_functions" class="locallink">Appendix B: Debugging script functions</a></li>
-								<li><a href="#script_function_constants" class="locallink">Appendix C: Script function constants</a></li>
-								<li><a href="#script_function_externals" class="locallink">Appendix D: Script function externals</a></li>
-								<li><a href="#script_function_callbacks" class="locallink">Appendix E: Script function callbacks</a></li>
+							<li><a href="#debugging_script_functions" class="locallink">Appendix B: Debugging script functions</a></li>
+							<li><a href="#script_function_constants" class="locallink">Appendix C: Script function constants</a>
+								<ul>
+									<li><a href="#sf_consts_buttonid" class="locallink">BUTTONID</a></li>
+									<li><a href="#sf_consts_messagetype" class="locallink">MESSAGETYPE</a></li>
+									<li><a href="#sf_consts_mp_alliance_types" class="locallink">Multiplayer alliance types</a></li>
+									<li><a href="#sf_consts_missiontype" class="locallink">MISSIONTYPE</a></li>
+									<li><a href="#sf_consts_droid_orders" class="locallink">Droid orders</a></li>
+									<li><a href="#sf_consts_unit_secondary_orders" class="locallink">Unit secondary orders (<acronym title="Droid Secondary Order">DSO</acronym>)</a></li>
+									<li><a href="#sf_consts_unit_secondary_states" class="locallink">Unit secondary states (<acronym title="Droid Secondary State">DSS</acronym>)</a></li>
+									<li><a href="#sf_consts_unit_types" class="locallink">Unit types</a></li>
+									<li><a href="#sf_consts_structure_types" class="locallink">Structure types</a></li>
+									<li><a href="#sf_consts_mp_game_types" class="locallink">Multiplayer Game Types</a></li>
+									<li><a href="#sf_consts_mp_base_configs" class="locallink">Multiplayer base configurations</a></li>
+									<li><a href="#sf_consts_cursor_modes" class="locallink">Cursor modes</a></li>
+									<li><a href="#sf_consts_game_modes" class="locallink">Game modes</a></li>
+									<li><a href="#sf_consts_getgamestatus" class="locallink">Options for getGameStatus()</a></li>
+									<li><a href="#sf_consts_targetedobjecttype" class="locallink">Values for targetedObjectType</a></li>
+									<li><a href="#sf_consts_structure_target_preference_types" class="locallink">Structure target preference types</a></li>
+									<li><a href="#sf_consts_unit_target_prefence_types" class="locallink">Unit target preference types</a>
+										<ul>
+											<li><a href="#sf_consts_turret_types" class="locallink">Turret types</a></li>
+											<li><a href="#sf_consts_body_types" class="locallink">Body types</a></li>
+											<li><a href="#sf_consts_propulsion_types" class="locallink">Propulsion types</a></li>
+											<li><a href="#sf_consts_group_types" class="locallink">Group types</a></li>
+										</ul>
+									</li>
+								</ul>
+							</li>
+							<li><a href="#script_function_externals" class="locallink">Appendix D: Script function externals</a></li>
+							<li><a href="#script_function_callbacks" class="locallink">Appendix E: Script function callbacks</a>
+								<ul>
+									<li><a href="#sf_callbacks_with_parameters" class="locallink">Callbacks with parameters</a></li>
+									<li><a href="#sf_callbacks_tutorial_callbacks" class="locallink">Tutorial callbacks</a></li>
+									<li><a href="#sf_callbacks_tutorial_callbacks_tutonly" class="locallink">Tutorial callbacks (tutorial only)</a></li>
+								</ul>
+							</li>
 						</ul>
 					</li>
 				</ul>
@@ -265,7 +298,7 @@ event eventTwo(everySecond) // uses the trigger we declared above
 			<hr/>
 
 			<h2 id="expressions">Expressions</h2>
-			<h3 id="string_Expressions">String expressions</h3>
+			<h3 id="string_expressions">String expressions</h3>
 			<p>Strings are put inside quotation marks: <code>"some text inside quotation marks is a legal string"</code>.</p>
 			<p>Strings can be easily concatenated using the <code>&amp;</code> operator.</p>
 			<p>For example: <code>"String1" &amp; "String2"</code> will result in "String1String2".</p>
@@ -1163,7 +1196,7 @@ myNewTemplate = getStructure(Rocket, 0);</pre>
 				<dt><code>int missionTimeRemaining()</code></dt>
 				<dd>Returns how long left for the current mission. If the mission time has not been set it will return 0. The value returned is in 10ths of a second.</dd>
 				<dt><code>setReinforcementTime(int time)</code></dt>
-				<dd>this defines how long it will take for reinforcements to arrive for an OffWorld mission. If time &lt; 0, there can be no reinforcements. Time is in 10th of a second. Set time to LZ_COMPROMISED_TIME to display '--:--' to indicate the Transporter is unable to land.</dd>
+				<dd>This defines how long it will take for reinforcements to arrive for an OffWorld mission. If time &lt; 0, there can be no reinforcements. Time is in 10th of a second. Set time to LZ_COMPROMISED_TIME to display '--:--' to indicate the Transporter is unable to land.</dd>
 				<dt><code>bool getGameStatus(int StatusRequired)</code></dt>
 				<dd>Gets the status of some of the game TRUE/FALSE variables. Can be used to find if the reticule is up or the battle map is open, that sort of thing. Examples:
 					<ul>
@@ -1236,9 +1269,9 @@ myNewTemplate = getStructure(Rocket, 0);</pre>
 				<dt><code>removeMessage(INTMESSAGE, MESSAGETYPE, PLAYER)</code></dt>
 				<dd>This removes a message from the interface for the PLAYER. INTMESSAGE is a variable defined in the values file. MESSAGETYPE is a predefined type - see <a href="#script_function_constants" class="locallink">Script function constants</a>. PLAYER is the player who loses the message.</dd>
 				<dt><code>flashOn(int buttonID)</code></dt>
-				<dd>turn on flashing for a button (ids in <a href="#script_function_constants" class="locallink">Script function constants</a>). Works for all buttons not just reticule buttons.</dd>
+				<dd>Turn on flashing for a button (ids in <a href="#script_function_constants" class="locallink">Script function constants</a>). Works for all buttons not just reticule buttons.</dd>
 				<dt><code>flashOff(int buttonID)</code></dt>
-				<dd>turn off flashing for a button.</dd>
+				<dd>Turn off flashing for a button.</dd>
 				<dt><code>setRadarZoom(int level)</code></dt>
 				<dd>level is the zoom level between 0 .. 2 on the PC and 0 .. 1 on PSX. 0 is the most zoomed out, 2 the most zoomed in. 2 is mapped to 1 if the script is run on the PSX.</dd>
 				<dt><code>void dropBeacon (string msg, int forPlayer, int, fromPlayer, int x, int y, int z)</code></dt>
@@ -1326,265 +1359,502 @@ myNewTemplate = getStructure(Rocket, 0);</pre>
 
 			<h2 id="script_function_constants">Appendix C: Script function constants</h2>
 			<p>These values are used to represent numbers that are constant throughout the game.</p>
-			<p>NULLOBJECT- used to check that a BASEOBJECT/FEATURE/STRUCTURE has been assigned by a function</p>
-			<p>NULLTEMPLATE- used to check that a TEMPLATE has been assigned by a function</p>
-			<p>NULLSTAT- used to check that a BASESTAT has been assigned by a function</p>
-			<p>BARBARIAN1- this can used to represent enemy1 (PC:player 6, PSX:player2)</p>
-			<p>BARBARIAN2- this can used to represent enemy2 (PC:player 7, PSX:player3)</p>
-			<p>BUTTONID - these values are used when a particular reticule button needs to be identified</p>
-			<p>OPTIONs	- NOTE - this currently references the command button</p>
-			<p>CANCEL</p>
-			<p>BUILD</p>
-			<p>MANUFACTURE</p>
-			<p>RESEARCH</p>
-			<p>INTELMAP</p>
-			<p>DESIGN</p>
-			<p>COMMAND</p>
-			<p>- When flashing an icon - with scrFlashOn() scrFlashOff()</p>
-			<p>you can additional use</p>
-			<p>IDRET_OPTIONS</p>
-			<p>IDRET_CANCEl</p>
-			<p>IDRET_BUILD</p>
-			<p>IDRET_MANUFACTURE</p>
-			<p>IDRET_RESEARCH</p>
-			<p>IDRET_INTEL_MAP</p>
-			<p>IDRET_DESIGN</p>
-			<p>IDRET_COMMAND</p>
-			<p>IDDES_TEMPLSTART</p>
-			<p>IDDES_SYSTEMBUTTON</p>
-			<p>IDDES_BODYBUTTON</p>
-			<p>IDDES_PROPBUTTON</p>
-			<p>MESSAGETYPE - these values are used when a type of message needs to be identified</p>
-			<p>RES_MSG</p>
-			<p>CAMP_MSG</p>
-			<p>MISS_MSG</p>
-			<p>PROX_MSG</p>
-			<p>Multiplayer alliance types:</p>
-			<p>NO_ALLIANCES- alliances are disallowed</p>
-			<p>ALLIANCES- alliances are allowed</p>
-			<p>ALLIANCES_TEAMS- team mode, locked alliances</p>
-			<p>MISSIONTYPE - these values are used when a type of mission needs to be identified</p>
-			<p>CAMP_START	- used for the starting point of a campaign</p>
-			<p>CAMP_EXPAND	- used to expand a current campaign map</p>
-			<p>OFF_KEEP	- used to load up an off world map, but keeping access</p>
-			<p>to factories and research facilities back at home base</p>
-			<p>OFF_CLEAR	- used to load up an off world map, but having no access to home base</p>
-			<p>LZ_COMPROMISED_TIME- value to set the reinforcement time with to display '--:--'</p>
-			<p>when the Transporter is unable to land</p>
-			<p>Droid Orders:</p>
-			<p>DORDER_NONE- no order assigned</p>
-			<p>DORDER_STOP- stop current order</p>
-			<p>DORDER_RETREAT- retreat</p>
-			<p>DORDER_DESTRUCT- self destruct</p>
-			<p>DORDER_RTR- return to repair</p>
-			<p>DORDER_RTB- return to base</p>
-			<p>DORDER_RUN- run away for a bit (moral failure)</p>
-			<p>DORDER_MOVE- move to location</p>
-			<p>DORDER_ATTACK- attack the object</p>
-			<p>DORDER_HELPBUILD- help construct the object</p>
-			<p>DORDER_DEMOLISH- demolish structure</p>
-			<p>DORDER_REPAIR- repair structure</p>
-			<p>DORDER_OBSERVE- (sensor units) keep a target in sensor range</p>
-			<p>DORDER_EMBARK- get onto a transporter</p>
-			<p>DORDER_FIRESUPPORT- follow this sensor unit and attack anything it DORDER_OBSERVE's</p>
-			<p>DORDER_SCOUT- same as move, but stop if enemy units are encountered.</p>
-			<p>Unit secondary orders:</p>
-			<p>DSO_ATTACK_RANGE</p>
-			<p>DSO_REPAIR_LEVEL</p>
-			<p>DSO_ATTACK_LEVEL</p>
-			<p>DSO_RECYCLE</p>
-			<p>DSO_PATROL- patrol between current pos and next move target</p>
-			<p>DSO_HALTTYPE- what to do when stopped</p>
-			<p>DSO_RETURN_TO_LOC- return to various locations</p>
-			<p>Unit secondary states:</p>
-			<p>DSS_ARANGE_SHORT</p>
-			<p>DSS_ARANGE_LONG</p>
-			<p>DSS_ARANGE_DEFAULT</p>
-			<p>DSS_REPLEV_LOW- Medium Damage Taken</p>
-			<p>DSS_REPLEV_HIGH- Heavy Damage Taken</p>
-			<p>DSS_REPLEV_NEVER- Never Repair</p>
-			<p>DSS_ALEV_ALWAYS</p>
-			<p>DSS_ALEV_ATTACKED</p>
-			<p>DSS_ALEV_NEVER</p>
-			<p>DSS_PATROL_SET(0 to clear)</p>
-			<p>DSS_HALT_HOLD</p>
-			<p>DSS_HALT_GUARD</p>
-			<p>DSS_HALT_PERSUE</p>
-			<p>DSS_RECYCLE_SET(0 to clear)</p>
-			<p>DSS_RTL_REPAIR(0 to clear)</p>
-			<p>DSS_RTL_BASE(0 to clear)</p>
-			<p>DSS_RTL_TRANSPORT(0 to clear)</p>
-			<p>Button ID's:</p>
-			<p>IDRET_OPTIONS- option button</p>
-			<p>IDRET_BUILD- build button</p>
-			<p>IDRET_MANUFACTURE- manufacture button</p>
-			<p>IDRET_RESEARCH- research button</p>
-			<p>IDRET_INTEL_MAP- intelligence map button</p>
-			<p>IDRET_DESIGN- design units button</p>
-			<p>IDRET_CANCEL- central cancel button</p>
-			<p>Unit types:</p>
-			<p>DROID_WEAPON- Weapon unit</p>
-			<p>DROID_SENSOR- Sensor unit</p>
-			<p>DROID_ECM- ECM unit</p>
-			<p>DROID_CONSTRUCt	- Constructor unit</p>
-			<p>DROID_PERSON- person</p>
-			<p>DROID_CYBORG- cyborg/super cyborg</p>
-			<p>DROID_TRANSPORTER- guess what this is!</p>
-			<p>DROID_COMMAND- Command unit</p>
-			<p>DROID_REPAIR- Repair Unit</p>
-			<p>DROID_CYBORG_CONSTRUCT- Cyborg engineer</p>
-			<p>DROID_CYBORG_REPAIR- Cyborg mechanic</p>
-			<p>Structure types:</p>
-			<p>REF_HQ</p>
-			<p>REF_FACTORY</p>
-			<p>REF_FACTORY_MODULe</p>
-			<p>REF_POWER_GEN</p>
-			<p>REF_POWER_MODULE</p>
-			<p>REF_RESOURCE_EXTRACTOR</p>
-			<p>REF_DEFENSE</p>
-			<p>REF_WALL</p>
-			<p>REF_WALLCORNER- corner wall - no gun</p>
-			<p>REF_RESEARCh</p>
-			<p>REF_RESEARCH_MODULe</p>
-			<p>REF_REPAIR_FACILITY</p>
-			<p>REF_COMMAND_CONTROL- control centre for command units</p>
-			<p>REF_CYBORG_FACTORY</p>
-			<p>REF_VTOL_FACTORY</p>
-			<p>REF_REARM_PAD</p>
-			<p>REF_MISSILE_SILO</p>
-			<p>Multiplayer Game Types:</p>
-			<p>SKIRMISH</p>
-			<p>DMATCH</p>
-			<p>CAMPAIGN</p>
-			<p>TEAMPLAY</p>
-			<p>MultiPlayer Base Configurtations:</p>
-			<p>CAMP_CLEAN- build units only</p>
-			<p>CAMP_BASE- small base</p>
-			<p>CAMP_WALLS- defensive base</p>
-			<p>Cursor Mode (possible values of cursorType):</p>
-			<p>IMAGE_CURSOR_SELECT</p>
-			<p>IMAGE_CURSOR_ATTACK</p>
-			<p>IMAGE_CURSOR_MOVE</p>
-			<p>IMAGE_CURSOR_JAM</p>
-			<p>IMAGE_CURSOR_PICKUP</p>
-			<p>IMAGE_CURSOR_DEFAULT</p>
-			<p>IMAGE_CURSOR_SEEKREPAIR</p>
-			<p>IMAGE_CURSOR_BUILD</p>
-			<p>IMAGE_CURSOR_GUARD</p>
-			<p>IMAGE_CURSOR_BRIDGE</p>
-			<p>IMAGE_CURSOR_ATTACH</p>
-			<p>IMAGE_CURSOR_LOCKON</p>
-			<p>IMAGE_CURSOR_FIX</p>
-			<p>IMAGE_CURSOR_EMBARK</p>
-			<p>Game mode - possible values for intMode external variable</p>
-			<p>int_NORMAL- Standard mode (just the reticule)</p>
-			<p>int_OPTION- Option screen</p>
-			<p>int_EDITSTAT- Stat screen up for placing objects</p>
-			<p>int_EDIT- Edit mode</p>
-			<p>int_OBJECT- Object screen</p>
-			<p>int_STAT- Object screen with stat screen</p>
-			<p>int_CMDORDER- Object screen with command units and orders screen</p>
-			<p>int_DESIGN- Design screen</p>
-			<p>int_INTELMAP- Intelligence Map</p>
-			<p>int_ORDER</p>
-			<p>int_INGAMEOP- in game options.</p>
-			<p>int_TRANSPORTER- Loading/unloading a Transporter</p>
-			<p>int_MISSIONRES- Results of a mission display.</p>
-			<p>int_MULTIMENU- multiplayer only, player stats etc...</p>
-			<p>Possible options for getGameStatus():</p>
-			<p>STATUS_ReticuleIsOpen- returns true is the reticule is open</p>
-			<p>STATUS_BattleMapViewEnabled- returns true if we are in battlemap mode</p>
-			<p>Possible values for targetedObjectType:</p>
-			<p>MT_TERRAIN</p>
-			<p>MT_RESOURCE</p>
-			<p>MT_BLOCKING</p>
-			<p>MT_RIVER</p>
-			<p>MT_TRENCH</p>
-			<p>MT_OWNSTRDAM</p>
-			<p>MT_OWNSTROK</p>
-			<p>MT_OWNSTRINCOMP</p>
-			<p>MT_REPAIR</p>
-			<p>MT_REPAIRDAM</p>
-			<p>MT_ENEMYSTR</p>
-			<p>MT_TRANDROID</p>
-			<p>MT_OWNDROID</p>
-			<p>MT_OWNDROIDDAM</p>
-			<p>MT_ENEMYDROID</p>
-			<p>MT_COMMAND</p>
-			<p>MT_ARTIFACT</p>
-			<p>MT_DAMFEATURE</p>
-			<p>MT_SENSOR</p>
-			<p>MT_WRECKFEATURE</p>
-			<p>Structure Target preference types:</p>
-			<p>ST_HQ</p>
-			<p>ST_FACTORY</p>
-			<p>ST_POWER_GEN</p>
-			<p>ST_RESOURCE_EXTRACTOR</p>
-			<p>ST_WALL</p>
-			<p>ST_RESEARCH</p>
-			<p>ST_REPAIR_FACILITY</p>
-			<p>ST_COMMAND_CONTROL</p>
-			<p>ST_CYBORG_FACTORY</p>
-			<p>ST_VTOL_FACTORY</p>
-			<p>ST_REARM_PAD</p>
-			<p>ST_SENSOR</p>
-			<p>ST_DEF_GROUND</p>
-			<p>ST_DEF_AIR</p>
-			<p>ST_DEF_IDF</p>
-			<p>ST_DEF_ALL- ground/air/idf structures</p>
-			<p>Unit target preference types:</p>
-			<p>turret types:</p>
-			<p>DT_COMMAND</p>
-			<p>DT_SENSOR</p>
-			<p>DT_CONSTRUCT</p>
-			<p>DT_REPAIR</p>
-			<p>DT_WEAP_GROUND</p>
-			<p>DT_WEAP_AIR</p>
-			<p>DT_WEAP_IDF</p>
-			<p>DT_WEAP_ALL- ground/air/idf units</p>
-			<p>Body types:</p>
-			<p>DT_LIGHT</p>
-			<p>DT_MEDIUM</p>
-			<p>DT_HEAVY</p>
-			<p>DT_SUPER_HEAVy	- transporter only</p>
-			<p>Propulsion:</p>
-			<p>DT_TRACK</p>
-			<p>DT_HTRACK</p>
-			<p>DT_WHEEL</p>
-			<p>DT_LEGS</p>
-			<p>DT_GROUND</p>
-			<p>DT_VTOL</p>
-			<p>DT_HOVER</p>
-			<p>Group types:</p>
-			<p>GT_NORMAL</p>
-			<p>GT_COMMAND</p>
-			<p>GT_TRANSPORTER</p>
+			<dl>
+				<dt><code>NULLOBJECT</code></dt>
+				<dd>used to check that a BASEOBJECT/FEATURE/STRUCTURE has been assigned by a function.</dd>
+				<dt><code>NULLTEMPLATE</code></dt>
+				<dd>used to check that a TEMPLATE has been assigned by a function.</dd>
+				<dt><code>NULLSTAT</code></dt>
+				<dd>used to check that a BASESTAT has been assigned by a function.</dd>
+				<dt><code>BARBARIAN1</code></dt>
+				<dd>This can used to represent enemy1 (PC:player 6, PSX:player2).</dd>
+				<dt><code>BARBARIAN2</code></dt>
+				<dd>This can used to represent enemy2 (PC:player 7, PSX:player3).</dd>
+			</dl>
+			<div class="rt">
+				<p><a href="#top" class="locallink">back to top</a></p>
+			</div>
+
+			<h3 id="sf_consts_buttonid">BUTTONID</h3>
+			<p>These values are used when a particular reticule button needs to be identified.</p>
+			<dl>
+				<dt><code>OPTIONS</code></dt>
+				<dd>Currently references the command button.</dd>
+				<dt><code>CANCEL</code></dt>
+				<dd>The cancel button.</dd>
+				<dt><code>BUILD</code></dt>
+				<dd>The button for the construction menu.</dd>
+				<dt><code>MANUFACTURE</code></dt>
+				<dd>The button for the production menu.</dd>
+				<dt><code>RESEARCH</code></dt>
+				<dd>The button for the research menu.</dd>
+				<dt><code>INTELMAP</code></dt>
+				<dd>The button for the intelligence screen.</dd>
+				<dt><code>DESIGN</code></dt>
+				<dd>The button for the unit design menu.</dd>
+				<dt><code>COMMAND</code></dt>
+				<dd>The button for the commander management menu.</dd>
+			</dl>
+			<p>When flashing an icon (with <code>scrFlashOn()</code> and <code>scrFlashOff()</code>) you can additionally use:</p>
+			<dl>
+				<dt><code>IDRET_OPTIONS</code></dt>
+				<dd>The option button.</dd>
+				<dt><code>IDRET_CANCEL</code></dt>
+				<dd>The cancel button.</dd>
+				<dt><code>IDRET_BUILD</code></dt>
+				<dd>The button for the construction menu.</dd>
+				<dt><code>IDRET_MANUFACTURE</code></dt>
+				<dd>The button for the production menu.</dd>
+				<dt><code>IDRET_RESEARCH</code></dt>
+				<dd>The button for the research menu.</dd>
+				<dt><code>IDRET_INTEL_MAP</code></dt>
+				<dd>The button for the intelligence screen.</dd>
+				<dt><code>IDRET_DESIGN</code></dt>
+				<dd>The button for the unit design menu.</dd>
+				<dt><code>IDRET_COMMAND</code></dt>
+				<dt><code>IDDES_TEMPLSTART</code></dt>
+				<dt><code>IDDES_SYSTEMBUTTON</code></dt>
+				<dd>The button for system turrets in the design menu.</dd>
+				<dt><code>IDDES_BODYBUTTON</code></dt>
+				<dd>The button for bodies in the design menu.</dd>
+				<dt><code>IDDES_PROPBUTTON</code></dt>
+				<dd>The button for propulsions in the design menu.</dd>
+			</dl>
+			<div class="rt">
+				<p><a href="#top" class="locallink">back to top</a></p>
+			</div>
+
+			<h3 id="sf_consts_messagetype">MESSAGETYPE</h3>
+			<p>These values are used when a type of message needs to be identified.</p>
+			<dl>
+				<dt><code>RES_MSG</code></dt>
+				<dd>Research message.</dd>
+				<dt><code>CAMP_MSG</code></dt>
+				<dd>Campaign message.</dd>
+				<dt><code>MISS_MSG</code></dt>
+				<dd>Mission message.</dd>
+				<dt><code>PROX_MSG</code></dt>
+			</dl>
+			<div class="rt">
+				<p><a href="#top" class="locallink">back to top</a></p>
+			</div>
+
+			<h3 id="sf_consts_mp_alliance_types">Multiplayer alliance types</h3>
+			<dl>
+				<dt><code>NO_ALLIANCES</code></dt>
+				<dd>Alliances are disallowed.</dd>
+				<dt><code>ALLIANCES</code></dt>
+				<dd>Alliances are allowed</dd>
+				<dt><code>ALLIANCES_TEAMS</code></dt>
+				<dd>Locked alliances.</dd>
+			</dl>
+			<div class="rt">
+				<p><a href="#top" class="locallink">back to top</a></p>
+			</div>
+
+			<h3 id="sf_consts_missiontype">MISSIONTYPE</h3>
+			<p>These values are used when the type of mission needs to be identified.</p>
+			<dl>
+				<dt><code>CAMP_START</code></dt>
+				<dd>used for the starting point of a campaign</dd>
+				<dt><code>CAMP_EXPAND</code></dt>
+				<dd>used to expand a current campaign map</dd>
+				<dt><code>OFF_KEEP</code></dt>
+				<dd>used to load up an off world map, but keeping access to factories and research facilities back at home base</dd>
+				<dt><code>OFF_CLEAR</code></dt>
+				<dd>used to load up an off world map, but having no access to home base</dd>
+				<dt><code>LZ_COMPROMISED_TIME</code></dt>
+				<dd>value to set the reinforcement time with to display '--:--' when the Transporter is unable to land</dd>
+			</dl>
+			<div class="rt">
+				<p><a href="#top" class="locallink">back to top</a></p>
+			</div>
+
+			<h3 id="sf_consts_droid_orders">Droid orders</h3>
+			<dl>
+				<dt><code>DORDER_NONE</code></dt>
+				<dd>No order assigned.</dd>
+				<dt><code>DORDER_STOP</code></dt>
+				<dd>Stop current order.</dd>
+				<dt><code>DORDER_RETREAT</code></dt>
+				<dd>Retreat.</dd>
+				<dt><code>DORDER_DESTRUCT</code></dt>
+				<dd>Self-destruct.</dd>
+				<dt><code>DORDER_RTR</code></dt>
+				<dd>Return to repair.</dd>
+				<dt><code>DORDER_RTB</code></dt>
+				<dd>Return to base.</dd>
+				<dt><code>DORDER_RUN</code></dt>
+				<dd>Run away for a bit (moral failure).</dd>
+				<dt><code>DORDER_MOVE</code></dt>
+				<dd>Move to location.</dd>
+				<dt><code>DORDER_ATTACK</code></dt>
+				<dd>Attack the object.</dd>
+				<dt><code>DORDER_HELPBUILD</code></dt>
+				<dd>Help construct the object.</dd>
+				<dt><code>DORDER_DEMOLISH</code></dt>
+				<dd>Demolish structure.</dd>
+				<dt><code>DORDER_REPAIR</code></dt>
+				<dd>Repair structure.</dd>
+				<dt><code>DORDER_OBSERVE</code></dt>
+				<dd>Keep a target in sensor range. Sensor units only.</dd>
+				<dt><code>DORDER_EMBARK</code></dt>
+				<dd>Get onto a transport.</dd>
+				<dt><code>DORDER_FIRESUPPORT</code></dt>
+				<dd>Follow this sensor unit and attack anything it <code>DORDER_OBSERVE</code>'s.</dd>
+				<dt><code>DORDER_SCOUT</code></dt>
+				<dd>Same as move, but stop if enemy units are encountered.</dd>
+			</dl>
+			<div class="rt">
+				<p><a href="#top" class="locallink">back to top</a></p>
+			</div>
+
+			<h3 id="sf_consts_unit_secondary_orders">Unit secondary orders (<acronym title="Droid Secondary Order">DSO</acronym>)</h3>
+			<dl>
+				<dt><code>DSO_ATTACK_RANGE</code></dt>
+				<dt><code>DSO_REPAIR_LEVEL</code></dt>
+				<dt><code>DSO_ATTACK_LEVEL</code></dt>
+				<dt><code>DSO_RECYCLE</code></dt>
+				<dt><code>DSO_PATROL</code></dt>
+				<dd>Patrol between current position and next move target.</dd>
+				<dt><code>DSO_HALTTYPE</code></dt>
+				<dd>What to do when stopped.</dd>
+				<dt><code>DSO_RETURN_TO_LOC</code></dt>
+				<dd>Return to various locations.</dd>
+			</dl>
+			<div class="rt">
+				<p><a href="#top" class="locallink">back to top</a></p>
+			</div>
+
+			<h3 id="sf_consts_unit_secondary_states">Unit secondary states (<acronym title="Droid Secondary State">DSS</acronym>)</h3>
+			<dl>
+				<dt><code>DSS_ARANGE_SHORT</code></dt>
+				<dt><code>DSS_ARANGE_LONG</code></dt>
+				<dt><code>DSS_ARANGE_DEFAULT</code></dt>
+				<dt><code>DSS_REPLEV_LOW</code></dt>
+				<dd>Medium Damage Taken</dd>
+				<dt><code>DSS_REPLEV_HIGH</code></dt>
+				<dd>Heavy Damage Taken</dd>
+				<dt><code>DSS_REPLEV_NEVER</code></dt>
+				<dd>Never Repair</dd>
+				<dt><code>DSS_ALEV_ALWAYS</code></dt>
+				<dt><code>DSS_ALEV_ATTACKED</code></dt>
+				<dt><code>DSS_ALEV_NEVER</code></dt>
+				<dt><code>DSS_PATROL_SET</code></dt>
+				<dd>0 to clear</dd>
+				<dt><code>DSS_HALT_HOLD</code></dt>
+				<dt><code>DSS_HALT_GUARD</code></dt>
+				<dt><code>DSS_HALT_PERSUE</code></dt>
+				<dt><code>DSS_RECYCLE_SET</code></dt>
+				<dd>0 to clear</dd>
+				<dt><code>DSS_RTL_REPAIR</code></dt>
+				<dd>0 to clear</dd>
+				<dt><code>DSS_RTL_BASE</code></dt>
+				<dd>0 to clear</dd>
+				<dt><code>DSS_RTL_TRANSPORT</code></dt>
+				<dd>0 to clear</dd>
+			</dl>
+			<div class="rt">
+				<p><a href="#top" class="locallink">back to top</a></p>
+			</div>
+
+			<h3 id="sf_consts_unit_types">Unit types</h3>
+			<dl>
+				<dt><code>DROID_WEAPON</code></dt>
+				<dd>Weapon unit</dd>
+				<dt><code>DROID_SENSOR</code></dt>
+				<dd>Sensor unit</dd>
+				<dt><code>DROID_ECM</code></dt>
+				<dd>ECM unit</dd>
+				<dt><code>DROID_CONSTRUCT</code></dt>
+				<dd>Constructor unit</dd>
+				<dt><code>DROID_PERSON</code></dt>
+				<dd>Person</dd>
+				<dt><code>DROID_CYBORG</code></dt>
+				<dd>(Super) cyborg</dd>
+				<dt><code>DROID_TRANSPORTER</code></dt>
+				<dd>Transporter</dd>
+				<dt><code>DROID_COMMAND</code></dt>
+				<dd>Commander unit</dd>
+				<dt><code>DROID_REPAIR</code></dt>
+				<dd>Repair unit</dd>
+				<dt><code>DROID_CYBORG_CONSTRUCT</code></dt>
+				<dd>Cyborg engineer</dd>
+				<dt><code>DROID_CYBORG_REPAIR</code></dt>
+				<dd>Cyborg mechanic</dd>
+			</dl>
+			<div class="rt">
+				<p><a href="#top" class="locallink">back to top</a></p>
+			</div>
+
+			<h3 id="sf_consts_structure_types">Structure types</h3>
+			<dl>
+				<dt><code>REF_HQ</code></dt>
+				<dd>Command centre</dd>
+				<dt><code>REF_FACTORY</code></dt>
+				<dd>Factory</dd>
+				<dt><code>REF_FACTORY_MODULE</code></dt>
+				<dd>Factory module</dd>
+				<dt><code>REF_POWER_GEN</code></dt>
+				<dd>Power generator</dd>
+				<dt><code>REF_POWER_MODULE</code></dt>
+				<dd>Power module</dd>
+				<dt><code>REF_RESOURCE_EXTRACTOR</code></dt>
+				<dd>Oil derrick</dd>
+				<dt><code>REF_DEFENSE</code></dt>
+				<dd>Defensive structure</dd>
+				<dt><code>REF_WALL</code></dt>
+				<dd>Wall</dd>
+				<dt><code>REF_WALLCORNER</code></dt>
+				<dd>Corner wall (no weapon)</dd>
+				<dt><code>REF_RESEARCH</code></dt>
+				<dd>Research facility</dd>
+				<dt><code>REF_RESEARCH_MODULE</code></dt>
+				<dd>Research module</dd>
+				<dt><code>REF_REPAIR_FACILITY</code></dt>
+				<dd>Repair facility</dd>
+				<dt><code>REF_COMMAND_CONTROL</code></dt>
+				<dd>Command relay centre</dd>
+				<dt><code>REF_CYBORG_FACTORY</code></dt>
+				<dd>Cyborg factory</dd>
+				<dt><code>REF_VTOL_FACTORY</code></dt>
+				<dd>VTOL Factory</dd>
+				<dt><code>REF_REARM_PAD</code></dt>
+				<dd>VTOL rearming pad</dd>
+				<dt><code>REF_MISSILE_SILO</code></dt>
+				<dd>Missile silo</dd>
+			</dl>
+			<div class="rt">
+				<p><a href="#top" class="locallink">back to top</a></p>
+			</div>
+
+			<h3 id="sf_consts_mp_game_types">Multiplayer Game Types</h3>
+			<dl>
+				<dt><code>SKIRMISH</code></dt>
+				<dt><code>DMATCH</code></dt>
+				<dt><code>CAMPAIGN</code></dt>
+				<dt><code>TEAMPLAY</code></dt>
+			</dl>
+			<div class="rt">
+				<p><a href="#top" class="locallink">back to top</a></p>
+			</div>
+
+			<h3 id="sf_consts_mp_base_configs">Multiplayer base configurations</h3>
+			<dl>
+				<dt><code>CAMP_CLEAN</code></dt>
+				<dd>Build units only</dd>
+				<dt><code>CAMP_BASE</code></dt>
+				<dd>Small base</dd>
+				<dt><code>CAMP_WALLS</code></dt>
+				<dd>Defensive base</dd>
+			</dl>
+			<div class="rt">
+				<p><a href="#top" class="locallink">back to top</a></p>
+			</div>
+
+			<h3 id="sf_consts_cursor_modes">Cursor modes</h3>
+			<p>Possible values of cursorType:</p>
+			<dl>
+				<dt><code>IMAGE_CURSOR_SELECT</code></dt>
+				<dt><code>IMAGE_CURSOR_ATTACK</code></dt>
+				<dt><code>IMAGE_CURSOR_MOVE</code></dt>
+				<dt><code>IMAGE_CURSOR_JAM</code></dt>
+				<dt><code>IMAGE_CURSOR_PICKUP</code></dt>
+				<dt><code>IMAGE_CURSOR_DEFAULT</code></dt>
+				<dt><code>IMAGE_CURSOR_SEEKREPAIR</code></dt>
+				<dt><code>IMAGE_CURSOR_BUILD</code></dt>
+				<dt><code>IMAGE_CURSOR_GUARD</code></dt>
+				<dt><code>IMAGE_CURSOR_BRIDGE</code></dt>
+				<dt><code>IMAGE_CURSOR_ATTACH</code></dt>
+				<dt><code>IMAGE_CURSOR_LOCKON</code></dt>
+				<dt><code>IMAGE_CURSOR_FIX</code></dt>
+				<dt><code>IMAGE_CURSOR_EMBARK</code></dt>
+			</dl>
+			<div class="rt">
+				<p><a href="#top" class="locallink">back to top</a></p>
+			</div>
+
+			<h3 id="sf_consts_game_modes">Game modes</h3>
+			<p>Possible values for intMode external variable.</p>
+			<dl>
+				<dt><code>int_NORMAL</code></dt>
+				<dd>Standard mode (just the reticule).</dd>
+				<dt><code>int_OPTION</code></dt>
+				<dd>Option screen.</dd>
+				<dt><code>int_EDITSTAT</code></dt>
+				<dd>Stat screen up for placing objects.</dd>
+				<dt><code>int_EDIT</code></dt>
+				<dd>Edit mode.</dd>
+				<dt><code>int_OBJECT</code></dt>
+				<dd>Object screen.</dd>
+				<dt><code>int_STAT</code></dt>
+				<dd>Object screen with stat screen.</dd>
+				<dt><code>int_CMDORDER</code></dt>
+				<dd>Object screen with command units and orders screen.</dd>
+				<dt><code>int_DESIGN</code></dt>
+				<dd>Design screen.</dd>
+				<dt><code>int_INTELMAP</code></dt>
+				<dd>Intelligence Map.</dd>
+				<dt><code>int_ORDER</code></dt>
+				<dt><code>int_INGAMEOP</code></dt>
+				<dd>In-game options.</dd>
+				<dt><code>int_TRANSPORTER</code></dt>
+				<dd>Loading/unloading a Transporter.</dd>
+				<dt><code>int_MISSIONRES</code></dt>
+				<dd>Results of a mission display.</dd>
+				<dt><code>int_MULTIMENU</code></dt>
+				<dd>Multiplayer only, player stats etc.</dd>
+			</dl>
+			<div class="rt">
+				<p><a href="#top" class="locallink">back to top</a></p>
+			</div>
+
+			<h3 id="sf_consts_getgamestatus">Options for getGameStatus()</h3>
+			<dl>
+				<dt><code>STATUS_ReticuleIsOpen</code></dt>
+				<dd>Returns true is the reticule is open</dd>
+				<dt><code>STATUS_BattleMapViewEnabled</code></dt>
+				<dd>Returns true if we are in battle map mode.</dd>
+			</dl>
+			<div class="rt">
+				<p><a href="#top" class="locallink">back to top</a></p>
+			</div>
+
+			<h3 id="sf_consts_targetedobjecttype">Values for targetedObjectType</h3>
+			<dl>
+				<dt><code>MT_TERRAIN</code></dt>
+				<dt><code>MT_RESOURCE</code></dt>
+				<dt><code>MT_BLOCKING</code></dt>
+				<dt><code>MT_RIVER</code></dt>
+				<dt><code>MT_TRENCH</code></dt>
+				<dt><code>MT_OWNSTRDAM</code></dt>
+				<dt><code>MT_OWNSTROK</code></dt>
+				<dt><code>MT_OWNSTRINCOMP</code></dt>
+				<dt><code>MT_REPAIR</code></dt>
+				<dt><code>MT_REPAIRDAM</code></dt>
+				<dt><code>MT_ENEMYSTR</code></dt>
+				<dt><code>MT_TRANDROID</code></dt>
+				<dt><code>MT_OWNDROID</code></dt>
+				<dt><code>MT_OWNDROIDDAM</code></dt>
+				<dt><code>MT_ENEMYDROID</code></dt>
+				<dt><code>MT_COMMAND</code></dt>
+				<dt><code>MT_ARTIFACT</code></dt>
+				<dt><code>MT_DAMFEATURE</code></dt>
+				<dt><code>MT_SENSOR</code></dt>
+				<dt><code>MT_WRECKFEATURE</code></dt>
+			</dl>
+			<div class="rt">
+				<p><a href="#top" class="locallink">back to top</a></p>
+			</div>
+
+			<h3 id="sf_consts_structure_target_preference_types">Structure target preference types</h3>
+			<dl>
+				<dt><code>ST_HQ</code></dt>
+				<dt><code>ST_FACTORY</code></dt>
+				<dt><code>ST_POWER_GEN</code></dt>
+				<dt><code>ST_RESOURCE_EXTRACTOR</code></dt>
+				<dt><code>ST_WALL</code></dt>
+				<dt><code>ST_RESEARCH</code></dt>
+				<dt><code>ST_REPAIR_FACILITY</code></dt>
+				<dt><code>ST_COMMAND_CONTROL</code></dt>
+				<dt><code>ST_CYBORG_FACTORY</code></dt>
+				<dt><code>ST_VTOL_FACTORY</code></dt>
+				<dt><code>ST_REARM_PAD</code></dt>
+				<dt><code>ST_SENSOR</code></dt>
+				<dt><code>ST_DEF_GROUND</code></dt>
+				<dt><code>ST_DEF_AIR</code></dt>
+				<dt><code>ST_DEF_IDF</code></dt>
+				<dt><code>ST_DEF_ALL</code></dt>
+				<dd>Ground/air/IDF structures</dd>
+			</dl>
+			<div class="rt">
+				<p><a href="#top" class="locallink">back to top</a></p>
+			</div>
+
+			<h3 id="sf_consts_unit_target_prefence_types">Unit target preference types</h3>
+			<h4 id="sf_consts_turret_types">Turret types</h4>
+			<dl>
+				<dt><code>DT_COMMAND</code></dt>
+				<dt><code>DT_SENSOR</code></dt>
+				<dt><code>DT_CONSTRUCT</code></dt>
+				<dt><code>DT_REPAIR</code></dt>
+				<dt><code>DT_WEAP_GROUND</code></dt>
+				<dt><code>DT_WEAP_AIR</code></dt>
+				<dt><code>DT_WEAP_IDF</code></dt>
+				<dt><code>DT_WEAP_ALL</code></dt>
+				<dd>Ground/air/IDF units.</dd>
+			</dl>
+			<h4 id="sf_consts_body_types">Body types</h4>
+			<dl>
+				<dt><code>DT_LIGHT</code></dt>
+				<dt><code>DT_MEDIUM</code></dt>
+				<dt><code>DT_HEAVY</code></dt>
+				<dt><code>DT_SUPER_HEAVY</code></dt>
+				<dd>Transporter only</dd>
+			</dl>
+			<h4 id="sf_consts_propulsion_types">Propulsion types</h4>
+			<dl>
+				<dt><code>DT_TRACK</code></dt>
+				<dt><code>DT_HTRACK</code></dt>
+				<dt><code>DT_WHEEL</code></dt>
+				<dt><code>DT_LEGS</code></dt>
+				<dt><code>DT_GROUND</code></dt>
+				<dt><code>DT_VTOL</code></dt>
+				<dt><code>DT_HOVER</code></dt>
+			</dl>
+			<h4 id="sf_consts_group_types">Group types</h4>
+			<dl>
+				<dt><code>GT_NORMAL</code></dt>
+				<dt><code>GT_COMMAND</code></dt>
+				<dt><code>GT_TRANSPORTER</code></dt>
+			</dl>
 			<div class="rt">
 				<p><a href="#top" class="locallink">back to top</a></p>
 			</div>
 			<hr/>
 
 			<h2 id="script_function_externals">Appendix D: Script function externals</h2>
-			<p>These represent variables that are defined in the game which can be accessed in the scripts. It will only be possible to set the value that is held for some of the variables.</p>
-			<p>mapWidth- (get) - field to hold the width of the map</p>
-			<p>mapHeight- (get) - field to hold the height of the map</p>
-			<p>gameInitialised- (get) flag to specify when all initialisation has been performed for the game - use it in place of a bool i. e. can be considered to equal true or false</p>
-			<p>selectedPlayer- (get) field to hold the currently selected player</p>
-			<p>gameTime- (get) the current time in the game (in 1/10 sec)</p>
-			<p>multiPlayerGameType	- (get) the type of multiplayer game underway.</p>
-			<p>multiPlayerMaxPlayers	- max number of human players in this game.(see constants for return values)</p>
-			<p>multiPlayerBaseType	- campaign game base type. (see constants for return values)</p>
-			<p>multiPlayerAlliancesType- (get) alliance type (eg NO_ALLIANCES etc, see	<a href="#script_function_constants" class="locallink">Script function constants</a>)</p>
-			<p>scrollX- (get/set) field to hold the starting x coordinate where the player can scroll</p>
-			<p>scrollY- (get/set) field to hold the starting y coordinate where the player can scroll</p>
-			<p>scrollWidth- (get/set) field to hold the width the player can scroll</p>
-			<p>scrollHeight- (get/set) field to hold the height the player can scroll</p>
-			<p>cursorType- (get) - Gets the current mode that the cursor is in (e.g. IMAGE_CURSOR_BUILD ... see	<a href="#script_function_constants" class="locallink">Script function constants</a>)</p>
-			<p>intMode- (get) - Get the current game mode (e.g. int_DESIGN when the design screen is active) ... see	<a href="#script_function_constants" class="locallink">Script function constants</a>)</p>
-			<p>targetedObjectType- (get) - The type of the object currently under the cursor (one of MT_... see	<a href="#script_function_constants" class="locallink">Script function constants</a>)</p>
-			<p>boolextraVictoryFlag- use to mark additional victory conditions have been met - reset to FALSE at start of each level</p>
-			<p>boolextraFailFlag- use to mark additional failure conditions have been met - reset to FALSE at start of each level</p>
-			<p>GameLevel(get/set) - set single player difficulty.</p>
+			<p>These represent variables that are defined in the game which can be accessed in the scripts. It will only be possible to set the value that is held for some of the variables. Every variable can be get and set, if not noted otherwise.</p>
+			<dl>
+				<dt><code>mapWidth</code></dt>
+				<dd>Width of the map. Cannot be set.</dd>
+				<dt><code>mapHeight</code></dt>
+				<dd>Height of the map. Cannot be set.</dd>
+				<dt><code>gameInitialised</code></dt>
+				<dd>Flag to specify whether all initialisation for the game has been performed. Use it in place of a bool i. e. can be considered to equal true or false. Cannot be set.</dd>
+				<dt><code>selectedPlayer</code></dt>
+				<dd>Field to hold the currently selected player. Cannot be set</dd>
+				<dt><code>gameTime</code></dt>
+				<dd>Holds the current time in the game (in 1/10 s). Cannot be set</dd>
+				<dt><code>multiPlayerGameType</code></dt>
+				<dd>Holds the multiplayer game type. Cannot be set</dd>
+				<dt><code>multiPlayerMaxPlayers</code></dt>
+				<dd>Maximum number of human players in this game. Cannot be set.</dd>
+				<dt><code>multiPlayerBaseType</code></dt>
+				<dd>Campaign game base type (see <a href="#sf_consts_mp_game_types" class="locallink">Script function constants, Multiplayer game types</a>).</dd>
+				<dt><code>multiPlayerAlliancesType</code></dt>
+				<dd>Get alliance type (see <a href="#sf_consts_mp_alliance_types" class="locallink">Script function constants, Multiplayer alliance types</a>).</dd>
+				<dt><code>scrollX</code></dt>
+				<dd>Holds the starting x coordinate where the player can scroll.</dd>
+				<dt><code>scrollY</code></dt>
+				<dd>Holds the starting y coordinate where the player can scroll.</dd>
+				<dt><code>scrollWidth</code></dt>
+				<dd>Holds the width the player can scroll.</dd>
+				<dt><code>scrollHeight</code></dt>
+				<dd>Holds the height the player can scroll.</dd>
+				<dt><code>cursorType</code></dt>
+				<dd>Gets the current mode that the cursor is in (see <a href="#sf_consts_cursor_modes" class="locallink">Script function constants, Cursor modes</a>). Cannot be set.</dd>
+				<dt><code>intMode</code></dt>
+				<dd>Get the current game mode (e.g. int_DESIGN when the design screen is active), see <a href="#sf_consts_game_modes" class="locallink">Script function constants, Game modes</a>. Cannot be set.</dd>
+				<dt><code>targetedObjectType</code></dt>
+				<dd>Get the type of the object currently under the cursor (see	<a href="#sf_consts_targetedobjecttype" class="locallink">Script function constants, Values for targetedObjectType</a>). Cannot be set.</dd>
+				<dt><code>boolextraVictoryFlag</code></dt>
+				<dd>Use to mark additional victory conditions have been met; reset to FALSE at start of each level.</dd>
+				<dt><code>boolextraFailFlag</code></dt>
+				<dd>Use to mark additional failure conditions have been met; reset to FALSE at start of each level.</dd>
+				<dt><code>GameLevel</code></dt>
+				<dd>Single player difficulty.</dd>
+			</dl>
 			<div class="rt">
 				<p><a href="#top" class="locallink">back to top</a></p>
 			</div>
@@ -1594,62 +1864,62 @@ myNewTemplate = getStructure(Rocket, 0);</pre>
 			<p>These are used in the place of a trigger and are for events that are to be called at specific times in the game. They will cause the event they are associated with to be called every time unless the trigger for the event is set to inactive.</p>
 			<dl>
 				<dt><code>CALL_GAMEINIT</code></dt>
-				<dd>this is triggered when the game has initialised.</dd>
+				<dd>This is triggered when the game has initialised.</dd>
 				<dt><code>CALL_DROIDDESIGNED</code></dt>
-				<dd>this is triggered when the player saves a template design.</dd>
+				<dd>This is triggered when the player saves a template design.</dd>
 				<dt><code>CALL_DROIDBUILT</code></dt>
-				<dd>this is triggered when a unit has been built via a factory.</dd>
+				<dd>This is triggered when a unit has been built via a factory.</dd>
 				<dt><code>CALL_POWERGEN_BUILT</code></dt>
-				<dd>this is triggered when a Power generatot has been built.</dd>
+				<dd>This is triggered when a Power generator has been built.</dd>
 				<dt><code>CALL_RESEX_BUILT</code></dt>
-				<dd>this is triggered when a Resource Extractor has been built.</dd>
+				<dd>This is triggered when a Resource Extractor has been built.</dd>
 				<dt><code>CALL_RESEARCH_BUILT</code></dt>
-				<dd>this is triggered when a Research Facility has been built.</dd>
+				<dd>This is triggered when a Research Facility has been built.</dd>
 				<dt><code>CALL_FACTORY_BUILT</code></dt>
-				<dd>this is triggered when a Factory has been built.</dd>
+				<dd>This is triggered when a Factory has been built.</dd>
 				<dt><code>CALL_MISSION_START</code></dt>
-				<dd>this is triggered when CTRL + 'M' is pressed so that the script can start a mission.</dd>
+				<dd>This is triggered when CTRL + 'M' is pressed so that the script can start a mission.</dd>
 				<dt><code>CALL_MISSION_END</code></dt>
-				<dd>this is triggered when CTRL + 'B' is pressed so that the script can end a mission.</dd>
+				<dd>This is triggered when CTRL + 'B' is pressed so that the script can end a mission.</dd>
 				<dt><code>CALL_VIDEO_QUIT</code></dt>
-				<dd>this is triggered when the CURRENT video sequence is over, either end of anim or when 'ESC' has been pressed.</dd>
+				<dd>This is triggered when the CURRENT video sequence is over, either end of anim or when 'ESC' has been pressed.</dd>
 				<dt><code>CALL_LAUNCH_TRANSPORTER</code></dt>
-				<dd>this is triggered when the 'Launch' button is pressed on the Transporter interface.</dd>
+				<dd>This is triggered when the 'Launch' button is pressed on the Transporter interface.</dd>
 				<dt><code>CALL_START_NEXT_LEVEL</code></dt>
-				<dd>this is triggered when a new level is desired.</dd>
+				<dd>This is triggered when a new level is desired.</dd>
 				<dt><code>CALL_TRANSPORTER_REINFORCE</code></dt>
-				<dd>this is triggered when a transporter carrying reinforcements for player 0 enters the map.</dd>
+				<dd>This is triggered when a transporter carrying reinforcements for player 0 enters the map.</dd>
 				<dt><code>CALL_MISSION_TIME</code></dt>
-				<dd>this is triggered when the time specified by setMissionTime() has elapsed.</dd>
+				<dd>This is triggered when the time specified by setMissionTime() has elapsed.</dd>
 				<dt><code>CALL_ELECTRONIC_TAKEOVER</code></dt>
-				<dd>triggered when a unit or a structure for the selectedPlayer are taken over using Electronic weapons.</dd>
+				<dd>Triggered when a unit or a structure for the selectedPlayer are taken over using Electronic weapons.</dd>
 			</dl>
 			<div class="rt">
 				<p><a href="#top" class="locallink">back to top</a></p>
 			</div>
 
-			<h3 id="callbacks_with_parameters">Callbacks with parameters</h3>
+			<h3 id="sf_callbacks_with_parameters">Callbacks with parameters</h3>
 			<dl>
 				<dt><code>CALL_RESEARCHCOMPLETED, ref RESEARCHSTAT, ref STRUCTURE</code></dt>
 				<dd>This is triggered when a research topic is complete - major or minor.. RESEARCHSTAt is the research topic that was complete, STRUCTURE is research facility that has completed research.</dd>
 				<dt><code>CALL_NEWDROID, player, ref DROID, ref STRUCTURE</code></dt>
-				<dd>triggered when a unit for player is built by a factory. DROID is the unit that was built. structure is the factory that built it, do not assume that the factory is still there!!.</dd>
+				<dd>Triggered when a unit for player is built by a factory. DROID is the unit that was built. structure is the factory that built it, do not assume that the factory is still there!!.</dd>
 				<dt><code>CALL_STRUCT_ATTACKED, player, ref STRUCTURE, ref BASEOBJ</code></dt>
-				<dd>triggered when a structure for player is attacked. STRUCTURE is the attacked structure, . BASEOBJ is the unit that attacked the structure (could be NULLOBJECT).</dd>
+				<dd>Triggered when a structure for player is attacked. STRUCTURE is the attacked structure, . BASEOBJ is the unit that attacked the structure (could be NULLOBJECT).</dd>
 				<dt><code>CALL_DROID_ATTACKED, player, ref DROID, ref BASEOBJ</code></dt>
-				<dd>triggered when a unit for player is attacked. DROID is the attacked unit, . BASEOBJ is the unit that attacked (could be NULLOBJECT).</dd>
+				<dd>Triggered when a unit for player is attacked. DROID is the attacked unit, . BASEOBJ is the unit that attacked (could be NULLOBJECT).</dd>
 				<dt><code>CALL_ATTACKED, player, ref BASEOBJ, ref BASEOBJ</code></dt>
-				<dd>triggered when a structure or unit for player is attacked. BASEOBJ is the attacked unit, . BASEOBJ is the unit that attacked (could be NULLOBJECT).</dd>
+				<dd>Triggered when a structure or unit for player is attacked. BASEOBJ is the attacked unit, . BASEOBJ is the unit that attacked (could be NULLOBJECT).</dd>
 				<dt><code>CALL_TRANSPORTER_OFFMAP, player</code></dt>
-				<dd>triggered when a transporter for player exits the map.</dd>
+				<dd>Triggered when a transporter for player exits the map.</dd>
 				<dt><code>CALL_TRANSPORTER_LANDED, GROUP, player</code></dt>
-				<dd>triggered when transporter for player lands; units on transporter are unloaded. into the given GROUP.</dd>
+				<dd>Triggered when transporter for player lands; units on transporter are unloaded. into the given GROUP.</dd>
 			</dl>
 			<div class="rt">
 				<p><a href="#top" class="locallink">back to top</a></p>
 			</div>
 
-			<h3 id="tutorial_callbacks">Tutorial Callbacks</h3>
+			<h3 id="sf_callbacks_tutorial_callbacks">Tutorial callbacks</h3>
 			<dl>
 				<dt><code>CALL_BUILDLIST</code></dt>
 				<dd>Build structures interface up.</dd>
@@ -1662,23 +1932,23 @@ myNewTemplate = getStructure(Rocket, 0);</pre>
 				<dt><code>CALL_MANULIST</code></dt>
 				<dd>Choose manufacturing interface up.</dd>
 				<dt><code>CALL_BUTTON_PRESSED, buttonID</code></dt>
-				<dd>triggered when an interface button with id buttonID is pressed.</dd>
+				<dd>Triggered when an interface button with id buttonID is pressed.</dd>
 				<dt><code>CALL_DESIGN_QUIT</code></dt>
-				<dd>triggered when the design screen is closed.</dd>
+				<dd>Triggered when the design screen is closed.</dd>
 				<dt><code>CALL_OBJ_DESTROYED, int player, ref BASEOBJ object</code></dt>
-				<dd>triggered when either a unit or a structure for player is destroyed.</dd>
+				<dd>Triggered when either a unit or a structure for player is destroyed.</dd>
 				<dt><code>CALL_DROID_DESTROYED, int player, ref DROID droid</code></dt>
-				<dd>triggered when a unit for player is destroyed.</dd>
+				<dd>Triggered when a unit for player is destroyed.</dd>
 				<dt><code>CALL_STRUCT_DESTROYED, int player, ref STRUCTURE structure</code></dt>
-				<dd>triggered when a structure for player is destroyed.</dd>
+				<dd>Triggered when a structure for player is destroyed.</dd>
 				<dt><code>CALL_FEATURE_DESTROYED, ref FEATURe feature</code></dt>
-				<dd>triggered when either a unit or a structure for player is destroyed.</dd>
+				<dd>Triggered when either a unit or a structure for player is destroyed.</dd>
 				<dt><code>CALL_OBJ_SEEN, int player, ref BASEOBj object, ref BASEOBJ viewer</code></dt>
-				<dd>triggered when either a unit or a structure is seen by a unit belonging to player.. object is the thing that was seen, viewer is the thing that saw it (may be NULLOBJECT).</dd>
+				<dd>Triggered when either a unit or a structure is seen by a unit belonging to player.. object is the thing that was seen, viewer is the thing that saw it (may be NULLOBJECT).</dd>
 				<dt><code>CALL_DROID_SEEN, int player, ref BASEOBJ object, ref BASEOBJ viewer</code></dt>
-				<dd>triggered when a unit is seen by a unit belonging to player.. object is the thing that was seen, viewer is the thing that saw it (may be NULLOBJECT).</dd>
+				<dd>Triggered when a unit is seen by a unit belonging to player.. object is the thing that was seen, viewer is the thing that saw it (may be NULLOBJECT).</dd>
 				<dt><code>CALL_STRUCT_SEEN, int player, ref BASEOBJ object, ref BASEOBJ viewer</code></dt>
-				<dd>triggered when a structure is seen by a unit belonging to player.. object is the thing that was seen, viewer is the thing that saw it (may be NULLOBJECT).</dd>
+				<dd>Triggered when a structure is seen by a unit belonging to player.. object is the thing that was seen, viewer is the thing that saw it (may be NULLOBJECT).</dd>
 				<dt><code>CALL_NO_REINFORCEMENTS_LEFT</code></dt>
 				<dd>called when the player has transferred all reinforcements from one level to the next.</dd>
 			</dl>
@@ -1686,7 +1956,7 @@ myNewTemplate = getStructure(Rocket, 0);</pre>
 				<p><a href="#top" class="locallink">back to top</a></p>
 			</div>
 
-			<h3 id="tutorial_callbacks_tutonly">Tutorial callbacks (tutorial only)</h3>
+			<h3 id="sf_callbacks_tutorial_callbacks_tutonly">Tutorial callbacks (tutorial only)</h3>
 			<dl>
 				<dt><code>CALL_DESIGN_WEAPON</code></dt>
 				<dd>a weapon button pressed.</dd>
@@ -1712,11 +1982,17 @@ myNewTemplate = getStructure(Rocket, 0);</pre>
 			</div>
 			<hr/>
 
-			<p>Warzone2100. Script language notes.</p>
-			<p>Original Author: Pumpkin Studios. 1999</p>
-			<p>Last Author: $Author$</p>
-			<p>Last update: $Date$, $Revision$, <a href="http://wz2100.net/">Warzone 2100 Resurrection Project</a></p>
-			<p>Note from Pumpkin Studios: making any modifications to Warzone 2100 will void any technical support open to you. We will not answer questions or help you in any way if you have modified Warzone 2100. Pumpkin Studios and Eidos will not take responsibility for any damage resulting from modifcation of Warzone 2100.</p>
+			<div id="fileinfo">
+				<ul>
+					<li>Original title: Warzone2100. Script language notes.</li>
+					<li>Original Author: Pumpkin Studios. 1999</li>
+					<li>Last $Author$</li>
+					<li>Last change on $Date$</li>
+					<li>$Revision$</li>
+					<li>Author: <a href="http://wz2100.net/" title="Homepage of the Warzone 2100 Resurrection Project" hreflang="en">Warzone 2100 Resurrection Project</a></li>
+					<li>Original note from Pumpkin Studios: making any modifications to Warzone 2100 will void any technical support open to you. We will not answer questions or help you in any way if you have modified Warzone 2100. Pumpkin Studios and Eidos will not take responsibility for any damage resulting from modifcation of Warzone 2100.</li>
+				</ul>
+			</div>
 		</div>
 	</body>
 </html>
