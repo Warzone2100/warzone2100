@@ -12,8 +12,8 @@ typedef point size;
 
 struct _point
 {
-	int x;
-	int y;
+	float x;
+	float y;
 };
 
 /*

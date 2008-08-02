@@ -193,6 +193,9 @@ void widgetInit(widget *self, const char *id)
 	// By default we need drawing
 	self->needsRedraw = true;
 	
+	// Enabled by default
+	self->isEnabled = true;
+	
 	// Also by default we need to be shown (hence are invisible)
 	self->isVisible = false;
 	
@@ -736,17 +739,17 @@ void widgetCompositeImpl(widget *self)
 	glBindTexture(GL_TEXTURE_RECTANGLE_ARB, self->textureId);
 	
 	glBegin(GL_QUADS);
-		glTexCoord2i(0, 0);
-		glVertex2i(0, 0);
+		glTexCoord2f(0, 0);
+		glVertex2f(0, 0);
 		
-		glTexCoord2i(0, self->size.y);
-		glVertex2i(0, self->size.y);
+		glTexCoord2f(0, self->size.y);
+		glVertex2f(0, self->size.y);
 		
-		glTexCoord2i(self->size.x, self->size.y);
-		glVertex2i(self->size.x, self->size.y);
+		glTexCoord2f(self->size.x, self->size.y);
+		glVertex2f(self->size.x, self->size.y);
 		
-		glTexCoord2i(self->size.x, 0);
-		glVertex2i(self->size.x, 0);
+		glTexCoord2f(self->size.x, 0);
+		glVertex2f(self->size.x, 0);
 	glEnd();
 
 	// Now our children
@@ -982,10 +985,10 @@ bool widgetPointMasked(widget *self, point loc)
 	const uint32_t *data = (uint32_t *) cairo_image_surface_get_data(surface);
 	
 	// The 32-bit segment of data we are interested in
-	const uint32_t bits = data[loc.y * (stride / 4) + (loc.x / 32)];
+	const uint32_t bits = data[(int) loc.y * (stride / 4) + ((int) loc.x / 32)];
 	
 	// Where in the 32-bit segment the pixel is located
-	const uint32_t pixelMask = 1 << (loc.x % 32);
+	const uint32_t pixelMask = 1 << ((int) loc.x % 32);
 	
 	// Check to see if the pixel is set or not
 	if (bits & pixelMask)
