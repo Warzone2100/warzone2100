@@ -617,7 +617,7 @@ void fpathTest(int x, int y, int x2, int y2)
 	assert(fpathJobQueueLength() == 1 || fpathResultQueueLength() == 1);
 	fpathRemoveDroidData(2);	// should not crash, nor remove our path
 	assert(fpathJobQueueLength() == 1 || fpathResultQueueLength() == 1);
-	while (fpathResultQueueLength() == 0) usleep(1);
+	while (fpathResultQueueLength() == 0) SDL_Delay(10);
 	assert(fpathJobQueueLength() == 0);
 	assert(fpathResultQueueLength() == 1);
 	r = fpathRoute(&sMove, 1, x, y, x2, y2, PROPULSION_TYPE_WHEELED, DROID_WEAPON);
@@ -634,7 +634,7 @@ void fpathTest(int x, int y, int x2, int y2)
 		r = fpathRoute(&sMove, i, x, y, x2, y2, PROPULSION_TYPE_WHEELED, DROID_WEAPON);
 		assert(r == FPR_WAIT);
 	}
-	while (fpathResultQueueLength() != 100) usleep(1);
+	while (fpathResultQueueLength() != 100) SDL_Delay(10);
 	assert(fpathJobQueueLength() == 0);
 	for (i = 1; i <= 100; i++)
 	{
