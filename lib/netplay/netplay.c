@@ -1262,7 +1262,7 @@ static void NETregisterServer(int state)
 					return;
 				}
 
-				SDLNet_TCP_Send(rs_socket, "addg", sizeof("addg"));
+				SDLNet_TCP_Send(rs_socket, (void*)"addg", sizeof("addg"));
 				NETsendGAMESTRUCT(rs_socket, &game);
 			}
 			break;
@@ -1558,7 +1558,7 @@ BOOL NETfindGame(void)
 	}
 	SDLNet_TCP_AddSocket(socket_set, tcp_socket);
 
-	SDLNet_TCP_Send(tcp_socket, "list", sizeof("list"));
+	SDLNet_TCP_Send(tcp_socket, (void*)"list", sizeof("list"));
 
 	if (SDLNet_CheckSockets(socket_set, 1000) > 0
 	 && SDLNet_SocketReady(tcp_socket)
@@ -1648,7 +1648,7 @@ BOOL NETjoinGame(UDWORD gameNumber, const char* playername)
  	}
 	SDLNet_TCP_AddSocket(socket_set, tcp_socket);
 
-	SDLNet_TCP_Send(tcp_socket, "join", sizeof("join"));
+	SDLNet_TCP_Send(tcp_socket, (void*)"join", sizeof("join"));
 
 	if (NETrecvGAMESTRUCT(&NetPlay.games[gameNumber])
 	 && NetPlay.games[gameNumber].desc.host[0] == '\0')
