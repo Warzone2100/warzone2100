@@ -345,7 +345,7 @@ BOOL dispInitialise(void)
 
 void ProcessRadarInput(void)
 {
-	SDWORD PosX,PosY;
+	int PosX, PosY;
 	int x = mouseX();
 	int y = mouseY();
 	UDWORD	temp1,temp2;
@@ -369,7 +369,7 @@ void ProcessRadarInput(void)
 //					{
 //						camToggleStatus();
 //					}
-					CalcRadarPosition(x,y,(UDWORD *)&PosX,(UDWORD *)&PosY);
+					CalcRadarPosition(x, y, &PosX, &PosY);
 					if(mouseOverRadar)
 					{
 					//	requestRadarTrack(PosX*TILE_UNITS,PosY*TILE_UNITS);
@@ -389,7 +389,7 @@ void ProcessRadarInput(void)
 
 			if(mouseDrag(MOUSE_RMB,&temp1,&temp2) && !rotActive)
 			{
-				CalcRadarPosition(x,y,(UDWORD*)&PosX,(UDWORD*)&PosY);
+				CalcRadarPosition(x, y, &PosX, &PosY);
 				setViewPos(PosX,PosY,true);
 				bRadarDragging = true;
 				if(keyDown(KEY_LCTRL) || keyDown(KEY_RCTRL))
@@ -399,12 +399,7 @@ void ProcessRadarInput(void)
 			}
 			else if (mousePressed(MOUSE_RMB))
 			{
-#ifdef RADAR_POSITION_AT_ZOOM
-				CalcRadarPosition(x,y,&PosX,&PosY);
-				setViewPos(PosX,PosY,true);
-				CheckScrollLimits();
-#endif
-				CalcRadarPosition(x,y,(UDWORD*)&PosX,(UDWORD*)&PosY);
+				CalcRadarPosition(x, y, &PosX, &PosY);
 
 				if(bInstantRadarJump)
 				{

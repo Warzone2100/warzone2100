@@ -2527,7 +2527,7 @@ BOOL	processConsoleCommands( char *pName )
 //Add a beacon (blip)
 void	kf_AddHelpBlip( void )
 {
-	UDWORD 	worldX,worldY;
+	int 	worldX, worldY;
 	UDWORD	i;
 	char	tempStr[255];
 	SDWORD	x,y;

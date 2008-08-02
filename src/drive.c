@@ -734,11 +734,11 @@ void driveTacticalSelectionChanged(void)
 //
 void driveProcessRadarInput(int x,int y)
 {
-	SDWORD PosX,PosY;
+	int PosX, PosY;
 
 	// when drive mode is active, clicking on the radar orders all selected droids
 	// to move to this position.
-	CalcRadarPosition(x,y,(UDWORD *)&PosX,(UDWORD *)&PosY);
+	CalcRadarPosition(x, y, &PosX, &PosY);
 	orderSelectedLoc(selectedPlayer, PosX*TILE_UNITS,PosY*TILE_UNITS);
 }
 /*
