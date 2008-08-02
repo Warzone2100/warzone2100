@@ -205,10 +205,6 @@ static UDWORD	baseTimes[BASE_FRAMES];
 /* The current base turn rate */
 static float	baseTurn;
 
-// The next DROID that should get the router when a lot of units are
-// in a MOVEROUTE state
-DROID	*psNextRouteDroid;
-
 /* Function prototypes */
 static void	moveUpdatePersonModel(DROID *psDroid, SDWORD speed, SDWORD direction);
 // Calculate the boundary vector
@@ -268,8 +264,6 @@ BOOL moveInitialise(void)
 		baseTimes[i] = GAME_TICKS_PER_SEC / BASE_DEF_RATE;
 	}
 
-	psNextRouteDroid = NULL;
-
 	return true;
 }
 
@@ -301,19 +295,6 @@ void moveUpdateBaseSpeed(void)
 
 	// reset the astar counters
 	astarResetCounters();
-
-	// check the waiting droid pointer
-	if (psNextRouteDroid != NULL)
-	{
-		if ((psNextRouteDroid->died) ||
-			((psNextRouteDroid->sMove.Status != MOVEROUTE) &&
-			 (psNextRouteDroid->sMove.Status != MOVEROUTESHUFFLE)))
-		{
-			objTrace(psNextRouteDroid->id, "Waiting droid %d (player %d) reset",
-			         (int)psNextRouteDroid->id, (int)psNextRouteDroid->player);
-			psNextRouteDroid = NULL;
-		}
-	}
 }
 
 /** Set a target location in world coordinates for a droid to move to
@@ -351,7 +332,7 @@ static BOOL moveDroidToBase(DROID *psDroid, UDWORD x, UDWORD y, BOOL bFormation)
 	}
 	else
 	{
-		retVal = fpathRoute(psDroid, x, y);
+		retVal = fpathDroidRoute(psDroid, x, y);
 	}
 
 	/* check formations */
@@ -372,14 +353,6 @@ static BOOL moveDroidToBase(DROID *psDroid, UDWORD x, UDWORD y, BOOL bFormation)
 		psDroid->sMove.fx = psDroid->pos.x;
 		psDroid->sMove.fy = psDroid->pos.y;
 		psDroid->sMove.fz = psDroid->pos.z;
-
-		// reset the next route droid
-		if (psDroid == psNextRouteDroid)
-		{
-			objTrace(psDroid->id, "Waiting droid %d (player %d) got route",
-			         (int)psDroid->id, (int)psDroid->player);
-			psNextRouteDroid = NULL;
-		}
 
 		// leave any old formation
 		if (psDroid->sMove.psFormation)
@@ -428,42 +401,9 @@ static BOOL moveDroidToBase(DROID *psDroid, UDWORD x, UDWORD y, BOOL bFormation)
 			}
 		}
 	}
-	else if (retVal == FPR_RESCHEDULE)
-	{
-		objTrace(psDroid->id, "moveDroidToBase(%d): out of time, not our turn; rescheduled", (int)psDroid->id);
-
-		// maxed out routing time this frame - do it next time
-		psDroid->sMove.DestinationX = x;
-		psDroid->sMove.DestinationY = y;
-
-		if ((psDroid->sMove.Status != MOVEROUTE) &&
-			(psDroid->sMove.Status != MOVEROUTESHUFFLE))
-		{
-			objTrace(psDroid->id, "moveDroidToBase(%d): started waiting at %d",
-			         (int)psDroid->id, (int)gameTime);
-
-			psDroid->sMove.Status = MOVEROUTE;
-
-			// note when the unit first tried to route
-			psDroid->sMove.bumpTime = gameTime;
-		}
-	}
 	else if (retVal == FPR_WAIT)
 	{
-		// reset the next route droid
-		if (psDroid == psNextRouteDroid)
-		{
-			objTrace(psDroid->id, "moveDroidToBase(%d): out of time, waiting for next frame (we are next)",
-			         (int)psDroid->id);
-			psNextRouteDroid = NULL;
-		}
-		else
-		{
-			objTrace(psDroid->id, "moveDroidToBase(%d): out of time, waiting for next frame (we are not next)",
-			         (int)psDroid->id);
-		}
-
-		// the route will be calculated over a number of frames
+		// the route will be calculated by the path-finding thread
 		psDroid->sMove.Status = MOVEWAITROUTE;
 		psDroid->sMove.DestinationX = x;
 		psDroid->sMove.DestinationY = y;
@@ -3069,45 +3009,6 @@ void moveUpdateDroid(DROID *psDroid)
 		// deal with both waiting for a route (MOVEROUTE) and the droid shuffle (MOVESHUFFLE)
 		// here because droids waiting for a route need to shuffle out of the way (MOVEROUTESHUFFLE)
 		// of those that have already got a route
-
-		if ((psDroid->sMove.Status == MOVEROUTE) ||
-			(psDroid->sMove.Status == MOVEROUTESHUFFLE))
-		{
-			// see if this droid started waiting for a route before the previous one
-			// and note it to be the next droid to route.
-			// selectedPlayer always gets precidence in single player
-			if (psNextRouteDroid == NULL)
-			{
-				objTrace(psDroid->id, "Waiting droid set to %d (player %d) started at %d now %d (none waiting)",
-				         (int)psDroid->id, (int)psDroid->player, (int)psDroid->sMove.bumpTime, (int)gameTime);
-				psNextRouteDroid = psDroid;
-			}
-
-			else if (bMultiPlayer &&
-					 (psNextRouteDroid->sMove.bumpTime > psDroid->sMove.bumpTime))
-			{
-				objTrace(psDroid->id, "Waiting droid set to %d (player %d) started at %d now %d (mulitplayer)",
-				         (int)psDroid->id, (int)psDroid->player, (int)psDroid->sMove.bumpTime, (int)gameTime);
-				psNextRouteDroid = psDroid;
-			}
-
-			else if ( (psDroid->player == selectedPlayer) &&
-					  ( (psNextRouteDroid->player != selectedPlayer) ||
-						(psNextRouteDroid->sMove.bumpTime > psDroid->sMove.bumpTime) ) )
-			{
-				objTrace(psDroid->id, "Waiting droid set to %d (player %d) started at %d now %d (selectedPlayer)",
-				         (int)psDroid->id, (int)psDroid->player, (int)psDroid->sMove.bumpTime, (int)gameTime);
-				psNextRouteDroid = psDroid;
-			}
-			else if ( (psDroid->player != selectedPlayer) &&
-					  (psNextRouteDroid->player != selectedPlayer) &&
-					  (psNextRouteDroid->sMove.bumpTime > psDroid->sMove.bumpTime) )
-			{
-				objTrace(psDroid->id, "Waiting droid set to %d (player %d) started at %d now %d (non selectedPlayer)",
-				         (int)psDroid->id, (int)psDroid->player, (int)psDroid->sMove.bumpTime, (int)gameTime);
-				psNextRouteDroid = psDroid;
-			}
-		}
 
 		if ((psDroid->sMove.Status == MOVEROUTE) ||
 			(psDroid->sMove.Status == MOVEROUTESHUFFLE))

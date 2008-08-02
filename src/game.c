@@ -42,6 +42,7 @@
 
 #include "game.h"
 
+#include "fpath.h"
 #include "map.h"
 #include "droid.h"
 #include "action.h"
@@ -5745,6 +5746,14 @@ static void LoadDroidMoveControl(DROID * const psDroid, SAVE_DROID const * const
 				formationJoin(psDroid->sMove.psFormation, psDroid);
 			}
 		}
+	}
+
+	// Recreate path-finding jobs
+	if (psDroid->sMove.Status == MOVEWAITROUTE)
+	{
+		psDroid->sMove.Status = MOVEINACTIVE;
+		fpathDroidRoute(psDroid, psDroid->sMove.DestinationX, psDroid->sMove.DestinationY);
+		psDroid->sMove.Status = MOVEWAITROUTE;
 	}
 }
 

@@ -21,22 +21,6 @@
 #ifndef __INCLUDED_SRC_ASTART_H__
 #define __INCLUDED_SRC_ASTART_H__
 
-/** The maximum amount of iterations we want to spend in the inner loop of the
- *  A* algorithm.
- *
- *  If this number is succeeded, we will return ASR_PARTIAL and continue the
- *  path finding during the next next frame. Function fpathRoute() will return
- *  FPR_WAIT if it was already working on the currently requested droid.
- *  FPR_RESCHEDULE indicates that fpathRoute() didn't even get started on the
- *  current droid and it'll require rescheduling in the next frame.
- *
- *  @ingroup pathfinding
- */
-#define FPATH_LOOP_LIMIT	600
-
-// counters for A*
-extern int astarInner;
-
 /** Reset the A* counters
  *
  *  This function resets astarInner among others.
@@ -53,25 +37,14 @@ enum
 {
 	ASR_OK,         ///< found a route
 	ASR_FAILED,     ///< no route could be found
-	ASR_PARTIAL,    ///< routing cannot be finished this frame, and should be continued the next frame
 	ASR_NEAREST,    ///< found a partial route to a nearby position
-};
-
-/** route modes for astar
- *
- *  @ingroup pathfinding
- */
-enum
-{
-	ASR_NEWROUTE,   ///< start a new route
-	ASR_CONTINUE,   ///< continue a route that was partially completed the last frame
 };
 
 /** Use the A* algorithm to find a path
  *
  *  @ingroup pathfinding
  */
-SDWORD fpathAStarRoute(SDWORD routeMode, MOVE_CONTROL *psMove, SDWORD sx, SDWORD sy, SDWORD fx, SDWORD fy, PROPULSION_TYPE propulsion);
+SDWORD fpathAStarRoute(MOVE_CONTROL *psMove, SDWORD sx, SDWORD sy, SDWORD fx, SDWORD fy, PROPULSION_TYPE propulsion);
 
 /** Check LOS (Line Of Sight) between two tiles
  */

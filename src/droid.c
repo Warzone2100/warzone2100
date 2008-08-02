@@ -299,6 +299,8 @@ void droidRelease(DROID *psDroid)
 		}
 	}
 
+	fpathRemoveDroidData(psDroid->id);
+
 	// leave the current formation if any
 	if (psDroid->sMove.psFormation)
 	{

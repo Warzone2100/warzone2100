@@ -37,8 +37,6 @@ static SDWORD	astarOuter, astarRemove;
 /** Keeps track of the amount of iterations done in the inner loop of our A*
  *  implementation.
  *
- *  @see FPATH_LOOP_LIMIT
- *
  *  @ingroup pathfinding
  */
 int astarInner = 0;
@@ -368,10 +366,10 @@ BOOL fpathTileLOS(SDWORD x1,SDWORD y1, SDWORD x2,SDWORD y2)
 	return !obstruction;
 }
 
-SDWORD fpathAStarRoute(SDWORD routeMode, MOVE_CONTROL *psMove, SDWORD sx, SDWORD sy, SDWORD fx, SDWORD fy, PROPULSION_TYPE propulsion)
+SDWORD fpathAStarRoute(MOVE_CONTROL *psMove, SDWORD sx, SDWORD sy, SDWORD fx, SDWORD fy, PROPULSION_TYPE propulsion)
 {
- 	FP_NODE		*psFound, *psCurr, *psNew, *psParent, *psNext;
-static 	FP_NODE		*psNearest, *psRoute;
+	FP_NODE		*psFound, *psCurr, *psNew, *psParent, *psNext;
+	FP_NODE		*psNearest, *psRoute;
 	SDWORD		dir, x,y, currDist;
 	SDWORD		retval = ASR_OK;
 	const int       tileSX = map_coord(sx);
@@ -379,8 +377,6 @@ static 	FP_NODE		*psNearest, *psRoute;
 	const int       tileFX = map_coord(fx);
 	const int       tileFY = map_coord(fy);
 
-	if (routeMode == ASR_NEWROUTE)
-	{
 		fpathTableReset();
 
 		// Add the start point to the open list
@@ -397,16 +393,10 @@ static 	FP_NODE		*psNearest, *psRoute;
 		fpathAddNode(psCurr);
 		psRoute = NULL;
 		psNearest = NULL;
-	}
 
 	// search for a route
 	while (psOpen != NULL)
 	{
-		if (astarInner > FPATH_LOOP_LIMIT)
-		{
-			return ASR_PARTIAL;
-		}
-
 		psCurr = fpathOpenGet();
 
 		if (psCurr->x == tileFX && psCurr->y == tileFY)
