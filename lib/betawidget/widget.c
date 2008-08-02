@@ -206,11 +206,18 @@ void widgetInit(widget *self, const char *id)
 
 void widgetDestroyImpl(widget *self)
 {
+	eventTableEntry *currEntry;
+	
 	// Release the container
 	vectorMapAndDestroy(self->children, (mapCallback) widgetDestroy);
 
 	// Release the event handler table
-	vectorMapAndDestroy(self->eventVtbl, free);
+	while ((currEntry = vectorHead(self->eventVtbl)))
+	{
+		widgetRemoveEventHandler(self, currEntry->id);
+	}
+	
+	vectorDestroy(self->eventVtbl);
 
 	// Destroy the cairo context
 	cairo_destroy(self->cr);
@@ -486,6 +493,17 @@ void widgetRemoveEventHandlerImpl(widget *self, int id)
 		// If the handler matches, remove it
 		if (handler->id == id)
 		{
+			// Generate an EVT_DESTRUCT event to allow the handler to clean-up
+			eventMisc evtDestruct;
+			evtDestruct.event.type = EVT_DESTRUCT;
+			
+			handler->callback(self, (event *) &evtDestruct, handler->id,
+			                  handler->userData);
+			
+			// Release the handler
+			free(handler);
+			
+			// Finally, remove the event handler from the table
 			vectorRemoveAt(self->eventVtbl, i);
 			break;
 		}

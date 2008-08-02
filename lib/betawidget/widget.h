@@ -79,7 +79,9 @@ typedef enum
 
 	// Misc
 	EVT_FOCUS,
-	EVT_BLUR
+	EVT_BLUR,
+	
+	EVT_DESTRUCT
 } eventType;
 
 /*
