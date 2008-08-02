@@ -68,10 +68,10 @@ typedef enum
 	// Keyboard events
 	EVT_KEY_DOWN,
 	EVT_KEY_UP,
-	
+
 	// Text input events
 	EVT_TEXT,
-	
+
 	// Timer events
 	EVT_TIMER,
 	EVT_TIMER_SINGLE_SHOT,
@@ -158,7 +158,7 @@ struct _eventKey
 struct _eventText
 {
 	event event;
-	
+
 	// The text that was typed, UTF-8 encoded
 	const char *utf8;
 };
@@ -186,19 +186,19 @@ struct _eventTableEntry
 {
 	/// The unique id of the event handler
 	int id;
-	
+
 	/// The event for which the handler is registered for
 	eventType type;
-	
+
 	/// The method to call
 	callback callback;
-	
+
 	/// Pointer to user supplied data to pass to callback
 	void *userData;
-	
+
 	/// The time when the event was last called (for debugging and timer events)
 	int lastCalled;
-	
+
 	/// For timer events only; how often the event should fire; in ms
 	int interval;
 };
@@ -215,12 +215,12 @@ struct _widgetVtbl
 
 	bool    (*fireCallbacks)                (widget *self, event *evt);
 	bool    (*fireTimerCallbacks)           (widget *self, event *evt);
-	
+
 	int     (*addEventHandler)              (widget *self, eventType type,
 	                                         callback handler, void *userData);
 	int     (*addTimerEventHandler)         (widget *self, eventType type,
-                                             int interval, callback handler,
-                                             void *userData);
+	                                         int interval, callback handler,
+	                                         void *userData);
 	void    (*removeEventHandler)           (widget *self, int id);
 
 	void    (*focus)                        (widget *self);
@@ -228,15 +228,15 @@ struct _widgetVtbl
 
 	void    (*enable)                       (widget *self);
 	void    (*disable)                      (widget *self);
-	
+
 	void    (*show)                         (widget *self);
 	void    (*hide)                         (widget *self);
 
 	size    (*getMinSize)                   (widget *self);
 	size    (*getMaxSize)                   (widget *self);
-	
+
 	void    (*resize)                       (widget *self, int x, int y);
-	
+
 	void    (*composite)                    (widget *self);
 
 	void    (*doDraw)                       (widget *self);
@@ -275,17 +275,17 @@ struct _widget
 	 * If a mouse button is currently depressed on the widget
 	 */
 	bool hasMouseDown;
-	
+
 	/*
 	 * The widgets cairo drawing context
 	 */
 	cairo_t *cr;
-	
+
 	/*
 	 * The id of the OpenGL texture to which self->cr is mapped
 	 */
 	GLuint textureId;
-	
+
 	/*
 	 * The widgets mouse-event mask
 	 */
@@ -304,9 +304,9 @@ struct _widget
 	 * The class (or subclass) that widget is (used for type checking)
 	 */
 	const classInfo *classInfo;
-	
+
 	/*
-	 * Arbitary user-defined data
+	 * Arbitrary user-defined data
 	 */
 	void *pUserData;
 	int32_t userData;
@@ -335,17 +335,17 @@ struct _widget
 	 * If the widget is currently enabled or not
 	 */
 	bool isEnabled;
-	
+
 	/*
 	 * If the widget is visible or not
 	 */
 	bool isVisible;
-	
+
 	/*
 	 * If the widget is dirty (i.e., needs to be re-drawn)
 	 */
 	bool needsRedraw;
-	
+
 	/*
 	 * If the widget uses an mouse event mask
 	 */
@@ -395,7 +395,7 @@ void widgetCompositeImpl(widget *self);
 /**
  * Checks to see if it is legal to cast self to instanceOf. Or, put in OO terms
  * checks if self `is a' instanceOf instance.
- * 
+ *
  * @param self	The widget to check the class of.
  * @param instanceOf	The class we are interested in.
  * @return True if it is legal to cast, false otherwise.
@@ -420,14 +420,14 @@ void widgetComposite(widget *self);
 
 /**
  * Enables the widgets mask.
- * 
+ *
  * @param self  The widget whose mask to enable.
  */
 void widgetEnableMask(widget *self);
 
 /**
  * Disables the widgets mouse-event mask.
- * 
+ *
  * @param self	The widget whose mask to disable.
  */
 void widgetDisableMask(widget *self);
@@ -516,7 +516,7 @@ int widgetAddEventHandler(widget *self, eventType type,
 /**
  * Similar to widgetAddEventHandler in many respects, except that it is designed
  * to add timer event handlers (EVT_TIMER_ONE_SHOT and EVT_TIMER_PERSISTENT).
- * 
+ *
  * @param self          The widget to add the timer event handler to.
  * @param type          The tyoe of the timer to register the handler for.
  * @param interval      The duration in ms to wait.
@@ -632,7 +632,7 @@ size widgetGetMaxSize(widget *self);
  * conditions:
  *  widgetGetMinSize().x <= x <= widgetGetMaxSize().x and
  *  widgetGetMinSize().y <= y <= widgetGetMaxSize().y.
- * 
+ *
  * @param self  The widget to resize.
  * @param w     The new size of the widget in the x-axis.
  * @param h     The new size of the widget in the y-axis.
@@ -659,7 +659,7 @@ void widgetDoDraw(widget *self);
  * Configures the mask context (self->maskCr) for drawing and then delegates the
  * drawing to widgetDoDrawMask. This method is required as the mask context
  * requires some additional initialisation to a regular Cairo context.
- * 
+ *
  * @param self  The widget whose mask to draw.
  */
 void widgetDrawMask(widget *self);
@@ -667,7 +667,7 @@ void widgetDrawMask(widget *self);
 /**
  * A protected `pure virtual` method which is called to draw the widgets mouse-
  * event mask.
- * 
+ *
  * @param self  The widget that should draw its mask.
  */
 void widgetDoDrawMask(widget *self);
@@ -686,14 +686,14 @@ bool widgetDoLayout(widget *self);
 bool widgetFireCallbacks(widget *self, event *evt);
 
 /**
- * 
+ *
  */
 bool widgetFireTimerCallbacks(widget *self, event *evt);
 
 /**
  * Checks to see if the point loc is masked or not by the widgets mouse-event
  * mask.
- * 
+ *
  * @param self  The widget to check the mask of.
  * @param loc   The point (x,y) to check the mask status of.
  * @return true if loc is masked; false otherwise;
