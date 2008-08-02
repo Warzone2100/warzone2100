@@ -887,7 +887,6 @@ static SDWORD moveObjRadius(const BASE_OBJECT* psObj)
 			{
 				return mvPersRad;
 			}
-			//else if (psDroid->droidType == DROID_CYBORG)
 			else if (cyborgDroid(psDroid))
 			{
 				return mvCybRad;
@@ -916,15 +915,13 @@ static SDWORD moveObjRadius(const BASE_OBJECT* psObj)
 			break;
 		}
 		case OBJ_STRUCTURE:
-//			return psObj->sDisplay.imd->visRadius;
 			return psObj->sDisplay.imd->radius / 2;
 
 		case OBJ_FEATURE:
-//			return psObj->sDisplay.imd->visRadius;
 			return psObj->sDisplay.imd->radius / 2;
 
 		default:
-			ASSERT(!"Unknown object type", "moveObjRadius: unknown object type");
+			ASSERT(false, "unknown object type");
 			return 0;
 	}
 }
@@ -1382,9 +1379,7 @@ static void moveCalcDroidSlide(DROID *psDroid, float *pmx, float *pmy)
 	CHECK_DROID(psDroid);
 
 	bLegs = false;
-	if (psDroid->droidType == DROID_PERSON
-//	 || psDroid->droidType == DROID_CYBORG)
-	 || cyborgDroid(psDroid))
+	if (psDroid->droidType == DROID_PERSON || cyborgDroid(psDroid))
 	{
 		bLegs = true;
 	}
@@ -1404,7 +1399,6 @@ static void moveCalcDroidSlide(DROID *psDroid, float *pmx, float *pmy)
 
 			if (bLegs
 			 && ((DROID *)psInfo->psObj)->droidType != DROID_PERSON
-//			 && ((DROID *)psInfo->psObj)->droidType != DROID_CYBORG)
 			 && !cyborgDroid((DROID *)psInfo->psObj))
 			{
 				// cyborgs/people only avoid other cyborgs/people
@@ -1448,7 +1442,6 @@ static void moveCalcDroidSlide(DROID *psDroid, float *pmx, float *pmy)
 			}
 			else
 			{
-//				if (((DROID *)psInfo->psObj)->sMove.Status == MOVEINACTIVE)
 				psObst = psInfo->psObj;
 
 				// note the bump time and position if necessary
@@ -1623,13 +1616,11 @@ static void moveGetObstacleVector(DROID *psDroid, float *pX, float *pY)
 			oy = dirY / omag;
 			if (*pX * oy + *pY * -ox < 0)
 			{
-// 				debug( LOG_NEVER, "First perp\n");
 				avoidX = -oy;
 				avoidY = ox;
 			}
 			else
 			{
-// 				debug( LOG_NEVER, "Second perp\n");
 				avoidX = oy;
 				avoidY = -ox;
 			}
