@@ -2056,12 +2056,7 @@ static void addProjNaybor(BASE_OBJECT *psObj, UDWORD distSqr)
 {
 	UDWORD	pos;
 
-	if (numProjNaybors >= MAX_NAYBORS)
-	{
-//		DBPRINTF(("Naybor list maxed out for id %d\n", psObj->id));
-		return;
-	}
-	else if (numProjNaybors == 0)
+	if (numProjNaybors == 0)
 	{
 		// No objects in the list
 		asProjNaybors[0].psObj = psObj;
@@ -2090,9 +2085,6 @@ static void addProjNaybor(BASE_OBJECT *psObj, UDWORD distSqr)
 		asProjNaybors[pos].distSqr = distSqr;
 		numProjNaybors++;
 	}
-
-	ASSERT( numProjNaybors <= MAX_NAYBORS,
-		"addNaybor: numNaybors > MAX_NAYBORS" );
 }
 
 //Watermelon: projGetNaybors ripped from droid.c
@@ -2101,13 +2093,13 @@ static void projGetNaybors(PROJECTILE *psObj)
 {
 	SDWORD		xdiff, ydiff;
 	UDWORD		dx,dy, distSqr;
-	//Watermelon:renamed to psTempObj from psObj
 	BASE_OBJECT	*psTempObj;
 
 	CHECK_PROJECTILE(psObj);
 
-// Ensure only called max of once per droid per game cycle.
-	if(CurrentProjNaybors == (BASE_OBJECT *)psObj && projnayborTime == gameTime) {
+	// Ensure only called max of once per droid per game cycle.
+	if (CurrentProjNaybors == (BASE_OBJECT *)psObj && projnayborTime == gameTime)
+	{
 		return;
 	}
 	CurrentProjNaybors = (BASE_OBJECT *)psObj;
@@ -2115,9 +2107,6 @@ static void projGetNaybors(PROJECTILE *psObj)
 
 	// reset the naybor array
 	numProjNaybors = 0;
-#ifdef DEBUG
-	memset(asProjNaybors, 0xcd, sizeof(asProjNaybors));
-#endif
 
 	// search for naybor objects
 	dx = ((BASE_OBJECT *)psObj)->pos.x;
@@ -2156,6 +2145,10 @@ static void projGetNaybors(PROJECTILE *psObj)
 			}
 
 			addProjNaybor(psTempObj, distSqr);
+			if (numProjNaybors >= MAX_NAYBORS)
+			{
+				break;
+			}
 		}
 	}
 }

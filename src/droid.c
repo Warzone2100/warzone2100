@@ -716,12 +716,7 @@ static void addNaybor(BASE_OBJECT *psObj, UDWORD distSqr)
 {
 	UDWORD	pos;
 
-	if (numNaybors >= MAX_NAYBORS)
-	{
-		return;
-	}
-
-	else if (numNaybors == 0)
+	if (numNaybors == 0)
 	{
 		// No objects in the list
 		asDroidNaybors[0].psObj = psObj;
@@ -748,44 +743,11 @@ static void addNaybor(BASE_OBJECT *psObj, UDWORD distSqr)
 		asDroidNaybors[pos].distSqr = distSqr;
 		numNaybors++;
 	}
-
-	ASSERT( numNaybors <= MAX_NAYBORS,
-		"addNaybor: numNaybors > MAX_NAYBORS" );
 }
 
 
 static DROID	*CurrentNaybors = NULL;
 static UDWORD	nayborTime = 0;
-
-// macro to see if an object is in NAYBOR_RANGE
-// used by droidGetNayb
-#define IN_NAYBOR_RANGE(psObj) \
-	xdiff = dx - (SDWORD)psObj->pos.x; \
-	if (xdiff < 0) \
-	{ \
-		xdiff = -xdiff; \
-	} \
-	if (xdiff > NAYBOR_RANGE) \
-	{ \
-		continue; \
-	} \
-\
-	ydiff = dy - (SDWORD)psObj->pos.y; \
-	if (ydiff < 0) \
-	{ \
-		ydiff = -ydiff; \
-	} \
-	if (ydiff > NAYBOR_RANGE) \
-	{ \
-		continue; \
-	} \
-\
-	distSqr = xdiff*xdiff + ydiff*ydiff; \
-	if (distSqr > NAYBOR_RANGE*NAYBOR_RANGE) \
-	{ \
-		continue; \
-	} \
-
 
 /* Find all the objects close to the droid */
 void droidGetNaybors(DROID *psDroid)
@@ -797,7 +759,8 @@ void droidGetNaybors(DROID *psDroid)
 	CHECK_DROID(psDroid);
 
 	// Ensure only called max of once per droid per game cycle.
-	if(CurrentNaybors == psDroid && nayborTime == gameTime) {
+	if (CurrentNaybors == psDroid && nayborTime == gameTime)
+	{
 		return;
 	}
 	CurrentNaybors = psDroid;
@@ -805,9 +768,6 @@ void droidGetNaybors(DROID *psDroid)
 
 	// reset the naybor array
 	numNaybors = 0;
-#ifdef DEBUG
-	memset(asDroidNaybors, 0xcd, sizeof(asDroidNaybors));
-#endif
 
 	// search for naybor objects
 	dx = psDroid->pos.x;
@@ -818,9 +778,38 @@ void droidGetNaybors(DROID *psDroid)
 	{
 		if (psObj != (BASE_OBJECT *)psDroid && !psObj->died)
 		{
-			IN_NAYBOR_RANGE(psObj);
+			xdiff = dx - (SDWORD)psObj->pos.x;
+			if (xdiff < 0)
+			{
+				xdiff = -xdiff;
+			}
+			if (xdiff > NAYBOR_RANGE)
+			{
+				continue;
+			}
+
+			ydiff = dy - (SDWORD)psObj->pos.y;
+			if (ydiff < 0)
+			{
+				ydiff = -ydiff;
+			}
+			if (ydiff > NAYBOR_RANGE)
+			{
+				continue;
+			}
+
+			distSqr = xdiff*xdiff + ydiff*ydiff;
+			if (distSqr > NAYBOR_RANGE*NAYBOR_RANGE)
+			{
+				continue;
+			}
 
 			addNaybor(psObj, distSqr);
+			if (numNaybors >= MAX_NAYBORS)
+			{
+				break;
+			}
+
 		}
 	}
 }
