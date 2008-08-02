@@ -36,6 +36,11 @@
 #include "lib/framework/frameint.h"
 #include "lib/ivis_common/piestate.h"
 #include "lib/ivis_common/pieblitfunc.h"
+#ifdef __APPLE__
+#include <OpenGL/glu.h>
+#else
+#include <GL/glu.h>
+#endif
 #include "screen.h"
 
 /* The Current screen size and bit depth */
@@ -51,6 +56,12 @@ static BOOL		bBackDrop = false;
 static char		screendump_filename[PATH_MAX];
 static BOOL		screendump_required = false;
 static GLuint		backDropTexture = ~0;
+
+// Variables needed for our FBO
+GLuint fbo;					// Our handle to the FBO
+GLuint FBOtexture;			// The texture we are going to use
+GLuint FBOdepthbuffer;		// Our handle to the depth render buffer
+static BOOL FBOinit = false;			
 
 /* Initialise the double buffered display */
 BOOL screenInitialise(
@@ -166,6 +177,7 @@ BOOL screenInitialise(
 	debug(LOG_3D, "  * Stencil wrap %s supported.", GLEE_EXT_stencil_wrap ? "is" : "is NOT");
 	debug(LOG_3D, "  * Anisotropic filtering %s supported.", GLEE_EXT_texture_filter_anisotropic ? "is" : "is NOT");
 	debug(LOG_3D, "  * Rectangular texture %s supported.", GLEE_ARB_texture_rectangle ? "is" : "is NOT");
+	debug(LOG_3D, "  * FrameBuffer Object (FBO) %s supported.", GLEE_EXT_framebuffer_object  ? "is" : "is NOT");
 
 	if (!GLEE_ARB_texture_rectangle)
 	{
@@ -377,4 +389,116 @@ void screenDumpToDisk(const char* path) {
 	// If we have an integer overflow, we don't want to go about and overwrite files
 	if (screendump_num != 0)
 		screendump_required = true;
+}
+// checkGLErrors( char *label)
+// 
+// if a openGL error has occured, we query the error code, and see what it was.
+void checkGLErrors(const char *label)
+{
+    GLenum errCode;
+    const GLubyte *errStr;
+
+    if ((errCode = glGetError()) != GL_NO_ERROR)
+	{
+        errStr = gluErrorString(errCode);
+        debug(LOG_ERROR,"OpenGL ERROR in %s: ",label);
+        debug(LOG_ERROR,"%s, %d(0x%0x)",(char*)errStr,errCode,errCode);
+    }
+}
+// Init_FBO( int width, int height )
+//  FBO create routine
+BOOL Init_FBO( int width, int height )
+{
+GLenum status;	
+	// check to make sure user has FBO available, and we didn't create a FBO before.
+	if(glGenFramebuffersEXT  && !FBOinit)
+	{
+		glGenFramebuffersEXT(1, &fbo);	//create fbo
+		glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, fbo);
+
+		// create depthbuffer
+		glGenRenderbuffersEXT(1, &FBOdepthbuffer);
+		glBindRenderbufferEXT(GL_RENDERBUFFER_EXT, FBOdepthbuffer);
+		glRenderbufferStorageEXT(GL_RENDERBUFFER_EXT, GL_DEPTH_COMPONENT, width, height);
+		glFramebufferRenderbufferEXT(GL_FRAMEBUFFER_EXT, GL_DEPTH_ATTACHMENT_EXT, GL_RENDERBUFFER_EXT, FBOdepthbuffer);
+
+		// Now setup a texture to render to
+		glGenTextures(1, &FBOtexture);
+		glBindTexture(GL_TEXTURE_2D, FBOtexture);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB,  width, height,0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+
+		// attach that texture to the color
+		glFramebufferTexture2DEXT (GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT,
+		GL_TEXTURE_2D, FBOtexture, 0);
+		glBindFramebufferEXT (GL_FRAMEBUFFER_EXT, 0); // unbind FBO
+
+		// make sure everything went OK
+		status = glCheckFramebufferStatusEXT(GL_FRAMEBUFFER_EXT);
+		if(status != GL_FRAMEBUFFER_COMPLETE_EXT)
+		{
+			switch (status)
+			{
+				case GL_FRAMEBUFFER_COMPLETE_EXT:
+					break;
+				case GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT_EXT:
+					debug(LOG_ERROR, "Error: FBO missing a required image/buffer attachment!");
+					break;
+				case GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT_EXT:
+					debug(LOG_ERROR, "Error: FBO has no images/buffers attached!");
+					break;
+				case GL_FRAMEBUFFER_INCOMPLETE_DUPLICATE_ATTACHMENT_EXT:
+					debug(LOG_ERROR, "Error: FBO has an image/buffer attached in multiple locations!");
+					break;
+				case GL_FRAMEBUFFER_INCOMPLETE_DIMENSIONS_EXT:
+					debug(LOG_ERROR, "Error: FBO has mismatched image/buffer dimensions!");
+					break;
+				case GL_FRAMEBUFFER_INCOMPLETE_FORMATS_EXT:
+					debug(LOG_ERROR, "Error: FBO colorbuffer attachments have different types!");
+					break;
+				case GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER_EXT:
+					debug(LOG_ERROR, "Error: FBO trying to draw to non-attached color buffer!");
+					break;
+				case GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER_EXT:
+					debug(LOG_ERROR, "Error: FBO trying to read from a non-attached color buffer!");
+					break;
+				case GL_FRAMEBUFFER_UNSUPPORTED_EXT:
+					debug(LOG_ERROR, "Error: FBO format is not supported by current graphics card/driver!");
+					break;
+				case GL_INVALID_FRAMEBUFFER_OPERATION_EXT :
+					debug(LOG_ERROR, "Error: FBO Non-framebuffer passed to glCheckFramebufferStatusEXT()!");
+					break;
+				default:
+					debug(LOG_ERROR, "*UNKNOWN FBO ERROR* reported from glCheckFramebufferStatusEXT() for %x!", status);
+					break;
+			}
+			FBOinit = false;	//we have a error with the FBO setup
+			return false;
+		}
+		else
+		{
+			FBOinit = true;		//everything is OK with FBO setup.
+		}
+	}
+	glBindFramebufferEXT (GL_FRAMEBUFFER_EXT, 0); // unbind it for now.
+	checkGLErrors("Init_FBO() Completed");
+	return true;
+
+}
+// Delete_FBO()
+void Delete_FBO(void)
+{
+	if(FBOinit)
+	{
+		glDeleteFramebuffersEXT(1, &fbo);
+		checkGLErrors("Deleting FBO");
+		glDeleteRenderbuffersEXT(1, &FBOdepthbuffer);
+		checkGLErrors("deleting FBOdepthbuffer");
+		glDeleteTextures(1,&FBOtexture);
+		checkGLErrors("deleting FBOtexture");
+		fbo = FBOdepthbuffer = FBOtexture = FBOinit = 0;	//reset everything.
+	}
 }

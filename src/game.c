@@ -11807,10 +11807,21 @@ static BOOL getNameFromComp(UDWORD compType, char *pDest, UDWORD compIndex)
 }
 // -----------------------------------------------------------------------------------------
 // END
-
 //======================================================
-//draws stuff into our newer bitmap.
-BOOL plotStructurePreview16(char *backDropSprite, UBYTE scale, UDWORD offX, UDWORD offY)
+//BOOL plotStructurePreview16(
+// char *backDropSprite,			// the premade map texture
+// UBYTE scale,						// scale of the map texture
+// UDWORD offX,						// X offset for map
+// UDWORD offY,						// Y offset for map
+// Vector2i playeridpos[])			// holds the position on map that player's HQ is located
+//
+// adds clancolors for the map preview texture.
+// What basically happens in this routine is we read the map, and then for
+// every structure on said map, we either color it via clan colors (which
+// are the same as the radar colors), and it plots its pixel on the bitmap.
+// Also added position number of starting location (which is determined by
+// the map maker(!)) This info is needed so we can blit players location. 
+BOOL plotStructurePreview16(char *backDropSprite, UBYTE scale, UDWORD offX, UDWORD offY,Vector2i playeridpos[])
 {
 	SAVE_STRUCTURE				sSave;  // close eyes now.
 	SAVE_STRUCTURE				*psSaveStructure = &sSave; // assumes save_struct is larger than all previous ones...
@@ -11829,6 +11840,8 @@ BOOL plotStructurePreview16(char *backDropSprite, UBYTE scale, UDWORD offX, UDWO
 	char			*pFileData = NULL;
 	LEVEL_DATASET	*psLevel;
 	PIELIGHT color = WZCOL_BLACK ;
+	bool HQ = false;
+
 
 	psLevel = levFindDataSet(game.map);
 	strcpy(aFileName,psLevel->apDataFiles[0]);
@@ -11915,10 +11928,23 @@ BOOL plotStructurePreview16(char *backDropSprite, UBYTE scale, UDWORD offX, UDWO
 			endian_udword(&psSaveStructure2->player);
 			endian_udword(&psSaveStructure2->burnStart);
 			endian_udword(&psSaveStructure2->burnDamage);
-
-			xx = map_coord(psSaveStructure2->x);
-			yy = map_coord(psSaveStructure2->y);
+			// we are specifically looking for the HQ, and it seems this is the only way to
+			// find it via parsing map.
+			// We store the coordinates of the structure, into a array for as many players as are on the map.
+			// all map versions follow this pattern, and I will not comment the other routines.
 			playerid = psSaveStructure2->player;
+			if(strncmp(psSaveStructure2->name,"A0CommandCentre",15)  == 0 )
+			{
+				HQ = true;
+				xx = playeridpos[playerid].x = map_coord(psSaveStructure2->x);
+				yy = playeridpos[playerid].y = map_coord(psSaveStructure2->y);
+			}
+			else
+			{
+				HQ = false;
+				xx = map_coord(psSaveStructure2->x);
+				yy = map_coord(psSaveStructure2->y);
+			}
 		}
 		else if (psHeader->version < VERSION_14)
 		{
@@ -11950,10 +11976,20 @@ BOOL plotStructurePreview16(char *backDropSprite, UBYTE scale, UDWORD offX, UDWO
 			endian_udword(&psSaveStructure12->player);
 			endian_udword(&psSaveStructure12->burnStart);
 			endian_udword(&psSaveStructure12->burnDamage);
-
-			xx = map_coord(psSaveStructure12->x);
-			yy = map_coord(psSaveStructure12->y);
 			playerid = psSaveStructure12->player;
+
+			if(strncmp(psSaveStructure12->name,"A0CommandCentre",15)  == 0 )
+			{
+				HQ = true;
+				xx = playeridpos[playerid].x  = map_coord(psSaveStructure12->x);
+				yy = playeridpos[playerid].y  = map_coord(psSaveStructure12->y);
+			}
+			else
+			{
+				HQ = false;
+				xx = map_coord(psSaveStructure12->x);
+				yy = map_coord(psSaveStructure12->y);
+			}
 		}
 		else if (psHeader->version <= VERSION_14)
 		{
@@ -11986,10 +12022,20 @@ BOOL plotStructurePreview16(char *backDropSprite, UBYTE scale, UDWORD offX, UDWO
 			endian_udword(&psSaveStructure14->player);
 			endian_udword(&psSaveStructure14->burnStart);
 			endian_udword(&psSaveStructure14->burnDamage);
-
-			xx = map_coord(psSaveStructure14->x);
-			yy = map_coord(psSaveStructure14->y);
 			playerid = psSaveStructure14->player;
+
+			if(strncmp(psSaveStructure14->name,"A0CommandCentre",15)  == 0 )
+			{
+				HQ = true;
+				xx = playeridpos[playerid].x  = map_coord(psSaveStructure14->x);
+				yy = playeridpos[playerid].y  = map_coord(psSaveStructure14->y);
+			}
+			else
+			{
+				HQ = false;
+				xx = map_coord(psSaveStructure14->x);
+				yy = map_coord(psSaveStructure14->y);
+			}
 		}
 		else if (psHeader->version <= VERSION_16)
 		{
@@ -12023,10 +12069,20 @@ BOOL plotStructurePreview16(char *backDropSprite, UBYTE scale, UDWORD offX, UDWO
 			endian_udword(&psSaveStructure15->player);
 			endian_udword(&psSaveStructure15->burnStart);
 			endian_udword(&psSaveStructure15->burnDamage);
-
-			xx = map_coord(psSaveStructure15->x);
-			yy = map_coord(psSaveStructure15->y);
 			playerid = psSaveStructure15->player;
+
+			if(strncmp(psSaveStructure15->name,"A0CommandCentre",15)  == 0 )
+			{
+				HQ = true;
+				xx = playeridpos[playerid].x  = map_coord(psSaveStructure15->x);
+				yy = playeridpos[playerid].y  = map_coord(psSaveStructure15->y);
+			}
+			else
+			{
+				HQ = false;
+				xx = map_coord(psSaveStructure15->x);
+				yy = map_coord(psSaveStructure15->y);
+			}
 		}
 		else if (psHeader->version <= VERSION_19)
 		{
@@ -12062,10 +12118,20 @@ BOOL plotStructurePreview16(char *backDropSprite, UBYTE scale, UDWORD offX, UDWO
 			endian_udword(&psSaveStructure17->player);
 			endian_udword(&psSaveStructure17->burnStart);
 			endian_udword(&psSaveStructure17->burnDamage);
-
-			xx = map_coord(psSaveStructure17->x);
-			yy = map_coord(psSaveStructure17->y);
 			playerid = psSaveStructure17->player;
+
+			if(strncmp(psSaveStructure17->name,"A0CommandCentre",15)  == 0 )
+			{
+				HQ = true;
+				xx = playeridpos[playerid].x  = map_coord(psSaveStructure17->x);
+				yy = playeridpos[playerid].y  = map_coord(psSaveStructure17->y);
+			}
+			else
+			{
+				HQ = false;
+				xx = map_coord(psSaveStructure17->x);
+				yy = map_coord(psSaveStructure17->y);
+			}
 		}
 		else if (psHeader->version <= VERSION_20)
 		{
@@ -12098,10 +12164,20 @@ BOOL plotStructurePreview16(char *backDropSprite, UBYTE scale, UDWORD offX, UDWO
 			endian_udword(&psSaveStructure20->player);
 			endian_udword(&psSaveStructure20->burnStart);
 			endian_udword(&psSaveStructure20->burnDamage);
-
-			xx = map_coord(psSaveStructure20->x);
-			yy = map_coord(psSaveStructure20->y);
 			playerid = psSaveStructure20->player;
+
+			if(strncmp(psSaveStructure20->name,"A0CommandCentre",15)  == 0 )
+			{
+				HQ = true;
+				xx = playeridpos[playerid].x  = map_coord(psSaveStructure20->x);
+				yy = playeridpos[playerid].y  = map_coord(psSaveStructure20->y);
+			}
+			else
+			{
+				HQ = false;
+				xx = map_coord(psSaveStructure20->x);
+				yy = map_coord(psSaveStructure20->y);
+			}
 		}
 		else
 		{
@@ -12137,10 +12213,20 @@ BOOL plotStructurePreview16(char *backDropSprite, UBYTE scale, UDWORD offX, UDWO
 			endian_udword(&psSaveStructure->player);
 			endian_udword(&psSaveStructure->burnStart);
 			endian_udword(&psSaveStructure->burnDamage);
-
-			xx = map_coord(psSaveStructure->x);
-			yy = map_coord(psSaveStructure->y);
 			playerid = psSaveStructure->player;
+
+			if(strncmp(psSaveStructure->name,"A0CommandCentre",15)  == 0 )
+			{
+				HQ = true;
+				xx = playeridpos[playerid].x  = map_coord(psSaveStructure->x);
+				yy = playeridpos[playerid].y  = map_coord(psSaveStructure->y);
+			}
+			else
+			{
+				HQ = false;
+				xx = map_coord(psSaveStructure->x);
+				yy = map_coord(psSaveStructure->y);
+			}
 		}
 		// if human player, then use clan color.  If AI, then use something else.
 		if( isHumanPlayer(playerid) )
@@ -12150,7 +12236,6 @@ BOOL plotStructurePreview16(char *backDropSprite, UBYTE scale, UDWORD offX, UDWO
 			// kludge to fix black, so you can see it on some maps.
 			if ( playerid == 3 )	// in this case 3 = pallete entry for black.
 			{	
-	
 				color = WZCOL_GREY;
 			}
 		}
@@ -12158,7 +12243,16 @@ BOOL plotStructurePreview16(char *backDropSprite, UBYTE scale, UDWORD offX, UDWO
 		{	// Use a dark green color for the AI
 			color = WZCOL_MAP_PREVIEW_AIPLAYER ;
 		}
+		if(HQ)
+		{	// This shows where the HQ is on the map in a special color.
+			// We could do the same for anything else (oil/whatever) also.  
+			// Possible future enhancement?
+			color.byte.b=0xff;
+			color.byte.g=0;
+			color.byte.r=0xff;
+		}
 
+		// and now we blit the color to the texture
 		for(x = (xx*scale);x < (xx*scale)+scale ;x++)
 		{
 			for(y = (yy*scale);y< (yy*scale)+scale ;y++)
@@ -12167,8 +12261,10 @@ BOOL plotStructurePreview16(char *backDropSprite, UBYTE scale, UDWORD offX, UDWO
 				backDropSprite[3 * (((offY + y) * BACKDROP_HACK_WIDTH) + x + offX) + 1] = color.byte.g;
 				backDropSprite[3 * (((offY + y) * BACKDROP_HACK_WIDTH) + x + offX) + 2] = color.byte.b;
 			}
+			
 		}
+		
 	}
-	return true;
-
+	// NOTE: would do fallback if FBO is not available here.
+return true;
 }

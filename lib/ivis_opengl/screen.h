@@ -59,5 +59,7 @@ extern void	screenToggleMode(void);
 extern int wz_texture_compression;
 
 extern void screenDoDumpToDiskIfRequired(void);
-
+extern BOOL Init_FBO( int width, int height );
+extern void Delete_FBO(void);
+extern void checkGLErrors(const char *label);  // reports what the openGL error was
 #endif

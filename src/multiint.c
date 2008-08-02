@@ -86,12 +86,17 @@
 
 #include "init.h"
 #include "levels.h"
+# include <GL/glc.h>
 
 #define MAP_PREVIEW_DISPLAY_TIME 2500	// number of milliseconds to show map in preview
 // ////////////////////////////////////////////////////////////////////////////
 // vars
 extern char	MultiCustomMapsPath[PATH_MAX];
 extern char	MultiPlayersPath[PATH_MAX];
+
+extern GLuint fbo;					// Our handle to the FBO
+extern GLuint FBOtexture;			// The texture we are going to use
+extern GLuint FBOdepthbuffer;		// Our handle to the depth render buffer
 
 extern BOOL				bSendingMap;
 
@@ -181,13 +186,14 @@ void loadMapPreview(void)
 	char			aFileName[256];
 	UDWORD			fileSize;
 	char			*pFileData = NULL;
-	LEVEL_DATASET	*psLevel;
-
+	LEVEL_DATASET	*psLevel = NULL;
 	UDWORD			i, j, x, y, height, offX2, offY2;
 	UBYTE			scale,col;
 	MAPTILE			*psTile,*WTile;
 	UDWORD oursize;
-	char  *ptr, *imageData;
+	Vector2i playerpos[MAX_PLAYERS];	// Will hold player positions
+	char  *ptr = NULL, *imageData = NULL, *fboData = NULL;
+//=============================
 
 	if(psMapTiles)
 	{
@@ -250,7 +256,21 @@ void loadMapPreview(void)
 		scale = 5;
 	}
 	oursize = sizeof(char) * BACKDROP_HACK_WIDTH * BACKDROP_HACK_HEIGHT;
-	imageData = (char*)malloc(oursize * 3);
+	imageData = (char*)malloc(oursize * 3);		// used for the texture
+	if( !imageData )
+	{
+		debug(LOG_ERROR,"Out of memory for texture!");
+		abort();	// should be a fatal error ?
+		return;
+	}
+	fboData = (char*)malloc(oursize* 3);		// used for the FBO texture
+	if( !fboData )
+	{
+		debug(LOG_ERROR,"Out of memory for FBO texture!");
+		free(imageData);
+		abort();	// should be a fatal error?
+		return ;
+	}
 	ptr = imageData;
 	memset(ptr, 0x45, sizeof(char) * BACKDROP_HACK_WIDTH * BACKDROP_HACK_HEIGHT * 3); //dunno about background color
 	psTile = psMapTiles;
@@ -278,10 +298,94 @@ void loadMapPreview(void)
 		}
 		psTile += mapWidth;
 	}
-	plotStructurePreview16(imageData, scale, offX2, offY2);
-	screen_Upload(imageData);
-	free(imageData);
+	// Slight hack to init array with a special value used to determine how many players on map
+	memset(playerpos,0x77,sizeof(playerpos));
+	// color our texture with clancolors @ correct position
+	plotStructurePreview16(imageData, scale, offX2, offY2,playerpos);
+	// and now, for those that have FBO available on their card
+	if(Init_FBO(BACKDROP_HACK_WIDTH,BACKDROP_HACK_HEIGHT))
+	{
+		// Save the view port and set it to the size of the texture
+		glPushAttrib(GL_VIEWPORT_BIT);
 
+		// First we bind the FBO so we can render to it
+		glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, fbo);
+		checkGLErrors("write to fbo enabled");	
+
+		//set up projection & model matrix for the texture(!)
+		glMatrixMode(GL_PROJECTION);
+		glPushMatrix();
+		glLoadIdentity();
+		glOrtho(0.0,(double)BACKDROP_HACK_HEIGHT,0,(double)BACKDROP_HACK_WIDTH,-1,1);
+
+		glMatrixMode(GL_MODELVIEW);
+		glPushMatrix();
+		glLoadIdentity();
+		glViewport( 0, 0, BACKDROP_HACK_WIDTH, BACKDROP_HACK_HEIGHT );
+		checkGLErrors("viewport set");	
+		// Then render as normal
+		glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+		glClear(GL_COLOR_BUFFER_BIT );		//| GL_DEPTH_BUFFER_BIT);	
+		glLoadIdentity();
+		// and start drawing here
+		glEnable(GL_TEXTURE_2D);
+		glBindTexture(GL_TEXTURE_2D, FBOtexture);
+		//upload the texture to the FBO
+		glTexSubImage2D(GL_TEXTURE_2D,0,0,0,BACKDROP_HACK_WIDTH,BACKDROP_HACK_HEIGHT,GL_RGB,GL_UNSIGNED_BYTE,imageData);
+		checkGLErrors("After texture upload");
+
+		iV_SetFont(font_large);
+		glDisable(GL_CULL_FACE);
+		checkGLErrors("After setting font");
+		for(i=0;i < MAX_PLAYERS;i++)//
+		{
+			float fx,fy;
+			if(playerpos[i].x==0x77777777) continue;	// no player is available, so skip
+			fx =(float)playerpos[i].x;
+			fy =(float)playerpos[i].y;
+			fx*=(float)scale;
+			fy*=(float)scale;
+			fx+=(float)offX2;
+			fy+=(float)offY2;
+
+			glcRenderStyle(GLC_TEXTURE);
+			// first draw a slightly bigger font of the number using said color
+			iV_SetTextColour(WZCOL_DBLUE);
+			iV_SetTextSize(28.f);
+			iV_DrawTextF(fx,fy,"%d",i);
+			// now draw it again using smaller font and said color
+			iV_SetTextColour(WZCOL_LBLUE);
+			iV_SetTextSize(24.f);
+			iV_DrawTextF(fx,fy,"%d",i);
+		}
+		glcRenderStyle(GLC_TEXTURE);
+		checkGLErrors("after text draw");
+
+		// set rendering back to default frame buffer
+		glReadBuffer(GL_COLOR_ATTACHMENT0_EXT);
+		glReadPixels(0, 0, BACKDROP_HACK_WIDTH, BACKDROP_HACK_HEIGHT,GL_RGB,GL_UNSIGNED_BYTE,fboData);
+		checkGLErrors("Reading pixels");
+
+		//done with the FBO, so unbind it.
+		glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);
+		glMatrixMode(GL_PROJECTION);
+		glPopMatrix();
+		glMatrixMode(GL_MODELVIEW);
+		glPopMatrix();
+		glPopAttrib();
+
+		screen_Upload(fboData);
+		checkGLErrors("Done with FBO routine");
+
+	}
+	else
+	{	// no FBO was available, just show them what we got.
+		screen_Upload(imageData);
+
+	}
+
+	free(fboData);
+	free(imageData);
 	hideTime = gameTime;
 	mapShutdown();
 }

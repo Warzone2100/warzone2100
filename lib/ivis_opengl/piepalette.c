@@ -95,6 +95,8 @@ void pal_Init(void)
 	WZCOL_MAP_PREVIEW_AIPLAYER = pal_Colour(0, 0x7f, 0);
 	WZCOL_GREY = pal_Colour(0x55, 0x55, 0x55);
 	WZCOL_MENU_SHADOW = WZCOL_BLACK;
+	WZCOL_DBLUE =pal_Colour(0x0f,0x08,0x56);
+	WZCOL_LBLUE =pal_Colour(0x1c,0x9f,0xfb);
 }
 
 void pal_ShutDown(void)
