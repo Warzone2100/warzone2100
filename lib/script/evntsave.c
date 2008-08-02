@@ -260,8 +260,8 @@ static BOOL eventLoadContext(const SDWORD version, char *pBuffer, UDWORD *pSize,
         
 		if (numVars != *((SWORD*)pPos))
 		{
-			debug( LOG_ERROR, "eventLoadContext: number of context variables does not match the script code" );
-			abort();
+			ASSERT(false, "Context %d of %d: Number of context variables (%d) does not match the script code (%d)", 
+			       context, numContext, numVars, *((SWORD*)pPos));
 			return false;
 		}
 		pPos += sizeof(SWORD);
