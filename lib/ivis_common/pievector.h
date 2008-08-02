@@ -391,6 +391,41 @@ static inline WZ_DECL_CONST Vector3f Vector3f_Normalise(const Vector3f v)
 	}
 }
 
+/*!
+ * Compute the forward vector, a body's local Z axis, for a set of Euler angles
+ * (pitch, yaw and roll).
+ * \param v Vector containing the pitch, yaw and roll in its x, y and z members
+ *          respectively.
+ * \return Forward vector.
+ */
+static inline WZ_DECL_CONST Vector3f Vector3f_EulerToForwardVector(const Vector3f v)
+{
+	Vector3f dest = {
+		cosf(v.x) * sinf(v.y),
+		-sinf(v.x),
+		cosf(v.x) * cosf(v.y)
+	};
+
+	return dest;
+}
+
+/*!
+ * Compute the up vector, a body's local Y axis, for a set of Euler angles
+ * (pitch, yaw and roll).
+ * \param v Vector containing the pitch, yaw and roll in its x, y and z members
+ *          respectively.
+ * \return Up vector.
+ */
+static inline WZ_DECL_CONST Vector3f Vector3f_EulerToUpVector(const Vector3f v)
+{
+	Vector3f dest = {
+		sinf(v.x) * sinf(v.y) * cosf(v.z) - sinf(v.z) * cosf(v.z),
+		cosf(v.x) * cosf(v.z),
+		sinf(v.x) * cosf(v.y) * cosf(v.z) + sinf(v.y) * sinf(v.z)
+	};
+
+	return dest;
+}
 
 /*!
  * Set the vector field by field, same as v = (Vector3i){x, y, z};
