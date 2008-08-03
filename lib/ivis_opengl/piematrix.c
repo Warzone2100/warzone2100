@@ -24,7 +24,7 @@
 #include "lib/ivis_opengl/GLee.h"
 #include "lib/framework/frame.h"
 
-#include "lib/ivis_common/piedef.h"
+#include "lib/ivis_common/piefixedpoint.h"
 #include "lib/ivis_common/pieclip.h"
 #include "piematrix.h"
 #include "lib/ivis_common/rendmode.h"

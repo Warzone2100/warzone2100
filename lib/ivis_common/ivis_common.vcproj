@@ -212,6 +212,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\piefixedpoint.h"
+				>
+			</File>
+			<File
 				RelativePath=".\piefunc.h"
 				>
 			</File>

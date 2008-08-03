@@ -53,6 +53,7 @@
 #include "geometry.h"
 // FIXME Direct iVis implementation include!
 #include "lib/ivis_opengl/piematrix.h"
+#include "lib/ivis_common/piefixedpoint.h"
 #include "order.h"
 #include "droid.h"
 #include "lib/script/script.h"

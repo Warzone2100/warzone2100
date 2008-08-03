@@ -30,7 +30,7 @@
 
 /* Includes direct access to render library */
 #include "lib/ivis_common/ivisdef.h"
-#include "lib/ivis_common/piedef.h"
+#include "lib/ivis_common/piefixedpoint.h"
 #include "lib/ivis_common/piestate.h"
 #include "lib/ivis_common/rendmode.h"
 #include "lib/ivis_common/piemode.h"

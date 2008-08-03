@@ -31,6 +31,7 @@
 #include "lib/gamelib/animobj.h"
 #include "lib/ivis_opengl/piematrix.h"
 #include "lib/ivis_opengl/screen.h"
+#include "lib/ivis_common/piefixedpoint.h"
 #include "lib/script/script.h"
 #include "lib/sound/audio.h"
 #include "lib/sound/audio_id.h"

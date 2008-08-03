@@ -32,6 +32,7 @@
 #include "lib/ivis_common/ivisdef.h" //ivis matrix code
 #include "lib/ivis_opengl/piematrix.h"
 #include "lib/ivis_common/piedef.h" //ivis matrix code
+#include "lib/ivis_common/piefixedpoint.h"
 #include "lib/ivis_common/piestate.h" //ivis render code
 #include "lib/ivis_common/piepalette.h"
 #include "lighting.h"

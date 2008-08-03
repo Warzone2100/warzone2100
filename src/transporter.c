@@ -53,6 +53,7 @@
 #include "lib/sound/audio.h"
 #include "lib/sound/audio_id.h"
 // FIXME Direct iVis implementation include!
+#include "lib/ivis_common/piefixedpoint.h"
 #include "lib/ivis_opengl/piematrix.h"
 #include "mapgrid.h"
 

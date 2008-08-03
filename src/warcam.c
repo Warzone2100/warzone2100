@@ -34,7 +34,7 @@
 #include "lib/framework/input.h"
 
 #include "lib/ivis_opengl/piematrix.h"
-#include "lib/ivis_common/piedef.h" //ivis matrix code
+#include "lib/ivis_common/piefixedpoint.h" //ivis matrix code
 
 #include "lib/gamelib/gtime.h"
 

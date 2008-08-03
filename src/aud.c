@@ -29,7 +29,7 @@
 #include "basedef.h"
 #include "map.h"
 #include "display3d.h"
-#include "lib/ivis_common/piedef.h"
+#include "lib/ivis_common/piefixedpoint.h"
 #include "lib/gamelib/gtime.h"
 
 #include "cluster.h"

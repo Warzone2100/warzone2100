@@ -690,6 +690,12 @@
 			<Option target="DBGWindows" />
 			<Option target="NDBGWindows" />
 		</Unit>
+		<Unit filename="lib/ivis_common/piefixedpoint.h">
+			<Option target="DBGUnix" />
+			<Option target="NDBGUnix" />
+			<Option target="DBGWindows" />
+			<Option target="NDBGWindows" />
+		</Unit>
 		<Unit filename="lib/ivis_common/piefunc.h">
 			<Option target="DBGUnix" />
 			<Option target="NDBGUnix" />

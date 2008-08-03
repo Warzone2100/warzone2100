@@ -21,6 +21,8 @@
 #ifndef __INCLUDED_SRC_KEYBIND_H__
 #define __INCLUDED_SRC_KEYBIND_H__
 
+#include "lib/ivis_common/piefixedpoint.h"
+
 // --------------- All those keyboard mappable functions */
 extern void	kf_HalveHeights( void );
 extern void	kf_DebugDroidInfo( void );

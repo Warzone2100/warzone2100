@@ -70,6 +70,7 @@
 #include "lib/ivis_common/rendmode.h"
 #include "lib/ivis_common/piestate.h"
 // FIXME Direct iVis implementation include!
+#include "lib/ivis_common/piefixedpoint.h"
 #include "lib/ivis_opengl/piematrix.h"
 
 #include "keymap.h"

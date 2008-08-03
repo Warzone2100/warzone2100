@@ -29,6 +29,7 @@
 
 #include "lib/ivis_common/piestate.h"
 #include "lib/ivis_opengl/piematrix.h"
+#include "lib/ivis_common/piefixedpoint.h"
 
 #include "lib/gamelib/gtime.h"
 

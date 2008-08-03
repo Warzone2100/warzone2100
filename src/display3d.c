@@ -35,6 +35,7 @@
 #include "lib/ivis_common/piepalette.h"
 #include "lib/ivis_opengl/piematrix.h"
 #include "lib/ivis_common/piemode.h"
+#include "lib/ivis_common/piefixedpoint.h"
 #include "lib/ivis_common/piefunc.h"
 #include "lib/ivis_common/rendmode.h"
 
