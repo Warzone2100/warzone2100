@@ -388,6 +388,7 @@ void loadMapPreview(void)
 	free(imageData);
 	hideTime = gameTime;
 	mapShutdown();
+	Delete_FBO();
 }
 
 // ////////////////////////////////////////////////////////////////////////////

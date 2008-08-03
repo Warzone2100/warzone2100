@@ -400,10 +400,10 @@ void checkGLErrors(const char *label)
 
     if ((errCode = glGetError()) != GL_NO_ERROR)
 	{
-        errStr = gluErrorString(errCode);
-        debug(LOG_ERROR,"OpenGL ERROR in %s: ",label);
-        debug(LOG_ERROR,"%s, %d(0x%0x)",(char*)errStr,errCode,errCode);
-    }
+		errStr = gluErrorString(errCode);
+		debug(LOG_ERROR,"OpenGL ERROR in %s: ",label);
+		debug(LOG_ERROR,"%s, %d(0x%0x)",(char*)errStr,errCode,errCode);
+	}
 }
 // Init_FBO( int width, int height )
 //  FBO create routine
