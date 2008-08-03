@@ -411,7 +411,7 @@ BOOL Init_FBO( int width, int height )
 {
 GLenum status;	
 	// check to make sure user has FBO available, and we didn't create a FBO before.
-	if(glGenFramebuffersEXT  && !FBOinit)
+	if(GLEE_EXT_framebuffer_object  && !FBOinit)
 	{
 		glGenFramebuffersEXT(1, &fbo);	//create fbo
 		glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, fbo);
