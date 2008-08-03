@@ -1056,34 +1056,29 @@ void sound_StopSample(AUDIO_SAMPLE* psSample)
 #endif
 }
 
-//*
-// =======================================================================================================================
-// =======================================================================================================================
-//
-void sound_SetPlayerPos( SDWORD iX, SDWORD iY, SDWORD iZ )
+void sound_SetPlayerPos(Vector3f pos)
 {
 #ifndef WZ_NOSOUND
-	alListener3f( AL_POSITION, iX, iY, iZ );
+	alListener3f(AL_POSITION, pos.x, pos.y, pos.z);
 	sound_GetError();
 #endif
 }
 
-//
-// =======================================================================================================================
-// =======================================================================================================================
-//
-/** sets player's sound orientation
- * \param iX pitch in degree (current function implementation ignores this)
- * \param iY roll in degree (current function implementation ignores this)
- * \param iZ yaw in degree
+/**
+ * Sets the player's orientation to use for sound
+ * \param forward forward pointing vector
+ * \param up      upward pointing vector
  */
-void sound_SetPlayerOrientation(WZ_DECL_UNUSED float x, WZ_DECL_UNUSED float y, float z)
+void sound_SetPlayerOrientation(Vector3f forward, Vector3f up)
 {
 #ifndef WZ_NOSOUND
-	const float yaw = deg2radf(z);
-	const float ori[6] = {-sinf( yaw ), cosf( yaw ), 0.0f, 0.0f, 0.0f, 1.0f};
+	const ALfloat ori[6] =
+	{
+		forward.x, forward.y, forward.z,
+		up.x,      up.y,      up.z,
+	};
 
-	alListenerfv( AL_ORIENTATION, ori );
+	alListenerfv(AL_ORIENTATION, ori);
 	sound_GetError();
 #endif
 }

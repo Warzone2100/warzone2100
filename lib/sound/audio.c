@@ -24,6 +24,7 @@
 
 #include "tracklib.h"
 #include "aud.h"
+#include "audio.h"
 #include "audio_id.h"
 
 // defines
@@ -512,15 +513,10 @@ static void audio_UpdateQueue( void )
 	}
 }
 
-//*
-// =======================================================================================================================
-// =======================================================================================================================
-//
-void audio_Update( void )
+void audio_Update()
 {
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	Vector3i		vecPlayer;
-	SDWORD			iA;
+	Vector3f playerPos, playerForward, playerUp;
 	AUDIO_SAMPLE	*psSample, *psSampleTemp;
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -533,11 +529,10 @@ void audio_Update( void )
 	audio_UpdateQueue();
 
 	// get player position
-	audio_Get3DPlayerPos(&vecPlayer.x, &vecPlayer.y, &vecPlayer.z);
-
-	sound_SetPlayerPos( vecPlayer.x, vecPlayer.y, vecPlayer.z );
-	audio_Get3DPlayerRotAboutVerticalAxis( &iA );
-	sound_SetPlayerOrientation( 0, 0, iA );
+	playerPos = audio_GetPlayerPos();
+	audio_GetPlayerOrientation(&playerForward, &playerUp);
+	sound_SetPlayerPos(playerPos);
+	sound_SetPlayerOrientation(playerForward, playerUp);
 
 	// loop through 3D sounds and remove if finished or update position
 	psSample = g_psSampleList;

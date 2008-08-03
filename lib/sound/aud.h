@@ -24,7 +24,7 @@
 #ifndef __INCLUDED_LIB_SOUND_AUD_H__
 #define __INCLUDED_LIB_SOUND_AUD_H__
 
-#include "audio.h"
+#include "lib/ivis_common/pievector.h"
 
 #if defined(__cplusplus)
 extern "C"
@@ -36,8 +36,8 @@ void	audio_GetObjectPos( void *psObj, SDWORD *piX, SDWORD *piY,
 void	audio_GetStaticPos( SDWORD iWorldX, SDWORD iWorldY,
 								SDWORD *piX, SDWORD *piY, SDWORD *piZ );
 BOOL	audio_ObjectDead( void * psObj );
-void	audio_Get3DPlayerPos( SDWORD *piX, SDWORD *piY, SDWORD *piZ );
-void	audio_Get3DPlayerRotAboutVerticalAxis( SDWORD *piA );
+Vector3f audio_GetPlayerPos(void);
+void audio_GetPlayerOrientation(Vector3f* forward, Vector3f* up);
 
 #if defined(__cplusplus)
 }

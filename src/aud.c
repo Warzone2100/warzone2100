@@ -18,12 +18,10 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 /**
- * @file aud.c
+ * @file
  *
  * Warzone audio wrapper functions.
- *
  */
-/***************************************************************************/
 
 #include "lib/framework/frame.h"
 #include "basedef.h"
@@ -32,22 +30,8 @@
 #include "lib/ivis_common/piefixedpoint.h"
 #include "lib/gamelib/gtime.h"
 
-#include "cluster.h"
 #include "lib/sound/aud.h"
 #include "lib/sound/tracklib.h"
-
-/***************************************************************************/
-
-extern UDWORD	mapX;
-extern UDWORD	mapY;
-extern iView	player;
-extern UDWORD	distance;
-
-/* Map Position of top right hand corner of the screen */
-extern UDWORD	viewX;
-extern UDWORD	viewY;
-
-/***************************************************************************/
 
 BOOL audio_ObjectDead(void * psObj)
 {
@@ -76,39 +60,32 @@ BOOL audio_ObjectDead(void * psObj)
 	}
 }
 
-/***************************************************************************/
-
-void audio_Get3DPlayerPos(SDWORD *piX, SDWORD *piY, SDWORD *piZ)
+Vector3f audio_GetPlayerPos(void)
 {
-	/* player's y and z interchanged */
-	*piX = player.p.x + world_coord(visibleTiles.x / 2);
-	*piY = player.p.z + world_coord(visibleTiles.x / 2);
-	*piZ = player.p.y;
+	Vector3f pos;
+	// Player's Y and Z interchanged
+	// @NOTE Why?
+	pos.x = player.p.x + world_coord(visibleTiles.x / 2);
+	pos.y = player.p.z + world_coord(visibleTiles.x / 2);
+	pos.z = player.p.y;
 
-	/* invert y to match QSOUND axes */
-	*piY = world_coord(GetHeightOfMap()) - *piY;
+	// Invert Y to match QSOUND axes
+	// @NOTE What is QSOUND? Why invert the Y axis?
+	pos.y = world_coord(GetHeightOfMap()) - pos.y;
+
+	return pos;
 }
 
-/***************************************************************************/
-/*
- * get player direction vector - angle about vertical (y) ivis axis
- */
-/***************************************************************************/
-
-void
-audio_Get3DPlayerRotAboutVerticalAxis( SDWORD *piA )
+void audio_GetPlayerOrientation(Vector3f* forward, Vector3f* up)
 {
-	*piA = player.r.y / DEG_1;
+	const Vector3f r = Vector3f_ToRadians(Vector3iPSX_To3fDegree(player.r));
+	*forward = Vector3f_EulerToForwardVector(r);
+	*up = Vector3f_EulerToUpVector(r);
 }
 
-/***************************************************************************/
-/*
- * audio_GetStaticPos
- *
+/**
  * Get QSound axial position from world (x,y)
  */
-/***************************************************************************/
-
 void audio_GetStaticPos(SDWORD iWorldX, SDWORD iWorldY, SDWORD *piX, SDWORD *piY, SDWORD *piZ)
 {
 	*piX = iWorldX;
@@ -116,8 +93,6 @@ void audio_GetStaticPos(SDWORD iWorldX, SDWORD iWorldY, SDWORD *piX, SDWORD *piY
 	/* invert y to match QSOUND axes */
 	*piY = world_coord(GetHeightOfMap()) - iWorldY;
 }
-
-/***************************************************************************/
 
 void audio_GetObjectPos(void *psObj, SDWORD *piX, SDWORD *piY, SDWORD *piZ)
 {
@@ -134,12 +109,7 @@ void audio_GetObjectPos(void *psObj, SDWORD *piX, SDWORD *piY, SDWORD *piZ)
 	*piY = world_coord(GetHeightOfMap()) - psBaseObj->pos.y;
 }
 
-/***************************************************************************/
-
-UDWORD
-sound_GetGameTime( void )
+UDWORD sound_GetGameTime()
 {
 	return gameTime;
 }
-
-/***************************************************************************/

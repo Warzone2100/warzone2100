@@ -26,6 +26,7 @@
 #define __INCLUDED_LIB_SOUND_TRACKLIB_H__
 
 #include "track.h"
+#include "lib/ivis_common/pievector.h"
 
 #if defined(__cplusplus)
 extern "C"
@@ -54,8 +55,8 @@ int		sound_GetNumSamples( void );
 BOOL	sound_SampleIsFinished( AUDIO_SAMPLE * psSample );
 BOOL	sound_QueueSamplePlaying( void );
 
-void	sound_SetPlayerPos( SDWORD iX, SDWORD iY, SDWORD iZ );
-void	sound_SetPlayerOrientation(float x, float y, float z);
+void	sound_SetPlayerPos(Vector3f pos);
+void sound_SetPlayerOrientation(Vector3f forward, Vector3f up);
 void	sound_SetObjectPosition( AUDIO_SAMPLE *psSample );
 
 void *	sound_GetObject( SDWORD iSample );
