@@ -21,6 +21,7 @@
 #define __INCLUDED_LIB_IVIS_PIEVECTOR_H__
 
 #include "lib/framework/wzglobal.h"
+#include "piefixedpoint.h"
 
 #include <math.h>
 
@@ -460,9 +461,9 @@ static inline WZ_DECL_CONST Vector3f Vector3i_To3f(const Vector3i v)
 static inline WZ_DECL_CONST Vector3f Vector3f_ToRadians(const Vector3f v)
 {
 	Vector3f dest = {
-		v.x * M_PI / 180.f,
-		v.y * M_PI / 180.f,
-		v.z * M_PI / 180.f
+		deg2radf(v.x),
+		deg2radf(v.y),
+		deg2radf(v.z)
 	};
 	return dest;
 }
@@ -476,15 +477,9 @@ static inline WZ_DECL_CONST Vector3f Vector3f_ToRadians(const Vector3f v)
  */
 static inline WZ_DECL_CONST Vector3f Vector3iPSX_To3fDegree(const Vector3i v)
 {
+	return Vector3f_Mult(Vector3i_To3f(v),
 	// Required to multiply by this to undo the PSX fixed point fract stuff
-	static const float make_float = 22.5 / 4096.f;
-
-	Vector3f dest = {
-		(float)v.x * make_float,
-		(float)v.y * make_float,
-		(float)v.z * make_float
-	};
-	return dest;
+	                     360.f / (float)DEG_360);
 }
 
 
