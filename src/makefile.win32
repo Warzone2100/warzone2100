@@ -59,7 +59,6 @@ SRC=ai.c \
 	multisync.c \
 	multibot.c \
 	multistat.c \
-	mumblelink.c \
 	objmem.c \
 	objects.c \
 	order.c \

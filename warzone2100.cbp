@@ -2385,19 +2385,6 @@
 			<Option target="DBGWindows" />
 			<Option target="NDBGWindows" />
 		</Unit>
-		<Unit filename="src/mumblelink.c">
-			<Option compilerVar="CC" />
-			<Option target="DBGUnix" />
-			<Option target="NDBGUnix" />
-			<Option target="DBGWindows" />
-			<Option target="NDBGWindows" />
-		</Unit>
-		<Unit filename="src/mumblelink.h">
-			<Option target="DBGUnix" />
-			<Option target="NDBGUnix" />
-			<Option target="DBGWindows" />
-			<Option target="NDBGWindows" />
-		</Unit>
 		<Unit filename="src/objectdef.h">
 			<Option target="DBGUnix" />
 			<Option target="NDBGUnix" />
