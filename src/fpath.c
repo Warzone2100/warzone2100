@@ -523,8 +523,8 @@ FPATH_RETVAL fpathDroidRoute(DROID* psDroid, SDWORD tX, SDWORD tY)
 
 		for (dir = 0; dir < NUM_DIR; dir++)
 		{
-			int x = map_coord(tX) + aDirOffset[dir].x;
-			int y = map_coord(tY) + aDirOffset[dir].y;
+			int x = map_coord(psDroid->pos.x) + aDirOffset[dir].x;
+			int y = map_coord(psDroid->pos.y) + aDirOffset[dir].y;
 
 			if (!fpathBlockingTile(x, y, psPropStats->propulsionType))
 			{
