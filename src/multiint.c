@@ -187,13 +187,13 @@ void loadMapPreview(void)
 	UDWORD			fileSize;
 	char			*pFileData = NULL;
 	LEVEL_DATASET	*psLevel = NULL;
+
 	UDWORD			i, j, x, y, height, offX2, offY2;
 	UBYTE			scale,col;
 	MAPTILE			*psTile,*WTile;
 	UDWORD oursize;
 	Vector2i playerpos[MAX_PLAYERS];	// Will hold player positions
 	char  *ptr = NULL, *imageData = NULL, *fboData = NULL;
-//=============================
 
 	if(psMapTiles)
 	{
@@ -386,6 +386,7 @@ void loadMapPreview(void)
 
 	free(fboData);
 	free(imageData);
+
 	hideTime = gameTime;
 	mapShutdown();
 	Delete_FBO();

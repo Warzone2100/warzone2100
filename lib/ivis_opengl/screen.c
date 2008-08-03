@@ -61,7 +61,7 @@ static GLuint		backDropTexture = ~0;
 GLuint fbo;					// Our handle to the FBO
 GLuint FBOtexture;			// The texture we are going to use
 GLuint FBOdepthbuffer;		// Our handle to the depth render buffer
-static BOOL FBOinit = false;			
+static BOOL FBOinit = false;
 
 /* Initialise the double buffered display */
 BOOL screenInitialise(
@@ -390,26 +390,24 @@ void screenDumpToDisk(const char* path) {
 	if (screendump_num != 0)
 		screendump_required = true;
 }
-// checkGLErrors( char *label)
-// 
-// if a openGL error has occured, we query the error code, and see what it was.
+
+/**
+ * Checks if an OpenGL error has occurred.
+ * \param label Label to print when an OpenGL occurred.
+ */
 void checkGLErrors(const char *label)
 {
-    GLenum errCode;
-    const GLubyte *errStr;
+	const GLenum errCode = glGetError();
 
-    if ((errCode = glGetError()) != GL_NO_ERROR)
-	{
-		errStr = gluErrorString(errCode);
-		debug(LOG_ERROR,"OpenGL ERROR in %s: ",label);
-		debug(LOG_ERROR,"%s, %d(0x%0x)",(char*)errStr,errCode,errCode);
-	}
+	if (errCode == GL_NO_ERROR)
+		return;
+
+	debug(LOG_ERROR, "OpenGL ERROR in %s: %s, (0x%0x)", label, gluErrorString(errCode), errCode);
 }
-// Init_FBO( int width, int height )
-//  FBO create routine
+
 BOOL Init_FBO( int width, int height )
 {
-GLenum status;	
+	GLenum status;
 	// check to make sure user has FBO available, and we didn't create a FBO before.
 	if(GLEE_EXT_framebuffer_object  && !FBOinit)
 	{
@@ -433,7 +431,7 @@ GLenum status;
 
 		// attach that texture to the color
 		glFramebufferTexture2DEXT (GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT,
-		GL_TEXTURE_2D, FBOtexture, 0);
+		                           GL_TEXTURE_2D, FBOtexture, 0);
 		glBindFramebufferEXT (GL_FRAMEBUFFER_EXT, 0); // unbind FBO
 
 		// make sure everything went OK
@@ -488,7 +486,7 @@ GLenum status;
 	return true;
 
 }
-// Delete_FBO()
+
 void Delete_FBO(void)
 {
 	if(FBOinit)

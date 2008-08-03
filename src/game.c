@@ -11816,20 +11816,17 @@ static BOOL getNameFromComp(UDWORD compType, char *pDest, UDWORD compIndex)
 }
 // -----------------------------------------------------------------------------------------
 // END
-//======================================================
-//BOOL plotStructurePreview16(
-// char *backDropSprite,			// the premade map texture
-// UBYTE scale,						// scale of the map texture
-// UDWORD offX,						// X offset for map
-// UDWORD offY,						// Y offset for map
-// Vector2i playeridpos[])			// holds the position on map that player's HQ is located
-//
-// adds clancolors for the map preview texture.
-// What basically happens in this routine is we read the map, and then for
-// every structure on said map, we either color it via clan colors (which
-// are the same as the radar colors), and it plots its pixel on the bitmap.
-// Also added position number of starting location (which is determined by
-// the map maker(!)) This info is needed so we can blit players location. 
+
+/**
+ * \param[out] backDropSprite The premade map texture.
+ * \param scale               Scale of the map texture.
+ * \param offX,offY           X and Y offset for map
+ * \param[out] playeridpos    Will contain the position on the map where the player's HQ are located.
+ *
+ * Reads the current map and colours the map preview for any structures
+ * present. Additionally we load the player's HQ location into playeridpos so
+ * we know the player's starting location.
+ */
 BOOL plotStructurePreview16(char *backDropSprite, UBYTE scale, UDWORD offX, UDWORD offY,Vector2i playeridpos[])
 {
 	SAVE_STRUCTURE				sSave;  // close eyes now.
@@ -11937,6 +11934,7 @@ BOOL plotStructurePreview16(char *backDropSprite, UBYTE scale, UDWORD offX, UDWO
 			endian_udword(&psSaveStructure2->player);
 			endian_udword(&psSaveStructure2->burnStart);
 			endian_udword(&psSaveStructure2->burnDamage);
+
 			// we are specifically looking for the HQ, and it seems this is the only way to
 			// find it via parsing map.
 			// We store the coordinates of the structure, into a array for as many players as are on the map.
@@ -12244,7 +12242,7 @@ BOOL plotStructurePreview16(char *backDropSprite, UBYTE scale, UDWORD offX, UDWO
 			color.rgba = clanColours[playerid].rgba;
 			// kludge to fix black, so you can see it on some maps.
 			if ( playerid == 3 )	// in this case 3 = pallete entry for black.
-			{	
+			{
 				color = WZCOL_GREY;
 			}
 		}
@@ -12252,9 +12250,10 @@ BOOL plotStructurePreview16(char *backDropSprite, UBYTE scale, UDWORD offX, UDWO
 		{	// Use a dark green color for the AI
 			color = WZCOL_MAP_PREVIEW_AIPLAYER ;
 		}
+
 		if(HQ)
 		{	// This shows where the HQ is on the map in a special color.
-			// We could do the same for anything else (oil/whatever) also.  
+			// We could do the same for anything else (oil/whatever) also.
 			// Possible future enhancement?
 			color.byte.b=0xff;
 			color.byte.g=0;
@@ -12266,14 +12265,13 @@ BOOL plotStructurePreview16(char *backDropSprite, UBYTE scale, UDWORD offX, UDWO
 		{
 			for(y = (yy*scale);y< (yy*scale)+scale ;y++)
 			{
-				backDropSprite[3 * (((offY + y) * BACKDROP_HACK_WIDTH) + x + offX)] = color.byte.r;	 
+				backDropSprite[3 * (((offY + y) * BACKDROP_HACK_WIDTH) + x + offX)] = color.byte.r;
 				backDropSprite[3 * (((offY + y) * BACKDROP_HACK_WIDTH) + x + offX) + 1] = color.byte.g;
 				backDropSprite[3 * (((offY + y) * BACKDROP_HACK_WIDTH) + x + offX) + 2] = color.byte.b;
 			}
-			
 		}
-		
 	}
+
 	// NOTE: would do fallback if FBO is not available here.
-return true;
+	return true;
 }
