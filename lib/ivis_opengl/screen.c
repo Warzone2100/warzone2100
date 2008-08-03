@@ -372,12 +372,13 @@ void screenDoDumpToDiskIfRequired(void)
 	screendump_required = false;
 }
 
-void screenDumpToDisk(const char* path) {
+void screenDumpToDisk(const char* path)
+{
 	static unsigned int screendump_num = 0;
 
 	while (++screendump_num != 0) {
 		// We can safely use '/' as path separator here since PHYSFS uses that as its default separator
-		snprintf(screendump_filename, PATH_MAX, "%s/wz2100_shot_%03i.png", path, screendump_num);
+		ssprintf(screendump_filename, "%s/wz2100_shot_%03i.png", path, screendump_num);
 		if (!PHYSFS_exists(screendump_filename)) {
 			// Found a usable filename, so we'll stop searching.
 			break;
@@ -405,82 +406,89 @@ void checkGLErrors(const char *label)
 	debug(LOG_ERROR, "OpenGL ERROR in %s: %s, (0x%0x)", label, gluErrorString(errCode), errCode);
 }
 
-BOOL Init_FBO( int width, int height )
+BOOL Init_FBO(unsigned int width, unsigned int height)
 {
 	GLenum status;
-	// check to make sure user has FBO available, and we didn't create a FBO before.
-	if(GLEE_EXT_framebuffer_object  && !FBOinit)
+
+	// Bail out if FBOs aren't supported
+	if (!GLEE_EXT_framebuffer_object)
+		return false;
+
+	// No need to create two FBOs
+	if (FBOinit)
+		return true;
+
+	// Create the FBO
+	glGenFramebuffersEXT(1, &fbo);
+	glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, fbo);
+
+	// create depthbuffer
+	glGenRenderbuffersEXT(1, &FBOdepthbuffer);
+	glBindRenderbufferEXT(GL_RENDERBUFFER_EXT, FBOdepthbuffer);
+	glRenderbufferStorageEXT(GL_RENDERBUFFER_EXT, GL_DEPTH_COMPONENT, width, height);
+	glFramebufferRenderbufferEXT(GL_FRAMEBUFFER_EXT, GL_DEPTH_ATTACHMENT_EXT, GL_RENDERBUFFER_EXT, FBOdepthbuffer);
+
+	// Now setup a texture to render to
+	glGenTextures(1, &FBOtexture);
+	glBindTexture(GL_TEXTURE_2D, FBOtexture);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB,  width, height,0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+
+	// attach that texture to the color
+	glFramebufferTexture2DEXT (GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT,
+				   GL_TEXTURE_2D, FBOtexture, 0);
+	glBindFramebufferEXT (GL_FRAMEBUFFER_EXT, 0); // unbind FBO
+
+	// make sure everything went OK
+	status = glCheckFramebufferStatusEXT(GL_FRAMEBUFFER_EXT);
+	if(status != GL_FRAMEBUFFER_COMPLETE_EXT)
 	{
-		glGenFramebuffersEXT(1, &fbo);	//create fbo
-		glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, fbo);
-
-		// create depthbuffer
-		glGenRenderbuffersEXT(1, &FBOdepthbuffer);
-		glBindRenderbufferEXT(GL_RENDERBUFFER_EXT, FBOdepthbuffer);
-		glRenderbufferStorageEXT(GL_RENDERBUFFER_EXT, GL_DEPTH_COMPONENT, width, height);
-		glFramebufferRenderbufferEXT(GL_FRAMEBUFFER_EXT, GL_DEPTH_ATTACHMENT_EXT, GL_RENDERBUFFER_EXT, FBOdepthbuffer);
-
-		// Now setup a texture to render to
-		glGenTextures(1, &FBOtexture);
-		glBindTexture(GL_TEXTURE_2D, FBOtexture);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB,  width, height,0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
-		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-
-		// attach that texture to the color
-		glFramebufferTexture2DEXT (GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT,
-		                           GL_TEXTURE_2D, FBOtexture, 0);
-		glBindFramebufferEXT (GL_FRAMEBUFFER_EXT, 0); // unbind FBO
-
-		// make sure everything went OK
-		status = glCheckFramebufferStatusEXT(GL_FRAMEBUFFER_EXT);
-		if(status != GL_FRAMEBUFFER_COMPLETE_EXT)
+		switch (status)
 		{
-			switch (status)
-			{
-				case GL_FRAMEBUFFER_COMPLETE_EXT:
-					break;
-				case GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT_EXT:
-					debug(LOG_ERROR, "Error: FBO missing a required image/buffer attachment!");
-					break;
-				case GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT_EXT:
-					debug(LOG_ERROR, "Error: FBO has no images/buffers attached!");
-					break;
-				case GL_FRAMEBUFFER_INCOMPLETE_DUPLICATE_ATTACHMENT_EXT:
-					debug(LOG_ERROR, "Error: FBO has an image/buffer attached in multiple locations!");
-					break;
-				case GL_FRAMEBUFFER_INCOMPLETE_DIMENSIONS_EXT:
-					debug(LOG_ERROR, "Error: FBO has mismatched image/buffer dimensions!");
-					break;
-				case GL_FRAMEBUFFER_INCOMPLETE_FORMATS_EXT:
-					debug(LOG_ERROR, "Error: FBO colorbuffer attachments have different types!");
-					break;
-				case GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER_EXT:
-					debug(LOG_ERROR, "Error: FBO trying to draw to non-attached color buffer!");
-					break;
-				case GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER_EXT:
-					debug(LOG_ERROR, "Error: FBO trying to read from a non-attached color buffer!");
-					break;
-				case GL_FRAMEBUFFER_UNSUPPORTED_EXT:
-					debug(LOG_ERROR, "Error: FBO format is not supported by current graphics card/driver!");
-					break;
-				case GL_INVALID_FRAMEBUFFER_OPERATION_EXT :
-					debug(LOG_ERROR, "Error: FBO Non-framebuffer passed to glCheckFramebufferStatusEXT()!");
-					break;
-				default:
-					debug(LOG_ERROR, "*UNKNOWN FBO ERROR* reported from glCheckFramebufferStatusEXT() for %x!", status);
-					break;
-			}
-			FBOinit = false;	//we have a error with the FBO setup
-			return false;
+			case GL_FRAMEBUFFER_COMPLETE_EXT:
+				break;
+			case GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT_EXT:
+				debug(LOG_ERROR, "Error: FBO missing a required image/buffer attachment!");
+				break;
+			case GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT_EXT:
+				debug(LOG_ERROR, "Error: FBO has no images/buffers attached!");
+				break;
+			case GL_FRAMEBUFFER_INCOMPLETE_DUPLICATE_ATTACHMENT_EXT:
+				debug(LOG_ERROR, "Error: FBO has an image/buffer attached in multiple locations!");
+				break;
+			case GL_FRAMEBUFFER_INCOMPLETE_DIMENSIONS_EXT:
+				debug(LOG_ERROR, "Error: FBO has mismatched image/buffer dimensions!");
+				break;
+			case GL_FRAMEBUFFER_INCOMPLETE_FORMATS_EXT:
+				debug(LOG_ERROR, "Error: FBO colorbuffer attachments have different types!");
+				break;
+			case GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER_EXT:
+				debug(LOG_ERROR, "Error: FBO trying to draw to non-attached color buffer!");
+				break;
+			case GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER_EXT:
+				debug(LOG_ERROR, "Error: FBO trying to read from a non-attached color buffer!");
+				break;
+			case GL_FRAMEBUFFER_UNSUPPORTED_EXT:
+				debug(LOG_ERROR, "Error: FBO format is not supported by current graphics card/driver!");
+				break;
+			case GL_INVALID_FRAMEBUFFER_OPERATION_EXT :
+				debug(LOG_ERROR, "Error: FBO Non-framebuffer passed to glCheckFramebufferStatusEXT()!");
+				break;
+			default:
+				debug(LOG_ERROR, "*UNKNOWN FBO ERROR* reported from glCheckFramebufferStatusEXT() for %x!", status);
+				break;
 		}
-		else
-		{
-			FBOinit = true;		//everything is OK with FBO setup.
-		}
+		FBOinit = false;	//we have a error with the FBO setup
+		return false;
 	}
+	else
+	{
+		FBOinit = true;		//everything is OK with FBO setup.
+	}
+
 	glBindFramebufferEXT (GL_FRAMEBUFFER_EXT, 0); // unbind it for now.
 	checkGLErrors("Init_FBO() Completed");
 	return true;
