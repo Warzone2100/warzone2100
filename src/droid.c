@@ -865,7 +865,8 @@ void droidUpdate(DROID *psDroid)
 	/* Only add smoke if they're visible */
 	if((psDroid->visible[selectedPlayer]) && psDroid->droidType != DROID_PERSON)
 	{
-		percentDamage= (100-PERCENT(psDroid->body,psDroid->originalBody));
+		// need to clip this value to prevent ovelflow condition
+		percentDamage = 100 - clip(PERCENT(psDroid->body,psDroid->originalBody),0,100);
 
 		// Is there any damage?
 		if(percentDamage>=25)
