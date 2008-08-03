@@ -397,10 +397,14 @@ BOOL NETsetGameFlags(UDWORD flag, SDWORD value)
 
 	return true;
 }
-// NETsendGAMESTRUCT(TCPsocket socket, const GAMESTRUCT* game)
-// NOTE! The GAMESTRUCT is being sent to the master server (if user is hosting).
-// It must be packed in network byte order. (Big-endian).
-// Be advised that if you change GAMESTRUCT, then you must also modify the master server code.
+
+/**
+ * @NOTE \c game is being sent to the master server (if hosting)
+ *       The implementation of NETsendGAMESTRUCT <em>must</em> guarantee to
+ *       pack it in network byte order (big-endian).
+ *
+ * @see GAMESTRUCT,NETrecvGAMESTRUCT
+ */
 static void NETsendGAMESTRUCT(TCPsocket socket, const GAMESTRUCT* game)
 {
 	// A buffer that's guaranteed to have the correct size (i.e. it
@@ -445,10 +449,14 @@ static void NETsendGAMESTRUCT(TCPsocket socket, const GAMESTRUCT* game)
 		debug(LOG_NET, "Failed to send: %s", SDLNet_GetError());
 	}
 }
-// NETrecvGAMESTRUCT(GAMESTRUCT* game)
-// NOTE! The GAMESTRUCT is being received from the master server (if user is using lobby).
-// It must be packed in network byte order. (Big-endian).
-// Be advised that if you change GAMESTRUCT, then you must also modify the master server code.
+
+/**
+ * @NOTE \c game is being retrieved from the master server (if browsing the
+ *       lobby). The implementation of NETrecvGAMESTRUCT should assume the data
+ *       to be packed in network byte order (big-endian).
+ *
+ * @see GAMESTRUCT,NETsendGAMESTRUCT
+ */
 static bool NETrecvGAMESTRUCT(GAMESTRUCT* game)
 {
 	// A buffer that's guaranteed to have the correct size (i.e. it

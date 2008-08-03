@@ -111,7 +111,10 @@ typedef struct {					//Available game storage... JUST FOR REFERENCE!
 	int32_t dwUser4;
 } SESSIONDESC;
 
-// Games Storage Structures
+/**
+ * @NOTE when changing this structure, NETsendGAMESTRUCT, NETrecvGAMESTRUCT and
+ *       the lobby server should be changed accordingly.
+ */
 typedef struct {
 	char		name[StringSize];
 	SESSIONDESC	desc;
