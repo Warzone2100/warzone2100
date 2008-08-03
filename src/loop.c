@@ -67,6 +67,7 @@
 #include "loadsave.h"
 #include "game.h"
 #include "multijoin.h"
+#include "mumblelink.h"
 #include "lighting.h"
 #include "intimage.h"
 #include "lib/framework/cursors.h"
@@ -148,6 +149,7 @@ GAMECODE gameLoop(void)
 	BOOL		quitting=false;
 	INT_RETVAL	intRetVal;
 	int	        clearMode = 0;
+	const Vector3f  playerRot = Vector3f_ToRadians(Vector3iPSX_To3fDegree(player.r));
 
 	if (!war_GetFog())
 	{
@@ -173,6 +175,10 @@ GAMECODE gameLoop(void)
 	HandleClosingWindows();	// Needs to be done outside the pause case.
 
 	audio_Update();
+
+	UpdateMumbleSoundPos(Vector3i_To3f(player.p),
+	                     Vector3f_EulerToForwardVector(playerRot),
+	                     Vector3f_EulerToUpVector(playerRot));
 
 	if (!paused)
 	{

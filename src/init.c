@@ -78,6 +78,7 @@
 #include "modding.h"
 #include "multigifts.h"
 #include "multiplay.h"
+#include "mumblelink.h"
 #include "projectile.h"
 #include "radar.h"
 #include "lib/framework/cursors.h"
@@ -435,6 +436,8 @@ BOOL systemInitialise(void)
 		return false;
 	}
 
+	InitMumbleLink();
+
 	// Initialize the iVis text rendering module
 	iV_TextInit();
 
@@ -480,6 +483,8 @@ void systemShutdown(void)
 	pie_TerrainCleanup();
 
 	fpathShutdown();
+
+	CloseMumbleLink();
 
 	return;
 }

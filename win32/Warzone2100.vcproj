@@ -525,6 +525,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\src\mumblelink.c"
+					>
+				</File>
+				<File
 					RelativePath="..\src\objects.c"
 					>
 				</File>
@@ -1025,6 +1029,10 @@
 			</File>
 			<File
 				RelativePath="..\src\multistat.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\mumblelink.h"
 				>
 			</File>
 			<File
