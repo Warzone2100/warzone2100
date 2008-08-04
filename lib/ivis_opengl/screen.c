@@ -456,9 +456,6 @@ BOOL Init_FBO(unsigned int width, unsigned int height)
 			case GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT_EXT:
 				debug(LOG_ERROR, "Error: FBO has no images/buffers attached!");
 				break;
-			case GL_FRAMEBUFFER_INCOMPLETE_DUPLICATE_ATTACHMENT_EXT:
-				debug(LOG_ERROR, "Error: FBO has an image/buffer attached in multiple locations!");
-				break;
 			case GL_FRAMEBUFFER_INCOMPLETE_DIMENSIONS_EXT:
 				debug(LOG_ERROR, "Error: FBO has mismatched image/buffer dimensions!");
 				break;
