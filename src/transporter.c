@@ -1239,10 +1239,13 @@ void intRemoveTrans(void)
 
 	// Start the window close animation.
 	Form = (W_TABFORM*)widgGetFromID(psWScreen,IDTRANS_FORM);
-	Form->display = intClosePlainForm;
-	Form->disableChildren = true;
-	Form->pUserData = NULL; // Used to signal when the close anim has finished.
-	ClosingTrans = true;
+	if (Form)
+	{
+		Form->display = intClosePlainForm;
+		Form->disableChildren = true;
+		Form->pUserData = NULL; // Used to signal when the close anim has finished.
+		ClosingTrans = true;
+	}
 
 	intRemoveTransContent();
 	intRemoveTransDroidsAvail();
