@@ -71,6 +71,7 @@ typedef struct _jobDone
 } PATHRESULT;
 
 
+#define NUM_BASIC	 8
 #define NUM_DIR		24
 
 // Convert a direction into an offset, spanning two tiles
@@ -516,6 +517,7 @@ FPATH_RETVAL fpathDroidRoute(DROID* psDroid, SDWORD tX, SDWORD tY)
 		int nearestDir = NUM_DIR;
 		int dir;
 
+		objTrace(psDroid->id, "BLOCKED(%d,%d) - trying workaround", map_coord(tX), map_coord(tY));
 		for (dir = 0; dir < NUM_DIR; dir++)
 		{
 			int x = map_coord(tX) + aDirOffset[dir].x;
@@ -532,6 +534,11 @@ FPATH_RETVAL fpathDroidRoute(DROID* psDroid, SDWORD tX, SDWORD tY)
 					nearestDir = dir;
 				}
 			}
+
+			if (dir == NUM_BASIC - 1 && nearestDir != NUM_DIR)
+			{
+				break;	// found a solution without checking at greater distance
+			}
 		}
 
 		if (nearestDir == NUM_DIR)
@@ -544,6 +551,7 @@ FPATH_RETVAL fpathDroidRoute(DROID* psDroid, SDWORD tX, SDWORD tY)
 		{
 			tX = world_coord(map_coord(tX) + aDirOffset[nearestDir].x) + TILE_SHIFT / 2;
 			tY = world_coord(map_coord(tY) + aDirOffset[nearestDir].y) + TILE_SHIFT / 2;
+			objTrace(psDroid->id, "Workaround found at (%d, %d)", map_coord(tX), map_coord(tY));
 		}
 	}
 	return fpathRoute(&psDroid->sMove, psDroid->id, psDroid->pos.x, psDroid->pos.y, tX, tY, psPropStats->propulsionType, psDroid->droidType);
