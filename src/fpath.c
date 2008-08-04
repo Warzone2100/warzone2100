@@ -51,9 +51,6 @@
 #define	LIFT_BLOCK_HEIGHT_MEDIUMBODY	 350
 #define	LIFT_BLOCK_HEIGHT_HEAVYBODY		 350
 
-#define NUM_DIR		8
-
-
 typedef struct _jobNode
 {
 	PROPULSION_TYPE	propulsion;
@@ -74,18 +71,14 @@ typedef struct _jobDone
 } PATHRESULT;
 
 
-// Convert a direction into an offset
-// dir 0 => x = 0, y = -1
+#define NUM_DIR		24
+
+// Convert a direction into an offset, spanning two tiles
 static const Vector2i aDirOffset[NUM_DIR] =
 {
-	{ 0, 1},
-	{-1, 1},
-	{-1, 0},
-	{-1,-1},
-	{ 0,-1},
-	{ 1,-1},
-	{ 1, 0},
-	{ 1, 1},
+	{  0,  1 }, { -1,  1 }, { -1,  0 }, { -1, -1 }, {  0, -1 }, {  1, -1 }, {  1,  0 }, {  1,  1 },
+	{ -2, -2 }, { -1, -2 }, {  0, -2 }, {  1, -2 }, {  2, -2 }, { -2, -1 }, {  2, -1 }, { -2,  0 },
+	{  2,  0 }, { -2,  1 }, {  2,  1 }, { -2,  2 }, { -1,  2 }, {  0,  2 }, {  1,  2 }, {  2,  2 },
 };
 
 // threading stuff
@@ -301,8 +294,10 @@ static inline int fpathDistToTile(int tileX, int tileY, int pointX, int pointY)
 	int xdiff = world_coord(tileX) - pointX;
 	int ydiff = world_coord(tileY) - pointY;
 
-	ASSERT(xdiff != 0 || ydiff != 0, "fpathDistToTile: points are on same position");
-
+	if (xdiff == 0 && ydiff == 0)
+	{
+		return 0;
+	}
 	return trigIntSqrt(xdiff * xdiff + ydiff * ydiff);
 }
 
@@ -523,10 +518,10 @@ FPATH_RETVAL fpathDroidRoute(DROID* psDroid, SDWORD tX, SDWORD tY)
 
 		for (dir = 0; dir < NUM_DIR; dir++)
 		{
-			int x = map_coord(psDroid->pos.x) + aDirOffset[dir].x;
-			int y = map_coord(psDroid->pos.y) + aDirOffset[dir].y;
+			int x = map_coord(tX) + aDirOffset[dir].x;
+			int y = map_coord(tY) + aDirOffset[dir].y;
 
-			if (!fpathBlockingTile(x, y, psPropStats->propulsionType))
+			if (tileOnMap(x, y) && !fpathBlockingTile(x, y, psPropStats->propulsionType))
 			{
 				// pick the adjacent tile closest to our starting point
 				int tileDist = fpathDistToTile(x, y, psDroid->pos.x, psDroid->pos.y);
@@ -542,7 +537,7 @@ FPATH_RETVAL fpathDroidRoute(DROID* psDroid, SDWORD tX, SDWORD tY)
 		if (nearestDir == NUM_DIR)
 		{
 			// surrounded by blocking tiles, give up
-			objTrace(psDroid->id, "route failed (target by blocking)");
+			objTrace(psDroid->id, "route to (%d, %d) failed - target blocked", map_coord(tX), map_coord(tY));
 			return FPR_FAILED;
 		}
 		else
