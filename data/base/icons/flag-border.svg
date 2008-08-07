@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://web.resource.org/cc/"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="24.33453"
+   height="21.771255"
+   id="svg13391"
+   sodipodi:version="0.32"
+   inkscape:version="0.45.1"
+   version="1.0"
+   sodipodi:docbase="/storage/projekte/programmieren/warzone/data/base/images/icons"
+   sodipodi:docname="flag.svg"
+   inkscape:output_extension="org.inkscape.output.svg.inkscape">
+  <defs
+     id="defs13393" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#ffffff"
+     borderopacity="0.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="0"
+     inkscape:zoom="11.2"
+     inkscape:cx="11.725037"
+     inkscape:cy="9.7518166"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     inkscape:window-width="910"
+     inkscape:window-height="627"
+     inkscape:window-x="0"
+     inkscape:window-y="25" />
+  <metadata
+     id="metadata13396">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-524.97559,-701.47655)">
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#a4faf7;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M 525.47559,722.21748 L 525.47559,717.09096 L 533.25377,702.33011 C 533.25377,702.33011 536.92189,701.53461 539.26418,702.33011 C 541.60647,703.1256 541.78324,703.94319 542.62293,705.51209 C 543.46262,707.08098 542.1147,707.36824 542.62293,708.60568 C 543.13117,709.84312 543.21955,709.9757 544.65587,710.46183 C 546.09218,710.94797 548.81012,711.08055 548.81012,711.08055 L 545.27459,720.36133 C 545.27459,720.36133 543.12266,720.8117 540.76678,720.71488 C 539.15369,720.64859 537.18705,720.40552 536.17058,718.77034 C 535.15412,717.13515 535.35299,715.19061 534.40282,713.99737 C 533.45264,712.80413 532.36989,713.99737 532.36989,713.99737 L 528.39241,722.74781 L 525.47559,722.21748 z "
+       id="path7600"
+       sodipodi:nodetypes="cccssssccsssccc" />
+  </g>
+</svg>
