@@ -4240,25 +4240,9 @@ const char *getDroidName(const DROID *psDroid)
 	return getTemplateName(&sTemplate);
 }
 
-
-
-/*return the name to display for the interface - we don't know if this is
-a string ID or something the user types in*/
 const char* getTemplateName(const DROID_TEMPLATE *psTemplate)
 {
-	/* See if the name has a string resource associated with it by trying
-	 * to get the string resource.
-	 */
-	const char * const pNameID = strresGetString(psStringRes, psTemplate->aName);
-
-	// If we couldn't find a string resource, return the name passed in
-	if (!pNameID)
-	{
-		return psTemplate->aName;
-	}
-
-	// Return the retrieved resource string
-	return pNameID;
+	return psTemplate->aName;
 }
 
 /* Just returns true if the droid's present body points aren't as high as the original*/
