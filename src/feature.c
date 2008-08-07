@@ -386,9 +386,16 @@ FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,BOOL FromSave)
 
 			if (width != psStats->baseWidth && breadth != psStats->baseBreadth)
 			{
-				ASSERT( !(TileHasFeature(psTile)),
-					"buildFeature - feature- %d already found at %d, %d",
-					psFeature->id, mapX+width,mapY+breadth );
+				if (TileHasFeature(psTile))
+				{
+					FEATURE *psBlock = (FEATURE *)psTile->psObject;
+
+					debug(LOG_ERROR, "%s(%d) already placed at (%d+%d, %d+%d) when trying to place %s(%d) at (%d+%d, %d+%d) - removing it",
+					      getName(psBlock->psStats->pName), psBlock->id, map_coord(psBlock->pos.x), psBlock->psStats->baseWidth, map_coord(psBlock->pos.y), 
+					      psBlock->psStats->baseBreadth, getName(psFeature->psStats->pName), psFeature->id, mapX, psStats->baseWidth, mapY, psStats->baseBreadth);
+
+					removeFeature(psBlock);
+				}
 
 				psTile->psObject = (BASE_OBJECT*)psFeature;
 
