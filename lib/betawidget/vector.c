@@ -63,7 +63,7 @@ void *vectorAdd(vector *v, void *object)
 
 void *vectorAt(vector *v, int index)
 {
-	return (index <= v->head && v->head >= 0) ? v->mem[index] : NULL;
+	return (index < v->head && index >= 0) ? v->mem[index] : NULL;
 }
 
 void *vectorHead(vector *v)
