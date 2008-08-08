@@ -538,6 +538,26 @@ int widgetAddTimerEventHandler(widget *self, eventType type, int interval,
 void widgetRemoveEventHandler(widget *self, int id);
 
 /**
+ * Returns the user-data for the event whose id is id.
+ *
+ * @param self  The widget to whom the event handler is registered to.
+ * @param id    The id of the event handler to fetch the user-data for.
+ * @returm The user-data for the event handler, or NULL if the eventId is
+ *         invalid.
+ */
+void *widgetGetEventHandlerUserData(widget *self, int id);
+
+/**
+ * Sets the user-data for the event handler with an id of id registered to self
+ * to userData.
+ *
+ * @param self  The widget to whom the event handler is registered to.
+ * @param id    The id of the widget to set the user-data for.
+ * @param userData  The new user-data for the event handler
+ */
+void widgetSetEventHandlerUserData(widget *self, int id, void *userData);
+
+/**
  * Enables the current widget along with all of its child widgets. If the
  * widget is currently enabled but one or more of its child widgets are not
  * then they will also be enabled.

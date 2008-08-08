@@ -89,6 +89,35 @@ static bool widgetHasMouse(widget *self, point location)
 	return hasMouse;
 }
 
+/**
+ * Returns a pointer to the event handler with an id of id. Should id be invalid
+ * then NULL is returned.
+ *
+ * @param self  The widget whose event handler table to search.
+ * @param id    The id of the desired event handler.
+ * @return A pointer to the event handler, or NULL if id is invalid.
+ */
+static eventTableEntry *widgetGetEventHandlerById(widget *self, int id)
+{
+	int i;
+	eventTableEntry *entry = NULL;
+	
+	// Search the event handler table
+	for (i = 0; i < vectorSize(self->eventVtbl); i++)
+	{
+		eventTableEntry *currEntry = vectorAt(self->eventVtbl, id);
+		
+		// See if the id matches
+		if (currEntry->id == id)
+		{
+			entry = currEntry;
+			break;
+		}
+	}
+	
+	return entry;
+}
+
 bool widgetIsA(widget *self, const classInfo *instanceOf)
 {
 	const classInfo *widgetClass;
@@ -374,6 +403,28 @@ widget *widgetFindById(widget *self, const char *id)
 
 	// If we found nothing return NULL
 	return NULL;
+}
+
+void *widgetGetEventHandlerUserData(widget *self, int id)
+{
+	eventTableEntry *entry = widgetGetEventHandlerById(self, id);
+	
+	// Make sure we found something
+	assert(entry != NULL);
+	
+	// Return the user-data
+	return entry->userData;
+}
+
+void widgetSetEventHandlerUserData(widget *self, int id, void *userData)
+{
+	eventTableEntry *entry = widgetGetEventHandlerById(self, id);
+	
+	// Make sure we found something
+	assert(entry != NULL);
+	
+	// Set the user-data
+	entry->userData = userData;
 }
 
 bool widgetAddChildImpl(widget *self, widget *child)
