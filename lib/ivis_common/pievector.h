@@ -168,6 +168,18 @@ static inline WZ_DECL_CONST Vector2f Vector2f_New(const float x, const float y)
 
 
 /*!
+ * Convert a float vector to integer
+ * \param v Vector to convert
+ * \return Float vector
+ */
+static inline WZ_DECL_CONST Vector2i Vector2f_To2i(const Vector2f v)
+{
+	Vector2i dest = { (int)v.x, (int)v.y };
+	return dest;
+}
+
+
+/*!
  * Add op2 to op1.
  * \param op1,op2 Operands
  * \return Result
@@ -251,6 +263,44 @@ static inline WZ_DECL_CONST Vector2f Vector2f_Normalise(const Vector2f v)
 		Vector2f dest = { v.x / length, v.y / length };
 		return dest;
 	}
+}
+
+
+/*!
+ * Finds a point that lies in between two other points, a starting and ending
+ * point.
+ *
+ * \param from Vector representing the starting point.
+ * \param to Vector representing the ending point.
+ * \param s The distance travelled along the line between vectors \c from and
+ *          \c to expressed as a number ranging from 0.f to 1.f.
+ *
+ * \return a Vector that's \c s along the line between \c from and \to
+ */
+static inline WZ_DECL_CONST Vector2i Vector2i_LinearInterpolate(const Vector2i from, const Vector2i to, const float s)
+{
+	assert(s >= 0.f && s <= 1.f);
+
+	return Vector2i_Add(from, Vector2f_To2i(Vector2f_Mult(Vector2i_To2f(Vector2i_Sub(to, from)), s)));
+}
+
+
+/*!
+ * Finds a point that lies in between two other points, a starting and ending
+ * point.
+ *
+ * \param from Vector representing the starting point.
+ * \param to Vector representing the ending point.
+ * \param s The distance travelled along the line between vectors \c from and
+ *          \c to expressed as a number ranging from 0.f to 1.f.
+ *
+ * \return a Vector that's \c s along the line between \c from and \to
+ */
+static inline WZ_DECL_CONST Vector2f Vector2f_LinearInterpolate(const Vector2f from, const Vector2f to, const float s)
+{
+	assert(s >= 0.f && s <= 1.f);
+
+	return Vector2f_Add(from, Vector2f_Mult(Vector2f_Sub(to, from), s));
 }
 
 
@@ -426,6 +476,25 @@ static inline WZ_DECL_CONST Vector3f Vector3f_EulerToUpVector(const Vector3f v)
 	};
 
 	return dest;
+}
+
+
+/*!
+ * Finds a point that lies in between two other points, a starting and ending
+ * point.
+ *
+ * \param from Vector representing the starting point.
+ * \param to Vector representing the ending point.
+ * \param s The distance travelled along the line between vectors \c from and
+ *          \c to expressed as a number ranging from 0.f to 1.f.
+ *
+ * \return a Vector that's \c s along the line between \c from and \to
+ */
+static inline WZ_DECL_CONST Vector3f Vector3f_LinearInterpolate(const Vector3f from, const Vector3f to, const float s)
+{
+	assert(s >= 0.f && s <= 1.f);
+
+	return Vector3f_Add(from, Vector3f_Mult(Vector3f_Sub(to, from), s));
 }
 
 /*!
@@ -613,6 +682,25 @@ static inline WZ_DECL_CONST bool Vector3i_InSphere (const Vector3i v, const Vect
 	// warns about a comparison of a comparison between an unsigned and a
 	// signed integer.
 	return (unsigned int)((delta.x * delta.x) + (delta.y * delta.y) + (delta.z * delta.z)) < (r * r);
+}
+
+
+/*!
+ * Finds a point that lies in between two other points, a starting and ending
+ * point.
+ *
+ * \param from Vector representing the starting point.
+ * \param to Vector representing the ending point.
+ * \param s The distance travelled along the line between vectors \c from and
+ *          \c to expressed as a number ranging from 0.f to 1.f.
+ *
+ * \return a Vector that's \c s along the line between \c from and \to
+ */
+static inline WZ_DECL_CONST Vector3i Vector3i_LinearInterpolate(const Vector3i from, const Vector3i to, const float s)
+{
+	assert(s >= 0.f && s <= 1.f);
+
+	return Vector3i_Add(from, Vector3f_To3i(Vector3f_Mult(Vector3i_To3f(Vector3i_Sub(to, from)), s)));
 }
 
 
