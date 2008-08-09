@@ -612,7 +612,7 @@ bool widgetFireTimerCallbacksImpl(widget *self, event *evt)
 			if (evt->time >= (handler->lastCalled + handler->interval))
 			{
 				// Ensure the type of our custom event matches
-				evtTimer.event.type = evt->type;
+				evtTimer.event.type = handler->type;
 				
 				// Fire the associated callback
 				ret = handler->callback(self, (event *) &evtTimer, handler->id,
