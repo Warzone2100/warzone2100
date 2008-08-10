@@ -724,8 +724,8 @@ void widgetFocusImpl(widget *self)
 	self->hasFocus = true;
 
 	// Fire our on-focus callbacks
-	// FIXME: We need to set the timestamp of the event
 	evt.event.type = EVT_FOCUS;
+	evt.event.time = widgetGetTime();
 	widgetFireCallbacks(self, (event *) &evt);
 }
 
@@ -751,8 +751,8 @@ void widgetBlurImpl(widget *self)
 	self->hasFocus = false;
 
 	// Fire off the on-blur callbacks
-	// FIXME: We need to set the timestamp of the event
 	evt.event.type = EVT_BLUR;
+	evt.event.time = widgetGetTime();
 	widgetFireCallbacks(self, (event *) &evt);
 }
 

@@ -405,6 +405,18 @@ void widgetCompositeImpl(widget *self);
 bool widgetIsA(widget *self, const classInfo *instanceOf);
 
 /*
+ * Public static, implementation defined methods
+ */
+
+/**
+ * This method should return the number of milliseconds since an undefined
+ * epoch.
+ *
+ * @return The number of milliseconds since the epoch.
+ */
+int widgetGetTime(void);
+
+/*
  * Public methods
  */
 
