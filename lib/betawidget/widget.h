@@ -416,7 +416,12 @@ bool widgetIsA(widget *self, const classInfo *instanceOf);
 void widgetDraw(widget *self);
 
 /**
- * TODO
+ * Composites the widget self onto the frame-buffer. In addition this method is
+ * also responsible for transforming the widget for the purposes of animation.
+ * Finally this method will loop over the child widgets of self and call
+ * widgetComposite on each one.
+ *
+ * @param self  The widget (along with its children to composite.
  */
 void widgetComposite(widget *self);
 
@@ -662,7 +667,14 @@ size widgetGetMaxSize(widget *self);
 void widgetResize(widget *self, int w, int h);
 
 /**
- * @TODO
+ * This is the main event dispatching function. Its purpose is to take an event,
+ * evt and decide what course of action needs to be taken (if any). It is
+ * responsible for setting widget-states such as hasMouse and hasFocus and for
+ * deciding if evt is relevant to any child widgets of self.
+ *
+ * @param self  The widget to handle the event.
+ * @param evt   The event itself.
+ * @param True if the event was `handled', false otherwise.
  */
 bool widgetHandleEvent(widget *self, event *evt);
 
