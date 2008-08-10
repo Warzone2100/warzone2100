@@ -402,7 +402,7 @@ void widgetCompositeImpl(widget *self);
  * @param instanceOf	The class we are interested in.
  * @return True if it is legal to cast, false otherwise.
  */
-bool widgetIsA(widget *self, const classInfo *instanceOf);
+bool widgetIsA(const widget *self, const classInfo *instanceOf);
 
 /*
  * Public static, implementation defined methods
@@ -468,7 +468,7 @@ widget *widgetFindById(widget *self, const char *id);
  * @param self  The widget to get the position of.
  * @return The absolute position of self.
  */
-point widgetAbsolutePosition(widget *self);
+point widgetAbsolutePosition(const widget *self);
 
 /**
  * Returns the absolute bounding rectangle of the widget.
@@ -476,7 +476,7 @@ point widgetAbsolutePosition(widget *self);
  * @param self  The widget to get the bounds of.
  * @return The absolute bounds of self.
  */
-rect widgetAbsoluteBounds(widget *self);
+rect widgetAbsoluteBounds(const widget *self);
 
 /**
  * Transverses up the hierarchy until it finds parent-less widget (known as
@@ -562,7 +562,7 @@ void widgetRemoveEventHandler(widget *self, int id);
  * @returm The user-data for the event handler, or NULL if the eventId is
  *         invalid.
  */
-void *widgetGetEventHandlerUserData(widget *self, int id);
+void *widgetGetEventHandlerUserData(const widget *self, int id);
 
 /**
  * Sets the user-data for the event handler with an id of id registered to self
@@ -744,6 +744,6 @@ bool widgetFireTimerCallbacks(widget *self, event *evt);
  * @param loc   The point (x,y) to check the mask status of.
  * @return true if loc is masked; false otherwise;
  */
-bool widgetPointMasked(widget *self, point loc);
+bool widgetPointMasked(const widget *self, point loc);
 
 #endif /*WIDGET_H_*/

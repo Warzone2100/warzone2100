@@ -97,7 +97,7 @@ static bool widgetHasMouse(widget *self, point location)
  * @param id    The id of the desired event handler.
  * @return A pointer to the event handler, or NULL if id is invalid.
  */
-static eventTableEntry *widgetGetEventHandlerById(widget *self, int id)
+static eventTableEntry *widgetGetEventHandlerById(const widget *self, int id)
 {
 	int i;
 	eventTableEntry *entry = NULL;
@@ -118,7 +118,7 @@ static eventTableEntry *widgetGetEventHandlerById(widget *self, int id)
 	return entry;
 }
 
-bool widgetIsA(widget *self, const classInfo *instanceOf)
+bool widgetIsA(const widget *self, const classInfo *instanceOf)
 {
 	const classInfo *widgetClass;
 	
@@ -332,7 +332,7 @@ void widgetDrawMask(widget *self)
 	widgetDoDrawMask(self);
 }
 
-point widgetAbsolutePosition(widget *self)
+point widgetAbsolutePosition(const widget *self)
 {
 	// Get our own offset
 	point pos = self->offset;
@@ -346,7 +346,7 @@ point widgetAbsolutePosition(widget *self)
 	return pos;
 }
 
-rect widgetAbsoluteBounds(widget *self)
+rect widgetAbsoluteBounds(const widget *self)
 {
 	// Get our position
 	const point p = widgetAbsolutePosition(self);
@@ -405,7 +405,7 @@ widget *widgetFindById(widget *self, const char *id)
 	return NULL;
 }
 
-void *widgetGetEventHandlerUserData(widget *self, int id)
+void *widgetGetEventHandlerUserData(const widget *self, int id)
 {
 	eventTableEntry *entry = widgetGetEventHandlerById(self, id);
 	
@@ -1035,7 +1035,7 @@ bool widgetHandleEventImpl(widget *self, event *evt)
 	return true;
 }
 
-bool widgetPointMasked(widget *self, point loc)
+bool widgetPointMasked(const widget *self, point loc)
 {
 	/*
 	 * The format of the mask is CAIRO_FORMAT_A1, where:
