@@ -37,7 +37,7 @@ typedef struct _eventText		eventText;
 typedef struct _eventTimer      eventTimer;
 typedef struct _eventMisc       eventMisc;
 
-typedef bool (*callback)        (widget *widget, event *evt, int handlerId,
+typedef bool (*callback)        (widget *widget, const event *evt, int handlerId,
                                  void *userData);
 
 typedef struct _eventTableEntry eventTableEntry;
@@ -210,13 +210,13 @@ struct _eventTableEntry
  */
 struct _widgetVtbl
 {
-	bool    (*handleEvent)                  (widget *self, event *evt);
+	bool    (*handleEvent)                  (widget *self, const event *evt);
 
 	bool    (*addChild)                     (widget *self, widget *child);
 	void    (*removeChild)                  (widget *self, widget *child);
 
-	bool    (*fireCallbacks)                (widget *self, event *evt);
-	bool    (*fireTimerCallbacks)           (widget *self, event *evt);
+	bool    (*fireCallbacks)                (widget *self, const event *evt);
+	bool    (*fireTimerCallbacks)           (widget *self, const event *evt);
 
 	int     (*addEventHandler)              (widget *self, eventType type,
 	                                         callback handler, void *userData);
@@ -373,8 +373,8 @@ void widgetInit(widget *instance, const char *id);
 void widgetDestroyImpl(widget *instance);
 bool widgetAddChildImpl(widget *self, widget *child);
 void widgetRemoveChildImpl(widget *self, widget *child);
-bool widgetFireCallbacksImpl(widget *self, event *evt);
-bool widgetFireTimerCallbacksImpl(widget *self, event *evt);
+bool widgetFireCallbacksImpl(widget *self, const event *evt);
+bool widgetFireTimerCallbacksImpl(widget *self, const event *evt);
 int widgetAddEventHandlerImpl(widget *self, eventType type,
                               callback handler, void *userData);
 int widgetAddTimerEventHandlerImpl(widget *self, eventType type, int interval,
@@ -387,7 +387,7 @@ void widgetHideImpl(widget *self);
 void widgetFocusImpl(widget *self);
 void widgetBlurImpl(widget *self);
 void widgetResizeImpl(widget *self, int w, int h);
-bool widgetHandleEventImpl(widget *self, event *evt);
+bool widgetHandleEventImpl(widget *self, const event *evt);
 void widgetCompositeImpl(widget *self);
 
 /*
@@ -688,7 +688,7 @@ void widgetResize(widget *self, int w, int h);
  * @param evt   The event itself.
  * @param True if the event was `handled', false otherwise.
  */
-bool widgetHandleEvent(widget *self, event *evt);
+bool widgetHandleEvent(widget *self, const event *evt);
 
 /*
  * Protected methods
@@ -729,12 +729,12 @@ bool widgetDoLayout(widget *self);
  * @param self  The widget to fire the callbacks on.
  * @param evt   The event to fire the callbacks for.
  */
-bool widgetFireCallbacks(widget *self, event *evt);
+bool widgetFireCallbacks(widget *self, const event *evt);
 
 /**
  *
  */
-bool widgetFireTimerCallbacks(widget *self, event *evt);
+bool widgetFireTimerCallbacks(widget *self, const event *evt);
 
 /**
  * Checks to see if the point loc is masked or not by the widgets mouse-event

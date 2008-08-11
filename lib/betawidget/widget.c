@@ -561,7 +561,7 @@ void widgetRemoveEventHandlerImpl(widget *self, int id)
 	}
 }
 
-bool widgetFireCallbacksImpl(widget *self, event *evt)
+bool widgetFireCallbacksImpl(widget *self, const event *evt)
 {
 	int i;
 	bool ret;
@@ -591,7 +591,7 @@ bool widgetFireCallbacksImpl(widget *self, event *evt)
 	return true;
 }
 
-bool widgetFireTimerCallbacksImpl(widget *self, event *evt)
+bool widgetFireTimerCallbacksImpl(widget *self, const event *evt)
 {
 	int i;
 	bool ret;
@@ -894,7 +894,7 @@ widget *widgetGetCurrentlyFocused(widget *self)
 	return self;
 }
 
-bool widgetHandleEventImpl(widget *self, event *evt)
+bool widgetHandleEventImpl(widget *self, const event *evt)
 {
 	// If the event should be passed onto our children
 	bool relevant = true;
@@ -1098,12 +1098,12 @@ void widgetRemoveEventHandler(widget *self, int id)
 	WIDGET_GET_VTBL(self)->removeEventHandler(self, id);
 }
 
-bool widgetFireCallbacks(widget *self, event *evt)
+bool widgetFireCallbacks(widget *self, const event *evt)
 {
 	return WIDGET_GET_VTBL(self)->fireCallbacks(self, evt);
 }
 
-bool widgetFireTimerCallbacks(widget *self, event *evt)
+bool widgetFireTimerCallbacks(widget *self, const event *evt)
 {
 	return WIDGET_GET_VTBL(self)->fireTimerCallbacks(self, evt);
 }
@@ -1183,7 +1183,7 @@ bool widgetDoLayout(widget *self)
 	return WIDGET_GET_VTBL(self)->doLayout(self);
 }
 
-bool widgetHandleEvent(widget *self, event *evt)
+bool widgetHandleEvent(widget *self, const event *evt)
 {
 	return WIDGET_GET_VTBL(self)->handleEvent(self, evt);
 }
