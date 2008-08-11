@@ -283,12 +283,25 @@ static const char * wz_strsignal(int signum, int sigcode)
 					return "SIGPOLL: Pollable event: Output buffers available";
 				case POLL_MSG:
 					return "SIGPOLL: Pollable event: Input message available";
+#if defined(POLL_ERR) && defined(POLL_HUP) && (POLL_ERR != POLL_HUP)
 				case POLL_ERR:
 					return "SIGPOLL: Pollable event: I/O error";
+#endif
 				case POLL_PRI:
 					return "SIGPOLL: Pollable event: High priority input available";
+#if defined(POLL_ERR) && defined(POLL_HUP) && (POLL_ERR != POLL_HUP)
 				case POLL_HUP:
 					return "SIGPOLL: Pollable event: Device disconnected.";
+#endif
+	/* Work around the fact that the FreeBSD kernel uses the same value for
+	 * POLL_ERR and POLL_HUP. See
+	 * http://www.freebsd.org/cgi/cvsweb.cgi/src/sys/sys/signal.h (version
+	 * 1.47 introduced these constants with the same values).
+	 */
+#if defined(POLL_ERR) && defined(POLL_HUP) && (POLL_ERR == POLL_HUP)
+				case POLL_ERR:
+					return "SIGPOLL: Pollable event: \"I/O error\" or \"Device disconnected\".";
+#endif
 				default:
 					return "SIGPOLL: Pollable event";
 			}
