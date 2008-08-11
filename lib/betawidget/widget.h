@@ -120,8 +120,11 @@ struct _eventMouse
 {
 	event event;
 
-	// Location of the event
+	// Location of the mouse
 	point loc;
+	
+	// Previous location of the mouse
+	point previousLoc;
 };
 
 /*
