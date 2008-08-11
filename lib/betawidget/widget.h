@@ -37,7 +37,32 @@ typedef struct _eventText		eventText;
 typedef struct _eventTimer      eventTimer;
 typedef struct _eventMisc       eventMisc;
 
-typedef bool (*callback)        (widget *widget, const event *evt, int handlerId,
+/**
+ * Function signature for event handler callbacks. All callback functions must
+ * be of this form.
+ *
+ * @param self  The widget that received/handled the event.
+ * @param evt   A pointer to the event structure. Depending on the value of
+ *              evt->type it may be necessary to cast this to derived event
+ *              structure (e.g., evtMouse or evtMisc).
+ *
+ *              All callback functions must be able to handle EVT_DESTRUCT
+ *              events, which are generated when either self is destroyed or the
+ *              event handler removed (widgetRemoveEventHandler). This allows
+ *              for the callback to free any memory which it has allocated/is
+ *              responsible for (e.g. userData).
+ * @param handlerId The (unique) id of this event handler. This can be used to:
+ *                   - Remove the event handler from the widgets event table;
+ *                     which can be done by calling widgetRemoveEventHandler. It
+ *                     is important to note that this will immediately generate
+ *                     an EVT_DESTRUCT event and dispatch it.
+ *                   - Set the *userData pointer by using
+ *                     widgetSetEventHandlerUserData.
+ * @param userData  The user-data associated with the callback; this is stored
+ *                  and passed verbatim.
+ * @return True if the callback executed without error, otherwise false.
+ */
+typedef bool (*callback)        (widget *self, const event *evt, int handlerId,
                                  void *userData);
 
 typedef struct _eventTableEntry eventTableEntry;
