@@ -97,6 +97,11 @@ typedef enum
 	// Text input events
 	EVT_TEXT,
 
+	// Drag events
+	EVT_DRAG_BEGIN,
+	EVT_DRAG_TRACK,
+	EVT_DRAG_END,
+	
 	// Timer events
 	EVT_TIMER,
 	EVT_TIMER_SINGLE_SHOT,
@@ -120,6 +125,27 @@ typedef enum
 	BUTTON_WHEEL_DOWN,
 	BUTTON_OTHER
 } mouseButton;
+
+/*
+ * Possible drag states
+ */
+typedef enum
+{
+	/// No active drag
+	DRAG_NONE,
+	
+	/// Drag offer pending acceptance/declination
+	DRAG_PENDING,
+	
+	/// Offer was accepted
+	DRAG_ACCEPTED,
+	
+	/// Offer was declined
+	DRAG_DECLINED,
+	
+	/// Drag is currently active
+	DRAG_ACTIVE
+} dragStates;
 
 /*
  * Event structures
@@ -256,6 +282,9 @@ struct _widgetVtbl
 	void    (*focus)                        (widget *self);
 	void    (*blur)                         (widget *self);
 
+	void    (*acceptDrag)                   (widget *self);
+	void    (*declineDrag)                  (widget *self);
+	
 	void    (*enable)                       (widget *self);
 	void    (*disable)                      (widget *self);
 
@@ -305,6 +334,11 @@ struct _widget
 	 * If a mouse button is currently depressed on the widget
 	 */
 	bool hasMouseDown;
+	
+	/*
+	 * Current drag state
+	 */
+	dragStates dragState;
 
 	/*
 	 * The widgets cairo drawing context
@@ -408,6 +442,8 @@ int widgetAddEventHandlerImpl(widget *self, eventType type,
 int widgetAddTimerEventHandlerImpl(widget *self, eventType type, int interval,
                                    callback handler, void *userData);
 void widgetRemoveEventHandlerImpl(widget *self, int id);
+void widgetAcceptDragImpl(widget *self);
+void widgetDeclineDragImpl(widget *self);
 void widgetEnableImpl(widget *self);
 void widgetDisableImpl(widget *self);
 void widgetShowImpl(widget *self);
@@ -601,6 +637,22 @@ void *widgetGetEventHandlerUserData(const widget *self, int id);
  * @param userData  The new user-data for the event handler
  */
 void widgetSetEventHandlerUserData(widget *self, int id, void *userData);
+
+/**
+ * Accepts the current drag offer, if any. Should no drag offer be on the table
+ * then the results are undefined.
+ *
+ * @param self  The widget to accept the drag offer for.
+ */
+void widgetAcceptDrag(widget *self);
+
+/**
+ * Declines the current drag offer. Like with widgetAcceptDrag the results are
+ * undefined if there is no drag offer .
+ *
+ * @param self  The widget to decline the drag offer for.
+ */
+void widgetDeclineDrag(widget *self);
 
 /**
  * Enables the current widget along with all of its child widgets. If the

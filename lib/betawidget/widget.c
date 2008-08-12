@@ -157,6 +157,9 @@ static void widgetInitVtbl(widget *self)
 		vtbl.focus                  = widgetFocusImpl;
 		vtbl.blur                   = widgetBlurImpl;
 
+		vtbl.acceptDrag             = widgetAcceptDragImpl;
+		vtbl.declineDrag            = widgetDeclineDragImpl;
+		
 		vtbl.enable                 = widgetEnableImpl;
 		vtbl.disable                = widgetDisableImpl;
 		
@@ -634,6 +637,24 @@ bool widgetFireTimerCallbacksImpl(widget *self, const event *evt)
 	return true;
 }
 
+void widgetAcceptDragImpl(widget *self)
+{
+	// Make sure there is an active drag offer
+	assert(self->dragState == DRAG_PENDING);
+	
+	// Accept the offer
+	self->dragState = DRAG_ACCEPTED;
+}
+
+void widgetDeclineDragImpl(widget *self)
+{
+	// Make sure there is an active drag offer
+	assert(self->dragState == DRAG_PENDING);
+	
+	// Decline the offer
+	self->dragState = DRAG_DECLINED;
+}
+
 void widgetEnableImpl(widget *self)
 {
 	int i;
@@ -925,6 +946,19 @@ bool widgetHandleEventImpl(widget *self, const event *evt)
 				break;
 			}
 
+			// While dragging hasMouse irrelevant
+			if (self->dragState == DRAG_ACTIVE)
+			{
+				// Morph the event into a DRAG_TRACK event
+				evtMouse.event.type = EVT_DRAG_TRACK;
+				
+				widgetFireCallbacks(self, (event *) &evtMouse);
+				
+				// Not relevant to our children
+				relevant = false;
+				break;
+			}
+			
 			// If we have or did have the mouse
 			if (newHasMouse || self->hasMouse)
 			{
@@ -949,6 +983,30 @@ bool widgetHandleEventImpl(widget *self, const event *evt)
 			{
 				relevant = false;
 			}
+			
+			// If the mouse is down offer a drag event
+			if (newHasMouse && self->hasMouseDown)
+			{
+				// We are awaiting a response to our drag offer
+				self->dragState = DRAG_PENDING;
+				
+				// Morph the event
+				evtMouse.event.type = EVT_DRAG_BEGIN;
+				
+				// Fire any EVT_DRAG_BEGIN callbacks
+				widgetFireCallbacks(self, (event *) &evtMouse);
+				
+				// Check to see if the drag was accepted or not
+				if (self->dragState == DRAG_ACCEPTED)
+				{
+					self->dragState = DRAG_ACTIVE;
+				}
+				// Drag was declined or not handled (no BEGIN callback)
+				else
+				{
+					self->dragState = DRAG_NONE;
+				}
+			}
 
 			// Update the status of the mouse
 			self->hasMouse = newHasMouse;
@@ -959,6 +1017,26 @@ bool widgetHandleEventImpl(widget *self, const event *evt)
 		{
 			eventMouseBtn evtMouseBtn = *((eventMouseBtn *) evt);
 
+			// On mouse-up cancel any active drag events
+			if (evt->type == EVT_MOUSE_UP && self->dragState == DRAG_ACTIVE)
+			{
+				// Morph the event
+				evtMouseBtn.event.type = EVT_DRAG_END;
+				
+				// Fire the callbacks
+				widgetFireCallbacks(self, (event *) &evtMouseBtn);
+				
+				// No drag is active
+				self->dragState = DRAG_NONE;
+				
+				// Mouse is no longer down
+				self->hasMouseDown = false;
+				
+				// Of no relevance to our children
+				relevant = false;
+				break;
+			}
+			
 			// If the mouse is inside of the widget
 			if (widgetHasMouse(self, evtMouseBtn.loc))
 			{
@@ -1131,6 +1209,16 @@ void widgetFocus(widget *self)
 void widgetBlur(widget *self)
 {
 	WIDGET_GET_VTBL(self)->blur(self);
+}
+
+void widgetAcceptDrag(widget *self)
+{
+	WIDGET_GET_VTBL(self)->acceptDrag(self);
+}
+
+void widgetDeclineDrag(widget *self)
+{
+	WIDGET_GET_VTBL(self)->declineDrag(self);
 }
 
 size widgetGetMinSize(widget *self)
