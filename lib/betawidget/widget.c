@@ -925,28 +925,23 @@ bool widgetHandleEventImpl(widget *self, const event *evt)
 				break;
 			}
 
-			// If we have just `got' the mouse
-			if (newHasMouse && !self->hasMouse)
+			// If we have or did have the mouse
+			if (newHasMouse || self->hasMouse)
 			{
-				// Generate a EVT_MOUSE_ENTER event
-				evtMouse.event.type = EVT_MOUSE_ENTER;
-
-				// Fire the event handler
-				widgetFireCallbacks(self, (event *) &evtMouse);
-			}
-			// If we have just lost the mouse
-			else if (!newHasMouse && self->hasMouse)
-			{
-				// Generate a EVT_MOUSE_LEAVE event
-				evtMouse.event.type = EVT_MOUSE_LEAVE;
-
-				// Fire the handler
-				widgetFireCallbacks(self, (event *) &evtMouse);
-			}
-			// We had and still have the mouse
-			else if (newHasMouse && self->hasMouse)
-			{
-				// Pass the event as-is
+				// If we have just `got' the mouse
+				if (newHasMouse && !self->hasMouse)
+				{
+					// Generate an EVT_MOUSE_ENTER event instead
+					evtMouse.event.type = EVT_MOUSE_ENTER;
+				}
+				// If we have just lost the mouse
+				else if (!newHasMouse && self->hasMouse)
+				{
+					// Generate an EVT_MOUSE_LEAVE event
+					evtMouse.event.type = EVT_MOUSE_LEAVE;
+				}
+				
+				// Fire any registered callbacks for evtMouse.event.type
 				widgetFireCallbacks(self, (event *) &evtMouse);
 			}
 			// Of no interest to us (and therefore not to our children either)
