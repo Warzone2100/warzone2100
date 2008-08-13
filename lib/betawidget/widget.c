@@ -836,18 +836,18 @@ void widgetCompositeImpl(widget *self)
 	// Composite ourself
 	glBindTexture(GL_TEXTURE_RECTANGLE_ARB, self->textureId);
 	
-	glBegin(GL_QUADS);
-		glTexCoord2f(0, 0);
-		glVertex2f(0, 0);
-		
-		glTexCoord2f(0, self->size.y);
-		glVertex2f(0, self->size.y);
+	glBegin(GL_TRIANGLE_STRIP);
+		glTexCoord2f(0.0f, self->size.y);
+		glVertex2f(0.0f, self->size.y);
+	
+		glTexCoord2f(0.0f, 0.0f);
+		glVertex2f(0.0f, 0.0f);
 		
 		glTexCoord2f(self->size.x, self->size.y);
 		glVertex2f(self->size.x, self->size.y);
 		
-		glTexCoord2f(self->size.x, 0);
-		glVertex2f(self->size.x, 0);
+		glTexCoord2f(self->size.x, 0.0f);
+		glVertex2f(self->size.x, 0.0f);
 	glEnd();
 
 	// Now our children
