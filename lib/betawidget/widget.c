@@ -463,8 +463,8 @@ bool widgetAddChildImpl(widget *self, widget *child)
 	// Add the widget
 	vectorAdd(self->children, child);
 
-	// Re-layout ourself
-	if (widgetDoLayout(self))
+	// Re-layout the window
+	if (widgetDoLayout(widgetGetRoot(self)))
 	{
 		// Set ourself as its parent
 		child->parent = self;
@@ -498,6 +498,9 @@ void widgetRemoveChildImpl(widget *self, widget *child)
 			
 			// Remove it from the list of children
 			vectorRemoveAt(self->children, i);
+			
+			// Re-layout the window
+			widgetDoLayout(widgetGetRoot(self));
 		}
 		// See if it is one of its children
 		else
