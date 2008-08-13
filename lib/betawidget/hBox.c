@@ -168,8 +168,7 @@ bool hBoxDoLayoutImpl(widget *self)
 		widgetResize(child, childSize->currentSize.x,
 		             childSize->currentSize.y);
 		
-		child->offset.x = temp;
-		child->offset.y = childSize->offset.y;
+		widgetReposition(child, temp, childSize->offset.y);
 		
 		temp += child->size.x;
 	}

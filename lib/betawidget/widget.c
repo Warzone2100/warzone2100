@@ -170,6 +170,7 @@ static void widgetInitVtbl(widget *self)
 		vtbl.getMaxSize             = NULL;
 		
 		vtbl.resize                 = widgetResizeImpl;
+		vtbl.reposition             = widgetRepositionImpl;
 		
 		vtbl.composite              = widgetCompositeImpl;
 
@@ -812,6 +813,13 @@ void widgetResizeImpl(widget *self, int w, int h)
 	}
 }
 
+void widgetRepositionImpl(widget *self, int x, int y)
+{
+	// Update our position
+	self->offset.x = x;
+	self->offset.y = y;
+}
+
 void widgetCompositeImpl(widget *self)
 {
 	int i;
@@ -1235,9 +1243,14 @@ size widgetGetMaxSize(widget *self)
 	return WIDGET_GET_VTBL(self)->getMaxSize(self);
 }
 
-void widgetResize(widget *self, int x, int y)
+void widgetResize(widget *self, int w, int h)
 {
-	WIDGET_GET_VTBL(self)->resize(self, x, y);
+	WIDGET_GET_VTBL(self)->resize(self, w, h);
+}
+
+void widgetReposition(widget *self, int x, int y)
+{
+	WIDGET_GET_VTBL(self)->reposition(self, x, y);
 }
 
 void widgetComposite(widget *self)

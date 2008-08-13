@@ -294,7 +294,8 @@ struct _widgetVtbl
 	size    (*getMinSize)                   (widget *self);
 	size    (*getMaxSize)                   (widget *self);
 
-	void    (*resize)                       (widget *self, int x, int y);
+	void    (*resize)                       (widget *self, int w, int h);
+	void    (*reposition)                   (widget *self, int x, int y);
 
 	void    (*composite)                    (widget *self);
 
@@ -451,6 +452,7 @@ void widgetHideImpl(widget *self);
 void widgetFocusImpl(widget *self);
 void widgetBlurImpl(widget *self);
 void widgetResizeImpl(widget *self, int w, int h);
+void widgetRepositionImpl(widget *self, int x, int y);
 bool widgetHandleEventImpl(widget *self, const event *evt);
 void widgetCompositeImpl(widget *self);
 
@@ -757,6 +759,15 @@ size widgetGetMaxSize(widget *self);
  * @param h     The new size of the widget in the y-axis.
  */
 void widgetResize(widget *self, int w, int h);
+
+/**
+ * Sets the offset of the widget, relative to its parent widget to (x,y).
+ *
+ * @param self  The widget to reposition.
+ * @param w     The new x-offset of the widget.
+ * @param h     The new y-offset of the widget.
+ */
+void widgetReposition(widget *self, int x, int y);
 
 /**
  * This is the main event dispatching function. Its purpose is to take an event,
