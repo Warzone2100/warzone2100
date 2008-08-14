@@ -65,6 +65,7 @@ typedef struct
 	GLfloat *textureArray[MAX_TEXARRAYS];
 	FRAME *frameArray;
 	int currentFrame;
+	int currentTextureArray;
 	uint32_t lastChange;	// animation
 } MESH;
 

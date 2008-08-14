@@ -374,7 +374,7 @@ static void dump_to_wzm(FILE *ctl, FILE *fp)
 		}
 
 		// We only handle texture animation here, so leave bone heap animation out of it for now.
-		if (textureArrays == 1)
+		if (textureArrays == 1 || (textureArrays == 8 && !assumeAnimation))
 		{
 			// none is just as good as one
 			fprintf(ctl, "\nFRAMES 0");
