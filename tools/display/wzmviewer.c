@@ -86,6 +86,8 @@ static void drawModel(MODEL *psModel, int x, int y)
 			double fraction = 1.0f / (psFrame->timeSlice * 1000) * (now - psMesh->lastChange); // until next frame
 			Vector3f vec;
 
+			glPushMatrix();	// save matrix state
+
 			assert(psMesh->currentFrame < psMesh->frames);
 
 			if (psMesh->currentFrame == psMesh->frames - 1)
@@ -99,19 +101,18 @@ static void drawModel(MODEL *psModel, int x, int y)
 
 			// Try to avoid crap drivers from taking down the entire system
 			assert(isfinite(psFrame->translation.x) && isfinite(psFrame->translation.y) && isfinite(psFrame->translation.z));
-			assert(psFrame->translation.x >= 0.0f && psFrame->translation.y >= 0.0f && psFrame->translation.z >= 0.0f);
-			assert(psFrame->rotation.x >= 0.0f && psFrame->rotation.y >= 0.0f && psFrame->rotation.z >= 0.0f);
+			assert(psFrame->rotation.x >= -360.0f && psFrame->rotation.y >= -360.0f && psFrame->rotation.z >= -360.0f);
 			assert(psFrame->rotation.x <= 360.0f && psFrame->rotation.y <= 360.0f && psFrame->rotation.z <= 360.0f);
 
 			// Translate
 			interpolateVectors(psFrame->translation, nextFrame->translation, &vec, fraction);
-			glTranslatef(vec.x, vec.y, vec.z);
+			glTranslatef(vec.x, vec.z, vec.y);	// z and y flipped
 
 			// Rotate
 			interpolateVectors(psFrame->rotation, nextFrame->rotation, &vec, fraction);
 			glRotatef(vec.x, 1, 0, 0);
-			glRotatef(vec.y, 0, 1, 0);
-			glRotatef(vec.z, 0, 0, 1);
+			glRotatef(vec.z, 0, 1, 0);	// z and y flipped again...
+			glRotatef(vec.y, 0, 0, 1);
 
 			// Morph
 			if (!psMesh->teamColours)
@@ -124,6 +125,10 @@ static void drawModel(MODEL *psModel, int x, int y)
 		glVertexPointer(3, GL_FLOAT, 0, psMesh->vertexArray);
 
 		glDrawElements(GL_TRIANGLES, psMesh->faces * 3, GL_UNSIGNED_INT, psMesh->indexArray);
+		if (psMesh->frameArray)
+		{
+			glPopMatrix();	// restore position for next mesh
+		}
 	}
 }
 
