@@ -3,22 +3,20 @@
 # Copyright (c) 2008 Rosetta Contributors and Canonical Ltd 2008
 # This file is distributed under the same license as the warzone2100 package.
 #
-# Giel van Schijndel <me@mortis.eu>, 2007.
+# Giel van Schijndel <me@mortis.eu>, 2007-2008.
 # Rubenes <Unknown>, 2008.
 msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
 "POT-Creation-Date: 2008-07-29 20:16+0200\n"
-"PO-Revision-Date: 2008-05-09 16:19+0000\n"
-"Last-Translator: Rubenes <Unknown>\n"
+"PO-Revision-Date: 2008-08-14 17:13+0200\n"
+"Last-Translator: Giel van Schijndel <muggenhor@gna.org>\n"
 "Language-Team: Dutch <vertaling@vrijschrift.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Launchpad-Export-Date: 2008-05-10 13:56+0000\n"
-"X-Generator: Launchpad (build Unknown)\n"
 
 #: data/base/messages/messages.rmsg:4
 msgid "Structure Research Completed"
@@ -10371,7 +10369,7 @@ msgstr "Speler %u heeft zichzelf met cheats (debug menu) een nieuw voorwerp gege
 #: src/hci.c:2169
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new droid: %s."
-msgstr "Speler %u heeft zichzelf met cheats (debug menu) een nieuw eenhied gegeven: %s."
+msgstr "Speler %u heeft zichzelf met cheats (debug menu) een nieuw eenheid gegeven: %s."
 
 #: src/hci.c:3755
 #, fuzzy
