@@ -333,6 +333,16 @@ void screenToggleMode(void)
 // Screenshot code goes below this
 static const unsigned int channelsPerPixel = 3;
 
+/** Writes a screenshot of the current frame to file.
+ *
+ *  Performs the actual work of writing the frame currently displayed on screen
+ *  to the filename specified by screenDumpToDisk().
+ *
+ *  @NOTE This function will only dump a screenshot to file if it was requested
+ *        by screenDumpToDisk().
+ *
+ *  \sa screenDumpToDisk()
+ */
 void screenDoDumpToDiskIfRequired(void)
 {
 	const char* fileName = screendump_filename;
@@ -346,7 +356,7 @@ void screenDoDumpToDiskIfRequired(void)
 	// comparison between unsigned and signed integers. Why does SDL use
 	// a signed integer anyway? When will your screen ever have a negative
 	// width or height for your screen? Assert it to be sure though. -- Giel
-	ASSERT(screen->w >= 0 && screen->h >= 0, "screenDoDumpToDiskIfRequired: Somehow our screen has negative dimensions! Width = %d; Height = %d", screen->w, screen->h);
+	ASSERT(screen->w >= 0 && screen->h >= 0, "Somehow our screen has negative dimensions! Width = %d; Height = %d", screen->w, screen->h);
 	if (image.width != (unsigned int)screen->w || image.height != (unsigned int)screen->h)
 	{
 		if (image.bmp != NULL)
@@ -360,7 +370,7 @@ void screenDoDumpToDiskIfRequired(void)
 		if (image.bmp == NULL)
 		{
 			image.width = 0; image.height = 0;
-			debug(LOG_ERROR, "screenDoDumpToDiskIfRequired: Couldn't allocate memory\n");
+			debug(LOG_ERROR, "Couldn't allocate memory");
 			return;
 		}
 	}
@@ -372,6 +382,13 @@ void screenDoDumpToDiskIfRequired(void)
 	screendump_required = false;
 }
 
+/** Registers the currently displayed frame for making a screen shot.
+ *
+ *  The filename will be suffixed with a number, such that no files are
+ *  overwritten.
+ *
+ *  \param path The directory path to save the screenshot in.
+ */
 void screenDumpToDisk(const char* path)
 {
 	static unsigned int screendump_num = 0;
