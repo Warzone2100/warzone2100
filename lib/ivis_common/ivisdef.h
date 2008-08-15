@@ -32,20 +32,6 @@
 #include "lib/framework/frame.h"
 #include "pietypes.h"
 
-
-
-/***************************************************************************/
-/***************************************************************************/
-/*
- *	Global Definitions
- */
-/***************************************************************************/
-#define iV_SCANTABLE_MAX	1024
-
-// texture animation defines
-#define iV_IMD_ANIM_FRAMES	8
-
-
 //*************************************************************************
 //
 // screen surface structure
@@ -62,7 +48,6 @@ typedef struct _iSurface {
 	iClip clip;
 
 	UBYTE *buffer;
-	Sint32 scantable[iV_SCANTABLE_MAX];	// currently uses 4k per structure (!)
 
 	int width;
 	int height;

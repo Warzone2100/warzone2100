@@ -38,7 +38,6 @@ iSurface	*psRendSurface;
 iSurface *iV_SurfaceCreate(Uint32 flags, int width, int height, int xp, int yp, UBYTE *buffer)
 {
 	iSurface *s = malloc(sizeof(iSurface));
-	int i;
 
 	assert(buffer!=NULL);	// on playstation this MUST be null
 
@@ -56,13 +55,7 @@ iSurface *iV_SurfaceCreate(Uint32 flags, int width, int height, int xp, int yp, 
 	s->width = width;
 	s->height = height;
 	s->size = width * height;
-
 	s->buffer = buffer;
-	for (i=0; i<iV_SCANTABLE_MAX; i++)
-	{
-		s->scantable[i] = i * width;
-	}
-
 	s->clip.left = 0;
 	s->clip.right = width-1;
 	s->clip.top = 0;

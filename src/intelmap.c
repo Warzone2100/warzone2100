@@ -1327,8 +1327,7 @@ void intDisplayFLICView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIG
 		seq_RenderVideoToBuffer(NULL, psViewResearch->sequenceName,
 			gameTime2, SEQUENCE_HOLD);
 		//download to screen now
-		seq_BlitBufferToScreen((SBYTE *)rendSurface.buffer, rendSurface.scantable[1],
-			x0, y0);
+		seq_BlitBufferToScreen((SBYTE *)rendSurface.buffer, x0, y0);
 		CloseButtonRender();
 	}
 
