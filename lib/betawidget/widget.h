@@ -280,6 +280,45 @@ struct _eventTableEntry
 };
 
 /*
+ * Possible types of widget animation
+ */
+typedef enum
+{
+	ANI_TYPE_TRANSLATE,
+	ANI_TYPE_ROTATE,
+	ANI_TYPE_SCALE,
+	ANI_TYPE_ALPHA,
+	
+	/// Must be the last member
+	ANI_TYPE_COUNT
+} animationType;
+
+typedef struct
+{
+	/// The animation type represented by this keyframe
+	animationType type;
+	
+	/// The time this keyframe represents in ms
+	int time;
+	
+	/// Animation specific information
+	union
+	{
+		/// Where to translate ourself to, relative to our parent
+		point translate;
+		
+		/// Number of degrees to rotate the widget by
+		float rotate;
+		
+		/// Scale factor to scale the widget by
+		size scale;
+		
+		/// Alpha value to use
+		float alpha;
+	} data;
+} animationFrame;
+
+/*
  * The widget classes virtual method table
  */
 struct _widgetVtbl
@@ -299,6 +338,27 @@ struct _widgetVtbl
 	                                         void *userData);
 	void    (*removeEventHandler)           (widget *self, int id);
 
+	point   (*animationInterpolateTranslate)    (widget *self,
+	                                             animationFrame k1,
+	                                             animationFrame k2,
+	                                             int time);
+	
+	float   (*animationInterpolateRotate)       (widget *self,
+	                                             animationFrame k1,
+	                                             animationFrame k2,
+	                                             int time);
+	
+	point   (*animationInterpolateScale)        (widget *self,
+	                                             animationFrame k1,
+	                                             animationFrame k2,
+	                                             int time);
+	
+	float   (*animationInterpolateAlpha)        (widget *self,
+	                                             animationFrame k1,
+	                                             animationFrame k2,
+	                                             int time);
+
+	
 	void    (*focus)                        (widget *self);
 	void    (*blur)                         (widget *self);
 
@@ -400,6 +460,22 @@ struct _widget
 	 * The offset of the widget relative to its parent
 	 */
 	point offset;
+	
+	/*
+	 * How many degrees to rotate the widget about the z-axis
+	 */
+	float rotate;
+	
+	/*
+	 * How much to scale the widget by in the x- and y-axis; the deformation is
+	 * non vector
+	 */
+	point scale;
+	
+	/*
+	 * Alpha value to multiply the cairo context by when compositing
+	 */
+	float alpha;
 
 	/*
 	 * The size of the widget
@@ -463,6 +539,14 @@ int widgetAddEventHandlerImpl(widget *self, eventType type,
 int widgetAddTimerEventHandlerImpl(widget *self, eventType type, int interval,
                                    callback handler, void *userData);
 void widgetRemoveEventHandlerImpl(widget *self, int id);
+point widgetAnimationInterpolateTranslateImpl(widget *self, animationFrame k1,
+                                              animationFrame k2, int time);
+float widgetAnimationInterpolateRotateImpl(widget *self, animationFrame k1,
+                                           animationFrame k2, int time);
+point widgetAnimationInterpolateScaleImpl(widget *self, animationFrame k1,
+                                          animationFrame k2, int time);
+float widgetAnimationInterpolateAlphaImpl(widget *self, animationFrame k1,
+										  animationFrame k2, int time);
 void widgetAcceptDragImpl(widget *self);
 void widgetDeclineDragImpl(widget *self);
 void widgetEnableImpl(widget *self);
@@ -677,6 +761,12 @@ void widgetAcceptDrag(widget *self);
 void widgetDeclineDrag(widget *self);
 
 /**
+ * TODO
+ */
+int widgetAddAnimation(widget *self, int nframes,
+                       const animationFrame *frames);
+
+/**
  * Enables the current widget along with all of its child widgets. If the
  * widget is currently enabled but one or more of its child widgets are not
  * then they will also be enabled.
@@ -856,5 +946,33 @@ bool widgetFireTimerCallbacks(widget *self, const event *evt);
  * @return true if loc is masked; false otherwise;
  */
 bool widgetPointMasked(const widget *self, point loc);
+
+/**
+ * TODO
+ */
+point widgetAnimationInterpolateTranslate(widget *self,
+                                          animationFrame k1, animationFrame k2, 
+                                          int time);
+
+/**
+ * TODO
+ */
+float widgetAnimationInterpolateRotate(widget *self,
+                                       animationFrame k1, animationFrame k2,
+                                       int time);
+
+/**
+ * TODO
+ */
+point widgetAnimationInterpolateScale(widget *self,
+                                      animationFrame k1, animationFrame k2,
+                                      int time);
+
+/**
+ * TODO
+ */
+float widgetAnimationInterpolateAlpha(widget *self,
+                                      animationFrame k1, animationFrame k2,
+                                      int time);
 
 #endif /*WIDGET_H_*/

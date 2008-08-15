@@ -23,6 +23,7 @@
 
 // TODO: Make this cross platform (MSVC)
 #include <stdbool.h>
+#include <math.h>
 
 /*
  * A point

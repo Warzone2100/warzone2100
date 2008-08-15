@@ -22,6 +22,14 @@
 
 #include "widget.h"
 
+/**
+ * Performs linear interpolation between the points (x0,y0) and (x1,y1),
+ * returning the y co-ordinate of the line when the x co-ordinate is x.
+ */
+#define LINEAR_INTERPOLATE(x0, y0, x1, y1, x) ((y0) + ((x) - (x0)) * \
+                                               ((y1) - (y0)) / ((x1) - (x0)))
+
+
 const classInfo widgetClassInfo =
 {
 	NULL,		// Root class and therefore no parent
@@ -157,6 +165,136 @@ bool widgetIsA(const widget *self, const classInfo *instanceOf)
 	return false;
 }
 
+static bool widgetAnimationTimerCallback(widget *self, const event *evt,
+                                         int handlerId, void *userData)
+{
+	int i;
+	vector *frames = userData;
+	animationFrame *currFrame;
+	
+	// Regular timer event
+	if (evt->type == EVT_TIMER_PERSISTENT)
+	{
+		bool didInterpolate = false;
+		
+		// Currently active keyframes to be interpolated between
+		struct
+		{
+			animationFrame *pre;
+			animationFrame *post;
+		} interpolateFrames[ANI_TYPE_COUNT] = { { NULL, NULL } };
+		
+		// Work out what frames we need to interpolate between
+		for (i = 0; i < vectorSize(frames); i++)
+		{
+			currFrame = vectorAt(frames, i);
+			
+			/*
+			 * We are only interested in the key frames which either directly
+			 * precede now or come directly after. (As it is these frames which
+			 * will be interpolated between.) 
+			 */
+			if (currFrame->time <= evt->time)
+			{
+				interpolateFrames[currFrame->type].pre = currFrame;
+			}
+			else if (currFrame->time > evt->time
+					 && !interpolateFrames[currFrame->type].post)
+			{
+				interpolateFrames[currFrame->type].post = currFrame;
+			}
+		}
+		
+		// Do the interpolation 
+		for (i = 0; i < ANI_TYPE_COUNT; i++)
+		{
+			// If there are frames to interpolate between then do so
+			if (interpolateFrames[i].pre && interpolateFrames[i].post)
+			{
+				// Get the points to interpolate between
+				animationFrame k1 = *interpolateFrames[i].pre;
+				animationFrame k2 = *interpolateFrames[i].post;
+				
+				int time = evt->time;
+				
+				switch (i)
+				{
+					case ANI_TYPE_TRANSLATE:
+						// Update the widgets position
+						self->offset = widgetAnimationInterpolateTranslate(self, k1,
+						                                                   k2, time);
+						break;
+					case ANI_TYPE_ROTATE:
+						// Update the widgets rotation
+						self->rotate = widgetAnimationInterpolateRotate(self, k1,
+						                                                k2, time);
+						break;
+					case ANI_TYPE_SCALE:
+						// Update the widgets scale factor
+						self->scale = widgetAnimationInterpolateScale(self, k1,
+						                                              k2, time);
+						break;
+					case ANI_TYPE_ALPHA:
+						// Update the widgets alpha
+						self->alpha = widgetAnimationInterpolateAlpha(self, k1,
+						                                              k2, time);
+						break;
+				}
+				
+				// Make a note that we did interpolate
+				didInterpolate = true;
+			}
+		}
+		
+		// If there was no interpolation then the animation is over
+		if (!didInterpolate)
+		{		
+			// Remove ourself (the event handler)
+			widgetRemoveEventHandler(self, handlerId);
+		}
+	}
+	else if (evt->type == EVT_DESTRUCT)
+	{
+		animationFrame *lastFrame[ANI_TYPE_COUNT] = { NULL };
+		
+		// Find the last frame of each animation type
+		for (i = 0; i < vectorSize(frames); i++)
+		{
+			currFrame = vectorAt(frames, i);
+			
+			lastFrame[currFrame->type] = currFrame;
+		}
+		
+		// Set the position/rotation/scale/alpha to that of the final frame
+		for (i = 0; i < ANI_TYPE_COUNT; i++)
+		{
+			if (lastFrame[i]) switch (i)
+			{
+				case ANI_TYPE_TRANSLATE:
+					self->offset = lastFrame[ANI_TYPE_TRANSLATE]->data.translate;
+					break;
+				case ANI_TYPE_ROTATE:
+					self->rotate = lastFrame[ANI_TYPE_ROTATE]->data.rotate;
+					break;
+				case ANI_TYPE_SCALE:
+					self->scale = lastFrame[ANI_TYPE_SCALE]->data.scale;
+					break;
+				case ANI_TYPE_ALPHA:
+					self->alpha = lastFrame[ANI_TYPE_ALPHA]->data.alpha;
+					break;
+				default:
+					break;
+			}
+		}
+		
+		// Free the frames vector
+		vectorMapAndDestroy(frames, free);
+	}
+	
+	
+	return true;
+}
+
 static void widgetInitVtbl(widget *self)
 {
 	static bool initialised = false;
@@ -174,6 +312,11 @@ static void widgetInitVtbl(widget *self)
 		vtbl.removeEventHandler     = widgetRemoveEventHandlerImpl;
 		vtbl.handleEvent            = widgetHandleEventImpl;
 
+		vtbl.animationInterpolateTranslate  = widgetAnimationInterpolateTranslateImpl;
+		vtbl.animationInterpolateRotate     = widgetAnimationInterpolateRotateImpl;
+		vtbl.animationInterpolateScale      = widgetAnimationInterpolateScaleImpl;
+		vtbl.animationInterpolateAlpha      = widgetAnimationInterpolateAlphaImpl;
+		
 		vtbl.focus                  = widgetFocusImpl;
 		vtbl.blur                   = widgetBlurImpl;
 
@@ -220,12 +363,22 @@ void widgetInit(widget *self, const char *id)
 
 	// Prepare our events table
 	self->eventVtbl = vectorCreate();
-
+	
 	// Copy the ID of the widget
 	self->id = strdup(id);
 
 	// Default parent is none
 	self->parent = NULL;
+	
+	// We are not rotated by default
+	self->rotate = 0.0f;
+	
+	// Scale is (1,1)
+	self->scale.x = 1.0f;
+	self->scale.y = 1.0f;
+	
+	// Alpha is 1 (no change)
+	self->alpha = 1.0f;
 	
 	// Zero the user data
 	self->userData = 0;
@@ -588,6 +741,119 @@ void widgetRemoveEventHandlerImpl(widget *self, int id)
 	}
 }
 
+int widgetAddAnimation(widget *self, int nframes,
+                       const animationFrame *frames)
+{
+	int i;
+	int lastTime = 0;
+	int translateCount = 0, rotateCount = 0, scaleCount = 0, alphaCount = 0;
+	vector *ourFrames;
+	animationFrame *currFrame;	 
+	
+	/*
+	 * We need to make sure that the frames are in order and that there is
+	 * enough information to do the required interpolation.
+	 */
+	for (i = 0; i < nframes; i++)
+	{
+		// Make sure the frame N+1 follows after N
+		assert(frames[i].time >= lastTime);
+		
+		// Update the time
+		lastTime = frames[i].time;
+		
+		// Update the animation frame count
+		switch (frames[i].type)
+		{
+			case ANI_TYPE_TRANSLATE:
+				translateCount++;
+				break;
+			case ANI_TYPE_ROTATE:
+				rotateCount++;
+				break;
+			case ANI_TYPE_SCALE:
+				scaleCount++;
+				break;
+			case ANI_TYPE_ALPHA:
+				alphaCount++;
+				break;
+			default:
+				assert(!"Invalid animation type");
+				break;
+		}
+	}
+	
+	// Ensure the frame counts are valid
+	assert(translateCount != 1);
+	assert(rotateCount != 1);
+	assert(scaleCount != 1);
+	assert(alphaCount != 1);
+	
+	// Copy the frames over to our own vector
+	ourFrames = vectorCreate();
+	
+	for (i = 0; i < nframes; i++)
+	{		
+		// Allocate space for the frame
+		currFrame = malloc(sizeof(animationFrame));
+		
+		// Copy the frame
+		*currFrame = frames[i];
+		
+		// De-normalise the frames time (so that it is absolute)
+		currFrame->time += widgetGetTime();
+		
+		// Add the frame to the vector
+		vectorAdd(ourFrames, currFrame);
+	}
+	
+	// Install the animation timer event handler
+	return widgetAddTimerEventHandler(self, EVT_TIMER_PERSISTENT, 10,
+	                                  widgetAnimationTimerCallback, ourFrames);
+}
+
+point widgetAnimationInterpolateTranslateImpl(widget *self, animationFrame k1,
+                                              animationFrame k2, int time)
+{
+	point newOffset;
+	
+	// Use linear interpolation to get the new (x,y) coords
+	newOffset.x = LINEAR_INTERPOLATE(k1.time, k1.data.translate.x,
+	                                 k2.time, k2.data.translate.x, time);
+	newOffset.y = LINEAR_INTERPOLATE(k1.time, k1.data.translate.y,
+                                     k2.time, k2.data.translate.y, time);
+	
+	return newOffset;
+}
+
+float widgetAnimationInterpolateRotateImpl(widget *self, animationFrame k1,
+                                           animationFrame k2, int time)
+{
+	return LINEAR_INTERPOLATE(k1.time, k1.data.rotate,
+	                          k2.time, k2.data.rotate, time);
+}
+
+point widgetAnimationInterpolateScaleImpl(widget *self, animationFrame k1,
+                                          animationFrame k2, int time)
+{
+	point newScale;
+	
+	// Like with the translate method use linear interpolation
+	newScale.x = LINEAR_INTERPOLATE(k1.time, k1.data.scale.x,
+	                                k2.time, k2.data.scale.x, time);
+	newScale.y = LINEAR_INTERPOLATE(k1.time, k1.data.scale.y,
+	                                k2.time, k2.data.scale.y, time);
+	
+	return newScale;
+}
+
+float widgetAnimationInterpolateAlphaImpl(widget *self, animationFrame k1,
+                                          animationFrame k2, int time)
+{
+	return LINEAR_INTERPOLATE(k1.time, k1.data.alpha,
+	                          k2.time, k2.data.alpha, time);
+}
+
 bool widgetFireCallbacksImpl(widget *self, const event *evt)
 {
 	int i;
@@ -845,6 +1111,7 @@ void widgetRepositionImpl(widget *self, int x, int y)
 
 void widgetCompositeImpl(widget *self)
 {
+	float blendColour[4];
 	int i;
 	
 	// Do not composite unless we are visible
@@ -853,8 +1120,18 @@ void widgetCompositeImpl(widget *self)
 		return;
 	}
 	
+	// Scale if necessary
+	glScalef(self->scale.x,  self->scale.y,  1.0f);
+	
 	// Translate such that (0,0) is the top-left of ourself
 	glTranslatef(self->offset.x, self->offset.y, 0.0f);
+	
+	// Rotate ourself
+	glRotatef(self->rotate, 0.0f, 0.0f, 1.0f);
+	
+	// Set our alpha (blend colour)
+	glGetFloatv(GL_BLEND_COLOR, blendColour);
+	glBlendColor(1.0f, 1.0f, 1.0f, blendColour[3] * self->alpha);
 	
 	// Composite ourself
 	glBindTexture(GL_TEXTURE_RECTANGLE_ARB, self->textureId);
@@ -883,7 +1160,10 @@ void widgetCompositeImpl(widget *self)
 	}
 	
 	// Restore the matrix
+	glBlendColor(1.0f, 1.0f, 1.0f, blendColour[3]);
+	glRotatef(-self->rotate, 0.0f, 0.0f, 1.0f);
 	glTranslatef(-self->offset.x, -self->offset.y, 0.0f);
+	glScalef(1.0f / self->scale.x, 1.0f / self->scale.y, 1.0f);
 }
 
 void widgetEnableMask(widget *self)
@@ -1305,6 +1585,34 @@ bool widgetDoLayout(widget *self)
 bool widgetHandleEvent(widget *self, const event *evt)
 {
 	return WIDGET_GET_VTBL(self)->handleEvent(self, evt);
+}
+
+point widgetAnimationInterpolateTranslate(widget *self, animationFrame k1,
+                                          animationFrame k2, int time)
+{
+	return WIDGET_GET_VTBL(self)->animationInterpolateTranslate(self, k1, k2,
+                                                                time);
+}
+
+float widgetAnimationInterpolateRotate(widget *self, animationFrame k1,
+                                       animationFrame k2, int time)
+{
+	return WIDGET_GET_VTBL(self)->animationInterpolateRotate(self, k1, k2,
+	                                                         time);
+}
+
+point widgetAnimationInterpolateScale(widget *self, animationFrame k1,
+                                      animationFrame k2, int time)
+{
+	return WIDGET_GET_VTBL(self)->animationInterpolateScale(self, k1, k2,
+	                                                        time);
+}
+
+float widgetAnimationInterpolateAlpha(widget *self, animationFrame k1,
+                                      animationFrame k2, int time)
+{
+	return WIDGET_GET_VTBL(self)->animationInterpolateAlpha(self, k1, k2,
+	                                                        time);
 }
 
 void widgetDestroy(widget *self)
