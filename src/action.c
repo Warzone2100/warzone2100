@@ -800,8 +800,7 @@ static void actionUpdateVtolAttack( DROID *psDroid )
 			if (psDroid->asWeaps[i].nStat != 0)
 			{
 				psWeapStats[i] = asWeaponStats + psDroid->asWeaps[i].nStat;
-				ASSERT( psWeapStats != NULL,
-				"actionUpdateVtolAttack: invalid weapon stats pointer" );
+				ASSERT(psWeapStats != NULL, "invalid weapon stats pointer");
 				break;
 			}
 		}
@@ -811,8 +810,7 @@ static void actionUpdateVtolAttack( DROID *psDroid )
 		if (psDroid->asWeaps[0].nStat > 0)
 		{
 			psWeapStats[0] = asWeaponStats + psDroid->asWeaps[0].nStat;
-			ASSERT( psWeapStats != NULL,
-				"actionUpdateVtolAttack: invalid weapon stats pointer" );
+			ASSERT(psWeapStats != NULL, "invalid weapon stats pointer");
 		}
 	}
 
@@ -1019,13 +1017,10 @@ void actionUpdateDroid(DROID *psDroid)
 	CHECK_DROID(psDroid);
 
 	psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
-	ASSERT( psPropStats != NULL,
-			"actionUpdateUnit: invalid propulsion stats pointer" );
+	ASSERT(psPropStats != NULL, "invalid propulsion stats pointer");
 
 	/* check whether turret inverted for actionTargetTurret */
-	//if ( psDroid->droidType != DROID_CYBORG &&
-	if ( !cyborgDroid(psDroid) &&
-		psPropStats->propulsionType == PROPULSION_TYPE_LIFT   )
+	if (!cyborgDroid(psDroid) && psPropStats->propulsionType == PROPULSION_TYPE_LIFT)
 	{
 		bInvert = true;
 	}
@@ -1035,47 +1030,23 @@ void actionUpdateDroid(DROID *psDroid)
 	}
 
 	// clear the target if it has died
-	// weapon droid
-	if (psDroid->numWeaps > 0)
+	for (i = 0; i < DROID_MAXWEAPS; i++)
 	{
-		// clear targets
-		for (i = 0;i < psDroid->numWeaps;i++)
+		if (psDroid->psActionTarget[i] && psDroid->psActionTarget[i]->died)
 		{
-			if (psDroid->psActionTarget[i] && psDroid->psActionTarget[i]->died)
+			setDroidActionTarget(psDroid, NULL, i);
+			if (i == 0)
 			{
-				setDroidActionTarget(psDroid, NULL, i);
-				if (i == 0)
+				if ( (psDroid->action != DACTION_MOVEFIRE) &&
+					(psDroid->action != DACTION_TRANSPORTIN) &&
+					(psDroid->action != DACTION_TRANSPORTOUT)   )
 				{
-					if ( (psDroid->action != DACTION_MOVEFIRE) &&
-						(psDroid->action != DACTION_TRANSPORTIN) &&
-						(psDroid->action != DACTION_TRANSPORTOUT)   )
+					psDroid->action = DACTION_NONE;
+					//if Vtol - return to rearm pad
+					if (isVtolDroid(psDroid))
 					{
-						psDroid->action = DACTION_NONE;
-						//if Vtol - return to rearm pad
-						if (isVtolDroid(psDroid))
-						{
-							moveToRearm(psDroid);
-						}
+						moveToRearm(psDroid);
 					}
-				}
-			}
-		}
-	}
-	//utility droid
-	else
-	{
-		if (psDroid->psActionTarget[0] && psDroid->psActionTarget[0]->died)
-		{
-			setDroidActionTarget(psDroid, NULL, 0);
-			if ( (psDroid->action != DACTION_MOVEFIRE) &&
-				(psDroid->action != DACTION_TRANSPORTIN) &&
-				(psDroid->action != DACTION_TRANSPORTOUT)   )
-			{
-				psDroid->action = DACTION_NONE;
-				//if Vtol - return to rearm pad
-				if (isVtolDroid(psDroid))
-				{
-					moveToRearm(psDroid);
 				}
 			}
 		}
@@ -1099,8 +1070,6 @@ void actionUpdateDroid(DROID *psDroid)
 		}
 	}
 
-	//if (psDroid->numWeaps == 0)
-	/* Watermelon:if I am a multi-turret droid */
 	if (psDroid->numWeaps > 1)
 	{
 		for(i = 0;i < psDroid->numWeaps;i++)
@@ -1118,8 +1087,6 @@ void actionUpdateDroid(DROID *psDroid)
 
 	psTarget = psDroid->psTarget;
 
-	//Watermelon:safety check
-	//if (psDroid->numWeaps > 0)
 	if (psDroid->asWeaps[0].nStat > 0)
 	{
 		psWeapStats = asWeaponStats + psDroid->asWeaps[0].nStat;
@@ -1589,7 +1556,6 @@ void actionUpdateDroid(DROID *psDroid)
 				}
 			}
 			// if the vtol is far enough away head for the target again
-//			else if (rangeSq > (VTOL_ATTACK_RETURNDIST*VTOL_ATTACK_RETURNDIST))
 			else if (rangeSq > (SDWORD)(psWeapStats->longRange*psWeapStats->longRange))
 			{
 				// don't do another attack run if already heading for the target
