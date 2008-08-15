@@ -63,7 +63,7 @@ extern const classInfo windowClassInfo;
 /*
  * Protected methods
  */
-void windowInit(window *self, const char *id, int x, int y, int w, int h);
+void windowInit(window *self, const char *id, int w, int h);
 void windowDestroyImpl(widget *self);
 bool windowDoLayoutImpl(widget *self);
 void windowDoDrawImpl(widget *self);
@@ -95,5 +95,46 @@ void windowSetWindowVector(vector *v);
  * @return The window-vector pointer currently in-use.
  */
 vector *windowGetWindowVector(void);
+
+/**
+ * Sets the size of the screen to (w,h). It is important that the screen size
+ * be set before any calls to windowRepositionFromScreen are made.
+ *
+ * @param w The width of the screen, in pixels.
+ * @param h The height of the screen, in pixels.
+ */
+void windowSetScreenSize(int w, int h);
+
+/*
+ * Public methods
+ */
+
+/**
+ * Positions the window relative to the screen. The screens dimensions must be
+ * set prior to calling this method; this can be done by calling
+ * windowSetScreenSize.
+ *
+ * @param self  The window to position.
+ * @param hAlign    The horizontal alignment to use for the x-coord.
+ * @param xOffset   The offset to apply to the final x-coord.
+ * @param vAlign    The vertical alignment to use for the y-coord.
+ * @param yOffset   The offset to apply to the final y-coord.
+ */
+void windowRepositionFromScreen(window *self, hAlign hAlign, int xOffset,
+                                              vAlign vAlign, int yOffset);
+
+/**
+ * Positions the window relative to the position of another window, anchor.
+ *
+ * @param self  The window to position.
+ * @param anchor    The window to position self relative to.
+ * @param hAlign    The horizontal alignment to use for the x-coord.
+ * @param xOffset   The offset to apply to the final x-coord.
+ * @param vAlign    The vertical alignment to use for the y-coord.
+ * @param yOffset   The offset to apply to the final y-coord.
+ */
+void windowRepositionFromAnchor(window *self, const window *anchor,
+                                hAlign hAlign, int xOffset,
+                                vAlign vAlign, int yOffset);
 
 #endif /*WINDOW_H_*/

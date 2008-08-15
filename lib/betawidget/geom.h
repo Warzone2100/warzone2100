@@ -26,6 +26,23 @@
 #include <math.h>
 
 /*
+ * Alignment schemes
+ */
+typedef enum
+{
+	LEFT,
+	CENTRE,
+	RIGHT
+} hAlign;
+
+typedef enum
+{
+	TOP,
+	MIDDLE,
+	BOTTOM
+} vAlign;
+
+/*
  * A point
  */
 typedef struct _point point;

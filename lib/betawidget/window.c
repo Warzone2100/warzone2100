@@ -22,6 +22,7 @@
 
 static windowVtbl vtbl;
 static vector *windowVector = NULL;
+static int screenWidth = -1, screenHeight = -1;
 
 const classInfo windowClassInfo =
 {
@@ -57,7 +58,7 @@ static void windowInitVtbl(window *self)
 	self->vtbl = &vtbl;
 }
 
-void windowInit(window *self, const char *id, int x, int y, int w, int h)
+void windowInit(window *self, const char *id, int w, int h)
 {	
 	// Init our parent
 	widgetInit(WIDGET(self), id);
@@ -73,9 +74,6 @@ void windowInit(window *self, const char *id, int x, int y, int w, int h)
 	
 	// Add ourselves to the window list
 	vectorAdd(windowVector, self);
-	
-	// Set our position to (x,y)
-	widgetReposition(WIDGET(self), x, y);
 	
 	// Set our size to (w,h)
 	widgetResize(WIDGET(self), w, h);
@@ -171,4 +169,108 @@ void windowSetWindowVector(vector *v)
 vector *windowGetWindowVector()
 {
 	return windowVector;
+}
+
+void windowSetScreenSize(int w, int h)
+{
+	screenWidth = w;
+	screenHeight = h;
+}
+
+void windowRepositionFromScreen(window *self, hAlign hAlign, int xOffset,
+                                              vAlign vAlign, int yOffset)
+{
+	int x, y;
+	size ourSize = WIDGET(self)->size;
+	
+	// Ensure the screen width and height have been set
+	assert(screenWidth != -1 && screenHeight != -1);
+	
+	switch (hAlign)
+	{
+		case LEFT:
+			x = 0;
+			break;
+		case CENTRE:
+			x = screenWidth / 2 - ourSize.x / 2;
+			break;
+		case RIGHT:
+			x = screenWidth;
+			
+			// Transform xOffset so that +ve moves us away from the right
+			xOffset = -xOffset;
+			break;
+	}
+	
+	switch (vAlign)
+	{
+		case TOP:
+			y = 0;
+			break;
+		case MIDDLE:
+			y = screenHeight / 2 - ourSize.y / 2;
+			break;
+		case BOTTOM:
+			x = screenHeight;
+			
+			// Transform yOffset so that +ve moves us away from the bottom
+			yOffset = -yOffset;
+			break;
+	}
+	
+	// Take offsets into account
+	x += xOffset;
+	y += yOffset;
+	
+	// Reposition
+	widgetReposition(WIDGET(self), x, y);
+}
+
+void windowRepositionFromAnchor(window *self, const window *anchor,
+                                hAlign hAlign, int xOffset,
+                                vAlign vAlign, int yOffset)
+{
+	int x, y;
+	size anchorSize = WIDGET(anchor)->size;
+	point anchorPos = WIDGET(anchor)->offset;
+	size ourSize = WIDGET(self)->size;
+	
+	switch (hAlign)
+	{
+		case LEFT:
+			x = anchorPos.x - ourSize.x;
+			
+			// Transform xOffset so that +ve moves us away from anchorPos.x
+			xOffset = -xOffset;
+			break;
+		case CENTRE:
+			x = (anchorPos.x + anchorSize.x) / 2 - ourSize.x / 2;
+			break;
+		case RIGHT:
+			x = anchorPos.x + anchorSize.x;
+			break;
+	}
+	
+	switch (vAlign)
+	{
+		case TOP:
+			y = anchorPos.y - ourSize.y;
+			
+			// Transform yOffset so that +ve moves us away from anchorPos.y
+			yOffset = -yOffset;
+			break;
+		case MIDDLE:
+			y = (anchorPos.y + anchorSize.y) / 2 - ourSize.y / 2;
+			break;
+		case BOTTOM:
+			y = anchorPos.y + anchorSize.y;
+			break;
+	}
+	
+	// Take the offsets into account
+	x += xOffset;
+	y += yOffset;
+	
+	// Reposition
+	widgetReposition(WIDGET(self), x, y);
 }

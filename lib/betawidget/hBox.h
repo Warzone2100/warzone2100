@@ -29,16 +29,6 @@
 typedef struct _hBox hBox;
 typedef struct _hBoxVtbl hBoxVtbl;
 
-/*
- * The possible vertical sides a child can be aligned to
- */
-typedef enum
-{
-	TOP,
-	MIDDLE,
-	BOTTOM
-} vAlign;
-
 struct _hBoxVtbl
 {
 	widgetVtbl widgetVtbl;
