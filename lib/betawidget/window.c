@@ -180,7 +180,7 @@ void windowSetScreenSize(int w, int h)
 void windowRepositionFromScreen(window *self, hAlign hAlign, int xOffset,
                                               vAlign vAlign, int yOffset)
 {
-	int x, y;
+	int x = 0, y = 0;
 	size ourSize = WIDGET(self)->size;
 	
 	// Ensure the screen width and height have been set
@@ -230,7 +230,7 @@ void windowRepositionFromAnchor(window *self, const window *anchor,
                                 hAlign hAlign, int xOffset,
                                 vAlign vAlign, int yOffset)
 {
-	int x, y;
+	int x = 0, y = 0;
 	size anchorSize = WIDGET(anchor)->size;
 	point anchorPos = WIDGET(anchor)->offset;
 	size ourSize = WIDGET(self)->size;
