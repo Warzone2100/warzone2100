@@ -920,7 +920,15 @@ void widgetDrawMask(widget *self);
 void widgetDoDrawMask(widget *self);
 
 /**
+ * A protected `pure virtual' method which is called to lay out any child
+ * widgets of self.
  *
+ * This method may fail (return false) if self is not large enough to hold all
+ * of its children.
+ *
+ * @param self  The widget whose children should be layed out.
+ * @return True if the widgets children were successfully layed out, false
+ *         otherwise.
  */
 bool widgetDoLayout(widget *self);
 
@@ -933,7 +941,10 @@ bool widgetDoLayout(widget *self);
 bool widgetFireCallbacks(widget *self, const event *evt);
 
 /**
+ * Fires all of the timer event handles for the widget self.
  *
+ * @param self  The widget to fire the timer callbacks on.
+ * @param evt   The event to fire the callbacks for.
  */
 bool widgetFireTimerCallbacks(widget *self, const event *evt);
 
