@@ -62,6 +62,7 @@ GLuint fbo;					// Our handle to the FBO
 GLuint FBOtexture;			// The texture we are going to use
 GLuint FBOdepthbuffer;		// Our handle to the depth render buffer
 static BOOL FBOinit = false;
+BOOL bFboProblem = false;	// hack to work around people with bad drivers. (*cough*intel*cough*)
 
 /* Initialise the double buffered display */
 BOOL screenInitialise(
@@ -421,6 +422,7 @@ void checkGLErrors(const char *label)
 		return;
 
 	debug(LOG_ERROR, "OpenGL ERROR in %s: %s, (0x%0x)", label, gluErrorString(errCode), errCode);
+	bFboProblem = true;		// we have a issue with the FBO, fallback to normal routine
 }
 
 BOOL Init_FBO(unsigned int width, unsigned int height)

@@ -97,8 +97,8 @@ extern char	MultiPlayersPath[PATH_MAX];
 extern GLuint fbo;					// Our handle to the FBO
 extern GLuint FBOtexture;			// The texture we are going to use
 extern GLuint FBOdepthbuffer;		// Our handle to the depth render buffer
-
-extern BOOL				bSendingMap;
+extern BOOL bFboProblem;			// hack to work around people with bad drivers. (*cough*intel*cough*)
+extern BOOL bSendingMap;			// used to indicate we are sending a map
 
 extern void intDisplayTemplateButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
 
@@ -302,8 +302,10 @@ void loadMapPreview(void)
 	memset(playerpos,0x77,sizeof(playerpos));
 	// color our texture with clancolors @ correct position
 	plotStructurePreview16(imageData, scale, offX2, offY2,playerpos);
+	glGetError();					// clear openGL errorcodes
 	// and now, for those that have FBO available on their card
-	if(Init_FBO(BACKDROP_HACK_WIDTH,BACKDROP_HACK_HEIGHT))
+	// added hack to work around bad drivers that report FBO available, when it is not.
+	if(Init_FBO(BACKDROP_HACK_WIDTH,BACKDROP_HACK_HEIGHT) && !bFboProblem)
 	{
 		// Save the view port and set it to the size of the texture
 		glPushAttrib(GL_VIEWPORT_BIT);
@@ -373,15 +375,22 @@ void loadMapPreview(void)
 		glMatrixMode(GL_MODELVIEW);
 		glPopMatrix();
 		glPopAttrib();
-
-		screen_Upload(fboData);
+		// if we detected a error, then we must fallback to old texture, or user will not see anything.
+		if(!bFboProblem)
+		{
+			screen_Upload(fboData);
+		}
+		else
+		{
+			screen_Upload(imageData);
+		}
 		checkGLErrors("Done with FBO routine");
 
 	}
 	else
-	{	// no FBO was available, just show them what we got.
+	{
+		// no FBO was available, just show them what we got.
 		screen_Upload(imageData);
-
 	}
 
 	free(fboData);
