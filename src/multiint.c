@@ -593,19 +593,22 @@ static void addGames(void)
 	sButInit.FontID = font_regular;
 	sButInit.pDisplay = displayRemoteGame;
 
-	for(i=0;i<MaxGames;i++)							// draw games
+	// only have to do this if we have any games available.
+	if (gcount)
 	{
-		widgDelete(psWScreen, GAMES_GAMESTART+i);	// remove old icon.
-		if( NetPlay.games[i].desc.dwSize !=0)
+		for(i=0;i<MaxGames;i++)							// draw games
 		{
-
-			sButInit.id = GAMES_GAMESTART+i;
-
-			if(gcount < 6)							// only center column needed.
+			widgDelete(psWScreen, GAMES_GAMESTART+i);	// remove old icon.
+			if( NetPlay.games[i].desc.dwSize !=0)
 			{
-				sButInit.x = 125;
-				sButInit.y = (UWORD)(30+((5+GAMES_GAMEHEIGHT)*i) );
-			}
+
+				sButInit.id = GAMES_GAMESTART+i;
+
+				if(gcount < 6)							// only center column needed.
+				{
+					sButInit.x = 125;
+					sButInit.y = (UWORD)(30+((5+GAMES_GAMEHEIGHT)*i) );
+				}
 			else
 			{
 				if(i<6)		//column 1
@@ -621,10 +624,36 @@ static void addGames(void)
 			}
 
 			sButInit.pTip = NetPlay.games[i].name;
-
 			sButInit.UserData = i;
+
 			widgAddButton(psWScreen, &sButInit);
+			}
 		}
+	}
+	else
+	{
+	// display that no games are available in lobby.
+	// This is a 'button', not text so it can be hilighted/centered.
+		const char *txt = _("NO GAMES ARE AVAILABLE");
+		W_BUTINIT sButInit;
+
+		// delete old widget if necessary
+		widgDelete(psWScreen,FRONTEND_NOGAMESAVAILABLE);
+
+		memset(&sButInit, 0, sizeof(W_BUTINIT));
+		sButInit.formID = FRONTEND_BOTFORM;
+		sButInit.id = FRONTEND_NOGAMESAVAILABLE;
+		sButInit.x = 20;
+		sButInit.y = 50;
+		sButInit.style = WBUT_PLAIN | WBUT_TXTCENTRE;
+		sButInit.width = FRONTEND_BUTWIDTH;
+		sButInit.UserData = 0; // store disable state
+		sButInit.height = FRONTEND_BUTHEIGHT;
+		sButInit.pDisplay = displayTextOption;
+		sButInit.FontID = font_large;
+		sButInit.pText = txt;
+
+		widgAddButton(psWScreen, &sButInit);
 	}
 
 }
