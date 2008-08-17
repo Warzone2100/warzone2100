@@ -815,10 +815,21 @@ void widgetDestroy(widget *self);
  * Should none of self's child widgets have focus (but it does) then self is
  * returned.
  *
- * @param self  The widget to get the further down focused child of.
+ * @param self  The widget to get the furthest down focused child of.
  * @return A pointer to the widget, or NULL if self is not focused.
  */
 widget *widgetGetCurrentlyFocused(widget *self);
+
+/**
+ * Very much the same as widgetGetCurrentlyFocused except that it returns a
+ * pointer to the widget furthest down the hierarchy which currently has the
+ * mouse over it. Like with widgetGetCurrentlyFocused should self not have the
+ * mouse over it, NULL is returned.
+ *
+ * @param self  The widget to get the furthest down moused-over child of.
+ * @param A pointer to the widget, or NULL if self does not have the mouse.
+ */
+widget *widgetGetCurrentlyMousedOver(widget *self);
 
 /**
  * If the widget is capable of holding keyboard focus and does not currently

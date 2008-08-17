@@ -1226,6 +1226,31 @@ widget *widgetGetCurrentlyFocused(widget *self)
 	return self;
 }
 
+widget *widgetGetCurrentlyMousedOver(widget *self)
+{
+	int i;
+	
+	// Make sure we have the mouse
+	if (!self->hasMouse)
+	{
+		return NULL;
+	}
+	
+	// See if any of our children are moused over
+	for (i = 0; i < vectorSize(self->children); i++)
+	{
+		widget *child = vectorAt(self->children, i);
+		
+		if (child->hasMouse)
+		{
+			return widgetGetCurrentlyMousedOver(child);
+		}
+	}
+	
+	// None of our children have the mouse; return ourself
+	return self;
+}
+
 bool widgetHandleEventImpl(widget *self, const event *evt)
 {
 	// If the event should be passed onto our children
