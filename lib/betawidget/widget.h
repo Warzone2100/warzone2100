@@ -443,7 +443,7 @@ struct _widget
 	/*
 	 * The id of the widget
 	 */
-	char *id;
+	const char *id;
 
 	/*
 	 * The class (or subclass) that widget is (used for type checking)
