@@ -9519,15 +9519,13 @@ BOOL loadTerrainTypeMap(const char *pFileData, UDWORD filesize)
 	// Load the terrain type mapping
 	pType = (UWORD *)(pFileData + TILETYPE_HEADER_SIZE);
 	endian_uword(pType);
+	if (psHeader->quantity >= MAX_TILE_TEXTURES)
+	{
+		// Workaround for fugly map editor bug, since we can't fix the map editor
+		psHeader->quantity = MAX_TILE_TEXTURES - 1;
+	}
 	for(i = 0; i < psHeader->quantity; i++)
 	{
-		if (i >= MAX_TILE_TEXTURES)
-		{
-			debug( LOG_ERROR, "loadTerrainTypeMap: too many types" );
-			abort();
-			return false;
-
-		}
 		if (*pType > TER_MAX)
 		{
 			debug( LOG_ERROR, "loadTerrainTypeMap: terrain type out of range" );
