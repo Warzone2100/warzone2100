@@ -794,12 +794,17 @@ void orderUpdateDroid(DROID *psDroid)
 				// if in multiPlayer, only want to process if this player's droid
 				if (!bMultiPlayer || psDroid->player == selectedPlayer)
 				{
-					transporterAddDroid((DROID *)psDroid->psTarget, psDroid);
+					// save the target of current droid (the transporter)
+					DROID * transporter = (DROID *)psDroid->psTarget;
+
 					// order the droid to stop so moveUpdateDroid does not process this unit
 					orderDroid(psDroid, DORDER_STOP);
 					setDroidTarget(psDroid, NULL);
 					psDroid->psTarStats = NULL;
 					secondarySetState(psDroid, DSO_RETURN_TO_LOC, DSS_NONE);
+					// process orders *before* adding unit to transporter
+					// since we remove it from the list!
+					transporterAddDroid(transporter, psDroid);
 				}
 			}
 			else if (psDroid->action == DACTION_NONE)

@@ -2184,7 +2184,10 @@ void unloadTransporter(DROID *psTransporter, UDWORD x, UDWORD y, BOOL goingHome)
 			// Inform all other players
 			if (bMultiPlayer)
 			{
-				sendDroidDisEmbark(psDroid);
+				// This isn't used for cyber transports, only 'normal' one, but that isn't used in MP games AFAIK?
+				// which is why I don't know why this is here.  Maybe for mod support?
+				debug(LOG_ERROR,"If you see this, then notify dev team. Code: 0xDEADF00D");
+				sendDroidDisEmbark(psDroid,psTransporter);
 			}
 		}
 

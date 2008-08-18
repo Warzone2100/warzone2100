@@ -1376,71 +1376,82 @@ void transporterRemoveDroid(UDWORD id)
 	}
 	if (psDroid)
 	{
-        /*if we're offWorld we can't pick a tile without swapping the map
-        pointers - can't be bothered so just do this...*/
-        if (onMission)
-        {
-            psDroid->pos.x = INVALID_XY;
-            psDroid->pos.y = INVALID_XY;
-        }
-        else
-        {
-            if (bMultiPlayer)
-            {
-                //set the units next to the transporter's current location
-                droidX = map_coord(psCurrTransporter->pos.x);
-                droidY = map_coord(psCurrTransporter->pos.y);
-            }
-            else
-            {
-        		//pick a tile because save games won't remember where the droid was when it was loaded
-	        	droidX = map_coord(getLandingX(0));
-		        droidY = map_coord(getLandingY(0));
-            }
-    		if (!pickATileGen(&droidX, &droidY,LOOK_FOR_EMPTY_TILE,zonedPAT))
-	    	{
-		    	ASSERT( false, "transporterRemoveUnit: Unable to find a valid location" );
-    		}
-	    	psDroid->pos.x = (UWORD)world_coord(droidX);
-		    psDroid->pos.y = (UWORD)world_coord(droidY);
-    		psDroid->pos.z = map_Height(psDroid->pos.x, psDroid->pos.y);
-	    	updateDroidOrientation(psDroid);
-		    //initialise the movement data
-    		initDroidMovement(psDroid);
-	    	//reset droid orders
-		    orderDroid(psDroid, DORDER_STOP);
-		    gridAddObject((BASE_OBJECT *)psDroid);
-		    psDroid->cluster = 0;
-        }
+		/*if we're offWorld we can't pick a tile without swapping the map
+		pointers - can't be bothered so just do this...*/
+		if (onMission)
+		{
+			psDroid->pos.x = INVALID_XY;
+			psDroid->pos.y = INVALID_XY;
+		}
+		else
+		{
+			if (bMultiPlayer)
+			{
+				//set the units next to the transporter's current location
+				droidX = map_coord(psCurrTransporter->pos.x);
+				droidY = map_coord(psCurrTransporter->pos.y);
+			}
+			else
+			{
+				//pick a tile because save games won't remember where the droid was when it was loaded
+				droidX = map_coord(getLandingX(0));
+				droidY = map_coord(getLandingY(0));
+			}
+			if (!pickATileGen(&droidX, &droidY,LOOK_FOR_EMPTY_TILE,zonedPAT))
+			{
+				ASSERT( false, "transporterRemoveUnit: Unable to find a valid location" );
+			}
+			psDroid->pos.x = (UWORD)world_coord(droidX);
+			psDroid->pos.y = (UWORD)world_coord(droidY);
+			psDroid->pos.z = map_Height(psDroid->pos.x, psDroid->pos.y);
 
-	    grpLeave(psDroid->psGroup, psDroid);
+		}
+		// remove it from the transporter group
+		grpLeave(psDroid->psGroup, psDroid);
 
-	    //add it back into apsDroidLists
-	    if (onMission)
-	    {
-		    //addDroid(psDroid, mission.apsBuiltDroids);
-		    addDroid(psDroid, mission.apsDroidLists);
-	    }
-	    else
-	    {
-		    addDroid(psDroid, apsDroidLists);
-	    }
+		//add it back into apsDroidLists
+		if (onMission)
+		{
+			//addDroid(psDroid, mission.apsBuiltDroids);
+			addDroid(psDroid, mission.apsDroidLists);
+		}
+		else
+		{
+			// add the droid back onto the droid list
+			addDroid(psDroid, apsDroidLists);
+			//inform all other players about that
+			if (bMultiPlayer)
+			{
+				sendDroidDisEmbark(psDroid,psCurrTransporter);
+			}
+		}
+		// We can update the orders now, since everyone has been
+		// notified of the droid exiting the transporter
+		updateDroidOrientation(psDroid);
+		//initialise the movement data
+		initDroidMovement(psDroid);
+		//reset droid orders
+		orderDroid(psDroid, DORDER_STOP);
+		gridAddObject((BASE_OBJECT *)psDroid);
+		psDroid->cluster = 0;
+		// check if it is a commander
+		if (psDroid->droidType == DROID_COMMAND)
+		{
+			if (grpCreate(&psGroup))
+			{
+				grpJoin(psGroup, psDroid);
+			}
+		}
+		psDroid->selected = true;
 
-   		if (psDroid->droidType == DROID_COMMAND)
-    	{
-	    	if (grpCreate(&psGroup))
-		    {
-			    grpJoin(psGroup, psDroid);
-		    }
-	    }
-   		psDroid->selected = true;
-
-        if (calcRemainingCapacity(psCurrTransporter))
-        {
-            //make sure the button isn't flashing
-            stopMissionButtonFlash(IDTRANS_LAUNCH);
-        }
+		if (calcRemainingCapacity(psCurrTransporter))
+		{
+			//make sure the button isn't flashing
+			stopMissionButtonFlash(IDTRANS_LAUNCH);
+		}
 	}
+	// we want to sync with all clients *now*.
+	ForceDroidSync(psDroid);
 }
 
 /*adds a droid to the current transporter via the interface*/
@@ -1474,8 +1485,16 @@ void intTransporterAddDroid(UDWORD id)
 /*Adds a droid to the transporter, removing it from the world */
 void transporterAddDroid(DROID *psTransporter, DROID *psDroidToAdd)
 {
-    BOOL    bDroidRemoved;
+	BOOL    bDroidRemoved;
 
+	ASSERT( psTransporter != NULL, "Was passed a NULL transporter" );
+	ASSERT( psDroidToAdd != NULL, "Was passed a NULL droid, can't add to transporter" );
+
+	if (!psTransporter || !psDroidToAdd)
+	{
+		debug(LOG_ERROR,"We can't add the unit to the transporter!");
+		return;
+	}
 	/* check for space */
 	if (!checkTransporterSpace(psTransporter, psDroidToAdd))
 	{
@@ -1483,24 +1502,31 @@ void transporterAddDroid(DROID *psTransporter, DROID *psDroidToAdd)
 	}
 	if (onMission)
 	{
+		// removing from droid mission list
 		bDroidRemoved = droidRemove(psDroidToAdd, mission.apsDroidLists);
 	}
 	else
 	{
+		// removing from droid list
 		bDroidRemoved = droidRemove(psDroidToAdd, apsDroidLists);
-
-        //inform all other players
-        if (bMultiPlayer)
-        {
-            sendDroidEmbark(psDroidToAdd);
-        }
-
 	}
-    if (bDroidRemoved)
-    {
-    	grpJoin(psTransporter->psGroup, psDroidToAdd);
-    }
-    //this is called by droidRemove
+	if (bDroidRemoved)
+	{
+		// adding to transporter unit's group list
+		grpJoin(psTransporter->psGroup, psDroidToAdd);
+		
+		if (bMultiPlayer)
+		{
+			//inform all other players to update their local lists
+			sendDroidEmbark(psDroidToAdd,psTransporter);
+		}
+	}
+	else
+	{
+		debug(LOG_ERROR,"droid %d not found, so nothing added to transporter!",psDroidToAdd->id);
+	}
+
+	//this is called by droidRemove
 	//intRefreshScreen();
 }
 
