@@ -830,6 +830,9 @@ BOOL stageOneShutDown(void)
 
 	debug(LOG_TEXTURE, "=== stageOneShutDown ===");
 	pie_TexShutDown();
+	// In case we are coming back from a SP game, we need to reset the search path back to mp
+	// it will be reset back to normal if we launch a SP game.
+	rebuildSearchPath( mod_multiplay, true );	
 	pie_TexInit(); // restart it
 
 	initMiscVars();
