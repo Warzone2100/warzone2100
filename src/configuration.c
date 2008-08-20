@@ -272,6 +272,46 @@ BOOL loadConfig(void)
 		setWarzoneKeyString("masterserver_name", "lobby.wz2100.net");
 	}
 
+	if (getWarzoneKeyString("fontname", sBuf))
+	{
+		iV_font(sBuf, NULL, NULL);
+	}
+	else
+	{
+#ifdef WZ_OS_MAC
+		iV_font("Lucida Grande", NULL, NULL);
+		setWarzoneKeyString("fontname", "Lucida Grande");
+#else
+		iV_font("DejaVu Sans Mono", NULL, NULL);
+		setWarzoneKeyString("fontname", "DejaVu Sans Mono");
+#endif
+	}
+
+	if (getWarzoneKeyString("fontface", sBuf))
+	{
+		iV_font(NULL, sBuf, NULL);
+	}
+	else
+	{
+#ifdef WZ_OS_MAC
+		iV_font(NULL, "Regular", NULL);
+		setWarzoneKeyString("fontface", "Regular");
+#else
+		iV_font(NULL, "Book", NULL);
+		setWarzoneKeyString("fontface", "Book");
+#endif
+	}
+
+	if (getWarzoneKeyString("fontfacebold", sBuf))
+	{
+		iV_font(NULL, NULL, sBuf);
+	}
+	else
+	{
+		iV_font(NULL, NULL, "Bold");
+		setWarzoneKeyString("fontfacebold", "Bold");
+	}
+
 	if (getWarzoneKeyNumeric("masterserver_port", &val))
 	{
 		NETsetMasterserverPort(val);

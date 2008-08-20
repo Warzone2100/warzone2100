@@ -39,15 +39,9 @@
 # include <GL/glc.h>
 #endif
 
-#ifdef WZ_OS_MAC
-static const char font_family[] = "Lucida Grande";
-static const char font_face_regular[] = "Regular";
-static const char font_face_bold[] = "Bold";
-#else
-static const char font_family[] = "DejaVu Sans Mono";
-static const char font_face_regular[] = "Book";
-static const char font_face_bold[] = "Bold";
-#endif
+static char font_family[128];
+static char font_face_regular[128];
+static char font_face_bold[128];
 
 static float font_size = 12.f;
 // Contains the font color in the following order: red, green, blue, alpha
@@ -62,6 +56,27 @@ static GLint _glcFont_Bold = 0;
  *	Source
  */
 /***************************************************************************/
+
+void iV_font(const char *fontName, const char *fontFace, const char *fontFaceBold)
+{
+	if (_glcContext)
+	{
+		debug(LOG_ERROR, "Cannot change font in running game, yet.");
+		return;
+	}
+	if (fontName)
+	{
+		sstrcpy(font_family, fontName);
+	}
+	if (fontFace)
+	{
+		sstrcpy(font_face_regular, fontFace);
+	}
+	if (fontFaceBold)
+	{
+		sstrcpy(font_face_bold, fontFaceBold);
+	}
+}
 
 static inline void iV_printFontList(void)
 {

@@ -36,6 +36,7 @@ enum iV_fonts
 
 extern void iV_TextInit(void);
 extern void iV_TextShutdown(void);
+extern void iV_font(const char *fontName, const char *fontFace, const char *fontFaceBold);
 
 extern void iV_SetFont(enum iV_fonts FontID);
 extern int iV_GetTextAboveBase(void);
