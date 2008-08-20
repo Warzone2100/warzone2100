@@ -65,7 +65,7 @@ static void spacerInitVtbl(spacer *self)
 	// Replace our parents vtable with our own
 	WIDGET(self)->vtbl = &vtbl.widgetVtbl;
 	
-	// Set our vtablr
+	// Set our vtable
 	self->vtbl = &vtbl;
 }
 

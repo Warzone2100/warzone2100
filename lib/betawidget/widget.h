@@ -41,6 +41,8 @@
 
 #include "keycode.h"
 
+#include "font.h"
+
 /*
  * Forward declarations
  */
@@ -707,7 +709,7 @@ int widgetAddEventHandler(widget *self, eventType type,
  * to add timer event handlers (EVT_TIMER_ONE_SHOT and EVT_TIMER_PERSISTENT).
  *
  * @param self          The widget to add the timer event handler to.
- * @param type          The tyoe of the timer to register the handler for.
+ * @param type          The type of the timer to register the handler for.
  * @param interval      The duration in ms to wait.
  * @param handler       The function to call when the event fires.
  * @param userData      User specified data pointer to pass to handler.

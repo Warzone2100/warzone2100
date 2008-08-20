@@ -438,7 +438,7 @@ void widgetDestroyImpl(widget *self)
 	}
 	
 	// Free the ID
-	free(self->id);
+	free((char *) self->id);
 
 	// Free ourself
 	free(self);
