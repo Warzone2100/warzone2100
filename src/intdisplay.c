@@ -269,6 +269,11 @@ void intUpdateProgressBar(WIDGET *psWidget, W_CONTEXT *psContext)
 				{
 					BuildPoints = Range;
 				}
+				// prevent a division by 0 error
+				if (Range == 0)
+				{
+					Range = 1;
+				}
 				BarGraph->majorSize = (UWORD)PERNUM(WBAR_SCALE,BuildPoints,Range);
 				BarGraph->style &= ~WIDG_HIDDEN;
 			}
@@ -320,6 +325,11 @@ void intUpdateProgressBar(WIDGET *psWidget, W_CONTEXT *psContext)
 				if (BuildPoints > Range)
 				{
 					BuildPoints = Range;
+				}
+				// prevent a division by 0 error
+				if (Range == 0)
+				{
+					Range = 1;
 				}
 				BarGraph->majorSize = (UWORD)PERNUM(WBAR_SCALE,BuildPoints,Range);
 				BarGraph->style &= ~WIDG_HIDDEN;
