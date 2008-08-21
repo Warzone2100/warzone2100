@@ -607,11 +607,10 @@ void widgetSetEventHandlerUserData(widget *self, int id, void *userData)
 bool widgetAddChildImpl(widget *self, widget *child)
 {
 	// Make sure the id of the child is unquie
-	if (widgetFindById(widgetGetRoot(self), child->id) != NULL)
-	{
-		// TODO: An error/debug message is probably required
-		return false;
-	}
+	assert(widgetFindById(widgetGetRoot(self), child->id) == NULL);
+	
+	// Make sure the child does not currently have a parent
+	assert(child->parent == NULL);
 
 	// Add the widget
 	vectorAdd(self->children, child);
