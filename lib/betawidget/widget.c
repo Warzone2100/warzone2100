@@ -165,6 +165,11 @@ bool widgetIsA(const widget *self, const classInfo *instanceOf)
 	return false;
 }
 
+bool widgetIsEventHandler(const widget *self, int id)
+{
+	return widgetGetEventHandlerById(self, id) ? true : false;
+}
+
 static bool widgetAnimationTimerCallback(widget *self, const event *evt,
                                          int handlerId, void *userData)
 {

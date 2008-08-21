@@ -727,6 +727,14 @@ int widgetAddTimerEventHandler(widget *self, eventType type, int interval,
 void widgetRemoveEventHandler(widget *self, int id);
 
 /**
+ * Returns if id is that of a valid event handler.
+ *
+ * @param self  The widget to check if id is a valid event handler for.
+ * @param id    The id in question.
+ */
+bool widgetIsEventHandler(const widget *self, int id);
+
+/**
  * Returns the user-data for the event whose id is id.
  *
  * @param self  The widget to whom the event handler is registered to.
