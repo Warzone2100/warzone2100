@@ -274,6 +274,7 @@ BOOL		runGameOptions4Menu		(void);
 #define FRONTEND_TEXTURESZ		31422
 #define FRONTEND_TEXTURESZ_R	31423
 #define FRONTEND_TAKESEFFECT	31424
+#define FRONTEND_NOGAMESAVAILABLE	31666	// Used when no games are available in lobby
 
 #define FRONTEND_SEQUENCE		20097
 #define FRONTEND_SEQUENCE_R		20098
