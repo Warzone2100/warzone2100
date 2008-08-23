@@ -97,5 +97,16 @@ static inline WZ_DECL_CONST WZ_DECL_WARN_UNUSED_RESULT float wrapf(float x, floa
 	while(x >= y) x -= y;
 	return x;
 }
-
+/*!
+ * Clips x to boundaries
+ * \param x Value to clip
+ * \param min Lower bound
+ * \param max Upper bound
+ */
+static inline WZ_DECL_CONST int clip(int x, int min, int max)
+{
+	if (x < min) return min;
+	if (x > max) return max;
+	return x;
+}
 #endif // __INCLUDED_LIB_FRAMEWORK_MATH_HELP_H__
