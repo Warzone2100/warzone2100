@@ -578,6 +578,7 @@ BOOL sound_Play2DSample( TRACK *psTrack, AUDIO_SAMPLE *psSample, BOOL bQueued )
 #ifndef WZ_NOSOUND
 	ALfloat zero[3] = { 0.0, 0.0, 0.0 };
 	ALfloat volume;
+	ALint error = 0;
 
 	if (sfx_volume == 0.0)
 	{
@@ -586,8 +587,18 @@ BOOL sound_Play2DSample( TRACK *psTrack, AUDIO_SAMPLE *psSample, BOOL bQueued )
 	volume = ((float)psTrack->iVol / 100.0f);       // each object can have OWN volume!
 	psSample->fVol = volume;                        // save computed volume
 	volume *= sfx_volume;                           // and now take into account the Users sound Prefs.
+	sound_GetError();								//clear error codes
+	// Retrieve an OpenAL sound source  *IF AVAILABLE!*
 	alGenSources( 1, &(psSample->iSample) );
-	sound_GetError();
+	error = sound_GetError();
+	if (error != AL_NO_ERROR)
+	{	// FIX ME:  NOTE:
+		// we run out of buffers very quickly, and currently, we do not handle this event.
+		// we do NOT return false here, since this can have unpleasant side effects.
+		// Just be aware this is currently happening *very* much.
+		debug(LOG_NEVER, "alGenSources has failed--most likely out of buffers. error code %x", error );
+	}
+
 	alSourcef( psSample->iSample, AL_PITCH, 1.0f );
 	alSourcef( psSample->iSample, AL_GAIN,volume );
 	alSourcefv( psSample->iSample, AL_POSITION, zero );
@@ -620,6 +631,7 @@ BOOL sound_Play3DSample( TRACK *psTrack, AUDIO_SAMPLE *psSample )
 #ifndef WZ_NOSOUND
 	ALfloat zero[3] = { 0.0, 0.0, 0.0 };
 	ALfloat volume;
+	ALint error = 0;
 
 	if (sfx3d_volume == 0.0)
 	{
@@ -628,8 +640,18 @@ BOOL sound_Play3DSample( TRACK *psTrack, AUDIO_SAMPLE *psSample )
 
 	volume = ((float)psTrack->iVol / 100.f);        // max range is 0-100
 	psSample->fVol = volume;                        // store results for later
+	sound_GetError();								// clear error codes
+	// Retrieve an OpenAL sound source  *IF AVAILABLE!*
 	alGenSources( 1, &(psSample->iSample) );
-	sound_GetError();
+	error = sound_GetError();
+	if (error != AL_NO_ERROR)
+	{	// FIX ME:  NOTE:
+		// we run out of buffers very quickly, and currently, we do not handle this event.
+		// we do NOT return false here, since this can have unpleasant side effects.
+		// Just be aware this is currently happening *very* much.
+		debug(LOG_NEVER, "alGenSources has failed--most likely out of buffers.  error code %x", error );
+	}
+
 	// HACK: this is a workaround for a bug in the 64bit implementation of OpenAL on GNU/Linux
 	// The AL_PITCH value really should be 1.0.
 	alSourcef( psSample->iSample, AL_PITCH, 1.001 );
@@ -681,6 +703,7 @@ AUDIO_STREAM* sound_PlayStreamWithBuf(PHYSFS_file* fileHandle, float volume, voi
 {
 	AUDIO_STREAM* stream;
 	ALuint*       buffers = alloca(sizeof(ALuint) * buffer_count);
+	ALint error = 0;
 	unsigned int i;
 
 	if ( !openal_initialized )
@@ -697,6 +720,20 @@ AUDIO_STREAM* sound_PlayStreamWithBuf(PHYSFS_file* fileHandle, float volume, voi
 		return NULL;
 	}
 
+	sound_GetError();					//clear the error codes
+	// Retrieve an OpenAL sound source  *IF AVAILABLE!*
+	alGenSources(1, &(stream->source));
+	error = sound_GetError();
+	if (error != AL_NO_ERROR)
+	{
+		// FIX ME:
+		// we run out of buffers very quickly, and the pointer would be wrong (uninitialized data),
+		// this would cause openAL errors, and corrupt the stack later on in sound_DestroyStream()
+		debug(LOG_NEVER, "alGenSources has failed--most likely out of buffers.  error code %x", error );
+		free (stream);
+		return NULL;
+	}
+
 	stream->fileHandle = fileHandle;
 
 	stream->decoder = sound_CreateOggVorbisDecoder(stream->fileHandle, false);
@@ -709,10 +746,6 @@ AUDIO_STREAM* sound_PlayStreamWithBuf(PHYSFS_file* fileHandle, float volume, voi
 
 	stream->volume = volume;
 	stream->bufferSize = streamBufferSize;
-
-	// Retrieve an OpenAL sound source
-	alGenSources(1, &(stream->source));
-	sound_GetError();
 
 	alSourcef(stream->source, AL_GAIN, stream->volume);
 
@@ -956,16 +989,27 @@ static bool sound_UpdateStream(AUDIO_STREAM* stream)
  */
 static void sound_DestroyStream(AUDIO_STREAM* stream)
 {
-	ALint buffer_count;
-	ALuint* buffers;
+	ALint buffer_count = 0;
+	ALuint* buffers = NULL;
+	ALint error = 0;
 
 	// Stop the OpenAL source from playing
 	alSourceStop(stream->source);
-	sound_GetError();
+	error = sound_GetError();
+
+	if( error != AL_NO_ERROR)
+	{
+		// FIX ME:  If error has occured, we should bail out should we not?
+	}
 
 	// Retrieve the amount of buffers which were processed
 	alGetSourcei(stream->source, AL_BUFFERS_PROCESSED, &buffer_count);
-	sound_GetError();
+	error = sound_GetError();
+	if( error != AL_NO_ERROR)
+	{
+		// FIX ME:  If error has occured, we *really* should bail out should we not,
+		// since buffer_count can be a invalid value for alloca?
+	}
 
 	// Detach all buffers and retrieve their ID numbers
 	buffers = alloca(buffer_count * sizeof(ALuint));
