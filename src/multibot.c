@@ -219,8 +219,8 @@ BOOL recvDroidSecondaryAll()
 
 	return true;
 }
-
-BOOL sendDroidEmbark(const DROID* psDroid)
+// broadcast droid & transporter loading information
+BOOL sendDroidEmbark(const DROID* psDroid,const DROID* psTransporter )
 {
 	if (!bMultiPlayer)
 		return true;
@@ -228,51 +228,78 @@ BOOL sendDroidEmbark(const DROID* psDroid)
 	NETbeginEncode(NET_DROIDEMBARK, NET_ALL_PLAYERS);
 	{
 		uint8_t player = psDroid->player;
-		uint32_t droid = psDroid->id;
+		uint32_t droidID = psDroid->id;
+		uint32_t transporterID = psTransporter->id;
 
 		NETuint8_t(&player);
-		NETuint32_t(&droid);
+		NETuint32_t(&droidID);
+		NETuint32_t(&transporterID);
 	}
 	return NETend();
 }
-
+// receive droid & transporter loading information
 BOOL recvDroidEmbark()
 {
-	DROID* psDroid;
+	DROID *psDroid;
+	DROID *psTransporterDroid;
+	BOOL bDroidRemoved;
 
 	NETbeginDecode(NET_DROIDEMBARK);
 	{
 		uint8_t player;
-		uint32_t droid;
+		uint32_t droidID;
+		uint32_t transporterID;
 
 		NETuint8_t(&player);
-		NETuint32_t(&droid);
+		NETuint32_t(&droidID);
+		NETuint32_t(&transporterID);
 
-		if (!IdToDroid(droid, player, &psDroid))
+		// we have to find the droid on our (local) list first.
+		if (!IdToDroid(droidID, player, &psDroid))
 		{
 			NETend();
+			// Possible it already died? (sync error?)
+			debug(LOG_WARNING,"player's %d droid %d wasn't found?",player,droidID);
 			return false;
+		}
+		if (!IdToDroid(transporterID, player, &psTransporterDroid))
+		{
+			NETend();
+			// Possible it already died? (sync error?)
+			debug(LOG_WARNING,"player's %d transport droid %d wasn't found?",player,transporterID);
+			return false;
+		}
+
+		if (psDroid == NULL)
+		{
+			// how can this happen?
+			return true;
+		}
+
+		// Take it out of the world without destroying it (just removes it from the droid list)
+		bDroidRemoved = droidRemove(psDroid, apsDroidLists);
+
+		// Init the order for when disembark
+		psDroid->order = DORDER_NONE;
+		setDroidTarget(psDroid, NULL);
+		psDroid->psTarStats = NULL;
+
+		if (bDroidRemoved)
+		{
+			// and now we need to add it to their transporter group!
+			grpJoin(psTransporterDroid->psGroup, psDroid);
+		}
+		else
+		{
+			// possible sync error?
+			debug(LOG_WARNING,"Eh? Where did unit %d go?  Couldn't load droid onto transporter.",droidID);
 		}
 	}
 	NETend();
-
-	if (psDroid == NULL)
-	{
-		return true;
-	}
-
-	// Take it out of the world without destroying it
-	droidRemove(psDroid, apsDroidLists);
-
-	// Init the order for when disembark
-	psDroid->order = DORDER_NONE;
-	setDroidTarget(psDroid, NULL);
-	psDroid->psTarStats = NULL;
-
 	return true;
 }
-
-BOOL sendDroidDisEmbark(const DROID* psDroid)
+// sending information that droid is being unloaded from a transporter
+BOOL sendDroidDisEmbark(const DROID* psDroid, const DROID* psTransporter)
 {
 	if (!bMultiPlayer)
 		return true;
@@ -280,64 +307,87 @@ BOOL sendDroidDisEmbark(const DROID* psDroid)
 	NETbeginEncode(NET_DROIDDISEMBARK, NET_ALL_PLAYERS);
 	{
 		uint8_t player = psDroid->player;
-		uint32_t droid = psDroid->id;
+		uint32_t droidID = psDroid->id;
+		uint32_t transporterID = psTransporter->id;
 		Vector3uw pos = psDroid->pos;
 
 		NETuint8_t(&player);
-		NETuint32_t(&droid);
+		NETuint32_t(&droidID);
+		NETuint32_t(&transporterID);
 		NETVector3uw(&pos);
 	}
 	return NETend();
 }
-
+// getting informaton about droid is being unloaded from a transporter
 BOOL recvDroidDisEmbark()
 {
-	DROID* psDroid;
+	DROID *psFoundDroid = NULL, *psTransporterDroid = NULL;
+	DROID *psCheckDroid = NULL;
 
 	NETbeginDecode(NET_DROIDDISEMBARK);
 	{
 		uint8_t player;
-		uint32_t droid;
+		uint32_t droidID;
+		uint32_t transporterID;
 		Vector3uw pos;
 
 		NETuint8_t(&player);
-		NETuint32_t(&droid);
+		NETuint32_t(&droidID);
+		NETuint32_t(&transporterID);
 		NETVector3uw(&pos);
 
 		NETend();
 
-		if (!IdToDroid(droid, player, &psDroid))
+		// find the transporter first
+		if (!IdToDroid(transporterID, player, &psTransporterDroid))
 		{
+			// Possible it already died? (sync error?)
+			debug(LOG_WARNING,"player's %d transport droid %d wasn't found?",player,transporterID);
+			return false;
+		}
+		// we need to find the droid *in* the transporter
+		psCheckDroid = psTransporterDroid ->psGroup->psList;
+		while (psCheckDroid)
+		{
+			// is this the one we want?
+			if( psCheckDroid->id == droidID)
+			{
+				psFoundDroid = psCheckDroid;
+				break;
+			}
+			// not found, so check next one in *group*
+			psCheckDroid = psCheckDroid->psGrpNext;
+		}
+		// don't continue if we couldn't find it.
+		if (!psFoundDroid)
+		{
+			// I don't think this could ever be possible...but
+			debug(LOG_ERROR,"Couldn't find droid %d to disembark from player %d's transporter?",droidID,player);
 			return false;
 		}
 
-		if (psDroid == NULL)
-		{
-			return true;
-		}
+		// remove it from the transporter
+		grpLeave(psFoundDroid->psGroup, psFoundDroid);
+
+		// and add it back to the bloody droid list
+		addDroid(psFoundDroid, apsDroidLists);
 
 		// Add it back into the world at the x/y
-		psDroid->pos = pos;
-	}
+		psFoundDroid->pos = pos;
 
-	if (!droidOnMap(psDroid))
-	{
-		debug(LOG_ERROR, "recvDroidDisEmbark: droid not disembarked on map");
-		return false;
-	}
+		if (!droidOnMap(psFoundDroid))
+		{
+			debug(LOG_ERROR,"droid %d disembarked was NOT on map?",psFoundDroid->id);
+			return false;
+		}
 
-	updateDroidOrientation(psDroid);
+		updateDroidOrientation(psFoundDroid);
 
-	// Initialise the movement data
-	initDroidMovement(psDroid);
-
-	// Reset droid orders
-	orderDroid(psDroid, DORDER_STOP);
-	gridAddObject((BASE_OBJECT *)psDroid);
-	psDroid->cluster = 0;
-
-	addDroid(psDroid, apsDroidLists);
-
+		// Initialise the movement data
+		initDroidMovement(psFoundDroid);
+		// must add it to the grid for targeting to work
+		gridAddObject((BASE_OBJECT *)psFoundDroid);
+	} // NetBeginDecode
 	return true;
 }
 

@@ -1391,15 +1391,9 @@ void transporterRemoveDroid(UDWORD id)
 	    	psDroid->pos.x = (UWORD)world_coord(droidX);
 		    psDroid->pos.y = (UWORD)world_coord(droidY);
     		psDroid->pos.z = map_Height(psDroid->pos.x, psDroid->pos.y);
-	    	updateDroidOrientation(psDroid);
-		    //initialise the movement data
-    		initDroidMovement(psDroid);
-	    	//reset droid orders
-		    orderDroid(psDroid, DORDER_STOP);
-		    gridAddObject((BASE_OBJECT *)psDroid);
-		    psDroid->cluster = 0;
-        }
 
+        }
+		// remove it from the transporter group
 	    grpLeave(psDroid->psGroup, psDroid);
 
 	    //add it back into apsDroidLists
@@ -1410,9 +1404,24 @@ void transporterRemoveDroid(UDWORD id)
 	    }
 	    else
 	    {
+			// add the droid back onto the droid list
 		    addDroid(psDroid, apsDroidLists);
+			//inform all other players about that
+			if (bMultiPlayer)
+			{
+				sendDroidDisEmbark(psDroid,psCurrTransporter);
+			}
 	    }
-
+		// We can update the orders now, since everyone has been
+		// notified of the droid exiting the transporter
+		updateDroidOrientation(psDroid);
+		//initialise the movement data
+		initDroidMovement(psDroid);
+		//reset droid orders
+		orderDroid(psDroid, DORDER_STOP);
+		gridAddObject((BASE_OBJECT *)psDroid);
+		psDroid->cluster = 0;
+		// check if it is a commander
    		if (psDroid->droidType == DROID_COMMAND)
     	{
 	    	if (grpCreate(&psGroup))
@@ -1428,6 +1437,8 @@ void transporterRemoveDroid(UDWORD id)
             stopMissionButtonFlash(IDTRANS_LAUNCH);
         }
 	}
+	// we want to sync with all clients *now*.
+	ForceDroidSync(psDroid);
 }
 
 /*adds a droid to the current transporter via the interface*/
@@ -1463,6 +1474,14 @@ void transporterAddDroid(DROID *psTransporter, DROID *psDroidToAdd)
 {
     BOOL    bDroidRemoved;
 
+	ASSERT( psTransporter != NULL, "Was passed a NULL transporter" );
+	ASSERT( psDroidToAdd != NULL, "Was passed a NULL droid, can't add to transporter" );
+
+	if (!psTransporter || !psDroidToAdd)
+	{
+		debug(LOG_ERROR,"We can't add the unit to the transporter!");
+		return;
+	}
 	/* check for space */
 	if (!checkTransporterSpace(psTransporter, psDroidToAdd))
 	{
@@ -1470,22 +1489,29 @@ void transporterAddDroid(DROID *psTransporter, DROID *psDroidToAdd)
 	}
 	if (onMission)
 	{
+		// removing from droid mission list
 		bDroidRemoved = droidRemove(psDroidToAdd, mission.apsDroidLists);
 	}
 	else
 	{
+		// removing from droid list
 		bDroidRemoved = droidRemove(psDroidToAdd, apsDroidLists);
+	}
+	if (bDroidRemoved)
+	{
+		// adding to transporter unit's group list
+		grpJoin(psTransporter->psGroup, psDroidToAdd);
 
-        //inform all other players
         if (bMultiPlayer)
         {
-            sendDroidEmbark(psDroidToAdd);
+			//inform all other players to update their local lists
+			sendDroidEmbark(psDroidToAdd,psTransporter);
         }
 
 	}
-    if (bDroidRemoved)
+	else
     {
-    	grpJoin(psTransporter->psGroup, psDroidToAdd);
+		debug(LOG_ERROR,"droid %d not found, so nothing added to transporter!",psDroidToAdd->id);
     }
     //this is called by droidRemove
 	//intRefreshScreen();
