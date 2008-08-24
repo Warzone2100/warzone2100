@@ -3169,7 +3169,7 @@ void drawRadarBlips(int radarX, int radarY, float pixSizeH, float pixSizeV)
 		{
 			FEATURE *psFeature = (FEATURE *)psProxDisp->psMessage->pViewData;
 
-			ASSERT(psFeature && psFeature->psStats, "Bad feature message")
+			ASSERT(psFeature && psFeature->psStats, "Bad feature message");
 			if (psFeature && psFeature->psStats && psFeature->psStats->subType == FEAT_OIL_RESOURCE)
 			{
 				proxType = PROX_RESOURCE;

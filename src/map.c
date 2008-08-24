@@ -147,13 +147,18 @@ BOOL mapNew(UDWORD width, UDWORD height)
 
 	if (width*height > MAP_MAXAREA)
 	{
-		debug( LOG_ERROR, "mapNew: map too large : %d %d\n", width, height );
+		debug(LOG_ERROR, "map too large : %u %u", width, height);
 		abort();
 		return false;
 	}
 
 	psMapTiles = calloc(width * height, sizeof(MAPTILE));
-	ASSERT(psMapTiles != NULL, "mapNew: Out of memory")
+	if (psMapTiles == NULL)
+	{
+		debug(LOG_ERROR, "Out of memory");
+		abort();
+		return false;
+	}
 
 	psTile = psMapTiles;
 	for (i = 0; i < width * height; i++)

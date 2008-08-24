@@ -32,6 +32,7 @@
 #endif
 
 #include <assert.h>
+#include "macros.h"
 
 #if defined(__cplusplus)
 extern "C"
@@ -50,17 +51,44 @@ extern "C"
 extern char last_called_script_event[MAX_EVENT_NAME_LEN];
 
 /**
+ * ASSERT helper macro to allow some debug functions to use an alternate
+ * calling location.
+ *
+ * \param expr                 Expression to assert on.
+ * \param location_description A string describing the calling location, e.g.:
+ *                             "filename:linenum".
+ * \param function             The name of the function that called
+ *                             ASSERT_HELPER or the debug function that uses ASSERT_HELPER.
+ *
+ * \param ...                  printf-style format string followed by its parameters
+ *
+ * \return Will return whatever assert(expr) returns. That's undefined though,
+ *         so unless you have a good reason to, don't depend on it.
+ */
+#define ASSERT_HELPER(expr, location_description, function, ...) \
+( \
+	( \
+		(expr) ? /* if (expr) */ \
+			(void)0 \
+		: /* else */\
+		( \
+			(void)_debug(LOG_ERROR, function, __VA_ARGS__), \
+			(void)_debug(LOG_ERROR, function, "Assert in Warzone: %s (%s), last script event: '%s'", \
+		                                  location_description, (#expr), last_called_script_event) \
+		) \
+	), \
+	assert(expr) \
+)
+
+/**
  *
  * Rewritten version of assert that allows a printf format text string to be passed
  * to ASSERT along with the condition.
  *
  * Arguments:	ASSERT( condition, "Format string with variables: %d, %d", var1, var2 );
  */
-#define ASSERT( expr, ... ) \
-	( (expr) ? (void)0 : (void)_debug( LOG_ERROR, __FUNCTION__, __VA_ARGS__ ) ); \
-	( (expr) ? (void)0 : (void)_debug( LOG_ERROR, __FUNCTION__, "Assert in Warzone: %s:%d (%s), last script event: '%s'", \
-		__FILE__, __LINE__, (#expr), last_called_script_event ) ); \
-	assert( expr );
+#define ASSERT(expr, ...) \
+	ASSERT_HELPER(expr, AT_MACRO, __FUNCTION__, __VA_ARGS__)
 
 
 /**

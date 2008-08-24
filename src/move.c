@@ -2164,7 +2164,7 @@ static void moveUpdateDroidPos( DROID *psDroid, float dx, float dy )
 	if ( worldOnMap( iX, iY ) == false )
 	{
 		/* transporter going off-world will trigger next map, and is ok */
-		ASSERT(psDroid->droidType == DROID_TRANSPORTER, "droid trying to move off the map!")
+		ASSERT(psDroid->droidType == DROID_TRANSPORTER, "droid trying to move off the map!");
 		if (psDroid->droidType != DROID_TRANSPORTER)
 		{
 			/* dreadful last-ditch crash-avoiding hack - sort this! - GJ */
