@@ -1788,7 +1788,7 @@ static inline void dealWithLMBDroid(DROID* psDroid, SELECTION_TYPE selection)
 			CONPRINTF(ConsoleString, (ConsoleString,
 						"%s - Damage %d%% - ID %d - experience %f, %s - order %s - action %s - sensor range %hu power %hu - ECM %u",
 						droidGetName(psDroid),
-						100 - clip(PERCENT(psDroid->body,psDroid->originalBody),0,100), psDroid->id,
+						100 - clip(PERCENT(psDroid->body, psDroid->originalBody), 0, 100), psDroid->id,
 						psDroid->experience, getDroidLevelName(psDroid), getDroidOrderName(psDroid->order), getDroidActionName(psDroid->action),
 						droidSensorRange(psDroid), droidSensorPower(psDroid), droidConcealment(psDroid)));
 			FeedbackClickedOn();
@@ -1800,7 +1800,7 @@ static inline void dealWithLMBDroid(DROID* psDroid, SELECTION_TYPE selection)
 			CONPRINTF(ConsoleString, (ConsoleString,
 					"%s - Damage %d%% - Serial ID %d - Experience %f order %d action %d, %s",
 					droidGetName(psDroid),
-					100 -clip(PERCENT(psDroid->body,psDroid->originalBody),0,100),
+					100 - clip(PERCENT(psDroid->body, psDroid->originalBody), 0, 100),
 					psDroid->id, psDroid->experience, psDroid->order,
 					psDroid->action, getDroidLevelName(psDroid)));
 
@@ -1813,8 +1813,8 @@ static inline void dealWithLMBDroid(DROID* psDroid, SELECTION_TYPE selection)
 				CONPRINTF(ConsoleString, (ConsoleString,
 					_("%s - Damage %d%% - Experience %d, %s"),
 					droidGetName(psDroid),
-					100 - clip(PERCENT(psDroid->body,psDroid->originalBody),0,100),
-					(SDWORD) psDroid->experience,getDroidLevelName(psDroid)));
+					100 - clip(PERCENT(psDroid->body,psDroid->originalBody), 0, 100),
+					(SDWORD) psDroid->experience, getDroidLevelName(psDroid)));
 
 				FeedbackClickedOn();
 			}
