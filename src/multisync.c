@@ -56,7 +56,7 @@
 // function definitions
 
 static BOOL sendStructureCheck	(void);							//Structure
-static void packageCheck		(DROID *pD);
+static void packageCheck		(const DROID* pD);
 static BOOL sendDroidCheck		(void);							//droids
 
 static void highLevelDroidUpdate(DROID *psDroid,
@@ -283,25 +283,34 @@ static BOOL sendDroidCheck(void)
 
 // ////////////////////////////////////////////////////////////////////////////
 // Send a Single Droid Check message
-static void packageCheck(DROID *pD)
+static void packageCheck(const DROID* pD)
 {
+	// Copy these variables so that we don't have to violate pD's constness
+	uint8_t player = pD->player;
+	uint32_t droidID = pD->id;
+	int32_t order = pD->order;
+	uint32_t secondaryOrder = pD->secondaryOrder;
+	uint32_t body = pD->body;
+	float direction = pD->direction;
+	float experience = pD->experience;
+
 	// Send the player to which the droid belongs
-	NETuint8_t(&pD->player);
+	NETuint8_t(&player);
 
 	// Now the droid's ID
-	NETuint32_t(&pD->id);
+	NETuint32_t(&droidID);
 
 	// The droid's order
-	NETint32_t(&pD->order);
+	NETint32_t(&order);
 
 	// The droids secondary order
-	NETuint32_t(&pD->secondaryOrder);
+	NETuint32_t(&secondaryOrder);
 
 	// Droid's current HP
-	NETuint32_t(&pD->body);
+	NETuint32_t(&body);
 
 	// Direction it is going in
-	NETfloat(&pD->direction);
+	NETfloat(&direction);
 
 	// Fractional move
 	if (pD->order == DORDER_ATTACK
@@ -309,29 +318,40 @@ static void packageCheck(DROID *pD)
 	 || pD->order == DORDER_RTB
 	 || pD->order == DORDER_RTR)
 	{
-		NETfloat(&pD->sMove.fx);
-		NETfloat(&pD->sMove.fy);
+		float sMoveX = pD->sMove.fx;
+		float sMoveY = pD->sMove.fy;
+
+		NETfloat(&sMoveX);
+		NETfloat(&sMoveY);
 	}
 	// Non-fractional move, send regular coords
 	else
 	{
-		NETuint16_t(&pD->pos.x);
-		NETuint16_t(&pD->pos.y);
+		uint16_t posX = pD->pos.x;
+		uint16_t posY = pD->pos.y;
+
+		NETuint16_t(&posX);
+		NETuint16_t(&posY);
 	}
 
 
 	if (pD->order == DORDER_ATTACK)
 	{
-		NETuint32_t(&pD->psTarget->id);
+		uint32_t targetID = pD->psTarget->id;
+
+		NETuint32_t(&targetID);
 	}
 	else if (pD->order == DORDER_MOVE)
 	{
-		NETuint16_t(&pD->orderX);
-		NETuint16_t(&pD->orderY);
+		uint16_t orderX = pD->orderX;
+		uint16_t orderY = pD->orderY;
+
+		NETuint16_t(&orderX);
+		NETuint16_t(&orderY);
 	}
 
 	// Last send the droid's experience
-	NETfloat(&pD->experience);
+	NETfloat(&experience);
 }
 
 
