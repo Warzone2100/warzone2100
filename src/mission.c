@@ -2184,10 +2184,14 @@ void unloadTransporter(DROID *psTransporter, UDWORD x, UDWORD y, BOOL goingHome)
 			// Inform all other players
 			if (bMultiPlayer)
 			{
-				// This isn't used for cyber transports, only 'normal' one, but that isn't used in MP games AFAIK?
-				// which is why I don't know why this is here.  Maybe for mod support?
-				debug(LOG_ERROR,"If you see this, then notify dev team. Code: 0xDEADF00D");
-				sendDroidDisEmbark(psDroid,psTransporter);
+				/* This isn't used for cyborg transports, only
+				 * for "normal" ones, though we shouldn't get
+				 * those in a multiplayer game.
+				 *
+				 * NOTE: Why(!) is this here?
+				 */
+				ASSERT(!"We should never get here", "Apparently we have a \"large\" transporter in a multiplayer game, please make a bugreport from this");
+				sendDroidDisEmbark(psDroid, psTransporter);
 			}
 		}
 
