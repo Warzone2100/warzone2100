@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
 "POT-Creation-Date: 2008-07-29 20:16+0200\n"
-"PO-Revision-Date: 2008-05-09 16:22+0000\n"
-"Last-Translator: MoroSqua <Unknown>\n"
+"PO-Revision-Date: 2008-08-24 13:04+0200\n"
+"Last-Translator: Cassarin-Grand Arthur <zoloom@hotmail.fr>\n"
 "Language-Team: French <warzone-dev@gna.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -2654,13 +2654,14 @@ msgstr "Augmente la cadence de tir des armes AA"
 #: data/mp/messages/strings/resstrings.txt:718
 #: data/mp/messages/strings/resstrings.txt:724
 msgid "New Proximity Bomb Turret Available"
-msgstr ""
+msgstr "Nouvelle Tourelle Lanceuse de mines de proximité Disponible"
 
 #: data/base/messages/resmessages2.rmsg:681
 #: data/base/messages/strings/resstrings.txt:686
 #: data/mp/messages/strings/resstrings.txt:719
+#, fuzzy
 msgid "Bomb turret explodes in proximity to enemy"
-msgstr ""
+msgstr "Une bombe-tourelle a explosé à proximité d'un ennemi"
 
 #: data/base/messages/resmessages2.rmsg:682
 #: data/base/messages/resmessages2.rmsg:695
@@ -2674,8 +2675,9 @@ msgstr "Cibles Conseillées: Bâtiments et Défenses"
 #: data/base/messages/resmessages2.rmsg:694
 #: data/base/messages/strings/resstrings.txt:692
 #: data/mp/messages/strings/resstrings.txt:725
+#, fuzzy
 msgid "Superbomb turret explodes in proximity to enemy"
-msgstr ""
+msgstr "Une super bombe-tourelle a explosé à proximité d'un ennemi"
 
 #: data/base/messages/resmessages2.rmsg:707
 #: data/base/messages/strings/resstrings.txt:698
@@ -2855,7 +2857,7 @@ msgstr "Programme d'Intrusion Nexus analysé"
 
 #: data/base/messages/resmessages3.rmsg:19
 msgid "Intruder parasite isolated"
-msgstr ""
+msgstr "Parasite intrus isolé"
 
 #: data/base/messages/resmessages3.rmsg:20
 #: data/base/messages/resmessages3.rmsg:33
@@ -2872,19 +2874,19 @@ msgstr "Les systèmes informatiques peuvent désormais faire barrière à Nexus"
 
 #: data/base/messages/resmessages3.rmsg:43
 msgid "New Cyborg Research Available"
-msgstr ""
+msgstr "Nouvelle recherche de Cyborg disponible"
 
 #: data/base/messages/resmessages3.rmsg:44
 msgid "Aerodynamic Jump Pack"
-msgstr ""
+msgstr "Pack de saut aérodynamique"
 
 #: data/base/messages/resmessages3.rmsg:45
 msgid "Gives Cyborg limited flight abilities"
-msgstr ""
+msgstr "Donne aux Cyborgs la possibilité de voler de façon limité"
 
 #: data/base/messages/resmessages3.rmsg:46
 msgid "Jump Cyborgs can now be researched"
-msgstr ""
+msgstr "Le saut de Cyborgs peut maintenant être recherché"
 
 #: data/base/messages/resmessages3.rmsg:70
 #: data/base/messages/resmessages3.rmsg:694
@@ -3058,8 +3060,9 @@ msgstr "Systèmes de reconnaissance de cible avancés"
 
 #: data/base/messages/resmessages3.rmsg:564
 #: data/mp/messages/resmessagesall.rmsg:343
+#, fuzzy
 msgid "Synaptic Link Scrambler technology"
-msgstr ""
+msgstr "Technologie de lien synaptique brouilleur"
 
 #: data/base/messages/resmessages3.rmsg:565
 #: data/mp/messages/resmessagesall.rmsg:344
@@ -3095,24 +3098,25 @@ msgstr "Systèmes embarqués de diagnostic et réparation"
 
 #: data/base/messages/resmessages3.rmsg:579
 msgid "Enables self-repair in all Cyborgs"
-msgstr ""
+msgstr "Active l'auto-réparation dans tous les Cyborgs"
 
 #: data/base/messages/resmessages3.rmsg:591
 #: data/base/messages/resmessages3.rmsg:604
+#, fuzzy
 msgid "Built-in diagnostic and repair systems"
-msgstr ""
+msgstr "Systèmes de diagnostic et réparation embarqués"
 
 #: data/base/messages/resmessages3.rmsg:592
 msgid "Enables self-repair in all base structures"
-msgstr ""
+msgstr "Active l'auto-réparation dans toutes les structures de la base"
 
 #: data/base/messages/resmessages3.rmsg:605
 msgid "Enables self-repair in all defenses"
-msgstr ""
+msgstr "Active l'auto-réparation dans toutes les défenses"
 
 #: data/base/messages/resmessages3.rmsg:618
 msgid "Enables self-repair in all vehicles"
-msgstr ""
+msgstr "Active l'auto-réparation dans tous les véhicules"
 
 #: data/base/messages/resmessages3.rmsg:628
 msgid "NEXUS Light Body"
@@ -5265,7 +5269,7 @@ msgstr "Propulsion Bipédique III"
 #: data/base/messages/strings/names.txt:334
 #: data/mp/messages/strings/names.txt:336
 msgid "Naval"
-msgstr ""
+msgstr "Navale"
 
 #: data/base/messages/strings/names.txt:337
 #: data/mp/messages/strings/names.txt:339
@@ -5368,7 +5372,7 @@ msgstr "Lien NEXUS"
 #: data/base/messages/strings/names.txt:380
 #: data/base/messages/strings/names.txt:909
 msgid "Scrambler Turret"
-msgstr ""
+msgstr "Tourelle brouilleuse"
 
 #: data/base/messages/strings/names.txt:383
 #: data/mp/messages/strings/names.txt:385
@@ -6097,12 +6101,13 @@ msgstr "Canon Électrique VTOL"
 #: data/base/messages/strings/names.txt:572
 #: data/mp/messages/strings/names.txt:574
 msgid "Proximity Bomb Turret"
-msgstr ""
+msgstr "Tourelle lanceuse de mines de proximité"
 
 #: data/base/messages/strings/names.txt:573
 #: data/mp/messages/strings/names.txt:575
+#, fuzzy
 msgid "Proximity Superbomb Turret"
-msgstr ""
+msgstr "Tourelle de super bombes de proximité"
 
 #: data/base/messages/strings/names.txt:575
 #: data/mp/messages/strings/names.txt:577
@@ -6383,7 +6388,7 @@ msgstr ""
 #: data/base/messages/strings/names.txt:691
 #: data/mp/messages/strings/names.txt:695
 msgid "Cyborg Jump Pack"
-msgstr ""
+msgstr "Pack de Saut Cyborg"
 
 #: data/base/messages/strings/names.txt:697
 #: data/mp/messages/strings/names.txt:701
@@ -6969,12 +6974,12 @@ msgstr "Tour de Contrôle Aérien"
 #: data/base/messages/strings/names.txt:910
 #: data/mp/messages/strings/names.txt:918
 msgid "Improved Scrambler"
-msgstr ""
+msgstr "Brouilleur Amélioré"
 
 #: data/base/messages/strings/names.txt:911
 #: data/mp/messages/strings/names.txt:919
 msgid "Scrambler Turret Mk2"
-msgstr ""
+msgstr "Tourelle brouilleuse Mk2"
 
 #: data/base/messages/strings/names.txt:913
 #: data/mp/messages/strings/names.txt:921
@@ -8298,7 +8303,7 @@ msgstr "Toutes les unités de réparation mobiles améliorées automatiquement"
 #: data/base/messages/strings/resstrings.txt:511
 #: data/mp/messages/strings/resstrings.txt:539
 msgid "Scrambler Improved"
-msgstr ""
+msgstr "Brouilleur amélioré"
 
 #: data/base/messages/strings/resstrings.txt:512
 #: data/mp/messages/strings/resstrings.txt:540
@@ -8308,12 +8313,12 @@ msgstr "Amélioration dans la technologie du lien synaptique"
 #: data/base/messages/strings/resstrings.txt:513
 #: data/mp/messages/strings/resstrings.txt:541
 msgid "Increases scrambler rate"
-msgstr ""
+msgstr "Augmente le taux de brouillage"
 
 #: data/base/messages/strings/resstrings.txt:514
 #: data/mp/messages/strings/resstrings.txt:542
 msgid "All scramblers upgraded automatically"
-msgstr ""
+msgstr "Tous les brouilleurs sont améliorés automatiquement"
 
 #: data/base/messages/strings/resstrings.txt:952
 #: data/mp/messages/strings/resstrings.txt:995
@@ -9552,7 +9557,7 @@ msgstr "Langage du système"
 #: lib/framework/i18n.c:45
 #: lib/framework/i18n.c:96
 msgid "Czech"
-msgstr ""
+msgstr "Tchèque"
 
 #: lib/framework/i18n.c:46
 #: lib/framework/i18n.c:97
@@ -9572,25 +9577,22 @@ msgstr "Anglais"
 #: lib/framework/i18n.c:49
 #: lib/framework/i18n.c:100
 msgid "English (United Kingdom)"
-msgstr ""
+msgstr "Anglais (Royaume-Uni)"
 
 #: lib/framework/i18n.c:50
 #: lib/framework/i18n.c:101
-#, fuzzy
 msgid "Spanish"
-msgstr "Danois"
+msgstr "Espagnol"
 
 #: lib/framework/i18n.c:51
 #: lib/framework/i18n.c:102
-#, fuzzy
 msgid "Basque"
-msgstr "Base"
+msgstr "Basque"
 
 #: lib/framework/i18n.c:52
 #: lib/framework/i18n.c:103
-#, fuzzy
 msgid "Finnish"
-msgstr "Danois"
+msgstr "Finlandais"
 
 #: lib/framework/i18n.c:53
 #: lib/framework/i18n.c:104
@@ -9604,9 +9606,8 @@ msgstr ""
 
 #: lib/framework/i18n.c:62
 #: lib/framework/i18n.c:113
-#, fuzzy
 msgid "Irish"
-msgstr "Escarmouche"
+msgstr "Irlandais"
 
 #: lib/framework/i18n.c:63
 #: lib/framework/i18n.c:114
@@ -9616,7 +9617,7 @@ msgstr "Italien"
 #: lib/framework/i18n.c:64
 #: lib/framework/i18n.c:116
 msgid "Lithuanian"
-msgstr ""
+msgstr "Lituanien"
 
 #: lib/framework/i18n.c:65
 #: lib/framework/i18n.c:117
@@ -9642,15 +9643,13 @@ msgstr "Hollandais"
 
 #: lib/framework/i18n.c:69
 #: lib/framework/i18n.c:121
-#, fuzzy
 msgid "Polish"
-msgstr "Démolir"
+msgstr "Polonais"
 
 #: lib/framework/i18n.c:70
 #: lib/framework/i18n.c:122
-#, fuzzy
 msgid "Brazilian Portuguese"
-msgstr "Portugais"
+msgstr "Portugais Brésilien "
 
 #: lib/framework/i18n.c:71
 #: lib/framework/i18n.c:123
@@ -9660,7 +9659,7 @@ msgstr "Portugais"
 #: lib/framework/i18n.c:72
 #: lib/framework/i18n.c:124
 msgid "Romanian"
-msgstr ""
+msgstr "Roumain"
 
 #: lib/framework/i18n.c:73
 #: lib/framework/i18n.c:125
@@ -9670,14 +9669,13 @@ msgstr "Russe"
 #: lib/framework/i18n.c:74
 #: lib/framework/i18n.c:126
 msgid "Slovenian"
-msgstr ""
+msgstr "Slovénien"
 
 #: lib/framework/i18n.c:76
 #: lib/framework/i18n.c:78
 #: lib/framework/i18n.c:127
-#, fuzzy
 msgid "Swedish (Sweden)"
-msgstr "Suédois"
+msgstr "Suédois (Suède)"
 
 #: lib/framework/i18n.c:80
 #: lib/framework/i18n.c:128
@@ -9686,19 +9684,18 @@ msgstr "Suédois"
 
 #: lib/framework/i18n.c:81
 #: lib/framework/i18n.c:129
-#, fuzzy
 msgid "Turkish"
-msgstr "Chenilles"
+msgstr "Turque"
 
 #: lib/framework/i18n.c:82
 #: lib/framework/i18n.c:130
 msgid "Uzbek (Cyrillic)"
-msgstr ""
+msgstr "Uzbek (Cyrillique)"
 
 #: lib/framework/i18n.c:83
 #: lib/framework/i18n.c:131
 msgid "Simplified Chinese"
-msgstr ""
+msgstr "Chinois simplifié"
 
 #: lib/framework/i18n.c:115
 msgid "Latin"
@@ -9714,7 +9711,7 @@ msgstr "Choisir le répertoire pour les données"
 
 #: src/clparse.c:96
 msgid "data directory"
-msgstr ""
+msgstr "dossier de données"
 
 #: src/clparse.c:97
 msgid "Set configuration directory"
@@ -9722,7 +9719,7 @@ msgstr "Choisir le répertoire pour la configuration"
 
 #: src/clparse.c:97
 msgid "configuration directory"
-msgstr ""
+msgstr "dossier de configuration"
 
 #: src/clparse.c:98
 msgid "Show debug for given level"
@@ -9730,7 +9727,7 @@ msgstr "Voir l'affichage debug au niveau sélectionné"
 
 #: src/clparse.c:98
 msgid "debug level"
-msgstr ""
+msgstr "niveau de débogage"
 
 #: src/clparse.c:99
 msgid "Log debug output to file"
@@ -9738,11 +9735,12 @@ msgstr "Stocker la sortie debug vers le fichier donné"
 
 #: src/clparse.c:99
 msgid "file"
-msgstr ""
+msgstr "fichier"
 
 #: src/clparse.c:100
+#, fuzzy
 msgid "Flush all debug output written to stderr"
-msgstr ""
+msgstr "Nettoyer toutes les sorties du débogueur écrites dans stderr"
 
 #: src/clparse.c:101
 msgid "Play in fullscreen mode"
@@ -9754,7 +9752,7 @@ msgstr "Charger un jeu spécifique"
 
 #: src/clparse.c:102
 msgid "game-name"
-msgstr ""
+msgstr "nom du jeu"
 
 #: src/clparse.c:103
 msgid "Show this help message and exit"
@@ -9768,7 +9766,7 @@ msgstr "Active un mod global"
 #: src/clparse.c:105
 #: src/clparse.c:106
 msgid "mod"
-msgstr ""
+msgstr "mod"
 
 #: src/clparse.c:105
 msgid "Enable a campaign only mod"
@@ -9784,7 +9782,7 @@ msgstr "Charger une Sauvegarde"
 
 #: src/clparse.c:107
 msgid "savegame"
-msgstr ""
+msgstr "jeu sauvegardé"
 
 #: src/clparse.c:110
 msgid "Play in windowed mode"
@@ -9819,16 +9817,17 @@ msgid "Disable sound"
 msgstr "Désactiver le son"
 
 #: src/clparse.c:117
+#, fuzzy
 msgid "Activate self-test"
-msgstr ""
+msgstr "Activé l'auto-test"
 
 #: src/clparse.c:118
 msgid "connect directly to IP/hostname"
-msgstr ""
+msgstr "se connecter directement à une/un IP/nom de domaine"
 
 #: src/clparse.c:119
 msgid "go directly to host screen"
-msgstr ""
+msgstr "aller directement à l'écran de l'hôte"
 
 #: src/configuration.c:403
 #: src/configuration.c:404
@@ -9928,7 +9927,7 @@ msgstr ""
 #: src/design.c:1690
 #: src/design.c:1707
 msgid "Build Points"
-msgstr ""
+msgstr "Points de bâtiment"
 
 #: src/design.c:1734
 #: src/design.c:1766
@@ -10102,7 +10101,6 @@ msgstr "TUTORIAUX"
 #: src/frontend.c:843
 #: src/frontend.c:946
 #: src/frontend.c:1109
-#, fuzzy
 msgctxt "menu"
 msgid "Return"
 msgstr "Menu précédent"
@@ -10158,9 +10156,8 @@ msgid "Graphics Options"
 msgstr "Options Graphiques"
 
 #: src/frontend.c:533
-#, fuzzy
 msgid "Video Options"
-msgstr "Options Audio"
+msgstr "Options Vidéos"
 
 #: src/frontend.c:534
 msgid "Audio Options"
@@ -10355,7 +10352,7 @@ msgstr "PARTIE SAUVEGARDÉE!"
 
 #: src/hci.c:2113
 msgid "Failed to create building"
-msgstr ""
+msgstr "Échec de la création du bâtiment"
 
 #: src/hci.c:2136
 #, c-format
@@ -10403,23 +10400,20 @@ msgid "Power"
 msgstr "Énergie"
 
 #: src/hci.c:4099
-#, fuzzy
 msgid "Tile"
-msgstr "Trois-Roues"
+msgstr "Tuile"
 
 #: src/hci.c:4100
-#, fuzzy
 msgid "Place tiles on map"
-msgstr "Placer des Bâtiments sur la carte"
+msgstr "Placer des tuiles sur la carte"
 
 #: src/hci.c:4109
 msgid "Unit"
 msgstr "Unité"
 
 #: src/hci.c:4110
-#, fuzzy
 msgid "Place Unit on map"
-msgstr "Placer des Bâtiments sur la carte"
+msgstr "Placer des Unités sur la carte"
 
 #: src/hci.c:4118
 msgid "Struct"
@@ -10439,13 +10433,13 @@ msgid "Place Features on map"
 msgstr "Placer des Bâtiments sur la carte"
 
 #: src/hci.c:4139
-#, fuzzy
 msgid "Pause or unpause the game"
-msgstr "L'hôte à quitté la partie!"
+msgstr "Mettre en pause ou enlever la pause"
 
 #: src/hci.c:4153
+#, fuzzy
 msgid "Align height of all map objects"
-msgstr ""
+msgstr "Aligner la hauteur de tous les objets de la carte"
 
 #: src/hci.c:4178
 #: src/ingameop.c:121
@@ -10511,7 +10505,7 @@ msgstr "PAUSE"
 
 #: src/intelmap.c:403
 msgid "Research Update"
-msgstr ""
+msgstr "Mise a jour de Recherche"
 
 #: src/intelmap.c:407
 msgid "Project Goals"
@@ -10623,9 +10617,8 @@ msgid "Assign VTOL Factory Production"
 msgstr "Lui assigner la production d'une usine à VTOLs"
 
 #: src/intorder.c:201
-#, fuzzy
 msgid "Circle"
-msgstr "Trois-Roues"
+msgstr "Cercle"
 
 #: src/keybind.c:130
 msgid "Sorry, that cheat is disabled in multiplayer games."
@@ -10669,11 +10662,11 @@ msgstr "À Deux, c'est Mieux!"
 
 #: src/keybind.c:385
 msgid "FPS display is enabled."
-msgstr ""
+msgstr "Affichage des FPS activé"
 
 #: src/keybind.c:389
 msgid "FPS display is disabled."
-msgstr ""
+msgstr "Affichage des FPS désactivé"
 
 #: src/keybind.c:402
 #, c-format
@@ -10991,11 +10984,11 @@ msgstr "Options Multijoueurs"
 
 #: src/keymap.c:348
 msgid "Start Multiplayer Audio"
-msgstr ""
+msgstr "Démarrer le son multi-joueurs"
 
 #: src/keymap.c:349
 msgid "Stop Multiplayer Audio"
-msgstr ""
+msgstr "Arrêter le son multi-joueurs"
 
 #: src/keymap.c:352
 msgid "Snap View to North"
@@ -11003,7 +10996,7 @@ msgstr "Bloquer la vue vers le Nord"
 
 #: src/keymap.c:353
 msgid "Toggle Tracking Camera"
-msgstr ""
+msgstr "Basculer la Caméra Traqueuse"
 
 #: src/keymap.c:354
 msgid "Display In-Game Options"
@@ -11308,7 +11301,7 @@ msgstr "Jeu"
 
 #: src/multiint.c:696
 msgid "Mayhem"
-msgstr ""
+msgstr "Pagaille"
 
 #: src/multiint.c:698
 msgid "Skirmish"
@@ -11370,11 +11363,11 @@ msgstr "Commencer avec une Base Avancée"
 
 #: src/multiint.c:831
 msgid "Map Preview"
-msgstr ""
+msgstr "Pré-visualisation de la carte"
 
 #: src/multiint.c:833
 msgid "Click to see Map"
-msgstr ""
+msgstr "Cliquez pour voir la carte"
 
 #: src/multiint.c:847
 msgid "Start Hosting Game"
@@ -11386,15 +11379,15 @@ msgstr "Fixer des limites de Construction"
 
 #: src/multiint.c:1207
 msgid "Team"
-msgstr ""
+msgstr "Équipe"
 
 #: src/multiint.c:1251
 msgid "Waiting for other players"
-msgstr ""
+msgstr "En attente d'autres joueurs"
 
 #: src/multiint.c:1257
 msgid "Click when ready"
-msgstr ""
+msgstr "Cliquez une fois prêt"
 
 #: src/multiint.c:1299
 msgid "PLAYERS"
@@ -11425,7 +11418,7 @@ msgstr "Joueurs"
 #: src/multijoin.c:98
 #: src/multijoin.c:99
 msgid "Players Still Joining"
-msgstr ""
+msgstr "Des joueurs sont entrain de rejoindre la partie"
 
 #: src/multijoin.c:220
 #, c-format
@@ -11547,8 +11540,9 @@ msgid "Research Completed"
 msgstr "Recherche Terminée"
 
 #: src/research.c:2653
+#, fuzzy
 msgid "Research Award"
-msgstr ""
+msgstr "Résultat de Recherche"
 
 #: src/scores.c:99
 #, c-format
@@ -11665,22 +11659,21 @@ msgstr "Temps de Jeu Total - %s"
 
 #: src/scriptfuncs.c:3216
 msgid "YOU ARE VICTORIOUS!"
-msgstr ""
+msgstr "VOUS ÊTES VICTORIEUX !"
 
 #: src/scriptfuncs.c:3220
-#, fuzzy
 msgid "YOU WERE DEFEATED!"
-msgstr "NOUS AVONS VAINCU LE NEXUS!"
+msgstr "VOUS AVEZ PERDU !"
 
 #: src/scriptfuncs.c:10144
 #, c-format
 msgid "Beacon received from %s!"
-msgstr ""
+msgstr "Balise reçue de %s!"
 
 #: src/scriptfuncs.c:10190
 #, c-format
 msgid "Beacon %d"
-msgstr ""
+msgstr "Balise %d"
 
 #: src/selection.c:117
 #, c-format
@@ -11732,7 +11725,7 @@ msgstr "%s - Endommagé à %3.0f%%"
 #: src/structure.c:6129
 #, c-format
 msgid "%s - Electronically Damaged"
-msgstr ""
+msgstr "%s - Électriquement endomagé"
 
 #: src/structure.c:6364
 msgid "Electronic Reward - Visibility Report"
@@ -11773,19 +11766,19 @@ msgstr "Les renforts sont arrivés !"
 
 #: src/version.c:137
 msgid " (modified and switched locally)"
-msgstr ""
+msgstr "(modifié et changé localement)"
 
 #: src/version.c:139
 msgid " (modified locally)"
-msgstr ""
+msgstr "(modifié localement)"
 
 #: src/version.c:141
 msgid " (switched locally)"
-msgstr ""
+msgstr "(changé localement)"
 
 #: src/version.c:148
 msgid " - DEBUG"
-msgstr ""
+msgstr " - DEBUG"
 
 #: src/version.c:157
 #, c-format
