@@ -668,7 +668,7 @@ void widgetRemoveChildImpl(widget *self, widget *child)
 }
 
 int widgetAddEventHandlerImpl(widget *self, eventType type, callback handler,
-                              void *userData)
+                              callback destructor, void *userData)
 {
 	eventTableEntry *entry = malloc(sizeof(eventTableEntry));
 	eventTableEntry *lastEntry = vectorHead(self->eventVtbl);
@@ -677,10 +677,11 @@ int widgetAddEventHandlerImpl(widget *self, eventType type, callback handler,
 	assert(type != EVT_TIMER_SINGLE_SHOT && type != EVT_TIMER_PERSISTENT);
 	
 	// Assign the handler an id which is one higher than the current highest
-	entry->id       = (lastEntry) ? lastEntry->id + 1 : 1;
-	entry->type     = type;
-	entry->callback = handler;
-	entry->userData = userData;
+	entry->id           = (lastEntry) ? lastEntry->id + 1 : 1;
+	entry->type         = type;
+	entry->callback     = handler;
+	entry->destructor   = destructor;
+	entry->userData     = userData;
 	
 	entry->lastCalled   = 0;    // We have never been called
 	entry->interval     = -1;   // We are not a timer event
@@ -693,7 +694,8 @@ int widgetAddEventHandlerImpl(widget *self, eventType type, callback handler,
 }
 
 int widgetAddTimerEventHandlerImpl(widget *self, eventType type, int interval,
-                                   callback handler, void *userData)
+                                   callback handler, callback destructor,
+                                   void *userData)
 {
 	eventTableEntry *entry = malloc(sizeof(eventTableEntry));
 	eventTableEntry *lastEntry = vectorHead(self->eventVtbl);
@@ -701,10 +703,11 @@ int widgetAddTimerEventHandlerImpl(widget *self, eventType type, int interval,
 	// We should only be used to add timer events
 	assert(type == EVT_TIMER_SINGLE_SHOT || type == EVT_TIMER_PERSISTENT);
 	
-	entry->id       = (lastEntry) ? lastEntry->id + 1 : 1;
-	entry->type     = type;
-	entry->callback = handler;
-	entry->userData = userData;
+	entry->id           = (lastEntry) ? lastEntry->id + 1 : 1;
+	entry->type         = type;
+	entry->callback     = handler;
+	entry->destructor   = destructor;
+	entry->userData     = userData;
 	
 	entry->lastCalled   = 0;
 	entry->interval     = interval;
@@ -728,12 +731,16 @@ void widgetRemoveEventHandlerImpl(widget *self, int id)
 		// If the handler matches, remove it
 		if (handler->id == id)
 		{
-			// Generate an EVT_DESTRUCT event to allow the handler to clean-up
-			eventMisc evtDestruct;
-			evtDestruct.event.type = EVT_DESTRUCT;
-			
-			handler->callback(self, (event *) &evtDestruct, handler->id,
-			                  handler->userData);
+			// If there is a destructor; call it
+			if (handler->destructor)
+			{
+				// Generate an EVT_DESTRUCT event
+				eventMisc evtDestruct;
+				evtDestruct.event.type = EVT_DESTRUCT;
+				
+				handler->destructor(self, (event *) &evtDestruct, -1,
+								   handler->userData);
+			}
 			
 			// Release the handler
 			free(handler);
@@ -813,6 +820,7 @@ int widgetAddAnimation(widget *self, int nframes,
 	
 	// Install the animation timer event handler
 	return widgetAddTimerEventHandler(self, EVT_TIMER_PERSISTENT, 10,
+	                                  widgetAnimationTimerCallback,
 	                                  widgetAnimationTimerCallback, ourFrames);
 }
 
@@ -1493,17 +1501,20 @@ void widgetRemoveChild(widget *self, widget *child)
 	WIDGET_GET_VTBL(self)->removeChild(self, child);
 }
 
-int widgetAddEventHandler(widget *self, eventType type,
-                          callback handler, void *userData)
+int widgetAddEventHandler(widget *self, eventType type, callback handler,
+                          callback destructor, void *userData)
 {
-	return WIDGET_GET_VTBL(self)->addEventHandler(self, type, handler, userData);
+	return WIDGET_GET_VTBL(self)->addEventHandler(self, type, handler,
+	                                              destructor, userData);
 }
 
 int widgetAddTimerEventHandler(widget *self, eventType type, int interval,
-                               callback handler, void *userData)
+                               callback handler, callback destructor,
+                               void *userData)
 {
 	return WIDGET_GET_VTBL(self)->addTimerEventHandler(self, type, interval,
-	                                                   handler, userData);
+	                                                   handler, destructor,
+	                                                   userData);
 }
 
 void widgetRemoveEventHandler(widget *self, int id)

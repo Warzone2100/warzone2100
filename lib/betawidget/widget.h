@@ -67,12 +67,6 @@ typedef struct _eventMisc       eventMisc;
  * @param evt   A pointer to the event structure. Depending on the value of
  *              evt->type it may be necessary to cast this to derived event
  *              structure (e.g., evtMouse or evtMisc).
- *
- *              All callback functions must be able to handle EVT_DESTRUCT
- *              events, which are generated when either self is destroyed or the
- *              event handler removed (widgetRemoveEventHandler). This allows
- *              for the callback to free any memory which it has allocated/is
- *              responsible for (e.g. userData).
  * @param handlerId The (unique) id of this event handler. This can be used to:
  *                   - Remove the event handler from the widgets event table;
  *                     which can be done by calling widgetRemoveEventHandler. It
@@ -270,6 +264,9 @@ struct _eventTableEntry
 
 	/// The method to call
 	callback callback;
+	
+	/// The method to call when removing the event handler
+	callback destructor;
 
 	/// Pointer to user supplied data to pass to callback
 	void *userData;
@@ -334,9 +331,12 @@ struct _widgetVtbl
 	bool    (*fireTimerCallbacks)           (widget *self, const event *evt);
 
 	int     (*addEventHandler)              (widget *self, eventType type,
-	                                         callback handler, void *userData);
+	                                         callback handler,
+	                                         callback destructor,
+	                                         void *userData);
 	int     (*addTimerEventHandler)         (widget *self, eventType type,
 	                                         int interval, callback handler,
+	                                         callback destructor,
 	                                         void *userData);
 	void    (*removeEventHandler)           (widget *self, int id);
 
@@ -537,9 +537,11 @@ void widgetRemoveChildImpl(widget *self, widget *child);
 bool widgetFireCallbacksImpl(widget *self, const event *evt);
 bool widgetFireTimerCallbacksImpl(widget *self, const event *evt);
 int widgetAddEventHandlerImpl(widget *self, eventType type,
-                              callback handler, void *userData);
+                              callback handler, callback destructor,
+                              void *userData);
 int widgetAddTimerEventHandlerImpl(widget *self, eventType type, int interval,
-                                   callback handler, void *userData);
+                                   callback handler, callback destructor,
+                                   void *userData);
 void widgetRemoveEventHandlerImpl(widget *self, int id);
 point widgetAnimationInterpolateTranslateImpl(widget *self, animationFrame k1,
                                               animationFrame k2, int time);
@@ -698,11 +700,12 @@ void widgetRemoveChild(widget *self, widget *child);
  * @param self          The widget to add the event handler to.
  * @param type          The type of event that handler should respond to.
  * @param handler       The function to call when the event type fires.
+ * @param destructor    The function to call when the event handler is removed.
  * @param userData      User specified data pointer to pass to handler.
  * @return The id of the newly added event.
  */
-int widgetAddEventHandler(widget *self, eventType type,
-                          callback handler, void *userData);
+int widgetAddEventHandler(widget *self, eventType type, callback handler,
+                          callback destructor, void *userData);
 
 /**
  * Similar to widgetAddEventHandler in many respects, except that it is designed
@@ -712,11 +715,13 @@ int widgetAddEventHandler(widget *self, eventType type,
  * @param type          The type of the timer to register the handler for.
  * @param interval      The duration in ms to wait.
  * @param handler       The function to call when the event fires.
+ * @param destructor    The function to call when the event handler is removed.
  * @param userData      User specified data pointer to pass to handler.
  * @return The id of the newly added event.
  */
 int widgetAddTimerEventHandler(widget *self, eventType type, int interval,
-                               callback handler, void *userData);
+                               callback handler, callback destructor,
+                               void *userData);
 
 /**
  * Removes the event from the events table at offset id.
