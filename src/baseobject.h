@@ -24,12 +24,14 @@
 #ifndef __INCLUDED_BASEOBJECT_H__
 #define __INCLUDED_BASEOBJECT_H__
 
+static const unsigned int max_check_object_recursion = 4;
+
 // Forward declaration to allow pointers to this type
 struct BASE_OBJECT;
 
-void checkObject(const struct BASE_OBJECT* psObject, const char * const location_description, const char * function);
+void checkObject(const struct BASE_OBJECT* psObject, const char * const location_description, const char * function, const int recurse);
 
 /* assert if object is bad */
-#define CHECK_OBJECT(object) checkObject((object), AT_MACRO, __FUNCTION__)
+#define CHECK_OBJECT(object) checkObject((object), AT_MACRO, __FUNCTION__, max_check_object_recursion)
 
 #endif // __INCLUDED_BASEOBJECT_H__

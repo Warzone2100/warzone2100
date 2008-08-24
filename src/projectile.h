@@ -97,9 +97,9 @@ static inline void setProjectileDamaged(PROJECTILE *psProj, BASE_OBJECT *psObj)
 
 /* @} */
 
-void checkProjectile(const PROJECTILE* psProjectile, const char * const location_description, const char * function);
+void checkProjectile(const PROJECTILE* psProjectile, const char * const location_description, const char * function, const int recurse);
 
 /* assert if projectile is bad */
-#define CHECK_PROJECTILE(object) checkProjectile((object), AT_MACRO, __FUNCTION__)
+#define CHECK_PROJECTILE(object) checkProjectile((object), AT_MACRO, __FUNCTION__, max_check_object_recursion)
 
 #endif // __INCLUDED_SRC_PROJECTILE_H__

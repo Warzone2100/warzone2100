@@ -2249,8 +2249,11 @@ static UDWORD	establishTargetHeight(BASE_OBJECT *psTarget)
 	}
 }
 
-void checkProjectile(const PROJECTILE* psProjectile, const char * const location_description, const char * function)
+void checkProjectile(const PROJECTILE* psProjectile, const char * const location_description, const char * function, const int recurse)
 {
+	if (recurse < 0)
+		return;
+
 	ASSERT_HELPER(psProjectile != NULL, location_description, function, "CHECK_PROJECTILE: NULL pointer");
 	ASSERT_HELPER(psProjectile->psWStats != NULL, location_description, function, "CHECK_PROJECTILE");
 	ASSERT_HELPER(psProjectile->type == OBJ_PROJECTILE, location_description, function, "CHECK_PROJECTILE");
@@ -2261,11 +2264,11 @@ void checkProjectile(const PROJECTILE* psProjectile, const char * const location
 	ASSERT_HELPER(psProjectile->direction <= 360.0f && psProjectile->direction >= 0.0f, location_description, function, "CHECK_PROJECTILE: out of range direction (%f)", psProjectile->direction);
 
 	if (psProjectile->psDest)
-		checkObject(psProjectile->psDest, location_description, function);
+		checkObject(psProjectile->psDest, location_description, function, recurse - 1);
 
 	if (psProjectile->psSource)
-		checkObject(psProjectile->psSource, location_description, function);
+		checkObject(psProjectile->psSource, location_description, function, recurse - 1);
 
 	if (psProjectile->psDamaged)
-		checkObject(psProjectile->psDamaged, location_description, function);
+		checkObject(psProjectile->psDamaged, location_description, function, recurse - 1);
 }

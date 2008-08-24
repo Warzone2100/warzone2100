@@ -7953,9 +7953,12 @@ BOOL structureCheckReferences(STRUCTURE *psVictimStruct)
 	return true;
 }
 
-void checkStructure(const STRUCTURE* psStructure, const char * const location_description, const char * function)
+void checkStructure(const STRUCTURE* psStructure, const char * const location_description, const char * function, const int recurse)
 {
 	unsigned int i;
+
+	if (recurse < 0)
+		return;
 
 	ASSERT(psStructure != NULL, location_description, function, "CHECK_STRUCTURE: NULL pointer");
 	ASSERT(psStructure->type == OBJ_STRUCTURE, location_description, function, "CHECK_STRUCTURE: No structure (type num %u)", function, (unsigned int)psStructure->type);
@@ -7968,7 +7971,7 @@ void checkStructure(const STRUCTURE* psStructure, const char * const location_de
 		ASSERT(psStructure->turretRotation[i] <= 360, location_description, function, "CHECK_STRUCTURE: Out of range turret rotation (turret %u; rotation: %u)", i, (unsigned int)psStructure->turretRotation[i]);
 		if (psStructure->psTarget[i])
 		{
-			checkObject(psStructure->psTarget[i], location_description, function);
+			checkObject(psStructure->psTarget[i], location_description, function, recurse - 1);
 		}
 	}
 }

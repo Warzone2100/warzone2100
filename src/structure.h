@@ -441,9 +441,9 @@ static inline void _setStructureTarget(STRUCTURE *psBuilding, BASE_OBJECT *psNew
 #endif
 }
 
-void checkStructure(const STRUCTURE* psStructure, const char * const location_description, const char * function);
+void checkStructure(const STRUCTURE* psStructure, const char * const location_description, const char * function, const int recurse);
 
-#define CHECK_STRUCTURE(object) checkStructure((object), AT_MACRO, __FUNCTION__)
+#define CHECK_STRUCTURE(object) checkStructure((object), AT_MACRO, __FUNCTION__, max_check_object_recursion)
 
 extern void     structureInitVars(void);
 

@@ -75,7 +75,14 @@ static void dumpEOL(const DumpFileHandle file)
 
 static void debug_exceptionhandler_data(void **, const char * const str)
 {
-	ASSERT(str != NULL, "Empty string sent to debug callback");
+	/* Can't use ASSERT here as that will cause us to be invoked again.
+	 * Possibly resulting in infinite recursion.
+	 */
+	assert(str != NULL && "Empty string sent to debug callback");
+
+	// For non-debug builds
+	if (str == NULL)
+		return;
 
 	// Push this message on the message list
 	const char * last = &str[strlen(str)];

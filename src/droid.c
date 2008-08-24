@@ -5171,9 +5171,12 @@ void droidSetPosition(DROID *psDroid, int x, int y)
 }
 
 /** Check validity of a droid. Crash hard if it fails. */
-void checkDroid(const DROID *droid, const char * const location_description, const char * function)
+void checkDroid(const DROID *droid, const char * const location_description, const char * function, const int recurse)
 {
 	int i;
+
+	if (recurse < 0)
+		return;
 
 	ASSERT_HELPER(droid != NULL, location_description, function, "CHECK_DROID: NULL pointer");
 	ASSERT_HELPER(droid->type == OBJ_DROID, location_description, function, "CHECK_DROID: Not droid (type %d)", (int)droid->type);

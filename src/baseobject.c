@@ -26,22 +26,25 @@
 #include "projectile.h"
 #include "structure.h"
 
-void checkObject(const struct BASE_OBJECT* psObject, const char * const location_description, const char * function)
+void checkObject(const struct BASE_OBJECT* psObject, const char * const location_description, const char * function, const int recurse)
 {
+	if (recurse < 0)
+		return;
+
 	ASSERT(psObject != NULL, "NULL pointer");
 
 	switch (psObject->type)
 	{
 		case OBJ_DROID:
-			checkDroid((const DROID *)psObject, location_description, function);
+			checkDroid((const DROID *)psObject, location_description, function, recurse - 1);
 			break;
 
 		case OBJ_STRUCTURE:
-			checkStructure((const STRUCTURE *)psObject, location_description, function);
+			checkStructure((const STRUCTURE *)psObject, location_description, function, recurse - 1);
 			break;
 
 		case OBJ_PROJECTILE:
-			checkProjectile((const PROJECTILE *)psObject, location_description, function);
+			checkProjectile((const PROJECTILE *)psObject, location_description, function, recurse - 1);
 			break;
 
 		case OBJ_FEATURE:
