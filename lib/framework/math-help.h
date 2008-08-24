@@ -71,32 +71,35 @@ static inline WZ_DECL_CONST float rad2degf(float x)
 	return x / (float)M_PI * 180.0f;
 }
 
+
 /*!
- * Moves x into the range 0 - y
+ * Moves x into the range 0 - max
  * \param x Value to clip
- * \param y Upper range
- * \return Value in the range 0 - y
+ * \param max Upper range
+ * \return Value in the range 0 - max
  */
-static inline WZ_DECL_CONST WZ_DECL_WARN_UNUSED_RESULT int wrap(int x, int y)
+static inline WZ_DECL_CONST int wrap(int x, int max)
 {
-	while(x < 0) x += y;
-	while(x >= y) x -= y;
+	while(x < 0) x += max;
+	while(x >= max) x -= max;
 	return x;
 }
 
 
 /*!
- * Moves x into the range 0.0f - y
+ * Moves x into the range 0.0f - max
  * \param x Value to clip
- * \param y Upper range
- * \return Value in the range 0.0f - y
+ * \param max Upper range
+ * \return Value in the range 0.0f - max
  */
-static inline WZ_DECL_CONST WZ_DECL_WARN_UNUSED_RESULT float wrapf(float x, float y)
+static inline WZ_DECL_CONST float wrapf(float x, float max)
 {
-	while(x < 0.0f) x += y;
-	while(x >= y) x -= y;
+	while(x < 0.0f) x += max;
+	while(x >= max) x -= max;
 	return x;
 }
+
+
 /*!
  * Clips x to boundaries
  * \param x Value to clip
@@ -109,4 +112,19 @@ static inline WZ_DECL_CONST int clip(int x, int min, int max)
 	if (x > max) return max;
 	return x;
 }
+
+
+/*!
+ * Clips x to boundaries
+ * \param x Value to clip
+ * \param min Lower bound
+ * \param max Upper bound
+ */
+static inline WZ_DECL_CONST float clipf(float x, float min, float max)
+{
+	if (x < min) return min;
+	if (x > max) return max;
+	return x;
+}
+
 #endif // __INCLUDED_LIB_FRAMEWORK_MATH_HELP_H__
