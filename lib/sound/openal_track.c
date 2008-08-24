@@ -578,7 +578,7 @@ BOOL sound_Play2DSample( TRACK *psTrack, AUDIO_SAMPLE *psSample, BOOL bQueued )
 #ifndef WZ_NOSOUND
 	ALfloat zero[3] = { 0.0, 0.0, 0.0 };
 	ALfloat volume;
-	ALint error = 0;
+	ALint error;
 
 	if (sfx_volume == 0.0)
 	{
@@ -587,16 +587,20 @@ BOOL sound_Play2DSample( TRACK *psTrack, AUDIO_SAMPLE *psSample, BOOL bQueued )
 	volume = ((float)psTrack->iVol / 100.0f);       // each object can have OWN volume!
 	psSample->fVol = volume;                        // save computed volume
 	volume *= sfx_volume;                           // and now take into account the Users sound Prefs.
-	sound_GetError();								//clear error codes
-	// Retrieve an OpenAL sound source  *IF AVAILABLE!*
+
+	// Clear error codes
+	alGetError();
+
 	alGenSources( 1, &(psSample->iSample) );
+
 	error = sound_GetError();
 	if (error != AL_NO_ERROR)
-	{	// FIX ME:  NOTE:
-		// we run out of buffers very quickly, and currently, we do not handle this event.
-		// we do NOT return false here, since this can have unpleasant side effects.
-		// Just be aware this is currently happening *very* much.
-		debug(LOG_NEVER, "alGenSources has failed--most likely out of buffers. error code %x", error );
+	{
+		/* FIXME: We run out of OpenAL sources very quickly, so we
+		 * should handle the case where we've ran out of them.
+		 * Currently we don't do this, causing some unpleasant side
+		 * effects, e.g. crashing...
+		 */
 	}
 
 	alSourcef( psSample->iSample, AL_PITCH, 1.0f );
@@ -606,9 +610,13 @@ BOOL sound_Play2DSample( TRACK *psTrack, AUDIO_SAMPLE *psSample, BOOL bQueued )
 	alSourcei( psSample->iSample, AL_BUFFER, psTrack->iBufferName );
 	alSourcei( psSample->iSample, AL_SOURCE_RELATIVE, AL_TRUE );
 	alSourcei( psSample->iSample, AL_LOOPING, (sound_SetupChannel(psSample)) ? AL_TRUE : AL_FALSE );
-	sound_GetError();
+
+	// Clear error codes
+	alGetError();
+
 	alSourcePlay( psSample->iSample );
 	sound_GetError();
+
 	if ( bQueued )
 	{
 		current_queue_sample = psSample->iSample;
@@ -631,7 +639,7 @@ BOOL sound_Play3DSample( TRACK *psTrack, AUDIO_SAMPLE *psSample )
 #ifndef WZ_NOSOUND
 	ALfloat zero[3] = { 0.0, 0.0, 0.0 };
 	ALfloat volume;
-	ALint error = 0;
+	ALint error;
 
 	if (sfx3d_volume == 0.0)
 	{
@@ -640,16 +648,20 @@ BOOL sound_Play3DSample( TRACK *psTrack, AUDIO_SAMPLE *psSample )
 
 	volume = ((float)psTrack->iVol / 100.f);        // max range is 0-100
 	psSample->fVol = volume;                        // store results for later
-	sound_GetError();								// clear error codes
-	// Retrieve an OpenAL sound source  *IF AVAILABLE!*
+
+	// Clear error codes
+	alGetError();
+
 	alGenSources( 1, &(psSample->iSample) );
+
 	error = sound_GetError();
 	if (error != AL_NO_ERROR)
-	{	// FIX ME:  NOTE:
-		// we run out of buffers very quickly, and currently, we do not handle this event.
-		// we do NOT return false here, since this can have unpleasant side effects.
-		// Just be aware this is currently happening *very* much.
-		debug(LOG_NEVER, "alGenSources has failed--most likely out of buffers.  error code %x", error );
+	{
+		/* FIXME: We run out of OpenAL sources very quickly, so we
+		 * should handle the case where we've ran out of them.
+		 * Currently we don't do this, causing some unpleasant side
+		 * effects, e.g. crashing...
+		 */
 	}
 
 	// HACK: this is a workaround for a bug in the 64bit implementation of OpenAL on GNU/Linux
@@ -660,7 +672,10 @@ BOOL sound_Play3DSample( TRACK *psTrack, AUDIO_SAMPLE *psSample )
 	alSourcefv( psSample->iSample, AL_VELOCITY, zero );
 	alSourcei( psSample->iSample, AL_BUFFER, psTrack->iBufferName );
 	alSourcei( psSample->iSample, AL_LOOPING, (sound_SetupChannel(psSample)) ? AL_TRUE : AL_FALSE );
-	sound_GetError();
+
+	// Clear error codes
+	alGetError();
+
 	alSourcePlay( psSample->iSample );
 	sound_GetError();
 #endif
@@ -703,7 +718,7 @@ AUDIO_STREAM* sound_PlayStreamWithBuf(PHYSFS_file* fileHandle, float volume, voi
 {
 	AUDIO_STREAM* stream;
 	ALuint*       buffers = alloca(sizeof(ALuint) * buffer_count);
-	ALint error = 0;
+	ALint error;
 	unsigned int i;
 
 	if ( !openal_initialized )
@@ -720,17 +735,18 @@ AUDIO_STREAM* sound_PlayStreamWithBuf(PHYSFS_file* fileHandle, float volume, voi
 		return NULL;
 	}
 
-	sound_GetError();					//clear the error codes
-	// Retrieve an OpenAL sound source  *IF AVAILABLE!*
+	// Clear error codes
+	alGetError();
+
+	// Retrieve an OpenAL sound source
 	alGenSources(1, &(stream->source));
+
 	error = sound_GetError();
 	if (error != AL_NO_ERROR)
 	{
-		// FIX ME:
-		// we run out of buffers very quickly, and the pointer would be wrong (uninitialized data),
-		// this would cause openAL errors, and corrupt the stack later on in sound_DestroyStream()
-		debug(LOG_NEVER, "alGenSources has failed--most likely out of buffers.  error code %x", error );
-		free (stream);
+		// Failed to create OpenAL sound source, so bail out...
+		debug(LOG_SOUND, "alGenSources failed, most likely out of sound sources");
+		free(stream);
 		return NULL;
 	}
 
@@ -989,26 +1005,31 @@ static bool sound_UpdateStream(AUDIO_STREAM* stream)
  */
 static void sound_DestroyStream(AUDIO_STREAM* stream)
 {
-	ALint buffer_count = 0;
-	ALuint* buffers = NULL;
-	ALint error = 0;
+	ALint buffer_count;
+	ALuint* buffers;
+	ALint error;
 
 	// Stop the OpenAL source from playing
 	alSourceStop(stream->source);
 	error = sound_GetError();
 
-	if( error != AL_NO_ERROR)
+	if (error != AL_NO_ERROR)
 	{
-		// FIX ME:  If error has occured, we should bail out should we not?
+		// FIXME: We should really handle these errors.
 	}
 
 	// Retrieve the amount of buffers which were processed
 	alGetSourcei(stream->source, AL_BUFFERS_PROCESSED, &buffer_count);
 	error = sound_GetError();
-	if( error != AL_NO_ERROR)
+	if (error != AL_NO_ERROR)
 	{
-		// FIX ME:  If error has occured, we *really* should bail out should we not,
-		// since buffer_count can be a invalid value for alloca?
+		/* FIXME: We're leaking memory and resources here when bailing
+		 * out. But not doing so could cause stack overflows as a
+		 * result of the below alloca() call (due to buffer_count not
+		 * being properly initialised.
+		 */
+		debug(LOG_SOUND, "alGetSourcei(AL_BUFFERS_PROCESSED) failed; bailing out...");
+		return;
 	}
 
 	// Detach all buffers and retrieve their ID numbers
