@@ -9,6 +9,7 @@ SRC=ai.c \
 	action.c \
 	advvis.c \
 	atmos.c \
+	baseobject.c \
 	bridge.c \
 	cheat.c \
 	cluster.c \

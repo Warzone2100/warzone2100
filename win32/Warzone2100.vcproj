@@ -257,6 +257,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\src\baseobject.c"
+					>
+				</File>
+				<File
 					RelativePath="..\src\bridge.c"
 					>
 				</File>
@@ -705,6 +709,10 @@
 			</File>
 			<File
 				RelativePath="..\src\basedef.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\baseobject.h"
 				>
 			</File>
 			<File

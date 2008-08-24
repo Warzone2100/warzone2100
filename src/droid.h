@@ -535,10 +535,10 @@ static inline void setSaveDroidBase(DROID *psSaveDroid, STRUCTURE *psNewBase)
 #endif
 }
 
-void checkDroid(const DROID *droid, const int line, const char *file);
+void checkDroid(const DROID *droid, const char * const location_description, const char * function);
 
 /* assert if droid is bad */
-#define CHECK_DROID(droid) checkDroid(droid, __LINE__, __FILE__)
+#define CHECK_DROID(droid) checkDroid(droid, AT_MACRO, __FUNCTION__)
 
 // Minimum damage a weapon will deal to its target
 #define	MIN_WEAPON_DAMAGE	1

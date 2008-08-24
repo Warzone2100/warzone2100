@@ -5171,24 +5171,25 @@ void droidSetPosition(DROID *psDroid, int x, int y)
 }
 
 /** Check validity of a droid. Crash hard if it fails. */
-void checkDroid(const DROID *droid, const int line, const char *file)
+void checkDroid(const DROID *droid, const char * const location_description, const char * function)
 {
 	int i;
 
-	ASSERT(droid != NULL, "NULL droid pointer coming from %s line %d", file, line);
-	ASSERT(droid != NULL && droid->type == OBJ_DROID, "Not droid (type %d) coming from %s line %d", (int)droid->type, file, line);
-	ASSERT(droid->direction <= 360.0f && droid->direction >= 0.0f, "Bad droid direction %f coming from %s line %d", droid->direction, file, line);
-	ASSERT(droid->numWeaps <= DROID_MAXWEAPS, "Bad number of droid weapons %d coming from %s line %d", (int)droid->numWeaps, file, line);
-	ASSERT(droid->listSize <= ORDER_LIST_MAX, "Bad number of droid orders %d coming from %s line %d", (int)droid->listSize, file, line);
-	ASSERT(droid->player < MAX_PLAYERS, "Bad droid owner %d coming from %s line %d", (int)droid->player, file, line);
-	ASSERT(droidOnMap(droid), "Droid off map coming from %s line %d", file, line);
+	ASSERT_HELPER(droid != NULL, location_description, function, "CHECK_DROID: NULL pointer");
+	ASSERT_HELPER(droid->type == OBJ_DROID, location_description, function, "CHECK_DROID: Not droid (type %d)", (int)droid->type);
+	ASSERT_HELPER(droid->direction <= 360.0f && droid->direction >= 0.0f, location_description, function, "CHECK_DROID: Bad droid direction %f", droid->direction);
+	ASSERT_HELPER(droid->numWeaps <= DROID_MAXWEAPS, location_description, function, "CHECK_DROID: Bad number of droid weapons %d", (int)droid->numWeaps);
+	ASSERT_HELPER(droid->listSize <= ORDER_LIST_MAX, location_description, function, "CHECK_DROID: Bad number of droid orders %d", (int)droid->listSize);
+	ASSERT_HELPER(droid->player < MAX_PLAYERS, location_description, function, "CHECK_DROID: Bad droid owner %d", (int)droid->player);
+	ASSERT_HELPER(droidOnMap(droid), location_description, function, "CHECK_DROID: Droid off map");
+
 	for (i = 0; i < DROID_MAXWEAPS; ++i)
 	{
-		ASSERT(droid->turretRotation[i] <= 360, "Bad turret rotation of turret %u coming from %s line %d", i, file, line);
-		ASSERT(droid->asWeaps[i].lastFired <= gameTime, "Bad last fired time for turret %u coming from %s line %d", i, file, line);
+		ASSERT_HELPER(droid->turretRotation[i] <= 360, location_description, function, "CHECK_DROID: Bad turret rotation of turret %u", i);
+		ASSERT_HELPER(droid->asWeaps[i].lastFired <= gameTime, location_description, function, "CHECK_DROID: Bad last fired time for turret %u", i);
 		if (droid->psActionTarget[i])
 		{
-			ASSERT(droid->psActionTarget[i]->direction >= 0.0f, "Bad direction of turret %u's target coming from %s line %d", i, file, line);
+			ASSERT_HELPER(droid->psActionTarget[i]->direction >= 0.0f, location_description, function, "CHECK_DROID: Bad direction of turret %u's target", i);
 		}
 	}
 }

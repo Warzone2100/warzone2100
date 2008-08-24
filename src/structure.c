@@ -7952,3 +7952,23 @@ BOOL structureCheckReferences(STRUCTURE *psVictimStruct)
 	}
 	return true;
 }
+
+void checkStructure(const STRUCTURE* psStructure, const char * const location_description, const char * function)
+{
+	unsigned int i;
+
+	ASSERT(psStructure != NULL, location_description, function, "CHECK_STRUCTURE: NULL pointer");
+	ASSERT(psStructure->type == OBJ_STRUCTURE, location_description, function, "CHECK_STRUCTURE: No structure (type num %u)", function, (unsigned int)psStructure->type);
+	ASSERT(psStructure->player < MAX_PLAYERS, location_description, function, "CHECK_STRUCTURE: Out of bound player num (%u)", (unsigned int)psStructure->player);
+	ASSERT(psStructure->pStructureType->type < NUM_DIFF_BUILDINGS, location_description, function, "CHECK_STRUCTURE: Out of bound structure type (%u)", (unsigned int)psStructure->pStructureType->type);
+	ASSERT(psStructure->numWeaps <= STRUCT_MAXWEAPS, location_description, function, "CHECK_STRUCTURE: Out of bound weapon count (%u)", (unsigned int)psStructure->numWeaps);
+
+	for (i = 0; i < ARRAY_SIZE(psStructure->turretRotation); ++i)
+	{
+		ASSERT(psStructure->turretRotation[i] <= 360, location_description, function, "CHECK_STRUCTURE: Out of range turret rotation (turret %u; rotation: %u)", i, (unsigned int)psStructure->turretRotation[i]);
+		if (psStructure->psTarget[i])
+		{
+			checkObject(psStructure->psTarget[i], location_description, function);
+		}
+	}
+}

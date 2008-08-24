@@ -25,6 +25,7 @@
 #define __INCLUDED_BASEDEF_H__
 
 #include "lib/ivis_common/pievector.h"
+#include "baseobject.h"
 #include "displaydef.h"
 #include "statsdef.h"
 
@@ -103,28 +104,5 @@ static inline bool isDead(const BASE_OBJECT* psObj)
 	// See objmem.c for comments on the NOT_CURRENT_LIST hack
 	return (psObj->died > NOT_CURRENT_LIST);
 }
-
-/* assert if object is bad */
-#define CHECK_OBJECT(object) \
-do \
-{ \
-	assert(object != NULL); \
-\
-	ASSERT(object->type == OBJ_DROID \
-	    || object->type == OBJ_STRUCTURE \
-	    || object->type == OBJ_FEATURE \
-	    || object->type == OBJ_PROJECTILE \
-	    || object->type == OBJ_TARGET, \
-	       "CHECK_OBJECT: Invalid object type (type num %u)", (unsigned int)(object)->type); \
-\
-	ASSERT(object->type == OBJ_FEATURE \
-	    || object->type == OBJ_TARGET \
-	    || object->player < MAX_PLAYERS, \
-	       "CHECK_OBJECT: Out of bound owning player number (%u)", (unsigned int)(object)->player); \
-\
-	ASSERT(object->direction <= 360.0f \
-	    && object->direction >= 0.0f, \
-	       "CHECK_OBJECT: out of range direction (%f)", (float)(object)->direction); \
-} while (0)
 
 #endif // __INCLUDED_BASEDEF_H__
