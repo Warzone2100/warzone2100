@@ -205,15 +205,19 @@ static DROID* pickADroid(void)
 
 	return pD;
 }
-// ///////////////////////////////////////////////////////////////////////////
-// force a droid sync
-// We need to update the droid in question ASAP, to prevent 'lost' droids until
-// the next 'real' update is done.
-BOOL ForceDroidSync( DROID* droidToSend )
+
+/** Force a droid to be synced
+ *
+ *  Call this when you need to update the given droid right now.
+ */
+BOOL ForceDroidSync(const DROID* droidToSend)
 {
 	uint8_t count = 1;		// *always* one
-	if(!droidToSend) return false;
-	debug(LOG_SYNC,"Force sync of droid %d from player %d",droidToSend->id,droidToSend->player);
+
+	ASSERT(droidToSend != NULL, "NULL pointer passed");
+
+	debug(LOG_SYNC, "Force sync of droid %d from player %d", droidToSend->id, droidToSend->player);
+
 	NETbeginEncode(NET_CHECK_DROID, NET_ALL_PLAYERS);
 		NETuint8_t(&count);
 		packageCheck(droidToSend);

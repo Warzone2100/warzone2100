@@ -219,8 +219,12 @@ BOOL recvDroidSecondaryAll()
 
 	return true;
 }
-// broadcast droid & transporter loading information
-BOOL sendDroidEmbark(const DROID* psDroid,const DROID* psTransporter )
+
+/** Broadcast droid and transporter loading information
+ *
+ *  \sa recvDroidEmbark(),sendDroidDisEmbark(),recvDroidDisEmbark()
+ */
+BOOL sendDroidEmbark(const DROID* psDroid, const DROID* psTransporter)
 {
 	if (!bMultiPlayer)
 		return true;
@@ -237,11 +241,15 @@ BOOL sendDroidEmbark(const DROID* psDroid,const DROID* psTransporter )
 	}
 	return NETend();
 }
-// receive droid & transporter loading information
+
+/** Receive droid and transporter loading information
+ *
+ *  \sa sendDroidEmbark(),sendDroidDisEmbark(),recvDroidDisEmbark()
+ */
 BOOL recvDroidEmbark()
 {
-	DROID *psDroid;
-	DROID *psTransporterDroid;
+	DROID* psDroid;
+	DROID* psTransporterDroid;
 	BOOL bDroidRemoved;
 
 	NETbeginDecode(NET_DROIDEMBARK);
@@ -259,14 +267,14 @@ BOOL recvDroidEmbark()
 		{
 			NETend();
 			// Possible it already died? (sync error?)
-			debug(LOG_WARNING,"player's %d droid %d wasn't found?",player,droidID);
+			debug(LOG_WARNING, "player's %d droid %d wasn't found?", player,droidID);
 			return false;
 		}
 		if (!IdToDroid(transporterID, player, &psTransporterDroid))
 		{
 			NETend();
 			// Possible it already died? (sync error?)
-			debug(LOG_WARNING,"player's %d transport droid %d wasn't found?",player,transporterID);
+			debug(LOG_WARNING, "player's %d transport droid %d wasn't found?", player,transporterID);
 			return false;
 		}
 
@@ -292,13 +300,17 @@ BOOL recvDroidEmbark()
 		else
 		{
 			// possible sync error?
-			debug(LOG_WARNING,"Eh? Where did unit %d go?  Couldn't load droid onto transporter.",droidID);
+			debug(LOG_WARNING, "Eh? Where did unit %d go? Couldn't load droid onto transporter.", droidID);
 		}
 	}
 	NETend();
 	return true;
 }
-// sending information that droid is being unloaded from a transporter
+
+/** Broadcast that droid is being unloaded from a transporter
+ *
+ *  \sa sendDroidEmbark(),recvDroidEmbark(),recvDroidDisEmbark()
+ */
 BOOL sendDroidDisEmbark(const DROID* psDroid, const DROID* psTransporter)
 {
 	if (!bMultiPlayer)
@@ -318,7 +330,11 @@ BOOL sendDroidDisEmbark(const DROID* psDroid, const DROID* psTransporter)
 	}
 	return NETend();
 }
-// getting informaton about droid is being unloaded from a transporter
+
+/** Receive info about a droid that is being unloaded from a transporter
+ *
+ *  \sa sendDroidEmbark(),recvDroidEmbark(),sendDroidDisEmbark()
+ */
 BOOL recvDroidDisEmbark()
 {
 	DROID *psFoundDroid = NULL, *psTransporterDroid = NULL;
@@ -342,7 +358,7 @@ BOOL recvDroidDisEmbark()
 		if (!IdToDroid(transporterID, player, &psTransporterDroid))
 		{
 			// Possible it already died? (sync error?)
-			debug(LOG_WARNING,"player's %d transport droid %d wasn't found?",player,transporterID);
+			debug(LOG_WARNING, "player's %d transport droid %d wasn't found?", player, transporterID);
 			return false;
 		}
 		// we need to find the droid *in* the transporter
@@ -362,7 +378,7 @@ BOOL recvDroidDisEmbark()
 		if (!psFoundDroid)
 		{
 			// I don't think this could ever be possible...but
-			debug(LOG_ERROR,"Couldn't find droid %d to disembark from player %d's transporter?",droidID,player);
+			debug(LOG_ERROR, "Couldn't find droid %d to disembark from player %d's transporter?", droidID, player);
 			return false;
 		}
 
@@ -377,7 +393,7 @@ BOOL recvDroidDisEmbark()
 
 		if (!droidOnMap(psFoundDroid))
 		{
-			debug(LOG_ERROR,"droid %d disembarked was NOT on map?",psFoundDroid->id);
+			debug(LOG_ERROR, "droid %d disembarked was NOT on map?", psFoundDroid->id);
 			return false;
 		}
 
@@ -387,7 +403,7 @@ BOOL recvDroidDisEmbark()
 		initDroidMovement(psFoundDroid);
 		// must add it to the grid for targeting to work
 		gridAddObject((BASE_OBJECT *)psFoundDroid);
-	} // NetBeginDecode
+	}
 	return true;
 }
 

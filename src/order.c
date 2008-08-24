@@ -800,13 +800,18 @@ void orderUpdateDroid(DROID *psDroid)
 					// save the target of current droid (the transporter)
 					DROID * transporter = (DROID *)psDroid->psTarget;
 
+					// Make sure that it really is a valid droid
+					CHECK_DROID(transporter);
+
 					// order the droid to stop so moveUpdateDroid does not process this unit
 					orderDroid(psDroid, DORDER_STOP);
 					setDroidTarget(psDroid, NULL);
 					psDroid->psTarStats = NULL;
 					secondarySetState(psDroid, DSO_RETURN_TO_LOC, DSS_NONE);
-					// process orders *before* adding unit to transporter
-					// since we remove it from the list!
+
+					/* We must add the droid to the transporter only *after*
+					 * processing changing its orders (see above).
+					 */
 					transporterAddDroid(transporter, psDroid);
 				}
 			}

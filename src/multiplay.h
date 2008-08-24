@@ -191,7 +191,8 @@ extern BOOL addTemplate			(UDWORD	player,DROID_TEMPLATE *psNew);
 extern BOOL sendCheck			(void);							//send/recv  check info
 extern BOOL sendScoreCheck		(void);							//score check only(frontend)
 extern BOOL sendPing			(void);							// allow game to request pings.
-extern BOOL ForceDroidSync( DROID* droidToSend );				// force a sync on a droid to happen
+
+extern BOOL ForceDroidSync(const DROID* droidToSend);
 // multijoin
 extern void modifyResources		(POWER_GEN_FUNCTION* psFunction);
 

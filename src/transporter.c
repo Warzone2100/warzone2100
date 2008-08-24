@@ -1404,8 +1404,8 @@ void transporterRemoveDroid(UDWORD id)
 			psDroid->pos.x = (UWORD)world_coord(droidX);
 			psDroid->pos.y = (UWORD)world_coord(droidY);
 			psDroid->pos.z = map_Height(psDroid->pos.x, psDroid->pos.y);
-
 		}
+
 		// remove it from the transporter group
 		grpLeave(psDroid->psGroup, psDroid);
 
@@ -1419,12 +1419,14 @@ void transporterRemoveDroid(UDWORD id)
 		{
 			// add the droid back onto the droid list
 			addDroid(psDroid, apsDroidLists);
+
 			//inform all other players about that
 			if (bMultiPlayer)
 			{
 				sendDroidDisEmbark(psDroid,psCurrTransporter);
 			}
 		}
+
 		// We can update the orders now, since everyone has been
 		// notified of the droid exiting the transporter
 		updateDroidOrientation(psDroid);
@@ -1450,6 +1452,7 @@ void transporterRemoveDroid(UDWORD id)
 			stopMissionButtonFlash(IDTRANS_LAUNCH);
 		}
 	}
+
 	// we want to sync with all clients *now*.
 	ForceDroidSync(psDroid);
 }
@@ -1510,6 +1513,7 @@ void transporterAddDroid(DROID *psTransporter, DROID *psDroidToAdd)
 		// removing from droid list
 		bDroidRemoved = droidRemove(psDroidToAdd, apsDroidLists);
 	}
+
 	if (bDroidRemoved)
 	{
 		// adding to transporter unit's group list
