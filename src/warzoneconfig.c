@@ -52,6 +52,7 @@ typedef struct _warzoneGlobals
 	BOOL		trapCursor;
 	UDWORD		width;
 	UDWORD		height;
+	bool		vsync;
 	bool            pauseOnFocusLoss;
 	bool            ColouredCursor;
 	bool            MusicEnabled;
@@ -110,6 +111,16 @@ void war_SetTrapCursor(BOOL b)
 BOOL war_GetTrapCursor(void)
 {
 	return warGlobs.trapCursor;
+}
+
+void war_SetVsync(bool b)
+{
+	warGlobs.vsync = b;
+}
+
+bool war_GetVsync(void)
+{
+	return warGlobs.vsync;
 }
 
 void war_SetWidth(UDWORD width)

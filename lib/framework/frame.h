@@ -52,11 +52,12 @@ extern UDWORD selectedPlayer;
  *  @param height the display height
  *  @param bitDepth the display bit depth
  *  @param fullScreen whether to start full screen or windowed
+ *  @param vsync if to sync to the vertical blanking interval or not
  *
  *  @return true when the framework library is successfully initialised, false
  *          when a part of the initialisation failed.
  */
-extern BOOL frameInitialise(const char* pWindowName, UDWORD width, UDWORD height, UDWORD bitDepth, BOOL fullScreen);
+extern BOOL frameInitialise(const char* pWindowName, UDWORD width, UDWORD height, UDWORD bitDepth, BOOL fullScreen, BOOL vsync);
 
 extern bool selfTest;
 

@@ -222,8 +222,8 @@ BOOL frameInitialise(
 					UDWORD width,			// The display width
 					UDWORD height,			// The display height
 					UDWORD bitDepth,		// The display bit depth
-					BOOL fullScreen		// Whether to start full screen or windowed
-					)
+					BOOL fullScreen,		// Whether to start full screen or windowed
+					BOOL vsync)				// If to sync to vblank or not
 {
 	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) != 0)
 	{
@@ -242,7 +242,7 @@ BOOL frameInitialise(
 	/* initialise all cursors */
 	initCursors();
 
-	if (!screenInitialise(width, height, bitDepth, fullScreen))
+	if (!screenInitialise(width, height, bitDepth, fullScreen, vsync))
 	{
 		return false;
 	}

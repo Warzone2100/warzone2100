@@ -904,7 +904,7 @@ int main(int argc, char *argv[])
 	// Find out where to find the data
 	scanDataDirs();
 
-	// Must be run before OpenGL driver is properly initialized due to 
+	// Must be run before OpenGL driver is properly initialized due to
 	// strange conflicts - Per
 	if (selfTest)
 	{
@@ -919,7 +919,7 @@ int main(int argc, char *argv[])
 	// SQLite's VFS system as the default (non-zero=default, zero=default).
 	sqlite3_register_physfs_vfs(1);
 
-	if (!frameInitialise( "Warzone 2100", pie_GetVideoBufferWidth(), pie_GetVideoBufferHeight(), pie_GetVideoBufferDepth(), war_getFullscreen() ))
+	if (!frameInitialise( "Warzone 2100", pie_GetVideoBufferWidth(), pie_GetVideoBufferHeight(), pie_GetVideoBufferDepth(), war_getFullscreen(), war_GetVsync()))
 	{
 		return -1;
 	}

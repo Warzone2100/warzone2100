@@ -47,9 +47,9 @@
 extern BOOL screenInitialise(UDWORD		width,			// Display width
 							 UDWORD		height,			// Display height
 							 UDWORD		bitDepth,		// Display bit depth
-							 BOOL		fullScreen		// Whether to start windowed
+							 BOOL		fullScreen,		// Whether to start windowed
 														// or full screen
-							 );
+							 BOOL		vsync);
 
 
 /* Release the DD objects */

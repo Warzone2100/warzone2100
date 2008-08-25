@@ -69,9 +69,9 @@ BOOL screenInitialise(
 			UDWORD		width,		// Display width
 			UDWORD		height,		// Display height
 			UDWORD		bitDepth,	// Display bit depth
-			BOOL		fullScreen	// Whether to start windowed
+			BOOL		fullScreen,	// Whether to start windowed
 							// or full screen
-			)
+			BOOL		vsync)		// If to sync to vblank or not
 {
 	static int video_flags = 0;
 	int bpp = 0, value;
@@ -113,6 +113,9 @@ BOOL screenInitialise(
 
 		// Set the double buffer OpenGL attribute.
 		SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+
+		// Enable vsync if requested by the user
+		SDL_GL_SetAttribute(SDL_GL_SWAP_CONTROL, vsync);
 
 		bpp = SDL_VideoModeOK(width, height, bitDepth, video_flags);
 		if (!bpp) {

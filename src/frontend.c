@@ -939,8 +939,20 @@ BOOL startGameOptions4Menu(void)
 	addTextButton(FRONTEND_TEXTURESZ, FRONTEND_POS5X-35, FRONTEND_POS5Y, _("Texture size"), true, false);
 	addTextButton(FRONTEND_TEXTURESZ_R, FRONTEND_POS5M-55, FRONTEND_POS5Y, textureSize, true, false);
 
+	// Vsync
+	addTextButton(FRONTEND_VSYNC, FRONTEND_POS6X-35, FRONTEND_POS6Y, _("Vertical sync*"), true, false);
+
+	if (war_GetVsync())
+	{
+		addTextButton(FRONTEND_VSYNC_R, FRONTEND_POS6M-55, FRONTEND_POS6Y, _("On"), true, false);
+	}
+	else
+	{
+		addTextButton(FRONTEND_VSYNC_R, FRONTEND_POS6M-55, FRONTEND_POS6Y, _("Off"), true, false);
+	}
+
 	// Add a note about changes taking effect on restart for certain options
-	addTextButton(FRONTEND_TAKESEFFECT, FRONTEND_POS6X-35, FRONTEND_POS6Y, _("* Takes effect on game restart"), true, true);
+	addTextButton(FRONTEND_TAKESEFFECT, FRONTEND_POS7X-35, FRONTEND_POS7Y, _("* Takes effect on game restart"), true, true);
 
 	// Quit/return
 	addMultiBut(psWScreen, FRONTEND_BOTFORM, FRONTEND_QUIT, 10, 10, 30, 29, P_("menu", "Return"), IMAGE_RETURN, IMAGE_RETURN_HI, IMAGE_RETURN_HI);
@@ -1036,6 +1048,22 @@ BOOL runGameOptions4Menu(void)
 			// Update the widget
 			widgSetString(psWScreen, FRONTEND_TEXTURESZ_R, textureSize);
 
+			break;
+		}
+
+		case FRONTEND_VSYNC:
+		case FRONTEND_VSYNC_R:
+		{
+			if (war_GetVsync())
+			{
+				war_SetVsync(false);
+				widgSetString(psWScreen, FRONTEND_VSYNC_R, _("Off"));
+			}
+			else
+			{
+				war_SetVsync(true);
+				widgSetString(psWScreen, FRONTEND_VSYNC_R, _("On"));
+			}
 			break;
 		}
 

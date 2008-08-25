@@ -599,6 +599,15 @@ BOOL loadRenderMode(void)
 		war_SetTrapCursor(false);
 	}
 
+	if (getWarzoneKeyNumeric("vsync", &val))
+	{
+		war_SetVsync(val);
+	}
+	else
+	{
+		war_SetVsync(true);
+	}
+
 	// now load the desired res..
 	// note that we only do this if we havent changed renderer..
 	if (getWarzoneKeyNumeric("width", &val)
@@ -686,6 +695,7 @@ BOOL saveConfig(void)
 	setWarzoneKeyNumeric("radarObjectMode",(SDWORD)bEnemyAllyRadarColor);    // enemy/allies radar view
 	setWarzoneKeyNumeric("radarTerrainMode",(SDWORD)radarDrawMode);
 	setWarzoneKeyNumeric("trapCursor", war_GetTrapCursor());
+	setWarzoneKeyNumeric("vsync", war_GetVsync());
 	setWarzoneKeyNumeric("textureSize", getTextureSize());
 	setWarzoneKeyNumeric("PauseOnFocusLoss", war_GetPauseOnFocusLoss());
 	setWarzoneKeyNumeric("ColouredCursor", war_GetColouredCursor());
