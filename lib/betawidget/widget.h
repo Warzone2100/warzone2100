@@ -57,6 +57,7 @@ typedef struct _eventMouseBtn   eventMouseBtn;
 typedef struct _eventKey        eventKey;
 typedef struct _eventText		eventText;
 typedef struct _eventTimer      eventTimer;
+typedef struct _eventToolTip    eventToolTip;
 typedef struct _eventMisc       eventMisc;
 
 /**
@@ -123,10 +124,15 @@ typedef enum
 	EVT_TIMER_SINGLE_SHOT,
 	EVT_TIMER_PERSISTENT,
 
+	// Tool-tip events
+	EVT_TOOL_TIP_SHOW,
+	EVT_TOOL_TIP_HIDE,
+	
 	// Misc
 	EVT_FOCUS,
 	EVT_BLUR,
 	
+	// Destroy
 	EVT_DESTRUCT
 } eventType;
 
@@ -241,6 +247,16 @@ struct _eventText
 struct _eventTimer
 {
 	event event;
+};
+
+/*
+ * The event structure for tool-tip events
+ */
+struct _eventToolTip
+{
+	event event;
+	
+	widget *target;
 };
 
 /*
@@ -417,6 +433,16 @@ struct _widget
 	 * If a mouse button is currently depressed on the widget
 	 */
 	bool hasMouseDown;
+	
+	/*
+	 * The tool-tip of the widget
+	 */
+	const char *toolTip;
+	
+	/*
+	 * If the widgets tool-tip is currently visible
+	 */
+	bool toolTipVisible;
 	
 	/*
 	 * Current drag state
@@ -917,6 +943,25 @@ void widgetReposition(widget *self, int x, int y);
  */
 bool widgetHandleEvent(widget *self, const event *evt);
 
+/**
+ * Sets the tool-tip for the widget to tip. Since this method makes a copy of
+ * tip there is no need for the caller to retain it. Should one wish to disable
+ * tool-tips for this widget NULL should be passed in-place of tip.
+ *
+ * @param self  The widget to set the tool-tip for.
+ * @param tip   The tool-tip to set for the widget.
+ */
+void widgetSetToolTip(widget *self, const char *tip);
+
+/**
+ * Returns a pointer to the widgets tool-tip text. Should the widget not have a
+ * tool-tip, NULL is returned.
+ *
+ * @param self  The widget to get the tool-tip for.
+ * @return A pointer to the widgets tool-tip.
+ */
+const char *widgetGetToolTip(widget *self);
+
 /*
  * Protected methods
  */
@@ -983,6 +1028,20 @@ bool widgetFireTimerCallbacks(widget *self, const event *evt);
  * @return true if loc is masked; false otherwise;
  */
 bool widgetPointMasked(const widget *self, point loc);
+
+/**
+ * Asks the root widget to show the tool-tip of self.
+ *
+ * @param self  The widget to show the tool-tip for.
+ */
+void widgetShowToolTip(widget *self);
+
+/**
+ * Asks the root widget to hide the tool-tip of self.
+ *
+ * @param self  The widget to hide the tool-tip for.
+ */
+void widgetHideToolTip(widget *self);
 
 /**
  * TODO

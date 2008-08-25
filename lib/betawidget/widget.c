@@ -300,6 +300,44 @@ static bool widgetAnimationTimerCallback(widget *self, const event *evt,
 	return true;
 }
 
+static bool widgetToolTipTimerCallback(widget *self, const event *evt,
+                                       int handlerId, void *userData)
+{
+	// So long as we still have the mouse, show the tool-tip
+	if (self->hasMouse)
+	{
+		widgetShowToolTip(self);
+	}
+	
+	return true;
+}
+
+static bool widgetToolTipMouseEnterCallback(widget *self, const event *evt,
+                                            int handlerId, void *userData)
+{
+	// Only relevant if we have a tool-tip
+	if (self->toolTip)
+	{
+		// Install a single-shot event handler to show the tip
+		widgetAddTimerEventHandler(self, EVT_TIMER_SINGLE_SHOT, 2000, 
+								   widgetToolTipTimerCallback, NULL, NULL);
+	}
+	
+	return true;
+}
+
+static bool widgetToolTipMouseLeaveCallback(widget *self, const event *evt,
+                                            int handlerId, void *userData)
+{
+	// If we have a tool tip and it is visible; hide it
+	if (self->toolTip && self->toolTipVisible)
+	{
+		widgetHideToolTip(self);
+	}
+	
+	return true;
+}
+
 static void widgetInitVtbl(widget *self)
 {
 	static bool initialised = false;
@@ -396,6 +434,16 @@ void widgetInit(widget *self, const char *id)
 	// Ask OpenGL for a texture id
 	glGenTextures(1, &self->textureId);
 	
+	// No tool-tip by default
+	self->toolTip = NULL;
+	self->toolTipVisible = false;
+	
+	// Install required event handlers for showing/hiding tool-tips
+	widgetAddEventHandler(self, EVT_MOUSE_ENTER,
+	                      widgetToolTipMouseEnterCallback, NULL, NULL);
+	widgetAddEventHandler(self, EVT_MOUSE_LEAVE,
+	                      widgetToolTipMouseLeaveCallback, NULL, NULL);
+	
 	// Focus and mouse are false by default
 	self->hasFocus = false;
 	self->hasMouse = false;
@@ -444,6 +492,9 @@ void widgetDestroyImpl(widget *self)
 	
 	// Free the ID
 	free((char *) self->id);
+	
+	// Free the tool-tip (if any)
+	free((char *) self->toolTip);
 
 	// Free ourself
 	free(self);
@@ -1079,6 +1130,36 @@ void widgetBlurImpl(widget *self)
 	widgetFireCallbacks(self, (event *) &evt);
 }
 
+void widgetShowToolTip(widget *self)
+{
+	// Create the event
+	eventToolTip evt;
+	evt.event.type = EVT_TOOL_TIP_SHOW;
+	evt.event.time = widgetGetTime();
+	evt.target = self;
+	
+	// Dispatch the event to the root widget
+	widgetHandleEvent(widgetGetRoot(self), (event *) &evt);
+	
+	// Note that the tool-tip is visible
+	self->toolTipVisible = true;
+}
+
+void widgetHideToolTip(widget *self)
+{	
+	// Create the event
+	eventToolTip evt;
+	evt.event.type = EVT_TOOL_TIP_HIDE;
+	evt.event.time = widgetGetTime();
+	evt.target = self;
+	
+	// Dispatch the event to the root widget
+	widgetHandleEvent(widgetGetRoot(self), (event *) &evt);
+	
+	// Note that the tool-tip is now hidden
+	self->toolTipVisible = false;
+}
+
 void widgetResizeImpl(widget *self, int w, int h)
 {
 	const size minSize = widgetGetMinSize(self);
@@ -1438,6 +1519,13 @@ bool widgetHandleEventImpl(widget *self, const event *evt)
 			widgetFireTimerCallbacks(self, evt);
 			break;
 		}
+		case EVT_TOOL_TIP_SHOW:
+		case EVT_TOOL_TIP_HIDE:
+		{
+			// Fire any callback handlers
+			widgetFireCallbacks(self, evt);
+			break;
+		}
 		default:
 			break;
 	}
@@ -1489,6 +1577,28 @@ bool widgetPointMasked(const widget *self, point loc)
 	{
 		return false;
 	}
+}
+
+void widgetSetToolTip(widget *self, const char *tip)
+{	
+	// Free the current tip (if any)
+	free((char *) self->toolTip);
+	
+	// If a new tip is being set, duplicate it
+	if (tip)
+	{
+		self->toolTip = strdup(tip);
+	}
+	// No new tip being set; disable tool-tips
+	else
+	{
+		self->toolTip = NULL;
+	}
+}
+
+const char *widgetGetToolTip(widget *self)
+{
+	return self->toolTip;
 }
 
 bool widgetAddChild(widget *self, widget *child)
