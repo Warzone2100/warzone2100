@@ -21,6 +21,8 @@
 #ifndef CLIPBOARD_H_
 #define CLIPBOARD_H_
 
+#include <stdbool.h>
+
 /**
  * Returns a copy of the text in the systems clipboard. Should the clipboard be
  * empty, or populated with non-textual data NULL is returned.

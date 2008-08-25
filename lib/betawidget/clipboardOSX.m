@@ -19,7 +19,6 @@
 */
 
 #include <stdlib.h>
-#include <stdbool.h>
 
 #import <AppKit/AppKit.h>
 
