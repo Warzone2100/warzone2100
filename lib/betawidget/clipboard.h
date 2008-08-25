@@ -27,7 +27,7 @@
  * Returns a copy of the text in the systems clipboard. Should the clipboard be
  * empty, or populated with non-textual data NULL is returned.
  *
- * It remains the resposibility of the caller to free() the string when finished
+ * It remains the responsibility of the caller to free() the string when finished
  * with it.
  *
  * @return The textual contents of the clipboard (if any), otherwise NULL.
