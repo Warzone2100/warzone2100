@@ -40,7 +40,7 @@
 #include "geom.h"
 
 #include "keycode.h"
-
+#include "clipboard.h"
 #include "font.h"
 
 /*
