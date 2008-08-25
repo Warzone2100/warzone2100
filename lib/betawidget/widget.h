@@ -118,7 +118,7 @@ typedef enum
 	EVT_DRAG_BEGIN,
 	EVT_DRAG_TRACK,
 	EVT_DRAG_END,
-	
+
 	// Timer events
 	EVT_TIMER,
 	EVT_TIMER_SINGLE_SHOT,
@@ -127,11 +127,11 @@ typedef enum
 	// Tool-tip events
 	EVT_TOOL_TIP_SHOW,
 	EVT_TOOL_TIP_HIDE,
-	
+
 	// Misc
 	EVT_FOCUS,
 	EVT_BLUR,
-	
+
 	// Destroy
 	EVT_DESTRUCT
 } eventType;
@@ -155,16 +155,16 @@ typedef enum
 {
 	/// No active drag
 	DRAG_NONE,
-	
+
 	/// Drag offer pending acceptance/declination
 	DRAG_PENDING,
-	
+
 	/// Offer was accepted
 	DRAG_ACCEPTED,
-	
+
 	/// Offer was declined
 	DRAG_DECLINED,
-	
+
 	/// Drag is currently active
 	DRAG_ACTIVE
 } dragStates;
@@ -195,7 +195,7 @@ struct _eventMouse
 
 	// Location of the mouse
 	point loc;
-	
+
 	// Previous location of the mouse
 	point previousLoc;
 };
@@ -255,7 +255,7 @@ struct _eventTimer
 struct _eventToolTip
 {
 	event event;
-	
+
 	widget *target;
 };
 
@@ -280,7 +280,7 @@ struct _eventTableEntry
 
 	/// The method to call
 	callback callback;
-	
+
 	/// The method to call when removing the event handler
 	callback destructor;
 
@@ -303,7 +303,7 @@ typedef enum
 	ANI_TYPE_ROTATE,
 	ANI_TYPE_SCALE,
 	ANI_TYPE_ALPHA,
-	
+
 	/// Must be the last member
 	ANI_TYPE_COUNT
 } animationType;
@@ -312,22 +312,22 @@ typedef struct
 {
 	/// The animation type represented by this keyframe
 	animationType type;
-	
+
 	/// The time this keyframe represents in ms
 	int time;
-	
+
 	/// Animation specific information
 	union
 	{
 		/// Where to translate ourself to, relative to our parent
 		point translate;
-		
+
 		/// Number of degrees to rotate the widget by
 		float rotate;
-		
+
 		/// Scale factor to scale the widget by
 		size scale;
-		
+
 		/// Alpha value to use
 		float alpha;
 	} data;
@@ -360,29 +360,29 @@ struct _widgetVtbl
 	                                             animationFrame k1,
 	                                             animationFrame k2,
 	                                             int time);
-	
+
 	float   (*animationInterpolateRotate)       (widget *self,
 	                                             animationFrame k1,
 	                                             animationFrame k2,
 	                                             int time);
-	
+
 	point   (*animationInterpolateScale)        (widget *self,
 	                                             animationFrame k1,
 	                                             animationFrame k2,
 	                                             int time);
-	
+
 	float   (*animationInterpolateAlpha)        (widget *self,
 	                                             animationFrame k1,
 	                                             animationFrame k2,
 	                                             int time);
 
-	
+
 	void    (*focus)                        (widget *self);
 	void    (*blur)                         (widget *self);
 
 	void    (*acceptDrag)                   (widget *self);
 	void    (*declineDrag)                  (widget *self);
-	
+
 	void    (*enable)                       (widget *self);
 	void    (*disable)                      (widget *self);
 
@@ -433,17 +433,17 @@ struct _widget
 	 * If a mouse button is currently depressed on the widget
 	 */
 	bool hasMouseDown;
-	
+
 	/*
 	 * The tool-tip of the widget
 	 */
 	const char *toolTip;
-	
+
 	/*
 	 * If the widgets tool-tip is currently visible
 	 */
 	bool toolTipVisible;
-	
+
 	/*
 	 * Current drag state
 	 */
@@ -488,18 +488,18 @@ struct _widget
 	 * The offset of the widget relative to its parent
 	 */
 	point offset;
-	
+
 	/*
 	 * How many degrees to rotate the widget about the z-axis
 	 */
 	float rotate;
-	
+
 	/*
 	 * How much to scale the widget by in the x- and y-axis; the deformation is
 	 * non vector
 	 */
 	point scale;
-	
+
 	/*
 	 * Alpha value to multiply the cairo context by when compositing
 	 */
@@ -702,7 +702,7 @@ bool widgetAddChild(widget *self, widget *child);
  * Attempts to remove child from the list of child widgets. If the child widget
  * is found anywhere in the hierarchy it is removed and its destructor called.
  *
- * A convenient way of using this methid is as follows:
+ * A convenient way of using this method is as follows:
  * widgetRemoveChild(self, widgetFindById(self, "id_to_remove"));
  *
  * @param self  The widget to remove child from.
@@ -770,7 +770,7 @@ bool widgetIsEventHandler(const widget *self, int id);
  *
  * @param self  The widget to whom the event handler is registered to.
  * @param id    The id of the event handler to fetch the user-data for.
- * @returm The user-data for the event handler, or NULL if the eventId is
+ * @return The user-data for the event handler, or NULL if the eventId is
  *         invalid.
  */
 void *widgetGetEventHandlerUserData(const widget *self, int id);
@@ -851,23 +851,23 @@ void widgetHide(widget *self);
 void widgetDestroy(widget *self);
 
 /**
- * Returns a pointer to the widget furthest down the hierarchy which currently
+ * Returns a pointer to the widget farthest down the hierarchy which currently
  * has focus. If self does not currently have focus then NULL is returned.
  * Should none of self's child widgets have focus (but it does) then self is
  * returned.
  *
- * @param self  The widget to get the furthest down focused child of.
+ * @param self  The widget to get the farthest down focused child of.
  * @return A pointer to the widget, or NULL if self is not focused.
  */
 widget *widgetGetCurrentlyFocused(widget *self);
 
 /**
  * Very much the same as widgetGetCurrentlyFocused except that it returns a
- * pointer to the widget furthest down the hierarchy which currently has the
+ * pointer to the widget farthest down the hierarchy which currently has the
  * mouse over it. Like with widgetGetCurrentlyFocused should self not have the
  * mouse over it, NULL is returned.
  *
- * @param self  The widget to get the furthest down moused-over child of.
+ * @param self  The widget to get the farthest down moused-over child of.
  * @param A pointer to the widget, or NULL if self does not have the mouse.
  */
 widget *widgetGetCurrentlyMousedOver(widget *self);
@@ -878,7 +878,7 @@ widget *widgetGetCurrentlyMousedOver(widget *self);
  * focused then widgetFocus(self->parent) will be called to focus it.
  *
  * This method will also blur any widgets which will no longer be in focus as a
- * result of self being focued. In addition it takes responsibility for firing
+ * result of self being focused. In addition it takes responsibility for firing
  * the EVT_FOCUS callbacks for self.
  *
  * @param self  The widget to focus.
@@ -897,13 +897,13 @@ void widgetBlur(widget *self);
 /**
  * Returns the minimum size that the widget can be.
  *
- * @param self  The widget to return the miniumum size of.
- * @return The miniumum (x,y) size of the widget.
+ * @param self  The widget to return the minimum size of.
+ * @return The minimum (x,y) size of the widget.
  */
 size widgetGetMinSize(widget *self);
 
 /**
- * Returns the maxiumum size that the widget can be.
+ * Returns the maximum size that the widget can be.
  *
  * @param self  The widget to return the maximum size of.
  * @return The maximum (x,y) size of the widget.
@@ -1004,7 +1004,7 @@ void widgetDoDrawMask(widget *self);
 bool widgetDoLayout(widget *self);
 
 /**
- * Fires all of the event handlers registered for evt->type on the widger self.
+ * Fires all of the event handlers registered for evt->type on the widget self.
  *
  * @param self  The widget to fire the callbacks on.
  * @param evt   The event to fire the callbacks for.
@@ -1047,7 +1047,7 @@ void widgetHideToolTip(widget *self);
  * TODO
  */
 point widgetAnimationInterpolateTranslate(widget *self,
-                                          animationFrame k1, animationFrame k2, 
+                                          animationFrame k1, animationFrame k2,
                                           int time);
 
 /**
