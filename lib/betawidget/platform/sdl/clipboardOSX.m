@@ -22,6 +22,8 @@
 
 #import <AppKit/AppKit.h>
 
+#include "../../clipboard.h"
+
 char *widgetGetClipboardText()
 {
 	NSPasteboard *pasteboard = [NSPasteboard generalPasteboard];
