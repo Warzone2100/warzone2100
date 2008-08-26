@@ -679,7 +679,7 @@
 				"${DERIVED_FILES_DIR}/${INPUT_FILE_BASE}.tab.h",
 				"${DERIVED_FILES_DIR}/${INPUT_FILE_BASE}.tab.c",
 			);
-			script = "cd \"${DERIVED_FILES_DIR}\" || exit 1\nbison -y -d -o\"${INPUT_FILE_BASE}\".tab.h \"${INPUT_FILE_PATH}\" || exit 1\nbison -y -d -o\"${INPUT_FILE_BASE}\".tab.c \"${INPUT_FILE_PATH}\" || exit 1";
+			script = "external/bison/src/bison -y -d -o\"${DERIVED_FILES_DIR}/${INPUT_FILE_BASE}\".tab.h \"${INPUT_FILE_PATH}\" || exit 1\nexternal/bison/src/bison -y -d -o\"${DERIVED_FILES_DIR}/${INPUT_FILE_BASE}\".tab.c \"${INPUT_FILE_PATH}\" || exit 1";
 		};
 		0246AA730BD3E47F004D1C70 /* PBXBuildRule */ = {
 			isa = PBXBuildRule;
@@ -805,6 +805,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = 02F5CC6C0D1494AA0000A2D0;
 			remoteInfo = Popt;
+		};
+		221052AB0E3D369C0057CD9C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 02356D660BD3BB2600E9A019 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 221052010E3D21E80057CD9C;
+			remoteInfo = Bison;
 		};
 		97B1D6670D1541C000737638 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -3232,6 +3239,7 @@
 				0246AA4D0BD3E067004D1C70 /* PBXBuildRule */,
 			);
 			dependencies = (
+				221052AC0E3D369C0057CD9C /* PBXTargetDependency */,
 				02CDDCFF0D159C0000722688 /* PBXTargetDependency */,
 				02581C630BD5A97400957CBC /* PBXTargetDependency */,
 				022B313F0BD56915002E64E3 /* PBXTargetDependency */,
@@ -3440,6 +3448,20 @@
 			productReference = 02F5CC6D0D1494AA0000A2D0 /* Popt.framework */;
 			productType = "com.apple.product-type.framework";
 		};
+		221052010E3D21E80057CD9C /* Bison */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 221052040E3D220C0057CD9C /* Build configuration list for PBXNativeTarget "Bison" */;
+			buildPhases = (
+				221052070E3D22540057CD9C /* Fetch source and build */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Bison;
+			productName = Bison;
+			productType = "com.apple.product-type.tool";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -3464,6 +3486,7 @@
 				02581C5C0BD5A94A00957CBC /* SDLmain */,
 				02F5CC6C0D1494AA0000A2D0 /* Popt */,
 				02CDDCF30D159BC300722688 /* Autorevision */,
+				221052010E3D21E80057CD9C /* Bison */,
 			);
 		};
 /* End PBXProject section */
@@ -3750,6 +3773,20 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "DIRECTORY=\"SDL_net-1.2.6\"\nOUTDIR=\"SDL_net\"\nFILENAME=\"SDL_net-1.2.6.tar.gz\"\nSOURCE=\"http://www.libsdl.org/projects/SDL_net/release/SDL_net-1.2.6.tar.gz\"\nMD5=\"7be5b9ef36129ee187ace96906cd264c\"\n\ncd external\n\nif [ -d \"$OUTDIR\" ]; then\n  echo \"$OUTDIR already exists, skipping\"\n  exit 0\nfi\n\nif [ -d \"$DIRECTORY\" ]; then\n  echo \"$DIRECTORY exists, probably from an earlier failed run\" >&2\n  exit 1\nfi\n\nif [ ! -r \"$FILENAME\" ]; then\n  echo \"Fetching $SOURCE\"\n  if ! curl -L -o \"$FILENAME\" \"$SOURCE\"; then\n    echo \"Unable to fetch $SOURCE\" >&2\n    exit 1\n  fi\nfi\n\nHAVEMD5=`md5 \"$FILENAME\" | sed -n -e 's/^MD5 (\\(.*\\)) = \\(.*\\)$/\\2/p'`\n\nif [ -z \"$HAVEMD5\" ]; then\n  echo \"Unable to compute md5 for $FILENAME\" >&2\n  exit 1\nfi\n\nif [ \"$HAVEMD5\" != \"$MD5\" ]; then\n  echo \"Md5 does not match for $FILENAME\" >&2\n  exit 1\nfi\n\nEXTENSION=`echo $FILENAME | sed -e 's/^.*\\.\\([^.]*\\)/\\1/'`\n\nif [ \"$EXTENSION\" = \"gz\" ]; then\n  if ! tar -zxf \"$FILENAME\"; then\n    echo \"Unpacking $FILENAME failed\" >&2\n    exit 1\n  fi\nelif [ \"$EXTENSION\" = \"bz2\" ]; then\n  if ! tar -jxf \"$FILENAME\"; then\n    echo \"Unpacking $FILENAME failed\" >&2\n    exit 1\n  fi\nelse\n  echo \"Unable to unpack $FILENAME\" >&2\n  exit 1\nfi\n\nif [ ! -d \"$DIRECTORY\" ]; then\n  echo \"Can't find $DIRECTORY to rename\" >&2\n  exit 1\nfi\n\nmv \"$DIRECTORY\" \"$OUTDIR\"\n";
+		};
+		221052070E3D22540057CD9C /* Fetch source and build */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Fetch source and build";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "DIRECTORY=\"bison-2.3\"\nOUTDIR=\"bison\"\nEXECUTABLE=\"`pwd`/$OUTDIR/src/bison\"\nFILENAME=\"bison-2.3.tar.bz2\"\nSOURCE=\"http://ftp.gnu.org/gnu/bison/bison-2.3.tar.bz2\"\nMD5=\"c18640c6ec31a169d351e3117ecce3ec\"\n\n## Fetch source ##\n\ncd external\n\nif [ -d \"$OUTDIR\" ]; then\n  echo \"$OUTDIR exists, skipping\"\n  exit 0\nfi\n\nif [ -d \"$DIRECTORY\" ]; then\n  echo \"$DIRECTORY exists, probably from an earlier failed run\" >&2\n  exit 1\nfi\n\nif [ ! -r \"$FILENAME\" ]; then\n  echo \"Fetching $SOURCE\"\n  if ! curl -L -o \"$FILENAME\" \"$SOURCE\"; then\n    echo \"Unable to fetch $SOURCE\" >&2\n    exit 1\n  fi\nfi\n\nHAVEMD5=`md5 \"$FILENAME\" | sed -n -e 's/^MD5 (\\(.*\\)) = \\(.*\\)$/\\2/p'`\n\nif [ -z \"$HAVEMD5\" ]; then\n  echo \"Unable to compute md5 for $FILENAME\" >&2\n  exit 1\nfi\n\nif [ \"$HAVEMD5\" != \"$MD5\" ]; then\n  echo \"Md5 does not match for $FILENAME\" >&2\n  exit 1\nfi\n\nEXTENSION=`echo $FILENAME | sed -e 's/^.*\\.\\([^.]*\\)/\\1/'`\n\nif [ \"$EXTENSION\" = \"gz\" ]; then\n  if ! tar -zxf \"$FILENAME\"; then\n    echo \"Unpacking $FILENAME failed\" >&2\n    exit 1\n  fi\nelif [ \"$EXTENSION\" = \"bz2\" ]; then\n  if ! tar -jxf \"$FILENAME\"; then\n    echo \"Unpacking $FILENAME failed\" >&2\n    exit 1\n  fi\nelse\n  echo \"Unable to unpack $FILENAME\" >&2\n  exit 1\nfi\n\nif [ ! -d \"$DIRECTORY\" ]; then\n  echo \"Can't find $DIRECTORY to rename\" >&2\n  exit 1\nfi\n\nmv \"$DIRECTORY\" \"$OUTDIR\"\n\n## Build source ##\n\ncd \"$OUTDIR\"\n\necho \"Configuring GNU Bison\"\n./configure\n\nif [ \"$?\" -ne 0 ]; then\n\techo \"GNU Bison configure operation failed\" >&2\n\texit 1\nfi\n\necho \"Compiling GNU Bison\"\nmake\n\nif [ \"$?\" -ne 0 ]; then\n\techo \"GNU Bison make operation failed\" >&2\n\texit 1\nfi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -4316,6 +4353,11 @@
 			isa = PBXTargetDependency;
 			target = 02F5CC6C0D1494AA0000A2D0 /* Popt */;
 			targetProxy = 02F5CCC30D1498BB0000A2D0 /* PBXContainerItemProxy */;
+		};
+		221052AC0E3D369C0057CD9C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 221052010E3D21E80057CD9C /* Bison */;
+			targetProxy = 221052AB0E3D369C0057CD9C /* PBXContainerItemProxy */;
 		};
 		97B1D6680D1541C000737638 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -5133,6 +5175,36 @@
 			};
 			name = Release;
 		};
+		221052050E3D220C0057CD9C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				INSTALL_PATH = "$(HOME)/bin";
+				PREBINDING = NO;
+				PRODUCT_NAME = Bison;
+				ZERO_LINK = YES;
+			};
+			name = Debug;
+		};
+		221052060E3D220C0057CD9C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_MODEL_TUNING = G5;
+				INSTALL_PATH = "$(HOME)/bin";
+				PREBINDING = NO;
+				PRODUCT_NAME = Bison;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -5258,6 +5330,15 @@
 			buildConfigurations = (
 				02F5CC700D1494AB0000A2D0 /* Debug */,
 				02F5CC710D1494AB0000A2D0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		221052040E3D220C0057CD9C /* Build configuration list for PBXNativeTarget "Bison" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				221052050E3D220C0057CD9C /* Debug */,
+				221052060E3D220C0057CD9C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
