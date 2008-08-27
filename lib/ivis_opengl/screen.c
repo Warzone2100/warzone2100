@@ -36,7 +36,7 @@
 #include "lib/framework/frameint.h"
 #include "lib/ivis_common/piestate.h"
 #include "lib/ivis_common/pieblitfunc.h"
-#ifdef __APPLE__
+#if defined(WZ_OS_MAC)
 #include <OpenGL/glu.h>
 #else
 #include <GL/glu.h>

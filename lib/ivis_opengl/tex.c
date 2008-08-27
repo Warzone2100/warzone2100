@@ -21,7 +21,7 @@
 #include "lib/ivis_opengl/GLee.h"
 #include "lib/framework/frame.h"
 
-#ifdef __APPLE__
+#if defined(WZ_OS_MAC)
 #include <OpenGL/glu.h>
 #else
 #include <GL/glu.h>

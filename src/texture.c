@@ -31,7 +31,7 @@
 
 #include <physfs.h>
 
-#ifdef __APPLE__
+#if defined(WZ_OS_MAC)
 #include <OpenGL/glu.h>
 #else
 #include <GL/glu.h>

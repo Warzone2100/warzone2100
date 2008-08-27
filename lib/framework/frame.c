@@ -40,7 +40,7 @@
 #include "cursors.h"
 
 static const enum CURSOR_TYPE cursor_type =
-#ifdef __APPLE__
+#if defined(WZ_OS_MAC)
 	CURSOR_16;
 #else
 	CURSOR_32;
