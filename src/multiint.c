@@ -86,7 +86,12 @@
 
 #include "init.h"
 #include "levels.h"
-# include <GL/glc.h>
+
+#ifdef __APPLE__
+#include <QuesoGLC/glc.h>
+#else
+#include <GL/glc.h>
+#endif
 
 #define MAP_PREVIEW_DISPLAY_TIME 2500	// number of milliseconds to show map in preview
 // ////////////////////////////////////////////////////////////////////////////
