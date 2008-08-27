@@ -87,7 +87,7 @@
 #include "init.h"
 #include "levels.h"
 
-#ifdef __APPLE__
+#if defined(WZ_OS_MAC)
 #include <QuesoGLC/glc.h>
 #else
 #include <GL/glc.h>
