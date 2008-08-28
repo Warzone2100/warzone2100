@@ -261,6 +261,18 @@ static void positionEffect(EFFECT *psEffect)
 
 static void killEffect(EFFECT *e)
 {
+	if (e->group == EFFECT_FIRE)
+	{
+		const int posX = map_coord(e->position.x);
+		const int posY = map_coord(e->position.z);
+		MAPTILE *psTile = mapTile(posX, posY);
+
+		ASSERT(psTile, "Fire effect on non-existing tile (%d, %d)", posX, posY);
+		if (psTile)
+		{
+			psTile->tileInfoBits &= ~BITS_ON_FIRE;	// clear fire bit
+		}
+	}
 	effectStatus[e-asEffectsList] = ES_INACTIVE;
 	e->control = (UBYTE) 0;
 }
@@ -2326,6 +2338,15 @@ void	effectSetupConstruction(EFFECT *psEffect)
 // ----------------------------------------------------------------------------------------
 void	effectSetupFire(EFFECT *psEffect)
 {
+	const int posX = map_coord(psEffect->position.x);
+	const int posY = map_coord(psEffect->position.z);
+	MAPTILE *psTile = mapTile(posX, posY);
+
+	ASSERT(psTile, "Cannot place a fire effect %d, %d - outside map!", posX, posY);
+	if (psTile)
+	{
+		psTile->tileInfoBits |= BITS_ON_FIRE;
+	}
 	psEffect->frameDelay = 300;	   // needs to be investigated...
 	psEffect->radius = auxVar;	// needs to be investigated
 	psEffect->lifeSpan = (UWORD)auxVarSec;
@@ -2709,26 +2730,18 @@ UDWORD	i;
 
 
 // -----------------------------------------------------------------------------------
+/// Check if tile contained within the given world coordinates is burning.
 bool fireOnLocation(unsigned int x, unsigned int y)
 {
-	unsigned int i;
+	const int posX = map_coord(x);
+	const int posY = map_coord(y);
+	MAPTILE *psTile = mapTile(posX, posY);
 
-	for(i = 0; i < MAX_EFFECTS; ++i)
+	ASSERT(psTile, "Checking fire on tile outside the map (%d, %d)", posX, posY);
+	if (psTile)
 	{
-	 	if (effectStatus[i] == ES_ACTIVE
-	 	 && asEffectsList[i].group == EFFECT_FIRE)
-		{
-			const unsigned int posX = asEffectsList[i].position.x;
-			const unsigned int posY = asEffectsList[i].position.z;
-
-			if (posX == x
-			 && posY == y)
-			{
-				return true;
-			}
-		}
+		return (psTile->tileInfoBits & BITS_ON_FIRE);
 	}
-
 	return false;
 }
 

@@ -73,6 +73,7 @@ static inline unsigned short TileNumber_texture(unsigned short tilenumber)
 
 #define BITS_NOTBLOCKING 0x01 // units can drive on this even if there is a structure or feature on it
 #define BITS_FPATHBLOCK	0x10		// bit set temporarily by find path to mark a blocking tile
+#define BITS_ON_FIRE	0x20		// cache whether tile is burning
 #define BITS_GATEWAY	0x40		// bit set to show a gateway on the tile
 #define BITS_TALLSTRUCTURE 0x80		// bit set to show a tall structure which camera needs to avoid.
 

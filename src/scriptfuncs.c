@@ -1777,7 +1777,7 @@ BOOL scrGetFeatureB(void)
 		if(	( psCurrEnumFeature[bucket]->psStats->subType == psFeatureStatToFind[bucket]->subType)
 			&&( psCurrEnumFeature[bucket]->visible[playerToEnum[bucket]]	!= 0)
 			&&!TileHasStructure(mapTile(map_coord(psCurrEnumFeature[bucket]->pos.x), map_coord(psCurrEnumFeature[bucket]->pos.y)))
-			 /*&&!fireOnLocation(psCurrEnumFeature[bucket]->pos.x,psCurrEnumFeature[bucket]->pos.y )*/		// not burning.
+			&&!fireOnLocation(psCurrEnumFeature[bucket]->pos.x,psCurrEnumFeature[bucket]->pos.y )		// not burning.
 			)
 		{
 			scrFunctionResult.v.oval = psCurrEnumFeature[bucket];
