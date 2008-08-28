@@ -97,6 +97,13 @@ void windowSetWindowVector(vector *v);
 vector *windowGetWindowVector(void);
 
 /**
+ * Passes the event evt to each window in the current window vector.
+ *
+ * @param evt   The event to handle.
+ */
+void windowHandleEventForWindowVector(const event *evt);
+
+/**
  * Sets the size of the screen to (w,h). It is important that the screen size
  * be set before any calls to windowRepositionFromScreen are made.
  *

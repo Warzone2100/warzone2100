@@ -171,6 +171,20 @@ vector *windowGetWindowVector()
 	return windowVector;
 }
 
+void windowHandleEventForWindowVector(const event *evt)
+{
+	int i;
+	
+	// Make sure the vector is valid
+	assert(windowVector != NULL);
+	
+	// Pass the event to each of the windows
+	for (i = 0; i < vectorSize(windowVector); i++)
+	{
+		widgetHandleEvent(vectorAt(windowVector, i), evt);
+	}
+}
+
 void windowSetScreenSize(int w, int h)
 {
 	screenWidth = w;
