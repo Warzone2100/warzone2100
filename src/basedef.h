@@ -25,7 +25,6 @@
 #define __INCLUDED_BASEDEF_H__
 
 #include "lib/ivis_common/pievector.h"
-#include "baseobject.h"
 #include "displaydef.h"
 #include "statsdef.h"
 
@@ -104,5 +103,8 @@ static inline bool isDead(const BASE_OBJECT* psObj)
 	// See objmem.c for comments on the NOT_CURRENT_LIST hack
 	return (psObj->died > NOT_CURRENT_LIST);
 }
+
+// Must be #included __AFTER__ the definition of BASE_OBJECT
+#include "baseobject.h"
 
 #endif // __INCLUDED_BASEDEF_H__

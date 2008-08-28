@@ -21,12 +21,11 @@
 #include "lib/framework/frame.h"
 #include "lib/framework/debug.h"
 #include "baseobject.h"
-#include "basedef.h"
 #include "droid.h"
 #include "projectile.h"
 #include "structure.h"
 
-void checkObject(const struct BASE_OBJECT* psObject, const char * const location_description, const char * function, const int recurse)
+void checkObject(const BASE_OBJECT* psObject, const char * const location_description, const char * function, const int recurse)
 {
 	if (recurse < 0)
 		return;
