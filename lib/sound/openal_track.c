@@ -183,12 +183,11 @@ BOOL sound_InitLibrary( void )
 	return true;
 }
 
-//*
-// =======================================================================================================================
-// =======================================================================================================================
-//
+static void sound_UpdateStreams(void);
+
 void sound_ShutdownLibrary( void )
 {
+	AUDIO_STREAM* stream;
 	SAMPLE_LIST * aSample = active_samples, * tmpSample = NULL;
 
 	if ( !openal_initialized )
@@ -196,6 +195,13 @@ void sound_ShutdownLibrary( void )
 		return;
 	}
 	debug(LOG_SOUND, "starting shutdown");
+
+	// Stop all streams, sound_UpdateStreams() will deallocate all stopped streams
+	for (stream = active_streams; stream != NULL; stream = stream->next)
+	{
+		sound_StopStream(stream);
+	}
+	sound_UpdateStreams();
 
 #ifndef WZ_NOSOUND
 	/* On Linux since this caused some versions of OpenAL to hang on exit. - Per */
@@ -257,8 +263,6 @@ unsigned int sound_GetActiveSamplesCount()
 	}
 	return num;
 }
-
-static void sound_UpdateStreams(void);
 
 void sound_Update()
 {

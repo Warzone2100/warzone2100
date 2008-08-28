@@ -465,7 +465,6 @@ void systemShutdown(void)
 	debug(LOG_MAIN, "shutting down audio subsystems");
 
 	debug(LOG_MAIN, "shutting down CD audio");
-	cdAudio_Stop();
 	cdAudio_Close();
 
 	if ( audio_Disabled() == false && !audio_Shutdown() )
