@@ -64,8 +64,6 @@ static int widgetClipboardFilterX11(const SDL_Event *evt)
 			reply.target = None;
 			reply.time = request->time;
 
-			printf("It is: %s\n", XGetAtomName(info.info.x11.display, request->target));
-
 			// They want to know what we can provide/offer
 			if (request->target == targetsAtom)
 			{
