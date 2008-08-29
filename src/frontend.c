@@ -238,8 +238,8 @@ BOOL startTitleMenu(void)
 	addTopForm();
 	addBottomForm();
 
-	addTextButton(FRONTEND_SINGLEPLAYER, FRONTEND_POS2X, FRONTEND_POS2Y, _("Single Player Campaign"), false, false);
-	addTextButton(FRONTEND_MULTIPLAYER, FRONTEND_POS3X, FRONTEND_POS3Y, _("Multi Player Game"), false, false);
+	addTextButton(FRONTEND_SINGLEPLAYER, FRONTEND_POS2X, FRONTEND_POS2Y, _("Single Player"), false, false);
+	addTextButton(FRONTEND_MULTIPLAYER, FRONTEND_POS3X, FRONTEND_POS3Y, _("Multi Player"), false, false);
 	addTextButton(FRONTEND_TUTORIAL, FRONTEND_POS4X, FRONTEND_POS4Y, _("Tutorial") ,false,false);
 	addTextButton(FRONTEND_OPTIONS, FRONTEND_POS5X, FRONTEND_POS5Y, _("Options") ,false,false);
 
@@ -350,8 +350,9 @@ void startSinglePlayerMenu(void)
 	addTopForm();
 	addBottomForm();
 
-	addTextButton(FRONTEND_LOADGAME, FRONTEND_POS4X,FRONTEND_POS4Y, _("Load Campaign"),false,false);
 	addTextButton(FRONTEND_NEWGAME,  FRONTEND_POS3X,FRONTEND_POS3Y,_("New Campaign") ,false,false);
+	addTextButton(FRONTEND_SKIRMISH, FRONTEND_POS4X,FRONTEND_POS4Y, _("Start Skirmish Game"),false,false);
+	addTextButton(FRONTEND_LOADGAME, FRONTEND_POS5X,FRONTEND_POS5Y, _("Load Game"),false,false);
 
 	addSideText	 (FRONTEND_SIDETEXT ,FRONTEND_SIDEX,FRONTEND_SIDEY,_("SINGLE PLAYER"));
 	addMultiBut(psWScreen, FRONTEND_BOTFORM, FRONTEND_QUIT, 10, 10, 30, 29, P_("menu", "Return"), IMAGE_RETURN, IMAGE_RETURN_HI, IMAGE_RETURN_HI);
@@ -436,6 +437,12 @@ BOOL runSinglePlayerMenu(void)
 				addLoadSave(LOAD_FRONTEND,SaveGamePath,"gam",_("Load Saved Game"));	// change mode when loadsave returns
 				break;
 
+			case FRONTEND_SKIRMISH:
+				NetPlay.bComms = false; // use network = false
+				ingame.bHostSetup = true;
+				changeTitleMode(MULTIOPTION);
+				break;
+
 			case FRONTEND_QUIT:
 				changeTitleMode(TITLE);
 				break;
@@ -478,8 +485,6 @@ BOOL startMultiPlayerMenu(void)
 	addTextButton(FRONTEND_HOST,     FRONTEND_POS2X,FRONTEND_POS2Y, _("Host Game"),false,false);
 	addTextButton(FRONTEND_JOIN,     FRONTEND_POS3X,FRONTEND_POS3Y, _("Join Game"),false,false);
 
-	addTextButton(FRONTEND_SKIRMISH, FRONTEND_POS4X,FRONTEND_POS4Y, _("One Player Skirmish"),false,false);
-
 	addMultiBut(psWScreen, FRONTEND_BOTFORM, FRONTEND_QUIT, 10, 10, 30, 29, P_("menu", "Return"), IMAGE_RETURN, IMAGE_RETURN_HI, IMAGE_RETURN_HI);
 
 	return true;
@@ -493,8 +498,6 @@ BOOL runMultiPlayerMenu(void)
 	id = widgRunScreen(psWScreen);						// Run the current set of widgets
 	switch(id)
 	{
-	case FRONTEND_SKIRMISH:
-		NetPlay.bComms = false; // use network = false
 	case FRONTEND_HOST:
 		ingame.bHostSetup = true;
 		changeTitleMode(MULTIOPTION);
