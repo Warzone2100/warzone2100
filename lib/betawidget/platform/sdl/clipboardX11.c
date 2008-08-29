@@ -27,10 +27,12 @@
 #include <SDL.h>
 
 static SDL_SysWMinfo info;
-static Atom clipboardAtom;
-static Atom compoundTextAtom;
-static Atom utf8StringAtom;
-static Atom targetsAtom;
+
+// Atoms
+static Atom XA_CLIPBOARD;
+static Atom XA_COMPOUND_TEXT;
+static Atom XA_UTF8_STRING;
+static Atom XA_TARGETS;
 
 /**
  * Filters through SDL_Events searching for clipboard requests from the X
@@ -65,13 +67,13 @@ static int widgetClipboardFilterX11(const SDL_Event *evt)
 			reply.time = request->time;
 
 			// They want to know what we can provide/offer
-			if (request->target == targetsAtom)
+			if (request->target == XA_TARGETS)
 			{
 				Atom possibleTargets[] =
 				{
 					XA_STRING,
-					utf8StringAtom,
-					compoundTextAtom
+					XA_UTF8_STRING,
+					XA_COMPOUND_TEXT
 				};
 
 				XChangeProperty(info.info.x11.display, request->requestor,
@@ -80,8 +82,8 @@ static int widgetClipboardFilterX11(const SDL_Event *evt)
 			}
 			// They want a string (all we can provide)
 			else if (request->target == XA_STRING
-			      || request->target == utf8StringAtom
-			      || request->target == compoundTextAtom)
+			      || request->target == XA_UTF8_STRING
+			      || request->target == XA_COMPOUND_TEXT)
 			{
 				int len;
 				char *xdata = XFetchBytes(info.info.x11.display, &len);
@@ -114,9 +116,6 @@ static void widgetInitialiseClipboardX11()
 
 	if (!initialised)
 	{
-		// Make sure we have not already been initialised
-		assert(initialised == false);
-
 		// Get the window manager information
 		SDL_GetWMInfo(&info);
 
@@ -131,18 +130,18 @@ static void widgetInitialiseClipboardX11()
 		info.info.x11.lock_func();
 
 		// Get the clipboard atom (it is not defined by default)
-		clipboardAtom = XInternAtom(info.info.x11.display, "CLIPBOARD", True);
+		XA_CLIPBOARD = XInternAtom(info.info.x11.display, "CLIPBOARD", True);
 
 		// Get the compound text type atom
-		compoundTextAtom = XInternAtom(info.info.x11.display, "COMPOUND_TEXT",
+		XA_COMPOUND_TEXT = XInternAtom(info.info.x11.display, "COMPOUND_TEXT",
 		                               True);
 
 		// UTF-8 string atom
-		utf8StringAtom = XInternAtom(info.info.x11.display, "UTF8_STRING",
+		XA_UTF8_STRING = XInternAtom(info.info.x11.display, "UTF8_STRING",
 		                             True);
 
 		// TARGETS atom
-		targetsAtom = XInternAtom(info.info.x11.display, "TARGETS", True);
+		XA_TARGETS = XInternAtom(info.info.x11.display, "TARGETS", True);
 
 		// Unlock the connection
 		info.info.x11.unlock_func();
@@ -168,13 +167,13 @@ char *widgetGetClipboardText()
 	info.info.x11.lock_func();
 
 	// Get the owner of the clipboard selection
-	selectionOwner = XGetSelectionOwner(info.info.x11.display, clipboardAtom);
+	selectionOwner = XGetSelectionOwner(info.info.x11.display, XA_CLIPBOARD);
 
 	// If there is a selection (and therefore owner) fetch it
 	if (selectionOwner != None)
 	{
 		// Convert the selection to a string
-		XConvertSelection(info.info.x11.display, clipboardAtom, XA_STRING, None,
+		XConvertSelection(info.info.x11.display, XA_CLIPBOARD, XA_STRING, None,
 		                  selectionOwner, CurrentTime);
 		XFlush(info.info.x11.display);
 
@@ -230,11 +229,11 @@ bool widgetSetClipboardText(const char *text)
 	XStoreBytes(info.info.x11.display, text, strlen(text) + 1);
 
 	// Set ourself as the owner of the CLIPBOARD atom
-	XSetSelectionOwner(info.info.x11.display, clipboardAtom,
+	XSetSelectionOwner(info.info.x11.display, XA_CLIPBOARD,
 	                   info.info.x11.window, CurrentTime);
 
 	// Check if we acquired ownership or not
-	selectionOwner = XGetSelectionOwner(info.info.x11.display, clipboardAtom);
+	selectionOwner = XGetSelectionOwner(info.info.x11.display, XA_CLIPBOARD);
 
 	// We got ownership
 	if (selectionOwner == info.info.x11.window)
