@@ -1695,7 +1695,7 @@ static void stopJoining(void)
 			return;
 		}
 
-		changeTitleMode(MULTI);
+		changeTitleMode(TITLE);		// Go back to top level menu
 		selectedPlayer = 0;
 
 		if (ingame.bHostSetup)
