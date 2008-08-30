@@ -34,6 +34,131 @@
 #define ASSERT_START_OCTECT(octet) \
 	assert((octet & 0x80) == 0x00 || (octet & 0xC0) == 0xC0 || !"invalid starting UTF-8 octet")
 
+/** Decodes a single Unicode character from the given UTF-8 string.
+ * 
+ *  \param utf8_char      Points to a character string that should contain at
+ *                        least one valid UTF-8 character sequence.
+ *  \param[out] next_char Will be modified to point to the first character
+ *                        following the UTF-8 character sequence.
+ *
+ *  \return The Unicode character encoded as UTF-32 with native endianness.
+ */
+static utf_32_char decode_utf8_char(const char * const utf8_char, const char** next_char)
+{
+	utf_32_char decoded;
+	*next_char = utf8_char;
+
+	ASSERT_START_OCTECT(*utf8_char);
+
+	// first octect: 0xxxxxxx: 7 bit (ASCII)
+	if      ((*utf8_char & 0x80) == 0x00)
+	{
+		// 1 byte long encoding
+		decoded = *((*next_char)++);
+	}
+	// first octect: 110xxxxx: 11 bit
+	else if ((*utf8_char & 0xe0) == 0xc0)
+	{
+		// 2 byte long encoding
+		ASSERT_NON_START_OCTET(utf8_char[1]);
+
+		decoded  = (*((*next_char)++) & 0x1f) << 6;
+		decoded |= (*((*next_char)++) & 0x3f) << 0;
+	}
+	// first octect: 1110xxxx: 16 bit
+	else if ((*utf8_char & 0xf0) == 0xe0)
+	{
+		// 3 byte long encoding
+		ASSERT_NON_START_OCTET(utf8_char[1]);
+		ASSERT_NON_START_OCTET(utf8_char[2]);
+
+		decoded  = (*((*next_char)++) & 0x0f) << 12;
+		decoded |= (*((*next_char)++) & 0x3f) << 6;
+		decoded |= (*((*next_char)++) & 0x3f) << 0;
+	}
+	// first octect: 11110xxx: 21 bit
+	else if ((*utf8_char & 0xf8) == 0xf0)
+	{
+		// 4 byte long encoding
+		ASSERT_NON_START_OCTET(utf8_char[1]);
+		ASSERT_NON_START_OCTET(utf8_char[2]);
+		ASSERT_NON_START_OCTET(utf8_char[3]);
+
+		decoded  = (*((*next_char)++) & 0x07) << 18;
+		decoded |= (*((*next_char)++) & 0x3f) << 12;
+		decoded |= (*((*next_char)++) & 0x3f) << 6;
+		decoded |= (*((*next_char)++) & 0x3f) << 0;
+	}
+	// first octect: 111110xx: 26 bit
+	else if ((*utf8_char & 0xfc) == 0xf8)
+	{
+		// 5 byte long encoding
+		ASSERT_NON_START_OCTET(utf8_char[1]);
+		ASSERT_NON_START_OCTET(utf8_char[2]);
+		ASSERT_NON_START_OCTET(utf8_char[3]);
+		ASSERT_NON_START_OCTET(utf8_char[4]);
+
+		decoded  = (*((*next_char)++) & 0x03) << 24;
+		decoded |= (*((*next_char)++) & 0x3f) << 18;
+		decoded |= (*((*next_char)++) & 0x3f) << 12;
+		decoded |= (*((*next_char)++) & 0x3f) << 6;
+		decoded |= (*((*next_char)++) & 0x3f) << 0;
+	}
+	// first octect: 1111110x: 31 bit
+	else if ((*utf8_char & 0xfe) == 0xfc)
+	{
+		// 6 byte long encoding
+		ASSERT_NON_START_OCTET(utf8_char[1]);
+		ASSERT_NON_START_OCTET(utf8_char[2]);
+		ASSERT_NON_START_OCTET(utf8_char[3]);
+		ASSERT_NON_START_OCTET(utf8_char[4]);
+		ASSERT_NON_START_OCTET(utf8_char[5]);
+
+		decoded  = (*((*next_char)++) & 0x01) << 30;
+		decoded |= (*((*next_char)++) & 0x3f) << 24;
+		decoded |= (*((*next_char)++) & 0x3f) << 18;
+		decoded |= (*((*next_char)++) & 0x3f) << 12;
+		decoded |= (*((*next_char)++) & 0x3f) << 6;
+		decoded |= (*((*next_char)++) & 0x3f) << 0;
+	}
+	// first octect: 11111110: 36 bit (we'll only use 32bit though)
+	else if ((*utf8_char & 0xff) == 0xfe)
+	{
+		// 7 byte long encoding
+		ASSERT_NON_START_OCTET(utf8_char[1]);
+		ASSERT_NON_START_OCTET(utf8_char[2]);
+		ASSERT_NON_START_OCTET(utf8_char[3]);
+		ASSERT_NON_START_OCTET(utf8_char[4]);
+		ASSERT_NON_START_OCTET(utf8_char[5]);
+		ASSERT_NON_START_OCTET(utf8_char[6]);
+
+		// original: decoded  = (*((*next_char)++) & 0x00) << 36;
+		// The first octect contains no data bits
+		decoded = 0; ++(*next_char);
+
+		// original: decoded |= (*((*next_char)++) & 0x3f) << 30;
+		// Use only the 2 least significant bits of this byte
+		// to make sure we use 32bit at maximum
+		decoded |= (*((*next_char)++) & 0x03) << 30;
+
+		decoded |= (*((*next_char)++) & 0x3f) << 24;
+		decoded |= (*((*next_char)++) & 0x3f) << 18;
+		decoded |= (*((*next_char)++) & 0x3f) << 12;
+		decoded |= (*((*next_char)++) & 0x3f) << 6;
+		decoded |= (*((*next_char)++) & 0x3f) << 0;
+	}
+	// first octet: 11111111: 41 bit or more
+	else
+	{
+		// apparently this character uses more than 36 bit
+		// this decoder is not developed to cope with those
+		// characters so error out
+		ASSERT(!"out-of-range UTF-8 character", "utf8_character_count: this UTF-8 character is too large (> 36bits) for this UTF-8 decoder");
+	}
+
+	return decoded;
+}
+
 size_t utf8_character_count(const char* utf8_string)
 {
 	const char* curChar = utf8_string;
@@ -41,79 +166,7 @@ size_t utf8_character_count(const char* utf8_string)
 	size_t length = 0;
 	while (*curChar != '\0')
 	{
-		ASSERT_START_OCTECT(*curChar);
-
-		// first octect: 0xxxxxxx: 7 bit (ASCII)
-		if      ((*curChar & 0x80) == 0x00)
-		{
-			// 1 byte long encoding
-			curChar += 1;
-		}
-		// first octect: 110xxxxx
-		else if ((*curChar & 0xe0) == 0xc0)
-		{
-			// 2 byte long encoding
-			ASSERT_NON_START_OCTET(curChar[1]);
-			curChar += 2;
-		}
-		// first octect: 1110xxxx
-		else if ((*curChar & 0xf0) == 0xe0)
-		{
-			// 3 byte long encoding
-			ASSERT_NON_START_OCTET(curChar[1]);
-			ASSERT_NON_START_OCTET(curChar[2]);
-			curChar += 3;
-		}
-		// first octect: 11110xxx
-		else if ((*curChar & 0xf8) == 0xf0)
-		{
-			// 4 byte long encoding
-			ASSERT_NON_START_OCTET(curChar[1]);
-			ASSERT_NON_START_OCTET(curChar[2]);
-			ASSERT_NON_START_OCTET(curChar[3]);
-			curChar += 4;
-		}
-		// first octect: 111110xx
-		else if ((*curChar & 0xfc) == 0xf8)
-		{
-			// 5 byte long encoding
-			ASSERT_NON_START_OCTET(curChar[1]);
-			ASSERT_NON_START_OCTET(curChar[2]);
-			ASSERT_NON_START_OCTET(curChar[3]);
-			ASSERT_NON_START_OCTET(curChar[4]);
-			curChar += 5;
-		}
-		// first octect: 1111110x
-		else if ((*curChar & 0xfe) == 0xfc)
-		{
-			// 6 byte long encoding
-			ASSERT_NON_START_OCTET(curChar[1]);
-			ASSERT_NON_START_OCTET(curChar[2]);
-			ASSERT_NON_START_OCTET(curChar[3]);
-			ASSERT_NON_START_OCTET(curChar[4]);
-			ASSERT_NON_START_OCTET(curChar[5]);
-			curChar += 6;
-		}
-		// first octect: 11111110
-		else if ((*curChar & 0xff) == 0xfe)
-		{
-			// 7 byte long encoding
-			ASSERT_NON_START_OCTET(curChar[1]);
-			ASSERT_NON_START_OCTET(curChar[2]);
-			ASSERT_NON_START_OCTET(curChar[3]);
-			ASSERT_NON_START_OCTET(curChar[4]);
-			ASSERT_NON_START_OCTET(curChar[5]);
-			ASSERT_NON_START_OCTET(curChar[6]);
-			curChar += 7;
-		}
-		// first octet: 11111111
-		else
-		{
-			// apparently this character uses more than 36 bit
-			// this decoder is not developed to cope with those
-			// characters so error out
-			ASSERT(!"out-of-range UTF-8 character", "utf8_character_count: this UTF-8 character is too large (> 36bits) for this UTF-8 decoder");
-		}
+		decode_utf8_char(curChar, &curChar);
 
 		++length;
 	}
@@ -265,115 +318,7 @@ utf_32_char* utf8_decode(const char* utf8_string)
 
 	while (*curChar != '\0')
 	{
-		ASSERT_START_OCTECT(*curChar);
-
-		// first octect: 0xxxxxxx: 7 bit (ASCII)
-		if      ((*curChar & 0x80) == 0x00)
-		{
-			// 1 byte long encoding
-			*curOutPos = *(curChar++);
-		}
-		// first octect: 110xxxxx: 11 bit
-		else if ((*curChar & 0xe0) == 0xc0)
-		{
-			// 2 byte long encoding
-			ASSERT_NON_START_OCTET(curChar[1]);
-
-			*curOutPos  = (*(curChar++) & 0x1f) << 6;
-			*curOutPos |= (*(curChar++) & 0x3f) << 0;
-		}
-		// first octect: 1110xxxx: 16 bit
-		else if ((*curChar & 0xf0) == 0xe0)
-		{
-			// 3 byte long encoding
-			ASSERT_NON_START_OCTET(curChar[1]);
-			ASSERT_NON_START_OCTET(curChar[2]);
-
-			*curOutPos  = (*(curChar++) & 0x0f) << 12;
-			*curOutPos |= (*(curChar++) & 0x3f) << 6;
-			*curOutPos |= (*(curChar++) & 0x3f) << 0;
-		}
-		// first octect: 11110xxx: 21 bit
-		else if ((*curChar & 0xf8) == 0xf0)
-		{
-			// 4 byte long encoding
-			ASSERT_NON_START_OCTET(curChar[1]);
-			ASSERT_NON_START_OCTET(curChar[2]);
-			ASSERT_NON_START_OCTET(curChar[3]);
-
-			*curOutPos  = (*(curChar++) & 0x07) << 18;
-			*curOutPos |= (*(curChar++) & 0x3f) << 12;
-			*curOutPos |= (*(curChar++) & 0x3f) << 6;
-			*curOutPos |= (*(curChar++) & 0x3f) << 0;
-		}
-		// first octect: 111110xx: 26 bit
-		else if ((*curChar & 0xfc) == 0xf8)
-		{
-			// 5 byte long encoding
-			ASSERT_NON_START_OCTET(curChar[1]);
-			ASSERT_NON_START_OCTET(curChar[2]);
-			ASSERT_NON_START_OCTET(curChar[3]);
-			ASSERT_NON_START_OCTET(curChar[4]);
-
-			*curOutPos  = (*(curChar++) & 0x03) << 24;
-			*curOutPos |= (*(curChar++) & 0x3f) << 18;
-			*curOutPos |= (*(curChar++) & 0x3f) << 12;
-			*curOutPos |= (*(curChar++) & 0x3f) << 6;
-			*curOutPos |= (*(curChar++) & 0x3f) << 0;
-		}
-		// first octect: 1111110x: 31 bit
-		else if ((*curChar & 0xfe) == 0xfc)
-		{
-			// 6 byte long encoding
-			ASSERT_NON_START_OCTET(curChar[1]);
-			ASSERT_NON_START_OCTET(curChar[2]);
-			ASSERT_NON_START_OCTET(curChar[3]);
-			ASSERT_NON_START_OCTET(curChar[4]);
-			ASSERT_NON_START_OCTET(curChar[5]);
-
-			*curOutPos  = (*(curChar++) & 0x01) << 30;
-			*curOutPos |= (*(curChar++) & 0x3f) << 24;
-			*curOutPos |= (*(curChar++) & 0x3f) << 18;
-			*curOutPos |= (*(curChar++) & 0x3f) << 12;
-			*curOutPos |= (*(curChar++) & 0x3f) << 6;
-			*curOutPos |= (*(curChar++) & 0x3f) << 0;
-		}
-		// first octect: 11111110: 36 bit (we'll only use 32bit though)
-		else if ((*curChar & 0xff) == 0xfe)
-		{
-			// 7 byte long encoding
-			ASSERT_NON_START_OCTET(curChar[1]);
-			ASSERT_NON_START_OCTET(curChar[2]);
-			ASSERT_NON_START_OCTET(curChar[3]);
-			ASSERT_NON_START_OCTET(curChar[4]);
-			ASSERT_NON_START_OCTET(curChar[5]);
-			ASSERT_NON_START_OCTET(curChar[6]);
-
-			// original: *curOutPos  = (*(curChar++) & 0x00) << 36;
-			// The first octect contains no data bits
-			*curOutPos = 0; ++curChar;
-
-			// original: *curOutPos |= (*(curChar++) & 0x3f) << 30;
-			// Use only the 2 least significant bits of this byte
-			// to make sure we use 32bit at maximum
-			*curOutPos |= (*(curChar++) & 0x03) << 30;
-
-			*curOutPos |= (*(curChar++) & 0x3f) << 24;
-			*curOutPos |= (*(curChar++) & 0x3f) << 18;
-			*curOutPos |= (*(curChar++) & 0x3f) << 12;
-			*curOutPos |= (*(curChar++) & 0x3f) << 6;
-			*curOutPos |= (*(curChar++) & 0x3f) << 0;
-		}
-		// first octet: 11111111: 41 bit or more
-		else
-		{
-			// apparently this character uses more than 36 bit
-			// this decoder is not developed to cope with those
-			// characters so error out
-			ASSERT(!"out-of-range UTF-8 character", "utf8_character_count: this UTF-8 character is too large (> 36bits) for this UTF-8 decoder");
-		}
-
-		++curOutPos;
+		*(curOutPos++) = decode_utf8_char(curChar, &curChar);
 	}
 
 	// Terminate the string with a nul
