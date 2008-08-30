@@ -38,10 +38,10 @@ typedef uint32_t utf_32_char;
 size_t utf8_character_count(const char* utf8_string);
 
 /** Determines the amount of octets required to store this string if it's encoded as UTF-8
- *  \param unicode_string the string to determine the UTF-8 buffer length of
+ *  \param unicode_string the UTF-32 encoded string to determine the UTF-8 encoded length of
  *  \return the size required to hold unicode_string if encoded in UTF-8
  */
-size_t unicode_utf8_buffer_length(const utf_32_char* unicode_string);
+size_t utf32_utf8_buffer_length(const utf_32_char* unicode_string);
 
 /** Encodes a UTF-32 encoded unicode string to a UTF-8 encoded string
  *  \param unicode_string the UTF-32 encoded unicode string to encode into UTF-8

@@ -174,29 +174,34 @@ size_t utf8_character_count(const char* utf8_string)
 	return length;
 }
 
-size_t unicode_utf8_buffer_length(const utf_32_char* unicode_string)
+static size_t unicode_utf8_char_length(const utf_32_char unicode_char)
+{
+	// an ASCII character, which uses 7 bit at most, which is one byte in UTF-8
+	if      (unicode_char < 0x00000080)
+		return 1; // stores 7 bits
+	else if (unicode_char < 0x00000800)
+		return 2; // stores 11 bits
+	else if (unicode_char < 0x00010000)
+		return 3; // stores 16 bits
+	else if (unicode_char < 0x00200000)
+		return 4; // stores 21 bits
+	else if (unicode_char < 0x04000000)
+		return 5; // stores 26 bits
+	else if (unicode_char < 0x80000000)
+		return 6; // stores 31 bits
+	else // if (unicode_char < 0x1000000000)
+		return 7; // stores 36 bits
+}
+
+size_t utf32_utf8_buffer_length(const utf_32_char* unicode_string)
 {
 	const utf_32_char* curChar;
 
 	// Determine length of string (in octets) when encoded in UTF-8
 	size_t length = 0;
-	for (curChar = unicode_string; *curChar != 0; ++curChar)
+	for (curChar = unicode_string; *curChar != '\0'; ++curChar)
 	{
-		// an ASCII character, which uses 7 bit at most, which is one byte in UTF-8
-		if      (*curChar < 0x00000080)
-			length += 1; // stores 7 bits
-		else if (*curChar < 0x00000800)
-			length += 2; // stores 11 bits
-		else if (*curChar < 0x00010000)
-			length += 3; // stores 16 bits
-		else if (*curChar < 0x00200000)
-			length += 4; // stores 21 bits
-		else if (*curChar < 0x04000000)
-			length += 5; // stores 26 bits
-		else if (*curChar < 0x80000000)
-			length += 6; // stores 31 bits
-		else // if (*curChar < 0x1000000000)
-			length += 7; // stores 36 bits
+		length += unicode_utf8_char_length(*curChar);
 	}
 
 	return length;
@@ -206,7 +211,7 @@ char* utf8_encode(const utf_32_char* unicode_string)
 {
 	const utf_32_char* curChar;
 
-	const size_t utf8_length = unicode_utf8_buffer_length(unicode_string);
+	const size_t utf8_length = utf32_utf8_buffer_length(unicode_string);
 
 	// Allocate memory to hold the UTF-8 encoded string (plus a terminating nul char)
 	char* utf8_string = malloc(utf8_length + 1);
