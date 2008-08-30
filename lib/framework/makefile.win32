@@ -23,6 +23,7 @@ SRC=configfile.c \
 	tagfile.c \
 	treap.c \
 	trig.c \
+	utf8.c \
 	SDL_framerate.c
 
 LIB=framework
