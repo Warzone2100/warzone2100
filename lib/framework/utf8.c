@@ -34,8 +34,16 @@
 #define ASSERT_START_OCTECT(octet) \
 	assert((octet & 0x80) == 0x00 || (octet & 0xC0) == 0xC0 || !"invalid starting UTF-8 octet")
 
+// Assert that hexadect (16bit sequence) 1 of UTF-16 surrogate pair sequences are of the form 110110XXXXXXXXXX
+#define ASSERT_START_HEXADECT(hexadect) \
+	assert(((hexadect) & 0xD800) == 0xD800 && "invalid first UTF-16 hexadect")
+
+// Assert that hexadect (16bit sequence) 2 of UTF-16 surrogate pair sequences are of the form 110111XXXXXXXXXX
+#define ASSERT_FINAL_HEXADECT(hexadect) \
+	assert(((hexadect) & 0xDC00) == 0xDC00 && "invalid first UTF-16 hexadect")
+
 /** Decodes a single Unicode character from the given UTF-8 string.
- * 
+ *
  *  \param utf8_char      Points to a character string that should contain at
  *                        least one valid UTF-8 character sequence.
  *  \param[out] next_char Will be modified to point to the first character
@@ -208,7 +216,7 @@ size_t utf32_utf8_buffer_length(const utf_32_char* unicode_string)
 }
 
 /** Encodes a single Unicode character to a UTF-8 encoded string.
- * 
+ *
  *  \param unicode_char A UTF-32 encoded Unicode codepoint that will be encoded
  *                      into UTF-8.
  *  \param out_char     Points to the position in a buffer where the UTF-8
@@ -361,4 +369,180 @@ size_t utf32_strlen(const utf_32_char* unicode_string)
 	}
 
 	return length;
+}
+
+/** Decodes a single Unicode character from the given UTF-16 string.
+ *
+ *  \param utf16_char     Points to a character string that should contain at
+ *                        least one valid UTF-16 character sequence.
+ *  \param[out] next_char Will be modified to point to the first character
+ *                        following the UTF-16 character sequence.
+ *
+ *  \return The Unicode character encoded as UTF-32 with native endianness.
+ */
+static utf_32_char decode_utf16_char(const utf_16_char * const utf16_char, const utf_16_char** next_char)
+{
+	utf_32_char decoded;
+	*next_char = utf16_char;
+
+	// Are we dealing with a surrogate pair
+	if (*utf16_char >= 0xD800
+	 && *utf16_char <= 0xDFFF)
+	{
+		ASSERT_START_HEXADECT(utf16_char[0]);
+		ASSERT_FINAL_HEXADECT(utf16_char[1]);
+
+		decoded  = (*((*next_char)++) & 0x3ff) << 10;
+		decoded |= *((*next_char)++) & 0x3ff;
+
+		decoded += 0x10000;
+	}
+	// Not a surrogate pair, so it's a valid Unicode codepoint right away
+	else
+	{
+		decoded = *((*next_char)++);
+	}
+
+	return decoded;
+}
+
+/** Encodes a single Unicode character to a UTF-16 encoded string.
+ *
+ *  \param unicode_char A UTF-32 encoded Unicode codepoint that will be encoded
+ *                      into UTF-16.
+ *  \param out_char     Points to the position in a buffer where the UTF-16
+ *                      encoded character can be stored.
+ *
+ *  \return A pointer pointing to the first byte <em>after</em> the encoded
+ *          UTF-16 sequence. This can be used as the \c out_char parameter for a
+ *          next invocation of encode_utf16_char().
+ */
+static utf_16_char* encode_utf16_char(const utf_32_char unicode_char, utf_16_char * const out_char)
+{
+	utf_16_char * next_char = out_char;
+
+	// 16 bits
+	if      (unicode_char < 0x10000)
+	{
+		*(next_char++) = unicode_char;
+	}
+	else if (unicode_char < 0x110000)
+	{
+		const utf_16_char v = unicode_char - 0x10000;
+
+		*(next_char++) = 0xD800 | (v >> 10);
+		*(next_char++) = 0xDC00 | (v & 0x3ff);
+
+		ASSERT_START_HEXADECT(out_char[0]);
+		ASSERT_FINAL_HEXADECT(out_char[1]);
+	}
+	else
+	{
+		/* Apparently this character lies outside the 0x0 - 0x10FFFF
+		 * Unicode range, and UTF-16 cannot cope with that, so error
+		 * out.
+		 */
+		ASSERT(!"out-of-range Unicode codepoint", "This Unicode codepoint too large (%u > 0x10FFFF) for the UTF-16 encoding", (unsigned int)unicode_char);
+	}
+
+	return next_char;
+}
+
+size_t utf16_utf8_buffer_length(const utf_16_char* unicode_string)
+{
+	const utf_16_char* curChar = unicode_string;
+
+	// Determine length of string (in octets) when encoded in UTF-8
+	size_t length = 0;
+
+	while (*curChar)
+	{
+		length += unicode_utf8_char_length(decode_utf16_char(curChar, &curChar));
+	}
+
+	return length;
+}
+
+char* utf8_encode_utf16(const utf_16_char* unicode_string)
+{
+	const utf_16_char* curChar;
+
+	const size_t utf8_length = utf16_utf8_buffer_length(unicode_string);
+
+	// Allocate memory to hold the UTF-8 encoded string (plus a terminating nul char)
+	char* utf8_string = malloc(utf8_length + 1);
+	char* curOutPos = utf8_string;
+
+	if (utf8_string == NULL)
+	{
+		debug(LOG_ERROR, "Out of memory");
+		return NULL;
+	}
+
+	curChar = unicode_string;
+	while (*curChar)
+	{
+		curOutPos = encode_utf8_char(decode_utf16_char(curChar, &curChar), curOutPos);
+	}
+
+	// Terminate the string with a nul character
+	utf8_string[utf8_length] = '\0';
+
+	return utf8_string;
+}
+
+static size_t utf8_as_utf16_buf_size(const char* utf8_string)
+{
+	const char* curChar = utf8_string;
+
+	size_t length = 0;
+	while (*curChar != '\0')
+	{
+		const utf_32_char unicode_char = decode_utf8_char(curChar, &curChar);
+
+		if      (unicode_char < 0x10000)
+		{
+			length += 1;
+		}
+		else if (unicode_char < 0x110000)
+		{
+			length += 2;
+		}
+		else
+		{
+			/* Apparently this character lies outside the 0x0 - 0x10FFFF
+			 * Unicode range, and UTF-16 cannot cope with that, so error
+			 * out.
+			 */
+			ASSERT(!"out-of-range Unicode codepoint", "This Unicode codepoint too large (%u > 0x10FFFF) for the UTF-16 encoding", (unsigned int)unicode_char);
+		}
+	}
+
+	return length;
+}
+
+utf_16_char* utf8_decode_utf16(const char* utf8_string)
+{
+	const char* curChar = utf8_string;
+	const size_t unicode_length = utf8_as_utf16_buf_size(utf8_string);
+
+	// Allocate memory to hold the UTF-16 encoded string (plus a terminating nul)
+	utf_16_char* unicode_string = malloc(sizeof(utf_16_char) * (unicode_length + 1));
+	utf_16_char* curOutPos = unicode_string;
+
+	if (unicode_string == NULL)
+	{
+		debug(LOG_ERROR, "Out of memory");
+		return NULL;
+	}
+
+	while (*curChar != '\0')
+	{
+		curOutPos = encode_utf16_char(decode_utf8_char(curChar, &curChar), curOutPos);
+	}
+
+	// Terminate the string with a nul
+	unicode_string[unicode_length] = '\0';
+
+	return unicode_string;
 }
