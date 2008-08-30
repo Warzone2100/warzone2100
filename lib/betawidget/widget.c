@@ -1524,6 +1524,9 @@ bool widgetHandleEventImpl(widget *self, const event *evt)
 		{
 			// Fire any callback handlers
 			widgetFireCallbacks(self, evt);
+			
+			// Never relevant to our children
+			relevant = false;
 			break;
 		}
 		default:
