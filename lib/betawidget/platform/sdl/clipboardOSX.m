@@ -54,7 +54,7 @@ char *widgetGetClipboardText()
 }
 
 bool widgetSetClipboardText(const char *text)
-{
+{	
 	NSPasteboard *pasteboard = [NSPasteboard generalPasteboard];
 	
 	// We are willing to provide an NSString representation only
@@ -63,16 +63,19 @@ bool widgetSetClipboardText(const char *text)
 	// Convert text to an NSString instance
 	NSString *copyText = [[NSString alloc] initWithUTF8String:text];
 	
+	// Return status
+	bool ret;
+	
 	// Register the data types we are willing to provide
 	[pasteboard declareTypes:types owner:nil];
 	
 	// Set the pasteboard text
-	[pasteboard setString:copyText forType:NSStringPboardType];
+	ret = [pasteboard setString:copyText forType:NSStringPboardType];
 	
 	// Clean-up
 	[copyText release];
 	[pasteboard release];
 	[types release];
 	
-	return true;
+	return ret;
 }

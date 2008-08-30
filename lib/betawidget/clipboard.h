@@ -25,7 +25,8 @@
 
 /**
  * Returns a copy of the text in the systems clipboard. Should the clipboard be
- * empty, or populated with non-textual data NULL is returned.
+ * empty, or populated with non-textual data NULL is returned. The character set
+ * of the returned is guaranteed to be UTF-8.
  *
  * It remains the responsibility of the caller to free() the string when finished
  * with it.
@@ -35,8 +36,10 @@
 char *widgetGetClipboardText(void);
 
 /**
- * Attempts to set the contents of the systems clipboard to text.
+ * Attempts to set the contents of the systems clipboard to text. The character
+ * set of text must be UTF-8.
  *
+ * @param text  The UTF-8 text to set the clipboard to.
  * @return True if the contents were successfully set, false otherwise.
  */
 bool widgetSetClipboardText(const char *text);
