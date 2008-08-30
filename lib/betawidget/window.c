@@ -268,10 +268,7 @@ void windowRepositionFromAnchor(window *self, const window *anchor,
 	switch (vAlign)
 	{
 		case TOP:
-			y = anchorPos.y - ourSize.y;
-			
-			// Transform yOffset so that +ve moves us away from anchorPos.y
-			yOffset = -yOffset;
+			y = anchorPos.y;
 			break;
 		case MIDDLE:
 			y = (anchorPos.y + anchorSize.y) / 2 - ourSize.y / 2;
