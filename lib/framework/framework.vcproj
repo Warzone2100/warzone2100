@@ -267,6 +267,10 @@
 				RelativePath=".\trig.c"
 				>
 			</File>
+			<File
+				RelativePath=".\utf8.c"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -379,6 +383,10 @@
 			</File>
 			<File
 				RelativePath=".\types.h"
+				>
+			</File>
+			<File
+				RelativePath=".\utf8.h"
 				>
 			</File>
 			<File
