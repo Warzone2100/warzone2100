@@ -299,7 +299,7 @@ static char* encode_utf8_char(const utf_32_char unicode_char, char * const out_c
 	return next_char;
 }
 
-char* utf8_encode(const utf_32_char* unicode_string)
+char* utf8_encode_utf32(const utf_32_char* unicode_string)
 {
 	const utf_32_char* curChar;
 
@@ -326,7 +326,7 @@ char* utf8_encode(const utf_32_char* unicode_string)
 	return utf8_string;
 }
 
-utf_32_char* utf8_decode(const char* utf8_string)
+utf_32_char* utf8_decode_utf32(const char* utf8_string)
 {
 	const char* curChar = utf8_string;
 	const size_t unicode_length = utf8_character_count(utf8_string);

@@ -47,13 +47,13 @@ size_t utf32_utf8_buffer_length(const utf_32_char* unicode_string);
  *  \param unicode_string the UTF-32 encoded unicode string to encode into UTF-8
  *  \return a UTF-8 encoded unicode nul terminated string (use free() to deallocate it)
  */
-char* utf8_encode(const utf_32_char* unicode_string);
+char* utf8_encode_utf32(const utf_32_char* unicode_string);
 
 /** Decodes a UTF-8 encode string to a UTF-32 encoded string (native endianess)
  *  \param utf8_string a UTF-8 encoded nul terminated string
  *  \return a UTF-32 encoded unicode nul terminated string (use free() to deallocate it)
  */
-utf_32_char* utf8_decode(const char* utf8_string);
+utf_32_char* utf8_decode_utf32(const char* utf8_string);
 
 /** Determines the amount of characters found in a UTF-32 encoded string
  *  This function is similar to strlen, except that it operates on a string of utf_32_char's
