@@ -311,7 +311,7 @@ char* utf8_encode(const utf_32_char* unicode_string)
 
 	if (utf8_string == NULL)
 	{
-		debug(LOG_ERROR, "utf8_encode: Out of memory");
+		debug(LOG_ERROR, "Out of memory");
 		return NULL;
 	}
 
@@ -337,7 +337,7 @@ utf_32_char* utf8_decode(const char* utf8_string)
 
 	if (unicode_string == NULL)
 	{
-		debug(LOG_ERROR, "utf8_decode: Out of memory");
+		debug(LOG_ERROR, "Out of memory");
 		return NULL;
 	}
 
@@ -352,7 +352,7 @@ utf_32_char* utf8_decode(const char* utf8_string)
 	return unicode_string;
 }
 
-size_t unicode_strlen(const utf_32_char* unicode_string)
+size_t utf32_strlen(const utf_32_char* unicode_string)
 {
 	size_t length = 0;
 	while (*(unicode_string++))

@@ -60,6 +60,6 @@ utf_32_char* utf8_decode(const char* utf8_string);
  *  \param unicode_string the string to determine the length of
  *  \return the amount of characters found
  */
-size_t unicode_strlen(const utf_32_char* unicode_string);
+size_t utf32_strlen(const utf_32_char* unicode_string);
 
 #endif // __INCLUDE_LIB_FRAMEWORK_UTF8_H__
