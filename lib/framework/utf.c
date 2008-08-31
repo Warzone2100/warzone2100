@@ -22,7 +22,11 @@
 	$HeadURL$
 */
 
-#include "utf8.h"
+/** \file
+ *  Functions to convert between different Unicode Transformation Formats (UTF for short)
+ */
+
+#include "utf.h"
 #include "debug.h"
 #include <assert.h>
 

@@ -268,7 +268,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\utf8.c"
+				RelativePath=".\utf.c"
 				>
 			</File>
 		</Filter>
@@ -386,7 +386,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\utf8.h"
+				RelativePath=".\utf.h"
 				>
 			</File>
 			<File
