@@ -85,4 +85,7 @@ utf_16_char* utf8_decode_utf16(const char* utf8_string);
  */
 size_t utf32_strlen(const utf_32_char* unicode_string);
 
+char* utf8_char_at_offset(const char* utf8_string, size_t index);
+utf_16_char* utf16_char_at_offset(const utf_16_char* utf16_string, size_t index);
+
 #endif // __INCLUDE_LIB_FRAMEWORK_UTF8_H__

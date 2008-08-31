@@ -219,6 +219,23 @@ size_t utf32_utf8_buffer_length(const utf_32_char* unicode_string)
 	return length;
 }
 
+char* utf8_char_at_offset(const char* utf8_string, size_t index)
+{
+	while (*utf8_string != '\0'
+	    && index != 0)
+	{
+		// Move to the next character
+		decode_utf8_char(utf8_string, &utf8_string);
+
+		--index;
+	}
+
+	if (*utf8_string == '\0')
+		return NULL;
+
+	return (char*)utf8_string;
+}
+
 /** Encodes a single Unicode character to a UTF-8 encoded string.
  *
  *  \param unicode_char A UTF-32 encoded Unicode codepoint that will be encoded
@@ -549,4 +566,21 @@ utf_16_char* utf8_decode_utf16(const char* utf8_string)
 	unicode_string[unicode_length] = '\0';
 
 	return unicode_string;
+}
+
+utf_16_char* utf16_char_at_offset(const utf_16_char* utf16_string, size_t index)
+{
+	while (*utf16_string != '\0'
+	    && index != 0)
+	{
+		// Move to the next character
+		decode_utf16_char(utf16_string, &utf16_string);
+
+		--index;
+	}
+
+	if (*utf16_string == '\0')
+		return NULL;
+
+	return (utf_16_char*)utf16_string;
 }
