@@ -686,7 +686,7 @@ bool widgetAddChildImpl(widget *self, widget *child)
 		vectorRemoveAt(self->children, vectorSize(self->children) - 1);
 
 		// Restore the layout
-		widgetDoLayout(self);
+		widgetDoLayout(widgetGetRoot(self));
 
 		return false;
 	}
