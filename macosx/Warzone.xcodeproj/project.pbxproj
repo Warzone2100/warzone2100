@@ -160,6 +160,8 @@
 		02356E190BD3BD9700E9A019 /* ogg.h in Headers */ = {isa = PBXBuildFile; fileRef = 02356E170BD3BD9700E9A019 /* ogg.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		02356E1A0BD3BD9700E9A019 /* os_types.h in Headers */ = {isa = PBXBuildFile; fileRef = 02356E180BD3BD9700E9A019 /* os_types.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		0235F9100D52BCC7007B8F63 /* math-help.h in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 0235F90F0D52BCC7007B8F63 /* math-help.h */; };
+		024480240C5E4BEE00E1A641 /* utf.c in Sources */ = {isa = PBXBuildFile; fileRef = 024480220C5E4BEE00E1A641 /* utf.c */; };
+		024480250C5E4BEE00E1A641 /* utf.h in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 024480230C5E4BEE00E1A641 /* utf.h */; };
 		0246A05D0BD3C975004D1C70 /* Warzone.icns in Resources */ = {isa = PBXBuildFile; fileRef = 0246A05C0BD3C975004D1C70 /* Warzone.icns */; };
 		0246A0C10BD3CBD5004D1C70 /* configfile.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A09A0BD3CBD5004D1C70 /* configfile.c */; };
 		0246A0C20BD3CBD5004D1C70 /* debug.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A09F0BD3CBD5004D1C70 /* debug.c */; };
@@ -542,6 +544,9 @@
 		02581C860BD5AD1100957CBC /* SDL_net.framework in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 0246A3ED0BD3CD8A004D1C70 /* SDL_net.framework */; };
 		02581C870BD5AD1100957CBC /* Vorbis.framework in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 02DDA7EE0BD3C03F0049AB60 /* Vorbis.framework */; };
 		02581C880BD5AD1100957CBC /* Zlib.framework in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 02356D830BD3BB4100E9A019 /* Zlib.framework */; };
+		026591FA0D7B6E0F00B20A35 /* sqlite3.c in Sources */ = {isa = PBXBuildFile; fileRef = 026591F70D7B6E0F00B20A35 /* sqlite3.c */; };
+		026591FB0D7B6E0F00B20A35 /* sqlite3.h in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 026591F80D7B6E0F00B20A35 /* sqlite3.h */; };
+		026591FC0D7B6E0F00B20A35 /* sqlite3ext.h in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 026591F90D7B6E0F00B20A35 /* sqlite3ext.h */; };
 		027F9E360D0322CE00FA2030 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0246A3BC0BD3CD2B004D1C70 /* OpenGL.framework */; };
 		027F9E370D0322D300FA2030 /* libfreetype.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 027F9E1F0D03229500FA2030 /* libfreetype.dylib */; };
 		027F9E380D0322D400FA2030 /* libfontconfig.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 02EA22450CFE494000EA65A0 /* libfontconfig.dylib */; };
@@ -549,6 +554,9 @@
 		02AAD1440D9ED28C00248B0F /* i18n.c in Sources */ = {isa = PBXBuildFile; fileRef = 02AAD1400D9ED28C00248B0F /* i18n.c */; };
 		02AAD1450D9ED28C00248B0F /* i18n.h in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 02AAD1410D9ED28C00248B0F /* i18n.h */; };
 		02AAD1460D9ED28C00248B0F /* physfs_ext.h in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 02AAD1420D9ED28C00248B0F /* physfs_ext.h */; };
+		02AAD14A0D9ED2DB00248B0F /* stats-db.h in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 02AAD1480D9ED2DB00248B0F /* stats-db.h */; };
+		02AAD1600D9ED4B200248B0F /* physfs_vfs.c in Sources */ = {isa = PBXBuildFile; fileRef = 02AAD15E0D9ED4B200248B0F /* physfs_vfs.c */; };
+		02AAD1610D9ED4B200248B0F /* physfs_vfs.h in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 02AAD15F0D9ED4B200248B0F /* physfs_vfs.h */; };
 		02B2132D0DA8755F0059E864 /* cursors.c in Sources */ = {isa = PBXBuildFile; fileRef = 02B2132A0DA8755F0059E864 /* cursors.c */; };
 		02B2132E0DA8755F0059E864 /* cursors16.c in Sources */ = {isa = PBXBuildFile; fileRef = 02B2132B0DA8755F0059E864 /* cursors16.c */; };
 		02B2132F0DA8755F0059E864 /* cursors32.c in Sources */ = {isa = PBXBuildFile; fileRef = 02B2132C0DA8755F0059E864 /* cursors32.c */; };
@@ -653,6 +661,12 @@
 		02F5CC900D1496580000A2D0 /* poptparse.c in Sources */ = {isa = PBXBuildFile; fileRef = 02F5CC870D1496580000A2D0 /* poptparse.c */; };
 		02F5CC910D1496580000A2D0 /* system.h in Headers */ = {isa = PBXBuildFile; fileRef = 02F5CC880D1496580000A2D0 /* system.h */; };
 		02F5CCC00D1498A30000A2D0 /* Popt.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02F5CC6D0D1494AA0000A2D0 /* Popt.framework */; };
+		2234C2A00E2BE18200E7704C /* positiondef.h in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 2234C29F0E2BE18200E7704C /* positiondef.h */; };
+		2244463C0E3EB7CB004D0F1F /* message_lexer.l in Sources */ = {isa = PBXBuildFile; fileRef = 224446390E3EB7CB004D0F1F /* message_lexer.l */; };
+		2244463D0E3EB7CB004D0F1F /* message_parser.y in Sources */ = {isa = PBXBuildFile; fileRef = 2244463A0E3EB7CB004D0F1F /* message_parser.y */; };
+		2244463E0E3EB7CB004D0F1F /* messagely.h in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 2244463B0E3EB7CB004D0F1F /* messagely.h */; };
+		22E244D70E65361800EC2B3E /* baseobject.c in Sources */ = {isa = PBXBuildFile; fileRef = 22E244D40E65361800EC2B3E /* baseobject.c */; };
+		22E244D80E65361800EC2B3E /* baseobject.h in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 22E244D50E65361800EC2B3E /* baseobject.h */; };
 		9742E5730DF9975E000A5D41 /* lexer_input.c in Sources */ = {isa = PBXBuildFile; fileRef = 9742E5710DF9975E000A5D41 /* lexer_input.c */; };
 		9742E5740DF9975E000A5D41 /* lexer_input.h in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 9742E5720DF9975E000A5D41 /* lexer_input.h */; };
 		9742E5770DF9979C000A5D41 /* parsetest.c in Sources */ = {isa = PBXBuildFile; fileRef = 9742E5750DF9979C000A5D41 /* parsetest.c */; };
@@ -840,13 +854,21 @@
 				02CDDD090D159D5900722688 /* autorevision.h in Copy frameworks */,
 				02CDDD1D0D159E2F00722688 /* openal_error.h in Copy frameworks */,
 				0235F9100D52BCC7007B8F63 /* math-help.h in Copy frameworks */,
+				026591FB0D7B6E0F00B20A35 /* sqlite3.h in Copy frameworks */,
+				026591FC0D7B6E0F00B20A35 /* sqlite3ext.h in Copy frameworks */,
 				02AAD1430D9ED28C00248B0F /* file.h in Copy frameworks */,
 				02AAD1450D9ED28C00248B0F /* i18n.h in Copy frameworks */,
 				02AAD1460D9ED28C00248B0F /* physfs_ext.h in Copy frameworks */,
+				02AAD14A0D9ED2DB00248B0F /* stats-db.h in Copy frameworks */,
+				02AAD1610D9ED4B200248B0F /* physfs_vfs.h in Copy frameworks */,
 				02BBB20A0DA874F6002D438B /* exceptionhandler.h in Copy frameworks */,
 				02DE76070DC3B84900D48F58 /* GLee.h in Copy frameworks */,
 				9742E5740DF9975E000A5D41 /* lexer_input.h in Copy frameworks */,
 				9742E5780DF9979C000A5D41 /* parsetest.h in Copy frameworks */,
+				2234C2A00E2BE18200E7704C /* positiondef.h in Copy frameworks */,
+				2244463E0E3EB7CB004D0F1F /* messagely.h in Copy frameworks */,
+				22E244D80E65361800EC2B3E /* baseobject.h in Copy frameworks */,
+				024480250C5E4BEE00E1A641 /* utf.h in Copy frameworks */,
 			);
 			name = "Copy frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1017,6 +1039,8 @@
 		02356E170BD3BD9700E9A019 /* ogg.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = ogg.h; path = external/libogg/include/ogg/ogg.h; sourceTree = "<group>"; };
 		02356E180BD3BD9700E9A019 /* os_types.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = os_types.h; path = external/libogg/include/ogg/os_types.h; sourceTree = "<group>"; };
 		0235F90F0D52BCC7007B8F63 /* math-help.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = "math-help.h"; path = "../lib/framework/math-help.h"; sourceTree = SOURCE_ROOT; };
+		024480220C5E4BEE00E1A641 /* utf.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = utf.c; path = ../lib/framework/utf.c; sourceTree = SOURCE_ROOT; };
+		024480230C5E4BEE00E1A641 /* utf.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = utf.h; path = ../lib/framework/utf.h; sourceTree = SOURCE_ROOT; };
 		0246A05C0BD3C975004D1C70 /* Warzone.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = Warzone.icns; path = Resources/Warzone.icns; sourceTree = "<group>"; };
 		0246A09A0BD3CBD5004D1C70 /* configfile.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = configfile.c; path = ../lib/framework/configfile.c; sourceTree = SOURCE_ROOT; };
 		0246A09B0BD3CBD5004D1C70 /* configfile.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = configfile.h; path = ../lib/framework/configfile.h; sourceTree = SOURCE_ROOT; };
@@ -1563,11 +1587,17 @@
 		0246AA030BD3DEFA004D1C70 /* SDL_sysloadso.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = SDL_sysloadso.c; path = external/SDL/src/loadso/dlopen/SDL_sysloadso.c; sourceTree = "<group>"; };
 		0246AA160BD3DFEE004D1C70 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = /Developer/SDKs/MacOSX10.4u.sdk/System/Library/Frameworks/CoreFoundation.framework; sourceTree = "<absolute>"; };
 		02581C5D0BD5A94A00957CBC /* libSDLmain.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libSDLmain.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		026591F70D7B6E0F00B20A35 /* sqlite3.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = sqlite3.c; path = ../lib/sqlite3/sqlite3.c; sourceTree = SOURCE_ROOT; };
+		026591F80D7B6E0F00B20A35 /* sqlite3.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = sqlite3.h; path = ../lib/sqlite3/sqlite3.h; sourceTree = SOURCE_ROOT; };
+		026591F90D7B6E0F00B20A35 /* sqlite3ext.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = sqlite3ext.h; path = ../lib/sqlite3/sqlite3ext.h; sourceTree = SOURCE_ROOT; };
 		027F9E1F0D03229500FA2030 /* libfreetype.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; name = libfreetype.dylib; path = /Developer/SDKs/MacOSX10.4u.sdk/usr/X11R6/lib/libfreetype.dylib; sourceTree = "<absolute>"; };
 		02AAD13F0D9ED28C00248B0F /* file.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = file.h; path = ../lib/framework/file.h; sourceTree = SOURCE_ROOT; };
 		02AAD1400D9ED28C00248B0F /* i18n.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = i18n.c; path = ../lib/framework/i18n.c; sourceTree = SOURCE_ROOT; };
 		02AAD1410D9ED28C00248B0F /* i18n.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = i18n.h; path = ../lib/framework/i18n.h; sourceTree = SOURCE_ROOT; };
 		02AAD1420D9ED28C00248B0F /* physfs_ext.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = physfs_ext.h; path = ../lib/framework/physfs_ext.h; sourceTree = SOURCE_ROOT; };
+		02AAD1480D9ED2DB00248B0F /* stats-db.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = "stats-db.h"; path = "../src/stats-db.h"; sourceTree = SOURCE_ROOT; };
+		02AAD15E0D9ED4B200248B0F /* physfs_vfs.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = physfs_vfs.c; path = ../lib/sqlite3/physfs_vfs.c; sourceTree = SOURCE_ROOT; };
+		02AAD15F0D9ED4B200248B0F /* physfs_vfs.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = physfs_vfs.h; path = ../lib/sqlite3/physfs_vfs.h; sourceTree = SOURCE_ROOT; };
 		02B2132A0DA8755F0059E864 /* cursors.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = cursors.c; path = ../lib/framework/cursors.c; sourceTree = SOURCE_ROOT; };
 		02B2132B0DA8755F0059E864 /* cursors16.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = cursors16.c; path = ../lib/framework/cursors16.c; sourceTree = SOURCE_ROOT; };
 		02B2132C0DA8755F0059E864 /* cursors32.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = cursors32.c; path = ../lib/framework/cursors32.c; sourceTree = SOURCE_ROOT; };
@@ -1678,6 +1708,12 @@
 		02F5CC860D1496580000A2D0 /* poptint.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = poptint.h; path = external/popt/poptint.h; sourceTree = SOURCE_ROOT; };
 		02F5CC870D1496580000A2D0 /* poptparse.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = poptparse.c; path = external/popt/poptparse.c; sourceTree = SOURCE_ROOT; };
 		02F5CC880D1496580000A2D0 /* system.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = system.h; path = external/popt/system.h; sourceTree = SOURCE_ROOT; };
+		2234C29F0E2BE18200E7704C /* positiondef.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = positiondef.h; path = ../src/positiondef.h; sourceTree = SOURCE_ROOT; };
+		224446390E3EB7CB004D0F1F /* message_lexer.l */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.lex; name = message_lexer.l; path = ../src/message_lexer.l; sourceTree = SOURCE_ROOT; };
+		2244463A0E3EB7CB004D0F1F /* message_parser.y */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.yacc; name = message_parser.y; path = ../src/message_parser.y; sourceTree = SOURCE_ROOT; };
+		2244463B0E3EB7CB004D0F1F /* messagely.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = messagely.h; path = ../src/messagely.h; sourceTree = SOURCE_ROOT; };
+		22E244D40E65361800EC2B3E /* baseobject.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = baseobject.c; path = ../src/baseobject.c; sourceTree = SOURCE_ROOT; };
+		22E244D50E65361800EC2B3E /* baseobject.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = baseobject.h; path = ../src/baseobject.h; sourceTree = SOURCE_ROOT; };
 		9742E5710DF9975E000A5D41 /* lexer_input.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = lexer_input.c; path = ../lib/framework/lexer_input.c; sourceTree = SOURCE_ROOT; };
 		9742E5720DF9975E000A5D41 /* lexer_input.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = lexer_input.h; path = ../lib/framework/lexer_input.h; sourceTree = SOURCE_ROOT; };
 		9742E5750DF9979C000A5D41 /* parsetest.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = parsetest.c; path = ../src/parsetest.c; sourceTree = SOURCE_ROOT; };
@@ -1931,6 +1967,8 @@
 		02356D640BD3BB2600E9A019 = {
 			isa = PBXGroup;
 			children = (
+				22E244D40E65361800EC2B3E /* baseobject.c */,
+				22E244D50E65361800EC2B3E /* baseobject.h */,
 				023A1D4F0D2DAEC900EFEB37 /* Resources */,
 				02CDDCFD0D159BE700722688 /* Autorevision sources */,
 				02F5CC7F0D1495EB0000A2D0 /* Popt sources */,
@@ -2029,6 +2067,8 @@
 				0223BBB80CFE3CD60056EF85 /* strnlen1.h */,
 				0223BBB90CFE3CD60056EF85 /* tagfile.c */,
 				0223BBBA0CFE3CD60056EF85 /* tagfile.h */,
+				024480220C5E4BEE00E1A641 /* utf.c */,
+				024480230C5E4BEE00E1A641 /* utf.h */,
 				022B2EBF0BD55401002E64E3 /* config-macosx.h */,
 				0246A09A0BD3CBD5004D1C70 /* configfile.c */,
 				0246A09B0BD3CBD5004D1C70 /* configfile.h */,
@@ -2240,11 +2280,13 @@
 		0246A1970BD3CCC3004D1C70 /* Warzone */ = {
 			isa = PBXGroup;
 			children = (
+				02AAD1480D9ED2DB00248B0F /* stats-db.h */,
 				02CDDD080D159D5900722688 /* autorevision.h */,
 				0223BBAC0CFE3C380056EF85 /* main.h */,
 				0223BBAD0CFE3C380056EF85 /* version.c */,
 				0223BBAE0CFE3C380056EF85 /* version.h */,
 				0246A1980BD3CCDB004D1C70 /* action.c */,
+				2234C29F0E2BE18200E7704C /* positiondef.h */,
 				0246A1990BD3CCDB004D1C70 /* action.h */,
 				0246A19A0BD3CCDB004D1C70 /* advvis.c */,
 				0246A19B0BD3CCDB004D1C70 /* advvis.h */,
@@ -2367,6 +2409,9 @@
 				0246A2210BD3CCDB004D1C70 /* mapdisplay.h */,
 				0246A2220BD3CCDB004D1C70 /* mapgrid.c */,
 				0246A2230BD3CCDB004D1C70 /* mapgrid.h */,
+				224446390E3EB7CB004D0F1F /* message_lexer.l */,
+				2244463A0E3EB7CB004D0F1F /* message_parser.y */,
+				2244463B0E3EB7CB004D0F1F /* messagely.h */,
 				0246A2240BD3CCDB004D1C70 /* mechanics.c */,
 				0246A2250BD3CCDB004D1C70 /* mechanics.h */,
 				0246A2260BD3CCDB004D1C70 /* message.c */,
@@ -2661,6 +2706,11 @@
 		026591F40D7B6DE200B20A35 /* SQLite */ = {
 			isa = PBXGroup;
 			children = (
+				02AAD15E0D9ED4B200248B0F /* physfs_vfs.c */,
+				02AAD15F0D9ED4B200248B0F /* physfs_vfs.h */,
+				026591F70D7B6E0F00B20A35 /* sqlite3.c */,
+				026591F80D7B6E0F00B20A35 /* sqlite3.h */,
+				026591F90D7B6E0F00B20A35 /* sqlite3ext.h */,
 			);
 			name = SQLite;
 			sourceTree = "<group>";
@@ -4004,7 +4054,9 @@
 				0223BBC00CFE3CD60056EF85 /* tagfile.c in Sources */,
 				02CDDD1C0D159E2F00722688 /* openal_error.c in Sources */,
 				020A7E670D246D2B009C29F5 /* sequence.c in Sources */,
+				026591FA0D7B6E0F00B20A35 /* sqlite3.c in Sources */,
 				02AAD1440D9ED28C00248B0F /* i18n.c in Sources */,
+				02AAD1600D9ED4B200248B0F /* physfs_vfs.c in Sources */,
 				02BBB2090DA874F6002D438B /* exceptionhandler.c in Sources */,
 				02B2132D0DA8755F0059E864 /* cursors.c in Sources */,
 				02B2132E0DA8755F0059E864 /* cursors16.c in Sources */,
@@ -4012,6 +4064,10 @@
 				02DE76060DC3B84900D48F58 /* GLee.c in Sources */,
 				9742E5730DF9975E000A5D41 /* lexer_input.c in Sources */,
 				9742E5770DF9979C000A5D41 /* parsetest.c in Sources */,
+				2244463C0E3EB7CB004D0F1F /* message_lexer.l in Sources */,
+				2244463D0E3EB7CB004D0F1F /* message_parser.y in Sources */,
+				22E244D70E65361800EC2B3E /* baseobject.c in Sources */,
+				024480240C5E4BEE00E1A641 /* utf.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
