@@ -136,14 +136,16 @@ static size_t unicode_utf8_char_length(const utf_32_char unicode_char)
 		return 2; // stores 11 bits
 	else if (unicode_char < 0x00010000)
 		return 3; // stores 16 bits
-	else if (unicode_char < 0x00200000)
+	/* This encoder can deal with < 0x00200000, but Unicode only ranges
+	 * from 0x0 to 0x10FFFF. Thus we don't accept anything else.
+	 */
+	else if (unicode_char < 0x00110000)
 		return 4; // stores 21 bits
-	else if (unicode_char < 0x04000000)
-		return 5; // stores 26 bits
-	else if (unicode_char < 0x80000000)
-		return 6; // stores 31 bits
-	else // if (unicode_char < 0x1000000000)
-		return 7; // stores 36 bits
+	else
+		/* Apparently this character lies outside the 0x0 - 0x10FFFF
+		 * Unicode range, so don't accept it.
+		 */
+		ASSERT(!"out-of-range Unicode codepoint", "This Unicode codepoint is too large (%u > 0x10FFFF) to be a valid Unicode codepoint", (unsigned int)unicode_char);
 }
 
 size_t utf32_utf8_buffer_length(const utf_32_char* unicode_string)
