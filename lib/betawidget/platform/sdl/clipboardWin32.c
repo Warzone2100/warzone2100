@@ -45,7 +45,7 @@ char *widgetGetClipboardText()
 			{
 				int i, j;
 
-			    // Convert it to UTF-8 (from UTF-16)
+				// Convert it to UTF-8 (from UTF-16)
 				ourText = UTF16toUTF8(clipboardText, NULL);
 
 				// Unlock the text
