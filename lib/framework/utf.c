@@ -318,7 +318,7 @@ static size_t utf16_utf8_buffer_length(const utf_16_char* unicode_string)
 	return length;
 }
 
-char *UTF16toUTF8(const utf_16_char* unicode_string)
+char *UTF16toUTF8(const utf_16_char *unicode_string, size_t *nbytes)
 {
 	const utf_16_char* curChar;
 
@@ -342,6 +342,12 @@ char *UTF16toUTF8(const utf_16_char* unicode_string)
 
 	// Terminate the string with a nul character
 	utf8_string[utf8_length] = '\0';
+
+	// Set the number of bytes allocated
+	if (nbytes)
+	{
+		*nbytes = utf8_length + 1;
+	}
 
 	return utf8_string;
 }
@@ -376,7 +382,7 @@ static size_t utf8_as_utf16_buf_size(const char* utf8_string)
 	return length;
 }
 
-utf_16_char *UTF8toUTF16(const char* utf8_string)
+utf_16_char *UTF8toUTF16(const char* utf8_string, size_t *nbytes)
 {
 	const char* curChar = utf8_string;
 	const size_t unicode_length = utf8_as_utf16_buf_size(utf8_string);
@@ -398,6 +404,12 @@ utf_16_char *UTF8toUTF16(const char* utf8_string)
 
 	// Terminate the string with a nul
 	unicode_string[unicode_length] = '\0';
+
+	// Set the number of bytes allocated
+	if (nbytes)
+	{
+		*nbytes = sizeof(utf_16_char) * (unicode_length + 1);
+	}
 
 	return unicode_string;
 }

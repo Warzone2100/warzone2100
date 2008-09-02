@@ -68,15 +68,17 @@ size_t UTF16CharacterCount(const uint16_t *utf16);
 
 /** Encodes a UTF-16 encoded unicode string to a UTF-8 encoded string
  *  \param unicode_string the UTF-16 encoded unicode string to encode into UTF-8
+ *  \param[out] nbytes the number of bytes allocated, may be NULL
  *  \return a UTF-8 encoded unicode nul terminated string (use free() to deallocate it)
  */
-char *UTF16toUTF8(const utf_16_char *unicode_string);
+char *UTF16toUTF8(const utf_16_char *unicode_string, size_t *nbytes);
 
 /** Decodes a UTF-8 encode string to a UTF-16 encoded string (native endianess)
  *  \param utf8_string a UTF-8 encoded nul terminated string
+ *  \param[out] nbytes the number of bytes allocated, may be NULL
  *  \return a UTF-16 encoded unicode nul terminated string (use free() to deallocate it)
  */
-utf_16_char *UTF8toUTF16(const char *utf8_string);
+utf_16_char *UTF8toUTF16(const char *utf8_string, size_t *nbytes);
 
 char *UTF8CharacterAtOffset(const char *utf8_string, size_t index);
 utf_16_char *UTF16CharacterAtOffset(const utf_16_char *utf16_string, size_t index);
