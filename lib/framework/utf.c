@@ -46,16 +46,7 @@
 #define ASSERT_FINAL_HEXADECT(hexadect) \
 	assert(((hexadect) & 0xDC00) == 0xDC00 && "invalid first UTF-16 hexadect")
 
-/** Decodes a single Unicode character from the given UTF-8 string.
- *
- *  \param utf8_char      Points to a character string that should contain at
- *                        least one valid UTF-8 character sequence.
- *  \param[out] next_char Will be modified to point to the first character
- *                        following the UTF-8 character sequence.
- *
- *  \return The Unicode character encoded as UTF-32 with native endianness.
- */
-static utf_32_char decode_utf8_char(const char * const utf8_char, const char** next_char)
+utf_32_char UTF8DecodeChar(const char *utf8_char, const char **next_char)
 {
 	utf_32_char decoded;
 	*next_char = utf8_char;
@@ -112,14 +103,27 @@ static utf_32_char decode_utf8_char(const char * const utf8_char, const char** n
 	return decoded;
 }
 
-size_t utf8_character_count(const char* utf8_string)
+size_t UTF8CharacterCount(const char *utf8_string)
 {
-	const char* curChar = utf8_string;
-
 	size_t length = 0;
-	while (*curChar != '\0')
+
+	while (*utf8_string != '\0')
 	{
-		decode_utf8_char(curChar, &curChar);
+		UTF8DecodeChar(utf8_string, &utf8_string);
+
+		++length;
+	}
+
+	return length;
+}
+
+size_t UTF16CharacterCount(const uint16_t *utf16)
+{
+	size_t length = 0;
+
+	while (*utf16)
+	{
+		UTF16DecodeChar(utf16, &utf16);
 
 		++length;
 	}
@@ -148,27 +152,13 @@ static size_t unicode_utf8_char_length(const utf_32_char unicode_char)
 		ASSERT(!"out-of-range Unicode codepoint", "This Unicode codepoint is too large (%u > 0x10FFFF) to be a valid Unicode codepoint", (unsigned int)unicode_char);
 }
 
-size_t utf32_utf8_buffer_length(const utf_32_char* unicode_string)
-{
-	const utf_32_char* curChar;
-
-	// Determine length of string (in octets) when encoded in UTF-8
-	size_t length = 0;
-	for (curChar = unicode_string; *curChar != '\0'; ++curChar)
-	{
-		length += unicode_utf8_char_length(*curChar);
-	}
-
-	return length;
-}
-
-char* utf8_char_at_offset(const char* utf8_string, size_t index)
+char *UTF8CharacterAtOffset(const char *utf8_string, size_t index)
 {
 	while (*utf8_string != '\0'
 	    && index != 0)
 	{
 		// Move to the next character
-		decode_utf8_char(utf8_string, &utf8_string);
+		UTF8DecodeChar(utf8_string, &utf8_string);
 
 		--index;
 	}
@@ -191,9 +181,9 @@ char* utf8_char_at_offset(const char* utf8_string, size_t index)
  *          UTF-8 sequence. This can be used as the \c out_char parameter for a
  *          next invocation of encode_utf8_char().
  */
-static char* encode_utf8_char(const utf_32_char unicode_char, char * const out_char)
+static char *encode_utf8_char(const utf_32_char unicode_char, char *out_char)
 {
-	char * next_char = out_char;
+	char *next_char = out_char;
 
 	// 7 bits
 	if      (unicode_char < 0x00000080)
@@ -244,80 +234,7 @@ static char* encode_utf8_char(const utf_32_char unicode_char, char * const out_c
 	return next_char;
 }
 
-char* utf8_encode_utf32(const utf_32_char* unicode_string)
-{
-	const utf_32_char* curChar;
-
-	const size_t utf8_length = utf32_utf8_buffer_length(unicode_string);
-
-	// Allocate memory to hold the UTF-8 encoded string (plus a terminating nul char)
-	char* utf8_string = malloc(utf8_length + 1);
-	char* curOutPos = utf8_string;
-
-	if (utf8_string == NULL)
-	{
-		debug(LOG_ERROR, "Out of memory");
-		return NULL;
-	}
-
-	for (curChar = unicode_string; *curChar != 0; ++curChar)
-	{
-		curOutPos = encode_utf8_char(*curChar, curOutPos);
-	}
-
-	// Terminate the string with a nul character
-	utf8_string[utf8_length] = '\0';
-
-	return utf8_string;
-}
-
-utf_32_char* utf8_decode_utf32(const char* utf8_string)
-{
-	const char* curChar = utf8_string;
-	const size_t unicode_length = utf8_character_count(utf8_string);
-
-	// Allocate memory to hold the UTF-32 encoded string (plus a terminating nul)
-	utf_32_char* unicode_string = malloc(sizeof(utf_32_char) * (unicode_length + 1));
-	utf_32_char* curOutPos = unicode_string;
-
-	if (unicode_string == NULL)
-	{
-		debug(LOG_ERROR, "Out of memory");
-		return NULL;
-	}
-
-	while (*curChar != '\0')
-	{
-		*(curOutPos++) = decode_utf8_char(curChar, &curChar);
-	}
-
-	// Terminate the string with a nul
-	unicode_string[unicode_length] = '\0';
-
-	return unicode_string;
-}
-
-size_t utf32_strlen(const utf_32_char* unicode_string)
-{
-	size_t length = 0;
-	while (*(unicode_string++))
-	{
-		++length;
-	}
-
-	return length;
-}
-
-/** Decodes a single Unicode character from the given UTF-16 string.
- *
- *  \param utf16_char     Points to a character string that should contain at
- *                        least one valid UTF-16 character sequence.
- *  \param[out] next_char Will be modified to point to the first character
- *                        following the UTF-16 character sequence.
- *
- *  \return The Unicode character encoded as UTF-32 with native endianness.
- */
-static utf_32_char decode_utf16_char(const utf_16_char * const utf16_char, const utf_16_char** next_char)
+utf_32_char UTF16DecodeChar(const utf_16_char *utf16_char, const utf_16_char **next_char)
 {
 	utf_32_char decoded;
 	*next_char = utf16_char;
@@ -355,9 +272,9 @@ static utf_32_char decode_utf16_char(const utf_16_char * const utf16_char, const
  *          UTF-16 sequence. This can be used as the \c out_char parameter for a
  *          next invocation of encode_utf16_char().
  */
-static utf_16_char* encode_utf16_char(const utf_32_char unicode_char, utf_16_char * const out_char)
+static utf_16_char *encode_utf16_char(const utf_32_char unicode_char, utf_16_char *out_char)
 {
-	utf_16_char * next_char = out_char;
+	utf_16_char *next_char = out_char;
 
 	// 16 bits
 	if      (unicode_char < 0x10000)
@@ -386,7 +303,7 @@ static utf_16_char* encode_utf16_char(const utf_32_char unicode_char, utf_16_cha
 	return next_char;
 }
 
-size_t utf16_utf8_buffer_length(const utf_16_char* unicode_string)
+static size_t utf16_utf8_buffer_length(const utf_16_char* unicode_string)
 {
 	const utf_16_char* curChar = unicode_string;
 
@@ -395,13 +312,13 @@ size_t utf16_utf8_buffer_length(const utf_16_char* unicode_string)
 
 	while (*curChar)
 	{
-		length += unicode_utf8_char_length(decode_utf16_char(curChar, &curChar));
+		length += unicode_utf8_char_length(UTF16DecodeChar(curChar, &curChar));
 	}
 
 	return length;
 }
 
-char* utf8_encode_utf16(const utf_16_char* unicode_string)
+char *UTF16toUTF8(const utf_16_char* unicode_string)
 {
 	const utf_16_char* curChar;
 
@@ -420,7 +337,7 @@ char* utf8_encode_utf16(const utf_16_char* unicode_string)
 	curChar = unicode_string;
 	while (*curChar)
 	{
-		curOutPos = encode_utf8_char(decode_utf16_char(curChar, &curChar), curOutPos);
+		curOutPos = encode_utf8_char(UTF16DecodeChar(curChar, &curChar), curOutPos);
 	}
 
 	// Terminate the string with a nul character
@@ -436,7 +353,7 @@ static size_t utf8_as_utf16_buf_size(const char* utf8_string)
 	size_t length = 0;
 	while (*curChar != '\0')
 	{
-		const utf_32_char unicode_char = decode_utf8_char(curChar, &curChar);
+		const utf_32_char unicode_char = UTF8DecodeChar(curChar, &curChar);
 
 		if      (unicode_char < 0x10000)
 		{
@@ -459,7 +376,7 @@ static size_t utf8_as_utf16_buf_size(const char* utf8_string)
 	return length;
 }
 
-utf_16_char* utf8_decode_utf16(const char* utf8_string)
+utf_16_char *UTF8toUTF16(const char* utf8_string)
 {
 	const char* curChar = utf8_string;
 	const size_t unicode_length = utf8_as_utf16_buf_size(utf8_string);
@@ -476,7 +393,7 @@ utf_16_char* utf8_decode_utf16(const char* utf8_string)
 
 	while (*curChar != '\0')
 	{
-		curOutPos = encode_utf16_char(decode_utf8_char(curChar, &curChar), curOutPos);
+		curOutPos = encode_utf16_char(UTF8DecodeChar(curChar, &curChar), curOutPos);
 	}
 
 	// Terminate the string with a nul
@@ -485,13 +402,13 @@ utf_16_char* utf8_decode_utf16(const char* utf8_string)
 	return unicode_string;
 }
 
-utf_16_char* utf16_char_at_offset(const utf_16_char* utf16_string, size_t index)
+utf_16_char *UTF16CharacterAtOffset(const utf_16_char *utf16_string, size_t index)
 {
 	while (*utf16_string != '\0'
 	    && index != 0)
 	{
 		// Move to the next character
-		decode_utf16_char(utf16_string, &utf16_string);
+		UTF16DecodeChar(utf16_string, &utf16_string);
 
 		--index;
 	}
