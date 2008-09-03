@@ -669,7 +669,7 @@
 				"${DERIVED_FILES_DIR}/${INPUT_FILE_BASE}.tab.h",
 				"${DERIVED_FILES_DIR}/${INPUT_FILE_BASE}.tab.c",
 			);
-			script = "cd \"${DERIVED_FILES_DIR}\" || exit 1\nbison -y -d -o\"${INPUT_FILE_BASE}\".tab.h \"${INPUT_FILE_PATH}\" || exit 1\nbison -y -d -o\"${INPUT_FILE_BASE}\".tab.c \"${INPUT_FILE_PATH}\" || exit 1";
+			script = "external/bison.sh -y -d -o\"${DERIVED_FILES_DIR}/${INPUT_FILE_BASE}\".tab.h \"${INPUT_FILE_PATH}\" || exit 1\nexternal/bison.sh -y -d -o\"${DERIVED_FILES_DIR}/${INPUT_FILE_BASE}\".tab.c \"${INPUT_FILE_PATH}\" || exit 1";
 		};
 		0246AA730BD3E47F004D1C70 /* PBXBuildRule */ = {
 			isa = PBXBuildRule;
@@ -795,6 +795,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = 02F5CC6C0D1494AA0000A2D0;
 			remoteInfo = Popt;
+		};
+		221052AB0E3D369C0057CD9C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 02356D660BD3BB2600E9A019 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 221052010E3D21E80057CD9C;
+			remoteInfo = Bison;
 		};
 		97B1D6670D1541C000737638 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -957,7 +964,7 @@
 		022B2FE10BD55E45002E64E3 /* libintl.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = libintl.h; path = "external/gettext/gettext-runtime/intl/libintl.h"; sourceTree = SOURCE_ROOT; };
 		022B30AA0BD564FC002E64E3 /* config.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = config.h; path = "external/gettext/gettext-runtime/config.h"; sourceTree = SOURCE_ROOT; };
 		022B30DF0BD56618002E64E3 /* plural.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = plural.c; path = "external/gettext/gettext-runtime/intl/plural.c"; sourceTree = "<group>"; };
-		02356D750BD3BB3400E9A019 /* Warzone.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Warzone.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		02356D750BD3BB3400E9A019 /* Warzone.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Warzone.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		02356D780BD3BB3500E9A019 /* Warzone-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = "Warzone-Info.plist"; path = "Resources/Warzone-Info.plist"; sourceTree = "<group>"; };
 		02356D830BD3BB4100E9A019 /* Zlib.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Zlib.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		02356D840BD3BB4100E9A019 /* Zlib-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = "Zlib-Info.plist"; path = "Resources/Zlib-Info.plist"; sourceTree = "<group>"; };
@@ -1038,7 +1045,6 @@
 		0246A0B90BD3CBD5004D1C70 /* strresly.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = strresly.h; path = ../lib/framework/strresly.h; sourceTree = SOURCE_ROOT; };
 		0246A0BA0BD3CBD5004D1C70 /* treap.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = treap.c; path = ../lib/framework/treap.c; sourceTree = SOURCE_ROOT; };
 		0246A0BB0BD3CBD5004D1C70 /* treap.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = treap.h; path = ../lib/framework/treap.h; sourceTree = SOURCE_ROOT; };
-		0246A0BC0BD3CBD5004D1C70 /* treapint.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = treapint.h; path = ../lib/framework/treapint.h; sourceTree = SOURCE_ROOT; };
 		0246A0BD0BD3CBD5004D1C70 /* trig.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = trig.c; path = ../lib/framework/trig.c; sourceTree = SOURCE_ROOT; };
 		0246A0BE0BD3CBD5004D1C70 /* trig.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = trig.h; path = ../lib/framework/trig.h; sourceTree = SOURCE_ROOT; };
 		0246A0BF0BD3CBD5004D1C70 /* types.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = types.h; path = ../lib/framework/types.h; sourceTree = SOURCE_ROOT; };
@@ -2051,7 +2057,6 @@
 				0246A0B90BD3CBD5004D1C70 /* strresly.h */,
 				0246A0BA0BD3CBD5004D1C70 /* treap.c */,
 				0246A0BB0BD3CBD5004D1C70 /* treap.h */,
-				0246A0BC0BD3CBD5004D1C70 /* treapint.h */,
 				0246A0BD0BD3CBD5004D1C70 /* trig.c */,
 				0246A0BE0BD3CBD5004D1C70 /* trig.h */,
 				0246A0BF0BD3CBD5004D1C70 /* types.h */,
@@ -3198,6 +3203,7 @@
 				0246AA4D0BD3E067004D1C70 /* PBXBuildRule */,
 			);
 			dependencies = (
+				221052AC0E3D369C0057CD9C /* PBXTargetDependency */,
 				02CDDCFF0D159C0000722688 /* PBXTargetDependency */,
 				02581C630BD5A97400957CBC /* PBXTargetDependency */,
 				022B313F0BD56915002E64E3 /* PBXTargetDependency */,
@@ -3406,6 +3412,20 @@
 			productReference = 02F5CC6D0D1494AA0000A2D0 /* Popt.framework */;
 			productType = "com.apple.product-type.framework";
 		};
+		221052010E3D21E80057CD9C /* Bison */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 221052040E3D220C0057CD9C /* Build configuration list for PBXNativeTarget "Bison" */;
+			buildPhases = (
+				221052070E3D22540057CD9C /* Fetch source and build */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Bison;
+			productName = Bison;
+			productType = "com.apple.product-type.tool";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -3430,6 +3450,7 @@
 				02581C5C0BD5A94A00957CBC /* SDLmain */,
 				02F5CC6C0D1494AA0000A2D0 /* Popt */,
 				02CDDCF30D159BC300722688 /* Autorevision */,
+				221052010E3D21E80057CD9C /* Bison */,
 			);
 		};
 /* End PBXProject section */
@@ -3529,7 +3550,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "DIRECTORY=\"quesoglc-0.7.1\"\nOUTDIR=\"quesoglc\"\nFILENAME=\"quesoglc-0.7.1.tar.bz2\"\nSOURCE=\"http://superb-east.dl.sourceforge.net/sourceforge/quesoglc/quesoglc-0.7.1.tar.bz2\"\nMD5=\"53e9c5c304369803aa99000916728119\"\n\ncd external\n\nif [ -d \"$OUTDIR\" ]; then\n  echo \"$OUTDIR exists, skipping\"\n  exit 0\nfi\n\nif [ -d \"$DIRECTORY\" ]; then\n  echo \"$DIRECTORY exists, probably from an earlier failed run\" >&2\n  exit 1\nfi\n\nif [ ! -r \"$FILENAME\" ]; then\n  echo \"Fetching $SOURCE\"\n  if ! curl -L -o \"$FILENAME\" \"$SOURCE\"; then\n    echo \"Unable to fetch $SOURCE\" >&2\n    exit 1\n  fi\nfi\n\nHAVEMD5=`md5 \"$FILENAME\" | sed -n -e 's/^MD5 (\\(.*\\)) = \\(.*\\)$/\\2/p'`\n\nif [ -z \"$HAVEMD5\" ]; then\n  echo \"Unable to compute md5 for $FILENAME\" >&2\n  exit 1\nfi\n\nif [ \"$HAVEMD5\" != \"$MD5\" ]; then\n  echo \"Md5 does not match for $FILENAME\" >&2\n  exit 1\nfi\n\nEXTENSION=`echo $FILENAME | sed -e 's/^.*\\.\\([^.]*\\)/\\1/'`\n\nif [ \"$EXTENSION\" = \"gz\" ]; then\n  if ! tar -zxf \"$FILENAME\"; then\n    echo \"Unpacking $FILENAME failed\" >&2\n    exit 1\n  fi\nelif [ \"$EXTENSION\" = \"bz2\" ]; then\n  if ! tar -jxf \"$FILENAME\"; then\n    echo \"Unpacking $FILENAME failed\" >&2\n    exit 1\n  fi\nelse\n  echo \"Unable to unpack $FILENAME\" >&2\n  exit 1\nfi\n\nif [ ! -d \"$DIRECTORY\" ]; then\n  echo \"Can't find $DIRECTORY to rename\" >&2\n  exit 1\nfi\n\nmv \"$DIRECTORY\" \"$OUTDIR\"";
+			shellScript = "OUTDIR=quesoglc\nSVNURL=https://quesoglc.svn.sourceforge.net/svnroot/quesoglc/branches/release-0.7/quesoglc/\nSVNREV=835\n\nPATH=\"/usr/local/bin:${PATH}\"\nexport PATH\n\ncd external\n\nif [ -d \"$OUTDIR\" ]; then\n  echo \"$OUTDIR exists, skipping\"\n  exit 0\nfi\n\nif [ ! -z \"$SVNREV\" ]; then\n  SVNARGS=\"$SVNARGS -r $SVNREV\"\nfi\n\nsvn co $SVNARGS $SVNURL $OUTDIR\n";
 		};
 		022B2F290BD55840002E64E3 /* Fetch source */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -3716,6 +3737,20 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "DIRECTORY=\"SDL_net-1.2.6\"\nOUTDIR=\"SDL_net\"\nFILENAME=\"SDL_net-1.2.6.tar.gz\"\nSOURCE=\"http://www.libsdl.org/projects/SDL_net/release/SDL_net-1.2.6.tar.gz\"\nMD5=\"7be5b9ef36129ee187ace96906cd264c\"\n\ncd external\n\nif [ -d \"$OUTDIR\" ]; then\n  echo \"$OUTDIR already exists, skipping\"\n  exit 0\nfi\n\nif [ -d \"$DIRECTORY\" ]; then\n  echo \"$DIRECTORY exists, probably from an earlier failed run\" >&2\n  exit 1\nfi\n\nif [ ! -r \"$FILENAME\" ]; then\n  echo \"Fetching $SOURCE\"\n  if ! curl -L -o \"$FILENAME\" \"$SOURCE\"; then\n    echo \"Unable to fetch $SOURCE\" >&2\n    exit 1\n  fi\nfi\n\nHAVEMD5=`md5 \"$FILENAME\" | sed -n -e 's/^MD5 (\\(.*\\)) = \\(.*\\)$/\\2/p'`\n\nif [ -z \"$HAVEMD5\" ]; then\n  echo \"Unable to compute md5 for $FILENAME\" >&2\n  exit 1\nfi\n\nif [ \"$HAVEMD5\" != \"$MD5\" ]; then\n  echo \"Md5 does not match for $FILENAME\" >&2\n  exit 1\nfi\n\nEXTENSION=`echo $FILENAME | sed -e 's/^.*\\.\\([^.]*\\)/\\1/'`\n\nif [ \"$EXTENSION\" = \"gz\" ]; then\n  if ! tar -zxf \"$FILENAME\"; then\n    echo \"Unpacking $FILENAME failed\" >&2\n    exit 1\n  fi\nelif [ \"$EXTENSION\" = \"bz2\" ]; then\n  if ! tar -jxf \"$FILENAME\"; then\n    echo \"Unpacking $FILENAME failed\" >&2\n    exit 1\n  fi\nelse\n  echo \"Unable to unpack $FILENAME\" >&2\n  exit 1\nfi\n\nif [ ! -d \"$DIRECTORY\" ]; then\n  echo \"Can't find $DIRECTORY to rename\" >&2\n  exit 1\nfi\n\nmv \"$DIRECTORY\" \"$OUTDIR\"\n";
+		};
+		221052070E3D22540057CD9C /* Fetch source and build */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Fetch source and build";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "#!/bin/bash\n\nOUTDIR=\"bison\"    # Dir in macosx/external to unpack Bison to\nSYS_BISON=\"bison\" # System Bison executable\nBISON_BIN_DIR=\"`pwd`/external/$OUTDIR/built\" # Directory to install Bison to (relative to macosx/)\nLOCAL_BISON=\"$BISON_BIN_DIR/bison\" # Local Warzone Bison executable\n\n# getLocalBison\n# \n# Attempts to build and (if needed) download a version of Bison that is\n# compatible with Warzone. Returns 0 if successful, else 1.\nfunction getLocalBison\n{\n\tlocal DIRECTORY=\"bison-2.3\"\n\tlocal EXECUTABLE=$LOCAL_BISON\n\tlocal FILENAME=\"bison-2.3.tar.bz2\"\n\tlocal SOURCE=\"http://ftp.gnu.org/gnu/bison/bison-2.3.tar.bz2\"\n\tlocal MD5=\"c18640c6ec31a169d351e3117ecce3ec\"\n\t\n\t## Fetch source ##\n\t\n\tcd external\n\t\n\tif [ -d \"$OUTDIR\" ]; then\n\t  echo \"$OUTDIR exists, skipping\"\n\t  return 0\n\tfi\n\t\n\tif [ -d \"$DIRECTORY\" ]; then\n\t  echo \"$DIRECTORY exists, probably from an earlier failed run\" >&2\n\t  return 1\n\tfi\n\t\n\tif [ ! -r \"$FILENAME\" ]; then\n\t  echo \"Fetching $SOURCE\"\n\t  if ! curl -L -o \"$FILENAME\" \"$SOURCE\"; then\n\t    echo \"Unable to fetch $SOURCE\" >&2\n\t    return 1\n\t  fi\n\tfi\n\t\n\tlocal HAVEMD5=`md5 \"$FILENAME\" | sed -n -e 's/^MD5 (\\(.*\\)) = \\(.*\\)$/\\2/p'`\n\t\n\tif [ -z \"$HAVEMD5\" ]; then\n\t  echo \"Unable to compute md5 for $FILENAME\" >&2\n\t  return 1\n\tfi\n\t\n\tif [ \"$HAVEMD5\" != \"$MD5\" ]; then\n\t  echo \"Md5 does not match for $FILENAME\" >&2\n\t  return 1\n\tfi\n\t\n\tlocal EXTENSION=`echo $FILENAME | sed -e 's/^.*\\.\\([^.]*\\)/\\1/'`\n\t\n\tif [ \"$EXTENSION\" = \"gz\" ]; then\n\t  if ! tar -zxf \"$FILENAME\"; then\n\t    echo \"Unpacking $FILENAME failed\" >&2\n\t    return 1\n\t  fi\n\telif [ \"$EXTENSION\" = \"bz2\" ]; then\n\t  if ! tar -jxf \"$FILENAME\"; then\n\t    echo \"Unpacking $FILENAME failed\" >&2\n\t    return 1\n\t  fi\n\telse\n\t  echo \"Unable to unpack $FILENAME\" >&2\n\t  return 1\n\tfi\n\t\n\tif [ ! -d \"$DIRECTORY\" ]; then\n\t  echo \"Can't find $DIRECTORY to rename\" >&2\n\t  return 1\n\tfi\n\t\n\tmv \"$DIRECTORY\" \"$OUTDIR\"\n\t\n\t## Build source ##\n\t\n\tcd \"$OUTDIR\"\n\t\n\techo \"Configuring GNU Bison\"\n\t./configure --prefix \"$BISON_BIN_DIR\"\n\t\n\tif [ \"$?\" -ne 0 ]; then\n\t\techo \"GNU Bison configure operation failed\" >&2\n\t\treturn 1\n\tfi\n\t\n\techo \"Compiling GNU Bison\"\n\tmake && make install\n\t\n\tif [ \"$?\" -ne 0 ]; then\n\t\techo \"GNU Bison make operation failed\" >&2\n\t\treturn 1\n\tfi\n\t\n\treturn 0\n}\n\n# isValidBison executable\n#\n# Determines if a version of Bison is compatible with Warzone. The argument\n# 'executable' specifies the location of the Bison executable to test. Returns\n# 1 if the version of Bison is valid, else 0\nfunction isValidBison\n{\n\tlocal BISON=$1            # Bison command to check version of\n\tlocal MIN_BISON_MAJOR=1   # Minimum major version of Bison to allow\n\tlocal MIN_BISON_MINOR=31  # Minimum minor version of Bison to allow\n\tlocal BISON_BLACKLIST=()  # Bison versions to blacklist (e.g. \"2.1\")\n\t\n\t# Expects the Bison version to be the only token of the form #.# on the first\n\t# line of the output from ./bison --version, where the first # is the major\n\t# version and the second # is the minor version\n\tlocal BISON_VER=`$BISON --version  | sed -En '1 s:.*([0-9]+\\.[0-9]+):\\1: p'`\n\tlocal BISON_MAJOR=`echo $BISON_VER | sed -E  's:([0-9]+)\\.[0-9]+:\\1:'`\n\tlocal BISON_MINOR=`echo $BISON_VER | sed -E  's:[0-9]+\\.([0-9]+):\\1:'`\n\t\n\tlocal VALID_BISON=$(( (BISON_MAJOR > MIN_BISON_MAJOR)\n\t                   || (  BISON_MAJOR == MIN_BISON_MAJOR\n\t                      && BISON_MINOR >= MIN_BISON_MINOR) ))\n\t\n\t# If version is valid so far, check the blacklist\n\tif [ $VALID_BISON -eq 1 ]; then\n\t\tfor (( i = 0; i < ${#BISON_BLACKLIST[@]}; ++i )); do\n\t\t\tif [ $BISON_VER == ${BISON_BLACKLIST[${i}]} ]; then\n\t\t\t\tVALID_BISON=0\n\t\t\tfi\n\t\tdone\n\tfi\n\t\n\treturn $VALID_BISON\n}\n\n## Main ##\n#\n# If there is not already a local version of Bison (one in macosx/external/) and\n# the version of Bison on the system is incompatible with the build process,\n# attempt to download a compatible version of Bison.\n\n# Check any local version of Bison\nif [ -e $LOCAL_BISON ]; then\n\tisValidBison $LOCAL_BISON\n\t\n\tif [ $? -eq 1 ]; then\n\t\t# Local version is valid (nothing further needs to be done)\n\t\texit 0\n\telse\n\t\t# Local version is invalid\n\t\techo \"The local executable of GNU Bison is of an incompatible version\" >&2\n\t\texit 1\n\tfi\nfi\n\n# If the system version of Bison is incompatible, download a compatible version\nisValidBison $SYS_BISON\nif [ $? -ne 1 ]; then\n\techo \"The version of Bison on your system is not compatible with Warzone\"\n\techo \"A compatible version will be attempted to be downloaded and used\"\n\t\n\tgetLocalBison\n\tif [ $? -ne 0 ]; then\n\t\techo \"Retrieval of a compatible version of Bison has failed\" >&2\n\t\texit 1\n\tfi\nfi\n\nexit 0\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -4279,6 +4314,11 @@
 			target = 02F5CC6C0D1494AA0000A2D0 /* Popt */;
 			targetProxy = 02F5CCC30D1498BB0000A2D0 /* PBXContainerItemProxy */;
 		};
+		221052AC0E3D369C0057CD9C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 221052010E3D21E80057CD9C /* Bison */;
+			targetProxy = 221052AB0E3D369C0057CD9C /* PBXContainerItemProxy */;
+		};
 		97B1D6680D1541C000737638 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 0223BBD00CFE3D5C0056EF85 /* QuesoGLC */;
@@ -4576,7 +4616,7 @@
 					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_3)",
 				);
 				FRAMEWORK_SEARCH_PATHS_QUOTED_1 = "\"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.4u.sdk/System/Library/Frameworks\"";
-				FRAMEWORK_SEARCH_PATHS_QUOTED_2 = "\"$(SRCROOT)/build/Debug\"";
+				FRAMEWORK_SEARCH_PATHS_QUOTED_2 = "\"$(SRCROOT)/build/Release\"";
 				FRAMEWORK_SEARCH_PATHS_QUOTED_3 = "\"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.4u.sdk/System/Library/Frameworks\"";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
@@ -4598,7 +4638,7 @@
 					"$(inherited)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_1)",
 				);
-				LIBRARY_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)/build/Debug\"";
+				LIBRARY_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)/build/Release\"";
 				OTHER_LDFLAGS = "";
 				PREBINDING = NO;
 				PRODUCT_NAME = Warzone;
@@ -5095,6 +5135,36 @@
 			};
 			name = Release;
 		};
+		221052050E3D220C0057CD9C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				INSTALL_PATH = "$(HOME)/bin";
+				PREBINDING = NO;
+				PRODUCT_NAME = Bison;
+				ZERO_LINK = YES;
+			};
+			name = Debug;
+		};
+		221052060E3D220C0057CD9C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_MODEL_TUNING = G5;
+				INSTALL_PATH = "$(HOME)/bin";
+				PREBINDING = NO;
+				PRODUCT_NAME = Bison;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -5220,6 +5290,15 @@
 			buildConfigurations = (
 				02F5CC700D1494AB0000A2D0 /* Debug */,
 				02F5CC710D1494AB0000A2D0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		221052040E3D220C0057CD9C /* Build configuration list for PBXNativeTarget "Bison" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				221052050E3D220C0057CD9C /* Debug */,
+				221052060E3D220C0057CD9C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
