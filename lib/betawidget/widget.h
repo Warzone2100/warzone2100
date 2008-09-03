@@ -70,9 +70,9 @@ typedef struct _eventMisc       eventMisc;
  *              structure (e.g., evtMouse or evtMisc).
  * @param handlerId The (unique) id of this event handler. This can be used to:
  *                   - Remove the event handler from the widgets event table;
- *                     which can be done by calling widgetRemoveEventHandler. It
- *                     is important to note that this will immediately generate
- *                     an EVT_DESTRUCT event and dispatch it.
+ *                     which can be done by calling widgetRemoveEventHandler.
+ *                     This will result in the event handlers destruct method
+ *                     being called, so long as such a method exists.
  *                   - Set the *userData pointer by using
  *                     widgetSetEventHandlerUserData.
  * @param userData  The user-data associated with the callback; this is stored
@@ -84,7 +84,7 @@ typedef bool (*callback)        (widget *self, const event *evt, int handlerId,
 
 typedef struct _eventTableEntry eventTableEntry;
 
-/*
+/**
  * Information about the `type' (class) of a widget
  */
 struct _classInfo
@@ -93,7 +93,7 @@ struct _classInfo
 	const char *ourType;
 };
 
-/*
+/**
  * The valid event types
  */
 typedef enum
@@ -136,7 +136,7 @@ typedef enum
 	EVT_DESTRUCT
 } eventType;
 
-/*
+/**
  * The possible mouse states as understood by the events system
  */
 typedef enum
@@ -148,7 +148,7 @@ typedef enum
 	BUTTON_OTHER
 } mouseButton;
 
-/*
+/**
  * Possible drag states
  */
 typedef enum
@@ -174,7 +174,7 @@ typedef enum
  */
 
 
-/*
+/**
  * The 'base' event structure. All events can be cast to this
  */
 struct _event
@@ -186,62 +186,62 @@ struct _event
 	eventType type;
 };
 
-/*
+/**
  * The event structure used for mouse motion events
  */
 struct _eventMouse
 {
 	event event;
 
-	// Location of the mouse
+	/// Location of the mouse
 	point loc;
 
-	// Previous location of the mouse
+	/// Previous location of the mouse
 	point previousLoc;
 };
 
-/*
+/**
  * The event structure used for mouse button events
  */
 struct _eventMouseBtn
 {
 	event event;
 
-	// Location
+	/// Location
 	point loc;
 
-	// Button pressed
+	/// Button pressed
 	mouseButton button;
 };
 
-/*
+/**
  * The event structure used for keyboard events
  */
 struct _eventKey
 {
 	event event;
 
-	// The keycode of the key which was pressed
+	/// The keycode of the key which was pressed
 	eventKeycode keycode;
 
-	// Active modifier keys
+	/// Active modifier keys
 	bool ctrl;
 	bool shift;
 	bool alt;
 };
 
-/*
+/**
  * The event structure for text input events
  */
 struct _eventText
 {
 	event event;
 
-	// The text that was typed, UTF-8 encoded
+	/// The text that was typed, UTF-8 encoded
 	const char *utf8;
 };
 
-/*
+/**
  * The event structure for timer events
  */
 struct _eventTimer
@@ -249,7 +249,7 @@ struct _eventTimer
 	event event;
 };
 
-/*
+/**
  * The event structure for tool-tip events
  */
 struct _eventToolTip
@@ -259,15 +259,15 @@ struct _eventToolTip
 	widget *target;
 };
 
-/*
- *
+/**
+ * The event structure for miscellaneous events
  */
 struct _eventMisc
 {
 	event event;
 };
 
-/*
+/**
  * Event table structure
  */
 struct _eventTableEntry
@@ -294,7 +294,7 @@ struct _eventTableEntry
 	int interval;
 };
 
-/*
+/**
  * Possible types of widget animation
  */
 typedef enum
@@ -333,7 +333,7 @@ typedef struct
 	} data;
 } animationFrame;
 
-/*
+/**
  * The widget classes virtual method table
  */
 struct _widgetVtbl
@@ -915,6 +915,9 @@ size widgetGetMaxSize(widget *self);
  * conditions:
  *  widgetGetMinSize().x <= x <= widgetGetMaxSize().x and
  *  widgetGetMinSize().y <= y <= widgetGetMaxSize().y.
+ *
+ * This method should not be invoked directly on non-root widget; setting the
+ * dimensions of a widget remains the exclusive responsibility of the parent.
  *
  * @param self  The widget to resize.
  * @param w     The new size of the widget in the x-axis.
