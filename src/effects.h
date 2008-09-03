@@ -168,7 +168,6 @@ extern	UDWORD	getNumEvenEffects(void);
 
 extern	bool fireOnLocation(unsigned int x, unsigned int y);
 
-extern UDWORD EffectGetNumFrames(EFFECT *psEffect);
 extern UDWORD IMDGetNumFrames(iIMDShape *Shape);
 extern UDWORD IMDGetAnimInterval(iIMDShape *Shape);
 extern void	initPerimeterSmoke			( iIMDShape *pImd, UDWORD x, UDWORD y, UDWORD z);

@@ -234,6 +234,8 @@ static BOOL	validatePie( EFFECT_GROUP group, iIMDShape *pie );
 #endif
 static void effectStructureUpdates(void);
 static void effectDroidUpdates(void);
+static UDWORD EffectGetNumFrames(EFFECT *psEffect);
+
 
 static void positionEffect(EFFECT *psEffect)
 {
@@ -2505,7 +2507,7 @@ UDWORD	getNumEffects( void )
 
 
 // ----------------------------------------------------------------------------------------
-UDWORD EffectGetNumFrames(EFFECT *psEffect)
+static UDWORD EffectGetNumFrames(EFFECT *psEffect)
 {
 
 	return psEffect->imd->numFrames;
