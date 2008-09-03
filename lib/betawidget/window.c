@@ -258,7 +258,7 @@ void windowRepositionFromAnchor(window *self, const window *anchor,
 			xOffset = -xOffset;
 			break;
 		case CENTRE:
-			x = (anchorPos.x + anchorSize.x) / 2 - ourSize.x / 2;
+			x = anchorPos.x + (anchorSize.x / 2 - ourSize.x / 2);
 			break;
 		case RIGHT:
 			x = anchorPos.x + anchorSize.x;
