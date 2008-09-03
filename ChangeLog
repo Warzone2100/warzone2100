@@ -6,6 +6,9 @@
    * Added visual feedback for when there are no games available in the lobby.
    * Fix: Smoking healthy droids gone.
    * Fix: Cyborg transports should now unload correctly. (bug #12116)
+ * Buildsystem:
+   * Fix: The OS X build system now works properly on both Tiger and Leopard.
+   * New: Bison is no longer an external dependency when building on OS X as it is automatically downloaded if the system version of Bison is incompatible with the build system.
 
 2008-07-19: Version 2.1_beta4
  * General:

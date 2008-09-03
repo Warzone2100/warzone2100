@@ -3,6 +3,7 @@ Original game developed by Pumpkin Studios, and published by EIDOS Interactive.
 The Warzone Resurrection Project team and former contributors to the GPL version, in alphabetical order:
 
 Scott Balneaves <sbalneav> : Programming
+Tim Baumgartner <Baum> : MacOSX port maintenance
 -- <Buginator> : Programming
 Roman C. <troman> : Programming and Scripting + Scripting-engine rewrite and AI
 Denis Dupeyron <charun> : Programming
