@@ -271,7 +271,7 @@ void windowRepositionFromAnchor(window *self, const window *anchor,
 			y = anchorPos.y;
 			break;
 		case MIDDLE:
-			y = (anchorPos.y + anchorSize.y) / 2 - ourSize.y / 2;
+			y = anchorPos.y + (anchorSize.x / 2 - ourSize.y / 2);
 			break;
 		case BOTTOM:
 			y = anchorPos.y + anchorSize.y;
