@@ -102,8 +102,7 @@ void widgetHandleSDLEvent(const SDL_Event *sdlEvt)
 		case SDL_MOUSEMOTION:
 		{
 			eventMouse evtMouse;
-			evtMouse.event.time = widgetGetTime();
-			evtMouse.event.type = EVT_MOUSE_MOVE;
+			evtMouse.event = widgetCreateEvent(EVT_MOUSE_MOVE);
 			
 			// Location
 			evtMouse.loc.x = sdlEvt->motion.x;
@@ -122,9 +121,8 @@ void widgetHandleSDLEvent(const SDL_Event *sdlEvt)
 		case SDL_MOUSEBUTTONUP:
 		{
 			eventMouseBtn evtMouseBtn;
-			evtMouseBtn.event.time = widgetGetTime();
-			evtMouseBtn.event.type = (sdlEvt->button.state == SDL_PRESSED) ?
-			                          EVT_MOUSE_DOWN : EVT_MOUSE_UP;
+			evtMouseBtn.event = widgetCreateEvent(sdlEvt->button.state == SDL_PRESSED ?
+			                                      EVT_MOUSE_DOWN : EVT_MOUSE_UP);
 			
 			// Location
 			evtMouseBtn.loc.x = sdlEvt->button.x;
@@ -143,9 +141,8 @@ void widgetHandleSDLEvent(const SDL_Event *sdlEvt)
 		case SDL_KEYUP:
 		{
 			eventKey evtKey;
-			evtKey.event.time = widgetGetTime();
-			evtKey.event.type = (sdlEvt->key.type == SDL_KEYDOWN) ?
-			                     EVT_KEY_DOWN : EVT_KEY_UP;
+			evtKey.event = widgetCreateEvent(sdlEvt->key.type == SDL_KEYDOWN ?
+			                                 EVT_KEY_DOWN : EVT_KEY_UP);
 			
 			// Key pressed/released
 			evtKey.keycode = SDLKeyToEventKeycode(sdlEvt->key.keysym.sym);
@@ -176,8 +173,7 @@ void widgetFireTimers()
 {
 	// Create the generic timer event
 	eventTimer evtTimer;
-	evtTimer.event.time = widgetGetTime();
-	evtTimer.event.type = EVT_TIMER;
+	evtTimer.event = widgetCreateEvent(EVT_TIMER);
 	
 	// Dispatch
 	windowHandleEventForWindowVector((event *) &evtTimer);

@@ -165,6 +165,21 @@ bool widgetIsA(const widget *self, const classInfo *instanceOf)
 	return false;
 }
 
+event widgetCreateEvent(eventType type)
+{
+	// Create the event
+	event e;
+	
+	// Set the time of the event to now
+	e.time = widgetGetTime();
+	
+	// Type of the event to the one provided
+	e.type = type;
+	
+	return e;
+}
+
+
 bool widgetIsEventHandler(const widget *self, int id)
 {
 	return widgetGetEventHandlerById(self, id) ? true : false;
@@ -1098,8 +1113,7 @@ void widgetFocusImpl(widget *self)
 	self->hasFocus = true;
 
 	// Fire our on-focus callbacks
-	evt.event.type = EVT_FOCUS;
-	evt.event.time = widgetGetTime();
+	evt.event = widgetCreateEvent(EVT_FOCUS);
 	widgetFireCallbacks(self, (event *) &evt);
 }
 
@@ -1125,8 +1139,7 @@ void widgetBlurImpl(widget *self)
 	self->hasFocus = false;
 
 	// Fire off the on-blur callbacks
-	evt.event.type = EVT_BLUR;
-	evt.event.time = widgetGetTime();
+	evt.event = widgetCreateEvent(EVT_BLUR);
 	widgetFireCallbacks(self, (event *) &evt);
 }
 
@@ -1134,8 +1147,7 @@ void widgetShowToolTip(widget *self)
 {
 	// Create the event
 	eventToolTip evt;
-	evt.event.type = EVT_TOOL_TIP_SHOW;
-	evt.event.time = widgetGetTime();
+	evt.event = widgetCreateEvent(EVT_TOOL_TIP_SHOW);
 	evt.target = self;
 	
 	// Dispatch the event to the root widget
@@ -1149,8 +1161,7 @@ void widgetHideToolTip(widget *self)
 {	
 	// Create the event
 	eventToolTip evt;
-	evt.event.type = EVT_TOOL_TIP_HIDE;
-	evt.event.time = widgetGetTime();
+	evt.event = widgetCreateEvent(EVT_TOOL_TIP_HIDE);
 	evt.target = self;
 	
 	// Dispatch the event to the root widget

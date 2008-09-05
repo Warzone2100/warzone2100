@@ -604,6 +604,19 @@ void widgetCompositeImpl(widget *self);
  */
 bool widgetIsA(const widget *self, const classInfo *instanceOf);
 
+/**
+ * Creates and fills out a new event structure using the information provided.
+ * This is strictly a convenience method to make it easier to generate new
+ * events.
+ *
+ * The event structure returned is the building block of all other, more complex
+ * events (such as mouse and keyboard events).
+ *
+ * @param type  The type of the newly created event.
+ * @return A complete event structure.
+ */
+event widgetCreateEvent(eventType type);
+
 /*
  * Public static, implementation defined methods
  */
