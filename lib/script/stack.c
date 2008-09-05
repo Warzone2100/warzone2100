@@ -292,8 +292,6 @@ BOOL stackPopParams(unsigned int numParams, ...)
 	unsigned int i, index;
 	STACK_CHUNK *psCurr;
 
-	va_start(args, numParams);
-
 	// Find the position of the first parameter, and set
 	// the stack top to it
 	if (numParams <= currEntry)
@@ -327,9 +325,10 @@ BOOL stackPopParams(unsigned int numParams, ...)
 	{
 		debug( LOG_ERROR, "stackPopParams: not enough parameters on stack" );
 		ASSERT( false, "stackPopParams: not enough parameters on stack" );
-		va_end(args);
 		return false;
 	}
+
+	va_start(args, numParams);
 
 	// Get the values, checking their types
 	index = currEntry;

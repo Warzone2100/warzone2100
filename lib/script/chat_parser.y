@@ -763,11 +763,10 @@ void chat_error(const char *pMessage,...)
 	va_list	args;
 
 	va_start(args, pMessage);
-
 	vsnprintf(aTxtBuf, sizeof(aTxtBuf), pMessage, args);
+	va_end(args);
+
 	chatGetErrorData(&line, &pText);
 	//debug(LOG_WARNING, "multiplayer message parse error: %s at line %d, token: %d, text: '%s'",
 	//      aTxtBuf, line, chat_char, pText);
-
-	va_end(args);
 }
