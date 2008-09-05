@@ -1176,6 +1176,13 @@ void widgetResizeImpl(widget *self, int w, int h)
 	const size minSize = widgetGetMinSize(self);
 	const size maxSize = widgetGetMaxSize(self);
 	
+	// Create an event
+	eventResize evtResize;
+	evtResize.event = widgetCreateEvent(EVT_RESIZE);
+	
+	// Save the current size in the event
+	evtResize.oldSize = self->size;
+	
 	assert(minSize.x <= w);
 	assert(minSize.y <= h);
 	assert(w <= maxSize.x);
@@ -1204,13 +1211,27 @@ void widgetResizeImpl(widget *self, int w, int h)
 	{
 		widgetDoLayout(self);
 	}
+	
+	// Fire any EVT_RESIZE callbacks
+	widgetFireCallbacks(self, (event *) &evtResize);
 }
 
 void widgetRepositionImpl(widget *self, int x, int y)
 {
+	// Generate a reposition event
+	eventReposition evtReposition;
+	evtReposition.event = widgetCreateEvent(EVT_REPOSITION);
+	
+	// Save the current position in the event
+	evtReposition.oldPosition = self->offset;
+	evtReposition.oldAbsolutePosition = widgetAbsolutePosition(self);
+	
 	// Update our position
 	self->offset.x = x;
 	self->offset.y = y;
+	
+	// Fire any callbacks for EVT_REPOSITION
+	widgetFireCallbacks(self, (event *) &evtReposition);
 }
 
 void widgetCompositeImpl(widget *self)

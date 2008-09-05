@@ -58,6 +58,8 @@ typedef struct _eventKey        eventKey;
 typedef struct _eventText		eventText;
 typedef struct _eventTimer      eventTimer;
 typedef struct _eventToolTip    eventToolTip;
+typedef struct _eventReposition eventReposition;
+typedef struct _eventResize     eventResize;
 typedef struct _eventMisc       eventMisc;
 
 /**
@@ -127,6 +129,10 @@ typedef enum
 	// Tool-tip events
 	EVT_TOOL_TIP_SHOW,
 	EVT_TOOL_TIP_HIDE,
+	
+	// Resize and reposition
+	EVT_RESIZE,
+	EVT_REPOSITION,
 
 	// Misc
 	EVT_FOCUS,
@@ -257,6 +263,31 @@ struct _eventToolTip
 	event event;
 
 	widget *target;
+};
+
+/**
+ * The event structure for resize events
+ */
+struct _eventResize
+{
+	event event;
+	
+	/// The previous size of the widget
+	size oldSize;
+};
+
+/**
+ * The event structure for reposition events
+ */
+struct _eventReposition
+{
+	event event;
+	
+	/// The previous position of the widget relative to its parent
+	point oldPosition;
+	
+	/// The previous position of the widget relative to the screen
+	point oldAbsolutePosition;
 };
 
 /**
