@@ -649,14 +649,23 @@ void iV_DrawTextRotated(const char* string, float XPos, float YPos, float rotati
 
 void iV_DrawTextRotatedFv(float x, float y, float rotation, const char* format, va_list ap)
 {
-	// Determine the size of the string we'll be going to draw on screen
-	size_t size = vsnprintf(NULL, 0, format, ap);
+	va_list aq;
+	size_t size;
+	char* str;
+
+	/* Required because we're using the va_list ap twice otherwise, which
+	 * results in undefined behaviour. See stdarg(3) for details.
+	 */
+	va_copy(aq, ap);
 
 	// Allocate a buffer large enough to hold our string on the stack
-	char* str = alloca(size + 1);
+	size = vsnprintf(NULL, 0, format, ap);
+	str = alloca(size + 1);
 
 	// Print into our newly created string buffer
-	vsprintf(str, format, ap);
+	vsprintf(str, format, aq);
+
+	va_end(aq);
 
 	// Draw the produced string to the screen at the given position and rotation
 	iV_DrawTextRotated(str, x, y, rotation);
