@@ -1129,9 +1129,16 @@ void handleAbandonedStructures()
 			// Save the next structure in the list
 			psNext = psCurr->psNext;
 
-			// We are only interested in structures accruing
+			/*
+			 * We are only interested in structures accruing that are not
+			 * structures which can have modules (factory, research, power).
+			 */
 			if (psCurr->status == SS_BEING_BUILT
-			 && psCurr->currentPowerAccrued < structPowerToBuild(psCurr))
+			 && psCurr->currentPowerAccrued < structPowerToBuild(psCurr)
+			 && psCurr->pStructureType->type != REF_FACTORY
+			 && psCurr->pStructureType->type != REF_VTOL_FACTORY
+			 && psCurr->pStructureType->type != REF_RESEARCH
+			 && psCurr->pStructureType->type != REF_POWER_GEN)
 			{
 				DROID *psDroid;
 				bool beingBuilt = false;
@@ -3001,7 +3008,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 			    && (!orderState(psDroid, DORDER_RTR)
 			        || psDroid->psTarget != (BASE_OBJECT *)psStructure))
 			{
-				objTrace(psStructure->id, "Dropping repair target %d; wrong order=%d, wrong target=%d", 
+				objTrace(psStructure->id, "Dropping repair target %d; wrong order=%d, wrong target=%d",
 				         (int)psChosenObj->id, (int)(!orderState(psDroid, DORDER_RTR)), (int)(psDroid->psTarget != (BASE_OBJECT *)psStructure));
 				psChosenObj = NULL;
 				psDroid = NULL;
