@@ -148,6 +148,7 @@ not_version ()
 version_check 1 "pkg-config" "http://pkgconfig.freedesktop.org/" 0 9 || DIE=1
 version_check 1 "autoconf" "ftp://ftp.gnu.org/pub/gnu/autoconf/" 2 56 || DIE=1
 version_check 1 "automake" "ftp://ftp.gnu.org/pub/gnu/automake/" 1 10 || DIE=1
+version_check 1 "libtoolize" "ftp://ftp.gnu.org/pub/gnu/libtool/" 1 5 || DIE=1
 if [ "$DIE" -eq 1 ]; then
   exit 1
 fi
@@ -177,6 +178,12 @@ echo "+ running autoconf ... "
 autoconf || {
   echo
   echo "autoconf failed"
+  exit 1
+}
+echo "+ running libtoolize ... "
+libtoolize --automake -c || {
+  echo
+  echo "libtoolize failed"
   exit 1
 }
 echo "+ running automake ... "

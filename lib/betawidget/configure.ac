@@ -12,7 +12,13 @@ AC_CANONICAL_HOST
 
 # Checks for programs.
 AC_PROG_CC
-AC_PROG_RANLIB
+
+# By default don't build shared libraries
+AC_DISABLE_SHARED
+
+AC_PROG_LIBTOOL
+AC_SUBST([LIBTOOL_DEPS])
+
 PKG_PROG_PKG_CONFIG
 
 # pkg-config hooks:
@@ -21,9 +27,6 @@ if test "x$PKGCONFIG_PREFIX" != "x" ; then
 	PKG_CONFIG="${PKG_CONFIG} --define-variable=prefix=${PKGCONFIG_PREFIX}"
 fi
 
-AC_ARG_ENABLE([static],
-	AS_HELP_STRING([--enable-static], [Link statically [no]]),
-	[ enable_static=${enableval} ], [ enable_static=no ])
 if test "x$enable_static" = "xyes" ; then
 	# Tell pkg-config to link against static libraries, incl. all dependencies
 	PKG_CONFIG="${PKG_CONFIG} --static"
