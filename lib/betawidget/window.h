@@ -29,18 +29,6 @@
 typedef struct _window window;
 typedef struct _windowVtbl windowVtbl;
 
-/**
- * The possible ways in which windowRepositionFromAnchor can act
- */
-typedef enum
-{
-	/// The window does not track changes in the anchor windows
-	ANCHOR_STATIC,
-	
-	/// The window tracks and updates to changes in the anchor window
-	ANCHOR_DYNAMIC
-} anchorState;
-
 struct _windowVtbl
 {
 	widgetVtbl widgetVtbl;
@@ -59,42 +47,6 @@ struct _window
 	 * Our vtable
 	 */
 	windowVtbl *vtbl;
-	
-	/**
-	 * Current anchor state
-	 */
-	anchorState anchorState;
-	
-	/**
-	 * Anchor window
-	 */
-	window *anchorWindow;
-	
-	/**
-	 * Anchor horizontal alignment
-	 */
-	hAlign anchorHAlign;
-	
-	/**
-	 * Anchor horizontal offset
-	 */
-	int anchorXOffset;
-	
-	/**
-	 * Anchor vertical alignment
-	 */
-	vAlign anchorVAlign;
-	
-	/**
-	 * Anchor vertical offset
-	 */
-	int anchorYOffset;
-	
-	/**
-	 * Event handler IDs for anchor events
-	 */
-	int anchorRepositionId;
-	int anchorResizeId;
 };
 
 /*
@@ -116,7 +68,6 @@ void windowDestroyImpl(widget *self);
 bool windowDoLayoutImpl(widget *self);
 void windowDoDrawImpl(widget *self);
 bool windowAddChildImpl(widget *self, widget *child);
-void windowResizeImpl(widget *self, int w, int h);
 size windowGetMinSizeImpl(widget *self);
 size windowGetMaxSizeImpl(widget *self);
 
@@ -178,23 +129,6 @@ void windowSetScreenSize(int w, int h);
  */
 void windowRepositionFromScreen(window *self, hAlign hAlign, int xOffset,
                                               vAlign vAlign, int yOffset);
-
-/**
- * Sets the behaviour of windowRepositionFromAchor (with the default being
- * ANCHOR_STATIC) to state. If the state is the same as the current anchor state
- * then this method is a no-op.
- *
- * It is important to note that:
- *  - setting the state to ANCHOR_STATIC will break the current anchor (if any);
- *  - a state of ANCHOR_DYNAMIC will only take effect after the next call to
- *    windowRepositionFromAnchor;
- *  - calling widgetReposition with an anchor state of ANCHOR_DYNAMIC will cause
- *    strange behaviour - the anchor should be set to ANCHOR_STATIC first.
- *
- * @param self  The window to set the anchor state for.
- * @param state The new state to set the anchor behaviour to.
- */
-void windowSetAnchorState(window *self, anchorState state);
 
 /**
  * Positions the window relative to the position of another window, anchor.
