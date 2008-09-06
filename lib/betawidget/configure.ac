@@ -32,10 +32,6 @@ if test "x$enable_static" = "xyes" ; then
 	PKG_CONFIG="${PKG_CONFIG} --static"
 fi
 
-# Checks for libraries.
-PKG_CHECK_MODULES([SDL], [sdl >= 1.2])
-PKG_CHECK_MODULES([CAIRO_SVG], [cairo-svg])
-
 # Checks for header files.
 AC_HEADER_STDC
 AC_CHECK_HEADERS([stdint.h stdlib.h string.h])
@@ -52,6 +48,25 @@ AC_TYPE_UINT32_T
 AC_FUNC_MALLOC
 AC_FUNC_REALLOC
 AC_CHECK_FUNCS([memmove strdup])
+
+# Checks for libraries.
+PKG_CHECK_MODULES([SDL], [sdl >= 1.2])
+PKG_CHECK_MODULES([CAIRO_SVG], [cairo-svg])
+
+# Look for OpenGL
+AC_CHECK_HEADER(SDL/SDL_opengl.h, ,
+	AC_MSG_ERROR([SDL OpenGL header not found. Please install SDL with OpenGL support.]))
+AC_CHECK_LIB(GL, main,
+	OPENGL_LIBS="-lGL",
+	AC_CHECK_LIB(opengl32, main,
+		OPENGL_LIBS="-lopengl32",
+		AC_MSG_ERROR([OpenGL library not found.])))
+AC_CHECK_LIB(GLU, main,
+	OPENGL_LIBS="${OPENGL_LIBS} -lGLU",
+	AC_CHECK_LIB(glu32, main,
+		OPENGL_LIBS="${OPENGL_LIBS} -lglu32",
+		AC_MSG_ERROR([GLU library not found.])))
+AC_SUBST([OPENGL_LIBS], [${OPENGL_LIBS}])
 
 AC_CONFIG_FILES([Makefile])
 AC_OUTPUT
