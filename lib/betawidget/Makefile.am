@@ -24,4 +24,15 @@ LIBS += $(SDL_LIBS)
 libbetawidget_la_SOURCES += $(PLATFORM)/event.c $(PLATFORM)/init.c \
 	$(PLATFORM)/time.c
 
+if MINGW32
+libbetawidget_la_SOURCES += $(PLATFORM)/clipboardWin32.c
+else
+if MACOSX
+libbetawidget_la_SOURCES += $(PLATFORM)/clipboardOSX.m
+else
+# Assume X11 if none of the above match
+libbetawidget_la_SOURCES += $(PLATFORM)/clipboardX11.c
+endif
+endif
+
 noinst_HEADERS += $(PLATFORM)/event.h $(PLATFORM)/init.h

@@ -12,6 +12,8 @@ AC_CANONICAL_HOST
 
 # Checks for programs.
 AC_PROG_CC
+# Objective C is used when compiling for OSX (platform/sdl/clipboardOSX.m)
+AC_PROG_OBJC
 
 # By default don't build shared libraries
 AC_DISABLE_SHARED
@@ -31,6 +33,20 @@ if test "x$enable_static" = "xyes" ; then
 	# Tell pkg-config to link against static libraries, incl. all dependencies
 	PKG_CONFIG="${PKG_CONFIG} --static"
 fi
+
+# Check for operating system
+case ${host_os} in
+	*mingw32*)
+		host_os_mingw32=yes
+		;;
+	*darwin*)
+		host_os_macosx=yes
+		;;
+	*)
+		;;
+esac
+AM_CONDITIONAL([MINGW32], test "x$host_os_mingw32" = "xyes")
+AM_CONDITIONAL([MACOSX], test "x$host_os_macosx" = "xyes")
 
 # Checks for header files.
 AC_HEADER_STDC
