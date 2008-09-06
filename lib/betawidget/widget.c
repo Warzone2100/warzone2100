@@ -240,10 +240,16 @@ static bool widgetAnimationTimerCallback(widget *self, const event *evt,
 				switch (i)
 				{
 					case ANI_TYPE_TRANSLATE:
-						// Update the widgets position
-						self->offset = widgetAnimationInterpolateTranslate(self, k1,
-						                                                   k2, time);
+					{
+						// Get the new position
+						point pos = widgetAnimationInterpolateTranslate(self, k1,
+						                                                k2, time);
+						
+						// Set the new position
+						widgetReposition(self, pos.x, pos.y);
+						
 						break;
+					}
 					case ANI_TYPE_ROTATE:
 						// Update the widgets rotation
 						self->rotate = widgetAnimationInterpolateRotate(self, k1,

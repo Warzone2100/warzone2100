@@ -44,6 +44,7 @@ static void windowInitVtbl(window *self)
 		vtbl.widgetVtbl.addChild    = windowAddChildImpl;
 		vtbl.widgetVtbl.doLayout    = windowDoLayoutImpl;
 		vtbl.widgetVtbl.doDraw      = windowDoDrawImpl;
+		vtbl.widgetVtbl.resize      = windowResizeImpl;
 		
 		vtbl.widgetVtbl.getMinSize  = windowGetMinSizeImpl;
 		vtbl.widgetVtbl.getMaxSize  = windowGetMaxSizeImpl;
@@ -77,6 +78,11 @@ void windowInit(window *self, const char *id, int w, int h)
 	
 	// Set our size to (w,h)
 	widgetResize(WIDGET(self), w, h);
+	
+	// Default anchor state is static (as opposed to dynamic)
+	self->anchorState = ANCHOR_STATIC;
+	self->anchorWindow = NULL;
+	self->anchorRepositionId = self->anchorResizeId = -1;
 }
 
 void windowDestroyImpl(widget *self)
@@ -240,9 +246,36 @@ void windowRepositionFromScreen(window *self, hAlign hAlign, int xOffset,
 	widgetReposition(WIDGET(self), x, y);
 }
 
-void windowRepositionFromAnchor(window *self, const window *anchor,
-                                hAlign hAlign, int xOffset,
-                                vAlign vAlign, int yOffset)
+void windowSetAnchorState(window *self, anchorState state)
+{
+	// If the anchor is being disabled, remove any active event handlers
+	if (state == ANCHOR_STATIC && self->anchorWindow)
+	{
+		widget *anchorWidget = WIDGET(self->anchorWindow);
+
+		// Remove the reposition event handler
+		if (widgetIsEventHandler(anchorWidget, self->anchorRepositionId))
+		{
+			widgetRemoveEventHandler(anchorWidget, self->anchorRepositionId);
+		}
+		
+		// Remove the resize event handler
+		if (widgetIsEventHandler(anchorWidget, self->anchorResizeId))
+		{
+			widgetRemoveEventHandler(anchorWidget, self->anchorResizeId);
+		}
+		
+		// We no longer have an anchor window
+		self->anchorWindow = NULL;
+	}
+	
+	// Update the state
+	self->anchorState = state;
+}
+
+static void windowDoRepositionFromAnchor(window *self, const window *anchor,
+                                         hAlign hAlign, int xOffset,
+                                         vAlign vAlign, int yOffset)
 {
 	int x = 0, y = 0;
 	size anchorSize = WIDGET(anchor)->size;
@@ -284,4 +317,110 @@ void windowRepositionFromAnchor(window *self, const window *anchor,
 	
 	// Reposition
 	widgetReposition(WIDGET(self), x, y);
+}
+
+void windowResizeImpl(widget *self, int w, int h)
+{
+	window *windowSelf = WINDOW(self);
+	
+	// Call our parents resize method
+	widgetResizeImpl(self, w, h);
+	
+	// If dynamic anchoring is enabled, reposition ourself
+	if (windowSelf->anchorState == ANCHOR_DYNAMIC && windowSelf->anchorWindow)
+	{
+		windowDoRepositionFromAnchor(windowSelf, windowSelf->anchorWindow, 
+		                             windowSelf->anchorHAlign, 
+		                             windowSelf->anchorXOffset, 
+		                             windowSelf->anchorVAlign, 
+		                             windowSelf->anchorYOffset);
+	}
+}
+
+static bool windowAnchorCallback(widget *self, const event *evt, int handlerId,
+                                 void *userData)
+{
+	// The window to be repositioned is stored in userData
+	window *anchoredWindow = WINDOW(userData);
+	
+	// We should only be called to respond to resize and reposition eventd
+	assert(evt->type == EVT_REPOSITION || evt->type == EVT_RESIZE);
+	
+	// Call windowDoRepositionFromAnchor to update the position
+	windowDoRepositionFromAnchor(anchoredWindow, WINDOW(self),
+	                             anchoredWindow->anchorHAlign,
+	                             anchoredWindow->anchorXOffset,
+	                             anchoredWindow->anchorVAlign,
+	                             anchoredWindow->anchorYOffset);
+	
+	return true;
+}
+
+static bool windowAnchorDestroyCallback(widget *self, const event *evt,
+                                        int handlerId, void *userData)
+{
+	// The window that installed us is in userData
+	window *anchoredWindow = WINDOW(userData);
+	
+	// Make sure the event is a destruct event
+	assert(evt->type == EVT_DESTRUCT);
+	
+	// We are being removed and therefore are no longer anchored
+	anchoredWindow->anchorWindow = NULL;
+	anchoredWindow->anchorRepositionId = anchoredWindow->anchorResizeId = -1;
+	
+	return true;
+}
+
+void windowRepositionFromAnchor(window *self, const window *anchor,
+                                hAlign hAlign, int xOffset,
+                                vAlign vAlign, int yOffset)
+{
+	// If dynamic anchors are enabled, set up dynamic anchoring
+	if (self->anchorState == ANCHOR_DYNAMIC)
+	{
+		// Get the current anchor (so that we may remove the event handlers)
+		widget *anchorWidget = WIDGET(self->anchorWindow);
+		
+		if (anchorWidget)
+		{
+			// Remove any current event handlers we've installed
+			if (widgetIsEventHandler(anchorWidget, self->anchorRepositionId))
+			{
+				widgetRemoveEventHandler(anchorWidget, self->anchorRepositionId);
+			}
+			if (widgetIsEventHandler(anchorWidget, self->anchorResizeId))
+			{
+				widgetRemoveEventHandler(anchorWidget, self->anchorResizeId);
+			}
+		}
+		
+		// Save the window/alignment/offsets
+		self->anchorWindow = self;
+		self->anchorHAlign = hAlign;
+		self->anchorXOffset = xOffset;
+		
+		self->anchorVAlign = vAlign;
+		self->anchorYOffset = yOffset;
+		
+		/*
+		 * Install the event handlers, which are required to track changes to
+		 * the size and position of the anchor window.
+		 *
+		 * Here we make the assumption that the event handlers when removed,
+		 * will be done so in pairs (and therefore only need to install a single
+		 * destructor). The same callback is used for both resize and reposition
+		 * events.
+		 */
+		self->anchorRepositionId = widgetAddEventHandler(WIDGET(anchor), EVT_REPOSITION, 
+		                                                 windowAnchorCallback, 
+		                                                 NULL, self);
+		self->anchorResizeId = widgetAddEventHandler(WIDGET(anchor), EVT_RESIZE,
+		                                             windowAnchorCallback,
+		                                             windowAnchorDestroyCallback,
+		                                             self);
+	}
+	
+	// Reposition the window
+	windowDoRepositionFromAnchor(self, anchor, hAlign, xOffset, vAlign, yOffset);
 }
