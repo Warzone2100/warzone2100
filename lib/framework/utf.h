@@ -25,7 +25,10 @@
 #ifndef __INCLUDE_LIB_FRAMEWORK_UTF8_H__
 #define __INCLUDE_LIB_FRAMEWORK_UTF8_H__
 
-#include "frame.h"
+/* Allow frame header files to be singly included */
+#define FRAME_LIB_INCLUDE
+
+#include "types.h"
 
 /** Used to store a UTF-32 character in
  */
