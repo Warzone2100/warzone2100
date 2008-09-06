@@ -7,6 +7,9 @@ AM_INIT_AUTOMAKE([1.10])
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_SRCDIR([lib/framework/frame.c])
 
+# Make cross compilation options available in --help
+AC_CANONICAL_HOST
+
 
 # HACK
 # Workaround stupid autoconf CFLAGS default
