@@ -27,8 +27,14 @@
  */
 
 #include "utf.h"
-#include "debug.h"
 #include <assert.h>
+
+#if defined(LIB_COMPILE)
+# define ASSERT(expr, ...) (assert(expr))
+# define debug(part, ...) ((void)0)
+#else
+# include "debug.h"
+#endif
 
 // Assert that non-starting octets are of the form 10xxxxxx
 #define ASSERT_NON_START_OCTET(octet) \
