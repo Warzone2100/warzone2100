@@ -13,7 +13,7 @@ noinst_HEADERS = clipboard.h font.h geom.h hBox.h internal-cairo.h keycode.h \
 
 # utf.c, GLee
 libbetawidget_la_SOURCES += ../framework/utf.c ../ivis_opengl/GLee.c
-noinst_HEADERS += ../framework/utf.h ../ivis_opengl/GLee.h
+noinst_HEADERS += ../framework/types.h ../framework/utf.h ../ivis_opengl/GLee.h
 
 # Platform selection
 PLATFORM=platform/sdl
