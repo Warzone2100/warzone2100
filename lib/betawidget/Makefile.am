@@ -11,6 +11,10 @@ libbetawidget_la_LDFLAGS = $(CAIRO_SVG_LIBS) $(OPENGL_LIBS)
 noinst_HEADERS = clipboard.h font.h geom.h hBox.h internal-cairo.h keycode.h \
 	spacer.h textEntry.h vector.h widget.h window.h
 
+# utf.c, GLee
+libbetawidget_la_SOURCES += ../framework/utf.c ../ivis_opengl/GLee.c
+noinst_HEADERS += ../framework/utf.h ../ivis_opengl/GLee.h
+
 # Platform selection
 PLATFORM=platform/sdl
 
