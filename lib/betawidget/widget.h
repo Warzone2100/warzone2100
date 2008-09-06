@@ -26,7 +26,7 @@
 #include <stdlib.h>
 #include <assert.h>
 
-#include <cairo.h>
+#include "internal-cairo.h"
 
 #if __APPLE__
 #	include <OpenGL/gl.h>

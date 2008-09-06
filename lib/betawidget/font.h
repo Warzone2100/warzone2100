@@ -21,7 +21,7 @@
 #ifndef FONT_H_
 #define FONT_H_
 
-#include <cairo.h>
+#include "internal-cairo.h"
 
 /*
  * Forward declarations
