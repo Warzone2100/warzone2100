@@ -142,6 +142,7 @@ int main(int argc, char *argv[])
 	}
 
 	widgetSDLQuit();
+	SDL_Quit();
 	
 	return EXIT_SUCCESS;
 }
