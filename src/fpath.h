@@ -29,6 +29,7 @@
 /** Return values for routing
  *
  *  @ingroup pathfinding
+ *  @{
  */
 typedef enum _fpath_retval
 {
@@ -38,22 +39,16 @@ typedef enum _fpath_retval
 } FPATH_RETVAL;
 
 /** Initialise the path-finding module.
- *
- *  @ingroup pathfinding
  */
 extern BOOL fpathInitialise(void);
 
 /** Shutdown the path-finding module.
- *
- *  @ingroup
  */
 extern void fpathShutdown(void);
 
 extern void fpathUpdate(void);
 
 /** Find a route for a droid to a location.
- *  
- *  @ingroup pathfinding
  */
 extern FPATH_RETVAL fpathDroidRoute(DROID* psDroid, SDWORD targetX, SDWORD targetY);
 
@@ -64,8 +59,6 @@ extern FPATH_RETVAL fpathDroidRoute(DROID* psDroid, SDWORD targetX, SDWORD targe
  *
  *  @param x,y the parameters of the map tile to check
  *  @return true if the given tile is blocking for this droid
- *
- *  @ingroup pathfinding
  */
 extern BOOL fpathBlockingTile(SDWORD x, SDWORD y, PROPULSION_TYPE propulsion);
 
@@ -75,15 +68,15 @@ extern BOOL fpathBlockingTile(SDWORD x, SDWORD y, PROPULSION_TYPE propulsion);
  *  taking obstructions into consideration.
  *
  *  Used for instance by VTOLs. Function is thread-safe.
- *
- *  @ingroup pathfinding
  */
 extern void fpathSetDirectRoute(DROID* psDroid, SDWORD targetX, SDWORD targetY);
 
 /** Clean up path jobs and results for a droid. Function is thread-safe. */
 extern void fpathRemoveDroidData(int id);
 
-// Unit testing
+/** Unit testing. */
 void fpathTest(int x, int y, int x2, int y2);
+
+/** @} */
 
 #endif // __INCLUDED_SRC_FPATH_H__

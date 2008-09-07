@@ -174,16 +174,14 @@ float GetRadarZoom(void)
 	return RadarZoom;
 }
 
-// Calculate the radar pixel sizes. Returns pixels per tile.
-//
+/** Calculate the radar pixel sizes. Returns pixels per tile. */
 static void CalcRadarPixelSize(float *SizeH, float *SizeV)
 {
 	*SizeH = (float)radarHeight / (float)radarTexHeight;
 	*SizeV = (float)radarWidth / (float)radarTexWidth;
 }
 
-// Given a position within the radar, return a world coordinate.
-//
+/** Given a position within the radar, return a world coordinate. */
 void CalcRadarPosition(int mX, int mY, int *PosX, int *PosY)
 {
 	const int	posX = mX - radarX;		// pixel position within radar
@@ -312,8 +310,7 @@ static PIELIGHT appliedRadarColour(RADAR_DRAW_MODE radarDrawMode, MAPTILE *WTile
 	return WScr;
 }
 
-// Draw the map tiles on the radar.
-//
+/** Draw the map tiles on the radar. */
 static void DrawRadarTiles(UDWORD *screen)
 {
 	SDWORD	x, y;
@@ -335,8 +332,7 @@ static void DrawRadarTiles(UDWORD *screen)
 	}
 }
 
-// Draw the droids and structure positions on the radar.
-//
+/** Draw the droids and structure positions on the radar. */
 static void DrawRadarObjects(UDWORD *screen)
 {
 	UBYTE				clan;
@@ -450,8 +446,7 @@ static void DrawRadarObjects(UDWORD *screen)
    	}
 }
 
-// Rotate an array of 2d vectors about a given angle, also translates them after rotating.
-//
+/** Rotate an array of 2d vectors about a given angle, also translates them after rotating. */
 static void RotateVector2D(Vector3i *Vector, Vector3i *TVector, Vector3i *Pos, int Angle, int Count)
 {
 	int Cos = COS(Angle);
@@ -505,7 +500,7 @@ static SDWORD getLengthAdjust( void )
 	return dif / 2;
 }
 
-/* Draws a Myth/FF7 style viewing window */
+/** Draws a Myth/FF7 style viewing window */
 static void drawViewingWindow(UDWORD x, UDWORD y, float pixSizeH, float pixSizeV)
 {
 	Vector3i v[4], tv[4], centre;
@@ -573,8 +568,7 @@ static void DrawRadarExtras(float pixSizeH, float pixSizeV)
 	RenderWindowFrame(FRAME_RADAR, radarX - 1, radarY - 1, radarWidth + 2, radarHeight + 2);
 }
 
-// Does a screen coordinate lie within the radar area?
-//
+/** Does a screen coordinate lie within the radar area? */
 BOOL CoordInRadar(int x,int y)
 {
 	if (x >= radarX && x < radarX + radarWidth && y >= radarY && y < radarY + radarHeight)
