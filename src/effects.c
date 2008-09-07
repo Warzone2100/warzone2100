@@ -97,7 +97,7 @@
 #define SET_CYCLIC(x)			((x->control) = (UBYTE)(x->control | EFFECT_CYCLIC))
 #define SET_SCALED(x)			((x->control) = (UBYTE)(x->control | EFFECT_SCALED))
 #define SET_LIT(x)				((x->control) = (UBYTE)(x->control | EFFECT_LIT))
-#define SET_LITABS(x)			((x.control) = (UBYTE)(x.control | EFFECT_LIT))
+#define SET_LITABS(x)			((x->control) = (UBYTE)(x->control | EFFECT_LIT))
 
 #define MINIMUM_IMPACT_VELOCITY		(16)
 #define	NORMAL_SMOKE_LIFESPAN		(6000 + rand()%3000)
@@ -229,9 +229,6 @@ static void effectSetupDestruction  ( EFFECT *psEffect );
 static void	effectSetupFire			( EFFECT *psEffect );
 static void	effectSetUpSatLaser		( EFFECT *psEffect );
 static void effectSetUpFirework		( EFFECT *psEffect );
-#ifdef DEBUG
-static BOOL	validatePie( EFFECT_GROUP group, iIMDShape *pie );
-#endif
 static void effectStructureUpdates(void);
 static void effectDroidUpdates(void);
 static UDWORD EffectGetNumFrames(EFFECT *psEffect);
@@ -279,7 +276,6 @@ static void killEffect(EFFECT *e)
 	e->control = (UBYTE) 0;
 }
 
-// ----------------------------------------------------------------------------------------
 static BOOL	essentialEffect(EFFECT_GROUP group, EFFECT_TYPE type)
 {
 	switch(group)
@@ -320,8 +316,7 @@ static BOOL utterlyReject( EFFECT_GROUP group )
 	}
 }
 
-// ----------------------------------------------------------------------------------------
-/*	Simply sets the free pointer to the start - actually this isn't necessary
+/**	Simply sets the free pointer to the start - actually this isn't necessary
 	as it will work just fine anyway. This WOULD be necessary were we to change
 	the system so that it seeks FREE slots rather than the oldest one. This is because
 	different effects last for different times and the oldest effect may have
@@ -329,9 +324,8 @@ static BOOL utterlyReject( EFFECT_GROUP group )
 */
 void	initEffectsSystem( void )
 {
-UDWORD	i;
-EFFECT	*psEffect;
-
+	UDWORD	i;
+	EFFECT	*psEffect;
 
 	/* Set position to first */
 	freeEffect = 0;
@@ -356,23 +350,21 @@ EFFECT	*psEffect;
 	}
 }
 
-// ----------------------------------------------------------------------------------------
 void	effectSetLandLightSpec(LAND_LIGHT_SPEC spec)
 {
 	ellSpec = spec;
 }
-// ----------------------------------------------------------------------------------------
+
 void	effectSetSize(UDWORD size)
 {
 	specifiedSize = size;
 }
-// ----------------------------------------------------------------------------------------
+
 void	addMultiEffect(Vector3i *basePos, Vector3i *scatter, EFFECT_GROUP group,
 					   EFFECT_TYPE type,BOOL specified, iIMDShape *imd, UDWORD number, BOOL lit, UDWORD size)
 {
-UDWORD	i;
-Vector3i scatPos;
-
+	UDWORD	i;
+	Vector3i scatPos;
 
 	if(number==0)
 	{
@@ -407,12 +399,11 @@ Vector3i scatPos;
 	}
 }
 
-// ----------------------------------------------------------------------------------------
 UDWORD	getNumActiveEffects( void )
 {
 	return(activeEffects);
 }
-// ----------------------------------------------------------------------------------------
+
 UDWORD	getMissCount( void )
 {
 	return(missCount);
@@ -427,15 +418,13 @@ UDWORD	getNumEvenEffects(void)
 {
 	return(letThrough);
 }
-// ----------------------------------------------------------------------------------------
-
-UDWORD Reject1;
 
 void	addEffect(Vector3i *pos, EFFECT_GROUP group, EFFECT_TYPE type,BOOL specified, iIMDShape *imd, BOOL lit)
 {
 	UDWORD	essentialCount;
 	UDWORD	i;
 	BOOL	bSmoke;
+	EFFECT	*psEffect = NULL;
 
 	aeCalls++;
 
@@ -501,86 +490,80 @@ void	addEffect(Vector3i *pos, EFFECT_GROUP group, EFFECT_TYPE type,BOOL specifie
 		freeEffect = i;
 	}
 
-	/* Store away it's position - into FRACTS */
-	asEffectsList[freeEffect].position.x = pos->x;
-	asEffectsList[freeEffect].position.y = pos->y;
-	asEffectsList[freeEffect].position.z = pos->z;
+	psEffect = &asEffectsList[freeEffect];
 
+	/* Store away it's position - into FRACTS */
+	psEffect->position.x = pos->x;
+	psEffect->position.y = pos->y;
+	psEffect->position.z = pos->z;
 
 	/* Now, note group and type */
-	asEffectsList[freeEffect].group = group;
-	asEffectsList[freeEffect].type = type;
+	psEffect->group = group;
+	psEffect->type = type;
 
 	/* Set when it entered the world */
-	asEffectsList[freeEffect].birthTime = asEffectsList[freeEffect].lastFrame = gameTime;
+	psEffect->birthTime = psEffect->lastFrame = gameTime;
 
 	if(group == EFFECT_GRAVITON && (type == GRAVITON_TYPE_GIBLET || type == GRAVITON_TYPE_EMITTING_DR))
 	{
-		asEffectsList[freeEffect].frameNumber = lit;
+		psEffect->frameNumber = lit;
 	}
 
 	else
 	{
 		/* Starts off on frame zero */
-		asEffectsList[freeEffect].frameNumber = 0;
+		psEffect->frameNumber = 0;
 	}
 
 	/*
 		See what kind of effect it is - the add fucnction is different for each,
 		although some things are shared
 	*/
-	asEffectsList[freeEffect].imd = NULL;
+	psEffect->imd = NULL;
 	if(lit)
 	{
-		SET_LITABS(asEffectsList[freeEffect]);
+		SET_LITABS(psEffect);
 	}
 
 	if(specified)
 	{
 		/* We're specifying what the imd is - override */
-		asEffectsList[freeEffect].imd = imd;
-//		if(type == EXPLOSION_TYPE_SPECIFIED_FIXME)
-//		{
-//			asEffectsList[freeEffect].size = EXPLOSION_SIZE;
-//		}
-//		else
-//		{
-		asEffectsList[freeEffect].size =(UWORD) specifiedSize;
-//		}
+		psEffect->imd = imd;
+		psEffect->size = specifiedSize;
 	}
 
 	/* Do all the effect type specific stuff */
 	switch(group)
 	{
 		case EFFECT_SMOKE:
-			effectSetupSmoke(&asEffectsList[freeEffect]);
+			effectSetupSmoke(psEffect);
 			break;
 		case EFFECT_GRAVITON:
-			effectSetupGraviton(&asEffectsList[freeEffect]);
+			effectSetupGraviton(psEffect);
 			break;
 		case EFFECT_EXPLOSION:
-			effectSetupExplosion(&asEffectsList[freeEffect]);
+			effectSetupExplosion(psEffect);
 			break;
 		case EFFECT_CONSTRUCTION:
-			effectSetupConstruction(&asEffectsList[freeEffect]);
+			effectSetupConstruction(psEffect);
 			break;
 		case EFFECT_WAYPOINT:
-			effectSetupWayPoint(&asEffectsList[freeEffect]);
+			effectSetupWayPoint(psEffect);
 			break;
 		case EFFECT_BLOOD:
-			effectSetupBlood(&asEffectsList[freeEffect]);
+			effectSetupBlood(psEffect);
 			break;
 		case EFFECT_DESTRUCTION:
-			effectSetupDestruction(&asEffectsList[freeEffect]);
+			effectSetupDestruction(psEffect);
 			break;
 		case EFFECT_FIRE:
-			effectSetupFire(&asEffectsList[freeEffect]);
+			effectSetupFire(psEffect);
 			break;
 		case EFFECT_SAT_LASER:
-			effectSetUpSatLaser(&asEffectsList[freeEffect]);
+			effectSetUpSatLaser(psEffect);
 			break;
 		case EFFECT_FIREWORK:
-			effectSetUpFirework(&asEffectsList[freeEffect]);
+			effectSetUpFirework(psEffect);
 			break;
 		default:
 			ASSERT( false,"Weirdy group type for an effect" );
@@ -593,21 +576,10 @@ void	addEffect(Vector3i *pos, EFFECT_GROUP group, EFFECT_TYPE type,BOOL specifie
 	/* As of yet, it hasn't bounced (or whatever)... */
 	if(type!=EXPLOSION_TYPE_LAND_LIGHT)
 	{
-		asEffectsList[freeEffect].specific = 0;
+		psEffect->specific = 0;
 	}
 
-	/* Looks like we didn't establish an imd for the effect */
-	/*
-	ASSERT( asEffectsList[freeEffect].imd != NULL || group == EFFECT_DESTRUCTION || group == EFFECT_FIRE || group == EFFECT_SAT_LASER,
-		"null effect imd" );
-	*/
-
-#ifdef DEBUG
-	if ( validatePie( group, asEffectsList[freeEffect].imd ) == false )
-	{
-		ASSERT( false,"No PIE found or specified for an effect" );
-	}
-#endif
+	ASSERT(psEffect->imd != NULL || group == EFFECT_DESTRUCTION || group == EFFECT_FIRE || group == EFFECT_SAT_LASER, "null effect imd");
 
 	/* No more slots available? */
 	if(freeEffect++ >= (MAX_EFFECTS-1))
@@ -616,30 +588,6 @@ void	addEffect(Vector3i *pos, EFFECT_GROUP group, EFFECT_TYPE type,BOOL specifie
 		freeEffect = 0;
 	}
 }
-
-#ifdef DEBUG
-// ----------------------------------------------------------------------------------------
-static BOOL validatePie( EFFECT_GROUP group, iIMDShape *pie )
-{
-
-	/* If we haven't got a pie */
-	if(pie == NULL)
-	{
-		if(group == EFFECT_DESTRUCTION || group == EFFECT_FIRE || group == EFFECT_SAT_LASER)
-		{
-			/* Ok in these cases */
-			return(true);
-		}
-
-		return(false);
-	}
-	else
-	{
-		return(true);
-	}
-}
-// ----------------------------------------------------------------------------------------
-#endif
 
 /* Calls all the update functions for each different currently active effect */
 void	processEffects(void)
@@ -681,7 +629,6 @@ void	processEffects(void)
 	skippedEffects = skipped;
 }
 
-// ----------------------------------------------------------------------------------------
 /* The general update function for all effects - calls a specific one for each */
 static void updateEffect(EFFECT *psEffect)
 {
@@ -739,7 +686,7 @@ static void updateEffect(EFFECT *psEffect)
 // ----------------------------------------------------------------------------------------
 // ALL THE UPDATE FUNCTIONS
 // ----------------------------------------------------------------------------------------
-/* Update the waypoint effects.*/
+/** Update the waypoint effects.*/
 static void updateWaypoint(EFFECT *psEffect)
 {
 	if(!(keyDown(KEY_LCTRL) || keyDown(KEY_RCTRL) ||
@@ -749,8 +696,6 @@ static void updateWaypoint(EFFECT *psEffect)
 	}
 }
 
-
-// ----------------------------------------------------------------------------------------
 static void updateFirework(EFFECT *psEffect)
 {
 	UDWORD	height;
@@ -866,7 +811,6 @@ static void updateFirework(EFFECT *psEffect)
 	}
 }
 
-// ----------------------------------------------------------------------------------------
 static void updateSatLaser(EFFECT *psEffect)
 {
 	Vector3i dv;
@@ -960,8 +904,7 @@ static void updateSatLaser(EFFECT *psEffect)
 	}
 }
 
-// ----------------------------------------------------------------------------------------
-/* The update function for the explosions */
+/** The update function for the explosions */
 static void updateExplosion(EFFECT *psEffect)
 {
 	LIGHT light;
@@ -1069,8 +1012,7 @@ static void updateExplosion(EFFECT *psEffect)
 	}
 }
 
-// ----------------------------------------------------------------------------------------
-/* The update function for blood */
+/** The update function for blood */
 static void updateBlood(EFFECT *psEffect)
 {
 	/* Time to update the frame number on the blood */
@@ -1091,8 +1033,7 @@ static void updateBlood(EFFECT *psEffect)
 	psEffect->position.z += timeAdjustedIncrement(psEffect->velocity.z, true);
 }
 
-// ----------------------------------------------------------------------------------------
-/* Processes all the drifting smoke
+/** Processes all the drifting smoke
 	Handles the smoke puffing out the factory as well */
 static void updatePolySmoke(EFFECT *psEffect)
 {
@@ -1146,8 +1087,7 @@ static void updatePolySmoke(EFFECT *psEffect)
 	}
 }
 
-// ----------------------------------------------------------------------------------------
-/*
+/**
 	Gravitons just fly up for a bit and then drop down and are
 	killed off when they hit the ground
 */
@@ -1296,10 +1236,7 @@ static void updateGraviton(EFFECT *psEffect)
 }
 
 
-// ----------------------------------------------------------------------------------------
-/* updateDestruction
-This isn't really an on-screen effect itself - it just spawns other ones....
-  */
+/** This isn't really an on-screen effect itself - it just spawns other ones.... */
 static void updateDestruction(EFFECT *psEffect)
 {
 	Vector3i pos;
@@ -1476,11 +1413,7 @@ static void updateDestruction(EFFECT *psEffect)
 	}
 }
 
-// ----------------------------------------------------------------------------------------
-/*
-updateConstruction:-
-Moves the construction graphic about - dust cloud or whatever....
-*/
+/** Moves the construction graphic about - dust cloud or whatever.... */
 static void updateConstruction(EFFECT *psEffect)
 {
 
@@ -1530,8 +1463,7 @@ static void updateConstruction(EFFECT *psEffect)
 	}
 }
 
-// ----------------------------------------------------------------------------------------
-/* Update fire sequences */
+/** Update fire sequences */
 static void updateFire(EFFECT *psEffect)
 {
 	Vector3i pos;
@@ -1620,10 +1552,7 @@ static void updateFire(EFFECT *psEffect)
 // ----------------------------------------------------------------------------------------
 // ALL THE RENDER FUNCTIONS
 // ----------------------------------------------------------------------------------------
-/*
-renderEffect:-
-Calls the appropriate render routine for each type of effect
-*/
+/** Calls the appropriate render routine for each type of effect */
 void	renderEffect(EFFECT *psEffect)
 {
 		/* What type of effect are we dealing with? */
@@ -1677,8 +1606,7 @@ void	renderEffect(EFFECT *psEffect)
 	}
 }
 
-// ----------------------------------------------------------------------------------------
-/* drawing func for wapypoints . AJL. */
+/** drawing func for wapypoints */
 void	renderWaypointEffect(EFFECT *psEffect)
 {
 	positionEffect(psEffect);
@@ -1687,7 +1615,6 @@ void	renderWaypointEffect(EFFECT *psEffect)
 	iV_MatrixEnd();
 }
 
-// ----------------------------------------------------------------------------------------
 void	renderFirework(EFFECT *psEffect)
 {
 	/* these don't get rendered */
@@ -1706,8 +1633,7 @@ void	renderFirework(EFFECT *psEffect)
  	iV_MatrixEnd();
 }
 
-// ----------------------------------------------------------------------------------------
-/* drawing func for blood. */
+/** drawing func for blood. */
 void	renderBloodEffect(EFFECT *psEffect)
 {
 	positionEffect(psEffect);
@@ -1720,7 +1646,6 @@ void	renderBloodEffect(EFFECT *psEffect)
 	iV_MatrixEnd();
 }
 
-// ----------------------------------------------------------------------------------------
 void	renderDestructionEffect(EFFECT *psEffect)
 {
 	float	div;
@@ -1751,7 +1676,6 @@ void	renderDestructionEffect(EFFECT *psEffect)
 	iV_MatrixEnd();
 }
 
-// ----------------------------------------------------------------------------------------
 static BOOL	rejectLandLight(LAND_LIGHT_SPEC type)
 {
 UDWORD	timeSlice;
@@ -1779,8 +1703,7 @@ UDWORD	timeSlice;
 	}
 }
 
-// ----------------------------------------------------------------------------------------
-/* Renders the standard explosion effect */
+/** Renders the standard explosion effect */
 void	renderExplosionEffect(EFFECT *psEffect)
 {
 	SDWORD	percent;
@@ -1838,7 +1761,6 @@ void	renderExplosionEffect(EFFECT *psEffect)
 	iV_MatrixEnd();
 }
 
-// ----------------------------------------------------------------------------------------
 void	renderGravitonEffect(EFFECT *psEffect)
 {
 
@@ -1865,10 +1787,7 @@ void	renderGravitonEffect(EFFECT *psEffect)
 	iV_MatrixEnd();
 }
 
-// ----------------------------------------------------------------------------------------
-/*
-renderConstructionEffect:-
-Renders the standard construction effect */
+/** Renders the standard construction effect */
 void	renderConstructionEffect(EFFECT *psEffect)
 {
 	Vector3i null;
@@ -1913,11 +1832,7 @@ void	renderConstructionEffect(EFFECT *psEffect)
 	iV_MatrixEnd();
 }
 
-// ----------------------------------------------------------------------------------------
-/*
-renderSmokeEffect:-
-Renders the standard smoke effect - it is now scaled in real-time as well
-*/
+/** Renders the standard smoke effect - it is now scaled in real-time as well */
 void	renderSmokeEffect(EFFECT *psEffect)
 {
 	UDWORD	transparency = 0;
@@ -2041,7 +1956,6 @@ void	effectSetUpFirework(EFFECT *psEffect)
 
 }
 
-// ----------------------------------------------------------------------------------------
 void	effectSetupSmoke(EFFECT *psEffect)
 {
 	/* everything except steam drifts about */
@@ -2126,7 +2040,6 @@ void	effectSetupSmoke(EFFECT *psEffect)
 	}
 }
 
-// ----------------------------------------------------------------------------------------
 void effectSetUpSatLaser(EFFECT *psEffect)
 {
 	/* Does nothing at all..... Runs only for one frame! */
@@ -2134,7 +2047,6 @@ void effectSetUpSatLaser(EFFECT *psEffect)
 	return;
 }
 
-// ----------------------------------------------------------------------------------------
 void	effectSetupGraviton(EFFECT *psEffect)
 {
 	switch(psEffect->type)
@@ -2182,7 +2094,6 @@ void	effectSetupGraviton(EFFECT *psEffect)
 	}
 }
 
-// ----------------------------------------------------------------------------------------
 void effectSetupExplosion(EFFECT *psEffect)
 {
 	/* Get an imd if it's not established */
@@ -2310,7 +2221,6 @@ void effectSetupExplosion(EFFECT *psEffect)
 	}
 }
 
-// ----------------------------------------------------------------------------------------
 void	effectSetupConstruction(EFFECT *psEffect)
 {
 	psEffect->velocity.x = 0.f;//(1-rand()%3);
@@ -2337,7 +2247,6 @@ void	effectSetupConstruction(EFFECT *psEffect)
 	}
 }
 
-// ----------------------------------------------------------------------------------------
 void	effectSetupFire(EFFECT *psEffect)
 {
 	const int posX = map_coord(psEffect->position.x);
@@ -2357,7 +2266,6 @@ void	effectSetupFire(EFFECT *psEffect)
 
 }
 
-// ----------------------------------------------------------------------------------------
 void	effectSetupWayPoint(EFFECT *psEffect)
 {
 	psEffect->imd = pProximityMsgIMD;
@@ -2366,7 +2274,6 @@ void	effectSetupWayPoint(EFFECT *psEffect)
 	SET_ESSENTIAL(psEffect);
 }
 
-// ----------------------------------------------------------------------------------------
 void	effectSetupBlood(EFFECT *psEffect)
 {
 	psEffect->frameDelay = BLOOD_FRAME_DELAY;
@@ -2375,7 +2282,6 @@ void	effectSetupBlood(EFFECT *psEffect)
 	psEffect->size = (UBYTE)BLOOD_SIZE;
 }
 
-// ----------------------------------------------------------------------------------------
 void    effectSetupDestruction(EFFECT *psEffect)
 {
 
@@ -2411,7 +2317,6 @@ void    effectSetupDestruction(EFFECT *psEffect)
 
 #define FX_PER_EDGE 6
 #define	SMOKE_SHIFT	(16 - (rand()%32))
-// ----------------------------------------------------------------------------------------
 void	initPerimeterSmoke(iIMDShape *pImd, UDWORD x, UDWORD y, UDWORD z)
 {
 	SDWORD	i;
@@ -2499,14 +2404,11 @@ void	initPerimeterSmoke(iIMDShape *pImd, UDWORD x, UDWORD y, UDWORD z)
 	}
 }
 
-// ----------------------------------------------------------------------------------------
 UDWORD	getNumEffects( void )
 {
 	return(numEffects);
 }
 
-
-// ----------------------------------------------------------------------------------------
 static UDWORD EffectGetNumFrames(EFFECT *psEffect)
 {
 
@@ -2538,8 +2440,7 @@ void	effectGiveAuxVarSec( UDWORD var)
 	auxVarSec = var;
 }
 
-// ----------------------------------------------------------------------------------------
-/* Runs all the spot effect stuff for the droids - adding of dust and the like... */
+/** Runs all the spot effect stuff for the droids - adding of dust and the like... */
 static void effectDroidUpdates(void)
 {
 	unsigned int i;
@@ -2586,8 +2487,7 @@ static void effectDroidUpdates(void)
 	}
 }
 
-// ----------------------------------------------------------------------------------------
-/* Runs all the structure effect stuff - steam puffing out etc */
+/** Runs all the structure effect stuff - steam puffing out etc */
 static void effectStructureUpdates(void)
 {
 	UDWORD		i;
@@ -2714,11 +2614,9 @@ UDWORD	getFreeEffect( void )
 	return(freeEffect);
 }
 
-
-// ----------------------------------------------------------------------------------------
 void	effectResetUpdates( void )
 {
-UDWORD	i;
+	UDWORD	i;
 
 	for(i=0; i<EFFECT_DROID_DIVISION; i++)
 	{
@@ -2731,8 +2629,7 @@ UDWORD	i;
 }
 
 
-// -----------------------------------------------------------------------------------
-/// Check if tile contained within the given world coordinates is burning.
+/** Check if tile contained within the given world coordinates is burning. */
 bool fireOnLocation(unsigned int x, unsigned int y)
 {
 	const int posX = map_coord(x);
@@ -2750,8 +2647,7 @@ bool fireOnLocation(unsigned int x, unsigned int y)
 static const char FXData_tag_definition[] = "tagdefinitions/savegame/effects.def";
 static const char FXData_file_identifier[] = "FXData";
 
-// -----------------------------------------------------------------------------------
-/* This will save out the effects data */
+/** This will save out the effects data */
 bool writeFXData(const char* fileName)
 {
 	unsigned int count, i;
@@ -2817,8 +2713,7 @@ bool writeFXData(const char* fileName)
 	return true;
 }
 
-// -----------------------------------------------------------------------------------
-/* This will read in the effects data */
+/** This will read in the effects data */
 bool readFXData(const char* fileName)
 {
 	unsigned int count, i;
