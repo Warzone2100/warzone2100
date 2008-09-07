@@ -36,3 +36,9 @@ endif
 endif
 
 noinst_HEADERS += $(PLATFORM)/event.h $(PLATFORM)/init.h
+
+noinst_PROGRAMS = tools/sdl-testapp
+
+tools_sdl_testapp_SOURCES = tools/sdl-testapp.c
+tools_sdl_testapp_CPPFLAGS = -I..
+tools_sdl_testapp_LDADD = $(OPENGL_LIBS) libbetawidget.la
