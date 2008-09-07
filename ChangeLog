@@ -2,6 +2,8 @@
  * General:
    * Reordered main menues. Skirmish is now under Single Player.
    * Various source compilation fixes.
+ * Campaign:
+   * Fix: Researching Gas Turbine Generator no longer reduces the output of power generators (bug #12262)
  * Multiplayer (non-skirmish only):
    * Added visual feedback for when there are no games available in the lobby.
    * Fix: Smoking healthy droids gone.
