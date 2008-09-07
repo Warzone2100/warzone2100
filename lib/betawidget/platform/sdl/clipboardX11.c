@@ -172,15 +172,52 @@ char *widgetGetClipboardText()
 	// If there is a selection (and therefore owner) fetch it
 	if (selectionOwner != None)
 	{
-		// Convert the selection to a string
-		XConvertSelection(info.info.x11.display, XA_CLIPBOARD, XA_STRING, None,
-		                  selectionOwner, CurrentTime);
+		SDL_Event event;
+		bool response = false;
+
+		/*
+		 * Ask the window whom current owns the clipboard to convert it to an
+		 * XA_UTF8_STRING and place it into the XA_CLIPBOARD property of our
+		 * window.
+		 */
+		XConvertSelection(info.info.x11.display, XA_CLIPBOARD, XA_UTF8_STRING,
+		                  XA_CLIPBOARD, info.info.x11.window, CurrentTime);
 		XFlush(info.info.x11.display);
 
+		/*
+		 * We now need to wait for a response from the window that owns the
+		 * clipboard.
+		 */
+
+		// Unlock the connection so that the SDL event loop may function
+		info.info.x11.unlock_func();
+
+		while (!response)
+		{
+			// Wait for an event
+			SDL_WaitEvent(&event);
+
+			// If the event is a window manager event
+			if (event.type == SDL_SYSWMEVENT)
+			{
+				XEvent xevent = event.syswm.msg->event.xevent;
+
+				// See if it is a response to our request
+				if (xevent.type == SelectionNotify
+				 && xevent.xselection.requestor == info.info.x11.window)
+				{
+					response = true;
+				}
+			}
+		}
+
+		// Lock the connection once again
+		info.info.x11.lock_func();
+
 		// See how much data is there
-		XGetWindowProperty(info.info.x11.display, selectionOwner, XA_STRING, 0,
-		                   0, False, AnyPropertyType, &type, &format, &len,
-		                   &bytesLeft, &data);
+		XGetWindowProperty(info.info.x11.display, info.info.x11.window,
+		                   XA_CLIPBOARD, 0, 0, False, AnyPropertyType, &type,
+		                   &format, &len, &bytesLeft, &data);
 
 		// If any 0-length data was returned, free it
 		if (data)
@@ -192,10 +229,11 @@ char *widgetGetClipboardText()
 		// If there is any data
 		if (bytesLeft)
 		{
-			result = XGetWindowProperty(info.info.x11.display, selectionOwner,
-			                            XA_STRING, 0, bytesLeft, False,
-			                            AnyPropertyType, &type, &format, &len,
-			                            &dummy, &data);
+			// Fetch the data
+			result = XGetWindowProperty(info.info.x11.display,
+			                            info.info.x11.window, XA_CLIPBOARD, 0,
+			                            bytesLeft, False, AnyPropertyType,
+			                            &type, &format, &len, &dummy, &data);
 
 			// If we got some data, duplicate it
 			if (result == Success)
@@ -206,7 +244,8 @@ char *widgetGetClipboardText()
 		}
 
 		// Delete the property now that we are finished with it
-		XDeleteProperty(info.info.x11.display, selectionOwner, XA_STRING);
+		XDeleteProperty(info.info.x11.display, info.info.x11.window,
+		                XA_CLIPBOARD);
 	}
 
 	// Unlock the connection
