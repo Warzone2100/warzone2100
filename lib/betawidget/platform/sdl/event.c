@@ -23,6 +23,8 @@
 #include "../../widget.h"
 #include "../../window.h"
 
+#include "../../../framework/utf.h"
+
 /**
  * Converts an SDLkey to an eventKeycode (as used by the widget system).
  *
@@ -66,7 +68,7 @@ static eventKeycode SDLKeyToEventKeycode(SDLKey key)
 			return EVT_KEYCODE_PAGEDOWN;
 		default:
 			return EVT_KEYCODE_UNKNOWN;
-	}	
+	}
 }
 
 /**
@@ -96,24 +98,24 @@ void widgetHandleSDLEvent(const SDL_Event *sdlEvt)
 {
 	// Last known location of the mouse
 	static point previousMouseLoc = { -1, -1 };
-	
+
 	switch (sdlEvt->type)
 	{
 		case SDL_MOUSEMOTION:
 		{
 			eventMouse evtMouse;
 			evtMouse.event = widgetCreateEvent(EVT_MOUSE_MOVE);
-			
+
 			// Location
 			evtMouse.loc.x = sdlEvt->motion.x;
 			evtMouse.loc.y = sdlEvt->motion.y;
-			
+
 			// Previous location
 			evtMouse.previousLoc = previousMouseLoc;
-			
+
 			// Update the previous location
 			previousMouseLoc = evtMouse.loc;
-			
+
 			windowHandleEventForWindowVector((event *) &evtMouse);
 			break;
 		}
@@ -123,17 +125,17 @@ void widgetHandleSDLEvent(const SDL_Event *sdlEvt)
 			eventMouseBtn evtMouseBtn;
 			evtMouseBtn.event = widgetCreateEvent(sdlEvt->button.state == SDL_PRESSED ?
 			                                      EVT_MOUSE_DOWN : EVT_MOUSE_UP);
-			
+
 			// Location
 			evtMouseBtn.loc.x = sdlEvt->button.x;
 			evtMouseBtn.loc.y = sdlEvt->button.y;
-			
+
 			// Update the previous location
 			previousMouseLoc = evtMouseBtn.loc;
-			
+
 			// Button pressed/released
 			evtMouseBtn.button = SDLButtonToMouseButton(sdlEvt->button.button);
-			
+
 			windowHandleEventForWindowVector((event *) &evtMouseBtn);
 			break;
 		}
@@ -143,10 +145,10 @@ void widgetHandleSDLEvent(const SDL_Event *sdlEvt)
 			eventKey evtKey;
 			evtKey.event = widgetCreateEvent(sdlEvt->key.type == SDL_KEYDOWN ?
 			                                 EVT_KEY_DOWN : EVT_KEY_UP);
-			
+
 			// Key pressed/released
 			evtKey.keycode = SDLKeyToEventKeycode(sdlEvt->key.keysym.sym);
-			
+
 			// Modifier keys
 			if (sdlEvt->key.keysym.mod & KMOD_CTRL)
 			{
@@ -160,9 +162,35 @@ void widgetHandleSDLEvent(const SDL_Event *sdlEvt)
 			{
 				evtKey.shift = true;
 			}
-			
-			// FIXME: Add support for text events!
-			
+
+			// Only needed/works on SDL 1.2!
+			if (sdlEvt->key.keysym.unicode)
+			{
+				char *utf16[3];
+				char *utf8;
+
+				// Create the text event
+				eventText evtText;
+				evtText.event = widgetCreateEvent(EVT_TEXT);
+
+				// Copy the unicode character to a UTF-16 string
+				utf16[0] = ((char *) &sdlEvt->key.keysym.unicode)[0];
+				utf16[1] = ((char *) &sdlEvt->key.keysym.unicode)[1];
+				utf16[2] = '\0';
+
+				// Convert the UTF-16 string to UTF-8
+				utf8 = UTF16toUTF8(utf16, NULL);
+
+				// Set the text of the event to UTF-8 string
+				evtText.utf8 = utf8;
+
+				// Dispatch the event
+				windowHandleEventForWindowVector((event *) &evtText);
+
+				// Free the memory allocated by UTF16toUTF8
+				free(utf8);
+			}
+
 			windowHandleEventForWindowVector((event *) &evtKey);
 			break;
 		}
@@ -174,7 +202,7 @@ void widgetFireTimers()
 	// Create the generic timer event
 	eventTimer evtTimer;
 	evtTimer.event = widgetCreateEvent(EVT_TIMER);
-	
+
 	// Dispatch
 	windowHandleEventForWindowVector((event *) &evtTimer);
 }
