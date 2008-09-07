@@ -197,7 +197,7 @@ struct _event
  */
 struct _eventMouse
 {
-	event event;
+	struct _event event;
 
 	/// Location of the mouse
 	point loc;
@@ -211,7 +211,7 @@ struct _eventMouse
  */
 struct _eventMouseBtn
 {
-	event event;
+	struct _event event;
 
 	/// Location
 	point loc;
@@ -225,7 +225,7 @@ struct _eventMouseBtn
  */
 struct _eventKey
 {
-	event event;
+	struct _event event;
 
 	/// The keycode of the key which was pressed
 	eventKeycode keycode;
@@ -241,7 +241,7 @@ struct _eventKey
  */
 struct _eventText
 {
-	event event;
+	struct _event event;
 
 	/// The text that was typed, UTF-8 encoded
 	const char *utf8;
@@ -252,7 +252,7 @@ struct _eventText
  */
 struct _eventTimer
 {
-	event event;
+	struct _event event;
 };
 
 /**
@@ -260,7 +260,7 @@ struct _eventTimer
  */
 struct _eventToolTip
 {
-	event event;
+	struct _event event;
 
 	widget *target;
 };
@@ -270,7 +270,7 @@ struct _eventToolTip
  */
 struct _eventResize
 {
-	event event;
+	struct _event event;
 	
 	/// The previous size of the widget
 	size oldSize;
@@ -281,7 +281,7 @@ struct _eventResize
  */
 struct _eventReposition
 {
-	event event;
+	struct _event event;
 	
 	/// The previous position of the widget relative to its parent
 	point oldPosition;
@@ -295,7 +295,7 @@ struct _eventReposition
  */
 struct _eventMisc
 {
-	event event;
+	struct _event event;
 };
 
 /**
@@ -310,10 +310,10 @@ struct _eventTableEntry
 	eventType type;
 
 	/// The method to call
-	callback callback;
+	bool (*callback)(widget*, const event*, int, void*);
 
 	/// The method to call when removing the event handler
-	callback destructor;
+	bool (*destructor)(widget*, const event*, int, void*);
 
 	/// Pointer to user supplied data to pass to callback
 	void *userData;
@@ -507,7 +507,7 @@ struct _widget
 	/*
 	 * The class (or subclass) that widget is (used for type checking)
 	 */
-	const classInfo *classInfo;
+	const struct _classInfo *classInfo;
 
 	/*
 	 * Arbitrary user-defined data
@@ -539,7 +539,7 @@ struct _widget
 	/*
 	 * The size of the widget
 	 */
-	size size;
+	struct _point size;
 
 	/*
 	 * If the widget currently has keyboard focus

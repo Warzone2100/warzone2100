@@ -11,7 +11,7 @@ typedef struct _textEntryVtbl textEntryVtbl;
 
 struct _textEntryVtbl
 {
-	widgetVtbl widgetVtbl;
+	struct _widgetVtbl widgetVtbl;
 };
 
 struct _textEntry
@@ -19,7 +19,7 @@ struct _textEntry
 	/*
 	 * Parent
 	 */
-	widget widget;
+	struct _widget widget;
 	
 	/*
 	 * Our vtable

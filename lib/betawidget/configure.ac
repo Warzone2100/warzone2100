@@ -12,6 +12,9 @@ AC_CANONICAL_HOST
 
 # Checks for programs.
 AC_PROG_CC
+AC_PROG_SWIG
+SWIG_ENABLE_CXX
+SWIG_LUA
 # Objective C is used when compiling for OSX (platform/sdl/clipboardOSX.m)
 AC_PROG_OBJC
 
@@ -68,6 +71,8 @@ AC_CHECK_FUNCS([memmove strdup])
 # Checks for libraries.
 PKG_CHECK_MODULES([SDL], [sdl >= 1.2])
 PKG_CHECK_MODULES([CAIRO_SVG], [cairo-svg])
+PKG_CHECK_MODULES([LUA], [lua5.1 >= 5.1])
+AC_SUBST([LUA_LIBTOOL], [`${PKG_CONFIG} lua5.1 --variable=libtool_lib`])
 
 # Look for OpenGL
 AC_CHECK_HEADER(SDL/SDL_opengl.h, ,

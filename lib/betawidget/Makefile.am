@@ -1,10 +1,17 @@
+%_wrap_lua.cpp: %.i
+	$(SWIG) $(SWIG_LUA_OPT) -o $@ $<
+
+BUILT_SOURCES = betawidget_wrap_lua.cpp
+CLEANFILES = betawidget_wrap_lua.cpp
+
 lib_LTLIBRARIES = libbetawidget.la
 
-libbetawidget_la_SOURCES = font.c geom.c hBox.c spacer.c textEntry.c vector.c \
-	widget.c window.c
+libbetawidget_la_SOURCES = betawidget_wrap_lua.cpp font.c geom.c hBox.c \
+	spacer.c textEntry.c vector.c widget.c window.c
 
-libbetawidget_la_CPPFLAGS = $(CAIRO_SVG_CFLAGS) -DLIB_COMPILE=1
+libbetawidget_la_CPPFLAGS = $(CAIRO_SVG_CFLAGS) $(LUA_CFLAGS) -DLIB_COMPILE=1
 libbetawidget_la_LDFLAGS = $(CAIRO_SVG_LIBS) $(OPENGL_LIBS)
+libbetawidget_la_LIBADD = $(LUA_LIBTOOL)
 
 # FIXME: Headers required for the public API should be placed in the
 #        inlude_HEADERS directory.
@@ -40,5 +47,5 @@ noinst_HEADERS += $(PLATFORM)/event.h $(PLATFORM)/init.h
 noinst_PROGRAMS = tools/sdl-testapp
 
 tools_sdl_testapp_SOURCES = tools/sdl-testapp.c
-tools_sdl_testapp_CPPFLAGS = -I..
-tools_sdl_testapp_LDADD = $(OPENGL_LIBS) libbetawidget.la
+tools_sdl_testapp_CPPFLAGS = -I.. $(LUA_CFLAGS)
+tools_sdl_testapp_LDADD = $(OPENGL_LIBS) libbetawidget.la $(LUA_LIBTOOL)

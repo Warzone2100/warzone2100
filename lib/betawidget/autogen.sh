@@ -163,7 +163,7 @@ cd "$SRCDIR"
 }
 
 echo "+ running aclocal ..."
-aclocal || {
+aclocal -I m4 || {
   echo
   echo "aclocal failed - check that all needed development files are present on system"
   exit 1

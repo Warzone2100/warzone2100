@@ -40,7 +40,7 @@ typedef enum
 
 struct _spacerVtbl
 {
-	widgetVtbl widgetVtbl;
+	struct _widgetVtbl widgetVtbl;
 	
 	// No additional virtual methods
 };
@@ -50,7 +50,7 @@ struct _spacer
 	/*
 	 * Parent
 	 */
-	widget widget;
+	struct _widget widget;
 	
 	/*
 	 * Our vtable

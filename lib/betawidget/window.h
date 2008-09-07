@@ -31,7 +31,7 @@ typedef struct _windowVtbl windowVtbl;
 
 struct _windowVtbl
 {
-	widgetVtbl widgetVtbl;
+	struct _widgetVtbl widgetVtbl;
 	
 	// No additional virtual methods
 };
@@ -41,7 +41,7 @@ struct _window
 	/**
 	 * Parent
 	 */
-	widget widget;
+	struct _widget widget;
 	
 	/**
 	 * Our vtable
