@@ -810,8 +810,8 @@ void widgetRemoveEventHandlerImpl(widget *self, int id)
 				eventMisc evtDestruct;
 				evtDestruct.event.type = EVT_DESTRUCT;
 				
-				handler->destructor(self, (event *) &evtDestruct, -1,
-								   handler->userData);
+				handler->destructor(self, (event *) &evtDestruct, handler->id,
+				                    handler->userData);
 			}
 			
 			// Release the handler
