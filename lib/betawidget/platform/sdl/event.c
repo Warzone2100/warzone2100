@@ -166,17 +166,12 @@ void widgetHandleSDLEvent(const SDL_Event *sdlEvt)
 			// Only needed/works on SDL 1.2!
 			if (sdlEvt->key.keysym.unicode)
 			{
-				char *utf16[3];
+				const uint16_t utf16[2] = { sdlEvt->key.keysym.unicode, 0 };
 				char *utf8;
 
 				// Create the text event
 				eventText evtText;
 				evtText.event = widgetCreateEvent(EVT_TEXT);
-
-				// Copy the unicode character to a UTF-16 string
-				utf16[0] = ((char *) &sdlEvt->key.keysym.unicode)[0];
-				utf16[1] = ((char *) &sdlEvt->key.keysym.unicode)[1];
-				utf16[2] = '\0';
 
 				// Convert the UTF-16 string to UTF-8
 				utf8 = UTF16toUTF8(utf16, NULL);
