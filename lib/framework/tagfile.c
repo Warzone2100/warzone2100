@@ -264,6 +264,7 @@ static bool init(const char *definition, const char *datafile, bool write)
 	tag_error = false;
 	line = 1;
 	fp = PHYSFS_openRead(definition);
+	debug(LOG_WZ, "Reading...[directory: %s] %s", PHYSFS_getRealDir(definition), definition);
 	sstrcpy(saveDefine, definition);
 	sstrcpy(saveTarget, datafile);
 	if (!fp)
@@ -317,6 +318,7 @@ static bool init(const char *definition, const char *datafile, bool write)
 	{
 		fp = PHYSFS_openRead(datafile);
 	}
+	debug(LOG_WZ, "Reading...[directory: %s] %s", PHYSFS_getRealDir(datafile), datafile);
 	handle = fp;
 	if (!fp)
 	{

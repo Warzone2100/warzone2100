@@ -282,7 +282,7 @@ BOOL rebuildSearchPath( searchPathMode mode, BOOL force )
 				}
 				break;
 			case mod_campaign:
-				debug(LOG_WZ, "Switching to campaign mods");
+				debug(LOG_WZ, "*** Switching to campaign mods ***");
 
 				while( curSearchPath )
 				{
@@ -313,7 +313,7 @@ BOOL rebuildSearchPath( searchPathMode mode, BOOL force )
 				}
 				break;
 			case mod_multiplay:
-				debug(LOG_WZ, "Switching to multiplay mods");
+				debug(LOG_WZ, "*** Switching to multiplay mods ***");
 
 				while( curSearchPath )
 				{

@@ -816,6 +816,7 @@ AUDIO_STREAM* audio_PlayStream(const char* fileName, float volume, void (*onFini
 
 	// Open up the file
 	fileHandle = PHYSFS_openRead(fileName);
+	debug(LOG_WZ, "Reading...[directory: %s] %s", PHYSFS_getRealDir(fileName), fileName);
 	if (fileHandle == NULL)
 	{
 		debug(LOG_ERROR, "sound_LoadTrackFromFile: PHYSFS_openRead(\"%s\") failed with error: %s\n", fileName, PHYSFS_getLastError());

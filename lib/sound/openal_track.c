@@ -466,6 +466,7 @@ TRACK* sound_LoadTrackFromFile(const char *fileName)
 
 	// Use PhysicsFS to open the file
 	fileHandle = PHYSFS_openRead(fileName);
+	debug(LOG_WZ, "Reading...[directory: %s] %s", PHYSFS_getRealDir(fileName), fileName);
 	if (fileHandle == NULL)
 	{
 		debug(LOG_ERROR, "sound_LoadTrackFromFile: PHYSFS_openRead(\"%s\") failed with error: %s\n", fileName, PHYSFS_getLastError());

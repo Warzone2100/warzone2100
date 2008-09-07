@@ -715,7 +715,7 @@ BOOL levLoadData(const char* name, char *pSaveName, GAME_TYPE saveType)
 			if (psBaseData->apDataFiles[i])
 			{
 				// load the data
-				debug(LOG_WZ, "Loading %s ...", psBaseData->apDataFiles[i]);
+				debug(LOG_WZ, "Loading [directory: %s] %s ...", PHYSFS_getRealDir(psBaseData->apDataFiles[i]), psBaseData->apDataFiles[i]);
 				if (!resLoad(psBaseData->apDataFiles[i], i))
 				{
 					return false;

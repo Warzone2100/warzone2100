@@ -600,8 +600,8 @@ BOOL loadKeyMap(void)
 	}
 	pfile = PHYSFS_openRead(KeyMapPath);
 	if (!pfile) {
-		debug(LOG_ERROR, "loadKeyMap: %s could not be opened: %s", KeyMapPath,
-		      PHYSFS_getLastError());
+		debug(LOG_ERROR, "loadKeyMap: [directory: %s] %s could not be opened: %s", PHYSFS_getRealDir(KeyMapPath),
+			KeyMapPath, PHYSFS_getLastError());
 		assert(false);
 		return false;
 	}

@@ -1146,6 +1146,7 @@ UBYTE NETsendFile(BOOL newFile, char *fileName, UDWORD player)
 	{
 		// open the file.
 		pFileHandle = PHYSFS_openRead(fileName);			// check file exists
+		debug(LOG_WZ, "Reading...[directory: %s] %s", PHYSFS_getRealDir(fileName), fileName);
 		if (pFileHandle == NULL)
 		{
 			debug(LOG_ERROR, "Failed");

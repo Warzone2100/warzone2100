@@ -81,9 +81,10 @@ static bool cdAudio_OpenTrack(const char* filename)
 	{
 		PHYSFS_file* music_file = PHYSFS_openRead(filename);
 
+		debug(LOG_WZ, "Reading...[directory: %s] %s", PHYSFS_getRealDir(filename), filename);
 		if (music_file == NULL)
 		{
-			debug(LOG_ERROR, "Failed opening file %s, with error %s", filename, PHYSFS_getLastError());
+			debug(LOG_ERROR, "Failed opening file [directory: %s] %s, with error %s", PHYSFS_getRealDir(filename), filename, PHYSFS_getLastError());
 			return false;
 		}
 

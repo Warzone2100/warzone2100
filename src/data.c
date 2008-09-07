@@ -821,7 +821,7 @@ static BOOL dataAudioCfgLoad(const char* fileName, void **ppData)
 	{
 		return true;
 	}
-
+	debug(LOG_WZ, "Reading...[directory: %s] %s", PHYSFS_getRealDir(fileName), fileName);
 	fileHandle = PHYSFS_openRead(fileName);
 
 	if (fileHandle == NULL)
@@ -840,6 +840,7 @@ static BOOL dataAudioCfgLoad(const char* fileName, void **ppData)
 static BOOL dataAnimLoad(const char *fileName, void **ppData)
 {
 	PHYSFS_file* fileHandle = PHYSFS_openRead(fileName);
+	debug(LOG_WZ, "Reading...[directory: %s] %s", PHYSFS_getRealDir(fileName), fileName);
 	if (fileHandle == NULL)
 	{
 		*ppData = NULL;
@@ -860,6 +861,7 @@ static BOOL dataAnimCfgLoad(const char *fileName, void **ppData)
 	PHYSFS_file* fileHandle = PHYSFS_openRead(fileName);
 	*ppData = NULL;
 
+	debug(LOG_WZ, "Reading...[directory: %s] %s", PHYSFS_getRealDir(fileName), fileName);
 	if (fileHandle == NULL)
 	{
 		return false;
@@ -921,7 +923,7 @@ static BOOL dataScriptLoad(const char* fileName, void **ppData)
 	scr_lineno = 1;
 
 	fileHandle = PHYSFS_openRead(fileName);
-
+	debug(LOG_WZ, "Reading...[directory: %s] %s", PHYSFS_getRealDir(fileName), fileName);
 	if (fileHandle == NULL)
 	{
 		return false;
@@ -970,7 +972,7 @@ static BOOL dataScriptLoadVals(const char* fileName, void **ppData)
 	debug(LOG_WZ, "Loading script data %s", GetLastResourceFilename());
 
 	fileHandle = PHYSFS_openRead(fileName);
-
+	debug(LOG_WZ, "Reading...[directory: %s] %s", PHYSFS_getRealDir(fileName), fileName);
 	if (fileHandle == NULL)
 	{
 		return false;

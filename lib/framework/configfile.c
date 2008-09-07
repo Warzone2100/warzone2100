@@ -179,7 +179,7 @@ static BOOL registry_load( const char *filename )
 	int l; // sscanf expects an int to receive %n, not an unsigned int
 	UDWORD filesize;
 
-	debug(LOG_WZ, "Loading the registry from %s", filename);
+	debug(LOG_WZ, "Loading the registry from [directory: %s] %s", PHYSFS_getRealDir(filename), filename);
 	if (PHYSFS_exists(filename)) {
 		if (!loadFile(filename, &bptr, &filesize)) {
 			return false;           // happens only in NDEBUG case
@@ -189,7 +189,7 @@ static BOOL registry_load( const char *filename )
 		return false;
 	}
 
-	debug(LOG_WZ, "Parsing the registry from %s", filename);
+	debug(LOG_WZ, "Parsing the registry from [directory: %s] %s", PHYSFS_getRealDir(filename) , filename);
 	if (filesize == 0 || strlen(bptr) == 0) {
 		debug(LOG_WARNING, "Registry file %s is empty!", filename);
 		return false;
@@ -237,7 +237,7 @@ static BOOL registry_save( const char *filename )
 	unsigned int i;
 	int count = 0;
 
-	debug(LOG_WZ, "Saving the registry to %s", filename);
+	debug(LOG_WZ, "Saving the registry to [directory: %s] %s", PHYSFS_getRealDir(filename), filename);
 	for (i = 0; i < REGISTRY_HASH_SIZE; ++i) {
 		regkey_t *j;
 

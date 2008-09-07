@@ -220,7 +220,7 @@ BOOL SetUpInputFile(SDWORD nPlayer)
 
 	if (!aiSaveFile[nPlayer])
 	{
-		debug(LOG_ERROR,"SetUpInputFile(): Couldn't open input file: '%s' for player %d: %s", FileName, nPlayer, PHYSFS_getLastError());
+		debug(LOG_ERROR,"SetUpInputFile(): Couldn't open input file: [directory: %s] '%s' for player %d: %s", PHYSFS_getRealDir(FileName), FileName, nPlayer, PHYSFS_getLastError());
 		return false;
 	}
 

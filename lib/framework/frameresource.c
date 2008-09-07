@@ -106,7 +106,7 @@ BOOL resLoad(const char *pResFile, SDWORD blockID)
 	// Note the block id number
 	resBlockID = blockID;
 
-	debug(LOG_WZ, "resLoad: loading %s", pResFile);
+	debug(LOG_WZ, "resLoad: loading [directory: %s] %s", PHYSFS_getRealDir(pResFile), pResFile);
 
 	// Load the RES file; allocate memory for a wrf, and load it
 	input.type = LEXINPUT_PHYSFS;

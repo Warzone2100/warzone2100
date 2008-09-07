@@ -809,6 +809,7 @@ VIEWDATA* loadResearchViewData(const char* fileName)
 
 	input.type = LEXINPUT_PHYSFS;
 	input.input.physfsfile = PHYSFS_openRead(fileName);
+	debug(LOG_WZ, "Reading...[directory: %s] %s", PHYSFS_getRealDir(fileName), fileName);
 	if (!input.input.physfsfile)
 	{
 		debug(LOG_ERROR, "PHYSFS_openRead(\"%s\") failed with error: %s\n", fileName, PHYSFS_getLastError());
