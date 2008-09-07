@@ -215,7 +215,7 @@ Repair Upgrade,Struc-RprFac-Upgrade04,200
 Repair Upgrade,Struc-RprFac-Upgrade05,250
 Repair Upgrade,Struc-RprFac-Upgrade06,300
 Power Upgrade,Struc-PowerModuleMk1,20
-Power Upgrade,Struc-Power Upgrade01,15
+Power Upgrade,Struc-Power Upgrade01,30
 Power Upgrade,Struc-Power Upgrade02,40
 VehicleBody Upgrade,Vehicle-Engine01,5,0,0,0,1,0
 VehicleBody Upgrade,Vehicle-Engine02,10,0,0,0,1,0

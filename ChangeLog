@@ -1,3 +1,7 @@
+0000-00-00: Version 2.1_beta5
+ * Campaign:
+   * Fix: Researching Gas Turbine Generator no longer reduces the output of power generators (bug #12262)
+
 2008-07-19: Version 2.1_beta4
  * General:
    * New: An error will be shown if an invalid command line option is used.
