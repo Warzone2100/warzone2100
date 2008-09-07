@@ -698,12 +698,12 @@ static SCRIPT_DEBUG	*_psCurr;
 
 void script_debug(const char *pFormat, ...)
 {
-	char		buffer[500];
-    va_list		pArgs;
+	char    buffer[500];
+	va_list pArgs;
 
 	va_start(pArgs, pFormat);
-
 	vsnprintf(buffer, sizeof(buffer), pFormat, pArgs);
+	va_end(pArgs);
 
 	debug(LOG_SCRIPT, "%s", buffer);
 }

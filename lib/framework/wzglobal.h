@@ -277,6 +277,16 @@
 */
 #if defined(__STDC_VERSION__) && __STDC_VERSION__ >= 199901L
 # define WZ_C99
+#else
+/**
+ * Implements the interface of the C99 macro va_copy such that we can use it on
+ * non-C99 systems as well.
+ *
+ * This implementation assumes that va_list is just a pointer to the stack
+ * frame of the variadic function. This is by far the most common setup, though
+ * it might not always work.
+ */
+# define va_copy(dest, src) (void)((dest) = (src))
 #endif /* WZ_Cxx */
 
 

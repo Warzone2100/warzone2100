@@ -55,9 +55,13 @@ int slcatprintf(char* str, size_t size, const char* format, ...)
 int vasprintf(char** strp, const char* format, va_list ap)
 {
 	int count;
+	va_list aq;
+
+	va_copy(aq, ap);
 
 	// Find out how long the resulting string is
-	count = vsnprintf(NULL, 0, format, ap);
+	count = vsnprintf(NULL, 0, format, aq);
+	va_end(aq);
 
 	if (count == 0)
 	{
@@ -102,9 +106,13 @@ int asprintf(char** strp, const char* format, ...)
 int wz_vsnprintf(char* str, size_t size, const char* format, va_list ap)
 {
 	int count;
+	va_list aq;
+
+	va_copy(aq, ap);
 
 	// Find out how long the resulting string is
-	count = _vscprintf(format, ap);
+	count = _vscprintf(format, aq);
+	va_end(aq);
 
 	if (count >= 0
 	 && str != NULL)
