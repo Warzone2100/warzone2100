@@ -21,9 +21,9 @@
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 
-#include "../../framework/utf.h"
+#include "../../../framework/utf.h"
 // Defines most macros and types from <stdbool.h> and <stdint.h>
-#include "../../framework/types.h"
+#include "../../../framework/types.h"
 
 char *widgetGetClipboardText()
 {
