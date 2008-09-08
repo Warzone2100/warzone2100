@@ -108,7 +108,7 @@ void radarInitVars(void)
 }
 
 //called for when a new mission is started
-void resetRadarRedraw(void)
+void resetRadarRedraw()
 {
 	// nothing here now
 }
