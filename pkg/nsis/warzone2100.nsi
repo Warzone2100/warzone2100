@@ -255,6 +255,20 @@ Section $(TEXT_SecMusicMod) SecMusicMod
 
 SectionEnd
 
+Section $(TEXT_SecNTWMod) SecNTWMod
+
+  SetOutPath "$INSTDIR\mods\global"
+
+  File "..\..\data\mods\global\ntw.wz"
+
+  SetOutPath "$INSTDIR"
+
+  !insertmacro MUI_STARTMENU_WRITE_BEGIN "Application"
+    CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\${PACKAGE_NAME} - NTW.lnk" "$INSTDIR\${PACKAGE}.exe" "--mod_mp ntw.wz"
+  !insertmacro MUI_STARTMENU_WRITE_END
+
+SectionEnd
+
 SectionGroupEnd
 
 Section $(TEXT_SecNLS) SecNLS
@@ -361,6 +375,9 @@ FunctionEnd
   LangString TEXT_SecNLS ${LANG_ENGLISH} "NLS"
   LangString DESC_SecNLS ${LANG_ENGLISH} "Support for languages other than English."
 
+  LangString TEXT_SecNTWMod ${LANG_ENGLISH} "NTW: New Team War mod"
+  LangString DESC_SecNTWMod ${LANG_ENGLISH} "NTW: New Team War mod. Modifies most of the weapons and research."
+
 
 
   LangString TEXT_SecBase ${LANG_DUTCH} "Standaard installatie"
@@ -383,6 +400,9 @@ FunctionEnd
 
   LangString TEXT_SecNLS ${LANG_DUTCH} "NLS"
   LangString DESC_SecNLS ${LANG_DUTCH} "Ondersteuning voor andere talen dan Engels (Nederlands inbegrepen)."
+
+  LangString TEXT_SecNTWMod ${LANG_DUTCH} "NTW: New Team War mod"
+  LangString DESC_SecNTWMod ${LANG_DUTCH} "NTW: New Team War mod. Wijzigd de meeste wapens en onderzoeken."
 
 
 
@@ -407,6 +427,9 @@ FunctionEnd
   LangString TEXT_SecNLS ${LANG_GERMAN} "NLS"
   LangString DESC_SecNLS ${LANG_GERMAN} "Unterstützung für Sprachen anders als Englisch (Deutsch inbegriffen)."
 
+  LangString TEXT_SecNTWMod ${LANG_GERMAN} "NTW: New Team War mod"
+  ;LangString DESC_SecNTWMod ${LANG_ENGLISH} "NTW: New Team War mod. Modifies most of the weapons and research."
+
 
 
   LangString TEXT_RunWarzone ${LANG_ENGLISH} "Run ${PACKAGE_NAME}"
@@ -429,6 +452,7 @@ FunctionEnd
     !insertmacro MUI_DESCRIPTION_TEXT ${SecGrimMod} $(DESC_SecGrimMod)
     !insertmacro MUI_DESCRIPTION_TEXT ${SecAivolutionMod} $(DESC_SecAivolutionMod)
     !insertmacro MUI_DESCRIPTION_TEXT ${SecMusicMod} $(DESC_SecMusicMod)
+    !insertmacro MUI_DESCRIPTION_TEXT ${SecNTWMod} $(DESC_SecNTWMod)
 
     !insertmacro MUI_DESCRIPTION_TEXT ${SecNLS} $(DESC_SecNLS)
   !insertmacro MUI_FUNCTION_DESCRIPTION_END
@@ -478,6 +502,7 @@ Section "Uninstall"
 
   Delete "$INSTDIR\mods\global\aivolution.wz"
   Delete "$INSTDIR\mods\global\grim.wz"
+  Delete "$INSTDIR\mods\global\ntw.wz"
   RMDir "$INSTDIR\mods\global"
   RMDir "$INSTDIR\mods"
 
@@ -568,6 +593,7 @@ Section "Uninstall"
   Delete "$SMPROGRAMS\$STARTMENU_FOLDER\${PACKAGE_NAME}.lnk"
   Delete "$SMPROGRAMS\$STARTMENU_FOLDER\${PACKAGE_NAME} - Grim's GFX.lnk"
   Delete "$SMPROGRAMS\$STARTMENU_FOLDER\${PACKAGE_NAME} - Aivolution.lnk"
+  Delete "$SMPROGRAMS\$STARTMENU_FOLDER\${PACKAGE_NAME} - NTW.lnk"
   RMDir "$SMPROGRAMS\$STARTMENU_FOLDER"
 
   ;Delete empty start menu parent diretories
