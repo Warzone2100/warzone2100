@@ -14,8 +14,7 @@ extern "C" {
 typedef struct
 {
 	lua_State*      L;
-	int             funcref;
-	int             widgetref;
+	int             table;
 
 #ifndef NDEBUG
 	widget*         self;
@@ -30,8 +29,15 @@ static bool callbackHandler(widget* const self, const event* const evt, int cons
 	assert(evt->type == callbackRef->type);
 	assert(handlerId == callbackRef->handlerId);
 
-	lua_getref(callbackRef->L, callbackRef->funcref);
-	lua_getref(callbackRef->L, callbackRef->widgetref);
+	// callback.function(callback.weak.widget, evt, handlerId)
+	lua_getref(callbackRef->L, callbackRef->table);
+	lua_getfield(callbackRef->L, -1, "function");
+	lua_getfield(callbackRef->L, -2, "weak");
+	lua_getfield(callbackRef->L, -1, "widget");
+	lua_replace(callbackRef->L, -2);
+	lua_remove(callbackRef->L, -3);
+
+	assert(self == (widget const *)((swig_lua_userdata*)lua_touserdata(callbackRef->L, -1))->ptr);
 
 	swig_lua_userdata* const usr = (swig_lua_userdata*)lua_newuserdata(callbackRef->L, sizeof(*usr));
 	usr->ptr = (event* const)evt;
@@ -52,8 +58,7 @@ static bool callbackDestructor(widget* const self, const event* const evt, int c
 	assert(self == callbackRef->self);
 	assert(handlerId == callbackRef->handlerId);
 
-	lua_unref(callbackRef->L, callbackRef->funcref);
-	lua_unref(callbackRef->L, callbackRef->widgetref);
+	lua_unref(callbackRef->L, callbackRef->table);
 	free(callbackRef);
 	return true;
 }
@@ -319,6 +324,20 @@ struct _textEntry : public _widget
 };
 
 %wrapper %{
+static void createLuaCallbackTable(lua_State* const L)
+{
+	// Create a table to hold the function and a weak table with additional data
+	lua_newtable(L); // callback = {}
+	lua_newtable(L); // weak = {}
+	// setmetatable(weak, { __mode = 'v' })
+	lua_newtable(L);
+	lua_pushstring(L, "v");
+	lua_setfield(L, -2, "__mode");
+	lua_setmetatable(L, -2);
+	// callback.weak = weak
+	lua_setfield(L, -2, "weak");
+}
+
 static int lua_widget_addEventHandler(lua_State* const L)
 {
 	int args = 0;
@@ -351,11 +370,23 @@ static int lua_widget_addEventHandler(lua_State* const L)
         }
 	type = (eventType)lua_tonumber(L, 2);
 
-	// Retrieve a reference to the function and widget
-	callbackRef->L         = L;
-	callbackRef->funcref   = lua_ref(L, true);
+	// Create a table to store the Lua callback info in
+	createLuaCallbackTable(L);
+	lua_insert(L, 1);
+
+	// callback.function = function
+	lua_setfield(L, 1, "function");
+
+	// callback.weak.widget = self
 	lua_pop(L, 1);
-	callbackRef->widgetref = lua_ref(L, true);
+	lua_getfield(L, 1, "weak");
+	lua_insert(L, -2);
+	lua_setfield(L, -2, "widget");
+
+	// Retrieve a reference to the callback table
+	lua_settop(L, 1);
+	callbackRef->L     = L;
+	callbackRef->table = lua_ref(L, true);
 
 	// Register the event handler with the widget
 	handlerId = widgetAddEventHandler(WIDGET(self), type, (callback)callbackHandler, (callback)callbackDestructor, callbackRef);
@@ -414,11 +445,23 @@ static int lua_widget_addTimerEventHandler(lua_State* const L)
 	type = (eventType)lua_tonumber(L, 2);
         interval = lua_tonumber(L, 3);
 
-	// Retrieve a reference to the function and widget
-	callbackRef->L         = L;
-	callbackRef->funcref   = lua_ref(L, true);
+	// Create a table to store the Lua callback info in
+	createLuaCallbackTable(L);
+	lua_insert(L, 1);
+
+	// callback.function = function
+	lua_setfield(L, 1, "function");
+
+	// callback.weak.widget = self
 	lua_pop(L, 2);
-	callbackRef->widgetref = lua_ref(L, true);
+	lua_getfield(L, 1, "weak");
+	lua_insert(L, -2);
+	lua_setfield(L, -2, "widget");
+
+	// Retrieve a reference to the callback table
+	lua_settop(L, 1);
+	callbackRef->L     = L;
+	callbackRef->table = lua_ref(L, true);
 
 	// Register the event handler with the widget
 	handlerId = widgetAddTimerEventHandler(WIDGET(self), type, interval, (callback)callbackHandler, (callback)callbackDestructor, callbackRef);
