@@ -38,5 +38,5 @@ wnd2:repositionFromAnchor(wnd, betawidget.CENTRE, 0, betawidget.MIDDLE, 0)
 print(string.format("It is: %f %f", wnd2.offset.x, wnd2.offset.y))
 wnd2:show()
 
-print(string.format("The clipboard's contents are \"%s\"", betawidget.getClipboardText()))
+print(string.format("The clipboard's contents are \"%s\"", betawidget.getClipboardText() or ""))
 betawidget.setClipboardText("Hello World")
