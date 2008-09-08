@@ -120,7 +120,7 @@ module REXML
 				when "h5": begin_tag = "\n===== " ; end_tag = " =====\n"
 				when "b": begin_tag = "'''" ; end_tag = "'''"
 				when "i": begin_tag = "''" ; end_tag = "''"
-				when "u": begin_tag "__" ; end_tag = "__"
+				when "u": begin_tag = "__" ; end_tag = "__"
 				when "br": begin_tag = "[[BR]]\n"
 				when "hr": begin_tag = "\n----\n"
 				when "dl": begin_tag = "\n"
