@@ -74,6 +74,9 @@ static bool callbackDestructor(widget* const self, const event* const evt, int c
 }
 %}
 
+%rename (getTime) widgetGetTime;
+int widgetGetTime(void);
+
 %rename (getClipboardText) widgetGetClipboardText;
 %rename (setClipboardText) widgetSetClipboardText;
 %typemap (newfree) char * "free($1);";

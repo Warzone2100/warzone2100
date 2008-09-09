@@ -1,3 +1,5 @@
+-- vim:set et sts=2 sw=2:
+
 wnd = betawidget.window("myWindow", 400, 400)
 wnd:reposition(400, 50)
 wnd:show()
@@ -19,10 +21,9 @@ wnd:addEventHandler(betawidget.EVT_MOUSE_CLICK,
 )
 wnd:addTimerEventHandler(betawidget.EVT_TIMER_PERSISTENT, 1000,
   (function ()
-    local time = 0
+    local starttime = betawidget.getTime()
     return function (self, evt, handlerId)
-      time = time + 1
-      print(string.format("%d seconds passed", time))
+      print(string.format("%f seconds passed", (betawidget.getTime() - starttime) / 1000))
     end
   end)()
 )
