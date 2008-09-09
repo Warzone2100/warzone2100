@@ -48,7 +48,7 @@ VIAddVersionKey "CompanyName"		"Warzone Resurrection Project"
 VIAddVersionKey "FileDescription"	"${PACKAGE_NAME} Installer"
 VIAddVersionKey "FileVersion"		"${PACKAGE_VERSION}"
 VIAddVersionKey "InternalName"		"${PACKAGE_NAME}"
-VIAddVersionKey "LegalCopyright"	"Copyright Â© 2006 Warzone Resurrection Project"
+VIAddVersionKey "LegalCopyright"	"Copyright © 2006 Warzone Resurrection Project"
 VIAddVersionKey "OriginalFilename"	"${PACKAGE}-${PACKAGE_VERSION}.exe"
 VIAddVersionKey "ProductName"		"${PACKAGE_NAME}"
 VIAddVersionKey "ProductVersion"	"${PACKAGE_VERSION}"
@@ -390,7 +390,7 @@ FunctionEnd
   LangString DESC_SecMods ${LANG_DUTCH} "Verschillende mods."
 
   LangString TEXT_SecGrimMod ${LANG_DUTCH} "Grim's grafische-update"
-  LangString DESC_SecGrimMod ${LANG_DUTCH} "Grim's grafische-update. Bevat meer gedetaÃ¯leerde textures voor campaign 1 en extra texture- en model-updates. Copyright (C) 2005-2007 Grim Moroe, gebruik is alleen toegestaan voor ${PACKAGE_NAME}."
+  LangString DESC_SecGrimMod ${LANG_DUTCH} "Grim's grafische-update. Bevat meer gedetaïleerde textures voor campaign 1 en extra texture- en model-updates. Copyright (C) 2005-2007 Grim Moroe, gebruik is alleen toegestaan voor ${PACKAGE_NAME}."
 
   LangString TEXT_SecAivolutionMod ${LANG_DUTCH} "Aivolution"
   LangString DESC_SecAivolutionMod ${LANG_DUTCH} "Verbeterde kunstmatige intelligentie die leert."
@@ -410,25 +410,25 @@ FunctionEnd
   LangString DESC_SecBase ${LANG_GERMAN} "Standardinstallation."
 
   LangString TEXT_SecOpenAL ${LANG_GERMAN} "OpenAL Bibliotheken"
-  LangString DESC_SecOpenAL ${LANG_GERMAN} "Bibliotheken fÃ¼r OpenAL, ein freies Audio Interface. Implementation von Creative Labs."
+  LangString DESC_SecOpenAL ${LANG_GERMAN} "Bibliotheken für OpenAL, ein freies Audio Interface. Implementation von Creative Labs."
 
   LangString TEXT_SecMods ${LANG_GERMAN} "Mods"
   LangString DESC_SecMods ${LANG_GERMAN} "Verschiedene Mods."
 
   LangString TEXT_SecGrimMod ${LANG_GERMAN} "Grims Grafik-Update"
-  LangString DESC_SecGrimMod ${LANG_GERMAN} "Grims Grafik-Update. EnthÃ¤lt detailliertere Texturen fÃ¼r Kampagne 1 sowie einige andere Textur- und Model-Updates. Copyright (C) 2005-2007 Grim Moroe, Verwendung nur fÃ¼r ${PACKAGE_NAME} gestattet."
+  LangString DESC_SecGrimMod ${LANG_GERMAN} "Grims Grafik-Update. Enthält detailliertere Texturen für Kampagne 1 sowie einige andere Textur- und Model-Updates. Copyright (C) 2005-2007 Grim Moroe, Verwendung nur für ${PACKAGE_NAME} gestattet."
 
   LangString TEXT_SecAivolutionMod ${LANG_GERMAN} "Aivolution"
-  LangString DESC_SecAivolutionMod ${LANG_GERMAN} "Verbesserte kÃ¼nstliche Intelligenz die erlernt."
+  LangString DESC_SecAivolutionMod ${LANG_GERMAN} "Verbesserte künstliche Intelligenz, die dazulernt."
 
   LangString TEXT_SecMusicMod ${LANG_GERMAN} "Musik"
   LangString DESC_SecMusicMod ${LANG_GERMAN} "Musik herunterladen und installieren."
 
   LangString TEXT_SecNLS ${LANG_GERMAN} "NLS"
-  LangString DESC_SecNLS ${LANG_GERMAN} "UnterstÃ¼tzung fÃ¼r Sprachen anders als Englisch (Deutsch inbegriffen)."
+  LangString DESC_SecNLS ${LANG_GERMAN} "Unterstützung für Sprachen außer Englisch (Deutsch inbegriffen)."
 
   LangString TEXT_SecNTWMod ${LANG_GERMAN} "NTW: New Team War mod"
-  ;LangString DESC_SecNTWMod ${LANG_ENGLISH} "NTW: New Team War mod. Modifies most of the weapons and research."
+  LangString DESC_SecNTWMod ${LANG_GERMAN} "NTW: New Team War mod. Verändert die meisten Forschungen und Waffen."
 
 
 
