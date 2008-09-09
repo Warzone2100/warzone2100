@@ -113,11 +113,20 @@ data/mp/messages/strings/names.txt
 data/mp/messages/strings/resstrings.txt
 data/mp/multiplay/script/camtech.slo
 data/mp/multiplay/script/multiplay.slo
+lib/betawidget/font.c
 lib/betawidget/geom.c
 lib/betawidget/hBox.c
+lib/betawidget/platform/sdl/clipboardWin32.c
+lib/betawidget/platform/sdl/clipboardX11.c
+lib/betawidget/platform/sdl/event.c
+lib/betawidget/platform/sdl/init.c
+lib/betawidget/platform/sdl/time.c
 lib/betawidget/spacer.c
+lib/betawidget/textEntry.c
+lib/betawidget/tools/sdl-testapp.c
 lib/betawidget/vector.c
 lib/betawidget/widget.c
+lib/betawidget/window.c
 lib/exceptionhandler/exceptionhandler.c
 lib/exceptionhandler/exchndl.c
 lib/framework/configfile.c
@@ -137,6 +146,7 @@ lib/framework/strres.c
 lib/framework/tagfile.c
 lib/framework/treap.c
 lib/framework/trig.c
+lib/framework/utf.c
 lib/gamelib/anim.c
 lib/gamelib/animobj.c
 lib/gamelib/gtime.c
@@ -195,6 +205,7 @@ src/aiexperience.c
 src/astar.c
 src/atmos.c
 src/aud.c
+src/baseobject.c
 src/bridge.c
 src/bucket3d.c
 src/cheat.c
@@ -280,6 +291,8 @@ src/scriptvals.c
 src/selection.c
 src/seqdisp.c
 src/stats.c
+src/stats-db2.c
+src/stats-db2.tpl.sql.c
 src/stats-db.c
 src/structure.c
 src/target.c
