@@ -25,6 +25,9 @@ typedef struct
 
 static bool callbackHandler(widget* const self, const event* const evt, int const handlerId, lua_widget_callback const * const callbackRef)
 {
+	const int stack_top = lua_gettop(callbackRef->L);
+	bool result;
+
 	assert(self == callbackRef->self);
 	assert(evt->type == callbackRef->type);
 	assert(handlerId == callbackRef->handlerId);
@@ -50,7 +53,14 @@ static bool callbackHandler(widget* const self, const event* const evt, int cons
 	// return callback(self, evt, handlerId)
 	if (lua_pcall(callbackRef->L, 3, 1, 0) != 0)
                 return false;
-	return lua_toboolean(callbackRef->L, 1);
+	if (lua_gettop(callbackRef->L) != (stack_top + 1))
+		// If no value got returned assume the event handler was succesfull
+		return true;
+
+	// Pop the result from the stack and return it
+	result = lua_toboolean(callbackRef->L, -1);
+	lua_pop(callbackRef->L, 1);
+	return result;
 }
 
 static bool callbackDestructor(widget* const self, const event* const evt, int const handlerId, lua_widget_callback* const callbackRef)
