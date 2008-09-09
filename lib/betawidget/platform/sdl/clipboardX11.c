@@ -18,7 +18,11 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
-// Something wicked this way comes...
+/*
+ * Something wicked this way comes...
+ * Documentation/reference:
+ *  http://svr-www.eng.cam.ac.uk/~er258/code/dist/x_clipboard/paste.cc
+ */
 
 #include <stdbool.h>
 #include <assert.h>
