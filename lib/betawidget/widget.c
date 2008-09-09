@@ -780,8 +780,9 @@ int widgetAddTimerEventHandlerImpl(widget *self, eventType type, int interval,
 	entry->callback     = handler;
 	entry->destructor   = destructor;
 	entry->userData     = userData;
-	
-	entry->lastCalled   = 0;
+
+	// the handler is called when lastCalled + interval >= current time
+	entry->lastCalled   = widgetGetTime();
 	entry->interval     = interval;
 	
 	// Add the handler to the table
