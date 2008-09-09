@@ -291,8 +291,6 @@ src/scriptvals.c
 src/selection.c
 src/seqdisp.c
 src/stats.c
-src/stats-db2.c
-src/stats-db2.tpl.sql.c
 src/stats-db.c
 src/structure.c
 src/target.c
