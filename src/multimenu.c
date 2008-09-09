@@ -147,10 +147,34 @@ char		debugMenuEntry[DEBUGMENU_MAX_ENTRIES][MAX_STR_LENGTH];
 // ////////////////////////////////////////////////////////////////////////////
 // Map / force / name load save stuff.
 
+/* Sets the player's text color depending on if alliance formed, or if dead.
+ * \param mode  the specified alliance
+ * \param player the specified player
+ */
+static void SetPlayerTextColor( int mode, UDWORD player )
+{
+	// the colors were chosen to match the FRIEND/FOE radar map colors.
+	if (mode == ALLIANCE_FORMED)
+	{
+		iV_SetTextColour(WZCOL_YELLOW);			// Human alliance text color
+	}
+	else if (isHumanPlayer(player))				// Human player, no alliance
+	{
+		iV_SetTextColour(WZCOL_TEXT_BRIGHT);	// Normal text color
+	}
+	else
+	{
+		iV_SetTextColour(WZCOL_RED);			// Enemy color
+	}
+	// override color if they are dead...
+	if (!apsDroidLists[player] && !apsStructLists[player])
+	{
+		iV_SetTextColour(WZCOL_GREY);			// dead text color
+	}
+}
 // ////////////////////////////////////////////////////////////////////////////
 // enumerates maps in the gamedesc file.
 // returns only maps that are valid the right 'type'
-
 static BOOL enumerateMultiMaps(char *found, UDWORD *players,BOOL first, UBYTE camToUse, UBYTE numPlayers)
 {
 	static LEVEL_DATASET *lev;
@@ -676,10 +700,6 @@ static void displayExtraGubbins(UDWORD height)
 {
 	char	str[128];
 
-	// draw timer
-	getAsciiTime(str,gameTime);
-	iV_DrawText(str, MULTIMENU_FORM_X+MULTIMENU_C2 ,MULTIMENU_FORM_Y+MULTIMENU_FONT_OSET) ;
-
 	//draw grid
 	iV_Line(MULTIMENU_FORM_X+MULTIMENU_C0 -6 , MULTIMENU_FORM_Y,
 			MULTIMENU_FORM_X+MULTIMENU_C0 -6 , MULTIMENU_FORM_Y+height, WZCOL_BLACK);
@@ -699,23 +719,36 @@ static void displayExtraGubbins(UDWORD height)
 	iV_Line(MULTIMENU_FORM_X				, MULTIMENU_FORM_Y+MULTIMENU_PLAYER_H,
 			MULTIMENU_FORM_X+MULTIMENU_FORM_W, MULTIMENU_FORM_Y+MULTIMENU_PLAYER_H, WZCOL_BLACK);
 
-	//draw titles.
-	iV_SetFont(font_regular);											// font
-	iV_SetTextColour(WZCOL_TEXT_BRIGHT);
+	iV_SetFont(font_regular);						// font
+	iV_SetTextColour(WZCOL_TEXT_BRIGHT);			// main wz text color
 
+	// draw timer
+	getAsciiTime(str, gameTime);
+	iV_DrawText(str, MULTIMENU_FORM_X+MULTIMENU_C2, MULTIMENU_FORM_Y+MULTIMENU_FONT_OSET) ;
+
+	// draw titles.
 	iV_DrawText(_("Alliances"), MULTIMENU_FORM_X+MULTIMENU_C0, MULTIMENU_FORM_Y+MULTIMENU_FONT_OSET);
 	iV_DrawText(_("Score"), MULTIMENU_FORM_X+MULTIMENU_C8, MULTIMENU_FORM_Y+MULTIMENU_FONT_OSET);
 	iV_DrawText(_("Kills"), MULTIMENU_FORM_X+MULTIMENU_C9, MULTIMENU_FORM_Y+MULTIMENU_FONT_OSET);
 
 	if(getDebugMappingStatus())
-	{
+	{	// shows # units for *all* players in debug mode ONLY!
 		iV_DrawText("Units", MULTIMENU_FORM_X+MULTIMENU_C10, MULTIMENU_FORM_Y+MULTIMENU_FONT_OSET);
 		iV_DrawText("Power", MULTIMENU_FORM_X+MULTIMENU_C11, MULTIMENU_FORM_Y+MULTIMENU_FONT_OSET);
 	}
 	else
-	{
-		iV_DrawText(_("Ping"), MULTIMENU_FORM_X+MULTIMENU_C10, MULTIMENU_FORM_Y+MULTIMENU_FONT_OSET);
-		iV_DrawText(_("Played"), MULTIMENU_FORM_X+MULTIMENU_C11, MULTIMENU_FORM_Y+MULTIMENU_FONT_OSET);
+	{	// shows # units for *yourself* (+ team member?) only.
+		iV_DrawText(_("Units"), MULTIMENU_FORM_X+MULTIMENU_C10, MULTIMENU_FORM_Y+MULTIMENU_FONT_OSET);
+
+		// ping is useless for non MP games, so display something useful depending on mode.
+		if (runningMultiplayer())
+		{
+			iV_DrawText(_("Ping"), MULTIMENU_FORM_X+MULTIMENU_C11, MULTIMENU_FORM_Y+MULTIMENU_FONT_OSET);
+		}
+		else
+		{
+			iV_DrawText(_("Structs"), MULTIMENU_FORM_X+MULTIMENU_C11, MULTIMENU_FORM_Y+MULTIMENU_FONT_OSET);
+		}
 	}
 
 #ifdef DEBUG
@@ -755,6 +788,15 @@ static void displayMultiPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset,
 		sprintf(str,"%d:", player);
 
 		strcat(str, getPlayerName(player));
+		if (isHumanPlayer(player))
+		{
+			SetPlayerTextColor(alliances[selectedPlayer][player], player);
+		}
+		else
+		{
+			SetPlayerTextColor(alliances[selectedPlayer][player], player);
+		}
+
 		while(iV_GetTextWidth(str) >= (MULTIMENU_C0-MULTIMENU_C2-10) )
 		{
 			str[strlen(str)-1]='\0';
@@ -799,6 +841,8 @@ static void displayMultiPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset,
 	}
 	if(isHumanPlayer(player))
 	{
+		SetPlayerTextColor(alliances[selectedPlayer][player], player);
+
 		//c8:score,
 		sprintf(str,"%d",getMultiStats(player,true).recentScore);
 		iV_DrawText(str, x+MULTIMENU_C8, y+MULTIMENU_FONT_OSET);
@@ -809,27 +853,47 @@ static void displayMultiPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset,
 
 		if(!getDebugMappingStatus())
 		{
-			//c10:ping
-			if(player != selectedPlayer)
+			//only show player's units, and nobody elses.
+			//c10:units
+			if (myResponsibility(player))
 			{
-				if(ingame.PingTimes[player] >2000)
-				{
-					sprintf(str,"***");
-				}
-				else
-				{
-					sprintf(str,"%d",ingame.PingTimes[player]);
-				}
+				SetPlayerTextColor(alliances[selectedPlayer][player], player);
+				sprintf(str, "%d", getNumDroids(player));
 				iV_DrawText(str, x+MULTIMENU_C10, y+MULTIMENU_FONT_OSET);
 			}
 
-			//c11:played
-			sprintf(str,"%d",getMultiStats(player,true).played);
-			iV_DrawText(str, x+MULTIMENU_C11, y+MULTIMENU_FONT_OSET);
+			if (runningMultiplayer())
+			{
+				//c11:ping
+				if (player != selectedPlayer)
+				{
+					if (ingame.PingTimes[player] > 2000)
+					{
+						sprintf(str,"???");
+					}
+					else
+					{
+						sprintf(str, "%d", ingame.PingTimes[player]);
+					}
+					iV_DrawText(str, x+MULTIMENU_C11, y+MULTIMENU_FONT_OSET);
+				}
+			}
+			else
+			{
+				int num;
+				STRUCTURE *temp;
+				// NOTE, This tallys up *all* the structures you have. Test out via 'start with no base'.
+				for (num = 0, temp = apsStructLists[player]; temp != NULL;num++,temp = temp->psNext);
+				//c11: Structures
+				sprintf(str, "%d", num);
+				iV_DrawText(str, x+MULTIMENU_C11, y+MULTIMENU_FONT_OSET);
+			}
 		}
 	}
 	else
 	{
+		SetPlayerTextColor(alliances[selectedPlayer][player], player);
+
 		// estimate of score.
 		sprintf(str,"%d",ingame.skScores[player][0]);
 		iV_DrawText(str, x+MULTIMENU_C8, y+MULTIMENU_FONT_OSET);
