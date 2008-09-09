@@ -809,7 +809,7 @@ void widgetRemoveEventHandlerImpl(widget *self, int id)
 			{
 				// Generate an EVT_DESTRUCT event
 				eventMisc evtDestruct;
-				evtDestruct.event.type = EVT_DESTRUCT;
+				evtDestruct.event = widgetCreateEvent(EVT_DESTRUCT);
 				
 				handler->destructor(self, (event *) &evtDestruct, handler->id,
 				                    handler->userData);
