@@ -284,7 +284,15 @@ static int xAccess(WZ_DECL_UNUSED sqlite3_vfs* pVfs, const char* zName, int flag
 
 static int xGetTempname(WZ_DECL_UNUSED sqlite3_vfs* pVfs, WZ_DECL_UNUSED int nOut, WZ_DECL_UNUSED char* zOut)
 {
-	return SQLITE_IOERR;
+	/* From SQLite 3.5.7 onwards (at least in 3.5.x) this function is
+	 * *required* to place a filename that can later on be used with xOpen
+	 * in zOut. However, for at least 3.5.7, 3.5.8, and 3.5.9 this
+	 * particular filename is *always* combined with the
+	 * SQLITE_OPEN_SUBJOURNAL flag. Since we don't open files with that
+	 * flag for real anyway (see definition of xOpen below), we can legally
+	 * hand out any filename here.
+	 */
+	return (strlcpy(zOut, "<tempfile>", nOut) < nOut) ? SQLITE_OK : SQLITE_IOERR;
 }
 
 /** \return non-zero when no truncation occurred, zero otherwise.
