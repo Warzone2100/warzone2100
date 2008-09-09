@@ -41,3 +41,26 @@ wnd2:show()
 
 print(string.format("The clipboard's contents are \"%s\"", betawidget.getClipboardText() or ""))
 betawidget.setClipboardText("Hello World")
+
+-- A demonstration of destruction through the garbage collector
+-- FIXME: The sequence of widget = nil; collectgarbage("collect"); should
+--        really be replaced by something like widget:destroy(). This should
+--        happen in such a way that it's still safe to access any still alive
+--        references to this widget, e.g. it shouldn't result in
+--        widgetDestroy(WIDGET(widget)) being called twice. We probably need
+--        some way to turn these references into invalidated widget handles.
+wnd:addTimerEventHandler(betawidget.EVT_TIMER_SINGLE_SHOT, 5000,
+  function (self, evt, handlerId)
+    print "collecting garbage: 1"
+    collectgarbage("collect")
+    self:addTimerEventHandler(betawidget.EVT_TIMER_SINGLE_SHOT, 5000,
+      function (self, evt, handlerId)
+        print "collecting garbage: 2"
+        self = nil
+        collectgarbage("collect")
+      end
+    )
+  end
+)
+wnd = nil
+wnd2 = nil
