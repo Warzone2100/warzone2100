@@ -1280,62 +1280,23 @@ BOOL structSetManufacture(STRUCTURE *psStruct, DROID_TEMPLATE *psTempl, UBYTE qu
 */
 
 // look at where other walls are to decide what type of wall to build
-static SDWORD structWallScan(BOOL aWallPresent[5][5], SDWORD x,SDWORD y)
+static SDWORD structWallScan(BOOL aWallPresent[5][5], SDWORD x, SDWORD y)
 {
-	SDWORD cx,cy, numWalls;
-
-	numWalls = 0;
-	for(cx = x-1; cx <= x+1; cx += 1)
+	if (aWallPresent[x-1][y] || aWallPresent[x+1][y])
 	{
-		for(cy = y-1; cy <= y+1; cy += 1)
-		{
-			// do not look at walls diagonally from this wall
-			if (((cx == x && cy != y) ||
-				(cx != x && cy == y))
-				&& aWallPresent[cx][cy])
-			{
-				numWalls += 1;
-			}
-		}
-	}
-
-	// Now decide what type of wall is needed
-	if (numWalls == 1)
-	{
-		if (aWallPresent[x-1][y] || aWallPresent[x+1][y])
-		{
-			// there is a wall horizontally adjacent
-			return WALL_HORIZ;
-		}
-		else
-		{
-			return WALL_VERT;
-		}
-	}
-	else if (numWalls == 2)
-	{
-		if (aWallPresent[x-1][y] && aWallPresent[x+1][y])
-		{
-			// there is a wall horizontally adjacent
-			return WALL_HORIZ;
-		}
-		else if (aWallPresent[x][y-1] && aWallPresent[x][y+1])
-		{
-			// there is a wall vertically adjacent
-			return WALL_VERT;
-		}
-		else
+		if (aWallPresent[x][y-1] || aWallPresent[x][y+1])
 		{
 			return WALL_CORNER;
 		}
+		else
+		{
+			return WALL_HORIZ;
+		}
 	}
-	else if (numWalls > 2)
+	else
 	{
-		// definately need a corner wall
-		return WALL_CORNER;
+		return WALL_VERT;
 	}
-
-	return WALL_VERT;
 }
 
 // Choose a type of wall for a location - and update any neighbouring walls
