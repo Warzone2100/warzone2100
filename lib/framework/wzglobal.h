@@ -450,7 +450,7 @@
 #if defined(WZ_CC_GNU) || defined(WZ_CC_INTEL)
 #  define WZ_DECL_THREAD __thread
 #elif defined(WZ_CC_MSVC)
-#  define __declspec(thread)
+#  define WZ_DECL_THREAD __declspec(thread)
 #else
 #  error "Thread local storage attribute required"
 #endif
