@@ -13,10 +13,12 @@ libbetawidget_la_CPPFLAGS = $(CAIRO_SVG_CFLAGS) $(LUA_CFLAGS) -DLIB_COMPILE=1
 libbetawidget_la_LDFLAGS = $(CAIRO_SVG_LIBS) $(OPENGL_LIBS)
 libbetawidget_la_LIBADD = $(LUA_LIBTOOL)
 
-# FIXME: Headers required for the public API should be placed in the
-#        inlude_HEADERS directory.
-noinst_HEADERS = clipboard.h font.h geom.h hBox.h internal-cairo.h keycode.h \
-	spacer.h textEntry.h vector.h widget.h window.h
+# FIXME: As much non-API headers (i.e. headers that shouldn't be directly
+#        included by client code of betawidget) as possible should be moved to
+#        noinst_HEADERS.
+pkginclude_HEADERS = clipboard.h font.h internal-cairo.h keycode.h geom.h \
+	hBox.h spacer.h textEntry.h vector.h widget.h window.h
+noinst_HEADERS = 
 
 # utf.c, GLee
 libbetawidget_la_SOURCES += ../framework/utf.c ../ivis_opengl/GLee.c
