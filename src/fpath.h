@@ -57,7 +57,6 @@ extern FPATH_RETVAL fpathDroidRoute(DROID* psDroid, SDWORD targetX, SDWORD targe
  *  This function will check if the map tile at the given location blocks droids
  *  with the currently selected propulsion type.
  *
- *  @param x,y the parameters of the map tile to check
  *  @return true if the given tile is blocking for this droid
  */
 extern BOOL fpathBlockingTile(SDWORD x, SDWORD y, PROPULSION_TYPE propulsion);

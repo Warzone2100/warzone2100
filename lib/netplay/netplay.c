@@ -399,7 +399,7 @@ BOOL NETsetGameFlags(UDWORD flag, SDWORD value)
 }
 
 /**
- * @NOTE \c game is being sent to the master server (if hosting)
+ * @note \c game is being sent to the master server (if hosting)
  *       The implementation of NETsendGAMESTRUCT <em>must</em> guarantee to
  *       pack it in network byte order (big-endian).
  *
@@ -451,7 +451,7 @@ static void NETsendGAMESTRUCT(TCPsocket socket, const GAMESTRUCT* game)
 }
 
 /**
- * @NOTE \c game is being retrieved from the master server (if browsing the
+ * @note \c game is being retrieved from the master server (if browsing the
  *       lobby). The implementation of NETrecvGAMESTRUCT should assume the data
  *       to be packed in network byte order (big-endian).
  *

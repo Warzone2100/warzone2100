@@ -18,7 +18,7 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 /** 
- *	@file widget.h
+ *	@file lib/widget/widget.h
  *	Definitions for the Widget library
  *	@defgroup Widget Widget system
  *	Warzone uses a pixel layout, callback based widget code. While it has several

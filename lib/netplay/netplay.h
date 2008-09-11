@@ -112,7 +112,7 @@ typedef struct {					//Available game storage... JUST FOR REFERENCE!
 } SESSIONDESC;
 
 /**
- * @NOTE when changing this structure, NETsendGAMESTRUCT, NETrecvGAMESTRUCT and
+ * @note when changing this structure, NETsendGAMESTRUCT, NETrecvGAMESTRUCT and
  *       the lobby server should be changed accordingly.
  */
 typedef struct {

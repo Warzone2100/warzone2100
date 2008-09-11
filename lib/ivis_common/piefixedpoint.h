@@ -21,7 +21,7 @@
  * @file
  *
  * Handles fixed point operations for degrees and matrix math.
- * @TODO Get rid of this file and use floats instead.
+ * @todo Get rid of this file and use floats instead.
  */
 
 #ifndef __INCLUDED_LIB_IVIS_COMMON_PIEFIXEDPOINT_H__

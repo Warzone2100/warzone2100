@@ -165,7 +165,7 @@ static void pie_PrintLoadedTextures(void)
 
 /** Retrieve the texture number for a given texture resource.
  *
- *  @NOTE We keep textures in a separate data structure _TEX_PAGE apart from the
+ *  @note We keep textures in a separate data structure _TEX_PAGE apart from the
  *        normal resource system.
  *
  *  @param filename The filename of the texture page to search for.

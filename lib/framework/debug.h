@@ -200,9 +200,6 @@ BOOL debug_enable_switch(const char *str);
  * Output printf style format str with additional arguments.
  *
  * Only outputs if debugging of part was formerly enabled with debug_enable_switch.
- *
- * \param	part	Code part to associate with this message
- * \param	str		printf style formatstring
  */
 #define debug(part, ...) do { if (enabled_debug[part]) _debug(part, __FUNCTION__, __VA_ARGS__); } while(0)
 void _debug( code_part part, const char *function, const char *str, ...)
