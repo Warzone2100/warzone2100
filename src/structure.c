@@ -1486,11 +1486,6 @@ void alignStructure(STRUCTURE *psBuilding)
 /*Builds an instance of a Structure - the x/y passed in are in world coords. */
 STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, UDWORD player, BOOL FromSave)
 {
-	UDWORD		mapX, mapY;
-	UDWORD		width, breadth, weapon, capacity;
-	float bodyDiff = 0.f;
-	SDWORD		wallType = 0, preScrollMinX = 0, preScrollMinY = 0, preScrollMaxX = 0, preScrollMaxY = 0;
-	int			i;
 	STRUCTURE	*psBuilding = NULL;
 
 	assert(pStructureType);
@@ -1498,8 +1493,11 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 
 	if (IsStatExpansionModule(pStructureType)==false)
 	{
-		//some prelim tests...
+		SDWORD	wallType = 0, preScrollMinX = 0, preScrollMinY = 0, preScrollMaxX = 0, preScrollMaxY = 0;
 		UDWORD	max = pStructureType - asStructureStats;
+		UDWORD	mapX, mapY;
+		UDWORD	width, breadth;
+		int	i;
 
 		if (max > numStructureStats)
 		{
@@ -1520,15 +1518,13 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 		y = ((pStructureType->baseBreadth % 2) == 0) ? (y & ~TILE_MASK) : (y & ~TILE_MASK) + TILE_UNITS/2;
 
 		//check not trying to build too near the edge
-		if (map_coord(x) < TOO_NEAR_EDGE
-		 || map_coord(x) > (mapWidth - TOO_NEAR_EDGE))
+		if (map_coord(x) < TOO_NEAR_EDGE || map_coord(x) > (mapWidth - TOO_NEAR_EDGE))
 		{
 			debug(LOG_ERROR, "attempting to build too closely to map-edge, "
 			      "x coord (%u) too near edge (req. distance is %u)", x, TOO_NEAR_EDGE);
 			return NULL;
 		}
-		if (map_coord(y) < TOO_NEAR_EDGE
-		 || map_coord(y) > (mapHeight - TOO_NEAR_EDGE))
+		if (map_coord(y) < TOO_NEAR_EDGE || map_coord(y) > (mapHeight - TOO_NEAR_EDGE))
 		{
 			debug(LOG_ERROR, "attempting to build too closely to map-edge, "
 			      "y coord (%u) too near edge (req. distance is %u)", y, TOO_NEAR_EDGE);
@@ -1695,25 +1691,23 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 
 		/* Store the weapons */
 		memset(psBuilding->asWeaps, 0, sizeof(WEAPON));
-		//Watermelon:can only have the STRUCT_MAXWEAPS weapon now
 		psBuilding->numWeaps = 0;
 		if (pStructureType->numWeaps > 0)
 		{
+			UDWORD weapon;
+
 			for(weapon=0; weapon < pStructureType->numWeaps; weapon++)
 			{
-				//can only have the one weapon now - AB 24/01/99
 				if (pStructureType->psWeapStat[weapon])
 				{
 					psBuilding->asWeaps[weapon].lastFired = 0;
 					//in multiPlayer make the Las-Sats require re-loading from the start
-					if (bMultiPlayer && pStructureType->psWeapStat[0]->
-						weaponSubClass == WSC_LAS_SAT)
+					if (bMultiPlayer && pStructureType->psWeapStat[0]->weaponSubClass == WSC_LAS_SAT)
 					{
 						psBuilding->asWeaps[0].lastFired = gameTime;
 					}
 					psBuilding->asWeaps[weapon].nStat =	pStructureType->psWeapStat[weapon] - asWeaponStats;
-					psBuilding->asWeaps[weapon].ammo = (asWeaponStats + psBuilding->
-						asWeaps[weapon].nStat)->numRounds;
+					psBuilding->asWeaps[weapon].ammo = (asWeaponStats + psBuilding->asWeaps[weapon].nStat)->numRounds;
 					psBuilding->asWeaps[weapon].recoilValue = 0;
 					psBuilding->numWeaps++;
 				}
@@ -1725,14 +1719,12 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 			{
 				psBuilding->asWeaps[0].lastFired = 0;
 				//in multiPlayer make the Las-Sats require re-loading from the start
-				if (bMultiPlayer && pStructureType->psWeapStat[0]->
-					weaponSubClass == WSC_LAS_SAT)
+				if (bMultiPlayer && pStructureType->psWeapStat[0]->weaponSubClass == WSC_LAS_SAT)
 				{
 					psBuilding->asWeaps[0].lastFired = gameTime;
 				}
 				psBuilding->asWeaps[0].nStat =	pStructureType->psWeapStat[0] - asWeaponStats;
-				psBuilding->asWeaps[0].ammo = (asWeaponStats + psBuilding->
-					asWeaps[0].nStat)->numRounds;
+				psBuilding->asWeaps[0].ammo = (asWeaponStats + psBuilding->asWeaps[0].nStat)->numRounds;
 				psBuilding->asWeaps[0].recoilValue = 0;
 			}
 		}
@@ -1816,11 +1808,11 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 	}
 	else //its an upgrade
 	{
-		BOOL bUpgraded = false;
-
-		psBuilding = getTileStructure(map_coord(x), map_coord(y));
+		BOOL		bUpgraded = false;
+		float		bodyDiff = 0.0f;
 
 		//don't create the Structure use existing one
+		psBuilding = getTileStructure(map_coord(x), map_coord(y));
 
 		if (psBuilding == NULL)
 		{
@@ -1859,7 +1851,8 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 					|| (bMultiPlayer && (game.type == SKIRMISH) && (psBuilding->player < game.maxPlayers))
 					|| !bMultiPlayer)
 				{
-					capacity = psBuilding->pFunctionality->factory.capacity;
+					int capacity = psBuilding->pFunctionality->factory.capacity;
+
 					if (capacity < NUM_FACTORY_MODULES)
 					{
 						if (psBuilding->pStructureType->type == REF_FACTORY)
@@ -1922,7 +1915,8 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 					|| (bMultiPlayer && (game.type == SKIRMISH) && (psBuilding->player < game.maxPlayers))
 					|| !bMultiPlayer)
 				{
-					capacity = psBuilding->pFunctionality->researchFacility.capacity;
+					int capacity = psBuilding->pFunctionality->researchFacility.capacity;
+
 					if (capacity < NUM_RESEARCH_MODULES)
 					{
 						psBuilding->sDisplay.imd = researchModuleIMDs[capacity-1];
@@ -1965,7 +1959,8 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 					|| (bMultiPlayer && (game.type == SKIRMISH) && (psBuilding->player < game.maxPlayers))
 					|| !bMultiPlayer)
 				{
-					capacity = psBuilding->pFunctionality->powerGenerator.capacity;
+					int capacity = psBuilding->pFunctionality->powerGenerator.capacity;
+
 					if (capacity < NUM_POWER_MODULES)
 					{
 						psBuilding->sDisplay.imd = powerModuleIMDs[capacity-1];
