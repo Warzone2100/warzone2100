@@ -257,9 +257,9 @@ SectionEnd
 
 Section $(TEXT_SecNTWMod) SecNTWMod
 
-  SetOutPath "$INSTDIR\mods\global"
+  SetOutPath "$INSTDIR\mods\multiplay"
 
-  File "..\..\data\mods\global\ntw.wz"
+  File "..\..\data\mods\multiplay\ntw.wz"
 
   SetOutPath "$INSTDIR"
 
@@ -502,8 +502,10 @@ Section "Uninstall"
 
   Delete "$INSTDIR\mods\global\aivolution.wz"
   Delete "$INSTDIR\mods\global\grim.wz"
-  Delete "$INSTDIR\mods\global\ntw.wz"
   RMDir "$INSTDIR\mods\global"
+
+  Delete "$INSTDIR\mods\multiplay\ntw.wz"
+  RMDir "$INSTDIR\mods\multiplay"
   RMDir "$INSTDIR\mods"
 
   Delete "$INSTDIR\locale\cs\LC_MESSAGES\${PACKAGE}.mo"
