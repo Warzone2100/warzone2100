@@ -64,10 +64,12 @@ static void windowInitVtbl(window *self)
 	self->vtbl = &vtbl;
 }
 
-static void windowInitOnce() {
+static void windowInitOnce()
+{
 	static bool initialised = false;
 
-	if (!initialised) {
+	if (!initialised)
+	{
 		// Patterns initialization
 		windowPattern = cairo_pattern_create_linear(0, 0, 0, 384);
 		cairo_pattern_add_color_stop_rgba(windowPattern, 0, 0.000000, 0.000000, 0.235294, 0.75);
@@ -101,7 +103,7 @@ void windowInit(window *self, const char *id, int w, int h)
 	
 	// Set our size to (w,h)
 	widgetResize(WIDGET(self), w, h);
-	
+
 	// Mask for exact mouse events
 	widgetEnableMask(WIDGET(self));
 }
@@ -162,28 +164,31 @@ bool windowDoLayoutImpl(widget *self)
 	return true;
 }
 
-void windowDoDrawImpl(widget *self)
+void windowDoWindowPath(widget *self, cairo_t *cr)
 {
-	point p;
 	size ourSize = WIDGET(self)->size;
-	cairo_t *cr = WIDGET(self)->cr;
 
 	// Do the rounded rectangle
-	cairo_arc_negative(cr, p.x+borderRadius, p.y+borderRadius, borderRadius, -M_PI_2, -M_PI);
-	cairo_line_to(cr, p.x, p.y+ourSize.y-borderRadius);
-	cairo_arc_negative(cr, p.x+borderRadius, p.y+ourSize.y-borderRadius, borderRadius, M_PI, M_PI_2);
-	cairo_line_to(cr, p.x+ourSize.x-borderRadius, p.y+ourSize.y);
-	cairo_arc_negative(cr, p.x+ourSize.x-borderRadius, p.y+ourSize.y-borderRadius, borderRadius, M_PI_2, 0);
-	cairo_line_to(cr, p.x+ourSize.x, p.y+borderRadius);
-	cairo_arc_negative(cr, p.x+ourSize.x-borderRadius, p.y+borderRadius, borderRadius, 0, -M_PI_2);
+	cairo_arc_negative(cr, borderRadius, borderRadius, borderRadius, -M_PI_2, -M_PI);
+	cairo_line_to(cr, 0, ourSize.y-borderRadius);
+	cairo_arc_negative(cr, borderRadius, ourSize.y-borderRadius, borderRadius, M_PI, M_PI_2);
+	cairo_line_to(cr, ourSize.x-borderRadius, ourSize.y);
+	cairo_arc_negative(cr, ourSize.x-borderRadius, ourSize.y-borderRadius, borderRadius, M_PI_2, 0);
+	cairo_line_to(cr, ourSize.x, borderRadius);
+	cairo_arc_negative(cr, ourSize.x-borderRadius, borderRadius, borderRadius, 0, -M_PI_2);
 	cairo_close_path(cr);
+}
 
+void windowDoDrawImpl(widget *self)
+{
+	// Get drawing context
+	cairo_t *cr = WIDGET(self)->cr;
 
-	// Move to match with pattern
-	p = widgetAbsolutePosition(self);
-	cairo_translate(cr, p.x, p.y);
+	// Select window gradient
 	cairo_set_source(cr, windowPattern);
-	cairo_translate(cr, -p.x, -p.y);
+
+	// Do the rounded rectangle path
+	windowDoWindowPath(self, cr);
 	
 	// Finally fill the path
 	cairo_fill(cr);
@@ -192,23 +197,13 @@ void windowDoDrawImpl(widget *self)
 
 void windowDoDrawMaskImpl(widget *self)
 {
-	point p;
-	size ourSize = WIDGET(self)->size;
-
 	// Get the mask context
 	cairo_t *cr = WIDGET(self)->maskCr;
 
-	// Do the rounded rectangle
-	cairo_arc_negative(cr, p.x+borderRadius, p.y+borderRadius, borderRadius, -M_PI_2, -M_PI);
-	cairo_line_to(cr, p.x, p.y+ourSize.y-borderRadius);
-	cairo_arc_negative(cr, p.x+borderRadius, p.y+ourSize.y-borderRadius, borderRadius, M_PI, M_PI_2);
-	cairo_line_to(cr, p.x+ourSize.x-borderRadius, p.y+ourSize.y);
-	cairo_arc_negative(cr, p.x+ourSize.x-borderRadius, p.y+ourSize.y-borderRadius, borderRadius, M_PI_2, 0);
-	cairo_line_to(cr, p.x+ourSize.x, p.y+borderRadius);
-	cairo_arc_negative(cr, p.x+ourSize.x-borderRadius, p.y+borderRadius, borderRadius, 0, -M_PI_2);
-	cairo_close_path(cr);
+	// Do the rounded rectangle path
+	windowDoWindowPath(self, cr);
 
-	// Finally fill the path
+	// We don't have to specify the color, it's already set in our parent
 	cairo_fill(cr);
 }
 
