@@ -1,6 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 2008  Freddie Witherden
+	Copyright (C) 2008  Elio Gubser
 	Copyright (C) 2008  Warzone Resurrection Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
@@ -24,6 +25,9 @@ static windowVtbl vtbl;
 static vector *windowVector = NULL;
 static int screenWidth = -1, screenHeight = -1;
 
+static const float borderRadius = 20;
+cairo_pattern_t *windowPattern = NULL;
+
 const classInfo windowClassInfo =
 {
 	&widgetClassInfo,
@@ -44,9 +48,11 @@ static void windowInitVtbl(window *self)
 		vtbl.widgetVtbl.addChild    = windowAddChildImpl;
 		vtbl.widgetVtbl.doLayout    = windowDoLayoutImpl;
 		vtbl.widgetVtbl.doDraw      = windowDoDrawImpl;
+		vtbl.widgetVtbl.doDrawMask  = windowDoDrawMaskImpl;
 		
 		vtbl.widgetVtbl.getMinSize  = windowGetMinSizeImpl;
 		vtbl.widgetVtbl.getMaxSize  = windowGetMaxSizeImpl;
+
 		
 		initialised = true;
 	}
@@ -58,10 +64,28 @@ static void windowInitVtbl(window *self)
 	self->vtbl = &vtbl;
 }
 
+static void windowInitOnce() {
+	static bool initialised = false;
+
+	if (!initialised) {
+		// Patterns initialization
+		windowPattern = cairo_pattern_create_linear(0, 0, 0, 384);
+		cairo_pattern_add_color_stop_rgba(windowPattern, 0, 0.000000, 0.000000, 0.235294, 0.75);
+		cairo_pattern_add_color_stop_rgba(windowPattern, 0.2, 0.176470, 0.176470, 0.372549, 0.8);
+		cairo_pattern_add_color_stop_rgba(windowPattern, 0.6, 0.176470, 0.176470, 0.372549, 0.7);
+		cairo_pattern_add_color_stop_rgba(windowPattern, 1, 0.176470, 0.176470, 0.372549, 0.7);
+
+		initialised = true;
+	}
+}
+
 void windowInit(window *self, const char *id, int w, int h)
 {	
 	// Init our parent
 	widgetInit(WIDGET(self), id);
+
+	// Prepare things only have to be initialized once
+	windowInitOnce();
 	
 	// Prepare our vtable
 	windowInitVtbl(self);
@@ -77,6 +101,9 @@ void windowInit(window *self, const char *id, int w, int h)
 	
 	// Set our size to (w,h)
 	widgetResize(WIDGET(self), w, h);
+	
+	// Mask for exact mouse events
+	widgetEnableMask(WIDGET(self));
 }
 
 void windowDestroyImpl(widget *self)
@@ -137,10 +164,52 @@ bool windowDoLayoutImpl(widget *self)
 
 void windowDoDrawImpl(widget *self)
 {
-	// We really need something better than this
-	cairo_rectangle(self->cr, 0.0, 0.0, self->size.x, self->size.y);
-	cairo_set_source_rgba(self->cr, 0.0, 0.004, 0.380, 0.25);
-	cairo_fill(self->cr);
+	point p;
+	size ourSize = WIDGET(self)->size;
+	cairo_t *cr = WIDGET(self)->cr;
+
+	// Do the rounded rectangle
+	cairo_arc_negative(cr, p.x+borderRadius, p.y+borderRadius, borderRadius, -M_PI_2, -M_PI);
+	cairo_line_to(cr, p.x, p.y+ourSize.y-borderRadius);
+	cairo_arc_negative(cr, p.x+borderRadius, p.y+ourSize.y-borderRadius, borderRadius, M_PI, M_PI_2);
+	cairo_line_to(cr, p.x+ourSize.x-borderRadius, p.y+ourSize.y);
+	cairo_arc_negative(cr, p.x+ourSize.x-borderRadius, p.y+ourSize.y-borderRadius, borderRadius, M_PI_2, 0);
+	cairo_line_to(cr, p.x+ourSize.x, p.y+borderRadius);
+	cairo_arc_negative(cr, p.x+ourSize.x-borderRadius, p.y+borderRadius, borderRadius, 0, -M_PI_2);
+	cairo_close_path(cr);
+
+
+	// Move to match with pattern
+	p = widgetAbsolutePosition(self);
+	cairo_translate(cr, p.x, p.y);
+	cairo_set_source(cr, windowPattern);
+	cairo_translate(cr, -p.x, -p.y);
+	
+	// Finally fill the path
+	cairo_fill(cr);
+}
+
+
+void windowDoDrawMaskImpl(widget *self)
+{
+	point p;
+	size ourSize = WIDGET(self)->size;
+
+	// Get the mask context
+	cairo_t *cr = WIDGET(self)->maskCr;
+
+	// Do the rounded rectangle
+	cairo_arc_negative(cr, p.x+borderRadius, p.y+borderRadius, borderRadius, -M_PI_2, -M_PI);
+	cairo_line_to(cr, p.x, p.y+ourSize.y-borderRadius);
+	cairo_arc_negative(cr, p.x+borderRadius, p.y+ourSize.y-borderRadius, borderRadius, M_PI, M_PI_2);
+	cairo_line_to(cr, p.x+ourSize.x-borderRadius, p.y+ourSize.y);
+	cairo_arc_negative(cr, p.x+ourSize.x-borderRadius, p.y+ourSize.y-borderRadius, borderRadius, M_PI_2, 0);
+	cairo_line_to(cr, p.x+ourSize.x, p.y+borderRadius);
+	cairo_arc_negative(cr, p.x+ourSize.x-borderRadius, p.y+borderRadius, borderRadius, 0, -M_PI_2);
+	cairo_close_path(cr);
+
+	// Finally fill the path
+	cairo_fill(cr);
 }
 
 size windowGetMinSizeImpl(widget *self)

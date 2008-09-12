@@ -67,6 +67,7 @@ void windowInit(window *self, const char *id, int w, int h);
 void windowDestroyImpl(widget *self);
 bool windowDoLayoutImpl(widget *self);
 void windowDoDrawImpl(widget *self);
+void windowDoDrawMaskImpl(widget *self);
 bool windowAddChildImpl(widget *self, widget *child);
 size windowGetMinSizeImpl(widget *self);
 size windowGetMaxSizeImpl(widget *self);
