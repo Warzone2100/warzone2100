@@ -19,25 +19,7 @@ PATCHARCHIVE = mp.wz
 
 CLEANFILES = $(BASEARCHIVE) $(PATCHARCHIVE)
 
-data: $(BASEARCHIVE) $(PATCHARCHIVE)
-	$(MAKE) $(AM_MAKEFLAGS) -C mods data
-
 $(BASEARCHIVE): $(BASELIST:%=$(basename $(BASEARCHIVE))/%)
 $(PATCHARCHIVE): $(PATCHLIST:%=$(basename $(PATCHARCHIVE))/%)
 
-install-data-local: $(BASEARCHIVE) $(PATCHARCHIVE)
-	$(MKDIR_P) $(DESTDIR)$(pkgdatadir)
-	$(INSTALL_DATA) $(BASEARCHIVE) $(DESTDIR)$(pkgdatadir)/$(BASEARCHIVE)
-	$(INSTALL_DATA) $(PATCHARCHIVE) $(DESTDIR)$(pkgdatadir)/$(PATCHARCHIVE)
-
-uninstall-local:
-	rm -f $(DESTDIR)$(pkgdatadir)/$(BASEARCHIVE)
-	rm -f $(DESTDIR)$(pkgdatadir)/$(PATCHARCHIVE)
-
-installcheck:
-	[ -f $(BASEARCHIVE) ] && zip -T $(BASEARCHIVE)
-	[ -f $(PATCHARCHIVE) ] && zip -T $(PATCHARCHIVE)
-
-dist-hook: $(BASEARCHIVE) $(PATCHARCHIVE)
-	cp -fu $(BASEARCHIVE) $(DESTDIR)$(distdir)
-	cp -fu $(PATCHARCHIVE) $(DESTDIR)$(distdir)
+nodist_pkgdata_DATA =  $(BASEARCHIVE) $(PATCHARCHIVE)

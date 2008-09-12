@@ -12,19 +12,7 @@ NTWARCHIVE = ntw.wz
 
 CLEANFILES = $(NTWARCHIVE)
 
-data: $(NTWARCHIVE)
-
 $(NTWARCHIVE): $(NTWLIST:%=$(basename $(NTWARCHIVE))/%)
 
-install-data-local: $(NTWARCHIVE)
-	$(MKDIR_P) $(DESTDIR)$(pkgdatadir)/mods/global
-	$(INSTALL_DATA) $(NTWARCHIVE) $(DESTDIR)$(pkgdatadir)/mods/global/$(NTWARCHIVE)
-
-uninstall-local:
-	rm -f $(DESTDIR)$(pkgdatadir)/mods/global/$(NTWARCHIVE)
-
-installcheck:
-	[ -f $(NTWARCHIVE) ] && zip -T $(NTWARCHIVE)
-
-dist-hook: $(AIVOLUTIONARCHIVE) $(GRIMARCHIVE) $(NEWST_TILESARCHIVE)
-	cp -fu $(NTWARCHIVE) $(DESTDIR)$(distdir)
+multiplaymodsdir = $(pkgdata)/mods/multiplay
+nodist_multiplaymods_DATA = $(NTWARCHIVE)
