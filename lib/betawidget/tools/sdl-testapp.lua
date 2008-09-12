@@ -34,7 +34,7 @@ wnd:addEventHandler(betawidget.EVT_KEY_DOWN,
   end
 )
 
-wnd2 = betawidget.window("myOtherWindow", 100, 100)
+wnd2 = betawidget.window("myOtherWindow", 200, 100)
 wnd2:repositionFromAnchor(wnd, betawidget.CENTRE, 0, betawidget.MIDDLE, 0)
 print(string.format("It is: %f %f", wnd2.offset.x, wnd2.offset.y))
 wnd2:show()
