@@ -400,13 +400,15 @@ BOOL NETsetGameFlags(UDWORD flag, SDWORD value)
 static void NETsendGAMESTRUCT(TCPsocket socket, const GAMESTRUCT* game)
 {
 	// A buffer that's guaranteed to have the correct size (i.e. it
-	// circumvents struct padding, which could pose a problem).
-	char buf[sizeof(game->name) + sizeof(game->desc.host) + sizeof(int32_t) * 8];
+	// circumvents struct padding, which could pose a problem).  Initialise
+	// to zero so that we can be sure we're not sending any (undefined)
+	// memory content across the network.
+	char buf[sizeof(game->name) + sizeof(game->desc.host) + sizeof(int32_t) * 8] = { 0 };
 	char *buffer = buf;
 
 	// Now dump the data into the buffer
 	// Copy a string
-	sstrcpy(buffer, game->name);
+	strlcpy(buffer, game->name, sizeof(game->name));
 	buffer += sizeof(game->name);
 
 	// Copy 32bit large big endian numbers
@@ -416,7 +418,7 @@ static void NETsendGAMESTRUCT(TCPsocket socket, const GAMESTRUCT* game)
 	buffer += sizeof(int32_t);
 
 	// Copy yet another string
-	sstrcpy(buffer, game->desc.host);
+	strlcpy(buffer, game->desc.host, sizeof(game->desc.host));
 	buffer += sizeof(game->desc.host);
 
 	// Copy 32bit large big endian numbers
