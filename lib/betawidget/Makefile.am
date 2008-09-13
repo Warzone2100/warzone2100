@@ -28,9 +28,6 @@ libutil_la_SOURCES = ../framework/utf.c ../ivis_opengl/GLee.c
 libutil_la_CPPFLAGS = $(SDL_CFLAGS) -DLIB_COMPILE=1
 noinst_HEADERS += ../framework/types.h ../framework/utf.h ../ivis_opengl/GLee.h
 
-# Platform selection
-PLATFORM=sdl
-
 noinst_PROGRAMS = tools/sdl-testapp
 
 tools_sdl_testapp_SOURCES = tools/sdl-testapp.c
