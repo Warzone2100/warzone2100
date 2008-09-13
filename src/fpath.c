@@ -42,6 +42,8 @@
 
 #include "fpath.h"
 
+// If the path finding system is shutdown or not
+static volatile bool fpathQuit = false;
 
 /* Beware: Enabling this will cause significant slow-down. */
 #undef DEBUG_MAP
@@ -134,10 +136,9 @@ static int fpathResultQueueLength(void)
 /** This runs in a separate thread */
 static int fpathThreadFunc(WZ_DECL_UNUSED void *data)
 {
-	bool	finished = false;
-
 	SDL_SemWait(fpathSemaphore);
-	while (!finished)
+
+	while (!fpathQuit)
 	{
 		PATHJOB		job;
 		PATHRESULT	*psResult, result;
@@ -207,6 +208,9 @@ static int fpathThreadFunc(WZ_DECL_UNUSED void *data)
 // initialise the findpath module
 BOOL fpathInitialise(void)
 {
+	// The path system is up
+	fpathQuit = false;
+
 	if (!fpathThread)
 	{
 		fpathSemaphore = SDL_CreateSemaphore(1);
@@ -219,10 +223,13 @@ BOOL fpathInitialise(void)
 
 void fpathShutdown()
 {
+	// Signal the path finding thread to quit
+	fpathQuit = true;
+
 	fpathHardTableReset();
 	if (fpathThread)
 	{
-		SDL_KillThread(fpathThread);
+		SDL_WaitThread(fpathThread, NULL);
 		fpathThread = NULL;
 		SDL_DestroySemaphore(fpathSemaphore);
 		fpathSemaphore = NULL;
