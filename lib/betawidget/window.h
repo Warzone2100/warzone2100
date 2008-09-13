@@ -22,6 +22,7 @@
 #define WINDOW_H_
 
 #include "widget.h"
+#include "internal-cairo.h"
 
 /*
  * Forward declarations
@@ -47,6 +48,11 @@ struct _window
 	 * Our vtable
 	 */
 	windowVtbl *vtbl;
+
+	/**
+	 * Window gradient to use when drawing the window.
+	 */
+	cairo_pattern_t* windowPattern;
 };
 
 /*

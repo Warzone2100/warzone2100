@@ -26,7 +26,6 @@ static vector *windowVector = NULL;
 static int screenWidth = -1, screenHeight = -1;
 
 static const float borderRadius = 20;
-cairo_pattern_t *windowPattern = NULL;
 
 const classInfo windowClassInfo =
 {
@@ -64,30 +63,17 @@ static void windowInitVtbl(window *self)
 	self->vtbl = &vtbl;
 }
 
-static void windowInitOnce()
-{
-	static bool initialised = false;
-
-	if (!initialised)
-	{
-		// Patterns initialization
-		windowPattern = cairo_pattern_create_linear(0, 0, 0, 384);
-		cairo_pattern_add_color_stop_rgba(windowPattern, 0, 0.000000, 0.000000, 0.235294, 0.75);
-		cairo_pattern_add_color_stop_rgba(windowPattern, 0.2, 0.176470, 0.176470, 0.372549, 0.8);
-		cairo_pattern_add_color_stop_rgba(windowPattern, 0.6, 0.176470, 0.176470, 0.372549, 0.7);
-		cairo_pattern_add_color_stop_rgba(windowPattern, 1, 0.176470, 0.176470, 0.372549, 0.7);
-
-		initialised = true;
-	}
-}
-
 void windowInit(window *self, const char *id, int w, int h)
 {	
 	// Init our parent
 	widgetInit(WIDGET(self), id);
 
-	// Prepare things only have to be initialized once
-	windowInitOnce();
+	// Patterns initialization
+	self->windowPattern = cairo_pattern_create_linear(0, 0, 0, 384);
+	cairo_pattern_add_color_stop_rgba(self->windowPattern, 0, 0.000000, 0.000000, 0.235294, 0.75);
+	cairo_pattern_add_color_stop_rgba(self->windowPattern, 0.2, 0.176470, 0.176470, 0.372549, 0.8);
+	cairo_pattern_add_color_stop_rgba(self->windowPattern, 0.6, 0.176470, 0.176470, 0.372549, 0.7);
+	cairo_pattern_add_color_stop_rgba(self->windowPattern, 1, 0.176470, 0.176470, 0.372549, 0.7);
 	
 	// Prepare our vtable
 	windowInitVtbl(self);
@@ -121,6 +107,9 @@ void windowDestroyImpl(widget *self)
 			vectorRemoveAt(windowVector, i);
 		}
 	}
+
+	// Remove our pattern
+	cairo_pattern_destroy(WINDOW(self)->windowPattern);
 	
 	// Call our parents destructor
 	widgetDestroyImpl(self);
@@ -185,7 +174,7 @@ void windowDoDrawImpl(widget *self)
 	cairo_t *cr = WIDGET(self)->cr;
 
 	// Select window gradient
-	cairo_set_source(cr, windowPattern);
+	cairo_set_source(cr, WINDOW(self)->windowPattern);
 
 	// Do the rounded rectangle path
 	windowDoWindowPath(self, cr);

@@ -24,8 +24,9 @@
 #if defined(LIB_COMPILE)
 # include <cairo.h>
 #else
-// Forward declaration to allow pointers
+// Forward declarations to allow pointers
 typedef struct _cairo cairo_t;
+typedef struct _cairo_pattern cairo_pattern_t;
 #endif
 
 #endif // __INCLUDED_BETAWIDGET_INTERNAL_CAIRO_H__
