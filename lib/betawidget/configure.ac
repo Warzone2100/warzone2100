@@ -71,8 +71,13 @@ AC_CHECK_FUNCS([memmove strdup])
 # Checks for libraries.
 PKG_CHECK_MODULES([SDL], [sdl >= 1.2])
 PKG_CHECK_MODULES([CAIRO_SVG], [cairo-svg])
-PKG_CHECK_MODULES([LUA], [lua5.1 >= 5.1])
-AC_SUBST([LUA_LIBTOOL], [`${PKG_CONFIG} lua5.1 --variable=libtool_lib`])
+# First check the pkg-config lua5.1 package
+PKG_CHECK_MODULES([LUA], [lua5.1 >= 5.1], [
+	AC_SUBST([LUA_LIBTOOL], [`${PKG_CONFIG} lua5.1 --variable=libtool_lib`])], [
+	# If that fails, check the "lua" pkg-config package
+	PKG_CHECK_MODULES([LUA], [lua >= 5.1], [
+		# Workaround to retrieve the libtool library
+		AC_SUBST([LUA_LIBTOOL], [`${PKG_CONFIG} lua --variable=libdir`/liblua.la])])])
 
 # Look for OpenGL
 AC_CHECK_HEADER(SDL/SDL_opengl.h, ,
