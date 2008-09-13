@@ -1,3 +1,5 @@
+SUBDIRS = platform
+
 %_wrap_lua.cpp: %.i
 	$(SWIG) $(SWIG_LUA_OPT) -o $@ $<
 
@@ -11,7 +13,7 @@ libbetawidget_la_SOURCES = betawidget_wrap_lua.cpp font.c geom.c hBox.c \
 
 libbetawidget_la_CPPFLAGS = $(CAIRO_SVG_CFLAGS) $(LUA_CFLAGS) -DLIB_COMPILE=1
 libbetawidget_la_LDFLAGS = $(CAIRO_SVG_LIBS) $(OPENGL_LIBS)
-libbetawidget_la_LIBADD = $(LUA_LIBTOOL)
+libbetawidget_la_LIBADD = $(LUA_LIBTOOL) platform/libplatform.la libutil.la
 
 # FIXME: As much non-API headers (i.e. headers that shouldn't be directly
 #        included by client code of betawidget) as possible should be moved to
@@ -21,33 +23,16 @@ pkginclude_HEADERS = clipboard.h font.h internal-cairo.h keycode.h geom.h \
 noinst_HEADERS = 
 
 # utf.c, GLee
-libbetawidget_la_SOURCES += ../framework/utf.c ../ivis_opengl/GLee.c
+noinst_LTLIBRARIES = libutil.la
+libutil_la_SOURCES = ../framework/utf.c ../ivis_opengl/GLee.c
+libutil_la_CPPFLAGS = $(SDL_CFLAGS) -DLIB_COMPILE=1
 noinst_HEADERS += ../framework/types.h ../framework/utf.h ../ivis_opengl/GLee.h
 
 # Platform selection
-PLATFORM=platform/sdl
-
-CPPFLAGS += $(SDL_CFLAGS)
-LIBS += $(SDL_LIBS)
-
-libbetawidget_la_SOURCES += $(PLATFORM)/event.c $(PLATFORM)/init.c \
-	$(PLATFORM)/time.c
-
-if MINGW32
-libbetawidget_la_SOURCES += $(PLATFORM)/clipboardWin32.c
-else
-if MACOSX
-libbetawidget_la_SOURCES += $(PLATFORM)/clipboardOSX.m
-else
-# Assume X11 if none of the above match
-libbetawidget_la_SOURCES += $(PLATFORM)/clipboardX11.c
-endif
-endif
-
-noinst_HEADERS += $(PLATFORM)/event.h $(PLATFORM)/init.h
+PLATFORM=sdl
 
 noinst_PROGRAMS = tools/sdl-testapp
 
 tools_sdl_testapp_SOURCES = tools/sdl-testapp.c
-tools_sdl_testapp_CPPFLAGS = -I.. $(LUA_CFLAGS)
-tools_sdl_testapp_LDADD = $(OPENGL_LIBS) libbetawidget.la $(LUA_LIBTOOL)
+tools_sdl_testapp_CPPFLAGS = -I.. $(LUA_CFLAGS) $(SDL_CFLAGS)
+tools_sdl_testapp_LDADD = $(OPENGL_LIBS) $(SDL_LIBS) libbetawidget.la $(LUA_LIBTOOL)

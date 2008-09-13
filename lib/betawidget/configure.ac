@@ -89,5 +89,7 @@ AC_CHECK_LIB(GLU, main,
 		AC_MSG_ERROR([GLU library not found.])))
 AC_SUBST([OPENGL_LIBS], [${OPENGL_LIBS}])
 
-AC_CONFIG_FILES([Makefile])
+AC_CONFIG_FILES([Makefile
+                 platform/Makefile
+                 platform/sdl/Makefile])
 AC_OUTPUT
