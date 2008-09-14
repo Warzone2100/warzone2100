@@ -25,7 +25,8 @@ typedef struct
 
 static bool callbackHandler(widget* const self, const event* const evt, int const handlerId, lua_widget_callback const * const callbackRef)
 {
-	const int stack_top = lua_gettop(callbackRef->L);
+	lua_State* const L = callbackRef->L;
+	const int stack_top = lua_gettop(L);
 	bool result;
 
 	assert(self == callbackRef->self);
@@ -33,33 +34,33 @@ static bool callbackHandler(widget* const self, const event* const evt, int cons
 	assert(handlerId == callbackRef->handlerId);
 
 	// callback.function(callback.weak.widget, evt, handlerId)
-	lua_getref(callbackRef->L, callbackRef->table);
-	lua_getfield(callbackRef->L, -1, "function");
-	lua_getfield(callbackRef->L, -2, "weak");
-	lua_getfield(callbackRef->L, -1, "widget");
-	lua_replace(callbackRef->L, -2);
-	lua_remove(callbackRef->L, -3);
+	lua_getref(L, callbackRef->table);
+	lua_getfield(L, -1, "function");
+	lua_getfield(L, -2, "weak");
+	lua_getfield(L, -1, "widget");
+	lua_replace(L, -2);
+	lua_remove(L, -3);
 
-	assert(self == (widget const *)((swig_lua_userdata*)lua_touserdata(callbackRef->L, -1))->ptr);
+	assert(self == (widget const *)((swig_lua_userdata*)lua_touserdata(L, -1))->ptr);
 
-	swig_lua_userdata* const usr = (swig_lua_userdata*)lua_newuserdata(callbackRef->L, sizeof(*usr));
+	swig_lua_userdata* const usr = (swig_lua_userdata*)lua_newuserdata(L, sizeof(*usr));
 	usr->ptr = (event* const)evt;
 	usr->type = SWIGTYPE_p__event;
 	usr->own = 0;
-	_SWIG_Lua_AddMetatable(callbackRef->L, SWIGTYPE_p__event);
+	_SWIG_Lua_AddMetatable(L, SWIGTYPE_p__event);
 
-	lua_pushnumber(callbackRef->L, handlerId);
+	lua_pushnumber(L, handlerId);
 
 	// return callback(self, evt, handlerId)
-	if (lua_pcall(callbackRef->L, 3, 1, 0) != 0)
+	if (lua_pcall(L, 3, 1, 0) != 0)
                 return false;
-	if (lua_gettop(callbackRef->L) != (stack_top + 1))
+	if (lua_gettop(L) != (stack_top + 1))
 		// If no value got returned assume the event handler was succesfull
 		return true;
 
 	// Pop the result from the stack and return it
-	result = lua_toboolean(callbackRef->L, -1);
-	lua_pop(callbackRef->L, 1);
+	result = lua_toboolean(L, -1);
+	lua_pop(L, 1);
 	return result;
 }
 
