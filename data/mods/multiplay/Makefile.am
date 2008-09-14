@@ -17,11 +17,11 @@ data: $(NTWARCHIVE)
 $(NTWARCHIVE): $(NTWLIST:%=$(basename $(NTWARCHIVE))/%)
 
 install-data-local: $(NTWARCHIVE)
-	$(MKDIR_P) $(DESTDIR)$(pkgdatadir)/mods/global
-	$(INSTALL_DATA) $(NTWARCHIVE) $(DESTDIR)$(pkgdatadir)/mods/global/$(NTWARCHIVE)
+	$(MKDIR_P) $(DESTDIR)$(pkgdatadir)/mods/multiplay
+	$(INSTALL_DATA) $(NTWARCHIVE) $(DESTDIR)$(pkgdatadir)/mods/multiplay/$(NTWARCHIVE)
 
 uninstall-local:
-	rm -f $(DESTDIR)$(pkgdatadir)/mods/global/$(NTWARCHIVE)
+	rm -f $(DESTDIR)$(pkgdatadir)/mods/multiplay/$(NTWARCHIVE)
 
 installcheck:
 	[ -f $(NTWARCHIVE) ] && zip -T $(NTWARCHIVE)
