@@ -52,6 +52,8 @@ static void windowInitVtbl(window *self)
 		vtbl.widgetVtbl.getMinSize  = windowGetMinSizeImpl;
 		vtbl.widgetVtbl.getMaxSize  = windowGetMaxSizeImpl;
 
+		vtbl.widgetVtbl.resize      = windowResizeImpl;
+
 		
 		initialised = true;
 	}
@@ -63,17 +65,29 @@ static void windowInitVtbl(window *self)
 	self->vtbl = &vtbl;
 }
 
+static void windowCreateWindowPattern(window *self, int w, int h)
+{
+	// First clean up our current pattern (if any)
+	if (self->windowPattern)
+	{
+		cairo_pattern_destroy(WINDOW(self)->windowPattern);
+	}
+
+	self->windowPattern = cairo_pattern_create_linear(0, 0, 0, h);
+	cairo_pattern_add_color_stop_rgba(self->windowPattern, 0, 0.000000, 0.000000, 0.235294, 0.75);
+	cairo_pattern_add_color_stop_rgba(self->windowPattern, 0.2, 0.176470, 0.176470, 0.372549, 0.8);
+	cairo_pattern_add_color_stop_rgba(self->windowPattern, 0.6, 0.176470, 0.176470, 0.372549, 0.7);
+	cairo_pattern_add_color_stop_rgba(self->windowPattern, 1, 0.176470, 0.176470, 0.372549, 0.7);
+}
+
 void windowInit(window *self, const char *id, int w, int h)
 {	
 	// Init our parent
 	widgetInit(WIDGET(self), id);
 
 	// Patterns initialization
-	self->windowPattern = cairo_pattern_create_linear(0, 0, 0, 384);
-	cairo_pattern_add_color_stop_rgba(self->windowPattern, 0, 0.000000, 0.000000, 0.235294, 0.75);
-	cairo_pattern_add_color_stop_rgba(self->windowPattern, 0.2, 0.176470, 0.176470, 0.372549, 0.8);
-	cairo_pattern_add_color_stop_rgba(self->windowPattern, 0.6, 0.176470, 0.176470, 0.372549, 0.7);
-	cairo_pattern_add_color_stop_rgba(self->windowPattern, 1, 0.176470, 0.176470, 0.372549, 0.7);
+	self->windowPattern = NULL;
+	windowCreateWindowPattern(self, w, h);
 	
 	// Prepare our vtable
 	windowInitVtbl(self);
@@ -209,6 +223,13 @@ size windowGetMaxSizeImpl(widget *self)
 	const size maxSize = { INT16_MAX, INT16_MAX };
 	
 	return maxSize;
+}
+
+void windowResizeImpl(widget *self, int w, int h)
+{
+	windowCreateWindowPattern(WINDOW(self), w, h);
+	
+	widgetResizeImpl(self, w, h);
 }
 
 void windowSetWindowVector(vector *v)
