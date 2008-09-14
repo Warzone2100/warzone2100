@@ -78,3 +78,17 @@ wnd3:addTimerEventHandler(betawidget.EVT_TIMER_PERSISTENT, 1000,
 
 wnd = nil
 wnd2 = nil
+
+scale = betawidget.animationScaleFrame
+alpha = betawidget.animationAlphaFrame
+translate = betawidget.animationTranslateFrame
+rotate = betawidget.animationRotateFrame
+
+wnd3:addAnimation({scale(0, 0, 0),
+                   rotate(0, 90),
+                   translate(0, 250, 0),
+                   alpha(0, 0),
+                   scale(1000, 1, 1),
+                   rotate(1500, 0),
+                   translate(2000, 50, 50),
+                   alpha(3000, 1)})

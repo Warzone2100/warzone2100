@@ -11,6 +11,8 @@ extern "C" {
 #include <assert.h>
 }
 
+#include <vector>
+
 typedef struct
 {
 	lua_State*      L;
@@ -145,6 +147,75 @@ typedef struct _point
 
 typedef point size;
 
+typedef enum
+{
+	ANI_TYPE_TRANSLATE,
+	ANI_TYPE_ROTATE,
+	ANI_TYPE_SCALE,
+	ANI_TYPE_ALPHA,
+} animationType;
+
+struct animationFrame
+{
+	animationType type;
+	int time;
+
+	union
+	{
+		_point translate;
+		float rotate;
+		_point scale;
+		float alpha;
+	} data;
+};
+
+%typemap (in) (int nframes, const animationFrame *frames) (std::vector<animationFrame> frameList)
+{
+	if (!lua_istable(L, $input))
+		SWIG_fail_arg("addAnimation", $input, "table");
+
+	lua_getfield(L, LUA_GLOBALSINDEX, "ipairs");
+	lua_pushvalue(L, $input);
+
+	if (lua_pcall(L, 1, 3, 0) != 0)
+		goto fail;
+
+	for (;;)
+	{
+		animationFrame *frame = 0;
+
+		lua_pushvalue(L, -3);
+		lua_pushvalue(L, -3);
+		lua_pushvalue(L, -3);
+		if (lua_pcall(L, 2, 2, 0) != 0)
+		{
+			goto fail;
+		}
+
+		if (!SWIG_isptrtype(L, -1))
+		{
+			SWIG_fail_arg("addAnimation", -1, "animationFrame *");
+		}
+
+		if (!SWIG_IsOK(SWIG_ConvertPtr(L, -1, (void**)&frame, SWIGTYPE_p_animationFrame, 0)))
+		{
+			SWIG_fail_ptr("widget_addAnimation", -1, SWIGTYPE_p_animationFrame);
+		}
+		lua_pop(L, 1);
+		lua_replace(L, -2);
+
+		if (!frame)
+			break;
+
+		frameList.push_back(*frame);
+	}
+
+	lua_pop(L, 3);
+
+	$1 = frameList.size();
+	$2 = &frameList[0];
+}
+
 %rename (widget) _widget;
 struct _widget
 {
@@ -202,6 +273,11 @@ struct _widget
                 {
                         return widgetDeclineDrag(WIDGET($self));
                 }
+
+		virtual int addAnimation(int nframes, const animationFrame *frames)
+		{
+			return widgetAddAnimation($self, nframes, frames);
+		}
 
                 virtual void    enable()
                 {
@@ -598,3 +674,43 @@ static void addLuaFuncToSwigBaseClass(lua_State* const L,
                 addLuaFuncToSwigBaseClass(L, methods[i].base, classes, class_count, methods[i].name, methods[i].func);
         }
 %}
+
+%luacode {
+	function betawidget.animationScaleFrame(time, x, y)
+		local frame = betawidget.animationFrame()
+		frame.type = betawidget.ANI_TYPE_SCALE
+		frame.time = time
+		frame.data.scale.x = x
+		frame.data.scale.y = y
+
+		return frame
+	end
+
+	function betawidget.animationTranslateFrame(time, x, y)
+		local frame = betawidget.animationFrame()
+		frame.type = betawidget.ANI_TYPE_TRANSLATE
+		frame.time = time
+		frame.data.translate.x = x
+		frame.data.translate.y = y
+
+		return frame
+	end
+
+	function betawidget.animationRotateFrame(time, r)
+		local frame = betawidget.animationFrame()
+		frame.type = betawidget.ANI_TYPE_ROTATE
+		frame.time = time
+		frame.data.rotate = r
+
+		return frame
+	end
+
+	function betawidget.animationAlphaFrame(time, a)
+		local frame = betawidget.animationFrame()
+		frame.type = betawidget.ANI_TYPE_ALPHA
+		frame.time = time
+		frame.data.alpha = a
+
+		return frame
+	end
+}
