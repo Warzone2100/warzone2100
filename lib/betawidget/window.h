@@ -77,7 +77,6 @@ void windowDoDrawMaskImpl(widget *self);
 bool windowAddChildImpl(widget *self, widget *child);
 size windowGetMinSizeImpl(widget *self);
 size windowGetMaxSizeImpl(widget *self);
-void windowResizeImpl(widget *self, int w, int h);
 
 /*
  * Public static methods

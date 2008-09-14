@@ -51,9 +51,6 @@ static void windowInitVtbl(window *self)
 		
 		vtbl.widgetVtbl.getMinSize  = windowGetMinSizeImpl;
 		vtbl.widgetVtbl.getMaxSize  = windowGetMaxSizeImpl;
-
-		vtbl.widgetVtbl.resize      = windowResizeImpl;
-
 		
 		initialised = true;
 	}
@@ -80,14 +77,29 @@ static void windowCreateWindowPattern(window *self, int w, int h)
 	cairo_pattern_add_color_stop_rgba(self->windowPattern, 1, 0.176470, 0.176470, 0.372549, 0.7);
 }
 
+static bool windowResizePatternCallback(widget *self, const event *evt,
+                                        int handlerId, void *userData)
+{
+	// Make sure this is a resize event
+	assert(evt->type == EVT_RESIZE);
+	
+	// Re-create the window pattern
+	windowCreateWindowPattern(WINDOW(self), self->size.x, self->size.y);
+	
+	return true;
+}
+
 void windowInit(window *self, const char *id, int w, int h)
 {	
 	// Init our parent
 	widgetInit(WIDGET(self), id);
 
-	// Patterns initialization
+	// Patterns initialisation
 	self->windowPattern = NULL;
-	windowCreateWindowPattern(self, w, h);
+	
+	// Ensure the pattern is re-created whenever we are resized
+	widgetAddEventHandler(WIDGET(self), EVT_RESIZE, windowResizePatternCallback,
+	                      NULL, NULL);
 	
 	// Prepare our vtable
 	windowInitVtbl(self);
@@ -197,7 +209,6 @@ void windowDoDrawImpl(widget *self)
 	cairo_fill(cr);
 }
 
-
 void windowDoDrawMaskImpl(widget *self)
 {
 	// Get the mask context
@@ -223,13 +234,6 @@ size windowGetMaxSizeImpl(widget *self)
 	const size maxSize = { INT16_MAX, INT16_MAX };
 	
 	return maxSize;
-}
-
-void windowResizeImpl(widget *self, int w, int h)
-{
-	windowCreateWindowPattern(WINDOW(self), w, h);
-	
-	widgetResizeImpl(self, w, h);
 }
 
 void windowSetWindowVector(vector *v)
