@@ -1,0 +1,40 @@
+
+// Variables
+private INT 			count,numStrux,numTemplates,numCompo;
+private STRUCTURESTAT 		Strux[16];
+public	RESEARCHSTAT		tmpl[2];
+private	BODY			compo[3];
+
+//players
+private	INT				player;
+private	INT				player1;
+private	INT				player2;
+private	INT				player3;
+private	INT				player4;
+private	INT				player5;
+private	INT				player6;
+private	INT				player7;
+
+// Game initialization
+event AutoEnable(CALL_GAMEINIT)
+{
+  count = 0;
+  while (count < numStrux)
+  {
+    enableStructure(Strux[count], selectedPlayer);
+    count = count + 1;
+  }
+
+  count = 0;
+  while (count < numTemplates)
+  {
+    completeResearch(tmpl[count], selectedPlayer);
+    count = count + 1;
+  }
+  count = 0;
+  while (count < numCompo)
+  {
+    makeComponentAvailable(compo[count], selectedPlayer);
+    count = count + 1;
+  }
+}

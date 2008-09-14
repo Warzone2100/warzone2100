@@ -1,4 +1,4 @@
-SUBDIRS=global
+SUBDIRS=global multiplay
 
 all clean: $(SUBDIRS)
 

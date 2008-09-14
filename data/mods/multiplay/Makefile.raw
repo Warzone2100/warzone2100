@@ -1,0 +1,20 @@
+MAKERULES=../../../makerules
+include $(MAKERULES)/configure.mk
+
+NTWLIST=addon.lev audio components COPYING doc effects images messages multiplay stats structs texpages wrf
+
+NTWARCHIVE=ntw.wz
+
+all:
+ifdef DATA
+all: $(NTWARCHIVE)
+endif
+
+$(NTWARCHIVE): $(NTWLIST:%=ntw/%)
+	cd aivolution && zip -ru0 ../$@ $(NTWLIST) -x *svn*
+	zip -T $@
+
+clean:
+	$(RMF) $(NTWARCHIVE)
+
+.PHONY: all clean $(NTWARCHIVE)

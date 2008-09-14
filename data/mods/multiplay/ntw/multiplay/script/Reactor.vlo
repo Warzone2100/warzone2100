@@ -1,0 +1,18 @@
+
+script "Reactor.slo"
+
+run
+{
+
+	reactor				STRUCTURESTAT			"NuclearReactor"
+	coolingTow			STRUCTURESTAT			"CoolingTower"
+
+  	reactorPower        		INT               		25
+  	coolingPower      	 	INT                		3
+  	strengthRatio      		INT               		4
+   	reactorGAU         		INT               		30
+   
+	nuke           	 		WEAPON             		"Nuke"
+   	nukeEmp          		WEAPON           		"Nuke2"
+    	reactorBurn         		WEAPON             		"ReactorBurn"
+}

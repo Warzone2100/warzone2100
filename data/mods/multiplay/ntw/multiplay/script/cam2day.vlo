@@ -1,0 +1,29 @@
+// cam2day.vlo
+// Weather and day/night VLO for Cam3
+// make daytime
+
+script "fog-daynight.slo"
+run
+{
+
+// Time zone data.
+red[0]  int	0	grn[0]  int	4	blu[0]  int	16
+red[1]  int	0	grn[1]  int	4	blu[1]  int	16
+red[2]  int	8	grn[2]  int	12	blu[2]  int	16
+red[3]  int	44	grn[3]  int	54	blu[3]  int	64
+red[4]  int	88	grn[4]  int	84	blu[4]  int	80
+red[5]  int	96	grn[5]  int	92	blu[5]  int	90
+red[6]  int	96	grn[6]  int	92	blu[6]  int	90
+red[7]  int	96	grn[7]  int	92	blu[7]  int	90
+red[8]  int	84	grn[8]  int	80	blu[8]  int	76
+red[9]  int	44	grn[9]  int	54	blu[9]  int	64
+red[10] int	8	grn[10] int	12	blu[10] int	16
+red[11] int	0	grn[11] int	4	blu[11] int	16
+red[12] int	0	grn[12] int	4	blu[12] int	16
+
+// Urban weather conditions.
+      chStay	int	10
+	chClear	int	33
+	chRain	int	53
+	chSnow	int	4
+}

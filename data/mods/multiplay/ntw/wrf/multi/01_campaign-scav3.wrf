@@ -1,0 +1,27 @@
+//
+// Multiplayer Campaign Script loader. 
+// Alex Lee.
+//
+
+directory	"messages"
+file		SMSG		"multiplay.txt"
+
+directory      	"multiplay/script"
+file		SCRIPT		"multiplay.slo"
+file 		SCRIPT		"scavFact.slo"
+file		SCRIPT		"camtech.slo"
+file		SCRIPT		"AutoEnable.slo"
+file		SCRIPT		"LandMine.slo"
+file		SCRIPT		"fog-daynight.slo"
+file		SCRIPT		"Reactor.slo"
+
+directory       "multiplay/script"
+file            SCRIPTVAL       "multiplay.vlo"
+file            SCRIPTVAL       "scavFact.vlo"
+file		SCRIPTVAL	"cam3tech.vlo"
+file		SCRIPTVAL	"AutoEnable.vlo"
+file		SCRIPTVAL	"LandMine.vlo"
+file		SCRIPTVAL	"cam1day.vlo"
+file		SCRIPTVAL	"cam2day.vlo"
+file		SCRIPTVAL	"cam3day.vlo"
+file		SCRIPTVAL	"Reactor.vlo"
