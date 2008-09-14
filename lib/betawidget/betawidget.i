@@ -83,6 +83,12 @@ int widgetGetTime(void);
 %newobject widgetGetClipboardText;
 %include "clipboard.h"
 
+typedef enum 
+{
+	SPACER_DIRECTION_HORIZONTAL,
+	SPACER_DIRECTION_VERTICAL
+} spacerDirection;
+
 typedef enum
 {
 	LEFT,
@@ -496,6 +502,38 @@ fail:
 	return args;
 }
 
+static int lua_widget_destroy(lua_State* const L)
+{
+	int args = 0;
+	_widget *self;
+	swig_lua_userdata* usr;
+
+	SWIG_check_num_args("addChild", 1, 1);
+	if (!SWIG_isptrtype(L, 1))
+		SWIG_fail_arg("destroy", 1, "_widget *");
+
+        if (!SWIG_IsOK(SWIG_ConvertPtr(L, 1, (void**)&self, SWIGTYPE_p__widget,0)))
+        {
+                SWIG_fail_ptr("widget_destroy", 1, SWIGTYPE_p__widget);
+        }
+
+	widgetDestroy(self);
+
+	/* FIXME: Setting SWIG's pointer to our widget to NULL. This is
+	 *        currently required because widgetDestroy() frees the memory
+	 *        at *self. This however causes *all* further operations (in
+	 *        Lua) on the "self" variable/object to cause segfaults.
+	 */
+	usr = (swig_lua_userdata*)lua_touserdata(L, 1);
+	usr->ptr = NULL;
+
+	return args;
+
+fail:
+	lua_error(L);
+	return args;
+}
+
 static bool lua_inherits_From(swig_lua_class const * const clss, swig_lua_class const * const from)
 {
         int i;
@@ -550,6 +588,7 @@ static void addLuaFuncToSwigBaseClass(lua_State* const L,
         {
                 { &_wrap_class__widget, "addEventHandler",      lua_widget_addEventHandler },
                 { &_wrap_class__widget, "addTimerEventHandler", lua_widget_addTimerEventHandler },
+                { &_wrap_class__widget, "destroy",              lua_widget_destroy },
         };
 
         int i;

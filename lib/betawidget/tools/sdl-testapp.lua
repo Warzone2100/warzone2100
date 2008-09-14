@@ -19,14 +19,6 @@ wnd:addEventHandler(betawidget.EVT_MOUSE_CLICK,
     end
   end)()
 )
-wnd:addTimerEventHandler(betawidget.EVT_TIMER_PERSISTENT, 1000,
-  (function ()
-    local starttime = betawidget.getTime()
-    return function (self, evt, handlerId)
-      print(string.format("%f seconds passed", (betawidget.getTime() - starttime) / 1000))
-    end
-  end)()
-)
 wnd:addEventHandler(betawidget.EVT_KEY_DOWN,
   function (self, evt, handlerId)
     print("Key down")
@@ -62,5 +54,27 @@ wnd:addTimerEventHandler(betawidget.EVT_TIMER_SINGLE_SHOT, 5000,
     )
   end
 )
+
+wnd3 = betawidget.window('test destroy window', 75, 37.5)
+wnd3:reposition(50, 50)
+wnd3:show()
+
+wnd3:addTimerEventHandler(betawidget.EVT_TIMER_SINGLE_SHOT, 15000,
+  function (self, evt, handlerId)
+    print "destroying window 3"
+    print "if you close this application now, you should experience a segfault"
+    self:destroy()
+  end
+)
+
+wnd3:addTimerEventHandler(betawidget.EVT_TIMER_PERSISTENT, 1000,
+  (function ()
+    local starttime = betawidget.getTime()
+    return function (self, evt, handlerId)
+      print(string.format("%f seconds passed", (betawidget.getTime() - starttime) / 1000))
+    end
+  end)()
+)
+
 wnd = nil
 wnd2 = nil
