@@ -230,8 +230,6 @@ static BOOL mapLoadV3(char *pFileData, UDWORD fileSize)
 		psGate++;
 	}
 
-	LOADBARCALLBACK();	//	loadingScreenCallback();
-
 	return true;
 }
 

@@ -2629,7 +2629,6 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 	if (gameType != GTYPE_SCENARIO_EXPAND
 	 || UserSaveGame)
 	{
-		LOADBARCALLBACK();	//		loadingScreenCallback();
 		//load in the terrain type map
 		aFileName[fileExten] = '\0';
 		strcat(aFileName, "ttypes.ttp");
@@ -2654,7 +2653,6 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 	}
 
 	//load up the Droid Templates BEFORE any structures are loaded
-	LOADBARCALLBACK();	//	loadingScreenCallback();
 	if (IsScenario==false)
 	{
 		//NOT ANY MORE - use multiPlayerID (unique template id) to prevent duplicate's being loaded
@@ -2694,7 +2692,6 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 		}
 
 //load in the templates
-		LOADBARCALLBACK();	//	loadingScreenCallback();
 		aFileName[fileExten] = '\0';
 		strcat(aFileName, "templ.bjo");
 		/* Load in the chosen file data */
@@ -2715,7 +2712,6 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 
 	if (saveGameOnMission && UserSaveGame)
 	{
-		LOADBARCALLBACK();	//		loadingScreenCallback();
 
 		//the scroll limits for the mission map have already been written
 		if (saveGameVersion >= VERSION_29)
@@ -2753,7 +2749,6 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 		}
 
 	// reload the objects that were in the mission list
-		LOADBARCALLBACK();	//		loadingScreenCallback();
 		//load in the features -do before the structures
 		aFileName[fileExten] = '\0';
 		strcat(aFileName, "mfeat.bjo");
@@ -2791,7 +2786,6 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 			goto error;
 		}
 
-		LOADBARCALLBACK();	//		loadingScreenCallback();
 
 		if (bMultiPlayer)
 		{
@@ -2802,7 +2796,6 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 			}
 		}
 
-		LOADBARCALLBACK();	//		loadingScreenCallback();
 		//load in the mission droids
 		aFileName[fileExten] = '\0';
 
@@ -2845,7 +2838,6 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 			}
 		}
 
-		LOADBARCALLBACK();	//		loadingScreenCallback();
 		//load in the flag list file
 		aFileName[fileExten] = '\0';
 		strcat(aFileName, "mflagstate.bjo");
@@ -2883,7 +2875,6 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 	//if Campaign Expand then don't load in another map
 	if (gameType != GTYPE_SCENARIO_EXPAND)
 	{
-		LOADBARCALLBACK();	//		loadingScreenCallback();
 		psMapTiles = NULL;
 		//load in the map file
 		aFileName[fileExten] = '\0';
@@ -2905,7 +2896,6 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 
 	//save game stuff added after map load
 
-	LOADBARCALLBACK();	//	loadingScreenCallback();
 	if (saveGameVersion >= VERSION_16)
 	{
 		for (inc = 0; inc < MAX_NOGO_AREAS; inc++)
@@ -2927,7 +2917,6 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 	if ((gameType == GTYPE_SAVE_START) ||
 		(gameType == GTYPE_SAVE_MIDMISSION))
 	{
-		LOADBARCALLBACK();	//		loadingScreenCallback();
 		//load in the research list file
 		aFileName[fileExten] = '\0';
 		strcat(aFileName, "resstate.bjo");
@@ -2952,7 +2941,6 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 
 	if(IsScenario==true)
 	{
-		LOADBARCALLBACK();	//		loadingScreenCallback();
 		//load in the droid initialisation file
 		aFileName[fileExten] = '\0';
 		strcat(aFileName, "dinit.bjo");
@@ -2973,7 +2961,6 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 	}
 	else
 	{
-		LOADBARCALLBACK();	//		loadingScreenCallback();
 		//load in the droids
 		aFileName[fileExten] = '\0';
 		if (saveGameVersion < VERSION_27)//V27
@@ -3018,7 +3005,6 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 			}
 		}
 
-		LOADBARCALLBACK();	//		loadingScreenCallback();
 		if (saveGameVersion >= 12)
 		{
 			if (!saveGameOnMission)
@@ -3048,7 +3034,6 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 		}
 	}
 
-	LOADBARCALLBACK();	//	loadingScreenCallback();
 	if (saveGameVersion >= VERSION_23)
 	{
 		//load in the limbo droids
@@ -3068,7 +3053,6 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 
 	}
 
-	LOADBARCALLBACK();	//	loadingScreenCallback();
 	//load in the features -do before the structures
 	aFileName[fileExten] = '\0';
 	strcat(aFileName, "feat.bjo");
@@ -3091,7 +3075,6 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 	//load droid templates moved from here to BEFORE any structures loaded in
 
 	//load in the structures
-	LOADBARCALLBACK();	//	loadingScreenCallback();
 	initStructLimits();
 	aFileName[fileExten] = '\0';
 	strcat(aFileName, "struct.bjo");
@@ -3109,7 +3092,6 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 		goto error;
 	}
 
-	LOADBARCALLBACK();	//	loadingScreenCallback();
 	if ((gameType == GTYPE_SAVE_START) ||
 		(gameType == GTYPE_SAVE_MIDMISSION))
 	{
@@ -3124,7 +3106,6 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 	if ((gameType == GTYPE_SAVE_START) ||
 		(gameType == GTYPE_SAVE_MIDMISSION))
 	{
-		LOADBARCALLBACK();	//		loadingScreenCallback();
 		//load in the component list file
 		aFileName[fileExten] = '\0';
 		strcat(aFileName, "compl.bjo");
@@ -3146,7 +3127,6 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 				goto error;
 			}
 		}
-		LOADBARCALLBACK();	//		loadingScreenCallback();
 		//load in the structure type list file
 		aFileName[fileExten] = '\0';
 		strcat(aFileName, "strtype.bjo");
@@ -3170,8 +3150,6 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 		}
 	}
 
-	LOADBARCALLBACK();	//	loadingScreenCallback();
-
 	if (saveGameVersion >= VERSION_11)
 	{
 		//if user save game then load up the Visibility
@@ -3190,8 +3168,6 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 			}
 		}
 	}
-
-	LOADBARCALLBACK();	//	loadingScreenCallback();
 
 	if (saveGameVersion > VERSION_12)
 	{
@@ -3219,7 +3195,6 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 
 		}
 	}
-	LOADBARCALLBACK();	//	loadingScreenCallback();
 
 	if (saveGameVersion > VERSION_12)
 	{
@@ -3240,8 +3215,6 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 		}
 	}
 
-	LOADBARCALLBACK();	//	loadingScreenCallback();
-
 	if (saveGameVersion >= VERSION_16)
 	{
 		//if user save game then load up the FX
@@ -3260,8 +3233,6 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 			}
 		}
 	}
-
-	LOADBARCALLBACK();	//	loadingScreenCallback();
 
 	if (saveGameVersion >= VERSION_12)
 	{
@@ -3293,8 +3264,6 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 		}
 	}
 
-	LOADBARCALLBACK();	//	loadingScreenCallback();
-
 	if (saveGameVersion >= VERSION_21)
 	{
 		//rebuild the apsCommandDesignation AFTER all droids and structures are loaded
@@ -3312,8 +3281,6 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 			}
 		}
 	}
-
-	LOADBARCALLBACK();	//	loadingScreenCallback();
 
 	if ((saveGameVersion >= VERSION_15) && UserSaveGame)
 	{
@@ -3344,58 +3311,48 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 		setCurrentStructQuantity(true);
 	}
 
-
-	LOADBARCALLBACK();	//	loadingScreenCallback();
-
 	//check that delivery points haven't been put down in invalid location
 	checkDeliveryPoints(saveGameVersion);
 
 	if ((gameType == GTYPE_SAVE_START) ||
 		(gameType == GTYPE_SAVE_MIDMISSION))
 	{
-		LOADBARCALLBACK();	//	loadingScreenCallback();
 		for(pl=0;pl<MAX_PLAYERS;pl++)	// ajl. must do for every player to stop multiplay/pc players going gaga.
 		{
 			//reverse the structure lists so the Research Facilities are in the same order as when saved
 			reverseTemplateList((DROID_TEMPLATE**)&apsDroidTemplates[pl]);
 		}
 
-		LOADBARCALLBACK();	//		loadingScreenCallback();
 		for(pl=0;pl<MAX_PLAYERS;pl++)
 		{
 			//reverse the droid lists so selections occur in the same order
 			reverseObjectList((BASE_OBJECT**)&apsLimboDroids[pl]);
 		}
 
-		LOADBARCALLBACK();	//		loadingScreenCallback();
 		for(pl=0;pl<MAX_PLAYERS;pl++)
 		{
 			//reverse the droid lists so selections occur in the same order
 			reverseObjectList((BASE_OBJECT**)&apsDroidLists[pl]);
 		}
 
-		LOADBARCALLBACK();	//		loadingScreenCallback();
 		for(pl=0;pl<MAX_PLAYERS;pl++)
 		{
 			//reverse the droid lists so selections occur in the same order
 			reverseObjectList((BASE_OBJECT**)&mission.apsDroidLists[pl]);
 		}
 
-		LOADBARCALLBACK();	//		loadingScreenCallback();
 		for(pl=0;pl<MAX_PLAYERS;pl++)
 		{
 			//reverse the struct lists so selections occur in the same order
 			reverseObjectList((BASE_OBJECT**)&mission.apsStructLists[pl]);
 		}
 
-		LOADBARCALLBACK();	//		loadingScreenCallback();
 		for(pl=0;pl<MAX_PLAYERS;pl++)
 		{
 			//reverse the droid lists so selections occur in the same order
 			reverseObjectList((BASE_OBJECT**)&apsFeatureLists[pl]);
 		}
 
-		LOADBARCALLBACK();	//		loadingScreenCallback();
 		for(pl=0;pl<MAX_PLAYERS;pl++)
 		{
 			//reverse the droid lists so selections occur in the same order
@@ -3406,8 +3363,6 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 	//turn power on for rest of game
 	powerCalculated = true;
 
-	LOADBARCALLBACK();	//	loadingScreenCallback();
-
 	if (saveGameVersion > VERSION_12)
 	{
 		if (!keepObjects)//only reset the pointers if they were set
@@ -3416,8 +3371,6 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 			loadDroidSetPointers();
 		}
 	}
-
-	LOADBARCALLBACK();	//	loadingScreenCallback();
 
 	if (saveGameVersion > VERSION_20)
 	{
@@ -5608,7 +5561,7 @@ static void SaveDroidMoveControl(SAVE_DROID * const psSaveDroid, DROID const * c
 	psSaveDroid->sMove.Status    = psDroid->sMove.Status;
 	psSaveDroid->sMove.Position  = psDroid->sMove.Position;
 	psSaveDroid->sMove.numPoints = MIN(psDroid->sMove.numPoints, TRAVELSIZE);
-	memcpy(&psSaveDroid->sMove.asPath, psDroid->sMove.asPath, 
+	memcpy(&psSaveDroid->sMove.asPath, psDroid->sMove.asPath,
 	       MIN(sizeof(psSaveDroid->sMove.asPath), sizeof(*psDroid->sMove.asPath) * psDroid->sMove.numPoints));
 
 	// Little endian SDWORDs

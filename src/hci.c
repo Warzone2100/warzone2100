@@ -619,12 +619,7 @@ BOOL intInitialise(void)
 		return false;
 	}
 
-
-	LOADBARCALLBACK();	//	loadingScreenCallback();
-
 	intInitialiseGraphics();
-
-	LOADBARCALLBACK();	//	loadingScreenCallback();
 
 	psWScreen = widgCreateScreen();
 	if (psWScreen == NULL)
@@ -664,9 +659,6 @@ BOOL intInitialise(void)
 	//set the default colours to be used for drawing outlines in 2D
 	outlineOK = WZCOL_MAP_OUTLINE_OK;
 	outlineNotOK = WZCOL_MAP_OUTLINE_BAD;
-
-	LOADBARCALLBACK();	//	loadingScreenCallback();
-	LOADBARCALLBACK();	//	loadingScreenCallback();
 
 	// reset the previous objects
 	//memset(apsPreviousObj, 0, sizeof(apsPreviousObj));
@@ -2133,7 +2125,7 @@ INT_RETVAL intRunWidgets(void)
 						// Send a text message to all players, notifying them of
 						// the fact that we're cheating ourselves a new
 						// structure.
-						sasprintf((char**)&msg, _("Player %u is cheating (debug menu) him/herself a new structure: %s."), 
+						sasprintf((char**)&msg, _("Player %u is cheating (debug menu) him/herself a new structure: %s."),
 						          selectedPlayer, psStructure->pStructureType->pName);
 						sendTextMessage(msg, true);
 					}

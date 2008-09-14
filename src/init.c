@@ -830,7 +830,7 @@ BOOL stageOneShutDown(void)
 	debug(LOG_TEXTURE, "=== stageOneShutDown ===");
 	pie_TexShutDown();
 	// Use mod_multiplay as the default (campaign might have set it to mod_singleplayer)
-	rebuildSearchPath( mod_multiplay, true );	
+	rebuildSearchPath( mod_multiplay, true );
 	pie_TexInit(); // restart it
 
 	initMiscVars();
@@ -868,14 +868,10 @@ BOOL stageTwoInitialise(void)
 		return false;
 	}
 
-	LOADBARCALLBACK();	//	loadingScreenCallback();
-
 	if(!InitRadar()) 	// After resLoad cause it needs the game palette initialised.
 	{
 		return false;
 	}
-
-	LOADBARCALLBACK();	//	loadingScreenCallback();
 
 	if(!initMiscImds())			/* Set up the explosions */
 	{
@@ -890,8 +886,6 @@ BOOL stageTwoInitialise(void)
 		return false;
 	}
 
-	LOADBARCALLBACK();	//	loadingScreenCallback();
-
 #ifdef BUCKET
 	if ( !bucketSetupList() )	/* reset object list */
 	{
@@ -902,14 +896,10 @@ BOOL stageTwoInitialise(void)
    	/* Shift the interface initialisation here temporarily so that it
    		can pick up the stats after they have been loaded */
 
-	LOADBARCALLBACK();	//	loadingScreenCallback();
-
 	if (!intInitialise())
 	{
 		return false;
 	}
-
-	LOADBARCALLBACK();	//	loadingScreenCallback();
 
 	if (!initMessage())			/* Initialise the message heaps */
 	{
@@ -922,10 +912,8 @@ BOOL stageTwoInitialise(void)
 	}
 
 	// keymappings
-	LOADBARCALLBACK();	//	loadingScreenCallback();
 	keyClearMappings();
 	keyInitMappings(false);
-	LOADBARCALLBACK();	//	loadingScreenCallback();
 
 	// Set the default uncoloured cursor here, since it looks slightly
 	// better for menus and such.

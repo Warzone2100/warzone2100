@@ -55,9 +55,4 @@ extern void			setPlayerHasWon		    ( BOOL val );
 extern void         setScriptWinLoseVideo   ( UBYTE val );
 extern UBYTE        getScriptWinLoseVideo   ( void );
 
-
-// PC version calls the loading bar code directly.
-//#define LOADBARCALLBACK() loadingScreenCallback()
-#define LOADBARCALLBACK()
-
 #endif // __INCLUDED_SRC_WRAPPERS_H__
