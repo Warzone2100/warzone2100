@@ -139,6 +139,7 @@ lib/framework/frameresource.c
 lib/framework/i18n.c
 lib/framework/input.c
 lib/framework/lexer_input.c
+lib/framework/physfs_vfs.c
 lib/framework/printf_ext.c
 lib/framework/SDL_framerate.c
 lib/framework/strnlen1.c
@@ -188,7 +189,6 @@ lib/sound/openal_error.c
 lib/sound/openal_track.c
 lib/sound/playlist.c
 lib/sound/track.c
-lib/sqlite3/physfs_vfs.c
 lib/widget/bar.c
 lib/widget/button.c
 lib/widget/editbox.c

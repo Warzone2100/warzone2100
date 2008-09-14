@@ -29,7 +29,7 @@
 #include "main.h"
 #include "projectile.h"
 #include "lib/sound/audio_id.h"
-#include "lib/sqlite3/sqlite3.h"
+#include <sqlite3.h>
 #include <stdarg.h>
 
 static bool prepareStatement(sqlite3* db, sqlite3_stmt** stmt, const char* fmt, ...)

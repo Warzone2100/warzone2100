@@ -72,10 +72,17 @@ warzone2100_LDADD = \
 	$(top_builddir)/lib/ivis_common/libivis_common.a \
 	$(top_builddir)/lib/gamelib/libgamelib.a \
 	$(top_builddir)/lib/framework/libframework.a \
-	$(top_builddir)/lib/exceptionhandler/libexceptionhandler.a \
-	$(top_builddir)/lib/sqlite3/libsqlite3.a
+	$(top_builddir)/lib/exceptionhandler/libexceptionhandler.a
 
 warzone2100_LDADD += $(SDL_LIBS) $(SDL_NET_LIBS) $(PHYSFS_LIBS) $(PNG_LIBS) $(OGGVORBIS_LIBS) $(OPENAL_LIBS) $(OPENGLC_LIBS) $(OPENGL_LIBS) $(POPT_LIBS)
+
+if USE_SYSTEM_SQLITE
+warzone2100_LDADD += $(SQLITE_LIBS)
+CPPFLAGS += $(SQLITE_CFLAGS)
+else
+warzone2100_LDADD += $(top_builddir)/lib/sqlite3/libsqlite3.a
+CPPFLAGS += -I$(top_srcdir)/lib/sqlite3
+endif
 
 if MINGW32
 warzone2100_LDADD += $(top_builddir)/win32/warzone2100.o $(WIN32_LIBS)

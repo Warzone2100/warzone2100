@@ -3,7 +3,7 @@ top_builddir=$(top_srcdir)
 
 include $(top_srcdir)/makerules/common.mk
 
-SRC=physfs_vfs.c sqlite3.c
+SRC=sqlite3.c
 
 LIB=sqlite3
 

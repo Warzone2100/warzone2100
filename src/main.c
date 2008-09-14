@@ -51,7 +51,7 @@
 #include "lib/script/script.h"
 #include "lib/sound/audio.h"
 #include "lib/sound/cdaudio.h"
-#include "lib/sqlite3/physfs_vfs.h"
+#include "lib/framework/physfs_vfs.h"
 
 #include "clparse.h"
 #include "configuration.h"

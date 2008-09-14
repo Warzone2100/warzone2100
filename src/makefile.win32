@@ -1,6 +1,8 @@
 top_srcdir=..
 top_builddir=$(top_srcdir)
 
+CPPFLAGS += -I$(top_srcdir)/lib/sqlite3
+
 include $(top_srcdir)/makerules/common.mk
 
 SRC=ai.c \

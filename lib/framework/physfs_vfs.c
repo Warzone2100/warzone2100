@@ -21,11 +21,14 @@
 	   distribution.
 */
 
-// These are necessary for the `bool' type
-#include "lib/framework/frame.h"
+/* These are necessary for the `bool' type and `strlcpy'. Allow frame header
+ * files to be singly included */
+#define FRAME_LIB_INCLUDE
+#include "lib/framework/strlfuncs.h"
+#include "lib/framework/types.h"
 
 #include "physfs_vfs.h"
-#include "sqlite3.h"
+#include <sqlite3.h>
 #include <physfs.h>
 #include <assert.h>
 

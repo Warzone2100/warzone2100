@@ -1,6 +1,8 @@
 top_srcdir=../..
 top_builddir=$(top_srcdir)
 
+CPPFLAGS += -I$(top_srcdir)/lib/sqlite3
+
 include $(top_srcdir)/makerules/common.mk
 
 SRC=configfile.c \
@@ -13,6 +15,7 @@ SRC=configfile.c \
 	input.c \
 	i18n.c \
 	lexer_input.c \
+	physfs_vfs.c \
 	printf_ext.c \
 	resource_parser.tab.c \
 	resource_lexer.lex.c \

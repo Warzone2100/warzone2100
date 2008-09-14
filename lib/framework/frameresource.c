@@ -27,7 +27,7 @@
 
 #include "file.h"
 #include "resly.h"
-#include "lib/sqlite3/sqlite3.h"
+#include <sqlite3.h>
 
 // Local prototypes
 static RES_TYPE *psResTypes=NULL;

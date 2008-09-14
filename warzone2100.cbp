@@ -32,6 +32,7 @@
 					<Add option='-DLOCALEDIR=\\&quot;\\&quot;' />
 					<Add option='-DPACKAGE=\\&quot;warzone2100\\&quot;' />
 					<Add option="-D_GNU_SOURCE=1" />
+					<Add directory="lib/sqlite3" />
 				</Compiler>
 				<Linker>
 					<Add option="`pkg-config --libs sdl openal libpng vorbisfile`" />
@@ -60,6 +61,7 @@
 					<Add option='-DLOCALEDIR=\\&quot;\\&quot;' />
 					<Add option='-DPACKAGE=\\&quot;warzone2100\\&quot;' />
 					<Add option="-D_GNU_SOURCE=1" />
+					<Add directory="lib/sqlite3" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
@@ -89,6 +91,7 @@
 					<Add option='-DPACKAGE=\&quot;warzone2100\&quot;' />
 					<Add option="-DWIN32" />
 					<Add option="-DYY_STATIC" />
+					<Add directory="lib/sqlite3" />
 					<Add directory="$(#warzone_devpkg.include)" />
 					<Add directory="$(#warzone_devpkg.include)/SDL" />
 				</Compiler>
@@ -133,6 +136,7 @@
 					<Add option='-DPACKAGE=\&quot;warzone2100\&quot;' />
 					<Add option="-DWIN32" />
 					<Add option="-DYY_STATIC" />
+					<Add directory="lib/sqlite3" />
 					<Add directory="$(#warzone_devpkg.include)" />
 					<Add directory="$(#warzone_devpkg.include)/SDL" />
 				</Compiler>
@@ -380,6 +384,19 @@
 			<Option target="NDBGWindows" />
 		</Unit>
 		<Unit filename="lib/framework/math-help.h">
+			<Option target="DBGUnix" />
+			<Option target="NDBGUnix" />
+			<Option target="DBGWindows" />
+			<Option target="NDBGWindows" />
+		</Unit>
+		<Unit filename="lib/framework/physfs_vfs.c">
+			<Option compilerVar="CC" />
+			<Option target="DBGUnix" />
+			<Option target="NDBGUnix" />
+			<Option target="DBGWindows" />
+			<Option target="NDBGWindows" />
+		</Unit>
+		<Unit filename="lib/framework/physfs_vfs.h">
 			<Option target="DBGUnix" />
 			<Option target="NDBGUnix" />
 			<Option target="DBGWindows" />
@@ -1194,19 +1211,6 @@
 			<Option target="NDBGWindows" />
 		</Unit>
 		<Unit filename="lib/sound/tracklib.h">
-			<Option target="DBGUnix" />
-			<Option target="NDBGUnix" />
-			<Option target="DBGWindows" />
-			<Option target="NDBGWindows" />
-		</Unit>
-		<Unit filename="lib/sqlite3/physfs_vfs.c">
-			<Option compilerVar="CC" />
-			<Option target="DBGUnix" />
-			<Option target="NDBGUnix" />
-			<Option target="DBGWindows" />
-			<Option target="NDBGWindows" />
-		</Unit>
-		<Unit filename="lib/sqlite3/physfs_vfs.h">
 			<Option target="DBGUnix" />
 			<Option target="NDBGUnix" />
 			<Option target="DBGWindows" />
