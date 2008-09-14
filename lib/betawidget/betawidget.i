@@ -21,9 +21,22 @@ typedef struct
 #ifndef NDEBUG
 	widget*         self;
 	eventType       type;
-	int             handlerId;
 #endif
 } lua_widget_callback;
+
+static void createLuaCallbackTable(lua_State* const L)
+{
+	// Create a table to hold the function and a weak table with additional data
+	lua_newtable(L); // callback = {}
+	lua_newtable(L); // weak = {}
+	// setmetatable(weak, { __mode = 'v' })
+	lua_newtable(L);
+	lua_pushstring(L, "v");
+	lua_setfield(L, -2, "__mode");
+	lua_setmetatable(L, -2);
+	// callback.weak = weak
+	lua_setfield(L, -2, "weak");
+}
 
 static bool callbackHandler(widget* const self, const event* const evt, int const handlerId, lua_widget_callback const * const callbackRef)
 {
@@ -33,7 +46,6 @@ static bool callbackHandler(widget* const self, const event* const evt, int cons
 
 	assert(self == callbackRef->self);
 	assert(evt->type == callbackRef->type);
-	assert(handlerId == callbackRef->handlerId);
 
 	// callback.function(callback.weak.widget, evt, handlerId)
 	lua_getref(L, callbackRef->table);
@@ -69,7 +81,6 @@ static bool callbackHandler(widget* const self, const event* const evt, int cons
 static bool callbackDestructor(widget* const self, const event* const evt, int const handlerId, lua_widget_callback* const callbackRef)
 {
 	assert(self == callbackRef->self);
-	assert(handlerId == callbackRef->handlerId);
 
 	lua_unref(callbackRef->L, callbackRef->table);
 	free(callbackRef);
@@ -216,6 +227,57 @@ struct animationFrame
 	$2 = &frameList[0];
 }
 
+%typemap (in) (callback handler, callback destructor, void *userData)
+{
+	lua_widget_callback* callbackRef;
+	static const int self_idx = 1;
+	_widget* self = 0;
+
+	if (!SWIG_isptrtype(L, self_idx))
+		SWIG_fail_arg("$symname", self_idx, "_widget *");
+	if (!lua_isfunction(L, $input))
+		SWIG_fail_arg("$symname", $input, "function");
+
+	if (!SWIG_IsOK(SWIG_ConvertPtr(L, self_idx, (void**)&self, SWIGTYPE_p__widget, 0)))
+	{
+		SWIG_fail_ptr("$symname", self_idx, SWIGTYPE_p__widget);
+	}
+
+	// Allocate a chunk of memory to place a reference to the function in
+	callbackRef = (lua_widget_callback*)malloc(sizeof(*callbackRef));
+	if (callbackRef == NULL)
+	{
+		lua_pushstring(L, "Error in $symname: Out of memory");
+		goto fail;
+	}
+
+	// Create a table to store the Lua callback info in
+	createLuaCallbackTable(L);
+
+	// callback.function = function
+	lua_pushvalue(L, $input);
+	lua_setfield(L, -2, "function");
+
+	// callback.weak.widget = self
+	lua_getfield(L, -1, "weak");
+	lua_pushvalue(L, self_idx);
+	lua_setfield(L, -2, "widget");
+	lua_pop(L, 1);
+
+	// Retrieve a reference to the callback table
+	callbackRef->L     = L;
+	callbackRef->table = lua_ref(L, true);
+
+	$1 = (callback)callbackHandler;
+	$2 = (callback)callbackDestructor;
+	$3 = callbackRef;
+
+#ifndef NDEBUG
+        callbackRef->self      = self;
+        callbackRef->type      = arg2;
+#endif
+}
+
 %rename (widget) _widget;
 struct _widget
 {
@@ -248,6 +310,16 @@ struct _widget
                 {
                         return widgetRemoveChild(WIDGET($self), child);
                 }
+
+		virtual int addEventHandler(eventType type, callback handler, callback destructor, void *userData)
+		{
+			return widgetAddEventHandler($self, type, handler, destructor, userData);
+		}
+
+		virtual int addTimerEventHandler(eventType type, int interval, callback handler, callback destructor, void *userData)
+		{
+			return widgetAddTimerEventHandler($self, type, interval, handler, destructor, userData);
+		}
 
                 virtual void    removeEventHandler(int id)
                 {
@@ -420,165 +492,6 @@ struct _textEntry : public _widget
 };
 
 %wrapper %{
-static void createLuaCallbackTable(lua_State* const L)
-{
-	// Create a table to hold the function and a weak table with additional data
-	lua_newtable(L); // callback = {}
-	lua_newtable(L); // weak = {}
-	// setmetatable(weak, { __mode = 'v' })
-	lua_newtable(L);
-	lua_pushstring(L, "v");
-	lua_setfield(L, -2, "__mode");
-	lua_setmetatable(L, -2);
-	// callback.weak = weak
-	lua_setfield(L, -2, "weak");
-}
-
-static int lua_widget_addEventHandler(lua_State* const L)
-{
-	int args = 0;
-        widget* self;
-        eventType type;
-        int handlerId;
-	lua_widget_callback* callbackRef = 0;
-
-        SWIG_check_num_args("widgetAddEventHandler", 3, 3)
-        if (!SWIG_isptrtype(L, 1))
-                SWIG_fail_arg("widgetAddEventHandler", 1, "_widget *");
-        if (!lua_isnumber(L, 2))
-                SWIG_fail_arg("widgetAddEventHandler", 2, "eventType");
-	if (!lua_isfunction(L, 3))
-                SWIG_fail_arg("widgetAddEventHandler", 3, "function");
-
-	// value = function = -1
-
-	// Allocate a chunk of memory to place a reference to the function in
-	callbackRef = (lua_widget_callback*)malloc(sizeof(*callbackRef));
-	if (callbackRef == NULL)
-	{
-		lua_pushstring(L, "Error in widgetAddEventHandler: Out of memory");
-		goto fail;
-	}
-
-        if (!SWIG_IsOK(SWIG_ConvertPtr(L, 1, (void**)&self, SWIGTYPE_p__widget,0)))
-        {
-                SWIG_fail_ptr("widget_addEventHandler",1,SWIGTYPE_p__widget);
-        }
-	type = (eventType)lua_tonumber(L, 2);
-
-	// Create a table to store the Lua callback info in
-	createLuaCallbackTable(L);
-	lua_insert(L, 1);
-
-	// callback.function = function
-	lua_setfield(L, 1, "function");
-
-	// callback.weak.widget = self
-	lua_pop(L, 1);
-	lua_getfield(L, 1, "weak");
-	lua_insert(L, -2);
-	lua_setfield(L, -2, "widget");
-
-	// Retrieve a reference to the callback table
-	lua_settop(L, 1);
-	callbackRef->L     = L;
-	callbackRef->table = lua_ref(L, true);
-
-	// Register the event handler with the widget
-	handlerId = widgetAddEventHandler(WIDGET(self), type, (callback)callbackHandler, (callback)callbackDestructor, callbackRef);
-	lua_pushnumber(L, handlerId); ++args;
-
-#ifndef NDEBUG
-        callbackRef->self      = self;
-        callbackRef->type      = type;
-        callbackRef->handlerId = handlerId;
-#endif
-
-	return args;
-
-fail:
-        if (callbackRef)
-                free(callbackRef);
-
-	lua_error(L);
-	return args;
-}
-
-static int lua_widget_addTimerEventHandler(lua_State* const L)
-{
-	int args = 0;
-        widget* self;
-        eventType type;
-        int handlerId;
-        int interval;
-	lua_widget_callback* callbackRef = 0;
-
-        SWIG_check_num_args("addTimerEventHandler", 4, 4)
-        if (!SWIG_isptrtype(L, 1))
-                SWIG_fail_arg("addTimerEventHandler", 1, "_widget *");
-        if (!lua_isnumber(L, 2))
-                SWIG_fail_arg("addTimerEventHandler", 2, "eventType");
-        if (!lua_isnumber(L, 3))
-                SWIG_fail_arg("addTimerEventHandler", 3, "int");
-	if (!lua_isfunction(L, 4))
-                SWIG_fail_arg("addTimerEventHandler", 4, "function");
-
-	// value = function = -1
-
-	// Allocate a chunk of memory to place a reference to the function in
-	callbackRef = (lua_widget_callback*)malloc(sizeof(*callbackRef));
-	if (callbackRef == NULL)
-	{
-		lua_pushstring(L, "Error in addTimerEventHandler: Out of memory");
-		goto fail;
-	}
-
-        if (!SWIG_IsOK(SWIG_ConvertPtr(L, 1, (void**)&self, SWIGTYPE_p__widget,0)))
-        {
-                SWIG_fail_ptr("widget_addTimerEventHandler",1,SWIGTYPE_p__widget);
-        }
-
-	type = (eventType)lua_tonumber(L, 2);
-        interval = lua_tonumber(L, 3);
-
-	// Create a table to store the Lua callback info in
-	createLuaCallbackTable(L);
-	lua_insert(L, 1);
-
-	// callback.function = function
-	lua_setfield(L, 1, "function");
-
-	// callback.weak.widget = self
-	lua_pop(L, 2);
-	lua_getfield(L, 1, "weak");
-	lua_insert(L, -2);
-	lua_setfield(L, -2, "widget");
-
-	// Retrieve a reference to the callback table
-	lua_settop(L, 1);
-	callbackRef->L     = L;
-	callbackRef->table = lua_ref(L, true);
-
-	// Register the event handler with the widget
-	handlerId = widgetAddTimerEventHandler(WIDGET(self), type, interval, (callback)callbackHandler, (callback)callbackDestructor, callbackRef);
-	lua_pushnumber(L, handlerId); ++args;
-
-#ifndef NDEBUG
-        callbackRef->self      = self;
-        callbackRef->type      = type;
-        callbackRef->handlerId = handlerId;
-#endif
-
-	return args;
-
-fail:
-        if (callbackRef)
-                free(callbackRef);
-
-	lua_error(L);
-	return args;
-}
-
 static int lua_widget_destroy(lua_State* const L)
 {
 	int args = 0;
@@ -663,8 +576,6 @@ static void addLuaFuncToSwigBaseClass(lua_State* const L,
         } methods[] =
         // Table of custom crafted virtual functions
         {
-                { &_wrap_class__widget, "addEventHandler",      lua_widget_addEventHandler },
-                { &_wrap_class__widget, "addTimerEventHandler", lua_widget_addTimerEventHandler },
                 { &_wrap_class__widget, "destroy",              lua_widget_destroy },
         };
 
