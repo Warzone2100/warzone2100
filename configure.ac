@@ -237,7 +237,12 @@ PKG_CHECK_MODULES([OGGVORBIS], [vorbisfile >= 1.1])
 
 # Only accept SQLite versions 3.5.x, with a minimum of 3.5.4.
 PKG_CHECK_MODULES([SQLITE], [sqlite3 >= 3.5.4 sqlite3 < 3.6], 
-	[ use_system_sqlite="yes" ], [ use_system_sqlite="no" ])
+	[ use_system_sqlite="yes" ], [
+	use_system_sqlite="no"
+	SQLITE_CFLAGS="-I\$(top_srcdir)/lib/sqlite3"
+	SQLITE_LIBS="\$(top_builddir)/lib/sqlite3/libsqlite3.a"
+	AC_SUBST([SQLITE_CFLAGS])
+	AC_SUBST([SQLITE_LIBS])])
 AM_CONDITIONAL([USE_SYSTEM_SQLITE], [ test "x$use_system_sqlite" = "xyes" ])
 
 if test "x$enable_static" = "xyes" ; then

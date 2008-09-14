@@ -10,7 +10,7 @@
 %.h: %.tpl.struct.h %.tpl
 	$(top_srcdir)/build_tools/code-generators/db-lang.pl c_structdef $^ $@
 
-AM_CPPFLAGS = -DYY_NO_INPUT $(SDL_CFLAGS) $(SDL_NET_CFLAGS) $(PHYSFS_CFLAGS) $(PNG_CFLAGS) $(OGGVORBIS_CFLAGS) $(OPENAL_CFLAGS) $(OPENGLC_CFLAGS) $(OPENGL_CFLAGS) $(POPT_CFLAGS) $(WZ_CPPFLAGS)
+AM_CPPFLAGS = -DYY_NO_INPUT $(SDL_CFLAGS) $(SDL_NET_CFLAGS) $(PHYSFS_CFLAGS) $(PNG_CFLAGS) $(OGGVORBIS_CFLAGS) $(OPENAL_CFLAGS) $(OPENGLC_CFLAGS) $(OPENGL_CFLAGS) $(POPT_CFLAGS) $(SQLITE_CFLAGS) $(WZ_CPPFLAGS)
 AM_CFLAGS = $(WZ_CFLAGS)
 AM_LFLAGS = $(FLEX_FLAGS)
 AM_YFLAGS = -d
@@ -74,15 +74,7 @@ warzone2100_LDADD = \
 	$(top_builddir)/lib/framework/libframework.a \
 	$(top_builddir)/lib/exceptionhandler/libexceptionhandler.a
 
-warzone2100_LDADD += $(SDL_LIBS) $(SDL_NET_LIBS) $(PHYSFS_LIBS) $(PNG_LIBS) $(OGGVORBIS_LIBS) $(OPENAL_LIBS) $(OPENGLC_LIBS) $(OPENGL_LIBS) $(POPT_LIBS)
-
-if USE_SYSTEM_SQLITE
-warzone2100_LDADD += $(SQLITE_LIBS)
-CPPFLAGS += $(SQLITE_CFLAGS)
-else
-warzone2100_LDADD += $(top_builddir)/lib/sqlite3/libsqlite3.a
-CPPFLAGS += -I$(top_srcdir)/lib/sqlite3
-endif
+warzone2100_LDADD += $(SDL_LIBS) $(SDL_NET_LIBS) $(PHYSFS_LIBS) $(PNG_LIBS) $(OGGVORBIS_LIBS) $(OPENAL_LIBS) $(OPENGLC_LIBS) $(OPENGL_LIBS) $(POPT_LIBS) $(SQLITE_LIBS)
 
 if MINGW32
 warzone2100_LDADD += $(top_builddir)/win32/warzone2100.o $(WIN32_LIBS)

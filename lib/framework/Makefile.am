@@ -4,7 +4,7 @@
 %.lex.c:: %.l
 	$(LEX) $(LFLAGS) $(AM_LFLAGS) -o$@ $<
 
-AM_CPPFLAGS = -DYY_NO_INPUT $(SDL_CFLAGS) $(WZ_CPPFLAGS)
+AM_CPPFLAGS = -DYY_NO_INPUT $(SDL_CFLAGS) $(SQLITE_CFLAGS) $(WZ_CPPFLAGS)
 AM_CFLAGS = $(WZ_CFLAGS)
 AM_LFLAGS = $(FLEX_FLAGS)
 AM_YFLAGS = -d
@@ -23,9 +23,3 @@ libframework_a_SOURCES = SDL_framerate.c configfile.c cursors.c cursors16.c \
 	physfs_vfs.c printf_ext.c resource_lexer.lex.c resource_parser.tab.c \
 	strnlen1.c strres.c strres_lexer.lex.c strres_parser.tab.c treap.c \
 	trig.c tagfile.c utf.c i18n.c
-
-if USE_SYSTEM_SQLITE
-CPPFLAGS += $(SQLITE_CFLAGS)
-else
-CPPFLAGS += -I$(top_srcdir)/lib/sqlite3
-endif
