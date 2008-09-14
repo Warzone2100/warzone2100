@@ -270,6 +270,9 @@ BOOL rebuildSearchPath( searchPathMode mode, BOOL force )
 					sstrcat(tmpstr, "mp.wz");
 					PHYSFS_removeFromSearchPath( tmpstr );
 
+					// Remove plain dir
+					PHYSFS_removeFromSearchPath( curSearchPath->path );
+
 					// Remove base files
 					sstrcpy(tmpstr, curSearchPath->path);
 					sstrcat(tmpstr, "base");
@@ -300,6 +303,9 @@ BOOL rebuildSearchPath( searchPathMode mode, BOOL force )
 					{
 						debug(LOG_ERROR, "Failed to remove path %s again", curSearchPath->path);
 					}
+
+					// Add plain dir
+					PHYSFS_addToSearchPath( curSearchPath->path, PHYSFS_APPEND );
 
 					// Add base files
 					sstrcpy(tmpstr, curSearchPath->path);
@@ -336,6 +342,9 @@ BOOL rebuildSearchPath( searchPathMode mode, BOOL force )
 					sstrcpy(tmpstr, curSearchPath->path);
 					sstrcat(tmpstr, "mp.wz");
 					PHYSFS_addToSearchPath( tmpstr, PHYSFS_APPEND );
+
+					// Add plain dir
+					PHYSFS_addToSearchPath( curSearchPath->path, PHYSFS_APPEND );
 
 					// Add base files
 					sstrcpy(tmpstr, curSearchPath->path);
