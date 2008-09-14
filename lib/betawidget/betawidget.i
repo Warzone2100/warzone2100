@@ -508,7 +508,7 @@ static int lua_widget_destroy(lua_State* const L)
 	_widget *self;
 	swig_lua_userdata* usr;
 
-	SWIG_check_num_args("addChild", 1, 1);
+	SWIG_check_num_args("destroy", 1, 1);
 	if (!SWIG_isptrtype(L, 1))
 		SWIG_fail_arg("destroy", 1, "_widget *");
 
