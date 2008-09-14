@@ -1252,12 +1252,12 @@ void widgetCompositeImpl(widget *self)
 		return;
 	}
 	
-	// Scale if necessary
-	glScalef(self->scale.x,  self->scale.y,  1.0f);
-	
 	// Translate such that (0,0) is the top-left of ourself
 	glTranslatef(self->offset.x, self->offset.y, 0.0f);
 	
+	// Scale if necessary
+	glScalef(self->scale.x,  self->scale.y,  1.0f);
+
 	// Rotate ourself
 	glRotatef(self->rotate, 0.0f, 0.0f, 1.0f);
 	
@@ -1294,8 +1294,8 @@ void widgetCompositeImpl(widget *self)
 	// Restore the matrix
 	glBlendColor(1.0f, 1.0f, 1.0f, blendColour[3]);
 	glRotatef(-self->rotate, 0.0f, 0.0f, 1.0f);
-	glTranslatef(-self->offset.x, -self->offset.y, 0.0f);
 	glScalef(1.0f / self->scale.x, 1.0f / self->scale.y, 1.0f);
+	glTranslatef(-self->offset.x, -self->offset.y, 0.0f);
 }
 
 void widgetEnableMask(widget *self)
