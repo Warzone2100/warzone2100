@@ -1,5 +1,5 @@
 if !USE_SYSTEM_SQLITE
-AM_CPPFLAGS = $(SDL_CFLAGS) $(WZ_CPPFLAGS)
+AM_CPPFLAGS = $(SDL_CFLAGS) $(patsubst -DDATADIR%,,$(WZ_CPPFLAGS))
 AM_CFLAGS = $(patsubst -W%,,$(WZ_CFLAGS))
 
 noinst_LIBRARIES = libsqlite3.a
