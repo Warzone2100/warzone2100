@@ -470,6 +470,11 @@ static inline CONSTRUCT_STATS *getConstructStats(DROID *psDroid)
 	return asConstructStats + psDroid->asBits[COMP_CONSTRUCT].nStat;
 }
 
+static inline WEAPON_STATS *getWeaponStats(DROID *psDroid, int weapon_slot)
+{
+	return asWeaponStats + psDroid->asWeaps[weapon_slot].nStat;
+}
+
 /** helper functions for future refcount patch **/
 
 #define setDroidTarget(_psDroid, _psNewTarget) _setDroidTarget(_psDroid, _psNewTarget, __LINE__, __FUNCTION__)

@@ -256,22 +256,24 @@ BOOL actionInRange(DROID *psDroid, BASE_OBJECT *psObj, int weapon_slot)
 }
 
 
-
 // check if a target is inside minimum weapon range
-BOOL actionInsideMinRange(DROID *psDroid, BASE_OBJECT *psObj, int weapon_slot)
+BOOL actionInsideMinRange(DROID *psDroid, BASE_OBJECT *psObj, WEAPON_STATS *psStats)
 {
-	SDWORD			dx, dy, dz, radSq, rangeSq, minRange;
-	WEAPON_STATS	*psStats;
+	SDWORD	dx, dy, dz, radSq, rangeSq, minRange;
 
 	CHECK_DROID(psDroid);
+	CHECK_OBJECT(psObj);
+
+	if (!psStats)
+	{
+		psStats = getWeaponStats(psDroid, 0);
+	}
 
 	/* Watermelon:if I am a multi-turret droid */
 	if (psDroid->asWeaps[0].nStat == 0)
 	{
 		return false;
 	}
-
-	psStats = asWeaponStats + psDroid->asWeaps[weapon_slot].nStat;
 
 	dx = (SDWORD)psDroid->pos.x - (SDWORD)psObj->pos.x;
 	dy = (SDWORD)psDroid->pos.y - (SDWORD)psObj->pos.y;
@@ -557,19 +559,11 @@ BOOL actionTargetTurret(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, UWORD *p
 	}
 
 	/* set muzzle pitch if direct fire */
-//	if ( asWeaponStats[psAttacker->asWeaps->nStat].direct == true )
-	if ( psWeapStats != NULL &&
-		 ( proj_Direct( psWeapStats ) ||
-		 ( (psAttacker->type == OBJ_DROID) &&
-			!proj_Direct( psWeapStats ) &&
-			actionInsideMinRange(psDroid, psTarget, weapon_slot) ) ) )
+	if (psWeapStats && (proj_Direct(psWeapStats) || ((psAttacker->type == OBJ_DROID) && !proj_Direct(psWeapStats) 
+	                                                  && actionInsideMinRange(psDroid, psTarget, psWeapStats))))
 	{
-// difference between muzzle position and droid origin is unlikely to affect aiming
-// particularly as target origin is used
-//		calcDroidMuzzleLocation( psAttacker, &muzzle);
 		dx = psTarget->pos.x - psAttacker->pos.x;//muzzle.x;
 		dy = psTarget->pos.y - psAttacker->pos.y;//muzzle.y;
-//		dz = map_Height(psTarget->pos.x, psTarget->pos.y) - psAttacker->pos.z;//muzzle.z;
 		dz = psTarget->pos.z - psAttacker->pos.z;//muzzle.z;
 
 		/* get target distance */
@@ -1570,7 +1564,6 @@ void actionUpdateDroid(DROID *psDroid)
 		break;
 
 	case DACTION_MOVETOATTACK:
-
 		// don't wan't formations for this one
 		if (psDroid->sMove.psFormation)
 		{
@@ -1680,14 +1673,15 @@ void actionUpdateDroid(DROID *psDroid)
 			{
 				/* Stopped moving but haven't reached the target - possibly move again */
 
+				//Watermelon:'hack' to make the droid to check the primary turrent instead of all
+				psWeapStats = asWeaponStats + psDroid->asWeaps[0].nStat;
+
 				if (psDroid->order == DORDER_ATTACKTARGET && secondaryGetState(psDroid, DSO_HALTTYPE, &state) && (state == DSS_HALT_HOLD))
 				{
 					psDroid->action = DACTION_NONE;			// on hold, give up.
 				}
-				else if ( actionInsideMinRange(psDroid, psDroid->psActionTarget[0], 0) )
+				else if (actionInsideMinRange(psDroid, psDroid->psActionTarget[0], psWeapStats))
 				{
-					//Watermelon:'hack' to make the droid to check the primary turrent instead of all
-					psWeapStats = asWeaponStats + psDroid->asWeaps[0].nStat;
 					if ( proj_Direct( psWeapStats ) )
 					{
 						// try and extend the range
@@ -2454,7 +2448,7 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 {
 	SECONDARY_STATE			state;
 	SDWORD			pbx,pby;
-	WEAPON_STATS	*psWeapStats;
+	WEAPON_STATS		*psWeapStats = getWeaponStats(psDroid, 0);
 	UDWORD			droidX,droidY;
 	BASE_OBJECT		*psTarget;
 	//Watermelon:added MinRangeResult;
@@ -2542,9 +2536,8 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 		{
 			psDroid->action = DACTION_ATTACK;		// holding, try attack straightaway
 		}
-		else if (actionInsideMinRange(psDroid, psAction->psObj, 0))
+		else if (actionInsideMinRange(psDroid, psAction->psObj, psWeapStats))
 		{
-			psWeapStats = &asWeaponStats[psDroid->asWeaps[0].nStat];
 			if ( !proj_Direct( psWeapStats ) )
 			{
 				if (psWeapStats->rotate)

@@ -183,10 +183,8 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 	}
 
 	/* Check we can see the target */
-	if ( (psAttacker->type == OBJ_DROID) &&
-		 !isVtolDroid((DROID *)psAttacker) &&
-		 (proj_Direct(psStats) ||
-		 actionInsideMinRange(psDroid, psTarget, weapon_slot)) )
+	if (psAttacker->type == OBJ_DROID && !isVtolDroid((DROID *)psAttacker)
+	    && (proj_Direct(psStats) || actionInsideMinRange(psDroid, psTarget, psStats)))
 	{
 		if(!visibleObject(psAttacker, psTarget, true))
 		{
@@ -264,7 +262,7 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 			 ( (distSquared >= psStats->minRange * psStats->minRange) ||
 			   ((psAttacker->type == OBJ_DROID) &&
 			   !proj_Direct(psStats) &&
-			   actionInsideMinRange(psDroid, psTarget, weapon_slot)) ))
+			   actionInsideMinRange(psDroid, psTarget, psStats))))
 	{
 		// get weapon chance to hit in the long range
 		baseHitChance = weaponLongHit(psStats,psAttacker->player);

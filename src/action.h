@@ -125,7 +125,7 @@ extern BOOL actionInAttackRange(DROID *psDroid, BASE_OBJECT *psObj, int weapon_s
 extern BOOL actionInRange(DROID *psDroid, BASE_OBJECT *psObj, int weapon_slot);
 
 /** Check if a target is inside minimum weapon range. */
-extern BOOL actionInsideMinRange(DROID *psDroid, BASE_OBJECT *psObj, int weapon_slot);
+extern BOOL actionInsideMinRange(DROID *psDroid, BASE_OBJECT *psObj, WEAPON_STATS *psWeapStats);
 
 /** Return whether a droid can see a target to fire on it. */
 BOOL actionVisibleTarget(DROID *psDroid, BASE_OBJECT *psTarget, int weapon_slot);
