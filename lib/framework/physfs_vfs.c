@@ -182,9 +182,10 @@ static int xUnlock(WZ_DECL_UNUSED sqlite3_file* f, WZ_DECL_UNUSED int level)
 	return SQLITE_OK;
 }
 
-static int xCheckReservedLock(WZ_DECL_UNUSED sqlite3_file* f)
+static int xCheckReservedLock(WZ_DECL_UNUSED sqlite3_file* f, int *pResOut)
 {
-	return 0;
+	*pResOut = false;
+	return SQLITE_OK;
 }
 
 static int xFileControl(WZ_DECL_UNUSED sqlite3_file* f, WZ_DECL_UNUSED int op, WZ_DECL_UNUSED void *pArg)
@@ -240,6 +241,13 @@ static int xOpen(WZ_DECL_UNUSED sqlite3_vfs* pVfs, const char* zName, sqlite3_fi
 	      || flags & SQLITE_OPEN_TEMP_DB
 	      || flags & SQLITE_OPEN_TRANSIENT_DB) */
 	{
+		/* SQLite requires that we open a temporary file if zName is
+		 * NULL, but we currently do not provide an implementation for
+		 * that, so bail out.
+		 */
+		if (zName == NULL)
+			return SQLITE_IOERR;
+
 		file->file = PHYSFS_openRead(zName);
 		file->NOOP = false;
 
@@ -260,42 +268,29 @@ static int xDelete(WZ_DECL_UNUSED sqlite3_vfs* pVfs, const char* zName, WZ_DECL_
 		return SQLITE_IOERR_DELETE;
 }
 
-static int xAccess(WZ_DECL_UNUSED sqlite3_vfs* pVfs, const char* zName, int flags)
+static int xAccess(WZ_DECL_UNUSED sqlite3_vfs* pVfs, const char* zName, int flags, int *pResOut)
 {
 	switch (flags)
 	{
 		case SQLITE_ACCESS_EXISTS:
-			return PHYSFS_exists(zName);
+			*pResOut = PHYSFS_exists(zName);
+			break;
 
 		case SQLITE_ACCESS_READ:
 		{
 			PHYSFS_file* f = PHYSFS_openRead(zName);
-			if (!f)
-				return false;
+
+			*pResOut = (f != NULL);
 
 			PHYSFS_close(f);
-			return true;
+			break;
 		}
-
 		case SQLITE_ACCESS_READWRITE:
-			return false;
-
 		default:
-			return false;
+			*pResOut = 0;
 	}
-}
 
-static int xGetTempname(WZ_DECL_UNUSED sqlite3_vfs* pVfs, WZ_DECL_UNUSED int nOut, WZ_DECL_UNUSED char* zOut)
-{
-	/* From SQLite 3.5.7 onwards (at least in 3.5.x) this function is
-	 * *required* to place a filename that can later on be used with xOpen
-	 * in zOut. However, for at least 3.5.7, 3.5.8, and 3.5.9 this
-	 * particular filename is *always* combined with the
-	 * SQLITE_OPEN_SUBJOURNAL flag. Since we don't open files with that
-	 * flag for real anyway (see definition of xOpen below), we can legally
-	 * hand out any filename here.
-	 */
-	return (strlcpy(zOut, "<tempfile>", nOut) < nOut) ? SQLITE_OK : SQLITE_IOERR;
+	return SQLITE_OK;
 }
 
 /** \return non-zero when no truncation occurred, zero otherwise.
@@ -339,6 +334,11 @@ static int xCurrentTime(WZ_DECL_UNUSED sqlite3_vfs* pVfs, WZ_DECL_UNUSED double*
 	return SQLITE_IOERR;
 }
 
+static int xGetLastError(WZ_DECL_UNUSED sqlite3_vfs* pVfs, int nBuf, char* zBuf)
+{
+	return (strlcpy(zBuf, PHYSFS_getLastError(), nBuf) < nBuf) ? SQLITE_OK : SQLITE_IOERR;
+}
+
 static sqlite3_vfs physfs_sqlite3_vfs =
 {
 	1,                              /**< Structure version number */
@@ -350,7 +350,6 @@ static sqlite3_vfs physfs_sqlite3_vfs =
 	xOpen,
 	xDelete,
 	xAccess,
-	xGetTempname,
 	xFullPathname,
 	xDlOpen,
 	xDlError,
@@ -359,6 +358,7 @@ static sqlite3_vfs physfs_sqlite3_vfs =
 	xRandomness,
 	xSleep,
 	xCurrentTime,
+	xGetLastError,
 };
 
 void sqlite3_register_physfs_vfs(int makeDefault)

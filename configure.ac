@@ -236,7 +236,7 @@ PKG_CHECK_MODULES([PNG], [libpng >= 1.2])
 PKG_CHECK_MODULES([OGGVORBIS], [vorbisfile >= 1.1])
 
 # Only accept SQLite versions 3.5.x, with a minimum of 3.5.4.
-PKG_CHECK_MODULES([SQLITE], [sqlite3 >= 3.5.4 sqlite3 < 3.6], 
+PKG_CHECK_MODULES([SQLITE], [sqlite3 >= 3.6],
 	[ use_system_sqlite="yes" ], [
 	use_system_sqlite="no"
 	SQLITE_CFLAGS="-I\$(top_srcdir)/lib/sqlite3"
@@ -363,5 +363,5 @@ if test "x$use_system_sqlite" = "xno" ; then
 	AC_MSG_NOTICE()
 	AC_MSG_WARN([Not using a system provided SQLite library.])
 	AC_MSG_WARN([${SQLITE_PKG_ERRORS}])
-	AC_MSG_WARN([We currently only accept SQLite versions 3.5.x, with a minimum of 3.5.4.])
+	AC_MSG_WARN([We currently only accept SQLite versions >= 3.6.])
 fi
