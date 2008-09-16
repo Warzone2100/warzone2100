@@ -719,7 +719,7 @@ sub startFile()
 
     $$output .= "/* This file is generated automatically, do not edit, change the source ($name) instead. */\n"
               . "\n"
-              . "#include \"lib/sqlite3/sqlite3.h\"\n"
+              . "#include <sqlite3.h>\n"
               . "\n";
 
     $filename = $name;

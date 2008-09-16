@@ -1,7 +1,7 @@
 #include "lib/framework/frame.h"
 #include "lib/framework/frameresource.h"
 #include "$header"
-#include "lib/sqlite3/sqlite3.h"
+#include <sqlite3.h>
 #include <stdarg.h>
 
 static bool prepareStatement(sqlite3* db, sqlite3_stmt** stmt, const char* fmt, ...)
