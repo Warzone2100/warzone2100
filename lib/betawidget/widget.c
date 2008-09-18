@@ -1252,6 +1252,9 @@ void widgetCompositeImpl(widget *self)
 		return;
 	}
 	
+	// Save the current model-view matrix
+	glPushMatrix();
+	
 	// Translate such that (0,0) is the top-left of ourself
 	glTranslatef(self->offset.x, self->offset.y, 0.0f);
 	
@@ -1291,11 +1294,11 @@ void widgetCompositeImpl(widget *self)
 		widgetComposite(child);
 	}
 	
-	// Restore the matrix
+	// Restore the model-view matrix
+	glPopMatrix();
+	
+	// Restore the blend colour
 	glBlendColor(1.0f, 1.0f, 1.0f, blendColour[3]);
-	glRotatef(-self->rotate, 0.0f, 0.0f, 1.0f);
-	glScalef(1.0f / self->scale.x, 1.0f / self->scale.y, 1.0f);
-	glTranslatef(-self->offset.x, -self->offset.y, 0.0f);
 }
 
 void widgetEnableMask(widget *self)
