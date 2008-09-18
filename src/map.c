@@ -1141,7 +1141,7 @@ BOOL mapSave(char **ppFileData, UDWORD *pFileSize)
 
 	// Put the zone header.
 	psZoneHeader = (ZONEMAP_SAVEHEADER*)psGate;
-	psZoneHeader->version = 2;
+	psZoneHeader->version = 3;
 	psZoneHeader->numZones = 0;
 	psZoneHeader->numEquivZones = 0;
 
