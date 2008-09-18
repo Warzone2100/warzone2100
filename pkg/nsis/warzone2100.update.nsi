@@ -52,7 +52,7 @@ VIAddVersionKey "CompanyName"		"Warzone Resurrection Project"
 VIAddVersionKey "FileDescription"	"Warzone 2100 Updater"
 VIAddVersionKey "FileVersion"		"${VERSION}"
 VIAddVersionKey "InternalName"		"Warzone 2100"
-VIAddVersionKey "LegalCopyright"	"Copyright Â© 2006 Warzone Resurrection Project"
+VIAddVersionKey "LegalCopyright"	"Copyright © 2006 Warzone Resurrection Project"
 VIAddVersionKey "OriginalFilename"	"warzone2100-${VERSION}.update.exe"
 VIAddVersionKey "ProductName"		"Warzone 2100"
 VIAddVersionKey "ProductVersion"	"${VERSION}"
@@ -280,13 +280,13 @@ FunctionEnd
   LangString DESC_SecBase ${LANG_GERMAN} "Standardinstallation."
 
   LangString TEXT_SecOpenAL ${LANG_GERMAN} "OpenAL Bibliotheken"
-  LangString DESC_SecOpenAL ${LANG_GERMAN} "Bibliotheken fÃ¼r OpenAL, ein freies Audio Interface. Implementation von Creative Labs."
+  LangString DESC_SecOpenAL ${LANG_GERMAN} "Bibliotheken für OpenAL, ein freies Audio-Interface. Implementation von Creative Labs."
 
   LangString TEXT_SecMods ${LANG_GERMAN} "Mods"
   LangString DESC_SecMods ${LANG_GERMAN} "Verschiedene Mods."
 
   LangString TEXT_SecGrimMod ${LANG_GERMAN} "Grims Grafik-Update"
-  LangString DESC_SecGrimMod ${LANG_GERMAN} "Grims Grafik-Update. EnthÃ¤lt detailliertere Texturen fÃ¼r Kampagne 1 sowie einige andere Textur- und Model-Updates. Copyright (C) 2005-2007 Grim Moroe, Verwendung nur fÃ¼r Warzone 2100 gestattet."
+  LangString DESC_SecGrimMod ${LANG_GERMAN} "Grims Grafik-Update. Enthält detailliertere Texturen für Kampagne 1 sowie einige andere Textur- und Model-Updates. Copyright (C) 2005-2007 Grim Moroe, Verwendung nur für Warzone 2100 gestattet."
 
 
 
