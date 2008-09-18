@@ -14,6 +14,7 @@ AM_CPPFLAGS = -DYY_NO_INPUT $(SDL_CFLAGS) $(SDL_NET_CFLAGS) $(PHYSFS_CFLAGS) $(P
 AM_CFLAGS = $(WZ_CFLAGS)
 AM_LFLAGS = $(FLEX_FLAGS)
 AM_YFLAGS = -d
+
 BUILT_SOURCES = level_lexer.lex.c message_lexer.lex.c message_parser.tab.c \
 	message_parser.tab.h scriptvals_lexer.lex.c scriptvals_parser.tab.c \
 	scriptvals_parser.tab.h stats-db2.h
