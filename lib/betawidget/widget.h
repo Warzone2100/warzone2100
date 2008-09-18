@@ -28,13 +28,7 @@
 
 #include "internal-cairo.h"
 
-#if __APPLE__
-#	include <OpenGL/gl.h>
-#	include <OpenGL/glu.h>
-#else
-#	include <GL/gl.h>
-#	include <GL/glu.h>
-#endif
+#include "../ivis_opengl/GLee.h"
 
 #include "vector.h"
 #include "geom.h"
@@ -129,7 +123,7 @@ typedef enum
 	// Tool-tip events
 	EVT_TOOL_TIP_SHOW,
 	EVT_TOOL_TIP_HIDE,
-	
+
 	// Resize and reposition
 	EVT_RESIZE,
 	EVT_REPOSITION,
@@ -271,7 +265,7 @@ struct _eventToolTip
 struct _eventResize
 {
 	struct _event event;
-	
+
 	/// The previous size of the widget
 	size oldSize;
 };
@@ -282,10 +276,10 @@ struct _eventResize
 struct _eventReposition
 {
 	struct _event event;
-	
+
 	/// The previous position of the widget relative to its parent
 	point oldPosition;
-	
+
 	/// The previous position of the widget relative to the screen
 	point oldAbsolutePosition;
 };
