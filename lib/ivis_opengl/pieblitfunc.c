@@ -313,7 +313,7 @@ void pie_DownLoadRadar(UDWORD *buffer, int width, int height)
 	while (height > (h *= 2));
 
 	pie_SetTexturePage(radarTexture);
-	glTexImage2D(GL_TEXTURE_2D, 0, wz_texture_compression, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
 	glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
 	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
