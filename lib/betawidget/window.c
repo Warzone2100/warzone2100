@@ -284,7 +284,7 @@ void windowRepositionFromScreen(window *self, hAlign hAlign, int xOffset,
 			x = 0;
 			break;
 		case CENTRE:
-			x = screenWidth / 2 - ourSize.x / 2;
+			x = (screenWidth - ourSize.x) / 2;
 			break;
 		case RIGHT:
 			x = screenWidth;
@@ -300,7 +300,7 @@ void windowRepositionFromScreen(window *self, hAlign hAlign, int xOffset,
 			y = 0;
 			break;
 		case MIDDLE:
-			y = screenHeight / 2 - ourSize.y / 2;
+			y = (screenHeight - ourSize.y) / 2;
 			break;
 		case BOTTOM:
 			x = screenHeight;
@@ -336,7 +336,7 @@ void windowRepositionFromAnchor(window *self, const window *anchor,
 			xOffset = -xOffset;
 			break;
 		case CENTRE:
-			x = anchorPos.x + (anchorSize.x / 2 - ourSize.x / 2);
+			x = anchorPos.x + (anchorSize.x - ourSize.x) / 2;
 			break;
 		case RIGHT:
 			x = anchorPos.x + anchorSize.x;
@@ -349,7 +349,7 @@ void windowRepositionFromAnchor(window *self, const window *anchor,
 			y = anchorPos.y;
 			break;
 		case MIDDLE:
-			y = anchorPos.y + (anchorSize.x / 2 - ourSize.y / 2);
+			y = anchorPos.y + (anchorSize.x - ourSize.y) / 2;
 			break;
 		case BOTTOM:
 			y = anchorPos.y + anchorSize.y;
