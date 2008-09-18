@@ -14,5 +14,5 @@ CLEANFILES = $(NTWARCHIVE)
 
 $(NTWARCHIVE): $(NTWLIST:%=$(basename $(NTWARCHIVE))/%)
 
-multiplaymodsdir = $(pkgdata)/mods/multiplay
+multiplaymodsdir = $(pkgdatadir)/mods/multiplay
 nodist_multiplaymods_DATA = $(NTWARCHIVE)
