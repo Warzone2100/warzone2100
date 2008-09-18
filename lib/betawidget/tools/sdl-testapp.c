@@ -80,11 +80,14 @@ int main(int argc, char *argv[])
 	// Enable UNICODE support (for key events)
 	SDL_EnableUNICODE(true);
 
+	// Enable double-buffering
+	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+
 	// Enable sync-to-vblank
 	SDL_GL_SetAttribute(SDL_GL_SWAP_CONTROL, 1);
 
-	// 800x600 true colour, double buffered
-	screen = SDL_SetVideoMode(800, 600, 32, SDL_OPENGL | SDL_DOUBLEBUF);
+	// 800x600 true colour
+	screen = SDL_SetVideoMode(800, 600, 32, SDL_OPENGL);
 	if (screen == NULL)
 	{
 		fprintf(stderr, "SDL_SetVideoMode: %s\n", SDL_GetError());
