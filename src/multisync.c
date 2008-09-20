@@ -453,9 +453,7 @@ BOOL recvDroidCheck()
 			 * and the player who owns the droid has a low ping then do an
 			 * onscreen update, otherwise do an offscreen one.
 			 */
-			if (DrawnInLastFrame(pD->sDisplay.frameNumber)
-			 && pD->sDisplay.screenX < pie_GetVideoBufferWidth()
-			 && pD->sDisplay.screenY < pie_GetVideoBufferHeight()
+			if (droidOnScreen(pD, 0)
 			 && ingame.PingTimes[player] < PING_LIMIT)
 			{
 				onscreen = true;
