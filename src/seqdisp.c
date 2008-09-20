@@ -62,7 +62,8 @@
 #define SUBTITLE_BOX_MAX 480
 
 
-typedef struct {
+typedef struct
+{
 	char pText[MAX_STR_LENGTH];
 	UDWORD x;
 	UDWORD y;
@@ -71,7 +72,8 @@ typedef struct {
 	BOOL	bSubtitle;
 } SEQTEXT;
 
-typedef struct {
+typedef struct
+{
 	const char	*pSeq;						//name of the sequence to play
 	const char	*pAudio;					//name of the wav to play
 	BOOL		bSeqLoop;					//loop this sequence
