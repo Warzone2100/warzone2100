@@ -59,10 +59,10 @@
 
 #include "multiplay.h"
 #include "lib/sound/cdaudio.h"
-#include "lib/sequence/ogg.h"
+
 #include "scriptextern.h"
 
-//#define NO_VIDEO
+#define NO_VIDEO
 
 /* Intelligence Map screen IDs */
 #define IDINTMAP_MSGFORM		6001	//The intelligence map tabbed form
@@ -665,7 +665,6 @@ BOOL intAddMessageView(MESSAGE * psMessage)
 	{
 		return false;
 	}
-
 #endif
 
 	/*Add the text box*/
@@ -1083,7 +1082,9 @@ void intRemoveMessageView(BOOL animated)
 
 		//stop the video
 		psViewResearch = (VIEW_RESEARCH *)Form->pUserData;
-		seq_RenderVideoToBuffer( psViewResearch->sequenceName, SEQUENCE_KILL);
+		seq_RenderVideoToBuffer(NULL, psViewResearch->sequenceName,
+			gameTime2, SEQUENCE_KILL);
+
 
 		if (animated)
 		{
@@ -1315,18 +1316,18 @@ void intDisplayFLICView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIG
 		x1 = x0 + Form->width;
 		y1 = y0 + Form->height;
 
+
 		if (((VIEWDATA *)psMessage->pViewData)->type != VIEW_RES)
 		{
 			ASSERT( false, "intDisplayFLICView: Invalid message type" );
 			return;
 		}
-
-		RenderWindowFrame(FRAME_NORMAL, x0, y0, x1 - x0, y1 - y0);
-		psViewResearch = (VIEW_RESEARCH *)((VIEWDATA *)psCurrentMsg->pViewData)->pData;
-		// set the dimensions to window size & position
-		OGG_SetSize(192,168,x0,y0);
 		//render a frame of the current movie
-		seq_RenderVideoToBuffer( psViewResearch->sequenceName, SEQUENCE_HOLD);
+		psViewResearch = (VIEW_RESEARCH *)((VIEWDATA *)psCurrentMsg->pViewData)->pData;
+		seq_RenderVideoToBuffer(NULL, psViewResearch->sequenceName,
+			gameTime2, SEQUENCE_HOLD);
+		//download to screen now
+		seq_BlitBufferToScreen((SBYTE *)rendSurface.buffer, x0, y0);
 		CloseButtonRender();
 	}
 
@@ -1473,7 +1474,7 @@ void displayImmediateMessage(MESSAGE *psMessage)
 		This has to be changed to support a script calling a message in the intellegence screen
 	*/
 
-#ifndef NO_VIDEO
+#ifdef NO_VIDEO
 	psCurrentMsg = psMessage;
 	/* so we lied about definately not starting the intelligence screen */
 	addIntelScreen();

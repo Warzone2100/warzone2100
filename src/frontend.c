@@ -242,8 +242,8 @@ BOOL startTitleMenu(void)
 	addTextButton(FRONTEND_MULTIPLAYER, FRONTEND_POS3X, FRONTEND_POS3Y, _("Multi Player"), false, false);
 	addTextButton(FRONTEND_TUTORIAL, FRONTEND_POS4X, FRONTEND_POS4Y, _("Tutorial") ,false,false);
 	addTextButton(FRONTEND_OPTIONS, FRONTEND_POS5X, FRONTEND_POS5Y, _("Options") ,false,false);
-	addTextButton(FRONTEND_PLAYINTRO, FRONTEND_POS6X, FRONTEND_POS6Y, _("View Intro"), false, false);
-	addTextButton(FRONTEND_QUIT, FRONTEND_POS7X, FRONTEND_POS7Y, _("Quit Game"), false, false);
+
+	addTextButton(FRONTEND_QUIT, FRONTEND_POS6X, FRONTEND_POS6Y, _("Quit Game"), false, false);
 
 	addSideText(FRONTEND_SIDETEXT, FRONTEND_SIDEX, FRONTEND_SIDEY, _("MAIN MENU"));
 
@@ -273,9 +273,6 @@ BOOL runTitleMenu(void)
 			break;
 		case FRONTEND_TUTORIAL:
 			changeTitleMode(TUTORIAL);
-			break;
-		case FRONTEND_PLAYINTRO:
-			changeTitleMode(SHOWINTRO);
 			break;
 		default:
 			break;

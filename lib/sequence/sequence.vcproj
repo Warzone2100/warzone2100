@@ -6,6 +6,7 @@
 	ProjectGUID="{30F5FC4A-31F5-42F5-9581-45309559382F}"
 	RootNamespace="sequence"
 	Keyword="Win32Proj"
+	TargetFrameworkVersion="131072"
 	>
 	<Platforms>
 		<Platform
@@ -149,23 +150,7 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\ogg.c"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						WarningLevel="3"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
 				RelativePath=".\sequence.c"
-				>
-			</File>
-			<File
-				RelativePath=".\timer.c"
 				>
 			</File>
 		</Filter>
@@ -175,15 +160,7 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath=".\ogg.h"
-				>
-			</File>
-			<File
 				RelativePath=".\sequence.h"
-				>
-			</File>
-			<File
-				RelativePath=".\timer.h"
 				>
 			</File>
 		</Filter>

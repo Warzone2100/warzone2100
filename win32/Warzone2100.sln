@@ -104,7 +104,4 @@ Global
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
-	GlobalSection(ExtensibilityGlobals) = postSolution
-		AMDCaProjectFile = G:\dev-warzone-trunk\win32\CodeAnalyst\Warzone2100.caw
-	EndGlobalSection
 EndGlobal

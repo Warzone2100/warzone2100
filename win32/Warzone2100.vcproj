@@ -42,11 +42,11 @@
 				OutputFile="$(ProjectDir)..\src\$(InputName).lex.c"
 			/>
 			<Tool
-				Name="VCXMLDataGeneratorTool"
-			/>
-			<Tool
 				Name="VCCustomBuildTool"
 				ExecutionBucket="4"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
 			/>
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"
@@ -79,7 +79,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				ExecutionBucket="11"
-				AdditionalDependencies="SDL.lib SDLmain.lib SDL_net-static.lib libpng-static.lib ogg_static.lib vorbis_static.lib vorbisfile_static.lib OpenAL32.lib glc32.lib OpenGL32.lib GLU32.lib shfolder.lib winmm.lib wsock32.lib dbghelp.lib libpopt.lib physfs.lib zlib.lib G:\theora\win32\VS2005\release\libtheora.lib"
+				AdditionalDependencies="SDL.lib SDLmain.lib SDL_net-static.lib libpng-static.lib ogg_static.lib vorbis_static.lib vorbisfile_static.lib OpenAL32.lib glc32.lib OpenGL32.lib GLU32.lib shfolder.lib winmm.lib wsock32.lib dbghelp.lib libpopt.lib physfs.lib zlib.lib"
 				OutputFile="$(OutDir)\$(ProjectName)-Dbg.exe"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="&quot;$(SolutionDir)\..\devpkg\lib&quot;"
@@ -117,9 +117,6 @@
 			<Tool
 				Name="VCAppVerifierTool"
 			/>
-			<Tool
-				Name="VCWebDeploymentTool"
-			/>
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
@@ -145,11 +142,11 @@
 				OutputFile="$(ProjectDir)..\src\$(InputName).lex.c"
 			/>
 			<Tool
-				Name="VCXMLDataGeneratorTool"
-			/>
-			<Tool
 				Name="VCCustomBuildTool"
 				ExecutionBucket="4"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
 			/>
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"
@@ -217,9 +214,6 @@
 			/>
 			<Tool
 				Name="VCAppVerifierTool"
-			/>
-			<Tool
-				Name="VCWebDeploymentTool"
 			/>
 		</Configuration>
 	</Configurations>
@@ -974,15 +968,15 @@
 				>
 			</File>
 			<File
+				RelativePath="..\src\messagely.h"
+				>
+			</File>
+			<File
 				RelativePath="..\src\message_parser.tab.h"
 				>
 			</File>
 			<File
 				RelativePath="..\src\messagedef.h"
-				>
-			</File>
-			<File
-				RelativePath="..\src\messagely.h"
 				>
 			</File>
 			<File
@@ -1070,11 +1064,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\src\parsetest.h"
+				RelativePath="..\lib\framework\platform.h"
 				>
 			</File>
 			<File
-				RelativePath="..\lib\framework\platform.h"
+				RelativePath="..\src\parsetest.h"
 				>
 			</File>
 			<File
