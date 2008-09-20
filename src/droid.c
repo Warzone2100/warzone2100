@@ -57,6 +57,7 @@
 #include "component.h"
 #include "function.h"
 #include "lighting.h"
+#include "gateway.h"
 #include "multiplay.h"
 #include "formationdef.h"
 #include "formation.h"
@@ -3883,7 +3884,7 @@ BOOL	normalPAT(UDWORD x, UDWORD y)
 // Should stop things being placed in inaccessible areas?
 BOOL	zonedPAT(UDWORD x, UDWORD y)
 {
-	if (sensiblePlace(x,y) && noDroid(x,y))
+	if (sensiblePlace(x,y) && noDroid(x,y) && gwZoneReachable(gwGetZone(x,y)))
 	{
 		return(true);
 	}

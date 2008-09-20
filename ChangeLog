@@ -11,6 +11,11 @@
  * Buildsystem:
    * Fix: The OS X build system now works properly on both Tiger and Leopard.
    * New: Bison is no longer an external dependency when building on OS X as it is automatically downloaded if the system version of Bison is incompatible with the build system.
+ * Pathfinding:
+   * Change: We no longer use zones for path-finding. If they are present in the map file, they will be ignored. Gateways are only used by AI.
+   * Fix: 2.1_beta3 dropped the use of zones for path-finding causing a huge performance penalty. As a fix reintroduce zone usage for path-finding.
+ * Save games:
+   * Change: Save games made with 2.1_beta4 or trunk cannot be loaded anymore due to the above path-finding fix.
 
 2008-07-19: Version 2.1_beta4
  * General:

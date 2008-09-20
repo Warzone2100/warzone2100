@@ -368,6 +368,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\src\gatewayroute.c"
+					>
+				</File>
+				<File
 					RelativePath="..\src\geometry.c"
 					>
 				</File>
@@ -852,6 +856,10 @@
 			</File>
 			<File
 				RelativePath="..\src\gatewaydef.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\gatewayroute.h"
 				>
 			</File>
 			<File

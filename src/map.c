@@ -190,6 +190,10 @@ static BOOL mapLoadV3(char *pFileData, UDWORD fileSize)
 	MAP_SAVETILEV2		*psTileData;
 	GATEWAY_SAVEHEADER	*psGateHeader;
 	GATEWAY_SAVE		*psGate;
+	ZONEMAP_SAVEHEADER	*psZoneHeader;
+	UWORD ZoneSize;
+	UBYTE *pZone;
+	UBYTE *pDestZone;
 
 	/* Load in the map data */
 	psTileData = (MAP_SAVETILEV2 *)(pFileData + SAVE_HEADER_SIZE);
@@ -225,7 +229,126 @@ static BOOL mapLoadV3(char *pFileData, UDWORD fileSize)
 		psGate++;
 	}
 
+	psZoneHeader = (ZONEMAP_SAVEHEADER*)psGate;
+
+	/* ZONEMAP_SAVEHEADER */
+	endian_uword(&psZoneHeader->version);
+	endian_uword(&psZoneHeader->numZones);
+	endian_uword(&psZoneHeader->numEquivZones);
+	endian_uword(&psZoneHeader->pad);
+
+	ASSERT(psZoneHeader->version == 1
+	    || psZoneHeader->version == 2
+	    || psZoneHeader->version == 3, "Invalid zone map version: %u", psZoneHeader->version);
+
+	/* Special case due to r4637: a version 2 with numZones and
+	 * numEquivZones set to zero is actually version 3.
+	 */
+	if (psZoneHeader->version == 2
+	 && psZoneHeader->numZones == 0
+	 && psZoneHeader->numEquivZones == 0)
+	{
+		psZoneHeader->version = 3;
+	}
+
+	if(!gwNewZoneMap()) {
+		return false;
+	}
+
+	// This is a bit nasty but should work fine.
+	if      (psZoneHeader->version == 1)
+	{
+		// version 1 so add the size of a version 1 header.
+		pZone = ((UBYTE*)psZoneHeader) + sizeof(ZONEMAP_SAVEHEADER_V1);
+	}
+	else if (psZoneHeader->version == 2)
+	{
+		// version 2 so add the size of a version 2 header.
+		pZone = ((UBYTE*)psZoneHeader) + sizeof(ZONEMAP_SAVEHEADER);
+	}
+	/* Loading of savegames with ZONEMAP_SAVEHEADER structure versions of 3
+	 * or larger is not supported (and for version 3 cannot be supported as
+	 * long as we depend on zones).
+	 */
+	else if (psZoneHeader->version == 3)
+	{
+		debug(LOG_ERROR, "Unsupported savegame (zone map version 3): this savegame cannot be loaded with this version of warzone because \"zone map\" version 3 fails to provide required data. NOTE: Warzone 2100 2.2 will most likely support this savegame anyway.");
+		return false;
+	}
+	else
+	{
+		return false;
+	}
+
+	for(i=0; i<psZoneHeader->numZones; i++) {
+		ZoneSize = *((UWORD*)(pZone));
+		endian_uword(&ZoneSize);
+
+		pDestZone = gwNewZoneLine(i,ZoneSize);
+
+		if(pDestZone == NULL) {
+			return false;
+		}
+
+		for(j=0; j<ZoneSize; j++) {
+			pDestZone[j] = pZone[2+j];
+		}
+
+		pZone += ZoneSize+2;
+	}
+
+	// Version 2 has the zone equivelancy lists tacked on the end.
+	if(psZoneHeader->version == 2) {
+
+		if(psZoneHeader->numEquivZones > 0) {
+			// Load in the zone equivelance lists.
+			if(!gwNewEquivTable(psZoneHeader->numEquivZones)) {
+				debug( LOG_ERROR, "gwNewEquivTable failed" );
+				abort();
+				return false;
+			}
+
+			for(i=0; i<psZoneHeader->numEquivZones; i++) {
+				if(*pZone != 0) {
+					if(!gwSetZoneEquiv(i, (SDWORD)*pZone, pZone+1)) {
+						debug( LOG_ERROR, "gwSetZoneEquiv failed" );
+						abort();
+						return false;
+					}
+				}
+				pZone += ((UDWORD)*pZone)+1;
+			}
+		}
+	}
+
+	if ((char *)pZone - pFileData > fileSize)
+	{
+		debug( LOG_ERROR, "mapLoadV3: unexpected end of file" );
+		abort();
+		return false;
+	}
+
 	LOADBARCALLBACK();	//	loadingScreenCallback();
+
+	if ((apEquivZones != NULL) &&
+		!gwGenerateLinkGates())
+	{
+		return false;
+	}
+
+	LOADBARCALLBACK();	//	loadingScreenCallback();
+
+	//add new map initialise
+	if (!gwLinkGateways())
+	{
+		return false;
+	}
+
+	LOADBARCALLBACK();	//	loadingScreenCallback();
+
+#if defined(DEBUG)
+	gwCheckZoneSizes();
+#endif
 
 	return true;
 }
@@ -289,7 +412,8 @@ BOOL mapLoad(char *pFileData, UDWORD fileSize)
 	mapHeight = height;
 
 	//load in the map data itself
-	mapLoadV3(pFileData, fileSize);
+	if (!mapLoadV3(pFileData, fileSize))
+		return false;
 
 	environReset();
 
@@ -975,6 +1099,29 @@ BOOL mapSaveTagged(char *pFileName)
 	}
 	tagWriteLeave(0x0f);
 
+	tagWriteEnter(0x10, gwNumZoneLines()); // gateway zone lines
+	for (i = 0; i < gwNumZoneLines(); i++)
+	{
+		// binary blob for now... ugh, this is ugly, but no worse than it was
+		tagWrite(0x01, gwZoneLineSize(i));
+		tagWrite8v(0x02, gwZoneLineSize(i), apRLEZones[i]);
+		tagWriteNext();
+	}
+	tagWriteLeave(0x10);
+
+	tagWriteEnter(0x11, gwNumZones); // gateway equivalency zones
+	for (i = 0; i < gwNumZones; i++)
+	{
+		tagWrite(0x01, aNumEquiv[i]);
+		if (aNumEquiv[i])
+		{
+			// another ugly blob job
+			tagWrite8v(0x02, aNumEquiv[i], apEquivZones[i]);
+		}
+		tagWriteNext();
+	}
+	tagWriteLeave(0x11);
+
 	tagClose();
 	return true;
 }
@@ -1054,6 +1201,8 @@ BOOL mapSave(char **ppFileData, UDWORD *pFileSize)
 	GATEWAY_SAVEHEADER *psGateHeader = NULL;
 	GATEWAY_SAVE *psGate = NULL;
 	ZONEMAP_SAVEHEADER *psZoneHeader = NULL;
+	UBYTE *psZone = NULL;
+	UBYTE *psLastZone = NULL;
 	SDWORD	numGateways = 0;
 
 	// find the number of non water gateways
@@ -1069,8 +1218,16 @@ BOOL mapSave(char **ppFileData, UDWORD *pFileSize)
 	*pFileSize = SAVE_HEADER_SIZE + mapWidth*mapHeight * SAVE_TILE_SIZE;
 	// Add on the size of the gateway data.
 	*pFileSize += sizeof(GATEWAY_SAVEHEADER) + sizeof(GATEWAY_SAVE)*numGateways;
-	// Add on the size of the zone data header. For backwards compatibility.
+	// Add on the size of the zone data header.
 	*pFileSize += sizeof(ZONEMAP_SAVEHEADER);
+	// Add on the size of the zone data.
+	for(i=0; i<gwNumZoneLines(); i++) {
+		*pFileSize += 2+gwZoneLineSize(i);
+	}
+	// Add on the size of the equivalency lists.
+	for(i=0; i<(UDWORD)gwNumZones; i++) {
+		*pFileSize += 1+aNumEquiv[i];
+	}
 
 	*ppFileData = (char*)malloc(*pFileSize);
 	if (*ppFileData == NULL)
@@ -1141,15 +1298,42 @@ BOOL mapSave(char **ppFileData, UDWORD *pFileSize)
 
 	// Put the zone header.
 	psZoneHeader = (ZONEMAP_SAVEHEADER*)psGate;
-	psZoneHeader->version = 3;
-	psZoneHeader->numZones = 0;
-	psZoneHeader->numEquivZones = 0;
+	psZoneHeader->version = 2;
+	psZoneHeader->numZones =(UWORD)gwNumZoneLines();
+	psZoneHeader->numEquivZones =(UWORD)gwNumZones;
 
 	/* ZONEMAP_SAVEHEADER */
 	endian_uword(&psZoneHeader->version);
 	endian_uword(&psZoneHeader->numZones);
 	endian_uword(&psZoneHeader->numEquivZones);
 	endian_uword(&psZoneHeader->pad);
+
+	// Put the zone data.
+	psZone = (UBYTE*)(psZoneHeader+1);
+	for(i=0; i<gwNumZoneLines(); i++) {
+		psLastZone = psZone;
+		*((UWORD*)psZone) = (UWORD)gwZoneLineSize(i);
+		endian_uword(((UWORD *) psZone));
+
+		psZone += sizeof(UWORD);
+		memcpy(psZone,apRLEZones[i],gwZoneLineSize(i));
+		psZone += gwZoneLineSize(i);
+	}
+
+	// Put the equivalency lists.
+	if(gwNumZones > 0) {
+		for(i=0; i<(UDWORD)gwNumZones; i++) {
+			psLastZone = psZone;
+			*psZone = aNumEquiv[i];
+			psZone ++;
+			if(aNumEquiv[i]) {
+				memcpy(psZone,apEquivZones[i],aNumEquiv[i]);
+				psZone += aNumEquiv[i];
+			}
+		}
+	}
+
+	ASSERT( (intptr_t)psLastZone - (intptr_t)*ppFileData < (intptr_t)*pFileSize, "Buffer overflow saving map" );
 
 	return true;
 }

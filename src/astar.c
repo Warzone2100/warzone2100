@@ -402,6 +402,7 @@ static void fpathOptimise(FP_NODE *psRoute)
 	} while (psCurr);
 }
 
+// A* findpath
 SDWORD fpathAStarRoute(SDWORD routeMode, ASTAR_ROUTE *psRoutePoints,
 					 SDWORD sx, SDWORD sy, SDWORD fx, SDWORD fy)
 {
@@ -565,6 +566,7 @@ static 	FP_NODE		*psNearest, *psRoute;
 		retval = ASR_NEAREST;
 	}
 
+	// optimise the route if one was found
 	if (psRoute)
 	{
 		// optimise the route if one was found
