@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2008-09-20 02:12+0200\n"
+"POT-Creation-Date: 2008-07-29 20:16+0200\n"
 "PO-Revision-Date: 2008-05-09 19:41+0000\n"
 "Last-Translator: Alberto <Unknown>\n"
 "Language-Team: Italian <warzone-dev@gna.org>\n"
@@ -4781,7 +4781,6 @@ msgstr "Camion"
 
 #: data/base/messages/strings/names.txt:17
 #: data/mp/messages/strings/names.txt:17
-#: data/mp/messages/strings/names.txt:1822
 msgid "Machinegun Viper Wheels"
 msgstr "Mitragliatrice Viper Ruote"
 
@@ -4938,6 +4937,7 @@ msgstr "Python Cannone Leggero Cingoli"
 
 #: data/base/messages/strings/names.txt:194
 #: data/mp/messages/strings/names.txt:196
+#: data/mp/messages/strings/names.txt:1913
 msgid "Python Medium Cannon Tracks"
 msgstr "Phyton Cannone Medio Cingoli"
 
@@ -6864,6 +6864,7 @@ msgstr ""
 
 #: data/base/messages/strings/names.txt:874
 #: data/mp/messages/strings/names.txt:882
+#: data/mp/messages/strings/names.txt:1508
 msgid "Sensor Upgrade"
 msgstr ""
 
@@ -8186,7 +8187,6 @@ msgstr ""
 
 #: data/base/messages/strings/names.txt:1423
 #: data/mp/messages/strings/names.txt:1431
-#: data/mp/messages/strings/names.txt:1871
 msgid "Repair Cobra Tracks"
 msgstr ""
 
@@ -8197,7 +8197,6 @@ msgstr ""
 
 #: data/base/messages/strings/names.txt:1458
 #: data/mp/messages/strings/names.txt:1466
-#: data/mp/messages/strings/names.txt:1912
 msgid "Tank Killer Python Tracks"
 msgstr ""
 
@@ -8518,173 +8517,214 @@ msgstr "Per favore attendi mentre la fabbrica produce la nuova unità"
 msgid "Congratulations commander - you are ready for your first mission"
 msgstr "Congratulazioni comandante - è ora pronto per la sua prima missione"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1283
+#: data/mods/global/ntw/messages/strings/names.txt:1283
 #: data/mp/messages/strings/names.txt:144
 msgid "Viper Light Cannon Half-track"
 msgstr "Viper Cannone Leggero Semicingoli"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1289
+#: data/mods/global/ntw/messages/strings/names.txt:1289
+#: data/mp/messages/strings/names.txt:1812
 msgid "Cobra Hover Heavy-Repair"
 msgstr "Cobra Hover Torretta Riparatrice Pesante"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1290
+#: data/mods/global/ntw/messages/strings/names.txt:1290
+#: data/mp/messages/strings/names.txt:1813
 msgid "Viper HMG Wheels"
 msgstr "Viper Mitragliatrice Pesante Ruote"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1291
+#: data/mods/global/ntw/messages/strings/names.txt:1291
 #: data/mp/messages/strings/names.txt:1814
 msgid "Scourge Mantis Hover"
 msgstr "Mantis Hover Scourge"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1292
+#: data/mods/global/ntw/messages/strings/names.txt:1292
+#: data/mp/messages/strings/names.txt:1815
 msgid "TK Mantis Hover"
 msgstr "Mantis Hover Tank Killer"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1293
+#: data/mods/global/ntw/messages/strings/names.txt:1293
+#: data/mp/messages/strings/names.txt:1816
 msgid "Cobra HMG Tracks"
 msgstr "Cobra Cingoli Mitragliatrice Pesante"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1294
+#: data/mods/global/ntw/messages/strings/names.txt:1294
+#: data/mp/messages/strings/names.txt:1817
 msgid "Cobra Hover HC"
 msgstr "Cobra Hover Cannone Pesante"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1296
+#: data/mods/global/ntw/messages/strings/names.txt:1296
+#: data/mp/messages/strings/names.txt:1874
 msgid "Scorpion Lancer Tracks"
 msgstr "Scoprion Lancer Cingoli"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1297
+#: data/mods/global/ntw/messages/strings/names.txt:1297
+#: data/mp/messages/strings/names.txt:1875
 msgid "Scorpion Heavy Cannon Tracks"
 msgstr "Scoprion Cannone Pesante Cingoli"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1298
+#: data/mods/global/ntw/messages/strings/names.txt:1298
+#: data/mp/messages/strings/names.txt:1865
+#: data/mp/messages/strings/names.txt:1876
 msgid "Scorpion Lancer VTOL"
 msgstr "Scorpion Lancer VTOL"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1299
+#: data/mods/global/ntw/messages/strings/names.txt:1299
+#: data/mp/messages/strings/names.txt:1877
 msgid "Scorpion BB VTOL"
 msgstr "Scoprion BB Vtol"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1301
+#: data/mods/global/ntw/messages/strings/names.txt:1301
+#: data/mp/messages/strings/names.txt:1879
 msgid "Viper Command Turret Tracks"
 msgstr "Viper Torretta di Comando Cingoli"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1302
+#: data/mods/global/ntw/messages/strings/names.txt:1302
+#: data/mp/messages/strings/names.txt:1880
 msgid "Cobra Command Turret Tracks"
 msgstr "Cobra Torretta di Comando Cingoli"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1303
+#: data/mods/global/ntw/messages/strings/names.txt:1303
+#: data/mp/messages/strings/names.txt:1881
 msgid "Scorpion Command Turret Tracks"
 msgstr "Scorpion Torretta di Comando Cingoli"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1304
+#: data/mods/global/ntw/messages/strings/names.txt:1304
+#: data/mp/messages/strings/names.txt:1882
 msgid "mantis Command Turret Tracks"
 msgstr "Mantis Torretta di Comando Cingoli"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1306
+#: data/mods/global/ntw/messages/strings/names.txt:1306
+#: data/mp/messages/strings/names.txt:1884
 msgid "Cobra Lancer Tracks"
 msgstr "Cobra Lancer Cingoli"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1307
+#: data/mods/global/ntw/messages/strings/names.txt:1307
+#: data/mp/messages/strings/names.txt:1885
 msgid "Mantis Heavy Cannon Tracks"
 msgstr "Mantis Cannone Pesante Cingoli"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1308
+#: data/mods/global/ntw/messages/strings/names.txt:1308
+#: data/mp/messages/strings/names.txt:1886
 msgid "Mantis Tank Killer Tracks"
 msgstr "Mantis Tank Killer Cingoli"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1309
+#: data/mods/global/ntw/messages/strings/names.txt:1309
+#: data/mp/messages/strings/names.txt:1887
 msgid "Mantis Scourge Tracks"
 msgstr "Mantis Scourge Cingoli"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1310
+#: data/mods/global/ntw/messages/strings/names.txt:1310
+#: data/mp/messages/strings/names.txt:1888
 msgid "Scorpion Heavy Machinegun Tracks"
 msgstr "Scorpion Mitragliatrice Pesante Cingoli"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1312
+#: data/mods/global/ntw/messages/strings/names.txt:1312
+#: data/mp/messages/strings/names.txt:1890
 msgid "Scorpion Repair Tracks"
 msgstr "Scoprion Torretta Riparatrice Cingoli"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1313
+#: data/mods/global/ntw/messages/strings/names.txt:1313
+#: data/mp/messages/strings/names.txt:1891
 msgid "Scorpion Heavy Repair Hover"
 msgstr "Scorpion Torretta Riparatrice Pesante Hover"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1316
+#: data/mods/global/ntw/messages/strings/names.txt:1316
+#: data/mp/messages/strings/names.txt:1894
 msgid "Cobra Hover Truck"
 msgstr "Cobra Hover Camion"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1317
+#: data/mods/global/ntw/messages/strings/names.txt:1317
+#: data/mp/messages/strings/names.txt:1895
 msgid "Scorpion Hover Truck"
 msgstr "Scorpion Hover Camion"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1318
+#: data/mods/global/ntw/messages/strings/names.txt:1318
+#: data/mp/messages/strings/names.txt:1896
 msgid "Mantis Hover Truck"
 msgstr "Mantis Hover Camion"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1321
+#: data/mods/global/ntw/messages/strings/names.txt:1321
+#: data/mp/messages/strings/names.txt:1899
 msgid "Cobra Bunker Buster Tracks"
 msgstr "Cobra Bunker Buster Cingoli"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1322
+#: data/mods/global/ntw/messages/strings/names.txt:1322
+#: data/mp/messages/strings/names.txt:1900
 msgid "Scorpion Bunker Buster Tracks"
 msgstr "Scorpion Bunker Buster Cingoli"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1323
+#: data/mods/global/ntw/messages/strings/names.txt:1323
+#: data/mp/messages/strings/names.txt:1901
 msgid "Mantis Bunker Buster Tracks"
 msgstr "Mantis Bunker Buster Cingoli"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1325
+#: data/mods/global/ntw/messages/strings/names.txt:1325
+#: data/mp/messages/strings/names.txt:1903
 msgid "Viper Tracks Lancer"
 msgstr "Viper Cingoli Lancer"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1327
+#: data/mods/global/ntw/messages/strings/names.txt:1327
+#: data/mp/messages/strings/names.txt:1905
 msgid "Cobra Half-Tracks Mini-Pod"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1328
+#: data/mods/global/ntw/messages/strings/names.txt:1328
+#: data/mp/messages/strings/names.txt:1906
 msgid "Cobra Tracks Mini-Pod"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1329
+#: data/mods/global/ntw/messages/strings/names.txt:1329
+#: data/mp/messages/strings/names.txt:1907
 msgid "Cobra Tracks Mini-Rocket Artillery"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1331
+#: data/mods/global/ntw/messages/strings/names.txt:1331
+#: data/mp/messages/strings/names.txt:1909
 msgid "Cobra Inferno Half-track"
 msgstr "Cobra Inferno Semicingoli"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1332
+#: data/mods/global/ntw/messages/strings/names.txt:1332
+#: data/mp/messages/strings/names.txt:1910
 msgid "Python HVC Hover"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1334
+#: data/mods/global/ntw/messages/strings/names.txt:1334
+#: data/mp/messages/strings/names.txt:1914
 msgid "Python Scourge Tracks"
 msgstr "Python Scourge Cingoli"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1335
+#: data/mods/global/ntw/messages/strings/names.txt:1335
+#: data/mp/messages/strings/names.txt:1915
 msgid "Python Gauss Cannon Tracks"
 msgstr "Phyton Cannone Gauss Cingoli"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1336
+#: data/mods/global/ntw/messages/strings/names.txt:1336
+#: data/mp/messages/strings/names.txt:1916
 msgid "Python Pulse Laser Tracks"
 msgstr "Python Laser a Impulso Cingoli"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1337
+#: data/mods/global/ntw/messages/strings/names.txt:1337
+#: data/mp/messages/strings/names.txt:1917
 msgid "Tiger Pulse Laser Tracks"
 msgstr "Tiger Laser a Impulso Cingoli"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1338
+#: data/mods/global/ntw/messages/strings/names.txt:1338
+#: data/mp/messages/strings/names.txt:1918
 msgid "Tiger Heavy Laser Tracks"
 msgstr "Tiger Laser Pesante Cingoli"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1339
+#: data/mods/global/ntw/messages/strings/names.txt:1339
+#: data/mp/messages/strings/names.txt:1919
 msgid "Wyvern Gauss Cannon Tracks"
 msgstr "Wyvern Cannone Gauss Cingoli"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1340
+#: data/mods/global/ntw/messages/strings/names.txt:1340
+#: data/mp/messages/strings/names.txt:1920
 msgid "Wyvern Pulse Laser Tracks"
 msgstr "Wyvern Cannone a Impulso Cingoli"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1341
+#: data/mods/global/ntw/messages/strings/names.txt:1341
+#: data/mp/messages/strings/names.txt:1921
 msgid "Wyvern Heavy Laser Tracks"
 msgstr "Wyvern Laser Pesante Cingoli"
 
@@ -9023,25 +9063,11 @@ msgstr ""
 msgid "Cobra Bunker Buster Hover"
 msgstr "Cobra Bunker Buster Hover"
 
-#: data/mp/messages/strings/names.txt:1508
-#, fuzzy
-msgid "Sensor Upgrade Mk2"
-msgstr "Raggio dei Sensori"
-
 #: data/mp/messages/strings/names.txt:1509
-msgid "Vapor Turbine Generator Mk2"
-msgstr ""
-
 #: data/mp/messages/strings/names.txt:1513
-msgid "Gas Turbine Generator Mk2"
-msgstr ""
-
 #: data/mp/messages/strings/names.txt:1514
-msgid "Gas Turbine Generator Mk3"
-msgstr ""
-
 #: data/mp/messages/strings/names.txt:1517
-msgid "Vapor Turbine Generator Mk3"
+msgid "Power Upgrade"
 msgstr ""
 
 #: data/mp/messages/strings/names.txt:1602
@@ -9147,12 +9173,8 @@ msgstr "Super Cyborg con Tank Killer"
 
 #: data/mp/messages/strings/names.txt:1671
 #: data/mp/messages/strings/names.txt:1672
-msgid "Heavy Laser"
-msgstr "Laser Pesante"
-
 #: data/mp/messages/strings/names.txt:1673
-#, fuzzy
-msgid "VTOL Heavy Laser"
+msgid "Heavy Laser"
 msgstr "Laser Pesante"
 
 #: data/mp/messages/strings/names.txt:1674
@@ -9331,18 +9353,11 @@ msgid "Twin Assault Gun"
 msgstr ""
 
 #: data/mp/messages/strings/names.txt:1790
-msgid "VTOL Plasmite Bomb Bay"
-msgstr ""
-
 #: data/mp/messages/strings/names.txt:1791
 msgid "Plasmite Bomb"
 msgstr ""
 
 #: data/mp/messages/strings/names.txt:1792
-#, fuzzy
-msgid "VTOL EMP Missile Launcher"
-msgstr "Lanciamissili EMP"
-
 #: data/mp/messages/strings/names.txt:1793
 msgid "EMP Missile Launcher"
 msgstr "Lanciamissili EMP"
@@ -9362,135 +9377,101 @@ msgstr "Torretta di Comando MkIII"
 msgid "Command turret MkIV"
 msgstr "Torretta di Comando MkIV"
 
-#: data/mp/messages/strings/names.txt:1812
-#, fuzzy
-msgid "Heavy Repair Turret Cobra Hover"
-msgstr "Torretta Riparatrice Pesante"
-
-#: data/mp/messages/strings/names.txt:1813
-#: data/mp/messages/strings/names.txt:1824
-#, fuzzy
-msgid "Heavy Machinegun Viper Wheels"
-msgstr "Mitragliatrice Viper Ruote"
-
-#: data/mp/messages/strings/names.txt:1815
-#, fuzzy
-msgid "Tank Killer Mantis Hover"
-msgstr "Mantis Hover Tank Killer"
-
-#: data/mp/messages/strings/names.txt:1816
-#: data/mp/messages/strings/names.txt:1831
-#, fuzzy
-msgid "Heavy Machinegun Cobra Tracks"
-msgstr "Viper Mitragliatrice Pesante Cingoli"
-
-#: data/mp/messages/strings/names.txt:1817
-#, fuzzy
-msgid "Heavy Cannon Cobra Hover"
-msgstr "Cobra Cannone Pesante Cingoli"
+#: data/mp/messages/strings/names.txt:1822
+msgid "Viper Wheels Machinegun"
+msgstr "Viper Ruote Mitragliatrice"
 
 #: data/mp/messages/strings/names.txt:1823
-#, fuzzy
-msgid "Twin Machinegun Viper Wheels"
-msgstr "Mitragliatrice Viper Ruote"
+msgid "Viper Wheels Twin Machinegun"
+msgstr "Viper Ruote Doppia Mitragliatrice"
+
+#: data/mp/messages/strings/names.txt:1824
+msgid "Viper Wheels Heavy Machinegun"
+msgstr "Viper Ruote Mitragliatrice Pesante"
 
 #: data/mp/messages/strings/names.txt:1825
-#, fuzzy
-msgid "Heavy Machinegun Cobra Wheels"
-msgstr "Mitragliatrice Viper Ruote"
+msgid "Cobra Wheels Heavy Machinegun"
+msgstr "Cobra Ruote Mitragliatrice Pesante"
 
 #: data/mp/messages/strings/names.txt:1826
-#, fuzzy
-msgid "Heavy Machinegun Cobra Hover"
-msgstr "Viper Mitragliatrice Pesante Cingoli"
+msgid "Cobra Hover Heavy Machinegun"
+msgstr "Cobra Hover Mitragliatrice Pesante"
 
 #: data/mp/messages/strings/names.txt:1828
-#, fuzzy
-msgid "Machinegun Viper Tracks"
-msgstr "Mitragliatrice Viper Ruote"
+msgid "Viper Tracks Machinegun"
+msgstr "Viper Cingoli Mitragliatrice"
 
 #: data/mp/messages/strings/names.txt:1829
-#, fuzzy
-msgid "Twin Machinegun Viper Tracks"
-msgstr "Mitragliatrice Viper Ruote"
+msgid "Viper Tracks Twin Machinegun"
+msgstr "Viper Cingoli Doppia Mitragliatrice"
 
 #: data/mp/messages/strings/names.txt:1830
-#, fuzzy
-msgid "Heavy Machinegun Viper Tracks"
-msgstr "Viper Mitragliatrice Pesante Cingoli"
+msgid "Viper Tracks Heavy Machinegun"
+msgstr "Viper Cingoli Mitragliatrice Pesante"
+
+#: data/mp/messages/strings/names.txt:1831
+msgid "Cobra Tracks Heavy Machinegun"
+msgstr "Cobra Cingoli Mitragliatrice Pesante"
 
 #: data/mp/messages/strings/names.txt:1833
-#, fuzzy
-msgid "Medium Cannon Cobra Hover"
-msgstr "Corpo Medio - Cobra"
+msgid "Cobra Hover Medium Cannon"
+msgstr "Cobra Hover Cannone Medio"
 
 #: data/mp/messages/strings/names.txt:1834
-#, fuzzy
-msgid "Medium Cannon Scorpion Hover"
-msgstr "Corpo Medio - Scorpion"
+msgid "Scorpion Hover Medium Cannon"
+msgstr "Scorpion Hover Cannone Medio"
 
 #: data/mp/messages/strings/names.txt:1835
-#, fuzzy
-msgid "Medium Cannon Scorpion Tracks"
-msgstr "Viper Cannone Medio Cingoli"
+msgid "Scorpion Tracks Medium Cannon"
+msgstr "Scorpion Cingoli Cannone Medio"
 
 #: data/mp/messages/strings/names.txt:1836
-msgid "Medium Cannon Python Hover"
-msgstr ""
+msgid "Python Hover Medium Cannon"
+msgstr "Python Hover Cannone Medio"
 
 #: data/mp/messages/strings/names.txt:1837
-#, fuzzy
-msgid "Heavy Cannon Python Hover"
-msgstr "Corpo Pesante - Python"
+msgid "Python Hover Heavy Cannon"
+msgstr "Python Hover Cannone Pesante"
 
 #: data/mp/messages/strings/names.txt:1838
-#, fuzzy
-msgid "Heavy Cannon Python Tracks"
-msgstr "Cobra Cannone Pesante Cingoli"
+msgid "Python Tracks Heavy Cannon"
+msgstr "Python Cingoli Cannone Pesante"
 
 #: data/mp/messages/strings/names.txt:1839
-#, fuzzy
-msgid "Rail Gun Mantis Tracks"
-msgstr "Mantis Cingoli Lancer"
+msgid "Mantis Tracks Railgun"
+msgstr "Mantis Cingoli Rail Gun"
 
 #: data/mp/messages/strings/names.txt:1840
-#, fuzzy
-msgid "Pulse Laser Mantis Tracks"
-msgstr "Tiger Laser a Impulso Cingoli"
+msgid "Mantis Tracks Pulse Laser"
+msgstr "Mantis Cingoli Laser a Impulso"
 
 #: data/mp/messages/strings/names.txt:1841
-#, fuzzy
-msgid "Lancer Python Tracks"
-msgstr "Cobra Lancer Cingoli"
+msgid "Python Tracks Lancer"
+msgstr "Python Cingoli Lancer"
 
 #: data/mp/messages/strings/names.txt:1842
-#, fuzzy
-msgid "Lancer Mantis Tracks"
-msgstr "Cobra Lancer Cingoli"
+msgid "Mantis Tracks Lancer"
+msgstr "Mantis Cingoli Lancer"
 
 #: data/mp/messages/strings/names.txt:1843
-#, fuzzy
-msgid "Tank Killer Vengeance Tracks"
-msgstr "Mantis Tank Killer Cingoli"
+msgid "Vengeance Tracks Tank Killer"
+msgstr "Vengeance Cingoli Tank Killer"
 
 #: data/mp/messages/strings/names.txt:1848
-#, fuzzy
-msgid "Heavy Cannon Tiger Tracks"
-msgstr "Cobra Cannone Pesante Cingoli"
+msgid "Tiger Tracks Heavy Cannon"
+msgstr "Tiger Tracks Cannone Pesante"
 
 #: data/mp/messages/strings/names.txt:1849
-msgid "Needle Gun Tiger Tracks"
-msgstr ""
+msgid "Tiger Tracks Needle Gun"
+msgstr "Tiger Tracks Needle Gun"
 
 #: data/mp/messages/strings/names.txt:1850
-#, fuzzy
-msgid "Needle Gun Retribution Tracks"
+msgid "Retribution Tracks Needle Gun"
 msgstr "Retribution Cingoli Needle Gun"
 
 #: data/mp/messages/strings/names.txt:1851
-#, fuzzy
-msgid "Needle Gun Vengeance Tracks"
-msgstr "Vengeance Cingoli Rail Gun"
+msgid "Vengeance Tracks Needle Gun"
+msgstr "Vengeance Cingoli Needle Gun"
 
 #: data/mp/messages/strings/names.txt:1852
 msgid "Vengeance Tracks Rail Gun"
@@ -9505,241 +9486,62 @@ msgid "Vengeance Tracks Guass Scourge"
 msgstr "Vengeance Cingoli Scourge"
 
 #: data/mp/messages/strings/names.txt:1857
-#, fuzzy
-msgid "Cluster Bombs Bug VTOL"
+msgid "Bug Cluster Bomb VTOL"
 msgstr "Bug Bombe a Grappolo VTOL"
 
 #: data/mp/messages/strings/names.txt:1858
-#, fuzzy
-msgid "Bunker Buster Bug VTOL"
+msgid "Bug Bunker Buster VTOL"
 msgstr "Bug Bunker Buster VTOL"
 
 #: data/mp/messages/strings/names.txt:1859
-#, fuzzy
-msgid "Cluster Bomb Scorpion VTOL"
-msgstr "Bug Bombe a Grappolo VTOL"
+msgid "Scorpion Cluster Bomb VTOL"
+msgstr "Scorpion Bombe a Grappolo VTOL"
 
 #: data/mp/messages/strings/names.txt:1860
-#: data/mp/messages/strings/names.txt:1877
-#, fuzzy
-msgid "Bunker Buster Scorpion VTOL"
-msgstr "Bug Bunker Buster VTOL"
+msgid "Scorpion Bunker Buster VTOL"
+msgstr "Scorpion Bunker Buster VTOL"
 
 #: data/mp/messages/strings/names.txt:1863
-#, fuzzy
-msgid "VTOL Lancer Bug VTOL"
+msgid "Bug Lancer VTOL"
 msgstr "Bug Lancer VTOL"
 
 #: data/mp/messages/strings/names.txt:1864
-msgid "VTOL HPV Cannon Bug VTOL"
-msgstr ""
-
-#: data/mp/messages/strings/names.txt:1865
-#, fuzzy
-msgid "VTOL Lancer Scorpion VTOL"
-msgstr "Scoprion BB Vtol"
+msgid "Bug HPV VTOL"
+msgstr "Bug Cannone a Ipervelocità VTOL"
 
 #: data/mp/messages/strings/names.txt:1866
-msgid "VTOL HPV Cannon Scorpion VTOL"
-msgstr ""
+msgid "Scorpion HPV VTOL"
+msgstr "Scorpion Cannone a Ipervelocità VTOL"
 
 #: data/mp/messages/strings/names.txt:1867
-#, fuzzy
-msgid "VTOL Lancer Mantis VTOL"
-msgstr "Bug Lancer VTOL"
+msgid "Mantis Lancer VTOL"
+msgstr "Mantis Lancer VTOL"
 
 #: data/mp/messages/strings/names.txt:1868
-msgid "VTOL HPV Cannon Mantis VTOL"
-msgstr ""
+msgid "Mantis HPV VTOL"
+msgstr "Mantis Cannone a Ipervelocità VTOL"
 
-#: data/mp/messages/strings/names.txt:1872
-#, fuzzy
-msgid "Repair Mantis Tracks"
+#: data/mp/messages/strings/names.txt:1871
+msgid "Cobra Repair Tracks"
 msgstr "Cobra Torretta Riparatrice Cingoli"
 
-#: data/mp/messages/strings/names.txt:1874
-#, fuzzy
-msgid "Lancer Scorpion Tracks"
-msgstr "Scoprion Lancer Cingoli"
+#: data/mp/messages/strings/names.txt:1872
+msgid "Mantis Repair Tracks"
+msgstr "Mantis Torretta Riparatrice Cingoli"
 
-#: data/mp/messages/strings/names.txt:1875
+#: data/mp/messages/strings/names.txt:1912
 #, fuzzy
-msgid "Heavy Cannon Scorpion Tracks"
-msgstr "Cobra Cannone Pesante Cingoli"
-
-#: data/mp/messages/strings/names.txt:1876
-#, fuzzy
-msgid "Lancer Scorpion VTOL"
-msgstr "Scoprion BB Vtol"
-
-#: data/mp/messages/strings/names.txt:1879
-#, fuzzy
-msgid "Command Turret Viper Tracks"
-msgstr "Viper Torretta di Comando Cingoli"
-
-#: data/mp/messages/strings/names.txt:1880
-#, fuzzy
-msgid "Command Turret Cobra Tracks"
-msgstr "Viper Torretta di Comando Cingoli"
-
-#: data/mp/messages/strings/names.txt:1881
-#, fuzzy
-msgid "Command Turret Scorpion Tracks"
-msgstr "Viper Torretta di Comando Cingoli"
-
-#: data/mp/messages/strings/names.txt:1882
-#, fuzzy
-msgid "Command Turret Mantis Tracks"
-msgstr "Viper Torretta di Comando Cingoli"
-
-#: data/mp/messages/strings/names.txt:1884
-#, fuzzy
-msgid "Lancer Cobra Tracks"
-msgstr "Cobra Cingoli Mitragliatrice Pesante"
-
-#: data/mp/messages/strings/names.txt:1885
-#, fuzzy
-msgid "Heavy Cannon Mantis Tracks"
-msgstr "Cobra Cannone Pesante Cingoli"
-
-#: data/mp/messages/strings/names.txt:1886
-#, fuzzy
-msgid "Tank Killer Mantis Tracks"
+msgid "Python Tank Killer Tracks"
 msgstr "Mantis Tank Killer Cingoli"
-
-#: data/mp/messages/strings/names.txt:1887
-#, fuzzy
-msgid "Scourge Mantis Tracks"
-msgstr "Mantis Hover Scourge"
-
-#: data/mp/messages/strings/names.txt:1888
-#, fuzzy
-msgid "Heavy Machinegun Scorpion  Tracks"
-msgstr "Viper Mitragliatrice Pesante Cingoli"
-
-#: data/mp/messages/strings/names.txt:1890
-#, fuzzy
-msgid "Repair Scorpion Tracks"
-msgstr "Scoprion Lancer Cingoli"
-
-#: data/mp/messages/strings/names.txt:1891
-#, fuzzy
-msgid "Heavy Repair Scorpion Hover"
-msgstr "Scorpion Torretta Riparatrice Pesante Hover"
-
-#: data/mp/messages/strings/names.txt:1894
-#, fuzzy
-msgid "Truck Cobra Hover"
-msgstr "Cobra Hover Cannone Pesante"
-
-#: data/mp/messages/strings/names.txt:1895
-#, fuzzy
-msgid "Truck Scorpion Hover"
-msgstr "Scorpion Hover Camion"
-
-#: data/mp/messages/strings/names.txt:1896
-#, fuzzy
-msgid "Truck Mantis Hover"
-msgstr "Mantis Hover Tank Killer"
-
-#: data/mp/messages/strings/names.txt:1899
-#, fuzzy
-msgid "Bunker Buster Cobra Tracks"
-msgstr "Cobra Bunker Buster Cingoli"
-
-#: data/mp/messages/strings/names.txt:1900
-#, fuzzy
-msgid "Bunker Buster Scorpion Tracks"
-msgstr "Cobra Bunker Buster Cingoli"
-
-#: data/mp/messages/strings/names.txt:1901
-#, fuzzy
-msgid "Bunker Buster Mantis Tracks"
-msgstr "Cobra Bunker Buster Cingoli"
-
-#: data/mp/messages/strings/names.txt:1903
-#, fuzzy
-msgid "Lancer Viper Tracks"
-msgstr "Cobra Lancer Cingoli"
-
-#: data/mp/messages/strings/names.txt:1905
-#, fuzzy
-msgid "Mini-Pod Cobra Half-Tracks"
-msgstr "Cobra Cingoli Mitragliatrice Pesante"
-
-#: data/mp/messages/strings/names.txt:1906
-#, fuzzy
-msgid "Mini-Pod Cobra Tracks"
-msgstr "Cobra Cingoli Mitragliatrice Pesante"
-
-#: data/mp/messages/strings/names.txt:1907
-#, fuzzy
-msgid "Mini-Rocket Artillery Cobra Tracks"
-msgstr "Cobra Mini Artiglieria di Missili Semicingoli"
-
-#: data/mp/messages/strings/names.txt:1909
-#, fuzzy
-msgid "Inferno Cobra Half-Tracks"
-msgstr "Cobra Inferno Semicingoli"
-
-#: data/mp/messages/strings/names.txt:1910
-#, fuzzy
-msgid "HPV Cannon Python Hover"
-msgstr "Torretta con Cannone EMP"
-
-#: data/mp/messages/strings/names.txt:1913
-#, fuzzy
-msgid "Medium Cannon Python Tracks"
-msgstr "Viper Cannone Medio Cingoli"
-
-#: data/mp/messages/strings/names.txt:1914
-#, fuzzy
-msgid "Scourge Python Tracks"
-msgstr "Mantis Scourge Cingoli"
-
-#: data/mp/messages/strings/names.txt:1915
-#, fuzzy
-msgid "Gauss Cannon Python Tracks"
-msgstr "Phyton Cannone Gauss Cingoli"
-
-#: data/mp/messages/strings/names.txt:1916
-#, fuzzy
-msgid "Pulse Laser Python Tracks"
-msgstr "Tiger Laser a Impulso Cingoli"
-
-#: data/mp/messages/strings/names.txt:1917
-#, fuzzy
-msgid "Pulse Laser Tiger Tracks"
-msgstr "Tiger Laser a Impulso Cingoli"
-
-#: data/mp/messages/strings/names.txt:1918
-#, fuzzy
-msgid "Heavy Laser Tiger Tracks"
-msgstr "Tiger Laser Pesante Cingoli"
-
-#: data/mp/messages/strings/names.txt:1919
-#, fuzzy
-msgid "Gauss Cannon Wyvern Tracks"
-msgstr "Phyton Cannone Gauss Cingoli"
-
-#: data/mp/messages/strings/names.txt:1920
-#, fuzzy
-msgid "Pulse Laser Wyvern Tracks"
-msgstr "Tiger Laser a Impulso Cingoli"
-
-#: data/mp/messages/strings/names.txt:1921
-#, fuzzy
-msgid "Heavy Laser Wyvern Tracks"
-msgstr "Tiger Laser Pesante Cingoli"
 
 #: data/mp/messages/strings/names.txt:1923
 #, fuzzy
-msgid "Machinegun Viper Half-Tracks"
+msgid "Viper Machinegun Half-Track"
 msgstr "Viper Doppia Mitragliatrice Semicingoli"
 
 #: data/mp/messages/strings/names.txt:1924
 #, fuzzy
-msgid "Flamer Viper Half-Tracks"
+msgid "Viper Flamer Half-Track"
 msgstr "Viper Torretta Riparatrice Semicingoli"
 
 #: lib/framework/i18n.c:43
@@ -10032,8 +9834,8 @@ msgstr ""
 msgid "go directly to host screen"
 msgstr ""
 
-#: src/configuration.c:443
-#: src/configuration.c:444
+#: src/configuration.c:403
+#: src/configuration.c:404
 #: src/multistat.c:131
 msgid "Player"
 msgstr "Giocatore"
@@ -10175,11 +9977,11 @@ msgstr "Armi"
 msgid "Systems"
 msgstr "Sistemi"
 
-#: src/display.c:1664
+#: src/display.c:1668
 msgid "Cannot Build. Oil Resource Burning."
 msgstr "Impossibile costruire. Risorsa d'olio in fiamme."
 
-#: src/display.c:1814
+#: src/display.c:1815
 #, c-format
 msgid "%s - Damage %d%% - Experience %d, %s"
 msgstr "%s - Danno %d%% - Esperienza %d, %s"
@@ -10188,87 +9990,85 @@ msgstr "%s - Danno %d%% - Esperienza %d, %s"
 msgid "Truck ordered to build Oil Derrick"
 msgstr "Camion incaricato di costruire un Traliccio Petrolifero"
 
-#: src/droid.c:191
+#: src/droid.c:190
 msgid "Unit Lost!"
 msgstr "Unità Persa!"
 
-#: src/droid.c:1617
+#: src/droid.c:1624
 msgid "Structure Restored"
 msgstr "Struttura Riparata"
 
-#: src/droid.c:3402
+#: src/droid.c:3409
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
 msgstr[0] "Gruppo %u selezionato - %u Unità"
 msgstr[1] "Gruppo %u selezionato - %u Unità"
 
-#: src/droid.c:3415
+#: src/droid.c:3422
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
 msgstr[0] "%u unità assegnata al Gruppo %u"
 msgstr[1] "%u unità assegnata al Gruppo %u"
 
-#: src/droid.c:3428
+#: src/droid.c:3435
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
 msgstr[0] "Visuale Centrata sul Gruppo %u - %u Unit"
 msgstr[1] "Visuale Centrata sul gruppo %u - %u Unità"
 
-#: src/droid.c:3432
+#: src/droid.c:3439
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] "Visuale affiancata al Gruppo %u - %u Unità"
 msgstr[1] "Visuale affiancata al Gruppo %u - %u Unità"
 
-#: src/droid.c:3651
+#: src/droid.c:3658
 msgid "Rookie"
 msgstr "Coscritta"
 
-#: src/droid.c:3652
+#: src/droid.c:3659
 msgctxt "rank"
 msgid "Green"
 msgstr "Inesperta"
 
-#: src/droid.c:3653
+#: src/droid.c:3660
 msgid "Trained"
 msgstr "Addestrata"
 
-#: src/droid.c:3654
+#: src/droid.c:3661
 msgid "Regular"
 msgstr "Normale"
 
-#: src/droid.c:3655
+#: src/droid.c:3662
 msgid "Professional"
 msgstr "Professionale"
 
-#: src/droid.c:3656
+#: src/droid.c:3663
 msgid "Veteran"
 msgstr "Veterana"
 
-#: src/droid.c:3657
+#: src/droid.c:3664
 msgid "Elite"
 msgstr "Elite"
 
-#: src/droid.c:3658
+#: src/droid.c:3665
 msgid "Special"
 msgstr "Speciale"
 
-#: src/droid.c:3659
+#: src/droid.c:3666
 msgid "Hero"
 msgstr "Eroica"
 
 #: src/frontend.c:241
-#, fuzzy
-msgid "Single Player"
+msgid "Single Player Campaign"
 msgstr "Campagna"
 
 #: src/frontend.c:242
-#, fuzzy
-msgid "Multi Player"
+msgid "Multi Player Game"
 msgstr "Partita Multigiocatore"
 
 #: src/frontend.c:243
@@ -10299,398 +10099,388 @@ msgstr "TUTORIAL"
 
 #. TRANSLATORS: "Return", in this context, means "return to previous screen/menu"
 #: src/frontend.c:301
-#: src/frontend.c:358
-#: src/frontend.c:488
-#: src/frontend.c:539
-#: src/frontend.c:700
-#: src/frontend.c:846
-#: src/frontend.c:961
-#: src/frontend.c:1140
+#: src/frontend.c:357
+#: src/frontend.c:483
+#: src/frontend.c:536
+#: src/frontend.c:697
+#: src/frontend.c:843
+#: src/frontend.c:946
+#: src/frontend.c:1109
 msgctxt "menu"
 msgid "Return"
 msgstr "Indietro"
 
 #: src/frontend.c:353
+msgid "Load Campaign"
+msgstr "Carica Partita"
+
+#: src/frontend.c:354
 msgid "New Campaign"
 msgstr "Nuova Campagna"
 
-#: src/frontend.c:354
-#, fuzzy
-msgid "Start Skirmish Game"
-msgstr "Inizia ad ospitare la Partita"
-
-#: src/frontend.c:355
-#: src/ingameop.c:271
-msgid "Load Game"
-msgstr "Carica Partita"
-
-#: src/frontend.c:357
+#: src/frontend.c:356
 msgid "SINGLE PLAYER"
 msgstr "GIOCATORE SINGOLO"
 
-#: src/frontend.c:437
+#: src/frontend.c:436
 #: src/ingameop.c:408
-#: src/mission.c:2833
-#: src/mission.c:2934
+#: src/mission.c:2826
+#: src/mission.c:2927
 msgid "Load Saved Game"
 msgstr "Carica Partita"
 
-#: src/frontend.c:483
+#: src/frontend.c:476
 msgid "MULTI PLAYER"
 msgstr "MULTIGIOCATORE"
 
-#: src/frontend.c:485
+#: src/frontend.c:478
 msgid "Host Game"
 msgstr "Ospita una partita"
 
-#: src/frontend.c:486
+#: src/frontend.c:479
 msgid "Join Game"
 msgstr "Unisciti a una partita"
 
-#: src/frontend.c:533
-#: src/frontend.c:849
-#: src/frontend.c:1143
-#: src/frontend.c:1163
+#: src/frontend.c:481
+msgid "One Player Skirmish"
+msgstr "Schermaglia a Un Giocatore"
+
+#: src/frontend.c:530
+#: src/frontend.c:846
+#: src/frontend.c:1112
+#: src/frontend.c:1132
 msgid "GAME OPTIONS"
 msgstr "OPZIONI DI GIOCO"
 
-#: src/frontend.c:534
+#: src/frontend.c:531
 msgid "Game Options"
 msgstr "Opzioni di Gioco"
 
-#: src/frontend.c:535
+#: src/frontend.c:532
 msgid "Graphics Options"
 msgstr "Opzioni Grafiche"
 
-#: src/frontend.c:536
+#: src/frontend.c:533
 #, fuzzy
 msgid "Video Options"
 msgstr "Opzioni Audio"
 
-#: src/frontend.c:537
+#: src/frontend.c:534
 msgid "Audio Options"
 msgstr "Opzioni Audio"
 
-#: src/frontend.c:538
+#: src/frontend.c:535
 msgid "Key Mappings"
 msgstr "Assegnazione dei Tasti"
 
-#: src/frontend.c:610
+#: src/frontend.c:607
 msgid "Reverse Mouse"
 msgstr "Inverti il Mouse"
 
-#: src/frontend.c:613
-#: src/frontend.c:625
-#: src/frontend.c:678
-#: src/frontend.c:691
-#: src/frontend.c:723
-#: src/frontend.c:737
-#: src/frontend.c:773
-#: src/frontend.c:782
-#: src/frontend.c:934
-#: src/frontend.c:950
-#: src/frontend.c:1030
-#: src/frontend.c:1068
+#: src/frontend.c:610
+#: src/frontend.c:622
+#: src/frontend.c:675
+#: src/frontend.c:688
+#: src/frontend.c:720
+#: src/frontend.c:734
+#: src/frontend.c:770
+#: src/frontend.c:779
+#: src/frontend.c:931
+#: src/frontend.c:1015
 msgid "On"
 msgstr "On"
 
-#: src/frontend.c:617
-#: src/frontend.c:629
-#: src/frontend.c:674
-#: src/frontend.c:683
-#: src/frontend.c:695
-#: src/frontend.c:718
-#: src/frontend.c:732
-#: src/frontend.c:768
-#: src/frontend.c:786
-#: src/frontend.c:938
-#: src/frontend.c:954
-#: src/frontend.c:1025
-#: src/frontend.c:1063
+#: src/frontend.c:614
+#: src/frontend.c:626
+#: src/frontend.c:671
+#: src/frontend.c:680
+#: src/frontend.c:692
+#: src/frontend.c:715
+#: src/frontend.c:729
+#: src/frontend.c:765
+#: src/frontend.c:783
+#: src/frontend.c:935
+#: src/frontend.c:1010
 msgid "Off"
 msgstr "Off"
 
-#: src/frontend.c:622
+#: src/frontend.c:619
 msgid "Screen Shake"
 msgstr "Scuoti lo Schermo"
 
-#: src/frontend.c:634
-#: src/multiint.c:871
+#: src/frontend.c:631
+#: src/multiint.c:722
 msgid "Fog"
 msgstr "Nebbia"
 
-#: src/frontend.c:637
-#: src/frontend.c:755
+#: src/frontend.c:634
+#: src/frontend.c:752
 msgid "Mist"
 msgstr "Nebbia"
 
-#: src/frontend.c:641
-#: src/frontend.c:748
-#: src/multiint.c:873
+#: src/frontend.c:638
+#: src/frontend.c:745
+#: src/multiint.c:724
 msgid "Fog Of War"
 msgstr "Nebbia di Guerra"
 
-#: src/frontend.c:646
+#: src/frontend.c:643
 msgid "Video Playback"
 msgstr "Riproduzione dei Video"
 
-#: src/frontend.c:649
-#: src/frontend.c:805
+#: src/frontend.c:646
+#: src/frontend.c:802
 msgid "Full"
 msgstr "Pieno"
 
-#: src/frontend.c:653
-#: src/frontend.c:795
-#: src/frontend.c:921
-#: src/frontend.c:978
+#: src/frontend.c:650
+#: src/frontend.c:792
+#: src/frontend.c:918
+#: src/frontend.c:963
 msgid "Windowed"
 msgstr "A finestra"
 
-#: src/frontend.c:656
-#: src/frontend.c:800
+#: src/frontend.c:653
+#: src/frontend.c:797
 msgid "Minimal"
 msgstr "Minimo"
 
-#: src/frontend.c:663
-#: src/frontend.c:667
+#: src/frontend.c:660
+#: src/frontend.c:664
 msgid "Subtitles"
 msgstr "Sottotitoli"
 
-#: src/frontend.c:688
+#: src/frontend.c:685
 msgid "Shadows"
 msgstr "Ombre"
 
-#: src/frontend.c:834
+#: src/frontend.c:831
 #: src/ingameop.c:155
 msgid "Voice Volume"
 msgstr "Volume Voce"
 
-#: src/frontend.c:838
+#: src/frontend.c:835
 #: src/ingameop.c:160
 msgid "FX Volume"
 msgstr "Volume effetti"
 
-#: src/frontend.c:842
+#: src/frontend.c:839
 #: src/ingameop.c:165
 msgid "Music Volume"
 msgstr "Volume musica"
 
-#: src/frontend.c:913
+#: src/frontend.c:910
 msgid "Graphics Mode*"
 msgstr "Modalità Grafica*"
 
-#: src/frontend.c:917
-#: src/frontend.c:983
+#: src/frontend.c:914
+#: src/frontend.c:968
 msgid "Fullscreen"
 msgstr "A schermo pieno"
 
-#: src/frontend.c:925
+#: src/frontend.c:922
 msgid "Resolution*"
 msgstr "Risoluzione*"
 
-#: src/frontend.c:930
+#: src/frontend.c:927
 msgid "Trap Cursor"
 msgstr "Blocca il Cursore"
 
-#: src/frontend.c:942
+#: src/frontend.c:939
 msgid "Texture size"
 msgstr "Dimensione della Texture"
 
-#: src/frontend.c:946
-msgid "Vertical sync*"
-msgstr ""
-
-#: src/frontend.c:958
+#: src/frontend.c:943
 msgid "* Takes effect on game restart"
 msgstr "* Ha effetto al riavvio del gioco"
 
-#: src/frontend.c:1103
-#: src/frontend.c:1161
+#: src/frontend.c:1072
+#: src/frontend.c:1130
 msgid "Difficulty"
 msgstr "Difficoltà"
 
-#: src/frontend.c:1107
-#: src/frontend.c:1169
-#: src/frontend.c:1201
+#: src/frontend.c:1076
+#: src/frontend.c:1138
+#: src/frontend.c:1170
 msgid "Easy"
 msgstr "Facile"
 
-#: src/frontend.c:1110
-#: src/frontend.c:1172
-#: src/frontend.c:1193
+#: src/frontend.c:1079
+#: src/frontend.c:1141
+#: src/frontend.c:1162
 msgid "Normal"
 msgstr "Normale"
 
-#: src/frontend.c:1114
-#: src/frontend.c:1175
-#: src/frontend.c:1197
+#: src/frontend.c:1083
+#: src/frontend.c:1144
+#: src/frontend.c:1166
 msgid "Hard"
 msgstr "Difficile"
 
-#: src/frontend.c:1119
-#: src/frontend.c:1162
+#: src/frontend.c:1088
+#: src/frontend.c:1131
 msgid "Scroll Speed"
 msgstr "Velocità di Scorrimento"
 
-#: src/frontend.c:1133
-#: src/frontend.c:1159
+#: src/frontend.c:1102
+#: src/frontend.c:1128
 #, fuzzy
 msgid "Language"
 msgstr "Lungo Raggio"
 
-#: src/frontend.c:1137
-#: src/frontend.c:1160
+#: src/frontend.c:1106
+#: src/frontend.c:1129
 msgid "Unit Colour"
 msgstr "Colore delle Unità"
 
-#: src/hci.c:1009
-#: src/hci.c:3845
-#: src/hci.c:3996
-#: src/hci.c:4449
-#: src/hci.c:5673
+#: src/hci.c:1017
+#: src/hci.c:3853
+#: src/hci.c:4004
+#: src/hci.c:4457
+#: src/hci.c:5681
 #: src/intelmap.c:529
 #: src/intorder.c:661
 #: src/loadsave.c:261
-#: src/multimenu.c:455
-#: src/multimenu.c:1314
-#: src/transporter.c:286
-#: src/transporter.c:375
-#: src/transporter.c:840
+#: src/multimenu.c:431
+#: src/multimenu.c:1250
+#: src/transporter.c:285
+#: src/transporter.c:374
+#: src/transporter.c:839
 msgid "Close"
 msgstr "Chiudi"
 
-#: src/hci.c:1355
-#: src/hci.c:1700
+#: src/hci.c:1363
+#: src/hci.c:1708
 #: src/loop.c:511
 #: src/loop.c:523
-#: src/mission.c:2902
+#: src/mission.c:2895
 msgid "GAME SAVED!"
 msgstr "PARTITA SALVATA!"
 
-#: src/hci.c:2105
+#: src/hci.c:2113
 msgid "Failed to create building"
 msgstr ""
 
-#: src/hci.c:2128
+#: src/hci.c:2136
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new structure: %s."
 msgstr "Il giocatore %u sta ottenendo una nuova struttura per mezzo di trucchi (debug menu) : %s."
 
-#: src/hci.c:2142
+#: src/hci.c:2150
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new feature: %s."
 msgstr "Il giocatore %u sta ottenendo una nuova caratteristica per mezzo di trucchi (debug menu) : %s."
 
-#: src/hci.c:2161
+#: src/hci.c:2169
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new droid: %s."
 msgstr "Il giocatore %u sta ottenendo una nuova unità per mezzo di trucchi (debug menu) : %s."
 
-#: src/hci.c:3747
+#: src/hci.c:3755
 msgid "Commanders (F6)"
 msgstr "Comandanti (F6)"
 
-#: src/hci.c:3763
+#: src/hci.c:3771
 msgid "Intelligence Display (F5)"
 msgstr "Intelligence (F5)"
 
-#: src/hci.c:3779
+#: src/hci.c:3787
 msgid "Manufacture (F1)"
 msgstr "Produzione (F1)"
 
-#: src/hci.c:3795
+#: src/hci.c:3803
 msgid "Design (F4)"
 msgstr "Progettazione (F4)"
 
-#: src/hci.c:3811
+#: src/hci.c:3819
 msgid "Research (F2)"
 msgstr "Ricerca (F2)"
 
-#: src/hci.c:3827
+#: src/hci.c:3835
 msgid "Build (F3)"
 msgstr "Costruzione (F3)"
 
-#: src/hci.c:3907
-#: src/multiint.c:921
-#: src/multiint.c:925
+#: src/hci.c:3915
+#: src/multiint.c:772
+#: src/multiint.c:776
 msgid "Power"
 msgstr "Energia"
 
-#: src/hci.c:4091
+#: src/hci.c:4099
 #, fuzzy
 msgid "Tile"
 msgstr "file"
 
-#: src/hci.c:4092
+#: src/hci.c:4100
 #, fuzzy
 msgid "Place tiles on map"
 msgstr "Piazza un' Unità sulla mappa"
 
-#: src/hci.c:4101
+#: src/hci.c:4109
 msgid "Unit"
 msgstr "Unità"
 
-#: src/hci.c:4102
+#: src/hci.c:4110
 msgid "Place Unit on map"
 msgstr "Piazza un' Unità sulla mappa"
 
-#: src/hci.c:4110
+#: src/hci.c:4118
 msgid "Struct"
 msgstr "Struttura"
 
-#: src/hci.c:4111
+#: src/hci.c:4119
 msgid "Place Structures on map"
 msgstr "Piazza Strutture sulla mappa"
 
-#: src/hci.c:4119
+#: src/hci.c:4127
 msgid "Feat"
 msgstr "Caratteristica"
 
-#: src/hci.c:4120
+#: src/hci.c:4128
 #, fuzzy
 msgid "Place Features on map"
 msgstr "Piazza Strutture sulla mappa"
 
-#: src/hci.c:4131
+#: src/hci.c:4139
 #, fuzzy
 msgid "Pause or unpause the game"
 msgstr "L'host ha abbandonato la partita!"
 
-#: src/hci.c:4145
+#: src/hci.c:4153
 msgid "Align height of all map objects"
 msgstr ""
 
-#: src/hci.c:4170
+#: src/hci.c:4178
 #: src/ingameop.c:121
 #: src/ingameop.c:254
 #: src/ingameop.c:259
 msgid "Quit"
 msgstr "Abbandona"
 
-#: src/hci.c:4171
+#: src/hci.c:4179
 msgid "Exit Game"
 msgstr "Esci dal Gioco"
 
-#: src/hci.c:4534
+#: src/hci.c:4542
 #: src/intdisplay.c:211
 #: src/intdisplay.c:254
-#: src/intdisplay.c:305
+#: src/intdisplay.c:300
 msgid "Progress Bar"
 msgstr "Barra del Progresso"
 
-#: src/hci.c:5588
+#: src/hci.c:5596
 msgid "Factory Delivery Point"
 msgstr "Punto di Raduno della Fabbrica"
 
-#: src/hci.c:5607
+#: src/hci.c:5615
 msgid "Loop Production"
 msgstr "Produzione Ciclica"
 
-#: src/hci.c:5698
+#: src/hci.c:5706
 msgid "Tab Scroll left"
 msgstr "Scorri tabella a Sinistra"
 
-#: src/hci.c:5715
+#: src/hci.c:5723
 msgid "Tab Scroll right"
 msgstr "Scorri tabella a Destra"
 
@@ -10700,21 +10490,25 @@ msgstr "Scorri tabella a Destra"
 msgid "Resume Game"
 msgstr "Riprendi la partita"
 
+#: src/ingameop.c:271
+msgid "Load Game"
+msgstr "Carica Partita"
+
 #: src/ingameop.c:273
 #: src/ingameop.c:412
-#: src/mission.c:2823
-#: src/mission.c:2937
+#: src/mission.c:2816
+#: src/mission.c:2930
 msgid "Save Game"
 msgstr "Salva Partita"
 
 #: src/intdisplay.c:201
 #: src/intdisplay.c:246
-#: src/intdisplay.c:298
+#: src/intdisplay.c:293
 msgid "Power Accrued"
 msgstr "Energia Accumulata"
 
 #: src/intelmap.c:242
-#: src/keybind.c:1233
+#: src/keybind.c:1232
 msgid "PAUSED"
 msgstr "IN PAUSA"
 
@@ -10836,176 +10630,176 @@ msgstr "Assegna produzione della fabbrica di VTOL"
 msgid "Circle"
 msgstr "file"
 
-#: src/keybind.c:131
+#: src/keybind.c:130
 msgid "Sorry, that cheat is disabled in multiplayer games."
 msgstr "Spiacente, quel trucco è disabilitato nelle partite multigiocatore."
 
-#: src/keybind.c:195
+#: src/keybind.c:194
 msgid "Lets us see what you see!"
 msgstr "Lasciaci vedere cosa vedi!"
 
-#: src/keybind.c:197
+#: src/keybind.c:196
 msgid "Fine, sensor display is off!"
 msgstr "Ottimo, il display dei sensori è disabilitato!"
 
-#: src/keybind.c:295
+#: src/keybind.c:294
 msgid "Hard as nails!!!"
 msgstr "Duro come chiodi!"
 
-#: src/keybind.c:308
+#: src/keybind.c:307
 msgid "Takings thing easy!"
 msgstr "Prendendo le cose con calma!"
 
-#: src/keybind.c:322
+#: src/keybind.c:321
 msgid "1000 big ones!!!"
 msgstr "1000 belli grossi!"
 
-#: src/keybind.c:336
+#: src/keybind.c:335
 msgid "Power overwhelming"
 msgstr "Energia schiacciante!"
 
-#: src/keybind.c:350
+#: src/keybind.c:349
 msgid "Back to normality!"
 msgstr "Ritorno alla normalità!"
 
-#: src/keybind.c:363
+#: src/keybind.c:362
 msgid "Getting tricky!"
 msgstr "Si sta facendo complicato!"
 
-#: src/keybind.c:376
+#: src/keybind.c:375
 msgid "Twice as nice!"
 msgstr "Due volte più bello!"
 
-#: src/keybind.c:386
+#: src/keybind.c:385
 msgid "FPS display is enabled."
 msgstr "FPS display è attivato."
 
-#: src/keybind.c:390
+#: src/keybind.c:389
 msgid "FPS display is disabled."
 msgstr "FPS display è disattivato."
 
-#: src/keybind.c:403
+#: src/keybind.c:402
 #, c-format
 msgid "FPS %d; FPS-Limit: %d; PIEs %d; polys %d; Terr. polys %d; States %d"
 msgstr ""
 
-#: src/keybind.c:458
+#: src/keybind.c:457
 msgid "Infinite power disabled"
 msgstr "Energia infinita disabilitata"
 
-#: src/keybind.c:463
+#: src/keybind.c:462
 msgid "Infinite power enabled"
 msgstr "Energia infinita abilitata"
 
-#: src/keybind.c:516
+#: src/keybind.c:515
 msgid "All items made available"
 msgstr "Tutti gli oggetti resi disponibili"
 
-#: src/keybind.c:608
+#: src/keybind.c:607
 msgid "Fog off"
 msgstr "Nebbia disattiva"
 
-#: src/keybind.c:614
+#: src/keybind.c:613
 msgid "Fog on"
 msgstr "Nebbia attiva"
 
-#: src/keybind.c:1204
+#: src/keybind.c:1203
 msgid "View Aligned to North"
 msgstr "Visuale allineata a Nord"
 
-#: src/keybind.c:1272
+#: src/keybind.c:1271
 msgid "Researched EVERYTHING for you!"
 msgstr "Ricercato TUTTO per te!"
 
-#: src/keybind.c:1303
+#: src/keybind.c:1302
 msgid "Energy bars display toggled"
 msgstr "Visualizzazione barre d'energia attiva"
 
-#: src/keybind.c:1321
+#: src/keybind.c:1320
 msgid "Demo mode off - Returning to normal game mode"
 msgstr "Modialità Demo disattiva - Ritorno alla modalità di gioco normale"
 
-#: src/keybind.c:1362
+#: src/keybind.c:1361
 msgid "Unable to locate any resource extractors!"
 msgstr "Impossibile localizzare alcun estrattore di risorse!"
 
-#: src/keybind.c:1585
+#: src/keybind.c:1584
 msgid "Oh, the weather outside is frightful... SNOW"
 msgstr "Oh, il tempo fuori è pauroso... NEVE"
 
-#: src/keybind.c:1591
+#: src/keybind.c:1590
 msgid "Singing in the rain, I'm singing in the rain... RAIN"
 msgstr "Singing in the rain, I'm singing in the rain... PIOGGIA"
 
-#: src/keybind.c:1597
+#: src/keybind.c:1596
 msgid "Forecast : Clear skies for all areas... NO WEATHER"
 msgstr "Previsioni del tempo: Cieli puliti in ogni area... TEMPO DISATTIVATO"
 
-#: src/keybind.c:1630
+#: src/keybind.c:1629
 msgid "Enemy destroyed by cheating!"
 msgstr "Nemico distrutto con i trucchi!"
 
-#: src/keybind.c:2156
+#: src/keybind.c:2155
 msgid "Centered on player HQ, direction NORTH"
 msgstr "Visuale centrata sul Quartier Generale, direzione NORD"
 
-#: src/keybind.c:2168
+#: src/keybind.c:2167
 msgid "Unable to locate HQ!"
 msgstr "Impossibile localizzare il Quartier Generale!"
 
-#: src/keybind.c:2184
+#: src/keybind.c:2183
 msgid "Formation speed limiting OFF"
 msgstr "Limitazione velocità in formazione OFF"
 
-#: src/keybind.c:2188
+#: src/keybind.c:2187
 msgid "Formation speed limiting ON"
 msgstr "Limitazione velocità in formazione ON"
 
-#: src/keybind.c:2321
-#: src/keybind.c:2362
-#: src/keybind.c:2384
+#: src/keybind.c:2320
+#: src/keybind.c:2361
+#: src/keybind.c:2383
 msgid "Game Speed Reset"
 msgstr "Velocità di Gioco Reimpostata"
 
-#: src/keybind.c:2325
+#: src/keybind.c:2324
 #, c-format
 msgid "Game Speed Increased to %3.1f"
 msgstr "Velocità di Gioco Aumentata a %3.1f"
 
-#: src/keybind.c:2366
+#: src/keybind.c:2365
 #, c-format
 msgid "Game Speed Reduced to %3.1f"
 msgstr "Velocità di Gioco Ridotta a %3.1f"
 
-#: src/keybind.c:2396
+#: src/keybind.c:2395
 msgid "Build menu will reopen"
 msgstr "Il menu Costruzione si riaprirà"
 
-#: src/keybind.c:2400
+#: src/keybind.c:2399
 msgid "Build menu will not reopen"
 msgstr "Il menu Costruzione non si riaprirà"
 
-#: src/keybind.c:2412
+#: src/keybind.c:2411
 msgid "Radar showing friend-foe colors"
 msgstr "Il radar mostra i colori Amici-Nemici"
 
-#: src/keybind.c:2416
+#: src/keybind.c:2415
 msgid "Radar showing player colors"
 msgstr "Il radar mostra il colore dei giocatori"
 
-#: src/keybind.c:2433
+#: src/keybind.c:2432
 msgid "Radar showing only objects"
 msgstr "Il radar mostra solo oggetti"
 
-#: src/keybind.c:2436
+#: src/keybind.c:2435
 msgid "Radar blending terrain and height"
 msgstr ""
 
-#: src/keybind.c:2439
+#: src/keybind.c:2438
 msgid "Radar showing terrain"
 msgstr "Il radar mostra il terreno"
 
-#: src/keybind.c:2442
+#: src/keybind.c:2441
 msgid "Radar showing height"
 msgstr "Il radar mostra l'altitudine"
 
@@ -11014,10 +10808,10 @@ msgid "KEY MAPPING"
 msgstr "ASSEGNAZIONE TASTI"
 
 #: src/keyedit.c:378
-#: src/multiint.c:508
-#: src/multiint.c:550
-#: src/multiint.c:753
-#: src/multiint.c:990
+#: src/multiint.c:388
+#: src/multiint.c:430
+#: src/multiint.c:604
+#: src/multiint.c:841
 #: src/multilimit.c:148
 msgid "Return To Previous Screen"
 msgstr "Ritorna alla Schermata Precedente"
@@ -11394,25 +11188,25 @@ msgstr "Seleziona la prossima Fabbrica di Cyborg"
 msgid "Toggle reopening the build menu"
 msgstr "Attiva la riapertura del menu di costruzione"
 
-#: src/mission.c:2371
+#: src/mission.c:2364
 msgid "Load Transport"
 msgstr "Carica il trasporto"
 
-#: src/mission.c:2770
+#: src/mission.c:2763
 msgid "OBJECTIVE ACHIEVED"
 msgstr "OBIETTIVO RAGGIUNTO"
 
-#: src/mission.c:2776
+#: src/mission.c:2769
 msgid "OBJECTIVE FAILED"
 msgstr "MISSIONE FALLITA"
 
-#: src/mission.c:2802
-#: src/mission.c:2839
-#: src/mission.c:2953
+#: src/mission.c:2795
+#: src/mission.c:2832
+#: src/mission.c:2946
 msgid "Quit To Main Menu"
 msgstr "Esci al Menu Principale"
 
-#: src/mission.c:2810
+#: src/mission.c:2803
 msgid "Continue Game"
 msgstr "Continua la Partita"
 
@@ -11466,172 +11260,168 @@ msgstr "%s forma un'alleanza con %s"
 msgid "You Discover Blueprints For %s"
 msgstr "Hai scoperto i progetti per %s"
 
-#: src/multiint.c:453
+#: src/multiint.c:333
 #: src/multilimit.c:156
 msgid "Accept Settings"
 msgstr "Accetta le Impostazioni"
 
-#: src/multiint.c:464
+#: src/multiint.c:344
 msgid "IP Address or Machine Name"
 msgstr "Indirizzo IP o Nome Computer"
 
-#: src/multiint.c:505
+#: src/multiint.c:385
 msgid "CONNECTION"
 msgstr "CONNESSIONE"
 
-#: src/multiint.c:518
+#: src/multiint.c:398
 msgid "Lobby"
 msgstr "Lobby"
 
-#: src/multiint.c:519
+#: src/multiint.c:399
 msgid "IP"
 msgstr "IP"
 
-#: src/multiint.c:651
-msgid "NO GAMES ARE AVAILABLE"
-msgstr ""
-
-#: src/multiint.c:739
+#: src/multiint.c:590
 msgid "Searching"
 msgstr "Ricerca in corso..."
 
-#: src/multiint.c:750
+#: src/multiint.c:601
 msgid "GAMES"
 msgstr "PARTITE"
 
-#: src/multiint.c:760
+#: src/multiint.c:611
 msgid "Refresh Games List"
 msgstr "Aggiorna la Lista Partite"
 
-#: src/multiint.c:835
+#: src/multiint.c:686
 msgid "OPTIONS"
 msgstr "OPZIONI"
 
-#: src/multiint.c:837
+#: src/multiint.c:688
 msgid "Select Game Name"
 msgstr "Seleziona il Nome della Partita"
 
-#: src/multiint.c:838
+#: src/multiint.c:689
 msgid "Select Map"
 msgstr "Seleziona la Mappa"
 
-#: src/multiint.c:843
+#: src/multiint.c:694
 msgid "Game"
 msgstr "Partita"
 
-#: src/multiint.c:845
+#: src/multiint.c:696
 msgid "Mayhem"
 msgstr "Mayhem"
 
-#: src/multiint.c:847
+#: src/multiint.c:698
 msgid "Skirmish"
 msgstr "Schermaglia"
 
-#: src/multiint.c:868
+#: src/multiint.c:719
 msgid "Select Player Name"
 msgstr "Seleziona il Nome del Giocatore"
 
-#: src/multiint.c:874
+#: src/multiint.c:725
 msgid "Distance Fog"
 msgstr "Nebbia sulla Distanza"
 
-#: src/multiint.c:887
-#: src/multimenu.c:730
+#: src/multiint.c:738
+#: src/multimenu.c:706
 msgid "Alliances"
 msgstr "Alleanze"
 
-#: src/multiint.c:890
+#: src/multiint.c:741
 msgid "No Alliances"
 msgstr "Nessuna Alleanza"
 
-#: src/multiint.c:892
+#: src/multiint.c:743
 msgid "Allow Alliances"
 msgstr "Concedi Alleanze"
 
-#: src/multiint.c:896
+#: src/multiint.c:747
 msgid "Locked Teams"
 msgstr "Squadre Bloccate"
 
-#: src/multiint.c:928
+#: src/multiint.c:779
 msgid "Low Power Levels"
 msgstr "Livelli Energetici Bassi"
 
-#: src/multiint.c:930
+#: src/multiint.c:781
 msgid "Medium Power Levels"
 msgstr "Livelli Energetici Medi"
 
-#: src/multiint.c:932
+#: src/multiint.c:783
 msgid "High Power Levels"
 msgstr "Livelli Energetici Alti"
 
-#: src/multiint.c:952
-#: src/multiint.c:956
+#: src/multiint.c:803
+#: src/multiint.c:807
 msgid "Base"
 msgstr "Base"
 
-#: src/multiint.c:959
+#: src/multiint.c:810
 msgid "Start with No Bases"
 msgstr "Inizia senza Basi"
 
-#: src/multiint.c:961
+#: src/multiint.c:812
 msgid "Start with Bases"
 msgstr "Inizia con Basi"
 
-#: src/multiint.c:963
+#: src/multiint.c:814
 msgid "Start with Advanced Bases"
 msgstr "Inizia con Basi Avanzate"
 
-#: src/multiint.c:980
+#: src/multiint.c:831
 msgid "Map Preview"
 msgstr ""
 
-#: src/multiint.c:982
+#: src/multiint.c:833
 msgid "Click to see Map"
 msgstr ""
 
-#: src/multiint.c:996
+#: src/multiint.c:847
 msgid "Start Hosting Game"
 msgstr "Inizia ad ospitare la Partita"
 
-#: src/multiint.c:1004
+#: src/multiint.c:855
 msgid "Set Structure Limits"
 msgstr "Imposta i limiti di strutture"
 
-#: src/multiint.c:1356
+#: src/multiint.c:1207
 msgid "Team"
 msgstr ""
 
-#: src/multiint.c:1400
+#: src/multiint.c:1251
 msgid "Waiting for other players"
 msgstr ""
 
-#: src/multiint.c:1406
+#: src/multiint.c:1257
 msgid "Click when ready"
 msgstr ""
 
-#: src/multiint.c:1448
+#: src/multiint.c:1299
 msgid "PLAYERS"
 msgstr "GIOCATORI"
 
-#: src/multiint.c:1585
+#: src/multiint.c:1436
 msgid "CHAT"
 msgstr "CHAT"
 
-#: src/multiint.c:2100
+#: src/multiint.c:1951
 #, fuzzy
 msgid "'Locked Teams' mode enabled"
 msgstr "Squadre Bloccate"
 
-#: src/multiint.c:2143
+#: src/multiint.c:1994
 #, c-format
 msgid "The host has kicked %s from the game!"
 msgstr "L'host ha espulso %s dalla partita!"
 
-#: src/multiint.c:2234
+#: src/multiint.c:2085
 msgid "Host is Starting Game"
 msgstr "L'host sta avviando la partita"
 
-#: src/multiint.c:2681
+#: src/multiint.c:2532
 msgid "Players"
 msgstr "Giocatori"
 
@@ -11650,73 +11440,67 @@ msgstr "%s ha abbandonato la partita"
 msgid "%s is Joining the Game"
 msgstr "%s si sta unendo alla partita"
 
-#: src/multimenu.c:583
+#: src/multimenu.c:559
 msgid "Technology level 1"
 msgstr "Livello di tecnologia 1"
 
-#: src/multimenu.c:591
+#: src/multimenu.c:567
 msgid "Technology level 2"
 msgstr "Livello di tecnologia 2"
 
-#: src/multimenu.c:597
+#: src/multimenu.c:573
 msgid "Technology level 3"
 msgstr "Livello di tecnologia 3"
 
-#: src/multimenu.c:603
+#: src/multimenu.c:579
 msgid "Any number of players"
 msgstr "Qualsiasi numero di giocatori"
 
-#: src/multimenu.c:610
+#: src/multimenu.c:586
 msgid "2 players"
 msgstr "2 giocatori"
 
-#: src/multimenu.c:616
+#: src/multimenu.c:592
 msgid "4 players"
 msgstr "4 giocatori"
 
-#: src/multimenu.c:622
+#: src/multimenu.c:598
 msgid "8 players"
 msgstr "8 giocatori"
 
-#: src/multimenu.c:731
+#: src/multimenu.c:707
 msgid "Score"
 msgstr "Punteggio"
 
-#: src/multimenu.c:732
+#: src/multimenu.c:708
 msgid "Kills"
 msgstr "Uccisioni"
 
-#: src/multimenu.c:741
-#, fuzzy
-msgid "Units"
-msgstr "Unità"
-
-#: src/multimenu.c:746
+#: src/multimenu.c:717
 msgid "Ping"
 msgstr "Ping"
 
-#: src/multimenu.c:750
-#, fuzzy
-msgid "Structs"
-msgstr "Struttura"
+#: src/multimenu.c:718
+msgid "Played"
+msgstr "Giocate"
 
-#: src/multimenu.c:1088
+#: src/multimenu.c:1024
 msgid "Toggle Alliance State"
 msgstr "Cambia lo stato dell'Alleanza"
 
-#: src/multimenu.c:1107
+#: src/multimenu.c:1043
 msgid "Give Visibility Report"
 msgstr "Invia un Rapporto di Visibilità"
 
-#: src/multimenu.c:1113
+#: src/multimenu.c:1049
 msgid "Leak Technology Documents"
 msgstr "Invia Documenti delle Tecnologie"
 
-#: src/multimenu.c:1120
+#: src/multimenu.c:1056
 msgid "Hand Over Selected Units"
 msgstr "Consegna le Unità Selezionate"
 
-#: src/multimenu.c:1126
+#: src/multimenu.c:1062
 msgid "Give Power To Player"
 msgstr "Invia Energia al Giocatore"
 
@@ -11925,68 +11709,68 @@ msgstr "Impossibile localizzare alcuna Unità Sensoria!"
 msgid "Unable to locate any Commanders!"
 msgstr "Impossibile localizzare alcun Comandante!"
 
-#: src/structure.c:2729
+#: src/structure.c:2765
 msgid "Command Control Limit Reached - Production Halted"
 msgstr "Comando: Limite di Controllo Raggiunto - Produzione Bloccata"
 
-#: src/structure.c:5838
-#: src/structure.c:5860
+#: src/structure.c:5874
+#: src/structure.c:5896
 #, c-format
 msgid "%s - %u Unit assigned"
 msgid_plural "%s - %u Units assigned"
 msgstr[0] "%s - %u Unità Assegnata"
 msgstr[1] "%s - %u Unità Assegnate"
 
-#: src/structure.c:5910
+#: src/structure.c:5946
 #, c-format
 msgid "%s - Connected %u of %u"
 msgstr "%s - Collegati %u di %u"
 
-#: src/structure.c:5924
+#: src/structure.c:5960
 #, fuzzy, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - Danno %3.0f%%"
 
-#: src/structure.c:6044
-#: src/structure.c:6093
+#: src/structure.c:6080
+#: src/structure.c:6129
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - Danneggiato Elettronicamente"
 
-#: src/structure.c:6328
+#: src/structure.c:6364
 msgid "Electronic Reward - Visibility Report"
 msgstr "Premio Elettronico - Rapporto di Visibilità"
 
-#: src/structure.c:6368
+#: src/structure.c:6404
 msgid "Factory Reward - Propulsion"
 msgstr "Premio della Fabbrica - Propulsione"
 
-#: src/structure.c:6392
+#: src/structure.c:6428
 msgid "Factory Reward - Body"
 msgstr "Premio della Fabbrica - Corpo"
 
-#: src/structure.c:6416
+#: src/structure.c:6452
 msgid "Factory Reward - Weapon"
 msgstr "Premio della Fabbrica - Arma"
 
-#: src/structure.c:6425
+#: src/structure.c:6461
 msgid "Factory Reward - Nothing"
 msgstr "Premio della Fabbrica - Niente"
 
-#: src/structure.c:6453
+#: src/structure.c:6489
 msgid "Repair Facility Award - Repair"
 msgstr "Premio della Struttura di Riparazione - Ripara"
 
-#: src/structure.c:6460
+#: src/structure.c:6496
 msgid "Repair Facility Award - Nothing"
 msgstr "Premio della Struttura di Riparazione - Niente"
 
-#: src/transporter.c:397
-#: src/transporter.c:451
+#: src/transporter.c:396
+#: src/transporter.c:450
 msgid "Launch Transport"
 msgstr "Lancia il Trasporto"
 
-#: src/transporter.c:1747
+#: src/transporter.c:1713
 msgid "Reinforcements landing"
 msgstr "I rinforzi stanno atterrando"
 
@@ -12017,106 +11801,6 @@ msgstr " - Costruito %s"
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "Versione %s%s%s%s"
-
-#~ msgid "Viper Wheels Machinegun"
-#~ msgstr "Viper Ruote Mitragliatrice"
-
-#~ msgid "Viper Wheels Twin Machinegun"
-#~ msgstr "Viper Ruote Doppia Mitragliatrice"
-
-#~ msgid "Viper Wheels Heavy Machinegun"
-#~ msgstr "Viper Ruote Mitragliatrice Pesante"
-
-#~ msgid "Cobra Wheels Heavy Machinegun"
-#~ msgstr "Cobra Ruote Mitragliatrice Pesante"
-
-#~ msgid "Cobra Hover Heavy Machinegun"
-#~ msgstr "Cobra Hover Mitragliatrice Pesante"
-
-#~ msgid "Viper Tracks Machinegun"
-#~ msgstr "Viper Cingoli Mitragliatrice"
-
-#~ msgid "Viper Tracks Twin Machinegun"
-#~ msgstr "Viper Cingoli Doppia Mitragliatrice"
-
-#~ msgid "Viper Tracks Heavy Machinegun"
-#~ msgstr "Viper Cingoli Mitragliatrice Pesante"
-
-#~ msgid "Cobra Tracks Heavy Machinegun"
-#~ msgstr "Cobra Cingoli Mitragliatrice Pesante"
-
-#~ msgid "Cobra Hover Medium Cannon"
-#~ msgstr "Cobra Hover Cannone Medio"
-
-#~ msgid "Scorpion Hover Medium Cannon"
-#~ msgstr "Scorpion Hover Cannone Medio"
-
-#~ msgid "Scorpion Tracks Medium Cannon"
-#~ msgstr "Scorpion Cingoli Cannone Medio"
-
-#~ msgid "Python Hover Medium Cannon"
-#~ msgstr "Python Hover Cannone Medio"
-
-#~ msgid "Python Hover Heavy Cannon"
-#~ msgstr "Python Hover Cannone Pesante"
-
-#~ msgid "Python Tracks Heavy Cannon"
-#~ msgstr "Python Cingoli Cannone Pesante"
-
-#~ msgid "Mantis Tracks Railgun"
-#~ msgstr "Mantis Cingoli Rail Gun"
-
-#~ msgid "Mantis Tracks Pulse Laser"
-#~ msgstr "Mantis Cingoli Laser a Impulso"
-
-#~ msgid "Python Tracks Lancer"
-#~ msgstr "Python Cingoli Lancer"
-
-#~ msgid "Vengeance Tracks Tank Killer"
-#~ msgstr "Vengeance Cingoli Tank Killer"
-
-#~ msgid "Tiger Tracks Heavy Cannon"
-#~ msgstr "Tiger Tracks Cannone Pesante"
-
-#~ msgid "Tiger Tracks Needle Gun"
-#~ msgstr "Tiger Tracks Needle Gun"
-
-#~ msgid "Vengeance Tracks Needle Gun"
-#~ msgstr "Vengeance Cingoli Needle Gun"
-
-#~ msgid "Scorpion Cluster Bomb VTOL"
-#~ msgstr "Scorpion Bombe a Grappolo VTOL"
-
-#~ msgid "Scorpion Bunker Buster VTOL"
-#~ msgstr "Scorpion Bunker Buster VTOL"
-
-#~ msgid "Bug HPV VTOL"
-#~ msgstr "Bug Cannone a Ipervelocità VTOL"
-
-#~ msgid "Scorpion HPV VTOL"
-#~ msgstr "Scorpion Cannone a Ipervelocità VTOL"
-
-#~ msgid "Mantis Lancer VTOL"
-#~ msgstr "Mantis Lancer VTOL"
-
-#~ msgid "Mantis HPV VTOL"
-#~ msgstr "Mantis Cannone a Ipervelocità VTOL"
-
-#~ msgid "Mantis Repair Tracks"
-#~ msgstr "Mantis Torretta Riparatrice Cingoli"
-
-#, fuzzy
-#~ msgid "Python Tank Killer Tracks"
-#~ msgstr "Mantis Tank Killer Cingoli"
-
-#~ msgid "Load Campaign"
-#~ msgstr "Carica Partita"
-
-#~ msgid "One Player Skirmish"
-#~ msgstr "Schermaglia a Un Giocatore"
-
-#~ msgid "Played"
-#~ msgstr "Giocate"
 
 #~ msgid "Campaign One Full Version Test Message"
 #~ msgstr "Messaggio di Testo della Campagna Uno - Versione Completa"
