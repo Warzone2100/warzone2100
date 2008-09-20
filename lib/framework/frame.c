@@ -556,3 +556,45 @@ UDWORD HashStringIgnoreCase( const char *c )
 	}
 	return iHashValue;
 }
+
+#if defined(WZ_OS_WIN)
+/**
+ * The difference between the FAT32 and Unix epoch.
+ *
+ * The FAT32 epoch starts at 1 January 1601 while the Unix epoch starts at 1
+ * January 1970. And apparantly we gained 3.25 days in that time period.
+ *
+ * Thus the amount of micro seconds passed between these dates can be computed
+ * as follows:
+ * \f[((1970 - 1601) \cdot 365.25 + 3.25) \cdot 86400 \cdot 1000000\f]
+ *
+ * Use 1461 and 13 instead of 365.25 and 3.25 respectively because we can't use
+ * floating point math here.
+ */
+static const uint64_t usecs_between_fat32_and_unix_epoch = (uint64_t)((1970 - 1601) * 1461 + 13) * (uint64_t)86400 / (uint64_t)4 * (uint64_t)1000000;
+
+int gettimeofday(struct timeval* tv, struct timezone* tz)
+{
+	ASSERT(tz == NULL, "This gettimeofday implementation doesn't provide timezone info.");
+
+	if (tv)
+	{
+		FILETIME ft;
+		uint64_t systime, usec;
+
+		/* Retrieve the current time expressed as 100 nano-second
+		 * intervals since 1 January 1601 (UTC).
+		 */
+		GetSystemTimeAsFileTime(&ft);
+		systime = ((uint64_t)ft.dwHighDateTime << 32) | ft.dwLowDateTime;
+
+		// Convert to micro seconds since 1 January 1970 (UTC).
+		usec = systime / 10 - usecs_between_fat32_and_unix_epoch;
+
+		tv->tv_sec  = usec / (uint64_t)1000000;
+		tv->tv_usec = usec % (uint64_t)1000000;
+	}
+
+	return 0;
+}
+#endif

@@ -103,6 +103,10 @@ extern UDWORD frameGetAverageRate(void);
 extern UDWORD HashString( const char *String );
 extern UDWORD HashStringIgnoreCase( const char *String );
 
+#if defined(WZ_OS_WIN)
+struct timeval;
+extern int gettimeofday(struct timeval* tv, struct timezone* tz);
+#endif
 
 static inline WZ_DECL_CONST const char * bool2string(bool var)
 {
