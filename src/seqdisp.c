@@ -136,7 +136,7 @@ static void seq_SetVideoPath(void)
 	// now set up the hard disc path /
 	if (!bHardPath)
 	{
-		strcpy(aHardPath, "sequences/");
+		sstrcpy(aHardPath, "sequences/");
 		bHardPath=true;			//yes, always true, as it should be on windows ALSO.
 	}
 }
@@ -146,6 +146,7 @@ static BOOL seq_StartFullScreenVideo(const char* videoName, const char* audioNam
 {
 	const char* aAudioName;
 	bHoldSeqForAudio = false;
+	int chars_printed;
 
 	//set a valid video path if there is one
 	if(!bCDPath && !bHardPath)
@@ -153,8 +154,8 @@ static BOOL seq_StartFullScreenVideo(const char* videoName, const char* audioNam
 		seq_SetVideoPath();
 	}
 
-	ASSERT( (strlen(videoName) + strlen(aHardPath))<MAX_STR_LENGTH,"sequence path+name greater than max string" );
-	snprintf(aVideoName, sizeof(aVideoName), "%s%s", aHardPath, videoName);
+	chars_printed = ssprintf(aVideoName, "%s%s", aHardPath, videoName);
+	ASSERT(chars_printed < sizeof(aVideoName), "sequence path + name greater than max string");
 
 	//set audio path
 	if (audioName != NULL)
@@ -484,7 +485,7 @@ static BOOL seq_AddTextFromFile(const char *pTextName, BOOL bJustify)
 	SDWORD xOffset, yOffset, startFrame, endFrame;
 	const char *seps = "\n";
 
-	snprintf(aTextName, sizeof(aTextName), "sequenceaudio/%s", pTextName);
+	ssprintf(aTextName, "sequenceaudio/%s", pTextName);
 
 	if (loadFileToBufferNoError(aTextName, fileLoadBuffer, FILE_LOAD_BUFFER_SIZE, &fileSize) == false)  //Did I mention this is lame? -Q
 	{
