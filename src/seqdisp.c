@@ -24,7 +24,7 @@
  *
  */
 #include "lib/framework/frame.h"
-
+#include "lib/framework/frameint.h"
 #include <string.h>
 #include <SDL_timer.h>
 #include <physfs.h>
@@ -32,7 +32,7 @@
 #include "lib/framework/file.h"
 #include "lib/ivis_common/rendmode.h"
 #include "lib/ivis_opengl/screen.h"
-#include "lib/sequence/sequence.h"
+#include "lib/sequence/ogg.h"
 #include "lib/sound/audio.h"
 #include "lib/sound/cdaudio.h"
 #include "lib/script/script.h"
@@ -92,14 +92,25 @@ static BOOL bHoldSeqForAudio = false;
 static BOOL bCDPath = false;
 static BOOL bHardPath = false;
 static BOOL bSeqSubtitles = true;
+static BOOL bSeqPlaying = false;
+
+// static char aCDPath[MAX_STR_LENGTH];
 static char aHardPath[MAX_STR_LENGTH];
 static char aVideoName[MAX_STR_LENGTH];
+// static char aAudioName[MAX_STR_LENGTH];
+// static char aTextName[MAX_STR_LENGTH];
+// static char aSubtitleName[MAX_STR_LENGTH];
+static char* pVideoBuffer = NULL;
+static char* pVideoPalette = NULL;
+//static VIDEO_MODE videoMode;
+//static PERF_MODE perfMode = VIDEO_PERF_FULLSCREEN;
+static SDWORD frameSkip = 1;
 static SEQLIST aSeqList[MAX_SEQ_LIST];
 static SDWORD currentSeq = -1;
 static SDWORD currentPlaySeq = -1;
 static BOOL g_bResumeInGame = false;
 
-static unsigned int time_started = 0;
+// static unsigned int time_started = 0;
 
 /***************************************************************************/
 /*
@@ -109,7 +120,11 @@ static unsigned int time_started = 0;
 
 static void	seq_SetVideoPath(void);
 static BOOL seq_StartFullScreenVideo(const char* videoName, const char* audioName);
-
+BOOL	seq_BlitBufferToScreen(char* screen, SDWORD screenStride, SDWORD xOffset, SDWORD yOffset);
+BOOL seq_SetupVideoBuffers(void);
+BOOL seq_ReleaseVideoBuffers(void);
+static BOOL SeqEndCallBack( void *psObj );
+static BOOL seq_StartBufVideo(const char* videoName, const char* audioName);
 /***************************************************************************/
 /*
  *	Source
@@ -117,17 +132,119 @@ static BOOL seq_StartFullScreenVideo(const char* videoName, const char* audioNam
 /***************************************************************************/
 
  /* Renders a video sequence specified by filename to a buffer*/
-BOOL	seq_RenderVideoToBuffer(iSurface* pSurface, const char* sequenceName, int time, int seqCommand)
+BOOL seq_RenderVideoToBuffer(const char* sequenceName, int seqCommand)
 {
+#define	VIDEO_FINISHED 0
+#define RPL_FRAME_TIME 1
+
+	BOOL state = true;
+	static int frame = -1;
+	static int HOLD = 0;
+//	int videoFrameTime = 0;
+//	int perfMode = 0;
+//	int frameDuration = 0;
+//	int videoTime = 0;
+//	int frameLag = 0;
+
 	if (seqCommand == SEQUENCE_KILL)
 	{
 		//stop the movie
-		seq_Shutdown();
+		seq_ShutdownOgg();
+		bSeqPlaying = false;
+		HOLD = false;
+		frame = -1;
 		return true;
 	}
 
-	seq_StartFullScreenVideo(sequenceName, NULL);
+	if (!bSeqPlaying  && !HOLD )
+	{
+		//start the ball rolling
 
+		iV_SetFont(font_regular);
+		iV_SetTextColour(WZCOL_TEXT_BRIGHT);
+
+		frame = seq_StartBufVideo(sequenceName, NULL);
+		bSeqPlaying = true;
+	}
+
+	if (frame != VIDEO_FINISHED)
+	{
+		frame = seq_UpdateOgg();
+	}
+
+	if (frame == VIDEO_FINISHED)
+	{
+//		if (seqCommand == SEQUENCE_LOOP)
+//		{
+//			bSeqPlaying = false;
+//			state = true;
+//		}
+//		if (seqCommand == SEQUENCE_HOLD)
+//		{
+//			//wait for call to stop video
+//			state = true;
+//		}
+//		else
+//		{
+			state = false;
+//			seq_ShutDown();
+			seq_ShutdownOgg();
+			bSeqPlaying = false;
+			HOLD = true;
+			frame = -1;
+//		}
+	}
+	return state;
+}
+
+BOOL	seq_BlitBufferToScreen(char* screen, SDWORD screenStride, SDWORD xOffset, SDWORD yOffset)
+{
+#if 0
+	int i,j;
+	char c8, *d8;
+	UWORD c16, *p16;
+	SDWORD width, height;
+	seq_GetFrameSize(&width, &height);
+
+	if (videoMode == VIDEO_SOFT_WINDOW)
+	{
+		d8 = screen + xOffset + yOffset * screenStride;
+		p16 = (UWORD*)pVideoBuffer;
+
+		for (j = 0; j < height; j++)
+		{
+			for (i = 0; i < width; i++)
+			{
+				c16 = p16[i];
+				c16 &= RPL_MASK_555;
+				c8 = pVideoPalette[c16];
+				d8[i] = c8;
+			}
+			d8 += screenStride;
+			p16 += width;
+		}
+	}
+	else
+	{
+		/* pie_DownLoadBufferToScreen(pVideoBuffer, xOffset, yOffset,width,height,(2*width)); no longer exists */
+	}
+#endif
+	return true;
+SeqEndCallBack( NULL );
+}
+
+
+BOOL seq_ReleaseVideoBuffers(void)
+{
+	free(pVideoBuffer);
+	free(pVideoPalette);
+	pVideoBuffer = NULL;
+	pVideoPalette = NULL;
+	return true;
+}
+
+BOOL seq_SetupVideoBuffers(void)
+{
 	return true;
 }
 
@@ -141,12 +258,21 @@ static void seq_SetVideoPath(void)
 	}
 }
 
+static BOOL SeqEndCallBack( void *psObj )
+{
+	bAudioPlaying = false;
+	debug(LOG_NEVER, "************* briefing ended **************");
+
+	return true;
+}
 //full screenvideo functions
 static BOOL seq_StartFullScreenVideo(const char* videoName, const char* audioName)
 {
 	const char* aAudioName;
 	bHoldSeqForAudio = false;
 	int chars_printed;
+
+	frameSkip = 1;
 
 	//set a valid video path if there is one
 	if(!bCDPath && !bHardPath)
@@ -172,57 +298,125 @@ static BOOL seq_StartFullScreenVideo(const char* videoName, const char* audioNam
 		iV_SetFont(font_regular);
 		iV_SetTextColour(WZCOL_TEXT_BRIGHT);
 	}
-
+/*
 	if (!seq_Play(aVideoName))
 	{
 		// don't stop or cancel it as we may have text to display
 		debug( LOG_WARNING,"seq_StartFullScreenVideo: unable to initialise sequence %s",aVideoName );
 	}
+*/
+	// set the dimensions to show full screen
+	OGG_SetSize(screenWidth,screenHeight,0,0);
 
+	if (!seq_PlayOgg(aVideoName))
+	{
+
+		seq_ShutdownOgg();
+		//dunno why we assert if abort vid?
+//		ASSERT( false,"seq_StartFullScreenVideo: unable to initialise sequence %s",aVideoName );
+		return false;
+	}
+		
 	if (audioName == NULL)
 	{
 		bAudioPlaying = false;
-	}
+	}		
+		
 	else
 	{
-		static const float maxVolume = 1.f;
+		static const float maxVolume = 1.f;		//NOT controlled by sliders for now?
 
 		bAudioPlaying = audio_PlayStream(aAudioName, maxVolume, NULL, NULL) ? true : false;
 		ASSERT(bAudioPlaying == true, "seq_StartFullScreenVideo: unable to initialise sound %s", aAudioName);
 	}
 
-	time_started = SDL_GetTicks();
+	return true;
+}
+static BOOL seq_StartBufVideo(const char* videoName, const char* audioName)
+{
+	const char* aAudioName;
+	bHoldSeqForAudio = false;
+
+	//set a valid video path if there is one
+	if(!bCDPath && !bHardPath)
+	{
+		seq_SetVideoPath();
+	}
+
+	ASSERT( (strlen(videoName) + strlen(aHardPath))<MAX_STR_LENGTH,"sequence path+name greater than max string" );
+	snprintf(aVideoName, sizeof(aVideoName), "%s%s", aHardPath, videoName);
+
+	//set audio path
+	if (audioName != NULL)
+	{
+		ASSERT( strlen(audioName) < MAX_STR_LENGTH, "sequence path+name greater than max string" );
+		sasprintf((char**)&aAudioName, "sequenceaudio/%s", audioName);
+	}
+
+	cdAudio_Pause();
+	iV_SetFont(font_regular);
+	iV_SetTextColour(WZCOL_TEXT_BRIGHT);
+
+	if (!seq_PlayOgg(aVideoName))
+	{
+		seq_ShutdownOgg();
+		//dunno why we assert if abort vid?
+//		ASSERT( false,"seq_StartFullScreenVideo: unable to initialise sequence %s",aVideoName );
+		return false;
+	}
+		
+	if (audioName == NULL)
+	{
+		bAudioPlaying = false;
+	}		
+		
+	else
+	{
+		static const float maxVolume = 1.f;		//NOT controlled by sliders for now?
+
+		bAudioPlaying = audio_PlayStream(aAudioName, maxVolume, NULL, NULL) ? true : false;
+		ASSERT(bAudioPlaying == true, "seq_StartFullScreenVideo: unable to initialise sound %s", aAudioName);
+	}
 
 	return true;
 }
-
 BOOL seq_UpdateFullScreenVideo(int *pbClear)
 {
-	SDWORD i, x, y, w = 640, h = 480;
+	SDWORD i, x, y;
+	int w=640,h=480;
+	SDWORD frame = 0;
 	UDWORD subMin, subMax;
 	UDWORD realFrame;
+	BOOL stillText = 0;
 	BOOL bMoreThanOneSequenceLine = false;
-	BOOL stillText;
+	BOOL stillPlaying = true;
+//	char scrnFcount[20];
 
-	x = (pie_GetVideoBufferWidth() - w)/2;
-	y = (pie_GetVideoBufferHeight() - h)/2;
+	frame = 0;
+	stillText = 0;
+	h = 480;
+	w = 640;
+
+	x = (pie_GetVideoBufferWidth() )/2; //-w )
+	y = (pie_GetVideoBufferHeight())/2; // -h)
 
 	subMin = SUBTITLE_BOX_MAX + D_H;
 	subMax = SUBTITLE_BOX_MIN + D_H;
 
-	stillText = false;
+//	stillText = false;
 	//get any text lines over bottom of the video
-	realFrame = (SDL_GetTicks()-time_started)/40; // standard frame is 40 msec
+	realFrame = OGG_GetFrameCounter();//textFrame + 1;
+//	sprintf(scrnFcount,"%05d",realFrame);
+//	iV_SetTextColour(WZCOL_RED);
+//	iV_DrawText(scrnFcount,140.0,50.0);
+//	printf("realFrame=%d\n",realFrame);
 	for(i=0;i<MAX_TEXT_OVERLAYS;i++)
 	{
 		if (aSeqList[currentPlaySeq].aText[i].pText[0] != '\0')
 		{
 			if (aSeqList[currentPlaySeq].aText[i].bSubtitle == true)
 			{
-				if(realFrame <= aSeqList[currentPlaySeq].aText[i].endFrame)
-				{
-					stillText = true;
-				}
+
 				if ((realFrame >= aSeqList[currentPlaySeq].aText[i].startFrame) && (realFrame <= aSeqList[currentPlaySeq].aText[i].endFrame))
 				{
 					if (subMin > aSeqList[currentPlaySeq].aText[i].y)
@@ -252,8 +446,15 @@ BOOL seq_UpdateFullScreenVideo(int *pbClear)
 					}
 				}
 			}
+			if ((realFrame >= aSeqList[currentPlaySeq].aText[i].endFrame) && (realFrame < (aSeqList[currentPlaySeq].aText[i].endFrame + frameSkip)))
+			{
+				if (pbClear != NULL)
+				{
+						*pbClear = CLEAR_BLACK;
 		}
 	}
+			}
+		}
 
 	subMin -= D_H;//adjust video window here because text is already ofset for big screens
 	subMax -= D_H;
@@ -273,12 +474,13 @@ BOOL seq_UpdateFullScreenVideo(int *pbClear)
 	}
 
 	//call sequence player to download last frame
-	if(seq_Playing())
+//	if(seq_Playing())
 	{
-		seq_Update();
-	}
 
+		stillPlaying = seq_UpdateOgg();
 	//print any text over the video
+		realFrame = OGG_GetFrameCounter();//textFrame + 1;
+//		printf("realFrame2=%d\n",realFrame);
 	for(i=0;i<MAX_TEXT_OVERLAYS;i++)
 	{
 		if (aSeqList[currentPlaySeq].aText[i].pText[0] != '\0')
@@ -289,6 +491,7 @@ BOOL seq_UpdateFullScreenVideo(int *pbClear)
 				{
 					aSeqList[currentPlaySeq].aText[i].x = 20 + D_W;
 				}
+//				printf("a] showing %s\n",&(aSeqList[currentPlaySeq].aText[i].pText[0]));
 				iV_DrawText(&(aSeqList[currentPlaySeq].aText[i].pText[0]),
 						aSeqList[currentPlaySeq].aText[i].x, aSeqList[currentPlaySeq].aText[i].y);
 			}
@@ -298,21 +501,23 @@ BOOL seq_UpdateFullScreenVideo(int *pbClear)
 				{
 					aSeqList[currentPlaySeq].aText[i].x = 20 + D_W;
 				}
+//				printf("b] showing %s\n",&(aSeqList[currentPlaySeq].aText[i].pText[0]));
 				iV_DrawText(&(aSeqList[currentPlaySeq].aText[i].pText[0]),
 						aSeqList[currentPlaySeq].aText[i].x, aSeqList[currentPlaySeq].aText[i].y);
 			}
 
 		}
 	}
-
-	if ((!seq_Playing() && !stillText) || (bHoldSeqForAudio))
+	if ((!stillPlaying) || (bHoldSeqForAudio))
 	{
 		if (bAudioPlaying)
 		{
 			if (aSeqList[currentPlaySeq].bSeqLoop)
 			{
-				seq_Shutdown();
-				if (!seq_Play(aVideoName))
+
+				seq_ShutdownOgg();
+
+				if (!seq_PlayOgg(aVideoName))
 				{
 					bHoldSeqForAudio = true;
 				}
@@ -328,6 +533,8 @@ BOOL seq_UpdateFullScreenVideo(int *pbClear)
 			return false;//should terminate the video
 		}
 	}
+	}
+
 	return true;
 }
 
@@ -339,7 +546,8 @@ BOOL seq_StopFullScreenVideo(void)
 		loop_ClearVideoPlaybackMode();
 	}
 
-	seq_Shutdown();
+
+	seq_ShutdownOgg();
 
 	if (!seq_AnySeqLeft())
 	{
@@ -366,6 +574,7 @@ BOOL seq_AddTextForVideo(const char* pText, SDWORD xOffset, SDWORD yOffset, SDWO
 	SDWORD justification;
 	static SDWORD lastX;
 
+//	printf("[seq_AddTextForVideo]%s, start= %d end=%d\n",pText,startFrame,endFrame);
 	iV_SetFont(font_regular);
 
 	ASSERT( aSeqList[currentSeq].currentText < MAX_TEXT_OVERLAYS,
@@ -460,7 +669,7 @@ BOOL seq_AddTextForVideo(const char* pText, SDWORD xOffset, SDWORD yOffset, SDWO
 BOOL seq_ClearTextForVideo(void)
 {
 	SDWORD i, j;
-
+//		printf("[seq_ClearTextForVideo]\n");
 	for (j=0; j < MAX_SEQ_LIST; j++)
 	{
 		for(i=0;i<MAX_TEXT_OVERLAYS;i++)
@@ -486,6 +695,8 @@ static BOOL seq_AddTextFromFile(const char *pTextName, BOOL bJustify)
 	const char *seps = "\n";
 
 	ssprintf(aTextName, "sequenceaudio/%s", pTextName);
+
+//	printf("[seq_AddTextFromFile]%s\n",pTextName);
 
 	if (loadFileToBufferNoError(aTextName, fileLoadBuffer, FILE_LOAD_BUFFER_SIZE, &fileSize) == false)  //Did I mention this is lame? -Q
 	{
@@ -525,7 +736,7 @@ static BOOL seq_AddTextFromFile(const char *pTextName, BOOL bJustify)
 void seq_ClearSeqList(void)
 {
 	SDWORD i;
-
+//	printf("[seq_ClearSeqList]\n");
 	seq_ClearTextForVideo();
 	for(i=0;i<MAX_SEQ_LIST;i++)
 	{
@@ -541,7 +752,7 @@ void seq_AddSeqToList(const char *pSeqName, const char *pAudioName, const char *
 	SDWORD strLen;
 	currentSeq++;
 
-
+//	printf("[seq_AddSeqToList]\n");
 	if ((currentSeq) >=  MAX_SEQ_LIST)
 	{
 		ASSERT( false, "seq_AddSeqToList: too many sequences" );
@@ -601,7 +812,7 @@ static void seqDispCDOK( void )
 	{
 		screen_StopBackDrop();
 	}
-
+//	printf("[seqDispCDOK] currentPlaySeq = %d \n",currentPlaySeq);
 	currentPlaySeq++;
 	if (currentPlaySeq >= MAX_SEQ_LIST)
 	{
