@@ -145,9 +145,9 @@ static void seq_SetVideoPath(void)
 static BOOL seq_StartFullScreenVideo(const char* videoName, const char* audioName)
 {
 	const char* aAudioName;
-	bHoldSeqForAudio = false;
 	int chars_printed;
 
+	bHoldSeqForAudio = false;
 	//set a valid video path if there is one
 	if(!bCDPath && !bHardPath)
 	{
