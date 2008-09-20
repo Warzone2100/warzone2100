@@ -115,7 +115,7 @@ static BOOL seq_StartFullScreenVideo(const char* videoName, const char* audioNam
 /***************************************************************************/
 
  /* Renders a video sequence specified by filename to a buffer*/
-BOOL	seq_RenderVideoToBuffer( iSurface *pSurface, char *sequenceName, int time, int seqCommand)
+BOOL	seq_RenderVideoToBuffer(iSurface* pSurface, const char* sequenceName, int time, int seqCommand)
 {
 	if (seqCommand == SEQUENCE_KILL)
 	{
