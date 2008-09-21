@@ -85,8 +85,8 @@ static SDWORD radarWidth, radarHeight, radarX, radarY, radarTexWidth, radarTexHe
 static float RadarZoom;
 static UDWORD radarBufferSize = 0;
 
-static void DrawRadarTiles(UDWORD *screen);
-static void DrawRadarObjects(UDWORD *screen);
+static void DrawRadarTiles(void);
+static void DrawRadarObjects(void);
 static void DrawRadarExtras(float pixSizeH, float pixSizeV);
 
 static void radarSize(float zoom)
@@ -199,8 +199,8 @@ void CalcRadarPosition(int mX, int mY, int *PosX, int *PosY)
 	CalcRadarPixelSize(&pixSizeH, &pixSizeV);
 	sPosX = (float)posX / pixSizeH;	// adjust for pixel size
 	sPosY = (float)posY / pixSizeV;
-	sPosX -= scrollMinX;		// adjust for scroll limits
-	sPosY -= scrollMinY;
+	sPosX += scrollMinX;		// adjust for scroll limits
+	sPosY += scrollMinY;
 
 #if REALLY_DEBUG_RADAR
 	debug(LOG_ERROR, "m=(%d,%d) radar=(%d,%d) pos(%d,%d), scroll=(%u-%u,%u-%u) sPos=(%d,%d), pixSize=(%f,%f)",
@@ -247,8 +247,8 @@ void drawRadar(void)
 
 	if (frameSkip <= 0)
 	{
-		DrawRadarTiles(radarBuffer);
-		DrawRadarObjects(radarBuffer);
+		DrawRadarTiles();
+		DrawRadarObjects();
 		pie_DownLoadRadar(radarBuffer, radarTexWidth, radarTexHeight);
 		frameSkip = RADAR_FRAME_SKIP;
 	}
@@ -311,7 +311,7 @@ static PIELIGHT appliedRadarColour(RADAR_DRAW_MODE radarDrawMode, MAPTILE *WTile
 }
 
 /** Draw the map tiles on the radar. */
-static void DrawRadarTiles(UDWORD *screen)
+static void DrawRadarTiles(void)
 {
 	SDWORD	x, y;
 
@@ -319,21 +319,22 @@ static void DrawRadarTiles(UDWORD *screen)
 	{
 		for (y = scrollMinY; y < scrollMaxY; y++)
 		{
-			UDWORD	*pScr = screen + radarTexWidth * y + x;
 			MAPTILE	*psTile = mapTile(x, y);
+			size_t pos = radarTexWidth * (y - scrollMinY) + (x - scrollMinX);
 
+			ASSERT(pos * sizeof(*radarBuffer) < radarBufferSize, "Buffer overrun");
 			if (!getRevealStatus() || TEST_TILE_VISIBLE(selectedPlayer, psTile) || godMode)
 			{
-				*pScr = appliedRadarColour(radarDrawMode, psTile).rgba;
+				radarBuffer[pos] = appliedRadarColour(radarDrawMode, psTile).rgba;
 			} else {
-				*pScr = WZCOL_RADAR_BACKGROUND.rgba;
+				radarBuffer[pos] = WZCOL_RADAR_BACKGROUND.rgba;
 			}
 		}
 	}
 }
 
 /** Draw the droids and structure positions on the radar. */
-static void DrawRadarObjects(UDWORD *screen)
+static void DrawRadarObjects(void)
 {
 	UBYTE				clan;
 	PIELIGHT			playerCol;
@@ -380,15 +381,16 @@ static void DrawRadarObjects(UDWORD *screen)
 			{
 				int	x = psDroid->pos.x / TILE_UNITS;
    				int	y = psDroid->pos.y / TILE_UNITS;
-				UDWORD	*Ptr = screen + x + y * radarTexWidth;
+				size_t	pos = (x - scrollMinX) + (y - scrollMinY) * radarTexWidth;
 
+				ASSERT(pos * sizeof(*radarBuffer) < radarBufferSize, "Buffer overrun");
 				if (clan == selectedPlayer && gameTime-psDroid->timeLastHit < HIT_NOTIFICATION)
 				{
-					*Ptr = flashCol.rgba;
+					radarBuffer[pos] = flashCol.rgba;
 				}
 				else
 				{
-					*Ptr = playerCol.rgba;
+					radarBuffer[pos] = playerCol.rgba;
 				}
 			}
    		}
@@ -399,10 +401,11 @@ static void DrawRadarObjects(UDWORD *screen)
 	{
 		for (y = scrollMinY; y < scrollMaxY; y++)
 		{
-			UDWORD		*pScr = screen + y * radarTexWidth + x;
 			MAPTILE		*psTile = mapTile(x, y);
 			STRUCTURE	*psStruct = (STRUCTURE *)psTile->psObject;
+			size_t		pos = (x - scrollMinX) + (y - scrollMinY) * radarTexWidth;
 
+			ASSERT(pos * sizeof(*radarBuffer) < radarBufferSize, "Buffer overrun");
 			if (!TileHasStructure(psTile))
 			{
 				continue;
@@ -435,11 +438,11 @@ static void DrawRadarObjects(UDWORD *screen)
 			{
 				if (clan == selectedPlayer && gameTime - psStruct->timeLastHit < HIT_NOTIFICATION)
 				{
-					*pScr = flashCol.rgba;
+					radarBuffer[pos] = flashCol.rgba;
 				}
 				else
 				{
-					*pScr = playerCol.rgba;
+					radarBuffer[pos] = playerCol.rgba;
 				}
 			}
    		}
@@ -501,7 +504,7 @@ static SDWORD getLengthAdjust( void )
 }
 
 /** Draws a Myth/FF7 style viewing window */
-static void drawViewingWindow(UDWORD x, UDWORD y, float pixSizeH, float pixSizeV)
+static void drawViewingWindow(int x, int y, float pixSizeH, float pixSizeV)
 {
 	Vector3i v[4], tv[4], centre;
 	int	shortX, longX, yDrop, yDropVar;
@@ -526,8 +529,8 @@ static void drawViewingWindow(UDWORD x, UDWORD y, float pixSizeH, float pixSizeV
 	v[3].x = -shortX;
 	v[3].y = yDrop;
 
-	centre.x = radarX + x + (visibleTiles.x * pixSizeH) / 2;
-	centre.y = radarY + y + (visibleTiles.y * pixSizeV) / 2;
+	centre.x = radarX + (x - scrollMinX) + ((visibleTiles.x - scrollMinX) * pixSizeH) / 2;
+	centre.y = radarY + (y - scrollMinY) + ((visibleTiles.y - scrollMinY) * pixSizeV) / 2;
 
 	RotateVector2D(v,tv,&centre,player.r.y,4);
 
