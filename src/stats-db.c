@@ -954,6 +954,9 @@ bool loadBrainStatsFromDB(sqlite3* db, const char* tableName)
 		// program_capacity      INTEGER NOT NULL  -- Program's capacity
 		stats->progCap = sqlite3_column_int(stmt, getColNumByName(stmt, "program_capacity"));
 
+		// All brains except ZNULLBRAIN available in design screen
+		stats->designable = strcmp(stats->pName, "ZNULLBRAIN") ? true : false;
+
 		// save the stats
 		statsSetBrain(stats, brain_id - 1);
 
