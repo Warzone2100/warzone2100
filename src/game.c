@@ -5306,8 +5306,8 @@ static DROID* buildDroidFromSaveDroidV11(SAVE_DROID_V11* psSaveDroid)
 	//version 11
 	for (i=0; i < psDroid->numWeaps; i++)
 	{
-		psDroid->turretRotation[i] = psSaveDroid->turretRotation;
-		psDroid->turretPitch[i] = psSaveDroid->turretPitch;
+		psDroid->asWeaps[i].rotation = psSaveDroid->turretRotation;
+		psDroid->asWeaps[i].pitch = psSaveDroid->turretPitch;
 	}
 
 
@@ -5446,8 +5446,8 @@ static DROID* buildDroidFromSaveDroidV19(SAVE_DROID_V18* psSaveDroid, UDWORD ver
 		//Watermelon:make it back-compatible with older versions of save
 		for (i=0; i < psDroid->numWeaps; i++)
 		{
-			psDroid->turretRotation[i] = psSaveDroid->turretRotation;
-			psDroid->turretPitch[i] = psSaveDroid->turretPitch;
+			psDroid->asWeaps[i].rotation = psSaveDroid->turretRotation;
+			psDroid->asWeaps[i].pitch = psSaveDroid->turretPitch;
 		}
 	}
 	if (version >= VERSION_12)//version 12
@@ -5861,13 +5861,13 @@ static DROID* buildDroidFromSaveDroid(SAVE_DROID* psSaveDroid, UDWORD version)
 	{
 		if (version >= VERSION_24)
 		{
-			psDroid->turretRotation[i] = psSaveDroid->turretRotation[i];
-			psDroid->turretPitch[i] = psSaveDroid->turretPitch[i];
+			psDroid->asWeaps[i].rotation = psSaveDroid->turretRotation[i];
+			psDroid->asWeaps[i].pitch = psSaveDroid->turretPitch[i];
 		}
 		else
 		{
-			psDroid->turretRotation[i] = psSaveDroid->turretRotation[0];
-			psDroid->turretPitch[i] = psSaveDroid->turretPitch[0];
+			psDroid->asWeaps[i].rotation = psSaveDroid->turretRotation[0];
+			psDroid->asWeaps[i].pitch = psSaveDroid->turretPitch[0];
 		}
 	}
 	//version 12
@@ -6599,8 +6599,8 @@ static BOOL buildSaveDroidFromDroid(SAVE_DROID* psSaveDroid, DROID* psCurr, DROI
 			//Watermelon:endian_udword for new save format
 			for(i = 0;i < psCurr->numWeaps;i++)
 			{
-				psSaveDroid->turretRotation[i] = psCurr->turretRotation[i];
-				psSaveDroid->turretPitch[i]	= psCurr->turretPitch[i];
+				psSaveDroid->turretRotation[i] = psCurr->asWeaps[i].rotation;
+				psSaveDroid->turretPitch[i]	= psCurr->asWeaps[i].pitch;
 			}
 			//version 12
 			psSaveDroid->order			= psCurr->order;

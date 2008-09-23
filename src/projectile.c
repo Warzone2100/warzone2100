@@ -570,11 +570,11 @@ BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, Ve
 		{
 			if (psAttacker->type == OBJ_DROID)
 			{
-				((DROID *) psAttacker)->turretPitch[weapon_slot] = psObj->pitch;
+				((DROID *) psAttacker)->asWeaps[weapon_slot].pitch = psObj->pitch;
 			}
 			else if (psAttacker->type == OBJ_STRUCTURE)
 			{
-				((STRUCTURE *) psAttacker)->turretPitch[weapon_slot] = psObj->pitch;
+				((STRUCTURE *) psAttacker)->asWeaps[weapon_slot].pitch = psObj->pitch;
 			}
 		}
 

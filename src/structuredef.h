@@ -270,9 +270,6 @@ typedef struct _structure
 	/* The other structure data.  These are all derived from the functions
 	 * but stored here for easy access - will need to add more for variable stuff!
 	 */
-	//the sensor stats need to be stored since the actual sensor stat can change with research
-	UWORD		turretRotation[STRUCT_MAXWEAPS];				// weapon, ECM and sensor direction and pitch
-	UWORD		turretPitch[STRUCT_MAXWEAPS];				// weapon, ECM and sensor direction and pitch
 
 	FUNCTIONALITY	*pFunctionality;		/* pointer to structure that contains fields
 											   necessary for functionality */

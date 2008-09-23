@@ -1633,8 +1633,8 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 		//set up the rest of the data
 		for (i = 0;i < STRUCT_MAXWEAPS;i++)
 		{
-			psBuilding->turretRotation[i] = 0;
-			psBuilding->turretPitch[i] = 0;
+			psBuilding->asWeaps[i].rotation = 0;
+			psBuilding->asWeaps[i].pitch = 0;
 			psBuilding->psTarget[i] = NULL;
 		}
 		psBuilding->targetted = 0;
@@ -2781,9 +2781,8 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 	//////
 	// - radar should rotate every three seconds ... 'cause we timed it at Heathrow !
 	// gameTime is in milliseconds - one rotation every 3 seconds = 1 rotation event 3000 millisecs
-			psStructure->turretRotation[0] = (UWORD)(((gameTime*360)/3000)%360);
-
-			psStructure->turretPitch[0] = 0;
+			psStructure->asWeaps[0].rotation = (UWORD)(((gameTime*360)/3000)%360);
+			psStructure->asWeaps[0].pitch = 0;
 		}
 	}
 
@@ -2843,14 +2842,11 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 					//if were going to shoot at something move the turret first then fire when locked on
 					if (psWStats->pMountGraphic == NULL)//no turret so lock on whatever
 					{
-						psStructure->turretRotation[i] = (UWORD)calcDirection(psStructure->pos.x,
+						psStructure->asWeaps[i].rotation = (UWORD)calcDirection(psStructure->pos.x,
 							psStructure->pos.y, psChosenObjs[i]->pos.x, psChosenObjs[i]->pos.y);
 						combFire(&psStructure->asWeaps[i], (BASE_OBJECT *)psStructure, psChosenObjs[i], i);
 					}
-					else if(actionTargetTurret((BASE_OBJECT*)psStructure, psChosenObjs[i],
-											&(psStructure->turretRotation[i]),
-											&(psStructure->turretPitch[i]),
-											psWStats, false, i))
+					else if (actionTargetTurret((BASE_OBJECT*)psStructure, psChosenObjs[i], &psStructure->asWeaps[i]))
 					{
 						combFire(&psStructure->asWeaps[i], (BASE_OBJECT *)psStructure, psChosenObjs[i], i);
 					}
@@ -2858,8 +2854,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 				else
 				{
 					// realign the turret
-					if ( ((psStructure->turretRotation[i] % 90) != 0) ||
-						(psStructure->turretPitch[i] != 0) )
+					if ((psStructure->asWeaps[i].rotation % 90) != 0 || psStructure->asWeaps[i].pitch != 0)
 					{
 						actionAlignTurret((BASE_OBJECT *)psStructure, i);
 					}
@@ -3337,11 +3332,8 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 					"aiUpdateStructure: invalid droid pointer" );
 			psRepairFac = &psStructure->pFunctionality->repairFacility;
 
-			if ( psDroid->action == DACTION_WAITDURINGREPAIR &&
-				actionTargetTurret((BASE_OBJECT*)psStructure, psChosenObj,
-									&(psStructure->turretRotation[0]),
-									&(psStructure->turretPitch[0]),
-									NULL, false, 0))
+			if (psDroid->action == DACTION_WAITDURINGREPAIR
+			    && actionTargetTurret((BASE_OBJECT*)psStructure, psChosenObj, &psStructure->asWeaps[0]))
 			{
 				//check droid is not healthy
 				if (psDroid->body < psDroid->originalBody)
@@ -5436,8 +5428,8 @@ BOOL calcStructureMuzzleLocation(STRUCTURE *psStructure, Vector3f *muzzle, int w
 					-psShape->connectors[weapon_slot].y);//note y and z flipped
 
 		//matrix = the gun and turret mount on the body
-		pie_MatRotY(DEG(psStructure->turretRotation[weapon_slot]));//+ve anticlockwise
-		pie_MatRotX(DEG(psStructure->turretPitch[weapon_slot]));//+ve up
+		pie_MatRotY(DEG(psStructure->asWeaps[weapon_slot].rotation));	// +ve anticlockwise
+		pie_MatRotX(DEG(psStructure->asWeaps[weapon_slot].pitch));	// +ve up
 		pie_MatRotZ(DEG(0));
 
 		//matrix = the muzzle mount on turret
@@ -7929,9 +7921,9 @@ void checkStructure(const STRUCTURE* psStructure, const char * const location_de
 	ASSERT(psStructure->pStructureType->type < NUM_DIFF_BUILDINGS, location_description, function, "CHECK_STRUCTURE: Out of bound structure type (%u)", (unsigned int)psStructure->pStructureType->type);
 	ASSERT(psStructure->numWeaps <= STRUCT_MAXWEAPS, location_description, function, "CHECK_STRUCTURE: Out of bound weapon count (%u)", (unsigned int)psStructure->numWeaps);
 
-	for (i = 0; i < ARRAY_SIZE(psStructure->turretRotation); ++i)
+	for (i = 0; i < ARRAY_SIZE(psStructure->asWeaps); ++i)
 	{
-		ASSERT(psStructure->turretRotation[i] <= 360, location_description, function, "CHECK_STRUCTURE: Out of range turret rotation (turret %u; rotation: %u)", i, (unsigned int)psStructure->turretRotation[i]);
+		ASSERT(psStructure->asWeaps[i].rotation <= 360, location_description, function, "CHECK_STRUCTURE: Out of range turret rotation (turret %u; rotation: %u)", i, (unsigned int)psStructure->asWeaps[i].rotation);
 		if (psStructure->psTarget[i])
 		{
 			checkObject(psStructure->psTarget[i], location_description, function, recurse - 1);

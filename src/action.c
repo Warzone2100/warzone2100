@@ -315,12 +315,12 @@ void actionAlignTurret(BASE_OBJECT *psObj, int weapon_slot)
 	switch (psObj->type)
 	{
 	case OBJ_DROID:
-		tRot = ((DROID *)psObj)->turretRotation[weapon_slot];
-		tPitch = ((DROID *)psObj)->turretPitch[weapon_slot];
+		tRot = ((DROID *)psObj)->asWeaps[weapon_slot].rotation;
+		tPitch = ((DROID *)psObj)->asWeaps[weapon_slot].pitch;
 		break;
 	case OBJ_STRUCTURE:
-		tRot = ((STRUCTURE *)psObj)->turretRotation[weapon_slot];
-		tPitch = ((STRUCTURE *)psObj)->turretPitch[weapon_slot];
+		tRot = ((STRUCTURE *)psObj)->asWeaps[weapon_slot].rotation;
+		tPitch = ((STRUCTURE *)psObj)->asWeaps[weapon_slot].pitch;
 
 		// now find the nearest 90 degree angle
 		nearest = (UWORD)(((tRot + 45) / 90) * 90);
@@ -388,15 +388,15 @@ void actionAlignTurret(BASE_OBJECT *psObj, int weapon_slot)
 	switch (psObj->type)
 	{
 	case OBJ_DROID:
-		((DROID *)psObj)->turretRotation[weapon_slot] = tRot;
-		((DROID *)psObj)->turretPitch[weapon_slot] = tPitch;
+		((DROID *)psObj)->asWeaps[weapon_slot].rotation = tRot;
+		((DROID *)psObj)->asWeaps[weapon_slot].pitch = tPitch;
 		break;
 	case OBJ_STRUCTURE:
 		// now adjust back to the nearest 90 degree angle
 		tRot = (UWORD)((tRot + nearest) % 360);
 
-		((STRUCTURE *)psObj)->turretRotation[weapon_slot] = tRot;
-		((STRUCTURE *)psObj)->turretPitch[weapon_slot] = tPitch;
+		((STRUCTURE *)psObj)->asWeaps[weapon_slot].rotation = tRot;
+		((STRUCTURE *)psObj)->asWeaps[weapon_slot].pitch = tPitch;
 		break;
 	default:
 		ASSERT(!"invalid object type", "actionAlignTurret: invalid object type");
@@ -406,9 +406,9 @@ void actionAlignTurret(BASE_OBJECT *psObj, int weapon_slot)
 }
 
 /* returns true if on target */
-BOOL actionTargetTurret(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, UWORD *pRotation,
-		UWORD *pPitch, WEAPON_STATS *psWeapStats, BOOL bInvert, int weapon_slot)
+BOOL actionTargetTurret(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, WEAPON *psWeapon)
 {
+	WEAPON_STATS *psWeapStats = asWeaponStats + psWeapon->nStat;
 	SWORD  tRotation, tPitch, rotRate, pitchRate;
 	SDWORD  targetRotation,targetPitch;
 	SDWORD  pitchError;
@@ -416,49 +416,53 @@ BOOL actionTargetTurret(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, UWORD *p
 	BOOL	onTarget = false;
 	float	fR;
 	SDWORD	pitchLowerLimit, pitchUpperLimit;
-	DROID	*psDroid = NULL;
+	bool	bInvert = false;
+	bool	bRepair = false;
+
+	/* check whether turret position inverted vertically on body */
+	if (psAttacker->type == OBJ_DROID && !cyborgDroid((DROID *)psAttacker) && isVtolDroid((DROID *)psAttacker))
+	{
+		bInvert = true;
+	}
+
+	if (psAttacker->type == OBJ_DROID && ((DROID *)psAttacker)->droidType == DROID_REPAIR)
+	{
+		bRepair = true;
+	}
 
 	// these are constants now and can be set up at the start of the function
 	rotRate = ACTION_TURRET_ROTATION_RATE * 4;
 	pitchRate = ACTION_TURRET_ROTATION_RATE * 2;
 
-	if (psWeapStats)
+	// extra heavy weapons on some structures need to rotate and pitch more slowly
+	if (psWeapStats->weight > HEAVY_WEAPON_WEIGHT && !bRepair)
 	{
-		// extra heavy weapons on some structures need to rotate and pitch more slowly
-		if (psWeapStats->weight > HEAVY_WEAPON_WEIGHT)
-		{
-			UDWORD excess = 100 * (psWeapStats->weight - HEAVY_WEAPON_WEIGHT) / psWeapStats->weight;
+		UDWORD excess = 100 * (psWeapStats->weight - HEAVY_WEAPON_WEIGHT) / psWeapStats->weight;
 
-			rotRate = ACTION_TURRET_ROTATION_RATE * 2 - excess;
-			pitchRate = (SWORD) (rotRate / 2);
-		}
+		rotRate = ACTION_TURRET_ROTATION_RATE * 2 - excess;
+		pitchRate = (SWORD) (rotRate / 2);
 	}
 
-	tRotation = *pRotation;
-	tPitch = *pPitch;
+	tRotation = psWeapon->rotation;
+	tPitch = psWeapon->pitch;
 
 	//set the pitch limits based on the weapon stats of the attacker
 	pitchLowerLimit = pitchUpperLimit = 0;
 	if (psAttacker->type == OBJ_STRUCTURE)
 	{
-		pitchLowerLimit = asWeaponStats[((STRUCTURE *)psAttacker)->asWeaps[weapon_slot].
-			nStat].minElevation;
-		pitchUpperLimit = asWeaponStats[((STRUCTURE *)psAttacker)->asWeaps[weapon_slot].
-			nStat].maxElevation;
+		pitchLowerLimit = psWeapStats->minElevation;
+		pitchUpperLimit = psWeapStats->maxElevation;
 	}
 	else if (psAttacker->type == OBJ_DROID)
 	{
-		psDroid = (DROID *) psAttacker;
-		if ( (psDroid->droidType == DROID_WEAPON) ||
-			 (psDroid->droidType == DROID_TRANSPORTER) ||
-			 (psDroid->droidType == DROID_COMMAND) ||
-			 (psDroid->droidType == DROID_CYBORG) ||
-			 (psDroid->droidType == DROID_CYBORG_SUPER) )
+		DROID *psDroid = (DROID *)psAttacker;
+
+		if (psDroid->droidType == DROID_WEAPON || psDroid->droidType == DROID_TRANSPORTER
+		    || psDroid->droidType == DROID_COMMAND || psDroid->droidType == DROID_CYBORG
+		    || psDroid->droidType == DROID_CYBORG_SUPER)
 		{
-			pitchLowerLimit = asWeaponStats[psDroid->asWeaps[weapon_slot].
-				nStat].minElevation;
-			pitchUpperLimit = asWeaponStats[psDroid->asWeaps[weapon_slot].
-				nStat].maxElevation;
+			pitchLowerLimit = psWeapStats->minElevation;
+			pitchUpperLimit = psWeapStats->maxElevation;
 		}
 		else if ( psDroid->droidType == DROID_REPAIR )
 		{
@@ -539,7 +543,6 @@ BOOL actionTargetTurret(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, UWORD *p
 		{
 			tRotation = (SWORD)(targetRotation - psAttacker->direction);
 		}
-// 			debug( LOG_NEVER, "locked on target...\n");
 		onTarget = true;
 	}
 	tRotation %= 360;
@@ -559,18 +562,18 @@ BOOL actionTargetTurret(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, UWORD *p
 	}
 
 	/* set muzzle pitch if direct fire */
-	if (psWeapStats && (proj_Direct(psWeapStats) || ((psAttacker->type == OBJ_DROID) && !proj_Direct(psWeapStats) 
-	                                                  && actionInsideMinRange(psDroid, psTarget, psWeapStats))))
+	if (!bRepair && (proj_Direct(psWeapStats) || ((psAttacker->type == OBJ_DROID)
+                                                      && !proj_Direct(psWeapStats) 
+	                                              && actionInsideMinRange((DROID *)psAttacker, psTarget, psWeapStats))))
 	{
-		dx = psTarget->pos.x - psAttacker->pos.x;//muzzle.x;
-		dy = psTarget->pos.y - psAttacker->pos.y;//muzzle.y;
-		dz = psTarget->pos.z - psAttacker->pos.z;//muzzle.z;
+		dx = psTarget->pos.x - psAttacker->pos.x;
+		dy = psTarget->pos.y - psAttacker->pos.y;
+		dz = psTarget->pos.z - psAttacker->pos.z;
 
 		/* get target distance */
 		fR = trigIntSqrt( dx*dx + dy*dy );
 
 		targetPitch = (SDWORD)( RAD_TO_DEG(atan2(dz, fR)));
-		//tPitch = tPitch;
 		if (tPitch > 180)
 		{
 			tPitch -=360;
@@ -627,10 +630,8 @@ BOOL actionTargetTurret(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, UWORD *p
 		}
 	}
 
-	*pRotation = tRotation;
-	*pPitch = tPitch;
-
-// 	debug( LOG_NEVER, "endrot=%d\n",tRotation);
+	psWeapon->rotation = tRotation;
+	psWeapon->pitch = tPitch;
 
 	return onTarget;
 }
@@ -995,7 +996,7 @@ void actionUpdateDroid(DROID *psDroid)
 	SDWORD				xdiff,ydiff, rangeSq;
 	SECONDARY_STATE			state;
 	PROPULSION_STATS	*psPropStats;
-	BOOL				bChaseBloke, bInvert;
+	BOOL				bChaseBloke;
 	FEATURE				*psNextWreck;
 	BOOL				(*actionUpdateFunc)(DROID *psDroid) = NULL;
 	SDWORD				moveAction;
@@ -1012,16 +1013,6 @@ void actionUpdateDroid(DROID *psDroid)
 
 	psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
 	ASSERT(psPropStats != NULL, "invalid propulsion stats pointer");
-
-	/* check whether turret inverted for actionTargetTurret */
-	if (!cyborgDroid(psDroid) && psPropStats->propulsionType == PROPULSION_TYPE_LIFT)
-	{
-		bInvert = true;
-	}
-	else
-	{
-		bInvert = false;
-	}
 
 	// clear the target if it has died
 	for (i = 0; i < DROID_MAXWEAPS; i++)
@@ -1318,10 +1309,7 @@ void actionUpdateDroid(DROID *psDroid)
 
 							if (validTarget((BASE_OBJECT *)psDroid, psActionTarget, j))
 							{
-								if (actionTargetTurret((BASE_OBJECT*)psDroid, psActionTarget,
-														&(psDroid->turretRotation[j]), &(psDroid->turretPitch[j]),
-														&asWeaponStats[psDroid->asWeaps[j].nStat],
-														bInvert,j))
+								if (actionTargetTurret((BASE_OBJECT*)psDroid, psActionTarget, &psDroid->asWeaps[j]))
 								{
 									// In range - fire !!!
 									combFire(&psDroid->asWeaps[j], (BASE_OBJECT *)psDroid,
@@ -1332,10 +1320,7 @@ void actionUpdateDroid(DROID *psDroid)
 							{
 								if ((iVisible & 2) && validTarget((BASE_OBJECT *)psDroid, psDroid->psActionTarget[0], j))
 								{
-									if (actionTargetTurret((BASE_OBJECT*)psDroid, psDroid->psActionTarget[0],
-															&(psDroid->turretRotation[j]), &(psDroid->turretPitch[j]),
-															&asWeaponStats[psDroid->asWeaps[j].nStat],
-															bInvert,j))
+									if (actionTargetTurret((BASE_OBJECT*)psDroid, psDroid->psActionTarget[0], &psDroid->asWeaps[j]))
 									{
 										// In range - fire !!!
 										combFire(&psDroid->asWeaps[j], (BASE_OBJECT *)psDroid,
@@ -1431,10 +1416,7 @@ void actionUpdateDroid(DROID *psDroid)
 						}
 					}
 					else if (!psWeapStats->rotate ||
-							actionTargetTurret((BASE_OBJECT*)psDroid, psActionTarget,
-												&(psDroid->turretRotation[i]), &(psDroid->turretPitch[i]),
-												&asWeaponStats[psDroid->asWeaps[i].nStat],
-												bInvert,i))
+							actionTargetTurret((BASE_OBJECT*)psDroid, psActionTarget, &psDroid->asWeaps[i]))
 					{
 						/* In range - fire !!! */
 						combFire(&psDroid->asWeaps[i], (BASE_OBJECT *)psDroid, psActionTarget, i);
@@ -1497,10 +1479,7 @@ void actionUpdateDroid(DROID *psDroid)
 															VTOL_ATTACK_AUDIO_DELAY );
 							}
 
-							if (actionTargetTurret((BASE_OBJECT*)psDroid, psDroid->psActionTarget[0],
-													&(psDroid->turretRotation[i]), &(psDroid->turretPitch[i]),
-													&asWeaponStats[psDroid->asWeaps[i].nStat],
-													bInvert,i))
+							if (actionTargetTurret((BASE_OBJECT*)psDroid, psDroid->psActionTarget[0], &psDroid->asWeaps[i]))
 							{
 									// In range - fire !!!
 									combFire(&psDroid->asWeaps[i], (BASE_OBJECT *)psDroid,
@@ -1509,10 +1488,7 @@ void actionUpdateDroid(DROID *psDroid)
 						}
 						else
 						{
-							actionTargetTurret((BASE_OBJECT*)psDroid, psDroid->psActionTarget[0],
-													&(psDroid->turretRotation[i]), &(psDroid->turretPitch[i]),
-													&asWeaponStats[psDroid->asWeaps[i].nStat],
-													bInvert,i);
+							actionTargetTurret((BASE_OBJECT*)psDroid, psDroid->psActionTarget[0], &psDroid->asWeaps[i]);
 						}
 					}
 				}
@@ -1604,10 +1580,7 @@ void actionUpdateDroid(DROID *psDroid)
 						psWeapStats = asWeaponStats + psDroid->asWeaps[i].nStat;
 						if (psWeapStats->rotate)
 						{
-							actionTargetTurret((BASE_OBJECT*)psDroid, psDroid->psActionTarget[0],
-													&(psDroid->turretRotation[i]), &(psDroid->turretPitch[i]),
-													&asWeaponStats[psDroid->asWeaps[i].nStat],
-													bInvert,i);
+							actionTargetTurret((BASE_OBJECT*)psDroid, psDroid->psActionTarget[0], &psDroid->asWeaps[i]);
 						}
 
 						bChaseBloke = false;
@@ -1661,8 +1634,8 @@ void actionUpdateDroid(DROID *psDroid)
 			{
 				for(i = 0;i < psDroid->numWeaps;i++)
 				{
-					if ((psDroid->turretRotation[i] != 0) ||
-						(psDroid->turretPitch[i] != 0))
+					if ((psDroid->asWeaps[i].rotation != 0) ||
+						(psDroid->asWeaps[i].pitch != 0))
 					{
 						actionAlignTurret((BASE_OBJECT *)psDroid, i);
 					}
@@ -1935,9 +1908,7 @@ void actionUpdateDroid(DROID *psDroid)
 				moveTurnDroid(psDroid,psDroid->psTarget->pos.x,psDroid->psTarget->pos.y);
 			}*/
 			// Watermelon:make construct droid to use turretRotation[0]
-			actionTargetTurret((BASE_OBJECT*)psDroid, psDroid->psActionTarget[0],
-									&(psDroid->turretRotation[0]), &(psDroid->turretPitch[0]),
-									NULL,false,0);
+			actionTargetTurret((BASE_OBJECT*)psDroid, psDroid->psActionTarget[0], &psDroid->asWeaps[0]);
 		}
 		break;
 	case DACTION_MOVETODEMOLISH:
@@ -2045,9 +2016,7 @@ void actionUpdateDroid(DROID *psDroid)
 		else if ( actionUpdateFunc(psDroid) )
 		{
 			//Watermelon:use 0 for non-combat(only 1 'weapon')
-			actionTargetTurret((BASE_OBJECT*)psDroid, psDroid->psActionTarget[0],
-									&(psDroid->turretRotation[0]), &(psDroid->turretPitch[0]),
-									NULL,false,0);
+			actionTargetTurret((BASE_OBJECT*)psDroid, psDroid->psActionTarget[0], &psDroid->asWeaps[0]);
 		}
 		else if (psDroid->action == DACTION_CLEARWRECK)
 		{
@@ -2144,9 +2113,7 @@ void actionUpdateDroid(DROID *psDroid)
 		break;
 	case DACTION_OBSERVE:
 		// align the turret
-		actionTargetTurret((BASE_OBJECT*)psDroid, psDroid->psActionTarget[0],
-						&(psDroid->turretRotation[0]), &(psDroid->turretPitch[0]),
-						NULL,false,0);
+		actionTargetTurret((BASE_OBJECT*)psDroid, psDroid->psActionTarget[0], &psDroid->asWeaps[0]);
 
 		if (cbSensorDroid(psDroid))
 		{
@@ -2172,9 +2139,7 @@ void actionUpdateDroid(DROID *psDroid)
 		break;
 	case DACTION_MOVETOOBSERVE:
 		// align the turret
-		actionTargetTurret((BASE_OBJECT*)psDroid, psDroid->psActionTarget[0],
-						&(psDroid->turretRotation[0]), &(psDroid->turretPitch[0]),
-						NULL,false,0);
+		actionTargetTurret((BASE_OBJECT*)psDroid, psDroid->psActionTarget[0], &psDroid->asWeaps[0]);
 
 		if (visibleObject((BASE_OBJECT *)psDroid, psDroid->psActionTarget[0], false))
 		{
@@ -2268,9 +2233,7 @@ void actionUpdateDroid(DROID *psDroid)
 			// Got to destination - start repair
 			//rotate turret to point at droid being repaired
 			//Watermelon:use 0 for repair droid
-			if (actionTargetTurret((BASE_OBJECT*)psDroid,
-					psDroid->psActionTarget[0], &(psDroid->turretRotation[0]),
-					&(psDroid->turretPitch[0]), NULL, false, 0))
+			if (actionTargetTurret((BASE_OBJECT*)psDroid, psDroid->psActionTarget[0], &psDroid->asWeaps[0]))
 			{
 				if (droidStartDroidRepair(psDroid))
 				{
@@ -2295,9 +2258,7 @@ void actionUpdateDroid(DROID *psDroid)
 		//Watermelon:use 0 for repair droid
 		if (psDroid->psActionTarget[0] != (BASE_OBJECT *)psDroid)
 		{
-			actionTargetTurret((BASE_OBJECT*)psDroid,
-					psDroid->psActionTarget[0], &(psDroid->turretRotation[0]),
-					&(psDroid->turretPitch[0]), NULL, false, 0);
+			actionTargetTurret((BASE_OBJECT*)psDroid, psDroid->psActionTarget[0], &psDroid->asWeaps[0]);
 		}
 
 		//check still next to the damaged droid
@@ -2422,8 +2383,8 @@ void actionUpdateDroid(DROID *psDroid)
 		//Watermelon:use 0 for all non-combat droid types
 		if (psDroid->numWeaps == 0)
 		{
-			if ((psDroid->turretRotation[0] != 0) ||
-				(psDroid->turretPitch[0] != 0))
+			if ((psDroid->asWeaps[0].rotation != 0) ||
+				(psDroid->asWeaps[0].pitch != 0))
 			{
 				actionAlignTurret((BASE_OBJECT *)psDroid, 0);
 			}
@@ -2432,8 +2393,8 @@ void actionUpdateDroid(DROID *psDroid)
 		{
 			for (i = 0;i < psDroid->numWeaps;i++)
 			{
-				if ((psDroid->turretRotation[i] != 0) ||
-					(psDroid->turretPitch[i] != 0))
+				if ((psDroid->asWeaps[i].rotation != 0) ||
+					(psDroid->asWeaps[i].pitch != 0))
 				{
 					actionAlignTurret((BASE_OBJECT *)psDroid, i);
 				}

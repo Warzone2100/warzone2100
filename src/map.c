@@ -367,7 +367,7 @@ static void objectStatTagged(BASE_OBJECT *psObj, int body, int resistance)
 	tagWriteLeave(0x03);
 }
 
-static void objectWeaponTagged(int num, UWORD *rotation, UWORD *pitch, WEAPON *asWeaps, BASE_OBJECT **psTargets)
+static void objectWeaponTagged(int num, WEAPON *asWeaps, BASE_OBJECT **psTargets)
 {
 	int i;
 
@@ -375,8 +375,8 @@ static void objectWeaponTagged(int num, UWORD *rotation, UWORD *pitch, WEAPON *a
 	for (i = 0; i < num; i++)
 	{
 		tagWrite(0x01, asWeaps[i].nStat);
-		tagWrite(0x02, rotation[i]);
-		tagWrite(0x03, pitch[i]);
+		tagWrite(0x02, asWeaps[i].rotation);
+		tagWrite(0x03, asWeaps[i].pitch);
 		tagWrite(0x05, asWeaps[i].ammo);
 		tagWrite(0x06, asWeaps[i].lastFired);
 		tagWrite(0x07, asWeaps[i].recoilValue);
@@ -401,7 +401,7 @@ static void droidSaveTagged(DROID *psDroid)
 	objectSaveTagged((BASE_OBJECT *)psDroid); /* 0x01 */
 	objectSensorTagged(psDroid->sensorRange, psDroid->sensorPower, 0, psDroid->ECMMod); /* 0x02 */
 	objectStatTagged((BASE_OBJECT *)psDroid, psDroid->originalBody, psDroid->resistance); /* 0x03 */
-	objectWeaponTagged(psDroid->numWeaps, psDroid->turretRotation, psDroid->turretPitch, psDroid->asWeaps, psDroid->psActionTarget);
+	objectWeaponTagged(psDroid->numWeaps, psDroid->asWeaps, psDroid->psActionTarget);
 
 	/* DROID GROUP */
 
@@ -523,7 +523,7 @@ static void structureSaveTagged(STRUCTURE *psStruct)
 	objectSaveTagged((BASE_OBJECT *)psStruct); /* 0x01 */
 	objectSensorTagged(psStruct->sensorRange, psStruct->sensorPower, 0, psStruct->ECMMod); /* 0x02 */
 	objectStatTagged((BASE_OBJECT *)psStruct, psStruct->pStructureType->bodyPoints, psStruct->resistance); /* 0x03 */
-	objectWeaponTagged(psStruct->numWeaps, psStruct->turretRotation, psStruct->turretPitch, psStruct->asWeaps, psStruct->psTarget);
+	objectWeaponTagged(psStruct->numWeaps, psStruct->asWeaps, psStruct->psTarget);
 
 	/* STRUCTURE GROUP */
 

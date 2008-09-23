@@ -2915,6 +2915,8 @@ DROID* buildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player,
 		psDroid->asWeaps[i].nStat = 0;
 		psDroid->asWeaps[i].ammo = 0;
 		psDroid->asWeaps[i].recoilValue = 0;
+		psDroid->asWeaps[i].rotation = 0;
+		psDroid->asWeaps[i].pitch = 0;
 	}
 
 	psDroid->listSize = 0;
@@ -2965,15 +2967,8 @@ DROID* buildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player,
 	psDroid->direction = 0;
 	psDroid->pitch =  0;
 	psDroid->roll = 0;
-	//Watermelon:initialize all weapon turrent rotation pitch info
-	for(i = 0;i < DROID_MAXWEAPS; i++)
-	{
-		psDroid->turretRotation[i] = 0;
-		psDroid->turretPitch[i] = 0;
-	}
 	psDroid->selected = false;
 	psDroid->lastEmission = 0;
-		// ffs AM
 	psDroid->bTargetted = false;
 	psDroid->timeLastHit = UDWORD_MAX;
 	psDroid->lastHitWeapon = UDWORD_MAX;	// no such weapon
@@ -3102,8 +3097,8 @@ void droidSetBits(DROID_TEMPLATE *pTemplate,DROID *psDroid)
 	psDroid->numWeaps = pTemplate->numWeaps;
 	for (inc = 0;inc < psDroid->numWeaps;inc++)
 	{
-		psDroid->turretRotation[inc] = 0;
-		psDroid->turretPitch[inc] = 0;
+		psDroid->asWeaps[inc].rotation = 0;
+		psDroid->asWeaps[inc].pitch = 0;
 	}
 
 	psDroid->body = calcTemplateBody(pTemplate, psDroid->player);
@@ -3487,8 +3482,8 @@ BOOL calcDroidMuzzleLocation(DROID *psDroid, Vector3f *muzzle, int weapon_slot)
 					  -psShape->connectors[weapon_slot].y);//note y and z flipped
 
 		//matrix = the gun and turret mount on the body
-		pie_MatRotY(DEG(psDroid->turretRotation[weapon_slot]));//+ve anticlockwise
-		pie_MatRotX(DEG(psDroid->turretPitch[weapon_slot]));//+ve up
+		pie_MatRotY(DEG(psDroid->asWeaps[weapon_slot].rotation));	// +ve anticlockwise
+		pie_MatRotX(DEG(psDroid->asWeaps[weapon_slot].pitch));		// +ve up
 		pie_MatRotZ(DEG(0));
 
 		//matrix = the muzzle mount on turret
@@ -5188,7 +5183,7 @@ void checkDroid(const DROID *droid, const char * const location_description, con
 
 	for (i = 0; i < DROID_MAXWEAPS; ++i)
 	{
-		ASSERT_HELPER(droid->turretRotation[i] <= 360, location_description, function, "CHECK_DROID: Bad turret rotation of turret %u", i);
+		ASSERT_HELPER(droid->asWeaps[i].rotation <= 360, location_description, function, "CHECK_DROID: Bad turret rotation of turret %u", i);
 		ASSERT_HELPER(droid->asWeaps[i].lastFired <= gameTime, location_description, function, "CHECK_DROID: Bad last fired time for turret %u", i);
 		if (droid->psActionTarget[i])
 		{

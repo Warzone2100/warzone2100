@@ -30,6 +30,8 @@ typedef struct _weapon
 	UDWORD          ammo;
 	UDWORD          lastFired;      ///< When the weapon last fired
 	UDWORD          recoilValue;
+	UWORD		pitch;
+	UWORD		rotation;
 } WEAPON;
 
 #endif // __INCLUDED_WEAPONDEF_H__
