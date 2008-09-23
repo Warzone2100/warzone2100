@@ -24,6 +24,7 @@ Makefile.in
 /configure
 /depcomp
 /install-sh
+/ltmain.sh
 /missing
 /stamp-h1
 /po/POTFILES
