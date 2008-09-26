@@ -5703,7 +5703,7 @@
 					external/libtheora/include/theora,
 					"$(inherited)",
 				);
-				INFOPLIST_FILE = "/Users/freddie/Documents/Programming/Warzone/macosx/Resources/Theora-Info.plist";
+				INFOPLIST_FILE = "Resources/Theora-Info.plist";
 				INSTALL_PATH = "@executable_path/../Frameworks";
 				OTHER_LDFLAGS = "";
 				PREBINDING = NO;
@@ -5728,7 +5728,7 @@
 					external/libtheora/include/theora,
 					"$(inherited)",
 				);
-				INFOPLIST_FILE = "/Users/freddie/Documents/Programming/Warzone/macosx/Resources/Theora-Info.plist";
+				INFOPLIST_FILE = "Resources/Theora-Info.plist";
 				INSTALL_PATH = "@executable_path/../Frameworks";
 				OTHER_LDFLAGS = "";
 				PREBINDING = NO;
