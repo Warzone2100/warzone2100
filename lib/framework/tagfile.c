@@ -62,6 +62,7 @@ static int lastAccess = -1;		// track last accessed tag to detect user errors
 static int countGroups = 0;		// check group recursion count while reading definition
 static char saveDefine[PATH_MAX];	// save define file for error messages
 static char saveTarget[PATH_MAX];	// save binary file for error messages
+static int virtualGroupRecursion = 0;	// how deep into a virtual group we currently are
 
 #undef DEBUG_TAGFILE
 
@@ -261,6 +262,7 @@ static bool init(const char *definition, const char *datafile, bool write)
 	PHYSFS_sint64 fsize, fsize2;
 	char *buffer;
 
+	virtualGroupRecursion = 0;
 	tag_error = false;
 	line = 1;
 	fp = PHYSFS_openRead(definition);
@@ -561,7 +563,11 @@ uint16_t tagReadEnter(element_t tag)
 	uint16_t elements = 0;
 
 	assert(readmode);
-	if (scanforward(tag) && readmode)
+	if (!readmode)
+	{
+		return 0;
+	}
+	if (scanforward(tag))
 	{
 		element_t tagtype;
 
@@ -586,6 +592,10 @@ uint16_t tagReadEnter(element_t tag)
 			return 0;
 		}
 	}
+	else
+	{
+		virtualGroupRecursion++;
+	}
 #ifdef DEBUG_TAGFILE
 	debug(LOG_ERROR, "entering 0x%02x with %d elements", (unsigned int)tag, (int)elements);
 #endif
@@ -601,7 +611,17 @@ uint16_t tagReadEnter(element_t tag)
 
 void tagReadLeave(element_t tag)
 {
-	(void) scanforward(TAG_GROUP_END);
+	if (virtualGroupRecursion > 0)
+	{
+		virtualGroupRecursion--;
+	}
+	else
+	{
+		if (!scanforward(TAG_GROUP_END))
+		{
+			TF_ERROR("No end of group tag found");
+		}
+	}
 	if (tag_error)
 	{
 		return;
@@ -1315,6 +1335,7 @@ bool tagWriteString(element_t tag, const char *buffer)
 // unit test function
 void tagTest()
 {
+	int i;
 	static const char virtual_definition[] = "tagdefinitions/tagfile_virtual.def";
 	static const char basic_definition[]   = "tagdefinitions/tagfile_basic.def";
 	static const char writename[] = "test.wzs";
@@ -1370,6 +1391,7 @@ void tagTest()
 				tagWrite(0x01, 1);
 				tagWriteNext();
 			tagWriteLeave(0x03);
+			tagWrite(0x04, 1);
 			// deliberately no 'next' here
 		tagWriteLeave(0x07);
 		tagWriteEnter(0x08, 1);
@@ -1383,6 +1405,16 @@ void tagTest()
 			tagWrites32v(0x05, 3, v);
 		}
 		tagWriteLeave(0x09);
+		tagWriteEnter(0x0b, 1);
+			tagWrite(0x01, 0);
+			tagWriteEnter(0x0a, 10);
+				for (i = 0; i < 10; i++)
+				{
+					tagWriteNext();
+				}
+			tagWriteLeave(0x0a);
+			tagWrite(0x0b, 1);
+		tagWriteLeave(0x0b);
 	tagWriteLeave(0x02);
 	tagClose();
 
@@ -1418,6 +1450,23 @@ void tagTest()
 			assert(v[1] == 0);
 			assert(v[2] == 1);
 		tagReadLeave(0x09);
+		tagReadEnter(0x0a);
+			assert(tagRead(0x01) == 0);
+			assert(tagRead(0x02) == 0);
+			assert(tagRead(0x03) == 0);
+			assert(tagRead(0x04) == 0);
+		tagReadLeave(0x0a);
+		tagReadEnter(0x0b);
+			tagReadEnter(0x0a);
+				for (i = 0; i < 10; i++)
+				{
+					assert(tagRead(0x0a) == 0);
+					assert(tagRead(0x0b) == 0);
+					tagReadNext();
+				}
+			tagReadLeave(0x0a);
+			assert(tagRead(0x0b) == 1);
+		tagReadLeave(0x0b);
 		free(blobptr);
 	}
 	tagReadLeave(0x02);

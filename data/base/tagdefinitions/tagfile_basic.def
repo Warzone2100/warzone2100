@@ -19,6 +19,7 @@
     03 GR 00 -      # Another nested group
       01 US 01 0    # Default value
       FF EN 00 -
+    04 US 01 -      # Non-default value
     FF EN 00 -
   08 GR 00 -        # Empty group
     FF EN 00 -
@@ -29,6 +30,20 @@
     04 US 01  0     # Recoil value
     05 SI 03  -     # Array of signed int
     FF EN 00  -
+  0a GR 00 -        # Default values group
+    01 US 01 0      # Default value, not written
+    02 US 01 0      # Default value, not written
+    03 US 01 0      # Default value, not written
+    04 US 01 0      # Default value, not written
+    FF EN 00 -
+  0b GR 00 -        # Another test group
+    01 US 01 -      # Value 
+    0a GR 00 -      # Group
+      0a US 01 0    # Default value
+      0b US 01 0    # Default value
+      FF EN 00 -    # End group
+    0b US 01 -      # Value
+    FF EN 00 -
   FF EN 00  -
 03 GR 00  -         # STRUCTURE GROUP
   01 US 01  -       # Structure ID
