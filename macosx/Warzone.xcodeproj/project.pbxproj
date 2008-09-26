@@ -900,14 +900,14 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = 02356D660BD3BB2600E9A019 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 02DDA7ED0BD3C03F0049AB60 /* Vorbis */;
+			remoteGlobalIDString = 02DDA7ED0BD3C03F0049AB60;
 			remoteInfo = Vorbis;
 		};
 		97AEAC540E8C261600A10721 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 02356D660BD3BB2600E9A019 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 97AEAAEA0E8C1B5200A10721 /* Theora */;
+			remoteGlobalIDString = 97AEAAEA0E8C1B5200A10721;
 			remoteInfo = Theora;
 		};
 		97B1D6670D1541C000737638 /* PBXContainerItemProxy */ = {
@@ -1804,18 +1804,17 @@
 		2244463B0E3EB7CB004D0F1F /* messagely.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = messagely.h; path = ../src/messagely.h; sourceTree = SOURCE_ROOT; };
 		22E244D40E65361800EC2B3E /* baseobject.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = baseobject.c; path = ../src/baseobject.c; sourceTree = SOURCE_ROOT; };
 		22E244D50E65361800EC2B3E /* baseobject.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = baseobject.h; path = ../src/baseobject.h; sourceTree = SOURCE_ROOT; };
+		9730E7CE0E8CEAA5009C9481 /* Theora-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "Theora-Info.plist"; path = "Resources/Theora-Info.plist"; sourceTree = "<group>"; };
 		9742E5710DF9975E000A5D41 /* lexer_input.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = lexer_input.c; path = ../lib/framework/lexer_input.c; sourceTree = SOURCE_ROOT; };
 		9742E5720DF9975E000A5D41 /* lexer_input.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = lexer_input.h; path = ../lib/framework/lexer_input.h; sourceTree = SOURCE_ROOT; };
 		9742E5750DF9979C000A5D41 /* parsetest.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = parsetest.c; path = ../src/parsetest.c; sourceTree = SOURCE_ROOT; };
 		9742E5760DF9979C000A5D41 /* parsetest.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = parsetest.h; path = ../src/parsetest.h; sourceTree = SOURCE_ROOT; };
 		979738590E815F4400D6418D /* physfs_vfs.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = physfs_vfs.c; path = ../lib/framework/physfs_vfs.c; sourceTree = SOURCE_ROOT; };
 		9797385A0E815F4400D6418D /* physfs_vfs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = physfs_vfs.h; path = ../lib/framework/physfs_vfs.h; sourceTree = SOURCE_ROOT; };
-		97AEA5EC0E8C12E900A10721 /* Theora-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Theora-Info.plist"; sourceTree = "<group>"; };
 		97AEA8C60E8C164200A10721 /* internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = internal.h; path = external/libtheora/lib/internal.h; sourceTree = "<group>"; };
 		97AEA9550E8C182B00A10721 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		97AEA9600E8C184C00A10721 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 		97AEAB330E8C1B5200A10721 /* Theora.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Theora.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		97AEAB450E8C1B5200A10721 /* Vorbis-Info copy.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "Vorbis-Info copy.plist"; path = "Resources/Vorbis-Info copy.plist"; sourceTree = "<group>"; };
 		97AEAB6E0E8C1C3A00A10721 /* codec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = codec.h; path = external/libtheora/include/theora/codec.h; sourceTree = "<group>"; };
 		97AEAB6F0E8C1C3A00A10721 /* theora.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = theora.h; path = external/libtheora/include/theora/theora.h; sourceTree = "<group>"; };
 		97AEAB700E8C1C3A00A10721 /* theoradec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = theoradec.h; path = external/libtheora/include/theora/theoradec.h; sourceTree = "<group>"; };
@@ -1886,15 +1885,10 @@
 		97AEABC10E8C1C6D00A10721 /* fdct_mmx.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = fdct_mmx.c; sourceTree = "<group>"; };
 		97AEABC20E8C1C6D00A10721 /* idct_mmx.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = idct_mmx.c; sourceTree = "<group>"; };
 		97AEABC30E8C1C6D00A10721 /* recon_mmx.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = recon_mmx.c; sourceTree = "<group>"; };
-		97AEABC50E8C1C6D00A10721 /* dsp_mmx.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = dsp_mmx.c; sourceTree = "<group>"; };
 		97AEABC60E8C1C6D00A10721 /* fdct_mmx.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = fdct_mmx.c; sourceTree = "<group>"; };
-		97AEABC70E8C1C6D00A10721 /* recon_mmx.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = recon_mmx.c; sourceTree = "<group>"; };
-		97AEABC90E8C1C6D00A10721 /* dct_decode_mmx.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = dct_decode_mmx.c; sourceTree = "<group>"; };
-		97AEABCA0E8C1C6D00A10721 /* dsp_mmx.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = dsp_mmx.c; sourceTree = "<group>"; };
 		97AEABCB0E8C1C6D00A10721 /* dsp_mmxext.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = dsp_mmxext.c; sourceTree = "<group>"; };
 		97AEABCC0E8C1C6D00A10721 /* fdct_mmx.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = fdct_mmx.c; sourceTree = "<group>"; };
 		97AEABCD0E8C1C6D00A10721 /* idct_mmx.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = idct_mmx.c; sourceTree = "<group>"; };
-		97AEABCE0E8C1C6D00A10721 /* recon_mmx.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = recon_mmx.c; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -2154,19 +2148,6 @@
 		02356D640BD3BB2600E9A019 = {
 			isa = PBXGroup;
 			children = (
-				97AEAB7E0E8C1C6C00A10721 /* cpu.c */,
-				97AEAB7F0E8C1C6C00A10721 /* cpu.h */,
-				97AEAB800E8C1C6C00A10721 /* dec */,
-				97AEAB9F0E8C1C6C00A10721 /* enc */,
-				97AEAB6E0E8C1C3A00A10721 /* codec.h */,
-				97AEAB6F0E8C1C3A00A10721 /* theora.h */,
-				97AEAB700E8C1C3A00A10721 /* theoradec.h */,
-				97AEAB710E8C1C3A00A10721 /* theoraenc.h */,
-				97AEA8C60E8C164200A10721 /* internal.h */,
-				979738590E815F4400D6418D /* physfs_vfs.c */,
-				9797385A0E815F4400D6418D /* physfs_vfs.h */,
-				22E244D40E65361800EC2B3E /* baseobject.c */,
-				22E244D50E65361800EC2B3E /* baseobject.h */,
 				023A1D4F0D2DAEC900EFEB37 /* Resources */,
 				02CDDCFD0D159BE700722688 /* Autorevision sources */,
 				02F5CC7F0D1495EB0000A2D0 /* Popt sources */,
@@ -2179,10 +2160,10 @@
 				02DDA8DE0BD3C3930049AB60 /* PhysFS sources */,
 				02DDA8620BD3C1BB0049AB60 /* Vorbis sources */,
 				02DDA8610BD3C1B50049AB60 /* Ogg sources */,
+				9730E8000E8CEB3B009C9481 /* Theora sources */,
 				02DDA8600BD3C1AF0049AB60 /* Png sources */,
 				02DDA85F0BD3C1A60049AB60 /* Zlib sources */,
 				02356D760BD3BB3400E9A019 /* Products */,
-				97AEA5EC0E8C12E900A10721 /* Theora-Info.plist */,
 				97AEA9550E8C182B00A10721 /* Foundation.framework */,
 				97AEA9600E8C184C00A10721 /* AppKit.framework */,
 			);
@@ -2212,6 +2193,7 @@
 		023A1D4F0D2DAEC900EFEB37 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				9730E7CE0E8CEAA5009C9481 /* Theora-Info.plist */,
 				0246A05C0BD3C975004D1C70 /* Warzone.icns */,
 				02356D780BD3BB3500E9A019 /* Warzone-Info.plist */,
 				02356D840BD3BB4100E9A019 /* Zlib-Info.plist */,
@@ -2224,7 +2206,6 @@
 				022B2F230BD55815002E64E3 /* Gettext-Info.plist */,
 				0223BBD20CFE3D5C0056EF85 /* QuesoGLC-Info.plist */,
 				02F5CC6E0D1494AA0000A2D0 /* Popt-Info.plist */,
-				97AEAB450E8C1B5200A10721 /* Vorbis-Info copy.plist */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -2251,6 +2232,8 @@
 		0246A0D00BD3CBE1004D1C70 /* Framework */ = {
 			isa = PBXGroup;
 			children = (
+				979738590E815F4400D6418D /* physfs_vfs.c */,
+				9797385A0E815F4400D6418D /* physfs_vfs.h */,
 				9742E5750DF9979C000A5D41 /* parsetest.c */,
 				9742E5760DF9979C000A5D41 /* parsetest.h */,
 				9742E5710DF9975E000A5D41 /* lexer_input.c */,
@@ -2483,6 +2466,8 @@
 		0246A1970BD3CCC3004D1C70 /* Warzone */ = {
 			isa = PBXGroup;
 			children = (
+				22E244D40E65361800EC2B3E /* baseobject.c */,
+				22E244D50E65361800EC2B3E /* baseobject.h */,
 				02AAD1480D9ED2DB00248B0F /* stats-db.h */,
 				02CDDD080D159D5900722688 /* autorevision.h */,
 				0223BBAC0CFE3C380056EF85 /* main.h */,
@@ -3121,6 +3106,22 @@
 			name = "Popt sources";
 			sourceTree = "<group>";
 		};
+		9730E8000E8CEB3B009C9481 /* Theora sources */ = {
+			isa = PBXGroup;
+			children = (
+				97AEAB800E8C1C6C00A10721 /* dec */,
+				97AEAB9F0E8C1C6C00A10721 /* enc */,
+				97AEAB6E0E8C1C3A00A10721 /* codec.h */,
+				97AEAB6F0E8C1C3A00A10721 /* theora.h */,
+				97AEAB700E8C1C3A00A10721 /* theoradec.h */,
+				97AEAB710E8C1C3A00A10721 /* theoraenc.h */,
+				97AEA8C60E8C164200A10721 /* internal.h */,
+				97AEAB7E0E8C1C6C00A10721 /* cpu.c */,
+				97AEAB7F0E8C1C6C00A10721 /* cpu.h */,
+			);
+			name = "Theora sources";
+			sourceTree = "<group>";
+		};
 		97AEAB800E8C1C6C00A10721 /* dec */ = {
 			isa = PBXGroup;
 			children = (
@@ -3222,9 +3223,7 @@
 		97AEABC40E8C1C6D00A10721 /* x86_32_vs */ = {
 			isa = PBXGroup;
 			children = (
-				97AEABC50E8C1C6D00A10721 /* dsp_mmx.c */,
 				97AEABC60E8C1C6D00A10721 /* fdct_mmx.c */,
-				97AEABC70E8C1C6D00A10721 /* recon_mmx.c */,
 			);
 			path = x86_32_vs;
 			sourceTree = "<group>";
@@ -3232,12 +3231,9 @@
 		97AEABC80E8C1C6D00A10721 /* x86_64 */ = {
 			isa = PBXGroup;
 			children = (
-				97AEABC90E8C1C6D00A10721 /* dct_decode_mmx.c */,
-				97AEABCA0E8C1C6D00A10721 /* dsp_mmx.c */,
 				97AEABCB0E8C1C6D00A10721 /* dsp_mmxext.c */,
 				97AEABCC0E8C1C6D00A10721 /* fdct_mmx.c */,
 				97AEABCD0E8C1C6D00A10721 /* idct_mmx.c */,
-				97AEABCE0E8C1C6D00A10721 /* recon_mmx.c */,
 			);
 			path = x86_64;
 			sourceTree = "<group>";
@@ -5707,7 +5703,7 @@
 					external/libtheora/include/theora,
 					"$(inherited)",
 				);
-				INFOPLIST_FILE = /Users/freddie/Documents/Programming/Warzone/macosx/Resources/Theora.plist;
+				INFOPLIST_FILE = "/Users/freddie/Documents/Programming/Warzone/macosx/Resources/Theora-Info.plist";
 				INSTALL_PATH = "@executable_path/../Frameworks";
 				OTHER_LDFLAGS = "";
 				PREBINDING = NO;
@@ -5732,7 +5728,7 @@
 					external/libtheora/include/theora,
 					"$(inherited)",
 				);
-				INFOPLIST_FILE = /Users/freddie/Documents/Programming/Warzone/macosx/Resources/Theora.plist;
+				INFOPLIST_FILE = "/Users/freddie/Documents/Programming/Warzone/macosx/Resources/Theora-Info.plist";
 				INSTALL_PATH = "@executable_path/../Frameworks";
 				OTHER_LDFLAGS = "";
 				PREBINDING = NO;
