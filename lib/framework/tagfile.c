@@ -589,7 +589,7 @@ uint16_t tagReadEnter(element_t tag)
 		return 0;
 	}
 #ifdef DEBUG_TAGFILE
-	debug(LOG_ERROR, "entering 0x%02x", (unsigned int)tag);
+	debug(LOG_ERROR, "entering 0x%02x with %d elements", (unsigned int)tag, (int)elements);
 #endif
 	assert(current->group->parent != NULL);
 	assert(current->element == tag);

@@ -75,7 +75,7 @@
   FF EN 00 -
 0f GR 00 -		# OBJECT GROUP
   01 GR 00 -		# BASE OBJECT GROUP
-    01 US 01 -		# Object type (always type droid)
+    01 US 01 -		# Object type
     02 US 01 -		# Unique object id
     03 US 03 -		# (x, y, z) position coordinates
     04 FP 01 -		# Direction
@@ -171,6 +171,7 @@
     FF EN 00 -
   0c GR 00 -		# FEATURE GROUP
     01 US 01 0		# Time frame it was created
+    02 BO 01 0		# Targetted
     FF EN 00 -
   0d GR 00 -		# FACTORY GROUP
     01 US 01 0		# Capacity (the max size of body the factory can produce)
