@@ -234,7 +234,7 @@ PKG_CHECK_MODULES([OPENAL], [openal >= 0.0.8])
 PKG_CHECK_MODULES([PNG], [libpng >= 1.2])
 PKG_CHECK_MODULES([OGGVORBIS], [vorbisfile >= 1.1])
 
-# Only accept SQLite versions 3.5.x, with a minimum of 3.5.4.
+# Only accept SQLite versions newer than 3.6, otherwise use built-in
 PKG_CHECK_MODULES([SQLITE], [sqlite3 >= 3.6],
 	[ use_system_sqlite="yes" ], [
 	use_system_sqlite="no"
