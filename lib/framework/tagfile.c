@@ -527,10 +527,9 @@ static bool scanforward(element_t tag)
 		assert(current != NULL);
 		assert(current->element == tag);
 
-		if (!current->defaultval)
+		if (!current->defaultval && current->vr[0] != 'G' && current->vr[1] != 'R' && current->vr[0] != 'E' && current->vr[1] != 'N')
 		{
 			TF_ERROR("Tag not found and no default: %#04x", (unsigned int)tag);
-			return false;
 		}
 	}
 
@@ -559,38 +558,38 @@ bool tagReadNext()
 
 uint16_t tagReadEnter(element_t tag)
 {
-	uint16_t elements;
-	element_t tagtype;
+	uint16_t elements = 0;
 
 	assert(readmode);
-	if (!scanforward(tag) || !readmode)
+	if (scanforward(tag) && readmode)
 	{
-		return 0; // none found; avoid error reporting here
-	}
-	lastAccess = -1; // reset requirement that tags are increasing in value
-	if (!PHYSFS_readUBE8(handle, &tagtype))
-	{
-		TF_ERROR("Error reading group type: %s", PHYSFS_getLastError());
-		return 0;
-	}
-	if (tagtype != TF_INT_GROUP)
-	{
-		TF_ERROR("Error in group VR, tag %#04x", (unsigned int)tag);
-		return 0;
-	}
-	if (!PHYSFS_readUBE16(handle, &elements))
-	{
-		TF_ERROR("Error accessing group size: %s", PHYSFS_getLastError());
-		return 0;
-	}
-	if (!current->group)
-	{
-		TF_ERROR("Cannot enter group, none defined for element %x!", (unsigned int)current->element);
-		return 0;
+		element_t tagtype;
+
+		if (!PHYSFS_readUBE8(handle, &tagtype))
+		{
+			TF_ERROR("Error reading group type: %s", PHYSFS_getLastError());
+			return 0;
+		}
+		if (tagtype != TF_INT_GROUP)
+		{
+			TF_ERROR("Error in group VR, tag %#04x", (unsigned int)tag);
+			return 0;
+		}
+		if (!PHYSFS_readUBE16(handle, &elements))
+		{
+			TF_ERROR("Error accessing group size: %s", PHYSFS_getLastError());
+			return 0;
+		}
+		if (!current->group)
+		{
+			TF_ERROR("Cannot enter group, none defined for element %x!", (unsigned int)current->element);
+			return 0;
+		}
 	}
 #ifdef DEBUG_TAGFILE
 	debug(LOG_ERROR, "entering 0x%02x with %d elements", (unsigned int)tag, (int)elements);
 #endif
+	lastAccess = -1; // reset requirement that tags are increasing in value, also on failure, since we may enter virtual groups
 	assert(current->group->parent != NULL);
 	assert(current->element == tag);
 	current->group->expectedItems = elements;	// for debugging and consistency checking
@@ -602,11 +601,7 @@ uint16_t tagReadEnter(element_t tag)
 
 void tagReadLeave(element_t tag)
 {
-	if (!scanforward(TAG_GROUP_END))
-	{
-		TF_ERROR("Cannot leave group, group end tag not found!");
-		return;
-	}
+	(void) scanforward(TAG_GROUP_END);
 	if (tag_error)
 	{
 		return;
