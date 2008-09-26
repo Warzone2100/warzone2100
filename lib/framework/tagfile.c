@@ -33,7 +33,7 @@ enum internal_types
 typedef struct _define
 {
 	unsigned int vm; //! value multiple
-	uint8_t element; //! tag number
+	element_t element; //! tag number
 	char vr[2]; //! value representation (type)
 	struct _define *parent;	//! parent group
 	struct _define *group;	//! child group
