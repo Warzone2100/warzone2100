@@ -4,8 +4,10 @@
    * Fix: Various source compilation fixes.
  * Campaign:
    * Fix: Researching Gas Turbine Generator no longer reduces the output of power generators (bug #12262)
+ * Mods:
+   * New: New Team War (NTW) by Delphino added
  * Multiplayer (non-skirmish only):
-   * Added visual feedback for when there are no games available in the lobby.
+   * New: Added visual feedback for when there are no games available in the lobby.
    * Fix: Smoking healthy droids gone.
    * Fix: Cyborg transports should now unload correctly. (bug #12116)
  * Buildsystem:
