@@ -1,7 +1,7 @@
-0000-00-00: Version 2.1_beta5
+2008-09-28: Version 2.1_beta5
  * General:
-   * Reordered main menues. Skirmish is now under Single Player.
-   * Various source compilation fixes.
+   * Change: Reordered main menus. Skirmish is now under Single Player.
+   * Fix: Various source compilation fixes.
  * Campaign:
    * Fix: Researching Gas Turbine Generator no longer reduces the output of power generators (bug #12262)
  * Multiplayer (non-skirmish only):
