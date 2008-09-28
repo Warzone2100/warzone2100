@@ -670,10 +670,10 @@
 		9742E5770DF9979C000A5D41 /* parsetest.c in Sources */ = {isa = PBXBuildFile; fileRef = 9742E5750DF9979C000A5D41 /* parsetest.c */; };
 		9742E5780DF9979C000A5D41 /* parsetest.h in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 9742E5760DF9979C000A5D41 /* parsetest.h */; };
 		9797385B0E815F4400D6418D /* physfs_vfs.c in Sources */ = {isa = PBXBuildFile; fileRef = 979738590E815F4400D6418D /* physfs_vfs.c */; };
-		97AEAB720E8C1C3A00A10721 /* codec.h in Headers */ = {isa = PBXBuildFile; fileRef = 97AEAB6E0E8C1C3A00A10721 /* codec.h */; };
-		97AEAB730E8C1C3A00A10721 /* theora.h in Headers */ = {isa = PBXBuildFile; fileRef = 97AEAB6F0E8C1C3A00A10721 /* theora.h */; };
-		97AEAB740E8C1C3A00A10721 /* theoradec.h in Headers */ = {isa = PBXBuildFile; fileRef = 97AEAB700E8C1C3A00A10721 /* theoradec.h */; };
-		97AEAB750E8C1C3A00A10721 /* theoraenc.h in Headers */ = {isa = PBXBuildFile; fileRef = 97AEAB710E8C1C3A00A10721 /* theoraenc.h */; };
+		97AEAB720E8C1C3A00A10721 /* codec.h in Headers */ = {isa = PBXBuildFile; fileRef = 97AEAB6E0E8C1C3A00A10721 /* codec.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		97AEAB730E8C1C3A00A10721 /* theora.h in Headers */ = {isa = PBXBuildFile; fileRef = 97AEAB6F0E8C1C3A00A10721 /* theora.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		97AEAB740E8C1C3A00A10721 /* theoradec.h in Headers */ = {isa = PBXBuildFile; fileRef = 97AEAB700E8C1C3A00A10721 /* theoradec.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		97AEAB750E8C1C3A00A10721 /* theoraenc.h in Headers */ = {isa = PBXBuildFile; fileRef = 97AEAB710E8C1C3A00A10721 /* theoraenc.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		97AEAB780E8C1C5100A10721 /* Ogg.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02356E090BD3BCFE00E9A019 /* Ogg.framework */; };
 		97AEAB790E8C1C5100A10721 /* Vorbis.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02DDA7EE0BD3C03F0049AB60 /* Vorbis.framework */; };
 		97AEABCF0E8C1C6D00A10721 /* cpu.c in Sources */ = {isa = PBXBuildFile; fileRef = 97AEAB7E0E8C1C6C00A10721 /* cpu.c */; };
