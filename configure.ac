@@ -40,9 +40,11 @@ AC_GNU_SOURCE
 
 # Check for gettext
 AM_GNU_GETTEXT([external])
+AC_PROG_VERSION_CHECK([msgfmt xgettext], [0.15])
 
 # Check for pkg-config
 PKG_PROG_PKG_CONFIG
+AC_PROG_VERSION_CHECK([pkg-config], [0.9])
 
 
 # Check for compiler
