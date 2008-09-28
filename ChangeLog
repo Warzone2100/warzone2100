@@ -1,6 +1,18 @@
-0000-00-00: Version 2.1_beta5
+2008-09-28: Version 2.1_beta5
+ * General:
+   * Change: Reordered main menus. Skirmish is now under Single Player.
+   * Fix: Various source compilation fixes.
  * Campaign:
    * Fix: Researching Gas Turbine Generator no longer reduces the output of power generators (bug #12262)
+ * Multiplayer (non-skirmish only):
+   * Added visual feedback for when there are no games available in the lobby.
+   * Fix: Smoking healthy droids gone.
+   * Fix: Cyborg transports should now unload correctly. (bug #12116)
+ * Buildsystem:
+   * Fix: The OS X build system now works properly on both Tiger and Leopard.
+   * New: Bison is no longer an external dependency when building on OS X as it is automatically downloaded if the system version of Bison is incompatible with the build system.
+ * Pathfinding and savegames:
+   * Change: We now use zones for path-finding again. This means savegames from beta4 are no longer useable. Your beta4 savegames can be used with 2.2, however.
 
 2008-07-19: Version 2.1_beta4
  * General:
