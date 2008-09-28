@@ -27,11 +27,13 @@ AC_PROG_YACC
 if test "x$YACC" != "xbison -y" ; then
 	AC_MSG_ERROR([Bison is not installed])
 fi
+AC_PROG_VERSION_CHECK([bison], [1.31])
 
 AC_PROG_LEX
 if test "x$LEX" != "xflex" ; then
 	AC_MSG_ERROR([Flex is not installed])
 fi
+AC_PROG_VERSION_CHECK([flex], [2.5.33], [2.5.34])
 
 # Enable Compiler/LibC GNU extensions
 AC_GNU_SOURCE
