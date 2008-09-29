@@ -637,7 +637,7 @@ static void proj_InFlightDirectFunc(PROJECTILE *psProj)
 {
 	/* we want a delay between Las-Sats firing and actually hitting in multiPlayer
 	magic number but that's how long the audio countdown message lasts! */
-	const unsigned int LAS_SAT_DELAY = 8;
+	const unsigned int LAS_SAT_DELAY = 4;
 	int timeSoFar;
 	int distancePercent; /* How far we are 0..100 */
 	float distanceRatio; /* How far we are, 1.0==at target */
