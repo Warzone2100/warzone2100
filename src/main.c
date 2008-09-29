@@ -272,15 +272,8 @@ static void getPlatformUserDir(char * const tmpstr, size_t const size)
 		strlcat(tmpstr, PHYSFS_getDirSeparator(), size);
 	else
 #elif defined(WZ_OS_MAC)
-	short vol_ref;
-	long dir_id;
-	FSSpec fsspec;
 	FSRef fsref;
-	OSErr error = FindFolder(kUserDomain, kApplicationSupportFolderType, false, &vol_ref, &dir_id);
-	if (!error)
-		error = FSMakeFSSpec(vol_ref, dir_id, (const unsigned char *) "", &fsspec);
-	if (!error)
-		error = FSpMakeFSRef(&fsspec, &fsref);
+	OSErr error = FSFindFolder(kUserDomain, kApplicationSupportFolderType, false, &fsref);
 	if (!error)
 		error = FSRefMakePath(&fsref, (UInt8 *) tmpstr, size);
 	if (!error)
