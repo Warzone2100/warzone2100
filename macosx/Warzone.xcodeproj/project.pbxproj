@@ -160,6 +160,7 @@
 		02356E190BD3BD9700E9A019 /* ogg.h in Headers */ = {isa = PBXBuildFile; fileRef = 02356E170BD3BD9700E9A019 /* ogg.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		02356E1A0BD3BD9700E9A019 /* os_types.h in Headers */ = {isa = PBXBuildFile; fileRef = 02356E180BD3BD9700E9A019 /* os_types.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		0235F9100D52BCC7007B8F63 /* math-help.h in Copy frameworks (36) */ = {isa = PBXBuildFile; fileRef = 0235F90F0D52BCC7007B8F63 /* math-help.h */; };
+		023ECC500E9318D600D9E7C3 /* Theora.framework in Copy frameworks (36) */ = {isa = PBXBuildFile; fileRef = 97AEAB330E8C1B5200A10721 /* Theora.framework */; };
 		024480240C5E4BEE00E1A641 /* utf.c in Sources */ = {isa = PBXBuildFile; fileRef = 024480220C5E4BEE00E1A641 /* utf.c */; };
 		024480250C5E4BEE00E1A641 /* utf.h in Copy frameworks (36) */ = {isa = PBXBuildFile; fileRef = 024480230C5E4BEE00E1A641 /* utf.h */; };
 		0246A05D0BD3C975004D1C70 /* Warzone.icns in Resources */ = {isa = PBXBuildFile; fileRef = 0246A05C0BD3C975004D1C70 /* Warzone.icns */; };
@@ -926,6 +927,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				023ECC500E9318D600D9E7C3 /* Theora.framework in Copy frameworks (36) */,
 				02548E0A0D159F4400B4B3B9 /* QuesoGLC.framework in Copy frameworks (36) */,
 				02548E070D159F4000B4B3B9 /* Popt.framework in Copy frameworks (36) */,
 				02581C810BD5AD1100957CBC /* Gettext.framework in Copy frameworks (36) */,
@@ -981,7 +983,7 @@
 		0223BBB90CFE3CD60056EF85 /* tagfile.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = tagfile.c; path = ../lib/framework/tagfile.c; sourceTree = SOURCE_ROOT; };
 		0223BBBA0CFE3CD60056EF85 /* tagfile.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = tagfile.h; path = ../lib/framework/tagfile.h; sourceTree = SOURCE_ROOT; };
 		0223BBD10CFE3D5C0056EF85 /* QuesoGLC.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = QuesoGLC.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		0223BBD20CFE3D5C0056EF85 /* QuesoGLC-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "QuesoGLC-Info.plist"; path = "Resources/QuesoGLC-Info.plist"; sourceTree = "<group>"; };
+		0223BBD20CFE3D5C0056EF85 /* QuesoGLC-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = "QuesoGLC-Info.plist"; path = "Resources/QuesoGLC-Info.plist"; sourceTree = "<group>"; };
 		0223BBE60CFE3FFA0056EF85 /* context.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = context.c; path = external/quesoglc/src/context.c; sourceTree = SOURCE_ROOT; };
 		0223BBE80CFE3FFA0056EF85 /* except.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = except.c; path = external/quesoglc/src/except.c; sourceTree = SOURCE_ROOT; };
 		0223BBE90CFE3FFA0056EF85 /* except.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = except.h; path = external/quesoglc/src/except.h; sourceTree = SOURCE_ROOT; };
@@ -1028,7 +1030,7 @@
 		0223BC3B0CFE40680056EF85 /* wglew.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = wglew.h; path = external/quesoglc/include/GL/wglew.h; sourceTree = SOURCE_ROOT; };
 		022B2EBF0BD55401002E64E3 /* config-macosx.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = "config-macosx.h"; path = "../lib/framework/config-macosx.h"; sourceTree = SOURCE_ROOT; };
 		022B2F220BD55814002E64E3 /* Gettext.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Gettext.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		022B2F230BD55815002E64E3 /* Gettext-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "Gettext-Info.plist"; path = "Resources/Gettext-Info.plist"; sourceTree = "<group>"; };
+		022B2F230BD55815002E64E3 /* Gettext-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = "Gettext-Info.plist"; path = "Resources/Gettext-Info.plist"; sourceTree = "<group>"; };
 		022B2F4B0BD55AE2002E64E3 /* bindtextdom.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = bindtextdom.c; path = "external/gettext/gettext-runtime/intl/bindtextdom.c"; sourceTree = SOURCE_ROOT; };
 		022B2F4C0BD55AE2002E64E3 /* dcgettext.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = dcgettext.c; path = "external/gettext/gettext-runtime/intl/dcgettext.c"; sourceTree = SOURCE_ROOT; };
 		022B2F4D0BD55AE2002E64E3 /* dcigettext.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = dcigettext.c; path = "external/gettext/gettext-runtime/intl/dcigettext.c"; sourceTree = SOURCE_ROOT; };
@@ -1079,9 +1081,9 @@
 		022B30AA0BD564FC002E64E3 /* config.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = config.h; path = "external/gettext/gettext-runtime/config.h"; sourceTree = SOURCE_ROOT; };
 		022B30DF0BD56618002E64E3 /* plural.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = plural.c; path = "external/gettext/gettext-runtime/intl/plural.c"; sourceTree = "<group>"; };
 		02356D750BD3BB3400E9A019 /* Warzone.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Warzone.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		02356D780BD3BB3500E9A019 /* Warzone-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "Warzone-Info.plist"; path = "Resources/Warzone-Info.plist"; sourceTree = "<group>"; };
+		02356D780BD3BB3500E9A019 /* Warzone-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = "Warzone-Info.plist"; path = "Resources/Warzone-Info.plist"; sourceTree = "<group>"; };
 		02356D830BD3BB4100E9A019 /* Zlib.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Zlib.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		02356D840BD3BB4100E9A019 /* Zlib-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "Zlib-Info.plist"; path = "Resources/Zlib-Info.plist"; sourceTree = "<group>"; };
+		02356D840BD3BB4100E9A019 /* Zlib-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = "Zlib-Info.plist"; path = "Resources/Zlib-Info.plist"; sourceTree = "<group>"; };
 		02356D8A0BD3BB6F00E9A019 /* adler32.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = adler32.c; path = external/zlib/adler32.c; sourceTree = "<group>"; };
 		02356D8B0BD3BB6F00E9A019 /* compress.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = compress.c; path = external/zlib/compress.c; sourceTree = "<group>"; };
 		02356D8C0BD3BB6F00E9A019 /* crc32.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = crc32.c; path = external/zlib/crc32.c; sourceTree = "<group>"; };
@@ -1105,7 +1107,7 @@
 		02356D9E0BD3BB6F00E9A019 /* zutil.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = zutil.c; path = external/zlib/zutil.c; sourceTree = "<group>"; };
 		02356D9F0BD3BB6F00E9A019 /* zutil.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = zutil.h; path = external/zlib/zutil.h; sourceTree = "<group>"; };
 		02356DC20BD3BBFC00E9A019 /* Png.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Png.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		02356DC30BD3BBFC00E9A019 /* Png-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "Png-Info.plist"; path = "Resources/Png-Info.plist"; sourceTree = "<group>"; };
+		02356DC30BD3BBFC00E9A019 /* Png-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = "Png-Info.plist"; path = "Resources/Png-Info.plist"; sourceTree = "<group>"; };
 		02356DC90BD3BC9900E9A019 /* png.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = png.c; path = external/libpng/png.c; sourceTree = "<group>"; };
 		02356DCA0BD3BC9900E9A019 /* png.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = png.h; path = external/libpng/png.h; sourceTree = "<group>"; };
 		02356DCB0BD3BC9900E9A019 /* pngconf.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = pngconf.h; path = external/libpng/pngconf.h; sourceTree = "<group>"; };
@@ -1125,7 +1127,7 @@
 		02356DD90BD3BC9900E9A019 /* pngwtran.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = pngwtran.c; path = external/libpng/pngwtran.c; sourceTree = "<group>"; };
 		02356DDA0BD3BC9900E9A019 /* pngwutil.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = pngwutil.c; path = external/libpng/pngwutil.c; sourceTree = "<group>"; };
 		02356E090BD3BCFE00E9A019 /* Ogg.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Ogg.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		02356E0A0BD3BCFE00E9A019 /* Ogg-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "Ogg-Info.plist"; path = "Resources/Ogg-Info.plist"; sourceTree = "<group>"; };
+		02356E0A0BD3BCFE00E9A019 /* Ogg-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = "Ogg-Info.plist"; path = "Resources/Ogg-Info.plist"; sourceTree = "<group>"; };
 		02356E100BD3BD7E00E9A019 /* bitwise.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = bitwise.c; path = external/libogg/src/bitwise.c; sourceTree = "<group>"; };
 		02356E110BD3BD7E00E9A019 /* framing.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = framing.c; path = external/libogg/src/framing.c; sourceTree = "<group>"; };
 		02356E170BD3BD9700E9A019 /* ogg.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = ogg.h; path = external/libogg/include/ogg/ogg.h; sourceTree = "<group>"; };
@@ -1494,9 +1496,9 @@
 		0246A3B80BD3CD1F004D1C70 /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = /Developer/SDKs/MacOSX10.4u.sdk/System/Library/Frameworks/OpenAL.framework; sourceTree = "<absolute>"; };
 		0246A3BC0BD3CD2B004D1C70 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = /Developer/SDKs/MacOSX10.4u.sdk/System/Library/Frameworks/OpenGL.framework; sourceTree = "<absolute>"; };
 		0246A3E10BD3CD81004D1C70 /* SDL.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SDL.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		0246A3E20BD3CD81004D1C70 /* SDL-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "SDL-Info.plist"; path = "Resources/SDL-Info.plist"; sourceTree = "<group>"; };
+		0246A3E20BD3CD81004D1C70 /* SDL-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = "SDL-Info.plist"; path = "Resources/SDL-Info.plist"; sourceTree = "<group>"; };
 		0246A3ED0BD3CD8A004D1C70 /* SDL_net.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SDL_net.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		0246A3EE0BD3CD8A004D1C70 /* SDL_net-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "SDL_net-Info.plist"; path = "Resources/SDL_net-Info.plist"; sourceTree = "<group>"; };
+		0246A3EE0BD3CD8A004D1C70 /* SDL_net-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = "SDL_net-Info.plist"; path = "Resources/SDL_net-Info.plist"; sourceTree = "<group>"; };
 		0246A4000BD3CDFC004D1C70 /* SDL_net.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = SDL_net.h; path = external/SDL_net/SDL_net.h; sourceTree = SOURCE_ROOT; };
 		0246A4010BD3CDFC004D1C70 /* SDLnet.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = SDLnet.c; path = external/SDL_net/SDLnet.c; sourceTree = SOURCE_ROOT; };
 		0246A4020BD3CDFC004D1C70 /* SDLnetselect.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = SDLnetselect.c; path = external/SDL_net/SDLnetselect.c; sourceTree = SOURCE_ROOT; };
@@ -1705,7 +1707,7 @@
 		02CDDD1A0D159E2F00722688 /* openal_error.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = openal_error.c; path = ../lib/sound/openal_error.c; sourceTree = SOURCE_ROOT; };
 		02CDDD1B0D159E2F00722688 /* openal_error.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = openal_error.h; path = ../lib/sound/openal_error.h; sourceTree = SOURCE_ROOT; };
 		02DDA7EE0BD3C03F0049AB60 /* Vorbis.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Vorbis.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		02DDA7EF0BD3C03F0049AB60 /* Vorbis-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "Vorbis-Info.plist"; path = "Resources/Vorbis-Info.plist"; sourceTree = "<group>"; };
+		02DDA7EF0BD3C03F0049AB60 /* Vorbis-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = "Vorbis-Info.plist"; path = "Resources/Vorbis-Info.plist"; sourceTree = "<group>"; };
 		02DDA7F50BD3C1420049AB60 /* analysis.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = analysis.c; path = external/libvorbis/lib/analysis.c; sourceTree = "<group>"; };
 		02DDA7F60BD3C1420049AB60 /* backends.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = backends.h; path = external/libvorbis/lib/backends.h; sourceTree = "<group>"; };
 		02DDA7F70BD3C1420049AB60 /* bitrate.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = bitrate.c; path = external/libvorbis/lib/bitrate.c; sourceTree = "<group>"; };
@@ -1768,7 +1770,7 @@
 		02DDA8810BD3C27D0049AB60 /* setup_44u.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = setup_44u.h; path = external/libvorbis/lib/modes/setup_44u.h; sourceTree = "<group>"; };
 		02DDA8820BD3C27D0049AB60 /* setup_X.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = setup_X.h; path = external/libvorbis/lib/modes/setup_X.h; sourceTree = "<group>"; };
 		02DDA8B10BD3C2F20049AB60 /* PhysFS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PhysFS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		02DDA8B20BD3C2F20049AB60 /* PhysFS-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "PhysFS-Info.plist"; path = "Resources/PhysFS-Info.plist"; sourceTree = "<group>"; };
+		02DDA8B20BD3C2F20049AB60 /* PhysFS-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = "PhysFS-Info.plist"; path = "Resources/PhysFS-Info.plist"; sourceTree = "<group>"; };
 		02DDA8B80BD3C32D0049AB60 /* physfs_byteorder.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = physfs_byteorder.c; path = external/physfs/physfs_byteorder.c; sourceTree = "<group>"; };
 		02DDA8B90BD3C32D0049AB60 /* physfs_internal.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = physfs_internal.h; path = external/physfs/physfs_internal.h; sourceTree = "<group>"; };
 		02DDA8BA0BD3C32D0049AB60 /* physfs.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = physfs.c; path = external/physfs/physfs.c; sourceTree = "<group>"; };
@@ -1788,7 +1790,7 @@
 		02EA22450CFE494000EA65A0 /* libfontconfig.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; name = libfontconfig.dylib; path = /Developer/SDKs/MacOSX10.4u.sdk/usr/X11R6/lib/libfontconfig.dylib; sourceTree = "<absolute>"; };
 		02F5CC560D1490620000A2D0 /* database.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = database.c; path = external/quesoglc/src/database.c; sourceTree = "<group>"; };
 		02F5CC6D0D1494AA0000A2D0 /* Popt.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Popt.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		02F5CC6E0D1494AA0000A2D0 /* Popt-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "Popt-Info.plist"; path = "Resources/Popt-Info.plist"; sourceTree = "<group>"; };
+		02F5CC6E0D1494AA0000A2D0 /* Popt-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = "Popt-Info.plist"; path = "Resources/Popt-Info.plist"; sourceTree = "<group>"; };
 		02F5CC800D1496580000A2D0 /* findme.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = findme.c; path = external/popt/findme.c; sourceTree = SOURCE_ROOT; };
 		02F5CC810D1496580000A2D0 /* findme.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = findme.h; path = external/popt/findme.h; sourceTree = SOURCE_ROOT; };
 		02F5CC820D1496580000A2D0 /* popt.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = popt.c; path = external/popt/popt.c; sourceTree = SOURCE_ROOT; };
@@ -1804,7 +1806,7 @@
 		2244463B0E3EB7CB004D0F1F /* messagely.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = messagely.h; path = ../src/messagely.h; sourceTree = SOURCE_ROOT; };
 		22E244D40E65361800EC2B3E /* baseobject.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = baseobject.c; path = ../src/baseobject.c; sourceTree = SOURCE_ROOT; };
 		22E244D50E65361800EC2B3E /* baseobject.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = baseobject.h; path = ../src/baseobject.h; sourceTree = SOURCE_ROOT; };
-		9730E7CE0E8CEAA5009C9481 /* Theora-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "Theora-Info.plist"; path = "Resources/Theora-Info.plist"; sourceTree = "<group>"; };
+		9730E7CE0E8CEAA5009C9481 /* Theora-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = "Theora-Info.plist"; path = "Resources/Theora-Info.plist"; sourceTree = "<group>"; };
 		9742E5710DF9975E000A5D41 /* lexer_input.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = lexer_input.c; path = ../lib/framework/lexer_input.c; sourceTree = SOURCE_ROOT; };
 		9742E5720DF9975E000A5D41 /* lexer_input.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = lexer_input.h; path = ../lib/framework/lexer_input.h; sourceTree = SOURCE_ROOT; };
 		9742E5750DF9979C000A5D41 /* parsetest.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = parsetest.c; path = ../src/parsetest.c; sourceTree = SOURCE_ROOT; };
@@ -3855,7 +3857,6 @@
 		02356D660BD3BB2600E9A019 /* Project object */ = {
 			isa = PBXProject;
 			buildConfigurationList = 02356D670BD3BB2600E9A019 /* Build configuration list for PBXProject "Warzone" */;
-			compatibilityVersion = "Xcode 2.4";
 			hasScannedForEncodings = 0;
 			mainGroup = 02356D640BD3BB2600E9A019;
 			productRefGroup = 02356D760BD3BB3400E9A019 /* Products */;
