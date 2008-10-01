@@ -2,7 +2,7 @@
 # vim: set et sts=4 sw=4:
 
 my $scriptpath = $0;
-$scriptpath =~ s/^(.*\/)?([^\/]+)$/$1/g;
+$scriptpath =~ s/^(.*\/)?([^\/]+)$/$1/;
 
 my $out_lang = $scriptpath;
 $out_lang .= shift or die "Missing output language";
@@ -16,13 +16,12 @@ my @structList;
 
 sub parseEnum
 {
-    my ($enumName, $comment, $count) = @_;
+    my ($enumName, $comment) = @_;
     my %curEnum = (name => $enumName);
     my @curComment = ();
 
     @{$curEnum{"comment"}} = @$comment;
     @$comment = ();
-    $$count++;
 
     while (<>)
     {
@@ -53,12 +52,12 @@ sub parseEnum
             }
             else
             {
-                die "error: line $count: Unrecognized enum-level specifier: %$_";
+                die "error: $ARGV:$.: Unrecognized enum-level specifier: %$_";
             }
         }
         elsif (/^\s*(\w+)\s*$/)
         {
-            my %value = (name=>$1, line=>$$count);
+            my %value = (name=>$1, line=>$.);
 
             @{$value{"comment"}} = @curComment;
             @curComment = ();
@@ -75,16 +74,17 @@ sub parseEnum
             return;
         }
         else            { die "Unmatched line: $_\n"; }
-
-        $$count++;
+    }
+    continue
+    {
+        # Reset the line number if we've reached the end of the file
+        close ARGV if eof;
     }
 }
 
 sub readTillEnd
 {
-    my ($output, $count) = @_;
-
-    $$count++;
+    my ($output) = @_;
 
     while (<>)
     {
@@ -97,19 +97,22 @@ sub readTillEnd
         }
 
         push @$output, $_;
-        $$count++;
+    }
+    continue
+    {
+        # Reset the line number if we've reached the end of the file
+        close ARGV if eof;
     }
 }
 
 sub parseStruct
 {
-    my ($structName, $comment, $count) = @_;
+    my ($structName, $comment) = @_;
     my %curStruct = (name => $structName);
     my @curComment = ();
 
     @{$curStruct{"comment"}} = @$comment;
     @$comment = ();
-    $$count++;
 
     while (<>)
     {
@@ -162,7 +165,7 @@ sub parseStruct
             }
             elsif (/^loadFunc\s+\"([^\"]+)\"\s*;$/)
             {
-                my %loadFunc = (name=>$1, line=>$$count);
+                my %loadFunc = (name=>$1, line=>$.);
 
                 ${$curStruct{"qualifiers"}}{"loadFunc"} = \%loadFunc;
             }
@@ -181,42 +184,42 @@ sub parseStruct
             }
             elsif (/^fetchRowById\s+Row\s+Id\s*$/)
             {
-                my %fetchRowById = (line=>$$count);
+                my %fetchRowById = (line=>$.);
 
-                readTillEnd(\@{$fetchRowById{"code"}}, $count);
+                readTillEnd(\@{$fetchRowById{"code"}});
 
                 ${$curStruct{"qualifiers"}}{"fetchRowById"} = \%fetchRowById;
             }
             elsif (/^preLoadTable(\s+maxId)?(\s+rowCount)?\s*$/)
             {
-                my %preLoadTable = (line=>$$count);
+                my %preLoadTable = (line=>$.);
 
                 push @{$preLoadTable{"parameters"}}, $1 if $1;
                 push @{$preLoadTable{"parameters"}}, $2 if $2;
 
-                readTillEnd(\@{$preLoadTable{"code"}}, $count);
+                readTillEnd(\@{$preLoadTable{"code"}});
 
                 ${$curStruct{"qualifiers"}}{"preLoadTable"} = \%preLoadTable;
             }
             elsif (/^postLoadRow\s+curRow(\s+curId)?\s*$/)
             {
-                my %postLoadRow = (line=>$$count);
+                my %postLoadRow = (line=>$.);
 
                 push @{$postLoadRow{"parameters"}}, $1 if $1;
 
-                readTillEnd(\@{$postLoadRow{"code"}}, $count);
+                readTillEnd(\@{$postLoadRow{"code"}});
 
                 ${$curStruct{"qualifiers"}}{"postLoadRow"} = \%postLoadRow;
             }
             else
             {
-                die "error: line $count: Unrecognized struct-level specifier: %$_";
+                die "error: line $ARGV:$.: Unrecognized struct-level specifier: %$_";
             }
         }
         # Parse regular field declarations
         elsif (/^\s*(count|real|bool)\s+(unique\s+)?(\w+)\s*;\s*$/)
         {
-            my %field = (type=>$1, name=>$3, line=>$$count);
+            my %field = (type=>$1, name=>$3, line=>$.);
 
             push @{$field{"qualifiers"}}, $2 if $2;
 
@@ -228,7 +231,7 @@ sub parseStruct
         # Parse field declarations with "transition" types (types that should be replaced with others eventually)
         elsif (/^\s*([US]D?WORD|[US]BYTE)\s+(unique\s+)?(\w+)\s*;\s*$/)
         {
-            my %field = (type=>$1, name=>$3, line=>$$count);
+            my %field = (type=>$1, name=>$3, line=>$.);
 
             push @{$field{"qualifiers"}}, $2 if $2;
 
@@ -241,7 +244,7 @@ sub parseStruct
         # Meaning they can be NULL in C.
         elsif (/^\s*(string|IMD_model)\s+(unique\s+)?(optional\s+)?(\w+)\s*;\s*$/)
         {
-            my %field = (type=>$1, name=>$4, line=>$$count);
+            my %field = (type=>$1, name=>$4, line=>$.);
 
             push @{$field{"qualifiers"}}, $2 if $2;
             push @{$field{"qualifiers"}}, $3 if $3;
@@ -256,7 +259,7 @@ sub parseStruct
         {
             die "error: Cannot use enum \"$2\" as it isn't declared yet" unless exists($enumMap{$2});
 
-            my %field = (type=>$1, enum=>$enumMap{$2}, name=>$4, line=>$$count);
+            my %field = (type=>$1, enum=>$enumMap{$2}, name=>$4, line=>$.);
 
             push @{$field{"qualifiers"}}, $3 if $3;
 
@@ -268,10 +271,10 @@ sub parseStruct
         # Parse struct reference declarations
         elsif (/^\s*(struct)\s+(\w+)\s+(unique\s+)?(optional\s+)?(\w+)\s*;\s*$/)
         {
-            die "error:$count: Cannot use struct \"$2\" as it isn't declared yet" unless exists($structMap{$2});
-            die "error:$count: Cannot use struct \"$2\" as it doesn't have a fetchRowById function declared" unless exists(${${$structMap{$2}}{"qualifiers"}}{"fetchRowById"});
+            die "error: $ARGV:$.: Cannot use struct \"$2\" as it isn't declared yet" unless exists($structMap{$2});
+            die "error: $ARGV:$.: Cannot use struct \"$2\" as it doesn't have a fetchRowById function declared" unless exists(${${$structMap{$2}}{"qualifiers"}}{"fetchRowById"});
 
-            my %field = (type=>$1, struct=>$structMap{$2}, name=>$5, line=>$$count);
+            my %field = (type=>$1, struct=>$structMap{$2}, name=>$5, line=>$.);
 
             push @{$field{"qualifiers"}}, $3 if $3;
             push @{$field{"qualifiers"}}, $4 if $4;
@@ -284,7 +287,7 @@ sub parseStruct
         # Parse C-only fields
         elsif (/^\s*(C-only-field)\s+(.*)\s+(\w+)\s*;\s*$/)
         {
-            my %field = (type=>$1, ctype=>$2, name=>$3, line=>$$count);
+            my %field = (type=>$1, ctype=>$2, name=>$3, line=>$.);
 
             @{$field{"comment"}} = @curComment;
             @curComment = ();
@@ -292,8 +295,11 @@ sub parseStruct
             push @{$curStruct{"fields"}}, \%field;
         }
         else            { die "Unmatched line: $_\n"; }
-
-        $$count++;
+    }
+    continue
+    {
+        # Reset the line number if we've reached the end of the file
+        close ARGV if eof;
     }
 }
 
@@ -303,7 +309,6 @@ my @curComment = ();
 
 # Read and parse the file
 my $name = $ARGV[0];
-my $count = 1;
 my $outfile = "";
 $outfile = pop(@ARGV) if @ARGV > 1;
 while (<>)
@@ -315,11 +320,14 @@ while (<>)
     {
         push @curComment, substr($1, 1) if $1;
     }
-    elsif (/^\s*struct\s+(\w+)\s*$/)                                            { parseStruct($1, \@curComment, \$count); }
-    elsif (/^\s*enum\s+(\w+)\s*$/)                                              { parseEnum($1, \@curComment, \$count); }
+    elsif (/^\s*struct\s+(\w+)\s*$/)                                            { parseStruct($1, \@curComment); }
+    elsif (/^\s*enum\s+(\w+)\s*$/)                                              { parseEnum($1, \@curComment); }
     else            { die "Unmatched line: $_\n"; }
-
-    $count++;
+}
+continue
+{
+    # Reset the line number if we've reached the end of the file
+    close ARGV if eof;
 }
 
 my $output = "";
