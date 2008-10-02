@@ -62,7 +62,6 @@ static int lastAccess = -1;		// track last accessed tag to detect user errors
 static int countGroups = 0;		// check group recursion count while reading definition
 static char saveDefine[PATH_MAX];	// save define file for error messages
 static char saveTarget[PATH_MAX];	// save binary file for error messages
-static int virtualGroupRecursion = 0;	// how deep into a virtual group we currently are
 
 #undef DEBUG_TAGFILE
 
@@ -262,7 +261,6 @@ static bool init(const char *definition, const char *datafile, bool write)
 	PHYSFS_sint64 fsize, fsize2;
 	char *buffer;
 
-	virtualGroupRecursion = 0;
 	tag_error = false;
 	line = 1;
 	fp = PHYSFS_openRead(definition);
@@ -529,9 +527,10 @@ static bool scanforward(element_t tag)
 		assert(current != NULL);
 		assert(current->element == tag);
 
-		if (!current->defaultval && current->vr[0] != 'G' && current->vr[1] != 'R' && current->vr[0] != 'E' && current->vr[1] != 'N')
+		if (!current->defaultval)
 		{
 			TF_ERROR("Tag not found and no default: %#04x", (unsigned int)tag);
+			return false;
 		}
 	}
 
@@ -560,46 +559,38 @@ bool tagReadNext()
 
 uint16_t tagReadEnter(element_t tag)
 {
-	uint16_t elements = 0;
+	uint16_t elements;
+	element_t tagtype;
 
 	assert(readmode);
-	if (!readmode)
+	if (!scanforward(tag) || !readmode)
 	{
+		return 0; // none found; avoid error reporting here
+	}
+	lastAccess = -1; // reset requirement that tags are increasing in value
+	if (!PHYSFS_readUBE8(handle, &tagtype))
+	{
+		TF_ERROR("Error reading group type: %s", PHYSFS_getLastError());
 		return 0;
 	}
-	if (scanforward(tag))
+	if (tagtype != TF_INT_GROUP)
 	{
-		element_t tagtype;
-
-		if (!PHYSFS_readUBE8(handle, &tagtype))
-		{
-			TF_ERROR("Error reading group type: %s", PHYSFS_getLastError());
-			return 0;
-		}
-		if (tagtype != TF_INT_GROUP)
-		{
-			TF_ERROR("Error in group VR, tag %#04x", (unsigned int)tag);
-			return 0;
-		}
-		if (!PHYSFS_readUBE16(handle, &elements))
-		{
-			TF_ERROR("Error accessing group size: %s", PHYSFS_getLastError());
-			return 0;
-		}
-		if (!current->group)
-		{
-			TF_ERROR("Cannot enter group, none defined for element %x!", (unsigned int)current->element);
-			return 0;
-		}
+		TF_ERROR("Error in group VR, tag %#04x", (unsigned int)tag);
+		return 0;
 	}
-	else
+	if (!PHYSFS_readUBE16(handle, &elements))
 	{
-		virtualGroupRecursion++;
+		TF_ERROR("Error accessing group size: %s", PHYSFS_getLastError());
+		return 0;
+	}
+	if (!current->group)
+	{
+		TF_ERROR("Cannot enter group, none defined for element %x!", (unsigned int)current->element);
+		return 0;
 	}
 #ifdef DEBUG_TAGFILE
-	debug(LOG_ERROR, "entering 0x%02x with %d elements", (unsigned int)tag, (int)elements);
+	debug(LOG_ERROR, "entering 0x%02x", (unsigned int)tag);
 #endif
-	lastAccess = -1; // reset requirement that tags are increasing in value, also on failure, since we may enter virtual groups
 	assert(current->group->parent != NULL);
 	assert(current->element == tag);
 	current->group->expectedItems = elements;	// for debugging and consistency checking
@@ -611,16 +602,10 @@ uint16_t tagReadEnter(element_t tag)
 
 void tagReadLeave(element_t tag)
 {
-	if (virtualGroupRecursion > 0)
+	if (!scanforward(TAG_GROUP_END))
 	{
-		virtualGroupRecursion--;
-	}
-	else
-	{
-		if (!scanforward(TAG_GROUP_END))
-		{
-			TF_ERROR("No end of group tag found");
-		}
+		TF_ERROR("Cannot leave group, group end tag not found!");
+		return;
 	}
 	if (tag_error)
 	{
@@ -1335,7 +1320,6 @@ bool tagWriteString(element_t tag, const char *buffer)
 // unit test function
 void tagTest()
 {
-	int i;
 	static const char virtual_definition[] = "tagdefinitions/tagfile_virtual.def";
 	static const char basic_definition[]   = "tagdefinitions/tagfile_basic.def";
 	static const char writename[] = "test.wzs";
@@ -1391,7 +1375,6 @@ void tagTest()
 				tagWrite(0x01, 1);
 				tagWriteNext();
 			tagWriteLeave(0x03);
-			tagWrite(0x04, 1);
 			// deliberately no 'next' here
 		tagWriteLeave(0x07);
 		tagWriteEnter(0x08, 1);
@@ -1405,16 +1388,6 @@ void tagTest()
 			tagWrites32v(0x05, 3, v);
 		}
 		tagWriteLeave(0x09);
-		tagWriteEnter(0x0b, 1);
-			tagWrite(0x01, 0);
-			tagWriteEnter(0x0a, 10);
-				for (i = 0; i < 10; i++)
-				{
-					tagWriteNext();
-				}
-			tagWriteLeave(0x0a);
-			tagWrite(0x0b, 1);
-		tagWriteLeave(0x0b);
 	tagWriteLeave(0x02);
 	tagClose();
 
@@ -1450,23 +1423,6 @@ void tagTest()
 			assert(v[1] == 0);
 			assert(v[2] == 1);
 		tagReadLeave(0x09);
-		tagReadEnter(0x0a);
-			assert(tagRead(0x01) == 0);
-			assert(tagRead(0x02) == 0);
-			assert(tagRead(0x03) == 0);
-			assert(tagRead(0x04) == 0);
-		tagReadLeave(0x0a);
-		tagReadEnter(0x0b);
-			tagReadEnter(0x0a);
-				for (i = 0; i < 10; i++)
-				{
-					assert(tagRead(0x0a) == 0);
-					assert(tagRead(0x0b) == 0);
-					tagReadNext();
-				}
-			tagReadLeave(0x0a);
-			assert(tagRead(0x0b) == 1);
-		tagReadLeave(0x0b);
 		free(blobptr);
 	}
 	tagReadLeave(0x02);

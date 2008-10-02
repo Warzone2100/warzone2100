@@ -673,7 +673,6 @@ static void featureSaveTagged(FEATURE *psFeat)
 
 	tagWriteEnter(0x0c, 1);
 	tagWrite(0x01, psFeat->startTime);
-	tagWriteBool(0x02, psFeat->bTargetted);
 	tagWriteLeave(0x0c);
 }
 
@@ -1042,51 +1041,6 @@ BOOL mapLoadTagged(char *pFileName)
 		tagReadNext();
 	}
 	tagReadLeave(0x0a);
-
-	count = tagReadEnter(0x0f);
-	for (i = 0; i < count; i++)
-	{
-		uint16_t pos[3], visible[MAX_PLAYERS], j;
-		BASE_OBJECT obj;
-
-		// Read basic object information
-		tagReadEnter(0x01);
-		obj.type = tagRead(0x01);
-		obj.id = tagRead(0x02);
-		tagRead16v(0x03, 3, pos);
-		obj.pos.x = pos[0];
-		obj.pos.y = pos[1];
-		obj.pos.z = pos[2];
-		obj.direction = tagReadf(0x04);
-		obj.pitch = tagReads(0x05);
-		obj.roll = tagReads(0x06);
-		obj.player = tagRead(0x07);
-		obj.group = tagRead(0x08);
-		obj.selected = tagRead(0x09);
-		obj.cluster = tagRead(0x0a);
-		tagRead16v(0x0b, MAX_PLAYERS, visible);
-		for (j = 0; j < MAX_PLAYERS; j++)
-		{
-			obj.visible[j] = visible[j];
-		}
-		obj.died = tagRead(0x0c);
-		obj.lastEmission = tagRead(0x0d);
-		obj.inFire = tagReadBool(0x0e);
-		obj.burnStart = tagRead(0x0f);
-		obj.burnDamage = tagRead(0x10);
-		tagReadLeave(0x01);
-
-		// Sensor group
-		tagReadEnter(0x02);
-		obj.sensorRange = tagRead(0x01);
-		obj.sensorPower = tagRead(0x02);
-		obj.ECMMod = tagRead(0x04);
-		tagReadLeave(0x02);
-
-		tagReadNext();
-	}
-	debug(LOG_ERROR, "loaded %d of %d", i, count);
-	tagReadLeave(0x0f);
 
 	tagClose();
 	return true;
