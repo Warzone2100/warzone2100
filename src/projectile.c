@@ -77,7 +77,8 @@ typedef struct
 // Watermelon:they are from droid.c
 /* The range for neighbouring objects */
 #define PROJ_NAYBOR_RANGE		(TILE_UNITS*4)
-
+// used to create a specific ID for projectile objects to facilitate tracking them.
+static const UDWORD ProjectileTrackerID =	0xdead0000;
 // Watermelon:neighbour global info ripped from droid.c
 static PROJ_NAYBOR_INFO	asProjNaybors[MAX_NAYBORS];
 static UDWORD		numProjNaybors = 0;
@@ -375,6 +376,7 @@ BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, Ve
 	}
 
 	/* Initialise the structure */
+	psObj->id			= ProjectileTrackerID |(gameTime2 >>4);		// make unique id
 	psObj->type		    = OBJ_PROJECTILE;
 	psObj->state		= PROJ_INFLIGHT;
 	psObj->psWStats		= psStats;
@@ -718,7 +720,15 @@ static void proj_InFlightDirectFunc(PROJECTILE *psProj)
 		{
 			move.x = psProj->tarX - psProj->startX;
 			move.y = psProj->tarY - psProj->startY;
-			move.z = psProj->altChange;
+			// LASSAT doesn't have a z
+			if(psStats->weaponSubClass == WSC_LAS_SAT)
+			{
+				move.z = 0;
+			}
+			else
+			{
+				move.z = psProj->altChange;
+			}
 		}
 
 		targetDistance = sqrtf(move.x*move.x + move.y*move.y);
