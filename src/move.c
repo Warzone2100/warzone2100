@@ -25,6 +25,8 @@
  */
 #include "lib/framework/frame.h"
 
+#include <float.h>
+
 #include "lib/framework/trig.h"
 #include "lib/framework/math-help.h"
 #include "lib/gamelib/gtime.h"
@@ -1672,18 +1674,18 @@ static Vector2f moveGetDirection(DROID *psDroid)
 		float nextMagnitude = Vector2f_ScalarP(nextDelta, nextDelta);
 
 		// We are already there
-		if (magnitude == 0.0f && nextMagnitude == 0.0f)
+		if (magnitude < FLT_EPSILON && nextMagnitude < FLT_EPSILON)
 		{
 			Vector2f zero = {0.0f, 0.0f};
 			return zero; // We are practically standing on our only waypoint
 		}
 		// We are passing the current waypoint, so directly head over to the next
-		else if (magnitude == 0.0f)
+		else if (magnitude < FLT_EPSILON)
 		{
 			dest = Vector2f_Normalise(nextDelta);
 		}
 		// We are passing the next waypoint, so for now don't interpolate it
-		else if (nextMagnitude == 0.0f)
+		else if (nextMagnitude < FLT_EPSILON)
 		{
 			dest = Vector2f_Normalise(delta);
 		}
