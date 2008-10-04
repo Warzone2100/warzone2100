@@ -1,4 +1,4 @@
-SUBDIRS = mods
+SUBDIRS = mods music
 
 BASELIST = anims audio components effects features tagdefinitions \
 	gamedesc.lev images messages misc multiplay novideo.rpl script \
