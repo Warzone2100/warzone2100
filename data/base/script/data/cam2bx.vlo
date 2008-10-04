@@ -7,7 +7,7 @@ run
 {
 player	int	0
 power	int	4000	//boost power amount at start of level
-powTransSnd	SOUND		"pcv483.ogg"	//"Power Transferred.ogg"
+powTransSnd	SOUND		"power-transferred.ogg"
 
 }
 

@@ -252,7 +252,7 @@ static AUDIO_ID_MAP asAudioID[] =
 {ID_CLAN_ENTER,                                "pcv480.ogg"},
 {ID_CLAN_EXIT,                                 "pcv481.ogg"},
 {ID_GIFT,                                      "pcv482.ogg"},
-{ID_POWER_TRANSMIT,                            "pcv483.ogg"},
+{ID_POWER_TRANSMIT,                            "power-transferred.ogg"},
 {ID_SENSOR_DOWNLOAD,                           "pcv484.ogg"},
 {ID_TECHNOLOGY_TRANSFER,                       "pcv485.ogg"},
 {ID_UNITS_TRANSFER,                            "pcv486.ogg"},

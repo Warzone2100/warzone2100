@@ -9,7 +9,7 @@ run
 // the human player
 player		int		0
 power		int		5000
-powTransSnd	SOUND		"pcv483.ogg"	//"Power Transferred.ogg"
+powTransSnd	SOUND		"power-transferred.ogg"
 
 // the two computer players
 enemy[0]	int		3
