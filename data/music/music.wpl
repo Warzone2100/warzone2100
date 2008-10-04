@@ -1,2 +1,8 @@
+[game]
+path=music
 track1.ogg
 track2.ogg
+
+[menu]
+path=music
+menu.ogg
