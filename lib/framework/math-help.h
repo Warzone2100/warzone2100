@@ -17,16 +17,16 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/*! \file math-help.h
+/*! \file
  *  \brief Routines to provide simple math helper functions
  */
+
+#ifndef __INCLUDED_LIB_FRAMEWORK_MATH_HELP_H__
+#define __INCLUDED_LIB_FRAMEWORK_MATH_HELP_H__
 
 // Also PERCENT(int,int);	// returns a int value 0->100 of the percentage of the first param over the second
 
 #include "wzglobal.h"
-
-#ifndef __INCLUDED_LIB_FRAMEWORK_MATH_HELP_H__
-#define __INCLUDED_LIB_FRAMEWORK_MATH_HELP_H__
 
 #define PERCENT(a,b) (((a)*100)/(b))
 #define PERNUM(range,a,b) (((a)*range)/(b))
