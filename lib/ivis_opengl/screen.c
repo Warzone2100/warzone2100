@@ -42,6 +42,7 @@
 #include <GL/glu.h>
 #endif
 #include "screen.h"
+#include "src/console.h"
 
 /* The Current screen size and bit depth */
 UDWORD		screenWidth = 0;
@@ -382,6 +383,10 @@ void screenDoDumpToDiskIfRequired(void)
 
 	// Write the screen to a PNG
 	iV_saveImage_PNG(fileName, &image);
+
+	// display message to user about screenshot
+	snprintf(ConsoleString,sizeof(ConsoleString),"Screenshot %s saved!",fileName);
+	addConsoleMessage(ConsoleString, LEFT_JUSTIFY,SYSTEM_MESSAGE);
 
 	screendump_required = false;
 }
