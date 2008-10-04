@@ -22,9 +22,9 @@
 
 #include "lib/framework/types.h"
 
-extern BOOL seq_Play(char *filename);
-extern BOOL seq_Playing(void);
-extern BOOL seq_Update(void);
+extern bool seq_Play(const char* filename);
+extern bool seq_Playing(void);
+extern bool seq_Update(void);
 extern void seq_Shutdown(void);
 
 #endif

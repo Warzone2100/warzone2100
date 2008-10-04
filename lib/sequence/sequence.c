@@ -17,22 +17,21 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
+#include "sequence.h"
 #include "lib/framework/frame.h"
 
-#include "sequence.h"
-
-BOOL seq_Play(char *filename)
+bool seq_Play(const char* filename)
 {
 	debug( LOG_WARNING, "Sequence display is currently disabled (%s)", filename);
 	return false;
 }
 
-BOOL seq_Playing()
+bool seq_Playing()
 {
 	return false;
 }
 
-BOOL seq_Update()
+bool seq_Update()
 {
 	return false;
 }
