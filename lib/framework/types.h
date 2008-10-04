@@ -54,6 +54,17 @@ typedef int16_t  SWORD;
 typedef uint32_t UDWORD;
 typedef int32_t  SDWORD;
 
+/* Numeric size defines */
+#define UBYTE_MAX	UINT8_MAX
+#define SBYTE_MIN	INT8_MIN
+#define SBYTE_MAX	INT8_MAX
+#define UWORD_MAX	UINT16_MAX
+#define SWORD_MIN	INT16_MIN
+#define SWORD_MAX	INT16_MAX
+#define UDWORD_MAX	UINT32_MAX
+#define SDWORD_MIN	INT32_MIN
+#define SDWORD_MAX	INT32_MAX
+
 #ifndef WZ_OS_WIN
 typedef int BOOL;
 #endif /* !WZ_OS_WIN */
@@ -76,16 +87,5 @@ typedef int BOOL;
 #  define __bool_true_false_are_defined (1)
 # endif
 #endif /* WZ_C99 */
-
-/* Numeric size defines */
-#define UBYTE_MAX	0xff
-#define SBYTE_MIN	(-128) //(0x80)
-#define SBYTE_MAX	0x7f
-#define UWORD_MAX	0xffff
-#define SWORD_MIN	(-32768) //(0x8000)
-#define SWORD_MAX	0x7fff
-#define UDWORD_MAX	0xffffffff
-#define SDWORD_MIN	(0x80000000)
-#define SDWORD_MAX	0x7fffffff
 
 #endif // __INCLUDED_LIB_FRAMEWORK_TYPES_H__
