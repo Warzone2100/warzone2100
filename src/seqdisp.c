@@ -89,10 +89,8 @@ typedef struct
 static BOOL bBackDropWasAlreadyUp;
 static BOOL bAudioPlaying = false;
 static BOOL bHoldSeqForAudio = false;
-static BOOL bCDPath = false;
-static BOOL bHardPath = false;
 static BOOL bSeqSubtitles = true;
-static char aHardPath[MAX_STR_LENGTH];
+static const char aHardPath[] = "sequences/";
 static char aVideoName[MAX_STR_LENGTH];
 static SEQLIST aSeqList[MAX_SEQ_LIST];
 static SDWORD currentSeq = -1;
@@ -107,7 +105,6 @@ static unsigned int time_started = 0;
  */
 /***************************************************************************/
 
-static void	seq_SetVideoPath(void);
 static BOOL seq_StartFullScreenVideo(const char* videoName, const char* audioName);
 
 /***************************************************************************/
@@ -131,16 +128,6 @@ BOOL	seq_RenderVideoToBuffer(iSurface* pSurface, const char* sequenceName, int t
 	return true;
 }
 
-static void seq_SetVideoPath(void)
-{
-	// now set up the hard disc path /
-	if (!bHardPath)
-	{
-		sstrcpy(aHardPath, "sequences/");
-		bHardPath=true;			//yes, always true, as it should be on windows ALSO.
-	}
-}
-
 //full screenvideo functions
 static BOOL seq_StartFullScreenVideo(const char* videoName, const char* audioName)
 {
@@ -148,11 +135,6 @@ static BOOL seq_StartFullScreenVideo(const char* videoName, const char* audioNam
 	int chars_printed;
 
 	bHoldSeqForAudio = false;
-	//set a valid video path if there is one
-	if(!bCDPath && !bHardPath)
-	{
-		seq_SetVideoPath();
-	}
 
 	chars_printed = ssprintf(aVideoName, "%s%s", aHardPath, videoName);
 	ASSERT(chars_printed < sizeof(aVideoName), "sequence path + name greater than max string");
