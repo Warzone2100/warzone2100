@@ -607,6 +607,8 @@ static void addGames(void)
 	sButInit.FontID = font_regular;
 	sButInit.pDisplay = displayRemoteGame;
 
+	// in case they refresh, and a game becomes available.
+	widgDelete(psWScreen,FRONTEND_NOGAMESAVAILABLE); 
 	// only have to do this if we have any games available.
 	if (gcount)
 	{
