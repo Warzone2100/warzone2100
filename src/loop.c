@@ -364,6 +364,7 @@ GAMECODE gameLoop(void)
 					}
 				}
 
+				// FIXME: These for-loops are code duplicationo
 				/*set this up AFTER droidUpdate so that if trying to building a
 				new one, we know whether one exists already*/
 				setLasSatExists(false, i);
