@@ -700,7 +700,15 @@ static void proj_InFlightDirectFunc( PROJECTILE *psObj )
 	{
 		dx = (SDWORD)psObj->tarX - (SDWORD)psObj->startX;
 		dy = (SDWORD)psObj->tarY - (SDWORD)psObj->startY;
-		dz = (SDWORD)(psObj->altChange);
+		// LASSAT has no z component.
+		if (psStats->weaponSubClass == WSC_LAS_SAT)
+		{
+			dz = 0;
+		}
+		else
+		{
+			dz = (SDWORD)(psObj->altChange);
+		}
 	}
 
 	// ffs
