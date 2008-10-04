@@ -17,20 +17,12 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/*! \file types.h
+/*! \file
  *  \brief Simple type definitions.
- *  Includes wzglobal.h
- */
-#ifndef _types_h
-#define _types_h
-
-/* Check the header files have been included from frame.h if they
- * are used outside of the framework library.
  */
 
-#if !defined(_frame_h) && !defined(FRAME_LIB_INCLUDE)
-#error Framework header files MUST be included from Frame.h ONLY.
-#endif
+#ifndef __INCLUDED_LIB_FRAMEWORK_TYPES_H__
+#define __INCLUDED_LIB_FRAMEWORK_TYPES_H__
 
 #include "wzglobal.h"
 
@@ -96,4 +88,4 @@ typedef int BOOL;
 #define SDWORD_MIN	(0x80000000)
 #define SDWORD_MAX	0x7fffffff
 
-#endif
+#endif // __INCLUDED_LIB_FRAMEWORK_TYPES_H__
