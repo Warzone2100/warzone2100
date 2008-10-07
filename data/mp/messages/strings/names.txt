@@ -140,15 +140,15 @@ Cyb-NXCybATmiss-JUMP			"*Cyb-NXCybATmiss-JUMP*"
 Cyb-NXPulseLas-JUMP			"*Cyb-NXPulseLas-JUMP*"
 
 /* PLAYER 4 - FORCE EDITOR VEHICLES */
-ViperLtCannonWheels			_("Viper Light Cannon Wheels")
-ViperLtCannonHTracks		_("Viper Light Cannon Half-track")
-ViperFlameWheels			_("Viper Flamer Wheels")
-ViperSensorWheels			_("Viper Sensor Wheels")
-ViperLtCannonTracks			_("Viper Light Cannon Tracks")
+ViperLtCannonWheels			_("Light Cannon Viper Wheels")
+ViperLtCannonHTracks		_("Light Cannon Viper Half-tracks")
+ViperFlameWheels			_("Flamer Viper Wheels")
+ViperSensorWheels			_("Sensor Turret Viper Wheels")
+ViperLtCannonTracks			_("Light Cannon Viper Tracks")
 
-CobraHMGHalfTrack			_("Cobra Heavy Machinegun Half-track")
-CobraMortarHalfTrack			_("Cobra Mortar Half-track")
-CobraLtCnTrks				_("Cobra Light Cannon Tracks")
+CobraHMGHalfTrack			_("Heavy Machinegun Cobra Half-tracks")
+CobraMortarHalfTrack			_("Mortar Cobra Half-tracks")
+CobraLtCnTrks				_("Light Cannon Cobra Tracks")
 
 /* PLAYER 5 - MULTIPLAYER VEHICLES */
 ConstructorDroid			_("Truck")
@@ -163,39 +163,40 @@ ATESTVEHICLE				"*TEST VEHICLE*"
 ATESTVTOL				"*TEST VTOL*"
 ASPOTTER				"*SPOTTER*"
 AVTOLSPOTTER				"*VTOL SPOTTER*"
-Superbody				"*Kev's Super Body*"
-Superweapon				"*Kev's Super Weapon*"
-Superweapon2				"*Alex's Super Weapon*"
-SuperTank				"*Kev's Super Tank*"
-SuperTank2				"*Alex's Killa*"
+Superbody				"Kev's Super Body"
+Superbody2				"Alex's Super Body"
+Superweapon				"Kev's Super Weapon"
+Superweapon2				"Alex's Super Weapon"
+SuperTank				"Kev's Super Tank"
+SuperTank2				"Alex's Killa"
 
-ViperMedCnTrks				_("Viper Medium Cannon Tracks")
-ViperRepairWheels			_("Viper Repair Wheels")
-ViperRepairHalftrack			_("Viper Repair Half-track")
-ViperMG01Wheels				_("Viper Machine Gun Wheels")
-ViperMG02Wheels				_("Viper Twin Machinegun Wheels")
-ViperMG02Halftrack			_("Viper Twin Machinegun Half-track")
-ViperHMGHalftrack			_("Viper Heavy Machinegun Half-track")
-ViperHMGTracks				_("Viper Heavy Machinegun Tracks")
-ViperLtA-Twheels			_("Viper Lancer Wheels")
-ViperPODWheels				_("Viper Mini-Pod Rockets Wheels")
-ViperMRLWheels				_("Viper Mini-Rocket Artillery Wheels")
-ViperBBWheels				_("Viper Bunker Buster Rockets Wheels")
+ViperMedCnTrks				_("Medium Cannon Viper Tracks")
+ViperRepairWheels			_("Repair Turret Viper Wheels")
+ViperRepairHalftrack			_("Repair Turret Viper Half-track")
+ViperMG01Wheels				_("Machinegun Viper Wheels")
+ViperMG02Wheels				_("Twin Machinegun Viper Wheels")
+ViperMG02Halftrack			_("Twin Machinegun Viper Half-tracks")
+ViperHMGHalftrack			_("Heavy Machinegun Viper Half-tracks")
+ViperHMGTracks				_("Heavy Machinegun Viper Tracks")
+ViperLtA-Twheels			_("Lancer Viper Wheels")
+ViperPODWheels				_("Mini-Pod Rockets Viper Wheels")
+ViperMRLWheels				_("Mini-Rocket Artillery Viper Wheels")
+ViperBBWheels				_("Bunker Buster Rockets Viper Wheels")
 
-CobraMedCnTrks				_("Cobra Medium Cannon Tracks")
-CobraHvyCnTrks				_("Cobra Heavy Cannon Tracks")
+CobraMedCnTrks				_("Medium Cannon Cobra Tracks")
+CobraHvyCnTrks				_("Heavy Cannon Cobra Tracks")
 CobraSpadeTracks			_("Cobra Truck")
-CobraSensorHalftrack			_("Cobra Sensor Half-track")
-CobraFlameTracks			_("Cobra Flamer Tracks")
-CobraHvyMortarHalftrack			_("Cobra Bombard Half-track")
-CobraComHalftrack			_("Cobra Command Turret Half-track")
-CobraLtA-Thalftrack			_("Cobra Lancer Half-track")
-CobraMRLHalftrack			_("Cobra Mini-Rocket Artillery Half-track")
+CobraSensorHalftrack			_("Sensor Turret Cobra Half-tracks")
+CobraFlameTracks			_("Flamer Cobra Tracks")
+CobraHvyMortarHalftrack			_("Bombard Cobra Half-tracks")
+CobraComHalftrack			_("Command Turret Cobra Half-tracks")
+CobraLtA-Thalftrack			_("Lancer Cobra Half-tracks")
+CobraMRLHalftrack			_("Mini-Rocket Artillery Cobra Half-tracks")
 
-PythonLtCnTrks				_("Python Light Cannon Tracks")
-PythonMedCnTrks				_("Python Medium Cannon Tracks")
-PythonHvyCnTrks				_("Python Heavy Cannon Tracks")
-PythonComTracks				_("Python Commander Tracks")
+PythonLtCnTrks				_("Light Cannon Python Tracks")
+PythonMedCnTrks				_("Medium Cannon Python Tracks")
+PythonHvyCnTrks				_("Heavy Cannon Python Tracks")
+PythonComTracks				_("Command Turret Python Tracks")
 
 /* PLAYER 7 - SCAVENGER VEHICLES */
 BaBaPeople				_("Scavenger")
@@ -315,7 +316,7 @@ Spade1Mk1				_("Truck")
 /* PROPULSION */
 ZNULLPROP				_("Z NULL PROP")
 wheeled01				_("Wheels")
-wheeled02				_("Wheels II") 
+wheeled02				_("Wheels II")
 wheeled03				_("Wheels III")
 tracked01				_("Tracks")
 tracked02				_("Tracks II")
@@ -345,7 +346,7 @@ CyborgLegs				_("Cyborg Propulsion")
 
 /* VEHICLE AUTO-REPAIR */
 ZNULLREPAIR				_("Z NULL REPAIR")
-LightRepair1				_("Mobile Repair Turret")
+LightRepair1				_("Repair Turret")
 
 /* ECM */
 ZNULLECM				_("Z NULL ECM")
@@ -413,7 +414,7 @@ AASite-QuadBof				_("Cyclone AA Site")
 AASite-QuadMg1				_("Hurricane AA Site")
 AASite-QuadRotMg			_("Whirlwind AA Site")
 
-Emplacement-Rocket06-IDF		_("Ripple Rocket Battery") 
+Emplacement-Rocket06-IDF		_("Ripple Rocket Battery")
 //Tower-Missile1				_("Lancer Guard Tower")
 //Tower-Missile2				_("Mini-Pod Rocket Guard Tower")
 Tower-VulcanCan				_("Assault Cannon Guard Tower")
@@ -536,7 +537,7 @@ Rocket-VTOL-HvyA-T		_("VTOL Tank Killer")
 CyborgCannon			_("Heavy Gunner")
 CyborgCannon01			"*Cyborg Cannon*"
 CyborgRocket			_("Lancer")
-CyborgChaingun			_("Machine Gunner")
+CyborgChaingun			_("Machinegunner")
 CyborgFlamer01				_("Flamer")
 
 TUTMG						_("Machinegun")
@@ -556,8 +557,8 @@ NavaroneGun					"*NavaroneGun*"
 NX-CyborgMiss				"*NX-CyborgMiss*"
 NX-CyborgChaingun				"*NX-CyborgChaingun*"
 NX-CyborgPulseLas				"*NX-CyborgPulseLas*"
-				   
-LasSat					_("LasSat")
+
+LasSat					_("Laser Satellite Command Post")
 
 Cannon1-VTOL				_("VTOL Cannon")
 Cannon4AUTO-VTOL				_("VTOL Hyper Velocity Cannon")
@@ -674,15 +675,15 @@ R-Cyborg-Metals09				_("Cyborg Superdense Composite Alloys Mk3")
 
 R-Cyborg-Transport			_("Cyborg Transport")
 
-R-Cyborg-Wpn-BB				_("Bunker Blaster")
-R-Cyborg-Wpn-Cannon			_("Heavy Gunner") 
-R-Cyborg-Wpn-Flamer			_("Flamer")
-R-Cyborg-Wpn-MG				_("Machine Gunner")
-R-Cyborg-Wpn-Rocket			_("Lancer")
-R-Cyborg-Wpn-RotMG-Grd			_("Assault Gunner")
-R-Cyborg-Wpn-Rail1-Grd			_("Needle Gunner")
-R-Cyborg-Wpn-ATMiss-Grd			_("Scourge")
-R-Cyborg-Wpn-Laser1-Grd			_("Flashlight Gunner")
+R-Cyborg-Wpn-BB				_("Bunker Blaster Cyborg")
+R-Cyborg-Wpn-Cannon			_("Heavy Gunner Cyborg")
+R-Cyborg-Wpn-Flamer			_("Flamer Cyborg")
+R-Cyborg-Wpn-MG				_("Machinegunner Cyborg")
+R-Cyborg-Wpn-Rocket			_("Lancer Cyborg")
+R-Cyborg-Wpn-RotMG-Grd			_("Assault Gunner Cyborg")
+R-Cyborg-Wpn-Rail1-Grd			_("Needle Gunner Cyborg")
+R-Cyborg-Wpn-ATMiss-Grd			_("Scourge Cyborg")
+R-Cyborg-Wpn-Laser1-Grd			_("Flashlight Gunner Cyborg")
 
 R-Cyborg-Wpn-BB-Jump			_("Jump Bunker Blaster")
 R-Cyborg-Wpn-Cannon-Jump		_("Jump Heavy Gunner")
@@ -888,7 +889,7 @@ R-Sys-Engineering02			_("Improved Engineering")
 R-Sys-Engineering03			_("Advanced Engineering")
 
 R-Sys-MobileRepairTurret01		_("Mobile Repair Turret")
-R-Sys-MobileRepairTurret02		_("Heavy Mobile Repair Turret")
+R-Sys-MobileRepairTurret02		_("Heavy Repair Turret")
 R-Sys-MobileRepairTurret-01		_("Mobile Repair Upgrade")
 R-Sys-MobileRepairTurret-02		_("Mobile Repair Upgrade Mk2")
 
@@ -988,7 +989,7 @@ R-Vehicle-Prop-Wheels02			_("Wheeled Propulsion II")
 R-Wpn-AAGun01				_("Tornado Flak Turret")
 R-Wpn-AAGun02				_("Cyclone Flak Turret")
 R-Wpn-AAGun03				_("Hurricane AA Turret")
-R-Wpn-AAGun04				_("Whirlwind AATurret")
+R-Wpn-AAGun04				_("Whirlwind AA Turret")
 R-Wpn-AAGun-Accuracy01			_("AA Thermal Imaging Sensor")
 R-Wpn-AAGun-Accuracy02			_("AA Target Acquisition Shells")
 R-Wpn-AAGun-Accuracy03			_("AA Target Prediction Computer")
@@ -1064,7 +1065,7 @@ R-Wpn-Flamer-ROF01			_("Flamer Autoloader")
 R-Wpn-Flamer-ROF02			_("Flamer Autoloader Mk2")
 R-Wpn-Flamer-ROF03			_("Flamer Autoloader Mk3")
 R-Wpn-Flamer01Mk1				_("Flamer")
-R-Wpn-Flame2				_("Heavy Flamer - Inferno") 
+R-Wpn-Flame2				_("Heavy Flamer - Inferno")
 
 R-Wpn-HowitzerMk1				_("Howitzer")
 R-Wpn-HvyHowitzer				_("Heavy Howitzer - Ground Shaker")
@@ -1085,7 +1086,7 @@ R-Wpn-Howitzer-Damage06			_("HEAP Howitzer Shells Mk3")
 R-Wpn-Howitzer-ROF01			_("Howitzer Autoloader")
 R-Wpn-Howitzer-ROF02			_("Howitzer Autoloader Mk2")
 R-Wpn-Howitzer-ROF03			_("Howitzer Autoloader Mk3")
-R-Wpn-Howitzer-ROF04			_("Fast Loader")
+R-Wpn-Howitzer-ROF04			_("Howitzer Fast Loader")
 
 R-Wpn-Laser01				_("Laser - Flashlight")
 R-Wpn-Laser02				_("Pulse Laser")
@@ -1150,7 +1151,7 @@ R-Wpn-Mortar3				_("Rotary Mortar - Pepperpot")
 R-Wpn-RailGun01				_("Needle Gun")
 R-Wpn-RailGun02				_("Rail Gun")
 R-Wpn-RailGun03				_("Gauss Cannon")
-R-Wpn-Rail-Accuracy01			_("Target Prediction Computer")
+R-Wpn-Rail-Accuracy01			_("Rail Target Prediction Computer")
 R-Wpn-Rail-Damage01			_("Hardened Rail Dart")
 R-Wpn-Rail-Damage02			_("Hardened Rail Dart Mk2")
 R-Wpn-Rail-Damage03			_("Hardened Rail Dart Mk3")
@@ -1192,7 +1193,7 @@ R-Wpn-Rocket05-MiniPod			_("Mini-Pod Rockets")
 R-Wpn-Rocket06-IDF			_("Ripple Rockets")
 R-Wpn-Rocket07-Tank-Killer		_("Tank Killer Rocket")
 
-R-Wpn-TUTMG					_("Machine Gun Artifact")
+R-Wpn-TUTMG					_("Machinegun Artifact")
 
 /* ENEMY STRUCTURES */
 A0CommandCentreNP				_("New Paradigm Command Center")
@@ -1348,10 +1349,10 @@ R-Lab-Robotics				_("Robotics Laboratory")
 
 // *New Names...... Keith
 
-P0PythonHvyCnTrks		_("Python Heavy Cannon Tracks")
+P0PythonHvyCnTrks		_("Heavy Cannon Python Tracks")
 P0CobraSpadeTracks		_("Cobra Truck")
-P0CobraFlameTracks		_("Cobra Flamer Tracks")
-P0CobraMedCnTrks		_("Cobra Medium Cannon Tracks")
+P0CobraFlameTracks		_("Flamer Cobra Tracks")
+P0CobraMedCnTrks		_("Medium Cannon Cobra Tracks")
 
 //CyborgChain01GroundP0	_("Gunner")
 //CyborgRkt01GroundP0		_("Lancer")
@@ -1391,7 +1392,7 @@ WallTower-Atmiss		_("Scourge Missile Hardpoint")
 WallTower-Rail3			_("Gauss Cannon Hardpoint")
 
 // added by Pete
-//R-Cyborg-Wpn-Missile		_("Revenger")
+//R-Cyborg-Wpn-Missile		_("Revenger Cyborg")
 
 //ResMod-Cyb-MG-GRD		"*ResMod-Cyb-MG-GRD*"
 
@@ -1426,8 +1427,8 @@ Rocket-IDF-Emp		"*Rocket-IDF-Emp*"
 // Additional templates for Player 0 entering start of cam2
 
 P0CobraLtATRktHtrack	_("Lancer Cobra Half-tracks")
-P0CobraHvyMGHtrack	_("HMG Cobra Half-tracks")
-P0PythonComTracks		_("Commander Python Tracks")
+P0CobraHvyMGHtrack	_("Heavy Machinegun Cobra Half-tracks")
+P0PythonComTracks		_("Command Turret Python Tracks")
 P0CobraRepairTrks		_("Repair Cobra Tracks")
 
 // New Cyborg Bodies
@@ -1502,8 +1503,8 @@ NX-L-Flash-Hover			"*NX-L-Flash-Hover*"
 
 
 //New Skirmish Units
-Sk-PythonHvCanTrack			_("Python Heavy Cannon Tracks")
-Sk-CobraBBHover				_("Cobra Bunker Buster Hover")
+Sk-PythonHvCanTrack			_("Heavy Cannon Python Tracks")
+Sk-CobraBBHover				_("Bunker Buster Cobra Hover")
 
 R-Sys-Sensor-Upgrade02			_("Sensor Upgrade Mk2")
 R-Struc-Power-Upgrade03			_("Vapor Turbine Generator Mk2")
@@ -1599,12 +1600,12 @@ SK-Retre-VTOL-Scourge			"*SK-Retre-VTOL-Scourge*"
 MP-Cyb-Needle-GRD				_("Needle Gunner")
 
 // New Cyborgs - Thermite and Grenadier
-R-Cyborg-Wpn-Thermite			_("Thermite Flamer")
+R-Cyborg-Wpn-Thermite			_("Thermite Flamer Cyborg")
 Cyb-Wpn-Thermite				"*Cybrog Thermite Weapon*"
 Cyb-Bod-Thermite				"*Thermite Body*"
 Cyb-Thermite				_("Thermite Flamer")
 
-R-Cyborg-Wpn-Grenade			_("Grenadier")
+R-Cyborg-Wpn-Grenade			_("Grenadier Cyborg")
 Cyb-Wpn-Grenade				"*Cyborg Grenade Weapon*"
 Cyb-Bod-Grenade				"*Grenadier Body*"
 Cyb-Gren					_("Grenadier")
@@ -1629,12 +1630,12 @@ R-Defense-Howitzer-Incenediary	_("Incenediary Howitzer Emplacement")
 Emplacement-Howitzer-Incenediary	_("Incenediary Howitzer Emplacement")
 R-Wpn-Plasmite-Flamer			_("Plasmite Flamer")
 PlasmiteFlamer				_("Plasmite Flamer")
-R-Defense-PlasmiteFlamer		_("Plasmite Flamer")
-Plasmite-flamer-bunker			_("Plasmite Flamer")
+R-Defense-PlasmiteFlamer		_("Plasmite Flamer Bunker")
+Plasmite-flamer-bunker			_("Plasmite Flamer Bunker")
 R-Wpn-Mortar-Incenediary		_("Incenediary Mortar")
 Mortar-Incenediary			_("Incenediary Mortar")
-R-Defense-MortarPit-Incenediary	_("Incenediary Mortar")
-Emplacement-MortarPit-Incenediary	_("Incenediary Mortar")
+R-Defense-MortarPit-Incenediary	_("Incenediary Mortar Pit")
+Emplacement-MortarPit-Incenediary	_("Incenediary Mortar Pit")
 R-Sys-MobileRepairTurretHvy		_("Heavy Repair Turret")
 HeavyRepair					_("Heavy Repair Turret")
 
@@ -1676,7 +1677,7 @@ R-Defense-HeavyLas			_("Heavy Laser Emplacement")
 
 // added by SEBG 17 June 1999
 
-R-Sys-Resistance-Circuits		_("Resistance Circuits")
+R-Sys-Resistance-Circuits		_("NEXUS Resistance Circuits")
 
 Cannon6TwinAslt				_("Twin Assault Cannon")
 R-Wpn-Cannon6TwinAslt			_("Twin Assault Cannon")
@@ -1699,7 +1700,7 @@ LasSatCommandSensor			"*LasSatCommandSensor*"
 SK-Veng-Track-C6TwinAslt	"*SK-Veng-Track-C6TwinAslt*"
 SK-Veng-Track-HvyLaser		"*SK-Veng-Track-HvyLaser*"
 
-AutoRepair					"*AutoRepair*"
+AutoRepair					"Auto Repair"
 
 // added by Marc 23rd June 1999 Tech 3 Super-Cyborgs, Plasma Cannon and EMP Cannon
 
@@ -1734,19 +1735,19 @@ R-Wpn-EMPCannon				_("EMP Cannon")
 // added by SEBG for September patch
 
 X-Super-MassDriver			_("Mass Driver Fortress")
-MassDriver					"*Mass Driver Weapon*"
+MassDriver					_("Mass Driver")
 R-Defense-MassDriver			_("Mass Driver Fortress")
 
 X-Super-Cannon				_("Cannon Fortress")
-CannonSuper					"*Fortress Cannon Weapon*"
+CannonSuper					_("Cannon Fortress")
 R-Defense-Super-Cannon 			_("Cannon Fortress")
 
 X-Super-Rocket				_("Heavy Rocket Bastion")
-RocketSuper					"*Rocket Bastion Weapon*"
+RocketSuper					_("Heavy Rocket Bastion")
 R-Defense-Super-Rocket 			_("Heavy Rocket Bastion")
 
 X-Super-Missile				_("Missile Fortress")
-MissileSuper				"*Missile Fortress Weapon*"
+MissileSuper				_("Missile Fortress")
 R-Defense-Super-Missile 		_("Missile Fortress")
 
 // added by Marc 1st September - Super Heavy bodies, Flamer Upgrades
@@ -1768,9 +1769,9 @@ Emplacement-MortarEMP			_("EMP Mortar")
 R-Wpn-MortarEMP				_("EMP Mortar")
 R-Defense-EMPMortar			_("EMP Mortar")
 AAGunLaser					_("Stormbringer AA Laser")
-R-Defense-AA-Laser			_("Stormbringer AA Laser")
+R-Defense-AA-Laser			_("Stormbringer Emplacement")
 R-Wpn-AALaser				_("Stormbringer AA Laser")
-P0-AASite-Laser				_("Stormbringer AA Laser")
+P0-AASite-Laser				_("Stormbringer Emplacement")
 R-Defense-WallTower-SamHvy		_("Vindicator Hardpoint")
 WallTower-SamHvy				_("Vindicator Hardpoint")
 WallTower-QuadRotAAGun			_("Whirlwind Hardpoint")
@@ -1784,8 +1785,8 @@ WallTower-SamSite				_("Avenger Hardpoint")
 
 MG5TWINROTARY				_("Twin Assault Gun")
 R-Wpn-MG5					_("Twin Assault Gun")
-WallTower-TwinAssaultGun		_("Twin Assault Gun")
-R-Defense-WallTower-TwinAGun		_("Twin Assault Gun")
+WallTower-TwinAssaultGun		_("Twin Assault Gun Hardpoint")
+R-Defense-WallTower-TwinAGun		_("Twin Assault Gun Hardpoint")
 
 Bomb5-VTOL-Plasmite			_("VTOL Plasmite Bomb Bay")
 R-Wpn-Bomb05				_("Plasmite Bomb")
