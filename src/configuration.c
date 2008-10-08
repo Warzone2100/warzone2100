@@ -334,13 +334,13 @@ BOOL loadConfig(void)
 
 	// //////////////////////////
 	// sequences
-	if(getWarzoneKeyNumeric("sequences", &val))
+	if (getWarzoneKeyNumeric("FMVmode", &val))
 	{
-		war_SetSeqMode(val);
+		war_SetFMVmode(val);
 	}
 	else
 	{
-		war_SetSeqMode(SEQ_FULL);
+		war_SetFMVmode(FMV_FULLSCREEN);
 	}
 
 	// //////////////////////////
@@ -689,7 +689,7 @@ BOOL saveConfig(void)
 	setWarzoneKeyNumeric("mouseflip",(SDWORD)(getInvertMouseStatus()));	// flipmouse
 	setWarzoneKeyNumeric("shadows",(SDWORD)(getDrawShadows()));	// shadows
 	setWarzoneKeyNumeric("sound", (SDWORD)war_getSoundEnabled());
-	setWarzoneKeyNumeric("sequences",(SDWORD)(war_GetSeqMode()));		// sequences
+	setWarzoneKeyNumeric("FMVmode",(SDWORD)(war_GetFMVmode()));		// sequences
 	setWarzoneKeyNumeric("subtitles",(SDWORD)(seq_GetSubtitles()));		// subtitles
 	setWarzoneKeyNumeric("reopenBuild",(SDWORD)(intGetReopenBuild()));	// build menu
 	setWarzoneKeyNumeric("radarObjectMode",(SDWORD)bEnemyAllyRadarColor);    // enemy/allies radar view

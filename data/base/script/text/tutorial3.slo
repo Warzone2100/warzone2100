@@ -1040,7 +1040,7 @@ event	firstDroidBuilt(droidBuilt)
 	// Remove Button
 	removeReticuleButton(MANUFACTURE,TRUE);
 
-	//playVideo((TEXTSTRING)"factory.rpl", NULLSTRING); // we don't have cut-scenes, to this would cause the bare sky-box to be shown
+	//playVideo((TEXTSTRING)"factory.ogg", NULLSTRING); // we don't have cut-scenes, to this would cause the bare sky-box to be shown
 	
 	//#REGION copied from videoDone(...)
 	pause(20);

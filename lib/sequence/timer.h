@@ -17,16 +17,13 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
-#ifndef __INCLUDED_LIB_SEQUENCE_SEQUENCE_H__
-#define __INCLUDED_LIB_SEQUENCE_SEQUENCE_H__
+#ifndef __INCLUDED_LIB_SEQUENCE_TIMER_H__
+#define __INCLUDED_LIB_SEQUENCE_TIMER_H__
 
-#include "lib/framework/types.h"
+void   Timer_Init(void);
+void   Timer_start(void);					// start timer
+void   Timer_stop(void);					// stop the timer
+double Timer_getElapsedMilliSecs(void);		// get elapsed time in milliseconds
+double Timer_getElapsedMicroSecs(void);		// get elapsed time in microseconds
 
-extern bool seq_Play(const char* filename);
-extern bool seq_Playing(void);
-extern bool seq_Update(void);
-extern void seq_Shutdown(void);
-extern int seq_GetFrameNumber(void);
-extern void seq_SetDisplaySize(int sizeX, int sizeY, int posX, int posY);
-
-#endif // __INCLUDED_LIB_SEQUENCE_SEQUENCE_H__
+#endif // __INCLUDED_LIB_SEQUENCE_TIMER_H__

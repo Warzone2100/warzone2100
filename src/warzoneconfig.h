@@ -31,13 +31,14 @@
  *	Global Definitions
  */
 /***************************************************************************/
-typedef	enum	SEQ_MODE
+typedef	enum	FMV_MODE
 				{
-					SEQ_FULL,
-					SEQ_SMALL,
-					SEQ_SKIP
+					FMV_FULLSCREEN,
+					FMV_1X,
+					FMV_2X,
+					FMV_MAX
 				}
-				SEQ_MODE;
+				FMV_MODE;
 
 /***************************************************************************/
 /*
@@ -47,8 +48,8 @@ typedef	enum	SEQ_MODE
 extern void	war_SetDefaultStates(void);
 extern void war_SetFog(BOOL val);
 extern BOOL war_GetFog(void);
-extern void war_SetSeqMode(SEQ_MODE mode);
-extern SEQ_MODE war_GetSeqMode(void);
+extern void war_SetFMVmode(FMV_MODE mode);
+extern FMV_MODE war_GetFMVmode(void);
 extern void war_SetAllowSubtitles(BOOL);
 extern BOOL war_GetAllowSubtitles(void);
 extern void war_setFullscreen(BOOL);

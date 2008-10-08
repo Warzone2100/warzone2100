@@ -43,7 +43,7 @@
 
 typedef struct _warzoneGlobals
 {
-	SEQ_MODE	seqMode;
+	FMV_MODE	FMVmode;
 	BOOL		bFog;
 	SWORD		effectsLevel;
 	BOOL		allowSubtitles;
@@ -175,14 +175,14 @@ BOOL war_GetFog(void)
 
 /***************************************************************************/
 /***************************************************************************/
-void war_SetSeqMode(SEQ_MODE mode)
+void war_SetFMVmode(FMV_MODE mode)
 {
-	warGlobs.seqMode = mode;
+	warGlobs.FMVmode = mode % FMV_MAX;
 }
 
-SEQ_MODE war_GetSeqMode(void)
+FMV_MODE war_GetFMVmode(void)
 {
-	return  warGlobs.seqMode;
+	return  warGlobs.FMVmode;
 }
 
 void war_SetPauseOnFocusLoss(bool enabled)

@@ -23,7 +23,9 @@
  * Functions for the display of the Escape Sequences (FMV).
  *
  */
+
 #include "lib/framework/frame.h"
+#include "lib/framework/frameint.h"
 
 #include <string.h>
 #include <SDL_timer.h>
@@ -90,14 +92,16 @@ static BOOL bBackDropWasAlreadyUp;
 static BOOL bAudioPlaying = false;
 static BOOL bHoldSeqForAudio = false;
 static BOOL bSeqSubtitles = true;
+static BOOL bSeqPlaying = false;
 static const char aHardPath[] = "sequences/";
 static char aVideoName[MAX_STR_LENGTH];
+static char* pVideoBuffer = NULL;
+static char* pVideoPalette = NULL;
+static SDWORD frameSkip = 1;
 static SEQLIST aSeqList[MAX_SEQ_LIST];
 static SDWORD currentSeq = -1;
 static SDWORD currentPlaySeq = -1;
 static BOOL g_bResumeInGame = false;
-
-static unsigned int time_started = 0;
 
 /***************************************************************************/
 /*
@@ -105,7 +109,15 @@ static unsigned int time_started = 0;
  */
 /***************************************************************************/
 
-static BOOL seq_StartFullScreenVideo(const char* videoName, const char* audioName);
+typedef enum
+{
+	VIDEO_PRESELECTED_RESOLUTION,
+	VIDEO_USER_CHOSEN_RESOLUTION,
+} VIDEO_RESOLUTION;
+
+static bool seq_StartFullScreenVideo(const char* videoName, const char* audioName, VIDEO_RESOLUTION resolution);
+BOOL seq_SetupVideoBuffers(void);
+BOOL seq_ReleaseVideoBuffers(void);
 
 /***************************************************************************/
 /*
@@ -114,22 +126,108 @@ static BOOL seq_StartFullScreenVideo(const char* videoName, const char* audioNam
 /***************************************************************************/
 
  /* Renders a video sequence specified by filename to a buffer*/
-BOOL	seq_RenderVideoToBuffer(iSurface* pSurface, const char* sequenceName, int time, int seqCommand)
+bool seq_RenderVideoToBuffer(const char* sequenceName, int seqCommand)
 {
+	static enum
+	{
+		VIDEO_NOT_PLAYING,
+		VIDEO_PLAYING,
+		VIDEO_FINISHED,
+	} videoPlaying = VIDEO_NOT_PLAYING;
+	static enum
+	{
+		VIDEO_LOOP,
+		VIDEO_HOLD_LAST_FRAME,
+	} frameHold = VIDEO_LOOP;
+
 	if (seqCommand == SEQUENCE_KILL)
 	{
 		//stop the movie
 		seq_Shutdown();
+		bSeqPlaying = false;
+		frameHold = VIDEO_LOOP;
+		videoPlaying = VIDEO_NOT_PLAYING;
 		return true;
 	}
 
-	seq_StartFullScreenVideo(sequenceName, NULL);
+	if (!bSeqPlaying
+	 && frameHold == VIDEO_LOOP)
+	{
+		//start the ball rolling
+
+		iV_SetFont(font_regular);
+		iV_SetTextColour(WZCOL_TEXT_BRIGHT);
+
+		/* We do *NOT* want to use the user-choosen resolution when we
+		 * are doing intelligence videos.
+		 */
+		videoPlaying = seq_StartFullScreenVideo(sequenceName, NULL, VIDEO_PRESELECTED_RESOLUTION) ? VIDEO_PLAYING : VIDEO_FINISHED;
+		bSeqPlaying = true;
+	}
+
+	if (videoPlaying != VIDEO_FINISHED)
+	{
+		videoPlaying = seq_Update() ? VIDEO_PLAYING : VIDEO_FINISHED;
+	}
+
+	if (videoPlaying == VIDEO_FINISHED)
+	{
+		seq_Shutdown();
+		bSeqPlaying = false;
+		frameHold = VIDEO_HOLD_LAST_FRAME;
+		videoPlaying = VIDEO_NOT_PLAYING;
+		return false;
+	}
 
 	return true;
 }
 
+BOOL seq_ReleaseVideoBuffers(void)
+{
+	free(pVideoBuffer);
+	free(pVideoPalette);
+	pVideoBuffer = NULL;
+	pVideoPalette = NULL;
+	return true;
+}
+
+BOOL seq_SetupVideoBuffers(void)
+{
+	return true;
+}
+
+static void seq_SetUserResolution(void)
+{
+	switch (war_GetFMVmode())
+	{
+		case FMV_1X:
+		{
+			// Native (1x)
+			const int x = (screenWidth - 320) / 2;
+			const int y = (screenHeight - 240) / 2;
+			seq_SetDisplaySize(320, 240, x, y);
+			break;
+		}
+		case FMV_2X:
+		{
+			// Double (2x)
+			const int x = (screenWidth - 640) / 2;
+			const int y = (screenHeight - 480) / 2;
+			seq_SetDisplaySize(640, 480, x, y);
+			break;
+		}
+		case FMV_FULLSCREEN:
+			seq_SetDisplaySize(screenWidth, screenHeight, 0, 0);
+			break;
+
+		default:
+			ASSERT(!"invalid FMV mode", "Invalid FMV mode: %u", (unsigned int)war_GetFMVmode());
+			break;
+	}
+}
+
 //full screenvideo functions
-static BOOL seq_StartFullScreenVideo(const char* videoName, const char* audioName)
+static bool seq_StartFullScreenVideo(const char* videoName, const char* audioName, VIDEO_RESOLUTION resolution)
 {
 	const char* aAudioName;
 	int chars_printed;
@@ -142,23 +240,36 @@ static BOOL seq_StartFullScreenVideo(const char* videoName, const char* audioNam
 	//set audio path
 	if (audioName != NULL)
 	{
-		ASSERT( strlen(audioName) < MAX_STR_LENGTH, "sequence path+name greater than max string" );
 		sasprintf((char**)&aAudioName, "sequenceaudio/%s", audioName);
 	}
 
-	//start video mode
-	if (loop_GetVideoMode() == 0)
+	cdAudio_Pause();
+	iV_SetFont(font_regular);
+	iV_SetTextColour(WZCOL_TEXT_BRIGHT);
+
+	/* We do not want to enter loop_SetVideoPlaybackMode() when we are
+	 * doing intelligence videos.
+	 */
+	if (resolution == VIDEO_USER_CHOSEN_RESOLUTION)
 	{
-		cdAudio_Pause();
-		loop_SetVideoPlaybackMode();
-		iV_SetFont(font_regular);
-		iV_SetTextColour(WZCOL_TEXT_BRIGHT);
+		//start video mode
+		if (loop_GetVideoMode() == 0)
+		{
+			// check to see if we need to pause, and set font each time
+			cdAudio_Pause();
+			loop_SetVideoPlaybackMode();
+			iV_SetFont(font_regular);
+			iV_SetTextColour(WZCOL_TEXT_BRIGHT);
+		}
+
+		// set the dimensions to show full screen or native or ...
+		seq_SetUserResolution();
 	}
 
 	if (!seq_Play(aVideoName))
 	{
-		// don't stop or cancel it as we may have text to display
-		debug( LOG_WARNING,"seq_StartFullScreenVideo: unable to initialise sequence %s",aVideoName );
+		seq_Shutdown();
+		return false;
 	}
 
 	if (audioName == NULL)
@@ -167,44 +278,33 @@ static BOOL seq_StartFullScreenVideo(const char* videoName, const char* audioNam
 	}
 	else
 	{
+		// NOT controlled by sliders for now?
 		static const float maxVolume = 1.f;
 
 		bAudioPlaying = audio_PlayStream(aAudioName, maxVolume, NULL, NULL) ? true : false;
-		ASSERT(bAudioPlaying == true, "seq_StartFullScreenVideo: unable to initialise sound %s", aAudioName);
+		ASSERT(bAudioPlaying == true, "unable to initialise sound %s", aAudioName);
 	}
-
-	time_started = SDL_GetTicks();
 
 	return true;
 }
 
 BOOL seq_UpdateFullScreenVideo(int *pbClear)
 {
-	SDWORD i, x, y, w = 640, h = 480;
-	UDWORD subMin, subMax;
-	UDWORD realFrame;
+	int i;
 	BOOL bMoreThanOneSequenceLine = false;
-	BOOL stillText;
+	bool stillPlaying;
 
-	x = (pie_GetVideoBufferWidth() - w)/2;
-	y = (pie_GetVideoBufferHeight() - h)/2;
+	unsigned int subMin = SUBTITLE_BOX_MAX + D_H;
+	unsigned int subMax = SUBTITLE_BOX_MIN + D_H;
 
-	subMin = SUBTITLE_BOX_MAX + D_H;
-	subMax = SUBTITLE_BOX_MIN + D_H;
-
-	stillText = false;
 	//get any text lines over bottom of the video
-	realFrame = (SDL_GetTicks()-time_started)/40; // standard frame is 40 msec
+	unsigned int realFrame = seq_GetFrameNumber();
 	for(i=0;i<MAX_TEXT_OVERLAYS;i++)
 	{
 		if (aSeqList[currentPlaySeq].aText[i].pText[0] != '\0')
 		{
 			if (aSeqList[currentPlaySeq].aText[i].bSubtitle == true)
 			{
-				if(realFrame <= aSeqList[currentPlaySeq].aText[i].endFrame)
-				{
-					stillText = true;
-				}
 				if ((realFrame >= aSeqList[currentPlaySeq].aText[i].startFrame) && (realFrame <= aSeqList[currentPlaySeq].aText[i].endFrame))
 				{
 					if (subMin > aSeqList[currentPlaySeq].aText[i].y)
@@ -234,6 +334,15 @@ BOOL seq_UpdateFullScreenVideo(int *pbClear)
 					}
 				}
 			}
+
+			if (realFrame >= aSeqList[currentPlaySeq].aText[i].endFrame
+			 && realFrame < aSeqList[currentPlaySeq].aText[i].endFrame + frameSkip)
+			{
+				if (pbClear != NULL)
+				{
+					*pbClear = CLEAR_BLACK;
+				}
+			}
 		}
 	}
 
@@ -255,12 +364,10 @@ BOOL seq_UpdateFullScreenVideo(int *pbClear)
 	}
 
 	//call sequence player to download last frame
-	if(seq_Playing())
-	{
-		seq_Update();
-	}
-
+	stillPlaying = seq_Update();
 	//print any text over the video
+	realFrame = seq_GetFrameNumber();//textFrame + 1;
+
 	for(i=0;i<MAX_TEXT_OVERLAYS;i++)
 	{
 		if (aSeqList[currentPlaySeq].aText[i].pText[0] != '\0')
@@ -286,14 +393,15 @@ BOOL seq_UpdateFullScreenVideo(int *pbClear)
 
 		}
 	}
-
-	if ((!seq_Playing() && !stillText) || (bHoldSeqForAudio))
+	if (!stillPlaying
+	 || bHoldSeqForAudio)
 	{
 		if (bAudioPlaying)
 		{
 			if (aSeqList[currentPlaySeq].bSeqLoop)
 			{
 				seq_Shutdown();
+
 				if (!seq_Play(aVideoName))
 				{
 					bHoldSeqForAudio = true;
@@ -310,6 +418,7 @@ BOOL seq_UpdateFullScreenVideo(int *pbClear)
 			return false;//should terminate the video
 		}
 	}
+
 	return true;
 }
 
@@ -591,7 +700,7 @@ static void seqDispCDOK( void )
 	}
 	else
 	{
-		bPlayedOK = seq_StartFullScreenVideo( aSeqList[currentPlaySeq].pSeq, aSeqList[currentPlaySeq].pAudio );
+		bPlayedOK = seq_StartFullScreenVideo(aSeqList[currentPlaySeq].pSeq, aSeqList[currentPlaySeq].pAudio, VIDEO_USER_CHOSEN_RESOLUTION);
 	}
 
 	if ( bPlayedOK == false )
@@ -600,7 +709,10 @@ static void seqDispCDOK( void )
 		if (!getScriptWinLoseVideo())
 		{
 			debug(LOG_SCRIPT, "*** Called video quit trigger!");
-			eventFireCallbackTrigger((TRIGGER_TYPE)CALL_VIDEO_QUIT);
+			// Not sure this is correct... CHECK, since the callback should ONLY
+			// be called when a video is playing (always?)
+			if (seq_Playing())
+				eventFireCallbackTrigger((TRIGGER_TYPE)CALL_VIDEO_QUIT);
 		}
 		else
 		{

@@ -9,8 +9,8 @@ stamp:
 	rm -f stamp
 
 BASELIST = anims audio components effects features tagdefinitions \
-	gamedesc.lev images messages misc multiplay novideo.rpl script \
-	sequenceaudio stats stats-sql structs texpages wrf
+	gamedesc.lev images messages misc multiplay script sequenceaudio \
+	stats stats-sql structs texpages wrf
 PATCHLIST = addon.lev anims components effects \
 	messages multiplay stats structs wrf
 

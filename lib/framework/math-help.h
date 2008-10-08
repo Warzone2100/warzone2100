@@ -27,6 +27,7 @@
 // Also PERCENT(int,int);	// returns a int value 0->100 of the percentage of the first param over the second
 
 #include "wzglobal.h"
+#include <math.h>
 
 #define PERCENT(a,b) (((a)*100)/(b))
 #define PERNUM(range,a,b) (((a)*range)/(b))
@@ -46,6 +47,36 @@ static inline int roundf(float x)
 		return x - 0.5f;
 	else
 		return x + 0.5f;
+}
+
+/**
+ * nearbyint(3) implementation because that function is only available on C99
+ * compatible C libraries.
+ *
+ * This function rounds its argument to an integer value in floating point
+ * format, using the current rounding direction and without raising an
+ * @c inexact exception.
+ *
+ * @return The rounded integer value. If @c x is integral or infinite, @c x
+ *         itself is returned.
+ */
+static double nearbyint(double x)
+{
+	if (ceil(x + 0.5) == floor(x + 0.5))
+	{
+		if ((int)ceil(x) % 2 == 0)
+		{
+			return ceil(x);
+		}
+		else
+		{
+			return floor(x);
+		}
+	}
+	else
+	{
+		return floor(x + 0.5);
+	}
 }
 #endif
 

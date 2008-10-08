@@ -237,6 +237,7 @@ PKG_CHECK_MODULES([SDL], [sdl >= 1.2])
 PKG_CHECK_MODULES([OPENAL], [openal >= 0.0.8])
 PKG_CHECK_MODULES([PNG], [libpng >= 1.2])
 PKG_CHECK_MODULES([OGGVORBIS], [vorbisfile >= 1.1])
+PKG_CHECK_MODULES([THEORA], [theora >= 0.1])
 
 # Only accept SQLite versions newer than 3.6, otherwise use built-in
 PKG_CHECK_MODULES([SQLITE], [sqlite3 >= 3.6],

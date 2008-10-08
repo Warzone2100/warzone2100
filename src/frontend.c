@@ -242,8 +242,9 @@ BOOL startTitleMenu(void)
 	addTextButton(FRONTEND_MULTIPLAYER, FRONTEND_POS3X, FRONTEND_POS3Y, _("Multi Player"), false, false);
 	addTextButton(FRONTEND_TUTORIAL, FRONTEND_POS4X, FRONTEND_POS4Y, _("Tutorial") ,false,false);
 	addTextButton(FRONTEND_OPTIONS, FRONTEND_POS5X, FRONTEND_POS5Y, _("Options") ,false,false);
+	addTextButton(FRONTEND_PLAYINTRO, FRONTEND_POS6X, FRONTEND_POS6Y, _("View Intro"), false, false);
 
-	addTextButton(FRONTEND_QUIT, FRONTEND_POS6X, FRONTEND_POS6Y, _("Quit Game"), false, false);
+	addTextButton(FRONTEND_QUIT, FRONTEND_POS7X, FRONTEND_POS7Y, _("Quit Game"), false, false);
 
 	addSideText(FRONTEND_SIDETEXT, FRONTEND_SIDEX, FRONTEND_SIDEY, _("MAIN MENU"));
 
@@ -273,6 +274,9 @@ BOOL runTitleMenu(void)
 			break;
 		case FRONTEND_TUTORIAL:
 			changeTitleMode(TUTORIAL);
+			break;
+		case FRONTEND_PLAYINTRO:
+			changeTitleMode(SHOWINTRO);
 			break;
 		default:
 			break;
@@ -365,7 +369,7 @@ static void frontEndNewGame( void )
 			sstrcpy(aLevelName, DEFAULT_LEVEL);
 			seq_ClearSeqList();
 
-			seq_AddSeqToList("cam1/c001.rpl",NULL,"cam1/c001.txa",false);
+			seq_AddSeqToList("cam1/c001.ogg",NULL,"cam1/c001.txa",false);
 
 			seq_StartNextFullScreenVideo();
             break;
@@ -642,18 +646,25 @@ BOOL startGameOptions2Menu(void)
 	}
 
 //	////////////
-//	//sequence mode.
-	addTextButton(FRONTEND_SEQUENCE,	FRONTEND_POS6X-35,FRONTEND_POS6Y, _("Video Playback"),true,false);
-	if (war_GetSeqMode() == SEQ_FULL)
+//	//FMV mode.
+	addTextButton(FRONTEND_FMVMODE,	FRONTEND_POS6X - 35, FRONTEND_POS6Y, _("Video Playback"), true, false);
+	switch (war_GetFMVmode())
 	{
-		addTextButton(FRONTEND_SEQUENCE_R,	FRONTEND_POS6M-55,FRONTEND_POS6Y, _("Full"),true,false);
-	}
-	else if (war_GetSeqMode() == SEQ_SMALL)
-	{
-		addTextButton(FRONTEND_SEQUENCE_R,	FRONTEND_POS6M-55,FRONTEND_POS6Y, _("Windowed"),true,false);	}
-	else
-	{
-		addTextButton(FRONTEND_SEQUENCE_R,	FRONTEND_POS6M-55,FRONTEND_POS6Y, _("Minimal"),true,false);
+		case FMV_1X:
+			addTextButton(FRONTEND_FMVMODE_R, FRONTEND_POS6M - 55,FRONTEND_POS6Y, _("1X"), true, false);
+			break;
+
+		case FMV_2X:
+			addTextButton(FRONTEND_FMVMODE_R, FRONTEND_POS6M - 55,FRONTEND_POS6Y, _("2X"), true, false);
+			break;
+
+		case FMV_FULLSCREEN:
+			addTextButton(FRONTEND_FMVMODE_R, FRONTEND_POS6M - 55,FRONTEND_POS6Y, _("Fullscreen"), true, false);
+			break;
+
+		default:
+			ASSERT(!"invalid FMV mode", "Invalid FMV mode: %u", (unsigned int)war_GetFMVmode());
+			break;
 	}
 
 	////////////
@@ -706,6 +717,7 @@ BOOL startGameOptions2Menu(void)
 BOOL runGameOptions2Menu(void)
 {
 	UDWORD id;
+	int mode = 0;
 
 	id = widgRunScreen(psWScreen);						// Run the current set of widgets
 	switch(id)
@@ -787,22 +799,28 @@ BOOL runGameOptions2Menu(void)
 		}
 		break;
 
-	case FRONTEND_SEQUENCE:
-	case FRONTEND_SEQUENCE_R:
-		if( war_GetSeqMode() == SEQ_FULL )
+	case FRONTEND_FMVMODE:
+	case FRONTEND_FMVMODE_R:
+		switch (mode = war_GetFMVmode())
 		{
-			war_SetSeqMode(SEQ_SMALL);
-			widgSetString(psWScreen,FRONTEND_SEQUENCE_R, _("Windowed"));
-		}
-		else if( war_GetSeqMode() == SEQ_SMALL )
-		{
-			war_SetSeqMode(SEQ_SKIP);
-			widgSetString(psWScreen,FRONTEND_SEQUENCE_R, _("Minimal"));
-		}
-		else
-		{
-			war_SetSeqMode(SEQ_FULL);
-			widgSetString(psWScreen,FRONTEND_SEQUENCE_R, _("Full"));
+			case FMV_1X:
+				war_SetFMVmode(mode + 1);
+				widgSetString(psWScreen, FRONTEND_FMVMODE_R, _("2X"));
+				break;
+
+			case FMV_2X:
+				war_SetFMVmode(mode + 1);
+				widgSetString(psWScreen, FRONTEND_FMVMODE_R, _("Fullscreen"));
+				break;
+
+			case FMV_FULLSCREEN:
+				war_SetFMVmode(mode + 1);
+				widgSetString(psWScreen, FRONTEND_FMVMODE_R, _("1X"));
+				break;
+
+			default:
+				ASSERT(!"invalid FMV mode", "Invalid FMV mode: %u", (unsigned int)mode);
+				break;
 		}
 		break;
 

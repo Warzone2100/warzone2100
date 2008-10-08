@@ -55,7 +55,7 @@
  */
 /***************************************************************************/
 //buffer render
-extern BOOL seq_RenderVideoToBuffer(iSurface *pSurface, const char* sequenceName, int time, int seqCommand);
+extern bool seq_RenderVideoToBuffer(const char* sequenceName, int seqCommand);
 
 extern BOOL seq_UpdateFullScreenVideo(int *bClear);
 

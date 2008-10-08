@@ -8,7 +8,7 @@ RES_EMP_Mpit
 	},
 	.imdName = "MICAPSUL.pie",
 	.imdName2 = NULL,
-	.sequenceName = "res_struttech.rpl",
+	.sequenceName = "res_struttech.ogg",
 	.audioName = NULL,
 };
 RES_EMP_MRL
@@ -21,7 +21,7 @@ RES_EMP_MRL
 	},
 	.imdName = "MICAPSUL.pie",
 	.imdName2 = NULL,
-	.sequenceName = "res_struttech.rpl",
+	.sequenceName = "res_struttech.ogg",
 	.audioName = NULL,
 };
 RES_DF_WT1
@@ -34,7 +34,7 @@ RES_DF_WT1
 	},
 	.imdName = "MICAPSUL.pie",
 	.imdName2 = NULL,
-	.sequenceName = "res_struttech.rpl",
+	.sequenceName = "res_struttech.ogg",
 	.audioName = NULL,
 };
 RES_WT6_ATR
@@ -47,7 +47,7 @@ RES_WT6_ATR
 	},
 	.imdName = "MICAPSUL.pie",
 	.imdName2 = NULL,
-	.sequenceName = "res_struttech.rpl",
+	.sequenceName = "res_struttech.ogg",
 	.audioName = NULL,
 };
 RES_ENGIN1
@@ -60,7 +60,7 @@ RES_ENGIN1
 	},
 	.imdName = "MICAPSUL.PIE",
 	.imdName2 = NULL,
-	.sequenceName = "res_systech.rpl",
+	.sequenceName = "res_systech.ogg",
 	.audioName = NULL,
 };
 RES_SY_CBSTU1
@@ -73,7 +73,7 @@ RES_SY_CBSTU1
 	},
 	.imdName = "MICAPSUL.PIE",
 	.imdName2 = NULL,
-	.sequenceName = "res_systech.rpl",
+	.sequenceName = "res_systech.ogg",
 	.audioName = NULL,
 };
 RES_SY_CBSU1
@@ -86,7 +86,7 @@ RES_SY_CBSU1
 	},
 	.imdName = "MICAPSUL.PIE",
 	.imdName2 = NULL,
-	.sequenceName = "res_systech.rpl",
+	.sequenceName = "res_systech.ogg",
 	.audioName = NULL,
 };
 RES_W_CNAC1
@@ -99,7 +99,7 @@ RES_W_CNAC1
 	},
 	.imdName = "MICAPSUL.PIE",
 	.imdName2 = NULL,
-	.sequenceName = "res_weapons.rpl",
+	.sequenceName = "res_weapons.ogg",
 	.audioName = NULL,
 };
 RES_W_FL_ROF1
@@ -112,7 +112,7 @@ RES_W_FL_ROF1
 	},
 	.imdName = "MICAPSUL.PIE",
 	.imdName2 = NULL,
-	.sequenceName = "res_weapons.rpl",
+	.sequenceName = "res_weapons.ogg",
 	.audioName = NULL,
 };
 RES_MG3MK1
@@ -125,7 +125,7 @@ RES_MG3MK1
 	},
 	.imdName = "MICAPSUL.pie",
 	.imdName2 = NULL,
-	.sequenceName = "res_weapons.rpl",
+	.sequenceName = "res_weapons.ogg",
 	.audioName = NULL,
 };
 RES_W_MG_ROF1
@@ -138,7 +138,7 @@ RES_W_MG_ROF1
 	},
 	.imdName = "MICAPSUL.PIE",
 	.imdName2 = NULL,
-	.sequenceName = "res_weapons.rpl",
+	.sequenceName = "res_weapons.ogg",
 	.audioName = NULL,
 };
 RES_W_M2
@@ -151,7 +151,7 @@ RES_W_M2
 	},
 	.imdName = "MICAPSUL.PIE",
 	.imdName2 = NULL,
-	.sequenceName = "res_weapons.rpl",
+	.sequenceName = "res_weapons.ogg",
 	.audioName = NULL,
 };
 RES_W_M_AC1
@@ -164,7 +164,7 @@ RES_W_M_AC1
 	},
 	.imdName = "MICAPSUL.PIE",
 	.imdName2 = NULL,
-	.sequenceName = "res_weapons.rpl",
+	.sequenceName = "res_weapons.ogg",
 	.audioName = NULL,
 };
 RES_W_M_ROF1
@@ -177,7 +177,7 @@ RES_W_M_ROF1
 	},
 	.imdName = "MICAPSUL.PIE",
 	.imdName2 = NULL,
-	.sequenceName = "res_weapons.rpl",
+	.sequenceName = "res_weapons.ogg",
 	.audioName = NULL,
 };
 RES_W_RK_IDF
@@ -190,7 +190,7 @@ RES_W_RK_IDF
 	},
 	.imdName = "MICAPSUL.PIE",
 	.imdName2 = NULL,
-	.sequenceName = "res_weapons.rpl",
+	.sequenceName = "res_weapons.ogg",
 	.audioName = NULL,
 };
 RES_W_SRK_ROF1
@@ -203,7 +203,7 @@ RES_W_SRK_ROF1
 	},
 	.imdName = "MICAPSUL.PIE",
 	.imdName2 = NULL,
-	.sequenceName = "res_weapons.rpl",
+	.sequenceName = "res_weapons.ogg",
 	.audioName = NULL,
 };
 RES_W_CN_ROF1
@@ -216,7 +216,7 @@ RES_W_CN_ROF1
 	},
 	.imdName = "MICAPSUL.PIE",
 	.imdName2 = NULL,
-	.sequenceName = "res_weapons.rpl",
+	.sequenceName = "res_weapons.ogg",
 	.audioName = NULL,
 };
 RES_W_CN_D4
@@ -229,7 +229,7 @@ RES_W_CN_D4
 	},
 	.imdName = "MICAPSUL.PIE",
 	.imdName2 = NULL,
-	.sequenceName = "res_weapons.rpl",
+	.sequenceName = "res_weapons.ogg",
 	.audioName = NULL,
 };
 RES_W_SRK_AC2
@@ -242,7 +242,7 @@ RES_W_SRK_AC2
 	},
 	.imdName = "MICAPSUL.PIE",
 	.imdName2 = NULL,
-	.sequenceName = "res_weapons.rpl",
+	.sequenceName = "res_weapons.ogg",
 	.audioName = NULL,
 };
 RES_W_RK_HvAT
@@ -255,7 +255,7 @@ RES_W_RK_HvAT
 	},
 	.imdName = "MICAPSUL.PIE",
 	.imdName2 = NULL,
-	.sequenceName = "res_weapons.rpl",
+	.sequenceName = "res_weapons.ogg",
 	.audioName = NULL,
 };
 RES_W_RK_MRL1
@@ -268,6 +268,6 @@ RES_W_RK_MRL1
 	},
 	.imdName = "MICAPSUL.PIE",
 	.imdName2 = NULL,
-	.sequenceName = "res_weapons.rpl",
+	.sequenceName = "res_weapons.ogg",
 	.audioName = NULL,
 };

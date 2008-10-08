@@ -54,7 +54,7 @@ exitX		int		6
 exitY		int		62
 
 transporter	TEMPLATE	"Transporter"	//for enemy transports
-warnSnd		SOUND		"pcv632.ogg"	//enemy escaping	//"PCV395.ogg"	//incoming enemy transport
+warnSnd		SOUND		"pcv632.ogg"	//enemy escaping	//"pcv395.ogg"	//incoming enemy transport
 
 /* Proximity: Artifacts */
 crate		FEATURESTAT	"Crate"

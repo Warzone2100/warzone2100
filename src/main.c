@@ -702,10 +702,10 @@ static void runTitleLoop(void)
 		case TITLECODE_SHOWINTRO:
 			debug(LOG_MAIN, "TITLECODE_SHOWINTRO");
 			seq_ClearSeqList();
-			seq_AddSeqToList("eidos-logo.rpl", NULL, NULL, false);
-			seq_AddSeqToList("pumpkin.rpl", NULL, NULL, false);
-			seq_AddSeqToList("titles.rpl", NULL, NULL, false);
-			seq_AddSeqToList("devastation.rpl", NULL, "devastation.txa", false);
+			seq_AddSeqToList("eidos-logo.ogg", NULL, NULL, false);
+			seq_AddSeqToList("pumpkin.ogg", NULL, NULL, false);
+			seq_AddSeqToList("titles.ogg", NULL, NULL, false);
+			seq_AddSeqToList("devastation.ogg", NULL, "devastation.txa", false);
 			seq_StartNextFullScreenVideo();
 			break;
 		default:

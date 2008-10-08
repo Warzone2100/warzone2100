@@ -8,7 +8,7 @@ RES_CY_AH4
 	},
 	.imdName = "MICAPSUL.pie",
 	.imdName2 = NULL,
-	.sequenceName = "res_droid.rpl",
+	.sequenceName = "res_droid.ogg",
 	.audioName = NULL,
 };
 RES_SY_RESU1
@@ -21,7 +21,7 @@ RES_SY_RESU1
 	},
 	.imdName = "MICAPSUL.PIE",
 	.imdName2 = NULL,
-	.sequenceName = "res_systech.rpl",
+	.sequenceName = "res_systech.ogg",
 	.audioName = NULL,
 };
 RES_SY_RESU2
@@ -34,7 +34,7 @@ RES_SY_RESU2
 	},
 	.imdName = "MICAPSUL.PIE",
 	.imdName2 = NULL,
-	.sequenceName = "res_systech.rpl",
+	.sequenceName = "res_systech.ogg",
 	.audioName = NULL,
 };
 RES_CY_JP1
@@ -47,7 +47,7 @@ RES_CY_JP1
 	},
 	.imdName = "MICAPSUL.pie",
 	.imdName2 = NULL,
-	.sequenceName = "res_droid.rpl",
+	.sequenceName = "res_droid.ogg",
 	.audioName = NULL,
 };
 RES_CY_LG3
@@ -60,7 +60,7 @@ RES_CY_LG3
 	},
 	.imdName = "MICAPSUL.pie",
 	.imdName2 = NULL,
-	.sequenceName = "res_droid.rpl",
+	.sequenceName = "res_droid.ogg",
 	.audioName = NULL,
 };
 RES_CYMET7
@@ -73,7 +73,7 @@ RES_CYMET7
 	},
 	.imdName = "MICAPSUL.pie",
 	.imdName2 = NULL,
-	.sequenceName = "res_droid.rpl",
+	.sequenceName = "res_droid.ogg",
 	.audioName = NULL,
 };
 RES_CYMET10
@@ -86,7 +86,7 @@ RES_CYMET10
 	},
 	.imdName = "MICAPSUL.pie",
 	.imdName2 = NULL,
-	.sequenceName = "res_droid.rpl",
+	.sequenceName = "res_droid.ogg",
 	.audioName = NULL,
 };
 RES_CYW_MIS
@@ -99,7 +99,7 @@ RES_CYW_MIS
 	},
 	.imdName = "MICAPSUL.pie",
 	.imdName2 = NULL,
-	.sequenceName = "res_droid.rpl",
+	.sequenceName = "res_droid.ogg",
 	.audioName = NULL,
 };
 RES_CYW_RL1
@@ -112,7 +112,7 @@ RES_CYW_RL1
 	},
 	.imdName = "MICAPSUL.pie",
 	.imdName2 = NULL,
-	.sequenceName = "res_droid.rpl",
+	.sequenceName = "res_droid.ogg",
 	.audioName = NULL,
 };
 RES_CYW_ATM
@@ -125,7 +125,7 @@ RES_CYW_ATM
 	},
 	.imdName = "MICAPSUL.pie",
 	.imdName2 = NULL,
-	.sequenceName = "res_droid.rpl",
+	.sequenceName = "res_droid.ogg",
 	.audioName = NULL,
 };
 RES_CYW_LS1
@@ -138,7 +138,7 @@ RES_CYW_LS1
 	},
 	.imdName = "MICAPSUL.pie",
 	.imdName2 = NULL,
-	.sequenceName = "res_droid.rpl",
+	.sequenceName = "res_droid.ogg",
 	.audioName = NULL,
 };
 RES_CYJ_RKT
@@ -151,7 +151,7 @@ RES_CYJ_RKT
 	},
 	.imdName = "MICAPSUL.pie",
 	.imdName2 = NULL,
-	.sequenceName = "res_droid.rpl",
+	.sequenceName = "res_droid.ogg",
 	.audioName = NULL,
 };
 RES_CYJ_MG4
@@ -164,7 +164,7 @@ RES_CYJ_MG4
 	},
 	.imdName = "MICAPSUL.pie",
 	.imdName2 = NULL,
-	.sequenceName = "res_droid.rpl",
+	.sequenceName = "res_droid.ogg",
 	.audioName = NULL,
 };
 RES_CYJ_RL1
@@ -177,7 +177,7 @@ RES_CYJ_RL1
 	},
 	.imdName = "MICAPSUL.pie",
 	.imdName2 = NULL,
-	.sequenceName = "res_droid.rpl",
+	.sequenceName = "res_droid.ogg",
 	.audioName = NULL,
 };
 RES_CYJ_ATM
@@ -190,7 +190,7 @@ RES_CYJ_ATM
 	},
 	.imdName = "MICAPSUL.pie",
 	.imdName2 = NULL,
-	.sequenceName = "res_droid.rpl",
+	.sequenceName = "res_droid.ogg",
 	.audioName = NULL,
 };
 RES_CYJ_LS1
@@ -203,7 +203,7 @@ RES_CYJ_LS1
 	},
 	.imdName = "MICAPSUL.pie",
 	.imdName2 = NULL,
-	.sequenceName = "res_droid.rpl",
+	.sequenceName = "res_droid.ogg",
 	.audioName = NULL,
 };
 RES_DF_WU7
@@ -216,7 +216,7 @@ RES_DF_WU7
 	},
 	.imdName = "MICAPSUL.pie",
 	.imdName2 = NULL,
-	.sequenceName = "res_struttech.rpl",
+	.sequenceName = "res_struttech.ogg",
 	.audioName = NULL,
 };
 RES_DF_WU10
@@ -229,7 +229,7 @@ RES_DF_WU10
 	},
 	.imdName = "MICAPSUL.pie",
 	.imdName2 = NULL,
-	.sequenceName = "res_struttech.rpl",
+	.sequenceName = "res_struttech.ogg",
 	.audioName = NULL,
 };
 RES_EMP_SAM1
@@ -242,7 +242,7 @@ RES_EMP_SAM1
 	},
 	.imdName = "MICAPSUL.pie",
 	.imdName2 = NULL,
-	.sequenceName = "res_struttech.rpl",
+	.sequenceName = "res_struttech.ogg",
 	.audioName = NULL,
 };
 RES_EMP_SAM2
@@ -255,7 +255,7 @@ RES_EMP_SAM2
 	},
 	.imdName = "MICAPSUL.pie",
 	.imdName2 = NULL,
-	.sequenceName = "res_struttech.rpl",
+	.sequenceName = "res_struttech.ogg",
 	.audioName = NULL,
 };
 RES_EMP_MdAM
@@ -268,7 +268,7 @@ RES_EMP_MdAM
 	},
 	.imdName = "MICAPSUL.pie",
 	.imdName2 = NULL,
-	.sequenceName = "res_struttech.rpl",
+	.sequenceName = "res_struttech.ogg",
 	.audioName = NULL,
 };
 RES_EMP_HvAM
@@ -281,7 +281,7 @@ RES_EMP_HvAM
 	},
 	.imdName = "MICAPSUL.pie",
 	.imdName2 = NULL,
-	.sequenceName = "res_struttech.rpl",
+	.sequenceName = "res_struttech.ogg",
 	.audioName = NULL,
 };
 RES_EMP_PrisLas
@@ -294,7 +294,7 @@ RES_EMP_PrisLas
 	},
 	.imdName = "MICAPSUL.pie",
 	.imdName2 = NULL,
-	.sequenceName = "res_struttech.rpl",
+	.sequenceName = "res_struttech.ogg",
 	.audioName = NULL,
 };
 RES_EMP_PulseLas
@@ -307,7 +307,7 @@ RES_EMP_PulseLas
 	},
 	.imdName = "MICAPSUL.pie",
 	.imdName2 = NULL,
-	.sequenceName = "res_struttech.rpl",
+	.sequenceName = "res_struttech.ogg",
 	.audioName = NULL,
 };
 RES_EMP_Rail2
@@ -320,7 +320,7 @@ RES_EMP_Rail2
 	},
 	.imdName = "MICAPSUL.pie",
 	.imdName2 = NULL,
-	.sequenceName = "res_struttech.rpl",
+	.sequenceName = "res_struttech.ogg",
 	.audioName = NULL,
 };
 RES_EMP_Rail3
@@ -333,7 +333,7 @@ RES_EMP_Rail3
 	},
 	.imdName = "MICAPSUL.pie",
 	.imdName2 = NULL,
-	.sequenceName = "res_struttech.rpl",
+	.sequenceName = "res_struttech.ogg",
 	.audioName = NULL,
 };
 RES_EMP_ATMTOW
@@ -346,7 +346,7 @@ RES_EMP_ATMTOW
 	},
 	.imdName = "MICAPSUL.pie",
 	.imdName2 = NULL,
-	.sequenceName = "res_struttech.rpl",
+	.sequenceName = "res_struttech.ogg",
 	.audioName = NULL,
 };
 RES_EMP_RL1TOW
@@ -359,7 +359,7 @@ RES_EMP_RL1TOW
 	},
 	.imdName = "MICAPSUL.pie",
 	.imdName2 = NULL,
-	.sequenceName = "res_struttech.rpl",
+	.sequenceName = "res_struttech.ogg",
 	.audioName = NULL,
 };
 RES_WT9_ATM
@@ -372,7 +372,7 @@ RES_WT9_ATM
 	},
 	.imdName = "MICAPSUL.pie",
 	.imdName2 = NULL,
-	.sequenceName = "res_struttech.rpl",
+	.sequenceName = "res_struttech.ogg",
 	.audioName = NULL,
 };
 RES_WT14_PLS
@@ -385,7 +385,7 @@ RES_WT14_PLS
 	},
 	.imdName = "MICAPSUL.pie",
 	.imdName2 = NULL,
-	.sequenceName = "res_struttech.rpl",
+	.sequenceName = "res_struttech.ogg",
 	.audioName = NULL,
 };
 RES_WT15_RL2
@@ -398,7 +398,7 @@ RES_WT15_RL2
 	},
 	.imdName = "MICAPSUL.pie",
 	.imdName2 = NULL,
-	.sequenceName = "res_struttech.rpl",
+	.sequenceName = "res_struttech.ogg",
 	.audioName = NULL,
 };
 RES_WT15_RL3
@@ -411,7 +411,7 @@ RES_WT15_RL3
 	},
 	.imdName = "MICAPSUL.pie",
 	.imdName2 = NULL,
-	.sequenceName = "res_struttech.rpl",
+	.sequenceName = "res_struttech.ogg",
 	.audioName = NULL,
 };
 RES_ST_RFU7
@@ -424,7 +424,7 @@ RES_ST_RFU7
 	},
 	.imdName = "MICAPSUL.pie",
 	.imdName2 = NULL,
-	.sequenceName = "res_struttech.rpl",
+	.sequenceName = "res_struttech.ogg",
 	.audioName = NULL,
 };
 RES_POWU2
@@ -437,7 +437,7 @@ RES_POWU2
 	},
 	.imdName = "MICAPSUL.pie",
 	.imdName2 = NULL,
-	.sequenceName = "res_pow.rpl",
+	.sequenceName = "res_pow.ogg",
 	.audioName = NULL,
 };
 RES_ST_RU7
@@ -450,7 +450,7 @@ RES_ST_RU7
 	},
 	.imdName = "MICAPSUL.pie",
 	.imdName2 = NULL,
-	.sequenceName = "res_struttech.rpl",
+	.sequenceName = "res_struttech.ogg",
 	.audioName = NULL,
 };
 RES_ST_MAT7
@@ -463,7 +463,7 @@ RES_ST_MAT7
 	},
 	.imdName = "MICAPSUL.pie",
 	.imdName2 = NULL,
-	.sequenceName = "res_struttech.rpl",
+	.sequenceName = "res_struttech.ogg",
 	.audioName = NULL,
 };
 RES_ST_MAT10
@@ -476,7 +476,7 @@ RES_ST_MAT10
 	},
 	.imdName = "MICAPSUL.pie",
 	.imdName2 = NULL,
-	.sequenceName = "res_struttech.rpl",
+	.sequenceName = "res_struttech.ogg",
 	.audioName = NULL,
 };
 RES_ST_VFU4
@@ -489,7 +489,7 @@ RES_ST_VFU4
 	},
 	.imdName = "MICAPSUL.pie",
 	.imdName2 = NULL,
-	.sequenceName = "res_struttech.rpl",
+	.sequenceName = "res_struttech.ogg",
 	.audioName = NULL,
 };
 RES_ST_VPU4
@@ -502,7 +502,7 @@ RES_ST_VPU4
 	},
 	.imdName = "MICAPSUL.pie",
 	.imdName2 = NULL,
-	.sequenceName = "res_struttech.rpl",
+	.sequenceName = "res_struttech.ogg",
 	.audioName = NULL,
 };
 RES_ENGIN3
@@ -515,7 +515,7 @@ RES_ENGIN3
 	},
 	.imdName = "MICAPSUL.PIE",
 	.imdName2 = NULL,
-	.sequenceName = "res_systech.rpl",
+	.sequenceName = "res_systech.ogg",
 	.audioName = NULL,
 };
 RES_SY_CBSU3
@@ -528,7 +528,7 @@ RES_SY_CBSU3
 	},
 	.imdName = "MICAPSUL.PIE",
 	.imdName2 = NULL,
-	.sequenceName = "res_systech.rpl",
+	.sequenceName = "res_systech.ogg",
 	.audioName = NULL,
 };
 RES_SY_VCBSU3
@@ -541,7 +541,7 @@ RES_SY_VCBSU3
 	},
 	.imdName = "MICAPSUL.PIE",
 	.imdName2 = NULL,
-	.sequenceName = "res_systech.rpl",
+	.sequenceName = "res_systech.ogg",
 	.audioName = NULL,
 };
 RES_SY_VS3
@@ -554,7 +554,7 @@ RES_SY_VS3
 	},
 	.imdName = "MICAPSUL.PIE",
 	.imdName2 = NULL,
-	.sequenceName = "res_systech.rpl",
+	.sequenceName = "res_systech.ogg",
 	.audioName = NULL,
 };
 RES_SY_ST1
@@ -567,7 +567,7 @@ RES_SY_ST1
 	},
 	.imdName = "MICAPSUL.PIE",
 	.imdName2 = NULL,
-	.sequenceName = "res_systech.rpl",
+	.sequenceName = "res_systech.ogg",
 	.audioName = NULL,
 };
 RES_SY_ACYB
@@ -580,7 +580,7 @@ RES_SY_ACYB
 	},
 	.imdName = "MICAPSUL.PIE",
 	.imdName2 = NULL,
-	.sequenceName = "res_systech.rpl",
+	.sequenceName = "res_systech.ogg",
 	.audioName = NULL,
 };
 RES_SY_ASTRUC
@@ -593,7 +593,7 @@ RES_SY_ASTRUC
 	},
 	.imdName = "MICAPSUL.PIE",
 	.imdName2 = NULL,
-	.sequenceName = "res_systech.rpl",
+	.sequenceName = "res_systech.ogg",
 	.audioName = NULL,
 };
 RES_SY_ADEF
@@ -606,7 +606,7 @@ RES_SY_ADEF
 	},
 	.imdName = "MICAPSUL.PIE",
 	.imdName2 = NULL,
-	.sequenceName = "res_systech.rpl",
+	.sequenceName = "res_systech.ogg",
 	.audioName = NULL,
 };
 RES_SY_AVEH
@@ -619,7 +619,7 @@ RES_SY_AVEH
 	},
 	.imdName = "MICAPSUL.PIE",
 	.imdName2 = NULL,
-	.sequenceName = "res_systech.rpl",
+	.sequenceName = "res_systech.ogg",
 	.audioName = NULL,
 };
 RES_V_B03
@@ -632,7 +632,7 @@ RES_V_B03
 	},
 	.imdName = "MICAPSUL.pie",
 	.imdName2 = NULL,
-	.sequenceName = "res_droid.rpl",
+	.sequenceName = "res_droid.ogg",
 	.audioName = NULL,
 };
 RES_V_B07
@@ -645,7 +645,7 @@ RES_V_B07
 	},
 	.imdName = "MICAPSUL.pie",
 	.imdName2 = NULL,
-	.sequenceName = "res_droid.rpl",
+	.sequenceName = "res_droid.ogg",
 	.audioName = NULL,
 };
 RES_V_B10
@@ -658,7 +658,7 @@ RES_V_B10
 	},
 	.imdName = "MICAPSUL.pie",
 	.imdName2 = NULL,
-	.sequenceName = "res_droid.rpl",
+	.sequenceName = "res_droid.ogg",
 	.audioName = NULL,
 };
 RES_V_EN7
@@ -671,7 +671,7 @@ RES_V_EN7
 	},
 	.imdName = "MICAPSUL.pie",
 	.imdName2 = NULL,
-	.sequenceName = "res_droid.rpl",
+	.sequenceName = "res_droid.ogg",
 	.audioName = NULL,
 };
 RES_V_EN10
@@ -684,7 +684,7 @@ RES_V_EN10
 	},
 	.imdName = "MICAPSUL.pie",
 	.imdName2 = NULL,
-	.sequenceName = "res_droid.rpl",
+	.sequenceName = "res_droid.ogg",
 	.audioName = NULL,
 };
 RES_V_MET7
@@ -697,7 +697,7 @@ RES_V_MET7
 	},
 	.imdName = "MICAPSUL.pie",
 	.imdName2 = NULL,
-	.sequenceName = "res_droid.rpl",
+	.sequenceName = "res_droid.ogg",
 	.audioName = NULL,
 };
 RES_V_MET10
@@ -710,7 +710,7 @@ RES_V_MET10
 	},
 	.imdName = "MICAPSUL.pie",
 	.imdName2 = NULL,
-	.sequenceName = "res_droid.rpl",
+	.sequenceName = "res_droid.ogg",
 	.audioName = NULL,
 };
 RES_V_AH4
@@ -723,7 +723,7 @@ RES_V_AH4
 	},
 	.imdName = "MICAPSUL.pie",
 	.imdName2 = NULL,
-	.sequenceName = "res_droid.rpl",
+	.sequenceName = "res_droid.ogg",
 	.audioName = NULL,
 };
 RES_HALFT3
@@ -736,7 +736,7 @@ RES_HALFT3
 	},
 	.imdName = "MICAPSUL.pie",
 	.imdName2 = NULL,
-	.sequenceName = "res_droid.rpl",
+	.sequenceName = "res_droid.ogg",
 	.audioName = NULL,
 };
 RES_V_P_H3
@@ -749,7 +749,7 @@ RES_V_P_H3
 	},
 	.imdName = "MICAPSUL.pie",
 	.imdName2 = NULL,
-	.sequenceName = "res_droid.rpl",
+	.sequenceName = "res_droid.ogg",
 	.audioName = NULL,
 };
 RES_TRACK3
@@ -762,7 +762,7 @@ RES_TRACK3
 	},
 	.imdName = "MICAPSUL.pie",
 	.imdName2 = NULL,
-	.sequenceName = "res_droid.rpl",
+	.sequenceName = "res_droid.ogg",
 	.audioName = NULL,
 };
 RES_V_P_W3
@@ -775,7 +775,7 @@ RES_V_P_W3
 	},
 	.imdName = "MICAPSUL.pie",
 	.imdName2 = NULL,
-	.sequenceName = "res_droid.rpl",
+	.sequenceName = "res_droid.ogg",
 	.audioName = NULL,
 };
 RES_V_P_V2
@@ -788,7 +788,7 @@ RES_V_P_V2
 	},
 	.imdName = "MICAPSUL.pie",
 	.imdName2 = NULL,
-	.sequenceName = "res_droid.rpl",
+	.sequenceName = "res_droid.ogg",
 	.audioName = NULL,
 };
 RES_V_P_V3
@@ -801,7 +801,7 @@ RES_V_P_V3
 	},
 	.imdName = "MICAPSUL.pie",
 	.imdName2 = NULL,
-	.sequenceName = "res_droid.rpl",
+	.sequenceName = "res_droid.ogg",
 	.audioName = NULL,
 };
 RES_W_AAAC3
@@ -814,7 +814,7 @@ RES_W_AAAC3
 	},
 	.imdName = "MICAPSUL.PIE",
 	.imdName2 = NULL,
-	.sequenceName = "res_weapons.rpl",
+	.sequenceName = "res_weapons.ogg",
 	.audioName = NULL,
 };
 RES_W_AAD4
@@ -827,7 +827,7 @@ RES_W_AAD4
 	},
 	.imdName = "MICAPSUL.PIE",
 	.imdName2 = NULL,
-	.sequenceName = "res_weapons.rpl",
+	.sequenceName = "res_weapons.ogg",
 	.audioName = NULL,
 };
 RES_W_AAROF4
@@ -840,7 +840,7 @@ RES_W_AAROF4
 	},
 	.imdName = "MICAPSUL.PIE",
 	.imdName2 = NULL,
-	.sequenceName = "res_weapons.rpl",
+	.sequenceName = "res_weapons.ogg",
 	.audioName = NULL,
 };
 RES_W_BMB4
@@ -853,7 +853,7 @@ RES_W_BMB4
 	},
 	.imdName = "MICAPSUL.PIE",
 	.imdName2 = NULL,
-	.sequenceName = "res_weapons.rpl",
+	.sequenceName = "res_weapons.ogg",
 	.audioName = NULL,
 };
 RES_W_BAC3
@@ -866,7 +866,7 @@ RES_W_BAC3
 	},
 	.imdName = "MICAPSUL.PIE",
 	.imdName2 = NULL,
-	.sequenceName = "res_weapons.rpl",
+	.sequenceName = "res_weapons.ogg",
 	.audioName = NULL,
 };
 RES_W_CN_D7
@@ -879,7 +879,7 @@ RES_W_CN_D7
 	},
 	.imdName = "MICAPSUL.PIE",
 	.imdName2 = NULL,
-	.sequenceName = "res_weapons.rpl",
+	.sequenceName = "res_weapons.ogg",
 	.audioName = NULL,
 };
 RES_W_CN_ROF4
@@ -892,7 +892,7 @@ RES_W_CN_ROF4
 	},
 	.imdName = "MICAPSUL.PIE",
 	.imdName2 = NULL,
-	.sequenceName = "res_weapons.rpl",
+	.sequenceName = "res_weapons.ogg",
 	.audioName = NULL,
 };
 RES_W_HOWAC3
@@ -905,7 +905,7 @@ RES_W_HOWAC3
 	},
 	.imdName = "MICAPSUL.PIE",
 	.imdName2 = NULL,
-	.sequenceName = "res_weapons.rpl",
+	.sequenceName = "res_weapons.ogg",
 	.audioName = NULL,
 };
 RES_W_HOWD4
@@ -918,7 +918,7 @@ RES_W_HOWD4
 	},
 	.imdName = "MICAPSUL.PIE",
 	.imdName2 = NULL,
-	.sequenceName = "res_weapons.rpl",
+	.sequenceName = "res_weapons.ogg",
 	.audioName = NULL,
 };
 RES_W_HOWRF4
@@ -931,7 +931,7 @@ RES_W_HOWRF4
 	},
 	.imdName = "MICAPSUL.PIE",
 	.imdName2 = NULL,
-	.sequenceName = "res_weapons.rpl",
+	.sequenceName = "res_weapons.ogg",
 	.audioName = NULL,
 };
 RES_W_LAS1
@@ -944,7 +944,7 @@ RES_W_LAS1
 	},
 	.imdName = "MICAPSUL.PIE",
 	.imdName2 = NULL,
-	.sequenceName = "res_weapons.rpl",
+	.sequenceName = "res_weapons.ogg",
 	.audioName = NULL,
 };
 RES_W_LAS2
@@ -957,7 +957,7 @@ RES_W_LAS2
 	},
 	.imdName = "MICAPSUL.PIE",
 	.imdName2 = NULL,
-	.sequenceName = "res_weapons.rpl",
+	.sequenceName = "res_weapons.ogg",
 	.audioName = NULL,
 };
 RES_LASAC1
@@ -970,7 +970,7 @@ RES_LASAC1
 	},
 	.imdName = "MICAPSUL.PIE",
 	.imdName2 = NULL,
-	.sequenceName = "res_weapons.rpl",
+	.sequenceName = "res_weapons.ogg",
 	.audioName = NULL,
 };
 RES_LASD1
@@ -983,7 +983,7 @@ RES_LASD1
 	},
 	.imdName = "MICAPSUL.PIE",
 	.imdName2 = NULL,
-	.sequenceName = "res_weapons.rpl",
+	.sequenceName = "res_weapons.ogg",
 	.audioName = NULL,
 };
 RES_LASROF1
@@ -996,7 +996,7 @@ RES_LASROF1
 	},
 	.imdName = "MICAPSUL.PIE",
 	.imdName2 = NULL,
-	.sequenceName = "res_weapons.rpl",
+	.sequenceName = "res_weapons.ogg",
 	.audioName = NULL,
 };
 RES_W_MG_D8
@@ -1009,7 +1009,7 @@ RES_W_MG_D8
 	},
 	.imdName = "MICAPSUL.PIE",
 	.imdName2 = NULL,
-	.sequenceName = "res_weapons.rpl",
+	.sequenceName = "res_weapons.ogg",
 	.audioName = NULL,
 };
 RES_W_MG_D10
@@ -1022,7 +1022,7 @@ RES_W_MG_D10
 	},
 	.imdName = "MICAPSUL.PIE",
 	.imdName2 = NULL,
-	.sequenceName = "res_weapons.rpl",
+	.sequenceName = "res_weapons.ogg",
 	.audioName = NULL,
 };
 RES_W_ASM_AT
@@ -1035,7 +1035,7 @@ RES_W_ASM_AT
 	},
 	.imdName = "MICAPSUL.PIE",
 	.imdName2 = NULL,
-	.sequenceName = "res_weapons.rpl",
+	.sequenceName = "res_weapons.ogg",
 	.audioName = NULL,
 };
 RES_W_ASM_BB
@@ -1048,7 +1048,7 @@ RES_W_ASM_BB
 	},
 	.imdName = "MICAPSUL.PIE",
 	.imdName2 = NULL,
-	.sequenceName = "res_weapons.rpl",
+	.sequenceName = "res_weapons.ogg",
 	.audioName = NULL,
 };
 RES_W_MS_AC1
@@ -1061,7 +1061,7 @@ RES_W_MS_AC1
 	},
 	.imdName = "MICAPSUL.PIE",
 	.imdName2 = NULL,
-	.sequenceName = "res_weapons.rpl",
+	.sequenceName = "res_weapons.ogg",
 	.audioName = NULL,
 };
 RES_W_MS_AC2
@@ -1074,7 +1074,7 @@ RES_W_MS_AC2
 	},
 	.imdName = "MICAPSUL.PIE",
 	.imdName2 = NULL,
-	.sequenceName = "res_weapons.rpl",
+	.sequenceName = "res_weapons.ogg",
 	.audioName = NULL,
 };
 RES_W_MS_D1
@@ -1087,7 +1087,7 @@ RES_W_MS_D1
 	},
 	.imdName = "MICAPSUL.PIE",
 	.imdName2 = NULL,
-	.sequenceName = "res_weapons.rpl",
+	.sequenceName = "res_weapons.ogg",
 	.audioName = NULL,
 };
 RES_W_MS_LtSAM1
@@ -1100,7 +1100,7 @@ RES_W_MS_LtSAM1
 	},
 	.imdName = "MICAPSUL.PIE",
 	.imdName2 = NULL,
-	.sequenceName = "res_weapons.rpl",
+	.sequenceName = "res_weapons.ogg",
 	.audioName = NULL,
 };
 RES_W_MS_HvSAM1
@@ -1113,7 +1113,7 @@ RES_W_MS_HvSAM1
 	},
 	.imdName = "MICAPSUL.PIE",
 	.imdName2 = NULL,
-	.sequenceName = "res_weapons.rpl",
+	.sequenceName = "res_weapons.ogg",
 	.audioName = NULL,
 };
 RES_W_MS_MART
@@ -1126,7 +1126,7 @@ RES_W_MS_MART
 	},
 	.imdName = "MICAPSUL.PIE",
 	.imdName2 = NULL,
-	.sequenceName = "res_weapons.rpl",
+	.sequenceName = "res_weapons.ogg",
 	.audioName = NULL,
 };
 RES_W_MS_HART
@@ -1139,7 +1139,7 @@ RES_W_MS_HART
 	},
 	.imdName = "MICAPSUL.PIE",
 	.imdName2 = NULL,
-	.sequenceName = "res_weapons.rpl",
+	.sequenceName = "res_weapons.ogg",
 	.audioName = NULL,
 };
 RES_W_MS_ROF1
@@ -1152,7 +1152,7 @@ RES_W_MS_ROF1
 	},
 	.imdName = "MICAPSUL.PIE",
 	.imdName2 = NULL,
-	.sequenceName = "res_weapons.rpl",
+	.sequenceName = "res_weapons.ogg",
 	.audioName = NULL,
 };
 RES_W_SMS_ROF1
@@ -1165,7 +1165,7 @@ RES_W_SMS_ROF1
 	},
 	.imdName = "MICAPSUL.PIE",
 	.imdName2 = NULL,
-	.sequenceName = "res_weapons.rpl",
+	.sequenceName = "res_weapons.ogg",
 	.audioName = NULL,
 };
 RES_W_M_AC3
@@ -1178,7 +1178,7 @@ RES_W_M_AC3
 	},
 	.imdName = "MICAPSUL.PIE",
 	.imdName2 = NULL,
-	.sequenceName = "res_weapons.rpl",
+	.sequenceName = "res_weapons.ogg",
 	.audioName = NULL,
 };
 RES_W_M_ROF4
@@ -1191,7 +1191,7 @@ RES_W_M_ROF4
 	},
 	.imdName = "MICAPSUL.PIE",
 	.imdName2 = NULL,
-	.sequenceName = "res_weapons.rpl",
+	.sequenceName = "res_weapons.ogg",
 	.audioName = NULL,
 };
 RES_W_RAIL1
@@ -1204,7 +1204,7 @@ RES_W_RAIL1
 	},
 	.imdName = "MICAPSUL.PIE",
 	.imdName2 = NULL,
-	.sequenceName = "res_weapons.rpl",
+	.sequenceName = "res_weapons.ogg",
 	.audioName = NULL,
 };
 RES_W_RAIL2
@@ -1217,7 +1217,7 @@ RES_W_RAIL2
 	},
 	.imdName = "MICAPSUL.PIE",
 	.imdName2 = NULL,
-	.sequenceName = "res_weapons.rpl",
+	.sequenceName = "res_weapons.ogg",
 	.audioName = NULL,
 };
 RES_W_RAIL3
@@ -1230,7 +1230,7 @@ RES_W_RAIL3
 	},
 	.imdName = "MICAPSUL.PIE",
 	.imdName2 = NULL,
-	.sequenceName = "res_weapons.rpl",
+	.sequenceName = "res_weapons.ogg",
 	.audioName = NULL,
 };
 RES_W_RAIL_AC1
@@ -1243,7 +1243,7 @@ RES_W_RAIL_AC1
 	},
 	.imdName = "MICAPSUL.PIE",
 	.imdName2 = NULL,
-	.sequenceName = "res_weapons.rpl",
+	.sequenceName = "res_weapons.ogg",
 	.audioName = NULL,
 };
 RES_W_RAIL_D1
@@ -1256,7 +1256,7 @@ RES_W_RAIL_D1
 	},
 	.imdName = "MICAPSUL.PIE",
 	.imdName2 = NULL,
-	.sequenceName = "res_weapons.rpl",
+	.sequenceName = "res_weapons.ogg",
 	.audioName = NULL,
 };
 RES_W_RAIL_ROF1
@@ -1269,6 +1269,6 @@ RES_W_RAIL_ROF1
 	},
 	.imdName = "MICAPSUL.PIE",
 	.imdName2 = NULL,
-	.sequenceName = "res_weapons.rpl",
+	.sequenceName = "res_weapons.ogg",
 	.audioName = NULL,
 };

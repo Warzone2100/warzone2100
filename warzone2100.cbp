@@ -189,6 +189,7 @@
 			<Add library="vorbisfile" />
 			<Add library="vorbis" />
 			<Add library="ogg" />
+			<Add library="theora" />
 			<Add library="GLC" />
 		</Linker>
 		<Unit filename="build_tools/autorevision/autorevision.cpp">
@@ -1082,6 +1083,19 @@
 			<Option target="NDBGWindows" />
 		</Unit>
 		<Unit filename="lib/script/stack.h">
+			<Option target="DBGUnix" />
+			<Option target="NDBGUnix" />
+			<Option target="DBGWindows" />
+			<Option target="NDBGWindows" />
+		</Unit>
+		<Unit filename="lib/sequence/timer.c">
+			<Option compilerVar="CC" />
+			<Option target="DBGUnix" />
+			<Option target="NDBGUnix" />
+			<Option target="DBGWindows" />
+			<Option target="NDBGWindows" />
+		</Unit>
+		<Unit filename="lib/sequence/timer.h">
 			<Option target="DBGUnix" />
 			<Option target="NDBGUnix" />
 			<Option target="DBGWindows" />
