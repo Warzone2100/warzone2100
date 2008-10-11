@@ -1,7 +1,12 @@
 0000-00-00: SVN
  * Video:
    * New: Add support for playing of videos (OggTheora)
-
+ * General:
+   * New: Add mouse menu option.
+   * New: Add ability to toggle between hardware (SDL) and software (colored) cursors, in new mouse menu option.
+   * Fix: Should fix flickering background on loading screen.
+   * Fix: --nosound works correctly with videos now.
+   * Fix: Clean up input stream after saving a save game, to prevent it from going into chat mode.
 2008-09-28: Version 2.1_beta5
  * General:
    * Change: Reordered main menus. Skirmish is now under Single Player.
