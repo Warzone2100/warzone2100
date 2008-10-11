@@ -310,7 +310,7 @@ PHYSFS_file* openLoadFile(const char* fileName, bool hard_fail)
 		}
 		else
 		{
-			debug(LOG_WARNING, "optional file %s could not be opened: %s", fileName, PHYSFS_getLastError());
+			debug(LOG_WZ, "optional file %s could not be opened: %s", fileName, PHYSFS_getLastError());
 		}
 	}
 
