@@ -209,13 +209,6 @@ void pie_SetTranslucencyMode(TRANSLUCENCY_MODE transMode)
 	}
 }
 
-
-void pie_SetGammaValue(float val)
-{
-	debug(LOG_VIDEO, "%s(%f)", __FUNCTION__, val);
-	SDL_SetGamma(val, val, val);
-}
-
 void pie_InitColourMouse(IMAGEFILE* img, const uint16_t cursorIDs[CURSOR_MAX])
 {
 	MouseCursors = img;

@@ -244,8 +244,8 @@ _keymapsave keyMapSaveTable[] =
 	kf_RaiseTile,
 	kf_NOOP, // unused
 	kf_TriFlip,
-	kf_RaiseGamma,
-	kf_LowerGamma,
+	kf_NOOP, // unused
+	kf_NOOP, // unused
 	kf_ToggleWatchWindow,
 	kf_ToggleDrivingMode,
 	kf_ToggleShowGateways,
@@ -400,8 +400,6 @@ void	keyInitMappings( BOOL bForceDefaults )
 	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_LALT,KEY_S,KEYMAP_PRESSED,kf_ToggleShadows, "Toggles shadows");
 	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_LCTRL,KEY_TAB,KEYMAP_PRESSED,kf_ToggleRadarTerrain,         "Toggle radar terrain");
 	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_LSHIFT,KEY_TAB,KEYMAP_PRESSED,kf_ToggleRadarAllyEnemy,      "Toggle ally-enemy radar view");
-	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_LALT, KEY_KP_MINUS, KEYMAP_PRESSED, kf_LowerGamma, "Lower gamma");
-	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_LALT, KEY_KP_PLUS, KEYMAP_PRESSED, kf_RaiseGamma, "Raise gamma");
 
 	// Some extra non QWERTY mappings but functioning in same way
 	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_COMMA,KEYMAP_PRESSED,kf_SetDroidRetreatMedium,	   _("Retreat at Medium Damage") );

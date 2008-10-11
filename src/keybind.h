@@ -34,8 +34,6 @@ extern void	kf_ShowNumObjects( void );
 extern void	kf_ToggleRadar( void );
 extern void	kf_TogglePower( void );
 extern void	kf_RecalcLighting( void );
-extern void	kf_RaiseGamma( void );
-extern void	kf_LowerGamma( void );
 extern void	kf_ScreenDump( void );
 extern void	kf_AllAvailable( void );
 extern void	kf_TriFlip( void );

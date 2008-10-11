@@ -30,10 +30,8 @@
 #include "configuration.h"
 #include "lib/framework/configfile.h"
 #include "objmem.h"
-#include "display.h"	// gammaValue
 #include "lib/sound/track.h"		// audio
 #include "lib/sound/cdaudio.h"	// audio
-#include "lib/ivis_common/piestate.h"	// setgamma.
 #include "warzoneconfig.h"	// renderMode
 #include "component.h"
 #include "seqdisp.h"
@@ -55,7 +53,6 @@
 
 #define DEFAULTFXVOL	80
 #define DEFAULTCDVOL	60
-#define DEFAULTGAMMA	20
 #define DEFAULTSCROLL	1000
 #define DEFAULTMAPNAME	"Rush"
 
@@ -172,24 +169,6 @@ BOOL loadConfig(void)
 	{
 		showFPS = false;
 		setWarzoneKeyNumeric("showFPS", false);
-	}
-
-	// //////////////////////////
-	// gamma
-	if (getWarzoneKeyNumeric("gamma", &val))
-	{
-		gammaValue = val;
-		if (gammaValue < 10)
-			gammaValue = 10;
-// 		pie_SetGammaValue((float)gammaValue / 20.0f);
-	}
-	else
-	{
-		gammaValue = DEFAULTGAMMA;
-		if (gammaValue < 10)
-			gammaValue = 10;
-// 		pie_SetGammaValue((float)gammaValue / 20.0f);
-		setWarzoneKeyNumeric("gamma", gammaValue);
 	}
 
 	// //////////////////////////
@@ -681,7 +660,6 @@ BOOL saveConfig(void)
 	setWarzoneKeyNumeric("debugmode", bAllowDebugMode);
 	setWarzoneKeyNumeric("framerate", (SDWORD)getFramerateLimit());
 	setWarzoneKeyNumeric("showFPS", (SDWORD)showFPS);
-	setWarzoneKeyNumeric("gamma", (SDWORD)gammaValue);
 	setWarzoneKeyNumeric("scroll",(SDWORD)scroll_speed_accel);		// scroll
 	setWarzoneKeyNumeric("difficulty", getDifficultyLevel());		// level
 	setWarzoneKeyNumeric("visfog",(SDWORD)(!war_GetFog()));			// fogtype

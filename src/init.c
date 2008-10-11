@@ -415,9 +415,7 @@ BOOL systemInitialise(void)
 		debug(LOG_ERROR, "Unable to initialise renderer");
 		return false;
 	}
-
-	pie_SetGammaValue((float)gammaValue / 20.0f);
-
+	
 	if ( war_getSoundEnabled() )
 	{
 		if (!audio_Init(droidAudioTrackStopped))

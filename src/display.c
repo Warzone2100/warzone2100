@@ -208,7 +208,6 @@ static DROID	*psSelectedVtol;
 static DROID	*psDominantSelected;
 static BOOL bRadarDragging = false;
 
-int gammaValue = 20;
 BOOL	rotActive = false;
 BOOL	gameStats = false;
 

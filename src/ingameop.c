@@ -166,20 +166,6 @@ static BOOL addSlideOptions(void)
 	addFESlider(INTINGAMEOP_CDVOL_S, INTINGAMEOP, INTINGAMEOP_MID, INTINGAMEOP_3_Y-5,
 				AUDIO_VOL_MAX, (int)(sound_GetMusicVolume() * 100), INTINGAMEOP_CDVOL);
 
-	/*
-	// gamma
-	if (pie_GetRenderEngine() == ENGINE_GLIDE)
-	{
-		addIGTextButton(INTINGAMEOP_GAMMA, INTINGAMEOP_3_Y, _("Gamma"), WBUT_PLAIN);
-
-		if(gammaValue>3)	   gammaValue = (float)2.9;
-		if(gammaValue<0.5)  gammaValue = (float).5;
-
-		addFESlider(INTINGAMEOP_GAMMA_S,INTINGAMEOP , INTINGAMEOP_MID,INTINGAMEOP_3_Y-5,60,(UDWORD)(gammaValue*25),INTINGAMEOP_GAMMA );
-
-	}
-*/
-
 	return true;
 }
 
@@ -417,7 +403,6 @@ void intProcessInGameOptions(UDWORD id)
 	case INTINGAMEOP_FXVOL:
 	case INTINGAMEOP_3DFXVOL:
 	case INTINGAMEOP_CDVOL:
-//	case INTINGAMEOP_GAMMA:
 		break;
 
 
@@ -430,13 +415,6 @@ void intProcessInGameOptions(UDWORD id)
 	case INTINGAMEOP_CDVOL_S:
 		sound_SetMusicVolume((float)widgGetSliderPos(psWScreen, INTINGAMEOP_CDVOL_S) / 100.0);
 		break;
-
-//	case INTINGAMEOP_GAMMA_S:
-//		gammaValue = (float)(widgGetSliderPos(psWScreen,INTINGAMEOP_GAMMA_S))/25  ;
-//		if(gammaValue<0.5)  gammaValue = (float).5;
-//		pie_SetGammaValue(gammaValue);
-//		break;
-
 
 	default:
 		break;

@@ -168,7 +168,6 @@ void resetInput(void);
 BOOL CheckInScrollLimits(SDWORD *xPos,SDWORD *zPos);
 extern BOOL CheckScrollLimits(void);
 extern BOOL	rotActive;
-extern int gammaValue;
 
 BASE_OBJECT	*mouseTarget( void );
 

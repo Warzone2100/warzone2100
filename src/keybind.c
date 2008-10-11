@@ -475,24 +475,6 @@ void	kf_RecalcLighting( void )
 
 // --------------------------------------------------------------------------
 
-/* Raises the 3dfx gamma value */
-void	kf_RaiseGamma( void )
-{
-	gammaValue++;
-	pie_SetGammaValue((float)gammaValue / 20.0f);
-}
-
-// --------------------------------------------------------------------------
-
-/* Lowers the threedfx gamma value */
-void	kf_LowerGamma( void )
-{
-	gammaValue--;
-	pie_SetGammaValue((float)gammaValue / 20.0f);
-}
-
-// --------------------------------------------------------------------------
-
 /* Sends the 3dfx screen buffer to disk */
 void	kf_ScreenDump( void )
 {
