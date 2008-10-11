@@ -269,7 +269,8 @@ void loadingScreenCallback(void)
 	UDWORD			currTick;
 	PIELIGHT		colour;
 
-	if(SDL_GetTicks()-lastTick < 16) {
+	if(SDL_GetTicks()-lastTick < 16)
+	{
 		return;
 	}
 	currTick = SDL_GetTicks();
@@ -337,7 +338,9 @@ void initLoadingScreen( BOOL drawbdrop )
 	resSetLoadCallback(loadingScreenCallback);
 	loadScreenCallNo = 0;
 
-	screen_StopBackDrop();
+	// NOTE: When this is called, we stop the backdrop, but since the screen
+	// is double buffered, we only have the backdrop on 1 buffer, and not the other.
+	//screen_StopBackDrop();
 }
 
 
