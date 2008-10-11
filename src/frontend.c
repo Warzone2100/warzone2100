@@ -93,6 +93,7 @@ BOOL		startGameOptionsMenu	(void);
 BOOL		startGameOptions2Menu	(void);
 BOOL		startGameOptions3Menu	(void);
 BOOL		startGameOptions4Menu	(void);
+BOOL		startGameOptions5Menu	(void);
 
 void		removeTopForm			(void);
 void		removeBottomForm		(void);
@@ -157,6 +158,10 @@ void changeTitleMode(tMode mode)
 
 	case GAME4:
 		startGameOptions4Menu();
+		break;
+
+	case GAME5:
+		startGameOptions5Menu();
 		break;
 
 	case TUTORIAL:
@@ -539,7 +544,8 @@ BOOL startOptionsMenu(void)
 	addTextButton(FRONTEND_GAMEOPTIONS2,FRONTEND_POS3X,FRONTEND_POS3Y, _("Graphics Options"),false,false);
 	addTextButton(FRONTEND_GAMEOPTIONS4, FRONTEND_POS4X,FRONTEND_POS4Y, _("Video Options"), false, false);
 	addTextButton(FRONTEND_GAMEOPTIONS3,	FRONTEND_POS5X,FRONTEND_POS5Y, _("Audio Options"),false,false);
-	addTextButton(FRONTEND_KEYMAP,		FRONTEND_POS6X,FRONTEND_POS6Y, _("Key Mappings"),false,false);
+	addTextButton(FRONTEND_GAMEOPTIONS5,	FRONTEND_POS6X,FRONTEND_POS6Y, _("Mouse Options"),false,false);
+	addTextButton(FRONTEND_KEYMAP,		FRONTEND_POS7X,FRONTEND_POS7Y, _("Key Mappings"),false,false);
 	addMultiBut(psWScreen, FRONTEND_BOTFORM, FRONTEND_QUIT, 10, 10, 30, 29, P_("menu", "Return"), IMAGE_RETURN, IMAGE_RETURN_HI, IMAGE_RETURN_HI);
 
 	return true;
@@ -565,6 +571,9 @@ BOOL runOptionsMenu(void)
 		break;
 	case FRONTEND_GAMEOPTIONS4:
 		changeTitleMode(GAME4);
+		break;
+	case FRONTEND_GAMEOPTIONS5:
+		changeTitleMode(GAME5);
 		break;
 //	case FRONTEND_VIDEO:
 //		changeTitleMode(VIDEO);
@@ -601,25 +610,12 @@ BOOL runOptionsMenu(void)
 }
 
 // ////////////////////////////////////////////////////////////////////////////
-// Game Options Menu 2!
+// Game options Menu
 BOOL startGameOptions2Menu(void)
 {
 	addBackdrop();
 	addTopForm();
 	addBottomForm();
-
-
-	////////////
-	// mouseflip
-	addTextButton(FRONTEND_MFLIP,	 FRONTEND_POS2X-35,   FRONTEND_POS2Y, _("Reverse Mouse"),true,false);
-	if( getInvertMouseStatus() )
-	{// flipped
-		addTextButton(FRONTEND_MFLIP_R, FRONTEND_POS2M-55,  FRONTEND_POS2Y, _("On"),true,false);
-	}
-	else
-	{	// not flipped
-		addTextButton(FRONTEND_MFLIP_R, FRONTEND_POS2M-55,  FRONTEND_POS2Y, _("Off"),true,false);
-	}
 
 	////////////
 	// screenshake
@@ -713,7 +709,7 @@ BOOL startGameOptions2Menu(void)
 	return true;
 }
 
-
+// Game options Menu
 BOOL runGameOptions2Menu(void)
 {
 	UDWORD id;
@@ -733,20 +729,6 @@ BOOL runGameOptions2Menu(void)
 		{
 			setShakeStatus(true);
 			widgSetString(psWScreen,FRONTEND_SSHAKE_R, _("On"));
-		}
-		break;
-		break;
-	case FRONTEND_MFLIP:
-	case FRONTEND_MFLIP_R:
-		if( getInvertMouseStatus() )
-		{//	 flipped
-			setInvertMouseStatus(false);
-			widgSetString(psWScreen,FRONTEND_MFLIP_R, _("Off"));
-		}
-		else
-		{	// not flipped
-			setInvertMouseStatus(true);
-			widgSetString(psWScreen,FRONTEND_MFLIP_R, _("On"));
 		}
 		break;
 
@@ -841,7 +823,7 @@ BOOL runGameOptions2Menu(void)
 
 
 // ////////////////////////////////////////////////////////////////////////////
-// Game Options Menu
+// Audio Options Menu
 BOOL startGameOptions3Menu(void)
 {
 	addBackdrop();
@@ -869,7 +851,7 @@ BOOL startGameOptions3Menu(void)
 
 	return true;
 }
-
+// Audio Options
 BOOL runGameOptions3Menu(void)
 {
 	UDWORD id;
@@ -914,7 +896,7 @@ BOOL runGameOptions3Menu(void)
 	return true;
 }
 
-// Additional graphics game options menu
+// Graphics Options Menu
 BOOL startGameOptions4Menu(void)
 {
 	// Generate the resolution string
@@ -944,43 +926,31 @@ BOOL startGameOptions4Menu(void)
 	addTextButton(FRONTEND_RESOLUTION_R, FRONTEND_POS3M-55, FRONTEND_POS3Y, resolution, true, false);
 	widgSetString(psWScreen, FRONTEND_RESOLUTION_R, resolution);
 
-	// Cursor trapping
-	addTextButton(FRONTEND_TRAP, FRONTEND_POS4X-35, FRONTEND_POS4Y, _("Trap Cursor"), true, false);
-
-	if (war_GetTrapCursor())
-	{
-		addTextButton(FRONTEND_TRAP_R, FRONTEND_POS4M-55, FRONTEND_POS4Y, _("On"), true, false);
-	}
-	else
-	{
-		addTextButton(FRONTEND_TRAP_R, FRONTEND_POS4M-55, FRONTEND_POS4Y, _("Off"), true, false);
-	}
-
 	// Texture size
-	addTextButton(FRONTEND_TEXTURESZ, FRONTEND_POS5X-35, FRONTEND_POS5Y, _("Texture size"), true, false);
-	addTextButton(FRONTEND_TEXTURESZ_R, FRONTEND_POS5M-55, FRONTEND_POS5Y, textureSize, true, false);
+	addTextButton(FRONTEND_TEXTURESZ, FRONTEND_POS4X-35, FRONTEND_POS4Y, _("Texture size"), true, false);
+	addTextButton(FRONTEND_TEXTURESZ_R, FRONTEND_POS4M-55, FRONTEND_POS4Y, textureSize, true, false);
 
 	// Vsync
-	addTextButton(FRONTEND_VSYNC, FRONTEND_POS6X-35, FRONTEND_POS6Y, _("Vertical sync*"), true, false);
+	addTextButton(FRONTEND_VSYNC, FRONTEND_POS5X-35, FRONTEND_POS5Y, _("Vertical sync*"), true, false);
 
 	if (war_GetVsync())
 	{
-		addTextButton(FRONTEND_VSYNC_R, FRONTEND_POS6M-55, FRONTEND_POS6Y, _("On"), true, false);
+		addTextButton(FRONTEND_VSYNC_R, FRONTEND_POS5M-55, FRONTEND_POS5Y, _("On"), true, false);
 	}
 	else
 	{
-		addTextButton(FRONTEND_VSYNC_R, FRONTEND_POS6M-55, FRONTEND_POS6Y, _("Off"), true, false);
+		addTextButton(FRONTEND_VSYNC_R, FRONTEND_POS5M-55, FRONTEND_POS5Y, _("Off"), true, false);
 	}
 
 	// Add a note about changes taking effect on restart for certain options
-	addTextButton(FRONTEND_TAKESEFFECT, FRONTEND_POS7X-35, FRONTEND_POS7Y, _("* Takes effect on game restart"), true, true);
+	addTextButton(FRONTEND_TAKESEFFECT, FRONTEND_POS6X-35, FRONTEND_POS6Y, _("* Takes effect on game restart"), true, true);
 
 	// Quit/return
 	addMultiBut(psWScreen, FRONTEND_BOTFORM, FRONTEND_QUIT, 10, 10, 30, 29, P_("menu", "Return"), IMAGE_RETURN, IMAGE_RETURN_HI, IMAGE_RETURN_HI);
 
 	return true;
 }
-
+// Graphics Options 
 BOOL runGameOptions4Menu(void)
 {
 	SDL_Rect **modes = SDL_ListModes(NULL, SDL_FULLSCREEN | SDL_HWSURFACE);
@@ -1105,8 +1075,120 @@ BOOL runGameOptions4Menu(void)
 
 	return true;
 }
+// Mouse Menu options
+BOOL startGameOptions5Menu(void)
+{
+	addBackdrop();
+	addTopForm();
+	addBottomForm();
 
+	////////////
+	// mouseflip
+	addTextButton(FRONTEND_MFLIP,	 FRONTEND_POS2X-35,   FRONTEND_POS2Y, _("Reverse Mouse"),true,false);
+	if( getInvertMouseStatus() )
+	{	// flipped
+		addTextButton(FRONTEND_MFLIP_R, FRONTEND_POS2M-55,  FRONTEND_POS2Y, _("On"),true,false);
+	}
+	else
+	{	// not flipped
+		addTextButton(FRONTEND_MFLIP_R, FRONTEND_POS2M-55,  FRONTEND_POS2Y, _("Off"),true,false);
+	}
 
+	// Cursor trapping
+	addTextButton(FRONTEND_TRAP, FRONTEND_POS3X-35, FRONTEND_POS3Y, _("Trap Cursor"), true, false);
+
+	if (war_GetTrapCursor())
+	{
+		addTextButton(FRONTEND_TRAP_R, FRONTEND_POS3M-55, FRONTEND_POS3Y, _("On"), true, false);
+	}
+	else
+	{
+		addTextButton(FRONTEND_TRAP_R, FRONTEND_POS3M-55, FRONTEND_POS3Y, _("Off"), true, false);
+	}
+	
+	// Hardware / software cursor toggle
+	addTextButton(FRONTEND_CURSORMODE, FRONTEND_POS4X-35, FRONTEND_POS4Y, _("Cursor Mode"), true, false);
+
+	if (war_GetColouredCursor())
+	{
+		addTextButton(FRONTEND_CURSORMODE_R, FRONTEND_POS4M-85, FRONTEND_POS4Y, _("Software (colored)"), true, false);
+	}
+	else
+	{
+		addTextButton(FRONTEND_CURSORMODE_R, FRONTEND_POS4M-85, FRONTEND_POS4Y, _("Hardware"), true, false);
+	}
+
+	// Quit/return
+	addMultiBut(psWScreen, FRONTEND_BOTFORM, FRONTEND_QUIT, 10, 10, 30, 29, P_("menu", "Return"), IMAGE_RETURN, IMAGE_RETURN_HI, IMAGE_RETURN_HI);
+
+	return true;
+}
+// Mouse Menu 
+BOOL runGameOptions5Menu(void)
+{
+	UDWORD id = widgRunScreen(psWScreen);
+
+	switch (id)
+	{
+
+		case FRONTEND_MFLIP:
+		case FRONTEND_MFLIP_R:
+			if( getInvertMouseStatus() )
+			{//	 flipped
+				setInvertMouseStatus(false);
+				widgSetString(psWScreen,FRONTEND_MFLIP_R, _("Off"));
+			}
+			else
+			{	// not flipped
+				setInvertMouseStatus(true);
+				widgSetString(psWScreen,FRONTEND_MFLIP_R, _("On"));
+			}
+			break;
+		case FRONTEND_TRAP:
+		case FRONTEND_TRAP_R:
+			if (war_GetTrapCursor())
+			{
+				war_SetTrapCursor(false);
+				widgSetString(psWScreen, FRONTEND_TRAP_R, _("Off"));
+			}
+			else
+			{
+				war_SetTrapCursor(true);
+				widgSetString(psWScreen, FRONTEND_TRAP_R, _("On"));
+			}
+			break;
+
+		case FRONTEND_CURSORMODE:
+		case FRONTEND_CURSORMODE_R:
+			if (war_GetColouredCursor())
+			{
+				war_SetColouredCursor(false);
+				widgSetString(psWScreen, FRONTEND_CURSORMODE_R, _("Hardware"));
+			}
+			else
+			{
+				war_SetColouredCursor(true);
+				widgSetString(psWScreen, FRONTEND_CURSORMODE_R, _("Software (colored)"));
+			}
+			break;
+
+		case FRONTEND_QUIT:
+			changeTitleMode(OPTIONS);
+			break;
+
+		default:
+			break;
+	}
+
+	if (CancelPressed())
+	{
+		changeTitleMode(OPTIONS);
+	}
+
+	widgDisplayScreen(psWScreen);
+
+	return true;
+}
 // ////////////////////////////////////////////////////////////////////////////
 // Game Options Menu
 BOOL startGameOptionsMenu(void)

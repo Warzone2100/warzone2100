@@ -208,6 +208,10 @@ TITLECODE titleLoop(void)
 			runGameOptions4Menu();
 			break;
 
+		case GAME5:
+			runGameOptions5Menu();
+			break;
+
 		case QUIT:
 			RetCode = TITLECODE_QUITGAME;
 			break;

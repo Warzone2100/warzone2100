@@ -45,6 +45,7 @@ typedef enum _title_mode {
 	GAME2,			// 17 second options menu.
 	GAME3,			// 18 third options menu.
 	GAME4,			// 19 fourth options menu.
+	GAME5,			// 20 fifth options menu (mouse)
 } tMode;
 
 extern tMode titleMode;					// the global case
@@ -89,6 +90,7 @@ extern BOOL CancelPressed			(void);
 BOOL		runGameOptions2Menu		(void);
 BOOL		runGameOptions3Menu		(void);
 BOOL		runGameOptions4Menu		(void);
+BOOL		runGameOptions5Menu		(void);
 
 // ////////////////////////////////////////////////////////////////////////////
 // defines.
@@ -150,7 +152,7 @@ BOOL		runGameOptions4Menu		(void);
 
 enum
 {
-	FRONTEND_BACKDROP = 20000,
+	FRONTEND_BACKDROP		= 20000,
 	FRONTEND_TOPFORM,
 	FRONTEND_BOTFORM,
 	FRONTEND_LOGO,
@@ -231,7 +233,7 @@ enum
 	FRONTEND_MFLIP,
 	FRONTEND_MFLIP_R,
 
-	FRONTEND_KEYMAP		= 26000,		// Keymap menu
+	FRONTEND_KEYMAP			= 26000,	// Keymap menu
 	FRONTEND_NOGAMESAVAILABLE = 31666	// Used when no games are available in lobby
 
 };
