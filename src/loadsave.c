@@ -31,6 +31,7 @@
 #include "lib/framework/frame.h"
 #include "lib/framework/strres.h"
 #include "lib/framework/input.h"
+#include "lib/framework/input.h"
 #include "lib/widget/button.h"
 #include "lib/widget/editbox.h"
 #include "lib/widget/widget.h"
@@ -359,7 +360,8 @@ BOOL closeLoadSave(void)
 
 	}
 	widgReleaseScreen(psRequestScreen);
-
+	// need to "eat" up the return key so it don't pass back to game.
+	inputLooseFocus();
 	return true;
 }
 
