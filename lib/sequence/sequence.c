@@ -764,8 +764,10 @@ bool seq_Update()
 
 	alGetSourcei(audiodata.source, AL_SOURCE_STATE, &sourcestate);
 
-	if (!videobuf_ready && !audiobuf_ready && PHYSFS_eof(fpInfile) && sourcestate != AL_PLAYING &&
-	    audiodata.audiobuf_fill == 0)
+	if (PHYSFS_eof(fpInfile)
+		&& !videobuf_ready
+		&& ((!audiobuf_ready && (audiodata.audiobuf_fill == 0)) || audio_Disabled())
+		&& sourcestate != AL_PLAYING )
 	{
 		video_write(false);
 		seq_Shutdown();
