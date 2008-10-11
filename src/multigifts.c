@@ -799,9 +799,19 @@ void giftArtifact(UDWORD owner, UDWORD x, UDWORD y)
 			if (IsResearchCompleted(&pO[topic])
 			 && !IsResearchPossible(&pR[topic]))
 			{
-				MakeResearchPossible(&pR[topic]);
-				CONPRINTF(ConsoleString,(ConsoleString,_("You Discover Blueprints For %s"),
-					getName(asResearch[topic].pName)));
+				// Make sure the topic can be researched
+				if (asResearch[topic].researchPower 
+				 && asResearch[topic].researchPoints)
+				{
+					MakeResearchPossible(&pR[topic]);
+					CONPRINTF(ConsoleString,(ConsoleString,_("You Discover Blueprints For %s"),
+						getName(asResearch[topic].pName)));
+				}
+				// Invalid topic
+				else
+				{
+					debug(LOG_WARNING, "%s is a invalid research topic?", getName(asResearch[topic].pName));
+				}
 				
 				break;
 			}
