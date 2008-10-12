@@ -2171,6 +2171,10 @@ static BOOL intAddSystemButtons(DES_COMPMODE mode)
 	    {
 		    return false;
 	    }
+	    if (mode == IDES_SYSTEM)
+	    {
+		widgSetButtonState(psWScreen, IDDES_SYSTEMS, WBUT_LOCK);
+	    }
     }
 
 	// lock down the correct button
@@ -2182,7 +2186,6 @@ static BOOL intAddSystemButtons(DES_COMPMODE mode)
 			widgSetButtonState(psWScreen, IDDES_WEAPONS, WBUT_LOCK);
 			break;
 		case IDES_SYSTEM:
-			widgSetButtonState(psWScreen, IDDES_SYSTEMS, WBUT_LOCK);
 			break;
 		default:
 			ASSERT(!"invalid/unexpected mode", "intAddSystemButtons: unexpected mode");
@@ -3803,7 +3806,7 @@ void intProcessDesign(UDWORD id)
 			intSetPropulsionStats((PROPULSION_STATS *)apsComponentList[id - IDDES_COMPSTART]);
 
 			// Check that the weapon (if any) is valid for this propulsion
-			if (sCurrDesign.numWeaps && !intCheckValidWeaponForProp())
+			if (!intCheckValidWeaponForProp())
 			{
 				// Could be more than one weapon... FIXME - generalize!
 				if (sCurrDesign.numWeaps > 1)
