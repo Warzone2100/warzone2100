@@ -2762,14 +2762,6 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 
 	CHECK_STRUCTURE(psStructure);
 
-	for (i = 0; i < DROID_MAXWEAPS; i++)
-	{
-		if (psStructure->psTarget[i] && psStructure->psTarget[i]->died)
-		{
-			setStructureTarget(psStructure, NULL, i);
-		}
-	}
-
 	// Will go out into a building EVENT stats/text file
 	/* Spin round yer sensors! */
 	if (psStructure->numWeaps == 0)
@@ -3612,15 +3604,22 @@ void structureUpdate(STRUCTURE *psBuilding)
 	UDWORD widthScatter,breadthScatter;
 	UDWORD emissionInterval, iPointsToAdd, iPointsRequired;
 	Vector3i dv;
+	int i;
+
+	// Remove invalid targets. This must be done each frame.
+	for (i = 0; i < STRUCT_MAXWEAPS; i++)
+	{
+		if (psBuilding->psTarget[i] && psBuilding->psTarget[i]->died)
+		{
+			setStructureTarget(psBuilding, NULL, i);
+		}
+	}
 
 	//update the manufacture/research of the building once complete
 	if (psBuilding->status == SS_BUILT)
 	{
 		aiUpdateStructure(psBuilding);
 	}
-
-	// must be after aiUpdateStructure because this is where we clean out dead targets
-	CHECK_STRUCTURE(psBuilding);
 
 	if(psBuilding->status!=SS_BUILT)
 	{
