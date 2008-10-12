@@ -319,7 +319,7 @@ BOOL loadConfig(void)
 	}
 	else
 	{
-		war_SetFMVmode(FMV_FULLSCREEN);
+		war_SetFMVmode(FMV_2X);
 	}
 
 	// //////////////////////////

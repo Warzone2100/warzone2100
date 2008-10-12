@@ -55,14 +55,17 @@
  *	local Definitions
  */
 /***************************************************************************/
-#define STD_FRAME_TIME 40 //milliseconds
-#define VIDEO_PLAYBACK_WIDTH 640
-#define VIDEO_PLAYBACK_HEIGHT 480
 #define MAX_TEXT_OVERLAYS 32
 #define MAX_SEQ_LIST	  6
 #define SUBTITLE_BOX_MIN 430
 #define SUBTITLE_BOX_MAX 480
 
+// NOTE: The original game never had a true fullscreen mode for FMVs on >640x480 screens.
+// They would just use double sized videos, and move the text to that area.
+// Since we *do* offer fullscreen FMVs, this isn't really needed anymore, depending
+// on how we want to handle the text.
+static int D_W2 = 0;	// Text width offset
+static int D_H2 = 0;	// Text height offset
 
 typedef struct
 {
@@ -294,8 +297,8 @@ BOOL seq_UpdateFullScreenVideo(int *pbClear)
 	BOOL bMoreThanOneSequenceLine = false;
 	bool stillPlaying;
 
-	unsigned int subMin = SUBTITLE_BOX_MAX + D_H;
-	unsigned int subMax = SUBTITLE_BOX_MIN + D_H;
+	unsigned int subMin = SUBTITLE_BOX_MAX + D_H2;
+	unsigned int subMax = SUBTITLE_BOX_MIN + D_H2;
 
 	//get any text lines over bottom of the video
 	unsigned int realFrame = seq_GetFrameNumber();
@@ -346,8 +349,8 @@ BOOL seq_UpdateFullScreenVideo(int *pbClear)
 		}
 	}
 
-	subMin -= D_H;//adjust video window here because text is already ofset for big screens
-	subMax -= D_H;
+	subMin -= D_H2;//adjust video window here because text is already ofset for big screens
+	subMax -= D_H2;
 
 	if (subMin < SUBTITLE_BOX_MIN)
 	{
@@ -376,7 +379,7 @@ BOOL seq_UpdateFullScreenVideo(int *pbClear)
 			{
 				if (bMoreThanOneSequenceLine)
 				{
-					aSeqList[currentPlaySeq].aText[i].x = 20 + D_W;
+					aSeqList[currentPlaySeq].aText[i].x = 20 + D_W2;
 				}
 				iV_DrawText(&(aSeqList[currentPlaySeq].aText[i].pText[0]),
 						aSeqList[currentPlaySeq].aText[i].x, aSeqList[currentPlaySeq].aText[i].y);
@@ -385,7 +388,7 @@ BOOL seq_UpdateFullScreenVideo(int *pbClear)
 			{
 				if (bMoreThanOneSequenceLine)
 				{
-					aSeqList[currentPlaySeq].aText[i].x = 20 + D_W;
+					aSeqList[currentPlaySeq].aText[i].x = 20 + D_W2;
 				}
 				iV_DrawText(&(aSeqList[currentPlaySeq].aText[i].pText[0]),
 						aSeqList[currentPlaySeq].aText[i].x, aSeqList[currentPlaySeq].aText[i].y);
@@ -445,8 +448,7 @@ BOOL seq_StopFullScreenVideo(void)
 	return true;
 }
 
-#define BUFFER_WIDTH 600
-#define FOLLOW_ON_JUSTIFICATION 160
+#define FOLLOW_ON_JUSTIFICATION 160		// not really used for anything
 #define MIN_JUSTIFICATION 40
 
 // add a string at x,y or add string below last line if x and y are 0
@@ -456,6 +458,7 @@ BOOL seq_AddTextForVideo(const char* pText, SDWORD xOffset, SDWORD yOffset, SDWO
 	char* currentText;
 	SDWORD justification;
 	static SDWORD lastX;
+	int BUFFER_WIDTH = pie_GetVideoBufferWidth();
 
 	iV_SetFont(font_regular);
 
@@ -504,8 +507,8 @@ BOOL seq_AddTextForVideo(const char* pText, SDWORD xOffset, SDWORD yOffset, SDWO
 	}
 	else
 	{
-		aSeqList[currentSeq].aText[aSeqList[currentSeq].currentText].x = xOffset + D_W;
-		aSeqList[currentSeq].aText[aSeqList[currentSeq].currentText].y = yOffset + D_H;
+		aSeqList[currentSeq].aText[aSeqList[currentSeq].currentText].x = xOffset + D_W2;
+		aSeqList[currentSeq].aText[aSeqList[currentSeq].currentText].y = yOffset + D_H2;
 	}
 	lastX = aSeqList[currentSeq].aText[aSeqList[currentSeq].currentText].x;
 
@@ -576,6 +579,12 @@ static BOOL seq_AddTextFromFile(const char *pTextName, BOOL bJustify)
 	SDWORD xOffset, yOffset, startFrame, endFrame;
 	const char *seps = "\n";
 
+	// NOTE: The original game never had a fullscreen mode for FMVs on >640x480 screens.
+	// They would just use double sized videos, and move the text to that area.
+	// We just use the full screen for text right now, instead of using offsets.
+	// However, depending on reaction, we may use the old style again.
+	D_H2 = 0;				//( pie_GetVideoBufferHeight()- 480)/2;
+	D_W2 = 0;				//( pie_GetVideoBufferWidth() - 640)/2;
 	ssprintf(aTextName, "sequenceaudio/%s", pTextName);
 
 	if (loadFileToBufferNoError(aTextName, fileLoadBuffer, FILE_LOAD_BUFFER_SIZE, &fileSize) == false)  //Did I mention this is lame? -Q
@@ -591,6 +600,11 @@ static BOOL seq_AddTextFromFile(const char *pTextName, BOOL bJustify)
 		{
 			if (sscanf(pCurrentLine,"%d %d %d %d", &xOffset, &yOffset, &startFrame, &endFrame) == 4)
 			{
+				// Since all the positioning was hardcoded to specific values, we now calculate the
+				// ratio of our screen, compared to what the game expects and multiply that to x, y.
+				// This makes the text always take up the full screen, instead of original style.
+				xOffset = ((double)pie_GetVideoBufferWidth() / 640.0f) * (double)xOffset;
+				yOffset = ((double)pie_GetVideoBufferHeight() / 480.0f) * (double)yOffset;
 				//get the text
 				pText = strrchr(pCurrentLine,'"');
 				ASSERT( pText != NULL,"seq_AddTextFromFile error parsing text file" );
