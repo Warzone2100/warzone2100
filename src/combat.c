@@ -118,7 +118,7 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 	{
 		if (((DROID *)psAttacker)->sMove.iAttackRuns[weapon_slot] >= getNumAttackRuns(((DROID *)psAttacker), weapon_slot))
 		{
-			debug(LOG_NEVER, "VTOL slot %d is empty", weapon_slot);
+			objTrace(psAttacker->id, "VTOL slot %d is empty", weapon_slot);
 			return;
 		}
 	}
@@ -189,7 +189,7 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 		if(!visibleObject(psAttacker, psTarget, true))
 		{
 			// Can't see the target - can't hit it with direct fire
-			debug(LOG_SENSOR, "combFire(%u[%s]->%u): Droid has no direct line of sight to target",
+			objTrace(psAttacker->id, "combFire(%u[%s]->%u): Droid has no direct line of sight to target",
 			      psAttacker->id, ((DROID *)psAttacker)->aName, psTarget->id);
 			return;
 		}
@@ -202,7 +202,7 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 		if (!visibleObject(psAttacker, psTarget, true))
 		{
 			// Can't see the target - can't hit it with direct fire
-			debug(LOG_SENSOR, "combFire(%u[%s]->%u): Structure has no direct line of sight to target",
+			objTrace(psAttacker->id, "combFire(%u[%s]->%u): Structure has no direct line of sight to target",
 			      psAttacker->id, ((STRUCTURE *)psAttacker)->pStructureType->pName, psTarget->id);
 			return;
 		}
@@ -213,7 +213,7 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 		if (!visibleObject(psAttacker, psTarget, false))
 		{
 			// Can't see the target - can't hit it with direct fire
-			debug(LOG_SENSOR, "combFire(%u[%s]->%u): Tall object has no direct line of sight to target",
+			objTrace(psAttacker->id, "combFire(%u[%s]->%u): Tall object has no direct line of sight to target",
 			      psAttacker->id, psStats->pName, psTarget->id);
 			return;
 		}
@@ -224,7 +224,7 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 		if (!psTarget->visible[psAttacker->player])
 		{
 			// Can't get an indirect LOS - can't hit it with the weapon
-			debug(LOG_SENSOR, "combFire(%u[%s]->%u): Object has no indirect sight of target",
+			objTrace(psAttacker->id, "combFire(%u[%s]->%u): Object has no indirect sight of target",
 			      psAttacker->id, psStats->pName, psTarget->id);
 			return;
 		}
@@ -270,7 +270,7 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 	else
 	{
 		/* Out of range */
-		debug(LOG_NEVER, "combFire(%u[%s]->%u): Out of range", psAttacker->id, psStats->pName, psTarget->id);
+		objTrace(psAttacker->id, "combFire(%u[%s]->%u): Out of range", psAttacker->id, psStats->pName, psTarget->id);
 		return;
 	}
 
@@ -384,7 +384,7 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 		goto missed;
 	}
 
-	debug(LOG_SENSOR, "combFire: %u[%s]->%u: resultHitChance=%d, visibility=%hhu : ",
+	objTrace(psAttacker->id, "combFire: %u[%s]->%u: resultHitChance=%d, visibility=%hhu : ",
 	      psAttacker->id, psStats->pName, psTarget->id, resultHitChance, psTarget->visible[psAttacker->player]);
 
 	return;
@@ -399,7 +399,7 @@ missed:
 			psTarget->pos.z
 		};
 
-		debug(LOG_NEVER, "combFire: Missed shot (%d) ended up at (%4d,%4d)", dice, miss.x, miss.y);
+		objTrace(psAttacker->id, "combFire: Missed shot (%d) ended up at (%4d,%4d)", dice, miss.x, miss.y);
 
 		/* Fire off the bullet to the miss location. The miss is only visible if the player owns
 		* the target. (Why? - Per) */

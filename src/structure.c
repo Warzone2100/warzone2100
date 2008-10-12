@@ -2793,8 +2793,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 				{
 					if ( aiChooseTarget((BASE_OBJECT *)psStructure, &psChosenObjs[i], i, true) )
 					{
-						debug( LOG_ATTACK, "Struct(%d) attacking : %d\n",
-								psStructure->id, psChosenObjs[i]->id );
+						objTrace(psStructure->id, "Targeting %d at (%d, %d)", psChosenObjs[i]->id, psChosenObjs[i]->pos.x, psChosenObjs[i]->pos.y);
 						setStructureTarget(psStructure, psChosenObjs[i], i);
 					}
 					else

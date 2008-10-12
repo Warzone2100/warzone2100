@@ -626,7 +626,7 @@ BOOL aiChooseTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget, int weapon_slot
 			(newTargetWeight > (curTargetWeight + OLD_TARGET_THRESHOLD))	//updating and new target is better
 			))
 		{
-			/*check its a valid target*/
+			/* Check it is a valid target */
 			if (validTarget(psObj, psTarget, weapon_slot))
 			{
     			/* See if in sensor range */
@@ -702,7 +702,7 @@ BOOL aiChooseTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget, int weapon_slot
 				    && psCStruct->psTarget[0] != NULL
 				    && !psCStruct->psTarget[0]->died)
 				{
-					/*check its a valid target*/
+					/* Check it is a valid target */
 					//Watermelon:Greater than 1 for now
 					if ( validTarget(psObj, psCStruct->psTarget[0], 0) &&
 						aiStructHasRange((STRUCTURE *)psObj, psCStruct->psTarget[0], weapon_slot))
@@ -722,7 +722,7 @@ BOOL aiChooseTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget, int weapon_slot
 				         && psCStruct->psTarget[0] != NULL
 				         && !psCStruct->psTarget[0]->died)
 				{
-					/*check its a valid target*/
+					/* Check it is a valid target */
 					if ( validTarget(psObj, psCStruct->psTarget[0], 0) &&
 						aiStructHasRange((STRUCTURE *)psObj, psCStruct->psTarget[0], weapon_slot))
 					{
