@@ -113,7 +113,7 @@ typedef enum _des_sysmode
 	IDES_COMMAND,		// The command droid clickable is displayed
 	IDES_NOSYSTEM,		// No system clickable has been displayed
 } DES_SYSMODE;
-DES_SYSMODE desSysMode;
+static DES_SYSMODE desSysMode;
 
 /* The major component tabs on the design screen */
 #define IDES_MAINTAB	0
@@ -132,16 +132,16 @@ typedef enum _des_compmode
 	IDES_TURRET_A,		// The 2nd turret
 	IDES_TURRET_B,		// The 3rd turret
 } DES_COMPMODE;
-DES_COMPMODE desCompMode;
+static DES_COMPMODE desCompMode;
 
 /* Which type of propulsion is being selected */
 typedef enum _des_propmode
 {
 	IDES_GROUND,		// Ground propulsion (wheeled, tracked, etc).
 	IDES_AIR,			// Air propulsion
-	IDES_NOPROPULSION,	// No propulsion has be selected
+	IDES_NOPROPULSION,	// No propulsion has been selected
 } DES_PROPMODE;
-DES_PROPMODE desPropMode;
+static DES_PROPMODE desPropMode;
 
 
 #define STRING_BUFFER_SIZE (32 * MAX_STR_LENGTH)
@@ -294,7 +294,7 @@ static BOOL intAddTemplateForm(DROID_TEMPLATE *psSelected);
 static UDWORD intNumAvailable(UBYTE *aAvailable, UDWORD numEntries,
 							  COMPONENT_STATS *asStats, UDWORD size);
 /* Add the system buttons (weapons, command droid, etc) to the design screen */
-static BOOL intAddSystemButtons(SDWORD mode);
+static BOOL intAddSystemButtons(DES_COMPMODE mode);
 /* Add the component buttons to the main tab of the system or component form */
 static BOOL intAddComponentButtons(COMPONENT_STATS *psStats, UDWORD size,
 								   UBYTE *aAvailable,	UDWORD numEntries,
@@ -2125,7 +2125,7 @@ static BOOL intAddComponentForm(UDWORD numButtons)
 }
 
 /* Add the system buttons (weapons, command droid, etc) to the design screen */
-static BOOL intAddSystemButtons(SDWORD mode)
+static BOOL intAddSystemButtons(DES_COMPMODE mode)
 {
 	W_BUTINIT	sButInit;
 
@@ -3797,47 +3797,42 @@ void intProcessDesign(UDWORD id)
 			break;
 		case IDES_PROPULSION:
 			/* Calculate the index of the component */
-			sCurrDesign.asParts[COMP_PROPULSION] =
-				((PROPULSION_STATS *)apsComponentList[id - IDDES_COMPSTART]) -
-				asPropulsionStats;
+			sCurrDesign.asParts[COMP_PROPULSION] = ((PROPULSION_STATS *)apsComponentList[id - IDDES_COMPSTART]) - asPropulsionStats;
+
 			/* Set the new stats on the display */
 			intSetPropulsionStats((PROPULSION_STATS *)apsComponentList[id - IDDES_COMPSTART]);
 
-			//check that the weapon (if any) is valid for this propulsion
-			if (sCurrDesign.numWeaps
-			 && !intCheckValidWeaponForProp())
+			// Check that the weapon (if any) is valid for this propulsion
+			if (sCurrDesign.numWeaps && !intCheckValidWeaponForProp())
 			{
-				//no way of allocating more than one weapon is there?
+				// Could be more than one weapon... FIXME - generalize!
 				if (sCurrDesign.numWeaps > 1)
 				{
-					//Watermelon:this ASSERT is 'malicious' now ;)
-					/*
-					ASSERT( false,
-						"designScreen: More than one weapon on droid - how?" );
-						*/
-					//Reset slot 2,3 weapons so it wont cause more than one weapon on VTOL problem
+					// Reset slot 2,3 weapons so it wont cause more than one weapon on VTOL problem
 					sCurrDesign.asWeaps[1] = 0;
 					sCurrDesign.asWeaps[2] = 0;
 				}
-				//not valid weapon so initialise the weapon stat
+
+				// Not valid weapon so initialise the weapon stat
 				sCurrDesign.asWeaps[0] = 0;
-                //init all other stats as well!
-                sCurrDesign.asParts[COMP_SENSOR] = 0;
-                sCurrDesign.asParts[COMP_BRAIN] = 0;
-                sCurrDesign.asParts[COMP_REPAIRUNIT] = 0;
-                sCurrDesign.asParts[COMP_CONSTRUCT] = 0;
-                sCurrDesign.asParts[COMP_ECM] = 0;
+
+				// Init all other stats as well!
+				sCurrDesign.asParts[COMP_SENSOR] = 0;
+				sCurrDesign.asParts[COMP_BRAIN] = 0;
+				sCurrDesign.asParts[COMP_REPAIRUNIT] = 0;
+				sCurrDesign.asParts[COMP_CONSTRUCT] = 0;
+				sCurrDesign.asParts[COMP_ECM] = 0;
+
 				/* Reset the weapon stats on the display */
-				intSetSystemForm((COMPONENT_STATS *)(asWeaponStats +
-								sCurrDesign.asWeaps[0]));
-                intSetDesignMode(IDES_PROPULSION);
+				intSetSystemForm((COMPONENT_STATS *)(asWeaponStats + sCurrDesign.asWeaps[0]));
+				intSetDesignMode(IDES_PROPULSION);	// ???
 			}
+
 			// do the callback if in the tutorial
 			if (bInTutorial)
 			{
 				eventFireCallbackTrigger((TRIGGER_TYPE)CALL_DESIGN_PROPULSION);
 			}
-
 			break;
 		default:
 			break;
