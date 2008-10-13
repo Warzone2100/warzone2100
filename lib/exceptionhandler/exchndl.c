@@ -31,7 +31,6 @@
 #include <tchar.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <malloc.h>
 #include <limits.h>
 
 
@@ -92,7 +91,8 @@ slurp_symtab (bfd *abfd, asymbol ***syms, long *symcount)
 	if (storage < 0)
 		return FALSE;
 
-	if((*syms = (asymbol **) malloc (storage)) == NULL)
+	*syms = (asymbol **) GlobalAlloc(GMEM_FIXED, storage);
+	if (*syms == NULL)
 		return FALSE;
 
 	if((*symcount = bfd_canonicalize_symtab (abfd, *syms)) < 0)
@@ -721,7 +721,7 @@ BOOL StackBackTrace(HANDLE hProcess, HANDLE hThread, PCONTEXT pContext)
 			{
 				if(syms)
 				{
-					free(syms);
+					GlobalFree(syms);
 					syms = NULL;
 					symcount = 0;
 				}
@@ -793,7 +793,7 @@ BOOL StackBackTrace(HANDLE hProcess, HANDLE hThread, PCONTEXT pContext)
 #ifdef HAVE_BFD
 	if(syms)
 	{
-		free(syms);
+		GlobalFree(syms);
 		syms = NULL;
 		symcount = 0;
 	}
