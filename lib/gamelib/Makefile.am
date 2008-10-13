@@ -8,14 +8,30 @@ AM_CPPFLAGS = -DYY_NO_INPUT $(SDL_CFLAGS) $(WZ_CPPFLAGS)
 AM_CFLAGS = $(WZ_CFLAGS)
 AM_LFLAGS = $(FLEX_FLAGS)
 AM_YFLAGS = -d
-BUILT_SOURCES = audp_lexer.lex.c audp_parser.tab.c audp_parser.tab.h
-CLEANFILES = audp_lexer.lex.c audp_parser.tab.c audp_parser.tab.h
+BUILT_SOURCES = \
+	audp_lexer.lex.c \
+	audp_parser.tab.c \
+	audp_parser.tab.h
+CLEANFILES = \
+	audp_lexer.lex.c \
+	audp_parser.tab.c \
+	audp_parser.tab.h
 
 noinst_LIBRARIES = libgamelib.a
-noinst_HEADERS = anim.h animobj.h gtime.h hashtabl.h parser.h
+noinst_HEADERS = \
+	anim.h \
+	animobj.h \
+	gtime.h \
+	hashtabl.h \
+	parser.h
 
-libgamelib_a_SOURCES = anim.c animobj.c audp_lexer.lex.c audp_parser.tab.c \
-	gtime.c hashtabl.c
+libgamelib_a_SOURCES = \
+	anim.c \
+	animobj.c \
+	audp_lexer.lex.c \
+	audp_parser.tab.c \
+	gtime.c \
+	hashtabl.c
 
 libgamelib_a_LIBADD = $(top_builddir)/lib/ivis_opengl/libivis_opengl.a \
 	$(top_builddir)/lib/ivis_common/libivis_common.a $(top_builddir)/lib/framework/libframework.a

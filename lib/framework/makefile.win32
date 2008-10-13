@@ -5,29 +5,30 @@ CPPFLAGS += -I$(top_srcdir)/lib/sqlite3
 
 include $(top_srcdir)/makerules/common.mk
 
-SRC=configfile.c \
-	cursors.c \
+SRC= \
+	configfile.c \
 	cursors16.c \
 	cursors32.c \
+	cursors.c \
 	debug.c \
 	frame.c \
 	frameresource.c \
-	input.c \
 	i18n.c \
+	input.c \
 	lexer_input.c \
 	physfs_vfs.c \
 	printf_ext.c \
-	resource_parser.tab.c \
 	resource_lexer.lex.c \
+	resource_parser.tab.c \
+	SDL_framerate.c \
 	strnlen1.c \
 	strres.c \
-	strres_parser.tab.c \
 	strres_lexer.lex.c \
+	strres_parser.tab.c \
 	tagfile.c \
 	treap.c \
 	trig.c \
-	utf.c \
-	SDL_framerate.c
+	utf.c
 
 LIB=framework
 

@@ -3,7 +3,8 @@ top_builddir=$(top_srcdir)
 
 include $(top_srcdir)/makerules/common.mk
 
-SRC=dumpinfo.cpp \
+SRC= \
+	dumpinfo.cpp \
 	exceptionhandler.c \
 	exchndl.c
 

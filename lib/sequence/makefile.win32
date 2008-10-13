@@ -3,7 +3,9 @@ top_builddir=$(top_srcdir)
 
 include $(top_srcdir)/makerules/common.mk
 
-SRC=sequence.c timer.c
+SRC= \
+	sequence.c \
+	timer.c
 
 LIB=sequence
 

@@ -5,7 +5,13 @@ include $(top_srcdir)/makerules/common.mk
 
 include Makevars
 
-PO_FILES=nb.po de.po da.po nl.po la.po
+PO_FILES= \
+	da.po \
+	de.po \
+	la.po \
+	nb.po \
+	nl.po
+
 MO_FILES=$(patsubst %.po,%.gmo,$(PO_FILES))
 
 .PHONY: all clean update-po po-files mo-files

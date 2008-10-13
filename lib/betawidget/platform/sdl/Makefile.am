@@ -1,6 +1,9 @@
 noinst_LTLIBRARIES = libplatformsdl.la
 
-libplatformsdl_la_SOURCES = event.c init.c time.c
+libplatformsdl_la_SOURCES = \
+	event.c \
+	init.c \
+	time.c
 
 libplatformsdl_la_CPPFLAGS = $(SDL_CFLAGS)
 libplatformsdl_la_LIBADD = $(SDL_LIBS)
@@ -16,4 +19,6 @@ libplatformsdl_la_SOURCES += clipboardX11.c
 endif
 endif
 
-noinst_HEADERS = event.h init.h
+noinst_HEADERS = \
+	event.h \
+	init.h

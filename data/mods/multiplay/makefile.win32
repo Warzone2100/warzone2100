@@ -3,7 +3,20 @@ top_builddir=$(top_srcdir)
 
 include $(top_srcdir)/makerules/common.mk
 
-NTWLIST=addon.lev audio components COPYING doc effects images messages multiplay stats structs texpages wrf
+NTWLIST= \
+	addon.lev \
+	audio \
+	components \
+	COPYING \
+	doc \
+	effects \
+	images \
+	messages \
+	multiplay \
+	stats \
+	structs \
+	texpages \
+	wrf
 
 NTWARCHIVE=ntw.wz
 

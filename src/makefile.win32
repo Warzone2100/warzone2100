@@ -5,67 +5,89 @@ CPPFLAGS += -I$(top_srcdir)/lib/sqlite3
 
 include $(top_srcdir)/makerules/common.mk
 
-SRC=ai.c \
-	aiexperience.c \
-	astar.c \
+SRC= \
 	action.c \
 	advvis.c \
+	ai.c \
+	aiexperience.c \
+	astar.c \
 	atmos.c \
+	aud.c \
 	baseobject.c \
 	bridge.c \
+	bucket3d.c \
 	cheat.c \
+	clparse.c \
 	cluster.c \
 	cmddroid.c \
 	combat.c \
 	component.c \
+	configuration.c \
 	console.c \
 	data.c \
 	design.c \
 	difficulty.c \
+	display3d.c \
 	display.c \
+	drive.c \
 	droid.c \
 	e3demo.c \
 	edit3d.c \
 	effects.c \
 	environ.c \
-	fpath.c \
 	feature.c \
 	formation.c \
+	fpath.c \
 	frontend.c \
+	function.c \
+	game.c \
 	gateway.c \
 	geometry.c \
 	group.c \
 	hci.c \
+	ingameop.c \
 	init.c \
 	intdisplay.c \
+	intelmap.c \
 	intimage.c \
 	intorder.c \
-	intelmap.c \
 	keybind.c \
+	keyedit.c \
 	keymap.c \
 	level_lexer.lex.c \
 	levels.c \
 	lighting.c \
+	loadsave.c \
 	loop.c \
+	main.c \
 	map.c \
 	mapdisplay.c \
 	mapgrid.c \
 	mechanics.c \
-	message_parser.tab.c \
-	message_lexer.lex.c \
 	message.c \
+	message_lexer.lex.c \
+	message_parser.tab.c \
 	miscimd.c \
+	mission.c \
 	move.c \
+	multibot.c \
+	multigifts.c \
 	multiint.c \
+	multijoin.c \
+	multilimit.c \
 	multimenu.c \
 	multiopt.c \
-	multisync.c \
-	multibot.c \
+	multiplay.c \
 	multistat.c \
-	objmem.c \
+	multistruct.c \
+	multisync.c \
 	objects.c \
+	objmem.c \
+	oprint.c \
 	order.c \
 	parsetest.c \
+	power.c \
+	projectile.c \
 	radar.c \
 	raycast.c \
 	research.c \
@@ -77,42 +99,21 @@ SRC=ai.c \
 	scriptobj.c \
 	scripttabs.c \
 	scriptvals.c \
-	scriptvals_parser.tab.c \
 	scriptvals_lexer.lex.c \
+	scriptvals_parser.tab.c \
 	selection.c \
+	seqdisp.c \
 	stats.c \
+	structure.c \
+	target.c \
 	text.c \
 	texture.c \
 	transporter.c \
+	version.c \
 	visibility.c \
 	warcam.c \
-	wrappers.c \
-	aud.c \
-	bucket3d.c \
-	clparse.c \
-	configuration.c \
-	display3d.c \
-	drive.c \
-	function.c \
-	game.c \
-	ingameop.c \
-	keyedit.c \
-	loadsave.c \
-	main.c \
-	mission.c \
-	multigifts.c \
-	multijoin.c \
-	multilimit.c \
-	multiplay.c \
-	multistruct.c \
-	oprint.c \
-	power.c \
-	projectile.c \
-	seqdisp.c \
-	structure.c \
-	target.c \
-	version.c \
 	warzoneconfig.c
+	wrappers.c \
 
 LIBS=$(top_builddir)/lib/libgamelib.a \
 	$(top_builddir)/lib/libivis_common.a \

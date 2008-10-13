@@ -3,12 +3,13 @@ top_builddir=$(top_srcdir)
 
 include $(top_srcdir)/makerules/common.mk
 
-SRC=audio.c \
+SRC= \
+	audio.c \
 	audio_id.c \
 	cdaudio.c \
 	oggvorbis.c \
-	openal_track.c \
 	openal_error.c \
+	openal_track.c \
 	playlist.c \
 	track.c
 

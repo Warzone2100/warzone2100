@@ -3,7 +3,8 @@ top_builddir=$(top_srcdir)
 
 include $(top_srcdir)/makerules/common.mk
 
-SRC=bar.c \
+SRC= \
+	bar.c \
 	button.c \
 	editbox.c \
 	form.c \

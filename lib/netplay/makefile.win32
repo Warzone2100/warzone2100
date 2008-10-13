@@ -3,7 +3,8 @@ top_builddir=$(top_srcdir)
 
 include $(top_srcdir)/makerules/common.mk
 
-SRC=netjoin_stub.c \
+SRC= \
+	netjoin_stub.c \
 	netlog.c \
 	netplay.c \
 	nettypes.c

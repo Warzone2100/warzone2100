@@ -8,11 +8,36 @@ stamp:
 	zip -T $@
 	rm -f stamp
 
-BASELIST = anims audio components effects features tagdefinitions \
-	gamedesc.lev images messages misc multiplay script sequenceaudio \
-	stats stats-sql structs texpages wrf
-PATCHLIST = addon.lev anims components effects \
-	messages multiplay stats structs wrf
+BASELIST = \
+	anims \
+	audio \
+	components \
+	effects \
+	features \
+	gamedesc.lev \
+	images \
+	messages \
+	misc \
+	multiplay \
+	script \
+	sequenceaudio \
+	stats \
+	stats-sql \
+	structs \
+	tagdefinitions \
+	texpages \
+	wrf
+
+PATCHLIST = \
+	addon.lev \
+	anims \
+	components \
+	effects \
+	messages \
+	multiplay \
+	stats \
+	structs \
+	wrf
 
 BASEARCHIVE = base.wz
 PATCHARCHIVE = mp.wz

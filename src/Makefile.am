@@ -19,53 +19,265 @@ AM_CFLAGS = $(WZ_CFLAGS)
 AM_LFLAGS = $(FLEX_FLAGS)
 AM_YFLAGS = -d
 
-BUILT_SOURCES = force-linker.cpp level_lexer.lex.c message_lexer.lex.c \
-	message_parser.tab.c message_parser.tab.h scriptvals_lexer.lex.c \
-	scriptvals_parser.tab.c scriptvals_parser.tab.h stats-db2.h
-CLEANFILES = force-linker.cpp level_lexer.lex.c message_lexer.lex.c \
-	message_parser.tab.c message_parser.tab.h scriptvals_lexer.lex.c \
-	scriptvals_parser.tab.c scriptvals_parser.tab.h
+BUILT_SOURCES = \
+	force-linker.cpp \
+	level_lexer.lex.c \
+	message_lexer.lex.c \
+	message_parser.tab.c \
+	message_parser.tab.h \
+	scriptvals_lexer.lex.c \
+	scriptvals_parser.tab.c \
+	scriptvals_parser.tab.h \
+	stats-db2.h
+
+CLEANFILES = \
+	force-linker.cpp \
+	level_lexer.lex.c \
+	message_lexer.lex.c \
+	message_parser.tab.c \
+	message_parser.tab.h \
+	scriptvals_lexer.lex.c \
+	scriptvals_parser.tab.c \
+	scriptvals_parser.tab.h
 
 bin_PROGRAMS = warzone2100
-noinst_HEADERS = action.h advvis.h ai.h aiexperience.h anim_id.h \
-	astar.h atmos.h basedef.h baseobject.h bridge.h bucket3d.h \
-	projectiledef.h cheat.h clparse.h cluster.h cmddroid.h \
-	cmddroiddef.h combat.h component.h configuration.h console.h data.h \
-	design.h difficulty.h display.h display3d.h display3ddef.h \
-	displaydef.h drive.h droid.h droiddef.h e3demo.h edit3d.h effects.h \
-	environ.h feature.h featuredef.h formation.h formationdef.h fpath.h \
-	frend.h frontend.h function.h functiondef.h game.h gateway.h \
-	gatewaydef.h geometry.h group.h hci.h ingameop.h init.h intdisplay.h \
-	intelmap.h intfac.h intimage.h intorder.h keybind.h keyedit.h keymap.h levelint.h \
-	levels.h lighting.h loadsave.h loop.h map.h mapdisplay.h mapgrid.h mechanics.h \
-	message.h messagedef.h messagely.h message_parser.tab.h miscimd.h \
-	mission.h missiondef.h move.h movedef.h \
-	multigifts.h multiint.h multijoin.h multilimit.h multimenu.h multiplay.h multirecv.h \
-	multistat.h objectdef.h objects.h objmem.h oprint.h parsetest.h positiondef.h order.h \
-	orderdef.h power.h projectile.h radar.h raycast.h research.h \
-	researchdef.h scores.h scriptai.h scriptcb.h scriptextern.h scriptfuncs.h \
-	scriptobj.h scripttabs.h scriptvals.h selection.h seqdisp.h stats.h stats-db2.h statsdef.h \
-	structure.h structuredef.h target.h text.h texture.h transporter.h visibility.h \
-	warcam.h warzoneconfig.h weapondef.h main.h wrappers.h
+noinst_HEADERS = \
+	action.h \
+	advvis.h \
+	aiexperience.h \
+	ai.h \
+	anim_id.h \
+	astar.h \
+	atmos.h \
+	basedef.h \
+	baseobject.h \
+	bridge.h \
+	bucket3d.h \
+	cheat.h \
+	clparse.h \
+	cluster.h \
+	cmddroiddef.h \
+	cmddroid.h \
+	combat.h \
+	component.h \
+	configuration.h \
+	console.h \
+	data.h \
+	design.h \
+	difficulty.h \
+	display3ddef.h \
+	display3d.h \
+	displaydef.h \
+	display.h \
+	drive.h \
+	droiddef.h \
+	droid.h \
+	e3demo.h \
+	edit3d.h \
+	effects.h \
+	environ.h \
+	featuredef.h \
+	feature.h \
+	formationdef.h \
+	formation.h \
+	fpath.h \
+	frend.h \
+	frontend.h \
+	functiondef.h \
+	function.h \
+	game.h \
+	gatewaydef.h \
+	gateway.h \
+	geometry.h \
+	group.h \
+	hci.h \
+	ingameop.h \
+	init.h \
+	intdisplay.h \
+	intelmap.h \
+	intfac.h \
+	intimage.h \
+	intorder.h \
+	keybind.h \
+	keyedit.h \
+	keymap.h \
+	levelint.h \
+	levels.h \
+	lighting.h \
+	loadsave.h \
+	loop.h \
+	main.h \
+	mapdisplay.h \
+	mapgrid.h \
+	map.h \
+	mechanics.h \
+	messagedef.h \
+	message.h \
+	messagely.h \
+	message_parser.tab.h \
+	miscimd.h \
+	missiondef.h \
+	mission.h \
+	movedef.h \
+	move.h \
+	multigifts.h \
+	multiint.h \
+	multijoin.h \
+	multilimit.h \
+	multimenu.h \
+	multiplay.h \
+	multirecv.h \
+	multistat.h \
+	objectdef.h \
+	objects.h \
+	objmem.h \
+	oprint.h \
+	orderdef.h \
+	order.h \
+	parsetest.h \
+	positiondef.h \
+	power.h \
+	projectiledef.h \
+	projectile.h \
+	radar.h \
+	raycast.h \
+	researchdef.h \
+	research.h \
+	scores.h \
+	scriptai.h \
+	scriptcb.h \
+	scriptextern.h \
+	scriptfuncs.h \
+	scriptobj.h \
+	scripttabs.h \
+	scriptvals.h \
+	selection.h \
+	seqdisp.h \
+	stats-db2.h \
+	statsdef.h \
+	stats.h \
+	structuredef.h \
+	structure.h \
+	target.h \
+	text.h \
+	texture.h \
+	transporter.h \
+	visibility.h \
+	warcam.h \
+	warzoneconfig.h \
+	weapondef.h \
+	wrappers.h
 
-warzone2100_SOURCES = scriptvals_parser.tab.c scriptvals_lexer.lex.c \
-	level_lexer.lex.c ai.c aiexperience.c astar.c action.c advvis.c atmos.c baseobject.c bridge.c \
-	cheat.c cluster.c cmddroid.c combat.c component.c console.c \
-	data.c design.c difficulty.c display.c droid.c e3demo.c \
-	edit3d.c effects.c environ.c force-linker.cpp fpath.c feature.c formation.c frontend.c \
-	gateway.c geometry.c group.c hci.c init.c \
-	intdisplay.c intimage.c intorder.c intelmap.c keybind.c keymap.c levels.c lighting.c \
-	loop.c main.c map.c mapdisplay.c mapgrid.c mechanics.c message.c \
-	message_lexer.lex.c message_parser.tab.c miscimd.c \
-	move.c multiint.c multimenu.c multiopt.c multisync.c multibot.c multistat.c \
-	objmem.c objects.c order.c parsetest.c radar.c \
-	raycast.c research.c scores.c scriptai.c scriptcb.c scriptextern.c scriptfuncs.c \
-	scriptobj.c scripttabs.c scriptvals.c selection.c stats.c text.c texture.c \
-	transporter.c visibility.c warcam.c wrappers.c aud.c \
-	bucket3d.c clparse.c configuration.c display3d.c drive.c function.c game.c \
-	ingameop.c keyedit.c loadsave.c mission.c multigifts.c multijoin.c multilimit.c \
-	multiplay.c multistruct.c oprint.c power.c projectile.c seqdisp.c structure.c \
-	target.c version.c warzoneconfig.c
+warzone2100_SOURCES = \
+	action.c \
+	advvis.c \
+	ai.c \
+	aiexperience.c \
+	astar.c \
+	atmos.c \
+	aud.c \
+	baseobject.c \
+	bridge.c \
+	bucket3d.c \
+	cheat.c \
+	clparse.c \
+	cluster.c \
+	cmddroid.c \
+	combat.c \
+	component.c \
+	configuration.c \
+	console.c \
+	data.c \
+	design.c \
+	difficulty.c \
+	display3d.c \
+	display.c \
+	drive.c \
+	droid.c \
+	e3demo.c \
+	edit3d.c \
+	effects.c \
+	environ.c \
+	feature.c \
+	force-linker.cpp \
+	formation.c \
+	fpath.c \
+	frontend.c \
+	function.c \
+	game.c \
+	gateway.c \
+	geometry.c \
+	group.c \
+	hci.c \
+	ingameop.c \
+	init.c \
+	intdisplay.c \
+	intelmap.c \
+	intimage.c \
+	intorder.c \
+	keybind.c \
+	keyedit.c \
+	keymap.c \
+	level_lexer.lex.c \
+	levels.c \
+	lighting.c \
+	loadsave.c \
+	loop.c \
+	main.c \
+	map.c \
+	mapdisplay.c \
+	mapgrid.c \
+	mechanics.c \
+	message.c \
+	message_lexer.lex.c \
+	message_parser.tab.c \
+	miscimd.c \
+	mission.c \
+	move.c \
+	multibot.c \
+	multigifts.c \
+	multiint.c \
+	multijoin.c \
+	multilimit.c \
+	multimenu.c \
+	multiopt.c \
+	multiplay.c \
+	multistat.c \
+	multistruct.c \
+	multisync.c \
+	objects.c \
+	objmem.c \
+	oprint.c \
+	order.c \
+	parsetest.c \
+	power.c \
+	projectile.c \
+	radar.c \
+	raycast.c \
+	research.c \
+	scores.c \
+	scriptai.c \
+	scriptcb.c \
+	scriptextern.c \
+	scriptfuncs.c \
+	scriptobj.c \
+	scripttabs.c \
+	scriptvals.c \
+	scriptvals_lexer.lex.c \
+	scriptvals_parser.tab.c \
+	selection.c \
+	seqdisp.c \
+	stats.c \
+	structure.c \
+	target.c \
+	text.c \
+	texture.c \
+	transporter.c \
+	version.c \
+	visibility.c \
+	warcam.c \
+	warzoneconfig.c \
+	wrappers.c
 
 warzone2100_LDADD = \
 	$(top_builddir)/lib/widget/libwidget.a \

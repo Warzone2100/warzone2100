@@ -3,10 +3,11 @@ top_builddir=$(top_srcdir)
 
 include $(top_srcdir)/makerules/common.mk
 
-SRC=anim.c \
+SRC= \
+	anim.c \
 	animobj.c \
-	audp_parser.tab.c \
 	audp_lexer.lex.c \
+	audp_parser.tab.c \
 	gtime.c \
 	hashtabl.c
 

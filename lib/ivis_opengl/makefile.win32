@@ -3,7 +3,8 @@ top_builddir=$(top_srcdir)
 
 include $(top_srcdir)/makerules/common.mk
 
-SRC=GLee.c \
+SRC= \
+	GLee.c \
 	ivi.c \
 	pieblitfunc.c \
 	piedraw.c \
