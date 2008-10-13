@@ -12,6 +12,7 @@
 /src/autorevision.h
 # Generated executables:
 /build_tools/autorevision/autorevision
+/src/force-linker.cpp
 /src/warzone2100
 /tests/t1000
 # Autotool files:

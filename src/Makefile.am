@@ -10,17 +10,21 @@
 %.h: %.tpl.struct.h %.tpl
 	$(top_srcdir)/build_tools/code-generators/db-lang.pl c_structdef $^ $@
 
+# Required to force using a C++ linker
+force-linker.cpp:
+	touch $@
+
 AM_CPPFLAGS = -DYY_NO_INPUT $(SDL_CFLAGS) $(SDL_NET_CFLAGS) $(PHYSFS_CFLAGS) $(PNG_CFLAGS) $(OGGVORBIS_CFLAGS) $(OPENAL_CFLAGS) $(OPENGLC_CFLAGS) $(OPENGL_CFLAGS) $(POPT_CFLAGS) $(SQLITE_CFLAGS) $(WZ_CPPFLAGS)
 AM_CFLAGS = $(WZ_CFLAGS)
 AM_LFLAGS = $(FLEX_FLAGS)
 AM_YFLAGS = -d
 
-BUILT_SOURCES = level_lexer.lex.c message_lexer.lex.c message_parser.tab.c \
-	message_parser.tab.h scriptvals_lexer.lex.c scriptvals_parser.tab.c \
-	scriptvals_parser.tab.h stats-db2.h
-CLEANFILES = level_lexer.lex.c message_lexer.lex.c message_parser.tab.c \
-	message_parser.tab.h scriptvals_lexer.lex.c scriptvals_parser.tab.c \
-	scriptvals_parser.tab.h
+BUILT_SOURCES = force-linker.cpp level_lexer.lex.c message_lexer.lex.c \
+	message_parser.tab.c message_parser.tab.h scriptvals_lexer.lex.c \
+	scriptvals_parser.tab.c scriptvals_parser.tab.h stats-db2.h
+CLEANFILES = force-linker.cpp level_lexer.lex.c message_lexer.lex.c \
+	message_parser.tab.c message_parser.tab.h scriptvals_lexer.lex.c \
+	scriptvals_parser.tab.c scriptvals_parser.tab.h
 
 bin_PROGRAMS = warzone2100
 noinst_HEADERS = action.h advvis.h ai.h aiexperience.h anim_id.h \
@@ -48,7 +52,7 @@ warzone2100_SOURCES = scriptvals_parser.tab.c scriptvals_lexer.lex.c \
 	level_lexer.lex.c ai.c aiexperience.c astar.c action.c advvis.c atmos.c baseobject.c bridge.c \
 	cheat.c cluster.c cmddroid.c combat.c component.c console.c \
 	data.c design.c difficulty.c display.c droid.c e3demo.c \
-	edit3d.c effects.c environ.c fpath.c feature.c formation.c frontend.c \
+	edit3d.c effects.c environ.c force-linker.cpp fpath.c feature.c formation.c frontend.c \
 	gateway.c geometry.c group.c hci.c init.c \
 	intdisplay.c intimage.c intorder.c intelmap.c keybind.c keymap.c levels.c lighting.c \
 	loop.c main.c map.c mapdisplay.c mapgrid.c mechanics.c message.c \
