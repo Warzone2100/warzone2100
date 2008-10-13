@@ -1,10 +1,35 @@
 SUBDIRS = mods music
 
-BASELIST = anims audio components effects features tagdefinitions \
-	gamedesc.lev images messages misc multiplay novideo.rpl script \
-	sequenceaudio stats structs texpages wrf
-PATCHLIST = addon.lev anims components effects \
-	messages multiplay stats structs wrf
+BASELIST = \
+	anims \
+	audio \
+	components \
+	effects \
+	features \
+	gamedesc.lev \
+	images \
+	messages \
+	misc \
+	multiplay \
+	novideo.rpl \
+	script \
+	sequenceaudio \
+	stats \
+	structs \
+	tagdefinitions \
+	texpages \
+	wrf
+
+PATCHLIST = \
+	addon.lev \
+	anims \
+	components \
+	effects \
+	messages \
+	multiplay \
+	stats \
+	structs \
+	wrf
 
 BASEARCHIVE=warzone.wz
 PATCHARCHIVE=mp.wz

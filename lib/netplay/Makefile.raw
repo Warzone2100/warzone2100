@@ -1,7 +1,8 @@
 MAKERULES=../../makerules
 include $(MAKERULES)/configure.mk
 
-SRC=	netjoin_stub.c \
+SRC= \
+	netjoin_stub.c \
 	netlog.c \
 	netplay.c \
 	nettypes.c

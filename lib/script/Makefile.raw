@@ -1,15 +1,16 @@
 MAKERULES=../../makerules
 include $(MAKERULES)/configure.mk
 
-SRC=codeprint.c \
+SRC= \
+	codeprint.c \
 	event.c \
 	evntsave.c \
 	interp.c \
-	script.c \
-	chat_parser.tab.c \
 	chat_lexer.lex.c \
-	script_parser.tab.c \
+	chat_parser.tab.c \
+	script.c \
 	script_lexer.lex.c \
+	script_parser.tab.c \
 	stack.c
 
 LIB=script

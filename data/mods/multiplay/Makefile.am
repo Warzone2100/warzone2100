@@ -6,7 +6,20 @@ stamp:
 	zip -T $@
 	rm -f stamp
 
-NTWLIST = addon.lev audio components COPYING doc effects images messages multiplay stats structs texpages wrf
+NTWLIST = \
+	addon.lev \
+	audio \
+	components \
+	COPYING \
+	doc \
+	effects \
+	images \
+	messages \
+	multiplay \
+	stats \
+	structs \
+	texpages \
+	wrf
 
 NTWARCHIVE = ntw.wz
 

@@ -1,7 +1,20 @@
 MAKERULES=../../../makerules
 include $(MAKERULES)/configure.mk
 
-NTWLIST=addon.lev audio components COPYING doc effects images messages multiplay stats structs texpages wrf
+NTWLIST= \
+	addon.lev \
+	audio \
+	components \
+	COPYING \
+	doc \
+	effects \
+	images \
+	messages \
+	multiplay \
+	stats \
+	structs \
+	texpages \
+	wrf
 
 NTWARCHIVE=ntw.wz
 
