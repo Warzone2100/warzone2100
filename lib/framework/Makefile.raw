@@ -1,6 +1,14 @@
 MAKERULES=../../makerules
 include $(MAKERULES)/configure.mk
 
+# Due to the lexer's dependencies on the parser's header we need to compile the
+# parsers first
+PARSERS= \
+	resource_parser.tab.c \
+	resource_lexer.lex.c \
+	strres_parser.tab.c \
+	strres_lexer.lex.c
+
 SRC= \
 	configfile.c \
 	cursors16.c \
@@ -13,13 +21,9 @@ SRC= \
 	input.c \
 	lexer_input.c \
 	printf_ext.c \
-	resource_lexer.lex.c \
-	resource_parser.tab.c \
 	SDL_framerate.c \
 	strnlen1.c \
 	strres.c \
-	strres_lexer.lex.c \
-	strres_parser.tab.c \
 	tagfile.c \
 	treap.c \
 	trig.c

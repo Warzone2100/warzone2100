@@ -1,7 +1,14 @@
 MAKERULES=../makerules
 include $(MAKERULES)/configure.mk
 
+# Due to the lexer's dependencies on the parser's header we need to compile the
+# parsers first
+PARSERS= \
+	scriptvals_parser.tab.c \
+	scriptvals_lexer.lex.c
+
 SRC= \
+	$(PARSERS) \
 	action.c \
 	advvis.c \
 	ai.c \
@@ -93,8 +100,6 @@ SRC= \
 	scriptobj.c \
 	scripttabs.c \
 	scriptvals.c \
-	scriptvals_lexer.lex.c \
-	scriptvals_parser.tab.c \
 	selection.c \
 	seqdisp.c \
 	stats.c \

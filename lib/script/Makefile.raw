@@ -1,16 +1,20 @@
 MAKERULES=../../makerules
 include $(MAKERULES)/configure.mk
 
+# Due to the lexer's dependencies on the parser's header we need to compile the
+# parsers first
+PARSERS= \
+	chat_parser.tab.c \
+	chat_lexer.lex.c \
+	script_parser.tab.c \
+	script_lexer.lex.c
+
 SRC= \
 	codeprint.c \
 	event.c \
 	evntsave.c \
 	interp.c \
-	chat_lexer.lex.c \
-	chat_parser.tab.c \
 	script.c \
-	script_lexer.lex.c \
-	script_parser.tab.c \
 	stack.c
 
 LIB=script

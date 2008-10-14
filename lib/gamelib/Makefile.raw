@@ -1,11 +1,15 @@
 MAKERULES=../../makerules
 include $(MAKERULES)/configure.mk
 
+# Due to the lexer's dependencies on the parser's header we need to compile the
+# parsers first
+PARSERS= \
+	audp_parser.tab.c \
+	audp_lexer.lex.c
+
 SRC= \
 	anim.c \
 	animobj.c \
-	audp_lexer.lex.c \
-	audp_parser.tab.c \
 	gtime.c \
 	hashtabl.c
 
