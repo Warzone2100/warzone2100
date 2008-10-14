@@ -1,7 +1,6 @@
 /*
 	This file is part of Warzone 2100.
-	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2007  Warzone Resurrection Project
+	Copyright (C) 2006-2008  Warzone Resurrection Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -17,7 +16,7 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-//aiexperience.c
+
 #include <physfs.h>
 #include <string.h>
 
