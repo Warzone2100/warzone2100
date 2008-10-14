@@ -5,7 +5,16 @@ CPPFLAGS += -I$(top_srcdir)/lib/sqlite3
 
 include $(top_srcdir)/makerules/common.mk
 
+# Due to the lexer's dependencies on the parser's header we need to compile the
+# parsers first
+PARSERS= \
+	message_parser.tab.c \
+	message_lexer.lex.c \
+	scriptvals_parser.tab.c \
+	scriptvals_lexer.lex.c
+
 SRC= \
+	$(PARSERS) \
 	action.c \
 	advvis.c \
 	ai.c \
@@ -65,8 +74,6 @@ SRC= \
 	mapgrid.c \
 	mechanics.c \
 	message.c \
-	message_lexer.lex.c \
-	message_parser.tab.c \
 	miscimd.c \
 	mission.c \
 	move.c \
@@ -99,8 +106,6 @@ SRC= \
 	scriptobj.c \
 	scripttabs.c \
 	scriptvals.c \
-	scriptvals_lexer.lex.c \
-	scriptvals_parser.tab.c \
 	selection.c \
 	seqdisp.c \
 	stats.c \
@@ -112,8 +117,8 @@ SRC= \
 	version.c \
 	visibility.c \
 	warcam.c \
-	warzoneconfig.c
-	wrappers.c \
+	warzoneconfig.c \
+	wrappers.c
 
 LIBS=$(top_builddir)/lib/libgamelib.a \
 	$(top_builddir)/lib/libivis_common.a \

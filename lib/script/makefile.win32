@@ -3,16 +3,21 @@ top_builddir=$(top_srcdir)
 
 include $(top_srcdir)/makerules/common.mk
 
-SRC= \
-	chat_lexer.lex.c \
+# Due to the lexer's dependencies on the parser's header we need to compile the
+# parsers first
+PARSERS= \
 	chat_parser.tab.c \
+	chat_lexer.lex.c \
+	script_parser.tab.c \
+	script_lexer.lex.c
+
+SRC= \
+	$(PARSERS) \
 	codeprint.c \
 	event.c \
 	evntsave.c \
 	interp.c \
 	script.c \
-	script_parser.tab.c \
-	script_lexer.lex.c \
 	stack.c
 
 LIB=script
