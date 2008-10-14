@@ -303,7 +303,7 @@ int main(int argc, char** argv)
     return 0;
 }
 
-bool removeAfterNewLine(string& str)
+static bool removeAfterNewLine(string& str)
 {
     // Find a newline and erase everything that comes after it
     string::size_type lbreak_pos = str.find_first_of("\r\n");
