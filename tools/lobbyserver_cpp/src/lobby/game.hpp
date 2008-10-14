@@ -42,10 +42,7 @@ typedef struct
     char    host[16];
     int32_t dwMaxPlayers;
     int32_t dwCurrentPlayers;
-    int32_t dwUser1;
-    int32_t dwUser2;
-    int32_t dwUser3;
-    int32_t dwUser4;
+    int32_t dwUserFlags[4];
 } SESSIONDESC;
 
 typedef struct
@@ -63,10 +60,10 @@ inline bool operator==(const SESSIONDESC& left, const SESSIONDESC& right)
        && left.dwFlags           == right.dwFlags
        && left.dwMaxPlayers      == right.dwMaxPlayers
        && left.dwCurrentPlayers  == right.dwCurrentPlayers
-       && left.dwUser1           == right.dwUser1
-       && left.dwUser2           == right.dwUser2
-       && left.dwUser3           == right.dwUser3
-       && left.dwUser4           == right.dwUser4))
+       && left.dwUserFlags[0]    == right.dwUserFlags[0]
+       && left.dwUserFlags[1]    == right.dwUserFlags[1]
+       && left.dwUserFlags[2]    == right.dwUserFlags[2]
+       && left.dwUserFlags[3]    == right.dwUserFlags[3]))
         return false;
 
 #ifdef USE_STRCMP

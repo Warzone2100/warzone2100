@@ -501,10 +501,10 @@ static bool serializeSessionDesc(PHYSFS_file* fileHandle, const SESSIONDESC* ser
 	     && PHYSFS_write(fileHandle, serializeDesc->host, 1, 16) == 16
 	     && PHYSFS_writeSBE32(fileHandle, serializeDesc->dwMaxPlayers)
 	     && PHYSFS_writeSBE32(fileHandle, serializeDesc->dwCurrentPlayers)
-	     && PHYSFS_writeSBE32(fileHandle, serializeDesc->dwUser1)
-	     && PHYSFS_writeSBE32(fileHandle, serializeDesc->dwUser2)
-	     && PHYSFS_writeSBE32(fileHandle, serializeDesc->dwUser3)
-	     && PHYSFS_writeSBE32(fileHandle, serializeDesc->dwUser4));
+	     && PHYSFS_writeSBE32(fileHandle, serializeDesc->dwUserFlags[0])
+	     && PHYSFS_writeSBE32(fileHandle, serializeDesc->dwUserFlags[1])
+	     && PHYSFS_writeSBE32(fileHandle, serializeDesc->dwUserFlags[2])
+	     && PHYSFS_writeSBE32(fileHandle, serializeDesc->dwUserFlags[3]));
 }
 
 static bool deserializeSessionDesc(PHYSFS_file* fileHandle, SESSIONDESC* serializeDesc)
@@ -514,10 +514,10 @@ static bool deserializeSessionDesc(PHYSFS_file* fileHandle, SESSIONDESC* seriali
 	     && PHYSFS_read(fileHandle, serializeDesc->host, 1, 16) == 16
 	     && PHYSFS_readSBE32(fileHandle, &serializeDesc->dwMaxPlayers)
 	     && PHYSFS_readSBE32(fileHandle, &serializeDesc->dwCurrentPlayers)
-	     && PHYSFS_readSBE32(fileHandle, &serializeDesc->dwUser1)
-	     && PHYSFS_readSBE32(fileHandle, &serializeDesc->dwUser2)
-	     && PHYSFS_readSBE32(fileHandle, &serializeDesc->dwUser3)
-	     && PHYSFS_readSBE32(fileHandle, &serializeDesc->dwUser4));
+	     && PHYSFS_readSBE32(fileHandle, &serializeDesc->dwUserFlags[0])
+	     && PHYSFS_readSBE32(fileHandle, &serializeDesc->dwUserFlags[1])
+	     && PHYSFS_readSBE32(fileHandle, &serializeDesc->dwUserFlags[2])
+	     && PHYSFS_readSBE32(fileHandle, &serializeDesc->dwUserFlags[3]));
 }
 
 static bool serializeGameStruct(PHYSFS_file* fileHandle, const GAMESTRUCT* serializeGame)
@@ -3943,10 +3943,10 @@ static void endian_SaveGameV(SAVE_GAME* psSaveGame, UDWORD version)
 			endian_sdword(&psSaveGame->sNetPlay.games[i].desc.dwFlags);
 			endian_sdword(&psSaveGame->sNetPlay.games[i].desc.dwMaxPlayers);
 			endian_sdword(&psSaveGame->sNetPlay.games[i].desc.dwCurrentPlayers);
-			endian_sdword(&psSaveGame->sNetPlay.games[i].desc.dwUser1);
-			endian_sdword(&psSaveGame->sNetPlay.games[i].desc.dwUser2);
-			endian_sdword(&psSaveGame->sNetPlay.games[i].desc.dwUser3);
-			endian_sdword(&psSaveGame->sNetPlay.games[i].desc.dwUser4);
+			endian_sdword(&psSaveGame->sNetPlay.games[i].desc.dwUserFlags[0]);
+			endian_sdword(&psSaveGame->sNetPlay.games[i].desc.dwUserFlags[1]);
+			endian_sdword(&psSaveGame->sNetPlay.games[i].desc.dwUserFlags[2]);
+			endian_sdword(&psSaveGame->sNetPlay.games[i].desc.dwUserFlags[3]);
 		}
 		for(i = 0; i < MAX_PLAYERS; i++)
 			endian_udword(&psSaveGame->sNetPlay.players[i].dpid);

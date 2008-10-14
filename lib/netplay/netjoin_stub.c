@@ -25,27 +25,10 @@
 #include "lib/framework/frame.h"
 #include "netplay.h"
 
-SDWORD NETgetGameFlagsUnjoined(UDWORD gameid, UDWORD flag)
+int32_t NETgetGameFlagsUnjoined(unsigned int gameid, unsigned int flag)
 {
-	switch(flag)
-	{
-	case 1:
-		return NetPlay.games[gameid].desc.dwUser1;
-		break;
-	case 2:
-		return NetPlay.games[gameid].desc.dwUser2;
-		break;
-	case 3:
-		return NetPlay.games[gameid].desc.dwUser3;
-		break;
-	case 4:
-		return NetPlay.games[gameid].desc.dwUser4;
-		break;
-	default:
-		debug( LOG_ERROR, "Invalid flag for NETgetGameFlagsUnjoined in netplay lib" );
-		abort();
-		break;
-	}
-	return 0;
-}
+	ASSERT(gameid < ARRAY_SIZE(NetPlay.games), "Out of range gameid: %u", gameid);
+	ASSERT(flag < ARRAY_SIZE(NetPlay.games[gameid].desc.dwUserFlags), "Out of range flag number: %u", flag);
 
+	return NetPlay.games[gameid].desc.dwUserFlags[flag];
+}

@@ -413,6 +413,7 @@ static void NETsendGAMESTRUCT(TCPsocket socket, const GAMESTRUCT* game)
 	// memory content across the network.
 	char buf[sizeof(game->name) + sizeof(game->desc.host) + sizeof(int32_t) * 8] = { 0 };
 	char *buffer = buf;
+	unsigned int i;
 	int result;
 
 	// Now dump the data into the buffer
@@ -435,14 +436,11 @@ static void NETsendGAMESTRUCT(TCPsocket socket, const GAMESTRUCT* game)
 	buffer += sizeof(int32_t);
 	*(int32_t*)buffer = SDL_SwapBE32(game->desc.dwCurrentPlayers);
 	buffer += sizeof(int32_t);
-	*(int32_t*)buffer = SDL_SwapBE32(game->desc.dwUser1);
-	buffer += sizeof(int32_t);
-	*(int32_t*)buffer = SDL_SwapBE32(game->desc.dwUser2);
-	buffer += sizeof(int32_t);
-	*(int32_t*)buffer = SDL_SwapBE32(game->desc.dwUser3);
-	buffer += sizeof(int32_t);
-	*(int32_t*)buffer = SDL_SwapBE32(game->desc.dwUser4);
-	buffer += sizeof(int32_t);
+	for (i = 0; i < ARRAY_SIZE(game->desc.dwUserFlags); ++i)
+	{
+		*(int32_t*)buffer = SDL_SwapBE32(game->desc.dwUserFlags[i]);
+		buffer += sizeof(int32_t);
+	}
 
 	// Send over the GAMESTRUCT
 	result = SDLNet_TCP_Send(socket, buf, sizeof(buf));
@@ -465,6 +463,7 @@ static bool NETrecvGAMESTRUCT(GAMESTRUCT* game)
 	// circumvents struct padding, which could pose a problem).
 	char buf[sizeof(game->name) + sizeof(game->desc.host) + sizeof(int32_t) * 8];
 	char* buffer = buf;
+	unsigned int i;
 	int result = 0;
 
 	// Read a GAMESTRUCT from the connection
@@ -502,14 +501,11 @@ static bool NETrecvGAMESTRUCT(GAMESTRUCT* game)
 	buffer += sizeof(int32_t);
 	game->desc.dwCurrentPlayers = SDL_SwapBE32(*(int32_t*)buffer);
 	buffer += sizeof(int32_t);
-	game->desc.dwUser1 = SDL_SwapBE32(*(int32_t*)buffer);
-	buffer += sizeof(int32_t);
-	game->desc.dwUser2 = SDL_SwapBE32(*(int32_t*)buffer);
-	buffer += sizeof(int32_t);
-	game->desc.dwUser3 = SDL_SwapBE32(*(int32_t*)buffer);
-	buffer += sizeof(int32_t);
-	game->desc.dwUser4 = SDL_SwapBE32(*(int32_t*)buffer);
-	buffer += sizeof(int32_t);
+	for (i = 0; i < ARRAY_SIZE(game->desc.dwUserFlags); ++i)
+	{
+		game->desc.dwUserFlags[i] = SDL_SwapBE32(*(int32_t*)buffer);
+		buffer += sizeof(int32_t);
+	}
 
 	return true;
 }
@@ -1473,10 +1469,10 @@ BOOL NEThostGame(const char* SessionName, const char* PlayerName,
 	game.desc.dwCurrentPlayers = 1;
 	game.desc.dwMaxPlayers = plyrs;
 	game.desc.dwFlags = 0;
-	game.desc.dwUser1 = one;
-	game.desc.dwUser2 = two;
-	game.desc.dwUser3 = three;
-	game.desc.dwUser4 = four;
+	game.desc.dwUserFlags[0] = one;
+	game.desc.dwUserFlags[1] = two;
+	game.desc.dwUserFlags[2] = three;
+	game.desc.dwUserFlags[3] = four;
 
 	NET_InitPlayers();
 	NetPlay.dpidPlayer	= NET_CreatePlayer(PlayerName, PLAYER_HOST);

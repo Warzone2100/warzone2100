@@ -105,10 +105,7 @@ typedef struct {					//Available game storage... JUST FOR REFERENCE!
 	char host[16];	// host ip address
 	int32_t dwMaxPlayers;
 	int32_t dwCurrentPlayers;
-	int32_t dwUser1;
-	int32_t dwUser2;
-	int32_t dwUser3;
-	int32_t dwUser4;
+	int32_t dwUserFlags[4];
 } SESSIONDESC;
 
 /**
@@ -194,7 +191,7 @@ extern UDWORD	NETgetRecentBytesRecvd(void);
 
 // from netjoin.c
 extern SDWORD	NETgetGameFlags(UDWORD flag);			// return one of the four flags(dword) about the game.
-extern SDWORD	NETgetGameFlagsUnjoined(UDWORD gameid, UDWORD flag);	// return one of the four flags(dword) about the game.
+extern int32_t	NETgetGameFlagsUnjoined(unsigned int gameid, unsigned int flag);	// return one of the four flags(dword) about the game.
 extern BOOL	NETsetGameFlags(UDWORD flag, SDWORD value);	// set game flag(1-4) to value.
 extern BOOL	NEThaltJoining(void);				// stop new players joining this game
 extern BOOL	NETfindGame(void);		// find games being played(uses GAME_GUID);

@@ -57,10 +57,10 @@ void printGame(const GAMESTRUCT& game)
     std::string gameHost(game.desc.host);
     std::string gameMaxPlayers(to_string(game.desc.dwMaxPlayers));
     std::string gameCurrentPlayers(to_string(game.desc.dwCurrentPlayers));
-    std::string gameUser1(to_string(game.desc.dwUser1));
-    std::string gameUser2(to_string(game.desc.dwUser2));
-    std::string gameUser3(to_string(game.desc.dwUser3));
-    std::string gameUser4(to_string(game.desc.dwUser4));
+    std::string gameUser1(to_string(game.desc.dwUserFlags[0]));
+    std::string gameUser2(to_string(game.desc.dwUserFlags[1]));
+    std::string gameUser3(to_string(game.desc.dwUserFlags[2]));
+    std::string gameUser4(to_string(game.desc.dwUserFlags[3]));
 
     unsigned int targetLength = std::max(std::max(std::max(std::max(std::max(std::max(std::max(std::max(std::max(gameName.length() + 2, gameSize.length()), gameFlags.length()), gameHost.length() + 2), gameMaxPlayers.length()), gameCurrentPlayers.length()), gameUser1.length()), gameUser2.length()), gameUser3.length()), gameUser4.length());
 
