@@ -3654,9 +3654,8 @@ static const struct rankMap arrRank[] =
 	{512, 2048, N_("Hero")}
 };
 
-UDWORD	getDroidLevel(DROID *psDroid)
+unsigned int getDroidLevel(const DROID* psDroid)
 {
-	static const unsigned int lastRank = sizeof(arrRank) / sizeof(struct rankMap);
 	bool isCommander = (psDroid->droidType == DROID_COMMAND ||
 	                    psDroid->droidType == DROID_SENSOR) ? true : false;
 	unsigned int numKills = psDroid->experience;
@@ -3671,9 +3670,10 @@ UDWORD	getDroidLevel(DROID *psDroid)
 	// Search through the array of ranks until one is found
 	// which requires more kills than the droid has.
 	// Then fall back to the previous rank.
-	for (i = 1; i != lastRank; ++i)
+	for (i = 1; i < ARRAY_SIZE(arrRank); ++i)
 	{
-		unsigned int requiredKills = isCommander ? arrRank[i].commanderKills : arrRank[i].kills;
+		const unsigned int requiredKills = isCommander ? arrRank[i].commanderKills : arrRank[i].kills;
+
 		if (numKills < requiredKills)
 		{
 			return i - 1;
@@ -3681,7 +3681,7 @@ UDWORD	getDroidLevel(DROID *psDroid)
 	}
 
 	// If the criteria of the last rank are met, then select the last one
-	return lastRank - 1;
+	return ARRAY_SIZE(arrRank) - 1;
 }
 
 UDWORD getDroidEffectiveLevel(DROID *psDroid)

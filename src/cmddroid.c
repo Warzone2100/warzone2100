@@ -42,8 +42,6 @@ DROID	*apsCmdDesignator[MAX_PLAYERS];
 // whether experience should be boosted due to a multi game
 static BOOL bMultiExpBoost = false;
 
-bool hasCommander(DROID	*psDroid);
-
 // Initialise the command droids
 BOOL cmdDroidInit(void)
 {
@@ -169,7 +167,7 @@ BOOL cmdGetDroidMultiExpBoost()
 }
 
 // get the maximum group size for a command droid
-unsigned int cmdDroidMaxGroup(DROID *psCommander)
+unsigned int cmdDroidMaxGroup(const DROID* psCommander)
 {
 	return getDroidLevel(psCommander) * 2 + MIN_CMD_GROUP_DROIDS;
 }
@@ -190,10 +188,9 @@ void cmdDroidUpdateKills(DROID *psKiller, float experienceInc)
 }
 
 // returns true if a droid in question is assigned to a commander
-bool hasCommander(DROID	*psDroid)
+bool hasCommander(const DROID* psDroid)
 {
-	ASSERT( psDroid != NULL,
-		"hasCommander: invalid droid pointer" );
+	ASSERT(psDroid != NULL, "invalid droid pointer");
 
 	if (psDroid->droidType != DROID_COMMAND &&
 		psDroid->psGroup != NULL &&
@@ -206,12 +203,11 @@ bool hasCommander(DROID	*psDroid)
 }
 
 // get the level of a droids commander, if any
-unsigned int cmdGetCommanderLevel(DROID *psDroid)
+unsigned int cmdGetCommanderLevel(const DROID* psDroid)
 {
-	DROID	*psCommander;
+	const DROID* psCommander;
 
-	ASSERT( psDroid != NULL,
-		"cmdGetCommanderLevel: invalid droid pointer" );
+	ASSERT(psDroid != NULL, "invalid droid pointer");
 
 	// If this droid is not the member of a Commander's group
 	// Return an experience level of 0

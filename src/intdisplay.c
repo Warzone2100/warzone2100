@@ -514,7 +514,7 @@ void intUpdateCommandSize(WIDGET *psWidget, W_CONTEXT *psContext)
 		ASSERT( psDroid->droidType == DROID_COMMAND,
 			"intUpdateCommandSize: droid is not a command droid" );
 
-		snprintf(Label->aText, sizeof(Label->aText), "%d/%d", psDroid->psGroup ? grpNumMembers(psDroid->psGroup) : 0, cmdDroidMaxGroup(psDroid));
+		ssprintf(Label->aText, "%u/%u", psDroid->psGroup ? grpNumMembers(psDroid->psGroup) : 0, cmdDroidMaxGroup(psDroid));
 		Label->style &= ~WIDG_HIDDEN;
 	}
 	else

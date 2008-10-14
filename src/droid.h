@@ -249,7 +249,7 @@ extern DROID_TEMPLATE* getTemplateFromMultiPlayerID(UDWORD multiPlayerID);
 extern BOOL selectDroidByID(UDWORD id, UDWORD player);
 
 /* Droid experience stuff */
-extern UDWORD	getDroidLevel(DROID *psDroid);
+extern unsigned int getDroidLevel(const DROID* psDroid);
 extern UDWORD	getDroidEffectiveLevel(DROID *psDroid);
 extern const char *getDroidLevelName(DROID *psDroid);
 

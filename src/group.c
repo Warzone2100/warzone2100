@@ -286,17 +286,16 @@ void grpLeave(DROID_GROUP *psGroup, DROID *psDroid)
 }
 
 // count the members of a group
-SDWORD grpNumMembers(DROID_GROUP *psGroup)
+unsigned int grpNumMembers(const DROID_GROUP* psGroup)
 {
-	DROID	*psCurr;
-	SDWORD	num;
+	const DROID* psCurr;
+	unsigned int num;
 
 	ASSERT(grpInitialized, "Group code not initialized yet");
-	ASSERT( psGroup != NULL,
-		"grpNumMembers: invalid droid group" );
+	ASSERT(psGroup != NULL, "invalid droid group");
 
 	num = 0;
-	for(psCurr = psGroup->psList; psCurr; psCurr = psCurr->psGrpNext)
+	for (psCurr = psGroup->psList; psCurr; psCurr = psCurr->psGrpNext)
 	{
 		num += 1;
 	}

@@ -63,7 +63,7 @@ void grpJoinEnd(DROID_GROUP *psGroup, DROID *psDroid);
 void grpLeave(DROID_GROUP *psGroup, DROID *psDroid);
 
 // count the members of a group
-SDWORD grpNumMembers(DROID_GROUP *psGroup);
+unsigned int grpNumMembers(const DROID_GROUP* psGroup);
 
 // remove all droids from a group
 void grpReset(DROID_GROUP *psGroup);
