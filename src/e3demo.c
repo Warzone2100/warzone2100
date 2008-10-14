@@ -49,14 +49,11 @@
 #define DROID_MOVE_INTERVAL	(GAME_TICKS_PER_SEC/4)
 
 // -------------------------------------------------------------------------
-BOOL	tooNearEdge			( UDWORD x, UDWORD y );
 BOOL	demoGetStatus		( void );
 void	initDemoCamera		( void );
-void	demoRequestStart	( void );
 void	processDemoCam		( void );
 void	toggleDemoStatus	( void );
-BOOL	getDemoStatus		( void );
-void	findSomethingInteresting( void );
+static void findSomethingInteresting(void);
 void	setFindNewTarget	( void );
 
 // -------------------------------------------------------------------------
@@ -82,14 +79,6 @@ void	initDemoCamera( void )
 	demoCamInterval = DEFAULT_DEMO_INTERVAL;
 	psLastDroid = NULL;
 	lastHeight = 0;
-}
-
-// -------------------------------------------------------------------------
-/* Tells the camera demo stuff to start... */
-void	demoRequestStart( void )
-{
-	lastCameraMove = 0;
-	presentStatus = DC_ISACTIVE;
 }
 
 // -------------------------------------------------------------------------
@@ -216,15 +205,19 @@ BOOL	demoGetStatus( void )
 /*	Attempts to find a new location for the tracking camera to go to, or
 	a new object (target) for it to track.
 */
-#define NUM_CHOICES 2
-#define DROID_SEEK	0
-#define TAR_SEEK	1
-#define	OVERRIDE_SEEK	99
 
-
-void	findSomethingInteresting( void )
+void findSomethingInteresting()
 {
-UDWORD	type;
+	enum
+	{
+		SEEK_DROID,
+		SEEK_TARGET,
+
+		SEEK_LAST,
+
+		SEEK_OVERRIDE,
+	} type;
+
 UDWORD	player,otherPlayer;
 BOOL	gotNewTarget;
 DROID	*psDroid;
@@ -272,19 +265,19 @@ PROPULSION_STATS	*psPropStats;
 		if(bSeekOnlyLocations)
 		{
 			/* Then force the switch outcome - hacky I know, but same as if else in code */
-			type = OVERRIDE_SEEK;
+			type = SEEK_OVERRIDE;
 		}
 		else
 		{
 			/* We're off hunting droids */
-			type = rand()%NUM_CHOICES;
+			type = rand() % SEEK_LAST;
 		}
 		/* Check which */
-		switch(type)
+		switch (type)
 		{
 			/* Go after a droid, or a droid location */
-		case DROID_SEEK:
-		case TAR_SEEK:
+		case SEEK_DROID:
+		case SEEK_TARGET:
 			/* Choose a player at random */
 			player = rand()%MAX_PLAYERS;
 
@@ -349,7 +342,7 @@ PROPULSION_STATS	*psPropStats;
 			}
 			break;
 			/* Go to a new location cos there's no droids left in the world....ahhhhhhh*/
-		case OVERRIDE_SEEK:
+		case SEEK_OVERRIDE:
 			requestRadarTrack((16 + rand()%(mapWidth-31))*TILE_UNITS, (16 + rand()%(mapHeight-31)) * TILE_UNITS );
 			gotNewTarget = true;
 			break;
@@ -383,22 +376,5 @@ UDWORD	droidIndex;
 	else
 	{
 		return(NULL);
-	}
-}
-
-// -------------------------------------------------------------------------
-/* Hack! */
-BOOL	tooNearEdge( UDWORD x, UDWORD y )
-{
-	if( (x > ((visibleTiles.x/2) * TILE_UNITS)) &&
-		(x < ((mapWidth-(visibleTiles.x/2)) * TILE_UNITS)) &&
-		(y > ((visibleTiles.y/2) * TILE_UNITS)) &&
-		(y < ((mapHeight-(visibleTiles.y/2)) * TILE_UNITS)) )
-	{
-		return(false);
-	}
-	else
-	{
-		return(true);
 	}
 }

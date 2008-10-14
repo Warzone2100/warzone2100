@@ -218,7 +218,7 @@ BOOL startLimitScreen(void)
 
 			addFESlider(sButInit.id,sButInit.id-1, 290,11,
 						asStructLimits[0][i].globalLimit,
-						asStructLimits[0][i].limit, 0);
+						asStructLimits[0][i].limit);
 			sButInit.id	++;
 
 			if (sButInit.y + BARHEIGHT + 2 > (BUTPERFORM*(BARHEIGHT+2) - 4) )
@@ -410,7 +410,7 @@ static void displayStructureBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset
 	}
 
 	pie_SetDepthBufferStatus(DEPTH_CMP_LEQ_WRT_ON);
-	displayStructureStatButton(stat ,0,	 &Rotation,&Position,true, scale);
+	displayStructureStatButton(stat, &Rotation, &Position, true, scale);
 	pie_SetDepthBufferStatus(DEPTH_CMP_ALWAYS_WRT_ON);
 
 	// draw name

@@ -103,9 +103,9 @@ void featureInitVars(void)
 
 static void featureType(FEATURE_STATS* psFeature, const char *pType)
 {
-	int i;
+	unsigned int i;
 	
-	for (i = 0; i < sizeof(map) / sizeof(map[0]); i++)
+	for (i = 0; i < ARRAY_SIZE(map); i++)
 	{
 		if (strcmp(pType, map[i].typeStr) == 0)
 		{

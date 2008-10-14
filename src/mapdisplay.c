@@ -171,8 +171,7 @@ void renderResearchToBuffer(RESEARCH *psResearch,
 	} else if(IMDType == IMDTYPE_RESEARCH) {
 		displayResearchButton(psResGraphic,&Rotation,&Position,true, scale);
 	} else if(IMDType == IMDTYPE_STRUCTURESTAT) {
-		displayStructureStatButton((STRUCTURE_STATS *)psResGraphic,selectedPlayer,&Rotation,
-            &Position,true, scale);
+		displayStructureStatButton((STRUCTURE_STATS *)psResGraphic, &Rotation, &Position, true, scale);
 	} else {
 		ASSERT( false, "renderResearchToBuffer: Unknown PIEType" );
 	}

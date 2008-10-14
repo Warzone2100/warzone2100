@@ -154,17 +154,17 @@ static BOOL addSlideOptions(void)
 	// fx vol
 	addIGTextButton(INTINGAMEOP_FXVOL, INTINGAMEOP_1_Y, _("Voice Volume"), WBUT_PLAIN);
 	addFESlider(INTINGAMEOP_FXVOL_S, INTINGAMEOP, INTINGAMEOP_MID, INTINGAMEOP_1_Y-5,
-				AUDIO_VOL_MAX, (int)(sound_GetUIVolume() * 100.0), INTINGAMEOP_FXVOL);
+				AUDIO_VOL_MAX, (int)(sound_GetUIVolume() * 100.0));
 
 	// fx vol
 	addIGTextButton(INTINGAMEOP_3DFXVOL, INTINGAMEOP_2_Y, _("FX Volume"), WBUT_PLAIN);
 	addFESlider(INTINGAMEOP_3DFXVOL_S, INTINGAMEOP, INTINGAMEOP_MID, INTINGAMEOP_2_Y-5,
-				AUDIO_VOL_MAX, (int)(sound_GetEffectsVolume() * 100.0), INTINGAMEOP_3DFXVOL);
+				AUDIO_VOL_MAX, (int)(sound_GetEffectsVolume() * 100.0));
 
 	// cd vol
 	addIGTextButton(INTINGAMEOP_CDVOL, INTINGAMEOP_3_Y, _("Music Volume"), WBUT_PLAIN);
 	addFESlider(INTINGAMEOP_CDVOL_S, INTINGAMEOP, INTINGAMEOP_MID, INTINGAMEOP_3_Y-5,
-				AUDIO_VOL_MAX, (int)(sound_GetMusicVolume() * 100), INTINGAMEOP_CDVOL);
+				AUDIO_VOL_MAX, (int)(sound_GetMusicVolume() * 100));
 
 	return true;
 }

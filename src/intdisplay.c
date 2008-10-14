@@ -2476,7 +2476,7 @@ void CreateIMDButton(IMAGEFILE *ImageFile, UWORD ImageID, void *Object, UDWORD P
 		} else if(IMDType == IMDTYPE_STRUCTURE) {
 			displayStructureButton((STRUCTURE*)Object,&Rotation,&Position,true, scale);
 		} else if(IMDType == IMDTYPE_STRUCTURESTAT) {
-			displayStructureStatButton((STRUCTURE_STATS*)Object,Player,&Rotation,&Position,true, scale);
+			displayStructureStatButton((STRUCTURE_STATS*)Object, &Rotation, &Position, true, scale);
 		} else {
 			displayIMDButton((iIMDShape*)Object,&Rotation,&Position,true, scale);
 		}

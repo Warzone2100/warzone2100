@@ -22,7 +22,6 @@
 #define __INCLUDED_SRC_E3DEMO_H__
 
 extern	void	initDemoCamera		( void );
-extern	void	demoRequestStart	( void );
 extern	void	processDemoCam		( void );
 extern	void	toggleDemoStatus	( void );
 extern	BOOL	demoGetStatus		( void );

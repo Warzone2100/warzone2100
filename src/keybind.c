@@ -1700,7 +1700,6 @@ void kf_SendTextMessage(void)
 {
 	char	ch;
 	char tmp[MAX_CONSOLE_STRING_LENGTH + 100];
-	SDWORD	i;
 
 	if(bAllowOtherKeyPresses)									// just starting.
 	{
@@ -1752,6 +1751,8 @@ void kf_SendTextMessage(void)
 			}
 			else
 			{
+				unsigned int i;
+
 				//show the message we sent on our local console as well (even in skirmish, to see console commands)
 				sstrcpy(tmp, getPlayerName(selectedPlayer));
 				sstrcat(tmp, " : ");        // seperator
@@ -1759,9 +1760,10 @@ void kf_SendTextMessage(void)
 				addConsoleMessage(tmp,DEFAULT_JUSTIFY, selectedPlayer);
 
 				//in skirmish send directly to AIs, for command and chat procesing
-				for(i=0; i<game.maxPlayers; i++)		//don't use MAX_PLAYERS here, although possible
+				for (i = 0; i < game.maxPlayers; ++i)		//don't use MAX_PLAYERS here, although possible
 				{
-					if(openchannels[i] && i != selectedPlayer)
+					if (openchannels[i]
+					 && i != selectedPlayer)
 					{
 						sendAIMessage(sTextToSend, selectedPlayer, i);
 					}

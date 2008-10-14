@@ -218,7 +218,7 @@ float droidDamage(DROID *psDroid, UDWORD damage, UDWORD weaponClass, UDWORD weap
 // Check that psVictimDroid is not referred to by any other object in the game
 BOOL droidCheckReferences(DROID *psVictimDroid)
 {
-	int plr, i;
+	int plr;
 
 	for (plr = 0; plr < MAX_PLAYERS; plr++)
 	{
@@ -227,6 +227,8 @@ BOOL droidCheckReferences(DROID *psVictimDroid)
 
 		for (psStruct = apsStructLists[plr]; psStruct != NULL; psStruct = psStruct->psNext)
 		{
+			unsigned int i;
+
 			for (i = 0; i < psStruct->numWeaps; i++)
 			{
 				if ((DROID *)psStruct->psTarget[i] == psVictimDroid)
@@ -243,6 +245,8 @@ BOOL droidCheckReferences(DROID *psVictimDroid)
 		}
 		for (psDroid = apsDroidLists[plr]; psDroid != NULL; psDroid = psDroid->psNext)
 		{
+			unsigned int i;
+
 			if ((DROID *)psDroid->psTarget == psVictimDroid && psVictimDroid != psDroid)
 			{
 #ifndef DEBUG
@@ -2821,7 +2825,8 @@ UDWORD	calcDroidPower(DROID *psDroid)
 
 UDWORD calcDroidPoints(DROID *psDroid)
 {
-	int points, i;
+	unsigned int i;
+	int points;
 
 	points  = getBodyStats(psDroid)->buildPoints;
 	points += getBrainStats(psDroid)->buildPoints;
@@ -3758,19 +3763,18 @@ void droidSetName(DROID *psDroid,const char *pName)
 // returns true when no droid on x,y square.
 BOOL noDroid(UDWORD x, UDWORD y)
 {
-	UDWORD i;
-	DROID *pD;
+	unsigned int i;
+
 	// check each droid list
-	for(i=0;i<MAX_PLAYERS;i++)
+	for (i = 0; i < MAX_PLAYERS; ++i)
 	{
-		for(pD = apsDroidLists[i]; pD ; pD= pD->psNext)
+		const DROID* psDroid;
+		for (psDroid = apsDroidLists[i]; psDroid; psDroid = psDroid->psNext)
 		{
-			if (map_coord(pD->pos.x) == x)
+			if (map_coord(psDroid->pos.x) == x
+			 && map_coord(psDroid->pos.y) == y)
 			{
-				if (map_coord(pD->pos.y) == y)
-				{
 					return false;
-				}
 			}
 		}
 	}
@@ -3789,19 +3793,15 @@ static BOOL oneDroid(UDWORD x, UDWORD y)
 	{
 		for(pD = apsDroidLists[i]; pD ; pD= pD->psNext)
 		{
-			if (map_coord(pD->pos.x) == x)
+			if (map_coord(pD->pos.x) == x
+			 && map_coord(pD->pos.y) == y)
 			{
-				if (map_coord(pD->pos.y) == y)
+				if (bFound)
 				{
-					if (bFound)
-					{
-						return false;
-					}
-					else
-					{
-						bFound = true;//first droid on this square so continue
-					}
+					return false;
 				}
+
+				bFound = true;//first droid on this square so continue
 			}
 		}
 	}

@@ -446,13 +446,12 @@ void setConsoleTextColor(SDWORD player)
 void	displayConsoleMessages( void )
 {
 	CONSOLE_MESSAGE *psMessage;
-	int numProcessed;
 	int linePitch;
 	int boxDepth;
 	int drop;
 	int MesY;
 	int clipDepth;
-	int exceed;
+	unsigned int exceed, numProcessed;
 
 	/* Are there any to display? */
 	if(consoleMessages == NULL && !bConsoleDropped)
@@ -466,9 +465,6 @@ void	displayConsoleMessages( void )
 	{
 		return;
 	}
-
-	/* Haven't done any yet */
-	numProcessed = 0;
 
 	/* Get the travel to the next line */
 	linePitch = iV_GetTextLineSize();
@@ -489,13 +485,13 @@ void	displayConsoleMessages( void )
 	/* Do we want a box under it? */
 	if(bTextBoxActive)
 	{
-		for(psMessage = consoleMessages,exceed = 0;
-			psMessage && (numProcessed<consoleVisibleLines) && (exceed < 4); // ho ho ho!!!
-			psMessage = psMessage->psNext)
+		for (psMessage = consoleMessages, exceed = 0;
+		     psMessage && consoleVisibleLines > 0 && exceed < 4; // ho ho ho!!!
+		     psMessage = psMessage->psNext)
 		{
-			if((UDWORD)iV_GetTextWidth(psMessage->text) > mainConsole.width)
+			if (iV_GetTextWidth(psMessage->text) > mainConsole.width)
 			{
-				exceed++;
+				++exceed;
 			}
 		}
 
@@ -503,7 +499,7 @@ void	displayConsoleMessages( void )
 		boxDepth = (numActiveMessages> consoleVisibleLines ? consoleVisibleLines-1 : numActiveMessages-1);
 
 		/* Add on the extra - hope it doesn't exceed two lines! */
-		boxDepth+=exceed;
+		boxDepth += exceed;
 
 		/* GET RID OF THE MAGIC NUMBERS BELOW */
 		clipDepth = (mainConsole.topY+(boxDepth*linePitch)+CON_BORDER_HEIGHT+drop);
@@ -519,9 +515,9 @@ void	displayConsoleMessages( void )
 	/* Stop when we've drawn enough or we're at the end */
 	MesY = mainConsole.topY + drop;
 
-	for(psMessage = consoleMessages,numProcessed = 0;
-		psMessage && numProcessed<consoleVisibleLines && MesY < (pie_GetVideoBufferHeight()-linePitch);
-		psMessage = psMessage->psNext)
+	for (psMessage = consoleMessages, numProcessed = 0;
+	     psMessage && numProcessed < consoleVisibleLines && MesY < (pie_GetVideoBufferHeight() - linePitch);
+	     psMessage = psMessage->psNext)
 	{
 
 		/* Set text color depending on message type */
@@ -532,7 +528,7 @@ void	displayConsoleMessages( void )
 									mainConsole.width, psMessage->JustifyType);
 
 		/* Move on */
-		numProcessed++;
+		++numProcessed;
 	}
 }
 
@@ -540,18 +536,16 @@ void	displayConsoleMessages( void )
 	\return The number of messages actually shown */
 int displayOldMessages()
 {
-	int thisIndex;
 	int i;
-	int count;
 	BOOL bGotIt;
 	BOOL bQuit;
 	int marker = 0;
 	int linePitch;
 	int MesY;
+	unsigned int count = 0;
 
 	/* Check there actually are any messages */
-	thisIndex = messageId;
-	count = 0;
+	int thisIndex = messageId;
 
 	if(thisIndex)
 	{
@@ -560,7 +554,7 @@ int displayOldMessages()
 		{
 			for(i=0,bGotIt = false; i<MAX_CONSOLE_MESSAGES && !bGotIt; i++)
 			{
-				if(consoleStorage[i].id == thisIndex-1)
+				if (consoleStorage[i].id == thisIndex-1)
 				{
 					bGotIt = true;
 					marker = i;

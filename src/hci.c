@@ -448,7 +448,7 @@ static BOOL intAddCommand(DROID *psSelected);
 
 
 /* Start looking for a structure location */
-static void intStartStructPosition(BASE_STATS *psStats,DROID *psDroid);
+static void intStartStructPosition(BASE_STATS *psStats);
 /* Stop looking for a structure location */
 static void intStopStructPosition(void);
 
@@ -1496,7 +1496,7 @@ static void intProcessEditStats(UDWORD id)
 				return;
 			}
 		}
-		intStartStructPosition(psPositionStats, NULL);
+		intStartStructPosition(psPositionStats);
 		editPosMode = IED_POS;
 	}
 	else if (id == IDSTAT_CLOSE)
@@ -3230,8 +3230,7 @@ void intCommanderSelected(DROID *psDroid)
 extern void FinishStructurePosition(UDWORD xPos,UDWORD yPos,void *UserData);
 
 /* Start looking for a structure location */
-//static void intStartStructPosition(UDWORD width, UDWORD height)
-static void intStartStructPosition(BASE_STATS *psStats,DROID *psDroid)
+static void intStartStructPosition(BASE_STATS *psStats)
 {
 	init3DBuilding(psStats,NULL,NULL);
 
@@ -6157,7 +6156,7 @@ static BOOL setConstructionStats(BASE_OBJECT *psObj, BASE_STATS *psStats)
 			{
 				objMode = IOBJ_BUILDSEL;
 
-				intStartStructPosition(psStats,psDroid);
+				intStartStructPosition(psStats);
 
 				//set the droids current program
 				/*for (i=0; i < psDroid->numProgs; i++)
