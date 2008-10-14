@@ -78,6 +78,16 @@ static double nearbyint(double x)
 		return floor(x + 0.5);
 	}
 }
+
+static inline WZ_DECL_CONST double hypot(double x, double y)
+{
+	return sqrt(x * x + y * y);
+}
+
+static inline WZ_DECL_CONST float hypotf(float x, float y)
+{
+	return hypot(x, y);
+}
 #endif
 
 

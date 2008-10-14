@@ -4965,7 +4965,7 @@ BOOL scrDistanceTwoPts( void )
 	}
 
 	/* Approximate the distance */
-	scrFunctionResult.v.ival = dirtyHypot(x1 - x2, y1 - y2);
+	scrFunctionResult.v.ival = hypotf(x1 - x2, y1 - y2);
 	if(!stackPushResult(VAL_INT, &scrFunctionResult))
 	{
 		ASSERT( false,"SCRIPT : Distance between two points - cannot return scrFunctionResult" );
@@ -5153,7 +5153,6 @@ BOOL	bVisible;
 BOOL scrGetNearestGateway( void )
 {
 	SDWORD	x,y;
-	SDWORD	gX,gY;
 	UDWORD	nearestSoFar;
 	UDWORD	dist;
 	GATEWAY	*psGateway;
@@ -5185,11 +5184,11 @@ BOOL scrGetNearestGateway( void )
 	for(psGateway = psGateways; psGateway; psGateway = psGateway->psNext)
 	{
 		/* Get gateway midpoint */
-		gX = (psGateway->x1 + psGateway->x2)/2;
-		gY = (psGateway->y1 + psGateway->y2)/2;
+		const int gX = (psGateway->x1 + psGateway->x2)/2;
+		const int gY = (psGateway->y1 + psGateway->y2)/2;
 
 		/* Estimate the distance to it */
-		dist = dirtyHypot(x - gX, y - gY);
+		dist = hypotf(x - gX, y - gY);
 
 		/* Is it best we've found? */
 		if(dist<nearestSoFar)
@@ -7233,12 +7232,12 @@ BOOL scrFMax(void)
 
 BOOL ThreatInRange(SDWORD player, SDWORD range, SDWORD rangeX, SDWORD rangeY, BOOL bVTOLs)
 {
-	UDWORD				i,structType,tx,ty;
+	UDWORD				i,structType;
 	STRUCTURE			*psStruct;
 	DROID				*psDroid;
 
-	tx = map_coord(rangeX);
-	ty = map_coord(rangeY);
+	const int tx = map_coord(rangeX);
+	const int ty = map_coord(rangeY);
 
 	for(i=0;i<MAX_PLAYERS;i++)
 	{
@@ -7265,7 +7264,7 @@ BOOL ThreatInRange(SDWORD player, SDWORD range, SDWORD rangeX, SDWORD rangeY, BO
 						case REF_REARM_PAD:
 
 						if (range < 0
-						 || world_coord(dirtyHypot(tx - map_coord(psStruct->pos.x), ty - map_coord(psStruct->pos.y))) < range)	//enemy in range
+						 || world_coord(hypotf(tx - map_coord(psStruct->pos.x), ty - map_coord(psStruct->pos.y))) < range)	//enemy in range
 						{
 							return true;
 						}
@@ -7293,7 +7292,7 @@ BOOL ThreatInRange(SDWORD player, SDWORD range, SDWORD rangeX, SDWORD rangeY, BO
 				}
 
 				if (range < 0
-				 || world_coord(dirtyHypot(tx - map_coord(psDroid->pos.x), ty - map_coord(psDroid->pos.y))) < range)	//enemy in range
+				 || world_coord(hypotf(tx - map_coord(psDroid->pos.x), ty - map_coord(psDroid->pos.y))) < range)	//enemy in range
 				{
 					return true;
 				}
@@ -7949,28 +7948,25 @@ UDWORD playerWeapDroidsCostInRange(SDWORD player, SDWORD lookingPlayer, SDWORD r
 UDWORD numPlayerWeapStructsInRange(SDWORD player, SDWORD lookingPlayer, SDWORD range,
 								   SDWORD rangeX, SDWORD rangeY, BOOL bFinished)
 {
-	UDWORD				tx,ty,numStructs;
-	STRUCTURE			*psStruct;
+	const STRUCTURE* psStruct;
 
-	tx = map_coord(rangeX);
-	ty = map_coord(rangeY);
+	const int tx = map_coord(rangeX);
+	const int ty = map_coord(rangeY);
 
-	numStructs = 0;
+	unsigned int numStructs = 0;
 
 	//check structures
-	for(psStruct = apsStructLists[player]; psStruct; psStruct=psStruct->psNext)
+	for (psStruct = apsStructLists[player]; psStruct; psStruct = psStruct->psNext)
 	{
-		if(psStruct->visible[lookingPlayer])	//if can see it
+		if (psStruct->visible[lookingPlayer]	//if can see it
+		 && objHasWeapon((BASE_OBJECT *) psStruct)) // check whether this structure is "dangerous"
 		{
-			if(objHasWeapon((BASE_OBJECT *) psStruct))	//make sure structure is dangerous
+			if (!bFinished || psStruct->status == SS_BUILT)
 			{
-				if(!bFinished || psStruct->status == SS_BUILT)
+				if (range < 0
+				 || world_coord(hypotf(tx - map_coord(psStruct->pos.x), ty - map_coord(psStruct->pos.y))) < range)	//enemy in range
 				{
-					if (range < 0
-					 || world_coord(dirtyHypot(tx - map_coord(psStruct->pos.x), ty - map_coord(psStruct->pos.y))) < range)	//enemy in range
-					{
-						numStructs++;
-					}
+					++numStructs;
 				}
 			}
 		}
@@ -7982,16 +7978,12 @@ UDWORD numPlayerWeapStructsInRange(SDWORD player, SDWORD lookingPlayer, SDWORD r
 UDWORD playerWeapStructsCostInRange(SDWORD player, SDWORD lookingPlayer, SDWORD range,
 								   SDWORD rangeX, SDWORD rangeY, BOOL bFinished)
 {
-	UDWORD				tx,ty,structsCost;
-	STRUCTURE			*psStruct;
+	const STRUCTURE* psStruct;
 
-	tx = rangeX >> TILE_SHIFT;
-	ty = rangeY >> TILE_SHIFT;
-
-	structsCost = 0;
+	unsigned int structsCost = 0;
 
 	//check structures
-	for(psStruct = apsStructLists[player]; psStruct; psStruct=psStruct->psNext)
+	for (psStruct = apsStructLists[player]; psStruct; psStruct = psStruct->psNext)
 	{
 		if (psStruct->visible[lookingPlayer]	//if can see it
 		 && objHasWeapon((BASE_OBJECT *) psStruct))
@@ -8000,7 +7992,7 @@ UDWORD playerWeapStructsCostInRange(SDWORD player, SDWORD lookingPlayer, SDWORD 
 			 || psStruct->status == SS_BUILT)
 			{
 				if (range < 0
-				 || world_coord(dirtyHypot(tx - map_coord(psStruct->pos.x), ty - map_coord(psStruct->pos.y))) < range)	//enemy in range
+				 || world_coord(hypotf(map_coord(rangeX) - map_coord(psStruct->pos.x), map_coord(rangeY) - map_coord(psStruct->pos.y))) < range)	//enemy in range
 				{
 					structsCost += structPowerToBuild(psStruct);
 				}
@@ -8273,31 +8265,33 @@ BOOL scrNumEnemyObjInRange(void)
 UDWORD numEnemyObjInRange(SDWORD player, SDWORD range, SDWORD rangeX, SDWORD rangeY,
 						  BOOL bVTOLs, BOOL bFinished)
 {
-	UDWORD				i,tx,ty,numEnemies;
-	STRUCTURE			*psStruct;
-	DROID				*psDroid;
+	unsigned int i;
+	const STRUCTURE* psStruct;
+	const DROID* psDroid;
 
-	tx = map_coord(rangeX);
-	ty = map_coord(rangeY);
+	const int tx = map_coord(rangeX);
+	const int ty = map_coord(rangeY);
 
-	numEnemies = 0;
+	unsigned int numEnemies = 0;
 
-	for(i=0;i<MAX_PLAYERS;i++)
+	for (i = 0; i < MAX_PLAYERS;i++)
 	{
-		if((alliances[player][i] == ALLIANCE_FORMED) || (i == player))
+		if (alliances[player][i] == ALLIANCE_FORMED
+		 || i == player)
 		{
 			continue;
 		}
 
 		//check structures
-		for(psStruct = apsStructLists[i]; psStruct; psStruct=psStruct->psNext)
+		for (psStruct = apsStructLists[i]; psStruct; psStruct = psStruct->psNext)
 		{
-			if(psStruct->visible[player])	//if can see it
+			if (psStruct->visible[player])	//if can see it
 			{
-				if(!bFinished || psStruct->status == SS_BUILT)
+				if (!bFinished
+				 || psStruct->status == SS_BUILT)
 				{
 					if (range < 0
-					 || world_coord(dirtyHypot(tx - map_coord(psStruct->pos.x), ty - map_coord(psStruct->pos.y))) < range)	//enemy in range
+					 || world_coord(hypotf(tx - map_coord(psStruct->pos.x), ty - map_coord(psStruct->pos.y))) < range)	//enemy in range
 					{
 						numEnemies++;
 					}
@@ -8306,18 +8300,20 @@ UDWORD numEnemyObjInRange(SDWORD player, SDWORD range, SDWORD rangeX, SDWORD ran
 		}
 
 		//check droids
-		for(psDroid = apsDroidLists[i]; psDroid; psDroid = psDroid->psNext)
+		for (psDroid = apsDroidLists[i]; psDroid; psDroid = psDroid->psNext)
 		{
-			if(psDroid->visible[player])		//can see this droid?
+			if (psDroid->visible[player])		//can see this droid?
 			{
 				//if VTOLs are excluded, skip them
-				if(!bVTOLs && ((asPropulsionStats[psDroid->asBits[COMP_PROPULSION].nStat].propulsionType == PROPULSION_TYPE_LIFT) || (psDroid->droidType == DROID_TRANSPORTER)))
+				if (!bVTOLs
+				 && (asPropulsionStats[psDroid->asBits[COMP_PROPULSION].nStat].propulsionType == PROPULSION_TYPE_LIFT
+				  || psDroid->droidType == DROID_TRANSPORTER))
 				{
 					continue;
 				}
 
 				if (range < 0
-				 || world_coord(dirtyHypot(tx - map_coord(psDroid->pos.x), ty - map_coord(psDroid->pos.y))) < range)	//enemy in range
+				 || world_coord(hypotf(tx - map_coord(psDroid->pos.x), ty - map_coord(psDroid->pos.y))) < range)	//enemy in range
 				{
 					numEnemies++;
 				}
@@ -8832,7 +8828,7 @@ BOOL scrGetClosestEnemy(void)
 					continue;
 				}
 
-				dist = world_coord(dirtyHypot(tx - map_coord(psDroid->pos.x), ty - map_coord(psDroid->pos.y)));
+				dist = world_coord(hypotf(tx - map_coord(psDroid->pos.x), ty - map_coord(psDroid->pos.y)));
 				if(dist < bestDist)
 				{
 					if((range < 0) || (dist < range))	//enemy in range
@@ -8857,7 +8853,7 @@ BOOL scrGetClosestEnemy(void)
 					continue;
 				}
 
-				dist = world_coord(dirtyHypot(tx - map_coord(psStruct->pos.x), ty - map_coord(psStruct->pos.y)));
+				dist = world_coord(hypotf(tx - map_coord(psStruct->pos.x), ty - map_coord(psStruct->pos.y)));
 				if(dist < bestDist)
 				{
 					if((range < 0) || (dist < range))	//in range
@@ -9211,7 +9207,7 @@ BOOL scrGetClosestEnemyDroidByType(void)
 					continue;
 				}
 
-				dist = world_coord(dirtyHypot(tx - map_coord(psDroid->pos.x), ty - map_coord(psDroid->pos.y)));
+				dist = world_coord(hypotf(tx - map_coord(psDroid->pos.x), ty - map_coord(psDroid->pos.y)));
 				if(dist < bestDist)
 				{
 					if(dist < range)	//enemy in range
@@ -9293,7 +9289,7 @@ BOOL scrGetClosestEnemyStructByType(void)
 					continue;
 				}
 
-				dist = world_coord(dirtyHypot(tx - map_coord(psStruct->pos.x), ty - map_coord(psStruct->pos.y)));
+				dist = world_coord(hypotf(tx - map_coord(psStruct->pos.x), ty - map_coord(psStruct->pos.y)));
 				if(dist < bestDist)
 				{
 					if((range < 0) || (dist < range))	//in range or no range check
@@ -9334,8 +9330,7 @@ BOOL scrGetClosestEnemyStructByType(void)
 BOOL scrCirclePerimPoint(void)
 {
 	SDWORD				basex,basey,*grx,*gry,radius;
-	UDWORD				dist;
-	float				factor,tempx,tempy;
+	float factor, deltaX, deltaY;
 
 	if (!stackPopParams(5, VAL_INT, &basex, VAL_INT, &basey, VAL_REF|VAL_INT, &grx,
 		VAL_REF|VAL_INT, &gry, VAL_INT, &radius))
@@ -9350,12 +9345,10 @@ BOOL scrCirclePerimPoint(void)
 		return true;
 	}
 
-	tempx = (float)(*grx - basex);	//x len (signed!)
-	tempy = (float)(*gry - basey);
+	deltaX = (float)(*grx - basex);	//x len (signed!)
+	deltaY = (float)(*gry - basey);
 
-	dist = dirtyHypot(basex - *grx, basey - *gry);		//len
-
-	factor =  (float)((float)dist / (float)radius);			//by what factor is dist > radius?
+	factor =  hypotf(deltaX, deltaY) / (float)radius;			//by what factor is distance > radius?
 
 	//if point was inside of the circle, don't modify passed parameter
 	if(factor == 0)
@@ -9365,12 +9358,12 @@ BOOL scrCirclePerimPoint(void)
 	}
 
 	//calc new len
-	tempx = tempx / factor;
-	tempy = tempy / factor;
+	deltaX = deltaX / factor;
+	deltaY = deltaY / factor;
 
 	//now add new len to the center coords
-	*grx = basex + (SDWORD)tempx;
-	*gry = basey + (SDWORD)tempy;
+	*grx = basex + deltaX;
+	*gry = basey + deltaY;
 
 	return true;
 }
@@ -9474,7 +9467,7 @@ BOOL scrNumAAinRange(void)
 				(asWeaponStats[psStruct->asWeaps[0].nStat].surfaceToAir == SHOOT_IN_AIR) )
 			{
 				if (range < 0
-				 || world_coord(dirtyHypot(tx - map_coord(psStruct->pos.x), ty - map_coord(psStruct->pos.y))) < range)	//enemy in range
+				 || world_coord(hypotf(tx - map_coord(psStruct->pos.x), ty - map_coord(psStruct->pos.y))) < range)	//enemy in range
 				{
 					numFound++;
 				}
