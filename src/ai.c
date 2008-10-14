@@ -1009,7 +1009,7 @@ void aiUpdateDroid(DROID *psDroid)
 			if((psDroid->id % TARGET_UPD_SKIP_FRAMES) ==
 				(frameGetFrameNumber() % TARGET_UPD_SKIP_FRAMES))
 			{
-				int i;
+				unsigned int i;
 
 				(void)updateAttackTarget((BASE_OBJECT*)psDroid, 0); // this function always has to be called on weapon-slot 0 (even if ->numWeaps == 0)
 

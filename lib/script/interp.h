@@ -82,7 +82,7 @@ typedef struct _interp_val
 typedef struct _interp_typeequiv
 {
 	INTERP_TYPE		base;		// the type that the others are equivalent to
-	SDWORD			numEquiv;	// number of equivalent types
+	unsigned int		numEquiv;	// number of equivalent types
 	INTERP_TYPE		aEquivTypes[INTERP_MAXEQUIV]; // the equivalent types
 } TYPE_EQUIV;
 

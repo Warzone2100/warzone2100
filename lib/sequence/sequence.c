@@ -251,7 +251,7 @@ static void Allocate_videoFrame(void)
 // main routine to display video on screen.
 static void video_write(bool update)
 {
-	int x = 0, y = 0;
+	unsigned int x = 0, y = 0;
 	static bool unsupportedExtention = false;
 	yuv_buffer yuv;
 
@@ -297,7 +297,7 @@ static void video_write(bool update)
 			}
 		}
 
-		if (backDropTexture2 != ~0)
+		if (backDropTexture2 != (GLuint)~0)
 		{
 			glDeleteTextures(1, &backDropTexture2);
 		}

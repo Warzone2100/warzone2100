@@ -49,7 +49,7 @@
 static GLubyte *aColour = NULL;
 static GLfloat *aTexCoord = NULL;
 static GLfloat *aVertex = NULL;
-static GLuint allocX = 0, allocY = 0;
+static GLint allocX = 0, allocY = 0;
 static size_t sizeColour = 0, sizeTexCoord = 0, sizeVertex = 0;
 
 extern BOOL drawing_interface;
@@ -218,7 +218,7 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, WZ_DE
 	{
 		Vector2f	texCoords[pie_MAX_VERTICES_PER_POLYGON];
 		Vector3f	vertexCoords[pie_MAX_VERTICES_PER_POLYGON];
-		int		n;
+		unsigned int n;
 		VERTEXID	*index;
 
 		for (n = 0, index = pPolys->pindex;

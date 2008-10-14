@@ -1932,9 +1932,8 @@ static void scriptStoreVarTypes(VAR_SYMBOL *psVar)
 */
 accept_script:			script
 				{
-					unsigned int i;
+					unsigned int i, numArrays;
 					SDWORD			size = 0, debug_i = 0, totalArraySize = 0;
-					SDWORD			numArrays;
 					UDWORD			base;
 					VAR_SYMBOL		*psCurr;
 					TRIGGER_SYMBOL	*psTrig;
@@ -5932,7 +5931,7 @@ BOOL popArguments(INTERP_VAL **ip_temp, SDWORD numParams)
 BOOL scriptAddVariable(VAR_DECL *psStorage, VAR_IDENT_DECL *psVarIdent)
 {
 	VAR_SYMBOL		*psNew;
-	SDWORD			i;
+	unsigned int i;
 	char* ident;
 
 	/* Allocate the memory for the symbol structure plus the symbol name */

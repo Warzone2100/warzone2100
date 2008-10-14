@@ -136,7 +136,7 @@ typedef struct _var_symbol
 	INTERP_TYPE		objType;	// The object type if this is an object variable
 	UDWORD			index;		// Index of the variable in its data space
 	SCRIPT_VARFUNC	get, set;	// Access functions if the variable is stored in an object/in-game
-	SDWORD			dimensions;						// number of dimensions of an array - 0 for normal var
+	UDWORD			dimensions;						// number of dimensions of an array - 0 for normal var
 	SDWORD			elements[VAR_MAX_DIMENSIONS];	// number of elements in an array
 
 	struct _var_symbol *psNext;
@@ -147,7 +147,7 @@ typedef struct _var_symbol
 typedef struct _array_block
 {
 	VAR_SYMBOL		*psArrayVar;
-	SDWORD			dimensions;
+	UDWORD			dimensions;
 
 	UDWORD			size;
 	INTERP_VAL			*pCode;

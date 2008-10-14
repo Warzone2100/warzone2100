@@ -2626,9 +2626,9 @@ static BOOL structPlaceDroid(STRUCTURE *psStructure, DROID_TEMPLATE *psTempl,
 }
 
 
-static BOOL IsFactoryCommanderGroupFull(FACTORY *psFactory)
+static bool IsFactoryCommanderGroupFull(const FACTORY* psFactory)
 {
-	SDWORD DroidsInGroup;
+	unsigned int DroidsInGroup;
 
 	// If we don't have a commander return false (group not full)
 	if (psFactory->psCommander==NULL) return false;
@@ -2640,10 +2640,11 @@ static BOOL IsFactoryCommanderGroupFull(FACTORY *psFactory)
 	}
 
 	// Get the number of droids in the commanders group
-	DroidsInGroup = psFactory->psCommander->psGroup ? grpNumMembers( psFactory->psCommander->psGroup ) : 0;
+	DroidsInGroup = psFactory->psCommander->psGroup ? grpNumMembers(psFactory->psCommander->psGroup) : 0;
 
 	// if the number in group is less than the maximum allowed then return false (group not full)
-	if (DroidsInGroup < cmdDroidMaxGroup( psFactory->psCommander )) return false;
+	if (DroidsInGroup < cmdDroidMaxGroup(psFactory->psCommander))
+		return false;
 
 	// the number in group has reached the maximum
 	return true;
@@ -3215,7 +3216,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 				// also need to check if a command droid's group is full
 
 				// If the factory commanders group is full - return
-				if (IsFactoryCommanderGroupFull(psFactory)==true)
+				if (IsFactoryCommanderGroupFull(psFactory))
 				{
 					return;
 				}
