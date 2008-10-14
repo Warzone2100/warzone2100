@@ -159,12 +159,22 @@ SDWORD	sum;
 	return 0;
 }
 
-// Approximates a square root - never more than 11% out...
-UDWORD dirtySqrt( SDWORD x1, SDWORD y1, SDWORD x2, SDWORD y2)
+/**
+ * Approximates the euclidian distance function, never moret than 11% out.
+ * 
+ * Mathematically equivalent to sqrt(deltaX * deltaX + deltaY * deltaY).
+ *
+ * @Deprecated All uses of this function should be replaced by calls to hypot()
+ *             or hypotf(), the C99 functions. This because this integer
+ *             optimisation is no longer required (due to hardware improvements
+ *             since 1997).
+ */
+unsigned int WZ_DECL_CONST dirtyHypot(int deltaX, int deltaY)
 {
-	const UDWORD xDif = abs(x1 - x2), yDif = abs(y1 - y2);
-
-	return MAX(xDif, yDif) + MIN(xDif, yDif) / 2;
+	deltaX = abs(deltaX);
+	deltaY = abs(deltaY);
+	
+	return MAX(deltaX, deltaY) + MIN(deltaX, deltaY) / 2;
 }
 
 //-----------------------------------------------------------------------------------

@@ -814,7 +814,7 @@ SDWORD GetBaseDefendLocIndex(SDWORD x, SDWORD y, SDWORD nPlayer)
 		if((baseDefendLocation[nPlayer][i][0] > 0) && (baseDefendLocation[nPlayer][i][1] > 0))		//if this one initialized
 		{
 			//check if very close to an already stored location
-			if(dirtySqrt(x,y,baseDefendLocation[nPlayer][i][0],baseDefendLocation[nPlayer][i][1]) < range)
+			if (dirtyHypot(x - baseDefendLocation[nPlayer][i][0], y - baseDefendLocation[nPlayer][i][1]) < range)
 			{
 				return i;								//end here
 			}
@@ -965,7 +965,7 @@ SDWORD GetOilDefendLocIndex(SDWORD x, SDWORD y, SDWORD nPlayer)
 		if((oilDefendLocation[nPlayer][i][0] > 0) && (oilDefendLocation[nPlayer][i][1] > 0))		//if this one initialized
 		{
 			//check if very close to an already stored location
-			if(dirtySqrt(x,y,oilDefendLocation[nPlayer][i][0],oilDefendLocation[nPlayer][i][1]) < range)
+			if (dirtyHypot(x - oilDefendLocation[nPlayer][i][0], y - oilDefendLocation[nPlayer][i][1]) < range)
 			{
 				return i;								//end here
 			}

@@ -1919,7 +1919,7 @@ static BOOL defenseLocation(BOOL variantB)
 			gX = (psGate->x1 + psGate->x2)/2;
 			gY = (psGate->y1 + psGate->y2)/2;
 			/* Estimate the distance to it */
-			dist = dirtySqrt(x,y,gX,gY);
+			dist = dirtyHypot(x - gX, y - gY);
 			/* Is it best we've found? */
 			if(dist<nearestSoFar && dist<30)
 			{

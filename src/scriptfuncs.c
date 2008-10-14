@@ -4965,7 +4965,7 @@ BOOL scrDistanceTwoPts( void )
 	}
 
 	/* Approximate the distance */
-	scrFunctionResult.v.ival = (SDWORD)dirtySqrt(x1,y1,x2,y2);
+	scrFunctionResult.v.ival = dirtyHypot(x1 - x2, y1 - y2);
 	if(!stackPushResult(VAL_INT, &scrFunctionResult))
 	{
 		ASSERT( false,"SCRIPT : Distance between two points - cannot return scrFunctionResult" );
@@ -5189,7 +5189,7 @@ BOOL scrGetNearestGateway( void )
 		gY = (psGateway->y1 + psGateway->y2)/2;
 
 		/* Estimate the distance to it */
-		dist = dirtySqrt(x,y,gX,gY);
+		dist = dirtyHypot(x - gX, y - gY);
 
 		/* Is it best we've found? */
 		if(dist<nearestSoFar)
@@ -7265,7 +7265,7 @@ BOOL ThreatInRange(SDWORD player, SDWORD range, SDWORD rangeX, SDWORD rangeY, BO
 						case REF_REARM_PAD:
 
 						if (range < 0
-						 || world_coord(dirtySqrt(tx, ty, map_coord(psStruct->pos.x), map_coord(psStruct->pos.y))) < range)	//enemy in range
+						 || world_coord(dirtyHypot(tx - map_coord(psStruct->pos.x), ty - map_coord(psStruct->pos.y))) < range)	//enemy in range
 						{
 							return true;
 						}
@@ -7293,7 +7293,7 @@ BOOL ThreatInRange(SDWORD player, SDWORD range, SDWORD rangeX, SDWORD rangeY, BO
 				}
 
 				if (range < 0
-				 || world_coord(dirtySqrt(tx, ty , map_coord(psDroid->pos.x), map_coord(psDroid->pos.y))) < range)	//enemy in range
+				 || world_coord(dirtyHypot(tx - map_coord(psDroid->pos.x), ty - map_coord(psDroid->pos.y))) < range)	//enemy in range
 				{
 					return true;
 				}
@@ -7349,10 +7349,10 @@ BOOL scrFogTileInRange(void)
 		  	{
 				//within base range
 				if (wRange <= 0
-				 || world_coord(dirtySqrt(tRangeX, tRangeY, i, j)) < wRange)		//dist in world units between baseX/baseY and the tile
+				 || world_coord(dirtyHypot(tRangeX - i, tRangeY - j)) < wRange)		//dist in world units between baseX/baseY and the tile
 				{
 					//calc dist between this tile and looker
-					wDist = world_coord(dirtySqrt(tx, ty, i, j));
+					wDist = world_coord(dirtyHypot(tx - i, ty - j));
 
 					//closer than last one?
 					if(wDist < wBestDist)
@@ -7440,8 +7440,8 @@ BOOL scrMapRevealedInRange(void)
 			if(abs(tRangeX-i) < tRange && abs(tRangeY-j) < tRange)
 			{
 				//within range
-				if ((world_coord(dirtySqrt(tRangeX, tRangeY, i, j)) < wRange) && 		//dist in world units between x/y and the tile
-					TEST_TILE_VISIBLE( player,mapTile(i,j) ))		//not visible
+				if (world_coord(dirtyHypot(tRangeX - i, tRangeY - j)) < wRange 		//dist in world units between x/y and the tile
+				 && TEST_TILE_VISIBLE(player, mapTile(i, j)))		//not visible
 				{
 					scrFunctionResult.v.bval = true;
 					if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
@@ -7915,7 +7915,8 @@ static UDWORD costOrAmountInRange(SDWORD player, SDWORD lookingPlayer, SDWORD ra
 				continue;
 			}
 
-			if((range < 0) || (dirtySqrt(rangeX, rangeY , psDroid->pos.x, psDroid->pos.y) < range))	//enemy in range
+			if (range < 0
+			 || dirtyHypot(rangeX - psDroid->pos.x, rangeY - psDroid->pos.y) < range)	//enemy in range
 			{
 				if (justCount)
 				{
@@ -7966,7 +7967,7 @@ UDWORD numPlayerWeapStructsInRange(SDWORD player, SDWORD lookingPlayer, SDWORD r
 				if(!bFinished || psStruct->status == SS_BUILT)
 				{
 					if (range < 0
-					 || world_coord(dirtySqrt(tx, ty, map_coord(psStruct->pos.x), map_coord(psStruct->pos.y))) < range)	//enemy in range
+					 || world_coord(dirtyHypot(tx - map_coord(psStruct->pos.x), ty - map_coord(psStruct->pos.y))) < range)	//enemy in range
 					{
 						numStructs++;
 					}
@@ -7992,17 +7993,16 @@ UDWORD playerWeapStructsCostInRange(SDWORD player, SDWORD lookingPlayer, SDWORD 
 	//check structures
 	for(psStruct = apsStructLists[player]; psStruct; psStruct=psStruct->psNext)
 	{
-		if(psStruct->visible[lookingPlayer])	//if can see it
+		if (psStruct->visible[lookingPlayer]	//if can see it
+		 && objHasWeapon((BASE_OBJECT *) psStruct))
 		{
-			if(objHasWeapon((BASE_OBJECT *) psStruct))
+			if (!bFinished
+			 || psStruct->status == SS_BUILT)
 			{
-				if(!bFinished || psStruct->status == SS_BUILT)
+				if (range < 0
+				 || world_coord(dirtyHypot(tx - map_coord(psStruct->pos.x), ty - map_coord(psStruct->pos.y))) < range)	//enemy in range
 				{
-					if((range < 0) || ((dirtySqrt(tx, ty, psStruct->pos.x >> TILE_SHIFT, psStruct->pos.y >> TILE_SHIFT)
-						<< TILE_SHIFT) < range))	//enemy in range
-					{
-						structsCost += structPowerToBuild(psStruct);
-					}
+					structsCost += structPowerToBuild(psStruct);
 				}
 			}
 		}
@@ -8297,7 +8297,7 @@ UDWORD numEnemyObjInRange(SDWORD player, SDWORD range, SDWORD rangeX, SDWORD ran
 				if(!bFinished || psStruct->status == SS_BUILT)
 				{
 					if (range < 0
-					 || world_coord(dirtySqrt(tx, ty, map_coord(psStruct->pos.x), map_coord(psStruct->pos.y))) < range)	//enemy in range
+					 || world_coord(dirtyHypot(tx - map_coord(psStruct->pos.x), ty - map_coord(psStruct->pos.y))) < range)	//enemy in range
 					{
 						numEnemies++;
 					}
@@ -8317,7 +8317,7 @@ UDWORD numEnemyObjInRange(SDWORD player, SDWORD range, SDWORD rangeX, SDWORD ran
 				}
 
 				if (range < 0
-				 || world_coord(dirtySqrt(tx, ty , map_coord(psDroid->pos.x), map_coord(psDroid->pos.y))) < range)	//enemy in range
+				 || world_coord(dirtyHypot(tx - map_coord(psDroid->pos.x), ty - map_coord(psDroid->pos.y))) < range)	//enemy in range
 				{
 					numEnemies++;
 				}
@@ -8832,7 +8832,7 @@ BOOL scrGetClosestEnemy(void)
 					continue;
 				}
 
-				dist = world_coord(dirtySqrt(tx, ty , map_coord(psDroid->pos.x), map_coord(psDroid->pos.y)));
+				dist = world_coord(dirtyHypot(tx - map_coord(psDroid->pos.x), ty - map_coord(psDroid->pos.y)));
 				if(dist < bestDist)
 				{
 					if((range < 0) || (dist < range))	//enemy in range
@@ -8857,7 +8857,7 @@ BOOL scrGetClosestEnemy(void)
 					continue;
 				}
 
-				dist = world_coord(dirtySqrt(tx, ty, map_coord(psStruct->pos.x), map_coord(psStruct->pos.y)));
+				dist = world_coord(dirtyHypot(tx - map_coord(psStruct->pos.x), ty - map_coord(psStruct->pos.y)));
 				if(dist < bestDist)
 				{
 					if((range < 0) || (dist < range))	//in range
@@ -9211,7 +9211,7 @@ BOOL scrGetClosestEnemyDroidByType(void)
 					continue;
 				}
 
-				dist = world_coord(dirtySqrt(tx, ty , map_coord(psDroid->pos.x), map_coord(psDroid->pos.y)));
+				dist = world_coord(dirtyHypot(tx - map_coord(psDroid->pos.x), ty - map_coord(psDroid->pos.y)));
 				if(dist < bestDist)
 				{
 					if(dist < range)	//enemy in range
@@ -9293,7 +9293,7 @@ BOOL scrGetClosestEnemyStructByType(void)
 					continue;
 				}
 
-				dist = world_coord(dirtySqrt(tx, ty, map_coord(psStruct->pos.x), map_coord(psStruct->pos.y)));
+				dist = world_coord(dirtyHypot(tx - map_coord(psStruct->pos.x), ty - map_coord(psStruct->pos.y)));
 				if(dist < bestDist)
 				{
 					if((range < 0) || (dist < range))	//in range or no range check
@@ -9353,7 +9353,7 @@ BOOL scrCirclePerimPoint(void)
 	tempx = (float)(*grx - basex);	//x len (signed!)
 	tempy = (float)(*gry - basey);
 
-	dist = dirtySqrt(basex,basey,*grx,*gry);		//len
+	dist = dirtyHypot(basex - *grx, basey - *gry);		//len
 
 	factor =  (float)((float)dist / (float)radius);			//by what factor is dist > radius?
 
@@ -9474,7 +9474,7 @@ BOOL scrNumAAinRange(void)
 				(asWeaponStats[psStruct->asWeaps[0].nStat].surfaceToAir == SHOOT_IN_AIR) )
 			{
 				if (range < 0
-				 || world_coord(dirtySqrt(tx, ty, map_coord(psStruct->pos.x), map_coord(psStruct->pos.y))) < range)	//enemy in range
+				 || world_coord(dirtyHypot(tx - map_coord(psStruct->pos.x), ty - map_coord(psStruct->pos.y))) < range)	//enemy in range
 				{
 					numFound++;
 				}
@@ -10358,7 +10358,7 @@ BOOL scrClosestDamagedGroupDroid(void)
 	{
 		if((psDroid->body * 100 / psDroid->originalBody) <= healthLeft)	//in%
 		{
-			wDist = map_coord(dirtySqrt(psDroid->pos.x, psDroid->pos.y, x, y));	//in tiles
+			wDist = map_coord(dirtyHypot(psDroid->pos.x - x, psDroid->pos.y - y));	//in tiles
 			if(wDist < wBestDist)
 			{
 				if((maxRepairedBy < 0) || (getNumRepairedBy(psDroid, player) <= maxRepairedBy))
