@@ -5742,32 +5742,26 @@ void buildingComplete(STRUCTURE *psBuilding)
 
 
 /*for a given structure, return a pointer to its module stat */
-STRUCTURE_STATS* getModuleStat(STRUCTURE *psStruct)
+STRUCTURE_STATS* getModuleStat(const STRUCTURE* psStruct)
 {
-	STRUCTURE_STATS		*psStat;
+	ASSERT(psStruct != NULL, "Invalid structure pointer");
 
-	ASSERT( psStruct != NULL,
-		"getModuleStat: Invalid structure pointer" );
-
-	psStat = NULL;
 	switch (psStruct->pStructureType->type)
 	{
-	case REF_POWER_GEN:
-		psStat = &asStructureStats[powerModuleStat];
-		break;
-	case REF_FACTORY:
-	case REF_VTOL_FACTORY:
-		psStat = &asStructureStats[factoryModuleStat];
-		break;
-	case REF_RESEARCH:
-		psStat = &asStructureStats[researchModuleStat];
-		break;
-	default:
-		//no other structures can have modules attached
-		break;
-	}
+		case REF_POWER_GEN:
+			return &asStructureStats[powerModuleStat];
 
-	return psStat;
+		case REF_FACTORY:
+		case REF_VTOL_FACTORY:
+			return &asStructureStats[factoryModuleStat];
+
+		case REF_RESEARCH:
+			return &asStructureStats[researchModuleStat];
+
+		default:
+			//no other structures can have modules attached
+			return NULL;
+	}
 }
 
 /* count the artillery droids assigned to a structure (only makes sence by sensor towers and headquarters) */
@@ -7709,7 +7703,7 @@ BOOL checkStructureStats(void)
 
 
 /*returns the power cost to build this structure*/
-UDWORD  structPowerToBuild(STRUCTURE *psStruct)
+UDWORD structPowerToBuild(const STRUCTURE* psStruct)
 {
 	STRUCTURE_STATS     *psStat;
 	UBYTE               capacity;
@@ -7723,10 +7717,10 @@ UDWORD  structPowerToBuild(STRUCTURE *psStruct)
 		switch(psStruct->pStructureType->type)
 		{
 		case REF_POWER_GEN:
-			capacity = (UBYTE)psStruct->pFunctionality->powerGenerator.capacity;
+			capacity = psStruct->pFunctionality->powerGenerator.capacity;
 			break;
 		case REF_RESEARCH:
-			capacity = (UBYTE)psStruct->pFunctionality->researchFacility.capacity;
+			capacity = psStruct->pFunctionality->researchFacility.capacity;
 			break;
 		case REF_FACTORY:
 		case REF_VTOL_FACTORY:

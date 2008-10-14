@@ -239,7 +239,7 @@ extern void assignFactoryCommandDroid(STRUCTURE *psStruct, struct DROID *psComma
 void clearCommandDroidFactory(DROID *psDroid);
 
 /*for a given structure, return a pointer to its module stat */
-extern STRUCTURE_STATS* getModuleStat(STRUCTURE *psStruct);
+extern STRUCTURE_STATS* getModuleStat(const STRUCTURE* psStruct);
 
 /*called when a Res extractor is destroyed or runs out of power or is disconnected
 adjusts the owning Power Gen so that it can link to a different Res Extractor if one
@@ -389,7 +389,7 @@ all StructureStats parts have been loaded*/
 extern BOOL checkStructureStats(void);
 
 /*returns the power cost to build this structure*/
-extern UDWORD  structPowerToBuild(STRUCTURE *psStruct);
+extern UDWORD structPowerToBuild(const STRUCTURE* psStruct);
 
 extern UDWORD getMaxDroids(UDWORD PlayerNumber);
 
