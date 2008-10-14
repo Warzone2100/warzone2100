@@ -154,7 +154,7 @@ static std::string getProgramPath(const char* programCommand)
 	}
 #endif
 
-	std::string programPath = &buf[0];
+	std::string programPath(buf.begin(), buf.end());
 
 	if (!programPath.empty())
 	{
