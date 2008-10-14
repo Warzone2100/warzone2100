@@ -152,7 +152,6 @@ void		runGameFind				(void);
 void		startGameFind			(void);
 
 // Connection option functions
-static BOOL	OptionsInet				(UDWORD);
 static void addConnections			(UDWORD);
 void		runConnectionScreen		(void);
 BOOL		startConnectionScreen	(void);
@@ -429,7 +428,7 @@ static void decideWRF(void)
 // ////////////////////////////////////////////////////////////////////////////
 // Connection Options Screen.
 
-static BOOL OptionsInet(UDWORD parentID)			//internet options
+static BOOL OptionsInet(void)			//internet options
 {
 	W_EDBINIT		sEdInit;
 	W_FORMINIT		sFormInit;
@@ -556,7 +555,7 @@ void runConnectionScreen(void )
 			changeTitleMode(GAMEFIND);
 			break;
 		case CON_TYPESID_START+1: // IP button
-			OptionsInet(id);
+			OptionsInet();
 			break;
 		case CON_IP: // ip entered
 			sstrcpy(addr, widgGetString(psConScreen, CON_IP));
@@ -2078,8 +2077,8 @@ static void processMultiopWidgets(UDWORD id)
 	if((id >= MULTIOP_TEAMCHOOSER) && (id <= MULTIOP_TEAMCHOOSER_END))
 	{
 		ASSERT(teamChooserUp() >= 0, "processMultiopWidgets: teamChooserUp() < 0");
-		ASSERT((id - MULTIOP_TEAMCHOOSER) >= 0
-			&& (id - MULTIOP_TEAMCHOOSER) < MAX_PLAYERS, "processMultiopWidgets: wrong id - MULTIOP_TEAMCHOOSER value (%d)", id - MULTIOP_TEAMCHOOSER);
+		ASSERT(id >= MULTIOP_TEAMCHOOSER
+		    && (id - MULTIOP_TEAMCHOOSER) < MAX_PLAYERS, "processMultiopWidgets: wrong id - MULTIOP_TEAMCHOOSER value (%d)", id - MULTIOP_TEAMCHOOSER);
 
 		resetReadyStatus(false);		// will reset only locally if not a host
 
@@ -2613,7 +2612,7 @@ void displayRemoteGame(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGH
 	BOOL Down = false;
 	UDWORD	i = psWidget->UserData;
 	char	tmp[8];
-	UDWORD png;
+	unsigned int ping;
 
 	// collate info
 	if( ((W_BUTTON*)psWidget)->state & (WBUTS_HILITE))
@@ -2645,15 +2644,16 @@ void displayRemoteGame(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGH
 	}
 
 	// ping rating
-	png = NETgetGameFlagsUnjoined(i,2);
-	if(png >= PING_LO && png < PING_MED)
+	ping = NETgetGameFlagsUnjoined(i, 2);
+	if (ping >= PING_LO && ping < PING_MED)
 	{
 		iV_DrawImage(FrontImages,IMAGE_LAMP_GREEN,x+70,y+26);
 	}
-	else if(png >= PING_MED && png < PING_HI)
+	else if (ping >= PING_MED && ping < PING_HI)
 	{
 		iV_DrawImage(FrontImages,IMAGE_LAMP_AMBER,x+70,y+26);
-	}else
+	}
+	else
 	{
 		iV_DrawImage(FrontImages,IMAGE_LAMP_RED,x+70,y+26);
 	}

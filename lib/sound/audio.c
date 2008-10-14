@@ -1117,7 +1117,7 @@ void audio_RemoveObj(const void* psObj)
 		debug(LOG_MEMORY, "audio_RemoveObj: ***Warning! psOBJ %p was found %u times in the list of playing audio samples", psObj, count);
 }
 
-static BOOL dummyCB(void *nada)
+static BOOL dummyCB(WZ_DECL_UNUSED void* dummy)
 {
 	return true;
 }

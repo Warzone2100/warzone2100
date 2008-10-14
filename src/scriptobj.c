@@ -48,6 +48,9 @@
 #include "scriptvals.h"
 #include "research.h"
 
+// Marks a NULL pointer for the script value save/load routines
+static const int UNALLOCATED_OBJECT = -1;
+
 static INTERP_VAL	scrFunctionResult;	//function return value to be pushed to stack
 
 // Get values from a base object
@@ -761,9 +764,6 @@ BOOL scrValDefSave(INTERP_VAL *psVal, char *pBuffer, UDWORD *pSize)
 	RESEARCH	*psResearch;
 	char		*pPos;
 	DROID		*psCDroid;
-	SDWORD		members;
-	BOOL		bObjectDefined;
-	DROID_GROUP	*psGroup;
 #ifdef _DEBUG
 	BASE_OBJECT	*psObj;
 #endif
@@ -908,16 +908,9 @@ BOOL scrValDefSave(INTERP_VAL *psVal, char *pBuffer, UDWORD *pSize)
 		}
 		break;
 	case ST_GROUP:
-		bObjectDefined = (psVal->v.oval != NULL);
-
-		if (bObjectDefined)
-		{
-			members = grpNumMembers((DROID_GROUP *)psVal->v.oval);
-		}
-		else
-		{
-			members = UNALLOCATED_OBJECT;
-		}
+	{
+		DROID_GROUP* const psGroup = (DROID_GROUP *)psVal->v.oval;
+		const int members = psGroup ? grpNumMembers(psGroup) : UNALLOCATED_OBJECT;
 
 		if (pBuffer)
 		{
@@ -927,10 +920,8 @@ BOOL scrValDefSave(INTERP_VAL *psVal, char *pBuffer, UDWORD *pSize)
 			endian_sdword((SDWORD*)pPos);
 			pPos += sizeof(SDWORD);
 
-			if(bObjectDefined)
+			if (psGroup)
 			{
-				psGroup = (DROID_GROUP *)psVal->v.oval;
-
 				// store the run data
 				*((SDWORD *)pPos) = psGroup->sRunData.sPos.x;
 				endian_sdword((SDWORD*)pPos);
@@ -949,7 +940,7 @@ BOOL scrValDefSave(INTERP_VAL *psVal, char *pBuffer, UDWORD *pSize)
 				pPos += sizeof(SDWORD);
 
 				// now store the droids
-				for(psCDroid=((DROID_GROUP *)psVal->v.oval)->psList; psCDroid; psCDroid=psCDroid->psGrpNext)
+				for (psCDroid = psGroup->psList; psCDroid; psCDroid = psCDroid->psGrpNext)
 				{
 					checkValidId(psCDroid->id);
 
@@ -961,7 +952,7 @@ BOOL scrValDefSave(INTERP_VAL *psVal, char *pBuffer, UDWORD *pSize)
 			}
 		}
 
-		if(!bObjectDefined)
+		if (!psGroup)
 		{
 			*pSize = sizeof(SDWORD);
 		}
@@ -970,6 +961,7 @@ BOOL scrValDefSave(INTERP_VAL *psVal, char *pBuffer, UDWORD *pSize)
 			*pSize = sizeof(SDWORD) + sizeof(UDWORD) * members + sizeof(SDWORD) * 5;	// members + runData
 		}
 		break;
+	}
 	case ST_SOUND:
 		if(psVal->v.ival)
 		{

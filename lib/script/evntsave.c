@@ -506,7 +506,7 @@ static BOOL eventSaveTriggerList(ACTIVE_TRIGGER *psList, char *pBuffer, UDWORD *
 
 
 // load a list of triggers
-static BOOL eventLoadTriggerList(const SDWORD version, char *pBuffer, UDWORD *pSize)
+static BOOL eventLoadTriggerList(WZ_DECL_UNUSED const SDWORD version, char *pBuffer, UDWORD *pSize)
 {
 	UDWORD				size, event, offset, time;
 	char				*pPos;
