@@ -105,23 +105,13 @@ bool hBoxDoLayoutImpl(widget *self)
 	int i, temp;
 	const int numChildren = vectorSize(self->children);
 	const size minSize = widgetGetMinSize(self);
-	sizeInfo *childSizeInfo = malloc(sizeof(sizeInfo) * numChildren);
+	sizeInfo *childSizeInfo = alloca(sizeof(sizeInfo) * numChildren);
 	bool maxedOut = false;
-	
-	// Make sure malloc did not return NULL
-	if (childSizeInfo == NULL)
-	{
-		// We're screwed
-		return false;
-	}
 	
 	// First make sure we are large enough to hold all of our children
 	if (self->size.x < minSize.x
 	 || self->size.y < minSize.y)
-	{
-		// Release the childSizeInfo array
-		free(childSizeInfo);
-		
+	{		
 		return false;
 	}
 	
@@ -196,9 +186,6 @@ bool hBoxDoLayoutImpl(widget *self)
 		
 		temp += child->size.x;
 	}
-	
-	// We're done!
-	free(childSizeInfo);
 	
 	return true;
 }
