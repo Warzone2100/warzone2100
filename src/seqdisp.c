@@ -33,6 +33,7 @@
 
 #include "lib/framework/file.h"
 #include "lib/ivis_common/rendmode.h"
+#include "lib/ivis_common/piemode.h"
 #include "lib/ivis_opengl/screen.h"
 #include "lib/sequence/sequence.h"
 #include "lib/sound/audio.h"

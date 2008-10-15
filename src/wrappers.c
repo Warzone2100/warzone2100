@@ -50,7 +50,6 @@
 #include "keymap.h"
 #include "mission.h"
 #include "keyedit.h"
-#include "seqdisp.h"
 // FIXME Direct iVis implementation include!
 #include "lib/ivis_common/rendmode.h"
 #include "lib/framework/cursors.h"

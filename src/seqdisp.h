@@ -24,8 +24,7 @@
 #ifndef __INCLUDED_SRC_SEQDISP_H__
 #define __INCLUDED_SRC_SEQDISP_H__
 
-			// ffs js (bastard)
-#include "lib/ivis_common/piemode.h"
+#include "lib/framework/types.h"
 
 /***************************************************************************/
 /*
