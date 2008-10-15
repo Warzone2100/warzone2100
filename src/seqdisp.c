@@ -462,8 +462,7 @@ BOOL seq_AddTextForVideo(const char* pText, SDWORD xOffset, SDWORD yOffset, SDWO
 
 	iV_SetFont(font_regular);
 
-	ASSERT( aSeqList[currentSeq].currentText < MAX_TEXT_OVERLAYS,
-		"seq_AddTextForVideo: too many text lines" );
+	ASSERT(aSeqList[currentSeq].currentText < MAX_TEXT_OVERLAYS, "too many text lines");
 
 	sourceLength = strlen(pText);
 	currentLength = sourceLength;
@@ -662,7 +661,8 @@ void seq_AddSeqToList(const char *pSeqName, const char *pAudioName, const char *
 	aSeqList[currentSeq].bSeqLoop = bLoop;
 	if (pTextName != NULL)
 	{
-		seq_AddTextFromFile(pTextName, false);//SEQ_TEXT_POSITION);//ordinary text not justified
+		// Ordinary text shouldn't be justified
+		seq_AddTextFromFile(pTextName, SEQ_TEXT_POSITION);
 	}
 
 	if (bSeqSubtitles)
@@ -675,7 +675,8 @@ void seq_AddSeqToList(const char *pSeqName, const char *pAudioName, const char *
 		sstrcpy(aSubtitleName, pSeqName);
 		aSubtitleName[strLen - 4] = 0;
 		sstrcat(aSubtitleName, ".txt");
-		seq_AddTextFromFile(aSubtitleName, true);//SEQ_TEXT_JUSTIFY);//subtitles centre justified
+		// Subtitles should be center justified
+		seq_AddTextFromFile(aSubtitleName, SEQ_TEXT_JUSTIFY);
 	}
 }
 
