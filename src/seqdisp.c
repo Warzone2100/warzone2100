@@ -306,7 +306,7 @@ BOOL seq_UpdateFullScreenVideo(int *pbClear)
 	{
 		if (aSeqList[currentPlaySeq].aText[i].pText[0] != '\0')
 		{
-			if (aSeqList[currentPlaySeq].aText[i].bSubtitle == true)
+			if (aSeqList[currentPlaySeq].aText[i].bSubtitle)
 			{
 				if ((realFrame >= aSeqList[currentPlaySeq].aText[i].startFrame) && (realFrame <= aSeqList[currentPlaySeq].aText[i].endFrame))
 				{
@@ -452,7 +452,7 @@ BOOL seq_StopFullScreenVideo(void)
 #define MIN_JUSTIFICATION 40
 
 // add a string at x,y or add string below last line if x and y are 0
-BOOL seq_AddTextForVideo(const char* pText, SDWORD xOffset, SDWORD yOffset, SDWORD startFrame, SDWORD endFrame, SDWORD bJustify)
+BOOL seq_AddTextForVideo(const char* pText, SDWORD xOffset, SDWORD yOffset, SDWORD startFrame, SDWORD endFrame, SEQ_TEXT_POSITIONING textJustification)
 {
 	SDWORD sourceLength, currentLength;
 	char* currentText;
@@ -512,15 +512,18 @@ BOOL seq_AddTextForVideo(const char* pText, SDWORD xOffset, SDWORD yOffset, SDWO
 	}
 	lastX = aSeqList[currentSeq].aText[aSeqList[currentSeq].currentText].x;
 
-	if ((bJustify) && (currentLength == sourceLength))
+	if (textJustification
+	 && currentLength == sourceLength)
 	{
 		//justify this text
 		justification = BUFFER_WIDTH - iV_GetTextWidth(currentText);
-		if ((bJustify == SEQ_TEXT_JUSTIFY) && (justification > MIN_JUSTIFICATION))
+		if (textJustification == SEQ_TEXT_JUSTIFY
+		 && justification > MIN_JUSTIFICATION)
 		{
 			aSeqList[currentSeq].aText[aSeqList[currentSeq].currentText].x += (justification/2);
 		}
-		else if ((bJustify == SEQ_TEXT_FOLLOW_ON) && (justification > FOLLOW_ON_JUSTIFICATION))
+		else if (textJustification == SEQ_TEXT_FOLLOW_ON
+		      && justification > FOLLOW_ON_JUSTIFICATION)
 		{
 
 		}
@@ -530,7 +533,7 @@ BOOL seq_AddTextForVideo(const char* pText, SDWORD xOffset, SDWORD yOffset, SDWO
 	//set start and finish times for the objects
 	aSeqList[currentSeq].aText[aSeqList[currentSeq].currentText].startFrame = startFrame;
 	aSeqList[currentSeq].aText[aSeqList[currentSeq].currentText].endFrame = endFrame;
-	aSeqList[currentSeq].aText[aSeqList[currentSeq].currentText].bSubtitle = bJustify;
+	aSeqList[currentSeq].aText[aSeqList[currentSeq].currentText].bSubtitle = textJustification;
 
 	aSeqList[currentSeq].currentText++;
 	if (aSeqList[currentSeq].currentText >= MAX_TEXT_OVERLAYS)
@@ -542,11 +545,11 @@ BOOL seq_AddTextForVideo(const char* pText, SDWORD xOffset, SDWORD yOffset, SDWO
 	if (currentLength < sourceLength)
 	{
 		//RECURSE x= 0 y = 0 for nextLine
-		if (bJustify == SEQ_TEXT_JUSTIFY)
+		if (textJustification == SEQ_TEXT_JUSTIFY)
 		{
-			bJustify = SEQ_TEXT_POSITION;
+			textJustification = SEQ_TEXT_POSITION;
 		}
-		seq_AddTextForVideo(&pText[currentLength + 1], 0, 0, startFrame, endFrame, bJustify);
+		seq_AddTextForVideo(&pText[currentLength + 1], 0, 0, startFrame, endFrame, textJustification);
 	}
 	return true;
 }
@@ -571,7 +574,7 @@ BOOL seq_ClearTextForVideo(void)
 	return true;
 }
 
-static BOOL seq_AddTextFromFile(const char *pTextName, BOOL bJustify)
+static BOOL seq_AddTextFromFile(const char *pTextName, SEQ_TEXT_POSITIONING textJustification)
 {
 	char aTextName[MAX_STR_LENGTH];
 	char *pTextBuffer, *pCurrentLine, *pText;
@@ -616,7 +619,7 @@ static BOOL seq_AddTextFromFile(const char *pTextName, BOOL bJustify)
 				ASSERT( pText != NULL,"seq_AddTextFromFile error parsing text file" );
 				if (pText != NULL)
 				{
-					seq_AddTextForVideo(&pText[1], xOffset, yOffset, startFrame, endFrame, bJustify);
+					seq_AddTextForVideo(&pText[1], xOffset, yOffset, startFrame, endFrame, textJustification);
 				}
 			}
 		}

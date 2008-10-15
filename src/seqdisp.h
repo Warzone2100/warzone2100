@@ -39,9 +39,23 @@
 #define  SEQUENCE_KILL 3//stop
 #define  SEQUENCE_HOLD 4//play once and hold last frame
 
-#define  SEQ_TEXT_POSITION  0//position text
-#define  SEQ_TEXT_FOLLOW_ON 1//justify if less than 3/4 length
-#define  SEQ_TEXT_JUSTIFY   2//justify if less than 520/600
+typedef enum
+{
+	/**
+	 * Position text.
+	 */
+	SEQ_TEXT_POSITION,
+
+	/**
+	 * Justify if less than 3/4 length.
+	 */
+	SEQ_TEXT_FOLLOW_ON,
+
+	/**
+	 * Justify if less than 520/600 length.
+	 */
+	SEQ_TEXT_JUSTIFY,
+} SEQ_TEXT_POSITIONING;
 
 /***************************************************************************/
 /*
@@ -63,7 +77,7 @@ extern BOOL seq_StopFullScreenVideo(void);
 //control
 extern BOOL seq_GetVideoSize(SDWORD* pWidth, SDWORD* pHeight);
 //text
-extern BOOL seq_AddTextForVideo(const char* pText, SDWORD xOffset, SDWORD yOffset, SDWORD startTime, SDWORD endTime, SDWORD bJustify);
+extern BOOL seq_AddTextForVideo(const char* pText, SDWORD xOffset, SDWORD yOffset, SDWORD startTime, SDWORD endTime, SEQ_TEXT_POSITIONING textJustification);
 extern BOOL seq_ClearTextForVideo(void);
 //clear the sequence list
 extern void seq_ClearSeqList(void);
