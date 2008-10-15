@@ -297,11 +297,11 @@ static int xAccess(WZ_DECL_UNUSED sqlite3_vfs* pVfs, const char* zName, int flag
  */
 static int xFullPathname(WZ_DECL_UNUSED sqlite3_vfs* pVfs, const char* zName, int nOut, char* zOut)
 {
+	const unsigned int _nOut = nOut;
 	/* nOut isn't ever negative, because its a buffer length, and the
 	 * comparison below would cause a signed/unsigned comparison warning.
 	 */
 	assert(nOut > 0);
-	const unsigned int _nOut = nOut;
 	return (strlcpy(zOut, zName, _nOut) < _nOut) ? SQLITE_OK : SQLITE_IOERR;
 }
 
@@ -341,11 +341,12 @@ static int xCurrentTime(WZ_DECL_UNUSED sqlite3_vfs* pVfs, WZ_DECL_UNUSED double*
 
 static int xGetLastError(WZ_DECL_UNUSED sqlite3_vfs* pVfs, int nBuf, char* zBuf)
 {
+	const unsigned int _nBuf = nBuf;
 	/* nBuf isn't ever negative, because its a buffer length, and the
 	 * comparison below would cause a signed/unsigned comparison warning.
 	 */
 	assert(nBuf > 0);
-	const unsigned int _nBuf = nBuf;
+
 	return (strlcpy(zBuf, PHYSFS_getLastError(), _nBuf) < _nBuf) ? SQLITE_OK : SQLITE_IOERR;
 }
 
