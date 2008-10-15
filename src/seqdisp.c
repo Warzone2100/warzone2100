@@ -449,17 +449,13 @@ BOOL seq_StopFullScreenVideo(void)
 	return true;
 }
 
-#define FOLLOW_ON_JUSTIFICATION 160		// not really used for anything
-#define MIN_JUSTIFICATION 40
-
 // add a string at x,y or add string below last line if x and y are 0
 BOOL seq_AddTextForVideo(const char* pText, SDWORD xOffset, SDWORD yOffset, SDWORD startFrame, SDWORD endFrame, SEQ_TEXT_POSITIONING textJustification)
 {
 	SDWORD sourceLength, currentLength;
 	char* currentText;
-	SDWORD justification;
 	static SDWORD lastX;
-	int BUFFER_WIDTH = pie_GetVideoBufferWidth();
+	const unsigned int BUFFER_WIDTH = pie_GetVideoBufferWidth();
 
 	iV_SetFont(font_regular);
 
@@ -486,7 +482,7 @@ BOOL seq_AddTextForVideo(const char* pText, SDWORD xOffset, SDWORD yOffset, SDWO
 
 	//check the string is shortenough to print
 	//if not take a word of the end and try again
-	while(iV_GetTextWidth(currentText) > BUFFER_WIDTH)
+	while (iV_GetTextWidth(currentText) > BUFFER_WIDTH)
 	{
 		currentLength--;
 		while((pText[currentLength] != ' ') && (currentLength > 0))
@@ -515,12 +511,15 @@ BOOL seq_AddTextForVideo(const char* pText, SDWORD xOffset, SDWORD yOffset, SDWO
 	if (textJustification
 	 && currentLength == sourceLength)
 	{
+		static const int MIN_JUSTIFICATION = 40;
+		static const int FOLLOW_ON_JUSTIFICATION = 160;
 		//justify this text
-		justification = BUFFER_WIDTH - iV_GetTextWidth(currentText);
+		const int justification = BUFFER_WIDTH - iV_GetTextWidth(currentText);
+
 		if (textJustification == SEQ_TEXT_JUSTIFY
 		 && justification > MIN_JUSTIFICATION)
 		{
-			aSeqList[currentSeq].aText[aSeqList[currentSeq].currentText].x += (justification/2);
+			aSeqList[currentSeq].aText[aSeqList[currentSeq].currentText].x += (justification / 2);
 		}
 		else if (textJustification == SEQ_TEXT_FOLLOW_ON
 		      && justification > FOLLOW_ON_JUSTIFICATION)
