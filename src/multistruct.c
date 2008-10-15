@@ -99,7 +99,7 @@ BOOL recvBuildStarted()
 	STRUCTURE_STATS *psStats;
 	DROID			*psDroid;
 	UDWORD			actionX,actionY;
-	int				typeIndex;
+	unsigned int typeIndex;
 	uint8_t			player;
 	uint16_t		x, y, z;
 	int32_t			order;

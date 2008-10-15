@@ -86,7 +86,7 @@ static bool getTileHighestCallback(Vector3i pos, int distSq, void* data)
 
 	if (clipXY(pos.x, pos.y))
 	{
-		unsigned int height = map_Height(pos.x, pos.y), dist = sqrtf(distSq);
+		int height = map_Height(pos.x, pos.y), dist = sqrtf(distSq);
 		if (height > help->highestHeight && dist >= help->minDist)
 		{
 			int heightDif = height - help->origHeight;

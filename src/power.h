@@ -56,7 +56,7 @@ extern BOOL resetPlayerPower(UDWORD player, STRUCTURE *psStruct);
 extern void releasePlayerPower(void);
 
 /** Check the available power. */
-extern BOOL checkPower(UDWORD player, UDWORD quantity, BOOL playAudio);
+extern BOOL checkPower(UDWORD player, UDWORD quantity);
 
 /** Subtract the power required. */
 extern BOOL usePower(UDWORD player, UDWORD quantity);

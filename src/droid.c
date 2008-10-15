@@ -840,7 +840,7 @@ void droidUpdate(DROID *psDroid)
 	// May need power
 	if (droidUsesPower(psDroid))
 	{
-		if (checkPower(psDroid->player, POWER_PER_CYCLE, false))
+		if (checkPower(psDroid->player, POWER_PER_CYCLE))
 		{
 			// Check if this droid is due some power
 			if (getLastPowered((BASE_OBJECT *)psDroid))

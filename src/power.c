@@ -86,7 +86,7 @@ void releasePlayerPower(void)
 }
 
 /*check the current power - if enough return true, else return false */
-BOOL checkPower(UDWORD player, UDWORD quantity, BOOL playAudio)
+BOOL checkPower(UDWORD player, UDWORD quantity)
 {
 	ASSERT(player < MAX_PLAYERS, "checkPower: Bad player");
 

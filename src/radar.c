@@ -485,16 +485,13 @@ static SDWORD getDistanceAdjust( void )
 
 static SDWORD getLengthAdjust( void )
 {
-	SDWORD	pitch;
-	UDWORD	lookingDown,lookingFar;
-	SDWORD	dif;
-
-	pitch = 360 - (player.r.x/DEG_1);
+	const int pitch = 360 - (player.r.x/DEG_1);
 
 	// Max at
-	lookingDown = (0 - MIN_PLAYER_X_ANGLE);
-	lookingFar = (0 - MAX_PLAYER_X_ANGLE);
-	dif = MAX(pitch - lookingFar, 0);
+	const int lookingDown = (0 - MIN_PLAYER_X_ANGLE);
+	const int lookingFar = (0 - MAX_PLAYER_X_ANGLE);
+
+	int dif = MAX(pitch - lookingFar, 0);
 	if (dif > (lookingDown - lookingFar)) 
 	{
 		dif = (lookingDown - lookingFar);

@@ -1480,7 +1480,7 @@ static void intProcessEditStats(UDWORD id)
 		if (psPositionStats->ref >= REF_STRUCTURE_START &&
 		    psPositionStats->ref < REF_STRUCTURE_START + REF_RANGE)
 		{
-			if (!checkPower(selectedPlayer, ((STRUCTURE_STATS*)psPositionStats)->powerToBuild, true))
+			if (!checkPower(selectedPlayer, ((STRUCTURE_STATS*)psPositionStats)->powerToBuild))
 			{
 				return;
 			}
@@ -1490,7 +1490,7 @@ static void intProcessEditStats(UDWORD id)
 		if (psPositionStats->ref >= REF_TEMPLATE_START &&
 		    psPositionStats->ref < REF_TEMPLATE_START + REF_RANGE)
 		{
-			if (!checkPower(selectedPlayer, ((DROID_TEMPLATE*)psPositionStats)->powerPoints, true))
+			if (!checkPower(selectedPlayer, ((DROID_TEMPLATE*)psPositionStats)->powerPoints))
 			{
 				return;
 			}
@@ -6351,8 +6351,7 @@ static BOOL setManufactureStats(BASE_OBJECT *psObj, BASE_STATS *psStats)
 		//check if its because there isn't enough power - warning if it is
 		if (psStats)
 		{
-			(void)checkPower(selectedPlayer, ((DROID_TEMPLATE *)psStats)->
-				powerPoints, true);
+			(void)checkPower(selectedPlayer, ((DROID_TEMPLATE *)psStats)->powerPoints);
 		}
 		return false;
 	}
@@ -6368,7 +6367,7 @@ static BOOL setManufactureStats(BASE_OBJECT *psObj, BASE_STATS *psStats)
 		/* check power if factory not on infinte production*/
 		if (ProductionRun != NON_STOP_PRODUCTION)
 		{
-			if (!checkPower(selectedPlayer, ((DROID_TEMPLATE *)psStats)->powerPoints, true))
+			if (!checkPower(selectedPlayer, ((DROID_TEMPLATE *)psStats)->powerPoints))
 			{
 				return false;
 			}

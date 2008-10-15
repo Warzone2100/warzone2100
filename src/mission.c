@@ -757,7 +757,7 @@ void saveMissionData(void)
 					if (inc > 0)
 					{
 						// not accrued enough power, so check if there is enough available
-						if (checkPower(selectedPlayer, inc, false))
+						if (checkPower(selectedPlayer, inc))
 						{
 							// enough - so use it and set to complete
 							usePower(selectedPlayer, inc);

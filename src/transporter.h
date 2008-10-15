@@ -89,7 +89,7 @@ extern DROID * transporterGetScriptCurrent( void );
 //extern BOOL transporterOnMission( void );
 
 /*called when a Transporter has arrived back at the LZ when sending droids to safety*/
-extern void resetTransporter(DROID *psTransporter);
+extern void resetTransporter(void);
 
 /* get time transporter launch button was pressed */
 extern UDWORD transporterGetLaunchTime( void );

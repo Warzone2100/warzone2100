@@ -75,7 +75,7 @@ void targetCloseList(void)
 {
 }
 
-void	targetAdd(BASE_OBJECT *psObj)
+void targetAdd(WZ_DECL_UNUSED BASE_OBJECT* psObj)
 {
 }
 

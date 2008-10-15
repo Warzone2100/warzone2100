@@ -66,7 +66,7 @@ extern char	buildTime[8];
 // dpid == 0 for no new players.
 void sendOptions(uint32_t dest, uint32_t play)
 {
-	int i, j;
+	unsigned int i;
 
 	NETbeginEncode(NET_OPTIONS, NET_ALL_PLAYERS);
 
@@ -112,6 +112,8 @@ void sendOptions(uint32_t dest, uint32_t play)
 	// Same goes for the alliances
 	for (i = 0; i < MAX_PLAYERS; i++)
 	{
+		unsigned int j;
+
 		for (j = 0; j < MAX_PLAYERS; j++)
 		{
 			NETuint8_t(&alliances[i][j]);
@@ -167,7 +169,7 @@ static BOOL checkGameWdg(const char *nm)
 // options for a game. (usually recvd in frontend)
 void recvOptions()
 {
-	int		i, j;
+	unsigned int i;
 	UDWORD	play;
 	UDWORD	newPl;
 
@@ -219,6 +221,8 @@ void recvOptions()
 	// Alliances
 	for (i = 0; i < MAX_PLAYERS; i++)
 	{
+		unsigned int j;
+
 		for (j = 0; j < MAX_PLAYERS; j++)
 		{
 			NETuint8_t(&alliances[i][j]);
@@ -758,7 +762,6 @@ static BOOL campInit(void)
 {
 	UDWORD			player;
 	UBYTE		newPlayerArray[MAX_PLAYERS];
-	UDWORD		i,j,lastAI;
 	SDWORD		newPlayerTeam[MAX_PLAYERS] = {-1,-1,-1,-1,-1,-1,-1,-1};
 
 // if this is from a savegame, stop here!
@@ -777,35 +780,45 @@ static BOOL campInit(void)
 	//Convert skirmish GUI player ids to in-game ids
 	if(game.type == SKIRMISH)
 	{
-		lastAI = 0;		//last used AI slot
+		unsigned int i;
+		unsigned int lastAI = 0; // last used AI slot
+
 		memset(newPlayerArray,1,MAX_PLAYERS * sizeof(newPlayerArray[0]));		//'1' for humans
-		for(i=0;i<MAX_PLAYERS;i++)
+		for(i = 0; i < MAX_PLAYERS; ++i)
 		{
 			if(game.skDiff[i] < UBYTE_MAX )		//slot with enabled or disabled AI
 			{
+				unsigned int player;
+
 				//find first unused slot
-				for(j=lastAI;j<MAX_PLAYERS && isHumanPlayer(j);j++);	//skip humans
+				for (player = lastAI;
+				     player < MAX_PLAYERS && isHumanPlayer(player); // skip humans
+				     ++player);
 
-				ASSERT(j<MAX_PLAYERS,"campInit: couldn't find free slot while assigning AI %d , lastAI=%d", i, lastAI);
+				ASSERT(player < MAX_PLAYERS, "couldn't find free slot while assigning AI %u, lastAI=%u", i, lastAI);
 
-				newPlayerArray[j] = game.skDiff[i];		//copy over
-				newPlayerTeam[j] = playerTeamGUI[i];
+				newPlayerArray[player] = game.skDiff[i];		//copy over
+				newPlayerTeam[player] = playerTeamGUI[i];
 
 				//remove player if it was disabled in menus
 				if(game.skDiff[i] == 0)
-					clearPlayer(j,true,false);
+					clearPlayer(player,true,false);
 
-				lastAI = j;
+				lastAI = player;
 				lastAI++;
 			}
 			else if(game.skDiff[i] == UBYTE_MAX)	//human player
 			{
+				unsigned int player;
+
 				//find player net id
-				for(j=0;(j < MAX_PLAYERS) && (player2dpid[j] != NetPlay.players[i].dpid);j++);
+				for (player = 0;
+				     player < MAX_PLAYERS && player2dpid[player] != NetPlay.players[i].dpid;
+				     ++player);
 
-				ASSERT(j<MAX_PLAYERS,"campInit: couldn't find player id for GUI id %d", i);
+				ASSERT(player < MAX_PLAYERS, "couldn't find player id for GUI id %u", i);
 
-				newPlayerTeam[j] = playerTeamGUI[i];
+				newPlayerTeam[player] = playerTeamGUI[i];
 			}
 
 		}

@@ -2898,7 +2898,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 	//check if any power available
 	if (structUsesPower(psStructure))
 	{
-		if (checkPower(psStructure->player, POWER_PER_CYCLE, false))
+		if (checkPower(psStructure->player, POWER_PER_CYCLE))
 		{
 			//check if this structure is due some power
 			if (getLastPowered((BASE_OBJECT *)psStructure))

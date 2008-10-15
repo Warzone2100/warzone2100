@@ -344,7 +344,7 @@ void createLimitSet(void)
 void applyLimitSet(void)
 {
 	MULTISTRUCTLIMITS *pEntry = ingame.pStructureLimits;
-	int i, j;
+	unsigned int i;
 
 	if (ingame.numStructureLimits == 0)
 	{
@@ -352,14 +352,15 @@ void applyLimitSet(void)
 	}
 
 	// Get the limits and decode
-	for (i = 0; i < ingame.numStructureLimits; i++)
+	for (i = 0; i < ingame.numStructureLimits; ++i)
  	{
 		UBYTE id = pEntry[i].id;
 		
 		// So long as the ID is valid
 		if (id < numStructureStats)
 		{
-			for (j = 0; j < MAX_PLAYERS; j++)
+			unsigned int j;
+			for (j = 0; j < MAX_PLAYERS; ++j)
 			{
 				asStructLimits[j][id].limit = pEntry[i].limit;
 			}
@@ -377,7 +378,7 @@ void applyLimitSet(void)
 
 // ////////////////////////////////////////////////////////////////////////////
 
-static void displayStructureBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
+static void displayStructureBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
 {
 	UDWORD	x = xOffset+psWidget->x;
 	UDWORD	y = yOffset+psWidget->y;

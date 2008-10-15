@@ -440,7 +440,7 @@ void orderUpdateDroid(DROID *psDroid)
             if (psDroid->player == selectedPlayer && getDroidsToSafetyFlag() &&
                 missionDroidsRemaining(selectedPlayer))
             {
-                resetTransporter(psDroid);
+                resetTransporter();
             }
             else
             {
