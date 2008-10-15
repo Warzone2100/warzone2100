@@ -1401,7 +1401,7 @@ void addVideoText(SEQ_DISPLAY *psSeqDisplay, UDWORD sequence)
 		//add each message, the rest at the bottom
 		x = VIDEO_TEXT_BOTTOM_X;
 		// calculate the real bottom... NOTE, game assumes all videos to be 640x480
-		y = (UDWORD) (((double)pie_GetVideoBufferHeight() / 480.0f) * (double)VIDEO_TEXT_BOTTOM_Y );
+		y = (double)pie_GetVideoBufferHeight() / 480. * (double)VIDEO_TEXT_BOTTOM_Y;
 		i = 1;
 		while (i < psSeqDisplay->numText)
 		{

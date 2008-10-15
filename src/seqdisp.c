@@ -529,7 +529,6 @@ BOOL seq_AddTextForVideo(const char* pText, SDWORD xOffset, SDWORD yOffset, SDWO
 		}
 	}
 
-
 	//set start and finish times for the objects
 	aSeqList[currentSeq].aText[aSeqList[currentSeq].currentText].startFrame = startFrame;
 	aSeqList[currentSeq].aText[aSeqList[currentSeq].currentText].endFrame = endFrame;
@@ -606,17 +605,17 @@ static BOOL seq_AddTextFromFile(const char *pTextName, SEQ_TEXT_POSITIONING text
 				// Since all the positioning was hardcoded to specific values, we now calculate the
 				// ratio of our screen, compared to what the game expects and multiply that to x, y.
 				// This makes the text always take up the full screen, instead of original style.
-				xOffset = ((double)pie_GetVideoBufferWidth() / 640.0f) * (double)xOffset;
-				yOffset = ((double)pie_GetVideoBufferHeight() / 480.0f) * (double)yOffset;
+				xOffset = (double)pie_GetVideoBufferWidth() / 640. * (double)xOffset;
+				yOffset = (double)pie_GetVideoBufferHeight() / 480. * (double)yOffset;
 				//get the text
 				pText = strrchr(pCurrentLine,'"');
-				ASSERT( pText != NULL,"seq_AddTextFromFile error parsing text file" );
+				ASSERT(pText != NULL, "error parsing text file");
 				if (pText != NULL)
 				{
 					*pText = (UBYTE)0;
 				}
 				pText = strchr(pCurrentLine,'"');
-				ASSERT( pText != NULL,"seq_AddTextFromFile error parsing text file" );
+				ASSERT(pText != NULL, "error parsing text file");
 				if (pText != NULL)
 				{
 					seq_AddTextForVideo(&pText[1], xOffset, yOffset, startFrame, endFrame, textJustification);
@@ -646,13 +645,11 @@ void seq_ClearSeqList(void)
 //add a sequence to the list to be played
 void seq_AddSeqToList(const char *pSeqName, const char *pAudioName, const char *pTextName, BOOL bLoop)
 {
-	SDWORD strLen;
 	currentSeq++;
 
-
-	if ((currentSeq) >=  MAX_SEQ_LIST)
+	ASSERT(currentSeq < MAX_SEQ_LIST, "too many sequences");
+	if (currentSeq >=  MAX_SEQ_LIST)
 	{
-		ASSERT( false, "seq_AddSeqToList: too many sequences" );
 		return;
 	}
 
@@ -669,13 +666,18 @@ void seq_AddSeqToList(const char *pSeqName, const char *pAudioName, const char *
 	if (bSeqSubtitles)
 	{
 		char aSubtitleName[MAX_STR_LENGTH];
+		size_t check_len = sstrcpy(aSubtitleName, pSeqName);
+		char* extension;
 
-		//check for a subtitle file
-		strLen = strlen(pSeqName);
-		ASSERT( strLen < MAX_STR_LENGTH,"seq_AddSeqToList: sequence name error" );
-		sstrcpy(aSubtitleName, pSeqName);
-		aSubtitleName[strLen - 4] = 0;
-		sstrcat(aSubtitleName, ".txt");
+		ASSERT(check_len < sizeof(aSubtitleName), "given sequence name (%s) longer (%zu) than buffer (%zu)", pSeqName, check_len, sizeof(aSubtitleName));
+
+		// check for a subtitle file
+		extension = strrchr(aSubtitleName, '.');
+		if (extension)
+			*extension = '\0';
+		check_len = sstrcat(aSubtitleName, ".txt");
+		ASSERT(check_len < sizeof(aSubtitleName), "sequence name to long to attach an extension too");
+
 		// Subtitles should be center justified
 		seq_AddTextFromFile(aSubtitleName, SEQ_TEXT_JUSTIFY);
 	}
