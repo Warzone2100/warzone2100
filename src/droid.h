@@ -487,6 +487,10 @@ static inline void _setDroidTarget(DROID *psDroid, BASE_OBJECT *psNewTarget, int
 #ifdef DEBUG
 	psDroid->targetLine = line;
 	sstrcpy(psDroid->targetFunc, func);
+#else
+	// Prevent warnings about unused parameters
+	(void)line;
+	(void)func;
 #endif
 }
 
@@ -499,6 +503,10 @@ static inline void _setDroidActionTarget(DROID *psDroid, BASE_OBJECT *psNewTarge
 #ifdef DEBUG
 	psDroid->actionTargetLine[idx] = line;
 	sstrcpy(psDroid->actionTargetFunc[idx], func);
+#else
+	// Prevent warnings about unused parameters
+	(void)line;
+	(void)func;
 #endif
 }
 
@@ -510,6 +518,10 @@ static inline void _setDroidBase(DROID *psDroid, STRUCTURE *psNewBase, int line,
 #ifdef DEBUG
 	psDroid->baseLine = line;
 	sstrcpy(psDroid->baseFunc, func);
+#else
+	// Prevent warnings about unused parameters
+	(void)line;
+	(void)func;
 #endif
 }
 

@@ -438,6 +438,10 @@ static inline void _setStructureTarget(STRUCTURE *psBuilding, BASE_OBJECT *psNew
 #ifdef DEBUG
 	psBuilding->targetLine[idx] = line;
 	sstrcpy(psBuilding->targetFunc[idx], func);
+#else
+	// Prevent warnings about unused parameters
+	(void)line;
+	(void)func;
 #endif
 }
 
