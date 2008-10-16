@@ -112,7 +112,6 @@ bool hBoxDoLayoutImpl(widget *self)
 	const int numChildren = vectorSize(self->children);
 	const size minSize = widgetGetMinSize(self);
 	sizeInfo *childSizeInfo = alloca(sizeof(sizeInfo) * numChildren);
-	bool maxedOut = false;
 	
 	// First make sure we are large enough to hold all of our children
 	if (self->size.x < minSize.x
@@ -162,22 +161,16 @@ bool hBoxDoLayoutImpl(widget *self)
 		
 	}
 	
-	// Gradually increase the x-size of child widgets
-	while (!maxedOut)
+	// Gradually increase the x-size of child widgets until all space is used
+	for (i = 0; temp; i = (i + 1) % numChildren)
 	{
-		maxedOut = true;
+		sizeInfo *child = &childSizeInfo[i];
 		
-		for (i = 0; temp && i < numChildren; i++)
+		// If the child is not as wide as possible; widen it
+		if (child->currentSize.x < child->maxSize.x)
 		{
-			sizeInfo *child = &childSizeInfo[i];
-			
-			// If the child is not as wide as possible; widen it
-			if (child->currentSize.x < child->maxSize.x)
-			{
-				child->currentSize.x++;
-				temp--;
-				maxedOut = false;
-			}
+			child->currentSize.x++;
+			temp--;
 		}
 	}
 	
