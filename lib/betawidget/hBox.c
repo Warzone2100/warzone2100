@@ -84,6 +84,12 @@ void hBoxInit(hBox *self, const char *id)
 	
 	// Set our type
 	WIDGET(self)->classInfo = &hBoxClassInfo;
+	
+	// Default vertical alignment is top
+	self->vAlignment = TOP;
+	
+	// Default padding is 0
+	self->padding = 0;
 }
 
 void hBoxDestroyImpl(widget *self)
@@ -125,8 +131,11 @@ bool hBoxDoLayoutImpl(widget *self)
 		childSizeInfo[i].maxSize = widgetGetMaxSize(child);
 	}
 	
+	// Work out how much horizontal space is available for child widgets
+	temp = self->size.x - (numChildren - 1) * HBOX(self)->padding;
+	
 	// Next do y-axis positioning and initial x-axis sizing
-	for (i = 0, temp = self->size.x; i < numChildren; i++)
+	for (i = 0; i < numChildren; i++)
 	{
 		sizeInfo *child = &childSizeInfo[i];
 		
@@ -184,7 +193,7 @@ bool hBoxDoLayoutImpl(widget *self)
 		
 		widgetReposition(child, temp, childSize->offset.y);
 		
-		temp += child->size.x;
+		temp += child->size.x + HBOX(self)->padding;
 	}
 	
 	return true;
@@ -202,18 +211,49 @@ void hBoxSetVAlign(hBox *self, vAlign v)
 	}
 }
 
+bool hBoxSetPadding(hBox *self, int padding)
+{
+	// Save the current padding
+	int oldPadding = self->padding;
+	
+	// Set the padding
+	self->padding = padding;
+	
+	// Redo the window's layout
+	if (widgetDoLayout(widgetGetRoot(WIDGET(self))))
+	{
+		return true;
+	}
+	// New padding is untenable
+	else
+	{
+		// Restore the old padding
+		self->padding = oldPadding;
+		
+		// Restore the layout
+		widgetDoLayout(widgetGetRoot(WIDGET(self)));
+		
+		return false;
+	}
+}
+
 size hBoxGetMinSizeImpl(widget *self)
 {
 	size minSize = { 0, 0 };
 	int i;
+	const int numChildren = vectorSize(self->children);
 	
-	for (i = 0; i < vectorSize(self->children); i++)
+	// Sum up the minimum size of our children
+	for (i = 0; i < numChildren; i++)
 	{
 		const size minChildSize = widgetGetMinSize(vectorAt(self->children, i));
 		
 		minSize.x += minChildSize.x;
 		minSize.y = MAX(minSize.y, minChildSize.y);
 	}
+	
+	// Factor in padding between children
+	minSize.x += (numChildren - 1) * HBOX(self)->padding;
 	
 	return minSize;
 }
@@ -222,14 +262,19 @@ size hBoxGetMaxSizeImpl(widget *self)
 {
 	size maxSize = { 0, 0 };
 	int i;
+	const int numChildren = vectorSize(self->children);
 	
-	for (i = 0; i < vectorSize(self->children); i++)
+	// Sum up the maximum size of our children
+	for (i = 0; i < numChildren; i++)
 	{
 		const size maxChildSize = widgetGetMaxSize(vectorAt(self->children, i));
 		
 		maxSize.x += maxChildSize.x;
 		maxSize.y = MAX(maxSize.y, maxChildSize.y);
 	}
+	
+	// Factor in padding between children
+	maxSize.x += (numChildren - 1) * HBOX(self)->padding;
 	
 	return maxSize;
 }

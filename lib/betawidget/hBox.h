@@ -41,20 +41,25 @@ struct _hBoxVtbl
  */
 struct _hBox
 {
-	/*
+	/**
 	 * Parent
 	 */
 	struct _widget widget;
 	
-	/*
+	/**
 	 * Our vtable
 	 */
 	hBoxVtbl *vtbl;
 	
-	/*
+	/**
 	 * Child alignment
 	 */
 	vAlign vAlignment;
+	
+	/**
+	 * Padding between children
+	 */
+	int padding;
 };
 
 /*
@@ -98,5 +103,19 @@ hBox *hBoxCreate(const char *id);
  * @param v     The vertical alignment scheme to use.
  */
 void hBoxSetVAlign(hBox *self, vAlign v);
+
+/**
+ * Sets the padding (spacing) between child widgets. Since changing the padding
+ * affects the minimum/maximum size of the hBox a call to this method causes the
+ * window layout to be redone.
+ *
+ * Should the new padding result in an untenable layout then the padding is
+ * restored to its previous value and the layout restored.
+ *
+ * @param self  The hBox to set the padding property of.
+ * @param padding   The amount of padding to apply.
+ * @return true if the padding was changed successfully; false otherwise. 
+ */
+bool hBoxSetPadding(hBox *self, int padding);
 
 #endif /*HBOX_H_*/
