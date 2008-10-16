@@ -109,7 +109,7 @@ typedef struct _droid_template
 	DROID_TYPE      droidType;                  ///< The type of droid
 	UDWORD          multiPlayerID;              ///< multiplayer unique descriptor(cant use id's for templates). Used for save games as well now - AB 29/10/98
 	struct _droid_template* psNext;             ///< Pointer to next template
-} DROID_TEMPLATE;
+} WZ_DECL_MAY_ALIAS DROID_TEMPLATE;
 
 typedef struct DROID
 {

@@ -312,7 +312,7 @@ typedef struct BASE_STATS
 	 * Unique across all instances
 	 */
 	char*            pName;
-} BASE_STATS;
+} WZ_DECL_MAY_ALIAS BASE_STATS;
 
 #define STATS_BASE \
 	UDWORD ref; \
@@ -370,7 +370,7 @@ typedef struct COMPONENT_STATS
 	 * This field is optional and can be NULL to indicate that it has no value
 	 */
 	iIMDShape*       pIMD;
-} COMPONENT_STATS;
+} WZ_DECL_MAY_ALIAS COMPONENT_STATS;
 
 #define STATS_COMPONENT \
 	UDWORD ref; \
@@ -442,7 +442,7 @@ typedef struct PROPULSION_STATS
 	 * Type of propulsion used - index into PropulsionTable
 	 */
 	PROPULSION_TYPE propulsionType;
-} PROPULSION_STATS;
+} WZ_DECL_MAY_ALIAS PROPULSION_STATS;
 
 typedef struct SENSOR_STATS
 {
@@ -525,7 +525,7 @@ typedef struct SENSOR_STATS
 	 * The turret mount to use.
 	 */
 	iIMDShape*       pMountGraphic;
-} SENSOR_STATS;
+} WZ_DECL_MAY_ALIAS SENSOR_STATS;
 
 typedef struct ECM_STATS
 {
@@ -597,7 +597,7 @@ typedef struct ECM_STATS
 	 * The turret mount to use.
 	 */
 	iIMDShape*       pMountGraphic;
-} ECM_STATS;
+} WZ_DECL_MAY_ALIAS ECM_STATS;
 
 typedef struct REPAIR_STATS
 {
@@ -674,7 +674,7 @@ typedef struct REPAIR_STATS
 	 * The turret mount to use.
 	 */
 	iIMDShape*       pMountGraphic;
-} REPAIR_STATS;
+} WZ_DECL_MAY_ALIAS REPAIR_STATS;
 
 typedef struct WEAPON_STATS
 {
@@ -950,7 +950,7 @@ typedef struct WEAPON_STATS
 	SDWORD           iAudioFireID;
 
 	SDWORD           iAudioImpactID;
-} WEAPON_STATS;
+} WZ_DECL_MAY_ALIAS WEAPON_STATS;
 
 typedef struct BRAIN_STATS
 {
@@ -1012,7 +1012,7 @@ typedef struct BRAIN_STATS
 	 * Weapon stats associated with this brain - for Command Droids
 	 */
 	WEAPON_STATS* psWeaponStat;
-} BRAIN_STATS;
+} WZ_DECL_MAY_ALIAS BRAIN_STATS;
 
 typedef struct CONSTRUCT_STATS
 {
@@ -1074,6 +1074,6 @@ typedef struct CONSTRUCT_STATS
 	 * The turret mount to use
 	 */
 	iIMDShape*       pMountGraphic;
-} CONSTRUCT_STATS;
+} WZ_DECL_MAY_ALIAS CONSTRUCT_STATS;
 
 #endif // __INCLUDED_DB_TEMPLATE_SCHEMA_STRUCTDEF_STATS_DB2_TPL_H__

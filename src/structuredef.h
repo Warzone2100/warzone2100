@@ -140,7 +140,7 @@ typedef struct _structure_stats
 	SDWORD		defaultFunc;		/*The default function*/
 	struct _function	**asFuncList;		/*List of pointers to allowable functions -
 									  unalterable*/
-} STRUCTURE_STATS;
+} WZ_DECL_MAY_ALIAS STRUCTURE_STATS;
 
 typedef enum _struct_states
 {

@@ -82,7 +82,7 @@ typedef struct research_stats
 	                                       drawn instead of the two fields below*/
 	iIMDShape		*pIMD;		/* the IMD to draw for this research topic */
 	iIMDShape		*pIMD2;		/* the 2nd IMD for base plates/turrets*/
-} RESEARCH;
+} WZ_DECL_MAY_ALIAS RESEARCH;
 
 typedef struct _player_research
 {

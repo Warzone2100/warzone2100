@@ -74,7 +74,7 @@ typedef struct _feature_stats
 	BOOL            damageable;             ///< Whether the feature can be destroyed
 	UDWORD		body;			///< Number of body points
 	UDWORD          armourValue;            ///< Feature armour
-} FEATURE_STATS;
+} WZ_DECL_MAY_ALIAS FEATURE_STATS;
 
 typedef struct _feature
 {

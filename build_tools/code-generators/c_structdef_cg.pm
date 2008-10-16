@@ -325,7 +325,7 @@ sub printStruct()
     printStructContent($output, $struct, $structMap, $enumMap);
 
     # Finish printing the structure
-    $$output .= "} ${prefix}${name}${suffix};\n\n";
+    $$output .= "} WZ_DECL_MAY_ALIAS ${prefix}${name}${suffix};\n\n";
 
     printLoadFunc($output, $struct) if exists(${${$struct}{"qualifiers"}}{"loadFunc"});
 
