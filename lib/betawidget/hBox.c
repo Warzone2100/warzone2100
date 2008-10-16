@@ -59,7 +59,7 @@ static void hBoxInitVtbl(hBox *self)
 		
 		// Along with the min- and max-size methods
 		vtbl.widgetVtbl.getMinSize  = hBoxGetMinSizeImpl;
-		vtbl.widgetVtbl.getMaxSize  = hBoxGetMinSizeImpl;
+		vtbl.widgetVtbl.getMaxSize  = hBoxGetMaxSizeImpl;
 		
 		// A dummy draw method also
 		vtbl.widgetVtbl.doDraw		= hBoxDoDrawImpl;
