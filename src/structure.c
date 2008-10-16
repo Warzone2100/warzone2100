@@ -3762,9 +3762,9 @@ void structureUpdate(STRUCTURE *psBuilding)
 void structureRelease(STRUCTURE *psBuilding)
 {
 	/* remove animation if present */
-	if ( psBuilding->psCurAnim != NULL )
+	if (psBuilding->psCurAnim != NULL)
 	{
-		animObj_Remove( &psBuilding->psCurAnim, psBuilding->psCurAnim->psAnim->uwID );
+		animObj_Remove(psBuilding->psCurAnim, psBuilding->psCurAnim->psAnim->uwID);
 		psBuilding->psCurAnim = NULL;
 	}
 
@@ -4809,9 +4809,9 @@ BOOL removeStruct(STRUCTURE *psDel, BOOL bDestroy)
 	}
 
 	/* remove animation if present */
-	if ( psDel->psCurAnim != NULL )
+	if (psDel->psCurAnim != NULL)
 	{
-		animObj_Remove( &psDel->psCurAnim, psDel->psCurAnim->psAnim->uwID );
+		animObj_Remove(psDel->psCurAnim, psDel->psCurAnim->psAnim->uwID);
 		psDel->psCurAnim = NULL;
 	}
 
@@ -4971,9 +4971,9 @@ BOOL destroyStruct(STRUCTURE *psDel)
 	}
 
 	/* remove animation if present */
-	if ( psDel->psCurAnim != NULL )
+	if (psDel->psCurAnim != NULL)
 	{
-		animObj_Remove( &psDel->psCurAnim, psDel->psCurAnim->psAnim->uwID );
+		animObj_Remove(psDel->psCurAnim, psDel->psCurAnim->psAnim->uwID);
 		psDel->psCurAnim = NULL;
 	}
 

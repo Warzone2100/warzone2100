@@ -97,7 +97,7 @@ void			animObj_SetDoneFunc( ANIM_OBJECT *psObj,
 /* uwCycles=0 for infinite looping */
 ANIM_OBJECT *	animObj_Add( void *pParentObj, int iAnimID,
 								UDWORD udwStartDelay, UWORD uwCycles );
-BOOL			animObj_Remove( ANIM_OBJECT **ppsObj, int iAnimID );
+bool animObj_Remove(ANIM_OBJECT* psObj, int iAnimID);
 
 ANIM_OBJECT *	animObj_GetFirst( void );
 ANIM_OBJECT *	animObj_GetNext( void );

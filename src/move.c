@@ -2280,7 +2280,6 @@ static void moveUpdatePersonModel(DROID *psDroid, SDWORD speed, SDWORD direction
 	float			fPerpSpeed, fNormalSpeed, dx, dy, fSpeed;
 	float			iDroidDir;
 	SDWORD			slideDir;
-	BOOL			bRet;
 
 	CHECK_DROID(psDroid);
 
@@ -2296,8 +2295,8 @@ static void moveUpdatePersonModel(DROID *psDroid, SDWORD speed, SDWORD direction
 			if ( psDroid->psCurAnim != NULL &&
 				 psDroid->psCurAnim->psAnim->uwID != ID_ANIM_DROIDFIRE )
 			{
-				bRet = animObj_Remove( &psDroid->psCurAnim, psDroid->psCurAnim->psAnim->uwID );
-				ASSERT( bRet == true, "moveUpdatePersonModel: animObj_Remove failed" );
+				const bool bRet = animObj_Remove(psDroid->psCurAnim, psDroid->psCurAnim->psAnim->uwID);
+				ASSERT(bRet, "animObj_Remove failed");
 				psDroid->psCurAnim = NULL;
 			}
 
@@ -2358,8 +2357,8 @@ static void moveUpdatePersonModel(DROID *psDroid, SDWORD speed, SDWORD direction
 			 (psDroid->psCurAnim->psAnim->uwID != ID_ANIM_DROIDRUN ||
 			  psDroid->psCurAnim->psAnim->uwID != ID_ANIM_DROIDRUN)   )
 		{
-			bRet = animObj_Remove( &psDroid->psCurAnim, psDroid->psCurAnim->psAnim->uwID );
-			ASSERT( bRet == true, "moveUpdatePersonModel: animObj_Remove failed" );
+			const bool bRet = animObj_Remove(psDroid->psCurAnim, psDroid->psCurAnim->psAnim->uwID);
+			ASSERT(bRet, "animObj_Remove failed" );
 			psDroid->psCurAnim = NULL;
 		}
 
@@ -2375,8 +2374,8 @@ static void moveUpdatePersonModel(DROID *psDroid, SDWORD speed, SDWORD direction
 		} else {
 			// If the droid went off screen then remove the animation, saves memory and time.
 			if(!clipXY(psDroid->pos.x,psDroid->pos.y)) {
-				bRet = animObj_Remove( &psDroid->psCurAnim, psDroid->psCurAnim->psAnim->uwID );
-				ASSERT( bRet == true, "moveUpdatePersonModel : animObj_Remove failed" );
+				const bool bRet = animObj_Remove(psDroid->psCurAnim, psDroid->psCurAnim->psAnim->uwID);
+				ASSERT(bRet, "animObj_Remove failed");
 				psDroid->psCurAnim = NULL;
 				debug( LOG_NEVER, "Removed person run anim\n" );
 			}
@@ -2585,7 +2584,6 @@ moveUpdateCyborgModel( DROID *psDroid, SDWORD moveSpeed, SDWORD moveDir, UBYTE o
 	BASE_OBJECT			*psObj = (BASE_OBJECT *) psDroid;
 	UDWORD				iMapZ = map_Height(psDroid->pos.x, psDroid->pos.y);
 	SDWORD				iDist, iDx, iDy, iDz, iDroidZ;
-	BOOL			bRet;
 
 	CHECK_DROID(psDroid);
 
@@ -2594,9 +2592,9 @@ moveUpdateCyborgModel( DROID *psDroid, SDWORD moveSpeed, SDWORD moveDir, UBYTE o
 	{
 		if ( psDroid->psCurAnim != NULL )
 		{
-			if ( animObj_Remove( &psDroid->psCurAnim, psDroid->psCurAnim->uwID ) == false )
+			if (!animObj_Remove(psDroid->psCurAnim, psDroid->psCurAnim->uwID))
 			{
-				debug( LOG_NEVER, "moveUpdateCyborgModel: couldn't remove walk anim\n" );
+				debug(LOG_NEVER, "couldn't remove walk anim");
 			}
 			psDroid->psCurAnim = NULL;
 		}
@@ -2664,8 +2662,8 @@ moveUpdateCyborgModel( DROID *psDroid, SDWORD moveSpeed, SDWORD moveDir, UBYTE o
 			// If the droid went off screen then remove the animation, saves memory and time.
 			if(!clipXY(psDroid->pos.x,psDroid->pos.y))
 			{
-				bRet = animObj_Remove( &psDroid->psCurAnim, psDroid->psCurAnim->psAnim->uwID );
-				ASSERT( bRet == true, "moveUpdateCyborgModel : animObj_Remove failed" );
+				const bool bRet = animObj_Remove(psDroid->psCurAnim, psDroid->psCurAnim->psAnim->uwID);
+				ASSERT(bRet, "animObj_Remove failed");
 				psDroid->psCurAnim = NULL;
 			}
 		}
@@ -2678,13 +2676,14 @@ moveUpdateCyborgModel( DROID *psDroid, SDWORD moveSpeed, SDWORD moveDir, UBYTE o
 		/* jumping cyborg: remove walking animation if present */
 		if ( psDroid->psCurAnim != NULL )
 		{
-			if ( (psDroid->psCurAnim->uwID == ID_ANIM_CYBORG_RUN ||
-				  psDroid->psCurAnim->uwID == ID_ANIM_SUPERCYBORG_RUN ||
-				  psDroid->psCurAnim->uwID == ID_ANIM_CYBORG_PACK_RUN) &&
-				 (animObj_Remove( &psDroid->psCurAnim, psDroid->psCurAnim->uwID ) == false) )
+			if ((psDroid->psCurAnim->uwID == ID_ANIM_CYBORG_RUN
+			  || psDroid->psCurAnim->uwID == ID_ANIM_SUPERCYBORG_RUN
+			  || psDroid->psCurAnim->uwID == ID_ANIM_CYBORG_PACK_RUN)
+			 && !animObj_Remove(psDroid->psCurAnim, psDroid->psCurAnim->uwID))
 			{
-				debug( LOG_NEVER, "moveUpdateCyborgModel: couldn't remove walk anim\n" );
+				debug(LOG_NEVER, "couldn't remove walk anim");
 			}
+			psDroid->psCurAnim = NULL;
 		}
 
 		/* add jumping or landing anim */

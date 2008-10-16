@@ -285,7 +285,7 @@ void droidRelease(DROID *psDroid)
 	/* remove animation if present */
 	if (psDroid->psCurAnim != NULL)
 	{
-		animObj_Remove(&psDroid->psCurAnim, psDroid->psCurAnim->psAnim->uwID);
+		animObj_Remove(psDroid->psCurAnim, psDroid->psCurAnim->psAnim->uwID);
 		psDroid->psCurAnim = NULL;
 	}
 
@@ -386,7 +386,6 @@ void recycleDroid(DROID *psDroid)
 void	removeDroidBase(DROID *psDel)
 {
 	DROID	*psCurr, *psNext;
-	BOOL	bRet;
 	DROID_GROUP	*psGroup;
 	STRUCTURE	*psStruct;
 
@@ -413,8 +412,8 @@ void	removeDroidBase(DROID *psDel)
 	/* remove animation if present */
 	if (psDel->psCurAnim != NULL)
 	{
-		bRet = animObj_Remove( &psDel->psCurAnim, psDel->psCurAnim->psAnim->uwID );
-		ASSERT( bRet == true, "destroyUnit: animObj_Remove failed" );
+		const bool bRet = animObj_Remove(psDel->psCurAnim, psDel->psCurAnim->psAnim->uwID);
+		ASSERT(bRet, "animObj_Remove failed");
 		psDel->psCurAnim = NULL;
 	}
 
@@ -669,8 +668,6 @@ static void droidBurntCallback( ANIM_OBJECT * psObj )
 
 void droidBurn(DROID *psDroid)
 {
-	BOOL	bRet;
-
 	CHECK_DROID(psDroid);
 
 	if ( psDroid->droidType != DROID_PERSON )
@@ -689,8 +686,8 @@ void droidBurn(DROID *psDroid)
 		}
 		else
 		{
-			bRet = animObj_Remove( &psDroid->psCurAnim, psDroid->psCurAnim->psAnim->uwID );
-			ASSERT( bRet == true, "unitBurn: animObj_Remove failed" );
+			const bool bRet = animObj_Remove(psDroid->psCurAnim, psDroid->psCurAnim->psAnim->uwID);
+			ASSERT(bRet, "animObj_Remove failed");
 			psDroid->psCurAnim = NULL;
 		}
 	}

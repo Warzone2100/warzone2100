@@ -286,16 +286,7 @@ animObj_Find( void *pParentObj, int iAnimID )
 	return (ANIM_OBJECT*)hashTable_FindElement(g_pAnimObjTable, (intptr_t) pParentObj, iAnimID);
 }
 
-/***************************************************************************/
-
-BOOL
-animObj_Remove( ANIM_OBJECT **ppsObj, int iAnimID )
+bool animObj_Remove(ANIM_OBJECT* psObj, int iAnimID)
 {
-	BOOL bRemOK = hashTable_RemoveElement(g_pAnimObjTable, *ppsObj, (intptr_t)(*ppsObj)->psParent, iAnimID);
-    //init the animation
-    *ppsObj = NULL;
-
-    return bRemOK;
+	return hashTable_RemoveElement(g_pAnimObjTable, psObj, (intptr_t)psObj->psParent, iAnimID);
 }
-
-/***************************************************************************/
