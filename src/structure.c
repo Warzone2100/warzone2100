@@ -386,6 +386,9 @@ static STRUCTURE_TYPE structureType(const char* typeName)
 	}
 
 	ASSERT(!"unknown structure type", "Unknown Structure Type (%s)", typeName);
+
+	// Dummy value to prevent warnings about missing return from function
+	return 0;
 }
 
 

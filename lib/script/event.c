@@ -57,6 +57,24 @@ static SDWORD			eventTraceLevel=3;
 #define DB_TRIGINF(psTrigger, level)\
 	if (eventTraceLevel >= (level)) \
 		eventPrintTriggerInfo(psTrigger)
+
+// Print out all the info available about a trigger
+static void eventPrintTriggerInfo(ACTIVE_TRIGGER *psTrigger)
+{
+	SCRIPT_CODE *psCode = psTrigger->psContext->psCode;
+	const char	*pTrigLab, *pEventLab;
+
+	// find the debug info for the trigger
+	pTrigLab = eventGetTriggerID(psCode, psTrigger->trigger);
+	// find the debug info for the event
+	pEventLab = eventGetEventID(psCode, psTrigger->event);
+
+	debug(LOG_WARNING, "trigger %s at %d -> %s", pTrigLab, psTrigger->testTime, pEventLab);
+	if (psTrigger->offset != 0)
+	{
+		debug(LOG_WARNING, " %d", psTrigger->offset);
+	}
+}
 #else
 #define DB_TRIGINF(psTrigger, level)
 #endif
@@ -264,24 +282,6 @@ const char *eventGetEventID(SCRIPT_CODE *psCode, SDWORD event)
 	}
 
 	return pID;
-}
-
-// Print out all the info available about a trigger
-static void eventPrintTriggerInfo(ACTIVE_TRIGGER *psTrigger)
-{
-	SCRIPT_CODE *psCode = psTrigger->psContext->psCode;
-	const char	*pTrigLab, *pEventLab;
-
-	// find the debug info for the trigger
-	pTrigLab = eventGetTriggerID(psCode, psTrigger->trigger);
-	// find the debug info for the event
-	pEventLab = eventGetEventID(psCode, psTrigger->event);
-
-	debug(LOG_WARNING, "trigger %s at %d -> %s", pTrigLab, psTrigger->testTime, pEventLab);
-	if (psTrigger->offset != 0)
-	{
-		debug(LOG_WARNING, " %d", psTrigger->offset);
-	}
 }
 
 // Initialise the create/release function array - specify the maximum value type

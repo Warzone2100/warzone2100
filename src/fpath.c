@@ -607,6 +607,9 @@ void fpathTest(int x, int y, int x2, int y2)
 	FPATH_RETVAL r;
 	int i;
 
+	// On non-debug builds prevent warnings about defining but not using fpathJobQueueLength
+	(void)fpathJobQueueLength;
+
 	/* Check initial state */
 	assert(fpathThread != NULL);
 	assert(fpathSemaphore != NULL);

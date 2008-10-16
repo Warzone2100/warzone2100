@@ -151,11 +151,14 @@ static size_t unicode_utf8_char_length(const utf_32_char unicode_char)
 	 */
 	else if (unicode_char < 0x00110000)
 		return 4; // stores 21 bits
-	else
-		/* Apparently this character lies outside the 0x0 - 0x10FFFF
-		 * Unicode range, so don't accept it.
-		 */
-		ASSERT(!"out-of-range Unicode codepoint", "This Unicode codepoint is too large (%u > 0x10FFFF) to be a valid Unicode codepoint", (unsigned int)unicode_char);
+
+	/* Apparently this character lies outside the 0x0 - 0x10FFFF
+	 * Unicode range, so don't accept it.
+	 */
+	ASSERT(!"out-of-range Unicode codepoint", "This Unicode codepoint is too large (%u > 0x10FFFF) to be a valid Unicode codepoint", (unsigned int)unicode_char);
+
+	// Dummy value to prevent warnings about missing return from function
+	return 0;
 }
 
 char *UTF8CharacterAtOffset(const char *utf8_string, size_t index)
