@@ -110,6 +110,7 @@ bool hBoxDoLayoutImpl(widget *self)
 	
 	int i, temp;
 	const int numChildren = vectorSize(self->children);
+	const int padding = HBOX(self)->padding;
 	const size minSize = widgetGetMinSize(self);
 	sizeInfo *childSizeInfo = alloca(sizeof(sizeInfo) * numChildren);
 	
@@ -131,7 +132,7 @@ bool hBoxDoLayoutImpl(widget *self)
 	}
 	
 	// Work out how much horizontal space is available for child widgets
-	temp = self->size.x - (numChildren - 1) * HBOX(self)->padding;
+	temp = self->size.x - (numChildren - 1) * padding;
 	
 	// Next do y-axis positioning and initial x-axis sizing
 	for (i = 0; i < numChildren; i++)
@@ -186,7 +187,7 @@ bool hBoxDoLayoutImpl(widget *self)
 		
 		widgetReposition(child, temp, childSize->offset.y);
 		
-		temp += child->size.x + HBOX(self)->padding;
+		temp += child->size.x + padding;
 	}
 	
 	return true;
