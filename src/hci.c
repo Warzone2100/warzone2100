@@ -1966,9 +1966,8 @@ INT_RETVAL intRunWidgets(void)
 					structX2 = world_coord(structX2) + TILE_UNITS / 2;
 					structY2 = world_coord(structY2) + TILE_UNITS / 2;
 
-					if(IsPlayerStructureLimitReached(selectedPlayer)) {
-						/* Nothing */
-					} else {
+					if (!IsPlayerStructureLimitReached(selectedPlayer))
+					{
 						// Set the droid order
 						if (intNumSelectedDroids(DROID_CONSTRUCT) == 0
 						    && intNumSelectedDroids(DROID_CYBORG_CONSTRUCT) == 0
@@ -2024,10 +2023,10 @@ INT_RETVAL intRunWidgets(void)
 						}
 					}
 
-					if(CanBuild) {
-						if(IsPlayerStructureLimitReached(selectedPlayer)) {
-
-						} else {
+					if (CanBuild)
+					{
+						if (!IsPlayerStructureLimitReached(selectedPlayer))
+						{
 							// Set the droid order
 							if (intNumSelectedDroids(DROID_CONSTRUCT) == 0
 							    && intNumSelectedDroids(DROID_CYBORG_CONSTRUCT) == 0

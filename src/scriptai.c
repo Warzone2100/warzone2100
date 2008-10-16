@@ -651,7 +651,8 @@ BOOL scrOrderDroidStatsLoc(void)
 
 	// Don't allow scripts to order structure builds if players structure
 	// limit has been reached.
-	if(IsPlayerStructureLimitReached(psDroid->player) == false) {
+	if (!IsPlayerStructureLimitReached(psDroid->player))
+	{
 		orderDroidStatsLoc(psDroid, order, psStats, (UDWORD)x,(UDWORD)y);
 	}
 
