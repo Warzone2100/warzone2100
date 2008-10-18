@@ -1042,9 +1042,7 @@ void aiUpdateDroid(DROID *psDroid)
 	}
 }
 
-/*set of rules which determine whether the weapon associated with the object
-can fire on the propulsion type of the target*/
-//Watermelon:added weapon_slot
+/* Set of rules which determine whether the weapon associated with the object can fire on the propulsion type of the target. */
 BOOL validTarget(BASE_OBJECT *psObject, BASE_OBJECT *psTarget, int weapon_slot)
 {
 	BOOL	bTargetInAir, bValidTarget = false;
@@ -1055,45 +1053,45 @@ BOOL validTarget(BASE_OBJECT *psObject, BASE_OBJECT *psTarget, int weapon_slot)
 		return false;
 	}
 
-	//need to check propulsion type of target
+	// Need to check propulsion type of target
 	switch (psTarget->type)
 	{
 	case OBJ_DROID:
-        if (asPropulsionTypes[asPropulsionStats[((DROID *)psTarget)->asBits[
-            COMP_PROPULSION].nStat].propulsionType].travel == AIR)
-        {
+		if (asPropulsionTypes[asPropulsionStats[((DROID *)psTarget)->asBits[
+		                                            COMP_PROPULSION].nStat].propulsionType].travel == AIR)
+		{
 			if (((DROID *)psTarget)->sMove.Status != MOVEINACTIVE)
 			{
-	            bTargetInAir = true;
+				bTargetInAir = true;
 			}
 			else
 			{
-	            bTargetInAir = false;
+				bTargetInAir = false;
 			}
-        }
-        else
-        {
-            bTargetInAir = false;
-        }
-        break;
-    case OBJ_STRUCTURE:
+		}
+		else
+		{
+			bTargetInAir = false;
+		}
+		break;
+	case OBJ_STRUCTURE:
 	default:
-        //lets hope so!
-        bTargetInAir = false;
-        break;
-    }
+		//lets hope so!
+		bTargetInAir = false;
+		break;
+	}
 
 	//need what can shoot at
 	switch (psObject->type)
 	{
 	case OBJ_DROID:
-    	// Can't attack without a weapon
+		// Can't attack without a weapon
 		//Watermelon:re-enabled if (((DROID *)psObject)->numWeaps != 0) to prevent crash
-		if ( ((DROID *)psObject)->numWeaps != 0 &&
-			((DROID *)psObject)->asWeaps[weapon_slot].nStat != 0 )
+		if (((DROID *)psObject)->numWeaps != 0 &&
+		        ((DROID *)psObject)->asWeaps[weapon_slot].nStat != 0)
 		{
 			surfaceToAir = asWeaponStats[((DROID *)psObject)->asWeaps[weapon_slot].nStat].surfaceToAir;
-			if ( ((surfaceToAir & SHOOT_IN_AIR) && bTargetInAir) || ((surfaceToAir & SHOOT_ON_GROUND) && !bTargetInAir) )
+			if (((surfaceToAir & SHOOT_IN_AIR) && bTargetInAir) || ((surfaceToAir & SHOOT_ON_GROUND) && !bTargetInAir))
 			{
 				return true;
 			}
@@ -1103,10 +1101,10 @@ BOOL validTarget(BASE_OBJECT *psObject, BASE_OBJECT *psTarget, int weapon_slot)
 			return false;
 		}
 		/*
-        if (((DROID *)psObject)->asWeaps[0].nStat != 0 && ((DROID *)psObject)->numWeaps > 0)
+		if (((DROID *)psObject)->asWeaps[0].nStat != 0 && ((DROID *)psObject)->numWeaps > 0)
 		{
-            surfaceToAir = asWeaponStats[((DROID *)psObject)->asWeaps[0].nStat].surfaceToAir;
-        }
+		    surfaceToAir = asWeaponStats[((DROID *)psObject)->asWeaps[0].nStat].surfaceToAir;
+		}
 		else
 		{
 			 surfaceToAir = 0;
@@ -1116,8 +1114,8 @@ BOOL validTarget(BASE_OBJECT *psObject, BASE_OBJECT *psTarget, int weapon_slot)
 	case OBJ_STRUCTURE:
 		// Can't attack without a weapon
 		//Watermelon:re-enabled if (((DROID *)psObject)->numWeaps != 0) to prevent crash
-		if ( ((STRUCTURE *)psObject)->numWeaps != 0 &&
-			((STRUCTURE *)psObject)->asWeaps[weapon_slot].nStat != 0 )
+		if (((STRUCTURE *)psObject)->numWeaps != 0 &&
+		        ((STRUCTURE *)psObject)->asWeaps[weapon_slot].nStat != 0)
 		{
 			surfaceToAir = asWeaponStats[((STRUCTURE *)psObject)->asWeaps[weapon_slot].nStat].surfaceToAir;
 		}
@@ -1126,29 +1124,29 @@ BOOL validTarget(BASE_OBJECT *psObject, BASE_OBJECT *psTarget, int weapon_slot)
 			surfaceToAir = 0;
 		}
 
-		if ( ((surfaceToAir & SHOOT_IN_AIR) && bTargetInAir) || ((surfaceToAir & SHOOT_ON_GROUND) && !bTargetInAir) )
+		if (((surfaceToAir & SHOOT_IN_AIR) && bTargetInAir) || ((surfaceToAir & SHOOT_ON_GROUND) && !bTargetInAir))
 		{
 			return true;
 		}
-			break;
-		default:
-			surfaceToAir = 0;
-			break;
-		}
+		break;
+	default:
+		surfaceToAir = 0;
+		break;
+	}
 
-    //if target is in the air and you can shoot in the air - OK
-    if (bTargetInAir && (surfaceToAir & SHOOT_IN_AIR))
-    {
-        bValidTarget = true;
-    }
+	//if target is in the air and you can shoot in the air - OK
+	if (bTargetInAir && (surfaceToAir & SHOOT_IN_AIR))
+	{
+		bValidTarget = true;
+	}
 
-    //if target is on the ground and can shoot at it - OK
-    if (!bTargetInAir && (surfaceToAir & SHOOT_ON_GROUND))
-    {
-        bValidTarget = true;
-    }
+	//if target is on the ground and can shoot at it - OK
+	if (!bTargetInAir && (surfaceToAir & SHOOT_ON_GROUND))
+	{
+		bValidTarget = true;
+	}
 
-    return bValidTarget;
+	return bValidTarget;
 }
 
 /* Make droid/structure look for a better target */
