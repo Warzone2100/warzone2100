@@ -555,16 +555,16 @@ static BOOL aiObjIsWall(BASE_OBJECT *psObj)
 /* See if there is a target in range */
 BOOL aiChooseTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget, int weapon_slot, BOOL bUpdateTarget)
 {
-	UDWORD	radSquared;
+	UDWORD			radSquared;
 	BASE_OBJECT		*psTarget = NULL;
-	SDWORD			xdiff,ydiff, distSq, tarDist, minDist;//, longRange;
+	SDWORD			xdiff,ydiff, distSq, tarDist, minDist;
 	BOOL			bCBTower;
 	STRUCTURE		*psCStruct;
 	DROID			*psCommander;
 	BOOL			bCommanderBlock;
 	UDWORD			sensorRange = objSensorRange(psObj);
-	SECONDARY_STATE	state;
-	SDWORD			curTargetWeight=-1,newTargetWeight;
+	SECONDARY_STATE		state;
+	SDWORD			curTargetWeight=-1;
 
 	/* Get the sensor range */
 	switch (psObj->type)
@@ -611,7 +611,7 @@ BOOL aiChooseTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget, int weapon_slot
 		BASE_OBJECT *psCurrTarget = ((DROID *)psObj)->psActionTarget[0];
 
 		/* find a new target */
-		newTargetWeight = aiBestNearestTarget((DROID *)psObj, &psTarget, weapon_slot);
+		int newTargetWeight = aiBestNearestTarget((DROID *)psObj, &psTarget, weapon_slot);
 
 		/* Calculate weight of the current target if updating; but take care not to target
 		 * ourselves... */
@@ -741,8 +741,7 @@ BOOL aiChooseTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget, int weapon_slot
 			}
 		}
 
-		if ((psTarget == NULL) &&
-			!bCommanderBlock)
+		if (psTarget == NULL && !bCommanderBlock)
 		{
 			BASE_OBJECT *psCurr;
 

@@ -108,13 +108,10 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 
 	CHECK_OBJECT(psAttacker);
 	CHECK_OBJECT(psTarget);
-
-	ASSERT( psWeap != NULL,
-		"combFire: Invalid weapon pointer" );
+	ASSERT(psWeap != NULL, "Invalid weapon pointer");
 
 	/* Watermelon:dont shoot if the weapon_slot of a vtol is empty */
-	if (psAttacker->type == OBJ_DROID &&
-		isVtolDroid(((DROID *)psAttacker)))
+	if (psAttacker->type == OBJ_DROID && isVtolDroid(((DROID *)psAttacker)))
 	{
 		if (((DROID *)psAttacker)->sMove.iAttackRuns[weapon_slot] >= getNumAttackRuns(((DROID *)psAttacker), weapon_slot))
 		{
@@ -152,12 +149,9 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 	case OBJ_DROID:
 		psDroid = (DROID *)psAttacker;
 		damLevel = PERCENT(psDroid->body, psDroid->originalBody);
-
 		break;
 	case OBJ_STRUCTURE:
-		damLevel = PERCENT(((STRUCTURE *)psAttacker)->body,
-						//((STRUCTURE *)psAttacker)->baseBodyPoints);
-			structureBody((STRUCTURE *)psAttacker));
+		damLevel = PERCENT(((STRUCTURE *)psAttacker)->body, structureBody((STRUCTURE *)psAttacker));
 		break;
 	default:
 		damLevel = 100;
