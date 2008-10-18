@@ -2243,9 +2243,9 @@ bool loadGameInit(const char* fileName)
 {
 	if (!gameLoad(fileName))
 	{
-		debug(LOG_ERROR, "loadGameInit: Fail");
-
-		/* Start the game clock */
+		debug(LOG_ERROR, "Corrupted savegame file %s, Unable to load!", fileName);
+		// NOTE: why do we start the game clock on a *failed* load?
+		// Start the game clock
 		gameTimeStart();
 
 		return false;

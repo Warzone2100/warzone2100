@@ -613,17 +613,18 @@ static void stopGameLoop(void)
  * Load a savegame and start into the game loop
  * Game data should be initialised afterwards, so that startGameLoop is not necessary anymore.
  */
-static void initSaveGameLoad(void)
+static bool initSaveGameLoad(void)
 {
-	SetGameMode(GS_NORMAL);
-
-	screen_RestartBackDrop();
 	// load up a save game
 	if (!loadGameInit(saveGameName))
 	{
-		debug( LOG_ERROR, "Shutting down after failure" );
-		exit(EXIT_FAILURE);
+		// FIXME: we really should throw up a error window, but we can't (easily) so I won't.
+		debug( LOG_ERROR, "Trying to load Game %s failed!", saveGameName);
+		return false;
 	}
+
+	SetGameMode(GS_NORMAL);
+	screen_RestartBackDrop();
 	screen_StopBackDrop();
 
 	// Trap the cursor if cursor snapping is enabled
@@ -631,6 +632,8 @@ static void initSaveGameLoad(void)
 	{
 		SDL_WM_GrabInput(SDL_GRAB_ON);
 	}
+
+	return true;
 }
 
 
@@ -691,10 +694,23 @@ static void runTitleLoop(void)
 			}
 			break;
 		case TITLECODE_SAVEGAMELOAD:
-			debug(LOG_MAIN, "TITLECODE_SAVEGAMELOAD");
-			stopTitleLoop();
-			initSaveGameLoad(); // Restart into gameloop and load a savegame
+			{
+				bool result;
+				debug(LOG_MAIN, "TITLECODE_SAVEGAMELOAD");
+				// Restart into gameloop and load a savegame, ONLY on a good savegame load!
+				result = initSaveGameLoad(); 
+				if (result)
+				{
+					stopTitleLoop();
+				}
+				else 
+				{	// we had a error loading savegame (corrupt?), so go back to title screen?
+					stopGameLoop();
+					changeTitleMode(TITLE);
+				}
+
 			break;
+			}
 		case TITLECODE_STARTGAME:
 			debug(LOG_MAIN, "TITLECODE_STARTGAME");
 			stopTitleLoop();
