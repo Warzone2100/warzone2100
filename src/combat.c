@@ -176,11 +176,18 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 		return;
 	}
 
+	if (!psTarget->visible[psAttacker->player])
+	{
+		// Can't see it - can't hit it
+		objTrace(psAttacker->id, "combFire(%u[%s]->%u): Object has no indirect sight of target", psAttacker->id, psStats->pName, psTarget->id);
+		return;
+	}
+
 	/* Check we can see the target */
 	if (psAttacker->type == OBJ_DROID && !isVtolDroid((DROID *)psAttacker)
 	    && (proj_Direct(psStats) || actionInsideMinRange(psDroid, psTarget, psStats)))
 	{
-		if(!visibleObject(psAttacker, psTarget, true))
+		if(!lineOfFire(psAttacker, psTarget, true))
 		{
 			// Can't see the target - can't hit it with direct fire
 			objTrace(psAttacker->id, "combFire(%u[%s]->%u): Droid has no direct line of sight to target",
@@ -193,7 +200,7 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 			 proj_Direct(psStats))
 	{
 		// a bunker can't shoot through walls
-		if (!visibleObject(psAttacker, psTarget, true))
+		if (!lineOfFire(psAttacker, psTarget, true))
 		{
 			// Can't see the target - can't hit it with direct fire
 			objTrace(psAttacker->id, "combFire(%u[%s]->%u): Structure has no direct line of sight to target",
@@ -204,21 +211,10 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 	else if ( proj_Direct(psStats) )
 	{
 		// VTOL or tall building
-		if (!visibleObject(psAttacker, psTarget, false))
+		if (!lineOfFire(psAttacker, psTarget, false))
 		{
 			// Can't see the target - can't hit it with direct fire
 			objTrace(psAttacker->id, "combFire(%u[%s]->%u): Tall object has no direct line of sight to target",
-			      psAttacker->id, psStats->pName, psTarget->id);
-			return;
-		}
-	}
-	else
-	{
-		// Indirect fire
-		if (!psTarget->visible[psAttacker->player])
-		{
-			// Can't get an indirect LOS - can't hit it with the weapon
-			objTrace(psAttacker->id, "combFire(%u[%s]->%u): Object has no indirect sight of target",
 			      psAttacker->id, psStats->pName, psTarget->id);
 			return;
 		}

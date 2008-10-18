@@ -45,6 +45,9 @@ extern void visTilesUpdate(BASE_OBJECT *psObj, RAY_CALLBACK callback);
  */
 extern bool visibleObject(const BASE_OBJECT* psViewer, const BASE_OBJECT* psTarget, bool wallsBlock);
 
+/** Can shooter hit target with direct fire weapon? */
+bool lineOfFire(const BASE_OBJECT* psViewer, const BASE_OBJECT* psTarget, bool wallsBlock);
+
 // Find the wall that is blocking LOS to a target (if any)
 extern STRUCTURE* visGetBlockingWall(const BASE_OBJECT* psViewer, const BASE_OBJECT* psTarget);
 

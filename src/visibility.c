@@ -755,3 +755,53 @@ bool scrTileIsVisible(SDWORD player, SDWORD x, SDWORD y)
 
 	return scrTileVisible[player][x][y];
 }
+
+/* Check whether psViewer can fire directly at psTarget.
+ * psTarget can be any type of BASE_OBJECT (e.g. a tree).
+ */
+bool lineOfFire(const BASE_OBJECT* psViewer, const BASE_OBJECT* psTarget, bool wallsBlock)
+{
+	Vector3i pos, dest, diff;
+	int range, distSq;
+
+	ASSERT(psViewer != NULL, "Invalid shooter pointer!");
+	ASSERT(psTarget != NULL, "Invalid target pointer!");
+	if (!psViewer || !psTarget)
+	{
+		return false;
+	}
+
+	// FIXME HACK Needed since we got those ugly Vector3uw floating around in BASE_OBJECT...
+	pos = Vector3uw_To3i(psViewer->pos);
+	dest = Vector3uw_To3i(psTarget->pos);
+	diff = Vector3i_Sub(dest, pos);
+	range = objSensorRange(psViewer);
+
+	distSq = Vector3i_ScalarP(diff, diff);
+	if (distSq == 0)
+	{
+		// Should never be on top of each other, but ...
+		return true;
+	}
+
+	// initialise the callback variables
+	{
+		VisibleObjectHelp_t help = { true, wallsBlock, distSq, pos.z + visObjHeight(psViewer), { map_coord(dest.x), map_coord(dest.y) }, 0, 0, -UBYTE_MAX * GRAD_MUL * ELEVATION_SCALE, 0, { 0, 0 } };
+		int targetGrad, top;
+
+		// Cast a ray from the viewer to the target
+		rayCast(pos, diff, range, rayLOSCallback, &help);
+
+		if (gWall != NULL && gNumWalls != NULL) // Out globals are set
+		{
+			*gWall = help.wall;
+			*gNumWalls = help.numWalls;
+		}
+
+		// See if the target can be seen
+		top = dest.z + visObjHeight(psTarget) - help.startHeight;
+		targetGrad = top * GRAD_MUL / help.lastDist;
+
+		return targetGrad >= help.currGrad;
+	}
+}
