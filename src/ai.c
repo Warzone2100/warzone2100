@@ -646,6 +646,7 @@ BOOL aiChooseTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget, int weapon_slot
 	else if (psObj->type == OBJ_STRUCTURE)
 	{
 		WEAPON_STATS	*psWStats;
+		int             longRange = proj_GetLongRange(psWStats);
 
 		ASSERT( ((STRUCTURE *)psObj)->asWeaps[weapon_slot].nStat > 0,
 			"aiChooseTarget: no weapons on structure" );
@@ -682,12 +683,10 @@ BOOL aiChooseTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget, int weapon_slot
 		}
 
 		// indirect fire structures use sensor towers first
-		tarDist = SDWORD_MAX;
+		tarDist = longRange * longRange;
 		minDist = psWStats->minRange * psWStats->minRange;
 		bCBTower = false;
-		if (psTarget == NULL &&
-			!bCommanderBlock &&
-			!proj_Direct(psWStats))
+		if (psTarget == NULL && !bCommanderBlock && !proj_Direct(psWStats))
 		{
 			for(psCStruct=apsStructLists[psObj->player]; psCStruct; psCStruct=psCStruct->psNext)
 			{
