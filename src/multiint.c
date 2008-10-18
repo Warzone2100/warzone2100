@@ -1324,7 +1324,7 @@ BOOL recvColourRequest()
 	return changeColour(player, col, chosenPlayer);
 }
 
-
+#define ANYENTRY 0xFF		// used to allow any team slot to be used.
 /*
  * Opens a menu for a player to choose a team
  * 'player' is a player id of the player who will get a new team assigned
@@ -1332,8 +1332,10 @@ BOOL recvColourRequest()
 static void addTeamChooser(UDWORD player)
 {
 	UDWORD i;
+	int disallow = ANYENTRY;
+	SDWORD inSlot[MAX_PLAYERS] = {0};
 
-	debug(LOG_WZ, "opened team chooser for %d, current team: %d", player, playerTeamGUI[player]);
+	debug(LOG_NET, "opened team chooser for %d, current team: %d", player, playerTeamGUI[player]);
 
 	// delete team chooser botton
 	widgDelete(psWScreen,MULTIOP_TEAMS_START+player);
@@ -1350,12 +1352,51 @@ static void addTeamChooser(UDWORD player)
 				((MULTIOP_TEAMSHEIGHT+5)*player)+4,
 				MULTIOP_ROW_WIDTH,MULTIOP_TEAMSHEIGHT);
 
-	// add the teams, make sure we don't go over game.maxPlayers.
+	// tally up the team counts
+	for (i=0; i< game.maxPlayers ; i++)
+	{
+		inSlot[playerTeamGUI[i]]++;
+	}
+
+	// Make sure all players can't be on same team.
+	if ( game.maxPlayers <= 2 )	// 2p game
+	{
+		disallow = player ? playerTeamGUI[0] : playerTeamGUI[1];
+	}
+	else
+		if ( game.maxPlayers > 2 && game.maxPlayers <= 8)	// 4 or 8p game
+		{
+			int maxslot = 0 , tmpslot =0 , range = 0;
+
+			for(i=0; i < game.maxPlayers ; i++)
+			{
+				if( inSlot[i] >= tmpslot )
+				{
+					maxslot = i;
+					tmpslot = inSlot[i];
+				}
+			}
+			range = game.maxPlayers <= 4 ? 2 : 6 ;
+			if ( inSlot[maxslot] <= range  || playerTeamGUI[player] == maxslot)
+			{
+				disallow = ANYENTRY;	// we can pick any slot
+			}
+			else
+			{
+				disallow = maxslot;		// can't pick this slot
+			}
+		}
+
+	// add the teams, skipping the one we CAN'T be on (if applicable)
 	for (i = 0; i < game.maxPlayers; i++)
 	{
-		addMultiBut(psWScreen, MULTIOP_TEAMCHOOSER_FORM, MULTIOP_TEAMCHOOSER + i, i * (iV_GetImageWidth(FrontImages, IMAGE_TEAM0) + 3) + 3,
-		            6, iV_GetImageWidth(FrontImages, IMAGE_TEAM0), iV_GetImageHeight(FrontImages, IMAGE_TEAM0), _("Team"), IMAGE_TEAM0 + i , IMAGE_TEAM0_HI + i, 
-		            IMAGE_TEAM0_HI + i);
+		if (i != disallow)
+		{
+			addMultiBut(psWScreen, MULTIOP_TEAMCHOOSER_FORM, MULTIOP_TEAMCHOOSER + i, i * (iV_GetImageWidth(FrontImages,
+						IMAGE_TEAM0) + 3) + 3, 6, iV_GetImageWidth(FrontImages, IMAGE_TEAM0), iV_GetImageHeight(FrontImages,
+						IMAGE_TEAM0), _("Team"), IMAGE_TEAM0 + i , IMAGE_TEAM0_HI + i, IMAGE_TEAM0_HI + i);
+		}
+		// may want to add some kind of 'can't do' icon instead of being blank?
 	}
 
 	bTeamChooserUp[player] = true;
