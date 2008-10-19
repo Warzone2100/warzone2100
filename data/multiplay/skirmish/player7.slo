@@ -3064,7 +3064,8 @@ event reassignPlayers(reassignTr)
 {
 	if(count == me)
 	{
-		reassignAI();
+		dbg(" AI 7 is reassigningAI to dropped player ", me);
+		//reassignAI();
 	}
 }
 
