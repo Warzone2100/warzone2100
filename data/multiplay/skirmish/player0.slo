@@ -1969,7 +1969,8 @@ event takeover(takeoverTr)
 		{
 			groupAddDroid( buildGroup, droid );
 		}
-		else
+		else if (droid.droidType != DROID_TRANSPORTER
+		      && droid.droidType != DROID_COMMAND)
 		{
 			groupAddDroid( attackGroup, droid );
 		}
