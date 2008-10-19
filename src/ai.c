@@ -645,13 +645,14 @@ BOOL aiChooseTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget, int weapon_slot
 	}
 	else if (psObj->type == OBJ_STRUCTURE)
 	{
-		WEAPON_STATS	*psWStats;
-		int             longRange = proj_GetLongRange(psWStats);
+		WEAPON_STATS	*psWStats = NULL;
+		int	longRange = 0;
 
 		ASSERT( ((STRUCTURE *)psObj)->asWeaps[weapon_slot].nStat > 0,
 			"aiChooseTarget: no weapons on structure" );
 
 		psWStats = ((STRUCTURE *)psObj)->asWeaps[weapon_slot].nStat + asWeaponStats;
+		longRange = proj_GetLongRange(psWStats);
 
 		// see if there is a target from the command droids
 		psTarget = NULL;
