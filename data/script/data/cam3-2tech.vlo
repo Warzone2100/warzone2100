@@ -1,7 +1,7 @@
 // cam3tech.vlo
 //set up starting technology, templates etc. for GAMMA player at the start of a campaign
 
-script "Tech.slo"
+script "tech.slo"
 run
 {
 player			int		1	//ALPHA BASE player

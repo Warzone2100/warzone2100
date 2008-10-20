@@ -1,4 +1,4 @@
-script "camTech.slo"
+script "camtech.slo"
 run
 {
 
