@@ -120,10 +120,20 @@ static void sound_RemoveSample(SAMPLE_LIST* previous, SAMPLE_LIST* to_remove)
 #ifndef WZ_NOSOUND
 static void PrintOpenALVersion(code_part part)
 {
+	const ALchar* pDeviceNames = NULL;
+
 	debug(part, "OpenAL Vendor: %s", alGetString(AL_VENDOR));
 	debug(part, "OpenAL Version: %s", alGetString(AL_VERSION));
 	debug(part, "OpenAL Renderer: %s", alGetString(AL_RENDERER));
 	debug(part, "OpenAL Extensions: %s", alGetString(AL_EXTENSIONS));
+
+	// We are parsing to see what devices are available
+	pDeviceNames = alcGetString( NULL, ALC_DEVICE_SPECIFIER );
+	while ( strlen(pDeviceNames) )
+	{
+		debug(part, "available openAL device(s) are: %s", pDeviceNames);
+		pDeviceNames += strlen(pDeviceNames)+1;
+	}
 }
 #endif
 
