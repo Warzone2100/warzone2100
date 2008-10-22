@@ -127,12 +127,16 @@ static void PrintOpenALVersion(code_part part)
 	debug(part, "OpenAL Renderer: %s", alGetString(AL_RENDERER));
 	debug(part, "OpenAL Extensions: %s", alGetString(AL_EXTENSIONS));
 
-	// We are parsing to see what devices are available
-	pDeviceNames = alcGetString( NULL, ALC_DEVICE_SPECIFIER );
-	while ( strlen(pDeviceNames) )
+	// Print the available devices
+	pDeviceNames = alcGetString(NULL, ALC_DEVICE_SPECIFIER);
+	/* Devices are separated by NUL chars ('\0') and the list of devices is
+	 * terminated by two NUL chars (or an empty C string, depending on how
+	 * you look at it).
+	 */
+	while (pDeviceNames != NULL && *pDeviceNames != '\0')
 	{
 		debug(part, "available openAL device(s) are: %s", pDeviceNames);
-		pDeviceNames += strlen(pDeviceNames)+1;
+		pDeviceNames += strlen(pDeviceNames) + 1;
 	}
 }
 #endif
