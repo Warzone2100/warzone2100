@@ -36,7 +36,7 @@
 #include "visibility.h"
 
 /* Shutdown the mechanics system */
-BOOL mechShutdown(void)
+bool mechanicsShutdown(void)
 {
 	BASE_OBJECT *psObj, *psNext;
 
@@ -58,7 +58,7 @@ BOOL mechShutdown(void)
 				break;
 
 			default:
-				ASSERT(!"unknown object type", "mechShutdown: unknown object type in destroyed object list");
+				ASSERT(!"unknown object type", "unknown object type in destroyed object list");
 		}
 		free(psObj);
 	}

@@ -708,7 +708,7 @@ void intResetPreviousObj(void)
 
 
 /* Shut down the in game interface */
-void intShutDown(void)
+void interfaceShutDown(void)
 {
 //	widgEndScreen(psWScreen);
 	widgReleaseScreen(psWScreen);
@@ -735,7 +735,7 @@ void intShutDown(void)
 	apsObjectList = NULL;
 	apsListToOrder = NULL;
 
-	intDeleteGraphics();
+	interfaceDeleteGraphics();
 
 	//obviously!
 	ReticuleUp = false;

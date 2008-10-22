@@ -314,7 +314,7 @@ extern BOOL	ClosingTransDroids;
 extern BOOL intInitialise(void);
 
 /* Shut down the in game interface */
-extern void intShutDown(void);
+extern void interfaceShutDown(void);
 
 /* Return codes for the widget interface */
 typedef enum _int_retval

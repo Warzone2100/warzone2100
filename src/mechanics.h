@@ -36,7 +36,7 @@
 #include "visibility.h"
 
 /* Shutdown the mechanics system */
-extern BOOL mechShutdown(void);
+extern bool mechanicsShutdown(void);
 
 // Allocate the list for a component
 extern BOOL allocComponentList(COMPONENT_TYPE	type, SDWORD number);

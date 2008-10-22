@@ -624,14 +624,14 @@ BOOL frontendShutdown(void)
 
 	saveConfig();// save settings to registry.
 
-	if (!mechShutdown())
+	if (!mechanicsShutdown())
 	{
 		return false;
 	}
 
 	releasePlayerPower();
 
-	intShutDown();
+	interfaceShutDown();
 	scrShutDown();
 
 	//do this before shutting down the iV library
@@ -953,7 +953,7 @@ BOOL stageTwoShutDown(void)
 		return false;
 	}
 
-	if (!mechShutdown())
+	if (!mechanicsShutdown())
 	{
 		return false;
 	}
@@ -963,7 +963,7 @@ BOOL stageTwoShutDown(void)
 		return false;
 	}
 
-	intShutDown();
+	interfaceShutDown();
 
 	cmdDroidShutDown();
 

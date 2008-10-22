@@ -114,13 +114,10 @@ void SetFormAudioIDs(int OpenID,int CloseID);
 void intInitialiseGraphics(void);
 
 // Free up interface graphics.
-void intDeleteGraphics(void);
+void interfaceDeleteGraphics(void);
 
 // Intialise button surfaces.
 void InitialiseButtonData(void);
-
-// Free up button surfaces.
-void DeleteButtonData(void);
 
 // Get a free RENDERED_BUTTON structure for an object window button.
 SDWORD GetObjectBuffer(void);

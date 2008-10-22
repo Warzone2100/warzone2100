@@ -135,6 +135,7 @@ STRUCTURE *droidGetCommandFactory(DROID *psDroid);
 static SDWORD ButtonDrawXOffset;
 static SDWORD ButtonDrawYOffset;
 
+static void DeleteButtonData(void);
 
 // Set audio IDs for form opening/closing anims.
 // Use -1 to dissable audio.
@@ -1916,7 +1917,7 @@ void intInitialiseGraphics(void)
 
 // Free up all surfaces,graphics etc. used by the interface.
 //
-void intDeleteGraphics(void)
+void interfaceDeleteGraphics(void)
 {
 	DeleteButtonData();
 }
@@ -2132,10 +2133,10 @@ SDWORD GetSystem0Buffer(void)
 	return -1;
 }
 
-
-// Free up data for interface buttons.
-//
-void DeleteButtonData(void)
+/**
+ * Free up surfaces and data from interface buttons.
+ */
+void DeleteButtonData()
 {
 	unsigned int i;
 
