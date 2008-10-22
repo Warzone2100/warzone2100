@@ -695,17 +695,14 @@ static void runTitleLoop(void)
 			break;
 		case TITLECODE_SAVEGAMELOAD:
 			{
-				bool result;
 				debug(LOG_MAIN, "TITLECODE_SAVEGAMELOAD");
 				// Restart into gameloop and load a savegame, ONLY on a good savegame load!
-				result = initSaveGameLoad(); 
-				if (result)
+				stopTitleLoop();
+				if (!initSaveGameLoad())
 				{
-					stopTitleLoop();
-				}
-				else 
-				{	// we had a error loading savegame (corrupt?), so go back to title screen?
+					// we had a error loading savegame (corrupt?), so go back to title screen?
 					stopGameLoop();
+					startTitleLoop();
 					changeTitleMode(TITLE);
 				}
 
