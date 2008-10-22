@@ -255,10 +255,8 @@ BOOL mapLoadTagged(char *pFileName);
 /* Return a pointer to the tile structure at x,y */
 static inline WZ_DECL_PURE MAPTILE *mapTile(UDWORD x, UDWORD y)
 {
-	ASSERT( x < mapWidth,
-		"mapTile: x coordinate bigger than map width" );
-	ASSERT( y < mapHeight,
-		"mapTile: y coordinate bigger than map height" );
+	ASSERT(x < mapWidth, "x coordinate %u bigger than map width %u", x, mapWidth);
+	ASSERT(y < mapHeight, "y coordinate %u bigger than map height %u", y, mapHeight);
 
 	return &psMapTiles[x + (y * mapWidth)];
 }
@@ -276,11 +274,8 @@ static inline WZ_DECL_PURE SWORD map_TileHeight(UDWORD x, UDWORD y)
 /*sets the tile height */
 static inline void setTileHeight(UDWORD x, UDWORD y, UDWORD height)
 {
-
-	ASSERT( x < mapWidth,
-		"mapTile: x coordinate bigger than map width" );
-	ASSERT( y < mapHeight,
-		"mapTile: y coordinate bigger than map height" );
+	ASSERT(x < mapWidth, "x coordinate %u bigger than map width %u", x, mapWidth);
+	ASSERT(y < mapHeight, "y coordinate %u bigger than map height %u", y, mapHeight);
 
 	psMapTiles[x + (y * mapWidth)].height = (UBYTE) (height / ELEVATION_SCALE);
 }
