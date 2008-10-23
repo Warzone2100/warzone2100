@@ -799,6 +799,7 @@ void sound_StopStream(AUDIO_STREAM* stream)
 		{
 			debug(LOG_ERROR, "Couldn't close Stream, because of %s", PHYSFS_getLastError());
 		}
+		stream->fileHandle = NULL;
 	}
 
 	// Tell OpenAL to stop playing on the given source
