@@ -217,7 +217,8 @@ bool PlayList_Read(const char* path)
 
 	free(path_to_music);
 
-	PHYSFS_close(fileHandle);
+	if(!PHYSFS_close(fileHandle))
+		debug(LOG_ERROR, "Didn't close %s, because of %s", fileName, PHYSFS_getLastError());
 
 	return true;
 }

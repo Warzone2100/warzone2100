@@ -234,6 +234,12 @@ BOOL rebuildSearchPath( searchPathMode mode, BOOL force )
 	wzSearchPath * curSearchPath = searchPathRegistry;
 	char tmpstr[PATH_MAX] = "\0";
 
+	// we *must* do this, since we don't want any open file handles!
+	if (war_GetPlayAudioCDs())
+	{
+		cdAudio_Close();
+	}
+
 	if ( mode != current_mode || force )
 	{
 		current_mode = mode;
@@ -272,7 +278,10 @@ BOOL rebuildSearchPath( searchPathMode mode, BOOL force )
 					PHYSFS_removeFromSearchPath( tmpstr );
 
 					// Remove plain dir
-					PHYSFS_removeFromSearchPath( curSearchPath->path );
+					if(!PHYSFS_removeFromSearchPath( curSearchPath->path ))
+					{
+						debug(LOG_WARNING, "*Could not remove %s, because %s", curSearchPath->path,  PHYSFS_getLastError());
+					}
 
 					// Remove warzone.wz
 					strlcpy(tmpstr, curSearchPath->path, sizeof(tmpstr));
@@ -283,7 +292,7 @@ BOOL rebuildSearchPath( searchPathMode mode, BOOL force )
 				}
 				break;
 			case mod_campaign:
-				debug( LOG_WZ, "rebuildSearchPath: Switching to campaign mods" );
+				debug(LOG_WZ, "*** Switching to campaign mods ***");
 
 				while( curSearchPath )
 				{
@@ -297,7 +306,10 @@ BOOL rebuildSearchPath( searchPathMode mode, BOOL force )
 					addSubdirs( curSearchPath->path, "mods/global/autoload", PHYSFS_APPEND, NULL );
 					addSubdirs( curSearchPath->path, "mods/campaign", PHYSFS_APPEND, campaign_mods );
 					addSubdirs( curSearchPath->path, "mods/campaign/autoload", PHYSFS_APPEND, NULL );
-					PHYSFS_removeFromSearchPath( curSearchPath->path );
+					if (!PHYSFS_removeFromSearchPath( curSearchPath->path ))
+					{
+						debug(LOG_ERROR, "Failed to remove path %s again, because of %s", curSearchPath->path, PHYSFS_getLastError());
+					}
 
 					// Add plain dir
 					PHYSFS_addToSearchPath( curSearchPath->path, PHYSFS_APPEND );
@@ -311,7 +323,7 @@ BOOL rebuildSearchPath( searchPathMode mode, BOOL force )
 				}
 				break;
 			case mod_multiplay:
-				debug( LOG_WZ, "rebuildSearchPath: Switching to multiplay mods" );
+				debug(LOG_WZ, "*** Switching to multiplay mods ***");
 
 				while( curSearchPath )
 				{
@@ -359,6 +371,13 @@ BOOL rebuildSearchPath( searchPathMode mode, BOOL force )
 		printSearchPath();
 #endif // DEBUG
 	}
+
+	// and re-enable the music (if wanted)
+	if (war_GetPlayAudioCDs())
+	{
+		cdAudio_Open(UserMusicPath);
+	}
+
 	return true;
 }
 
