@@ -615,16 +615,18 @@ static void stopGameLoop(void)
  */
 static bool initSaveGameLoad(void)
 {
+	// NOTE: always setGameMode correctly before *any* loading routines!
+	SetGameMode(GS_NORMAL);
+	screen_RestartBackDrop();
 	// load up a save game
 	if (!loadGameInit(saveGameName))
 	{
 		// FIXME: we really should throw up a error window, but we can't (easily) so I won't.
 		debug( LOG_ERROR, "Trying to load Game %s failed!", saveGameName);
+		SetGameMode(GS_TITLE_SCREEN);
 		return false;
 	}
 
-	SetGameMode(GS_NORMAL);
-	screen_RestartBackDrop();
 	screen_StopBackDrop();
 
 	// Trap the cursor if cursor snapping is enabled
