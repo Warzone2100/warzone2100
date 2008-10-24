@@ -1119,6 +1119,11 @@ BOOL stageThreeInitialise(void)
 		eventFireCallbackTrigger((TRIGGER_TYPE)CALL_GAMEINIT);
 	}
 
+	// Need to restart CD audio, since it may have been closed before.
+	if (war_GetPlayAudioCDs())
+	{
+		cdAudio_PlayTrack(playlist_frontend); // frontend music.
+	}
 	return true;
 }
 
