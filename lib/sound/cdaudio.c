@@ -39,6 +39,13 @@ static AUDIO_STREAM* cdStream = NULL;
 
 BOOL cdAudio_Open(const char* user_musicdir)
 {
+	if(music_initialized)
+	{
+		return true;
+	}
+
+	debug(LOG_SOUND, "Starting CD audio");
+
 	PlayList_Init();
 
 	if (user_musicdir == NULL
@@ -64,6 +71,7 @@ static void cdAudio_CloseTrack(void)
 
 void cdAudio_Close(void)
 {
+	debug(LOG_SOUND, "Closing CD audio");
 	cdAudio_CloseTrack();
 	PlayList_Quit();
 	music_initialized = false;

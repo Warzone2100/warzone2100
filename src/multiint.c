@@ -50,6 +50,7 @@
 #include "lib/widget/button.h"
 #include "lib/widget/widget.h"
 #include "lib/widget/widgint.h"
+#include "lib/sound/cdaudio.h"
 
 #include "main.h"
 #include "objects.h"
@@ -197,6 +198,11 @@ void loadMapPreview(void)
 	// load the terrain types
 	psLevel = levFindDataSet(game.map);
 	rebuildSearchPath(psLevel->dataDir, false);
+	// Need to restart CD audio, since it gets closed in above call.
+	if (war_GetPlayAudioCDs())
+	{
+		cdAudio_PlayTrack(playlist_frontend); // frontend music.
+	}
 	sstrcpy(aFileName,psLevel->apDataFiles[0]);
 	aFileName[strlen(aFileName)-4] = '\0';
 	sstrcat(aFileName, "/ttypes.ttp");

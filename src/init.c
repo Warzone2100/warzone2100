@@ -234,17 +234,17 @@ BOOL rebuildSearchPath( searchPathMode mode, BOOL force )
 	wzSearchPath * curSearchPath = searchPathRegistry;
 	char tmpstr[PATH_MAX] = "\0";
 
-	// we *must* do this, since we don't want any open file handles!
-	if (war_GetPlayAudioCDs())
-	{
-		cdAudio_Close();
-	}
-
 	if ( mode != current_mode || force )
 	{
 		current_mode = mode;
 
 		rebuildSearchPath( mod_clean, false );
+
+		// we *must* do this, since we don't want any open file handles!
+		if (war_GetPlayAudioCDs())
+		{
+			cdAudio_Close();
+		}
 
 		// Start at the lowest priority
 		while( curSearchPath->lowerPriority )
@@ -367,15 +367,15 @@ BOOL rebuildSearchPath( searchPathMode mode, BOOL force )
 		PHYSFS_removeFromSearchPath( PHYSFS_getWriteDir() );
 		PHYSFS_addToSearchPath( PHYSFS_getWriteDir(), PHYSFS_PREPEND );
 
+		// and re-enable the music (if wanted)
+		if (war_GetPlayAudioCDs())
+		{
+			cdAudio_Open(UserMusicPath);
+		}
+
 #ifdef DEBUG
 		printSearchPath();
 #endif // DEBUG
-	}
-
-	// and re-enable the music (if wanted)
-	if (war_GetPlayAudioCDs())
-	{
-		cdAudio_Open(UserMusicPath);
 	}
 
 	return true;
