@@ -160,11 +160,11 @@ Section $(TEXT_SecBase) SecBase
   File "/oname=Readme.de.html" "..\..\doc\Readme.de.xhtml"
 
   ; Music files
-  SetOutPath "$INSTDIR\music"
-  File "..\..\data\music\menu.ogg"
-  File "..\..\data\music\track1.ogg"
-  File "..\..\data\music\track2.ogg"
-  File "..\..\data\music\music.wpl"
+  SetOutPath "$INSTDIR\mods\global\autoload\music\music"
+  File "..\..\data\mods\global\autoload\music\music\menu.ogg"
+  File "..\..\data\mods\global\autoload\music\music\track1.ogg"
+  File "..\..\data\mods\global\autoload\music\music\track2.ogg"
+  File "..\..\data\mods\global\autoload\music\music\music.wpl"
 
   SetOutPath "$INSTDIR\styles"
 
@@ -515,11 +515,12 @@ Section "Uninstall"
   Delete "$INSTDIR\Authors.txt"
   Delete "$INSTDIR\ChangeLog.txt"
 
-  Delete "$INSTDIR\music\menu.ogg"
-  Delete "$INSTDIR\music\track1.ogg"
-  Delete "$INSTDIR\music\track2.ogg"
-  Delete "$INSTDIR\music\music.wpl"
-  RMDir "$INSTDIR\music"
+  Delete "$INSTDIR\mods\global\autoload\music\music\menu.ogg"
+  Delete "$INSTDIR\mods\global\autoload\music\music\track1.ogg"
+  Delete "$INSTDIR\mods\global\autoload\music\music\track2.ogg"
+  Delete "$INSTDIR\mods\global\autoload\music\music\music.wpl"
+  RMDir "$INSTDIR\mods\global\autoload\music\music"
+  RMDir "$INSTDIR\mods\global\autoload\music"
 
   Delete "$INSTDIR\uninstall.exe"
 

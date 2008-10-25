@@ -1,4 +1,4 @@
-SUBDIRS = aivolution/multiplay/skirmish
+SUBDIRS = aivolution/multiplay/skirmish autoload/music
 
 %.wz: %
 	(cd $(srcdir)/$< && zip -ru0 $(abs_builddir)/$@ $(filter-out $<,$(?:$</%=%)) -x '*svn*')

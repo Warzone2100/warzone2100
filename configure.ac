@@ -313,8 +313,8 @@ AC_CONFIG_FILES([Makefile
 		data/mods/Makefile
 		data/mods/global/Makefile
 		data/mods/global/aivolution/multiplay/skirmish/Makefile
+		data/mods/global/autoload/music/Makefile
 		data/mods/multiplay/Makefile
-		data/music/Makefile
 		pkg/Makefile
 		pkg/nsis/Makefile
 		win32/Makefile
