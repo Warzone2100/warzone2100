@@ -601,7 +601,7 @@ static void posixExceptionHandler(int signum, siginfo_t * siginfo, WZ_DECL_UNUSE
 # endif
 
 	// XXXXXX will be converted into random characters by mkstemp(3)
-	static const char * gdmpPath = "/tmp/warzone2100.gdmp-XXXXXX";
+	static const char gdmpPath[] = "/tmp/warzone2100.gdmp-XXXXXX";
 
 	char dumpFilename[sizeof(gdmpPath)];
 	const int dumpFile = mkstemp(dumpFilename);
