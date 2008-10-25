@@ -282,7 +282,7 @@ extern BOOL interpInitialise(void);
 extern BOOL interpProcessorActive(void);
 
 /* Output script call stack trace */
-extern void scrOutputCallTrace(void);
+extern void scrOutputCallTrace(code_part part);
 
 #endif
 

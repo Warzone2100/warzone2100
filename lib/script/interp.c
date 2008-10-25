@@ -938,7 +938,7 @@ exit_with_error:
 	debug(LOG_ERROR,"Call depth : %d", callDepth);
 
 	/* Output script call trace */
-	scrOutputCallTrace();
+	scrOutputCallTrace(LOG_ERROR);
 	psCurProg = NULL;
 
 	TRCPRINTF( "*** ERROR EXIT ***\n" );
@@ -1113,15 +1113,15 @@ static BOOL retStackPop(UDWORD *CallerIndex, INTERP_VAL **ReturnAddress)
 
 
 /* Output script call stack trace */
-void scrOutputCallTrace(void)
+void scrOutputCallTrace(code_part part)
 {
 	SDWORD i;
 	const char *pEvent;
 
-	debug(LOG_SCRIPT, " *** Script call trace: ***");
+	debug(part, " *** Script call trace: ***");
 
 	if(!bInterpRunning){
-		debug(LOG_SCRIPT, "<Interpreter is inactive>");
+		debug(part, "<Interpreter is inactive>");
 		return;
 	}
 
@@ -1129,7 +1129,7 @@ void scrOutputCallTrace(void)
 		return;
 	}
 
-	debug(LOG_SCRIPT,"%d: %s (current event)", retStackPos + 1, &(last_called_script_event[0]));
+	debug(part,"%d: %s (current event)", retStackPos + 1, &(last_called_script_event[0]));
 
 	if(psCurProg->psDebug != NULL)
 	{
@@ -1141,12 +1141,12 @@ void scrOutputCallTrace(void)
 				pEvent = eventGetEventID(psCurProg, retStack[i].CallerIndex);
 			}
 
-			debug(LOG_SCRIPT,"%d: %s (return address: %p)", i, pEvent, retStack[i].ReturnAddress);
+			debug(part,"%d: %s (return address: %p)", i, pEvent, retStack[i].ReturnAddress);
 		}
 	}
 	else
 	{
-		debug(LOG_SCRIPT, "<No debug information available>");
+		debug(part, "<No debug information available>");
 	}
 }
 
