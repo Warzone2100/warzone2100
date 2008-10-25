@@ -8,6 +8,12 @@
    * Fix: --nosound works correctly with videos now.
    * Fix: Clean up input stream after saving a save game, to prevent it from going into chat mode.
 
+0000-00-00: Version 2.1_XXXX
+ * Sound:
+   * New: Add the original sound track
+ * Exceptionhandler:
+   * Fix: Prevent a potential symlink attack by using a temporary filename (of the form "/tmp/warzone2100.gdmp-XXXXXX") that's guaranteed not to exist yet
+
 2008-09-28: Version 2.1_beta5
  * General:
    * Change: Reordered main menus. Skirmish is now under Single Player.
@@ -25,8 +31,6 @@
    * New: Bison is no longer an external dependency when building on OS X as it is automatically downloaded if the system version of Bison is incompatible with the build system.
  * Pathfinding and savegames:
    * Change: We now use zones for path-finding again. This means savegames from beta4 are no longer useable. Your beta4 savegames can be used with 2.2, however.
- * Exceptionhandler:
-   * Fix: Prevent a potential symlink attack by using a temporary filename (of the form "/tmp/warzone2100.gdmp-XXXXXX") that's guaranteed not to exist yet
 
 2008-07-19: Version 2.1_beta4
  * General:
