@@ -604,6 +604,8 @@ static void posixExceptionHandler(int signum, siginfo_t * siginfo, WZ_DECL_UNUSE
 	static const char gdmpPath[] = "/tmp/warzone2100.gdmp-XXXXXX";
 
 	char dumpFilename[sizeof(gdmpPath)];
+	sstrcpy(dumpFilename, gdmpPath);
+
 	const int dumpFile = mkstemp(dumpFilename);
 
 
