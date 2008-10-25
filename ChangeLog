@@ -1,6 +1,8 @@
 0000-00-00: Version 2.1_XXXX
  * Sound:
    * New: Add the original sound track
+ * Exceptionhandler:
+   * Fix: Prevent a potential symlink attack by using a temporary filename (of the form "/tmp/warzone2100.gdmp-XXXXXX") that's guaranteed not to exist yet
 
 2008-09-28: Version 2.1_beta5
  * General:

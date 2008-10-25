@@ -146,7 +146,6 @@ static char
 	programPID[MAX_PID_STRING] = {'\0'},
 	programPath[PATH_MAX] = {'\0'},
 	gdbPath[PATH_MAX] = {'\0'};
-static const char * gdmpPath = "/tmp/warzone2100.gdmp";
 
 
 /**
@@ -414,13 +413,18 @@ static void posixExceptionHandler(int signum, siginfo_t * siginfo, WZ_DECL_UNUSE
 	uint32_t btSize = backtrace(btBuffer, MAX_BACKTRACE);
 # endif
 
-	pid_t pid = 0;
-	int gdbPipe[2] = {0}, dumpFile = open(gdmpPath, O_WRONLY|O_CREAT|O_TRUNC, S_IRUSR|S_IWUSR);
+	// XXXXXX will be converted into random characters by mkstemp(3)
+	static const char gdmpPath[] = "/tmp/warzone2100.gdmp-XXXXXX";
+
+	char dumpFilename[sizeof(gdmpPath)];
+	sstrcpy(dumpFilename, gdmpPath);
+
+	const int dumpFile = mkstemp(dumpFilename);
 
 
 	if (dumpFile == -1)
 	{
-		printf("Failed to create dump file '%s'", gdmpPath);
+		printf("Failed to create dump file '%s'", dumpFilename);
 		return;
 	}
 
@@ -454,9 +458,12 @@ static void posixExceptionHandler(int signum, siginfo_t * siginfo, WZ_DECL_UNUSE
 
 	if (programIsAvailable && gdbIsAvailable)
 	{
+		int gdbPipe[2];
+
 		if (pipe(gdbPipe) == 0)
 		{
-			pid = fork();
+			const pid_t pid = fork();
+
 			if (pid == (pid_t)0)
 			{
 				char *gdbArgv[] = { gdbPath, programPath, programPID, NULL };
@@ -526,7 +533,8 @@ static void posixExceptionHandler(int signum, siginfo_t * siginfo, WZ_DECL_UNUSE
 	}
 
 
-	printf("Saved dump file to '%s'\n", gdmpPath);
+	printf("Saved dump file to '%s'\n"
+	       "If you create a bugreport regardings this crash, please include this file.\n", dumpFilename);
 	close(dumpFile);
 
 
