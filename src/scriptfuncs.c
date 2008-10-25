@@ -11305,7 +11305,7 @@ BOOL scrGetTileStructure(void)
  */
 BOOL scrPrintCallStack(void)
 {
-	scrOutputCallTrace();
+	scrOutputCallTrace(LOG_SCRIPT);
 
 	return true;
 }
