@@ -152,8 +152,22 @@ BOOL sound_InitLibrary( void )
 	const ALfloat listenerVel[3] = { 0.0, 0.0, 0.0 };
 	const ALfloat listenerOri[6] = { 0.0, 0.0, 1.0, 0.0, 1.0, 0.0 };
 
-	device = alcOpenDevice(0);
+#ifdef WZ_OS_WIN
+	/* HACK: Select the "software" OpenAL device on Windows because it
+	 *       provides 256 sound sources (unlike most Creative's default
+	 *       which provides only 16), causing our lack of source-management
+	 *       to be significantly less noticeable.
+	 */
+	device = alcOpenDevice("Generic Software");
 	if (!device)
+	{
+		// If the software device isn't available, fall back to default
+		device = alcOpenDevice(NULL);
+	}
+#else
+	device = alcOpenDevice(0);
+#endif
+	if(!device)
 	{
 		PrintOpenALVersion(LOG_ERROR);
 		debug(LOG_ERROR, "Couldn't open audio device.");
