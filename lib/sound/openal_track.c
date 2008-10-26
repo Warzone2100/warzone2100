@@ -793,14 +793,6 @@ AUDIO_STREAM* sound_PlayStreamWithBuf(PHYSFS_file* fileHandle, float volume, voi
 void sound_StopStream(AUDIO_STREAM* stream)
 {
 	assert(stream != NULL);
-	if (stream->fileHandle)
-	{
-		if(!PHYSFS_close(stream->fileHandle))
-		{
-			debug(LOG_ERROR, "Couldn't close Stream, because of %s", PHYSFS_getLastError());
-		}
-		stream->fileHandle = NULL;
-	}
 
 	// Tell OpenAL to stop playing on the given source
 	alSourceStop(stream->source);
