@@ -255,8 +255,8 @@ BOOL fpathBlockingTile(SDWORD x, SDWORD y, PROPULSION_TYPE propulsion)
 	/* All tiles outside of the map and on map border are blocking. */
 	if (x < 1
 	 || y < 1
-	 || x > mapWidth
-	 || y > mapHeight)
+	 || x > mapWidth - 1
+	 || y > mapHeight - 1)
 	{
 		return true;
 	}
