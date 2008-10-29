@@ -1,0 +1,237 @@
+<ui version="4.0" >
+ <class>QWZM</class>
+ <widget class="QMainWindow" name="QWZM" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget" >
+   <layout class="QVBoxLayout" name="verticalLayout" >
+    <item>
+     <widget class="WZMOpenGLWidget" native="1" name="glView" >
+      <property name="sizePolicy" >
+       <sizepolicy vsizetype="MinimumExpanding" hsizetype="Preferred" >
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QGroupBox" name="groupBox" >
+      <property name="title" >
+       <string/>
+      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout" >
+       <item>
+        <spacer name="horizontalSpacer" >
+         <property name="orientation" >
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0" >
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <layout class="QVBoxLayout" name="verticalLayout_2" >
+         <item>
+          <widget class="QLabel" name="label" >
+           <property name="text" >
+            <string>Player</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QComboBox" name="comboBoxTeam" >
+           <item>
+            <property name="text" >
+             <string>Green</string>
+            </property>
+           </item>
+           <item>
+            <property name="text" >
+             <string>Yellow</string>
+            </property>
+           </item>
+           <item>
+            <property name="text" >
+             <string>Grey</string>
+            </property>
+           </item>
+           <item>
+            <property name="text" >
+             <string>Black</string>
+            </property>
+           </item>
+           <item>
+            <property name="text" >
+             <string>Red</string>
+            </property>
+           </item>
+           <item>
+            <property name="text" >
+             <string>Blue</string>
+            </property>
+           </item>
+           <item>
+            <property name="text" >
+             <string>Pink</string>
+            </property>
+           </item>
+           <item>
+            <property name="text" >
+             <string>Cyan</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar" >
+   <property name="geometry" >
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>800</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuImport_3DS" >
+    <property name="title" >
+     <string>File</string>
+    </property>
+    <addaction name="separator" />
+    <addaction name="actionOpenWZM" />
+    <addaction name="actionImport_3DS" />
+    <addaction name="actionImport_OBJ" />
+    <addaction name="actionImport_PIE" />
+    <addaction name="actionSave" />
+    <addaction name="actionSave_as" />
+    <addaction name="separator" />
+    <addaction name="actionQuit" />
+   </widget>
+   <widget class="QMenu" name="menuDisplay" >
+    <property name="title" >
+     <string>Display</string>
+    </property>
+    <addaction name="actionAnimation" />
+    <addaction name="actionCulling" />
+    <addaction name="actionWireframe" />
+   </widget>
+   <addaction name="menuImport_3DS" />
+   <addaction name="menuDisplay" />
+  </widget>
+  <action name="actionImport_3DS" >
+   <property name="enabled" >
+    <bool>false</bool>
+   </property>
+   <property name="text" >
+    <string>Import 3DS...</string>
+   </property>
+  </action>
+  <action name="actionImport_OBJ" >
+   <property name="enabled" >
+    <bool>false</bool>
+   </property>
+   <property name="text" >
+    <string>Import OBJ...</string>
+   </property>
+  </action>
+  <action name="actionImport_PIE" >
+   <property name="enabled" >
+    <bool>false</bool>
+   </property>
+   <property name="text" >
+    <string>Import PIE...</string>
+   </property>
+  </action>
+  <action name="actionSave" >
+   <property name="enabled" >
+    <bool>false</bool>
+   </property>
+   <property name="text" >
+    <string>Save</string>
+   </property>
+   <property name="shortcut" >
+    <string>Ctrl+S</string>
+   </property>
+  </action>
+  <action name="actionSave_as" >
+   <property name="enabled" >
+    <bool>false</bool>
+   </property>
+   <property name="text" >
+    <string>Save as...</string>
+   </property>
+  </action>
+  <action name="actionQuit" >
+   <property name="text" >
+    <string>Quit</string>
+   </property>
+  </action>
+  <action name="actionAnimation" >
+   <property name="checkable" >
+    <bool>true</bool>
+   </property>
+   <property name="text" >
+    <string>Animate</string>
+   </property>
+  </action>
+  <action name="actionCulling" >
+   <property name="checkable" >
+    <bool>true</bool>
+   </property>
+   <property name="checked" >
+    <bool>true</bool>
+   </property>
+   <property name="text" >
+    <string>Culling</string>
+   </property>
+  </action>
+  <action name="actionWireframe" >
+   <property name="checkable" >
+    <bool>true</bool>
+   </property>
+   <property name="text" >
+    <string>Wireframe</string>
+   </property>
+   <property name="shortcut" >
+    <string>Ctrl+W</string>
+   </property>
+  </action>
+  <action name="actionOpenWZM" >
+   <property name="text" >
+    <string>Open</string>
+   </property>
+   <property name="shortcut" >
+    <string>Ctrl+O</string>
+   </property>
+  </action>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>WZMOpenGLWidget</class>
+   <extends>QWidget</extends>
+   <header>wzmglwidget.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>
