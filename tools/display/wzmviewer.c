@@ -60,90 +60,6 @@ static void resizeWindow(int width, int height)
 	glViewport(0, 0, width, height);
 }
 
-// Adjust the vector in vec1 with the vector to be in vec2 by fractional value in
-// fraction which indicates how far we've come toward vec2. The result is put into
-// the result vector.
-static void interpolateVectors(Vector3f vec1, Vector3f vec2, Vector3f *result, double fraction)
-{
-	result->x = vec1.x * (1.0 - fraction) + vec2.x * fraction;
-	result->y = vec1.y * (1.0 - fraction) + vec2.y * fraction;
-	result->z = vec1.z * (1.0 - fraction) + vec2.z * fraction;
-}
-
-static void drawModel(MODEL *psModel, int x, int y)
-{
-	int i;
-
-	glColor3f(1.0f, 1.0f, 1.0f);
-	for (i = 0; i < psModel->meshes; i++)
-	{
-		MESH *psMesh = &psModel->mesh[i];
-
-		if (psMesh->frameArray)
-		{
-			FRAME *psFrame = &psMesh->frameArray[psMesh->currentFrame];
-			FRAME *nextFrame = psFrame;
-			double fraction = 1.0f / (psFrame->timeSlice * 1000) * (now - psMesh->lastChange); // until next frame
-			Vector3f vec;
-
-			glPushMatrix();	// save matrix state
-
-			assert(psMesh->currentFrame < psMesh->frames);
-
-			if (psMesh->currentFrame == psMesh->frames - 1)
-			{
-				nextFrame = &psMesh->frameArray[0];	// wrap around
-			}
-			else
-			{
-				nextFrame = &psMesh->frameArray[psMesh->currentFrame + 1];
-			}
-
-			// Try to avoid crap drivers from taking down the entire system
-			assert(isfinite(psFrame->translation.x) && isfinite(psFrame->translation.y) && isfinite(psFrame->translation.z));
-			assert(psFrame->rotation.x >= -360.0f && psFrame->rotation.y >= -360.0f && psFrame->rotation.z >= -360.0f);
-			assert(psFrame->rotation.x <= 360.0f && psFrame->rotation.y <= 360.0f && psFrame->rotation.z <= 360.0f);
-
-			// Translate
-			interpolateVectors(psFrame->translation, nextFrame->translation, &vec, fraction);
-			glTranslatef(vec.x, vec.z, vec.y);	// z and y flipped
-
-			// Rotate
-			interpolateVectors(psFrame->rotation, nextFrame->rotation, &vec, fraction);
-			glRotatef(vec.x, 1, 0, 0);
-			glRotatef(vec.z, 0, 1, 0);	// z and y flipped again...
-			glRotatef(vec.y, 0, 0, 1);
-
-			// Morph
-			if (!psMesh->teamColours)
-			{
-				psMesh->currentTextureArray = psFrame->textureArray;
-			}
-		}
-
-		glTexCoordPointer(2, GL_FLOAT, 0, psMesh->textureArray[psMesh->currentTextureArray]);
-		glVertexPointer(3, GL_FLOAT, 0, psMesh->vertexArray);
-
-		glDrawElements(GL_TRIANGLES, psMesh->faces * 3, GL_UNSIGNED_INT, psMesh->indexArray);
-		if (psMesh->frameArray)
-		{
-			glPopMatrix();	// restore position for next mesh
-		}
-	}
-}
-
-static void prepareModel(MODEL *psModel)
-{
-	glGenTextures(1, &psModel->texture);
-	glBindTexture(GL_TEXTURE_2D, psModel->texture);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, psModel->pixmap->w, psModel->pixmap->h, 0, GL_RGBA,
-	             GL_UNSIGNED_BYTE, psModel->pixmap->pixels);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-}
-
 int main(int argc, char **argv)
 {
 	MODEL *psModel;
@@ -165,7 +81,7 @@ int main(int argc, char **argv)
 	}
 	atexit(SDL_Quit);
 
-	psModel = readModel(input, texPath);
+	psModel = readModel(input, texPath, SDL_GetTicks());
 	psModel->pixmap = readPixmap(psModel->texPath);
 
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
@@ -308,7 +224,7 @@ int main(int argc, char **argv)
 		glTranslatef(0.0f, -30.0f, -50.0f + -(dimension * 2.0f));;
 		glRotatef(angle, 0, 1, 0);
 		glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
-		drawModel(psModel, 0, 0);
+		drawModel(psModel, now);
 		SDL_GL_SwapBuffers();
 		SDL_Delay(10);
 		angle += 0.1;

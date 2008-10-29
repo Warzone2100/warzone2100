@@ -17,7 +17,7 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
-#include "wzmviewer.h"
+#include "wzmutils.h"
 
 #include <png.h>
 
@@ -27,10 +27,93 @@
 #  define inline __inline
 #  define alloca _alloca
 #  define fileno _fileno
-#  define isfinite _finite
 #endif
 
-MODEL *createModel(int meshes)
+void prepareModel(MODEL *psModel)
+{
+	glGenTextures(1, &psModel->texture);
+	glBindTexture(GL_TEXTURE_2D, psModel->texture);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, psModel->pixmap->w, psModel->pixmap->h, 0, GL_RGBA,
+	             GL_UNSIGNED_BYTE, psModel->pixmap->pixels);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+}
+
+// Adjust the vector in vec1 with the vector to be in vec2 by fractional value in
+// fraction which indicates how far we've come toward vec2. The result is put into
+// the result vector.
+static void interpolateVectors(Vector3f vec1, Vector3f vec2, Vector3f *result, double fraction)
+{
+	result->x = vec1.x * (1.0 - fraction) + vec2.x * fraction;
+	result->y = vec1.y * (1.0 - fraction) + vec2.y * fraction;
+	result->z = vec1.z * (1.0 - fraction) + vec2.z * fraction;
+}
+
+void drawModel(MODEL *psModel, int now)
+{
+	int i;
+
+	glColor3f(1.0f, 1.0f, 1.0f);
+	for (i = 0; i < psModel->meshes; i++)
+	{
+		MESH *psMesh = &psModel->mesh[i];
+
+		if (psMesh->frameArray)
+		{
+			FRAME *psFrame = &psMesh->frameArray[psMesh->currentFrame];
+			FRAME *nextFrame = psFrame;
+			double fraction = 1.0f / (psFrame->timeSlice * 1000) * (now - psMesh->lastChange); // until next frame
+			Vector3f vec;
+
+			glPushMatrix();	// save matrix state
+
+			assert(psMesh->currentFrame < psMesh->frames);
+
+			if (psMesh->currentFrame == psMesh->frames - 1)
+			{
+				nextFrame = &psMesh->frameArray[0];	// wrap around
+			}
+			else
+			{
+				nextFrame = &psMesh->frameArray[psMesh->currentFrame + 1];
+			}
+
+			// Try to avoid crap drivers from taking down the entire system
+			assert(finitef(psFrame->translation.x) && finitef(psFrame->translation.y) && finitef(psFrame->translation.z));
+			assert(psFrame->rotation.x >= -360.0f && psFrame->rotation.y >= -360.0f && psFrame->rotation.z >= -360.0f);
+			assert(psFrame->rotation.x <= 360.0f && psFrame->rotation.y <= 360.0f && psFrame->rotation.z <= 360.0f);
+
+			// Translate
+			interpolateVectors(psFrame->translation, nextFrame->translation, &vec, fraction);
+			glTranslatef(vec.x, vec.z, vec.y);	// z and y flipped
+
+			// Rotate
+			interpolateVectors(psFrame->rotation, nextFrame->rotation, &vec, fraction);
+			glRotatef(vec.x, 1, 0, 0);
+			glRotatef(vec.z, 0, 1, 0);	// z and y flipped again...
+			glRotatef(vec.y, 0, 0, 1);
+
+			// Morph
+			if (!psMesh->teamColours)
+			{
+				psMesh->currentTextureArray = psFrame->textureArray;
+			}
+		}
+
+		glTexCoordPointer(2, GL_FLOAT, 0, psMesh->textureArray[psMesh->currentTextureArray]);
+		glVertexPointer(3, GL_FLOAT, 0, psMesh->vertexArray);
+
+		glDrawElements(GL_TRIANGLES, psMesh->faces * 3, GL_UNSIGNED_INT, psMesh->indexArray);
+		if (psMesh->frameArray)
+		{
+			glPopMatrix();	// restore position for next mesh
+		}
+	}
+}
+
+MODEL *createModel(int meshes, int now)
 {
 	MODEL *psModel = malloc(sizeof(MODEL));
 	int i;
@@ -58,7 +141,7 @@ MODEL *createModel(int meshes)
 		}
 		psMesh->frameArray = NULL;
 		psMesh->currentFrame = 0;
-		psMesh->lastChange = SDL_GetTicks();
+		psMesh->lastChange = now;
 	}
 
 	return psModel;
@@ -77,6 +160,7 @@ PIXMAP *readPixmap(const char *filename)
 	const unsigned int sig_length = 8;
 	unsigned char header[8];
 	unsigned char *image_data;
+	unsigned int result;
 
 	if (PNG_LIBPNG_VER_MAJOR != 1 || PNG_LIBPNG_VER_MINOR < 2)
 	{
@@ -88,7 +172,12 @@ PIXMAP *readPixmap(const char *filename)
 		printf("%s won't open!\n", filename);
 		exit(EXIT_FAILURE);
 	}
-	fread(header, 1, sig_length, fp);
+	result = fread(header, 1, sig_length, fp);
+	if (result != sig_length)
+	{
+		printf("Bad file %s\n", filename);
+		exit(EXIT_FAILURE);
+	}
 	if (png_sig_cmp(header, 0, sig_length))
 	{
 		printf("%s is not a PNG file!\n", filename);
@@ -129,7 +218,7 @@ PIXMAP *readPixmap(const char *filename)
 	row_pointers = malloc(sizeof(png_bytep) * height);
 
 	image_data = malloc(height * width * 4);
-	for (y = 0; y < height; y++)
+	for (y = 0; y < (int)height; y++)
 	{
 		row_pointers[y] = image_data + (y * width * 4);
 	}
@@ -149,7 +238,7 @@ PIXMAP *readPixmap(const char *filename)
 	return gfx;
 }
 
-MODEL *readModel(const char *filename, const char *path)
+MODEL *readModel(const char *filename, const char *path, int now)
 {
 	FILE *fp = fopen(filename, "r");
 	int num, x, meshes, mesh;
@@ -182,7 +271,7 @@ MODEL *readModel(const char *filename, const char *path)
 		fprintf(stderr, "Bad MESHES directive in %s\n", filename);
 		exit(1);
 	}
-	psModel = createModel(meshes);
+	psModel = createModel(meshes, now);
 	strcpy(psModel->texPath, path);
 	strcat(psModel->texPath, s);
 
@@ -225,7 +314,12 @@ MODEL *readModel(const char *filename, const char *path)
 		psMesh->faces = x;
 		psMesh->indexArray = malloc(sizeof(GLuint) * x * 3);
 
-		(void) fscanf(fp, "VERTEXARRAY");
+		num = fscanf(fp, "VERTEXARRAY");
+		if (num == EOF)
+		{
+			fprintf(stderr, "No VERTEXARRAY directive in %s, mesh %d.\n", filename, mesh);
+			exit(1);
+		}
 
 		for (j = 0; j < psMesh->vertices; j++)
 		{
@@ -270,7 +364,12 @@ MODEL *readModel(const char *filename, const char *path)
 			}
 		}
 
-		(void) fscanf(fp, "\nINDEXARRAY");
+		num = fscanf(fp, "\nINDEXARRAY");
+		if (num == EOF)
+		{
+			fprintf(stderr, "No INDEXARRAY directive in %s, mesh %d.\n", filename, mesh);
+			exit(1);
+		}
 
 		for (j = 0; j < psMesh->faces; j++)
 		{
