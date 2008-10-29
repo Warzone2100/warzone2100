@@ -31,6 +31,11 @@
 
 void prepareModel(MODEL *psModel)
 {
+	if (!psModel || !psModel->pixmap)
+	{
+		printf("Bad model passed to prepareModel!\n");
+		exit(EXIT_FAILURE);
+	}
 	glGenTextures(1, &psModel->texture);
 	glBindTexture(GL_TEXTURE_2D, psModel->texture);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, psModel->pixmap->w, psModel->pixmap->h, 0, GL_RGBA,
@@ -238,7 +243,7 @@ PIXMAP *readPixmap(const char *filename)
 	return gfx;
 }
 
-MODEL *readModel(const char *filename, const char *path, int now)
+MODEL *readModel(const char *filename, int now)
 {
 	FILE *fp = fopen(filename, "r");
 	int num, x, meshes, mesh;
@@ -272,8 +277,7 @@ MODEL *readModel(const char *filename, const char *path, int now)
 		exit(1);
 	}
 	psModel = createModel(meshes, now);
-	strcpy(psModel->texPath, path);
-	strcat(psModel->texPath, s);
+	strcpy(psModel->texPath, s);
 
 	// WZM does not support multiple meshes, nor importing them from PIE
 	for (mesh = 0; mesh < meshes; mesh++)

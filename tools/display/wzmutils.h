@@ -85,7 +85,7 @@ typedef struct
 
 MODEL *createModel(int meshes, int now);
 PIXMAP *readPixmap(const char *filename);
-MODEL *readModel(const char *filename, const char *path, int now);
+MODEL *readModel(const char *filename, int now);
 void freeModel(MODEL *psModel);
 void drawModel(MODEL *psModel, int now);
 void prepareModel(MODEL *psModel);

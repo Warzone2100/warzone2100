@@ -70,6 +70,7 @@ int main(int argc, char **argv)
 	bool quit = false;
 	float dimension = 0.0f;
 	int i;
+	char path[PATH_MAX];
 
 	parse_args(argc, argv);
 
@@ -81,8 +82,10 @@ int main(int argc, char **argv)
 	}
 	atexit(SDL_Quit);
 
-	psModel = readModel(input, texPath, SDL_GetTicks());
-	psModel->pixmap = readPixmap(psModel->texPath);
+	psModel = readModel(input, SDL_GetTicks());
+	strcpy(path, texPath);
+	strcat(path, psModel->texPath);
+	psModel->pixmap = readPixmap(path);
 
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 
