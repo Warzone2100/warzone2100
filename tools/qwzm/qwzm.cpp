@@ -35,17 +35,13 @@ QWzmViewer::QWzmViewer(QWidget *parent)
 	connect(comboBoxTeam, SIGNAL(currentIndexChanged(int)), this, SLOT(toggleTeam(int)));
 
 	// Set defaults
-	toggleCulling();
 	toggleAnimation();
-	toggleWireframe();
 
-	timer->start(10);	// 10 fps, which is more than enough!
+	timer->start(100);	// 10 fps, which is more than enough!
 }
 
 QWzmViewer::~QWzmViewer()
 {
-	glDisableClientState(GL_VERTEX_ARRAY);
-	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 }
 
 void QWzmViewer::toggleTeam(int index)

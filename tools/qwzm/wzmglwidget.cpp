@@ -18,10 +18,24 @@
 
 #include "wzmglwidget.h"
 
+#define gl_errors() really_report_gl_errors(__FILE__, __LINE__)
+static void really_report_gl_errors (const char *file, int line)
+{
+	GLenum error = glGetError();
+
+	if (error != GL_NO_ERROR)
+	{
+		qFatal("Oops, GL error caught: %s %s:%i", gluErrorString(error), file, line);
+	}
+}
+
 WZMOpenGLWidget::WZMOpenGLWidget(QWidget *parent)
 		: QGLWidget(parent)
 {
+	animation = false;
+	dimension = 0.0;
 	psModel = NULL;
+	teamIndex = 0;
 	if (!QGLFormat::hasOpenGL())
 	{
 		qWarning("This system has no OpenGL support!");
@@ -32,6 +46,8 @@ WZMOpenGLWidget::WZMOpenGLWidget(QWidget *parent)
 
 WZMOpenGLWidget::~WZMOpenGLWidget()
 {
+	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 	freeModel(psModel);
 }
 
@@ -51,7 +67,7 @@ void WZMOpenGLWidget::initializeGL()
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-	glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
+	gl_errors();
 }
 
 void WZMOpenGLWidget::resizeGL(int w, int h)
@@ -64,6 +80,7 @@ void WZMOpenGLWidget::resizeGL(int w, int h)
 	glViewport(0, 0, w, h);
 
 	gluPerspective(45.0f, aspect, 0.1f, 500.0f);
+	gl_errors();
 }
 
 void WZMOpenGLWidget::paintGL()
@@ -71,7 +88,8 @@ void WZMOpenGLWidget::paintGL()
 	glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	glTranslatef(0.0f, -30.0f, -50.0f + -(dimension * 2.0f));;
+	glTranslatef(0.0f, -40.0f, -50.0f + -(dimension * 2.0f));;
+	gl_errors();
 	if (psModel)
 	{
 		int now = timer.elapsed();
@@ -102,6 +120,7 @@ void WZMOpenGLWidget::paintGL()
 
 		drawModel(psModel, QTime::currentTime().elapsed());
 	}
+	gl_errors();
 }
 
 void WZMOpenGLWidget::setTeam(int index)
@@ -135,12 +154,13 @@ void WZMOpenGLWidget::setAnimation(bool value)
 
 void WZMOpenGLWidget::setModel(MODEL *model)
 {
-	psModel = model;
 	if (!model)
 	{
 		return;
 	}
 	prepareModel(model);
+	gl_errors();
+	psModel = model;
 
 	// Calculate best z offset
 	for (int i = 0; i < psModel->meshes; i++)
