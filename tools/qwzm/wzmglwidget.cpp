@@ -118,7 +118,7 @@ void WZMOpenGLWidget::paintGL()
 			}
 		}
 
-		drawModel(psModel, now);
+		drawModel(psModel, animation ? now : 0);
 	}
 	gl_errors();
 }
@@ -150,6 +150,17 @@ void WZMOpenGLWidget::setTeam(int index)
 void WZMOpenGLWidget::setAnimation(bool value)
 {
 	animation = value;
+
+	if (!animation && psModel)
+	{
+		for (int i = 0; i < psModel->meshes; i++)
+		{
+			MESH *psMesh = &psModel->mesh[i];
+
+			psMesh->currentFrame = 0;
+			psMesh->lastChange = 0;
+		}
+	}
 }
 
 void WZMOpenGLWidget::setModel(MODEL *model)
