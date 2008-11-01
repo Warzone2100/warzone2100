@@ -37,7 +37,7 @@ QWzmViewer::QWzmViewer(QWidget *parent)
 	// Set defaults
 	toggleAnimation();
 
-	timer->start(100);	// 10 fps, which is more than enough!
+	timer->start(50);
 }
 
 QWzmViewer::~QWzmViewer()

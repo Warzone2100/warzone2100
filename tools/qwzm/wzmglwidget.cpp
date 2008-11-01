@@ -118,7 +118,7 @@ void WZMOpenGLWidget::paintGL()
 			}
 		}
 
-		drawModel(psModel, QTime::currentTime().elapsed());
+		drawModel(psModel, now);
 	}
 	gl_errors();
 }
