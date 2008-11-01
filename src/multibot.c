@@ -130,11 +130,15 @@ BOOL sendDroidSecondary(const DROID* psDroid, SECONDARY_ORDER sec, SECONDARY_STA
 	{
 		uint8_t player = psDroid->player;
 		uint32_t droid = psDroid->id;
+		uint32_t body = psDroid->body;
+		Vector3uw pos = psDroid->pos;
 
 		NETuint8_t(&player);
 		NETuint32_t(&droid);
 		NETenum(&sec);
 		NETenum(&state);
+		NETuint32_t(&body);
+		NETVector3uw(&pos);
 	}
 	return NETend();
 }
@@ -145,6 +149,8 @@ BOOL recvDroidSecondary()
 	DROID*          psDroid;
 	SECONDARY_ORDER sec = DSO_ATTACK_RANGE;
 	SECONDARY_STATE state = DSS_NONE;
+	uint32_t body;
+	Vector3uw pos;
 
 	NETbeginDecode(NET_SECONDARY);
 	{
@@ -155,6 +161,8 @@ BOOL recvDroidSecondary()
 		NETuint32_t(&droid);
 		NETenum(&sec);
 		NETenum(&state);
+		NETuint32_t(&body);
+		NETVector3uw(&pos);
 
 		// If we can not find the droid should we not ask for it?
 		if (!IdToDroid(droid, player, &psDroid))
@@ -169,6 +177,23 @@ BOOL recvDroidSecondary()
 	turnOffMultiMsg(true);
 	secondarySetState(psDroid, sec, state);
 	turnOffMultiMsg(false);
+
+	// Set the droids body points (HP)
+	psDroid->body = body;
+
+	// Set the droids position if it is more than two tiles out
+	if (abs(pos.x - psDroid->pos.x) > (TILE_UNITS * 2)
+	 || abs(pos.y - psDroid->pos.y) > (TILE_UNITS * 2))
+	{
+		int oldx = psDroid->pos.x;
+		int oldy = psDroid->pos.y;
+
+		// Jump it, even if it is on screen (may want to change this)
+		psDroid->pos = pos;
+
+		// Tell the grid system that the object has moved
+		gridMoveDroid(psDroid, oldx, oldy);
+	}
 
 	return true;
 }
@@ -668,6 +693,8 @@ BOOL SendGroupOrderSelected(uint8_t player, uint32_t x, uint32_t y, const BASE_O
 			if (psDroid->selected)
 			{
 				NETuint32_t(&psDroid->id);
+				NETuint32_t(&psDroid->body);
+				NETVector3uw(&psDroid->pos);
 				--droidCount;
 			}
 		}
@@ -726,6 +753,8 @@ BOOL SendGroupOrderGroup(const DROID_GROUP* psGroup, DROID_ORDER order, uint32_t
 		for (psDroid = psGroup->psList; psDroid; psDroid = psDroid->psGrpNext)
 		{
 			NETuint32_t(&psDroid->id);
+			NETuint32_t(&psDroid->body);
+			NETVector3uw(&psDroid->pos);
 		}
 	}
 	return NETend();
@@ -743,6 +772,8 @@ BOOL recvGroupOrder()
 
 	uint8_t droidCount, i;
 	uint32_t* droidIDs;
+	uint32_t *droidBodies;
+	Vector3uw *droidPositions;
 
 	NETbeginDecode(NET_GROUPORDER);
 	{
@@ -769,6 +800,12 @@ BOOL recvGroupOrder()
 		// Allocate some space on the stack to hold the droid IDs
 		droidIDs = alloca(droidCount * sizeof(uint32_t));
 
+		// Plus some more space for the body points of the droids
+		droidBodies = alloca(droidCount * sizeof(uint32_t));
+
+		// Finally some space for the positions of the droids
+		droidPositions = alloca(droidCount * sizeof(Vector3uw));
+
 		// Retrieve the droids from the message
 		for (i = 0; i < droidCount; ++i)
 		{
@@ -781,6 +818,12 @@ BOOL recvGroupOrder()
 				NETend();
 				return false;
 			}
+
+			// Get the body points of the droid
+			NETuint32_t(&droidBodies[i]);
+
+			// Get the position of the droid
+			NETVector3uw(&droidPositions[i]);
 		}
 	}
 	NETend();
@@ -796,6 +839,8 @@ BOOL recvGroupOrder()
 	for (i = 0; i < droidCount; ++i)
 	{
 		DROID* psDroid;
+		uint32_t body = droidBodies[i];
+		Vector3uw pos = droidPositions[i];
 
 		// Retrieve the droid associated with the current ID
 		if (!IdToDroid(droidIDs[i], ANYPLAYER, &psDroid))
@@ -828,6 +873,23 @@ BOOL recvGroupOrder()
 			 * specific position. Then we don't have any destination info
 			 */
 			ProcessDroidOrder(psDroid, order, x, y, 0, 0);
+		}
+
+		// Update the droids body points
+		psDroid->body = body;
+
+		// Set the droids position if it is more than two tiles out
+		if (abs(pos.x - psDroid->pos.x) > (TILE_UNITS * 2)
+		 || abs(pos.y - psDroid->pos.y) > (TILE_UNITS * 2))
+		{
+			int oldx = psDroid->pos.x;
+			int oldy = psDroid->pos.y;
+
+			// Jump it, even if it is on screen (may want to change this)
+			psDroid->pos = pos;
+
+			// Tell the grid system that the object has moved
+			gridMoveDroid(psDroid, oldx, oldy);
 		}
 	}
 
