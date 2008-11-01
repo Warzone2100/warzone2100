@@ -199,29 +199,7 @@ int main(int argc, char **argv)
 			}
 		}
 
-		// Animation support! :-)
-		for (i = 0; i < psModel->meshes; i++)
-		{
-			MESH *psMesh = &psModel->mesh[i];
-			FRAME *psFrame;
-
-			if (!psMesh->frameArray)
-			{
-				continue;
-			}
-			psFrame = &psMesh->frameArray[psMesh->currentFrame];
-
-			assert(psMesh->currentFrame < psMesh->frames && psMesh->currentFrame >= 0);
-			if (psFrame->timeSlice != 0 && psFrame->timeSlice * 1000 + psMesh->lastChange < now)
-			{
-				psMesh->lastChange = now;
-				psMesh->currentFrame++;
-				if (psMesh->currentFrame >= psMesh->frames)
-				{
-					psMesh->currentFrame = 0;	// loop
-				}
-			}
-		}
+		animateModel(psModel, now);
 
 		glLoadIdentity();
 		glTranslatef(0.0f, -30.0f, -50.0f + -(dimension * 2.0f));;

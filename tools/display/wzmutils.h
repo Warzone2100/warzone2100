@@ -89,5 +89,6 @@ MODEL *readModel(const char *filename, int now);
 void freeModel(MODEL *psModel);
 void drawModel(MODEL *psModel, int now);
 void prepareModel(MODEL *psModel);
+void animateModel(MODEL *psModel, int now);
 
 #endif

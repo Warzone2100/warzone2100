@@ -56,6 +56,34 @@ static void interpolateVectors(Vector3f vec1, Vector3f vec2, Vector3f *result, d
 	result->z = vec1.z * (1.0 - fraction) + vec2.z * fraction;
 }
 
+void animateModel(MODEL *psModel, int now)
+{
+	int i;
+
+	for (i = 0; i < psModel->meshes; i++)
+	{
+		MESH *psMesh = &psModel->mesh[i];
+		FRAME *psFrame;
+
+		if (!psMesh->frameArray)
+		{
+			continue;
+		}
+		psFrame = &psMesh->frameArray[psMesh->currentFrame];
+
+		assert(psMesh->currentFrame < psMesh->frames && psMesh->currentFrame >= 0);
+		if (psFrame->timeSlice != 0 && psFrame->timeSlice * 1000 + psMesh->lastChange < now)
+		{
+			psMesh->lastChange = now;
+			psMesh->currentFrame++;
+			if (psMesh->currentFrame >= psMesh->frames)
+			{
+				psMesh->currentFrame = 0;	// loop
+			}
+		}
+	}
+}
+
 void drawModel(MODEL *psModel, int now)
 {
 	int i;
