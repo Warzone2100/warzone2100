@@ -31,7 +31,7 @@
 
 void prepareModel(MODEL *psModel)
 {
-	if (!psModel || !psModel->pixmap)
+	if (!psModel || !psModel->pixmap || psModel->pixmap->w <= 0 || psModel->pixmap->h <= 0 || !psModel->pixmap->pixels)
 	{
 		printf("Bad model passed to prepareModel!\n");
 		exit(EXIT_FAILURE);
@@ -60,11 +60,14 @@ void drawModel(MODEL *psModel, int now)
 {
 	int i;
 
+	assert(psModel && psModel->mesh);
+
 	glColor3f(1.0f, 1.0f, 1.0f);
 	for (i = 0; i < psModel->meshes; i++)
 	{
 		MESH *psMesh = &psModel->mesh[i];
 
+		assert(psMesh);
 		if (psMesh->frameArray)
 		{
 			FRAME *psFrame = &psMesh->frameArray[psMesh->currentFrame];
@@ -147,6 +150,7 @@ MODEL *createModel(int meshes, int now)
 		psMesh->frameArray = NULL;
 		psMesh->currentFrame = 0;
 		psMesh->lastChange = now;
+		psMesh->currentTextureArray = 0;
 	}
 
 	return psModel;
