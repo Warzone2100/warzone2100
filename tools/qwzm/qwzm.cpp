@@ -134,6 +134,21 @@ void QWzmViewer::save()
 	}
 }
 
+void QWzmViewer::setModel(QFileInfo &texPath)
+{
+	psModel->pixmap = readPixmap(texPath.absoluteFilePath().toAscii().constData());
+	if (!psModel->pixmap)
+	{
+		QMessageBox::critical(this, tr("Oops..."), "Could not read texture", QMessageBox::Ok, QMessageBox::NoButton, QMessageBox::NoButton);
+		psModel = NULL;
+		return;
+	}
+	comboBoxTeam->setCurrentIndex(0);
+	glView->setModel(psModel);
+	actionSave->setEnabled(false);
+	actionSaveAs->setEnabled(true);
+}
+
 void QWzmViewer::open3DS()
 {
 	QString model = QFileDialog::getOpenFileName(this, tr("Choose 3DS file"), QString::null, tr("3DS models (*.3ds)"));
@@ -159,18 +174,11 @@ void QWzmViewer::open3DS()
 					}
 				}
 			}
-			psModel->pixmap = readPixmap(texPath.absoluteFilePath().toAscii().constData());
-			qWarning("Loading %s with texture %s", model.toAscii().constData(), texPath.absoluteFilePath().toAscii().constData());
-			if (!psModel->pixmap)
-			{
-				QMessageBox::critical(this, tr("Oops..."), "Could not read texture", QMessageBox::Ok, QMessageBox::NoButton, QMessageBox::NoButton);
-				psModel = NULL;
-				return;
-			}
-			comboBoxTeam->setCurrentIndex(0);
-			glView->setModel(psModel);
-			actionSave->setEnabled(false);
-			actionSaveAs->setEnabled(true);
+			setModel(texPath);
+		}
+		else
+		{
+			qWarning("Failed to create model");
 		}
 	}
 }
@@ -200,18 +208,11 @@ void QWzmViewer::openPIE()
 					}
 				}
 			}
-			psModel->pixmap = readPixmap(texPath.absoluteFilePath().toAscii().constData());
-			qWarning("Loading %s with texture %s", model.toAscii().constData(), texPath.absoluteFilePath().toAscii().constData());
-			if (!psModel->pixmap)
-			{
-				QMessageBox::critical(this, tr("Oops..."), "Could not read texture", QMessageBox::Ok, QMessageBox::NoButton, QMessageBox::NoButton);
-				psModel = NULL;
-				return;
-			}
-			comboBoxTeam->setCurrentIndex(0);
-			glView->setModel(psModel);
-			actionSave->setEnabled(false);
-			actionSaveAs->setEnabled(true);
+			setModel(texPath);
+		}
+		else
+		{
+			qWarning("Failed to create model");
 		}
 	}
 }
@@ -237,25 +238,14 @@ void QWzmViewer::openWZM()
 					if (!texPath.exists())
 					{
 						QMessageBox::critical(this, tr("Oops..."), "Could not find texture", QMessageBox::Ok, QMessageBox::NoButton, QMessageBox::NoButton);
+						free(tmpModel);
 						return;
 					}
 				}
 			}
-
-			qWarning("Creating model from %s and texture from %s", filename.toAscii().constData(), texPath.absoluteFilePath().toAscii().constData());
-			tmpModel->pixmap = readPixmap(texPath.absoluteFilePath().toAscii().constData());
-			if (!tmpModel->pixmap)
-			{
-				QMessageBox::critical(this, tr("Oops..."), "Could not read texture", QMessageBox::Ok, QMessageBox::NoButton, QMessageBox::NoButton);
-			}
-			else
-			{
-				comboBoxTeam->setCurrentIndex(0);
-				glView->setModel(tmpModel);
-				actionSaveAs->setEnabled(true);
-				actionSave->setEnabled(true);
-				psModel = tmpModel;
-			}
+			psModel = tmpModel;
+			setModel(texPath);
+			actionSave->setEnabled(true);
 		}
 		else
 		{

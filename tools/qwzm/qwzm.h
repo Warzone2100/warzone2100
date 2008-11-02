@@ -61,6 +61,7 @@ class QWzmViewer : public QMainWindow, private Ui::QWZM
 	MODEL *psModel;
 	void load3DS(QString input);
 	void loadPIE(QString input);
+	void setModel(QFileInfo &texPath);
 };
 
 #endif
