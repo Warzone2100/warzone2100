@@ -56,10 +56,13 @@ static void interpolateVectors(Vector3f vec1, Vector3f vec2, Vector3f *result, d
 	result->z = vec1.z * (1.0 - fraction) + vec2.z * fraction;
 }
 
-void animateModel(MODEL *psModel, int now)
+void drawModel(MODEL *psModel, int now)
 {
 	int i;
 
+	assert(psModel && psModel->mesh);
+
+	// Update animation frames
 	for (i = 0; i < psModel->meshes; i++)
 	{
 		MESH *psMesh = &psModel->mesh[i];
@@ -82,14 +85,8 @@ void animateModel(MODEL *psModel, int now)
 			}
 		}
 	}
-}
 
-void drawModel(MODEL *psModel, int now)
-{
-	int i;
-
-	assert(psModel && psModel->mesh);
-
+	// Draw model
 	glColor3f(1.0f, 1.0f, 1.0f);
 	for (i = 0; i < psModel->meshes; i++)
 	{

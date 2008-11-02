@@ -94,30 +94,6 @@ void WZMOpenGLWidget::paintGL()
 	{
 		int now = timer.elapsed();
 
-		// Animation support
-		for (int i = 0; i < psModel->meshes && animation; i++)
-		{
-			MESH *psMesh = &psModel->mesh[i];
-			FRAME *psFrame;
-
-			if (!psMesh->frameArray)
-			{
-				continue;
-			}
-			psFrame = &psMesh->frameArray[psMesh->currentFrame];
-
-			assert(psMesh->currentFrame < psMesh->frames && psMesh->currentFrame >= 0);
-			if (psFrame->timeSlice != 0 && psFrame->timeSlice * 1000.0 + psMesh->lastChange < now)
-			{
-				psMesh->lastChange = now;
-				psMesh->currentFrame++;
-				if (psMesh->currentFrame >= psMesh->frames)
-				{
-					psMesh->currentFrame = 0;	// loop
-				}
-			}
-		}
-
 		drawModel(psModel, animation ? now : 0);
 	}
 	gl_errors();

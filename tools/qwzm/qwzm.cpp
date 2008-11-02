@@ -37,7 +37,7 @@ QWzmViewer::QWzmViewer(QWidget *parent)
 	// Set defaults
 	toggleAnimation();
 
-	timer->start(50);
+	timer->start(25);
 }
 
 QWzmViewer::~QWzmViewer()

@@ -199,8 +199,6 @@ int main(int argc, char **argv)
 			}
 		}
 
-		animateModel(psModel, now);
-
 		glLoadIdentity();
 		glTranslatef(0.0f, -30.0f, -50.0f + -(dimension * 2.0f));;
 		glRotatef(angle, 0, 1, 0);
