@@ -88,7 +88,7 @@ void WZMOpenGLWidget::paintGL()
 	glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	glTranslatef(0.0f, -40.0f, -50.0f + -(dimension * 2.0f));;
+	glTranslatef(0.0f, 0.0f/*-40.0f*/, -50.0f + -(dimension * 2.0f));;
 	gl_errors();
 	if (psModel)
 	{

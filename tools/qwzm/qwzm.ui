@@ -122,7 +122,7 @@
     <addaction name="actionImport_OBJ" />
     <addaction name="actionImport_PIE" />
     <addaction name="actionSave" />
-    <addaction name="actionSave_as" />
+    <addaction name="actionSaveAs" />
     <addaction name="separator" />
     <addaction name="actionQuit" />
    </widget>
@@ -134,12 +134,22 @@
     <addaction name="actionCulling" />
     <addaction name="actionWireframe" />
    </widget>
+   <widget class="QMenu" name="menuConversion" >
+    <property name="title" >
+     <string>Conversion</string>
+    </property>
+    <addaction name="actionSwapYZ" />
+    <addaction name="actionReverseWinding" />
+    <addaction name="actionFlipVerticalTexCoords" />
+    <addaction name="actionScaleModel" />
+   </widget>
    <addaction name="menuImport_3DS" />
    <addaction name="menuDisplay" />
+   <addaction name="menuConversion" />
   </widget>
   <action name="actionImport_3DS" >
    <property name="enabled" >
-    <bool>false</bool>
+    <bool>true</bool>
    </property>
    <property name="text" >
     <string>Import 3DS...</string>
@@ -155,7 +165,7 @@
   </action>
   <action name="actionImport_PIE" >
    <property name="enabled" >
-    <bool>false</bool>
+    <bool>true</bool>
    </property>
    <property name="text" >
     <string>Import PIE...</string>
@@ -163,7 +173,7 @@
   </action>
   <action name="actionSave" >
    <property name="enabled" >
-    <bool>false</bool>
+    <bool>true</bool>
    </property>
    <property name="text" >
     <string>Save</string>
@@ -172,9 +182,9 @@
     <string>Ctrl+S</string>
    </property>
   </action>
-  <action name="actionSave_as" >
+  <action name="actionSaveAs" >
    <property name="enabled" >
-    <bool>false</bool>
+    <bool>true</bool>
    </property>
    <property name="text" >
     <string>Save as...</string>
@@ -221,6 +231,26 @@
    </property>
    <property name="shortcut" >
     <string>Ctrl+O</string>
+   </property>
+  </action>
+  <action name="actionSwapYZ" >
+   <property name="text" >
+    <string>Swap Y and Z axis</string>
+   </property>
+  </action>
+  <action name="actionReverseWinding" >
+   <property name="text" >
+    <string>Reverse polygon winding</string>
+   </property>
+  </action>
+  <action name="actionFlipVerticalTexCoords" >
+   <property name="text" >
+    <string>Flip vertical texcoords</string>
+   </property>
+  </action>
+  <action name="actionScaleModel" >
+   <property name="text" >
+    <string>Scale model</string>
    </property>
   </action>
  </widget>

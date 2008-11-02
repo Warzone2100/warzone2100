@@ -272,6 +272,81 @@ PIXMAP *readPixmap(const char *filename)
 	return gfx;
 }
 
+int saveModel(const char *filename, MODEL *psModel)
+{
+	FILE *fp = fopen(filename, "w");
+	int mesh;
+
+	if (!fp)
+	{
+		fprintf(stderr, "Cannot open \"%s\" for reading: %s", filename, strerror(errno));
+		return -1;
+	}
+	fprintf(fp, "WZM %d\n", 1);
+	fprintf(fp, "TEXTURE %s\n", psModel->texPath);
+	fprintf(fp, "MESHES %d", psModel->meshes);
+	for (mesh = 0; mesh < psModel->meshes; mesh++)
+	{
+		MESH *psMesh = &psModel->mesh[mesh];
+		int j;
+
+		fprintf(fp, "\nMESH %d\n", mesh);
+		fprintf(fp, "TEAMCOLOURS %d\n", psMesh->teamColours);
+		fprintf(fp, "VERTICES %d\n", psMesh->vertices);
+		fprintf(fp, "FACES %d\n", psMesh->faces);
+		fprintf(fp, "VERTEXARRAY\n");
+		for (j = 0; j < psMesh->vertices; j++)
+		{
+			GLfloat *v = &psMesh->vertexArray[j * 3];
+
+			fprintf(fp, "\t%f %f %f\n", v[0], v[1], v[2]);
+		}
+
+		fprintf(fp, "TEXTUREARRAYS %d", psMesh->textureArrays);
+		for (j = 0; j < psMesh->textureArrays; j++)
+		{
+			int k;
+
+			fprintf(fp, "\nTEXTUREARRAY %d", j);
+			for (k = 0; k < psMesh->vertices; k++)
+			{
+				GLfloat *v = &psMesh->textureArray[j][k * 2];
+
+				fprintf(fp, "\n\t%f %f", v[0], v[1]);
+			}
+		}
+
+		fprintf(fp, "\nINDEXARRAY");
+		for (j = 0; j < psMesh->faces; j++)
+		{
+			GLuint *v = &psMesh->indexArray[j * 3];
+
+			fprintf(fp, "\n\t%u %u %u", v[0], v[1], v[2]);
+		}
+
+		fprintf(fp, "\nFRAMES %d", psMesh->frames);
+		// Read animation frames
+		for (j = 0; j < psMesh->frames; j++)
+		{
+			FRAME *psFrame = &psMesh->frameArray[j];
+
+			fprintf(fp, "\n\t%f %d %f %f %f %f %f %f", psFrame->timeSlice, psFrame->textureArray, 
+			             psFrame->translation.x, psFrame->translation.y, psFrame->translation.z,
+			             psFrame->rotation.x, psFrame->rotation.y, psFrame->rotation.z);
+		}
+
+		fprintf(fp, "\nCONNECTORS %d", 0);	// FIXME!
+/*		for (j = 0; j < x; j++)
+		{
+			int pos[3] = { 0, 0, 0 };
+
+			fprintf(fp, "\n%d %d %d", pos[0], pos[1], pos[2]);
+		}
+*/
+	}
+	return 0;
+}
+
 MODEL *readModel(const char *filename, int now)
 {
 	FILE *fp = fopen(filename, "r");

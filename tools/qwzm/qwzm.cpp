@@ -21,21 +21,26 @@
 QWzmViewer::QWzmViewer(QWidget *parent)
            : QMainWindow(parent), Ui::QWZM()
 {
+	psModel = NULL;
 	QTimer *timer = new QTimer(this);
 
 	setupUi(this);
 	connect(timer, SIGNAL(timeout()), this, SLOT(tick()));
 	connect(actionQuit, SIGNAL(triggered()), qApp, SLOT(quit()));
-	connect(actionSave_as, SIGNAL(triggered()), this, SLOT(saveAs()));
+	connect(actionSave, SIGNAL(triggered()), this, SLOT(save()));
+	connect(actionSaveAs, SIGNAL(triggered()), this, SLOT(saveAs()));
 	connect(actionImport_3DS, SIGNAL(triggered()), this, SLOT(open3DS()));
 	connect(actionOpenWZM, SIGNAL(triggered()), this, SLOT(openWZM()));
 	connect(actionWireframe, SIGNAL(triggered()), this, SLOT(toggleWireframe()));
 	connect(actionCulling, SIGNAL(triggered()), this, SLOT(toggleCulling()));
 	connect(actionAnimation, SIGNAL(triggered()), this, SLOT(toggleAnimation()));
+	connect(actionScaleModel, SIGNAL(triggered()), this, SLOT(toggleScale()));
 	connect(comboBoxTeam, SIGNAL(currentIndexChanged(int)), this, SLOT(toggleTeam(int)));
 
 	// Set defaults
 	toggleAnimation();
+	actionSave->setEnabled(false);
+	actionSaveAs->setEnabled(false);
 
 	timer->start(25);
 }
@@ -47,6 +52,12 @@ QWzmViewer::~QWzmViewer()
 void QWzmViewer::toggleTeam(int index)
 {
 	glView->setTeam(index);
+}
+
+void QWzmViewer::toggleScale()
+{
+	double result = QInputDialog::getDouble(this, tr("Choose scale factor"), tr("Factor:") );
+	// TODO
 }
 
 void QWzmViewer::tick()
@@ -85,11 +96,23 @@ void QWzmViewer::toggleWireframe()
 
 void QWzmViewer::saveAs()
 {
-	filename = QFileDialog::getOpenFileName(this, tr("Choose output file"), QString::null, QString::null);
+	if (psModel)
+	{
+		filename = QFileDialog::getSaveFileName(this, tr("Choose output file"), QString::null, QString::null);
+		actionSave->setEnabled(true);
+		save();
+	}
 }
 
 void QWzmViewer::save()
 {
+	if (filename != "" && psModel)
+	{
+		if (saveModel(filename.toAscii().constData(), psModel) != 0)
+		{
+			QMessageBox::critical(this, tr("Oops..."), "Could not save model", QMessageBox::Ok, QMessageBox::NoButton, QMessageBox::NoButton);
+		}
+	}
 }
 
 void QWzmViewer::open3DS()
@@ -99,6 +122,8 @@ void QWzmViewer::open3DS()
 	if (model != "" && texture != "")
 	{
 		// TODO
+		actionSave->setEnabled(false);
+		actionSaveAs->setEnabled(true);
 	}
 }
 
@@ -107,18 +132,19 @@ void QWzmViewer::openWZM()
 	filename = QFileDialog::getOpenFileName(this, tr("Choose 3DS file"), QString::null, tr("WZM models (*.wzm)"));
 	if (filename != "")
 	{
-		MODEL *psModel = readModel(filename.toAscii().constData(), 0);
-		if (psModel)
+		MODEL *tmpModel = readModel(filename.toAscii().constData(), 0);
+
+		if (tmpModel)
 		{
-			QFileInfo texPath(psModel->texPath);
+			QFileInfo texPath(tmpModel->texPath);
 
 			// Try to find texture automatically
 			if (!texPath.exists())
 			{
-				texPath.setFile(QString("../../data/base/texpages/"), psModel->texPath);
+				texPath.setFile(QString("../../data/base/texpages/"), tmpModel->texPath);
 				if (!texPath.exists())
 				{
-					texPath.setFile(QFileDialog::getExistingDirectory(this, tr("Specify texture directory"), QString::null), psModel->texPath);
+					texPath.setFile(QFileDialog::getExistingDirectory(this, tr("Specify texture directory"), QString::null), tmpModel->texPath);
 					if (!texPath.exists())
 					{
 						QMessageBox::critical(this, tr("Oops..."), "Could not find texture", QMessageBox::Ok, QMessageBox::NoButton, QMessageBox::NoButton);
@@ -128,13 +154,19 @@ void QWzmViewer::openWZM()
 			}
 
 			qWarning("Creating model from %s and texture from %s", filename.toAscii().constData(), texPath.absoluteFilePath().toAscii().constData());
-			psModel->pixmap = readPixmap(texPath.absoluteFilePath().toAscii().constData());
-			if (!psModel->pixmap)
+			tmpModel->pixmap = readPixmap(texPath.absoluteFilePath().toAscii().constData());
+			if (!tmpModel->pixmap)
 			{
 				QMessageBox::critical(this, tr("Oops..."), "Could not read texture", QMessageBox::Ok, QMessageBox::NoButton, QMessageBox::NoButton);
 			}
-			comboBoxTeam->setCurrentIndex(0);
-			glView->setModel(psModel);
+			else
+			{
+				comboBoxTeam->setCurrentIndex(0);
+				glView->setModel(tmpModel);
+				actionSaveAs->setEnabled(true);
+				actionSave->setEnabled(true);
+				psModel = tmpModel;
+			}
 		}
 		else
 		{

@@ -50,9 +50,11 @@ class QWzmViewer : public QMainWindow, private Ui::QWZM
 	void toggleTeam(int index);
 	void tick();
 	void toggleAnimation();
+	void toggleScale();
 
 	private:
 	QString filename;
+	MODEL *psModel;
 };
 
 #endif
