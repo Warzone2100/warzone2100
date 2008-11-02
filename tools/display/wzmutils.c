@@ -383,7 +383,6 @@ MODEL *readModel(const char *filename, int now)
 	psModel = createModel(meshes, now);
 	strcpy(psModel->texPath, s);
 
-	// WZM does not support multiple meshes, nor importing them from PIE
 	for (mesh = 0; mesh < meshes; mesh++)
 	{
 		MESH *psMesh = &psModel->mesh[mesh];

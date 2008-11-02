@@ -90,11 +90,11 @@ void dump_wzm_file(Lib3dsFile *f, FILE *ctl, bool swapYZ, bool invertUV, bool re
 
 			if (swapYZ)
 			{
-				fprintf(ctl, "\t%d %d %d\n", (int)(pos[0] * scaleFactor), (int)(pos[2] * scaleFactor), (int)(pos[1] * scaleFactor));
+				fprintf(ctl, "\t%f %f %f\n", pos[0] * scaleFactor, pos[2] * scaleFactor, pos[1] * scaleFactor);
 			}
 			else
 			{
-				fprintf(ctl, "\t%d %d %d\n", (int)(pos[0] * scaleFactor), (int)(pos[1] * scaleFactor), (int)(pos[2] * scaleFactor));
+				fprintf(ctl, "\t%f %f %f\n", pos[0] * scaleFactor, pos[1] * scaleFactor, pos[2] * scaleFactor);
 			}
 		}
 

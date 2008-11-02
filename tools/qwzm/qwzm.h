@@ -55,6 +55,7 @@ class QWzmViewer : public QMainWindow, private Ui::QWZM
 	private:
 	QString filename;
 	MODEL *psModel;
+	void load3DS(QString input);
 };
 
 #endif
