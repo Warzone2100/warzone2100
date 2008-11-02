@@ -45,6 +45,7 @@ class QWzmViewer : public QMainWindow, private Ui::QWZM
 	void save();
 	void open3DS();
 	void openWZM();
+	void openPIE();
 	void toggleWireframe();
 	void toggleCulling();
 	void toggleTeam(int index);
@@ -56,6 +57,7 @@ class QWzmViewer : public QMainWindow, private Ui::QWZM
 	QString filename;
 	MODEL *psModel;
 	void load3DS(QString input);
+	void loadPIE(QString input);
 };
 
 #endif
