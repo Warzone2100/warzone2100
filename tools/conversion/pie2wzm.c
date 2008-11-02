@@ -139,7 +139,6 @@ static void dump_to_wzm(FILE *ctl, FILE *fp)
 	}
 	fprintf(ctl, "MESHES %d\n", levels);
 
-	// WZM does not support multiple meshes, nor importing them from PIE
 	for (level = 0; level < levels; level++)
 	{
 		int j, points, faces, facesWZM, faceCount, pointsWZM, pointCount, textureArrays = 1;
@@ -341,7 +340,6 @@ static void dump_to_wzm(FILE *ctl, FILE *fp)
 		faceCount = 0;
 
 		fprintf(ctl, "\nINDEXARRAY");
-		// TODO support reverse winding option?
 		for (j = 0; j < faces; j++)
 		{
 			int k, key, previous;
