@@ -52,6 +52,9 @@ class QWzmViewer : public QMainWindow, private Ui::QWZM
 	void tick();
 	void toggleAnimation();
 	void toggleScale();
+	void toggleSwapYZ();
+	void toggleReverseWinding();
+	void toggleFlipVerticalTexCoords();
 
 	private:
 	QString filename;

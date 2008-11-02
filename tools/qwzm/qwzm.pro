@@ -1,5 +1,5 @@
 FORMS += qwzm.ui
-SOURCES += qwzm.cpp ../display/wzmutils.c wzmglwidget.cpp
+SOURCES += qwzm.cpp ../display/wzmutils.c wzmglwidget.cpp conversion.cpp
 HEADERS += qwzm.h ../display/wzmutils.h wzmglwidget.h
 TEMPLATE = app
 CONFIG += warn_on \
