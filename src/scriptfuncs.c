@@ -6744,7 +6744,7 @@ BOOL scrDebugFile(void)
 		return false;
 	}
 
-	debug(LOG_SCRIPT, strParam1);
+	debug(LOG_SCRIPT, "%s", strParam1);
 
 	return true;
 }
@@ -10907,7 +10907,7 @@ BOOL scrASSERT(void)
 #ifdef DEBUG
 	/* Just pass the expression and message from script */
 	sprintf(sTmp,"%d) %s",player,strParam1);
-	ASSERT(bExpression, sTmp);
+	ASSERT(bExpression, "%s", sTmp);
 #else
 	if(scrDebug[player])
 	{
