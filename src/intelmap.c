@@ -1466,29 +1466,20 @@ void resetIntelligencePauseState(void)
 	}
 }
 
-
-// play this message immediately, but definitely donot tell the intelligence screen to start
-
+/** Play an intelligence message.
+ * This function is used from scripts to give updates to the mission.
+ */
 void displayImmediateMessage(MESSAGE *psMessage)
 {
 	/*
 		This has to be changed to support a script calling a message in the intellegence screen
 	*/
 
-#ifndef NO_VIDEO
 	psCurrentMsg = psMessage;
-	/* so we lied about definately not starting the intelligence screen */
-	addIntelScreen();
-
-	// Using software cursors (when on) for these menus due to a bug in SDL's SDL_ShowCursor()
-	pie_SetMouse(CURSOR_DEFAULT, war_GetColouredCursor());
-
-	/* addIntelScreen() (via addIntelMap()) actually starts
-	 * playing psCurrentMsg automatically */
-	return;
-#endif
-
 	StartMessageSequences(psMessage,true);
+	// remind the player that the message can be seen again from
+	// the intelligence screen
+	addConsoleMessage(_("New Intelligence Report"), CENTRE_JUSTIFY, SYSTEM_MESSAGE);
 }
 
 
