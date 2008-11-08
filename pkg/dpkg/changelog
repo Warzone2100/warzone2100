@@ -5,6 +5,8 @@ warzone2100 (2.1.0~rc1-0) unstable; urgency=low
       of weapons on a droid (DROID_MAXWEAPS, bug #12400)
     * Fix: Crash as a result of uninitialised C++ library, caused by linking
       as C instead of C++ (ticket:65)
+    * Fix: Crash when passing an invalid file as log file with the
+      "--debugfile" parameter (ticket:136)
     * Change: Don't terminate on a bad/corrupted save game, instead reload the
       main menu.
   * AI:
