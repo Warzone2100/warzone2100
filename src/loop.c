@@ -173,6 +173,8 @@ GAMECODE gameLoop(void)
 	HandleClosingWindows();	// Needs to be done outside the pause case.
 
 	audio_Update();
+	
+	pie_ShowMouse(true);
 
 	if (!paused)
 	{
@@ -818,6 +820,7 @@ void loop_SetVideoPlaybackMode(void)
 	gameTimeStop();
 	pie_SetFogStatus(false);
 	audio_StopAll();
+	pie_ShowMouse(false);
 }
 
 
@@ -829,6 +832,7 @@ void loop_ClearVideoPlaybackMode(void)
 	gameTimeStart();
 	pie_SetFogStatus(true);
 	cdAudio_Resume();
+	pie_ShowMouse(true);
 	ASSERT( videoMode == 0, "loop_ClearVideoPlaybackMode: out of sync." );
 }
 

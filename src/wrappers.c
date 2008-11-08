@@ -114,6 +114,7 @@ TITLECODE titleLoop(void)
 	pie_SetDepthBufferStatus(DEPTH_CMP_ALWAYS_WRT_ON);
 	pie_SetFogStatus(false);
 	screen_RestartBackDrop();
+	pie_ShowMouse(true);
 
 	// When we first init the game, firstcall is true.
 	if (firstcall)
@@ -319,6 +320,7 @@ void loadingScreenCallback(void)
 // fill buffers with the static screen
 void initLoadingScreen( BOOL drawbdrop )
 {
+	pie_ShowMouse(false);
 	if (!drawbdrop)	// fill buffers
 	{
 		//just init the load bar with the current screen

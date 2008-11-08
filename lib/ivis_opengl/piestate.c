@@ -42,6 +42,7 @@ static CURSOR MouseCursor = 0;
 static bool ColouredMouse = false;
 static IMAGEFILE* MouseCursors = NULL;
 static uint16_t MouseCursorIDs[CURSOR_MAX];
+static bool MouseVisible = true;
 
 extern RENDER_STATE	rendStates;
 
@@ -225,7 +226,6 @@ void pie_SetMouse(CURSOR cursor, bool coloured)
 
 	MouseCursor = cursor;
 
-	SDL_ShowCursor(ColouredMouse ? SDL_DISABLE : SDL_ENABLE);
 	frameSetCursor(MouseCursor);
 	ColouredMouse = coloured;
 }
@@ -235,12 +235,25 @@ void pie_SetMouse(CURSOR cursor, bool coloured)
  */
 void pie_DrawMouse(unsigned int X, unsigned int Y)
 {
-	SDL_ShowCursor(ColouredMouse ? SDL_DISABLE : SDL_ENABLE);
+	if (ColouredMouse && MouseVisible)
+	{
+		ASSERT(MouseCursors != NULL, "Drawing coloured mouse cursor while no coloured mouse cursors have been loaded yet!");
 
-	if (!ColouredMouse)
-		return;
-
-	ASSERT(MouseCursors != NULL, "Drawing coloured mouse cursor while no coloured mouse cursors have been loaded yet!");
-
-	iV_DrawImage(MouseCursors, MouseCursorIDs[MouseCursor], X, Y);
+		iV_DrawImage(MouseCursors, MouseCursorIDs[MouseCursor], X, Y);
+	}
 }
+
+/** Set the visibility of the mouse cursor */
+void pie_ShowMouse(bool visible)
+{
+	MouseVisible = visible;
+	if (MouseVisible && !ColouredMouse)
+	{
+		SDL_ShowCursor(SDL_ENABLE);
+	}
+	else
+	{
+		SDL_ShowCursor(SDL_DISABLE);
+	}
+}
+
