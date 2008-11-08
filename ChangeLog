@@ -8,11 +8,38 @@
    * Fix: --nosound works correctly with videos now.
    * Fix: Clean up input stream after saving a save game, to prevent it from going into chat mode.
 
-0000-00-00: Version 2.1_XXXX
+2008-11-08: Version 2.1_rc1
+ * General:
+   * Fix: Don't validate the weapons of a structure using the maximum amount of weapons on a droid (DROID_MAXWEAPS, bug #12400)
+   * Fix: Crash as a result of uninitialised C++ library, caused by linking as C instead of C++ (ticket:65)
+   * Change: Don't terminate on a bad/corrupted save game, instead reload the main menu.
+ * AI:
+   * Fix: Prevent the AI from attempting to add command or transporter droids to a group as that's impossible with these droid types (r5678, r6194)
  * Sound:
    * New: Add the original sound track
+   * New: Dump out available devices available for OpenAL on startup when LOG_SOUND is enabled (r6196, r6197).
+   * Workaround: Force software "accelerated" OpenAL for Windows XP users to prevent audio "clogging" issues (ticket:115)
+ * GUI:
+   * Fix: When new games are created in the lobby make sure to remove the "NO GAMES ARE AVAILABLE" message (bug #12399).
+   * Fix: Prevent the "return" key from being mistaken for enabling chat mode if it has just been pressed to save a game (r6132, r6191)
+   * Fix: Prevent flickering of the backdrop image while loading (ticket:87)
+ * Gameplay:
+   * Change: Disable multi turret support
+   * Fix: Fix the laser satellite such that it does hit droids correctly
+   * Fix: Team alliances from skirmish/multiplayer games are "copied" over to campaign games. (ticket:103)
+ * Scripts:
+   * Fix: Read some scripts using with the correct case for their filenames (bug #12011, r5539)
+   * Change: Dump the script call stack to LOG_ERROR on errors.
+ * Maps:
+   * Change: Be more lenient with broken maps, since we do not have a map editor that we can fix: If the next feature in the map overlaps another, remove the already placed feature in favour of the new one. (bug #12121, r5782, r6195)
+ * Multiplayer:
+   * Fix: When a player drops out do not grant control to the AI. (ticket:105)
+ * Buildsystem:
+   * Change: Verify the versions of pkg-config, xgettext and msgfmt in the configure script instead of autogen.sh
  * Exceptionhandler:
    * Fix: Prevent a potential symlink attack by using a temporary filename (of the form "/tmp/warzone2100.gdmp-XXXXXX") that's guaranteed not to exist yet
+   * Fix: Prevent a potential crash in the Windows exception handler (r6146, r6147)
+   * Change: Make sure that the backtraces are slightly more useful when GDB isn't available but the GNU C library is (r5678, r6194)
 
 2008-09-28: Version 2.1_beta5
  * General:
@@ -29,6 +56,7 @@
  * Buildsystem:
    * Fix: The OS X build system now works properly on both Tiger and Leopard.
    * New: Bison is no longer an external dependency when building on OS X as it is automatically downloaded if the system version of Bison is incompatible with the build system.
+   * Change: Verify the Flex and Bison versions in the configure script instead of autogen.sh
  * Pathfinding and savegames:
    * Change: We now use zones for path-finding again. This means savegames from beta4 are no longer useable. Your beta4 savegames can be used with 2.2, however.
 
