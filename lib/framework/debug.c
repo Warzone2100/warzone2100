@@ -166,19 +166,22 @@ void debug_callback_file( void ** data, const char * outputBuffer )
  * \param[in,out]	data	In: 	The filename to output to.
  * 							Out:	The filehandle.
  */
-void debug_callback_file_init( void ** data )
+bool debug_callback_file_init(void ** data)
 {
 	const char * filename = (const char *)*data;
-	FILE * logfile = NULL;
 
-	logfile = fopen( filename, "w" );
-	if (!logfile) {
-		fprintf( stderr, "Could not open %s for appending!\n", filename );
-	} else {
-		setbuf( logfile, NULL );
-		fprintf( logfile, "\n--- Starting log ---\n" );
-		*data = logfile;
+	FILE* const logfile = fopen(filename, "w");
+	if (!logfile)
+	{
+		fprintf(stderr, "Could not open %s for appending!\n", filename);
+		return false;
 	}
+
+	setbuf(logfile, NULL);
+	fprintf(logfile, "\n--- Starting log ---\n");
+	*data = logfile;
+
+	return true;
 }
 
 
@@ -250,7 +253,7 @@ void debug_register_callback( debug_callback_fn callback, debug_callback_init in
 {
 	debug_callback * curCallback = callbackRegistry, * tmpCallback = NULL;
 
-	tmpCallback = (debug_callback*)malloc(sizeof(debug_callback));
+	tmpCallback = (debug_callback*)malloc(sizeof(*tmpCallback));
 
 	tmpCallback->next = NULL;
 	tmpCallback->callback = callback;
@@ -258,8 +261,13 @@ void debug_register_callback( debug_callback_fn callback, debug_callback_init in
 	tmpCallback->exit = exit;
 	tmpCallback->data = data;
 
-	if ( tmpCallback->init )
-		tmpCallback->init( &tmpCallback->data );
+	if (tmpCallback->init
+	 && !tmpCallback->init(&tmpCallback->data))
+	{
+		debug(LOG_ERROR, "Failed to initialise debug callback");
+		free(tmpCallback);
+		return;
+	}
 
 	if ( !curCallback )
 	{

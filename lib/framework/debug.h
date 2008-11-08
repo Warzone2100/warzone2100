@@ -33,6 +33,7 @@
 
 #include <assert.h>
 #include "macros.h"
+#include "types.h"
 
 #if defined(__cplusplus)
 extern "C"
@@ -139,7 +140,7 @@ typedef enum {
 extern BOOL enabled_debug[LOG_LAST];
 
 typedef void (*debug_callback_fn)(void**, const char*);
-typedef void (*debug_callback_init)(void**);
+typedef bool (*debug_callback_init)(void**);
 typedef void (*debug_callback_exit)(void**);
 
 typedef struct _debug_callback {
@@ -180,7 +181,7 @@ extern void debugFlushStderr(void);
 void debug_register_callback( debug_callback_fn callback, debug_callback_init init, debug_callback_exit exit, void * data );
 
 void debug_callback_file(void **data, const char *outputBuffer);
-void debug_callback_file_init(void **data);
+bool debug_callback_file_init(void **data);
 void debug_callback_file_exit(void **data);
 
 void debug_callback_stderr(void **data, const char *outputBuffer);
