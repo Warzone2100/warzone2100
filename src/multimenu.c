@@ -175,10 +175,10 @@ static void SetPlayerTextColor( int mode, UDWORD player )
 // ////////////////////////////////////////////////////////////////////////////
 // enumerates maps in the gamedesc file.
 // returns only maps that are valid the right 'type'
-static BOOL enumerateMultiMaps(char *found, UDWORD *players,BOOL first, UBYTE camToUse, UBYTE numPlayers)
+static char* enumerateMultiMaps(UDWORD* players, bool first, unsigned int camToUse, unsigned int numPlayers)
 {
 	static LEVEL_DATASET *lev;
-	UBYTE cam;
+	unsigned int cam;
 
 	if(first)
 	{
@@ -205,10 +205,18 @@ static BOOL enumerateMultiMaps(char *found, UDWORD *players,BOOL first, UBYTE ca
 				&& (numPlayers == 0 || numPlayers == lev->players)
 				&& cam == camToUse )
 			{
-				strcpy(found,lev->pName);
+				char* const found = strdup(lev->pName);
+				if (found == NULL)
+				{
+					debug(LOG_ERROR, "Out of memory");
+					// No way to indicate out-of-memory failure by return value
+					abort();
+					return NULL;
+				}
+
 				*players = lev->players;
 				lev = lev->psNext;
-				return true;
+				return found;
 			}
 		}
 		else	//  campaign
@@ -232,15 +240,24 @@ static BOOL enumerateMultiMaps(char *found, UDWORD *players,BOOL first, UBYTE ca
 			    && (numPlayers == 0 || numPlayers == lev->players)
 			    && cam == camToUse )
 			{
-				strcpy(found,lev->pName);
+				char* const found = strdup(lev->pName);
+				if (found == NULL)
+				{
+					debug(LOG_ERROR, "Out of memory");
+					// No way to indicate out-of-memory failure by return value
+					abort();
+					return NULL;
+				}
+
 				*players = lev->players;
 				lev = lev->psNext;
-				return true;
+				return found;
 			}
 		}
 		lev = lev->psNext;
 	}
-	return false;
+
+	return NULL;
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -376,11 +393,14 @@ void addMultiRequest(const char* searchDir, const char* fileExtension, UDWORD mo
 
 	if(mode == MULTIOP_MAP)									// if its a map, also look in the predone stuff.
 	{
-		if(enumerateMultiMaps(tips[0],&players, true,mapCam,numPlayers))
+		char* map;
+		if ((map = enumerateMultiMaps(&players, true, mapCam, numPlayers)))
 		{
+			free(map);
 			numButtons++;
-			while(enumerateMultiMaps(tips[0],&players, false,mapCam,numPlayers))
+			while ((map = enumerateMultiMaps(&players, false, mapCam, numPlayers)))
 			{
+				free(map);
 				numButtons++;
 			}
 		}
@@ -534,14 +554,16 @@ void addMultiRequest(const char* searchDir, const char* fileExtension, UDWORD mo
 
 	if(mode == MULTIOP_MAP)
 	{
-		char sTemp[64];
-		if(enumerateMultiMaps( sTemp,&players,true,mapCam,numPlayers))
+		char* mapName;
+		if ((mapName = enumerateMultiMaps(&players, true, mapCam, numPlayers)))
 		{
-			do{
+			do
+			{
 				unsigned int tip_index = check_tip_index(sButInit.id-M_REQUEST_BUT);
 
 				// add number of players to string.
-				sprintf(tips[tip_index],"%s",sTemp );
+				sstrcpy(tips[tip_index], mapName);
+				free(mapName);
 
 				sButInit.pTip = tips[tip_index];
 				sButInit.pText = tips[tip_index];
@@ -561,7 +583,7 @@ void addMultiRequest(const char* searchDir, const char* fileExtension, UDWORD mo
 					sButInit.y = 4;
 					sButInit.majorID += 1;
 				}
-			}while(enumerateMultiMaps(sTemp,&players,false,mapCam,numPlayers));
+			} while ((mapName = enumerateMultiMaps(&players, false, mapCam, numPlayers)));
 		}
 	}
 	multiRequestUp = true;
