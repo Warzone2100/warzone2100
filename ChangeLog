@@ -8,7 +8,7 @@
    * Fix: --nosound works correctly with videos now.
    * Fix: Clean up input stream after saving a save game, to prevent it from going into chat mode.
 
-2008-11-08: Version 2.1_rc1
+2008-11-09: Version 2.1_rc1
  * General:
    * Fix: Don't validate the weapons of a structure using the maximum amount of weapons on a droid (DROID_MAXWEAPS, bug #12400)
    * Fix: Crash as a result of uninitialised C++ library, caused by linking as C instead of C++ (ticket:65)
