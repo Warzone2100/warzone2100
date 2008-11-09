@@ -196,7 +196,7 @@ BOOL levParse(const char* buffer, size_t size, searchPathMode datadir)
 				psDataSet->players = 1;
 				psDataSet->game = -1;
 				psDataSet->dataDir = datadir;
-				LIST_ADDEND(psLevels, psDataSet, LEVEL_DATASET);
+				LIST_APPEND(psLevels, psDataSet, LEVEL_DATASET);
 				currData = 0;
 
 				// set the dataset type

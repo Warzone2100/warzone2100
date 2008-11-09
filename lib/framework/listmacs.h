@@ -27,39 +27,40 @@
  * TYPE			the type of the list structure (not a pointer to it)
  *
  */
-#ifndef _listmacs_h
-#define _listmacs_h
+#ifndef __INCLUDED_LIB_FRAMEWORK_LISTMACS_H__
+#define __INCLUDED_LIB_FRAMEWORK_LISTMACS_H__
 
-// initialise a list
-#define LIST_INIT(psHead) psHead = NULL
-
-// add an entry to the start of a list
-#define LIST_ADD(psHead, psEntry) \
-	(psEntry)->psNext = (psHead); \
-	(psHead) = (psEntry)
-
-// add an entry to a list
-#define LIST_ADDEND(psHead, psEntry, TYPE) \
+/**
+ * Append an entry to the end of a linked list
+ */
+#define LIST_APPEND(psHead, psEntry, TYPE) \
 { \
 	TYPE	*psPrev, *psCurr; \
 \
+	/* Find the end of the list */ \
 	psPrev = NULL; \
 	for(psCurr = (psHead); psCurr; psCurr = psCurr->psNext) \
 	{ \
 		psPrev = psCurr; \
 	} \
+\
+	(psEntry)->psNext = NULL; \
+\
 	if (psPrev) \
 	{ \
+		/* Append to the end */ \
 		psPrev->psNext = (psEntry); \
 	} \
 	else \
 	{ \
-		(psEntry)->psNext = NULL; \
+		/* If a NULL list got passed, make this item the list */ \
 		(psHead) = (psEntry); \
 	} \
 }
 
-// remove an entry from a list
+/**
+ * Remove an entry from a linked list
+ */
 #define LIST_REMOVE(psHead, psEntry, TYPE) \
 { \
 	TYPE	*psPrev, *psCurr; \
@@ -73,7 +74,7 @@
 		} \
 		psPrev = psCurr; \
 	} \
-	ASSERT( psCurr!=NULL, "LIST_REMOVE: " __FILE__ "(%d): entry not found", __LINE__ ); \
+	ASSERT(psCurr != NULL, "LIST_REMOVE: entry not found"); \
 	if (psPrev == NULL) \
 	{ \
 		(psHead) = (psHead)->psNext; \
@@ -84,5 +85,4 @@
 	} \
 }
 
-
-#endif
+#endif // __INCLUDED_LIB_FRAMEWORK_LISTMACS_H__
