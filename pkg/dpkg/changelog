@@ -53,7 +53,7 @@ warzone2100 (2.1.0~rc1-0) unstable; urgency=low
     * Change: Make sure that the backtraces are slightly more useful when GDB
       isn't available but the GNU C library is (r5678, r6194)
 
- -- Giel van Schijndel <muggenhor@gna.org>  Sat, 08 Nov 2008 19:54:29 +0100
+ -- Giel van Schijndel <muggenhor@gna.org>  Sat, 09 Nov 2008 16:48:06 +0100
 
 warzone2100 (2.1.0~beta5-0) unstable; urgency=low
 
