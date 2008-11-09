@@ -10741,11 +10741,11 @@ static BOOL writeMessageFile(char *pFileName)
 						VIEW_PROXIMITY * viewData = (VIEW_PROXIMITY *)((VIEWDATA *)psMessage->pViewData)->pData;
 
 						psSaveMessage->locX =  viewData->x;
-						endian_udword(psSaveMessage->locX);
+						endian_udword(&psSaveMessage->locX);
 						psSaveMessage->locY =  viewData->y;
-						endian_udword(psSaveMessage->locY);
+						endian_udword(&psSaveMessage->locY);
 						psSaveMessage->sender = viewData->sender;
-						endian_sdword(psSaveMessage->sender);
+						endian_sdword(&psSaveMessage->sender);
 					}
 				}
 				else
