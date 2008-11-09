@@ -189,22 +189,4 @@ static inline void endian_sdword(SDWORD* sdword)
 #endif
 }
 
-static inline void endian_fract(float* fract)
-{
-#ifdef __BIG_ENDIAN__
-  UBYTE tmp, *ptr;
-
-  ptr = (UBYTE *) fract;
-  tmp = ptr[0];
-  ptr[0] = ptr[3];
-  ptr[3] = tmp;
-  tmp = ptr[1];
-  ptr[1] = ptr[2];
-  ptr[2] = ptr[1];
-#else
-  // Prevent warnings
-  (void)fract;
-#endif
-}
-
 #endif
