@@ -459,10 +459,13 @@
 /*! \def WZ_ASSERT_STATIC_STRING
  * Asserts that two types are equal
  */
-#if defined(WZ_CC_GNU) || defined(WZ_CC_INTEL)
+#if defined(__cplusplus)
+#  include <typeinfo>
+#  define WZ_ASSERT_STATIC_STRING(_var) assert(typeid(_var) == typeid(char[]))
+#elif defined(WZ_CC_GNU) || defined(WZ_CC_INTEL)
 #  define WZ_ASSERT_STATIC_STRING(_var) assert(__builtin_types_compatible_p(typeof(_var), char[]))
 #else
-#  define WZ_ASSERT_STATIC_STRING(_var) (void)_var
+#  define WZ_ASSERT_STATIC_STRING(_var) (void)(_var)
 #endif
 
 
