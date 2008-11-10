@@ -81,8 +81,6 @@ extern void renderShadow( DROID *psDroid, iIMDShape *psShadowIMD );
 extern PIELIGHT getTileColour(int x, int y);
 extern void setTileColour(int x, int y, PIELIGHT colour);
 
-extern UDWORD getSuggestedPitch( void );
-
 extern BOOL	clipXY ( SDWORD x, SDWORD y);
 
 extern BOOL init3DView(void);

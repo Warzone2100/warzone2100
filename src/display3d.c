@@ -19,12 +19,9 @@
 */
 /**
  * @file display3d.c
- * Draws the 3D terrain view. Both the 3D and pseudo-3D components - textured tiles.
-
-	-------------------------------------------------------------------
-	-	Alex McLean & Jeremy Sallis, Pumpkin Studios, EIDOS INTERACTIVE -
-	-------------------------------------------------------------------
-*/
+ * Draws the 3D view.
+ * Originally by Alex McLean & Jeremy Sallis, Pumpkin Studios, EIDOS INTERACTIVE
+ */
 #include "lib/framework/frame.h"
 #include "lib/framework/math-help.h"
 
@@ -93,9 +90,9 @@
 #include "anim_id.h"
 #include "cmddroid.h"
 
-#define WATER_ZOFFSET 32		// Sorting offset for main water tile.
-#define WATER_EDGE_ZOFFSET 64	// Sorting offset for water edge tiles.
-#define WATER_DEPTH	127			// Amount to push terrain below water.
+#define WATER_ZOFFSET 32		///< Sorting offset for main water tile.
+#define WATER_EDGE_ZOFFSET 64	///< Sorting offset for water edge tiles.
+#define WATER_DEPTH	127			///< Amount to push terrain below water.
 
 /********************  Prototypes  ********************/
 
@@ -108,7 +105,7 @@ static void preprocessTiles(void);
 static BOOL	renderWallSection(STRUCTURE *psStructure);
 static void	drawDragBox(void);
 static void	calcFlagPosScreenCoords(SDWORD *pX, SDWORD *pY, SDWORD *pR);
-static void	flipsAndRots(unsigned int tileNumber, unsigned int i, unsigned int j);
+static void	setTexCoords(unsigned int tileNumber, unsigned int i, unsigned int j);
 static void	displayTerrain(void);
 static iIMDShape	*flattenImd(iIMDShape *imd, UDWORD structX, UDWORD structY, UDWORD direction);
 static void	drawTiles(iView *player);
@@ -145,70 +142,92 @@ BOOL	godMode;
 BOOL	showGateways = false;
 BOOL	showPath = false;
 
+/// The name of the texture page used to draw the skybox
 static char skyboxPageName[PATH_MAX] = "page-25";
 
+/// The current shift of the water texture
 static float waterRealValue = 0.0f;
+/// The speed at which to shift the water texture
 #define WAVE_SPEED 0.015f
 
-// When to display HP bars
+/// When to display HP bars
 UWORD barMode;
 
-/* Have we made a selection by clicking the mouse - used for dragging etc */
+/// Have we made a selection by clicking the mouse? - used for dragging etc
 BOOL	selectAttempt = false;
 
-/* Vectors that hold the player and camera directions and positions */
+/// Vectors that hold the player and camera directions and positions
 iView	player;
 
-/* Temporary rotation vectors to store rotations for droids etc */
+/// Temporary rotation vectors to store rotations for droids etc
 static Vector3i	imdRot,imdRot2;
 
-/* How far away are we from the terrain */
+/// How far away are we from the terrain
 UDWORD		distance;
 
-/* Stores the screen coordinates of the transformed terrain tiles */
+/// Stores the screen coordinates of the transformed terrain tiles
 static TERRAIN_VERTEX tileScreenInfo[VISIBLE_YTILES+1][VISIBLE_XTILES+1];
 
-/* Records the present X and Y values for the current mouse tile (in tiles */
+/// Records the present X and Y values for the current mouse tile (in tiles)
 SDWORD mouseTileX, mouseTileY;
 
-/* Do we want the radar to be rendered */
+/// Do we want the radar to be rendered
 BOOL	radarOnScreen=false;
 
-/* Show unit/building gun/sensor range*/
+/// Show unit/building gun/sensor range
 bool rangeOnScreen = false;  // For now, most likely will change later!  -Q 5-10-05   A very nice effect - Per
 
-/* Temporary values for the terrain render - top left corner of grid to be rendered */
+/// Temporary values for the terrain render - top left corner of grid to be rendered
 static int playerXTile, playerZTile;
 
-/* Have we located the mouse? */
+/// Have we located the mouse?
 static BOOL	mouseLocated = true;
 
-/* The box used for multiple selection - present screen coordinates */
+/// The cached value of frameGetFrameNumber()
 static UDWORD currentGameFrame;
-static UDWORD numTiles = 0;
-static SDWORD tileZ = 8000;
+/// The box used for multiple selection - present screen coordinates
 static QUAD dragQuad;
 
-/* temporary buffer used for flattening IMDs */
+/// temporary buffer used for flattening IMDs
 static Vector3f alteredPoints[iV_IMD_MAX_POINTS];
 
-//number of tiles visible
-// FIXME This should become dynamic! (A function of resolution, angle and zoom maybe.)
+/** Number of tiles visible
+ * \todo This should become dynamic! (A function of resolution, angle and zoom maybe.)
+ */
 Vector2i visibleTiles = { VISIBLE_XTILES, VISIBLE_YTILES };
 
+/// The X position (in tile coordinates) of the middle of the visible map
 UDWORD	terrainMidX;
+/// The Y position (in tile coordinates) of the middle of the visible map
 UDWORD	terrainMidY;
 
+/// The tile we use for drawing the bottom of a body of water
 static unsigned int underwaterTile = WATER_TILE;
+/** The tile we use for drawing rubble
+ * \note Unused.
+ */
 static unsigned int rubbleTile = BLOCKING_RUBBLE_TILE;
 
-bool showFPS = false;       // default OFF, turn ON via console command 'showfps'
-bool showSAMPLES = false;   // default OFF, turn ON via console command 'showsamples'
+/** Show how many frames we are rendering per second 
+ * default OFF, turn ON via console command 'showfps'
+ */
+bool showFPS = false;       //
+/** Show how many samples we are rendering per second
+ * default OFF, turn ON via console command 'showsamples'
+ */
+bool showSAMPLES = false;
+/// Geometric offset which will be passed to pie_SetGeometricOffset
 UDWORD geoOffset;
-
+/// The average terrain height for the center of the area the camera is looking at
 static int averageCentreTerrainHeight;
 
+/** The time at which a sensor target was last asssigned
+ * Used to draw a visual effect.
+ */
 static UDWORD	lastTargetAssignation = 0;
+/** The time at which an order concerning a destination was last given
+ * Used to draw a visual effect.
+ */
 static UDWORD	lastDestAssignation = 0;
 static BOOL	bSensorTargetting = false;
 static BOOL	bDestTargetting = false;
@@ -220,11 +239,12 @@ static UDWORD	destTileX=0,destTileY=0;
 #define	DEST_TARGET_TIME	(GAME_TICKS_PER_SEC/4)
 #define STRUCTURE_ANIM_RATE 4
 
-/* Colour strobe values for the strobing drag selection box */
+/// The distance the selection box will pulse
 #define BOX_PULSE_SIZE  10
 
 /********************  Functions  ********************/
 
+/// Display the multiplayer chat box
 static void displayMultiChat(void)
 {
 	UDWORD	pixelLength;
@@ -245,19 +265,20 @@ static void displayMultiChat(void)
 	iV_DrawText(sTextToSend, RET_X + 3, 469 + E_H);
 }
 
-// Optimisation to stop it being calculated every frame
+/// Cached values
 static SDWORD	gridCentreX,gridCentreZ,gridVarCalls;
+/// Get the cached value for the X center of the grid
 SDWORD	getCentreX( void )
 {
 	gridVarCalls++;
 	return(gridCentreX);
 }
-
+/// Get the cached value for the Z center of the grid
 SDWORD	getCentreZ( void )
 {
 	return(gridCentreZ);
 }
-
+/// Show all droid movement parts by displaying an explosion at every step
 static void showDroidPaths(void)
 {
 	DROID *psDroid;
@@ -292,7 +313,7 @@ static void showDroidPaths(void)
 	}
 }
 
-/* Render the 3D world */
+/// Render the 3D world
 void draw3DScene( void )
 {
 	BOOL bPlayerHasHQ = false;
@@ -460,15 +481,11 @@ void draw3DScene( void )
 }
 
 
-/* Draws the 3D textured terrain */
+/// Draws the 3D textured terrain
 static void displayTerrain(void)
 {
-	tileZ = 8000;
-
 	/* We haven't yet located which tile mouse is over */
 	mouseLocated = false;
-
-	numTiles = 0;
 
 	pie_PerspectiveBegin();
 
@@ -501,7 +518,7 @@ void	setProximityDraw(BOOL val)
 	bDrawProximitys = val;
 }
 /***************************************************************************/
-
+/// Calculate the average terrain height for the area directly below the player
 static void calcAverageTerrainHeight(iView *player)
 {
 	int numTilesAveraged = 0, i, j;
@@ -541,19 +558,19 @@ static void calcAverageTerrainHeight(iView *player)
 		averageCentreTerrainHeight = ELEVATION_SCALE * TILE_UNITS;
 	}
 }
-
+/// Get the colour of the terrain tile at the specified position
 PIELIGHT getTileColour(int x, int y)
 {
 	return mapTile(x, y)->colour;
 }
-
+/// Set the colour of the tile at the specified position
 void setTileColour(int x, int y, PIELIGHT colour)
 {
 	MAPTILE *psTile = mapTile(x, y);
 
 	psTile->colour = colour;
 }
-
+/// Draw the terrain and all droids, missiles and other objects on it
 static void drawTiles(iView *player)
 {
 	UDWORD i, j;
@@ -674,7 +691,7 @@ static void drawTiles(iView *player)
 				}
 
 				// If it's the main water tile (has water texture) then..
-				if (TileNumber_tile(psTile->texture) == WATER_TILE && !bEdgeTile)
+				if (TileNumber_tile(psTile->texture) == underwaterTile && !bEdgeTile)
 				{
 					// Push the terrain down for the river bed.
 					shiftVal = WATER_DEPTH + environGetData(playerXTile+j, playerZTile+i) * 1.5f;
@@ -798,7 +815,7 @@ static void drawTiles(iView *player)
 			psTile = mapTile(playerXTile + j, playerZTile + i);
 
 			// check if we need to draw a water edge
-			if (terrainType(psTile) == TER_WATER && TileNumber_tile(psTile->texture) != WATER_TILE)
+			if (terrainType(psTile) == TER_WATER && TileNumber_tile(psTile->texture) != underwaterTile)
 			{
 				//get distance of furthest corner
 				int zMax = MAX(tileScreenInfo[i][j].screen.z, tileScreenInfo[i + 1][j].screen.z);
@@ -895,7 +912,7 @@ static void drawTiles(iView *player)
 	locateMouse();
 }
 
-
+/// Initialise the fog, skybox and some other stuff
 BOOL init3DView(void)
 {
 	/* Arbitrary choice - from direct read! */
@@ -953,13 +970,13 @@ BOOL init3DView(void)
 }
 
 
-// set the view position from save game
+/// set the view position from save game
 void disp3d_setView(iView *newView)
 {
 	memcpy(&player,newView,sizeof(iView));
 }
 
-// reset the camera rotation (used for save games <= 10)
+/// reset the camera rotation (used for save games <= 10)
 void disp3d_resetView()
 {
 	player.r.z = 0; // roll
@@ -970,15 +987,14 @@ void disp3d_resetView()
 	player.p.y = START_HEIGHT; // height
 }
 
-// get the view position for save game
+/// get the view position for save game
 void disp3d_getView(iView *newView)
 {
 	memcpy(newView,&player,sizeof(iView));
 }
 
-/* John's routine - deals with flipping around the vertex ordering for source textures
-when flips and rotations are being done */
-static void flipsAndRots(unsigned int tileNumber, unsigned int i, unsigned int j)
+/// Set up the texture coordinates for a tile
+static void setTexCoords(unsigned int tileNumber, unsigned int i, unsigned int j)
 {
 	/* unmask proper values from compressed data */
 	const unsigned short texture = TileNumber_texture(tileNumber);
@@ -1060,7 +1076,7 @@ static void flipsAndRots(unsigned int tileNumber, unsigned int i, unsigned int j
 }
 
 
-/* Clips anything - not necessarily a droid */
+/// Are the current tile coordinates visible on screen?
 BOOL clipXY(SDWORD x, SDWORD y)
 {
 	if (x > (SDWORD)player.p.x &&  x < (SDWORD)(player.p.x+(visibleTiles.x * TILE_UNITS)) &&
@@ -1070,9 +1086,10 @@ BOOL clipXY(SDWORD x, SDWORD y)
 		return(false);
 }
 
-
-/*	Get the onscreen corrdinates of a Object Position so we can draw a 'button' in
-the Intelligence screen.  VERY similar to above function*/
+/** Get the screen coordinates for the current transform matrix.
+ * This function is used to determine the area the user can click for the
+ * intelligence screen buttons. The radius parameter is always set to the same value.
+ */
 static void	calcFlagPosScreenCoords(SDWORD *pX, SDWORD *pY, SDWORD *pR)
 {
 	/* Get it's absolute dimensions */
@@ -1090,8 +1107,7 @@ static void	calcFlagPosScreenCoords(SDWORD *pX, SDWORD *pY, SDWORD *pR)
 	*pR = radius;
 }
 
-
-/* Renders the bullets and their effects in 3D */
+/// Decide whether to render a projectile, and make sure it will be drawn
 static void display3DProjectiles( void )
 {
 	PROJECTILE		*psObj;
@@ -1145,7 +1161,7 @@ static void display3DProjectiles( void )
 	}
 }	/* end of function display3DProjectiles */
 
-
+/// Draw a projectile to the screen
 void	renderProjectile(PROJECTILE *psCurr)
 {
 	WEAPON_STATS	*psStats;
@@ -1216,8 +1232,8 @@ void	renderProjectile(PROJECTILE *psCurr)
 	/* Flush matrices */
 }
 
-void
-renderAnimComponent( const COMPONENT_OBJECT *psObj )
+/// Draw an animated component
+void	renderAnimComponent( const COMPONENT_OBJECT *psObj )
 {
 	BASE_OBJECT *psParentObj = (BASE_OBJECT*)psObj->psParent;
 	const SDWORD posX = psParentObj->pos.x + psObj->position.x,
@@ -1329,8 +1345,7 @@ renderAnimComponent( const COMPONENT_OBJECT *psObj )
 	}
 }
 
-
-/* Draw the buildings */
+/// Draw the buildings
 void displayStaticObjects( void )
 {
 	STRUCTURE	*psStructure;
@@ -1402,7 +1417,7 @@ void displayStaticObjects( void )
 	pie_SetDepthOffset(0.0f);
 }
 
-//draw Factory Delivery Points
+/// Draw Factory Delivery Points
 void displayDelivPoints(void)
 {
 	FLAG_POSITION	*psDelivPoint;
@@ -1419,11 +1434,11 @@ void displayDelivPoints(void)
 	}
 }
 
-/* Draw the features */
+/// Draw the features
 void displayFeatures( void )
 {
-FEATURE	*psFeature;
-UDWORD		clan;
+	FEATURE	*psFeature;
+	UDWORD		clan;
 
 		/* player can only be 0 for the features */
 		clan = 0;
@@ -1440,7 +1455,7 @@ UDWORD		clan;
 		}
 }
 
-/* Draw the Proximity messages for the **SELECTED PLAYER ONLY***/
+/// Draw the Proximity messages for the *SELECTED PLAYER ONLY*
 void displayProximityMsgs( void )
 {
 	PROXIMITY_DISPLAY	*psProxDisp;
@@ -1474,6 +1489,7 @@ void displayProximityMsgs( void )
 	}
 }
 
+/// Display an animation
 static void displayAnimation( ANIM_OBJECT * psAnimObj, BOOL bHoldOnFirstFrame )
 {
 	UWORD i, uwFrame;
@@ -1518,7 +1534,7 @@ static void displayAnimation( ANIM_OBJECT * psAnimObj, BOOL bHoldOnFirstFrame )
 	}
 }
 
-/* Draw the droids */
+/// Draw the droids
 void displayDynamicObjects( void )
 {
 	DROID		*psDroid;
@@ -1563,7 +1579,7 @@ void displayDynamicObjects( void )
 	} // end for clan
 } // end Fn
 
-/* Sets the player's position and view angle - defaults player rotations as well */
+/// Sets the player's position and view angle - defaults player rotations as well
 void setViewPos( UDWORD x, UDWORD y, WZ_DECL_UNUSED BOOL Pan )
 {
 	SDWORD midX,midY;
@@ -1584,12 +1600,14 @@ void setViewPos( UDWORD x, UDWORD y, WZ_DECL_UNUSED BOOL Pan )
 	scroll();
 }
 
+/// Get the player position
 void getPlayerPos(SDWORD *px, SDWORD *py)
 {
 	*px = player.p.x + (visibleTiles.x/2)*TILE_UNITS;
 	*py = player.p.z + (visibleTiles.y/2)*TILE_UNITS;
 }
 
+/// Set the player position
 void setPlayerPos(SDWORD x, SDWORD y)
 {
 	SDWORD midX,midY;
@@ -1608,24 +1626,25 @@ void setPlayerPos(SDWORD x, SDWORD y)
 	player.r.z = 0;
 }
 
-
+/// Set the angle at which the player views the world
 void	setViewAngle(SDWORD angle)
 {
 	player.r.x = DEG(360 + angle);
 }
 
-
+/// Get the distance at which the player views the world
 UDWORD getViewDistance(void)
 {
 	return distance;
 }
 
+/// Set the distance at which the player views the world
 void	setViewDistance(UDWORD dist)
 {
 	dist = distance;
 }
 
-
+/// Draw a feature (tree/rock/etc.)
 void	renderFeature(FEATURE *psFeature)
 {
 	UDWORD		featX,featY;
@@ -1728,6 +1747,7 @@ void	renderFeature(FEATURE *psFeature)
 	iV_MatrixEnd();
 }
 
+/// 
 void renderProximityMsg(PROXIMITY_DISPLAY *psProxDisp)
 {
 	UDWORD			msgX = 0, msgY = 0;
@@ -1845,7 +1865,7 @@ void renderProximityMsg(PROXIMITY_DISPLAY *psProxDisp)
 	iV_MatrixEnd();
 }
 
-// Draw the structures
+/// Draw the structures
 void	renderStructure(STRUCTURE *psStructure)
 {
 	SDWORD			structX, structY, rx, rz;
@@ -2266,7 +2286,7 @@ void	renderStructure(STRUCTURE *psStructure)
 	iV_MatrixEnd();
 }
 
-/*draw the delivery points */
+/// draw the delivery points
 void	renderDeliveryPoint(FLAG_POSITION *psPosition)
 {
 	Vector3i dv;
@@ -2319,6 +2339,7 @@ void	renderDeliveryPoint(FLAG_POSITION *psPosition)
 	iV_MatrixEnd();
 }
 
+/// Draw a piece of wall
 static BOOL	renderWallSection(STRUCTURE *psStructure)
 {
 	SDWORD			structX, structY, rx, rz;
@@ -2465,7 +2486,7 @@ static BOOL	renderWallSection(STRUCTURE *psStructure)
 	return false;
 }
 
-/* renderShadow: draws shadow under droid */
+/// Draws a shadow under a droid
 void renderShadow( DROID *psDroid, iIMDShape *psShadowIMD )
 {
 	Vector3i			dv;
@@ -2517,15 +2538,14 @@ void renderShadow( DROID *psDroid, iIMDShape *psShadowIMD )
 	iV_MatrixEnd();
 }
 
-/* Draw the droids */
+/// Draw all pieces of a droid and register it as a target
 void renderDroid( DROID *psDroid )
 {
 	displayComponentObject( (BASE_OBJECT *) psDroid);
 	targetAdd((BASE_OBJECT*)psDroid);
 }
 
-
-/* Draws the strobing 3D drag box that is used for multiple selection */
+/// Draws the strobing 3D drag box that is used for multiple selection
 static void	drawDragBox( void )
 {
 	int minX, maxX;		// SHURCOOL: These 4 ints will hold the corners of the selection box
@@ -2563,9 +2583,7 @@ static void	drawDragBox( void )
 }
 
 
-// display reload bars for structures and droids
-// Watermelon:make it to accept additional int value weapon_slot
-// this should fix the overlapped reloadbar problem
+/// Display reload bars for structures and droids
 static void drawWeaponReloadBar(BASE_OBJECT *psObj, WEAPON *psWeap, int weapon_slot)
 {
 	WEAPON_STATS		*psStats;
@@ -2688,7 +2706,7 @@ static void drawWeaponReloadBar(BASE_OBJECT *psObj, WEAPON *psWeap, int weapon_s
 	}
 }
 
-
+/// Draw the health of structures and show enemy structures being targetted
 static void	drawStructureSelections( void )
 {
 	STRUCTURE	*psStruct;
@@ -2927,6 +2945,7 @@ UDWORD	index;
 	}
 }
 
+/// Is the droid, its commander or its sensor tower selected?
 BOOL	eitherSelected(DROID *psDroid)
 {
 BOOL			retVal;
@@ -2959,6 +2978,7 @@ BASE_OBJECT		*psObj;
 	return retVal;
 }
 
+/// Draw the selection graphics for selected droids
 static void	drawDroidSelections( void )
 {
 	UDWORD			scrX,scrY,scrR;
@@ -3191,8 +3211,11 @@ static void	drawDroidSelections( void )
 }
 
 /* ---------------------------------------------------------------------------- */
+/// X offset to display the group number at
 #define GN_X_OFFSET	(28)
+/// Y offset to display the group number at
 #define GN_Y_OFFSET (17)
+/// Draw the number of the group the droid is in next to the droid
 static void	drawDroidGroupNumber(DROID *psDroid)
 {
 UWORD	id;
@@ -3263,7 +3286,7 @@ SDWORD	xShift,yShift;
 	}
 }
 
-/* ---------------------------------------------------------------------------- */
+/// Draw the number of the commander the droid is assigned to
 static void	drawDroidCmndNo(DROID *psDroid)
 {
 UWORD	id;
@@ -3332,8 +3355,9 @@ SDWORD	xShift,yShift, index;
 /* ---------------------------------------------------------------------------- */
 
 
-/*	Get the onscreen corrdinates of a droid - so we can draw a bounding box - this need to be severely
-	speeded up and the accuracy increased to allow variable size bouding boxes */
+/**	Get the onscreen coordinates of a droid so we can draw a bounding box
+ * This need to be severely speeded up and the accuracy increased to allow variable size bouding boxes
+ */
 void calcScreenCoords(DROID *psDroid)
 {
 	/* Get it's absolute dimensions */
@@ -3382,7 +3406,7 @@ void calcScreenCoords(DROID *psDroid)
 	psDroid->sDisplay.screenR = radius;
 }
 
-
+/// Light up the terrain where buildings are going to be placed
 static void preprocessTiles(void)
 {
 	UDWORD i, j;
@@ -3532,10 +3556,10 @@ static void preprocessTiles(void)
 }
 
 
-/*!
+/**
  * Find the tile the mouse is currently over
+ * \todo This is slow - speed it up
  */
-/* TODO This is slow - speed it up */
 static void locateMouse(void)
 {
 	const Vector2i pt = {mouseXPos, mouseYPos};
@@ -3587,8 +3611,7 @@ static void locateMouse(void)
 	}
 }
 
-
-// Render the sky and surroundings
+/// Render the sky and surroundings
 static void renderSurroundings(void)
 {
 	static float wind = 0.0f;
@@ -3650,7 +3673,7 @@ static void renderSurroundings(void)
 	pie_PerspectiveEnd();
 }
 
-/* Flattens an imd to the landscape and handles 4 different rotations */
+/// Flattens an imd to the landscape and handles 4 different rotations
 static iIMDShape	*flattenImd(iIMDShape *imd, UDWORD structX, UDWORD structY, UDWORD direction)
 {
 	UDWORD i, centreHeight;
@@ -3734,9 +3757,9 @@ static iIMDShape	*flattenImd(iIMDShape *imd, UDWORD structX, UDWORD structY, UDW
 	return imd;
 }
 
-// -------------------------------------------------------------------------------------
-/* New improved (and much faster) tile drawer */
-// -------------------------------------------------------------------------------------
+/** Draw a single terrain tile
+ * If onWaterEdge is true, a water tile will be drawn.
+ */
 static void drawTerrainTile(UDWORD i, UDWORD j, BOOL onWaterEdge)
 {
 	/* Get the correct tile index for the x/y coordinates */
@@ -3821,7 +3844,7 @@ static void drawTerrainTile(UDWORD i, UDWORD j, BOOL onWaterEdge)
 	}
 
 	/* Check for rotations and flips - this sets up the coordinates for texturing */
-	flipsAndRots(tileNumber, i, j);
+	setTexCoords(tileNumber, i, j);
 
 	/* The first triangle */
 	vertices[0] = tileScreenInfo[i + 0][j + 0];
@@ -3877,8 +3900,7 @@ static void drawTerrainTile(UDWORD i, UDWORD j, BOOL onWaterEdge)
 }
 
 
-// Render a water tile.
-//
+/// Render a water tile.
 static void drawTerrainWaterTile(UDWORD i, UDWORD j)
 {
 	/* Get the correct tile index for the x/y coordinates */
@@ -3952,31 +3974,7 @@ static void drawTerrainWaterTile(UDWORD i, UDWORD j)
 	}
 }
 
-
-UDWORD	getSuggestedPitch( void )
-{
-	UDWORD	worldAngle;
-	UDWORD	xPos,yPos;
-	SDWORD	pitch;
-
-	worldAngle = (UDWORD) ((UDWORD)player.r.y/DEG_1)%360;
-	/* Now, we need to track angle too - to avoid near z clip! */
-
-	xPos = player.p.x + world_coord(visibleTiles.x/2);
-	yPos = player.p.z + world_coord(visibleTiles.y/2);
-// 	getBestPitchToEdgeOfGrid(xPos,yPos,360-worldAngle,&pitch);
-	getPitchToHighestPoint(xPos, yPos, 360-worldAngle, 0, &pitch);
-
-	if (pitch < abs(MAX_PLAYER_X_ANGLE))
-		pitch = abs(MAX_PLAYER_X_ANGLE);
-	if (pitch > abs(MIN_PLAYER_X_ANGLE))
-		pitch = abs(MIN_PLAYER_X_ANGLE);
-
-	return(pitch);
-}
-
-
-// -------------------------------------------------------------------------------------
+/// Smoothly adjust player height to match the desired height
 static void trackHeight( float desiredHeight )
 {
 	static float heightSpeed = 0.0f;
@@ -3990,8 +3988,7 @@ static void trackHeight( float desiredHeight )
 	player.p.y += timeAdjustedIncrement(heightSpeed, false);
 }
 
-
-// -------------------------------------------------------------------------------------
+/// Select the next energy bar display mode
 void toggleEnergyBars(void)
 {
 	if (++barMode == BAR_LAST)
@@ -4000,7 +3997,7 @@ void toggleEnergyBars(void)
 	}
 }
 
-// -------------------------------------------------------------------------------------
+/// Set everything up for when the player assigns the sensor target
 void assignSensorTarget( BASE_OBJECT *psObj )
 {
 	bSensorTargetting = true;
@@ -4008,7 +4005,7 @@ void assignSensorTarget( BASE_OBJECT *psObj )
 	psSensorObj = psObj;
 }
 
-// -------------------------------------------------------------------------------------
+/// Set everything up for when the player selects the destination
 void	assignDestTarget( void )
 {
 	bDestTargetting = true;
@@ -4019,7 +4016,7 @@ void	assignDestTarget( void )
 	destTileY = mouseTileY;
 }
 
-// -------------------------------------------------------------------------------------
+/// Draw a graphical effect after selecting a sensor target
 static void	processSensorTarget( void )
 {
 	SWORD x,y;
@@ -4079,7 +4076,7 @@ static void	processSensorTarget( void )
 
 }
 
-// -------------------------------------------------------------------------------------
+/// Draw a graphical effect after selecting a destination
 static void	processDestinationTarget( void )
 {
 	SWORD x,y;
@@ -4113,30 +4110,32 @@ static void	processDestinationTarget( void )
 	}
 }
 
-// -------------------------------------------------------------------------------------
+/// Set what tile is being used to draw the bottom of a body of water
 void	setUnderwaterTile(UDWORD num)
 {
 	underwaterTile = num;
 }
-// -------------------------------------------------------------------------------------
+
+/// Set what tile is being used to show rubble
 void	setRubbleTile(UDWORD num)
 {
 	rubbleTile = num;
 }
-// -------------------------------------------------------------------------------------
+/// Get the tile that is currently being used to draw underwater ground
 UDWORD	getWaterTileNum( void )
 {
 	return(underwaterTile);
 }
-// -------------------------------------------------------------------------------------
+/// Get the tile that is being used to show rubble
 UDWORD	getRubbleTileNum( void )
 {
 	return(rubbleTile);
 }
-// -------------------------------------------------------------------------------------
 
+/// Variable used by structureEffectsPlayer
 static UDWORD	lastSpinVal;
 
+/// Draw the spinning particles for power stations and re-arm pads for the specified player
 static void structureEffectsPlayer( UDWORD player )
 {
 	SDWORD	val;
@@ -4264,6 +4263,7 @@ static void structureEffectsPlayer( UDWORD player )
 	}
 }
 
+/// Draw the effects for all players and buildings
 static void structureEffects()
 {
 	UDWORD	i;
@@ -4287,7 +4287,7 @@ static void structureEffects()
 		}
 }
 
-
+/// Show the sensor ranges of selected droids and buildings
 static void	showDroidSensorRanges(void)
 {
 DROID		*psDroid;
@@ -4313,6 +4313,7 @@ STRUCTURE	*psStruct;
 	}//end if we want to display...
 }
 
+/// Show the sensor range for the specified object
 static void	showSensorRange2(BASE_OBJECT *psObj)
 {
 	SDWORD	radius;
@@ -4358,6 +4359,7 @@ static void	showSensorRange2(BASE_OBJECT *psObj)
 	}
 }
 
+/// Draw a circle on the map (to show the range of something)
 static void	drawRangeAtPos(SDWORD centerX, SDWORD centerY, SDWORD radius)
 {
 	SDWORD	xDif,yDif;
@@ -4385,9 +4387,9 @@ static void	drawRangeAtPos(SDWORD centerX, SDWORD centerY, SDWORD radius)
 	}
 }
 
-/* draw some effects at certain position to visualize the radius,
-* negative radius turns this off
-*/
+/** Turn on drawing some effects at certain position to visualize the radius.
+ * \note Pass a negative radius to turn this off
+ */
 void showRangeAtPos(SDWORD centerX, SDWORD centerY, SDWORD radius)
 {
 	rangeCenterX = centerX;
@@ -4400,7 +4402,7 @@ void showRangeAtPos(SDWORD centerX, SDWORD centerY, SDWORD radius)
 		bRangeDisplay = false;
 }
 
-/*returns the graphic ID for a droid rank*/
+/// Get the graphic ID for a droid rank
 UDWORD  getDroidRankGraphic(DROID *psDroid)
 {
 	UDWORD gfxId;
@@ -4444,10 +4446,9 @@ UDWORD  getDroidRankGraphic(DROID *psDroid)
 	return gfxId;
 }
 
-/*	DOES : Assumes matrix context set and that z-buffer write is force enabled (Always).
-	Will render a graphic depiction of the droid's present rank.
-	BY : Alex McLean.
-*/
+/**	Will render a graphic depiction of the droid's present rank.
+ * \note Assumes matrix context set and that z-buffer write is force enabled (Always).
+ */
 static void	drawDroidRank(DROID *psDroid)
 {
 	UDWORD	gfxId = getDroidRankGraphic(psDroid);
@@ -4460,9 +4461,9 @@ static void	drawDroidRank(DROID *psDroid)
 	}
 }
 
-/*	DOES : Assumes matrix context set and that z-buffer write is force enabled (Always).
-	Will render a graphic depiction of the droid's present rank.
-*/
+/**	Will render a sensor graphic for a droid locked to a sensor droid/structure
+ * \note Assumes matrix context set and that z-buffer write is force enabled (Always).
+ */
 static void	drawDroidSensorLock(DROID *psDroid)
 {
 	//if on fire support duty - must be locked to a Sensor Droid/Structure
@@ -4474,6 +4475,7 @@ static void	drawDroidSensorLock(DROID *psDroid)
 	}
 }
 
+/// Draw the construction lines for all construction droids
 static	void	doConstructionLines( void )
 {
 DROID	*psDroid;
@@ -4521,6 +4523,7 @@ UDWORD	i;
 	pie_SetDepthBufferStatus(DEPTH_CMP_LEQ_WRT_ON);
 }
 
+/// Draw the construction or demolish lines for one droid
 static void addConstructionLine(DROID *psDroid, STRUCTURE *psStructure)
 {
 	CLIP_VERTEX pts[3];
