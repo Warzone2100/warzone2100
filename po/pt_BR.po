@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
 "POT-Creation-Date: 2008-07-29 20:16+0200\n"
-"PO-Revision-Date: 2008-05-09 16:01+0000\n"
-"Last-Translator: Artur <tucalipe@hotmail.com>\n"
+"PO-Revision-Date: 2008-11-03 00:01-0300\n"
+"Last-Translator: Artur Filipe <tucalipe@hotmail.com>\n"
 "Language-Team: Brazilian Portugese <warzone-dev@gna.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -5262,7 +5262,7 @@ msgstr "Propulsão Ciborgue III"
 #: data/base/messages/strings/names.txt:334
 #: data/mp/messages/strings/names.txt:336
 msgid "Naval"
-msgstr ""
+msgstr "Naval"
 
 #: data/base/messages/strings/names.txt:337
 #: data/mp/messages/strings/names.txt:339
@@ -9527,9 +9527,8 @@ msgid "Mantis Repair Tracks"
 msgstr "Tanque Reparo Mantis"
 
 #: data/mp/messages/strings/names.txt:1912
-#, fuzzy
 msgid "Python Tank Killer Tracks"
-msgstr "Tanque Destruidor de Tanques Mantis"
+msgstr "Tanque Destruidor de Tanques Python"
 
 #: data/mp/messages/strings/names.txt:1923
 msgid "Viper Machinegun Half-Track"
@@ -9547,7 +9546,7 @@ msgstr "Localização do Sistema"
 #: lib/framework/i18n.c:45
 #: lib/framework/i18n.c:96
 msgid "Czech"
-msgstr ""
+msgstr "Tcheco"
 
 #: lib/framework/i18n.c:46
 #: lib/framework/i18n.c:97
@@ -9567,25 +9566,22 @@ msgstr "Inglês"
 #: lib/framework/i18n.c:49
 #: lib/framework/i18n.c:100
 msgid "English (United Kingdom)"
-msgstr ""
+msgstr "Inglês Britânico"
 
 #: lib/framework/i18n.c:50
 #: lib/framework/i18n.c:101
-#, fuzzy
 msgid "Spanish"
-msgstr "Dinamarquês"
+msgstr "Espanhol"
 
 #: lib/framework/i18n.c:51
 #: lib/framework/i18n.c:102
-#, fuzzy
 msgid "Basque"
-msgstr "Bases"
+msgstr "Basco"
 
 #: lib/framework/i18n.c:52
 #: lib/framework/i18n.c:103
-#, fuzzy
 msgid "Finnish"
-msgstr "Dinamarquês"
+msgstr "Finlandês"
 
 #: lib/framework/i18n.c:53
 #: lib/framework/i18n.c:104
@@ -9595,13 +9591,12 @@ msgstr "Francês"
 #: lib/framework/i18n.c:61
 #: lib/framework/i18n.c:112
 msgid "Frisian"
-msgstr ""
+msgstr "Frisiano"
 
 #: lib/framework/i18n.c:62
 #: lib/framework/i18n.c:113
-#, fuzzy
 msgid "Irish"
-msgstr "Batalha"
+msgstr "Irlandês"
 
 #: lib/framework/i18n.c:63
 #: lib/framework/i18n.c:114
@@ -9611,13 +9606,12 @@ msgstr "Italiano"
 #: lib/framework/i18n.c:64
 #: lib/framework/i18n.c:116
 msgid "Lithuanian"
-msgstr ""
+msgstr "Lituânio"
 
 #: lib/framework/i18n.c:65
 #: lib/framework/i18n.c:117
-#, fuzzy
 msgid "Latvian"
-msgstr "Latim"
+msgstr "Latuviano"
 
 #: lib/framework/i18n.c:66
 #: lib/framework/i18n.c:118
@@ -9626,9 +9620,8 @@ msgstr "Norueguês"
 
 #: lib/framework/i18n.c:67
 #: lib/framework/i18n.c:119
-#, fuzzy
 msgid "Norwegian (Nynorsk)"
-msgstr "Norueguês"
+msgstr "Norgueguês (Nynorsk)"
 
 #: lib/framework/i18n.c:68
 #: lib/framework/i18n.c:120
@@ -9637,15 +9630,13 @@ msgstr "Holandês"
 
 #: lib/framework/i18n.c:69
 #: lib/framework/i18n.c:121
-#, fuzzy
 msgid "Polish"
-msgstr "Demolir"
+msgstr "Polandês"
 
 #: lib/framework/i18n.c:70
 #: lib/framework/i18n.c:122
-#, fuzzy
 msgid "Brazilian Portuguese"
-msgstr "Português"
+msgstr "Português Brasileiro"
 
 #: lib/framework/i18n.c:71
 #: lib/framework/i18n.c:123
@@ -9655,7 +9646,7 @@ msgstr "Português"
 #: lib/framework/i18n.c:72
 #: lib/framework/i18n.c:124
 msgid "Romanian"
-msgstr ""
+msgstr "Romeno"
 
 #: lib/framework/i18n.c:73
 #: lib/framework/i18n.c:125
@@ -9665,12 +9656,11 @@ msgstr "Russo"
 #: lib/framework/i18n.c:74
 #: lib/framework/i18n.c:126
 msgid "Slovenian"
-msgstr ""
+msgstr "Slovênio"
 
 #: lib/framework/i18n.c:76
 #: lib/framework/i18n.c:78
 #: lib/framework/i18n.c:127
-#, fuzzy
 msgid "Swedish (Sweden)"
 msgstr "Sueco"
 
@@ -9681,19 +9671,18 @@ msgstr "Sueco"
 
 #: lib/framework/i18n.c:81
 #: lib/framework/i18n.c:129
-#, fuzzy
 msgid "Turkish"
-msgstr "Tanque"
+msgstr "Turco"
 
 #: lib/framework/i18n.c:82
 #: lib/framework/i18n.c:130
 msgid "Uzbek (Cyrillic)"
-msgstr ""
+msgstr "Uzbek (Cirílico)"
 
 #: lib/framework/i18n.c:83
 #: lib/framework/i18n.c:131
 msgid "Simplified Chinese"
-msgstr ""
+msgstr "Chinês Simplificado"
 
 #: lib/framework/i18n.c:115
 msgid "Latin"
@@ -9737,7 +9726,7 @@ msgstr "arquivo"
 
 #: src/clparse.c:100
 msgid "Flush all debug output written to stderr"
-msgstr ""
+msgstr "Relatar o processo de debug para stderr"
 
 #: src/clparse.c:101
 msgid "Play in fullscreen mode"
@@ -9819,11 +9808,11 @@ msgstr "Ativar o teste automático"
 
 #: src/clparse.c:118
 msgid "connect directly to IP/hostname"
-msgstr ""
+msgstr "conectar diretamente ao IP/hostname"
 
 #: src/clparse.c:119
 msgid "go directly to host screen"
-msgstr ""
+msgstr "ir diretamente à tela de hospedeiro"
 
 #: src/configuration.c:403
 #: src/configuration.c:404
@@ -10152,9 +10141,8 @@ msgid "Graphics Options"
 msgstr "Opções de Vídeo"
 
 #: src/frontend.c:533
-#, fuzzy
 msgid "Video Options"
-msgstr "Opções de Áudio"
+msgstr "Opções de Vídeo"
 
 #: src/frontend.c:534
 msgid "Audio Options"
@@ -10612,9 +10600,8 @@ msgid "Assign VTOL Factory Production"
 msgstr "Designar Produção de VTOL"
 
 #: src/intorder.c:201
-#, fuzzy
 msgid "Circle"
-msgstr "arquivo"
+msgstr "Circular"
 
 #: src/keybind.c:130
 msgid "Sorry, that cheat is disabled in multiplayer games."
@@ -11207,9 +11194,9 @@ msgid "%s Gives you a %s"
 msgstr "%s Dar-lhe um %s"
 
 #: src/multigifts.c:240
-#, fuzzy, c-format
+#, c-format
 msgid "Tried to give away a non-empty %s - but this is not allowed."
-msgstr "Tentei dar uma distância do %s  - mas isso não é permitido."
+msgstr "Tentativa de dar um %s não-vazio não foi permitida."
 
 #: src/multigifts.c:299
 #, c-format
@@ -11379,11 +11366,11 @@ msgstr "Time"
 
 #: src/multiint.c:1251
 msgid "Waiting for other players"
-msgstr ""
+msgstr "Aguardando outros jogadores"
 
 #: src/multiint.c:1257
 msgid "Click when ready"
-msgstr ""
+msgstr "Clique quando estiver pronto"
 
 #: src/multiint.c:1299
 msgid "PLAYERS"
@@ -11394,9 +11381,8 @@ msgid "CHAT"
 msgstr "BATE-PAPO"
 
 #: src/multiint.c:1951
-#, fuzzy
 msgid "'Locked Teams' mode enabled"
-msgstr "Trancar Times"
+msgstr "Modo 'Times Fixos' ativado"
 
 #: src/multiint.c:1994
 #, c-format
