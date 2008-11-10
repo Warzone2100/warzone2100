@@ -9,15 +9,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2008-07-19 21:58+0200\n"
-"PO-Revision-Date: 2008-05-22 16:19+0000\n"
-"Last-Translator: Mario Ancelmo Carvalho da Silva <marioancelmo@gmail.com>\n"
+"POT-Creation-Date: 2008-11-10 21:35+0100\n"
+"PO-Revision-Date: 2008-11-03 00:01-0300\n"
+"Last-Translator: Artur Filipe <tucalipe@hotmail.com>\n"
 "Language-Team: Brazilian Portugese <warzone-dev@gna.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Launchpad-Export-Date: 2008-07-19 19:37+0000\n"
+"X-Launchpad-Export-Date: 2008-05-10 13:56+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 "X-Poedit-Language: Portuguese\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -10238,61 +10238,153 @@ msgstr "Torrete de Comando mais reforçado disponível para projeto"
 msgid "Upgraded battlefield computer system"
 msgstr "Sistema de computador de guerra melhorado"
 
-#: lib/framework/i18n.c:42
-#: lib/framework/i18n.c:64
+#: lib/framework/i18n.c:43
+#: lib/framework/i18n.c:94
 msgid "System locale"
 msgstr "Localização do Sistema"
 
-#: lib/framework/i18n.c:44
-#: lib/framework/i18n.c:69
-msgid "Danish"
-msgstr "Espanhol"
-
 #: lib/framework/i18n.c:45
-#: lib/framework/i18n.c:68
+#: lib/framework/i18n.c:96
+msgid "Czech"
+msgstr "Tcheco"
+
+#: lib/framework/i18n.c:46
+#: lib/framework/i18n.c:97
+msgid "Danish"
+msgstr "Dinamarquês"
+
+#: lib/framework/i18n.c:47
+#: lib/framework/i18n.c:98
 msgid "German"
 msgstr "Alemão"
 
-#: lib/framework/i18n.c:46
-#: lib/framework/i18n.c:66
+#: lib/framework/i18n.c:48
+#: lib/framework/i18n.c:99
 msgid "English"
 msgstr "Inglês"
 
-#: lib/framework/i18n.c:47
-#: lib/framework/i18n.c:70
+#: lib/framework/i18n.c:49
+#: lib/framework/i18n.c:100
+msgid "English (United Kingdom)"
+msgstr "Inglês Britânico"
+
+#: lib/framework/i18n.c:50
+#: lib/framework/i18n.c:101
+msgid "Spanish"
+msgstr "Espanhol"
+
+#: lib/framework/i18n.c:51
+#: lib/framework/i18n.c:102
+msgid "Basque"
+msgstr "Basco"
+
+#: lib/framework/i18n.c:52
+#: lib/framework/i18n.c:103
+msgid "Finnish"
+msgstr "Finlandês"
+
+#: lib/framework/i18n.c:53
+#: lib/framework/i18n.c:104
 msgid "French"
 msgstr "Francês"
 
-#: lib/framework/i18n.c:48
-#: lib/framework/i18n.c:71
+#: lib/framework/i18n.c:61
+#: lib/framework/i18n.c:112
+msgid "Frisian"
+msgstr "Frisiano"
+
+#: lib/framework/i18n.c:62
+#: lib/framework/i18n.c:113
+msgid "Irish"
+msgstr "Irlandês"
+
+#: lib/framework/i18n.c:63
+#: lib/framework/i18n.c:114
 msgid "Italian"
 msgstr "Italiano"
 
-#: lib/framework/i18n.c:49
-#: lib/framework/i18n.c:73
-msgid "Dutch"
-msgstr "Holandês"
+#: lib/framework/i18n.c:64
+#: lib/framework/i18n.c:116
+msgid "Lithuanian"
+msgstr "Lituânio"
 
-#: lib/framework/i18n.c:50
-#: lib/framework/i18n.c:67
+#: lib/framework/i18n.c:65
+#: lib/framework/i18n.c:117
+msgid "Latvian"
+msgstr "Latuviano"
+
+#: lib/framework/i18n.c:66
+#: lib/framework/i18n.c:118
 msgid "Norwegian"
 msgstr "Norueguês"
 
-#: lib/framework/i18n.c:51
-#: lib/framework/i18n.c:74
+#: lib/framework/i18n.c:67
+#: lib/framework/i18n.c:119
+msgid "Norwegian (Nynorsk)"
+msgstr "Norgueguês (Nynorsk)"
+
+#: lib/framework/i18n.c:68
+#: lib/framework/i18n.c:120
+msgid "Dutch"
+msgstr "Holandês"
+
+#: lib/framework/i18n.c:69
+#: lib/framework/i18n.c:121
+msgid "Polish"
+msgstr "Polandês"
+
+#: lib/framework/i18n.c:70
+#: lib/framework/i18n.c:122
+msgid "Brazilian Portuguese"
+msgstr "Português Brasileiro"
+
+#: lib/framework/i18n.c:71
+#: lib/framework/i18n.c:123
 msgid "Portuegese"
 msgstr "Português"
 
-#: lib/framework/i18n.c:52
-#: lib/framework/i18n.c:75
+#: lib/framework/i18n.c:72
+#: lib/framework/i18n.c:124
+msgid "Romanian"
+msgstr "Romeno"
+
+#: lib/framework/i18n.c:73
+#: lib/framework/i18n.c:125
 msgid "Russian"
 msgstr "Russo"
 
-#: lib/framework/i18n.c:53
+#: lib/framework/i18n.c:74
+#: lib/framework/i18n.c:126
+msgid "Slovenian"
+msgstr "Slovênio"
+
+#: lib/framework/i18n.c:76
+#: lib/framework/i18n.c:78
+#: lib/framework/i18n.c:127
+msgid "Swedish (Sweden)"
+msgstr "Sueco"
+
+#: lib/framework/i18n.c:80
+#: lib/framework/i18n.c:128
 msgid "Swedish"
 msgstr "Sueco"
 
-#: lib/framework/i18n.c:72
+#: lib/framework/i18n.c:81
+#: lib/framework/i18n.c:129
+msgid "Turkish"
+msgstr "Turco"
+
+#: lib/framework/i18n.c:82
+#: lib/framework/i18n.c:130
+msgid "Uzbek (Cyrillic)"
+msgstr "Uzbek (Cirílico)"
+
+#: lib/framework/i18n.c:83
+#: lib/framework/i18n.c:131
+msgid "Simplified Chinese"
+msgstr "Chinês Simplificado"
+
+#: lib/framework/i18n.c:115
 msgid "Latin"
 msgstr "Latim"
 
@@ -10553,98 +10645,100 @@ msgstr "Armas"
 msgid "Systems"
 msgstr "Sistemas"
 
-#: src/display.c:1671
+#: src/display.c:1672
 msgid "Cannot Build. Oil Resource Burning."
 msgstr "Não pode construir. Recursos petrolíferos queimados."
 
-#: src/display.c:1818
+#: src/display.c:1822
 #, c-format
 msgid "%s - Damage %d%% - Experience %d, %s"
 msgstr "%s - Danos %d%% - Experiência %d, %s"
 
-#: src/display.c:2055
+#: src/display.c:2059
 msgid "Truck ordered to build Oil Derrick"
 msgstr "O Caminhão ordenou a construção Oil Derrick"
 
-#: src/droid.c:190
+#: src/droid.c:191
 msgid "Unit Lost!"
 msgstr "Unidades Perdidas!"
 
-#: src/droid.c:1614
+#: src/droid.c:1616
 msgid "Structure Restored"
 msgstr "Estrutura Restaurada"
 
-#: src/droid.c:3401
+#: src/droid.c:3403
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
 msgstr[0] "Grupo %u selecionado - %u Unidade"
 msgstr[1] "Grupo %u selecionado - %u Unidades"
 
-#: src/droid.c:3414
+#: src/droid.c:3416
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
 msgstr[0] "%u unidade atribuída ao Grupo %u"
 msgstr[1] "%u unidades atribuídas ao Grupo %u"
 
-#: src/droid.c:3427
+#: src/droid.c:3429
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
 msgstr[0] "Centrado no Grupo %u - %u Unidade"
 msgstr[1] "Centrado no Grupo %u - %u Unidades"
 
-#: src/droid.c:3431
+#: src/droid.c:3433
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] "Alinhamento com o grupo %u - %u Unidade"
 msgstr[1] "Alinhamento com o grupo %u - %u Unidades"
 
-#: src/droid.c:3657
+#: src/droid.c:3659
 msgid "Rookie"
 msgstr "Recruta"
 
-#: src/droid.c:3658
+#: src/droid.c:3660
 msgctxt "rank"
 msgid "Green"
 msgstr "Soldado"
 
-#: src/droid.c:3659
+#: src/droid.c:3661
 msgid "Trained"
 msgstr "Treinado"
 
-#: src/droid.c:3660
+#: src/droid.c:3662
 msgid "Regular"
 msgstr "Regular"
 
-#: src/droid.c:3661
+#: src/droid.c:3663
 msgid "Professional"
 msgstr "Tenente"
 
-#: src/droid.c:3662
+#: src/droid.c:3664
 msgid "Veteran"
 msgstr "Veterano"
 
-#: src/droid.c:3663
+#: src/droid.c:3665
 msgid "Elite"
 msgstr "Elite"
 
-#: src/droid.c:3664
+#: src/droid.c:3666
 msgid "Special"
 msgstr "Força Especial"
 
-#: src/droid.c:3665
+#: src/droid.c:3667
 msgid "Hero"
 msgstr "Herói"
 
 #: src/frontend.c:241
-msgid "Single Player Campaign"
+#, fuzzy
+msgid "Single Player"
 msgstr "Campanha (Um Jogador)"
 
 #: src/frontend.c:242
-msgid "Multi Player Game"
+#, fuzzy
+msgid "Multi Player"
 msgstr "Jogo Multiplayer"
 
 #: src/frontend.c:243
@@ -10675,231 +10769,237 @@ msgstr "APRENDENDO A JOGAR"
 
 #. TRANSLATORS: "Return", in this context, means "return to previous screen/menu"
 #: src/frontend.c:301
-#: src/frontend.c:357
-#: src/frontend.c:483
-#: src/frontend.c:536
-#: src/frontend.c:697
-#: src/frontend.c:843
-#: src/frontend.c:946
-#: src/frontend.c:1109
+#: src/frontend.c:358
+#: src/frontend.c:488
+#: src/frontend.c:539
+#: src/frontend.c:700
+#: src/frontend.c:846
+#: src/frontend.c:949
+#: src/frontend.c:1112
 msgctxt "menu"
 msgid "Return"
 msgstr "Voltar"
 
 #: src/frontend.c:353
-msgid "Load Campaign"
-msgstr "Carregar Camapnha Salva"
-
-#: src/frontend.c:354
 msgid "New Campaign"
 msgstr "Nova Campanha"
 
-#: src/frontend.c:356
+#: src/frontend.c:354
+#, fuzzy
+msgid "Start Skirmish Game"
+msgstr "Iniciar Hospedagem de Jogo"
+
+#: src/frontend.c:355
+#: src/ingameop.c:271
+msgid "Load Game"
+msgstr "Carregar Jogo"
+
+#: src/frontend.c:357
 msgid "SINGLE PLAYER"
 msgstr "UM JOGADOR"
 
-#: src/frontend.c:436
+#: src/frontend.c:437
 #: src/ingameop.c:408
-#: src/mission.c:2826
-#: src/mission.c:2927
+#: src/mission.c:2879
+#: src/mission.c:2980
 msgid "Load Saved Game"
 msgstr "Carregar Jogo Salvo"
 
-#: src/frontend.c:476
+#: src/frontend.c:483
 msgid "MULTI PLAYER"
 msgstr "MULTIPLAYER"
 
-#: src/frontend.c:478
+#: src/frontend.c:485
 msgid "Host Game"
 msgstr "Hospedar Jogo"
 
-#: src/frontend.c:479
+#: src/frontend.c:486
 msgid "Join Game"
 msgstr "Conectar-se a um jogo"
 
-#: src/frontend.c:481
-msgid "One Player Skirmish"
-msgstr "Confronto Direto (Um jogador)"
-
-#: src/frontend.c:530
-#: src/frontend.c:846
-#: src/frontend.c:1112
-#: src/frontend.c:1132
+#: src/frontend.c:533
+#: src/frontend.c:849
+#: src/frontend.c:1115
+#: src/frontend.c:1135
 msgid "GAME OPTIONS"
 msgstr "OPÇÕES DE JOGO"
 
-#: src/frontend.c:531
+#: src/frontend.c:534
 msgid "Game Options"
 msgstr "Opções de Jogo"
 
-#: src/frontend.c:532
+#: src/frontend.c:535
 msgid "Graphics Options"
 msgstr "Opções de Vídeo"
 
-#: src/frontend.c:534
+#: src/frontend.c:536
+msgid "Video Options"
+msgstr "Opções de Vídeo"
+
+#: src/frontend.c:537
 msgid "Audio Options"
 msgstr "Opções de Áudio"
 
-#: src/frontend.c:535
+#: src/frontend.c:538
 msgid "Key Mappings"
 msgstr "Configuração das Teclas"
 
-#: src/frontend.c:607
+#: src/frontend.c:610
 msgid "Reverse Mouse"
 msgstr "Reverter Mouse"
 
-#: src/frontend.c:610
-#: src/frontend.c:622
-#: src/frontend.c:675
-#: src/frontend.c:688
-#: src/frontend.c:720
-#: src/frontend.c:734
-#: src/frontend.c:770
-#: src/frontend.c:779
-#: src/frontend.c:931
-#: src/frontend.c:1015
+#: src/frontend.c:613
+#: src/frontend.c:625
+#: src/frontend.c:678
+#: src/frontend.c:691
+#: src/frontend.c:723
+#: src/frontend.c:737
+#: src/frontend.c:773
+#: src/frontend.c:782
+#: src/frontend.c:934
+#: src/frontend.c:1018
 msgid "On"
 msgstr "Ligado"
 
-#: src/frontend.c:614
-#: src/frontend.c:626
-#: src/frontend.c:671
-#: src/frontend.c:680
-#: src/frontend.c:692
-#: src/frontend.c:715
-#: src/frontend.c:729
-#: src/frontend.c:765
-#: src/frontend.c:783
-#: src/frontend.c:935
-#: src/frontend.c:1010
+#: src/frontend.c:617
+#: src/frontend.c:629
+#: src/frontend.c:674
+#: src/frontend.c:683
+#: src/frontend.c:695
+#: src/frontend.c:718
+#: src/frontend.c:732
+#: src/frontend.c:768
+#: src/frontend.c:786
+#: src/frontend.c:938
+#: src/frontend.c:1013
 msgid "Off"
 msgstr "Desligado"
 
-#: src/frontend.c:619
+#: src/frontend.c:622
 msgid "Screen Shake"
 msgstr "Tremer a Tela"
 
-#: src/frontend.c:631
-#: src/multiint.c:722
+#: src/frontend.c:634
+#: src/multiint.c:752
 msgid "Fog"
 msgstr "Nevoeiro"
 
-#: src/frontend.c:634
-#: src/frontend.c:752
+#: src/frontend.c:637
+#: src/frontend.c:755
 msgid "Mist"
 msgstr "Misto"
 
-#: src/frontend.c:638
-#: src/frontend.c:745
-#: src/multiint.c:724
+#: src/frontend.c:641
+#: src/frontend.c:748
+#: src/multiint.c:754
 msgid "Fog Of War"
 msgstr "Nevoeiro da Guerra"
 
-#: src/frontend.c:643
+#: src/frontend.c:646
 msgid "Video Playback"
 msgstr "Tamanho de Vídeo"
 
-#: src/frontend.c:646
-#: src/frontend.c:802
+#: src/frontend.c:649
+#: src/frontend.c:805
 msgid "Full"
 msgstr "Tela Cheia"
 
-#: src/frontend.c:650
-#: src/frontend.c:792
-#: src/frontend.c:918
-#: src/frontend.c:963
+#: src/frontend.c:653
+#: src/frontend.c:795
+#: src/frontend.c:921
+#: src/frontend.c:966
 msgid "Windowed"
 msgstr "Em Janela"
 
-#: src/frontend.c:653
-#: src/frontend.c:797
+#: src/frontend.c:656
+#: src/frontend.c:800
 msgid "Minimal"
 msgstr "Tamaho Mínimo"
 
-#: src/frontend.c:660
-#: src/frontend.c:664
+#: src/frontend.c:663
+#: src/frontend.c:667
 msgid "Subtitles"
 msgstr "Legendas"
 
-#: src/frontend.c:685
+#: src/frontend.c:688
 msgid "Shadows"
 msgstr "Sombras"
 
-#: src/frontend.c:831
+#: src/frontend.c:834
 #: src/ingameop.c:155
 msgid "Voice Volume"
 msgstr "Volume da Voz"
 
-#: src/frontend.c:835
+#: src/frontend.c:838
 #: src/ingameop.c:160
 msgid "FX Volume"
 msgstr "Volume dos Sons"
 
-#: src/frontend.c:839
+#: src/frontend.c:842
 #: src/ingameop.c:165
 msgid "Music Volume"
 msgstr "Volume da Música"
 
-#: src/frontend.c:910
+#: src/frontend.c:913
 msgid "Graphics Mode*"
 msgstr "Modo Gráfico*"
 
-#: src/frontend.c:914
-#: src/frontend.c:968
+#: src/frontend.c:917
+#: src/frontend.c:971
 msgid "Fullscreen"
 msgstr "Tela Cheia"
 
-#: src/frontend.c:922
+#: src/frontend.c:925
 msgid "Resolution*"
 msgstr "Resolução*"
 
-#: src/frontend.c:927
+#: src/frontend.c:930
 msgid "Trap Cursor"
 msgstr "Travar Cursor"
 
-#: src/frontend.c:939
+#: src/frontend.c:942
 msgid "Texture size"
 msgstr "Tamanho da Textura"
 
-#: src/frontend.c:943
+#: src/frontend.c:946
 msgid "* Takes effect on game restart"
 msgstr "* Precisa reiniciar o jogo"
 
-#: src/frontend.c:1072
-#: src/frontend.c:1130
+#: src/frontend.c:1075
+#: src/frontend.c:1133
 msgid "Difficulty"
 msgstr "Dificuldade"
 
-#: src/frontend.c:1076
-#: src/frontend.c:1138
-#: src/frontend.c:1170
+#: src/frontend.c:1079
+#: src/frontend.c:1141
+#: src/frontend.c:1173
 msgid "Easy"
 msgstr "Fácil"
 
-#: src/frontend.c:1079
-#: src/frontend.c:1141
-#: src/frontend.c:1162
+#: src/frontend.c:1082
+#: src/frontend.c:1144
+#: src/frontend.c:1165
 msgid "Normal"
 msgstr "Média"
 
-#: src/frontend.c:1083
-#: src/frontend.c:1144
-#: src/frontend.c:1166
+#: src/frontend.c:1086
+#: src/frontend.c:1147
+#: src/frontend.c:1169
 msgid "Hard"
 msgstr "Difícil"
 
-#: src/frontend.c:1088
-#: src/frontend.c:1131
+#: src/frontend.c:1091
+#: src/frontend.c:1134
 msgid "Scroll Speed"
 msgstr "Velocidade da Tela"
 
-#: src/frontend.c:1102
-#: src/frontend.c:1128
+#: src/frontend.c:1105
+#: src/frontend.c:1131
 msgid "Language"
 msgstr "Idioma"
 
-#: src/frontend.c:1106
-#: src/frontend.c:1129
+#: src/frontend.c:1109
+#: src/frontend.c:1132
 msgid "Unit Colour"
 msgstr "Cor das Unidades"
 
@@ -10910,7 +11010,7 @@ msgstr "Cor das Unidades"
 #: src/hci.c:5707
 #: src/intelmap.c:529
 #: src/intorder.c:661
-#: src/loadsave.c:261
+#: src/loadsave.c:262
 #: src/multimenu.c:431
 #: src/multimenu.c:1250
 #: src/transporter.c:285
@@ -10923,7 +11023,7 @@ msgstr "Fechar"
 #: src/hci.c:1708
 #: src/loop.c:511
 #: src/loop.c:523
-#: src/mission.c:2895
+#: src/mission.c:2948
 msgid "GAME SAVED!"
 msgstr "JOGO SALVO!"
 
@@ -10971,8 +11071,8 @@ msgid "Build (F3)"
 msgstr "Construir (F3)"
 
 #: src/hci.c:3941
-#: src/multiint.c:772
-#: src/multiint.c:776
+#: src/multiint.c:802
+#: src/multiint.c:806
 msgid "Power"
 msgstr "Poder"
 
@@ -11030,7 +11130,7 @@ msgstr "Sair do Jogo"
 #: src/hci.c:4568
 #: src/intdisplay.c:211
 #: src/intdisplay.c:254
-#: src/intdisplay.c:300
+#: src/intdisplay.c:305
 msgid "Progress Bar"
 msgstr "Barra de Progresso"
 
@@ -11056,20 +11156,16 @@ msgstr "Tab mover para direita"
 msgid "Resume Game"
 msgstr "Resumir Jogo"
 
-#: src/ingameop.c:271
-msgid "Load Game"
-msgstr "Carregar Jogo"
-
 #: src/ingameop.c:273
 #: src/ingameop.c:412
-#: src/mission.c:2816
-#: src/mission.c:2930
+#: src/mission.c:2869
+#: src/mission.c:2983
 msgid "Save Game"
 msgstr "Salvar"
 
 #: src/intdisplay.c:201
 #: src/intdisplay.c:246
-#: src/intdisplay.c:293
+#: src/intdisplay.c:298
 msgid "Power Accrued"
 msgstr "Energia Coletada"
 
@@ -11192,9 +11288,8 @@ msgid "Assign VTOL Factory Production"
 msgstr "Designar Produção de VTOL"
 
 #: src/intorder.c:201
-#, fuzzy
 msgid "Circle"
-msgstr "Espaço"
+msgstr "Circular"
 
 #: src/keybind.c:131
 msgid "Sorry, that cheat is disabled in multiplayer games."
@@ -11376,8 +11471,8 @@ msgstr "CONFIGURAÇÃO DAS TECLAS"
 #: src/keyedit.c:378
 #: src/multiint.c:388
 #: src/multiint.c:430
-#: src/multiint.c:604
-#: src/multiint.c:841
+#: src/multiint.c:634
+#: src/multiint.c:871
 #: src/multilimit.c:148
 msgid "Return To Previous Screen"
 msgstr "Return a Tela Anterior"
@@ -11754,25 +11849,25 @@ msgstr "Localizar Fábrica de Ciborgues"
 msgid "Toggle reopening the build menu"
 msgstr "Liga/Desliga a reabertura do menu de construção"
 
-#: src/mission.c:2364
+#: src/mission.c:2417
 msgid "Load Transport"
 msgstr "Carregar Transportes"
 
-#: src/mission.c:2763
+#: src/mission.c:2816
 msgid "OBJECTIVE ACHIEVED"
 msgstr "OBJETIVO ARQUIVADO"
 
-#: src/mission.c:2769
+#: src/mission.c:2822
 msgid "OBJECTIVE FAILED"
 msgstr "FLAHA NO OBJETIVO"
 
-#: src/mission.c:2795
-#: src/mission.c:2832
-#: src/mission.c:2946
+#: src/mission.c:2848
+#: src/mission.c:2885
+#: src/mission.c:2999
 msgid "Quit To Main Menu"
 msgstr "Sair para o Menu Principal"
 
-#: src/mission.c:2803
+#: src/mission.c:2856
 msgid "Continue Game"
 msgstr "Continuar o Jogo"
 
@@ -11847,143 +11942,150 @@ msgstr "Lobby"
 msgid "IP"
 msgstr "IP"
 
-#: src/multiint.c:590
+#: src/multiint.c:534
+msgid "NO GAMES ARE AVAILABLE"
+msgstr ""
+
+#: src/multiint.c:620
 msgid "Searching"
 msgstr "Pesquisando"
 
-#: src/multiint.c:601
+#: src/multiint.c:631
 msgid "GAMES"
 msgstr "JOGOS"
 
-#: src/multiint.c:611
+#: src/multiint.c:641
 msgid "Refresh Games List"
 msgstr "Atualizar Lista de Jogos"
 
-#: src/multiint.c:686
+#: src/multiint.c:716
 msgid "OPTIONS"
 msgstr "OPÇÕES"
 
-#: src/multiint.c:688
+#: src/multiint.c:718
 msgid "Select Game Name"
 msgstr "Selecionar Nome do Jogo"
 
-#: src/multiint.c:689
+#: src/multiint.c:719
 msgid "Select Map"
 msgstr "Selecionar o Mapa"
 
-#: src/multiint.c:694
+#: src/multiint.c:724
 msgid "Game"
 msgstr "Jogo"
 
-#: src/multiint.c:696
+#: src/multiint.c:726
 msgid "Mayhem"
 msgstr "Mayhem"
 
-#: src/multiint.c:698
+#: src/multiint.c:728
 msgid "Skirmish"
 msgstr "Batalha"
 
-#: src/multiint.c:719
+#: src/multiint.c:749
 msgid "Select Player Name"
 msgstr "Selecionar o Nome do Jogador"
 
-#: src/multiint.c:725
+#: src/multiint.c:755
 msgid "Distance Fog"
 msgstr "Distância do Nevoeiro"
 
-#: src/multiint.c:738
+#: src/multiint.c:768
 #: src/multimenu.c:706
 msgid "Alliances"
 msgstr "Alianças"
 
-#: src/multiint.c:741
+#: src/multiint.c:771
 msgid "No Alliances"
 msgstr "Sem Alianças"
 
-#: src/multiint.c:743
+#: src/multiint.c:773
 msgid "Allow Alliances"
 msgstr "Permitir Alianças"
 
-#: src/multiint.c:747
-#: src/multiint.c:1953
+#: src/multiint.c:777
 msgid "Locked Teams"
 msgstr "Trancar Times"
 
-#: src/multiint.c:779
+#: src/multiint.c:809
 msgid "Low Power Levels"
 msgstr "Nível de Poder Baixo"
 
-#: src/multiint.c:781
+#: src/multiint.c:811
 msgid "Medium Power Levels"
 msgstr "Nível de Poder Médio"
 
-#: src/multiint.c:783
+#: src/multiint.c:813
 msgid "High Power Levels"
 msgstr "Nível de Poder Alto"
 
-#: src/multiint.c:803
-#: src/multiint.c:807
+#: src/multiint.c:833
+#: src/multiint.c:837
 msgid "Base"
 msgstr "Bases"
 
-#: src/multiint.c:810
+#: src/multiint.c:840
 msgid "Start with No Bases"
 msgstr "Iniciar sem Bases"
 
-#: src/multiint.c:812
+#: src/multiint.c:842
 msgid "Start with Bases"
 msgstr "Iniciar com Bases"
 
-#: src/multiint.c:814
+#: src/multiint.c:844
 msgid "Start with Advanced Bases"
 msgstr "Iniciar com Bases Avançadas"
 
-#: src/multiint.c:831
+#: src/multiint.c:861
 msgid "Map Preview"
 msgstr "Previsualização do Mapa"
 
-#: src/multiint.c:833
+#: src/multiint.c:863
 msgid "Click to see Map"
 msgstr "Clique para ver o Mapa"
 
-#: src/multiint.c:847
+#: src/multiint.c:877
 msgid "Start Hosting Game"
 msgstr "Iniciar Hospedagem de Jogo"
 
-#: src/multiint.c:855
+#: src/multiint.c:885
 msgid "Set Structure Limits"
 msgstr "Definir Limites da Estrutura"
 
-#: src/multiint.c:1207
+#: src/multiint.c:1237
 msgid "Team"
 msgstr "Time"
 
-#: src/multiint.c:1251
+#: src/multiint.c:1281
 msgid "Waiting for other players"
-msgstr ""
+msgstr "Aguardando outros jogadores"
 
-#: src/multiint.c:1257
+#: src/multiint.c:1287
 msgid "Click when ready"
-msgstr ""
+msgstr "Clique quando estiver pronto"
 
-#: src/multiint.c:1299
+#: src/multiint.c:1329
 msgid "PLAYERS"
 msgstr "JOGADORES"
 
-#: src/multiint.c:1436
+#: src/multiint.c:1466
 msgid "CHAT"
 msgstr "BATE-PAPO"
 
-#: src/multiint.c:1997
+#: src/multiint.c:1981
+msgid "'Locked Teams' mode enabled"
+msgstr "Modo 'Times Fixos' ativado"
+
+#: src/multiint.c:2024
 #, c-format
 msgid "The host has kicked %s from the game!"
 msgstr "O Host chutou %s do jogo!"
 
-#: src/multiint.c:2088
+#: src/multiint.c:2115
 msgid "Host is Starting Game"
 msgstr "O Host iniciou o Jogo"
 
-#: src/multiint.c:2535
+#: src/multiint.c:2562
 msgid "Players"
 msgstr "Jogadores"
 
@@ -12068,7 +12170,7 @@ msgstr "Fornecer Energia"
 
 #: src/multiplay.c:729
 msgid "The host has left the game!"
-msgstr "O host deixou o jogo!"
+msgstr "O host deixadou o jogo!"
 
 #: src/multiplay.c:1908
 msgid "Green"
@@ -12274,55 +12376,55 @@ msgstr "Impossível localizar Comandantes!"
 msgid "Command Control Limit Reached - Production Halted"
 msgstr "Limite de Unidades Alcancado - Produção Interrompida"
 
-#: src/structure.c:5836
-#: src/structure.c:5858
+#: src/structure.c:5850
+#: src/structure.c:5872
 #, c-format
 msgid "%s - %u Unit assigned"
 msgid_plural "%s - %u Units assigned"
 msgstr[0] "%s - %u Unidade designada"
 msgstr[1] "%s - %u Unidades designadas"
 
-#: src/structure.c:5895
+#: src/structure.c:5909
 #, c-format
 msgid "%s - Connected %u of %u"
 msgstr "%s - %u de %u conectados"
 
-#: src/structure.c:5909
+#: src/structure.c:5923
 #, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - Dano %3.0f%%"
 
-#: src/structure.c:6029
-#: src/structure.c:6078
+#: src/structure.c:6043
+#: src/structure.c:6092
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - Danificado Eletronicamente"
 
-#: src/structure.c:6313
+#: src/structure.c:6327
 msgid "Electronic Reward - Visibility Report"
 msgstr "Prêmio - Relatório de Visibilidade"
 
-#: src/structure.c:6353
+#: src/structure.c:6367
 msgid "Factory Reward - Propulsion"
 msgstr "Prêmio - Propulsão"
 
-#: src/structure.c:6377
+#: src/structure.c:6391
 msgid "Factory Reward - Body"
 msgstr "Prêmio - Chassis"
 
-#: src/structure.c:6401
+#: src/structure.c:6415
 msgid "Factory Reward - Weapon"
 msgstr "Prêmio - Arma"
 
-#: src/structure.c:6410
+#: src/structure.c:6424
 msgid "Factory Reward - Nothing"
 msgstr "Prêmio - Nada"
 
-#: src/structure.c:6438
+#: src/structure.c:6452
 msgid "Repair Facility Award - Repair"
 msgstr "Prêmio - Centro de Reparos"
 
-#: src/structure.c:6445
+#: src/structure.c:6459
 msgid "Repair Facility Award - Nothing"
 msgstr "Prêmio - Nada"
 
@@ -12331,7 +12433,7 @@ msgstr "Prêmio - Nada"
 msgid "Launch Transport"
 msgstr "Lançar Transportes"
 
-#: src/transporter.c:1702
+#: src/transporter.c:1730
 msgid "Reinforcements landing"
 msgstr "Reforços de aterragem"
 
