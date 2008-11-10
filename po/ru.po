@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
 "POT-Creation-Date: 2008-07-29 20:16+0200\n"
-"PO-Revision-Date: 2008-10-27 03:09+0500\n"
+"PO-Revision-Date: 2008-11-09 00:25+0500\n"
 "Last-Translator: Azamat H. Hackimov <azamat.hackimov@gmail.com>\n"
 "Language-Team: Russian <>\n"
 "MIME-Version: 1.0\n"
@@ -1396,7 +1396,7 @@ msgstr ""
 #: data/base/messages/resmessages1.rmsg:396
 #: data/base/messages/resmessages3.rmsg:630
 msgid "Faster than Viper"
-msgstr "Быстрее Гадюки"
+msgstr "Быстрее \"Гадюки\""
 
 #: data/base/messages/resmessages1.rmsg:397
 msgid "Power cost and production time similar to Viper"
@@ -1429,7 +1429,7 @@ msgstr ""
 #: data/base/messages/resmessages1.rmsg:422
 #: data/base/messages/resmessages3.rmsg:643
 msgid "Faster than Cobra"
-msgstr "Быстрее Кобры"
+msgstr "Быстрее \"Кобры\""
 
 #: data/base/messages/resmessages1.rmsg:423
 msgid "Power cost and production time similar to Cobra"
@@ -1462,7 +1462,7 @@ msgstr ""
 #: data/base/messages/resmessages1.rmsg:448
 #: data/base/messages/resmessages3.rmsg:656
 msgid "Faster than Python"
-msgstr "Быстрее Питона"
+msgstr "Быстрее \"Питона\""
 
 #: data/base/messages/resmessages1.rmsg:449
 msgid "Power cost and production time the same as Python"
@@ -2241,13 +2241,13 @@ msgstr ""
 #: data/base/messages/strings/resstrings.txt:204
 #: data/mp/messages/strings/resstrings.txt:226
 msgid "Armored strongpoint with Inferno Flamer"
-msgstr "Укреплённая опорный пункт с огемётом \"Инферно\""
+msgstr "Укреплённый опорный пункт с огемётом \"Инферно\""
 
 #: data/base/messages/resmessages2.rmsg:252
 #: data/base/messages/strings/resstrings.txt:218
 #: data/mp/messages/strings/resstrings.txt:244
 msgid "Armored strongpoint with Assault Cannon"
-msgstr "Укреплённая опорный пункт с штурмовой пушкой"
+msgstr "Укреплённый опорный пункт с штурмовой пушкой"
 
 #: data/base/messages/resmessages2.rmsg:265
 #: data/base/messages/strings/resstrings.txt:224
@@ -2429,7 +2429,7 @@ msgstr ""
 #: data/base/messages/strings/resstrings.txt:529
 #: data/mp/messages/strings/resstrings.txt:562
 msgid "Slower than Viper"
-msgstr "Медленнее Гадюки"
+msgstr "Медленнее \"Гадюки\""
 
 #: data/base/messages/resmessages2.rmsg:475
 #: data/base/messages/strings/resstrings.txt:530
@@ -2454,7 +2454,7 @@ msgstr ""
 #: data/base/messages/strings/resstrings.txt:541
 #: data/mp/messages/strings/resstrings.txt:574
 msgid "Slower than Cobra"
-msgstr "Медленнее Кобры"
+msgstr "Медленнее \"Кобры\""
 
 #: data/base/messages/resmessages2.rmsg:488
 #: data/base/messages/strings/resstrings.txt:542
@@ -2974,15 +2974,15 @@ msgstr "Укреплённый опорный пукнт с лазером \"В�
 
 #: data/base/messages/resmessages3.rmsg:304
 msgid "Armored strongpoint with Pulse Laser"
-msgstr "Укреплённая опорный пункт с импульсным лазером"
+msgstr "Укреплённый опорный пункт с импульсным лазером"
 
 #: data/base/messages/resmessages3.rmsg:317
 msgid "Armored strongpoint with Rail Gun"
-msgstr "Укреплённая опорный пункт с рельсовой пушкой"
+msgstr "Укреплённый опорный пункт с рельсовой пушкой"
 
 #: data/base/messages/resmessages3.rmsg:330
 msgid "Armored strongpoint with Gauss Cannon"
-msgstr "Укреплённая опорный пункт с пушкой Гаусса"
+msgstr "Укреплённый опорный пункт с пушкой Гаусса"
 
 #: data/base/messages/resmessages3.rmsg:343
 msgid "Armored guard tower with Scourge Missile"
@@ -3570,7 +3570,7 @@ msgstr ""
 #: data/base/messages/resmessagesall.rmsg:110
 #: data/mp/messages/resmessagesall.rmsg:110
 msgid "Slower than Python"
-msgstr "Медленнее Питона"
+msgstr "Медленнее \"Питона\""
 
 #: data/base/messages/resmessagesall.rmsg:111
 #: data/mp/messages/resmessagesall.rmsg:111
@@ -3858,7 +3858,7 @@ msgstr "Эта структура является Вашей основной �
 
 #: data/base/messages/strings/cam1strings.txt:95
 msgid "Search for and recover any artifacts here."
-msgstr ""
+msgstr "Разыщите и заполучите любые артефакты."
 
 #: data/base/messages/strings/cam1strings.txt:97
 msgid "ENEMY LZ"
@@ -4008,7 +4008,7 @@ msgstr ""
 #: data/base/messages/strings/cam2strings.txt:11
 #: data/base/messages/strings/cam2strings.txt:34
 msgid "New technologies are available."
-msgstr ""
+msgstr "Доступны новые технологии"
 
 #: data/base/messages/strings/cam2strings.txt:14
 msgid "We are currently detecting coded bitstream signals."
@@ -4042,19 +4042,19 @@ msgstr "ПОЛЕТНЫЙ ИНСТРУКТАЖ"
 
 #: data/base/messages/strings/cam2strings.txt:28
 msgid "Team Beta are searching for Vertical Takeoff and Landing (VTOL) technology."
-msgstr ""
+msgstr "Команда \"Бета\" исследует технологию вертикального взлёта и посадки (ВВП)."
 
 #: data/base/messages/strings/cam2strings.txt:29
 msgid "It's believed to be at a pre-Collapse airbase in this area."
-msgstr ""
+msgstr "Похоже, что она есть в доколлапсовой авиабазе в этой зоне."
 
 #: data/base/messages/strings/cam2strings.txt:32
 msgid "Team Beta under heavy attack"
-msgstr ""
+msgstr "Команда \"Бета\" атакуют превосходящие силы"
 
 #: data/base/messages/strings/cam2strings.txt:37
 msgid "BETA BASE MISSION: Hold at all costs"
-msgstr ""
+msgstr "МИССИЯ НА БАЗЕ \"БЕТА\": Удержать любой ценой"
 
 #: data/base/messages/strings/cam2strings.txt:38
 msgid "We are detecting coded bitstream signals from the Collective."
@@ -4062,7 +4062,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam2strings.txt:42
 msgid "BETA BASE MISSION: Hold At All Costs"
-msgstr ""
+msgstr "МИССИЯ НА БАЗЕ \"БЕТА\": Удержать любой ценой"
 
 #: data/base/messages/strings/cam2strings.txt:43
 msgid "We are detecting ground and aerial forces from the north."
@@ -4124,19 +4124,19 @@ msgstr ""
 #: data/base/messages/strings/cam2strings.txt:68
 #: data/base/messages/strings/cam2strings.txt:72
 msgid "TRANSPORT MISSION: Rescue civilians from Containment Camp"
-msgstr ""
+msgstr "МИССИЯ НА ВЫЛЕТЕ: Спасите гражданских из концентрационного лагеря"
 
 #: data/base/messages/strings/cam2strings.txt:69
 msgid "The Collective are processing and exterminating civilians at this base."
-msgstr ""
+msgstr "Коллектив обрабатывает и уничтожает гражданских в этой базе."
 
 #: data/base/messages/strings/cam2strings.txt:73
 msgid "You are to rescue the civilians."
-msgstr ""
+msgstr "Спасите гражданских"
 
 #: data/base/messages/strings/cam2strings.txt:74
 msgid "Then destroy the camp."
-msgstr ""
+msgstr "Затем уничтожьте лагерь."
 
 #: data/base/messages/strings/cam2strings.txt:77
 msgid "BETA BASE MISSION: Destroy Enemy Air Base and Recover VTOLs."
@@ -4186,19 +4186,19 @@ msgstr "МИССИЯ НА ВЫЛЕТЕ: Уничтожить реактор"
 
 #: data/base/messages/strings/cam2strings.txt:97
 msgid "The Collective are searching for knowledge of nuclear reactors."
-msgstr ""
+msgstr "Коллектив разыскивает материалы по ядерным реакторам"
 
 #: data/base/messages/strings/cam2strings.txt:98
 msgid "They must be stopped."
-msgstr ""
+msgstr "Они должны быть остановлены."
 
 #: data/base/messages/strings/cam2strings.txt:102
 msgid "Proceed from the LZ to the reactor and destroy it."
-msgstr ""
+msgstr "Проследуйте из зоны высадки к реактору и уничтожьте его."
 
 #: data/base/messages/strings/cam2strings.txt:103
 msgid "Do not allow the Collective to bring the reactor on-line."
-msgstr ""
+msgstr "Не позвольте Коллективу включить реактор."
 
 #: data/base/messages/strings/cam2strings.txt:106
 msgid "BETA BASE MISSION: Capture NASDA Central"
@@ -4279,11 +4279,11 @@ msgstr "МИССИЯ НА БАЗЕ \"БЕТА\": Эвакуация!"
 
 #: data/base/messages/strings/cam2strings.txt:142
 msgid "Commander, we have grave news."
-msgstr ""
+msgstr "Командующий, у нас печальные новости."
 
 #: data/base/messages/strings/cam2strings.txt:143
 msgid "Alpha base has been destroyed by nuclear missile attack."
-msgstr ""
+msgstr "База \"Альфа\" была уничтожена ядерными ракетами."
 
 #: data/base/messages/strings/cam2strings.txt:147
 msgid "The Collective are unaware of the nuclear attack and have air units heading for your base."
@@ -4304,11 +4304,11 @@ msgstr "Удачи, Командующий."
 
 #: data/base/messages/strings/cam3strings.txt:4
 msgid "TRANSPORT MISSION: Northern Sector"
-msgstr ""
+msgstr "МИССИЯ НА ВЫЛЕТЕ: Северные сектор"
 
 #: data/base/messages/strings/cam3strings.txt:5
 msgid "Congratulations on your successful evacuation of Beta Base."
-msgstr ""
+msgstr "Поздравляем, Вы успешно эвакуировали базу \"Бета\"."
 
 #: data/base/messages/strings/cam3strings.txt:6
 msgid "NEXUS has gained access to nuclear weapons and is determined to destroy the Project."
@@ -4324,7 +4324,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam3strings.txt:11
 msgid "Team Gamma will contact you there."
-msgstr ""
+msgstr "Там команда \"Гамма\" свяжется с Вами."
 
 #: data/base/messages/strings/cam3strings.txt:14
 msgid "TRANSPORT MISSION: Establish A Forward Base"
@@ -4427,7 +4427,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam3strings.txt:64
 msgid "TRANSPORT MISSION: Team Alpha Detected"
-msgstr ""
+msgstr "МИССИЯ НА ВЫЛЕТЕ: Обнаружена команда \"Альфа\""
 
 #: data/base/messages/strings/cam3strings.txt:65
 msgid "Take a scout force to these coordinates and evaluate the situation."
@@ -4729,7 +4729,7 @@ msgstr "Цели миссии"
 
 #: data/base/messages/strings/genstrings.txt:15
 msgid "Pre-Collapse Research Center"
-msgstr ""
+msgstr "Доколлапсовый исследовательский центр"
 
 #: data/base/messages/strings/genstrings.txt:17
 msgid "En-route To Mission Site"
@@ -4787,82 +4787,82 @@ msgstr "Грузовик"
 #: data/base/messages/strings/names.txt:17
 #: data/mp/messages/strings/names.txt:17
 msgid "Machinegun Viper Wheels"
-msgstr "Гадюка с пулемётом на колёсах"
+msgstr "Пулемёт \"Гадюка\" на колёсах"
 
 #: data/base/messages/strings/names.txt:143
 #: data/mp/messages/strings/names.txt:143
 msgid "Viper Light Cannon Wheels"
-msgstr "Гадюка с мелкокалиберной пушкой на колёсах"
+msgstr "Мелкокалиберная пушка \"Гадюка\" на колёсах"
 
 #: data/base/messages/strings/names.txt:144
 #: data/mp/messages/strings/names.txt:145
 msgid "Viper Flamer Wheels"
-msgstr "Гадюка с огнемётом на колёсах"
+msgstr "Огнемёт \"Гадюка\" на колёсах"
 
 #: data/base/messages/strings/names.txt:145
 #: data/mp/messages/strings/names.txt:146
 msgid "Viper Sensor Wheels"
-msgstr "Гадюка с сенсором на колёсах"
+msgstr "Сенсором \"Гадюка\" на колёсах"
 
 #: data/base/messages/strings/names.txt:146
 #: data/mp/messages/strings/names.txt:147
 msgid "Viper Light Cannon Tracks"
-msgstr "Гадюка с мелкокалиберной пушкой на гусеничном ходу"
+msgstr "Мелкокалиберная пушка \"Гадюка\" на гусеничном ходу"
 
 #: data/base/messages/strings/names.txt:148
 #: data/mp/messages/strings/names.txt:149
 msgid "Cobra Heavy Machinegun Half-track"
-msgstr "Кобра с крупнокалиберным пулемётом на полугусеничном ходу"
+msgstr "Крупнокалиберный пулемёт \"Кобра\" на полугусеничном ходу"
 
 #: data/base/messages/strings/names.txt:149
 #: data/mp/messages/strings/names.txt:150
 msgid "Cobra Mortar Half-track"
-msgstr "Кобра с миномётом на полугусеничном ходу"
+msgstr "Миномёт \"Кобра\" на полугусеничном ходу"
 
 #: data/base/messages/strings/names.txt:150
 #: data/mp/messages/strings/names.txt:151
 msgid "Cobra Light Cannon Tracks"
-msgstr "Кобра с мелкокалиберной пушкой на гусеничном ходу"
+msgstr "Мелкокалиберная пушка \"Кобра\" на гусеничном ходу"
 
 #: data/base/messages/strings/names.txt:170
 #: data/mp/messages/strings/names.txt:172
 msgid "Viper Medium Cannon Tracks"
-msgstr "Гадюка со среднекалиберной пушкой на гусеничном ходу"
+msgstr "Среднекалиберная пушка \"Гадюка\" на гусеничном ходу"
 
 #: data/base/messages/strings/names.txt:171
 #: data/mp/messages/strings/names.txt:173
 msgid "Viper Repair Wheels"
-msgstr "Ремонтная Гадюка на колёсах"
+msgstr "Ремонтная \"Гадюка\" на колёсах"
 
 #: data/base/messages/strings/names.txt:172
 #: data/mp/messages/strings/names.txt:174
 msgid "Viper Repair Half-track"
-msgstr "Ремонтная Гадюка на полугусеничном ходу"
+msgstr "Ремонтная \"Гадюка\" на полугусеничном ходу"
 
 #: data/base/messages/strings/names.txt:173
 #: data/mp/messages/strings/names.txt:175
 msgid "Viper Machine Gun Wheels"
-msgstr "Гадюка с пулемётом на колёсах"
+msgstr "Пулемёт \"Гадюка\" на колёсах"
 
 #: data/base/messages/strings/names.txt:174
 #: data/mp/messages/strings/names.txt:176
 msgid "Viper Twin Machinegun Wheels"
-msgstr "Гадюка со спаренным пулемётом на колёсах"
+msgstr "Спаренный пулемёт \"Гадюка\" на колёсах"
 
 #: data/base/messages/strings/names.txt:175
 #: data/mp/messages/strings/names.txt:177
 msgid "Viper Twin Machinegun Half-track"
-msgstr "Гадюка со спаренным пулемётом на полугусеничном ходу"
+msgstr "Спаренный пулемёт \"Гадюка\" на полугусеничном ходу"
 
 #: data/base/messages/strings/names.txt:176
 #: data/mp/messages/strings/names.txt:178
 msgid "Viper Heavy Machinegun Half-track"
-msgstr "Гадюка с тяжёлым пулемётом на полугусеничном ходу"
+msgstr "Тяжёлый пулемёт \"Гадюка\" на полугусеничном ходу"
 
 #: data/base/messages/strings/names.txt:177
 #: data/mp/messages/strings/names.txt:179
 msgid "Viper Heavy Machinegun Tracks"
-msgstr "Гадюка с крупнокалиберным пулемётом на гусеничном ходу"
+msgstr "Крупнокалиберный пулемёт \"Гадюка\" на гусеничном ходу"
 
 #: data/base/messages/strings/names.txt:178
 #: data/mp/messages/strings/names.txt:180
@@ -4889,37 +4889,36 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:185
 #: data/mp/messages/strings/names.txt:1354
 msgid "Cobra Medium Cannon Tracks"
-msgstr "Кобра со среднекалиберной пушкой на гусеничном ходу"
+msgstr "Среднекалиберная пушка \"Кобра\" на гусеничном ходу"
 
 #: data/base/messages/strings/names.txt:184
 #: data/mp/messages/strings/names.txt:186
 msgid "Cobra Heavy Cannon Tracks"
-msgstr "Кобра с крупнокалиберной пушкой на гусеничном ходу"
+msgstr "Крупнокалиберная пушка \"Кобра\" на гусеничном ходу"
 
 #: data/base/messages/strings/names.txt:185
 #: data/base/messages/strings/names.txt:1344
 #: data/mp/messages/strings/names.txt:187
 #: data/mp/messages/strings/names.txt:1352
-#, fuzzy
 msgid "Cobra Truck"
-msgstr "Кобра грузовик"
+msgstr "Грузовик \"Кобра\""
 
 #: data/base/messages/strings/names.txt:186
 #: data/mp/messages/strings/names.txt:188
 msgid "Cobra Sensor Half-track"
-msgstr "Кобра с сенсором на полугусеничном ходу"
+msgstr "Сенсор \"Кобра\" на полугусеничном ходу"
 
 #: data/base/messages/strings/names.txt:187
 #: data/base/messages/strings/names.txt:1345
 #: data/mp/messages/strings/names.txt:189
 #: data/mp/messages/strings/names.txt:1353
 msgid "Cobra Flamer Tracks"
-msgstr "Кобра с огнемётом на гусеничном ходу"
+msgstr "Огнемёт \"Кобра\" на гусеничном ходу"
 
 #: data/base/messages/strings/names.txt:188
 #: data/mp/messages/strings/names.txt:190
 msgid "Cobra Bombard Half-track"
-msgstr "Кобра с бомбардой на полугусеничном ходу"
+msgstr "Бомбарда \"Кобра\" на полугусеничном ходу"
 
 #: data/base/messages/strings/names.txt:189
 #: data/mp/messages/strings/names.txt:191
@@ -4939,13 +4938,13 @@ msgstr ""
 #: data/base/messages/strings/names.txt:193
 #: data/mp/messages/strings/names.txt:195
 msgid "Python Light Cannon Tracks"
-msgstr "Питон с мелкокалиберной пушкой на гусеничном ходу"
+msgstr "Мелкокалиберная пушка \"Питон\" на гусеничном ходу"
 
 #: data/base/messages/strings/names.txt:194
 #: data/mp/messages/strings/names.txt:196
 #: data/mp/messages/strings/names.txt:1913
 msgid "Python Medium Cannon Tracks"
-msgstr "Питон со среднекалиберной пушкой на гусеничном ходу"
+msgstr "Среднекалиберная пушка \"Питон\" на гусеничном ходу"
 
 #: data/base/messages/strings/names.txt:195
 #: data/base/messages/strings/names.txt:1343
@@ -4953,7 +4952,7 @@ msgstr "Питон со среднекалиберной пушкой на гу�
 #: data/mp/messages/strings/names.txt:1351
 #: data/mp/messages/strings/names.txt:1505
 msgid "Python Heavy Cannon Tracks"
-msgstr "Питон с крупнокалиберной пушкой на гусеничном ходу"
+msgstr "Крупнокалиберная пушка \"Питон\" на гусеничном ходу"
 
 #: data/base/messages/strings/names.txt:196
 #: data/mp/messages/strings/names.txt:198
@@ -5080,62 +5079,62 @@ msgstr ""
 #: data/base/messages/strings/names.txt:234
 #: data/mp/messages/strings/names.txt:236
 msgid "Viper"
-msgstr "Гадюка"
+msgstr "\"Гадюка\""
 
 #: data/base/messages/strings/names.txt:235
 #: data/mp/messages/strings/names.txt:237
 msgid "Leopard"
-msgstr "Леопард"
+msgstr "\"Леопард\""
 
 #: data/base/messages/strings/names.txt:236
 #: data/mp/messages/strings/names.txt:238
 msgid "Retaliation"
-msgstr "Отплата"
+msgstr "\"Отплата\""
 
 #: data/base/messages/strings/names.txt:237
 #: data/mp/messages/strings/names.txt:239
 msgid "Bug"
-msgstr "Жук"
+msgstr "\"Жук\""
 
 #: data/base/messages/strings/names.txt:238
 #: data/mp/messages/strings/names.txt:240
 msgid "Cobra"
-msgstr "Кобра"
+msgstr "\"Кобра\""
 
 #: data/base/messages/strings/names.txt:239
 #: data/mp/messages/strings/names.txt:241
 msgid "Panther"
-msgstr "Пантера"
+msgstr "\"Пантера\""
 
 #: data/base/messages/strings/names.txt:240
 #: data/mp/messages/strings/names.txt:242
 msgid "Retribution"
-msgstr "Возмездие"
+msgstr "\"Возмездие\""
 
 #: data/base/messages/strings/names.txt:241
 #: data/mp/messages/strings/names.txt:243
 msgid "Scorpion"
-msgstr "Скропион"
+msgstr "\"Скропион\""
 
 #: data/base/messages/strings/names.txt:242
 #: data/mp/messages/strings/names.txt:244
 msgid "Tiger"
-msgstr "Тигр"
+msgstr "\"Тигр\""
 
 #: data/base/messages/strings/names.txt:243
 #: data/mp/messages/strings/names.txt:245
 msgid "Vengeance"
-msgstr "Мщение"
+msgstr "\"Мщение\""
 
 #: data/base/messages/strings/names.txt:244
 #: data/mp/messages/strings/names.txt:246
 msgid "Python"
-msgstr "Питон"
+msgstr "\"Питон\""
 
 #: data/base/messages/strings/names.txt:245
 #: data/mp/messages/strings/names.txt:247
 msgid "Mantis"
-msgstr "Богомол"
+msgstr "\"Богомол\""
 
 #: data/base/messages/strings/names.txt:247
 #: data/mp/messages/strings/names.txt:249
@@ -5181,77 +5180,77 @@ msgstr ""
 #: data/base/messages/strings/names.txt:315
 #: data/mp/messages/strings/names.txt:317
 msgid "Wheels"
-msgstr "Колеса"
+msgstr "на колёсах"
 
 #: data/base/messages/strings/names.txt:316
 #: data/mp/messages/strings/names.txt:318
 msgid "Wheels II"
-msgstr "Колеса II"
+msgstr "на колёсах II"
 
 #: data/base/messages/strings/names.txt:317
 #: data/mp/messages/strings/names.txt:319
 msgid "Wheels III"
-msgstr "Колеса III"
+msgstr "на колёсах III"
 
 #: data/base/messages/strings/names.txt:318
 #: data/mp/messages/strings/names.txt:320
 msgid "Tracks"
-msgstr "Гусеницы"
+msgstr "на гусеничном ходу"
 
 #: data/base/messages/strings/names.txt:319
 #: data/mp/messages/strings/names.txt:321
 msgid "Tracks II"
-msgstr "Гусеницы II"
+msgstr "на гусеничном ходу II"
 
 #: data/base/messages/strings/names.txt:320
 #: data/mp/messages/strings/names.txt:322
 msgid "Tracks III"
-msgstr "Гусеницы III"
+msgstr "на гусеничном ходу III"
 
 #: data/base/messages/strings/names.txt:321
 #: data/mp/messages/strings/names.txt:323
 msgid "Hover"
-msgstr "Воздушная подушка"
+msgstr "на воздушной подушке"
 
 #: data/base/messages/strings/names.txt:322
 #: data/mp/messages/strings/names.txt:324
 msgid "Hover II"
-msgstr "Воздушная подушка II"
+msgstr "на воздушной подушке II"
 
 #: data/base/messages/strings/names.txt:323
 #: data/mp/messages/strings/names.txt:325
 msgid "Hover III"
-msgstr "Воздушная подушка III"
+msgstr "на воздушной подушке III"
 
 #: data/base/messages/strings/names.txt:324
 #: data/mp/messages/strings/names.txt:326
 msgid "VTOL"
-msgstr "Воздушный"
+msgstr "ВВП"
 
 #: data/base/messages/strings/names.txt:325
 #: data/mp/messages/strings/names.txt:327
 msgid "VTOL II"
-msgstr "Воздушный II"
+msgstr "ВВП II"
 
 #: data/base/messages/strings/names.txt:326
 #: data/mp/messages/strings/names.txt:328
 msgid "VTOL III"
-msgstr "Воздушный III"
+msgstr "ВВП III"
 
 #: data/base/messages/strings/names.txt:327
 #: data/mp/messages/strings/names.txt:329
 msgid "Half-tracks"
-msgstr "Полугусеницы"
+msgstr "на полугусеничном ходу"
 
 #: data/base/messages/strings/names.txt:328
 #: data/mp/messages/strings/names.txt:330
 msgid "Half-tracks II"
-msgstr "Полугусеницы II"
+msgstr "на полугусеничном ходу II"
 
 #: data/base/messages/strings/names.txt:329
 #: data/mp/messages/strings/names.txt:331
 msgid "Half-tracks III"
-msgstr "Полугусеницы III"
+msgstr "на полугусеничном ходу III"
 
 #: data/base/messages/strings/names.txt:330
 #: data/base/messages/strings/names.txt:693
@@ -5565,28 +5564,28 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:433
 #: data/mp/messages/strings/names.txt:770
 msgid "Heavy Machinegun Hardpoint"
-msgstr ""
+msgstr "Оборонительная точка с крупнокалиберным пулемётом"
 
 #: data/base/messages/strings/names.txt:432
 #: data/base/messages/strings/names.txt:765
 #: data/mp/messages/strings/names.txt:434
 #: data/mp/messages/strings/names.txt:771
 msgid "Light Cannon Hardpoint"
-msgstr ""
+msgstr "Оборонительная точка с мелкокалиберной пушкой"
 
 #: data/base/messages/strings/names.txt:433
 #: data/base/messages/strings/names.txt:766
 #: data/mp/messages/strings/names.txt:435
 #: data/mp/messages/strings/names.txt:772
 msgid "Medium Cannon Hardpoint"
-msgstr ""
+msgstr "Оборонительная точка со среднекалиберной пушкой"
 
 #: data/base/messages/strings/names.txt:434
 #: data/base/messages/strings/names.txt:767
 #: data/mp/messages/strings/names.txt:436
 #: data/mp/messages/strings/names.txt:773
 msgid "Heavy Cannon Hardpoint"
-msgstr ""
+msgstr "Оборонительная точка с крупнокалиберной пушкой"
 
 #: data/base/messages/strings/names.txt:435
 #: data/base/messages/strings/names.txt:768
@@ -6247,77 +6246,77 @@ msgstr ""
 #: data/base/messages/strings/names.txt:655
 #: data/mp/messages/strings/names.txt:657
 msgid "Cyborg Thermal Armor"
-msgstr ""
+msgstr "Термоброня киборгов"
 
 #: data/base/messages/strings/names.txt:656
 #: data/mp/messages/strings/names.txt:658
 msgid "Cyborg Thermal Armor Mk2"
-msgstr ""
+msgstr "Термоброня киборгов Mk2"
 
 #: data/base/messages/strings/names.txt:657
 #: data/mp/messages/strings/names.txt:659
 msgid "Cyborg Thermal Armor Mk3"
-msgstr ""
+msgstr "Термоброня киборгов Mk3"
 
 #: data/base/messages/strings/names.txt:658
 #: data/mp/messages/strings/names.txt:660
 msgid "Cyborg High Intensity Thermal Armor"
-msgstr ""
+msgstr "Высокоинтенсивная термоброня киборгов"
 
 #: data/base/messages/strings/names.txt:659
 #: data/mp/messages/strings/names.txt:661
 msgid "Cyborg High Intensity Thermal Armor Mk2"
-msgstr ""
+msgstr "Высокоинтенсивная термоброня киборгов Mk2"
 
 #: data/base/messages/strings/names.txt:660
 #: data/mp/messages/strings/names.txt:662
 msgid "Cyborg High Intensity Thermal Armor Mk3"
-msgstr ""
+msgstr "Высокоинтенсивная термоброня киборгов Mk3"
 
 #: data/base/messages/strings/names.txt:662
 #: data/mp/messages/strings/names.txt:664
 msgid "Cyborg Composite Alloys"
-msgstr ""
+msgstr "Композитный сплав киборгов"
 
 #: data/base/messages/strings/names.txt:663
 #: data/mp/messages/strings/names.txt:665
 msgid "Cyborg Composite Alloys Mk2"
-msgstr ""
+msgstr "Композитный сплав киборгов Mk2"
 
 #: data/base/messages/strings/names.txt:664
 #: data/mp/messages/strings/names.txt:666
 msgid "Cyborg Composite Alloys Mk3"
-msgstr ""
+msgstr "Композитный сплав киборгов Mk3"
 
 #: data/base/messages/strings/names.txt:665
 #: data/mp/messages/strings/names.txt:667
 msgid "Cyborg Dense Composite Alloys"
-msgstr ""
+msgstr "Плотный композитный сплав киборгов"
 
 #: data/base/messages/strings/names.txt:666
 #: data/mp/messages/strings/names.txt:668
 msgid "Cyborg Dense Composite Alloys Mk2"
-msgstr ""
+msgstr "Плотный композитный сплав киборгов Mk2"
 
 #: data/base/messages/strings/names.txt:667
 #: data/mp/messages/strings/names.txt:669
 msgid "Cyborg Dense Composite Alloys Mk3"
-msgstr ""
+msgstr "Плотный композитный сплав киборгов Mk3"
 
 #: data/base/messages/strings/names.txt:668
 #: data/mp/messages/strings/names.txt:670
 msgid "Cyborg Superdense Composite Alloys"
-msgstr ""
+msgstr "Сверхплотный композитный сплав киборгов"
 
 #: data/base/messages/strings/names.txt:669
 #: data/mp/messages/strings/names.txt:671
 msgid "Cyborg Superdense Composite Alloys Mk2"
-msgstr ""
+msgstr "Сверхплотный композитный сплав киборгов Mk2"
 
 #: data/base/messages/strings/names.txt:670
 #: data/mp/messages/strings/names.txt:672
 msgid "Cyborg Superdense Composite Alloys Mk3"
-msgstr ""
+msgstr "Сверхплотный композитный сплав киборгов Mk3"
 
 #: data/base/messages/strings/names.txt:673
 #: data/base/messages/strings/names.txt:1437
@@ -6675,7 +6674,7 @@ msgstr "Газотурбинный генератор"
 #: data/base/messages/strings/names.txt:818
 #: data/mp/messages/strings/names.txt:824
 msgid "Vapor Turbine Generator"
-msgstr ""
+msgstr "Паротурбинный генератор"
 
 #: data/base/messages/strings/names.txt:820
 #: data/base/messages/strings/names.txt:1449
@@ -7112,12 +7111,12 @@ msgstr "Инжекторный двигатель Mk3"
 #: data/base/messages/strings/names.txt:946
 #: data/mp/messages/strings/names.txt:954
 msgid "Turbo-Charged Engine Mk2"
-msgstr ""
+msgstr "Двигатель с турбонаддувом Mk2"
 
 #: data/base/messages/strings/names.txt:947
 #: data/mp/messages/strings/names.txt:955
 msgid "Turbo-Charged Engine Mk3"
-msgstr ""
+msgstr "Двигатель с турбонаддувом Mk3"
 
 #: data/base/messages/strings/names.txt:949
 #: data/mp/messages/strings/names.txt:957
@@ -7462,32 +7461,32 @@ msgstr ""
 #: data/base/messages/strings/names.txt:1049
 #: data/mp/messages/strings/names.txt:1057
 msgid "High Temperature Flamer Gel"
-msgstr ""
+msgstr "Высокотемпературный огнемётный гель"
 
 #: data/base/messages/strings/names.txt:1050
 #: data/mp/messages/strings/names.txt:1058
 msgid "High Temperature Flamer Gel Mk2"
-msgstr ""
+msgstr "Высокотемпературный огнемётный гель Mk2"
 
 #: data/base/messages/strings/names.txt:1051
 #: data/mp/messages/strings/names.txt:1059
 msgid "High Temperature Flamer Gel Mk3"
-msgstr ""
+msgstr "Высокотемпературный огнемётный гель Mk3x"
 
 #: data/base/messages/strings/names.txt:1052
 #: data/mp/messages/strings/names.txt:1060
 msgid "Superhot Flamer Gel"
-msgstr ""
+msgstr "Сверхгорячий огнемётный гель"
 
 #: data/base/messages/strings/names.txt:1053
 #: data/mp/messages/strings/names.txt:1061
 msgid "Superhot Flamer Gel Mk2"
-msgstr ""
+msgstr "Сверхгорячий огнемётный гель Mk2"
 
 #: data/base/messages/strings/names.txt:1054
 #: data/mp/messages/strings/names.txt:1062
 msgid "Superhot Flamer Gel Mk3"
-msgstr ""
+msgstr "Сверхгорячий огнемётный гель Mk3"
 
 #: data/base/messages/strings/names.txt:1055
 #: data/mp/messages/strings/names.txt:1063
@@ -7507,7 +7506,7 @@ msgstr ""
 #: data/base/messages/strings/names.txt:1059
 #: data/mp/messages/strings/names.txt:1067
 msgid "Heavy Flamer - Inferno"
-msgstr ""
+msgstr "Тяжёлый огнемёт - \"Инферно\""
 
 #: data/base/messages/strings/names.txt:1062
 #: data/mp/messages/strings/names.txt:1070
@@ -7587,7 +7586,7 @@ msgstr ""
 #: data/base/messages/strings/names.txt:1082
 #: data/mp/messages/strings/names.txt:1090
 msgid "Laser - Flashlight"
-msgstr ""
+msgstr "Лазер - \"Вспышка\""
 
 #: data/base/messages/strings/names.txt:1085
 #: data/mp/messages/strings/names.txt:1093
@@ -7661,17 +7660,17 @@ msgstr ""
 #: data/base/messages/strings/names.txt:1105
 #: data/mp/messages/strings/names.txt:1113
 msgid "Advanced Missile Warhead"
-msgstr ""
+msgstr "Улучшенная боеголовка"
 
 #: data/base/messages/strings/names.txt:1106
 #: data/mp/messages/strings/names.txt:1114
 msgid "Advanced Missile Warhead Mk2"
-msgstr ""
+msgstr "Улучшенная боеголовка Mk2"
 
 #: data/base/messages/strings/names.txt:1107
 #: data/mp/messages/strings/names.txt:1115
 msgid "Advanced Missile Warhead Mk3"
-msgstr ""
+msgstr "Улучшенная боеголовка Mk3"
 
 #: data/base/messages/strings/names.txt:1108
 #: data/mp/messages/strings/names.txt:1116
@@ -7896,12 +7895,12 @@ msgstr ""
 #: data/base/messages/strings/names.txt:1168
 #: data/mp/messages/strings/names.txt:1176
 msgid "Rocket Laser Designator"
-msgstr ""
+msgstr "Ракетный лазерный целеуказатель"
 
 #: data/base/messages/strings/names.txt:1169
 #: data/mp/messages/strings/names.txt:1177
 msgid "Thermal Imaging Rockets"
-msgstr ""
+msgstr "Ракеты с теплонаведением"
 
 #: data/base/messages/strings/names.txt:1170
 #: data/mp/messages/strings/names.txt:1178
@@ -7966,12 +7965,12 @@ msgstr ""
 #: data/base/messages/strings/names.txt:1185
 #: data/mp/messages/strings/names.txt:1193
 msgid "Tank Killer Rocket"
-msgstr ""
+msgstr "Ракета истребителя танков"
 
 #: data/base/messages/strings/names.txt:1187
 #: data/mp/messages/strings/names.txt:1195
 msgid "Machine Gun Artifact"
-msgstr ""
+msgstr "Артефакт \"Пулемёт\""
 
 #: data/base/messages/strings/names.txt:1190
 #: data/mp/messages/strings/names.txt:1198
@@ -8081,39 +8080,39 @@ msgstr "Бочка с нефтью"
 #: data/base/messages/strings/names.txt:1293
 #: data/mp/messages/strings/names.txt:1301
 msgid "Wreck"
-msgstr ""
+msgstr "Обломки"
 
 #: data/base/messages/strings/names.txt:1295
 #: data/mp/messages/strings/names.txt:1303
 msgid "Wrecked Tank"
-msgstr ""
+msgstr "Разрушенный танк"
 
 #: data/base/messages/strings/names.txt:1313
 #: data/mp/messages/strings/names.txt:1321
 msgid "Wrecked Bridge"
-msgstr ""
+msgstr "Разрушенный мост"
 
 #: data/base/messages/strings/names.txt:1314
 #: data/mp/messages/strings/names.txt:1322
 msgid "Wrecked Van"
-msgstr ""
+msgstr "Разрушенный фургон"
 
 #: data/base/messages/strings/names.txt:1315
 #: data/mp/messages/strings/names.txt:1323
 msgid "Wrecked Vehicle"
-msgstr ""
+msgstr "Разрушенная машина"
 
 #: data/base/messages/strings/names.txt:1316
 #: data/mp/messages/strings/names.txt:1324
 msgid "Wrecked Tanker"
-msgstr ""
+msgstr "Разрушенный танкер"
 
 #: data/base/messages/strings/names.txt:1320
 #: data/base/messages/strings/names.txt:1336
 #: data/mp/messages/strings/names.txt:1328
 #: data/mp/messages/strings/names.txt:1344
 msgid "Cyborg Laboratory"
-msgstr ""
+msgstr "Лаборатория киборгов"
 
 #: data/base/messages/strings/names.txt:1321
 #: data/mp/messages/strings/names.txt:1329
@@ -8137,21 +8136,21 @@ msgstr ""
 #: data/base/messages/strings/names.txt:1324
 #: data/mp/messages/strings/names.txt:1332
 msgid "Laser Optics Laboratory"
-msgstr ""
+msgstr "Лаборатория лазерной оптики"
 
 #: data/base/messages/strings/names.txt:1325
 #: data/base/messages/strings/names.txt:1337
 #: data/mp/messages/strings/names.txt:1333
 #: data/mp/messages/strings/names.txt:1345
 msgid "Electronics Laboratory"
-msgstr ""
+msgstr "Лаборатория электроники"
 
 #: data/base/messages/strings/names.txt:1326
 #: data/base/messages/strings/names.txt:1335
 #: data/mp/messages/strings/names.txt:1334
 #: data/mp/messages/strings/names.txt:1343
 msgid "Chemical Laboratory"
-msgstr ""
+msgstr "Химическая лаборатория"
 
 #: data/base/messages/strings/names.txt:1334
 #: data/mp/messages/strings/names.txt:1342
@@ -8226,7 +8225,7 @@ msgstr ""
 #: data/base/messages/strings/names.txt:1467
 #: data/mp/messages/strings/names.txt:1475
 msgid "Flashlight"
-msgstr ""
+msgstr "\"Вспышка\""
 
 #: data/base/messages/strings/names.txt:1468
 #: data/mp/messages/strings/names.txt:1476
@@ -8361,174 +8360,176 @@ msgstr "Цель захвачена"
 
 #: data/base/script/text/cam3-2x.slo:118
 msgid "Reinforcements are now available"
-msgstr ""
+msgstr "Доступно подкрепление"
 
 #: data/base/script/text/tutorial3.slo:289
 msgid "In this training session you'll learn how to build an effective base"
-msgstr ""
+msgstr "В этой тренировочной миссии Вы научитесь строить эффективную базу"
 
 #: data/base/script/text/tutorial3.slo:304
 msgid "Oil resources are key to your success"
-msgstr ""
+msgstr "Нефтяные ресурсы являются залогом Вашей победы"
 
 #: data/base/script/text/tutorial3.slo:313
 msgid "To build an oil derrick, select one of your trucks"
-msgstr ""
+msgstr "Чтобы построить нефтянную вышку, выберите один из своих грузовиков"
 
 #: data/base/script/text/tutorial3.slo:333
 msgid "Left click the oil pool indicated by the radar pulse to order your truck to build"
 msgstr ""
+"Нажмите левой кнопкой по нефтянному месторождению, пульсирующем на радаре, чтобы приказать грузовику начать "
+"строительство"
 
 #: data/base/script/text/tutorial3.slo:353
 msgid "The oil derrick is currently dormant. Build a power generator to convert the oil into power"
-msgstr ""
+msgstr "Нефтяная вышка не работает. Постройте генератор энергии, чтобы преобразовать нефть в энергию"
 
 #: data/base/script/text/tutorial3.slo:370
 #: data/base/script/text/tutorial3.slo:576
 #: data/base/script/text/tutorial3.slo:867
 msgid "Left click the flashing BUILD icon"
-msgstr ""
+msgstr "Нажмите левой кнопкой по мигающей кнопке СТРОИТЬ"
 
 #: data/base/script/text/tutorial3.slo:397
 msgid "Now left click the power generator in the build menu on the left"
-msgstr ""
+msgstr "Затем выберите генератор энергии в меню строительства слева"
 
 #: data/base/script/text/tutorial3.slo:407
 msgid "Position the square at your base and left click to start the build process"
-msgstr ""
+msgstr "Разместите квадарт на Вашей базе и нажмите левую кнопку для начала процесса строительства"
 
 #: data/base/script/text/tutorial3.slo:422
 msgid "To increase your build rate, select your second truck"
-msgstr ""
+msgstr "Чтобы увеличить скорость строительства, выберите второй грузовик"
 
 #: data/base/script/text/tutorial3.slo:457
 msgid "Now left click the power generator site"
-msgstr ""
+msgstr "Теперь кликните по месту строительства генератора энергии"
 
 #: data/base/script/text/tutorial3.slo:472
 msgid "The other truck will now help to build the power generator"
-msgstr ""
+msgstr "Теперь грузовик помогает строить генератор энергии"
 
 #: data/base/script/text/tutorial3.slo:506
 msgid "During missions you need to locate and recover technologies from before the Collapse"
-msgstr ""
+msgstr "Во время миссий Вы будете искать и восстанавливать доколлапсовые технологии"
 
 #: data/base/script/text/tutorial3.slo:516
 msgid "Use a truck to search for the artifact indicated by the radar pulse"
-msgstr ""
+msgstr "Выберите грузовик и найдите артефакт, обозначенный пульсирующей точной на радаре"
 
 #: data/base/script/text/tutorial3.slo:519
 msgid "Move the pointer over the artifact and left click to recover it"
-msgstr ""
+msgstr "Наведите указатель на артефакт и щелкните по нему, чтобы восстановить"
 
 #: data/base/script/text/tutorial3.slo:562
 msgid "A research facility is required to research artifacts"
-msgstr ""
+msgstr "Для исследования артефактов необходима исследовательская лаборатория"
 
 #: data/base/script/text/tutorial3.slo:604
 msgid "Now left click the research facility and position it at your base"
-msgstr ""
+msgstr "Теперь щелкните по исследовательской лаборатории и выберите позицию для ее размещения на базе"
 
 #: data/base/script/text/tutorial3.slo:627
 msgid "Use your other truck to help build the research facility"
-msgstr ""
+msgstr "Используйте другой грузовик, чтобы помочь построить исследовательскую лабораторию"
 
 #: data/base/script/text/tutorial3.slo:650
 msgid "To research the artifact, left click on the flashing RESEARCH icon"
-msgstr ""
+msgstr "Чтобы исследовать артефакт, щелкните по мигающей иконке ИССЛЕДОВАНИЯ"
 
 #: data/base/script/text/tutorial3.slo:675
 msgid "Now left click the machinegun artifact"
-msgstr ""
+msgstr "Теперь щелкните по артефакту \"пулемёт\""
 
 #: data/base/script/text/tutorial3.slo:688
 msgid "The artifact is now being researched by the facility"
-msgstr ""
+msgstr "Теперь артефакт исследуется лабораторией"
 
 #: data/base/script/text/tutorial3.slo:709
 msgid "The researched machinegun can now be used to design a new vehicle"
-msgstr ""
+msgstr "Теперь исследованный пулемёт может быть использован в разработке новой машины"
 
 #: data/base/script/text/tutorial3.slo:726
 msgid "Left click the flashing DESIGN icon"
-msgstr ""
+msgstr "Щелкните по мигающей иконке ДИЗАЙН"
 
 #: data/base/script/text/tutorial3.slo:742
 msgid "To start your design, left click the NEW DESIGN icon"
-msgstr ""
+msgstr "Чтобы начать разработку, щелкните по иконке НОВЫЙ ДИЗАЙН"
 
 #: data/base/script/text/tutorial3.slo:757
 msgid "Now left click the Vehicle Body icon"
-msgstr ""
+msgstr "Теперь щелкните по иконке \"Корпус машины\""
 
 #: data/base/script/text/tutorial3.slo:771
 msgid "Then left click the Viper body"
-msgstr ""
+msgstr "Затем выберите корпус \"Гадюка\""
 
 #: data/base/script/text/tutorial3.slo:783
 msgid "Left click the Wheels icon"
-msgstr ""
+msgstr "Щелкните по иконке \"Колёса\""
 
 #: data/base/script/text/tutorial3.slo:795
 msgid "Then left click the machinegun to complete your design"
-msgstr ""
+msgstr "Затем, чтобы завершить разработку, щелкните по пулемёту"
 
 #: data/base/script/text/tutorial3.slo:826
 msgid "To finalize your design, left click the CLOSE icon"
-msgstr ""
+msgstr "Для завершения разработки, нажмите по иконке ЗАКРЫТЬ"
 
 #: data/base/script/text/tutorial3.slo:855
 msgid "A factory is now required to manufacture your new vehicle"
-msgstr ""
+msgstr "Теперь, чтобы построить новую машину, необходим завод"
 
 #: data/base/script/text/tutorial3.slo:890
 msgid "Now left click the factory icon and position it at your base"
-msgstr ""
+msgstr "Теперь щелкните по заводу и выберите позицию для его размещения на базе"
 
 #: data/base/script/text/tutorial3.slo:910
 msgid "Select a location for your factory"
-msgstr ""
+msgstr "Выберите размещение завода"
 
 #: data/base/script/text/tutorial3.slo:929
 msgid "The delivery point is indicated by the number 1"
-msgstr ""
+msgstr "Точка прибытия обозначена цифрой 1"
 
 #: data/base/script/text/tutorial3.slo:932
 msgid "All new units will drive to this location once built"
-msgstr ""
+msgstr "Все построенные машины будут прибывать в эту зону"
 
 #: data/base/script/text/tutorial3.slo:934
 msgid "You can move the delivery point at any time by left clicking it"
-msgstr ""
+msgstr "Вы можете переместить точку прибытия в любой момент, щелкнув по ней"
 
 #: data/base/script/text/tutorial3.slo:948
 msgid "Now click where you want to position the delivery point"
-msgstr ""
+msgstr "Теперь укажите, где Вы хотите разместить точку прибытия"
 
 #: data/base/script/text/tutorial3.slo:965
 msgid "The factory can now be ordered to build a new unit"
-msgstr ""
+msgstr "Теперь заводу можно приказать строить новую машину"
 
 #: data/base/script/text/tutorial3.slo:991
 msgid "Left click the flashing MANUFACTURE icon"
-msgstr ""
+msgstr "Щелкните по мигающей иконке ПРОИЗВОДСТВО"
 
 #: data/base/script/text/tutorial3.slo:1009
 msgid "Now left click the units you want to build from the menu at the left"
-msgstr ""
+msgstr "Затем щелкните по машинам, которые хотите построить, в меню слева"
 
 #: data/base/script/text/tutorial3.slo:1023
 msgid "Please wait whilst the factory manufactures the new unit(s)"
-msgstr ""
+msgstr "Подождите, пока завод не построит новые машины"
 
 #: data/base/script/text/tutorial3.slo:1048
 msgid "Congratulations commander - you are ready for your first mission"
-msgstr ""
+msgstr "Поздравляем, Командующий - теперь Вы готовы к своей первой миссии"
 
 #: data/mods/global/ntw/messages/strings/names.txt:1283
 #: data/mp/messages/strings/names.txt:144
 msgid "Viper Light Cannon Half-track"
-msgstr ""
+msgstr "Мелкокалиберная пушка \"Гадюка\" на полугусеничном ходу"
 
 #: data/mods/global/ntw/messages/strings/names.txt:1289
 #: data/mp/messages/strings/names.txt:1812
@@ -8568,7 +8569,7 @@ msgstr ""
 #: data/mods/global/ntw/messages/strings/names.txt:1297
 #: data/mp/messages/strings/names.txt:1875
 msgid "Scorpion Heavy Cannon Tracks"
-msgstr "Скорпион с крупнокалиберной пушкой на гусеничном ходу"
+msgstr "Крупнокалиберная пушка \"Скорпион\" на гусеничном ходу"
 
 #: data/mods/global/ntw/messages/strings/names.txt:1298
 #: data/mp/messages/strings/names.txt:1865
@@ -8609,12 +8610,12 @@ msgstr ""
 #: data/mods/global/ntw/messages/strings/names.txt:1307
 #: data/mp/messages/strings/names.txt:1885
 msgid "Mantis Heavy Cannon Tracks"
-msgstr "Богомол с крупнокалиберной пушкой на гусеничном ходу"
+msgstr "Крупнокалиберная пушка \"Богомол\" на гусеничном ходу"
 
 #: data/mods/global/ntw/messages/strings/names.txt:1308
 #: data/mp/messages/strings/names.txt:1886
 msgid "Mantis Tank Killer Tracks"
-msgstr "Богомол истребитель танков на гусеничном ходу"
+msgstr "Истребитель танков \"Богомол\" на гусеничном ходу"
 
 #: data/mods/global/ntw/messages/strings/names.txt:1309
 #: data/mp/messages/strings/names.txt:1887
@@ -8624,12 +8625,12 @@ msgstr ""
 #: data/mods/global/ntw/messages/strings/names.txt:1310
 #: data/mp/messages/strings/names.txt:1888
 msgid "Scorpion Heavy Machinegun Tracks"
-msgstr "Скорпион с крупнокалиберным пулемётом на гусеничном ходу"
+msgstr "Крупнокалиберный пулемёт \"Скорпион\" на гусеничном ходу"
 
 #: data/mods/global/ntw/messages/strings/names.txt:1312
 #: data/mp/messages/strings/names.txt:1890
 msgid "Scorpion Repair Tracks"
-msgstr ""
+msgstr "Ремонтный \"Скорпион\" на гусеничном ходу"
 
 #: data/mods/global/ntw/messages/strings/names.txt:1313
 #: data/mp/messages/strings/names.txt:1891
@@ -8704,37 +8705,37 @@ msgstr ""
 #: data/mods/global/ntw/messages/strings/names.txt:1335
 #: data/mp/messages/strings/names.txt:1915
 msgid "Python Gauss Cannon Tracks"
-msgstr "Питон с пушкой Гаусса на гусеничном ходу"
+msgstr "Пушка Гаусса \"Питон\" на гусеничном ходу"
 
 #: data/mods/global/ntw/messages/strings/names.txt:1336
 #: data/mp/messages/strings/names.txt:1916
 msgid "Python Pulse Laser Tracks"
-msgstr "Питон с импульсным лазером на гусеничном ходу"
+msgstr "Импульсный лазер \"Питон\" на гусеничном ходу"
 
 #: data/mods/global/ntw/messages/strings/names.txt:1337
 #: data/mp/messages/strings/names.txt:1917
 msgid "Tiger Pulse Laser Tracks"
-msgstr "Тигр с импульсным лазером на гусеничном ходу"
+msgstr "Импульсный лазер \"Тигр\" на гусеничном ходу"
 
 #: data/mods/global/ntw/messages/strings/names.txt:1338
 #: data/mp/messages/strings/names.txt:1918
 msgid "Tiger Heavy Laser Tracks"
-msgstr "Тигр с тяжёлым лазером на гусеничном ходу"
+msgstr "Тяжёлый лазер \"Тигр\" на гусеничном ходу"
 
 #: data/mods/global/ntw/messages/strings/names.txt:1339
 #: data/mp/messages/strings/names.txt:1919
 msgid "Wyvern Gauss Cannon Tracks"
-msgstr "Виверн с пушкой Гаусса на гусеничном ходу"
+msgstr "Пушка Гаусса \"Виверн\" на гусеничном ходу"
 
 #: data/mods/global/ntw/messages/strings/names.txt:1340
 #: data/mp/messages/strings/names.txt:1920
 msgid "Wyvern Pulse Laser Tracks"
-msgstr "Виверн с импульсным лазером на гусеничном ходу"
+msgstr "Импульсный лазер \"Виверн\" на гусеничном ходу"
 
 #: data/mods/global/ntw/messages/strings/names.txt:1341
 #: data/mp/messages/strings/names.txt:1921
 msgid "Wyvern Heavy Laser Tracks"
-msgstr "Виверн с тяжёлым лазером на гусеничном ходу"
+msgstr "Тяжёлый лазер \"Виверн\" на гусеничном ходу"
 
 #: data/mp/messages/resmessagesall.rmsg:186
 msgid "Cyborg Transport Available"
@@ -8742,7 +8743,7 @@ msgstr ""
 
 #: data/mp/messages/resmessagesall.rmsg:187
 msgid "Armed with Machinegun"
-msgstr ""
+msgstr "Вооружён пулемётом"
 
 #: data/mp/messages/resmessagesall.rmsg:189
 msgid "Requires heavy VTOL factory to produce"
@@ -8766,7 +8767,7 @@ msgstr ""
 
 #: data/mp/messages/resmessagesall.rmsg:252
 msgid "Armed with grenades"
-msgstr ""
+msgstr "Вооружён гранатами"
 
 #: data/mp/messages/resmessagesall.rmsg:265
 msgid "Combat engineer with construction ability"
@@ -8806,7 +8807,7 @@ msgstr ""
 
 #: data/mp/messages/resmessagesall.rmsg:382
 msgid "Armed with medium cannon"
-msgstr ""
+msgstr "Вооружёно среднекалиберной пушкой"
 
 #: data/mp/messages/resmessagesall.rmsg:395
 #: data/mp/messages/resmessagesall.rmsg:408
@@ -8815,7 +8816,7 @@ msgstr ""
 
 #: data/mp/messages/resmessagesall.rmsg:421
 msgid "Armed with tank killer rockets"
-msgstr ""
+msgstr "Вооружён противотанковыми ракетами"
 
 #: data/mp/messages/resmessagesall.rmsg:434
 msgid "Fires heavy pulses of laser light"
@@ -8823,7 +8824,7 @@ msgstr ""
 
 #: data/mp/messages/resmessagesall.rmsg:435
 msgid "Best Targets: Heavy cyborgs"
-msgstr ""
+msgstr "Лучшая цель: тяжёлые киборги"
 
 #: data/mp/messages/resmessagesall.rmsg:447
 msgid "76mm twin-barrel automatic-cannon"
@@ -8879,7 +8880,7 @@ msgstr ""
 #: data/mp/messages/resmessagesall.rmsg:643
 #: data/mp/messages/resmessagesall.rmsg:656
 msgid "Best Targets : Vehicles"
-msgstr ""
+msgstr "Лучшая цель: машины"
 
 #: data/mp/messages/resmessagesall.rmsg:538
 msgid "Armored strongpoint with Heavy Laser"
@@ -8930,7 +8931,7 @@ msgstr ""
 
 #: data/mp/messages/resmessagesall.rmsg:667
 msgid "New System Available"
-msgstr ""
+msgstr "Доступна новая система"
 
 #: data/mp/messages/resmessagesall.rmsg:680
 msgid "Medium Super Heavy Body"
@@ -9198,7 +9199,7 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:1681
 #: data/mp/messages/strings/names.txt:1682
 msgid "Twin Assault Cannon"
-msgstr ""
+msgstr "Спаренная штурмовая пушка"
 
 #: data/mp/messages/strings/names.txt:1683
 #: data/mp/messages/strings/names.txt:1684
@@ -9298,7 +9299,7 @@ msgstr ""
 
 #: data/mp/messages/strings/names.txt:1755
 msgid "Wyvern"
-msgstr "Виверн"
+msgstr "\"Виверн\""
 
 #: data/mp/messages/strings/names.txt:1757
 msgid "Super Heavy Body - Dragon"
@@ -9306,7 +9307,7 @@ msgstr ""
 
 #: data/mp/messages/strings/names.txt:1758
 msgid "Dragon"
-msgstr "Дракон"
+msgstr "\"Дракон\""
 
 #: data/mp/messages/strings/names.txt:1760
 msgid "Superhot Plasmite gel"
@@ -9342,24 +9343,24 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:1776
 #: data/mp/messages/strings/names.txt:1777
 msgid "Whirlwind Hardpoint"
-msgstr ""
+msgstr "Оборонительная точка \"Вихрь\""
 
 #: data/mp/messages/strings/names.txt:1778
 #: data/mp/messages/strings/names.txt:1779
 msgid "Cyclone Hardpoint"
-msgstr ""
+msgstr "Оборонительная точка \"Циклон\""
 
 #: data/mp/messages/strings/names.txt:1780
 #: data/mp/messages/strings/names.txt:1781
 msgid "Avenger Hardpoint"
-msgstr ""
+msgstr "Оборонительная точка с \"Мститель\""
 
 #: data/mp/messages/strings/names.txt:1785
 #: data/mp/messages/strings/names.txt:1786
 #: data/mp/messages/strings/names.txt:1787
 #: data/mp/messages/strings/names.txt:1788
 msgid "Twin Assault Gun"
-msgstr ""
+msgstr "Спаренное штурмовое орудие"
 
 #: data/mp/messages/strings/names.txt:1790
 #: data/mp/messages/strings/names.txt:1791
@@ -9388,19 +9389,19 @@ msgstr ""
 
 #: data/mp/messages/strings/names.txt:1822
 msgid "Viper Wheels Machinegun"
-msgstr "Гадюка с пулемётом на колёсах"
+msgstr "Пулемёт \"Гадюка\" на колёсах"
 
 #: data/mp/messages/strings/names.txt:1823
 msgid "Viper Wheels Twin Machinegun"
-msgstr "Гадюка со спаренным пулемётом на колёсах"
+msgstr "Спаренный пулемёт \"Гадюка\" на колёсах"
 
 #: data/mp/messages/strings/names.txt:1824
 msgid "Viper Wheels Heavy Machinegun"
-msgstr "Гадюка с крупнокалиберным пулемётом на колёсах"
+msgstr "Крупнокалиберный пулемёт \"Гадюка\" на колёсах"
 
 #: data/mp/messages/strings/names.txt:1825
 msgid "Cobra Wheels Heavy Machinegun"
-msgstr "Кобра с крупнокалиберным пулемётом на колёсах"
+msgstr "Крупнокалиберный пулемёт \"Кобра\" на колёсах"
 
 #: data/mp/messages/strings/names.txt:1826
 msgid "Cobra Hover Heavy Machinegun"
@@ -9408,19 +9409,19 @@ msgstr ""
 
 #: data/mp/messages/strings/names.txt:1828
 msgid "Viper Tracks Machinegun"
-msgstr "Гадюка с пулемётом на гусеничном ходу"
+msgstr "Пулемёт \"Гадюка\" на гусеничном ходу"
 
 #: data/mp/messages/strings/names.txt:1829
 msgid "Viper Tracks Twin Machinegun"
-msgstr "Гадюка со спаренным пулемётом на гусеничном ходу"
+msgstr "Спаренный пулемёт \"Гадюка\" на гусеничном ходу"
 
 #: data/mp/messages/strings/names.txt:1830
 msgid "Viper Tracks Heavy Machinegun"
-msgstr "Гадюка с крупнокалиберным пулемётом на гусеничном ходу"
+msgstr "Крупнокалиберный пулемёт \"Гадюка\" на гусеничном ходу"
 
 #: data/mp/messages/strings/names.txt:1831
 msgid "Cobra Tracks Heavy Machinegun"
-msgstr "Кобра с крупнокалиберным пулемётом на гусеничном ходу"
+msgstr "Крупнокалиберный пулемёт \"Кобра\" на гусеничном ходу"
 
 #: data/mp/messages/strings/names.txt:1833
 msgid "Cobra Hover Medium Cannon"
@@ -9432,7 +9433,7 @@ msgstr ""
 
 #: data/mp/messages/strings/names.txt:1835
 msgid "Scorpion Tracks Medium Cannon"
-msgstr "Скорпион со среднекалиберной пушкой на гусеничном ходу"
+msgstr "Среднекалиберная пушка \"Скорпион\" на гусеничном ходу"
 
 #: data/mp/messages/strings/names.txt:1836
 msgid "Python Hover Medium Cannon"
@@ -9444,15 +9445,15 @@ msgstr ""
 
 #: data/mp/messages/strings/names.txt:1838
 msgid "Python Tracks Heavy Cannon"
-msgstr "Питон с крупнокалиберной пушкой на гусеничном ходу"
+msgstr "Крупнокалиберная пушка \"Питон\" на гусеничном ходу"
 
 #: data/mp/messages/strings/names.txt:1839
 msgid "Mantis Tracks Railgun"
-msgstr "Богомол с рельсовой пушкой на гусеничном ходу"
+msgstr "Рельсовая пушка \"Богомол\" на гусеничном ходу"
 
 #: data/mp/messages/strings/names.txt:1840
 msgid "Mantis Tracks Pulse Laser"
-msgstr "Богомол с импульсным лазером на гусеничном ходу"
+msgstr "Импульсный лазер \"Богомол\" на гусеничном ходу"
 
 #: data/mp/messages/strings/names.txt:1841
 msgid "Python Tracks Lancer"
@@ -9468,7 +9469,7 @@ msgstr ""
 
 #: data/mp/messages/strings/names.txt:1848
 msgid "Tiger Tracks Heavy Cannon"
-msgstr "Тигр с крупнокалиберной пушкой на гусеничном ходу"
+msgstr "Крупнокалиберная пушка \"Тигр\" на гусеничном ходу"
 
 #: data/mp/messages/strings/names.txt:1849
 msgid "Tiger Tracks Needle Gun"
@@ -9540,15 +9541,15 @@ msgstr ""
 
 #: data/mp/messages/strings/names.txt:1912
 msgid "Python Tank Killer Tracks"
-msgstr "Питон истребитель танков на гусеничном ходу"
+msgstr "Истребитель танков \"Питон\" на гусеничном ходу"
 
 #: data/mp/messages/strings/names.txt:1923
 msgid "Viper Machinegun Half-Track"
-msgstr "Гадюка с пулемётом на полугусеничном ходу"
+msgstr "Пулемёт \"Гадюка\" на полугусеничном ходу"
 
 #: data/mp/messages/strings/names.txt:1924
 msgid "Viper Flamer Half-Track"
-msgstr "Гадюка с огнемётом на полугусеничном ходу"
+msgstr "Огнемёт \"Гадюка\" на полугусеничном ходу"
 
 #: lib/framework/i18n.c:43
 #: lib/framework/i18n.c:94
@@ -9764,7 +9765,7 @@ msgstr ""
 #: src/clparse.c:105
 #: src/clparse.c:106
 msgid "mod"
-msgstr ""
+msgstr "мод"
 
 #: src/clparse.c:105
 msgid "Enable a campaign only mod"
@@ -9995,25 +9996,25 @@ msgstr ""
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Выбрана группа %u - %u юнит"
+msgstr[1] "Выбрана группа %u - %u юнита"
+msgstr[2] "Выбрана группа %u - %u юнитов"
 
 #: src/droid.c:3422
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "%u юнит назначен группе %u"
+msgstr[1] "%u юнита назначено группе %u"
+msgstr[2] "%u юнитов назначено группе %u"
 
 #: src/droid.c:3435
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Фокус на группе %u - %u юнит"
+msgstr[1] "Фокус на группе %u - %u юнита"
+msgstr[2] "Фокус на группе %u - %u юнитов"
 
 #: src/droid.c:3439
 #, c-format
@@ -11437,15 +11438,15 @@ msgstr "%s присоединился к игре"
 
 #: src/multimenu.c:559
 msgid "Technology level 1"
-msgstr ""
+msgstr "Уровень технологий 1"
 
 #: src/multimenu.c:567
 msgid "Technology level 2"
-msgstr ""
+msgstr "Уровень технологий 2"
 
 #: src/multimenu.c:573
 msgid "Technology level 3"
-msgstr ""
+msgstr "Уровень технологий 3"
 
 #: src/multimenu.c:579
 msgid "Any number of players"
@@ -11683,9 +11684,9 @@ msgstr ""
 #, c-format
 msgid "%u unit selected"
 msgid_plural "%u units selected"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "выбран %u юнит"
+msgstr[1] "выбрано %u юнита"
+msgstr[2] "выбрано %u юнитов"
 
 #: src/selection.c:434
 #: src/selection.c:521
@@ -11725,7 +11726,7 @@ msgstr "%s - подключено %u из %u"
 #: src/structure.c:5960
 #, c-format
 msgid "%s - Damage %3.0f%%"
-msgstr ""
+msgstr "%s - повреждение %3.0f%%"
 
 #: src/structure.c:6080
 #: src/structure.c:6129
