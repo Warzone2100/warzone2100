@@ -898,30 +898,41 @@ void aiUpdateDroid(DROID *psDroid)
 	{
 		return;		// we should not order this droid around
 	}
-
-	lookForTarget = true;
-	updateTarget = true;
-
-	// don't look for a target if sulking
-	if (psDroid->action == DACTION_SULK)
+	
+	lookForTarget = false;
+	updateTarget = false;
+	
+	// look for a target if doing nothing
+	if (orderState(psDroid, DORDER_NONE) ||
+		orderState(psDroid, DORDER_GUARD))
+	{
+		lookForTarget = true;
+	}
+	// but do not choose another target if doing anything while guarding
+	if (orderState(psDroid, DORDER_GUARD) &&
+		(psDroid->action != DACTION_NONE))
 	{
 		lookForTarget = false;
-		updateTarget = false;
 	}
-	// don't look for a target if doing something else
-	if (!orderState(psDroid, DORDER_NONE) &&
-		!orderState(psDroid, DORDER_GUARD))
+	// except when self-repairing
+	if (psDroid->action == DACTION_DROIDREPAIR &&
+	    psDroid->psActionTarget[0] == (BASE_OBJECT *)psDroid)
+	{
+		lookForTarget = true;
+	}
+	// don't look for a target if sulking
+	if (psDroid->action == DACTION_SULK)
 	{
 		lookForTarget = false;
 	}
 
 	/* Only try to update target if already have some target */
-	if (psDroid->action != DACTION_ATTACK &&
-		psDroid->action != DACTION_MOVEFIRE &&
-		psDroid->action != DACTION_MOVETOATTACK &&
-		psDroid->action != DACTION_ROTATETOATTACK)
+	if (psDroid->action == DACTION_ATTACK ||
+		psDroid->action == DACTION_MOVEFIRE ||
+		psDroid->action == DACTION_MOVETOATTACK ||
+		psDroid->action == DACTION_ROTATETOATTACK)
 	{
-		updateTarget = false;
+		updateTarget = true;
 	}
 
 	/* Don't update target if we are sent to attack and reached
@@ -961,13 +972,6 @@ void aiUpdateDroid(DROID *psDroid)
 	{
 		lookForTarget = false;
 		updateTarget = false;
-	}
-
-	// do not choose another target if doing anything while guarding
-	if (orderState(psDroid, DORDER_GUARD) &&
-		(psDroid->action != DACTION_NONE))
-	{
-		lookForTarget = false;
 	}
 
 	// do not look for a target if droid is currently under direct control.
