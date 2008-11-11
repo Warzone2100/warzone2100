@@ -778,8 +778,10 @@ static void drawTiles(iView *player)
 			drawTerrainTile(i, j, false);
 		}
 	}
-	pie_DrawTerrain(MAX(0, playerXTile), MAX(0, playerZTile),
-                        MIN(playerXTile + visibleTiles.x, mapWidth - 1),  MIN(playerZTile + visibleTiles.y, mapHeight - 1));
+	pie_DrawTerrain(MAX(0,-playerZTile-1),
+	                MAX(0,-playerXTile-1),
+	                MIN(visibleTiles.y, mapHeight-playerZTile),
+	                MIN(visibleTiles.x, mapHeight-playerXTile));
 
 	// Update height for water
 	for (i = 0; i < visibleTiles.y + 1; i++)
@@ -934,7 +936,7 @@ BOOL init3DView(void)
 	imdRot.x = -35;
 
 	/* Initialize vertex arrays */
-	pie_TerrainInit(mapWidth, mapHeight);
+	pie_TerrainInit(visibleTiles.y+1, visibleTiles.x+1);
 
 	/* Get all the init stuff out of here? */
 	initWarCam();
@@ -3867,9 +3869,9 @@ static void drawTerrainTile(UDWORD i, UDWORD j, BOOL onWaterEdge)
 	{
 		pie_DrawWaterTriangle(vertices);
 	}
-	else if (tileOnMap(actualX, actualY))
+	else
 	{
-		pie_DrawTerrainTriangle(actualX, actualY, 0, vertices);
+		pie_DrawTerrainTriangle(i, j, 0, vertices);
 	}
 
 	/* The second triangle */
@@ -3893,9 +3895,9 @@ static void drawTerrainTile(UDWORD i, UDWORD j, BOOL onWaterEdge)
 	{
 		pie_DrawWaterTriangle(vertices);
 	}
-	else if (tileOnMap(actualX, actualY))
+	else
 	{
-		pie_DrawTerrainTriangle(actualX, actualY, 1, vertices);
+		pie_DrawTerrainTriangle(i, j, 1, vertices);
 	}
 }
 
