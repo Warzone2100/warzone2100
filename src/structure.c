@@ -5054,7 +5054,7 @@ SWORD buildFoundation(STRUCTURE_STATS *psStructStats, UDWORD x, UDWORD y)
 
 /* gets a structure stat from its name - relies on the name being unique (or it will
 return the first one it finds!! */
-SDWORD getStructStatFromName(char *pName)
+SDWORD getStructStatFromName(const char *pName)
 {
 	UDWORD				inc;
 	STRUCTURE_STATS		*psStat;

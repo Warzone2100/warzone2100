@@ -32,6 +32,17 @@
 #include "event.h"
 #include "evntsave.h"
 
+// Lua
+#include "lib/lua/lua.h"
+#include "lib/lua/lauxlib.h"
+#include "lib/lua/lualib.h"
+
+extern void registerScript(lua_State *L);
+extern void scriptTick(void);
+extern void scrNewState(const char *filename);
+extern void scrSaveState(const char *directory);
+extern void scrLoadStates(const char *directory);
+
 /* Whether to include debug info when compiling */
 typedef enum _scr_debugtype
 {

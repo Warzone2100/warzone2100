@@ -792,7 +792,9 @@ BASE_OBJECT *getBaseObjFromId(UDWORD id)
 			}
 		}
 	}
-	ASSERT(!"couldn't find a BASE_OBJ with ID", "getBaseObjFromId() failed for id %d", id);
+	// Gerard: Allow this function to be used for objects which have already
+	// been destroyed
+	// ASSERT(!"couldn't find a BASE_OBJ with ID", "getBaseObjFromId() failed for id %d", id);
 
 	return NULL;
 }

@@ -23,7 +23,7 @@
  * Script functions to support the AI system
  *
  */
-
+ 
 #include "lib/framework/frame.h"
 #include "objects.h"
 #include "group.h"
@@ -44,68 +44,61 @@
 #include "geometry.h"
 #include "src/scriptfuncs.h"
 
+// Lua
+#include "lib/lua/lua.h"
+#include "lib/lua/lauxlib.h"
+#include "lib/lua/lualib.h"
+#include "lib/lua/warzone.h"
+
+#include "scriptobj.h"
+
 static INTERP_VAL	scrFunctionResult;	//function return value to be pushed to stack
 
-// Add a droid to a group
-BOOL scrGroupAddDroid(void)
+static int scrNewGroup(lua_State *L)
 {
-	DROID_GROUP		*psGroup;
-	DROID			*psDroid;
-
-	if (!stackPopParams(2, ST_GROUP, &psGroup, ST_DROID, &psDroid))
+	DROID_GROUP *group;
+	if (!grpCreate(&group))
 	{
-		return false;
+		luaL_error(L, "could not create new group");
 	}
+	// increase the reference count
+	group->refCount += 1;
+	luaWZObj_pushgroup(L, group);
+	return 1;
+}
 
-	ASSERT( psGroup != NULL,
-		"scrGroupAdd: Invalid group pointer" );
-	ASSERT( psDroid != NULL,
-		"scrGroupAdd: Invalid droid pointer" );
-	if (psDroid == NULL)
-	{
-		return false;
-	}
+/// Add a droid to a group
+static int scrGroupAddDroid(lua_State *L)
+{
+	DROID_GROUP *psGroup = luaWZObj_checkgroup(L, 1);
+	DROID *psDroid = (DROID*)luaWZObj_checkobject(L, 2, OBJ_DROID);
+
 	if (psDroid->droidType == DROID_COMMAND)
 	{
-		debug( LOG_ERROR,
-			"scrGroupAdd: cannot add a command droid to a group" );
-		return false;
+		luaL_error(L, "scrGroupAdd: cannot add a command droid to a group" );
 	}
 	if (psDroid->droidType == DROID_TRANSPORTER)
 	{
-		debug( LOG_ERROR,
-			"scrGroupAdd: cannot add a transporter to a group" );
-		return false;
+		luaL_error(L, "scrGroupAdd: cannot add a transporter to a group" );
 	}
 
 	grpJoin(psGroup, psDroid);
 
-	return true;
+	return 0;
 }
 
 
-// Add droids in an area to a group
-BOOL scrGroupAddArea(void)
+/// Add droids in an area to a group
+int scrGroupAddArea(lua_State *L)
 {
-	DROID_GROUP		*psGroup;
-	DROID			*psDroid;
-	SDWORD			x1,y1,x2,y2, player;
-
-	if (!stackPopParams(6, ST_GROUP, &psGroup, VAL_INT, &player,
-							VAL_INT,&x1,VAL_INT,&y1, VAL_INT,&x2,VAL_INT,&y2))
-	{
-		return false;
-	}
-
-	ASSERT( psGroup != NULL,
-		"scrGroupAdd: Invalid group pointer" );
-
-	if (player < 0 || player >= MAX_PLAYERS)
-	{
-		ASSERT( false, "scrGroupAddArea: invalid player" );
-		return false;
-	}
-
+	DROID *psDroid;
+	DROID_GROUP *psGroup = luaWZObj_checkgroup(L, 1);
+	int player = luaL_checkint(L, 2);
+	int x1 = luaL_checkint(L, 3);
+	int y1 = luaL_checkint(L, 4);
+	int x2 = luaL_checkint(L, 5);
+	int y2 = luaL_checkint(L, 6);
+	
 // 	debug( LOG_SCRIPT, "groupAddArea: player %d (%d,%d) -> (%d,%d)\n", player, x1, y1, x2, y2 );
 
 	for(psDroid=apsDroidLists[player]; psDroid; psDroid=psDroid->psNext)
@@ -120,7 +113,7 @@ BOOL scrGroupAddArea(void)
 		}
 	}
 
-	return true;
+	return 0;
 }
 
 
@@ -162,21 +155,12 @@ BOOL scrGroupAddAreaNoGroup(void)
 }
 
 
-// Move the droids from one group to another
-BOOL scrGroupAddGroup(void)
+/// Move the droids from one group to another
+static int scrGroupAddGroup(lua_State *L)
 {
-	DROID_GROUP		*psTo, *psFrom;
-	DROID			*psDroid, *psNext;
-
-	if (!stackPopParams(2, ST_GROUP, &psTo, ST_GROUP, &psFrom))
-	{
-		return false;
-	}
-
-	ASSERT( psTo != NULL,
-		"scrGroupAddGroup: Invalid group pointer" );
-	ASSERT( psFrom != NULL,
-		"scrGroupAddGroup: Invalid group pointer" );
+	DROID_GROUP *psTo = luaWZObj_checkgroup(L, 1);
+	DROID_GROUP *psFrom = luaWZObj_checkgroup(L, 2);
+	DROID *psDroid, *psNext;
 
 	for(psDroid=psFrom->psList; psDroid; psDroid=psNext)
 	{
@@ -184,7 +168,7 @@ BOOL scrGroupAddGroup(void)
 		grpJoin(psTo, psDroid);
 	}
 
-	return true;
+	return 0;
 }
 
 
@@ -228,20 +212,12 @@ BOOL scrGroupMember(void)
 }
 
 
-// returns number of idle droids in a group.
-BOOL scrIdleGroup(void)
+/// returns number of idle droids in a group.
+static int scrIdleGroup(lua_State *L)
 {
-	DROID_GROUP *psGroup;
+	DROID_GROUP *psGroup = luaWZObj_checkgroup(L, 1);
 	DROID		*psDroid;
 	UDWORD		count=0;
-
-	if (!stackPopParams(1, ST_GROUP, &psGroup))
-	{
-		return false;
-	}
-
-	ASSERT( psGroup != NULL,
-		"scrIdleGroup: invalid group pointer" );
 
 	for(psDroid = psGroup->psList;psDroid; psDroid = psDroid->psGrpNext)
 	{
@@ -251,49 +227,32 @@ BOOL scrIdleGroup(void)
 			count++;
 		}
 	}
-
-	scrFunctionResult.v.ival = (SDWORD)count;
-	if (!stackPushResult(VAL_INT, &scrFunctionResult))
-	{
-		return false;
-	}
-	return true;
+	lua_pushinteger(L, count);
+	return 1;
 }
 
 // variables for the group iterator
 static DROID_GROUP		*psScrIterateGroup;
 static DROID			*psScrIterateGroupDroid;
 
-// initialise iterating a groups members
-BOOL scrInitIterateGroup(void)
+/// initialise iterating a groups members
+static int scrInitIterateGroup(lua_State *L)
 {
-	DROID_GROUP	*psGroup;
-
-	if (!stackPopParams(1, ST_GROUP, &psGroup))
-	{
-		return false;
-	}
-
-	ASSERT( psGroup != NULL,
-		"scrInitGroupIterate: invalid group pointer" );
+	DROID_GROUP *psGroup = luaWZObj_checkgroup(L, 1);
 
 	psScrIterateGroup = psGroup;
 	psScrIterateGroupDroid = psGroup->psList;
+	
+	//debug(LOG_WARNING, "iterating over group with %i members", grpNumMembers(psGroup));
 
-	return true;
+	return 0;
 }
 
-
-// iterate through a groups members
-BOOL scrIterateGroup(void)
+/// iterate through a groups members
+static int scrIterateGroup(lua_State *L)
 {
-	DROID_GROUP	*psGroup;
-	DROID		*psDroid;
-
-	if (!stackPopParams(1, ST_GROUP, &psGroup))
-	{
-		return false;
-	}
+	DROID_GROUP *psGroup = luaWZObj_checkgroup(L, 1);
+	DROID *psDroid;
 
 	if (psGroup != psScrIterateGroup)
 	{
@@ -305,19 +264,14 @@ BOOL scrIterateGroup(void)
 	{
 		psDroid = psScrIterateGroupDroid;
 		psScrIterateGroupDroid = psScrIterateGroupDroid->psGrpNext;
+		luaWZObj_pushdroid(L, psDroid);
 	}
 	else
 	{
-		psDroid = NULL;
+		lua_pushnil(L);
 	}
-
-	scrFunctionResult.v.oval = psDroid;
-	if (!stackPushResult((INTERP_TYPE)ST_DROID, &scrFunctionResult))
-	{
-		return false;
-	}
-
-	return true;
+	
+	return 1;
 }
 
 
@@ -405,44 +359,32 @@ BOOL scrOrderGroup(void)
 	return true;
 }
 
-
-// Give a group an order to a location
-BOOL scrOrderGroupLoc(void)
+/// Give a group an order to a location
+static int scrOrderGroupLoc(lua_State *L)
 {
-	DROID_GROUP		*psGroup;
-	DROID_ORDER		order;
-	SDWORD			x,y;
-
-	if (!stackPopParams(4, ST_GROUP, &psGroup, VAL_INT, &order, VAL_INT, &x, VAL_INT, &y))
-	{
-		return false;
-	}
-
-	ASSERT( psGroup != NULL,
-		"scrOrderGroupLoc: Invalid group pointer" );
+	DROID_GROUP *psGroup = luaWZObj_checkgroup(L, 1);
+	DROID_ORDER order = (DROID_ORDER)luaL_checkinteger(L, 2);
+	int x = luaL_checkint(L, 3);
+	int y = luaL_checkint(L, 4);
 
 	if (order != DORDER_MOVE &&
 		order != DORDER_SCOUT)
 	{
-		ASSERT( false,
-			"scrOrderGroupLoc: Invalid order" );
-		return false;
+		luaL_error(L, "scrOrderGroupLoc: Invalid order" );
 	}
 	if (x < 0
 	 || x > world_coord(mapWidth)
 	 || y < 0
 	 || y > world_coord(mapHeight))
 	{
-		ASSERT( false,
-			"scrOrderGroupLoc: Invalid location" );
-		return false;
+		luaL_error(L, "scrOrderGroupLoc: Invalid location" );
 	}
 
 	debug(LOG_NEVER, "group %p (%u) order %d (%d,%d)",
 		psGroup, grpNumMembers(psGroup), order, x,y);
 	orderGroupLoc(psGroup, order, (UDWORD)x,(UDWORD)y);
 
-	return true;
+	return 0;
 }
 
 
@@ -603,50 +545,31 @@ BOOL scrOrderDroidObj(void)
 	return true;
 }
 
-// Give a Droid an order with a stat
-BOOL scrOrderDroidStatsLoc(void)
+/// Give a Droid an order with a stat
+static int scrOrderDroidStatsLoc(lua_State *L)
 {
-	DROID			*psDroid;
-	DROID_ORDER		order;
-	SDWORD			x,y, statIndex;
-	BASE_STATS		*psStats;
+	BASE_STATS *psStats;
+	
+	DROID *psDroid = (DROID*)luaWZObj_checkobject(L, 1, OBJ_DROID);
+	DROID_ORDER order = (DROID_ORDER)luaL_checkint(L, 2);
+	int statIndex = luaWZObj_checkstructurestat(L, 3);
+	int x = luaL_checkint(L, 4);
+	int y = luaL_checkint(L, 5);
 
-	if (!stackPopParams(5, ST_DROID, &psDroid, VAL_INT, &order, ST_STRUCTURESTAT, &statIndex,
-						   VAL_INT, &x, VAL_INT, &y))
-	{
-		return false;
-	}
-
-	if (statIndex < 0 || statIndex >= (SDWORD)numStructureStats)
-	{
-		ASSERT( false,
-			"scrOrderUnitStatsLoc: invalid structure stat" );
-		return false;
-	}
 	psStats = (BASE_STATS *)(asStructureStats + statIndex);
 
-	ASSERT( psDroid != NULL,
-		"scrOrderUnitStatsLoc: Invalid Unit pointer" );
 	ASSERT( psStats != NULL,
 		"scrOrderUnitStatsLoc: Invalid object pointer" );
-	if (psDroid == NULL)
-	{
-		return false;
-	}
 
 	if ((x < 0) || (x > (SDWORD)mapWidth*TILE_UNITS) ||
 		(y < 0) || (y > (SDWORD)mapHeight*TILE_UNITS))
 	{
-		ASSERT( false,
-			"scrOrderUnitStatsLoc: Invalid location" );
-		return false;
+		luaL_error(L, "scrOrderUnitStatsLoc: Invalid location" );
 	}
 
 	if (order != DORDER_BUILD)
 	{
-		ASSERT( false,
-			"scrOrderUnitStatsLoc: Invalid order" );
-		return false;
+		luaL_error(L, "scrOrderUnitStatsLoc: Invalid order" );
 	}
 
 	// Don't allow scripts to order structure builds if players structure
@@ -656,7 +579,7 @@ BOOL scrOrderDroidStatsLoc(void)
 		orderDroidStatsLoc(psDroid, order, psStats, (UDWORD)x,(UDWORD)y);
 	}
 
-	return true;
+	return 0;
 }
 
 
@@ -1390,16 +1313,26 @@ BOOL scrTargetInCluster(void)
 // ********************************************************************************************
 // ********************************************************************************************
 
-BOOL scrSkCanBuildTemplate(void)
+static int scrSkCanBuildTemplate(lua_State *L)
 {
-	STRUCTURE *psStructure;
+	int player = luaWZ_checkplayer(L, 1);
+	STRUCTURE *psStructure = luaWZObj_checkobject(L, 2, OBJ_STRUCTURE);
+	const char *templatename = luaL_checkstring(L, 3);
 	DROID_TEMPLATE *psTempl;
-
-	SDWORD player;
-
-	if (!stackPopParams(3,VAL_INT, &player,ST_STRUCTURE, &psStructure, ST_TEMPLATE, &psTempl))
+	int i;
+	// FIXME, probably need something like the Translatedname function without the translation
+	for(i=0;i<MAX_PLAYERS;i++)
 	{
-		return false;
+		psTempl = getTemplateFromUniqueName(templatename, player);
+		if (psTempl)
+		{
+			break;
+		}
+	}
+	if (!psTempl)
+	{
+		debug(LOG_SCRIPT, "invalid template name \"%s\"", templatename);
+		goto failTempl;
 	}
 
 	// is factory big enough?
@@ -1487,39 +1420,27 @@ BOOL scrSkCanBuildTemplate(void)
 	case DROID_DEFAULT:		        // Default droid
 	case DROID_ANY:
 	default:
-		debug( LOG_ERROR, "scrSkCanBuildTemplate: Unhandled template type" );
+		luaL_error(L, "scrSkCanBuildTemplate: Unhandled template type" );
 		abort();
 		break;
 	}
 
-	scrFunctionResult.v.bval = true;
-	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))		// yes
-	{
-		return false;
-	}
-	return true;
+	lua_pushboolean(L, true);
+	return 1;
 
 failTempl:
-	scrFunctionResult.v.bval = false;
-	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))		// no
-	{
-		return false;
-	}
-	return true;
+	lua_pushboolean(L, false);
+	return 1;
 }
 
 // ********************************************************************************************
-// locate the enemy
-// gives a target location given a player to attack.
-BOOL scrSkLocateEnemy(void)
+/** locate the enemy
+ * gives a target location given a player to attack.
+ */
+static int scrSkLocateEnemy(lua_State *L)
 {
-	SDWORD		player;//,*x,*y;
+	int player = luaWZ_checkplayer(L, 1);
 	STRUCTURE	*psStruct;
-
-	if (!stackPopParams(1,VAL_INT, &player))
-	{
-		return false;
-	}
 
 	// find where the player has some structures..	// factories or hq.
 	for(psStruct=apsStructLists[player];
@@ -1535,21 +1456,11 @@ BOOL scrSkLocateEnemy(void)
 	// set the x and y accordingly..
 	if(psStruct)
 	{
-		scrFunctionResult.v.oval = psStruct;
-		if (!stackPushResult((INTERP_TYPE)ST_BASEOBJECT, &scrFunctionResult))		// success!
-		{
-			return false;
-		}
+		luaWZObj_pushstructure(L, psStruct);
+		return 1;
 	}
-	else
-	{
-		scrFunctionResult.v.oval = NULL;
-		if (!stackPushResult((INTERP_TYPE)ST_BASEOBJECT, &scrFunctionResult))		// part success
-		{
-			return false;
-		}
-	}
-	return true;
+	lua_pushnil(L);
+	return 1;
 }
 
 // ********************************************************************************************
@@ -2183,3 +2094,32 @@ BOOL scrIterateGroupB(void)
 
 // ********************************************************************************************
 // ********************************************************************************************
+
+static int scrGroupCountMembers(lua_State *L)
+{
+	DROID_GROUP *group = luaWZObj_checkgroup(L, 1);
+	
+	lua_pushinteger(L, grpNumMembers(group));
+	return 1;
+}
+
+void registerScriptAIfuncs(lua_State *L)
+{
+	lua_register(L, "groupAddArea", scrGroupAddArea);
+	lua_register(L, "Group", scrNewGroup);
+	lua_register(L, "groupAddGroup", scrGroupAddGroup);
+	lua_register(L, "initIterateGroup", scrInitIterateGroup);
+	lua_register(L, "iterateGroup", scrIterateGroup);
+	lua_register(L, "groupAddDroid", scrGroupAddDroid);
+	lua_register(L, "orderGroupLoc", scrOrderGroupLoc);
+	lua_register(L, "groupCountMembers", scrGroupCountMembers);
+	lua_register(L, "idleGroup", scrIdleGroup);
+	lua_register(L, "orderDroidStatsLoc", scrOrderDroidStatsLoc);
+	lua_register(L, "skCanBuildTemplate", scrSkCanBuildTemplate);
+	lua_register(L, "skLocateEnemy", scrSkLocateEnemy);
+	//lua_register(L, "", );
+	//lua_register(L, "", );
+	//lua_register(L, "", );
+
+}
+

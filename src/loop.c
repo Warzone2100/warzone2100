@@ -87,6 +87,8 @@
 
 #include "warzoneconfig.h"
 
+#include "scriptcb.h"
+
 #ifdef DEBUG
 #include "objmem.h"
 #endif
@@ -178,8 +180,10 @@ GAMECODE gameLoop(void)
 
 	if (!paused)
 	{
+		
 		if (!scriptPaused() && !editPaused())
 		{
+			scriptTick();
 			/* Update the event system */
 			if (!bInTutorial)
 			{

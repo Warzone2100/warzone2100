@@ -23,13 +23,19 @@
  * All the C functions callable from the script code
  *
  */
-
+ 
 #include <time.h>
 #include <string.h>
 
 #include "lib/framework/frame.h"
 #include "lib/framework/strres.h"
 #include "lib/widget/widget.h"
+
+// Lua
+#include "lib/lua/lua.h"
+#include "lib/lua/lauxlib.h"
+#include "lib/lua/lualib.h"
+#include "lib/lua/warzone.h"
 
 #include "effects.h"
 #include "lib/script/script.h"
@@ -93,6 +99,12 @@
 #include "visibility.h"
 #include "design.h"
 
+#include "scriptobj.h"
+#include "scriptvals.h"
+
+// temp hack
+void *L=NULL;
+
 static INTERP_VAL	scrFunctionResult;	//function return value to be pushed to stack
 
 // If this is defined then check max number of units not reached before adding more.
@@ -108,7 +120,7 @@ static DROID_TEMPLATE* scrCheckTemplateExists(SDWORD player, DROID_TEMPLATE *psT
 extern	UDWORD				objID;					// unique ID creation thing..
 
 /******************************************************************************************/
-/*                 Check for objects in areas                                             */
+/*				 Check for objects in areas											 */
 
 // check for a base object being in range of a point
 BOOL objectInRange(BASE_OBJECT *psList, SDWORD x, SDWORD y, SDWORD range)
@@ -148,113 +160,61 @@ BOOL objectInRange(BASE_OBJECT *psList, SDWORD x, SDWORD y, SDWORD range)
 
 // -----------------------------------------------------------------------------------------
 // Check for any player object being within a certain range of a position
-BOOL scrObjectInRange(void)
+static int scrObjectInRange(lua_State *L)
 {
-	SDWORD		range, player, x,y;
 	BOOL		found;
-
-	if (!stackPopParams(4, VAL_INT, &player, VAL_INT, &x, VAL_INT, &y, VAL_INT, &range))
-	{
-		return false;
-	}
-
-	if (player < 0 || player >= MAX_PLAYERS)
-	{
-		ASSERT( false, "scrObjectInRange: invalid player number" );
-		return false;
-	}
+	
+	int player = luaWZ_checkplayer(L, 1);
+	int x = luaL_checkint(L, 2);
+	int y = luaL_checkint(L, 3);
+	int range = luaL_checkint(L, 4);
 
 	found = objectInRange((BASE_OBJECT *)apsDroidLists[player], x,y, range) ||
 			objectInRange((BASE_OBJECT *)apsStructLists[player], x,y, range);
 
-	scrFunctionResult.v.bval = found;
-	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
-	{
-		return false;
-	}
-
-	return true;
+	lua_pushboolean(L, found);
+	return 1;
 }
 
 // -----------------------------------------------------------------------------------------
 // Check for a droid being within a certain range of a position
-BOOL scrDroidInRange(void)
+static int scrDroidInRange(lua_State *L)
 {
-	SDWORD		range, player, x,y;
 	BOOL		found;
-
-	if (!stackPopParams(4, VAL_INT, &player, VAL_INT, &x, VAL_INT, &y, VAL_INT, &range))
-	{
-		return false;
-	}
-
-	if (player < 0 || player >= MAX_PLAYERS)
-	{
-		ASSERT( false, "scrUnitInRange: invalid player number" );
-		return false;
-	}
+	int player = luaWZ_checkplayer(L, 1);
+	int x = luaL_checkint(L, 2);
+	int y = luaL_checkint(L, 3);
+	int range = luaL_checkint(L, 4);
 
 	found = objectInRange((BASE_OBJECT *)apsDroidLists[player], x,y, range);
 
-	scrFunctionResult.v.bval = found;
-	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
-	{
-		return false;
-	}
-
-	return true;
+	lua_pushboolean(L, found);
+	return 1;
 }
 
 // -----------------------------------------------------------------------------------------
 // Check for a struct being within a certain range of a position
-BOOL scrStructInRange(void)
+static int scrStructInRange(lua_State *L)
 {
-	SDWORD		range, player, x,y;
 	BOOL		found;
-
-	if (!stackPopParams(4, VAL_INT, &player, VAL_INT, &x, VAL_INT, &y, VAL_INT, &range))
-	{
-		return false;
-	}
-
-	if (player < 0 || player >= MAX_PLAYERS)
-	{
-		ASSERT( false, "scrStructInRange: invalid player number" );
-		return false;
-	}
+	int player = luaWZ_checkplayer(L, 1);
+	int x = luaL_checkint(L, 2);
+	int y = luaL_checkint(L, 3);
+	int range = luaL_checkint(L, 4);
 
 	found = objectInRange((BASE_OBJECT *)apsStructLists[player], x,y, range);
 
-	scrFunctionResult.v.bval = found;
-	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
-	{
-		return false;
-	}
-
-	return true;
+	lua_pushboolean(L, found);
+	return 1;
 }
 
 // -----------------------------------------------------------------------------------------
-BOOL scrPlayerPower(void)
+static int scrPlayerPower(lua_State *L)
 {
-	SDWORD player;
+	int player = luaWZ_checkplayer(L, 1);
 
-	if (!stackPopParams(1, VAL_INT, &player))
-	{
-		return false;
-	}
-	if (player < 0 || player >= MAX_PLAYERS)
-	{
-		ASSERT( false, "scrPlayerPower: invalid player number" );
-		return false;
-	}
-
-	scrFunctionResult.v.ival = getPower(player);
-	if (!stackPushResult(VAL_INT, &scrFunctionResult))
-	{
-		return false;
-	}
-	return true;
+	lua_pushinteger(L, getPower(player));
+	return 1;
 }
 
 
@@ -289,113 +249,71 @@ static BOOL objectInArea(BASE_OBJECT *psList, SDWORD x1, SDWORD y1, SDWORD x2, S
 
 // -----------------------------------------------------------------------------------------
 // Check for any player object being within a certain area
-BOOL scrObjectInArea(void)
+static int scrObjectInArea(lua_State *L)
 {
-	SDWORD		player, x1,y1, x2,y2;
 	BOOL		found;
-
-	if (!stackPopParams(5, VAL_INT, &player, VAL_INT, &x1, VAL_INT, &y1, VAL_INT, &x2, VAL_INT, &y2))
-	{
-		return false;
-	}
-
-	if (player < 0 || player >= MAX_PLAYERS)
-	{
-		ASSERT( false, "scrObjectInArea: invalid player number" );
-		return false;
-	}
+	int player = luaWZ_checkplayer(L, 1);
+	int x1 = luaL_checkint(L, 2);
+	int y1 = luaL_checkint(L, 3);
+	int x2 = luaL_checkint(L, 4);
+	int y2 = luaL_checkint(L, 5);
 
 	found = objectInArea((BASE_OBJECT *)apsDroidLists[player], x1,y1, x2,y2) ||
 			objectInArea((BASE_OBJECT *)apsStructLists[player], x1,y1, x2,y2);
 
-	scrFunctionResult.v.bval = found;
-	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
-	{
-		return false;
-	}
-
-	return true;
+	lua_pushboolean(L, found);
+	return 1;
 }
 
 // -----------------------------------------------------------------------------------------
 // Check for a droid being within a certain area
-BOOL scrDroidInArea(void)
+static int scrDroidInArea(lua_State *L)
 {
-	SDWORD		player, x1,y1, x2,y2;
 	BOOL		found;
-
-	if (!stackPopParams(5, VAL_INT, &player, VAL_INT, &x1, VAL_INT, &y1, VAL_INT, &x2, VAL_INT, &y2))
-	{
-		return false;
-	}
-
-	if (player < 0 || player >= MAX_PLAYERS)
-	{
-		ASSERT( false, "scrUnitInArea: invalid player number" );
-		return false;
-	}
+	int player = luaWZ_checkplayer(L, 1);
+	int x1 = luaL_checkint(L, 2);
+	int y1 = luaL_checkint(L, 3);
+	int x2 = luaL_checkint(L, 4);
+	int y2 = luaL_checkint(L, 5);
 
 	found = objectInArea((BASE_OBJECT *)apsDroidLists[player], x1,y1, x2,y2);
 
-	scrFunctionResult.v.bval = found;
-	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
-	{
-		return false;
-	}
-
-	return true;
+	lua_pushboolean(L, found);
+	return 1;
 }
 
 // -----------------------------------------------------------------------------------------
 // Check for a struct being within a certain Area of a position
-BOOL scrStructInArea(void)
+static int scrStructInArea(lua_State *L)
 {
-	SDWORD		player, x1,y1, x2,y2;
 	BOOL		found;
-
-	if (!stackPopParams(5, VAL_INT, &player, VAL_INT, &x1, VAL_INT, &y1, VAL_INT, &x2, VAL_INT, &y2))
-	{
-		return false;
-	}
-
-	if (player < 0 || player >= MAX_PLAYERS)
-	{
-		ASSERT( false, "scrStructInArea: invalid player number" );
-		return false;
-	}
+	int player = luaWZ_checkplayer(L, 1);
+	int x1 = luaL_checkint(L, 2);
+	int y1 = luaL_checkint(L, 3);
+	int x2 = luaL_checkint(L, 4);
+	int y2 = luaL_checkint(L, 5);
 
 	found = objectInArea((BASE_OBJECT *)apsStructLists[player], x1,y1, x2,y2);
 
-	scrFunctionResult.v.bval = found;
-	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
-	{
-		return false;
-	}
-
-	return true;
+	lua_pushboolean(L, found);
+	return 1;
 }
 
 
 // -----------------------------------------------------------------------------------------
-BOOL scrSeenStructInArea(void)
+static int scrSeenStructInArea(lua_State *L)
 {
-	BOOL		walls=false,found = false;
-	SDWORD		player,enemy,x1,y1, x2,y2;
-	STRUCTURE	*psCurr;
-	SDWORD		ox,oy;
-
-	// player, enemyplayer, walls, x1,r1,x2,y2
-	if (!stackPopParams(7, VAL_INT, &player, VAL_INT, &enemy, VAL_BOOL,&walls,VAL_INT, &x1, VAL_INT, &y1, VAL_INT, &x2, VAL_INT, &y2))
-	{
-		return false;
-	}
-
-
-	if (player < 0 || player >= MAX_PLAYERS)
-	{
-		ASSERT( false, "scrSeenStructInArea: invalid player number" );
-		return false;
-	}
+	BOOL        found = false;
+	STRUCTURE   *psCurr;
+	SDWORD      ox,oy;
+	
+	int player = luaWZ_checkplayer(L, 1);
+	int enemy  = luaL_checkint(L, 2);
+	BOOL walls = luaL_checkboolean(L, 3);
+	int x1 = luaL_checkint(L, 4);
+	int y1 = luaL_checkint(L, 5);
+	int x2 = luaL_checkint(L, 6);
+	int y2 = luaL_checkint(L, 7);
 
 	for(psCurr = apsStructLists[enemy]; psCurr; psCurr = psCurr->psNext)
 	{
@@ -422,35 +340,24 @@ BOOL scrSeenStructInArea(void)
 			}
 		}
 	}
-
-	scrFunctionResult.v.bval = found;
-	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
-	{
-		return false;
-	}
-
-	return true;
+	
+	lua_pushboolean(L, found);
+	return 1;
 }
 
 // -----------------------------------------------------------------------------------------
 // Check for a players structures but no walls being within a certain area
-BOOL scrStructButNoWallsInArea(void)
+static int scrStructButNoWallsInArea(lua_State *L)
 {
-	SDWORD		player, x1,y1, x2,y2;
 	SDWORD		ox,oy;
 	STRUCTURE	*psStruct;
 	SDWORD		found = false;
 
-	if (!stackPopParams(5, VAL_INT, &player, VAL_INT, &x1, VAL_INT, &y1, VAL_INT, &x2, VAL_INT, &y2))
-	{
-		return false;
-	}
-
-	if (player < 0 || player >= MAX_PLAYERS)
-	{
-		ASSERT( false, "scrStructButNoWallsInArea: invalid player number" );
-		return false;
-	}
+	int player = luaWZ_checkplayer(L, 1);
+	int x1 = luaL_checkint(L, 2);
+	int y1 = luaL_checkint(L, 3);
+	int x2 = luaL_checkint(L, 4);
+	int y2 = luaL_checkint(L, 5);
 
 	for(psStruct = apsStructLists[player]; psStruct; psStruct = psStruct->psNext)
 	{
@@ -469,13 +376,8 @@ BOOL scrStructButNoWallsInArea(void)
 		}
 	}
 
-	scrFunctionResult.v.bval = found;
-	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
-	{
-		return false;
-	}
-
-	return true;
+	lua_pushboolean(L, found);
+	return 1;
 }
 
 
@@ -512,113 +414,74 @@ static SDWORD numObjectsInArea(BASE_OBJECT *psList, SDWORD x1, SDWORD y1, SDWORD
 
 // -----------------------------------------------------------------------------------------
 // Count the number of player objects within a certain area
-BOOL scrNumObjectsInArea(void)
+static int scrNumObjectsInArea(lua_State *L)
 {
-	SDWORD		player, x1,y1, x2,y2;
 	SDWORD		count;
 
-	if (!stackPopParams(5, VAL_INT, &player, VAL_INT, &x1, VAL_INT, &y1, VAL_INT, &x2, VAL_INT, &y2))
-	{
-		return false;
-	}
-
-	if (player < 0 || player >= MAX_PLAYERS)
-	{
-		ASSERT( false, "scrNumObjectsInArea: invalid player number" );
-		return false;
-	}
+	int player = luaWZ_checkplayer(L, 1);
+	int x1 = luaL_checkint(L, 2);
+	int y1 = luaL_checkint(L, 3);
+	int x2 = luaL_checkint(L, 4);
+	int y2 = luaL_checkint(L, 5);
 
 	count = numObjectsInArea((BASE_OBJECT *)apsDroidLists[player], x1,y1, x2,y2) +
 			numObjectsInArea((BASE_OBJECT *)apsStructLists[player], x1,y1, x2,y2);
 
-	scrFunctionResult.v.ival = count;
-	if (!stackPushResult(VAL_INT, &scrFunctionResult))
-	{
-		return false;
-	}
-
-	return true;
+	lua_pushinteger(L, count);
+	return 1;
 }
 
 
 // -----------------------------------------------------------------------------------------
 // Count the number of player droids within a certain area
-BOOL scrNumDroidsInArea(void)
+static int scrNumDroidsInArea(lua_State *L)
 {
-	SDWORD		player, x1,y1, x2,y2;
 	SDWORD		count;
 
-	if (!stackPopParams(5, VAL_INT, &player, VAL_INT, &x1, VAL_INT, &y1, VAL_INT, &x2, VAL_INT, &y2))
-	{
-		return false;
-	}
-
-	if (player < 0 || player >= MAX_PLAYERS)
-	{
-		ASSERT( false, "scrNumUnitInArea: invalid player number" );
-		return false;
-	}
+	int player = luaWZ_checkplayer(L, 1);
+	int x1 = luaL_checkint(L, 2);
+	int y1 = luaL_checkint(L, 3);
+	int x2 = luaL_checkint(L, 4);
+	int y2 = luaL_checkint(L, 5);
 
 	count = numObjectsInArea((BASE_OBJECT *)apsDroidLists[player], x1,y1, x2,y2);
 
-	scrFunctionResult.v.ival = count;
-	if (!stackPushResult(VAL_INT, &scrFunctionResult))
-	{
-		return false;
-	}
-
-	return true;
+	lua_pushinteger(L, count);
+	return 1;
 }
 
 
 // -----------------------------------------------------------------------------------------
 // Count the number of player structures within a certain area
-BOOL scrNumStructsInArea(void)
+static int scrNumStructsInArea(lua_State *L)
 {
-	SDWORD		player, x1,y1, x2,y2;
 	SDWORD		count;
 
-	if (!stackPopParams(5, VAL_INT, &player, VAL_INT, &x1, VAL_INT, &y1, VAL_INT, &x2, VAL_INT, &y2))
-	{
-		return false;
-	}
-
-	if (player < 0 || player >= MAX_PLAYERS)
-	{
-		ASSERT( false, "scrNumStructsInArea: invalid player number" );
-		return false;
-	}
+	int player = luaWZ_checkplayer(L, 1);
+	int x1 = luaL_checkint(L, 2);
+	int y1 = luaL_checkint(L, 3);
+	int x2 = luaL_checkint(L, 4);
+	int y2 = luaL_checkint(L, 5);
 
 	count = numObjectsInArea((BASE_OBJECT *)apsStructLists[player], x1,y1, x2,y2);
 
-	scrFunctionResult.v.ival = count;
-	if (!stackPushResult(VAL_INT, &scrFunctionResult))
-	{
-		return false;
-	}
-
-	return true;
+	lua_pushinteger(L, count);
+	return 1;
 }
 
 
 // -----------------------------------------------------------------------------------------
 // Count the number of player structures but not walls within a certain area
-BOOL scrNumStructsButNotWallsInArea(void)
+static int scrNumStructsButNotWallsInArea(lua_State *L)
 {
-	SDWORD		player, x1,y1, x2,y2;
 	SDWORD		count, ox,oy;
 	STRUCTURE	*psStruct;
 
-	if (!stackPopParams(5, VAL_INT, &player, VAL_INT, &x1, VAL_INT, &y1, VAL_INT, &x2, VAL_INT, &y2))
-	{
-		return false;
-	}
-
-	if (player < 0 || player >= MAX_PLAYERS)
-	{
-		ASSERT( false, "scrNumStructsButNotWallsInArea: invalid player number" );
-		return false;
-	}
+	int player = luaWZ_checkplayer(L, 1);
+	int x1 = luaL_checkint(L, 2);
+	int y1 = luaL_checkint(L, 3);
+	int x2 = luaL_checkint(L, 4);
+	int y2 = luaL_checkint(L, 5);
 
 	count = 0;
 	for(psStruct = apsStructLists[player]; psStruct; psStruct = psStruct->psNext)
@@ -637,35 +500,24 @@ BOOL scrNumStructsButNotWallsInArea(void)
 		}
 	}
 
-	scrFunctionResult.v.ival = count;
-	if (!stackPushResult(VAL_INT, &scrFunctionResult))
-	{
-		return false;
-	}
-
-	return true;
+	lua_pushinteger(L, count);
+	return 1;
 }
 
 
 // -----------------------------------------------------------------------------------------
 // Count the number of structures in an area of a certain type
-BOOL scrNumStructsByTypeInArea(void)
+static int scrNumStructsByTypeInArea(lua_State *L)
 {
-	SDWORD		player, type, x1,y1, x2,y2;
 	SDWORD		count, ox,oy;
 	STRUCTURE	*psStruct;
 
-	if (!stackPopParams(6, VAL_INT, &player, VAL_INT, &type,
-					VAL_INT, &x1, VAL_INT, &y1, VAL_INT, &x2, VAL_INT, &y2))
-	{
-		return false;
-	}
-
-	if (player < 0 || player >= MAX_PLAYERS)
-	{
-		ASSERT( false, "scrNumStructsByTypeInArea: invalid player number" );
-		return false;
-	}
+	int player = luaWZ_checkplayer(L, 1);
+	int type = luaL_checkint(L, 2);
+	int x1 = luaL_checkint(L, 3);
+	int y1 = luaL_checkint(L, 4);
+	int x2 = luaL_checkint(L, 5);
+	int y2 = luaL_checkint(L, 6);
 
 	count = 0;
 	for(psStruct = apsStructLists[player]; psStruct; psStruct = psStruct->psNext)
@@ -683,40 +535,17 @@ BOOL scrNumStructsByTypeInArea(void)
 		}
 	}
 
-	scrFunctionResult.v.ival = count;
-	if (!stackPushResult(VAL_INT, &scrFunctionResult))
-	{
-		return false;
-	}
-
-	return true;
+	lua_pushinteger(L, count);
+	return 1;
 }
-
 
 // -----------------------------------------------------------------------------------------
 // Check for a droid having seen a certain object
-BOOL scrDroidHasSeen(void)
+static int scrDroidHasSeen(lua_State *L)
 {
-	SDWORD		player;
-	BASE_OBJECT	*psObj;
+	BASE_OBJECT	*psObj = luaWZObj_checkbaseobject(L, 1);
+	int player = luaWZ_checkplayer(L, 2);
 	BOOL		seen;
-
-	if (!stackPopParams(2, ST_BASEOBJECT, &psObj, VAL_INT, &player))
-	{
-		return false;
-	}
-
-	if (psObj == NULL)
-	{
-		ASSERT( false, "scrUnitHasSeen: NULL object" );
-		return false;
-	}
-
-	if (player >= MAX_PLAYERS)
-	{
-		ASSERT( false, "scrUnitHasSeen:player number is too high" );
-		return false;
-	}
 
 	// See if any droid has seen this object
 	seen = false;
@@ -725,14 +554,10 @@ BOOL scrDroidHasSeen(void)
 		seen = true;
 	}
 
-	scrFunctionResult.v.bval = seen;
-	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
-	{
-		return false;
-	}
-
-	return true;
+	lua_pushboolean(L, seen);
+	return 1;
 }
+
 
 // -----------------------------------------------------------------------------------------
 // Enable a component to be researched
@@ -747,12 +572,6 @@ BOOL scrEnableComponent(void)
 	}
 	if (!stackPop(&sVal))
 	{
-		return false;
-	}
-
-	if (player >= MAX_PLAYERS)
-	{
-		ASSERT( false, "scrEnableComponent:player number is too high" );
 		return false;
 	}
 
@@ -792,60 +611,66 @@ BOOL scrEnableComponent(void)
 }
 
 // -----------------------------------------------------------------------------------------
-// Make a component available
-BOOL scrMakeComponentAvailable(void)
+/// Make a component available
+static int scrMakeComponentAvailable(lua_State *L)
 {
-	SDWORD		player;
-	INTERP_VAL	sVal;
+	int index;
 
-	if (!stackPopParams(1, VAL_INT, &player))
+	const char *componentName = luaL_checkstring(L, 1);
+	int player = luaWZ_checkplayer(L, 2);
+	
+	index = getCompFromResName(COMP_BODY, componentName);
+	if (index > 0)
 	{
-		return false;
+		apCompLists[player][COMP_BODY][index] = AVAILABLE;
+		return 0;
 	}
-	if (!stackPop(&sVal))
+	index = getCompFromResName(COMP_PROPULSION, componentName);
+	if (index > 0)
 	{
-		return false;
+		apCompLists[player][COMP_PROPULSION][index] = AVAILABLE;
+		return 0;
+	}
+	index = getCompFromResName(COMP_ECM, componentName);
+	if (index > 0)
+	{
+		apCompLists[player][COMP_ECM][index] = AVAILABLE;
+		return 0;
+	}
+	index = getCompFromResName(COMP_SENSOR, componentName);
+	if (index > 0)
+	{
+		apCompLists[player][COMP_SENSOR][index] = AVAILABLE;
+		return 0;
+	}
+	index = getCompFromResName(COMP_CONSTRUCT, componentName);
+	if (index > 0)
+	{
+		apCompLists[player][COMP_CONSTRUCT][index] = AVAILABLE;
+		return 0;
+	}
+	index = getCompFromResName(COMP_WEAPON, componentName);
+	if (index > 0)
+	{
+		apCompLists[player][COMP_WEAPON][index] = AVAILABLE;
+		return 0;
+	}
+	index = getCompFromResName(COMP_REPAIRUNIT, componentName);
+	if (index > 0)
+	{
+		apCompLists[player][COMP_REPAIRUNIT][index] = AVAILABLE;
+		return 0;
+	}
+	index = getCompFromResName(COMP_BRAIN, componentName);
+	if (index > 0)
+	{
+		apCompLists[player][COMP_BRAIN][index] = AVAILABLE;
+		return 0;
 	}
 
-	if (player >= MAX_PLAYERS)
-	{
-		ASSERT( false, "scrMakeComponentAvailable:player number is too high" );
-		return false;
-	}
-
-	// make the appropriate component available
-	switch (sVal.type)
-	{
-	case ST_BODY:
-		apCompLists[player][COMP_BODY][sVal.v.ival] = AVAILABLE;
-		break;
-	case ST_PROPULSION:
-		apCompLists[player][COMP_PROPULSION][sVal.v.ival] = AVAILABLE;
-		break;
-	case ST_ECM:
-		apCompLists[player][COMP_ECM][sVal.v.ival] = AVAILABLE;
-		break;
-	case ST_SENSOR:
-		apCompLists[player][COMP_SENSOR][sVal.v.ival] = AVAILABLE;
-		break;
-	case ST_CONSTRUCT:
-		apCompLists[player][COMP_CONSTRUCT][sVal.v.ival] = AVAILABLE;
-		break;
-	case ST_WEAPON:
-		apCompLists[player][COMP_WEAPON][sVal.v.ival] = AVAILABLE;
-		break;
-	case ST_REPAIR:
-		apCompLists[player][COMP_REPAIRUNIT][sVal.v.ival] = AVAILABLE;
-		break;
-	case ST_BRAIN:
-		apCompLists[player][COMP_BRAIN][sVal.v.ival] = AVAILABLE;
-		break;
-	default:
-		ASSERT( false, "scrEnableComponent: unknown type" );
-		return false;
-	}
-
-	return true;
+	luaL_error(L, "component %s not found", componentName);
+	// not reached
+	return 0;
 }
 
 // -----------------------------------------------------------------------------------------
@@ -866,12 +691,6 @@ BOOL scrAddDroidToMissionList(void)
 		ASSERT( false, "scrAddDroidToMissionList: can't add own player to list" );
 		return false;
 	}*/
-
-	if (player >= MAX_PLAYERS)
-	{
-		ASSERT( false, "scrAddUnitToMissionList:player number is too high" );
-		return false;
-	}
 
 	ASSERT( psTemplate != NULL,
 		"scrAddUnitToMissionList: Invalid template pointer" );
@@ -897,37 +716,26 @@ BOOL scrAddDroidToMissionList(void)
 }
 
 // -----------------------------------------------------------------------------------------
-// Add a droid
-BOOL scrAddDroid(void)
+/// Add a droid
+static int scrAddDroid(lua_State *L)
 {
-	SDWORD			x, y, player;
-//	INTERP_VAL		sVal;
-	DROID_TEMPLATE	*psTemplate;
 	DROID			*psDroid;
+	DROID_TEMPLATE	*psTemplate;
+	char templateName2[MAXSTRLEN];
+	
+	const char *templateName = luaL_checkstring(L, 1);
+	int x = luaL_checkint(L, 2);
+	int y = luaL_checkint(L, 3);
+	int player = luaL_checkint(L, 4);
+	
+	// this function can probably change the name
+	strcpy(templateName2, templateName);
+	psTemplate = getTemplateFromUniqueName(templateName2, player);
 
-	if (!stackPopParams(4, ST_TEMPLATE, &psTemplate, VAL_INT, &x, VAL_INT, &y, VAL_INT, &player))
+	if (psTemplate == NULL)
 	{
-		return false;
+		luaL_error(L, "scrAddUnit: Invalid template pointer" );
 	}
-/*	if (!stackPop(&sVal))
-	{
-		return false;
-	}
-	if (sVal.type != ST_TEMPLATE)
-	{
-		ASSERT( false, "scrAddDroid: type mismatch for object" );
-		return false;
-	}
-	psTemplate = (DROID_TEMPLATE *)sVal.v.ival;
-*/
-	if (player >= MAX_PLAYERS)
-	{
-		ASSERT( false, "scrAddUnit:player number is too high" );
-		return false;
-	}
-
-	ASSERT( psTemplate != NULL,
-		"scrAddUnit: Invalid template pointer" );
 
 #ifdef SCRIPT_CHECK_MAX_UNITS
 	// Don't build a new droid if player limit reached, unless it's a transporter.
@@ -949,13 +757,8 @@ BOOL scrAddDroid(void)
 		}
 	}
 
-	scrFunctionResult.v.oval = psDroid;
-	if (!stackPushResult((INTERP_TYPE)ST_DROID, &scrFunctionResult))
-	{
-		return false;
-	}
-
-	return true;
+	luaWZObj_pushdroid(L, psDroid);
+	return 1;
 }
 
 // -----------------------------------------------------------------------------------------
@@ -1045,41 +848,19 @@ BOOL scrBuildingDestroyed(void)
 
 // -----------------------------------------------------------------------------------------
 // Enable a structure to be built
-BOOL scrEnableStructure(void)
+static int scrEnableStructure(lua_State *L)
 {
-	SDWORD		player, index;
-//	INTERP_VAL	sVal;
-
-	if (!stackPopParams(2, ST_STRUCTURESTAT, &index, VAL_INT, &player))
-	{
-		return false;
-	}
-/*	if (!stackPop(&sVal))
-	{
-		return false;
-	}
-
-	if (sVal.type != ST_STRUCTURESTAT)
-	{
-		ASSERT( false, "scrEnableStructure: type mismatch for object" );
-		return false;
-	}*/
-	if (player >= MAX_PLAYERS)
-	{
-		ASSERT( false, "scrEnableStructure:player number is too high" );
-		return false;
-	}
+	int index = luaWZObj_checkstructurestat(L, 1);
+	int player = luaWZ_checkplayer(L, 2);
 
 	if (index < (SDWORD)0 || index > (SDWORD)numStructureStats)
 	{
-		ASSERT( false, "scrEnableStructure:invalid structure stat" );
-		return false;
+		luaL_error(L, "invalid structure stat" );
 	}
-
+	
 	// enable the appropriate structure
 	apStructTypeLists[player][index] = AVAILABLE;
-
-	return true;
+	return 0;
 }
 
 
@@ -1087,30 +868,17 @@ BOOL scrEnableStructure(void)
 // -----------------------------------------------------------------------------------------
 // Check if a structure can be built.
 // currently PC skirmish only.
-BOOL scrIsStructureAvailable(void)
+static int scrIsStructureAvailable(lua_State *L)
 {
-	SDWORD		player, index;
-	BOOL		bResult;
-
-	if (!stackPopParams(2, ST_STRUCTURESTAT, &index, VAL_INT, &player))
+	int index = luaWZObj_checkstructurestat(L, 1);
+	int player = luaWZ_checkplayer(L, 2);
+	
+	if (index < 0)
 	{
-		return false;
+		luaL_error(L, "unknown structure type");
 	}
-	if(	apStructTypeLists[player][index] == AVAILABLE)
-	{
-		bResult = true;
-	}
-	else
-	{
-		bResult = false;
-	}
-
-	scrFunctionResult.v.bval = bResult;
-	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
-	{
-		return false;
-	}
-	return true;
+	lua_pushboolean(L, apStructTypeLists[player][index] == AVAILABLE);
+	return 1;
 }
 
 
@@ -1137,12 +905,6 @@ BOOL scrSelectDroidByID(void)
 		return false;
 	}
 */
-	if (player >= MAX_PLAYERS)
-	{
-		ASSERT( false, "scrSelectUnitByID:player number is too high" );
-		return false;
-	}
-
 	selected = false;
 	if (selectDroidByID(droidID, player))
 	{
@@ -1157,27 +919,6 @@ BOOL scrSelectDroidByID(void)
 	}
 	return true;
 }
-
-
-// -----------------------------------------------------------------------------------------
-// Pop up a message box with a number value in it
-BOOL scrNumMB(void)
-{
-	SDWORD	val;
-
-	if (!stackPopParams(1, VAL_INT, &val))
-	{
-		return false;
-	}
-
-/*	gameTimeStop();
-	DBERROR(("scrNumMB: called by script with value: %d", val));
-	gameTimeStart();*/
-	debug( LOG_NEVER, "scrNumMB: called by script with value: %d\n", val );
-
-	return true;
-}
-
 
 // -----------------------------------------------------------------------------------------
 // Do an approximation to a square root
@@ -1208,14 +949,9 @@ BOOL scrApproxRoot(void)
 
 // -----------------------------------------------------------------------------------------
 // Add a reticule button to the interface
-BOOL scrAddReticuleButton(void)
+static int scrAddReticuleButton(lua_State *L)
 {
-	SDWORD	val;
-
-	if (!stackPopParams(1, VAL_INT, &val))
-	{
-		return false;
-	}
+	int val = luaL_checkint(L, 1);
 
 	if (selfTest)
 	{
@@ -1251,24 +987,18 @@ BOOL scrAddReticuleButton(void)
 		widgReveal(psWScreen, IDRET_CANCEL);
 		break;
 	default:
-		ASSERT( false, "scrAddReticuleButton: Invalid reticule Button ID" );
-		return false;
+		luaL_error(L, "Invalid reticule Button ID" );
 	}
 
-	return true;
+	return 0;
 }
 
 // -----------------------------------------------------------------------------------------
 //Remove a reticule button from the interface
-BOOL scrRemoveReticuleButton(void)
+static int scrRemoveReticuleButton(lua_State *L)
 {
-	SDWORD	val;
-	BOOL	bReset;
-
-	if (!stackPopParams(2, VAL_INT, &val,VAL_BOOL, &bReset))
-	{
-		return false;
-	}
+	int val = luaL_checkint(L, 1);
+	BOOL bReset = luaL_checkboolean(L,2);
 
 	if (selfTest)
 	{
@@ -1310,56 +1040,34 @@ BOOL scrRemoveReticuleButton(void)
 		widgHide(psWScreen, IDRET_CANCEL);
 		break;
 	default:
-		ASSERT( false, "scrAddReticuleButton: Invalid reticule Button ID" );
-		return false;
+		luaL_error(L, "Invalid reticule Button ID" );
 	}
 
-	return true;
+	return 0;
 }
 
 // -----------------------------------------------------------------------------------------
 // add a message to the Intelligence Display
-BOOL scrAddMessage(void)
+static int scrAddMessage(lua_State *L)
 {
 	MESSAGE			*psMessage;
-	MESSAGE_TYPE		msgType;
-	SDWORD			player;
-	BOOL			playImmediate;
 //	INTERP_VAL		sVal;
-	VIEWDATA		*psViewData;
+	VIEWDATA	*psViewData;
 	UDWORD			height;
-
-
-	if (!stackPopParams(4, ST_INTMESSAGE, &psViewData , VAL_INT, &msgType,
-				VAL_INT, &player, VAL_BOOL, &playImmediate))
-	{
-		return false;
-	}
-
-/*
-	if (!stackPop(&sVal))
-	{
-		return false;
-	}
-
-	if (sVal.type != ST_INTMESSAGE)
-	{
-		ASSERT( false, "scrAddMessage: type mismatch for object" );
-		return false;
-	}
-*/
-	if (player >= MAX_PLAYERS)
-	{
-		ASSERT( false, "scrAddMessage:player number is too high" );
-		return false;
-	}
+	
+	const char *message = luaL_checkstring(L, 1);
+	int msgType = luaL_checkint(L, 2);
+	int player = luaWZ_checkplayer(L, 3);
+	BOOL playImmediate = luaL_checkboolean(L, 4);
+	
+	psViewData = getViewData(message);
 
 	//create the message
 	psMessage = addMessage(msgType, false, player);
 	if (psMessage)
 	{
 		//set the data
-		psMessage->pViewData = (MSG_VIEWDATA *)psViewData;
+		psMessage->pViewData = (MSG_VIEWDATA*)psViewData;
 		debug(LOG_MSG, "Adding %s pViewData=%p", psViewData->pName, psMessage->pViewData);
 		if (msgType == MSG_PROXIMITY)
 		{
@@ -1379,31 +1087,23 @@ BOOL scrAddMessage(void)
 		}
 	}
 
-	return true;
+	return 0;
 }
 
 // -----------------------------------------------------------------------------------------
 // remove a message from the Intelligence Display
-BOOL scrRemoveMessage(void)
+static int scrRemoveMessage(lua_State *L)
 {
 	MESSAGE			*psMessage;
-	MESSAGE_TYPE		msgType;
-	SDWORD			player;
 	VIEWDATA		*psViewData;
 
-	if (!stackPopParams(3, ST_INTMESSAGE, &psViewData , VAL_INT, &msgType, VAL_INT, &player))
-	{
-		return false;
-	}
-
-	ASSERT(player < MAX_PLAYERS && player >= 0, "bad player number");
-	if (player >= MAX_PLAYERS || player < 0)
-	{
-		return false;
-	}
+	const char *message = luaL_checkstring(L, 1);
+	int msgType = luaL_checkint(L, 2);
+	int player = luaWZ_checkplayer(L, 3);
+	psViewData = getViewData(message);
 
 	//find the message
-	psMessage = findMessage((MSG_VIEWDATA *)psViewData, msgType, player);
+	psMessage = findMessage((MSG_VIEWDATA*)psViewData, msgType, player);
 	ASSERT(psMessage, "cannot find message - %s", psViewData->pName);
 	if (psMessage)
 	{
@@ -1413,151 +1113,85 @@ BOOL scrRemoveMessage(void)
 	}
 	else
 	{
-		return false;
+		luaL_error(L, "cannot find message - %s",
+			psViewData->pName );
 	}
 
-	return true;
+	return 0;
 }
 
 // -----------------------------------------------------------------------------------------
-// add a tutorial message to the Intelligence Display
-/*BOOL scrAddTutorialMessage(void)
+/**builds a droid in the specified factory*/
+static int scrBuildDroid(lua_State *L)
 {
-	SDWORD			player;
-	VIEWDATA		*psViewData;
-
-
-	if (!stackPopParams(2, ST_INTMESSAGE, &psViewData , VAL_INT, &player))
-	{
-		return false;
-	}
-
-	if (player >= MAX_PLAYERS)
-	{
-		ASSERT( false, "scrAddTutorialMessage:player number is too high" );
-		return false;
-	}
-
-	//set the data
-	tutorialMessage.pViewData = psViewData;
-	tutorialMessage.player = player;
-
-	//play the tutorial message immediately
-	psCurrentMsg = &tutorialMessage;
-	initTextDisplay(psCurrentMsg, font_regular, 255);
-	addIntelScreen(true);
-
-	return true;
-}*/
-
-// -----------------------------------------------------------------------------------------
-/*builds a droid in the specified factory*/
-BOOL scrBuildDroid(void)
-{
-	SDWORD			player, productionRun;
-//	INTERP_VAL		sVal, sVal2;
-	STRUCTURE		*psFactory;
 	DROID_TEMPLATE	*psTemplate;
-
-	if (!stackPopParams(4, ST_TEMPLATE, &psTemplate, ST_STRUCTURE, &psFactory,
-					VAL_INT, &player, VAL_INT, &productionRun))
-	{
-		return false;
-	}
-
-	if (psFactory == NULL)
-	{
-		ASSERT( false, "scrBuildUnit: NULL factory object" );
-		return false;
-	}
-
-	if (player >= MAX_PLAYERS)
-	{
-		ASSERT( false, "scrBuildUnit:player number is too high" );
-		return false;
-	}
-
+	char templateName2[MAXSTRLEN];
+	
+	const char *templateName = luaL_checkstring(L, 1);
+	STRUCTURE *psFactory = (STRUCTURE*)luaWZObj_checkobject(L, 2, OBJ_STRUCTURE);
+	// note, argument 3 (player) is unused
+	int productionRun = luaL_checkint(L, 4);
+	
+	// this function can probably change the name
+	strcpy(templateName2, templateName);
+	psTemplate = getTemplateFromTranslatedNameNoPlayer(templateName2);
+	
 	if (productionRun > UBYTE_MAX)
 	{
-		ASSERT( false, "scrBuildUnit: production run too high" );
-		return false;
+		luaL_error(L, "scrBuildUnit: production run too high" );
 	}
 
-	ASSERT( psFactory != NULL,
-		"scrBuildUnit: Invalid structure pointer" );
-	ASSERT( (psFactory->pStructureType->type == REF_FACTORY ||
+	if (!(psFactory->pStructureType->type == REF_FACTORY ||
 		psFactory->pStructureType->type == REF_CYBORG_FACTORY ||
-		psFactory->pStructureType->type == REF_VTOL_FACTORY),
-		"scrBuildUnit: structure is not a factory" );
-	ASSERT( psTemplate != NULL,
-		"scrBuildUnit: Invalid template pointer" );
+		psFactory->pStructureType->type == REF_VTOL_FACTORY))
+	{
+		luaL_error(L, "scrBuildUnit: structure is not a factory" );
+	}
+	if (psTemplate == NULL)
+	{
+		luaL_error(L, "scrBuildUnit: Invalid template pointer" );
+	}
 
 	//check building the right sort of droid for the factory
 	if (!validTemplateForFactory(psTemplate, psFactory))
 	{
 
-		ASSERT( false, "scrBuildUnit: invalid template - %s for factory - %s",
+		luaL_error(L, "scrBuildUnit: invalid template - %s for factory - %s",
 			psTemplate->aName, psFactory->pStructureType->pName );
-
-		return false;
 	}
 
 	structSetManufacture(psFactory, psTemplate, (UBYTE)productionRun);
 
-	return true;
+	return 0;
 }
 
 // -----------------------------------------------------------------------------------------
-// for a specified structure, set the assembly point droids go to when built
-BOOL	scrSetAssemblyPoint(void)
+/// for a specified structure, set the assembly point droids go to when built
+static int scrSetAssemblyPoint(lua_State *L)
 {
-	SDWORD		x, y;
-	STRUCTURE	*psBuilding;
-
-	if (!stackPopParams(3, ST_STRUCTURE, &psBuilding, VAL_INT, &x, VAL_INT, &y))
-	{
-		return false;
-	}
-
-	if (psBuilding == NULL)
-	{
-		ASSERT( false, "scrSetAssemblyPoint: NULL structure" );
-		return false;
-	}
+	STRUCTURE *psBuilding = (STRUCTURE*)luaWZObj_checkobject(L, 1, OBJ_STRUCTURE);
+	int x = luaL_checkint(L, 2);
+	int y = luaL_checkint(L, 3);
 
 	if (psBuilding->pStructureType->type != REF_FACTORY &&
 		psBuilding->pStructureType->type != REF_CYBORG_FACTORY &&
 		psBuilding->pStructureType->type != REF_VTOL_FACTORY)
 	{
-		ASSERT( false, "scrSetAssemblyPoint: structure is not a factory" );
-		return false;
+		luaL_error(L, "structure is not a factory" );
 	}
 
 	setAssemblyPoint(((FACTORY *)psBuilding->pFunctionality)->psAssemblyPoint,x,y,
-        psBuilding->player, true);
+		psBuilding->player, true);
 
-	return true;
+	return 0;
 }
 
 // -----------------------------------------------------------------------------------------
-// test for structure is idle or not
-BOOL	scrStructureIdle(void)
+/// test for structure is idle or not
+static int scrStructureIdle(lua_State *L)
 {
-//	INTERP_VAL	sVal;
-	STRUCTURE	*psBuilding;
+	STRUCTURE *psBuilding = (STRUCTURE*)luaWZObj_checkobject(L, 1, OBJ_STRUCTURE);
 	BOOL		idle;
-
-	if (!stackPopParams(1, ST_STRUCTURE, &psBuilding))
-	{
-		return false;
-	}
-//	DBPRINTF(("scrStructureIdle called\n"));
-
-	if (psBuilding == NULL)
-	{
-		ASSERT( false, "scrStructureIdle: NULL structure" );
-		return false;
-	}
 
 	//test for idle
 	idle = false;
@@ -1566,16 +1200,8 @@ BOOL	scrStructureIdle(void)
 		idle = true;
 	}
 
-
-//	DBPRINTF(("structure %p is %d\n",psBuilding,idle));
-
-	scrFunctionResult.v.bval = idle;
-	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
-	{
-		return false;
-	}
-
-	return true;
+	lua_pushboolean(L, idle);
+	return 1;
 }
 
 // -----------------------------------------------------------------------------------------
@@ -1589,42 +1215,20 @@ BOOL	scrAttackLocation(void)
 		return false;
 	}
 
-	if (player >= MAX_PLAYERS)
-	{
-		ASSERT( false, "scrAttackLocation:player number is too high" );
-		return false;
-	}
-
 	debug(LOG_ERROR, "UNUSED FUNCTION attackLocation called - do not use!");
 
 	return true;
 }
 
 // -----------------------------------------------------------------------------------------
-//Destroy a feature
-BOOL scrDestroyFeature(void)
+/// Destroy a feature
+static int scrDestroyFeature(lua_State *L)
 {
-	FEATURE		*psFeature;
-//	INTERP_VAL	sVal;
-
-	if (!stackPopParams(1, ST_FEATURE, &psFeature))
-	{
-		return false;
-	}
-
-	if (psFeature == NULL)
-	{
-		ASSERT( psFeature != NULL,
-			"scrDestroyFeature: Invalid feature pointer" );
-	}
+	FEATURE *psFeature = (FEATURE*)luaWZObj_checkobject(L, 1, OBJ_FEATURE);
 
 	removeFeature(psFeature);
-
-	return true;
+	return 0;
 }
-
-
-
 
 // -----------------------------------------------------------------------------------------
 // static vars to enum features.
@@ -1634,48 +1238,34 @@ static  SDWORD			getFeatureCount[MAX_PLAYERS]={0};
 static	FEATURE			*psCurrEnumFeature[MAX_PLAYERS];
 
 // -----------------------------------------------------------------------------------------
-// init enum visible features.
-BOOL scrInitGetFeature(void)
+/// init enum visible features.
+static int scrInitGetFeature(lua_State *L)
 {
-	SDWORD			player,iFeat,bucket;
-
-	if ( !stackPopParams(3, ST_FEATURESTAT, &iFeat,  VAL_INT, &player,VAL_INT,&bucket) )
-	{
-		return false;
-	}
-
-	ASSERT(bucket >= 0 && bucket < MAX_PLAYERS,
-		"scrInitGetFeature: bucket out of bounds: %d", bucket);
-
-	ASSERT(player >= 0 && player < MAX_PLAYERS,
-		"scrInitGetFeature: player out of bounds: %d", player);
+	const char *featurename = luaL_checkstring(L, 1);
+	int player = luaWZ_checkplayer(L, 2);
+	int bucket = luaWZ_checkplayer(L, 3);
+	int iFeat = getFeatureStatFromName(featurename);
 
 	psFeatureStatToFind[bucket]		= (FEATURE_STATS *)(asFeatureStats + iFeat);				// find this stat
 	playerToEnum[bucket]			= player;				// that this player can see
 	psCurrEnumFeature[bucket]		= apsFeatureLists[0];
 	getFeatureCount[bucket]			= 0;					// start at the beginning of list.
-	return true;
+	return 0;
 }
 
 // -----------------------------------------------------------------------------------------
-// get next visible feature of required type
-// notes:	can't rely on just using the feature list, since it may change
-//			between calls, Use an index into list instead.
-//			Doesn't return Features sharing a tile with a structure.
-//			Skirmish Only, dunno if kev uses this?
-BOOL scrGetFeature(void)
+/** get next visible feature of required type
+ * \note can't rely on just using the feature list, since it may change
+ *       between calls, Use an index into list instead.
+ *       Doesn't return Features sharing a tile with a structure.
+ *       Skirmish Only, dunno if kev uses this?
+ */
+static int scrGetFeature(lua_State *L)
 {
-	SDWORD	bucket,count;
-	FEATURE	*psFeat;
-
-	if ( !stackPopParams(1,VAL_INT,&bucket) )
-	{
-		ASSERT( false, "scrGetFeature: Failed to pop player number from stack" );
-		return false;
-	}
-
-	ASSERT(bucket >= 0 && bucket < MAX_PLAYERS,
-		"scrGetFeature: bucket out of bounds: %d", bucket);
+	int count;
+	FEATURE *psFeat;
+	
+	int bucket = luaWZ_checkplayer(L, 1);
 
 	count =0;
 	// go to the correct start point in the feature list.
@@ -1686,26 +1276,16 @@ BOOL scrGetFeature(void)
 
 	if(psFeat == NULL)		// no more to find.
 	{
-		scrFunctionResult.v.oval = NULL;
-		if (!stackPushResult((INTERP_TYPE)ST_FEATURE, &scrFunctionResult))
-		{
-			ASSERT( false, "scrGetFeature: Failed to push result" );
-			return false;
-		}
-		return true;
+		lua_pushnil(L);
+		return 1;
 	}
 
 	// check to see if badly called
 	if(psFeatureStatToFind[bucket] == NULL)
 	{
-		debug( LOG_NEVER, "invalid feature to find. possibly due to save game\n" );
-		scrFunctionResult.v.oval = NULL;
-		if(!stackPushResult((INTERP_TYPE)ST_FEATURE, &scrFunctionResult))
-		{
-			ASSERT( false, "scrGetFeature: Failed to push result" );
-			return false;
-		}
-		return true;
+		debug( LOG_SCRIPT, "invalid feature to find. possibly due to save game\n" );
+		lua_pushnil(L);
+		return 1;
 	}
 
 	// begin searching the feature list for the required stat.
@@ -1717,28 +1297,17 @@ BOOL scrGetFeature(void)
 		 && !fireOnLocation(psFeat->pos.x,psFeat->pos.y)		// not burning.
 		   )
 		{
-			scrFunctionResult.v.oval = psFeat;
-			if (!stackPushResult((INTERP_TYPE)ST_FEATURE, &scrFunctionResult))	//	push scrFunctionResult
-			{
-				ASSERT( false, "scrGetFeature: Failed to push result" );
-				return false;
-			}
-
 			getFeatureCount[bucket]++;
-			return true;
+			luaWZObj_pushfeature(L, psFeat);
+			return 1;
 		}
 		getFeatureCount[bucket]++;
 		psFeat=psFeat->psNext;
 	}
 
 	// none found
-	scrFunctionResult.v.oval = NULL;
-	if (!stackPushResult((INTERP_TYPE)ST_FEATURE,  &scrFunctionResult))
-	{
-		ASSERT( false, "scrGetFeature: Failed to push result" );
-		return false;
-	}
-	return true;
+	lua_pushnil(L);
+	return 1;
 }
 
 /* Faster implementation of scrGetFeature -  assumes no features
@@ -1848,18 +1417,17 @@ BOOL scrGetFeature(void)
 
 // -----------------------------------------------------------------------------------------
 //Add a feature
-BOOL scrAddFeature(void)
+static int scrAddFeature(lua_State *L)
 {
 	FEATURE_STATS	*psStat;
 	FEATURE			*psFeat = NULL;
-	SDWORD			iX, iY, iMapX, iMapY, iTestX, iTestY, iFeat;
+	SDWORD			iMapX, iMapY, iTestX, iTestY, iFeat;
+	
+	const char *featureName = luaL_checkstring(L, 1);
+	int iX = luaL_checkint(L, 2);
+	int iY = luaL_checkint(L, 3);
 
-	if ( !stackPopParams(3, ST_FEATURESTAT, &iFeat,
-		 VAL_INT, &iX, VAL_INT, &iY ) )
-	{
-		return false;
-	}
-
+	iFeat = getFeatureStatFromName(featureName);
 	psStat = (FEATURE_STATS *)(asFeatureStats + iFeat);
 
 	ASSERT( psStat != NULL,
@@ -1895,13 +1463,8 @@ BOOL scrAddFeature(void)
 		psFeat = buildFeature( psStat, iX, iY, false );
 	}
 
-	scrFunctionResult.v.oval = psFeat;
-	if (!stackPushResult((INTERP_TYPE)ST_FEATURE, &scrFunctionResult))
-	{
-		return false;
-	}
-
-	return true;
+	luaWZObj_pushfeature(L, psFeat);
+	return 1;
 }
 
 // -----------------------------------------------------------------------------------------
@@ -1947,10 +1510,10 @@ BOOL scrAddStructure(void)
 			psStruct->status = SS_BUILT;
 			buildingComplete(psStruct);
 
-            /*
-            Apart from this being wrong (iWidth = 0 when psStat->baseWidth = 1
-            and you end up in an infinite loop) we don't need to do this here
-            since the map is flattened as part of buildStructure
+			/*
+			Apart from this being wrong (iWidth = 0 when psStat->baseWidth = 1
+			and you end up in an infinite loop) we don't need to do this here
+			since the map is flattened as part of buildStructure
 
 			iWidth   = psStat->baseWidth/2;
 			iBreadth = psStat->baseBreadth/2;
@@ -2014,22 +1577,13 @@ static	UDWORD			playerToEnumStructB[MAX_PLAYERS];
 static	UDWORD			enumStructCountB[MAX_PLAYERS];
 static	BOOL			structfindanyB[MAX_PLAYERS];
 static	SDWORD			playerVisibleStructB[MAX_PLAYERS];		//player whose structures must be visible
-// init enum visible structures.
-BOOL scrInitEnumStruct(void)
+/// init enum visible structures.
+static int scrInitEnumStruct(lua_State *L)
 {
-	SDWORD		lookingPlayer,iStat,targetPlayer;
-	BOOL		any;
-
-	if ( !stackPopParams(4,VAL_BOOL,&any, ST_STRUCTURESTAT, &iStat,  VAL_INT, &targetPlayer, VAL_INT, &lookingPlayer) )
-	{
-		return false;
-	}
-
-	ASSERT(targetPlayer >= 0 && targetPlayer < MAX_PLAYERS,
-		"scrInitEnumStructB: targetPlayer out of bounds: %d", targetPlayer);
-
-	ASSERT(lookingPlayer >= 0 && lookingPlayer < MAX_PLAYERS,
-		"scrInitEnumStructB: lookingPlayer out of bounds: %d", lookingPlayer);
+	BOOL any          = luaL_checkboolean(L, 1);
+	int iStat = luaWZObj_checkstructurestat(L, 2);
+	int targetPlayer  = luaWZ_checkplayer(L, 3);
+	int lookingPlayer = luaWZ_checkplayer(L, 4);
 
 	structfindany = any;
 
@@ -2037,11 +1591,11 @@ BOOL scrInitEnumStruct(void)
 	playerToEnumStruct	= (UDWORD)targetPlayer;
 	playerVisibleStruct = lookingPlayer;		//remember who must be able to see the structure
 	enumStructCount		= 0;
-	return true;
+	return 0;
 }
 
 // -----------------------------------------------------------------------------------------
-BOOL scrEnumStruct(void)
+static int scrEnumStruct(lua_State *L)
 {
 	UDWORD		count;
 	STRUCTURE	*psStruct;
@@ -2055,12 +1609,8 @@ BOOL scrEnumStruct(void)
 
 	if(psStruct == NULL)		// no more to find.
 	{
-		scrFunctionResult.v.oval = NULL;
-		if (!stackPushResult((INTERP_TYPE)ST_STRUCTURE, &scrFunctionResult))
-		{
-			return false;
-		}
-		return true;
+		lua_pushnil(L);
+		return 1;
 	}
 
 	while(psStruct)	// find a visible structure of required type.
@@ -2071,25 +1621,16 @@ BOOL scrEnumStruct(void)
 			((playerVisibleStruct < 0) || (psStruct->visible[playerVisibleStruct]))	//fix: added playerVisibleStruct for visibility test
 			)
 		{
-			scrFunctionResult.v.oval = psStruct;
-			if (!stackPushResult((INTERP_TYPE)ST_STRUCTURE, &scrFunctionResult))			//	push scrFunctionResult
-			{
-				return false;
-			}
 			enumStructCount++;
-
-			return true;
+			luaWZObj_pushstructure(L, psStruct);
+			return 1;
 		}
 		enumStructCount++;
 		psStruct = psStruct->psNext;
 	}
-	// push NULL, none found;
-	scrFunctionResult.v.oval = NULL;
-	if (!stackPushResult((INTERP_TYPE)ST_STRUCTURE, &scrFunctionResult))
-	{
-		return false;
-	}
-	return true;
+	// no building found
+	lua_pushnil(L);
+	return 1;
 }
 
 // init enum visible structures - takes bucket as additional parameter
@@ -2185,52 +1726,24 @@ BOOL scrEnumStructB(void)
 }
 
 // -----------------------------------------------------------------------------------------
-/*looks to see if a structure (specified by type) exists and is being built*/
-BOOL scrStructureBeingBuilt(void)
+/**looks to see if a structure (specified by type) exists and is being built*/
+static int scrStructureBeingBuilt(lua_State *L)
 {
-//	INTERP_VAL			sVal;
-	UDWORD				structInc;
 	STRUCTURE_STATS		*psStats;
-	SDWORD				player;
 	BOOL				beingBuilt;
+	
+	int index = luaWZObj_checkstructurestat(L, 1);
+	int player = luaWZ_checkplayer(L, 2);
 
-	if (!stackPopParams(2, ST_STRUCTURESTAT, &structInc, VAL_INT, &player))
-	{
-		return false;
-	}
-
-/*	if (!stackPop(&sVal))
-	{
-		return false;
-	}
-
-	if (sVal.type != ST_STRUCTURESTAT)
-	{
-		ASSERT( false, "scrStructureBeingBuilt: type mismatch for object" );
-		return false;
-	}
-	psStats = (STRUCTURE_STATS *)(asStructureStats + sVal.v.ival);
-*/
-	if (player >= MAX_PLAYERS)
-	{
-		ASSERT( false, "scrStructureBeingBuilt:player number is too high" );
-		return false;
-	}
-
-	psStats = (STRUCTURE_STATS *)(asStructureStats + structInc);
+	psStats = (STRUCTURE_STATS *)(asStructureStats + index);
 	beingBuilt = false;
 	if (checkStructureStatus(psStats, player, SS_BEING_BUILT))
 	{
 		beingBuilt = true;
 	}
 
-	scrFunctionResult.v.bval = beingBuilt;
-	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
-	{
-		return false;
-	}
-
-	return true;
+	lua_pushboolean(L, beingBuilt);
+	return 1;
 }
 
 
@@ -2294,10 +1807,9 @@ BOOL scrStructureBuilt(void)
 	}
 	psStats = (STRUCTURE_STATS *)(asStructureStats + sVal.v.ival);
 */
-	if (player >= MAX_PLAYERS)
+	if (player < 0 || player >= MAX_PLAYERS)
 	{
-		ASSERT( false, "scrStructureBuilt:player number is too high" );
-		return false;
+		luaL_error(L, "invalid player number" );
 	}
 
 	psStats = (STRUCTURE_STATS *)(asStructureStats + structInc);
@@ -2342,75 +1854,52 @@ BOOL scrCentreView(void)
 
 // -----------------------------------------------------------------------------------------
 /*centre the view on a position */
-BOOL scrCentreViewPos(void)
+static int scrCentreViewPos(lua_State *L)
 {
-	SDWORD		x,y;
-
-	if (!stackPopParams(2, VAL_INT, &x, VAL_INT, &y))
-	{
-		return false;
-	}
+	int x,y;
+	
+	x = luaL_checkint(L,1);
+	y = luaL_checkint(L,2);
 
 	if ( (x < 0) || (x >= (SDWORD)mapWidth*TILE_UNITS) ||
 		 (y < 0) || (y >= (SDWORD)mapHeight*TILE_UNITS))
 	{
-		ASSERT( false, "scrCenterViewPos: coords off map" );
-		return false;
+		luaL_error(L, "coords off map" );
 	}
 
 	//centre the view on the objects x/y
 	setViewPos(map_coord(x), map_coord(y), false);
 
-	return true;
+	return 0;
 }
 
 // -----------------------------------------------------------------------------------------
-// Get a pointer to a structure based on a stat - returns NULL if cannot find one
-BOOL scrGetStructure(void)
+/// Get a pointer to a structure based on a stat - returns nil if cannot find one
+static int scrGetStructure(lua_State *L)
 {
-	SDWORD				player, index;
 	STRUCTURE			*psStruct;
 	UDWORD				structType;
-	BOOL				found;
-
-	if (!stackPopParams(2, ST_STRUCTURESTAT, &index, VAL_INT, &player))
-	{
-		return false;
-	}
-
-	if (player >= MAX_PLAYERS)
-	{
-		ASSERT( false, "scrGetStructure:player number is too high" );
-		return false;
-	}
-
+	
+	int index = luaWZObj_checkstructurestat(L, 1);
+	int player = luaWZ_checkplayer(L, 2);
+	
 	structType = asStructureStats[index].ref;
 
 	//search the players' list of built structures to see if one exists
-	found = false;
 	for (psStruct = apsStructLists[player]; psStruct != NULL; psStruct =
 		psStruct->psNext)
 	{
 		if (psStruct->pStructureType->ref == structType)
 		{
-			found = true;
-			break;
+			// found it!
+			luaWZObj_pushstructure(L, psStruct);
+			return 1;
 		}
 	}
 
-	//make sure pass NULL back if not got one
-	if (!found)
-	{
-		psStruct = NULL;
-	}
-
-	scrFunctionResult.v.oval = psStruct;
-	if (!stackPushResult((INTERP_TYPE)ST_STRUCTURE, &scrFunctionResult))
-	{
-		return false;
-	}
-
-	return true;
+	// no structure of this type found
+	lua_pushnil(L);
+	return 1;
 }
 
 // -----------------------------------------------------------------------------------------
@@ -2428,10 +1917,9 @@ BOOL scrGetTemplate(void)
 		return false;
 	}
 
-	if (player >= MAX_PLAYERS)
+	if (player < 0 || player >= MAX_PLAYERS)
 	{
-		ASSERT( false, "scrGetTemplate:player number is too high" );
-		return false;
+		luaL_error(L, "invalid player number" );
 	}
 
 	if (!stackPop(&sVal))
@@ -2533,10 +2021,9 @@ BOOL scrGetDroid(void)
 		return false;
 	}
 
-	if (player >= MAX_PLAYERS)
+	if (player < 0 || player >= MAX_PLAYERS)
 	{
-		ASSERT( false, "scrGetUnit:player number is too high" );
-		return false;
+		luaL_error(L, "invalid player number" );
 	}
 
 	if (!stackPop(&sVal))
@@ -2677,13 +2164,13 @@ BOOL scrSetScrollMinX(void)
 		return false;
 	}
 
-    prevMinX = scrollMinX;
+	prevMinX = scrollMinX;
 
-    scrollMinX = minX;
+	scrollMinX = minX;
 
-    //when the scroll limits change midgame - need to redo the lighting
-    initLighting(prevMinX < scrollMinX ? prevMinX : scrollMinX,
-        scrollMinY, scrollMaxX, scrollMaxY);
+	//when the scroll limits change midgame - need to redo the lighting
+	initLighting(prevMinX < scrollMinX ? prevMinX : scrollMinX,
+		scrollMinY, scrollMaxX, scrollMaxY);
 
     return true;
 }
@@ -2706,14 +2193,14 @@ BOOL scrSetScrollMinY(void)
 		return false;
 	}
 
-    prevMinY = scrollMinY;
+	prevMinY = scrollMinY;
 
 	scrollMinY = minY;
 
-    //when the scroll limits change midgame - need to redo the lighting
-    initLighting(scrollMinX,
-        prevMinY < scrollMinY ? prevMinY : scrollMinY,
-        scrollMaxX, scrollMaxY);
+	//when the scroll limits change midgame - need to redo the lighting
+	initLighting(scrollMinX,
+		prevMinY < scrollMinY ? prevMinY : scrollMinY,
+		scrollMaxX, scrollMaxY);
 
     return true;
 }
@@ -2736,14 +2223,14 @@ BOOL scrSetScrollMaxX(void)
 		return false;
 	}
 
-    prevMaxX = scrollMaxX;
+	prevMaxX = scrollMaxX;
 
 	scrollMaxX = maxX;
 
-    //when the scroll limits change midgame - need to redo the lighting
-    initLighting(scrollMinX,  scrollMinY,
-        prevMaxX < scrollMaxX ? prevMaxX : scrollMaxX,
-        scrollMaxY);
+	//when the scroll limits change midgame - need to redo the lighting
+	initLighting(scrollMinX,  scrollMinY,
+		prevMaxX < scrollMaxX ? prevMaxX : scrollMaxX,
+		scrollMaxY);
 
     return true;
 }
@@ -2766,13 +2253,13 @@ BOOL scrSetScrollMaxY(void)
 		return false;
 	}
 
-    prevMaxY = scrollMaxY;
+	prevMaxY = scrollMaxY;
 
 	scrollMaxY = maxY;
 
-    //when the scroll limits change midgame - need to redo the lighting
-    initLighting(scrollMinX, scrollMinY, scrollMaxX,
-        prevMaxY < scrollMaxY ? prevMaxY : scrollMaxY);
+	//when the scroll limits change midgame - need to redo the lighting
+	initLighting(scrollMinX, scrollMinY, scrollMaxX,
+		prevMaxY < scrollMaxY ? prevMaxY : scrollMaxY);
 
     return true;
 }
@@ -2789,7 +2276,7 @@ BOOL scrSetDefaultSensor(void)
 		return false;
 	}
 
-	if (player >= MAX_PLAYERS)
+	if (player < 0 || player >= MAX_PLAYERS)
 	{
 		ASSERT( false, "scrSetDefaultSensor:player number is too high" );
 		return false;
@@ -2829,7 +2316,7 @@ BOOL scrSetDefaultECM(void)
 		return false;
 	}
 
-	if (player >= MAX_PLAYERS)
+	if (player < 0 || player >= MAX_PLAYERS)
 	{
 		ASSERT( false, "scrSetDefaultECM:player number is too high" );
 		return false;
@@ -2868,7 +2355,7 @@ BOOL scrSetDefaultRepair(void)
 		return false;
 	}
 
-	if (player >= MAX_PLAYERS)
+	if (player < 0 || player >= MAX_PLAYERS)
 	{
 		ASSERT( false, "scrSetDefaultRepair:player number is too high" );
 		return false;
@@ -2896,49 +2383,32 @@ BOOL scrSetDefaultRepair(void)
 }
 
 // -----------------------------------------------------------------------------------------
-// Sets the structure limits for a player
-BOOL scrSetStructureLimits(void)
+/// Sets the structure limits for a player
+static int scrSetStructureLimits(lua_State *L)
 {
-	SDWORD				player, limit;
-	UDWORD				structInc;
 	STRUCTURE_LIMITS	*psStructLimits;
-
-	if (!stackPopParams(3, ST_STRUCTURESTAT, &structInc, VAL_INT, &limit, VAL_INT, &player))
-	{
-		return false;
-	}
-
-	if (player >= MAX_PLAYERS)
-	{
-		ASSERT( false, "scrSetStructureLimits:player number is too high" );
-		return false;
-	}
-
-	if (structInc > numStructureStats)
-	{
-		ASSERT( false, "scrSetStructureLimits: Structure stat is too high - %d", structInc );
-		return false;
-	}
+	
+	int index = luaWZObj_checkstructurestat(L, 1);
+	int limit = luaL_checkint(L, 2);
+	int player = luaWZ_checkplayer(L, 3);
 
 	if (limit < 0)
 	{
-		ASSERT( false, "scrSetStructureLimits: limit is less than zero - %d", limit );
-		return false;
+		luaL_error(L, "scrSetStructureLimits: limit is less than zero - %d", limit );
 	}
 
 	if (limit > LOTS_OF)
 	{
-		ASSERT( false, "scrSetStructureLimits: limit is too high - %d - must be less than %d",
+		luaL_error(L, "scrSetStructureLimits: limit is too high - %d - must be less than %d",
 			limit, LOTS_OF );
-		return false;
 	}
 
 	psStructLimits = asStructLimits[player];
-	psStructLimits[structInc].limit = (UBYTE)limit;
+	psStructLimits[index].limit = (UBYTE)limit;
 
-	psStructLimits[structInc].globalLimit = (UBYTE)limit;
+	psStructLimits[index].globalLimit = (UBYTE)limit;
 
-	return true;
+	return 0;
 }
 
 
@@ -2954,20 +2424,17 @@ BOOL scrApplyLimitSet(void)
 
 
 // -----------------------------------------------------------------------------------------
-// plays a sound for the specified player - only plays the sound if the
-// specified player = selectedPlayer
-BOOL scrPlaySound(void)
+/// plays a sound for the specified player - only plays the sound if the
+/// specified player = selectedPlayer
+static int scrPlaySound(lua_State *L)
 {
-	SDWORD	player, soundID;
-
-	if (!stackPopParams(2, ST_SOUND, &soundID, VAL_INT, &player))
+	int soundID;
+	const char *filename = luaL_checkstring(L, 1);
+	int player = luaWZ_checkplayer(L, 2);
+	
+	soundID = audio_GetTrackID( filename );
+	if (soundID == SAMPLE_NOT_FOUND)
 	{
-		return false;
-	}
-
-	if (player >= MAX_PLAYERS)
-	{
-		ASSERT( false, "scrPlaySound:player number is too high" );
 		return false;
 	}
 
@@ -2979,25 +2446,24 @@ BOOL scrPlaySound(void)
 			audio_QueueTrack(ID_SOUND_OF_SILENCE);
 		}
 	}
-	return true;
+	return 0;
 }
 
 // -----------------------------------------------------------------------------------------
-// plays a sound for the specified player - only plays the sound if the
-// specified player = selectedPlayer - saves position
-BOOL scrPlaySoundPos(void)
+/// plays a sound for the specified player - only plays the sound if the
+/// specified player = selectedPlayer - saves position
+static int scrPlaySoundPos(lua_State *L)
 {
-	SDWORD	player, soundID, iX, iY, iZ;
-
-	if (!stackPopParams(5, ST_SOUND, &soundID, VAL_INT, &player,
-							VAL_INT, &iX, VAL_INT, &iY, VAL_INT, &iZ))
+	int soundID;
+	const char *filename = luaL_checkstring(L, 1);
+	int player = luaWZ_checkplayer(L, 2);
+	int iX = luaL_checkint(L, 3);
+	int iY = luaL_checkint(L, 4);
+	int iZ = luaL_checkint(L, 5);
+	
+	soundID = audio_GetTrackID( filename );
+	if (soundID == SAMPLE_NOT_FOUND)
 	{
-		return false;
-	}
-
-	if (player >= MAX_PLAYERS)
-	{
-		ASSERT( false, "scrPlaySoundPos:player number is too high" );
 		return false;
 	}
 
@@ -3005,7 +2471,7 @@ BOOL scrPlaySoundPos(void)
 	{
 		audio_QueueTrackPos(soundID, iX, iY, iZ);
 	}
-	return true;
+	return 0;
 }
 
 // -----------------------------------------------------------------------------------------
@@ -3021,10 +2487,9 @@ BOOL scrShowConsoleText(void)
 		return false;
 	}
 
-	if (player >= MAX_PLAYERS)
+	if (player < 0 || player >= MAX_PLAYERS)
 	{
-		ASSERT( false, "scrAddConsoleText:player number is too high" );
-		return false;
+		luaL_error(L, "invalid player number" );
 	}
 
 	if (player == (SDWORD)selectedPlayer)
@@ -3037,22 +2502,13 @@ BOOL scrShowConsoleText(void)
 }
 
 // -----------------------------------------------------------------------------------------
-/* add a text message to the top of the screen for the selected player*/
-BOOL scrAddConsoleText(void)
+/** add a text message to the top of the screen for the selected player*/
+static int scrAddConsoleText(lua_State *L)
 {
-	char				*pText;
-	SDWORD				player;
-
-	if (!stackPopParams(2, ST_TEXTSTRING, &pText, VAL_INT, &player))
-	{
-		return false;
-	}
-
-	if (player >= MAX_PLAYERS)
-	{
-		ASSERT( false, "scrAddConsoleText:player number is too high" );
-		return false;
-	}
+	const char *pText = luaL_checkstring(L, 1);
+	int player = luaWZ_checkplayer(L, 2);
+	char *message;
+	//(pText, &message);
 
 	if (player == (SDWORD)selectedPlayer)
 	{
@@ -3062,28 +2518,19 @@ BOOL scrAddConsoleText(void)
 		permitNewConsoleMessages(false);
 	}
 
-	return true;
+	return 0;
 }
 
 
 
 // -----------------------------------------------------------------------------------------
-/* add a text message to the top of the screen for the selected player - without clearing whats there*/
-BOOL scrTagConsoleText(void)
+/** add a text message to the top of the screen for the selected player - without clearing whats there*/
+static int scrTagConsoleText(lua_State *L)
 {
-	char				*pText;
-	SDWORD				player;
-
-	if (!stackPopParams(2, ST_TEXTSTRING, &pText, VAL_INT, &player))
-	{
-		return false;
-	}
-
-	if (player >= MAX_PLAYERS)
-	{
-		ASSERT( false, "scrAddConsoleText:player number is too high" );
-		return false;
-	}
+	const char *pText = luaL_checkstring(L, 1);
+	int player = luaWZ_checkplayer(L, 2);
+	char *message;
+	//scrvGetString(pText, &message);
 
 	if (player == (SDWORD)selectedPlayer)
 	{
@@ -3093,7 +2540,7 @@ BOOL scrTagConsoleText(void)
 		permitNewConsoleMessages(false);
 	}
 
-	return true;
+	return 0;
 }
 
 
@@ -3153,22 +2600,12 @@ BOOL scrPlayVideo(void)
 }
 
 // -----------------------------------------------------------------------------------------
-//checks to see if there are any droids for the specified player
-BOOL scrAnyDroidsLeft(void)
+///checks to see if there are any droids for the specified player
+static int scrAnyDroidsLeft(lua_State *L)
 {
-	SDWORD		player;
 	BOOL		droidsLeft;
 
-	if (!stackPopParams(1, VAL_INT, &player))
-	{
-		return false;
-	}
-
-	if (player >= MAX_PLAYERS)
-	{
-		ASSERT( false, "scrAnyUnitsLeft:player number is too high" );
-		return false;
-	}
+	int player = luaWZ_checkplayer(L, 1);
 
 	//check the players list for any droid
 	droidsLeft = true;
@@ -3176,40 +2613,23 @@ BOOL scrAnyDroidsLeft(void)
 	{
 		droidsLeft = false;
 	}
-
-	scrFunctionResult.v.bval = droidsLeft;
-	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
-	{
-		return false;
-	}
-
-	return true;
+	lua_pushboolean(L, droidsLeft);
+	return 1;
 }
 
 // -----------------------------------------------------------------------------------------
-//function to call when the game is over, plays a message then does game over stuff.
-//
-BOOL scrGameOverMessage(void)
+///function to call when the game is over, plays a message then does game over stuff.
+static int scrGameOverMessage(lua_State *L)
 {
-	BOOL			gameWon;
 	MESSAGE			*psMessage;
-	MESSAGE_TYPE		msgType;
-	SDWORD			player;
 	VIEWDATA		*psViewData;
 
-
-	if (!stackPopParams(4, ST_INTMESSAGE, &psViewData , VAL_INT, &msgType,
-				VAL_INT, &player, VAL_BOOL, &gameWon))
-	{
-		return false;
-	}
-
-
-	if (player >= MAX_PLAYERS)
-	{
-		ASSERT( false, "scrGameOverMessage:player number is too high" );
-		return false;
-	}
+	const char *message = luaL_checkstring(L, 1);
+	MESSAGE_TYPE msgType = luaL_checkint(L, 2);
+	int player = luaWZ_checkplayer(L, 3);
+	BOOL gameWon = luaL_checkboolean(L, 4);
+	
+	psViewData = getViewData(message);
 
 	if(gameWon)
 	{
@@ -3223,8 +2643,10 @@ BOOL scrGameOverMessage(void)
 	//create the message
 	psMessage = addMessage(msgType, false, player);
 
-	ASSERT( msgType != MSG_PROXIMITY, "scrGameOverMessage: Bad message type (MSG_PROXIMITY)" );
-
+	if (msgType == MSG_PROXIMITY)
+	{
+	    luaL_error(L, "Bad message type (MSG_PROXIMITY)" );
+    }
 	if (psMessage)
 	{
 		//set the data
@@ -3258,11 +2680,11 @@ BOOL scrGameOverMessage(void)
 	}
 	debug(LOG_MSG, "Game over message");
 
-    // this should be called when the video Quit is processed
-    // not always is tough, so better be sure
+	// this should be called when the video Quit is processed
+	// not always is tough, so better be sure
 	displayGameOver(gameWon);
 
-	return true;
+	return 0;
 }
 
 
@@ -3282,8 +2704,8 @@ BOOL scrGameOver(void)
     /*this function will only be called with gameOver = true when at the end of
     the game so we'll just hard-code what happens!*/
 
-    //don't want this in multiplayer...
-    if (!bMultiPlayer)
+	//don't want this in multiplayer...
+	if (!bMultiPlayer)
 
     {
         if (gameOver == true && !bInTutorial)
@@ -3291,13 +2713,13 @@ BOOL scrGameOver(void)
             //we need to set this here so the VIDEO_QUIT callback is not called
 		    setScriptWinLoseVideo(PLAY_WIN);
 
-    	    seq_ClearSeqList();
+			seq_ClearSeqList();
 
 	        seq_AddSeqToList("outro.ogg", NULL, "outro.txa", false);
 	        seq_StartNextFullScreenVideo();
 
-        }
-    }
+		}
+	}
 
 	return true;
 }
@@ -3314,7 +2736,7 @@ BOOL scrAnyFactoriesLeft(void)
 		return false;
 	}
 
-	if (player >= MAX_PLAYERS)
+	if (player < 0 || player >= MAX_PLAYERS)
 	{
 		ASSERT( false, "scrAnyFactorysLeft:player number is too high" );
 		return false;
@@ -3348,23 +2770,13 @@ BOOL scrAnyFactoriesLeft(void)
 
 
 // -----------------------------------------------------------------------------------------
-//checks to see if there are any structures (except walls) for the specified player
-BOOL scrAnyStructButWallsLeft(void)
+///checks to see if there are any structures (except walls) for the specified player
+static int scrAnyStructButWallsLeft(lua_State *L)
 {
-	SDWORD		player;
 	BOOL		structuresLeft;
 	STRUCTURE	*psCurr;
-
-	if (!stackPopParams(1, VAL_INT, &player))
-	{
-		return false;
-	}
-
-	if (player >= MAX_PLAYERS)
-	{
-		ASSERT( false, "scrAnyStructuresButWallsLeft:player number is too high" );
-		return false;
-	}
+	
+	int player = luaWZ_checkplayer(L, 1);
 
 	//check the players list for any structures
 	structuresLeft = true;
@@ -3386,13 +2798,8 @@ BOOL scrAnyStructButWallsLeft(void)
 		}
 	}
 
-	scrFunctionResult.v.bval = structuresLeft;
-	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
-	{
-		return false;
-	}
-
-	return true;
+	lua_pushboolean(L, structuresLeft);
+	return 1;
 }
 
 // -----------------------------------------------------------------------------------------
@@ -3456,7 +2863,7 @@ BOOL scrSetRetreatPoint(void)
 		return false;
 	}
 
-	if (player >= MAX_PLAYERS)
+	if (player < 0 || player >= MAX_PLAYERS)
 	{
 		ASSERT( false, "scrSetRetreatPoint: player out of range" );
 		return false;
@@ -3486,7 +2893,7 @@ BOOL scrSetRetreatForce(void)
 		return false;
 	}
 
-	if (player >= MAX_PLAYERS)
+	if (player < 0 || player >= MAX_PLAYERS)
 	{
 		ASSERT( false, "scrSetRetreatForce: player out of range" );
 		return false;
@@ -3521,7 +2928,7 @@ BOOL scrSetRetreatLeadership(void)
 		return false;
 	}
 
-	if (player >= MAX_PLAYERS)
+	if (player < 0 || player >= MAX_PLAYERS)
 	{
 		ASSERT( false, "scrSetRetreatLeadership: player out of range" );
 		return false;
@@ -3539,46 +2946,36 @@ BOOL scrSetRetreatLeadership(void)
 }
 
 // -----------------------------------------------------------------------------------------
-// set the retreat point for a group
-BOOL scrSetGroupRetreatPoint(void)
+/// set the retreat point for a group
+static int scrSetGroupRetreatPoint(lua_State *L)
 {
-	SDWORD		x,y;
-	DROID_GROUP	*psGroup;
-
-	if (!stackPopParams(3, ST_GROUP, &psGroup, VAL_INT, &x, VAL_INT, &y))
-	{
-		return false;
-	}
+	DROID_GROUP *psGroup = luaWZObj_checkgroup(L, 1);
+	int x = luaL_checkint(L, 2);
+	int y = luaL_checkint(L, 3);
 
 	if (x < 0 || x >= (SDWORD)mapWidth*TILE_UNITS ||
 		y < 0 || y >= (SDWORD)mapHeight*TILE_UNITS)
 	{
-		ASSERT( false, "scrSetRetreatPoint: coords off map" );
-		return false;
+		luaL_error(L, "scrSetRetreatPoint: coords off map" );
 	}
 
 	psGroup->sRunData.sPos.x = x;
 	psGroup->sRunData.sPos.y = y;
 
-	return true;
+	return 0;
 }
 
 // -----------------------------------------------------------------------------------------
-BOOL scrSetGroupRetreatForce(void)
+static int scrSetGroupRetreatForce(lua_State *L)
 {
-	SDWORD		level, numDroids;
-	DROID_GROUP	*psGroup;
-	DROID		*psCurr;
-
-	if (!stackPopParams(2, ST_GROUP, &psGroup, VAL_INT, &level))
-	{
-		return false;
-	}
+	SDWORD numDroids;
+	DROID *psCurr;
+	DROID_GROUP *psGroup = luaWZObj_checkgroup(L, 1);
+	int level = luaL_checkint(L, 2);
 
 	if (level > 100 || level < 0)
 	{
-		ASSERT( false, "scrSetRetreatForce: level out of range" );
-		return false;
+		luaL_error(L, "scrSetRetreatForce: level out of range" );
 	}
 
 	// count up the current number of droids
@@ -3590,7 +2987,7 @@ BOOL scrSetGroupRetreatForce(void)
 
 	psGroup->sRunData.forceLevel = (UBYTE)(level * numDroids / 100);
 
-	return true;
+	return 0;
 }
 
 // -----------------------------------------------------------------------------------------
@@ -3604,7 +3001,7 @@ BOOL scrSetRetreatHealth(void)
 		return false;
 	}
 
-	if (player >= MAX_PLAYERS)
+	if (player < 0 || player >= MAX_PLAYERS)
 	{
 		ASSERT( false, "scrSetHealthForce: player out of range" );
 		return false;
@@ -3644,54 +3041,35 @@ BOOL scrSetGroupRetreatHealth(void)
 }
 
 // -----------------------------------------------------------------------------------------
-// set the retreat leadership
-BOOL scrSetGroupRetreatLeadership(void)
+/// set the retreat leadership
+static int scrSetGroupRetreatLeadership(lua_State *L)
 {
-	SDWORD		level;
-	DROID_GROUP	*psGroup;
-
-	if (!stackPopParams(2, ST_GROUP, &psGroup, VAL_INT, &level))
-	{
-		return false;
-	}
+	DROID_GROUP *psGroup = luaWZObj_checkgroup(L, 1);
+	int level = luaL_checkint(L, 2);
 
 	if (level > 100 || level < 0)
 	{
-		ASSERT( false, "scrSetRetreatLeadership: level out of range" );
-		return false;
+		luaL_error(L, "scrSetRetreatLeadership: level out of range" );
 	}
 
 	psGroup->sRunData.leadership = (UBYTE)level;
 
-	return true;
+	return 0;
 }
 
 // -----------------------------------------------------------------------------------------
-//start a Mission - the missionType is ignored now - gets it from the level data ***********
-BOOL scrStartMission(void)
+/// start a Mission - the missionType is ignored now - gets it from the level data ***********
+static int scrStartMission(lua_State *L)
 {
-	char				*pGame;
-	SDWORD				missionType;
+	int missionType = luaL_checkint(L, 1);
+	const char *pGame = luaL_checkstring(L, 2);
 	LEVEL_DATASET		*psNewLevel;
-
-	if (!stackPopParams(2, VAL_INT, &missionType, ST_LEVEL, &pGame))
-	{
-		return false;
-	}
 
 	//if (missionType > MISSION_NONE)
 	if (missionType > LDS_NONE)
 	{
-		ASSERT( false, "Invalid Mission Type" );
-		return false;
+		luaL_error(L, "Invalid Mission Type" );
 	}
-
-	// check the last mission got finished
-	/*if (mission.type != MISSION_NONE)
-	{
-		DBMB(("scrStartMission: old mission incomplete\n   ending mission with success"));
-		endMission(true);
-	}*/
 
 	// tell the loop that a new level has to be loaded up - not yet!
 	//loopNewLevel = true;
@@ -3703,7 +3081,7 @@ BOOL scrStartMission(void)
 	{
 		debug( LOG_ERROR, "scrStartMission: couldn't find level data" );
 		abort();
-		return false;
+		luaL_error(L, "couldn't find level data" );
 	}
 
 	//set the mission rolling...
@@ -3718,7 +3096,7 @@ BOOL scrStartMission(void)
 		return false;
 	}*/
 
-	return true;
+	return 0;
 }
 
 //end a mission - NO LONGER CALLED FROM SCRIPT
@@ -3987,22 +3365,11 @@ BOOL scrIsHumanPlayer(void)
 
 
 // -----------------------------------------------------------------------------------------
-// Set an alliance between two players
-BOOL scrCreateAlliance(void)
+/// Set an alliance between two players
+static int scrCreateAlliance(lua_State *L)
 {
-	SDWORD	player1,player2;
-
-	if (!stackPopParams(2, VAL_INT, &player1, VAL_INT, &player2))
-	{
-		return false;
-	}
-
-	if (player1 < 0 || player1 >= MAX_PLAYERS ||
-		player2 < 0 || player2 >= MAX_PLAYERS)
-	{
-		ASSERT( false, "scrCreateAlliance: player out of range" );
-		return false;
-	}
+	int player1 = luaWZ_checkplayer(L, 1);
+	int player2 = luaWZ_checkplayer(L, 2);
 
 	if(bMultiPlayer)
 	{
@@ -4036,7 +3403,7 @@ BOOL scrCreateAlliance(void)
 	alliances[player1][player2] = ALLIANCE_FORMED;
 	alliances[player2][player1] = ALLIANCE_FORMED;
 */
-	return true;
+	return 0;
 }
 
 
@@ -4149,32 +3516,13 @@ BOOL scrAllianceExists(void)
 	return true;
 }
 
-BOOL scrAllianceExistsBetween(void)
+static int scrAllianceExistsBetween(lua_State *L)
 {
-	UDWORD i,j;
+	int i = luaWZ_checkplayer(L, 1);
+	int j = luaWZ_checkplayer(L, 2);
 
-
-	if (!stackPopParams(2, VAL_INT, &i,VAL_INT, &j))
-	{
-		return false;
-	}
-	if(alliances[i][j] == ALLIANCE_FORMED)
-	{
-		scrFunctionResult.v.bval = true;
-		if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
-		{
-			return false;
-		}
-		return true;
-	}
-
-	scrFunctionResult.v.bval = false;
-	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
-	{
-		return false;
-	}
-
-	return true;
+	lua_pushboolean(L, alliances[i][j] == ALLIANCE_FORMED);
+	return 1;
 }
 
 // -----------------------------------------------------------------------------------------
@@ -4244,89 +3592,49 @@ BOOL scrDominatingAlliance(void)
 	return true;
 }
 
-
-BOOL scrMyResponsibility(void)
+/// Is the ai responsible for this player?
+static int scrMyResponsibility(lua_State *L)
 {
-	SDWORD player;
+	int player = luaWZ_checkplayer(L, 1);
 
-	if (!stackPopParams(1, VAL_INT, &player))
-	{
-		return false;
-	}
-
-	if(	myResponsibility(player) )
-	{
-		scrFunctionResult.v.bval = true;
-		if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
-		{
-			return false;
-		}
-	}
-	else
-	{
-		scrFunctionResult.v.bval = false;
-		if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
-		{
-			return false;
-		}
-	}
-
-
-	return true;
+	lua_pushboolean(L, myResponsibility(player));
+	return 1;
 }
 
 // -----------------------------------------------------------------------------------------
-/*checks to see if a structure of the type specified exists within the
-specified range of an XY location */
-BOOL scrStructureBuiltInRange(void)
+// checks to see if a structure of the type specified exists within the specified range of an XY location
+static int scrStructureBuiltInRange(lua_State *L)
 {
-	SDWORD		player, index, x, y, range;
-	SDWORD		rangeSquared;
-	STRUCTURE	*psCurr;
-	BOOL		found;
-	SDWORD		xdiff, ydiff;
+	int rangeSquared;
+	STRUCTURE *psCurr;
+	int xdiff, ydiff;
 	STRUCTURE_STATS *psTarget;
-
-	if (!stackPopParams(5, ST_STRUCTURESTAT, &index, VAL_INT, &x, VAL_INT, &y,
-		VAL_INT, &range, VAL_INT, &player))
-	{
-		return false;
-	}
-
-	if (player >= MAX_PLAYERS)
-	{
-		ASSERT( false, "scrStructureBuiltInRange:player number is too high" );
-		return false;
-	}
+	
+	int index = luaWZObj_checkstructurestat(L, 1);
+	int x = luaL_checkint(L, 2);
+	int y = luaL_checkint(L, 3);
+	int range = luaL_checkint(L, 4);
+	int player = luaWZ_checkplayer(L, 5);
 
 	if (x < 0
 	 || map_coord(x) > (SDWORD)mapWidth)
 	{
-		ASSERT( false, "scrStructureBuiltInRange : invalid X coord" );
-		return false;
+		luaL_error(L, "The X coordinate is off map");
 	}
 	if (y < 0
 	 || map_coord(y) > (SDWORD)mapHeight)
 	{
-		ASSERT( false,"scrStructureBuiltInRange : invalid Y coord" );
-		return false;
-	}
-	if (index < (SDWORD)0 || index > (SDWORD)numStructureStats)
-	{
-		ASSERT( false, "scrStructureBuiltInRange : Invalid structure stat" );
-		return false;
+		luaL_error(L, "The Y coordinate is off map");
 	}
 	if (range < (SDWORD)0)
 	{
-		ASSERT( false, "scrStructureBuiltInRange : Rnage is less than zero" );
-		return false;
+		luaL_error(L, "Negative range");
 	}
 
 	//now look through the players list of structures to see if this type
 	//exists within range
 	psTarget = &asStructureStats[index];
 	rangeSquared = range * range;
-	found = false;
 	for(psCurr = apsStructLists[player]; psCurr; psCurr = psCurr->psNext)
 	{
 		xdiff = (SDWORD)psCurr->pos.x - x;
@@ -4338,25 +3646,14 @@ BOOL scrStructureBuiltInRange(void)
 			{
 				if (psCurr->status == SS_BUILT)
 				{
-					found = true;
-					break;
+					luaWZObj_pushstructure(L, psCurr);
+					return 1;
 				}
 			}
 		}
 	}
-	//make sure pass NULL back if not got one
-	if (!found)
-	{
-		psCurr = NULL;
-	}
-
-	scrFunctionResult.v.oval = psCurr;
-	if (!stackPushResult((INTERP_TYPE)ST_STRUCTURE, &scrFunctionResult))
-	{
-		return false;
-	}
-
-	return true;
+	lua_pushnil(L);
+	return 1;
 }
 
 
@@ -4404,72 +3701,53 @@ BOOL scrRandomiseSeed(void)
 
 // -----------------------------------------------------------------------------------------
 //explicitly enables a research topic
-BOOL scrEnableResearch(void)
+static int scrEnableResearch(lua_State *L)
 {
-	SDWORD		player;
 	RESEARCH	*psResearch;
-
-	if (!stackPopParams(2, ST_RESEARCH, &psResearch, VAL_INT, &player))
+	
+	const char *researchName = luaL_checkstring(L, 1);
+	int player = luaWZ_checkplayer(L, 2);
+	
+	psResearch = getResearch(researchName, false);
+	if (!psResearch)
 	{
-		return false;
+		luaL_error(L, "could not find research");
 	}
 
-	if (player >= MAX_PLAYERS)
-	{
-		ASSERT( false, "scrEnableResearch:player number is too high" );
-		return false;
-	}
-
-	if (!enableResearch(psResearch, player))
-	{
-		return false;
-	}
-	return true;
+	enableResearch(psResearch, player);
+	
+	return 0;
 }
 
 // -----------------------------------------------------------------------------------------
 //acts as if the research topic was completed - used to jump into the tree
-BOOL scrCompleteResearch(void)
+static int scrCompleteResearch(lua_State *L)
 {
-	SDWORD		player;
-	RESEARCH	*psResearch;
-	UDWORD		researchIndex;
-
-	if (!stackPopParams(2, ST_RESEARCH, &psResearch, VAL_INT, &player))
-	{
-		return false;
-	}
-
-	if (player >= MAX_PLAYERS)
-	{
-		ASSERT( false, "scrCompleteResearch:player number is too high" );
-		return false;
-	}
-
+	unsigned int researchIndex;
+	
+	const char *researchName = luaL_checkstring(L, 1);
+	RESEARCH *psResearch = getResearch(researchName, false);
+	int player = luaWZ_checkplayer(L, 2);
 
 	if(psResearch == NULL)
 	{
-		ASSERT( false, "scrCompleteResearch: no such research topic" );
-		return false;
+		luaL_error(L, "scrCompleteResearch: no such research topic" );
 	}
 
 	researchIndex = psResearch - asResearch;	//TODO: fix if needed
 	if (researchIndex > numResearch)
 	{
-		ASSERT( false, "scrCompleteResearch: invalid research index" );
-		return false;
+		luaL_error(L, "scrCompleteResearch: invalid research index" );
 	}
 
 	researchResult(researchIndex, (UBYTE)player, false, NULL);
-
 
 	if(bMultiPlayer && (gameTime > 2 ))
 	{
 		SendResearch((UBYTE)player,researchIndex );
 	}
 
-
-	return true;
+	return 0;
 }
 
 // -----------------------------------------------------------------------------------------
@@ -4527,24 +3805,15 @@ BOOL scrFlashOff(void)
 
 // -----------------------------------------------------------------------------------------
 //set the initial power level settings for a player
-BOOL scrSetPowerLevel(void)
+static int scrSetPowerLevel(lua_State *L)
 {
-	SDWORD		player, power;
-
-	if (!stackPopParams(2, VAL_INT, &power, VAL_INT, &player))
-	{
-		return false;
-	}
-
-	if (player >= MAX_PLAYERS)
-	{
-		ASSERT( false, "scrSetPowerLevel:player number is too high" );
-		return false;
-	}
+	int player, power;
+	power = luaL_checkint(L, 1);
+	player = luaWZ_checkplayer(L, 2);
 
 	setPlayerPower(power, player);
 
-	return true;
+	return 0;
 }
 
 // -----------------------------------------------------------------------------------------
@@ -4558,7 +3827,7 @@ BOOL scrAddPower(void)
 		return false;
 	}
 
-	if (player >= MAX_PLAYERS)
+	if (player < 0 || player >= MAX_PLAYERS)
 	{
 		ASSERT( false, "scrAddPower:player number is too high" );
 		return false;
@@ -4663,8 +3932,8 @@ BOOL scrSetLimboLanding(void)
 
 	setNoGoArea((UBYTE)x1, (UBYTE)y1, (UBYTE)x2, (UBYTE)y2, LIMBO_LANDING);
 
-    //this calls the Droids from the Limbo list onto the map
-    placeLimboDroids();
+	//this calls the Droids from the Limbo list onto the map
+	placeLimboDroids();
 
 	return true;
 }
@@ -4680,115 +3949,96 @@ BOOL scrInitAllNoGoAreas(void)
 
 // -----------------------------------------------------------------------------------------
 //set a no go area for the map - landing zones for the enemy, or player 0
-BOOL scrSetNoGoArea(void)
+int scrSetNoGoArea(lua_State *L)
 {
-	SDWORD		x1, x2, y1, y2, area;
+	int x1 = luaL_checkint(L, 1);
+	int y1 = luaL_checkint(L, 2);
+	int x2 = luaL_checkint(L, 3);
+	int y2 = luaL_checkint(L, 4);
+	int area = luaL_checkint(L, 5);
 
-	if (!stackPopParams(5, VAL_INT, &x1, VAL_INT, &y1, VAL_INT, &x2, VAL_INT, &y2,
-		VAL_INT, &area))
+	if (area == LIMBO_LANDING)
 	{
-		return false;
+		luaL_error(L, "Cannot set the Limbo Landing area with this function" );
 	}
-
-    if (area == LIMBO_LANDING)
-    {
-        ASSERT( false, "scrSetNoGoArea: Cannot set the Limbo Landing area with this function" );
-        return false;
-    }
 
 	//check the values - check against max possible since can set in one mission for the next
 	//if (x1 > (SDWORD)mapWidth)
 	if (x1 > (SDWORD)MAP_MAXWIDTH)
 	{
-		ASSERT( false, "scrSetNoGoArea: x1 is greater than max mapWidth" );
-		return false;
+		luaL_error(L, "x1 is greater than max mapWidth" );
 	}
 	//if (x2 > (SDWORD)mapWidth)
 	if (x2 > (SDWORD)MAP_MAXWIDTH)
 	{
-		ASSERT( false, "scrSetNoGoArea: x2 is greater than max mapWidth" );
-		return false;
+		luaL_error(L, "x2 is greater than max mapWidth" );
 	}
 	//if (y1 > (SDWORD)mapHeight)
 	if (y1 > (SDWORD)MAP_MAXHEIGHT)
 	{
-		ASSERT( false, "scrSetNoGoArea: y1 is greater than max mapHeight" );
-		return false;
+		luaL_error(L, "y1 is greater than max mapHeight" );
 	}
 	//if (y2 > (SDWORD)mapHeight)
 	if (y2 > (SDWORD)MAP_MAXHEIGHT)
 	{
-		ASSERT( false, "scrSetNoGoArea: y2 is greater than max mapHeight" );
+		luaL_error(L, "y2 is greater than max mapHeight" );
 		return false;
 	}
 	//check won't overflow!
 	if (x1 > UBYTE_MAX || y1 > UBYTE_MAX || x2 > UBYTE_MAX || y2 > UBYTE_MAX)
 	{
-		ASSERT( false, "scrSetNoGoArea: one coord is greater than %d", UBYTE_MAX );
-		return false;
+		luaL_error(L, "one coord is greater than %d", UBYTE_MAX );
 	}
 
 	if (area >= MAX_NOGO_AREAS)
 	{
-		ASSERT( false, "scrSetNoGoArea: max num of areas is %d", MAX_NOGO_AREAS );
-		return false;
+		luaL_error(L, "max num of areas is %d", MAX_NOGO_AREAS );
 	}
 
 	setNoGoArea((UBYTE)x1, (UBYTE)y1, (UBYTE)x2, (UBYTE)y2, (UBYTE)area);
 
-	return true;
+	return 0;
 }
 
 
 // -----------------------------------------------------------------------------------------
-// set the zoom level for the radar
-// What is the script doing setting radar zoom? Commenting out for now. - Per
-BOOL scrSetRadarZoom(void)
+/// set the zoom level for the radar
+/// What is the script doing setting radar zoom? Commenting out for now. - Per
+static int scrSetRadarZoom(lua_State *L)
 {
-	SDWORD	level;
+	int level = luaL_checkint(L,1);
 
-	if (!stackPopParams(1, VAL_INT, &level))
-	{
-		return true;
-	}
 #if 0
 	if (level < 0 || level > 2)
 	{
-		ASSERT( false, "scrSetRadarZoom: zoom level out of range" );
-		return false;
+		luaL_error(L, "scrSetRadarZoom: zoom level out of range" );
 	}
 
 	SetRadarZoom((UWORD)level);
 #endif
-	return true;
+	return 0;
 }
 
 // -----------------------------------------------------------------------------------------
 //set how long an offworld mission can last -1 = no limit
-BOOL scrSetMissionTime(void)
+static int scrSetMissionTime(lua_State *L)
 {
-	SDWORD		time;
-
-	if (!stackPopParams(1, VAL_INT, &time))
-	{
-		return false;
-	}
-
-	time *= 100;
+	double dtime = luaL_checknumber(L, 1);
+	int time = dtime*1000;
 
 	//check not more than one hour - the mission timers cannot cope at present! - (visually)
 	//if (time > 60*60*GAME_TICKS_PER_SEC)
 	//check not more than 99 mins - the mission timers cannot cope at present! - (visually)
-    //we're allowing up to 5 hours now!
-    if (time > 5*60*60*GAME_TICKS_PER_SEC)
+	//we're allowing up to 5 hours now!
+	if (time > 5*60*60*GAME_TICKS_PER_SEC)
 	{
 		ASSERT( false,"The mission timer cannot be set to more than 99!" );
 		time = -1;
 	}
 	//store the value
 	mission.time = time;
-		// ffs ab    ... but shouldn't this be on the psx ?
-    setMissionCountDown();
+		// ffs ab	... but shouldn't this be on the psx ?
+	setMissionCountDown();
 
 
 	//add the timer to the interface
@@ -4797,32 +4047,32 @@ BOOL scrSetMissionTime(void)
 		mission.startTime = gameTime;
 		addMissionTimerInterface();
 	}
-    else
-    {
-        //make sure its not up if setting to -1
-        intRemoveMissionTimer();
-        //make sure the cheat time is not set
-        mission.cheatTime = 0;
-    }
+	else
+	{
+		//make sure its not up if setting to -1
+		intRemoveMissionTimer();
+		//make sure the cheat time is not set
+		mission.cheatTime = 0;
+	}
 
-	return true;
+	return 0;
 }
 
 // this returns how long is left for the current mission time is 1/100th sec - same units as passed in
 BOOL scrMissionTimeRemaining(void)
 {
-    SDWORD      timeRemaining;
+	SDWORD	  timeRemaining;
 
 	timeRemaining = mission.time - (gameTime - mission.startTime);
 
-    if (timeRemaining < 0)
-    {
-        timeRemaining = 0;
-    }
-    else
-    {
-        timeRemaining /= 100;
-    }
+	if (timeRemaining < 0)
+	{
+		timeRemaining = 0;
+	}
+	else
+	{
+		timeRemaining /= 100;
+	}
 
 	scrFunctionResult.v.ival = timeRemaining;
 	if(!stackPushResult(VAL_INT, &scrFunctionResult))
@@ -4833,18 +4083,13 @@ BOOL scrMissionTimeRemaining(void)
 }
 
 // -----------------------------------------------------------------------------------------
-//set the time delay for reinforcements for an offworld mission
-BOOL scrSetReinforcementTime(void)
+/// set the time delay for reinforcements for an offworld mission
+static int scrSetReinforcementTime(lua_State *L)
 {
-	SDWORD		time;
-    DROID       *psDroid;
+	DROID	   *psDroid;
 
-	if (!stackPopParams(1, VAL_INT, &time))
-	{
-		return false;
-	}
-
-    time *= 100;
+	double dtime = luaL_checknumber(L, 1);
+	int time = dtime*1000;
 
 	//check not more than one hour - the mission timers cannot cope at present!
 	if (time != LZ_COMPROMISED_TIME && time > 60*60*GAME_TICKS_PER_SEC)
@@ -4853,8 +4098,8 @@ BOOL scrSetReinforcementTime(void)
 		time = -1;
 	}
 
-    //not interseted in this check any more -  AB 28/01/99
-    //quick check of the value - don't check if time has not been set
+	//not interseted in this check any more -  AB 28/01/99
+	//quick check of the value - don't check if time has not been set
 	/*if (mission.time > 0 && time != LZ_COMPROMISED_TIME && time > mission.time)
 	{
 		DBMB(("scrSetReinforcementTime: reinforcement time greater than mission time!"));
@@ -4864,37 +4109,37 @@ BOOL scrSetReinforcementTime(void)
 
 	//if offworld or campaign change mission, then add the timer
 	//if (mission.type == LDS_MKEEP || mission.type == LDS_MCLEAR ||
-    //    mission.type == LDS_CAMCHANGE)
-    if (missionCanReEnforce())
+	//	mission.type == LDS_CAMCHANGE)
+	if (missionCanReEnforce())
 	{
 		addTransporterTimerInterface();
 	}
 
-    //make sure the timer is not there if the reinforcement time has been set to < 0
-    if (time < 0)
-    {
+	//make sure the timer is not there if the reinforcement time has been set to < 0
+	if (time < 0)
+	{
 
-        intRemoveTransporterTimer();
+		intRemoveTransporterTimer();
 
-        /*only remove the launch if haven't got a transporter droid since the
-        scripts set the time to -1 at the between stage if there are not going
-        to be reinforcements on the submap  */
-        for (psDroid = apsDroidLists[selectedPlayer]; psDroid != NULL; psDroid =
-            psDroid->psNext)
-        {
-            if (psDroid->droidType == DROID_TRANSPORTER)
-            {
-                break;
-            }
-        }
-        //if not found a transporter, can remove the launch button
-        if (psDroid ==  NULL)
-        {
-            intRemoveTransporterLaunch();
-        }
-    }
+		/*only remove the launch if haven't got a transporter droid since the
+		scripts set the time to -1 at the between stage if there are not going
+		to be reinforcements on the submap  */
+		for (psDroid = apsDroidLists[selectedPlayer]; psDroid != NULL; psDroid =
+			psDroid->psNext)
+		{
+			if (psDroid->droidType == DROID_TRANSPORTER)
+			{
+				break;
+			}
+		}
+		//if not found a transporter, can remove the launch button
+		if (psDroid ==  NULL)
+		{
+			intRemoveTransporterLaunch();
+		}
+	}
 
-	return true;
+	return 0;
 }
 
 // -----------------------------------------------------------------------------------------
@@ -4910,7 +4155,7 @@ BOOL scrSetAllStructureLimits(void)
 		return false;
 	}
 
-	if (player >= MAX_PLAYERS)
+	if (player < 0 || player >= MAX_PLAYERS)
 	{
 		ASSERT( false, "scrSetStructureLimits:player number is too high" );
 		return false;
@@ -5000,28 +4245,21 @@ BOOL		retVal;
 }
 
 // -----------------------------------------------------------------------------------------
-// Destroys all structures within a certain bounding area.
-BOOL	scrDestroyStructuresInArea( void )
+/// Destroys all structures within a certain bounding area.
+static int scrKillStructsInArea(lua_State *L)
 {
-SDWORD		x1,y1,x2,y2;
-UDWORD		typeRef;
-UDWORD		player;
-STRUCTURE	*psStructure,*psNextS;
-FEATURE		*psFeature,*psNextF;
-BOOL		bVisible,bTakeFeatures;
-SDWORD		sX,sY;
-
-	if(!stackPopParams(8, VAL_INT, &player, VAL_INT, &typeRef, VAL_INT, &x1, VAL_INT, &y1, VAL_INT, &x2,
-						VAL_INT, &y2, VAL_BOOL, &bVisible, VAL_BOOL, &bTakeFeatures))
-	{
-		ASSERT( false,"SCRIPT : scrDestroyStructuresInArea - Cannot get parameters" );
-		return(false);
-	}
-
-	if(player>=MAX_PLAYERS)
-	{
-		ASSERT( false,"Player number too high in scrDestroyStructuresInArea" );
-	}
+	STRUCTURE	*psStructure,*psNextS;
+	FEATURE		*psFeature,*psNextF;
+	SDWORD		sX,sY;
+	
+	int player = luaWZ_checkplayer(L, 1);
+	unsigned int typeRef = luaL_checkint(L, 2);
+	int x1 = luaL_checkint(L, 3);
+	int y1 = luaL_checkint(L, 4);
+	int x2 = luaL_checkint(L, 5);
+	int y2 = luaL_checkint(L, 6);
+	BOOL bVisible = luaL_checkboolean(L, 7);
+	BOOL bTakeFeatures = luaL_checkboolean(L, 8);
 
 	for(psStructure = apsStructLists[player]; psStructure; psStructure = psNextS)
 	{
@@ -5076,7 +4314,7 @@ SDWORD		sX,sY;
 			}
 		}
 	}
-	return(true);
+	return 0;
 }
 // -----------------------------------------------------------------------------------------
 // Returns a value representing the threat from droids in a given area
@@ -5290,7 +4528,7 @@ BOOL	bFound;
 		return(false);
 	}
 
-	if(player>=MAX_PLAYERS)
+	if (player < 0 || player >= MAX_PLAYERS)
 	{
 		ASSERT( false,"SCRIPT : Player number too high in scrTestStructureModule" );
 		return(false);
@@ -5409,7 +4647,7 @@ UDWORD	count=0;
 		return(false);
 	}
 
-	if(player>=MAX_PLAYERS)
+	if (player < 0 || player >= MAX_PLAYERS)
 	{
 		ASSERT( false,"Invalid player number in scrKillDroidsInArea" );
 	}
@@ -5529,7 +4767,7 @@ BOOL scrAddTemplate(void)
 		return false;
 	}
 
-	if (player >= MAX_PLAYERS)
+	if (player < 0 || player >= MAX_PLAYERS)
 	{
 		ASSERT( false, "scrAddTemplate:player number is too high" );
 		return false;
@@ -5632,13 +4870,13 @@ static BOOL pickStructLocation(int index, int *pX, int *pY, int player, int maxB
 	UDWORD			startX, startY, incX, incY;
 	SDWORD			x=0, y=0;
 
-	if (player >= MAX_PLAYERS)
+	if (player < 0 || player >= MAX_PLAYERS)
 	{
 		ASSERT( false, "pickStructLocation:player number is too high" );
 		return false;
 	}
 
-    // check for wacky coords.
+	// check for wacky coords.
 	if(		*pX < 0
 		||	*pX > world_coord(mapWidth)
 		||	*pY < 0
@@ -5742,36 +4980,38 @@ failedstructloc:
 	return true;
 }
 
-// pick a structure location(only used in skirmish game at 27Aug) ajl.
-BOOL scrPickStructLocation(void)
+/// pick a structure location(only used in skirmish game at 27Aug) ajl.
+static int scrPickStructLocation(lua_State *L)
 {
-	SDWORD			*pX,*pY;
-	SDWORD			index;
-	UDWORD			player;
-
-	if (!stackPopParams(4, ST_STRUCTURESTAT, &index, VAL_REF|VAL_INT, &pX ,
-        VAL_REF|VAL_INT, &pY, VAL_INT, &player))
-	{
-		return false;
-	}
-	return pickStructLocation(index, pX, pY, player, MAX_BLOCKING_TILES);
+	int index = luaWZObj_checkstructurestat(L, 1);
+	int x = luaL_checkinteger(L, 2);
+	int y = luaL_checkinteger(L, 3);
+	int player = luaWZ_checkplayer(L, 4);
+	
+	BOOL success = pickStructLocation(index, &x, &y, player, MAX_BLOCKING_TILES);
+	
+	lua_pushboolean(L, success);
+	lua_pushinteger(L, x);
+	lua_pushinteger(L, y);
+	return 3;
 }
 
-// pick a structure location(only used in skirmish game at 27Aug) ajl.
-// Max number of blocking tiles is passed as parameter for this one
-BOOL scrPickStructLocationB(void)
+/// pick a structure location(only used in skirmish game at 27Aug) ajl.
+/// Max number of blocking tiles is passed as parameter for this one
+static int scrPickStructLocationB(lua_State *L) // FIXME, duplicated code
 {
-	SDWORD			*pX,*pY;
-	SDWORD			index;
-	UDWORD			player;
-	SDWORD			maxBlockingTiles;
+	int index = luaWZObj_checkstructurestat(L, 1);
+	int x = luaL_checkinteger(L, 2);
+	int y = luaL_checkinteger(L, 3);
+	int player = luaWZ_checkplayer(L, 4);
+	int maxBlockingTiles = luaL_checkinteger(L, 5);
 
-	if (!stackPopParams(5, ST_STRUCTURESTAT, &index, VAL_REF|VAL_INT, &pX ,
-        VAL_REF|VAL_INT, &pY, VAL_INT, &player, VAL_INT, &maxBlockingTiles))
-	{
-		return false;
-	}
-	return pickStructLocation(index, pX, pY, player, maxBlockingTiles);
+	BOOL success = pickStructLocation(index, &x, &y, player, maxBlockingTiles);
+	
+	lua_pushboolean(L, success);
+	lua_pushinteger(L, x);
+	lua_pushinteger(L, y);
+	return 3;
 }
 
 // -----------------------------------------------------------------------------------------
@@ -5819,8 +5059,8 @@ BOOL scrFlyTransporterIn(void)
  *  PARAMETERS: The parameter passed must be one of the STATUS_ variable
  *
  *  DESCRIPTION: Returns various BOOL options in the game	e.g. If the reticule is open
- *      - You should use the externed variable intMode for other game mode options
- *        e.g. in the intelligence screen or desgin screen)
+ *	  - You should use the externed variable intMode for other game mode options
+ *		e.g. in the intelligence screen or desgin screen)
  *
  *  RETURNS:
  *
@@ -5888,7 +5128,7 @@ BOOL scrGetPlayerColour(void)
 		return false;
 	}
 
-	if (player >= MAX_PLAYERS)
+	if (player < 0 || player >= MAX_PLAYERS)
 	{
 		ASSERT( false, "scrGetPlayerColour: player number is too high" );
 		return false;
@@ -5913,7 +5153,7 @@ BOOL scrGetPlayerColourName(void)
 		return false;
 	}
 
-	if (player >= MAX_PLAYERS || player < 0)
+	if (player < 0 || player >= MAX_PLAYERS)
 	{
 		ASSERT( false, "scrGetPlayerColourName: wrong player index" );
 		return false;
@@ -5939,103 +5179,89 @@ BOOL scrSetPlayerColour(void)
 		return false;
 	}
 
-	if (player >= MAX_PLAYERS)
+	if (player < 0 || player >= MAX_PLAYERS)
 	{
 		ASSERT( false, "scrSetPlayerColour:player number is too high" );
 		return false;
 	}
 
-	if (colour >= MAX_PLAYERS)
+	if (player < 0 || player >= MAX_PLAYERS)
 	{
 		ASSERT( false, "scrSetPlayerColour:colour number is too high" );
 		return false;
 	}
 
-    //not the end of the world if this doesn't work so don't check the return code
-    (void)setPlayerColour(player, colour);
+	//not the end of the world if this doesn't work so don't check the return code
+	(void)setPlayerColour(player, colour);
 
 	return true;
 }
 
-//set all droids in an area to belong to a different player - returns the number of droids changed
-BOOL scrTakeOverDroidsInArea(void)
+/// set all droids in an area to belong to a different player - returns the number of droids changed
+static int scrTakeOverDroidsInArea(lua_State *L)
 {
-	SDWORD		fromPlayer, toPlayer, x1, x2, y1, y2, numChanged;
-    DROID       *psDroid, *psNext;
-
-	if (!stackPopParams(6, VAL_INT, &fromPlayer, VAL_INT, &toPlayer,
-        VAL_INT, &x1, VAL_INT, &y1, VAL_INT, &x2, VAL_INT, &y2))
-	{
-		return false;
-	}
-
-	if (fromPlayer >= MAX_PLAYERS || toPlayer >= MAX_PLAYERS)
-	{
-		ASSERT( false, "scrTakeOverUnitsInArea:player number is too high" );
-		return false;
-	}
+	int numChanged;
+	DROID *psDroid, *psNext;
+	
+	int fromPlayer = luaWZ_checkplayer(L, 1);
+	int toPlayer = luaWZ_checkplayer(L, 2);
+	int x1 = luaL_checkint(L, 3);
+	int y1 = luaL_checkint(L, 4);
+	int x2 = luaL_checkint(L, 5);
+	int y2 = luaL_checkint(L, 6);
 
 	if (x1 > world_coord(MAP_MAXWIDTH))
 	{
-		ASSERT( false, "scrTakeOverUnitsInArea: x1 is greater than max mapWidth" );
-		return false;
+		luaL_error(L, "scrTakeOverUnitsInArea: x1 is greater than max mapWidth" );
 	}
 
-    if (x2 > world_coord(MAP_MAXWIDTH))
+	if (x2 > world_coord(MAP_MAXWIDTH))
 	{
-		ASSERT( false, "scrTakeOverUnitsInArea: x2 is greater than max mapWidth" );
-		return false;
+		luaL_error(L, "scrTakeOverUnitsInArea: x2 is greater than max mapWidth" );
 	}
 
-    if (y1 > world_coord(MAP_MAXHEIGHT))
+	if (y1 > world_coord(MAP_MAXHEIGHT))
 	{
-		ASSERT( false, "scrTakeOverUnitsInArea: y1 is greater than max mapHeight" );
-		return false;
+		luaL_error(L, "scrTakeOverUnitsInArea: y1 is greater than max mapHeight" );
 	}
 
-    if (y2 > world_coord(MAP_MAXHEIGHT))
+	if (y2 > world_coord(MAP_MAXHEIGHT))
 	{
-		ASSERT( false, "scrTakeOverUnitsInArea: y2 is greater than max mapHeight" );
-		return false;
+		luaL_error(L, "scrTakeOverUnitsInArea: y2 is greater than max mapHeight" );
 	}
 
-    numChanged = 0;
-    for (psDroid = apsDroidLists[fromPlayer]; psDroid != NULL; psDroid = psNext)
-    {
-        psNext = psDroid->psNext;
-        //check if within area specified
-        if (psDroid->pos.x >= x1 && psDroid->pos.x <= x2 &&
-            psDroid->pos.y >= y1 && psDroid->pos.y <= y2)
-        {
-            //give the droid away
-            if (giftSingleDroid(psDroid, toPlayer))
-            {
-                numChanged++;
-            }
-        }
-    }
-
-	scrFunctionResult.v.ival = numChanged;
-	if (!stackPushResult(VAL_INT, &scrFunctionResult))
+	numChanged = 0;
+	for (psDroid = apsDroidLists[fromPlayer]; psDroid != NULL; psDroid = psNext)
 	{
-		return false;
+		psNext = psDroid->psNext;
+		//check if within area specified
+		if (psDroid->pos.x >= x1 && psDroid->pos.x <= x2 &&
+			psDroid->pos.y >= y1 && psDroid->pos.y <= y2)
+		{
+			//give the droid away
+			if (giftSingleDroid(psDroid, toPlayer))
+			{
+				numChanged++;
+			}
+		}
 	}
 
-    return true;
+	lua_pushinteger(L, numChanged);
+	return 1;
 }
 
 /*this takes over a single droid and passes a pointer back to the new one*/
 BOOL scrTakeOverSingleDroid(void)
 {
 	SDWORD			playerToGain;
-    DROID           *psDroidToTake, *psNewDroid;
+	DROID		   *psDroidToTake, *psNewDroid;
 
     if (!stackPopParams(2, ST_DROID, &psDroidToTake, VAL_INT, &playerToGain))
     {
 		return false;
     }
 
-	if (playerToGain >= MAX_PLAYERS)
+	if (psDroidToTake == NULL)
 	{
 		ASSERT( false, "scrTakeOverSingleUnit:player number is too high" );
 		return false;
@@ -6050,7 +5276,7 @@ BOOL scrTakeOverSingleDroid(void)
 	ASSERT( psDroidToTake != NULL,
 		"scrTakeOverSingleUnit: Invalid unit pointer" );
 
-    psNewDroid = giftSingleDroid(psDroidToTake, playerToGain);
+	psNewDroid = giftSingleDroid(psDroidToTake, playerToGain);
 
 	scrFunctionResult.v.oval = psNewDroid;
 	if (!stackPushResult((INTERP_TYPE)ST_DROID, &scrFunctionResult))
@@ -6065,10 +5291,10 @@ BOOL scrTakeOverSingleDroid(void)
 BOOL scrTakeOverDroidsInAreaExp(void)
 {
 	SDWORD		fromPlayer, toPlayer, x1, x2, y1, y2, numChanged, level, maxUnits;
-    DROID       *psDroid, *psNext;
+	DROID	   *psDroid, *psNext;
 
 	if (!stackPopParams(8, VAL_INT, &fromPlayer, VAL_INT, &toPlayer,
-        VAL_INT, &x1, VAL_INT, &y1, VAL_INT, &x2, VAL_INT, &y2, VAL_INT, &level, VAL_INT, &maxUnits))
+		VAL_INT, &x1, VAL_INT, &y1, VAL_INT, &x2, VAL_INT, &y2, VAL_INT, &level, VAL_INT, &maxUnits))
 	{
 		return false;
 	}
@@ -6085,50 +5311,50 @@ BOOL scrTakeOverDroidsInAreaExp(void)
 		return false;
 	}
 
-    if (x2 > world_coord(MAP_MAXWIDTH))
+	if (x2 > world_coord(MAP_MAXWIDTH))
 	{
 		ASSERT( false, "scrTakeOverUnitsInArea: x2 is greater than max mapWidth" );
 		return false;
 	}
 
-    if (y1 > world_coord(MAP_MAXHEIGHT))
+	if (y1 > world_coord(MAP_MAXHEIGHT))
 	{
 		ASSERT( false, "scrTakeOverUnitsInArea: y1 is greater than max mapHeight" );
 		return false;
 	}
 
-    if (y2 > world_coord(MAP_MAXHEIGHT))
+	if (y2 > world_coord(MAP_MAXHEIGHT))
 	{
 		ASSERT( false, "scrTakeOverUnitsInArea: y2 is greater than max mapHeight" );
 		return false;
 	}
 
-    numChanged = 0;
-    for (psDroid = apsDroidLists[fromPlayer]; psDroid != NULL; psDroid = psNext)
-    {
-        psNext = psDroid->psNext;
-        //check if within area specified
-        if ((psDroid->droidType != DROID_CONSTRUCT) &&
+	numChanged = 0;
+	for (psDroid = apsDroidLists[fromPlayer]; psDroid != NULL; psDroid = psNext)
+	{
+		psNext = psDroid->psNext;
+		//check if within area specified
+		if ((psDroid->droidType != DROID_CONSTRUCT) &&
 			(psDroid->droidType != DROID_REPAIR) &&
-            (psDroid->droidType != DROID_CYBORG_CONSTRUCT) &&
-            (psDroid->droidType != DROID_CYBORG_REPAIR) &&
+			(psDroid->droidType != DROID_CYBORG_CONSTRUCT) &&
+			(psDroid->droidType != DROID_CYBORG_REPAIR) &&
 //			((SDWORD)getDroidLevel(psDroid) <= level) &&
 			((SDWORD)psDroid->experience <= level) &&
 			psDroid->pos.x >= x1 && psDroid->pos.x <= x2 &&
-            psDroid->pos.y >= y1 && psDroid->pos.y <= y2)
-        {
-            //give the droid away
-            if (giftSingleDroid(psDroid, toPlayer))
-            {
-                numChanged++;
-            }
-        }
+			psDroid->pos.y >= y1 && psDroid->pos.y <= y2)
+		{
+			//give the droid away
+			if (giftSingleDroid(psDroid, toPlayer))
+			{
+				numChanged++;
+			}
+		}
 
 		if (numChanged >= maxUnits)
 		{
 			break;
 		}
-    }
+	}
 
 	scrFunctionResult.v.ival = numChanged;
 	if (!stackPushResult(VAL_INT, &scrFunctionResult))
@@ -6143,15 +5369,15 @@ BOOL scrTakeOverDroidsInAreaExp(void)
 BOOL scrTakeOverSingleStructure(void)
 {
 	SDWORD			playerToGain;
-    STRUCTURE       *psStructToTake, *psNewStruct;
-    UDWORD          structureInc;
+	STRUCTURE	   *psStructToTake, *psNewStruct;
+	UDWORD		  structureInc;
 
     if (!stackPopParams(2, ST_STRUCTURE, &psStructToTake, VAL_INT, &playerToGain))
     {
 		return false;
     }
 
-	if (playerToGain >= MAX_PLAYERS)
+	if (psStructToTake == NULL)
 	{
 		ASSERT( false, "scrTakeOverSingleStructure:player number is too high" );
 		return false;
@@ -6166,10 +5392,10 @@ BOOL scrTakeOverSingleStructure(void)
 	ASSERT( psStructToTake != NULL,
 		"scrTakeOverSingleStructure: Invalid structure pointer" );
 
-    structureInc = psStructToTake->pStructureType->ref - REF_STRUCTURE_START;
-    if (playerToGain == (SDWORD)selectedPlayer && StructIsFactory(psStructToTake) &&
-        asStructLimits[playerToGain][structureInc].currentQuantity >= MAX_FACTORY)
-    {
+	structureInc = psStructToTake->pStructureType->ref - REF_STRUCTURE_START;
+	if (playerToGain == (SDWORD)selectedPlayer && StructIsFactory(psStructToTake) &&
+		asStructLimits[playerToGain][structureInc].currentQuantity >= MAX_FACTORY)
+	{
 		debug( LOG_NEVER, "scrTakeOverSingleStructure - factory ignored for selectedPlayer\n" );
         psNewStruct = NULL;
     }
@@ -6305,7 +5531,7 @@ BOOL scrSetDroidsToSafetyFlag(void)
 		return false;
 	}
 
-    setDroidsToSafetyFlag(bState);
+	setDroidsToSafetyFlag(bState);
 
 	return true;
 }
@@ -6321,35 +5547,19 @@ BOOL scrSetPlayCountDown(void)
 	}
 
 
-    setPlayCountDown((UBYTE)bState);
+	setPlayCountDown((UBYTE)bState);
 
 
 	return true;
 }
 
-//get the number of droids currently onthe map for a player
-BOOL scrGetDroidCount(void)
+/// get the number of droids currently onthe map for a player
+static int scrGetDroidCount(lua_State *L)
 {
-	SDWORD		player;
+	int player = luaWZ_checkplayer(L, 1);
 
-	if (!stackPopParams(1, VAL_INT, &player))
-	{
-		return false;
-	}
-
-	if (player >= MAX_PLAYERS)
-	{
-		ASSERT( false, "scrGetUnitCount:player number is too high" );
-		return false;
-	}
-
-	scrFunctionResult.v.ival = getNumDroids(player);
-	if (!stackPushResult(VAL_INT, &scrFunctionResult))
-	{
-		return false;
-	}
-
-	return true;
+	lua_pushinteger(L, getNumDroids(player));
+	return 1;
 }
 
 
@@ -6526,35 +5736,19 @@ BOOL scrResetLimboMission(void)
         return false;
     }
 
-    //turn it into an expand mission
-    resetLimboMission();
+	//turn it into an expand mission
+	resetLimboMission();
 
     return true;
 }
 
-
-
-// skirmish only.
-BOOL scrIsVtol(void)
+/// is this a VTOL droid?
+static int scrIsVtol(lua_State *L)
 {
-	DROID *psDroid;
+	DROID *psDroid = (DROID*)luaWZObj_checkobject(L, 1, OBJ_DROID);
 
-	if (!stackPopParams(1, ST_DROID, &psDroid))
-	{
-		return true;
-	}
-
-	if(psDroid == NULL)
-	{
-		ASSERT( false,"scrIsVtol: null droid passed in." );
-	}
-
-	scrFunctionResult.v.bval = isVtolDroid(psDroid) ;
-	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
-	{
-		return false;
-	}
-	return true;
+	lua_pushboolean(L, isVtolDroid(psDroid));
+	return 1;
 }
 
 
@@ -6657,27 +5851,15 @@ BOOL scrConsole(void)
 
 BOOL scrDebug[MAX_PLAYERS];
 
-//turn on debug messages
-BOOL scrDbgMsgOn(void)
+/// turn on debug messages
+static int scrDbgMsgOn(lua_State *L)
 {
-	BOOL	bOn;
-	SDWORD	player;
-
-	if (!stackPopParams(2, VAL_INT, &player, VAL_BOOL, &bOn))
-	{
-		debug(LOG_ERROR, "scrDbgMsgOn(): stack failed");
-		return false;
-	}
-
-	if (player < 0 || player >= MAX_PLAYERS)
-	{
-		debug(LOG_ERROR, "scrDbgMsgOn(): wrong player number");
-		return false;
-	}
+	int player = luaWZ_checkplayer(L, 1);
+	BOOL bOn = luaL_checkboolean(L, 2);
 
 	scrDebug[player] = bOn;
 
-	return true;
+	return 0;
 }
 
 BOOL scrMsg(void)
@@ -6716,24 +5898,21 @@ BOOL scrMsg(void)
 	return true;
 }
 
-BOOL scrDbg(void)
+/// Print a debug message to the console
+static int scrDbg(lua_State *L)
 {
-	SDWORD	player;
-
-	if (!stackPopParams(2, VAL_STRING, &strParam1, VAL_INT, &player))
-	{
-		debug(LOG_ERROR, "scrDbg(): stack failed");
-		return false;
-	}
-
+	const char *message = luaL_checkstring(L, 1);
+	int player = luaWZ_checkplayer(L, 2);
+	
 	if(scrDebug[player])
 	{
 		char	sTmp[255];
-		sprintf(sTmp,"%d) %s",player,strParam1);
+		snprintf(sTmp, 255, "%d) %s", player, message);
 		addConsoleMessage(sTmp,DEFAULT_JUSTIFY, player);
+		debug(LOG_SCRIPT, "dbg: %s", sTmp);
 	}
 
-	return true;
+	return 0;
 }
 
 BOOL scrDebugFile(void)
@@ -6866,7 +6045,7 @@ BOOL scrNumTemplatesInProduction(void)
 {
 	SDWORD			player,numTemplates = 0;
 	DROID_TEMPLATE	*psTemplate;
-    STRUCTURE		*psStruct;
+	STRUCTURE		*psStruct;
 	STRUCTURE		*psList;
 	BASE_STATS		*psBaseStats;
 
@@ -7320,7 +6499,7 @@ BOOL scrFogTileInRange(void)
 		debug(LOG_ERROR, "scrFogTileInRange: failed to pop");
 		return false;}
 
-    //Check coords
+	//Check coords
 	if(		pwLookerX < 0
 		||	pwLookerX > world_coord(mapWidth)
 		||	pwLookerY < 0
@@ -7416,7 +6595,7 @@ BOOL scrMapRevealedInRange(void)
 		return false;
 	}
 
-    //Check coords
+	//Check coords
 	if (wRangeX < 0
 	 || wRangeX > world_coord(mapWidth)
 	 || wRangeY < 0
@@ -7475,7 +6654,7 @@ BOOL scrMapTileVisible(void)
 		return false;
 	}
 
-    //Check coords
+	//Check coords
 	if (tileX < 0
 	 || tileX > world_coord(mapWidth)
 	 || tileY < 0
@@ -8736,7 +7915,7 @@ BOOL scrChooseValidLoc(void)
 		return false;
 	}
 
-    //Check coords
+	//Check coords
 	if (sendX < 0
 	 || sendX > world_coord(mapWidth)
 	 || sendY < 0
@@ -8788,7 +7967,7 @@ BOOL scrGetClosestEnemy(void)
 		return false;
 	}
 
-    //Check coords
+	//Check coords
 	if (x < 0
 	 || x > world_coord(mapWidth)
 	 || y < 0
@@ -9168,7 +8347,7 @@ BOOL scrGetClosestEnemyDroidByType(void)
 		return false;
 	}
 
-    //Check coords
+	//Check coords
 	if (x < 0
 	 || x > world_coord(mapWidth)
 	 || y < 0
@@ -9256,7 +8435,7 @@ BOOL scrGetClosestEnemyStructByType(void)
 		return false;
 	}
 
-    //Check coords
+	//Check coords
 	if (x < 0
 	 || x > world_coord(mapWidth)
 	 || y < 0
@@ -10584,7 +9763,7 @@ BOOL scrPursueResearch(void)
 		//DbgMsg("Research already in progress, %d", index);
 	}
 	else if(IsResearchPossible(&pPlayerRes[index])
-	     || IsResearchCancelled(&pPlayerRes[index]))
+		 || IsResearchCancelled(&pPlayerRes[index]))
 	{
 		foundIndex = index;
 		found = true;
@@ -11376,6 +10555,52 @@ BOOL scrGetDroidLevel(void)
 	return true;
 }
 
+static int scrGetGameTime(lua_State *L)
+{
+	lua_pushnumber(L, (float)gameTime/1000.0f);
+	return 1;
+}
+
+static int scrGetStructureByID(lua_State *L)
+{
+	int id = luaL_checkint(L, 1);
+	STRUCTURE *structure;
+	
+	structure = (STRUCTURE*)getBaseObjFromId(id);
+	if (structure == NULL || structure->type != OBJ_STRUCTURE)
+	{
+		//luaL_error(L, "invalid structure ID");
+		// return nil for now
+		lua_pushnil(L);
+		return 1;
+	}
+	
+	
+	luaWZObj_pushstructure(L, structure);
+	return 1;	
+}
+
+static int scrDestroyed(lua_State *L)
+{
+	unsigned int id = luaWZObj_toid(L, 1);
+	if (id == 0)
+	{
+		luaL_error(L, "argument 1 should be an id or an object");
+	}
+	BASE_OBJECT *object = getBaseObjFromId(id);
+	if (!object)
+	{
+		lua_pushboolean(L, true);
+		//debug(LOG_WARNING, "scrDestroyed: could not find the id (%d)", id);
+	}
+	else
+	{
+		lua_pushboolean(L, object->died != 0);
+		//debug(LOG_WARNING, "scrDestroyed: the object has been destroyed? %d", object->died != 0);
+	}
+	return 1;
+}
+
 /*
  * Updates tile visibility for all map tiles for a given player,
  * to be used with scrCheckVisibleTile()
@@ -11830,4 +11055,84 @@ BOOL scrPgettext_noop()
 	scrFunctionResult.v.sval = gettext_noop(strParam1);
 
 	return stackPushResult(VAL_STRING, &scrFunctionResult);
+}
+
+/// Register all script functions with the Lua interpreter
+void registerScriptfuncs(lua_State *L)
+{
+	lua_register(L, "centreViewPos",               scrCentreViewPos); 
+	lua_register(L, "setRadarZoom",                scrSetRadarZoom);
+	lua_register(L, "setPowerLevel",               scrSetPowerLevel); 
+	lua_register(L, "enableStructure",             scrEnableStructure); 
+	lua_register(L, "setNoGoArea",                 scrSetNoGoArea);
+	lua_register(L, "getGameTime",                 scrGetGameTime);
+	lua_register(L, "seenStructInArea",            scrSeenStructInArea);
+	lua_register(L, "droidInArea",                 scrDroidInArea);
+	lua_register(L, "droidInRange",                scrDroidInRange);
+	lua_register(L, "numStructsButNotWallsInArea", scrNumStructsButNotWallsInArea);
+	lua_register(L, "objectInRange", scrObjectInRange);
+	lua_register(L, "structInRange", scrStructInRange);
+	lua_register(L, "playerPower", scrPlayerPower);
+	lua_register(L, "structInArea", scrStructInArea);
+	lua_register(L, "structButNoWallsInArea", scrStructButNoWallsInArea);
+	lua_register(L, "numObjectsInArea", scrNumObjectsInArea);
+	lua_register(L, "numDroidsInArea", scrNumDroidsInArea);
+	lua_register(L, "numStructsInArea", scrNumStructsInArea);
+	lua_register(L, "numStructsByTypeInArea", scrNumStructsByTypeInArea);
+	lua_register(L, "objectInArea", scrObjectInArea);
+	lua_register(L, "isStructureAvailable", scrIsStructureAvailable);
+	lua_register(L, "addReticuleButton", scrAddReticuleButton);
+	lua_register(L, "removeReticuleButton", scrRemoveReticuleButton);
+	lua_register(L, "addMessage", scrAddMessage);
+	lua_register(L, "removeMessage", scrRemoveMessage);
+	lua_register(L, "takeOverDroidsInArea", scrTakeOverDroidsInArea);
+	lua_register(L, "completeResearch", scrCompleteResearch);
+	lua_register(L, "addFeature", scrAddFeature);
+	lua_register(L, "destroyFeature", scrDestroyFeature);
+	lua_register(L, "enableResearch", scrEnableResearch);
+	lua_register(L, "anyStructButWallsLeft", scrAnyStructButWallsLeft);
+	lua_register(L, "makeComponentAvailable", scrMakeComponentAvailable);
+	lua_register(L, "killStructsInArea", scrKillStructsInArea);
+	lua_register(L, "setReinforcementTime", scrSetReinforcementTime);
+	lua_register(L, "setMissionTime", scrSetMissionTime);
+	lua_register(L, "setStructureLimits", scrSetStructureLimits);
+	lua_register(L, "anyDroidsLeft", scrAnyDroidsLeft);
+	lua_register(L, "gameOverMessage", scrGameOverMessage);
+	lua_register(L, "structureBeingBuilt", scrStructureBeingBuilt);
+	lua_register(L, "getStructureByID", scrGetStructureByID);
+	lua_register(L, "createAlliance", scrCreateAlliance);
+	lua_register(L, "setAssemblyPoint", scrSetAssemblyPoint);
+	lua_register(L, "structureIdle", scrStructureIdle);
+	lua_register(L, "destroyed", scrDestroyed);
+	lua_register(L, "startMission", scrStartMission);
+	lua_register(L, "droidHasSeen", scrDroidHasSeen);
+	lua_register(L, "addConsoleText", scrAddConsoleText);
+	lua_register(L, "tagConsoleText", scrTagConsoleText);
+	lua_register(L, "playSound", scrPlaySound);
+	lua_register(L, "playSoundPos", scrPlaySoundPos);
+	lua_register(L, "buildDroid", scrBuildDroid);
+	lua_register(L, "setGroupRetreatPoint", scrSetGroupRetreatPoint);
+	lua_register(L, "setGroupRetreatForce", scrSetGroupRetreatForce);
+	lua_register(L, "setGroupRetreatLeadership", scrSetGroupRetreatLeadership);
+	lua_register(L, "addDroid", scrAddDroid);
+	lua_register(L, "getStructure", scrGetStructure);
+	lua_register(L, "enumStruct", scrEnumStruct);
+	lua_register(L, "initEnumStruct", scrInitEnumStruct);
+	lua_register(L, "myResponsibility", scrMyResponsibility);
+	lua_register(L, "getDroidCount", scrGetDroidCount);
+	lua_register(L, "allianceExistsBetween", scrAllianceExistsBetween);
+	lua_register(L, "structureBuiltInRange", scrStructureBuiltInRange);
+	lua_register(L, "pickStructLocation", scrPickStructLocation);
+	lua_register(L, "pickStructLocationB", scrPickStructLocationB);
+	lua_register(L, "dbgMsgOn", scrDbgMsgOn);
+	lua_register(L, "dbg", scrDbg);
+	lua_register(L, "initGetFeature", scrInitGetFeature);
+	lua_register(L, "getFeature", scrGetFeature);
+	lua_register(L, "isVtol", scrIsVtol);
+	//lua_register(L, "", );
+	//lua_register(L, "", );
+	//lua_register(L, "", );
+	//lua_register(L, "", );
+
+
 }

@@ -66,155 +66,131 @@ void scrExternReset(void)
 	bExtraFailFlag = false;
 }
 
-
-// General function to get some basic game values
-BOOL scrGenExternGet(UDWORD index)
+int scrGetCVar(lua_State *L)
 {
-	INTERP_TYPE		type;
-	INTERP_VAL	scrFunctionResult;	//function return value to be pushed to stack
-
-	switch (index)
+	int id = luaL_checkinteger(L, 1);
+	switch (id)
 	{
-
-	case EXTID_TRACKTRANSPORTER:
-		type = VAL_BOOL;
-		scrFunctionResult.v.bval = bTrackTransporter;
-		break;
-	case EXTID_MAPWIDTH:
-		type = VAL_INT;
-		scrFunctionResult.v.ival = mapWidth;
-		break;
-	case EXTID_MAPHEIGHT:
-		type = VAL_INT;
-		scrFunctionResult.v.ival = mapHeight;
-		break;
-	case EXTID_GAMEINIT:
-		type = VAL_BOOL;
-		scrFunctionResult.v.bval = gameInitialised;
-		break;
-	case EXTID_SELECTEDPLAYER:
-		type = VAL_INT;
-		scrFunctionResult.v.ival = selectedPlayer;
-		break;
-	case EXTID_GAMELEVEL:
-		type = VAL_INT;
-		scrFunctionResult.v.ival = scrGameLevel;
-		break;
-	case EXTID_GAMETIME:
-		type = VAL_INT;
-		scrFunctionResult.v.ival = (SDWORD)(gameTime/SCR_TICKRATE);
-		break;
-	case EXTID_TUTORIAL:
-		type = VAL_BOOL;
-		scrFunctionResult.v.bval = bInTutorial;
-		break;
-	case EXTID_CURSOR:
-		type = VAL_INT;
-		scrFunctionResult.v.ival = 0; // FIXME Set to 0 since function returned undef value
-		break;
-	case EXTID_INTMODE:
-		type=VAL_INT;
-		scrFunctionResult.v.ival=intMode;
-		break;
-
-	case EXTID_TARGETTYPE:
-		type=VAL_INT;
-		scrFunctionResult.v.ival=getTargetType();
-		break;
-	case EXTID_EXTRAVICTORYFLAG:
-		type=VAL_BOOL;
-		scrFunctionResult.v.bval=bExtraVictoryFlag;
-		break;
-	case EXTID_EXTRAFAILFLAG:
-		type=VAL_BOOL;
-		scrFunctionResult.v.bval=bExtraFailFlag;
-		break;
-	case EXTID_MULTIGAMETYPE:		// multiplayer variable..
-		type = VAL_INT;
-		scrFunctionResult.v.ival = game.type;
-		break;
-	case EXTID_MULTIGAMEHUMANMAX:		// multiplayer variable..
-		type = VAL_INT;
-		scrFunctionResult.v.ival = game.maxPlayers;
-		break;
-	case EXTID_MULTIGAMEBASETYPE:
-		type = VAL_INT;
-		scrFunctionResult.v.ival	= game.base;
-		break;
-	case EXTID_MULTIGAMEALLIANCESTYPE:
-		type = VAL_INT;
-		scrFunctionResult.v.ival	= game.alliance;
-		break;
-
+		case EXTID_TRACKTRANSPORTER:
+			lua_pushboolean(L, bTrackTransporter);
+			break;
+		case EXTID_MAPWIDTH:
+			lua_pushinteger(L, mapWidth);
+			break;
+		case EXTID_MAPHEIGHT:
+			lua_pushinteger(L, mapHeight);
+			break;
+		case EXTID_GAMEINIT:
+			lua_pushboolean(L, gameInitialised);
+			break;
+		case EXTID_SELECTEDPLAYER:
+			lua_pushinteger(L, selectedPlayer);
+			break;
+		case EXTID_GAMETIME:
+			lua_pushinteger(L, (SDWORD)(gameTime/SCR_TICKRATE));
+			break;
+		case EXTID_GAMELEVEL:
+			lua_pushinteger(L, scrGameLevel);
+			break;
+		case EXTID_TUTORIAL:
+			lua_pushboolean(L, bInTutorial);
+			break;
+		case EXTID_CURSOR:
+			lua_pushinteger(L, 0); // FIXME Set to 0 since function returned undef value
+			break;
+		case EXTID_INTMODE:
+			lua_pushinteger(L, intMode);
+			break;
+		case EXTID_TARGETTYPE:
+			lua_pushinteger(L, getTargetType());
+			break;
+		case EXTID_EXTRAVICTORYFLAG:
+			lua_pushboolean(L, bExtraVictoryFlag);
+			break;
+		case EXTID_EXTRAFAILFLAG:
+			lua_pushboolean(L, bExtraFailFlag);
+			break;
+		case EXTID_MULTIGAMETYPE:
+			lua_pushinteger(L, game.type);
+			break;
+		case EXTID_MULTIGAMEHUMANMAX:
+			lua_pushinteger(L, game.maxPlayers);
+			break;
+		case EXTID_MULTIGAMEBASETYPE:
+			lua_pushinteger(L, game.base);
+			break;
+		case EXTID_MULTIGAMEALLIANCESTYPE:
+			lua_pushinteger(L, game.alliance);
+			break;
 		default:
-		ASSERT( false, "scrGenExternGet: unknown variable index" );
-		return false;
-		break;
+			luaL_error(L, "invalid id %d for C variable");
 	}
-
-	if (!stackPushResult(type, &scrFunctionResult))
-	{
-		return false;
-	}
-
-	return true;
+	return 1;
 }
 
-
-// General function to set some basic game values
-BOOL scrGenExternSet(UDWORD index)
+int scrSetCVar(lua_State *L)
 {
-	INTERP_VAL		sVal;
-	INTERP_TYPE		type;
-	SDWORD			val;
-
-	// Get the value and store it in type,val
-	if (!stackPop(&sVal))
+	int id = luaL_checkinteger(L, 1);
+	int value;
+	switch (id)
 	{
-		return false;
+		case EXTID_TRACKTRANSPORTER:
+			luaL_error(L, "readonly C variable");
+			break;
+		case EXTID_MAPWIDTH:
+			luaL_error(L, "readonly C variable");
+			break;
+		case EXTID_MAPHEIGHT:
+			luaL_error(L, "readonly C variable");
+			break;
+		case EXTID_GAMEINIT:
+			luaL_error(L, "readonly C variable");
+			break;
+		case EXTID_SELECTEDPLAYER:
+			luaL_error(L, "readonly C variable");
+			break;
+		case EXTID_GAMETIME:
+			luaL_error(L, "readonly C variable");
+			break;
+		case EXTID_GAMELEVEL:
+			value = luaL_checkinteger(L, 2);
+			scrGameLevel = value;
+			break;
+		case EXTID_TUTORIAL:
+			value = luaL_checkboolean(L, 2);
+			bInTutorial = value;
+			break;
+		case EXTID_CURSOR:
+			luaL_error(L, "readonly C variable");
+			break;
+		case EXTID_INTMODE:
+			luaL_error(L, "readonly C variable");
+			break;
+		case EXTID_TARGETTYPE:
+			luaL_error(L, "readonly C variable");
+			break;
+		case EXTID_EXTRAVICTORYFLAG:
+			value = luaL_checkboolean(L, 2);
+			bExtraVictoryFlag = value;
+			break;
+		case EXTID_EXTRAFAILFLAG:
+			value = luaL_checkboolean(L, 2);
+			bExtraFailFlag = value;
+			break;
+		case EXTID_MULTIGAMETYPE:
+			luaL_error(L, "readonly C variable");
+			break;
+		case EXTID_MULTIGAMEHUMANMAX:
+			luaL_error(L, "readonly C variable");
+			break;
+		case EXTID_MULTIGAMEBASETYPE:
+			luaL_error(L, "readonly C variable");
+			break;
+		case EXTID_MULTIGAMEALLIANCESTYPE:
+			luaL_error(L, "readonly C variable");
+			break;
+		default:
+			luaL_error(L, "invalid id %d for C variable");
 	}
-	type = sVal.type;
-	val = sVal.v.ival;
-
-	switch (index)
-	{
-	case EXTID_GAMELEVEL:
-		if (type != VAL_INT)
-		{
-			ASSERT( false,"invalid type for gameLevel" );
-			return false;
-		}
-		scrGameLevel = val;
-		break;
-	case EXTID_TUTORIAL:
-		if (type != VAL_BOOL)
-		{
-			ASSERT( false,"invalid type for inTutorial" );
-			return false;
-		}
-		bInTutorial = val;
-		break;
-	case EXTID_EXTRAVICTORYFLAG:
-		if (type != VAL_BOOL)
-		{
-			ASSERT( false,"invalid type for extraVictoryFlag" );
-			return false;
-		}
-		bExtraVictoryFlag = val;
-		break;
-	case EXTID_EXTRAFAILFLAG:
-		if (type != VAL_BOOL)
-		{
-			ASSERT( false,"invalid type for extraFailFlag" );
-			return false;
-		}
-		bExtraFailFlag = val;
-		break;
-	default:
-		ASSERT( false, "scrGenExternSet: unknown variable index" );
-		return false;
-		break;
-	}
-
-	return true;
+	return 0;
 }

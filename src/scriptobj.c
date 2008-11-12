@@ -1441,3 +1441,124 @@ BOOL scrValDefLoad(SDWORD version, INTERP_VAL *psVal, char *pBuffer, UDWORD size
 
 	return true;
 }
+
+//////////////////////////////////////////////////////////////////////////
+
+int luaWZObj_checkstructurestat(lua_State *L, int pos)
+{
+	const char *structure_type = luaL_checkstring(L, pos);
+	return getStructStatFromName(structure_type);
+}
+
+BASE_OBJECT *luaWZObj_checkobject(lua_State *L, int pos, int type)
+{
+	int objectType;
+	BASE_OBJECT *object = luaWZObj_checkbaseobject(L, pos);
+	
+	if (object->type != type)
+	{
+		luaL_error(L, "type of argument %d is %d instead of %d", pos, objectType, type);
+	}
+	return object;
+}
+
+unsigned int luaWZObj_toid(lua_State *L, int pos)
+{
+	unsigned int id = 0;
+	
+	if (lua_istable(L, pos))
+	{
+		lua_getfield(L, pos, "id");
+		if(!lua_isnumber(L, -1))
+		{
+			luaL_error(L, "argument %d has no number field 'id'", pos);
+		}
+		id = lua_tointeger(L, -1);
+		lua_pop(L, 1);
+	}
+	if (lua_isnumber(L, pos))
+	{
+		id = lua_tointeger(L, -1);
+	}
+	return id;
+}
+
+BASE_OBJECT *luaWZObj_checkbaseobject(lua_State *L, int pos)
+{
+	BASE_OBJECT *object;
+	unsigned int id = luaWZObj_toid(L, pos);
+	if (id == 0)
+	{
+		luaL_error(L, "argument %d should be an id or an object", pos);
+	}
+	object = getBaseObjFromId(id);
+	if (object == NULL)
+	{
+		luaL_error(L, "argument %d: id not found (%d)" , pos, id);
+	}
+	return object;
+}
+
+void luaWZObj_pushbaseobject(lua_State *L, BASE_OBJECT* baseobject, int type)
+{
+	lua_newtable(L);
+	luaWZ_setintfield(L, "type", type);
+	luaWZ_setintfield(L, "id", baseobject->id);
+	luaWZ_setintfield(L, "x", baseobject->pos.x);
+	luaWZ_setintfield(L, "y", baseobject->pos.y);
+	luaWZ_setintfield(L, "z", baseobject->pos.z);
+	luaWZ_setintfield(L, "player", baseobject->player);
+}
+
+void luaWZObj_pushstructure(lua_State *L, STRUCTURE* structure)
+{
+	luaWZObj_pushbaseobject(L, (BASE_OBJECT*)structure, OBJ_STRUCTURE);
+}
+
+void luaWZObj_pushfeature(lua_State *L, FEATURE* feature)
+{
+	luaWZObj_pushbaseobject(L, (BASE_OBJECT*)feature, OBJ_FEATURE);
+}
+
+void luaWZObj_pushdroid(lua_State *L, DROID* droid)
+{
+	luaWZObj_pushbaseobject(L, (BASE_OBJECT*)droid, OBJ_DROID);
+	luaWZ_setintfield(L, "droidType", droid->droidType);
+	luaWZ_setintfield(L, "order", droid->order);
+}
+
+void luaWZObj_pushgroup(lua_State *L, DROID_GROUP *group)
+{
+	lua_newtable(L);
+	luaWZ_setstringfield(L, "type", "group");
+	luaWZ_setpointerfield(L, "pointer", group);
+	//luaWZ_setintfield(L, "members", grpNumMembers(group));
+}
+
+DROID_GROUP *luaWZObj_checkgroup(lua_State *L, int pos)
+{
+	DROID_GROUP *group;
+	if (lua_istable(L, pos))
+	{
+		lua_getfield(L, pos, "type");
+		if (!lua_tostring(L, -1) || strcmp(lua_tostring(L, -1), "group") != 0)
+		{
+			luaL_error(L, "argument %d is not a group", pos);
+		}
+		lua_pop(L, 1);
+		lua_getfield(L, pos, "pointer");
+		if(!lua_isuserdata(L, -1))
+		{
+			luaL_error(L, "argument %d has no pointer field 'pointer'", pos);
+		}
+		group = lua_touserdata(L, -1);
+		lua_pop(L, 1);
+		if (!group)
+		{
+			luaL_error(L, "group pointer is NULL");
+		}
+		return group;
+	}
+	luaL_error(L, "argument %d is not a group (not even a table)", pos);
+	return NULL;
+}

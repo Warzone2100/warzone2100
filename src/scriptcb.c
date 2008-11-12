@@ -37,6 +37,7 @@
 #include "transporter.h"
 #include "mission.h"
 #include "research.h"
+#include "scriptobj.h"
 
 static INTERP_VAL	scrFunctionResult;	//function return value to be pushed to stack
 
@@ -73,6 +74,27 @@ SDWORD MultiMsgPlayerFrom = -2;
 char ConsoleMsg[MAXSTRLEN]="ERROR!!!\0";	//Last console message
 char MultiplayMsg[MAXSTRLEN];	//Last multiplayer message
 
+
+///////////////////////////////////////////
+
+typedef struct
+{
+    DROID *droid;
+    STRUCTURE *factory;
+} NEWDROID;
+
+typedef struct
+{
+    TRIGGER_TYPE type;
+    union p_t
+    {
+        NEWDROID newDroid;
+    } p;
+} EVENT;
+
+static unsigned int numEvents = 0;
+static EVENT eventList[100];
+
 BOOL scrCBDroidTaken(void)
 {
 	DROID		**ppsDroid;
@@ -103,41 +125,27 @@ BOOL scrCBDroidTaken(void)
 	return true;
 }
 
-// Deal with a CALL_NEWDROID
-BOOL scrCBNewDroid(void)
+/// Deal with a CALL_NEWDROID
+int scrCheckNewDroid(lua_State *L)
 {
-	SDWORD		player;
-	DROID		**ppsDroid;
-	STRUCTURE	**ppsStructure;
-	BOOL	triggered = false;
-
-	if (!stackPopParams(3, VAL_INT, &player, VAL_REF|ST_DROID, &ppsDroid, VAL_REF|ST_STRUCTURE, &ppsStructure))
+	int i;
+	
+	int player = luaWZ_checkplayer(L, 1);
+	// now search for the event
+	for (i=0;i<numEvents;i++)
 	{
-		return false;
+		if (eventList[i].type == CALL_NEWDROID
+			&& eventList[i].p.newDroid.droid->player == player)
+		{
+			// ok, it fires
+			lua_pushboolean(L, true);
+			luaWZObj_pushdroid(L, eventList[i].p.newDroid.droid);
+			luaWZObj_pushstructure(L, eventList[i].p.newDroid.factory);
+			return 3;
+		}
 	}
-
-	if (psScrCBNewDroid == NULL)
-	{
-		// eh? got called without setting the new droid
-		ASSERT( false, "scrCBNewUnit: no unit has been set" );
-		triggered = false;
-		*ppsDroid = NULL;
-		*ppsStructure  = NULL;
-	}
-	else if (psScrCBNewDroid->player == (UDWORD)player)
-	{
-		triggered = true;
-		*ppsDroid = psScrCBNewDroid;
-		*ppsStructure  = psScrCBNewDroidFact;
-	}
-
-	scrFunctionResult.v.bval = triggered;
-	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
-	{
-		return false;
-	}
-
-	return true;
+	lua_pushboolean(L, false);
+	return 1;
 }
 
 // Deal with a CALL_STRUCT_ATTACKED
@@ -1139,4 +1147,47 @@ BOOL scrCBProcessKeyPress(void)
 	}
 
 	return true;
+}
+
+// FIXME
+extern lua_State *lua_states[100];
+
+void eventFireCallbackTrigger(TRIGGER_TYPE trigger)
+{
+	int i, args;
+	lua_State *L;
+	for(i=0;i<100;i++)
+	{
+		L = lua_states[i];
+		if (!L)
+		{
+			continue;
+		}
+		lua_getglobal(L, "doCallbacksFor");
+		lua_pushinteger(L, trigger);
+		args = 1;
+		switch (trigger)
+		{
+			case CALL_GAMEINIT:
+				debug(LOG_WARNING, "CALL_GAMEINIT %i", trigger);
+				break;
+			case CALL_NEWDROID:
+				luaWZObj_pushdroid(L, psScrCBNewDroid);
+				luaWZObj_pushstructure(L, psScrCBNewDroidFact);
+				args += 2;
+				break;
+			case CALL_STRUCT_DESTROYED:
+				luaWZObj_pushstructure(L, (STRUCTURE*)psCBObjDestroyed);
+				args += 1;
+				break;
+			case CALL_STRUCT_ATTACKED:
+				luaWZObj_pushstructure(L, psLastStructHit);
+				luaWZObj_pushbaseobject(L, g_pProjLastAttacker, -1);
+				args += 2;
+				break;
+			default:
+				break;
+		}
+		luaWZ_pcall_backtrace(L, args, 0);
+	}
 }

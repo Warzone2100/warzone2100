@@ -24,9 +24,21 @@
  */
 
 #include "lib/framework/frame.h"
+#include "lib/framework/printf_ext.h"
 #include "script.h"
 #include <assert.h>
 
+// Lua
+#include "lib/lua/lua.h"
+#include "lib/lua/lauxlib.h"
+#include "lib/lua/lualib.h"
+#include "lib/lua/warzone.h"
+
+#include "src/scriptfuncs.h"
+#include "src/scriptai.h"
+extern void registerScriptfuncs(lua_State *L);
+
+#include "src/scripttabs.h"
 
 // Flags for storing function indexes
 #define FUNC_SETBIT	0x80000000		// set for a set function, clear otherwise
@@ -37,10 +49,198 @@
 #define FUNC_OBJVAR	0x10000000		// object variable
 #define FUNC_EXTERNAL	0x20000000		// external variable
 
+// FIXME: should be static?
+lua_State *lua_states[100];
+
+void registerScript(lua_State *L)
+{
+	int i;
+	for(i=0;i<100;i++)
+	{
+		if(!lua_states[i])
+		{
+			lua_states[i] = L;
+			return;
+		}
+	}
+}
+
+static lua_State *scrLoadState(const char *filename)
+{
+	lua_State *L = luaL_newstate();
+	
+	debug(LOG_SCRIPT, "loading script %s", filename);
+	
+	luaL_openlibs(L);
+	luaWZ_openlibs(L);
+	
+	registerScriptfuncs(L);
+	registerScriptAIfuncs(L);
+	scrRegisterConstants(L);
+	scrRegisterCVariables(L);
+	
+	lua_pushstring(L, filename);
+	lua_setglobal(L, "_filename");
+	
+	luaWZ_dofile(L, "script/save.lua");
+	luaWZ_dofile(L, "script/event.lua");
+	luaWZ_dofile(L, "script/group.lua");
+	luaWZ_dofile(L, "script/glue.lua");
+	
+	if (luaWZ_dofile(L, filename))
+	{
+		return L;
+	}
+	debug(LOG_WARNING, "failed loading script %s", filename);
+	return NULL;
+}
+
+void scrNewState(const char *filename)
+{
+	lua_State *L = scrLoadState(filename);
+	
+	if (L)
+	{
+		registerScript(L);
+	}
+	else
+	{
+		debug(LOG_WARNING, "failed loading script %s", filename);
+	}
+}
+
+char *scrSaveSingleState(lua_State *L)
+{
+	const char *result, *scriptfile;
+	char *save;
+	lua_getglobal(L, "saveall");
+	luaWZ_pcall_backtrace(L, 0, 1);
+	result = lua_tostring(L, -1);
+	lua_pop(L,1);
+	lua_getglobal(L, "_filename");
+	scriptfile = lua_tostring(L, -1);
+	lua_pop(L,1);
+	asprintf(&save, "--[[ name of corresponding script:\n%s\n]]--\n%s", scriptfile, result);
+	return save;
+}
+
+void scrLoadStates(const char *directory)
+{
+	int i,j;
+	PHYSFS_file* fileHandle;
+	char *filename, *p, *start, *stop;
+	char text[1024]; // FIXME
+	debug(LOG_SCRIPT, "loading script states from %s", directory);
+	
+	//for(i=0;i<100;i++)
+	//{
+	//	lua_states[i] = NULL;
+	//}
+	for(i=0;i<100;i++)
+	{
+		asprintf(&filename, "%s/state%i.lua", directory, i);
+		fileHandle = PHYSFS_openRead(filename);
+		if (!fileHandle)
+		{
+			free(filename);
+			continue;
+		}
+		if (PHYSFS_read(fileHandle, text, 1, 1023) < 1)
+		{
+			debug(LOG_ERROR, "scrLoadStates: error reading %s", filename);
+			free(filename);
+			continue;
+		}
+		text[1023] = 0;
+		start = strchr(text, '\n');
+		p = strchr(text, '\r');
+		if (p && p>start)
+		{
+			start = p;
+		}
+		ASSERT(start, "expected a newline within the first 1023 chars");
+		start++;
+		stop = strchr(start, '\n');
+		p = strchr(start, '\r');
+		if (p && p<stop)
+		{
+			stop = p;
+		}
+		ASSERT(stop, "expected a second newline within the first 1023 chars");
+		*stop = 0;
+		// now start contains the name of the script this data belongs to
+		// let's search for it
+		for (j=0;i<100;j++)
+		{
+			lua_getglobal(lua_states[i], "_filename");
+			if (strcmp(start, lua_tostring(lua_states[i], -1)) == 0)
+			{
+				// found!
+				lua_pop(lua_states[i], 1);
+				debug(LOG_SCRIPT, "loading state for %s from %s", start, filename);
+				luaWZ_dofile(lua_states[i], filename);
+				// execute the onload handler which will fix things up
+				lua_getglobal(lua_states[i], "onload");
+				luaWZ_pcall_backtrace(lua_states[i], 0, 1);
+				break;
+			}
+			lua_pop(lua_states[i], 1);
+		}
+		if (j == 100)
+		{
+			debug(LOG_ERROR, "while loading a state from %s: %s not loaded", filename, start);
+		}
+	}
+}
+
+void scrSaveState(const char *directory)
+{
+	char *buffer;
+	char *filename;
+	int i;
+	
+	debug(LOG_SCRIPT, "saving script states to %s", directory);
+	
+	for(i=0;i<100;i++)
+	{
+		if(!lua_states[i])
+		{
+			continue;
+		}
+		buffer = scrSaveSingleState(lua_states[i]);
+		sasprintf(&filename, "%s/state%i.lua", directory, i);
+		saveFile(filename, buffer, strlen(buffer));
+		free(buffer);
+	}
+}
+
+void scriptTick()
+{
+	int i;
+	for(i=99;i>=0;i--)
+	{
+		if(!lua_states[i])
+		{
+			continue;
+		}
+		/* push functions and arguments */
+		lua_getglobal(lua_states[i], "tick");  /* function to be called */
+		luaWZ_pcall_backtrace(lua_states[i], 0, 0);
+	}
+}
+
 
 // Initialise the script library
 BOOL scriptInitialise()
 {
+	int i;
+	
+	debug(LOG_SCRIPT, "initialising script system");
+	
+	for(i=0;i<100;i++)
+	{
+		lua_states[i] = NULL;
+	}
 	if (!stackInitialise())
 	{
 		return false;
@@ -68,7 +268,8 @@ void scriptShutDown(void)
 /* Free a SCRIPT_CODE structure */
 void scriptFreeCode(SCRIPT_CODE *psCode)
 {
-	unsigned int i, j;
+#if 0
+	UDWORD	i,j;
 
 	debug(LOG_WZ, "Unloading script data");
 
@@ -137,6 +338,7 @@ void scriptFreeCode(SCRIPT_CODE *psCode)
 	free(psCode->numParams);
 
 	free(psCode);
+#endif
 }
 
 

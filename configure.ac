@@ -349,6 +349,7 @@ AC_CONFIG_FILES([Makefile
 		lib/sound/Makefile
 		lib/sqlite3/Makefile
 		lib/widget/Makefile
+		lib/lua/Makefile
 		src/Makefile])
 AC_OUTPUT
 

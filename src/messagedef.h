@@ -25,6 +25,7 @@
 #define __INCLUDED_MESSAGEDEF_H__
 
 #include "lib/ivis_common/pietypes.h"
+#include "structuredef.h"
 #include "lib/ivis_common/ivisdef.h"
 #include "positiondef.h"
 

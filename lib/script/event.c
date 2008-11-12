@@ -107,6 +107,8 @@ void eventTimeReset(UDWORD initTime)
 /* Initialise the event system */
 BOOL eventInitialise()
 {
+    return true;
+#if 0
 	psTrigList = NULL;
 	psCallbackList = NULL;
 	psContList = NULL;
@@ -116,12 +118,14 @@ BOOL eventInitialise()
 	numFuncs = 0;
 	strcpy(last_called_script_event, "<none>");
 	return true;
+#endif
 }
 
 
 // reset the event system
 void eventReset(void)
 {
+#if 0
 	SDWORD			count=0;
 
 	// Free any active triggers and their context's
@@ -164,12 +168,14 @@ void eventReset(void)
 	{
 		debug(LOG_SCRIPT, "eventReset: %d contexts still allocated at reset", count);
 	}
+#endif
 }
 
 
 // Shutdown the event system
 void eventShutDown(void)
 {
+#if 0
 	eventReset();
 
 	if (asCreateFuncs)
@@ -182,6 +188,7 @@ void eventShutDown(void)
 		free(asReleaseFuncs);
 		asReleaseFuncs = NULL;
 	}
+#endif
 }
 
 
@@ -284,29 +291,6 @@ const char *eventGetEventID(SCRIPT_CODE *psCode, SDWORD event)
 	return pID;
 }
 
-// Initialise the create/release function array - specify the maximum value type
-BOOL eventInitValueFuncs(SDWORD maxType)
-{
-	ASSERT(asReleaseFuncs == NULL, "eventInitValueFuncs: array already initialised");
-
-	asCreateFuncs = calloc(maxType, sizeof(*asCreateFuncs));
-	if (!asCreateFuncs)
-	{
-		debug(LOG_SCRIPT, "eventInitValueFuncs: Out of memory");
-		return false;
-	}
-	asReleaseFuncs = calloc(maxType, sizeof(*asReleaseFuncs));
-	if (!asReleaseFuncs)
-	{
-		debug(LOG_SCRIPT, "eventInitValueFuncs: Out of memory");
-		return false;
-	}
-
-	numFuncs = maxType;
-
-	return true;
-}
-
 // Add a new value create function
 BOOL eventAddValueCreate(INTERP_TYPE type, VAL_CREATE_FUNC create)
 {
@@ -339,6 +323,8 @@ BOOL eventAddValueRelease(INTERP_TYPE type, VAL_RELEASE_FUNC release)
 BOOL eventNewContext(SCRIPT_CODE *psCode, CONTEXT_RELEASE release,
 					 SCRIPT_CONTEXT **ppsContext)
 {
+    return true;
+#if 0
 	SCRIPT_CONTEXT	*psContext;
 	SDWORD		val, storeIndex, arrayNum, arraySize;
 	UDWORD		i, j;
@@ -506,6 +492,7 @@ BOOL eventNewContext(SCRIPT_CODE *psCode, CONTEXT_RELEASE release,
 	*ppsContext = psContext;
 
 	return true;
+#endif
 }
 
 
@@ -970,7 +957,7 @@ static void eventFreeTrigger(ACTIVE_TRIGGER *psTrigger)
 	free(psTrigger);
 }
 
-
+#if 0
 // Activate a callback trigger
 void eventFireCallbackTrigger(TRIGGER_TYPE callback)
 {
@@ -1080,69 +1067,11 @@ void eventFireCallbackTrigger(TRIGGER_TYPE callback)
 	//clear out after added them all
 	psAddedTriggers = NULL;
 }
-
-
-// Run a trigger
-static BOOL eventFireTrigger(ACTIVE_TRIGGER *psTrigger)
-{
-	BOOL			fired;
-	INTERP_VAL		sResult;
-
-	fired = false;
-
-
-	// If this is a code trigger see if it fires
-	if (psTrigger->type == TR_CODE)
-	{
-		// Run the trigger
-		if (!interpRunScript(psTrigger->psContext,
-						IRT_TRIGGER, psTrigger->trigger, 0))
-		{
-			ASSERT( false, "eventFireTrigger: trigger %s: code failed",
-					eventGetTriggerID(psTrigger->psContext->psCode, psTrigger->trigger) );
-			return false;
-		}
-		// Get the result
-		sResult.type = VAL_BOOL;
-		if (!stackPopType(&sResult))
-		{
-			return false;
-		}
-		fired = sResult.v.bval;
-	}
-	else
-	{
-		fired = true;
-	}
-
-	// If it fired run the event
-	if (fired)
-	{
-		DB_TRIGINF(psTrigger,1);
-		DB_TRACE(" fired", 1);
-		if (!interpRunScript(psTrigger->psContext, IRT_EVENT, psTrigger->event, psTrigger->offset))
-		{
-			DB_TRACE(("********  script failed  *********"), 0);
-			DB_TRIGINF(psTrigger,0);
-			ASSERT(false, "eventFireTrigger: event %s: code failed",
-			       eventGetEventID(psTrigger->psContext->psCode, psTrigger->event));
-			return false;
-		}
-	}
-#ifdef DEBUG
-	else
-	{
-		DB_TRIGINF(psTrigger,3);
-	}
 #endif
-
-	return true;
-}
-
-
 // Process all the currently active triggers
 void eventProcessTriggers(UDWORD currTime)
 {
+#if 0
 	ACTIVE_TRIGGER	*psCurr, *psNext, *psNew;
 	TRIGGER_DATA	*psData;
 
@@ -1203,6 +1132,7 @@ void eventProcessTriggers(UDWORD currTime)
 	}
 	//clear out after added them all
 	psAddedTriggers = NULL;
+#endif
 }
 
 

@@ -8,4 +8,5 @@ SUBDIRS = framework	\
 	sound		\
 	sqlite3		\
 	netplay		\
-	widget
+	widget		\
+	lua

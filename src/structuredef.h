@@ -28,6 +28,7 @@
 #include "positiondef.h"
 #include "statsdef.h"
 #include "weapondef.h"
+#include "basedef.h"
 
 #define NUM_FACTORY_MODULES	2
 #define NUM_RESEARCH_MODULES 4

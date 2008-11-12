@@ -33,6 +33,13 @@
 #include "lib/ivis_common/piestate.h"
 #include "lib/ivis_common/bitimage.h"
 
+// Lua
+#include "lib/lua/lua.h"
+#include "lib/lua/lauxlib.h"
+#include "lib/lua/lualib.h"
+#include "lib/lua/warzone.h"
+
+
 #include "texture.h"
 #include "warzoneconfig.h"
 #include "lib/ivis_common/tex.h"
@@ -915,6 +922,8 @@ static void dataStrResRelease(WZ_DECL_UNUSED void *pData)
 // All scripts, binary or otherwise are now passed through this routine
 static BOOL dataScriptLoad(const char* fileName, void **ppData)
 {
+	return true;
+#if 0
 	static const bool printHack = false;
 	SCRIPT_CODE** psProg = (SCRIPT_CODE**)ppData;
 	PHYSFS_file* fileHandle;
@@ -945,19 +954,41 @@ static BOOL dataScriptLoad(const char* fileName, void **ppData)
 	}
 
 	return true;
+#endif
 }
 
 
 static void dataScriptRelease(void *pData)
 {
+#if 0
 	SCRIPT_CODE *psCode = pData;
 	scriptFreeCode(psCode);
+#endif
 }
 
 
 // Load a script variable values file
 static BOOL dataScriptLoadVals(const char* fileName, void **ppData)
 {
+	lua_State *L;
+
+	debug(LOG_WZ, "COMPILING SCRIPT ...%s", GetLastResourceFilename());
+	
+	//////////////////////////
+	
+	// Try to open it as a lua file
+	char *newfilename = strdup(fileName);
+	char *slopos = strstr(newfilename, ".vlo");
+	strcpy(slopos, ".lua");
+	debug(LOG_WZ, "trying to load lua file %s", newfilename);
+	
+	scrNewState(newfilename);
+	
+	free(newfilename);
+	*ppData = L;
+	return true;
+#if 0
+
 	BOOL success;
 	PHYSFS_file* fileHandle;
 
@@ -986,6 +1017,7 @@ static BOOL dataScriptLoadVals(const char* fileName, void **ppData)
 	PHYSFS_close(fileHandle);
 
 	return success;
+#endif
 }
 
 // New reduced resource type ... specially for PSX

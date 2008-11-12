@@ -122,4 +122,13 @@ extern BOOL scrTabInitialise(void);
 // Shut down the script system
 extern void scrShutDown(void);
 
+// Lua
+#include "lib/lua/lua.h"
+#include "lib/lua/lauxlib.h"
+#include "lib/lua/lualib.h"
+#include "lib/lua/warzone.h"
+
+extern void scrRegisterConstants(lua_State *L);
+extern void scrRegisterCVariables(lua_State *L);
+
 #endif // __INCLUDED_SRC_SCRIPTTABS_H__

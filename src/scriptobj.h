@@ -24,6 +24,8 @@
 #ifndef __INCLUDED_SRC_SCRIPTOBJ_H__
 #define __INCLUDED_SRC_SCRIPTOBJ_H__
 
+#include "group.h"
+
 // id's for object variables
 enum _objids
 {
@@ -97,5 +99,17 @@ extern BOOL scrValDefSave(INTERP_VAL *psVal, char *pBuffer, UDWORD *pSize);
 
 // default value load routine
 extern BOOL scrValDefLoad(SDWORD version, INTERP_VAL *psVal, char *pBuffer, UDWORD size);
+
+extern int luaWZObj_checkstructurestat(lua_State *L, int pos);
+extern BASE_OBJECT *luaWZObj_checkobject(lua_State *L, int pos, int type);
+extern BASE_OBJECT *luaWZObj_checkbaseobject(lua_State *L, int pos);
+extern unsigned int luaWZObj_toid(lua_State *L, int pos);
+extern void luaWZObj_pushstructure(lua_State *L, STRUCTURE* structure);
+extern void luaWZObj_pushfeature(lua_State *L, FEATURE* feature);
+extern void luaWZObj_pushdroid(lua_State *L, DROID* droid);
+
+extern void luaWZObj_pushgroup(lua_State *L, DROID_GROUP *group);
+extern DROID_GROUP *luaWZObj_checkgroup(lua_State *L, int pos);
+extern void luaWZObj_pushbaseobject(lua_State *L, BASE_OBJECT* baseobject, int type);
 
 #endif // __INCLUDED_SRC_SCRIPTOBJ_H__
