@@ -118,9 +118,9 @@ extern WZ_DECL_WARN_UNUSED_RESULT FEATURE		*IdToFeature(UDWORD id,UDWORD player)
 extern WZ_DECL_WARN_UNUSED_RESULT DROID_TEMPLATE	*IdToTemplate(UDWORD tempId,UDWORD player);
 extern WZ_DECL_WARN_UNUSED_RESULT DROID_TEMPLATE	*NameToTemplate(const char *sName,UDWORD player);
 
-extern char *getPlayerName	(UDWORD player);
+extern const char* getPlayerName(unsigned int player);
 extern BOOL setPlayerName		(UDWORD player, const char *sName);
-extern char *getPlayerColourName(SDWORD player);
+extern const char* getPlayerColourName(unsigned int player);
 extern BOOL isHumanPlayer		(UDWORD player);				//to tell if the player is a computer or not.
 extern BOOL myResponsibility	(UDWORD player);
 extern BOOL responsibleFor		(UDWORD player, UDWORD playerinquestion);
