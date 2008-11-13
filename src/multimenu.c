@@ -807,9 +807,7 @@ static void displayMultiPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset,
 
 	if(isHumanPlayer(player) || (game.type == SKIRMISH && player<game.maxPlayers) )
 	{
-		sprintf(str,"%d:", player);
-
-		strcat(str, getPlayerName(player));
+		ssprintf(str, "%d:%s", player, getPlayerName(player));
 		if (isHumanPlayer(player))
 		{
 			SetPlayerTextColor(alliances[selectedPlayer][player], player);

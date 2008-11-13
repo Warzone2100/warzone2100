@@ -10292,7 +10292,7 @@ BOOL scrDropBeacon(void)
 		return false;
 	}
 
-	sprintf(ssval2, "%s : %s", getPlayerName(sender), strParam1);	//temporary solution
+	ssprintf(ssval2, "%s : %s", getPlayerName(sender), strParam1);	//temporary solution
 
 	return sendBeaconToPlayer(locX, locY, forPlayer, sender, ssval2);
 }
