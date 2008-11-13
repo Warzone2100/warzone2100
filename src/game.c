@@ -3516,6 +3516,16 @@ BOOL saveGame(char *aFileName, SDWORD saveType)
 
 	//create dir will fail if directory already exists but don't care!
 	(void) PHYSFS_mkdir(aFileName);
+	
+	// scripts may perform some actions while saving them
+	// this happens for example when a script is saved while waiting in a
+	// pause call. The call to pause() will immedeately return and the rest
+	// of the event or function will be executed.
+	// save the script state if necessary
+	if (saveType == GTYPE_SAVE_MIDMISSION)
+	{
+		scrSaveState(aFileName);
+	}
 
 	//save the map file
 	strcat(aFileName, "/game.map");
@@ -11644,32 +11654,9 @@ static BOOL	writeScriptState(char *pFileName)
 // load the script state given a .gam name
 BOOL loadScriptState(char *pFileName)
 {
-	char	*pFileData;
-	UDWORD	fileSize;
-	BOOL bHashed = false;
-
 	// change the file extension
 	pFileName[strlen(pFileName)-4] = (char)0;
-	strcat(pFileName, ".es");
-
-	pFileData = fileLoadBuffer;
-	if (!loadFileToBuffer(pFileName, pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
-	{
-		debug( LOG_ERROR, "loadScriptState: couldn't load %s", pFileName );
-		abort();
-		return false;
-	}
-
-	if (saveGameVersion > VERSION_12)
-	{
-		bHashed = true;
-	}
-
-	if (!eventLoadState(pFileData, fileSize, bHashed))
-	{
-		return false;
-	}
-
+	scrLoadStates(pFileName);
 	return true;
 }
 

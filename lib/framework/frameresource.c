@@ -898,7 +898,7 @@ void resReleaseBlockData(SDWORD blockID)
 				}
 				else
 				{
-					ASSERT( false,"resReleaseAllData: NULL release function" );
+					debug(LOG_WARNING, "resReleaseAllData: NULL release function" );
 				}
 
 				psNRes = psRes->psNext;

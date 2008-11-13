@@ -1316,19 +1316,14 @@ BOOL scrTargetInCluster(void)
 static int scrSkCanBuildTemplate(lua_State *L)
 {
 	int player = luaWZ_checkplayer(L, 1);
-	STRUCTURE *psStructure = luaWZObj_checkobject(L, 2, OBJ_STRUCTURE);
+	STRUCTURE *psStructure = (STRUCTURE*)luaWZObj_checkobject(L, 2, OBJ_STRUCTURE);
 	const char *templatename = luaL_checkstring(L, 3);
+	char copy[MAX_STR_LENGTH];
 	DROID_TEMPLATE *psTempl;
-	int i;
-	// FIXME, probably need something like the Translatedname function without the translation
-	for(i=0;i<MAX_PLAYERS;i++)
-	{
-		psTempl = getTemplateFromUniqueName(templatename, player);
-		if (psTempl)
-		{
-			break;
-		}
-	}
+	
+	strlcpy(copy, templatename, MAX_STR_LENGTH);
+	psTempl = getTemplateFromTranslatedNameNoPlayer(copy);
+
 	if (!psTempl)
 	{
 		debug(LOG_SCRIPT, "invalid template name \"%s\"", templatename);
