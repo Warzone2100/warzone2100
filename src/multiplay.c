@@ -80,7 +80,6 @@ MULTIPLAYERINGAME			ingame;
 
 BOOL						bSendingMap					= false;	// map broadcasting.
 
-char						tempString[12];
 char						beaconReceiveMsg[MAX_PLAYERS][MAX_CONSOLE_STRING_LENGTH];	//beacon msg for each player
 char								playerName[MAX_PLAYERS][MAX_STR_LENGTH];	//Array to store all player names (humans and AIs)
 BOOL						bPlayerReadyGUI[MAX_PLAYERS] = {false};
@@ -433,7 +432,7 @@ BASE_OBJECT *IdToPointer(UDWORD id,UDWORD player)
 
 // ////////////////////////////////////////////////////////////////////////////
 // return a players name.
-char *getPlayerName(UDWORD player)
+const char* getPlayerName(unsigned int player)
 {
 	UDWORD i;
 
@@ -455,7 +454,7 @@ char *getPlayerName(UDWORD player)
 				return getPlayerColourName(player);
 			}
 
-			return (char*)&NetPlay.players[i].name;
+			return NetPlay.players[i].name;
 		}
 	}
 
@@ -1903,35 +1902,28 @@ static BOOL recvBeacon(void)
 	return addBeaconBlip(locX, locY, receiver, sender, beaconReceiveMsg[sender]);
 }
 
-static const char* playerColors[] =
+const char* getPlayerColourName(unsigned int player)
 {
-	N_("Green"),
-	N_("Orange"),
-	N_("Grey"),
-	N_("Black"),
-	N_("Red"),
-	N_("Blue"),
-	N_("Pink"),
-	N_("Cyan")
-};
-
-char *getPlayerColourName(SDWORD player)
-{
-	static const unsigned int end = sizeof(playerColors) / sizeof(const char*);
-
-	ASSERT(player < end,
-	       "getPlayerColourName: player number (%d) exceeds maximum (%d)\n", player, end - 1);
-
-	if (player < end)
+	static const char* playerColors[] =
 	{
-		strcpy(tempString, _(playerColors[ getPlayerColour(player) ]));
-	}
-	else
+		N_("Green"),
+		N_("Orange"),
+		N_("Grey"),
+		N_("Black"),
+		N_("Red"),
+		N_("Blue"),
+		N_("Pink"),
+		N_("Cyan")
+	};
+
+	ASSERT(player < ARRAY_SIZE(playerColors), "player number (%d) exceeds maximum (%zu)", player, ARRAY_SIZE(playerColors));
+
+	if (player >= ARRAY_SIZE(playerColors))
 	{
-		tempString[0] = '0';
+		return "";
 	}
 
-	return tempString;
+	return gettext(playerColors[getPlayerColour(player)]);
 }
 
 /*

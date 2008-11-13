@@ -5919,7 +5919,10 @@ BOOL scrGetPlayerColourName(void)
 		return false;
 	}
 
-	scrFunctionResult.v.sval = getPlayerColourName(player);
+	/* Casting away constness because stackPushResult doesn't modify it's
+	 * value (i.e. in this case it's not const correct).
+	 */
+	scrFunctionResult.v.sval = (char*)getPlayerColourName(player);
 	if (!stackPushResult(VAL_STRING, &scrFunctionResult))
 	{
 		debug(LOG_ERROR, "scrGetPlayerColourName(): failed to push result");
@@ -10745,7 +10748,10 @@ BOOL scrGetPlayerName(void)
 		return false;
 	}
 
-	scrFunctionResult.v.sval = getPlayerName((UDWORD)player);
+	/* Casting away constness because stackPushResult doesn't modify it's
+	 * value (i.e. in this case it's not const correct).
+	 */
+	scrFunctionResult.v.sval = (char*)getPlayerName((UDWORD)player);
 	if (!stackPushResult(VAL_STRING, &scrFunctionResult))
 	{
 		debug(LOG_ERROR, "scrGetPlayerName(): failed to push result");
@@ -10791,7 +10797,7 @@ SDWORD getPlayerFromString(char *playerName)
 	{
 		/* check name */
 		//debug(LOG_SCRIPT, "checking  (%s,%s)",getPlayerName(playerIndex), playerName);
-		if (strncasecmp(getPlayerName(playerIndex),playerName, 255) == 0)
+		if (strncasecmp(getPlayerName(playerIndex), playerName, 255) == 0)
 		{
 			//debug(LOG_SCRIPT, "matched, returning %d", playerIndex);
 			return playerIndex;
@@ -10799,7 +10805,7 @@ SDWORD getPlayerFromString(char *playerName)
 
 		/* check color */
 		//debug(LOG_SCRIPT, "checking (%s,%s)",getPlayerColourName(playerIndex), playerName);
-		if (strncasecmp(getPlayerColourName(playerIndex),playerName, 255) == 0)
+		if (strncasecmp(getPlayerColourName(playerIndex), playerName, 255) == 0)
 		{
 			//debug(LOG_SCRIPT, "matched, returning %d", playerIndex);
 			return playerIndex;
