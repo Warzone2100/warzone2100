@@ -11538,50 +11538,40 @@ BOOL scrAssembleWeaponTemplate(void)
 /* Checks if template already exists, returns it if yes */
 static DROID_TEMPLATE* scrCheckTemplateExists(SDWORD player, DROID_TEMPLATE *psTempl)
 {
-	DROID_TEMPLATE    *psCurrent;
-	UDWORD				weaponSlot;
-	bool				bEqual = true;
+	DROID_TEMPLATE* psCurrent;
 
-	psCurrent = apsDroidTemplates[player];
-
-	while(psCurrent != NULL)
+	for (psCurrent = apsDroidTemplates[player]; psCurrent != NULL; psCurrent = psCurrent->psNext)
 	{
 		unsigned int componentType;
+		unsigned int weaponSlot;
 
 		// compare components
-		bEqual = true;
-		for (componentType = 0; bEqual && componentType < ARRAY_SIZE(psTempl->asParts); ++componentType)
+		for (componentType = 0; componentType < ARRAY_SIZE(psTempl->asParts); ++componentType)
 		{
 			if (psTempl->asParts[componentType] != psCurrent->asParts[componentType])
 			{
-				bEqual = false;
+				continue;
 			}
 		}
 
 		// compare weapon count
-		if(bEqual && (psTempl->numWeaps != psCurrent->numWeaps))
+		if (psTempl->numWeaps != psCurrent->numWeaps)
 		{
-			bEqual = false;;
+			continue;
 		}
 
 		// compare all weapons separately
-		for(weaponSlot = 0; bEqual && (weaponSlot < psTempl->numWeaps); weaponSlot++)
+		for(weaponSlot = 0; weaponSlot < psTempl->numWeaps; ++weaponSlot)
 		{
-			if(psTempl->asWeaps[weaponSlot] != psCurrent->asWeaps[weaponSlot])
+			if (psTempl->asWeaps[weaponSlot] != psCurrent->asWeaps[weaponSlot])
 			{
-				bEqual = false;
+				continue;
 			}
 		}
 
 		// they are equal, so return the current template
-		if(bEqual)
-		{
-			return psCurrent;
-		}
-
-		// try next one
-		psCurrent = psCurrent->psNext;
-    }
+		return psCurrent;
+	}
 
 	return NULL;
 }
