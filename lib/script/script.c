@@ -25,6 +25,7 @@
 
 #include "lib/framework/frame.h"
 #include "lib/framework/printf_ext.h"
+#include "lib/framework/file.h"
 #include "script.h"
 #include <assert.h>
 
@@ -109,7 +110,7 @@ void scrNewState(const char *filename)
 	}
 }
 
-char *scrSaveSingleState(lua_State *L)
+static char *scrSaveSingleState(lua_State *L)
 {
 	const char *result, *scriptfile;
 	char *save;

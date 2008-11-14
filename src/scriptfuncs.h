@@ -59,9 +59,6 @@ extern MESSAGE * findBeaconMsg(UDWORD player, SDWORD sender);
 extern SDWORD getNumRepairedBy(struct DROID *psDroidToCheck, SDWORD player);
 extern BOOL objectInRangeVis(struct BASE_OBJECT *psList, SDWORD x, SDWORD y, SDWORD range, SDWORD lookingPlayer);
 extern SDWORD getPlayerFromString(char *playerName);
-extern BOOL scrExp(void);
-extern BOOL scrSqrt(void);
-extern BOOL scrLog(void);
 
 // Lua
 #include "lib/lua/lua.h"

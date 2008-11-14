@@ -89,7 +89,7 @@ static int scrGroupAddDroid(lua_State *L)
 
 
 /// Add droids in an area to a group
-int scrGroupAddArea(lua_State *L)
+static int scrGroupAddArea(lua_State *L)
 {
 	DROID *psDroid;
 	DROID_GROUP *psGroup = luaWZObj_checkgroup(L, 1);
@@ -118,7 +118,7 @@ int scrGroupAddArea(lua_State *L)
 
 
 // Add groupless droids in an area to a group
-BOOL scrGroupAddAreaNoGroup(void)
+WZ_DECL_UNUSED static BOOL scrGroupAddAreaNoGroup(void)
 {
 	DROID_GROUP		*psGroup;
 	DROID			*psDroid;
@@ -173,7 +173,7 @@ static int scrGroupAddGroup(lua_State *L)
 
 
 // check if a droid is a member of a group
-BOOL scrGroupMember(void)
+WZ_DECL_UNUSED static BOOL scrGroupMember(void)
 {
 	DROID_GROUP		*psGroup;
 	DROID			*psDroid;
@@ -276,7 +276,7 @@ static int scrIterateGroup(lua_State *L)
 
 
 // initialise iterating a cluster
-BOOL scrInitIterateCluster(void)
+WZ_DECL_UNUSED static BOOL scrInitIterateCluster(void)
 {
 	SDWORD	clusterID;
 
@@ -292,7 +292,7 @@ BOOL scrInitIterateCluster(void)
 
 
 // iterate a cluster
-BOOL scrIterateCluster(void)
+WZ_DECL_UNUSED static BOOL scrIterateCluster(void)
 {
 	BASE_OBJECT		*psObj;
 
@@ -309,7 +309,7 @@ BOOL scrIterateCluster(void)
 
 
 // remove a droid from a group
-BOOL scrDroidLeaveGroup(void)
+WZ_DECL_UNUSED static BOOL scrDroidLeaveGroup(void)
 {
 	DROID			*psDroid;
 
@@ -328,7 +328,7 @@ BOOL scrDroidLeaveGroup(void)
 
 
 // Give a group an order
-BOOL scrOrderGroup(void)
+WZ_DECL_UNUSED static BOOL scrOrderGroup(void)
 {
 	DROID_GROUP		*psGroup;
 	DROID_ORDER		order;
@@ -389,7 +389,7 @@ static int scrOrderGroupLoc(lua_State *L)
 
 
 // Give a group an order to an object
-BOOL scrOrderGroupObj(void)
+WZ_DECL_UNUSED static BOOL scrOrderGroupObj(void)
 {
 	DROID_GROUP		*psGroup;
 	DROID_ORDER		order;
@@ -450,7 +450,7 @@ static int scrOrderDroid(lua_State *L)
 
 
 // Give a Droid an order to a location
-BOOL scrOrderDroidLoc(void)
+WZ_DECL_UNUSED static BOOL scrOrderDroidLoc(void)
 {
 	DROID			*psDroid;
 	DROID_ORDER		order;
@@ -564,7 +564,7 @@ static int scrSetDroidSecondary(lua_State *L)
 }
 
 // set the secondary state for a droid
-BOOL scrSetGroupSecondary(void)
+WZ_DECL_UNUSED static BOOL scrSetGroupSecondary(void)
 {
 	DROID_GROUP		*psGroup;
 	SECONDARY_ORDER		sec;
@@ -585,7 +585,7 @@ BOOL scrSetGroupSecondary(void)
 
 
 // add a droid to a commander
-BOOL scrCmdDroidAddDroid(void)
+WZ_DECL_UNUSED static BOOL scrCmdDroidAddDroid(void)
 {
 	DROID		*psDroid, *psCommander;
 
@@ -600,7 +600,7 @@ BOOL scrCmdDroidAddDroid(void)
 }
 
 // returns max number of droids in a commander group
-BOOL scrCmdDroidMaxGroup(void)
+WZ_DECL_UNUSED static BOOL scrCmdDroidMaxGroup(void)
 {
 	DROID		*psCommander;
 
@@ -627,7 +627,7 @@ UDWORD	scrDroidPref, scrDroidIgnore;
 
 
 // reset the structure preferences
-BOOL scrResetStructTargets(void)
+WZ_DECL_UNUSED static BOOL scrResetStructTargets(void)
 {
 	scrStructPref = 0;
 	scrStructIgnore = 0;
@@ -637,7 +637,7 @@ BOOL scrResetStructTargets(void)
 
 
 // reset the droid preferences
-BOOL scrResetDroidTargets(void)
+WZ_DECL_UNUSED static BOOL scrResetDroidTargets(void)
 {
 	scrDroidPref = 0;
 	scrDroidIgnore = 0;
@@ -647,7 +647,7 @@ BOOL scrResetDroidTargets(void)
 
 
 // set prefered structure target types
-BOOL scrSetStructTarPref(void)
+WZ_DECL_UNUSED static BOOL scrSetStructTarPref(void)
 {
 	UDWORD	pref;
 
@@ -681,7 +681,7 @@ BOOL scrSetStructTarPref(void)
 
 
 // set structure target ignore types
-BOOL scrSetStructTarIgnore(void)
+WZ_DECL_UNUSED static BOOL scrSetStructTarIgnore(void)
 {
 	UDWORD	pref;
 
@@ -715,7 +715,7 @@ BOOL scrSetStructTarIgnore(void)
 
 
 // set prefered droid target types
-BOOL scrSetDroidTarPref(void)
+WZ_DECL_UNUSED static BOOL scrSetDroidTarPref(void)
 {
 	UDWORD	pref;
 
@@ -752,7 +752,7 @@ BOOL scrSetDroidTarPref(void)
 }
 
 // set droid target ignore types
-BOOL scrSetDroidTarIgnore(void)
+WZ_DECL_UNUSED static BOOL scrSetDroidTarIgnore(void)
 {
 	UDWORD	pref;
 
@@ -1136,7 +1136,7 @@ static BASE_OBJECT *scrTargetInArea(SDWORD tarPlayer, SDWORD visPlayer, SDWORD t
 }
 
 // get a structure target in an area using the preferences
-BOOL scrStructTargetInArea(void)
+WZ_DECL_UNUSED static BOOL scrStructTargetInArea(void)
 {
 	SDWORD		x1,y1,x2,y2;
 	SDWORD		tarPlayer, visPlayer;
@@ -1158,7 +1158,7 @@ BOOL scrStructTargetInArea(void)
 }
 
 // get a structure target on the map using the preferences
-BOOL scrStructTargetOnMap(void)
+WZ_DECL_UNUSED static BOOL scrStructTargetOnMap(void)
 {
 	SDWORD		tarPlayer, visPlayer;
 	STRUCTURE	*psTarget;
@@ -1182,7 +1182,7 @@ BOOL scrStructTargetOnMap(void)
 }
 
 // get a droid target in an area using the preferences
-BOOL scrDroidTargetInArea(void)
+WZ_DECL_UNUSED static BOOL scrDroidTargetInArea(void)
 {
 	SDWORD		x1,y1,x2,y2;
 	SDWORD		tarPlayer, visPlayer;
@@ -1206,7 +1206,7 @@ BOOL scrDroidTargetInArea(void)
 }
 
 // get a droid target on the map using the preferences
-BOOL scrDroidTargetOnMap(void)
+WZ_DECL_UNUSED static BOOL scrDroidTargetOnMap(void)
 {
 	SDWORD		tarPlayer, visPlayer;
 	DROID		*psTarget;
@@ -1230,7 +1230,7 @@ BOOL scrDroidTargetOnMap(void)
 }
 
 // get a target from a cluster using the preferences
-BOOL scrTargetInCluster(void)
+WZ_DECL_UNUSED static BOOL scrTargetInCluster(void)
 {
 	SDWORD		tarPlayer, tarType, visPlayer, clusterID, cluster;
 	BASE_OBJECT	*psTarget;
@@ -1495,7 +1495,8 @@ static int scrSkDoResearch(lua_State *L)
 	
 	STRUCTURE *psBuilding = (STRUCTURE*)luaWZObj_checkobject(L, 1, OBJ_STRUCTURE);
 	int player            = luaWZ_checkplayer(L, 2);
-	int bias              = luaL_checkint(L, 3);
+	// this parameter is passed but unused
+	// int bias              = luaL_checkint(L, 3);
 
 	psResFacilty =	(RESEARCH_FACILITY*)psBuilding->pFunctionality;
 
@@ -1575,7 +1576,7 @@ static int scrSkVtolEnableCheck(lua_State *L)
 }
 
 // ********************************************************************************************
-BOOL scrSkGetFactoryCapacity(void)
+WZ_DECL_UNUSED static BOOL scrSkGetFactoryCapacity(void)
 {
 	SDWORD count=0;
 	STRUCTURE *psStructure;
@@ -1885,19 +1886,19 @@ failed:
 
 
 // return a good place to build a defence, given a starting point
-BOOL scrSkDefenseLocation(void)
+WZ_DECL_UNUSED static BOOL scrSkDefenseLocation(void)
 {
     return defenseLocation(false);
 }
 
 // return a good place to build a defence with a min number of clear tiles
-BOOL scrSkDefenseLocationB(void)
+WZ_DECL_UNUSED static BOOL scrSkDefenseLocationB(void)
 {
     return defenseLocation(true);
 }
 
 
-BOOL scrSkFireLassat(void)
+WZ_DECL_UNUSED static BOOL scrSkFireLassat(void)
 {
 	SDWORD	player;
 	BASE_OBJECT *psObj;
@@ -1918,7 +1919,7 @@ BOOL scrSkFireLassat(void)
 //-----------------------
 // New functions
 //-----------------------
-BOOL scrActionDroidObj(void)
+WZ_DECL_UNUSED static BOOL scrActionDroidObj(void)
 {
 	DROID			*psDroid;
 	DROID_ACTION		action;
@@ -1957,7 +1958,7 @@ DROID_GROUP		*psScrIterateGroupB[MAX_PLAYERS];
 DROID			*psScrIterateGroupDroidB[MAX_PLAYERS];
 
 // initialise iterating a groups members
-BOOL scrInitIterateGroupB(void)
+WZ_DECL_UNUSED static BOOL scrInitIterateGroupB(void)
 {
 	DROID_GROUP	*psGroup;
 	SDWORD		bucket;
@@ -1982,7 +1983,7 @@ BOOL scrInitIterateGroupB(void)
 
 //script function - improved version
 // iterate through a groups members
-BOOL scrIterateGroupB(void)
+WZ_DECL_UNUSED static BOOL scrIterateGroupB(void)
 {
 	DROID_GROUP	*psGroup;
 	DROID		*psDroid;

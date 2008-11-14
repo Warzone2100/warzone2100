@@ -561,7 +561,7 @@ static int scrDroidHasSeen(lua_State *L)
 
 // -----------------------------------------------------------------------------------------
 // Enable a component to be researched
-BOOL scrEnableComponent(void)
+WZ_DECL_UNUSED static BOOL scrEnableComponent(void)
 {
 	SDWORD		player;
 	INTERP_VAL	sVal;
@@ -675,7 +675,7 @@ static int scrMakeComponentAvailable(lua_State *L)
 
 // -----------------------------------------------------------------------------------------
 // Add a droid
-BOOL scrAddDroidToMissionList(void)
+WZ_DECL_UNUSED static BOOL scrAddDroidToMissionList(void)
 {
 	SDWORD			player;
 	DROID_TEMPLATE	*psTemplate;
@@ -764,7 +764,7 @@ static int scrAddDroid(lua_State *L)
 // -----------------------------------------------------------------------------------------
 // Add droid to transporter
 
-BOOL scrAddDroidToTransporter(void)
+WZ_DECL_UNUSED static BOOL scrAddDroidToTransporter(void)
 {
 	DROID	*psTransporter, *psDroid;
 
@@ -797,7 +797,7 @@ BOOL scrAddDroidToTransporter(void)
 
 // -----------------------------------------------------------------------------------------
 //check for a building to have been destroyed
-BOOL scrBuildingDestroyed(void)
+WZ_DECL_UNUSED static BOOL scrBuildingDestroyed(void)
 {
 	SDWORD		player;
 	UDWORD		structureID;
@@ -884,7 +884,7 @@ static int scrIsStructureAvailable(lua_State *L)
 
 // -----------------------------------------------------------------------------------------
 //make the droid with the matching id the currently selected droid
-BOOL scrSelectDroidByID(void)
+WZ_DECL_UNUSED static BOOL scrSelectDroidByID(void)
 {
 	SDWORD			player, droidID;
 //	INTERP_VAL		sVal;
@@ -922,7 +922,7 @@ BOOL scrSelectDroidByID(void)
 
 // -----------------------------------------------------------------------------------------
 // Do an approximation to a square root
-BOOL scrApproxRoot(void)
+WZ_DECL_UNUSED static BOOL scrApproxRoot(void)
 {
 	SDWORD	val1, val2;
 
@@ -1206,7 +1206,7 @@ static int scrStructureIdle(lua_State *L)
 
 // -----------------------------------------------------------------------------------------
 // sends a players droids to a location to attack
-BOOL	scrAttackLocation(void)
+WZ_DECL_UNUSED static BOOL	scrAttackLocation(void)
 {
 	SDWORD		player, x, y;
 
@@ -1314,7 +1314,7 @@ static int scrGetFeature(lua_State *L)
  * are deleted between calls, unlike scrGetFeature also returns
  * burning features (mainly relevant for burning oil resources)
  */
-BOOL scrGetFeatureB(void)
+WZ_DECL_UNUSED static BOOL scrGetFeatureB(void)
 {
 	SDWORD	bucket;
 
@@ -1378,7 +1378,7 @@ BOOL scrGetFeatureB(void)
 // enum next visible feature of required type.
 // note: wont return features covered by structures (ie oil resources)
 // YUK NASTY BUG. CANT RELY ON THE FEATURE LIST BETWEEN CALLS.
-BOOL scrGetFeature(void)
+WZ_DECL_UNUSED static BOOL scrGetFeature(void)
 {
 	SDWORD	bucket;
 
@@ -1469,7 +1469,7 @@ static int scrAddFeature(lua_State *L)
 
 // -----------------------------------------------------------------------------------------
 //Add a structure
-BOOL scrAddStructure(void)
+WZ_DECL_UNUSED static BOOL scrAddStructure(void)
 {
 	STRUCTURE_STATS		*psStat;
 	STRUCTURE			*psStruct = NULL;
@@ -1540,7 +1540,7 @@ BOOL scrAddStructure(void)
 
 // -----------------------------------------------------------------------------------------
 //Destroy a structure
-BOOL scrDestroyStructure(void)
+WZ_DECL_UNUSED static BOOL scrDestroyStructure(void)
 {
 	STRUCTURE	*psStruct;
 
@@ -1634,7 +1634,7 @@ static int scrEnumStruct(lua_State *L)
 }
 
 // init enum visible structures - takes bucket as additional parameter
-BOOL scrInitEnumStructB(void)
+WZ_DECL_UNUSED static BOOL scrInitEnumStructB(void)
 {
 	SDWORD		lookingPlayer,iStat,targetPlayer,bucket;
 	BOOL		any;
@@ -1666,7 +1666,7 @@ BOOL scrInitEnumStructB(void)
 }
 
 // Similar to scrEnumStruct, but uses bucket
-BOOL scrEnumStructB(void)
+WZ_DECL_UNUSED static BOOL scrEnumStructB(void)
 {
 	SDWORD		bucket;
 	UDWORD		count;
@@ -1754,7 +1754,6 @@ static int scrStructureBeingBuilt(lua_State *L)
 static int scrStructureComplete(lua_State *L)
 {
 	STRUCTURE *psStruct = (STRUCTURE*)luaWZObj_checkobject(L, 1, OBJ_STRUCTURE);
-	BOOL bResult;
 
 	lua_pushboolean(L, psStruct->status == SS_BUILT);
 	return 1;
@@ -1762,7 +1761,7 @@ static int scrStructureComplete(lua_State *L)
 
 // -----------------------------------------------------------------------------------------
 /*looks to see if a structure (specified by type) exists and built*/
-BOOL scrStructureBuilt(void)
+WZ_DECL_UNUSED static BOOL scrStructureBuilt(void)
 {
 //	INTERP_VAL			sVal;
 	UDWORD				structInc;
@@ -1810,7 +1809,7 @@ BOOL scrStructureBuilt(void)
 
 // -----------------------------------------------------------------------------------------
 /*centre the view on an object - can be droid/structure or feature */
-BOOL scrCentreView(void)
+WZ_DECL_UNUSED static BOOL scrCentreView(void)
 {
 	BASE_OBJECT	*psObj;
 //	INTERP_VAL	sVal;
@@ -1884,7 +1883,7 @@ static int scrGetStructure(lua_State *L)
 
 // -----------------------------------------------------------------------------------------
 // Get a pointer to a template based on a component stat - returns NULL if cannot find one
-BOOL scrGetTemplate(void)
+WZ_DECL_UNUSED static BOOL scrGetTemplate(void)
 {
 	SDWORD				player;
 	DROID_TEMPLATE		*psTemplate;
@@ -1988,7 +1987,7 @@ BOOL scrGetTemplate(void)
 
 // -----------------------------------------------------------------------------------------
 // Get a pointer to a droid based on a component stat - returns NULL if cannot find one
-BOOL scrGetDroid(void)
+WZ_DECL_UNUSED static BOOL scrGetDroid(void)
 {
 	SDWORD				player;
 	DROID				*psDroid;
@@ -2092,7 +2091,7 @@ BOOL scrGetDroid(void)
 
 // -----------------------------------------------------------------------------------------
 // Sets all the scroll params for the map
-BOOL scrSetScrollParams(void)
+WZ_DECL_UNUSED static BOOL scrSetScrollParams(void)
 {
 	SDWORD		minX, minY, maxX, maxY, prevMinX, prevMinY, prevMaxX, prevMaxY;
 
@@ -2128,7 +2127,7 @@ BOOL scrSetScrollParams(void)
 
 // -----------------------------------------------------------------------------------------
 // Sets the scroll minX separately for the map
-BOOL scrSetScrollMinX(void)
+WZ_DECL_UNUSED static BOOL scrSetScrollMinX(void)
 {
 	SDWORD				minX, prevMinX;
 
@@ -2157,7 +2156,7 @@ BOOL scrSetScrollMinX(void)
 
 // -----------------------------------------------------------------------------------------
 // Sets the scroll minY separately for the map
-BOOL scrSetScrollMinY(void)
+WZ_DECL_UNUSED static BOOL scrSetScrollMinY(void)
 {
 	SDWORD				minY, prevMinY;
 
@@ -2187,7 +2186,7 @@ BOOL scrSetScrollMinY(void)
 
 // -----------------------------------------------------------------------------------------
 // Sets the scroll maxX separately for the map
-BOOL scrSetScrollMaxX(void)
+WZ_DECL_UNUSED static BOOL scrSetScrollMaxX(void)
 {
 	SDWORD				maxX, prevMaxX;
 
@@ -2217,7 +2216,7 @@ BOOL scrSetScrollMaxX(void)
 
 // -----------------------------------------------------------------------------------------
 // Sets the scroll maxY separately for the map
-BOOL scrSetScrollMaxY(void)
+WZ_DECL_UNUSED static BOOL scrSetScrollMaxY(void)
 {
 	SDWORD				maxY, prevMaxY;
 
@@ -2246,7 +2245,7 @@ BOOL scrSetScrollMaxY(void)
 
 // -----------------------------------------------------------------------------------------
 // Sets which sensor will be used as the default for a player
-BOOL scrSetDefaultSensor(void)
+WZ_DECL_UNUSED static BOOL scrSetDefaultSensor(void)
 {
 	SDWORD				player;
 	UDWORD				sensorInc;
@@ -2286,7 +2285,7 @@ BOOL scrSetDefaultSensor(void)
 
 // -----------------------------------------------------------------------------------------
 // Sets which ECM will be used as the default for a player
-BOOL scrSetDefaultECM(void)
+WZ_DECL_UNUSED static BOOL scrSetDefaultECM(void)
 {
 	SDWORD				player;
 	UDWORD				ecmInc;
@@ -2325,7 +2324,7 @@ BOOL scrSetDefaultECM(void)
 
 // -----------------------------------------------------------------------------------------
 // Sets which RepairUnit will be used as the default for a player
-BOOL scrSetDefaultRepair(void)
+WZ_DECL_UNUSED static BOOL scrSetDefaultRepair(void)
 {
 	SDWORD				player;
 	UDWORD				repairInc;
@@ -2455,7 +2454,7 @@ static int scrPlaySoundPos(lua_State *L)
 // -----------------------------------------------------------------------------------------
 
 /* add a text message to the top of the screen for the selected player*/
-BOOL scrShowConsoleText(void)
+WZ_DECL_UNUSED static BOOL scrShowConsoleText(void)
 {
 	char				*pText;
 	SDWORD				player;
@@ -2485,8 +2484,6 @@ static int scrAddConsoleText(lua_State *L)
 {
 	const char *pText = luaL_checkstring(L, 1);
 	int player = luaWZ_checkplayer(L, 2);
-	char *message;
-	//(pText, &message);
 
 	if (player == (SDWORD)selectedPlayer)
 	{
@@ -2507,8 +2504,6 @@ static int scrTagConsoleText(lua_State *L)
 {
 	const char *pText = luaL_checkstring(L, 1);
 	int player = luaWZ_checkplayer(L, 2);
-	char *message;
-	//scrvGetString(pText, &message);
 
 	if (player == (SDWORD)selectedPlayer)
 	{
@@ -2524,7 +2519,7 @@ static int scrTagConsoleText(lua_State *L)
 
 // -----------------------------------------------------------------------------------------
 
-BOOL	scrClearConsole(void)
+WZ_DECL_UNUSED static BOOL	scrClearConsole(void)
 {
 	flushConsoleMessages();
 	return(true);
@@ -2532,7 +2527,7 @@ BOOL	scrClearConsole(void)
 
 // -----------------------------------------------------------------------------------------
 //demo functions for turning the power on
-BOOL scrTurnPowerOff(void)
+WZ_DECL_UNUSED static BOOL scrTurnPowerOff(void)
 {
 	//powerCalculated = false;
 	powerCalc(false);
@@ -2542,7 +2537,7 @@ BOOL scrTurnPowerOff(void)
 
 // -----------------------------------------------------------------------------------------
 //demo functions for turning the power off
-BOOL scrTurnPowerOn(void)
+WZ_DECL_UNUSED static BOOL scrTurnPowerOn(void)
 {
 
 	//powerCalculated = true;
@@ -2553,7 +2548,7 @@ BOOL scrTurnPowerOn(void)
 
 // -----------------------------------------------------------------------------------------
 //flags when the tutorial is over so that console messages can be turned on again
-BOOL scrTutorialEnd(void)
+WZ_DECL_UNUSED static BOOL scrTutorialEnd(void)
 {
 	initConsoleMessages();
 	return true;
@@ -2561,7 +2556,7 @@ BOOL scrTutorialEnd(void)
 
 // -----------------------------------------------------------------------------------------
 //function to play a full-screen video in the middle of the game for the selected player
-BOOL scrPlayVideo(void)
+WZ_DECL_UNUSED static BOOL scrPlayVideo(void)
 {
 	char				*pVideo, *pText;
 
@@ -2670,7 +2665,7 @@ static int scrGameOverMessage(lua_State *L)
 
 // -----------------------------------------------------------------------------------------
 //function to call when the game is over
-BOOL scrGameOver(void)
+WZ_DECL_UNUSED static BOOL scrGameOver(void)
 {
 	BOOL	gameOver;
 
@@ -2703,7 +2698,7 @@ BOOL scrGameOver(void)
 }
 
 // -----------------------------------------------------------------------------------------
-BOOL scrAnyFactoriesLeft(void)
+WZ_DECL_UNUSED static BOOL scrAnyFactoriesLeft(void)
 {
 	SDWORD		player;
 	BOOL		bResult;
@@ -2782,7 +2777,7 @@ static int scrAnyStructButWallsLeft(lua_State *L)
 
 // -----------------------------------------------------------------------------------------
 //defines the background audio to play
-BOOL scrPlayBackgroundAudio(void)
+WZ_DECL_UNUSED static BOOL scrPlayBackgroundAudio(void)
 {
 	char	*pText;
 	SDWORD	iVol;
@@ -2809,7 +2804,7 @@ static int scrPlayIngameCDAudio(lua_State *L)
 }
 
 // -----------------------------------------------------------------------------------------
-BOOL scrStopCDAudio(void)
+WZ_DECL_UNUSED static BOOL scrStopCDAudio(void)
 {
 	debug(LOG_SOUND, "Script wanted music to stop");
 	cdAudio_Stop();
@@ -2817,14 +2812,14 @@ BOOL scrStopCDAudio(void)
 }
 
 // -----------------------------------------------------------------------------------------
-BOOL scrPauseCDAudio(void)
+WZ_DECL_UNUSED static BOOL scrPauseCDAudio(void)
 {
 	cdAudio_Pause();
 	return true;
 }
 
 // -----------------------------------------------------------------------------------------
-BOOL scrResumeCDAudio(void)
+WZ_DECL_UNUSED static BOOL scrResumeCDAudio(void)
 {
 	cdAudio_Resume();
 	return true;
@@ -2832,7 +2827,7 @@ BOOL scrResumeCDAudio(void)
 
 // -----------------------------------------------------------------------------------------
 // set the retreat point for a player
-BOOL scrSetRetreatPoint(void)
+WZ_DECL_UNUSED static BOOL scrSetRetreatPoint(void)
 {
 	SDWORD	player, x,y;
 
@@ -2861,7 +2856,7 @@ BOOL scrSetRetreatPoint(void)
 
 // -----------------------------------------------------------------------------------------
 // set the retreat force level
-BOOL scrSetRetreatForce(void)
+WZ_DECL_UNUSED static BOOL scrSetRetreatForce(void)
 {
 	SDWORD	player, level, numDroids;
 	DROID	*psCurr;
@@ -2897,7 +2892,7 @@ BOOL scrSetRetreatForce(void)
 
 // -----------------------------------------------------------------------------------------
 // set the retreat leadership
-BOOL scrSetRetreatLeadership(void)
+WZ_DECL_UNUSED static BOOL scrSetRetreatLeadership(void)
 {
 	SDWORD	player, level;
 
@@ -2970,7 +2965,7 @@ static int scrSetGroupRetreatForce(lua_State *L)
 
 // -----------------------------------------------------------------------------------------
 // set the retreat health level
-BOOL scrSetRetreatHealth(void)
+WZ_DECL_UNUSED static BOOL scrSetRetreatHealth(void)
 {
 	SDWORD	player, health;
 
@@ -2997,7 +2992,7 @@ BOOL scrSetRetreatHealth(void)
 }
 
 // -----------------------------------------------------------------------------------------
-BOOL scrSetGroupRetreatHealth(void)
+WZ_DECL_UNUSED static BOOL scrSetGroupRetreatHealth(void)
 {
 	SDWORD		health;
 	DROID_GROUP	*psGroup;
@@ -3078,7 +3073,7 @@ static int scrStartMission(lua_State *L)
 }
 
 //end a mission - NO LONGER CALLED FROM SCRIPT
-/*BOOL scrEndMission(void)
+/*WZ_DECL_UNUSED static BOOL scrEndMission(void)
 {
 	BOOL	status;
 
@@ -3092,7 +3087,7 @@ static int scrStartMission(lua_State *L)
 }*/
 // -----------------------------------------------------------------------------------------
 //set Snow (enable disable snow)
-BOOL scrSetSnow(void)
+WZ_DECL_UNUSED static BOOL scrSetSnow(void)
 {
 	BOOL bState;
 
@@ -3116,7 +3111,7 @@ BOOL scrSetSnow(void)
 
 // -----------------------------------------------------------------------------------------
 //set Rain (enable disable Rain)
-BOOL scrSetRain(void)
+WZ_DECL_UNUSED static BOOL scrSetRain(void)
 {
 	BOOL bState;
 
@@ -3294,7 +3289,7 @@ static int scrSetFogColour(lua_State *L)
 
 // -----------------------------------------------------------------------------------------
 // test function to test variable references
-BOOL scrRefTest(void)
+WZ_DECL_UNUSED static BOOL scrRefTest(void)
 {
 	SDWORD		Num = 0;
 
@@ -3365,7 +3360,7 @@ static int scrCreateAlliance(lua_State *L)
 
 // -----------------------------------------------------------------------------------------
 // offer an alliance
-BOOL scrOfferAlliance(void)
+WZ_DECL_UNUSED static BOOL scrOfferAlliance(void)
 {
 	SDWORD	player1,player2;
 	if (!stackPopParams(2, VAL_INT, &player1, VAL_INT, &player2))
@@ -3388,7 +3383,7 @@ BOOL scrOfferAlliance(void)
 
 // -----------------------------------------------------------------------------------------
 // Break an alliance between two players
-BOOL scrBreakAlliance(void)
+WZ_DECL_UNUSED static BOOL scrBreakAlliance(void)
 {
 	SDWORD	player1,player2;
 
@@ -3442,7 +3437,7 @@ if(bMultiPlayer)
 // -----------------------------------------------------------------------------------------
 // Multiplayer relevant scriptfuncs
 // returns true if 2 or more players are in alliance.
-BOOL scrAllianceExists(void)
+WZ_DECL_UNUSED static BOOL scrAllianceExists(void)
 {
 
 	UDWORD i,j;
@@ -3481,7 +3476,7 @@ static int scrAllianceExistsBetween(lua_State *L)
 }
 
 // -----------------------------------------------------------------------------------------
-BOOL scrPlayerInAlliance(void)
+WZ_DECL_UNUSED static BOOL scrPlayerInAlliance(void)
 {
 	UDWORD player,j;
 
@@ -3513,7 +3508,7 @@ BOOL scrPlayerInAlliance(void)
 
 // -----------------------------------------------------------------------------------------
 // returns true if a single alliance is dominant.
-BOOL scrDominatingAlliance(void)
+WZ_DECL_UNUSED static BOOL scrDominatingAlliance(void)
 {
 	UDWORD i,j;
 
@@ -3614,7 +3609,7 @@ static int scrStructureBuiltInRange(lua_State *L)
 
 // -----------------------------------------------------------------------------------------
 // generate a random number
-BOOL scrRandom(void)
+WZ_DECL_UNUSED static BOOL scrRandom(void)
 {
 	SDWORD		range, iResult;
 
@@ -3647,7 +3642,7 @@ BOOL scrRandom(void)
 
 // -----------------------------------------------------------------------------------------
 // randomise the random number seed
-BOOL scrRandomiseSeed(void)
+WZ_DECL_UNUSED static BOOL scrRandomiseSeed(void)
 {
 	srand((UDWORD)clock());
 
@@ -3708,7 +3703,7 @@ static int scrCompleteResearch(lua_State *L)
 // -----------------------------------------------------------------------------------------
 // This routine used to start just a reticule button flashing
 //   .. now it starts any button flashing (awaiting implmentation from widget library)
-BOOL scrFlashOn(void)
+WZ_DECL_UNUSED static BOOL scrFlashOn(void)
 {
 	SDWORD		button;
 
@@ -3735,7 +3730,7 @@ BOOL scrFlashOn(void)
 
 // -----------------------------------------------------------------------------------------
 // stop a generic button flashing
-BOOL scrFlashOff(void)
+WZ_DECL_UNUSED static BOOL scrFlashOff(void)
 {
 	SDWORD		button;
 
@@ -3773,7 +3768,7 @@ static int scrSetPowerLevel(lua_State *L)
 
 // -----------------------------------------------------------------------------------------
 //add some power for a player
-BOOL scrAddPower(void)
+WZ_DECL_UNUSED static BOOL scrAddPower(void)
 {
 	SDWORD		player, power;
 
@@ -3796,7 +3791,7 @@ BOOL scrAddPower(void)
 // -----------------------------------------------------------------------------------------
 /*set the landing Zone position for the map - this is for player 0. Can be
 scrapped and replaced by setNoGoAreas, left in for compatibility*/
-BOOL scrSetLandingZone(void)
+WZ_DECL_UNUSED static BOOL scrSetLandingZone(void)
 {
 	SDWORD		x1, x2, y1, y2;
 
@@ -3844,7 +3839,7 @@ BOOL scrSetLandingZone(void)
 
 /*set the landing Zone position for the Limbo droids and adds the Limbo droids
 to the world at the location*/
-BOOL scrSetLimboLanding(void)
+WZ_DECL_UNUSED static BOOL scrSetLimboLanding(void)
 {
 	SDWORD		x1, x2, y1, y2;
 
@@ -3895,7 +3890,7 @@ BOOL scrSetLimboLanding(void)
 
 // -----------------------------------------------------------------------------------------
 //initialises all the no go areas
-BOOL scrInitAllNoGoAreas(void)
+WZ_DECL_UNUSED static BOOL scrInitAllNoGoAreas(void)
 {
 	initNoGoAreas();
 
@@ -3904,7 +3899,7 @@ BOOL scrInitAllNoGoAreas(void)
 
 // -----------------------------------------------------------------------------------------
 //set a no go area for the map - landing zones for the enemy, or player 0
-int scrSetNoGoArea(lua_State *L)
+static int scrSetNoGoArea(lua_State *L)
 {
 	int x1 = luaL_checkint(L, 1);
 	int y1 = luaL_checkint(L, 2);
@@ -3961,9 +3956,9 @@ int scrSetNoGoArea(lua_State *L)
 /// What is the script doing setting radar zoom? Commenting out for now. - Per
 static int scrSetRadarZoom(lua_State *L)
 {
+#if 0
 	int level = luaL_checkint(L,1);
 
-#if 0
 	if (level < 0 || level > 2)
 	{
 		luaL_error(L, "scrSetRadarZoom: zoom level out of range" );
@@ -4014,7 +4009,7 @@ static int scrSetMissionTime(lua_State *L)
 }
 
 // this returns how long is left for the current mission time is 1/100th sec - same units as passed in
-BOOL scrMissionTimeRemaining(void)
+WZ_DECL_UNUSED static BOOL scrMissionTimeRemaining(void)
 {
 	SDWORD	  timeRemaining;
 
@@ -4099,7 +4094,7 @@ static int scrSetReinforcementTime(lua_State *L)
 
 // -----------------------------------------------------------------------------------------
 // Sets all structure limits for a player to a specified value
-BOOL scrSetAllStructureLimits(void)
+WZ_DECL_UNUSED static BOOL scrSetAllStructureLimits(void)
 {
 	SDWORD				player, limit;
 	STRUCTURE_LIMITS	*psStructLimits;
@@ -4145,7 +4140,7 @@ BOOL scrSetAllStructureLimits(void)
 
 // -----------------------------------------------------------------------------------------
 // clear all the console messages
-BOOL scrFlushConsoleMessages(void)
+WZ_DECL_UNUSED static BOOL scrFlushConsoleMessages(void)
 {
 	flushConsoleMessages();
 
@@ -4154,7 +4149,7 @@ BOOL scrFlushConsoleMessages(void)
 
 // -----------------------------------------------------------------------------------------
 // Establishes the distance between two points - uses an approximation
-BOOL scrDistanceTwoPts( void )
+WZ_DECL_UNUSED static BOOL scrDistanceTwoPts( void )
 {
 	SDWORD	x1,y1,x2,y2;
 
@@ -4176,7 +4171,7 @@ BOOL scrDistanceTwoPts( void )
 
 // -----------------------------------------------------------------------------------------
 // Returns whether two objects can see each other
-BOOL	scrLOSTwoBaseObjects( void )
+WZ_DECL_UNUSED static BOOL	scrLOSTwoBaseObjects( void )
 {
 BASE_OBJECT	*psSource,*psDest;
 BOOL		bWallsBlock;
@@ -4273,7 +4268,7 @@ static int scrKillStructsInArea(lua_State *L)
 }
 // -----------------------------------------------------------------------------------------
 // Returns a value representing the threat from droids in a given area
-BOOL	scrThreatInArea( void )
+WZ_DECL_UNUSED static BOOL	scrThreatInArea( void )
 {
 SDWORD	x1,y1,x2,y2;
 SDWORD	ldThreat,mdThreat,hdThreat;
@@ -4343,7 +4338,7 @@ BOOL	bVisible;
 }
 // -----------------------------------------------------------------------------------------
 // returns the nearest gateway bottleneck to a specified point
-BOOL scrGetNearestGateway( void )
+WZ_DECL_UNUSED static BOOL scrGetNearestGateway( void )
 {
 	SDWORD	x,y;
 	UDWORD	nearestSoFar;
@@ -4408,7 +4403,7 @@ BOOL scrGetNearestGateway( void )
 	return(true);
 }
 // -----------------------------------------------------------------------------------------
-BOOL	scrSetWaterTile(void)
+WZ_DECL_UNUSED static BOOL	scrSetWaterTile(void)
 {
 UDWORD	tileNum;
 
@@ -4430,7 +4425,7 @@ UDWORD	tileNum;
 	return(true);
 }
 // -----------------------------------------------------------------------------------------
-BOOL	scrSetRubbleTile(void)
+WZ_DECL_UNUSED static BOOL	scrSetRubbleTile(void)
 {
 UDWORD	tileNum;
 
@@ -4463,7 +4458,7 @@ static int scrSetCampaignNumber(lua_State *L)
 // -----------------------------------------------------------------------------------------
 // Tests whether a structure has a certain module for a player. Tests whether any structure
 // has this module if structure is null
-BOOL	scrTestStructureModule(void)
+WZ_DECL_UNUSED static BOOL	scrTestStructureModule(void)
 {
 SDWORD	player,refId;
 STRUCTURE	*psStructure,*psStruct;
@@ -4520,7 +4515,7 @@ BOOL	bFound;
 
 
 // -----------------------------------------------------------------------------------------
-BOOL	scrForceDamage( void )
+WZ_DECL_UNUSED static BOOL	scrForceDamage( void )
 {
 DROID		*psDroid;
 STRUCTURE	*psStructure;
@@ -4581,7 +4576,7 @@ UDWORD		newVal;
 }
 // Kills of a droid without spawning any explosion effects.
 // -----------------------------------------------------------------------------------------
-BOOL	scrDestroyUnitsInArea( void )
+WZ_DECL_UNUSED static BOOL	scrDestroyUnitsInArea( void )
 {
 DROID	*psDroid,*psNext;
 SDWORD	x1,y1,x2,y2;
@@ -4620,7 +4615,7 @@ UDWORD	count=0;
 	return(true);
 }
 // -----------------------------------------------------------------------------------------
-BOOL	scrRemoveDroid( void )
+WZ_DECL_UNUSED static BOOL	scrRemoveDroid( void )
 {
 DROID	*psDroid;
 
@@ -4704,7 +4699,7 @@ BOOL			bFound;
 
 // -----------------------------------------------------------------------------------------
 // give player a template belonging to another.
-BOOL scrAddTemplate(void)
+WZ_DECL_UNUSED static BOOL scrAddTemplate(void)
 {
 	DROID_TEMPLATE *psTemplate;
 	UDWORD			player;
@@ -4963,7 +4958,7 @@ static int scrPickStructLocationB(lua_State *L) // FIXME, duplicated code
 
 // -----------------------------------------------------------------------------------------
 // Sets the transporter entry and exit points for the map
-BOOL scrSetTransporterExit(void)
+WZ_DECL_UNUSED static BOOL scrSetTransporterExit(void)
 {
 	SDWORD	iPlayer, iExitTileX, iExitTileY;
 
@@ -4979,7 +4974,7 @@ BOOL scrSetTransporterExit(void)
 
 // -----------------------------------------------------------------------------------------
 // Fly transporters in at start of map
-BOOL scrFlyTransporterIn(void)
+WZ_DECL_UNUSED static BOOL scrFlyTransporterIn(void)
 {
 	SDWORD	iPlayer, iEntryTileX, iEntryTileY;
 	BOOL	bTrackTransporter;
@@ -5012,7 +5007,7 @@ BOOL scrFlyTransporterIn(void)
  *  RETURNS:
  *
  */
-BOOL scrGetGameStatus(void)
+WZ_DECL_UNUSED static BOOL scrGetGameStatus(void)
 {
 	SDWORD GameChoice;
 	BOOL bResult;
@@ -5066,7 +5061,7 @@ BOOL scrGetGameStatus(void)
 }
 
 //get the colour number used by a player
-BOOL scrGetPlayerColour(void)
+WZ_DECL_UNUSED static BOOL scrGetPlayerColour(void)
 {
 	SDWORD		player;
 
@@ -5091,7 +5086,7 @@ BOOL scrGetPlayerColour(void)
 }
 
 //get the colour name of the player ("green", "black" etc)
-BOOL scrGetPlayerColourName(void)
+WZ_DECL_UNUSED static BOOL scrGetPlayerColourName(void)
 {
 	SDWORD		player;
 
@@ -5117,7 +5112,7 @@ BOOL scrGetPlayerColourName(void)
 }
 
 //set the colour number to use for a player
-BOOL scrSetPlayerColour(void)
+WZ_DECL_UNUSED static BOOL scrSetPlayerColour(void)
 {
 	SDWORD		player, colour;
 
@@ -5198,7 +5193,7 @@ static int scrTakeOverDroidsInArea(lua_State *L)
 }
 
 /*this takes over a single droid and passes a pointer back to the new one*/
-BOOL scrTakeOverSingleDroid(void)
+WZ_DECL_UNUSED static BOOL scrTakeOverSingleDroid(void)
 {
 	SDWORD			playerToGain;
 	DROID		   *psDroidToTake, *psNewDroid;
@@ -5235,7 +5230,7 @@ BOOL scrTakeOverSingleDroid(void)
 
 // set all droids in an area of a certain experience level or less to belong to
 // a different player - returns the number of droids changed
-BOOL scrTakeOverDroidsInAreaExp(void)
+WZ_DECL_UNUSED static BOOL scrTakeOverDroidsInAreaExp(void)
 {
 	SDWORD		fromPlayer, toPlayer, x1, x2, y1, y2, numChanged, level, maxUnits;
 	DROID	   *psDroid, *psNext;
@@ -5313,7 +5308,7 @@ BOOL scrTakeOverDroidsInAreaExp(void)
 }
 
 /*this takes over a single structure and passes a pointer back to the new one*/
-BOOL scrTakeOverSingleStructure(void)
+WZ_DECL_UNUSED static BOOL scrTakeOverSingleStructure(void)
 {
 	SDWORD			playerToGain;
 	STRUCTURE	   *psStructToTake, *psNewStruct;
@@ -5376,7 +5371,7 @@ BOOL scrTakeOverSingleStructure(void)
 
 //set all structures in an area to belong to a different player - returns the number of droids changed
 //will not work on factories for the selectedPlayer
-BOOL scrTakeOverStructsInArea(void)
+WZ_DECL_UNUSED static BOOL scrTakeOverStructsInArea(void)
 {
 	SDWORD		fromPlayer, toPlayer, x1, x2, y1, y2, numChanged;
     STRUCTURE   *psStruct, *psNext, *psNewStruct;
@@ -5469,7 +5464,7 @@ BOOL scrTakeOverStructsInArea(void)
 }
 
 //set Flag for defining what happens to the droids in a Transporter
-BOOL scrSetDroidsToSafetyFlag(void)
+WZ_DECL_UNUSED static BOOL scrSetDroidsToSafetyFlag(void)
 {
 	BOOL bState;
 
@@ -5484,7 +5479,7 @@ BOOL scrSetDroidsToSafetyFlag(void)
 }
 
 //set Flag for defining whether the coded countDown is called
-BOOL scrSetPlayCountDown(void)
+WZ_DECL_UNUSED static BOOL scrSetPlayCountDown(void)
 {
 	BOOL bState;
 
@@ -5511,7 +5506,7 @@ static int scrGetDroidCount(lua_State *L)
 
 
 // fire a weapon stat at an object
-BOOL scrFireWeaponAtObj(void)
+WZ_DECL_UNUSED static BOOL scrFireWeaponAtObj(void)
 {
 	Vector3i target;
 	BASE_OBJECT *psTarget;
@@ -5538,7 +5533,7 @@ BOOL scrFireWeaponAtObj(void)
 }
 
 // fire a weapon stat at a location
-BOOL scrFireWeaponAtLoc(void)
+WZ_DECL_UNUSED static BOOL scrFireWeaponAtLoc(void)
 {
 	Vector3i target;
 	WEAPON sWeapon = {0, 0, 0, 0, 0, 0};
@@ -5557,7 +5552,7 @@ BOOL scrFireWeaponAtLoc(void)
 }
 
 // set the number of kills for a droid
-BOOL scrSetDroidKills(void)
+WZ_DECL_UNUSED static BOOL scrSetDroidKills(void)
 {
 	DROID	*psDroid;
 	SDWORD	kills;
@@ -5580,7 +5575,7 @@ BOOL scrSetDroidKills(void)
 }
 
 // get the number of kills for a droid
-BOOL scrGetDroidKills(void)
+WZ_DECL_UNUSED static BOOL scrGetDroidKills(void)
 {
 	DROID	*psDroid;
 
@@ -5606,7 +5601,7 @@ BOOL scrGetDroidKills(void)
 }
 
 // reset the visibility for a player
-BOOL scrResetPlayerVisibility(void)
+WZ_DECL_UNUSED static BOOL scrResetPlayerVisibility(void)
 {
 	SDWORD			player, i;
 	BASE_OBJECT		*psObj;
@@ -5652,7 +5647,7 @@ BOOL scrResetPlayerVisibility(void)
 
 
 // set the vtol return pos for a player
-BOOL scrSetVTOLReturnPos(void)
+WZ_DECL_UNUSED static BOOL scrSetVTOLReturnPos(void)
 {
 	SDWORD		player, tx,ty;
 
@@ -5674,7 +5669,7 @@ BOOL scrSetVTOLReturnPos(void)
 }
 
 //called via the script in a Limbo Expand level to set the level to plain ol' expand
-BOOL scrResetLimboMission(void)
+WZ_DECL_UNUSED static BOOL scrResetLimboMission(void)
 {
     //check currently on a Limbo expand mission
     if (!missionLimboExpand())
@@ -5702,7 +5697,7 @@ static int scrIsVtol(lua_State *L)
 
 
 // do the setting up of the template list for the tutorial.
-BOOL scrTutorialTemplates(void)
+WZ_DECL_UNUSED static BOOL scrTutorialTemplates(void)
 {
 	DROID_TEMPLATE	*psCurr, *psPrev;
 	char			pName[MAX_STR_LENGTH];
@@ -5764,7 +5759,7 @@ BOOL scrTutorialTemplates(void)
 //-----------------------------------------
 
 //compare two strings (0 means they are different)
-BOOL scrStrcmp(void)
+WZ_DECL_UNUSED static BOOL scrStrcmp(void)
 {
 	if (!stackPopParams(2, VAL_STRING, &strParam1, VAL_STRING, &strParam2))
 	{
@@ -5783,7 +5778,7 @@ BOOL scrStrcmp(void)
 }
 
 /* Output a string to console */
-BOOL scrConsole(void)
+WZ_DECL_UNUSED static BOOL scrConsole(void)
 {
 	if (!stackPopParams(1, VAL_STRING, &strParam1))
 	{
@@ -5796,7 +5791,7 @@ BOOL scrConsole(void)
 	return true;
 }
 
-BOOL scrDebug[MAX_PLAYERS];
+WZ_DECL_UNUSED static BOOL scrDebug[MAX_PLAYERS];
 
 /// turn on debug messages
 static int scrDbgMsgOn(lua_State *L)
@@ -5809,7 +5804,7 @@ static int scrDbgMsgOn(lua_State *L)
 	return 0;
 }
 
-BOOL scrMsg(void)
+WZ_DECL_UNUSED static BOOL scrMsg(void)
 {
 	SDWORD	playerTo,playerFrom;
 	char tmp[255];
@@ -5862,7 +5857,7 @@ static int scrDbg(lua_State *L)
 	return 0;
 }
 
-BOOL scrDebugFile(void)
+WZ_DECL_UNUSED static BOOL scrDebugFile(void)
 {
 	if (!stackPopParams(1, VAL_STRING, &strParam1))
 	{
@@ -5880,7 +5875,7 @@ static	UDWORD			playerVisibleDroid;
 static	UDWORD			enumDroidCount;
 
 /* Prepare the droid iteration */
-BOOL scrInitEnumDroids(void)
+WZ_DECL_UNUSED static BOOL scrInitEnumDroids(void)
 {
 	SDWORD	targetplayer,playerVisible;
 
@@ -5897,7 +5892,7 @@ BOOL scrInitEnumDroids(void)
 }
 
 /* Get next droid */
-BOOL scrEnumDroid(void)
+WZ_DECL_UNUSED static BOOL scrEnumDroid(void)
 {
 	UDWORD			count;
 	DROID		 *psDroid;
@@ -5942,7 +5937,7 @@ BOOL scrEnumDroid(void)
 }
 
 //Return the template factory is currently building
-BOOL scrFactoryGetTemplate(void)
+WZ_DECL_UNUSED static BOOL scrFactoryGetTemplate(void)
 {
 	STRUCTURE		*psStructure = NULL;
 	DROID_TEMPLATE	*psTemplate = NULL;
@@ -6027,7 +6022,7 @@ static int scrNumTemplatesInProduction(lua_State *L)
 }
 
 // Returns number of units based on a component a certain player has
-BOOL scrNumDroidsByComponent(void)
+WZ_DECL_UNUSED static BOOL scrNumDroidsByComponent(void)
 {
 	SDWORD				player,lookingPlayer,comp;
 	UDWORD				numFound;
@@ -6131,7 +6126,7 @@ BOOL scrNumDroidsByComponent(void)
 	return true;
 }
 
-BOOL scrGetStructureLimit(void)
+WZ_DECL_UNUSED static BOOL scrGetStructureLimit(void)
 {
 	SDWORD				player,limit;
 	UDWORD				structInc;
@@ -6169,7 +6164,7 @@ BOOL scrGetStructureLimit(void)
 }
 
 // Returns true if limit for the passed structurestat is reached, otherwise returns false
-BOOL scrStructureLimitReached(void)
+WZ_DECL_UNUSED static BOOL scrStructureLimitReached(void)
 {
 	SDWORD				player;
 	BOOL				bLimit = false;
@@ -6226,7 +6221,7 @@ static int scrGetNumStructures(lua_State *L)
 }
 
 // Return player's unit limit
-BOOL scrGetUnitLimit(void)
+WZ_DECL_UNUSED static BOOL scrGetUnitLimit(void)
 {
 	SDWORD				player;
 
@@ -6250,7 +6245,7 @@ BOOL scrGetUnitLimit(void)
 }
 
 // Return minimum of 2 vals
-BOOL scrMin(void)
+WZ_DECL_UNUSED static BOOL scrMin(void)
 {
 	SDWORD				val1,val2;
 
@@ -6269,7 +6264,7 @@ BOOL scrMin(void)
 }
 
 // Return maximum of 2 vals
-BOOL scrMax(void)
+WZ_DECL_UNUSED static BOOL scrMax(void)
 {
 	SDWORD				val1,val2;
 
@@ -6287,7 +6282,7 @@ BOOL scrMax(void)
 	return true;
 }
 
-BOOL scrFMin(void)
+WZ_DECL_UNUSED static BOOL scrFMin(void)
 {
 	float				fval1,fval2;
 
@@ -6306,7 +6301,7 @@ BOOL scrFMin(void)
 }
 
 // Return maximum of 2 floats
-BOOL scrFMax(void)
+WZ_DECL_UNUSED static BOOL scrFMax(void)
 {
 	float				fval1,fval2;
 
@@ -6398,7 +6393,7 @@ BOOL ThreatInRange(SDWORD player, SDWORD range, SDWORD rangeX, SDWORD rangeY, BO
 }
 
 //find unrevealed tile closest to pwLooker within the range of wRange
-BOOL scrFogTileInRange(void)
+WZ_DECL_UNUSED static BOOL scrFogTileInRange(void)
 {
 	SDWORD		pwLookerX,pwLookerY,tBestX,tBestY,threadRange;
 	SDWORD		wRangeX,wRangeY,tRangeX,tRangeY,wRange,player;
@@ -6498,7 +6493,7 @@ BOOL scrFogTileInRange(void)
 	return true;
 }
 
-BOOL scrMapRevealedInRange(void)
+WZ_DECL_UNUSED static BOOL scrMapRevealedInRange(void)
 {
 	SDWORD		wRangeX,wRangeY,tRangeX,tRangeY,wRange,tRange,player;
 	UDWORD		i,j;
@@ -6559,7 +6554,7 @@ BOOL scrMapRevealedInRange(void)
 }
 
 /* Returns true if a certain map tile was revealed, ie fog of war was removed */
-BOOL scrMapTileVisible(void)
+WZ_DECL_UNUSED static BOOL scrMapTileVisible(void)
 {
 	SDWORD		tileX,tileY,player;
 
@@ -6603,7 +6598,7 @@ BOOL scrMapTileVisible(void)
 
 //return number of reserach topics that are left to be researched
 //for a certain technology to become available
-BOOL scrNumResearchLeft(void)
+WZ_DECL_UNUSED static BOOL scrNumResearchLeft(void)
 {
 	RESEARCH			*psResearch;
 	SDWORD				player,iResult;
@@ -6797,7 +6792,7 @@ static int scrResearchStarted(lua_State *L)
 
 	if(psResearch == NULL)
 	{
-		return luaL_error("no such research topic: %s", researchName );
+		return luaL_error(L, "no such research topic: %s", researchName );
 	}
 
 	pPlayerRes = asPlayerResList[player];
@@ -6814,7 +6809,7 @@ static int scrResearchStarted(lua_State *L)
 }
 
 //returns true if location is dangerous
-BOOL scrThreatInRange(void)
+WZ_DECL_UNUSED static BOOL scrThreatInRange(void)
 {
 	SDWORD				player,range,rangeX,rangeY;
 	BOOL					bVTOLs;
@@ -6836,7 +6831,7 @@ BOOL scrThreatInRange(void)
 }
 
 
-BOOL scrNumEnemyWeapObjInRange(void)
+WZ_DECL_UNUSED static BOOL scrNumEnemyWeapObjInRange(void)
 {
 	SDWORD				lookingPlayer,range,rangeX,rangeY,i;
 	UDWORD				numEnemies = 0;
@@ -6872,7 +6867,7 @@ BOOL scrNumEnemyWeapObjInRange(void)
 }
 
 /* Calculates the total cost of enemy weapon objects in a certain area */
-BOOL scrEnemyWeapObjCostInRange(void)
+WZ_DECL_UNUSED static BOOL scrEnemyWeapObjCostInRange(void)
 {
 	SDWORD				lookingPlayer,range,rangeX,rangeY,i;
 	UDWORD				enemyCost = 0;
@@ -6909,7 +6904,7 @@ BOOL scrEnemyWeapObjCostInRange(void)
 /* Calculates the total cost of ally (+ looking player)
  * weapon objects in a certain area
  */
-BOOL scrFriendlyWeapObjCostInRange(void)
+WZ_DECL_UNUSED static BOOL scrFriendlyWeapObjCostInRange(void)
 {
 	SDWORD				player,range,rangeX,rangeY,i;
 	UDWORD				friendlyCost = 0;
@@ -7083,7 +7078,7 @@ static int scrNumPlayerWeapStructsInRange(lua_State *L)
 	return 1;
 }
 
-BOOL scrNumEnemyObjInRange(void)
+WZ_DECL_UNUSED static BOOL scrNumEnemyObjInRange(void)
 {
 	SDWORD				lookingPlayer,range,rangeX,rangeY;
 	BOOL				bVTOLs,bFinished;
@@ -7168,7 +7163,7 @@ UDWORD numEnemyObjInRange(SDWORD player, SDWORD range, SDWORD rangeX, SDWORD ran
 }
 
 /* Similiar to structureBuiltInRange(), but also returns true if structure is not finished */
-BOOL scrNumStructsByStatInRange(void)
+WZ_DECL_UNUSED static BOOL scrNumStructsByStatInRange(void)
 {
 	SDWORD		player, lookingPlayer, index, x, y, range;
 	SDWORD		rangeSquared,NumStruct;
@@ -7243,7 +7238,7 @@ BOOL scrNumStructsByStatInRange(void)
 	return true;
 }
 
-BOOL scrNumStructsByStatInArea(void)
+WZ_DECL_UNUSED static BOOL scrNumStructsByStatInArea(void)
 {
 	SDWORD		player, lookingPlayer, index, x1, y1, x2, y2;
 	SDWORD		NumStruct;
@@ -7305,7 +7300,7 @@ BOOL scrNumStructsByStatInArea(void)
 	return true;
 }
 
-BOOL scrNumStructsByTypeInRange(void)
+WZ_DECL_UNUSED static BOOL scrNumStructsByTypeInRange(void)
 {
 	SDWORD		targetPlayer, lookingPlayer, type, x, y, range;
 	SDWORD		rangeSquared,NumStruct;
@@ -7375,7 +7370,7 @@ BOOL scrNumStructsByTypeInRange(void)
 	return true;
 }
 
-BOOL scrNumFeatByTypeInRange(void)
+WZ_DECL_UNUSED static BOOL scrNumFeatByTypeInRange(void)
 {
 	SDWORD		lookingPlayer, type, x, y, range;
 	SDWORD		rangeSquared,NumFeat;
@@ -7446,7 +7441,7 @@ BOOL scrNumFeatByTypeInRange(void)
 }
 
 //returns num of visible structures of a certain player in range (only visible ones)
-BOOL scrNumStructsButNotWallsInRangeVis(void)
+WZ_DECL_UNUSED static BOOL scrNumStructsButNotWallsInRangeVis(void)
 {
 	SDWORD		player, lookingPlayer, x, y, range;
 	SDWORD		rangeSquared,NumStruct;
@@ -7515,7 +7510,7 @@ BOOL scrNumStructsButNotWallsInRangeVis(void)
 }
 
 // Only returns structure if it is visible
-BOOL scrGetStructureVis(void)
+WZ_DECL_UNUSED static BOOL scrGetStructureVis(void)
 {
 	SDWORD				player, lookingPlayer, index;
 	STRUCTURE			*psStruct;
@@ -7567,7 +7562,7 @@ BOOL scrGetStructureVis(void)
 }
 
 //returns num of visible structures of a certain player in range
-BOOL scrChooseValidLoc(void)
+WZ_DECL_UNUSED static BOOL scrChooseValidLoc(void)
 {
 	SDWORD sendY, sendX, *x, *y, player, threatRange;
 	UDWORD tx,ty;
@@ -7615,7 +7610,7 @@ BOOL scrChooseValidLoc(void)
 }
 
 //returns closest enemy object
-BOOL scrGetClosestEnemy(void)
+WZ_DECL_UNUSED static BOOL scrGetClosestEnemy(void)
 {
 	SDWORD				x,y,tx,ty, player, range,i;
 	UDWORD				dist, bestDist;
@@ -7732,7 +7727,7 @@ BOOL scrGetClosestEnemy(void)
 }
 
 //How many droids can it still fit?
-BOOL scrTransporterCapacity(void)
+WZ_DECL_UNUSED static BOOL scrTransporterCapacity(void)
 {
 	DROID			*psDroid;
 
@@ -7765,7 +7760,7 @@ BOOL scrTransporterCapacity(void)
 }
 
 //is it?
-BOOL scrTransporterFlying(void)
+WZ_DECL_UNUSED static BOOL scrTransporterFlying(void)
 {
 	DROID			*psDroid;
 
@@ -7797,7 +7792,7 @@ BOOL scrTransporterFlying(void)
 	return true;
 }
 
-BOOL scrUnloadTransporter(void)
+WZ_DECL_UNUSED static BOOL scrUnloadTransporter(void)
 {
 	DROID			*psDroid;
 	SDWORD			x,y;
@@ -7826,7 +7821,7 @@ BOOL scrUnloadTransporter(void)
 }
 
 //return true if droid is a member of any group
-BOOL scrHasGroup(void)
+WZ_DECL_UNUSED static BOOL scrHasGroup(void)
 {
 	DROID			*psDroid;
 	BOOL			retval;
@@ -7862,7 +7857,7 @@ BOOL scrHasGroup(void)
 }
 
 /* Range is in world units! */
-BOOL scrObjWeaponMaxRange(void)
+WZ_DECL_UNUSED static BOOL scrObjWeaponMaxRange(void)
 {
 	BASE_OBJECT			*psObj;
 	WEAPON_STATS		*psStats;
@@ -7917,7 +7912,7 @@ BOOL scrObjWeaponMaxRange(void)
 	return true;
 }
 
-BOOL scrObjHasWeapon(void)
+WZ_DECL_UNUSED static BOOL scrObjHasWeapon(void)
 {
 	BASE_OBJECT			*psObj;
 
@@ -7949,7 +7944,7 @@ BOOL scrObjHasWeapon(void)
 	return true;
 }
 
-BOOL scrObjectHasIndirectWeapon(void)
+WZ_DECL_UNUSED static BOOL scrObjectHasIndirectWeapon(void)
 {
 	WEAPON_STATS	*psWeapStats;
 	BOOL			bIndirect;
@@ -7996,7 +7991,7 @@ BOOL scrObjectHasIndirectWeapon(void)
 }
 
 //returns closest droid by type
-BOOL scrGetClosestEnemyDroidByType(void)
+WZ_DECL_UNUSED static BOOL scrGetClosestEnemyDroidByType(void)
 {
 	SDWORD				x,y,tx,ty, player, range,i,type;
 	UDWORD				dist,bestDist;
@@ -8085,7 +8080,7 @@ BOOL scrGetClosestEnemyDroidByType(void)
 }
 
 //returns closest structure by type
-BOOL scrGetClosestEnemyStructByType(void)
+WZ_DECL_UNUSED static BOOL scrGetClosestEnemyStructByType(void)
 {
 	SDWORD				x,y,tx,ty, player, range,i,type,dist;
 	UDWORD				bestDist;
@@ -8170,7 +8165,7 @@ BOOL scrGetClosestEnemyStructByType(void)
 
 
 //Approx point of intersection of a circle and a line with start loc being circle's center point
-BOOL scrCirclePerimPoint(void)
+WZ_DECL_UNUSED static BOOL scrCirclePerimPoint(void)
 {
 	SDWORD				basex,basey,*grx,*gry,radius;
 	float factor, deltaX, deltaY;
@@ -8212,7 +8207,7 @@ BOOL scrCirclePerimPoint(void)
 }
 
 //send my vision to AI
-BOOL scrGiftRadar(void)
+WZ_DECL_UNUSED static BOOL scrGiftRadar(void)
 {
 	SDWORD	playerFrom, playerTo;
 	BOOL	playMsg;
@@ -8237,7 +8232,7 @@ BOOL scrGiftRadar(void)
 	return true;
 }
 
-BOOL scrNumAllies(void)
+WZ_DECL_UNUSED static BOOL scrNumAllies(void)
 {
 	SDWORD			player,numAllies,i;
 
@@ -8282,7 +8277,7 @@ BOOL scrNumAllies(void)
 
 
 //num aa defenses in range
-BOOL scrNumAAinRange(void)
+WZ_DECL_UNUSED static BOOL scrNumAAinRange(void)
 {
 	SDWORD				targetPlayer,lookingPlayer,range,rangeX,rangeY;
 	SDWORD				tx,ty;
@@ -8329,7 +8324,7 @@ BOOL scrNumAAinRange(void)
 }
 
 //select droid
-BOOL scrSelectDroid(void)
+WZ_DECL_UNUSED static BOOL scrSelectDroid(void)
 {
 	BOOL	bSelect;
 	DROID	*psDroid;
@@ -8352,7 +8347,7 @@ BOOL scrSelectDroid(void)
 }
 
 //select droid group
-BOOL scrSelectGroup(void)
+WZ_DECL_UNUSED static BOOL scrSelectGroup(void)
 {
 	BOOL		bSelect;
 	DROID_GROUP	*psGroup;
@@ -8372,7 +8367,7 @@ BOOL scrSelectGroup(void)
 	return true;
 }
 
-BOOL scrModulo(void)
+WZ_DECL_UNUSED static BOOL scrModulo(void)
 {
 	SDWORD				num1,num2;
 
@@ -8392,7 +8387,7 @@ BOOL scrModulo(void)
 	return true;
 }
 
-BOOL scrPlayerLoaded(void)
+WZ_DECL_UNUSED static BOOL scrPlayerLoaded(void)
 {
 	SDWORD			player;
 	BOOL			bPlayerHasFactories=false;
@@ -8435,7 +8430,7 @@ BOOL scrPlayerLoaded(void)
 		/********************************/
 
 //Returns enemy base x and y for a certain player
-BOOL scrLearnPlayerBaseLoc(void)
+WZ_DECL_UNUSED static BOOL scrLearnPlayerBaseLoc(void)
 {
 	SDWORD				playerStoring,enemyPlayer, x, y;
 
@@ -8484,7 +8479,7 @@ BOOL scrLearnPlayerBaseLoc(void)
 }
 
 //Saves enemy base x and y for a certain player
-BOOL scrRecallPlayerBaseLoc(void)
+WZ_DECL_UNUSED static BOOL scrRecallPlayerBaseLoc(void)
 {
 	SDWORD				playerStoring,enemyPlayer, *x, *y;
 
@@ -8531,7 +8526,7 @@ BOOL scrRecallPlayerBaseLoc(void)
 }
 
 /* Checks if player base loc is stored */
-BOOL scrCanRememberPlayerBaseLoc(void)
+WZ_DECL_UNUSED static BOOL scrCanRememberPlayerBaseLoc(void)
 {
 	SDWORD				playerStoring,enemyPlayer;
 
@@ -8563,7 +8558,7 @@ BOOL scrCanRememberPlayerBaseLoc(void)
 }
 
 /* Stores the place where we were attacked at */
-BOOL scrLearnBaseDefendLoc(void)
+WZ_DECL_UNUSED static BOOL scrLearnBaseDefendLoc(void)
 {
 	SDWORD				playerStoring,enemyPlayer, x, y;
 
@@ -8607,7 +8602,7 @@ BOOL scrLearnBaseDefendLoc(void)
 }
 
 /* Stores the place where we were attacked at */
-BOOL scrLearnOilDefendLoc(void)
+WZ_DECL_UNUSED static BOOL scrLearnOilDefendLoc(void)
 {
 	SDWORD				playerStoring,enemyPlayer, x, y;
 
@@ -8651,7 +8646,7 @@ BOOL scrLearnOilDefendLoc(void)
 }
 
 /* Returns -1 if this location is not stored yet, otherwise returns index */
-BOOL scrGetBaseDefendLocIndex(void)
+WZ_DECL_UNUSED static BOOL scrGetBaseDefendLocIndex(void)
 {
 	SDWORD				playerStoring, x, y;
 
@@ -8692,7 +8687,7 @@ BOOL scrGetBaseDefendLocIndex(void)
 }
 
 /* Returns -1 if this location is not stored yet, otherwise returns index */
-BOOL scrGetOilDefendLocIndex(void)
+WZ_DECL_UNUSED static BOOL scrGetOilDefendLocIndex(void)
 {
 	SDWORD				playerStoring, x, y;
 
@@ -8734,7 +8729,7 @@ BOOL scrGetOilDefendLocIndex(void)
 }
 
 /* Returns number of available locations */
-BOOL scrGetBaseDefendLocCount(void)
+WZ_DECL_UNUSED static BOOL scrGetBaseDefendLocCount(void)
 {
 	scrFunctionResult.v.ival = MAX_BASE_DEFEND_LOCATIONS;
 	if (!stackPushResult(VAL_INT, &scrFunctionResult))
@@ -8747,7 +8742,7 @@ BOOL scrGetBaseDefendLocCount(void)
 }
 
 /* Returns number of available locations*/
-BOOL scrGetOilDefendLocCount(void)
+WZ_DECL_UNUSED static BOOL scrGetOilDefendLocCount(void)
 {
 	scrFunctionResult.v.ival = MAX_OIL_DEFEND_LOCATIONS;
 	if (!stackPushResult(VAL_INT, &scrFunctionResult))
@@ -8760,7 +8755,7 @@ BOOL scrGetOilDefendLocCount(void)
 }
 
 /* Returns a locations and its priority */
-BOOL scrRecallBaseDefendLoc(void)
+WZ_DECL_UNUSED static BOOL scrRecallBaseDefendLoc(void)
 {
 	SDWORD				player, *x, *y, *prior,index;
 
@@ -8816,7 +8811,7 @@ BOOL scrRecallBaseDefendLoc(void)
 }
 
 /* Returns number of available locations */
-BOOL scrRecallOilDefendLoc(void)
+WZ_DECL_UNUSED static BOOL scrRecallOilDefendLoc(void)
 {
 	SDWORD				player, *x, *y, *prior,index;
 
@@ -8872,7 +8867,7 @@ BOOL scrRecallOilDefendLoc(void)
 }
 
 /* Restores vilibility (fog of war) */
-BOOL scrRecallPlayerVisibility(void)
+WZ_DECL_UNUSED static BOOL scrRecallPlayerVisibility(void)
 {
 	SDWORD				player;
 
@@ -8899,7 +8894,7 @@ BOOL scrRecallPlayerVisibility(void)
 	return true;
 }
 
-BOOL scrSavePlayerAIExperience(void)
+WZ_DECL_UNUSED static BOOL scrSavePlayerAIExperience(void)
 {
 	SDWORD				player;
 	BOOL				bNotify;
@@ -8919,7 +8914,7 @@ BOOL scrSavePlayerAIExperience(void)
 	return true;
 }
 
-BOOL scrLoadPlayerAIExperience(void)
+WZ_DECL_UNUSED static BOOL scrLoadPlayerAIExperience(void)
 {
 	SDWORD				player;
 
@@ -9122,7 +9117,7 @@ MESSAGE * findBeaconMsg(UDWORD player, SDWORD sender)
 }
 
 /* Add beacon (radar blip) */
-BOOL scrDropBeacon(void)
+WZ_DECL_UNUSED static BOOL scrDropBeacon(void)
 {
 	SDWORD			forPlayer,sender;
 	char					ssval2[255];
@@ -9141,7 +9136,7 @@ BOOL scrDropBeacon(void)
 }
 
 /* Remove beacon from the map */
-BOOL scrRemoveBeacon(void)
+WZ_DECL_UNUSED static BOOL scrRemoveBeacon(void)
 {
 	MESSAGE			*psMessage;
 	SDWORD			player, sender;
@@ -9175,7 +9170,7 @@ BOOL scrRemoveBeacon(void)
 	return true;
 }
 
-BOOL scrClosestDamagedGroupDroid(void)
+WZ_DECL_UNUSED static BOOL scrClosestDamagedGroupDroid(void)
 {
 	DROID_GROUP	*psGroup;
 	DROID		*psDroid,*psClosestDroid;
@@ -9240,7 +9235,7 @@ SDWORD getNumRepairedBy(DROID *psDroidToCheck, SDWORD player)
 }
 
 /* Uses printf_console() for console debug output right now */
-BOOL scrMsgBox(void)
+WZ_DECL_UNUSED static BOOL scrMsgBox(void)
 {
 	if (!stackPopParams(1, VAL_STRING, &strParam1))
 	{
@@ -9255,7 +9250,7 @@ BOOL scrMsgBox(void)
 
 
 // Check for a struct being within a certain range of a position (must be visible)
-BOOL scrStructInRangeVis(void)
+WZ_DECL_UNUSED static BOOL scrStructInRangeVis(void)
 {
 	SDWORD		range, player,lookingPlayer, x,y;
 	BOOL		found;
@@ -9284,7 +9279,7 @@ BOOL scrStructInRangeVis(void)
 }
 
 // Check for a droid being within a certain range of a position (must be visible)
-BOOL scrDroidInRangeVis(void)
+WZ_DECL_UNUSED static BOOL scrDroidInRangeVis(void)
 {
 	SDWORD		range, player,lookingPlayer, x,y;
 	BOOL		found;
@@ -9541,7 +9536,7 @@ static int scrPursueResearch(lua_State *L)
 	return 1;
 }
 
-BOOL scrGetStructureType(void)
+WZ_DECL_UNUSED static BOOL scrGetStructureType(void)
 {
 	STRUCTURE			*psStruct;
 
@@ -9562,7 +9557,7 @@ BOOL scrGetStructureType(void)
 }
 
 /* Get player name from index */
-BOOL scrGetPlayerName(void)
+WZ_DECL_UNUSED static BOOL scrGetPlayerName(void)
 {
 	SDWORD	player;
 
@@ -9589,7 +9584,7 @@ BOOL scrGetPlayerName(void)
 }
 
 /* Set player name */
-BOOL scrSetPlayerName(void)
+WZ_DECL_UNUSED static BOOL scrSetPlayerName(void)
 {
 	SDWORD	player;
 
@@ -9653,7 +9648,7 @@ SDWORD getPlayerFromString(char *playerName)
 }
 
 /* Checks if a particular bit is set in an integer */
-BOOL scrGetBit(void)
+WZ_DECL_UNUSED static BOOL scrGetBit(void)
 {
 	SDWORD				val1,val2;
 
@@ -9675,7 +9670,7 @@ BOOL scrGetBit(void)
 }
 
 /* Sets a particular bit in an integer */
-BOOL scrSetBit(void)
+WZ_DECL_UNUSED static BOOL scrSetBit(void)
 {
 	SDWORD				base,position;
 	BOOL				bSet;
@@ -9708,7 +9703,7 @@ BOOL scrSetBit(void)
 }
 
 /* Can we create and break alliances? */
-BOOL scrAlliancesLocked(void)
+WZ_DECL_UNUSED static BOOL scrAlliancesLocked(void)
 {
 	BOOL		bResult = true;
 
@@ -9726,7 +9721,7 @@ BOOL scrAlliancesLocked(void)
 }
 
 /* Visualize radius at position */
-BOOL scrShowRangeAtPos(void)
+WZ_DECL_UNUSED static BOOL scrShowRangeAtPos(void)
 {
 	SDWORD		x,y,radius;
 
@@ -9742,7 +9737,7 @@ BOOL scrShowRangeAtPos(void)
 	return true;
 }
 
-BOOL scrToPow(void)
+WZ_DECL_UNUSED static BOOL scrToPow(void)
 {
 	float		x,y;
 
@@ -9763,7 +9758,7 @@ BOOL scrToPow(void)
 }
 
 /* Exponential function */
-BOOL scrExp(void)
+WZ_DECL_UNUSED static BOOL scrExp(void)
 {
 	float		fArg;
 
@@ -9782,7 +9777,7 @@ BOOL scrExp(void)
 }
 
 /* Square root */
-BOOL scrSqrt(void)
+WZ_DECL_UNUSED static BOOL scrSqrt(void)
 {
 	float		fArg;
 
@@ -9801,7 +9796,7 @@ BOOL scrSqrt(void)
 }
 
 /* Natural logarithm */
-BOOL scrLog(void)
+WZ_DECL_UNUSED static BOOL scrLog(void)
 {
 	float		fArg;
 
@@ -9820,7 +9815,7 @@ BOOL scrLog(void)
 }
 
 /* Show/Hide multiplayer debug menu */
-BOOL scrDebugMenu(void)
+WZ_DECL_UNUSED static BOOL scrDebugMenu(void)
 {
 	SDWORD		menuUp;
 
@@ -9836,7 +9831,7 @@ BOOL scrDebugMenu(void)
 }
 
 /* Set debug menu output string */
-BOOL scrSetDebugMenuEntry(void)
+WZ_DECL_UNUSED static BOOL scrSetDebugMenuEntry(void)
 {
 	SDWORD		index;
 
@@ -9852,7 +9847,7 @@ BOOL scrSetDebugMenuEntry(void)
 }
 
 /* Parse chat message and return number of commands that could be extracted */
-BOOL scrProcessChatMsg(void)
+WZ_DECL_UNUSED static BOOL scrProcessChatMsg(void)
 {
 	if (!stackPopParams(1, VAL_STRING, &strParam1))
 	{
@@ -9881,7 +9876,7 @@ BOOL scrProcessChatMsg(void)
 /* Returns number of command arguments for a certain
  * chat command that could be extracted
  */
-BOOL scrGetNumArgsInCmd(void)
+WZ_DECL_UNUSED static BOOL scrGetNumArgsInCmd(void)
 {
 	SDWORD		cmdIndex;
 
@@ -9913,7 +9908,7 @@ BOOL scrGetNumArgsInCmd(void)
 /* Returns a string representing a certain chat command,
  * based on the command index provided
  */
-BOOL scrGetChatCmdDescription(void)
+WZ_DECL_UNUSED static BOOL scrGetChatCmdDescription(void)
 {
 	SDWORD			cmdIndex;
 	char			*pChatCommand=NULL;
@@ -9962,7 +9957,7 @@ BOOL scrGetChatCmdDescription(void)
 /* Returns a certain parameter of a certain chat command
  * Returns false if failed
  */
-BOOL scrGetChatCmdParam(void)
+WZ_DECL_UNUSED static BOOL scrGetChatCmdParam(void)
 {
 	SDWORD			cmdIndex, argIndex;
 	void			*pArgument=NULL;
@@ -10025,7 +10020,7 @@ BOOL scrGetChatCmdParam(void)
 }
 
 /* Returns true if a certain command was addressed to a certain player */
-BOOL scrChatCmdIsPlayerAddressed(void)
+WZ_DECL_UNUSED static BOOL scrChatCmdIsPlayerAddressed(void)
 {
 	SDWORD		cmdIndex,playerInQuestion;
 
@@ -10061,7 +10056,7 @@ BOOL scrChatCmdIsPlayerAddressed(void)
 }
 
 /* Modifies height of a tile */
-BOOL scrSetTileHeight(void)
+WZ_DECL_UNUSED static BOOL scrSetTileHeight(void)
 {
 	UDWORD		tileX,tileY,newHeight;
 	MAPTILE		*psTile;
@@ -10084,7 +10079,7 @@ BOOL scrSetTileHeight(void)
 /* Returns structure which placed on provided coordinates.
  * Returns NULL (NULLOBJECT) if there's no structure.
  */
-BOOL scrGetTileStructure(void)
+WZ_DECL_UNUSED static BOOL scrGetTileStructure(void)
 {
 	SDWORD		structureX,structureY;
 
@@ -10106,7 +10101,7 @@ BOOL scrGetTileStructure(void)
 
 /* Outputs script call stack
  */
-BOOL scrPrintCallStack(void)
+WZ_DECL_UNUSED static BOOL scrPrintCallStack(void)
 {
 	scrOutputCallTrace(LOG_SCRIPT);
 
@@ -10116,7 +10111,7 @@ BOOL scrPrintCallStack(void)
 /*
  * Returns true if game debug mode is on
  */
-BOOL scrDebugModeEnabled(void)
+WZ_DECL_UNUSED static BOOL scrDebugModeEnabled(void)
 {
 
 	scrFunctionResult.v.bval = getDebugMappingStatus();
@@ -10132,7 +10127,7 @@ BOOL scrDebugModeEnabled(void)
 /*
  * Returns the cost of a droid
  */
-BOOL scrCalcDroidPower(void)
+WZ_DECL_UNUSED static BOOL scrCalcDroidPower(void)
 {
 	DROID	*psDroid;
 
@@ -10157,7 +10152,7 @@ BOOL scrCalcDroidPower(void)
 /*
  * Returns experience level of a droid
  */
-BOOL scrGetDroidLevel(void)
+WZ_DECL_UNUSED static BOOL scrGetDroidLevel(void)
 {
 	DROID	*psDroid;
 
@@ -10229,7 +10224,7 @@ static int scrDestroyed(lua_State *L)
  * Updates tile visibility for all map tiles for a given player,
  * to be used with scrCheckVisibleTile()
  */
-BOOL scrUpdateVisibleTiles(void)
+WZ_DECL_UNUSED static BOOL scrUpdateVisibleTiles(void)
 {
 	DROID		*psDroid;
 	STRUCTURE	*psStruct;
@@ -10263,7 +10258,7 @@ BOOL scrUpdateVisibleTiles(void)
  * Check is a given tile is visible for by a given player.
  * Should be used after a call to scrUpdateVisibleTiles().
  */
-BOOL scrCheckVisibleTile(void)
+WZ_DECL_UNUSED static BOOL scrCheckVisibleTile(void)
 {
 	int			x,y;
 	SDWORD		player;
@@ -10284,7 +10279,7 @@ BOOL scrCheckVisibleTile(void)
 }
 
 /* Assembles a template from components and returns it */
-BOOL scrAssembleWeaponTemplate(void)
+WZ_DECL_UNUSED static BOOL scrAssembleWeaponTemplate(void)
 {
 	SDWORD					player,bodyIndex,weapIndex,propIndex;
 	DROID_TEMPLATE			*pNewTemplate = NULL;
@@ -10427,7 +10422,7 @@ static DROID_TEMPLATE* scrCheckTemplateExists(SDWORD player, DROID_TEMPLATE *psT
 	return NULL;
 }
 
-BOOL scrWeaponShortHitUpgrade(void)
+WZ_DECL_UNUSED static BOOL scrWeaponShortHitUpgrade(void)
 {
 	SDWORD					player,weapIndex;
 	const WEAPON_STATS		*psWeapStats;
@@ -10448,7 +10443,7 @@ BOOL scrWeaponShortHitUpgrade(void)
 	return true;
 }
 
-BOOL scrWeaponLongHitUpgrade(void)
+WZ_DECL_UNUSED static BOOL scrWeaponLongHitUpgrade(void)
 {
 	SDWORD					player,weapIndex;
 	const WEAPON_STATS		*psWeapStats;
@@ -10470,7 +10465,7 @@ BOOL scrWeaponLongHitUpgrade(void)
 }
 
 
-BOOL scrWeaponDamageUpgrade(void)
+WZ_DECL_UNUSED static BOOL scrWeaponDamageUpgrade(void)
 {
 	SDWORD					player,weapIndex;
 	const WEAPON_STATS		*psWeapStats;
@@ -10491,7 +10486,7 @@ BOOL scrWeaponDamageUpgrade(void)
 	return true;
 }
 
-BOOL scrWeaponFirePauseUpgrade(void)
+WZ_DECL_UNUSED static BOOL scrWeaponFirePauseUpgrade(void)
 {
 	SDWORD					player,weapIndex;
 	const WEAPON_STATS		*psWeapStats;
@@ -10513,7 +10508,7 @@ BOOL scrWeaponFirePauseUpgrade(void)
 }
 
 
-BOOL scrIsComponentAvailable(void)
+WZ_DECL_UNUSED static BOOL scrIsComponentAvailable(void)
 {
 	SDWORD					player;
 	BOOL					bAvailable = false;
@@ -10575,7 +10570,7 @@ BOOL scrIsComponentAvailable(void)
 	return true;
 }
 
-BOOL scrGetBodySize(void)
+WZ_DECL_UNUSED static BOOL scrGetBodySize(void)
 {
 	SDWORD		bodyIndex;
 
@@ -10592,7 +10587,7 @@ BOOL scrGetBodySize(void)
 	return true;
 }
 
-BOOL scrGettext()
+WZ_DECL_UNUSED static BOOL scrGettext(void)
 {
 	if (!stackPopParams(1, VAL_STRING, &strParam1))
 	{
@@ -10604,7 +10599,7 @@ BOOL scrGettext()
 	return stackPushResult(ST_TEXTSTRING, &scrFunctionResult);
 }
 
-BOOL scrGettext_noop()
+WZ_DECL_UNUSED static BOOL scrGettext_noop(void)
 {
 	if (!stackPopParams(1, VAL_STRING, &strParam1))
 	{
@@ -10616,7 +10611,7 @@ BOOL scrGettext_noop()
 	return stackPushResult(VAL_STRING, &scrFunctionResult);
 }
 
-BOOL scrPgettext()
+WZ_DECL_UNUSED static BOOL scrPgettext(void)
 {
 	char* msg_ctxt_id;
 	char* translation;
@@ -10657,7 +10652,7 @@ BOOL scrPgettext()
 	return stackPushResult(ST_TEXTSTRING, &scrFunctionResult);
 }
 
-BOOL scrPgettext_expr()
+WZ_DECL_UNUSED static BOOL scrPgettext_expr(void)
 {
 	if (!stackPopParams(2, VAL_STRING, &strParam1, VAL_STRING, &strParam2))
 	{
@@ -10669,7 +10664,7 @@ BOOL scrPgettext_expr()
 	return stackPushResult(ST_TEXTSTRING, &scrFunctionResult);
 }
 
-BOOL scrPgettext_noop()
+WZ_DECL_UNUSED static BOOL scrPgettext_noop(void)
 {
 	if (!stackPopParams(2, VAL_STRING, &strParam1, VAL_STRING, &strParam2))
 	{

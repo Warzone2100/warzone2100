@@ -92,10 +92,7 @@ typedef struct
     } p;
 } EVENT;
 
-static unsigned int numEvents = 0;
-static EVENT eventList[100];
-
-BOOL scrCBDroidTaken(void)
+WZ_DECL_UNUSED static BOOL scrCBDroidTaken(void)
 {
 	DROID		**ppsDroid;
 	BOOL	triggered = false;
@@ -125,31 +122,8 @@ BOOL scrCBDroidTaken(void)
 	return true;
 }
 
-/// Deal with a CALL_NEWDROID
-int scrCheckNewDroid(lua_State *L)
-{
-	int i;
-	
-	int player = luaWZ_checkplayer(L, 1);
-	// now search for the event
-	for (i=0;i<numEvents;i++)
-	{
-		if (eventList[i].type == CALL_NEWDROID
-			&& eventList[i].p.newDroid.droid->player == player)
-		{
-			// ok, it fires
-			lua_pushboolean(L, true);
-			luaWZObj_pushdroid(L, eventList[i].p.newDroid.droid);
-			luaWZObj_pushstructure(L, eventList[i].p.newDroid.factory);
-			return 3;
-		}
-	}
-	lua_pushboolean(L, false);
-	return 1;
-}
-
 // Deal with a CALL_STRUCT_ATTACKED
-BOOL scrCBStructAttacked(void)
+WZ_DECL_UNUSED static BOOL scrCBStructAttacked(void)
 {
 	SDWORD			player;
 	STRUCTURE		**ppsTarget;
@@ -193,7 +167,7 @@ BOOL scrCBStructAttacked(void)
 }
 
 // Deal with a CALL_DROID_ATTACKED
-BOOL scrCBDroidAttacked(void)
+WZ_DECL_UNUSED static BOOL scrCBDroidAttacked(void)
 {
 	SDWORD			player;
 	DROID			**ppsTarget;
@@ -237,7 +211,7 @@ BOOL scrCBDroidAttacked(void)
 }
 
 // Deal with a CALL_ATTACKED
-BOOL scrCBAttacked(void)
+WZ_DECL_UNUSED static BOOL scrCBAttacked(void)
 {
 	SDWORD			player;
 	BASE_OBJECT		**ppsTarget;
@@ -283,7 +257,7 @@ BOOL scrCBAttacked(void)
 // The button id
 
 // deal with CALL_BUTTON_PRESSED
-BOOL scrCBButtonPressed(void)
+WZ_DECL_UNUSED static BOOL scrCBButtonPressed(void)
 {
 	UDWORD	button;
 	BOOL	triggered = false;
@@ -311,7 +285,7 @@ BOOL scrCBButtonPressed(void)
 DROID	*psCBSelectedDroid;
 
 // deal with CALL_DROID_SELECTED
-BOOL scrCBDroidSelected(void)
+WZ_DECL_UNUSED static BOOL scrCBDroidSelected(void)
 {
 	DROID	**ppsDroid;
 
@@ -339,7 +313,7 @@ BOOL scrCBDroidSelected(void)
 BASE_OBJECT *psCBObjDestroyed;
 
 // deal with a CALL_OBJ_DESTROYED
-BOOL scrCBObjDestroyed(void)
+WZ_DECL_UNUSED static BOOL scrCBObjDestroyed(void)
 {
 	SDWORD			player;
 	BASE_OBJECT		**ppsObj;
@@ -374,7 +348,7 @@ BOOL scrCBObjDestroyed(void)
 
 
 // deal with a CALL_STRUCT_DESTROYED
-BOOL scrCBStructDestroyed(void)
+WZ_DECL_UNUSED static BOOL scrCBStructDestroyed(void)
 {
 	SDWORD			player;
 	BASE_OBJECT		**ppsObj;
@@ -409,7 +383,7 @@ BOOL scrCBStructDestroyed(void)
 
 
 // deal with a CALL_DROID_DESTROYED
-BOOL scrCBDroidDestroyed(void)
+WZ_DECL_UNUSED static BOOL scrCBDroidDestroyed(void)
 {
 	SDWORD			player;
 	BASE_OBJECT		**ppsObj;
@@ -444,7 +418,7 @@ BOOL scrCBDroidDestroyed(void)
 
 
 // deal with a CALL_FEATURE_DESTROYED
-BOOL scrCBFeatureDestroyed(void)
+WZ_DECL_UNUSED static BOOL scrCBFeatureDestroyed(void)
 {
 	BASE_OBJECT		**ppsObj;
 	BOOL			retval;
@@ -481,7 +455,7 @@ BASE_OBJECT		*psScrCBObjSeen;
 BASE_OBJECT		*psScrCBObjViewer;
 
 // deal with all the object seen functions
-static BOOL scrCBObjectSeen(SDWORD callback)
+WZ_DECL_UNUSED static BOOL scrCBObjectSeen(SDWORD callback)
 {
 	BASE_OBJECT		**ppsObj;
 	BASE_OBJECT		**ppsViewer;
@@ -538,30 +512,30 @@ static BOOL scrCBObjectSeen(SDWORD callback)
 }
 
 // deal with a CALL_OBJ_SEEN
-BOOL scrCBObjSeen(void)
+WZ_DECL_UNUSED static BOOL scrCBObjSeen(void)
 {
 	return scrCBObjectSeen(CALL_OBJ_SEEN);
 }
 
 // deal with a CALL_DROID_SEEN
-BOOL scrCBDroidSeen(void)
+WZ_DECL_UNUSED static BOOL scrCBDroidSeen(void)
 {
 	return scrCBObjectSeen(CALL_DROID_SEEN);
 }
 
 // deal with a CALL_STRUCT_SEEN
-BOOL scrCBStructSeen(void)
+WZ_DECL_UNUSED static BOOL scrCBStructSeen(void)
 {
 	return scrCBObjectSeen(CALL_STRUCT_SEEN);
 }
 
 // deal with a CALL_FEATURE_SEEN
-BOOL scrCBFeatureSeen(void)
+WZ_DECL_UNUSED static BOOL scrCBFeatureSeen(void)
 {
 	return scrCBObjectSeen(CALL_FEATURE_SEEN);
 }
 
-BOOL scrCBTransporterOffMap( void )
+WZ_DECL_UNUSED static BOOL scrCBTransporterOffMap( void )
 {
 	SDWORD	player;
 	BOOL	retval;
@@ -593,7 +567,7 @@ BOOL scrCBTransporterOffMap( void )
 	return true;
 }
 
-BOOL scrCBTransporterLanded( void )
+WZ_DECL_UNUSED static BOOL scrCBTransporterLanded( void )
 {
 	SDWORD			player;
 	DROID_GROUP		*psGroup;
@@ -641,7 +615,7 @@ BOOL scrCBTransporterLanded( void )
 	return true;
 }
 
-BOOL scrCBTransporterLandedB( void )
+WZ_DECL_UNUSED static BOOL scrCBTransporterLandedB( void )
 {
 	SDWORD			player;
 	DROID_GROUP		*psGroup;
@@ -698,7 +672,7 @@ BOOL scrCBTransporterLandedB( void )
 
 // tell the scripts when a cluster is no longer valid
 SDWORD	scrCBEmptyClusterID;
-BOOL scrCBClusterEmpty( void )
+WZ_DECL_UNUSED static BOOL scrCBClusterEmpty( void )
 {
 	SDWORD		*pClusterID;
 
@@ -721,7 +695,7 @@ BOOL scrCBClusterEmpty( void )
 // note when a vtol has finished returning to base - used to vanish
 // vtols when they are attacking from off map
 DROID *psScrCBVtolOffMap;
-BOOL scrCBVtolOffMap(void)
+WZ_DECL_UNUSED static BOOL scrCBVtolOffMap(void)
 {
 	SDWORD	player;
 	DROID	**ppsVtol;
@@ -756,7 +730,7 @@ BOOL scrCBVtolOffMap(void)
 }
 
 /*called when selectedPlayer completes some research*/
-BOOL scrCBResCompleted(void)
+WZ_DECL_UNUSED static BOOL scrCBResCompleted(void)
 {
 	RESEARCH	**ppsResearch;
 	STRUCTURE	**ppsResFac;
@@ -798,7 +772,7 @@ BOOL scrCBResCompleted(void)
 
 
 /* when a humna player leaves a game*/
-BOOL scrCBPlayerLeft(void)
+WZ_DECL_UNUSED static BOOL scrCBPlayerLeft(void)
 {
 	SDWORD	*player;
 	if (!stackPopParams(1, VAL_REF | VAL_INT, &player) )
@@ -819,7 +793,7 @@ BOOL scrCBPlayerLeft(void)
 
 
 // alliance has been offered.
-BOOL scrCBAllianceOffer(void)
+WZ_DECL_UNUSED static BOOL scrCBAllianceOffer(void)
 {
 	SDWORD	*from,*to;
 
@@ -846,7 +820,7 @@ BOOL scrCBAllianceOffer(void)
 
 //console callback
 //---------------------------
-BOOL scrCallConsole(void)
+WZ_DECL_UNUSED static BOOL scrCallConsole(void)
 {
 	SDWORD	*player;
 	char	**ConsoleText = NULL;
@@ -879,7 +853,7 @@ BOOL scrCallConsole(void)
 
 //multiplayer beacon
 //---------------------------
-BOOL scrCallBeacon(void)
+WZ_DECL_UNUSED static BOOL scrCallBeacon(void)
 {
 	SDWORD	*playerFrom, playerTo;
 	char	**BeaconText = NULL;
@@ -947,7 +921,7 @@ BOOL scrCallBeacon(void)
 
 //multiplayer message callback
 //----------------------------
-BOOL scrCallMultiMsg(void)
+WZ_DECL_UNUSED static BOOL scrCallMultiMsg(void)
 {
 	SDWORD	*player, playerTo;
 	char	**ConsoleText = NULL;
@@ -1009,7 +983,7 @@ STRUCTURE	*psScrCBNewStruct = NULL;	//for scrCBStructBuilt callback
 DROID		*psScrCBNewStructTruck = NULL;
 //structure built callback
 //------------------------------
-BOOL scrCBStructBuilt(void)
+WZ_DECL_UNUSED static BOOL scrCBStructBuilt(void)
 {
 	SDWORD		player;
 	STRUCTURE	**ppsStructure;
@@ -1056,7 +1030,7 @@ BOOL scrCBStructBuilt(void)
 }
 
 /* Droid received stop order */
-BOOL scrCBDorderStop(void)
+WZ_DECL_UNUSED static BOOL scrCBDorderStop(void)
 {
 	SDWORD		player;
 	DROID		**ppsDroid;
@@ -1090,7 +1064,7 @@ BOOL scrCBDorderStop(void)
 }
 
 /* Droid reached destination point and stopped on its own */
-BOOL scrCBDorderReachedLocation(void)
+WZ_DECL_UNUSED static BOOL scrCBDorderReachedLocation(void)
 {
 	SDWORD		player;
 	SDWORD		*Order = NULL;
@@ -1127,7 +1101,7 @@ BOOL scrCBDorderReachedLocation(void)
 }
 
 /* Process key-combo */
-BOOL scrCBProcessKeyPress(void)
+WZ_DECL_UNUSED static BOOL scrCBProcessKeyPress(void)
 {
 	SDWORD		*key = NULL, *metaKey = NULL;
 
