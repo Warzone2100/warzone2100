@@ -6999,7 +6999,7 @@ BOOL scrNumDroidsByComponent(void)
 				}
 				break;
 			case ST_BRAIN:
-				if (psDroid->asBits[ST_BRAIN].nStat == comp)
+				if (psDroid->asBits[COMP_BRAIN].nStat == comp)
 				{
 					numFound++;
 				}
