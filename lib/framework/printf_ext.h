@@ -42,9 +42,36 @@ extern int vslcatprintf(char* str, size_t size, const char* format, va_list ap);
  */
 extern int slcatprintf(char* str, size_t size, const char* format, ...) WZ_DECL_FORMAT(printf, 3, 4);
 
-#if defined(WZ_OS_WIN)
+#if defined(WZ_OS_WIN) || defined(DOXYGEN)
 // These functions are GNU extensions; so make sure they are available on Windows also
+
+/**
+ * This function is analogue to vsprintf, except that it allocates a string
+ * large enough to hold the output including the terminating NUL character.
+ *
+ * \param[out] strp   If successful will hold a pointer to the formatted
+ *                    string. This pointer should be passed to free() to
+ *                    release the allocated storage when it is no longer
+ *                    needed. When unsuccessful the contents of \c strp are
+ *                    undefined (no memory will have been allocated though).
+ *
+ * \param      format The format specifier (the same to vsprintf).
+ *
+ * \param      ap     An argument list to be used in combination with \c format
+ *                    to print the string.
+ *
+ * \return When successful the amount of characters printed, just like
+ *         vsprintf. If memory allocation wasn't possible or some other error
+ *         occurred, -1 is returned.
+ */
 extern int vasprintf(char** strp, const char* format, va_list ap);
+
+/**
+ * This function is analogue to sprintf, except that it allocates a string
+ * large enough to hold the output including the terminating NUL character.
+ *
+ * @see vasprintf()
+ */
 extern int asprintf(char** strp, const char* format, ...) WZ_DECL_FORMAT(printf, 2, 3);
 #endif
 
