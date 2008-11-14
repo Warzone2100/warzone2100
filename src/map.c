@@ -392,7 +392,7 @@ static void objectWeaponTagged(int num, WEAPON *asWeaps, BASE_OBJECT **psTargets
 static void droidSaveTagged(DROID *psDroid)
 {
 	int plr = psDroid->player;
-	uint16_t v[DROID_MAXCOMP], i, order[4], ammo[VTOL_MAXWEAPS];
+	uint16_t v[ARRAY_SIZE(psDroid->asBits)], i, order[4], ammo[VTOL_MAXWEAPS];
 	int32_t sv[2];
 	float fv[3];
 
@@ -407,11 +407,11 @@ static void droidSaveTagged(DROID *psDroid)
 
 	tagWriteEnter(0x0a, 1);
 	tagWrite(0x01, psDroid->droidType);
-	for (i = 0; i < DROID_MAXCOMP; i++)
+	for (i = 0; i < ARRAY_SIZE(v); ++i)
 	{
 		v[i] = psDroid->asBits[i].nStat;
 	}
-	tagWrite16v(0x02, DROID_MAXCOMP, v);
+	tagWrite16v(0x02, ARRAY_SIZE(v), v);
 	// transporter droid in the mission list
 	if (psDroid->droidType == DROID_TRANSPORTER && apsDroidLists[plr] == mission.apsDroidLists[plr])
 	{

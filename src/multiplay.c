@@ -1354,7 +1354,7 @@ BOOL sendTemplate(DROID_TEMPLATE *pTempl)
 		NETstring(pTempl->aName, sizeof(pTempl->aName));
 		NETuint8_t(&pTempl->NameVersion);
 
-		for (i = 0; i < DROID_MAXCOMP; i++)
+		for (i = 0; i < ARRAY_SIZE(pTempl->asParts); ++i)
 		{
 			// signed, but sent as a bunch of bits...
 			NETint32_t(&pTempl->asParts[i]);
@@ -1392,7 +1392,7 @@ BOOL recvTemplate()
 		NETstring(pT->aName, sizeof(pT->aName));
 		NETuint8_t(&pT->NameVersion);
 
-		for (i = 0; i < DROID_MAXCOMP; i++)
+		for (i = 0; i < ARRAY_SIZE(pT->asParts); ++i)
 		{
 			// signed, but sent as a bunch of bits...
 			NETint32_t(&pT->asParts[i]);

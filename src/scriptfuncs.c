@@ -11539,18 +11539,20 @@ BOOL scrAssembleWeaponTemplate(void)
 static DROID_TEMPLATE* scrCheckTemplateExists(SDWORD player, DROID_TEMPLATE *psTempl)
 {
 	DROID_TEMPLATE    *psCurrent;
-	UDWORD				compType,weaponSlot;
+	UDWORD				weaponSlot;
 	bool				bEqual = true;
 
 	psCurrent = apsDroidTemplates[player];
 
-    while(psCurrent != NULL)
-    {
+	while(psCurrent != NULL)
+	{
+		unsigned int componentType;
+
 		// compare components
 		bEqual = true;
-		for(compType = 0; bEqual && compType < DROID_MAXCOMP; compType++)
+		for (componentType = 0; bEqual && componentType < ARRAY_SIZE(psTempl->asParts); ++componentType)
 		{
-			if(psTempl->asParts[compType] != psCurrent->asParts[compType])
+			if (psTempl->asParts[componentType] != psCurrent->asParts[componentType])
 			{
 				bEqual = false;
 			}
