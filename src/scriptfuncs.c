@@ -11783,8 +11783,7 @@ BOOL scrPgettext()
 		return false;
 	}
 
-	asprintf(&msg_ctxt_id, "%s%s%s", strParam1, GETTEXT_CONTEXT_GLUE, strParam2);
-	if (!msg_ctxt_id)
+	if (asprintf(&msg_ctxt_id, "%s%s%s", strParam1, GETTEXT_CONTEXT_GLUE, strParam2) == -1)
 	{
 		debug(LOG_ERROR, "Out of memory");
 		abort();
