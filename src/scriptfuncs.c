@@ -2822,12 +2822,12 @@ BOOL scrPlayBackgroundAudio(void)
 
 }
 
-BOOL scrPlayIngameCDAudio(void)
+static int scrPlayIngameCDAudio(lua_State *L)
 {
 	debug(LOG_SOUND, "Script wanted music to start");
 	cdAudio_PlayTrack(SONG_INGAME);
 
-	return true;
+	return 0;
 }
 
 // -----------------------------------------------------------------------------------------
@@ -3161,15 +3161,9 @@ BOOL scrSetRain(void)
 }
 
 // -----------------------------------------------------------------------------------------
-//set Background Fog (replace fade out with fog)
-BOOL scrSetBackgroundFog(void)
+static int scrSetBackgroundFog(lua_State *L)
 {
-	BOOL bState;
-
-	if (!stackPopParams(1, VAL_BOOL, &bState))
-	{
-		return false;
-	}
+	BOOL bState = luaL_checkboolean(L, 1);
 
 	//jps 17 feb 99 just set the status let other code worry about fogEnable/reveal
 	if (bState)//true, so go to false
@@ -3228,19 +3222,15 @@ BOOL scrSetBackgroundFog(void)
 	}
 */
 
-	return true;
+	return 0;
 }
 
 // -----------------------------------------------------------------------------------------
 //set Depth Fog (gradual fog from mid range to edge of world)
-BOOL scrSetDepthFog(void)
+static int scrSetDepthFog(lua_State *L)
 {
-	BOOL bState;
+	BOOL bState = luaL_checkboolean(L, 1);
 
-	if (!stackPopParams(1, VAL_BOOL, &bState))
-	{
-		return false;
-	}
 	// ffs am
 //jps 17 feb 99 just set the status let other code worry about fogEnable/reveal
 	if (bState)//true, so go to false
@@ -3298,20 +3288,18 @@ BOOL scrSetDepthFog(void)
 	}
 */
 
-	return true;
+	return 0;
 }
 
 // -----------------------------------------------------------------------------------------
-//set Mission Fog colour, may be modified by weather effects
-BOOL scrSetFogColour(void)
+/// set Mission Fog colour, may be modified by weather effects
+static int scrSetFogColour(lua_State *L)
 {
-	SDWORD	red,green,blue;
 	PIELIGHT scrFogColour;
-
-	if (!stackPopParams(3, VAL_INT, &red, VAL_INT, &green, VAL_INT, &blue))
-	{
-		return false;
-	}
+	
+	int red   = luaL_checkint(L, 1);
+	int green = luaL_checkint(L, 2);
+	int blue  = luaL_checkint(L, 3);
 
 	if (war_GetFog())
 	{
@@ -3323,7 +3311,7 @@ BOOL scrSetFogColour(void)
 		pie_SetFogColour(scrFogColour);
 	}
 
-	return true;
+	return 0;
 }
 
 // -----------------------------------------------------------------------------------------
@@ -4497,20 +4485,12 @@ UDWORD	tileNum;
 	return(true);
 }
 // -----------------------------------------------------------------------------------------
-BOOL	scrSetCampaignNumber(void)
+static int scrSetCampaignNumber(lua_State *L)
 {
-UDWORD	campaignNumber;
-
-	if(!stackPopParams(1,VAL_INT, &campaignNumber))
-	{
-		ASSERT( false,"SCRIPT : Cannot get parameter for scrSetCampaignNumber" );
-		return(false);
-	}
-
+	int campaignNumber = luaL_checkint(L, 1);
 
 	setCampaignNumber(campaignNumber);
-
-	return(true);
+	return 0;
 }
 
 // -----------------------------------------------------------------------------------------
@@ -11129,6 +11109,12 @@ void registerScriptfuncs(lua_State *L)
 	lua_register(L, "initGetFeature", scrInitGetFeature);
 	lua_register(L, "getFeature", scrGetFeature);
 	lua_register(L, "isVtol", scrIsVtol);
+	lua_register(L, "setCampaignNumber", scrSetCampaignNumber);
+	lua_register(L, "setBackgroundFog", scrSetBackgroundFog);
+	lua_register(L, "setDepthFog", scrSetDepthFog);
+	lua_register(L, "setFogColour", scrSetFogColour);
+	lua_register(L, "playIngameCDAudio", scrPlayIngameCDAudio);
+	//lua_register(L, "", );
 	//lua_register(L, "", );
 	//lua_register(L, "", );
 	//lua_register(L, "", );
