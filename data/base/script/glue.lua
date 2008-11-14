@@ -17,6 +17,26 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 ]]--
 
+-- to obtain information about undefined members
+__undefined_meta = {}
+function __undefined_meta.__index(table, key)
+	local name
+	val = rawget(table, key)
+	if not val then
+		name = _save.search(table)
+		if name then
+			name = "\""..name.."\""
+		else
+			name = "<local table>"
+		end
+		error(name .. " does not contain member \"" .. key .. "\"", 2)
+	end
+	return val
+end
+
+
+-- This are script api functions which are written in Lua
+
 function setLandingZone(x1, y1, x2, y2)
     setNoGoArea(x1, y1, x2, y2, 0)
 end

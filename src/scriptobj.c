@@ -1508,6 +1508,9 @@ void luaWZObj_pushbaseobject(lua_State *L, BASE_OBJECT* baseobject, int type)
 	luaWZ_setintfield(L, "y", baseobject->pos.y);
 	luaWZ_setintfield(L, "z", baseobject->pos.z);
 	luaWZ_setintfield(L, "player", baseobject->player);
+	
+	lua_getglobal(L, "__undefined_meta");
+	lua_setmetatable(L, -2);
 }
 
 void luaWZObj_pushstructure(lua_State *L, STRUCTURE* structure)
