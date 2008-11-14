@@ -71,7 +71,7 @@ int vasprintf(char** strp, const char* format, va_list ap)
 	else if (count < 0)
 	{
 		// Something went wrong, so return the error code (probably still requires checking of "errno" though)
-		return count;
+		return -1;
 	}
 
 	assert(strp != NULL);
@@ -80,7 +80,7 @@ int vasprintf(char** strp, const char* format, va_list ap)
 	*strp = malloc(count + 1);
 	if (*strp == NULL)
 	{
-		debug(LOG_ERROR, "vasprintf: Out of memory!");
+		debug(LOG_ERROR, "Out of memory!");
 		abort();
 		return -1;
 	}
