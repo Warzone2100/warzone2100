@@ -1513,6 +1513,7 @@ void luaWZObj_pushbaseobject(lua_State *L, BASE_OBJECT* baseobject, int type)
 void luaWZObj_pushstructure(lua_State *L, STRUCTURE* structure)
 {
 	luaWZObj_pushbaseobject(L, (BASE_OBJECT*)structure, OBJ_STRUCTURE);
+	luaWZ_setstringfield(L, "stat", structure->pStructureType->pName);
 }
 
 void luaWZObj_pushfeature(lua_State *L, FEATURE* feature)

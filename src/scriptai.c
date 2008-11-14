@@ -427,23 +427,11 @@ BOOL scrOrderGroupObj(void)
 	return true;
 }
 
-// Give a droid an order
-BOOL scrOrderDroid(void)
+/// Give a droid an order
+static int scrOrderDroid(lua_State *L)
 {
-	DROID			*psDroid;
-	DROID_ORDER		order;
-
-	if (!stackPopParams(2, ST_DROID, &psDroid, VAL_INT, &order))
-	{
-		return false;
-	}
-
-	ASSERT( psDroid != NULL,
-		"scrOrderUnit: Invalid unit pointer" );
-	if (psDroid == NULL)
-	{
-		return false;
-	}
+	DROID *psDroid = (DROID*)luaWZObj_checkobject(L, 1, OBJ_DROID);
+	DROID_ORDER order = luaL_checkint(L, 2);
 
 	if (order != DORDER_STOP &&
 		order != DORDER_RETREAT &&
@@ -452,14 +440,12 @@ BOOL scrOrderDroid(void)
 		order != DORDER_RTB &&
 		order != DORDER_RUN)
 	{
-		ASSERT( false,
-			"scrOrderUnit: Invalid order" );
-		return false;
+		return luaL_error(L, "Invalid order");
 	}
 
 	orderDroid(psDroid, order);
 
-	return true;
+	return 0;
 }
 
 
@@ -505,26 +491,12 @@ BOOL scrOrderDroidLoc(void)
 }
 
 
-// Give a Droid an order to an object
-BOOL scrOrderDroidObj(void)
+/// Give a Droid an order to an object
+static int scrOrderDroidObj(lua_State *L)
 {
-	DROID			*psDroid;
-	DROID_ORDER		order;
-	BASE_OBJECT		*psObj;
-
-	if (!stackPopParams(3, ST_DROID, &psDroid, VAL_INT, &order, ST_BASEOBJECT, &psObj))
-	{
-		return false;
-	}
-
-	ASSERT( psDroid != NULL,
-		"scrOrderUnitObj: Invalid unit pointer" );
-	ASSERT( psObj != NULL,
-		"scrOrderUnitObj: Invalid object pointer" );
-	if (psDroid == NULL || psObj == NULL)
-	{
-		return false;
-	}
+	DROID *psDroid = (DROID*)luaWZObj_checkobject(L, 1, OBJ_DROID);
+	DROID_ORDER order = luaL_checkint(L, 2);
+	BASE_OBJECT *psObj = luaWZObj_checkbaseobject(L, 3);
 
 	if (order != DORDER_ATTACK &&
 		order != DORDER_HELPBUILD &&
@@ -535,14 +507,11 @@ BOOL scrOrderDroidObj(void)
 		order != DORDER_FIRESUPPORT &&
 		order != DORDER_DROIDREPAIR)
 	{
-		ASSERT( false,
-			"scrOrderUnitObj: Invalid order" );
-		return false;
+		return luaL_error(L, "Invalid order");
 	}
 
 	orderDroidObj(psDroid, order, psObj);
-
-	return true;
+	return 0;
 }
 
 /// Give a Droid an order with a stat
@@ -583,28 +552,15 @@ static int scrOrderDroidStatsLoc(lua_State *L)
 }
 
 
-// set the secondary state for a droid
-BOOL scrSetDroidSecondary(void)
+/// set the secondary state for a droid
+static int scrSetDroidSecondary(lua_State *L)
 {
-	DROID		*psDroid;
-	SECONDARY_ORDER	sec;
-	SECONDARY_STATE	state;
-
-	if (!stackPopParams(3, ST_DROID, &psDroid, VAL_INT, &sec, VAL_INT, &state))
-	{
-		return false;
-	}
-
-	ASSERT( psDroid != NULL,
-		"scrSetUnitSecondary: invalid unit pointer" );
-	if (psDroid == NULL)
-	{
-		return false;
-	}
+	DROID *psDroid = (DROID*)luaWZObj_checkobject(L, 1, OBJ_DROID);
+	SECONDARY_ORDER sec = (SECONDARY_ORDER)luaL_checkint(L, 2);
+	SECONDARY_STATE state = (SECONDARY_STATE)luaL_checkint(L, 3);
 
 	secondarySetState(psDroid, sec, state);
-
-	return true;
+	return 0;
 }
 
 // set the secondary state for a droid
@@ -1529,21 +1485,17 @@ BOOL skTopicAvail(UWORD inc, UDWORD player)
 	return false;
 }
 // ********************************************************************************************
-BOOL scrSkDoResearch(void)
+static int scrSkDoResearch(lua_State *L)
 {
-	SDWORD				player, bias;//,timeToResearch;//,*x,*y;
 	UWORD				i;
-
 	char				sTemp[128];
-	STRUCTURE			*psBuilding;
 	RESEARCH_FACILITY	*psResFacilty;
 	PLAYER_RESEARCH		*pPlayerRes;
 	RESEARCH			*pResearch;
-
-	if (!stackPopParams(3,ST_STRUCTURE, &psBuilding, VAL_INT, &player, VAL_INT,&bias ))
-	{
-		return false;
-	}
+	
+	STRUCTURE *psBuilding = (STRUCTURE*)luaWZObj_checkobject(L, 1, OBJ_STRUCTURE);
+	int player            = luaWZ_checkplayer(L, 2);
+	int bias              = luaL_checkint(L, 3);
 
 	psResFacilty =	(RESEARCH_FACILITY*)psBuilding->pFunctionality;
 
@@ -1592,20 +1544,15 @@ BOOL scrSkDoResearch(void)
 
 	}
 
-	return true;
+	return 0;
 }
 
 // ********************************************************************************************
-BOOL scrSkVtolEnableCheck(void)
+static int scrSkVtolEnableCheck(lua_State *L)
 {
-	SDWORD player;
 	UDWORD i;
 
-	if (!stackPopParams(1,VAL_INT, &player ))
-	{
-		return false;
-	}
-
+	int player = luaWZ_checkplayer(L, 1);
 
 	// vtol factory
 	for(i=0;(i<numStructureStats)&&(asStructureStats[i].type != REF_VTOL_FACTORY);i++);
@@ -1617,22 +1564,14 @@ BOOL scrSkVtolEnableCheck(void)
 			if((asPropulsionStats[i].propulsionType == PROPULSION_TYPE_LIFT)
 			 && apCompLists[player][COMP_PROPULSION][i] == AVAILABLE)
 			{
-				scrFunctionResult.v.bval = true;
-				if (!stackPushResult(VAL_BOOL, &scrFunctionResult))		// success!
-				{
-					return false;
-				}
-				return true;
+				lua_pushboolean(L, true);
+				return 1;
 			}
 		}
 	}
 
-	scrFunctionResult.v.bval = false;
-	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))		// success!
-	{
-		return false;
-	}
-	return true;
+	lua_pushboolean(L, false);
+	return 1;
 }
 
 // ********************************************************************************************
@@ -1659,17 +1598,14 @@ BOOL scrSkGetFactoryCapacity(void)
 	return true;
 }
 // ********************************************************************************************
-BOOL scrSkDifficultyModifier(void)
+static int scrSkDifficultyModifier(lua_State *L)
 {
-	SDWORD              amount,player;
+	SDWORD              amount;
 	RESEARCH_FACILITY	*psResFacility;
 	STRUCTURE           *psStr;
 	PLAYER_RESEARCH		*pPlayerRes;
-
-	if (!stackPopParams(1,VAL_INT, &player ))
-	{
-		return false;
-	}
+	
+	int player = luaL_checkint(L,1);
 
 	/* Skip cheats if difficulty modifier slider is set to minimum.
 	 * (0 - player disabled, 20 - max value)
@@ -1714,7 +1650,7 @@ BOOL scrSkDifficultyModifier(void)
 	//free stuff??
 
 
-	return true;
+	return 0;
 }
 
 // ********************************************************************************************
@@ -2112,7 +2048,12 @@ void registerScriptAIfuncs(lua_State *L)
 	lua_register(L, "orderDroidStatsLoc", scrOrderDroidStatsLoc);
 	lua_register(L, "skCanBuildTemplate", scrSkCanBuildTemplate);
 	lua_register(L, "skLocateEnemy", scrSkLocateEnemy);
-	//lua_register(L, "", );
+	lua_register(L, "orderDroid", scrOrderDroid);
+	lua_register(L, "setDroidSecondary", scrSetDroidSecondary);
+	lua_register(L, "skDoResearch", scrSkDoResearch);
+	lua_register(L, "orderDroidObj", scrOrderDroidObj);
+	lua_register(L, "skDifficultyModifier", scrSkDifficultyModifier);
+	lua_register(L, "skVtolEnableCheck", scrSkVtolEnableCheck);
 	//lua_register(L, "", );
 	//lua_register(L, "", );
 

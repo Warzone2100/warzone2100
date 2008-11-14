@@ -1750,35 +1750,15 @@ static int scrStructureBeingBuilt(lua_State *L)
 
 // -----------------------------------------------------------------------------------------
 // multiplayer skirmish only for now.
-// returns true if a specific struct is complete. I know it's like the previous func,
-BOOL scrStructureComplete(void)
+/// returns true if a specific struct is complete. I know it's like the previous func,
+static int scrStructureComplete(lua_State *L)
 {
-	STRUCTURE	*psStruct;
-	BOOL		bResult;
+	STRUCTURE *psStruct = (STRUCTURE*)luaWZObj_checkobject(L, 1, OBJ_STRUCTURE);
+	BOOL bResult;
 
-	if (!stackPopParams(1, ST_STRUCTURE, &psStruct))
-	{
-		return false;
-	}
-	if(psStruct->status == SS_BUILT)
-	{
-		bResult = true;
-	}
-	else
-	{
-		bResult = false;
-	}
-
-	scrFunctionResult.v.bval = bResult;
-	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
-	{
-		return false;
-	}
-
-	return true;
+	lua_pushboolean(L, psStruct->status == SS_BUILT);
+	return 1;
 }
-
-
 
 // -----------------------------------------------------------------------------------------
 /*looks to see if a structure (specified by type) exists and built*/
@@ -2414,14 +2394,12 @@ static int scrSetStructureLimits(lua_State *L)
 
 
 // -----------------------------------------------------------------------------------------
-// multiplayer limit handler.
-BOOL scrApplyLimitSet(void)
+/// multiplayer limit handler.
+static int scrApplyLimitSet(lua_State *L)
 {
 	applyLimitSet();
-	return true;
+	return 0;
 }
-
-
 
 // -----------------------------------------------------------------------------------------
 /// plays a sound for the specified player - only plays the sound if the
@@ -3331,24 +3309,13 @@ BOOL scrRefTest(void)
 }
 
 // -----------------------------------------------------------------------------------------
-// is player a human or computer player? (multiplayer only)
-
-BOOL scrIsHumanPlayer(void)
+/// is player a human or computer player? (multiplayer only)
+static int scrIsHumanPlayer(lua_State *L)
 {
-	SDWORD	player;
+	int player = luaWZ_checkplayer(L, 1);
 
-	if (!stackPopParams(1, VAL_INT, &player))
-	{
-		return false;
-	}
-
-	scrFunctionResult.v.bval = isHumanPlayer(player);
-	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
-	{
-		return false;
-	}
-
-	return true;
+	lua_pushboolean(L, isHumanPlayer(player));
+	return 1;
 }
 
 
@@ -6021,29 +5988,21 @@ BOOL scrFactoryGetTemplate(void)
 	return true;
 }
 
-BOOL scrNumTemplatesInProduction(void)
+static int scrNumTemplatesInProduction(lua_State *L)
 {
-	SDWORD			player,numTemplates = 0;
+	SDWORD			numTemplates = 0;
 	DROID_TEMPLATE	*psTemplate;
 	STRUCTURE		*psStruct;
 	STRUCTURE		*psList;
 	BASE_STATS		*psBaseStats;
-
-	if (!stackPopParams(2, ST_TEMPLATE, &psTemplate, VAL_INT, &player))
-	{
-		debug(LOG_ERROR, "scrNumTemplatesInProduction: stackPopParams failed");
-		return false;
-	}
-
-	if (player >= MAX_PLAYERS)
-	{
-		debug(LOG_ERROR, "scrNumTemplatesInProduction: player number is too high");
-		ASSERT( false, "scrNumTemplatesInProduction: player number is too high" );
-		return false;
-	}
-
-	ASSERT( psTemplate != NULL,
-		"scrNumTemplatesInProduction: Invalid template pointer" );
+	char templateName2[MAXSTRLEN];
+	
+	const char *templateName = luaL_checkstring(L, 1);
+	int player = luaWZ_checkplayer(L, 2);
+	
+	// this function will change the name
+	strcpy(templateName2, templateName);
+	psTemplate = getTemplateFromTranslatedNameNoPlayer(templateName2);
 
 	psBaseStats = (BASE_STATS *)psTemplate; //Convert
 
@@ -6063,14 +6022,8 @@ BOOL scrNumTemplatesInProduction(void)
 		}
 	}
 
-	scrFunctionResult.v.ival = numTemplates;
-	if (!stackPushResult(VAL_INT, &scrFunctionResult))
-	{
-		debug(LOG_ERROR, "scrNumTemplatesInProduction: stackPushResult failed");
-		return false;
-	}
-
-	return true;
+	lua_pushinteger(L, numTemplates);
+	return 1;
 }
 
 // Returns number of units based on a component a certain player has
@@ -6256,38 +6209,20 @@ BOOL scrStructureLimitReached(void)
 	return true;
 }
 
-// How many structures of a given type a player has
-BOOL scrGetNumStructures(void)
+/// How many structures of a given type a player has
+static int scrGetNumStructures(lua_State *L)
 {
-	SDWORD				player,numStructures;
-	UDWORD				structInc;
-	STRUCTURE_LIMITS	*psStructLimits;
-
-	if (!stackPopParams(2, ST_STRUCTURESTAT, &structInc, VAL_INT, &player))
-	{
-		debug(LOG_ERROR, "scrSetStructureLimits: failed to pop");
-		return false;}
-
-	if (player >= MAX_PLAYERS)
-	{
-		debug(LOG_ERROR, "scrSetStructureLimits:player number is too high");
-		return false;}
-
-	if (structInc > numStructureStats)
-	{
-		debug(LOG_ERROR, "scrSetStructureLimits: Structure stat is too high");
-		return false;}
+	int numStructures;
+	STRUCTURE_LIMITS *psStructLimits;
+	
+	int structInc = luaWZObj_checkstructurestat(L, 1);
+	int player = luaWZ_checkplayer(L, 2);
 
 	psStructLimits = asStructLimits[player];
 	numStructures = (SDWORD)psStructLimits[structInc].currentQuantity;
 
-	scrFunctionResult.v.ival = numStructures;
-	if (!stackPushResult(VAL_INT, &scrFunctionResult))
-	{
-		return false;
-	}
-
-	return true;
+	lua_pushinteger(L, numStructures);
+	return 1;
 }
 
 // Return player's unit limit
@@ -6820,24 +6755,20 @@ BOOL beingResearchedByAlly(SDWORD resIndex, SDWORD player)
 	return false;
 }
 
-// true if player has completed this research
-BOOL scrResearchCompleted(void)
+/// true if player has completed this research
+static int scrResearchFinished(lua_State *L)
 {
-	RESEARCH			*psResearch;
-	SDWORD				player;
-	UWORD				index;
-	PLAYER_RESEARCH		*pPlayerRes;
-
-	if (!stackPopParams(2,ST_RESEARCH, &psResearch, VAL_INT, &player ))
-	{
-		debug(LOG_ERROR,   "scrResearchCompleted: stack failed");
-		return false;
-	}
+	int index;
+	PLAYER_RESEARCH *pPlayerRes;
+	
+	const char *researchName = luaL_checkstring(L, 1);
+	int player = luaWZ_checkplayer(L, 2);
+	
+	RESEARCH *psResearch = getResearch(researchName, false);
 
 	if(psResearch == NULL)
 	{
-		debug( LOG_ERROR, "scrResearchCompleted: no such research topic" );
-		return false;
+		return luaL_error(L, "no such research topic: %s", researchName);
 	}
 
 	pPlayerRes = asPlayerResList[player];
@@ -6845,48 +6776,28 @@ BOOL scrResearchCompleted(void)
 
 	if (index >= numResearch)
 	{
-		debug( LOG_ERROR, "scrResearchCompleted: invalid research index" );
-		return false;
+		debug( LOG_ERROR, "invalid research index" );
+		return luaL_error(L, "internal error");
 	}
 
-	if(IsResearchCompleted(&pPlayerRes[index]))
-	{
-		scrFunctionResult.v.bval = true;
-		if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
-		{
-			return false;
-		}
-	}
-	else
-	{
-		scrFunctionResult.v.bval = false;
-		if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
-		{
-			return false;
-		}
-	}
-
-	return true;
+	lua_pushboolean(L, IsResearchCompleted(&pPlayerRes[index]));
+	return 1;
 }
 
-// true if player has already started researching it
-BOOL scrResearchStarted(void)
+/// true if player has already started researching it
+static int scrResearchStarted(lua_State *L)
 {
-	RESEARCH			*psResearch;
-	SDWORD				player;
-	UWORD				index;
-	PLAYER_RESEARCH		*pPlayerRes;
-
-	if (!stackPopParams(2,ST_RESEARCH, &psResearch, VAL_INT, &player ))
-	{
-		debug(LOG_ERROR,  "scrResearchStarted(): stack failed");
-		return false;
-	}
+	int index;
+	PLAYER_RESEARCH *pPlayerRes;
+	
+	const char *researchName = luaL_checkstring(L, 1);
+	int player = luaWZ_checkplayer(L, 2);
+	
+	RESEARCH *psResearch = getResearch(researchName, false);
 
 	if(psResearch == NULL)
 	{
-		ASSERT( false, ": no such research topic" );
-		return false;
+		return luaL_error("no such research topic: %s", researchName );
 	}
 
 	pPlayerRes = asPlayerResList[player];
@@ -6894,28 +6805,12 @@ BOOL scrResearchStarted(void)
 
 	if (index >= numResearch)
 	{
-		ASSERT( false, "scrResearchCompleted: invalid research index" );
-		return false;
+		debug( LOG_ERROR, "invalid research index" );
+		return luaL_error(L, "internal error");
 	}
 
-	if(IsResearchStarted(&pPlayerRes[index]))
-	{
-		scrFunctionResult.v.bval = true;
-		if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
-		{
-			return false;
-		}
-	}
-	else
-	{
-		scrFunctionResult.v.bval = false;
-		if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
-		{
-			return false;
-		}
-	}
-
-	return true;
+	lua_pushboolean(L, IsResearchStarted(&pPlayerRes[index]));
+	return 1;
 }
 
 //returns true if location is dangerous
@@ -9465,33 +9360,28 @@ BOOL objectInRangeVis(BASE_OBJECT *psList, SDWORD x, SDWORD y, SDWORD range, SDW
 	return false;
 }
 
-/* Go after a certain research */
-BOOL scrPursueResearch(void)
+/// Go after a certain research
+static int scrPursueResearch(lua_State *L)
 {
-	RESEARCH			*psResearch;
-	SDWORD				foundIndex = 0,player,cur,tempIndex,Stack[400];
+	SDWORD				foundIndex = 0,cur,tempIndex,Stack[400];
 	UDWORD				index;
 	SWORD				top;
 
 	BOOL				found;
 	PLAYER_RESEARCH		*pPlayerRes;
-
 	char				sTemp[128];
-	STRUCTURE			*psBuilding;
 	RESEARCH_FACILITY	*psResFacilty;
+	RESEARCH *pResearch;
 
-	RESEARCH			*pResearch;
-
-	if (!stackPopParams(3,ST_STRUCTURE, &psBuilding, VAL_INT, &player, ST_RESEARCH, &psResearch ))
-	{
-		debug(LOG_ERROR, "scrPursueResearch(): stack failed");
-		return false;
-	}
+	STRUCTURE *psBuilding = (STRUCTURE*)luaWZObj_checkobject(L, 1, OBJ_STRUCTURE);
+	int player = luaWZ_checkplayer(L, 2);
+	const char *researchName = luaL_checkstring(L, 3);
+	
+	RESEARCH *psResearch = getResearch(researchName, false);
 
 	if(psResearch == NULL)
 	{
-		ASSERT(false, ": no such research topic");
-		return false;
+		return luaL_error(L, "no such research topic: %s", researchName);
 	}
 
 	psResFacilty =	(RESEARCH_FACILITY*)psBuilding->pFunctionality;
@@ -9511,8 +9401,8 @@ BOOL scrPursueResearch(void)
 
 	if (index >= numResearch)
 	{
-		ASSERT(false, "scrPursueResearch: invalid research index");
-		return false;
+		debug( LOG_ERROR, "invalid research index" );
+		return luaL_error(L, "internal error");
 	}
 
 	found = false;
@@ -9647,13 +9537,8 @@ BOOL scrPursueResearch(void)
 		NETlogEntry(sTemp,0,0);
 	}
 
-	scrFunctionResult.v.bval = found;
-	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
-	{
-		return false;
-	}
-
-	return true;
+	lua_pushboolean(L, found);
+	return 1;
 }
 
 BOOL scrGetStructureType(void)
@@ -9836,36 +9721,6 @@ BOOL scrAlliancesLocked(void)
 		debug(LOG_ERROR, "scrAlliancesLocked(): failed to push result");
 		return false;
 	}
-
-	return true;
-}
-
-BOOL scrASSERT(void)
-{
-	BOOL				bExpression;
-	SDWORD			player;
-	char			sTmp[255];
-
-	if (!stackPopParams(3, VAL_BOOL, &bExpression, VAL_STRING, &strParam1, VAL_INT, &player))
-	{
-		debug(LOG_ERROR, "scrASSERT(): stack failed");
-		return false;
-	}
-
-#ifdef DEBUG
-	/* Just pass the expression and message from script */
-	sprintf(sTmp,"%d) %s",player,strParam1);
-	ASSERT(bExpression, "%s", sTmp);
-#else
-	if(scrDebug[player])
-	{
-		if(!bExpression)
-		{
-			sprintf(sTmp,"%d) %s",player,strParam1);
-			addConsoleMessage(sTmp,RIGHT_JUSTIFY,player);
-		}
-	}
-#endif
 
 	return true;
 }
@@ -10905,6 +10760,19 @@ void registerScriptfuncs(lua_State *L)
 	lua_register(L, "playIngameCDAudio", scrPlayIngameCDAudio);
 	lua_register(L, "numPlayerWeapStructsInRange", scrNumPlayerWeapStructsInRange);
 	lua_register(L, "numPlayerWeapDroidsInRange", scrNumPlayerWeapDroidsInRange);
+	lua_register(L, "applyLimitSet", scrApplyLimitSet);
+	lua_register(L, "numTemplatesInProduction", scrNumTemplatesInProduction);
+	lua_register(L, "structureComplete", scrStructureComplete);
+	lua_register(L, "isHumanPlayer", scrIsHumanPlayer);
+	lua_register(L, "researchFinished", scrResearchFinished);
+	lua_register(L, "researchStarted", scrResearchStarted);
+	lua_register(L, "pursueResearch", scrPursueResearch);
+	lua_register(L, "getNumStructures", scrGetNumStructures);
+	//lua_register(L, "", );
+	//lua_register(L, "", );
+	//lua_register(L, "", );
+	//lua_register(L, "", );
+	//lua_register(L, "", );
 	//lua_register(L, "", );
 	//lua_register(L, "", );
 	//lua_register(L, "", );

@@ -30,6 +30,15 @@ function distBetweenTwoPoints(x1, y1, x2, y2)
 	return math.sqrt( math.pow(x1-x2, 2) + math.pow(y1-y2, 2) )
 end
 
+function ASSERT(check, message, me)
+	if not check then error("Player "..me..": "..message, 2) end
+end
+
+function objToStructure(object)
+	if not object.type == "structure" then error("object is not a structure", 2) end
+	return object
+end
+
 -- Functions for counting things in a range
 -- all objects
 function scrNumFriendlyWeapObjInRange(me, x, y, range, vtols, finished)
