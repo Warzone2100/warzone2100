@@ -7,6 +7,10 @@
    * Fix: Should fix flickering background on loading screen.
    * Fix: --nosound works correctly with videos now.
    * Fix: Clean up input stream after saving a save game, to prevent it from going into chat mode.
+ * AI:
+   * Fix: Allow a droid to pick a new target while auto-repairing. (ticket:35, bug #12217)
+ * Buildsystem:
+   * Fix: Only compile the translations when $(TRANSLATION) is "yes". (ticket:130)
 
 2008-11-09: Version 2.1_rc1
  * General:
