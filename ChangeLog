@@ -1,3 +1,7 @@
+0000-00-00: Version 2.1_rc2
+ * AI:
+   * Fix: Allow a droid to pick a new target while auto-repairing. (ticket:35, bug #12217)
+
 2008-11-09: Version 2.1_rc1
  * General:
    * Fix: Don't validate the weapons of a structure using the maximum amount of weapons on a droid (DROID_MAXWEAPS, bug #12400)
