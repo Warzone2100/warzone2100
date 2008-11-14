@@ -187,7 +187,7 @@ int luaWZ_checkplayer (lua_State *L, int narg) {
 	}
 	if (d < 0 || d >= 8) // HACK: MAX_PLAYERS
 	{
-		luaL_error(L, "player number out of range (%i)", d);
+		luaL_error(L, "player number out of range (%d)", d);
 	}
 	return d;
 }

@@ -7162,241 +7162,30 @@ UDWORD playerWeapStructsCostInRange(SDWORD player, SDWORD lookingPlayer, SDWORD 
 	return structsCost;
 }
 
-BOOL scrNumEnemyWeapDroidsInRange(void)
+static int scrNumPlayerWeapDroidsInRange(lua_State *L)
 {
-	SDWORD				lookingPlayer,range,rangeX,rangeY,i;
-	UDWORD				numEnemies = 0;
-	BOOL				bVTOLs;
+	int targetPlayer  = luaWZ_checkplayer(L, 1);
+	int lookingPlayer = luaWZ_checkplayer(L, 2);
+	int rangeX        = luaL_checkinteger(L, 3);
+	int rangeY        = luaL_checkinteger(L, 4);
+	int range         = luaL_checkinteger(L, 5);
+	BOOL bVTOLs       = luaL_checkboolean(L, 6);
 
-	if (!stackPopParams(5, VAL_INT, &lookingPlayer, VAL_INT, &rangeX,
-		VAL_INT, &rangeY, VAL_INT, &range, VAL_BOOL, &bVTOLs))
-	{
-		debug(LOG_ERROR,  "scrNumEnemyWeapDroidsInRange(): stack failed");
-		return false;
-	}
-
-	for(i=0;i<MAX_PLAYERS;i++)
-	{
-		if((alliances[lookingPlayer][i] == ALLIANCE_FORMED) || (i == lookingPlayer))	//skip allies and myself
-		{
-			continue;
-		}
-
-		numEnemies += numPlayerWeapDroidsInRange(i, lookingPlayer, range, rangeX, rangeY, bVTOLs);
-	}
-
-	scrFunctionResult.v.ival = numEnemies;
-	if (!stackPushResult(VAL_INT, &scrFunctionResult))
-	{
-		debug(LOG_ERROR,  "scrNumEnemyWeapDroidsInRange(): failed to push result");
-		return false;
-	}
-
-	return true;
+	lua_pushinteger(L, numPlayerWeapDroidsInRange(targetPlayer, lookingPlayer, range, rangeX, rangeY, bVTOLs));
+	return 1;
 }
 
-
-
-BOOL scrNumEnemyWeapStructsInRange(void)
+static int scrNumPlayerWeapStructsInRange(lua_State *L)
 {
-	SDWORD				lookingPlayer,range,rangeX,rangeY,i;
-	UDWORD				numEnemies = 0;
-	BOOL				bFinished;
+	int targetPlayer  = luaWZ_checkplayer(L, 1);
+	int lookingPlayer = luaWZ_checkplayer(L, 2);
+	int rangeX        = luaL_checkint(L, 3);
+	int rangeY        = luaL_checkint(L, 4);
+	int range         = luaL_checkint(L, 5);
+	BOOL bFinished    = luaL_checkboolean(L, 6);
 
-	if (!stackPopParams(5, VAL_INT, &lookingPlayer, VAL_INT, &rangeX,
-		VAL_INT, &rangeY, VAL_INT, &range, VAL_BOOL, &bFinished))
-	{
-		debug(LOG_ERROR,  "scrNumEnemyWeapStructsInRange(): stack failed");
-		return false;
-	}
-
-	for(i=0;i<MAX_PLAYERS;i++)
-	{
-		if((alliances[lookingPlayer][i] == ALLIANCE_FORMED) || (i == lookingPlayer))	//skip allies and myself
-		{
-			continue;
-		}
-
-		numEnemies += numPlayerWeapStructsInRange(i, lookingPlayer, range, rangeX, rangeY, bFinished);
-	}
-
-	scrFunctionResult.v.ival = numEnemies;
-	if (!stackPushResult(VAL_INT, &scrFunctionResult))
-	{
-		debug(LOG_ERROR, "scrNumEnemyWeapStructsInRange(): failed to push result");
-		return false;
-	}
-
-	return true;
-}
-
-BOOL scrNumFriendlyWeapObjInRange(void)
-{
-	SDWORD				player,range,rangeX,rangeY,i;
-	UDWORD				numFriends = 0;
-	BOOL				bVTOLs,bFinished;
-
-	if (!stackPopParams(6, VAL_INT, &player, VAL_INT, &rangeX,
-		VAL_INT, &rangeY, VAL_INT, &range, VAL_BOOL, &bVTOLs, VAL_BOOL, &bFinished))
-	{
-		debug(LOG_ERROR,  "scrNumFriendlyWeapObjInRange(): stack failed");
-		return false;
-	}
-
-	for(i=0;i<MAX_PLAYERS;i++)
-	{
-		if((alliances[player][i] == ALLIANCE_FORMED) || (i == player))	//skip enemies
-		{
-			numFriends += numPlayerWeapDroidsInRange(i, player, range, rangeX, rangeY, bVTOLs);
-			numFriends += numPlayerWeapStructsInRange(i, player, range, rangeX, rangeY,bFinished);
-		}
-	}
-
-	scrFunctionResult.v.ival = numFriends;
-	if (!stackPushResult(VAL_INT, &scrFunctionResult))
-	{
-		return false;
-	}
-
-	return true;
-}
-
-BOOL scrNumFriendlyWeapDroidsInRange(void)
-{
-	SDWORD				lookingPlayer,range,rangeX,rangeY,i;
-	UDWORD				numEnemies = 0;
-	BOOL				bVTOLs;
-
-	if (!stackPopParams(5, VAL_INT, &lookingPlayer, VAL_INT, &rangeX,
-		VAL_INT, &rangeY, VAL_INT, &range, VAL_BOOL, &bVTOLs))
-	{
-		debug(LOG_ERROR,  "scrNumFriendlyWeapDroidsInRange(): stack failed");
-		return false;
-	}
-
-	for(i=0;i<MAX_PLAYERS;i++)
-	{
-		if((alliances[lookingPlayer][i] == ALLIANCE_FORMED) || (i == lookingPlayer))
-		{
-			numEnemies += numPlayerWeapDroidsInRange(i, lookingPlayer, range, rangeX, rangeY, bVTOLs);
-		}
-	}
-
-	//numEnemies = numEnemyWeapObjInRange(player, range, rangeX, rangeY, bVTOLs);
-	scrFunctionResult.v.ival = numEnemies;
-	if (!stackPushResult(VAL_INT, &scrFunctionResult))
-	{
-		debug(LOG_ERROR, "scrNumFriendlyWeapDroidsInRange(): failed to push result");
-		return false;
-	}
-
-	return true;
-}
-
-
-
-BOOL scrNumFriendlyWeapStructsInRange(void)
-{
-	SDWORD				lookingPlayer,range,rangeX,rangeY,i;
-	UDWORD				numEnemies = 0;
-	BOOL				bFinished;
-
-	if (!stackPopParams(5, VAL_INT, &lookingPlayer, VAL_INT, &rangeX,
-		VAL_INT, &rangeY, VAL_INT, &range, VAL_BOOL, &bFinished))
-	{
-		debug(LOG_ERROR, "scrNumFriendlyWeapStructsInRange(): stack failed");
-		return false;
-	}
-
-	for(i=0; i<MAX_PLAYERS; i++)
-	{
-		if((alliances[lookingPlayer][i] == ALLIANCE_FORMED) || (i == lookingPlayer))	//skip enemies
-		{
-			numEnemies += numPlayerWeapStructsInRange(i, lookingPlayer, range, rangeX, rangeY, bFinished);
-		}
-	}
-
-	scrFunctionResult.v.ival = numEnemies;
-	if (!stackPushResult(VAL_INT, &scrFunctionResult))
-	{
-		debug(LOG_ERROR,"scrNumFriendlyWeapStructsInRange(): failed to push result");
-		return false;
-	}
-
-	return true;
-}
-
-BOOL scrNumPlayerWeapDroidsInRange(void)
-{
-	SDWORD		targetPlayer,lookingPlayer,range,rangeX,rangeY;
-	BOOL		bVTOLs;
-
-	if (!stackPopParams(6, VAL_INT, &targetPlayer, VAL_INT, &lookingPlayer,
-		VAL_INT, &rangeX, VAL_INT, &rangeY, VAL_INT, &range, VAL_BOOL, &bVTOLs))
-	{
-		debug(LOG_ERROR,"scrNumPlayerWeapDroidsInRange(): stack failed");
-		return false;
-	}
-
-	scrFunctionResult.v.ival = numPlayerWeapDroidsInRange(targetPlayer, lookingPlayer, range, rangeX, rangeY, bVTOLs);
-
-	if (!stackPushResult(VAL_INT, &scrFunctionResult))
-	{
-		debug(LOG_ERROR, "scrNumPlayerWeapDroidsInRange(): failed to push result");
-		return false;
-	}
-
-	return true;
-}
-
-BOOL scrNumPlayerWeapStructsInRange(void)
-{
-	SDWORD		targetPlayer,lookingPlayer,range,rangeX,rangeY;
-	BOOL		bFinished;
-
-	if (!stackPopParams(6, VAL_INT, &targetPlayer, VAL_INT, &lookingPlayer,
-		VAL_INT, &rangeX, VAL_INT, &rangeY, VAL_INT, &range, VAL_BOOL, &bFinished))
-	{
-		debug(LOG_ERROR,"scrNumPlayerWeapStructsInRange(): stack failed");
-		return false;
-	}
-
-	scrFunctionResult.v.ival = numPlayerWeapStructsInRange(targetPlayer, lookingPlayer, range, rangeX, rangeY, bFinished);
-
-	if (!stackPushResult(VAL_INT, &scrFunctionResult))
-	{
-		debug(LOG_ERROR, "scrNumPlayerWeapStructsInRange(): failed to push result");
-		return false;
-	}
-
-	return true;
-}
-
-BOOL scrNumPlayerWeapObjInRange(void)
-{
-	SDWORD				targetPlayer,lookingPlayer,range,rangeX,rangeY;
-	UDWORD				numEnemies = 0;
-	BOOL				bVTOLs,bFinished;
-
-	if (!stackPopParams(7, VAL_INT, &targetPlayer, VAL_INT, &lookingPlayer,
-						VAL_INT, &rangeX, VAL_INT, &rangeY, VAL_INT, &range,
-						VAL_BOOL, &bVTOLs, VAL_BOOL, &bFinished))
-	{
-		debug(LOG_ERROR,"scrNumPlayerWeapObjInRange(): stack failed");
-		return false;
-	}
-
-	numEnemies += numPlayerWeapDroidsInRange(targetPlayer, lookingPlayer, range, rangeX, rangeY, bVTOLs);
-	numEnemies += numPlayerWeapStructsInRange(targetPlayer, lookingPlayer, range, rangeX, rangeY, bFinished);
-
-	scrFunctionResult.v.ival = numEnemies;
-	if (!stackPushResult(VAL_INT, &scrFunctionResult))
-	{
-		debug(LOG_ERROR, "scrNumPlayerWeapObjInRange(): failed to push result");
-		return false;
-	}
-
-	return true;
+	lua_pushinteger(L, numPlayerWeapStructsInRange(targetPlayer, lookingPlayer, range, rangeX, rangeY, bFinished));
+	return 1;
 }
 
 BOOL scrNumEnemyObjInRange(void)
@@ -11114,8 +10903,8 @@ void registerScriptfuncs(lua_State *L)
 	lua_register(L, "setDepthFog", scrSetDepthFog);
 	lua_register(L, "setFogColour", scrSetFogColour);
 	lua_register(L, "playIngameCDAudio", scrPlayIngameCDAudio);
-	//lua_register(L, "", );
-	//lua_register(L, "", );
+	lua_register(L, "numPlayerWeapStructsInRange", scrNumPlayerWeapStructsInRange);
+	lua_register(L, "numPlayerWeapDroidsInRange", scrNumPlayerWeapDroidsInRange);
 	//lua_register(L, "", );
 	//lua_register(L, "", );
 	//lua_register(L, "", );

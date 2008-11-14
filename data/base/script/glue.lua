@@ -30,37 +30,57 @@ function distBetweenTwoPoints(x1, y1, x2, y2)
 	return math.sqrt( math.pow(x1-x2, 2) + math.pow(y1-y2, 2) )
 end
 
--- structure code
---[[
-_glue.structuremt = {}
-_glue.structuremt.__eq = function(a,b)
-	return a.ptr == b.ptr
-end]]--
---[[
-_glue.tracked_structs = {}
-function getStructureByID(id, varname)
-	local s = _getStructureByID(id)
-	--setmetatable(s, _glue.structuremt)
-	if varname ~= nil then
-		-- add to the list so we can nil it later
-		print('getStructureByID: adding to check list')
-		_glue.tracked_structs[s] = varname
-	end
-	return s
+-- Functions for counting things in a range
+-- all objects
+function scrNumFriendlyWeapObjInRange(me, x, y, range, vtols, finished)
+	local count
+	count =         numFriendlyWeapDroidsInRange(me, x, y, range, vtols)
+	count = count + numFriendlyWeapStructsInRange(me, x, y, range, finished) 
+	return count
 end
-function _glue.structDestroyed(structure)
-	print('_glue.structDestroyed')
-	for s, varname in pairs(_glue.tracked_structs) do
-		if s.ptr == structure.ptr then
-			print('setting '..varname..' to nil')
-			_G[varname] = nil
-			_glue.tracked_structs[s] = nil
-			return
+
+function scrNumPlayerWeapObjInRange(player, me, x, y, range, vtols, finished)
+	local count
+	count =         numPlayerWeapDroidsInRange(player, me, x, y, range, vtols)
+	count = count + numPlayerWeapStructsInRange(player, me, x, y, range, finished) 
+	return count
+end
+
+-- droids
+function numWeapDroidsInRange(me, x, y, range, vtols, friendly)
+	local count = 0
+	local ally
+	for player=0,MAX_PLAYERS-1 do
+		ally = allianceExistsBetween(me, player) or me == player
+		if (ally and friendly) or (not ally and not friendly) then
+			count = count + numPlayerWeapDroidsInRange(player, me, x, y, range, vtols) 
 		end
 	end
+	return count
 end
-callbackEvent(_glue.structDestroyed, CALL_STRUCT_DESTROYED)
-]]--
--- temporary
---mapWidth = 64
---mapHeight = 64
+function numEnemyWeapDroidsInRange(me, x, y, range, vtols)
+	return numWeapDroidsInRange(me, x, y, range, vtols, false)
+end
+function numFriendlyWeapDroidsInRange(me, x, y, range, vtols)
+	return numWeapDroidsInRange(me, x, y, range, vtols, true)
+end
+
+-- structs
+function numWeapStructsInRange(me, x, y, range, finished, friendly)
+	local count = 0
+	local ally
+	for player=0,MAX_PLAYERS-1 do
+		ally = allianceExistsBetween(me, player) or me == player
+		if (ally and friendly) or (not ally and not friendly) then
+			count = count + numPlayerWeapStructsInRange(player, me, x, y, range, finished) 
+		end
+	end
+	return count
+end
+function numEnemyWeapStructsInRange(me, x, y, range, finished)
+	return numWeapStructsInRange(me, x, y, range, finished, false)
+end
+function numFriendlyWeapStructsInRange(me, x, y, range, finished)
+	return numWeapStructsInRange(me, x, y, range, finished, true)
+end
+
