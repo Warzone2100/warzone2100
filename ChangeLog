@@ -9,6 +9,7 @@
    * Fix: Clean up input stream after saving a save game, to prevent it from going into chat mode.
  * AI:
    * Fix: Allow a droid to pick a new target while auto-repairing. (ticket:35, bug #12217)
+   * Fix: Improve targetting AI so that it does not select bad targets, and make it use full weapon range instead of limited to sensor range. (ticket:97)
  * Buildsystem:
    * Fix: Only compile the translations when $(TRANSLATION) is "yes". (ticket:130)
 
