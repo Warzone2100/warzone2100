@@ -573,7 +573,8 @@ void processVisibility(BASE_OBJECT *psObj)
 	for (player = 0; player < MAX_PLAYERS; player++)
 	{
 		if ( (psObj->type == OBJ_STRUCTURE || psObj->type == OBJ_FEATURE) &&
-			!prevVis[player] && psObj->visible[player] )
+			!prevVis[player] && psObj->visible[player] &&
+			!godMode )
 		{
 			setUnderTilesVis(psObj, player);
 		}

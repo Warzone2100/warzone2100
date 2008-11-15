@@ -1163,7 +1163,34 @@ void	kf_ToggleGodMode( void )
 
 	if(godMode)
 	{
-		CONPRINTF(ConsoleString,(ConsoleString,"God Mode cannot be turned off"));
+		godMode = false;
+		setRevealStatus(game.fog);
+		// now hide the features
+		FEATURE	*psFeat = apsFeatureLists[0];
+		int player;
+		while (psFeat)
+		{
+			psFeat->visible[selectedPlayer] = 0;
+			psFeat = psFeat->psNext;
+		}
+		// and the structures
+		STRUCTURE *psStruct;
+		for(player=0;player<MAX_PLAYERS;player++)
+		{
+			if (player != selectedPlayer)
+			{
+				psStruct = apsStructLists[player];
+				
+				while (psStruct)
+				{
+					psStruct->visible[selectedPlayer] = 0;
+					psStruct = psStruct->psNext;
+				}
+			}
+		}
+		// remove all proximity messages
+		releaseAllProxDisp();
+		CONPRINTF(ConsoleString,(ConsoleString,"God Mode OFF"));
 	}
 	else
 	{
