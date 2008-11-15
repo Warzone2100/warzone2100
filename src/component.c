@@ -789,7 +789,7 @@ void displayComponentObject(BASE_OBJECT *psObj)
 		addEffect(&position,EFFECT_EXPLOSION,EXPLOSION_TYPE_PLASMA,false,NULL,0);
 	}
 
-	if (godMode || (psDroid->visible[selectedPlayer] == UBYTE_MAX) || demoGetStatus())
+	if ((psDroid->visible[selectedPlayer] == UBYTE_MAX) || demoGetStatus())
 	{
 		//ingame not button object
 		//Watermelon:should render 3 mounted weapons now

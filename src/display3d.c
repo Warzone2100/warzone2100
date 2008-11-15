@@ -665,7 +665,7 @@ static void drawTiles(iView *player)
 
 				tileScreenInfo[i][j].pos.y = map_TileHeight(playerXTile + j, playerZTile + i);
 
-				if (getRevealStatus() && !godMode)
+				if (getRevealStatus())
 				{
 					TileIllum = pal_SetBrightness(psTile->level < 0 ? 1 : psTile->level);
 				}
@@ -1245,7 +1245,7 @@ void	renderAnimComponent( const COMPONENT_OBJECT *psObj )
 	ASSERT( psParentObj != NULL, "renderAnimComponent: invalid parent object pointer" );
 
 	/* only draw visible bits */
-	if( (psParentObj->type == OBJ_DROID) && !godMode && !demoGetStatus() &&
+	if( (psParentObj->type == OBJ_DROID) && !demoGetStatus() &&
 		((DROID*)psParentObj)->visible[selectedPlayer] != UBYTE_MAX )
 	{
 		return;
@@ -1335,7 +1335,7 @@ void	renderAnimComponent( const COMPONENT_OBJECT *psObj )
 			brightness = pal_SetBrightness(UBYTE_MAX);
 		}
 
-		if(getRevealStatus() && !godMode)
+		if(getRevealStatus())
 		{
 			brightness = pal_SetBrightness(avGetObjLightLevel((BASE_OBJECT*)psParentObj, brightness.byte.r));
 		}
@@ -1385,7 +1385,7 @@ void displayStaticObjects( void )
 				}
 				else
 				{
-					if ( psStructure->visible[selectedPlayer] || godMode )
+					if ( psStructure->visible[selectedPlayer] )
 					{
 						//check not a resource extractors
 						if (psStructure->pStructureType->type !=
@@ -1553,7 +1553,7 @@ void displayDynamicObjects( void )
 				if(clipXY(psDroid->pos.x,psDroid->pos.y))
 				{
 					/* No point in adding it if you can't see it? */
-					if(psDroid->visible[selectedPlayer] || godMode || demoGetStatus())
+					if(psDroid->visible[selectedPlayer] || demoGetStatus())
 					{
 						psDroid->sDisplay.frameNumber = currentGameFrame;
 
@@ -1657,7 +1657,7 @@ void	renderFeature(FEATURE *psFeature)
 	BOOL bForceDraw = ( !getRevealStatus() && psFeature->psStats->visibleAtStart);
 	int shadowFlags = 0;
 
-	if (!psFeature->visible[selectedPlayer] && !godMode && !demoGetStatus() && !bForceDraw)
+	if (!psFeature->visible[selectedPlayer] && !demoGetStatus() && !bForceDraw)
 	{
 		return;
 	}
@@ -1705,7 +1705,7 @@ void	renderFeature(FEATURE *psFeature)
 		objectShimmy((BASE_OBJECT*)psFeature);
 	}
 
-	if (godMode || demoGetStatus() || bForceDraw)
+	if (demoGetStatus() || bForceDraw)
 	{
 		brightness = pal_SetBrightness(200);
 	}
@@ -1889,7 +1889,7 @@ void	renderStructure(STRUCTURE *psStructure)
 		renderWallSection(psStructure);
 		return;
 	}
-	else if (!psStructure->visible[selectedPlayer] && !godMode && !demoGetStatus())
+	else if (!psStructure->visible[selectedPlayer] && !demoGetStatus())
 	{
 		return;
 	}
@@ -2013,7 +2013,7 @@ void	renderStructure(STRUCTURE *psStructure)
 		}
 		buildingBrightness = pal_SetBrightness(200 + brightVar);
 	}
-	if (!godMode && !demoGetStatus() && getRevealStatus())
+	if (!demoGetStatus() && getRevealStatus())
 	{
 		buildingBrightness = pal_SetBrightness(avGetObjLightLevel((BASE_OBJECT*)psStructure, buildingBrightness.byte.r));
 	}
@@ -2352,7 +2352,7 @@ static BOOL	renderWallSection(STRUCTURE *psStructure)
 	UDWORD			i;
 	Vector3f			*temp;
 
-	if(psStructure->visible[selectedPlayer] || godMode || demoGetStatus())
+	if(psStructure->visible[selectedPlayer] || demoGetStatus())
 	{
 		psStructure->sDisplay.frameNumber = currentGameFrame;
 		/* Get it's x and y coordinates so we don't have to deref. struct later */
@@ -2378,7 +2378,7 @@ static BOOL	renderWallSection(STRUCTURE *psStructure)
 			buildingBrightness = pal_SetBrightness(200 + brightVar);
 		}
 
-		if(godMode || demoGetStatus())
+		if(demoGetStatus())
 		{
 			/* NOP */
 		}

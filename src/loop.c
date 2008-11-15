@@ -136,7 +136,6 @@ SDWORD	nextMissionType = LDS_NONE;//MISSION_NONE;
 
  /* Force 3D display */
 UDWORD	mcTime;
-extern BOOL		godMode;
 
 /* The main game loop */
 GAMECODE gameLoop(void)

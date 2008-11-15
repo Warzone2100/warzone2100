@@ -41,6 +41,7 @@
 #include "scriptextern.h"
 #include "structure.h"
 
+#include "display.h"
 #include "multiplay.h"
 #include "advvis.h"
 
@@ -475,10 +476,11 @@ void processVisibility(BASE_OBJECT *psObj)
 		}
 	}
 
-	// if a player has a SAT_UPLINK structure, they can see everything!
+	// if a player has a SAT_UPLINK structure, or has godMode enabled,
+	// they can see everything!
 	for (player = 0; player < MAX_PLAYERS; player++)
 	{
-		if (getSatUplinkExists(player))
+		if (getSatUplinkExists(player) || (player == selectedPlayer && godMode))
 		{
 			currVis[player] = true;
 			if (psObj->visible[player] == 0)

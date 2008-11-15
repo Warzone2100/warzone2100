@@ -1163,14 +1163,12 @@ void	kf_ToggleGodMode( void )
 
 	if(godMode)
 	{
-		godMode = false;
-//		setDifficultyLevel(getDifficultyLevel());
-		CONPRINTF(ConsoleString,(ConsoleString,"God Mode OFF"));
+		CONPRINTF(ConsoleString,(ConsoleString,"God Mode cannot be turned off"));
 	}
 	else
 	{
-		godMode = true;
-//		setModifiers(1000.f / 100.f,100.f / 1000.f);
+		godMode = true; // view all structures and droids
+		setRevealStatus(false); // view the entire map
 		CONPRINTF(ConsoleString,(ConsoleString,"God Mode ON"));
 	}
 }

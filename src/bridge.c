@@ -119,8 +119,8 @@ BOOL	renderBridgeSection(STRUCTURE *psStructure)
 	//iIMDShape		*imd;
 	Vector3i dv;
 
-			/* Bomb out if it's not visible and there's no active god mode */
-			if(!psStructure->visible[selectedPlayer] && !godMode)
+			/* Bomb out if it's not visible */
+			if(!psStructure->visible[selectedPlayer])
 			{
 				return(false);
 			}
