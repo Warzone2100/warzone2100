@@ -1142,24 +1142,109 @@ void eventFireCallbackTrigger(TRIGGER_TYPE trigger)
 		args = 1;
 		switch (trigger)
 		{
-			case CALL_GAMEINIT:
-				debug(LOG_WARNING, "CALL_GAMEINIT %i", trigger);
-				break;
 			case CALL_NEWDROID:
 				luaWZObj_pushdroid(L, psScrCBNewDroid);
 				luaWZObj_pushstructure(L, psScrCBNewDroidFact);
 				args += 2;
 				break;
-			case CALL_STRUCT_DESTROYED:
-				luaWZObj_pushstructure(L, (STRUCTURE*)psCBObjDestroyed);
-				args += 1;
-				break;
+			case CALL_ATTACKED:
 			case CALL_STRUCT_ATTACKED:
-				luaWZObj_pushstructure(L, psLastStructHit);
-				luaWZObj_pushbaseobject(L, g_pProjLastAttacker, -1);
+			case CALL_DROID_ATTACKED:
+				luaWZObj_pushobject(L, psScrCBTarget);
+				if (g_pProjLastAttacker)
+				{
+					luaWZObj_pushobject(L, g_pProjLastAttacker);
+				}
+				else
+				{
+					// we don't know who shot it (not in LOS)
+					lua_pushnil(L);
+				}
 				args += 2;
 				break;
+			case CALL_STRUCTBUILT:
+				luaWZObj_pushdroid(L, psScrCBNewStructTruck);
+				luaWZObj_pushstructure(L, psScrCBNewStruct);
+				args += 2;
+				break;
+			case CALL_KEY_PRESSED:
+				lua_pushinteger(L, cbPressedKey);
+				args += 1;
+				break;
+			case CALL_CONSOLE:
+				lua_pushinteger(L, ConsolePlayer);
+				lua_pushstring(L, ConsoleMsg);
+				args += 2;
+				break;
+			case CALL_AI_MSG:
+				lua_pushinteger(L, MultiMsgPlayerTo);
+				lua_pushinteger(L, MultiMsgPlayerFrom);
+				lua_pushstring(L, MultiplayMsg);
+				args += 3;
+				break;
+			case CALL_DROID_REACH_LOCATION:
+				luaWZObj_pushdroid(L, psScrCBOrderDroid);
+				lua_pushinteger(L, psScrCBOrder);
+				args += 2;
+				break;
+			case CALL_RESEARCHCOMPLETED:
+				lua_pushstring(L, psCBLastResearch->pName);
+				luaWZObj_pushstructure(L, psCBLastResStructure);
+				args += 2;
+				break;
+			case CALL_OBJ_SEEN:
+				luaWZObj_pushobject(L, psScrCBObjSeen);
+				luaWZObj_pushobject(L, psScrCBObjViewer);
+				args += 2;
+				break;
+			case CALL_OBJ_DESTROYED:
+			case CALL_DROID_DESTROYED:
+			case CALL_STRUCT_DESTROYED:
+			case CALL_FEATURE_DESTROYED:
+				luaWZObj_pushobject(L, psCBObjDestroyed);
+				args += 1;
+				break;
+			case CALL_CLUSTER_EMPTY:
+				lua_pushinteger(L, scrCBEmptyClusterID);
+				args += 1;
+				break;
+			case CALL_DROID_SEEN:
+			case CALL_STRUCT_SEEN:
+			case CALL_FEATURE_SEEN:
+				luaWZObj_pushobject(L, psScrCBObjSeen);
+				luaWZObj_pushobject(L, psScrCBObjViewer);
+				args += 2;
+				break;
+			case CALL_BUILDGRID:
+			case CALL_BUILDLIST:
+			case CALL_DELIVPOINTMOVED:
+			case CALL_DESIGN_BODY:
+			case CALL_DESIGN_PROPULSION:
+			case CALL_DESIGN_QUIT:
+			case CALL_DESIGN_WEAPON:
+			case CALL_DROIDBUILT:
+			case CALL_DROIDDESIGNED:
+			case CALL_ELECTRONIC_TAKEOVER:
+			case CALL_FACTORY_BUILT:
+			case CALL_GAMEINIT:
+			case CALL_LAUNCH_TRANSPORTER:
+			case CALL_MANULIST:
+			case CALL_MANURUN:
+			case CALL_MISSION_END:
+			case CALL_MISSION_START:
+			case CALL_MISSION_TIME:
+			case CALL_NO_REINFORCEMENTS_LEFT:
+			case CALL_POWERGEN_BUILT:
+			case CALL_RESEARCH_BUILT:
+			case CALL_RESEARCHLIST:
+			case CALL_RESEX_BUILT:
+			case CALL_START_NEXT_LEVEL:
+			case CALL_TRANSPORTER_REINFORCE:
+			case CALL_VIDEO_QUIT:
+				// no args
+				break;
 			default:
+				debug(LOG_SCRIPT, "unknown callback %i", trigger);
 				break;
 		}
 		luaWZ_pcall_backtrace(L, args, 0);

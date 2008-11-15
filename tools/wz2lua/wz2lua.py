@@ -616,11 +616,11 @@ class CodeGenerator(GenericASTTraversal):
 				node.arrayinit = 'for i=0,'+node[1].code+' do '+node[0].code+'[i] = 0 end\n'
 			defined_arrays.add(node[0].code)
 	def n_event_declaration(self, node):
-		# TODO
-		'''
-		error: add checks for trigger CALL_BEACON
-		error: add checks for trigger CALL_AI_MSG
-		'''
+		# originally, the events were only called if certain conditions were met
+		# these conditions were specific to each event
+		# we now add a piece of code to each event that will check the condition
+		# itself. This simplifies calling events and adds flexibility.
+		
 		# these have an unneccesary player parameter
 		# format: 'CALL_':(<pos of player>,<pos of object with player property>)
 		check_player = {
@@ -634,12 +634,14 @@ class CodeGenerator(GenericASTTraversal):
 			'CALL_OBJ_SEEN':(0,2),
 			'CALL_STRUCTBUILT':(0,1),
 			'CALL_DROID_DESTROYED':(0,1),
-			'CALL_STRUCT_DESTROYED':(0,1)
+			'CALL_STRUCT_DESTROYED':(0,1),
 			}
 		# these have a real player parameter
 		check_player_parameter = {
 			'CALL_TRANSPORTER_LANDED':1,
 			'CALL_TRANSPORTER_OFFMAP':0,
+			'CALL_AI_MSG':0,
+			'CALL_BEACON':0,
 			}
 		if node[1].code in triggers:
 			trigger_name = node[1].code
@@ -730,8 +732,10 @@ class CodeGenerator(GenericASTTraversal):
 		node.boolean = True
 	def n_expression_statement(self, node):
 		if node[0].ref:
-			# add the multiple returns
-			node.code += ', '.join(node[0].ref) + ' = ' + node[0].code + '\n'
+			# this is just a lone function call(ref a, ref b)
+			# as all of these also return a value, we need to add it as UNUSED
+			# the ref parameters are extra returns
+			node.code += 'UNUSED, ' + ', '.join(node[0].ref) + ' = ' + node[0].code + '\n'
 		else:
 			node.code += node[0].code + '\n'
 	def n_arglist(self, node):

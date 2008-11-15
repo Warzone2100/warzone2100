@@ -55,4 +55,7 @@ def convertdir(dir):
 		
 	vlofiles.close()
 	
-convertdir('data/base')
+convertdir('data/base/script')
+convertdir('data/base/multiplay/script')
+convertdir('data/base/multiplay/skirmish')
+convertdir('data/mods/global/aivolution')

@@ -1499,10 +1499,28 @@ BASE_OBJECT *luaWZObj_checkbaseobject(lua_State *L, int pos)
 	return object;
 }
 
-void luaWZObj_pushbaseobject(lua_State *L, BASE_OBJECT* baseobject, int type)
+void luaWZObj_pushobject(lua_State *L, BASE_OBJECT* object)
+{
+	switch (object->type)
+	{
+		case OBJ_DROID:
+			luaWZObj_pushdroid(L, (DROID*)object);
+			break;
+		case OBJ_FEATURE:
+			luaWZObj_pushfeature(L, (FEATURE*)object);
+			break;
+		case OBJ_STRUCTURE:
+			luaWZObj_pushstructure(L, (STRUCTURE*)object);
+			break;
+		default:
+			debug(LOG_ERROR, "invalid structure type: %i", object->type);
+	}
+}
+
+static void luaWZObj_pushbaseobject(lua_State *L, BASE_OBJECT* baseobject)
 {
 	lua_newtable(L);
-	luaWZ_setintfield(L, "type", type);
+	luaWZ_setintfield(L, "type", baseobject->type);
 	luaWZ_setintfield(L, "id", baseobject->id);
 	luaWZ_setintfield(L, "x", baseobject->pos.x);
 	luaWZ_setintfield(L, "y", baseobject->pos.y);
@@ -1515,20 +1533,28 @@ void luaWZObj_pushbaseobject(lua_State *L, BASE_OBJECT* baseobject, int type)
 
 void luaWZObj_pushstructure(lua_State *L, STRUCTURE* structure)
 {
-	luaWZObj_pushbaseobject(L, (BASE_OBJECT*)structure, OBJ_STRUCTURE);
+	luaWZObj_pushbaseobject(L, (BASE_OBJECT*)structure);
 	luaWZ_setstringfield(L, "stat", structure->pStructureType->pName);
+	luaWZ_setintfield(L, "stattype", structure->type);
 }
 
 void luaWZObj_pushfeature(lua_State *L, FEATURE* feature)
 {
-	luaWZObj_pushbaseobject(L, (BASE_OBJECT*)feature, OBJ_FEATURE);
+	luaWZObj_pushbaseobject(L, (BASE_OBJECT*)feature);
 }
 
 void luaWZObj_pushdroid(lua_State *L, DROID* droid)
 {
-	luaWZObj_pushbaseobject(L, (BASE_OBJECT*)droid, OBJ_DROID);
+	luaWZObj_pushbaseobject(L, (BASE_OBJECT*)droid);
 	luaWZ_setintfield(L, "droidType", droid->droidType);
 	luaWZ_setintfield(L, "order", droid->order);
+	luaWZ_setintfield(L, "orderx", droid->orderX);
+	luaWZ_setintfield(L, "ordery", droid->orderY);
+	if (droid->psTarStats)
+	{
+		// we are building something, set the stat member to the name of the building
+		luaWZ_setstringfield(L, "stat", droid->psTarStats->pName);
+	}
 }
 
 void luaWZObj_pushgroup(lua_State *L, DROID_GROUP *group)

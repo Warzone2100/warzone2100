@@ -17,6 +17,10 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 ]]--
 
+
+-- FIXME: HACKS
+structChoice = {} -- bug in skirmish scripts, this variable should have been PRIVATE in the .slo
+
 -- to obtain information about undefined members
 __undefined_meta = {}
 function __undefined_meta.__index(table, key)
@@ -33,7 +37,6 @@ function __undefined_meta.__index(table, key)
 	end
 	return val
 end
-
 
 -- This are script api functions which are written in Lua
 
@@ -56,6 +59,11 @@ end
 
 function objToStructure(object)
 	if not object.type == "structure" then error("object is not a structure", 2) end
+	return object
+end
+
+function objToDroid(object)
+	if not object.type == "droid" then error("object is not a droid", 2) end
 	return object
 end
 

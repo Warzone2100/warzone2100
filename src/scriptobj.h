@@ -110,6 +110,7 @@ extern void luaWZObj_pushdroid(lua_State *L, DROID* droid);
 
 extern void luaWZObj_pushgroup(lua_State *L, DROID_GROUP *group);
 extern DROID_GROUP *luaWZObj_checkgroup(lua_State *L, int pos);
-extern void luaWZObj_pushbaseobject(lua_State *L, BASE_OBJECT* baseobject, int type);
+/// Push a droid, structure or feature when you don't know what it is
+extern void luaWZObj_pushobject(lua_State *L, BASE_OBJECT* baseobject);
 
 #endif // __INCLUDED_SRC_SCRIPTOBJ_H__
