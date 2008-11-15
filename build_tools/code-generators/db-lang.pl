@@ -1,12 +1,7 @@
 #!/usr/bin/perl -w
 # vim: set et sts=4 sw=4:
 
-my $scriptpath = $0;
-$scriptpath =~ s/^(.*\/)?([^\/]+)$/$1/;
-
-my $out_lang = $scriptpath;
-$out_lang .= shift or die "Missing output language";
-$out_lang .= "_cg.pm";
+my $out_lang = shift or die "Missing output language";
 require $out_lang or die "Couldn't load $out_lang";
 
 my %enumMap;

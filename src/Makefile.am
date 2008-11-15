@@ -4,11 +4,11 @@
 %.lex.h %.lex.c:: %.l
 	$(LEX) $(LFLAGS) $(AM_LFLAGS) -o$@ $<
 
-%.c: %.tpl.sql.c %.tpl
-	$(top_srcdir)/build_tools/code-generators/db-lang.pl c_sqliteload $^ $@
+%.c: $(top_srcdir)/build_tools/code-generators/db-lang.pl $(top_srcdir)/build_tools/code-generators/c_sqliteload_cg.pm %.tpl.sql.c %.tpl
+	$^ $@
 
-%.h: %.tpl.struct.h %.tpl
-	$(top_srcdir)/build_tools/code-generators/db-lang.pl c_structdef $^ $@
+%.h: $(top_srcdir)/build_tools/code-generators/db-lang.pl $(top_srcdir)/build_tools/code-generators/c_structdef_cg.pm %.tpl.struct.h %.tpl
+	$^ $@
 
 # Required to force using a C++ linker
 force-linker.cpp:
