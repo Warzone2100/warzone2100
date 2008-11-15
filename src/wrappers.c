@@ -242,6 +242,8 @@ TITLECODE titleLoop(void)
 	}
 
 	audio_Update();
+	
+	pie_DrawMouse(mouseX(), mouseY());
 
 	pie_SetFogStatus(false);
 	pie_ScreenFlip(CLEAR_BLACK);//title loop
