@@ -330,6 +330,8 @@ AC_CONFIG_FILES([Makefile
 		build_tools/autorevision/Makefile
 		icons/Makefile
 		data/Makefile
+		data/base/Makefile
+		data/base/stats-sql/Makefile
 		data/mods/Makefile
 		data/mods/global/Makefile
 		data/mods/multiplay/Makefile
