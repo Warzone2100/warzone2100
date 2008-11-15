@@ -5101,7 +5101,10 @@ WZ_DECL_UNUSED static BOOL scrGetPlayerColourName(void)
 		return false;
 	}
 
-	scrFunctionResult.v.sval = getPlayerColourName(player);
+	/* Casting away constness because stackPushResult doesn't modify it's
+	 * value (i.e. in this case it's not const correct).
+	 */
+	scrFunctionResult.v.sval = (char*)getPlayerColourName(player);
 	if (!stackPushResult(VAL_STRING, &scrFunctionResult))
 	{
 		debug(LOG_ERROR, "scrGetPlayerColourName(): failed to push result");
@@ -6103,7 +6106,7 @@ WZ_DECL_UNUSED static BOOL scrNumDroidsByComponent(void)
 				}
 				break;
 			case ST_BRAIN:
-				if (psDroid->asBits[ST_BRAIN].nStat == comp)
+				if (psDroid->asBits[COMP_BRAIN].nStat == comp)
 				{
 					numFound++;
 				}
@@ -9130,7 +9133,7 @@ WZ_DECL_UNUSED static BOOL scrDropBeacon(void)
 		return false;
 	}
 
-	sprintf(ssval2, "%s : %s", getPlayerName(sender), strParam1);	//temporary solution
+	ssprintf(ssval2, "%s : %s", getPlayerName(sender), strParam1);	//temporary solution
 
 	return sendBeaconToPlayer(locX, locY, forPlayer, sender, ssval2);
 }
@@ -9573,7 +9576,10 @@ WZ_DECL_UNUSED static BOOL scrGetPlayerName(void)
 		return false;
 	}
 
-	scrFunctionResult.v.sval = getPlayerName((UDWORD)player);
+	/* Casting away constness because stackPushResult doesn't modify it's
+	 * value (i.e. in this case it's not const correct).
+	 */
+	scrFunctionResult.v.sval = (char*)getPlayerName((UDWORD)player);
 	if (!stackPushResult(VAL_STRING, &scrFunctionResult))
 	{
 		debug(LOG_ERROR, "scrGetPlayerName(): failed to push result");
@@ -9619,7 +9625,7 @@ SDWORD getPlayerFromString(char *playerName)
 	{
 		/* check name */
 		//debug(LOG_SCRIPT, "checking  (%s,%s)",getPlayerName(playerIndex), playerName);
-		if (strncasecmp(getPlayerName(playerIndex),playerName, 255) == 0)
+		if (strncasecmp(getPlayerName(playerIndex), playerName, 255) == 0)
 		{
 			//debug(LOG_SCRIPT, "matched, returning %d", playerIndex);
 			return playerIndex;
@@ -9627,7 +9633,7 @@ SDWORD getPlayerFromString(char *playerName)
 
 		/* check color */
 		//debug(LOG_SCRIPT, "checking (%s,%s)",getPlayerColourName(playerIndex), playerName);
-		if (strncasecmp(getPlayerColourName(playerIndex),playerName, 255) == 0)
+		if (strncasecmp(getPlayerColourName(playerIndex), playerName, 255) == 0)
 		{
 			//debug(LOG_SCRIPT, "matched, returning %d", playerIndex);
 			return playerIndex;
@@ -10376,48 +10382,40 @@ WZ_DECL_UNUSED static BOOL scrAssembleWeaponTemplate(void)
 /* Checks if template already exists, returns it if yes */
 static DROID_TEMPLATE* scrCheckTemplateExists(SDWORD player, DROID_TEMPLATE *psTempl)
 {
-	DROID_TEMPLATE    *psCurrent;
-	UDWORD				compType,weaponSlot;
-	bool				bEqual = true;
+	DROID_TEMPLATE* psCurrent;
 
-	psCurrent = apsDroidTemplates[player];
+	for (psCurrent = apsDroidTemplates[player]; psCurrent != NULL; psCurrent = psCurrent->psNext)
+	{
+		unsigned int componentType;
+		unsigned int weaponSlot;
 
-    while(psCurrent != NULL)
-    {
 		// compare components
-		bEqual = true;
-		for(compType = 0; bEqual && compType < DROID_MAXCOMP; compType++)
+		for (componentType = 0; componentType < ARRAY_SIZE(psTempl->asParts); ++componentType)
 		{
-			if(psTempl->asParts[compType] != psCurrent->asParts[compType])
+			if (psTempl->asParts[componentType] != psCurrent->asParts[componentType])
 			{
-				bEqual = false;
+				continue;
 			}
 		}
 
 		// compare weapon count
-		if(bEqual && (psTempl->numWeaps != psCurrent->numWeaps))
+		if (psTempl->numWeaps != psCurrent->numWeaps)
 		{
-			bEqual = false;;
+			continue;
 		}
 
 		// compare all weapons separately
-		for(weaponSlot = 0; bEqual && (weaponSlot < psTempl->numWeaps); weaponSlot++)
+		for(weaponSlot = 0; weaponSlot < psTempl->numWeaps; ++weaponSlot)
 		{
-			if(psTempl->asWeaps[weaponSlot] != psCurrent->asWeaps[weaponSlot])
+			if (psTempl->asWeaps[weaponSlot] != psCurrent->asWeaps[weaponSlot])
 			{
-				bEqual = false;
+				continue;
 			}
 		}
 
 		// they are equal, so return the current template
-		if(bEqual)
-		{
-			return psCurrent;
-		}
-
-		// try next one
-		psCurrent = psCurrent->psNext;
-    }
+		return psCurrent;
+	}
 
 	return NULL;
 }
@@ -10621,8 +10619,7 @@ WZ_DECL_UNUSED static BOOL scrPgettext(void)
 		return false;
 	}
 
-	asprintf(&msg_ctxt_id, "%s%s%s", strParam1, GETTEXT_CONTEXT_GLUE, strParam2);
-	if (!msg_ctxt_id)
+	if (asprintf(&msg_ctxt_id, "%s%s%s", strParam1, GETTEXT_CONTEXT_GLUE, strParam2) == -1)
 	{
 		debug(LOG_ERROR, "Out of memory");
 		abort();

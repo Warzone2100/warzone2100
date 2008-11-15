@@ -217,7 +217,7 @@ BOOL MultiPlayerLeave( UDWORD dp)
 	{
 		NETlogEntry("Player Unexpectedly leaving, came from directplay...",0,dp);
 
-		sprintf( buf,_("%s has Left the Game"),getPlayerName(i) );
+		ssprintf(buf, _("%s has Left the Game"), getPlayerName(i));
 
 		turnOffMultiMsg(true);
 		clearPlayer(i,false,false);
@@ -323,7 +323,7 @@ void setupNewPlayer(UDWORD dpid, UDWORD player)
 
 	setMultiStats(player2dpid[player],getMultiStats(player,false),true);  // get the players score from the ether.
 
-	sprintf( buf,_("%s is Joining the Game"),getPlayerName(player) );
+	ssprintf(buf, _("%s is Joining the Game"), getPlayerName(player));
 	addConsoleMessage(buf,DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 }
 

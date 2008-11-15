@@ -17,7 +17,7 @@ MO_FILES=$(patsubst %.po,%.gmo,$(PO_FILES))
 .PHONY: all clean update-po po-files mo-files
 
 all:
-ifdef TRANSLATION
+ifeq ($(strip $(TRANSLATION)),yes)
 all: po-files mo-files
 endif
 

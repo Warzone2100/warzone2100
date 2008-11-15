@@ -215,7 +215,7 @@ static void printWeaponInfo(const WEAPON_STATS* psStats)
  */
 void printDroidInfo(const DROID* psDroid)
 {
-	SDWORD	i;
+	unsigned int i;
 	BODY_STATS			*psBdyStats;
 	PROPULSION_STATS	*psPropStats;
 	ECM_STATS			*psECMStats;
@@ -234,7 +234,7 @@ void printDroidInfo(const DROID* psDroid)
 		printWeaponInfo(asWeaponStats + psDroid->asWeaps[0].nStat);
 	}
 
-	for(i=0; i<DROID_MAXCOMP; i++)
+	for (i = 0; i < COMP_NUMCOMPONENTS; ++i)
 	{
 		switch (i)
 		{
@@ -323,6 +323,7 @@ void printDroidInfo(const DROID* psDroid)
 					psRepairStats->pMountGraphic));
 			}
 			break;
+		case COMP_WEAPON:
 		default:
 			break;
 		}
