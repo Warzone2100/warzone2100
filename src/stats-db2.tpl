@@ -196,14 +196,15 @@ end;
 
 enum SENSOR_TYPE
     %valprefix "";
+    %valsuffix "_SENSOR";
 
-    STANDARD_SENSOR
-    INDIRECT_CB_SENSOR
-    VTOL_CB_SENSOR
-    VTOL_INTERCEPT_SENSOR
+    STANDARD
+    INDIRECT_CB
+    VTOL_CB
+    VTOL_INTERCEPT
 
     # Works as all of the above together! - new for updates
-    SUPER_SENSOR
+    SUPER
 end;
 
 struct SENSOR
