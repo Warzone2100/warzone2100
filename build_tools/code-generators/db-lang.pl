@@ -14,8 +14,7 @@ sub parseEnum
     my ($enumName, $comment) = @_;
     my %curEnum = (name => $enumName);
     my @curComment = ();
-
-    my $curValueString = "";
+    my @curValueStrings = ();
 
     @{$curEnum{"comment"}} = @$comment;
     @$comment = ();
@@ -39,7 +38,7 @@ LINE:
             {
                 $1 =~ s/\\"/"/g;
 
-                $curValueString = $1;
+                push @curValueStrings, $1;
                 next LINE;
             }
             else
@@ -66,11 +65,12 @@ LINE:
         }
         elsif (/^\s*(\w+)\s*$/)
         {
-            my %value = (name=>$1, line=>$., value_string=>$curValueString);
+            my %value = (name=>$1, line=>$.);
 
             @{$value{"comment"}} = @curComment;
             @curComment = ();
-            $curValueString = "";
+            @{$value{"value_strings"}} = @curValueStrings;
+            @curValueStrings = ();
 
             push @{$curEnum{"values"}}, \%value;
         }

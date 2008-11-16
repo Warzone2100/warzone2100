@@ -504,9 +504,8 @@ sub printRowProcessCode
             {
                 my $value = ${${$enum}{"values"}}[$i];
                 my $valueName = ${$value}{"name"};
-                my @strings = ();
-
-                push @strings, (${$value}{"value_string"} or $valueName);
+                my @strings = @{${$value}{"value_strings"}};
+                push @strings, $valueName unless @strings;
 
                 if ($i == 0)
                 {
