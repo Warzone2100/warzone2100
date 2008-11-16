@@ -508,7 +508,7 @@ typedef struct SENSOR_STATS
 	/**
 	 * specifies whether the Sensor is default or for the Turret.
 	 */
-	UDWORD           location;
+	LOC location;
 
 	/**
 	 * used for combat

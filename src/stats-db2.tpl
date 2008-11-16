@@ -218,7 +218,7 @@ struct SENSOR
     UDWORD          power;
 
     # specifies whether the Sensor is default or for the Turret.
-    UDWORD          location;
+    enum LOC        location;
 
     # used for combat
     enum SENSOR_TYPE type;

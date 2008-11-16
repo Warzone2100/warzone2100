@@ -58,7 +58,7 @@ CREATE TABLE `SENSOR` (
 	power INTEGER NOT NULL,
 
 	-- specifies whether the Sensor is default or for the Turret.
-	location INTEGER NOT NULL,
+	location TEXT NOT NULL,
 
 	-- used for combat
 	type TEXT NOT NULL,
