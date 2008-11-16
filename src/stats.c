@@ -1188,7 +1188,7 @@ BOOL loadSensorStats(const char *pSensorData, UDWORD bufferSize)
 		psStats->designable = (designable != 0);
 
 		//get the IMD for the component
-		if (strcmp(mountGfx, "0"))
+		if (strcmp(GfxFile, "0"))
 		{
 			psStats->pIMD = (iIMDShape *) resGetData("IMD", GfxFile);
 			if (psStats->pIMD == NULL)
