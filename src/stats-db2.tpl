@@ -217,6 +217,25 @@ end;
 struct SENSOR
     %inherit COMPONENT;
     %nomacro;
+    %loadFunc "loadSensorStatsFromDB";
+    %preLoadTable maxId
+        if (!statsAllocSensor($maxId))
+            ABORT;
+    end;
+    %postLoadRow curRow rowNum
+        $curRow->ref = REF_SENSOR_START + $rowNum;
+
+        // save the stats
+        statsSetSensor($curRow, $rowNum);
+
+        // set the max stat values for the design screen
+        if ($curRow->designable)
+        {
+            setMaxSensorRange($curRow->range);
+            setMaxSensorPower($curRow->power);
+            setMaxComponentWeight($curRow->weight);
+        }
+    end;
     %csv-file "sensor.txt";
 
     # Sensor range.

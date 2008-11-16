@@ -249,7 +249,7 @@ static BOOL bufferSSENSORLoad(const char *pBuffer, UDWORD size, void **ppData)
 
 static BOOL dataDBSENSORLoad(struct sqlite3* db, const char* tableName, void **ppData)
 {
-	if (!loadSensorStatsFromDB(db, tableName)
+	if (!loadSensorStatsFromDB(db)
 	 || !allocComponentList(COMP_SENSOR, numSensorStats))
 	{
 		return false;
