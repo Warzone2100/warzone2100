@@ -159,9 +159,17 @@ sub printStructFields
     my @fields = @{${$struct}{"fields"}};
     my $structName = ${$struct}{"name"};
 
+    my $first = 1;
+FIELD:
     while (@fields)
     {
         my $field = shift(@fields);
+
+        # Ignore: this is a user defined field type, the user code (%postLoadRow) can deal with it
+        next FIELD if ${$field}{"type"} and ${$field}{"type"} =~ /C-only-field/;
+
+        $$output .= ",\\n\"\n\n" unless $first;
+        $first = 0;
 
         printSqlComments($output, ${$field}{"comment"}, $indent);
 
@@ -178,16 +186,10 @@ sub printStructFields
                 $$output .= ",\\n\"\n" if @values;
             }
         }
-        elsif (${$field}{"type"} and ${$field}{"type"} =~ /C-only-field/)
-        {
-            # Ignore: this is a user defined field type, the user code (%postLoadRow) can deal with it
-        }
         else
         {
             $$output .= "$indent\"`$structName`.`${$field}{\"name\"}` AS `${$field}{\"name\"}`";
         }
-
-        $$output .= ",\\n\"\n\n" if @fields and not (${$field}{"type"} and ${$field}{"type"} =~ /C-only-field/);
     }
 }
 
