@@ -84,16 +84,20 @@ enum WEAPON_CLASS
     %valprefix "WC_";
 
     # Bullets, etc.
+    %string "KINETIC";
+    %string "EXPLOSIVE";
     KINETIC
 
     # Rockets, etc. - classed as KINETIC now to save space in DROID
     #EXPLOSIVE
 
     # Laser, etc.
+    %string "HEAT";
+    %string "MISC";
     HEAT
 
     # others we haven't thought of! - classed as HEAT now to save space in DROID
-    #WC_MISC
+    #MISC
 end;
 
 # weapon subclasses used to define which weapons are affected by weapon upgrade
@@ -135,9 +139,16 @@ enum MOVEMENT_MODEL
 
     DIRECT
     INDIRECT
+
+    %string "HOMING-DIRECT";
     HOMINGDIRECT
+
+    %string "HOMING-INDIRECT";
     HOMINGINDIRECT
+
+    %string "ERRATIC-DIRECT";
     ERRATICDIRECT
+
     SWEEP
 end;
 
@@ -147,11 +158,21 @@ enum WEAPON_EFFECT
     %max "WE_NUMEFFECTS";
     %valprefix "WE_";
 
+    %string "ANTI PERSONNEL";
     ANTI_PERSONNEL
+
+    %string "ANTI TANK";
     ANTI_TANK
+
+    %string "BUNKER BUSTER";
     BUNKER_BUSTER
+
+    %string "ARTILLERY ROUND";
     ARTILLERY_ROUND
+
     FLAMER
+
+    %string "ANTI AIRCRAFT";
     ANTI_AIRCRAFT
 end;
 

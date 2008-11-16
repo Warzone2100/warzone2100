@@ -13,7 +13,7 @@
  *          false otherwise.
  */
 bool
-#line 213 "stats-db2.tpl"
+#line 234 "stats-db2.tpl"
 loadPropulsionStatsFromDB
 #line 19 "stats-db2.c"
 	(sqlite3* db)
@@ -50,7 +50,7 @@ loadPropulsionStatsFromDB
 		ROW_COUNT_VAR = sqlite3_column_int(stmt, 0);
 		sqlite3_finalize(stmt);
 
-#line 215 "stats-db2.tpl"
+#line 236 "stats-db2.tpl"
 		if (!statsAllocPropulsion(ROW_COUNT_VAR))
 			return false;
 #line 57 "stats-db2.c"
@@ -237,7 +237,7 @@ loadPropulsionStatsFromDB
 
 		{
 
-#line 219 "stats-db2.tpl"
+#line 240 "stats-db2.tpl"
 			stats->ref = REF_PROPULSION_START + CUR_ROW_NUM;
 
 			// save the stats
@@ -273,7 +273,7 @@ in_statement_err:
  *          false otherwise.
  */
 bool
-#line 264 "stats-db2.tpl"
+#line 285 "stats-db2.tpl"
 loadSensorStatsFromDB
 #line 279 "stats-db2.c"
 	(sqlite3* db)
@@ -314,7 +314,7 @@ loadSensorStatsFromDB
 		ROW_COUNT_VAR = sqlite3_column_int(stmt, 0);
 		sqlite3_finalize(stmt);
 
-#line 266 "stats-db2.tpl"
+#line 287 "stats-db2.tpl"
 		if (!statsAllocSensor(ROW_COUNT_VAR))
 			return false;
 #line 321 "stats-db2.c"
@@ -554,7 +554,7 @@ loadSensorStatsFromDB
 
 		{
 
-#line 270 "stats-db2.tpl"
+#line 291 "stats-db2.tpl"
 			stats->ref = REF_SENSOR_START + CUR_ROW_NUM;
 
 			// save the stats
@@ -591,7 +591,7 @@ in_statement_err:
  *          false otherwise.
  */
 bool
-#line 481 "stats-db2.tpl"
+#line 502 "stats-db2.tpl"
 loadConstructStatsFromDB
 #line 597 "stats-db2.c"
 	(sqlite3* db)
@@ -628,7 +628,7 @@ loadConstructStatsFromDB
 		ROW_COUNT_VAR = sqlite3_column_int(stmt, 0);
 		sqlite3_finalize(stmt);
 
-#line 483 "stats-db2.tpl"
+#line 504 "stats-db2.tpl"
 		if (!statsAllocConstruct(ROW_COUNT_VAR))
 			return false;
 #line 635 "stats-db2.c"
@@ -800,7 +800,7 @@ loadConstructStatsFromDB
 
 		{
 
-#line 487 "stats-db2.tpl"
+#line 508 "stats-db2.tpl"
 			stats->ref = REF_CONSTRUCT_START + CUR_ROW_NUM;
 
 			// save the stats
