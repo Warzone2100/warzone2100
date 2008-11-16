@@ -1088,4 +1088,20 @@ typedef struct CONSTRUCT_STATS
 	iIMDShape*       pMountGraphic;
 } WZ_DECL_MAY_ALIAS CONSTRUCT_STATS;
 
+/* Forward declaration to allow pointers to this type */
+struct sqlite3;
+
+/** Load the contents of the CONSTRUCT table from the given SQLite database.
+ *
+ *  @param db represents the database to load from
+ *
+ *  @return true if we succesfully loaded all available rows from the table,
+ *          false otherwise.
+ */
+extern bool
+#line 418 "stats-db2.tpl"
+loadConstructStatsFromDB
+#line 1105 "stats-db2.h"
+	(struct sqlite3* db);
+
 #endif // __INCLUDED_DB_TEMPLATE_SCHEMA_STRUCTDEF_STATS_DB2_TPL_H__

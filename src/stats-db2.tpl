@@ -415,6 +415,24 @@ end;
 struct CONSTRUCT
     %inherit COMPONENT;
     %nomacro;
+    %loadFunc "loadConstructStatsFromDB";
+    %preLoadTable rowCount
+        if (!statsAllocConstruct($rowCount))
+            ABORT;
+    end;
+    %postLoadRow curRow rowNum
+        $curRow->ref = REF_CONSTRUCT_START + $rowNum;
+
+        // save the stats
+        statsSetConstruct($curRow, $rowNum);
+
+        // set the max stat values for the design screen
+        if ($curRow->designable)
+        {
+            setMaxConstPoints($curRow->constructPoints);
+            setMaxComponentWeight($curRow->weight);
+        }
+    end;
     %csv-file "construction.txt";
 
     # The number of points contributed each cycle

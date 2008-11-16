@@ -166,6 +166,19 @@ static BOOL bufferSCONSTRLoad(const char *pBuffer, UDWORD size, void **ppData)
 	return true;
 }
 
+static BOOL dataCONSTRLoad(struct sqlite3* db, const char* tableName, void **ppData)
+{
+	if (!loadConstructStatsFromDB(db)
+	 || !allocComponentList(COMP_CONSTRUCT, numConstructStats))
+	{
+		return false;
+	}
+
+	//not interested in this value
+	*ppData = NULL;
+	return true;
+}
+
 /* Load the ECM stats */
 static BOOL bufferSECMLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
@@ -1074,6 +1087,7 @@ static const RES_TYPE_MIN_TABLE TableResourceTypes[] =
 	{"DBPROP", dataDBPROPLoad, NULL},
 	{"DBSENSOR", dataDBSENSORLoad, NULL},
 	{"DBECM", dataDBECMLoad, NULL},
+	{"DBCONSTR", dataCONSTRLoad, NULL},
 };
 
 /* Pass all the data loading functions to the framework library */

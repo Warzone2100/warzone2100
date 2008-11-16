@@ -690,6 +690,9 @@ static bool _loadWeaponStats(WEAPON_STATS* stats, SQL_WEAPON_STATS* cols, sqlite
 	return true;
 }
 
+// Automatically generated file, which is intended to eventually replace this one
+#include "stats-db2.c"
+
 /** Load the weapon stats from the given SQLite database file
  *  \param filename name of the database file to load the weapon stats from.
  */

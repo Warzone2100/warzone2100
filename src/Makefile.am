@@ -28,6 +28,7 @@ BUILT_SOURCES = \
 	scriptvals_lexer.lex.c \
 	scriptvals_parser.tab.c \
 	scriptvals_parser.tab.h \
+	stats-db2.c \
 	stats-db2.h
 
 CLEANFILES = \
