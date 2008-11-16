@@ -61,7 +61,6 @@ loadPropulsionStatsFromDB
 	                          "SELECT\n"
 	                              "-- Automatically generated ID to link the inheritance hierarchy.\n"
 	                              "BASE.unique_inheritance_id,\n"
-	                              "-- Unique ID of the item\n"
 	                              "-- Unique language independant name that can be used to identify a specific\n"
 	                              "-- stats instance\n"
 	                              "`BASE`.`pName` AS `pName`,\n"
@@ -249,7 +248,7 @@ loadPropulsionStatsFromDB
 				setMaxPropulsionSpeed(stats->maxSpeed);
 				//setMaxComponentWeight(stats->weight);
 			}
-#line 253 "stats-db2.c"
+#line 252 "stats-db2.c"
 		}
 
 		/* Retrieve the next row */
@@ -275,7 +274,7 @@ in_statement_err:
 bool
 #line 285 "stats-db2.tpl"
 loadSensorStatsFromDB
-#line 279 "stats-db2.c"
+#line 278 "stats-db2.c"
 	(sqlite3* db)
 {
 	bool retval = false;
@@ -317,7 +316,7 @@ loadSensorStatsFromDB
 #line 287 "stats-db2.tpl"
 		if (!statsAllocSensor(ROW_COUNT_VAR))
 			return false;
-#line 321 "stats-db2.c"
+#line 320 "stats-db2.c"
 	}
 
 	/* Prepare the query to start fetching all rows */
@@ -325,7 +324,6 @@ loadSensorStatsFromDB
 	                          "SELECT\n"
 	                              "-- Automatically generated ID to link the inheritance hierarchy.\n"
 	                              "BASE.unique_inheritance_id,\n"
-	                              "-- Unique ID of the item\n"
 	                              "-- Unique language independant name that can be used to identify a specific\n"
 	                              "-- stats instance\n"
 	                              "`BASE`.`pName` AS `pName`,\n"
@@ -567,7 +565,7 @@ loadSensorStatsFromDB
 				setMaxSensorPower(stats->power);
 				setMaxComponentWeight(stats->weight);
 			}
-#line 571 "stats-db2.c"
+#line 569 "stats-db2.c"
 		}
 
 		/* Retrieve the next row */
@@ -593,7 +591,7 @@ in_statement_err:
 bool
 #line 502 "stats-db2.tpl"
 loadConstructStatsFromDB
-#line 597 "stats-db2.c"
+#line 595 "stats-db2.c"
 	(sqlite3* db)
 {
 	bool retval = false;
@@ -631,7 +629,7 @@ loadConstructStatsFromDB
 #line 504 "stats-db2.tpl"
 		if (!statsAllocConstruct(ROW_COUNT_VAR))
 			return false;
-#line 635 "stats-db2.c"
+#line 633 "stats-db2.c"
 	}
 
 	/* Prepare the query to start fetching all rows */
@@ -639,7 +637,6 @@ loadConstructStatsFromDB
 	                          "SELECT\n"
 	                              "-- Automatically generated ID to link the inheritance hierarchy.\n"
 	                              "BASE.unique_inheritance_id,\n"
-	                              "-- Unique ID of the item\n"
 	                              "-- Unique language independant name that can be used to identify a specific\n"
 	                              "-- stats instance\n"
 	                              "`BASE`.`pName` AS `pName`,\n"
@@ -812,7 +809,7 @@ loadConstructStatsFromDB
 				setMaxConstPoints(stats->constructPoints);
 				setMaxComponentWeight(stats->weight);
 			}
-#line 816 "stats-db2.c"
+#line 813 "stats-db2.c"
 		}
 
 		/* Retrieve the next row */
