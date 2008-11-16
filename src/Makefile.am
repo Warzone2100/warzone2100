@@ -4,11 +4,13 @@
 %.lex.h %.lex.c:: %.l
 	$(LEX) $(LFLAGS) $(AM_LFLAGS) -o$@ $<
 
+if PERL_AVAILABLE
 %.c: $(top_srcdir)/build_tools/code-generators/db-lang.pl $(top_srcdir)/build_tools/code-generators/c_sqliteload_cg.pm %.tpl.sql.c %.tpl
-	$^ $@
+	$(PERL) $^ $@
 
 %.h: $(top_srcdir)/build_tools/code-generators/db-lang.pl $(top_srcdir)/build_tools/code-generators/c_structdef_cg.pm %.tpl.struct.h %.tpl
-	$^ $@
+	$(PERL) $^ $@
+endif
 
 # Required to force using a C++ linker
 force-linker.cpp:
@@ -27,9 +29,13 @@ BUILT_SOURCES = \
 	message_parser.tab.h \
 	scriptvals_lexer.lex.c \
 	scriptvals_parser.tab.c \
-	scriptvals_parser.tab.h \
+	scriptvals_parser.tab.h
+
+if PERL_AVAILABLE
+BUILT_SOURCES += \
 	stats-db2.c \
 	stats-db2.h
+endif
 
 CLEANFILES = \
 	force-linker.cpp \

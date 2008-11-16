@@ -35,6 +35,9 @@ if test "x$LEX" != "xflex" ; then
 fi
 AC_PROG_VERSION_CHECK([flex], [2.5.33], [2.5.34])
 
+AX_WITH_PROG([PERL], [perl], [])
+AM_CONDITIONAL([PERL_AVAILABLE], test -z "$PERL")
+
 # Enable Compiler/LibC GNU extensions
 AC_GNU_SOURCE
 
@@ -370,4 +373,9 @@ if test "x$use_system_sqlite" = "xno" ; then
 	AC_MSG_WARN([Not using a system provided SQLite library.])
 	AC_MSG_WARN([${SQLITE_PKG_ERRORS}])
 	AC_MSG_WARN([We currently only accept SQLite versions >= 3.6.])
+fi
+
+if test -z "$PERL" ; then
+	AC_MSG_NOTICE()
+	AC_MSG_WARN([Perl isn't installed, autogeneration of some sources will not work.])
 fi
