@@ -180,7 +180,7 @@ sub startFile()
     else
     {
         $outfile = $name;
-        $outfile =~ s/\.[^.]*$/.c/;
+        $outfile =~ s/\.[^.]*$/.schema.sql/;
     }
 }
 
