@@ -44,7 +44,7 @@ CREATE TABLE `PROPULSION` (
 	maxSpeed INTEGER NOT NULL,
 
 	-- Type of propulsion used - index into PropulsionTable
-	propulsionType INTEGER NOT NULL
+	propulsionType TEXT NOT NULL
 );
 
 CREATE TABLE `SENSOR` (
@@ -61,7 +61,7 @@ CREATE TABLE `SENSOR` (
 	location INTEGER NOT NULL,
 
 	-- used for combat
-	type INTEGER NOT NULL,
+	type TEXT NOT NULL,
 
 	-- Time delay before the associated weapon droids 'know' where the attack is
 	-- from.
@@ -167,19 +167,19 @@ CREATE TABLE `WEAPON` (
 	indirectHeight INTEGER NOT NULL,
 
 	-- indicates whether the droid has to stop before firing
-	fireOnMove INTEGER NOT NULL,
+	fireOnMove TEXT NOT NULL,
 
 	-- the class of weapon
-	weaponClass INTEGER NOT NULL,
+	weaponClass TEXT NOT NULL,
 
 	-- the subclass to which the weapon belongs
-	weaponSubClass INTEGER NOT NULL,
+	weaponSubClass TEXT NOT NULL,
 
 	-- which projectile model to use for the bullet
-	movementModel INTEGER NOT NULL,
+	movementModel TEXT NOT NULL,
 
 	-- which type of warhead is associated with the weapon
-	weaponEffect INTEGER NOT NULL,
+	weaponEffect TEXT NOT NULL,
 
 	-- used to compare with weight to see if recoils or not
 	recoilValue INTEGER NOT NULL,
