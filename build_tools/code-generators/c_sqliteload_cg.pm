@@ -219,7 +219,7 @@ sub printStructContent
 
 sub printBaseStruct
 {
-    my ($outstr, $struct, $structMap) = @_;
+    my ($outstr, $struct) = @_;
     my $is_base = 1;
 
     foreach (keys %{${$struct}{"qualifiers"}})
@@ -228,12 +228,7 @@ sub printBaseStruct
         {
             my $inheritStruct = ${${$struct}{"qualifiers"}}{"inherit"};
 
-            printBaseStruct($outstr, $inheritStruct, $structMap);
-            $is_base = 0;
-        }
-        elsif (/abstract/)
-        {
-            $$outstr .= "`${$struct}{\"name\"}`";
+            printBaseStruct($outstr, $inheritStruct);
             $is_base = 0;
         }
     }
@@ -273,7 +268,7 @@ sub printParameterLoadCode
 
     $$output .= "(`$tableName`.unique_inheritance_id) ";
 
-    printBaseStruct($output, $struct, $structMap);
+    printBaseStruct($output, $struct);
     printStructJoins($output, $struct, $structMap);
 
     $$output .= ";\"))\n"
@@ -417,7 +412,7 @@ sub printStartSelectQuery
     printStructContent($output, $struct, $structMap, $enumMap, $indent . "    ", 1);
     $$output .= "${indent}\"FROM ";
 
-    printBaseStruct($output, $struct, $structMap);
+    printBaseStruct($output, $struct);
     printStructJoins($output, $struct, $structMap);
 
     $$output .= ";";
