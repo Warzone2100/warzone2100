@@ -496,8 +496,35 @@ sub printRowProcessCode
             my $enum = ${$field}{"enum"};
             my $enumSize = @{${$enum}{"values"}};
 
-            $$output .= "\t\tstats->$fieldName = sqlite3_column_int(stmt, cols.$fieldName);\n"
-                      . "\t\tASSERT(stats->$fieldName < $enumSize, \"Enum out of range (%u), maximum is $enumSize\", stats->$fieldName);\n";
+            my $valprefix = "";
+            $valprefix = ${${$enum}{"qualifiers"}}{"valprefix"} if exists(${${$enum}{"qualifiers"}}{"valprefix"});
+            my $valsuffix = "";
+            $valsuffix = ${${$enum}{"qualifiers"}}{"valsuffix"} if exists(${${$enum}{"qualifiers"}}{"valsuffix"});
+
+            $valprefix = "${$enum}{\"name\"}_" if not exists(${${$enum}{"qualifiers"}}{"valprefix"}) and not exists(${${$enum}{"qualifiers"}}{"valsuffix"});
+
+            for (my $i = 0; $i < @{${$enum}{"values"}}; $i++)
+            {
+                my $value = ${${$enum}{"values"}}[$i];
+                my $valueName = ${$value}{"name"};
+
+                if ($i == 0)
+                {
+                    $$output .= "\t\tif     ";
+                }
+                else
+                {
+                    $$output .= "\t\telse if";
+                }
+
+                $$output .= " (strcmp((const char*)sqlite3_column_text(stmt, cols.$fieldName), \"$valueName\") == 0)\n"
+                          . "\t\t\tstats->$fieldName = $valprefix$valueName$valsuffix;\n";
+            }
+            $$output .= "\t\telse\n"
+                      . "\t\t{\n"
+                      . "\t\t\tdebug(LOG_ERROR, \"Unknown enumerant (%s) for field $fieldName\", (const char*)sqlite3_column_text(stmt, cols.$fieldName));\n"
+                      . "\t\t\tgoto in_statement_err;\n"
+                      . "\t\t}\n"
         }
         elsif (/string/)
         {
