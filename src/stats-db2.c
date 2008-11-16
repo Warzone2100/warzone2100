@@ -41,21 +41,21 @@ loadSensorStatsFromDB
 	} cols;
 
 	{
-		int MAX_ID_VAR;
+		unsigned int ROW_COUNT_VAR;
 
 		/* Prepare this SQL statement for execution */
-		if (!prepareStatement(db, &stmt, "SELECT MAX(`SENSOR`.unique_inheritance_id) FROM `BASE` INNER JOIN `COMPONENT` ON `BASE`.`unique_inheritance_id` = `COMPONENT`.`unique_inheritance_id` INNER JOIN `SENSOR` ON `COMPONENT`.`unique_inheritance_id` = `SENSOR`.`unique_inheritance_id`;"))
+		if (!prepareStatement(db, &stmt, "SELECT COUNT(`SENSOR`.unique_inheritance_id) FROM `BASE` INNER JOIN `COMPONENT` ON `BASE`.`unique_inheritance_id` = `COMPONENT`.`unique_inheritance_id` INNER JOIN `SENSOR` ON `COMPONENT`.`unique_inheritance_id` = `SENSOR`.`unique_inheritance_id`;"))
 			return false;
 
 		/* Execute and process the results of the above SQL statement */
 		if (sqlite3_step(stmt) != SQLITE_ROW
 		 || sqlite3_data_count(stmt) != 1)
 			goto in_statement_err;
-		MAX_ID_VAR = sqlite3_column_int(stmt, 0);
+		ROW_COUNT_VAR = sqlite3_column_int(stmt, 0);
 		sqlite3_finalize(stmt);
 
 #line 222 "stats-db2.tpl"
-		if (!statsAllocSensor(MAX_ID_VAR))
+		if (!statsAllocSensor(ROW_COUNT_VAR))
 			return false;
 #line 61 "stats-db2.c"
 	}

@@ -218,8 +218,8 @@ struct SENSOR
     %inherit COMPONENT;
     %nomacro;
     %loadFunc "loadSensorStatsFromDB";
-    %preLoadTable maxId
-        if (!statsAllocSensor($maxId))
+    %preLoadTable rowCount
+        if (!statsAllocSensor($rowCount))
             ABORT;
     end;
     %postLoadRow curRow rowNum
