@@ -552,7 +552,8 @@ RECURSIVE              = YES
 # excluded from the INPUT source files. This way you can easily exclude a 
 # subdirectory from a directory tree whose root is specified with the INPUT tag.
 
-EXCLUDE                = ./lib/sqlite3/sqlite3.c \
+EXCLUDE                = ./lib/framework/config-macosx.h \
+                         ./lib/sqlite3/sqlite3.c \
                          ./lib/sqlite3/sqlite3.h \
                          ./lib/sqlite3/sqlite3ext.h \
                          ./lib/ivis_opengl/GLee.c \
@@ -573,7 +574,8 @@ EXCLUDE_SYMLINKS       = NO
 # against the file with absolute path, so to exclude all test directories 
 # for example use the pattern */test/*
 
-EXCLUDE_PATTERNS       = /*.svn/*
+EXCLUDE_PATTERNS       = /*.svn/* \
+                         ./lib/exceptionhandler/include/*
 
 # The EXCLUDE_SYMBOLS tag can be used to specify one or more symbol names 
 # (namespaces, classes, functions, etc.) that should be excluded from the output. 
