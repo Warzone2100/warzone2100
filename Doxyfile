@@ -232,6 +232,16 @@ DISTRIBUTE_GROUP_DOC   = NO
 
 SUBGROUPING            = YES
 
+# When TYPEDEF_HIDES_STRUCT is enabled, a typedef of a struct, union, or enum
+# is documented as struct, union, or enum with the name of the typedef. So
+# typedef struct TypeS {} TypeT, will appear in the documentation as a struct
+# with name TypeT. When disabled the typedef will appear as a member of a file,
+# namespace, or class. And the struct will be named TypeS. This can typically
+# be useful for C code in case the coding convention dictates that all compound
+# types are typedef'ed and only the typedef is referenced, never the tag name.
+
+TYPEDEF_HIDES_STRUCT   = YES
+
 #---------------------------------------------------------------------------
 # Build related configuration options
 #---------------------------------------------------------------------------
@@ -548,6 +558,7 @@ EXCLUDE                = ./lib/sqlite3/sqlite3.c \
                          ./lib/ivis_opengl/GLee.c \
                          ./lib/ivis_opengl/GLee.h \
 			 ./doc/code/html \
+			 ./src/stats-db2.tpl.sql.c \
 			 ./src/stats-db2.tpl.struct.h
 
 # The EXCLUDE_SYMLINKS tag can be used select whether or not files or 
@@ -685,7 +696,7 @@ VERBATIM_HEADERS       = YES
 # of all compounds will be generated. Enable this if the project 
 # contains a lot of classes, structs, unions or interfaces.
 
-ALPHABETICAL_INDEX     = NO
+ALPHABETICAL_INDEX     = YES
 
 # If the alphabetical index is enabled (see ALPHABETICAL_INDEX) then 
 # the COLS_IN_ALPHA_INDEX tag can be used to specify the number of columns 

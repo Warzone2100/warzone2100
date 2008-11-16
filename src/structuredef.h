@@ -26,6 +26,7 @@
 
 #include "lib/gamelib/animobj.h"
 #include "positiondef.h"
+#include "basedef.h"
 #include "statsdef.h"
 #include "weapondef.h"
 
