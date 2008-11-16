@@ -5,6 +5,266 @@
 #line 1 "stats-db2.tpl.sql.c"
 #line 7 "stats-db2.c"
 
+/** Load the contents of the PROPULSION table from the given SQLite database.
+ *
+ *  @param db represents the database to load from
+ *
+ *  @return true if we succesfully loaded all available rows from the table,
+ *          false otherwise.
+ */
+bool
+#line 213 "stats-db2.tpl"
+loadPropulsionStatsFromDB
+#line 19 "stats-db2.c"
+	(sqlite3* db)
+{
+	bool retval = false;
+	sqlite3_stmt* stmt;
+	int rc;
+	unsigned int CUR_ROW_NUM = 0;
+	struct
+	{
+		int unique_inheritance_id;
+		int pName;
+		int buildPower;
+		int buildPoints;
+		int weight;
+		int body;
+		int designable;
+		int pIMD;
+		int maxSpeed;
+		int propulsionType;
+	} cols;
+
+	{
+		unsigned int ROW_COUNT_VAR;
+
+		/* Prepare this SQL statement for execution */
+		if (!prepareStatement(db, &stmt, "SELECT COUNT(`PROPULSION`.unique_inheritance_id) FROM `BASE` INNER JOIN `COMPONENT` ON `BASE`.`unique_inheritance_id` = `COMPONENT`.`unique_inheritance_id` INNER JOIN `PROPULSION` ON `COMPONENT`.`unique_inheritance_id` = `PROPULSION`.`unique_inheritance_id`;"))
+			return false;
+
+		/* Execute and process the results of the above SQL statement */
+		if (sqlite3_step(stmt) != SQLITE_ROW
+		 || sqlite3_data_count(stmt) != 1)
+			goto in_statement_err;
+		ROW_COUNT_VAR = sqlite3_column_int(stmt, 0);
+		sqlite3_finalize(stmt);
+
+#line 215 "stats-db2.tpl"
+		if (!statsAllocPropulsion(ROW_COUNT_VAR))
+			return false;
+#line 57 "stats-db2.c"
+	}
+
+	/* Prepare the query to start fetching all rows */
+	if (!prepareStatement(db, &stmt,
+	                          "SELECT\n"
+	                              "-- Automatically generated ID to link the inheritance hierarchy.\n"
+	                              "BASE.unique_inheritance_id,\n"
+	                              "-- Unique ID of the item\n"
+	                              "-- Unique language independant name that can be used to identify a specific\n"
+	                              "-- stats instance\n"
+	                              "`BASE`.`pName` AS `pName`,\n"
+
+	                              "-- Power required to build this component\n"
+	                              "`COMPONENT`.`buildPower` AS `buildPower`,\n"
+
+	                              "-- Build points (which are rate-limited in the construction units) required\n"
+	                              "-- to build this component.\n"
+	                              "`COMPONENT`.`buildPoints` AS `buildPoints`,\n"
+
+	                              "-- Weight of this component\n"
+	                              "`COMPONENT`.`weight` AS `weight`,\n"
+
+	                              "-- Body points of this component\n"
+	                              "`COMPONENT`.`body` AS `body`,\n"
+
+	                              "-- Indicates whether this component is \"designable\" and can thus be used in\n"
+	                              "-- the design screen.\n"
+	                              "`COMPONENT`.`designable` AS `designable`,\n"
+
+	                              "-- The \"base\" IMD model representing this component in 3D space.\n"
+	                              "`COMPONENT`.`pIMD` AS `pIMD`,\n"
+
+	                              "-- Max speed for the droid\n"
+	                              "`PROPULSION`.`maxSpeed` AS `maxSpeed`,\n"
+
+	                              "-- Type of propulsion used - index into PropulsionTable\n"
+	                              "`PROPULSION`.`propulsionType` AS `propulsionType`\n"
+	                          "FROM `BASE` INNER JOIN `COMPONENT` ON `BASE`.`unique_inheritance_id` = `COMPONENT`.`unique_inheritance_id` INNER JOIN `PROPULSION` ON `COMPONENT`.`unique_inheritance_id` = `PROPULSION`.`unique_inheritance_id`;"))
+		return false;
+
+	/* Fetch the first row */
+	if ((rc = sqlite3_step(stmt)) != SQLITE_ROW)
+	{
+		/* Apparently we fetched no rows at all, this is a non-failure, terminal condition. */
+		sqlite3_finalize(stmt);
+		return true;
+	}
+
+	/* Fetch and cache column numbers */
+	/* BEGIN of inherited "COMPONENT" definition */
+	/* BEGIN of inherited "BASE" definition */
+	cols.unique_inheritance_id = getColNumByName(stmt, "unique_inheritance_id");
+		ASSERT(cols.unique_inheritance_id != -1, "Column unique_inheritance_id not found in result set!");
+		if (cols.unique_inheritance_id == -1)
+			goto in_statement_err;
+	cols.pName = getColNumByName(stmt, "pName");
+		ASSERT(cols.pName != -1, "Column pName not found in result set!");
+		if (cols.pName == -1)
+			goto in_statement_err;
+	/* END of inherited "BASE" definition */
+	cols.buildPower = getColNumByName(stmt, "buildPower");
+		ASSERT(cols.buildPower != -1, "Column buildPower not found in result set!");
+		if (cols.buildPower == -1)
+			goto in_statement_err;
+	cols.buildPoints = getColNumByName(stmt, "buildPoints");
+		ASSERT(cols.buildPoints != -1, "Column buildPoints not found in result set!");
+		if (cols.buildPoints == -1)
+			goto in_statement_err;
+	cols.weight = getColNumByName(stmt, "weight");
+		ASSERT(cols.weight != -1, "Column weight not found in result set!");
+		if (cols.weight == -1)
+			goto in_statement_err;
+	cols.body = getColNumByName(stmt, "body");
+		ASSERT(cols.body != -1, "Column body not found in result set!");
+		if (cols.body == -1)
+			goto in_statement_err;
+	cols.designable = getColNumByName(stmt, "designable");
+		ASSERT(cols.designable != -1, "Column designable not found in result set!");
+		if (cols.designable == -1)
+			goto in_statement_err;
+	cols.pIMD = getColNumByName(stmt, "pIMD");
+		ASSERT(cols.pIMD != -1, "Column pIMD not found in result set!");
+		if (cols.pIMD == -1)
+			goto in_statement_err;
+	/* END of inherited "COMPONENT" definition */
+	cols.maxSpeed = getColNumByName(stmt, "maxSpeed");
+		ASSERT(cols.maxSpeed != -1, "Column maxSpeed not found in result set!");
+		if (cols.maxSpeed == -1)
+			goto in_statement_err;
+	cols.propulsionType = getColNumByName(stmt, "propulsionType");
+		ASSERT(cols.propulsionType != -1, "Column propulsionType not found in result set!");
+		if (cols.propulsionType == -1)
+			goto in_statement_err;
+
+	while (rc == SQLITE_ROW)
+	{
+		PROPULSION_STATS sStats, * const stats = &sStats;
+
+		memset(stats, 0, sizeof(*stats));
+
+		/* BEGIN of inherited "COMPONENT" definition */
+		/* BEGIN of inherited "BASE" definition */
+		/* Unique ID of the item
+		 */
+
+		/* Unique language independant name that can be used to identify a specific
+		 * stats instance
+		 */
+		stats->pName = strdup((const char*)sqlite3_column_text(stmt, cols.pName));
+		if (stats->pName == NULL)
+		{
+			debug(LOG_ERROR, "Out of memory");
+			abort();
+			goto in_statement_err;
+		}
+
+		/* END of inherited "BASE" definition */
+		/* Power required to build this component
+		 */
+		stats->buildPower = sqlite3_column_int(stmt, cols.buildPower);
+
+		/* Build points (which are rate-limited in the construction units) required
+		 * to build this component.
+		 */
+		stats->buildPoints = sqlite3_column_int(stmt, cols.buildPoints);
+
+		/* Weight of this component
+		 */
+		stats->weight = sqlite3_column_int(stmt, cols.weight);
+
+		/* Body points of this component
+		 */
+		stats->body = sqlite3_column_int(stmt, cols.body);
+
+		/* Indicates whether this component is "designable" and can thus be used in
+		 * the design screen.
+		 */
+		stats->designable = sqlite3_column_int(stmt, cols.designable) ? true : false;
+
+		/* The "base" IMD model representing this component in 3D space.
+		 */
+		if (sqlite3_column_type(stmt, cols.pIMD) != SQLITE_NULL)
+		{
+			stats->pIMD = (iIMDShape *) resGetData("IMD", (const char*)sqlite3_column_text(stmt, cols.pIMD));
+		}
+		else
+		{
+			stats->pIMD = NULL;
+		}
+
+		/* END of inherited "COMPONENT" definition */
+		/* Max speed for the droid
+		 */
+		stats->maxSpeed = sqlite3_column_int(stmt, cols.maxSpeed);
+
+		/* Type of propulsion used - index into PropulsionTable
+		 */
+		if      (strcmp((const char*)sqlite3_column_text(stmt, cols.propulsionType), "Wheeled") == 0)
+			stats->propulsionType = PROPULSION_TYPE_WHEELED;
+		else if (strcmp((const char*)sqlite3_column_text(stmt, cols.propulsionType), "Tracked") == 0)
+			stats->propulsionType = PROPULSION_TYPE_TRACKED;
+		else if (strcmp((const char*)sqlite3_column_text(stmt, cols.propulsionType), "Legged") == 0)
+			stats->propulsionType = PROPULSION_TYPE_LEGGED;
+		else if (strcmp((const char*)sqlite3_column_text(stmt, cols.propulsionType), "Hover") == 0)
+			stats->propulsionType = PROPULSION_TYPE_HOVER;
+		else if (strcmp((const char*)sqlite3_column_text(stmt, cols.propulsionType), "Ski") == 0)
+			stats->propulsionType = PROPULSION_TYPE_SKI;
+		else if (strcmp((const char*)sqlite3_column_text(stmt, cols.propulsionType), "Lift") == 0)
+			stats->propulsionType = PROPULSION_TYPE_LIFT;
+		else if (strcmp((const char*)sqlite3_column_text(stmt, cols.propulsionType), "Propellor") == 0)
+			stats->propulsionType = PROPULSION_TYPE_PROPELLOR;
+		else if (strcmp((const char*)sqlite3_column_text(stmt, cols.propulsionType), "Half-Tracked") == 0)
+			stats->propulsionType = PROPULSION_TYPE_HALF_TRACKED;
+		else if (strcmp((const char*)sqlite3_column_text(stmt, cols.propulsionType), "Jump") == 0)
+			stats->propulsionType = PROPULSION_TYPE_JUMP;
+		else
+		{
+			debug(LOG_ERROR, "Unknown enumerant (%s) for field propulsionType", (const char*)sqlite3_column_text(stmt, cols.propulsionType));
+			goto in_statement_err;
+		}
+
+		{
+
+#line 219 "stats-db2.tpl"
+			stats->ref = REF_PROPULSION_START + CUR_ROW_NUM;
+
+			// save the stats
+			statsSetPropulsion(stats, CUR_ROW_NUM);
+
+			// set the max stat values for the design screen
+			if (stats->designable)
+			{
+				setMaxPropulsionSpeed(stats->maxSpeed);
+				//setMaxComponentWeight(stats->weight);
+			}
+#line 253 "stats-db2.c"
+		}
+
+		/* Retrieve the next row */
+		rc = sqlite3_step(stmt);
+		++CUR_ROW_NUM;
+	}
+
+	retval = true;
+
+in_statement_err:
+	sqlite3_finalize(stmt);
+
+	return retval;
+}
+
 /** Load the contents of the SENSOR table from the given SQLite database.
  *
  *  @param db represents the database to load from
@@ -13,9 +273,9 @@
  *          false otherwise.
  */
 bool
-#line 226 "stats-db2.tpl"
+#line 264 "stats-db2.tpl"
 loadSensorStatsFromDB
-#line 19 "stats-db2.c"
+#line 279 "stats-db2.c"
 	(sqlite3* db)
 {
 	bool retval = false;
@@ -54,10 +314,10 @@ loadSensorStatsFromDB
 		ROW_COUNT_VAR = sqlite3_column_int(stmt, 0);
 		sqlite3_finalize(stmt);
 
-#line 228 "stats-db2.tpl"
+#line 266 "stats-db2.tpl"
 		if (!statsAllocSensor(ROW_COUNT_VAR))
 			return false;
-#line 61 "stats-db2.c"
+#line 321 "stats-db2.c"
 	}
 
 	/* Prepare the query to start fetching all rows */
@@ -294,7 +554,7 @@ loadSensorStatsFromDB
 
 		{
 
-#line 232 "stats-db2.tpl"
+#line 270 "stats-db2.tpl"
 			stats->ref = REF_SENSOR_START + CUR_ROW_NUM;
 
 			// save the stats
@@ -307,7 +567,7 @@ loadSensorStatsFromDB
 				setMaxSensorPower(stats->power);
 				setMaxComponentWeight(stats->weight);
 			}
-#line 311 "stats-db2.c"
+#line 571 "stats-db2.c"
 		}
 
 		/* Retrieve the next row */
@@ -331,9 +591,9 @@ in_statement_err:
  *          false otherwise.
  */
 bool
-#line 443 "stats-db2.tpl"
+#line 481 "stats-db2.tpl"
 loadConstructStatsFromDB
-#line 337 "stats-db2.c"
+#line 597 "stats-db2.c"
 	(sqlite3* db)
 {
 	bool retval = false;
@@ -368,10 +628,10 @@ loadConstructStatsFromDB
 		ROW_COUNT_VAR = sqlite3_column_int(stmt, 0);
 		sqlite3_finalize(stmt);
 
-#line 445 "stats-db2.tpl"
+#line 483 "stats-db2.tpl"
 		if (!statsAllocConstruct(ROW_COUNT_VAR))
 			return false;
-#line 375 "stats-db2.c"
+#line 635 "stats-db2.c"
 	}
 
 	/* Prepare the query to start fetching all rows */
@@ -540,7 +800,7 @@ loadConstructStatsFromDB
 
 		{
 
-#line 449 "stats-db2.tpl"
+#line 487 "stats-db2.tpl"
 			stats->ref = REF_CONSTRUCT_START + CUR_ROW_NUM;
 
 			// save the stats
@@ -552,7 +812,7 @@ loadConstructStatsFromDB
 				setMaxConstPoints(stats->constructPoints);
 				setMaxComponentWeight(stats->weight);
 			}
-#line 556 "stats-db2.c"
+#line 816 "stats-db2.c"
 		}
 
 		/* Retrieve the next row */

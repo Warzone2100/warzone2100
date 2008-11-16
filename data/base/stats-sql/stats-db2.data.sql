@@ -2,6 +2,785 @@
 
 BEGIN TRANSACTION;
 
+-- Data for table `PROPULSION`, extracted from ../stats/propulsion.txt
+
+INSERT INTO `BASE` (
+	`pName`
+)
+VALUES (
+	'ZNULLPROP'
+);
+INSERT INTO `COMPONENT` (
+	`unique_inheritance_id`,
+	`buildPower`,
+	`buildPoints`,
+	`weight`,
+	`body`,
+	`designable`,
+	`pIMD`
+)
+SELECT
+	`BASE`.`unique_inheritance_id`,
+	0,
+	0,
+	0,
+	0,
+	0,
+	'MIBNKDRL.PIE'
+FROM `BASE`
+WHERE `BASE`.`pName`='ZNULLPROP';
+INSERT INTO `PROPULSION` (
+	`unique_inheritance_id`,
+	`maxSpeed`,
+	`propulsionType`
+)
+SELECT
+	`BASE`.`unique_inheritance_id`,
+	0,
+	'Wheeled'
+FROM `BASE`
+WHERE `BASE`.`pName`='ZNULLPROP';
+
+INSERT INTO `BASE` (
+	`pName`
+)
+VALUES (
+	'wheeled03'
+);
+INSERT INTO `COMPONENT` (
+	`unique_inheritance_id`,
+	`buildPower`,
+	`buildPoints`,
+	`weight`,
+	`body`,
+	`designable`,
+	`pIMD`
+)
+SELECT
+	`BASE`.`unique_inheritance_id`,
+	150,
+	50,
+	200,
+	300,
+	0,
+	'PRLRWHL1.PIE'
+FROM `BASE`
+WHERE `BASE`.`pName`='wheeled03';
+INSERT INTO `PROPULSION` (
+	`unique_inheritance_id`,
+	`maxSpeed`,
+	`propulsionType`
+)
+SELECT
+	`BASE`.`unique_inheritance_id`,
+	175,
+	'Wheeled'
+FROM `BASE`
+WHERE `BASE`.`pName`='wheeled03';
+
+INSERT INTO `BASE` (
+	`pName`
+)
+VALUES (
+	'wheeled02'
+);
+INSERT INTO `COMPONENT` (
+	`unique_inheritance_id`,
+	`buildPower`,
+	`buildPoints`,
+	`weight`,
+	`body`,
+	`designable`,
+	`pIMD`
+)
+SELECT
+	`BASE`.`unique_inheritance_id`,
+	100,
+	50,
+	250,
+	200,
+	0,
+	'PRLRWHL1.PIE'
+FROM `BASE`
+WHERE `BASE`.`pName`='wheeled02';
+INSERT INTO `PROPULSION` (
+	`unique_inheritance_id`,
+	`maxSpeed`,
+	`propulsionType`
+)
+SELECT
+	`BASE`.`unique_inheritance_id`,
+	175,
+	'Wheeled'
+FROM `BASE`
+WHERE `BASE`.`pName`='wheeled02';
+
+INSERT INTO `BASE` (
+	`pName`
+)
+VALUES (
+	'wheeled01'
+);
+INSERT INTO `COMPONENT` (
+	`unique_inheritance_id`,
+	`buildPower`,
+	`buildPoints`,
+	`weight`,
+	`body`,
+	`designable`,
+	`pIMD`
+)
+SELECT
+	`BASE`.`unique_inheritance_id`,
+	50,
+	50,
+	300,
+	100,
+	1,
+	'PRLRWHL1.PIE'
+FROM `BASE`
+WHERE `BASE`.`pName`='wheeled01';
+INSERT INTO `PROPULSION` (
+	`unique_inheritance_id`,
+	`maxSpeed`,
+	`propulsionType`
+)
+SELECT
+	`BASE`.`unique_inheritance_id`,
+	175,
+	'Wheeled'
+FROM `BASE`
+WHERE `BASE`.`pName`='wheeled01';
+
+INSERT INTO `BASE` (
+	`pName`
+)
+VALUES (
+	'V-Tol03'
+);
+INSERT INTO `COMPONENT` (
+	`unique_inheritance_id`,
+	`buildPower`,
+	`buildPoints`,
+	`weight`,
+	`body`,
+	`designable`,
+	`pIMD`
+)
+SELECT
+	`BASE`.`unique_inheritance_id`,
+	300,
+	125,
+	50,
+	300,
+	0,
+	'DPVTOL.PIE'
+FROM `BASE`
+WHERE `BASE`.`pName`='V-Tol03';
+INSERT INTO `PROPULSION` (
+	`unique_inheritance_id`,
+	`maxSpeed`,
+	`propulsionType`
+)
+SELECT
+	`BASE`.`unique_inheritance_id`,
+	800,
+	'Lift'
+FROM `BASE`
+WHERE `BASE`.`pName`='V-Tol03';
+
+INSERT INTO `BASE` (
+	`pName`
+)
+VALUES (
+	'V-Tol02'
+);
+INSERT INTO `COMPONENT` (
+	`unique_inheritance_id`,
+	`buildPower`,
+	`buildPoints`,
+	`weight`,
+	`body`,
+	`designable`,
+	`pIMD`
+)
+SELECT
+	`BASE`.`unique_inheritance_id`,
+	250,
+	125,
+	50,
+	150,
+	0,
+	'DPVTOL.PIE'
+FROM `BASE`
+WHERE `BASE`.`pName`='V-Tol02';
+INSERT INTO `PROPULSION` (
+	`unique_inheritance_id`,
+	`maxSpeed`,
+	`propulsionType`
+)
+SELECT
+	`BASE`.`unique_inheritance_id`,
+	800,
+	'Lift'
+FROM `BASE`
+WHERE `BASE`.`pName`='V-Tol02';
+
+INSERT INTO `BASE` (
+	`pName`
+)
+VALUES (
+	'V-Tol'
+);
+INSERT INTO `COMPONENT` (
+	`unique_inheritance_id`,
+	`buildPower`,
+	`buildPoints`,
+	`weight`,
+	`body`,
+	`designable`,
+	`pIMD`
+)
+SELECT
+	`BASE`.`unique_inheritance_id`,
+	150,
+	125,
+	50,
+	100,
+	1,
+	'DPVTOL.PIE'
+FROM `BASE`
+WHERE `BASE`.`pName`='V-Tol';
+INSERT INTO `PROPULSION` (
+	`unique_inheritance_id`,
+	`maxSpeed`,
+	`propulsionType`
+)
+SELECT
+	`BASE`.`unique_inheritance_id`,
+	700,
+	'Lift'
+FROM `BASE`
+WHERE `BASE`.`pName`='V-Tol';
+
+INSERT INTO `BASE` (
+	`pName`
+)
+VALUES (
+	'tracked03'
+);
+INSERT INTO `COMPONENT` (
+	`unique_inheritance_id`,
+	`buildPower`,
+	`buildPoints`,
+	`weight`,
+	`body`,
+	`designable`,
+	`pIMD`
+)
+SELECT
+	`BASE`.`unique_inheritance_id`,
+	275,
+	125,
+	550,
+	800,
+	0,
+	'PRLRTRK1.PIE'
+FROM `BASE`
+WHERE `BASE`.`pName`='tracked03';
+INSERT INTO `PROPULSION` (
+	`unique_inheritance_id`,
+	`maxSpeed`,
+	`propulsionType`
+)
+SELECT
+	`BASE`.`unique_inheritance_id`,
+	125,
+	'Tracked'
+FROM `BASE`
+WHERE `BASE`.`pName`='tracked03';
+
+INSERT INTO `BASE` (
+	`pName`
+)
+VALUES (
+	'tracked02'
+);
+INSERT INTO `COMPONENT` (
+	`unique_inheritance_id`,
+	`buildPower`,
+	`buildPoints`,
+	`weight`,
+	`body`,
+	`designable`,
+	`pIMD`
+)
+SELECT
+	`BASE`.`unique_inheritance_id`,
+	200,
+	125,
+	600,
+	600,
+	0,
+	'PRLRTRK1.PIE'
+FROM `BASE`
+WHERE `BASE`.`pName`='tracked02';
+INSERT INTO `PROPULSION` (
+	`unique_inheritance_id`,
+	`maxSpeed`,
+	`propulsionType`
+)
+SELECT
+	`BASE`.`unique_inheritance_id`,
+	125,
+	'Tracked'
+FROM `BASE`
+WHERE `BASE`.`pName`='tracked02';
+
+INSERT INTO `BASE` (
+	`pName`
+)
+VALUES (
+	'tracked01'
+);
+INSERT INTO `COMPONENT` (
+	`unique_inheritance_id`,
+	`buildPower`,
+	`buildPoints`,
+	`weight`,
+	`body`,
+	`designable`,
+	`pIMD`
+)
+SELECT
+	`BASE`.`unique_inheritance_id`,
+	125,
+	125,
+	650,
+	400,
+	1,
+	'PRLRTRK1.PIE'
+FROM `BASE`
+WHERE `BASE`.`pName`='tracked01';
+INSERT INTO `PROPULSION` (
+	`unique_inheritance_id`,
+	`maxSpeed`,
+	`propulsionType`
+)
+SELECT
+	`BASE`.`unique_inheritance_id`,
+	125,
+	'Tracked'
+FROM `BASE`
+WHERE `BASE`.`pName`='tracked01';
+
+INSERT INTO `BASE` (
+	`pName`
+)
+VALUES (
+	'hover03'
+);
+INSERT INTO `COMPONENT` (
+	`unique_inheritance_id`,
+	`buildPower`,
+	`buildPoints`,
+	`weight`,
+	`body`,
+	`designable`,
+	`pIMD`
+)
+SELECT
+	`BASE`.`unique_inheritance_id`,
+	200,
+	100,
+	100,
+	300,
+	0,
+	'PRLHOV1.PIE'
+FROM `BASE`
+WHERE `BASE`.`pName`='hover03';
+INSERT INTO `PROPULSION` (
+	`unique_inheritance_id`,
+	`maxSpeed`,
+	`propulsionType`
+)
+SELECT
+	`BASE`.`unique_inheritance_id`,
+	200,
+	'Hover'
+FROM `BASE`
+WHERE `BASE`.`pName`='hover03';
+
+INSERT INTO `BASE` (
+	`pName`
+)
+VALUES (
+	'hover02'
+);
+INSERT INTO `COMPONENT` (
+	`unique_inheritance_id`,
+	`buildPower`,
+	`buildPoints`,
+	`weight`,
+	`body`,
+	`designable`,
+	`pIMD`
+)
+SELECT
+	`BASE`.`unique_inheritance_id`,
+	150,
+	100,
+	150,
+	200,
+	0,
+	'PRLHOV1.PIE'
+FROM `BASE`
+WHERE `BASE`.`pName`='hover02';
+INSERT INTO `PROPULSION` (
+	`unique_inheritance_id`,
+	`maxSpeed`,
+	`propulsionType`
+)
+SELECT
+	`BASE`.`unique_inheritance_id`,
+	225,
+	'Hover'
+FROM `BASE`
+WHERE `BASE`.`pName`='hover02';
+
+INSERT INTO `BASE` (
+	`pName`
+)
+VALUES (
+	'hover01'
+);
+INSERT INTO `COMPONENT` (
+	`unique_inheritance_id`,
+	`buildPower`,
+	`buildPoints`,
+	`weight`,
+	`body`,
+	`designable`,
+	`pIMD`
+)
+SELECT
+	`BASE`.`unique_inheritance_id`,
+	100,
+	100,
+	200,
+	150,
+	1,
+	'PRLHOV1.PIE'
+FROM `BASE`
+WHERE `BASE`.`pName`='hover01';
+INSERT INTO `PROPULSION` (
+	`unique_inheritance_id`,
+	`maxSpeed`,
+	`propulsionType`
+)
+SELECT
+	`BASE`.`unique_inheritance_id`,
+	200,
+	'Hover'
+FROM `BASE`
+WHERE `BASE`.`pName`='hover01';
+
+INSERT INTO `BASE` (
+	`pName`
+)
+VALUES (
+	'HalfTrack03'
+);
+INSERT INTO `COMPONENT` (
+	`unique_inheritance_id`,
+	`buildPower`,
+	`buildPoints`,
+	`weight`,
+	`body`,
+	`designable`,
+	`pIMD`
+)
+SELECT
+	`BASE`.`unique_inheritance_id`,
+	125,
+	75,
+	300,
+	500,
+	1,
+	'PRLRHTR1.PIE'
+FROM `BASE`
+WHERE `BASE`.`pName`='HalfTrack03';
+INSERT INTO `PROPULSION` (
+	`unique_inheritance_id`,
+	`maxSpeed`,
+	`propulsionType`
+)
+SELECT
+	`BASE`.`unique_inheritance_id`,
+	150,
+	'Half-Tracked'
+FROM `BASE`
+WHERE `BASE`.`pName`='HalfTrack03';
+
+INSERT INTO `BASE` (
+	`pName`
+)
+VALUES (
+	'HalfTrack02'
+);
+INSERT INTO `COMPONENT` (
+	`unique_inheritance_id`,
+	`buildPower`,
+	`buildPoints`,
+	`weight`,
+	`body`,
+	`designable`,
+	`pIMD`
+)
+SELECT
+	`BASE`.`unique_inheritance_id`,
+	100,
+	75,
+	350,
+	350,
+	1,
+	'PRLRHTR1.PIE'
+FROM `BASE`
+WHERE `BASE`.`pName`='HalfTrack02';
+INSERT INTO `PROPULSION` (
+	`unique_inheritance_id`,
+	`maxSpeed`,
+	`propulsionType`
+)
+SELECT
+	`BASE`.`unique_inheritance_id`,
+	150,
+	'Half-Tracked'
+FROM `BASE`
+WHERE `BASE`.`pName`='HalfTrack02';
+
+INSERT INTO `BASE` (
+	`pName`
+)
+VALUES (
+	'HalfTrack'
+);
+INSERT INTO `COMPONENT` (
+	`unique_inheritance_id`,
+	`buildPower`,
+	`buildPoints`,
+	`weight`,
+	`body`,
+	`designable`,
+	`pIMD`
+)
+SELECT
+	`BASE`.`unique_inheritance_id`,
+	75,
+	75,
+	400,
+	200,
+	1,
+	'PRLRHTR1.PIE'
+FROM `BASE`
+WHERE `BASE`.`pName`='HalfTrack';
+INSERT INTO `PROPULSION` (
+	`unique_inheritance_id`,
+	`maxSpeed`,
+	`propulsionType`
+)
+SELECT
+	`BASE`.`unique_inheritance_id`,
+	150,
+	'Half-Tracked'
+FROM `BASE`
+WHERE `BASE`.`pName`='HalfTrack';
+
+INSERT INTO `BASE` (
+	`pName`
+)
+VALUES (
+	'CyborgLegs03'
+);
+INSERT INTO `COMPONENT` (
+	`unique_inheritance_id`,
+	`buildPower`,
+	`buildPoints`,
+	`weight`,
+	`body`,
+	`designable`,
+	`pIMD`
+)
+SELECT
+	`BASE`.`unique_inheritance_id`,
+	10,
+	50,
+	100,
+	150,
+	0,
+	NULL
+FROM `BASE`
+WHERE `BASE`.`pName`='CyborgLegs03';
+INSERT INTO `PROPULSION` (
+	`unique_inheritance_id`,
+	`maxSpeed`,
+	`propulsionType`
+)
+SELECT
+	`BASE`.`unique_inheritance_id`,
+	400,
+	'Legged'
+FROM `BASE`
+WHERE `BASE`.`pName`='CyborgLegs03';
+
+INSERT INTO `BASE` (
+	`pName`
+)
+VALUES (
+	'CyborgLegs02'
+);
+INSERT INTO `COMPONENT` (
+	`unique_inheritance_id`,
+	`buildPower`,
+	`buildPoints`,
+	`weight`,
+	`body`,
+	`designable`,
+	`pIMD`
+)
+SELECT
+	`BASE`.`unique_inheritance_id`,
+	10,
+	50,
+	100,
+	100,
+	0,
+	NULL
+FROM `BASE`
+WHERE `BASE`.`pName`='CyborgLegs02';
+INSERT INTO `PROPULSION` (
+	`unique_inheritance_id`,
+	`maxSpeed`,
+	`propulsionType`
+)
+SELECT
+	`BASE`.`unique_inheritance_id`,
+	400,
+	'Legged'
+FROM `BASE`
+WHERE `BASE`.`pName`='CyborgLegs02';
+
+INSERT INTO `BASE` (
+	`pName`
+)
+VALUES (
+	'CyborgLegs'
+);
+INSERT INTO `COMPONENT` (
+	`unique_inheritance_id`,
+	`buildPower`,
+	`buildPoints`,
+	`weight`,
+	`body`,
+	`designable`,
+	`pIMD`
+)
+SELECT
+	`BASE`.`unique_inheritance_id`,
+	10,
+	50,
+	100,
+	50,
+	0,
+	NULL
+FROM `BASE`
+WHERE `BASE`.`pName`='CyborgLegs';
+INSERT INTO `PROPULSION` (
+	`unique_inheritance_id`,
+	`maxSpeed`,
+	`propulsionType`
+)
+SELECT
+	`BASE`.`unique_inheritance_id`,
+	400,
+	'Legged'
+FROM `BASE`
+WHERE `BASE`.`pName`='CyborgLegs';
+
+INSERT INTO `BASE` (
+	`pName`
+)
+VALUES (
+	'BaBaProp'
+);
+INSERT INTO `COMPONENT` (
+	`unique_inheritance_id`,
+	`buildPower`,
+	`buildPoints`,
+	`weight`,
+	`body`,
+	`designable`,
+	`pIMD`
+)
+SELECT
+	`BASE`.`unique_inheritance_id`,
+	0,
+	15,
+	10,
+	1,
+	0,
+	NULL
+FROM `BASE`
+WHERE `BASE`.`pName`='BaBaProp';
+INSERT INTO `PROPULSION` (
+	`unique_inheritance_id`,
+	`maxSpeed`,
+	`propulsionType`
+)
+SELECT
+	`BASE`.`unique_inheritance_id`,
+	200,
+	'Wheeled'
+FROM `BASE`
+WHERE `BASE`.`pName`='BaBaProp';
+
+INSERT INTO `BASE` (
+	`pName`
+)
+VALUES (
+	'BaBaLegs'
+);
+INSERT INTO `COMPONENT` (
+	`unique_inheritance_id`,
+	`buildPower`,
+	`buildPoints`,
+	`weight`,
+	`body`,
+	`designable`,
+	`pIMD`
+)
+SELECT
+	`BASE`.`unique_inheritance_id`,
+	0,
+	15,
+	10,
+	1,
+	0,
+	NULL
+FROM `BASE`
+WHERE `BASE`.`pName`='BaBaLegs';
+INSERT INTO `PROPULSION` (
+	`unique_inheritance_id`,
+	`maxSpeed`,
+	`propulsionType`
+)
+SELECT
+	`BASE`.`unique_inheritance_id`,
+	200,
+	'Legged'
+FROM `BASE`
+WHERE `BASE`.`pName`='BaBaLegs';
+
 -- Data for table `SENSOR`, extracted from ../stats/sensor.txt
 
 INSERT INTO `BASE` (

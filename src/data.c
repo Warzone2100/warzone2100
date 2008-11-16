@@ -222,7 +222,7 @@ static BOOL bufferSPROPLoad(const char *pBuffer, UDWORD size, void **ppData)
 
 static BOOL dataDBPROPLoad(struct sqlite3* db, const char* tableName, void **ppData)
 {
-	if (!loadPropulsionStatsFromDB(db, tableName)
+	if (!loadPropulsionStatsFromDB(db)
 	 || !allocComponentList(COMP_PROPULSION, numPropulsionStats))
 	{
 		return false;

@@ -36,7 +36,6 @@ struct sqlite3;
 extern bool loadWeaponStatsFromDB(struct sqlite3* db, const char* tableName);
 extern bool loadBodyStatsFromDB(struct sqlite3* db, const char* tableName);
 extern bool loadBrainStatsFromDB(struct sqlite3* db, const char* tableName);
-extern bool loadPropulsionStatsFromDB(struct sqlite3* db, const char* tableName);
 extern bool loadECMStatsFromDB(struct sqlite3* db, const char* tableName);
 
 #endif // __INCLUDED_STATS_DB_H__

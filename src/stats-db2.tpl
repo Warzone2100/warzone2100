@@ -179,25 +179,63 @@ end;
 enum PROPULSION_TYPE
     %max "PROPULSION_TYPE_NUM";
 
+    %string "Wheeled";
     WHEELED
+
+    %string "Tracked";
     TRACKED
+
+    %string "Legged";
     LEGGED
+
+    %string "Hover";
     HOVER
+
+    %string "Ski";
     SKI
+
+    %string "Lift";
     LIFT
+
+    %string "Propellor";
     PROPELLOR
+
+    %string "Half-Tracked";
     HALF_TRACKED
+
+    %string "Jump";
     JUMP
 end;
 
 struct PROPULSION
     %inherit COMPONENT;
     %nomacro;
+    %loadFunc "loadPropulsionStatsFromDB";
+    %preLoadTable rowCount
+        if (!statsAllocPropulsion($rowCount))
+            ABORT;
+    end;
+    %postLoadRow curRow rowNum
+        $curRow->ref = REF_PROPULSION_START + $rowNum;
+
+        // save the stats
+        statsSetPropulsion($curRow, $rowNum);
+
+        // set the max stat values for the design screen
+        if ($curRow->designable)
+        {
+            setMaxPropulsionSpeed($curRow->maxSpeed);
+            //setMaxComponentWeight($curRow->weight);
+        }
+    end;
+    %csv-file "propulsion.txt";
 
     # Max speed for the droid
+    %csv-field 11;
     UDWORD          maxSpeed;
 
     # Type of propulsion used - index into PropulsionTable
+    %csv-field 10;
     enum PROPULSION_TYPE propulsionType;
 end;
 

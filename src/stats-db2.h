@@ -484,6 +484,22 @@ typedef struct PROPULSION_STATS
 	PROPULSION_TYPE propulsionType;
 } WZ_DECL_MAY_ALIAS PROPULSION_STATS;
 
+/* Forward declaration to allow pointers to this type */
+struct sqlite3;
+
+/** Load the contents of the PROPULSION table from the given SQLite database.
+ *
+ *  @param db represents the database to load from
+ *
+ *  @return true if we succesfully loaded all available rows from the table,
+ *          false otherwise.
+ */
+extern bool
+#line 213 "stats-db2.tpl"
+loadPropulsionStatsFromDB
+#line 501 "stats-db2.h"
+	(struct sqlite3* db);
+
 typedef struct SENSOR_STATS
 {
 	/* BEGIN of inherited "COMPONENT" definition */
@@ -580,9 +596,9 @@ struct sqlite3;
  *          false otherwise.
  */
 extern bool
-#line 226 "stats-db2.tpl"
+#line 264 "stats-db2.tpl"
 loadSensorStatsFromDB
-#line 586 "stats-db2.h"
+#line 602 "stats-db2.h"
 	(struct sqlite3* db);
 
 typedef struct ECM_STATS
@@ -1155,9 +1171,9 @@ struct sqlite3;
  *          false otherwise.
  */
 extern bool
-#line 443 "stats-db2.tpl"
+#line 481 "stats-db2.tpl"
 loadConstructStatsFromDB
-#line 1161 "stats-db2.h"
+#line 1177 "stats-db2.h"
 	(struct sqlite3* db);
 
 #endif // __INCLUDED_DB_TEMPLATE_SCHEMA_STRUCTDEF_STATS_DB2_TPL_H__
