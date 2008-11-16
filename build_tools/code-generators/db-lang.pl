@@ -208,11 +208,12 @@ LINE:
 
                 ${$curStruct{"qualifiers"}}{"preLoadTable"} = \%preLoadTable;
             }
-            elsif (/^postLoadRow\s+curRow(\s+curId)?\s*$/)
+            elsif (/^postLoadRow\s+curRow(\s+curId)?(\s+rowNum)?\s*$/)
             {
                 my %postLoadRow = (line=>$.);
 
                 push @{$postLoadRow{"parameters"}}, $1 if $1;
+                push @{$postLoadRow{"parameters"}}, $2 if $2;
 
                 readTillEnd(\@{$postLoadRow{"code"}});
 

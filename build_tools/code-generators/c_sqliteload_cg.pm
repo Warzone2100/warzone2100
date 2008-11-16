@@ -143,6 +143,7 @@ sub printSqlQueryVariables
     $$output .= "\tbool retval = false;\n"
               . "\tsqlite3_stmt* stmt;\n"
               . "\tint rc;\n"
+              . "\tunsigned int CUR_ROW_NUM = 0;\n"
               . "\tstruct\n"
               . "\t{\n";
               
@@ -707,6 +708,7 @@ sub printLoadFunc
             s/    /\t/g;
             s/\$curId\b/CUR_ROW_ID/g;
             s/\$curRow\b/stats/g;
+            s/\$rowNum\b/CUR_ROW_NUM/g;
 
             s/\bABORT\b/goto in_statement_err/g;
 
@@ -723,6 +725,7 @@ sub printLoadFunc
 
     $$output .= "\t\t/* Retrieve the next row */\n"
               . "\t\trc = sqlite3_step(stmt);\n"
+              . "\t\t++CUR_ROW_NUM;\n"
               . "\t}\n";
 
     # Close the function
