@@ -10,6 +10,7 @@ struct BASE
 
     # Unique language independant name that can be used to identify a specific
     # stats instance
+    %csv-field 1;
     string unique       pName;
 end;
 
@@ -35,23 +36,29 @@ struct COMPONENT
     %inherit BASE;
 
     # Power required to build this component
+    %csv-field 3;
     UDWORD              buildPower;
 
     # Build points (which are rate-limited in the construction units) required
     # to build this component.
+    %csv-field 4;
     UDWORD              buildPoints;
 
     # Weight of this component
+    %csv-field 5;
     UDWORD              weight;
 
     # Body points of this component
+    %csv-field 8;
     UDWORD              body;
 
     # Indicates whether this component is "designable" and can thus be used in
     # the design screen.
+    %csv-field last;
     bool                designable;
 
     # The "base" IMD model representing this component in 3D space.
+    %csv-field 9;
     IMD_model optional  pIMD;
 end;
 
@@ -210,24 +217,31 @@ end;
 struct SENSOR
     %inherit COMPONENT;
     %nomacro;
+    %csv-file "sensor.txt";
 
     # Sensor range.
+    %csv-field 11;
     UDWORD          range;
 
     # Sensor power (put against ecm power).
+    %csv-field 15;
     UDWORD          power;
 
     # specifies whether the Sensor is default or for the Turret.
+    %csv-field 12;
     enum LOC        location;
 
     # used for combat
+    %csv-field 13;
     enum SENSOR_TYPE type;
 
     # Time delay before the associated weapon droids 'know' where the attack is
     # from.
+    %csv-field 14;
     UDWORD          time;
 
     # The turret mount to use.
+    %csv-field 10;
     IMD_model optional pMountGraphic;
 end;
 
@@ -401,11 +415,14 @@ end;
 struct CONSTRUCT
     %inherit COMPONENT;
     %nomacro;
+    %csv-file "construction.txt";
 
     # The number of points contributed each cycle
+    %csv-field 11;
     UDWORD          constructPoints;
 
     # The turret mount to use
+    %csv-field 10;
     IMD_model optional pMountGraphic;
 end;
 

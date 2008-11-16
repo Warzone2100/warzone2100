@@ -106,9 +106,12 @@ sub parseStruct
     my %curStruct = (name => $structName);
     my @curComment = ();
 
+    my $curCSVfield = 0;
+
     @{$curStruct{"comment"}} = @$comment;
     @$comment = ();
 
+LINE:
     while (<>)
     {
         chomp;
@@ -130,9 +133,18 @@ sub parseStruct
         # Parse struct-level qualifiers
         elsif (/^\s*%(.*)\s*$/)
         {
-            die "error: Cannot give struct-level qualifiers after defining fields" if exists($curStruct{"fields"});
-
             $_ = $1;
+
+            # See if it's really a field-level qualifier
+            if    (/csv-field\s+(\d+|last)\s*;/)
+            {
+                $curCSVfield = $1;
+                next LINE;
+            }
+            else
+            {
+                die "error: Cannot give struct-level qualifiers after defining fields" if exists($curStruct{"fields"});
+            }
 
             if    (/^prefix\s+\"([^\"]+)\"\s*;$/)
             {
@@ -206,6 +218,12 @@ sub parseStruct
 
                 ${$curStruct{"qualifiers"}}{"postLoadRow"} = \%postLoadRow;
             }
+            elsif (/^csv-file\s+"((?:[^"]+|\\")+)"\s*;$/)
+            {
+                $1 =~ s/\\"/"/g;
+
+                ${$curStruct{"qualifiers"}}{"csv-file"} = $1;
+            }
             else
             {
                 die "error: line $ARGV:$.: Unrecognized struct-level specifier: %$_";
@@ -220,6 +238,8 @@ sub parseStruct
 
             @{$field{"comment"}} = @curComment;
             @curComment = ();
+            $field{"CSV"} = $curCSVfield;
+            $curCSVfield = 0;
 
             push @{$curStruct{"fields"}}, \%field;
         }
@@ -232,6 +252,8 @@ sub parseStruct
 
             @{$field{"comment"}} = @curComment;
             @curComment = ();
+            $field{"CSV"} = $curCSVfield;
+            $curCSVfield = 0;
 
             push @{$curStruct{"fields"}}, \%field;
         }
@@ -246,6 +268,8 @@ sub parseStruct
 
             @{$field{"comment"}} = @curComment;
             @curComment = ();
+            $field{"CSV"} = $curCSVfield;
+            $curCSVfield = 0;
 
             push @{$curStruct{"fields"}}, \%field;
         }
@@ -260,6 +284,8 @@ sub parseStruct
 
             @{$field{"comment"}} = @curComment;
             @curComment = ();
+            $field{"CSV"} = $curCSVfield;
+            $curCSVfield = 0;
 
             push @{$curStruct{"fields"}}, \%field;
         }
@@ -276,6 +302,8 @@ sub parseStruct
 
             @{$field{"comment"}} = @curComment;
             @curComment = ();
+            $field{"CSV"} = $curCSVfield;
+            $curCSVfield = 0;
 
             push @{$curStruct{"fields"}}, \%field;
         }
@@ -286,6 +314,8 @@ sub parseStruct
 
             @{$field{"comment"}} = @curComment;
             @curComment = ();
+            $field{"CSV"} = $curCSVfield;
+            $curCSVfield = 0;
 
             push @{$curStruct{"fields"}}, \%field;
         }
