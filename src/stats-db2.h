@@ -315,7 +315,16 @@ typedef struct BASE_STATS
 } WZ_DECL_MAY_ALIAS BASE_STATS;
 
 #define STATS_BASE \
+	/** \
+	 * Unique ID of the item \
+	 */ \
 	UDWORD ref; \
+	/** \
+	 * Unique language independant name that can be used to identify a specific \
+	 * stats instance \
+	 * \
+	 * Unique across all instances \
+	 */ \
 	char*            pName
 
 /**
@@ -373,13 +382,44 @@ typedef struct COMPONENT_STATS
 } WZ_DECL_MAY_ALIAS COMPONENT_STATS;
 
 #define STATS_COMPONENT \
+	/** \
+	 * Unique ID of the item \
+	 */ \
 	UDWORD ref; \
+	/** \
+	 * Unique language independant name that can be used to identify a specific \
+	 * stats instance \
+	 * \
+	 * Unique across all instances \
+	 */ \
 	char*            pName; \
+	/** \
+	 * Power required to build this component \
+	 */ \
 	UDWORD           buildPower; \
+	/** \
+	 * Build points (which are rate-limited in the construction units) required \
+	 * to build this component. \
+	 */ \
 	UDWORD           buildPoints; \
+	/** \
+	 * Weight of this component \
+	 */ \
 	UDWORD           weight; \
+	/** \
+	 * Body points of this component \
+	 */ \
 	UDWORD           body; \
+	/** \
+	 * Indicates whether this component is "designable" and can thus be used in \
+	 * the design screen. \
+	 */ \
 	bool             designable; \
+	/** \
+	 * The "base" IMD model representing this component in 3D space. \
+	 * \
+	 * This field is optional and can be NULL to indicate that it has no value \
+	 */ \
 	iIMDShape*       pIMD
 
 typedef struct PROPULSION_STATS
@@ -542,7 +582,7 @@ struct sqlite3;
 extern bool
 #line 220 "stats-db2.tpl"
 loadSensorStatsFromDB
-#line 546 "stats-db2.h"
+#line 586 "stats-db2.h"
 	(struct sqlite3* db);
 
 typedef struct ECM_STATS
@@ -1117,7 +1157,7 @@ struct sqlite3;
 extern bool
 #line 437 "stats-db2.tpl"
 loadConstructStatsFromDB
-#line 1121 "stats-db2.h"
+#line 1161 "stats-db2.h"
 	(struct sqlite3* db);
 
 #endif // __INCLUDED_DB_TEMPLATE_SCHEMA_STRUCTDEF_STATS_DB2_TPL_H__

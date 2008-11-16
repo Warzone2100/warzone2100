@@ -87,21 +87,23 @@ sub postProcessField
 
 sub printComments
 {
-    my ($output, $comments, $indent) = @_;
+    my ($output, $comments, $indent, $eol) = @_;
 
     return unless @{$comments};
 
+    $eol = "\n" unless $eol;
+
     $$output .= "\t" if $indent;
-    $$output .= "/**\n";
+    $$output .= "/**$eol";
 
     foreach my $comment (@{$comments})
     {
         $$output .= "\t" if $indent;
-        $$output .= " *${comment}\n";
+        $$output .= " *${comment}$eol";
     }
 
     $$output .= "\t" if $indent;
-    $$output .= " */\n";
+    $$output .= " */$eol";
 }
 
 sub printStructFields
@@ -223,6 +225,11 @@ sub printMacroStructFields
     while (@fields)
     {
         my $field = shift(@fields);
+        my @comments = @{${$field}{"comment"}};
+
+        preProcessField($field, \@comments);
+
+        printComments($output, \@comments, 1, " \\\n");
 
         $$output .= "\t";
         printStructFieldType($output, $field);
