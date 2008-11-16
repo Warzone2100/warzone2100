@@ -35,8 +35,8 @@ if test "x$LEX" != "xflex" ; then
 fi
 AC_PROG_VERSION_CHECK([flex], [2.5.33], [2.5.34])
 
-AX_WITH_PROG([PERL], [perl], [])
-AM_CONDITIONAL([PERL_AVAILABLE], test -z "$PERL")
+AX_WITH_PROG([PERL], [perl])
+AM_CONDITIONAL([PERL_AVAILABLE], test ! -z "$PERL")
 
 # Enable Compiler/LibC GNU extensions
 AC_GNU_SOURCE
