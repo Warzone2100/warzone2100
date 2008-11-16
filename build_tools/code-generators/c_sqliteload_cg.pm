@@ -504,28 +504,29 @@ sub printRowProcessCode
             {
                 my $value = ${${$enum}{"values"}}[$i];
                 my $valueName = ${$value}{"name"};
-                my $valueNameSpace = $valueName;
-                $valueNameSpace =~ s/_/ /g;
+                my @strings = ();
+
+                push @strings, (${$value}{"value_string"} or $valueName);
 
                 if ($i == 0)
                 {
-                    $$output .= "\t\tif     ";
+                    $$output .= "\t\tif      (";
                 }
                 else
                 {
-                    $$output .= "\t\telse if";
+                    $$output .= "\t\telse if (";
                 }
 
-                $$output .= " (strcmp((const char*)sqlite3_column_text(stmt, cols.$fieldName), \"$valueName\") == 0";
-                if ($valueName eq $valueNameSpace)
+                my $first = 1;
+                foreach my $string (@strings)
                 {
-                    $$output .= ")\n";
+                    $$output .= "\n\t\t  || " unless $first;
+                    $first = 0;
+
+                    $$output .= "strcmp((const char*)sqlite3_column_text(stmt, cols.$fieldName), \"$string\") == 0";
                 }
-                else
-                {
-                    $$output .= "\n\t\t  || strcmp((const char*)sqlite3_column_text(stmt, cols.$fieldName), \"$valueNameSpace\") == 0)\n"
-                }
-                $$output .= "\t\t\tstats->$fieldName = $valprefix$valueName$valsuffix;\n";
+
+                $$output .= ")\n\t\t\tstats->$fieldName = $valprefix$valueName$valsuffix;\n";
             }
             $$output .= "\t\telse\n"
                       . "\t\t{\n"

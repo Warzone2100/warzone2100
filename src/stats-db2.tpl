@@ -206,8 +206,14 @@ enum SENSOR_TYPE
     %valsuffix "_SENSOR";
 
     STANDARD
+
+    %string "INDIRECT CB";
     INDIRECT_CB
+
+    %string "VTOL CB";
     VTOL_CB
+
+    %string "VTOL INTERCEPT";
     VTOL_INTERCEPT
 
     # Works as all of the above together! - new for updates

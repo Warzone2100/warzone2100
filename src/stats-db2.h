@@ -580,7 +580,7 @@ struct sqlite3;
  *          false otherwise.
  */
 extern bool
-#line 220 "stats-db2.tpl"
+#line 226 "stats-db2.tpl"
 loadSensorStatsFromDB
 #line 586 "stats-db2.h"
 	(struct sqlite3* db);
@@ -1155,7 +1155,7 @@ struct sqlite3;
  *          false otherwise.
  */
 extern bool
-#line 437 "stats-db2.tpl"
+#line 443 "stats-db2.tpl"
 loadConstructStatsFromDB
 #line 1161 "stats-db2.h"
 	(struct sqlite3* db);

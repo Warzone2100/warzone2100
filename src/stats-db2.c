@@ -13,7 +13,7 @@
  *          false otherwise.
  */
 bool
-#line 220 "stats-db2.tpl"
+#line 226 "stats-db2.tpl"
 loadSensorStatsFromDB
 #line 19 "stats-db2.c"
 	(sqlite3* db)
@@ -54,7 +54,7 @@ loadSensorStatsFromDB
 		ROW_COUNT_VAR = sqlite3_column_int(stmt, 0);
 		sqlite3_finalize(stmt);
 
-#line 222 "stats-db2.tpl"
+#line 228 "stats-db2.tpl"
 		if (!statsAllocSensor(ROW_COUNT_VAR))
 			return false;
 #line 61 "stats-db2.c"
@@ -262,14 +262,11 @@ loadSensorStatsFromDB
 		 */
 		if      (strcmp((const char*)sqlite3_column_text(stmt, cols.type), "STANDARD") == 0)
 			stats->type = STANDARD_SENSOR;
-		else if (strcmp((const char*)sqlite3_column_text(stmt, cols.type), "INDIRECT_CB") == 0
-		  || strcmp((const char*)sqlite3_column_text(stmt, cols.type), "INDIRECT CB") == 0)
+		else if (strcmp((const char*)sqlite3_column_text(stmt, cols.type), "INDIRECT CB") == 0)
 			stats->type = INDIRECT_CB_SENSOR;
-		else if (strcmp((const char*)sqlite3_column_text(stmt, cols.type), "VTOL_CB") == 0
-		  || strcmp((const char*)sqlite3_column_text(stmt, cols.type), "VTOL CB") == 0)
+		else if (strcmp((const char*)sqlite3_column_text(stmt, cols.type), "VTOL CB") == 0)
 			stats->type = VTOL_CB_SENSOR;
-		else if (strcmp((const char*)sqlite3_column_text(stmt, cols.type), "VTOL_INTERCEPT") == 0
-		  || strcmp((const char*)sqlite3_column_text(stmt, cols.type), "VTOL INTERCEPT") == 0)
+		else if (strcmp((const char*)sqlite3_column_text(stmt, cols.type), "VTOL INTERCEPT") == 0)
 			stats->type = VTOL_INTERCEPT_SENSOR;
 		else if (strcmp((const char*)sqlite3_column_text(stmt, cols.type), "SUPER") == 0)
 			stats->type = SUPER_SENSOR;
@@ -297,7 +294,7 @@ loadSensorStatsFromDB
 
 		{
 
-#line 226 "stats-db2.tpl"
+#line 232 "stats-db2.tpl"
 			stats->ref = REF_SENSOR_START + CUR_ROW_NUM;
 			
 			// save the stats
@@ -310,7 +307,7 @@ loadSensorStatsFromDB
 				setMaxSensorPower(stats->power);
 				setMaxComponentWeight(stats->weight);
 			}
-#line 314 "stats-db2.c"
+#line 311 "stats-db2.c"
 		}
 
 		/* Retrieve the next row */
@@ -334,9 +331,9 @@ in_statement_err:
  *          false otherwise.
  */
 bool
-#line 437 "stats-db2.tpl"
+#line 443 "stats-db2.tpl"
 loadConstructStatsFromDB
-#line 340 "stats-db2.c"
+#line 337 "stats-db2.c"
 	(sqlite3* db)
 {
 	bool retval = false;
@@ -371,10 +368,10 @@ loadConstructStatsFromDB
 		ROW_COUNT_VAR = sqlite3_column_int(stmt, 0);
 		sqlite3_finalize(stmt);
 
-#line 439 "stats-db2.tpl"
+#line 445 "stats-db2.tpl"
 		if (!statsAllocConstruct(ROW_COUNT_VAR))
 			return false;
-#line 378 "stats-db2.c"
+#line 375 "stats-db2.c"
 	}
 
 	/* Prepare the query to start fetching all rows */
@@ -543,7 +540,7 @@ loadConstructStatsFromDB
 
 		{
 
-#line 443 "stats-db2.tpl"
+#line 449 "stats-db2.tpl"
 			stats->ref = REF_CONSTRUCT_START + CUR_ROW_NUM;
 			
 			// save the stats
@@ -555,7 +552,7 @@ loadConstructStatsFromDB
 				setMaxConstPoints(stats->constructPoints);
 				setMaxComponentWeight(stats->weight);
 			}
-#line 559 "stats-db2.c"
+#line 556 "stats-db2.c"
 		}
 
 		/* Retrieve the next row */

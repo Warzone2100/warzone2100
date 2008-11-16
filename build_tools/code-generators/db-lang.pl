@@ -15,9 +15,12 @@ sub parseEnum
     my %curEnum = (name => $enumName);
     my @curComment = ();
 
+    my $curValueString = "";
+
     @{$curEnum{"comment"}} = @$comment;
     @$comment = ();
 
+LINE:
     while (<>)
     {
         chomp;
@@ -26,12 +29,23 @@ sub parseEnum
         {
             push @curComment, substr($1, 1) if $1;
         }
-        # Parse struct-level qualifiers
+        # Parse enum-level qualifiers
         elsif (/^\s*%(.*)\s*$/)
         {
-            die "error: Cannot give enum-level qualifiers after defining fields" if exists($curEnum{"values"});
-
             $_ = $1;
+
+            # See if it's really a field-level qualifier
+            if    (/^string\s+"((?:[^"]+|\\")+)"\s*;$/)
+            {
+                $1 =~ s/\\"/"/g;
+
+                $curValueString = $1;
+                next LINE;
+            }
+            else
+            {
+                die "error: Cannot give enum-level qualifiers after defining fields" if exists($curEnum{"values"});
+            }
 
             if    (/^valprefix\s+\"([^\"]*)\"\s*;$/)
             {
@@ -52,10 +66,11 @@ sub parseEnum
         }
         elsif (/^\s*(\w+)\s*$/)
         {
-            my %value = (name=>$1, line=>$.);
+            my %value = (name=>$1, line=>$., value_string=>$curValueString);
 
             @{$value{"comment"}} = @curComment;
             @curComment = ();
+            $curValueString = "";
 
             push @{$curEnum{"values"}}, \%value;
         }
