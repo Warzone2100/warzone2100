@@ -268,6 +268,7 @@ sub printParameterLoadCode
 
     $$output .= "(`$tableName`.unique_inheritance_id) ";
 
+    $$output .= "FROM ";
     printBaseStruct($output, $struct);
     printStructJoins($output, $struct, $structMap);
 
@@ -421,7 +422,7 @@ sub printStartSelectQuery
               . "\t\treturn false;\n"
               . "\n"
               . "\t/* Fetch the first row */\n"
-              . "\tif ((rc = sqlite3_step(stmt) != SQLITE_ROW))\n"
+              . "\tif ((rc = sqlite3_step(stmt)) != SQLITE_ROW)\n"
               . "\t{\n"
               . "\t\t/* Apparently we fetched no rows at all, this is a non-failure, terminal condition. */\n"
               . "\t\tsqlite3_finalize(stmt);\n"
@@ -502,6 +503,8 @@ sub printRowProcessCode
             {
                 my $value = ${${$enum}{"values"}}[$i];
                 my $valueName = ${$value}{"name"};
+                my $valueNameSpace = $valueName;
+                $valueNameSpace =~ s/_/ /g;
 
                 if ($i == 0)
                 {
@@ -512,8 +515,16 @@ sub printRowProcessCode
                     $$output .= "\t\telse if";
                 }
 
-                $$output .= " (strcmp((const char*)sqlite3_column_text(stmt, cols.$fieldName), \"$valueName\") == 0)\n"
-                          . "\t\t\tstats->$fieldName = $valprefix$valueName$valsuffix;\n";
+                $$output .= " (strcmp((const char*)sqlite3_column_text(stmt, cols.$fieldName), \"$valueName\") == 0";
+                if ($valueName eq $valueNameSpace)
+                {
+                    $$output .= ")\n";
+                }
+                else
+                {
+                    $$output .= "\n\t\t  || strcmp((const char*)sqlite3_column_text(stmt, cols.$fieldName), \"$valueNameSpace\") == 0)\n"
+                }
+                $$output .= "\t\t\tstats->$fieldName = $valprefix$valueName$valsuffix;\n";
             }
             $$output .= "\t\telse\n"
                       . "\t\t{\n"
