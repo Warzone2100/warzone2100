@@ -296,10 +296,10 @@ loadSensorStatsFromDB
 
 #line 232 "stats-db2.tpl"
 			stats->ref = REF_SENSOR_START + CUR_ROW_NUM;
-			
+
 			// save the stats
 			statsSetSensor(stats, CUR_ROW_NUM);
-			
+
 			// set the max stat values for the design screen
 			if (stats->designable)
 			{
@@ -542,10 +542,10 @@ loadConstructStatsFromDB
 
 #line 449 "stats-db2.tpl"
 			stats->ref = REF_CONSTRUCT_START + CUR_ROW_NUM;
-			
+
 			// save the stats
 			statsSetConstruct(stats, CUR_ROW_NUM);
-			
+
 			// set the max stat values for the design screen
 			if (stats->designable)
 			{

@@ -713,7 +713,8 @@ sub printLoadFunc
 
             s/\bABORT\b/goto in_statement_err/g;
 
-            $$output .= "\t\t\t$_\n";
+            $$output .= "\t\t\t$_" if /\S/;
+            $$output .= "\n";
         }
 
         $line = $$output =~ s/\n/\n/sg;
