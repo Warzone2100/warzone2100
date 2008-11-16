@@ -68,7 +68,7 @@ CREATE TABLE `SENSOR` (
 	time INTEGER NOT NULL,
 
 	-- The turret mount to use.
-	pMountGraphic TEXT NOT NULL
+	pMountGraphic TEXT
 );
 
 CREATE TABLE `ECM` (
@@ -85,7 +85,7 @@ CREATE TABLE `ECM` (
 	location INTEGER NOT NULL,
 
 	-- The turret mount to use.
-	pMountGraphic TEXT NOT NULL
+	pMountGraphic TEXT
 );
 
 CREATE TABLE `REPAIR` (
@@ -105,7 +105,7 @@ CREATE TABLE `REPAIR` (
 	time INTEGER NOT NULL,
 
 	-- The turret mount to use.
-	pMountGraphic TEXT NOT NULL
+	pMountGraphic TEXT
 );
 
 CREATE TABLE `WEAPON` (
@@ -223,7 +223,7 @@ CREATE TABLE `WEAPON` (
 
 	-- Graphics used for the weapon
 	-- The turret mount to use
-	pMountGraphic TEXT NOT NULL,
+	pMountGraphic TEXT,
 
 	-- The muzzle flash
 	pMuzzleGraphic TEXT NOT NULL,
@@ -241,7 +241,7 @@ CREATE TABLE `WEAPON` (
 	pWaterHitGraphic TEXT NOT NULL,
 
 	-- The trail used for in flight
-	pTrailGraphic TEXT NOT NULL,
+	pTrailGraphic TEXT,
 
 	-- Audio
 	iAudioFireID INTEGER NOT NULL,
@@ -268,6 +268,6 @@ CREATE TABLE `CONSTRUCT` (
 	constructPoints INTEGER NOT NULL,
 
 	-- The turret mount to use
-	pMountGraphic TEXT NOT NULL
+	pMountGraphic TEXT
 );
 

@@ -523,6 +523,8 @@ typedef struct SENSOR_STATS
 
 	/**
 	 * The turret mount to use.
+	 *
+	 * This field is optional and can be NULL to indicate that it has no value
 	 */
 	iIMDShape*       pMountGraphic;
 } WZ_DECL_MAY_ALIAS SENSOR_STATS;
@@ -595,6 +597,8 @@ typedef struct ECM_STATS
 
 	/**
 	 * The turret mount to use.
+	 *
+	 * This field is optional and can be NULL to indicate that it has no value
 	 */
 	iIMDShape*       pMountGraphic;
 } WZ_DECL_MAY_ALIAS ECM_STATS;
@@ -672,6 +676,8 @@ typedef struct REPAIR_STATS
 
 	/**
 	 * The turret mount to use.
+	 *
+	 * This field is optional and can be NULL to indicate that it has no value
 	 */
 	iIMDShape*       pMountGraphic;
 } WZ_DECL_MAY_ALIAS REPAIR_STATS;
@@ -911,6 +917,8 @@ typedef struct WEAPON_STATS
 	/**
 	 * Graphics used for the weapon
 	 * The turret mount to use
+	 *
+	 * This field is optional and can be NULL to indicate that it has no value
 	 */
 	iIMDShape*       pMountGraphic;
 
@@ -941,6 +949,8 @@ typedef struct WEAPON_STATS
 
 	/**
 	 * The trail used for in flight
+	 *
+	 * This field is optional and can be NULL to indicate that it has no value
 	 */
 	iIMDShape*       pTrailGraphic;
 
@@ -1072,6 +1082,8 @@ typedef struct CONSTRUCT_STATS
 
 	/**
 	 * The turret mount to use
+	 *
+	 * This field is optional and can be NULL to indicate that it has no value
 	 */
 	iIMDShape*       pMountGraphic;
 } WZ_DECL_MAY_ALIAS CONSTRUCT_STATS;

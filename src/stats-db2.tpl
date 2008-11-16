@@ -227,7 +227,7 @@ struct SENSOR
     UDWORD          time;
 
     # The turret mount to use.
-    IMD_model       pMountGraphic;
+    IMD_model optional pMountGraphic;
 end;
 
 struct ECM
@@ -244,7 +244,7 @@ struct ECM
     UDWORD          location;
 
     # The turret mount to use.
-    IMD_model       pMountGraphic;
+    IMD_model optional pMountGraphic;
 end;
 
 struct REPAIR
@@ -264,7 +264,7 @@ struct REPAIR
     UDWORD          time;
 
     # The turret mount to use.
-    IMD_model       pMountGraphic;
+    IMD_model optional pMountGraphic;
 end;
 
 enum FIREONMOVE
@@ -367,7 +367,7 @@ struct WEAPON
     # Graphics used for the weapon
 
     # The turret mount to use
-    IMD_model        pMountGraphic;
+    IMD_model optional pMountGraphic;
     # The muzzle flash
     IMD_model        pMuzzleGraphic;
     # The ammo in flight
@@ -379,7 +379,7 @@ struct WEAPON
     # The ammo hitting water
     IMD_model        pWaterHitGraphic;
     # The trail used for in flight
-    IMD_model        pTrailGraphic;
+    IMD_model optional pTrailGraphic;
 
     # Audio
     SDWORD          iAudioFireID;
@@ -405,7 +405,7 @@ struct CONSTRUCT
     UDWORD          constructPoints;
 
     # The turret mount to use
-    IMD_model       pMountGraphic;
+    IMD_model optional pMountGraphic;
 end;
 
 enum TRAVEL_MEDIUM
