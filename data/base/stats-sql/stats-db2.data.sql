@@ -1,6 +1,9 @@
 -- This file is generated automatically, do not edit, change the source (../../../src/stats-db2.tpl) instead.
 
--- Extracted from ../stats/sensor.txt
+BEGIN TRANSACTION;
+
+-- Data for table `SENSOR`, extracted from ../stats/sensor.txt
+
 INSERT INTO `BASE` (
 	`pName`
 )
@@ -720,7 +723,9 @@ SELECT
 	NULL
 FROM `BASE`
 WHERE `BASE`.`pName`='BaBaSensor';
--- Extracted from ../stats/construction.txt
+
+-- Data for table `CONSTRUCT`, extracted from ../stats/construction.txt
+
 INSERT INTO `BASE` (
 	`pName`
 )
@@ -794,3 +799,5 @@ SELECT
 	NULL
 FROM `BASE`
 WHERE `BASE`.`pName`='Spade1Mk1';
+
+COMMIT TRANSACTION;

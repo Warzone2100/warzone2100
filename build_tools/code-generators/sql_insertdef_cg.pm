@@ -227,12 +227,14 @@ sub printStruct()
 
     if (${${$struct}{"qualifiers"}}{"csv-file"})
     {
-        my $first = 1;
         my $file = "$dataDir/${${$struct}{\"qualifiers\"}}{\"csv-file\"}";
         printComments($output, ${$struct}{"comment"}, 0);
 
         open (CSV, "<$file") or die "Can't open CSV file $file";
-        $$output .= "-- Extracted from $file\n";
+
+        $$output .= "-- Data for table `$name`, extracted from $file\n"
+                  . "\n";
+
         while (<CSV>)
         {
             chomp;
@@ -241,9 +243,8 @@ sub printStruct()
 
             s/'/''/g foreach (@values);
 
-            $$output .= "\n" unless $first;
-            $first = 0;
             printStructContent($output, $struct, $structMap, \@values);
+            $$output .= "\n";
         }
         close CSV;
     }
@@ -260,7 +261,10 @@ sub startFile()
 {
     my ($output, $name, $outputfile) = @_;
 
-    $$output .= "-- This file is generated automatically, do not edit, change the source ($name) instead.\n\n";
+    $$output .= "-- This file is generated automatically, do not edit, change the source ($name) instead.\n"
+              . "\n"
+              . "BEGIN TRANSACTION;\n"
+              . "\n";
 
     $filename = $name;
     if ($outputfile)
@@ -276,6 +280,9 @@ sub startFile()
 
 sub endFile()
 {
+    my ($output, $name) = @_;
+
+    $$output .= "COMMIT TRANSACTION;\n";
 }
 
 1;
