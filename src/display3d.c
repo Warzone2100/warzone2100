@@ -3668,7 +3668,7 @@ static void renderSurroundings(void)
 	{
 		wind = wrapf(wind + timeAdjustedIncrement(0.5f, false), 360.0f);
 	}
-	pie_DrawSkybox(skybox_scale, 0, 128, 256, 128);
+	pie_DrawSkybox(skybox_scale, 0, 0, 256, 256);
 
 	// Load Saved State
 	pie_MatEnd();
