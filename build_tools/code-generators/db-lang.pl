@@ -36,9 +36,10 @@ LINE:
             # See if it's really a field-level qualifier
             if    (/^string\s+"((?:[^"]+|\\")+)"\s*;$/)
             {
-                $1 =~ s/\\"/"/g;
+                my $string = $1;
+                $string =~ s/\\"/"/g;
 
-                push @curValueStrings, $1;
+                push @curValueStrings, $string;
                 next LINE;
             }
             else
@@ -236,9 +237,10 @@ LINE:
             }
             elsif (/^csv-file\s+"((?:[^"]+|\\")+)"\s*;$/)
             {
-                $1 =~ s/\\"/"/g;
+                my $file = $1;
+                $file =~ s/\\"/"/g;
 
-                ${$curStruct{"qualifiers"}}{"csv-file"} = $1;
+                ${$curStruct{"qualifiers"}}{"csv-file"} = $file;
             }
             else
             {
