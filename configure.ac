@@ -36,7 +36,7 @@ fi
 AC_PROG_VERSION_CHECK([flex], [2.5.33], [2.5.34])
 
 AX_WITH_PROG([PERL], [perl])
-AM_CONDITIONAL([PERL_AVAILABLE], test ! -z "$PERL")
+AM_CONDITIONAL([PERL_AVAILABLE], test -n "$PERL")
 
 # Enable Compiler/LibC GNU extensions
 AC_GNU_SOURCE
@@ -77,37 +77,41 @@ AM_CONDITIONAL([MINGW32], test "x$host_os_mingw32" = "xyes")
 
 # Set compilers to use when building for the build system in a cross compile build
 # Fallback to the system compilers
-if test "x$CXX_FOR_BUILD" = "x" ; then
-    CXX_FOR_BUILD="${CXX}"
-fi
-AC_SUBST([CXX_FOR_BUILD])
+AC_ARG_VAR([CXX_FOR_BUILD], [C++ compiler that produces binaries that will run
+	    on the build system])
+AS_IF([test -z "$CXX_FOR_BUILD"],[
+    AC_SUBST([CXX_FOR_BUILD], [${CXX}])
+])
 
-if test "x$CC_FOR_BUILD" = "x" ; then
-    CC_FOR_BUILD="${CC}"
-fi
-AC_SUBST([CC_FOR_BUILD])
+AC_ARG_VAR([CC_FOR_BUILD], [C compiler that produces binaries that will run on
+	    the build system])
+AS_IF([test -z "$CC_FOR_BUILD"],[
+    AC_SUBST([CC_FOR_BUILD], [${CC}])
+])
 
-if test "x$CPPFLAGS_FOR_BUILD" = "x" ; then
-    CPPFLAGS_FOR_BUILD="${CPPFLAGS}"
-fi
-AC_SUBST([CPPFLAGS_FOR_BUILD])
+AC_ARG_VAR([CPPFLAGS_FOR_BUILD], [Preprocessor flags to use for the C and C++
+	    compilers that produce binaries for the build system])
+AS_IF([test -z "$CPPFLAGS_FOR_BUILD"],[
+    AC_SUBST([CPPFLAGS_FOR_BUILD], [${CPPFLAGS}])
+])
 
 
 # pkg-config hooks:
 
-if test "x$PKGCONFIG_PREFIX" != "x" ; then
+AC_ARG_VAR([PKGCONFIG_PREFIX], [Prefix path to look in for pkg-config templates])
+AS_IF([test -n "$PKGCONFIG_PREFIX"],[
 	PKG_CONFIG="${PKG_CONFIG} --define-variable=prefix=${PKGCONFIG_PREFIX}"
-fi
+])
 
 
 # Variable fixes for older autoconf versions:
 
-if test "x$docdir" = "x" ; then
+AS_IF([test -z "$docdir"],[
 	AC_SUBST([docdir], [${datarootdir}/doc/${AC_PACKAGE_TARNAME}])
-fi
-if test "x$localedir" = "x" ; then
+])
+AS_IF([test -z "$localedir"],[
 	AC_SUBST([localedir], [${datadir}/locale])
-fi
+])
 
 
 # Installation directories
@@ -357,25 +361,25 @@ AC_CONFIG_FILES([Makefile
 		src/Makefile])
 AC_OUTPUT
 
-if test "x$enable_debug" = "xyes" ; then
+AS_IF([test "x$enable_debug" = "xyes"],[
 	AC_MSG_NOTICE()
 	AC_MSG_NOTICE([*** Running in debug mode! ***])
-fi
+])
 
-if test "x$with_distributor" = "x" ; then
+AS_IF([test "x$with_distributor" = "xUNKNOWN"],[
 	AC_MSG_NOTICE()
 	AC_MSG_WARN([Distributor unknown!])
 	AC_MSG_NOTICE([Use --with-distributor when compiling package for distribution])
-fi
+])
 
-if test "x$use_system_sqlite" = "xno" ; then
+AS_IF([test "x$use_system_sqlite" = "xno"],[
 	AC_MSG_NOTICE()
 	AC_MSG_WARN([Not using a system provided SQLite library.])
 	AC_MSG_WARN([${SQLITE_PKG_ERRORS}])
 	AC_MSG_WARN([We currently only accept SQLite versions >= 3.6.])
-fi
+])
 
-if test -z "$PERL" ; then
+AS_IF([test -z "$PERL"],[
 	AC_MSG_NOTICE()
 	AC_MSG_WARN([Perl isn't installed, autogeneration of some sources will not work.])
-fi
+])
