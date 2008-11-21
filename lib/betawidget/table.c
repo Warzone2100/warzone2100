@@ -541,6 +541,19 @@ void tableSetDefaultAlign(table *self, hAlign h, vAlign v)
 	self->vAlignment = v;
 }
 
+void tableSetPadding(table *self, int h, int v)
+{
+	// Set the padding
+	self->columnPadding = h;
+	self->rowPadding = v;
+	
+	// If applicable re-layout the window
+	if (WIDGET(self)->size.x != -1 && WIDGET(self)->size.y != -1)
+	{
+		widgetDoLayout(widgetGetRoot(WIDGET(self)));
+	}
+}
+
 int tableGetRowCount(const table *self)
 {
 	return self->numRows;
@@ -829,11 +842,11 @@ bool tableDoLayoutImpl(widget *self)
 		int x, y;
 		
 		// If we are not the last row/column, subtract the row/column padding
-		if (pos->column + pos->colspan != numColumns)
+		if (pos->column + pos->colspan - 1 != numColumns)
 		{
 			cellWidth -= selfTable->columnPadding;
 		}
-		if (pos->row + pos->rowspan != numRows)
+		if (pos->row + pos->rowspan - 1 != numRows)
 		{
 			cellHeight -= selfTable->rowPadding;
 		}

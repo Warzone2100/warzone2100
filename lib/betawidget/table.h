@@ -135,6 +135,15 @@ table *tableCreate(const char *id);
 void tableSetDefaultAlign(table *self, hAlign h, vAlign v);
 
 /**
+ * Sets padding for all child widgets.
+ *
+ * @param self  The table to set the padding of.
+ * @param h The new amount of horizontal padding to apply.
+ * @param v The new amount of vertical padding to apply.
+ */
+void tableSetPadding(table *self, int h, int v);
+
+/**
  * Returns the number of distinct rows in the table.
  *
  * @param self  The table to return the number of rows of.
