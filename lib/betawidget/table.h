@@ -244,7 +244,7 @@ bool tableAddChildWithAlign(table *self, widget *child,
  * @param column    The column in the table to add the child to.
  * @param colspan   The number of columns spanned by the child.
  * @param v Horizontal alignment of the child.
-* @return true if the child was successfully added, false otherwise.
+ * @return true if the child was successfully added, false otherwise.
  */
 bool tableAddChildWithSpanAlign(table *self, widget *child,
                                 int row, int rowspan, vAlign v,
