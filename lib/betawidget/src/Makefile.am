@@ -3,12 +3,17 @@ SUBDIRS = platform
 %_wrap_lua.cpp: %.i
 	$(SWIG) $(SWIG_LUA_OPT) -o $@ $<
 
-EXTRA_DIST = betawidget.i
+EXTRA_DIST = \
+	betawidget.i \
+	betawidget.pc.in
 
 BUILT_SOURCES = \
 	betawidget_wrap_lua.cpp
 CLEANFILES = \
 	betawidget_wrap_lua.cpp
+
+pkgconfigdir = $(libdir)/pkgconfig
+pkgconfig_DATA = betawidget.pc
 
 lib_LTLIBRARIES = libbetawidget.la
 

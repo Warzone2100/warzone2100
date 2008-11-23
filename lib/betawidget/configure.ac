@@ -70,14 +70,22 @@ AC_CHECK_FUNCS([memmove strdup])
 
 # Checks for libraries.
 PKG_CHECK_MODULES([SDL], [sdl >= 1.2])
+AC_SUBST([PLATFORM_REQUIRES], [sdl])
+
 PKG_CHECK_MODULES([CAIRO], [cairo])
+
 # First check the pkg-config lua5.1 package
 PKG_CHECK_MODULES([LUA], [lua5.1 >= 5.1], [
-	AC_SUBST([LUA_LIBTOOL], [`${PKG_CONFIG} lua5.1 --variable=libtool_lib`])], [
+	AC_SUBST([LUA_LIBTOOL], [`${PKG_CONFIG} lua5.1 --variable=libtool_lib`])
+	AC_SUBST([LUA_REQUIRES], [lua5.1])
+],[
 	# If that fails, check the "lua" pkg-config package
 	PKG_CHECK_MODULES([LUA], [lua >= 5.1], [
 		# Workaround to retrieve the libtool library
-		AC_SUBST([LUA_LIBTOOL], [`${PKG_CONFIG} lua --variable=libdir`/liblua.la])])])
+		AC_SUBST([LUA_LIBTOOL], [`${PKG_CONFIG} lua --variable=libdir`/liblua.la])
+		AC_SUBST([LUA_REQUIRES], [lua])
+	])
+])
 
 # Look for OpenGL
 AC_CHECK_HEADER(SDL/SDL_opengl.h, ,
@@ -98,6 +106,7 @@ CFLAGS="${CFLAGS} -Werror-implicit-function-declaration"
 AC_SUBST([CFLAGS])
 
 AC_CONFIG_FILES([Makefile
+                 src/betawidget.pc
                  src/Makefile
                  src/platform/Makefile
                  src/platform/sdl/Makefile

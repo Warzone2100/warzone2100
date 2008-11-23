@@ -1,0 +1,21 @@
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+libdir=@libdir@
+includedir=@includedir@
+
+lib_name=@PACKAGE@
+
+#
+# The following are intended to be used via "pkg-config --variable".
+
+# The location of the libtool library.  This is used when linking to the
+# Betawidget library via libtool.
+libtool_lib=${libdir}/lib${lib_name}.la
+
+Name: Betawidget
+Description: library for adding a GUI to OpenGL based applications
+Version: @VERSION@
+Requires: @PLATFORM_REQUIRES@ cairo
+Requires.private: @LUA_REQUIRES@
+Libs: -L${libdir} -l${lib_name}
+Cflags: -I${includedir}
