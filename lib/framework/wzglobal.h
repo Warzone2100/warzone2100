@@ -278,6 +278,7 @@
 #if defined(__STDC_VERSION__) && __STDC_VERSION__ >= 199901L
 # define WZ_C99
 #else
+# if !defined(va_copy)
 /**
  * Implements the interface of the C99 macro va_copy such that we can use it on
  * non-C99 systems as well.
@@ -286,7 +287,8 @@
  * frame of the variadic function. This is by far the most common setup, though
  * it might not always work.
  */
-# define va_copy(dest, src) (void)((dest) = (src))
+#  define va_copy(dest, src) (void)((dest) = (src))
+# endif
 #endif /* WZ_Cxx */
 
 
