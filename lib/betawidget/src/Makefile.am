@@ -30,8 +30,8 @@ libbetawidget_la_SOURCES = \
 	window.c
 
 libbetawidget_la_CPPFLAGS = $(CAIRO_CFLAGS) $(LUA_CFLAGS) -DLIB_COMPILE=1
-libbetawidget_la_LDFLAGS = $(CAIRO_LIBS) $(OPENGL_LIBS)
-libbetawidget_la_LIBADD = $(LUA_LIBTOOL) platform/libplatform.la libutil.la
+libbetawidget_la_LDFLAGS = $(LUA_LIBS) $(CAIRO_LIBS) $(OPENGL_LIBS)
+libbetawidget_la_LIBADD = platform/libplatform.la libutil.la
 
 # FIXME: As much non-API headers (i.e. headers that shouldn't be directly
 #        included by client code of betawidget) as possible should be moved to

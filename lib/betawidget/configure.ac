@@ -76,13 +76,10 @@ PKG_CHECK_MODULES([CAIRO], [cairo])
 
 # First check the pkg-config lua5.1 package
 PKG_CHECK_MODULES([LUA], [lua5.1 >= 5.1], [
-	AC_SUBST([LUA_LIBTOOL], [`${PKG_CONFIG} lua5.1 --variable=libtool_lib`])
 	AC_SUBST([LUA_REQUIRES], [lua5.1])
 ],[
 	# If that fails, check the "lua" pkg-config package
 	PKG_CHECK_MODULES([LUA], [lua >= 5.1], [
-		# Workaround to retrieve the libtool library
-		AC_SUBST([LUA_LIBTOOL], [`${PKG_CONFIG} lua --variable=libdir`/liblua.la])
 		AC_SUBST([LUA_REQUIRES], [lua])
 	])
 ])
