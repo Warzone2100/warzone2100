@@ -3,6 +3,23 @@
 
 AC_PREREQ(2.61)
 AC_INIT(betawidget, VERSION)
+
+# libtool shared library version
+
+# Increment if the interface has additions, changes, removals.
+LT_CURRENT=0
+
+# Increment any time the source changes; set to
+# 0 if you increment CURRENT
+LT_REVISION=0
+
+# Increment if any interfaces have been added; set to 0
+# if any interfaces have been removed. removal has
+# precedence over adding, so set to 0 if both happened.
+LT_AGE=0
+
+AC_SUBST([LIBTOOL_VERSION], ["$LT_CURRENT:$LT_REVISION:$LT_AGE"])
+
 AC_CONFIG_SRCDIR([src/vector.h])
 AC_CONFIG_HEADER([config.h])
 AM_INIT_AUTOMAKE
