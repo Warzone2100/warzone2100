@@ -70,7 +70,7 @@ AC_CHECK_FUNCS([memmove strdup])
 
 # Checks for libraries.
 PKG_CHECK_MODULES([SDL], [sdl >= 1.2])
-PKG_CHECK_MODULES([CAIRO_SVG], [cairo-svg])
+PKG_CHECK_MODULES([CAIRO], [cairo])
 # First check the pkg-config lua5.1 package
 PKG_CHECK_MODULES([LUA], [lua5.1 >= 5.1], [
 	AC_SUBST([LUA_LIBTOOL], [`${PKG_CONFIG} lua5.1 --variable=libtool_lib`])], [
@@ -93,6 +93,9 @@ AC_CHECK_LIB(GLU, main,
 		OPENGL_LIBS="${OPENGL_LIBS} -lglu32",
 		AC_MSG_ERROR([GLU library not found.])))
 AC_SUBST([OPENGL_LIBS], [${OPENGL_LIBS}])
+
+CFLAGS="${CFLAGS} -Werror-implicit-function-declaration"
+AC_SUBST([CFLAGS])
 
 AC_CONFIG_FILES([Makefile
                  platform/Makefile
