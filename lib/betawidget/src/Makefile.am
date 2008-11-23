@@ -3,6 +3,8 @@ SUBDIRS = platform
 %_wrap_lua.cpp: %.i
 	$(SWIG) $(SWIG_LUA_OPT) -o $@ $<
 
+EXTRA_DIST = betawidget.i
+
 BUILT_SOURCES = \
 	betawidget_wrap_lua.cpp
 CLEANFILES = \
@@ -43,7 +45,8 @@ pkginclude_HEADERS = \
 	widget.h \
 	window.h
 
-noinst_HEADERS = 
+noinst_HEADERS = \
+	lua-wrap.h
 
 # utf.c, GLee
 noinst_LTLIBRARIES = libutil.la

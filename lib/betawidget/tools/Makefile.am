@@ -1,5 +1,7 @@
 noinst_PROGRAMS = sdl-testapp
 
+EXTRA_DIST = sdl-testapp.lua
+
 sdl_testapp_SOURCES = \
 	sdl-testapp.c
 
