@@ -26,14 +26,14 @@
 #include <SDL.h>
 #include <SDL_main.h>
 
-#include <betawidget/widget.h>
-#include <betawidget/hBox.h>
-#include <betawidget/spacer.h>
-#include <betawidget/textEntry.h>
-#include <betawidget/window.h>
-#include <betawidget/platform/sdl/event.h>
-#include <betawidget/platform/sdl/init.h>
-#include <betawidget/lua-wrap.h>
+#include "../src/widget.h"
+#include "../src/hBox.h"
+#include "../src/spacer.h"
+#include "../src/textEntry.h"
+#include "../src/window.h"
+#include "../src/platform/sdl/event.h"
+#include "../src/platform/sdl/init.h"
+#include "../src/lua-wrap.h"
 #include <lualib.h>
 #include <lauxlib.h>
 

@@ -3,7 +3,7 @@
 
 AC_PREREQ(2.61)
 AC_INIT(betawidget, VERSION)
-AC_CONFIG_SRCDIR([vector.h])
+AC_CONFIG_SRCDIR([src/vector.h])
 AC_CONFIG_HEADER([config.h])
 AM_INIT_AUTOMAKE
 
@@ -98,7 +98,8 @@ CFLAGS="${CFLAGS} -Werror-implicit-function-declaration"
 AC_SUBST([CFLAGS])
 
 AC_CONFIG_FILES([Makefile
-                 platform/Makefile
-                 platform/sdl/Makefile
+                 src/Makefile
+                 src/platform/Makefile
+                 src/platform/sdl/Makefile
                  tools/Makefile])
 AC_OUTPUT
