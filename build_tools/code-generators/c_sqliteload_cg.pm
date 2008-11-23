@@ -14,13 +14,13 @@ sub printComments
 {
     my ($output, $comments, $indent) = @_;
 
-    return unless @{$comments};
+    return unless @$comments;
 
-    $$output .= "$indent/*${$comments}[0]\n";
+    $$output .= "$indent/*$comments->[0]\n";
 
-    for (my $i = 1; $i < @{$comments}; $i++)
+    for (my $i = 1; $i < @$comments; $i++)
     {
-        my $comment = ${$comments}[$i];
+        my $comment = $comments->[$i];
         $$output .= "$indent *${comment}\n";
     }
 
@@ -31,9 +31,9 @@ sub printSqlComments
 {
     my ($output, $comments, $indent) = @_;
 
-    return unless @{$comments};
+    return unless @$comments;
 
-    foreach (@{$comments})
+    foreach (@$comments)
     {
         my $comment = $_;
         $comment =~ s/\"/\\\"/g;
@@ -49,22 +49,22 @@ sub getStructName
 {
     my ($name, $struct, $structMap, $prefix, $suffix) = @_;
 
-    foreach (keys %{${$struct}{"qualifiers"}})
+    foreach (keys %{$struct->{"qualifiers"}})
     {
-        $$prefix = ${${$struct}{"qualifiers"}}{$_} if /prefix/ and not $$prefix;
-        $$suffix = ${${$struct}{"qualifiers"}}{$_} if /suffix/ and not $$suffix;
+        $$prefix = $struct->{"qualifiers"}{$_} if /prefix/ and not $$prefix;
+        $$suffix = $struct->{"qualifiers"}{$_} if /suffix/ and not $$suffix;
 
-        getStructName($name, ${${$struct}{"qualifiers"}}{"inherit"}, $structMap, $prefix, $suffix) if /inherit/;
+        getStructName($name, $struct->{"qualifiers"}{"inherit"}, $structMap, $prefix, $suffix) if /inherit/;
     }
 
-    $$name = "${$prefix}${$struct}{\"name\"}${$suffix}";
+    $$name = "$$prefix$struct->{name}$$suffix";
 }
 
 sub printFuncHeader
 {
     my ($output, $struct, $structName) = @_;
 
-    $$output .= "/** Load the contents of the ${$struct}{\"name\"} table from the given SQLite database.\n"
+    $$output .= "/** Load the contents of the $struct->{name} table from the given SQLite database.\n"
               . " *\n"
               . " *  \@param db represents the database to load from\n"
               . " *\n"
@@ -72,8 +72,8 @@ sub printFuncHeader
               . " *          false otherwise.\n"
               . " */\n"
               . "bool\n"
-              . "#line ${${${$struct}{\"qualifiers\"}}{\"loadFunc\"}}{\"line\"} \"$filename\"\n"
-              . "${${${$struct}{\"qualifiers\"}}{\"loadFunc\"}}{\"name\"}\n";
+              . "#line $struct->{qualifiers}{loadFunc}{line} \"$filename\"\n"
+              . "$struct->{qualifiers}{loadFunc}{name}\n";
 
     my $line = $$output =~ s/\n/\n/sg;
     $line += 2;
@@ -102,7 +102,7 @@ sub printColNums
     {
         if    (/inherit/)
         {
-            my $inheritStruct = ${${$struct}{"qualifiers"}}{"inherit"};
+            my $inheritStruct = $struct->{"qualifiers"}{"inherit"};
 
             printColNums($output, $inheritStruct, $structMap, $enumMap);
         }
@@ -112,20 +112,20 @@ sub printColNums
         }
     }
 
-    foreach my $field (@{${$struct}{"fields"}})
+    foreach my $field (@{$struct->{"fields"}})
     {
-        my $fieldName = ${$field}{"name"};
+        my $fieldName = $field->{"name"};
 
-        if (${$field}{"type"} and ${$field}{"type"} =~ /set/)
+        if ($field->{"type"} and $field->{"type"} =~ /set/)
         {
-            my $enum = ${$field}{"enum"};
+            my $enum = $field->{"enum"};
 
-            foreach my $value (@{${$enum}{"values"}})
+            foreach my $value (@{$enum->{"values"}})
             {
-                $$output .= "\t\tint ${$field}{\"name\"}_${$value}{\"name\"};\n";
+                $$output .= "\t\tint $field->{name}_$value->{name};\n";
             }
         }
-        elsif (${$field}{"type"} and ${$field}{"type"} =~ /C-only-field/)
+        elsif ($field->{"type"} and $field->{"type"} =~ /C-only-field/)
         {
             # Ignore: this is a user defined field type, the user code (%postLoadRow) can deal with it
         }
@@ -156,8 +156,8 @@ sub printSqlQueryVariables
 sub printStructFields
 {
     my ($output, $struct, $enumMap, $indent) = @_;
-    my @fields = @{${$struct}{"fields"}};
-    my $structName = ${$struct}{"name"};
+    my @fields = @{$struct->{"fields"}};
+    my $structName = $struct->{"name"};
 
     my $first = 1;
 FIELD:
@@ -166,29 +166,29 @@ FIELD:
         my $field = shift(@fields);
 
         # Ignore: this is a user defined field type, the user code (%postLoadRow) can deal with it
-        next FIELD if ${$field}{"type"} and ${$field}{"type"} =~ /C-only-field/;
+        next FIELD if $field->{"type"} and $field->{"type"} =~ /C-only-field/;
 
         $$output .= ",\\n\"\n\n" unless $first;
         $first = 0;
 
-        printSqlComments($output, ${$field}{"comment"}, $indent);
+        printSqlComments($output, $field->{"comment"}, $indent);
 
-        if (${$field}{"type"} and ${$field}{"type"} =~ /set/)
+        if ($field->{"type"} and $field->{"type"} =~ /set/)
         {
-            my $enum = ${$field}{"enum"};
-            my @values = @{${$enum}{"values"}};
+            my $enum = $field->{"enum"};
+            my @values = @{$enum->{"values"}};
 
             while (@values)
             {
                 my $value = shift(@values);
 
-                $$output .= "$indent\"`$structName`.`${$field}{\"name\"}_${$value}{\"name\"}` AS `${$field}{\"name\"}_${$value}{\"name\"}`";
+                $$output .= "$indent\"`$structName`.`$field->{name}_$value->{name}` AS `$field->{name}_$value->{name}`";
                 $$output .= ",\\n\"\n" if @values;
             }
         }
         else
         {
-            $$output .= "$indent\"`$structName`.`${$field}{\"name\"}` AS `${$field}{\"name\"}`";
+            $$output .= "$indent\"`$structName`.`$field->{name}` AS `$field->{name}`";
         }
     }
 }
@@ -197,17 +197,17 @@ sub printStructContent
 {
     my ($output, $struct, $structMap, $enumMap, $indent, $first) = @_;
 
-    foreach (keys %{${$struct}{"qualifiers"}})
+    foreach (keys %{$struct->{"qualifiers"}})
     {
         if    (/inherit/)
         {
-            my $inheritStruct = ${${$struct}{"qualifiers"}}{"inherit"};
+            my $inheritStruct = $struct->{"qualifiers"}{"inherit"};
 
             printStructContent($output, $inheritStruct, $structMap, $enumMap, $indent, 0);
         }
         elsif (/abstract/)
         {
-            my $tableName = ${$struct}{"name"};
+            my $tableName = $struct->{"name"};
 
             $$output .= "$indent\"-- Automatically generated ID to link the inheritance hierarchy.\\n\"\n"
                       . "$indent\"$tableName.unique_inheritance_id,\\n\"\n";
@@ -225,33 +225,33 @@ sub printBaseStruct
     my ($outstr, $struct) = @_;
     my $is_base = 1;
 
-    foreach (keys %{${$struct}{"qualifiers"}})
+    foreach (keys %{$struct->{"qualifiers"}})
     {
         if (/inherit/)
         {
-            my $inheritStruct = ${${$struct}{"qualifiers"}}{"inherit"};
+            my $inheritStruct = $struct->{"qualifiers"}{"inherit"};
 
             printBaseStruct($outstr, $inheritStruct);
             $is_base = 0;
         }
     }
 
-    $$outstr .= "`${$struct}{\"name\"}`" if $is_base;
+    $$outstr .= "`$struct->{name}`" if $is_base;
 }
 
 sub printStructJoins
 {
     my ($outstr, $struct, $structMap) = @_;
 
-    foreach (keys %{${$struct}{"qualifiers"}})
+    foreach (keys %{$struct->{"qualifiers"}})
     {
         if (/inherit/)
         {
-            my $inheritStruct = ${${$struct}{"qualifiers"}}{"inherit"};
-            my $inheritName = ${$inheritStruct}{"name"};
+            my $inheritStruct = $struct->{"qualifiers"}{"inherit"};
+            my $inheritName = $inheritStruct->{"name"};
 
             printStructJoins($outstr, $inheritStruct, $structMap);
-            $$outstr .= " INNER JOIN `${$struct}{\"name\"}` ON `${inheritName}`.`unique_inheritance_id` = `${$struct}{\"name\"}`.`unique_inheritance_id`";
+            $$outstr .= " INNER JOIN `$struct->{name}` ON `$inheritName`.`unique_inheritance_id` = `$struct->{name}`.`unique_inheritance_id`";
         }
     }
 }
@@ -259,7 +259,7 @@ sub printStructJoins
 sub printParameterLoadCode
 {
     my ($output, $struct, $structMap, $parameter) = @_;
-    my $tableName = ${$struct}{"name"};
+    my $tableName = $struct->{"name"};
 
     $$output .= "\t\t/* Prepare this SQL statement for execution */\n"
               . "\t\tif (!prepareStatement(db, &stmt, \"SELECT ";
@@ -297,13 +297,13 @@ sub printPreLoadTableCode
 {
     my ($output, $struct, $structMap, $enumMap) = @_;
 
-    return unless exists(${${$struct}{"qualifiers"}}{"preLoadTable"});
+    return unless exists($struct->{"qualifiers"}{"preLoadTable"});
 
-    my $line = ${${${$struct}{"qualifiers"}}{"preLoadTable"}}{"line"};
+    my $line = $struct->{"qualifiers"}{"preLoadTable"}{"line"};
 
     $$output .= "\t{\n";
 
-    foreach (@{${${${$struct}{"qualifiers"}}{"preLoadTable"}}{"parameters"}})
+    foreach (@{$struct->{"qualifiers"}{"preLoadTable"}{"parameters"}})
     {
         if    (/\bmaxId\b/)
         {
@@ -319,15 +319,15 @@ sub printPreLoadTableCode
         }
     }
 
-    $$output .= "\n" if (@{${${${$struct}{"qualifiers"}}{"preLoadTable"}}{"parameters"}});
+    $$output .= "\n" if (@{$struct->{"qualifiers"}{"preLoadTable"}{"parameters"}});
 
-    foreach (@{${${${$struct}{"qualifiers"}}{"preLoadTable"}}{"parameters"}})
+    foreach (@{$struct->{"qualifiers"}{"preLoadTable"}{"parameters"}})
     {
         printParameterLoadCode($output, $struct, $structMap, $_);
     }
 
     $$output .= "#line " . ($line + 1) . " \"$filename\"\n";
-    foreach (@{${${${$struct}{"qualifiers"}}{"preLoadTable"}}{"code"}})
+    foreach (@{$struct->{"qualifiers"}{"preLoadTable"}{"code"}})
     {
         s/^        //g;
         s/    /\t/g;
@@ -361,12 +361,12 @@ sub printSqlColNameFetchCode
 {
     my ($output, $struct, $structMap, $enumMap) = @_;
 
-    foreach (keys %{${$struct}{"qualifiers"}})
+    foreach (keys %{$struct->{"qualifiers"}})
     {
         if    (/inherit/)
         {
-            my $inheritStruct = ${${$struct}{"qualifiers"}}{"inherit"};
-            my $inheritName = ${$inheritStruct}{"name"};
+            my $inheritStruct = $struct->{"qualifiers"}{"inherit"};
+            my $inheritName = $inheritStruct->{"name"};
 
             $$output .= "\t/* BEGIN of inherited \"$inheritName\" definition */\n";
             printSqlColNameFetchCode($output, $inheritStruct, $structMap, $enumMap);
@@ -378,24 +378,24 @@ sub printSqlColNameFetchCode
         }
     }
 
-    foreach my $field (@{${$struct}{"fields"}})
+    foreach my $field (@{$struct->{"fields"}})
     {
-        if (${$field}{"type"} and ${$field}{"type"} =~ /set/)
+        if ($field->{"type"} and $field->{"type"} =~ /set/)
         {
-            my $enum = ${$field}{"enum"};
+            my $enum = $field->{"enum"};
 
-            foreach my $value (@{${$enum}{"values"}})
+            foreach my $value (@{$enum->{"values"}})
             {
-                printSqlFetchColName($output, "${$field}{\"name\"}_${$value}{\"name\"}");
+                printSqlFetchColName($output, "$field->{name}_$value->{name}");
             }
         }
-        elsif (${$field}{"type"} and ${$field}{"type"} =~ /C-only-field/)
+        elsif ($field->{"type"} and $field->{"type"} =~ /C-only-field/)
         {
             # Ignore: this is a user defined field type, the user code (%postLoadRow) can deal with it
         }
         else
         {
-            printSqlFetchColName($output, ${$field}{"name"});
+            printSqlFetchColName($output, $field->{"name"});
         }
     }
 }
@@ -442,12 +442,12 @@ sub printRowProcessCode
 {
     my ($output, $struct, $structMap, $enumMap) = @_;
 
-    foreach (keys %{${$struct}{"qualifiers"}})
+    foreach (keys %{$struct->{"qualifiers"}})
     {
         if (/inherit/)
         {
-            my $inheritStruct = ${${$struct}{"qualifiers"}}{"inherit"};
-            my $inheritName = ${$inheritStruct}{"name"};
+            my $inheritStruct = $struct->{"qualifiers"}{"inherit"};
+            my $inheritName = $inheritStruct->{"name"};
 
             $$output .= "\t\t/* BEGIN of inherited \"$inheritName\" definition */\n";
             printRowProcessCode($output, $inheritStruct, $structMap, $enumMap);
@@ -459,17 +459,17 @@ sub printRowProcessCode
     {
         printComments($output, ${$field}{"comment"}, "\t\t");
 
-        my $fieldName = ${$field}{"name"};
-        $_ = ${$field}{"type"};
+        my $fieldName = $field->{"name"};
+        $_ = $field->{"type"};
 
         if    (/set/)
         {
-            my $enum = ${$field}{"enum"};
+            my $enum = $field->{"enum"};
 
-            for (my $i = 0; $i < @{${$enum}{"values"}}; $i++)
+            for (my $i = 0; $i < @{$enum->{"values"}}; $i++)
             {
-                my $value = ${${$enum}{"values"}}[$i];
-                my $valueName = ${$value}{"name"};
+                my $value = $enum->{"values"}[$i];
+                my $valueName = $value->{"name"};
 
                 $$output .= "\t\tstats->$fieldName\[$i] = sqlite3_column_int(stmt, cols.${fieldName}_${valueName}) ? true : false;\n";
             }
@@ -492,19 +492,19 @@ sub printRowProcessCode
         }
         elsif (/enum/)
         {
-            my $enum = ${$field}{"enum"};
-            my $enumSize = @{${$enum}{"values"}};
+            my $enum = $field->{"enum"};
+            my $enumSize = @{$enum->{"values"}};
 
-            my $valprefix = ${${$enum}{"qualifiers"}}{"valprefix"} || "";
-            my $valsuffix = ${${$enum}{"qualifiers"}}{"valsuffix"} || "";
+            my $valprefix = $enum->{"qualifiers"}{"valprefix"} || "";
+            my $valsuffix = $enum->{"qualifiers"}{"valsuffix"} || "";
 
-            $valprefix = "${$enum}{\"name\"}_" if not exists(${${$enum}{"qualifiers"}}{"valprefix"}) and not exists(${${$enum}{"qualifiers"}}{"valsuffix"});
+            $valprefix = "$enum->{name}_" if not exists($enum->{"qualifiers"}{"valprefix"}) and not exists($enum->{"qualifiers"}{"valsuffix"});
 
             for (my $i = 0; $i < @{${$enum}{"values"}}; $i++)
             {
-                my $value = ${${$enum}{"values"}}[$i];
-                my $valueName = ${$value}{"name"};
-                my @strings = @{${$value}{"value_strings"}};
+                my $value = $enum->{"values"}[$i];
+                my $valueName = $value->{"name"};
+                my @strings = @{$value->{"value_strings"}};
                 push @strings, $valueName unless @strings;
 
                 if ($i == 0)
@@ -537,7 +537,7 @@ sub printRowProcessCode
         {
             my $indent = "\t\t";
 
-            if (grep(/optional/, @{${$field}{"qualifiers"}}))
+            if (grep(/optional/, @{$field->{"qualifiers"}}))
             {
                 $indent .= "\t";
                 $$output .= "\t\tif (sqlite3_column_type(stmt, cols.$fieldName) != SQLITE_NULL)\n"
@@ -552,7 +552,7 @@ sub printRowProcessCode
                       . "${indent}\tgoto in_statement_err;\n"
                       . "${indent}}\n";
 
-            if (grep(/optional/, @{${$field}{"qualifiers"}}))
+            if (grep(/optional/, @{$field->{"qualifiers"}}))
             {
                 $$output .= "\t\t}\n"
                           . "\t\telse\n"
@@ -565,7 +565,7 @@ sub printRowProcessCode
         {
             my $indent = "\t\t";
 
-            if (grep(/optional/, @{${$field}{"qualifiers"}}))
+            if (grep(/optional/, @{$field->{"qualifiers"}}))
             {
                 $indent .= "\t";
                 $$output .= "\t\tif (sqlite3_column_type(stmt, cols.$fieldName) != SQLITE_NULL)\n"
@@ -573,7 +573,7 @@ sub printRowProcessCode
             }
 
             $$output .= "${indent}stats->$fieldName = (iIMDShape *) resGetData(\"IMD\", (const char*)sqlite3_column_text(stmt, cols.$fieldName));\n";
-            unless (grep(/optional/, @{${$field}{"qualifiers"}}))
+            unless (grep(/optional/, @{$field->{"qualifiers"}}))
             {
                 $$output .= "${indent}if (stats->$fieldName == NULL)\n"
                           . "${indent}{\n"
@@ -583,7 +583,7 @@ sub printRowProcessCode
                           . "${indent}}\n";
             }
 
-            if (grep(/optional/, @{${$field}{"qualifiers"}}))
+            if (grep(/optional/, @{$field->{"qualifiers"}}))
             {
                 $$output .= "\t\t}\n"
                           . "\t\telse\n"
@@ -594,24 +594,24 @@ sub printRowProcessCode
         }
         elsif (/struct/)
         {
-            my $struct = ${$field}{"struct"};
+            my $struct = $field->{"struct"};
             my $indent = "\t\t";
 
-            if (grep(/optional/, @{${$field}{"qualifiers"}}))
+            if (grep(/optional/, @{$field->{"qualifiers"}}))
             {
                 $indent .= "\t";
                 $$output .= "\t\tif (sqlite3_column_type(stmt, cols.$fieldName) != SQLITE_NULL)\n"
                           . "\t\t{\n";
             }
 
-            die "error:$outfile:${$field}{\"line\"}: Cannot use struct \"${$struct}{\"name\"}\" as it doesn't have a fetchRowById function declared" unless exists(${${$struct}{"qualifiers"}}{"fetchRowById"});
+            die "error:$outfile:$field->{line}: Cannot use struct \"$struct->{name}\" as it doesn't have a fetchRowById function declared" unless exists($struct->{"qualifiers"}{"fetchRowById"});
 
-            $$output .= "${indent}{\n";
+            $$output .= "$indent\{\n";
 
-            my $line = ${${${$struct}{"qualifiers"}}{"fetchRowById"}}{"line"};
+            my $line = $struct->{"qualifiers"}{"fetchRowById"}{"line"};
 
             $$output .= "#line " . ($line + 1) . " \"$filename\"\n";
-            foreach (@{${${${$struct}{"qualifiers"}}{"fetchRowById"}}{"code"}})
+            foreach (@{$struct->{"qualifiers"}{"fetchRowById"}{"code"}})
             {
                 s/^        //g;
                 s/    /\t/g;
@@ -620,17 +620,17 @@ sub printRowProcessCode
 
                 s/\bABORT\b/goto in_statement_err/g;
 
-                $$output .= "${indent}\t$_\n";
+                $$output .= "$indent\t$_\n";
             }
 
             $line = $$output =~ s/\n/\n/sg;
             $line += 2;
             $$output .= "#line $line \"$outfile\"\n";
 
-            $$output .= "${indent}}\n"
+            $$output .= "$indent}\n"
                       . "\n";
 
-            unless (grep(/optional/, @{${$field}{"qualifiers"}}))
+            unless (grep(/optional/, @{$field->{"qualifiers"}}))
             {
                 $$output .= "${indent}if (stats->$fieldName == NULL)\n"
                           . "${indent}{\n"
@@ -640,7 +640,7 @@ sub printRowProcessCode
                           . "${indent}}\n";
             }
 
-            if (grep(/optional/, @{${$field}{"qualifiers"}}))
+            if (grep(/optional/, @{$field->{"qualifiers"}}))
             {
                 $$output .= "\t\t}\n"
                           . "\t\telse\n"
@@ -655,7 +655,7 @@ sub printRowProcessCode
         }
         else
         {
-            die "error:$filename:${$field}{\"line\"}: UKNOWN TYPE: $_";
+            die "error:$filename:$field->{line}: UKNOWN TYPE: $_";
         }
 
         $$output .= "\n";
@@ -666,7 +666,7 @@ sub printLoadFunc
 {
     my ($output, $struct, $structMap, $enumMap) = @_;
 
-    return unless exists(${${$struct}{"qualifiers"}}{"loadFunc"});
+    return unless exists($struct->{"qualifiers"}{"loadFunc"});
 
     my $structName = "";
     my $prefix = "";
@@ -693,16 +693,16 @@ sub printLoadFunc
 
     printRowProcessCode($output, $struct, $structMap, $enumMap);
 
-    if (exists(${${$struct}{"qualifiers"}}{"postLoadRow"}))
+    if (exists($struct->{"qualifiers"}{"postLoadRow"}))
     {
         $$output .= "\t\t{\n";
-        $$output .= "\t\t\tconst int CUR_ROW_ID = sqlite3_column_int(stmt, cols.unique_inheritance_id);\n" if grep(/curId/, @{${${${$struct}{"qualifiers"}}{"postLoadRow"}}{"parameters"}});
+        $$output .= "\t\t\tconst int CUR_ROW_ID = sqlite3_column_int(stmt, cols.unique_inheritance_id);\n" if grep(/curId/, @{$struct->{"qualifiers"}{"postLoadRow"}{"parameters"}});
         $$output .= "\n";
 
-        my $line = ${${${$struct}{"qualifiers"}}{"postLoadRow"}}{"line"};
+        my $line = $struct->{"qualifiers"}{"postLoadRow"}{"line"};
 
         $$output .= "#line " . ($line + 1) . " \"$filename\"\n";
-        foreach (@{${${${$struct}{"qualifiers"}}{"postLoadRow"}}{"code"}})
+        foreach (@{$struct->{"qualifiers"}{"postLoadRow"}{"code"}})
         {
             s/^        //g;
             s/    /\t/g;

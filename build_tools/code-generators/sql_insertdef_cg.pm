@@ -27,34 +27,31 @@ sub printStructFields
 {
     my ($output, $struct, $first, $values) = @_;
 
-    foreach my $field (@{${$struct}{"fields"}})
+    foreach my $field (@{$struct->{"fields"}})
     {
-        if (my $CSV = ${$field}{"CSV"})
+        if (my $CSV = $field->{"CSV"})
         {
             $CSV = @$values - 1 if $CSV eq "last" and $values;
 
             $$output .= ",\n" unless $first;
             $first = 0;
 
-            if (${$field}{"type"} and ${$field}{"type"} =~ /set/)
+            if ($field->{"type"} and $field->{"type"} =~ /set/)
             {
-                if ($values)
+                unless ($values)
                 {
-                }
-                else
-                {
-                    my $enum = ${$field}{"enum"};
-                    my @values = @{${$enum}{"values"}};
+                    my $enum = $field->{"enum"};
+                    my @values = @{$enum->{"values"}};
 
                     while (@values)
                     {
                         my $value = shift(@values);
 
-                        $$output .= "\t`${$field}{\"name\"}_${$value}{\"name\"}`";
+                        $$output .= "\t`$field->{name}_$value->{name}`";
                     }
                 }
             }
-            elsif (${$field}{"type"} and ${$field}{"type"} =~ /C-only-field/)
+            elsif ($field->{"type"} and $field->{"type"} =~ /C-only-field/)
             {
                 # Ignore: this is a user defined field type, the user code (%postLoadRow) can deal with it
             }
@@ -62,9 +59,9 @@ sub printStructFields
             {
                 if ($values)
                 {
-                    my $value = ${$values}[$CSV-1];
+                    my $value = $values->[$CSV-1];
 
-                    if    (!$value && grep(/optional/, @{${$field}{"qualifiers"}}))
+                    if    (!$value && grep(/optional/, @{$field->{"qualifiers"}}))
                     {
                         $value = 'NULL';
                     }
@@ -81,7 +78,7 @@ sub printStructFields
                 }
                 else
                 {
-                    $$output .= "\t`${$field}{\"name\"}`";
+                    $$output .= "\t`$field->{name}`";
                 }
             }
         }
@@ -93,18 +90,18 @@ sub printBaseStruct
     my ($outstr, $struct) = @_;
     my $is_base = 1;
 
-    foreach (keys %{${$struct}{"qualifiers"}})
+    foreach (keys %{$struct->{"qualifiers"}})
     {
         if (/inherit/)
         {
-            my $inheritStruct = ${${$struct}{"qualifiers"}}{"inherit"};
+            my $inheritStruct = $struct->{"qualifiers"}{"inherit"};
 
             printBaseStruct($outstr, $inheritStruct);
             $is_base = 0;
         }
     }
 
-    $$outstr .= "`${$struct}{\"name\"}`" if $is_base;
+    $$outstr .= "`$struct->{name}`" if $is_base;
 }
 
 sub getUniqueBaseField
@@ -112,11 +109,11 @@ sub getUniqueBaseField
     my ($unique_field, $struct) = @_;
     my $is_base = 1;
 
-    foreach (keys %{${$struct}{"qualifiers"}})
+    foreach (keys %{$struct->{"qualifiers"}})
     {
         if (/inherit/)
         {
-            my $inheritStruct = ${${$struct}{"qualifiers"}}{"inherit"};
+            my $inheritStruct = $struct->{"qualifiers"}{"inherit"};
 
             getUniqueBaseField($unique_field, $inheritStruct);
             $is_base = 0;
@@ -125,11 +122,11 @@ sub getUniqueBaseField
 
     if ($is_base)
     {
-        foreach my $field (@{${$struct}{"fields"}})
+        foreach my $field (@{$struct->{"fields"}})
         {
-            if (my $CSV = ${$field}{"CSV"})
+            if (my $CSV = $field->{"CSV"})
             {
-                $$unique_field = $field if grep(/unique/, @{${$field}{"qualifiers"}});
+                $$unique_field = $field if grep(/unique/, @{$field->{"qualifiers"}});
                 last;
             }
         }
@@ -142,11 +139,11 @@ sub printStructContent
     my $abstract = 0;
     my $inherit = 0;
 
-    foreach (keys %{${$struct}{"qualifiers"}})
+    foreach (keys %{$struct->{"qualifiers"}})
     {
         if (/inherit/)
         {
-            my $inheritStruct = ${${$struct}{"qualifiers"}}{"inherit"};
+            my $inheritStruct = $struct->{"qualifiers"}{"inherit"};
 
             printStructContent($output, $inheritStruct, $structMap, $values);
 
@@ -158,7 +155,7 @@ sub printStructContent
         }
     }
 
-    my $name = ${$struct}{"name"};
+    my $name = $struct->{"name"};
 
     $$output .= "INSERT INTO `$name` (\n";
     $$output .= "\t`unique_inheritance_id`" if $inherit;
@@ -198,14 +195,14 @@ sub printStructContent
 
         if ($unique_field)
         {
-            my $CSV = ${$unique_field}{"CSV"};
+            my $CSV = $unique_field->{"CSV"};
             $CSV = @$values - 1 if $CSV eq "last";
-            my $value = ${$values}[$CSV-1];
+            my $value = $values->[$CSV-1];
             $value =~ s/'/''/g;
 
             $$output .= "\nWHERE ";
             printBaseStruct($output, $struct);
-            $$output .= ".`${$unique_field}{\"name\"}`='$value'";
+            $$output .= ".`$unique_field->{name}`='$value'";
         }
     }
     else
@@ -223,12 +220,12 @@ sub printEnum()
 sub printStruct()
 {
     my ($output, $struct, $structMap, $enumMap) = @_;
-    my $name = ${$struct}{"name"};
+    my $name = $struct->{"name"};
 
-    if (${${$struct}{"qualifiers"}}{"csv-file"})
+    if ($struct->{"qualifiers"}{"csv-file"})
     {
-        my $file = "$dataDir/${${$struct}{\"qualifiers\"}}{\"csv-file\"}";
-        printComments($output, ${$struct}{"comment"}, 0);
+        my $file = "$dataDir/$struct->{qualifiers}{\"csv-file\"}";
+        printComments($output, $struct->{"comment"}, 0);
 
         open (CSV, "<$file") or die "Can't open CSV file $file";
 

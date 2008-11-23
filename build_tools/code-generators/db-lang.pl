@@ -49,15 +49,15 @@ LINE:
 
             if    (/^valprefix\s+\"([^\"]*)\"\s*;$/)
             {
-                ${$curEnum{"qualifiers"}}{"valprefix"} = $1;
+                $curEnum{"qualifiers"}->{"valprefix"} = $1;
             }
             elsif (/^valsuffix\s+\"([^\"]+)\"\s*;$/)
             {
-                ${$curEnum{"qualifiers"}}{"valsuffix"} = $1;
+                $curEnum{"qualifiers"}->{"valsuffix"} = $1;
             }
             elsif (/^max\s+\"([^\"]+)\"\s*;$/)
             {
-                ${$curEnum{"qualifiers"}}{"max"} = $1;
+                $curEnum{"qualifiers"}->{"max"} = $1;
             }
             else
             {
@@ -164,46 +164,46 @@ LINE:
 
             if    (/^prefix\s+\"([^\"]+)\"\s*;$/)
             {
-                ${$curStruct{"qualifiers"}}{"prefix"} = $1;
+                $curStruct{"qualifiers"}->{"prefix"} = $1;
             }
             elsif (/^suffix\s+\"([^\"]+)\"\s*;$/)
             {
-                ${$curStruct{"qualifiers"}}{"suffix"} = $1;
+                $curStruct{"qualifiers"}->{"suffix"} = $1;
             }
             elsif (/^macro\s*;$/)
             {
-                ${${$curStruct{"qualifiers"}}{"macro"}}{"has"} = 1;
+                $curStruct{"qualifiers"}->{"macro"}{"has"} = 1;
             }
             elsif (/^nomacro\s*;$/)
             {
-                ${${$curStruct{"qualifiers"}}{"macro"}}{"has"} = 0;
+                $curStruct{"qualifiers"}->{"macro"}{"has"} = 0;
             }
             elsif (/^macroprefix\s+\"([^\"]+)\"\s*;$/)
             {
-                ${${$curStruct{"qualifiers"}}{"macro"}}{"prefix"} = $1;
+                $curStruct{"qualifiers"}->{"macro"}{"prefix"} = $1;
             }
             elsif (/^macrosuffix\s+\"([^\"]+)\"\s*;$/)
             {
-                ${${$curStruct{"qualifiers"}}{"macro"}}{"suffix"} = $1;
+                $curStruct{"qualifiers"}->{"macro"}{"suffix"} = $1;
             }
             elsif (/^loadFunc\s+\"([^\"]+)\"\s*;$/)
             {
                 my %loadFunc = (name=>$1, line=>$.);
 
-                ${$curStruct{"qualifiers"}}{"loadFunc"} = \%loadFunc;
+                $curStruct{"qualifiers"}->{"loadFunc"} = \%loadFunc;
             }
             elsif (/^abstract\s*;$/)
             {
-                die "error: Cannot declare a struct \"abstract\" if it inherits from another" if exists(${$curStruct{"qualifiers"}}{"inherit"});
+                die "error: Cannot declare a struct \"abstract\" if it inherits from another" if exists($curStruct{"qualifiers"}->{"inherit"});
 
-                ${$curStruct{"qualifiers"}}{"abstract"} = 1;
+                $curStruct{"qualifiers"}->{"abstract"} = 1;
             }
             elsif (/^inherit\s+(\w+)\s*;$/)
             {
-                die "error: structs declared \"abstract\" cannot inherit" if exists(${$curStruct{"qualifiers"}}{"abstract"});
+                die "error: structs declared \"abstract\" cannot inherit" if exists($curStruct{"qualifiers"}->{"abstract"});
                 die "error: Cannot inherit from struct \"$1\" as it isn't (fully) declared yet" unless exists($structMap{$1});
 
-                ${$curStruct{"qualifiers"}}{"inherit"} = \%{$structMap{$1}};
+                $curStruct{"qualifiers"}->{"inherit"} = \%{$structMap{$1}};
             }
             elsif (/^fetchRowById\s+Row\s+Id\s*$/)
             {
@@ -211,7 +211,7 @@ LINE:
 
                 readTillEnd(\@{$fetchRowById{"code"}});
 
-                ${$curStruct{"qualifiers"}}{"fetchRowById"} = \%fetchRowById;
+                $curStruct{"qualifiers"}->{"fetchRowById"} = \%fetchRowById;
             }
             elsif (/^preLoadTable(\s+maxId)?(\s+rowCount)?\s*$/)
             {
@@ -222,7 +222,7 @@ LINE:
 
                 readTillEnd(\@{$preLoadTable{"code"}});
 
-                ${$curStruct{"qualifiers"}}{"preLoadTable"} = \%preLoadTable;
+                $curStruct{"qualifiers"}->{"preLoadTable"} = \%preLoadTable;
             }
             elsif (/^postLoadRow\s+curRow(\s+curId)?(\s+rowNum)?\s*$/)
             {
@@ -233,14 +233,14 @@ LINE:
 
                 readTillEnd(\@{$postLoadRow{"code"}});
 
-                ${$curStruct{"qualifiers"}}{"postLoadRow"} = \%postLoadRow;
+                $curStruct{"qualifiers"}->{"postLoadRow"} = \%postLoadRow;
             }
             elsif (/^csv-file\s+"((?:[^"]+|\\")+)"\s*;$/)
             {
                 my $file = $1;
                 $file =~ s/\\"/"/g;
 
-                ${$curStruct{"qualifiers"}}{"csv-file"} = $file;
+                $curStruct{"qualifiers"}->{"csv-file"} = $file;
             }
             else
             {
@@ -311,7 +311,7 @@ LINE:
         elsif (/^\s*(struct)\s+(\w+)\s+(unique\s+)?(optional\s+)?(\w+)\s*;\s*$/)
         {
             die "error: $ARGV:$.: Cannot use struct \"$2\" as it isn't declared yet" unless exists($structMap{$2});
-            die "error: $ARGV:$.: Cannot use struct \"$2\" as it doesn't have a fetchRowById function declared" unless exists(${${$structMap{$2}}{"qualifiers"}}{"fetchRowById"});
+            die "error: $ARGV:$.: Cannot use struct \"$2\" as it doesn't have a fetchRowById function declared" unless exists($structMap{$2}->{"qualifiers"}{"fetchRowById"});
 
             my %field = (type=>$1, struct=>$structMap{$2}, name=>$5, line=>$.);
 

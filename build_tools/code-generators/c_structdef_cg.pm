@@ -14,7 +14,7 @@ sub printStructFieldType
 {
     my ($output, $field) = @_;
 
-    $_ = ${$field}{"type"};
+    $_ = $field->{"type"};
 
     if    (/count/)     { $$output .= "unsigned int     "; }
     elsif (/([US]D?WORD|[US]BYTE)/) { $$output .= "$1           "; } # "transition" type
@@ -22,66 +22,64 @@ sub printStructFieldType
     elsif (/real/)      { $$output .= "float            "; }
     elsif (/bool/)      { $$output .= "bool             "; }
     elsif (/set/)       { $$output .= "bool             "; }
-    elsif (/enum/)      { $$output .= "${${$field}{\"enum\"}}{\"name\"} "; }
+    elsif (/enum/)      { $$output .= "$field->{enum}{name} "; }
     elsif (/struct/)
     {
         my $name;
         my $prefix = "";
         my $suffix = "";
 
-        getStructName(\$name, ${$field}{"struct"}, \$prefix, \$suffix);
+        getStructName(\$name, $field->{"struct"}, \$prefix, \$suffix);
 
-        $$output .= "${prefix}${name}${suffix}* ";
+        $$output .= "$prefix$name$suffix* ";
     }
     elsif (/IMD_model/) { $$output .= "iIMDShape*       "; }
-    elsif (/C-only-field/) { $$output .= "${$field}{\"ctype\"} "; }
-    else                { die "error:$filename:${$field}{\"line\"}: UKNOWN TYPE: $_"; }
+    elsif (/C-only-field/) { $$output .= "$field->{ctype} "; }
+    else                { die "error:$filename:$field->{line}: UKNOWN TYPE: $_"; }
 }
 
 sub preProcessField
 {
     my ($field, $comments) = @_;
 
-    if    (grep(/unique/, @{${$field}{"qualifiers"}}))
+    if    (grep(/unique/, @{$field->{"qualifiers"}}))
     {
         # Separate this notice from the rest of the comment if there's any
-        push @{$comments}, "" if @{$comments};
+        push @$comments, "" if @$comments;
 
-        push @{$comments}, " Unique across all instances";
+        push @$comments, " Unique across all instances";
     }
 
-    if    (grep(/optional/, @{${$field}{"qualifiers"}}))
+    if    (grep(/optional/, @{$field->{"qualifiers"}}))
     {
         # Separate this notice from the rest of the comment if there's any
-        push @{$comments}, "" if @{$comments};
+        push @$comments, "" if @$comments;
 
-        push @{$comments}, " This field is optional and can be NULL to indicate that it has no value";
+        push @$comments, " This field is optional and can be NULL to indicate that it has no value";
     }
 
-    $_ = ${$field}{"type"};
-    $_ = "" unless $_;
+    my $_ = $field->{"type"} || "";
 
     if (/set/)
     {
         # Separate this notice from the rest of the comment if there's any
-        push @{$comments}, "" if @{$comments};
+        push @$comments, "" if @$comments;
 
-        push @{$comments}, " \@see ${$field}{\"enum\"} for the meaning of index values";
+        push @$comments, " \@see $field->{enum} for the meaning of index values";
     }
 }
 
 sub postProcessField
 {
     my ($output, $field, $enumMap) = @_;
-    $_ = ${$field}{"type"};
-    $_ = "" unless $_;
+    my $_ = $field->{"type"} || "";
 
     if (/set/)
     {
-        my $enum = ${$field}{"enum"};
-        my $enumSize = @{${$enum}{"values"}};
+        my $enum = $field->{"enum"};
+        my $enumSize = @{$enum->{"values"}};
 
-        $$output .= "\[${enumSize}]" if (/set/);
+        $$output .= "\[$enumSize]" if (/set/);
     }
 }
 
@@ -89,17 +87,17 @@ sub printComments
 {
     my ($output, $comments, $indent, $eol) = @_;
 
-    return unless @{$comments};
+    return unless @$comments;
 
     $eol = "\n" unless $eol;
 
     $$output .= "\t" if $indent;
     $$output .= "/**$eol";
 
-    foreach my $comment (@{$comments})
+    foreach my $comment (@$comments)
     {
         $$output .= "\t" if $indent;
-        $$output .= " *${comment}$eol";
+        $$output .= " *$comment$eol";
     }
 
     $$output .= "\t" if $indent;
@@ -109,13 +107,13 @@ sub printComments
 sub printStructFields
 {
     my $output = $_[0];
-    my @fields = @{${$_[1]}{"fields"}};
+    my @fields = @{$_[1]{"fields"}};
     my $enumMap = $_[2];
 
     while (@fields)
     {
         my $field = shift(@fields);
-        my @comments = @{${$field}{"comment"}};
+        my @comments = @{$field->{"comment"}};
 
         preProcessField($field, \@comments);
 
@@ -136,27 +134,27 @@ sub getStructName
 {
     my ($name, $struct, $prefix, $suffix) = @_;
 
-    foreach (keys %{${$struct}{"qualifiers"}})
+    foreach (keys %{$struct->{"qualifiers"}})
     {
-        $$prefix = ${${$struct}{"qualifiers"}}{$_} if /prefix/ and not $$prefix;
-        $$suffix = ${${$struct}{"qualifiers"}}{$_} if /suffix/ and not $$suffix;
+        $$prefix = $struct->{"qualifiers"}{$_} if /prefix/ and not $$prefix;
+        $$suffix = $struct->{"qualifiers"}{$_} if /suffix/ and not $$suffix;
 
-        getStructName($name, ${${$struct}{"qualifiers"}}{"inherit"}, $prefix, $suffix) if /inherit/;
+        getStructName($name, $struct->{"qualifiers"}{"inherit"}, $prefix, $suffix) if /inherit/;
     }
 
-    $$name = ${$struct}{"name"};
+    $$name = $struct->{"name"};
 }
 
 sub printStructContent
 {
     my ($output, $struct, $structMap, $enumMap) = @_;
 
-    foreach (keys %{${$struct}{"qualifiers"}})
+    foreach (keys %{$struct->{"qualifiers"}})
     {
         if (/inherit/)
         {
-            my $inheritStruct = ${${$struct}{"qualifiers"}}{"inherit"};
-            my $inheritName = ${$inheritStruct}{"name"};
+            my $inheritStruct = $struct->{"qualifiers"}{"inherit"};
+            my $inheritName = $inheritStruct->{"name"};
 
             $$output .= "\t/* BEGIN of inherited \"$inheritName\" definition */\n";
             printStructContent($output, $inheritStruct, $structMap, $enumMap);
@@ -174,7 +172,7 @@ sub printLoadFunc
     $$output .= "/* Forward declaration to allow pointers to this type */\n"
               . "struct sqlite3;\n"
               . "\n"
-              . "/** Load the contents of the ${$struct}{\"name\"} table from the given SQLite database.\n"
+              . "/** Load the contents of the $struct->{name} table from the given SQLite database.\n"
               . " *\n"
               . " *  \@param db represents the database to load from\n"
               . " *\n"
@@ -182,8 +180,8 @@ sub printLoadFunc
               . " *          false otherwise.\n"
               . " */\n"
               . "extern bool\n"
-              . "#line ${${${$struct}{\"qualifiers\"}}{\"loadFunc\"}}{\"line\"} \"$filename\"\n"
-              . "${${${$struct}{\"qualifiers\"}}{\"loadFunc\"}}{\"name\"}\n";
+              . "#line $struct->{qualifiers}{loadFunc}{line} \"$filename\"\n"
+              . "$struct->{qualifiers}{loadFunc}{name}\n";
 
     my $count = $$output =~ s/\n/\n/sg;
     $count += 2;
@@ -195,37 +193,37 @@ sub getMacroName
 {
     my ($name, $struct, $prefix, $suffix) = @_;
 
-    foreach (keys %{${$struct}{"qualifiers"}})
+    foreach (keys %{$struct->{"qualifiers"}})
     {
         if (/macro/)
         {
-            foreach (keys %{${${$struct}{"qualifiers"}}{"macro"}})
+            foreach (keys %{$struct->{"qualifiers"}{"macro"}})
             {
-                $$prefix = ${${${$struct}{"qualifiers"}}{"macro"}}{$_} if /prefix/ and not $$prefix;
-                $$suffix = ${${${$struct}{"qualifiers"}}{"macro"}}{$_} if /suffix/ and not $$suffix;
+                $$prefix = $struct->{"qualifiers"}{"macro"}{$_} if /prefix/ and not $$prefix;
+                $$suffix = $struct->{"qualifiers"}{"macro"}{$_} if /suffix/ and not $$suffix;
             }
         }
 
-        getMacroName($name, ${${$struct}{"qualifiers"}}{"inherit"}, $prefix, $suffix) if /inherit/;
+        getMacroName($name, $struct->{"qualifiers"}{"inherit"}, $prefix, $suffix) if /inherit/;
     }
 
-    $$name = "${$prefix}${$struct}{\"name\"}${$suffix}";
+    $$name = "$$prefix$struct->{name}$$suffix";
 }
 
 sub printMacroStructFields
 {
     my ($output, $struct, $enumMap, $first) = @_;
 
-    foreach (keys %{${$struct}{"qualifiers"}})
+    foreach (keys %{$struct->{"qualifiers"}})
     {
-        printMacroStructFields($output, ${${$struct}{"qualifiers"}}{"inherit"}, $enumMap, 0) if /inherit/;
+        printMacroStructFields($output, $struct->{"qualifiers"}{"inherit"}, $enumMap, 0) if /inherit/;
     }
 
-    my @fields = @{${$struct}{"fields"}};
+    my @fields = @{$struct->{"fields"}};
     while (@fields)
     {
         my $field = shift(@fields);
-        my @comments = @{${$field}{"comment"}};
+        my @comments = @{$field->{"comment"}};
 
         preProcessField($field, \@comments);
 
@@ -233,7 +231,7 @@ sub printMacroStructFields
 
         $$output .= "\t";
         printStructFieldType($output, $field);
-        $$output .= ${$field}{"name"};
+        $$output .= $field->{"name"};
 
         postProcessField($output, $field, $enumMap);
         $$output .= "; \\" if @fields or not $first;
@@ -262,11 +260,11 @@ sub hasMacro
 {
     my ($struct) = @_;
 
-    return ${${${$struct}{"qualifiers"}}{"macro"}}{"has"} if exists(${${${$struct}{"qualifiers"}}{"macro"}}{"has"});
+    return $struct->{"qualifiers"}{"macro"}{"has"} if exists($struct->{"qualifiers"}{"macro"}{"has"});
 
-    foreach (keys %{${$struct}{"qualifiers"}})
+    foreach (keys %{$struct->{"qualifiers"}})
     {
-        return hasMacro(${${$struct}{"qualifiers"}}{"inherit"}) if /inherit/;
+        return hasMacro($struct->{"qualifiers"}{"inherit"}) if /inherit/;
     }
 
     return 0;
@@ -276,42 +274,40 @@ sub printEnum()
 {
     my ($output, $enum) = @_;
 
-    printComments($output, ${$enum}{"comment"}, 0);
+    printComments($output, $enum->{"comment"}, 0);
 
     # Start printing the enum
-    $$output .= "typedef enum ${$enum}{\"name\"}\n{\n";
+    $$output .= "typedef enum $enum->{name}\n{\n";
 
-    my @values = @{${$enum}{"values"}};
+    my @values = @{$enum->{"values"}};
 
-    my $valprefix = "";
-    $valprefix = ${${$enum}{"qualifiers"}}{"valprefix"} if exists(${${$enum}{"qualifiers"}}{"valprefix"});
-    my $valsuffix = "";
-    $valsuffix = ${${$enum}{"qualifiers"}}{"valsuffix"} if exists(${${$enum}{"qualifiers"}}{"valsuffix"});
+    my $valprefix = $enum->{"qualifiers"}{"valprefix"} || "";
+    my $valsuffix = $enum->{"qualifiers"}{"valsuffix"} || "";
 
-    $valprefix = "${$enum}{\"name\"}_" if not exists(${${$enum}{"qualifiers"}}{"valprefix"}) and not exists(${${$enum}{"qualifiers"}}{"valsuffix"});
+    $valprefix = "$enum->{name}_" if not exists($enum->{"qualifiers"}{"valprefix"}) and not exists($enum->{"qualifiers"}{"valsuffix"});
 
     while (@values)
     {
         my $value = shift(@values);
-        my $name = ${$value}{"name"};
+        my $name = $value->{"name"};
 
-        printComments($output, ${$value}{"comment"}, 1);
+        printComments($output, $value->{"comment"}, 1);
 
-        $$output .= "\t${valprefix}${name}${valsuffix},\n";
+        $$output .= "\t$valprefix$name$valsuffix,\n";
 
-        $$output .= "\n" if @values or exists(${${$enum}{"qualifiers"}}{"max"});
+        $$output .= "\n" if @values or exists($enum->{"qualifiers"}{"max"});
     }
 
-    if (exists(${${$enum}{"qualifiers"}}{"max"}))
+    if (exists($enum->{"qualifiers"}{"max"}))
     {
         $$output .= "\t/**\n"
                   . "\t * The number of enumerators in this enum.\n"
                   . "\t */\n"
-                  . "\t${${$enum}{\"qualifiers\"}}{\"max\"},\n";
+                  . "\t$enum->{qualifiers}{max},\n";
     }
 
     # Finish printing the enum
-    $$output .= "} ${$enum}{\"name\"};\n\n";
+    $$output .= "} $enum->{name};\n\n";
 }
 
 sub printStruct()
@@ -322,19 +318,19 @@ sub printStruct()
     my $prefix = "";
     my $suffix = "";
 
-    printComments($output, ${$struct}{"comment"}, 0);
+    printComments($output, $struct->{"comment"}, 0);
 
     getStructName(\$name, $struct, \$prefix, \$suffix);
 
     # Start printing the structure
-    $$output .= "typedef struct ${prefix}${name}${suffix}\n{\n";
+    $$output .= "typedef struct $prefix$name$suffix\n{\n";
 
     printStructContent($output, $struct, $structMap, $enumMap);
 
     # Finish printing the structure
-    $$output .= "} WZ_DECL_MAY_ALIAS ${prefix}${name}${suffix};\n\n";
+    $$output .= "} WZ_DECL_MAY_ALIAS $prefix$name$suffix;\n\n";
 
-    printLoadFunc($output, $struct) if exists(${${$struct}{"qualifiers"}}{"loadFunc"});
+    printLoadFunc($output, $struct) if exists($struct->{"qualifiers"}{"loadFunc"});
 
     printMacro($output, $struct, $enumMap) if hasMacro($struct);
 }
@@ -343,8 +339,7 @@ sub printHdrGuard
 {
     my ($output, $name) = @_;
 
-    $name =~ tr/\./_/;
-    $name =~ tr/-/_/;
+    $name =~ tr/\.-/_/;
     $name = uc($name);
 
     $$output .= "__INCLUDED_DB_TEMPLATE_SCHEMA_STRUCTDEF_${name}_H__";

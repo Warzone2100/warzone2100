@@ -13,7 +13,7 @@ sub printStructFieldType
 {
     my ($output, $field) = @_;
 
-    $_ = ${$field}{"type"};
+    $_ = $field->{"type"};
 
     if    (/count/)     { $$output .= "INTEGER NOT NULL"; }
     elsif (/([US]D?WORD|[US]BYTE)/) { $$output .= "INTEGER NOT NULL"; } # "transition" type
@@ -23,17 +23,17 @@ sub printStructFieldType
     elsif (/struct/)
     {
         $$output .= "INTEGER";
-        $$output .= " NOT NULL" unless grep(/optional/, @{${$field}{"qualifiers"}});
+        $$output .= " NOT NULL" unless grep(/optional/, @{$field->{"qualifiers"}});
     }
     elsif (/string/)
     {
         $$output .= "TEXT";
-        $$output .= " NOT NULL" unless grep(/optional/, @{${$field}{"qualifiers"}});
+        $$output .= " NOT NULL" unless grep(/optional/, @{$field->{"qualifiers"}});
     }
     elsif (/IMD_model/)
     {
         $$output .= "TEXT";
-        $$output .= " NOT NULL" unless grep(/optional/, @{${$field}{"qualifiers"}});
+        $$output .= " NOT NULL" unless grep(/optional/, @{$field->{"qualifiers"}});
     }
     elsif (/C-only-field/)
     {
@@ -41,7 +41,7 @@ sub printStructFieldType
     }
     else
     {
-        die "error:$filename:${$field}{\"line\"}: UKNOWN TYPE: $_";
+        die "error:$filename:$field->{line}: UKNOWN TYPE: $_";
     }
 }
 
@@ -54,62 +54,62 @@ sub printComments
     foreach my $comment (@{$comments})
     {
         $$output .= "\t" if $indent;
-        $$output .= "--${comment}\n";
+        $$output .= "--$comment\n";
     }
 }
 
 sub printStructFields
 {
     my ($output, $struct, $enumMap) = @_;
-    my @fields = @{${$struct}{"fields"}};
+    my @fields = @{$struct->{"fields"}};
     my @constraints = ();
 
     while (@fields)
     {
         my $field = shift(@fields);
 
-        printComments($output, ${$field}{"comment"}, 1) unless (${$field}{"type"} and ${$field}{"type"} =~ /C-only-field/);
+        printComments($output, $field->{"comment"}, 1) unless ($field->{"type"} and $field->{"type"} =~ /C-only-field/);
 
-        if (${$field}{"type"} and ${$field}{"type"} =~ /set/)
+        if ($field->{"type"} and $field->{"type"} =~ /set/)
         {
-            my $enum = ${$field}{"enum"};
-            my @values = @{${$enum}{"values"}};
+            my $enum = $field->{"enum"};
+            my @values = @{$enum->{"values"}};
             my $unique_string = "UNIQUE(";
 
             while (@values)
             {
                 my $value = shift(@values);
 
-                $$output .= "\t${$field}{\"name\"}_${$value}{\"name\"} INTEGER NOT NULL";
-                $$output .= "," if @values or @fields or @constraints or grep(/unique/, @{${$field}{"qualifiers"}});
+                $$output .= "\t$field->{name}_$value->{name} INTEGER NOT NULL";
+                $$output .= "," if @values or @fields or @constraints or grep(/unique/, @{$field->{"qualifiers"}});
                 $$output .= "\n";
-                $unique_string .= "${$field}{\"name\"}_${$value}{\"name\"}";
+                $unique_string .= "$field->{name}_$value->{name}";
                 $unique_string .= ", " if @values;
             }
 
             $unique_string .= ")";
-            push @constraints, $unique_string if grep(/unique/, @{${$field}{"qualifiers"}});
+            push @constraints, $unique_string if grep(/unique/, @{$field->{"qualifiers"}});
         }
-        elsif (${$field}{"type"} and ${$field}{"type"} =~ /C-only-field/)
+        elsif ($field->{"type"} and $field->{"type"} =~ /C-only-field/)
         {
             # Ignore: this is a user defined field type, the user code (%postLoadRow) can deal with it
         }
         else
         {
-            $$output .= "\t${$field}{\"name\"} ";
+            $$output .= "\t$field->{name} ";
             printStructFieldType($output, $field);
-            $$output .= " UNIQUE" if grep(/unique/, @{${$field}{"qualifiers"}});
+            $$output .= " UNIQUE" if grep(/unique/, @{$field->{"qualifiers"}});
             $$output .= ",\n" if @fields or @constraints;
         }
 
-        $$output .= "\n" unless (${$field}{"type"} and ${$field}{"type"} =~ /C-only-field/);
+        $$output .= "\n" unless ($field->{"type"} and $field->{"type"} =~ /C-only-field/);
     }
 
     while (@constraints)
     {
         my $constraint = shift(@constraints);
 
-        $$output .= "\t${constraint}";
+        $$output .= "\t$constraint";
         $$output .= ",\n" if @constraints;
         $$output .= "\n";
 
@@ -120,11 +120,11 @@ sub printStructContent
 {
     my ($output, $struct, $name, $structMap, $enumMap, $printFields) = @_;
 
-    foreach (keys %{${$struct}{"qualifiers"}})
+    foreach (keys %{$struct->{"qualifiers"}})
     {
         if (/inherit/)
         {
-            my $inheritStruct = ${${$struct}{"qualifiers"}}{"inherit"};
+            my $inheritStruct = $struct->{"qualifiers"}{"inherit"};
 
             printStructContent($output, $inheritStruct, $name, $structMap, $enumMap, 0);
         }
@@ -149,9 +149,9 @@ sub printEnum()
 sub printStruct()
 {
     my ($output, $struct, $structMap, $enumMap) = @_;
-    my $name = ${$struct}{"name"};
+    my $name = $struct->{"name"};
 
-    printComments($output, ${$struct}{"comment"}, 0);
+    printComments($output, $struct->{"comment"}, 0);
 
     # Start printing the structure
     $$output .= "CREATE TABLE `${name}` (\n";
