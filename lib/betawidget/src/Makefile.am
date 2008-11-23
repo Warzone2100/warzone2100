@@ -16,6 +16,7 @@ libbetawidget_la_SOURCES = \
 	geom.c \
 	hBox.c \
 	spacer.c \
+	table.c \
 	textEntry.c \
 	vector.c \
 	widget.c \
@@ -36,6 +37,7 @@ pkginclude_HEADERS = \
 	geom.h \
 	hBox.h \
 	spacer.h \
+	table.h \
 	textEntry.h \
 	vector.h \
 	widget.h \
