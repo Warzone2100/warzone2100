@@ -99,5 +99,6 @@ AC_SUBST([CFLAGS])
 
 AC_CONFIG_FILES([Makefile
                  platform/Makefile
-                 platform/sdl/Makefile])
+                 platform/sdl/Makefile
+                 tools/Makefile])
 AC_OUTPUT

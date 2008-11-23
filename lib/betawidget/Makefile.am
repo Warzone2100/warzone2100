@@ -1,6 +1,6 @@
 ACLOCAL_AMFLAGS = -I m4
 
-SUBDIRS = platform
+SUBDIRS = platform . tools
 
 %_wrap_lua.cpp: %.i
 	$(SWIG) $(SWIG_LUA_OPT) -o $@ $<
@@ -56,11 +56,3 @@ noinst_HEADERS += \
 	../framework/types.h \
 	../framework/utf.h \
 	../ivis_opengl/GLee.h
-
-noinst_PROGRAMS = tools/sdl-testapp
-
-tools_sdl_testapp_SOURCES = \
-		tools/sdl-testapp.c
-
-tools_sdl_testapp_CPPFLAGS = -I.. $(LUA_CFLAGS) $(SDL_CFLAGS)
-tools_sdl_testapp_LDADD = $(OPENGL_LIBS) $(SDL_LIBS) libbetawidget.la $(LUA_LIBTOOL)
