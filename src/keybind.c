@@ -1163,23 +1163,25 @@ void	kf_ToggleGodMode( void )
 
 	if(godMode)
 	{
+		FEATURE* psFeat;
+		int player;
+
 		godMode = false;
 		setRevealStatus(game.fog);
 		// now hide the features
-		FEATURE	*psFeat = apsFeatureLists[0];
-		int player;
+		psFeat = apsFeatureLists[0];
 		while (psFeat)
 		{
 			psFeat->visible[selectedPlayer] = 0;
 			psFeat = psFeat->psNext;
 		}
+
 		// and the structures
-		STRUCTURE *psStruct;
-		for(player=0;player<MAX_PLAYERS;player++)
+		for (player = 0; player < MAX_PLAYERS; ++player)
 		{
 			if (player != selectedPlayer)
 			{
-				psStruct = apsStructLists[player];
+				STRUCTURE* psStruct = apsStructLists[player];
 				
 				while (psStruct)
 				{
