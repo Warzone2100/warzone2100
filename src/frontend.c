@@ -1168,7 +1168,7 @@ BOOL runGameOptions5Menu(void)
 			else
 			{
 				war_SetColouredCursor(true);
-				widgSetString(psWScreen, FRONTEND_CURSORMODE_R, _("Software (colored)"));
+				widgSetString(psWScreen, FRONTEND_CURSORMODE_R, _("Software (coloured)"));
 			}
 			break;
 
