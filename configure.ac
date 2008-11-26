@@ -36,6 +36,8 @@ fi
 AC_PROG_VERSION_CHECK([flex], [2.5.33], [2.5.34])
 
 AX_WITH_PROG([PERL], [perl])
+AX_PROG_PERL_VERSION([5.10], [], [ PERL="" ])
+AC_SUBST([PERL])
 AM_CONDITIONAL([PERL_AVAILABLE], test -n "$PERL")
 
 # Enable Compiler/LibC GNU extensions
