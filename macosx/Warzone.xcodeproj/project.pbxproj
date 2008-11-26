@@ -354,7 +354,6 @@
 		0246A4AD0BD3D02E004D1C70 /* SDL_audio.h in Headers */ = {isa = PBXBuildFile; fileRef = 0246A4850BD3D02E004D1C70 /* SDL_audio.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		0246A4AE0BD3D02E004D1C70 /* SDL_byteorder.h in Headers */ = {isa = PBXBuildFile; fileRef = 0246A4860BD3D02E004D1C70 /* SDL_byteorder.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		0246A4AF0BD3D02E004D1C70 /* SDL_cdrom.h in Headers */ = {isa = PBXBuildFile; fileRef = 0246A4870BD3D02E004D1C70 /* SDL_cdrom.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		0246A4B00BD3D02E004D1C70 /* SDL_config_amiga.h in Headers */ = {isa = PBXBuildFile; fileRef = 0246A4880BD3D02E004D1C70 /* SDL_config_amiga.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		0246A4B10BD3D02E004D1C70 /* SDL_config_dreamcast.h in Headers */ = {isa = PBXBuildFile; fileRef = 0246A4890BD3D02E004D1C70 /* SDL_config_dreamcast.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		0246A4B20BD3D02E004D1C70 /* SDL_config_macos.h in Headers */ = {isa = PBXBuildFile; fileRef = 0246A48A0BD3D02E004D1C70 /* SDL_config_macos.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		0246A4B30BD3D02E004D1C70 /* SDL_config_macosx.h in Headers */ = {isa = PBXBuildFile; fileRef = 0246A48B0BD3D02E004D1C70 /* SDL_config_macosx.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1512,7 +1511,6 @@
 		0246A4850BD3D02E004D1C70 /* SDL_audio.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = SDL_audio.h; path = external/SDL/include/SDL_audio.h; sourceTree = "<group>"; };
 		0246A4860BD3D02E004D1C70 /* SDL_byteorder.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = SDL_byteorder.h; path = external/SDL/include/SDL_byteorder.h; sourceTree = "<group>"; };
 		0246A4870BD3D02E004D1C70 /* SDL_cdrom.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = SDL_cdrom.h; path = external/SDL/include/SDL_cdrom.h; sourceTree = "<group>"; };
-		0246A4880BD3D02E004D1C70 /* SDL_config_amiga.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = SDL_config_amiga.h; path = external/SDL/include/SDL_config_amiga.h; sourceTree = "<group>"; };
 		0246A4890BD3D02E004D1C70 /* SDL_config_dreamcast.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = SDL_config_dreamcast.h; path = external/SDL/include/SDL_config_dreamcast.h; sourceTree = "<group>"; };
 		0246A48A0BD3D02E004D1C70 /* SDL_config_macos.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = SDL_config_macos.h; path = external/SDL/include/SDL_config_macos.h; sourceTree = "<group>"; };
 		0246A48B0BD3D02E004D1C70 /* SDL_config_macosx.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = SDL_config_macosx.h; path = external/SDL/include/SDL_config_macosx.h; sourceTree = "<group>"; };
@@ -2752,7 +2750,6 @@
 				0246A5000BD3D0C1004D1C70 /* SDL_cdrom.c */,
 				0246A4870BD3D02E004D1C70 /* SDL_cdrom.h */,
 				0246A48F0BD3D02E004D1C70 /* SDL_config.h */,
-				0246A4880BD3D02E004D1C70 /* SDL_config_amiga.h */,
 				0246A4890BD3D02E004D1C70 /* SDL_config_dreamcast.h */,
 				0246A48A0BD3D02E004D1C70 /* SDL_config_macos.h */,
 				0246A48B0BD3D02E004D1C70 /* SDL_config_macosx.h */,
@@ -3346,7 +3343,6 @@
 				0246A4AD0BD3D02E004D1C70 /* SDL_audio.h in Headers */,
 				0246A4AE0BD3D02E004D1C70 /* SDL_byteorder.h in Headers */,
 				0246A4AF0BD3D02E004D1C70 /* SDL_cdrom.h in Headers */,
-				0246A4B00BD3D02E004D1C70 /* SDL_config_amiga.h in Headers */,
 				0246A4B10BD3D02E004D1C70 /* SDL_config_dreamcast.h in Headers */,
 				0246A4B20BD3D02E004D1C70 /* SDL_config_macos.h in Headers */,
 				0246A4B30BD3D02E004D1C70 /* SDL_config_macosx.h in Headers */,
@@ -4162,7 +4158,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "DIRECTORY=\"SDL-1.2.11\"\nOUTDIR=\"SDL\"\nFILENAME=\"SDL-1.2.11.tar.gz\"\nSOURCE=\"http://www.libsdl.org/release/SDL-1.2.11.tar.gz\"\nMD5=\"418b42956b7cd103bfab1b9077ccc149\"\n\ncd external\n\nif [ -d \"$OUTDIR\" ]; then\n  echo \"$OUTDIR exists, skipping\"\n  exit 0\nfi\n\nif [ -d \"$DIRECTORY\" ]; then\n  echo \"$DIRECTORY exists, probably from an earlier failed run\" >&2\n  exit 1\nfi\n\nif [ ! -r \"$FILENAME\" ]; then\n  echo \"Fetching $SOURCE\"\n  if ! curl -L -o \"$FILENAME\" \"$SOURCE\"; then\n    echo \"Unable to fetch $SOURCE\" >&2\n    exit 1\n  fi\nfi\n\nHAVEMD5=`md5 \"$FILENAME\" | sed -n -e 's/^MD5 (\\(.*\\)) = \\(.*\\)$/\\2/p'`\n\nif [ -z \"$HAVEMD5\" ]; then\n  echo \"Unable to compute md5 for $FILENAME\" >&2\n  exit 1\nfi\n\nif [ \"$HAVEMD5\" != \"$MD5\" ]; then\n  echo \"Md5 does not match for $FILENAME\" >&2\n  exit 1\nfi\n\nEXTENSION=`echo $FILENAME | sed -e 's/^.*\\.\\([^.]*\\)/\\1/'`\n\nif [ \"$EXTENSION\" = \"gz\" ]; then\n  if ! tar -zxf \"$FILENAME\"; then\n    echo \"Unpacking $FILENAME failed\" >&2\n    exit 1\n  fi\nelif [ \"$EXTENSION\" = \"bz2\" ]; then\n  if ! tar -jxf \"$FILENAME\"; then\n    echo \"Unpacking $FILENAME failed\" >&2\n    exit 1\n  fi\nelse\n  echo \"Unable to unpack $FILENAME\" >&2\n  exit 1\nfi\n\nif [ ! -d \"$DIRECTORY\" ]; then\n  echo \"Can't find $DIRECTORY to rename\" >&2\n  exit 1\nfi\n\nmv \"$DIRECTORY\" \"$OUTDIR\"\n";
+			shellScript = "DIRECTORY=\"SDL-1.2.13\"\nOUTDIR=\"SDL\"\nFILENAME=\"SDL-1.2.13.tar.gz\"\nSOURCE=\"http://www.libsdl.org/release/SDL-1.2.13.tar.gz\"\nMD5=\"c6660feea2a6834de10bc71b2f8e4d88\"\n\ncd external\n\nif [ -d \"$OUTDIR\" ]; then\n  echo \"$OUTDIR exists, skipping\"\n  exit 0\nfi\n\nif [ -d \"$DIRECTORY\" ]; then\n  echo \"$DIRECTORY exists, probably from an earlier failed run\" >&2\n  exit 1\nfi\n\nif [ ! -r \"$FILENAME\" ]; then\n  echo \"Fetching $SOURCE\"\n  if ! curl -L -o \"$FILENAME\" \"$SOURCE\"; then\n    echo \"Unable to fetch $SOURCE\" >&2\n    exit 1\n  fi\nfi\n\nHAVEMD5=`md5 \"$FILENAME\" | sed -n -e 's/^MD5 (\\(.*\\)) = \\(.*\\)$/\\2/p'`\n\nif [ -z \"$HAVEMD5\" ]; then\n  echo \"Unable to compute md5 for $FILENAME\" >&2\n  exit 1\nfi\n\nif [ \"$HAVEMD5\" != \"$MD5\" ]; then\n  echo \"Md5 does not match for $FILENAME\" >&2\n  exit 1\nfi\n\nEXTENSION=`echo $FILENAME | sed -e 's/^.*\\.\\([^.]*\\)/\\1/'`\n\nif [ \"$EXTENSION\" = \"gz\" ]; then\n  if ! tar -zxf \"$FILENAME\"; then\n    echo \"Unpacking $FILENAME failed\" >&2\n    exit 1\n  fi\nelif [ \"$EXTENSION\" = \"bz2\" ]; then\n  if ! tar -jxf \"$FILENAME\"; then\n    echo \"Unpacking $FILENAME failed\" >&2\n    exit 1\n  fi\nelse\n  echo \"Unable to unpack $FILENAME\" >&2\n  exit 1\nfi\n\nif [ ! -d \"$DIRECTORY\" ]; then\n  echo \"Can't find $DIRECTORY to rename\" >&2\n  exit 1\nfi\n\nmv \"$DIRECTORY\" \"$OUTDIR\"\n";
 		};
 		02FD38460BD4016700776FD3 /* Fetch source */ = {
 			isa = PBXShellScriptBuildPhase;
