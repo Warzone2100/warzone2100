@@ -21,7 +21,7 @@
 #ifndef HBOX_H_
 #define HBOX_H_
 
-#include "widget.h"
+#include "table.h"
 
 /*
  * Forward declarations
@@ -31,7 +31,7 @@ typedef struct _hBoxVtbl hBoxVtbl;
 
 struct _hBoxVtbl
 {
-	struct _widgetVtbl widgetVtbl;
+	struct _tableVtbl tableVtbl;
 	
 	// No additional virtual methods
 };
@@ -44,22 +44,12 @@ struct _hBox
 	/**
 	 * Parent
 	 */
-	struct _widget widget;
+	struct _table table;
 	
 	/**
-	 * Our vtable
+	 * Vtable
 	 */
-	hBoxVtbl *vtbl;
-	
-	/**
-	 * Child alignment
-	 */
-	vAlign vAlignment;
-	
-	/**
-	 * Padding between children
-	 */
-	int padding;
+	struct _hBoxVtbl *vtbl;
 };
 
 /*
@@ -78,10 +68,7 @@ extern const classInfo hBoxClassInfo;
  */
 void hBoxInit(hBox *instance, const char *id);
 void hBoxDestroyImpl(widget *instance);
-bool hBoxDoLayoutImpl(widget *self);
-void hBoxDoDrawImpl(widget *self);
-size hBoxGetMinSizeImpl(widget *self);
-size hBoxGetMaxSizeImpl(widget *self);
+bool hBoxAddChildImpl(widget *self, widget *child);
 
 /*
  * Public methods
