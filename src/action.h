@@ -138,8 +138,26 @@ BOOL actionDroidOnBuildPos(DROID *psDroid, SDWORD x, SDWORD y, BASE_STATS *psSta
 /** Send the vtol droid back to the nearest rearming pad - if there is one, otherwise return to base. */
 extern void moveToRearm(DROID *psDroid);
 
+/**
+ * @typedef tileMatchFunction
+ *
+ * @brief pointer to a 'tile search function', used by spiralSearch()
+ *
+ * @param x,y  are the coordinates that should be inspected.
+ *
+ * @param data a pointer to state data, allows the search function to retain
+ *             state in between calls and can be used as a means of returning
+ *             its result to the caller of spiralSearch().
+ *
+ * @return true when the search has finished, false when the search should
+ *         continue.
+ */
+typedef bool (*tileMatchFunction)(int x, int y, void* matchState);
+
+bool spiralSearch(int startX, int startY, int max_radius, tileMatchFunction match, void* matchState);
+
 /** Choose a landing position for a VTOL when it goes to rearm. */
-extern BOOL actionVTOLLandingPos(DROID *psDroid, UDWORD *px, UDWORD *py);
+bool actionVTOLLandingPos(const DROID* psDroid, UDWORD* px, UDWORD* py);
 
 /** Try to find a better target. */
 extern BOOL updateAttackTarget(BASE_OBJECT * psAttacker, SDWORD weapon_slot);

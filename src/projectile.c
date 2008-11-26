@@ -97,8 +97,6 @@ static PROJECTILE *psProjectileNext = NULL;
 // the last unit that did damage - used by script functions
 BASE_OBJECT		*g_pProjLastAttacker;
 
-extern BOOL	godMode;
-
 /***************************************************************************/
 
 static UDWORD	establishTargetRadius( BASE_OBJECT *psTarget );
@@ -130,12 +128,6 @@ BOOL gfxVisible(PROJECTILE *psObj)
 
 	// You fired it
 	if (psObj->player == selectedPlayer)
-	{
-		return true;
-	}
-
-	// Always see in this mode
-	if (godMode)
 	{
 		return true;
 	}

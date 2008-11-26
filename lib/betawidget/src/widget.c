@@ -434,6 +434,10 @@ void widgetInit(widget *self, const char *id)
 	// Default parent is none
 	self->parent = NULL;
 	
+	// Default size is (-1,-1) 'NULL' size
+	self->size.x = -1.0f;
+	self->size.y = -1.0f;
+	
 	// We are not rotated by default
 	self->rotate = 0.0f;
 	
@@ -692,15 +696,16 @@ bool widgetAddChildImpl(widget *self, widget *child)
 	// Add the widget
 	vectorAdd(self->children, child);
 
-	// Re-layout the window
-	if (widgetDoLayout(widgetGetRoot(self)))
+	// So long as our size is not (-1,-1) (NULL-size), re-layout the window
+	if ((self->size.x == -1.0f && self->size.y == -1.0f)
+	 || widgetDoLayout(widgetGetRoot(self)))
 	{
 		// Set ourself as its parent
 		child->parent = self;
 
 		return true;
 	}
-	// Not enough space to fit the widget
+	// Not enough space to fit the widget (widgetDoLayout returned false)
 	else
 	{
 		// Remove child *without* calling its destructor
@@ -728,11 +733,14 @@ void widgetRemoveChildImpl(widget *self, widget *child)
 			// Remove it from the list of children
 			vectorRemoveAt(self->children, i);
 			
-			// Re-layout the window
-			widgetDoLayout(widgetGetRoot(self));
+			// Re-layout the window (so long as we are part of one)
+			if (self->size.x != -1.0f && self->size.y != -1.0f)
+			{
+				widgetDoLayout(widgetGetRoot(self));
+			}
 		}
 		// See if it is one of its children
-		else
+		else if (child->parent != self)
 		{
 			widgetRemoveChild(vectorAt(self->children, i), child);
 		}

@@ -6,14 +6,14 @@ SQL_TABLES=$(DB_TEMPLATES:%.tpl=%.sql)
 
 all: $(C_SOURCES) $(C_HEADERS) $(SQL_TABLES)
 
-%.c: %.tpl.sql.c %.tpl
-	./db-lang.pl c_sqliteload $^ $@
+%.c: ./db-lang.pl c_sqliteload_cg.pm %.tpl.sql.c %.tpl
+	./$^ $@
 
-%.h: %.tpl.struct.h %.tpl
-	./db-lang.pl c_structdef $^ $@
+%.h: ./db-lang.pl c_structdef_cg.pm %.tpl.struct.h %.tpl
+	./$^ $@
 
-%.sql: %.tpl
-	./db-lang.pl sql_tabledef $< $@
+%.sql: ./db-lang.pl sql_tabledef_cg.pm %.tpl
+	./$^ $@
 
 clean:
 	rm -f $(C_SOURCES) $(C_HEADERS) $(SQL_TABLES)

@@ -10,6 +10,7 @@ struct BASE
 
     # Unique language independant name that can be used to identify a specific
     # stats instance
+    %csv-field 1;
     string unique       pName;
 end;
 
@@ -35,23 +36,29 @@ struct COMPONENT
     %inherit BASE;
 
     # Power required to build this component
+    %csv-field 3;
     UDWORD              buildPower;
 
     # Build points (which are rate-limited in the construction units) required
     # to build this component.
+    %csv-field 4;
     UDWORD              buildPoints;
 
     # Weight of this component
+    %csv-field 5;
     UDWORD              weight;
 
     # Body points of this component
+    %csv-field 8;
     UDWORD              body;
 
     # Indicates whether this component is "designable" and can thus be used in
     # the design screen.
+    %csv-field last;
     bool                designable;
 
     # The "base" IMD model representing this component in 3D space.
+    %csv-field 9;
     IMD_model optional  pIMD;
 end;
 
@@ -77,16 +84,20 @@ enum WEAPON_CLASS
     %valprefix "WC_";
 
     # Bullets, etc.
+    %string "KINETIC";
+    %string "EXPLOSIVE";
     KINETIC
 
     # Rockets, etc. - classed as KINETIC now to save space in DROID
     #EXPLOSIVE
 
     # Laser, etc.
+    %string "HEAT";
+    %string "MISC";
     HEAT
 
     # others we haven't thought of! - classed as HEAT now to save space in DROID
-    #WC_MISC
+    #MISC
 end;
 
 # weapon subclasses used to define which weapons are affected by weapon upgrade
@@ -128,9 +139,16 @@ enum MOVEMENT_MODEL
 
     DIRECT
     INDIRECT
+
+    %string "HOMING-DIRECT";
     HOMINGDIRECT
+
+    %string "HOMING-INDIRECT";
     HOMINGINDIRECT
+
+    %string "ERRATIC-DIRECT";
     ERRATICDIRECT
+
     SWEEP
 end;
 
@@ -140,11 +158,21 @@ enum WEAPON_EFFECT
     %max "WE_NUMEFFECTS";
     %valprefix "WE_";
 
+    %string "ANTI PERSONNEL";
     ANTI_PERSONNEL
+
+    %string "ANTI TANK";
     ANTI_TANK
+
+    %string "BUNKER BUSTER";
     BUNKER_BUSTER
+
+    %string "ARTILLERY ROUND";
     ARTILLERY_ROUND
+
     FLAMER
+
+    %string "ANTI AIRCRAFT";
     ANTI_AIRCRAFT
 end;
 
@@ -172,62 +200,133 @@ end;
 enum PROPULSION_TYPE
     %max "PROPULSION_TYPE_NUM";
 
+    %string "Wheeled";
     WHEELED
+
+    %string "Tracked";
     TRACKED
+
+    %string "Legged";
     LEGGED
+
+    %string "Hover";
     HOVER
+
+    %string "Ski";
     SKI
+
+    %string "Lift";
     LIFT
+
+    %string "Propellor";
     PROPELLOR
+
+    %string "Half-Tracked";
     HALF_TRACKED
+
+    %string "Jump";
     JUMP
 end;
 
 struct PROPULSION
     %inherit COMPONENT;
     %nomacro;
+    %loadFunc "loadPropulsionStatsFromDB";
+    %preLoadTable rowCount
+        if (!statsAllocPropulsion($rowCount))
+            ABORT;
+    end;
+    %postLoadRow curRow rowNum
+        $curRow->ref = REF_PROPULSION_START + $rowNum;
+
+        // save the stats
+        statsSetPropulsion($curRow, $rowNum);
+
+        // set the max stat values for the design screen
+        if ($curRow->designable)
+        {
+            setMaxPropulsionSpeed($curRow->maxSpeed);
+            //setMaxComponentWeight($curRow->weight);
+        }
+    end;
+    %csv-file "propulsion.txt";
 
     # Max speed for the droid
+    %csv-field 11;
     UDWORD          maxSpeed;
 
     # Type of propulsion used - index into PropulsionTable
+    %csv-field 10;
     enum PROPULSION_TYPE propulsionType;
 end;
 
 enum SENSOR_TYPE
     %valprefix "";
+    %valsuffix "_SENSOR";
 
-    STANDARD_SENSOR
-    INDIRECT_CB_SENSOR
-    VTOL_CB_SENSOR
-    VTOL_INTERCEPT_SENSOR
+    STANDARD
+
+    %string "INDIRECT CB";
+    INDIRECT_CB
+
+    %string "VTOL CB";
+    VTOL_CB
+
+    %string "VTOL INTERCEPT";
+    VTOL_INTERCEPT
 
     # Works as all of the above together! - new for updates
-    SUPER_SENSOR
+    SUPER
 end;
 
 struct SENSOR
     %inherit COMPONENT;
     %nomacro;
+    %loadFunc "loadSensorStatsFromDB";
+    %preLoadTable rowCount
+        if (!statsAllocSensor($rowCount))
+            ABORT;
+    end;
+    %postLoadRow curRow rowNum
+        $curRow->ref = REF_SENSOR_START + $rowNum;
+
+        // save the stats
+        statsSetSensor($curRow, $rowNum);
+
+        // set the max stat values for the design screen
+        if ($curRow->designable)
+        {
+            setMaxSensorRange($curRow->range);
+            setMaxSensorPower($curRow->power);
+            setMaxComponentWeight($curRow->weight);
+        }
+    end;
+    %csv-file "sensor.txt";
 
     # Sensor range.
+    %csv-field 11;
     UDWORD          range;
 
     # Sensor power (put against ecm power).
+    %csv-field 15;
     UDWORD          power;
 
     # specifies whether the Sensor is default or for the Turret.
-    UDWORD          location;
+    %csv-field 12;
+    enum LOC        location;
 
     # used for combat
+    %csv-field 13;
     enum SENSOR_TYPE type;
 
     # Time delay before the associated weapon droids 'know' where the attack is
     # from.
+    %csv-field 14;
     UDWORD          time;
 
     # The turret mount to use.
-    IMD_model       pMountGraphic;
+    %csv-field 10;
+    IMD_model optional pMountGraphic;
 end;
 
 struct ECM
@@ -244,7 +343,7 @@ struct ECM
     UDWORD          location;
 
     # The turret mount to use.
-    IMD_model       pMountGraphic;
+    IMD_model optional pMountGraphic;
 end;
 
 struct REPAIR
@@ -264,7 +363,7 @@ struct REPAIR
     UDWORD          time;
 
     # The turret mount to use.
-    IMD_model       pMountGraphic;
+    IMD_model optional pMountGraphic;
 end;
 
 enum FIREONMOVE
@@ -367,7 +466,7 @@ struct WEAPON
     # Graphics used for the weapon
 
     # The turret mount to use
-    IMD_model        pMountGraphic;
+    IMD_model optional pMountGraphic;
     # The muzzle flash
     IMD_model        pMuzzleGraphic;
     # The ammo in flight
@@ -379,7 +478,7 @@ struct WEAPON
     # The ammo hitting water
     IMD_model        pWaterHitGraphic;
     # The trail used for in flight
-    IMD_model        pTrailGraphic;
+    IMD_model optional pTrailGraphic;
 
     # Audio
     SDWORD          iAudioFireID;
@@ -400,12 +499,33 @@ end;
 struct CONSTRUCT
     %inherit COMPONENT;
     %nomacro;
+    %loadFunc "loadConstructStatsFromDB";
+    %preLoadTable rowCount
+        if (!statsAllocConstruct($rowCount))
+            ABORT;
+    end;
+    %postLoadRow curRow rowNum
+        $curRow->ref = REF_CONSTRUCT_START + $rowNum;
+
+        // save the stats
+        statsSetConstruct($curRow, $rowNum);
+
+        // set the max stat values for the design screen
+        if ($curRow->designable)
+        {
+            setMaxConstPoints($curRow->constructPoints);
+            setMaxComponentWeight($curRow->weight);
+        }
+    end;
+    %csv-file "construction.txt";
 
     # The number of points contributed each cycle
+    %csv-field 11;
     UDWORD          constructPoints;
 
     # The turret mount to use
-    IMD_model       pMountGraphic;
+    %csv-field 10;
+    IMD_model optional pMountGraphic;
 end;
 
 enum TRAVEL_MEDIUM

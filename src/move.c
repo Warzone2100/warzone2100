@@ -2756,7 +2756,7 @@ BOOL moveCheckDroidMovingAndVisible( void *psObj )
 	/* check for dead, not moving or invisible to player */
 	if ( psDroid->died || moveDroidStopped( psDroid, 0 ) ||
 		 (psDroid->droidType == DROID_TRANSPORTER && psDroid->order == DORDER_NONE) ||
-		 !(psDroid->visible[selectedPlayer] || godMode)                                )
+		 !(psDroid->visible[selectedPlayer])                                )
 	{
 		psDroid->iAudioID = NO_SOUND;
 		return false;
@@ -2776,7 +2776,7 @@ static void movePlayDroidMoveAudio( DROID *psDroid )
 		"movePlayUnitMoveAudio: unit pointer invalid\n" );
 
 	if ( (psDroid != NULL) &&
-		 (psDroid->visible[selectedPlayer] || godMode) )
+		 (psDroid->visible[selectedPlayer]) )
 	{
 		iPropType = asPropulsionStats[(psDroid)->asBits[COMP_PROPULSION].nStat].propulsionType;
 		psPropType = &asPropulsionTypes[iPropType];
@@ -2886,7 +2886,7 @@ static void movePlayAudio( DROID *psDroid, BOOL bStarted, BOOL bStoppedBefore, S
 	}
 
 	if ( (iAudioID != NO_SOUND) &&
-		 (psDroid->visible[selectedPlayer] || godMode) )
+		 (psDroid->visible[selectedPlayer]) )
 	{
 		if ( audio_PlayObjDynamicTrack( psDroid, iAudioID,
 				pAudioCallback ) )

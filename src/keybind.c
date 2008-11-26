@@ -1163,14 +1163,41 @@ void	kf_ToggleGodMode( void )
 
 	if(godMode)
 	{
+		FEATURE* psFeat;
+		int player;
+
 		godMode = false;
-//		setDifficultyLevel(getDifficultyLevel());
+		setRevealStatus(game.fog);
+		// now hide the features
+		psFeat = apsFeatureLists[0];
+		while (psFeat)
+		{
+			psFeat->visible[selectedPlayer] = 0;
+			psFeat = psFeat->psNext;
+		}
+
+		// and the structures
+		for (player = 0; player < MAX_PLAYERS; ++player)
+		{
+			if (player != selectedPlayer)
+			{
+				STRUCTURE* psStruct = apsStructLists[player];
+				
+				while (psStruct)
+				{
+					psStruct->visible[selectedPlayer] = 0;
+					psStruct = psStruct->psNext;
+				}
+			}
+		}
+		// remove all proximity messages
+		releaseAllProxDisp();
 		CONPRINTF(ConsoleString,(ConsoleString,"God Mode OFF"));
 	}
 	else
 	{
-		godMode = true;
-//		setModifiers(1000.f / 100.f,100.f / 1000.f);
+		godMode = true; // view all structures and droids
+		setRevealStatus(false); // view the entire map
 		CONPRINTF(ConsoleString,(ConsoleString,"God Mode ON"));
 	}
 }

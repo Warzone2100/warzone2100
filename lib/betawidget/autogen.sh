@@ -4,7 +4,7 @@
 DIE=0
 SRCDIR=`dirname $0`
 BUILDDIR=`pwd`
-srcfile=vector.c
+srcfile=src/vector.c
 package=Betawidget
 
 debug ()

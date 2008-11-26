@@ -99,7 +99,8 @@ public	STRUCTURESTAT	vtolTarget[10],rebuildStat[TECHS][2];
 // structures
 private int				baseX,baseY,minx,miny,maxx,maxy;
 public	int				numStructs,numIncendrys,numDefStructs,numExtraStructs[TECHS],numWallWeaps,numBaseStruct,numLightCyborgs;
-public	STRUCTURESTAT	incendrys[8],structs[13],defStructs[26],extraStructs[TECHS][6],structChoice[5],wallWeaps[11];
+private	STRUCTURESTAT	structChoice[5];
+public	STRUCTURESTAT	incendrys[8],structs[13],defStructs[26],extraStructs[TECHS][6],wallWeaps[11];
 public	STRUCTURESTAT	sensorTower,wall,cornerWall,resLab,powGen,playerHQ,lassat,factory,derrick,cybFactory,
 						vtolDefStruct[5],vtolPad,vtolFactory,repairFacility,uplink,baseStruct[8];
 public	STRUCTURESTAT	powModule,facModule,resModule,vtolModule;
@@ -622,20 +623,8 @@ event buildOilDefenseOrRetreat(buildOilDefenseOrRetreatTr)
 				buildX = structure.x;
 				buildY = structure.y;
 
-				count = 0;							// if derrick has no defense near it.
-				result = 0;
-				while(count < numDefStructs)
-				{
-					structure = structureBuiltInRange(defStructs[count], buildX, buildX,(3*128), me);
-					if(structure != NULLOBJECT)
-					{
-						result = result + 1;							// found a defense.
-					}
-					count = count + 1;
-				}
-
 				// not many defenses nearby
-				if(result < 2)
+				if(numFriendlyWeapStructsInRange(me, buildX, buildY, (3*128), FALSE) < 2)
 				{
 					count = numDefStructs - 1;							//pick a struct to build..
 					count2 = 0;

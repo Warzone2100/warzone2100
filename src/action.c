@@ -30,6 +30,7 @@
 #include "lib/script/script.h"
 
 #include "action.h"
+#include "lib/ivis_common/pievector.h"
 #include "lib/sound/audio_id.h"
 #include "lib/sound/audio.h"
 #include "combat.h"
@@ -89,6 +90,9 @@ typedef struct _droid_action_data
 #define DROID_STOPPED(psDroid) \
 	(psDroid->sMove.Status == MOVEINACTIVE || psDroid->sMove.Status == MOVEHOVER || \
 	 psDroid->sMove.Status == MOVESHUFFLE)
+
+/** Radius for search when looking for VTOL landing position */
+static const int vtolLandingRadius = 23;
 
 const char* getDroidActionName(DROID_ACTION action)
 {
@@ -2859,22 +2863,108 @@ static BOOL vtolLandingTile(SDWORD x, SDWORD y)
 	return true;
 }
 
+/**
+ * Performs a space-filling spiral-like search from startX,startY up to (and
+ * including) radius. For each tile, the search function is called; if it
+ * returns 'true', the search will finish immediately.
+ *
+ * @param startX,startY starting x and y coordinates
+ *
+ * @param max_radius radius to examine. Search will finish when @c max_radius is exceeded.
+ *
+ * @param match searchFunction to use; described in typedef
+ * \param matchState state for the search function
+ * \return true if finished because the searchFunction requested termination,
+ *         false if the radius limit was reached
+ */
+bool spiralSearch(int startX, int startY, int max_radius, tileMatchFunction match, void* matchState)
+{
+	int radius;          // radius counter
+
+	// test center tile
+	if (match(startX, startY, matchState))
+	{
+		return true;
+	}
+
+	// test for each radius, from 1 to max_radius (inclusive)
+	for (radius = 1; radius <= max_radius; ++radius)
+	{
+		// choose tiles that are between radius and radius+1 away from center
+		// distances are squared
+		const int min_distance = radius * radius;
+		const int max_distance = min_distance + 2 * radius;
+
+		// X offset from startX
+		int dx;
+
+		// dx starts with 1, to visiting tiles on same row or col as start twice
+		for (dx = 1; dx <= max_radius; dx++)
+		{
+			// Y offset from startY
+			int dy;
+
+			for (dy = 0; dy <= max_radius; dy++)
+			{
+				// Current distance, squared
+				const int distance = dx * dx + dy * dy;
+
+				// Ignore tiles outside of the current circle
+				if (distance < min_distance || distance > max_distance)
+				{
+					continue;
+				}
+
+				// call search function for each of the 4 quadrants of the circle
+				if (match(startX + dx, startY + dy, matchState)
+				 || match(startX - dx, startY - dy, matchState)
+				 || match(startX + dy, startY - dx, matchState)
+				 || match(startX - dy, startY + dx, matchState))
+				{
+					return true;
+				}
+			}
+		}
+	}
+
+	return false;
+}
+
+/**
+ * an internal tileMatchFunction that checks if x and y are coordinates of a
+ * valid landing place.
+ *
+ * @param matchState a pointer to a Vector2i where these coordintates should be stored
+ *
+ * @return true if coordinates are a valid landing tile, false if not.
+ */
+static bool vtolLandingTileSearchFunction(int x, int y, void* matchState)
+{
+	Vector2i* const xyCoords = (Vector2i*)matchState;
+
+	if (vtolLandingTile(x, y))
+	{
+		xyCoords->x = x;
+		xyCoords->y = y;
+		return true;
+	}
+
+	return false;
+}
 
 // choose a landing position for a VTOL when it goes to rearm
-BOOL actionVTOLLandingPos(DROID *psDroid, UDWORD *px, UDWORD *py)
+bool actionVTOLLandingPos(const DROID* psDroid, UDWORD* px, UDWORD* py)
 {
-	SDWORD	i,j;
-	SDWORD	startX,endX,startY,endY, tx,ty;
-	UDWORD	passes;
-	DROID	*psCurr;
-	BOOL	result;
+	int startX, startY, tx, ty;
+	DROID* psCurr;
+	bool   foundTile;
+	Vector2i xyCoords;
 
 	CHECK_DROID(psDroid);
 
 	/* Initial box dimensions and set iteration count to zero */
-	startX = endX = map_coord(*px);
-	startY = endY = map_coord(*py);
-	passes = 0;
+	startX = map_coord(*px);
+	startY = map_coord(*py);
 
 	// set blocking flags for all the other droids
 	for(psCurr=apsDroidLists[psDroid->player]; psCurr; psCurr = psCurr->psNext)
@@ -2898,36 +2988,16 @@ BOOL actionVTOLLandingPos(DROID *psDroid, UDWORD *px, UDWORD *py)
 		}
 	}
 
-	/* Keep going until we get a tile or we exceed distance */
-	result = false;
-	while(passes<20)
+	// search for landing tile; will stop when found or radius exceeded
+	foundTile = spiralSearch(startX, startY, vtolLandingRadius,
+	    vtolLandingTileSearchFunction, &xyCoords);
+	if (foundTile)
 	{
-		/* Process whole box */
-		for(i = startX; i <= endX; i++)
-		{
-			for(j = startY; j<= endY; j++)
-			{
-				/* Test only perimeter as internal tested previous iteration */
-				if(i==startX || i==endX || j==startY || j==endY)
-				{
-					/* Good enough? */
-					if(vtolLandingTile(i,j))
-					{
-						/* Set exit conditions and get out NOW */
-						debug( LOG_NEVER, "Unit %d landing pos (%d,%d)\n",psDroid->id, i,j);
-						*px = world_coord(i) + TILE_UNITS / 2;
-						*py = world_coord(j) + TILE_UNITS / 2;
-						result = true;
-						goto exit;
-					}
-				}
-			}
-		}
-		/* Expand the box out in all directions - off map handled by tileAcceptable */
-		startX--; startY--;	endX++;	endY++;	passes++;
+		debug( LOG_NEVER, "Unit %d landing pos (%d,%d)",
+		       psDroid->id, xyCoords.x, xyCoords.y);
+		*px = world_coord(xyCoords.x) + TILE_UNITS / 2;
+		*py = world_coord(xyCoords.y) + TILE_UNITS / 2;
 	}
-
-exit:
 
 	// clear blocking flags for all the other droids
 	for(psCurr=apsDroidLists[psDroid->player]; psCurr; psCurr = psCurr->psNext)
@@ -2948,6 +3018,5 @@ exit:
         }
 	}
 
-	return result;
-
+	return foundTile;
 }

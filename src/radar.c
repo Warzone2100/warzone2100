@@ -323,7 +323,7 @@ static void DrawRadarTiles(void)
 			size_t pos = radarTexWidth * (y - scrollMinY) + (x - scrollMinX);
 
 			ASSERT(pos * sizeof(*radarBuffer) < radarBufferSize, "Buffer overrun");
-			if (!getRevealStatus() || TEST_TILE_VISIBLE(selectedPlayer, psTile) || godMode)
+			if (!getRevealStatus() || TEST_TILE_VISIBLE(selectedPlayer, psTile))
 			{
 				radarBuffer[pos] = appliedRadarColour(radarDrawMode, psTile).rgba;
 			} else {
@@ -375,7 +375,6 @@ static void DrawRadarObjects(void)
 				continue;
 			}
 			if (psDroid->visible[selectedPlayer]
-			    || godMode
 			    || (bMultiPlayer && game.alliance == ALLIANCES_TEAMS
 			        && aiCheckAlliances(selectedPlayer,psDroid->player)))
 			{
@@ -432,7 +431,6 @@ static void DrawRadarObjects(void)
 			flashCol = flashColours[getPlayerColour(clan)];
 
 			if (psStruct->visible[selectedPlayer]
-			    || godMode
 			    || (bMultiPlayer && game.alliance == ALLIANCES_TEAMS
 			        && aiCheckAlliances(selectedPlayer, psStruct->player)))
 			{

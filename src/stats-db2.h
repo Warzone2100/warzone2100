@@ -315,7 +315,16 @@ typedef struct BASE_STATS
 } WZ_DECL_MAY_ALIAS BASE_STATS;
 
 #define STATS_BASE \
+	/** \
+	 * Unique ID of the item \
+	 */ \
 	UDWORD ref; \
+	/** \
+	 * Unique language independant name that can be used to identify a specific \
+	 * stats instance \
+	 * \
+	 * Unique across all instances \
+	 */ \
 	char*            pName
 
 /**
@@ -373,13 +382,44 @@ typedef struct COMPONENT_STATS
 } WZ_DECL_MAY_ALIAS COMPONENT_STATS;
 
 #define STATS_COMPONENT \
+	/** \
+	 * Unique ID of the item \
+	 */ \
 	UDWORD ref; \
+	/** \
+	 * Unique language independant name that can be used to identify a specific \
+	 * stats instance \
+	 * \
+	 * Unique across all instances \
+	 */ \
 	char*            pName; \
+	/** \
+	 * Power required to build this component \
+	 */ \
 	UDWORD           buildPower; \
+	/** \
+	 * Build points (which are rate-limited in the construction units) required \
+	 * to build this component. \
+	 */ \
 	UDWORD           buildPoints; \
+	/** \
+	 * Weight of this component \
+	 */ \
 	UDWORD           weight; \
+	/** \
+	 * Body points of this component \
+	 */ \
 	UDWORD           body; \
+	/** \
+	 * Indicates whether this component is "designable" and can thus be used in \
+	 * the design screen. \
+	 */ \
 	bool             designable; \
+	/** \
+	 * The "base" IMD model representing this component in 3D space. \
+	 * \
+	 * This field is optional and can be NULL to indicate that it has no value \
+	 */ \
 	iIMDShape*       pIMD
 
 typedef struct PROPULSION_STATS
@@ -443,6 +483,22 @@ typedef struct PROPULSION_STATS
 	 */
 	PROPULSION_TYPE propulsionType;
 } WZ_DECL_MAY_ALIAS PROPULSION_STATS;
+
+/* Forward declaration to allow pointers to this type */
+struct sqlite3;
+
+/** Load the contents of the PROPULSION table from the given SQLite database.
+ *
+ *  @param db represents the database to load from
+ *
+ *  @return true if we succesfully loaded all available rows from the table,
+ *          false otherwise.
+ */
+extern bool
+#line 234 "stats-db2.tpl"
+loadPropulsionStatsFromDB
+#line 501 "stats-db2.h"
+	(struct sqlite3* db);
 
 typedef struct SENSOR_STATS
 {
@@ -508,7 +564,7 @@ typedef struct SENSOR_STATS
 	/**
 	 * specifies whether the Sensor is default or for the Turret.
 	 */
-	UDWORD           location;
+	LOC location;
 
 	/**
 	 * used for combat
@@ -523,9 +579,27 @@ typedef struct SENSOR_STATS
 
 	/**
 	 * The turret mount to use.
+	 *
+	 * This field is optional and can be NULL to indicate that it has no value
 	 */
 	iIMDShape*       pMountGraphic;
 } WZ_DECL_MAY_ALIAS SENSOR_STATS;
+
+/* Forward declaration to allow pointers to this type */
+struct sqlite3;
+
+/** Load the contents of the SENSOR table from the given SQLite database.
+ *
+ *  @param db represents the database to load from
+ *
+ *  @return true if we succesfully loaded all available rows from the table,
+ *          false otherwise.
+ */
+extern bool
+#line 285 "stats-db2.tpl"
+loadSensorStatsFromDB
+#line 602 "stats-db2.h"
+	(struct sqlite3* db);
 
 typedef struct ECM_STATS
 {
@@ -595,6 +669,8 @@ typedef struct ECM_STATS
 
 	/**
 	 * The turret mount to use.
+	 *
+	 * This field is optional and can be NULL to indicate that it has no value
 	 */
 	iIMDShape*       pMountGraphic;
 } WZ_DECL_MAY_ALIAS ECM_STATS;
@@ -672,6 +748,8 @@ typedef struct REPAIR_STATS
 
 	/**
 	 * The turret mount to use.
+	 *
+	 * This field is optional and can be NULL to indicate that it has no value
 	 */
 	iIMDShape*       pMountGraphic;
 } WZ_DECL_MAY_ALIAS REPAIR_STATS;
@@ -911,6 +989,8 @@ typedef struct WEAPON_STATS
 	/**
 	 * Graphics used for the weapon
 	 * The turret mount to use
+	 *
+	 * This field is optional and can be NULL to indicate that it has no value
 	 */
 	iIMDShape*       pMountGraphic;
 
@@ -941,6 +1021,8 @@ typedef struct WEAPON_STATS
 
 	/**
 	 * The trail used for in flight
+	 *
+	 * This field is optional and can be NULL to indicate that it has no value
 	 */
 	iIMDShape*       pTrailGraphic;
 
@@ -1072,8 +1154,26 @@ typedef struct CONSTRUCT_STATS
 
 	/**
 	 * The turret mount to use
+	 *
+	 * This field is optional and can be NULL to indicate that it has no value
 	 */
 	iIMDShape*       pMountGraphic;
 } WZ_DECL_MAY_ALIAS CONSTRUCT_STATS;
+
+/* Forward declaration to allow pointers to this type */
+struct sqlite3;
+
+/** Load the contents of the CONSTRUCT table from the given SQLite database.
+ *
+ *  @param db represents the database to load from
+ *
+ *  @return true if we succesfully loaded all available rows from the table,
+ *          false otherwise.
+ */
+extern bool
+#line 502 "stats-db2.tpl"
+loadConstructStatsFromDB
+#line 1177 "stats-db2.h"
+	(struct sqlite3* db);
 
 #endif // __INCLUDED_DB_TEMPLATE_SCHEMA_STRUCTDEF_STATS_DB2_TPL_H__

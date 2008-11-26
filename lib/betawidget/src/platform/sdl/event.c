@@ -23,7 +23,7 @@
 #include "../../widget.h"
 #include "../../window.h"
 
-#include "../../../framework/utf.h"
+#include "../../../../framework/utf.h"
 
 /**
  * Converts an SDLkey to an eventKeycode (as used by the widget system).

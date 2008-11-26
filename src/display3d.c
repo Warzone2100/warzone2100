@@ -662,10 +662,11 @@ static void drawTiles(iView *player)
 				BOOL bEdgeTile = false;
 				MAPTILE *psTile = mapTile(playerXTile + j, playerZTile + i);
 				BOOL pushedDown = false;
+				float distToEdge,distA,distB,distC,distD;
 
 				tileScreenInfo[i][j].pos.y = map_TileHeight(playerXTile + j, playerZTile + i);
 
-				if (getRevealStatus() && !godMode)
+				if (getRevealStatus())
 				{
 					TileIllum = pal_SetBrightness(psTile->level < 0 ? 1 : psTile->level);
 				}
@@ -702,38 +703,45 @@ static void drawTiles(iView *player)
 					TileIllum.byte.b = (TileIllum.byte.b * 2) / 3;
 					pushedDown = true;
 				}
+				
+				// calculate the distance to the closest edge of the visible map
+				distA = j                + 1-rx/(float)TILE_UNITS;
+				distB = visibleTiles.x-j +   rx/(float)TILE_UNITS;
+				distC = i                + 1-rz/(float)TILE_UNITS;
+				distD = visibleTiles.y-i +   rz/(float)TILE_UNITS;
+				// determine the smallest distance
+				distToEdge = distA;
+				if (distB < distToEdge) distToEdge = distB;
+				if (distC < distToEdge) distToEdge = distC;
+				if (distD < distToEdge) distToEdge = distD;
 
-				// to prevent a sharp edge to the map, make sure the border is black
-				if (i == 0 || j == 0 || i == visibleTiles.y || j == visibleTiles.x)
+				// now fade the border depending on the distance
+				if (pie_GetFogStatus() == true)
 				{
-					TileIllum.byte.r = 0;
-					TileIllum.byte.g = 0;
-					TileIllum.byte.b = 0;
+					// no fog of war, so fade to fog color,
+					// as transparency and fog do not play well together
+					if (distToEdge < 3)
+					{
+						TileIllum.byte.r = (distToEdge-1)/2*TileIllum.byte.r + (1-(distToEdge-1)/2)*pie_GetFogColour().byte.r;
+						TileIllum.byte.g = (distToEdge-1)/2*TileIllum.byte.g + (1-(distToEdge-1)/2)*pie_GetFogColour().byte.g;
+						TileIllum.byte.b = (distToEdge-1)/2*TileIllum.byte.b + (1-(distToEdge-1)/2)*pie_GetFogColour().byte.b;
+					}
+					if (distToEdge < 1)
+					{
+						TileIllum = pie_GetFogColour();
+					}
 				}
-				// and fade towards the black border gradually
-				if (j == 1)
+				else
 				{
-					TileIllum.byte.r = TileIllum.byte.r*(TILE_UNITS-rx)/TILE_UNITS;
-					TileIllum.byte.g = TileIllum.byte.g*(TILE_UNITS-rx)/TILE_UNITS;
-					TileIllum.byte.b = TileIllum.byte.b*(TILE_UNITS-rx)/TILE_UNITS;
-				}
-				if (j == visibleTiles.x-1)
-				{
-					TileIllum.byte.r = TileIllum.byte.r*(rx)/TILE_UNITS;
-					TileIllum.byte.g = TileIllum.byte.g*(rx)/TILE_UNITS;
-					TileIllum.byte.b = TileIllum.byte.b*(rx)/TILE_UNITS;
-				}
-				if (i == 1)
-				{
-					TileIllum.byte.r = TileIllum.byte.r*(TILE_UNITS-rz)/TILE_UNITS;
-					TileIllum.byte.g = TileIllum.byte.g*(TILE_UNITS-rz)/TILE_UNITS;
-					TileIllum.byte.b = TileIllum.byte.b*(TILE_UNITS-rz)/TILE_UNITS;
-				}
-				if (i == visibleTiles.y-1)
-				{
-					TileIllum.byte.r = TileIllum.byte.r*(rz)/TILE_UNITS;
-					TileIllum.byte.g = TileIllum.byte.g*(rz)/TILE_UNITS;
-					TileIllum.byte.b = TileIllum.byte.b*(rz)/TILE_UNITS;
+					// fog of war; fade to transparancy
+					if (distToEdge < 3)
+					{
+						TileIllum.byte.a *= (distToEdge-1)/2;
+					}
+					if (distToEdge < 1)
+					{
+						TileIllum.byte.a = 0;
+					}
 				}
 
 				setTileColour(playerXTile + j, playerZTile + i, TileIllum);
@@ -760,6 +768,7 @@ static void drawTiles(iView *player)
 	pie_SetAlphaTest(false);
 	pie_SetFogStatus(true);
 	pie_SetTexturePage(terrainPage);
+	pie_SetRendMode(REND_ALPHA_TEX);
 	for (i = 0; i < visibleTiles.y; i++)
 	{
 		for (j = 0; j < visibleTiles.x; j++)
@@ -838,7 +847,6 @@ static void drawTiles(iView *player)
 
 	// Now draw the water tiles in a second pass to get alpha sort order correct
 	pie_TranslateTextureBegin(Vector2f_New(0.0f, waterRealValue));
-	pie_SetRendMode(REND_ALPHA_TEX);
 	pie_SetAlphaTest(false);
 	pie_SetDepthOffset(-1.0f);
 	for (i = 0; i < MIN(visibleTiles.y, mapHeight ); i++)
@@ -1245,7 +1253,7 @@ void	renderAnimComponent( const COMPONENT_OBJECT *psObj )
 	ASSERT( psParentObj != NULL, "renderAnimComponent: invalid parent object pointer" );
 
 	/* only draw visible bits */
-	if( (psParentObj->type == OBJ_DROID) && !godMode && !demoGetStatus() &&
+	if( (psParentObj->type == OBJ_DROID) && !demoGetStatus() &&
 		((DROID*)psParentObj)->visible[selectedPlayer] != UBYTE_MAX )
 	{
 		return;
@@ -1335,7 +1343,7 @@ void	renderAnimComponent( const COMPONENT_OBJECT *psObj )
 			brightness = pal_SetBrightness(UBYTE_MAX);
 		}
 
-		if(getRevealStatus() && !godMode)
+		if(getRevealStatus())
 		{
 			brightness = pal_SetBrightness(avGetObjLightLevel((BASE_OBJECT*)psParentObj, brightness.byte.r));
 		}
@@ -1385,7 +1393,7 @@ void displayStaticObjects( void )
 				}
 				else
 				{
-					if ( psStructure->visible[selectedPlayer] || godMode )
+					if ( psStructure->visible[selectedPlayer] )
 					{
 						//check not a resource extractors
 						if (psStructure->pStructureType->type !=
@@ -1553,7 +1561,7 @@ void displayDynamicObjects( void )
 				if(clipXY(psDroid->pos.x,psDroid->pos.y))
 				{
 					/* No point in adding it if you can't see it? */
-					if(psDroid->visible[selectedPlayer] || godMode || demoGetStatus())
+					if(psDroid->visible[selectedPlayer] || demoGetStatus())
 					{
 						psDroid->sDisplay.frameNumber = currentGameFrame;
 
@@ -1657,7 +1665,7 @@ void	renderFeature(FEATURE *psFeature)
 	BOOL bForceDraw = ( !getRevealStatus() && psFeature->psStats->visibleAtStart);
 	int shadowFlags = 0;
 
-	if (!psFeature->visible[selectedPlayer] && !godMode && !demoGetStatus() && !bForceDraw)
+	if (!psFeature->visible[selectedPlayer] && !demoGetStatus() && !bForceDraw)
 	{
 		return;
 	}
@@ -1705,7 +1713,7 @@ void	renderFeature(FEATURE *psFeature)
 		objectShimmy((BASE_OBJECT*)psFeature);
 	}
 
-	if (godMode || demoGetStatus() || bForceDraw)
+	if (demoGetStatus() || bForceDraw)
 	{
 		brightness = pal_SetBrightness(200);
 	}
@@ -1889,7 +1897,7 @@ void	renderStructure(STRUCTURE *psStructure)
 		renderWallSection(psStructure);
 		return;
 	}
-	else if (!psStructure->visible[selectedPlayer] && !godMode && !demoGetStatus())
+	else if (!psStructure->visible[selectedPlayer] && !demoGetStatus())
 	{
 		return;
 	}
@@ -2013,7 +2021,7 @@ void	renderStructure(STRUCTURE *psStructure)
 		}
 		buildingBrightness = pal_SetBrightness(200 + brightVar);
 	}
-	if (!godMode && !demoGetStatus() && getRevealStatus())
+	if (!demoGetStatus() && getRevealStatus())
 	{
 		buildingBrightness = pal_SetBrightness(avGetObjLightLevel((BASE_OBJECT*)psStructure, buildingBrightness.byte.r));
 	}
@@ -2352,7 +2360,7 @@ static BOOL	renderWallSection(STRUCTURE *psStructure)
 	UDWORD			i;
 	Vector3f			*temp;
 
-	if(psStructure->visible[selectedPlayer] || godMode || demoGetStatus())
+	if(psStructure->visible[selectedPlayer] || demoGetStatus())
 	{
 		psStructure->sDisplay.frameNumber = currentGameFrame;
 		/* Get it's x and y coordinates so we don't have to deref. struct later */
@@ -2378,7 +2386,7 @@ static BOOL	renderWallSection(STRUCTURE *psStructure)
 			buildingBrightness = pal_SetBrightness(200 + brightVar);
 		}
 
-		if(godMode || demoGetStatus())
+		if(demoGetStatus())
 		{
 			/* NOP */
 		}
@@ -3668,7 +3676,7 @@ static void renderSurroundings(void)
 	{
 		wind = wrapf(wind + timeAdjustedIncrement(0.5f, false), 360.0f);
 	}
-	pie_DrawSkybox(skybox_scale, 0, 128, 256, 128);
+	pie_DrawSkybox(skybox_scale, 0, 0, 256, 256);
 
 	// Load Saved State
 	pie_MatEnd();

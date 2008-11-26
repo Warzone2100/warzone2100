@@ -173,6 +173,19 @@ static BOOL bufferSCONSTRLoad(const char *pBuffer, UDWORD size, void **ppData)
 	return true;
 }
 
+static BOOL dataCONSTRLoad(struct sqlite3* db, const char* tableName, void **ppData)
+{
+	if (!loadConstructStatsFromDB(db)
+	 || !allocComponentList(COMP_CONSTRUCT, numConstructStats))
+	{
+		return false;
+	}
+
+	//not interested in this value
+	*ppData = NULL;
+	return true;
+}
+
 /* Load the ECM stats */
 static BOOL bufferSECMLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
@@ -216,7 +229,7 @@ static BOOL bufferSPROPLoad(const char *pBuffer, UDWORD size, void **ppData)
 
 static BOOL dataDBPROPLoad(struct sqlite3* db, const char* tableName, void **ppData)
 {
-	if (!loadPropulsionStatsFromDB(db, tableName)
+	if (!loadPropulsionStatsFromDB(db)
 	 || !allocComponentList(COMP_PROPULSION, numPropulsionStats))
 	{
 		return false;
@@ -243,7 +256,7 @@ static BOOL bufferSSENSORLoad(const char *pBuffer, UDWORD size, void **ppData)
 
 static BOOL dataDBSENSORLoad(struct sqlite3* db, const char* tableName, void **ppData)
 {
-	if (!loadSensorStatsFromDB(db, tableName)
+	if (!loadSensorStatsFromDB(db)
 	 || !allocComponentList(COMP_SENSOR, numSensorStats))
 	{
 		return false;
@@ -1106,6 +1119,7 @@ static const RES_TYPE_MIN_TABLE TableResourceTypes[] =
 	{"DBPROP", dataDBPROPLoad, NULL},
 	{"DBSENSOR", dataDBSENSORLoad, NULL},
 	{"DBECM", dataDBECMLoad, NULL},
+	{"DBCONSTR", dataCONSTRLoad, NULL},
 };
 
 /* Pass all the data loading functions to the framework library */

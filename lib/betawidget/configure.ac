@@ -3,7 +3,24 @@
 
 AC_PREREQ(2.61)
 AC_INIT(betawidget, VERSION)
-AC_CONFIG_SRCDIR([vector.h])
+
+# libtool shared library version
+
+# Increment if the interface has additions, changes, removals.
+LT_CURRENT=0
+
+# Increment any time the source changes; set to
+# 0 if you increment CURRENT
+LT_REVISION=0
+
+# Increment if any interfaces have been added; set to 0
+# if any interfaces have been removed. removal has
+# precedence over adding, so set to 0 if both happened.
+LT_AGE=0
+
+AC_SUBST([LIBTOOL_VERSION], ["$LT_CURRENT:$LT_REVISION:$LT_AGE"])
+
+AC_CONFIG_SRCDIR([src/vector.h])
 AC_CONFIG_HEADER([config.h])
 AM_INIT_AUTOMAKE
 
@@ -70,14 +87,19 @@ AC_CHECK_FUNCS([memmove strdup])
 
 # Checks for libraries.
 PKG_CHECK_MODULES([SDL], [sdl >= 1.2])
-PKG_CHECK_MODULES([CAIRO_SVG], [cairo-svg])
+AC_SUBST([PLATFORM_REQUIRES], [sdl])
+
+PKG_CHECK_MODULES([CAIRO], [cairo])
+
 # First check the pkg-config lua5.1 package
 PKG_CHECK_MODULES([LUA], [lua5.1 >= 5.1], [
-	AC_SUBST([LUA_LIBTOOL], [`${PKG_CONFIG} lua5.1 --variable=libtool_lib`])], [
+	AC_SUBST([LUA_REQUIRES], [lua5.1])
+],[
 	# If that fails, check the "lua" pkg-config package
 	PKG_CHECK_MODULES([LUA], [lua >= 5.1], [
-		# Workaround to retrieve the libtool library
-		AC_SUBST([LUA_LIBTOOL], [`${PKG_CONFIG} lua --variable=libdir`/liblua.la])])])
+		AC_SUBST([LUA_REQUIRES], [lua])
+	])
+])
 
 # Look for OpenGL
 AC_CHECK_HEADER(SDL/SDL_opengl.h, ,
@@ -94,7 +116,13 @@ AC_CHECK_LIB(GLU, main,
 		AC_MSG_ERROR([GLU library not found.])))
 AC_SUBST([OPENGL_LIBS], [${OPENGL_LIBS}])
 
+CFLAGS="${CFLAGS} -Werror-implicit-function-declaration"
+AC_SUBST([CFLAGS])
+
 AC_CONFIG_FILES([Makefile
-                 platform/Makefile
-                 platform/sdl/Makefile])
+                 src/betawidget.pc
+                 src/Makefile
+                 src/platform/Makefile
+                 src/platform/sdl/Makefile
+                 tools/Makefile])
 AC_OUTPUT

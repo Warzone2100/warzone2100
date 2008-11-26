@@ -1,12 +1,7 @@
 #!/usr/bin/perl -w
 # vim: set et sts=4 sw=4:
 
-my $scriptpath = $0;
-$scriptpath =~ s/^(.*\/)?([^\/]+)$/$1/;
-
-my $out_lang = $scriptpath;
-$out_lang .= shift or die "Missing output language";
-$out_lang .= "_cg.pm";
+my $out_lang = shift or die "Missing output language";
 require $out_lang or die "Couldn't load $out_lang";
 
 my %enumMap;
@@ -19,10 +14,12 @@ sub parseEnum
     my ($enumName, $comment) = @_;
     my %curEnum = (name => $enumName);
     my @curComment = ();
+    my @curValueStrings = ();
 
     @{$curEnum{"comment"}} = @$comment;
     @$comment = ();
 
+LINE:
     while (<>)
     {
         chomp;
@@ -31,24 +28,36 @@ sub parseEnum
         {
             push @curComment, substr($1, 1) if $1;
         }
-        # Parse struct-level qualifiers
+        # Parse enum-level qualifiers
         elsif (/^\s*%(.*)\s*$/)
         {
-            die "error: Cannot give enum-level qualifiers after defining fields" if exists($curEnum{"values"});
-
             $_ = $1;
+
+            # See if it's really a field-level qualifier
+            if    (/^string\s+"((?:[^"]+|\\")+)"\s*;$/)
+            {
+                my $string = $1;
+                $string =~ s/\\"/"/g;
+
+                push @curValueStrings, $string;
+                next LINE;
+            }
+            else
+            {
+                die "error: Cannot give enum-level qualifiers after defining fields" if exists($curEnum{"values"});
+            }
 
             if    (/^valprefix\s+\"([^\"]*)\"\s*;$/)
             {
-                ${$curEnum{"qualifiers"}}{"valprefix"} = $1;
+                $curEnum{"qualifiers"}->{"valprefix"} = $1;
             }
             elsif (/^valsuffix\s+\"([^\"]+)\"\s*;$/)
             {
-                ${$curEnum{"qualifiers"}}{"valsuffix"} = $1;
+                $curEnum{"qualifiers"}->{"valsuffix"} = $1;
             }
             elsif (/^max\s+\"([^\"]+)\"\s*;$/)
             {
-                ${$curEnum{"qualifiers"}}{"max"} = $1;
+                $curEnum{"qualifiers"}->{"max"} = $1;
             }
             else
             {
@@ -61,6 +70,8 @@ sub parseEnum
 
             @{$value{"comment"}} = @curComment;
             @curComment = ();
+            @{$value{"value_strings"}} = @curValueStrings;
+            @curValueStrings = ();
 
             push @{$curEnum{"values"}}, \%value;
         }
@@ -111,9 +122,12 @@ sub parseStruct
     my %curStruct = (name => $structName);
     my @curComment = ();
 
+    my $curCSVfield = 0;
+
     @{$curStruct{"comment"}} = @$comment;
     @$comment = ();
 
+LINE:
     while (<>)
     {
         chomp;
@@ -135,52 +149,61 @@ sub parseStruct
         # Parse struct-level qualifiers
         elsif (/^\s*%(.*)\s*$/)
         {
-            die "error: Cannot give struct-level qualifiers after defining fields" if exists($curStruct{"fields"});
-
             $_ = $1;
+
+            # See if it's really a field-level qualifier
+            if    (/csv-field\s+(\d+|last)\s*;/)
+            {
+                $curCSVfield = $1;
+                next LINE;
+            }
+            else
+            {
+                die "error: Cannot give struct-level qualifiers after defining fields" if exists($curStruct{"fields"});
+            }
 
             if    (/^prefix\s+\"([^\"]+)\"\s*;$/)
             {
-                ${$curStruct{"qualifiers"}}{"prefix"} = $1;
+                $curStruct{"qualifiers"}->{"prefix"} = $1;
             }
             elsif (/^suffix\s+\"([^\"]+)\"\s*;$/)
             {
-                ${$curStruct{"qualifiers"}}{"suffix"} = $1;
+                $curStruct{"qualifiers"}->{"suffix"} = $1;
             }
             elsif (/^macro\s*;$/)
             {
-                ${${$curStruct{"qualifiers"}}{"macro"}}{"has"} = 1;
+                $curStruct{"qualifiers"}->{"macro"}{"has"} = 1;
             }
             elsif (/^nomacro\s*;$/)
             {
-                ${${$curStruct{"qualifiers"}}{"macro"}}{"has"} = 0;
+                $curStruct{"qualifiers"}->{"macro"}{"has"} = 0;
             }
             elsif (/^macroprefix\s+\"([^\"]+)\"\s*;$/)
             {
-                ${${$curStruct{"qualifiers"}}{"macro"}}{"prefix"} = $1;
+                $curStruct{"qualifiers"}->{"macro"}{"prefix"} = $1;
             }
             elsif (/^macrosuffix\s+\"([^\"]+)\"\s*;$/)
             {
-                ${${$curStruct{"qualifiers"}}{"macro"}}{"suffix"} = $1;
+                $curStruct{"qualifiers"}->{"macro"}{"suffix"} = $1;
             }
             elsif (/^loadFunc\s+\"([^\"]+)\"\s*;$/)
             {
                 my %loadFunc = (name=>$1, line=>$.);
 
-                ${$curStruct{"qualifiers"}}{"loadFunc"} = \%loadFunc;
+                $curStruct{"qualifiers"}->{"loadFunc"} = \%loadFunc;
             }
             elsif (/^abstract\s*;$/)
             {
-                die "error: Cannot declare a struct \"abstract\" if it inherits from another" if exists(${$curStruct{"qualifiers"}}{"inherit"});
+                die "error: Cannot declare a struct \"abstract\" if it inherits from another" if exists($curStruct{"qualifiers"}->{"inherit"});
 
-                ${$curStruct{"qualifiers"}}{"abstract"} = 1;
+                $curStruct{"qualifiers"}->{"abstract"} = 1;
             }
             elsif (/^inherit\s+(\w+)\s*;$/)
             {
-                die "error: structs declared \"abstract\" cannot inherit" if exists(${$curStruct{"qualifiers"}}{"abstract"});
+                die "error: structs declared \"abstract\" cannot inherit" if exists($curStruct{"qualifiers"}->{"abstract"});
                 die "error: Cannot inherit from struct \"$1\" as it isn't (fully) declared yet" unless exists($structMap{$1});
 
-                ${$curStruct{"qualifiers"}}{"inherit"} = \%{$structMap{$1}};
+                $curStruct{"qualifiers"}->{"inherit"} = \%{$structMap{$1}};
             }
             elsif (/^fetchRowById\s+Row\s+Id\s*$/)
             {
@@ -188,7 +211,7 @@ sub parseStruct
 
                 readTillEnd(\@{$fetchRowById{"code"}});
 
-                ${$curStruct{"qualifiers"}}{"fetchRowById"} = \%fetchRowById;
+                $curStruct{"qualifiers"}->{"fetchRowById"} = \%fetchRowById;
             }
             elsif (/^preLoadTable(\s+maxId)?(\s+rowCount)?\s*$/)
             {
@@ -199,17 +222,25 @@ sub parseStruct
 
                 readTillEnd(\@{$preLoadTable{"code"}});
 
-                ${$curStruct{"qualifiers"}}{"preLoadTable"} = \%preLoadTable;
+                $curStruct{"qualifiers"}->{"preLoadTable"} = \%preLoadTable;
             }
-            elsif (/^postLoadRow\s+curRow(\s+curId)?\s*$/)
+            elsif (/^postLoadRow\s+curRow(\s+curId)?(\s+rowNum)?\s*$/)
             {
                 my %postLoadRow = (line=>$.);
 
                 push @{$postLoadRow{"parameters"}}, $1 if $1;
+                push @{$postLoadRow{"parameters"}}, $2 if $2;
 
                 readTillEnd(\@{$postLoadRow{"code"}});
 
-                ${$curStruct{"qualifiers"}}{"postLoadRow"} = \%postLoadRow;
+                $curStruct{"qualifiers"}->{"postLoadRow"} = \%postLoadRow;
+            }
+            elsif (/^csv-file\s+"((?:[^"]+|\\")+)"\s*;$/)
+            {
+                my $file = $1;
+                $file =~ s/\\"/"/g;
+
+                $curStruct{"qualifiers"}->{"csv-file"} = $file;
             }
             else
             {
@@ -225,6 +256,8 @@ sub parseStruct
 
             @{$field{"comment"}} = @curComment;
             @curComment = ();
+            $field{"CSV"} = $curCSVfield;
+            $curCSVfield = 0;
 
             push @{$curStruct{"fields"}}, \%field;
         }
@@ -237,6 +270,8 @@ sub parseStruct
 
             @{$field{"comment"}} = @curComment;
             @curComment = ();
+            $field{"CSV"} = $curCSVfield;
+            $curCSVfield = 0;
 
             push @{$curStruct{"fields"}}, \%field;
         }
@@ -251,6 +286,8 @@ sub parseStruct
 
             @{$field{"comment"}} = @curComment;
             @curComment = ();
+            $field{"CSV"} = $curCSVfield;
+            $curCSVfield = 0;
 
             push @{$curStruct{"fields"}}, \%field;
         }
@@ -265,6 +302,8 @@ sub parseStruct
 
             @{$field{"comment"}} = @curComment;
             @curComment = ();
+            $field{"CSV"} = $curCSVfield;
+            $curCSVfield = 0;
 
             push @{$curStruct{"fields"}}, \%field;
         }
@@ -272,7 +311,7 @@ sub parseStruct
         elsif (/^\s*(struct)\s+(\w+)\s+(unique\s+)?(optional\s+)?(\w+)\s*;\s*$/)
         {
             die "error: $ARGV:$.: Cannot use struct \"$2\" as it isn't declared yet" unless exists($structMap{$2});
-            die "error: $ARGV:$.: Cannot use struct \"$2\" as it doesn't have a fetchRowById function declared" unless exists(${${$structMap{$2}}{"qualifiers"}}{"fetchRowById"});
+            die "error: $ARGV:$.: Cannot use struct \"$2\" as it doesn't have a fetchRowById function declared" unless exists($structMap{$2}->{"qualifiers"}{"fetchRowById"});
 
             my %field = (type=>$1, struct=>$structMap{$2}, name=>$5, line=>$.);
 
@@ -281,6 +320,8 @@ sub parseStruct
 
             @{$field{"comment"}} = @curComment;
             @curComment = ();
+            $field{"CSV"} = $curCSVfield;
+            $curCSVfield = 0;
 
             push @{$curStruct{"fields"}}, \%field;
         }
@@ -291,6 +332,8 @@ sub parseStruct
 
             @{$field{"comment"}} = @curComment;
             @curComment = ();
+            $field{"CSV"} = $curCSVfield;
+            $curCSVfield = 0;
 
             push @{$curStruct{"fields"}}, \%field;
         }
