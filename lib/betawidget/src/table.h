@@ -141,7 +141,7 @@ void tableSetDefaultAlign(table *self, hAlign h, vAlign v);
  * @param h The new amount of horizontal padding to apply.
  * @param v The new amount of vertical padding to apply.
  */
-void tableSetPadding(table *self, int h, int v);
+bool tableSetPadding(table *self, int h, int v);
 
 /**
  * Returns the number of distinct rows in the table.

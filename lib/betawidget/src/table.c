@@ -541,8 +541,11 @@ void tableSetDefaultAlign(table *self, hAlign h, vAlign v)
 	self->vAlignment = v;
 }
 
-void tableSetPadding(table *self, int h, int v)
+bool tableSetPadding(table *self, int h, int v)
 {
+	const int oldColPadding = self->columnPadding;
+	const int oldRowPadding = self->rowPadding;
+	
 	// Set the padding
 	self->columnPadding = h;
 	self->rowPadding = v;
@@ -550,8 +553,21 @@ void tableSetPadding(table *self, int h, int v)
 	// If applicable re-layout the window
 	if (WIDGET(self)->size.x != -1 && WIDGET(self)->size.y != -1)
 	{
-		widgetDoLayout(widgetGetRoot(WIDGET(self)));
+		// If laying out the window with the new padding fails
+		if (!widgetDoLayout(widgetGetRoot(WIDGET(self))))
+		{
+			// Restore the old padding
+			self->columnPadding = oldColPadding;
+			self->rowPadding = oldRowPadding;
+			
+			widgetDoLayout(widgetGetRoot(WIDGET(self)));
+			
+			return false;
+		}
 	}
+	
+	// Either widgetDoLayout succeeded or we did not need laying out
+	return true;
 }
 
 int tableGetRowCount(const table *self)
