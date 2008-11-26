@@ -28,7 +28,7 @@
 
 #include "internal-cairo.h"
 
-#include "../ivis_opengl/GLee.h"
+#include "../../ivis_opengl/GLee.h"
 
 #include "vector.h"
 #include "geom.h"
