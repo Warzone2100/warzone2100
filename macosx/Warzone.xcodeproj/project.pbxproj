@@ -501,7 +501,6 @@
 		0246A5BF0BD3D4DD004D1C70 /* SDL_QuartzYUV.m in Sources */ = {isa = PBXBuildFile; fileRef = 0246A5B50BD3D4DD004D1C70 /* SDL_QuartzYUV.m */; };
 		0246A5F80BD3D5E5004D1C70 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0246A5F20BD3D5E5004D1C70 /* AudioToolbox.framework */; };
 		0246A5F90BD3D5E5004D1C70 /* AudioUnit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0246A5F30BD3D5E5004D1C70 /* AudioUnit.framework */; };
-		0246A5FB0BD3D5E5004D1C70 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0246A5F50BD3D5E5004D1C70 /* Cocoa.framework */; };
 		0246A5FC0BD3D5E5004D1C70 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0246A5F60BD3D5E5004D1C70 /* CoreAudio.framework */; };
 		0246A5FD0BD3D5E5004D1C70 /* QuickTime.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0246A5F70BD3D5E5004D1C70 /* QuickTime.framework */; };
 		0246A8010BD3D789004D1C70 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02DDA8E00BD3C3CC0049AB60 /* IOKit.framework */; };
@@ -535,7 +534,6 @@
 		02581C610BD5A95C00957CBC /* SDLMain.m in Sources */ = {isa = PBXBuildFile; fileRef = 0246A5A70BD3D482004D1C70 /* SDLMain.m */; };
 		02581C640BD5A98900957CBC /* libSDLmain.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 02581C5D0BD5A94A00957CBC /* libSDLmain.a */; };
 		02581C740BD5ABF700957CBC /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0246A93A0BD3DD3E004D1C70 /* Carbon.framework */; };
-		02581C770BD5AC5200957CBC /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0246A5F50BD3D5E5004D1C70 /* Cocoa.framework */; };
 		02581C810BD5AD1100957CBC /* Gettext.framework in Copy frameworks (36) */ = {isa = PBXBuildFile; fileRef = 022B2F220BD55814002E64E3 /* Gettext.framework */; };
 		02581C820BD5AD1100957CBC /* Ogg.framework in Copy frameworks (36) */ = {isa = PBXBuildFile; fileRef = 02356E090BD3BCFE00E9A019 /* Ogg.framework */; };
 		02581C830BD5AD1100957CBC /* PhysFS.framework in Copy frameworks (36) */ = {isa = PBXBuildFile; fileRef = 02DDA8B10BD3C2F20049AB60 /* PhysFS.framework */; };
@@ -744,6 +742,8 @@
 		97AEAC100E8C1C6D00A10721 /* recon_mmx.c in Sources */ = {isa = PBXBuildFile; fileRef = 97AEABC30E8C1C6D00A10721 /* recon_mmx.c */; };
 		97AEAC180E8C1C6D00A10721 /* idct_mmx.c in Sources */ = {isa = PBXBuildFile; fileRef = 97AEABCD0E8C1C6D00A10721 /* idct_mmx.c */; };
 		97AEAC560E8C261B00A10721 /* Theora.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 97AEAB330E8C1B5200A10721 /* Theora.framework */; };
+		97F013D60EDEAE76004947E5 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 97F013D10EDEAE5C004947E5 /* Cocoa.framework */; };
+		97F013D80EDEAE98004947E5 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 97F013D10EDEAE5C004947E5 /* Cocoa.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXBuildRule section */
@@ -1661,7 +1661,6 @@
 		0246A5B50BD3D4DD004D1C70 /* SDL_QuartzYUV.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; name = SDL_QuartzYUV.m; path = external/SDL/src/video/quartz/SDL_QuartzYUV.m; sourceTree = "<group>"; };
 		0246A5F20BD3D5E5004D1C70 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = /Developer/SDKs/MacOSX10.4u.sdk/System/Library/Frameworks/AudioToolbox.framework; sourceTree = "<absolute>"; };
 		0246A5F30BD3D5E5004D1C70 /* AudioUnit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioUnit.framework; path = /Developer/SDKs/MacOSX10.4u.sdk/System/Library/Frameworks/AudioUnit.framework; sourceTree = "<absolute>"; };
-		0246A5F50BD3D5E5004D1C70 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = ../../../../../Developer/SDKs/MacOSX10.4u.sdk/System/Library/Frameworks/Cocoa.framework; sourceTree = SOURCE_ROOT; };
 		0246A5F60BD3D5E5004D1C70 /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = /Developer/SDKs/MacOSX10.4u.sdk/System/Library/Frameworks/CoreAudio.framework; sourceTree = "<absolute>"; };
 		0246A5F70BD3D5E5004D1C70 /* QuickTime.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuickTime.framework; path = /Developer/SDKs/MacOSX10.4u.sdk/System/Library/Frameworks/QuickTime.framework; sourceTree = "<absolute>"; };
 		0246A80E0BD3D820004D1C70 /* SDL_dummyaudio.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = SDL_dummyaudio.c; path = external/SDL/src/audio/dummy/SDL_dummyaudio.c; sourceTree = "<group>"; };
@@ -1892,6 +1891,7 @@
 		97AEABCB0E8C1C6D00A10721 /* dsp_mmxext.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = dsp_mmxext.c; sourceTree = "<group>"; };
 		97AEABCC0E8C1C6D00A10721 /* fdct_mmx.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = fdct_mmx.c; sourceTree = "<group>"; };
 		97AEABCD0E8C1C6D00A10721 /* idct_mmx.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = idct_mmx.c; sourceTree = "<group>"; };
+		97F013D10EDEAE5C004947E5 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1920,7 +1920,6 @@
 				97AEAC560E8C261B00A10721 /* Theora.framework in Frameworks */,
 				02CDDD130D159DF600722688 /* QuesoGLC.framework in Frameworks */,
 				02F5CCC00D1498A30000A2D0 /* Popt.framework in Frameworks */,
-				02581C770BD5AC5200957CBC /* Cocoa.framework in Frameworks */,
 				02581C740BD5ABF700957CBC /* Carbon.framework in Frameworks */,
 				02581C640BD5A98900957CBC /* libSDLmain.a in Frameworks */,
 				02581B6F0BD5A30900957CBC /* CoreFoundation.framework in Frameworks */,
@@ -1939,6 +1938,7 @@
 				0246A3B50BD3CD0B004D1C70 /* Ogg.framework in Frameworks */,
 				0246A3B60BD3CD0B004D1C70 /* Vorbis.framework in Frameworks */,
 				0246A3B70BD3CD0B004D1C70 /* PhysFS.framework in Frameworks */,
+				97F013D80EDEAE98004947E5 /* Cocoa.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1973,11 +1973,11 @@
 				0246A8010BD3D789004D1C70 /* IOKit.framework in Frameworks */,
 				0246A5F80BD3D5E5004D1C70 /* AudioToolbox.framework in Frameworks */,
 				0246A5F90BD3D5E5004D1C70 /* AudioUnit.framework in Frameworks */,
-				0246A5FB0BD3D5E5004D1C70 /* Cocoa.framework in Frameworks */,
 				0246A5FC0BD3D5E5004D1C70 /* CoreAudio.framework in Frameworks */,
 				0246A5FD0BD3D5E5004D1C70 /* QuickTime.framework in Frameworks */,
 				0246A93B0BD3DD3E004D1C70 /* Carbon.framework in Frameworks */,
 				0246AA170BD3DFEE004D1C70 /* CoreFoundation.framework in Frameworks */,
+				97F013D60EDEAE76004947E5 /* Cocoa.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2216,8 +2216,6 @@
 		0246A0980BD3CB97004D1C70 /* Warzone sources */ = {
 			isa = PBXGroup;
 			children = (
-				976AE8260EA0B59A00F2473F /* timer.c */,
-				976AE8270EA0B59A00F2473F /* timer.h */,
 				02BBB2060DA874CF002D438B /* Exception Handler */,
 				026591F40D7B6DE200B20A35 /* SQLite */,
 				0246A1970BD3CCC3004D1C70 /* Warzone */,
@@ -2412,6 +2410,8 @@
 			children = (
 				020A7E660D246D2B009C29F5 /* sequence.c */,
 				0246A15E0BD3CC8A004D1C70 /* sequence.h */,
+				976AE8260EA0B59A00F2473F /* timer.c */,
+				976AE8270EA0B59A00F2473F /* timer.h */,
 			);
 			name = Sequence;
 			sourceTree = "<group>";
@@ -3078,13 +3078,13 @@
 		02DDA8DF0BD3C3A80049AB60 /* External frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				97F013D10EDEAE5C004947E5 /* Cocoa.framework */,
 				027F9E1F0D03229500FA2030 /* libfreetype.dylib */,
 				02EA22450CFE494000EA65A0 /* libfontconfig.dylib */,
 				0246AA160BD3DFEE004D1C70 /* CoreFoundation.framework */,
 				0246A93A0BD3DD3E004D1C70 /* Carbon.framework */,
 				0246A5F20BD3D5E5004D1C70 /* AudioToolbox.framework */,
 				0246A5F30BD3D5E5004D1C70 /* AudioUnit.framework */,
-				0246A5F50BD3D5E5004D1C70 /* Cocoa.framework */,
 				0246A5F60BD3D5E5004D1C70 /* CoreAudio.framework */,
 				0246A5F70BD3D5E5004D1C70 /* QuickTime.framework */,
 				0246A3BC0BD3CD2B004D1C70 /* OpenGL.framework */,
