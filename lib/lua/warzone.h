@@ -20,7 +20,7 @@
 #ifndef _lua_warzone_h
 #define _lua_warzone_h
 
-#include "lib/lua/lua.h"
+#include <lua.h>
 
 extern int luaWZ_dofile(lua_State *L, const char *filename);
 extern int luaWZ_dofile_threaded(lua_State *L, const char *filename);

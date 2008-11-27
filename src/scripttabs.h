@@ -123,9 +123,9 @@ extern BOOL scrTabInitialise(void);
 extern void scrShutDown(void);
 
 // Lua
-#include "lib/lua/lua.h"
-#include "lib/lua/lauxlib.h"
-#include "lib/lua/lualib.h"
+#include <lua.h>
+#include <lauxlib.h>
+#include <lualib.h>
 #include "lib/lua/warzone.h"
 
 extern void scrRegisterConstants(lua_State *L);

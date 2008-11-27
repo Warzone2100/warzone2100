@@ -26,9 +26,9 @@
 #define __INCLUDED_SRC_SCRIPTEXTERN_H__
 
 // Lua
-#include "lib/lua/lua.h"
-#include "lib/lua/lauxlib.h"
-#include "lib/lua/lualib.h"
+#include <lua.h>
+#include <lauxlib.h>
+#include <lualib.h>
 #include "lib/lua/warzone.h"
 
 /// current game level

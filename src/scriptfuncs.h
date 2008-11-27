@@ -61,9 +61,9 @@ extern BOOL objectInRangeVis(struct BASE_OBJECT *psList, SDWORD x, SDWORD y, SDW
 extern SDWORD getPlayerFromString(char *playerName);
 
 // Lua
-#include "lib/lua/lua.h"
-#include "lib/lua/lauxlib.h"
-#include "lib/lua/lualib.h"
+#include <lua.h>
+#include <lauxlib.h>
+#include <lualib.h>
 #include "lib/lua/warzone.h"
 
 extern void registerScriptfuncs(lua_State *L);

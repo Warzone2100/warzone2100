@@ -34,9 +34,9 @@
 #include "lib/ivis_common/bitimage.h"
 
 // Lua
-#include "lib/lua/lua.h"
-#include "lib/lua/lauxlib.h"
-#include "lib/lua/lualib.h"
+#include <lua.h>
+#include <lauxlib.h>
+#include <lualib.h>
 #include "lib/lua/warzone.h"
 
 

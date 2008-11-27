@@ -33,9 +33,9 @@
 #include "evntsave.h"
 
 // Lua
-#include "lib/lua/lua.h"
-#include "lib/lua/lauxlib.h"
-#include "lib/lua/lualib.h"
+#include <lua.h>
+#include <lauxlib.h>
+#include <lualib.h>
 
 extern void registerScript(lua_State *L);
 extern void scriptTick(void);

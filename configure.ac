@@ -258,6 +258,12 @@ PKG_CHECK_MODULES([SQLITE], [sqlite3 >= 3.6],
 	AC_SUBST([SQLITE_LIBS])])
 AM_CONDITIONAL([USE_SYSTEM_SQLITE], [ test "x$use_system_sqlite" = "xyes" ])
 
+# First check for the lua5.1 package
+PKG_CHECK_MODULES([LUA], [lua5.1 >= 5.1], , [
+	# If that fails, check the "lua" pkg-config package
+	PKG_CHECK_MODULES([LUA], [lua >= 5.1])
+])
+
 if test "x$enable_static" = "xyes" ; then
 	# If linking statically, make sure to include the direct dependencies of
 	# QuesoGLC as well, because it does not have a pkg-config file.
