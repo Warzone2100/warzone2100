@@ -359,6 +359,32 @@ static bool widgetToolTipMouseLeaveCallback(widget *self, const event *evt,
 	return true;
 }
 
+/**
+ * Passes the event, evt, onto each child of self.
+ *
+ * @param self  The widget to dispatch the event for.
+ * @param evt   The event to dispatch.
+ * @return True if any child widgets of self handled the event, false if self
+ *         either has no children or if none of them handled the event.
+ */
+static bool widgetDispatchEventToChildren(widget *self, const event *evt)
+{
+	int i;
+	const int numChildren = vectorSize(self->children);
+	bool handled = false;
+	
+	for (i = 0; i < numChildren; i++)
+	{
+		// 'We' handled the event if any of our children handled it
+		if (widgetHandleEvent(vectorAt(self->children, i), evt))
+		{
+			handled = true;
+		}
+	}
+	
+	return handled;
+}
+
 static void widgetInitVtbl(widget *self)
 {
 	static bool initialised = false;
@@ -1395,10 +1421,10 @@ widget *widgetGetCurrentlyMousedOver(widget *self)
 }
 
 bool widgetHandleEventImpl(widget *self, const event *evt)
-{
-	// If the event should be passed onto our children
-	bool relevant = true;
-
+{	
+	// If any callbacks were fired as a direct result of the event
+	bool handled = false;
+	
 	// If we are disabled or invisible then only timer events are relevant
 	if ((!self->isEnabled || !self->isVisible)
 	 && evt->type != EVT_TIMER)
@@ -1421,7 +1447,6 @@ bool widgetHandleEventImpl(widget *self, const event *evt)
 			 && self->parent->hasMouseDown
 			 && !self->hasMouseDown)
 			{
-				relevant = false;
 				break;
 			}
 
@@ -1433,14 +1458,18 @@ bool widgetHandleEventImpl(widget *self, const event *evt)
 				
 				widgetFireCallbacks(self, (event *) &evtMouse);
 				
-				// Not relevant to our children
-				relevant = false;
+				// Event was handled
+				handled = true;
+
 				break;
 			}
 			
 			// If we have or did have the mouse
 			if (newHasMouse || self->hasMouse)
 			{
+				// Pass the event onto our children first
+				widgetDispatchEventToChildren(self, evt);
+				
 				// If we have just `got' the mouse
 				if (newHasMouse && !self->hasMouse)
 				{
@@ -1456,11 +1485,9 @@ bool widgetHandleEventImpl(widget *self, const event *evt)
 				
 				// Fire any registered callbacks for evtMouse.event.type
 				widgetFireCallbacks(self, (event *) &evtMouse);
-			}
-			// Of no interest to us (and therefore not to our children either)
-			else
-			{
-				relevant = false;
+				
+				// The event was handled
+				handled = true;
 			}
 			
 			// If the mouse is down offer a drag event
@@ -1505,46 +1532,55 @@ bool widgetHandleEventImpl(widget *self, const event *evt)
 				// Fire the callbacks
 				widgetFireCallbacks(self, (event *) &evtMouseBtn);
 				
+				// Event was handled
+				handled = true;
+				
 				// No drag is active
 				self->dragState = DRAG_NONE;
 				
 				// Mouse is no longer down
 				self->hasMouseDown = false;
 				
-				// Of no relevance to our children
-				relevant = false;
 				break;
 			}
 			
 			// If the mouse is inside of the widget
 			if (widgetHasMouse(self, evtMouseBtn.loc))
 			{
+				// Pass the event onto our children first
+				bool childHandled = widgetDispatchEventToChildren(self, evt);
+				
 				// If it is a mouse-down event set hasMouseDown to true
 				if (evt->type == EVT_MOUSE_DOWN)
 				{
 					self->hasMouseDown = true;
 				}
 
-				// Fire mouse down and mouse up callbacks
-				widgetFireCallbacks(self, (event *) &evtMouseBtn);
-
-				// Check for a click event
-				if (evt->type == EVT_MOUSE_UP && self->hasMouseDown)
+				// Only fire our callbacks if none of our children handled it
+				if (!childHandled)
 				{
-					evtMouseBtn.event.type = EVT_MOUSE_CLICK;
-
 					widgetFireCallbacks(self, (event *) &evtMouseBtn);
+					
+					// Check for a click event
+					if (evt->type == EVT_MOUSE_UP && self->hasMouseDown)
+					{
+						// Morph the event into a mouse click
+						evtMouseBtn.event.type = EVT_MOUSE_CLICK;
+						
+						widgetFireCallbacks(self, (event *) &evtMouseBtn);
+					}
 				}
+				
+				// Event was handled
+				handled = true;
 			}
 			// If the mouse is no longer down
 			else if (evt->type == EVT_MOUSE_UP && self->hasMouseDown)
 			{
+				// Pass the event onto our children
+				widgetDispatchEventToChildren(self, evt);
+				
 				self->hasMouseDown = false;
-			}
-			// Of no interest to us or our children
-			else
-			{
-				relevant = false;
 			}
 			break;
 		}
@@ -1555,11 +1591,17 @@ bool widgetHandleEventImpl(widget *self, const event *evt)
 			// Only relevant if we have focus
 			if (self->hasFocus)
 			{
-				widgetFireCallbacks(self, evt);
-			}
-			else
-			{
-				relevant = false;
+				// Allow our children to handle the event first
+				bool childHandled = widgetDispatchEventToChildren(self, evt);
+				
+				// If none of our children handled it then handle it ourself
+				if (!childHandled)
+				{
+					widgetFireCallbacks(self, evt);
+				}
+				
+				// We handled the event
+				handled = true;
 			}
 			break;
 		}
@@ -1574,27 +1616,13 @@ bool widgetHandleEventImpl(widget *self, const event *evt)
 		{
 			// Fire any callback handlers
 			widgetFireCallbacks(self, evt);
-			
-			// Never relevant to our children
-			relevant = false;
 			break;
 		}
 		default:
 			break;
 	}
 
-	// If necessary pass the event onto our children
-	if (relevant)
-	{
-		int i;
-
-		for (i = 0; i < vectorSize(self->children); i++)
-		{
-			widgetHandleEvent(vectorAt(self->children, i), evt);
-		}
-	}
-
-	return true;
+	return handled;
 }
 
 bool widgetPointMasked(const widget *self, point loc)
