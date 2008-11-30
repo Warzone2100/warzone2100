@@ -252,8 +252,8 @@ Section $(TEXT_SecMusicMod) SecMusicMod
 
   SetOutPath "$INSTDIR\mods\global\autoload"
 
-  NSISdl::download "http://download.gna.org/warzone/releases/mods/music_1.0.AUTHORS"          "music_1.0.AUTHORS.txt"
-  NSISdl::download "http://download.gna.org/warzone/releases/mods/music_1.0.wz"               "music_1.0.wz"
+  NSISdl::download "http://download.gna.org/warzone/releases/mods/community-music_1.0.AUTHORS"          "music_1.0.AUTHORS.txt"
+  NSISdl::download "http://download.gna.org/warzone/releases/mods/community-music_1.0.wz"               "music_1.0.wz"
   Pop $R0 ; Get the return value
   StrCmp $R0 "success" +2
     MessageBox MB_OK|MB_ICONSTOP "Download of Music mod failed: $R0"
