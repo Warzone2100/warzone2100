@@ -393,8 +393,8 @@ static void widgetInitVtbl(widget *self)
 		vtbl.show                   = widgetShowImpl;
 		vtbl.hide                   = widgetHideImpl;
 
-		vtbl.getMinSize             = NULL;
-		vtbl.getMaxSize             = NULL;
+		vtbl.getMinSize             = widgetGetMinSizeImpl;
+		vtbl.getMaxSize             = widgetGetMaxSizeImpl;
 		
 		vtbl.resize                 = widgetResizeImpl;
 		vtbl.reposition             = widgetRepositionImpl;
@@ -1247,6 +1247,21 @@ void widgetRepositionImpl(widget *self, int x, int y)
 	
 	// Fire any callbacks for EVT_REPOSITION
 	widgetFireCallbacks(self, (event *) &evtReposition);
+}
+
+size widgetGetMinSizeImpl(widget *self)
+{
+	const size minSize = { 1.0f, 1.0f };
+	
+	return minSize;
+}
+
+size widgetGetMaxSizeImpl(widget *self)
+{
+	// Note the int => float conversion
+	const size maxSize = { INT16_MAX, INT16_MAX };
+	
+	return maxSize;
 }
 
 void widgetCompositeImpl(widget *self)

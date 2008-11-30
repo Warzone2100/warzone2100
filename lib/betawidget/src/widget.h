@@ -614,6 +614,8 @@ void widgetResizeImpl(widget *self, int w, int h);
 void widgetRepositionImpl(widget *self, int x, int y);
 bool widgetHandleEventImpl(widget *self, const event *evt);
 void widgetCompositeImpl(widget *self);
+size widgetGetMinSizeImpl(widget *self);
+size widgetGetMaxSizeImpl(widget *self);
 
 /*
  * Public static methods
