@@ -49,6 +49,9 @@ static void windowInitVtbl(window *self)
 		vtbl.widgetVtbl.doDraw      = windowDoDrawImpl;
 		vtbl.widgetVtbl.doDrawMask  = windowDoDrawMaskImpl;
 		
+		vtbl.widgetVtbl.getMinSize  = windowGetMinSizeImpl;
+		vtbl.widgetVtbl.getMaxSize  = windowGetMaxSizeImpl;
+		
 		initialised = true;
 	}
 	
@@ -216,6 +219,21 @@ void windowDoDrawMaskImpl(widget *self)
 
 	// We don't have to specify the color, it's already set in our parent
 	cairo_fill(cr);
+}
+
+size windowGetMinSizeImpl(widget *self)
+{
+	const size minSize = { 1.0f, 1.0f };
+	
+	return minSize;
+}
+
+size windowGetMaxSizeImpl(widget *self)
+{
+	// Note the int => float conversion
+	const size maxSize = { INT16_MAX, INT16_MAX };
+	
+	return maxSize;
 }
 
 void windowSetWindowVector(vector *v)
