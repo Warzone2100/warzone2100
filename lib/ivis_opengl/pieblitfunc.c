@@ -78,31 +78,8 @@ void pie_Line(int x0, int y0, int x1, int y1, PIELIGHT colour)
 /**
  *	Assumes render mode set up externally, draws filled rectangle.
  */
-static void pie_DrawRect(SDWORD x0, SDWORD y0, SDWORD x1, SDWORD y1, PIELIGHT colour)
+static void pie_DrawRect(float x0, float y0, float x1, float y1, PIELIGHT colour)
 {
-	if (x0 > psRendSurface->clip.right || x1 < psRendSurface->clip.left
-	    || y0 > psRendSurface->clip.bottom || y1 < psRendSurface->clip.top)
-	{
-		return;
-	}
-
-	if (x0 < psRendSurface->clip.left)
-	{
-		x0 = psRendSurface->clip.left;
-	}
-	if (x1 > psRendSurface->clip.right)
-	{
-		x1 = psRendSurface->clip.right;
-	}
-	if (y0 < psRendSurface->clip.top)
-	{
-		y0 = psRendSurface->clip.top;
-	}
-	if (y1 > psRendSurface->clip.bottom)
-	{
-		y1 = psRendSurface->clip.bottom;
-	}
-
 	pie_SetAlphaTest(false);
 
 	glColor4ubv(colour.vector);
@@ -158,7 +135,7 @@ void pie_BoxFill(int x0,int y0, int x1, int y1, PIELIGHT colour)
 
 /***************************************************************************/
 
-void pie_TransBoxFill(SDWORD x0, SDWORD y0, SDWORD x1, SDWORD y1)
+void pie_TransBoxFill(float x0, float y0, float x1, float y1)
 {
 	PIELIGHT light;
 
@@ -171,7 +148,7 @@ void pie_TransBoxFill(SDWORD x0, SDWORD y0, SDWORD x1, SDWORD y1)
 
 /***************************************************************************/
 
-void pie_UniTransBoxFill(SDWORD x0,SDWORD y0, SDWORD x1, SDWORD y1, PIELIGHT light)
+void pie_UniTransBoxFill(float x0, float y0, float x1, float y1, PIELIGHT light)
 {
 	pie_SetTexturePage(TEXPAGE_NONE);
 	pie_SetRendMode(REND_ALPHA_FLAT);

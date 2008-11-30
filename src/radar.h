@@ -57,6 +57,7 @@ typedef enum _radar_draw_mode
 
 extern BOOL		bEnemyAllyRadarColor;		///< Enemy/ally minimap color
 extern RADAR_DRAW_MODE	radarDrawMode;			///< Current minimap mode
+extern BOOL rotateRadar;
 
 extern void radarInitVars(void);			///< Recalculate minimap variables. For initialization code only.
 extern PIELIGHT clanColours[MAX_PLAYERS];

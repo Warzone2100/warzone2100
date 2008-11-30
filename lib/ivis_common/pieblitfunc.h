@@ -64,8 +64,8 @@ extern void pie_BoxFill(int x0,int y0, int x1, int y1, PIELIGHT colour);
 extern void pie_ImageFileID(IMAGEFILE *ImageFile, UWORD ID, int x, int y);
 extern void pie_ImageFileIDTile(IMAGEFILE *ImageFile, UWORD ID, int x, int y, int Width, int Height);
 
-extern void pie_TransBoxFill(SDWORD x0, SDWORD y0, SDWORD x1, SDWORD y1);
-extern void pie_UniTransBoxFill(SDWORD x0,SDWORD y0, SDWORD x1, SDWORD y1, PIELIGHT colour);
+extern void pie_TransBoxFill(float x0, float y0, float x1, float y1);
+extern void pie_UniTransBoxFill(float x0, float y0, float x1, float y1, PIELIGHT colour);
 
 extern BOOL pie_InitRadar(void);
 extern BOOL pie_ShutdownRadar(void);

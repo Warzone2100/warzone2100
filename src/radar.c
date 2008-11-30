@@ -51,6 +51,7 @@
 
 BOOL bEnemyAllyRadarColor = false;     			/**< Enemy/ally radar color. */
 RADAR_DRAW_MODE	radarDrawMode = RADAR_MODE_DEFAULT;	/**< Current mini-map mode. */
+BOOL rotateRadar; ///< Rotate the radar?
 
 static PIELIGHT		colRadarAlly, colRadarMe, colRadarEnemy;
 static PIELIGHT		tileColours[MAX_TILES];
@@ -87,7 +88,7 @@ static UDWORD radarBufferSize = 0;
 
 static void DrawRadarTiles(void);
 static void DrawRadarObjects(void);
-static void DrawRadarExtras(float pixSizeH, float pixSizeV);
+static void DrawRadarExtras(float radarX, float radarY, float pixSizeH, float pixSizeV);
 
 static void radarSize(float zoom)
 {
@@ -184,21 +185,29 @@ static void CalcRadarPixelSize(float *SizeH, float *SizeV)
 /** Given a position within the radar, return a world coordinate. */
 void CalcRadarPosition(int mX, int mY, int *PosX, int *PosY)
 {
-	const int	posX = mX - radarX;		// pixel position within radar
-	const int	posY = mY - radarY;
 	int		sPosX, sPosY;
 	float		pixSizeH, pixSizeV;
-
-	if (!CoordInRadar(mX, mY))
+	
+	Vector2f pos;
+	pos.x = mX - radarX - radarWidth/2;
+	pos.y = mY - radarY - radarHeight/2;
+	if (rotateRadar)
 	{
-		ASSERT(false, "clicked outside radar minimap (%d, %d)", mX, mY);
+		pos = Vector2f_Rotate2f(pos, -player.r.y/DEG(1));
+	}
+	pos.x += radarWidth/2;
+	pos.y += radarHeight/2;
+
+	if (pos.x<0 || pos.y<0 || pos.x>=radarWidth || pos.y>=radarHeight)
+	{
+		ASSERT(false, "clicked outside radar minimap (%d, %d) -> (%.1f,%.1f)", mX, mY, pos.x, pos.y);
 		*PosX = 0;
 		*PosY = 0;
 		return;
 	}
 	CalcRadarPixelSize(&pixSizeH, &pixSizeV);
-	sPosX = (float)posX / pixSizeH;	// adjust for pixel size
-	sPosY = (float)posY / pixSizeV;
+	sPosX = pos.x / pixSizeH;	// adjust for pixel size
+	sPosY = pos.y / pixSizeV;
 	sPosX += scrollMinX;		// adjust for scroll limits
 	sPosY += scrollMinY;
 
@@ -233,9 +242,8 @@ void drawRadar(void)
 {
 	float	pixSizeH, pixSizeV;
 	static int frameSkip = 0;
-	const int largerSize = MAX(radarWidth, radarHeight);
-	const int offX = radarX - (largerSize - radarWidth) / 2;
-	const int offY = radarY - (largerSize - radarHeight) / 2;
+	float centerX = radarX+radarWidth/2;
+	float centerY = radarY+radarHeight/2;
 
 	ASSERT(radarBuffer, "No radar buffer allocated");
 	if (!radarBuffer)
@@ -253,13 +261,26 @@ void drawRadar(void)
 		frameSkip = RADAR_FRAME_SKIP;
 	}
 	frameSkip--;
-
-	iV_TransBoxFill(offX, offY, offX + largerSize, offY + largerSize);
-	pie_ClipBegin(radarX, radarY, radarX + radarWidth, radarY + radarHeight);
-	pie_RenderRadar(radarX, radarY, radarWidth, radarHeight);
-	DrawRadarExtras(pixSizeH, pixSizeV);
-	drawRadarBlips(radarX, radarY, pixSizeH, pixSizeV);
-	pie_ClipEnd();
+	pie_SetTranslucencyMode(TRANS_ALPHA);
+	pie_MatBegin();
+		pie_TRANSLATE(centerX, centerY, 0);
+		if (rotateRadar)
+		{
+			// rotate the map
+			iV_MatrixRotateZ(player.r.y);
+		}
+		// draw the box at the dimensions of the map
+		iV_TransBoxFill(-radarWidth/2,
+						-radarHeight/2,
+						 radarWidth/2,
+						 radarHeight/2);
+		pie_RenderRadar(-radarWidth/2,
+						-radarHeight/2,
+						 radarWidth,
+						 radarHeight);
+		DrawRadarExtras(-radarWidth/2, -radarHeight/2, pixSizeH, pixSizeV);
+		drawRadarBlips(-radarWidth/2, -radarHeight/2, pixSizeH, pixSizeV);
+	pie_MatEnd();
 }
 
 static PIELIGHT appliedRadarColour(RADAR_DRAW_MODE radarDrawMode, MAPTILE *WTile)
@@ -499,7 +520,7 @@ static SDWORD getLengthAdjust( void )
 }
 
 /** Draws a Myth/FF7 style viewing window */
-static void drawViewingWindow(int x, int y, float pixSizeH, float pixSizeV)
+static void drawViewingWindow(float radarX, float radarY, int x, int y, float pixSizeH, float pixSizeV)
 {
 	Vector3i v[4], tv[4], centre;
 	int	shortX, longX, yDrop, yDropVar;
@@ -557,12 +578,12 @@ static void drawViewingWindow(int x, int y, float pixSizeH, float pixSizeV)
 	pie_DrawViewingWindow(tv, radarX, radarY, radarX + radarWidth, radarY + radarHeight, colour);
 }
 
-static void DrawRadarExtras(float pixSizeH, float pixSizeV)
+static void DrawRadarExtras(float radarX, float radarY, float pixSizeH, float pixSizeV)
 {
 	int	viewX = (player.p.x / TILE_UNITS) * pixSizeH;
 	int	viewY = (player.p.z / TILE_UNITS) * pixSizeV;
 
-	drawViewingWindow(viewX, viewY, pixSizeH, pixSizeV);
+	drawViewingWindow(radarX, radarY, viewX, viewY, pixSizeH, pixSizeV);
 	RenderWindowFrame(FRAME_RADAR, radarX - 1, radarY - 1, radarWidth + 2, radarHeight + 2);
 }
 

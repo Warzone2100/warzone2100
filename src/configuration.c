@@ -230,6 +230,18 @@ BOOL loadConfig(void)
 		setInvertMouseStatus(true);
 		setWarzoneKeyNumeric("mouseflip", true);
 	}
+	
+	// //////////////////////////
+	// rotate radar
+	if(getWarzoneKeyNumeric("rotateRadar", &val))
+	{
+		rotateRadar = val;
+	}
+	else
+	{
+		rotateRadar = true;
+		setWarzoneKeyNumeric("rotateRadar", rotateRadar);
+	}
 
 	if (getWarzoneKeyNumeric("PauseOnFocusLoss", &val))
 	{

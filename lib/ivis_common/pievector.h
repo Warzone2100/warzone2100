@@ -208,7 +208,6 @@ static inline WZ_DECL_CONST Vector2f Vector2f_Sub(const Vector2f op1, const Vect
 	return dest;
 }
 
-
 /*!
  * Multiply a vector with a scalar.
  * \param v Vector
@@ -265,6 +264,21 @@ static inline WZ_DECL_CONST Vector2f Vector2f_Normalise(const Vector2f v)
 	}
 }
 
+/*!
+ * Rotate v
+ * \param v vector to rotate
+ * \param degrees the amount of degrees to rotate in counterclockwise direction
+ * \return Result
+ */
+static inline WZ_DECL_CONST Vector2f Vector2f_Rotate2f(Vector2f v, float degrees)
+{
+	Vector2f result;
+	float radians = (degrees / 360) * 2 * 3.14;
+	result.x = v.x*cos(radians) - v.y*sin(radians);
+	result.y = v.x*sin(radians) + v.y*cos(radians);
+	
+	return result;
+}
 
 /*!
  * Finds a point that lies in between two other points, a starting and ending
