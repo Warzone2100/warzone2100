@@ -13,6 +13,15 @@
  * Buildsystem:
    * Fix: Only compile the translations when $(TRANSLATION) is "yes". (ticket:130)
 
+2008-11-30: Version 2.1_rc2
+ * General:
+   * Change: Updated Italian (100%), Portugues (99.96%) and Russian (46%) translations
+   * Fix: Crash when translations for player colour names where larger than the string buffer allocated for them (12 bytes) (r6283)
+ * AI:
+   * Fix: Allow a droid to pick a new target while auto-repairing. (ticket:35, bug #12217)
+ * Multiplayer:
+   * Fix: More out-of-sync issues fixed (r6230)
+
 2008-11-09: Version 2.1_rc1
  * General:
    * Fix: Don't validate the weapons of a structure using the maximum amount of weapons on a droid (DROID_MAXWEAPS, bug #12400)

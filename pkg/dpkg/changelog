@@ -1,3 +1,18 @@
+warzone2100 (2.1.0~rc2-0) unstable; urgency=low
+
+  * General:
+    * Change: Updated Italian (100%), Portugues (99.96%) and Russian (46%)
+      translations
+    * Fix: Crash when translations for player colour names where larger than
+      the string buffer allocated for them (12 bytes) (r6283)
+  * AI:
+    * Fix: Allow a droid to pick a new target while auto-repairing.
+      (ticket:35, bug #12217)
+  * Multiplayer:
+    * Fix: More out-of-sync issues fixed (r6285)
+
+ -- Giel van Schijndel <muggenhor@gna.org>  Sun, 30 Nov 2008 15:53:41 +0100
+
 warzone2100 (2.1.0~rc1-0) unstable; urgency=low
 
   * General:
