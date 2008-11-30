@@ -590,12 +590,21 @@ static void DrawRadarExtras(float radarX, float radarY, float pixSizeH, float pi
 /** Does a screen coordinate lie within the radar area? */
 BOOL CoordInRadar(int x,int y)
 {
-	if (x >= radarX && x < radarX + radarWidth && y >= radarY && y < radarY + radarHeight)
+	Vector2f pos;
+	pos.x = x - radarX - radarWidth/2;
+	pos.y = y - radarY - radarHeight/2;
+	if (rotateRadar)
 	{
-		return true;
+		pos = Vector2f_Rotate2f(pos, -player.r.y/DEG(1));
 	}
+	pos.x += radarWidth/2;
+	pos.y += radarHeight/2;
 
-	return false;
+	if (pos.x<0 || pos.y<0 || pos.x>=radarWidth || pos.y>=radarHeight)
+	{
+		return false;
+	}
+	return true;
 }
 
 void radarColour(UDWORD tileNumber, uint8_t r, uint8_t g, uint8_t b)
