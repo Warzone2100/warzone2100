@@ -1100,7 +1100,7 @@ void widgetDisableImpl(widget *self)
 	// Disable our children
 	for (i = 0; i < vectorSize(self->children); i++)
 	{
-		widgetDisable(WIDGET(vectorAt(self->children, i)));
+		widgetDisable(vectorAt(self->children, i));
 	}
 }
 
