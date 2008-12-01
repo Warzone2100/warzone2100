@@ -274,7 +274,7 @@ static bool widgetAnimationTimerCallback(widget *self, const event *evt,
 		
 		// If there was no interpolation then the animation is over
 		if (!didInterpolate)
-		{		
+		{
 			// Remove ourself (the event handler)
 			widgetRemoveEventHandler(self, handlerId);
 		}
@@ -341,7 +341,7 @@ static bool widgetToolTipMouseEnterCallback(widget *self, const event *evt,
 	{
 		// Install a single-shot event handler to show the tip
 		widgetAddTimerEventHandler(self, EVT_TIMER_SINGLE_SHOT, 2000, 
-								   widgetToolTipTimerCallback, NULL, NULL);
+		                           widgetToolTipTimerCallback, NULL, NULL);
 	}
 	
 	return true;
@@ -911,7 +911,7 @@ int widgetAddAnimation(widget *self, int nframes,
 	ourFrames = vectorCreate();
 	
 	for (i = 0; i < nframes; i++)
-	{		
+	{
 		// Allocate space for the frame
 		currFrame = malloc(sizeof(animationFrame));
 		
@@ -1199,7 +1199,7 @@ void widgetShowToolTip(widget *self)
 }
 
 void widgetHideToolTip(widget *self)
-{	
+{
 	// Create the event
 	eventToolTip evt;
 	evt.event = widgetCreateEvent(EVT_TOOL_TIP_HIDE);
@@ -1336,7 +1336,7 @@ void widgetCompositeImpl(widget *self)
 }
 
 void widgetEnableMask(widget *self)
-{	
+{
 	// Check if the mask is already enabled (worth asserting)
 	if (self->maskEnabled)
 	{
@@ -1421,7 +1421,7 @@ widget *widgetGetCurrentlyMousedOver(widget *self)
 }
 
 bool widgetHandleEventImpl(widget *self, const event *evt)
-{	
+{
 	// If any callbacks were fired as a direct result of the event
 	bool handled = false;
 	
@@ -1661,7 +1661,7 @@ bool widgetPointMasked(const widget *self, point loc)
 }
 
 void widgetSetToolTip(widget *self, const char *tip)
-{	
+{
 	// Free the current tip (if any)
 	free((char *) self->toolTip);
 	
