@@ -67,7 +67,12 @@ void *vectorAt(vector *v, int index);
 void *vectorHead(vector *v);
 
 /**
- * 
+ * Sets the item at offset index of the vector v to object.
+ *
+ * @param v The vector to set.
+ * @param index The index of the item to be set.
+ * @param object    The item to set v[index] to.
+ * @return The current item at index.
  */
 void *vectorSetAt(vector *v, int index, void *object);
 
