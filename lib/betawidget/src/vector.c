@@ -28,6 +28,7 @@ struct _vector
 	void            **mem;
 	int             size;
 	int             head;
+	int             iter;
 };
 
 static const int defaultSize = 4;
@@ -51,6 +52,9 @@ vector *vectorCreate()
 
 	v->size = defaultSize;
 	v->head = 0;
+	
+	// Rewind the vector to the start
+	vectorRewind(v);
 
 	return v;
 }
@@ -115,6 +119,7 @@ void vectorRemoveAt(vector *v, int index)
 	        (v->head - index) * sizeof(void *));
 
 	v->head--;
+	v->iter--;
 }
 
 void vectorMap(vector *v, mapCallback cb)
@@ -136,4 +141,27 @@ void vectorMapAndDestroy(vector *v, mapCallback cb)
 int vectorSize(vector *v)
 {
 	return v->head;
+}
+
+void vectorRewind(vector *v)
+{
+	v->iter = -1;
+}
+
+void *vectorNext(vector *v)
+{
+	if (v->iter >= v->head)
+	{
+		vectorRewind(v);
+		return NULL;
+	}
+	else
+	{
+		return v->mem[++v->iter];
+	}
+}
+
+bool vectorHasNext(vector *v)
+{
+	return (v->iter < v->head) ? true : false;
 }

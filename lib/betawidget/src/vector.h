@@ -21,6 +21,8 @@
 #ifndef VECTOR_H_
 #define VECTOR_H_
 
+#include <stdbool.h>
+
 typedef struct _vector vector;
 typedef void (*mapCallback) (void *object);
 
@@ -67,7 +69,7 @@ void *vectorAt(vector *v, int index);
 void *vectorHead(vector *v);
 
 /**
- * Sets the item at offset index of the vector v to object.
+ * Sets the item at offset index of the vector, v, to object.
  *
  * @param v The vector to set.
  * @param index The index of the item to be set.
@@ -109,5 +111,34 @@ void vectorMapAndDestroy(vector *v, mapCallback cb);
  * @return The number of elements in the vector.
  */
 int vectorSize(vector *v);
+
+/**
+ * Re-winds the internal index pointer of the vector, v, such that it is at the
+ * start of the vector.
+ *
+ * @param v The vector to rewind.
+ */
+void vectorRewind(vector *v);
+
+/**
+ * Returns a pointer to the next element in the vector, incrementing the
+ * internal index by 1. If the end of the vector has been reached then NULL is
+ * returned and the vector is rewound.
+ *
+ * @param v The vector to return the next element of.
+ * @return The next element of the vector, or NULL if we have reached the end of
+ *         the vector.
+ */
+void *vectorNext(vector *v);
+
+/**
+ * Returns true if the internal iterator index is not yet at the end of the
+ * vector. Otherwise, false is returned.
+ *
+ * @param v The vector to check.
+ * @return True if thd end of the vector has not yet been reached, false
+ *         otherwise.
+ */
+bool vectorHasNext(vector *v);
 
 #endif /*VECTOR_H_*/
