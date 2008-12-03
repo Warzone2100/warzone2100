@@ -200,12 +200,6 @@ extern BOOL mouseDrag(MOUSE_KEY_CODE code, UDWORD *px, UDWORD *py);
 /** Warps the mouse to the given position. */
 extern void SetMousePos(Uint16 x, Uint16 y);
 
-/** Sets the state of the mouse key to down. */
-extern void setMouseDown(MOUSE_KEY_CODE code);
-
-/** Sets the state of the mouse key to up. */
-extern void setMouseUp(MOUSE_KEY_CODE code);
-
 /* The input buffer can contain normal character codes and these control codes */
 #define INPBUF_LEFT		0x010000
 #define INPBUF_RIGHT	0x020000

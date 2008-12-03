@@ -538,31 +538,3 @@ void SetMousePos(Uint16 x, Uint16 y)
 	if (mousewarp)
 		SDL_WarpMouse(x, y);
 }
-
-/* Sets the state of the mouse key to down */
-void setMouseDown(MOUSE_KEY_CODE code)
-{
-	SDL_Event event;
-
-	event.type = SDL_MOUSEBUTTONDOWN;
-	event.button.type = SDL_MOUSEBUTTONDOWN;
-	event.button.button = code;
-	event.button.state = SDL_PRESSED;
-	event.button.x = mouseX();
-	event.button.y = mouseY();
-	SDL_PushEvent(&event);
-}
-
-/* Sets the state of the mouse key to up */
-void setMouseUp(MOUSE_KEY_CODE code)
-{
-	SDL_Event event;
-
-	event.type = SDL_MOUSEBUTTONUP;
-	event.button.type = SDL_MOUSEBUTTONUP;
-	event.button.button = code;
-	event.button.state = SDL_RELEASED;
-	event.button.x = mouseX();
-	event.button.y = mouseY();
-	SDL_PushEvent(&event);
-}
