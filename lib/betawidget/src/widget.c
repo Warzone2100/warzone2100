@@ -72,8 +72,11 @@ static bool widgetCairoCreate(cairo_t **cr, cairo_format_t format, int w, int h)
 		return false;
 	}
 	
-	// Creatr a context to draw on the surface
+	// Create a context to draw on the surface
 	*cr = cairo_create(surface);
+	
+	// Enable anti-aliasing to improvement the output quality
+	cairo_set_antialias(*cr, CAIRO_ANTIALIAS_GRAY);
 	
 	// Destroy the surface (*cr still maintains a reference to it)
 	cairo_surface_destroy(surface);
