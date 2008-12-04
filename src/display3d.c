@@ -2716,19 +2716,87 @@ static void drawWeaponReloadBar(BASE_OBJECT *psObj, WEAPON *psWeap, int weapon_s
 	}
 }
 
-/// Draw the health of structures and show enemy structures being targetted
-static void	drawStructureSelections( void )
+/// draw the health bar for the specified structure
+static void drawStructureHealth(STRUCTURE *psStruct)
 {
-	STRUCTURE	*psStruct;
 	SDWORD		scrX,scrY,scrR;
 	PIELIGHT	powerCol = WZCOL_BLACK;
 	UDWORD		health,width;
 	UDWORD		scale;
+
+	scale = MAX(psStruct->pStructureType->baseWidth, psStruct->pStructureType->baseBreadth);
+	width = scale*20;
+	scrX = psStruct->sDisplay.screenX;
+	scrY = psStruct->sDisplay.screenY + (scale*10);
+	scrR = width;
+	//health = PERCENT(psStruct->body, psStruct->baseBodyPoints);
+	if (ctrlShiftDown())
+	{
+		//show resistance values if CTRL/SHIFT depressed
+		UDWORD  resistance = structureResistance(
+			psStruct->pStructureType, psStruct->player);
+		if (resistance)
+		{
+			health = PERCENT(psStruct->resistance, resistance);
+		}
+		else
+		{
+			health = 100;
+		}
+	}
+	else
+	{
+		//show body points
+		health = (1. - getStructureDamage(psStruct)) * 100;
+	}
+	if (health > REPAIRLEV_HIGH)
+	{
+		powerCol = WZCOL_HEALTH_HIGH;
+	}
+	else if (health > REPAIRLEV_LOW)
+	{
+		powerCol = WZCOL_HEALTH_MEDIUM;
+	}
+	else
+	{
+		powerCol = WZCOL_HEALTH_LOW;
+	}
+	health = (((width*10000)/100)*health)/10000;
+	health*=2;
+	pie_BoxFill(scrX-scrR-1, scrY-1, scrX+scrR+1, scrY+2, WZCOL_RELOAD_BACKGROUND);
+	pie_BoxFill(scrX-scrR, scrY, scrX-scrR+health, scrY+1, powerCol);
+}
+
+/// draw the construction bar for the specified structure
+static void drawStructureBuildProgress(STRUCTURE *psStruct)
+{
+	SDWORD		scrX,scrY,scrR;
+	PIELIGHT	powerCol = WZCOL_BLACK;
+	UDWORD		health,width;
+	UDWORD		scale;
+
+	scale = MAX(psStruct->pStructureType->baseWidth, psStruct->pStructureType->baseBreadth);
+	width = scale*20;
+	scrX = psStruct->sDisplay.screenX;
+	scrY = psStruct->sDisplay.screenY + (scale*10);
+	scrR = width;
+	health =  PERCENT(psStruct->currentBuildPts , psStruct->pStructureType->buildPoints);
+	powerCol = WZCOL_YELLOW;
+	health = (((width*10000)/100)*health)/10000;
+	health*=2;
+	pie_BoxFill(scrX - scrR - 1, scrY - 1, scrX + scrR + 1, scrY + 2, WZCOL_RELOAD_BACKGROUND);
+	pie_BoxFill(scrX - scrR - 1, scrY, scrX - scrR + health, scrY + 1, powerCol);
+}
+
+/// Draw the health of structures and show enemy structures being targetted
+static void	drawStructureSelections( void )
+{
+	STRUCTURE	*psStruct;
+	SDWORD		scrX,scrY;
 	UDWORD		i;
 	BASE_OBJECT	*psClickedOn;
 	BOOL		bMouseOverStructure = false;
 	BOOL		bMouseOverOwnStructure = false;
-	float		mulH;
 
 	psClickedOn = mouseTarget();
 	if(psClickedOn!=NULL && psClickedOn->type == OBJ_STRUCTURE)
@@ -2756,48 +2824,8 @@ static void	drawStructureSelections( void )
 			        && ((STRUCTURE * )psClickedOn)->status == SS_BUILT
 			            && psStruct->sDisplay.frameNumber == currentGameFrame))
 			{
-				scale = MAX(psStruct->pStructureType->baseWidth, psStruct->pStructureType->baseBreadth);
-				width = scale*20;
-				scrX = psStruct->sDisplay.screenX;
-				scrY = psStruct->sDisplay.screenY + (scale*10);
-				scrR = width;
-				//health = PERCENT(psStruct->body, psStruct->baseBodyPoints);
-				if (ctrlShiftDown())
-				{
-					//show resistance values if CTRL/SHIFT depressed
-					UDWORD  resistance = structureResistance(psStruct->pStructureType, psStruct->player);
-
-					if (resistance)
-					{
-						health = PERCENT(psStruct->resistance, resistance);
-					}
-					else
-					{
-						health = 100;
-					}
-				}
-				else
-				{
-					//show body points
-					health = (1. - getStructureDamage(psStruct)) * 100;
-				}
-				if(health>100) health =100;
-
-				if (health > REPAIRLEV_HIGH) {
-					powerCol = WZCOL_HEALTH_HIGH;
-				} else if (health >= REPAIRLEV_LOW) {
-					powerCol = WZCOL_HEALTH_MEDIUM;
-				} else {
-					powerCol = WZCOL_HEALTH_LOW;
-				}
-				mulH = (float)health / 100.f;
-				mulH *= (float)width;
-				health = mulH;
-				if(health>width) health = width;
-				health*=2;
-				pie_BoxFill(scrX-scrR - 1, scrY - 1, scrX + scrR + 1, scrY + 2, WZCOL_RELOAD_BACKGROUND);
-				pie_BoxFill(scrX-scrR, scrY, scrX - scrR + health, scrY + 1, powerCol);
-
+				drawStructureHealth(psStruct);
+				
 				for (i = 0; i < psStruct->numWeaps; i++)
 				{
 					drawWeaponReloadBar((BASE_OBJECT *)psStruct, &psStruct->asWeaps[i], i);
@@ -2807,28 +2835,7 @@ static void	drawStructureSelections( void )
 			{
 				if(psStruct->status == SS_BEING_BUILT && psStruct->sDisplay.frameNumber == currentGameFrame)
 				{
-					scale = MAX(psStruct->pStructureType->baseWidth, psStruct->pStructureType->baseBreadth);
-					width = scale*20;
-					scrX = psStruct->sDisplay.screenX;
-					scrY = psStruct->sDisplay.screenY + (scale*10);
-					scrR = width;
-					health = PERCENT(psStruct->currentBuildPts ,
-					psStruct->pStructureType->buildPoints);
-					if (health >= 100)
-					{
-						health = 100;	// belt and braces
-					}
-					powerCol = WZCOL_YELLOW;
-					mulH = (float)health / 100.f;
-					mulH *= (float)width;
-					health = mulH;
-					if (health > width)
-					{
-						health = width;
-					}
-					health *= 2;
-					pie_BoxFill(scrX - scrR - 1, scrY - 1, scrX + scrR + 1, scrY + 2, WZCOL_RELOAD_BACKGROUND);
-					pie_BoxFill(scrX - scrR, scrY, scrX - scrR + health, scrY + 1, powerCol);
+					drawStructureBuildProgress(psStruct);
 				}
 			}
 		}
@@ -2867,61 +2874,11 @@ static void	drawStructureSelections( void )
 			psStruct = (STRUCTURE*)psClickedOn;
 			if(psStruct->status==SS_BUILT)
 			{
-				scale = MAX(psStruct->pStructureType->baseWidth, psStruct->pStructureType->baseBreadth);
-				width = scale*20;
-				scrX = psStruct->sDisplay.screenX;
-				scrY = psStruct->sDisplay.screenY + (scale*10);
-				scrR = width;
-				//health = PERCENT(psStruct->body, psStruct->baseBodyPoints);
-				if (ctrlShiftDown())
-				{
-					//show resistance values if CTRL/SHIFT depressed
-					UDWORD  resistance = structureResistance(
-						psStruct->pStructureType, psStruct->player);
-					if (resistance)
-					{
-						health = PERCENT(psStruct->resistance, resistance);
-					}
-					else
-					{
-						health = 100;
-					}
-				}
-				else
-				{
-					//show body points
-					health = (1. - getStructureDamage(psStruct)) * 100;
-				}
-				if (health > REPAIRLEV_HIGH)
-				{
-					powerCol = WZCOL_HEALTH_HIGH;
-				}
-				else if (health > REPAIRLEV_LOW)
-				{
-					powerCol = WZCOL_HEALTH_MEDIUM;
-				}
-				else
-				{
-					powerCol = WZCOL_HEALTH_LOW;
-				}
-				health = (((width*10000)/100)*health)/10000;
-				health*=2;
-				pie_BoxFill(scrX-scrR-1, scrY-1, scrX+scrR+1, scrY+2, WZCOL_RELOAD_BACKGROUND);
-				pie_BoxFill(scrX-scrR, scrY, scrX-scrR+health, scrY+1, powerCol);
+				drawStructureHealth(psStruct);
 			}
 			else if(psStruct->status == SS_BEING_BUILT)
 			{
-				scale = MAX(psStruct->pStructureType->baseWidth, psStruct->pStructureType->baseBreadth);
-				width = scale*20;
-				scrX = psStruct->sDisplay.screenX;
-				scrY = psStruct->sDisplay.screenY + (scale*10);
-				scrR = width;
-				health =  PERCENT(psStruct->currentBuildPts , psStruct->pStructureType->buildPoints);
-				powerCol = WZCOL_GREEN;
-				health = (((width*10000)/100)*health)/10000;
-				health*=2;
-				pie_BoxFill(scrX - scrR - 1, scrY - 1, scrX + scrR + 1, scrY + 2, WZCOL_RELOAD_BACKGROUND);
-				pie_BoxFill(scrX - scrR - 1, scrY, scrX - scrR + health, scrY + 1, powerCol);
+				drawStructureBuildProgress(psStruct);
 			}
 		}
 	}
