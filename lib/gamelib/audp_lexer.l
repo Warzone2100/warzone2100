@@ -32,7 +32,7 @@
 /* Maximum length for any TEXT value */
 #define YYLMAX	255
 
-void audp_error(const char* fmt, ...) WZ_DECL_FORMAT(printf, 1, 2);
+void audp_error(const char* fmt);
 
 #include "lib/framework/lexer_input.h"
 

@@ -61,8 +61,6 @@ extern CHAT_MSG chat_msg;
 /* Store parameter extracted from the message - for scripts */
 //extern BOOL chat_store_parameter(INTERP_VAL *parameter);
 
-extern void chat_error(const char *pMessage,...);
-
 extern void chatGetErrorData(int *pLine, char **ppText);
 
 /* Set the current input buffer for the lexer */

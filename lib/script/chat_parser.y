@@ -167,6 +167,8 @@ static void chat_reset_command(SDWORD cmdIndex)
 	}
 }
 
+static void yyerror(const char* msg);
+
 %}
 
 %name-prefix="chat_"
@@ -631,7 +633,7 @@ R_ALLY_PLAYER:								_T_ALLY R_PLAYER R_EOD		/* ally blue */
 												scrParameter.v.ival = $2;
 												if(!chat_store_parameter(&scrParameter))
 												{
-													chat_error("chat command: Too many parameters in the message");
+													yyerror("chat command: Too many parameters in the message");
 												}
 											}
 											;
@@ -644,7 +646,7 @@ R_ATTACK_PLAYER:							R_INITIATE_ATTACK R_PLAYER R_EOD		/* attack blue */
 													scrParameter.v.ival = $2;
 													if(!chat_store_parameter(&scrParameter))
 													{
-														chat_error("chat command: Too many parameters in the message");
+														yyerror("chat command: Too many parameters in the message");
 													}
 												}
 											|	_T_GO R_PLAYER R_EOD					/* go blue */
@@ -654,7 +656,7 @@ R_ATTACK_PLAYER:							R_INITIATE_ATTACK R_PLAYER R_EOD		/* attack blue */
 													scrParameter.v.ival = $2;
 													if(!chat_store_parameter(&scrParameter))
 													{
-														chat_error("chat command: Too many parameters in the message");
+														yyerror("chat command: Too many parameters in the message");
 													}
 												}
 											;
@@ -667,7 +669,7 @@ R_ATTACKING_PLAYER:							R_ATTACKING R_PLAYER R_EOD				/* attacking blue */
 													scrParameter.v.ival = $2;
 													if(!chat_store_parameter(&scrParameter))
 													{
-														chat_error("chat command: Too many parameters in the message");
+														yyerror("chat command: Too many parameters in the message");
 													}
 												}
 											;
@@ -680,7 +682,7 @@ R_PLAYER_HAS_VTOLS:							R_PLAYER R_POSSESSES _T_VTOLS R_EOD	/* blue has VTOLS 
 													scrParameter.v.ival = $1;
 													if(!chat_store_parameter(&scrParameter))
 													{
-														chat_error("chat command: Too many parameters in the message");
+														yyerror("chat command: Too many parameters in the message");
 													}
 												}
 											;
@@ -692,7 +694,7 @@ R_GETTING_ENEMY_DERRICK:					_T_GONNA R_INITIATE_ATTACK R_PLAYER_POSSESSION _T_D
 													scrParameter.v.ival = $3;
 													if(!chat_store_parameter(&scrParameter))
 													{
-														chat_error("chat command: Too many parameters in the message");
+														yyerror("chat command: Too many parameters in the message");
 													}
 												}
 											;
@@ -704,7 +706,7 @@ R_LASSAT_PLAYER:							_T_LASSAT R_PLAYER R_EOD	/* gonna get blue's derrick */
 													scrParameter.v.ival = $2;
 													if(!chat_store_parameter(&scrParameter))
 													{
-														chat_error("chat command: Too many parameters in the message");
+														yyerror("chat command: Too many parameters in the message");
 													}
 												}
 											;
@@ -755,18 +757,12 @@ BOOL chatLoad(char *pData, UDWORD size)
 }
 
 /* A simple error reporting routine */
-void chat_error(const char *pMessage,...)
+static void yyerror(const char* msg)
 {
 	int		line;
 	char	*pText;
-	char	aTxtBuf[1024];
-	va_list	args;
-
-	va_start(args, pMessage);
-	vsnprintf(aTxtBuf, sizeof(aTxtBuf), pMessage, args);
-	va_end(args);
 
 	chatGetErrorData(&line, &pText);
 	//debug(LOG_WARNING, "multiplayer message parse error: %s at line %d, token: %d, text: '%s'",
-	//      aTxtBuf, line, chat_char, pText);
+	//      msg, line, chat_char, pText);
 }
