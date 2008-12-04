@@ -300,7 +300,7 @@ extern BOOL scriptInitParser(void);
 extern int scr_parse(void);
 
 /* Give an error message */
-void scr_error(const char *pMessage, ...);
+void scr_error(const char *pMessage, ...) WZ_DECL_FORMAT(printf, 1, 2);
 
 extern void scriptGetErrorData(int *pLine, char **ppText);
 
