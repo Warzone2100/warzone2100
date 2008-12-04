@@ -68,7 +68,7 @@
 #define	RANK_BAR_WIDTH	100
 #define STAT_BAR_WIDTH	100
 
-enum
+typedef enum
 {
 	STR_MR_UNITS_LOST,
 	STR_MR_UNITS_KILLED,
@@ -88,13 +88,13 @@ enum
 	STR_MR_LEVEL_ELITE,
 	STR_MR_LEVEL_SPECIAL,
 	STR_MR_LEVEL_ACE
-};
+} MR_STRING;
 
 
 // return translated string
-static const char *getDescription(int id)
+static const char *getDescription(MR_STRING id)
 {
-	switch ( id )
+	switch (id)
 	{
 		case STR_MR_UNITS_LOST   : return _("Own Units: %u");
 		case STR_MR_UNITS_KILLED : return _("Enemy Units: %u");
@@ -114,9 +114,10 @@ static const char *getDescription(int id)
 		case STR_MR_LEVEL_ELITE  : return _("Elite: %u");
 		case STR_MR_LEVEL_SPECIAL: return _("Special: %u");
 		case STR_MR_LEVEL_ACE    : return _("Hero: %u");
-
-		default: return "";  // make compiler shut up
 	}
+
+	// make compiler shut up
+	return "";
 }
 
 static PIELIGHT getColour(int id)
