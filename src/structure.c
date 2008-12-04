@@ -6857,9 +6857,11 @@ void factoryProdAdjust(STRUCTURE *psStructure, DROID_TEMPLATE *psTemplate, BOOL 
 	}
 }
 
-
-//returns the quantity of a specific template in the production list
-UDWORD	getProductionQuantity(STRUCTURE *psStructure, DROID_TEMPLATE *psTemplate)
+/** checks the status of the production of a template
+ * if totalquantity is true, it will return the total ordered amount
+ * it it is false, it will return the amount that has already been built
+ */
+static int getProduction(STRUCTURE *psStructure, DROID_TEMPLATE *psTemplate, BOOL totalQuantity)
 {
 	UDWORD		inc, factoryType, factoryInc;
 	FACTORY		*psFactory;
@@ -6876,7 +6878,14 @@ UDWORD	getProductionQuantity(STRUCTURE *psStructure, DROID_TEMPLATE *psTemplate)
 		{
 			if (asProductionRun[factoryType][factoryInc][inc].psTemplate == psTemplate)
 			{
-				return asProductionRun[factoryType][factoryInc][inc].quantity;
+				if (totalQuantity)
+				{
+					return asProductionRun[factoryType][factoryInc][inc].quantity;
+				}
+				else
+				{
+					return asProductionRun[factoryType][factoryInc][inc].built;
+				}
 			}
 		}
 	}
@@ -6885,33 +6894,17 @@ UDWORD	getProductionQuantity(STRUCTURE *psStructure, DROID_TEMPLATE *psTemplate)
 	return 0;
 }
 
+/// the total amount ordered of a specific template in the production list
+UDWORD	getProductionQuantity(STRUCTURE *psStructure, DROID_TEMPLATE *psTemplate)
+{
+	return getProduction(psStructure, psTemplate, true);
+}
 
-/*returns the quantity of a specific template in the production list that
-have already been built*/
+
+/// the number of times a specific template in the production list has been built
 UDWORD	getProductionBuilt(STRUCTURE *psStructure, DROID_TEMPLATE *psTemplate)
 {
-	UDWORD		inc, factoryType, factoryInc;
-	FACTORY		*psFactory;
-
-	if (psStructure == NULL) return 0;
-	if (psStructure->player == productionPlayer)
-	{
-		psFactory = &psStructure->pFunctionality->factory;
-		factoryType = psFactory->psAssemblyPoint->factoryType;
-		factoryInc = psFactory->psAssemblyPoint->factoryInc;
-
-		//see if the template is in the list
-		for (inc=0; inc < MAX_PROD_RUN; inc++)
-		{
-			if (asProductionRun[factoryType][factoryInc][inc].psTemplate == psTemplate)
-			{
-				return asProductionRun[factoryType][factoryInc][inc].built;
-			}
-		}
-	}
-
-	//not in the list so none being produced
-	return 0;
+	return getProduction(psStructure, psTemplate, false);
 }
 
 

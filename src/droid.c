@@ -3857,67 +3857,22 @@ static BOOL sensiblePlace(SDWORD x, SDWORD y, PROPULSION_TYPE propulsion)
 // Should stop things being placed in inaccessible areas? Assume wheeled propulsion.
 BOOL	zonedPAT(UDWORD x, UDWORD y)
 {
-	if (sensiblePlace(x, y, PROPULSION_TYPE_WHEELED) && noDroid(x,y))
-	{
-		return(true);
-	}
-	else
-	{
-		return(false);
-	}
+	return sensiblePlace(x, y, PROPULSION_TYPE_WHEELED) && noDroid(x,y);
 }
 
-// ------------------------------------------------------------------------------------
+static BOOL canFitDroid(UDWORD x, UDWORD y)
+{
+	return sensiblePlace(x, y, PROPULSION_TYPE_WHEELED) && (noDroid(x,y) || oneDroid(x, y));
+}
+
+/// find a tile for which the function will return true
 BOOL	pickATileGen(UDWORD *x, UDWORD *y, UBYTE numIterations,
 					 BOOL (*function)(UDWORD x, UDWORD y))
 {
-	SDWORD	i,j;
-	SDWORD	startX,endX,startY,endY;
-	UDWORD	passes;
-
-
-	ASSERT( *x<mapWidth,"x coordinate is off-map for pickATileGen" );
-	ASSERT( *y<mapHeight,"y coordinate is off-map for pickATileGen" );
-
-	/* Exit if they're fine! */
-	if (sensiblePlace(*x, *y, PROPULSION_TYPE_WHEELED) && noDroid(*x,*y))
-	{
-		return(true);
-	}
-
-	/* Initial box dimensions and set iteration count to zero */
-	startX = endX = *x;	startY = endY = *y;	passes = 0;
-
-	/* Keep going until we get a tile or we exceed distance */
-	while(passes<numIterations)
-	{
-		/* Process whole box */
-		for(i = startX; i <= endX; i++)
-		{
-			for(j = startY; j<= endY; j++)
-			{
-				/* Test only perimeter as internal tested previous iteration */
-				if(i==startX || i==endX || j==startY || j==endY)
-				{
-					/* Good enough? */
-					if(function(i,j))
-					{
-						/* Set exit conditions and get out NOW */
-						*x = i;	*y = j;
-						return(true);
-					}
-				}
-			}
-		}
-		/* Expand the box out in all directions - off map handled by tileAcceptable */
-		startX--; startY--;	endX++;	endY++;	passes++;
-	}
-	/* If we got this far, then we failed - passed in values will be unchanged */
-	return(false);
-
+	return pickATileGenThreat(x, y, numIterations, -1, -1, function);
 }
 
-//same as orig, but with threat check
+/// find a tile for which the passed function will return true without any threat in the specified range 
 BOOL	pickATileGenThreat(UDWORD *x, UDWORD *y, UBYTE numIterations, SDWORD threatRange,
 					 SDWORD player, BOOL (*function)(UDWORD x, UDWORD y))
 {
@@ -3966,108 +3921,16 @@ UDWORD	passes;
 
 }
 
-// ------------------------------------------------------------------------------------
-/* Improved pickATile - Replaces truly scary existing one. */
-/* AM 22 - 10 - 98 */
+/// find an empty tile accessible to a wheeled droid 
 BOOL	pickATile(UDWORD *x, UDWORD *y, UBYTE numIterations)
 {
-	SDWORD	i,j;
-	SDWORD	startX,endX,startY,endY;
-	UDWORD	passes;
-
-	ASSERT( *x<mapWidth,"x coordinate is off-map for pickATile" );
-	ASSERT( *y<mapHeight,"y coordinate is off-map for pickATile" );
-
-	/* Exit if they're fine! */
-	if (sensiblePlace(*x, *y, PROPULSION_TYPE_WHEELED) && noDroid(*x,*y))
-	{
-		return(true);
-	}
-
-	/* Initial box dimensions and set iteration count to zero */
-	startX = endX = *x;	startY = endY = *y;	passes = 0;
-
-	/* Keep going until we get a tile or we exceed distance */
-	while(passes<numIterations)
-	{
-		/* Process whole box */
-		for(i = startX; i <= endX; i++)
-		{
-			for(j = startY; j<= endY; j++)
-			{
-				/* Test only perimeter as internal tested previous iteration */
-				if(i==startX || i==endX || j==startY || j==endY)
-				{
-					/* Good enough? */
-					if (sensiblePlace(i, j, PROPULSION_TYPE_WHEELED) && noDroid(i,j))
-					{
-						/* Set exit conditions and get out NOW */
-						*x = i;	*y = j;
-						return(true);
-					}
-				}
-			}
-		}
-		/* Expand the box out in all directions - off map handled by tileAcceptable */
-		startX--; startY--;	endX++;	endY++;	passes++;
-	}
-	/* If we got this far, then we failed - passed in values will be unchanged */
-	return(false);
+	return pickATileGen(x, y, numIterations, zonedPAT);
 }
 
-// pickHalfATile just like improved pickATile but with Double Density Droid Placement
+/// find a tile for a wheeled droid with only one other droid present
 PICKTILE pickHalfATile(UDWORD *x, UDWORD *y, UBYTE numIterations)
 {
-	SDWORD	i,j;
-	SDWORD	startX,endX,startY,endY;
-	UDWORD	passes;
-
-	/*
-		Why was this written - I wrote pickATileGen to take a function
-		pointer for what qualified as a valid tile - could use that.
-		I'm not going to change it in case I'm missing the point */
-	if (pickATileGen(x, y, numIterations,zonedPAT))
-	{
-		return FREE_TILE;
-	}
-
-	/* Exit if they're fine! */
-	if (sensiblePlace(*x, *y, PROPULSION_TYPE_WHEELED) && oneDroid(*x, *y))
-	{
-		return HALF_FREE_TILE;
-	}
-
-	/* Initial box dimensions and set iteration count to zero */
-	startX = endX = *x;	startY = endY = *y;	passes = 0;
-
-
-
-	/* Keep going until we get a tile or we exceed distance */
-	while(passes<numIterations)
-	{
-		/* Process whole box */
-		for(i = startX; i <= endX; i++)
-		{
-			for(j = startY; j<= endY; j++)
-			{
-				/* Test only perimeter as internal tested previous iteration */
-				if(i==startX || i==endX || j==startY || j==endY)
-				{
-					/* Good enough? */
-					if (sensiblePlace(i, j, PROPULSION_TYPE_WHEELED) && oneDroid(i,j))
-					{
-						/* Set exit conditions and get out NOW */
-						*x = i;	*y = j;
-						return HALF_FREE_TILE;
-					}
-				}
-			}
-		}
-		/* Expand the box out in all directions - off map handled by tileAcceptable */
-		startX--; startY--;	endX++;	endY++;	passes++;
-	}
-	/* If we got this far, then we failed - passed in values will be unchanged */
-	return NO_FREE_TILE;
+	return pickATileGen(x, y, numIterations, canFitDroid);
 }
 
 /* Looks through the players list of droids to see if any of them are
