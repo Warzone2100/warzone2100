@@ -21,6 +21,7 @@
 #include "init.h"
 
 #include "../../widget.h"
+#include "../../svgManager.h"
 #include "../../window.h"
 
 #include <SDL.h>
@@ -32,6 +33,9 @@ void widgetSDLInit()
 
 	// Set the screen size
 	windowSetScreenSize(surface->w, surface->h);
+	
+	// Initialise the SVG manager
+	svgManagerInit();
 
 	// Create an initial window vector to store windows
 	windowSetWindowVector(vectorCreate());
@@ -44,5 +48,8 @@ void widgetSDLQuit()
 
 	// Release all active windows
 	vectorMapAndDestroy(windowVector, (mapCallback) widgetDestroy);
+	
+	// Release any cached SVG images
+	svgManagerQuit();
 }
 
