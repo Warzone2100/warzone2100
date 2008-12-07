@@ -5,7 +5,9 @@ SUBDIRS = platform
 
 EXTRA_DIST = \
 	betawidget.i \
-	betawidget.pc.in
+	betawidget.pc.in \
+	lua_memberfnptr.i \
+	lua_table_as_array.i
 
 BUILT_SOURCES = \
 	betawidget_wrap_lua.cpp

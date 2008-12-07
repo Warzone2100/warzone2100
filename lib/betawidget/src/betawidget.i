@@ -1,6 +1,7 @@
 %module betawidget
 
 %include "lua_memberfnptr.i"
+%include "lua_table_as_array.i"
 
 %{
 extern "C" {
@@ -13,8 +14,6 @@ extern "C" {
 #include "lua-wrap.h"
 #include <assert.h>
 }
-
-#include <vector>
 
 static bool callbackHandler(widget* const self, const event* const evt, int const handlerId, SWIGLUA_MEMBER_FN const * const callbackRef)
 {
@@ -148,52 +147,7 @@ struct animationFrame
 	} data;
 };
 
-%typemap (in) (int nframes, const animationFrame *frames) (std::vector<animationFrame> frameList)
-{
-	if (!lua_istable(L, $input))
-		SWIG_fail_arg("addAnimation", $input, "table");
-
-	lua_getfield(L, LUA_GLOBALSINDEX, "ipairs");
-	lua_pushvalue(L, $input);
-
-	if (lua_pcall(L, 1, 3, 0) != 0)
-		goto fail;
-
-	for (;;)
-	{
-		animationFrame *frame = 0;
-
-		lua_pushvalue(L, -3);
-		lua_pushvalue(L, -3);
-		lua_pushvalue(L, -3);
-		if (lua_pcall(L, 2, 2, 0) != 0)
-		{
-			goto fail;
-		}
-
-		if (!SWIG_isptrtype(L, -1))
-		{
-			SWIG_fail_arg("addAnimation", -1, "animationFrame *");
-		}
-
-		if (!SWIG_IsOK(SWIG_ConvertPtr(L, -1, (void**)&frame, SWIGTYPE_p_animationFrame, 0)))
-		{
-			SWIG_fail_ptr("widget_addAnimation", -1, SWIGTYPE_p_animationFrame);
-		}
-		lua_pop(L, 1);
-		lua_replace(L, -2);
-
-		if (!frame)
-			break;
-
-		frameList.push_back(*frame);
-	}
-
-	lua_pop(L, 3);
-
-	$1 = frameList.size();
-	$2 = &frameList[0];
-}
+%table_as_array(animationFrame, nframes, frames)
 
 %rename (widget) _widget;
 struct _widget
@@ -263,7 +217,7 @@ struct _widget
                         return widgetDeclineDrag(WIDGET($self));
                 }
 
-		virtual int addAnimation(int nframes, const animationFrame *frames)
+		virtual int addAnimation(size_t nframes, const animationFrame* frames)
 		{
 			return widgetAddAnimation($self, nframes, frames);
 		}
