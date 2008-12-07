@@ -25,14 +25,15 @@ libbetawidget_la_SOURCES = \
 	geom.c \
 	hBox.c \
 	spacer.c \
+	svgManager.c \
 	table.c \
 	textEntry.c \
 	vector.c \
 	widget.c \
 	window.c
 
-libbetawidget_la_CPPFLAGS = $(CAIRO_CFLAGS) $(LUA_CFLAGS) -DLIB_COMPILE=1
-libbetawidget_la_LDFLAGS = $(LUA_LIBS) $(CAIRO_LIBS) $(OPENGL_LIBS) -version-info $(LIBTOOL_VERSION)
+libbetawidget_la_CPPFLAGS = $(SVG_CAIRO_CFLAGS) $(CAIRO_CFLAGS) $(LUA_CFLAGS) -DLIB_COMPILE=1
+libbetawidget_la_LDFLAGS = $(SVG_CAIRO_LIBS) $(LUA_LIBS) $(CAIRO_LIBS) $(OPENGL_LIBS) -version-info $(LIBTOOL_VERSION)
 libbetawidget_la_LIBADD = platform/libplatform.la libutil.la
 
 # FIXME: As much non-API headers (i.e. headers that shouldn't be directly
@@ -46,6 +47,7 @@ pkginclude_HEADERS = \
 	geom.h \
 	hBox.h \
 	spacer.h \
+	svgManager.h \
 	table.h \
 	textEntry.h \
 	vector.h \

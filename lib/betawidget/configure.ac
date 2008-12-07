@@ -90,6 +90,7 @@ PKG_CHECK_MODULES([SDL], [sdl >= 1.2])
 AC_SUBST([PLATFORM_REQUIRES], [sdl])
 
 PKG_CHECK_MODULES([CAIRO], [cairo])
+PKG_CHECK_MODULES([SVG_CAIRO], [libsvg-cairo])
 
 # First check the pkg-config lua5.1 package
 PKG_CHECK_MODULES([LUA], [lua5.1 >= 5.1], [
