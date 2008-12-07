@@ -55,7 +55,9 @@ static void spacerInitVtbl(spacer *self)
 		
 		// Overload widget's destroy, draw and size methods
 		vtbl.widgetVtbl.destroy     = spacerDestroyImpl;
+		vtbl.widgetVtbl.addChild    = spacerAddChildDummyImpl;
 		vtbl.widgetVtbl.doDraw      = spacerDoDrawImpl;
+		vtbl.widgetVtbl.doLayout    = spacerDoLayoutImpl;
 		vtbl.widgetVtbl.getMinSize  = spacerGetMinSizeImpl;
 		vtbl.widgetVtbl.getMaxSize  = spacerGetMaxSizeImpl;
 		
@@ -90,6 +92,11 @@ void spacerDestroyImpl(widget *self)
 	widgetDestroyImpl(self);
 }
 
+bool spacerAddChildDummyImpl(widget *self, widget *child)
+{
+	assert(!"widgetAddChild is not applicable for spacers");
+}
+
 size spacerGetMinSizeImpl(widget *self)
 {
 	(void) self;
@@ -117,6 +124,14 @@ size spacerGetMaxSizeImpl(widget *self)
 	}
 	
 	return maxSize;
+}
+
+bool spacerDoLayoutImpl(widget *self)
+{
+	// NO-OP
+	(void) self;
+	
+	return true;
 }
 
 void spacerDoDrawImpl(widget *self)

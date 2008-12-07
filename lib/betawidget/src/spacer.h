@@ -80,6 +80,8 @@ extern const classInfo spacerClassInfo;
 void spacerInit(spacer *self, const char *id, spacerDirection direction);
 void spacerDestroyImpl(widget *self);
 void spacerDoDrawImpl(widget *self);
+bool spacerDoLayoutImpl(widget *self);
+bool spacerAddChildDummyImpl(widget *self, widget *child);
 size spacerGetMinSizeImpl(widget *self);
 size spacerGetMaxSizeImpl(widget *self);
 
