@@ -331,7 +331,10 @@ class CodeParser(GenericParser):
 	def p_globaldef(self, args):
 		' globaldef ::= access name definitionlist semicolon '
 		return AST('globaldef', [args[0], args[1], args[2]])
-		
+	def p_localdef(self, args):
+		''' localdef ::= local name definitionlist semicolon'''
+		return AST('localdef', [args[0], args[1], args[2]])
+
 	def p_definitionlist_1(self, args):
 		' definitionlist ::= variable '
 		return AST('definitionlist', [args[0]])
@@ -414,7 +417,7 @@ class CodeParser(GenericParser):
 			statement ::= expression_statement
 			statement ::= if_statement
 			statement ::= block
-			statement ::= local_def
+			statement ::= localdef
 			statement ::= return_statement
 			statement ::= while_statement
 			'''
@@ -440,9 +443,6 @@ class CodeParser(GenericParser):
 	def p_function_declaration(self, args):
 		''' function_declaration ::= function name name argdeflist block '''
 		return AST('function_declaration', [args[2], args[3], args[4]])		
-	def p_local(self, args):
-		''' local_def ::= local name definitionlist semicolon'''
-		return AST('local_def', [args[2]])
 	def p_return_value_statement(self, args):
 		''' return_statement ::= return expression semicolon'''
 		return AST('return_value_statement', [args[1]])
@@ -498,7 +498,7 @@ class CodeCommenter(GenericASTTraversal):
 		node.code = pop_comments(node.line)
 	def n_expression_statement(self, node):
 		node.code = pop_comments(node.line)
-	def n_local_def(self, node):
+	def n_localdef(self, node):
 		node.code = pop_comments(node.line)
 	def n_file(self, node):
 		node.code = pop_comments(node.line)
@@ -617,13 +617,23 @@ class CodeGenerator(GenericASTTraversal):
 		node.arraydef = ''
 		node.arrayinit = ''
 		if node[0].type == 'arrayref':
-			node.arraydef = node[0].arraydef
-			node.arrayinit = node[0].arrayinit
-		if not node[0].code in defined_arrays:
-			node.arraydef += node[0].code + ' = {}\n'
-			if node[1].type == 'number' and not node.arrayinit:
-				node.arrayinit = 'for i=0,'+node[1].code+' do '+node[0].code+'[i] = 0 end\n'
-			defined_arrays.add(node[0].code)
+			if not node[0][0].code+'[]' in defined_arrays:
+				# a[8][2]
+				node.arraydef += node[0][0].code + ' = {}\n'
+				
+				node.arrayinit +=  'for i=0,'+node[0][1].code+' do\n'
+				node.arrayinit +=  '	'+node[0][0].code + '[i] = {}\n'
+				node.arrayinit +=  '	for j=0,'+node[1].code+' do\n'
+				node.arrayinit +=  '		'+node[0][0].code+'[i][j] = 0\n'
+				node.arrayinit +=  '	end\n'
+				node.arrayinit +=  'end\n'
+				defined_arrays.add(node[0][0].code+'[]')
+		else:
+			if not node[0].code in defined_arrays:
+				node.arraydef += node[0].code + ' = {}\n'
+				if node[1].type == 'number' and not node.arrayinit:
+					node.arrayinit = 'for i=0,'+node[1].code+' do '+node[0].code+'[i] = 0 end\n'
+				defined_arrays.add(node[0].code)
 	def n_event_declaration(self, node):
 		# originally, the events were only called if certain conditions were met
 		# these conditions were specific to each event
@@ -762,8 +772,6 @@ class CodeGenerator(GenericASTTraversal):
 	def n_ref(self, node):
 		node.code = node[0].code
 		node.ref = [node[0].code]
-	def n_local_def(self, node):
-		node.code += 'local ' + node[0].code + '\n'
 	def n_definitionlist(self, node):
 		node.code = ', '.join([k.code for k in node])
 	def n_min(self, node):
@@ -811,7 +819,7 @@ class CodeGenerator(GenericASTTraversal):
 						node.code += 'false'
 					elif node[1].code == 'group':
 						node.code += 'Group()'
-					elif node[1].code == 'int':
+					elif node[1].code in ['int', 'float']:
 						node.code += '0'
 					else:
 						node.code += 'nil'
@@ -819,6 +827,19 @@ class CodeGenerator(GenericASTTraversal):
 		else:
 			# already defined in the vlo
 			node.code += ''
+	def n_localdef(self, node):
+		for d in node[2]:
+			node.code += 'local ' + d.code + ' = '
+			node[1].code = node[1].code.lower()
+			if node[1].code == 'bool':
+				node.code += 'false'
+			elif node[1].code == 'group':
+				node.code += 'Group()'
+			elif node[1].code in ['int', 'float']:
+				node.code += '0'
+			else:
+				node.code += 'nil'
+			node.code += '\n'
 	def n_variable(self, node):
 		if node[0].code in macros:
 			node.code = node[0].code + '()'

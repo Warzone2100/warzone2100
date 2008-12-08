@@ -38,6 +38,10 @@ function __undefined_meta.__index(table, key)
 	return val
 end
 
+-- Some legacy names
+EnumDroid = enumDroid
+InitEnumDroids = initEnumDroids
+
 -- This are script api functions which are written in Lua
 
 function setLandingZone(x1, y1, x2, y2)

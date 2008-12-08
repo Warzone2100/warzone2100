@@ -5877,25 +5877,20 @@ static	UDWORD			playerToEnumDroid;
 static	UDWORD			playerVisibleDroid;
 static	UDWORD			enumDroidCount;
 
-/* Prepare the droid iteration */
-WZ_DECL_UNUSED static BOOL scrInitEnumDroids(void)
+/// Prepare the droid iteration
+static int scrInitEnumDroids(lua_State *L)
 {
-	SDWORD	targetplayer,playerVisible;
-
-	if ( !stackPopParams(2,  VAL_INT, &targetplayer, VAL_INT, &playerVisible) )
-	{
-		//DbgMsg("scrInitEnumDroids() - failed to pop params");
-		return false;
-	}
+	int targetplayer  = luaWZ_checkplayer(L, 1);
+	int playerVisible = luaWZ_checkplayer(L, 2);
 
 	playerToEnumDroid	= (UDWORD)targetplayer;
 	playerVisibleDroid	= (UDWORD)playerVisible;
 	enumDroidCount = 0;		//returned 0 droids so far
-	return true;
+	return 0;
 }
 
-/* Get next droid */
-WZ_DECL_UNUSED static BOOL scrEnumDroid(void)
+/// Get next droid
+static int scrEnumDroid(lua_State *L)
 {
 	UDWORD			count;
 	DROID		 *psDroid;
@@ -5914,29 +5909,17 @@ WZ_DECL_UNUSED static BOOL scrEnumDroid(void)
 	{
 		if(psDroid->visible[playerVisibleDroid])
 		{
-			scrFunctionResult.v.oval = psDroid;
-			if (!stackPushResult((INTERP_TYPE)ST_DROID, &scrFunctionResult))			//	push scrFunctionResult
-			{
-				return false;
-			}
-
+			luaWZObj_pushdroid(L, psDroid);
 			enumDroidCount++;
-			return true;
+			return 1;
 		}
 
 		enumDroidCount++;
 		psDroid = psDroid->psNext;
 	}
 
-	// push NULLDROID, since didn't find any
-	scrFunctionResult.v.oval = NULL;
-	if (!stackPushResult((INTERP_TYPE)ST_DROID, &scrFunctionResult))
-	{
-		debug(LOG_ERROR, "scrEnumDroid() - push failed");
-		return false;
-	}
-
-	return true;
+	lua_pushnil(L);
+	return 1;
 }
 
 //Return the template factory is currently building
@@ -10760,8 +10743,8 @@ void registerScriptfuncs(lua_State *L)
 	lua_register(L, "researchStarted", scrResearchStarted);
 	lua_register(L, "pursueResearch", scrPursueResearch);
 	lua_register(L, "getNumStructures", scrGetNumStructures);
-	//lua_register(L, "", );
-	//lua_register(L, "", );
+	lua_register(L, "initEnumDroids", scrInitEnumDroids);
+	lua_register(L, "enumDroid", scrEnumDroid);
 	//lua_register(L, "", );
 	//lua_register(L, "", );
 	//lua_register(L, "", );
