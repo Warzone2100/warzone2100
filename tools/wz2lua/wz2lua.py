@@ -61,7 +61,7 @@ from sys import stdin, stdout, stderr
 cvars = ['trackTransporter', 'mapWidth', 'mapHeight', 'gameInitialised', 'selectedPlayer', 'gameTime', 'gameLevel', 'inTutorial', 'cursorType', 'intMode', 'targetedObjectType', 'extraVictoryFlag', 'extraFailFlag', 'multiPlayerGameType', 'multiPlayerMaxPlayers', 'multiPlayerBaseType', 'multiPlayerAlliancesType']
 
 class Token:
-	def __init__(self, type, attr=''):
+	def __init__(self, type, attr='', constant=True):
 		self.type = type
 		self.attr = attr
 		self.ref = []
@@ -69,6 +69,7 @@ class Token:
 		self.line = current_line
 		
 		self.boolean = True # set to False to make conditional expressions truly boolean
+		self.constant = constant
 
 	def __cmp__(self, o):
 		return cmp(self.type, o)
@@ -95,6 +96,9 @@ class AST:
 		self.line = linelist[0]
 		
 		self.boolean = True # set to False to make conditional expressions truly boolean
+		self.constant = True
+		for k in self.kids:
+			self.constant = self.constant and k.constant
 		
 	def __repr__(self):
 		return self.attr or self.type
@@ -119,7 +123,10 @@ class CodeScanner(GenericScanner):
 		self.rv.append(Token('operator', s))
 	def t_name(self, s):
 		r" [a-zA-Z_][a-zA-Z0-9_]* "
-		self.rv.append(Token('name', s))
+		c = False
+		if s == "TRUE" or s == "FALSE":
+			c = True
+		self.rv.append(Token('name', s, constant=c))
 	def t_member(self, s):
 		r" [.][a-zA-Z0-9_]+ "
 		self.rv.append(Token('member', s))
@@ -269,7 +276,7 @@ class CodeParser(GenericParser):
 		
 	def p_global_stuff(self, args):
 		''' global_stuff ::= emptyline
-			global_stuff ::= constant
+			global_stuff ::= macrodef
 			global_stuff ::= globaldef
 			global_stuff ::= trigger_declaration
 			global_stuff ::= event_prototype
@@ -279,9 +286,9 @@ class CodeParser(GenericParser):
 			 '''
 		return args[0]
 		
-	def p_constant(self, args):
-		' constant ::= define name expression '
-		return AST('constant', [args[1], args[2]])
+	def p_macrodef(self, args):
+		' macrodef ::= define name expression '
+		return AST('macrodef', [args[1], args[2]])
 		
 	def p_expression_1(self, args):
 		''' expression ::= number
@@ -469,7 +476,7 @@ class CodeCommenter(GenericASTTraversal):
 	def __init__(self, ast):
 		GenericASTTraversal.__init__(self, ast)
 		self.preorder()
-	def n_constant(self, node):
+	def n_macrodef(self, node):
 		node.code = pop_comments(node.line)
 	def n_function_declaration(self, node):
 		node.code = pop_comments(node.line)
@@ -509,9 +516,12 @@ class CodeGenerator(GenericASTTraversal):
 	def n_file(self, node):
 		node.code = ''.join([k.code for k in node])
 		
-	def n_constant(self, node):
-		node.code += node[0].code + ' = ' + node[1].code + '\n'
-		
+	def n_macrodef(self, node):
+		if node[1].constant:
+			node.code += node[0].code + ' = ' + node[1].code + '\n'
+		else:
+			node.code += node[0].code + ' = function () return ' + node[1].code + ' end\n'
+			macros.append(node[0].code)
 	def n_number(self, node):
 		node.code = node.attr
 	def n_string(self, node):
@@ -571,11 +581,10 @@ class CodeGenerator(GenericASTTraversal):
 	def n_statementlist(self, node):
 		node.code = ''
 		for n in node:
-			if False and (n.code.startswith('return ')
-				or n.code == 'return\n'):
-				# lua does not like the unreachable code
-				# just leave it out (commented out code sucks after all)
+			if n.code.startswith('return ') or n.code == 'return\n':
 				node.code += n.code
+				# do not output any more code for this statementlist
+				# as Lua will rightfully complain it is unreachable
 				break
 			else:
 				node.code += n.code
@@ -811,7 +820,10 @@ class CodeGenerator(GenericASTTraversal):
 			# already defined in the vlo
 			node.code += ''
 	def n_variable(self, node):
-		node.code = node[0].code
+		if node[0].code in macros:
+			node.code = node[0].code + '()'
+		else:
+			node.code = node[0].code
 	def n_trigger_declaration(self, node):
 		trigger = self.parse_trigger(node[1])
 
@@ -994,6 +1006,7 @@ triggers = {}
 called_functions = set()
 
 can_be_destroyed = []
+macros = []
 
 def load_file(filename):
 	f = file(filename)

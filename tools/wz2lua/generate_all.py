@@ -18,7 +18,6 @@ def convertdir(dir):
 	# add extra ones
 	os.system('find -name "*.slo" > slofiles')
 	slofiles = file('slofiles')
-	slo = {}
 	for path in slofiles:
 		name = path.split('/')[-1].split('.')[0]
 		if not name in slo:
