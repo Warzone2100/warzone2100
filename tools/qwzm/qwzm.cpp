@@ -18,6 +18,29 @@
 
 #include "qwzm.h"
 
+QAnimViewer::QAnimViewer(QWidget *parent)
+           : QDialog(parent), Ui_AnimationView()
+{
+	setupUi(this);
+	connect(pushButtonClose, SIGNAL(pressed()), this, SLOT(hide()));
+}
+
+void QAnimViewer::setModel(QStandardItemModel *model)
+{
+	tableViewAnimation->setModel(model);
+	tableViewAnimation->setSelectionMode(QAbstractItemView::SingleSelection);
+	tableViewAnimation->setSelectionBehavior(QAbstractItemView::SelectRows);
+}
+
+void QAnimViewer::updateModel()
+{
+	tableViewAnimation->resizeColumnsToContents();
+}
+
+QAnimViewer::~QAnimViewer()
+{
+}
+
 QWzmViewer::QWzmViewer(QWidget *parent)
            : QMainWindow(parent), Ui::QWZM()
 {
@@ -36,15 +59,29 @@ QWzmViewer::QWzmViewer(QWidget *parent)
 	connect(actionCulling, SIGNAL(triggered()), this, SLOT(toggleCulling()));
 	connect(actionAnimation, SIGNAL(triggered()), this, SLOT(toggleAnimation()));
 	connect(actionScaleModel, SIGNAL(triggered()), this, SLOT(toggleScale()));
-	connect(comboBoxTeam, SIGNAL(currentIndexChanged(int)), this, SLOT(toggleTeam(int)));
+	connect(comboBoxTeam, SIGNAL(currentIndexChanged(int)), this, SLOT(setTeam(int)));
+	connect(comboBoxSelectedMesh, SIGNAL(currentIndexChanged(int)), this, SLOT(setMesh(int)));
 	connect(actionSwapYZ, SIGNAL(triggered()), this, SLOT(toggleSwapYZ()));
 	connect(actionReverseWinding, SIGNAL(triggered()), this, SLOT(toggleReverseWinding()));
 	connect(actionFlipVerticalTexCoords, SIGNAL(triggered()), this, SLOT(toggleFlipVerticalTexCoords()));
+	connect(actionEditFrames, SIGNAL(triggered()), this, SLOT(toggleEditAnimation()));
 
 	// Set defaults
 	toggleAnimation();
 	actionSave->setEnabled(false);
 	actionSaveAs->setEnabled(false);
+
+	animView = new QAnimViewer(this);
+	anim.setColumnCount(8);
+	anim.setHeaderData(0, Qt::Horizontal, QString("Time"));
+	anim.setHeaderData(1, Qt::Horizontal, QString("Tex"));
+	anim.setHeaderData(2, Qt::Horizontal, QString("Trs X"));
+	anim.setHeaderData(3, Qt::Horizontal, QString("Trs Y"));
+	anim.setHeaderData(4, Qt::Horizontal, QString("Trs Z"));
+	anim.setHeaderData(5, Qt::Horizontal, QString("Rot X"));
+	anim.setHeaderData(6, Qt::Horizontal, QString("Rot Y"));
+	anim.setHeaderData(7, Qt::Horizontal, QString("Rot Z"));
+	animView->setModel(&anim);
 
 	timer->start(25);
 }
@@ -53,7 +90,12 @@ QWzmViewer::~QWzmViewer()
 {
 }
 
-void QWzmViewer::toggleTeam(int index)
+void QWzmViewer::toggleEditAnimation()
+{
+	animView->show();
+}
+
+void QWzmViewer::setTeam(int index)
 {
 	glView->setTeam(index);
 }
@@ -61,7 +103,7 @@ void QWzmViewer::toggleTeam(int index)
 void QWzmViewer::toggleScale()
 {
 	double result = QInputDialog::getDouble(this, tr("Choose scale factor"), tr("Factor:") );
-	qWarning("TODO");
+	qWarning("TODO: %f", result);
 }
 
 void QWzmViewer::toggleSwapYZ()
@@ -134,6 +176,28 @@ void QWzmViewer::save()
 	}
 }
 
+void QWzmViewer::setMesh(int index)
+{
+	MESH *psMesh = &psModel->mesh[index];
+
+	// Refresh frame view
+	anim.setRowCount(psMesh->frames);
+	for (int i = 0; i < psMesh->frames; i++)
+	{
+		FRAME *psFrame = &psMesh->frameArray[i];
+
+		anim.setData(anim.index(i, 0, QModelIndex()), QString::number(psFrame->timeSlice));
+		anim.setData(anim.index(i, 1, QModelIndex()), QString::number(psFrame->textureArray));
+		anim.setData(anim.index(i, 2, QModelIndex()), QString::number(psFrame->translation.x));
+		anim.setData(anim.index(i, 3, QModelIndex()), QString::number(psFrame->translation.y));
+		anim.setData(anim.index(i, 4, QModelIndex()), QString::number(psFrame->translation.z));
+		anim.setData(anim.index(i, 5, QModelIndex()), QString::number(psFrame->rotation.x));
+		anim.setData(anim.index(i, 6, QModelIndex()), QString::number(psFrame->rotation.y));
+		anim.setData(anim.index(i, 7, QModelIndex()), QString::number(psFrame->rotation.z));
+	}
+	animView->updateModel();
+}
+
 void QWzmViewer::setModel(QFileInfo &texPath)
 {
 	psModel->pixmap = readPixmap(texPath.absoluteFilePath().toAscii().constData());
@@ -143,10 +207,18 @@ void QWzmViewer::setModel(QFileInfo &texPath)
 		psModel = NULL;
 		return;
 	}
-	comboBoxTeam->setCurrentIndex(0);
 	glView->setModel(psModel);
+	comboBoxTeam->setCurrentIndex(0);
 	actionSave->setEnabled(false);
 	actionSaveAs->setEnabled(true);
+	comboBoxSelectedMesh->setMaxCount(0);	// delete previous
+	comboBoxSelectedMesh->setMaxCount(psModel->meshes);
+	for (int i = 0; i < psModel->meshes; i++)
+	{
+		comboBoxSelectedMesh->insertItem(i, QString::number(i));
+	}
+	comboBoxSelectedMesh->setCurrentIndex(0);
+	setMesh(0);
 }
 
 void QWzmViewer::open3DS()

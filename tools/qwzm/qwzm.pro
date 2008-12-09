@@ -1,4 +1,4 @@
-FORMS += qwzm.ui
+FORMS += qwzm.ui animationview.ui
 SOURCES += qwzm.cpp ../display/wzmutils.c wzmglwidget.cpp conversion.cpp
 HEADERS += qwzm.h ../display/wzmutils.h wzmglwidget.h
 TEMPLATE = app

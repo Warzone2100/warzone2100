@@ -44,6 +44,20 @@
         </spacer>
        </item>
        <item>
+        <layout class="QVBoxLayout" name="verticalLayout_3" >
+         <item>
+          <widget class="QLabel" name="label_2" >
+           <property name="text" >
+            <string>Selected mesh</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QComboBox" name="comboBoxSelectedMesh" />
+         </item>
+        </layout>
+       </item>
+       <item>
         <layout class="QVBoxLayout" name="verticalLayout_2" >
          <item>
           <widget class="QLabel" name="label" >
@@ -147,8 +161,8 @@
     <property name="title" >
      <string>Edit</string>
     </property>
-    <addaction name="actionAnimation_2" />
-    <addaction name="actionConnectors" />
+    <addaction name="actionEditFrames" />
+    <addaction name="actionEditConnectors" />
    </widget>
    <addaction name="menuImport_3DS" />
    <addaction name="menuEdit" />
@@ -261,12 +275,12 @@
     <string>Scale model</string>
    </property>
   </action>
-  <action name="actionAnimation_2" >
+  <action name="actionEditFrames" >
    <property name="text" >
     <string>Frames</string>
    </property>
   </action>
-  <action name="actionConnectors" >
+  <action name="actionEditConnectors" >
    <property name="text" >
     <string>Connectors</string>
    </property>

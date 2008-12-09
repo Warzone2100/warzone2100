@@ -31,6 +31,18 @@ extern "C" {
 #include "wzmutils.h"
 }
 #include "ui_qwzm.h"
+#include "ui_animationview.h"
+
+/** Animation view */
+class QAnimViewer : public QDialog, private Ui_AnimationView
+{
+	Q_OBJECT
+	public:
+	QAnimViewer(QWidget *parent = 0);
+	~QAnimViewer();
+	void setModel(QStandardItemModel *model);
+	void updateModel();
+};
 
 /** WZM Viewer */
 class QWzmViewer : public QMainWindow, private Ui::QWZM
@@ -48,20 +60,24 @@ class QWzmViewer : public QMainWindow, private Ui::QWZM
 	void openPIE();
 	void toggleWireframe();
 	void toggleCulling();
-	void toggleTeam(int index);
+	void setTeam(int index);
 	void tick();
 	void toggleAnimation();
 	void toggleScale();
 	void toggleSwapYZ();
 	void toggleReverseWinding();
 	void toggleFlipVerticalTexCoords();
+	void setMesh(int index);
+	void toggleEditAnimation();
 
 	private:
 	QString filename;
 	MODEL *psModel;
+	QStandardItemModel anim;
 	void load3DS(QString input);
 	void loadPIE(QString input);
 	void setModel(QFileInfo &texPath);
+	QAnimViewer *animView;
 };
 
 #endif
