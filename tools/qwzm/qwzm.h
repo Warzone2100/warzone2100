@@ -70,6 +70,8 @@ class QWzmViewer : public QMainWindow, private Ui::QWZM
 	void setMesh(int index);
 	void toggleEditAnimation();
 
+	void reloadFrames(const QModelIndex &first, const QModelIndex &last);
+
 	private:
 	QString filename;
 	MODEL *psModel;

@@ -176,9 +176,32 @@ void QWzmViewer::save()
 	}
 }
 
+// Load animation frames from UI model into WZM drawing model
+void QWzmViewer::reloadFrames(const QModelIndex &first, const QModelIndex &last)
+{
+	MESH *psMesh = &psModel->mesh[comboBoxSelectedMesh->currentIndex()];
+
+	for (int i = 0; i < psMesh->frames; i++)
+	{
+		FRAME *psFrame = &psMesh->frameArray[i];
+
+		psFrame->timeSlice = anim.data(anim.index(i, 0, QModelIndex())).toDouble();
+		psFrame->textureArray = anim.data(anim.index(i, 1, QModelIndex())).toInt();
+		psFrame->translation.x = anim.data(anim.index(i, 2, QModelIndex())).toDouble();
+		psFrame->translation.y = anim.data(anim.index(i, 3, QModelIndex())).toDouble();
+		psFrame->translation.z = anim.data(anim.index(i, 4, QModelIndex())).toDouble();
+		psFrame->rotation.x = anim.data(anim.index(i, 5, QModelIndex())).toDouble();
+		psFrame->rotation.y = anim.data(anim.index(i, 6, QModelIndex())).toDouble();
+		psFrame->rotation.z = anim.data(anim.index(i, 7, QModelIndex())).toDouble();
+	}
+}
+
 void QWzmViewer::setMesh(int index)
 {
 	MESH *psMesh = &psModel->mesh[index];
+
+	// Prevent backscatter
+	disconnect(&anim, SIGNAL(dataChanged(const QModelIndex &, const QModelIndex &)), this, SLOT(reloadFrames(const QModelIndex &, const QModelIndex &)));
 
 	// Refresh frame view
 	anim.setRowCount(psMesh->frames);
@@ -196,6 +219,7 @@ void QWzmViewer::setMesh(int index)
 		anim.setData(anim.index(i, 7, QModelIndex()), QString::number(psFrame->rotation.z));
 	}
 	animView->updateModel();
+	connect(&anim, SIGNAL(dataChanged(const QModelIndex &, const QModelIndex &)), this, SLOT(reloadFrames(const QModelIndex &, const QModelIndex &))); 
 }
 
 void QWzmViewer::setModel(QFileInfo &texPath)
