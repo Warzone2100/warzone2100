@@ -1555,6 +1555,9 @@ void luaWZObj_pushdroid(lua_State *L, DROID* droid)
 		// we are building something, set the stat member to the name of the building
 		luaWZ_setstringfield(L, "stat", droid->psTarStats->pName);
 	}
+	luaWZ_setintfield(L, "action", droid->action);
+	luaWZ_setintfield(L, "actionX", droid->actionX);
+	luaWZ_setintfield(L, "actionY", droid->actionY);
 }
 
 void luaWZObj_pushgroup(lua_State *L, DROID_GROUP *group)

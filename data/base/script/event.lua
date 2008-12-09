@@ -59,7 +59,8 @@ function callbackEvent(handler, event)
 end
 
 function deactivateEvent(handler)
-	_event.event_list[handler] = nil
+	_event.event_list[handler].enabled = false
+	_event.event_list[handler].enabled_stored = false
 end
 
 -- will process all conditional events, executed every tick
@@ -75,7 +76,7 @@ function processEvents()
 				if not event.expression or event.expression() then
 					-- update the trigger
 					if event.rep == false then
-						_event.event_list[handler] = nil
+						_event.event_list[handler].enabled = false
 					else
 						event.check_time = event.check_time + event.time
 					end
@@ -91,6 +92,7 @@ end
 -- same time
 function _event.disable_run_enable(handler, ...)
 	if _event.event_list[handler] then -- could be deactivated
+		_event.event_list[handler].enabled_stored = _event.event_list[handler].enabled
 		_event.event_list[handler].enabled = false
 	end
 	--[[if arg then
@@ -101,7 +103,7 @@ function _event.disable_run_enable(handler, ...)
 	end]]--
 	local results = {handler(unpack(arg))}
 	if _event.event_list[handler] then -- could be deactivated
-		_event.event_list[handler].enabled = true
+		_event.event_list[handler].enabled = _event.event_list[handler].enabled_stored
 	end
 	return unpack(results)
 end
@@ -147,7 +149,7 @@ function run_event(handler, parameters)
 			error('yield returned unsupported request '..results[2])
 		end
 	elseif coroutine.status(co) == 'dead' and type(handler) == 'thread' then
-		_event.event_list[handler] = nil
+		_event.event_list[handler].enabled = false
 	end
 end
 

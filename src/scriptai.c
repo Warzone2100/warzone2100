@@ -308,22 +308,17 @@ WZ_DECL_UNUSED static BOOL scrIterateCluster(void)
 }
 
 
-// remove a droid from a group
-WZ_DECL_UNUSED static BOOL scrDroidLeaveGroup(void)
+/// remove a droid from a group
+static int scrDroidLeaveGroup(lua_State *L)
 {
-	DROID			*psDroid;
-
-	if (!stackPopParams(1, ST_DROID, &psDroid))
-	{
-		return false;
-	}
+	DROID *psDroid = (DROID*)luaWZObj_checkobject(L, 1, OBJ_DROID);
 
 	if (psDroid->psGroup != NULL)
 	{
 		grpLeave(psDroid->psGroup, psDroid);
 	}
 
-	return true;
+	return 0;
 }
 
 
@@ -1957,51 +1952,30 @@ WZ_DECL_UNUSED static BOOL scrActionDroidObj(void)
 DROID_GROUP		*psScrIterateGroupB[MAX_PLAYERS];
 DROID			*psScrIterateGroupDroidB[MAX_PLAYERS];
 
-// initialise iterating a groups members
-WZ_DECL_UNUSED static BOOL scrInitIterateGroupB(void)
+/// initialise iterating a groups members
+static int scrInitIterateGroupB(lua_State *L)
 {
-	DROID_GROUP	*psGroup;
-	SDWORD		bucket;
-
-	if (!stackPopParams(2, ST_GROUP, &psGroup, VAL_INT, &bucket))
-	{
-		debug(LOG_ERROR, "scrInitIterateGroupB: stackPopParams failed");
-		return false;
-	}
-
-	ASSERT( psGroup != NULL,
-		"scrInitIterateGroupB: invalid group pointer" );
-
-	ASSERT( bucket < MAX_PLAYERS,
-		"scrInitIterateGroupB: invalid bucket" );
+	DROID_GROUP *psGroup = luaWZObj_checkgroup(L, 1);
+	int bucket = luaWZ_checkplayer(L, 2);
 
 	psScrIterateGroupB[bucket] = psGroup;
 	psScrIterateGroupDroidB[bucket] = psGroup->psList;
 
-	return true;
+	return 0;
 }
 
 //script function - improved version
-// iterate through a groups members
-WZ_DECL_UNUSED static BOOL scrIterateGroupB(void)
+/// iterate through a groups members
+static int scrIterateGroupB(lua_State *L)
 {
-	DROID_GROUP	*psGroup;
-	DROID		*psDroid;
-	SDWORD		bucket;
-
-	if (!stackPopParams(2, ST_GROUP, &psGroup, VAL_INT, &bucket))
-	{
-		debug(LOG_ERROR, "scrIterateGroupB: stackPopParams failed");
-		return false;
-	}
-
-	ASSERT( bucket < MAX_PLAYERS,
-		"scrIterateGroupB: invalid bucket" );
+	DROID *psDroid;
+	
+	DROID_GROUP *psGroup = luaWZObj_checkgroup(L, 1);
+	int bucket = luaWZ_checkplayer(L, 2);
 
 	if (psGroup != psScrIterateGroupB[bucket])
 	{
-		ASSERT( false, "scrIterateGroupB: invalid group, InitGroupIterateB not called?" );
-		return false;
+		return luaL_error(L, "invalid group, InitGroupIterateB not called?" );
 	}
 
 	if (psScrIterateGroupDroidB[bucket] != NULL)
@@ -2011,17 +1985,12 @@ WZ_DECL_UNUSED static BOOL scrIterateGroupB(void)
 	}
 	else
 	{
-		psDroid = NULL;
+		lua_pushnil(L);
+		return 1;
 	}
 
-	scrFunctionResult.v.oval = psDroid;
-	if (!stackPushResult((INTERP_TYPE)ST_DROID, &scrFunctionResult))
-	{
-		debug(LOG_ERROR, "scrIterateGroupB: stackPushResult failed");
-		return false;
-	}
-
-	return true;
+	luaWZObj_pushdroid(L, psDroid);
+	return 1;
 }
 
 // ********************************************************************************************
@@ -2055,6 +2024,13 @@ void registerScriptAIfuncs(lua_State *L)
 	lua_register(L, "orderDroidObj", scrOrderDroidObj);
 	lua_register(L, "skDifficultyModifier", scrSkDifficultyModifier);
 	lua_register(L, "skVtolEnableCheck", scrSkVtolEnableCheck);
+	lua_register(L, "droidLeaveGroup", scrDroidLeaveGroup);
+	lua_register(L, "initIterateGroupB", scrInitIterateGroupB);
+	lua_register(L, "iterateGroupB", scrIterateGroupB);
+	//lua_register(L, "", );
+	//lua_register(L, "", );
+	//lua_register(L, "", );
+	//lua_register(L, "", );
 	//lua_register(L, "", );
 	//lua_register(L, "", );
 

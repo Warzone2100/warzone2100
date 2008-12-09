@@ -38,6 +38,24 @@ function __undefined_meta.__index(table, key)
 	return val
 end
 
+function Array(a, b)
+	local new_array = {}
+	local i,j
+	if not b then
+		for i=0,a do
+			new_array[i] = 0
+		end
+	else
+		for i=0,a do
+			new_array[i] = {}
+			for j=0,b do
+				new_array[i][j] = 0
+			end
+		end
+	end
+	return new_array
+end
+
 -- Some legacy names
 EnumDroid = enumDroid
 InitEnumDroids = initEnumDroids
@@ -69,6 +87,13 @@ end
 function objToDroid(object)
 	if not object.type == "droid" then error("object is not a droid", 2) end
 	return object
+end
+
+min = math.min
+max = math.max
+
+function modulo(a, b)
+	return a % b
 end
 
 -- Functions for counting things in a range

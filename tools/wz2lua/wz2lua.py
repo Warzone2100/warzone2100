@@ -619,20 +619,11 @@ class CodeGenerator(GenericASTTraversal):
 		if node[0].type == 'arrayref':
 			if not node[0][0].code+'[]' in defined_arrays:
 				# a[8][2]
-				node.arraydef += node[0][0].code + ' = {}\n'
-				
-				node.arrayinit +=  'for i=0,'+node[0][1].code+' do\n'
-				node.arrayinit +=  '	'+node[0][0].code + '[i] = {}\n'
-				node.arrayinit +=  '	for j=0,'+node[1].code+' do\n'
-				node.arrayinit +=  '		'+node[0][0].code+'[i][j] = 0\n'
-				node.arrayinit +=  '	end\n'
-				node.arrayinit +=  'end\n'
+				node.arraydef += node[0][0].code + ' = Array(%s, %s)\n' % (node[0][1].code, node[1].code)
 				defined_arrays.add(node[0][0].code+'[]')
 		else:
 			if not node[0].code in defined_arrays:
-				node.arraydef += node[0].code + ' = {}\n'
-				if node[1].type == 'number' and not node.arrayinit:
-					node.arrayinit = 'for i=0,'+node[1].code+' do '+node[0].code+'[i] = 0 end\n'
+				node.arraydef += node[0].code + ' = Array(%s)\n' % node[1].code
 				defined_arrays.add(node[0].code)
 	def n_event_declaration(self, node):
 		# originally, the events were only called if certain conditions were met
@@ -804,15 +795,16 @@ class CodeGenerator(GenericASTTraversal):
 		# not neccesary for lua
 		node.code = ''
 	def n_globaldef(self, node):
-		if node[0].attr == 'private':
-			node.code += ''
-			for d in node[2]:
-				if node[1].code in ['STRUCTURE']:
-					can_be_destroyed.append(d.attr)
-				if d.type == 'arrayref':
+		for d in node[2]:
+			if node[1].code in ['STRUCTURE']:
+				can_be_destroyed.append(d.attr)
+			if d.type == 'arrayref':
+				if not d[0].code in defined_globals:
 					node.code += d.arraydef
 					node.code += d.arrayinit
-				else:
+					defined_globals.append(d[0].code)
+			else:
+				if not d.code in defined_globals:
 					node.code += d.code + ' = '
 					node[1].code = node[1].code.lower()
 					if node[1].code == 'bool':
@@ -824,9 +816,7 @@ class CodeGenerator(GenericASTTraversal):
 					else:
 						node.code += 'nil'
 					node.code += '\n'
-		else:
-			# already defined in the vlo
-			node.code += ''
+					defined_globals.append(d.code)
 	def n_localdef(self, node):
 		for d in node[2]:
 			node.code += 'local ' + d.code + ' = '
@@ -1015,11 +1005,13 @@ class VloCodeGenerator(GenericASTTraversal):
 		node.code = pop_comments(node.line)
 		if node[0].type == 'arrayref':
 			node.code += node[0].arraydef
+			defined_globals.append(node[0][0].code)
 		if node[1].code == 'STRUCTURE':
 			can_be_destroyed.append(node[0].code)
 			node.code += node[0].code + ' = getStructureByID(' + node[2].code + ')\n'
 		else:
 			node.code += node[0].code + ' = ' + node[2].code + '\n'
+		defined_globals.append(node[0].code)
 			
 operator_convert = { '!=':'~=', '!':'not', '&&':'and', '||':'or',  '&':'..' }
 
@@ -1028,6 +1020,7 @@ called_functions = set()
 
 can_be_destroyed = []
 macros = []
+defined_globals = []
 
 def load_file(filename):
 	f = file(filename)

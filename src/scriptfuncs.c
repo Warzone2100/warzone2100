@@ -7806,40 +7806,13 @@ WZ_DECL_UNUSED static BOOL scrUnloadTransporter(void)
 	return true;
 }
 
-//return true if droid is a member of any group
-WZ_DECL_UNUSED static BOOL scrHasGroup(void)
+/// return true if droid is a member of any group
+static int scrHasGroup(lua_State *L)
 {
-	DROID			*psDroid;
-	BOOL			retval;
+	DROID *psDroid = (DROID*)luaWZObj_checkobject(L, 1, OBJ_DROID);
 
-	if (!stackPopParams(1, ST_DROID, &psDroid))
-	{
-		debug( LOG_ERROR,"scrHasGroup: failed to pop" );
-		return false;
-	}
-
-	if (psDroid == NULL)
-	{
-		debug( LOG_ERROR, "scrHasGroup: droid is NULLOBJECT" );
-		return false;
-	}
-
-	if (psDroid->psGroup != NULL)
-	{
-		retval = true;
-	}
-	else
-	{
-		retval = false;
-	}
-
-	scrFunctionResult.v.bval = retval;
-	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
-	{
-		return false;
-	}
-
-	return true;
+	lua_pushboolean(L, psDroid->psGroup != NULL);
+	return 1;
 }
 
 /* Range is in world units! */
@@ -8353,37 +8326,12 @@ WZ_DECL_UNUSED static BOOL scrSelectGroup(void)
 	return true;
 }
 
-WZ_DECL_UNUSED static BOOL scrModulo(void)
+static int scrPlayerLoaded(lua_State *L)
 {
-	SDWORD				num1,num2;
-
-	if (!stackPopParams(2, VAL_INT, &num1, VAL_INT, &num2))
-	{
-		debug(LOG_ERROR,"scrModulo(): stack failed");
-		return false;
-	}
-
-	scrFunctionResult.v.ival =  (num1 % num2);
-	if (!stackPushResult(VAL_INT, &scrFunctionResult))
-	{
-		debug(LOG_ERROR,"scrModulo(): failed to push result");
-		return false;
-	}
-
-	return true;
-}
-
-WZ_DECL_UNUSED static BOOL scrPlayerLoaded(void)
-{
-	SDWORD			player;
 	BOOL			bPlayerHasFactories=false;
 	STRUCTURE		*psCurr;
-
-	if (!stackPopParams(1, VAL_INT, &player))
-	{
-		debug(LOG_ERROR, "scrPlayerLoaded(): stack failed");
-		return false;
-	}
+	
+	int player = luaWZ_checkplayer(L, 1);
 
 	/* see if there are any player factories left */
 	if(apsStructLists[player])
@@ -8399,15 +8347,8 @@ WZ_DECL_UNUSED static BOOL scrPlayerLoaded(void)
 	}
 
 	/* player is active if he has at least a unit or some factory */
-	scrFunctionResult.v.bval = (apsDroidLists[player] != NULL || bPlayerHasFactories);
-
-	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
-	{
-		debug(LOG_ERROR,"scrPlayerLoaded(): failed to push result");
-		return false;
-	}
-
-	return true;
+	lua_pushboolean(L, apsDroidLists[player] != NULL || bPlayerHasFactories);
+	return 1;
 }
 
 
@@ -8464,51 +8405,26 @@ WZ_DECL_UNUSED static BOOL scrLearnPlayerBaseLoc(void)
 	return true;
 }
 
-//Saves enemy base x and y for a certain player
-WZ_DECL_UNUSED static BOOL scrRecallPlayerBaseLoc(void)
+/// Saves enemy base x and y for a certain player
+static int scrRecallPlayerBaseLoc(lua_State *L)
 {
-	SDWORD				playerStoring,enemyPlayer, *x, *y;
-
-	if (!stackPopParams(4, VAL_INT, &playerStoring, VAL_INT, &enemyPlayer,
-						VAL_REF|VAL_INT, &x, VAL_REF|VAL_INT, &y))
-	{
-		debug(LOG_ERROR, "scrRecallPlayerBaseLoc(): stack failed");
-		return false;
-	}
-
-	if((playerStoring >= MAX_PLAYERS) || (enemyPlayer >= MAX_PLAYERS))
-	{
-		debug(LOG_ERROR, "scrRecallPlayerBaseLoc: player index too high.");
-		return false;
-	}
-
-	if((playerStoring < 0) || (enemyPlayer < 0))
-	{
-		debug(LOG_ERROR, "scrRecallPlayerBaseLoc: player index too low.");
-		return false;
-	}
-
+	int x,y;
+	
+	int playerStoring = luaWZ_checkplayer(L, 1);
+	int enemyPlayer   = luaWZ_checkplayer(L, 2);
+	
 	if(!CanRememberPlayerBaseLoc(playerStoring, enemyPlayer))		//return false if this one not set yet
 	{
-		scrFunctionResult.v.bval = false;
-		if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
-		{
-			return false;
-		}
-
-		return true;
+		lua_pushnil(L);
+		return 1;
 	}
 
-	*x = baseLocation[playerStoring][enemyPlayer][0];
-	*y = baseLocation[playerStoring][enemyPlayer][1];
+	x = baseLocation[playerStoring][enemyPlayer][0];
+	y = baseLocation[playerStoring][enemyPlayer][1];
 
-	scrFunctionResult.v.bval = true;
-	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
-	{
-		return false;
-	}
-
-	return true;
+	lua_pushinteger(L, x);
+	lua_pushinteger(L, y);
+	return 2;
 }
 
 /* Checks if player base loc is stored */
@@ -9542,34 +9458,13 @@ WZ_DECL_UNUSED static BOOL scrGetStructureType(void)
 	return true;
 }
 
-/* Get player name from index */
-WZ_DECL_UNUSED static BOOL scrGetPlayerName(void)
+/// Get player name from index
+static int scrGetPlayerName(lua_State *L)
 {
-	SDWORD	player;
-
-	if (!stackPopParams(1, VAL_INT, &player))
-	{
-		debug(LOG_ERROR, "scrGetPlayerName(): stack failed");
-		return false;
-	}
-
-	if (player < 0 || player >= MAX_PLAYERS)
-	{
-		ASSERT( false, "scrGetPlayerName: invalid player number" );
-		return false;
-	}
-
-	/* Casting away constness because stackPushResult doesn't modify it's
-	 * value (i.e. in this case it's not const correct).
-	 */
-	scrFunctionResult.v.sval = (char*)getPlayerName((UDWORD)player);
-	if (!stackPushResult(VAL_STRING, &scrFunctionResult))
-	{
-		debug(LOG_ERROR, "scrGetPlayerName(): failed to push result");
-		return false;
-	}
-
-	return true;
+	int player = luaWZ_checkplayer(L, 1);
+	
+	lua_pushstring(L, getPlayerName(player));
+	return 1;
 }
 
 /* Set player name */
@@ -10745,6 +10640,12 @@ void registerScriptfuncs(lua_State *L)
 	lua_register(L, "getNumStructures", scrGetNumStructures);
 	lua_register(L, "initEnumDroids", scrInitEnumDroids);
 	lua_register(L, "enumDroid", scrEnumDroid);
+	lua_register(L, "recallPlayerBaseLoc", scrRecallPlayerBaseLoc);
+	lua_register(L, "playerLoaded", scrPlayerLoaded);
+	lua_register(L, "getPlayerName", scrGetPlayerName);
+	lua_register(L, "hasGroup", scrHasGroup);
+	//lua_register(L, "", );
+	//lua_register(L, "", );
 	//lua_register(L, "", );
 	//lua_register(L, "", );
 	//lua_register(L, "", );
