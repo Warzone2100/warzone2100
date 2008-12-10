@@ -59,6 +59,7 @@ from sys import stdin, stdout, stderr
 '''
 
 cvars = ['trackTransporter', 'mapWidth', 'mapHeight', 'gameInitialised', 'selectedPlayer', 'gameTime', 'gameLevel', 'inTutorial', 'cursorType', 'intMode', 'targetedObjectType', 'extraVictoryFlag', 'extraFailFlag', 'multiPlayerGameType', 'multiPlayerMaxPlayers', 'multiPlayerBaseType', 'multiPlayerAlliancesType']
+rename = {'debug': 'debugFile'}
 
 class Token:
 	def __init__(self, type, attr='', constant=True):
@@ -533,7 +534,10 @@ class CodeGenerator(GenericASTTraversal):
 			node.attr = 'nil'
 		if node.attr in cvars:
 			node.attr = 'C.'+node.attr
-		node.code = node.attr
+		if node.attr in rename:
+			node.code = rename[node.attr]
+		else:
+			node.code = node.attr
 		
 	def n_braced(self, node):
 		node.code = '(' + node[0].code + ')'
@@ -998,6 +1002,8 @@ class VloCodeGenerator(GenericASTTraversal):
 		node.arraydef = ''
 		if node[0].type == 'arrayref':
 			node.arraydef = node[0].arraydef
+			if not node[0][0].code+'[]' in defined_arrays:
+				defined_arrays.add(node[0][0].code+'[]')
 		if not node[0].code in defined_arrays:
 			node.arraydef += node[0].code + ' = {}\n'
 			defined_arrays.add(node[0].code)
@@ -1009,6 +1015,9 @@ class VloCodeGenerator(GenericASTTraversal):
 		if node[1].code == 'STRUCTURE':
 			can_be_destroyed.append(node[0].code)
 			node.code += node[0].code + ' = getStructureByID(' + node[2].code + ')\n'
+		elif node[1].code == 'WEAPON':
+			can_be_destroyed.append(node[0].code)
+			node.code += node[0].code + ' = getWeapon(' + node[2].code + ')\n'
 		else:
 			node.code += node[0].code + ' = ' + node[2].code + '\n'
 		defined_globals.append(node[0].code)

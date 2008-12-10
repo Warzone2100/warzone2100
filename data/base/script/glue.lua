@@ -17,10 +17,6 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 ]]--
 
-
--- FIXME: HACKS
-structChoice = {} -- bug in skirmish scripts, this variable should have been PRIVATE in the .slo
-
 -- to obtain information about undefined members
 __undefined_meta = {}
 function __undefined_meta.__index(table, key)
@@ -37,6 +33,28 @@ function __undefined_meta.__index(table, key)
 	end
 	return val
 end
+
+-- this will make sure we can use the concatenation operator .. with booleans
+__boolean_meta = {}
+function __boolean_meta.__concat(a, b)
+	if type(a) == 'boolean' then
+		if a then
+			a = 'true'
+		else
+			a = 'false'
+		end
+	end
+	if type(b) == 'boolean' then
+		if b then
+			b = 'true'
+		else
+			b = 'false'
+		end
+	end
+	return a..b
+end
+-- use the debug library as we can then set metatables for any type
+debug.setmetatable(true, __boolean_meta)
 
 function Array(a, b)
 	local new_array = {}
@@ -90,7 +108,10 @@ function objToDroid(object)
 end
 
 min = math.min
+fmin = min
 max = math.max
+fmax = max
+toPow = math.pow
 
 function modulo(a, b)
 	return a % b

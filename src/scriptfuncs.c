@@ -6539,17 +6539,13 @@ WZ_DECL_UNUSED static BOOL scrMapRevealedInRange(void)
 	return true;
 }
 
-/* Returns true if a certain map tile was revealed, ie fog of war was removed */
-WZ_DECL_UNUSED static BOOL scrMapTileVisible(void)
+/// Returns true if a certain map tile was revealed, ie fog of war was removed
+static int scrMapTileVisible(lua_State *L)
 {
-	SDWORD		tileX,tileY,player;
-
-	if (!stackPopParams(3, VAL_INT, &tileX, VAL_INT, &tileY, VAL_INT, &player))
-	{
-		debug(LOG_ERROR,  "scrMapTileVisible: failed to pop");
-		return false;
-	}
-
+	int player = luaWZ_checkplayer(L, 1);
+	int tileX  = luaL_checkint(L, 2);
+	int tileY  = luaL_checkint(L, 3);
+	
 	//Check coords
 	if (tileX < 0
 	 || tileX > world_coord(mapWidth)
@@ -6560,26 +6556,8 @@ WZ_DECL_UNUSED static BOOL scrMapTileVisible(void)
 		return false;
 	}
 
-	if(TEST_TILE_VISIBLE( player,mapTile(tileX,tileY) ))
-	{
-		scrFunctionResult.v.bval = true;
-
-		if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
-		{
-			return false;
-		}
-	}
-	else
-	{
-		//not visible
-		scrFunctionResult.v.bval = false;
-		if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
-		{
-			return false;
-		}
-	}
-
-	return true;
+	lua_pushboolean(L, TEST_TILE_VISIBLE( player,mapTile(tileX,tileY) ));
+	return 1;
 }
 
 //return number of reserach topics that are left to be researched
@@ -7495,26 +7473,17 @@ WZ_DECL_UNUSED static BOOL scrNumStructsButNotWallsInRangeVis(void)
 	return true;
 }
 
-// Only returns structure if it is visible
-WZ_DECL_UNUSED static BOOL scrGetStructureVis(void)
+/// Only returns structure if it is visible
+static int scrGetStructureVis(lua_State *L)
 {
-	SDWORD				player, lookingPlayer, index;
 	STRUCTURE			*psStruct;
 	UDWORD				structType;
 	BOOL				found;
-
-	if (!stackPopParams(3, ST_STRUCTURESTAT, &index, VAL_INT, &player, VAL_INT, &lookingPlayer))
-	{
-		debug(LOG_ERROR,"scrGetStructureVis: failed to pop");
-		return false;
-	}
-
-	if ((player >= MAX_PLAYERS) || (lookingPlayer >= MAX_PLAYERS))
-	{
-		ASSERT( false, "scrGetStructureVis:player number is too high" );
-		return false;
-	}
-
+	
+	int index         = luaWZObj_checkstructurestat(L, 1);
+	int player        = luaWZ_checkplayer(L, 2);
+	int lookingPlayer = luaWZ_checkplayer(L, 3);
+	
 	structType = asStructureStats[index].ref;
 
 	//search the players' list of built structures to see if one exists
@@ -7535,16 +7504,12 @@ WZ_DECL_UNUSED static BOOL scrGetStructureVis(void)
 	//make sure pass NULL back if not got one
 	if (!found)
 	{
-		psStruct = NULL;
+		lua_pushnil(L);
+		return 1;
 	}
-
-	scrFunctionResult.v.oval = psStruct;
-	if (!stackPushResult((INTERP_TYPE)ST_STRUCTURE, &scrFunctionResult))
-	{
-		return false;
-	}
-
-	return true;
+	
+	luaWZObj_pushstructure(L, psStruct);
+	return 1;
 }
 
 //returns num of visible structures of a certain player in range
@@ -8038,20 +8003,19 @@ WZ_DECL_UNUSED static BOOL scrGetClosestEnemyDroidByType(void)
 	return true;
 }
 
-//returns closest structure by type
-WZ_DECL_UNUSED static BOOL scrGetClosestEnemyStructByType(void)
+/// returns closest structure by type
+static int scrGetClosestEnemyStructByType(lua_State *L)
 {
-	SDWORD				x,y,tx,ty, player, range,i,type,dist;
+	SDWORD				tx, ty, i, dist;
 	UDWORD				bestDist;
 	BOOL				bFound = false;	//only military objects?
 	STRUCTURE			*psStruct = NULL, *foundStruct = NULL;
-
-	if (!stackPopParams(5, VAL_INT, &x, VAL_INT, &y,
-		 VAL_INT, &range,  VAL_INT, &type, VAL_INT, &player))
-	{
-		debug(LOG_ERROR, "scrGetClosestEnemyStructByType: stack failed");
-		return false;
-	}
+	
+	int x      = luaL_checkinteger(L, 1);
+	int y      = luaL_checkinteger(L, 2);
+	int range  = luaL_checkinteger(L, 3);
+	int type   = luaL_checkinteger(L, 4);
+	int player = luaWZ_checkplayer(L, 5);
 
 	//Check coords
 	if (x < 0
@@ -8098,27 +8062,16 @@ WZ_DECL_UNUSED static BOOL scrGetClosestEnemyStructByType(void)
 				}
 			}
 		}
-
 	}
-
-	if(bFound)
+	
+	if (!bFound)
 	{
-		scrFunctionResult.v.oval = foundStruct;
-		if (!stackPushResult((INTERP_TYPE)ST_STRUCTURE, &scrFunctionResult))
-		{
-			return false;
-		}
+		lua_pushnil(L);
+		return 1;
 	}
-	else
-	{
-		scrFunctionResult.v.oval = NULL;
-		if (!stackPushResult((INTERP_TYPE)ST_STRUCTURE, &scrFunctionResult))
-		{
-			return false;
-		}
-	}
-
-	return true;
+	
+	luaWZObj_pushstructure(L, foundStruct);
+	return 1;
 }
 
 
@@ -9621,26 +9574,6 @@ WZ_DECL_UNUSED static BOOL scrShowRangeAtPos(void)
 	return true;
 }
 
-WZ_DECL_UNUSED static BOOL scrToPow(void)
-{
-	float		x,y;
-
-	if (!stackPopParams(2, VAL_FLOAT, &x, VAL_FLOAT, &y))
-	{
-		debug(LOG_ERROR, "scrToPow(): stack failed");
-		return false;
-	}
-
-	scrFunctionResult.v.fval = (float)pow(x,y);
-	if (!stackPushResult(VAL_FLOAT, &scrFunctionResult))
-	{
-		debug(LOG_ERROR, "scrToPow(): failed to push result");
-		return false;
-	}
-
-	return true;
-}
-
 /* Exponential function */
 WZ_DECL_UNUSED static BOOL scrExp(void)
 {
@@ -10551,6 +10484,14 @@ WZ_DECL_UNUSED static BOOL scrPgettext_noop(void)
 	return stackPushResult(VAL_STRING, &scrFunctionResult);
 }
 
+static int scrGetWeapon(lua_State *L)
+{
+	const char *name = luaL_checkstring(L, 1);
+	int index = getCompFromResName(COMP_WEAPON, name);
+	luaWZObj_pushweaponstat(L, asWeaponStats+index);
+	return 1;
+}
+
 /// Register all script functions with the Lua interpreter
 void registerScriptfuncs(lua_State *L)
 {
@@ -10644,10 +10585,10 @@ void registerScriptfuncs(lua_State *L)
 	lua_register(L, "playerLoaded", scrPlayerLoaded);
 	lua_register(L, "getPlayerName", scrGetPlayerName);
 	lua_register(L, "hasGroup", scrHasGroup);
-	//lua_register(L, "", );
-	//lua_register(L, "", );
-	//lua_register(L, "", );
-	//lua_register(L, "", );
+	lua_register(L, "getStructureVis", scrGetStructureVis);
+	lua_register(L, "getClosestEnemyStructByType", scrGetClosestEnemyStructByType);
+	lua_register(L, "mapTileVisible", scrMapTileVisible);
+	lua_register(L, "getWeapon", scrGetWeapon);
 	//lua_register(L, "", );
 	//lua_register(L, "", );
 	//lua_register(L, "", );

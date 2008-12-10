@@ -107,6 +107,8 @@ extern unsigned int luaWZObj_toid(lua_State *L, int pos);
 extern void luaWZObj_pushstructure(lua_State *L, STRUCTURE* structure);
 extern void luaWZObj_pushfeature(lua_State *L, FEATURE* feature);
 extern void luaWZObj_pushdroid(lua_State *L, DROID* droid);
+extern void luaWZObj_pushweapon(lua_State *L, WEAPON* weapon);
+extern void luaWZObj_pushweaponstat(lua_State *L, WEAPON_STATS *psStat);
 
 extern void luaWZObj_pushgroup(lua_State *L, DROID_GROUP *group);
 extern DROID_GROUP *luaWZObj_checkgroup(lua_State *L, int pos);

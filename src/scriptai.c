@@ -1272,6 +1272,11 @@ static int scrSkCanBuildTemplate(lua_State *L)
 	char copy[MAX_STR_LENGTH];
 	DROID_TEMPLATE *psTempl;
 	
+	if (lua_isnumber(L, 3))
+	{
+		return luaL_argerror (lua_State *L, 3, "template should be a string");
+	}
+	
 	strlcpy(copy, templatename, MAX_STR_LENGTH);
 	psTempl = getTemplateFromTranslatedNameNoPlayer(copy);
 

@@ -1536,6 +1536,11 @@ void luaWZObj_pushstructure(lua_State *L, STRUCTURE* structure)
 	luaWZObj_pushbaseobject(L, (BASE_OBJECT*)structure);
 	luaWZ_setstringfield(L, "stat", structure->pStructureType->pName);
 	luaWZ_setintfield(L, "stattype", structure->type);
+
+	lua_pushstring(L, "weapon");
+	// FIXME: expose all weapons to the scripts (for multi-turret droids)
+	luaWZObj_pushweapon(L, &structure->asWeaps[0]);
+	lua_settable(L, -3);
 }
 
 void luaWZObj_pushfeature(lua_State *L, FEATURE* feature)
@@ -1558,6 +1563,38 @@ void luaWZObj_pushdroid(lua_State *L, DROID* droid)
 	luaWZ_setintfield(L, "action", droid->action);
 	luaWZ_setintfield(L, "actionX", droid->actionX);
 	luaWZ_setintfield(L, "actionY", droid->actionY);
+	
+	lua_pushstring(L, "weapon");
+	// FIXME: expose all weapons to the scripts (for multi-turret droids)
+	luaWZObj_pushweapon(L, &droid->asWeaps[0]);
+	lua_settable(L, -3);
+}
+
+void luaWZObj_pushweapon(lua_State *L, WEAPON* weapon)
+{
+	WEAPON_STATS *psStat = asWeaponStats + weapon->nStat;
+	luaWZObj_pushweaponstat(L, psStat);
+	luaWZ_setintfield(L, "ammo", weapon->ammo);
+	luaWZ_setintfield(L, "lastFired", weapon->lastFired);
+	luaWZ_setintfield(L, "recoilValue", weapon->recoilValue);
+	luaWZ_setintfield(L, "pitch", weapon->pitch);
+	luaWZ_setintfield(L, "rotation", weapon->rotation);
+}
+
+void luaWZObj_pushweaponstat(lua_State *L, WEAPON_STATS *psStat)
+{
+	lua_newtable(L);
+	luaWZ_setintfield(L, "shortRange", psStat->shortRange);
+	luaWZ_setintfield(L, "longRange", psStat->longRange);
+	luaWZ_setintfield(L, "shortHit", psStat->shortHit);
+	luaWZ_setintfield(L, "longHit", psStat->longHit);
+	luaWZ_setintfield(L, "damage", psStat->damage);
+	luaWZ_setintfield(L, "firePause", psStat->firePause);
+	luaWZ_setintfield(L, "reloadTime", psStat->reloadTime);
+	luaWZ_setintfield(L, "numRounds", psStat->numRounds);
+
+	lua_getglobal(L, "__undefined_meta");
+	lua_setmetatable(L, -2);
 }
 
 void luaWZObj_pushgroup(lua_State *L, DROID_GROUP *group)
