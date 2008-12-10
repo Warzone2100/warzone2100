@@ -45,6 +45,7 @@ class WZMOpenGLWidget : public QGLWidget
 	int teamIndex;
 	bool animation;
 	QTime timer;
+	int now;
 };
 
 #endif

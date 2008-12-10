@@ -43,6 +43,7 @@ class QAnimViewer : public QDialog, private Ui_AnimationView
 	void setModel(QStandardItemModel *model);
 	void updateModel();
 	QModelIndex selectedIndex();
+	void setSelectedIndex(int idx);
 };
 
 /** WZM Viewer */

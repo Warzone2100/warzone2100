@@ -41,6 +41,7 @@ WZMOpenGLWidget::WZMOpenGLWidget(QWidget *parent)
 		qWarning("This system has no OpenGL support!");
 		exit(EXIT_FAILURE);
 	}
+	now = 0;
 	timer.start();
 }
 
@@ -88,13 +89,16 @@ void WZMOpenGLWidget::paintGL()
 	glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	glTranslatef(0.0f, 0.0f/*-40.0f*/, -50.0f + -(dimension * 2.0f));;
+	glTranslatef(0.0f, 0.0f, -50.0f + -(dimension * 2.0f));;
 	gl_errors();
 	if (psModel)
 	{
-		int now = timer.elapsed();
+		if (animation)
+		{
+			now = timer.elapsed();
+		}
 
-		drawModel(psModel, animation ? now : 0);
+		drawModel(psModel, now);
 	}
 	gl_errors();
 }
@@ -126,17 +130,6 @@ void WZMOpenGLWidget::setTeam(int index)
 void WZMOpenGLWidget::setAnimation(bool value)
 {
 	animation = value;
-
-	if (!animation && psModel)
-	{
-		for (int i = 0; i < psModel->meshes; i++)
-		{
-			MESH *psMesh = &psModel->mesh[i];
-
-			psMesh->currentFrame = 0;
-			psMesh->lastChange = 0;
-		}
-	}
 }
 
 void WZMOpenGLWidget::setModel(MODEL *model)

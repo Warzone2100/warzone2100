@@ -40,6 +40,11 @@ QModelIndex QAnimViewer::selectedIndex()
 	return tableViewAnimation->currentIndex();
 }
 
+void QAnimViewer::setSelectedIndex(int idx)
+{
+	tableViewAnimation->setCurrentIndex(tableViewAnimation->model()->index(idx, 0));
+}
+
 void QAnimViewer::updateModel()
 {
 	tableViewAnimation->resizeColumnsToContents();
@@ -131,7 +136,20 @@ void QWzmViewer::toggleFlipVerticalTexCoords()
 
 void QWzmViewer::tick()
 {
+	int currentMesh = comboBoxSelectedMesh->currentIndex();
+	if (psModel)
+	{
+		MESH *psMesh = &psModel->mesh[currentMesh];
+
+		psMesh->currentFrame = animView->selectedIndex().row();
+	}
 	glView->updateGL();
+	if (psModel && actionAnimation->isChecked())
+	{
+		MESH *psMesh = &psModel->mesh[currentMesh];
+
+		animView->setSelectedIndex(psMesh->currentFrame);
+	}
 }
 
 void QWzmViewer::toggleCulling()
@@ -148,6 +166,19 @@ void QWzmViewer::toggleCulling()
 
 void QWzmViewer::toggleAnimation()
 {
+	// Reset animation on start because it might be out of sync
+	if (psModel && actionAnimation->isChecked())
+	{
+		animView->setSelectedIndex(0);
+		for (int i = 0; i < psModel->meshes; i++)
+		{
+			MESH *psMesh = &psModel->mesh[i];
+
+			psMesh->currentFrame = 0;
+			psMesh->lastChange = 0;
+		}
+	}
+
 	glView->setAnimation(actionAnimation->isChecked());
 }
 
@@ -296,6 +327,7 @@ void QWzmViewer::setMesh(int index)
 		anim.setData(anim.index(i, 7, QModelIndex()), QString::number(psFrame->rotation.z));
 	}
 	animView->updateModel();
+	animView->setSelectedIndex(psMesh->currentFrame);
 	animUnlock();
 }
 
