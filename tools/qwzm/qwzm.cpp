@@ -23,6 +23,9 @@ QAnimViewer::QAnimViewer(QWidget *parent)
 {
 	setupUi(this);
 	connect(pushButtonClose, SIGNAL(pressed()), this, SLOT(hide()));
+	connect(pushButtonPrepend, SIGNAL(pressed()), parent, SLOT(prependFrame()));
+	connect(pushButtonAppend, SIGNAL(pressed()), parent, SLOT(appendFrame()));
+	connect(pushButtonRemove, SIGNAL(pressed()), parent, SLOT(removeFrame()));
 }
 
 void QAnimViewer::setModel(QStandardItemModel *model)
@@ -30,6 +33,11 @@ void QAnimViewer::setModel(QStandardItemModel *model)
 	tableViewAnimation->setModel(model);
 	tableViewAnimation->setSelectionMode(QAbstractItemView::SingleSelection);
 	tableViewAnimation->setSelectionBehavior(QAbstractItemView::SelectRows);
+}
+
+QModelIndex QAnimViewer::selectedIndex()
+{
+	return tableViewAnimation->currentIndex();
 }
 
 void QAnimViewer::updateModel()
@@ -176,10 +184,25 @@ void QWzmViewer::save()
 	}
 }
 
+void QWzmViewer::rowsChanged(const QModelIndex &parent, int start, int end)
+{
+	reloadFrames();
+}
+
+void QWzmViewer::dataChanged(const QModelIndex &first, const QModelIndex &last)
+{
+	reloadFrames();
+}
+
 // Load animation frames from UI model into WZM drawing model
-void QWzmViewer::reloadFrames(const QModelIndex &first, const QModelIndex &last)
+void QWzmViewer::reloadFrames()
 {
 	MESH *psMesh = &psModel->mesh[comboBoxSelectedMesh->currentIndex()];
+
+	// Reallocate frames
+	psMesh->frames = anim.rowCount();
+	free(psMesh->frameArray);
+	psMesh->frameArray = (FRAME *)malloc(sizeof(FRAME) * psMesh->frames);
 
 	for (int i = 0; i < psMesh->frames; i++)
 	{
@@ -196,14 +219,68 @@ void QWzmViewer::reloadFrames(const QModelIndex &first, const QModelIndex &last)
 	}
 }
 
+void QWzmViewer::prependFrame()
+{
+	QModelIndex index = animView->selectedIndex();
+
+	animLock();
+	anim.insertRow(index.row());
+	anim.setData(anim.index(index.row(), 0, QModelIndex()), QString::number(0.1));
+	anim.setData(anim.index(index.row(), 1, QModelIndex()), QString::number(0));
+	anim.setData(anim.index(index.row(), 2, QModelIndex()), QString::number(0.0));
+	anim.setData(anim.index(index.row(), 3, QModelIndex()), QString::number(0.0));
+	anim.setData(anim.index(index.row(), 4, QModelIndex()), QString::number(0.0));
+	anim.setData(anim.index(index.row(), 5, QModelIndex()), QString::number(0.0));
+	anim.setData(anim.index(index.row(), 6, QModelIndex()), QString::number(0.0));
+	animUnlock();	// act on last change only
+	anim.setData(anim.index(index.row(), 7, QModelIndex()), QString::number(0.0));
+}
+
+void QWzmViewer::appendFrame()
+{
+	QModelIndex index = animView->selectedIndex();
+	int idx = index.row() + 1;
+
+	animLock();
+	anim.insertRow(idx);
+	anim.setData(anim.index(idx, 0, QModelIndex()), QString::number(0.1));
+	anim.setData(anim.index(idx, 1, QModelIndex()), QString::number(0));
+	anim.setData(anim.index(idx, 2, QModelIndex()), QString::number(0.0));
+	anim.setData(anim.index(idx, 3, QModelIndex()), QString::number(0.0));
+	anim.setData(anim.index(idx, 4, QModelIndex()), QString::number(0.0));
+	anim.setData(anim.index(idx, 5, QModelIndex()), QString::number(0.0));
+	anim.setData(anim.index(idx, 6, QModelIndex()), QString::number(0.0));
+	animUnlock();	// act on last change only
+	anim.setData(anim.index(idx, 7, QModelIndex()), QString::number(0.0));
+}
+
+void QWzmViewer::removeFrame()
+{
+	QModelIndex index = animView->selectedIndex();
+	anim.removeRow(index.row());
+}
+
+void QWzmViewer::animLock()
+{
+	// Prevent backscatter
+	disconnect(&anim, SIGNAL(dataChanged(const QModelIndex &, const QModelIndex &)), this, SLOT(dataChanged(const QModelIndex &, const QModelIndex &)));
+	disconnect(&anim, SIGNAL(rowsRemoved(const QModelIndex &, int, int)), this, SLOT(rowsChanged(const QModelIndex &, int, int)));
+	disconnect(&anim, SIGNAL(rowsInserted(const QModelIndex &, int, int)), this, SLOT(rowsChanged(const QModelIndex &, int, int)));
+}
+
+void QWzmViewer::animUnlock()
+{
+	connect(&anim, SIGNAL(dataChanged(const QModelIndex &, const QModelIndex &)), this, SLOT(dataChanged(const QModelIndex &, const QModelIndex &)));
+	connect(&anim, SIGNAL(rowsRemoved(const QModelIndex &, int, int)), this, SLOT(rowsChanged(const QModelIndex &, int, int)));
+	connect(&anim, SIGNAL(rowsInserted(const QModelIndex &, int, int)), this, SLOT(rowsChanged(const QModelIndex &, int, int)));
+}
+
 void QWzmViewer::setMesh(int index)
 {
 	MESH *psMesh = &psModel->mesh[index];
 
-	// Prevent backscatter
-	disconnect(&anim, SIGNAL(dataChanged(const QModelIndex &, const QModelIndex &)), this, SLOT(reloadFrames(const QModelIndex &, const QModelIndex &)));
-
 	// Refresh frame view
+	animLock();
 	anim.setRowCount(psMesh->frames);
 	for (int i = 0; i < psMesh->frames; i++)
 	{
@@ -219,7 +296,7 @@ void QWzmViewer::setMesh(int index)
 		anim.setData(anim.index(i, 7, QModelIndex()), QString::number(psFrame->rotation.z));
 	}
 	animView->updateModel();
-	connect(&anim, SIGNAL(dataChanged(const QModelIndex &, const QModelIndex &)), this, SLOT(reloadFrames(const QModelIndex &, const QModelIndex &))); 
+	animUnlock();
 }
 
 void QWzmViewer::setModel(QFileInfo &texPath)

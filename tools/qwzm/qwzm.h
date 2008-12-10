@@ -42,6 +42,7 @@ class QAnimViewer : public QDialog, private Ui_AnimationView
 	~QAnimViewer();
 	void setModel(QStandardItemModel *model);
 	void updateModel();
+	QModelIndex selectedIndex();
 };
 
 /** WZM Viewer */
@@ -69,8 +70,16 @@ class QWzmViewer : public QMainWindow, private Ui::QWZM
 	void toggleFlipVerticalTexCoords();
 	void setMesh(int index);
 	void toggleEditAnimation();
+	void animLock();
+	void animUnlock();
 
-	void reloadFrames(const QModelIndex &first, const QModelIndex &last);
+	void rowsChanged(const QModelIndex &parent, int start, int end);
+	void dataChanged(const QModelIndex &first, const QModelIndex &last);
+	void reloadFrames();
+
+	void prependFrame();
+	void appendFrame();
+	void removeFrame();
 
 	private:
 	QString filename;
