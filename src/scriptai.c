@@ -1274,7 +1274,7 @@ static int scrSkCanBuildTemplate(lua_State *L)
 	
 	if (lua_isnumber(L, 3))
 	{
-		return luaL_argerror (lua_State *L, 3, "template should be a string");
+		return luaL_argerror(L, 3, "template should be a string");
 	}
 	
 	strlcpy(copy, templatename, MAX_STR_LENGTH);
