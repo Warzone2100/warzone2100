@@ -262,6 +262,7 @@ extern UDWORD statRefStart(UDWORD stat);
 extern UDWORD componentType(const char* pType);
 //get the component Inc for a stat based on the name
 extern SDWORD getCompFromName(UDWORD compType, const char *pName);
+extern void findComponentByName(const char *name, int *type, int *index);
 //get the component Inc for a stat based on the Resource name held in Names.txt
 extern SDWORD getCompFromResName(UDWORD compType, const char *pName);
 /*returns the weapon sub class based on the string name passed in */

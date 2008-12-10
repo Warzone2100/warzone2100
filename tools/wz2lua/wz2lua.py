@@ -530,7 +530,7 @@ class CodeGenerator(GenericASTTraversal):
 	def n_name(self, node):
 		if node.attr in ['TRUE', 'FALSE']:
 			node.attr = node.attr.lower()
-		if node.attr == 'NULLOBJECT':
+		if node.attr in ['NULLOBJECT', 'NULLSTAT', 'NULLTEMPLATE']:
 			node.attr = 'nil'
 		if node.attr in cvars:
 			node.attr = 'C.'+node.attr
@@ -657,6 +657,16 @@ class CodeGenerator(GenericASTTraversal):
 			'CALL_AI_MSG':0,
 			'CALL_BEACON':0,
 			}
+		trigger_inactive = False
+		if node[1].code == "inactive":
+			trigger_inactive = True
+			# houston, we have a problem
+			# we need to figure out the arguments to this function
+			# FIXME: the assigned_triggers map needs to be populated in a separate pass
+			if node[0].code in assigned_triggers:
+				node[1].code = assigned_triggers[node[0].code]
+			else:
+				stderr.write('WARNING: could not find a trigger for deactivated event '+node[0].code+'\n')
 		if node[1].code in triggers:
 			trigger_name = node[1].code
 			trigger = triggers[trigger_name]
@@ -710,7 +720,7 @@ class CodeGenerator(GenericASTTraversal):
 			orgargsstr = ', '.join(trigger['ref'])
 			node.code += indent(orgargsstr + ' = ' + ref_argsstr + ' -- wz2lua: probably these can be used as function arguments directly\n')
 		node.code += indent(node[2].code) + 'end\n'
-		if trigger['type'] != 'Inactive':
+		if not trigger_inactive:
 			node.code += self.setEventTrigger_call(node[0].code,trigger) + '\n'
 	def setEventTrigger_call(self, function, trigger):
 		if trigger['expression'] == 'nil':
@@ -735,6 +745,7 @@ class CodeGenerator(GenericASTTraversal):
 				node.code = 'deactivateEvent(' + node[1].arglist[0] + ')'
 			else:
 				node.code = self.setEventTrigger_call(node[1].arglist[0], triggers[trigger_name])
+				assigned_triggers[node[1].arglist[0]] = node[1].arglist[1]
 		elif node[0].code in ['setReinforcementTime', 'setMissionTime', 'pause']:
 			node.code = node[0].code + '(' + node[1].code + '/10.0)'
 		elif node[0].code in ['buildingDestroyed']:
@@ -1025,6 +1036,7 @@ class VloCodeGenerator(GenericASTTraversal):
 operator_convert = { '!=':'~=', '!':'not', '&&':'and', '||':'or',  '&':'..' }
 
 triggers = {}
+assigned_triggers = {}
 called_functions = set()
 
 can_be_destroyed = []

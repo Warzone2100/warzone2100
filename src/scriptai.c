@@ -1576,27 +1576,18 @@ static int scrSkVtolEnableCheck(lua_State *L)
 }
 
 // ********************************************************************************************
-WZ_DECL_UNUSED static BOOL scrSkGetFactoryCapacity(void)
+static int scrSkGetFactoryCapacity(lua_State *L)
 {
-	SDWORD count=0;
-	STRUCTURE *psStructure;
-
-	if (!stackPopParams(1,ST_STRUCTURE, &psStructure))
-	{
-		return false;
-	}
+	int count=0;
+	STRUCTURE *psStructure = (STRUCTURE*)luaWZObj_checkobject(L, 1, OBJ_STRUCTURE);
 
 	if(psStructure && StructIsFactory(psStructure))
 	{
 		count = ((FACTORY *)psStructure->pFunctionality)->capacity;
 	}
 
-	scrFunctionResult.v.ival = count;
-	if (!stackPushResult(VAL_INT, &scrFunctionResult))
-	{
-		return false;
-	}
-	return true;
+	lua_pushinteger(L, count);
+	return 1;
 }
 // ********************************************************************************************
 static int scrSkDifficultyModifier(lua_State *L)
@@ -2032,7 +2023,7 @@ void registerScriptAIfuncs(lua_State *L)
 	lua_register(L, "droidLeaveGroup", scrDroidLeaveGroup);
 	lua_register(L, "initIterateGroupB", scrInitIterateGroupB);
 	lua_register(L, "iterateGroupB", scrIterateGroupB);
-	//lua_register(L, "", );
+	lua_register(L, "skGetFactoryCapacity", scrSkGetFactoryCapacity);
 	//lua_register(L, "", );
 	//lua_register(L, "", );
 	//lua_register(L, "", );

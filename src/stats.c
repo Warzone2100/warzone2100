@@ -2602,6 +2602,38 @@ SDWORD getCompFromName(UDWORD compType, const char *pName)
 	return -1;
 }
 
+/// try to find a component for the given name
+void findComponentByName(const char *name, int *type, int *index)
+{
+	*type  = COMP_BODY;
+	*index = getCompFromName(*type, name);
+	if (*index >= 0) return;
+	*type  = COMP_BRAIN;
+	*index = getCompFromName(*type, name);
+	if (*index >= 0) return;
+	*type  = COMP_PROPULSION;
+	*index = getCompFromName(*type, name);
+	if (*index >= 0) return;
+	*type  = COMP_REPAIRUNIT;
+	*index = getCompFromName(*type, name);
+	if (*index >= 0) return;
+	*type  = COMP_ECM;
+	*index = getCompFromName(*type, name);
+	if (*index >= 0) return;
+	*type  = COMP_SENSOR;
+	*index = getCompFromName(*type, name);
+	if (*index >= 0) return;
+	*type  = COMP_CONSTRUCT;
+	*index = getCompFromName(*type, name);
+	if (*index >= 0) return;
+	*type  = COMP_WEAPON;
+	*index = getCompFromName(*type, name);
+	if (*index < 0)
+	{
+		*type = -1;
+	}
+}
+
 
 //converts the name read in from Access into the name which is used in the Stat lists
 BOOL getResourceName(const char *pName)

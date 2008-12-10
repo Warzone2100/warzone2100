@@ -1572,8 +1572,8 @@ void luaWZObj_pushdroid(lua_State *L, DROID* droid)
 
 void luaWZObj_pushweapon(lua_State *L, WEAPON* weapon)
 {
-	WEAPON_STATS *psStat = asWeaponStats + weapon->nStat;
-	luaWZObj_pushweaponstat(L, psStat);
+	luaWZObj_pushweaponstat(L, weapon->nStat);
+
 	luaWZ_setintfield(L, "ammo", weapon->ammo);
 	luaWZ_setintfield(L, "lastFired", weapon->lastFired);
 	luaWZ_setintfield(L, "recoilValue", weapon->recoilValue);
@@ -1581,9 +1581,13 @@ void luaWZObj_pushweapon(lua_State *L, WEAPON* weapon)
 	luaWZ_setintfield(L, "rotation", weapon->rotation);
 }
 
-void luaWZObj_pushweaponstat(lua_State *L, WEAPON_STATS *psStat)
+void luaWZObj_pushweaponstat(lua_State *L, int index)
 {
+	WEAPON_STATS *psStat = asWeaponStats + index;
+
 	lua_newtable(L);
+	luaWZ_setstringfield(L, "name", psStat->pName);
+	
 	luaWZ_setintfield(L, "shortRange", psStat->shortRange);
 	luaWZ_setintfield(L, "longRange", psStat->longRange);
 	luaWZ_setintfield(L, "shortHit", psStat->shortHit);
@@ -1595,6 +1599,30 @@ void luaWZObj_pushweaponstat(lua_State *L, WEAPON_STATS *psStat)
 
 	lua_getglobal(L, "__undefined_meta");
 	lua_setmetatable(L, -2);
+}
+
+const char* luaWZObj_checkname(lua_State *L, int pos)
+{
+	const char *name;
+	
+	if (lua_isstring(L, pos))
+	{
+		return luaL_checkstring(L, pos);
+	}
+	
+	if (lua_istable(L, pos))
+	{
+		lua_getfield(L, pos, "name");
+		if(!lua_isstring(L, -1))
+		{
+			luaL_error(L, "argument %d has no string field 'name'", pos);
+		}
+		name = luaL_checkstring(L, -1);
+		lua_pop(L, 1);
+		return name;
+	}
+	luaL_argerror(L, pos, "no name");
+	return ""; // never reached
 }
 
 void luaWZObj_pushgroup(lua_State *L, DROID_GROUP *group)
