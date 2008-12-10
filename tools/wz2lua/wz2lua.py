@@ -65,9 +65,11 @@ class Token:
 	def __init__(self, type, attr='', constant=True):
 		self.type = type
 		self.attr = attr
+		self.attr_backup = attr
 		self.ref = []
 		self.nonref = []
 		self.line = current_line
+		self.code = ''
 		
 		self.boolean = True # set to False to make conditional expressions truly boolean
 		self.constant = constant
@@ -95,6 +97,7 @@ class AST:
 		linelist.append(current_line)
 		linelist.sort()
 		self.line = linelist[0]
+		self.code = ''
 		
 		self.boolean = True # set to False to make conditional expressions truly boolean
 		self.constant = True
@@ -506,6 +509,19 @@ class CodeCommenter(GenericASTTraversal):
 	def n_statementlist(self, node):
 		node.code = pop_comments(node.line)
 		
+class TreeCleaner(GenericASTTraversal):
+	def __init__(self, ast):
+		GenericASTTraversal.__init__(self, ast)
+		self.preorder()
+	def n_default(self, node):
+		node.attr = node.attr_backup
+		node.ref = []
+		node.nonref = []
+		node.code = ''
+		node.boolean = True
+		node.constant = constant
+		node.arglist = None
+		
 class CodeGenerator(GenericASTTraversal):
 	def __init__(self, ast):
 		GenericASTTraversal.__init__(self, ast)
@@ -529,12 +545,12 @@ class CodeGenerator(GenericASTTraversal):
 		node.code = node.attr
 	def n_name(self, node):
 		if node.attr in ['TRUE', 'FALSE']:
-			node.attr = node.attr.lower()
-		if node.attr in ['NULLOBJECT', 'NULLSTAT', 'NULLTEMPLATE']:
-			node.attr = 'nil'
-		if node.attr in cvars:
-			node.attr = 'C.'+node.attr
-		if node.attr in rename:
+			node.code = node.attr.lower()
+		elif node.attr in ['NULLOBJECT', 'NULLSTAT', 'NULLTEMPLATE']:
+			node.code = 'nil'
+		elif node.attr in cvars:
+			node.code = 'C.'+node.attr
+		elif node.attr in rename:
 			node.code = rename[node.attr]
 		else:
 			node.code = node.attr
@@ -665,7 +681,7 @@ class CodeGenerator(GenericASTTraversal):
 			# FIXME: the assigned_triggers map needs to be populated in a separate pass
 			if node[0].code in assigned_triggers:
 				node[1].code = assigned_triggers[node[0].code]
-			else:
+			elif pass_number == 2:
 				stderr.write('WARNING: could not find a trigger for deactivated event '+node[0].code+'\n')
 		if node[1].code in triggers:
 			trigger_name = node[1].code
@@ -745,7 +761,7 @@ class CodeGenerator(GenericASTTraversal):
 				node.code = 'deactivateEvent(' + node[1].arglist[0] + ')'
 			else:
 				node.code = self.setEventTrigger_call(node[1].arglist[0], triggers[trigger_name])
-				assigned_triggers[node[1].arglist[0]] = node[1].arglist[1]
+				assigned_triggers[node[1].arglist[0]] = trigger_name
 		elif node[0].code in ['setReinforcementTime', 'setMissionTime', 'pause']:
 			node.code = node[0].code + '(' + node[1].code + '/10.0)'
 		elif node[0].code in ['buildingDestroyed']:
@@ -866,10 +882,10 @@ class CodeGenerator(GenericASTTraversal):
 			'inactive' : 'Inactive'
 			}
 		trigger = {}
-		if 'arglist' in dir(node):
-			expression = node.arglist[0]
-			node.arglist = node.arglist[1:]
-			node.nonref = node.nonref[1:]
+		if 'arglist' in dir(node) and node.arglist:
+				expression = node.arglist[0]
+				node.arglist = node.arglist[1:]
+				node.nonref = node.nonref[1:]
 		else:
 			expression = node.code
 			node.arglist = []
@@ -981,7 +997,7 @@ class VloParser(GenericParser):
 			value ::= name '''
 		return args[0]
 		
-defined_arrays = set()
+
 		
 class VloCodeGenerator(GenericASTTraversal):
 	def __init__(self, ast):
@@ -1042,6 +1058,7 @@ called_functions = set()
 can_be_destroyed = []
 macros = []
 defined_globals = []
+defined_arrays = set()
 
 def load_file(filename):
 	f = file(filename)
@@ -1093,6 +1110,25 @@ p = CodeParser()
 parsed = p.parse(tokens)
 #printtree(parsed)
 #stderr.write('Slo: Generating code...\n')
+
+# first pass
+#stderr.write('first pass\n')
+pass_number = 1
+defined_globals_backup = defined_globals[:]
+defined_arrays_backup = set(defined_arrays)
+macros_backup = macros[:]
+CodeGenerator(parsed)
+
+# second pass
+#stderr.write('second pass\n')
+pass_number = 2
+TreeCleaner(parsed)
+called_functions = set()
+
+macros = macros_backup
+defined_globals = defined_globals_backup
+defined_arrays = defined_arrays_backup
+
 CodeCommenter(parsed)
 CodeGenerator(parsed)
 print parsed.code
