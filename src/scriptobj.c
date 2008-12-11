@@ -1541,6 +1541,8 @@ void luaWZObj_pushstructure(lua_State *L, STRUCTURE* structure)
 	// FIXME: expose all weapons to the scripts (for multi-turret droids)
 	luaWZObj_pushweapon(L, &structure->asWeaps[0]);
 	lua_settable(L, -3);
+	
+	luaWZ_setnumberfield(L, "health", 100*structure->body/(double)structure->pStructureType->bodyPoints);
 }
 
 void luaWZObj_pushfeature(lua_State *L, FEATURE* feature)
@@ -1601,6 +1603,11 @@ void luaWZObj_pushweaponstat(lua_State *L, int index)
 	lua_setmetatable(L, -2);
 }
 
+void luaWZObj_pushtemplate(lua_State *L, DROID_TEMPLATE *template)
+{
+	lua_pushinteger(L, template->multiPlayerID);
+}
+
 const char* luaWZObj_checkname(lua_State *L, int pos)
 {
 	const char *name;
@@ -1623,6 +1630,47 @@ const char* luaWZObj_checkname(lua_State *L, int pos)
 	}
 	luaL_argerror(L, pos, "no name");
 	return ""; // never reached
+}
+
+DROID_TEMPLATE* luaWZObj_checktemplate(lua_State *L, int pos)
+{
+	DROID_TEMPLATE *template;
+	
+	if (lua_isnumber(L, pos))
+	{
+		int id = luaL_checkint(L, pos);
+		template = getTemplateFromMultiPlayerID(id);
+		if (template)
+		{
+			return template;
+		}
+		else
+		{
+			luaL_error(L, "invalid template id %i at position %i", id, pos);
+			return NULL; // not reached
+		}
+	}
+	if (lua_isstring(L, pos))
+	{
+		const char *name = luaL_checkstring(L, pos);
+		char copy[MAX_STR_LENGTH];
+		
+		strlcpy(copy, name, MAX_STR_LENGTH);
+		template = getTemplateFromTranslatedNameNoPlayer(copy);
+		if (template)
+		{
+			return template;
+		}
+		else
+		{
+			luaL_error(L, "invalid template name \"%s\" at position %i", name, pos);
+			return NULL; // not reached
+		}
+
+	}
+	
+	luaL_argerror(L, pos, "not a template name or id");
+	return NULL; // never reached
 }
 
 void luaWZObj_pushgroup(lua_State *L, DROID_GROUP *group)

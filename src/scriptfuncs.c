@@ -720,23 +720,12 @@ WZ_DECL_UNUSED static BOOL scrAddDroidToMissionList(void)
 static int scrAddDroid(lua_State *L)
 {
 	DROID			*psDroid;
-	DROID_TEMPLATE	*psTemplate;
-	char templateName2[MAXSTRLEN];
 	
-	const char *templateName = luaL_checkstring(L, 1);
+	DROID_TEMPLATE	*psTemplate = luaWZObj_checktemplate(L, 1);
 	int x = luaL_checkint(L, 2);
 	int y = luaL_checkint(L, 3);
 	int player = luaL_checkint(L, 4);
 	
-	// this function can probably change the name
-	strcpy(templateName2, templateName);
-	psTemplate = getTemplateFromUniqueName(templateName2, player);
-
-	if (psTemplate == NULL)
-	{
-		luaL_error(L, "scrAddUnit: Invalid template pointer" );
-	}
-
 #ifdef SCRIPT_CHECK_MAX_UNITS
 	// Don't build a new droid if player limit reached, unless it's a transporter.
 	if( IsPlayerDroidLimitReached(player) && (psTemplate->droidType != DROID_TRANSPORTER) ) {
@@ -1124,17 +1113,10 @@ static int scrRemoveMessage(lua_State *L)
 /**builds a droid in the specified factory*/
 static int scrBuildDroid(lua_State *L)
 {
-	DROID_TEMPLATE	*psTemplate;
-	char templateName2[MAXSTRLEN];
-	
-	const char *templateName = luaL_checkstring(L, 1);
+	DROID_TEMPLATE	*psTemplate = luaWZObj_checktemplate(L, 1);
 	STRUCTURE *psFactory = (STRUCTURE*)luaWZObj_checkobject(L, 2, OBJ_STRUCTURE);
 	// note, argument 3 (player) is unused
 	int productionRun = luaL_checkint(L, 4);
-	
-	// this function can probably change the name
-	strcpy(templateName2, templateName);
-	psTemplate = getTemplateFromTranslatedNameNoPlayer(templateName2);
 	
 	if (productionRun > UBYTE_MAX)
 	{
@@ -4423,26 +4405,15 @@ static int scrSetCampaignNumber(lua_State *L)
 }
 
 // -----------------------------------------------------------------------------------------
-// Tests whether a structure has a certain module for a player. Tests whether any structure
-// has this module if structure is null
-WZ_DECL_UNUSED static BOOL	scrTestStructureModule(void)
+/// Tests whether a structure has a certain module for a player. Tests whether any structure
+/// has this module if structure is null
+static int scrTestStructureModule(lua_State *L)
 {
-SDWORD	player,refId;
-STRUCTURE	*psStructure,*psStruct;
-BOOL	bFound;
+	STRUCTURE *psStruct;
+	BOOL bFound;
 
-	if(!stackPopParams(3,VAL_INT,&player,ST_STRUCTURE,&psStructure,VAL_INT,&refId))
-	{
-		ASSERT( false,"SCRIPT : Cannot get parameters in scrTestStructureModule" );
-		return(false);
-	}
-
-	if (player < 0 || player >= MAX_PLAYERS)
-	{
-		ASSERT( false,"SCRIPT : Player number too high in scrTestStructureModule" );
-		return(false);
-
-	}
+	int player = luaWZ_checkplayer(L, 1);
+	STRUCTURE *psStructure = (STRUCTURE*)luaWZObj_checkobject(L, 2, OBJ_STRUCTURE);
 
 	/* Nothing yet */
 	bFound = false;
@@ -4468,16 +4439,8 @@ BOOL	bFound;
 			}
 		}
 	}
-
-	/* Send back the scrFunctionResult */
-	scrFunctionResult.v.bval = bFound;
-	if(!stackPushResult(VAL_BOOL, &scrFunctionResult))
-	{
-		ASSERT( false,"SCRIPT : Cannot push scrFunctionResult for scrTestStructureModule" );
-		return(false);
-	}
-
-	return(true);
+	lua_pushboolean(L, bFound);
+	return 1;
 }
 
 
@@ -5865,36 +5828,15 @@ static int scrEnumDroid(lua_State *L)
 	return 1;
 }
 
-//Return the template factory is currently building
-WZ_DECL_UNUSED static BOOL scrFactoryGetTemplate(void)
+/// Return the template factory is currently building
+static int scrFactoryGetTemplate(lua_State *L)
 {
-	STRUCTURE		*psStructure = NULL;
+	STRUCTURE *psStructure = (STRUCTURE*)luaWZObj_checkobject(L, 1, OBJ_STRUCTURE);
 	DROID_TEMPLATE	*psTemplate = NULL;
-
-	if (!stackPopParams(1, ST_STRUCTURE, &psStructure))
-	{
-		debug(LOG_ERROR, "scrFactoryGetTemplate() - stackPopParams failed");
-		return false;
-	}
-
-	if (psStructure == NULL)
-	{
-		debug(LOG_ERROR, "scrFactoryGetTemplate() - NULL factory object");
-		ASSERT( false, "scrFactoryGetTemplate: NULL factory object" );
-		return false;
-	}
-
-	ASSERT( psStructure != NULL,
-		"scrFactoryGetTemplate: Invalid structure pointer" );
-	ASSERT( (psStructure->pStructureType->type == REF_FACTORY ||
-		psStructure->pStructureType->type == REF_CYBORG_FACTORY ||
-		psStructure->pStructureType->type == REF_VTOL_FACTORY),
-		"scrFactoryGetTemplate: structure is not a factory" );
 
 	if(!StructIsFactory(psStructure))
 	{
-		debug(LOG_ERROR, "scrFactoryGetTemplate: structure not a factory.");
-		return false;
+		return luaL_argerror(L, 1, "structure not a factory");
 	}
 
 	psTemplate = (DROID_TEMPLATE *)((FACTORY*)psStructure->pFunctionality)->psSubject;
@@ -5902,32 +5844,20 @@ WZ_DECL_UNUSED static BOOL scrFactoryGetTemplate(void)
 	ASSERT( psTemplate != NULL,
 		"scrFactoryGetTemplate: Invalid template pointer" );
 
-	scrFunctionResult.v.oval = psTemplate;
-	if (!stackPushResult((INTERP_TYPE)ST_TEMPLATE, &scrFunctionResult))
-	{
-		debug(LOG_ERROR, "scrFactoryGetTemplate: stackPushResult failed");
-		return false;
-	}
-
-	return true;
+	luaWZObj_pushtemplate(L, psTemplate);
+	return 1;
 }
 
 static int scrNumTemplatesInProduction(lua_State *L)
 {
 	SDWORD			numTemplates = 0;
-	DROID_TEMPLATE	*psTemplate;
 	STRUCTURE		*psStruct;
 	STRUCTURE		*psList;
 	BASE_STATS		*psBaseStats;
-	char templateName2[MAXSTRLEN];
 	
-	const char *templateName = luaL_checkstring(L, 1);
+	DROID_TEMPLATE	*psTemplate = luaWZObj_checktemplate(L, 1);
 	int player = luaWZ_checkplayer(L, 2);
 	
-	// this function will change the name
-	strcpy(templateName2, templateName);
-	psTemplate = getTemplateFromTranslatedNameNoPlayer(templateName2);
-
 	psBaseStats = (BASE_STATS *)psTemplate; //Convert
 
 	psList = apsStructLists[player];
@@ -6202,22 +6132,21 @@ BOOL ThreatInRange(SDWORD player, SDWORD range, SDWORD rangeX, SDWORD rangeY, BO
 	return false;
 }
 
-//find unrevealed tile closest to pwLooker within the range of wRange
-WZ_DECL_UNUSED static BOOL scrFogTileInRange(void)
+/// find unrevealed tile closest to pwLooker within the range of wRange
+static int scrFogTileInRange(lua_State *L)
 {
-	SDWORD		pwLookerX,pwLookerY,tBestX,tBestY,threadRange;
-	SDWORD		wRangeX,wRangeY,tRangeX,tRangeY,wRange,player;
+	SDWORD		tBestX,tBestY, tRangeX, tRangeY;
 	UDWORD		tx,ty,i,j,wDist,wBestDist;
 	MAPTILE		*psTile;
 	BOOL		ok = false;
-	SDWORD		*wTileX,*wTileY;
-
-	if (!stackPopParams(9, VAL_REF|VAL_INT, &wTileX, VAL_REF|VAL_INT, &wTileY,
-		VAL_INT, &pwLookerX, VAL_INT, &pwLookerY, VAL_INT, &wRangeX, VAL_INT, &wRangeY,
-		VAL_INT, &wRange, VAL_INT, &player, VAL_INT, &threadRange))
-	{
-		debug(LOG_ERROR, "scrFogTileInRange: failed to pop");
-		return false;}
+	
+	int pwLookerX   = luaL_checkinteger(L, 3);
+	int pwLookerY   = luaL_checkinteger(L, 4);
+	int wRangeX     = luaL_checkinteger(L, 5);
+	int wRangeY     = luaL_checkinteger(L, 6);
+	int wRange      = luaL_checkinteger(L, 7);
+	int player      = luaWZ_checkplayer(L, 8);
+	int threadRange = luaL_checkinteger(L, 8);
 
 	//Check coords
 	if(		pwLookerX < 0
@@ -6280,27 +6209,14 @@ WZ_DECL_UNUSED static BOOL scrFogTileInRange(void)
 
 	if(ok)	//something found
 	{
-		*wTileX = world_coord(tBestX);
-		*wTileY = world_coord(tBestY);
-
-		scrFunctionResult.v.bval = true;
-		if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
-		{
-			debug(LOG_ERROR, "scrFogTileInRange: stackPushResult failed (found)");
-			return false;
-		}
+		lua_pushboolean(L, true);
+		lua_pushnumber(L, world_coord(tBestX));
+		lua_pushnumber(L, world_coord(tBestY));
+		return 3;
 	}
-	else
-	{
-		scrFunctionResult.v.bval = false;
-		if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
-		{
-			debug(LOG_ERROR, "scrFogTileInRange: stackPushResult failed (not found)");
-			return false;
-		}
-	}
-
-	return true;
+	
+	lua_pushboolean(L, false);
+	return 1;
 }
 
 static int scrMapRevealedInRange(lua_State *L)
@@ -8301,28 +8217,12 @@ WZ_DECL_UNUSED static BOOL scrLearnOilDefendLoc(void)
 	return true;
 }
 
-/* Returns -1 if this location is not stored yet, otherwise returns index */
-WZ_DECL_UNUSED static BOOL scrGetBaseDefendLocIndex(void)
+/// Returns -1 if this location is not stored yet, otherwise returns index
+static int scrGetBaseDefendLocIndex(lua_State *L)
 {
-	SDWORD				playerStoring, x, y;
-
-	if (!stackPopParams(3, VAL_INT, &playerStoring, VAL_INT, &x, VAL_INT, &y))
-	{
-		debug(LOG_ERROR, "scrGetBaseDefendLocIndex(): stack failed");
-		return false;
-	}
-
-	if(playerStoring >= MAX_PLAYERS)
-	{
-		debug(LOG_ERROR, "scrGetBaseDefendLocIndex: player index too high.");
-		return false;
-	}
-
-	if(playerStoring < 0)
-	{
-		debug(LOG_ERROR, "scrGetBaseDefendLocIndex: player index too low.");
-		return false;
-	}
+	int playerStoring = luaWZ_checkplayer(L, 1);
+	int x = luaL_checkint(L, 2);
+	int y = luaL_checkint(L, 3);
 
 	if (x < 0
 	 || x >= world_coord(mapWidth)
@@ -8333,38 +8233,16 @@ WZ_DECL_UNUSED static BOOL scrGetBaseDefendLocIndex(void)
 		return false;
 	}
 
-	scrFunctionResult.v.ival = GetBaseDefendLocIndex(x,y,playerStoring);
-	if (!stackPushResult(VAL_INT, &scrFunctionResult))
-	{
-		return false;
-	}
-
-	return true;
+	lua_pushinteger(L, GetBaseDefendLocIndex(x,y,playerStoring));
+	return 1;
 }
 
-/* Returns -1 if this location is not stored yet, otherwise returns index */
-WZ_DECL_UNUSED static BOOL scrGetOilDefendLocIndex(void)
+/// Returns -1 if this location is not stored yet, otherwise returns index
+static int scrGetOilDefendLocIndex(lua_State *L)
 {
-	SDWORD				playerStoring, x, y;
-
-	if (!stackPopParams(3, VAL_INT, &playerStoring, VAL_INT, &x, VAL_INT, &y))
-	{
-		debug(LOG_ERROR, "scrGetOilDefendLocIndex(): stack failed");
-		return false;
-	}
-
-	if(playerStoring >= MAX_PLAYERS)
-	{
-		debug(LOG_ERROR, "scrGetOilDefendLocIndex: player index too high.");
-
-		return false;
-	}
-
-	if(playerStoring < 0)
-	{
-		debug(LOG_ERROR, "scrGetOilDefendLocIndex: player index too low.");
-		return false;
-	}
+	int playerStoring = luaWZ_checkplayer(L, 1);
+	int x = luaL_checkint(L, 2);
+	int y = luaL_checkint(L, 3);
 
 	if (x < 0
 	 || x >= world_coord(mapWidth)
@@ -8375,13 +8253,8 @@ WZ_DECL_UNUSED static BOOL scrGetOilDefendLocIndex(void)
 		return false;
 	}
 
-	scrFunctionResult.v.ival = GetOilDefendLocIndex(x,y,playerStoring);
-	if (!stackPushResult(VAL_INT, &scrFunctionResult))
-	{
-		return false;
-	}
-
-	return true;
+	lua_pushinteger(L, GetOilDefendLocIndex(x,y,playerStoring));
+	return 1;
 }
 
 /// Returns number of available locations
@@ -8391,17 +8264,11 @@ static int scrGetBaseDefendLocCount(lua_State *L)
 	return 1;
 }
 
-/* Returns number of available locations*/
-WZ_DECL_UNUSED static BOOL scrGetOilDefendLocCount(void)
+/// Returns number of available locations
+static int scrGetOilDefendLocCount(lua_State *L)
 {
-	scrFunctionResult.v.ival = MAX_OIL_DEFEND_LOCATIONS;
-	if (!stackPushResult(VAL_INT, &scrFunctionResult))
-	{
-		debug(LOG_ERROR, "scrGetOilDefendLocCount: push failed");
-		return false;
-	}
-
-	return true;
+	lua_pushinteger(L, MAX_OIL_DEFEND_LOCATIONS);
+	return 1;
 }
 
 /// Returns a locations and its priority
@@ -8412,8 +8279,7 @@ static int scrRecallBaseDefendLoc(lua_State *L)
 
 	if(index < 0 || index >= MAX_BASE_DEFEND_LOCATIONS)
 	{
-		debug(LOG_ERROR,"scrRecallBaseDefendLoc: wrong index.");
-		return false;
+		return luaL_argerror(L, 2, "wrong index");
 	}
 
 	//check if can recall at this location
@@ -8430,61 +8296,31 @@ static int scrRecallBaseDefendLoc(lua_State *L)
 	return 4;
 }
 
-/* Returns number of available locations */
-WZ_DECL_UNUSED static BOOL scrRecallOilDefendLoc(void)
+/// Returns number of available locations
+static int scrRecallOilDefendLoc(lua_State *L)
 {
-	SDWORD				player, *x, *y, *prior,index;
-
-	if (!stackPopParams(5, VAL_INT, &player, VAL_INT, &index,
-						VAL_REF|VAL_INT, &x, VAL_REF|VAL_INT, &y, VAL_REF|VAL_INT, &prior))
-	{
-		debug(LOG_ERROR, "scrRecallOilDefendLoc(): stack failed");
-		return false;
-	}
-
-	if(player >= MAX_PLAYERS)
-	{
-		debug(LOG_ERROR,"scrRecallOilDefendLoc: player index too high.");
-		return false;
-	}
+	int player = luaWZ_checkplayer(L, 1);
+	int index = luaL_checkint(L, 2);
 
 	if(index < 0 || index >= MAX_OIL_DEFEND_LOCATIONS)
 	{
-		debug(LOG_ERROR,"scrRecallOilDefendLoc: wrong index: %d.", index);
-		return false;
-	}
-
-	if(player < 0)
-	{
-		debug(LOG_ERROR,"scrRecallOilDefendLoc: player index too low.");
-		return false;
+		return luaL_argerror(L, 2, "wrong index");
 	}
 
 	//check if can recall at this location
 	if(!CanRememberPlayerOilDefenseLoc(player, index))
 	{
-		scrFunctionResult.v.bval= false;
-		if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
-		{
-			return false;
-		}
-
-		return true;
+		lua_pushboolean(L, false);
+		return 1;
 	}
 
-	*x = oilDefendLocation[player][index][0];
-	*y = oilDefendLocation[player][index][1];
-
-	*prior = oilDefendLocPrior[player][index];
-
-	scrFunctionResult.v.bval = true;
-	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
-	{
-		return false;
-	}
-
-	return true;
+	lua_pushboolean(L, true);
+	lua_pushinteger(L, oilDefendLocation[player][index][0]);
+	lua_pushinteger(L, oilDefendLocation[player][index][1]);
+	lua_pushinteger(L, oilDefendLocPrior[player][index]);
+	return 4;
 }
+
 
 /* Restores vilibility (fog of war) */
 WZ_DECL_UNUSED static BOOL scrRecallPlayerVisibility(void)
@@ -9805,23 +9641,27 @@ WZ_DECL_UNUSED static BOOL scrCheckVisibleTile(void)
 	return true;
 }
 
-/* Assembles a template from components and returns it */
-WZ_DECL_UNUSED static BOOL scrAssembleWeaponTemplate(void)
+/// Assembles a template from components and returns it
+static int scrAssembleWeaponTemplate(lua_State *L)
 {
-	SDWORD					player,bodyIndex,weapIndex,propIndex;
+	SDWORD					bodyIndex,weapIndex,propIndex;
 	DROID_TEMPLATE			*pNewTemplate = NULL;
-
-	if (!stackPopParams(4, VAL_INT, &player, ST_BODY, &bodyIndex,
-		ST_PROPULSION, &propIndex, ST_WEAPON, &weapIndex))
-	{
-		return false;
-	}
-
+	
+	int player = luaWZ_checkplayer(L, 1);
+	const char *bodyName = luaWZObj_checkname(L, 2);
+	const char *propulsionName = luaWZObj_checkname(L, 3);
+	const char *weaponName = luaWZObj_checkname(L, 4);
+	
+	debug(LOG_SCRIPT, "assembling template %s + %s + %s", bodyName, propulsionName, weaponName);
+	
+	bodyIndex = getCompFromName(COMP_BODY, bodyName);
+	weapIndex = getCompFromName(COMP_WEAPON, weaponName);
+	propIndex = getCompFromName(COMP_PROPULSION, propulsionName);
+	
 	pNewTemplate  = malloc(sizeof(DROID_TEMPLATE));
 	if (pNewTemplate == NULL)
 	{
-		debug(LOG_ERROR, "pNewTemplate: Out of memory");
-		return false;
+		return luaL_error(L, "Out of memory");
 	}
 
 	memset(pNewTemplate, 0, sizeof(DROID_TEMPLATE));
@@ -9850,13 +9690,13 @@ WZ_DECL_UNUSED static BOOL scrAssembleWeaponTemplate(void)
 	// finalize template and set its name
 	if(!intValidTemplate(pNewTemplate, GetDefaultTemplateName(pNewTemplate)))
 	{
-		return false;
+		return luaL_error(L, "could not create template");
 	}
 
 	// make sure we have a valid weapon
 	if(!checkValidWeaponForProp(pNewTemplate))
 	{
-		scrFunctionResult.v.oval = NULL;		// failure
+		return luaL_error(L, "no valid weapon");
 	}
 	else
 	{
@@ -9887,55 +9727,55 @@ WZ_DECL_UNUSED static BOOL scrAssembleWeaponTemplate(void)
 			// already exists, so return it
 			pNewTemplate = tempTemplate;
 		}
-
-		scrFunctionResult.v.oval = pNewTemplate;	// succes
 	}
-
-	// return template to scripts
-	if (!stackPushResult(ST_TEMPLATE, &scrFunctionResult))
-	{
-		return false;
-	}
-
-	return true;
+	debug(LOG_SCRIPT, "created new template with name \"%s\" (id %i)", pNewTemplate->aName, pNewTemplate->multiPlayerID);
+	luaWZObj_pushtemplate(L, pNewTemplate);
+	return 1;
 }
 
 /* Checks if template already exists, returns it if yes */
 static DROID_TEMPLATE* scrCheckTemplateExists(SDWORD player, DROID_TEMPLATE *psTempl)
 {
 	DROID_TEMPLATE* psCurrent;
+	BOOL equal;
 
 	for (psCurrent = apsDroidTemplates[player]; psCurrent != NULL; psCurrent = psCurrent->psNext)
 	{
 		unsigned int componentType;
 		unsigned int weaponSlot;
+		
+		equal = true;
 
 		// compare components
 		for (componentType = 0; componentType < ARRAY_SIZE(psTempl->asParts); ++componentType)
 		{
 			if (psTempl->asParts[componentType] != psCurrent->asParts[componentType])
 			{
-				continue;
+				equal = false;
+				break;
 			}
 		}
 
 		// compare weapon count
 		if (psTempl->numWeaps != psCurrent->numWeaps)
 		{
-			continue;
+			equal = false;
 		}
 
 		// compare all weapons separately
-		for(weaponSlot = 0; weaponSlot < psTempl->numWeaps; ++weaponSlot)
+		for(weaponSlot = 0; equal && weaponSlot < psTempl->numWeaps; ++weaponSlot)
 		{
 			if (psTempl->asWeaps[weaponSlot] != psCurrent->asWeaps[weaponSlot])
 			{
-				continue;
+				equal = false;
+				break;
 			}
 		}
-
-		// they are equal, so return the current template
-		return psCurrent;
+		if (equal)
+		{
+			// they are equal, so return the current template
+			return psCurrent;
+		}
 	}
 
 	return NULL;
@@ -10234,6 +10074,16 @@ void registerScriptfuncs(lua_State *L)
 	lua_register(L, "weaponDamageUpgrade", scrWeaponDamageUpgrade);
 	lua_register(L, "weaponFirePauseUpgrade", scrWeaponFirePauseUpgrade);
 	lua_register(L, "threatInRange", scrThreatInRange);
+	lua_register(L, "getOilDefendLocCount", scrGetOilDefendLocCount);
+	lua_register(L, "getOilDefendLocIndex", scrGetOilDefendLocIndex);
+	lua_register(L, "getBaseDefendLocIndex", scrGetBaseDefendLocIndex);
+	lua_register(L, "recallOilDefendLoc", scrRecallOilDefendLoc);
+	lua_register(L, "assembleWeaponTemplate", scrAssembleWeaponTemplate);
+	lua_register(L, "testStructureModule", scrTestStructureModule);
+	lua_register(L, "fogTileInRange", scrFogTileInRange);
+	lua_register(L, "factoryGetTemplate", scrFactoryGetTemplate);
+	//lua_register(L, "", );
+	//lua_register(L, "", );
 	//lua_register(L, "", );
 	//lua_register(L, "", );
 }

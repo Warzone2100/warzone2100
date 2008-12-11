@@ -77,8 +77,9 @@ end
 -- Some legacy names
 EnumDroid = enumDroid
 InitEnumDroids = initEnumDroids
+MsgBox = msgBox
 
--- This are script api functions which are written in Lua
+-- These are script api functions which are written in Lua
 
 function setLandingZone(x1, y1, x2, y2)
     setNoGoArea(x1, y1, x2, y2, 0)

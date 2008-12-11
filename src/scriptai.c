@@ -444,45 +444,30 @@ static int scrOrderDroid(lua_State *L)
 }
 
 
-// Give a Droid an order to a location
-WZ_DECL_UNUSED static BOOL scrOrderDroidLoc(void)
+/// Give a Droid an order to a location
+static int scrOrderDroidLoc(lua_State *L)
 {
-	DROID			*psDroid;
-	DROID_ORDER		order;
-	SDWORD			x,y;
-
-	if (!stackPopParams(4, ST_DROID, &psDroid, VAL_INT, &order, VAL_INT, &x, VAL_INT, &y))
-	{
-		return false;
-	}
-
-	ASSERT( psDroid != NULL,
-		"scrOrderUnitLoc: Invalid unit pointer" );
-	if (psDroid == NULL)
-	{
-		return false;
-	}
+	DROID *psDroid = (DROID*)luaWZObj_checkobject(L, 1, OBJ_DROID);
+	int order = luaL_checkinteger(L, 2);
+	int x = luaL_checkinteger(L, 3);
+	int y = luaL_checkinteger(L, 4);
 
 	if (order != DORDER_MOVE &&
 		order != DORDER_SCOUT)
 	{
-		ASSERT( false,
-			"scrOrderUnitLoc: Invalid order" );
-		return false;
+		return luaL_error(L, "order (arg 2) should be MOVE or SCOUT (you passed %i)", order);
 	}
 	if (x < 0
 	 || x > world_coord(mapWidth)
 	 || y < 0
 	 || y > world_coord(mapHeight))
 	{
-		ASSERT( false,
-			"scrOrderUnitLoc: Invalid location" );
-		return false;
+		return luaL_error(L, "invalid location (%i,%i)", x, y);
 	}
 
 	orderDroidLoc(psDroid, order, (UDWORD)x,(UDWORD)y);
 
-	return true;
+	return 0;
 }
 
 
@@ -1268,23 +1253,7 @@ static int scrSkCanBuildTemplate(lua_State *L)
 {
 	int player = luaWZ_checkplayer(L, 1);
 	STRUCTURE *psStructure = (STRUCTURE*)luaWZObj_checkobject(L, 2, OBJ_STRUCTURE);
-	const char *templatename = luaL_checkstring(L, 3);
-	char copy[MAX_STR_LENGTH];
-	DROID_TEMPLATE *psTempl;
-	
-	if (lua_isnumber(L, 3))
-	{
-		return luaL_argerror(L, 3, "template should be a string");
-	}
-	
-	strlcpy(copy, templatename, MAX_STR_LENGTH);
-	psTempl = getTemplateFromTranslatedNameNoPlayer(copy);
-
-	if (!psTempl)
-	{
-		debug(LOG_SCRIPT, "invalid template name \"%s\"", templatename);
-		goto failTempl;
-	}
+	DROID_TEMPLATE *psTempl = luaWZObj_checktemplate(L, 3);
 
 	// is factory big enough?
 	if(!validTemplateForFactory(psTempl, psStructure) )
@@ -2024,7 +1993,7 @@ void registerScriptAIfuncs(lua_State *L)
 	lua_register(L, "initIterateGroupB", scrInitIterateGroupB);
 	lua_register(L, "iterateGroupB", scrIterateGroupB);
 	lua_register(L, "skGetFactoryCapacity", scrSkGetFactoryCapacity);
-	//lua_register(L, "", );
+	lua_register(L, "orderDroidLoc", scrOrderDroidLoc);
 	//lua_register(L, "", );
 	//lua_register(L, "", );
 	//lua_register(L, "", );

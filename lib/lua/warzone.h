@@ -37,5 +37,6 @@ extern const char *luaWZ_terminated;
 extern void luaWZ_setintfield (lua_State *L, const char *index, int value);
 extern void luaWZ_setpointerfield (lua_State *L, const char *index, void * ptr);
 extern void luaWZ_setstringfield (lua_State *L, const char *index, const char * string);
+extern void luaWZ_setnumberfield (lua_State *L, const char *index, double value);
 
 #endif

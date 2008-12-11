@@ -198,6 +198,12 @@ void luaWZ_setintfield (lua_State *L, const char *index, int value) {
 	lua_settable(L, -3);
 }
 
+void luaWZ_setnumberfield (lua_State *L, const char *index, double value) {
+	lua_pushstring(L, index);
+	lua_pushnumber(L, value);
+	lua_settable(L, -3);
+}
+
 void luaWZ_setpointerfield (lua_State *L, const char *index, void * ptr) {
 	lua_pushstring(L, index);
 	lua_pushlightuserdata(L, ptr);
