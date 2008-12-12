@@ -171,7 +171,7 @@ if test "x$enable_debug" = "xyes" ; then
 		WZ_CPPFLAGS="${WZ_CPPFLAGS} -DDEBUG"
 	else
 		WZ_CFLAGS="${WZ_CFLAGS} -O0 -g -Wall -Werror -Wno-unused-label -Wno-pointer-to-int-cast -Wmissing-field-initializers -Wcast-align -Wwrite-strings"
-		WZ_CFLAGS="${WZ_CFLAGS} -Wmissing-declarations -Wstrict-prototypes -Wpointer-arith"
+		WZ_CFLAGS="${WZ_CFLAGS} -Wmissing-declarations -Wstrict-prototypes -Wpointer-arith -Wno-format-security"
 		WZ_CPPFLAGS="${WZ_CPPFLAGS} -DDEBUG"
 	fi
 elif test "x$enable_debug" = "xrelaxed" ; then
