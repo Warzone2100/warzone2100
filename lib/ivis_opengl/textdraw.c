@@ -86,7 +86,7 @@ static inline void iV_printFontList(void)
 
 	if (font_count == 0)
 	{
-		debug(LOG_ERROR, "iV_printFontList: The required font (%s) isn't loaded", font_family);
+		debug(LOG_ERROR, "The required font (%s) isn't loaded", font_family);
 
 		// Fall back to unselected fonts since the requested font apparently
 		// isn't available.
@@ -118,11 +118,11 @@ static void iV_initializeGLC(void)
 	_glcContext = glcGenContext();
 	if (!_glcContext)
 	{
-		debug(LOG_ERROR, "glcGenContext() failed");
+		debug(LOG_ERROR, "Failed to initialize");
 	}
 	else
 	{
-		debug(LOG_NEVER, "glcGenContext() succesful: _glcContext = %d", _glcContext);
+		debug(LOG_NEVER, "Succesfully initialized. _glcContext = %d", _glcContext);
 	}
 
 	glcContext(_glcContext);
@@ -136,20 +136,20 @@ static void iV_initializeGLC(void)
 
 	if (!glcNewFontFromFamily(_glcFont_Regular, font_family))
 	{
-		debug(LOG_ERROR, "iV_initializeGLC: Failed to select font family %s as regular font", font_family);
+		debug(LOG_ERROR, "Failed to select font family %s as regular font", font_family);
 	}
 	else
 	{
-		debug(LOG_NEVER, "iV_initializeGLC: Successfully selected font family %s as regular font", font_family);
+		debug(LOG_NEVER, "Successfully selected font family %s as regular font", font_family);
 	}
 
 	if (!glcFontFace(_glcFont_Regular, font_face_regular))
 	{
-		debug(LOG_WARNING, "iV_initializeGLC: Failed to select the \"%s\" font face of font family %s", font_face_regular, font_family);
+		debug(LOG_WARNING, "Failed to select the \"%s\" font face of font family %s", font_face_regular, font_family);
 	}
 	else
 	{
-		debug(LOG_NEVER, "iV_initializeGLC: Successfully selected the \"%s\" font face of font family %s", font_face_regular, font_family);
+		debug(LOG_NEVER, "Successfully selected the \"%s\" font face of font family %s", font_face_regular, font_family);
 	}
 
 	if (!glcNewFontFromFamily(_glcFont_Bold, font_family))
@@ -158,19 +158,19 @@ static void iV_initializeGLC(void)
 	}
 	else
 	{
-		debug(LOG_NEVER, "iV_initializeGLC: Successfully selected font family %s for the bold font", font_family);
+		debug(LOG_NEVER, "Successfully selected font family %s for the bold font", font_family);
 	}
 
 	if (!glcFontFace(_glcFont_Bold, font_face_bold))
 	{
-		debug(LOG_WARNING, "iV_initializeGLC: Failed to select the \"%s\" font face of font family %s", font_face_bold, font_family);
+		debug(LOG_WARNING, "Failed to select the \"%s\" font face of font family %s", font_face_bold, font_family);
 	}
 	else
 	{
-		debug(LOG_NEVER, "iV_initializeGLC: Successfully selected the \"%s\" font face of font family %s", font_face_bold, font_family);
+		debug(LOG_NEVER, "Successfully selected the \"%s\" font face of font family %s", font_face_bold, font_family);
 	}
 
-	debug(LOG_NEVER, "finished initializing GLC");
+	debug(LOG_NEVER, "Finished initializing GLC");
 }
 
 void iV_TextInit()
@@ -277,7 +277,7 @@ unsigned int iV_GetTextWidth(const char* string)
 	glcMeasureString(GL_FALSE, string);
 	if (!glcGetStringMetric(GLC_BOUNDS, boundingbox))
 	{
-		debug(LOG_ERROR, "iV_GetTextWidth: couldn't retrieve a bounding box for the string");
+		debug(LOG_ERROR, "Couldn't retrieve a bounding box for the string \"%s\"", string);
 		return 0;
 	}
 
@@ -294,7 +294,8 @@ unsigned int iV_GetCountedTextWidth(const char* string, size_t string_length)
 	glcMeasureCountedString(GL_FALSE, string_length, string);
 	if (!glcGetStringMetric(GLC_BOUNDS, boundingbox))
 	{
-		debug(LOG_ERROR, "iV_GetCountedTextWidth: couldn't retrieve a bounding box for the string");
+		debug(LOG_ERROR, "Couldn't retrieve a bounding box for the string \"%s\" of length %u", 
+		      string, (unsigned int)string_length);
 		return 0;
 	}
 
@@ -311,7 +312,7 @@ unsigned int iV_GetTextHeight(const char* string)
 	glcMeasureString(GL_FALSE, string);
 	if (!glcGetStringMetric(GLC_BOUNDS, boundingbox))
 	{
-		debug(LOG_ERROR, "iV_GetTextHeight: couldn't retrieve a bounding box for the string");
+		debug(LOG_ERROR, "Couldn't retrieve a bounding box for the string \"%s\"", string);
 		return 0;
 	}
 
@@ -327,7 +328,7 @@ unsigned int iV_GetCharWidth(uint32_t charCode)
 
 	if (!glcGetCharMetric(charCode, GLC_BOUNDS, boundingbox))
 	{
-		debug(LOG_ERROR, "iV_GetCharWidth: couldn't retrieve a bounding box for the character");
+		debug(LOG_ERROR, "Couldn't retrieve a bounding box for the character code %u", charCode);
 		return 0;
 	}
 
@@ -343,7 +344,7 @@ int iV_GetTextLineSize()
 
 	if (!glcGetMaxCharMetric(GLC_BOUNDS, boundingbox))
 	{
-		debug(LOG_ERROR, "iV_GetTextLineSize: couldn't retrieve a bounding box for the character");
+		debug(LOG_ERROR, "Couldn't retrieve a bounding box for the character");
 		return 0;
 	}
 
@@ -358,7 +359,7 @@ static float iV_GetMaxCharBaseY(void)
 
 	if (!glcGetMaxCharMetric(GLC_BASELINE, base_line))
 	{
-		debug(LOG_ERROR, "iV_GetMaxCharBaseY: couldn't retrieve the baseline for the character");
+		debug(LOG_ERROR, "Couldn't retrieve the baseline for the character");
 		return 0;
 	}
 
@@ -374,7 +375,7 @@ int iV_GetTextAboveBase(void)
 
 	if (!glcGetMaxCharMetric(GLC_BOUNDS, boundingbox))
 	{
-		debug(LOG_ERROR, "iV_GetTextAboveBase: couldn't retrieve a bounding box for the character");
+		debug(LOG_ERROR, "Couldn't retrieve a bounding box for the character");
 		return 0;
 	}
 
@@ -393,7 +394,7 @@ int iV_GetTextBelowBase(void)
 
 	if (!glcGetMaxCharMetric(GLC_BOUNDS, boundingbox))
 	{
-		debug(LOG_ERROR, "iV_GetTextBelowBase: couldn't retrieve a bounding box for the character");
+		debug(LOG_ERROR, "Couldn't retrieve a bounding box for the character");
 		return 0;
 	}
 
