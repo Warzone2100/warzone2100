@@ -3089,14 +3089,6 @@ static void intProcessStats(UDWORD id)
 		sprintf(buf, "[build menu]Clicked RT %d numtabs %d tab # %d", psTForm->TabMultiplier, numTabs, psTForm->majorT);
 		addConsoleMessage(buf, DEFAULT_JUSTIFY,SYSTEM_MESSAGE);
 #endif
-
-	}
-	else
-	{
-		ASSERT( id == IDSTAT_FORM || id == IDSTAT_TITLEFORM ||
-				id == IDSTAT_LABEL || id == IDSTAT_TABFORM  ||
-				id == IDSTAT_TABSCRL_RIGHT || id ==IDSTAT_TABSCRL_LEFT,
-			"Unknown widget ID %u", id );
 	}
 }
 
