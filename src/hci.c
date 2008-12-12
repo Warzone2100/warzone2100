@@ -3096,7 +3096,7 @@ static void intProcessStats(UDWORD id)
 		ASSERT( id == IDSTAT_FORM || id == IDSTAT_TITLEFORM ||
 				id == IDSTAT_LABEL || id == IDSTAT_TABFORM  ||
 				id == IDSTAT_TABSCRL_RIGHT || id ==IDSTAT_TABSCRL_LEFT,
-			"intProcessStructure: Unknown widget ID" );
+			"Unknown widget ID %u", id );
 	}
 }
 
