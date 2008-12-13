@@ -5768,29 +5768,32 @@ STRUCTURE_STATS* getModuleStat(const STRUCTURE* psStruct)
 	}
 }
 
-/* count the artillery droids assigned to a structure (only makes sence by sensor towers and headquarters) */
-unsigned int countAssignedDroids(STRUCTURE *psStructure)
+/**
+ * Count the artillery and VTOL droids assigned to a structure.
+ */
+static unsigned int countAssignedDroids(const STRUCTURE* psStructure)
 {
-	DROID *psCurr;
-	SDWORD weapontype, hasindirect;
+	const DROID* psCurr;
 	unsigned int num;
 
-	if(psStructure == NULL)
+	CHECK_STRUCTURE(psStructure);
+
+	// For non-debug builds
+	if (psStructure == NULL)
 		return 0;
 
-	for (num = 0, psCurr = apsDroidLists[selectedPlayer]; psCurr; psCurr = psCurr->psNext)
+	num = 0;
+	for (psCurr = apsDroidLists[selectedPlayer]; psCurr; psCurr = psCurr->psNext)
 	{
-		if (psCurr->psTarget && psCurr->player == psStructure->player)
+		if (psCurr->psTarget
+		 && psCurr->psTarget->id == psStructure->id
+		 && psCurr->player == psStructure->player)
 		{
-			hasindirect = 0;
-			weapontype = asWeaponStats[psCurr->asWeaps[0].nStat].movementModel;
+			const MOVEMENT_MODEL weapontype = asWeaponStats[psCurr->asWeaps[0].nStat].movementModel;
 
-			if(weapontype == MM_INDIRECT || weapontype == MM_HOMINGINDIRECT)
-			{
-				hasindirect = 1;
-			}
-
-			if (psCurr->psTarget->id == psStructure->id && hasindirect)
+			if (weapontype == MM_INDIRECT
+			 || weapontype == MM_HOMINGINDIRECT
+			 || isVtolDroid(psCurr))
 			{
 				num++;
 			}
