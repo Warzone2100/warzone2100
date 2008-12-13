@@ -78,13 +78,16 @@ void svgManagerBlit(cairo_t *cr, const svgRenderedImage *svg);
  * size. If just width is 0 then the rendered width is the native width
  * multiplied by the height scale factor. The same applies when the height is 0
  * except that the width scale factor is used instead.
+ * If fit is true, then both width and height mustn't be 0. Then it tries to fit
+ * the image in the desired height and width without loosing proportion.
  *
  * @param filename  The path to the SVG image to render.
  * @param width The width to render the image at, 0 for auto-select.
  * @param height    The height to render the image at, 0 for auto-select.
+ * @param fit	Wetheter to fit the image, width and height mustn't be 0
  * @return A pointer to the rendered SVG image on success or NULL on failure.
  */
-svgRenderedImage *svgManagerGet(const char *filename, int width, int height);
+svgRenderedImage *svgManagerGet(const char *filename, int width, int height, bool fit);
 
 /**
  * A convenience wrapper around svgManagerGet which automatically computes the
@@ -111,5 +114,18 @@ svgRenderedImage *svgManagerGetWithWidth(const char *filename, int width,
  */
 svgRenderedImage *svgManagerGetWithHeight(const char *filename, int height,
                                           int *width);
+/**
+ * A convenience wrapper around svgManagerGet which computes the size of the image
+ * so it fits in height and width without loosing proportions.
+ *
+ * @param filename  The path to the SVG image to render.
+ * @param height    The maximum height to render the image.
+ * @param width     The maximum width to render the image
+ * @param ptrWidth  The resulting width of the image, may be NULL
+ * @param ptrHeight The resulting height of the image, may be NULL
+ * @return A pointer to the rendered SVG image on success or NULL on failure.
+ * @see svgManagerGet
+ */
+svgRenderedImage *svgManagerGetFit(const char *filename, int width, int height, int *ptrWidth, int *ptrHeight);
 
 #endif /*SVG_MANAGER_H*/

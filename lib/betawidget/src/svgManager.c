@@ -198,10 +198,13 @@ void svgManagerBlit(cairo_t *cr, const svgRenderedImage *svg)
 	cairo_restore(cr);
 }
 
-svgRenderedImage *svgManagerGet(const char *filename, int width, int height)
+svgRenderedImage *svgManagerGet(const char *filename, int width, int height, bool fit)
 {
 	svgImage *currSvg, *svg = NULL;
 	svgRenderedImage *currRender, *render = NULL;
+	unsigned int sourceWidth, sourceHeight;
+
+	assert(fit == false || (width != 0 && height != 0 && fit == true));
 	
 	// See if the image exists in the cache at *any* size
 	while ((currSvg = vectorNext(svgImages)))
@@ -220,12 +223,12 @@ svgRenderedImage *svgManagerGet(const char *filename, int width, int height)
 		svg = svgManagerLoad(filename);
 	}
 	
+	assert(svg != NULL);
+	
+	svg_cairo_get_size(svg->svg, &sourceWidth, &sourceHeight);
 	// Fill out any missing size information
 	if (width == 0 || height == 0)
 	{
-		unsigned int sourceWidth, sourceHeight;
-		
-		svg_cairo_get_size(svg->svg, &sourceWidth, &sourceHeight);
 		
 		// No size information provided, render at source
 		if (width == 0 && height == 0)
@@ -242,6 +245,21 @@ svgRenderedImage *svgManagerGet(const char *filename, int width, int height)
 		else // (height == 0)
 		{
 			height = ((float) width / (float) sourceWidth) * (float) sourceHeight;
+		}
+	}
+	else if(fit == true && width != 0 && height != 0)
+	{
+		int w, h;
+		w = ((float) height / (float) sourceHeight) * (float) sourceWidth;
+		h = ((float) width / (float) sourceWidth) * (float) sourceHeight;
+
+		if(w <= width)
+		{
+			width = w;
+		}
+		else if(h <= height)
+		{
+			height = h;
 		}
 	}
 	
@@ -270,7 +288,7 @@ svgRenderedImage *svgManagerGetWithWidth(const char *filename, int width,
                                          int *height)
 {
 	// Render the image
-	svgRenderedImage *render = svgManagerGet(filename, width, 0);
+	svgRenderedImage *render = svgManagerGet(filename, width, 0, false);
 	
 	// If height is non-NULL copy the height into it
 	if (height)
@@ -286,7 +304,7 @@ svgRenderedImage *svgManagerGetWithHeight(const char *filename, int height,
                                           int *width)
 {
 	// Render the image
-	svgRenderedImage *render = svgManagerGet(filename, 0, height);
+	svgRenderedImage *render = svgManagerGet(filename, 0, height, false);
 	
 	// If width is non-NULL copy the width into it
 	if (width)
@@ -294,6 +312,26 @@ svgRenderedImage *svgManagerGetWithHeight(const char *filename, int height,
 		*width = render->patternSize.x;
 	}
 	
+	// Return the render
+	return render;
+}
+
+svgRenderedImage *svgManagerGetFit(const char *filename, int width, int height, int *ptrWidth, int *ptrHeight)
+{
+	// Render the image
+	svgRenderedImage *render = svgManagerGet(filename, width, height, true);
+	
+	// If width is non-NULL copy the width into it
+	if (ptrWidth)
+	{
+		*ptrWidth = render->patternSize.x;
+	}
+	
+	// If height is non-NULL copy the width into it
+	if (ptrHeight)
+	{
+		*ptrHeight = render->patternSize.y;
+	}
 	// Return the render
 	return render;
 }
