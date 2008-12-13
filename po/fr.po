@@ -8,13 +8,14 @@
 # Guillaume Wilhelm <guillaume.wilhelm@gmail.com>, 2008.
 # MoroSqua <Unknown>, 2008.
 # TuniX12 <sedra12@gmail.com>, 2008.
+# Cyril Brulebois <kibi@debian.org>, 2008.
 msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
 "POT-Creation-Date: 2008-12-13 19:43+0100\n"
-"PO-Revision-Date: 2008-07-14 11:49+0000\n"
-"Last-Translator: TuniX12 <sedra12@gmail.com>\n"
+"PO-Revision-Date: 2008-11-20 20:34+0000\n"
+"Last-Translator: Cyril Brulebois <kibi@debian.org>\n"
 "Language-Team: French <warzone-dev@gna.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -10134,7 +10135,7 @@ msgstr "Charger un jeu spécifique"
 
 #: src/clparse.c:102
 msgid "game-name"
-msgstr "Nom du jeux"
+msgstr "Nom du jeu"
 
 #: src/clparse.c:103
 msgid "Show this help message and exit"
@@ -10903,7 +10904,7 @@ msgstr "Défilement à droite"
 #: src/ingameop.c:152
 #: src/ingameop.c:249
 msgid "Resume Game"
-msgstr "Reprendre au Jeu"
+msgstr "Reprendre le Jeu"
 
 #: src/ingameop.c:259
 #: src/ingameop.c:398
@@ -11047,23 +11048,23 @@ msgstr "Cercle"
 
 #: src/keybind.c:131
 msgid "Sorry, that cheat is disabled in multiplayer games."
-msgstr "Désolé, ce code est désactivé durant les jeux mulitjoueurs"
+msgstr "Désolé, ce code est désactivé durant les jeux multijoueurs."
 
 #: src/keybind.c:195
 msgid "Lets us see what you see!"
-msgstr "Voyons voir ce que tu vois!"
+msgstr "Voyons voir ce que tu vois !"
 
 #: src/keybind.c:197
 msgid "Fine, sensor display is off!"
-msgstr "C'est bon, je désactive l'affichage des senseurs!"
+msgstr "C'est bon, je désactive l'affichage des senseurs !"
 
 #: src/keybind.c:295
 msgid "Hard as nails!!!"
-msgstr "Mange-toi ça dans les dents!!!"
+msgstr "Mange-toi ça dans les dents !!!"
 
 #: src/keybind.c:308
 msgid "Takings thing easy!"
-msgstr "Prend ça cool!"
+msgstr "Prend ça cool !"
 
 #: src/keybind.c:322
 msgid "1000 big ones!!!"
@@ -11075,15 +11076,15 @@ msgstr "Surcharge de Puissance"
 
 #: src/keybind.c:350
 msgid "Back to normality!"
-msgstr "De Retour à la Normalité!"
+msgstr "De Retour à la Normalité !"
 
 #: src/keybind.c:363
 msgid "Getting tricky!"
-msgstr "Sois plus Audacieux!"
+msgstr "Sois plus Audacieux !"
 
 #: src/keybind.c:376
 msgid "Twice as nice!"
-msgstr "À Deux, c'est Mieux!"
+msgstr "À Deux, c'est Mieux !"
 
 #: src/keybind.c:386
 msgid "FPS display is enabled."
@@ -11100,11 +11101,11 @@ msgstr "FPS %d; Limite-FPSt: %d; PIEs %d; polys %d; Terr. polys %d; Etats %d"
 
 #: src/keybind.c:458
 msgid "Infinite power disabled"
-msgstr "Énergie Infinie Désactivée (T'est mieux aussi!)"
+msgstr "Énergie Infinie Désactivée (T'es mieux aussi !)"
 
 #: src/keybind.c:463
 msgid "Infinite power enabled"
-msgstr "Énergie Infinie  (Espèce de Tricheur!)"
+msgstr "Énergie Infinie (Espèce de Tricheur !)"
 
 #: src/keybind.c:498
 msgid "All items made available"
@@ -11124,7 +11125,7 @@ msgstr "Caméra Réorientée vers le Nord"
 
 #: src/keybind.c:1281
 msgid "Researched EVERYTHING for you!"
-msgstr "Chercheur Exténué: On a fait du mieux qu'on a pu et on croit qu'on a réussi!"
+msgstr "Chercheur Exténué : On a fait du mieux qu'on a pu et on croit qu'on a réussi !"
 
 #: src/keybind.c:1312
 msgid "Energy bars display toggled"
@@ -11136,7 +11137,7 @@ msgstr "Mode Démonstration désactivé - Retour au Jeu Normal"
 
 #: src/keybind.c:1371
 msgid "Unable to locate any resource extractors!"
-msgstr "Impossible de localiser le moindre extracteur de ressources!"
+msgstr "Impossible de localiser le moindre extracteur de ressources !"
 
 #: src/keybind.c:1594
 msgid "Oh, the weather outside is frightful... SNOW"
@@ -11148,11 +11149,11 @@ msgstr "Singing in the rain, I'm singing in the rain... IL PLEUT"
 
 #: src/keybind.c:1606
 msgid "Forecast : Clear skies for all areas... NO WEATHER"
-msgstr "Prévisions Locales: Ciel dégagé dans toute la Région... AUCUNE MÉTÉO"
+msgstr "Prévisions Locales : Ciel dégagé dans toute la Région... AUCUNE MÉTÉO"
 
 #: src/keybind.c:1639
 msgid "Enemy destroyed by cheating!"
-msgstr "L'ennemi a été détruit par un TRICHEUR!!!"
+msgstr "L'ennemi a été détruit par un TRICHEUR !!!"
 
 #: src/keybind.c:2167
 msgid "Centered on player HQ, direction NORTH"
@@ -11160,7 +11161,7 @@ msgstr "Vue Centrée sur le quartier général, direction NORD"
 
 #: src/keybind.c:2179
 msgid "Unable to locate HQ!"
-msgstr "Impossible de localiser le Quartier Général !"
+msgstr "Impossible de localiser le Quartier Général !"
 
 #: src/keybind.c:2195
 msgid "Formation speed limiting OFF"
@@ -11192,7 +11193,7 @@ msgstr "Le menu des Constructions va se réouvrir"
 
 #: src/keybind.c:2411
 msgid "Build menu will not reopen"
-msgstr "Le menu des constructions ne se rouvrira pas"
+msgstr "Le menu des constructions ne se réouvrira pas"
 
 #: src/keybind.c:2423
 msgid "Radar showing friend-foe colors"
@@ -11445,7 +11446,7 @@ msgstr "Dézoomer"
 
 #: src/keymap.c:359
 msgid "Pitch Forward"
-msgstr "Angle de la Caméra: Vue du Dessus"
+msgstr "Angle de la Caméra : Vue du Dessus"
 
 #: src/keymap.c:360
 msgid "Rotate Left"
@@ -11549,7 +11550,7 @@ msgstr "Sélectionner toutes les Unités de Combat"
 
 #: src/keymap.c:412
 msgid "Select all Heavily Damaged Units"
-msgstr "Sélectionner toutes les unitées Sévèrement Endommagées"
+msgstr "Sélectionner toutes les unités Sévèrement Endommagées"
 
 #: src/keymap.c:414
 msgid "Select all Half-tracks"
@@ -11792,11 +11793,11 @@ msgstr "Commencer avec une Base Avancée"
 
 #: src/multiint.c:981
 msgid "Map Preview"
-msgstr "Pré-visualisation de la carte"
+msgstr "Prévisualisation de la carte"
 
 #: src/multiint.c:983
 msgid "Click to see Map"
-msgstr "Cliquez pour voir la carte"
+msgstr "Cliquer pour voir la carte"
 
 #: src/multiint.c:997
 msgid "Start Hosting Game"
@@ -11812,11 +11813,11 @@ msgstr "Équipe"
 
 #: src/multiint.c:1442
 msgid "Waiting for other players"
-msgstr "En attente d'autres joueurs"
+msgstr "Attente des autres joueurs"
 
 #: src/multiint.c:1448
 msgid "Click when ready"
-msgstr "Cliquez une fois prêt"
+msgstr "Cliquer une fois prêt"
 
 #: src/multiint.c:1490
 msgid "PLAYERS"
@@ -11846,7 +11847,7 @@ msgstr "Joueurs"
 #: src/multijoin.c:98
 #: src/multijoin.c:99
 msgid "Players Still Joining"
-msgstr "Les joueurs sont encore en connexions"
+msgstr "Les joueurs sont encore en cours de connexion"
 
 #: src/multijoin.c:220
 #, c-format
@@ -11930,7 +11931,7 @@ msgstr "Donner de l'énergie au Joueur"
 
 #: src/multiplay.c:728
 msgid "The host has left the game!"
-msgstr "L'hôte à quitté la partie!"
+msgstr "L'hôte à quitté la partie !"
 
 #: src/multiplay.c:1909
 msgid "Green"
@@ -11967,7 +11968,7 @@ msgstr "Joueur Cyan"
 #: src/research.c:1845
 #, c-format
 msgid "Research completed: %s"
-msgstr "Recherche terminée: %s"
+msgstr "Recherche terminée : %s"
 
 #: src/research.c:1850
 msgid "Research Completed"
@@ -11980,105 +11981,105 @@ msgstr "Bourse de recherche"
 #: src/scores.c:99
 #, c-format
 msgid "Own Units: %u"
-msgstr "Vos Unités: %u"
+msgstr "Vos Unités : %u"
 
 #: src/scores.c:100
 #, c-format
 msgid "Enemy Units: %u"
-msgstr "Unités Ennemies: %u"
+msgstr "Unités Ennemies : %u"
 
 #: src/scores.c:101
 #, c-format
 msgid "Own Structures: %u"
-msgstr "Vos Bâtiments: %u"
+msgstr "Vos Bâtiments : %u"
 
 #: src/scores.c:102
 #, c-format
 msgid "Enemy Structures: %u"
-msgstr "Bâtiments Ennemis: %u"
+msgstr "Bâtiments Ennemis : %u"
 
 #: src/scores.c:103
 #, c-format
 msgid "Units Manufactured: %u"
-msgstr "Unités Assemblées: %u"
+msgstr "Unités Assemblées : %u"
 
 #: src/scores.c:104
 #, c-format
 msgid "Total Units: %u"
-msgstr "Unités Totales: %u"
+msgstr "Unités Totales : %u"
 
 #: src/scores.c:105
 #, c-format
 msgid "Structures Built: %u"
-msgstr "Structures Érigées: %u"
+msgstr "Structures Érigées : %u"
 
 #: src/scores.c:106
 #, c-format
 msgid "Total Structures: %u"
-msgstr "Structures Totales: %u"
+msgstr "Structures Totales : %u"
 
 #: src/scores.c:108
 #, c-format
 msgid "Rookie: %u"
-msgstr "Bleus: %u"
+msgstr "Bleus : %u"
 
 #: src/scores.c:109
 #, fuzzy, c-format
 msgctxt "rank"
 msgid "Green: %u"
-msgstr "Deuxième Classe: %u"
+msgstr "Deuxième Classe : %u"
 
 #: src/scores.c:110
 #, c-format
 msgid "Trained: %u"
-msgstr "Première Classe: %u"
+msgstr "Première Classe : %u"
 
 #: src/scores.c:111
 #, c-format
 msgid "Regular: %u"
-msgstr "Expérimentés: %u"
+msgstr "Expérimentés : %u"
 
 #: src/scores.c:112
 #, c-format
 msgid "Professional: %u"
-msgstr "Professionnels: %u"
+msgstr "Professionnels : %u"
 
 #: src/scores.c:113
 #, c-format
 msgid "Veteran: %u"
-msgstr "Vétérans: %u"
+msgstr "Vétérans : %u"
 
 #: src/scores.c:114
 #, c-format
 msgid "Elite: %u"
-msgstr "Unités d'Élite: %u"
+msgstr "Unités d'Élite : %u"
 
 #: src/scores.c:115
 #, c-format
 msgid "Special: %u"
-msgstr "Unités Spéciales: %u"
+msgstr "Unités Spéciales : %u"
 
 #: src/scores.c:116
 #, c-format
 msgid "Hero: %u"
-msgstr "Héros: %u"
+msgstr "Héros : %u"
 
 #: src/scores.c:351
 msgid "Unit Losses"
-msgstr "Unités Perdues:"
+msgstr "Unités Perdues :"
 
 #: src/scores.c:352
 msgid "Structure Losses"
-msgstr "Bâtiments Perdus:"
+msgstr "Bâtiments Perdus :"
 
 #: src/scores.c:353
 msgid "Force Information"
-msgstr "Relevé d'Effectifs:"
+msgstr "Relevé d'Effectifs :"
 
 #: src/scores.c:433
 #, c-format
 msgid "ARTIFACTS RECOVERED: %d"
-msgstr "ARTEFACTS RÉCUPÉRÉS: %d"
+msgstr "ARTEFACTS RÉCUPÉRÉS : %d"
 
 #: src/scores.c:438
 #, c-format
@@ -12101,12 +12102,12 @@ msgstr "VOUS AVEZ PERDU !"
 #: src/scriptfuncs.c:10154
 #, c-format
 msgid "Beacon received from %s!"
-msgstr "Balise reçue de %s!"
+msgstr "Signal émis par %s !"
 
 #: src/scriptfuncs.c:10200
 #, c-format
 msgid "Beacon %d"
-msgstr "Balise %d"
+msgstr "Signal %d"
 
 #: src/selection.c:117
 #, c-format
@@ -12118,19 +12119,19 @@ msgstr[1] "%u unités sélectionnées"
 #: src/selection.c:434
 #: src/selection.c:521
 msgid "Unable to locate any repair units!"
-msgstr "Impossible de localiser la moindre unité de réparation !"
+msgstr "Impossible de localiser la moindre unité de réparation !"
 
 #: src/selection.c:437
 msgid "Unable to locate any Trucks!"
-msgstr "Impossible de localiser le moindre Véhicule de Construction !"
+msgstr "Impossible de localiser le moindre Véhicule de Construction !"
 
 #: src/selection.c:440
 msgid "Unable to locate any Sensor Units!"
-msgstr "Impossible de localiser la moindre unité radar !"
+msgstr "Impossible de localiser la moindre unité radar !"
 
 #: src/selection.c:443
 msgid "Unable to locate any Commanders!"
-msgstr "Impossible de localiser le moindre Commandant !"
+msgstr "Impossible de localiser le moindre Commandant !"
 
 #: src/structure.c:2733
 msgid "Command Control Limit Reached - Production Halted"
@@ -12158,7 +12159,7 @@ msgstr "%s - Endommagé à %3.0f%%"
 #: src/structure.c:6084
 #, c-format
 msgid "%s - Electronically Damaged"
-msgstr "%s - Electroniquement endommagé"
+msgstr "%s - Électroniquement endommagé"
 
 #: src/structure.c:6319
 #, fuzzy
@@ -12198,7 +12199,7 @@ msgstr "Lancer le Transporteur"
 
 #: src/transporter.c:1747
 msgid "Reinforcements landing"
-msgstr "Les renforts sont arrivés !"
+msgstr "Les renforts sont arrivés !"
 
 #: src/version.c:137
 msgid " (modified and switched locally)"
@@ -12214,7 +12215,7 @@ msgstr " (changé localement)"
 
 #: src/version.c:148
 msgid " - DEBUG"
-msgstr " -DEBOGUER"
+msgstr " - DEBOGUER"
 
 #: src/version.c:157
 #, c-format
@@ -12480,29 +12481,31 @@ msgstr "Version %s%s%s%s"
 #~ msgid "Mantis Tracks Pulse Laser"
 #~ msgstr "Laser à Impulsion Mante Chenilles"
 
-#~ msgid "Python Tracks Lancer"
-#~ msgstr "Lance-roquettes Python chenillé"
-
-#~ msgid "Mantis Tracks Lancer"
-#~ msgstr "Lance-roquettes Mante chenillé"
-
 #~ msgid "Vengeance Tracks Tank Killer"
 #~ msgstr "Anti-char Vengeance Chenilles"
 
 #~ msgid "Tiger Tracks Heavy Cannon"
 #~ msgstr "Canon Lourd Tigre Chenilles"
 
-#~ msgid "Mantis Lancer VTOL"
-#~ msgstr "VTOL Mantis armé d'un lance-roquettes"
-
-#~ msgid "Mantis HPV VTOL"
-#~ msgstr "VTOL Mantis armé d'un HPV"
-
 #~ msgid "Cobra Repair Tracks"
 #~ msgstr "Réparateur Cobra Chenilles"
 
 #~ msgid "Mantis Repair Tracks"
 #~ msgstr "Réparateur Mante Chenilles"
+
+#, fuzzy
+#~ msgid "Viper Machinegun Half-Track"
+#~ msgstr "Mitrailleuses Jumelées Viper Semi-chenillées"
+
+#, fuzzy
+#~ msgid "Viper Flamer Half-Track"
+#~ msgstr "Tourelle de Réparation Mobile Viper Semi-chenillée"
+
+#~ msgid "Single Player Campaign"
+#~ msgstr "Campagne (Un Joueur)"
+
+#~ msgid "Multi Player Game"
+#~ msgstr "Partie en Réseau"
 
 #~ msgid "Load Campaign"
 #~ msgstr "Charger une Campagne"
@@ -12522,9 +12525,17 @@ msgstr "Version %s%s%s%s"
 #~ msgid "Played"
 #~ msgstr "Parties Jouées"
 
-#, fuzzy
-#~ msgid "Python Tank Killer Tracks"
-#~ msgstr "Commandant Python Chenillé"
+#~ msgid "Python Tracks Lancer"
+#~ msgstr "Lance-roquettes Python chenillé"
+
+#~ msgid "Mantis Tracks Lancer"
+#~ msgstr "Lance-roquettes Mante chenillé"
+
+#~ msgid "Mantis Lancer VTOL"
+#~ msgstr "VTOL Mantis armé d'un lance-roquettes"
+
+#~ msgid "Mantis HPV VTOL"
+#~ msgstr "VTOL Mantis armé d'un HPV"
 
 #~ msgid "%s - Damage %u%%"
 #~ msgstr "%s - Endommagé à %u%%"
@@ -12546,3 +12557,7 @@ msgstr "Version %s%s%s%s"
 
 #~ msgid "Improvement in laser emission density "
 #~ msgstr "Amélioration de la densité des émissions laser "
+
+#, fuzzy
+#~ msgid "Python Tank Killer Tracks"
+#~ msgstr "Commandant Python Chenillé"
