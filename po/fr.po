@@ -633,7 +633,7 @@ msgstr "Amélioration pour Mitrailleuses"
 
 #: data/base/messages/resmessages12.rmsg:135
 msgid "Chaingun mechanism replaces belt-feed"
-msgstr "Alimentation à la chaîne remplaçant les bandes"
+msgstr "Les chargeurs à chaîne remplacent les chargeurs à bandes"
 
 #: data/base/messages/resmessages12.rmsg:136
 #: data/base/messages/resmessages23.rmsg:175
@@ -731,7 +731,7 @@ msgstr "Amélioration pour Mortier"
 
 #: data/base/messages/resmessages12.rmsg:161
 msgid "Targeting systems compensate for distance and weather conditions"
-msgstr "Les systèmes de visée corrigent le tir selon la distance et les conditions météorologiques"
+msgstr "Les systèmes de visée anticipent la distance et les conditions météorologiques lors du tir"
 
 #: data/base/messages/resmessages12.rmsg:162
 #: data/base/messages/resmessages23.rmsg:188
@@ -926,7 +926,7 @@ msgstr "Matériaux pour Cyborgs améliorés"
 #: data/base/messages/resmessages1.rmsg:31
 #: data/base/messages/resmessages1.rmsg:473
 msgid "Layered composite alloys and energy-absorbing fibres"
-msgstr "Couches d'alliages composites et de fibres absorbant les impacts intercalées"
+msgstr "sandwich de couches d'alliages composites et de fibres absorbant les impacts"
 
 #: data/base/messages/resmessages1.rmsg:32
 #: data/base/messages/resmessages2.rmsg:19
@@ -2039,7 +2039,7 @@ msgstr "Tous les bombardiers améliorés automatiquement"
 
 #: data/base/messages/resmessages23.rmsg:174
 msgid "Robotic advances make new chaingun upgrade available"
-msgstr "Les avancées en robotique rendent de nouvelles améliorations de l'alimentation disponibles"
+msgstr "Les avancées en robotique permettent de nouvelles améliorations pour chargeur."
 
 #: data/base/messages/resmessages23.rmsg:187
 msgid "Shells detect and home to thermal heat signatures"
@@ -3876,7 +3876,7 @@ msgstr "Nouvel Objectif."
 
 #: data/base/messages/strings/cam1strings.txt:103
 msgid "We have detected and isolated an intruder program."
-msgstr "Nous avons détecté et isolé un programme d'intrusion."
+msgstr "Nous avons détecté et isolé un programme virus."
 
 #: data/base/messages/strings/cam1strings.txt:108
 msgid "Supplemental"
@@ -3968,7 +3968,7 @@ msgstr "Bravo d'avoir vaincu le Nouveau Paragigme, le secteur est maintenant sé
 
 #: data/base/messages/strings/cam1strings.txt:151
 msgid "The Nexus Intruder Program was in the New Paradigm system."
-msgstr "Le cyber espion du Nexus se trouvait aussi dans les systèmes du Nouveau Paradigme."
+msgstr "Le virus du Nexus se trouvait aussi dans les systèmes du Nouveau Paradigme."
 
 #: data/base/messages/strings/cam1strings.txt:152
 msgid "We recorded two conversations with it, extracts follow..."
@@ -4076,15 +4076,15 @@ msgstr "OPÉRATION AÉROTRANSPORTÉE: Intercepter le convoi."
 
 #: data/base/messages/strings/cam2strings.txt:48
 msgid "Data from the Collective's base indicates the presence of the NEXUS intruder program."
-msgstr "Les données du système du Collectif indiquent la présence du cyber espion du NEXUS."
+msgstr "Les données du système du Collectif indiquent la présence du virus informatique de NEXUS."
 
 #: data/base/messages/strings/cam2strings.txt:49
 msgid "Before NEXUS switched itself off-line we accessed the following."
-msgstr "Avant que le NEXUS ne s'éteigne, nous avouns pu accéder aux informations suivantes."
+msgstr "Avant que le NEXUS ne s'éteigne, nous avons pu accéder aux informations suivantes."
 
 #: data/base/messages/strings/cam2strings.txt:51
 msgid "An enemy commander is collecting a shipment from NEXUS at this location."
-msgstr "Un commandant ennemi livre une cargaison du NEXUS à cet endroit."
+msgstr "Un commandant ennemi livre une cargaison de NEXUS à cet endroit."
 
 #: data/base/messages/strings/cam2strings.txt:52
 msgid "Once at the LZ, eradicate the enemy commander and recover the shipment."
@@ -4405,7 +4405,7 @@ msgstr "Vous allez devoir assister la Division gamma."
 
 #: data/base/messages/strings/cam3strings.txt:50
 msgid "On reaching Gamma Base, help secure the area from further NEXUS attacks."
-msgstr "En atteignant la Base Gamma, aidez à sécuriser le secteur des prochaines attaques du NEXUS."
+msgstr "En atteignant la Base Gamma, aidez à sécuriser le secteur des prochaines attaques de NEXUS."
 
 #: data/base/messages/strings/cam3strings.txt:53
 msgid "NEXUS DEFEATED"
@@ -4469,7 +4469,7 @@ msgstr "Trouvez et mettez un terme à .........."
 
 #: data/base/messages/strings/cam3strings.txt:84
 msgid "TRANSPORT MISSION: Ambush NEXUS Forces"
-msgstr "MISSION LONGUE DISTANCE: Coup-Fourré des Forces du NEXUS"
+msgstr "MISSION LONGUE DISTANCE: Coup-Fourré des Forces de NEXUS"
 
 #: data/base/messages/strings/cam3strings.txt:85
 msgid "Commander, your decisive actions halted the spread of NEXUS."
@@ -4481,7 +4481,7 @@ msgstr "Avant que le NEXUS ne rende son dernier souffle, nous avons intercepté 
 
 #: data/base/messages/strings/cam3strings.txt:89
 msgid "A NEXUS task force is heading for these coordinates."
-msgstr "La dernière tâche donnée aux forces du NEXUS est de se rendre à ces coordonées."
+msgstr "La dernière tâche donnée aux forces de NEXUS est de se rendre à ces coordonées."
 
 #: data/base/messages/strings/cam3strings.txt:90
 msgid "You have an opportunity to destroy NEXUS before they get there."
@@ -4489,7 +4489,7 @@ msgstr "Vous avez l'opportunitée d'anéantir définitivement le NEXUS avant qu'
 
 #: data/base/messages/strings/cam3strings.txt:91
 msgid "Take an attack force and ambush NEXUS task force at ....... the  ......."
-msgstr "Envoyez une force d'attaque et piègez la semence du NEXUS au ...... le ........"
+msgstr "Envoyez une force d'attaque et piègez la semence de NEXUS au ...... le ........"
 
 #: data/base/messages/strings/cam3strings.txt:94
 msgid "TRANSPORT MISSION: Away Team"
@@ -4537,7 +4537,7 @@ msgstr "Les éléments de la Division Gamma nous ont contactés."
 
 #: data/base/messages/strings/cam3strings.txt:117
 msgid "They claim to be free of NEXUS, and offer their base as a site of operations."
-msgstr "Ils implorent à êtres libérés du NEXUS et offrent leur base comme site d'opération."
+msgstr "Ils disent être hors du contrôle de NEXUS et offrent leur base comme site d'opération."
 
 #: data/base/messages/strings/cam3strings.txt:118
 msgid "Base coordinates download in progress."
@@ -4610,7 +4610,7 @@ msgstr "Le NEXUS est déja présent dans nos systèmes."
 
 #: data/base/messages/strings/cam3strings.txt:149
 msgid "To defeat NEXUS we must research the Nexus Intruder Program."
-msgstr "Pour en venir à bout, nous devons des recherches sur le Cyber Espion du NEXUS"
+msgstr "Pour en venir à bout, nous devons faire les recherches sur le Virus de NEXUS"
 
 #: data/base/messages/strings/cam3strings.txt:150
 msgid "Assign this task to a research facility."
@@ -4618,11 +4618,11 @@ msgstr "Assignez cette tâche à un de vos centre de recherche."
 
 #: data/base/messages/strings/cam3strings.txt:153
 msgid "NEXUS forces detected at these locations."
-msgstr "Nous venons de déceler des troupes armées du NEXUS à ces endroits."
+msgstr "Nous venons de déceler des troupes armées de NEXUS à ces endroits."
 
 #: data/base/messages/strings/cam3strings.txt:157
 msgid "NEXUS has been eradicated from all Project systems."
-msgstr "Toute trace du NEXUS a été éradiquée de nos systèmes."
+msgstr "Toute trace de NEXUS a été éradiquée de nos systèmes."
 
 #: data/base/messages/strings/cam3strings.txt:158
 msgid "We are attempting to access the missile control codes."
@@ -4634,7 +4634,7 @@ msgstr "Il nous faut un centre de recherche pour forcer le code. Libérez en un 
 
 #: data/base/messages/strings/cam3strings.txt:163
 msgid "Protect the missile silos from NEXUS attacks."
-msgstr "Protégez le silo à missile des ataques du NEXUS pour le récupérer."
+msgstr "Protégez le silo à missile des attaques de NEXUS pour le récupérer."
 
 #: data/base/messages/strings/cam3strings.txt:166
 msgid "PROJECT UPDATE: 1st Level Missile Code Cracked."
@@ -4670,11 +4670,11 @@ msgstr "Séquence de lancement initiée."
 
 #: data/base/messages/strings/cam3strings.txt:180
 msgid "TRANSPORT MISSION: Attack NEXUS Final Base"
-msgstr "MISSION LONGUE DISTANCE: Raid Final sur les Bases du NEXUS"
+msgstr "MISSION LONGUE DISTANCE: Raid Final sur les Bases de NEXUS"
 
 #: data/base/messages/strings/cam3strings.txt:181
 msgid "We have located NEXUS' base at this location."
-msgstr "Nous avons découvert une des base du NEXUS à cet endroit."
+msgstr "Nous avons découvert une des base de NEXUS à cet endroit."
 
 #: data/base/messages/strings/cam3strings.txt:184
 msgid "This area contains numerous NEXUS structures."
@@ -4682,7 +4682,7 @@ msgstr "Cette zone contient une quantitée impressionante de leurs structures."
 
 #: data/base/messages/strings/cam3strings.txt:185
 msgid "We are certain that NEXUS's core systems are located here."
-msgstr "Nous sommes sûrs que le système nerveux du NEXUS est situé ici."
+msgstr "Nous sommes sûrs que le système central de NEXUS est situé ici."
 
 #: data/base/messages/strings/cam3strings.txt:188
 msgid "Establish an LZ."
@@ -4690,7 +4690,7 @@ msgstr "Établissez une ZA."
 
 #: data/base/messages/strings/cam3strings.txt:189
 msgid "Begin your attacks on NEXUS. You must destroy his core systems."
-msgstr "Puis commencez vos attaques sur le NEXUS. Vous devez détruire son nerf central."
+msgstr "Puis commencez vos attaques sur le NEXUS. Vous devez détruire son syst central."
 
 #: data/base/messages/strings/cam3strings.txt:192
 msgid "Incoming intelligence report... Team Gamma"
@@ -6935,7 +6935,7 @@ msgstr "Tourelle brouilleuse Mk2"
 #: data/base/messages/strings/names.txt:913
 #: data/mp/messages/strings/names.txt:922
 msgid "NEXUS Intruder Program"
-msgstr "Programme d'Intrusion NEXUS"
+msgstr "Ciber virus de NEXUS"
 
 #: data/base/messages/strings/names.txt:914
 #: data/mp/messages/strings/names.txt:923
@@ -7171,7 +7171,7 @@ msgstr "Propulsion Roues II"
 #: data/base/messages/strings/names.txt:984
 #: data/mp/messages/strings/names.txt:993
 msgid "AA Thermal Imaging Sensor"
-msgstr "Déecteur Thermique AA"
+msgstr "Détecteur Thermique AA"
 
 #: data/base/messages/strings/names.txt:985
 #: data/mp/messages/strings/names.txt:994
