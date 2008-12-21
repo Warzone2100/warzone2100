@@ -13,6 +13,10 @@
  * Buildsystem:
    * Fix: Only compile the translations when $(TRANSLATION) is "yes". (ticket:130)
 
+2008-12-21: Version 2.1
+ * GUI:
+   * Fix: Bug that caused the number of assigned units to a structure to be displayed wrongly (ticket:90)
+
 2008-11-30: Version 2.1_rc2
  * General:
    * Change: Updated Italian (100%), Portugues (99.96%) and Russian (46%) translations

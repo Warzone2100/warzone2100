@@ -1,3 +1,11 @@
+warzone2100 (2.1.0-0) unstable; urgency=low
+
+  * GUI:
+    * Fix: Bug that caused the number of assigned units to a structure to be
+      displayed wrongly (ticket:90)
+
+ -- Giel van Schijndel <muggenhor@gna.org>  Sun, 21 Dec 2008 19:31:04 +0100
+
 warzone2100 (2.1.0~rc2-0) unstable; urgency=low
 
   * General:
