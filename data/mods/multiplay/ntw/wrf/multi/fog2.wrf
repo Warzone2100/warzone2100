@@ -1,0 +1,6 @@
+
+directory       "multiplay/script"
+file			SCRIPT		"fog-daynight.slo"
+
+directory       "multiplay/script"
+file			SCRIPTVAL	"cam2day.vlo"
