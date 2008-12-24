@@ -1,0 +1,130 @@
+#define	TILE							128
+#define N_GATES					5
+
+public	RESEARCHSTAT		GateRX;
+public	STRUCTURESTAT		GateG, GateGH, GateS, GateSH, StakeM, StakeMH;
+public	bool				GateE[N_GATES][2];
+public	int				px[N_GATES][2], py[N_GATES][2];
+
+private	int		me;
+
+event gateFunctionality(every, 20) {
+
+// Locals
+local bool				antep, ap, gse, ks, mex;
+local int				k, i, j, range1, range2, dx, dy, tx, ty;
+local STRUCTURE			ggs, gss, gmm, todes;
+local STRUCTURESTAT		cg, cs, cm;
+local DROID				cdr;
+
+range1 = 1000;			// Gate reaction range
+range2 = 10;
+
+	// Only for humans
+	if (isHumanPlayer(me)) {
+
+		// Make both components available (Horizontal and vertical gate)
+		if (isStructureAvailable(StakeM, me) && not isStructureAvailable(StakeMH, me)) {completeResearch(GateRX, me);}
+		
+		k=0;
+		while(k < 2) {
+		
+			// Which component?
+			if (k==0) {cg = GateG; cs = GateS; cm = StakeM; dx = 0; dy = TILE;}  			// vertical
+			if (k==1) {cg = GateGH; cs = GateSH; cm = StakeMH; dx = TILE; dy = 0;} 		// horizontal
+			
+			// Pick up structure limit
+			setStructureLimits(cm, 1, me);
+			
+			// Loop over all gate grounds
+			j = 0;
+			initEnumStruct(FALSE, cg, me, me);
+			ggs = enumStruct();
+			while(ggs != NULLOBJECT && j < N_GATES){
+			
+				// Building ready?
+				if (structureComplete(ggs)) {
+						
+					// Enemy ante portas?
+					i=0; antep = false;
+					while(i <= multiPlayerMaxPlayers - 1){
+						ap = droidInRange(i, ggs.x, ggs.y, range1);
+						// Eigene Einheit, Verbündeter ?
+						if (ap && i != me && not allianceExistsBetween (me, i)) {antep = true;}
+						i = i + 1;
+					}
+		
+					// Gate stake existing?
+					gss = structureBuiltInRange(cs, ggs.x + dx, ggs.y + dy, range2, me);
+					// If not, should it exist?
+					i=0; gse = false;
+					while(i < N_GATES && gss == NULLOBJECT){
+						if (distBetweenTwoPoints(px[i][k], py[i][k], ggs.x + dx , ggs.y + dy) < range2 && GateE[i][k]) {gse = true;}
+						i = i + 1;
+					}
+					// Add gate stake -> Close gate
+					if (not gse && antep && gss == NULLOBJECT) {
+						gss = addStructure(cs, me, ggs.x + dx , ggs.y + dy);
+						// Save position on map
+						i = 0;
+						while (GateE[i][k] && i < N_GATES) {i = i + 1;}
+						GateE[i][k] = true; px[i][k] = ggs.x + dx; py[i][k] = ggs.y + dy;
+						
+					}
+					// Remove gate stake -> Open Gate
+					if (not antep && gss != NULLOBJECT) {
+						i=0; 
+						while (i < N_GATES) {
+							if (distBetweenTwoPoints(px[i][k], py[i][k], gss.x, gss.y) < range2)  {GateE[i][k] = false;} 
+							i = i + 1;
+						}
+						destroyStructure(gss);
+						gse = false;
+					}
+					// If gate stake is destroyed, remove associate gate ground
+					if (gse) {
+						i=0; 
+						while (i < N_GATES) {
+							if (distBetweenTwoPoints(px[i][k], py[i][k], ggs.x + dx, ggs.y + dy) < range2)  {GateE[i][k] = false;} 
+							i = i + 1;
+						}
+						destroyStructure(ggs);
+					}
+				}
+				ggs=enumStruct();
+				j = j + 1;
+				
+				// Set structure limit to zero if max. number of buildings reached
+				if (j >= N_GATES) {setStructureLimits(cm, 0, me);}
+			}
+			
+			// Loop over all gate stakes
+			initEnumStruct(FALSE, cs, me, me);
+			gss = enumStruct();
+			while(gss != NULLOBJECT) {
+				// Remove associate gate stake, if gate ground is destroyed
+				if (structureBuiltInRange(cg, gss.x - dx, gss.y - dy, range2, me) == NULLOBJECT) {destroyStructure(gss);}
+				gss = enumStruct();
+			}
+			
+			// Switch buildings
+			initEnumStruct(FALSE, cm, me, me);
+			gmm = enumStruct();
+			while(gmm != NULLOBJECT) {
+				if (structureComplete(gmm)) {
+					tx = gmm.x; ty = gmm.y;
+					destroyStructure(gmm);
+					ggs = addStructure(cg, me, tx - dx/2, ty - dy/2);
+					// Reset entry
+					i=0; 
+					while (i < N_GATES) {
+						if (distBetweenTwoPoints(px[i][k], py[i][k], ggs.x + dx, ggs.y + dy) < range2)  {GateE[i][k] = false;} 
+						i = i + 1;
+					}
+				}
+				gmm = enumStruct();
+			}
+			k=k+1;
+		}
+	}	
+}
