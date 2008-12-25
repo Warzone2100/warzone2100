@@ -1,14 +1,29 @@
 0000-00-00: SVN
  * General:
-   * New: Add mouse menu option.
-   * New: Add ability to toggle between hardware (SDL) and software (colored) cursors, in new mouse menu option.
-   * New: Use --join <host> to join into a game lobby directly from the commandline.
-   * New: Add a --host option (to compliment the --join option), so you can create games via an external program. It takes you directly to the host screen.
-   * Fix: Should fix flickering background on loading screen.
-   * Fix: --nosound works correctly with videos now.
    * Fix: Clean up input stream after saving a save game, to prevent it from going into chat mode.
  * Video:
    * New: Add support for playing of videos (OggTheora)
+ * Graphics:
+   * Change: The skybox texture is now more easily moddable.
+   * Fix: The map is now properly capped on the edges.
+   * Fix: The "deity" cheat now correctly shows the area that was cheated visible.
+   * Fix: The background in the loading screen no longer flickers.
+ * GUI:
+   * New: Add mouse menu option.
+   * New: Add ability to toggle between hardware (SDL) and software (colored) cursors, in new mouse menu option.
+   * New: The radar minimap now shows the entire map and rotates to ease navigation.
+ * Commandline options:
+   * New: Use --join <host> to join into a game lobby directly from the commandline.
+   * New: Add a --host option (to compliment the --join option), so you can create games via an external program. It takes you directly to the host screen.
+   * Fix: Difficulty now works when you start the campaign with the --game parameter.
+   * Fix: --nosound works correctly with videos now.
+ * Gameplay:
+   * New: Make repair facilities that are close to each other share the workload if one is overloaded and others are out of work.
+   * Change: Allow VTOLs to uncover fog of war and land-move to unseen areas in distance fog mode.
+   * Change: Remove limitation that VTOLs cannot pass over tall cliffs, and allow that VTOLs to fly over anything to rearm.
+   * Fix: Restrict direct fire to weapons range only instead of minimum of sensor range and weapon range.
+ * Multiplayer:
+   * Fix: Droids no longer explode randomly during the game.
  * AI:
    * Fix: Allow a droid to pick a new target while auto-repairing. (ticket:35, bug #12217)
    * Fix: Improve targetting AI so that it does not select bad targets, and make it use full weapon range instead of limited to sensor range. (ticket:97)
