@@ -1,6 +1,4 @@
 0000-00-00: SVN
- * License:
-   * New: All artwork from the original game now confirmed as released under the GPL v2 or later.
  * General:
    * New: Multi-threaded path-finding should make path-finding much faster (r5735, patch #1064)
    * New: Original sound tracks added (r5261)
