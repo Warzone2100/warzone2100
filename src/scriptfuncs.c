@@ -11539,38 +11539,45 @@ BOOL scrAssembleWeaponTemplate(void)
 static DROID_TEMPLATE* scrCheckTemplateExists(SDWORD player, DROID_TEMPLATE *psTempl)
 {
 	DROID_TEMPLATE* psCurrent;
+	BOOL equal;
 
 	for (psCurrent = apsDroidTemplates[player]; psCurrent != NULL; psCurrent = psCurrent->psNext)
 	{
 		unsigned int componentType;
 		unsigned int weaponSlot;
+		
+		equal = true;
 
 		// compare components
 		for (componentType = 0; componentType < ARRAY_SIZE(psTempl->asParts); ++componentType)
 		{
 			if (psTempl->asParts[componentType] != psCurrent->asParts[componentType])
 			{
-				continue;
+				equal = false;
+				break;
 			}
 		}
 
 		// compare weapon count
 		if (psTempl->numWeaps != psCurrent->numWeaps)
 		{
-			continue;
+			equal = false;
 		}
 
 		// compare all weapons separately
-		for(weaponSlot = 0; weaponSlot < psTempl->numWeaps; ++weaponSlot)
+		for(weaponSlot = 0; equal && weaponSlot < psTempl->numWeaps; ++weaponSlot)
 		{
 			if (psTempl->asWeaps[weaponSlot] != psCurrent->asWeaps[weaponSlot])
 			{
-				continue;
+				equal = false;
+				break;
 			}
 		}
-
-		// they are equal, so return the current template
-		return psCurrent;
+		if (equal)
+		{
+			// they are equal, so return the current template
+			return psCurrent;
+		}
 	}
 
 	return NULL;
