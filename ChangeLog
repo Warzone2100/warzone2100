@@ -1,8 +1,12 @@
 0000-00-00: SVN
+ * License:
+   * New: All artwork from the original game now confirmed as released under the GPL v2 or later.
  * General:
+   * New: Multi-threaded path-finding should make path-finding much faster (r5735, patch #1064)
+   * New: Original sound tracks added (r5261)
+   * New: Playing of Ogg Theora full motion videos are now supported (r6119, ticket:64, ticket:46)
+   * New: Fonts are now configurable (r5841, patch #1095)
    * Fix: Clean up input stream after saving a save game, to prevent it from going into chat mode.
- * Video:
-   * New: Add support for playing of videos (OggTheora)
  * Graphics:
    * Change: The skybox texture is now more easily moddable.
    * Fix: The map is now properly capped on the edges.
@@ -11,7 +15,7 @@
  * GUI:
    * New: Add mouse menu option.
    * New: Add ability to toggle between hardware (SDL) and software (colored) cursors, in new mouse menu option.
-   * New: The radar minimap now shows the entire map and rotates to ease navigation.
+   * New: The radar minimap now shows the entire map, can be scaled and rotate to ease navigation (r5266, patch #969, r6410)
  * Commandline options:
    * New: Use --join <host> to join into a game lobby directly from the commandline.
    * New: Add a --host option (to compliment the --join option), so you can create games via an external program. It takes you directly to the host screen.
@@ -22,14 +26,19 @@
    * Change: Allow VTOLs to uncover fog of war and land-move to unseen areas in distance fog mode.
    * Change: Remove limitation that VTOLs cannot pass over tall cliffs, and allow that VTOLs to fly over anything to rearm.
    * Fix: Restrict direct fire to weapons range only instead of minimum of sensor range and weapon range.
- * Multiplayer:
-   * Fix: Droids no longer explode randomly during the game.
  * AI:
    * Fix: Allow a droid to pick a new target while auto-repairing. (ticket:35, bug #12217)
    * Fix: Improve targetting AI so that it does not select bad targets, and make it use full weapon range instead of limited to sensor range. (ticket:97)
+   * Fix: Fix AI bug that made it build on burning oil derricks (r5883, patch #1096)
  * Buildsystem:
    * Fix: Only compile the translations when $(TRANSLATION) is "yes". (ticket:130)
    * Change: Former "raw" Makefiles are now used for Windows only and thus named makefile.win32
+ * Tools:
+   * New: OBJ to PIE format converter (r5774)
+ * Map:
+   * New: 8c-cockate and 4c-cockpit by zydonk (r5567, r5566, r5286)
+ * Engine:
+   * New: Support for naval propulsion type (r5803)
 
 2008-12-21: Version 2.1
  * GUI:
