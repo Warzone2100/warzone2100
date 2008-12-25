@@ -1,17 +1,20 @@
 0000-00-00: SVN
- * Video:
-   * New: Add support for playing of videos (OggTheora)
  * General:
    * New: Add mouse menu option.
    * New: Add ability to toggle between hardware (SDL) and software (colored) cursors, in new mouse menu option.
+   * New: Use --join <host> to join into a game lobby directly from the commandline.
+   * New: Add a --host option (to compliment the --join option), so you can create games via an external program. It takes you directly to the host screen.
    * Fix: Should fix flickering background on loading screen.
    * Fix: --nosound works correctly with videos now.
    * Fix: Clean up input stream after saving a save game, to prevent it from going into chat mode.
+ * Video:
+   * New: Add support for playing of videos (OggTheora)
  * AI:
    * Fix: Allow a droid to pick a new target while auto-repairing. (ticket:35, bug #12217)
    * Fix: Improve targetting AI so that it does not select bad targets, and make it use full weapon range instead of limited to sensor range. (ticket:97)
  * Buildsystem:
    * Fix: Only compile the translations when $(TRANSLATION) is "yes". (ticket:130)
+   * Change: Former "raw" Makefiles are now used for Windows only and thus named makefile.win32
 
 2008-12-21: Version 2.1
  * GUI:
