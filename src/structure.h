@@ -393,8 +393,6 @@ extern UDWORD getMaxDroids(UDWORD PlayerNumber);
 // check whether a factory of a certain number and type exists
 extern BOOL checkFactoryExists(UDWORD player, UDWORD factoryType, UDWORD inc);
 
-extern BOOL	ptInStructure(STRUCTURE *psStruct, UDWORD x, UDWORD y);
-
 /*checks the structure passed in is a Las Sat structure which is currently
 selected - returns true if valid*/
 extern BOOL lasSatStructSelected(STRUCTURE *psStruct);

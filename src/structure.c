@@ -192,31 +192,6 @@ static UDWORD	lastMaxUnitMessage;
 
 #define MAX_UNIT_MESSAGE_PAUSE 20000
 
-
-/* New function from Alex M */
-/* Tells you if a point is inside the footprint of a building */
-BOOL	ptInStructure(STRUCTURE *psStruct, UDWORD x, UDWORD y)
-{
-	UDWORD tlX, tlY, brX, brY;
-	UDWORD width, height;
-
-	CHECK_STRUCTURE(psStruct);
-
-	width = (psStruct->pStructureType->baseWidth * TILE_UNITS);
-	height = (psStruct->pStructureType->baseBreadth * TILE_UNITS);
-
-
-	tlX = psStruct->pos.x - (width/2);
-	tlY = psStruct->pos.y - (height/2);
-
-	brX = psStruct->pos.x + (width/2);
-	brY = psStruct->pos.y + (height/2);
-
-	if (x > tlX && x < brX && y > tlY && y < brY)
-		return(true);
-	return(false);
-}
-
 /*
 Check to see if the stats is some kind of expansion module
 

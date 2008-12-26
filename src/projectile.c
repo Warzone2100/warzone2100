@@ -63,7 +63,6 @@
 #define	PROJ_MAX_PITCH			30
 #define	ACC_GRAVITY				1000
 #define	DIRECT_PROJ_SPEED		500
-#define NOMINAL_DAMAGE	5
 #define VTOL_HITBOX_MODIFICATOR 100
 
 /** Used for passing data to the checkBurnDamage function */
@@ -1438,26 +1437,6 @@ static void proj_ImpactFunc( PROJECTILE *psObj )
 								proj_UpdateKills(psObj, relativeDamage);
 							}
 						}
-					}
-					// Missed by old method, but maybe in landed within the building's footprint(baseplate)
-					else if(ptInStructure(psCurrS,psObj->pos.x, psObj->pos.y) && (BASE_OBJECT*)psCurrS != psObj->psDest)
-					{
-						damage = NOMINAL_DAMAGE;
-
-						if(bMultiPlayer)
-						{
-							if(psObj->psSource && myResponsibility(psObj->psSource->player))
-							{
-								updateMultiStatsDamage(psObj->psSource->player,	psCurrS->player,damage);
-							}
-						}
-
-						relativeDamage = structureDamage(psCurrS,
-						                                damage,
-						                                psStats->weaponClass,
-						                                psStats->weaponSubClass, impactSide);
-
-						proj_UpdateKills(psObj, relativeDamage);
 					}
 				}
 			}
