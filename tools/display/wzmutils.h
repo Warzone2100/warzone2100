@@ -41,7 +41,6 @@ typedef int bool;
 #define false 0
 #endif
 
-#define MAX_MESHES 4
 #define MAX_TEXARRAYS 16
 #define MAX(a, b) (((a) > (b)) ? (a) : (b))
 

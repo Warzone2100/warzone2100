@@ -400,7 +400,7 @@ static void dump_to_wzm(FILE *ctl, FILE *fp)
 					fprintf(stderr, "Bad CONNECTORS directive entry level %d, number %d\n", level, j);
 					exit(1);
 				}
-				fprintf(ctl, "\n\t%d %d %d", a, b, c);
+				fprintf(ctl, "\n\t%d %d %d 0", a, b, c);
 			}
 		}
 		else

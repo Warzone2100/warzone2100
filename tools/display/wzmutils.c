@@ -300,7 +300,7 @@ int saveModel(const char *filename, MODEL *psModel)
 		{
 			GLfloat *v = &psMesh->vertexArray[j * 3];
 
-			fprintf(fp, "\t%f %f %f\n", v[0], v[1], v[2]);
+			fprintf(fp, "\t%g %g %g\n", v[0], v[1], v[2]);
 		}
 
 		fprintf(fp, "TEXTUREARRAYS %d", psMesh->textureArrays);
@@ -313,7 +313,7 @@ int saveModel(const char *filename, MODEL *psModel)
 			{
 				GLfloat *v = &psMesh->textureArray[j][k * 2];
 
-				fprintf(fp, "\n\t%f %f", v[0], v[1]);
+				fprintf(fp, "\n\t%g %g", v[0], v[1]);
 			}
 		}
 
@@ -331,7 +331,7 @@ int saveModel(const char *filename, MODEL *psModel)
 		{
 			FRAME *psFrame = &psMesh->frameArray[j];
 
-			fprintf(fp, "\n\t%f %d %f %f %f %f %f %f", psFrame->timeSlice, psFrame->textureArray, 
+			fprintf(fp, "\n\t%g %d %g %g %g %g %g %g", psFrame->timeSlice, psFrame->textureArray, 
 			             psFrame->translation.x, psFrame->translation.y, psFrame->translation.z,
 			             psFrame->rotation.x, psFrame->rotation.y, psFrame->rotation.z);
 		}
@@ -341,7 +341,7 @@ int saveModel(const char *filename, MODEL *psModel)
 		{
 			CONNECTOR *conn = &psMesh->connectorArray[j];
 
-			fprintf(fp, "\n\t%f %f %f 0", conn->pos.x, conn->pos.y, conn->pos.z);
+			fprintf(fp, "\n\t%g %g %g 0", conn->pos.x, conn->pos.y, conn->pos.z);
 		}
 	}
 	return 0;
@@ -404,7 +404,7 @@ MODEL *readModel(const char *filename, int now)
 		psMesh->teamColours = x;
 
 		num = fscanf(fp, "VERTICES %d\n", &x);
-		if (num != 1)
+		if (num != 1 || x < 0)
 		{
 			fprintf(stderr, "Bad VERTICES directive in %s, mesh %d.\n", filename, mesh);
 			exit(1);

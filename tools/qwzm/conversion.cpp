@@ -156,7 +156,7 @@ void QWzmViewer::loadPIE(QString inputFile)
 			}
 
 			num = fscanf(fp, "%d", &faceList[j].vertices);
-			if (num != 1)
+			if (num != 1 || faceList[j].vertices < 0)
 			{
 				fprintf(stderr, "Bad POLYGONS vertices entry level %d, number %d\n", level, j);
 				exit(1);
@@ -233,7 +233,7 @@ void QWzmViewer::loadPIE(QString inputFile)
 		psMesh->vertices = pointsWZM;
 		psMesh->faces = facesWZM;
 		psMesh->vertexArray = (GLfloat*)malloc(sizeof(GLfloat) * psMesh->vertices * 3);
-		psMesh->indexArray = (GLuint*)malloc(sizeof(GLuint) * psMesh->faces * 3);
+		psMesh->indexArray = (GLuint*)malloc(sizeof(GLuint) * psMesh->vertices * 3);
 		psMesh->textureArrays = textureArrays;
 		for (j = 0; j < textureArrays; j++)
 		{
@@ -285,22 +285,27 @@ void QWzmViewer::loadPIE(QString inputFile)
 
 		faceCount = 0;
 
-		for (j = 0; j < faces; j++)
+		for (z = 0, j = 0; j < faces; j++)
 		{
 			int k, key, previous;
-			GLuint *v = &psMesh->indexArray[j * 3];
 
 			key = faceList[j].index[0];
 			previous = faceList[j].index[2];
 			faceCount++;
 			if (reverseWinding || faceList[j].cull)
 			{
+				GLuint *v = &psMesh->indexArray[z];
+
+				z += 3;
 				v[0] = key;
 				v[1] = previous;
 				v[2] = faceList[j].index[1];
 			}
 			if (!reverseWinding || faceList[j].cull)
 			{
+				GLuint *v = &psMesh->indexArray[z];
+
+				z += 3;
 				v[0] = key;
 				v[2] = previous;
 				v[1] = faceList[j].index[1];
@@ -309,14 +314,21 @@ void QWzmViewer::loadPIE(QString inputFile)
 			// Generate triangles from the Warzone triangle fans (PIEs, get it?)
 			for (k = 3; k < faceList[j].vertices; k++)
 			{
-				v[0] = key;
 				if (reverseWinding || faceList[j].cull)
 				{
+					GLuint *v = &psMesh->indexArray[z];
+
+					z += 3;
+					v[0] = key;
 					v[2] = previous;
 					v[1] = faceList[j].index[k];
 				}
 				if (!reverseWinding || faceList[j].cull)
 				{
+					GLuint *v = &psMesh->indexArray[z];
+
+					z += 3;
+					v[0] = key;
 					v[1] = previous;
 					v[2] = faceList[j].index[k];
 				}
@@ -348,14 +360,14 @@ void QWzmViewer::loadPIE(QString inputFile)
 			}
 		}
 
-		psMesh->connectors = 0;
-		num = fscanf(fp, "\nCONNECTORS %d", &x);
+		num = fscanf(fp, "\nCONNECTORS %d", &psMesh->connectors);
 		if (num == 1 && x > 0)
 		{
-			// TODO
-			// psMesh->connectors = x;
+			psMesh->connectorArray = (CONNECTOR *)malloc(sizeof(CONNECTOR) * psMesh->connectors);
+
 			for (j = 0; j < x; ++j)
 			{
+				CONNECTOR *conn = &psMesh->connectorArray[j];
 				int a, b, c;
 
 				num = fscanf(fp, "\n%d %d %d", &a, &b, &c);
@@ -364,6 +376,10 @@ void QWzmViewer::loadPIE(QString inputFile)
 					fprintf(stderr, "Bad CONNECTORS directive entry level %d, number %d\n", level, j);
 					exit(1);
 				}
+				conn->pos.x = a;
+				conn->pos.y = b;
+				conn->pos.z = c;
+				conn->type = 0;	// generic type of connector, only type supported in PIE
 			}
 		}
 

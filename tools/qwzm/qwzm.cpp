@@ -358,6 +358,10 @@ void QWzmViewer::animUnlock()
 
 void QWzmViewer::setMesh(int index)
 {
+	if (index < 0)
+	{
+		return;
+	}
 	MESH *psMesh = &psModel->mesh[index];
 
 	// Refresh frame view
