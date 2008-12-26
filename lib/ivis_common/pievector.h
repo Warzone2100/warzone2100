@@ -276,7 +276,7 @@ static inline WZ_DECL_CONST Vector2f Vector2f_Rotate2f(Vector2f v, float degrees
 	float radians = (degrees / 360) * 2 * 3.14;
 	result.x = v.x*cos(radians) - v.y*sin(radians);
 	result.y = v.x*sin(radians) + v.y*cos(radians);
-	
+
 	return result;
 }
 
@@ -537,6 +537,18 @@ static inline WZ_DECL_CONST Vector3f Vector3i_To3f(const Vector3i v)
 
 
 /*!
+ * Convert an integer vector to short
+ * \param v Vector to convert
+ * \return Short vector
+ */
+static inline WZ_DECL_CONST Vector3uw Vector3i_To3uw(const Vector3i v)
+{
+	Vector3uw dest = { (uint16_t)v.x, (uint16_t)v.y, (uint16_t)v.z };
+	return dest;
+}
+
+
+/*!
  * Convert a vector of degree angles into radians.
  * \param v Vector to convert
  * \return Radian vector
@@ -674,6 +686,25 @@ static inline WZ_DECL_CONST Vector3i Vector3i_Normalise(const Vector3i v)
 		Vector3i dest = { v.x / length, v.y / length, v.z / length };
 		return dest;
 	}
+}
+
+
+/*!
+ * Much the same as Vector2i_InCircle except that it works in 3-axis by discarding the z-component and with
+ * circles.
+ * \param v Vector to test
+ * \param c Vector containing the centre of the circle
+ * \param r The radius of the circle
+ * \return If v falls within the circle
+ */
+static inline WZ_DECL_CONST bool Vector3i_InCircle(const Vector3i v, const Vector3i c, const unsigned int r)
+{
+	Vector3i delta = Vector3i_Sub(v, c);
+	// Explictily cast to "unsigned int" because this number never can be
+	// negative, due to the fact that these numbers are squared. Still GCC
+	// warns about a comparison of a comparison between an unsigned and a
+	// signed integer.
+	return (unsigned int)((delta.x * delta.x) + (delta.y * delta.y)) < (r * r);
 }
 
 
