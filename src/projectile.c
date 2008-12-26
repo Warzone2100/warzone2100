@@ -1114,16 +1114,8 @@ static void proj_ImpactFunc( PROJECTILE *psObj )
 {
 	WEAPON_STATS	*psStats;
 	SDWORD			i, iAudioImpactID;
-	DROID			*psCurrD, *psNextD;
-	STRUCTURE		*psCurrS, *psNextS;
-	FEATURE			*psCurrF, *psNextF;
-	UDWORD			dice;
-	SDWORD			radSquared, xDiff, yDiff, zDiff;
 	float			relativeDamage;
 	Vector3i position,scatter;
-	UDWORD			damage;	//optimisation - were all being calculated twice on PC
-	// EvilGuru: Data about the effect to be shown
-	EFFECT_TYPE     facing;
 	iIMDShape       *imd;
 	HIT_SIDE	impactSide = HIT_SIDE_FRONT;
 
@@ -1132,9 +1124,6 @@ static void proj_ImpactFunc( PROJECTILE *psObj )
 	psStats = psObj->psWStats;
 	ASSERT( psStats != NULL,
 		"proj_ImpactFunc: Invalid weapon stats pointer" );
-
-	// Get if we are facing or not
-	facing = (psStats->facePlayer) ? EXPLOSION_TYPE_SPECIFIED : EXPLOSION_TYPE_NOT_FACING;
 
 	// note the attacker if any
 	g_pProjLastAttacker = psObj->psSource;
@@ -1202,6 +1191,9 @@ static void proj_ImpactFunc( PROJECTILE *psObj )
 	{
 		if (gfxVisible(psObj))
 		{
+			// Get if we are facing or not
+			EFFECT_TYPE facing = (psStats->facePlayer ? EXPLOSION_TYPE_SPECIFIED : EXPLOSION_TYPE_NOT_FACING);
+
 			// The graphic to show depends on if we hit water or not
 			if (terrainType(mapTile(map_coord(psObj->pos.x), map_coord(psObj->pos.y))) == TER_WATER)
 			{
@@ -1239,6 +1231,9 @@ static void proj_ImpactFunc( PROJECTILE *psObj )
 
 		if (gfxVisible(psObj))
 		{
+			// Get if we are facing or not
+			EFFECT_TYPE facing = (psStats->facePlayer ? EXPLOSION_TYPE_SPECIFIED : EXPLOSION_TYPE_NOT_FACING);
+
 			// If we hit a VTOL with an AA gun use the miss graphic and add some smoke
 			if (psObj->airTarget
 			 && (psStats->surfaceToAir & SHOOT_IN_AIR)
@@ -1289,7 +1284,7 @@ static void proj_ImpactFunc( PROJECTILE *psObj )
 		else
 		{
 			// Calculate the damage the weapon does to its target
-			damage = calcDamage(weaponDamage(psStats, psObj->player), psStats->weaponEffect, psObj->psDest);
+			unsigned int damage = calcDamage(weaponDamage(psStats, psObj->player), psStats->weaponEffect, psObj->psDest);
 
 			// If we are in a multi-player game and the attacker is our responsibility
 			if (bMultiPlayer && psObj->psSource && myResponsibility(psObj->psSource->player))
@@ -1328,17 +1323,18 @@ static void proj_ImpactFunc( PROJECTILE *psObj )
 
 	if (psStats->radius != 0)
 	{
+		FEATURE *psCurrF, *psNextF;
+
 		/* An area effect bullet */
 		psObj->state = PROJ_POSTIMPACT;
 
 		/* Note when it exploded for the explosion effect */
 		psObj->born = gameTime;
 
-		/* Store the radius cubed */
-		radSquared = psStats->radius * psStats->radius;
-
 		for (i = 0; i < MAX_PLAYERS; i++)
 		{
+			DROID *psCurrD, *psNextD;
+
 			for (psCurrD = apsDroidLists[i]; psCurrD; psCurrD = psNextD)
 			{
 				/* have to store the next pointer as psCurrD could be destroyed */
@@ -1347,22 +1343,20 @@ static void proj_ImpactFunc( PROJECTILE *psObj )
 				/* see if psCurrD is hit (don't hit main target twice) */
 				if ((BASE_OBJECT *)psCurrD != psObj->psDest)
 				{
-					// Check if it is in the hit radius (FIXME: Use Pie Vector)
-					xDiff = psCurrD->pos.x - psObj->pos.x;
-					yDiff = psCurrD->pos.y - psObj->pos.y;
-					zDiff = psCurrD->pos.z - psObj->pos.z;
-					
-					if (xDiff*xDiff + yDiff*yDiff + zDiff*zDiff <= radSquared)
+					// Check whether it is in hit radius
+					if (Vector3i_InSphere(Vector3uw_To3i(psCurrD->pos), Vector3uw_To3i(psObj->pos), psStats->radius))
 					{
+						int dice;
 						HIT_ROLL(dice);
 						if (dice < weaponRadiusHit(psStats, psObj->player))
 						{
+							unsigned int damage = calcDamage(
+										weaponRadDamage(psStats, psObj->player),
+										psStats->weaponEffect, (BASE_OBJECT *)psCurrD);
+
 							debug(LOG_NEVER, "Damage to object %d, player %d\n",
 									psCurrD->id, psCurrD->player);
 
-							damage = calcDamage(
-										weaponRadDamage(psStats, psObj->player),
-										psStats->weaponEffect, (BASE_OBJECT *)psCurrD);
 							if (bMultiPlayer)
 							{
 								if (psObj->psSource && myResponsibility(psObj->psSource->player))
@@ -1387,6 +1381,8 @@ static void proj_ImpactFunc( PROJECTILE *psObj )
 			}
 			if (!psObj->airTarget)
 			{
+				STRUCTURE *psCurrS, *psNextS;
+
 				for (psCurrS = apsStructLists[i]; psCurrS; psCurrS = psNextS)
 				{
 					/* have to store the next pointer as psCurrD could be destroyed */
@@ -1395,16 +1391,14 @@ static void proj_ImpactFunc( PROJECTILE *psObj )
 					/* see if psCurrS is hit (don't hit main target twice) */
 					if ((BASE_OBJECT *)psCurrS != psObj->psDest)
 					{
-						/* Within the bounding box, now check the radius */
-						xDiff = psCurrS->pos.x - psObj->pos.x;
-						yDiff = psCurrS->pos.y - psObj->pos.y;
-						
-						if (xDiff*xDiff + yDiff*yDiff <= radSquared)
+						// Check whether it is in hit radius
+						if (Vector3i_InCircle(Vector3uw_To3i(psCurrS->pos), Vector3uw_To3i(psObj->pos), psStats->radius))
 						{
+							int dice;
 							HIT_ROLL(dice);
 							if (dice < weaponRadiusHit(psStats, psObj->player))
 							{
-								damage = calcDamage(weaponRadDamage(psStats, psObj->player),
+								unsigned int damage = calcDamage(weaponRadDamage(psStats, psObj->player),
 								                    psStats->weaponEffect,
 								                    (BASE_OBJECT *)psCurrS);
 
@@ -1446,12 +1440,10 @@ static void proj_ImpactFunc( PROJECTILE *psObj )
 			/* see if psCurrS is hit (don't hit main target twice) */
 			if ((BASE_OBJECT *)psCurrF != psObj->psDest)
 			{
-				// Check the radius
-				xDiff = psCurrF->pos.x - psObj->pos.x;
-				yDiff = psCurrF->pos.y - psObj->pos.y;
-				
-				if ((xDiff*xDiff + yDiff*yDiff) <= radSquared)
+				// Check whether it is in hit radius
+				if (Vector3i_InCircle(Vector3uw_To3i(psCurrF->pos), Vector3uw_To3i(psObj->pos), psStats->radius))
 				{
+					int dice;
 					HIT_ROLL(dice);
 					if (dice < weaponRadiusHit(psStats, psObj->player))
 					{
@@ -1632,7 +1624,7 @@ static void proj_checkBurnDamage( BASE_OBJECT *apsList, PROJECTILE *psProj)
 
 	psStats = psProj->psWStats;
 	radSquared = psStats->incenRadius * psStats->incenRadius;
-	
+
 	for (psCurr = apsList; psCurr; psCurr = psNext)
 	{
 		/* have to store the next pointer as psCurr could be destroyed */
@@ -2059,7 +2051,7 @@ static void projGetNaybors(PROJECTILE *psObj)
 			{
 				// Add psTempObj as a naybor
 				addProjNaybor(psTempObj, distSqr);
-				
+
 				// If the naybors array is full, break early
 				if (numProjNaybors >= MAX_NAYBORS)
 				{
