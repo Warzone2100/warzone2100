@@ -322,7 +322,7 @@ static void proj_UpdateKills(PROJECTILE *psObj, float experienceInc)
 
 BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, Vector3i target, BASE_OBJECT *psTarget, BOOL bVisible, int weapon_slot)
 {
-	PROJECTILE		*psObj = malloc(sizeof(PROJECTILE));
+	PROJECTILE		*psProj = malloc(sizeof(PROJECTILE));
 	SDWORD			tarHeight, srcHeight, iMinSq;
 	SDWORD			altChange, dx, dy, dz, iVelSq, iVel;
 	double          fR, fA, fS, fT, fC;
@@ -359,47 +359,47 @@ BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, Ve
 	}
 
 	/* Initialise the structure */
-	psObj->id			= ProjectileTrackerID |(gameTime2 >>4);		// make unique id
-	psObj->type		    = OBJ_PROJECTILE;
-	psObj->state		= PROJ_INFLIGHT;
-	psObj->psWStats		= psStats;
-	psObj->pos = Vector3uw_New(muzzle.x, muzzle.y, muzzle.z);
-	psObj->startX		= muzzle.x;
-	psObj->startY		= muzzle.y;
-	psObj->tarX			= target.x;
-	psObj->tarY			= target.y;
-	psObj->targetRadius = (psTarget ? establishTargetRadius(psTarget) : 0); // needed to backtrack FX
-	psObj->born			= gameTime;
-	psObj->player		= (UBYTE)player;
-	psObj->bVisible		= false;
-	psObj->airTarget	= false;
-	psObj->psDamaged	= NULL; // must initialize these to NULL first!
-	psObj->psSource		= NULL;
-	psObj->psDest		= NULL;
-	psObj->died		= 0;
-	setProjectileDestination(psObj, psTarget);
+	psProj->id			= ProjectileTrackerID |(gameTime2 >>4);		// make unique id
+	psProj->type		    = OBJ_PROJECTILE;
+	psProj->state		= PROJ_INFLIGHT;
+	psProj->psWStats		= psStats;
+	psProj->pos = Vector3uw_New(muzzle.x, muzzle.y, muzzle.z);
+	psProj->startX		= muzzle.x;
+	psProj->startY		= muzzle.y;
+	psProj->tarX			= target.x;
+	psProj->tarY			= target.y;
+	psProj->targetRadius = (psTarget ? establishTargetRadius(psTarget) : 0); // needed to backtrack FX
+	psProj->born			= gameTime;
+	psProj->player		= (UBYTE)player;
+	psProj->bVisible		= false;
+	psProj->airTarget	= false;
+	psProj->psDamaged	= NULL; // must initialize these to NULL first!
+	psProj->psSource		= NULL;
+	psProj->psDest		= NULL;
+	psProj->died		= 0;
+	setProjectileDestination(psProj, psTarget);
 
 	/* If target is a VTOL or higher than ground, it is an air target. */
 	if ((psTarget != NULL && psTarget->type == OBJ_DROID && isVtolDroid((DROID*)psTarget))
 		|| (psTarget == NULL && target.z > map_Height(target.x, target.y)))
 	{
-		psObj->airTarget = true;
+		psProj->airTarget = true;
 	}
 
-	//Watermelon:use the source of the source of psObj :) (psAttacker is a projectile)
+	//Watermelon:use the source of the source of psProj :) (psAttacker is a projectile)
 	if (psAttacker && psAttacker->type == OBJ_PROJECTILE)
 	{
 		// psAttacker is a projectile if bPenetrate
-		PROJECTILE *psProj = (PROJECTILE*)psAttacker;
+		PROJECTILE *psPrevProj = (PROJECTILE*)psAttacker;
 
-		if (psProj->psSource && !psProj->psSource->died)
+		if (psPrevProj->psSource && !psPrevProj->psSource->died)
 		{
-			setProjectileSource(psObj, psProj->psSource);
+			setProjectileSource(psProj, psPrevProj->psSource);
 		}
 	}
 	else
 	{
-		setProjectileSource(psObj, psAttacker);
+		setProjectileSource(psProj, psAttacker);
 	}
 
 	if (psTarget)
@@ -447,22 +447,22 @@ BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, Ve
 	srcHeight			= muzzle.z;
 	altChange			= tarHeight - srcHeight;
 
-	psObj->srcHeight	= srcHeight;
-	psObj->altChange	= altChange;
+	psProj->srcHeight	= srcHeight;
+	psProj->altChange	= altChange;
 
-	dx = ((SDWORD)psObj->tarX) - muzzle.x;
-	dy = ((SDWORD)psObj->tarY) - muzzle.y;
+	dx = ((SDWORD)psProj->tarX) - muzzle.x;
+	dy = ((SDWORD)psProj->tarY) - muzzle.y;
 	dz = tarHeight - muzzle.z;
 
 	/* roll never set */
-	psObj->roll = 0;
+	psProj->roll = 0;
 
 	fR = atan2(dx, dy);
 	if ( fR < 0.0 )
 	{
 		fR += 2.0 * M_PI;
 	}
-	psObj->direction = RAD_TO_DEG(fR);
+	psProj->direction = RAD_TO_DEG(fR);
 
 
 	/* get target distance */
@@ -478,8 +478,8 @@ BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, Ve
 		{
 			fR += 2.0 * M_PI;
 		}
-		psObj->pitch = (SWORD)( RAD_TO_DEG(fR) );
-		psObj->pInFlightFunc = proj_InFlightDirectFunc;
+		psProj->pitch = (SWORD)( RAD_TO_DEG(fR) );
+		psProj->pInFlightFunc = proj_InFlightDirectFunc;
 	}
 	else
 	{
@@ -494,7 +494,7 @@ BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, Ve
 		if ( fS < 0.0 )
 		{
 			/* set optimal pitch */
-			psObj->pitch = PROJ_MAX_PITCH;
+			psProj->pitch = PROJ_MAX_PITCH;
 
 			fS = trigSin(PROJ_MAX_PITCH);
 			fC = trigCos(PROJ_MAX_PITCH);
@@ -541,11 +541,11 @@ BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, Ve
 			/* chooselow pitch unless -ve */
 			if ( iPitchLow > 0 )
 			{
-				psObj->pitch = (SWORD)iPitchLow;
+				psProj->pitch = (SWORD)iPitchLow;
 			}
 			else
 			{
-				psObj->pitch = (SWORD)iPitchHigh;
+				psProj->pitch = (SWORD)iPitchHigh;
 			}
 		}
 
@@ -555,52 +555,52 @@ BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, Ve
 		{
 			if (psAttacker->type == OBJ_DROID)
 			{
-				((DROID *) psAttacker)->asWeaps[weapon_slot].pitch = psObj->pitch;
+				((DROID *) psAttacker)->asWeaps[weapon_slot].pitch = psProj->pitch;
 			}
 			else if (psAttacker->type == OBJ_STRUCTURE)
 			{
-				((STRUCTURE *) psAttacker)->asWeaps[weapon_slot].pitch = psObj->pitch;
+				((STRUCTURE *) psAttacker)->asWeaps[weapon_slot].pitch = psProj->pitch;
 			}
 		}
 
-		psObj->vXY = iVel * trigCos(psObj->pitch);
-		psObj->vZ  = iVel * trigSin(psObj->pitch);
+		psProj->vXY = iVel * trigCos(psProj->pitch);
+		psProj->vZ  = iVel * trigSin(psProj->pitch);
 
 		/* set function pointer */
-		psObj->pInFlightFunc = proj_InFlightIndirectFunc;
+		psProj->pInFlightFunc = proj_InFlightIndirectFunc;
 	}
 
 	/* put the projectile object first in the global list */
-	psObj->psNext = psProjectileList;
-	psProjectileList = psObj;
+	psProj->psNext = psProjectileList;
+	psProjectileList = psProj;
 
 	/* play firing audio */
 	// only play if either object is visible, i know it's a bit of a hack, but it avoids the problem
 	// of having to calculate real visibility values for each projectile.
-	if ( bVisible || gfxVisible(psObj) )
+	if ( bVisible || gfxVisible(psProj) )
 	{
 		// note that the projectile is visible
-		psObj->bVisible = true;
+		psProj->bVisible = true;
 
 		if ( psStats->iAudioFireID != NO_SOUND )
 		{
 
-			if ( psObj->psSource )
+			if ( psProj->psSource )
 			{
 				/* firing sound emitted from source */
-				audio_PlayObjDynamicTrack( (BASE_OBJECT *) psObj->psSource,
+				audio_PlayObjDynamicTrack( (BASE_OBJECT *) psProj->psSource,
 									psStats->iAudioFireID, NULL );
 				/* GJ HACK: move howitzer sound with shell */
 				if ( psStats->weaponSubClass == WSC_HOWITZERS )
 				{
-					audio_PlayObjDynamicTrack( (BASE_OBJECT *) psObj,
+					audio_PlayObjDynamicTrack( (BASE_OBJECT *) psProj,
 									ID_SOUND_HOWITZ_FLIGHT, NULL );
 				}
 			}
 			//don't play the sound for a LasSat in multiPlayer
 			else if (!(bMultiPlayer && psStats->weaponSubClass == WSC_LAS_SAT))
 			{
-					audio_PlayObjStaticTrack(psObj, psStats->iAudioFireID);
+					audio_PlayObjStaticTrack(psProj, psStats->iAudioFireID);
 			}
 		}
 	}
@@ -611,7 +611,7 @@ BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, Ve
 		counterBatteryFire(psAttacker, psTarget);
 	}
 
-	CHECK_PROJECTILE(psObj);
+	CHECK_PROJECTILE(psProj);
 
 	return true;
 }
