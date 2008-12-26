@@ -774,4 +774,16 @@ static inline WZ_DECL_CONST Vector3i Vector3uw_To3i(const Vector3uw v)
 }
 
 
+/*!
+ * Convert an short vector to int
+ * \param v Vector to convert
+ * \return Short vector
+ */
+static inline WZ_DECL_CONST Vector3f Vector3uw_To3f(const Vector3uw v)
+{
+	Vector3f dest = { (float)v.x, (float)v.y, (float)v.z };
+	return dest;
+}
+
+
 #endif // __INCLUDED_LIB_IVIS_PIEVECTOR_H__
