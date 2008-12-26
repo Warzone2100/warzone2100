@@ -1128,13 +1128,10 @@ static void proj_ImpactFunc( PROJECTILE *psObj )
 	STRUCTURE		*psCurrS, *psNextS;
 	FEATURE			*psCurrF, *psNextF;
 	UDWORD			dice;
-	SDWORD			tarX0,tarY0, tarX1,tarY1;
-	SDWORD			radCubed, xDiff,yDiff;
+	SDWORD			radSquared, xDiff, yDiff, zDiff;
 	float			relativeDamage;
 	Vector3i position,scatter;
 	UDWORD			damage;	//optimisation - were all being calculated twice on PC
-	//Watermelon: tarZ0,tarZ1,zDiff for AA AOE weapons;
-	SDWORD			tarZ0,tarZ1,zDiff;
 	// EvilGuru: Data about the effect to be shown
 	EFFECT_TYPE     facing;
 	iIMDShape       *imd;
@@ -1347,17 +1344,8 @@ static void proj_ImpactFunc( PROJECTILE *psObj )
 		/* Note when it exploded for the explosion effect */
 		psObj->born = gameTime;
 
-		/* Work out the bounding box for the blast radius */
-		tarX0 = (SDWORD)psObj->pos.x - (SDWORD)psStats->radius;
-		tarY0 = (SDWORD)psObj->pos.y - (SDWORD)psStats->radius;
-		tarX1 = (SDWORD)psObj->pos.x + (SDWORD)psStats->radius;
-		tarY1 = (SDWORD)psObj->pos.y + (SDWORD)psStats->radius;
-		/* Watermelon:height bounding box  for airborne units*/
-		tarZ0 = (SDWORD)psObj->pos.z - (SDWORD)psStats->radius;
-		tarZ1 = (SDWORD)psObj->pos.z + (SDWORD)psStats->radius;
-
 		/* Store the radius cubed */
-		radCubed = psStats->radius * psStats->radius * psStats->radius;
+		radSquared = psStats->radius * psStats->radius;
 
 		for (i = 0; i < MAX_PLAYERS; i++)
 		{
@@ -1367,19 +1355,14 @@ static void proj_ImpactFunc( PROJECTILE *psObj )
 				psNextD = psCurrD->psNext;
 
 				/* see if psCurrD is hit (don't hit main target twice) */
-				if (((BASE_OBJECT *)psCurrD != psObj->psDest) &&
-					((SDWORD)psCurrD->pos.x >= tarX0) &&
-					((SDWORD)psCurrD->pos.x <= tarX1) &&
-					((SDWORD)psCurrD->pos.y >= tarY0) &&
-					((SDWORD)psCurrD->pos.y <= tarY1) &&
-					((SDWORD)psCurrD->pos.z >= tarZ0) &&
-					((SDWORD)psCurrD->pos.z <= tarZ1))
+				if ((BASE_OBJECT *)psCurrD != psObj->psDest)
 				{
-					/* Within the bounding box, now check the radius */
+					// Check if it is in the hit radius (FIXME: Use Pie Vector)
 					xDiff = psCurrD->pos.x - psObj->pos.x;
 					yDiff = psCurrD->pos.y - psObj->pos.y;
 					zDiff = psCurrD->pos.z - psObj->pos.z;
-					if ((xDiff*xDiff + yDiff*yDiff + zDiff*zDiff) <= radCubed)
+					
+					if (xDiff*xDiff + yDiff*yDiff + zDiff*zDiff <= radSquared)
 					{
 						HIT_ROLL(dice);
 						if (dice < weaponRadiusHit(psStats, psObj->player))
@@ -1420,16 +1403,13 @@ static void proj_ImpactFunc( PROJECTILE *psObj )
 					psNextS = psCurrS->psNext;
 
 					/* see if psCurrS is hit (don't hit main target twice) */
-					if (((BASE_OBJECT *)psCurrS != psObj->psDest) &&
-						((SDWORD)psCurrS->pos.x >= tarX0) &&
-						((SDWORD)psCurrS->pos.x <= tarX1) &&
-						((SDWORD)psCurrS->pos.y >= tarY0) &&
-						((SDWORD)psCurrS->pos.y <= tarY1))
+					if ((BASE_OBJECT *)psCurrS != psObj->psDest)
 					{
 						/* Within the bounding box, now check the radius */
 						xDiff = psCurrS->pos.x - psObj->pos.x;
 						yDiff = psCurrS->pos.y - psObj->pos.y;
-						if ((xDiff*xDiff + yDiff*yDiff) <= radCubed)
+						
+						if (xDiff*xDiff + yDiff*yDiff <= radSquared)
 						{
 							HIT_ROLL(dice);
 							if (dice < weaponRadiusHit(psStats, psObj->player))
@@ -1494,16 +1474,13 @@ static void proj_ImpactFunc( PROJECTILE *psObj )
 				continue;
 			}
 			/* see if psCurrS is hit (don't hit main target twice) */
-			if (((BASE_OBJECT *)psCurrF != psObj->psDest) &&
-				((SDWORD)psCurrF->pos.x >= tarX0) &&
-				((SDWORD)psCurrF->pos.x <= tarX1) &&
-				((SDWORD)psCurrF->pos.y >= tarY0) &&
-				((SDWORD)psCurrF->pos.y <= tarY1))
+			if ((BASE_OBJECT *)psCurrF != psObj->psDest)
 			{
-				/* Within the bounding box, now check the radius */
+				// Check the radius
 				xDiff = psCurrF->pos.x - psObj->pos.x;
 				yDiff = psCurrF->pos.y - psObj->pos.y;
-				if ((xDiff*xDiff + yDiff*yDiff) <= radCubed)
+				
+				if ((xDiff*xDiff + yDiff*yDiff) <= radSquared)
 				{
 					HIT_ROLL(dice);
 					if (dice < weaponRadiusHit(psStats, psObj->player))
