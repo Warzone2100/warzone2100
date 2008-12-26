@@ -65,14 +65,6 @@
 #define	DIRECT_PROJ_SPEED		500
 #define VTOL_HITBOX_MODIFICATOR 100
 
-/** Used for passing data to the checkBurnDamage function */
-typedef struct
-{
-	SWORD   x1, y1;
-	SWORD   x2, y2;
-	SWORD   rad;
-} FIRE_BOX;
-
 // Watermelon:they are from droid.c
 /* The range for neighbouring objects */
 #define PROJ_NAYBOR_RANGE		(TILE_UNITS*4)
@@ -104,8 +96,7 @@ static void	proj_InFlightDirectFunc( PROJECTILE *psObj );
 static void	proj_InFlightIndirectFunc( PROJECTILE *psObj );
 static void	proj_ImpactFunc( PROJECTILE *psObj );
 static void	proj_PostImpactFunc( PROJECTILE *psObj );
-static void	proj_checkBurnDamage( BASE_OBJECT *apsList, PROJECTILE *psProj,
-									FIRE_BOX *pFireBox );
+static void	proj_checkBurnDamage( BASE_OBJECT *apsList, PROJECTILE *psProj);
 static void	proj_Free(PROJECTILE *psObj);
 
 static float objectDamage(BASE_OBJECT *psObj, UDWORD damage, UDWORD weaponClass,UDWORD weaponSubClass, HIT_SIDE impactSide);
@@ -1502,7 +1493,6 @@ static void proj_PostImpactFunc( PROJECTILE *psObj )
 {
 	WEAPON_STATS	*psStats;
 	SDWORD			i, age;
-	FIRE_BOX		flame;
 
 	CHECK_PROJECTILE(psObj);
 
@@ -1523,21 +1513,13 @@ static void proj_PostImpactFunc( PROJECTILE *psObj )
 	if (psStats->incenTime > 0)
 	{
 		/* See if anything is in the fire and burn it */
-
-		/* Calculate the fire's bounding box */
-		flame.x1 = (SWORD)(psObj->pos.x - psStats->incenRadius);
-		flame.y1 = (SWORD)(psObj->pos.y - psStats->incenRadius);
-		flame.x2 = (SWORD)(psObj->pos.x + psStats->incenRadius);
-		flame.y2 = (SWORD)(psObj->pos.y + psStats->incenRadius);
-		flame.rad = (SWORD)(psStats->incenRadius*psStats->incenRadius);
-
 		for (i=0; i<MAX_PLAYERS; i++)
 		{
 			/* Don't damage your own droids - unrealistic, but better */
 			if(i!=psObj->player)
 			{
-				proj_checkBurnDamage((BASE_OBJECT*)apsDroidLists[i], psObj, &flame);
-				proj_checkBurnDamage((BASE_OBJECT*)apsStructLists[i], psObj, &flame);
+				proj_checkBurnDamage((BASE_OBJECT*)apsDroidLists[i], psObj);
+				proj_checkBurnDamage((BASE_OBJECT*)apsStructLists[i], psObj);
 			}
 		}
 	}
@@ -1633,11 +1615,12 @@ void proj_UpdateAll()
 
 /***************************************************************************/
 
-static void proj_checkBurnDamage( BASE_OBJECT *apsList, PROJECTILE *psProj, FIRE_BOX *pFireBox )
+static void proj_checkBurnDamage( BASE_OBJECT *apsList, PROJECTILE *psProj)
 {
 	BASE_OBJECT		*psCurr, *psNext;
 	SDWORD			xDiff,yDiff;
 	WEAPON_STATS	*psStats;
+	UDWORD			radSquared;
 	UDWORD			damageSoFar;
 	SDWORD			damageToDo;
 	float			relativeDamage;
@@ -1648,6 +1631,8 @@ static void proj_checkBurnDamage( BASE_OBJECT *apsList, PROJECTILE *psProj, FIRE
 	g_pProjLastAttacker = psProj->psSource;
 
 	psStats = psProj->psWStats;
+	radSquared = psStats->incenRadius * psStats->incenRadius;
+	
 	for (psCurr = apsList; psCurr; psCurr = psNext)
 	{
 		/* have to store the next pointer as psCurr could be destroyed */
@@ -1661,53 +1646,46 @@ static void proj_checkBurnDamage( BASE_OBJECT *apsList, PROJECTILE *psProj, FIRE
 			continue;
 		}
 
-		/* see if psCurr is hit (don't hit main target twice) */
-		if (((SDWORD)psCurr->pos.x >= pFireBox->x1) &&
-			((SDWORD)psCurr->pos.x <= pFireBox->x2) &&
-			((SDWORD)psCurr->pos.y >= pFireBox->y1) &&
-			((SDWORD)psCurr->pos.y <= pFireBox->y2))
+		/* Within the bounding box, now check the radius */
+		xDiff = psCurr->pos.x - psProj->pos.x;
+		yDiff = psCurr->pos.y - psProj->pos.y;
+		if (xDiff*xDiff + yDiff*yDiff <= radSquared)
 		{
-			/* Within the bounding box, now check the radius */
-			xDiff = psCurr->pos.x - psProj->pos.x;
-			yDiff = psCurr->pos.y - psProj->pos.y;
-			if ((xDiff*xDiff + yDiff*yDiff) <= pFireBox->rad)
+			/* The object is in the fire */
+			psCurr->inFire |= IN_FIRE;
+
+			if ( (psCurr->burnStart == 0) ||
+				 (psCurr->inFire & BURNING) )
 			{
-				/* The object is in the fire */
-				psCurr->inFire |= IN_FIRE;
-
-				if ( (psCurr->burnStart == 0) ||
-					 (psCurr->inFire & BURNING) )
+				/* This is the first turn the object is in the fire */
+				psCurr->burnStart = gameTime;
+				psCurr->burnDamage = 0;
+			}
+			else
+			{
+				/* Calculate how much damage should have
+				   been done up till now */
+				damageSoFar = (gameTime - psCurr->burnStart)
+							  //* psStats->incenDamage
+							  * weaponIncenDamage(psStats,psProj->player)
+							  / GAME_TICKS_PER_SEC;
+				damageToDo = (SDWORD)damageSoFar
+							 - (SDWORD)psCurr->burnDamage;
+				if (damageToDo > 0)
 				{
-					/* This is the first turn the object is in the fire */
-					psCurr->burnStart = gameTime;
-					psCurr->burnDamage = 0;
+					debug(LOG_NEVER, "Burn damage of %d to object %d, player %d\n",
+							damageToDo, psCurr->id, psCurr->player);
+
+					//Watermelon:just assume the burn damage is from FRONT
+					relativeDamage = objectDamage(psCurr, damageToDo, psStats->weaponClass,psStats->weaponSubClass, 0);
+
+					psCurr->burnDamage += damageToDo;
+
+					proj_UpdateKills(psProj, relativeDamage);
 				}
-				else
-				{
-					/* Calculate how much damage should have
-					   been done up till now */
-					damageSoFar = (gameTime - psCurr->burnStart)
-								  //* psStats->incenDamage
-								  * weaponIncenDamage(psStats,psProj->player)
-								  / GAME_TICKS_PER_SEC;
-					damageToDo = (SDWORD)damageSoFar
-								 - (SDWORD)psCurr->burnDamage;
-					if (damageToDo > 0)
-					{
-						debug(LOG_NEVER, "Burn damage of %d to object %d, player %d\n",
-								damageToDo, psCurr->id, psCurr->player);
-
-						//Watermelon:just assume the burn damage is from FRONT
-	  					relativeDamage = objectDamage(psCurr, damageToDo, psStats->weaponClass,psStats->weaponSubClass, 0);
-
-						psCurr->burnDamage += damageToDo;
-
-						proj_UpdateKills(psProj, relativeDamage);
-					}
-					/* The damage could be negative if the object
-					   is being burn't by another fire
-					   with a higher burn damage */
-				}
+				/* The damage could be negative if the object
+				   is being burn't by another fire
+				   with a higher burn damage */
 			}
 		}
 	}
