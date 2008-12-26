@@ -37,6 +37,7 @@ Makefile.in
 /po/stamp-po
 /po/warzone2100.pot
 
+# Betawidget autotools and libtool files:
 /lib/betawidget/.libs/
 /lib/betawidget/aclocal.m4
 /lib/betawidget/autom4te.cache/
@@ -54,3 +55,10 @@ Makefile.in
 /lib/betawidget/missing
 /lib/betawidget/stamp-h1
 /lib/betawidget/tools/.dirstamp
+
+# CScope:
+/.cscope
+
+# Waf:
+/waf
+/.waf-*
