@@ -18,6 +18,42 @@
 
 #include "qwzm.h"
 
+QConnectorViewer::QConnectorViewer(QWidget *parent)
+           : QDialog(parent), Ui_ConnectorView()
+{
+	setupUi(this);
+	connect(pushButtonClose, SIGNAL(pressed()), this, SLOT(hide()));
+//	connect(pushButtonPrepend, SIGNAL(pressed()), parent, SLOT(prependConnector()));
+//	connect(pushButtonAppend, SIGNAL(pressed()), parent, SLOT(appendConnector()));
+//	connect(pushButtonRemove, SIGNAL(pressed()), parent, SLOT(removeConnector()));
+}
+
+void QConnectorViewer::setModel(QStandardItemModel *model)
+{
+	tableView->setModel(model);
+	tableView->setSelectionMode(QAbstractItemView::SingleSelection);
+	tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
+}
+
+QModelIndex QConnectorViewer::selectedIndex()
+{
+	return tableView->currentIndex();
+}
+
+void QConnectorViewer::setSelectedIndex(int idx)
+{
+	tableView->setCurrentIndex(tableView->model()->index(idx, 0));
+}
+
+void QConnectorViewer::updateModel()
+{
+	tableView->resizeColumnsToContents();
+}
+
+QConnectorViewer::~QConnectorViewer()
+{
+}
+
 QAnimViewer::QAnimViewer(QWidget *parent)
            : QDialog(parent), Ui_AnimationView()
 {
@@ -78,11 +114,20 @@ QWzmViewer::QWzmViewer(QWidget *parent)
 	connect(actionReverseWinding, SIGNAL(triggered()), this, SLOT(toggleReverseWinding()));
 	connect(actionFlipVerticalTexCoords, SIGNAL(triggered()), this, SLOT(toggleFlipVerticalTexCoords()));
 	connect(actionEditFrames, SIGNAL(triggered()), this, SLOT(toggleEditAnimation()));
+	connect(actionEditConnectors, SIGNAL(triggered()), this, SLOT(toggleEditConnectors()));
 
 	// Set defaults
 	toggleAnimation();
 	actionSave->setEnabled(false);
 	actionSaveAs->setEnabled(false);
+
+	connectorView = new QConnectorViewer(this);
+	connectors.setColumnCount(4);
+	connectors.setHeaderData(0, Qt::Horizontal, QString("X"));
+	connectors.setHeaderData(1, Qt::Horizontal, QString("Y"));
+	connectors.setHeaderData(2, Qt::Horizontal, QString("Z"));
+	connectors.setHeaderData(3, Qt::Horizontal, QString("Type"));
+	connectorView->setModel(&connectors);
 
 	animView = new QAnimViewer(this);
 	anim.setColumnCount(8);
@@ -106,6 +151,11 @@ QWzmViewer::~QWzmViewer()
 void QWzmViewer::toggleEditAnimation()
 {
 	animView->show();
+}
+
+void QWzmViewer::toggleEditConnectors()
+{
+	connectorView->show();
 }
 
 void QWzmViewer::setTeam(int index)
@@ -329,6 +379,16 @@ void QWzmViewer::setMesh(int index)
 	animView->updateModel();
 	animView->setSelectedIndex(psMesh->currentFrame);
 	animUnlock();
+
+	// Refresh connector view
+	connectors.setRowCount(psMesh->connectors);
+	for (int i = 0; i < psMesh->connectors; i++)
+	{
+		connectors.setData(connectors.index(i, 0, QModelIndex()), QString::number(psMesh->connectorArray[i].pos.x));
+		connectors.setData(connectors.index(i, 1, QModelIndex()), QString::number(psMesh->connectorArray[i].pos.y));
+		connectors.setData(connectors.index(i, 2, QModelIndex()), QString::number(psMesh->connectorArray[i].pos.z));
+		connectors.setData(connectors.index(i, 4, QModelIndex()), QString::number(psMesh->connectorArray[i].type)); // TODO, dropdown box
+	}
 }
 
 void QWzmViewer::setModel(QFileInfo &texPath)

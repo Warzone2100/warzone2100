@@ -32,6 +32,7 @@ extern "C" {
 }
 #include "ui_qwzm.h"
 #include "ui_animationview.h"
+#include "ui_connectorview.h"
 
 /** Animation view */
 class QAnimViewer : public QDialog, private Ui_AnimationView
@@ -40,6 +41,19 @@ class QAnimViewer : public QDialog, private Ui_AnimationView
 	public:
 	QAnimViewer(QWidget *parent = 0);
 	~QAnimViewer();
+	void setModel(QStandardItemModel *model);
+	void updateModel();
+	QModelIndex selectedIndex();
+	void setSelectedIndex(int idx);
+};
+
+/** Connector view */
+class QConnectorViewer : public QDialog, private Ui_ConnectorView
+{
+	Q_OBJECT
+	public:
+	QConnectorViewer(QWidget *parent = 0);
+	~QConnectorViewer();
 	void setModel(QStandardItemModel *model);
 	void updateModel();
 	QModelIndex selectedIndex();
@@ -71,6 +85,7 @@ class QWzmViewer : public QMainWindow, private Ui::QWZM
 	void toggleFlipVerticalTexCoords();
 	void setMesh(int index);
 	void toggleEditAnimation();
+	void toggleEditConnectors();
 	void animLock();
 	void animUnlock();
 
@@ -85,11 +100,12 @@ class QWzmViewer : public QMainWindow, private Ui::QWZM
 	private:
 	QString filename;
 	MODEL *psModel;
-	QStandardItemModel anim;
+	QStandardItemModel anim, connectors;
 	void load3DS(QString input);
 	void loadPIE(QString input);
 	void setModel(QFileInfo &texPath);
 	QAnimViewer *animView;
+	QConnectorViewer *connectorView;
 };
 
 #endif

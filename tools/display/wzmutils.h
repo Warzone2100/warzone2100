@@ -49,6 +49,12 @@ typedef struct { float x, y, z; } Vector3f;
 
 typedef struct
 {
+	Vector3f pos;
+	int type;
+} CONNECTOR;
+
+typedef struct
+{
 	float timeSlice;
 	int textureArray;
 	Vector3f translation;
@@ -66,6 +72,7 @@ typedef struct
 	int currentFrame;
 	int currentTextureArray;
 	uint32_t lastChange;	// animation
+	CONNECTOR *connectorArray;
 } MESH;
 
 typedef struct
