@@ -354,7 +354,8 @@ BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, Ve
 	}
 	else // incase anything wants a projectile
 	{
-		muzzle = Vector3f_New(psAttacker->pos.x, psAttacker->pos.y, psAttacker->pos.z);
+		// FIXME HACK Needed since we got those ugly Vector3uw floating around in BASE_OBJECT...
+		muzzle = Vector3uw_To3f(psAttacker->pos);
 	}
 
 	/* Initialise the structure */
@@ -799,8 +800,8 @@ static void proj_InFlightDirectFunc(PROJECTILE *psProj)
 		{
 			// FIXME HACK Needed since we got those ugly Vector3uw floating around in BASE_OBJECT...
 			Vector3i
-				posProj = {psProj->pos.x, psProj->pos.y, psProj->pos.z},
-				posTemp = {psTempObj->pos.x, psTempObj->pos.y, psTempObj->pos.z};
+				posProj = Vector3uw_To3i(psProj->pos),
+				posTemp = Vector3uw_To3i(psTempObj->pos);
 
 			Vector3i diff = Vector3i_Sub(posProj, posTemp);
 
@@ -1017,8 +1018,8 @@ static void proj_InFlightIndirectFunc(PROJECTILE *psProj)
 		{
 			// FIXME HACK Needed since we got those ugly Vector3uw floating around in BASE_OBJECT...
 			Vector3i
-				posProj = {psProj->pos.x, psProj->pos.y, psProj->pos.z},
-				posTemp = {psTempObj->pos.x, psTempObj->pos.y, psTempObj->pos.z};
+				posProj = Vector3uw_To3i(psProj->pos),
+				posTemp = Vector3uw_To3i(psTempObj->pos);
 
 			Vector3i diff = Vector3i_Sub(posProj, posTemp);
 

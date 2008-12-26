@@ -6375,7 +6375,7 @@ BOOL scrFireWeaponAtObj(void)
 	}
 
 	// FIXME HACK Needed since we got those ugly Vector3uw floating around in BASE_OBJECT...
-	target = Vector3i_New(psTarget->pos.x, psTarget->pos.y, psTarget->pos.z);
+	target = Vector3uw_To3i(psTarget->pos);
 
 	// send the projectile using the selectedPlayer so that it can always be seen
 	proj_SendProjectile(&sWeapon, NULL, selectedPlayer, target, psTarget, true, 0);
@@ -11545,7 +11545,7 @@ static DROID_TEMPLATE* scrCheckTemplateExists(SDWORD player, DROID_TEMPLATE *psT
 	{
 		unsigned int componentType;
 		unsigned int weaponSlot;
-		
+
 		equal = true;
 
 		// compare components

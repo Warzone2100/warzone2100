@@ -4205,7 +4205,7 @@ void orderStructureObj(UDWORD player, BASE_OBJECT *psObj)
 		if (lasSatStructSelected(psStruct))
 		{
 			// FIXME HACK Needed since we got those ugly Vector3uw floating around in BASE_OBJECT...
-			Vector3i pos = {psObj->pos.x, psObj->pos.y, psObj->pos.z};
+			Vector3i pos = Vector3uw_To3i(psObj->pos);
 
 			// Lassats have just one weapon
 			unsigned int firePause = weaponFirePause(&asWeaponStats[psStruct->asWeaps[0].nStat], (UBYTE)player);

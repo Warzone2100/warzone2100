@@ -384,7 +384,7 @@ BOOL recvLasSat()
 	if( psStruct && psObj)
 	{
 		// FIXME HACK Needed since we got those ugly Vector3uw floating around in BASE_OBJECT...
-		Vector3i pos = {psObj->pos.x, psObj->pos.y, psObj->pos.z};
+		Vector3i pos = Vector3uw_To3i(psObj->pos);
 
 		// Give enemy no quarter, unleash the lasat
 		proj_SendProjectile(&psStruct->asWeaps[0], NULL, player, pos, psObj, true, 0);
