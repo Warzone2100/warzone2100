@@ -2050,7 +2050,7 @@ static void addProjNaybor(BASE_OBJECT *psObj, UDWORD distSqr)
 static void projGetNaybors(PROJECTILE *psObj)
 {
 	SDWORD		xdiff, ydiff;
-	UDWORD		dx,dy, distSqr;
+	UDWORD		distSqr;
 	BASE_OBJECT	*psTempObj;
 
 	CHECK_PROJECTILE(psObj);
@@ -2066,46 +2066,27 @@ static void projGetNaybors(PROJECTILE *psObj)
 	// reset the naybor array
 	numProjNaybors = 0;
 
-	// search for naybor objects
-	dx = ((BASE_OBJECT *)psObj)->pos.x;
-	dy = ((BASE_OBJECT *)psObj)->pos.y;
-
-	gridStartIterate((SDWORD)dx, (SDWORD)dy);
-	for (psTempObj = gridIterate(); psTempObj != NULL; psTempObj = gridIterate())
+	gridStartIterate(psObj->pos.x, psObj->pos.y);
+	while ((psTempObj = gridIterate()) != NULL)
 	{
 		if (psTempObj != (BASE_OBJECT *)psObj && !psTempObj->died)
 		{
-			// see if an object is in NAYBOR_RANGE
-			xdiff = dx - (SDWORD)psTempObj->pos.x;
-			if (xdiff < 0)
-			{
-				xdiff = -xdiff;
-			}
-			if (xdiff > PROJ_NAYBOR_RANGE)
-			{
-				continue;
-			}
+			// See if an object is in NAYBOR_RANGE
+			xdiff = (SDWORD) psObj->pos.x - (SDWORD) psTempObj->pos.x;
+			ydiff = (SDWORD) psObj->pos.y - (SDWORD) psTempObj->pos.y;
 
-			ydiff = dy - (SDWORD)psTempObj->pos.y;
-			if (ydiff < 0)
-			{
-				ydiff = -ydiff;
-			}
-			if (ydiff > PROJ_NAYBOR_RANGE)
-			{
-				continue;
-			}
-
+			// Compute the distance squared
 			distSqr = xdiff*xdiff + ydiff*ydiff;
-			if (distSqr > PROJ_NAYBOR_RANGE*PROJ_NAYBOR_RANGE)
+			if (distSqr <= PROJ_NAYBOR_RANGE*PROJ_NAYBOR_RANGE)
 			{
-				continue;
-			}
-
-			addProjNaybor(psTempObj, distSqr);
-			if (numProjNaybors >= MAX_NAYBORS)
-			{
-				break;
+				// Add psTempObj as a naybor
+				addProjNaybor(psTempObj, distSqr);
+				
+				// If the naybors array is full, break early
+				if (numProjNaybors >= MAX_NAYBORS)
+				{
+					break;
+				}
 			}
 		}
 	}
