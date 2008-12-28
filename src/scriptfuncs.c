@@ -1170,10 +1170,7 @@ BOOL scrNumMB(void)
 		return false;
 	}
 
-/*	gameTimeStop();
-	DBERROR(("scrNumMB: called by script with value: %d", val));
-	gameTimeStart();*/
-	debug( LOG_NEVER, "scrNumMB: called by script with value: %d\n", val );
+	debug(LOG_NEVER, "called by script with value: %d", val);
 
 	return true;
 }

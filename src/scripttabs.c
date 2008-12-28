@@ -702,9 +702,6 @@ FUNC_SYMBOL asFuncTable[] =
 		0, 0, NULL, 0, 0, NULL, NULL },
 
 	// a couple of example functions
-	{ "numMessageBox",		scrNumMB,				VAL_VOID,
-		1, { VAL_INT },
-		0, 0, NULL, 0, 0, NULL, NULL },
 	{ "debugBox",			scrNumMB,				VAL_VOID,
 		1, { VAL_INT },
 		0, 0, NULL, 0, 0, NULL, NULL },
