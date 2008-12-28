@@ -6446,36 +6446,6 @@ BOOL loadSaveDroidV(char *pFileData, UDWORD filesize, UDWORD numDroids, UDWORD v
 		endian_udword(&psSaveDroid->player);
 		endian_udword(&psSaveDroid->burnStart);
 		endian_udword(&psSaveDroid->burnDamage);
-		/* SAVE_MOVE_CONTROL */
-		endian_sdword(&psSaveDroid->sMove.DestinationX);
-		endian_sdword(&psSaveDroid->sMove.DestinationY);
-		endian_sdword(&psSaveDroid->sMove.srcX);
-		endian_sdword(&psSaveDroid->sMove.srcY);
-		endian_sdword(&psSaveDroid->sMove.targetX);
-		endian_sdword(&psSaveDroid->sMove.targetY);
-		endian_sword(&psSaveDroid->sMove.boundX);
-		endian_sword(&psSaveDroid->sMove.boundY);
-		endian_sword(&psSaveDroid->sMove.moveDir);
-		endian_sword(&psSaveDroid->sMove.bumpDir);
-		endian_udword(&psSaveDroid->sMove.bumpTime);
-		endian_uword(&psSaveDroid->sMove.lastBump);
-		endian_uword(&psSaveDroid->sMove.pauseTime);
-		endian_uword(&psSaveDroid->sMove.bumpX);
-		endian_uword(&psSaveDroid->sMove.bumpY);
-		endian_udword(&psSaveDroid->sMove.shuffleStart);
-		endian_sword(&psSaveDroid->sMove.iVertSpeed);
-		if( version == CURRENT_VERSION_NUM )
-		{
-			for(i = 0;i < psSaveDroid->numWeaps;i++)
-			{
-				endian_udword(&psSaveDroid->sMove.iAttackRuns[i]);
-			}
-			//endian_uword(&psSaveDroid->sMove.iGuardRadius);
-		}
-		else
-		{
-			endian_udword(&psSaveDroid->sMove.iAttackRuns[0]);
-		}
 		for(i = 0; i < TEMP_DROID_MAXPROGS; i++) {
 			/* SAVE_WEAPON */
 			endian_udword(&psSaveDroid->asWeaps[i].ammo);
