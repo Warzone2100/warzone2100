@@ -87,7 +87,24 @@ static inline void setProjectileDestination(PROJECTILE *psProj, BASE_OBJECT *psO
 
 static inline void setProjectileSource(PROJECTILE *psProj, BASE_OBJECT *psObj)
 {
-	psProj->psSource = psObj;
+	// use the source of the source of psProj if psAttacker is a projectile
+	if (psObj && psObj->type == OBJ_PROJECTILE)
+	{
+		PROJECTILE *psPrevProj = (PROJECTILE*)psObj;
+
+		if (psPrevProj->psSource && !psPrevProj->psSource->died)
+		{
+			psProj->psSource = psPrevProj->psSource;
+		}
+		else
+		{
+			psProj->psSource = NULL;
+		}
+	}
+	else
+	{
+		psProj->psSource = psObj;
+	}
 }
 
 static inline void setProjectileDamaged(PROJECTILE *psProj, BASE_OBJECT *psObj)

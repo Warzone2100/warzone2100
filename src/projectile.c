@@ -361,42 +361,29 @@ BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, Ve
 	psProj->type		    = OBJ_PROJECTILE;
 	psProj->state		= PROJ_INFLIGHT;
 	psProj->psWStats		= psStats;
+
 	psProj->pos = Vector3uw_New(muzzle.x, muzzle.y, muzzle.z);
 	psProj->startX		= muzzle.x;
 	psProj->startY		= muzzle.y;
 	psProj->tarX			= target.x;
 	psProj->tarY			= target.y;
-	psProj->born			= gameTime;
-	psProj->player		= (UBYTE)player;
-	psProj->bVisible		= false;
-	psProj->airTarget	= false;
-	psProj->psDamaged	= NULL; // must initialize these to NULL first!
-	psProj->psSource		= NULL;
-	psProj->psDest		= NULL;
-	psProj->died		= 0;
+
+	psProj->player = player;
+	psProj->bVisible = false;
+	psProj->airTarget = false;
+
+	psProj->born = gameTime;
+	psProj->died = 0;
+
+	setProjectileSource(psProj, psAttacker);
 	setProjectileDestination(psProj, psTarget);
+	setProjectileDamaged(psProj, NULL);
 
 	/* If target is a VTOL or higher than ground, it is an air target. */
 	if ((psTarget != NULL && psTarget->type == OBJ_DROID && isVtolDroid((DROID*)psTarget))
 		|| (psTarget == NULL && target.z > map_Height(target.x, target.y)))
 	{
 		psProj->airTarget = true;
-	}
-
-	//Watermelon:use the source of the source of psProj :) (psAttacker is a projectile)
-	if (psAttacker && psAttacker->type == OBJ_PROJECTILE)
-	{
-		// psAttacker is a projectile if bPenetrate
-		PROJECTILE *psPrevProj = (PROJECTILE*)psAttacker;
-
-		if (psPrevProj->psSource && !psPrevProj->psSource->died)
-		{
-			setProjectileSource(psProj, psPrevProj->psSource);
-		}
-	}
-	else
-	{
-		setProjectileSource(psProj, psAttacker);
 	}
 
 	if (psTarget)
