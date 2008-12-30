@@ -315,6 +315,13 @@ static inline bool worldOnMap3i(Vector3i pos)
 }
 
 
+/* Return whether a world coordinate is on the map */
+static inline bool worldOnMap3f(Vector3f pos)
+{
+	return worldOnMap(pos.x, pos.y);
+}
+
+
 /* Store a map coordinate and it's associated tile */
 typedef struct _tile_coord
 {
