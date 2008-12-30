@@ -319,6 +319,15 @@ static inline WZ_DECL_CONST Vector2f Vector2f_LinearInterpolate(const Vector2f f
 
 
 /*!
+ * Print a vector to stdout
+ */
+static inline void Vector3f_Print(const Vector3f v)
+{
+	printf("V: x:%f, y:%f, z:%f\n", v.x, v.y, v.z);
+}
+
+
+/*!
  * Set the vector field by field, same as v = (Vector3f){x, y, z};
  * Needed for MSVC which doesn't support C99 struct assignments.
  * \param x,y,z Values to set to
@@ -339,6 +348,18 @@ static inline WZ_DECL_CONST Vector3f Vector3f_New(const float x, const float y, 
 static inline WZ_DECL_CONST Vector3i Vector3f_To3i(const Vector3f v)
 {
 	Vector3i dest = { (int)v.x, (int)v.y, (int)v.z };
+	return dest;
+}
+
+
+/*!
+ * Convert a float vector to short
+ * \param v Vector to convert
+ * \return Short vector
+ */
+static inline WZ_DECL_CONST Vector3uw Vector3f_To3uw(const Vector3f v)
+{
+	Vector3uw dest = { (uint16_t)v.x, (uint16_t)v.y, (uint16_t)v.z };
 	return dest;
 }
 
@@ -455,6 +476,48 @@ static inline WZ_DECL_CONST Vector3f Vector3f_Normalise(const Vector3f v)
 		return dest;
 	}
 }
+
+
+/*!
+ * Much the same as Vector2i_InCircle except that it works in 3-axis by discarding the z-component and with
+ * circles.
+ * \param v Vector to test
+ * \param c Vector containing the centre of the circle
+ * \param r The radius of the circle
+ * \return If v falls within the circle
+ */
+static inline WZ_DECL_CONST bool Vector3f_InCircle(const Vector3f v, const Vector3f c, const float r)
+{
+	Vector3f delta = Vector3f_Sub(v, c);
+	// Explictily cast to "unsigned int" because this number never can be
+	// negative, due to the fact that these numbers are squared. Still GCC
+	// warns about a comparison of a comparison between an unsigned and a
+	// signed integer.
+	return (delta.x * delta.x) + (delta.y * delta.y) < (r * r);
+}
+
+
+/*!
+ * Much the same as Vector2i_InCircle except that it works in 3-axis and with
+ * spheres.
+ * The equation used is also ever so slightly different:
+ * (x - a)^2 + (y - b)^2 + (z - c)^2 = r^2. Notice how it is still squared and
+ * _not_ cubed!
+ * \param v Vector to test
+ * \param c Vector containing the centre of the sphere
+ * \param r The radius of the sphere
+ * \return If v falls within the sphere
+ */
+static inline WZ_DECL_CONST bool Vector3f_InSphere (const Vector3f v, const Vector3f c, const float r)
+{
+	Vector3f delta = Vector3f_Sub(v, c);
+	// Explictily cast to "unsigned int" because this number never can be
+	// negative, due to the fact that these numbers are squared. Still GCC
+	// warns about a comparison of a comparison between an unsigned and a
+	// signed integer.
+	return (delta.x * delta.x) + (delta.y * delta.y) + (delta.z * delta.z) < (r * r);
+}
+
 
 /*!
  * Compute the forward vector, a body's local Z axis, for a set of Euler angles
@@ -746,6 +809,15 @@ static inline WZ_DECL_CONST Vector3i Vector3i_LinearInterpolate(const Vector3i f
 	assert(s >= 0.f && s <= 1.f);
 
 	return Vector3i_Add(from, Vector3f_To3i(Vector3f_Mult(Vector3i_To3f(Vector3i_Sub(to, from)), s)));
+}
+
+
+/*!
+ * Print a vector to stdout
+ */
+static inline void Vector3uw_Print(const Vector3uw v)
+{
+	printf("V: x:%u, y:%u, z:%u\n", v.x, v.y, v.z);
 }
 
 
