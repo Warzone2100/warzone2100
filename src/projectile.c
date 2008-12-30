@@ -370,7 +370,6 @@ BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, Ve
 
 	psProj->player = player;
 	psProj->bVisible = false;
-	psProj->airTarget = false;
 
 	psProj->born = gameTime;
 	psProj->died = 0;
@@ -378,13 +377,6 @@ BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, Ve
 	setProjectileSource(psProj, psAttacker);
 	setProjectileDestination(psProj, psTarget);
 	setProjectileDamaged(psProj, NULL);
-
-	/* If target is a VTOL or higher than ground, it is an air target. */
-	if ((psTarget != NULL && psTarget->type == OBJ_DROID && isVtolDroid((DROID*)psTarget))
-		|| (psTarget == NULL && target.z > map_Height(target.x, target.y)))
-	{
-		psProj->airTarget = true;
-	}
 
 	if (psTarget)
 	{
@@ -1193,8 +1185,7 @@ static void proj_ImpactFunc( PROJECTILE *psObj )
 			addMultiEffect(&position, &scatter, EFFECT_EXPLOSION, facing, true, imd, psStats->numExplosions, psStats->lightWorld, psStats->effectSize);
 
 			// If the target was a VTOL hit in the air add smoke
-			if (psObj->airTarget
-			 && (psStats->surfaceToAir & SHOOT_IN_AIR)
+			if ((psStats->surfaceToAir & SHOOT_IN_AIR)
 			 && !(psStats->surfaceToAir & SHOOT_ON_GROUND))
 			{
 				addMultiEffect(&position, &scatter, EFFECT_SMOKE, SMOKE_TYPE_DRIFTING, false, NULL, 3, 0, 0);
@@ -1220,8 +1211,7 @@ static void proj_ImpactFunc( PROJECTILE *psObj )
 			EFFECT_TYPE facing = (psStats->facePlayer ? EXPLOSION_TYPE_SPECIFIED : EXPLOSION_TYPE_NOT_FACING);
 
 			// If we hit a VTOL with an AA gun use the miss graphic and add some smoke
-			if (psObj->airTarget
-			 && (psStats->surfaceToAir & SHOOT_IN_AIR)
+			if ((psStats->surfaceToAir & SHOOT_IN_AIR)
 			 && !(psStats->surfaceToAir & SHOOT_ON_GROUND)
 			 && psStats->weaponSubClass == WSC_AAGUN)
 			{
@@ -1364,7 +1354,8 @@ static void proj_ImpactFunc( PROJECTILE *psObj )
 					}
 				}
 			}
-			if (!psObj->airTarget)
+
+			// FIXME Check whether we hit above maximum structure height, to skip unnecessary calculations!
 			{
 				STRUCTURE *psCurrS, *psNextS;
 
@@ -1383,9 +1374,7 @@ static void proj_ImpactFunc( PROJECTILE *psObj )
 							HIT_ROLL(dice);
 							if (dice < weaponRadiusHit(psStats, psObj->player))
 							{
-								unsigned int damage = calcDamage(weaponRadDamage(psStats, psObj->player),
-								                    psStats->weaponEffect,
-								                    (BASE_OBJECT *)psCurrS);
+								unsigned int damage = calcDamage(weaponRadDamage(psStats, psObj->player), psStats->weaponEffect, (BASE_OBJECT *)psCurrS);
 
 								if (bMultiPlayer)
 								{

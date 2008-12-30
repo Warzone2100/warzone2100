@@ -39,7 +39,6 @@ typedef struct PROJECTILE
 	SIMPLE_ELEMENTS( struct PROJECTILE );
 
 	UBYTE           state;                  ///< current projectile state
-	UBYTE           airTarget;              ///< whether the projectile was fierd at an airborn target
 
 	UBYTE           player;                 ///< needed because damange and radDamage vary from base stat per player because of upgrades
 
