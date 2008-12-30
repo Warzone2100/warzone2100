@@ -108,8 +108,6 @@ static void projGetNaybors(PROJECTILE *psObj);
 /***************************************************************************/
 BOOL gfxVisible(PROJECTILE *psObj)
 {
-	BOOL bVisible = false;
-
 	// Already know it is visible
 	if (psObj->bVisible)
 	{
@@ -122,22 +120,6 @@ BOOL gfxVisible(PROJECTILE *psObj)
 		return true;
 	}
 
-	// You can see the source
-	if (psObj->psSource != NULL
-	 && !psObj->psSource->died
-	 && psObj->psSource->visible[selectedPlayer])
-	{
-		bVisible = true;
-	}
-
-	// You can see the destination
-	if (psObj->psDest != NULL
-	 && !psObj->psDest->died
-	 && psObj->psDest->visible[selectedPlayer])
-	{
-		bVisible = true;
-	}
-
 	// Someone elses structure firing at something you can't see
 	if (psObj->psSource != NULL
 	 && !psObj->psSource->died
@@ -147,7 +129,7 @@ BOOL gfxVisible(PROJECTILE *psObj)
 	  || psObj->psDest->died
 	  || !psObj->psDest->visible[selectedPlayer]))
 	{
-		bVisible = false;
+		return false;
 	}
 
 	// Something you cannot see firing at a structure that isn't yours
@@ -158,10 +140,26 @@ BOOL gfxVisible(PROJECTILE *psObj)
 	 && (psObj->psSource == NULL
 	  || !psObj->psSource->visible[selectedPlayer]))
 	{
-		bVisible = false;
+		return false;
 	}
 
-	return bVisible;
+	// You can see the source
+	if (psObj->psSource != NULL
+	 && !psObj->psSource->died
+	 && psObj->psSource->visible[selectedPlayer])
+	{
+		return true;
+	}
+
+	// You can see the destination
+	if (psObj->psDest != NULL
+	 && !psObj->psDest->died
+	 && psObj->psDest->visible[selectedPlayer])
+	{
+		return true;
+	}
+
+	return false;
 }
 
 /***************************************************************************/
