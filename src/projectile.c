@@ -366,7 +366,6 @@ BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, Ve
 	psProj->startY		= muzzle.y;
 	psProj->tarX			= target.x;
 	psProj->tarY			= target.y;
-	psProj->targetRadius = (psTarget ? establishTargetRadius(psTarget) : 0); // needed to backtrack FX
 	psProj->born			= gameTime;
 	psProj->player		= (UBYTE)player;
 	psProj->bVisible		= false;
