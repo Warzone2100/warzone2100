@@ -32,7 +32,7 @@
 #include "weapondef.h"
 
 /* The number of components in the asParts / asBits arrays */
-#define DROID_MAXCOMP COMP_NUMCOMPONENTS
+#define DROID_MAXCOMP		(COMP_NUMCOMPONENTS - 1)//(COMP_NUMCOMPONENTS - 2)
 
 /* The maximum number of droid weapons */
 #define DROID_MAXWEAPS		3
