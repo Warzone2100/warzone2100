@@ -11465,7 +11465,6 @@ BOOL scrAssembleWeaponTemplate(void)
 	pNewTemplate->asParts[COMP_PROPULSION] = propIndex;
 
 	// set template weapon (only one)
-	pNewTemplate->asParts[COMP_WEAPON] = weapIndex;
 	pNewTemplate->asWeaps[0] = weapIndex;
 	pNewTemplate->numWeaps = 1;
 

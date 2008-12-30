@@ -31,8 +31,12 @@
 #include "statsdef.h"
 #include "weapondef.h"
 
-/* The number of components in the asParts / asBits arrays */
-#define DROID_MAXCOMP		(COMP_NUMCOMPONENTS - 1)//(COMP_NUMCOMPONENTS - 2)
+/*!
+ * The number of components in the asParts / asBits arrays.
+ * Weapons are stored seperately, thus the maximum index into the array
+ * is 1 smaller than the number of components.
+ */
+#define DROID_MAXCOMP (COMP_NUMCOMPONENTS - 1)
 
 /* The maximum number of droid weapons */
 #define DROID_MAXWEAPS		3
@@ -92,9 +96,14 @@ typedef struct _droid_template
 
 	UBYTE           NameVersion;                //< Version number used in name (e.g. Viper Mk "I" would be stored as 1 - Viper Mk "X" as 10)
 
-	/* The droid components.  This array is indexed by COMPONENT_TYPE
-	 * so the ECM would be accessed using asParts[COMP_ECM].
+	/*!
+	 * The droid components.
+	 *
+	 * This array is indexed by COMPONENT_TYPE so the ECM would be accessed
+	 * using asParts[COMP_ECM].
 	 * COMP_BRAIN is an index into the asCommandDroids array NOT asBrainStats
+	 *
+	 * Weapons are stored in asWeaps, _not_ here at index COMP_WEAPON! (Which is the reason we do not have a COMP_NUMCOMPONENTS sized array here.)
 	 */
 	SDWORD          asParts[DROID_MAXCOMP];
 
