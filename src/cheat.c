@@ -44,6 +44,7 @@ static CHEAT_ENTRY cheatCodes[] =
 //	{"PJKSVQZ,",kf_ToggleOutline},
 //	{"L\\MZZQ[JRO",kf_ScreenDump},	//screendump
 
+	{"noassert", kf_NoAssert}, // turn off asserts
 	{"count me", kf_ShowNumObjects}, // give a count of objects in the world
 	{"give all", kf_AllAvailable},	// give all
 	{"research all", kf_FinishAllResearch}, // research everything at once

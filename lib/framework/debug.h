@@ -51,6 +51,9 @@ extern "C"
 /** Stores name of the last function or event called by scripts. */
 extern char last_called_script_event[MAX_EVENT_NAME_LEN];
 
+/** Whether asserts are currently enabled. */
+extern bool assertEnabled;
+
 /**
  * ASSERT helper macro to allow some debug functions to use an alternate
  * calling location.
@@ -78,7 +81,7 @@ extern char last_called_script_event[MAX_EVENT_NAME_LEN];
 		                                  location_description, (#expr), last_called_script_event) \
 		) \
 	), \
-	assert(expr) \
+	assertEnabled ? assert(expr) : (void)0 \
 )
 
 /**
@@ -225,5 +228,7 @@ static inline void objTraceDisable(void) { traceID = (UDWORD)-1; }
 
 /** Checks if a particular debub flag was enabled */
 extern bool debugPartEnabled(code_part codePart);
+
+void debugDisableAssert(void);
 
 #endif // __INCLUDED_LIB_FRAMEWORK_DEBUG_H__

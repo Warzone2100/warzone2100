@@ -41,6 +41,7 @@ UDWORD traceID = -1;
 
 static debug_callback * callbackRegistry = NULL;
 BOOL enabled_debug[LOG_LAST]; // global
+bool assertEnabled = true;
 
 /*
  * This list _must_ match the enum in debug.h!
@@ -381,4 +382,9 @@ void _debug( code_part part, const char *function, const char *str, ... )
 bool debugPartEnabled(code_part codePart)
 {
 	return enabled_debug[codePart];
+}
+
+void debugDisableAssert()
+{
+	assertEnabled = false;
 }

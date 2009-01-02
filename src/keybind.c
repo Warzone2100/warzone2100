@@ -2599,3 +2599,10 @@ void	kf_AddHelpBlip( void )
 		}
 	}
 }
+
+void kf_NoAssert()
+{
+	debugDisableAssert();
+	console("Asserts turned off");
+	debug(LOG_ERROR, "Asserts turned off");
+}

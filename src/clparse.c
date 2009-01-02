@@ -43,6 +43,7 @@
 #include "wrappers.h"
 #include "cheat.h"
 #include "init.h"
+#include "keybind.h"
  // To set the shadow config:
 #include "display.h"
 #include "version.h"
@@ -86,6 +87,7 @@ typedef enum
 	CLI_SELFTEST,
 	CLI_CONNECTTOIP,
 	CLI_HOSTLAUNCH,
+	CLI_NOASSERT,
 } CLI_OPTIONS;
 
 static const struct poptOption* getOptionsTable(void)
@@ -104,6 +106,7 @@ static const struct poptOption* getOptionsTable(void)
 		{ "mod",        '\0', POPT_ARG_STRING, NULL, CLI_MOD_GLOB,   N_("Enable a global mod"),               N_("mod") },
 		{ "mod_ca",     '\0', POPT_ARG_STRING, NULL, CLI_MOD_CA,     N_("Enable a campaign only mod"),        N_("mod") },
 		{ "mod_mp",     '\0', POPT_ARG_STRING, NULL, CLI_MOD_MP,     N_("Enable a multiplay only mod"),       N_("mod") },
+		{ "noassert",	'\0', POPT_ARG_NONE,   NULL, CLI_NOASSERT,   N_("Disable asserts"),                   NULL },
 		{ "savegame",   '\0', POPT_ARG_STRING, NULL, CLI_SAVEGAME,   N_("Load a saved game"),                 N_("savegame") },
 		{ "usage",      '\0', POPT_ARG_NONE
 		          | POPT_ARGFLAG_DOC_HIDDEN,   NULL, CLI_USAGE,      NULL,                                    NULL, },
@@ -281,6 +284,10 @@ bool ParseCommandLine(int argc, const char** argv)
 			case CLI_USAGE:
 			case CLI_VERSION:
 				// These options are parsed in ParseCommandLineEarly() already, so ignore them
+				break;
+
+			case CLI_NOASSERT:
+				kf_NoAssert();
 				break;
 
 			case CLI_CHEAT:

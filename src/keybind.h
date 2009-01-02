@@ -21,6 +21,7 @@
 #ifndef __INCLUDED_SRC_KEYBIND_H__
 #define __INCLUDED_SRC_KEYBIND_H__
 
+#include "console.h"
 #include "lib/ivis_common/piefixedpoint.h"
 
 // --------------- All those keyboard mappable functions */
@@ -233,6 +234,8 @@ void kf_ToggleRadarTerrain( void );          //radar terrain
 void kf_ToggleRadarAllyEnemy( void );        //enemy/ally color toggle
 
 void kf_TileInfo(void);
+
+void kf_NoAssert(void);
 
 extern void	kf_ToggleWatchWindow( void );
 
