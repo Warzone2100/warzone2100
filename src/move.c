@@ -26,6 +26,7 @@
 #include "lib/framework/frame.h"
 
 #include <float.h>
+#include <math.h>
 
 #include "lib/framework/trig.h"
 #include "lib/framework/math-help.h"
@@ -78,8 +79,11 @@
 #define OBJ_MAXRADIUS	(TILE_UNITS * 4)
 
 // How close to a way point the next target starts to phase in
-#define WAYPOINT_DIST	(TILE_UNITS *2)
-#define WAYPOINT_DSQ	(WAYPOINT_DIST*WAYPOINT_DIST)
+const float WAYPOINT_DIST = TILE_UNITS*2.0f;
+#define WAYPOINT_DSQ (WAYPOINT_DIST*WAYPOINT_DIST) // C does not allows this to be a const variable...
+
+// Never get turned stronger towards the 2nd next waypoint than this times the current waypoint's strength
+const float WAYPOINT_2NDNEXT_SUCKINESS = 0.5f;
 
 // Accuracy for the boundary vector
 #define BOUND_ACC		1000
@@ -1692,9 +1696,13 @@ static Vector2f moveGetDirection(DROID *psDroid)
 		// Interpolate with the next target
 		else
 		{
+			// Make sure we get sucked stronger towards the 2nd waypoint than the first.
+			// Also ensure we get never turned away from a waypoint.
+			float nextInterpolation = fmaxf(fminf(WAYPOINT_DSQ - magnitude, magnitude * WAYPOINT_2NDNEXT_SUCKINESS), 0.0f);
+
 			// Interpolate the vectors based on how close to them we are
 			delta = Vector2f_Mult(delta, magnitude);
-			nextDelta = Vector2f_Mult(nextDelta, WAYPOINT_DSQ - magnitude);
+			nextDelta = Vector2f_Mult(nextDelta, nextInterpolation);
 
 			dest = Vector2f_Normalise( Vector2f_Add(delta, nextDelta) );
 		}
