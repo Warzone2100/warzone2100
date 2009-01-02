@@ -5026,28 +5026,31 @@ void droidSetPosition(DROID *psDroid, int x, int y)
 }
 
 /** Check validity of a droid. Crash hard if it fails. */
-void checkDroid(const DROID *droid, const char * const location_description, const char * function, const int recurse)
+void checkDroid(const DROID *droid, const char *const location, const char *function, const int recurse)
 {
 	int i;
 
 	if (recurse < 0)
+	{
 		return;
+	}
 
-	ASSERT_HELPER(droid != NULL, location_description, function, "CHECK_DROID: NULL pointer");
-	ASSERT_HELPER(droid->type == OBJ_DROID, location_description, function, "CHECK_DROID: Not droid (type %d)", (int)droid->type);
-	ASSERT_HELPER(droid->direction <= 360.0f && droid->direction >= 0.0f, location_description, function, "CHECK_DROID: Bad droid direction %f", droid->direction);
-	ASSERT_HELPER(droid->numWeaps <= DROID_MAXWEAPS, location_description, function, "CHECK_DROID: Bad number of droid weapons %d", (int)droid->numWeaps);
-	ASSERT_HELPER(droid->listSize <= ORDER_LIST_MAX, location_description, function, "CHECK_DROID: Bad number of droid orders %d", (int)droid->listSize);
-	ASSERT_HELPER(droid->player < MAX_PLAYERS, location_description, function, "CHECK_DROID: Bad droid owner %d", (int)droid->player);
-	ASSERT_HELPER(droidOnMap(droid), location_description, function, "CHECK_DROID: Droid off map");
+	ASSERT_HELPER(droid != NULL, location, function, "CHECK_DROID: NULL pointer");
+	ASSERT_HELPER(droid->type == OBJ_DROID, location, function, "CHECK_DROID: Not droid (type %d)", (int)droid->type);
+	ASSERT_HELPER(droid->direction <= 360.0f && droid->direction >= 0.0f, location, function, "CHECK_DROID: Bad droid direction %f", droid->direction);
+	ASSERT_HELPER(droid->numWeaps <= DROID_MAXWEAPS, location, function, "CHECK_DROID: Bad number of droid weapons %d", (int)droid->numWeaps);
+	ASSERT_HELPER(droid->listSize <= ORDER_LIST_MAX, location, function, "CHECK_DROID: Bad number of droid orders %d", (int)droid->listSize);
+	ASSERT_HELPER(droid->player < MAX_PLAYERS, location, function, "CHECK_DROID: Bad droid owner %d", (int)droid->player);
+	ASSERT_HELPER(droidOnMap(droid), location, function, "CHECK_DROID: Droid off map");
+	ASSERT_HELPER((!droid->psTarStats || ((STRUCTURE_STATS *)droid->psTarStats)->type != REF_DEMOLISH), location, function, "CHECK_DROID: Cannot build demolition");
 
 	for (i = 0; i < DROID_MAXWEAPS; ++i)
 	{
-		ASSERT_HELPER(droid->asWeaps[i].rotation <= 360, location_description, function, "CHECK_DROID: Bad turret rotation of turret %u", i);
-		ASSERT_HELPER(droid->asWeaps[i].lastFired <= gameTime, location_description, function, "CHECK_DROID: Bad last fired time for turret %u", i);
+		ASSERT_HELPER(droid->asWeaps[i].rotation <= 360, location, function, "CHECK_DROID: Bad turret rotation of turret %u", i);
+		ASSERT_HELPER(droid->asWeaps[i].lastFired <= gameTime, location, function, "CHECK_DROID: Bad last fired time for turret %u", i);
 		if (droid->psActionTarget[i])
 		{
-			ASSERT_HELPER(droid->psActionTarget[i]->direction >= 0.0f, location_description, function, "CHECK_DROID: Bad direction of turret %u's target", i);
+			ASSERT_HELPER(droid->psActionTarget[i]->direction >= 0.0f, location, function, "CHECK_DROID: Bad direction of turret %u's target", i);
 		}
 	}
 }
