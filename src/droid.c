@@ -3979,7 +3979,11 @@ BOOL buildModule(STRUCTURE *psStruct)
 	BOOL	order = false;
 	UDWORD	i = 0;
 
-	ASSERT(psStruct != NULL, "buildModule: Invalid structure pointer");
+	ASSERT(psStruct != NULL && psStruct->pStructureType != NULL, "Invalid structure pointer");
+	if (!psStruct || !psStruct->pStructureType)
+	{
+		return false;
+	}
 
 	switch (psStruct->pStructureType->type)
 	{
