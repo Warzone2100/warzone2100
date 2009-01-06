@@ -32,6 +32,30 @@
 typedef struct _svgRenderedImage svgRenderedImage;
 
 /**
+ * Ways in which the size (dimensions) of an SVG can be specified.
+ */
+typedef enum
+{
+	/// Renders the image at its native size
+	SVG_SIZE_NATIVE,
+
+	/// Renders the image with a specified width and auto-computed height
+	SVG_SIZE_WIDTH,
+
+	/// Renders the image with a specified height and auto-computed width
+	SVG_SIZE_HEIGHT,
+
+	/// Renders the image with a specified width and height, may be distorted
+	SVG_SIZE_WIDTH_AND_HEIGHT,
+
+	/**
+	 * Renders the image with a width and a height as close as possible to that
+	 * specified while keeping the image in proportion
+	 */
+	SVG_SIZE_WIDTH_AND_HEIGHT_FIT
+} svgSizingPolicy;
+
+/**
  * Represents a rendered SVG image which is ready to be blitted/composited onto
  * a widget.
  */
@@ -39,7 +63,7 @@ struct _svgRenderedImage
 {
 	/// Bitmap cairo_pattern_t containing the rendered image
 	cairo_pattern_t *pattern;
-	
+
 	/// Size of the rendered image
 	size patternSize;
 };
@@ -69,63 +93,29 @@ void svgManagerQuit(void);
 void svgManagerBlit(cairo_t *cr, const svgRenderedImage *svg);
 
 /**
+ * Returns the width and height that the SVG image, filename, will be rendered
+ * at when using the sizing policy, policy.
+ *
+ * @param filename  The path to the SVG image to get the size of.
+ * @param policy    The sizing policy to use, extra parameters may be required.
+ * @return The size that the image will be rendered at.
+ */
+size svgManagerGetSize(const char *filename, svgSizingPolicy policy, ...);
+
+/**
  * Loads and renders the SVG image, filename, at a size of (width,height). In
  * order to improve performance the SVG manager makes use of an image cache.
  * Hence, repeated calls to this method with the same parameters will not
  * result in any kind of performance penalty.
  *
- * If both width and height are 0 then the image will be rendered at its native
- * size. If just width is 0 then the rendered width is the native width
- * multiplied by the height scale factor. The same applies when the height is 0
- * except that the width scale factor is used instead.
- * If fit is true, then both width and height mustn't be 0. Then it tries to fit
- * the image in the desired height and width without loosing proportion.
+ * The at which the image is rendered is determined by the sizing policy
+ * argument. Many policies require extra arguments. The various available
+ * policies are documented in the svgSizingPolicy enum.
  *
  * @param filename  The path to the SVG image to render.
- * @param width The width to render the image at, 0 for auto-select.
- * @param height    The height to render the image at, 0 for auto-select.
- * @param fit	Wetheter to fit the image, width and height mustn't be 0
+ * @param policy    The sizing policy to use, extra parameters may be required.
  * @return A pointer to the rendered SVG image on success or NULL on failure.
  */
-svgRenderedImage *svgManagerGet(const char *filename, int width, int height, bool fit);
-
-/**
- * A convenience wrapper around svgManagerGet which automatically computes the
- * desired image-height based off the provided width.
- *
- * @param filename  The path to the SVG image to render.
- * @param width The width to render the image.
- * @param height    The resulting height of the image, may be NULL.
- * @return A pointer to the rendered SVG image on success or NULL on failure.
- * @see svgManagerGet
- */
-svgRenderedImage *svgManagerGetWithWidth(const char *filename, int width,
-                                         int *height);
-
-/**
- * A convenience wrapper around svgManagerGet which automatically computes the
- * desired image-width based off the provided height.
- *
- * @param filename  The path to the SVG image to render.
- * @param height    The height to render the image.
- * @param width The resulting width of the image, may be NULL.
- * @return A pointer to the rendered SVG image on success or NULL on failure.
- * @see svgManagerGet
- */
-svgRenderedImage *svgManagerGetWithHeight(const char *filename, int height,
-                                          int *width);
-/**
- * A convenience wrapper around svgManagerGet which computes the size of the image
- * so it fits in height and width without loosing proportions.
- *
- * @param filename  The path to the SVG image to render.
- * @param height    The maximum height to render the image.
- * @param width     The maximum width to render the image
- * @param ptrWidth  The resulting width of the image, may be NULL
- * @param ptrHeight The resulting height of the image, may be NULL
- * @return A pointer to the rendered SVG image on success or NULL on failure.
- * @see svgManagerGet
- */
-svgRenderedImage *svgManagerGetFit(const char *filename, int width, int height, int *ptrWidth, int *ptrHeight);
+svgRenderedImage *svgManagerGet(const char *filename, svgSizingPolicy policy, ...);
 
 #endif /*SVG_MANAGER_H*/
