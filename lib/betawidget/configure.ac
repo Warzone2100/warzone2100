@@ -4,6 +4,8 @@
 AC_PREREQ(2.61)
 AC_INIT(betawidget, VERSION)
 
+AC_CONFIG_MACRO_DIR([m4])
+
 # libtool shared library version
 
 # Increment if the interface has additions, changes, removals.
