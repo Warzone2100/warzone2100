@@ -21,6 +21,7 @@ lib_LTLIBRARIES = libbetawidget.la
 
 libbetawidget_la_SOURCES = \
 	betawidget_wrap_lua.cpp \
+	button.c \
 	font.c \
 	geom.c \
 	hBox.c \

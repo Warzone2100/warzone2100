@@ -131,6 +131,8 @@ typedef enum
 	// Misc
 	EVT_FOCUS,
 	EVT_BLUR,
+	EVT_ENABLE,
+	EVT_DISABLE,
 
 	// Destroy
 	EVT_DESTRUCT
