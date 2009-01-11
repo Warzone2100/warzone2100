@@ -569,9 +569,9 @@ bool seq_Play(const char* filename)
 	}
 
 	/* we're expecting more header packets. */
-	while (theora_p && theora_p < 3
+	while ((theora_p && theora_p < 3)
 #if !defined(WZ_NOSOUND)
-	    || vorbis_p && vorbis_p < 3
+	    || (vorbis_p && vorbis_p < 3)
 #endif
 	    )
 	{
