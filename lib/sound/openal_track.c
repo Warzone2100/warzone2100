@@ -81,9 +81,10 @@ typedef struct	SAMPLE_LIST
 } SAMPLE_LIST;
 
 static SAMPLE_LIST *active_samples = NULL;
+
+#if !defined(WZ_NOSOUND)
 static AUDIO_STREAM* active_streams = NULL;
 
-#ifndef WZ_NOSOUND
 static ALfloat		sfx_volume = 1.0;
 static ALfloat		sfx3d_volume = 1.0;
 
@@ -211,11 +212,15 @@ BOOL sound_InitLibrary( void )
 	return true;
 }
 
+#if !defined(WZ_NOSOUND)
 static void sound_UpdateStreams(void);
+#endif
 
 void sound_ShutdownLibrary( void )
 {
+#if !defined(WZ_NOSOUND)
 	AUDIO_STREAM* stream;
+#endif
 	SAMPLE_LIST * aSample = active_samples, * tmpSample = NULL;
 
 	if ( !openal_initialized )
@@ -224,6 +229,7 @@ void sound_ShutdownLibrary( void )
 	}
 	debug(LOG_SOUND, "starting shutdown");
 
+#if !defined(WZ_NOSOUND)
 	// Stop all streams, sound_UpdateStreams() will deallocate all stopped streams
 	for (stream = active_streams; stream != NULL; stream = stream->next)
 	{
@@ -231,7 +237,6 @@ void sound_ShutdownLibrary( void )
 	}
 	sound_UpdateStreams();
 
-#ifndef WZ_NOSOUND
 	/* On Linux since this caused some versions of OpenAL to hang on exit. - Per */
 	debug(LOG_SOUND, "make default context NULL");
 	alcMakeContextCurrent(NULL);
@@ -749,6 +754,7 @@ AUDIO_STREAM* sound_PlayStream(PHYSFS_file* fileHandle, float volume, void (*onF
  */
 AUDIO_STREAM* sound_PlayStreamWithBuf(PHYSFS_file* fileHandle, float volume, void (*onFinished)(void*), void* user_data, size_t streamBufferSize, unsigned int buffer_count)
 {
+#if !defined(WZ_NOSOUND)
 	AUDIO_STREAM* stream;
 	ALuint*       buffers = alloca(sizeof(ALuint) * buffer_count);
 	ALint error;
@@ -877,6 +883,9 @@ AUDIO_STREAM* sound_PlayStreamWithBuf(PHYSFS_file* fileHandle, float volume, voi
 	active_streams = stream;
 
 	return stream;
+#else
+	return NULL;
+#endif
 }
 
 /** Stops the current stream from playing.
@@ -890,9 +899,11 @@ void sound_StopStream(AUDIO_STREAM* stream)
 {
 	assert(stream != NULL);
 
+#if !defined(WZ_NOSOUND)
 	// Tell OpenAL to stop playing on the given source
 	alSourceStop(stream->source);
 	sound_GetError();
+#endif
 }
 
 /** Pauses playing of this stream until playing is resumed with
@@ -901,6 +912,7 @@ void sound_StopStream(AUDIO_STREAM* stream)
  */
 void sound_PauseStream(AUDIO_STREAM* stream)
 {
+#if !defined(WZ_NOSOUND)
 	ALint state;
 
 	// To be sure we won't go mutilating this OpenAL source, check wether
@@ -916,6 +928,7 @@ void sound_PauseStream(AUDIO_STREAM* stream)
 	// Pause playing of this OpenAL source
 	alSourcePause(stream->source);
 	sound_GetError();
+#endif
 }
 
 /** Resumes playing of a stream that's paused by means of sound_PauseStream().
@@ -923,6 +936,7 @@ void sound_PauseStream(AUDIO_STREAM* stream)
  */
 void sound_ResumeStream(AUDIO_STREAM* stream)
 {
+#if !defined(WZ_NOSOUND)
 	ALint state;
 
 	// To be sure we won't go mutilating this OpenAL source, check wether
@@ -938,6 +952,7 @@ void sound_ResumeStream(AUDIO_STREAM* stream)
 	// Resume playing of this OpenAL source
 	alSourcePlay(stream->source);
 	sound_GetError();
+#endif
 }
 
 /** Retrieve the playing volume of the given stream.
@@ -949,10 +964,14 @@ void sound_ResumeStream(AUDIO_STREAM* stream)
  */
 float sound_GetStreamVolume(const AUDIO_STREAM* stream)
 {
+#if !defined(WZ_NOSOUND)
 	ALfloat volume;
 	alGetSourcef(stream->source, AL_GAIN, &volume);
 
 	return volume;
+#else
+	return 1.f;
+#endif
 }
 
 /** Set the playing volume of the given stream.
@@ -964,9 +983,12 @@ float sound_GetStreamVolume(const AUDIO_STREAM* stream)
 void sound_SetStreamVolume(AUDIO_STREAM* stream, float volume)
 {
 	stream->volume = volume;
+#if !defined(WZ_NOSOUND)
 	alSourcef(stream->source, AL_GAIN, stream->volume);
+#endif
 }
 
+#if !defined(WZ_NOSOUND)
 /** Update the given stream by making sure its buffers remain full
  *  \param stream the stream to update
  *  \return true when the stream is still playing, false when it has stopped
@@ -1134,6 +1156,7 @@ static void sound_UpdateStreams()
 		stream = stream->next;
 	}
 }
+#endif
 
 //*
 // =======================================================================================================================

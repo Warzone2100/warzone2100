@@ -152,9 +152,9 @@ fi
 AC_ARG_ENABLE([sound],
 	AS_HELP_STRING([--disable-sound], [Disable sound [no]]),
 	[ enable_sound="${enableval}" ], [ enable_sound="yes" ])
-if test "x$enable_sound" != "xyes" ; then
+AS_IF([test "x$enable_sound" != "xyes"],[
 	AC_DEFINE([WZ_NOSOUND], [], [Causes sound to be disabled])
-fi
+])
 
 # -O0 turns off all optimizations; this is necessary for accurate debugging
 # -Wno-unused-label is necessary because flex produces unused labels that we cannot fix
@@ -243,10 +243,13 @@ fi
 # Checks for modules:
 
 PKG_CHECK_MODULES([SDL], [sdl >= 1.2])
-PKG_CHECK_MODULES([OPENAL], [openal >= 0.0.8])
 PKG_CHECK_MODULES([PNG], [libpng >= 1.2])
-PKG_CHECK_MODULES([OGGVORBIS], [vorbisfile >= 1.1])
 PKG_CHECK_MODULES([THEORA], [theora >= 0.1])
+
+AS_IF([test "x$enable_sound" = "xyes"],[
+	PKG_CHECK_MODULES([OPENAL], [openal >= 0.0.8])
+	PKG_CHECK_MODULES([OGGVORBIS], [vorbisfile >= 1.1])
+])
 
 # Only accept SQLite versions newer than 3.6, otherwise use built-in
 PKG_CHECK_MODULES([SQLITE], [sqlite3 >= 3.6],

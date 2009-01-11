@@ -22,6 +22,7 @@
 #include "lib/framework/printf_ext.h"
 #include "openal_error.h"
 
+#if !defined(WZ_NOSOUND)
 #ifdef WZ_OS_MAC
 # include <OpenAL/al.h>
 # include <OpenAL/alc.h>
@@ -30,7 +31,6 @@
 # include <AL/alc.h>
 #endif
 
-#if !defined(WZ_NOSOUND)
 ALenum __sound_GetError(const char* location_description)
 {
 	const char* errorString;
