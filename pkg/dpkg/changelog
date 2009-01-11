@@ -1,3 +1,12 @@
+warzone2100 (2.1.1-0) unstable; urgency=low
+
+  * General:
+    * Fix: Double endian swapping bug that caused loading of save games to go
+      wrong on big endian systems, e.g. PowerPC (ticket:96, ticket:127,
+      ticket:177)
+
+ -- Giel van Schijndel <muggenhor@gna.org>  Sun, 11 Jan 2009 22:25:25 +0100
+
 warzone2100 (2.1.0-0) unstable; urgency=low
 
   * GUI:
