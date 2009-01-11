@@ -386,5 +386,5 @@ AS_IF([test "x$use_system_sqlite" = "xno"],[
 
 AS_IF([test -z "$PERL"],[
 	AC_MSG_NOTICE()
-	AC_MSG_WARN([Perl isn't installed, autogeneration of some sources will not work.])
+	AC_MSG_WARN([Perl >= 5.10 isn't installed, autogeneration of some sources will not work.])
 ])
