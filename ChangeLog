@@ -41,6 +41,7 @@
 2009-01-11: Version 2.1.1
  * General:
    * Fix: Double endian swapping bug that caused loading of save games to go wrong on big endian systems, e.g. PowerPC (ticket:96, ticket:127, ticket:177)
+   * Change: Updated Dutch translation (49%)
 
 2008-12-21: Version 2.1
  * GUI:
