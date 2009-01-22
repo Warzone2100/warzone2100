@@ -385,99 +385,146 @@ struct WEAPON
     %fetchRowById Row Id
         $Row = statsGetWeapon($Id - 1);
     end;
+    %csv-file "weapons.txt";
+
+    # WEAPON's CSV layout differs from the rest for this field
+    %csv-field-override designable 52;
 
     # Max distance to target for short range shot
+    %csv-field 17;
     UDWORD          shortRange;
     # Max distance to target for long range shot
+    %csv-field 18;
     UDWORD          longRange;
     # Min distance to target for shot
+    %csv-field 47;
     UDWORD          minRange;
     # Chance to hit at short range
+    %csv-field 19;
     UDWORD          shortHit;
     # Chance to hit at long range
+    %csv-field 20;
     UDWORD          longHit;
     # Time between each weapon fire
+    %csv-field 21;
     UDWORD          firePause;
     # The number of explosions per shot
+    %csv-field 22;
     UDWORD          numExplosions;
     # The number of rounds per salvo(magazine)
+    %csv-field 23;
     UBYTE           numRounds;
     # Time to reload the round of ammo (salvo fire)
+    %csv-field 24;
     UDWORD          reloadTime;
     # How much damage the weapon causes
+    %csv-field 25;
     UDWORD          damage;
     # Basic blast radius of weapon
+    %csv-field 26;
     UDWORD          radius;
     # Chance to hit in the blast radius
+    %csv-field 27;
     UDWORD          radiusHit;
     # Damage done in the blast radius
+    %csv-field 28;
     UDWORD          radiusDamage;
     # How long the round burns
+    %csv-field 29;
     UDWORD          incenTime;
     # Damage done each burn cycle
+    %csv-field 30;
     UDWORD          incenDamage;
     # Burn radius of the round
+    %csv-field 31;
     UDWORD          incenRadius;
     # speed ammo travels at
+    %csv-field 34;
     UDWORD          flightSpeed;
     # how high the ammo travels for indirect fire
+    %csv-field 35;
     UDWORD          indirectHeight;
     # indicates whether the droid has to stop before firing
+    %csv-field 36;
     enum FIREONMOVE fireOnMove;
     # the class of weapon
+    %csv-field 37;
     enum WEAPON_CLASS weaponClass;
     # the subclass to which the weapon belongs
+    %csv-field 38;
     enum WEAPON_SUBCLASS weaponSubClass;
 
     # which projectile model to use for the bullet
+    %csv-field 39;
     enum MOVEMENT_MODEL movementModel;
     # which type of warhead is associated with the weapon
+    %csv-field 40;
     enum WEAPON_EFFECT weaponEffect;
     # used to compare with weight to see if recoils or not
+    %csv-field 46;
     UDWORD          recoilValue;
     # amount the weapon(turret) can rotate 0 = none
+    %csv-field 41;
     UBYTE           rotate;
     # max amount the turret can be elevated up
+    %csv-field 42;
     UBYTE           maxElevation;
     # min amount the turret can be elevated down
+    %csv-field 43;
     SBYTE           minElevation;
     # flag to make the (explosion) effect face the player when drawn
+    %csv-field 44;
     UBYTE           facePlayer;
     # flag to make the inflight effect face the player when drawn
+    %csv-field 45;
     UBYTE           faceInFlight;
     # size of the effect 100 = normal, 50 = half etc
+    %csv-field 49;
     UBYTE           effectSize;
     # flag to indicate whether the effect lights up the world
+    %csv-field 48;
     bool            lightWorld;
     # indicates how good in the air - SHOOT_ON_GROUND, SHOOT_IN_AIR or both
+    %csv-field 50;
     UBYTE           surfaceToAir;
     # number of attack runs a VTOL droid can do with this weapon
+    %csv-field 51;
     UBYTE           vtolAttackRuns;
     # flag to indicate whether pentrate droid or not
+    %csv-field 53;
     bool            penetrate;
 
     # Graphics control stats
 
     # How long a direct fire weapon is visible. Measured in 1/100 sec.
+    %csv-field 32;
     UDWORD          directLife;
     # How long a blast radius is visible
+    %csv-field 33;
     UDWORD          radiusLife;
 
     # Graphics used for the weapon
 
     # The turret mount to use
+    %csv-field 10;
     IMD_model optional pMountGraphic;
     # The muzzle flash
+    %csv-field 11;
     IMD_model        pMuzzleGraphic;
     # The ammo in flight
+    %csv-field 12;
     IMD_model        pInFlightGraphic;
     # The ammo hitting a target
+    %csv-field 13;
     IMD_model        pTargetHitGraphic;
     # The ammo missing a target
+    %csv-field 14;
     IMD_model        pTargetMissGraphic;
     # The ammo hitting water
+    %csv-field 15;
     IMD_model        pWaterHitGraphic;
     # The trail used for in flight
+    %csv-field 16;
     IMD_model optional pTrailGraphic;
 
     # Audio

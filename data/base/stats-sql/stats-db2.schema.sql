@@ -112,6 +112,7 @@ CREATE TABLE `WEAPON` (
 	-- Automatically generated ID to link the inheritance hierarchy.
 	unique_inheritance_id INTEGER PRIMARY KEY NOT NULL,
 
+	-- WEAPON's CSV layout differs from the rest for this field
 	-- Max distance to target for short range shot
 	shortRange INTEGER NOT NULL,
 

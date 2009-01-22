@@ -242,6 +242,10 @@ LINE:
 
                 $curStruct{"qualifiers"}->{"csv-file"} = $file;
             }
+            elsif (/csv-field-override\s+(\w+)\s+(\d+|last)\s*;/)
+            {
+                $curStruct{"qualifiers"}->{"csv-field-overrides"}{$1} = $2;
+            }
             else
             {
                 die "error: line $ARGV:$.: Unrecognized struct-level specifier: %$_";
