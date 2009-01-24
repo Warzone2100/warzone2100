@@ -22,6 +22,14 @@
 #include <stddef.h>
 #include <assert.h>
 
+#ifndef HAVE_VALID_STRLCPY
+# ifdef HAVE_SYSTEM_STRLCPY
+   // If the system provides a non-conformant strlcpy we use our own
+#  ifdef strlcpy
+#   undef strlcpy
+#  endif
+#  define strlcpy wz_strlcpy
+# endif // HAVE_SYSTEM_STRLCPY
 /** 
  *	A safer variant of \c strncpy and its completely unsafe variant \c strcpy.
  *	Copy src to string dst of size siz.  At most siz-1 characters
@@ -61,7 +69,16 @@ static inline size_t strlcpy(char *WZ_DECL_RESTRICT dst, const char *WZ_DECL_RES
 
 	return(s - src - 1);        /* count does not include NUL */
 }
+#endif // HAVE_VALID_STRLCPY
 
+#ifndef HAVE_VALID_STRLCAT
+# ifdef HAVE_SYSTEM_STRLCAT
+   // If the system provides a non-conformant strlcat we use our own
+#  ifdef strlcat
+#   undef strlcat
+#  endif
+#  define strlcat wz_strlcat
+# endif // HAVE_SYSTEM_STRLCAT
 /** 
  *	A safer variant of \c strncat and its completely unsafe variant \c strcat.
  *	Appends src to string dst of size siz (unlike strncat, siz is the
@@ -105,6 +122,7 @@ static inline size_t strlcat(char *WZ_DECL_RESTRICT dst, const char *WZ_DECL_RES
 
 	return(dlen + (s - src));        /* count does not include NUL */
 }
+#endif // HAVE_VALID_STRLCAT
 
 /* Static array versions of common string functions. Safer because one less parameter to screw up. 
  * Can only be used on strings longer than the length of a pointer, because we use this for debugging. */
