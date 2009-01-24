@@ -38,6 +38,10 @@
  * Engine:
    * New: Support for naval propulsion type (r5803)
 
+0000-00-00: Version 2.1.2
+ * General:
+   * Fix: If the target system to run on already provides strlcpy and/or strlcat, check whether they work as expected, and if they do, use them instead (r6556, r6557)
+
 2009-01-11: Version 2.1.1
  * General:
    * Fix: Double endian swapping bug that caused loading of save games to go wrong on big endian systems, e.g. PowerPC (ticket:96, ticket:127, ticket:177)
