@@ -36,6 +36,10 @@ AC_PROG_VERSION_CHECK([flex], [2.5.33], [2.5.34])
 # Enable Compiler/LibC GNU extensions
 AC_GNU_SOURCE
 
+# Check for the strlcpy and strlcat functions
+AX_CHECK_STRLCPY
+AX_CHECK_STRLCAT
+
 # Check for gettext
 AM_GNU_GETTEXT([external])
 AC_PROG_VERSION_CHECK([msgfmt xgettext], [0.15])
