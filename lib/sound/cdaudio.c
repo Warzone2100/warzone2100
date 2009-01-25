@@ -29,16 +29,20 @@
 #include "mixer.h"
 #include "playlist.h"
 
+static float		music_volume = 0.5;
+
+#if !defined(WZ_NOSOUND)
 static const size_t bufferSize = 16 * 1024;
 static const unsigned int buffer_count = 32;
 static bool		music_initialized;
 static unsigned int	music_track = 0;
-static float		music_volume = 0.5;
 
 static AUDIO_STREAM* cdStream = NULL;
+#endif
 
 BOOL cdAudio_Open(const char* user_musicdir)
 {
+#if !defined(WZ_NOSOUND)
 	if(music_initialized)
 	{
 		return true;
@@ -54,7 +58,9 @@ BOOL cdAudio_Open(const char* user_musicdir)
 		return false;
 	}
 
+
 	music_initialized = true;
+#endif
 
 	return true;
 }
@@ -63,10 +69,12 @@ static void cdAudio_CloseTrack(void)
 {
 	cdAudio_Stop();
 
+#if !defined(WZ_NOSOUND)
 	if (music_track != 0)
 	{
 		music_track = 0;
 	}
+#endif
 }
 
 void cdAudio_Close(void)
@@ -74,9 +82,13 @@ void cdAudio_Close(void)
 	debug(LOG_SOUND, "Closing CD audio");
 	cdAudio_CloseTrack();
 	PlayList_Quit();
+
+#if !defined(WZ_NOSOUND)
 	music_initialized = false;
+#endif
 }
 
+#if !defined(WZ_NOSOUND)
 static void cdAudio_TrackFinished(void*);
 
 static bool cdAudio_OpenTrack(const char* filename)
@@ -88,7 +100,6 @@ static bool cdAudio_OpenTrack(const char* filename)
 
 	cdAudio_CloseTrack();
 
-#ifndef WZ_NOSOUND
 	if (strncasecmp(filename+strlen(filename)-4, ".ogg", 4) == 0)
 	{
 		PHYSFS_file* music_file = PHYSFS_openRead(filename);
@@ -109,7 +120,6 @@ static bool cdAudio_OpenTrack(const char* filename)
 
 		return true;
 	}
-#endif
 
 	return false; // unhandled
 }
@@ -140,9 +150,11 @@ static void cdAudio_TrackFinished(void* user_data)
 		debug(LOG_SOUND, "Now playing %s", filename);
 	}
 }
+#endif
 
 BOOL cdAudio_PlayTrack(SDWORD iTrack)
 {
+#if !defined(WZ_NOSOUND)
 	cdAudio_CloseTrack();
 
 	PlayList_SetTrack(iTrack);
@@ -172,31 +184,40 @@ BOOL cdAudio_PlayTrack(SDWORD iTrack)
 	}
 
 	return true;
+#else
+	return false;
+#endif
 }
 
 void cdAudio_Stop()
 {
+#if !defined(WZ_NOSOUND)
 	if (cdStream)
 	{
 		sound_StopStream(cdStream);
 		cdStream = NULL;
 	}
+#endif
 }
 
 void cdAudio_Pause()
 {
+#if !defined(WZ_NOSOUND)
 	if (cdStream)
 	{
 		sound_PauseStream(cdStream);
 	}
+#endif
 }
 
 void cdAudio_Resume()
 {
+#if !defined(WZ_NOSOUND)
 	if (cdStream)
 	{
 		sound_ResumeStream(cdStream);
 	}
+#endif
 }
 
 float sound_GetMusicVolume()
@@ -218,9 +239,11 @@ void sound_SetMusicVolume(float volume)
 		music_volume = 1.0;
 	}
 
+#if !defined(WZ_NOSOUND)
 	// Change the volume of the current stream as well (if any)
 	if (cdStream)
 	{
 		sound_SetStreamVolume(cdStream, music_volume);
 	}
+#endif
 }
