@@ -679,6 +679,12 @@ AUDIO_STREAM* sound_PlayStreamWithBuf(PHYSFS_file* fileHandle, float volume, voi
 
 	unsigned int i;
 
+	if (!openal_initialized)
+	{
+		debug(LOG_WARNING, "OpenAL isn't initialized, not creating an audio stream");
+		return NULL;
+	}
+
 	stream = malloc(sizeof(AUDIO_STREAM));
 	if (stream == NULL)
 	{
