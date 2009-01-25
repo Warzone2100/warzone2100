@@ -41,6 +41,9 @@
 0000-00-00: Version 2.1.2
  * General:
    * Fix: If the target system to run on already provides strlcpy and/or strlcat, check whether they work as expected, and if they do, use them instead (r6556, r6557)
+   * Change: Allow compiling without OpenAL and Vorbis when compiling with --disable-sound
+ * Sound:
+   * Fix: When sound isn't enabled (at runtime, unrelated to --disable-sound, e.g. when no sound device is available) do not attempt to set up an AUDIO_STREAM
 
 2009-01-11: Version 2.1.1
  * General:
