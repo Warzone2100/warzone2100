@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2008-12-13 19:43+0100\n"
+"POT-Creation-Date: 2009-01-25 01:04+0100\n"
 "PO-Revision-Date: 2009-01-05 00:56+0100\n"
 "Last-Translator: Mathijs <mathijssch@gmail.com>\n"
 "Language-Team: Dutch <vertaling@vrijschrift.org>\n"
@@ -8464,84 +8464,80 @@ msgstr "Wacht even terwijl de fabriek de nieuwe eenheden produceert"
 msgid "Congratulations commander - you are ready for your first mission"
 msgstr "Gefeliciteerd commandant - je bent nu klaar voor je eerste missie"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1283
-msgid "Viper Light Cannon Half-track"
-msgstr "Adder Licht Kanon Halfband"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1289
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1293
 msgid "Cobra Hover Heavy-Repair"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1290
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1294
 msgid "Viper HMG Wheels"
 msgstr "Adder HMG Wielen"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1291
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1295
 #: data/mp/messages/strings/names.txt:1815
 msgid "Scourge Mantis Hover"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1292
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1296
 msgid "TK Mantis Hover"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1293
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1297
 msgid "Cobra HMG Tracks"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1294
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1298
 msgid "Cobra Hover HC"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1296
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1299
 msgid "Scorpion Lancer Tracks"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1297
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1300
 msgid "Scorpion Heavy Cannon Tracks"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1298
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1301
 msgid "Scorpion Lancer VTOL"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1299
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1302
 msgid "Scorpion BB VTOL"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1301
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1303
 msgid "Viper Command Turret Tracks"
 msgstr "Adder Commandokoepel Banden"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1302
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1304
 msgid "Cobra Command Turret Tracks"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1303
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1305
 msgid "Scorpion Command Turret Tracks"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1304
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1306
 msgid "mantis Command Turret Tracks"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1306
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1307
 msgid "Cobra Lancer Tracks"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1307
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1308
 msgid "Mantis Heavy Cannon Tracks"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1308
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1309
 msgid "Mantis Tank Killer Tracks"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1309
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1310
 msgid "Mantis Scourge Tracks"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1310
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1311
 msgid "Scorpion Heavy Machinegun Tracks"
 msgstr ""
 
@@ -8553,85 +8549,93 @@ msgstr ""
 msgid "Scorpion Heavy Repair Hover"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1316
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1314
 msgid "Cobra Hover Truck"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1317
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1315
 msgid "Scorpion Hover Truck"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1318
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1316
 msgid "Mantis Hover Truck"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1321
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1317
 msgid "Cobra Bunker Buster Tracks"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1322
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1318
 msgid "Scorpion Bunker Buster Tracks"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1323
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1319
 msgid "Mantis Bunker Buster Tracks"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1325
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1320
 msgid "Viper Tracks Lancer"
 msgstr "Adder Banden Lansier"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1327
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1321
 msgid "Cobra Half-Tracks Mini-Pod"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1328
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1322
 msgid "Cobra Tracks Mini-Pod"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1329
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1323
 msgid "Cobra Tracks Mini-Rocket Artillery"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1331
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1324
 msgid "Cobra Inferno Half-track"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1332
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1325
 msgid "Python HVC Hover"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1334
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1326
 msgid "Python Scourge Tracks"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1335
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1327
 msgid "Python Gauss Cannon Tracks"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1336
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1328
 msgid "Python Pulse Laser Tracks"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1337
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1329
 msgid "Tiger Pulse Laser Tracks"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1338
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1330
 msgid "Tiger Heavy Laser Tracks"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1339
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1331
 msgid "Wyvern Gauss Cannon Tracks"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1340
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1332
 msgid "Wyvern Pulse Laser Tracks"
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1341
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1333
 msgid "Wyvern Heavy Laser Tracks"
 msgstr ""
+
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1334
+msgid "Viper Machinegun Half-Track"
+msgstr "Adder Machinegeweer Halfband"
+
+#: data/mods/multiplay/ntw/messages/strings/names.txt:1335
+msgid "Viper Flamer Half-Track"
+msgstr "Adder Vlammenwerper Halfband"
 
 #: data/mp/messages/resmessagesall.rmsg:186
 msgid "Cyborg Transport Available"
@@ -10025,129 +10029,138 @@ msgstr "Vereenvoudigd Chinees"
 msgid "Latin"
 msgstr "Latijn"
 
-#: src/clparse.c:95
+#: src/clparse.c:97
 msgid "Run in cheat mode"
 msgstr "Valsspelen aanzetten"
 
-#: src/clparse.c:96
+#: src/clparse.c:98
 msgid "Set default data directory"
 msgstr "Stel standaard gegevensmap in"
 
-#: src/clparse.c:96
+#: src/clparse.c:98
 msgid "data directory"
 msgstr "gegevensmap"
 
-#: src/clparse.c:97
+#: src/clparse.c:99
 msgid "Set configuration directory"
 msgstr "Stel instellingenmap in"
 
-#: src/clparse.c:97
+#: src/clparse.c:99
 msgid "configuration directory"
 msgstr "instellingenmap"
 
-#: src/clparse.c:98
+#: src/clparse.c:100
 msgid "Show debug for given level"
 msgstr "Laat fouten zien voor gegeven niveau"
 
-#: src/clparse.c:98
+#: src/clparse.c:100
 msgid "debug level"
 msgstr "foutenniveau"
 
-#: src/clparse.c:99
+#: src/clparse.c:101
 msgid "Log debug output to file"
 msgstr "Sla foutenuitvoer op in logboek"
 
-#: src/clparse.c:99
+#: src/clparse.c:101
 msgid "file"
 msgstr "bestand"
 
-#: src/clparse.c:100
+#: src/clparse.c:102
 msgid "Flush all debug output written to stderr"
 msgstr ""
 
-#: src/clparse.c:101
+#: src/clparse.c:103
 msgid "Play in fullscreen mode"
 msgstr "Speel met volledig scherm"
 
-#: src/clparse.c:102
+#: src/clparse.c:104
 msgid "Load a specific game"
 msgstr "Laad een specifiek spel"
 
-#: src/clparse.c:102
+#: src/clparse.c:104
 msgid "game-name"
 msgstr "spelnaam"
 
-#: src/clparse.c:103
+#: src/clparse.c:105
 msgid "Show this help message and exit"
 msgstr "Geef dit helpbericht weer en stop"
 
-#: src/clparse.c:104
+#: src/clparse.c:106
 msgid "Enable a global mod"
 msgstr "Globale mod aanzetten"
 
-#: src/clparse.c:104
-#: src/clparse.c:105
 #: src/clparse.c:106
+#: src/clparse.c:107
+#: src/clparse.c:108
 msgid "mod"
 msgstr "mod"
 
-#: src/clparse.c:105
+#: src/clparse.c:107
 msgid "Enable a campaign only mod"
 msgstr "Een mod alleen voor veldtocht aanzetten"
 
-#: src/clparse.c:106
+#: src/clparse.c:108
 msgid "Enable a multiplay only mod"
 msgstr "Een mod alleen voor meerdere spelers aanzetten"
 
-#: src/clparse.c:107
+#: src/clparse.c:109
+#, fuzzy
+msgid "Disable asserts"
+msgstr "Schaduwen uitschakelen"
+
+#: src/clparse.c:110
 msgid "Load a saved game"
 msgstr "Laad een opgeslagen spel"
 
-#: src/clparse.c:107
+#: src/clparse.c:110
 msgid "savegame"
 msgstr "opgeslagen spel"
 
-#: src/clparse.c:110
+#: src/clparse.c:113
 msgid "Play in windowed mode"
 msgstr "Speel in een venster"
 
-#: src/clparse.c:111
+#: src/clparse.c:114
 msgid "Show version information and exit"
 msgstr "Laat versieinformatie zien en sluit af"
 
-#: src/clparse.c:112
+#: src/clparse.c:115
 msgid "Set the resolution to use"
 msgstr "Resolutie instellen"
 
-#: src/clparse.c:112
+#: src/clparse.c:115
 msgid "WIDTHxHEIGHT"
 msgstr "BREEDTExHOOGTE"
 
-#: src/clparse.c:113
+#: src/clparse.c:116
 msgid "Enable shadows"
 msgstr "Schaduwen inschakelen"
 
-#: src/clparse.c:114
+#: src/clparse.c:117
 msgid "Disable shadows"
 msgstr "Schaduwen uitschakelen"
 
-#: src/clparse.c:115
+#: src/clparse.c:118
 msgid "Enable sound"
 msgstr "Geluid inschakelen"
 
-#: src/clparse.c:116
+#: src/clparse.c:119
 msgid "Disable sound"
 msgstr "Geluid uitschakelen"
 
-#: src/clparse.c:117
+#: src/clparse.c:120
 msgid "Activate self-test"
 msgstr "Zelftest activeren"
 
-#: src/clparse.c:118
+#: src/clparse.c:121
 msgid "connect directly to IP/hostname"
 msgstr ""
 
-#: src/clparse.c:119
+#: src/clparse.c:121
+msgid "host"
+msgstr ""
+
+#: src/clparse.c:122
 msgid "go directly to host screen"
 msgstr ""
 
@@ -12020,20 +12033,20 @@ msgstr "Missietijd - %s"
 msgid "Total Game Time - %s"
 msgstr "Totale speeltijd - %s"
 
-#: src/scriptfuncs.c:3216
+#: src/scriptfuncs.c:3213
 msgid "YOU ARE VICTORIOUS!"
 msgstr "JE HEBT GEWONNEN!"
 
-#: src/scriptfuncs.c:3220
+#: src/scriptfuncs.c:3217
 msgid "YOU WERE DEFEATED!"
 msgstr "JE BENT VERSLAGEN!"
 
-#: src/scriptfuncs.c:10154
+#: src/scriptfuncs.c:10151
 #, c-format
 msgid "Beacon received from %s!"
 msgstr "Baken ontvangen  van %s!"
 
-#: src/scriptfuncs.c:10200
+#: src/scriptfuncs.c:10197
 #, c-format
 msgid "Beacon %d"
 msgstr "Baken %d"
@@ -12062,59 +12075,59 @@ msgstr "Kon geen sensoreenheden vinden!"
 msgid "Unable to locate any Commanders!"
 msgstr "Kon geen commandanten vinden!"
 
-#: src/structure.c:2733
+#: src/structure.c:2708
 msgid "Command Control Limit Reached - Production Halted"
 msgstr "Commando controlelimiet bereikt - Productie gestopt"
 
-#: src/structure.c:5829
-#: src/structure.c:5851
+#: src/structure.c:5804
+#: src/structure.c:5826
 #, c-format
 msgid "%s - %u Unit assigned"
 msgid_plural "%s - %u Units assigned"
 msgstr[0] "%s - %u Eenheid toegewezen"
 msgstr[1] "%s - %u Eenheden toegewezen"
 
-#: src/structure.c:5901
+#: src/structure.c:5876
 #, c-format
 msgid "%s - Connected %u of %u"
 msgstr "%s - Verbonden met %u van %u"
 
-#: src/structure.c:5915
+#: src/structure.c:5890
 #, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - Schade %3.0f%%"
 
-#: src/structure.c:6035
-#: src/structure.c:6084
+#: src/structure.c:6010
+#: src/structure.c:6059
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - Elektronisch beschadigd"
 
-#: src/structure.c:6319
+#: src/structure.c:6294
 msgid "Electronic Reward - Visibility Report"
 msgstr "Elektronische onderscheiding - Zichtbaarheidsverslag"
 
-#: src/structure.c:6359
+#: src/structure.c:6334
 msgid "Factory Reward - Propulsion"
 msgstr "Fabrieksonderscheiding - Aandrijving"
 
-#: src/structure.c:6383
+#: src/structure.c:6358
 msgid "Factory Reward - Body"
 msgstr "Fabrieksonderscheiding - Carrosserie"
 
-#: src/structure.c:6407
+#: src/structure.c:6382
 msgid "Factory Reward - Weapon"
 msgstr "Fabrieksonderscheiding - Wapen"
 
-#: src/structure.c:6416
+#: src/structure.c:6391
 msgid "Factory Reward - Nothing"
 msgstr "Fabrieksonderscheiding - Niets"
 
-#: src/structure.c:6444
+#: src/structure.c:6419
 msgid "Repair Facility Award - Repair"
 msgstr "Reparatie-onderscheiding - Reparatie"
 
-#: src/structure.c:6451
+#: src/structure.c:6426
 msgid "Repair Facility Award - Nothing"
 msgstr "Reparatie-onderscheiding - Niets"
 
@@ -12154,6 +12167,9 @@ msgstr " - Gebouwd %s"
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "Versie %s%s%s%s"
+
+#~ msgid "Viper Light Cannon Half-track"
+#~ msgstr "Adder Licht Kanon Halfband"
 
 #~ msgid "New Paradigm Transmission"
 #~ msgstr "Uitzending van het Nieuwe Paradigma"
@@ -12292,12 +12308,6 @@ msgstr "Versie %s%s%s%s"
 
 #~ msgid "Power Upgrade"
 #~ msgstr "Energieverbetering"
-
-#~ msgid "Viper Machinegun Half-Track"
-#~ msgstr "Adder Machinegeweer Halfband"
-
-#~ msgid "Viper Flamer Half-Track"
-#~ msgstr "Adder Vlammenwerper Halfband"
 
 #~ msgid "Full"
 #~ msgstr "Vol"
