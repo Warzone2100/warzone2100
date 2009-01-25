@@ -118,7 +118,7 @@ static const struct poptOption* getOptionsTable(void)
 		{ "sound",      '\0', POPT_ARG_NONE,   NULL, CLI_SOUND,      N_("Enable sound"),                      NULL },
 		{ "nosound",    '\0', POPT_ARG_NONE,   NULL, CLI_NOSOUND,    N_("Disable sound"),                     NULL },
 		{ "selftest",   '\0', POPT_ARG_NONE,   NULL, CLI_SELFTEST,   N_("Activate self-test"),                NULL },
-		{ "join",       '\0', POPT_ARG_STRING, NULL, CLI_CONNECTTOIP,N_("connect directly to IP/hostname"),   NULL },
+		{ "join",       '\0', POPT_ARG_STRING, NULL, CLI_CONNECTTOIP,N_("connect directly to IP/hostname"),   N_("host") },
 		{ "host",       '\0', POPT_ARG_NONE,   NULL, CLI_HOSTLAUNCH, N_("go directly to host screen"),        NULL },
 		// Terminating entry
 		{ NULL,         '\0', 0,               NULL, 0,              NULL,                                    NULL },
