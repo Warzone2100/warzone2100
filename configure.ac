@@ -255,8 +255,8 @@ AS_IF([test "x$enable_sound" = "xyes"],[
 	PKG_CHECK_MODULES([OGGVORBIS], [vorbisfile >= 1.1])
 ])
 
-# Only accept SQLite versions newer than 3.6, otherwise use built-in
-PKG_CHECK_MODULES([SQLITE], [sqlite3 >= 3.6],
+# Only accept SQLite versions newer than 3.6.10, otherwise use built-in
+PKG_CHECK_MODULES([SQLITE], [sqlite3 >= 3.6.10],
 	[ use_system_sqlite="yes" ], [
 	use_system_sqlite="no"
 	SQLITE_CFLAGS="-I\$(top_srcdir)/lib/sqlite3"
