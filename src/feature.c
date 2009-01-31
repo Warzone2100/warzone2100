@@ -140,6 +140,7 @@ BOOL loadFeatureStats(const char *pFeatureData, UDWORD bufferSize)
 	for (i = 0; i < numFeatureStats; i++)
 	{
 		UDWORD Width, Breadth;
+		int damageable = 0, tileDraw = 0, allowLOS = 0, visibleAtStart = 0;
 
 		memset(psFeature, 0, sizeof(FEATURE_STATS));
 
@@ -147,7 +148,6 @@ BOOL loadFeatureStats(const char *pFeatureData, UDWORD bufferSize)
 		GfxFile[0] = '\0';
 		type[0] = '\0';
 
-		int damageable = 0, tileDraw = 0, allowLOS = 0, visibleAtStart = 0;
 
 		//read the data into the storage - the data is delimeted using comma's
 		sscanf(pFeatureData, "%[^','],%d,%d,%d,%d,%d,%[^','],%[^','],%d,%d,%d",
