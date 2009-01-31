@@ -1165,7 +1165,6 @@ void	kf_ToggleGodMode( void )
 	{
 		FEATURE	*psFeat = apsFeatureLists[0];
 		int player;
-		STRUCTURE *psStruct;
 
 		godMode = false;
 		setRevealStatus(game.fog);
