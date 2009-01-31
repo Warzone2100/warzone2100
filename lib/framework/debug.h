@@ -140,7 +140,7 @@ typedef enum {
   LOG_LAST /**< _must_ be last! */
 } code_part;
 
-extern BOOL enabled_debug[LOG_LAST];
+extern bool enabled_debug[LOG_LAST];
 
 typedef void (*debug_callback_fn)(void**, const char*);
 typedef bool (*debug_callback_init)(void**);
@@ -198,7 +198,7 @@ void debug_callback_win32debug(void** data, const char* outputBuffer);
  *
  * \param	str	Codepart in textformat
  */
-BOOL debug_enable_switch(const char *str);
+bool debug_enable_switch(const char *str);
 
 /**
  * Output printf style format str with additional arguments.

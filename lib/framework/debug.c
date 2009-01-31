@@ -40,7 +40,7 @@ char last_called_script_event[MAX_EVENT_NAME_LEN];
 UDWORD traceID = -1;
 
 static debug_callback * callbackRegistry = NULL;
-BOOL enabled_debug[LOG_LAST]; // global
+bool enabled_debug[LOG_LAST]; // global
 bool assertEnabled = true;
 
 /*
@@ -76,7 +76,7 @@ static const char *code_part_names[] = {
 };
 
 static char inputBuffer[2][MAX_LEN_LOG_LINE];
-static BOOL useInputBuffer1 = false;
+static bool useInputBuffer1 = false;
 static bool debug_flush_stderr = false;
 
 /**
@@ -283,7 +283,7 @@ void debug_register_callback( debug_callback_fn callback, debug_callback_init in
 }
 
 
-BOOL debug_enable_switch(const char *str)
+bool debug_enable_switch(const char *str)
 {
 	code_part part = code_part_from_str(str);
 
