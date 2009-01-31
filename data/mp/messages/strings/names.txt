@@ -180,7 +180,7 @@ ViperHMGHalftrack			_("Heavy Machinegun Viper Half-tracks")
 ViperHMGTracks				_("Heavy Machinegun Viper Tracks")
 ViperLtA-Twheels			_("Lancer Viper Wheels")
 ViperPODWheels				_("Mini-Pod Rockets Viper Wheels")
-ViperMRLWheels				_("Mini-Rocket Artillery Viper Wheels")
+ViperMRLWheels				_("Mini-Pod Artillery Viper Wheels")
 ViperBBWheels				_("Bunker Buster Rockets Viper Wheels")
 
 CobraMedCnTrks				_("Medium Cannon Cobra Tracks")
@@ -191,7 +191,7 @@ CobraFlameTracks			_("Flamer Cobra Tracks")
 CobraHvyMortarHalftrack			_("Bombard Cobra Half-tracks")
 CobraComHalftrack			_("Command Turret Cobra Half-tracks")
 CobraLtA-Thalftrack			_("Lancer Cobra Half-tracks")
-CobraMRLHalftrack			_("Mini-Rocket Artillery Cobra Half-tracks")
+CobraMRLHalftrack			_("Mini-Pod Artillery Cobra Half-tracks")
 
 PythonLtCnTrks				_("Light Cannon Python Tracks")
 PythonMedCnTrks				_("Medium Cannon Python Tracks")
@@ -365,8 +365,10 @@ ECM1Default				"*TEST - Baba ECM Default*"
 ZNULLSENSOR				_("Z NULL SENSOR")
 BaBaSensor				"*BaBa Default Sensor*"
 CCSensor				"*CC Sensor*"
-DefaultSensor1Mk1			"*Default Sensor1 Mk1*"
-NavGunSensor				"*NavGunSensor*"
+DefaultSensor1Mk1			"*Default Sensor*"
+NavGunSensor				"*Nexus Sensor*"
+TowerSensor			"*Tower Sensor*"
+FortressSensor			"*Fortress Sensor*"
 SensorTower1Mk1				_("Sensor Tower")
 SensorTower2Mk1				_("Hardened Sensor Tower")
 SensorTurret1Mk1			_("Sensor Turret")
@@ -378,7 +380,7 @@ UplinkSensor				_("Uplink Sensor")
 Sys-CBTurret01				_("CB Radar Turret")
 Sys-VstrikeTurret01			_("VTOL Strike Turret")
 Sys-VTOLCBTurret01			_("VTOL CB Radar Turret")
-Sys-NXLinkTurret01			_("NEXUS Link")
+Sys-NXLinkTurret01			_("Nexus Link")
 
 SpyTurret01				_("Nexus Link Turret")
 
@@ -440,10 +442,10 @@ WallTower06				_("Lancer Hardpoint")
 
 GuardTower1				_("Machinegun Guard Tower")
 GuardTower2				_("Twin Machinegun Guard Tower")
-GuardTower3				_("Heavy Machinegun Guard Tower")
+GuardTower3				_("Heavy Machinegun Tower")
 GuardTower4				_("Flamer Guard Tower")
-GuardTower5				_("Lancer Guard Tower")
-GuardTower6				_("Mini-Pod Rocket Guard Tower")
+GuardTower5				_("Lancer Tower")
+GuardTower6				_("Mini-Pod Rocket Tower")
 
 /*PILLBOXES*/
 PillBox1				_("Machinegun Bunker")
@@ -523,7 +525,7 @@ RailGun1Mk1				_("Needle Gun")
 RailGun2Mk1				_("Rail Gun")
 RailGun3Mk1				_("Gauss Cannon")
 Rocket-LtA-T			_("Lancer")
-Rocket-MRL				_("Mini-Rocket Artillery")
+Rocket-MRL				_("Mini-Pod Artillery")
 Rocket-BB				_("Bunker Buster")
 //Rocket04-Scud			"*Earthshaker*"
 Rocket-Pod				_("Mini-Pod")
@@ -582,7 +584,7 @@ Bomb4-VTOL-HvyINC				_("VTOL Thermite Bomb Bay")
 											 
 // Collective Specific Defensive Structures
 CollectiveWall				_("Collective Wall")
-CollectiveCWall				_("Collective CWall")
+CollectiveCWall				_("Collective Corner Wall")
 CO-Tower-MG3				"*CO-Tower-MG3*"
 CO-Tower-RotMG				"*CO-Tower-RotMG*"
 CO-Tower-MdCan				"*CO-Tower-MdCan*"
@@ -604,8 +606,8 @@ CO-Emp-RotMortar-Pit			"*CO-Emp-RotMortar-Pit*"
 CO-AASite-SAM1				"*CO-AASite-SAM1*"
 
 // NEXUS Specific Defensive Structures
-NEXUSWall					_("NEXUS Wall")
-NEXUSCWall					_("NEXUS CWall")
+NEXUSWall					_("Nexus Wall")
+NEXUSCWall					_("Nexus Corner Wall")
 NX-Tower-Rail1				"*NX-Tower-Rail1*"
 NX-Tower-ATMiss				"*NX-Tower-ATMiss*"
 NX-Tower-PulseLas				"*NX-Tower-PulseLas*"
@@ -645,7 +647,7 @@ CAM3RESEARCH				_("CAM3 RESEARCH")
 //CAM3SYSTEMS					_("CAM3 SYSTEMS")
 //CAM3DEFENSES				_("CAM3 DEFENSES")
 //CAM3NOTUSED				_("CAM3 NOT USED")
-//CAM3-NXWall					_("CAM3 NEXUS Wall")
+//CAM3-NXWall					_("CAM3 Nexus Wall")
 
 //R-Comp-IDFAccuracy01			"*IDF Fire Accuracy*"
 R-Comp-CommandTurret01			_("Command Turret")
@@ -711,7 +713,7 @@ R-Defense-WallUpgrade05			_("Supercrete Mk2")
 R-Defense-WallUpgrade06			_("Supercrete Mk3")
 R-Defense-WallUpgrade07			_("Plascrete")
 R-Defense-WallUpgrade08			_("Plascrete Mk2")
-R-Defense-WallUpgrade09			_("Plascrete MK3")
+R-Defense-WallUpgrade09			_("Plascrete Mk3")
 R-Defense-WallUpgrade10			_("Plasteel")
 R-Defense-WallUpgrade11			_("Plasteel Mk2")
 R-Defense-WallUpgrade12			_("Plasteel Mk3")
@@ -735,7 +737,7 @@ R-Defense-IDFRocket			_("Ripple Rocket Battery")
 R-Defense-MdArtMissile			_("Angel Missile Battery")
 R-Defense-HvyArtMissile			_("Archangel Missile Battery")
 R-Defense-MortarPit			_("Mortar Pit")
-R-Defense-MRL				_("Mini-Rocket Battery")
+R-Defense-MRL				_("Mini-Pod Battery")
 
 R-Defense-Pillbox01			_("Machinegun Bunker")
 R-Defense-Pillbox03			_("Heavy Machinegun Bunker")
@@ -750,7 +752,7 @@ R-Defense-Rail2				_("Rail Gun Emplacement")
 R-Defense-Rail3				_("Gauss Cannon Emplacement")
 R-Defense-RotCannon			_("Assault Cannon Emplacement")
 R-Defense-RotHow				_("Hellstorm Emplacement")
-R-Defense-RotMG				_("Assault Gun Emplacement")
+R-Defense-RotMG				_("Rotary MG Bunker")
 R-Defense-RotMor				_("Pepperpot Pit")
 
 R-Defense-SamSite1			_("Avenger SAM Site")
@@ -760,13 +762,13 @@ R-Defense-TankTrap01			_("Tank Traps")
 R-Defense-TankTrap02			_("Dragon's Teeth")
 
 R-Defense-Tower01				_("Machinegun Guard Tower")
-R-Defense-Tower03				_("Heavy Machinegun Guard Tower")
-R-Defense-Tower04				_("Flamer Guard Tower")
-R-Defense-Tower05				_("Lancer Guard Tower")
-R-Defense-Tower06				_("Mini-Pod Rocket Guard Tower")
+R-Defense-Tower03				_("Heavy Machinegun Tower")
+R-Defense-Tower04				_("Flamer Tower")
+R-Defense-Tower05				_("Lancer Tower")
+R-Defense-Tower06				_("Mini-Pod Rocket Tower")
 
 R-Defense-GuardTower-ATMiss		_("Scourge Missile Tower")
-R-Defense-GuardTower-Rail1		_("Needle Gun Tower")	
+R-Defense-GuardTower-Rail1		_("Needle Gun Tower")
 
 R-Defense-WallTower01			_("Heavy Machinegun Hardpoint")
 R-Defense-WallTower02			_("Light Cannon Hardpoint")
@@ -919,10 +921,10 @@ R-Sys-SpyTurret					_("Nexus Link Turret")
 R-Sys-SpyTurret-Upgrade01		_("Improved Scrambler")
 R-Sys-SpyTurret-Upgrade02		_("Scrambler Turret Mk2")
 
-R-Sys-Resistance				_("NEXUS Intruder Program")
-R-Sys-Resistance-Upgrade01		_("NEXUS Resistance Circuits")
-R-Sys-Resistance-Upgrade02		_("NEXUS Resistance Circuits Mk2")
-R-Sys-Resistance-Upgrade03		_("NEXUS Resistance Circuits Mk3")
+R-Sys-Resistance				_("Nexus Intruder Program")
+R-Sys-Resistance-Upgrade01		_("Nexus Resistance Circuits")
+R-Sys-Resistance-Upgrade02		_("Nexus Resistance Circuits Mk2")
+R-Sys-Resistance-Upgrade03		_("Nexus Resistance Circuits Mk3")
 
 R-Sys-SensorLock				_("Sensor Lock")
 
@@ -1159,20 +1161,20 @@ R-Wpn-Rail-ROF01				_("Rail Gun ROF")
 R-Wpn-Rail-ROF02				_("Rail Gun ROF Mk2")
 R-Wpn-Rail-ROF03				_("Rail Gun ROF Mk3")
 
-R-Wpn-Rocket-Accuracy01			_("Stabilized Mini-Rockets")
-R-Wpn-Rocket-Accuracy02			_("Stabilized Mini-Rockets Mk2")
-R-Wpn-Rocket-Damage01			_("HE Mini-Rockets")
-R-Wpn-Rocket-Damage02			_("HE Mini-Rockets Mk2")
-R-Wpn-Rocket-Damage03			_("HE Mini-Rockets Mk3")
-R-Wpn-Rocket-Damage04			_("HEAP Mini-Rockets")
-R-Wpn-Rocket-Damage05			_("HEAP Mini-Rockets Mk2")
-R-Wpn-Rocket-Damage06			_("HEAP Mini-Rockets Mk3")
-R-Wpn-Rocket-ROF01			_("Fast Fire Mini-Rockets")
-R-Wpn-Rocket-ROF02			_("Fast Fire Mini-Rockets Mk2")
-R-Wpn-Rocket-ROF03			_("Fast Fire Mini-Rockets Mk3")
-R-Wpn-Rocket-ROF04			_("Rapid Fire Mini-Rockets")
-R-Wpn-Rocket-ROF05			_("Rapid Fire Mini-Rockets Mk2")
-R-Wpn-Rocket-ROF06			_("Rapid Fire Mini-Rockets Mk3")
+R-Wpn-Rocket-Accuracy01			_("Stabilized Mini-Pods")
+R-Wpn-Rocket-Accuracy02			_("Stabilized Mini-Pods Mk2")
+R-Wpn-Rocket-Damage01			_("HE Mini-Pods")
+R-Wpn-Rocket-Damage02			_("HE Mini-Pods Mk2")
+R-Wpn-Rocket-Damage03			_("HE Mini-Pods Mk3")
+R-Wpn-Rocket-Damage04			_("HEAP Mini-Pods")
+R-Wpn-Rocket-Damage05			_("HEAP Mini-Pods Mk2")
+R-Wpn-Rocket-Damage06			_("HEAP Mini-Pods Mk3")
+R-Wpn-Rocket-ROF01			_("Fast Fire Mini-Pods")
+R-Wpn-Rocket-ROF02			_("Fast Fire Mini-Pods Mk2")
+R-Wpn-Rocket-ROF03			_("Fast Fire Mini-Pods Mk3")
+R-Wpn-Rocket-ROF04			_("Rapid Fire Mini-Pods")
+R-Wpn-Rocket-ROF05			_("Rapid Fire Mini-Pods Mk2")
+R-Wpn-Rocket-ROF06			_("Rapid Fire Mini-Pods Mk3")
 R-Wpn-RocketSlow-Accuracy01		_("Improved Rocket Wire Guidance")
 R-Wpn-RocketSlow-Accuracy02		_("Rocket Laser Designator")
 R-Wpn-RocketSlow-Accuracy03		_("Thermal Imaging Rockets")
@@ -1187,7 +1189,7 @@ R-Wpn-RocketSlow-ROF02			_("Rocket Autoloader Mk2")
 R-Wpn-RocketSlow-ROF03			_("Rocket Autoloader Mk3")
 
 R-Wpn-Rocket01-LtAT			_("Lancer AT Rocket")
-R-Wpn-Rocket02-MRL			_("Mini-Rocket Artillery")
+R-Wpn-Rocket02-MRL			_("Mini-Pod Artillery")
 R-Wpn-Rocket03-HvAT			_("Bunker Buster Rocket")
 R-Wpn-Rocket05-MiniPod			_("Mini-Pod Rockets")
 R-Wpn-Rocket06-IDF			_("Ripple Rockets")
@@ -1375,7 +1377,7 @@ Howitzer04-Inc-pit		"*Howitzer04-Inc-pit*"
 //P0-Emp-IncHow-Pit		_("Hellfire Emplacement")
 Rocket-MRL-pit			"*Rocket-MRL-pit*"
 Emplacement-MRL-pit		_("MRL Emplacement")
-GuardTower-RotMg		_("Assault Gun Guard Tower")
+GuardTower-RotMg		_("Assault Gun Tower")
 
 Emplacement-HvyATrocket	_("Tank Killer Emplacement")
 //Rocket-HvyA-T-pit		"*Tank Killer-pit*"
@@ -1383,7 +1385,7 @@ Emplacement-HPVcannon	_("HPV Cannon Emplacement")
 Emplacement-PulseLaser	_("Pulse Laser Emplacement")
 Emplacement-Rail2		_("Railgun Emplacement")
 Emplacement-MdART-pit	_("Angel Missile Emplacement")
-Missile-MdArt-pit		"*Angle Missile-pit*"
+Missile-MdArt-pit		"*Angel Missile-pit*"
 Emplacement-HvART-pit	_("Archangel Missile Emplacement")
 Missile-HvyArt-pit		"*Missile-HvyArt-pit*"
 WallTower-HvATrocket	_("Tank Killer Hardpoint")
@@ -1456,7 +1458,7 @@ P6-M-QMG1-HT		"*P6-M-QMG1-HT*"
 // New Style Repair Center - replaces all instances of A0RepairCentre
 A0RepairCentre2		_("Repair Center")
 A0RepairCentre3		_("Repair Facility")
-RepairCentre		"*RepairCenter*"
+RepairCentre		"*Repair Center*"
 
 Emplacement-MortarPit02	_("Bombard Pit")
 Emplacement-Howitzer150	_("Ground Shaker Emplacement")
@@ -1507,6 +1509,7 @@ Sk-PythonHvCanTrack			_("Heavy Cannon Python Tracks")
 Sk-CobraBBHover				_("Bunker Buster Cobra Hover")
 
 R-Sys-Sensor-Upgrade02			_("Sensor Upgrade Mk2")
+R-Sys-Sensor-Upgrade03			_("Sensor Upgrade Mk3")
 R-Struc-Power-Upgrade03			_("Vapor Turbine Generator Mk2")
 MP-Cyb-ATmiss-GRD			_("Scourge")
 MP-Cyb-Laser1-GRD			_("Flashlight Gunner")
@@ -1677,7 +1680,7 @@ R-Defense-HeavyLas			_("Heavy Laser Emplacement")
 
 // added by SEBG 17 June 1999
 
-R-Sys-Resistance-Circuits		_("NEXUS Resistance Circuits")
+R-Sys-Resistance-Circuits		_("Nexus Resistance Circuits")
 
 Cannon6TwinAslt				_("Twin Assault Cannon")
 R-Wpn-Cannon6TwinAslt			_("Twin Assault Cannon")
@@ -1724,8 +1727,8 @@ Cyb-Hvy-A-T					_("Super Scourge Cyborg")
 Cyb-Hvybod-A-T				_("Super Scourge Cyborg")
 Cyb-Hvywpn-A-T				_("Super Scourge Cyborg")
 
-Sys-SpyTower				_("NEXUS Link Tower")
-R-Sys-SpyTower				_("NEXUS Link Tower")
+Sys-SpyTower				_("Nexus Link Tower")
+R-Sys-SpyTower				_("Nexus Link Tower")
 
 EMP-Cannon					_("EMP Cannon")
 WallTower-EMP				_("EMP Cannon Tower")
@@ -1765,9 +1768,9 @@ R-Wpn-Flamer-Damage09			_("Superhot Plasmite gel Mk3")
 // added by Marc 13th September - EMP Mortar, AA laser, AA Hardpoints, Sam Hardpoints
 
 MortarEMP					_("EMP Mortar")
-Emplacement-MortarEMP			_("EMP Mortar")
+Emplacement-MortarEMP			_("EMP Mortar Pit")
 R-Wpn-MortarEMP				_("EMP Mortar")
-R-Defense-EMPMortar			_("EMP Mortar")
+R-Defense-EMPMortar			_("EMP Mortar Pit")
 AAGunLaser					_("Stormbringer AA Laser")
 R-Defense-AA-Laser			_("Stormbringer Emplacement")
 R-Wpn-AALaser				_("Stormbringer AA Laser")
@@ -1905,7 +1908,7 @@ ViperTrkLancer				_("Lancer Viper Tracks")
 
 CobraPODHTracks				_("Mini-Pod Cobra Half-Tracks")
 CobraPODTracks				_("Mini-Pod Cobra Tracks")
-CobraMRLTracks				_("Mini-Rocket Artillery Cobra Tracks")
+CobraMRLTracks				_("Mini-Pod Artillery Cobra Tracks")
 
 CobraInfernoHTracks			_("Inferno Cobra Half-Tracks")
 PythonHoverHVC				_("HPV Cannon Python Hover")
