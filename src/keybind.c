@@ -194,7 +194,7 @@ void kf_ToggleSensorDisplay( void )
 	if (rangeOnScreen)
 		addConsoleMessage(_("Lets us see what you see!"), LEFT_JUSTIFY, SYSTEM_MESSAGE);        //added this message... Yeah, its lame. :)
 	else
-		addConsoleMessage(_("Fine, sensor display is off!"), LEFT_JUSTIFY, SYSTEM_MESSAGE);     //added this message... Yeah, its lame. :)
+		addConsoleMessage(_("Fine, weapon & sensor display is off!"), LEFT_JUSTIFY, SYSTEM_MESSAGE);     //added this message... Yeah, its lame. :)
 }
 //===================================================
 /* Halves all the heights of the map tiles */
@@ -1163,13 +1163,13 @@ void	kf_ToggleGodMode( void )
 
 	if(godMode)
 	{
-		FEATURE* psFeat;
+		FEATURE	*psFeat = apsFeatureLists[0];
 		int player;
+		STRUCTURE *psStruct;
 
 		godMode = false;
 		setRevealStatus(game.fog);
 		// now hide the features
-		psFeat = apsFeatureLists[0];
 		while (psFeat)
 		{
 			psFeat->visible[selectedPlayer] = 0;

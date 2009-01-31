@@ -4280,7 +4280,52 @@ STRUCTURE	*psStruct;
 	}//end if we want to display...
 }
 
-/// Show the sensor range for the specified object
+// Shows the weapon (long) range of the object in question.
+// Note, it only does it for the first weapon slot!
+static void showWeaponRange(BASE_OBJECT *psObj)
+{
+	UDWORD	i;
+	DROID	*psDroid;
+	STRUCTURE	*psStruct;
+	WEAPON_STATS	*psStats;
+	SDWORD	radius;
+	SDWORD	xDif,yDif;
+	UDWORD	weaponRange;
+	Vector3i pos;
+
+	if ( psObj->type == OBJ_DROID)
+	{
+		psDroid = (DROID*)psObj;
+		psStats = asWeaponStats + psDroid->asWeaps[0].nStat;//weapon_slot
+		weaponRange = psStats->longRange;
+	}
+	else
+	{
+		psStruct = (STRUCTURE*)psObj;
+		if(psStruct->pStructureType->numWeaps == 0) return;
+		weaponRange = psStruct->pStructureType->psWeapStat[0]->longRange;
+	}
+
+	if ( weaponRange == 0)
+	{
+		return;		//don't bother if no range.
+	}
+
+	for(i=0; i<360; i+=23)
+	{
+		radius = weaponRange;
+		xDif = radius * (SIN(DEG(i)));
+		yDif = radius * (COS(DEG(i)));
+
+		xDif = xDif/4096;	 // 'cause it's fixed point
+		yDif = yDif/4096;
+		pos.x = MAX(psObj->pos.x - xDif, 0);
+		pos.z = MAX(psObj->pos.y - yDif, 0);
+		pos.y = map_Height(pos.x,pos.z) + 16;
+		effectGiveAuxVar(40);	// half normal plasma size...
+		addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_VERY_SMALL,false,NULL,0);
+	}
+}
 static void	showSensorRange2(BASE_OBJECT *psObj)
 {
 	SDWORD	radius;
@@ -4290,9 +4335,8 @@ static void	showSensorRange2(BASE_OBJECT *psObj)
 	UDWORD	i;
 	DROID	*psDroid;
 	STRUCTURE	*psStruct;
-	BOOL	bBuilding=false;
 
-	for(i=0; i<360; i++)
+	for(i=0; i<360; i+=15)
 	{
 		if(psObj->type == OBJ_DROID)
 		{
@@ -4303,7 +4347,6 @@ static void	showSensorRange2(BASE_OBJECT *psObj)
 		{
 			psStruct = (STRUCTURE*)psObj;
 			sensorRange = structSensorRange(psStruct);
-			bBuilding = true;
 		}
 		radius = sensorRange;
 		xDif = radius * (SIN(DEG(i)));
@@ -4315,15 +4358,11 @@ static void	showSensorRange2(BASE_OBJECT *psObj)
 		pos.z = MAX(psObj->pos.y - yDif, 0);
 		pos.y = map_Height(pos.x,pos.z) + 16;
 		effectGiveAuxVar(80);	// half normal plasma size...
-		if(bBuilding)
-		{
-			addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_SMALL,false,NULL,0);
-		}
-		else
-		{
-			addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_LASER,false,NULL,0);
-		}
+
+		addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_LASER,false,NULL,0);
 	}
+
+	showWeaponRange(psObj);
 }
 
 /// Draw a circle on the map (to show the range of something)
