@@ -147,16 +147,23 @@ BOOL loadFeatureStats(const char *pFeatureData, UDWORD bufferSize)
 		GfxFile[0] = '\0';
 		type[0] = '\0';
 
+		int damageable = 0, tileDraw = 0, allowLOS = 0, visibleAtStart = 0;
+
 		//read the data into the storage - the data is delimeted using comma's
-		sscanf(pFeatureData,"%[^','],%d,%d,%d,%d,%d,%[^','],%[^','],%d,%d,%d",
+		sscanf(pFeatureData, "%[^','],%d,%d,%d,%d,%d,%[^','],%[^','],%d,%d,%d",
 			featureName, &Width, &Breadth,
-			&psFeature->damageable, &psFeature->armourValue, &psFeature->body,
-			GfxFile, type, &psFeature->tileDraw, &psFeature->allowLOS,
-			&psFeature->visibleAtStart);
+			&damageable, &psFeature->armourValue, &psFeature->body,
+			GfxFile, type, &tileDraw, &allowLOS,
+			&visibleAtStart);
+
+		psFeature->damageable = damageable;
+		psFeature->tileDraw = tileDraw;
+		psFeature->allowLOS = allowLOS;
+		psFeature->visibleAtStart = visibleAtStart;
 
 		// These are now only 16 bits wide - so we need to copy them
-		psFeature->baseWidth = (UWORD)Width;
-		psFeature->baseBreadth = (UWORD)Breadth;
+		psFeature->baseWidth = Width;
+		psFeature->baseBreadth = Breadth;
 
 		psFeature->pName = allocateName(featureName);
 		if (!psFeature->pName)
