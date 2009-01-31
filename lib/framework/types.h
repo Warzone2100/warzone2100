@@ -31,7 +31,10 @@
 
 #include <limits.h>
 
-#ifdef WZ_CC_MSVC
+#ifdef WZ_C99
+/* Compilers that have support for C99 have all values below defined in stdint.h */
+# include <stdint.h>
+#else
 # define INT8_MIN               (-128)
 # define INT16_MIN              (-32767-1)
 # define INT32_MIN              (-2147483647-1)
@@ -41,10 +44,7 @@
 # define UINT8_MAX              (255)
 # define UINT16_MAX             (65535)
 # define UINT32_MAX             (4294967295U)
-#else
-/* Compilers that have support for C99 have all of the above defined in stdint.h */
-# include <stdint.h>
-#endif // WZ_CC_MSVC
+#endif // WZ_C99
 
 /* Basic numeric types */
 typedef uint8_t  UBYTE;
@@ -65,12 +65,10 @@ typedef int32_t  SDWORD;
 #define SDWORD_MIN	INT32_MIN
 #define SDWORD_MAX	INT32_MAX
 
-#ifndef WZ_OS_WIN
-typedef int BOOL;
-#endif /* !WZ_OS_WIN */
-
 // If we are C99 compatible, the "bool" macro will be defined in <stdbool.h> (as _Bool)
-#if defined(WZ_C99)
+// C++ comes with an integrated bool type
+#if defined(WZ_CXX98)
+#elif defined(WZ_C99)
 # include <stdbool.h>
 #else
 // Pretend we are C99 compatible (well, for the bool type then)
@@ -87,5 +85,9 @@ typedef int BOOL;
 #  define __bool_true_false_are_defined (1)
 # endif
 #endif /* WZ_C99 */
+
+#if !defined(WZ_OS_WIN)
+typedef int BOOL;
+#endif // WZ_OS_WIN
 
 #endif // __INCLUDED_LIB_FRAMEWORK_TYPES_H__
