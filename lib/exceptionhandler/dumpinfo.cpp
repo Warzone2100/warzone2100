@@ -27,6 +27,7 @@
 #include <physfs.h>
 #include "dumpinfo.h"
 
+
 extern "C"
 {
 // FIXME: #include from src/
@@ -59,6 +60,7 @@ static void dumpstr(const DumpFileHandle file, const char * const str, std::size
 	DWORD lNumberOfBytesWritten;
 	WriteFile(file, str, size, &lNumberOfBytesWritten, NULL);
 #else
+# warning FIXME ignoring return value
 	write(file, str, size);
 #endif
 }
@@ -149,6 +151,7 @@ static std::string getProgramPath(const char* programCommand)
 
 		sasprintf(&whichProgramCommand, "which %s", programCommand);
 		whichProgramStream = popen(whichProgramCommand, "r");
+# warning FIXME ignoring return value
 		fread(&buf[0], 1, buf.size(), whichProgramStream);
 		pclose(whichProgramStream);
 	}
