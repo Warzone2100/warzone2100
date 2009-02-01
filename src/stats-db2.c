@@ -589,7 +589,7 @@ in_statement_err:
  *          false otherwise.
  */
 bool
-#line 549 "stats-db2.tpl"
+#line 566 "stats-db2.tpl"
 loadConstructStatsFromDB
 #line 595 "stats-db2.c"
 	(sqlite3* db)
@@ -626,7 +626,7 @@ loadConstructStatsFromDB
 		ROW_COUNT_VAR = sqlite3_column_int(stmt, 0);
 		sqlite3_finalize(stmt);
 
-#line 551 "stats-db2.tpl"
+#line 568 "stats-db2.tpl"
 		if (!statsAllocConstruct(ROW_COUNT_VAR))
 			return false;
 #line 633 "stats-db2.c"
@@ -797,7 +797,7 @@ loadConstructStatsFromDB
 
 		{
 
-#line 555 "stats-db2.tpl"
+#line 572 "stats-db2.tpl"
 			stats->ref = REF_CONSTRUCT_START + CUR_ROW_NUM;
 
 			// save the stats

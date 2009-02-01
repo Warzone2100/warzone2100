@@ -1503,6 +1503,90 @@ SELECT
 FROM `BASE`
 WHERE `BASE`.`pName`='BaBaSensor';
 
+-- Data for table `ECM`, extracted from ../stats/ecm.txt
+
+INSERT INTO `BASE` (
+	`pName`
+)
+VALUES (
+	'ZNULLECM'
+);
+INSERT INTO `COMPONENT` (
+	`unique_inheritance_id`,
+	`buildPower`,
+	`buildPoints`,
+	`weight`,
+	`body`,
+	`designable`,
+	`pIMD`
+)
+SELECT
+	`BASE`.`unique_inheritance_id`,
+	0,
+	0,
+	0,
+	0,
+	0,
+	NULL
+FROM `BASE`
+WHERE `BASE`.`pName`='ZNULLECM';
+INSERT INTO `ECM` (
+	`unique_inheritance_id`,
+	`range`,
+	`power`,
+	`location`,
+	`pMountGraphic`
+)
+SELECT
+	`BASE`.`unique_inheritance_id`,
+	0,
+	50,
+	'DEFAULT',
+	NULL
+FROM `BASE`
+WHERE `BASE`.`pName`='ZNULLECM';
+
+INSERT INTO `BASE` (
+	`pName`
+)
+VALUES (
+	'RepairCentre'
+);
+INSERT INTO `COMPONENT` (
+	`unique_inheritance_id`,
+	`buildPower`,
+	`buildPoints`,
+	`weight`,
+	`body`,
+	`designable`,
+	`pIMD`
+)
+SELECT
+	`BASE`.`unique_inheritance_id`,
+	0,
+	0,
+	0,
+	0,
+	0,
+	'GNHREPAR.PIE'
+FROM `BASE`
+WHERE `BASE`.`pName`='RepairCentre';
+INSERT INTO `ECM` (
+	`unique_inheritance_id`,
+	`range`,
+	`power`,
+	`location`,
+	`pMountGraphic`
+)
+SELECT
+	`BASE`.`unique_inheritance_id`,
+	0,
+	0,
+	'TURRET',
+	NULL
+FROM `BASE`
+WHERE `BASE`.`pName`='RepairCentre';
+
 -- Data for table `WEAPON`, extracted from ../stats/weapons.txt
 
 INSERT INTO `BASE` (

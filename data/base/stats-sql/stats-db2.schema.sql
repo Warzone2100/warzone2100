@@ -92,6 +92,8 @@ CREATE TABLE `REPAIR` (
 	-- Automatically generated ID to link the inheritance hierarchy.
 	unique_inheritance_id INTEGER PRIMARY KEY NOT NULL,
 
+	-- FIXME: UDWORD COMPONENT::body; doesn't exist for this component
+	--%csv-file "repair.txt";
 	-- How much damage is restored to Body Points and armour each Repair Cycle.
 	repairPoints INTEGER NOT NULL,
 
@@ -254,6 +256,9 @@ CREATE TABLE `BRAIN` (
 	-- Automatically generated ID to link the inheritance hierarchy.
 	unique_inheritance_id INTEGER PRIMARY KEY NOT NULL,
 
+	-- FIXME: UDWORD COMPONENT::body; doesn't exist for this component
+	-- FIXME: bool COMPONENT::designable; doesn't exist for this component
+	--%csv-file "brain.txt";
 	-- Program capacity
 	progCap INTEGER NOT NULL,
 

@@ -332,37 +332,50 @@ end;
 struct ECM
     %inherit COMPONENT;
     %nomacro;
+    %csv-file "ecm.txt";
 
     # ECM range.
+    %csv-field 13;
     UDWORD          range;
 
     # ECM power (put against sensor power).
+    %csv-field 12;
     UDWORD          power;
 
     # Specifies whether the ECM is default or for the Turret.
+    %csv-field 11;
     UDWORD          location;
 
     # The turret mount to use.
+    %csv-field 10;
     IMD_model optional pMountGraphic;
 end;
 
 struct REPAIR
     %inherit COMPONENT;
     %nomacro;
+    # FIXME: UDWORD COMPONENT::body; doesn't exist for this component
+    #%csv-file "repair.txt";
+    %csv-field-override pIMD 10;
 
     # How much damage is restored to Body Points and armour each Repair Cycle.
+    %csv-field 12;
     UDWORD          repairPoints;
 
     # Whether armour can be repaired or not.
+    %csv-field 8;
     bool            repairArmour;
 
     # Specifies whether the Repair is default or for the Turret.
+    %csv-field 9;
     UDWORD          location;
 
     # Time delay for repair cycle.
+    %csv-field 13;
     UDWORD          time;
 
     # The turret mount to use.
+    %csv-field 11;
     IMD_model optional pMountGraphic;
 end;
 
@@ -535,8 +548,12 @@ end;
 struct BRAIN
     %inherit COMPONENT;
     %nomacro;
+    # FIXME: UDWORD COMPONENT::body; doesn't exist for this component
+    # FIXME: bool COMPONENT::designable; doesn't exist for this component
+    #%csv-file "brain.txt";
 
     # Program capacity
+    %csv-field 9;
     UDWORD              progCap;
 
     # Weapon stats associated with this brain - for Command Droids
