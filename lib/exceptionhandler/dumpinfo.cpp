@@ -257,7 +257,8 @@ static std::string getCurTime()
 	return time;
 }
 
-static std::ostream& writePhysFSVersion(std::ostream& os, PHYSFS_Version const& ver)
+template <typename CharT, typename Traits>
+std::basic_ostream<CharT, Traits>& operator<<(std::basic_ostream<CharT, Traits>& os, PHYSFS_Version const& ver)
 {
 	return os << static_cast<unsigned int>(ver.major)
 	   << "." << static_cast<unsigned int>(ver.minor)
@@ -300,11 +301,11 @@ static void createHeader(int const argc, char* argv[])
 
 	// Determine PhysicsFS compile time version
 	PHYSFS_VERSION(&physfs_version)
-	writePhysFSVersion(os << "Compiled against PhysicsFS version: ", physfs_version) << endl;
+	os << "Compiled against PhysicsFS version: " << physfs_version << endl;
 
 	// Determine PhysicsFS runtime version
 	PHYSFS_getLinkedVersion(&physfs_version);
-	writePhysFSVersion(os << "Running with PhysicsFS version: ", physfs_version) << endl
+	os << "Running with PhysicsFS version: " << physfs_version << endl
 	   << endl;
 
 	dbgHeader = strdup(os.str().c_str());
