@@ -18,6 +18,7 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
+#include <cerrno>
 #include <climits>
 #include <ctime>
 #include <string>
@@ -60,8 +61,27 @@ static void dumpstr(const DumpFileHandle file, const char * const str, std::size
 	DWORD lNumberOfBytesWritten;
 	WriteFile(file, str, size, &lNumberOfBytesWritten, NULL);
 #else
-# warning FIXME ignoring return value
-	write(file, str, size);
+	std::size_t written = 0;
+	while (written < size)
+	{
+		const ssize_t ret = write(file, str + written, size - written);
+		if (ret == -1)
+		{
+			switch (errno)
+			{
+				case EAGAIN:
+					// Sleep to prevent wasting of CPU in case of non-blocking I/O
+					usleep(1);
+				case EINTR:
+					continue;
+				default:
+					// TODO find a decent way to deal with the fatal errors
+					return;
+			}
+		}
+
+		written += ret;
+	}
 #endif
 }
 
@@ -151,8 +171,20 @@ static std::string getProgramPath(const char* programCommand)
 
 		sasprintf(&whichProgramCommand, "which %s", programCommand);
 		whichProgramStream = popen(whichProgramCommand, "r");
-# warning FIXME ignoring return value
-		fread(&buf[0], 1, buf.size(), whichProgramStream);
+		if (whichProgramStream == NULL)
+		{
+			debug(LOG_WARNING, "Failed to run \"%s\", will not create extended backtrace", whichProgramCommand);
+			return std::string();
+		}
+
+		size_t read = 0;
+		while (!feof(whichProgramStream))
+		{
+			if (read == buf.size())
+				buf.resize(buf.size() * 2);
+
+			read += fread(&buf[read], 1, buf.size() - read, whichProgramStream);
+		}
 		pclose(whichProgramStream);
 	}
 #endif
