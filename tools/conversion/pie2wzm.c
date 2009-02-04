@@ -50,6 +50,7 @@ static bool reverseWinding = false;
 static bool assumeAnimation = false;
 static char *input = "";
 static char output[PATH_MAX];
+static bool verbose = false;
 
 typedef struct {
 	int index[MAX_POLYGON_SIZE];
@@ -78,6 +79,10 @@ static void parse_args(int argc, char **argv)
 		{
 			invertUV = true;
 		}
+		if (argv[i][1] == 'v')
+		{
+			verbose = true;
+		}
 		if (argv[i][1] == 'r')
 		{
 			reverseWinding = true;
@@ -94,6 +99,7 @@ static void parse_args(int argc, char **argv)
 		fprintf(stderr, "  -r  Reverse winding of all polygons.\n");
 		fprintf(stderr, "  -i  Invert the vertical texture coordinates (for 3DS MAX etc.).\n");
 		fprintf(stderr, "  -a  Do not make a guess about team colour usage. Assume animation.\n");
+		fprintf(stderr, "  -v  Verbose mode.\n");
 		exit(1);
 	}
 	input = argv[i++];
@@ -138,6 +144,7 @@ static void dump_to_wzm(FILE *ctl, FILE *fp)
 		exit(1);
 	}
 	fprintf(ctl, "MESHES %d\n", levels);
+	if (verbose) printf("PIE file %s with %d levels is being parsed\n", input, levels);
 
 	for (level = 0; level < levels; level++)
 	{
@@ -145,12 +152,18 @@ static void dump_to_wzm(FILE *ctl, FILE *fp)
 		WZ_FACE *faceList;
 		WZ_POSITION *posList;
 
-		num = fscanf(fp, "LEVEL %d\n", &x);
-		if (num != 1 || level + 1 != x)
+		num = fscanf(fp, "\nLEVEL %d\n", &x);
+		if (num != 1)
 		{
-			fprintf(stderr, "Bad LEVEL directive in %s, was %d should be %d.\n", input, x, level + 1);
+			fprintf(stderr, "Bad LEVEL directive in %s.\n", input);
 			exit(1);
 		}
+		if (level + 1 != x)
+		{
+			fprintf(stderr, "LEVEL directive in %s was %d should be %d.\n", input, x, level + 1);
+			exit(1);
+		}
+		if (verbose) printf("Parsing level %d\n", x);
 		fprintf(ctl, "MESH %d\n", level);
 
 		num = fscanf(fp, "POINTS %d\n", &points);
@@ -252,7 +265,7 @@ static void dump_to_wzm(FILE *ctl, FILE *fp)
 				}
 				if (faceList[j].frames <= 1)
 				{
-					fprintf(stderr, "Level %d, polygon %d has a single animation frame. That makes no sense.\n", level, j);
+					fprintf(stderr, "File %slevel %d, polygon %d has a single animation frame. That makes no sense.\n", input, level, j);
 				}
 				if (textureArrays < faceList[j].frames)
 				{
@@ -387,25 +400,24 @@ static void dump_to_wzm(FILE *ctl, FILE *fp)
 		}
 
 		num = fscanf(fp, "\nCONNECTORS %d", &x);
-		if (num == 1 && x > 0)
+		if (num != 1)
 		{
-			fprintf(ctl, "\nCONNECTORS %d", x);
-			for (j = 0; j < x; ++j)
-			{
-				int a, b, c;
-
-				num = fscanf(fp, "\n%d %d %d", &a, &b, &c);
-				if (num != 3)
-				{
-					fprintf(stderr, "Bad CONNECTORS directive entry level %d, number %d\n", level, j);
-					exit(1);
-				}
-				fprintf(ctl, "\n\t%d %d %d 0", a, b, c);
-			}
+			fprintf(stderr, "Bad CONNNECTORS directive in %s, level %d\n", input, level);
+			exit(EXIT_FAILURE);
 		}
-		else
+		if (verbose) printf("Read %d connectors\n", x);
+		fprintf(ctl, "\nCONNECTORS %d", x);
+		for (j = 0; j < x; ++j)
 		{
-			fprintf(ctl, "\nCONNECTORS 0\n");
+			int a, b, c;
+
+			num = fscanf(fp, "\n%d %d %d", &a, &b, &c);
+			if (num != 3)
+			{
+				fprintf(stderr, "Bad CONNECTORS directive entry level %d, number %d\n", level, j);
+				exit(1);
+			}
+			fprintf(ctl, "\n\t%d %d %d 0", a, b, c);
 		}
 
 		free(faceList);
