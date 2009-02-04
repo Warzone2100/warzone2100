@@ -88,7 +88,7 @@ void QWzmViewer::loadPIE(QString inputFile)
 		WZ_FACE *faceList;
 		WZ_POSITION *posList;
 
-		num = fscanf(fp, "LEVEL %d\n", &x);
+		num = fscanf(fp, "\nLEVEL %d\n", &x);
 		if (num != 1 || level + 1 != x)
 		{
 			fprintf(stderr, "Bad LEVEL directive in %s, was %d should be %d.\n", input, x, level + 1);
@@ -361,11 +361,11 @@ void QWzmViewer::loadPIE(QString inputFile)
 		}
 
 		num = fscanf(fp, "\nCONNECTORS %d", &psMesh->connectors);
-		if (num == 1 && x > 0)
+		if (num == 1 && psMesh->connectors > 0)
 		{
 			psMesh->connectorArray = (CONNECTOR *)malloc(sizeof(CONNECTOR) * psMesh->connectors);
 
-			for (j = 0; j < x; ++j)
+			for (j = 0; j < psMesh->connectors; j++)
 			{
 				CONNECTOR *conn = &psMesh->connectorArray[j];
 				int a, b, c;
@@ -373,7 +373,7 @@ void QWzmViewer::loadPIE(QString inputFile)
 				num = fscanf(fp, "\n%d %d %d", &a, &b, &c);
 				if (num != 3)
 				{
-					fprintf(stderr, "Bad CONNECTORS directive entry level %d, number %d\n", level, j);
+					fprintf(stderr, "Bad CONNECTORS directive in %s entry level %d, number %d\n", input, level, j);
 					exit(1);
 				}
 				conn->pos.x = a;
