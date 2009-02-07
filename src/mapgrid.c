@@ -248,9 +248,7 @@ void gridRemoveObject(BASE_OBJECT *psObj)
 // could affect a location (x,y in world coords)
 void gridStartIterate(SDWORD x, SDWORD y)
 {
-	ASSERT( (x >= 0) && (x < gridWidth*GRID_UNITS) &&
-			 (y >= 0) && (y < gridHeight*GRID_UNITS),
-		"gridStartIterate: coords off grid" );
+	ASSERT(x >= 0 && x < gridWidth * GRID_UNITS && y >= 0 && y < gridHeight * GRID_UNITS, "coords(%d, %d) off grid", x, y);
 
 	x = x / GRID_UNITS;
 	y = y / GRID_UNITS;
