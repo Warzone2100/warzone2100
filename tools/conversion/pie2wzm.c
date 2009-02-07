@@ -400,26 +400,29 @@ static void dump_to_wzm(FILE *ctl, FILE *fp)
 		}
 
 		num = fscanf(fp, "\nCONNECTORS %d", &x);
-		if (num != 1)
+		if (num == 1)
 		{
-			fprintf(stderr, "Bad CONNNECTORS directive in %s, level %d\n", input, level);
-			exit(EXIT_FAILURE);
-		}
-		if (verbose) printf("Read %d connectors\n", x);
-		fprintf(ctl, "\nCONNECTORS %d", x);
-		for (j = 0; j < x; ++j)
-		{
-			int a, b, c;
-
-			num = fscanf(fp, "\n%d %d %d", &a, &b, &c);
-			if (num != 3)
+			if (x < 0)
 			{
-				fprintf(stderr, "Bad CONNECTORS directive entry level %d, number %d\n", level, j);
-				exit(1);
+				fprintf(stderr, "Bad CONNNECTORS directive in %s, level %d\n", input, level);
+				exit(EXIT_FAILURE);
 			}
-			fprintf(ctl, "\n\t%d %d %d 0", a, b, c);
+			if (verbose) printf("Read %d connectors\n", x);
+			fprintf(ctl, "\nCONNECTORS %d", x);
+			for (j = 0; num == 1 && j < x; ++j)
+			{
+				int a, b, c;
+
+				num = fscanf(fp, "\n%d %d %d", &a, &b, &c);
+				if (num != 3)
+				{
+					fprintf(stderr, "Bad CONNECTORS directive entry level %d, number %d\n", level, j);
+					exit(1);
+				}
+				fprintf(ctl, "\n\t%d %d %d 0", a, b, c);
+			}
+			fprintf(ctl, "\n");
 		}
-		fprintf(ctl, "\n");
 
 		free(faceList);
 		free(posList);
