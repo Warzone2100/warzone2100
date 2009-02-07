@@ -245,10 +245,8 @@ BOOL mapLoadTagged(char *pFileName);
 /* Return a pointer to the tile structure at x,y */
 static inline WZ_DECL_PURE MAPTILE *mapTile(UDWORD x, UDWORD y)
 {
-	ASSERT( x < mapWidth,
-		"mapTile: x coordinate bigger than map width" );
-	ASSERT( y < mapHeight,
-		"mapTile: y coordinate bigger than map height" );
+	ASSERT(x < mapWidth, "x coordinate %u bigger than map width %u", x, mapWidth);
+	ASSERT(y < mapHeight, "y coordinate %u bigger than map height %u", y, mapHeight);
 
 	return &psMapTiles[x + (y * mapWidth)];
 }
