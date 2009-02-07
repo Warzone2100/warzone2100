@@ -419,6 +419,7 @@ static void dump_to_wzm(FILE *ctl, FILE *fp)
 			}
 			fprintf(ctl, "\n\t%d %d %d 0", a, b, c);
 		}
+		fprintf(ctl, "\n");
 
 		free(faceList);
 		free(posList);
