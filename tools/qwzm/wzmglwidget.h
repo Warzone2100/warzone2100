@@ -18,12 +18,12 @@
 #ifndef QWZMGL_H
 #define QWZMGL_H
 
-#include <QtOpenGL>
+#include <QGLViewer/qglviewer.h>
 extern "C" {
 #include "wzmutils.h"
 }
 
-class WZMOpenGLWidget : public QGLWidget
+class WZMOpenGLWidget : public QGLViewer
 {
 	Q_OBJECT
 
@@ -33,15 +33,15 @@ class WZMOpenGLWidget : public QGLWidget
 	void setModel(MODEL *model);
 	void setTeam(int index);
 	void setAnimation(bool value);
+	void draw();
 
 	protected:
-	void initializeGL();
-	void resizeGL(int w, int h);
-	void paintGL();
+	void init();
+//	void resizeGL(int w, int h);
+	QString helpString() const;
 
 	private:
 	MODEL *psModel;
-	float dimension;
 	int teamIndex;
 	bool animation;
 	QTime timer;

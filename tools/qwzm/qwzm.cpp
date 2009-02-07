@@ -105,6 +105,8 @@ QWzmViewer::QWzmViewer(QWidget *parent)
 	connect(actionOpenWZM, SIGNAL(triggered()), this, SLOT(openWZM()));
 	connect(actionImport_PIE, SIGNAL(triggered()), this, SLOT(openPIE()));
 	connect(actionWireframe, SIGNAL(triggered()), this, SLOT(toggleWireframe()));
+	connect(actionHelp, SIGNAL(triggered()), glView, SLOT(help()));
+	connect(actionAxis, SIGNAL(triggered()), glView, SLOT(toggleAxisIsDrawn()));
 	connect(actionCulling, SIGNAL(triggered()), this, SLOT(toggleCulling()));
 	connect(actionAnimation, SIGNAL(triggered()), this, SLOT(toggleAnimation()));
 	connect(actionScaleModel, SIGNAL(triggered()), this, SLOT(toggleScale()));

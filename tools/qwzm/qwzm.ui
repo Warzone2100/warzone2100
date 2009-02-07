@@ -154,6 +154,8 @@
     <addaction name="actionAnimation" />
     <addaction name="actionCulling" />
     <addaction name="actionWireframe" />
+    <addaction name="actionAxis" />
+    <addaction name="actionHelp" />
    </widget>
    <widget class="QMenu" name="menuConversion" >
     <property name="title" >
@@ -258,6 +260,31 @@
    </property>
    <property name="shortcut" >
     <string>Ctrl+W</string>
+   </property>
+  </action>
+  <action name="actionHelp" >
+   <property name="checkable" >
+    <bool>false</bool>
+   </property>
+   <property name="text" >
+    <string>Help</string>
+   </property>
+   <property name="shortcut" >
+    <string>Ctrl+H</string>
+   </property>
+  </action>
+  <action name="actionAxis" >
+   <property name="checkable" >
+    <bool>true</bool>
+   </property>
+   <property name="checked" >
+    <bool>true</bool>
+   </property>
+   <property name="text" >
+    <string>Show axis</string>
+   </property>
+   <property name="shortcut" >
+    <string>Ctrl+A</string>
    </property>
   </action>
   <action name="actionOpenWZM" >

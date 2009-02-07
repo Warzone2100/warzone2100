@@ -5,5 +5,5 @@ TEMPLATE = app
 CONFIG += debug warn_on qt precompile_header
 TARGET = qwzm
 INCLUDEPATH += ../display
-LIBS += -l3ds -lm
-QT += opengl
+LIBS += -l3ds -lm -lQGLViewer
+QT += opengl xml
