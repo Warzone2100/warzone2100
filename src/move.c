@@ -3327,7 +3327,7 @@ void moveUpdateDroid(DROID *psDroid)
 //	}
 
 	/* If it's sitting in water then it's got to go with the flow! */
-	if (terrainType(mapTile(psDroid->pos.x/TILE_UNITS,psDroid->pos.y/TILE_UNITS)) == TER_WATER)
+	if (terrainType(mapTile(map_coord(psDroid->pos.x), map_coord(psDroid->pos.y))) == TER_WATER)
 	{
 		updateDroidOrientation(psDroid);
 	}
