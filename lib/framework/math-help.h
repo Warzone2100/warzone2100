@@ -34,6 +34,7 @@
 /* conversion macros */
 #define RAD_TO_DEG(x)	(x * 180.0 / M_PI)
 
+
 #ifndef M_PI
 # define M_PI 3.14159265358979323846
 #endif
@@ -107,6 +108,19 @@ static inline WZ_DECL_CONST float hypotf(float x, float y)
 	return sqrtf(x * x + y * y);
 }
 #endif
+
+
+
+/*!
+ * Calculates a random floating point number in a certain range
+ * \param x Lower bound
+ * \param y Upper boundX
+ * \return Random number between x and y
+ */
+static inline float frandom(float x, float y)
+{
+	return x + (y-x)*rand()/(float)RAND_MAX;
+}
 
 
 /*!
