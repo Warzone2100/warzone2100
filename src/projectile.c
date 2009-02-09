@@ -371,12 +371,29 @@ BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, Ve
 	psProj->player = player;
 	psProj->bVisible = false;
 
-	psProj->born = gameTime;
 	psProj->died = 0;
 
-	setProjectileSource(psProj, psAttacker);
 	setProjectileDestination(psProj, psTarget);
-	setProjectileDamaged(psProj, NULL);
+
+	/*
+	When we have been created by penetration (spawned from another projectile),
+	we shall live no longer than the original projectile may have lived
+	*/
+	if (psAttacker->type == OBJ_PROJECTILE)
+	{
+		PROJECTILE * psOldProjectile = (PROJECTILE*)psAttacker;
+		psProj->born = psOldProjectile->born;
+
+		setProjectileSource(psProj, psOldProjectile->psSource);
+		setProjectileDamaged(psProj, psOldProjectile->psDamaged);
+	}
+	else
+	{
+		psProj->born = gameTime;
+
+		setProjectileSource(psProj, psAttacker);
+		setProjectileDamaged(psProj, NULL);
+	}
 
 	if (psTarget)
 	{
