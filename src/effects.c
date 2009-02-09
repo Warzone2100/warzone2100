@@ -231,7 +231,7 @@ static void	effectSetUpSatLaser		( EFFECT *psEffect );
 static void effectSetUpFirework		( EFFECT *psEffect );
 static void effectStructureUpdates(void);
 static void effectDroidUpdates(void);
-static UDWORD EffectGetNumFrames(EFFECT *psEffect);
+static UDWORD effectGetNumFrames(EFFECT *psEffect);
 
 
 static void positionEffect(EFFECT *psEffect)
@@ -782,7 +782,7 @@ static void updateFirework(EFFECT *psEffect)
 			psEffect->lastFrame = gameTime;
 
 			/* Are we on the last frame? */
-			if(++psEffect->frameNumber >= EffectGetNumFrames(psEffect))
+			if(++psEffect->frameNumber >= effectGetNumFrames(psEffect))
 			{
 				/* Does the anim wrap around? */
 				if(TEST_CYCLIC(psEffect))
@@ -960,7 +960,7 @@ static void updateExplosion(EFFECT *psEffect)
 	{
 		psEffect->size += timeAdjustedIncrement(SHOCKWAVE_SPEED, true);
 		scaling = (float)psEffect->size / (float)MAX_SHOCKWAVE_SIZE;
-		psEffect->frameNumber = scaling * EffectGetNumFrames(psEffect);
+		psEffect->frameNumber = scaling * effectGetNumFrames(psEffect);
 
 		light.position.x = psEffect->position.x;
 		light.position.y = psEffect->position.y;
@@ -985,7 +985,7 @@ static void updateExplosion(EFFECT *psEffect)
 			psEffect->lastFrame = gameTime;
 			/* Are we on the last frame? */
 
-			if(++psEffect->frameNumber >= EffectGetNumFrames(psEffect))
+			if(++psEffect->frameNumber >= effectGetNumFrames(psEffect))
 			{
 		 		if(psEffect->type!=EXPLOSION_TYPE_LAND_LIGHT)
 				{
@@ -1020,7 +1020,7 @@ static void updateBlood(EFFECT *psEffect)
 	{
 		psEffect->lastFrame = gameTime;
 		/* Are we on the last frame? */
-		if(++psEffect->frameNumber >= EffectGetNumFrames(psEffect))
+		if(++psEffect->frameNumber >= effectGetNumFrames(psEffect))
 		{
 			/* Kill it off */
 			killEffect(psEffect);
@@ -1045,7 +1045,7 @@ static void updatePolySmoke(EFFECT *psEffect)
 		psEffect->lastFrame = gameTime;
 
 		/* Are we on the last frame? */
-		if(++psEffect->frameNumber >= EffectGetNumFrames(psEffect))
+		if(++psEffect->frameNumber >= effectGetNumFrames(psEffect))
 		{
 			/* Does the anim wrap around? */
 			if(TEST_CYCLIC(psEffect))
@@ -1422,7 +1422,7 @@ static void updateConstruction(EFFECT *psEffect)
 	{
 		psEffect->lastFrame = gameTime;
 		/* Are we on the last frame? */
-		if(++psEffect->frameNumber >= EffectGetNumFrames(psEffect))
+		if(++psEffect->frameNumber >= effectGetNumFrames(psEffect))
 		{
 			/* Is it a cyclic sprite? */
 			if(TEST_CYCLIC(psEffect))
@@ -1489,14 +1489,14 @@ static void updateFire(EFFECT *psEffect)
 		psEffect->lastFrame = gameTime;
 		pos.x = (psEffect->position.x + ((rand() % psEffect->radius) - (rand() % (2 * psEffect->radius))));
 		pos.z = (psEffect->position.z + ((rand() % psEffect->radius) - (rand() % (2 * psEffect->radius))));
-		
+
 		// Effect is off map, no need to update it anymore
 		if(!worldOnMap(pos.x, pos.z))
 		{
 			killEffect(psEffect);
 			return;
 		}
-		
+
 		pos.y = map_Height(pos.x,pos.z);
 
 		if(psEffect->type == FIRE_TYPE_SMOKY_BLUE)
@@ -1607,7 +1607,7 @@ void	renderEffect(EFFECT *psEffect)
 }
 
 /** drawing func for wapypoints */
-void	renderWaypointEffect(EFFECT *psEffect)
+static void renderWaypointEffect(EFFECT *psEffect)
 {
 	positionEffect(psEffect);
 
@@ -1615,7 +1615,7 @@ void	renderWaypointEffect(EFFECT *psEffect)
 	iV_MatrixEnd();
 }
 
-void	renderFirework(EFFECT *psEffect)
+static void renderFirework(EFFECT *psEffect)
 {
 	/* these don't get rendered */
 	if(psEffect->type == FIREWORK_TYPE_LAUNCHER)
@@ -1634,7 +1634,7 @@ void	renderFirework(EFFECT *psEffect)
 }
 
 /** drawing func for blood. */
-void	renderBloodEffect(EFFECT *psEffect)
+static void renderBloodEffect(EFFECT *psEffect)
 {
 	positionEffect(psEffect);
 
@@ -1646,7 +1646,7 @@ void	renderBloodEffect(EFFECT *psEffect)
 	iV_MatrixEnd();
 }
 
-void	renderDestructionEffect(EFFECT *psEffect)
+static void renderDestructionEffect(EFFECT *psEffect)
 {
 	float	div;
 	SDWORD	percent;
@@ -1676,7 +1676,7 @@ void	renderDestructionEffect(EFFECT *psEffect)
 	iV_MatrixEnd();
 }
 
-static BOOL	rejectLandLight(LAND_LIGHT_SPEC type)
+static BOOL rejectLandLight(LAND_LIGHT_SPEC type)
 {
 UDWORD	timeSlice;
 
@@ -1704,7 +1704,7 @@ UDWORD	timeSlice;
 }
 
 /** Renders the standard explosion effect */
-void	renderExplosionEffect(EFFECT *psEffect)
+static void renderExplosionEffect(EFFECT *psEffect)
 {
 	SDWORD	percent;
 	const PIELIGHT brightness = WZCOL_WHITE;
@@ -1761,7 +1761,7 @@ void	renderExplosionEffect(EFFECT *psEffect)
 	iV_MatrixEnd();
 }
 
-void	renderGravitonEffect(EFFECT *psEffect)
+static void renderGravitonEffect(EFFECT *psEffect)
 {
 
 	positionEffect(psEffect);
@@ -1788,7 +1788,7 @@ void	renderGravitonEffect(EFFECT *psEffect)
 }
 
 /** Renders the standard construction effect */
-void	renderConstructionEffect(EFFECT *psEffect)
+static void renderConstructionEffect(EFFECT *psEffect)
 {
 	Vector3i null;
 	SDWORD	percent;
@@ -1833,7 +1833,7 @@ void	renderConstructionEffect(EFFECT *psEffect)
 }
 
 /** Renders the standard smoke effect - it is now scaled in real-time as well */
-void	renderSmokeEffect(EFFECT *psEffect)
+static void renderSmokeEffect(EFFECT *psEffect)
 {
 	UDWORD	transparency = 0;
 	const PIELIGHT brightness = WZCOL_WHITE;
@@ -2274,7 +2274,7 @@ void	effectSetupWayPoint(EFFECT *psEffect)
 	SET_ESSENTIAL(psEffect);
 }
 
-void	effectSetupBlood(EFFECT *psEffect)
+static void effectSetupBlood(EFFECT *psEffect)
 {
 	psEffect->frameDelay = BLOOD_FRAME_DELAY;
 	psEffect->velocity.y = (float)BLOOD_FALL_SPEED;
@@ -2282,7 +2282,7 @@ void	effectSetupBlood(EFFECT *psEffect)
 	psEffect->size = (UBYTE)BLOOD_SIZE;
 }
 
-void    effectSetupDestruction(EFFECT *psEffect)
+static void effectSetupDestruction(EFFECT *psEffect)
 {
 
 	if(psEffect->type == DESTRUCTION_TYPE_SKYSCRAPER)
@@ -2404,36 +2404,18 @@ void	initPerimeterSmoke(iIMDShape *pImd, UDWORD x, UDWORD y, UDWORD z)
 	}
 }
 
-UDWORD	getNumEffects( void )
-{
-	return(numEffects);
-}
 
-static UDWORD EffectGetNumFrames(EFFECT *psEffect)
+static UDWORD effectGetNumFrames(EFFECT *psEffect)
 {
-
 	return psEffect->imd->numFrames;
-
 }
 
-UDWORD IMDGetNumFrames(iIMDShape *Shape)
-{
-
-	return Shape->numFrames;
-
-}
-
-UDWORD IMDGetAnimInterval(iIMDShape *Shape)
-{
-
-	return Shape->animInterval;
-
-}
 
 void	effectGiveAuxVar( UDWORD var)
 {
 	auxVar = var;
 }
+
 
 void	effectGiveAuxVarSec( UDWORD var)
 {
@@ -2609,10 +2591,6 @@ static void effectStructureUpdates(void)
 	}
 }
 
-UDWORD	getFreeEffect( void )
-{
-	return(freeEffect);
-}
 
 void	effectResetUpdates( void )
 {

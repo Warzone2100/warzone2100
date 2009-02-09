@@ -158,8 +158,6 @@ extern void	addMultiEffect			( Vector3i *basePos, Vector3i *scatter,EFFECT_GROUP
 									EFFECT_TYPE type,BOOL specified, iIMDShape *imd, UDWORD number, BOOL lit, UDWORD size );
 
 extern void	renderEffect			( EFFECT *psEffect );
-extern UDWORD getNumEffects			( void );
-extern UDWORD	getFreeEffect		( void );
 extern void	effectResetUpdates		( void );
 extern UDWORD	getNumActiveEffects		( void );
 extern UDWORD	getMissCount( void );
@@ -168,8 +166,6 @@ extern	UDWORD	getNumEvenEffects(void);
 
 extern	bool fireOnLocation(unsigned int x, unsigned int y);
 
-extern UDWORD IMDGetNumFrames(iIMDShape *Shape);
-extern UDWORD IMDGetAnimInterval(iIMDShape *Shape);
 extern void	initPerimeterSmoke			( iIMDShape *pImd, UDWORD x, UDWORD y, UDWORD z);
 
 #define SKY_MULT	1
