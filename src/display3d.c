@@ -1133,7 +1133,7 @@ static void display3DProjectiles( void )
 			if(gfxVisible(psObj))
 			{
 				/* don't display first frame of trajectory (projectile on firing object) */
-				if ( gameTime != psObj->birth )
+				if ( gameTime != psObj->born )
 				{
 					/* Draw a bullet at psObj->pos.x for X coord
 										psObj->pos.y for Z coord

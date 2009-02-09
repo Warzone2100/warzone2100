@@ -342,9 +342,10 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 		//Watermelon:Target prediction
 		if(psTarget->type == OBJ_DROID)
 		{
-			int time = dist / psStats->flightSpeed;
-			predict.x = psTarget->pos.x + trigSin( ((DROID *)psTarget)->sMove.moveDir ) * ((DROID *)psTarget)->sMove.speed * time;
-			predict.y = psTarget->pos.y + trigCos( ((DROID *)psTarget)->sMove.moveDir ) * ((DROID *)psTarget)->sMove.speed * time;
+			predict.x = trigSin( ((DROID *)psTarget)->sMove.moveDir ) * ((DROID *)psTarget)->sMove.speed * dist / psStats->flightSpeed;
+			predict.x += psTarget->pos.x;
+			predict.y = trigCos( ((DROID *)psTarget)->sMove.moveDir ) * ((DROID *)psTarget)->sMove.speed * dist / psStats->flightSpeed;
+			predict.y += psTarget->pos.y;
 
 			// Make sure we don't pass any negative or out of bounds numbers to proj_SendProjectile
 			predict.x = MAX(predict.x, 0);
