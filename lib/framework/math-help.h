@@ -43,25 +43,15 @@
 
 static inline float fmaxf(float x, float y)
 {
-	if (isnan(x) && isnan(y))
-		return NAN;
-	else if (isnan(x))
-		return y;
-	else if (isnan(y))
-		return x;
-	return (x > y ? x : y);
+	/* Any comparison will return false if either of the arguments are NAN */
+	return (x > y || isnan(y) ? x : y);
 }
 
 
 static inline float fminf(float x, float y)
 {
-	if (isnan(x) && isnan(y))
-		return NAN;
-	else if (isnan(x))
-		return y;
-	else if (isnan(y))
-		return x;
-	return (x > y ? y : x);
+	/* Any comparison will return false if either of the arguments are NAN */
+	return (x < y || isnan(y) ? x : y);
 }
 
 
