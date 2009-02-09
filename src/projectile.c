@@ -396,7 +396,8 @@ BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, Ve
 
 	if (psTarget)
 	{
-		unsigned int heightVariance = frandom(0, establishTargetHeight(psTarget));
+		const float maxHeight = establishTargetHeight(psTarget);
+		unsigned int heightVariance = frandom() * maxHeight;
 
 		scoreUpdateVar(WD_SHOTS_ON_TARGET);
 

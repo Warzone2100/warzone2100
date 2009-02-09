@@ -113,13 +113,11 @@ static inline WZ_DECL_CONST float hypotf(float x, float y)
 
 /*!
  * Calculates a random floating point number in a certain range
- * \param x Lower bound
- * \param y Upper boundX
- * \return Random number between x and y
+ * \return Random number between 0.f and 1.f
  */
-static inline float frandom(float x, float y)
+static inline float frandom(void)
 {
-	return x + (y-x)*rand()/(float)RAND_MAX;
+	return (float)rand() / (float)RAND_MAX;
 }
 
 
