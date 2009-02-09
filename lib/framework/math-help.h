@@ -24,11 +24,10 @@
 #ifndef __INCLUDED_LIB_FRAMEWORK_MATH_HELP_H__
 #define __INCLUDED_LIB_FRAMEWORK_MATH_HELP_H__
 
-// Also PERCENT(int,int);	// returns a int value 0->100 of the percentage of the first param over the second
-
 #include "wzglobal.h"
 #include <math.h>
 
+// Also PERCENT(int,int);	// returns a int value 0->100 of the percentage of the first param over the second
 #define PERCENT(a,b) (((a)*100)/(b))
 #define PERNUM(range,a,b) (((a)*range)/(b))
 
@@ -48,6 +47,7 @@ static inline int roundf(float x)
 	else
 		return x + 0.5f;
 }
+
 
 /**
  * nearbyint(3) implementation because that function is only available on C99
@@ -79,14 +79,16 @@ static double nearbyint(double x)
 	}
 }
 
+
 static inline WZ_DECL_CONST double hypot(double x, double y)
 {
 	return sqrt(x * x + y * y);
 }
 
+
 static inline WZ_DECL_CONST float hypotf(float x, float y)
 {
-	return hypot(x, y);
+	return sqrtf(x * x + y * y);
 }
 #endif
 
