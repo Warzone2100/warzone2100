@@ -39,6 +39,32 @@
 #endif
 
 #if !defined(WZ_C99) && !defined(__cplusplus) && !defined(WZ_CC_GNU)
+# include <float.h>
+
+static inline float fmaxf(float x, float y)
+{
+	if (isnan(x) && isnan(y))
+		return NAN;
+	else if (isnan(x))
+		return y;
+	else if (isnan(y))
+		return x;
+	return (x > y ? x : y);
+}
+
+
+static inline float fminf(float x, float y)
+{
+	if (isnan(x) && isnan(y))
+		return NAN;
+	else if (isnan(x))
+		return y;
+	else if (isnan(y))
+		return x;
+	return (x > y ? y : x);
+}
+
+
 static inline int roundf(float x)
 {
 	// Ensure that float truncation results in a proper rounding

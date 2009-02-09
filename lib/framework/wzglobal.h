@@ -513,7 +513,10 @@
 #    define inline __inline
 #    define alloca _alloca
 #    define fileno _fileno
+
+#    define isnan _isnan
 #    define isfinite _finite
+
 #    define PATH_MAX MAX_PATH
 #  endif /* WZ_CC_MSVC */
 
