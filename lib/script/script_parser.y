@@ -745,7 +745,7 @@ static CODE_ERROR scriptCodeFunction(FUNC_SYMBOL	*psFSymbol,		// The function be
 			{
 				debug(LOG_ERROR, "scriptCodeFunction: Type mismatch for paramter %d (%d/%d)", i, psFSymbol->aParams[i], psPBlock->aParams[i]);
 				snprintf(aErrorString, sizeof(aErrorString), "Type mismatch for paramter %d", i);
-				scr_error(aErrorString);
+				scr_error("%s", aErrorString);
 				typeError = true;
 			}
 		}
@@ -759,7 +759,7 @@ static CODE_ERROR scriptCodeFunction(FUNC_SYMBOL	*psFSymbol,		// The function be
 	if (psFSymbol->numParams != psPBlock->numParams)
 	{
 		snprintf(aErrorString, sizeof(aErrorString), "Expected %d parameters", psFSymbol->numParams);
-		scr_error(aErrorString);
+		scr_error("%s", aErrorString);
 		*ppsCBlock = NULL;
 		return CE_PARSE;
 	}
@@ -913,7 +913,7 @@ static CODE_ERROR scriptCodeCallbackParams(
 		if (!interpCheckEquiv(psCBSymbol->aParams[i], psPBlock->aParams[i]))
 		{
 			snprintf(aErrorString, sizeof(aErrorString), "Type mismatch for paramter %d", i);
-			scr_error(aErrorString);
+			scr_error("%s", aErrorString);
 			typeError = true;
 		}
 	}
@@ -928,7 +928,7 @@ static CODE_ERROR scriptCodeCallbackParams(
 	else if (psCBSymbol->numParams != psPBlock->numParams)
 	{
 		snprintf(aErrorString, sizeof(aErrorString), "Expected %d parameters", psCBSymbol->numParams);
-		scr_error(aErrorString);
+		scr_error("%s", aErrorString);
 		*ppsTDecl = NULL;
 		return CE_PARSE;
 	}
