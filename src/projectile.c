@@ -326,7 +326,6 @@ BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, Ve
 	double          fR, fA, fS, fT, fC;
 	Vector3f muzzle;
 	SDWORD			iRadSq, iPitchLow, iPitchHigh, iTemp;
-	UDWORD			heightVariance;
 	WEAPON_STATS *psStats = &asWeaponStats[psWeap->nStat];
 
 	ASSERT( psStats != NULL, "proj_SendProjectile: invalid weapon stats" );
@@ -397,38 +396,10 @@ BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, Ve
 
 	if (psTarget)
 	{
+		unsigned int heightVariance = frandom(0, establishTargetHeight(psTarget));
+
 		scoreUpdateVar(WD_SHOTS_ON_TARGET);
-		heightVariance = 0;
-		switch(psTarget->type)
-		{
-			case OBJ_DROID:
-			case OBJ_FEATURE:
-				if( ((DROID*)psTarget)->droidType == DROID_PERSON )
-				{
-					heightVariance = rand()%4;
-				}
-				else
-				{
-					heightVariance = rand()%8;
-				}
-				break;
 
-			case OBJ_STRUCTURE:
-				heightVariance = rand()%8;
-				break;
-
-			case OBJ_PROJECTILE:
-				ASSERT(!"invalid object type: bullet", "proj_SendProjectile: invalid object type: OBJ_PROJECTILE");
-				break;
-
-			case OBJ_TARGET:
-				ASSERT(!"invalid object type: target", "proj_SendProjectile: invalid object type: OBJ_TARGET");
-				break;
-
-			default:
-				ASSERT(!"unknown object type", "proj_SendProjectile: unknown object type");
-				break;
-		}
 		tarHeight = psTarget->pos.z + heightVariance;
 	}
 	else
@@ -2053,34 +2024,26 @@ static void projGetNaybors(PROJECTILE *psObj)
 	}
 }
 
+
+#define BULLET_FLIGHT_HEIGHT 16
+
+
 static UDWORD	establishTargetHeight(BASE_OBJECT *psTarget)
 {
-	UDWORD		height;
-	UDWORD		utilityHeight = 0, yMax = 0, yMin = 0; // Temporaries for addition of utility's height to total height
-	DROID		*psDroid;
-	STRUCTURE_STATS		*psStructureStats;
-
 	if (psTarget == NULL)
 	{
 		return 0;
 	}
+
 	CHECK_OBJECT(psTarget);
 
 	switch(psTarget->type)
 	{
 		case OBJ_DROID:
-			psDroid = (DROID*)psTarget;
-			height = asBodyStats[psDroid->asBits[COMP_BODY].nStat].pIMD->max.y - asBodyStats[psDroid->asBits[COMP_BODY].nStat].pIMD->min.y;
-
-			// Don't do this for Barbarian Propulsions as they don't possess a turret (and thus have pIMD == NULL)
-			if (!strcmp(asPropulsionStats[psDroid->asBits[COMP_PROPULSION].nStat].pName, "BaBaProp") )
-			{
-				return height;
-			}
-
-			// Commanders don't have pIMD either
-			if (psDroid->droidType == DROID_COMMAND)
-				return height;
+		{
+			DROID * psDroid = (DROID*)psTarget;
+			unsigned int height = asBodyStats[psDroid->asBits[COMP_BODY].nStat].pIMD->max.y - asBodyStats[psDroid->asBits[COMP_BODY].nStat].pIMD->min.y;
+			unsigned int utilityHeight = 0, yMax = 0, yMin = 0; // Temporaries for addition of utility's height to total height
 
 			// VTOL's don't have pIMD either it seems...
 			if (isVtolDroid(psDroid))
@@ -2093,6 +2056,10 @@ static UDWORD	establishTargetHeight(BASE_OBJECT *psTarget)
 				case DROID_WEAPON:
 					if ( psDroid->numWeaps > 0 )
 					{
+						// Don't do this for Barbarian Propulsions as they don't possess a turret (and thus have pIMD == NULL)
+						if ((asWeaponStats[psDroid->asWeaps[0].nStat]).pIMD == NULL)
+							return height;
+
 						yMax = (asWeaponStats[psDroid->asWeaps[0].nStat]).pIMD->max.y;
 						yMin = (asWeaponStats[psDroid->asWeaps[0].nStat]).pIMD->min.y;
 					}
@@ -2126,24 +2093,26 @@ static UDWORD	establishTargetHeight(BASE_OBJECT *psTarget)
 				case DROID_CYBORG_SUPER:
 				case DROID_DEFAULT:
 				case DROID_TRANSPORTER:
-				default:
-					break;
+				// Commanders don't have pIMD either
+				case DROID_COMMAND:
+				case DROID_ANY:
+					return height;
 			}
 
 			utilityHeight = (yMax + yMin)/2;
-			height += utilityHeight;
 
-			return height;
-
+			return height + utilityHeight;
+		}
 		case OBJ_STRUCTURE:
-			psStructureStats = ((STRUCTURE *)psTarget)->pStructureType;
+		{
+			STRUCTURE_STATS * psStructureStats = ((STRUCTURE *)psTarget)->pStructureType;
 			return (psStructureStats->pIMD->max.y + psStructureStats->pIMD->min.y) / 2;
+		}
 		case OBJ_FEATURE:
 			// Just use imd ymax+ymin
 			return (psTarget->sDisplay.imd->max.y + psTarget->sDisplay.imd->min.y) / 2;
 		case OBJ_PROJECTILE:
-			// 16 for bullet
-			return 16;
+			return BULLET_FLIGHT_HEIGHT;
 		default:
 			return 0;
 	}
