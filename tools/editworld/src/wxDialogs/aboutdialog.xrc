@@ -2,7 +2,7 @@
 <!--
     This file is part of Warzone 2100.
     Copyright (C) 2007  Giel van Schijndel
-    Copyright (C) 2007  Warzone Resurrection Project
+    Copyright (C) 2007-2009  Warzone Resurrection Project
 
     Warzone 2100 is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -49,7 +49,7 @@
                             </object>
                             <object class="sizeritem">
                                 <object class="wxStaticText" name="ID_STATICTEXT_CREDITS">
-                                    <label>Copyright (C) 1999-2004  Eidos Interactive&#x0A;Copyright (C) 2005-2007  Warzone Resurrection Project</label>
+                                    <label>Copyright (C) 1999-2004  Eidos Interactive&#x0A;Copyright (C) 2005-2009  Warzone Resurrection Project</label>
                                 </object>
                                 <flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
                                 <border>5</border>

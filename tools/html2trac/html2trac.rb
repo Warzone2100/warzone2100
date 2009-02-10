@@ -1,6 +1,6 @@
 #!/usr/bin/ruby
 #	This file is part of html2trac.
-#	Copyright (C) 2008 Dennis Schridde
+#	Copyright (C) 2008-2009 Dennis Schridde
 #
 #	html2trac is free software: you can redistribute it and/or modify
 #	it under the terms of the GNU General Public License as published by

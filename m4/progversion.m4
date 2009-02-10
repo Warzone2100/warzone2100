@@ -1,6 +1,6 @@
 # progversion.m4
 dnl Copyright (C) 2008  Giel van Schijndel
-dnl Copyright (C) 2008  Warzone Resurrection Project
+dnl Copyright (C) 2008-2009  Warzone Resurrection Project
 dnl
 dnl This file is free software; I, Giel van Schijndel give unlimited
 dnl permission to copy and/or distribute it, with or without modficiations,
