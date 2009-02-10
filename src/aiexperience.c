@@ -24,7 +24,7 @@
 #include "objectdef.h"
 #include "map.h"
 #include "lib/framework/frame.h"
-#include "lib/script/interp.h"
+#include "lib/script/interpreter.h"
 #include "lib/script/stack.h"
 #include "lib/script/codeprint.h"
 #include "lib/script/script.h"

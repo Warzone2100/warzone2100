@@ -29,7 +29,7 @@
 
 #include "lib/framework/frame.h"
 #include "lib/framework/string_ext.h"
-#include "interp.h"
+#include "interpreter.h"
 #include "stack.h"
 #include "codeprint.h"
 #include "script.h"

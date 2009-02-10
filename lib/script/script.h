@@ -25,12 +25,12 @@
 #ifndef _script_h
 #define _script_h
 
-#include "interp.h"
+#include "interpreter.h"
 #include "stack.h"
 #include "codeprint.h"
 #include "parse.h"
 #include "event.h"
-#include "evntsave.h"
+#include "eventsave.h"
 
 /* Whether to include debug info when compiling */
 typedef enum _scr_debugtype

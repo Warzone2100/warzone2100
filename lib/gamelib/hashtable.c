@@ -25,7 +25,7 @@
 
 #include "lib/framework/frame.h"
 
-#include "hashtabl.h"
+#include "hashtable.h"
 
 /***************************************************************************/
 

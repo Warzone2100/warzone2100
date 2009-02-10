@@ -26,7 +26,7 @@
 #ifndef _event_h
 #define _event_h
 
-#include "interp.h"
+#include "interpreter.h"
 
 /* The number of values in a context value chunk */
 #define CONTEXT_VALS 20

@@ -30,7 +30,7 @@
 #include <string.h>
 
 #include "lib/framework/frame.h"
-#include "hashtabl.h"
+#include "hashtable.h"
 #include "gtime.h"
 #include "animobj.h"
 

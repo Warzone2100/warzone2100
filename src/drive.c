@@ -61,7 +61,6 @@
 #include "target.h"
 
 // all the bollox needed for script callbacks
-#include "lib/script/interp.h"				// needed to define types in scripttabs.h
 #include "lib/script/parse.h"				// needed to define types in scripttabs.h (Arse!)
 #include "scripttabs.h"			// needed to define the callback
 #include "scriptextern.h"		// needed to include the GLOBAL for checking bInTutorial

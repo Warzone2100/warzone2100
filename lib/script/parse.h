@@ -27,6 +27,8 @@
 
 #include <physfs.h>
 
+#include "interpreter.h"
+
 #ifndef MAXSTRLEN
 #define MAXSTRLEN 255
 #endif

@@ -24,7 +24,7 @@
  */
 
 #include "lib/framework/frame.h"
-#include "interp.h"
+#include "interpreter.h"
 #include "parse.h"
 #include "codeprint.h"
 #include "script.h"
