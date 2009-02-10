@@ -3491,7 +3491,7 @@ BOOL calcDroidMuzzleLocation(DROID *psDroid, Vector3f *muzzle, int weapon_slot)
 		//matrix = the muzzle mount on turret
 		if( psWeaponImd && psWeaponImd->nconnectors )
 		{
-			barrel = Vector3f_New(psWeaponImd->connectors->x, -psWeaponImd->connectors->y, -psWeaponImd->connectors->z);
+			barrel = Vector3f_Init(psWeaponImd->connectors->x, -psWeaponImd->connectors->y, -psWeaponImd->connectors->z);
 		}
 
 		pie_RotateTranslate3f(&barrel, muzzle);
@@ -3501,7 +3501,7 @@ BOOL calcDroidMuzzleLocation(DROID *psDroid, Vector3f *muzzle, int weapon_slot)
 	}
 	else
 	{
-		*muzzle = Vector3f_New(psDroid->pos.x, psDroid->pos.y, psDroid->pos.z + psDroid->sDisplay.imd->max.y);
+		*muzzle = Vector3f_Init(psDroid->pos.x, psDroid->pos.y, psDroid->pos.z + psDroid->sDisplay.imd->max.y);
 	}
 
 	CHECK_DROID(psDroid);

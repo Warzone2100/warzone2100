@@ -846,7 +846,7 @@ static void drawTiles(iView *player)
 	}
 
 	// Now draw the water tiles in a second pass to get alpha sort order correct
-	pie_TranslateTextureBegin(Vector2f_New(0.0f, waterRealValue));
+	pie_TranslateTextureBegin(Vector2f_Init(0.0f, waterRealValue));
 	pie_SetAlphaTest(false);
 	pie_SetDepthOffset(-1.0f);
 	for (i = 0; i < MIN(visibleTiles.y, mapHeight ); i++)
@@ -1683,7 +1683,7 @@ void	renderFeature(FEATURE *psFeature)
 		return;
 	}
 
-	dv = Vector3i_New(
+	dv = Vector3i_Init(
 		(featX - player.p.x) - terrainMidX*TILE_UNITS,
 		dv.y = psFeature->pos.z, // features sits at the height of the tile it's centre is on
 		terrainMidY*TILE_UNITS - (featY - player.p.z)

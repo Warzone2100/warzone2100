@@ -38,7 +38,7 @@ typedef struct { uint16_t x, y, z; } Vector3uw; //Only used for basedef.h BASE_E
  * \param x,y Coordinates
  * \return New Vector
  */
-static inline WZ_DECL_CONST Vector2i Vector2i_New(const int x, const int y)
+static inline WZ_DECL_CONST Vector2i Vector2i_Init(const int x, const int y)
 {
 	Vector2i dest = { x, y };
 	return dest;
@@ -160,7 +160,7 @@ static inline WZ_DECL_CONST bool Vector2i_InCircle(const Vector2i v, const Vecto
  * \param x,y Coordinates
  * \return New Vector
  */
-static inline WZ_DECL_CONST Vector2f Vector2f_New(const float x, const float y)
+static inline WZ_DECL_CONST Vector2f Vector2f_Init(const float x, const float y)
 {
 	Vector2f dest = { x, y };
 	return dest;
@@ -333,7 +333,7 @@ static inline void Vector3f_Print(const Vector3f v)
  * \param x,y,z Values to set to
  * \return New vector
  */
-static inline WZ_DECL_CONST Vector3f Vector3f_New(const float x, const float y, const float z)
+static inline WZ_DECL_CONST Vector3f Vector3f_Init(const float x, const float y, const float z)
 {
 	Vector3f dest = { x, y, z };
 	return dest;
@@ -580,7 +580,7 @@ static inline WZ_DECL_CONST Vector3f Vector3f_LinearInterpolate(const Vector3f f
  * \param x,y,z Coordinates
  * \return New Vector
  */
-static inline WZ_DECL_CONST Vector3i Vector3i_New(const int x, const int y, const int z)
+static inline WZ_DECL_CONST Vector3i Vector3i_Init(const int x, const int y, const int z)
 {
 	Vector3i dest = { x, y, z };
 	return dest;
@@ -827,7 +827,7 @@ static inline void Vector3uw_Print(const Vector3uw v)
  * \param x,y,z Coordinates
  * \return New Vector
  */
-static inline WZ_DECL_CONST Vector3uw Vector3uw_New(const unsigned int x, const unsigned int y, const unsigned int z)
+static inline WZ_DECL_CONST Vector3uw Vector3uw_Init(const unsigned int x, const unsigned int y, const unsigned int z)
 {
 	Vector3uw dest = { x, y, z };
 	return dest;

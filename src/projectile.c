@@ -337,7 +337,7 @@ BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, Ve
 	{
 		// if there isn't an attacker just start at the target position
 		// NB this is for the script function to fire the las sats
-		muzzle = Vector3f_New(target.x, target.y, target.z);
+		muzzle = Vector3f_Init(target.x, target.y, target.z);
 	}
 	else if (psAttacker->type == OBJ_DROID && weapon_slot >= 0)
 	{
@@ -361,7 +361,7 @@ BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, Ve
 	psProj->state		= PROJ_INFLIGHT;
 	psProj->psWStats		= psStats;
 
-	psProj->pos = Vector3uw_New(muzzle.x, muzzle.y, muzzle.z);
+	psProj->pos = Vector3uw_Init(muzzle.x, muzzle.y, muzzle.z);
 	psProj->startX		= muzzle.x;
 	psProj->startY		= muzzle.y;
 	psProj->tarX			= target.x;

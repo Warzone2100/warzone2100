@@ -225,7 +225,7 @@ static bool rayLOSCallback(Vector3i pos, int distSq, void *data)
 			if (TileHasWall(psTile) && !TileHasSmallStructure(psTile))
 			{
 				help->lastHeight = 2*UBYTE_MAX * ELEVATION_SCALE;
-				help->wall = Vector2i_New(pos.x, pos.y);
+				help->wall = Vector2i_Init(pos.x, pos.y);
 				help->numWalls++;
 			}
 		}
