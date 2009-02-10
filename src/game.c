@@ -24,11 +24,12 @@
 #include <string.h>
 
 /* Warzone src and library headers */
-#include "lib/framework/strres.h"
-#include "lib/framework/frameint.h"
-#include "lib/framework/tagfile.h"
+#include "lib/framework/endian_hack.h"
 #include "lib/framework/file.h"
+#include "lib/framework/frameint.h"
 #include "lib/framework/physfs_ext.h"
+#include "lib/framework/strres.h"
+#include "lib/framework/tagfile.h"
 
 #include "lib/gamelib/gtime.h"
 #include "lib/ivis_common/ivisdef.h"
