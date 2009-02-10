@@ -97,7 +97,6 @@
 #define SET_CYCLIC(x)			((x->control) = (UBYTE)(x->control | EFFECT_CYCLIC))
 #define SET_SCALED(x)			((x->control) = (UBYTE)(x->control | EFFECT_SCALED))
 #define SET_LIT(x)				((x->control) = (UBYTE)(x->control | EFFECT_LIT))
-#define SET_LITABS(x)			((x->control) = (UBYTE)(x->control | EFFECT_LIT))
 
 #define MINIMUM_IMPACT_VELOCITY		(16)
 #define	NORMAL_SMOKE_LIFESPAN		(6000 + rand()%3000)
@@ -514,7 +513,7 @@ void	addEffect(Vector3i *pos, EFFECT_GROUP group, EFFECT_TYPE type,BOOL specifie
 	psEffect->imd = NULL;
 	if(lit)
 	{
-		SET_LITABS(psEffect);
+		SET_LIT(psEffect);
 	}
 
 	if(specified)
