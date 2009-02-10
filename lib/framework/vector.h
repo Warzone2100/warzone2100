@@ -17,11 +17,11 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
-#ifndef __INCLUDED_LIB_IVIS_PIEVECTOR_H__
-#define __INCLUDED_LIB_IVIS_PIEVECTOR_H__
+#ifndef VECTOR_H
+#define VECTOR_H
 
-#include "lib/framework/wzglobal.h"
-#include "piefixedpoint.h"
+#include "wzglobal.h"
+#include "fixedpoint.h"
 
 #include <math.h>
 
@@ -858,4 +858,4 @@ static inline WZ_DECL_CONST Vector3f Vector3uw_To3f(const Vector3uw v)
 }
 
 
-#endif // __INCLUDED_LIB_IVIS_PIEVECTOR_H__
+#endif // VECTOR_H

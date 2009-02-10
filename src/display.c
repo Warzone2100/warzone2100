@@ -29,7 +29,7 @@
 #include "lib/framework/input.h"
 #include "lib/framework/strres.h"
 #include "lib/ivis_common/piestate.h"
-#include "lib/ivis_common/piefixedpoint.h"
+#include "lib/framework/fixedpoint.h"
 
 #include "display.h"
 #include "map.h"

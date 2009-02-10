@@ -26,7 +26,7 @@
 #define __INCLUDED_LIB_SOUND_TRACKLIB_H__
 
 #include "track.h"
-#include "lib/ivis_common/pievector.h"
+#include "lib/framework/vector.h"
 
 #if defined(__cplusplus)
 extern "C"

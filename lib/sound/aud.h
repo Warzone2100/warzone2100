@@ -24,7 +24,7 @@
 #ifndef __INCLUDED_LIB_SOUND_AUD_H__
 #define __INCLUDED_LIB_SOUND_AUD_H__
 
-#include "lib/ivis_common/pievector.h"
+#include "lib/framework/vector.h"
 
 #if defined(__cplusplus)
 extern "C"

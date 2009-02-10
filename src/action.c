@@ -30,7 +30,7 @@
 #include "lib/script/script.h"
 
 #include "action.h"
-#include "lib/ivis_common/pievector.h"
+#include "lib/framework/vector.h"
 #include "lib/sound/audio_id.h"
 #include "lib/sound/audio.h"
 #include "combat.h"

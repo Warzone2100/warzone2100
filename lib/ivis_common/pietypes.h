@@ -30,8 +30,7 @@
 #define _pieTypes_h
 
 #include "lib/framework/frame.h"
-
-#include "pievector.h"
+#include "lib/framework/vector.h"
 
 //*************************************************************************
 //

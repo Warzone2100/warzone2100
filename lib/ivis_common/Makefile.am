@@ -11,7 +11,6 @@ noinst_HEADERS = \
 	pieblitfunc.h \
 	pieclip.h \
 	piedef.h \
-	piefixedpoint.h \
 	piefunc.h \
 	piemode.h \
 	piepalette.h \

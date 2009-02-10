@@ -24,7 +24,7 @@
 #ifndef __INCLUDED_BASEDEF_H__
 #define __INCLUDED_BASEDEF_H__
 
-#include "lib/ivis_common/pievector.h"
+#include "lib/framework/vector.h"
 #include "displaydef.h"
 #include "statsdef.h"
 

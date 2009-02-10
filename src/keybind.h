@@ -22,7 +22,7 @@
 #define __INCLUDED_SRC_KEYBIND_H__
 
 #include "console.h"
-#include "lib/ivis_common/piefixedpoint.h"
+#include "lib/framework/fixedpoint.h"
 
 // --------------- All those keyboard mappable functions */
 extern void	kf_HalveHeights( void );

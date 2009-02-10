@@ -31,7 +31,7 @@
 // -------------------------------------------------------------------------
 
 #include "lib/gamelib/gtime.h"
-#include "lib/ivis_common/piefixedpoint.h"
+#include "lib/framework/fixedpoint.h"
 #include "objects.h"
 #include "map.h"
 #include "hci.h"

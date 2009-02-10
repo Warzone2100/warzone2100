@@ -26,7 +26,7 @@
 
 #include "lib/framework/frame.h"
 #include "netplay.h"
-#include "lib/ivis_common/pievector.h"
+#include "lib/framework/vector.h"
 
 typedef enum packetDirectionEnum
 {

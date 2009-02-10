@@ -30,6 +30,7 @@ noinst_HEADERS = \
 	cursors.h \
 	debug.h \
 	file.h \
+	fixedpoint.h \
 	frame.h \
 	frameint.h \
 	frameresource.h \
@@ -49,7 +50,8 @@ noinst_HEADERS = \
 	treap.h \
 	trig.h \
 	types.h \
-	utf.h
+	utf.h \
+	vector.h
 
 libframework_a_SOURCES = \
 	configfile.c \

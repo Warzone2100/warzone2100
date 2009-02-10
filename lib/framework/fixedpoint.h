@@ -24,27 +24,28 @@
  * @todo Get rid of this file and use floats instead.
  */
 
-#ifndef __INCLUDED_LIB_IVIS_COMMON_PIEFIXEDPOINT_H__
-#define __INCLUDED_LIB_IVIS_COMMON_PIEFIXEDPOINT_H__
+#ifndef FIXEDPOINT_H
+#define FIXEDPOINT_H
 
-#include "lib/framework/wzglobal.h"
+#include "wzglobal.h"
 
-/***************************************************************************/
-/*
- *	Global Definitions (CONSTANTS)
- */
-/***************************************************************************/
-static const int DEG_360 = 65536;
-static const float DEG_1 = (float)65536 / 360.f;
-
-static inline WZ_DECL_CONST int DEG(const float degree)
-{
-	return (int)(degree * DEG_1);
-}
 
 //! PSX-style float emulation: 12 digit semi-floats stored in an int
 // FIXME!
 #define FP12_SHIFT 12
 #define FP12_MULTIPLIER (1 << FP12_SHIFT)
 
-#endif // __INCLUDED_LIB_IVIS_COMMON_PIEFIXEDPOINT_H__
+
+/*
+ *	Global Definitions (CONSTANTS)
+ */
+static const int DEG_360 = 65536;
+static const float DEG_1 = (float)65536 / 360.f;
+
+
+static inline WZ_DECL_CONST int DEG(const float degree)
+{
+	return (int)(degree * DEG_1);
+}
+
+#endif // FIXEDPOINT_H

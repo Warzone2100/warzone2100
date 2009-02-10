@@ -20,7 +20,7 @@
 #include <string.h>
 
 #include "lib/framework/frame.h"
-#include "lib/ivis_common/piefixedpoint.h"
+#include "lib/framework/fixedpoint.h"
 #include "lib/ivis_common/rendmode.h"
 // FIXME Direct iVis implementation include!
 #include "lib/ivis_opengl/piematrix.h"

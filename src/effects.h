@@ -29,7 +29,7 @@
 	Alex McLean, Pumpkin Studios, EIDOS Interactive, 1998.
 */
 #include "lib/ivis_common/piedef.h"
-#include "lib/ivis_common/piefixedpoint.h"
+#include "lib/framework/fixedpoint.h"
 #include "lib/ivis_common/pietypes.h"
 
 /* All the effect groups */
