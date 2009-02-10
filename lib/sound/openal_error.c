@@ -17,10 +17,11 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-
 #include "lib/framework/frame.h"
-#include "lib/framework/printf_ext.h"
+
 #include "openal_error.h"
+
+#include "lib/framework/stdio_ext.h"
 
 #if !defined(WZ_NOSOUND)
 #ifdef WZ_OS_MAC

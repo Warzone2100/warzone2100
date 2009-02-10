@@ -24,6 +24,7 @@
  */
 
 #include "lib/framework/frame.h"
+#include "lib/framework/string_ext.h"
 
 #include "levels.h"
 #include "levelint.h"

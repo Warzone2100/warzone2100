@@ -33,7 +33,7 @@
 #include "lib/framework/frame.h"
 
 #include <math.h>
-#include "lib/framework/math-help.h"
+#include "lib/framework/math_ext.h"
 
 #include "difficulty.h"
 // ------------------------------------------------------------------------------------

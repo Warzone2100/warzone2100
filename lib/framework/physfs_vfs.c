@@ -24,7 +24,7 @@
 /* These are necessary for the `bool' type and `strlcpy'. Allow frame header
  * files to be singly included */
 #define FRAME_LIB_INCLUDE
-#include "lib/framework/strlfuncs.h"
+#include "lib/framework/string_ext.h"
 #include "lib/framework/types.h"
 
 #include "physfs_vfs.h"

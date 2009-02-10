@@ -31,7 +31,7 @@
 #include "lib/framework/frame.h"
 #include "lib/framework/strres.h"
 #include "lib/framework/input.h"
-#include "lib/framework/input.h"
+#include "lib/framework/stdio_ext.h"
 #include "lib/widget/button.h"
 #include "lib/widget/editbox.h"
 #include "lib/widget/widget.h"

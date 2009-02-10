@@ -21,7 +21,6 @@
 #ifndef __INCLUDED_VERSION_H__
 #define __INCLUDED_VERSION_H__
 
-#include "lib/framework/frame.h"
 #include "lib/framework/types.h"
 
 /** Retrieve the low revision number

@@ -17,13 +17,13 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
+#ifndef STDIO_EXT_H
+#define STDIO_EXT_H
 
-#ifndef __INCLUDE_LIB_FRAMEWORK_PRINTF_EXT_H__
-#define __INCLUDE_LIB_FRAMEWORK_PRINTF_EXT_H__
-
-#include "frame.h"
+#include "wzglobal.h"
 
 #include <stdarg.h>
+
 
 /** A variant on snprintf which appends its output string to the given string
  *  buffer, rather than to replace it.
@@ -36,11 +36,13 @@
  */
 extern int vslcatprintf(char* str, size_t size, const char* format, va_list ap);
 
+
 /** A variant on snprintf which appends its output string to the given string
  *  The function's interface is similar to vslcatprintf(), so look at that
  *  function's description.
  */
 extern int slcatprintf(char* str, size_t size, const char* format, ...) WZ_DECL_FORMAT(printf, 3, 4);
+
 
 #if defined(WZ_OS_WIN) || defined(DOXYGEN)
 // These functions are GNU extensions; so make sure they are available on Windows also
@@ -66,6 +68,7 @@ extern int slcatprintf(char* str, size_t size, const char* format, ...) WZ_DECL_
  */
 extern int vasprintf(char** strp, const char* format, va_list ap);
 
+
 /**
  * This function is analogue to sprintf, except that it allocates a string
  * large enough to hold the output including the terminating NUL character.
@@ -77,6 +80,7 @@ extern int asprintf(char** strp, const char* format, ...) WZ_DECL_FORMAT(printf,
 
 #if defined(WZ_CC_MSVC)
 // Make sure that these functions are available, and work according to the C99 spec on MSVC also
+
 extern int wz_vsnprintf(char* str, size_t size, const char* format, va_list ap);
 extern int wz_snprintf(char* str, size_t size, const char* format, ...);
 
@@ -88,6 +92,7 @@ extern int wz_snprintf(char* str, size_t size, const char* format, ...);
 #elif !defined(WZ_CC_GNU) && !defined(WZ_C99)
 # error "This code depends on a C99-compliant implementation of snprintf and vsnprintf; please compile as C99 or provide a compliant implementation!"
 #endif
+
 
 // A stack-allocating variant of sprintf
 #define sasprintf(strp, format, ...) \
@@ -106,4 +111,4 @@ do { \
 	sprintf(*var, fmt,  __VA_ARGS__); \
 } while(0)
 
-#endif // __INCLUDE_LIB_FRAMEWORK_PRINTF_EXT_H__
+#endif // STDIO_EXT_H

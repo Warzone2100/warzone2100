@@ -23,7 +23,7 @@
 
 // this has to be first
 #include "lib/framework/frame.h"
-#include "lib/framework/math-help.h"
+#include "lib/framework/math_ext.h"
 #include "lib/framework/frameresource.h"
 
 #ifndef WZ_NOSOUND

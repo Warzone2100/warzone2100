@@ -27,7 +27,7 @@
 #define _trig_h
 
 #include "frame.h"
-#include "math-help.h"
+#include "math_ext.h"
 
 /* The number of units around a full circle */
 #define TRIG_DEGREES	360

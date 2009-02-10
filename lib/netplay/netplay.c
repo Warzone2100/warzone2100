@@ -24,6 +24,7 @@
  */
 
 #include "lib/framework/frame.h"
+#include "lib/framework/string_ext.h"
 
 #include <time.h>			// for stats
 #include <SDL_thread.h>

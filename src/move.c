@@ -29,7 +29,7 @@
 #include <math.h>
 
 #include "lib/framework/trig.h"
-#include "lib/framework/math-help.h"
+#include "lib/framework/math_ext.h"
 #include "lib/gamelib/gtime.h"
 #include "lib/gamelib/animobj.h"
 #include "lib/netplay/netplay.h"

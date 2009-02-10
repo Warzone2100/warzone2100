@@ -24,7 +24,7 @@
  */
 
 #include "lib/framework/wzglobal.h"
-#include "lib/framework/strnlen1.h"
+#include "lib/framework/string_ext.h"
 #include <string.h>
 
 #include <SDL_endian.h>

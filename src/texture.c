@@ -38,6 +38,7 @@
 #endif
 
 #include "lib/framework/file.h"
+#include "lib/framework/string_ext.h"
 
 #include "lib/ivis_common/pietypes.h"
 #include "lib/ivis_common/piestate.h"

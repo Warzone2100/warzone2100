@@ -23,7 +23,8 @@
  * Originally by Alex McLean & Jeremy Sallis, Pumpkin Studios, EIDOS INTERACTIVE
  */
 #include "lib/framework/frame.h"
-#include "lib/framework/math-help.h"
+#include "lib/framework/math_ext.h"
+#include "lib/framework/stdio_ext.h"
 
 /* Includes direct access to render library */
 #include "lib/ivis_common/piedef.h"

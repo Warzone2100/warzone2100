@@ -57,7 +57,7 @@
 
 #include "sequence.h"
 #include "timer.h"
-#include "lib/framework/math-help.h"
+#include "lib/framework/math_ext.h"
 #include "lib/ivis_opengl/GLee.h"
 #include "lib/ivis_common/piestate.h"
 #include "lib/sound/audio.h"

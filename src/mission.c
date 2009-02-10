@@ -25,7 +25,7 @@
 #include "mission.h"
 
 #include "lib/framework/frame.h"
-#include "lib/framework/math-help.h"
+#include "lib/framework/math_ext.h"
 #include "lib/ivis_common/bitimage.h"
 #include "lib/ivis_common/textdraw.h"
 #include "lib/ivis_common/piestate.h"

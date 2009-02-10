@@ -31,6 +31,7 @@
 
 extern "C"
 {
+#include "lib/framework/stdio_ext.h"
 // FIXME: #include from src/
 #include "src/version.h"
 }

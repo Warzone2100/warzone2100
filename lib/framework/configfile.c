@@ -22,6 +22,7 @@
 #include "configfile.h"
 
 #include <string.h>
+#include "string_ext.h"
 
 #include "file.h"
 

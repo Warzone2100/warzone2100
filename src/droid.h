@@ -24,8 +24,10 @@
 #ifndef __INCLUDED_SRC_DROID_H__
 #define __INCLUDED_SRC_DROID_H__
 
-#include "objectdef.h"
+#include "lib/framework/string_ext.h"
 #include "lib/gamelib/gtime.h"
+
+#include "objectdef.h"
 #include "stats.h"
 #include "visibility.h"
 

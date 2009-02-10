@@ -20,7 +20,8 @@
 
 #include "lib/framework/frame.h"
 #include "lib/framework/debug.h"
-#include "lib/framework/strlfuncs.h"
+#include "lib/framework/string_ext.h"
+#include "lib/framework/stdio_ext.h"
 #include "version.h"
 #include "stringdef.h"
 

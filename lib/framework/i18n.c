@@ -21,6 +21,8 @@
 #include <locale.h>
 #include <physfs.h>
 
+#include "string_ext.h"
+
 
 /* Always use fallbacks on Windows */
 #if defined(WZ_OS_WIN)

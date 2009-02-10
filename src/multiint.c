@@ -33,6 +33,7 @@
 #include "lib/framework/frameresource.h"
 #include "lib/framework/frameint.h"
 #include "lib/framework/file.h"
+#include "lib/framework/stdio_ext.h"
 
 /* Includes direct access to render library */
 #include "lib/ivis_common/piedef.h"

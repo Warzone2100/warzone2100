@@ -25,6 +25,9 @@
  */
 #include "frameresource.h"
 
+#include "string_ext.h"
+#include "stdio_ext.h"
+
 #include "file.h"
 #include "resly.h"
 #include <sqlite3.h>

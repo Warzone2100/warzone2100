@@ -17,12 +17,13 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/*! \file
- *  \brief Routines to provide simple math helper functions
+/*!
+ * \file
+ * \brief Routines to provide simple math helper functions
  */
 
-#ifndef __INCLUDED_LIB_FRAMEWORK_MATH_HELP_H__
-#define __INCLUDED_LIB_FRAMEWORK_MATH_HELP_H__
+#ifndef MATH_EXT_H
+#define MATH_EXT_H
 
 #include "wzglobal.h"
 #include <math.h>
@@ -198,4 +199,4 @@ static inline WZ_DECL_CONST float clipf(float x, float min, float max)
 	return x;
 }
 
-#endif // __INCLUDED_LIB_FRAMEWORK_MATH_HELP_H__
+#endif // MATH_EXT_H

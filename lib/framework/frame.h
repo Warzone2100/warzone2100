@@ -33,8 +33,8 @@
 #include "types.h"
 
 // Provides the safer functions strlcpy and strlcat
-#include "strlfuncs.h"
-#include "printf_ext.h"
+//#include "string_ext.h"
+//#include "stdio_ext.h"
 
 #include "macros.h"
 #include "debug.h"

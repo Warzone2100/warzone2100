@@ -17,10 +17,12 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
+#include "stdio_ext.h"
 
-#include "frame.h"
-#include "printf_ext.h"
 #include <stdio.h>
+#include <string.h>
+#include <assert.h>
+
 
 int vslcatprintf(char* str, size_t size, const char* format, va_list ap)
 {
@@ -39,6 +41,7 @@ int vslcatprintf(char* str, size_t size, const char* format, va_list ap)
 	return vsnprintf(&str[str_len], size - str_len, format, ap);
 }
 
+
 int slcatprintf(char* str, size_t size, const char* format, ...)
 {
 	va_list ap;
@@ -50,6 +53,7 @@ int slcatprintf(char* str, size_t size, const char* format, ...)
 
 	return count;
 }
+
 
 #if defined(WZ_OS_WIN)
 int vasprintf(char** strp, const char* format, va_list ap)
@@ -89,6 +93,7 @@ int vasprintf(char** strp, const char* format, va_list ap)
 	return vsprintf(*strp, format, ap);
 }
 
+
 int asprintf(char** strp, const char* format, ...)
 {
 	va_list ap;
@@ -101,6 +106,7 @@ int asprintf(char** strp, const char* format, ...)
 	return count;
 }
 #endif
+
 
 #if defined(WZ_CC_MSVC)
 int wz_vsnprintf(char* str, size_t size, const char* format, va_list ap)
@@ -124,6 +130,7 @@ int wz_vsnprintf(char* str, size_t size, const char* format, va_list ap)
 	// Return the amount of characters that would be written if _no_ truncation occurred
 	return count;
 }
+
 
 int wz_snprintf(char* str, size_t size, const char* format, ...)
 {

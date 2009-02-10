@@ -30,7 +30,7 @@
 #include <stdio.h>
 
 #include "frameint.h"
-#include "strnlen1.h"
+#include "string_ext.h"
 
 #include "lib/gamelib/gtime.h"
 

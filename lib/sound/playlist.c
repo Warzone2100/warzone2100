@@ -19,6 +19,8 @@
 */
 #include "lib/framework/frame.h"
 #include "lib/framework/file.h"
+#include "lib/framework/string_ext.h"
+#include "lib/framework/stdio_ext.h"
 
 #include "playlist.h"
 #include "cdaudio.h"

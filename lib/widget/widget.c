@@ -22,6 +22,7 @@
  */
 
 #include "lib/framework/frame.h"
+#include "lib/framework/string_ext.h"
 #include "lib/framework/frameint.h"
 #include "lib/ivis_common/textdraw.h"
 

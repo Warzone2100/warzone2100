@@ -34,6 +34,7 @@ extern char* res_get_text(void);
 #include <string.h>
 #include <stdlib.h>
 
+#include "lib/framework/string_ext.h"
 #include "lib/framework/frameresource.h"
 #include "lib/framework/resly.h"
 
