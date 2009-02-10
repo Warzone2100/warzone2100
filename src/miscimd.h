@@ -21,6 +21,10 @@
 #ifndef __INCLUDED_SRC_MISCIMD_H__
 #define __INCLUDED_SRC_MISCIMD_H__
 
+#include "structure.h"
+#include "structuredef.h"
+#include "messagedef.h"
+
 extern BOOL initMiscImds( void );
 extern iIMDShape	*getImdFromIndex(UDWORD	index);
 extern iIMDShape	*getRandomWreckageImd( void );
@@ -75,56 +79,56 @@ const char	*pName;
 
 
 enum {
-MI_EXPLOSION_SMALL,       
-MI_EXPLOSION_MEDIUM,     
-MI_CONSTRUCTION,          
-MI_SMALL_SMOKE,           
-MI_BABA_HEAD,             
-MI_BABA_LEGS,             
-MI_BABA_ARM,             
-MI_BABA_BODY,             
-MI_CYBORG_HEAD,           
-MI_CYBORG_LEGS,           
-MI_CYBORG_ARM,            
-MI_CYBORG_BODY,           
-MI_WATER,                 
-MI_DROID_DAMAGE,          
-MI_SMALL_STEAM,           
-MI_PLASMA,                
-MI_BLIP,                  
-MI_SHADOW,                
-MI_TRANSPORTER_SHADOW,    
-MI_BLOOD,                 
-MI_TRAIL,                 
-MI_FLAME,                 
-MI_TESLA,                 
-MI_MFLARE,                
-MI_RAIN,                  
-MI_SNOW,                  
-MI_SPLASH,                
-MI_KICK,                  
-MI_LANDING,               
+MI_EXPLOSION_SMALL,
+MI_EXPLOSION_MEDIUM,
+MI_CONSTRUCTION,
+MI_SMALL_SMOKE,
+MI_BABA_HEAD,
+MI_BABA_LEGS,
+MI_BABA_ARM,
+MI_BABA_BODY,
+MI_CYBORG_HEAD,
+MI_CYBORG_LEGS,
+MI_CYBORG_ARM,
+MI_CYBORG_BODY,
+MI_WATER,
+MI_DROID_DAMAGE,
+MI_SMALL_STEAM,
+MI_PLASMA,
+MI_BLIP,
+MI_SHADOW,
+MI_TRANSPORTER_SHADOW,
+MI_BLOOD,
+MI_TRAIL,
+MI_FLAME,
+MI_TESLA,
+MI_MFLARE,
+MI_RAIN,
+MI_SNOW,
+MI_SPLASH,
+MI_KICK,
+MI_LANDING,
 MI_SHOCK,
-MI_BLIP_ENEMY,    
-MI_BLIP_RESOURCE, 
+MI_BLIP_ENEMY,
+MI_BLIP_RESOURCE,
 MI_BLIP_ARTEFACT,
 
 MI_WRECK0,
-MI_WRECK1, 
-MI_WRECK2, 
-MI_WRECK3, 
-MI_WRECK4, 
+MI_WRECK1,
+MI_WRECK2,
+MI_WRECK3,
+MI_WRECK4,
 
-MI_DEBRIS0,  
-MI_DEBRIS1,  
-MI_DEBRIS2,  
-MI_DEBRIS3,  
-MI_DEBRIS4,  
+MI_DEBRIS0,
+MI_DEBRIS1,
+MI_DEBRIS2,
+MI_DEBRIS3,
+MI_DEBRIS4,
 
 MI_FIREWORK,
 
 
-MI_TOO_MANY  
+MI_TOO_MANY
 };
 
 #endif // __INCLUDED_SRC_MISCIMD_H__
