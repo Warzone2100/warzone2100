@@ -88,9 +88,8 @@ BOOL						bPlayerReadyGUI[MAX_PLAYERS] = {false};
 /* multiplayer message stack stuff */
 /////////////////////////////////////
 #define MAX_MSG_STACK	100				// must be *at least* 64
-#define MAX_STR			MAX_STR_LENGTH
 
-static char msgStr[MAX_MSG_STACK][MAX_STR];
+static char msgStr[MAX_MSG_STACK][MAX_STR_LENGTH];
 static SDWORD msgPlFrom[MAX_MSG_STACK];
 static SDWORD msgPlTo[MAX_MSG_STACK];
 static SDWORD callbackType[MAX_MSG_STACK];

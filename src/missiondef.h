@@ -24,6 +24,13 @@
 #ifndef __INCLUDED_MISSIONDEF_H__
 #define __INCLUDED_MISSIONDEF_H__
 
+#include "map.h"
+#include "structuredef.h"
+#include "droiddef.h"
+#include "featuredef.h"
+#include "power.h"
+
+
 //mission types
 
 //used to set the reinforcement time on hold whilst the Transporter is unable to land

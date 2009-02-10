@@ -27,6 +27,7 @@
 #include "lib/ivis_common/pietypes.h"
 #include "lib/ivis_common/ivisdef.h"
 #include "positiondef.h"
+#include "stringdef.h"
 
 /// max number of text strings or sequences for VIEWDATA
 static const unsigned int MAX_DATA = 4;

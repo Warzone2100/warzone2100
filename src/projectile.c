@@ -361,7 +361,7 @@ BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, Ve
 	psProj->state		= PROJ_INFLIGHT;
 	psProj->psWStats		= psStats;
 
-	psProj->pos = Vector3uw_Init(muzzle.x, muzzle.y, muzzle.z);
+	psProj->pos = Vector3f_To3uw(muzzle);
 	psProj->startX		= muzzle.x;
 	psProj->startY		= muzzle.y;
 	psProj->tarX			= target.x;

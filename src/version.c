@@ -22,6 +22,7 @@
 #include "lib/framework/debug.h"
 #include "lib/framework/strlfuncs.h"
 #include "version.h"
+#include "stringdef.h"
 
 #define SVN_AUTOREVISION_STATIC static
 #include "autorevision.h"

@@ -26,6 +26,7 @@
 
 #include "lib/gamelib/animobj.h"
 
+#include "stringdef.h"
 #include "basedef.h"
 #include "movedef.h"
 #include "statsdef.h"
