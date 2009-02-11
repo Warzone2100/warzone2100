@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2007  Warzone Resurrection Project
+	Copyright (C) 2005-2009  Warzone Resurrection Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -248,9 +248,7 @@ void gridRemoveObject(BASE_OBJECT *psObj)
 // could affect a location (x,y in world coords)
 void gridStartIterate(SDWORD x, SDWORD y)
 {
-	ASSERT( (x >= 0) && (x < gridWidth*GRID_UNITS) &&
-			 (y >= 0) && (y < gridHeight*GRID_UNITS),
-		"gridStartIterate: coords off grid" );
+	ASSERT(x >= 0 && x < gridWidth * GRID_UNITS && y >= 0 && y < gridHeight * GRID_UNITS, "coords(%d, %d) off grid", x, y);
 
 	x = x / GRID_UNITS;
 	y = y / GRID_UNITS;

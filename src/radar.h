@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2007  Warzone Resurrection Project
+	Copyright (C) 2005-2009  Warzone Resurrection Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -57,6 +57,7 @@ typedef enum _radar_draw_mode
 
 extern BOOL		bEnemyAllyRadarColor;		///< Enemy/ally minimap color
 extern RADAR_DRAW_MODE	radarDrawMode;			///< Current minimap mode
+extern BOOL rotateRadar;
 
 extern void radarInitVars(void);			///< Recalculate minimap variables. For initialization code only.
 extern PIELIGHT clanColours[MAX_PLAYERS];

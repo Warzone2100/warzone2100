@@ -3,15 +3,11 @@
 // ANSI C + stdint.h
 //
 // See header file for documentation.
-
-// #include <assert.h>
-// #include <stdlib.h>
-// #include <string.h>
+#include "tagfile.h"
 
 #include "frame.h"
 
-#include "tagfile.h"
-
+#include "string_ext.h"
 #include "physfs_ext.h"
 
 // Tags of values 0x0 and 0xFF are reserved as instance separators and group end

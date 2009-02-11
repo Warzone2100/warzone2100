@@ -4,21 +4,23 @@
 AC_PREREQ(2.61)
 AC_INIT(betawidget, VERSION)
 
+AC_CONFIG_MACRO_DIR([m4])
+
 # libtool shared library version
 
 # Increment if the interface has additions, changes, removals.
-LT_CURRENT=0
+LIB_CURRENT=0
 
 # Increment any time the source changes; set to
 # 0 if you increment CURRENT
-LT_REVISION=0
+LIB_REVISION=0
 
 # Increment if any interfaces have been added; set to 0
 # if any interfaces have been removed. removal has
 # precedence over adding, so set to 0 if both happened.
-LT_AGE=0
+LIB_AGE=0
 
-AC_SUBST([LIBTOOL_VERSION], ["$LT_CURRENT:$LT_REVISION:$LT_AGE"])
+AC_SUBST([LIBTOOL_VERSION], ["$LIB_CURRENT:$LIB_REVISION:$LIB_AGE"])
 
 AC_CONFIG_SRCDIR([src/vector.h])
 AC_CONFIG_HEADER([config.h])
@@ -90,6 +92,7 @@ PKG_CHECK_MODULES([SDL], [sdl >= 1.2])
 AC_SUBST([PLATFORM_REQUIRES], [sdl])
 
 PKG_CHECK_MODULES([CAIRO], [cairo])
+PKG_CHECK_MODULES([SVG_CAIRO], [libsvg-cairo])
 
 # First check the pkg-config lua5.1 package
 PKG_CHECK_MODULES([LUA], [lua5.1 >= 5.1], [

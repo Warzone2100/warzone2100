@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2007  Warzone Resurrection Project
+	Copyright (C) 2005-2009  Warzone Resurrection Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -39,7 +39,6 @@ typedef struct PROJECTILE
 	SIMPLE_ELEMENTS( struct PROJECTILE );
 
 	UBYTE           state;                  ///< current projectile state
-	UBYTE           airTarget;              ///< whether the projectile was fierd at an airborn target
 
 	UBYTE           player;                 ///< needed because damange and radDamage vary from base stat per player because of upgrades
 
@@ -57,7 +56,6 @@ typedef struct PROJECTILE
 	UDWORD          srcHeight;              ///< Height of origin
 	SDWORD          altChange;              ///< Change in altitude
 	UDWORD          born;
-	UDWORD          targetRadius;           ///< Needed to backtrack the projectiles
 	UDWORD          died;
 
 	void (*pInFlightFunc)(struct PROJECTILE* psObj);

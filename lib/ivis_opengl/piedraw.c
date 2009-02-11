@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2007  Warzone Resurrection Project
+	Copyright (C) 2005-2009  Warzone Resurrection Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -388,7 +388,7 @@ static void pie_DrawShadow(iIMDShape *shape, int flag, int flag_data, Vector3f* 
 			for(j = 0; j < 3; j++)
 			{
 				current = pPolys->pindex[j];
-				p[j] = Vector3f_New(pVertices[current].x, scale_y(pVertices[current].y, flag, flag_data), pVertices[current].z);
+				p[j] = Vector3f_Init(pVertices[current].x, scale_y(pVertices[current].y, flag, flag_data), pVertices[current].z);
 			}
 
 			v[0] = Vector3f_Sub(p[2], p[0]);

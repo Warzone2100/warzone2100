@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2007  Warzone Resurrection Project
+	Copyright (C) 2005-2009  Warzone Resurrection Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -310,6 +310,13 @@ static inline bool worldOnMap2i(Vector2i pos)
 
 /* Return whether a world coordinate is on the map */
 static inline bool worldOnMap3i(Vector3i pos)
+{
+	return worldOnMap(pos.x, pos.y);
+}
+
+
+/* Return whether a world coordinate is on the map */
+static inline bool worldOnMap3f(Vector3f pos)
 {
 	return worldOnMap(pos.x, pos.y);
 }

@@ -1,5 +1,5 @@
 ;  This file is part of Warzone 2100.
-;  Copyright (C) 2007  Warzone Resurrection Project
+;  Copyright (C) 2007-2009  Warzone Resurrection Project
 ;  Copyright (C) 2007  Dennis Schridde
 ;
 ;  Warzone 2100 is free software; you can redistribute it and/or modify
@@ -52,7 +52,7 @@ VIAddVersionKey "CompanyName"		"Warzone Resurrection Project"
 VIAddVersionKey "FileDescription"	"Warzone 2100 Updater"
 VIAddVersionKey "FileVersion"		"${VERSION}"
 VIAddVersionKey "InternalName"		"Warzone 2100"
-VIAddVersionKey "LegalCopyright"	"Copyright © 2006 Warzone Resurrection Project"
+VIAddVersionKey "LegalCopyright"	"Copyright © 2006-2009 Warzone Resurrection Project"
 VIAddVersionKey "OriginalFilename"	"warzone2100-${VERSION}.update.exe"
 VIAddVersionKey "ProductName"		"Warzone 2100"
 VIAddVersionKey "ProductVersion"	"${VERSION}"

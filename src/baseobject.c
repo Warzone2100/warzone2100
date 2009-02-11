@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2007  Warzone Resurrection Project
+	Copyright (C) 2005-2009  Warzone Resurrection Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -55,12 +55,12 @@ void checkObject(const BASE_OBJECT* psObject, const char * const location_descri
 			break;
 	}
 
-	ASSERT(psObject->type == OBJ_FEATURE
+	ASSERT_HELPER(psObject->type == OBJ_FEATURE
 	    || psObject->type == OBJ_TARGET
 	    || psObject->player < MAX_PLAYERS,
 	       location_description, function, "CHECK_OBJECT: Out of bound owning player number (%u)", (unsigned int)psObject->player);
 
-	ASSERT(psObject->direction <= 360.0f
+	ASSERT_HELPER(psObject->direction <= 360.0f
 	    && psObject->direction >= 0.0f,
 	       location_description, function, "CHECK_OBJECT: Out of range direction (%f)", (float)psObject->direction);
 }

@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2007  Warzone Resurrection Project
+	Copyright (C) 2005-2009  Warzone Resurrection Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -26,7 +26,7 @@
 #ifndef _event_h
 #define _event_h
 
-#include "interp.h"
+#include "interpreter.h"
 
 /* The number of values in a context value chunk */
 #define CONTEXT_VALS 20

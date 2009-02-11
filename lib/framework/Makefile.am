@@ -30,6 +30,7 @@ noinst_HEADERS = \
 	cursors.h \
 	debug.h \
 	file.h \
+	fixedpoint.h \
 	frame.h \
 	frameint.h \
 	frameresource.h \
@@ -37,20 +38,20 @@ noinst_HEADERS = \
 	input.h \
 	lexer_input.h \
 	listmacs.h \
-	math-help.h \
+	math_ext.h \
 	physfs_ext.h \
 	physfs_vfs.h \
-	printf_ext.h \
 	resly.h \
-	strlfuncs.h \
-	strnlen1.h \
+	stdio_ext.h \
+	string_ext.h \
 	strres.h \
 	strresly.h \
 	tagfile.h \
 	treap.h \
 	trig.h \
 	types.h \
-	utf.h
+	utf.h \
+	vector.h
 
 libframework_a_SOURCES = \
 	configfile.c \
@@ -64,11 +65,10 @@ libframework_a_SOURCES = \
 	input.c \
 	lexer_input.c \
 	physfs_vfs.c \
-	printf_ext.c \
 	resource_lexer.lex.c \
 	resource_parser.tab.c \
 	SDL_framerate.c \
-	strnlen1.c \
+	stdio_ext.c \
 	strres.c \
 	strres_lexer.lex.c \
 	strres_parser.tab.c \

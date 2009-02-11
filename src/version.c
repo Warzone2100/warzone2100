@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 2007  Giel van Schijndel
-	Copyright (C) 2007  Warzone Resurrection Project
+	Copyright (C) 2007-2009  Warzone Resurrection Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -20,8 +20,10 @@
 
 #include "lib/framework/frame.h"
 #include "lib/framework/debug.h"
-#include "lib/framework/strlfuncs.h"
+#include "lib/framework/string_ext.h"
+#include "lib/framework/stdio_ext.h"
 #include "version.h"
+#include "stringdef.h"
 
 #define SVN_AUTOREVISION_STATIC static
 #include "autorevision.h"

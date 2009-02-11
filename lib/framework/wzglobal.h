@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1992-2007  Trolltech ASA.
-	Copyright (C) 2005-2007  Warzone Resurrection Project
+	Copyright (C) 2005-2009  Warzone Resurrection Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -277,19 +277,16 @@
 */
 #if defined(__STDC_VERSION__) && __STDC_VERSION__ >= 199901L
 # define WZ_C99
-#else
-# if !defined(va_copy)
-/**
- * Implements the interface of the C99 macro va_copy such that we can use it on
- * non-C99 systems as well.
- *
- * This implementation assumes that va_list is just a pointer to the stack
- * frame of the variadic function. This is by far the most common setup, though
- * it might not always work.
- */
-#  define va_copy(dest, src) (void)((dest) = (src))
-# endif
 #endif /* WZ_Cxx */
+
+/*
+   The supported C++ standard, must be one of: (WZ_CXXxx)
+
+     98       - ISO/IEC 14882:1998 / C++98
+*/
+#if defined(__cplusplus)
+# define WZ_CXX98
+#endif /* WZ_CXXxx */
 
 
 /*
@@ -471,10 +468,6 @@
 #endif
 
 
-/* ---- Global constants ---- */
-
-#define	MAX_STR_LENGTH          256
-
 /* ---- Platform specific setup ---- */
 
 
@@ -516,7 +509,10 @@
 #    define inline __inline
 #    define alloca _alloca
 #    define fileno _fileno
+
+#    define isnan _isnan
 #    define isfinite _finite
+
 #    define PATH_MAX MAX_PATH
 #  endif /* WZ_CC_MSVC */
 
@@ -532,6 +528,19 @@
 #  include <unistd.h>
 #  include <alloca.h>
 #endif /* WZ_OS_* */
+
+
+#if !defined(WZ_C99) && !defined(va_copy)
+/**
+ * Implements the interface of the C99 macro va_copy such that we can use it on
+ * non-C99 systems as well.
+ *
+ * This implementation assumes that va_list is just a pointer to the stack
+ * frame of the variadic function. This is by far the most common setup, though
+ * it might not always work.
+ */
+# define va_copy(dest, src) (void)((dest) = (src))
+#endif // !WZ_C99 && !va_copy
 
 
 #endif /* WZGLOBAL_H */

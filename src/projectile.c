@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2007  Warzone Resurrection Project
+	Copyright (C) 2005-2009  Warzone Resurrection Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -27,7 +27,7 @@
 
 #include "lib/framework/frame.h"
 #include "lib/framework/trig.h"
-#include "lib/framework/math-help.h"
+#include "lib/framework/math_ext.h"
 
 #include "lib/gamelib/gtime.h"
 #include "objects.h"
@@ -63,16 +63,7 @@
 #define	PROJ_MAX_PITCH			30
 #define	ACC_GRAVITY				1000
 #define	DIRECT_PROJ_SPEED		500
-#define NOMINAL_DAMAGE	5
 #define VTOL_HITBOX_MODIFICATOR 100
-
-/** Used for passing data to the checkBurnDamage function */
-typedef struct
-{
-	SWORD   x1, y1;
-	SWORD   x2, y2;
-	SWORD   rad;
-} FIRE_BOX;
 
 // Watermelon:they are from droid.c
 /* The range for neighbouring objects */
@@ -105,8 +96,7 @@ static void	proj_InFlightDirectFunc( PROJECTILE *psObj );
 static void	proj_InFlightIndirectFunc( PROJECTILE *psObj );
 static void	proj_ImpactFunc( PROJECTILE *psObj );
 static void	proj_PostImpactFunc( PROJECTILE *psObj );
-static void	proj_checkBurnDamage( BASE_OBJECT *apsList, PROJECTILE *psProj,
-									FIRE_BOX *pFireBox );
+static void	proj_checkBurnDamage( BASE_OBJECT *apsList, PROJECTILE *psProj);
 static void	proj_Free(PROJECTILE *psObj);
 
 static float objectDamage(BASE_OBJECT *psObj, UDWORD damage, UDWORD weaponClass,UDWORD weaponSubClass, HIT_SIDE impactSide);
@@ -118,8 +108,6 @@ static void projGetNaybors(PROJECTILE *psObj);
 /***************************************************************************/
 BOOL gfxVisible(PROJECTILE *psObj)
 {
-	BOOL bVisible = false;
-
 	// Already know it is visible
 	if (psObj->bVisible)
 	{
@@ -132,22 +120,6 @@ BOOL gfxVisible(PROJECTILE *psObj)
 		return true;
 	}
 
-	// You can see the source
-	if (psObj->psSource != NULL
-	 && !psObj->psSource->died
-	 && psObj->psSource->visible[selectedPlayer])
-	{
-		bVisible = true;
-	}
-
-	// You can see the destination
-	if (psObj->psDest != NULL
-	 && !psObj->psDest->died
-	 && psObj->psDest->visible[selectedPlayer])
-	{
-		bVisible = true;
-	}
-
 	// Someone elses structure firing at something you can't see
 	if (psObj->psSource != NULL
 	 && !psObj->psSource->died
@@ -157,7 +129,7 @@ BOOL gfxVisible(PROJECTILE *psObj)
 	  || psObj->psDest->died
 	  || !psObj->psDest->visible[selectedPlayer]))
 	{
-		bVisible = false;
+		return false;
 	}
 
 	// Something you cannot see firing at a structure that isn't yours
@@ -168,10 +140,26 @@ BOOL gfxVisible(PROJECTILE *psObj)
 	 && (psObj->psSource == NULL
 	  || !psObj->psSource->visible[selectedPlayer]))
 	{
-		bVisible = false;
+		return false;
 	}
 
-	return bVisible;
+	// You can see the source
+	if (psObj->psSource != NULL
+	 && !psObj->psSource->died
+	 && psObj->psSource->visible[selectedPlayer])
+	{
+		return true;
+	}
+
+	// You can see the destination
+	if (psObj->psDest != NULL
+	 && !psObj->psDest->died
+	 && psObj->psDest->visible[selectedPlayer])
+	{
+		return true;
+	}
+
+	return false;
 }
 
 /***************************************************************************/
@@ -332,13 +320,12 @@ static void proj_UpdateKills(PROJECTILE *psObj, float experienceInc)
 
 BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, Vector3i target, BASE_OBJECT *psTarget, BOOL bVisible, int weapon_slot)
 {
-	PROJECTILE		*psObj = malloc(sizeof(PROJECTILE));
+	PROJECTILE		*psProj = malloc(sizeof(PROJECTILE));
 	SDWORD			tarHeight, srcHeight, iMinSq;
 	SDWORD			altChange, dx, dy, dz, iVelSq, iVel;
 	double          fR, fA, fS, fT, fC;
 	Vector3f muzzle;
 	SDWORD			iRadSq, iPitchLow, iPitchHigh, iTemp;
-	UDWORD			heightVariance;
 	WEAPON_STATS *psStats = &asWeaponStats[psWeap->nStat];
 
 	ASSERT( psStats != NULL, "proj_SendProjectile: invalid weapon stats" );
@@ -350,7 +337,7 @@ BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, Ve
 	{
 		// if there isn't an attacker just start at the target position
 		// NB this is for the script function to fire the las sats
-		muzzle = Vector3f_New(target.x, target.y, target.z);
+		muzzle = Vector3f_Init(target.x, target.y, target.z);
 	}
 	else if (psAttacker->type == OBJ_DROID && weapon_slot >= 0)
 	{
@@ -364,87 +351,56 @@ BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, Ve
 	}
 	else // incase anything wants a projectile
 	{
-		muzzle = Vector3f_New(psAttacker->pos.x, psAttacker->pos.y, psAttacker->pos.z);
+		// FIXME HACK Needed since we got those ugly Vector3uw floating around in BASE_OBJECT...
+		muzzle = Vector3uw_To3f(psAttacker->pos);
 	}
 
 	/* Initialise the structure */
-	psObj->id			= ProjectileTrackerID |(gameTime2 >>4);		// make unique id
-	psObj->type		    = OBJ_PROJECTILE;
-	psObj->state		= PROJ_INFLIGHT;
-	psObj->psWStats		= psStats;
-	psObj->pos = Vector3uw_New(muzzle.x, muzzle.y, muzzle.z);
-	psObj->startX		= muzzle.x;
-	psObj->startY		= muzzle.y;
-	psObj->tarX			= target.x;
-	psObj->tarY			= target.y;
-	psObj->targetRadius = (psTarget ? establishTargetRadius(psTarget) : 0); // needed to backtrack FX
-	psObj->born			= gameTime;
-	psObj->player		= (UBYTE)player;
-	psObj->bVisible		= false;
-	psObj->airTarget	= false;
-	psObj->psDamaged	= NULL; // must initialize these to NULL first!
-	psObj->psSource		= NULL;
-	psObj->psDest		= NULL;
-	psObj->died		= 0;
-	setProjectileDestination(psObj, psTarget);
+	psProj->id			= ProjectileTrackerID |(gameTime2 >>4);		// make unique id
+	psProj->type		    = OBJ_PROJECTILE;
+	psProj->state		= PROJ_INFLIGHT;
+	psProj->psWStats		= psStats;
 
-	/* If target is a VTOL or higher than ground, it is an air target. */
-	if ((psTarget != NULL && psTarget->type == OBJ_DROID && isVtolDroid((DROID*)psTarget))
-		|| (psTarget == NULL && target.z > map_Height(target.x, target.y)))
+	psProj->pos = Vector3f_To3uw(muzzle);
+	psProj->startX		= muzzle.x;
+	psProj->startY		= muzzle.y;
+	psProj->tarX			= target.x;
+	psProj->tarY			= target.y;
+
+	psProj->player = player;
+	psProj->bVisible = false;
+
+	psProj->died = 0;
+
+	setProjectileDestination(psProj, psTarget);
+
+	/*
+	When we have been created by penetration (spawned from another projectile),
+	we shall live no longer than the original projectile may have lived
+	*/
+	if (psAttacker->type == OBJ_PROJECTILE)
 	{
-		psObj->airTarget = true;
-	}
+		PROJECTILE * psOldProjectile = (PROJECTILE*)psAttacker;
+		psProj->born = psOldProjectile->born;
 
-	//Watermelon:use the source of the source of psObj :) (psAttacker is a projectile)
-	if (psAttacker && psAttacker->type == OBJ_PROJECTILE)
-	{
-		// psAttacker is a projectile if bPenetrate
-		PROJECTILE *psProj = (PROJECTILE*)psAttacker;
-
-		if (psProj->psSource && !psProj->psSource->died)
-		{
-			setProjectileSource(psObj, psProj->psSource);
-		}
+		setProjectileSource(psProj, psOldProjectile->psSource);
+		setProjectileDamaged(psProj, psOldProjectile->psDamaged);
 	}
 	else
 	{
-		setProjectileSource(psObj, psAttacker);
+		psProj->born = gameTime;
+
+		setProjectileSource(psProj, psAttacker);
+		setProjectileDamaged(psProj, NULL);
 	}
 
 	if (psTarget)
 	{
+		const float maxHeight = establishTargetHeight(psTarget);
+		unsigned int heightVariance = frandom() * maxHeight;
+
 		scoreUpdateVar(WD_SHOTS_ON_TARGET);
-		heightVariance = 0;
-		switch(psTarget->type)
-		{
-			case OBJ_DROID:
-			case OBJ_FEATURE:
-				if( ((DROID*)psTarget)->droidType == DROID_PERSON )
-				{
-					heightVariance = rand()%4;
-				}
-				else
-				{
-					heightVariance = rand()%8;
-				}
-				break;
 
-			case OBJ_STRUCTURE:
-				heightVariance = rand()%8;
-				break;
-
-			case OBJ_PROJECTILE:
-				ASSERT(!"invalid object type: bullet", "proj_SendProjectile: invalid object type: OBJ_PROJECTILE");
-				break;
-
-			case OBJ_TARGET:
-				ASSERT(!"invalid object type: target", "proj_SendProjectile: invalid object type: OBJ_TARGET");
-				break;
-
-			default:
-				ASSERT(!"unknown object type", "proj_SendProjectile: unknown object type");
-				break;
-		}
 		tarHeight = psTarget->pos.z + heightVariance;
 	}
 	else
@@ -456,22 +412,22 @@ BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, Ve
 	srcHeight			= muzzle.z;
 	altChange			= tarHeight - srcHeight;
 
-	psObj->srcHeight	= srcHeight;
-	psObj->altChange	= altChange;
+	psProj->srcHeight	= srcHeight;
+	psProj->altChange	= altChange;
 
-	dx = ((SDWORD)psObj->tarX) - muzzle.x;
-	dy = ((SDWORD)psObj->tarY) - muzzle.y;
+	dx = ((SDWORD)psProj->tarX) - muzzle.x;
+	dy = ((SDWORD)psProj->tarY) - muzzle.y;
 	dz = tarHeight - muzzle.z;
 
 	/* roll never set */
-	psObj->roll = 0;
+	psProj->roll = 0;
 
 	fR = atan2(dx, dy);
 	if ( fR < 0.0 )
 	{
 		fR += 2.0 * M_PI;
 	}
-	psObj->direction = RAD_TO_DEG(fR);
+	psProj->direction = RAD_TO_DEG(fR);
 
 
 	/* get target distance */
@@ -487,8 +443,8 @@ BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, Ve
 		{
 			fR += 2.0 * M_PI;
 		}
-		psObj->pitch = (SWORD)( RAD_TO_DEG(fR) );
-		psObj->pInFlightFunc = proj_InFlightDirectFunc;
+		psProj->pitch = (SWORD)( RAD_TO_DEG(fR) );
+		psProj->pInFlightFunc = proj_InFlightDirectFunc;
 	}
 	else
 	{
@@ -503,7 +459,7 @@ BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, Ve
 		if ( fS < 0.0 )
 		{
 			/* set optimal pitch */
-			psObj->pitch = PROJ_MAX_PITCH;
+			psProj->pitch = PROJ_MAX_PITCH;
 
 			fS = trigSin(PROJ_MAX_PITCH);
 			fC = trigCos(PROJ_MAX_PITCH);
@@ -550,11 +506,11 @@ BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, Ve
 			/* chooselow pitch unless -ve */
 			if ( iPitchLow > 0 )
 			{
-				psObj->pitch = (SWORD)iPitchLow;
+				psProj->pitch = (SWORD)iPitchLow;
 			}
 			else
 			{
-				psObj->pitch = (SWORD)iPitchHigh;
+				psProj->pitch = (SWORD)iPitchHigh;
 			}
 		}
 
@@ -564,52 +520,52 @@ BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, Ve
 		{
 			if (psAttacker->type == OBJ_DROID)
 			{
-				((DROID *) psAttacker)->asWeaps[weapon_slot].pitch = psObj->pitch;
+				((DROID *) psAttacker)->asWeaps[weapon_slot].pitch = psProj->pitch;
 			}
 			else if (psAttacker->type == OBJ_STRUCTURE)
 			{
-				((STRUCTURE *) psAttacker)->asWeaps[weapon_slot].pitch = psObj->pitch;
+				((STRUCTURE *) psAttacker)->asWeaps[weapon_slot].pitch = psProj->pitch;
 			}
 		}
 
-		psObj->vXY = iVel * trigCos(psObj->pitch);
-		psObj->vZ  = iVel * trigSin(psObj->pitch);
+		psProj->vXY = iVel * trigCos(psProj->pitch);
+		psProj->vZ  = iVel * trigSin(psProj->pitch);
 
 		/* set function pointer */
-		psObj->pInFlightFunc = proj_InFlightIndirectFunc;
+		psProj->pInFlightFunc = proj_InFlightIndirectFunc;
 	}
 
 	/* put the projectile object first in the global list */
-	psObj->psNext = psProjectileList;
-	psProjectileList = psObj;
+	psProj->psNext = psProjectileList;
+	psProjectileList = psProj;
 
 	/* play firing audio */
 	// only play if either object is visible, i know it's a bit of a hack, but it avoids the problem
 	// of having to calculate real visibility values for each projectile.
-	if ( bVisible || gfxVisible(psObj) )
+	if ( bVisible || gfxVisible(psProj) )
 	{
 		// note that the projectile is visible
-		psObj->bVisible = true;
+		psProj->bVisible = true;
 
 		if ( psStats->iAudioFireID != NO_SOUND )
 		{
 
-			if ( psObj->psSource )
+			if ( psProj->psSource )
 			{
 				/* firing sound emitted from source */
-				audio_PlayObjDynamicTrack( (BASE_OBJECT *) psObj->psSource,
+				audio_PlayObjDynamicTrack( (BASE_OBJECT *) psProj->psSource,
 									psStats->iAudioFireID, NULL );
 				/* GJ HACK: move howitzer sound with shell */
 				if ( psStats->weaponSubClass == WSC_HOWITZERS )
 				{
-					audio_PlayObjDynamicTrack( (BASE_OBJECT *) psObj,
+					audio_PlayObjDynamicTrack( (BASE_OBJECT *) psProj,
 									ID_SOUND_HOWITZ_FLIGHT, NULL );
 				}
 			}
 			//don't play the sound for a LasSat in multiPlayer
 			else if (!(bMultiPlayer && psStats->weaponSubClass == WSC_LAS_SAT))
 			{
-					audio_PlayObjStaticTrack(psObj, psStats->iAudioFireID);
+					audio_PlayObjStaticTrack(psProj, psStats->iAudioFireID);
 			}
 		}
 	}
@@ -620,7 +576,7 @@ BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, Ve
 		counterBatteryFire(psAttacker, psTarget);
 	}
 
-	CHECK_PROJECTILE(psObj);
+	CHECK_PROJECTILE(psProj);
 
 	return true;
 }
@@ -809,8 +765,8 @@ static void proj_InFlightDirectFunc(PROJECTILE *psProj)
 		{
 			// FIXME HACK Needed since we got those ugly Vector3uw floating around in BASE_OBJECT...
 			Vector3i
-				posProj = {psProj->pos.x, psProj->pos.y, psProj->pos.z},
-				posTemp = {psTempObj->pos.x, psTempObj->pos.y, psTempObj->pos.z};
+				posProj = Vector3uw_To3i(psProj->pos),
+				posTemp = Vector3uw_To3i(psTempObj->pos);
 
 			Vector3i diff = Vector3i_Sub(posProj, posTemp);
 
@@ -1027,8 +983,8 @@ static void proj_InFlightIndirectFunc(PROJECTILE *psProj)
 		{
 			// FIXME HACK Needed since we got those ugly Vector3uw floating around in BASE_OBJECT...
 			Vector3i
-				posProj = {psProj->pos.x, psProj->pos.y, psProj->pos.z},
-				posTemp = {psTempObj->pos.x, psTempObj->pos.y, psTempObj->pos.z};
+				posProj = Vector3uw_To3i(psProj->pos),
+				posTemp = Vector3uw_To3i(psTempObj->pos);
 
 			Vector3i diff = Vector3i_Sub(posProj, posTemp);
 
@@ -1124,19 +1080,8 @@ static void proj_ImpactFunc( PROJECTILE *psObj )
 {
 	WEAPON_STATS	*psStats;
 	SDWORD			i, iAudioImpactID;
-	DROID			*psCurrD, *psNextD;
-	STRUCTURE		*psCurrS, *psNextS;
-	FEATURE			*psCurrF, *psNextF;
-	UDWORD			dice;
-	SDWORD			tarX0,tarY0, tarX1,tarY1;
-	SDWORD			radCubed, xDiff,yDiff;
 	float			relativeDamage;
 	Vector3i position,scatter;
-	UDWORD			damage;	//optimisation - were all being calculated twice on PC
-	//Watermelon: tarZ0,tarZ1,zDiff for AA AOE weapons;
-	SDWORD			tarZ0,tarZ1,zDiff;
-	// EvilGuru: Data about the effect to be shown
-	EFFECT_TYPE     facing;
 	iIMDShape       *imd;
 	HIT_SIDE	impactSide = HIT_SIDE_FRONT;
 
@@ -1145,9 +1090,6 @@ static void proj_ImpactFunc( PROJECTILE *psObj )
 	psStats = psObj->psWStats;
 	ASSERT( psStats != NULL,
 		"proj_ImpactFunc: Invalid weapon stats pointer" );
-
-	// Get if we are facing or not
-	facing = (psStats->facePlayer) ? EXPLOSION_TYPE_SPECIFIED : EXPLOSION_TYPE_NOT_FACING;
 
 	// note the attacker if any
 	g_pProjLastAttacker = psObj->psSource;
@@ -1215,6 +1157,9 @@ static void proj_ImpactFunc( PROJECTILE *psObj )
 	{
 		if (gfxVisible(psObj))
 		{
+			// Get if we are facing or not
+			EFFECT_TYPE facing = (psStats->facePlayer ? EXPLOSION_TYPE_SPECIFIED : EXPLOSION_TYPE_NOT_FACING);
+
 			// The graphic to show depends on if we hit water or not
 			if (terrainType(mapTile(map_coord(psObj->pos.x), map_coord(psObj->pos.y))) == TER_WATER)
 			{
@@ -1229,8 +1174,7 @@ static void proj_ImpactFunc( PROJECTILE *psObj )
 			addMultiEffect(&position, &scatter, EFFECT_EXPLOSION, facing, true, imd, psStats->numExplosions, psStats->lightWorld, psStats->effectSize);
 
 			// If the target was a VTOL hit in the air add smoke
-			if (psObj->airTarget
-			 && (psStats->surfaceToAir & SHOOT_IN_AIR)
+			if ((psStats->surfaceToAir & SHOOT_IN_AIR)
 			 && !(psStats->surfaceToAir & SHOOT_ON_GROUND))
 			{
 				addMultiEffect(&position, &scatter, EFFECT_SMOKE, SMOKE_TYPE_DRIFTING, false, NULL, 3, 0, 0);
@@ -1252,9 +1196,11 @@ static void proj_ImpactFunc( PROJECTILE *psObj )
 
 		if (gfxVisible(psObj))
 		{
+			// Get if we are facing or not
+			EFFECT_TYPE facing = (psStats->facePlayer ? EXPLOSION_TYPE_SPECIFIED : EXPLOSION_TYPE_NOT_FACING);
+
 			// If we hit a VTOL with an AA gun use the miss graphic and add some smoke
-			if (psObj->airTarget
-			 && (psStats->surfaceToAir & SHOOT_IN_AIR)
+			if ((psStats->surfaceToAir & SHOOT_IN_AIR)
 			 && !(psStats->surfaceToAir & SHOOT_ON_GROUND)
 			 && psStats->weaponSubClass == WSC_AAGUN)
 			{
@@ -1302,7 +1248,7 @@ static void proj_ImpactFunc( PROJECTILE *psObj )
 		else
 		{
 			// Calculate the damage the weapon does to its target
-			damage = calcDamage(weaponDamage(psStats, psObj->player), psStats->weaponEffect, psObj->psDest);
+			unsigned int damage = calcDamage(weaponDamage(psStats, psObj->player), psStats->weaponEffect, psObj->psDest);
 
 			// If we are in a multi-player game and the attacker is our responsibility
 			if (bMultiPlayer && psObj->psSource && myResponsibility(psObj->psSource->player))
@@ -1341,55 +1287,40 @@ static void proj_ImpactFunc( PROJECTILE *psObj )
 
 	if (psStats->radius != 0)
 	{
+		FEATURE *psCurrF, *psNextF;
+
 		/* An area effect bullet */
 		psObj->state = PROJ_POSTIMPACT;
 
 		/* Note when it exploded for the explosion effect */
 		psObj->born = gameTime;
 
-		/* Work out the bounding box for the blast radius */
-		tarX0 = (SDWORD)psObj->pos.x - (SDWORD)psStats->radius;
-		tarY0 = (SDWORD)psObj->pos.y - (SDWORD)psStats->radius;
-		tarX1 = (SDWORD)psObj->pos.x + (SDWORD)psStats->radius;
-		tarY1 = (SDWORD)psObj->pos.y + (SDWORD)psStats->radius;
-		/* Watermelon:height bounding box  for airborne units*/
-		tarZ0 = (SDWORD)psObj->pos.z - (SDWORD)psStats->radius;
-		tarZ1 = (SDWORD)psObj->pos.z + (SDWORD)psStats->radius;
-
-		/* Store the radius cubed */
-		radCubed = psStats->radius * psStats->radius * psStats->radius;
-
 		for (i = 0; i < MAX_PLAYERS; i++)
 		{
+			DROID *psCurrD, *psNextD;
+
 			for (psCurrD = apsDroidLists[i]; psCurrD; psCurrD = psNextD)
 			{
 				/* have to store the next pointer as psCurrD could be destroyed */
 				psNextD = psCurrD->psNext;
 
 				/* see if psCurrD is hit (don't hit main target twice) */
-				if (((BASE_OBJECT *)psCurrD != psObj->psDest) &&
-					((SDWORD)psCurrD->pos.x >= tarX0) &&
-					((SDWORD)psCurrD->pos.x <= tarX1) &&
-					((SDWORD)psCurrD->pos.y >= tarY0) &&
-					((SDWORD)psCurrD->pos.y <= tarY1) &&
-					((SDWORD)psCurrD->pos.z >= tarZ0) &&
-					((SDWORD)psCurrD->pos.z <= tarZ1))
+				if ((BASE_OBJECT *)psCurrD != psObj->psDest)
 				{
-					/* Within the bounding box, now check the radius */
-					xDiff = psCurrD->pos.x - psObj->pos.x;
-					yDiff = psCurrD->pos.y - psObj->pos.y;
-					zDiff = psCurrD->pos.z - psObj->pos.z;
-					if ((xDiff*xDiff + yDiff*yDiff + zDiff*zDiff) <= radCubed)
+					// Check whether it is in hit radius
+					if (Vector3i_InSphere(Vector3uw_To3i(psCurrD->pos), Vector3uw_To3i(psObj->pos), psStats->radius))
 					{
+						int dice;
 						HIT_ROLL(dice);
 						if (dice < weaponRadiusHit(psStats, psObj->player))
 						{
+							unsigned int damage = calcDamage(
+										weaponRadDamage(psStats, psObj->player),
+										psStats->weaponEffect, (BASE_OBJECT *)psCurrD);
+
 							debug(LOG_NEVER, "Damage to object %d, player %d\n",
 									psCurrD->id, psCurrD->player);
 
-							damage = calcDamage(
-										weaponRadDamage(psStats, psObj->player),
-										psStats->weaponEffect, (BASE_OBJECT *)psCurrD);
 							if (bMultiPlayer)
 							{
 								if (psObj->psSource && myResponsibility(psObj->psSource->player))
@@ -1412,31 +1343,27 @@ static void proj_ImpactFunc( PROJECTILE *psObj )
 					}
 				}
 			}
-			if (!psObj->airTarget)
+
+			// FIXME Check whether we hit above maximum structure height, to skip unnecessary calculations!
 			{
+				STRUCTURE *psCurrS, *psNextS;
+
 				for (psCurrS = apsStructLists[i]; psCurrS; psCurrS = psNextS)
 				{
 					/* have to store the next pointer as psCurrD could be destroyed */
 					psNextS = psCurrS->psNext;
 
 					/* see if psCurrS is hit (don't hit main target twice) */
-					if (((BASE_OBJECT *)psCurrS != psObj->psDest) &&
-						((SDWORD)psCurrS->pos.x >= tarX0) &&
-						((SDWORD)psCurrS->pos.x <= tarX1) &&
-						((SDWORD)psCurrS->pos.y >= tarY0) &&
-						((SDWORD)psCurrS->pos.y <= tarY1))
+					if ((BASE_OBJECT *)psCurrS != psObj->psDest)
 					{
-						/* Within the bounding box, now check the radius */
-						xDiff = psCurrS->pos.x - psObj->pos.x;
-						yDiff = psCurrS->pos.y - psObj->pos.y;
-						if ((xDiff*xDiff + yDiff*yDiff) <= radCubed)
+						// Check whether it is in hit radius
+						if (Vector3i_InCircle(Vector3uw_To3i(psCurrS->pos), Vector3uw_To3i(psObj->pos), psStats->radius))
 						{
+							int dice;
 							HIT_ROLL(dice);
 							if (dice < weaponRadiusHit(psStats, psObj->player))
 							{
-								damage = calcDamage(weaponRadDamage(psStats, psObj->player),
-								                    psStats->weaponEffect,
-								                    (BASE_OBJECT *)psCurrS);
+								unsigned int damage = calcDamage(weaponRadDamage(psStats, psObj->player), psStats->weaponEffect, (BASE_OBJECT *)psCurrS);
 
 								if (bMultiPlayer)
 								{
@@ -1459,26 +1386,6 @@ static void proj_ImpactFunc( PROJECTILE *psObj )
 							}
 						}
 					}
-					// Missed by old method, but maybe in landed within the building's footprint(baseplate)
-					else if(ptInStructure(psCurrS,psObj->pos.x, psObj->pos.y) && (BASE_OBJECT*)psCurrS != psObj->psDest)
-					{
-						damage = NOMINAL_DAMAGE;
-
-						if(bMultiPlayer)
-						{
-							if(psObj->psSource && myResponsibility(psObj->psSource->player))
-							{
-								updateMultiStatsDamage(psObj->psSource->player,	psCurrS->player,damage);
-							}
-						}
-
-						relativeDamage = structureDamage(psCurrS,
-						                                damage,
-						                                psStats->weaponClass,
-						                                psStats->weaponSubClass, impactSide);
-
-						proj_UpdateKills(psObj, relativeDamage);
-					}
 				}
 			}
 		}
@@ -1494,17 +1401,12 @@ static void proj_ImpactFunc( PROJECTILE *psObj )
 				continue;
 			}
 			/* see if psCurrS is hit (don't hit main target twice) */
-			if (((BASE_OBJECT *)psCurrF != psObj->psDest) &&
-				((SDWORD)psCurrF->pos.x >= tarX0) &&
-				((SDWORD)psCurrF->pos.x <= tarX1) &&
-				((SDWORD)psCurrF->pos.y >= tarY0) &&
-				((SDWORD)psCurrF->pos.y <= tarY1))
+			if ((BASE_OBJECT *)psCurrF != psObj->psDest)
 			{
-				/* Within the bounding box, now check the radius */
-				xDiff = psCurrF->pos.x - psObj->pos.x;
-				yDiff = psCurrF->pos.y - psObj->pos.y;
-				if ((xDiff*xDiff + yDiff*yDiff) <= radCubed)
+				// Check whether it is in hit radius
+				if (Vector3i_InCircle(Vector3uw_To3i(psCurrF->pos), Vector3uw_To3i(psObj->pos), psStats->radius))
 				{
+					int dice;
 					HIT_ROLL(dice);
 					if (dice < weaponRadiusHit(psStats, psObj->player))
 					{
@@ -1546,7 +1448,6 @@ static void proj_PostImpactFunc( PROJECTILE *psObj )
 {
 	WEAPON_STATS	*psStats;
 	SDWORD			i, age;
-	FIRE_BOX		flame;
 
 	CHECK_PROJECTILE(psObj);
 
@@ -1567,21 +1468,13 @@ static void proj_PostImpactFunc( PROJECTILE *psObj )
 	if (psStats->incenTime > 0)
 	{
 		/* See if anything is in the fire and burn it */
-
-		/* Calculate the fire's bounding box */
-		flame.x1 = (SWORD)(psObj->pos.x - psStats->incenRadius);
-		flame.y1 = (SWORD)(psObj->pos.y - psStats->incenRadius);
-		flame.x2 = (SWORD)(psObj->pos.x + psStats->incenRadius);
-		flame.y2 = (SWORD)(psObj->pos.y + psStats->incenRadius);
-		flame.rad = (SWORD)(psStats->incenRadius*psStats->incenRadius);
-
 		for (i=0; i<MAX_PLAYERS; i++)
 		{
 			/* Don't damage your own droids - unrealistic, but better */
 			if(i!=psObj->player)
 			{
-				proj_checkBurnDamage((BASE_OBJECT*)apsDroidLists[i], psObj, &flame);
-				proj_checkBurnDamage((BASE_OBJECT*)apsStructLists[i], psObj, &flame);
+				proj_checkBurnDamage((BASE_OBJECT*)apsDroidLists[i], psObj);
+				proj_checkBurnDamage((BASE_OBJECT*)apsStructLists[i], psObj);
 			}
 		}
 	}
@@ -1677,11 +1570,12 @@ void proj_UpdateAll()
 
 /***************************************************************************/
 
-static void proj_checkBurnDamage( BASE_OBJECT *apsList, PROJECTILE *psProj, FIRE_BOX *pFireBox )
+static void proj_checkBurnDamage( BASE_OBJECT *apsList, PROJECTILE *psProj)
 {
 	BASE_OBJECT		*psCurr, *psNext;
 	SDWORD			xDiff,yDiff;
 	WEAPON_STATS	*psStats;
+	UDWORD			radSquared;
 	UDWORD			damageSoFar;
 	SDWORD			damageToDo;
 	float			relativeDamage;
@@ -1692,6 +1586,8 @@ static void proj_checkBurnDamage( BASE_OBJECT *apsList, PROJECTILE *psProj, FIRE
 	g_pProjLastAttacker = psProj->psSource;
 
 	psStats = psProj->psWStats;
+	radSquared = psStats->incenRadius * psStats->incenRadius;
+
 	for (psCurr = apsList; psCurr; psCurr = psNext)
 	{
 		/* have to store the next pointer as psCurr could be destroyed */
@@ -1705,53 +1601,46 @@ static void proj_checkBurnDamage( BASE_OBJECT *apsList, PROJECTILE *psProj, FIRE
 			continue;
 		}
 
-		/* see if psCurr is hit (don't hit main target twice) */
-		if (((SDWORD)psCurr->pos.x >= pFireBox->x1) &&
-			((SDWORD)psCurr->pos.x <= pFireBox->x2) &&
-			((SDWORD)psCurr->pos.y >= pFireBox->y1) &&
-			((SDWORD)psCurr->pos.y <= pFireBox->y2))
+		/* Within the bounding box, now check the radius */
+		xDiff = psCurr->pos.x - psProj->pos.x;
+		yDiff = psCurr->pos.y - psProj->pos.y;
+		if (xDiff*xDiff + yDiff*yDiff <= radSquared)
 		{
-			/* Within the bounding box, now check the radius */
-			xDiff = psCurr->pos.x - psProj->pos.x;
-			yDiff = psCurr->pos.y - psProj->pos.y;
-			if ((xDiff*xDiff + yDiff*yDiff) <= pFireBox->rad)
+			/* The object is in the fire */
+			psCurr->inFire |= IN_FIRE;
+
+			if ( (psCurr->burnStart == 0) ||
+				 (psCurr->inFire & BURNING) )
 			{
-				/* The object is in the fire */
-				psCurr->inFire |= IN_FIRE;
-
-				if ( (psCurr->burnStart == 0) ||
-					 (psCurr->inFire & BURNING) )
+				/* This is the first turn the object is in the fire */
+				psCurr->burnStart = gameTime;
+				psCurr->burnDamage = 0;
+			}
+			else
+			{
+				/* Calculate how much damage should have
+				   been done up till now */
+				damageSoFar = (gameTime - psCurr->burnStart)
+							  //* psStats->incenDamage
+							  * weaponIncenDamage(psStats,psProj->player)
+							  / GAME_TICKS_PER_SEC;
+				damageToDo = (SDWORD)damageSoFar
+							 - (SDWORD)psCurr->burnDamage;
+				if (damageToDo > 0)
 				{
-					/* This is the first turn the object is in the fire */
-					psCurr->burnStart = gameTime;
-					psCurr->burnDamage = 0;
+					debug(LOG_NEVER, "Burn damage of %d to object %d, player %d\n",
+							damageToDo, psCurr->id, psCurr->player);
+
+					//Watermelon:just assume the burn damage is from FRONT
+					relativeDamage = objectDamage(psCurr, damageToDo, psStats->weaponClass,psStats->weaponSubClass, 0);
+
+					psCurr->burnDamage += damageToDo;
+
+					proj_UpdateKills(psProj, relativeDamage);
 				}
-				else
-				{
-					/* Calculate how much damage should have
-					   been done up till now */
-					damageSoFar = (gameTime - psCurr->burnStart)
-								  //* psStats->incenDamage
-								  * weaponIncenDamage(psStats,psProj->player)
-								  / GAME_TICKS_PER_SEC;
-					damageToDo = (SDWORD)damageSoFar
-								 - (SDWORD)psCurr->burnDamage;
-					if (damageToDo > 0)
-					{
-						debug(LOG_NEVER, "Burn damage of %d to object %d, player %d\n",
-								damageToDo, psCurr->id, psCurr->player);
-
-						//Watermelon:just assume the burn damage is from FRONT
-	  					relativeDamage = objectDamage(psCurr, damageToDo, psStats->weaponClass,psStats->weaponSubClass, 0);
-
-						psCurr->burnDamage += damageToDo;
-
-						proj_UpdateKills(psProj, relativeDamage);
-					}
-					/* The damage could be negative if the object
-					   is being burn't by another fire
-					   with a higher burn damage */
-				}
+				/* The damage could be negative if the object
+				   is being burn't by another fire
+				   with a higher burn damage */
 			}
 		}
 	}
@@ -2094,7 +1983,7 @@ static void addProjNaybor(BASE_OBJECT *psObj, UDWORD distSqr)
 static void projGetNaybors(PROJECTILE *psObj)
 {
 	SDWORD		xdiff, ydiff;
-	UDWORD		dx,dy, distSqr;
+	UDWORD		distSqr;
 	BASE_OBJECT	*psTempObj;
 
 	CHECK_PROJECTILE(psObj);
@@ -2110,79 +1999,52 @@ static void projGetNaybors(PROJECTILE *psObj)
 	// reset the naybor array
 	numProjNaybors = 0;
 
-	// search for naybor objects
-	dx = ((BASE_OBJECT *)psObj)->pos.x;
-	dy = ((BASE_OBJECT *)psObj)->pos.y;
-
-	gridStartIterate((SDWORD)dx, (SDWORD)dy);
-	for (psTempObj = gridIterate(); psTempObj != NULL; psTempObj = gridIterate())
+	gridStartIterate(psObj->pos.x, psObj->pos.y);
+	while ((psTempObj = gridIterate()) != NULL)
 	{
 		if (psTempObj != (BASE_OBJECT *)psObj && !psTempObj->died)
 		{
-			// see if an object is in NAYBOR_RANGE
-			xdiff = dx - (SDWORD)psTempObj->pos.x;
-			if (xdiff < 0)
-			{
-				xdiff = -xdiff;
-			}
-			if (xdiff > PROJ_NAYBOR_RANGE)
-			{
-				continue;
-			}
+			// See if an object is in NAYBOR_RANGE
+			xdiff = (SDWORD) psObj->pos.x - (SDWORD) psTempObj->pos.x;
+			ydiff = (SDWORD) psObj->pos.y - (SDWORD) psTempObj->pos.y;
 
-			ydiff = dy - (SDWORD)psTempObj->pos.y;
-			if (ydiff < 0)
-			{
-				ydiff = -ydiff;
-			}
-			if (ydiff > PROJ_NAYBOR_RANGE)
-			{
-				continue;
-			}
-
+			// Compute the distance squared
 			distSqr = xdiff*xdiff + ydiff*ydiff;
-			if (distSqr > PROJ_NAYBOR_RANGE*PROJ_NAYBOR_RANGE)
+			if (distSqr <= PROJ_NAYBOR_RANGE*PROJ_NAYBOR_RANGE)
 			{
-				continue;
-			}
+				// Add psTempObj as a naybor
+				addProjNaybor(psTempObj, distSqr);
 
-			addProjNaybor(psTempObj, distSqr);
-			if (numProjNaybors >= MAX_NAYBORS)
-			{
-				break;
+				// If the naybors array is full, break early
+				if (numProjNaybors >= MAX_NAYBORS)
+				{
+					break;
+				}
 			}
 		}
 	}
 }
 
+
+#define BULLET_FLIGHT_HEIGHT 16
+
+
 static UDWORD	establishTargetHeight(BASE_OBJECT *psTarget)
 {
-	UDWORD		height;
-	UDWORD		utilityHeight = 0, yMax = 0, yMin = 0; // Temporaries for addition of utility's height to total height
-	DROID		*psDroid;
-	STRUCTURE_STATS		*psStructureStats;
-
 	if (psTarget == NULL)
 	{
 		return 0;
 	}
+
 	CHECK_OBJECT(psTarget);
 
 	switch(psTarget->type)
 	{
 		case OBJ_DROID:
-			psDroid = (DROID*)psTarget;
-			height = asBodyStats[psDroid->asBits[COMP_BODY].nStat].pIMD->max.y - asBodyStats[psDroid->asBits[COMP_BODY].nStat].pIMD->min.y;
-
-			// Don't do this for Barbarian Propulsions as they don't possess a turret (and thus have pIMD == NULL)
-			if (!strcmp(asPropulsionStats[psDroid->asBits[COMP_PROPULSION].nStat].pName, "BaBaProp") )
-			{
-				return height;
-			}
-
-			// Commanders don't have pIMD either
-			if (psDroid->droidType == DROID_COMMAND)
-				return height;
+		{
+			DROID * psDroid = (DROID*)psTarget;
+			unsigned int height = asBodyStats[psDroid->asBits[COMP_BODY].nStat].pIMD->max.y - asBodyStats[psDroid->asBits[COMP_BODY].nStat].pIMD->min.y;
+			unsigned int utilityHeight = 0, yMax = 0, yMin = 0; // Temporaries for addition of utility's height to total height
 
 			// VTOL's don't have pIMD either it seems...
 			if (isVtolDroid(psDroid))
@@ -2195,6 +2057,10 @@ static UDWORD	establishTargetHeight(BASE_OBJECT *psTarget)
 				case DROID_WEAPON:
 					if ( psDroid->numWeaps > 0 )
 					{
+						// Don't do this for Barbarian Propulsions as they don't possess a turret (and thus have pIMD == NULL)
+						if ((asWeaponStats[psDroid->asWeaps[0].nStat]).pIMD == NULL)
+							return height;
+
 						yMax = (asWeaponStats[psDroid->asWeaps[0].nStat]).pIMD->max.y;
 						yMin = (asWeaponStats[psDroid->asWeaps[0].nStat]).pIMD->min.y;
 					}
@@ -2228,24 +2094,26 @@ static UDWORD	establishTargetHeight(BASE_OBJECT *psTarget)
 				case DROID_CYBORG_SUPER:
 				case DROID_DEFAULT:
 				case DROID_TRANSPORTER:
-				default:
-					break;
+				// Commanders don't have pIMD either
+				case DROID_COMMAND:
+				case DROID_ANY:
+					return height;
 			}
 
 			utilityHeight = (yMax + yMin)/2;
-			height += utilityHeight;
 
-			return height;
-
+			return height + utilityHeight;
+		}
 		case OBJ_STRUCTURE:
-			psStructureStats = ((STRUCTURE *)psTarget)->pStructureType;
+		{
+			STRUCTURE_STATS * psStructureStats = ((STRUCTURE *)psTarget)->pStructureType;
 			return (psStructureStats->pIMD->max.y + psStructureStats->pIMD->min.y) / 2;
+		}
 		case OBJ_FEATURE:
 			// Just use imd ymax+ymin
 			return (psTarget->sDisplay.imd->max.y + psTarget->sDisplay.imd->min.y) / 2;
 		case OBJ_PROJECTILE:
-			// 16 for bullet
-			return 16;
+			return BULLET_FLIGHT_HEIGHT;
 		default:
 			return 0;
 	}

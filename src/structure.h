@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2007  Warzone Resurrection Project
+	Copyright (C) 2005-2009  Warzone Resurrection Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -23,6 +23,8 @@
 
 #ifndef __INCLUDED_SRC_STRUCTURE_H__
 #define __INCLUDED_SRC_STRUCTURE_H__
+
+#include "lib/framework/string_ext.h"
 
 #include "objectdef.h"
 #include "structuredef.h"
@@ -251,9 +253,6 @@ adjusts the associated Res Extractors so that they can link to different Power
 Gens if any are available*/
 extern void releasePowerGen(STRUCTURE *psRelease);
 
-/* count the droids assigned to a structure (only sence by sensor towers and headquarters) */
-extern unsigned int countAssignedDroids(STRUCTURE *psStructure);
-
 //print some info at the top of the screen dependant on the structure
 extern void printStructureInfo(STRUCTURE *psStructure);
 
@@ -395,8 +394,6 @@ extern UDWORD getMaxDroids(UDWORD PlayerNumber);
 
 // check whether a factory of a certain number and type exists
 extern BOOL checkFactoryExists(UDWORD player, UDWORD factoryType, UDWORD inc);
-
-extern BOOL	ptInStructure(STRUCTURE *psStruct, UDWORD x, UDWORD y);
 
 /*checks the structure passed in is a Las Sat structure which is currently
 selected - returns true if valid*/

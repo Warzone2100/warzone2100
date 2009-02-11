@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2007  Warzone Resurrection Project
+	Copyright (C) 2005-2009  Warzone Resurrection Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -31,10 +31,6 @@
 #endif
 
 #include "types.h"
-
-// Provides the safer functions strlcpy and strlcat
-#include "strlfuncs.h"
-#include "printf_ext.h"
 
 #include "macros.h"
 #include "debug.h"
@@ -117,76 +113,6 @@ extern int gettimeofday(struct timeval* tv, struct timezone* tz);
 static inline WZ_DECL_CONST const char * bool2string(bool var)
 {
 	return (var ? "true" : "false");
-}
-
-
-/* Endianness hacks */
-// TODO Use SDL_SwapXXXX instead
-
-static inline void endian_uword(UWORD* uword)
-{
-#ifdef __BIG_ENDIAN__
-  UBYTE tmp, *ptr;
-
-  ptr = (UBYTE *) uword;
-  tmp = ptr[0];
-  ptr[0] = ptr[1];
-  ptr[1] = tmp;
-#else
-  // Prevent warnings
-  (void)uword;
-#endif
-}
-
-static inline void endian_sword(SWORD* sword)
-{
-#ifdef __BIG_ENDIAN__
-  UBYTE tmp, *ptr;
-
-  ptr = (UBYTE *) sword;
-  tmp = ptr[0];
-  ptr[0] = ptr[1];
-  ptr[1] = tmp;
-#else
-  // Prevent warnings
-  (void)sword;
-#endif
-}
-
-static inline void endian_udword(UDWORD* udword)
-{
-#ifdef __BIG_ENDIAN__
-  UBYTE tmp, *ptr;
-
-  ptr = (UBYTE *) udword;
-  tmp = ptr[0];
-  ptr[0] = ptr[3];
-  ptr[3] = tmp;
-  tmp = ptr[1];
-  ptr[1] = ptr[2];
-  ptr[2] = tmp;
-#else
-  // Prevent warnings
-  (void)udword;
-#endif
-}
-
-static inline void endian_sdword(SDWORD* sdword)
-{
-#ifdef __BIG_ENDIAN__
-  UBYTE tmp, *ptr;
-
-  ptr = (UBYTE *) sdword;
-  tmp = ptr[0];
-  ptr[0] = ptr[3];
-  ptr[3] = tmp;
-  tmp = ptr[1];
-  ptr[1] = ptr[2];
-  ptr[2] = tmp;
-#else
-  // Prevent warnings
-  (void)sdword;
-#endif
 }
 
 #endif

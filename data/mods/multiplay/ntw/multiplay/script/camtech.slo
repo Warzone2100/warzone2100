@@ -2,7 +2,7 @@
 
 public	int				initialPowerCl,initialPowerBa,initialPowerDe,numCamTech,numCamTechB,count,playnum;
 public	RESEARCHSTAT	camTech[254];
-public	RESEARCHSTAT	camTechB[17];
+public	RESEARCHSTAT	camTechB[15];
 
 event setTechPower(CALL_GAMEINIT)
 {

@@ -727,6 +727,8 @@ typedef struct REPAIR_STATS
 	iIMDShape*       pIMD;
 	/* END of inherited "COMPONENT" definition */
 	/**
+	 * FIXME: UDWORD COMPONENT::body; doesn't exist for this component
+	 *%csv-file "repair.txt";
 	 * How much damage is restored to Body Points and armour each Repair Cycle.
 	 */
 	UDWORD           repairPoints;
@@ -806,6 +808,7 @@ typedef struct WEAPON_STATS
 	iIMDShape*       pIMD;
 	/* END of inherited "COMPONENT" definition */
 	/**
+	 * WEAPON's CSV layout differs from the rest for this field
 	 * Max distance to target for short range shot
 	 */
 	UDWORD           shortRange;
@@ -1086,6 +1089,9 @@ typedef struct BRAIN_STATS
 	iIMDShape*       pIMD;
 	/* END of inherited "COMPONENT" definition */
 	/**
+	 * FIXME: UDWORD COMPONENT::body; doesn't exist for this component
+	 * FIXME: bool COMPONENT::designable; doesn't exist for this component
+	 *%csv-file "brain.txt";
 	 * Program capacity
 	 */
 	UDWORD           progCap;
@@ -1171,9 +1177,9 @@ struct sqlite3;
  *          false otherwise.
  */
 extern bool
-#line 502 "stats-db2.tpl"
+#line 566 "stats-db2.tpl"
 loadConstructStatsFromDB
-#line 1177 "stats-db2.h"
+#line 1183 "stats-db2.h"
 	(struct sqlite3* db);
 
 #endif // __INCLUDED_DB_TEMPLATE_SCHEMA_STRUCTDEF_STATS_DB2_TPL_H__

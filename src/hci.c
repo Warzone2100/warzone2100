@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2007  Warzone Resurrection Project
+	Copyright (C) 2005-2009  Warzone Resurrection Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -31,6 +31,7 @@
 
 #include "lib/framework/frame.h"
 #include "lib/framework/strres.h"
+#include "lib/framework/stdio_ext.h"
 #include "lib/gamelib/gtime.h"
 #include "lib/ivis_common/rendmode.h"
 #include "lib/ivis_common/piepalette.h"
@@ -3089,14 +3090,6 @@ static void intProcessStats(UDWORD id)
 		sprintf(buf, "[build menu]Clicked RT %d numtabs %d tab # %d", psTForm->TabMultiplier, numTabs, psTForm->majorT);
 		addConsoleMessage(buf, DEFAULT_JUSTIFY,SYSTEM_MESSAGE);
 #endif
-
-	}
-	else
-	{
-		ASSERT( id == IDSTAT_FORM || id == IDSTAT_TITLEFORM ||
-				id == IDSTAT_LABEL || id == IDSTAT_TABFORM  ||
-				id == IDSTAT_TABSCRL_RIGHT || id ==IDSTAT_TABSCRL_LEFT,
-			"intProcessStructure: Unknown widget ID" );
 	}
 }
 

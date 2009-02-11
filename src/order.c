@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2007  Warzone Resurrection Project
+	Copyright (C) 2005-2009  Warzone Resurrection Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -27,7 +27,7 @@
 
 #include "lib/framework/frame.h"
 #include "lib/framework/input.h"
-#include "lib/framework/math-help.h"
+#include "lib/framework/math_ext.h"
 
 #include "objects.h"
 #include "order.h"
@@ -4205,7 +4205,7 @@ void orderStructureObj(UDWORD player, BASE_OBJECT *psObj)
 		if (lasSatStructSelected(psStruct))
 		{
 			// FIXME HACK Needed since we got those ugly Vector3uw floating around in BASE_OBJECT...
-			Vector3i pos = {psObj->pos.x, psObj->pos.y, psObj->pos.z};
+			Vector3i pos = Vector3uw_To3i(psObj->pos);
 
 			// Lassats have just one weapon
 			unsigned int firePause = weaponFirePause(&asWeaponStats[psStruct->asWeaps[0].nStat], (UBYTE)player);

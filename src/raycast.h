@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2007  Warzone Resurrection Project
+	Copyright (C) 2005-2009  Warzone Resurrection Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -24,7 +24,7 @@
 #ifndef __INCLUDED_SRC_RAYCAST_H__
 #define __INCLUDED_SRC_RAYCAST_H__
 
-#include "lib/ivis_common/pievector.h"
+#include "lib/framework/vector.h"
 
 #define NUM_RAYS 360
 

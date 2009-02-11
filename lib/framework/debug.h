@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2007  Warzone Resurrection Project
+	Copyright (C) 2005-2009  Warzone Resurrection Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -51,6 +51,9 @@ extern "C"
 /** Stores name of the last function or event called by scripts. */
 extern char last_called_script_event[MAX_EVENT_NAME_LEN];
 
+/** Whether asserts are currently enabled. */
+extern bool assertEnabled;
+
 /**
  * ASSERT helper macro to allow some debug functions to use an alternate
  * calling location.
@@ -78,7 +81,7 @@ extern char last_called_script_event[MAX_EVENT_NAME_LEN];
 		                                  location_description, (#expr), last_called_script_event) \
 		) \
 	), \
-	assert(expr) \
+	assertEnabled ? assert(expr) : (void)0 \
 )
 
 /**
@@ -137,7 +140,7 @@ typedef enum {
   LOG_LAST /**< _must_ be last! */
 } code_part;
 
-extern BOOL enabled_debug[LOG_LAST];
+extern bool enabled_debug[LOG_LAST];
 
 typedef void (*debug_callback_fn)(void**, const char*);
 typedef bool (*debug_callback_init)(void**);
@@ -195,7 +198,7 @@ void debug_callback_win32debug(void** data, const char* outputBuffer);
  *
  * \param	str	Codepart in textformat
  */
-BOOL debug_enable_switch(const char *str);
+bool debug_enable_switch(const char *str);
 
 /**
  * Output printf style format str with additional arguments.
@@ -225,5 +228,7 @@ static inline void objTraceDisable(void) { traceID = (UDWORD)-1; }
 
 /** Checks if a particular debub flag was enabled */
 extern bool debugPartEnabled(code_part codePart);
+
+void debugDisableAssert(void);
 
 #endif // __INCLUDED_LIB_FRAMEWORK_DEBUG_H__

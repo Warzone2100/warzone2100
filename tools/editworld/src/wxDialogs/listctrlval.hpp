@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 2007  Giel van Schijndel
-	Copyright (C) 2007  Warzone Resurrection Project
+	Copyright (C) 2007-2009  Warzone Resurrection Project
 	Copyright (C) 1999  Julian Smart (assigned from Kevin Smith)
 	Copyright (C) 1999  Kevin Smith
 

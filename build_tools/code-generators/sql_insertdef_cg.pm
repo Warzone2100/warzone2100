@@ -25,12 +25,13 @@ sub printComments
 
 sub printStructFields
 {
-    my ($output, $struct, $first, $values) = @_;
+    my ($output, $struct, $first, $values, $fieldOverrides) = @_;
 
     foreach my $field (@{$struct->{"fields"}})
     {
         if (my $CSV = $field->{"CSV"})
         {
+            $CSV = $fieldOverrides->{$field->{"name"}} if $fieldOverrides->{$field->{"name"}};
             $CSV = @$values - 1 if $CSV eq "last" and $values;
 
             $$output .= ",\n" unless $first;
@@ -135,7 +136,7 @@ sub getUniqueBaseField
 
 sub printStructContent
 {
-    my ($output, $struct, $structMap, $values) = @_;
+    my ($output, $struct, $structMap, $values, $fieldOverrides) = @_;
     my $abstract = 0;
     my $inherit = 0;
 
@@ -145,7 +146,7 @@ sub printStructContent
         {
             my $inheritStruct = $struct->{"qualifiers"}{"inherit"};
 
-            printStructContent($output, $inheritStruct, $structMap, $values);
+            printStructContent($output, $inheritStruct, $structMap, $values, $fieldOverrides);
 
             $inherit = 1;
         }
@@ -160,7 +161,7 @@ sub printStructContent
     $$output .= "INSERT INTO `$name` (\n";
     $$output .= "\t`unique_inheritance_id`" if $inherit;
 
-    printStructFields($output, $struct, !$inherit, 0);
+    printStructFields($output, $struct, !$inherit, 0, $fieldOverrides);
     $$output .= "\n)\n";
 
     my $unique_field = 0;
@@ -186,7 +187,7 @@ sub printStructContent
         }
     }
 
-    printStructFields($output, $struct, !$inherit, $values);
+    printStructFields($output, $struct, !$inherit, $values, $fieldOverrides);
 
     if ($inherit)
     {
@@ -196,6 +197,7 @@ sub printStructContent
         if ($unique_field)
         {
             my $CSV = $unique_field->{"CSV"};
+            $CSV = $fieldOverrides->{$unique_field->{"name"}} if $fieldOverrides->{$unique_field->{"name"}};
             $CSV = @$values - 1 if $CSV eq "last";
             my $value = $values->[$CSV-1];
             $value =~ s/'/''/g;
@@ -240,7 +242,7 @@ sub printStruct()
 
             s/'/''/g foreach (@values);
 
-            printStructContent($output, $struct, $structMap, \@values);
+            printStructContent($output, $struct, $structMap, \@values, $struct->{"qualifiers"}->{"csv-field-overrides"});
             $$output .= "\n";
         }
         close CSV;

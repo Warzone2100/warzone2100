@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2007  Warzone Resurrection Project
+	Copyright (C) 2005-2009  Warzone Resurrection Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -24,14 +24,14 @@
  *
  */
 #include "lib/framework/frame.h"
-#include "lib/framework/math-help.h"
+#include "lib/framework/math_ext.h"
 #include "lib/framework/strres.h"
 
 #include "lib/gamelib/gtime.h"
 #include "lib/gamelib/animobj.h"
 #include "lib/ivis_opengl/piematrix.h"
 #include "lib/ivis_opengl/screen.h"
-#include "lib/ivis_common/piefixedpoint.h"
+#include "lib/framework/fixedpoint.h"
 #include "lib/script/script.h"
 #include "lib/sound/audio.h"
 #include "lib/sound/audio_id.h"
@@ -3491,7 +3491,7 @@ BOOL calcDroidMuzzleLocation(DROID *psDroid, Vector3f *muzzle, int weapon_slot)
 		//matrix = the muzzle mount on turret
 		if( psWeaponImd && psWeaponImd->nconnectors )
 		{
-			barrel = Vector3f_New(psWeaponImd->connectors->x, -psWeaponImd->connectors->y, -psWeaponImd->connectors->z);
+			barrel = Vector3f_Init(psWeaponImd->connectors->x, -psWeaponImd->connectors->y, -psWeaponImd->connectors->z);
 		}
 
 		pie_RotateTranslate3f(&barrel, muzzle);
@@ -3501,7 +3501,7 @@ BOOL calcDroidMuzzleLocation(DROID *psDroid, Vector3f *muzzle, int weapon_slot)
 	}
 	else
 	{
-		*muzzle = Vector3f_New(psDroid->pos.x, psDroid->pos.y, psDroid->pos.z + psDroid->sDisplay.imd->max.y);
+		*muzzle = Vector3f_Init(psDroid->pos.x, psDroid->pos.y, psDroid->pos.z + psDroid->sDisplay.imd->max.y);
 	}
 
 	CHECK_DROID(psDroid);
@@ -3857,67 +3857,22 @@ static BOOL sensiblePlace(SDWORD x, SDWORD y, PROPULSION_TYPE propulsion)
 // Should stop things being placed in inaccessible areas? Assume wheeled propulsion.
 BOOL	zonedPAT(UDWORD x, UDWORD y)
 {
-	if (sensiblePlace(x, y, PROPULSION_TYPE_WHEELED) && noDroid(x,y))
-	{
-		return(true);
-	}
-	else
-	{
-		return(false);
-	}
+	return sensiblePlace(x, y, PROPULSION_TYPE_WHEELED) && noDroid(x,y);
 }
 
-// ------------------------------------------------------------------------------------
+static BOOL canFitDroid(UDWORD x, UDWORD y)
+{
+	return sensiblePlace(x, y, PROPULSION_TYPE_WHEELED) && (noDroid(x,y) || oneDroid(x, y));
+}
+
+/// find a tile for which the function will return true
 BOOL	pickATileGen(UDWORD *x, UDWORD *y, UBYTE numIterations,
 					 BOOL (*function)(UDWORD x, UDWORD y))
 {
-	SDWORD	i,j;
-	SDWORD	startX,endX,startY,endY;
-	UDWORD	passes;
-
-
-	ASSERT( *x<mapWidth,"x coordinate is off-map for pickATileGen" );
-	ASSERT( *y<mapHeight,"y coordinate is off-map for pickATileGen" );
-
-	/* Exit if they're fine! */
-	if (sensiblePlace(*x, *y, PROPULSION_TYPE_WHEELED) && noDroid(*x,*y))
-	{
-		return(true);
-	}
-
-	/* Initial box dimensions and set iteration count to zero */
-	startX = endX = *x;	startY = endY = *y;	passes = 0;
-
-	/* Keep going until we get a tile or we exceed distance */
-	while(passes<numIterations)
-	{
-		/* Process whole box */
-		for(i = startX; i <= endX; i++)
-		{
-			for(j = startY; j<= endY; j++)
-			{
-				/* Test only perimeter as internal tested previous iteration */
-				if(i==startX || i==endX || j==startY || j==endY)
-				{
-					/* Good enough? */
-					if(function(i,j))
-					{
-						/* Set exit conditions and get out NOW */
-						*x = i;	*y = j;
-						return(true);
-					}
-				}
-			}
-		}
-		/* Expand the box out in all directions - off map handled by tileAcceptable */
-		startX--; startY--;	endX++;	endY++;	passes++;
-	}
-	/* If we got this far, then we failed - passed in values will be unchanged */
-	return(false);
-
+	return pickATileGenThreat(x, y, numIterations, -1, -1, function);
 }
 
-//same as orig, but with threat check
+/// find a tile for which the passed function will return true without any threat in the specified range 
 BOOL	pickATileGenThreat(UDWORD *x, UDWORD *y, UBYTE numIterations, SDWORD threatRange,
 					 SDWORD player, BOOL (*function)(UDWORD x, UDWORD y))
 {
@@ -3966,108 +3921,16 @@ UDWORD	passes;
 
 }
 
-// ------------------------------------------------------------------------------------
-/* Improved pickATile - Replaces truly scary existing one. */
-/* AM 22 - 10 - 98 */
+/// find an empty tile accessible to a wheeled droid 
 BOOL	pickATile(UDWORD *x, UDWORD *y, UBYTE numIterations)
 {
-	SDWORD	i,j;
-	SDWORD	startX,endX,startY,endY;
-	UDWORD	passes;
-
-	ASSERT( *x<mapWidth,"x coordinate is off-map for pickATile" );
-	ASSERT( *y<mapHeight,"y coordinate is off-map for pickATile" );
-
-	/* Exit if they're fine! */
-	if (sensiblePlace(*x, *y, PROPULSION_TYPE_WHEELED) && noDroid(*x,*y))
-	{
-		return(true);
-	}
-
-	/* Initial box dimensions and set iteration count to zero */
-	startX = endX = *x;	startY = endY = *y;	passes = 0;
-
-	/* Keep going until we get a tile or we exceed distance */
-	while(passes<numIterations)
-	{
-		/* Process whole box */
-		for(i = startX; i <= endX; i++)
-		{
-			for(j = startY; j<= endY; j++)
-			{
-				/* Test only perimeter as internal tested previous iteration */
-				if(i==startX || i==endX || j==startY || j==endY)
-				{
-					/* Good enough? */
-					if (sensiblePlace(i, j, PROPULSION_TYPE_WHEELED) && noDroid(i,j))
-					{
-						/* Set exit conditions and get out NOW */
-						*x = i;	*y = j;
-						return(true);
-					}
-				}
-			}
-		}
-		/* Expand the box out in all directions - off map handled by tileAcceptable */
-		startX--; startY--;	endX++;	endY++;	passes++;
-	}
-	/* If we got this far, then we failed - passed in values will be unchanged */
-	return(false);
+	return pickATileGen(x, y, numIterations, zonedPAT);
 }
 
-// pickHalfATile just like improved pickATile but with Double Density Droid Placement
+/// find a tile for a wheeled droid with only one other droid present
 PICKTILE pickHalfATile(UDWORD *x, UDWORD *y, UBYTE numIterations)
 {
-	SDWORD	i,j;
-	SDWORD	startX,endX,startY,endY;
-	UDWORD	passes;
-
-	/*
-		Why was this written - I wrote pickATileGen to take a function
-		pointer for what qualified as a valid tile - could use that.
-		I'm not going to change it in case I'm missing the point */
-	if (pickATileGen(x, y, numIterations,zonedPAT))
-	{
-		return FREE_TILE;
-	}
-
-	/* Exit if they're fine! */
-	if (sensiblePlace(*x, *y, PROPULSION_TYPE_WHEELED) && oneDroid(*x, *y))
-	{
-		return HALF_FREE_TILE;
-	}
-
-	/* Initial box dimensions and set iteration count to zero */
-	startX = endX = *x;	startY = endY = *y;	passes = 0;
-
-
-
-	/* Keep going until we get a tile or we exceed distance */
-	while(passes<numIterations)
-	{
-		/* Process whole box */
-		for(i = startX; i <= endX; i++)
-		{
-			for(j = startY; j<= endY; j++)
-			{
-				/* Test only perimeter as internal tested previous iteration */
-				if(i==startX || i==endX || j==startY || j==endY)
-				{
-					/* Good enough? */
-					if (sensiblePlace(i, j, PROPULSION_TYPE_WHEELED) && oneDroid(i,j))
-					{
-						/* Set exit conditions and get out NOW */
-						*x = i;	*y = j;
-						return HALF_FREE_TILE;
-					}
-				}
-			}
-		}
-		/* Expand the box out in all directions - off map handled by tileAcceptable */
-		startX--; startY--;	endX++;	endY++;	passes++;
-	}
-	/* If we got this far, then we failed - passed in values will be unchanged */
-	return NO_FREE_TILE;
+	return pickATileGen(x, y, numIterations, canFitDroid);
 }
 
 /* Looks through the players list of droids to see if any of them are
@@ -4116,7 +3979,11 @@ BOOL buildModule(STRUCTURE *psStruct)
 	BOOL	order = false;
 	UDWORD	i = 0;
 
-	ASSERT(psStruct != NULL, "buildModule: Invalid structure pointer");
+	ASSERT(psStruct != NULL && psStruct->pStructureType != NULL, "Invalid structure pointer");
+	if (!psStruct || !psStruct->pStructureType)
+	{
+		return false;
+	}
 
 	switch (psStruct->pStructureType->type)
 	{
@@ -5163,28 +5030,31 @@ void droidSetPosition(DROID *psDroid, int x, int y)
 }
 
 /** Check validity of a droid. Crash hard if it fails. */
-void checkDroid(const DROID *droid, const char * const location_description, const char * function, const int recurse)
+void checkDroid(const DROID *droid, const char *const location, const char *function, const int recurse)
 {
 	int i;
 
 	if (recurse < 0)
+	{
 		return;
+	}
 
-	ASSERT_HELPER(droid != NULL, location_description, function, "CHECK_DROID: NULL pointer");
-	ASSERT_HELPER(droid->type == OBJ_DROID, location_description, function, "CHECK_DROID: Not droid (type %d)", (int)droid->type);
-	ASSERT_HELPER(droid->direction <= 360.0f && droid->direction >= 0.0f, location_description, function, "CHECK_DROID: Bad droid direction %f", droid->direction);
-	ASSERT_HELPER(droid->numWeaps <= DROID_MAXWEAPS, location_description, function, "CHECK_DROID: Bad number of droid weapons %d", (int)droid->numWeaps);
-	ASSERT_HELPER(droid->listSize <= ORDER_LIST_MAX, location_description, function, "CHECK_DROID: Bad number of droid orders %d", (int)droid->listSize);
-	ASSERT_HELPER(droid->player < MAX_PLAYERS, location_description, function, "CHECK_DROID: Bad droid owner %d", (int)droid->player);
-	ASSERT_HELPER(droidOnMap(droid), location_description, function, "CHECK_DROID: Droid off map");
+	ASSERT_HELPER(droid != NULL, location, function, "CHECK_DROID: NULL pointer");
+	ASSERT_HELPER(droid->type == OBJ_DROID, location, function, "CHECK_DROID: Not droid (type %d)", (int)droid->type);
+	ASSERT_HELPER(droid->direction <= 360.0f && droid->direction >= 0.0f, location, function, "CHECK_DROID: Bad droid direction %f", droid->direction);
+	ASSERT_HELPER(droid->numWeaps <= DROID_MAXWEAPS, location, function, "CHECK_DROID: Bad number of droid weapons %d", (int)droid->numWeaps);
+	ASSERT_HELPER(droid->listSize <= ORDER_LIST_MAX, location, function, "CHECK_DROID: Bad number of droid orders %d", (int)droid->listSize);
+	ASSERT_HELPER(droid->player < MAX_PLAYERS, location, function, "CHECK_DROID: Bad droid owner %d", (int)droid->player);
+	ASSERT_HELPER(droidOnMap(droid), location, function, "CHECK_DROID: Droid off map");
+	ASSERT_HELPER((!droid->psTarStats || ((STRUCTURE_STATS *)droid->psTarStats)->type != REF_DEMOLISH), location, function, "CHECK_DROID: Cannot build demolition");
 
 	for (i = 0; i < DROID_MAXWEAPS; ++i)
 	{
-		ASSERT_HELPER(droid->asWeaps[i].rotation <= 360, location_description, function, "CHECK_DROID: Bad turret rotation of turret %u", i);
-		ASSERT_HELPER(droid->asWeaps[i].lastFired <= gameTime, location_description, function, "CHECK_DROID: Bad last fired time for turret %u", i);
+		ASSERT_HELPER(droid->asWeaps[i].rotation <= 360, location, function, "CHECK_DROID: Bad turret rotation of turret %u", i);
+		ASSERT_HELPER(droid->asWeaps[i].lastFired <= gameTime, location, function, "CHECK_DROID: Bad last fired time for turret %u", i);
 		if (droid->psActionTarget[i])
 		{
-			ASSERT_HELPER(droid->psActionTarget[i]->direction >= 0.0f, location_description, function, "CHECK_DROID: Bad direction of turret %u's target", i);
+			ASSERT_HELPER(droid->psActionTarget[i]->direction >= 0.0f, location, function, "CHECK_DROID: Bad direction of turret %u's target", i);
 		}
 	}
 }

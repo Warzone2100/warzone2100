@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2007  Warzone Resurrection Project
+	Copyright (C) 2005-2009  Warzone Resurrection Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -61,7 +61,6 @@
 #include "target.h"
 
 // all the bollox needed for script callbacks
-#include "lib/script/interp.h"				// needed to define types in scripttabs.h
 #include "lib/script/parse.h"				// needed to define types in scripttabs.h (Arse!)
 #include "scripttabs.h"			// needed to define the callback
 #include "scriptextern.h"		// needed to include the GLOBAL for checking bInTutorial

@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2007  Warzone Resurrection Project
+	Copyright (C) 2005-2009  Warzone Resurrection Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -45,7 +45,7 @@
 #include "lib/sound/audio.h"
 #include "lib/sound/audio_id.h"
 #include "stats.h"
-#include "lib/framework/math-help.h"
+#include "lib/framework/math_ext.h"
 #include "edit3d.h"
 #include "anim_id.h"
 #include "lib/gamelib/anim.h"
@@ -53,7 +53,7 @@
 #include "geometry.h"
 // FIXME Direct iVis implementation include!
 #include "lib/ivis_opengl/piematrix.h"
-#include "lib/ivis_common/piefixedpoint.h"
+#include "lib/framework/fixedpoint.h"
 #include "order.h"
 #include "droid.h"
 #include "lib/script/script.h"
@@ -191,31 +191,6 @@ static void cbNewDroid(STRUCTURE *psFactory, DROID *psDroid);
 static UDWORD	lastMaxUnitMessage;
 
 #define MAX_UNIT_MESSAGE_PAUSE 20000
-
-
-/* New function from Alex M */
-/* Tells you if a point is inside the footprint of a building */
-BOOL	ptInStructure(STRUCTURE *psStruct, UDWORD x, UDWORD y)
-{
-	UDWORD tlX, tlY, brX, brY;
-	UDWORD width, height;
-
-	CHECK_STRUCTURE(psStruct);
-
-	width = (psStruct->pStructureType->baseWidth * TILE_UNITS);
-	height = (psStruct->pStructureType->baseBreadth * TILE_UNITS);
-
-
-	tlX = psStruct->pos.x - (width/2);
-	tlY = psStruct->pos.y - (height/2);
-
-	brX = psStruct->pos.x + (width/2);
-	brY = psStruct->pos.y + (height/2);
-
-	if (x > tlX && x < brX && y > tlY && y < brY)
-		return(true);
-	return(false);
-}
 
 /*
 Check to see if the stats is some kind of expansion module
@@ -5437,7 +5412,7 @@ BOOL calcStructureMuzzleLocation(STRUCTURE *psStructure, Vector3f *muzzle, int w
 		//matrix = the muzzle mount on turret
 		if( psWeaponImd && psWeaponImd->nconnectors )
 		{
-			barrel = Vector3f_New(psWeaponImd->connectors->x, -psWeaponImd->connectors->y, -psWeaponImd->connectors->z);
+			barrel = Vector3f_Init(psWeaponImd->connectors->x, -psWeaponImd->connectors->y, -psWeaponImd->connectors->z);
 		}
 
 		pie_RotateTranslate3f(&barrel, muzzle);
@@ -5447,7 +5422,7 @@ BOOL calcStructureMuzzleLocation(STRUCTURE *psStructure, Vector3f *muzzle, int w
 	}
 	else
 	{
-		*muzzle = Vector3f_New(psStructure->pos.x, psStructure->pos.y, psStructure->pos.z + psStructure->sDisplay.imd->max.y);
+		*muzzle = Vector3f_Init(psStructure->pos.x, psStructure->pos.y, psStructure->pos.z + psStructure->sDisplay.imd->max.y);
 	}
 
 	return true;
@@ -5768,29 +5743,32 @@ STRUCTURE_STATS* getModuleStat(const STRUCTURE* psStruct)
 	}
 }
 
-/* count the artillery droids assigned to a structure (only makes sence by sensor towers and headquarters) */
-unsigned int countAssignedDroids(STRUCTURE *psStructure)
+/**
+ * Count the artillery and VTOL droids assigned to a structure.
+ */
+static unsigned int countAssignedDroids(const STRUCTURE* psStructure)
 {
-	DROID *psCurr;
-	SDWORD weapontype, hasindirect;
+	const DROID* psCurr;
 	unsigned int num;
 
-	if(psStructure == NULL)
+	CHECK_STRUCTURE(psStructure);
+
+	// For non-debug builds
+	if (psStructure == NULL)
 		return 0;
 
-	for (num = 0, psCurr = apsDroidLists[selectedPlayer]; psCurr; psCurr = psCurr->psNext)
+	num = 0;
+	for (psCurr = apsDroidLists[selectedPlayer]; psCurr; psCurr = psCurr->psNext)
 	{
-		if (psCurr->psTarget && psCurr->player == psStructure->player)
+		if (psCurr->psTarget
+		 && psCurr->psTarget->id == psStructure->id
+		 && psCurr->player == psStructure->player)
 		{
-			hasindirect = 0;
-			weapontype = asWeaponStats[psCurr->asWeaps[0].nStat].movementModel;
+			const MOVEMENT_MODEL weapontype = asWeaponStats[psCurr->asWeaps[0].nStat].movementModel;
 
-			if(weapontype == MM_INDIRECT || weapontype == MM_HOMINGINDIRECT)
-			{
-				hasindirect = 1;
-			}
-
-			if (psCurr->psTarget->id == psStructure->id && hasindirect)
+			if (weapontype == MM_INDIRECT
+			 || weapontype == MM_HOMINGINDIRECT
+			 || isVtolDroid(psCurr))
 			{
 				num++;
 			}
@@ -5859,7 +5837,7 @@ void printStructureInfo(STRUCTURE *psStructure)
 		else
 #endif
 		{
-			CONPRINTF(ConsoleString, (ConsoleString, getStatName(psStructure->pStructureType)));
+			CONPRINTF(ConsoleString, (ConsoleString, "%s", getStatName(psStructure->pStructureType)));
 		}
 		break;
 	case REF_RESOURCE_EXTRACTOR:
@@ -5872,7 +5850,7 @@ void printStructureInfo(STRUCTURE *psStructure)
 		else
 #endif
 		{
-			CONPRINTF(ConsoleString, (ConsoleString, getStatName(psStructure->pStructureType)));
+			CONPRINTF(ConsoleString, (ConsoleString, "%s", getStatName(psStructure->pStructureType)));
 		}
 		break;
 	case REF_POWER_GEN:
@@ -6857,9 +6835,11 @@ void factoryProdAdjust(STRUCTURE *psStructure, DROID_TEMPLATE *psTemplate, BOOL 
 	}
 }
 
-
-//returns the quantity of a specific template in the production list
-UDWORD	getProductionQuantity(STRUCTURE *psStructure, DROID_TEMPLATE *psTemplate)
+/** checks the status of the production of a template
+ * if totalquantity is true, it will return the total ordered amount
+ * it it is false, it will return the amount that has already been built
+ */
+static int getProduction(STRUCTURE *psStructure, DROID_TEMPLATE *psTemplate, BOOL totalQuantity)
 {
 	UDWORD		inc, factoryType, factoryInc;
 	FACTORY		*psFactory;
@@ -6876,7 +6856,14 @@ UDWORD	getProductionQuantity(STRUCTURE *psStructure, DROID_TEMPLATE *psTemplate)
 		{
 			if (asProductionRun[factoryType][factoryInc][inc].psTemplate == psTemplate)
 			{
-				return asProductionRun[factoryType][factoryInc][inc].quantity;
+				if (totalQuantity)
+				{
+					return asProductionRun[factoryType][factoryInc][inc].quantity;
+				}
+				else
+				{
+					return asProductionRun[factoryType][factoryInc][inc].built;
+				}
 			}
 		}
 	}
@@ -6885,33 +6872,17 @@ UDWORD	getProductionQuantity(STRUCTURE *psStructure, DROID_TEMPLATE *psTemplate)
 	return 0;
 }
 
+/// the total amount ordered of a specific template in the production list
+UDWORD	getProductionQuantity(STRUCTURE *psStructure, DROID_TEMPLATE *psTemplate)
+{
+	return getProduction(psStructure, psTemplate, true);
+}
 
-/*returns the quantity of a specific template in the production list that
-have already been built*/
+
+/// the number of times a specific template in the production list has been built
 UDWORD	getProductionBuilt(STRUCTURE *psStructure, DROID_TEMPLATE *psTemplate)
 {
-	UDWORD		inc, factoryType, factoryInc;
-	FACTORY		*psFactory;
-
-	if (psStructure == NULL) return 0;
-	if (psStructure->player == productionPlayer)
-	{
-		psFactory = &psStructure->pFunctionality->factory;
-		factoryType = psFactory->psAssemblyPoint->factoryType;
-		factoryInc = psFactory->psAssemblyPoint->factoryInc;
-
-		//see if the template is in the list
-		for (inc=0; inc < MAX_PROD_RUN; inc++)
-		{
-			if (asProductionRun[factoryType][factoryInc][inc].psTemplate == psTemplate)
-			{
-				return asProductionRun[factoryType][factoryInc][inc].built;
-			}
-		}
-	}
-
-	//not in the list so none being produced
-	return 0;
+	return getProduction(psStructure, psTemplate, false);
 }
 
 
@@ -7911,15 +7882,15 @@ void checkStructure(const STRUCTURE* psStructure, const char * const location_de
 	if (recurse < 0)
 		return;
 
-	ASSERT(psStructure != NULL, location_description, function, "CHECK_STRUCTURE: NULL pointer");
-	ASSERT(psStructure->type == OBJ_STRUCTURE, location_description, function, "CHECK_STRUCTURE: No structure (type num %u)", function, (unsigned int)psStructure->type);
-	ASSERT(psStructure->player < MAX_PLAYERS, location_description, function, "CHECK_STRUCTURE: Out of bound player num (%u)", (unsigned int)psStructure->player);
-	ASSERT(psStructure->pStructureType->type < NUM_DIFF_BUILDINGS, location_description, function, "CHECK_STRUCTURE: Out of bound structure type (%u)", (unsigned int)psStructure->pStructureType->type);
-	ASSERT(psStructure->numWeaps <= STRUCT_MAXWEAPS, location_description, function, "CHECK_STRUCTURE: Out of bound weapon count (%u)", (unsigned int)psStructure->numWeaps);
+	ASSERT_HELPER(psStructure != NULL, location_description, function, "CHECK_STRUCTURE: NULL pointer");
+	ASSERT_HELPER(psStructure->type == OBJ_STRUCTURE, location_description, function, "CHECK_STRUCTURE: No structure (type num %u)", (unsigned int)psStructure->type);
+	ASSERT_HELPER(psStructure->player < MAX_PLAYERS, location_description, function, "CHECK_STRUCTURE: Out of bound player num (%u)", (unsigned int)psStructure->player);
+	ASSERT_HELPER(psStructure->pStructureType->type < NUM_DIFF_BUILDINGS, location_description, function, "CHECK_STRUCTURE: Out of bound structure type (%u)", (unsigned int)psStructure->pStructureType->type);
+	ASSERT_HELPER(psStructure->numWeaps <= STRUCT_MAXWEAPS, location_description, function, "CHECK_STRUCTURE: Out of bound weapon count (%u)", (unsigned int)psStructure->numWeaps);
 
 	for (i = 0; i < ARRAY_SIZE(psStructure->asWeaps); ++i)
 	{
-		ASSERT(psStructure->asWeaps[i].rotation <= 360, location_description, function, "CHECK_STRUCTURE: Out of range turret rotation (turret %u; rotation: %u)", i, (unsigned int)psStructure->asWeaps[i].rotation);
+		ASSERT_HELPER(psStructure->asWeaps[i].rotation <= 360, location_description, function, "CHECK_STRUCTURE: Out of range turret rotation (turret %u; rotation: %u)", i, (unsigned int)psStructure->asWeaps[i].rotation);
 		if (psStructure->psTarget[i])
 		{
 			checkObject(psStructure->psTarget[i], location_description, function, recurse - 1);

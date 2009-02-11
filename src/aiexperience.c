@@ -1,6 +1,6 @@
 /*
 	This file is part of Warzone 2100.
-	Copyright (C) 2006-2008  Warzone Resurrection Project
+	Copyright (C) 2006-2009  Warzone Resurrection Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -24,7 +24,7 @@
 #include "objectdef.h"
 #include "map.h"
 #include "lib/framework/frame.h"
-#include "lib/script/interp.h"
+#include "lib/script/interpreter.h"
 #include "lib/script/stack.h"
 #include "lib/script/codeprint.h"
 #include "lib/script/script.h"

@@ -1,17 +1,67 @@
 0000-00-00: SVN
- * Video:
-   * New: Add support for playing of videos (OggTheora)
  * General:
+   * New: Multi-threaded path-finding should make path-finding much faster (r5735, patch #1064)
+   * New: Original sound tracks added (r5261)
+   * New: Playing of Ogg Theora full motion videos are now supported (r6119, ticket:64, ticket:46)
+   * New: Fonts are now configurable (r5841, patch #1095)
+   * Fix: Clean up input stream after saving a save game, to prevent it from going into chat mode.
+ * Graphics:
+   * Change: The skybox texture is now more easily moddable.
+   * Fix: The map is now properly capped on the edges.
+   * Fix: The "deity" cheat now correctly shows the area that was cheated visible.
+   * Fix: The background in the loading screen no longer flickers.
+ * GUI:
    * New: Add mouse menu option.
    * New: Add ability to toggle between hardware (SDL) and software (colored) cursors, in new mouse menu option.
-   * Fix: Should fix flickering background on loading screen.
+   * New: The radar minimap now shows the entire map, can be scaled and rotate to ease navigation (r5266, patch #969, r6410)
+ * Commandline options:
+   * New: Use --join <host> to join into a game lobby directly from the commandline.
+   * New: Add a --host option (to compliment the --join option), so you can create games via an external program. It takes you directly to the host screen.
+   * Fix: Difficulty now works when you start the campaign with the --game parameter.
    * Fix: --nosound works correctly with videos now.
-   * Fix: Clean up input stream after saving a save game, to prevent it from going into chat mode.
+ * Gameplay:
+   * New: Make repair facilities that are close to each other share the workload if one is overloaded and others are out of work.
+   * Change: Allow VTOLs to uncover fog of war and land-move to unseen areas in distance fog mode.
+   * Change: Remove limitation that VTOLs cannot pass over tall cliffs, and allow that VTOLs to fly over anything to rearm.
+   * Fix: Restrict direct fire to weapons range only instead of minimum of sensor range and weapon range.
  * AI:
    * Fix: Allow a droid to pick a new target while auto-repairing. (ticket:35, bug #12217)
    * Fix: Improve targetting AI so that it does not select bad targets, and make it use full weapon range instead of limited to sensor range. (ticket:97)
+   * Fix: Fix AI bug that made it build on burning oil derricks (r5883, patch #1096)
  * Buildsystem:
    * Fix: Only compile the translations when $(TRANSLATION) is "yes". (ticket:130)
+   * Change: Former "raw" Makefiles are now used for Windows only and thus named makefile.win32
+ * Tools:
+   * New: OBJ to PIE format converter (r5774)
+ * Map:
+   * New: 8c-cockate and 4c-cockpit by zydonk (r5567, r5566, r5286)
+ * Engine:
+   * New: Support for naval propulsion type (r5803)
+
+0000-00-00: Version 2.1.2
+ * General:
+   * Fix: If the target system to run on already provides strlcpy and/or strlcat, check whether they work as expected, and if they do, use them instead (r6556, r6557)
+   * Change: Allow compiling without OpenAL and Vorbis when compiling with --disable-sound
+ * Sound:
+   * Fix: When sound isn't enabled (at runtime, unrelated to --disable-sound, e.g. when no sound device is available) do not attempt to set up an AUDIO_STREAM
+
+2009-01-11: Version 2.1.1
+ * General:
+   * Fix: Double endian swapping bug that caused loading of save games to go wrong on big endian systems, e.g. PowerPC (ticket:96, ticket:127, ticket:177)
+   * Change: Updated Dutch translation (49%)
+
+2008-12-21: Version 2.1
+ * GUI:
+   * Fix: Bug that caused the number of assigned units to a structure to be displayed wrongly (ticket:90)
+
+2008-11-30: Version 2.1_rc2
+ * General:
+   * Change: Updated Italian (100%), Portugues (99.96%) and Russian (46%) translations
+   * Fix: Crash when translations for player colour names where larger than the string buffer allocated for them (12 bytes) (r6283)
+ * AI:
+   * Fix: Allow a droid to pick a new target while auto-repairing. (ticket:35, bug #12217)
+ * Multiplayer:
+   * Fix: More out-of-sync issues fixed (r6230)
 
 2008-11-09: Version 2.1_rc1
  * General:

@@ -1,6 +1,6 @@
 /*
 	This file is part of Warzone 2100.
-	Copyright (C) 2007-2008  Warzone Resurrection Project
+	Copyright (C) 2007-2009  Warzone Resurrection Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -41,11 +41,16 @@ typedef int bool;
 #define false 0
 #endif
 
-#define MAX_MESHES 4
 #define MAX_TEXARRAYS 16
 #define MAX(a, b) (((a) > (b)) ? (a) : (b))
 
 typedef struct { float x, y, z; } Vector3f;
+
+typedef struct
+{
+	Vector3f pos;
+	int type;
+} CONNECTOR;
 
 typedef struct
 {
@@ -66,6 +71,7 @@ typedef struct
 	int currentFrame;
 	int currentTextureArray;
 	uint32_t lastChange;	// animation
+	CONNECTOR *connectorArray;
 } MESH;
 
 typedef struct

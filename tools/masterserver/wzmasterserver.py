@@ -1,7 +1,7 @@
 #!/usr/bin/python2.5
 #
 # This file is part of the Warzone 2100 Resurrection Project.
-# Copyright (c) 2007  Warzone 2100 Resurrection Project
+# Copyright (c) 2007-2009  Warzone 2100 Resurrection Project
 #
 # Warzone 2100 is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by

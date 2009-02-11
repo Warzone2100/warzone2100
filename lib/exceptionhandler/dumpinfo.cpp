@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 2008  Giel van Schijndel
-	Copyright (C) 2008  Warzone Resurrection Project
+	Copyright (C) 2008-2009  Warzone Resurrection Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -18,6 +18,7 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
+#include <cerrno>
 #include <climits>
 #include <ctime>
 #include <string>
@@ -27,8 +28,10 @@
 #include <physfs.h>
 #include "dumpinfo.h"
 
+
 extern "C"
 {
+#include "lib/framework/stdio_ext.h"
 // FIXME: #include from src/
 #include "src/version.h"
 }
@@ -59,7 +62,27 @@ static void dumpstr(const DumpFileHandle file, const char * const str, std::size
 	DWORD lNumberOfBytesWritten;
 	WriteFile(file, str, size, &lNumberOfBytesWritten, NULL);
 #else
-	write(file, str, size);
+	std::size_t written = 0;
+	while (written < size)
+	{
+		const ssize_t ret = write(file, str + written, size - written);
+		if (ret == -1)
+		{
+			switch (errno)
+			{
+				case EAGAIN:
+					// Sleep to prevent wasting of CPU in case of non-blocking I/O
+					usleep(1);
+				case EINTR:
+					continue;
+				default:
+					// TODO find a decent way to deal with the fatal errors
+					return;
+			}
+		}
+
+		written += ret;
+	}
 #endif
 }
 
@@ -149,7 +172,20 @@ static std::string getProgramPath(const char* programCommand)
 
 		sasprintf(&whichProgramCommand, "which %s", programCommand);
 		whichProgramStream = popen(whichProgramCommand, "r");
-		fread(&buf[0], 1, buf.size(), whichProgramStream);
+		if (whichProgramStream == NULL)
+		{
+			debug(LOG_WARNING, "Failed to run \"%s\", will not create extended backtrace", whichProgramCommand);
+			return std::string();
+		}
+
+		size_t read = 0;
+		while (!feof(whichProgramStream))
+		{
+			if (read == buf.size())
+				buf.resize(buf.size() * 2);
+
+			read += fread(&buf[read], 1, buf.size() - read, whichProgramStream);
+		}
 		pclose(whichProgramStream);
 	}
 #endif
@@ -222,7 +258,8 @@ static std::string getCurTime()
 	return time;
 }
 
-static std::ostream& writePhysFSVersion(std::ostream& os, PHYSFS_Version const& ver)
+template <typename CharT, typename Traits>
+std::basic_ostream<CharT, Traits>& operator<<(std::basic_ostream<CharT, Traits>& os, PHYSFS_Version const& ver)
 {
 	return os << static_cast<unsigned int>(ver.major)
 	   << "." << static_cast<unsigned int>(ver.minor)
@@ -265,11 +302,11 @@ static void createHeader(int const argc, char* argv[])
 
 	// Determine PhysicsFS compile time version
 	PHYSFS_VERSION(&physfs_version)
-	writePhysFSVersion(os << "Compiled against PhysicsFS version: ", physfs_version) << endl;
+	os << "Compiled against PhysicsFS version: " << physfs_version << endl;
 
 	// Determine PhysicsFS runtime version
 	PHYSFS_getLinkedVersion(&physfs_version);
-	writePhysFSVersion(os << "Running with PhysicsFS version: ", physfs_version) << endl
+	os << "Running with PhysicsFS version: " << physfs_version << endl
 	   << endl;
 
 	dbgHeader = strdup(os.str().c_str());

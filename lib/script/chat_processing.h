@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 2006       Roman
-	Copyright (C) 2006-2007  Warzone Resurrection Project
+	Copyright (C) 2006-2009  Warzone Resurrection Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -60,8 +60,6 @@ extern CHAT_MSG chat_msg;
 
 /* Store parameter extracted from the message - for scripts */
 //extern BOOL chat_store_parameter(INTERP_VAL *parameter);
-
-extern void chat_error(const char *pMessage,...);
 
 extern void chatGetErrorData(int *pLine, char **ppText);
 

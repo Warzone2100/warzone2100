@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 2008  Freddie Witherden
-	Copyright (C) 2008  Warzone Resurrection Project
+	Copyright (C) 2008-2009  Warzone Resurrection Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -131,6 +131,8 @@ typedef enum
 	// Misc
 	EVT_FOCUS,
 	EVT_BLUR,
+	EVT_ENABLE,
+	EVT_DISABLE,
 
 	// Destroy
 	EVT_DESTRUCT

@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2007  Warzone Resurrection Project
+	Copyright (C) 2005-2009  Warzone Resurrection Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -148,7 +148,7 @@ typedef struct _CVAR {
 	int id;
 	BOOL readOnly;
 } CVAR;
- 
+
 CVAR CVarTable[] = {
 	{"trackTransporter", EXTID_TRACKTRANSPORTER, true},
 	{"mapWidth", EXTID_MAPWIDTH, true},
@@ -730,7 +730,7 @@ CONST_SYMBOL asConstantTable[] =
 	{ "KEY_KP_7",		VAL_INT,	false,		KEY_KP_7,		NULL, NULL, 0.0f },
 	{ "KEY_KP_8",		VAL_INT,	false,		KEY_KP_8,		NULL, NULL, 0.0f },
 	{ "KEY_KP_9",		VAL_INT,	false,		KEY_KP_9,		NULL, NULL, 0.0f },
-	
+
 	{ "CALL_DROID_SELECTED",		VAL_INT,	false,		CALL_DROID_SELECTED,		NULL, NULL, 0.0f },
 	{ "CALL_MANURUN",		VAL_INT,	false,		CALL_MANURUN,		NULL, NULL, 0.0f },
 	{ "CALL_MANULIST",		VAL_INT,	false,		CALL_MANULIST,		NULL, NULL, 0.0f },

@@ -23,7 +23,7 @@ red[12] int	0	grn[12] int	4	blu[12] int	16
 
 // Urban weather conditions.
       chStay	int	10
-	chClear	int	33
-	chRain	int	53
-	chSnow	int	4
+	chClear	int	35
+	chRain	int	45
+	chSnow	int	10
 }

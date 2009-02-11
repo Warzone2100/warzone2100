@@ -1,6 +1,6 @@
 /*
 	This file is part of Warzone 2100.
-	Copyright (C) 2007-2008  Warzone Resurrection Project
+	Copyright (C) 2007-2009  Warzone Resurrection Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -168,6 +168,7 @@ MODEL *createModel(int meshes, int now)
 		psMesh->teamColours = false;
 		psMesh->vertexArray = NULL;
 		psMesh->indexArray = NULL;
+		psMesh->connectorArray = NULL;
 		for (j = 0; j < MAX_TEXARRAYS; j++)
 		{
 			psMesh->textureArray[j] = NULL;
@@ -299,7 +300,7 @@ int saveModel(const char *filename, MODEL *psModel)
 		{
 			GLfloat *v = &psMesh->vertexArray[j * 3];
 
-			fprintf(fp, "\t%f %f %f\n", v[0], v[1], v[2]);
+			fprintf(fp, "\t%g %g %g\n", v[0], v[1], v[2]);
 		}
 
 		fprintf(fp, "TEXTUREARRAYS %d", psMesh->textureArrays);
@@ -312,7 +313,7 @@ int saveModel(const char *filename, MODEL *psModel)
 			{
 				GLfloat *v = &psMesh->textureArray[j][k * 2];
 
-				fprintf(fp, "\n\t%f %f", v[0], v[1]);
+				fprintf(fp, "\n\t%g %g", v[0], v[1]);
 			}
 		}
 
@@ -330,19 +331,18 @@ int saveModel(const char *filename, MODEL *psModel)
 		{
 			FRAME *psFrame = &psMesh->frameArray[j];
 
-			fprintf(fp, "\n\t%f %d %f %f %f %f %f %f", psFrame->timeSlice, psFrame->textureArray, 
+			fprintf(fp, "\n\t%g %d %g %g %g %g %g %g", psFrame->timeSlice, psFrame->textureArray, 
 			             psFrame->translation.x, psFrame->translation.y, psFrame->translation.z,
 			             psFrame->rotation.x, psFrame->rotation.y, psFrame->rotation.z);
 		}
 
-		fprintf(fp, "\nCONNECTORS %d", 0);	// FIXME!
-/*		for (j = 0; j < x; j++)
+		fprintf(fp, "\nCONNECTORS %d", psMesh->connectors);
+		for (j = 0; j < psMesh->connectors; j++)
 		{
-			int pos[3] = { 0, 0, 0 };
+			CONNECTOR *conn = &psMesh->connectorArray[j];
 
-			fprintf(fp, "\n%d %d %d", pos[0], pos[1], pos[2]);
+			fprintf(fp, "\n\t%g %g %g 0", conn->pos.x, conn->pos.y, conn->pos.z);
 		}
-*/
 	}
 	return 0;
 }
@@ -404,7 +404,7 @@ MODEL *readModel(const char *filename, int now)
 		psMesh->teamColours = x;
 
 		num = fscanf(fp, "VERTICES %d\n", &x);
-		if (num != 1)
+		if (num != 1 || x < 0)
 		{
 			fprintf(stderr, "Bad VERTICES directive in %s, mesh %d.\n", filename, mesh);
 			exit(1);
@@ -485,19 +485,18 @@ MODEL *readModel(const char *filename, int now)
 			num = fscanf(fp, "\n%u %u %u", &v[0], &v[1], &v[2]);
 			if (num != 3)
 			{
-				fprintf(stderr, "Bad INDEXARRAY directive in mesh %d, number %d\n", mesh, j);
+				fprintf(stderr, "Bad INDEXARRAY entry in mesh %d, number %d\n", mesh, j);
 				exit(1);
 			}
 		}
 
+		// Read animation frames
 		num = fscanf(fp, "\nFRAMES %d", &psMesh->frames);
-		if (num != 1)
+		if (num != 1 || psMesh->frames < 0)
 		{
 			fprintf(stderr, "Bad FRAMES directive in mesh %d\n", mesh);
 			exit(1);
 		}
-
-		// Read animation frames
 		if (psMesh->frames)
 		{
 			psMesh->frameArray = malloc(sizeof(FRAME) * psMesh->frames);
@@ -511,27 +510,30 @@ MODEL *readModel(const char *filename, int now)
 			             &psFrame->rotation.x, &psFrame->rotation.y, &psFrame->rotation.z);
 			if (num != 8)
 			{
-				fprintf(stderr, "Bad FRAMES directive in mesh %d, number %d\n", mesh, j);
+				fprintf(stderr, "Bad FRAMES entry in mesh %d, number %d\n", mesh, j);
 				exit(1);
 			}
 		}
 
-		num = fscanf(fp, "\nCONNECTORS %d", &x);
-		if (num != 1)
+		// Read connectors
+		num = fscanf(fp, "\nCONNECTORS %d", &psMesh->connectors);
+		if (num != 1 || psMesh->connectors < 0)
 		{
 			fprintf(stderr, "Bad CONNECTORS directive in mesh %d\n", mesh);
 			exit(1);
 		}
-
-		// throw away for now
-		for (j = 0; j < x; j++)
+		if (psMesh->connectors)
 		{
-			int pos[3];
+			psMesh->connectorArray = malloc(sizeof(CONNECTOR) * psMesh->connectors);
+		}
+		for (j = 0; j < psMesh->connectors; j++)
+		{
+			CONNECTOR *conn = &psMesh->connectorArray[j];
 
-			num = fscanf(fp, "\n%d %d %d", &pos[0], &pos[1], &pos[2]);
-			if (num != 3)
+			num = fscanf(fp, "\n%f %f %f %d", &conn->pos.x, &conn->pos.y, &conn->pos.z, &conn->type);
+			if (num != 4)
 			{
-				fprintf(stderr, "Bad CONNECTORS directive in mesh %d, number %d\n", mesh, j);
+				fprintf(stderr, "Bad CONNECTORS entry in mesh %d, number %d\n", mesh, j);
 				exit(1);
 			}
 		}

@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2007  Warzone Resurrection Project
+	Copyright (C) 2005-2009  Warzone Resurrection Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -34,7 +34,7 @@ extern int audp_get_lineno(void);
 extern char* audp_get_text(void);
 extern void audp_set_extra(YY_EXTRA_TYPE user_defined);
 
-void yyerror(const char* fmt, ...) WZ_DECL_FORMAT(printf, 1, 2);
+void yyerror(const char* fmt);
 
 %}
 
@@ -215,22 +215,9 @@ anim_state:				INTEGER INTEGER INTEGER INTEGER INTEGER INTEGER INTEGER INTEGER I
 %%
 
 /* A simple error reporting routine */
-void yyerror(const char* msg, ...)
+void yyerror(const char* msg)
 {
-	char* txtBuf;
-	va_list	args;
-	size_t size;
-
-	va_start(args, msg);
-	size = vsnprintf(NULL, 0, msg, args);
-	va_end(args);
-
-	txtBuf = alloca(size + 1);
-	va_start(args, msg);
-	vsprintf(txtBuf, msg, args);
-	va_end(args);
-
-	debug(LOG_ERROR, "RES file parse error:\n%s at line %d\nToken: %d, Text: '%s'\n", txtBuf, audp_get_lineno(), audp_char, audp_get_text());
+	debug(LOG_ERROR, "RES file parse error:\n%s at line %d\nToken: %d, Text: '%s'\n", msg, audp_get_lineno(), audp_char, audp_get_text());
 }
 
 /** Read an audio properties file

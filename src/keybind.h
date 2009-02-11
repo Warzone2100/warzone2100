@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2007  Warzone Resurrection Project
+	Copyright (C) 2005-2009  Warzone Resurrection Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -21,7 +21,8 @@
 #ifndef __INCLUDED_SRC_KEYBIND_H__
 #define __INCLUDED_SRC_KEYBIND_H__
 
-#include "lib/ivis_common/piefixedpoint.h"
+#include "console.h"
+#include "lib/framework/fixedpoint.h"
 
 // --------------- All those keyboard mappable functions */
 extern void	kf_HalveHeights( void );
@@ -233,6 +234,8 @@ void kf_ToggleRadarTerrain( void );          //radar terrain
 void kf_ToggleRadarAllyEnemy( void );        //enemy/ally color toggle
 
 void kf_TileInfo(void);
+
+void kf_NoAssert(void);
 
 extern void	kf_ToggleWatchWindow( void );
 

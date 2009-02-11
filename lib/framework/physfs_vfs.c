@@ -24,7 +24,7 @@
 /* These are necessary for the `bool' type and `strlcpy'. Allow frame header
  * files to be singly included */
 #define FRAME_LIB_INCLUDE
-#include "lib/framework/strlfuncs.h"
+#include "lib/framework/string_ext.h"
 #include "lib/framework/types.h"
 
 #include "physfs_vfs.h"
@@ -308,7 +308,7 @@ static int xFullPathname(WZ_DECL_UNUSED sqlite3_vfs* pVfs, const char* zName, in
 
 static void* xDlOpen(WZ_DECL_UNUSED sqlite3_vfs* pVfs, WZ_DECL_UNUSED const char* zFilename)
 {
-	return 0;
+	return NULL;
 }
 
 static void xDlError(WZ_DECL_UNUSED sqlite3_vfs* pVfs, int nByte, char* zErrMsg)
@@ -316,9 +316,9 @@ static void xDlError(WZ_DECL_UNUSED sqlite3_vfs* pVfs, int nByte, char* zErrMsg)
 	strlcpy(zErrMsg, "DlOpen and DlSym API isn't supported for this (PhysicsFS \"physfs\") VFS.", nByte);
 }
 
-static void *xDlSym(WZ_DECL_UNUSED sqlite3_vfs* pVfs, WZ_DECL_UNUSED void* dl, WZ_DECL_UNUSED const char* zSymbol)
+static void (*xDlSym(WZ_DECL_UNUSED sqlite3_vfs* pVfs, WZ_DECL_UNUSED void* dl, WZ_DECL_UNUSED const char* zSymbol))(void)
 {
-	return 0;
+	return NULL;
 }
 
 static void xDlClose(WZ_DECL_UNUSED sqlite3_vfs* pVfs, WZ_DECL_UNUSED void* dl)

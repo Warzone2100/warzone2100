@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2007  Warzone Resurrection Project
+	Copyright (C) 2005-2009  Warzone Resurrection Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -43,6 +43,7 @@
 #include "wrappers.h"
 #include "cheat.h"
 #include "init.h"
+#include "keybind.h"
  // To set the shadow config:
 #include "display.h"
 #include "version.h"
@@ -86,6 +87,7 @@ typedef enum
 	CLI_SELFTEST,
 	CLI_CONNECTTOIP,
 	CLI_HOSTLAUNCH,
+	CLI_NOASSERT,
 } CLI_OPTIONS;
 
 static const struct poptOption* getOptionsTable(void)
@@ -104,6 +106,7 @@ static const struct poptOption* getOptionsTable(void)
 		{ "mod",        '\0', POPT_ARG_STRING, NULL, CLI_MOD_GLOB,   N_("Enable a global mod"),               N_("mod") },
 		{ "mod_ca",     '\0', POPT_ARG_STRING, NULL, CLI_MOD_CA,     N_("Enable a campaign only mod"),        N_("mod") },
 		{ "mod_mp",     '\0', POPT_ARG_STRING, NULL, CLI_MOD_MP,     N_("Enable a multiplay only mod"),       N_("mod") },
+		{ "noassert",	'\0', POPT_ARG_NONE,   NULL, CLI_NOASSERT,   N_("Disable asserts"),                   NULL },
 		{ "savegame",   '\0', POPT_ARG_STRING, NULL, CLI_SAVEGAME,   N_("Load a saved game"),                 N_("savegame") },
 		{ "usage",      '\0', POPT_ARG_NONE
 		          | POPT_ARGFLAG_DOC_HIDDEN,   NULL, CLI_USAGE,      NULL,                                    NULL, },
@@ -115,7 +118,7 @@ static const struct poptOption* getOptionsTable(void)
 		{ "sound",      '\0', POPT_ARG_NONE,   NULL, CLI_SOUND,      N_("Enable sound"),                      NULL },
 		{ "nosound",    '\0', POPT_ARG_NONE,   NULL, CLI_NOSOUND,    N_("Disable sound"),                     NULL },
 		{ "selftest",   '\0', POPT_ARG_NONE,   NULL, CLI_SELFTEST,   N_("Activate self-test"),                NULL },
-		{ "join",       '\0', POPT_ARG_STRING, NULL, CLI_CONNECTTOIP,N_("connect directly to IP/hostname"),   NULL },
+		{ "join",       '\0', POPT_ARG_STRING, NULL, CLI_CONNECTTOIP,N_("connect directly to IP/hostname"),   N_("host") },
 		{ "host",       '\0', POPT_ARG_NONE,   NULL, CLI_HOSTLAUNCH, N_("go directly to host screen"),        NULL },
 		// Terminating entry
 		{ NULL,         '\0', 0,               NULL, 0,              NULL,                                    NULL },
@@ -281,6 +284,10 @@ bool ParseCommandLine(int argc, const char** argv)
 			case CLI_USAGE:
 			case CLI_VERSION:
 				// These options are parsed in ParseCommandLineEarly() already, so ignore them
+				break;
+
+			case CLI_NOASSERT:
+				kf_NoAssert();
 				break;
 
 			case CLI_CHEAT:

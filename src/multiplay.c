@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2007  Warzone Resurrection Project
+	Copyright (C) 2005-2009  Warzone Resurrection Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -88,9 +88,8 @@ BOOL						bPlayerReadyGUI[MAX_PLAYERS] = {false};
 /* multiplayer message stack stuff */
 /////////////////////////////////////
 #define MAX_MSG_STACK	100				// must be *at least* 64
-#define MAX_STR			MAX_STR_LENGTH
 
-static char msgStr[MAX_MSG_STACK][MAX_STR];
+static char msgStr[MAX_MSG_STACK][MAX_STR_LENGTH];
 static SDWORD msgPlFrom[MAX_MSG_STACK];
 static SDWORD msgPlTo[MAX_MSG_STACK];
 static SDWORD callbackType[MAX_MSG_STACK];

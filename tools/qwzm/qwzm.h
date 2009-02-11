@@ -31,6 +31,34 @@ extern "C" {
 #include "wzmutils.h"
 }
 #include "ui_qwzm.h"
+#include "ui_animationview.h"
+#include "ui_connectorview.h"
+
+/** Animation view */
+class QAnimViewer : public QDialog, private Ui_AnimationView
+{
+	Q_OBJECT
+	public:
+	QAnimViewer(QWidget *parent = 0);
+	~QAnimViewer();
+	void setModel(QStandardItemModel *model);
+	void updateModel();
+	QModelIndex selectedIndex();
+	void setSelectedIndex(int idx);
+};
+
+/** Connector view */
+class QConnectorViewer : public QDialog, private Ui_ConnectorView
+{
+	Q_OBJECT
+	public:
+	QConnectorViewer(QWidget *parent = 0);
+	~QConnectorViewer();
+	void setModel(QStandardItemModel *model);
+	void updateModel();
+	QModelIndex selectedIndex();
+	void setSelectedIndex(int idx);
+};
 
 /** WZM Viewer */
 class QWzmViewer : public QMainWindow, private Ui::QWZM
@@ -48,20 +76,36 @@ class QWzmViewer : public QMainWindow, private Ui::QWZM
 	void openPIE();
 	void toggleWireframe();
 	void toggleCulling();
-	void toggleTeam(int index);
+	void setTeam(int index);
 	void tick();
 	void toggleAnimation();
 	void toggleScale();
 	void toggleSwapYZ();
 	void toggleReverseWinding();
 	void toggleFlipVerticalTexCoords();
+	void setMesh(int index);
+	void toggleEditAnimation();
+	void toggleEditConnectors();
+	void animLock();
+	void animUnlock();
+
+	void rowsChanged(const QModelIndex &parent, int start, int end);
+	void dataChanged(const QModelIndex &first, const QModelIndex &last);
+	void reloadFrames();
+
+	void prependFrame();
+	void appendFrame();
+	void removeFrame();
 
 	private:
 	QString filename;
 	MODEL *psModel;
+	QStandardItemModel anim, connectors;
 	void load3DS(QString input);
 	void loadPIE(QString input);
 	void setModel(QFileInfo &texPath);
+	QAnimViewer *animView;
+	QConnectorViewer *connectorView;
 };
 
 #endif

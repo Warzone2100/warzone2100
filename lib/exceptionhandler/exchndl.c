@@ -2,8 +2,8 @@
 	This file is part of Warzone 2100.
 	Copyright (C) 1997-XXXX  José Fonseca <j_r_fonseca@yahoo.co.uk>
 	 * Originally based on Matt Pietrek's MSJEXHND.CPP in Microsoft Systems Journal, April 1997.
-	Copyright (C) 2008       Giel van Schijndel
-	Copyright (C) 2008       Warzone Resurrection Project
+	Copyright (C) 2008  Giel van Schijndel
+	Copyright (C) 2008-2009  Warzone Resurrection Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by

@@ -14,7 +14,7 @@ public 	STRUCTURESTAT	cybfac;
 public 	STRUCTURESTAT	vtolfac;
 public	STRUCTURESTAT	NuclearReactor1;
 public	STRUCTURESTAT	CoolingTower1;
-public	STRUCTURESTAT	look;
+public	STRUCTURESTAT	shield;
 public	STRUCTURESTAT	command2;
 
 // starting technologies.
@@ -127,7 +127,7 @@ event initialisedEvent2(CALL_GAMEINIT)
 	playnum=0;
 	while (playnum < 8)
 	{
-		enableStructure(command,	playnum);		//make structures available to build
+		enableStructure(command	,	playnum);		//make structures available to build
 		enableStructure(factory,	playnum);
 		//enableStructure(wall,		playnum);
 		//enableStructure(cornerWall,	playnum);
@@ -137,14 +137,15 @@ event initialisedEvent2(CALL_GAMEINIT)
 		
 		setStructureLimits(factory,	5, playnum);	// set structure limits
 		setStructureLimits(powerGen,	5, playnum);
-		setStructureLimits(research,	3, playnum);
+		setStructureLimits(research,	5, playnum);
+		setStructureLimits(command,	1, playnum);
 		setStructureLimits(commandrelay,1, playnum);
 		setStructureLimits(cybfac,	5, playnum);
 		setStructureLimits(vtolfac,	5, playnum);
 		setStructureLimits(NuclearReactor1, 	1, playnum);
 		setStructureLimits(CoolingTower1, 	4, playnum);
-		setStructureLimits(look, 	255, playnum);
-		setStructureLimits(command2,	1, playnum);
+		setStructureLimits(shield, 	1, playnum);
+		setStructureLimits(command2, 	1, playnum);
 
 		playnum = playnum+1;
 	}
@@ -276,6 +277,7 @@ event checkEndConditions (endConditions)
 	playnum=0;
 	gamenotwon = FALSE;
 
+	////////////////
 	// Campaign Game
 	if(multiPlayerGameType == CAMPAIGN)
 	{
@@ -315,7 +317,6 @@ event checkEndConditions (endConditions)
 		setEventTrigger(checkEndConditions, inactive);
 	}	
 }
-
 
 // /////////////////////////////////////////////////////////////////
 /* Base Under Attack */

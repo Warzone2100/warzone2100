@@ -30,10 +30,9 @@ static void really_report_gl_errors (const char *file, int line)
 }
 
 WZMOpenGLWidget::WZMOpenGLWidget(QWidget *parent)
-		: QGLWidget(parent)
+		: QGLViewer(parent)
 {
 	animation = false;
-	dimension = 0.0;
 	psModel = NULL;
 	teamIndex = 0;
 	if (!QGLFormat::hasOpenGL())
@@ -41,7 +40,9 @@ WZMOpenGLWidget::WZMOpenGLWidget(QWidget *parent)
 		qWarning("This system has no OpenGL support!");
 		exit(EXIT_FAILURE);
 	}
+	now = 0;
 	timer.start();
+	setAxisIsDrawn(true);
 }
 
 WZMOpenGLWidget::~WZMOpenGLWidget()
@@ -51,7 +52,7 @@ WZMOpenGLWidget::~WZMOpenGLWidget()
 	freeModel(psModel);
 }
 
-void WZMOpenGLWidget::initializeGL()
+void WZMOpenGLWidget::init()
 {
 	qWarning("OpenGL version: %s", glGetString(GL_VERSION));
 	qWarning("OpenGL renderer: %s", glGetString(GL_RENDERER));
@@ -63,40 +64,23 @@ void WZMOpenGLWidget::initializeGL()
 	glEnable(GL_BLEND);
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LEQUAL);
-	glClearDepth(1.0f);
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 	gl_errors();
 }
 
-void WZMOpenGLWidget::resizeGL(int w, int h)
+void WZMOpenGLWidget::draw()
 {
-	if ( h == 0 ) h = 1;
-	const float aspect = (float)w / (float)h;
-
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	glViewport(0, 0, w, h);
-
-	gluPerspective(45.0f, aspect, 0.1f, 500.0f);
-	gl_errors();
-}
-
-void WZMOpenGLWidget::paintGL()
-{
-	glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-	glTranslatef(0.0f, 0.0f/*-40.0f*/, -50.0f + -(dimension * 2.0f));;
-	gl_errors();
 	if (psModel)
 	{
-		int now = timer.elapsed();
+		if (animation)
+		{
+			now = timer.elapsed();
+		}
 
-		drawModel(psModel, animation ? now : 0);
+		drawModel(psModel, now);
 	}
-	gl_errors();
 }
 
 void WZMOpenGLWidget::setTeam(int index)
@@ -126,21 +110,12 @@ void WZMOpenGLWidget::setTeam(int index)
 void WZMOpenGLWidget::setAnimation(bool value)
 {
 	animation = value;
-
-	if (!animation && psModel)
-	{
-		for (int i = 0; i < psModel->meshes; i++)
-		{
-			MESH *psMesh = &psModel->mesh[i];
-
-			psMesh->currentFrame = 0;
-			psMesh->lastChange = 0;
-		}
-	}
 }
 
 void WZMOpenGLWidget::setModel(MODEL *model)
 {
+	double dimension;
+
 	if (!model)
 	{
 		return;
@@ -159,5 +134,14 @@ void WZMOpenGLWidget::setModel(MODEL *model)
 			dimension = MAX(fabs(psMesh->vertexArray[j]), dimension);
 		}
 	}
+	setSceneRadius(dimension);
+	showEntireScene();
 	timer.start();
+}
+
+QString WZMOpenGLWidget::helpString() const
+{
+	QString text("<h2>The Warzone Model Post-production Program</h2>");
+	text += "Welcome! This help needs be a lot more helpful!";
+	return text;
 }

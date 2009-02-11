@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 2004  Giel van Schijndel
-	Copyright (C) 2007  Warzone Resurrection Project
+	Copyright (C) 2007-2009  Warzone Resurrection Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -21,7 +21,6 @@
 #ifndef __INCLUDED_VERSION_H__
 #define __INCLUDED_VERSION_H__
 
-#include "lib/framework/frame.h"
 #include "lib/framework/types.h"
 
 /** Retrieve the low revision number

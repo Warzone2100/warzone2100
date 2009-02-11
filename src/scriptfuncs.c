@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2007  Warzone Resurrection Project
+	Copyright (C) 2005-2009  Warzone Resurrection Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -908,6 +908,24 @@ WZ_DECL_UNUSED static BOOL scrSelectDroidByID(void)
 	}
 	return true;
 }
+
+
+// -----------------------------------------------------------------------------------------
+// Pop up a message box with a number value in it
+WZ_DECL_UNUSED static BOOL scrNumMB(void)
+{
+	SDWORD	val;
+
+	if (!stackPopParams(1, VAL_INT, &val))
+	{
+		return false;
+	}
+
+	debug(LOG_NEVER, "called by script with value: %d", val);
+
+	return true;
+}
+
 
 // -----------------------------------------------------------------------------------------
 // Do an approximation to a square root
@@ -5437,7 +5455,7 @@ WZ_DECL_UNUSED static BOOL scrFireWeaponAtObj(void)
 	}
 
 	// FIXME HACK Needed since we got those ugly Vector3uw floating around in BASE_OBJECT...
-	target = Vector3i_New(psTarget->pos.x, psTarget->pos.y, psTarget->pos.z);
+	target = Vector3uw_To3i(psTarget->pos);
 
 	// send the projectile using the selectedPlayer so that it can always be seen
 	proj_SendProjectile(&sWeapon, NULL, selectedPlayer, target, psTarget, true, 0);
@@ -9673,7 +9691,6 @@ static int scrAssembleWeaponTemplate(lua_State *L)
 	pNewTemplate->asParts[COMP_PROPULSION] = propIndex;
 
 	// set template weapon (only one)
-	pNewTemplate->asParts[COMP_WEAPON] = weapIndex;
 	pNewTemplate->asWeaps[0] = weapIndex;
 	pNewTemplate->numWeaps = 1;
 

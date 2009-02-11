@@ -1,5 +1,5 @@
 ;  This file is part of Warzone 2100.
-;  Copyright (C) 2006-2007  Warzone Resurrection Project
+;  Copyright (C) 2006-2009  Warzone Resurrection Project
 ;  Copyright (C) 2006       Dennis Schridde
 ;
 ;  Warzone 2100 is free software; you can redistribute it and/or modify
@@ -48,7 +48,7 @@ VIAddVersionKey "CompanyName"		"Warzone Resurrection Project"
 VIAddVersionKey "FileDescription"	"${PACKAGE_NAME} Installer"
 VIAddVersionKey "FileVersion"		"${PACKAGE_VERSION}"
 VIAddVersionKey "InternalName"		"${PACKAGE_NAME}"
-VIAddVersionKey "LegalCopyright"	"Copyright © 2006 Warzone Resurrection Project"
+VIAddVersionKey "LegalCopyright"	"Copyright © 2006-2009 Warzone Resurrection Project"
 VIAddVersionKey "OriginalFilename"	"${PACKAGE}-${PACKAGE_VERSION}.exe"
 VIAddVersionKey "ProductName"		"${PACKAGE_NAME}"
 VIAddVersionKey "ProductVersion"	"${PACKAGE_VERSION}"
@@ -252,8 +252,8 @@ Section $(TEXT_SecMusicMod) SecMusicMod
 
   SetOutPath "$INSTDIR\mods\global\autoload"
 
-  NSISdl::download "http://download.gna.org/warzone/releases/mods/music_1.0.AUTHORS"          "music_1.0.AUTHORS.txt"
-  NSISdl::download "http://download.gna.org/warzone/releases/mods/music_1.0.wz"               "music_1.0.wz"
+  NSISdl::download "http://download.gna.org/warzone/releases/mods/community-music_1.0.AUTHORS"          "music_1.0.AUTHORS.txt"
+  NSISdl::download "http://download.gna.org/warzone/releases/mods/community-music_1.0.wz"               "music_1.0.wz"
   Pop $R0 ; Get the return value
   StrCmp $R0 "success" +2
     MessageBox MB_OK|MB_ICONSTOP "Download of Music mod failed: $R0"

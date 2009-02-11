@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2007  Warzone Resurrection Project
+	Copyright (C) 2005-2009  Warzone Resurrection Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -26,7 +26,8 @@
 
 #include "lib/framework/frame.h"
 #include "lib/framework/frameresource.h"
-#include "lib/script/interp.h"
+#include "lib/framework/string_ext.h"
+#include "lib/script/interpreter.h"
 #include "lib/script/parse.h"
 #include "lib/script/script.h"
 
@@ -745,7 +746,7 @@ static CODE_ERROR scriptCodeFunction(FUNC_SYMBOL	*psFSymbol,		// The function be
 			{
 				debug(LOG_ERROR, "scriptCodeFunction: Type mismatch for paramter %d (%d/%d)", i, psFSymbol->aParams[i], psPBlock->aParams[i]);
 				snprintf(aErrorString, sizeof(aErrorString), "Type mismatch for paramter %d", i);
-				scr_error(aErrorString);
+				scr_error("%s", aErrorString);
 				typeError = true;
 			}
 		}
@@ -759,7 +760,7 @@ static CODE_ERROR scriptCodeFunction(FUNC_SYMBOL	*psFSymbol,		// The function be
 	if (psFSymbol->numParams != psPBlock->numParams)
 	{
 		snprintf(aErrorString, sizeof(aErrorString), "Expected %d parameters", psFSymbol->numParams);
-		scr_error(aErrorString);
+		scr_error("%s", aErrorString);
 		*ppsCBlock = NULL;
 		return CE_PARSE;
 	}
@@ -913,7 +914,7 @@ static CODE_ERROR scriptCodeCallbackParams(
 		if (!interpCheckEquiv(psCBSymbol->aParams[i], psPBlock->aParams[i]))
 		{
 			snprintf(aErrorString, sizeof(aErrorString), "Type mismatch for paramter %d", i);
-			scr_error(aErrorString);
+			scr_error("%s", aErrorString);
 			typeError = true;
 		}
 	}
@@ -928,7 +929,7 @@ static CODE_ERROR scriptCodeCallbackParams(
 	else if (psCBSymbol->numParams != psPBlock->numParams)
 	{
 		snprintf(aErrorString, sizeof(aErrorString), "Expected %d parameters", psCBSymbol->numParams);
-		scr_error(aErrorString);
+		scr_error("%s", aErrorString);
 		*ppsTDecl = NULL;
 		return CE_PARSE;
 	}

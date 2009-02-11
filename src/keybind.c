@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2007  Warzone Resurrection Project
+	Copyright (C) 2005-2009  Warzone Resurrection Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -70,7 +70,7 @@
 #include "lib/ivis_common/rendmode.h"
 #include "lib/ivis_common/piestate.h"
 // FIXME Direct iVis implementation include!
-#include "lib/ivis_common/piefixedpoint.h"
+#include "lib/framework/fixedpoint.h"
 #include "lib/ivis_opengl/piematrix.h"
 
 #include "keymap.h"
@@ -194,7 +194,7 @@ void kf_ToggleSensorDisplay( void )
 	if (rangeOnScreen)
 		addConsoleMessage(_("Lets us see what you see!"), LEFT_JUSTIFY, SYSTEM_MESSAGE);        //added this message... Yeah, its lame. :)
 	else
-		addConsoleMessage(_("Fine, sensor display is off!"), LEFT_JUSTIFY, SYSTEM_MESSAGE);     //added this message... Yeah, its lame. :)
+		addConsoleMessage(_("Fine, weapon & sensor display is off!"), LEFT_JUSTIFY, SYSTEM_MESSAGE);     //added this message... Yeah, its lame. :)
 }
 //===================================================
 /* Halves all the heights of the map tiles */
@@ -1163,13 +1163,13 @@ void	kf_ToggleGodMode( void )
 
 	if(godMode)
 	{
-		FEATURE* psFeat;
+		FEATURE	*psFeat = apsFeatureLists[0];
 		int player;
 
 		godMode = false;
 		setRevealStatus(game.fog);
 		// now hide the features
-		psFeat = apsFeatureLists[0];
+
 		while (psFeat)
 		{
 			psFeat->visible[selectedPlayer] = 0;
@@ -2598,4 +2598,11 @@ void	kf_AddHelpBlip( void )
 			sendBeaconToPlayer(worldX, worldY, i, selectedPlayer, beaconMsg[i]);
 		}
 	}
+}
+
+void kf_NoAssert()
+{
+	debugDisableAssert();
+	console("Asserts turned off");
+	debug(LOG_ERROR, "Asserts turned off");
 }

@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2007  Warzone Resurrection Project
+	Copyright (C) 2005-2009  Warzone Resurrection Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -24,6 +24,7 @@
 /* Alex M 19th - Jan. 1999 */
 
 #include "lib/framework/frame.h"
+#include "lib/framework/string_ext.h"
 #include "cheat.h"
 #include "console.h"
 #include "keybind.h"
@@ -44,6 +45,7 @@ static CHEAT_ENTRY cheatCodes[] =
 //	{"PJKSVQZ,",kf_ToggleOutline},
 //	{"L\\MZZQ[JRO",kf_ScreenDump},	//screendump
 
+	{"noassert", kf_NoAssert}, // turn off asserts
 	{"count me", kf_ShowNumObjects}, // give a count of objects in the world
 	{"give all", kf_AllAvailable},	// give all
 	{"research all", kf_FinishAllResearch}, // research everything at once

@@ -43,6 +43,10 @@ AM_CONDITIONAL([PERL_AVAILABLE], test -n "$PERL")
 # Enable Compiler/LibC GNU extensions
 AC_GNU_SOURCE
 
+# Check for the strlcpy and strlcat functions
+AX_CHECK_STRLCPY
+AX_CHECK_STRLCAT
+
 # Check for gettext
 AM_GNU_GETTEXT([external])
 AC_PROG_VERSION_CHECK([msgfmt xgettext], [0.15])
@@ -152,9 +156,9 @@ fi
 AC_ARG_ENABLE([sound],
 	AS_HELP_STRING([--disable-sound], [Disable sound [no]]),
 	[ enable_sound="${enableval}" ], [ enable_sound="yes" ])
-if test "x$enable_sound" != "xyes" ; then
+AS_IF([test "x$enable_sound" != "xyes"],[
 	AC_DEFINE([WZ_NOSOUND], [], [Causes sound to be disabled])
-fi
+])
 
 # -O0 turns off all optimizations; this is necessary for accurate debugging
 # -Wno-unused-label is necessary because flex produces unused labels that we cannot fix
@@ -171,7 +175,7 @@ if test "x$enable_debug" = "xyes" ; then
 		WZ_CPPFLAGS="${WZ_CPPFLAGS} -DDEBUG"
 	else
 		WZ_CFLAGS="${WZ_CFLAGS} -O0 -g -Wall -Werror -Wno-unused-label -Wno-pointer-to-int-cast -Wmissing-field-initializers -Wcast-align -Wwrite-strings"
-		WZ_CFLAGS="${WZ_CFLAGS} -Wmissing-declarations -Wstrict-prototypes -Wpointer-arith"
+		WZ_CFLAGS="${WZ_CFLAGS} -Wmissing-declarations -Wstrict-prototypes -Wpointer-arith -Wno-format-security"
 		WZ_CPPFLAGS="${WZ_CPPFLAGS} -DDEBUG"
 	fi
 elif test "x$enable_debug" = "xrelaxed" ; then
@@ -243,13 +247,16 @@ fi
 # Checks for modules:
 
 PKG_CHECK_MODULES([SDL], [sdl >= 1.2])
-PKG_CHECK_MODULES([OPENAL], [openal >= 0.0.8])
 PKG_CHECK_MODULES([PNG], [libpng >= 1.2])
-PKG_CHECK_MODULES([OGGVORBIS], [vorbisfile >= 1.1])
 PKG_CHECK_MODULES([THEORA], [theora >= 0.1])
 
-# Only accept SQLite versions newer than 3.6, otherwise use built-in
-PKG_CHECK_MODULES([SQLITE], [sqlite3 >= 3.6],
+AS_IF([test "x$enable_sound" = "xyes"],[
+	PKG_CHECK_MODULES([OPENAL], [openal >= 0.0.8])
+	PKG_CHECK_MODULES([OGGVORBIS], [vorbisfile >= 1.1])
+])
+
+# Only accept SQLite versions newer than 3.6.10, otherwise use built-in
+PKG_CHECK_MODULES([SQLITE], [sqlite3 >= 3.6.10],
 	[ use_system_sqlite="yes" ], [
 	use_system_sqlite="no"
 	SQLITE_CFLAGS="-I\$(top_srcdir)/lib/sqlite3"
@@ -385,10 +392,10 @@ AS_IF([test "x$use_system_sqlite" = "xno"],[
 	AC_MSG_NOTICE()
 	AC_MSG_WARN([Not using a system provided SQLite library.])
 	AC_MSG_WARN([${SQLITE_PKG_ERRORS}])
-	AC_MSG_WARN([We currently only accept SQLite versions >= 3.6.])
+	AC_MSG_WARN([We currently only accept SQLite versions >= 3.6.10.])
 ])
 
 AS_IF([test -z "$PERL"],[
 	AC_MSG_NOTICE()
-	AC_MSG_WARN([Perl isn't installed, autogeneration of some sources will not work.])
+	AC_MSG_WARN([Perl >= 5.10 isn't installed, autogeneration of some sources will not work.])
 ])

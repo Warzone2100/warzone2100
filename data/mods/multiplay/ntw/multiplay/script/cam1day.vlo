@@ -22,8 +22,8 @@ red[11] int 8	grn[11] int 12	blu[11] int 32
 red[12] int 8	grn[12] int 12	blu[12] int 32
 
 // Desert weather conditions.
-      chStay	int	12
-	chClear	int	85
-	chRain	int	3
-	chSnow	int	0
+      chStay	int	40
+	chClear	int	50
+	chRain	int	7
+	chSnow	int	3
 }

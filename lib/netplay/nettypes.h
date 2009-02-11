@@ -1,6 +1,6 @@
 /*
 	This file is part of Warzone 2100.
-	Copyright (C) 2007  Warzone Resurrection Project
+	Copyright (C) 2007-2009  Warzone Resurrection Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -26,7 +26,7 @@
 
 #include "lib/framework/frame.h"
 #include "netplay.h"
-#include "lib/ivis_common/pievector.h"
+#include "lib/framework/vector.h"
 
 typedef enum packetDirectionEnum
 {

@@ -29,8 +29,8 @@ noinst_HEADERS = \
 	chat_processing.h \
 	codeprint.h \
 	event.h \
-	evntsave.h \
-	interp.h \
+	eventsave.h \
+	interpreter.h \
 	parse.h \
 	script.h \
 	stack.h
@@ -40,8 +40,8 @@ libscript_a_SOURCES = \
 	chat_parser.tab.c \
 	codeprint.c \
 	event.c \
-	evntsave.c \
-	interp.c \
+	eventsave.c \
+	interpreter.c \
 	script.c \
 	script_lexer.lex.c \
 	script_parser.tab.c \

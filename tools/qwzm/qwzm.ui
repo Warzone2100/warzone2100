@@ -10,7 +10,7 @@
    </rect>
   </property>
   <property name="windowTitle" >
-   <string>MainWindow</string>
+   <string>The Warzone Model Post-production Program</string>
   </property>
   <widget class="QWidget" name="centralwidget" >
    <layout class="QVBoxLayout" name="verticalLayout" >
@@ -42,6 +42,27 @@
           </size>
          </property>
         </spacer>
+       </item>
+       <item>
+        <layout class="QVBoxLayout" name="verticalLayout_3" >
+         <item>
+          <widget class="QLabel" name="label_2" >
+           <property name="text" >
+            <string>Selected mesh</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QComboBox" name="comboBoxSelectedMesh" />
+         </item>
+        </layout>
+       </item>
+       <item>
+        <widget class="Line" name="line" >
+         <property name="orientation" >
+          <enum>Qt::Vertical</enum>
+         </property>
+        </widget>
        </item>
        <item>
         <layout class="QVBoxLayout" name="verticalLayout_2" >
@@ -133,6 +154,8 @@
     <addaction name="actionAnimation" />
     <addaction name="actionCulling" />
     <addaction name="actionWireframe" />
+    <addaction name="actionAxis" />
+    <addaction name="actionHelp" />
    </widget>
    <widget class="QMenu" name="menuConversion" >
     <property name="title" >
@@ -147,8 +170,8 @@
     <property name="title" >
      <string>Edit</string>
     </property>
-    <addaction name="actionAnimation_2" />
-    <addaction name="actionConnectors" />
+    <addaction name="actionEditFrames" />
+    <addaction name="actionEditConnectors" />
    </widget>
    <addaction name="menuImport_3DS" />
    <addaction name="menuEdit" />
@@ -202,6 +225,9 @@
    <property name="text" >
     <string>Quit</string>
    </property>
+   <property name="shortcut" >
+    <string>Ctrl+Q</string>
+   </property>
   </action>
   <action name="actionAnimation" >
    <property name="checkable" >
@@ -209,6 +235,9 @@
    </property>
    <property name="text" >
     <string>Animate</string>
+   </property>
+   <property name="shortcut" >
+    <string>Ctrl+A</string>
    </property>
   </action>
   <action name="actionCulling" >
@@ -231,6 +260,31 @@
    </property>
    <property name="shortcut" >
     <string>Ctrl+W</string>
+   </property>
+  </action>
+  <action name="actionHelp" >
+   <property name="checkable" >
+    <bool>false</bool>
+   </property>
+   <property name="text" >
+    <string>Help</string>
+   </property>
+   <property name="shortcut" >
+    <string>Ctrl+H</string>
+   </property>
+  </action>
+  <action name="actionAxis" >
+   <property name="checkable" >
+    <bool>true</bool>
+   </property>
+   <property name="checked" >
+    <bool>true</bool>
+   </property>
+   <property name="text" >
+    <string>Show axis</string>
+   </property>
+   <property name="shortcut" >
+    <string>Ctrl+A</string>
    </property>
   </action>
   <action name="actionOpenWZM" >
@@ -261,12 +315,12 @@
     <string>Scale model</string>
    </property>
   </action>
-  <action name="actionAnimation_2" >
+  <action name="actionEditFrames" >
    <property name="text" >
     <string>Frames</string>
    </property>
   </action>
-  <action name="actionConnectors" >
+  <action name="actionEditConnectors" >
    <property name="text" >
     <string>Connectors</string>
    </property>

@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 2008  Freddie Witherden
-	Copyright (C) 2008  Warzone Resurrection Project
+	Copyright (C) 2008-2009  Warzone Resurrection Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -21,6 +21,7 @@
 #include "init.h"
 
 #include "../../widget.h"
+#include "../../svgManager.h"
 #include "../../window.h"
 
 #include <SDL.h>
@@ -32,6 +33,9 @@ void widgetSDLInit()
 
 	// Set the screen size
 	windowSetScreenSize(surface->w, surface->h);
+	
+	// Initialise the SVG manager
+	svgManagerInit();
 
 	// Create an initial window vector to store windows
 	windowSetWindowVector(vectorCreate());
@@ -44,5 +48,8 @@ void widgetSDLQuit()
 
 	// Release all active windows
 	vectorMapAndDestroy(windowVector, (mapCallback) widgetDestroy);
+	
+	// Release any cached SVG images
+	svgManagerQuit();
 }
 

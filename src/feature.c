@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2007  Warzone Resurrection Project
+	Copyright (C) 2005-2009  Warzone Resurrection Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -140,6 +140,7 @@ BOOL loadFeatureStats(const char *pFeatureData, UDWORD bufferSize)
 	for (i = 0; i < numFeatureStats; i++)
 	{
 		UDWORD Width, Breadth;
+		int damageable = 0, tileDraw = 0, allowLOS = 0, visibleAtStart = 0;
 
 		memset(psFeature, 0, sizeof(FEATURE_STATS));
 
@@ -147,16 +148,22 @@ BOOL loadFeatureStats(const char *pFeatureData, UDWORD bufferSize)
 		GfxFile[0] = '\0';
 		type[0] = '\0';
 
+
 		//read the data into the storage - the data is delimeted using comma's
-		sscanf(pFeatureData,"%[^','],%d,%d,%d,%d,%d,%[^','],%[^','],%d,%d,%d",
+		sscanf(pFeatureData, "%[^','],%d,%d,%d,%d,%d,%[^','],%[^','],%d,%d,%d",
 			featureName, &Width, &Breadth,
-			&psFeature->damageable, &psFeature->armourValue, &psFeature->body,
-			GfxFile, type, &psFeature->tileDraw, &psFeature->allowLOS,
-			&psFeature->visibleAtStart);
+			&damageable, &psFeature->armourValue, &psFeature->body,
+			GfxFile, type, &tileDraw, &allowLOS,
+			&visibleAtStart);
+
+		psFeature->damageable = damageable;
+		psFeature->tileDraw = tileDraw;
+		psFeature->allowLOS = allowLOS;
+		psFeature->visibleAtStart = visibleAtStart;
 
 		// These are now only 16 bits wide - so we need to copy them
-		psFeature->baseWidth = (UWORD)Width;
-		psFeature->baseBreadth = (UWORD)Breadth;
+		psFeature->baseWidth = Width;
+		psFeature->baseBreadth = Breadth;
 
 		psFeature->pName = allocateName(featureName);
 		if (!psFeature->pName)

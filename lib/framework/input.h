@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2007  Warzone Resurrection Project
+	Copyright (C) 2005-2009  Warzone Resurrection Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -199,12 +199,6 @@ extern BOOL mouseDrag(MOUSE_KEY_CODE code, UDWORD *px, UDWORD *py);
 
 /** Warps the mouse to the given position. */
 extern void SetMousePos(Uint16 x, Uint16 y);
-
-/** Sets the state of the mouse key to down. */
-extern void setMouseDown(MOUSE_KEY_CODE code);
-
-/** Sets the state of the mouse key to up. */
-extern void setMouseUp(MOUSE_KEY_CODE code);
 
 /* The input buffer can contain normal character codes and these control codes */
 #define INPBUF_LEFT		0x010000

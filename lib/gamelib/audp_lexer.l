@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2007  Warzone Resurrection Project
+	Copyright (C) 2005-2009  Warzone Resurrection Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -32,7 +32,7 @@
 /* Maximum length for any TEXT value */
 #define YYLMAX	255
 
-void audp_error(const char* fmt, ...) WZ_DECL_FORMAT(printf, 1, 2);
+void audp_error(const char* fmt);
 
 #include "lib/framework/lexer_input.h"
 

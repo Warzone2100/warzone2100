@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2007  Warzone Resurrection Project
+	Copyright (C) 2005-2009  Warzone Resurrection Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -24,6 +24,7 @@
  */
 
 #include "lib/framework/frame.h"
+#include "lib/framework/string_ext.h"
 
 #include <time.h>			// for stats
 #include <SDL_thread.h>
@@ -1129,7 +1130,8 @@ BOOL NETsetupTCPIP(const char *machine)
 
 // ////////////////////////////////////////////////////////////////////////
 // File Transfer programs.
-// send file. it returns % of file sent. when 100 it's complete. call until it returns 100.
+/** Send file. It returns % of file sent when 100 it's complete. Call until it returns 100. 
+ * @TODO Needs to be rewritten. See issue #215. */
 #define MAX_FILE_TRANSFER_PACKET 256
 UBYTE NETsendFile(BOOL newFile, char *fileName, UDWORD player)
 {
@@ -1147,7 +1149,7 @@ UBYTE NETsendFile(BOOL newFile, char *fileName, UDWORD player)
 		debug(LOG_WZ, "Reading...[directory: %s] %s", PHYSFS_getRealDir(fileName), fileName);
 		if (pFileHandle == NULL)
 		{
-			debug(LOG_ERROR, "Failed");
+			debug(LOG_ERROR, "Failed to open %s for reading: %s", fileName, PHYSFS_getLastError());
 			return 0; // failed
 		}
 		// get the file's size.
@@ -1162,6 +1164,11 @@ UBYTE NETsendFile(BOOL newFile, char *fileName, UDWORD player)
 		PHYSFS_seek(pFileHandle, 0);
 	}
 	// read some bytes.
+	if (!pFileHandle)
+	{
+		debug(LOG_ERROR, "No filehandle");
+		return 0; // failed
+	}
 	bytesRead = PHYSFS_read(pFileHandle, inBuff,1, MAX_FILE_TRANSFER_PACKET);
 
 	if (player == 0)

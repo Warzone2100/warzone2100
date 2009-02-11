@@ -14,7 +14,7 @@ R-Defense-WallTower03,WallTower03,0,242
 R-Struc-RepairFacility,A0RepairCentre3,0,127
 R-Struc-Factory-Cyborg,A0CyborgFactory,0,119
 R-Struc-CommandRelay,A0ComDroidControl,0,114
-R-Defense-TankTrap01,A0TankTrap,0,132
+R-Defense-TankTrap01,A0TankTrap2,0,132
 R-Defense-Tower01,GuardTower1,0,175
 R-Defense-Tower06,GuardTower6,0,180
 R-Defense-Pillbox01,PillBox1,0,201
@@ -66,7 +66,7 @@ R-Defense-MassDriver,X-Super-MassDriver,0,248
 R-Defense-Super-Cannon,X-Super-Cannon,0,247
 R-Defense-Pillbox-RotMG,Pillbox-RotMG,0,200
 R-Defense-Cannon6,PillBox-Cannon6,0,199
-R-Defense-HeavyLas,Emplacement-HeavyLaser,Emplacement-PrisLas,150
+R-Defense-HeavyLas,Emplacement-HeavyLaser,0,150
 R-Sys-Sensor-WSTower,Sys-SensoTowerWS,0,216
 R-Sys-Sensor-UpLink,A0Sat-linkCentre,0,131
 R-Wpn-LasSat,A0LasSatCommand,0,123
@@ -86,3 +86,4 @@ R-Wpn-LasSat_3,NuclearReactor,0,251
 R-Wpn-LasSat_3,CoolingTower,0,252
 R-Defense-WallTower-HGC,WallTower-Rail4,0,253
 R-Struc-com,A0CommandCentreDEL,0,254
+R-Struc-AAShield,AAShield,0,255

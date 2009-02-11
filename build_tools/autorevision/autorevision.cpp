@@ -3,7 +3,7 @@
  * Copyright (C) 2005       Thomas Denk
  * Copyright (C) 2008       Paul Wise
  * Copyright (C) 2007-2008  Giel van Schijndel
- * Copyright (C) 2007-2008  Warzone Resurrection Project
+ * Copyright (C) 2007-2009  Warzone Resurrection Project
  *
  * This program is distributed under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or (at your option) any later version.

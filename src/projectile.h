@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2007  Warzone Resurrection Project
+	Copyright (C) 2005-2009  Warzone Resurrection Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -87,7 +87,24 @@ static inline void setProjectileDestination(PROJECTILE *psProj, BASE_OBJECT *psO
 
 static inline void setProjectileSource(PROJECTILE *psProj, BASE_OBJECT *psObj)
 {
-	psProj->psSource = psObj;
+	// use the source of the source of psProj if psAttacker is a projectile
+	if (psObj && psObj->type == OBJ_PROJECTILE)
+	{
+		PROJECTILE *psPrevProj = (PROJECTILE*)psObj;
+
+		if (psPrevProj->psSource && !psPrevProj->psSource->died)
+		{
+			psProj->psSource = psPrevProj->psSource;
+		}
+		else
+		{
+			psProj->psSource = NULL;
+		}
+	}
+	else
+	{
+		psProj->psSource = psObj;
+	}
 }
 
 static inline void setProjectileDamaged(PROJECTILE *psProj, BASE_OBJECT *psObj)

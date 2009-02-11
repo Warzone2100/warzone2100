@@ -23,8 +23,8 @@ red[12] int 16	grn[12] int 32	blu[12] int 48
 
 
 // Mountain weather conditions.
-      chStay	int	35
-	chClear	int	10
-	chRain	int	5
+      chStay	int	30
+	chClear	int	5
+	chRain	int	15
 	chSnow	int	50
 }

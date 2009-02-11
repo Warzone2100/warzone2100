@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 2008  Freddie Witherden
-	Copyright (C) 2008  Warzone Resurrection Project
+	Copyright (C) 2008-2009  Warzone Resurrection Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -80,6 +80,8 @@ extern const classInfo spacerClassInfo;
 void spacerInit(spacer *self, const char *id, spacerDirection direction);
 void spacerDestroyImpl(widget *self);
 void spacerDoDrawImpl(widget *self);
+bool spacerDoLayoutImpl(widget *self);
+bool spacerAddChildDummyImpl(widget *self, widget *child);
 size spacerGetMinSizeImpl(widget *self);
 size spacerGetMaxSizeImpl(widget *self);
 

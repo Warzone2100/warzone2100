@@ -1,0 +1,49 @@
+script "AutoEnable.slo"
+run
+{
+	player			INT					0
+	player1			INT					1
+	player2			INT					2
+	player3			INT					3
+	player4			INT					4
+	player5			INT					5
+	player6			INT					6
+	player7			INT					7 
+
+  	numStrux  INT  19
+ 	Strux[0]  STRUCTURESTAT  "A0BaBaFlameTower"
+  	Strux[1]  STRUCTURESTAT  "A0BaBaGunTower"
+  	Strux[2]  STRUCTURESTAT  "A0BaBaRocketPit"
+  	Strux[3]  STRUCTURESTAT  "A0BaBaBunker" 
+  	Strux[4]  STRUCTURESTAT  "A0BaBaHorizontalWall"
+  	Strux[5]  STRUCTURESTAT  "ContaMine1"
+  	Strux[6]  STRUCTURESTAT  "ContaMine2"
+  	Strux[7]  STRUCTURESTAT  "ContaMine3"
+  	Strux[8]  STRUCTURESTAT  "ContaMine4"
+  	Strux[9]  STRUCTURESTAT  "ContaMine5"
+  	Strux[10]  STRUCTURESTAT  "ContaMine6"
+  	Strux[11]  STRUCTURESTAT  "ContaMine7"
+  	Strux[12]  STRUCTURESTAT  "ContaMine8"
+  	Strux[13]  STRUCTURESTAT  "mineinfo"
+  	Strux[14]  STRUCTURESTAT  "A0CannonTower"
+  	Strux[15]  STRUCTURESTAT  "A0BaBaMortarPit"
+  	Strux[16]  STRUCTURESTAT  "A0TankTrap"
+	Strux[17]	STRUCTURESTAT  	"StakeMark"
+	Strux[18]	STRUCTURESTAT  	"StakeMark_h"
+
+
+	numTemplates	INT		5
+	tmpl[0]		RESEARCHSTAT  	"R-Sys-Engineering01"
+	tmpl[1]		RESEARCHSTAT  	"R-Cyb-MineSwp"
+	tmpl[2]		RESEARCHSTAT  	"R-Cyborg-Sys-ComEng"
+	tmpl[3]		RESEARCHSTAT  	"R-Struc-Factory-Cyborg-Upgrade-extra"
+	tmpl[4]		RESEARCHSTAT  	"R-StakeMark_h"
+
+	numCompo	INT		6
+	compo[0]	BODY		"B4body-sml-trike01"
+	compo[1]	BODY		"B3body-sml-buggy01"
+	compo[2]	BODY		"B2JeepBody"
+	compo[3]	BODY		"BusBody"
+	compo[4]	BODY		"TruckBody"
+	compo[5]	BODY		"FireBody"
+}

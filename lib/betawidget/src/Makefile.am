@@ -5,7 +5,9 @@ SUBDIRS = platform
 
 EXTRA_DIST = \
 	betawidget.i \
-	betawidget.pc.in
+	betawidget.pc.in \
+	lua_memberfnptr.i \
+	lua_table_as_array.i
 
 BUILT_SOURCES = \
 	betawidget_wrap_lua.cpp
@@ -19,18 +21,31 @@ lib_LTLIBRARIES = libbetawidget.la
 
 libbetawidget_la_SOURCES = \
 	betawidget_wrap_lua.cpp \
+<<<<<<< HEAD:lib/betawidget/src/Makefile.am
+=======
+	button.c \
+>>>>>>> trunk:lib/betawidget/src/Makefile.am
 	font.c \
 	geom.c \
 	hBox.c \
 	spacer.c \
+<<<<<<< HEAD:lib/betawidget/src/Makefile.am
+=======
+	svgManager.c \
+>>>>>>> trunk:lib/betawidget/src/Makefile.am
 	table.c \
 	textEntry.c \
 	vector.c \
 	widget.c \
 	window.c
 
+<<<<<<< HEAD:lib/betawidget/src/Makefile.am
 libbetawidget_la_CPPFLAGS = $(CAIRO_CFLAGS) $(LUA_CFLAGS) -DLIB_COMPILE=1
 libbetawidget_la_LDFLAGS = $(LUA_LIBS) $(CAIRO_LIBS) $(OPENGL_LIBS) -version-info $(LIBTOOL_VERSION)
+=======
+libbetawidget_la_CPPFLAGS = $(SVG_CAIRO_CFLAGS) $(CAIRO_CFLAGS) $(LUA_CFLAGS) -DLIB_COMPILE=1
+libbetawidget_la_LDFLAGS = $(SVG_CAIRO_LIBS) $(LUA_LIBS) $(CAIRO_LIBS) $(OPENGL_LIBS) -version-info $(LIBTOOL_VERSION)
+>>>>>>> trunk:lib/betawidget/src/Makefile.am
 libbetawidget_la_LIBADD = platform/libplatform.la libutil.la
 
 # FIXME: As much non-API headers (i.e. headers that shouldn't be directly
@@ -44,6 +59,10 @@ pkginclude_HEADERS = \
 	geom.h \
 	hBox.h \
 	spacer.h \
+<<<<<<< HEAD:lib/betawidget/src/Makefile.am
+=======
+	svgManager.h \
+>>>>>>> trunk:lib/betawidget/src/Makefile.am
 	table.h \
 	textEntry.h \
 	vector.h \
