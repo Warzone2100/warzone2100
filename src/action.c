@@ -884,6 +884,11 @@ BOOL actionReachedBuildPos(DROID *psDroid, SDWORD x, SDWORD y, BASE_STATS *psSta
 	SDWORD		width, breadth, tx,ty, dx,dy;
 
 	CHECK_DROID(psDroid);
+	ASSERT(psStats != NULL, "Bad stat");
+	if (!psStats || !psDroid)
+	{
+		return false;
+	}
 
 	// do all calculations in half tile units so that
 	// the droid moves to within half a tile of the target
@@ -1833,6 +1838,12 @@ void actionUpdateDroid(DROID *psDroid)
 		}
 		break;
 	case DACTION_MOVETOBUILD:
+		if (!psDroid->psTarStats)
+		{
+			debug(LOG_ERROR, "Bad move to build action target");
+			psDroid->action = DACTION_NONE;
+			break;
+		}
 		// The droid cannot be in a formation
 		if (psDroid->sMove.psFormation != NULL)
 		{
