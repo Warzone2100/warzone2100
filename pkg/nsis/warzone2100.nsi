@@ -38,8 +38,6 @@
   ;Get installation folder from registry if available
   InstallDirRegKey HKLM "Software\${PACKAGE_NAME}" ""
 
-  SetCompressor /FINAL /SOLID lzma
-
 ;--------------------------------
 ;Versioninfo
 
