@@ -284,8 +284,8 @@ BOOL fpathBlockingTile(SDWORD x, SDWORD y, PROPULSION_TYPE propulsion)
 		return true;
 	}
 
-	if (psTile->tileInfoBits & BITS_FPATHBLOCK || (TileIsOccupied(psTile) && !TILE_IS_NOTBLOCKING(psTile))
-	    || terrainType(psTile) == TER_CLIFFFACE 
+	if (psTile->tileInfoBits & BITS_FPATHBLOCK || (TileIsOccupied(psTile) && !TileIsNotBlocking(psTile))
+	    || terrainType(psTile) == TER_CLIFFFACE
 	    || (terrainType(psTile) == TER_WATER && propulsion != PROPULSION_TYPE_HOVER && propulsion != PROPULSION_TYPE_PROPELLOR))
 	{
 		return true;

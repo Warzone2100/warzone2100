@@ -744,7 +744,7 @@ BOOL mapSaveTagged(char *pFileName)
 		tagWrite(0x03, TRI_FLIPPED(psTile));
 		tagWrite(0x04, psTile->texture & TILE_XFLIP);
 		tagWrite(0x05, psTile->texture & TILE_YFLIP);
-		tagWrite(0x06, TILE_IS_NOTBLOCKING(psTile));
+		tagWrite(0x06, TileIsNotBlocking(psTile)); // Redundant, since already included in tileInfoBits
 		tagWrite(0x08, psTile->height);
 		tagWrite(0x09, psTile->tileVisBits);
 		tagWrite(0x0a, psTile->tileInfoBits);
@@ -1546,4 +1546,16 @@ void mapTest()
 	astarTest("MizaMaze-T3", 5, 5, 108, 112);
 
 	fprintf(stdout, "\tMap self-test: PASSED\n");
+}
+
+
+/** Check if tile contained within the given world coordinates is burning. */
+bool fireOnLocation(unsigned int x, unsigned int y)
+{
+	const int posX = map_coord(x);
+	const int posY = map_coord(y);
+	const MAPTILE *psTile = mapTile(posX, posY);
+
+	ASSERT(psTile, "Checking fire on tile outside the map (%d, %d)", posX, posY);
+	return psTile != NULL && TileIsBurning(psTile);
 }

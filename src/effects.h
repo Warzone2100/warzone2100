@@ -163,13 +163,8 @@ extern UDWORD	getMissCount( void );
 extern	UDWORD	getNumSkippedEffects(void);
 extern	UDWORD	getNumEvenEffects(void);
 
-extern	bool fireOnLocation(unsigned int x, unsigned int y);
-
 extern void	initPerimeterSmoke			( iIMDShape *pImd, UDWORD x, UDWORD y, UDWORD z);
 
-#define SKY_MULT	1
-#define SKY_SHIMMY_BASE	((DEG(1)*SKY_MULT)/2)
-#define SKY_SHIMMY (SKY_SHIMMY_BASE - (rand()%(2*SKY_SHIMMY_BASE)))
 extern bool readFXData(const char* fileName);
 extern bool	writeFXData(const char* fileName);
 extern	void	effectSetSize(UDWORD size);

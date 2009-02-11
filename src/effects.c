@@ -2602,21 +2602,6 @@ void	effectResetUpdates( void )
 }
 
 
-/** Check if tile contained within the given world coordinates is burning. */
-bool fireOnLocation(unsigned int x, unsigned int y)
-{
-	const int posX = map_coord(x);
-	const int posY = map_coord(y);
-	MAPTILE *psTile = mapTile(posX, posY);
-
-	ASSERT(psTile, "Checking fire on tile outside the map (%d, %d)", posX, posY);
-	if (psTile)
-	{
-		return (psTile->tileInfoBits & BITS_ON_FIRE);
-	}
-	return false;
-}
-
 static const char FXData_tag_definition[] = "tagdefinitions/savegame/effects.def";
 static const char FXData_file_identifier[] = "FXData";
 
