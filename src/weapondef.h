@@ -30,7 +30,7 @@ typedef struct _weapon
 	 * Index into the global @c asWeaponStats array; thus a "reference" of
 	 * some kind to the associated stats.
 	 */
-	UDWORD          nStat;
+	unsigned int    nStat;
 
 	UDWORD          ammo;
 
