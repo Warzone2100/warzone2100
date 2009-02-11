@@ -6990,7 +6990,6 @@ BOOL loadSaveStructureV7(char *pFileData, UDWORD filesize, UDWORD numStructures)
 			if (psStructure == NULL)
 			{
 				debug( LOG_ERROR, "No owning structure for module - %s for player - %d", getSaveStructNameV19((SAVE_STRUCTURE_V17*)psSaveStructure), psSaveStructure->player );
-				abort();
 				//ignore this module
 				continue;
 			}
@@ -7282,7 +7281,6 @@ BOOL loadSaveStructureV19(char *pFileData, UDWORD filesize, UDWORD numStructures
 			if (psStructure == NULL)
 			{
 				debug( LOG_ERROR, "No owning structure for module - %s for player - %d", getSaveStructNameV19(psSaveStructure), psSaveStructure->player );
-				abort();
 				//ignore this module
 				continue;
 			}
@@ -7723,7 +7721,6 @@ BOOL loadSaveStructureV(char *pFileData, UDWORD filesize, UDWORD numStructures, 
 			if (psStructure == NULL)
 			{
 				debug( LOG_ERROR, "No owning structure for module - %s for player - %d", getSaveStructNameV(psSaveStructure), psSaveStructure->player );
-				abort();
 				//ignore this module
 				continue;
 			}
