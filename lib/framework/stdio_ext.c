@@ -23,6 +23,8 @@
 #include <string.h>
 #include <assert.h>
 
+#include "frame.h"
+
 
 int vslcatprintf(char* str, size_t size, const char* format, va_list ap)
 {
