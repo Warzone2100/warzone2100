@@ -567,7 +567,7 @@ BOOL actionTargetTurret(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, WEAPON *
 
 	/* set muzzle pitch if direct fire */
 	if (!bRepair && (proj_Direct(psWeapStats) || ((psAttacker->type == OBJ_DROID)
-                                                      && !proj_Direct(psWeapStats) 
+                                                      && !proj_Direct(psWeapStats)
 	                                              && actionInsideMinRange((DROID *)psAttacker, psTarget, psWeapStats))))
 	{
 		dx = psTarget->pos.x - psAttacker->pos.x;
@@ -1380,8 +1380,8 @@ void actionUpdateDroid(DROID *psDroid)
 			 && actionVisibleTarget(psDroid, psActionTarget, i)
 			 && actionInRange(psDroid, psActionTarget, i))
 			{
-				bHasTarget = true;
 				WEAPON_STATS* const psWeapStats = &asWeaponStats[psDroid->asWeaps[i].nStat];
+				bHasTarget = true;
 				if (validTarget((BASE_OBJECT *)psDroid, psActionTarget, i))
 				{
 					int dirDiff = 0;
@@ -1723,11 +1723,10 @@ void actionUpdateDroid(DROID *psDroid)
 			!actionDroidOnBuildPos(psDroid,
 						(SDWORD)psDroid->orderX,(SDWORD)psDroid->orderY, psDroid->psTarStats))
 		{
-			moveStopDroid(psDroid);
 			bool helpBuild = false;
-
 			// Got to destination - start building
 			STRUCTURE_STATS* const psStructStats = (STRUCTURE_STATS*)psDroid->psTarStats;
+			moveStopDroid(psDroid);
 			if (psDroid->order == DORDER_BUILD && psDroid->psTarget == NULL)
 			{
 				// Starting a new structure
@@ -2268,6 +2267,9 @@ void actionUpdateDroid(DROID *psDroid)
 		break;
 	}
 	case DACTION_DROIDREPAIR:
+	{
+		int xdiff , ydiff;
+
 		//if not doing self-repair
 		//Watermelon:use 0 for repair droid
 		if (psDroid->psActionTarget[0] != (BASE_OBJECT *)psDroid)
@@ -2276,9 +2278,9 @@ void actionUpdateDroid(DROID *psDroid)
 		}
 
 		//check still next to the damaged droid
-		const int xdiff = (SDWORD)psDroid->pos.x - (SDWORD)psDroid->psActionTarget[0]->pos.x;
-		const int ydiff = (SDWORD)psDroid->pos.y - (SDWORD)psDroid->psActionTarget[0]->pos.y;
-		if ( xdiff*xdiff + ydiff*ydiff > REPAIR_RANGE )
+		xdiff = (SDWORD)psDroid->pos.x - (SDWORD)psDroid->psActionTarget[0]->pos.x;
+		ydiff = (SDWORD)psDroid->pos.y - (SDWORD)psDroid->psActionTarget[0]->pos.y;
+		if (xdiff * xdiff + ydiff * ydiff > REPAIR_RANGE)
 		{
 			/*once started - don't allow the Repair droid to follow the
 			damaged droid for too long*/
@@ -2318,6 +2320,7 @@ void actionUpdateDroid(DROID *psDroid)
 			}
 		}
 		break;
+	}
 	case DACTION_WAITFORREARM:
 		// wait here for the rearm pad to ask the vtol to move
 		if (psDroid->psActionTarget[0] == NULL)
@@ -2351,9 +2354,10 @@ void actionUpdateDroid(DROID *psDroid)
 
 		if (visibleObject((BASE_OBJECT *)psDroid, psDroid->psActionTarget[0], false))
 		{
+			STRUCTURE* const psStruct = findNearestReArmPad(psDroid, (STRUCTURE *)psDroid->psActionTarget[0], true);
 			// got close to the rearm pad - now find a clear one
 			objTrace(psDroid->id, "Seen rearm pad - searching for available one");
-			STRUCTURE* const psStruct = findNearestReArmPad(psDroid, (STRUCTURE *)psDroid->psActionTarget[0], true);
+
 			if (psStruct != NULL)
 			{
 				// found a clear landing pad - go for it
