@@ -116,6 +116,46 @@ sub printStructFields
     }
 }
 
+sub printStructViewFields
+{
+    my ($output, $struct, $enumMap) = @_;
+    my @fields = @{$struct->{"fields"}};
+    my $structName = $struct->{"name"};
+
+    my $first = 1;
+FIELD:
+    while (@fields)
+    {
+        my $field = shift(@fields);
+
+        # Ignore: this is a user defined field type, the user code (%postLoadRow) can deal with it
+        next FIELD if $field->{"type"} and $field->{"type"} =~ /C-only-field/;
+
+        $$output .= ",\n\n" unless $first;
+        $first = 0;
+
+        printComments($output, $field->{"comment"}, 1);
+
+        if ($field->{"type"} and $field->{"type"} =~ /set/)
+        {
+            my $enum = $field->{"enum"};
+            my @values = @{$enum->{"values"}};
+
+            while (@values)
+            {
+                my $value = shift(@values);
+
+                $$output .= "\t`$structName`.`$field->{name}_$value->{name}` AS `$field->{name}_$value->{name}`";
+                $$output .= ",\n" if @values;
+            }
+        }
+        else
+        {
+            $$output .= "\t`$structName`.`$field->{name}` AS `$field->{name}`";
+        }
+    }
+}
+
 sub printStructContent
 {
     my ($output, $struct, $name, $structMap, $enumMap, $printFields) = @_;
@@ -142,6 +182,69 @@ sub printStructContent
     printStructFields($output, $struct, $enumMap) if $printFields;
 }
 
+sub printStructViewContent
+{
+    my ($output, $struct, $structMap, $enumMap, $first) = @_;
+
+    foreach (keys %{$struct->{"qualifiers"}})
+    {
+        if    (/inherit/)
+        {
+            my $inheritStruct = $struct->{"qualifiers"}{"inherit"};
+
+            printStructViewContent($output, $inheritStruct, $structMap, $enumMap, 0);
+        }
+        elsif (/abstract/)
+        {
+            my $tableName = $struct->{"name"};
+
+            $$output .= "\t-- Automatically generated ID to link the inheritance hierarchy.\n"
+                      . "\t`$tableName`.unique_inheritance_id AS unique_inheritance_id,\n";
+        }
+    }
+
+    printStructViewFields($output, $struct, $enumMap);
+    $$output .= "," unless $first;
+    $$output .= "\n";
+    $$output .= "\n" unless $first;
+}
+
+sub printBaseStruct
+{
+    my ($outstr, $struct) = @_;
+    my $is_base = 1;
+
+    foreach (keys %{$struct->{"qualifiers"}})
+    {
+        if (/inherit/)
+        {
+            my $inheritStruct = $struct->{"qualifiers"}{"inherit"};
+
+            printBaseStruct($outstr, $inheritStruct);
+            $is_base = 0;
+        }
+    }
+
+    $$outstr .= "`$struct->{name}`" if $is_base;
+}
+
+sub printStructJoins
+{
+    my ($outstr, $struct, $structMap) = @_;
+
+    foreach (keys %{$struct->{"qualifiers"}})
+    {
+        if (/inherit/)
+        {
+            my $inheritStruct = $struct->{"qualifiers"}{"inherit"};
+            my $inheritName = $inheritStruct->{"name"};
+
+            printStructJoins($outstr, $inheritStruct, $structMap);
+            $$outstr .= " INNER JOIN `$struct->{name}` ON `$inheritName`.`unique_inheritance_id` = `$struct->{name}`.`unique_inheritance_id`";
+        }
+    }
+}
+
 sub printEnum()
 {
 }
@@ -160,6 +263,17 @@ sub printStruct()
 
     # Finish printing the structure
     $$output .= ");\n\n";
+
+    # Start printing the VIEW to make SELECTing on this table easier
+    $$output .= "CREATE VIEW `${name}S` AS SELECT\n";
+
+    printStructViewContent($output, $struct, $structMap, $enumMap, 1);
+    $$output .= "\tFROM ";
+
+    printBaseStruct($output, $struct);
+    printStructJoins($output, $struct, $structMap);
+
+    $$output .= ";\n\n";
 }
 
 sub processCmdLine()

@@ -40,7 +40,7 @@ loadPropulsionStatsFromDB
 		unsigned int ROW_COUNT_VAR;
 
 		/* Prepare this SQL statement for execution */
-		if (!prepareStatement(db, &stmt, "SELECT COUNT(`PROPULSION`.unique_inheritance_id) FROM `BASE` INNER JOIN `COMPONENT` ON `BASE`.`unique_inheritance_id` = `COMPONENT`.`unique_inheritance_id` INNER JOIN `PROPULSION` ON `COMPONENT`.`unique_inheritance_id` = `PROPULSION`.`unique_inheritance_id`;"))
+		if (!prepareStatement(db, &stmt, "SELECT COUNT(unique_inheritance_id) FROM `PROPULSIONS`;"))
 			return false;
 
 		/* Execute and process the results of the above SQL statement */
@@ -60,37 +60,37 @@ loadPropulsionStatsFromDB
 	if (!prepareStatement(db, &stmt,
 	                          "SELECT\n"
 	                              "-- Automatically generated ID to link the inheritance hierarchy.\n"
-	                              "BASE.unique_inheritance_id,\n"
+	                              "unique_inheritance_id,\n"
 	                              "-- Unique language independant name that can be used to identify a specific\n"
 	                              "-- stats instance\n"
-	                              "`BASE`.`pName` AS `pName`,\n"
+	                              "`pName`,\n"
 
 	                              "-- Power required to build this component\n"
-	                              "`COMPONENT`.`buildPower` AS `buildPower`,\n"
+	                              "`buildPower`,\n"
 
 	                              "-- Build points (which are rate-limited in the construction units) required\n"
 	                              "-- to build this component.\n"
-	                              "`COMPONENT`.`buildPoints` AS `buildPoints`,\n"
+	                              "`buildPoints`,\n"
 
 	                              "-- Weight of this component\n"
-	                              "`COMPONENT`.`weight` AS `weight`,\n"
+	                              "`weight`,\n"
 
 	                              "-- Body points of this component\n"
-	                              "`COMPONENT`.`body` AS `body`,\n"
+	                              "`body`,\n"
 
 	                              "-- Indicates whether this component is \"designable\" and can thus be used in\n"
 	                              "-- the design screen.\n"
-	                              "`COMPONENT`.`designable` AS `designable`,\n"
+	                              "`designable`,\n"
 
 	                              "-- The \"base\" IMD model representing this component in 3D space.\n"
-	                              "`COMPONENT`.`pIMD` AS `pIMD`,\n"
+	                              "`pIMD`,\n"
 
 	                              "-- Max speed for the droid\n"
-	                              "`PROPULSION`.`maxSpeed` AS `maxSpeed`,\n"
+	                              "`maxSpeed`,\n"
 
 	                              "-- Type of propulsion used - index into PropulsionTable\n"
-	                              "`PROPULSION`.`propulsionType` AS `propulsionType`\n"
-	                          "FROM `BASE` INNER JOIN `COMPONENT` ON `BASE`.`unique_inheritance_id` = `COMPONENT`.`unique_inheritance_id` INNER JOIN `PROPULSION` ON `COMPONENT`.`unique_inheritance_id` = `PROPULSION`.`unique_inheritance_id`;"))
+	                              "`propulsionType`\n"
+	                          "FROM `PROPULSIONS`;"))
 		return false;
 
 	/* Fetch the first row */
@@ -303,7 +303,7 @@ loadSensorStatsFromDB
 		unsigned int ROW_COUNT_VAR;
 
 		/* Prepare this SQL statement for execution */
-		if (!prepareStatement(db, &stmt, "SELECT COUNT(`SENSOR`.unique_inheritance_id) FROM `BASE` INNER JOIN `COMPONENT` ON `BASE`.`unique_inheritance_id` = `COMPONENT`.`unique_inheritance_id` INNER JOIN `SENSOR` ON `COMPONENT`.`unique_inheritance_id` = `SENSOR`.`unique_inheritance_id`;"))
+		if (!prepareStatement(db, &stmt, "SELECT COUNT(unique_inheritance_id) FROM `SENSORS`;"))
 			return false;
 
 		/* Execute and process the results of the above SQL statement */
@@ -323,50 +323,50 @@ loadSensorStatsFromDB
 	if (!prepareStatement(db, &stmt,
 	                          "SELECT\n"
 	                              "-- Automatically generated ID to link the inheritance hierarchy.\n"
-	                              "BASE.unique_inheritance_id,\n"
+	                              "unique_inheritance_id,\n"
 	                              "-- Unique language independant name that can be used to identify a specific\n"
 	                              "-- stats instance\n"
-	                              "`BASE`.`pName` AS `pName`,\n"
+	                              "`pName`,\n"
 
 	                              "-- Power required to build this component\n"
-	                              "`COMPONENT`.`buildPower` AS `buildPower`,\n"
+	                              "`buildPower`,\n"
 
 	                              "-- Build points (which are rate-limited in the construction units) required\n"
 	                              "-- to build this component.\n"
-	                              "`COMPONENT`.`buildPoints` AS `buildPoints`,\n"
+	                              "`buildPoints`,\n"
 
 	                              "-- Weight of this component\n"
-	                              "`COMPONENT`.`weight` AS `weight`,\n"
+	                              "`weight`,\n"
 
 	                              "-- Body points of this component\n"
-	                              "`COMPONENT`.`body` AS `body`,\n"
+	                              "`body`,\n"
 
 	                              "-- Indicates whether this component is \"designable\" and can thus be used in\n"
 	                              "-- the design screen.\n"
-	                              "`COMPONENT`.`designable` AS `designable`,\n"
+	                              "`designable`,\n"
 
 	                              "-- The \"base\" IMD model representing this component in 3D space.\n"
-	                              "`COMPONENT`.`pIMD` AS `pIMD`,\n"
+	                              "`pIMD`,\n"
 
 	                              "-- Sensor range.\n"
-	                              "`SENSOR`.`range` AS `range`,\n"
+	                              "`range`,\n"
 
 	                              "-- Sensor power (put against ecm power).\n"
-	                              "`SENSOR`.`power` AS `power`,\n"
+	                              "`power`,\n"
 
 	                              "-- specifies whether the Sensor is default or for the Turret.\n"
-	                              "`SENSOR`.`location` AS `location`,\n"
+	                              "`location`,\n"
 
 	                              "-- used for combat\n"
-	                              "`SENSOR`.`type` AS `type`,\n"
+	                              "`type`,\n"
 
 	                              "-- Time delay before the associated weapon droids 'know' where the attack is\n"
 	                              "-- from.\n"
-	                              "`SENSOR`.`time` AS `time`,\n"
+	                              "`time`,\n"
 
 	                              "-- The turret mount to use.\n"
-	                              "`SENSOR`.`pMountGraphic` AS `pMountGraphic`\n"
-	                          "FROM `BASE` INNER JOIN `COMPONENT` ON `BASE`.`unique_inheritance_id` = `COMPONENT`.`unique_inheritance_id` INNER JOIN `SENSOR` ON `COMPONENT`.`unique_inheritance_id` = `SENSOR`.`unique_inheritance_id`;"))
+	                              "`pMountGraphic`\n"
+	                          "FROM `SENSORS`;"))
 		return false;
 
 	/* Fetch the first row */
@@ -616,7 +616,7 @@ loadConstructStatsFromDB
 		unsigned int ROW_COUNT_VAR;
 
 		/* Prepare this SQL statement for execution */
-		if (!prepareStatement(db, &stmt, "SELECT COUNT(`CONSTRUCT`.unique_inheritance_id) FROM `BASE` INNER JOIN `COMPONENT` ON `BASE`.`unique_inheritance_id` = `COMPONENT`.`unique_inheritance_id` INNER JOIN `CONSTRUCT` ON `COMPONENT`.`unique_inheritance_id` = `CONSTRUCT`.`unique_inheritance_id`;"))
+		if (!prepareStatement(db, &stmt, "SELECT COUNT(unique_inheritance_id) FROM `CONSTRUCTS`;"))
 			return false;
 
 		/* Execute and process the results of the above SQL statement */
@@ -636,37 +636,37 @@ loadConstructStatsFromDB
 	if (!prepareStatement(db, &stmt,
 	                          "SELECT\n"
 	                              "-- Automatically generated ID to link the inheritance hierarchy.\n"
-	                              "BASE.unique_inheritance_id,\n"
+	                              "unique_inheritance_id,\n"
 	                              "-- Unique language independant name that can be used to identify a specific\n"
 	                              "-- stats instance\n"
-	                              "`BASE`.`pName` AS `pName`,\n"
+	                              "`pName`,\n"
 
 	                              "-- Power required to build this component\n"
-	                              "`COMPONENT`.`buildPower` AS `buildPower`,\n"
+	                              "`buildPower`,\n"
 
 	                              "-- Build points (which are rate-limited in the construction units) required\n"
 	                              "-- to build this component.\n"
-	                              "`COMPONENT`.`buildPoints` AS `buildPoints`,\n"
+	                              "`buildPoints`,\n"
 
 	                              "-- Weight of this component\n"
-	                              "`COMPONENT`.`weight` AS `weight`,\n"
+	                              "`weight`,\n"
 
 	                              "-- Body points of this component\n"
-	                              "`COMPONENT`.`body` AS `body`,\n"
+	                              "`body`,\n"
 
 	                              "-- Indicates whether this component is \"designable\" and can thus be used in\n"
 	                              "-- the design screen.\n"
-	                              "`COMPONENT`.`designable` AS `designable`,\n"
+	                              "`designable`,\n"
 
 	                              "-- The \"base\" IMD model representing this component in 3D space.\n"
-	                              "`COMPONENT`.`pIMD` AS `pIMD`,\n"
+	                              "`pIMD`,\n"
 
 	                              "-- The number of points contributed each cycle\n"
-	                              "`CONSTRUCT`.`constructPoints` AS `constructPoints`,\n"
+	                              "`constructPoints`,\n"
 
 	                              "-- The turret mount to use\n"
-	                              "`CONSTRUCT`.`pMountGraphic` AS `pMountGraphic`\n"
-	                          "FROM `BASE` INNER JOIN `COMPONENT` ON `BASE`.`unique_inheritance_id` = `COMPONENT`.`unique_inheritance_id` INNER JOIN `CONSTRUCT` ON `COMPONENT`.`unique_inheritance_id` = `CONSTRUCT`.`unique_inheritance_id`;"))
+	                              "`pMountGraphic`\n"
+	                          "FROM `CONSTRUCTS`;"))
 		return false;
 
 	/* Fetch the first row */

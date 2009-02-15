@@ -182,13 +182,13 @@ FIELD:
             {
                 my $value = shift(@values);
 
-                $$output .= "$indent\"`$structName`.`$field->{name}_$value->{name}` AS `$field->{name}_$value->{name}`";
+                $$output .= "$indent\"`$field->{name}_$value->{name}`";
                 $$output .= ",\\n\"\n" if @values;
             }
         }
         else
         {
-            $$output .= "$indent\"`$structName`.`$field->{name}` AS `$field->{name}`";
+            $$output .= "$indent\"`$field->{name}`";
         }
     }
 }
@@ -210,7 +210,7 @@ sub printStructContent
             my $tableName = $struct->{"name"};
 
             $$output .= "$indent\"-- Automatically generated ID to link the inheritance hierarchy.\\n\"\n"
-                      . "$indent\"$tableName.unique_inheritance_id,\\n\"\n";
+                      . "$indent\"unique_inheritance_id,\\n\"\n";
         }
     }
 
@@ -218,42 +218,6 @@ sub printStructContent
     $$output .= "," unless $first;
     $$output .= "\\n\"\n";
     $$output .= "\n" unless $first;
-}
-
-sub printBaseStruct
-{
-    my ($outstr, $struct) = @_;
-    my $is_base = 1;
-
-    foreach (keys %{$struct->{"qualifiers"}})
-    {
-        if (/inherit/)
-        {
-            my $inheritStruct = $struct->{"qualifiers"}{"inherit"};
-
-            printBaseStruct($outstr, $inheritStruct);
-            $is_base = 0;
-        }
-    }
-
-    $$outstr .= "`$struct->{name}`" if $is_base;
-}
-
-sub printStructJoins
-{
-    my ($outstr, $struct, $structMap) = @_;
-
-    foreach (keys %{$struct->{"qualifiers"}})
-    {
-        if (/inherit/)
-        {
-            my $inheritStruct = $struct->{"qualifiers"}{"inherit"};
-            my $inheritName = $inheritStruct->{"name"};
-
-            printStructJoins($outstr, $inheritStruct, $structMap);
-            $$outstr .= " INNER JOIN `$struct->{name}` ON `$inheritName`.`unique_inheritance_id` = `$struct->{name}`.`unique_inheritance_id`";
-        }
-    }
 }
 
 sub printParameterLoadCode
@@ -269,13 +233,9 @@ sub printParameterLoadCode
     elsif (/\browCount\b/)  { $$output .= "COUNT"; }
     else                    { die "UKNOWN PARAMETER TYPE: $_"; }
 
-    $$output .= "(`$tableName`.unique_inheritance_id) ";
+    $$output .= "(unique_inheritance_id) ";
 
-    $$output .= "FROM ";
-    printBaseStruct($output, $struct);
-    printStructJoins($output, $struct, $structMap);
-
-    $$output .= ";\"))\n"
+    $$output .= "FROM `${tableName}S`;\"))\n"
               . "\t\t\treturn false;\n"
               . "\n"
               . "\t\t/* Execute and process the results of the above SQL statement */\n"
@@ -414,14 +374,7 @@ sub printStartSelectQuery
     $$output .= "\"SELECT\\n\"\n";
 
     printStructContent($output, $struct, $structMap, $enumMap, $indent . "    ", 1);
-    $$output .= "${indent}\"FROM ";
-
-    printBaseStruct($output, $struct);
-    printStructJoins($output, $struct, $structMap);
-
-    $$output .= ";";
-
-    $$output .= "\"))\n"
+    $$output .= "${indent}\"FROM `$struct->{name}S`;\"))\n"
               . "\t\treturn false;\n"
               . "\n"
               . "\t/* Fetch the first row */\n"
