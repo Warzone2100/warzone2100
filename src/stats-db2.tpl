@@ -541,8 +541,8 @@ struct WEAPON
     IMD_model optional pTrailGraphic;
 
     # Audio
-    SDWORD          iAudioFireID;
-    SDWORD          iAudioImpactID;
+    C-only-field SDWORD           iAudioFireID;
+    C-only-field SDWORD           iAudioImpactID;
 end;
 
 struct BRAIN

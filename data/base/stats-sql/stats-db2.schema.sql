@@ -448,10 +448,6 @@ CREATE TABLE `WEAPON` (
 	-- The trail used for in flight
 	pTrailGraphic TEXT,
 
-	-- Audio
-	iAudioFireID INTEGER NOT NULL,
-
-	iAudioImpactID INTEGER NOT NULL
 );
 
 CREATE VIEW `WEAPONS` AS SELECT
@@ -611,12 +607,7 @@ CREATE VIEW `WEAPONS` AS SELECT
 	`WEAPON`.`pWaterHitGraphic` AS `pWaterHitGraphic`,
 
 	-- The trail used for in flight
-	`WEAPON`.`pTrailGraphic` AS `pTrailGraphic`,
-
-	-- Audio
-	`WEAPON`.`iAudioFireID` AS `iAudioFireID`,
-
-	`WEAPON`.`iAudioImpactID` AS `iAudioImpactID`
+	`WEAPON`.`pTrailGraphic` AS `pTrailGraphic`
 	FROM `BASE` INNER JOIN `COMPONENT` ON `BASE`.`unique_inheritance_id` = `COMPONENT`.`unique_inheritance_id` INNER JOIN `WEAPON` ON `COMPONENT`.`unique_inheritance_id` = `WEAPON`.`unique_inheritance_id`;
 
 CREATE TABLE `BRAIN` (
