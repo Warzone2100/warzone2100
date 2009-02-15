@@ -31,6 +31,12 @@
 #endif
 
 #include "types.h"
+/**
+* NOTE: the next two #include lines are needed by MSVC to override the default,
+* non C99 compliant routines, and redefinition; different linkage errors
+*/
+#include "stdio_ext.h"
+#include "string_ext.h"
 
 #include "macros.h"
 #include "debug.h"
