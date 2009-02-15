@@ -42,11 +42,11 @@
 				OutputFile="$(ProjectDir)..\src\$(InputName).lex.c"
 			/>
 			<Tool
-				Name="VCCustomBuildTool"
-				ExecutionBucket="4"
+				Name="VCXMLDataGeneratorTool"
 			/>
 			<Tool
-				Name="VCXMLDataGeneratorTool"
+				Name="VCCustomBuildTool"
+				ExecutionBucket="4"
 			/>
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"
@@ -117,6 +117,9 @@
 			<Tool
 				Name="VCAppVerifierTool"
 			/>
+			<Tool
+				Name="VCWebDeploymentTool"
+			/>
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
@@ -142,11 +145,11 @@
 				OutputFile="$(ProjectDir)..\src\$(InputName).lex.c"
 			/>
 			<Tool
-				Name="VCCustomBuildTool"
-				ExecutionBucket="4"
+				Name="VCXMLDataGeneratorTool"
 			/>
 			<Tool
-				Name="VCXMLDataGeneratorTool"
+				Name="VCCustomBuildTool"
+				ExecutionBucket="4"
 			/>
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"
@@ -214,6 +217,9 @@
 			/>
 			<Tool
 				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCWebDeploymentTool"
 			/>
 		</Configuration>
 	</Configurations>
@@ -968,15 +974,15 @@
 				>
 			</File>
 			<File
-				RelativePath="..\src\messagely.h"
-				>
-			</File>
-			<File
 				RelativePath="..\src\message_parser.tab.h"
 				>
 			</File>
 			<File
 				RelativePath="..\src\messagedef.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\messagely.h"
 				>
 			</File>
 			<File
@@ -1064,11 +1070,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\lib\framework\platform.h"
+				RelativePath="..\src\parsetest.h"
 				>
 			</File>
 			<File
-				RelativePath="..\src\parsetest.h"
+				RelativePath="..\lib\framework\platform.h"
 				>
 			</File>
 			<File
@@ -1144,11 +1150,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\src\scriptvals_parser.tab.h"
+				RelativePath=".\scriptvals_parser.tab.h"
 				>
 			</File>
 			<File
-				RelativePath=".\scriptvals_parser.tab.h"
+				RelativePath="..\src\scriptvals_parser.tab.h"
 				>
 			</File>
 			<File
@@ -1169,6 +1175,10 @@
 			</File>
 			<File
 				RelativePath="..\lib\sequence\streamer.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\stringdef.h"
 				>
 			</File>
 			<File

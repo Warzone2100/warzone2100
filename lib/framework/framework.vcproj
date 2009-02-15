@@ -210,10 +210,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\printf_ext.c"
-				>
-			</File>
-			<File
 				RelativePath=".\resource_lexer.lex.c"
 				>
 				<FileConfiguration
@@ -244,7 +240,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\strnlen1.c"
+				RelativePath=".\stdio_ext.c"
 				>
 			</File>
 			<File
@@ -290,11 +286,19 @@
 				>
 			</File>
 			<File
-				RelativePath=".\dbghelp.h"
+				RelativePath=".\debug.h"
 				>
 			</File>
 			<File
-				RelativePath=".\debug.h"
+				RelativePath=".\endian_hack.h"
+				>
+			</File>
+			<File
+				RelativePath=".\file.h"
+				>
+			</File>
+			<File
+				RelativePath=".\fixedpoint.h"
 				>
 			</File>
 			<File
@@ -334,15 +338,15 @@
 				>
 			</File>
 			<File
-				RelativePath=".\math-help.h"
+				RelativePath=".\math_ext.h"
+				>
+			</File>
+			<File
+				RelativePath=".\physfs_ext.h"
 				>
 			</File>
 			<File
 				RelativePath=".\physfs_vfs.h"
-				>
-			</File>
-			<File
-				RelativePath=".\printf_ext.h"
 				>
 			</File>
 			<File
@@ -358,11 +362,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\strlfuncs.h"
+				RelativePath=".\stdio_ext.h"
 				>
 			</File>
 			<File
-				RelativePath=".\strnlen1.h"
+				RelativePath=".\string_ext.h"
 				>
 			</File>
 			<File
@@ -395,6 +399,10 @@
 			</File>
 			<File
 				RelativePath=".\utf.h"
+				>
+			</File>
+			<File
+				RelativePath=".\vector.h"
 				>
 			</File>
 			<File
