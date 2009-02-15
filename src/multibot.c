@@ -813,7 +813,7 @@ BOOL recvGroupOrder()
 			if (!NETuint32_t(&droidIDs[i]))
 			{
 				// If somehow we fail assume the message got truncated prematurely
-				debug(LOG_NET, "recvGroupOrder: error retrieving droid ID number; while there are (supposed to be) still %u droids left",
+				debug(LOG_SYNC, "recvGroupOrder: error retrieving droid ID number; while there are (supposed to be) still %u droids left",
 				      (unsigned int)(droidCount - i));
 				NETend();
 				return false;
