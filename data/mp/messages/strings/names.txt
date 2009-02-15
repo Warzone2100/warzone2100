@@ -274,9 +274,9 @@ NX-CybLasGrnd				"*NX-CybLasGrnd*"
 
 // New Cyborg Bodies - Unique body for EACH template
 CyborgCannonGrd				"*Cyborg Cannon*"
-//				"*Cyborg Machine Gun*"
+//				"*Cyborg Machinegun*"
 CyborgFlamerGrd				"*Cyborg Flamer*"
-//CyborgChn01Ground			"*Cyborg Machine Gun*"
+//CyborgChn01Ground			"*Cyborg Machinegun*"
 CybFlamer01CGrd				"*Cyborg Flamer*"
 //CybRocketGrd				"*Cyborg Rocket*"	
 CybRotMgGrd				"*Cyborg Assault Gun*"
@@ -1625,20 +1625,20 @@ CyborgRepair				"*Cyborg Mechanic*"
 Cyb-Bod-Mechanic				"*Cyborg Mechanic*"
 Cyb-Mechanic				_("Cyborg Mechanic")
 
-// added by Marc 9th June 1999 Incendiary Howitzer/Incenediary Mortar/Plasmite Flamer/Heavy Repair
+// added by Marc 9th June 1999 Incendiary Howitzer/Incendiary Mortar/Plasmite Flamer/Heavy Repair
 
-R-Wpn-Howitzer-Incenediary		_("Incenediary Howitzer")
-Howitzer-Incenediary			_("Incenediary Howitzer")
-R-Defense-Howitzer-Incenediary	_("Incenediary Howitzer Emplacement")
-Emplacement-Howitzer-Incenediary	_("Incenediary Howitzer Emplacement")
+R-Wpn-Howitzer-Incenediary		_("Incendiary Howitzer")
+Howitzer-Incenediary			_("Incendiary Howitzer")
+R-Defense-Howitzer-Incenediary	_("Incendiary Howitzer Emplacement")
+Emplacement-Howitzer-Incenediary	_("Incendiary Howitzer Emplacement")
 R-Wpn-Plasmite-Flamer			_("Plasmite Flamer")
 PlasmiteFlamer				_("Plasmite Flamer")
 R-Defense-PlasmiteFlamer		_("Plasmite Flamer Bunker")
 Plasmite-flamer-bunker			_("Plasmite Flamer Bunker")
-R-Wpn-Mortar-Incenediary		_("Incenediary Mortar")
-Mortar-Incenediary			_("Incenediary Mortar")
-R-Defense-MortarPit-Incenediary	_("Incenediary Mortar Pit")
-Emplacement-MortarPit-Incenediary	_("Incenediary Mortar Pit")
+R-Wpn-Mortar-Incenediary		_("Incendiary Mortar")
+Mortar-Incenediary			_("Incendiary Mortar")
+R-Defense-MortarPit-Incenediary	_("Incendiary Mortar Pit")
+Emplacement-MortarPit-Incenediary	_("Incendiary Mortar Pit")
 R-Sys-MobileRepairTurretHvy		_("Heavy Repair Turret")
 HeavyRepair					_("Heavy Repair Turret")
 
