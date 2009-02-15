@@ -6,7 +6,6 @@
 	ProjectGUID="{F580F567-CE2A-4C58-A036-C1B71664BF2D}"
 	RootNamespace="ivis_common"
 	Keyword="Win32Proj"
-	TargetFrameworkVersion="131072"
 	>
 	<Platforms>
 		<Platform
@@ -212,10 +211,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\piefixedpoint.h"
-				>
-			</File>
-			<File
 				RelativePath=".\piefunc.h"
 				>
 			</File>
@@ -233,10 +228,6 @@
 			</File>
 			<File
 				RelativePath=".\pietypes.h"
-				>
-			</File>
-			<File
-				RelativePath=".\pievector.h"
 				>
 			</File>
 			<File
