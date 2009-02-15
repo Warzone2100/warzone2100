@@ -179,7 +179,7 @@ static BOOL		safeToUseColour		(UDWORD player,UDWORD col);
 BOOL			chooseColour		(UDWORD);
 static BOOL		changeReadyStatus	(UBYTE player, BOOL bReady);
 void			resetReadyStatus	(bool bSendOptions);
-
+void			initTeams( void );
 // ////////////////////////////////////////////////////////////////////////////
 // map previews..
 
@@ -2574,6 +2574,18 @@ void runMultiOptions(void)
 }
 
 // ////////////////////////////////////////////////////////////////////////////
+void initTeams()
+{
+	int i;
+
+	for(i=0; i < MAX_PLAYERS; i++)
+	{
+		bTeamChooserUp[i] = false;			// default is all false
+		playerTeam[i] = -1;					//team each player belongs to (in the game) default = -1
+		playerTeamGUI[i] = i;				//team each player belongs to (in skirmish setup screen)
+	}
+
+}
 BOOL startMultiOptions(BOOL bReenter)
 {
 	PLAYERSTATS		nullStats;
@@ -2585,7 +2597,7 @@ BOOL startMultiOptions(BOOL bReenter)
 	if(!bReenter)
 	{
 		initPlayerColours();			 // force a colour clearout.
-
+		initTeams();					// reset teams to defaults.
 		for(i=0;i<MAX_PLAYERS;i++)
 		{
 //			game.skirmishPlayers[i] = 1; // clear out skirmish setting
