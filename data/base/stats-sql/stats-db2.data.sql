@@ -506,7 +506,7 @@ SELECT
 	75,
 	300,
 	500,
-	1,
+	0,
 	'PRLRHTR1.PIE'
 FROM `BASE`
 WHERE `BASE`.`pName`='HalfTrack03';
@@ -543,7 +543,7 @@ SELECT
 	75,
 	350,
 	350,
-	1,
+	0,
 	'PRLRHTR1.PIE'
 FROM `BASE`
 WHERE `BASE`.`pName`='HalfTrack02';
