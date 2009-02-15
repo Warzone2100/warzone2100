@@ -26,9 +26,8 @@ SRC= \
 	input.c \
 	lexer_input.c \
 	physfs_vfs.c \
-	printf_ext.c \
 	SDL_framerate.c \
-	strnlen1.c \
+	stdio_ext.c \
 	strres.c \
 	tagfile.c \
 	treap.c \

@@ -15,8 +15,8 @@ SRC= \
 	$(PARSERS) \
 	codeprint.c \
 	event.c \
-	evntsave.c \
-	interp.c \
+	eventsave.c \
+	interpreter.c \
 	script.c \
 	stack.c
 
