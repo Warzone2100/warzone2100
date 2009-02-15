@@ -42,7 +42,7 @@ extern BOOL			offWorldKeepLists;
 extern DROID       *apsLimboDroids[MAX_PLAYERS];
 // return positions for vtols
 extern Vector2i asVTOLReturnPos[MAX_PLAYERS];
-
+extern bool Cheated;
 extern void initMission(void);
 extern BOOL missionShutDown(void);
 extern void missionDestroyObjects(void);

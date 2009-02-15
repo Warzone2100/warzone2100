@@ -2127,6 +2127,7 @@ INT_RETVAL intRunWidgets(void)
 						sasprintf((char**)&msg, _("Player %u is cheating (debug menu) him/herself a new structure: %s."),
 						          selectedPlayer, psStructure->pStructureType->pName);
 						sendTextMessage(msg, true);
+						Cheated = true;
 					}
 				}
 				else if (psPositionStats->ref >= REF_FEATURE_START &&
@@ -2140,7 +2141,7 @@ INT_RETVAL intRunWidgets(void)
 					// the fact that we're cheating ourselves a new feature.
 					sasprintf((char**)&msg, _("Player %u is cheating (debug menu) him/herself a new feature: %s."), selectedPlayer, psPositionStats->pName);
 					sendTextMessage(msg, true);
-
+					Cheated = true;
 					// Notify the other hosts that we've just built ourselves a feature
 					sendMultiPlayerFeature(((FEATURE_STATS *)psPositionStats)->subType, world_coord(structX), world_coord(structY));
 				}
@@ -2159,6 +2160,7 @@ INT_RETVAL intRunWidgets(void)
 						// the fact that we're cheating ourselves a new droid.
 						sasprintf((char**)&msg, _("Player %u is cheating (debug menu) him/herself a new droid: %s."), selectedPlayer, psDroid->aName);
 						sendTextMessage(msg, true);
+						Cheated = true;
 					}
 				}
 				editPosMode = IED_NOPOS;

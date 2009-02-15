@@ -1055,6 +1055,11 @@ BOOL sendTextMessage(const char *pStr, BOOL all)
 
 	if (!ingame.localOptionsReceived)
 	{
+		if(!bMultiPlayer)
+		{
+			// apparently we are not in a mp game, so dump the message to the console.
+			addConsoleMessage(pStr,LEFT_JUSTIFY, SYSTEM_MESSAGE);
+		}
 		return true;
 	}
 
