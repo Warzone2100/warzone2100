@@ -1916,7 +1916,8 @@ static void processMultiopWidgets(UDWORD id)
 			widgSetButtonState(psWScreen, MULTIOP_ALLIANCE_Y,0);
 
 			widgSetButtonState(psWScreen, MULTIOP_ALLIANCE_TEAMS,0);
-
+			// Host wants NO alliance, so reset all teams back to default
+			initTeams();
 			game.alliance = NO_ALLIANCES;	//0;
 
 			resetReadyStatus(false);
