@@ -35,6 +35,7 @@
 #include "lib/netplay/netplay.h"
 #include "lib/sound/audio.h"
 #include "lib/sound/audio_id.h"
+#include "console.h"
 
 #include "move.h"
 
@@ -2943,6 +2944,7 @@ static void checkLocalFeatures(DROID *psDroid)
 
 		{
 			addPower(selectedPlayer,OILDRUM_POWER);
+			CONPRINTF(ConsoleString,(ConsoleString,_("You found %u power in an oil drum"),OILDRUM_POWER));
 		}
 		removeFeature((FEATURE*)psObj);							// remove artifact+ send multiplay info.
 
