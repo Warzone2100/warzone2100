@@ -446,8 +446,7 @@ CREATE TABLE `WEAPON` (
 	pWaterHitGraphic TEXT NOT NULL,
 
 	-- The trail used for in flight
-	pTrailGraphic TEXT,
-
+	pTrailGraphic TEXT
 );
 
 CREATE VIEW `WEAPONS` AS SELECT

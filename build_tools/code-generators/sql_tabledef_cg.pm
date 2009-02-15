@@ -99,7 +99,7 @@ sub printStructFields
             $$output .= "\t$field->{name} ";
             printStructFieldType($output, $field);
             $$output .= " UNIQUE" if grep(/unique/, @{$field->{"qualifiers"}});
-            $$output .= ",\n" if @fields or @constraints;
+            $$output .= ",\n" if (@fields and $fields[0]->{"type"} ne "C-only-field") or @constraints;
         }
 
         $$output .= "\n" unless ($field->{"type"} and $field->{"type"} =~ /C-only-field/);
