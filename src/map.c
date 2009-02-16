@@ -63,19 +63,10 @@ typedef struct _map_save_header
 	UDWORD		height;
 } MAP_SAVEHEADER;
 
-
-#define SAVE_MAP_V2 \
-	UWORD		texture; \
-	UBYTE		height
-
 typedef struct _map_save_tilev2
 {
-	SAVE_MAP_V2;
-} MAP_SAVETILEV2;
-
-typedef struct _map_save_tile
-{
-	SAVE_MAP_V2;
+	UWORD		texture;
+	UBYTE		height;
 } MAP_SAVETILE;
 
 typedef struct _gateway_save_header
@@ -88,11 +79,6 @@ typedef struct _gateway_save
 {
 	UBYTE	x0,y0,x1,y1;
 } GATEWAY_SAVE;
-
-typedef struct _zonemap_save_header_v1 {
-	UWORD version;
-	UWORD numZones;
-} ZONEMAP_SAVEHEADER_V1;
 
 typedef struct _zonemap_save_header {
 	UWORD version;
@@ -112,10 +98,6 @@ typedef struct _zonemap_save_header {
 
 /* Number of entries in the sqrt(1/(1+x*x)) table for aaLine */
 #define	ROOT_TABLE_SIZE		1024
-
-/* aaLine direction bits and tables */
-#define DIR_STEEP			1  /* set when abs(dy) > abs(dx) */
-#define DIR_NEGY			2  /* set whey dy < 0 */
 
 /* The size and contents of the map */
 UDWORD	mapWidth = 0, mapHeight = 0;
@@ -193,15 +175,15 @@ BOOL mapNew(UDWORD width, UDWORD height)
 static BOOL mapLoadV3(char *pFileData, UDWORD fileSize)
 {
 	UDWORD				i,j;
-	MAP_SAVETILEV2		*psTileData;
+	MAP_SAVETILE		*psTileData;
 	GATEWAY_SAVEHEADER	*psGateHeader;
 	GATEWAY_SAVE		*psGate;
 
 	/* Load in the map data */
-	psTileData = (MAP_SAVETILEV2 *)(pFileData + SAVE_HEADER_SIZE);
+	psTileData = (MAP_SAVETILE *)(pFileData + SAVE_HEADER_SIZE);
 	for(i=0; i< mapWidth * mapHeight; i++)
 	{
-		/* MAP_SAVETILEV2 */
+		/* MAP_SAVETILE */
 		endian_uword(&psTileData->texture);
 
 		psMapTiles[i].texture = psTileData->texture;
@@ -210,7 +192,7 @@ static BOOL mapLoadV3(char *pFileData, UDWORD fileSize)
 		{
 			psMapTiles[i].tileVisBits =(UBYTE)(( (psMapTiles[i].tileVisBits) &~ (UBYTE)(1<<j) ));
 		}
-		psTileData = (MAP_SAVETILEV2 *)(((UBYTE *)psTileData) + SAVE_TILE_SIZE);
+		psTileData = (MAP_SAVETILE *)(((UBYTE *)psTileData) + SAVE_TILE_SIZE);
 	}
 
 	psGateHeader = (GATEWAY_SAVEHEADER*)psTileData;
@@ -246,8 +228,7 @@ BOOL mapLoad(char *pFileData, UDWORD fileSize)
 	if (psHeader->aFileType[0] != 'm' || psHeader->aFileType[1] != 'a' ||
 		psHeader->aFileType[2] != 'p' || psHeader->aFileType[3] != ' ')
 	{
-		debug( LOG_ERROR, "mapLoad: Incorrect file type" );
-		abort();
+		ASSERT(false, "Incorrect map type");
 		free(pFileData);
 		return false;
 	}
@@ -260,13 +241,13 @@ BOOL mapLoad(char *pFileData, UDWORD fileSize)
 	/* Check the file version */
 	if (psHeader->version <= VERSION_9)
 	{
-		ASSERT(false, "MapLoad: unsupported save format version %d", psHeader->version);
+		ASSERT(false, "Unsupported save format version %d", psHeader->version);
 		free(pFileData);
 		return false;
 	}
 	else if (psHeader->version > CURRENT_VERSION_NUM)
 	{
-		ASSERT(false, "MapLoad: undefined save format version %d", psHeader->version);
+		ASSERT(false, "Undefined save format version %d", psHeader->version);
 		free(pFileData);
 		return false;
 	}
@@ -277,8 +258,8 @@ BOOL mapLoad(char *pFileData, UDWORD fileSize)
 
 	if (width*height > MAP_MAXAREA)
 	{
-		debug( LOG_ERROR, "mapLoad: map too large : %d %d\n", width, height );
-		abort();
+		debug( LOG_ERROR, "Map too large : %d %d\n", width, height );
+		free(pFileData);
 		return false;
 	}
 
@@ -287,7 +268,7 @@ BOOL mapLoad(char *pFileData, UDWORD fileSize)
 
 	/* Allocate the memory for the map */
 	psMapTiles = calloc(width * height, sizeof(MAPTILE));
-	ASSERT(psMapTiles != NULL, "mapLoad: Out of memory" );
+	ASSERT(psMapTiles != NULL, "Out of memory" );
 
 	mapWidth = width;
 	mapHeight = height;
@@ -1057,8 +1038,8 @@ BOOL mapSave(char **ppFileData, UDWORD *pFileSize)
 	GATEWAY *psCurrGate = NULL;
 	GATEWAY_SAVEHEADER *psGateHeader = NULL;
 	GATEWAY_SAVE *psGate = NULL;
-	ZONEMAP_SAVEHEADER *psZoneHeader = NULL;
 	SDWORD	numGateways = 0;
+	ZONEMAP_SAVEHEADER *psZoneHeader = NULL;
 
 	// find the number of non water gateways
 	for(psCurrGate = gwGetGateways(); psCurrGate; psCurrGate = psCurrGate->psNext)
@@ -1107,7 +1088,7 @@ BOOL mapSave(char **ppFileData, UDWORD *pFileSize)
 		psTileData->texture = psTile->texture;
 		psTileData->height = psTile->height;
 
-		/* MAP_SAVETILEV2 */
+		/* MAP_SAVETILE */
 		endian_uword(&psTileData->texture);
 
 		psTileData = (MAP_SAVETILE *)((UBYTE *)psTileData + SAVE_TILE_SIZE);
