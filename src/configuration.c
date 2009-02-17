@@ -577,8 +577,14 @@ BOOL loadRenderMode(void)
 	}
 	else
 	{
+#ifdef WZ_OS_MAC
+		// Mac OS X doesn't support normal cursors
+		war_SetColouredCursor(true);
+		setWarzoneKeyNumeric("ColouredCursor", true);
+#else
 		war_SetColouredCursor(false);
 		setWarzoneKeyNumeric("ColouredCursor", false);
+#endif
 	}
 
 	if (getWarzoneKeyNumeric("trapCursor", &val))
