@@ -135,9 +135,6 @@ BOOL gwNewGateway(SDWORD x1, SDWORD y1, SDWORD x2, SDWORD y2)
 	psNew->y1 = (UBYTE)y1;
 	psNew->x2 = (UBYTE)x2;
 	psNew->y2 = (UBYTE)y2;
-	psNew->zone1 = 0;
-	psNew->zone2 = 0;
-	psNew->psLinks = NULL;
 	psNew->flags = 0;
 
 	// add the gateway to the list
@@ -216,10 +213,6 @@ void gwFreeGateway(GATEWAY *psDel)
 
 	}
 
-	if (psDel->psLinks != NULL)
-	{
-		free(psDel->psLinks);
-	}
 	free(psDel);
 }
 
