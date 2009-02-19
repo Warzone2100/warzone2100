@@ -24,6 +24,26 @@
 #define PHYSFS_APPEND 1
 #define PHYSFS_PREPEND 0
 
+static inline bool PHYSFS_writeSLE8(PHYSFS_file* file, int8_t val)
+{
+	return (PHYSFS_write(file, &val, sizeof(int8_t), 1) == 1);
+}
+
+static inline bool PHYSFS_writeULE8(PHYSFS_file* file, uint8_t val)
+{
+	return (PHYSFS_write(file, &val, sizeof(uint8_t), 1) == 1);
+}
+
+static inline bool PHYSFS_readSLE8(PHYSFS_file* file, int8_t* val)
+{
+	return (PHYSFS_read(file, val, sizeof(int8_t), 1) == 1);
+}
+
+static inline bool PHYSFS_readULE8(PHYSFS_file* file, uint8_t* val)
+{
+	return (PHYSFS_read(file, val, sizeof(uint8_t), 1) == 1);
+}
+
 static inline bool PHYSFS_writeSBE8(PHYSFS_file* file, int8_t val)
 {
 	return (PHYSFS_write(file, &val, sizeof(int8_t), 1) == 1);

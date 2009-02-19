@@ -171,95 +171,44 @@ BOOL mapNew(UDWORD width, UDWORD height)
 	return true;
 }
 
-/* load the map data - for version 3 */
-static BOOL mapLoadV3(char *pFileData, UDWORD fileSize)
-{
-	UDWORD				i,j;
-	MAP_SAVETILE		*psTileData;
-	GATEWAY_SAVEHEADER	*psGateHeader;
-	GATEWAY_SAVE		*psGate;
-
-	/* Load in the map data */
-	psTileData = (MAP_SAVETILE *)(pFileData + SAVE_HEADER_SIZE);
-	for(i=0; i< mapWidth * mapHeight; i++)
-	{
-		/* MAP_SAVETILE */
-		endian_uword(&psTileData->texture);
-
-		psMapTiles[i].texture = psTileData->texture;
-		psMapTiles[i].height = psTileData->height;
-		for (j=0; j<MAX_PLAYERS; j++)
-		{
-			psMapTiles[i].tileVisBits =(UBYTE)(( (psMapTiles[i].tileVisBits) &~ (UBYTE)(1<<j) ));
-		}
-		psTileData = (MAP_SAVETILE *)(((UBYTE *)psTileData) + SAVE_TILE_SIZE);
-	}
-
-	psGateHeader = (GATEWAY_SAVEHEADER*)psTileData;
-	psGate = (GATEWAY_SAVE*)(psGateHeader+1);
-
-	/* GATEWAY_SAVEHEADER */
-	endian_udword(&psGateHeader->version);
-	endian_udword(&psGateHeader->numGateways);
-
-	ASSERT( psGateHeader->version == 1,"Invalid gateway version" );
-
-	for(i=0; i<psGateHeader->numGateways; i++) {
-		if (!gwNewGateway(psGate->x0,psGate->y0, psGate->x1,psGate->y1)) {
-			debug( LOG_ERROR, "mapLoadV3: Unable to add gateway" );
-			abort();
-			return false;
-		}
-		psGate++;
-	}
-
-	return true;
-}
-
-
 /* Initialise the map structure */
-BOOL mapLoad(char *pFileData, UDWORD fileSize)
+BOOL mapLoad(char *filename)
 {
-	UDWORD				width,height;
-	MAP_SAVEHEADER		*psHeader;
+	UDWORD		numGw, width, height;
+	char		aFileType[4];
+	UDWORD		version;
+	UDWORD		i, j;
+	PHYSFS_file	*fp = PHYSFS_openRead(filename);
 
-	/* Check the file type */
-	psHeader = (MAP_SAVEHEADER *)pFileData;
-	if (psHeader->aFileType[0] != 'm' || psHeader->aFileType[1] != 'a' ||
-		psHeader->aFileType[2] != 'p' || psHeader->aFileType[3] != ' ')
+	if (!fp)
 	{
-		ASSERT(false, "Incorrect map type");
-		free(pFileData);
+		debug(LOG_ERROR, "%s not found", filename);
 		return false;
 	}
-
-	/* MAP_SAVEHEADER */
-	endian_udword(&psHeader->version);
-	endian_udword(&psHeader->width);
-	endian_udword(&psHeader->height);
-
-	/* Check the file version */
-	if (psHeader->version <= VERSION_9)
+	else if (PHYSFS_read(fp, aFileType, 4, 1) != 1
+	    || !PHYSFS_readULE32(fp, &version)
+	    || !PHYSFS_readULE32(fp, &width)
+	    || !PHYSFS_readULE32(fp, &height)
+	    || aFileType[0] != 'm'
+	    || aFileType[1] != 'a'
+	    || aFileType[2] != 'p')
 	{
-		ASSERT(false, "Unsupported save format version %d", psHeader->version);
-		free(pFileData);
+		debug(LOG_ERROR, "Bad header in %s", filename);
 		return false;
 	}
-	else if (psHeader->version > CURRENT_VERSION_NUM)
+	else if (version <= VERSION_9)
 	{
-		ASSERT(false, "Undefined save format version %d", psHeader->version);
-		free(pFileData);
+		debug(LOG_ERROR, "%s: Unsupported save format version %u", filename, version);
 		return false;
 	}
-
-	/* Get the width and height */
-	width = psHeader->width;
-	height = psHeader->height;
-
-	if (width*height > MAP_MAXAREA)
+	else if (version > CURRENT_VERSION_NUM)
 	{
-		debug( LOG_ERROR, "Map too large : %d %d\n", width, height );
-		free(pFileData);
+		debug(LOG_ERROR, "%s: Undefined save format version %u", filename, version);
+		return false;
+	}
+	else if (width * height > MAP_MAXAREA)
+	{
+		debug(LOG_ERROR, "Map %s too large : %d %d", filename, width, height);
 		return false;
 	}
 
@@ -274,7 +223,48 @@ BOOL mapLoad(char *pFileData, UDWORD fileSize)
 	mapHeight = height;
 
 	//load in the map data itself
-	mapLoadV3(pFileData, fileSize);
+
+	/* Load in the map data */
+	for (i = 0; i < mapWidth * mapHeight; i++)
+	{
+		UWORD	texture;
+		UBYTE	height;
+
+		if (!PHYSFS_readULE16(fp, &texture) || !PHYSFS_readULE8(fp, &height))
+		{
+			debug(LOG_ERROR, "%s: Error during savegame load", filename);
+			return false;
+		}
+
+		psMapTiles[i].texture = texture;
+		psMapTiles[i].height = height;
+		for (j = 0; j < MAX_PLAYERS; j++)
+		{
+			psMapTiles[i].tileVisBits =(UBYTE)(psMapTiles[i].tileVisBits &~ (UBYTE)(1 << j));
+		}
+	}
+
+	if (!PHYSFS_readULE32(fp, &version) || !PHYSFS_readULE32(fp, &numGw) || version != 1)
+	{
+		debug(LOG_ERROR, "Bad gateway in %s", filename);
+		return false;
+	}
+
+	for (i = 0; i < numGw; i++)
+	{
+		UBYTE	x0, y0, x1, y1;
+
+		if (!PHYSFS_readULE8(fp, &x0) || !PHYSFS_readULE8(fp, &y0) || !PHYSFS_readULE8(fp, &x1) || !PHYSFS_readULE8(fp, &y1))
+		{
+			debug(LOG_ERROR, "%s: Failed to read gateway info", filename);
+			return false;
+		}
+		if (!gwNewGateway(x0, y0, x1, y1))
+		{
+			debug(LOG_ERROR, "%s: Unable to add gateway", filename);
+			return false;
+		}
+	}
 
 	environReset();
 

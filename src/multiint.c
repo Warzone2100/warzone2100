@@ -230,13 +230,7 @@ void loadMapPreview(void)
 	ptr = strrchr(aFileName, '/');
 	ASSERT(ptr, "this string was supposed to contain a /");
 	strcpy(ptr, "/game.map");
-	pFileData = fileLoadBuffer;
-	if (!loadFileToBuffer(aFileName, pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
-	{
-		debug(LOG_ERROR, "loadMapPreview: Failed to load map file");
-		return;
-	}
-	if (!mapLoad(pFileData, fileSize))
+	if (!mapLoad(aFileName))
 	{
 		debug(LOG_ERROR, "loadMapPreview: Failed to load map");
 		return;
