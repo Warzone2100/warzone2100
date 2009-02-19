@@ -327,8 +327,7 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 	}
 
 	// cap resultHitChance to 0-100%, just in case
-	resultHitChance = MAX(0, resultHitChance);
-	resultHitChance = MIN(100, resultHitChance);
+	CLIP(resultHitChance, 0, 100);
 
 	HIT_ROLL(dice);
 
@@ -348,10 +347,8 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 			predict.y += psTarget->pos.y;
 
 			// Make sure we don't pass any negative or out of bounds numbers to proj_SendProjectile
-			predict.x = MAX(predict.x, 0);
-			predict.x = MIN(predict.x, world_coord(mapWidth - 1));
-			predict.y = MAX(predict.y, 0);
-			predict.y = MIN(predict.y, world_coord(mapHeight - 1));
+			CLIP(predict.x, 0, world_coord(mapWidth - 1));
+			CLIP(predict.y, 0, world_coord(mapHeight - 1));
 		}
 		else
 		{
