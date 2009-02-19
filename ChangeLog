@@ -1,5 +1,6 @@
 0000-00-00: Version 2.1.2
  * General:
+   * Fix: No longer crash if more than six players join a game (r6658, ticket:273)
    * Fix: If the target system to run on already provides strlcpy and/or strlcat, check whether they work as expected, and if they do, use them instead (r6556, r6557)
    * Change: Allow compiling without OpenAL and Vorbis when compiling with --disable-sound
  * Sound:
