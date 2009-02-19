@@ -978,7 +978,7 @@ receive_message:
 
 			if (received == false)
 			{
-				uint32_t i = current + 1;
+				uint32_t i = (current + 1) % 8;
 
 				if (socket_set == NULL
 				    || SDLNet_CheckSockets(socket_set, NET_READ_TIMEOUT) <= 0)
@@ -987,7 +987,8 @@ receive_message:
 				}
 				for (;;)
 				{
-					if (connected_bsocket[i]->socket == NULL)
+					ASSERT(i < MAX_CONNECTED_PLAYERS, "Bad player number %u (current was %u)", i, current);
+					if (connected_bsocket[i] == NULL || connected_bsocket[i]->socket == NULL)
 					{
 						// do nothing
 					}
