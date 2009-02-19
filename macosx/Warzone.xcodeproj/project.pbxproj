@@ -1351,7 +1351,6 @@
 		0246A1F30BD3CCDB004D1C70 /* game.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = game.h; path = ../src/game.h; sourceTree = SOURCE_ROOT; };
 		0246A1F40BD3CCDB004D1C70 /* gateway.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = gateway.c; path = ../src/gateway.c; sourceTree = SOURCE_ROOT; };
 		0246A1F50BD3CCDB004D1C70 /* gateway.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = gateway.h; path = ../src/gateway.h; sourceTree = SOURCE_ROOT; };
-		0246A1F60BD3CCDB004D1C70 /* gatewaydef.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = gatewaydef.h; path = ../src/gatewaydef.h; sourceTree = SOURCE_ROOT; };
 		0246A1FA0BD3CCDB004D1C70 /* geometry.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = geometry.c; path = ../src/geometry.c; sourceTree = SOURCE_ROOT; };
 		0246A1FB0BD3CCDB004D1C70 /* geometry.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = geometry.h; path = ../src/geometry.h; sourceTree = SOURCE_ROOT; };
 		0246A1FC0BD3CCDB004D1C70 /* group.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = group.c; path = ../src/group.c; sourceTree = SOURCE_ROOT; };
@@ -2559,7 +2558,6 @@
 				0246A1F30BD3CCDB004D1C70 /* game.h */,
 				0246A1F40BD3CCDB004D1C70 /* gateway.c */,
 				0246A1F50BD3CCDB004D1C70 /* gateway.h */,
-				0246A1F60BD3CCDB004D1C70 /* gatewaydef.h */,
 				0246A1FA0BD3CCDB004D1C70 /* geometry.c */,
 				0246A1FB0BD3CCDB004D1C70 /* geometry.h */,
 				0246A1FC0BD3CCDB004D1C70 /* group.c */,

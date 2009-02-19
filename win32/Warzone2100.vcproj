@@ -874,10 +874,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\src\gatewaydef.h"
-				>
-			</File>
-			<File
 				RelativePath="..\src\geometry.h"
 				>
 			</File>

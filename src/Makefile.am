@@ -93,7 +93,6 @@ noinst_HEADERS = \
 	functiondef.h \
 	function.h \
 	game.h \
-	gatewaydef.h \
 	gateway.h \
 	geometry.h \
 	group.h \

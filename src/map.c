@@ -665,10 +665,7 @@ BOOL mapSaveTagged(char *pFileName)
 	// find the number of non water gateways
 	for (psCurrGate = gwGetGateways(); psCurrGate; psCurrGate = psCurrGate->psNext)
 	{
-		if (!(psCurrGate->flags & GWR_WATERLINK))
-		{
-			numGateways += 1;
-		}
+		numGateways += 1;
 	}
 
 	if (!tagOpenWrite(definition, pFileName))
@@ -735,17 +732,14 @@ BOOL mapSaveTagged(char *pFileName)
 	tagWriteEnter(0x0b, numGateways); // gateway group
 	for (psCurrGate = gwGetGateways(); psCurrGate; psCurrGate = psCurrGate->psNext)
 	{
-		if (!(psCurrGate->flags & GWR_WATERLINK))
-		{
-			uint16_t p[4];
+		uint16_t p[4];
 
-			p[0] = psCurrGate->x1;
-			p[1] = psCurrGate->y1;
-			p[2] = psCurrGate->x2;
-			p[3] = psCurrGate->y2;
-			tagWrite16v(0x01, 4, p);
-			tagWriteNext();
-		}
+		p[0] = psCurrGate->x1;
+		p[1] = psCurrGate->y1;
+		p[2] = psCurrGate->x2;
+		p[3] = psCurrGate->y2;
+		tagWrite16v(0x01, 4, p);
+		tagWriteNext();
 	}
 	debug(LOG_MAP, " * Writing info about %d gateways", (int)numGateways);
 	tagWriteLeave(0x0b);
@@ -1034,10 +1028,7 @@ BOOL mapSave(char **ppFileData, UDWORD *pFileSize)
 	// find the number of non water gateways
 	for(psCurrGate = gwGetGateways(); psCurrGate; psCurrGate = psCurrGate->psNext)
 	{
-		if (!(psCurrGate->flags & GWR_WATERLINK))
-		{
-			numGateways += 1;
-		}
+		numGateways += 1;
 	}
 
 	/* Allocate the data buffer */
@@ -1100,15 +1091,12 @@ BOOL mapSave(char **ppFileData, UDWORD *pFileSize)
 	// Put the gateway data.
 	for(psCurrGate = gwGetGateways(); psCurrGate; psCurrGate = psCurrGate->psNext)
 	{
-		if (!(psCurrGate->flags & GWR_WATERLINK))
-		{
-			psGate->x0 = psCurrGate->x1;
-			psGate->y0 = psCurrGate->y1;
-			psGate->x1 = psCurrGate->x2;
-			psGate->y1 = psCurrGate->y2;
-			psGate++;
-			i++;
-		}
+		psGate->x0 = psCurrGate->x1;
+		psGate->y0 = psCurrGate->y1;
+		psGate->x1 = psCurrGate->x2;
+		psGate->y1 = psCurrGate->y2;
+		psGate++;
+		i++;
 	}
 
 	// Put the zone header.
