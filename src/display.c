@@ -1644,13 +1644,6 @@ static void FeedbackOrderGiven(void)
 	}
 }
 
-
-static void FeedbackClickedOn(void)
-{
-	FeedbackOrderGiven();
-}
-
-
 // check whether the queue order keys are pressed
 BOOL ctrlShiftDown(void)
 {
@@ -1790,7 +1783,7 @@ static inline void dealWithLMBDroid(DROID* psDroid, SELECTION_TYPE selection)
 						100 - clip(PERCENT(psDroid->body, psDroid->originalBody), 0, 100), psDroid->id,
 						psDroid->experience, getDroidLevelName(psDroid), getDroidOrderName(psDroid->order), getDroidActionName(psDroid->action),
 						droidSensorRange(psDroid), droidSensorPower(psDroid), droidConcealment(psDroid)));
-			FeedbackClickedOn();
+			FeedbackOrderGiven();
 		}
 		else
 #endif
@@ -1803,7 +1796,7 @@ static inline void dealWithLMBDroid(DROID* psDroid, SELECTION_TYPE selection)
 					psDroid->id, psDroid->experience, psDroid->order,
 					psDroid->action, getDroidLevelName(psDroid)));
 
-			FeedbackClickedOn();
+			FeedbackOrderGiven();
 		}
 		else
 		{
@@ -1815,7 +1808,7 @@ static inline void dealWithLMBDroid(DROID* psDroid, SELECTION_TYPE selection)
 					100 - clip(PERCENT(psDroid->body,psDroid->originalBody), 0, 100),
 					(SDWORD) psDroid->experience, getDroidLevelName(psDroid)));
 
-				FeedbackClickedOn();
+				FeedbackOrderGiven();
 			}
 		}
 
@@ -1906,7 +1899,7 @@ static inline void dealWithLMBStructure(STRUCTURE* psStructure, SELECTION_TYPE s
 		if (!anyDroidSelected(selectedPlayer))
 		{
 			intObjectSelected((BASE_OBJECT *)psStructure);
-			FeedbackClickedOn();
+			FeedbackOrderGiven();
 		}
 // We don't actually wan't to select structures, just inform the interface we've clicked on it,
 // might wan't to do this on PC as well as it fixes the problem with the interface locking multiple
@@ -2436,7 +2429,7 @@ static void dealWithRMB( void )
 						if(isHumanPlayer(psDroid->player) )
 						{
 							CONPRINTF(ConsoleString, (ConsoleString,"%s",droidGetName(psDroid)));
-							FeedbackClickedOn();
+							FeedbackOrderGiven();
 						}
 					}
 				}
