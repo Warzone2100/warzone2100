@@ -194,8 +194,6 @@ extern BOOL sendPing			(void);							// allow game to request pings.
 
 extern BOOL ForceDroidSync(const DROID* droidToSend);
 // multijoin
-extern void modifyResources		(POWER_GEN_FUNCTION* psFunction);
-
 extern BOOL sendReseachStatus	(STRUCTURE *psBuilding ,UDWORD index, UBYTE player, BOOL bStart);
 
 extern void displayAIMessage	(char *pStr, SDWORD from, SDWORD to); //make AI process a message

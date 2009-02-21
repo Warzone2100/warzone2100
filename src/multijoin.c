@@ -326,24 +326,3 @@ void setupNewPlayer(UDWORD dpid, UDWORD player)
 	ssprintf(buf, _("%s is Joining the Game"), getPlayerName(player));
 	addConsoleMessage(buf,DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 }
-
-// ////////////////////////////////////////////////////////////////////////////
-// reduce the amount of oil that can be extracted.
-void modifyResources(POWER_GEN_FUNCTION* psFunction)
-{
-	switch(game.power)
-	{
-	case LEV_LOW:
-		psFunction->powerMultiplier = psFunction->powerMultiplier * 3/4 ;	// careful with the brackets! (do mul before div)
-		break;
-	case LEV_MED:
-		psFunction->powerMultiplier = psFunction->powerMultiplier * 1;
-		break;
-	case LEV_HI:
-		psFunction->powerMultiplier = psFunction->powerMultiplier * 5/4  ;
-		break;
-	default:
-		break;
-	}
-	return;
-}

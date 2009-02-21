@@ -782,7 +782,24 @@ static BOOL loadPowerGenFunction(const char *pData)
 
 	if(bMultiPlayer)
 	{
-		modifyResources(psFunction);
+		switch(game.power)
+		{
+			// Multiply by 3/4
+			case LEV_LOW:
+				psFunction->powerMultiplier *= 3;
+				psFunction->powerMultiplier /= 4;
+				break;
+			// No change
+			case LEV_MED:
+				break;
+			// Multiply by 5/4
+			case LEV_HI:
+				psFunction->powerMultiplier *= 5;
+				psFunction->powerMultiplier /= 4;
+				break;
+			default:
+				break;
+		}
 	}
 
 
