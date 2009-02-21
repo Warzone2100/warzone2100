@@ -3117,7 +3117,8 @@ void displayMultiBut(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT 
 			break;
 		default:
 			hiToUse = 0;
-			debug(LOG_WARNING, "no automatic multibut highlight for width = %d", iV_GetImageWidth(FrontImages, im_norm));
+			// This line spams a TON.  (Game options screen, hover mouse over one of the flag colors)
+//			debug(LOG_WARNING, "no automatic multibut highlight for width = %d", iV_GetImageWidth(FrontImages, im_norm));
 			break;
 		}
 	}

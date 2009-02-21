@@ -1194,6 +1194,7 @@ BOOL runGameOptions5Menu(void)
 BOOL startGameOptionsMenu(void)
 {
 	UDWORD	w, h;
+	int playercolor;
 
 	addBackdrop();
 	addTopForm();
@@ -1233,7 +1234,15 @@ BOOL startGameOptionsMenu(void)
 	addTextButton(FRONTEND_LANGUAGE,  FRONTEND_POS2X - 25, FRONTEND_POS5Y, _("Language"), true, false);
 	addTextButton(FRONTEND_LANGUAGE_R,  FRONTEND_POS2M - 25, FRONTEND_POS5Y, getLanguageName(), true, false);
 
-	widgSetButtonState(psWScreen, FE_P0 + getPlayerColour(0), WBUT_LOCK);
+	// FIXME: if playercolor = 1-3, then we Assert in widgSetButtonState() since we don't define FE_P1 - FE_P3
+	// I assume the reason is that in SP games, those are reserved for the AI?  Valid values are 0, 4-7.
+	// This is a workaround, until we find what is setting that to 1-3.  See configuration.c:701
+	playercolor = getPlayerColour(0);
+	if (playercolor >= 1 && playercolor <= 3)
+	{
+		playercolor = 0;
+	}
+	widgSetButtonState(psWScreen, FE_P0 + playercolor, WBUT_LOCK);
 	addTextButton(FRONTEND_COLOUR, FRONTEND_POS4X-25, FRONTEND_POS4Y, _("Unit Colour"), true, false);
 
 	// Quit
