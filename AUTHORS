@@ -17,7 +17,7 @@ Stefan Huehner <shuehner> : Programming + original 64bit support
 Ari Johnson <iamtheari> : Programming and MacOSX Packaging + original MacOSX port
 Steven Koenig <kreuvf> : Documentation, translation
 Martin Koller <mkoller> : Programming
-Gerard Krol <gerard_> : Programming
+Gerard Krol <gerard_> : Programming, Textures
 Angus Lees <gus> : Debian Packaging
 Dennis Luxen <pret> : Programming
 Kevin Malec <Kevin`> : Websupport
@@ -38,3 +38,15 @@ Dmitri Shuralyov <shurcool> : Programming
 Rodolphe Suescun <rodzilla> : Programming
 Freddie Witherden <EvilGuru> : Programming and MacOSX Packaging
 -- <vs2k5> : Programming
+
+These files are licensed GPL version 2 or (at your option) any later version,
+but cannot easily contain the copyright in the file itself:
+
+data/base/texpages/page-40-ground-plants.png
+data/base/texpages/page-41-slightly-cracked-concrete.png
+data/base/texpages/page-42-rock.png
+data/base/texpages/page-43-mud.png
+data/base/texpages/page-53-cracked-concrete.png
+data/base/texpages/page-54-snow-grass.png
+data/base/texpages/page-55-grass.png
+	Copyright (c) 2008 Image*After/Tristan Bethe (imageafter.com)

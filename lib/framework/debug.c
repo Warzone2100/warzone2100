@@ -72,6 +72,7 @@ static const char *code_part_names[] = {
 	"death",
 	"gateway",
 	"message",
+	"terrain",
 	"last"
 };
 

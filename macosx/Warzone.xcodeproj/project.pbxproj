@@ -667,6 +667,7 @@
 		9742E5740DF9975E000A5D41 /* lexer_input.h in Copy frameworks (36) */ = {isa = PBXBuildFile; fileRef = 9742E5720DF9975E000A5D41 /* lexer_input.h */; };
 		9742E5770DF9979C000A5D41 /* parsetest.c in Sources */ = {isa = PBXBuildFile; fileRef = 9742E5750DF9979C000A5D41 /* parsetest.c */; };
 		9742E5780DF9979C000A5D41 /* parsetest.h in Copy frameworks (36) */ = {isa = PBXBuildFile; fileRef = 9742E5760DF9979C000A5D41 /* parsetest.h */; };
+		974EDB380EDC818D00A25352 /* terrain.c in Sources */ = {isa = PBXBuildFile; fileRef = 974EDB360EDC818D00A25352 /* terrain.c */; };
 		976AE8280EA0B59A00F2473F /* timer.c in Sources */ = {isa = PBXBuildFile; fileRef = 976AE8260EA0B59A00F2473F /* timer.c */; };
 		9797385B0E815F4400D6418D /* physfs_vfs.c in Sources */ = {isa = PBXBuildFile; fileRef = 979738590E815F4400D6418D /* physfs_vfs.c */; };
 		97AEAB720E8C1C3A00A10721 /* codec.h in Headers */ = {isa = PBXBuildFile; fileRef = 97AEAB6E0E8C1C3A00A10721 /* codec.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1808,6 +1809,8 @@
 		9742E5720DF9975E000A5D41 /* lexer_input.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = lexer_input.h; path = ../lib/framework/lexer_input.h; sourceTree = SOURCE_ROOT; };
 		9742E5750DF9979C000A5D41 /* parsetest.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = parsetest.c; path = ../src/parsetest.c; sourceTree = SOURCE_ROOT; };
 		9742E5760DF9979C000A5D41 /* parsetest.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = parsetest.h; path = ../src/parsetest.h; sourceTree = SOURCE_ROOT; };
+		974EDB360EDC818D00A25352 /* terrain.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = terrain.c; path = ../src/terrain.c; sourceTree = SOURCE_ROOT; };
+		974EDB370EDC818D00A25352 /* terrain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = terrain.h; path = ../src/terrain.h; sourceTree = SOURCE_ROOT; };
 		976AE8260EA0B59A00F2473F /* timer.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = timer.c; path = ../lib/sequence/timer.c; sourceTree = SOURCE_ROOT; };
 		976AE8270EA0B59A00F2473F /* timer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = timer.h; path = ../lib/sequence/timer.h; sourceTree = SOURCE_ROOT; };
 		979738590E815F4400D6418D /* physfs_vfs.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = physfs_vfs.c; path = ../lib/framework/physfs_vfs.c; sourceTree = SOURCE_ROOT; };
@@ -2687,6 +2690,8 @@
 				0246A27A0BD3CCDC004D1C70 /* structuredef.h */,
 				0246A27B0BD3CCDC004D1C70 /* target.c */,
 				0246A27C0BD3CCDC004D1C70 /* target.h */,
+				974EDB360EDC818D00A25352 /* terrain.c */,
+				974EDB370EDC818D00A25352 /* terrain.h */,
 				0246A27D0BD3CCDC004D1C70 /* text.c */,
 				0246A27E0BD3CCDC004D1C70 /* text.h */,
 				0246A27F0BD3CCDC004D1C70 /* texture.c */,
@@ -4467,6 +4472,7 @@
 				024480240C5E4BEE00E1A641 /* utf.c in Sources */,
 				9797385B0E815F4400D6418D /* physfs_vfs.c in Sources */,
 				976AE8280EA0B59A00F2473F /* timer.c in Sources */,
+				974EDB380EDC818D00A25352 /* terrain.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

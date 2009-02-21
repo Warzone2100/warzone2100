@@ -105,7 +105,14 @@ unsigned int environGetValue(unsigned int x, unsigned int y)
 
 UDWORD	environGetData( UDWORD x, UDWORD y )
 {
-	SDWORD	retVal = (pEnvironData[(y * mapWidth) + x].data);
+	SDWORD	retVal;
+	
+	if(pEnvironData == NULL ) // loading map preview..
+	{
+		return 0;
+	}
+
+	retVal = (pEnvironData[(y * mapWidth) + x].data);
 
 	if (retVal < 0)
 	{

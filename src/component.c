@@ -847,6 +847,10 @@ void displayCompObj(BASE_OBJECT *psObj, BOOL bButton)
 	{
 		colour = getPlayerColour(psDroid->player);
 	}
+	
+	/* get propulsion stats */
+	psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
+	ASSERT( psPropStats != NULL, "invalid propulsion stats pointer" );
 
 	//set pieflag for button object or ingame object
 	if ( bButton )
@@ -880,6 +884,12 @@ void displayCompObj(BASE_OBJECT *psObj, BOOL bButton)
 	else
 	{
 		iPieData = 0;
+	}
+	
+	if (!bButton && psPropStats->propulsionType == PROPULSION_TYPE_PROPELLOR)
+	{
+		// FIXME: change when adding submarines to the game
+		pie_TRANSLATE(0, -world_coord(1)/2.3f, 0);
 	}
 
 	//Watermelon:uses psShapeTemp too separate it from turret's psShape
@@ -931,11 +941,6 @@ void displayCompObj(BASE_OBJECT *psObj, BOOL bButton)
 			pie_Draw3DShape(psShapeTemp, 0, colour, brightness, specular, pieFlag, iPieData);
 		}
 	}
-
-	/* get propulsion stats */
-	psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
-	ASSERT( psPropStats != NULL,
-			"moveUpdateUnit: invalid propulsion stats pointer" );
 
 	/* render vtol jet if flying - horrible hack - GJ */
 	if (((psPropStats->propulsionType == PROPULSION_TYPE_LIFT) &&

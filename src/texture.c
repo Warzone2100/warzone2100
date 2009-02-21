@@ -49,6 +49,7 @@
 #include "display3ddef.h"
 #include "texture.h"
 #include "radar.h"
+#include "map.h"
 
 
 #define MIPMAP_LEVELS		4
@@ -137,6 +138,10 @@ void texLoad(const char *fileName)
 
 	ASSERT(_TEX_INDEX < iV_TEX_MAX, "Too many texture pages used");
 	ASSERT(MIPMAP_MAX == TILE_WIDTH && MIPMAP_MAX == TILE_HEIGHT, "Bad tile sizes");
+	
+	// store the filename so we can later determine which tileset we are using
+	if (tileset) free(tileset);
+	tileset = strdup(fileName);
 
 	// reset defaults
 	mipmap_max = MIPMAP_MAX;

@@ -179,7 +179,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				ExecutionBucket="11"
-				AdditionalDependencies="SDL.lib SDLmain.lib SDL_net-static.lib libpng-static.lib ogg_static.lib vorbis_static.lib vorbisfile_static.lib OpenAL32.lib glc32.lib OpenGL32.lib GLU32.lib shfolder.lib winmm.lib wsock32.lib dbghelp.lib libpopt.lib physfs.lib zlib.lib"
+				AdditionalDependencies="SDL.lib SDLmain.lib SDL_net-static.lib libpng-static.lib ogg_static.lib vorbis_static.lib vorbisfile_static.lib OpenAL32.lib glc32.lib OpenGL32.lib GLU32.lib shfolder.lib winmm.lib wsock32.lib dbghelp.lib libpopt.lib physfs.lib zlib.lib libtheora.lib"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="&quot;$(SolutionDir)\..\devpkg\lib&quot;"
 				IgnoreDefaultLibraryNames="libcmt.lib"
@@ -632,6 +632,10 @@
 				</File>
 				<File
 					RelativePath="..\src\target.c"
+					>
+				</File>
+				<File
+					RelativePath="..\src\terrain.c"
 					>
 				</File>
 				<File
