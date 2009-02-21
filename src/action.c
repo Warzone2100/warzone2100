@@ -939,6 +939,12 @@ BOOL actionDroidOnBuildPos(DROID *psDroid, SDWORD x, SDWORD y, BASE_STATS *psSta
 
 	CHECK_DROID(psDroid);
 
+	ASSERT(psStats != NULL, "Bad stat");
+	if (!psStats)
+	{
+		return false;
+	}
+
 	dx = map_coord(psDroid->pos.x);
 	dy = map_coord(psDroid->pos.y);
 	if (StatIsStructure(psStats))
