@@ -63,33 +63,33 @@ loadPropulsionStatsFromDB
 	                              "unique_inheritance_id,\n"
 	                              "-- Unique language independant name that can be used to identify a specific\n"
 	                              "-- stats instance\n"
-	                              "`pName`,\n"
+	                              "pName,\n"
 
 	                              "-- Power required to build this component\n"
-	                              "`buildPower`,\n"
+	                              "buildPower,\n"
 
 	                              "-- Build points (which are rate-limited in the construction units) required\n"
 	                              "-- to build this component.\n"
-	                              "`buildPoints`,\n"
+	                              "buildPoints,\n"
 
 	                              "-- Weight of this component\n"
-	                              "`weight`,\n"
+	                              "weight,\n"
 
 	                              "-- Body points of this component\n"
-	                              "`body`,\n"
+	                              "body,\n"
 
 	                              "-- Indicates whether this component is \"designable\" and can thus be used in\n"
 	                              "-- the design screen.\n"
-	                              "`designable`,\n"
+	                              "designable,\n"
 
 	                              "-- The \"base\" IMD model representing this component in 3D space.\n"
-	                              "`pIMD`,\n"
+	                              "pIMD,\n"
 
 	                              "-- Max speed for the droid\n"
-	                              "`maxSpeed`,\n"
+	                              "maxSpeed,\n"
 
 	                              "-- Type of propulsion used - index into PropulsionTable\n"
-	                              "`propulsionType`\n"
+	                              "propulsionType\n"
 	                          "FROM `PROPULSIONS`;"))
 		return false;
 
@@ -326,46 +326,46 @@ loadSensorStatsFromDB
 	                              "unique_inheritance_id,\n"
 	                              "-- Unique language independant name that can be used to identify a specific\n"
 	                              "-- stats instance\n"
-	                              "`pName`,\n"
+	                              "pName,\n"
 
 	                              "-- Power required to build this component\n"
-	                              "`buildPower`,\n"
+	                              "buildPower,\n"
 
 	                              "-- Build points (which are rate-limited in the construction units) required\n"
 	                              "-- to build this component.\n"
-	                              "`buildPoints`,\n"
+	                              "buildPoints,\n"
 
 	                              "-- Weight of this component\n"
-	                              "`weight`,\n"
+	                              "weight,\n"
 
 	                              "-- Body points of this component\n"
-	                              "`body`,\n"
+	                              "body,\n"
 
 	                              "-- Indicates whether this component is \"designable\" and can thus be used in\n"
 	                              "-- the design screen.\n"
-	                              "`designable`,\n"
+	                              "designable,\n"
 
 	                              "-- The \"base\" IMD model representing this component in 3D space.\n"
-	                              "`pIMD`,\n"
+	                              "pIMD,\n"
 
 	                              "-- Sensor range.\n"
-	                              "`range`,\n"
+	                              "range,\n"
 
 	                              "-- Sensor power (put against ecm power).\n"
-	                              "`power`,\n"
+	                              "power,\n"
 
 	                              "-- specifies whether the Sensor is default or for the Turret.\n"
-	                              "`location`,\n"
+	                              "location,\n"
 
 	                              "-- used for combat\n"
-	                              "`type`,\n"
+	                              "type,\n"
 
 	                              "-- Time delay before the associated weapon droids 'know' where the attack is\n"
 	                              "-- from.\n"
-	                              "`time`,\n"
+	                              "time,\n"
 
 	                              "-- The turret mount to use.\n"
-	                              "`pMountGraphic`\n"
+	                              "pMountGraphic\n"
 	                          "FROM `SENSORS`;"))
 		return false;
 
@@ -639,33 +639,33 @@ loadConstructStatsFromDB
 	                              "unique_inheritance_id,\n"
 	                              "-- Unique language independant name that can be used to identify a specific\n"
 	                              "-- stats instance\n"
-	                              "`pName`,\n"
+	                              "pName,\n"
 
 	                              "-- Power required to build this component\n"
-	                              "`buildPower`,\n"
+	                              "buildPower,\n"
 
 	                              "-- Build points (which are rate-limited in the construction units) required\n"
 	                              "-- to build this component.\n"
-	                              "`buildPoints`,\n"
+	                              "buildPoints,\n"
 
 	                              "-- Weight of this component\n"
-	                              "`weight`,\n"
+	                              "weight,\n"
 
 	                              "-- Body points of this component\n"
-	                              "`body`,\n"
+	                              "body,\n"
 
 	                              "-- Indicates whether this component is \"designable\" and can thus be used in\n"
 	                              "-- the design screen.\n"
-	                              "`designable`,\n"
+	                              "designable,\n"
 
 	                              "-- The \"base\" IMD model representing this component in 3D space.\n"
-	                              "`pIMD`,\n"
+	                              "pIMD,\n"
 
 	                              "-- The number of points contributed each cycle\n"
-	                              "`constructPoints`,\n"
+	                              "constructPoints,\n"
 
 	                              "-- The turret mount to use\n"
-	                              "`pMountGraphic`\n"
+	                              "pMountGraphic\n"
 	                          "FROM `CONSTRUCTS`;"))
 		return false;
 
