@@ -38,6 +38,7 @@
 
 #include "netplay.h"
 #include "netlog.h"
+#include "lib/gamelib/gtime.h"
 
 // WARNING !!! This is initialised via configuration.c !!!
 char masterserver_name[255] = {'\0'};
@@ -54,7 +55,8 @@ extern void recvMultiStats(void);
 
 // ////////////////////////////////////////////////////////////////////////
 // Function prototypes
-
+void NETplayerLeaving(UDWORD dpid);		// Cleanup sockets on player leaving (nicely)
+void NETplayerDropped(UDWORD dpid);		// Broadcast NET_PLAYER_DROPPED & cleanup
 static void NETallowJoining(void);
 extern BOOL MultiPlayerJoin(UDWORD dpid);  /* from src/multijoin.c ! */
 extern BOOL MultiPlayerLeave(UDWORD dpid); /* from src/multijoin.c ! */
@@ -84,10 +86,13 @@ typedef struct
 
 typedef struct
 {
-	uint32_t        id;
-	BOOL            allocated;
-	char            name[StringSize];
-	uint32_t        flags;
+	uint32_t		id;
+	BOOL			allocated;
+	char			name[StringSize];
+	uint32_t		flags;
+	uint32_t		heartattacktime;		//time cardiac arrest started
+	BOOL			heartbeat;				// if we are still alive or not
+	BOOL			kick;					// if we should kick them
 } NET_PLAYER;
 
 typedef struct
@@ -107,8 +112,8 @@ NETPLAY	NetPlay;
 
 static BOOL		allow_joining = false;
 static GAMESTRUCT	game;
-static TCPsocket	tcp_socket = NULL;
-static NETBUFSOCKET*	bsocket = NULL;
+static TCPsocket	tcp_socket = NULL;		//socket used to talk to lobbyserver/ host machine
+static NETBUFSOCKET*	bsocket = NULL;		//buffered socket (holds tcp_socket) (clients only?)
 static NETBUFSOCKET*	connected_bsocket[MAX_CONNECTED_PLAYERS] = { NULL };
 static SDLNet_SocketSet	socket_set = NULL;
 static BOOL		is_server = false;
@@ -120,6 +125,7 @@ static NET_PLAYER	players[MAX_CONNECTED_PLAYERS];
 static int32_t          NetGameFlags[4] = { 0, 0, 0, 0 };
 char iptoconnect[PATH_MAX] = "\0"; // holds IP/hostname from command line
 
+extern int NET_PlayerConnectionStatus;		// from src/display3d.c
 // *********** Socket with buffer that read NETMSGs ******************
 
 static NETBUFSOCKET* NET_createBufferedSocket(void)
@@ -173,11 +179,14 @@ static BOOL NET_fillBuffer(NETBUFSOCKET* bs, SDLNet_SocketSet socket_set)
 	{
 		bs->bytes += size;
 		return true;
-	} else {
+	}
+	else
+	{	// an error occured, or the remote host has closed the connection.
 		if (socket_set != NULL)
 		{
 			SDLNet_TCP_DelSocket(socket_set, bs->socket);
 		}
+		debug(LOG_WARNING, "SDLNet_TCP_Recv error: %s tcp_socket %p is now invalid", SDLNet_GetError(), bs->socket);
 		SDLNet_TCP_Close(bs->socket);
 		bs->socket = NULL;
 	}
@@ -238,6 +247,11 @@ error:
 		bs->buffer = tmp_buffer;
 		tmp_buffer = tmp;
 
+		if (tmp_buffer)
+		{
+			free(tmp_buffer);
+			tmp_buffer = NULL;
+		}
 		// Now data is in the beginning of the buffer
 		bs->buffer_start = 0;
 	}
@@ -253,6 +267,9 @@ static void NET_InitPlayers(void)
 	{
 		players[i].allocated = false;
 		players[i].id = i;
+		players[i].heartattacktime = 0;
+		players[i].heartbeat = true;		// we always start with a hearbeat
+		players[i].kick = false;
 	}
 }
 
@@ -261,8 +278,11 @@ static void NETBroadcastPlayerInfo(uint32_t dpid)
 	NETbeginEncode(NET_PLAYER_INFO, NET_ALL_PLAYERS);
 		NETuint32_t(&players[dpid].id);
 		NETbool(&players[dpid].allocated);
+		NETbool(&players[dpid].heartbeat);
+		NETbool(&players[dpid].kick);
 		NETstring(players[dpid].name, sizeof(players[dpid].name));
 		NETuint32_t(&players[dpid].flags);
+		NETuint32_t(&players[dpid].heartattacktime);
 	NETend();
 }
 
@@ -274,6 +294,7 @@ static unsigned int NET_CreatePlayer(const char* name, unsigned int flags)
 	{
 		if (players[i].allocated == false)
 		{
+			debug(LOG_NET, "A new player has been created. Player, %s, is set to slot %u", name, i);
 			players[i].allocated = true;
 			sstrcpy(players[i].name, name);
 			players[i].flags = flags;
@@ -287,6 +308,7 @@ static unsigned int NET_CreatePlayer(const char* name, unsigned int flags)
 
 static void NET_DestroyPlayer(unsigned int id)
 {
+	debug(LOG_NET, "Freeing slot %u for a new player", id);
 	players[id].allocated = false;
 }
 
@@ -330,7 +352,46 @@ UDWORD NETplayerInfo(void)
 
 	return NetPlay.playercount;
 }
+/**
+ * @note When a player leaves nicely (ie, we got a NET_PLAYER_LEAVING
+ *       message), we clean up the socket that we used.
+ * \param dpid
+ */
+void NETplayerLeaving(UDWORD dpid)
+{
+	if(connected_bsocket[dpid])
+	{
+		debug(LOG_NET, "Player (%u) has left nicely, closing socket %p",
+			dpid, connected_bsocket[dpid]->socket);
 
+		// Although we can get a error result from DelSocket, it don't really matter here.
+		SDLNet_TCP_DelSocket(socket_set, connected_bsocket[dpid]->socket);
+		SDLNet_TCP_Close(connected_bsocket[dpid]->socket);
+		connected_bsocket[dpid]->socket = NULL;
+	}
+	else
+	{
+		debug(LOG_NET, "Player (%u) has left nicely", dpid);
+	}
+}
+/**
+ * @note When a player's connection is broken we broadcast the NET_PLAYER_DROPPED
+ *       message.
+ * \param dpid
+ */
+void NETplayerDropped(UDWORD dpid)
+{
+	uint32_t id = dpid;
+
+	// Send message type speciffically for dropped / disconnects
+	NETbeginEncode(NET_PLAYER_DROPPED, NET_ALL_PLAYERS);
+		NETuint32_t(&id);
+	NETend();
+	
+	NET_DestroyPlayer(id);		// just clears array
+	MultiPlayerLeave(id);			// more cleanup
+	NET_PlayerConnectionStatus = 2;	//DROPPED_CONNECTION
+}
 // ////////////////////////////////////////////////////////////////////////
 // rename the local player
 BOOL NETchangePlayerName(UDWORD dpid, char *newName)
@@ -340,7 +401,7 @@ BOOL NETchangePlayerName(UDWORD dpid, char *newName)
 		sstrcpy(NetPlay.players[0].name, newName);
 		return true;
 	}
-	debug(LOG_NET, "Requesting a change of player name for pid=%d to %s", dpid, newName);
+	debug(LOG_NET, "Requesting a change of player name for pid=%u to %s", dpid, newName);
 
 	sstrcpy(players[dpid].name, newName);
 
@@ -447,7 +508,9 @@ static void NETsendGAMESTRUCT(TCPsocket socket, const GAMESTRUCT* game)
 	result = SDLNet_TCP_Send(socket, buf, sizeof(buf));
 	if (result != sizeof(buf))
 	{
-		debug(LOG_NET, "Failed to send: %s", SDLNet_GetError());
+		// If packet could not be sent, we should inform user of the error.
+		debug(LOG_ERROR, "Failed to send GAMESTRUCT. Reason: %s", SDLNet_GetError());
+		debug(LOG_ERROR, "Please make sure TCP ports 9998-9999 are open!");
 	}
 }
 
@@ -561,13 +624,16 @@ int NETclose(void)
 	unsigned int i;
 	int result;
 
-	debug(LOG_NET, "NETclose");
-
 	NEThaltJoining();
+
+	debug(LOG_NET, "Terminating sockets.");
+
 	is_server=false;
 
 	if(bsocket)
-	{
+	{	// need SDLNet_TCP_DelSocket() as well, socket_set or tmp_socket_set?
+		debug(LOG_NET, "Closing bsocket %p socket %p (tcp_socket=%p)", bsocket, bsocket->socket, tcp_socket);
+		//SDLNet_TCP_Close(bsocket->socket);
 		NET_destroyBufferedSocket(bsocket);
 		bsocket=NULL;
 	}
@@ -576,6 +642,11 @@ int NETclose(void)
 	{
 		if (connected_bsocket[i])
 		{
+			if(connected_bsocket[i]->socket)
+			{
+				debug(LOG_NET, "Closing connected_bsocket[%u], %p", i, connected_bsocket[i]->socket);
+				SDLNet_TCP_Close(connected_bsocket[i]->socket);
+			}
 			NET_destroyBufferedSocket(connected_bsocket[i]);
 			connected_bsocket[i]=NULL;
 		}
@@ -584,6 +655,7 @@ int NETclose(void)
 
 	if (tmp_socket_set)
 	{
+		debug(LOG_NET, "Freeing tmp_socket_set %p", tmp_socket_set);
 		SDLNet_FreeSocketSet(tmp_socket_set);
 		tmp_socket_set=NULL;
 	}
@@ -592,6 +664,8 @@ int NETclose(void)
 	{
 		if (tmp_socket[i])
 		{
+			// FIXME: need SDLNet_TCP_DelSocket() as well, socket_set or tmp_socket_set?
+			debug(LOG_NET, "Closing tmp_socket[%d] %p", i, tmp_socket[i]);
 			SDLNet_TCP_Close(tmp_socket[i]);
 			tmp_socket[i]=NULL;
 		}
@@ -603,14 +677,17 @@ int NETclose(void)
 		result = SDLNet_TCP_DelSocket(socket_set, tcp_socket);
 		if (result == -1)
 		{
+			// non fatal error
 			debug(LOG_NET,"SDLNet_DelSocket error: %s", SDLNet_GetError());
 			tcp_socket = NULL;
 		}
+		debug(LOG_NET, "Freeing socket_set %p", socket_set);
 		SDLNet_FreeSocketSet(socket_set);
 		socket_set=NULL;
 	}
 	if (tcp_socket)
 	{
+		debug(LOG_NET, "Closing tcp_socket %p", tcp_socket);
 		SDLNet_TCP_Close(tcp_socket);
 		tcp_socket=NULL;
 	}
@@ -724,7 +801,8 @@ BOOL NETsend(NETMSG *msg, UDWORD player)
 	msg->size = SDL_SwapBE16(msg->size);
 
 	if (is_server)
-	{
+	{	// FIXME: We are NOT checking SDLNet_CheckSockets/SDLNet_SocketReady 
+		// SDLNet_TCP_Send *can* block!
 		if (   player < MAX_CONNECTED_PLAYERS
 		    && connected_bsocket[player] != NULL
 		    && connected_bsocket[player]->socket != NULL
@@ -739,13 +817,17 @@ BOOL NETsend(NETMSG *msg, UDWORD player)
 		{
 			if (result < size)
 			{
-				debug(LOG_NET, "SDLNet_TCP_Send returned: %d error: %s line %d", result, SDLNet_GetError(),__LINE__);
+				// TCP_Send error, inform user of problem.  This really should never happen normally.
+				// Possible client disconnect, and in either case, socket is most likely invalid now.
+				debug(LOG_WARNING, "SDLNet_TCP_Send returned: %d error: %s line %d", result, SDLNet_GetError(), __LINE__);
 				connected_bsocket[player]->socket = NULL ; // It is invalid,  Unknown how to handle.
 			}
 		}
 	}
 	else
 	{
+		// FIXME: We are NOT checking SDLNet_CheckSockets/SDLNet_SocketReady 
+		// SDLNet_TCP_Send *can* block!
 			if (tcp_socket && (result = SDLNet_TCP_Send(tcp_socket, msg, size) == size))
 			{
 				return true;
@@ -754,7 +836,9 @@ BOOL NETsend(NETMSG *msg, UDWORD player)
 			{
 				if (result < size)
 				{
-					debug(LOG_NET, "SDLNet_TCP_Send returned: %d error: %s line %d", result, SDLNet_GetError(),__LINE__);
+					// TCP_Send error, inform user of problem.  This really should never happen normally.
+					// Possible client disconnect, and in either case, socket is most likely invalid now.
+					debug(LOG_WARNING, "SDLNet_TCP_Send returned: %d error: %s line %d", result, SDLNet_GetError(), __LINE__);
 					tcp_socket = NULL; // unknow how to handle when invalid.
 				}
 			}
@@ -790,19 +874,28 @@ BOOL NETbcast(NETMSG *msg)
 
 		for (i = 0; i < MAX_CONNECTED_PLAYERS; ++i)
 		{
-			if (   connected_bsocket[i] != NULL
-			    && connected_bsocket[i]->socket != NULL)
+			if (   connected_bsocket[i] == NULL
+			    || connected_bsocket[i]->socket == NULL)
 			{
+				continue;
+			}
+			else
+			{	
+				// FIXME: We are NOT checking SDLNet_CheckSockets/SDLNet_SocketReady 
+				// SDLNet_TCP_Send *can* block!
 				result = SDLNet_TCP_Send(connected_bsocket[i]->socket, msg, size);
 				if (result < size)
 				{
-					debug(LOG_NET, "(server) SDLNet_TCP_Send returned %d < %d, socket %p invalid: %s",
-					      result, size, connected_bsocket[i]->socket, SDLNet_GetError());
+					// TCP_Send error, inform user of problem.  This really should never happen normally.
+					// Possible client disconnect, and in either case, socket is most likely invalid now.
+					debug(LOG_WARNING, "(server) SDLNet_TCP_Send returned %d < %d, socket %p invalid: %s",
+						  result, size, connected_bsocket[i]->socket, SDLNet_GetError());
+					players[i].heartbeat = false;	//mark them dead
+					debug(LOG_WARNING, "Player (dpid %u) connection was broken.", i);
 					connected_bsocket[i]->socket = NULL; // Unsure how to handle invalid sockets.
 				}
 			}
 		}
-
 	}
 	else
 	{
@@ -810,13 +903,18 @@ BOOL NETbcast(NETMSG *msg)
 		{
 			return false;
 		}
-
+		// FIXME: We are NOT checking SDLNet_CheckSockets/SDLNet_SocketReady 
+		// SDLNet_TCP_Send *can* block!
 		result = SDLNet_TCP_Send(tcp_socket, msg, size);
 		if (result < size)
 		{
+			// I believe host has dropped...here
 			debug(LOG_WARNING, "(client) SDLNet_TCP_Send returned %d < %d, tcp_socket %p is now invalid: %s", 
-			      result, size, tcp_socket, SDLNet_GetError());
+				  result, size, tcp_socket, SDLNet_GetError());
+			debug(LOG_WARNING, "Host connection was broken?");
 			tcp_socket = NULL; // unsure how to handle invalid sockets.
+			players[HOST_DPID].heartbeat = false;	//mark them dead
+			//Game is pretty much over --should just end everything when HOST dies.
 			return false;
 		}
 	}
@@ -862,8 +960,11 @@ static BOOL NETprocessSystemMessage(void)
 
 				// Retrieve the rest of the data
 				NETbool(&players[dpid].allocated);
+				NETbool(&players[dpid].heartbeat);
+				NETbool(&players[dpid].kick);
 				NETstring(players[dpid].name, sizeof(players[dpid].name));
 				NETuint32_t(&players[dpid].flags);
+				NETuint32_t(&players[dpid].heartattacktime);
 			NETend();
 
 			NETplayerInfo();
@@ -883,23 +984,35 @@ static BOOL NETprocessSystemMessage(void)
 				NETuint8_t(&dpid);
 			NETend();
 
-			debug(LOG_NET, "Receiving NET_PLAYER_JOINED for player %u", (unsigned int)dpid);
+			debug(LOG_NET, "Receiving NET_PLAYER_JOINED for player %u using socket %p",
+				(unsigned int)dpid, tcp_socket);
 
 			MultiPlayerJoin(dpid);
 			break;
 		}
-		case NET_PLAYER_LEFT:
+		// This message type is when player is leaving 'nicely', and socket is still valid.
+		case NET_PLAYER_LEAVING:
 		{
 			uint32_t dpid;
 
-			NETbeginDecode(NET_PLAYER_LEFT);
+			NETbeginDecode(NET_PLAYER_LEAVING);
 				NETuint32_t(&dpid);
 			NETend();
 
-			debug(LOG_NET, "Receiving NET_PLAYER_LEFT for player %u", (unsigned int)dpid);
+			if(connected_bsocket[dpid])
+			{
+				debug(LOG_NET, "Receiving NET_PLAYER_LEAVING for player %u on socket %p",
+							(unsigned int)dpid, connected_bsocket[dpid]->socket);
+			}
+			else
+			{	// dropped from join screen most likely
+				debug(LOG_NET, "Receiving NET_PLAYER_LEAVING for player %u ", (unsigned int)dpid);
+			}
 
-			NET_DestroyPlayer(dpid);
-			MultiPlayerLeave(dpid);
+			NET_DestroyPlayer(dpid);			// sets dpid player's array to false
+			MultiPlayerLeave(dpid);				// more cleanup
+			NETplayerLeaving(dpid);				// need to close socket for the player that left.
+			NET_PlayerConnectionStatus = 1;		//LEAVING_NICELY
 			break;
 		}
 		case NET_GAME_FLAGS:
@@ -941,7 +1054,39 @@ static BOOL NETprocessSystemMessage(void)
 
 	return true;
 }
+/*
+*	Checks to see if a human player is still with us.
+*	@note: resuscitation isn't possible with current code, so once we lose
+*	the socket, then we have no way to connect with them again. Future 
+*	item to enhance.
+*/
+static void NETcheckPlayers(void)
+{
+	int i;
 
+	for(i=0; i< MAX_PLAYERS ; i++)
+	{
+		if(players[i].allocated == 0) continue;		// not allocated means that it most like it is a AI player
+		if( players[i].heartbeat == 0 && players[i].heartattacktime == 0)	// looks like they are dead
+		{
+			players[i].heartattacktime = gameTime2;		// mark when this occured
+		}
+		else
+		{
+			if(players[i].heartattacktime)
+			{
+				if( players[i].heartattacktime + (15 * GAME_TICKS_PER_SEC) <  gameTime2) // wait 15 secs
+				{
+					players[i].kick = true;		// if still dead, then kick em.
+				}
+			}
+		}
+		if( players[i].kick)
+		{
+			NETplayerDropped(i);
+		}
+	}
+}
 // ////////////////////////////////////////////////////////////////////////
 // Receive a message over the current connection. We return true if there
 // is a message for the higher level code to process, and false otherwise.
@@ -962,6 +1107,8 @@ BOOL NETrecv(uint8_t *type)
 	{
 		NETallowJoining();
 	}
+
+	NETcheckPlayers();		// make sure players are still alive & well
 
 	do {
 receive_message:
@@ -1001,18 +1148,22 @@ receive_message:
 					}
 					else if (connected_bsocket[i]->socket == NULL)
 					{
-						// check if we dropped any players in the check above
+						// If there is a error in NET_fillBuffer() then socket is already invalid.
+						// This means that the player dropped / disconnected for whatever reason. 
+						debug(LOG_WARNING, "Player, (dpid %u) seems to have dropped/disconnected.", i);
 
 						// Decrement player count
 						--game.desc.dwCurrentPlayers;
 
-						debug(LOG_NET, "dpid to send set to %u", i);
-						NETbeginEncode(NET_PLAYER_LEFT, NET_ALL_PLAYERS);
+						// Send message type speciffically for dropped / disconnects
+						NETbeginEncode(NET_PLAYER_DROPPED, NET_ALL_PLAYERS);
 							NETuint32_t(&i);
 						NETend();
-
-						MultiPlayerLeave(i);
-						NET_DestroyPlayer(i);
+	
+						NET_DestroyPlayer(i);			// just clears array
+						MultiPlayerLeave(i);			// more cleanup
+						NET_PlayerConnectionStatus = 2;	//DROPPED_CONNECTION
+						players[i].kick = true;			//they are going to get kicked.
 					}
 
 					if (++i == MAX_CONNECTED_PLAYERS)
@@ -1026,12 +1177,16 @@ receive_message:
 					}
 				}
 			}
-		} else {
+		}
+		else
+		{
 			// we are a client
 			if (bsocket == NULL)
 			{
 				return false;
-			} else {
+			}
+			else
+			{
 				received = NET_recvMessage(bsocket);
 
 				if (received == false)
@@ -1082,11 +1237,20 @@ receive_message:
 				    && connected_bsocket[pMsg->destination] != NULL
 				    && connected_bsocket[pMsg->destination]->socket != NULL)
 				{
+					int result = 0;
+
 					debug(LOG_NET, "Reflecting message type %hhu to %hhu", pMsg->type, pMsg->destination);
 					pMsg->size = SDL_SwapBE16(pMsg->size);
-					SDLNet_TCP_Send(connected_bsocket[pMsg->destination]->socket,
-							pMsg, size);
-				} else {
+
+					result = SDLNet_TCP_Send(connected_bsocket[pMsg->destination]->socket, pMsg, size);
+					if (result < size)
+					{
+						debug(LOG_WARNING,"SDLNet_TCP_Send(line %d) failed, because of %s", __LINE__, SDLNet_GetError());
+						connected_bsocket[pMsg->destination]->socket = NULL; // socket becomes invalid on error
+					}
+				}
+				else
+				{
 					debug(LOG_NET, "Cannot reflect message type %hhu to %hhu", pMsg->type, pMsg->destination);
 				}
 
@@ -1300,6 +1464,7 @@ static void NETallowJoining(void)
 	unsigned int i;
 	UDWORD numgames = SDL_SwapBE32(1);	// always 1 on normal server
 	char buffer[5];
+	int recv_result = 9999;
 
 	if (allow_joining == false) return;
 
@@ -1307,6 +1472,8 @@ static void NETallowJoining(void)
 
 	if (tmp_socket_set == NULL)
 	{
+		int result = 0;
+
 		// initialize server socket set
 		// FIXME: why is this not done in NETinit()?? - Per
 		tmp_socket_set = SDLNet_AllocSocketSet(MAX_TMP_SOCKETS+1);
@@ -1315,9 +1482,18 @@ static void NETallowJoining(void)
 			debug(LOG_ERROR, "Cannot create socket set: %s", SDLNet_GetError());
 			return;
 		}
+		debug(LOG_NET, "Created tmp_socket_set %p", tmp_socket_set);
 
-		SDLNet_TCP_AddSocket(tmp_socket_set, tcp_socket);
-		debug(LOG_NET,"TCP_AddSocket using %p set, socket %p", tmp_socket_set, tcp_socket);
+		result = SDLNet_TCP_AddSocket(tmp_socket_set, tcp_socket);
+		if( result != -1)
+		{
+			debug(LOG_NET,"TCP_AddSocket using socket set %p, socket %p", tmp_socket_set, tcp_socket);
+		}
+		else
+		{
+			// Should never fail, or we will have major problems.
+			debug(LOG_ERROR,"SDLNet_AddSocket: %s\n", SDLNet_GetError());
+		}
 	}
 
 	if (SDLNet_CheckSockets(tmp_socket_set, NET_READ_TIMEOUT) > 0)
@@ -1332,22 +1508,47 @@ static void NETallowJoining(void)
 				}
 			}
 			tmp_socket[i] = SDLNet_TCP_Accept(tcp_socket);
+			debug(LOG_NET, "tmp_socket[%d]=%p Accepted", i, tmp_socket[i]);
 			SDLNet_TCP_AddSocket(tmp_socket_set, tmp_socket[i]);
 			if (SDLNet_CheckSockets(tmp_socket_set, 1000) > 0
 			    && SDLNet_SocketReady(tmp_socket[0])
-			    && SDLNet_TCP_Recv(tmp_socket[i], buffer, 5))
+			    && (recv_result = SDLNet_TCP_Recv(tmp_socket[i], buffer, 5)))
 			{
 				if(strcmp(buffer, "list")==0)
 				{
-					SDLNet_TCP_Send(tmp_socket[i], &numgames, sizeof(numgames));
-					NETsendGAMESTRUCT(tmp_socket[i], &game);
+					int result = 0;
+					debug(LOG_NET, "cmd: list.  Sending game list");
+					result = SDLNet_TCP_Send(tmp_socket[i], &numgames, sizeof(numgames));
+					if( result < sizeof(numgames) )
+					{
+						// TCP_Send error, inform user of problem.  This really should never happen normally.
+						// Possible client disconnect, and in either case, socket is most likely invalid now.
+						// How to handle error?
+						debug(LOG_WARNING, "SDLNet_TCP_Send returned: %d error: %s line %d", result, SDLNet_GetError(),__LINE__);
+						debug(LOG_WARNING, "Couldn't get list from server. Make sure required ports are open. (TCP 9998-9999)");
+					}
+					else
+					{
+						NETsendGAMESTRUCT(tmp_socket[i], &game);
+					}
 				}
 				else if (strcmp(buffer, "join") == 0)
 				{
+					debug(LOG_NET, "cmd: join.  Sending GAMESTRUCT");
 					NETsendGAMESTRUCT(tmp_socket[i], &game);
 				}
 
-			} else {
+			}
+			else
+			{
+				//if (recv_result <= 0)
+				//{
+				//	// An error may have occured, but sometimes you can just ignore it
+				//	// It may be good to disconnect sock because it is likely invalid now.
+				//	// We need to handle this error correctly!
+				//	debug(LOG_ERROR,"Couldn't contact server!  Are required TCP ports open?");
+
+				//}
 				return;
 			}
 		}
@@ -1361,6 +1562,7 @@ static void NETallowJoining(void)
 				if (size <= 0)
 				{
 					// socket probably disconnected.
+					debug(LOG_NET, "tmp socket %p probably disconnected", tmp_socket[i]);
 					SDLNet_TCP_DelSocket(tmp_socket_set, tmp_socket[i]);
 					SDLNet_TCP_Close(tmp_socket[i]);
 					tmp_socket[i] = NULL;
@@ -1377,11 +1579,13 @@ static void NETallowJoining(void)
 
 					dpid = NET_CreatePlayer(name, 0);
 
-					debug(LOG_NET, "NET_JOIN: dpid set to %u", (unsigned int)dpid);
 					SDLNet_TCP_DelSocket(tmp_socket_set, tmp_socket[i]);
 					NET_initBufferedSocket(connected_bsocket[dpid], tmp_socket[i]);
 					SDLNet_TCP_AddSocket(socket_set, connected_bsocket[dpid]->socket);
 					tmp_socket[i] = NULL;
+
+					debug(LOG_NET, "Player, %s, with dpid of %u has joined using socket %p", name,
+									(unsigned int)dpid, connected_bsocket[dpid]->socket);
 
 					// Increment player count
 					game.desc.dwCurrentPlayers++;
@@ -1447,7 +1651,7 @@ BOOL NEThostGame(const char* SessionName, const char* PlayerName,
 		debug(LOG_ERROR, "Cannot resolve master self: %s", SDLNet_GetError());
 		return false;
 	}
-
+	// tcp_socket is the connection to the lobby server (or machine)
 	if(!tcp_socket) tcp_socket = SDLNet_TCP_Open(&ip);
 	if(tcp_socket == NULL)
 	{
@@ -1455,6 +1659,7 @@ BOOL NEThostGame(const char* SessionName, const char* PlayerName,
 		return false;
 	}
 	debug(LOG_NET, "New tcp_socket = %p", tcp_socket);
+	// Host needs to create a socket set for MAX_PLAYERS
 	if(!socket_set) socket_set = SDLNet_AllocSocketSet(MAX_CONNECTED_PLAYERS);
 	if (socket_set == NULL)
 	{
@@ -1462,6 +1667,7 @@ BOOL NEThostGame(const char* SessionName, const char* PlayerName,
 		return false;
 	}
 	SDLNet_TCP_AddSocket(socket_set, tcp_socket);
+	// allocate socket storage for all possible players
 	for (i = 0; i < MAX_CONNECTED_PLAYERS; ++i)
 	{
 		connected_bsocket[i] = NET_createBufferedSocket();
@@ -1501,7 +1707,7 @@ BOOL NEThostGame(const char* SessionName, const char* PlayerName,
 // Stop the dplay interface from accepting more players.
 BOOL NEThaltJoining(void)
 {
-	debug(LOG_NET, "NEThaltJoining");
+	debug(LOG_NET, "temporarily locking game to prevent more players");
 
 	allow_joining = false;
 	// disconnect from the master server
@@ -1518,7 +1724,7 @@ BOOL NETfindGame(void)
 	IPaddress ip;
 	unsigned int port = (hostname == masterserver_name) ? masterserver_port : gameserver_port;
 	int result = 0;
-	debug(LOG_NET, "NETfindGame");
+	debug(LOG_NET, "Looking for games...");
 
 	NetPlay.games[0].desc.dwSize = 0;
 	NetPlay.games[0].desc.dwCurrentPlayers = 0;
@@ -1554,6 +1760,8 @@ BOOL NETfindGame(void)
 
 	if (tcp_socket != NULL)
 	{
+		debug(LOG_NET, "Deleting tcp_socket %p", tcp_socket);
+		SDLNet_TCP_DelSocket(socket_set,tcp_socket);
 		SDLNet_TCP_Close(tcp_socket);
 		tcp_socket = NULL;
 	}
@@ -1565,14 +1773,18 @@ BOOL NETfindGame(void)
 		return false;
 	}
 	debug(LOG_NET, "New tcp_socket = %p", tcp_socket);
+	// client machines only need 1 socket set
 	socket_set = SDLNet_AllocSocketSet(1);
 	if (socket_set == NULL)
 	{
 		debug(LOG_ERROR, "Cannot create socket set: %s", SDLNet_GetError());
 		return false;
 	}
+	debug(LOG_NET, "Created socket_set %p", socket_set);
+
 	SDLNet_TCP_AddSocket(socket_set, tcp_socket);
 
+	debug(LOG_NET, "Sending list cmd");
 	SDLNet_TCP_Send(tcp_socket, (void*)"list", sizeof("list"));
 
 	if (SDLNet_CheckSockets(socket_set, 1000) > 0
@@ -1593,7 +1805,7 @@ BOOL NETfindGame(void)
 		return false;
 	}
 
-	debug(LOG_NET, "receiving info of %u game(s)", (unsigned int)gamesavailable);
+	debug(LOG_NET, "receiving info on %u game(s)", (unsigned int)gamesavailable);
 
 	do
 	{
@@ -1627,9 +1839,10 @@ BOOL NETjoinGame(UDWORD gameNumber, const char* playername)
 {
 	IPaddress ip;
 
-	debug(LOG_NET, "NETjoinGame gameNumber=%d", gameNumber);
-
+	debug(LOG_NET, "resetting sockets.");
 	NETclose();	// just to be sure :)
+
+	debug(LOG_NET, "Trying to join gameNumber (%u)...", gameNumber);
 
 	if (hostname != masterserver_name)
 	{
@@ -1654,13 +1867,16 @@ BOOL NETjoinGame(UDWORD gameNumber, const char* playername)
 		debug(LOG_ERROR, "Cannot connect to \"%s:%d\": %s", hostname, gameserver_port, SDLNet_GetError());
 		return false;
 	}
-
+	// client machines only need 1 socket set
 	socket_set = SDLNet_AllocSocketSet(1);
 	if (socket_set == NULL)
 	{
 		debug(LOG_ERROR, "Cannot create socket set: %s", SDLNet_GetError());
  		return false;
  	}
+	debug(LOG_NET, "Created socket_set %p", socket_set);
+
+	// tcp_socket is used to talk to host machine
 	SDLNet_TCP_AddSocket(socket_set, tcp_socket);
 
 	SDLNet_TCP_Send(tcp_socket, (void*)"join", sizeof("join"));
@@ -1677,8 +1893,9 @@ BOOL NETjoinGame(UDWORD gameNumber, const char* playername)
 			(int)(address[2]),
 			(int)(address[3]));
 	}
-
+	// Allocate memory for a new socket
 	bsocket = NET_createBufferedSocket();
+	// NOTE: tcp_socket = bsocket->socket now!
 	NET_initBufferedSocket(bsocket, tcp_socket);
 
 	// Send a join message
@@ -1704,8 +1921,8 @@ BOOL NETjoinGame(UDWORD gameNumber, const char* playername)
 			NETend();
 
 			NetPlay.dpidPlayer = dpid;
-			debug(LOG_NET, "NET_ACCEPTED received. Accepted into the game - I'm player %u",
-			      (unsigned int)NetPlay.dpidPlayer);
+			debug(LOG_NET, "NET_ACCEPTED received. Accepted into the game - I'm player %u using bsocket %p, tcp_socket=%p",
+				(unsigned int)NetPlay.dpidPlayer, bsocket->socket, tcp_socket);
 			NetPlay.bHost = false;
 
 			if (NetPlay.dpidPlayer >= MAX_CONNECTED_PLAYERS)
@@ -1718,12 +1935,11 @@ BOOL NETjoinGame(UDWORD gameNumber, const char* playername)
 			players[NetPlay.dpidPlayer].id = NetPlay.dpidPlayer;
 			sstrcpy(players[NetPlay.dpidPlayer].name, playername);
 			players[NetPlay.dpidPlayer].flags = 0;
+			players[NetPlay.dpidPlayer].heartbeat = true;
 
 			return true;
 		}
 	}
-
-	return false;
 }
 
 /*!

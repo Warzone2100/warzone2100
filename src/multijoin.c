@@ -211,11 +211,10 @@ BOOL MultiPlayerLeave( UDWORD dp)
 
 	while((player2dpid[i] != dp) && (i<MAX_PLAYERS) )i++;	// find out which!
 
-	debug(LOG_NET, "Player %u is leaving (dpid=%u)", i, dp);
-
 	if(i != MAX_PLAYERS)									// player not already removed
 	{
-		NETlogEntry("Player Unexpectedly leaving, came from directplay...",0,dp);
+		NETlogEntry("Player leaving game",0,dp);
+		debug(LOG_WARNING,"** Warning, player %u (dpid %u) [%s], has left the game.", i, dp, getPlayerName(i));
 
 		ssprintf(buf, _("%s has Left the Game"), getPlayerName(i));
 
@@ -231,17 +230,20 @@ BOOL MultiPlayerLeave( UDWORD dp)
 		{
 			audio_QueueTrack( ID_CLAN_EXIT );
 		}
+
+		NETplayerInfo();				// update the player info stuff
+
+		// fire script callback to reassign skirmish players.
+		CBPlayerLeft = i;
+		eventFireCallbackTrigger((TRIGGER_TYPE)CALL_PLAYERLEFT);
+		return true;
+	}
+	else
+	{
+		debug(LOG_WARNING, "Could not find Player %u (dpid=%u) to leave?", i, dp);
 	}
 
-	NETplayerInfo();									// update the player info stuff
-
-
-	// fire script callback to reassign skirmish players.
-	CBPlayerLeft = i;
-	eventFireCallbackTrigger((TRIGGER_TYPE)CALL_PLAYERLEFT);
-
-
-	return true;
+	return false;
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -295,7 +297,6 @@ BOOL MultiPlayerJoin(UDWORD dpid)
 		{
 			kickPlayer(dpid);
 		}
-
 	}
 	return true;
 }

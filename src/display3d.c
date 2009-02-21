@@ -132,6 +132,8 @@ BOOL	doWeDrawProximitys(void);
 static void drawTerrainTile(UDWORD i, UDWORD j, BOOL onWaterEdge);
 static void drawTerrainWaterTile(UDWORD i, UDWORD j);
 
+static void NetworkDisplayPlainForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours);
+static void NetworkDisplayImage(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours);
 /********************  Variables  ********************/
 // Should be cleaned up properly and be put in structures.
 
@@ -217,6 +219,13 @@ bool showFPS = false;       //
  * default OFF, turn ON via console command 'showsamples'
  */
 bool showSAMPLES = false;
+/** When we have a connection issue, we will flash a message on screen
+* 0 = no issue, 1= player leaving nicely, 2= player got disconnected
+*/
+int NET_PlayerConnectionStatus = 0;
+#define NETWORK_FORM_ID 0xFAAA
+#define NETWORK_BUT_ID 0xFAAB
+
 /// Geometric offset which will be passed to pie_SetGeometricOffset
 UDWORD geoOffset;
 /// The average terrain height for the center of the area the camera is looking at
@@ -312,6 +321,41 @@ static void showDroidPaths(void)
 			}
 		}
 	}
+}
+/// Renders the Network Issue form
+static void NetworkDisplayPlainForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
+{
+	W_TABFORM *Form = (W_TABFORM*)psWidget;
+	UDWORD x0,y0,x1,y1;
+
+	x0 = xOffset+Form->x;
+	y0 = yOffset+Form->y;
+	x1 = x0 + Form->width;
+	y1 = y0 + Form->height;
+
+	RenderWindowFrame(FRAME_NORMAL, x0, y0, x1 - x0, y1 - y0);
+}
+
+/// Displays an image for the Network Issue button
+static void NetworkDisplayImage(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
+{
+	UDWORD x = xOffset+psWidget->x;
+	UDWORD y = yOffset+psWidget->y;
+	UWORD ImageID;
+
+	ASSERT( psWidget->type == WIDG_BUTTON,"Not a button" );
+
+	// cheap way to do a button flash
+	if ( (gameTime2/250) % 2 == 0 )
+	{
+		ImageID = UNPACKDWORD_TRI_B(psWidget->UserData);
+	}
+	else
+	{
+		ImageID = UNPACKDWORD_TRI_C(psWidget->UserData);
+	}
+
+	iV_DrawImage(IntImages,ImageID,x,y);
 }
 
 /// Render the 3D world
@@ -411,6 +455,69 @@ void draw3DScene( void )
 		height = iV_GetTextHeight(fps);
 
 		iV_DrawText(fps, pie_GetVideoBufferWidth() - width, pie_GetVideoBufferHeight() - height);
+	}
+//	debug(LOG_ERROR,"%d NET_PlayerConnectionStatus",NET_PlayerConnectionStatus);
+	if (NET_PlayerConnectionStatus)
+	{
+		static W_FORMINIT		sFormInit;
+		static W_BUTINIT		sButInit;
+		static bool formUP = 0;
+		static int flashtimer = 0;
+
+		if(!formUP)
+		{
+			// Create the basic form 
+			memset(&sFormInit, 0, sizeof(W_FORMINIT));
+			sFormInit.formID = 0;
+			sFormInit.id = NETWORK_FORM_ID;
+			sFormInit.style = WFORM_PLAIN;
+			sFormInit.x = RET_X;
+			sFormInit.y = (SWORD)RET_Y-40;
+			sFormInit.width = 31;
+			sFormInit.height = 	21;
+			sFormInit.pDisplay = NetworkDisplayPlainForm;
+			if (!widgAddForm(psWScreen, &sFormInit))
+			{
+				//return false;
+			}
+
+			/* Now add the buttons */
+
+			//set up default button data
+			memset(&sButInit, 0, sizeof(W_BUTINIT));
+			sButInit.formID = NETWORK_FORM_ID;
+			sButInit.id = NETWORK_BUT_ID;
+			sButInit.width = 31;
+			sButInit.height = 21;
+			sButInit.FontID = font_regular;
+
+			//add button
+			sButInit.style = WBUT_PLAIN;
+			sButInit.x = 0;
+			sButInit.y = 0;
+			sButInit.pTip = NET_PlayerConnectionStatus == 1 ? _("Player left"):_("Player dropped");
+			sButInit.pDisplay = NetworkDisplayImage;
+			// Note we would set the image to be different based on which issue it is.
+			sButInit.UserData = PACKDWORD_TRI(1, 316, 311);	//IMAGE_MULTI_POW_HI,IMAGE_MULTI_POW
+
+			if (!widgAddButton(psWScreen, &sButInit))
+			{
+				//return false;
+			}
+			formUP = true;					//
+			flashtimer = gameTime2;			// save time widget went up
+		}
+		else
+		{
+			// flash the button for ~10 secs.
+			if(flashtimer + (GAME_TICKS_PER_SEC * 10) < gameTime2)
+			{
+				widgDelete(psWScreen,NETWORK_BUT_ID);	// kill button
+				widgDelete(psWScreen,NETWORK_FORM_ID);	// kill form
+				formUP = false;
+				NET_PlayerConnectionStatus = 0;
+			}
+		}
 	}
 	if(getDebugMappingStatus() && !demoGetStatus() && !gamePaused())
 	{

@@ -127,6 +127,7 @@ static UDWORD hideTime=0;
 #define DEFAULTCAMPAIGNMAP	"Rush"
 #define DEFAULTSKIRMISHMAP	"Sk-Rush"
 
+extern int NET_PlayerConnectionStatus;		// from src/display3d.c
 
 /// end of globals.
 // ////////////////////////////////////////////////////////////////////////////
@@ -180,6 +181,7 @@ BOOL			chooseColour		(UDWORD);
 static BOOL		changeReadyStatus	(UBYTE player, BOOL bReady);
 void			resetReadyStatus	(bool bSendOptions);
 void			initTeams( void );
+static	void stopJoining(void);
 // ////////////////////////////////////////////////////////////////////////////
 // map previews..
 
@@ -1695,6 +1697,7 @@ static void stopJoining(void)
 	dwSelectedGame	 = 0;
 	saveConfig();
 
+	debug(LOG_NET,"player %u (Host is %s) stopping.", NetPlay.dpidPlayer, NetPlay.bHost ? "true" : "false");
 	{
 		if(bHosted)											// cancel a hosted game.
 		{
@@ -2152,6 +2155,8 @@ static void processMultiopWidgets(UDWORD id)
 			if(NetPlay.bHost && multiplayPlayersReady(false))
 			{
 				startMultiplayerGame();
+				// reset flag in case people dropped/quit on join screen
+				NET_PlayerConnectionStatus = 0;
 			}
 		}
 	}
@@ -2330,20 +2335,24 @@ void frontendMultiMessages(void)
 			recvPing();
 			break;
 
-		case NET_LEAVING:					// remote player leaving.
+		case NET_PLAYER_DROPPED:		// remote player got disconnected
 		{
 			BOOL host;
 			uint32_t player_id;
 
 			resetReadyStatus(false);
 
-			NETbeginDecode(NET_LEAVING);
+			NETbeginDecode(NET_PLAYER_DROPPED);
 			{
 				NETuint32_t(&player_id);
 				NETbool(&host);
 			}
 			NETend();
+
+			debug(LOG_WARNING,"** player %u has dropped! Host is %s",player_id,host?"true":"false");
+
 			MultiPlayerLeave(player_id);
+			NET_PlayerConnectionStatus = 2;		//DROPPED_CONNECTION
 			if (host)					// host has quit, need to quit too.
 			{
 				stopJoining();

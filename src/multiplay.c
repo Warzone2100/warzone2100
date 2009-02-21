@@ -123,7 +123,8 @@ BOOL turnOffMultiMsg(BOOL bDoit)
 	{
 		if(bTemp == true)
 		{
-			debug(LOG_NET, "turnOffMultiMsg: multiple calls to turn off");
+			// Surely, this should be a Assert?
+			debug(LOG_ERROR, "multiple calls to turn off");
 		}
 		if(bMultiPlayer)
 		{
@@ -703,31 +704,6 @@ BOOL recvMessage(void)
 		case NET_RESEARCH:					// some research has been done.
 			recvResearch();
 			break;
-		case NET_LEAVING:					// player leaving nicely
-		{
-			uint32_t player_id;
-			BOOL host;
-
-			resetReadyStatus(false);
-
-			NETbeginDecode(NET_LEAVING);
-				NETuint32_t(&player_id);
-				NETbool(&host);                 // Added to check for host quit here -- Buggy
-			NETend();
-			if (player_id >= MAX_PLAYERS)
-			{
-				debug(LOG_ERROR, "Bad NET_LEAVING received, player ID is %d", (int)player_id);
-				break;
-			}
-			MultiPlayerLeave(player_id);
-			if (host)                               // host has quit, need to quit too.
-			{
-				//stopJoining();		//NOT defined here, checking if we need it or not.
-				debug(LOG_NET, "***Need to call stopJoining()");
-				addConsoleMessage(_("The host has left the game!"), LEFT_JUSTIFY, SYSTEM_MESSAGE);
-			}
-			break;
-		}
 		case NET_OPTIONS:
 			recvOptions();
 			break;
