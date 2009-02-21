@@ -182,13 +182,13 @@ FIELD:
             {
                 my $value = shift(@values);
 
-                $$output .= "$indent\"`$field->{name}_$value->{name}`";
+                $$output .= "$indent\"$field->{name}_$value->{name}";
                 $$output .= ",\\n\"\n" if @values;
             }
         }
         else
         {
-            $$output .= "$indent\"`$field->{name}`";
+            $$output .= "$indent\"$field->{name}";
         }
     }
 }
