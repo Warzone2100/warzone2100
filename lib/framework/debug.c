@@ -28,7 +28,7 @@
 
 #include <string.h>
 #include <stdio.h>
-
+#include <time.h>
 #include "frameint.h"
 #include "string_ext.h"
 
@@ -371,8 +371,16 @@ void _debug( code_part part, const char *function, const char *str, ... )
 
 	if (!repeated)
 	{
+		time_t rawtime;
+		struct tm * timeinfo;
+		char ourtime[15];		//HH:MM:SS
+
+		time ( &rawtime );
+		timeinfo = localtime ( &rawtime );
+		strftime (ourtime,15,"%I:%M:%S",timeinfo);
+
 		// Assemble the outputBuffer:
-		ssprintf(outputBuffer, "%-8s|%012u: %s", code_part_names[part], gameTime, useInputBuffer1 ? inputBuffer[1] : inputBuffer[0]);
+		ssprintf(outputBuffer, "%-8s|%s: %s", code_part_names[part], ourtime, useInputBuffer1 ? inputBuffer[1] : inputBuffer[0]);
 
 		printToDebugCallbacks(outputBuffer);
 	}
