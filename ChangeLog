@@ -1,4 +1,4 @@
-0000-00-00: SVN
+0000-00-00: Version 2.2
  * General:
    * New: Multi-threaded path-finding should make path-finding much faster (r5735, patch #1064)
    * New: Original sound tracks added (r5261)
@@ -40,6 +40,8 @@
 
 0000-00-00: Version 2.1.2
  * General:
+   * Fix: No longer crash if more than six players join a game (r6658, ticket:273)
+   * Fix: Some other crash bugs may have been prevented (r6688, r6629, r6596)
    * Fix: If the target system to run on already provides strlcpy and/or strlcat, check whether they work as expected, and if they do, use them instead (r6556, r6557)
    * Change: Allow compiling without OpenAL and Vorbis when compiling with --disable-sound
  * Sound:
