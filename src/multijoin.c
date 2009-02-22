@@ -154,11 +154,9 @@ void clearPlayer(UDWORD player,BOOL quietly,BOOL removeOil)
 		}
 		else
 		{
-			if(	(psStruct->pStructureType->type != REF_WALL &&
-				 psStruct->pStructureType->type != REF_WALLCORNER ) )
-			{
-				destroyStruct(psStruct);
-			}
+			// NOTE: when a player leaves, we should destroy everything, including the walls
+			// Is there any reason why not to do this? (removed wall check code)
+			destroyStruct(psStruct);
 		}
 
 		if(bTemp)
