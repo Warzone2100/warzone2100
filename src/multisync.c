@@ -87,8 +87,8 @@ static UDWORD averagePing(void);
 // Defined numeric values
 #define AV_PING_FREQUENCY	45000					// how often to update average pingtimes. in approx millisecs.
 #define PING_FREQUENCY		12000					// how often to update pingtimes. in approx millisecs.
-#define STRUCT_FREQUENCY	700						// how often (ms) to send a structure check.
-#define DROID_FREQUENCY		1000					// how ofter (ms) to send droid checks
+#define STRUCT_FREQUENCY	450						// how often (ms) to send a structure check.
+#define DROID_FREQUENCY		300						// how ofter (ms) to send droid checks
 #define POWER_FREQUENCY		10000					// how often to send power levels
 #define SCORE_FREQUENCY		25000					// how often to update global score.
 
@@ -137,18 +137,35 @@ BOOL sendCheck(void)
 	{
 		sendStructureCheck();
 	}
+	else
+	{
+		debug(LOG_SYNC, "Couldn't sendStructureCheck()");
+	}
 	if(okToSend())
 	{
 		sendPowerCheck();
+	}
+	else
+	{
+		debug(LOG_SYNC, "Couldn't sendPowerCheck()");
 	}
 	if(okToSend())
 	{
 		sendScoreCheck();
 	}
+	else
+	{
+		debug(LOG_SYNC, "Couldn't sendScoreCheck()");
+	}
 	if(okToSend())
 	{
 		sendDroidCheck();
 	}
+	else
+	{
+		debug(LOG_SYNC, "Couldn't sendDroidCheck()");
+	}
+
 	return true;
 }
 
@@ -216,7 +233,7 @@ BOOL ForceDroidSync(const DROID* droidToSend)
 
 	ASSERT(droidToSend != NULL, "NULL pointer passed");
 
-	debug(LOG_SYNC, "Force sync of droid %d from player %d", droidToSend->id, droidToSend->player);
+	debug(LOG_SYNC, "Force sync of droid %u from player %u", droidToSend->id, droidToSend->player);
 
 	NETbeginEncode(NET_CHECK_DROID, NET_ALL_PLAYERS);
 		NETuint8_t(&count);
