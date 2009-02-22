@@ -2001,7 +2001,6 @@ static inline void dealWithLMBFeature(FEATURE* psFeature)
 
 
 	//clicking an oil field should start a build..
-	//if(psFeature->subType == FEAT_OIL_RESOURCE)
 	if(psFeature->psStats->subType == FEAT_OIL_RESOURCE)
 	{
 		unsigned int i;
@@ -2042,7 +2041,6 @@ static inline void dealWithLMBFeature(FEATURE* psFeature)
 							psFeature->pos.x, psFeature->pos.y);
 					}
 					addConsoleMessage(_("Truck ordered to build Oil Derrick"),DEFAULT_JUSTIFY,SYSTEM_MESSAGE);
-		//				"Construction vehicle ordered to build a Derrick.",DEFAULT_JUSTIFY);
 					FeedbackOrderGiven();
 				}
 			}
@@ -2072,33 +2070,12 @@ static inline void dealWithLMBFeature(FEATURE* psFeature)
 				}
 				break;
 			}
-
-/*			case FEAT_OIL_DRUM:
-				psNearestUnit = getNearestDroid(mouseTileX*TILE_UNITS+TILE_UNITS/2,
-											mouseTileY*TILE_UNITS+TILE_UNITS/2,true);
-				// If so then find the nearest unit!
-				if(psNearestUnit)	// bloody well should be!!!
-				{
-					orderDroidLoc(psNearestUnit,DORDER_MOVE, mouseTileX*TILE_UNITS+TILE_UNITS/2,mouseTileY*TILE_UNITS+TILE_UNITS/2);
-				}
-				else
-				{
-					orderSelectedLoc(selectedPlayer, psFeature->pos.x,psFeature->pos.y);	// recover it.
-				}
-				break;*/
 			case FEAT_BOULDER:
-				//addConsoleMessage("Clicked on a Boulder",DEFAULT_JUSTIFY,SYSTEM_MESSAGE);
-				break;
 			case FEAT_BUILD_WRECK:
-//				addConsoleMessage("Clicked on a Wrecked Building",DEFAULT_JUSTIFY,SYSTEM_MESSAGE);
-				break;
 			case FEAT_HOVER:
-//				addConsoleMessage("Clicked on a Hover",DEFAULT_JUSTIFY,SYSTEM_MESSAGE);
-				break;
 			case FEAT_OIL_RESOURCE:
 			case FEAT_VEHICLE:
 			default:
-//				addConsoleMessage("Clicked on an Obstacle",DEFAULT_JUSTIFY,SYSTEM_MESSAGE);
 				break;
 		}
 	}
