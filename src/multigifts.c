@@ -321,7 +321,7 @@ void giftPower(uint8_t from, uint8_t to, BOOL send)
 
 	addPower(to, gifval);
 
-	if (from == ANYPLAYER)
+	if (from == ANYPLAYER && to == selectedPlayer)
 	{
 		CONPRINTF(ConsoleString,(ConsoleString,_("You found %u power in an oil drum"),gifval));
 	}
