@@ -2054,6 +2054,11 @@ void cancelResearch(STRUCTURE *psBuilding)
 		"cancelResearch: structure not a research facility" );
 
 	psResFac = (RESEARCH_FACILITY *)psBuilding->pFunctionality;
+	if( !(RESEARCH *)psResFac->psSubject)
+	{
+		debug(LOG_SYNC, "Invalid research topic");
+		return;
+	}
 	topicInc = ((RESEARCH *)psResFac->psSubject) - asResearch;
 	if (topicInc > numResearch)
 	{
