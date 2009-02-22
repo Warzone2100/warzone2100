@@ -474,14 +474,14 @@ BOOL SendDroidMove(const DROID* psDroid, uint32_t x, uint32_t y, BOOL formation)
 // recv and updated droid position
 BOOL recvDroidMove()
 {
-	DROID* psDroid;
-	uint32_t x, y;
-	BOOL formation;
+	DROID*		psDroid;
+	uint32_t	x, y;
+	BOOL	formation;
 
 	NETbeginDecode(NET_DROIDMOVE);
 	{
-		uint8_t player;
-		uint32_t droid;
+		uint8_t		player;
+		uint32_t	droid;
 
 		NETuint8_t(&player);
 		NETuint32_t(&droid);
@@ -494,13 +494,14 @@ BOOL recvDroidMove()
 		if ((x == 0 && y == 0) || x > world_coord(mapWidth) || y > world_coord(mapHeight))
 		{
 			/* Probably an invalid droid position */
-			debug(LOG_ERROR, "Received an invalid droid position from %d", NETgetSource());
+			debug(LOG_ERROR, "Received an invalid droid position from %d, [%s : p%d]", NETgetSource(),
+				isHumanPlayer(player) ? "Human" : "AI", player);
 			return false;
 		}
 		if (!IdToDroid(droid, player, &psDroid))
 		{
-			debug(LOG_ERROR, "recvDroidMove: Packet from %d refers to non-existent droid %d!",
-			      NETgetSource(), (int)droid);
+			debug(LOG_ERROR, "Packet from %d refers to non-existent droid %u, [%s : p%d]",
+				NETgetSource(), droid, isHumanPlayer(player) ? "Human" : "AI", player);
 			return false;
 		}
 	}
@@ -541,17 +542,21 @@ BOOL SendDroid(const DROID_TEMPLATE* pTemplate, uint32_t x, uint32_t y, uint8_t 
 		return false;
 	}
 
+	debug(LOG_SYNC, "Droid created with id of %u", id);
 	NETbeginEncode(NET_DROID, NET_ALL_PLAYERS);
 	{
 		Vector3uw pos = { x, y, 0 };
 		uint32_t templateID = pTemplate->multiPlayerID;
+		uint32_t power = getPower(player);
 
 		NETuint8_t(&player);
 		NETuint32_t(&id);
 		NETVector3uw(&pos);
 		NETuint32_t(&templateID);
+		NETuint32_t(&power);		// update player's power as well.
 		NETbool(&powerCalculated);
 	}
+	debug(LOG_LIFE, "===> sending Droid from %u id of %u ",player,id);
 	return NETend();
 }
 
@@ -564,8 +569,9 @@ BOOL recvDroid()
 	uint8_t player;
 	uint32_t id;
 	Vector3uw pos;
-	BOOL power;
+	BOOL powerCalculated;
 	uint32_t templateID;
+	uint32_t power;
 
 	NETbeginDecode(NET_DROID);
 	{
@@ -573,34 +579,32 @@ BOOL recvDroid()
 		NETuint32_t(&id);
 		NETVector3uw(&pos);
 		NETuint32_t(&templateID);
-		NETbool(&power);
+		NETuint32_t(&power);
+		NETbool(&powerCalculated);
 
 		pT = IdToTemplate(templateID, player);
 	}
 	NETend();
-
+	debug(LOG_LIFE, "<=== getting Droid from %u id of %u ",player,id);
 	if ((pos.x == 0 && pos.y == 0) || pos.x > world_coord(mapWidth) || pos.y > world_coord(mapHeight))
 	{
-		debug(LOG_ERROR, "recvDroid: Received bad droid position (%d, %d) from %d", (int)pos.x, (int)pos.y, NETgetSource());
+		debug(LOG_ERROR, "Received bad droid position (%d, %d) from %d about p%d (%s)", (int)pos.x, (int)pos.y,
+				NETgetSource(), player, isHumanPlayer(player) ? "Human" : "AI");
 		return false;
 	}
 
 	// If we can not find the template ask for the entire droid instead
 	if (!pT)
 	{
-		debug(LOG_ERROR, "recvDroid: Packet from %d refers to non-existent template %d!",
-		      NETgetSource(), (int)templateID);
+		debug(LOG_ERROR, "Packet from %d refers to non-existent template %u, [%s : p%d]",
+				NETgetSource(), templateID, isHumanPlayer(player) ? "Human" : "AI", player);
 		return false;
 	}
 
-	// If the power to build the droid has been calculated
-	if (power
-	// Use the power required to build the droid
-	 && !usePower(player, pT->powerPoints))
-	{
-		debug(LOG_ERROR, "recvDroid: Not enough power to build droid for player = %hhu", player);
-		// Build anyway..
-	}
+	// forget about calculating the power, we *know* they built it, so we set
+	// their power accordingly on the local machine.
+	setPower(player, power);
+	debug(LOG_SYNC, "Syncing players %u power to %u", player, power);
 
 	// Create that droid on this machine.
 	turnOffMultiMsg(true);
@@ -615,7 +619,8 @@ BOOL recvDroid()
 	}
 	else
 	{
-		debug(LOG_ERROR, "recvDroid: Packet from %d cannot create droid!", NETgetSource());
+		debug(LOG_ERROR, "Packet from %d cannot create droid for p%d (%s)!", NETgetSource(),
+			player, isHumanPlayer(player) ? "Human" : "AI");
 		DBCONPRINTF(ConsoleString, (ConsoleString, "MULTIPLAYER: Couldn't build a remote droid, relying on checking to resync"));
 		return false;
 	}
@@ -651,6 +656,7 @@ BOOL SendGroupOrderSelected(uint8_t player, uint32_t x, uint32_t y, const BASE_O
 		DROID* psDroid;
 		uint8_t droidCount;
 
+		NETuint8_t(&player);
 		NETenum(&order);
 		NETbool(&cmdOrder);
 		NETbool(&subType);
@@ -701,7 +707,10 @@ BOOL SendGroupOrderSelected(uint8_t player, uint32_t x, uint32_t y, const BASE_O
 	}
 	return NETend();
 }
-
+/*
+*	This routine is called by the AI scripts
+*
+*/
 BOOL SendGroupOrderGroup(const DROID_GROUP* psGroup, DROID_ORDER order, uint32_t x, uint32_t y, const BASE_OBJECT* psObj)
 {
 	/* Check if the order is valid */
@@ -716,10 +725,17 @@ BOOL SendGroupOrderGroup(const DROID_GROUP* psGroup, DROID_ORDER order, uint32_t
 
 	NETbeginEncode(NET_GROUPORDER, NET_ALL_PLAYERS);
 	{
-		BOOL subType = (psObj) ? true : false, cmdOrder = false;
-		DROID* psDroid;
-		uint8_t droidCount;
+		BOOL	subType = (psObj) ? true : false, cmdOrder = false;
+		DROID	*psDroid;
+		uint8_t	droidCount;
+		uint8_t	player = 99;	// anything over MAX_PLAYERS = AI
 
+		if(psGroup && psGroup->psList)
+		{
+			player = psGroup->psList->player;
+		}
+
+		NETuint8_t(&player);
 		NETenum(&order);
 		NETbool(&cmdOrder);
 		NETbool(&subType);
@@ -765,18 +781,19 @@ BOOL SendGroupOrderGroup(const DROID_GROUP* psGroup, DROID_ORDER order, uint32_t
 BOOL recvGroupOrder()
 {
 	DROID_ORDER order = DORDER_NONE;
-	BOOL subType, cmdOrder;
+	BOOL		subType, cmdOrder;
 
-	uint32_t destId, x, y;
+	uint32_t	destId, x, y;
 	OBJECT_TYPE destType = OBJ_DROID; // Dummy initialisation to workaround NETenum macro
 
-	uint8_t droidCount, i;
-	uint32_t* droidIDs;
-	uint32_t *droidBodies;
-	Vector3uw *droidPositions;
+	uint8_t		droidCount, i, player;
+	uint32_t	*droidIDs;
+	uint32_t	*droidBodies;
+	Vector3uw	*droidPositions;
 
 	NETbeginDecode(NET_GROUPORDER);
 	{
+		NETuint8_t(&player);		// FYI: anything over MAX_PLAYERS means this is a ai player
 		NETenum(&order);
 		NETbool(&cmdOrder);
 		NETbool(&subType);
@@ -813,8 +830,8 @@ BOOL recvGroupOrder()
 			if (!NETuint32_t(&droidIDs[i]))
 			{
 				// If somehow we fail assume the message got truncated prematurely
-				debug(LOG_SYNC, "recvGroupOrder: error retrieving droid ID number; while there are (supposed to be) still %u droids left",
-				      (unsigned int)(droidCount - i));
+				debug(LOG_SYNC, "Error retrieving droid ID number; while there are (supposed to be) still %u droids left for p%d",
+				      (unsigned int)(droidCount - i), player);
 				NETend();
 				return false;
 			}
@@ -831,7 +848,8 @@ BOOL recvGroupOrder()
 	/* Check if the order is valid */
 	if (order != UNKNOWN && ((subType && !validOrderForObj(order)) || (!subType && !validOrderForLoc(order))))
 	{
-		debug(LOG_ERROR, "recvGroupOrder: Invalid group order received from %d!", NETgetSource());
+		debug(LOG_ERROR, "Invalid group order received from %d, [%s : p%d]", NETgetSource(),
+			isHumanPlayer(player) ? "Human" : "AI", player);
 		return false;
 	}
 
@@ -845,8 +863,8 @@ BOOL recvGroupOrder()
 		// Retrieve the droid associated with the current ID
 		if (!IdToDroid(droidIDs[i], ANYPLAYER, &psDroid))
 		{
-			debug(LOG_ERROR, "recvGroupOrder: Packet from %d refers to non-existent droid %d!",
-			      NETgetSource(), (int)droidIDs[i]);
+			debug(LOG_ERROR, "Packet from %d refers to non-existent droid %u, [%s : p%d]",
+				NETgetSource(), droidIDs[i], isHumanPlayer(player) ? "Human" : "AI", player);
 			continue; // continue working on next droid; crossing fingers...
 		}
 
@@ -912,7 +930,9 @@ BOOL SendDroidInfo(const DROID* psDroid, DROID_ORDER order, uint32_t x, uint32_t
 	{
 		uint32_t droidId = psDroid->id;
 		BOOL subType = (psObj) ? true : false;
+		uint8_t player = psDroid->player;
 
+		NETuint8_t(&player);
 		// Send the droid's ID
 		NETuint32_t(&droidId);
 
@@ -943,18 +963,19 @@ BOOL recvDroidInfo()
 {
 	NETbeginDecode(NET_DROIDINFO);
 	{
-		uint32_t    droidId;
-		DROID*      psDroid;
-		DROID_ORDER order = DORDER_NONE;
-		BOOL        subType;
+		uint32_t	droidId;
+		DROID*		psDroid;
+		DROID_ORDER	order = DORDER_NONE;
+		BOOL		subType;
+		uint8_t		player;
 
-		// Get the droid
-		NETuint32_t(&droidId);
+		NETuint8_t(&player);		// actual player this belongs to
+		NETuint32_t(&droidId);		// Get the droid
 
 		if (!IdToDroid(droidId, ANYPLAYER, &psDroid))
 		{
-			debug(LOG_ERROR, "recvDroidInfo: Packet from %d refers to non-existent droid %d!",
-			      NETgetSource(), (int)droidId);
+			debug(LOG_ERROR, "Packet from %d refers to non-existent droid %u, [%s : p%d]",
+				NETgetSource(), droidId, isHumanPlayer(player) ? "Human" : "AI", player);
 			return false;
 		}
 
@@ -1105,6 +1126,8 @@ BOOL recvDestroyDroid()
 		NETuint32_t(&id);
 		if (!IdToDroid(id, ANYPLAYER, &psDroid))
 		{
+			debug(LOG_DEATH, "droid %d on request from player %d can't be found? Must be dead already?",
+					id, NETgetSource() );
 			return false;
 		}
 	}
@@ -1117,6 +1140,10 @@ BOOL recvDestroyDroid()
 		debug(LOG_DEATH, "Killing droid %d on request from player %d", psDroid->id, NETgetSource());
 		destroyDroid(psDroid);
 		turnOffMultiMsg(false);
+	}
+	else
+	{
+		debug(LOG_DEATH, "droid %d on request from player %d is dead already?", psDroid->id, NETgetSource());
 	}
 
 	return true;
