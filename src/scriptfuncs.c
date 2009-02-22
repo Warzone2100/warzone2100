@@ -942,11 +942,16 @@ BOOL scrAddDroid(void)
 		if (psDroid)
 		{
 			addDroid(psDroid, apsDroidLists);
+			debug( LOG_LIFE, "created droid for AI player %d %u", player, psDroid->id );
 			if (isVtolDroid(psDroid))
 			{
 				// vtols start in the air
 				moveMakeVtolHover(psDroid);
 			}
+		}
+		else
+		{
+			debug( LOG_LIFE, "failed to create droid for AI player %d", player );
 		}
 	}
 
