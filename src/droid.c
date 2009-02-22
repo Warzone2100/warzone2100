@@ -4682,6 +4682,11 @@ BOOL droidSensorDroidWeapon(BASE_OBJECT *psObj, DROID *psDroid)
 {
 	SENSOR_STATS	*psStats = NULL;
 
+	if (!psObj || !psDroid)
+	{
+		return false;
+	}
+
 	//first check if the object is a droid or a structure
 	if ( (psObj->type != OBJ_DROID) &&
 		 (psObj->type != OBJ_STRUCTURE) )
