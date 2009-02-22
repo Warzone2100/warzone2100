@@ -378,7 +378,7 @@ BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, Ve
 	When we have been created by penetration (spawned from another projectile),
 	we shall live no longer than the original projectile may have lived
 	*/
-	if (psAttacker->type == OBJ_PROJECTILE)
+	if (psAttacker && psAttacker->type == OBJ_PROJECTILE)
 	{
 		PROJECTILE * psOldProjectile = (PROJECTILE*)psAttacker;
 		psProj->born = psOldProjectile->born;
@@ -1333,7 +1333,8 @@ static void proj_ImpactFunc( PROJECTILE *psObj )
 							//Watermelon:uses a slightly different check for angle,
 							// since fragment of a project is from the explosion spot not from the projectile start position
 							impactSide = getHitSide(psObj, (BASE_OBJECT *)psCurrD);
-
+							//  FIXME: This screws us!  A droid *can* die in the function below!
+							// which means we can't send that info to other players since turnOffMultiMsg() is off!
 							relativeDamage = droidDamage(psCurrD, damage, psStats->weaponClass, psStats->weaponSubClass, impactSide);
 
 							turnOffMultiMsg(false);	// multiplay msgs back on.
