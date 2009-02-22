@@ -433,14 +433,12 @@ BOOL LobbyLaunched(void)
 #endif
 
 // ////////////////////////////////////////////////////////////////////////////
-// say goodbye to everyone else
+// Broadcast that we are leaving the game 'nicely', (we wanted to) and not
+// because we have some kind of error. (dropped or disconnected)
 BOOL sendLeavingMsg(void)
 {
-	/*
-	 * Send a leaving message, This resolves a problem with tcpip which
-	 * occasionally doesn't automatically notice a player leaving
-	 */
-	NETbeginEncode(NET_LEAVING, NET_ALL_PLAYERS);
+	debug(LOG_NET, "We are leaving 'nicely'");
+	NETbeginEncode(NET_PLAYER_LEAVING, NET_ALL_PLAYERS);
 	{
 		uint32_t player_id = player2dpid[selectedPlayer];
 		BOOL host = NetPlay.bHost;
@@ -901,6 +899,8 @@ BOOL multiGameInit(void)
 BOOL multiGameShutdown(void)
 {
 	PLAYERSTATS	st;
+
+	debug(LOG_NET,"%s is shutting down.",getPlayerName(selectedPlayer));
 
 	sendLeavingMsg();							// say goodbye
 	updateMultiStatsGames();					// update games played.

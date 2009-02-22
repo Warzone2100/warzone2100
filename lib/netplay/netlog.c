@@ -51,7 +51,6 @@ static const char *packetname[NUM_GAME_PACKETS] =
 	"NET_BUILDFINISHED",
 	"NET_RESEARCH",
 	"NET_TEXTMSG",
-	"NET_LEAVING",
 	"NET_REQUESTDROID",
 	"NET_PLAYERCOMPLETE",
 	"NET_REQUESTPLAYER",
@@ -89,7 +88,8 @@ static const char *packetname[NUM_GAME_PACKETS] =
 	"NET_ACCEPTED",
 	"NET_PLAYER_INFO",
 	"NET_PLAYER_JOINED",
-	"NET_PLAYER_LEFT",
+	"NET_PLAYER_LEAVING",
+	"NET_PLAYER_DROPPED",
 	"NET_GAME_FLAGS"
 };
 
@@ -195,13 +195,13 @@ BOOL NETlogEntry(const char *str,UDWORD a,UDWORD b)
 	else
 		snprintf(buf, sizeof(buf), "%s \t:%d \t\t\t:%d\t\t%s", str, a, b, asctime(newtime));
 
-	if (a == 18) // NET_LEAVING
+	if (a == 56 || a==57 ) // NET_PLAYER_LEAVING || NET_PLAYER_DROPPED
 		// Write a starry line above NET_LEAVING messages
 		PHYSFS_write(pFileHandle, star_line, strlen(star_line), 1);
 
 	PHYSFS_write(pFileHandle, buf, strlen( buf ), 1);
 
-	if (a == 18) // NET_LEAVING
+	if (a == 56 || a== 57 ) // NET_PLAYER_LEAVING ||NET_PLAYER_DROPPED
 		// Write a starry line below NET_LEAVING messages
 		PHYSFS_write(pFileHandle, star_line, strlen(star_line), 1);
 
