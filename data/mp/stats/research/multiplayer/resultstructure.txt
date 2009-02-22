@@ -28,7 +28,7 @@ R-Defense-Pillbox-RotMG,Pillbox-RotMG,0,290
 R-Defense-Pillbox01,PillBox1,0,126
 R-Defense-Pillbox04,PillBox4,0,130
 R-Defense-Pillbox05,PillBox5,0,158
-R-Defense-Pillbox06,PillBox6,0,174
+R-Defense-Pillbox06,GuardTower5,0,174
 R-Defense-PlasmaCannon,Emplacement-PlasmaCannon,0,332
 R-Defense-PlasmiteFlamer,Plasmite-flamer-bunker,0,324
 R-Defense-PrisLas,Emplacement-PrisLas,0,214

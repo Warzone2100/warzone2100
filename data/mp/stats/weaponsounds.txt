@@ -56,7 +56,7 @@ NX-CyborgPulseLas,plslsr.ogg,lsrexpl.ogg,225
 Missile-LtSAM,rocket.ogg,smlexpl.ogg,226
 Missile-VTOL-AT,rocket.ogg,smlexpl.ogg,227
 Superweapon,mgbar2.ogg,-1,229
-Superweapon2,mgbar2.ogg,-1,230
+Superweapon2,gaussgun.ogg,lrgexpl.ogg,230
 Howitzer105Mk1,lrgcan.ogg,lrgexpl.ogg,232
 Mortar2Mk1,mortar.ogg,lrgexpl.ogg,233
 Rocket-IDF,rocket.ogg,smlexpl.ogg,234

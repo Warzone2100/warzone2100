@@ -28,6 +28,7 @@ R-Wpn-Cannon3Mk1,Cannon375mmMk1,WEAPON,0,0,10
 R-Wpn-Cannon4AMk1,Cannon4AUTO-VTOL,WEAPON,0,0,10
 R-Wpn-Cannon4AMk1,Cannon4AUTOMk1,WEAPON,0,0,10
 R-Wpn-Cannon5,Cannon5VulcanMk1,WEAPON,0,0,10
+R-Wpn-Cannon5,Cannon5Vulcan-VTOL,WEAPON,0,0,10
 R-Wpn-Cannon6TwinAslt,Cannon6TwinAslt,WEAPON,0,BODY,10
 R-Comp-CommandTurret01,CommandBrain01,BRAIN,0,0,3
 R-Comp-CommandTurret02,CommandTurret2,WEAPON,0,0,10

@@ -19,7 +19,6 @@ R-Wpn-MG5,MG4ROTARYMk1,WEAPON,10
 R-Wpn-Missile-HvSAM,Missile-LtSAM,WEAPON,10
 R-Wpn-Mortar3,Mortar1Mk1,WEAPON,10
 R-Wpn-AAGun04,QuadMg1AAGun,WEAPON,10
-R-Wpn-AALaser,QuadRotAAGun,WEAPON,10
 R-Wpn-RailGun02,RailGun1-VTOL,WEAPON,10
 R-Wpn-RailGun02,RailGun1Mk1,WEAPON,10
 R-Wpn-Missile2A-T,Rocket-LtA-T,WEAPON,10
