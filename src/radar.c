@@ -545,8 +545,8 @@ static void drawViewingWindow(float radarX, float radarY, int x, int y, float pi
 	v[3].x = -shortX;
 	v[3].y = yDrop;
 
-	centre.x = radarX + (x - scrollMinX) + ((visibleTiles.x - scrollMinX) * pixSizeH) / 2;
-	centre.y = radarY + (y - scrollMinY) + ((visibleTiles.y - scrollMinY) * pixSizeV) / 2;
+	centre.x = radarX + (x - scrollMinX/2) + ((visibleTiles.x - scrollMinX) * pixSizeH) / 2;
+	centre.y = radarY + (y - scrollMinY/2) + ((visibleTiles.y - scrollMinY) * pixSizeV) / 2;
 
 	RotateVector2D(v,tv,&centre,player.r.y,4);
 
