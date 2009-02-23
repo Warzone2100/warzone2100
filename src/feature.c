@@ -59,7 +59,7 @@ FEATURE_STATS	*asFeatureStats;
 UDWORD			numFeatureStats;
 
 //Value is stored for easy access to this feature in destroyDroid()/destroyStruct()
-UDWORD			oilResFeature;
+FEATURE_STATS* oilResFeature = NULL;
 
 /* other house droid to add */
 #define DROID_TEMPLINDEX	0
@@ -98,7 +98,7 @@ void featureInitVars(void)
 {
 	asFeatureStats = NULL;
 	numFeatureStats = 0;
-	oilResFeature = 0;
+	oilResFeature = NULL;
 }
 
 static void featureType(FEATURE_STATS* psFeature, const char *pType)
@@ -177,7 +177,7 @@ BOOL loadFeatureStats(const char *pFeatureData, UDWORD bufferSize)
 		//and the oil resource - assumes only one!
 		if (psFeature->subType == FEAT_OIL_RESOURCE)
 		{
-			oilResFeature = i;
+			oilResFeature = psFeature;
 		}
 
 		//get the IMD for the feature

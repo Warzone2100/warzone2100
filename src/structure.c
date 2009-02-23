@@ -4702,7 +4702,7 @@ BOOL removeStruct(STRUCTURE *psDel, BOOL bDestroy)
 		{
 			if (psDel->pFunctionality->resourceExtractor.power)
 			{
-				buildFeature(&asFeatureStats[oilResFeature], psDel->pos.x, psDel->pos.y, false);
+				buildFeature(oilResFeature, psDel->pos.x, psDel->pos.y, false);
 				resourceFound = true;
 			}
 		}
