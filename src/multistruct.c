@@ -173,9 +173,11 @@ BOOL recvBuildStarted()
 // INFORM others that a building has been completed.
 BOOL SendBuildFinished(STRUCTURE *psStruct)
 {
+	uint32_t power = getPower( (uint32_t) psStruct->player);
+
 	NETbeginEncode(NET_BUILDFINISHED, NET_ALL_PLAYERS);
-		// ID of building
-		NETuint32_t(&psStruct->id);
+		NETuint32_t(&power);			// send how much power we got.
+		NETuint32_t(&psStruct->id);		// ID of building
 
 		// Along with enough info to build it (if needed)
 		NETuint32_t(&psStruct->pStructureType->ref);
@@ -189,13 +191,15 @@ BOOL SendBuildFinished(STRUCTURE *psStruct)
 // ////////////////////////////////////////////////////////////////////////////
 BOOL recvBuildFinished()
 {
-	UDWORD structId;
-	STRUCTURE *psStruct;
-	UWORD	x,y,z;
-	UDWORD	type,typeindex;
-	UBYTE	player;
+	uint32_t	structId;
+	STRUCTURE	*psStruct;
+	uint16_t	x,y,z;
+	uint32_t	type,typeindex;
+	uint8_t		player;
+	uint32_t	power;
 
 	NETbeginDecode(NET_BUILDFINISHED);
+		NETuint32_t(&power);	// get the player's power level
 		NETuint32_t(&structId);	// get the struct id.
 		NETuint32_t(&type); 	// Kind of building.
 		NETuint16_t(&x);    	// x pos
@@ -205,6 +209,7 @@ BOOL recvBuildFinished()
 	NETend();
 
 	psStruct = IdToStruct(structId,ANYPLAYER);
+	setPower(player, power);		// we sync the power level as well
 
 	if (psStruct)
 	{												// make it complete.
@@ -215,6 +220,7 @@ BOOL recvBuildFinished()
 			psStruct->status = SS_BUILT;
 			buildingComplete(psStruct);
 		}
+		debug(LOG_SYNC, "Created normal building %u for player %u", psStruct->id, player);
 		NETlogEntry("building finished ok." ,0,0);
 		return true;
 	}
@@ -237,6 +243,7 @@ BOOL recvBuildFinished()
 			psStruct->id = structId;
 			psStruct->status = SS_BUILT;
 			buildingComplete(psStruct);
+			debug(LOG_SYNC, "Created modified building %u for player %u", psStruct->id, player);
 			NETlogEntry("structure id modified", 0, player);
 
 			return true;
@@ -250,11 +257,12 @@ BOOL recvBuildFinished()
 		psStruct->id		= structId;
 		psStruct->status	= SS_BUILT;
 		buildingComplete(psStruct);
-
+		debug(LOG_SYNC, "Forced to create building %u for player %u", psStruct->id, player);
 		NETlogEntry("had to plonk down a building" ,0,player);
 	}
 	else
 	{
+		debug(LOG_SYNC, "Unable to create building for player %u", player);
 		NETlogEntry("had to plonk down a building, BUT FAILED OH S**T." ,0,player);
 	}
 

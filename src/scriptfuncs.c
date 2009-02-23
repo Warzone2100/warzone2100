@@ -942,11 +942,16 @@ BOOL scrAddDroid(void)
 		if (psDroid)
 		{
 			addDroid(psDroid, apsDroidLists);
+			debug( LOG_LIFE, "created droid for AI player %d %u", player, psDroid->id );
 			if (isVtolDroid(psDroid))
 			{
 				// vtols start in the air
 				moveMakeVtolHover(psDroid);
 			}
+		}
+		else
+		{
+			debug( LOG_LIFE, "failed to create droid for AI player %d", player );
 		}
 	}
 
@@ -3232,27 +3237,6 @@ BOOL scrGameOverMessage(void)
 
 		//we need to set this here so the VIDEO_QUIT callback is not called
 		setScriptWinLoseVideo((UBYTE)(gameWon ? PLAY_WIN : PLAY_LOSE));
-
-		/* For some reason, I can't locate why the script is not adding
-		 * these for us, so I hardcode it here. The script is
-		 * multiplay.txt.
-		 */
-		seq_ClearSeqList();
-		if (gameWon)
-		{
-			seq_AddSeqToList("victory.ogg", NULL, NULL, false);
-		}
-		else
-		{
-			seq_AddSeqToList("end.ogg", NULL, NULL, false);
-		}
-
-        // Can't do this cos won't process windows stuff
-        // Wait for the video to finish.
-		/*while (loop_GetVideoStatus())
-		{
-			videoLoop();
-		}*/
 	}
 	debug(LOG_MSG, "Game over message");
 

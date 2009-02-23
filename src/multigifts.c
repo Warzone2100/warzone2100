@@ -191,7 +191,7 @@ static void recvGiftDroids(uint8_t from, uint8_t to, uint32_t droidID)
 	}
 	else
 	{
-		debug(LOG_ERROR, "recvGiftDroids: Bad droid id %d", (int)droidID);
+		debug(LOG_ERROR, "Bad droid id %u, from %u to %u", droidID, from, to);
 	}
 }
 

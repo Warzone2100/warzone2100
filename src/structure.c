@@ -1588,8 +1588,8 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 				else if (TileHasStructure(psTile))
 				{
 					debug(LOG_ERROR,
-					       "building %s at (%d, %d) but found %s already at (%d, %d)",
-					       pStructureType->pName, mapX, mapY,
+					       "Player %u (%s): is building %s at (%d, %d) but found %s already at (%d, %d)",
+						   player,isHumanPlayer(player) ? "Human" : "AI", pStructureType->pName, mapX, mapY,
 					       getTileStructure(mapX + width, mapY + breadth)->pStructureType->pName,
 					       mapX + width, mapY + breadth);
 					free(psBuilding);
