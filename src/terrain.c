@@ -1067,6 +1067,13 @@ void drawTerrain(void)
 	glTexGeni(GL_T, GL_TEXTURE_GEN_MODE, GL_OBJECT_LINEAR);
 	glTexGenfv(GL_S, GL_OBJECT_PLANE, paramsX);
 	glTexGenfv(GL_T, GL_OBJECT_PLANE, paramsY);
+	
+	// shift the lightmap half a tile as lights are supposed to be placed at the center of a tile
+	glMatrixMode(GL_TEXTURE);
+	glLoadIdentity();
+	glTranslatef(1.0/lightmapSize/2, 1.0/lightmapSize/2, 0);
+	glMatrixMode(GL_MODELVIEW);
+	
 	glActiveTexture(GL_TEXTURE0);
 	
 	///////////////////////////////////
