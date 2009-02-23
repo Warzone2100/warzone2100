@@ -1345,7 +1345,7 @@ void drawWater(void)
 
 	for (x = 0; x < xSectors; x++)
 	{
-		for (y = 0; y < ySectors + 1; y++)
+		for (y = 0; y < ySectors; y++)
 		{
 			if (sectors[x*ySectors + y].draw)
 			{
