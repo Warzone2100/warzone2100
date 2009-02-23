@@ -83,8 +83,10 @@ static GLuint geometryVBO, geometryIndexVBO, textureVBO, textureIndexVBO, decalV
 static GLuint waterVBO, waterIndexVBO;
 static float waterOffset;
 
+static GLint GLmaxElementsVertices, GLmaxElementsIndices;
+
 static Sector *sectors;
-static const int sectorSize = 15;
+static int sectorSize = 15;
 static int terrainDistance;
 static int xSectors, ySectors;
 
@@ -105,6 +107,73 @@ bool terrainInitalised = false;
 
 /// Helper to specify the offset in a VBO
 #define BUFFER_OFFSET(i) ((char *)NULL + (i))
+
+GLuint dreStart, dreEnd, dreOffset;
+GLsizei dreCount;
+bool drawRangeElementsStarted = false;
+
+static void finishDrawRangeElements(void)
+{
+	if (drawRangeElementsStarted && dreCount > 0)
+	{
+		ASSERT(dreEnd - dreStart + 1 <= GLmaxElementsVertices, "too many vertices (%i)", dreEnd - dreStart + 1);
+		ASSERT(dreCount <= GLmaxElementsIndices, "too many indices (%i)", dreCount);
+		glDrawRangeElements(GL_TRIANGLES,
+							dreStart,
+							dreEnd,
+							dreCount,
+							GL_UNSIGNED_INT,
+							BUFFER_OFFSET(sizeof(GLuint)*dreOffset));
+	}
+	drawRangeElementsStarted = false;
+}
+
+static void addDrawRangeElements(GLenum mode,
+                                 GLuint start, 
+                                 GLuint end, 
+                                 GLsizei count, 
+                                 GLenum type, 
+                                 GLuint offset)
+{
+	ASSERT(mode == GL_TRIANGLES, "not supported");
+	ASSERT(type == GL_UNSIGNED_INT, "not supported");
+	
+	if (end - start + 1 > GLmaxElementsVertices)
+	{
+		debug(LOG_WARNING, "A single call provided too much vertices, will operate at reduced performance or crash. Decrease the sector size to fix this.");
+	}
+	if (count > GLmaxElementsIndices)
+	{
+		debug(LOG_WARNING, "A single call provided too much indices, will operate at reduced performance or crash. Decrease the sector size to fix this.");
+	}
+	
+	if (!drawRangeElementsStarted)
+	{
+		dreStart  = start;
+		dreEnd    = end;
+		dreCount  = count;
+		dreOffset = offset;
+		drawRangeElementsStarted = true;
+		return;
+	}
+	
+	// check if we can append theoretically and 
+	// check if this will not go over the bounds advised by the opengl implementation
+	if (dreOffset + dreCount != offset ||
+		dreCount + count > GLmaxElementsIndices ||
+		end - dreStart + 1 > GLmaxElementsVertices)
+	{
+		finishDrawRangeElements();
+		// start anew
+		addDrawRangeElements(mode, start, end, count, type, offset);
+	}
+	else
+	{
+		// OK to append
+		dreCount += count;
+		dreEnd = end;
+	}
+}
 
 /// Get the colour of the terrain tile at the specified position
 PIELIGHT getTileColour(int x, int y)
@@ -556,9 +625,6 @@ bool initTerrain(void)
 	int i, j, x, y, a, b, absX, absY;
 	PIELIGHT colour[2][2], centerColour;
 	int layer = 0;
-	GLint result;
-
-	// allocate memory
 	
 	RenderVertex *geometry;
 	RenderVertex *water;
@@ -572,7 +638,41 @@ bool initTerrain(void)
 	PIELIGHT *texture;
 	int decalSize;
 	int size;
+	int maxSectorSizeIndices, maxSectorSizeVertices;
+	bool decreasedSize = false;
+	
+	// this information is useful to prevent crashes with buggy opengl implementations
+	glGetIntegerv(GL_MAX_ELEMENTS_VERTICES, &GLmaxElementsVertices);
+	glGetIntegerv(GL_MAX_ELEMENTS_INDICES,  &GLmaxElementsIndices);
+	// testing for crappy cards
+	//GLmaxElementsVertices = 1024;
+	//GLmaxElementsIndices = 1024;
+	debug(LOG_TERRAIN, "GL_MAX_ELEMENTS_VERTICES: %i", GLmaxElementsVertices);
+	debug(LOG_TERRAIN, "GL_MAX_ELEMENTS_INDICES:  %i", GLmaxElementsIndices);
+	
+	// now we know these values, determine the maximum sector size achievable
+	maxSectorSizeVertices = sqrt(GLmaxElementsVertices/2)-1;
+	maxSectorSizeIndices = sqrt(GLmaxElementsIndices/12);
 
+	debug(LOG_TERRAIN, "preferred sector size: %i", sectorSize);
+	debug(LOG_TERRAIN, "maximum sector size due to vertices: %i", maxSectorSizeVertices);
+	debug(LOG_TERRAIN, "maximum sector size due to indices: %i", maxSectorSizeIndices);
+	
+	if (sectorSize > maxSectorSizeVertices)
+	{
+		sectorSize = maxSectorSizeVertices;
+		decreasedSize = true;
+	}
+	if (sectorSize > maxSectorSizeIndices)
+	{
+		sectorSize = maxSectorSizeIndices;
+		decreasedSize = true;
+	}
+	if (decreasedSize)
+	{
+		debug(LOG_WARNING, "decreasing sector size to %i to fit graphics card constraints", sectorSize);
+	}
+	
 	terrainDistance = 1.5*((visibleTiles.x+visibleTiles.y)/4+sectorSize/2);
 	debug(LOG_TERRAIN, "visible tiles x:%i y: %i", visibleTiles.x, visibleTiles.y);
 	debug(LOG_TERRAIN, "terrain view distance: %i", terrainDistance);
@@ -799,14 +899,6 @@ bool initTerrain(void)
 	glBufferData(GL_ARRAY_BUFFER, sizeof(GLuint)*textureIndexSize, textureIndex, GL_STATIC_DRAW); glError();
 	free(textureIndex);
 
-	////////////////////////////
-	// some useful information
-	glGetIntegerv(GL_MAX_ELEMENTS_VERTICES, &result);
-	debug(LOG_TERRAIN, "GL_MAX_ELEMENTS_VERTICES: %i", result);
-	glGetIntegerv(GL_MAX_ELEMENTS_INDICES, &result);
-	debug(LOG_TERRAIN, "GL_MAX_ELEMENTS_INDICES: %i", result);
-
-	
 	// and finally the decals
 	decaldata = malloc(sizeof(DecalVertex)*mapWidth*mapHeight*12);
 	decalSize = 0;
@@ -881,7 +973,7 @@ void drawTerrain(void)
 	int texPage;
 	PIELIGHT colour;
 	int layer;
-	int offset, size, startIndex, stopIndex;
+	int offset, size;
 	float xPos, yPos, distance;
 	GLfloat paramsX[4] = {0, 0, -1.0/world_coord(mapHeight)*((float)mapHeight/lightmapSize), 0}; 
 	GLfloat paramsY[4] = {1.0/world_coord(mapWidth)*((float)mapWidth/lightmapSize), 0, 0, 0};	
@@ -1029,40 +1121,22 @@ void drawTerrain(void)
 
 	glVertexPointer(3, GL_FLOAT, sizeof(RenderVertex), BUFFER_OFFSET(0)); glError();
 	
-	size = 0;
-	offset = 0;
-	startIndex = sectors[0].geometryOffset;
 	for (x = 0; x < xSectors; x++)
 	{
-		for (y = 0; y < ySectors + 1; y++)
+		for (y = 0; y < ySectors; y++)
 		{
-			if (y < ySectors && offset + size == sectors[x*ySectors + y].geometryIndexOffset && sectors[x*ySectors + y].draw)
+			if (sectors[x*ySectors + y].draw)
 			{
-				// append
-				size += sectors[x*ySectors + y].geometryIndexSize;
-				stopIndex = sectors[x*ySectors + y].geometryOffset+sectors[x*ySectors + y].geometrySize;
-				continue;
-			}
-			// can't append, so draw what we have and start anew
-			if (size > 0)
-			{
-				glDrawRangeElements(GL_TRIANGLES,
-									startIndex,
-									stopIndex,
-									size,
-									GL_UNSIGNED_INT,
-									BUFFER_OFFSET(sizeof(GLuint)*offset));
-			}
-			size = 0;
-			if (y < ySectors && sectors[x*ySectors + y].draw)
-			{
-				startIndex = sectors[x*ySectors + y].geometryOffset;
-				stopIndex = sectors[x*ySectors + y].geometryOffset+sectors[x*ySectors + y].geometrySize;
-				offset = sectors[x*ySectors + y].geometryIndexOffset;
-				size = sectors[x*ySectors + y].geometryIndexSize;
+				addDrawRangeElements(GL_TRIANGLES,
+				                     sectors[x*ySectors + y].geometryOffset,
+				                     sectors[x*ySectors + y].geometryOffset+sectors[x*ySectors + y].geometrySize,
+				                     sectors[x*ySectors + y].geometryIndexSize,
+				                     GL_UNSIGNED_INT,
+				                     sectors[x*ySectors + y].geometryIndexOffset);
 			}
 		}
 	}
+	finishDrawRangeElements();
 	
 	if (rendStates.fogEnabled)
 	{
@@ -1123,40 +1197,22 @@ void drawTerrain(void)
 		// load the color buffer
 		glColorPointer(4, GL_UNSIGNED_BYTE, sizeof(PIELIGHT), BUFFER_OFFSET(sizeof(PIELIGHT)*xSectors*ySectors*(sectorSize+1)*(sectorSize+1)*2*layer));
 		
-		size = 0;
-		offset = 0;
-		startIndex = sectors[0].geometryOffset;
 		for (x = 0; x < xSectors; x++)
 		{
-			for (y = 0; y < ySectors + 1; y++)
+			for (y = 0; y < ySectors; y++)
 			{
-				if (y < ySectors && offset + size == sectors[x*ySectors + y].textureIndexOffset[layer] && sectors[x*ySectors + y].draw)
+				if (sectors[x*ySectors + y].draw)
 				{
-					// append
-					size += sectors[x*ySectors + y].textureIndexSize[layer];
-					stopIndex = sectors[x*ySectors + y].geometryOffset+sectors[x*ySectors + y].geometrySize;
-					continue;
-				}
-				// can't append, so draw what we have and start anew
-				if (size > 0)
-				{
-					glDrawRangeElements(GL_TRIANGLES,
-										startIndex,
-										stopIndex,
-										size,
-										GL_UNSIGNED_INT,
-										BUFFER_OFFSET(sizeof(GLuint)*offset));
-				}
-				size = 0;
-				if (y < ySectors && sectors[x*ySectors + y].draw)
-				{
-					startIndex = sectors[x*ySectors + y].geometryOffset;
-					stopIndex = sectors[x*ySectors + y].geometryOffset+sectors[x*ySectors + y].geometrySize;
-					offset = sectors[x*ySectors + y].textureIndexOffset[layer];
-					size = sectors[x*ySectors + y].textureIndexSize[layer];
+					addDrawRangeElements(GL_TRIANGLES,
+										 sectors[x*ySectors + y].geometryOffset,
+										 sectors[x*ySectors + y].geometryOffset+sectors[x*ySectors + y].geometrySize,
+										 sectors[x*ySectors + y].textureIndexSize[layer],
+										 GL_UNSIGNED_INT,
+										 sectors[x*ySectors + y].textureIndexOffset[layer]);
 				}
 			}
 		}
+		finishDrawRangeElements();
 	}
 	// we don't need this one anymore
 	glDisableClientState( GL_COLOR_ARRAY );
@@ -1227,7 +1283,6 @@ void drawWater(void)
 {
 	float white[4] = {1.0f, 1.0f, 1.0f, 1.0f};
 	int x,y;
-	int size, offset, startIndex, stopIndex;
 	const GLfloat paramsX[4] = {0, 0, -1.0/world_coord(4), 0}; 
 	const GLfloat paramsY[4] = {1.0/world_coord(4), 0, 0, 0};
 	const GLfloat paramsX2[4] = {0, 0, -1.0/world_coord(5), 0}; 
@@ -1285,40 +1340,22 @@ void drawWater(void)
 
 	glVertexPointer(3, GL_FLOAT, sizeof(RenderVertex), BUFFER_OFFSET(0)); glError();
 
-	size = 0;
-	offset = 0;
-	startIndex = sectors[0].waterOffset;
 	for (x = 0; x < xSectors; x++)
 	{
 		for (y = 0; y < ySectors + 1; y++)
 		{
-			if (y < ySectors && offset + size == sectors[x*ySectors + y].waterIndexOffset && sectors[x*ySectors + y].draw)
+			if (sectors[x*ySectors + y].draw)
 			{
-				// append
-				size += sectors[x*ySectors + y].waterIndexSize;
-				stopIndex = sectors[x*ySectors + y].geometryOffset+sectors[x*ySectors + y].geometrySize;
-				continue;
-			}
-			// can't append, so draw what we have and start anew
-			if (size > 0)
-			{
-				glDrawRangeElements(GL_TRIANGLES,
-									startIndex,
-									stopIndex,
-									size,
-									GL_UNSIGNED_INT,
-									BUFFER_OFFSET(sizeof(GLuint)*offset));
-			}
-			size = 0;
-			if (y < ySectors && sectors[x*ySectors + y].draw)
-			{
-				startIndex = sectors[x*ySectors + y].geometryOffset;
-				stopIndex = sectors[x*ySectors + y].geometryOffset+sectors[x*ySectors + y].geometrySize;
-				offset = sectors[x*ySectors + y].waterIndexOffset;
-				size = sectors[x*ySectors + y].waterIndexSize;
+				addDrawRangeElements(GL_TRIANGLES,
+				                     sectors[x*ySectors + y].geometryOffset,
+				                     sectors[x*ySectors + y].geometryOffset+sectors[x*ySectors + y].geometrySize,
+				                     sectors[x*ySectors + y].waterIndexSize,
+				                     GL_UNSIGNED_INT,
+				                     sectors[x*ySectors + y].waterIndexOffset);
 			}
 		}
 	}
+	finishDrawRangeElements();
 	
 	glDisableClientState( GL_VERTEX_ARRAY );
 	
