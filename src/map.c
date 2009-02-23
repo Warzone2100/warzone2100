@@ -221,12 +221,7 @@ enum
 
 static BOOL mapLoadGroundTypes(void)
 {
-	if (!tileset)
-	{
-		debug(LOG_ERROR, "tileset not loaded");
-		return false;
-	}
-	debug(LOG_WARNING, "tileset: %s", tileset);
+	debug(LOG_TERRAIN, "tileset: %s", tileset);
 	// FIXME: Read these from a config file
 	if (strcmp(tileset, "texpages/tertilesc1hw") == 0)
 	{
@@ -875,6 +870,13 @@ BOOL mapLoad(char *filename)
 
 	mapWidth = width;
 	mapHeight = height;
+	
+	// FIXME: the map preview code loads the map without setting the tileset
+	if (!tileset)
+	{
+		debug(LOG_WARNING, "tileset not loaded, using arizona (map preview?)");
+		tileset = strdup("texpages/tertilesc1hw");
+	}
 	
 	// load the ground types
 	if (!mapLoadGroundTypes())
