@@ -843,22 +843,22 @@ BOOL mapLoad(char *filename)
 	    || aFileType[2] != 'p')
 	{
 		debug(LOG_ERROR, "Bad header in %s", filename);
-		return false;
+		goto failure;
 	}
 	else if (version <= VERSION_9)
 	{
 		debug(LOG_ERROR, "%s: Unsupported save format version %u", filename, version);
-		return false;
+		goto failure;
 	}
 	else if (version > CURRENT_VERSION_NUM)
 	{
 		debug(LOG_ERROR, "%s: Undefined save format version %u", filename, version);
-		return false;
+		goto failure;
 	}
 	else if (width * height > MAP_MAXAREA)
 	{
 		debug(LOG_ERROR, "Map %s too large : %d %d", filename, width, height);
-		return false;
+		goto failure;
 	}
 
 	/* See if this is the first time a map has been loaded */
@@ -881,7 +881,7 @@ BOOL mapLoad(char *filename)
 	// load the ground types
 	if (!mapLoadGroundTypes())
 	{
-		return false;
+		goto failure;
 	}
 	
 	//load in the map data itself
@@ -895,7 +895,7 @@ BOOL mapLoad(char *filename)
 		if (!PHYSFS_readULE16(fp, &texture) || !PHYSFS_readULE8(fp, &height))
 		{
 			debug(LOG_ERROR, "%s: Error during savegame load", filename);
-			return false;
+			goto failure;
 		}
 
 		psMapTiles[i].texture = texture;
@@ -909,7 +909,7 @@ BOOL mapLoad(char *filename)
 	if (!PHYSFS_readULE32(fp, &version) || !PHYSFS_readULE32(fp, &numGw) || version != 1)
 	{
 		debug(LOG_ERROR, "Bad gateway in %s", filename);
-		return false;
+		goto failure;
 	}
 
 	for (i = 0; i < numGw; i++)
@@ -919,18 +919,18 @@ BOOL mapLoad(char *filename)
 		if (!PHYSFS_readULE8(fp, &x0) || !PHYSFS_readULE8(fp, &y0) || !PHYSFS_readULE8(fp, &x1) || !PHYSFS_readULE8(fp, &y1))
 		{
 			debug(LOG_ERROR, "%s: Failed to read gateway info", filename);
-			return false;
+			goto failure;
 		}
 		if (!gwNewGateway(x0, y0, x1, y1))
 		{
 			debug(LOG_ERROR, "%s: Unable to add gateway", filename);
-			return false;
+			goto failure;
 		}
 	}
 	
 	if (!mapSetGroundTypes())
 	{
-		return false;
+		goto failure;
 	}
 
 	// reset the random water bottom heights
@@ -958,7 +958,12 @@ BOOL mapLoad(char *filename)
 	scrollMaxX = mapWidth;
 	scrollMaxY = mapHeight;
 
+	PHYSFS_close(fp);
 	return true;
+	
+failure:
+	PHYSFS_close(fp);
+	return false;
 }
 
 // Object macro group
