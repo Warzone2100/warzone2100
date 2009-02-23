@@ -173,6 +173,9 @@ static void addDrawRangeElements(GLenum mode,
 		dreCount += count;
 		dreEnd = end;
 	}
+	// make sure we did everything right
+	ASSERT(dreEnd - dreStart + 1 <= GLmaxElementsVertices, "too many vertices (%i)", dreEnd - dreStart + 1);
+	ASSERT(dreCount <= GLmaxElementsIndices, "too many indices (%i)", dreCount);
 }
 
 /// Get the colour of the terrain tile at the specified position

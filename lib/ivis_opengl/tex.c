@@ -57,9 +57,12 @@ static void pie_PrintLoadedTextures(void);
 
 	Returns the texture number of the image.
 **************************************************************************/
-int pie_AddTexPage(iV_Image *s, const char* filename, int slot)
+int pie_AddTexPage(iV_Image *s, const char* filename, int slot, int maxTextureSize)
 {
 	unsigned int i = 0;
+	int width, height;
+	void *bmp;
+	bool scaleDown = false;
 
 	/* Have we already loaded this one? Should not happen here. */
 	while (i < _TEX_INDEX)
@@ -93,13 +96,35 @@ int pie_AddTexPage(iV_Image *s, const char* filename, int slot)
 	// FIXME: This function is used instead of glBindTexture, but we're juggling with difficult to trace global state here. Look into pie_SetTexturePage's definition for details.
 	pie_SetTexturePage(i);
 
-	if ((s->width & (s->width-1)) == 0 && (s->height & (s->height-1)) == 0)
+	width = s->width;
+	height = s->height;
+	bmp = s->bmp;
+	if ((width & (width-1)) == 0 && (height & (height-1)) == 0)
 	{
-		gluBuild2DMipmaps(GL_TEXTURE_2D, wz_texture_compression, s->width, s->height, iV_getPixelFormat(s), GL_UNSIGNED_BYTE, s->bmp);
+		if (maxTextureSize && width > maxTextureSize)
+		{
+			width = maxTextureSize;
+			scaleDown = true;
+		}
+		if (maxTextureSize && height > maxTextureSize)
+		{
+			height = maxTextureSize;
+			scaleDown = true;
+		}
+		if (scaleDown)
+		{
+			debug(LOG_TEXTURE, "scaling down texture %s from %ix%i to %ix%i", filename, s->width, s->height, width, height);
+			bmp = malloc(4 * width * height); // FIXME: don't know for sure it is 4 bytes per pixel
+			gluScaleImage(iV_getPixelFormat(s), s->width, s->height, GL_UNSIGNED_BYTE, s->bmp,
+			                                    width,    height,    GL_UNSIGNED_BYTE, bmp);
+			free(s->bmp);
+		}
+		
+		gluBuild2DMipmaps(GL_TEXTURE_2D, wz_texture_compression, width, height, iV_getPixelFormat(s), GL_UNSIGNED_BYTE, bmp);
 	} else {
 		debug(LOG_ERROR, "pie_AddTexPage: non POT texture %s", filename);
 	}
-	free(s->bmp); // it is uploaded, we do not need it anymore
+	free(bmp); // it is uploaded, we do not need it anymore
 	s->bmp = NULL;
 
 	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
@@ -202,7 +227,7 @@ int iV_GetTexture(const char *filename)
 	replaceing the texture page with the same name if another file
 	with this prefix is loaded.
 **************************************************************************/
-int pie_ReplaceTexPage(iV_Image *s, const char *texPage)
+int pie_ReplaceTexPage(iV_Image *s, const char *texPage, int maxTextureSize)
 {
 	int i = iV_GetTexture(texPage);
 
@@ -215,7 +240,7 @@ int pie_ReplaceTexPage(iV_Image *s, const char *texPage)
 	glDeleteTextures(1, (GLuint *) &_TEX_PAGE[i].id);
 	debug(LOG_TEXTURE, "Reloading texture %s from index %d", texPage, i);
 	_TEX_PAGE[i].name[0] = '\0';
-	pie_AddTexPage(s, texPage, i);
+	pie_AddTexPage(s, texPage, i, maxTextureSize);
 
 	return i;
 }
