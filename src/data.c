@@ -780,13 +780,13 @@ static BOOL dataTexPageLoad(const char *fileName, void **ppData)
 	{
 		// replace the old texture page with the new one
 		debug(LOG_TEXTURE, "replacing %s with new texture %s", texpage, fileName);
-		(void) pie_ReplaceTexPage(*ppData, texpage);
+		(void) pie_ReplaceTexPage(*ppData, texpage, getTextureSize());
 	}
 	else
 	{
 		debug(LOG_TEXTURE, "adding page %s with texture %s", texpage, fileName);
 		SetLastResourceFilename(texpage);
-		(void) pie_AddTexPage(*ppData, texpage, 0);
+		(void) pie_AddTexPage(*ppData, texpage, 0, getTextureSize());
 	}
 
 	return true;

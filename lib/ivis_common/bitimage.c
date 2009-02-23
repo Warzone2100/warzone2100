@@ -48,7 +48,7 @@ static unsigned short LoadTextureFile(const char *FileName)
 	}
 
 	debug(LOG_TEXTURE, "LoadTextureFile: had to upload texture!");
-	return pie_AddTexPage(pSprite, FileName, 0);
+	return pie_AddTexPage(pSprite, FileName, 0, 0);
 }
 
 IMAGEFILE *iV_LoadImageFile(const char *fileName)
