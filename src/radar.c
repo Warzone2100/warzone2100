@@ -82,7 +82,7 @@ static PIELIGHT flashColours[MAX_PLAYERS]=
 	{{254,37,37,200}}		// Player 7
 };
 
-static SDWORD radarWidth, radarHeight, radarX, radarY, radarTexWidth, radarTexHeight;
+static SDWORD radarWidth, radarHeight, radarCenterX, radarCenterY, radarTexWidth, radarTexHeight;
 static float RadarZoom;
 static UDWORD radarBufferSize = 0;
 
@@ -94,9 +94,9 @@ static void radarSize(float zoom)
 {
 	radarWidth = radarTexWidth * zoom;
 	radarHeight = radarTexHeight * zoom;
-	radarX = pie_GetVideoBufferWidth() - BASE_GAP * 2 - MAX(radarHeight, radarWidth);
-	radarY = pie_GetVideoBufferHeight() - BASE_GAP * 2 - MAX(radarWidth, radarHeight);
-	debug(LOG_WZ, "radar=(%u,%u) tex=(%u,%u) size=(%u,%u)", radarX, radarY, radarTexWidth, radarTexHeight, radarWidth, radarHeight);
+	radarCenterX = pie_GetVideoBufferWidth() - BASE_GAP * 4 - MAX(radarHeight, radarWidth)/2;
+	radarCenterY = pie_GetVideoBufferHeight() - BASE_GAP * 4 - MAX(radarWidth, radarHeight)/2;
+	debug(LOG_WZ, "radar=(%u,%u) tex=(%u,%u) size=(%u,%u)", radarCenterX, radarCenterY, radarTexWidth, radarTexHeight, radarWidth, radarHeight);
 }
 
 void radarInitVars(void)
@@ -189,8 +189,8 @@ void CalcRadarPosition(int mX, int mY, int *PosX, int *PosY)
 	float		pixSizeH, pixSizeV;
 	
 	Vector2f pos;
-	pos.x = mX - radarX - radarWidth/2;
-	pos.y = mY - radarY - radarHeight/2;
+	pos.x = mX - radarCenterX;
+	pos.y = mY - radarCenterY;
 	if (rotateRadar)
 	{
 		pos = Vector2f_Rotate2f(pos, -player.r.y/DEG(1));
@@ -242,8 +242,6 @@ void drawRadar(void)
 {
 	float	pixSizeH, pixSizeV;
 	static int frameSkip = 0;
-	float centerX = radarX+radarWidth/2;
-	float centerY = radarY+radarHeight/2;
 
 	ASSERT(radarBuffer, "No radar buffer allocated");
 	if (!radarBuffer)
@@ -263,7 +261,7 @@ void drawRadar(void)
 	frameSkip--;
 	pie_SetTranslucencyMode(TRANS_ALPHA);
 	pie_MatBegin();
-		pie_TRANSLATE(centerX, centerY, 0);
+		pie_TRANSLATE(radarCenterX, radarCenterY, 0);
 		if (rotateRadar)
 		{
 			// rotate the map
@@ -591,8 +589,8 @@ static void DrawRadarExtras(float radarX, float radarY, float pixSizeH, float pi
 BOOL CoordInRadar(int x,int y)
 {
 	Vector2f pos;
-	pos.x = x - radarX - radarWidth/2;
-	pos.y = y - radarY - radarHeight/2;
+	pos.x = x - radarCenterX;
+	pos.y = y - radarCenterY;
 	if (rotateRadar)
 	{
 		pos = Vector2f_Rotate2f(pos, -player.r.y/DEG(1));
