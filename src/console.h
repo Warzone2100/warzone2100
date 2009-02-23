@@ -86,7 +86,15 @@ extern void	setConsoleLineInfo			( UDWORD vis );
 extern UDWORD	getConsoleLineInfo		( void );
 extern void	permitNewConsoleMessages		( BOOL allow);
 extern	void	toggleConsoleDrop( void );
-extern void printf_console(const char *pFormat, ...); /// Print to the ingame console in debug mode only
+
+#if defined(DEBUG)
+# define debug_console(...) \
+	console(__VA_ARGS__)
+#else // defined(DEBUG)
+# define debug_console(...) (void)0
+#endif // !defined(DEBUG)
+
+extern void debug_console(const char *pFormat, ...); /// Print to the ingame console in debug mode only
 extern void console(const char *pFormat, ...); /// Print allways to the ingame console
 
 /* Basic wrapper to sprintf - allows convenient printf style game info to be displayed */

@@ -9338,7 +9338,7 @@ BOOL scrCirclePerimPoint(void)
 	//if point was inside of the circle, don't modify passed parameter
 	if(factor == 0)
 	{
-		printf_console("scrCirclePerimPoint: division by zero.");
+		debug_console("scrCirclePerimPoint: division by zero.");
 		return true;
 	}
 
@@ -9612,9 +9612,7 @@ BOOL scrLearnPlayerBaseLoc(void)
 	baseLocation[playerStoring][enemyPlayer][0] = x;
 	baseLocation[playerStoring][enemyPlayer][1] = y;
 
-#ifdef DEBUG
-	printf_console("Learned player base.");
-#endif
+	debug_console("Learned player base.");
 
 	scrFunctionResult.v.bval = true;
 	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
@@ -10381,7 +10379,7 @@ SDWORD getNumRepairedBy(DROID *psDroidToCheck, SDWORD player)
 	return numRepaired;
 }
 
-/* Uses printf_console() for console debug output right now */
+/* Uses debug_console() for console debug output right now */
 BOOL scrMsgBox(void)
 {
 	if (!stackPopParams(1, VAL_STRING, &strParam1))
@@ -10390,7 +10388,7 @@ BOOL scrMsgBox(void)
 		return false;
 	}
 
-	printf_console("DEBUG: %s",strParam1);
+	debug_console("DEBUG: %s",strParam1);
 
 	return true;
 }

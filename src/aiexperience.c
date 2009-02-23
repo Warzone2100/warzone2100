@@ -237,7 +237,7 @@ return true;
 	{
 		if(psFeature->psStats->subType == FEAT_OIL_RESOURCE)
 		{
-			printf_console("Enabling feature at x: %d y: %d",psFeature->pos.x/128,psFeature->pos.y/128);
+			debug_console("Enabling feature at x: %d y: %d",psFeature->pos.x/128,psFeature->pos.y/128);
 
 			psFeature->visible[nPlayer] = true;
 		}
@@ -400,7 +400,7 @@ BOOL WriteAISaveData(SDWORD nPlayer)
 						/* Save Y */
 						PosXY[NumEntries * 2 + 1] = psFeature->pos.y;
 
-						//printf_console("New oil visible x: %d y: %d. Storing.", PosXY[NumEntries * 2]/128,PosXY[NumEntries * 2 + 1]/128);
+						//debug_console("New oil visible x: %d y: %d. Storing.", PosXY[NumEntries * 2]/128,PosXY[NumEntries * 2 + 1]/128);
 
 						NumEntries++;
 					}
@@ -424,7 +424,7 @@ BOOL WriteAISaveData(SDWORD nPlayer)
 							x = psCurr->pos.x;
 							y = psCurr->pos.y;
 
-							//printf_console("Found derrick at x: %d, y: %d,, width: %d",psCurr->pos.x/128,psCurr->pos.y/128,mapWidth);
+							//debug_console("Found derrick at x: %d, y: %d,, width: %d",psCurr->pos.x/128,psCurr->pos.y/128,mapWidth);
 
 							// Save X //
 							PosXY[NumEntries * 2] = psCurr->pos.x;
@@ -432,7 +432,7 @@ BOOL WriteAISaveData(SDWORD nPlayer)
 							// Save Y //
 							PosXY[NumEntries * 2 + 1] = psCurr->pos.y;
 
-							//printf_console("New derrick visible x: %d y: %d. Storing.", PosXY[NumEntries * 2]/128,PosXY[NumEntries * 2 + 1]/128);
+							//debug_console("New derrick visible x: %d y: %d. Storing.", PosXY[NumEntries * 2]/128,PosXY[NumEntries * 2 + 1]/128);
 
 							NumEntries++;
 						}
@@ -449,7 +449,7 @@ BOOL WriteAISaveData(SDWORD nPlayer)
 			return false;
 		}
 
-		//printf_console("Num Oil Resources: %d ****",NumEntries);
+		//debug_console("Num Oil Resources: %d ****",NumEntries);
 
 		/* Write Oil Resources coords */
 		if(NumEntries > 0)		//Anything to save
@@ -486,7 +486,7 @@ BOOL WriteAISaveData(SDWORD nPlayer)
 		return false;
 	}
 
-	//printf_console("AI settings file written for player %d",nPlayer);
+	//debug_console("AI settings file written for player %d",nPlayer);
 
 	return PHYSFS_close(aiSaveFile[nPlayer]);
 }
@@ -682,7 +682,7 @@ SDWORD ReadAISaveData(SDWORD nPlayer)
 						{
 							if((PosXY[i * 2] == psFeature->pos.x) && (PosXY[i * 2 + 1] == psFeature->pos.y))	/* Found it */
 							{
-								//printf_console("Matched oil resource at x: %d y: %d", PosXY[i * 2]/128,PosXY[i * 2 + 1]/128);
+								//debug_console("Matched oil resource at x: %d y: %d", PosXY[i * 2]/128,PosXY[i * 2 + 1]/128);
 
 								psFeature->visible[nPlayer] = true;		//Make visible for AI
 								Found = true;
@@ -694,7 +694,7 @@ SDWORD ReadAISaveData(SDWORD nPlayer)
 				}
 
 				//if(!Found)		//Couldn't find oil resource with this coords on the map
-				//	printf_console("!!Failed to match oil resource #%d at x: %d y: %d", i,PosXY[i * 2]/128,PosXY[i * 2 + 1]/128);
+				//	debug_console("!!Failed to match oil resource #%d at x: %d y: %d", i,PosXY[i * 2]/128,PosXY[i * 2 + 1]/128);
 			}
 
 			/************************/
@@ -741,7 +741,7 @@ BOOL OilResourceAt(UDWORD OilX,UDWORD OilY, SDWORD VisibleToPlayer)
 			{
 				if((OilX == psFeature->pos.x) && (OilY == psFeature->pos.y))	/* Found it */
 				{
-					printf_console("Matched oil resource at x: %d y: %d", OilX/128,OilY/128);
+					debug_console("Matched oil resource at x: %d y: %d", OilX/128,OilY/128);
 
 					psFeature->visible[VisibleToPlayer] = true;		//Make visible for AI
 					Found = true;
@@ -886,24 +886,24 @@ void BaseExperienceDebug(SDWORD nPlayer)
 {
 	SDWORD i;
 
-	printf_console("-------------");
+	debug_console("-------------");
 	for(i=0; i< MAX_BASE_DEFEND_LOCATIONS; i++)
 	{
-		printf_console("%d) %d - %d (%d)", i, map_coord(baseDefendLocation[nPlayer][i][0]), map_coord(baseDefendLocation[nPlayer][i][1]), baseDefendLocPrior[nPlayer][i]);
+		debug_console("%d) %d - %d (%d)", i, map_coord(baseDefendLocation[nPlayer][i][0]), map_coord(baseDefendLocation[nPlayer][i][1]), baseDefendLocPrior[nPlayer][i]);
 	}
-	printf_console("-------------");
+	debug_console("-------------");
 }
 
 void OilExperienceDebug(SDWORD nPlayer)
 {
 	SDWORD i;
 
-	printf_console("-------------");
+	debug_console("-------------");
 	for(i=0; i< MAX_OIL_DEFEND_LOCATIONS; i++)
 	{
-		printf_console("%d) %d - %d (%d)", i, map_coord(oilDefendLocation[nPlayer][i][0]), map_coord(oilDefendLocation[nPlayer][i][1]), oilDefendLocPrior[nPlayer][i]);
+		debug_console("%d) %d - %d (%d)", i, map_coord(oilDefendLocation[nPlayer][i][0]), map_coord(oilDefendLocation[nPlayer][i][1]), oilDefendLocPrior[nPlayer][i]);
 	}
-	printf_console("-------------");
+	debug_console("-------------");
 }
 
 
