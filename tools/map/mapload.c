@@ -10,6 +10,12 @@
 #define MAP_MAXAREA	(256 * 256)
 #define debug(z, ...) do { fprintf(stderr, __VA_ARGS__); fprintf(stderr, "\n"); } while (0)
 
+void mapFree(GAMEMAP *map)
+{
+	free(map->psMapTiles);
+	free(map);
+}
+
 /* Initialise the map structure */
 GAMEMAP *mapLoad(char *filename)
 {
@@ -37,7 +43,7 @@ GAMEMAP *mapLoad(char *filename)
 	else if (map->version <= 9)
 	{
 		debug(LOG_ERROR, "%s: Unsupported save format version %u", filename, map->version);
-		return NULL;
+//		return NULL;
 	}
 	else if (map->version > 36)
 	{
@@ -96,48 +102,4 @@ GAMEMAP *mapLoad(char *filename)
 	}
 	
 	return map;
-}
-
-int main(int argc, char **argv)
-{
-	char filename[PATH_MAX];
-	char path[PATH_MAX], *delim;
-        PHYSFS_Version compiled;
-        PHYSFS_Version linked;
-	GAMEMAP *map;
-
-	if (argc != 2)
-	{
-		printf("Usage: %s <map>\n", argv[0]);
-	}
-	strcpy(path, argv[1]);
-	delim = strrchr(path, '/');
-	if (delim)
-	{
-		*delim = '\0';
-		delim++;
-		strcpy(filename, delim);
-	}
-	else
-	{
-		path[1] = '.';
-		path[1] = '\0';
-		strcpy(filename, argv[1]);
-	}
-	PHYSFS_init(argv[0]);
-        PHYSFS_VERSION(&compiled);
-        PHYSFS_getLinkedVersion(&linked);
-	PHYSFS_addToSearchPath(path, 1);
-
-	map = mapLoad(filename);
-	if (map)
-	{
-		printf("Loaded map: %s\n", filename);
-		printf("\tMap version: %d\n", (int)map->version);
-		printf("\tWidth: %d\n", (int)map->width);
-		printf("\tHeight: %d\n", (int)map->height);
-		printf("\tGateways: %d\n", (int)map->numGateways);
-	}
-
-	return 0;
 }

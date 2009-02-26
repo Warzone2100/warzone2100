@@ -355,6 +355,7 @@ AC_CONFIG_FILES([Makefile
 		pkg/Makefile
 		pkg/nsis/Makefile
 		win32/Makefile
+		tests/Makefile
 		lib/Makefile
 		lib/framework/Makefile
 		lib/exceptionhandler/Makefile

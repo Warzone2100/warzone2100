@@ -15,9 +15,7 @@ data		"wrf/cam1.wrf"
 data		"wrf/audio.wrf"
 data		"wrf/piestats.wrf"
 data		"wrf/stats.wrf"
-//data		"wrf/cam1Res.wrf"
 game		"multiplay/maps/4c-rush.gam"
-//data		"wrf/multi/cm1.wrf"
 data		"wrf/prog.wrf"
 
 level		DEMO
@@ -173,19 +171,6 @@ data		"wrf/cam1/cam1kevlar.wrf"
 game		"wrf/cam1/sub1-7.gam"
 data		"wrf/cam1/sub1-7.wrf"
 
-/* This level CUT
-between		SUB_1_8S
-dataset		CAM_1
-data		"wrf/cam1/cam1kevlar.wrf"
-data		"wrf/cam1/sub1-8s.wrf"
-
-miss_keep	SUB_1_8
-dataset		CAM_1
-data		"wrf/cam1/cam1kevlar.wrf"
-game		"wrf/cam1/sub1-8.gam"
-data		"wrf/cam1/sub1-8.wrf"
-*/
-
 between		SUB_1_DS
 dataset		CAM_1
 data		"wrf/cam1/cam1kevlar.wrf"
@@ -250,17 +235,6 @@ dataset		CAM_2
 game		"wrf/cam2/sub2-2.gam"
 data		"wrf/cam2/sub2-2.wrf"
 
-/* This level cut
-between		SUB_2_3S
-dataset		CAM_2
-data		"wrf/cam2/sub2-3s.wrf"
-
-miss_keep	SUB_2_3
-dataset		CAM_2
-game		"wrf/cam2/sub2-3.gam"
-data		"wrf/cam2/sub2-3.wrf"
-*/
-
 expand		CAM_2C
 dataset		CAM_2
 game		"wrf/cam2/cam2c.gam"
@@ -271,17 +245,6 @@ dataset		CAM_2
 game		"wrf/cam2/cam2c2.gam"
 data		"wrf/cam2/cam2c2.wrf"
 
-/* This level CUT
-between		SUB_2_4S
-dataset		CAM_2
-data		"wrf/cam2/sub2-4s.wrf"
-
-miss_keep	SUB_2_4
-dataset		CAM_2
-game		"wrf/cam2/sub2-4.gam"
-data		"wrf/cam2/sub2-4.wrf"
-*/
-
 between		SUB_2_5S
 dataset		CAM_2
 data		"wrf/cam2/sub2-5s.wrf"
@@ -290,13 +253,6 @@ miss_keep	SUB_2_5
 dataset		CAM_2
 game		"wrf/cam2/sub2-5.gam"
 data		"wrf/cam2/sub2-5.wrf"
-
-/* no longer used
-expand		CAM_2D
-dataset		CAM_2
-game		"wrf/cam2/cam2d.gam"
-data		"wrf/cam2/cam2d.wrf"
-*/
 
 between		SUB_2DS
 dataset		CAM_2
@@ -334,22 +290,10 @@ dataset		CAM_2
 game		"wrf/cam2/sub2-8.gam"
 data		"wrf/cam2/sub2-8.wrf"
 
-/* USE CAM_2END instead!
-expand		CAM_2D2
-dataset		CAM_2
-game		"wrf/cam2/cam2d2.gam"
-data		"wrf/cam2/cam2d2.wrf"
-*/
-
 between		CAM_2END
 dataset		CAM_2
 data		"wrf/cam2/cam2end.wrf"
 
-/*miss_clear	CAM_1_MISS2
-dataset		CAM_1
-game		"cam1/miss2.gam"
-data		"cam1/miss2.wrf"
-*/
 
 /******************************************************/
 /*     campaign 3 dataset and levels                  */
@@ -449,9 +393,6 @@ data		"wrf/cam3/sub3-4.wrf"
 
 camstart	FASTPLAY
 dataset		CAM_1
-//game		"wrf/FastPlay/fastplay.gam"
-//data		"wrf/FastPlay/fastplay.wrf"
-//changed for demo!
 game		"wrf/fastplay/fastdemo.gam"
 data		"wrf/fastplay/fastdemo.wrf"
 
