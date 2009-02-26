@@ -19,14 +19,21 @@ void mapFree(GAMEMAP *map)
 /* Initialise the map structure */
 GAMEMAP *mapLoad(char *filename)
 {
+	char		path[PATH_MAX];
 	GAMEMAP		*map = malloc(sizeof(*map));
-	uint32_t	gwVersion, i, j;
+	uint32_t	gwVersion, i, j, gameVersion, gameTime, gameType;
 	char		aFileType[4];
-	PHYSFS_file	*fp = PHYSFS_openRead(filename);
+	PHYSFS_file	*fp;
+
+	/* === Load map data === */
+
+	strcpy(path, filename);
+	strcat(path, "/game.map");
+	fp = PHYSFS_openRead(path);
 
 	if (!fp)
 	{
-		debug(LOG_ERROR, "%s not found", filename);
+		debug(LOG_ERROR, "Map file %s not found", path);
 		return NULL;
 	}
 	else if (PHYSFS_read(fp, aFileType, 4, 1) != 1
@@ -43,7 +50,7 @@ GAMEMAP *mapLoad(char *filename)
 	else if (map->version <= 9)
 	{
 		debug(LOG_ERROR, "%s: Unsupported save format version %u", filename, map->version);
-//		return NULL;
+		return NULL;
 	}
 	else if (map->version > 36)
 	{
@@ -100,6 +107,55 @@ GAMEMAP *mapLoad(char *filename)
 			return NULL;
 		}
 	}
-	
+	PHYSFS_close(fp);
+
+	/* === Load game data === */
+
+	strcpy(path, filename);
+	strcat(path, ".gam");
+	fp = PHYSFS_openRead(path);
+	if (!fp)
+	{
+		debug(LOG_ERROR, "Game file %s not found", filename);
+		return NULL;
+	}
+	else if (PHYSFS_read(fp, aFileType, 4, 1) != 1
+	    || aFileType[0] != 'g'
+	    || aFileType[1] != 'a'
+	    || aFileType[2] != 'm'
+	    || aFileType[3] != 'e'
+	    || !PHYSFS_readULE32(fp, &gameVersion))
+	{
+		debug(LOG_ERROR, "Bad header in %s", path);
+		return NULL;
+	}
+	if (gameVersion > 35)	// big-endian
+	{
+		if (!PHYSFS_readUBE32(fp, &gameTime)
+		    || !PHYSFS_readUBE32(fp, &gameType)
+		    || !PHYSFS_readSBE32(fp, &map->scrollMinX)
+		    || !PHYSFS_readSBE32(fp, &map->scrollMinY)
+		    || !PHYSFS_readUBE32(fp, &map->scrollMaxX)
+		    || !PHYSFS_readUBE32(fp, &map->scrollMaxY))
+		{
+			debug(LOG_ERROR, "Bad data in %s - big endian", filename);
+			return NULL;
+		}
+	}
+	else
+	{
+		if (!PHYSFS_readULE32(fp, &gameTime)
+		    || !PHYSFS_readULE32(fp, &gameType)
+		    || !PHYSFS_readSLE32(fp, &map->scrollMinX)
+		    || !PHYSFS_readSLE32(fp, &map->scrollMinY)
+		    || !PHYSFS_readULE32(fp, &map->scrollMaxX)
+		    || !PHYSFS_readULE32(fp, &map->scrollMaxY))
+		{
+			debug(LOG_ERROR, "Bad data in %s - little endian", filename);
+			return NULL;
+		}
+	}
+	PHYSFS_close(fp);
+
 	return map;
 }

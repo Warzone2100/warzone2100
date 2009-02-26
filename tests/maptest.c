@@ -6,7 +6,6 @@
 
 int main(int argc, char **argv)
 {
-	char filename[PATH_MAX];
 	FILE *fp = fopen("maplist.txt", "r");
 
 	if (!fp)
@@ -20,8 +19,16 @@ int main(int argc, char **argv)
 	while (!feof(fp))
 	{
 		GAMEMAP *map;
+		char filename[PATH_MAX], *delim;
 
 		fscanf(fp, "%s\n", &filename);
+		delim = strrchr(filename, '/');
+		if (!delim)
+		{
+			fprintf(stderr, "maptest: Failed to parse %s\n", filename);
+			return -1;
+		}
+		*delim = '\0';
 		printf("Testing map: %s\n", filename);
 		map = mapLoad(filename);
 		if (!map)

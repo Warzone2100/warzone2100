@@ -42,6 +42,8 @@ int main(int argc, char **argv)
 		printf("\tWidth: %d\n", (int)map->width);
 		printf("\tHeight: %d\n", (int)map->height);
 		printf("\tGateways: %d\n", (int)map->numGateways);
+		printf("\tScroll limits: (%d, %d, %d, %d)\n", 
+		       (int)map->scrollMinX, (int)map->scrollMinY, (int)map->scrollMaxX, (int)map->scrollMaxY);
 	}
 	mapFree(map);
 

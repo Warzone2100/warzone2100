@@ -60,6 +60,10 @@ typedef struct _mapfile_type
 {
 	MAPTILE			*psMapTiles;
 	uint32_t		height, width, version, numGateways;
+	int32_t			scrollMinX;
+	int32_t			scrollMinY;
+	uint32_t		scrollMaxX;
+	uint32_t		scrollMaxY;
 } GAMEMAP;
 
 /* Load the map data */
