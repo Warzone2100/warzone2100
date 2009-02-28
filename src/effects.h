@@ -112,22 +112,22 @@ typedef enum
 {
 	ES_INACTIVE,
 	ES_ACTIVE
-}EFFECT_STATUS;
+} EFFECT_STATUS;
 
 typedef enum
 {
 	LL_MIDDLE,
 	LL_INNER,
 	LL_OUTER
-}LAND_LIGHT_SPEC;
+} LAND_LIGHT_SPEC;
 
 #define SHOCK_WAVE_HEIGHT	(64)
 
 typedef struct	_effect_def
 {
 	uint8_t           control;		// Controls the bits above - essential,flips etc
-	uint8_t           group;			// what	group is it - explosion, building effect etc....
-	uint8_t           type;			// what type is it within the group?
+	EFFECT_GROUP      group;			// what	group is it - explosion, building effect etc....
+	EFFECT_TYPE       type;			// what type is it within the group?
 	uint8_t           frameNumber;	// what frame number is the imd on?
 	uint16_t          size;			// Size in terms of percent of original imd.
 	uint8_t           baseScale;		// if scaled, what's bottom line?
@@ -151,19 +151,19 @@ extern void	effectGiveAuxVarSec		( UDWORD var); // and so's this
 
 extern void	initEffectsSystem		( void );
 extern void	processEffects			( void );
-extern void	addEffect				( Vector3i *pos, EFFECT_GROUP group,
-										EFFECT_TYPE type, BOOL specified, iIMDShape *imd, BOOL lit );
-extern void	addMultiEffect			( Vector3i *basePos, Vector3i *scatter,EFFECT_GROUP group,
-									EFFECT_TYPE type,BOOL specified, iIMDShape *imd, UDWORD number, BOOL lit, UDWORD size );
+extern void addEffect				( const Vector3i *pos, EFFECT_GROUP group,
+										EFFECT_TYPE type, bool specified, iIMDShape *imd, bool lit );
+extern void addMultiEffect			( const Vector3i *basePos, Vector3i *scatter, EFFECT_GROUP group,
+									EFFECT_TYPE type, bool specified, iIMDShape *imd, unsigned int number, bool lit, unsigned int size );
 
-extern void	renderEffect			( EFFECT *psEffect );
+extern void	renderEffect			( const EFFECT *psEffect );
 extern void	effectResetUpdates		( void );
 extern UDWORD	getNumActiveEffects		( void );
 extern UDWORD	getMissCount( void );
 extern	UDWORD	getNumSkippedEffects(void);
 extern	UDWORD	getNumEvenEffects(void);
 
-extern void	initPerimeterSmoke			( iIMDShape *pImd, UDWORD x, UDWORD y, UDWORD z);
+extern void initPerimeterSmoke( iIMDShape *pImd, Vector3i base);
 
 extern bool readFXData(const char* fileName);
 extern bool	writeFXData(const char* fileName);

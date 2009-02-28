@@ -104,7 +104,7 @@ void featureInitVars(void)
 static void featureType(FEATURE_STATS* psFeature, const char *pType)
 {
 	unsigned int i;
-	
+
 	for (i = 0; i < ARRAY_SIZE(map); i++)
 	{
 		if (strcmp(pType, map[i].typeStr) == 0)
@@ -399,7 +399,7 @@ FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,BOOL FromSave)
 					FEATURE *psBlock = (FEATURE *)psTile->psObject;
 
 					debug(LOG_ERROR, "%s(%d) already placed at (%d+%d, %d+%d) when trying to place %s(%d) at (%d+%d, %d+%d) - removing it",
-					      getName(psBlock->psStats->pName), psBlock->id, map_coord(psBlock->pos.x), psBlock->psStats->baseWidth, map_coord(psBlock->pos.y), 
+					      getName(psBlock->psStats->pName), psBlock->id, map_coord(psBlock->pos.x), psBlock->psStats->baseWidth, map_coord(psBlock->pos.y),
 					      psBlock->psStats->baseBreadth, getName(psFeature->psStats->pName), psFeature->id, mapX, psStats->baseWidth, mapY, psStats->baseBreadth);
 
 					removeFeature(psBlock);
@@ -601,7 +601,7 @@ void destroyFeature(FEATURE *psDel)
 			pos.z = psDel->pos.y;
 			pos.y = psDel->pos.z;
 			addEffect(&pos,EFFECT_DESTRUCTION,DESTRUCTION_TYPE_SKYSCRAPER,true,psDel->sDisplay.imd,0);
-			initPerimeterSmoke(psDel->sDisplay.imd,pos.x,pos.y,pos.z);
+			initPerimeterSmoke(psDel->sDisplay.imd, pos);
 
 			// ----- Flip all the tiles under the skyscraper to a rubble tile
 			// smoke effect should disguise this happening

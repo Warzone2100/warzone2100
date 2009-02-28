@@ -204,16 +204,16 @@ static void updateEffect(EFFECT *psEffect);	// MASTER function
 
 // ----------------------------------------------------------------------------------------
 // ---- The render functions - every group type of effect has a distinct one
-static void	renderExplosionEffect	( EFFECT *psEffect );
-static void	renderSmokeEffect		( EFFECT *psEffect );
-static void	renderGravitonEffect	( EFFECT *psEffect );
-static void	renderConstructionEffect( EFFECT *psEffect );
-static void	renderWaypointEffect	( EFFECT *psEffect );
-static void	renderBloodEffect		( EFFECT *psEffect );
-static void	renderDestructionEffect	( EFFECT *psEffect );
-static void renderFirework			( EFFECT *psEffect );
+static void	renderExplosionEffect	( const EFFECT *psEffect );
+static void	renderSmokeEffect		( const EFFECT *psEffect );
+static void	renderGravitonEffect	( const EFFECT *psEffect );
+static void	renderConstructionEffect( const EFFECT *psEffect );
+static void	renderWaypointEffect	( const EFFECT *psEffect );
+static void	renderBloodEffect		( const EFFECT *psEffect );
+static void	renderDestructionEffect	( const EFFECT *psEffect );
+static void renderFirework			( const EFFECT *psEffect );
 
-static void positionEffect(EFFECT *psEffect);
+static void positionEffect(const EFFECT *psEffect);
 /* There is no render destruction effect! */
 
 // ----------------------------------------------------------------------------------------
@@ -233,15 +233,16 @@ static void effectDroidUpdates(void);
 static UDWORD effectGetNumFrames(EFFECT *psEffect);
 
 
-static void positionEffect(EFFECT *psEffect)
+static void positionEffect(const EFFECT *psEffect)
 {
-	Vector3i dv;
-	SDWORD rx, rz;
+	int rx, rz;
 
 	/* Establish world position */
-	dv.x = (psEffect->position.x - player.p.x) - terrainMidX * TILE_UNITS;
-	dv.y = psEffect->position.y;
-	dv.z = terrainMidY * TILE_UNITS - (psEffect->position.z - player.p.z);
+	Vector3i dv = {
+		(psEffect->position.x - player.p.x) - terrainMidX * TILE_UNITS,
+		psEffect->position.y,
+		terrainMidY * TILE_UNITS - (psEffect->position.z - player.p.z)
+	};
 
 	/* Push the indentity matrix */
 	iV_MatrixBegin();
@@ -353,29 +354,26 @@ void	effectSetSize(UDWORD size)
 	specifiedSize = size;
 }
 
-void	addMultiEffect(Vector3i *basePos, Vector3i *scatter, EFFECT_GROUP group,
-					   EFFECT_TYPE type,BOOL specified, iIMDShape *imd, UDWORD number, BOOL lit, UDWORD size)
+void addMultiEffect(const Vector3i *basePos, Vector3i *scatter, EFFECT_GROUP group,
+					   EFFECT_TYPE type, bool specified, iIMDShape *imd, unsigned int number, bool lit, unsigned int size)
 {
-	UDWORD	i;
-	Vector3i scatPos;
-
 	if(number==0)
 	{
 		return;
 	}
+
 	/* Set up the scaling for specified ones */
 	specifiedSize = size;
 
 	/* If there's only one, make sure it's in the centre */
 	if(number == 1)
 	{
-		scatPos.x = basePos->x;
-		scatPos.y = basePos->y;
-		scatPos.z = basePos->z;
-		addEffect(&scatPos,group,type,specified,imd,lit);
+		addEffect(basePos,group,type,specified,imd,lit);
 	}
 	else
 	{
+		unsigned int i;
+
 		/* Fix for jim */
 		scatter->x/=10;
 		scatter->y/=10;
@@ -384,9 +382,11 @@ void	addMultiEffect(Vector3i *basePos, Vector3i *scatter, EFFECT_GROUP group,
 		/* There are multiple effects - so scatter them around according to parameter */
 		for(i=0; i<number; i++)
 		{
-			scatPos.x = basePos->x + (scatter->x ? ( scatter->x	- (rand()%(2*scatter->x)) ) : 0 );
-			scatPos.y = basePos->y + (scatter->y ? ( scatter->y	- (rand()%(2*scatter->y)) ) : 0 );
-			scatPos.z = basePos->z + (scatter->z ? ( scatter->z	- (rand()%(2*scatter->z)) ) : 0 );
+			Vector3i scatPos = {
+				basePos->x + (scatter->x ? ( scatter->x	- (rand()%(2*scatter->x)) ) : 0 ),
+				basePos->y + (scatter->y ? ( scatter->y	- (rand()%(2*scatter->y)) ) : 0 ),
+				basePos->z + (scatter->z ? ( scatter->z	- (rand()%(2*scatter->z)) ) : 0 )
+			};
 			addEffect(&scatPos,group,type,specified,imd,lit);
 		}
 	}
@@ -413,7 +413,7 @@ UDWORD	getNumEvenEffects(void)
 }
 
 
-void	addEffect(Vector3i *pos, EFFECT_GROUP group, EFFECT_TYPE type,BOOL specified, iIMDShape *imd, BOOL lit)
+void addEffect(const Vector3i *pos, EFFECT_GROUP group, EFFECT_TYPE type, bool specified, iIMDShape *imd, bool lit)
 {
 	static unsigned int aeCalls = 0;
 	UDWORD	essentialCount;
@@ -668,6 +668,9 @@ static void updateEffect(EFFECT *psEffect)
 	case EFFECT_FIREWORK:
 		if(!gamePaused()) updateFirework(psEffect);
 		return;
+
+	case EFFECT_DUST_BALL: // Apparently not a valid effect...
+		break;
 	}
 
 	debug( LOG_ERROR, "Weirdy class of effect passed to updateEffect" );
@@ -1546,7 +1549,7 @@ static void updateFire(EFFECT *psEffect)
 // ALL THE RENDER FUNCTIONS
 // ----------------------------------------------------------------------------------------
 /** Calls the appropriate render routine for each type of effect */
-void	renderEffect(EFFECT *psEffect)
+void renderEffect(const EFFECT *psEffect)
 {
 		/* What type of effect are we dealing with? */
 	switch(psEffect->group)
@@ -1595,6 +1598,9 @@ void	renderEffect(EFFECT *psEffect)
 	case EFFECT_FIREWORK:
 		renderFirework(psEffect);
 		return;
+
+	case EFFECT_DUST_BALL: // Apparently not a valid effect...
+		break;
 	}
 
 	debug( LOG_ERROR, "Weirdy class of effect passed to renderEffect" );
@@ -1602,7 +1608,7 @@ void	renderEffect(EFFECT *psEffect)
 }
 
 /** drawing func for wapypoints */
-static void renderWaypointEffect(EFFECT *psEffect)
+static void renderWaypointEffect(const EFFECT *psEffect)
 {
 	positionEffect(psEffect);
 
@@ -1610,7 +1616,7 @@ static void renderWaypointEffect(EFFECT *psEffect)
 	iV_MatrixEnd();
 }
 
-static void renderFirework(EFFECT *psEffect)
+static void renderFirework(const EFFECT *psEffect)
 {
 	/* these don't get rendered */
 	if(psEffect->type == FIREWORK_TYPE_LAUNCHER)
@@ -1629,7 +1635,7 @@ static void renderFirework(EFFECT *psEffect)
 }
 
 /** drawing func for blood. */
-static void renderBloodEffect(EFFECT *psEffect)
+static void renderBloodEffect(const EFFECT *psEffect)
 {
 	positionEffect(psEffect);
 
@@ -1641,7 +1647,7 @@ static void renderBloodEffect(EFFECT *psEffect)
 	iV_MatrixEnd();
 }
 
-static void renderDestructionEffect(EFFECT *psEffect)
+static void renderDestructionEffect(const EFFECT *psEffect)
 {
 	float	div;
 	SDWORD	percent;
@@ -1698,7 +1704,7 @@ static bool rejectLandLight(LAND_LIGHT_SPEC type)
 }
 
 /** Renders the standard explosion effect */
-static void renderExplosionEffect(EFFECT *psEffect)
+static void renderExplosionEffect(const EFFECT *psEffect)
 {
 	SDWORD	percent;
 	const PIELIGHT brightness = WZCOL_WHITE;
@@ -1755,7 +1761,7 @@ static void renderExplosionEffect(EFFECT *psEffect)
 	iV_MatrixEnd();
 }
 
-static void renderGravitonEffect(EFFECT *psEffect)
+static void renderGravitonEffect(const EFFECT *psEffect)
 {
 
 	positionEffect(psEffect);
@@ -1782,7 +1788,7 @@ static void renderGravitonEffect(EFFECT *psEffect)
 }
 
 /** Renders the standard construction effect */
-static void renderConstructionEffect(EFFECT *psEffect)
+static void renderConstructionEffect(const EFFECT *psEffect)
 {
 	Vector3i null;
 	SDWORD	percent;
@@ -1827,7 +1833,7 @@ static void renderConstructionEffect(EFFECT *psEffect)
 }
 
 /** Renders the standard smoke effect - it is now scaled in real-time as well */
-static void renderSmokeEffect(EFFECT *psEffect)
+static void renderSmokeEffect(const EFFECT *psEffect)
 {
 	UDWORD	transparency = 0;
 	const PIELIGHT brightness = WZCOL_WHITE;
@@ -2312,18 +2318,13 @@ static void effectSetupDestruction(EFFECT *psEffect)
 
 #define FX_PER_EDGE 6
 #define	SMOKE_SHIFT	(16 - (rand()%32))
-void	initPerimeterSmoke(iIMDShape *pImd, UDWORD x, UDWORD y, UDWORD z)
+void initPerimeterSmoke(iIMDShape *pImd, Vector3i base)
 {
 	SDWORD	i;
 	SDWORD	inStart, inEnd;
 	SDWORD	varStart, varEnd, varStride;
 	SDWORD	shift = 0;
-	Vector3i base;
 	Vector3i pos;
-
-	base.x = x;
-	base.y = y;
-	base.z = z;
 
 	varStart = pImd->min.x -16;
 	varEnd = pImd->max.x + 16;
@@ -2381,9 +2382,8 @@ void	initPerimeterSmoke(iIMDShape *pImd, UDWORD x, UDWORD y, UDWORD z)
 		}
 		else
 		{
-	   		addEffect(&pos,EFFECT_SMOKE,SMOKE_TYPE_BILLOW,false,NULL,0);
+			addEffect(&pos,EFFECT_SMOKE,SMOKE_TYPE_BILLOW,false,NULL,0);
 		}
-
 
 		pos.x = base.x + inEnd + shift;
 		pos.y = base.y;
@@ -2587,18 +2587,10 @@ static void effectStructureUpdates(void)
 }
 
 
-void	effectResetUpdates( void )
+void effectResetUpdates(void)
 {
-	UDWORD	i;
-
-	for(i=0; i<EFFECT_DROID_DIVISION; i++)
-	{
-		lastUpdateDroids[i] = 0;
-	}
-	for(i=0; i<EFFECT_STRUCTURE_DIVISION; i++)
-	{
-		lastUpdateStructures[i] = 0;
-	}
+	memset(lastUpdateDroids, 0, sizeof(lastUpdateDroids));
+	memset(lastUpdateStructures, 0, sizeof(lastUpdateStructures));
 }
 
 
