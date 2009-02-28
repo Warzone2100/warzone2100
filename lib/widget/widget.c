@@ -80,6 +80,18 @@ void widgShutDown(void)
 {
 }
 
+// reset psMouseOverWidget (a global) when needed
+void CheckpsMouseOverWidget( void *psWidget )
+{
+	// in formFreePlain() (and maybe the others?) it is possible to free() the form
+	// thus invalidating this pointer, causing a crash in widgDelete()
+	if ( (WIDGET *)psWidget == psMouseOverWidget )
+	{
+		debug(LOG_WARNING, "psMouseOverWidget (%p) has become dangling. Reseting.", psMouseOverWidget);
+		psMouseOverWidget = NULL;
+	}
+}
+
 /* Create an empty widget screen */
 W_SCREEN* widgCreateScreen()
 {
@@ -655,6 +667,8 @@ void widgDelete(W_SCREEN *psScreen, UDWORD id)
 	{
 		screenClearFocus(psScreen);
 	}
+
+	// NOTE: This is where it would crash because of a dangling pointer. See CheckpsMouseOverWidget() for info.
 	// the mouse can't be over it anymore
 	if (psMouseOverWidget && psMouseOverWidget->id == id)
 	{
