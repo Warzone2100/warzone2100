@@ -1002,6 +1002,8 @@ BOOL recvPowerCheck()
 		NETuint32_t(&power);
 	NETend();
 
+	ASSERT( player < MAX_PLAYERS, "invalid player %u", player);
+
 	if (player >= MAX_PLAYERS)
 	{
 		debug(LOG_ERROR, "Bad NET_CHECK_POWER packet: player is %d", (int)player);
@@ -1015,7 +1017,7 @@ BOOL recvPowerCheck()
 	{
 		debug(LOG_SYNC, "NET_CHECK_POWER: Adjusting power for player %d (%s) from %u to %u",
 		      (int)player, isHumanPlayer(player) ? "Human" : "AI", power2, power);
-		setPower(player, power);
+		setPower( (uint32_t)player, power);
 	}
 	return true;
 }
