@@ -439,6 +439,21 @@ BOOL loadConfig(void)
 	if(getWarzoneKeyString("mapName", sBuf))
 	{
 		sstrcpy(game.map, sBuf);
+		if (getWarzoneKeyNumeric("maxPlayers", &val))
+		{
+			game.maxPlayers = val;
+		}
+		else
+		{
+			debug(LOG_WARNING, "Invalid or not found maxPlayers parameter for map %s", game.map);
+			debug(LOG_WARNING, "Reseting map to default parameters.");
+			// we don't have maxPlayers set, so fall back to defaults.
+			game.maxPlayers = 4;	//4 is for the DEFAULTMAPNAME map (rush)
+			sstrcpy(game.map, DEFAULTMAPNAME);
+			setWarzoneKeyString("mapName", game.map);
+			setWarzoneKeyNumeric("maxPlayers",game.maxPlayers);
+
+		}
 	}
 	else
 	{
@@ -705,16 +720,17 @@ BOOL saveConfig(void)
 		debug( LOG_NEVER, "Writing multiplay prefs to registry\n" );
 		if(NetPlay.bHost && ingame.localJoiningInProgress)
 		{
-			setWarzoneKeyString("gameName", game.name);				//  last hosted game
+			setWarzoneKeyString("gameName", game.name);			//  last hosted game
 		}
 		setWarzoneKeyString("mapName", game.map);				//  map name
-		setWarzoneKeyNumeric("power", game.power);			// power
+		setWarzoneKeyNumeric("maxPlayers",game.maxPlayers);		// maxPlayers
+		setWarzoneKeyNumeric("power", game.power);				// power
 		setWarzoneKeyNumeric("type", game.type);				// game type
 		setWarzoneKeyNumeric("base", game.base);				// size of base
-		setWarzoneKeyNumeric("fog", game.fog);				// fog 'o war
-		setWarzoneKeyNumeric("alliance", game.alliance);			// allow alliances
+		setWarzoneKeyNumeric("fog", game.fog);					// fog 'o war
+		setWarzoneKeyNumeric("alliance", game.alliance);		// allow alliances
 		setWarzoneKeyString("playerName",(char*)sPlayer);		// player name
-		setWarzoneKeyString("phrase0", ingame.phrases[0]);	// phrases
+		setWarzoneKeyString("phrase0", ingame.phrases[0]);		// phrases
 		setWarzoneKeyString("phrase1", ingame.phrases[1]);
 		setWarzoneKeyString("phrase2", ingame.phrases[2]);
 		setWarzoneKeyString("phrase3", ingame.phrases[3]);
