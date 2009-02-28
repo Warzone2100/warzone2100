@@ -3205,13 +3205,13 @@ void drawRadarBlips(int radarX, int radarY, float pixSizeH, float pixSizeV)
 		{
 			VIEW_PROXIMITY *psViewProx = (VIEW_PROXIMITY *)((VIEWDATA *)psProxDisp->psMessage->pViewData)->pData;
 
-			x = (psViewProx->x / TILE_UNITS) * pixSizeH;
-			y = (psViewProx->y / TILE_UNITS) * pixSizeV;
+			x = (psViewProx->x / TILE_UNITS - scrollMinX) * pixSizeH;
+			y = (psViewProx->y / TILE_UNITS - scrollMinY) * pixSizeV;
 		}
 		else if (psProxDisp->type == POS_PROXOBJ)
 		{
-			x = (((BASE_OBJECT *)psProxDisp->psMessage->pViewData)->pos.x / TILE_UNITS) * pixSizeH;
-			y = (((BASE_OBJECT *)psProxDisp->psMessage->pViewData)->pos.y / TILE_UNITS) * pixSizeV;
+			x = (((BASE_OBJECT *)psProxDisp->psMessage->pViewData)->pos.x / TILE_UNITS - scrollMinX) * pixSizeH;
+			y = (((BASE_OBJECT *)psProxDisp->psMessage->pViewData)->pos.y / TILE_UNITS - scrollMinY) * pixSizeV;
 		}
 		else
 		{
