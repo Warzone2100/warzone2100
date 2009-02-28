@@ -2912,7 +2912,11 @@ static void checkLocalFeatures(DROID *psDroid)
 {
 	SDWORD			i;
 	BASE_OBJECT		*psObj;
+	static int oilTimer = 0;
+	static bool GenerateDrum = false;
+	static uint8_t drumCount = 0;
 
+	// NOTE: Why not do this for AI units also?
 	// only do for players droids.
 	if(psDroid->player != selectedPlayer)
 	{
@@ -2920,7 +2924,7 @@ static void checkLocalFeatures(DROID *psDroid)
 	}
 
 	droidGetNaybors(psDroid);// update naybor list.
-
+	ASSERT( numNaybors <= MAX_NAYBORS, "numNaybors is %d, out of range of %d!", numNaybors, MAX_NAYBORS);
 	// scan the neighbours
 	for(i=0; i<(SDWORD)numNaybors; i++)
 	{
@@ -2928,26 +2932,43 @@ static void checkLocalFeatures(DROID *psDroid)
 		psObj = asDroidNaybors[i].psObj;
 		if (   psObj->type != OBJ_FEATURE
 			|| ((FEATURE *)psObj)->psStats->subType != FEAT_OIL_DRUM
-			|| asDroidNaybors[i].distSqr >= DROIDDIST )
+			|| asDroidNaybors[i].distSqr >= DROIDDIST
+			|| isVtolDroid(psDroid))	// VTOLs can't pick up features!
 		{
 			// object too far away to worry about
 			continue;
 		}
 
-
 		if(bMultiPlayer && (psObj->player == ANYPLAYER))
 		{
 			giftPower(ANYPLAYER,selectedPlayer,true);			// give power and tell everyone.
-			addOilDrum(1);
+			// when player finds oil, we init the timer, and flag that we need a drum
+			if (!oilTimer)
+			{
+				oilTimer = gameTime2;
+				GenerateDrum = true;
+			}
+			// if player finds more than one drum (before timer expires), then we tack on ~50 sec to timer.
+			if(drumCount++)
+			{
+				oilTimer += GAME_TICKS_PER_SEC * 50;
+			}
 		}
 		else
-
 		{
 			addPower(selectedPlayer,OILDRUM_POWER);
-			CONPRINTF(ConsoleString,(ConsoleString,_("You found %u power in an oil drum"),OILDRUM_POWER));
+			CONPRINTF(ConsoleString,(ConsoleString,_("You found %u power in an oil drum."),OILDRUM_POWER));
 		}
 		removeFeature((FEATURE*)psObj);							// remove artifact+ send multiplay info.
+	}
 
+	// once they found a oil drum, we then wait ~600 secs before we pop up new one(s).
+	if( ((oilTimer + GAME_TICKS_PER_SEC * 600) < gameTime2 ) && GenerateDrum )
+	{
+		addOilDrum(drumCount);
+		oilTimer = 0;
+		drumCount = 0;
+		GenerateDrum = false;
 	}
 }
 

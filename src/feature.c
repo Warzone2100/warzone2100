@@ -254,6 +254,7 @@ FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,BOOL FromSave)
 	FEATURE* psFeature = createFeature();
 	if (psFeature == NULL)
 	{
+		debug(LOG_WARNING, "Feature couldn't be built.");
 		return NULL;
 	}
 	// features are not in the cluster system

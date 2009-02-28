@@ -311,6 +311,7 @@ void giftPower(uint8_t from, uint8_t to, BOOL send)
 	if (from == ANYPLAYER)
 	{
 		gifval = OILDRUM_POWER;
+		CONPRINTF(ConsoleString,(ConsoleString,_("Player %u found %u power in an oil drum"), to, gifval));
 	}
 	else
 	{
@@ -321,10 +322,6 @@ void giftPower(uint8_t from, uint8_t to, BOOL send)
 
 	addPower(to, gifval);
 
-	if (from == ANYPLAYER && to == selectedPlayer)
-	{
-		CONPRINTF(ConsoleString,(ConsoleString,_("You found %u power in an oil drum"),gifval));
-	}
 	if (send)
 	{
 		uint8_t giftType = POWER_GIFT;
@@ -604,6 +601,23 @@ void recvMultiPlayerFeature()
 		}
 	}
 }
+// must match _feature_type in featuredef.h
+static const char *feature_names[] =
+{
+	"FEAT_BUILD_WRECK",
+	"FEAT_HOVER",
+	"FEAT_TANK",
+	"FEAT_GEN_ARTE",
+	"FEAT_OIL_RESOURCE",
+	"FEAT_BOULDER",
+	"FEAT_VEHICLE",
+	"FEAT_BUILDING",
+	"FEAT_DROID",
+	"FEAT_LOS_OBJ",
+	"FEAT_OIL_DRUM",
+	"FEAT_TREE",
+	"FEAT_SKYSCRAPER",
+};
 ///////////////////////////////////////////////////////////////////////////////
 // splatter artifact gifts randomly about.
 void  addMultiPlayerRandomArtifacts(uint8_t quantity, FEATURE_TYPE type)
@@ -613,6 +627,7 @@ void  addMultiPlayerRandomArtifacts(uint8_t quantity, FEATURE_TYPE type)
 	uint32_t	x, y;
 	uint8_t		player = ANYPLAYER;
 
+	debug(LOG_FEATURE, "Sending %u artifact(s) type: (%s)", quantity, feature_names[type]);
 	NETbeginEncode(NET_ARTIFACTS, NET_ALL_PLAYERS);
 		NETuint8_t(&quantity);
 		NETenum(&type);
@@ -630,7 +645,8 @@ void  addMultiPlayerRandomArtifacts(uint8_t quantity, FEATURE_TYPE type)
 
 			if (!pickATileGen(&x, &y, LOOK_FOR_EMPTY_TILE, zonedPAT))
 			{
-				ASSERT(false, "addMultiPlayerRandomArtifacts: Unable to find a free location");
+				ASSERT(false, "Unable to find a free location");
+				break;
 			}
 
 			pF = buildFeature(asFeatureStats + i, world_coord(x), world_coord(y), false);
@@ -671,6 +687,7 @@ void recvMultiPlayerRandomArtifacts()
 		NETuint8_t(&quantity);
 		NETenum(&type);
 
+	debug(LOG_FEATURE, "receiving %u artifact(s) type: (%s)", quantity, feature_names[type]);
 	for (i = 0; i < numFeatureStats && asFeatureStats[i].subType != type; i++);
 
 	for (count = 0; count < quantity; count++)
@@ -684,13 +701,13 @@ void recvMultiPlayerRandomArtifacts()
 
 		if (!tileOnMap(tx, ty))
 		{
-			debug(LOG_ERROR, "recvMultiPlayerRandomArtifacts: Bad tile coordinates (%u,%u)", tx, ty);
+			debug(LOG_ERROR, "Bad tile coordinates (%u,%u)", tx, ty);
 			continue;
 		}
 		psTile = mapTile(tx, ty);
 		if (!psTile || psTile->psObject != NULL)
 		{
-			debug(LOG_ERROR, "recvMultiPlayerRandomArtifacts: Already something at (%u,%u)!", tx, ty);
+			debug(LOG_ERROR, "Already something at (%u,%u)!", tx, ty);
 			continue;
 		}
 
@@ -699,6 +716,10 @@ void recvMultiPlayerRandomArtifacts()
 		{
 			pF->id		= ref;
 			pF->player	= player;
+		}
+		else
+		{
+			debug(LOG_ERROR, "Couldn't build feature %u for player %u ?", ref, player);
 		}
 	}
 	NETend();

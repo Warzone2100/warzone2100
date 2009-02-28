@@ -123,8 +123,8 @@ BOOL turnOffMultiMsg(BOOL bDoit)
 	{
 		if(bTemp == true)
 		{
-			// Surely, this should be a Assert?
-			debug(LOG_ERROR, "multiple calls to turn off");
+			// This is spammed multiple times.
+			debug(LOG_NEVER, "multiple calls to turn off");
 		}
 		if(bMultiPlayer)
 		{
@@ -1479,10 +1479,13 @@ static BOOL recvDestroyTemplate()
 // send a destruct feature message.
 BOOL SendDestroyFeature(FEATURE *pF)
 {
-	// Only send if it is our responsibility
-	if (myResponsibility(pF->player))
+	// Since ANYPLAYER is supposed to be controlled by host only, that creates a issue when
+	// a MP player gets a feature, and it is 'ANYPLAYER' it would never send the destroy msg.
+	if (!myResponsibility(pF->player) || !(pF->player == ANYPLAYER))
+	{
 		return true;
-
+	}
+	debug(LOG_FEATURE, "p%d feature id %d destroyed (%s)", pF->player, pF->id, pF->psStats->pName);
 	NETbeginEncode(NET_FEATUREDEST, NET_ALL_PLAYERS);
 		NETuint32_t(&pF->id);
 	return NETend();
@@ -1502,9 +1505,11 @@ BOOL recvDestroyFeature()
 
 	if (pF == NULL)
 	{
+	debug(LOG_WARNING, "feature id %d not found? (sync error?)", id);
 		return false;
 	}
 
+	debug(LOG_FEATURE, "p%d feature id %d destroyed (%s)", pF->player, pF->id, pF->psStats->pName);
 	// Remove the feature locally
 	turnOffMultiMsg(true);
 	removeFeature(pF);

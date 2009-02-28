@@ -849,7 +849,8 @@ static BOOL campInit(void)
 	// add free research gifts..
 	if(NetPlay.bHost)
 	{
-		addOilDrum( NetPlay.playercount*2 );		// add some free power.
+		// NOTE: you can set this safely to 50 for testing.
+		addOilDrum( NetPlay.playercount*2);	// add some free power.
 	}
 
 	playerResponding();			// say howdy!

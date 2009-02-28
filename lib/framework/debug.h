@@ -139,6 +139,7 @@ typedef enum {
   LOG_GATEWAY,
   LOG_MSG,
   LOG_TERRAIN,
+  LOG_FEATURE,
   LOG_LAST /**< _must_ be last! */
 } code_part;
 
