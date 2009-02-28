@@ -1525,15 +1525,18 @@ void actionUpdateDroid(DROID *psDroid)
 					actionAddVtolAttackRun( psDroid );
 				}
 			}
-			// if the vtol is far enough away head for the target again
-			else if (rangeSq > (SDWORD)(psWeapStats->longRange * psWeapStats->longRange))
-			{
-				// don't do another attack run if already heading for the target
-				const int xdiff = (SDWORD)psDroid->sMove.DestinationX - (SDWORD)psDroid->psActionTarget[0]->pos.x;
-				const int ydiff = (SDWORD)psDroid->sMove.DestinationY - (SDWORD)psDroid->psActionTarget[0]->pos.y;
-				if ((xdiff*xdiff + ydiff*ydiff) > (VTOL_ATTACK_TARDIST*VTOL_ATTACK_TARDIST))
+			// in case psWeapStats is still NULL
+			else if (psWeapStats)
+			{	// if the vtol is far enough away head for the target again
+				if (rangeSq > (SDWORD)(psWeapStats->longRange * psWeapStats->longRange))
 				{
-					moveDroidToDirect(psDroid, psDroid->psActionTarget[0]->pos.x,psDroid->psActionTarget[0]->pos.y);
+					// don't do another attack run if already heading for the target
+					const int xdiff = (SDWORD)psDroid->sMove.DestinationX - (SDWORD)psDroid->psActionTarget[0]->pos.x;
+					const int ydiff = (SDWORD)psDroid->sMove.DestinationY - (SDWORD)psDroid->psActionTarget[0]->pos.y;
+					if ((xdiff*xdiff + ydiff*ydiff) > (VTOL_ATTACK_TARDIST*VTOL_ATTACK_TARDIST))
+					{
+						moveDroidToDirect(psDroid, psDroid->psActionTarget[0]->pos.x,psDroid->psActionTarget[0]->pos.y);
+					}
 				}
 			}
 		}
