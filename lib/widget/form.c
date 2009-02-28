@@ -143,10 +143,10 @@ static W_FORM* formCreatePlain(const W_FORMINIT* psInit)
 /* Free a plain form widget */
 static void formFreePlain(W_FORM *psWidget)
 {
-	ASSERT( psWidget != NULL,
-		"formFreePlain: Invalid form pointer" );
+	ASSERT( psWidget != NULL, "Invalid form pointer" );
 
 	widgReleaseWidgetList(psWidget->psWidgets);
+	CheckpsMouseOverWidget(psWidget);			// clear global if needed
 	free(psWidget);
 }
 
