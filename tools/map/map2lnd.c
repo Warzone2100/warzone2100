@@ -171,7 +171,7 @@ int main(int argc, char **argv)
 		MADD("        TID %d VF %d TF %d F %d VH %d %d %d %d", 
 		     tid + 1, vf, tf, f, vh[0], vh[1], vh[2], vh[3]);
 		y++;
-		if (x == map->width)
+		if (y == map->width)
 		{
 			y = 0; x++;
 		}
