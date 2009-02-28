@@ -454,7 +454,9 @@ void addMultiRequest(const char* searchDir, const char* fileExtension, UDWORD mo
 	// this will need to change.
 	if (sFormInit.numMajor > MAX_TAB_STD_SHOWN)
 	{
-		sFormInit.numMajor = MAX_TAB_STD_SHOWN;
+		ASSERT(sFormInit.numMajor < MAX_TAB_SMALL_SHOWN,"Too many maps! Need scroll tabs here.");
+		sFormInit.pUserData = &SmallTab;
+		sFormInit.majorSize /= 2;
 	}
 
 	for (i = 0; i < sFormInit.numMajor; ++i)
