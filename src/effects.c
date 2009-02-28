@@ -136,13 +136,6 @@
 #define	STRUCTURE_DESTRUCTION_DURATION	((7*GAME_TICKS_PER_SEC)/2)	 // 3.5 seconds
 
 
-extern UWORD OffScreenEffects;
-
-
-/* Our list of all game world effects */
-static EFFECT        asEffectsList[MAX_EFFECTS];
-static EFFECT_STATUS effectStatus[MAX_EFFECTS];
-
 #define FIREWORK_EXPLODE_HEIGHT			400
 #define STARBURST_RADIUS				150
 #define STARBURST_DIAMETER				300
@@ -170,6 +163,11 @@ static EFFECT_STATUS effectStatus[MAX_EFFECTS];
 #define	FLARE_SIZE						100
 #define SHOCKWAVE_SPEED	(GAME_TICKS_PER_SEC)
 #define	MAX_SHOCKWAVE_SIZE				500
+
+
+/* Our list of all game world effects */
+static EFFECT        asEffectsList[MAX_EFFECTS];
+static EFFECT_STATUS effectStatus[MAX_EFFECTS];
 
 /* Tick counts for updates on a particular interval */
 static	UDWORD	lastUpdateDroids[EFFECT_DROID_DIVISION];
@@ -359,7 +357,7 @@ void	effectSetSize(UDWORD size)
 void addMultiEffect(const Vector3i *basePos, Vector3i *scatter, EFFECT_GROUP group,
 					   EFFECT_TYPE type, bool specified, iIMDShape *imd, unsigned int number, bool lit, unsigned int size)
 {
-	if(number==0)
+	if (number == 0)
 	{
 		return;
 	}
@@ -368,7 +366,7 @@ void addMultiEffect(const Vector3i *basePos, Vector3i *scatter, EFFECT_GROUP gro
 	specifiedSize = size;
 
 	/* If there's only one, make sure it's in the centre */
-	if(number == 1)
+	if (number == 1)
 	{
 		addEffect(basePos,group,type,specified,imd,lit);
 	}
@@ -583,8 +581,9 @@ void addEffect(const Vector3i *pos, EFFECT_GROUP group, EFFECT_TYPE type, bool s
 	}
 }
 
+
 /* Calls all the update functions for each different currently active effect */
-void	processEffects(void)
+void processEffects(void)
 {
 	unsigned int i;
 
@@ -621,6 +620,7 @@ void	processEffects(void)
 	activeEffects = numEffects;
 	skippedEffects = skipped;
 }
+
 
 /* The general update function for all effects - calls a specific one for each */
 static void updateEffect(EFFECT *psEffect)
@@ -908,21 +908,18 @@ static void updateExplosion(EFFECT *psEffect)
 	UDWORD range;
 	float scaling;
 
-	if(TEST_LIT(psEffect))
+	if (TEST_LIT(psEffect))
 	{
-		if(psEffect->lifeSpan)
+		if (psEffect->lifeSpan)
 		{
-			percent = PERCENT(gameTime-psEffect->birthTime,psEffect->lifeSpan);
-			if(percent > 100)
+			percent = PERCENT(gameTime-psEffect->birthTime, psEffect->lifeSpan);
+			if (percent > 100)
 			{
 				percent = 100;
 			}
-			else
+			else if (percent > 50)
 			{
-				if(percent>50)
-				{
-					percent = 100-percent;
-				}
+				percent = 100 - percent;
 			}
 		}
 		else
@@ -939,20 +936,7 @@ static void updateExplosion(EFFECT *psEffect)
 		processLight(&light);
 	}
 
-/*
-	if(psEffect->type == EXPLOSION_TYPE_LAND_LIGHT)
-	{
-		light.position.x = psEffect->position.x;
-		light.position.y = psEffect->position.y;
-		light.position.z = psEffect->position.z;
-		light.range = getTimeValueRange(1024,512);
-		if(light.range>256) light.range = 512-light.range;
-		light.colour = LIGHT_RED;
-		processLight(&light);
-	}
-*/
-
-	if(psEffect->type == EXPLOSION_TYPE_SHOCKWAVE)
+	if (psEffect->type == EXPLOSION_TYPE_SHOCKWAVE)
 	{
 		psEffect->size += timeAdjustedIncrement(SHOCKWAVE_SPEED, true);
 		scaling = (float)psEffect->size / (float)MAX_SHOCKWAVE_SIZE;
@@ -965,49 +949,43 @@ static void updateExplosion(EFFECT *psEffect)
 		light.colour = LIGHT_YELLOW;
 		processLight(&light);
 
-		if(psEffect->size>MAX_SHOCKWAVE_SIZE || light.range>600)
+		if (psEffect->size > MAX_SHOCKWAVE_SIZE || light.range > 600)
 		{
  			/* Kill it off */
 			killEffect(psEffect);
 			return;
+		}
+	}
+	/* Time to update the frame number on the explosion */
+	else if (gameTime - psEffect->lastFrame > psEffect->frameDelay)
+	{
+		psEffect->lastFrame = gameTime;
+		/* Are we on the last frame? */
 
+		if (++psEffect->frameNumber >= effectGetNumFrames(psEffect))
+		{
+			if (psEffect->type != EXPLOSION_TYPE_LAND_LIGHT)
+			{
+				/* Kill it off */
+				killEffect(psEffect);
+				return;
+			}
+			else
+			{
+				psEffect->frameNumber = 0;
+			}
 		}
 	}
 
-	/* Time to update the frame number on the explosion */
-	else
-		if(gameTime - psEffect->lastFrame > psEffect->frameDelay)
-		{
-			psEffect->lastFrame = gameTime;
-			/* Are we on the last frame? */
-
-			if(++psEffect->frameNumber >= effectGetNumFrames(psEffect))
-			{
-		 		if(psEffect->type!=EXPLOSION_TYPE_LAND_LIGHT)
-				{
-		 			/* Kill it off */
-					killEffect(psEffect);
-					return;
-				}
-				else
-				{
-					psEffect->frameNumber = 0;
-				}
-			}
-		}
-
 	if(!gamePaused())
 	{
-
 		/* Tesla explosions are the only ones that rise, or indeed move */
 		if(psEffect->type == EXPLOSION_TYPE_TESLA)
 		{
 			psEffect->position.y += timeAdjustedIncrement(psEffect->velocity.y, true);
 		}
-
 	}
 }
-
 
 
 /** The update function for blood */
@@ -2174,7 +2152,7 @@ void effectSetupExplosion(EFFECT *psEffect)
 	/* Set how long it lasts */
 	else if(psEffect->type == EXPLOSION_TYPE_LASER)
 	{
-		psEffect->frameDelay = (UWORD)(EXPLOSION_FRAME_DELAY/2);
+		psEffect->frameDelay = EXPLOSION_FRAME_DELAY/2;
 	}
 	else
 	if(psEffect->type==EXPLOSION_TYPE_TESLA)
@@ -2287,7 +2265,6 @@ static void effectSetupBlood(EFFECT *psEffect)
 
 static void effectSetupDestruction(EFFECT *psEffect)
 {
-
 	if(psEffect->type == DESTRUCTION_TYPE_SKYSCRAPER)
 	{
 		psEffect->lifeSpan = (3*GAME_TICKS_PER_SEC)/2 + (rand()%GAME_TICKS_PER_SEC);
@@ -2318,85 +2295,77 @@ static void effectSetupDestruction(EFFECT *psEffect)
 	}
 }
 
-#define FX_PER_EDGE 6
-#define	SMOKE_SHIFT	(16 - (rand()%32))
+
+#define SMOKE_SHIFT (16 - (rand()%32))
 void initPerimeterSmoke(iIMDShape *pImd, Vector3i base)
 {
-	SDWORD	i;
-	SDWORD	inStart, inEnd;
-	SDWORD	varStart, varEnd, varStride;
-	SDWORD	shift = 0;
-	Vector3i pos;
+	int i;
+	int shift = SMOKE_SHIFT;
+	int inStart = pImd->min.z - 16, inEnd = pImd->max.z + 16;
+	int varStart = pImd->min.x - 16, varEnd = pImd->max.x + 16, varStride = 24;
 
-	varStart = pImd->min.x -16;
-	varEnd = pImd->max.x + 16;
-	varStride = 24;//(varEnd-varStart)/FX_PER_EDGE;
-
-	inStart = pImd->min.z - 16;
-	inEnd = pImd->max.z + 16;
-
-	for(i=varStart; i<varEnd; i+=varStride)
+	for (i = varStart; i < varEnd; i += varStride)
 	{
-		shift = SMOKE_SHIFT;
-		pos.x = base.x + i + shift;
-		pos.y = base.y;
-		pos.z = base.z + inStart + shift;
-		if(rand()%6==1)
+		Vector3i pos = {
+			base.x + i + shift,
+			base.y,
+			base.z + inStart + shift
+		};
+
+		if (rand()%6 == 1)
 		{
-			addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_SMALL,false,NULL,0);
+			addEffect(&pos, EFFECT_EXPLOSION, EXPLOSION_TYPE_SMALL, false, NULL, 0);
 		}
 		else
 		{
-			addEffect(&pos,EFFECT_SMOKE,SMOKE_TYPE_BILLOW,false,NULL,0);
+			addEffect(&pos, EFFECT_SMOKE, SMOKE_TYPE_BILLOW, false, NULL, 0);
 		}
 
-		pos.x = base.x + i + shift;
-		pos.y = base.y;
-		pos.z = base.z + inEnd + shift;
-		if(rand()%6==1)
+		pos = Vector3i_Init(base.x + i + shift, base.y, base.z + inEnd + shift);
+
+		if (rand()%6 == 1)
 		{
-			addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_SMALL,false,NULL,0);
+			addEffect(&pos, EFFECT_EXPLOSION, EXPLOSION_TYPE_SMALL, false, NULL, 0);
 		}
 		else
 		{
-			addEffect(&pos,EFFECT_SMOKE,SMOKE_TYPE_BILLOW,false,NULL,0);
+			addEffect(&pos, EFFECT_SMOKE, SMOKE_TYPE_BILLOW, false, NULL, 0);
 		}
-
 	}
-
 
 	varStart = pImd->min.z - 16;
 	varEnd = pImd->max.z + 16;
-	varStride = 24;//(varEnd-varStart)/FX_PER_EDGE;
+	varStride = 24;
 
 	inStart = pImd->min.x - 16;
 	inEnd = pImd->max.x + 16;
 
-
-	for(i=varStart; i<varEnd; i+=varStride)
+	for (i = varStart; i < varEnd; i += varStride)
 	{
-		pos.x = base.x + inStart + shift;
-		pos.y = base.y;
-		pos.z = base.z + i + shift;
-		if(rand()%6==1)
+		Vector3i pos = {
+			base.x + inStart + shift,
+			base.y,
+			base.z + i + shift
+		};
+
+		if (rand()%6 == 1)
 		{
-			addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_SMALL,false,NULL,0);
+			addEffect(&pos, EFFECT_EXPLOSION, EXPLOSION_TYPE_SMALL, false, NULL, 0);
 		}
 		else
 		{
-			addEffect(&pos,EFFECT_SMOKE,SMOKE_TYPE_BILLOW,false,NULL,0);
+			addEffect(&pos, EFFECT_SMOKE, SMOKE_TYPE_BILLOW, false, NULL, 0);
 		}
 
-		pos.x = base.x + inEnd + shift;
-		pos.y = base.y;
-		pos.z = base.z + i + shift;
-		if(rand()%6==1)
+		pos = Vector3i_Init(base.x + inEnd + shift, base.y, base.z + i + shift);
+
+		if (rand()%6 == 1)
 		{
-			addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_SMALL,false,NULL,0);
+			addEffect(&pos, EFFECT_EXPLOSION, EXPLOSION_TYPE_SMALL, false, NULL, 0);
 		}
 		else
 		{
-			addEffect(&pos,EFFECT_SMOKE,SMOKE_TYPE_BILLOW,false,NULL,0);
+			addEffect(&pos, EFFECT_SMOKE, SMOKE_TYPE_BILLOW, false, NULL, 0);
 		}
 	}
 }
@@ -2419,6 +2388,7 @@ void	effectGiveAuxVarSec( UDWORD var)
 	auxVarSec = var;
 }
 
+
 /** Runs all the spot effect stuff for the droids - adding of dust and the like... */
 static void effectDroidUpdates(void)
 {
@@ -2436,10 +2406,10 @@ static void effectDroidUpdates(void)
 			unsigned int partition = psDroid->id % EFFECT_DROID_DIVISION;
 
 			/* Right frame to process? */
-			if(partition == frameGetFrameNumber() % EFFECT_DROID_DIVISION && ONEINFOUR)
+			if (partition == frameGetFrameNumber() % EFFECT_DROID_DIVISION && ONEINFOUR)
 			{
 				/* Sufficent time since last update? - The EQUALS comparison is needed */
-				if(gameTime >= (lastUpdateDroids[partition] + DROID_UPDATE_INTERVAL))
+				if (gameTime >= (lastUpdateDroids[partition] + DROID_UPDATE_INTERVAL))
 				{
 					/* Store away when we last processed this group */
 					lastUpdateDroids[partition] = gameTime;
@@ -2447,18 +2417,22 @@ static void effectDroidUpdates(void)
 					/*	Now add some dust at it's arse end if it's moving or skidding.
 						The check that it's not 0 is probably not sufficient.
 					*/
-					if( (SDWORD)psDroid->sMove.speed != 0 )
+					if ((int)psDroid->sMove.speed != 0)
 					{
 						/* Present direction is important */
 						Vector2i behind = {
-							( 50 * SIN( DEG( psDroid->direction) ) ) >> FP12_SHIFT,
-							( 50 * COS( DEG( psDroid->direction) ) ) >> FP12_SHIFT
+							50.0f * sinf(psDroid->direction),
+							50.0f * cosf(psDroid->direction)
 						};
-						Vector3i pos;
+						Vector3i pos = {
+							clip(psDroid->pos.x - behind.x, 0, mapWidth),
+							clip(psDroid->pos.y - behind.y, 0, mapHeight),
+							0
+						};
 
-						pos.x = MAX(0, psDroid->pos.x - behind.x);
-						pos.z =	MAX(0, psDroid->pos.y - behind.y);
-						pos.y = map_Height(pos.x, pos.z);
+						pos.z = map_Height(pos.x, pos.z);
+
+						// FIXME This does not do anything!!
 					}
 				}
 			}
@@ -2466,86 +2440,77 @@ static void effectDroidUpdates(void)
 	}
 }
 
+
 /** Runs all the structure effect stuff - steam puffing out etc */
 static void effectStructureUpdates(void)
 {
-	UDWORD		i;
-	UDWORD		partition;
-	STRUCTURE	*psStructure;
-	Vector3i eventPos;
-	UDWORD		capacity;
-	POWER_GEN	*psPowerGen;
-	BOOL		active;
+	unsigned int i;
 
 	/* Go thru' all players */
-	for(i=0; i<MAX_PLAYERS; i++)
+	for (i = 0; i < MAX_PLAYERS; i++)
 	{
-		for(psStructure = apsStructLists[i]; psStructure; psStructure = psStructure->psNext)
+		STRUCTURE *psStructure;
+
+		for (psStructure = apsStructLists[i]; psStructure; psStructure = psStructure->psNext)
 		{
 			/* Find it's group */
-			partition = psStructure->id % EFFECT_STRUCTURE_DIVISION;
+			unsigned int partition = psStructure->id % EFFECT_STRUCTURE_DIVISION;
+
 			/* Is it the right frame? */
-			if(partition == frameGetFrameNumber() % EFFECT_STRUCTURE_DIVISION)
+			if (partition == frameGetFrameNumber() % EFFECT_STRUCTURE_DIVISION)
 			{
 				/* Is it the right time? */
-				if(gameTime > (lastUpdateStructures[partition] + STRUCTURE_UPDATE_INTERVAL))
+				if (gameTime > (lastUpdateStructures[partition] + STRUCTURE_UPDATE_INTERVAL))
 				{
 					/* Store away the last update time */
 					lastUpdateStructures[partition] = gameTime;
-					// -------------------------------------------------------------------------------
+
 					/* Factories puff out smoke, power stations puff out tesla stuff */
-
-				 	if( (psStructure->pStructureType->type == REF_FACTORY) ||
-						(psStructure->pStructureType->type == REF_POWER_GEN) )
-					if( (bMultiPlayer && isHumanPlayer(psStructure->player))
-						|| (psStructure->player == 0) )
-
-					if(psStructure->status==SS_BUILT)
-					if(psStructure->visible[selectedPlayer])
+					if ( (psStructure->pStructureType->type == REF_FACTORY
+							|| psStructure->pStructureType->type == REF_POWER_GEN)
+						&& psStructure->status == SS_BUILT
+						&& psStructure->visible[selectedPlayer])
 					{
-						/*	We're a factory, so better puff out a bit of steam
+						/*
+							We're a factory, so better puff out a bit of steam
 							Complete hack with the magic numbers - just for IAN demo
 						*/
-					if(psStructure->pStructureType->type == REF_FACTORY)
+						if (psStructure->pStructureType->type == REF_FACTORY)
 						{
 							if (psStructure->sDisplay.imd->nconnectors == 1)
 							{
-								eventPos.x = psStructure->pos.x+psStructure->sDisplay.imd->connectors->x;
-								eventPos.z = psStructure->pos.y-psStructure->sDisplay.imd->connectors->y;
-								eventPos.y = psStructure->pos.z+psStructure->sDisplay.imd->connectors->z;
-								addEffect(&eventPos,EFFECT_SMOKE,SMOKE_TYPE_STEAM,false,NULL,0);
+								Vector3i eventPos = {
+									psStructure->pos.x + psStructure->sDisplay.imd->connectors->x,
+									psStructure->pos.z + psStructure->sDisplay.imd->connectors->z,
+									psStructure->pos.y - psStructure->sDisplay.imd->connectors->y
+								};
 
+								addEffect(&eventPos, EFFECT_SMOKE, SMOKE_TYPE_STEAM, false, NULL, 0);
 
-								if(selectedPlayer == psStructure->player)
+								if (selectedPlayer == psStructure->player)
 								{
-									audio_PlayObjStaticTrack( (void *) psStructure, ID_SOUND_STEAM );
+									audio_PlayObjStaticTrack(psStructure, ID_SOUND_STEAM);
 								}
-
 							}
 						}
-						else if(psStructure->pStructureType->type == REF_POWER_GEN)
+						else if (psStructure->pStructureType->type == REF_POWER_GEN)
 						{
-							psPowerGen = &psStructure->pFunctionality->powerGenerator;
-							eventPos.x = psStructure->pos.x;
-							eventPos.z = psStructure->pos.y;
+							bool active = false;
+							POWER_GEN *psPowerGen = &psStructure->pFunctionality->powerGenerator;
+							Vector3i eventPos = {
+								psStructure->pos.x,
+								psStructure->pos.z,
+								psStructure->pos.y
+							};
+
 							if (psStructure->sDisplay.imd->nconnectors > 0)
 							{
 								eventPos.y = psStructure->pos.z+psStructure->sDisplay.imd->connectors->z;
 							}
-							else
-							{
-								eventPos.y = psStructure->pos.z;
-							}
-							capacity = psPowerGen->capacity;
-							/*if(capacity)
-							{
-								eventPos.y = psStructure->pos.z + 48;
-							}*/
+
 							/* Add an effect over the central spire - if
 							connected to Res Extractor and it is active*/
-							//look through the list to see if any connected Res Extr
-							active = false;
-							for (i=0; i < NUM_POWER_MODULES; i++)
+							for (i = 0; i < NUM_POWER_MODULES; i++)
 							{
 								if (psPowerGen->apResExtractors[i]
 								 && psPowerGen->apResExtractors[i]->pFunctionality->resourceExtractor.active)
@@ -2554,33 +2519,18 @@ static void effectStructureUpdates(void)
 									break;
 								}
 							}
-							/*
-							if (((POWER_GEN*)psStructure->pFunctionality)->
-								apResExtractors[0] && ((RES_EXTRACTOR *)((POWER_GEN*)
-								psStructure->pFunctionality)->apResExtractors[0]->
-								pFunctionality)->active)
-							*/
-							//if (active)
+
 							{
 								eventPos.y = psStructure->pos.z + 48;
-								addEffect(&eventPos,EFFECT_EXPLOSION,
-										EXPLOSION_TYPE_TESLA,false,NULL,0);
 
-								if(selectedPlayer == psStructure->player)
+								addEffect(&eventPos, EFFECT_EXPLOSION, EXPLOSION_TYPE_TESLA, false, NULL, 0);
+
+								if (selectedPlayer == psStructure->player)
 								{
-									audio_PlayObjStaticTrack( (void *) psStructure, ID_SOUND_POWER_SPARK );
+									audio_PlayObjStaticTrack((void*)psStructure, ID_SOUND_POWER_SPARK);
 								}
-
 							}
-							/*	Work out how many spires it has. This is a particularly unpleasant
-								hack and I'm not proud of it, but it needs to done. Honest. AM
-							*/
-							//if(capacity)
-
 						}
-
-
-
 					}
 				}
 			}
@@ -2693,7 +2643,7 @@ bool readFXData(const char* fileName)
 	for(i = 0; i < count; ++i)
 	{
 		EFFECT* curEffect = &asEffectsList[i];
-                char imd_name[PATH_MAX];
+		char imd_name[PATH_MAX];
 
 		ASSERT(i < MAX_EFFECTS, "readFXData: more effects in this file than our array can contain");
 
