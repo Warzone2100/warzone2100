@@ -226,10 +226,12 @@ static void	effectSetupWayPoint		( EFFECT *psEffect );
 static void	effectSetupBlood		( EFFECT *psEffect );
 static void effectSetupDestruction  ( EFFECT *psEffect );
 static void	effectSetupFire			( EFFECT *psEffect );
-static void	effectSetUpSatLaser		( EFFECT *psEffect );
-static void effectSetUpFirework		( EFFECT *psEffect );
+static void	effectSetupSatLaser		( EFFECT *psEffect );
+static void effectSetupFirework		( EFFECT *psEffect );
+
 static void effectStructureUpdates(void);
 static void effectDroidUpdates(void);
+
 static UDWORD effectGetNumFrames(EFFECT *psEffect);
 
 
@@ -551,10 +553,10 @@ void addEffect(const Vector3i *pos, EFFECT_GROUP group, EFFECT_TYPE type, bool s
 			effectSetupFire(psEffect);
 			break;
 		case EFFECT_SAT_LASER:
-			effectSetUpSatLaser(psEffect);
+			effectSetupSatLaser(psEffect);
 			break;
 		case EFFECT_FIREWORK:
-			effectSetUpFirework(psEffect);
+			effectSetupFirework(psEffect);
 			break;
 		case EFFECT_STRUCTURE:
 		case EFFECT_DUST_BALL:
@@ -1904,7 +1906,7 @@ static void renderSmokeEffect(const EFFECT *psEffect)
 // ----------------------------------------------------------------------------------------
 // ALL THE SETUP FUNCTIONS
 // ----------------------------------------------------------------------------------------
-void	effectSetUpFirework(EFFECT *psEffect)
+void	effectSetupFirework(EFFECT *psEffect)
 {
 	UDWORD	camExtra;
 
@@ -2040,7 +2042,7 @@ void	effectSetupSmoke(EFFECT *psEffect)
 	}
 }
 
-void effectSetUpSatLaser(EFFECT *psEffect)
+void effectSetupSatLaser(EFFECT *psEffect)
 {
 	/* Does nothing at all..... Runs only for one frame! */
 	psEffect->baseScale = 1;
