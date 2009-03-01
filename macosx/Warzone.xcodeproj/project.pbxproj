@@ -542,7 +542,6 @@
 		02AAD1440D9ED28C00248B0F /* i18n.c in Sources */ = {isa = PBXBuildFile; fileRef = 02AAD1400D9ED28C00248B0F /* i18n.c */; };
 		02AAD1450D9ED28C00248B0F /* i18n.h in Copy frameworks (36) */ = {isa = PBXBuildFile; fileRef = 02AAD1410D9ED28C00248B0F /* i18n.h */; };
 		02AAD1460D9ED28C00248B0F /* physfs_ext.h in Copy frameworks (36) */ = {isa = PBXBuildFile; fileRef = 02AAD1420D9ED28C00248B0F /* physfs_ext.h */; };
-		02AAD14A0D9ED2DB00248B0F /* stats-db.h in Copy frameworks (36) */ = {isa = PBXBuildFile; fileRef = 02AAD1480D9ED2DB00248B0F /* stats-db.h */; };
 		02B2132D0DA8755F0059E864 /* cursors.c in Sources */ = {isa = PBXBuildFile; fileRef = 02B2132A0DA8755F0059E864 /* cursors.c */; };
 		02B2132E0DA8755F0059E864 /* cursors16.c in Sources */ = {isa = PBXBuildFile; fileRef = 02B2132B0DA8755F0059E864 /* cursors16.c */; };
 		02B2132F0DA8755F0059E864 /* cursors32.c in Sources */ = {isa = PBXBuildFile; fileRef = 02B2132C0DA8755F0059E864 /* cursors32.c */; };
@@ -657,8 +656,6 @@
 		9742E5740DF9975E000A5D41 /* lexer_input.h in Copy frameworks (36) */ = {isa = PBXBuildFile; fileRef = 9742E5720DF9975E000A5D41 /* lexer_input.h */; };
 		9742E5770DF9979C000A5D41 /* parsetest.c in Sources */ = {isa = PBXBuildFile; fileRef = 9742E5750DF9979C000A5D41 /* parsetest.c */; };
 		9742E5780DF9979C000A5D41 /* parsetest.h in Copy frameworks (36) */ = {isa = PBXBuildFile; fileRef = 9742E5760DF9979C000A5D41 /* parsetest.h */; };
-		9749641F0F5ABB9E00A38899 /* stats-db.c in Sources */ = {isa = PBXBuildFile; fileRef = 974964190F5ABB9E00A38899 /* stats-db.c */; };
-		974964200F5ABB9E00A38899 /* stats-db2.c in Sources */ = {isa = PBXBuildFile; fileRef = 9749641A0F5ABB9E00A38899 /* stats-db2.c */; };
 		974964240F5ABBBB00A38899 /* hashtable.c in Sources */ = {isa = PBXBuildFile; fileRef = 974964220F5ABBBB00A38899 /* hashtable.c */; };
 		9749642C0F5ABBE100A38899 /* stdio_ext.c in Sources */ = {isa = PBXBuildFile; fileRef = 974964280F5ABBE100A38899 /* stdio_ext.c */; };
 		974964330F5ABC3F00A38899 /* eventsave.c in Sources */ = {isa = PBXBuildFile; fileRef = 9749642F0F5ABC3F00A38899 /* eventsave.c */; };
@@ -947,7 +944,6 @@
 				02AAD1430D9ED28C00248B0F /* file.h in Copy frameworks (36) */,
 				02AAD1450D9ED28C00248B0F /* i18n.h in Copy frameworks (36) */,
 				02AAD1460D9ED28C00248B0F /* physfs_ext.h in Copy frameworks (36) */,
-				02AAD14A0D9ED2DB00248B0F /* stats-db.h in Copy frameworks (36) */,
 				02BBB20A0DA874F6002D438B /* exceptionhandler.h in Copy frameworks (36) */,
 				02DE76070DC3B84900D48F58 /* GLee.h in Copy frameworks (36) */,
 				9742E5740DF9975E000A5D41 /* lexer_input.h in Copy frameworks (36) */,
@@ -1666,7 +1662,6 @@
 		02AAD1400D9ED28C00248B0F /* i18n.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = i18n.c; path = ../lib/framework/i18n.c; sourceTree = SOURCE_ROOT; };
 		02AAD1410D9ED28C00248B0F /* i18n.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = i18n.h; path = ../lib/framework/i18n.h; sourceTree = SOURCE_ROOT; };
 		02AAD1420D9ED28C00248B0F /* physfs_ext.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = physfs_ext.h; path = ../lib/framework/physfs_ext.h; sourceTree = SOURCE_ROOT; };
-		02AAD1480D9ED2DB00248B0F /* stats-db.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = "stats-db.h"; path = "../src/stats-db.h"; sourceTree = SOURCE_ROOT; };
 		02B2132A0DA8755F0059E864 /* cursors.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = cursors.c; path = ../lib/framework/cursors.c; sourceTree = SOURCE_ROOT; };
 		02B2132B0DA8755F0059E864 /* cursors16.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = cursors16.c; path = ../lib/framework/cursors16.c; sourceTree = SOURCE_ROOT; };
 		02B2132C0DA8755F0059E864 /* cursors32.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = cursors32.c; path = ../lib/framework/cursors32.c; sourceTree = SOURCE_ROOT; };
@@ -1788,9 +1783,6 @@
 		9742E5720DF9975E000A5D41 /* lexer_input.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = lexer_input.h; path = ../lib/framework/lexer_input.h; sourceTree = SOURCE_ROOT; };
 		9742E5750DF9979C000A5D41 /* parsetest.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = parsetest.c; path = ../src/parsetest.c; sourceTree = SOURCE_ROOT; };
 		9742E5760DF9979C000A5D41 /* parsetest.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = parsetest.h; path = ../src/parsetest.h; sourceTree = SOURCE_ROOT; };
-		974964190F5ABB9E00A38899 /* stats-db.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "stats-db.c"; path = "../src/stats-db.c"; sourceTree = SOURCE_ROOT; };
-		9749641A0F5ABB9E00A38899 /* stats-db2.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "stats-db2.c"; path = "../src/stats-db2.c"; sourceTree = SOURCE_ROOT; };
-		9749641B0F5ABB9E00A38899 /* stats-db2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "stats-db2.h"; path = "../src/stats-db2.h"; sourceTree = SOURCE_ROOT; };
 		9749641E0F5ABB9E00A38899 /* stringdef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = stringdef.h; path = ../src/stringdef.h; sourceTree = SOURCE_ROOT; };
 		974964220F5ABBBB00A38899 /* hashtable.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = hashtable.c; path = ../lib/gamelib/hashtable.c; sourceTree = SOURCE_ROOT; };
 		974964230F5ABBBB00A38899 /* hashtable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = hashtable.h; path = ../lib/gamelib/hashtable.h; sourceTree = SOURCE_ROOT; };
@@ -2473,13 +2465,9 @@
 			children = (
 				974964780F5ABEA500A38899 /* stats-db2.tpl.sql.c */,
 				974964790F5ABEA500A38899 /* stats-db2.tpl.struct.h */,
-				974964190F5ABB9E00A38899 /* stats-db.c */,
-				9749641A0F5ABB9E00A38899 /* stats-db2.c */,
-				9749641B0F5ABB9E00A38899 /* stats-db2.h */,
 				9749641E0F5ABB9E00A38899 /* stringdef.h */,
 				22E244D40E65361800EC2B3E /* baseobject.c */,
 				22E244D50E65361800EC2B3E /* baseobject.h */,
-				02AAD1480D9ED2DB00248B0F /* stats-db.h */,
 				02CDDD080D159D5900722688 /* autorevision.h */,
 				0223BBAC0CFE3C380056EF85 /* main.h */,
 				0223BBAD0CFE3C380056EF85 /* version.c */,
@@ -4472,8 +4460,6 @@
 				9797385B0E815F4400D6418D /* physfs_vfs.c in Sources */,
 				976AE8280EA0B59A00F2473F /* timer.c in Sources */,
 				974EDB380EDC818D00A25352 /* terrain.c in Sources */,
-				9749641F0F5ABB9E00A38899 /* stats-db.c in Sources */,
-				974964200F5ABB9E00A38899 /* stats-db2.c in Sources */,
 				974964240F5ABBBB00A38899 /* hashtable.c in Sources */,
 				9749642C0F5ABBE100A38899 /* stdio_ext.c in Sources */,
 				974964330F5ABC3F00A38899 /* eventsave.c in Sources */,
