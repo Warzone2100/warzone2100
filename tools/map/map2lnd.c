@@ -1,4 +1,9 @@
-// gcc -o ~/bin/map2lnd map2lnd.c mapload.c -I. -lphysfs -g -O0
+// Converter from Warzone (savegame) map format to Editworld LND format.
+// Note that we are missing some information, most notably the height for
+// the rightmost and bottom most vertices, which in Warzone is snapped to
+// sea level, while it can be freely manipulated in Editworld.
+
+// gcc -o ~/bin/map2lnd map2lnd.c mapload.c -I. -lphysfs -g
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -140,7 +145,7 @@ int main(int argc, char **argv)
 		// CHECK: Should these be multiplied by ELEVATION_SCALE?
 		// CHECK: I am simply assuming counter-clockwise orientation here
 		vh[0] = psTile->height;
-		if (y + 1 < map->height)
+		if (y + 1 < map->width)
 		{
 			vh[1] = mapTile(map, x, y + 1)->height;
 		}
@@ -149,7 +154,7 @@ int main(int argc, char **argv)
 			vh[1] = 0;
 		}
 
-		if (x + 1 < map->width)
+		if (x + 1 < map->height)
 		{
 			vh[3] = mapTile(map, x + 1, y)->height;
 		}
@@ -158,7 +163,7 @@ int main(int argc, char **argv)
 			vh[3] = 0;
 		}
 
-		if (x + 1 < map->width && y + 1 < map->height)
+		if (x + 1 < map->height && y + 1 < map->width)
 		{
 			vh[2] = mapTile(map, x + 1, y + 1)->height;
 		}
@@ -171,7 +176,7 @@ int main(int argc, char **argv)
 		MADD("        TID %d VF %d TF %d F %d VH %d %d %d %d", 
 		     tid + 1, vf, tf, f, vh[0], vh[1], vh[2], vh[3]);
 		y++;
-		if (y == map->width)
+		if (y == map->width)	// sic
 		{
 			y = 0; x++;
 		}
