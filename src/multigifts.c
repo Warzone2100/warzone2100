@@ -616,6 +616,7 @@ static void addLoserGifts(void)
 				if (!pickATileGen(&x, &y, LOOK_FOR_EMPTY_TILE, zonedPAT))
 				{
 					ASSERT(false, "addlosergifts: Unable to find a free location");
+					break;
 				}
 
 				NETlogEntry("gift", 0, 0);
@@ -708,6 +709,7 @@ void  addMultiPlayerRandomArtifacts(uint8_t quantity, FEATURE_TYPE type)
 			if (!pickATileGen(&x, &y, LOOK_FOR_EMPTY_TILE, zonedPAT))
 			{
 				ASSERT(false, "addMultiPlayerRandomArtifacts: Unable to find a free location");
+				break;
 			}
 
 			pF = buildFeature(asFeatureStats + i, world_coord(x), world_coord(y), false);

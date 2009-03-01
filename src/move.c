@@ -2977,7 +2977,7 @@ static void checkLocalFeatures(DROID *psDroid)
 	}
 
 	droidGetNaybors(psDroid);// update naybor list.
-
+	ASSERT( numNaybors <= MAX_NAYBORS, "numNaybors is %d, out of range of %d!", numNaybors, MAX_NAYBORS);
 	// scan the neighbours
 	for(i=0; i<(SDWORD)numNaybors; i++)
 	{
@@ -2985,7 +2985,8 @@ static void checkLocalFeatures(DROID *psDroid)
 		psObj = asDroidNaybors[i].psObj;
 		if (   psObj->type != OBJ_FEATURE
 			|| ((FEATURE *)psObj)->psStats->subType != FEAT_OIL_DRUM
-			|| asDroidNaybors[i].distSqr >= DROIDDIST )
+			|| asDroidNaybors[i].distSqr >= DROIDDIST
+			|| isVtolDroid(psDroid))	// VTOLs can't pick up features!)
 		{
 			// object too far away to worry about
 			continue;

@@ -1500,7 +1500,7 @@ static BOOL recvDestroyTemplate()
 BOOL SendDestroyFeature(FEATURE *pF)
 {
 	// Only send if it is our responsibility
-	if (myResponsibility(pF->player))
+	if  (!myResponsibility(pF->player) || (pF->player != ANYPLAYER))
 		return true;
 
 	NETbeginEncode(NET_FEATUREDEST, NET_ALL_PLAYERS);
