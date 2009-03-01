@@ -123,6 +123,7 @@ int main(int argc, char **argv)
 		//	16 : Rotate 90 degrees
 		//	32 : Rotate 180 degrees (yes, a 270 degree is possible)
 		//	64 : Gateway?
+		//	128: TF_TEXTURESPARE0, whatever that was, unused even in Editworld
 		// VH is vertex height, and gives height of all the four vertices that make up our tile
 		int tid = psTile->texture & TILE_NUMMASK;
 		int vf = TRI_FLIPPED(psTile);
@@ -143,34 +144,20 @@ int main(int argc, char **argv)
 		default:	fprintf(stderr, "Bad rotation value: %d\n", (psTile->texture & TILE_ROTMASK) >> TILE_ROTSHIFT); return -1;
 		}
 
-		// CHECK: Should these be multiplied by ELEVATION_SCALE?
-		// CHECK: I am simply assuming counter-clockwise orientation here
+		// Vertex positions set in clockwise order
 		vh[0] = psTile->height;
-		if (y + 1 < map->height)
-		{
-			vh[3] = mapTile(map, x, y + 1)->height;
-		}
-		else
-		{
-			vh[3] = 0;
-		}
-
+		vh[1] = vh[2] = vh[3] = 0;
 		if (x + 1 < map->width)
 		{
 			vh[1] = mapTile(map, x + 1, y)->height;
 		}
-		else
-		{
-			vh[1] = 0;
-		}
-
 		if (x + 1 < map->width && y + 1 < map->height)
 		{
 			vh[2] = mapTile(map, x + 1, y + 1)->height;
 		}
-		else
+		if (y + 1 < map->height)
 		{
-			vh[2] = 0;
+			vh[3] = mapTile(map, x, y + 1)->height;
 		}
 
 		// No idea why +1 to TID. In EditWorld source, it is a "hide" flag.
