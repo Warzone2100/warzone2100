@@ -36,7 +36,7 @@ static const char *tilesetTextures[] = { "texpages\\tertilesc1.pcx", "texpages\\
 
 static MAPTILE *mapTile(GAMEMAP *map, int x, int y)
 {
-	return &map->psMapTiles[x * map->width + y];
+	return &map->psMapTiles[y * map->width + x];
 }
 
 int main(int argc, char **argv)
@@ -122,6 +122,7 @@ int main(int argc, char **argv)
 		//	 8 : Texture flip Y (ditto)
 		//	16 : Rotate 90 degrees
 		//	32 : Rotate 180 degrees (yes, a 270 degree is possible)
+		//	64 : Gateway?
 		// VH is vertex height, and gives height of all the four vertices that make up our tile
 		int tid = psTile->texture & TILE_NUMMASK;
 		int vf = TRI_FLIPPED(psTile);
@@ -145,25 +146,25 @@ int main(int argc, char **argv)
 		// CHECK: Should these be multiplied by ELEVATION_SCALE?
 		// CHECK: I am simply assuming counter-clockwise orientation here
 		vh[0] = psTile->height;
-		if (y + 1 < map->width)
+		if (y + 1 < map->height)
 		{
-			vh[1] = mapTile(map, x, y + 1)->height;
-		}
-		else
-		{
-			vh[1] = 0;
-		}
-
-		if (x + 1 < map->height)
-		{
-			vh[3] = mapTile(map, x + 1, y)->height;
+			vh[3] = mapTile(map, x, y + 1)->height;
 		}
 		else
 		{
 			vh[3] = 0;
 		}
 
-		if (x + 1 < map->height && y + 1 < map->width)
+		if (x + 1 < map->width)
+		{
+			vh[1] = mapTile(map, x + 1, y)->height;
+		}
+		else
+		{
+			vh[1] = 0;
+		}
+
+		if (x + 1 < map->width && y + 1 < map->height)
 		{
 			vh[2] = mapTile(map, x + 1, y + 1)->height;
 		}
@@ -172,13 +173,14 @@ int main(int argc, char **argv)
 			vh[2] = 0;
 		}
 
-		// FIXME: no idea why +1 to TID
+		// No idea why +1 to TID. In EditWorld source, it is a "hide" flag.
 		MADD("        TID %d VF %d TF %d F %d VH %d %d %d %d", 
 		     tid + 1, vf, tf, f, vh[0], vh[1], vh[2], vh[3]);
-		y++;
-		if (y == map->width)	// sic
+		x++;
+		if (x == map->width)
 		{
-			y = 0; x++;
+			x = 0;
+			y++;
 		}
 	}
 	MADD("    }");
