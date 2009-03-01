@@ -2130,20 +2130,22 @@ INT_RETVAL intRunWidgets(void)
 						Cheated = true;
 					}
 				}
-				else if (psPositionStats->ref >= REF_FEATURE_START &&
-					psPositionStats->ref < REF_FEATURE_START + REF_RANGE)
+				else if (psPositionStats->ref >= REF_FEATURE_START && psPositionStats->ref < REF_FEATURE_START + REF_RANGE)
 				{
-					const char* msg;
-					buildFeature((FEATURE_STATS *)psPositionStats,
-								 world_coord(structX), world_coord(structY), false);
+					FEATURE *result = buildFeature((FEATURE_STATS *)psPositionStats, world_coord(structX), world_coord(structY), false);
 
-					// Send a text message to all players, notifying them of
-					// the fact that we're cheating ourselves a new feature.
-					sasprintf((char**)&msg, _("Player %u is cheating (debug menu) him/herself a new feature: %s."), selectedPlayer, psPositionStats->pName);
-					sendTextMessage(msg, true);
-					Cheated = true;
-					// Notify the other hosts that we've just built ourselves a feature
-					sendMultiPlayerFeature(((FEATURE_STATS *)psPositionStats)->subType, world_coord(structX), world_coord(structY));
+					if (result)
+					{
+						const char* msg;
+
+						// Send a text message to all players, notifying them of the fact that we're cheating ourselves a new feature.
+						sasprintf((char**)&msg, _("Player %u is cheating (debug menu) him/herself a new feature: %s."), 
+						          selectedPlayer, psPositionStats->pName);
+						sendTextMessage(msg, true);
+						Cheated = true;
+						// Notify the other hosts that we've just built ourselves a feature
+						sendMultiPlayerFeature(result->psStats->subType, result->pos.x, result->pos.y, result->id);
+					}
 				}
 				else if (psPositionStats->ref >= REF_TEMPLATE_START &&
 						 psPositionStats->ref < REF_TEMPLATE_START + REF_RANGE)

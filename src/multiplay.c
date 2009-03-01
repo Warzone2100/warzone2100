@@ -1479,13 +1479,6 @@ static BOOL recvDestroyTemplate()
 // send a destruct feature message.
 BOOL SendDestroyFeature(FEATURE *pF)
 {
-	// Since ANYPLAYER is supposed to be controlled by host only, that creates a issue when
-	// a MP player gets a feature, and it is 'ANYPLAYER' it would never send the destroy msg.
-	if (!myResponsibility(pF->player) || !(pF->player == ANYPLAYER))
-	{
-		return true;
-	}
-	debug(LOG_FEATURE, "p%d feature id %d destroyed (%s)", pF->player, pF->id, pF->psStats->pName);
 	NETbeginEncode(NET_FEATUREDEST, NET_ALL_PLAYERS);
 		NETuint32_t(&pF->id);
 	return NETend();
@@ -1502,7 +1495,6 @@ BOOL recvDestroyFeature()
 	NETend();
 
 	pF = IdToFeature(id,ANYPLAYER);
-
 	if (pF == NULL)
 	{
 	debug(LOG_WARNING, "feature id %d not found? (sync error?)", id);
