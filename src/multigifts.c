@@ -649,13 +649,14 @@ static void addLoserGifts(void)
  *  \param subType the type of feature to build
  *  \param x,y the coordinates to place the feature at
  */
-void sendMultiPlayerFeature(FEATURE_TYPE subType, uint32_t x, uint32_t y)
+void sendMultiPlayerFeature(FEATURE_TYPE subType, uint32_t x, uint32_t y, uint32_t id)
 {
 	NETbeginEncode(NET_FEATURES, NET_ALL_PLAYERS);
 	{
 		NETenum(&subType);
 		NETuint32_t(&x);
 		NETuint32_t(&y);
+		NETuint32_t(&id);
 	}
 	NETend();
 }
@@ -663,7 +664,7 @@ void sendMultiPlayerFeature(FEATURE_TYPE subType, uint32_t x, uint32_t y)
 void recvMultiPlayerFeature()
 {
 	FEATURE_TYPE subType;
-	uint32_t     x, y;
+	uint32_t     x, y, id;
 	unsigned int i;
 
 	NETbeginDecode(NET_FEATURES);
@@ -671,6 +672,7 @@ void recvMultiPlayerFeature()
 		NETenum(&subType);
 		NETuint32_t(&x);
 		NETuint32_t(&y);
+		NETuint32_t(&id);
 	}
 	NETend();
 
@@ -681,8 +683,8 @@ void recvMultiPlayerFeature()
 		if (asFeatureStats[i].subType == subType)
 		{
 			// Create a feature of the specified type at the given location
-			buildFeature(&asFeatureStats[i], x, y, false);
-
+			FEATURE *result = buildFeature(&asFeatureStats[i], x, y, false);
+			result->id = id;
 			break;
 		}
 	}

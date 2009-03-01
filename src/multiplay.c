@@ -1479,10 +1479,6 @@ static BOOL recvDestroyTemplate()
 // send a destruct feature message.
 BOOL SendDestroyFeature(FEATURE *pF)
 {
-	// Only send if it is our responsibility
-	if (myResponsibility(pF->player))
-		return true;
-
 	NETbeginEncode(NET_FEATUREDEST, NET_ALL_PLAYERS);
 		NETuint32_t(&pF->id);
 	return NETend();
@@ -1499,7 +1495,6 @@ BOOL recvDestroyFeature()
 	NETend();
 
 	pF = IdToFeature(id,ANYPLAYER);
-
 	if (pF == NULL)
 	{
 		return false;
