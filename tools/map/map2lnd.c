@@ -3,7 +3,7 @@
 // the rightmost and bottom most vertices, which in Warzone is snapped to
 // sea level, while it can be freely manipulated in Editworld.
 
-// gcc -o ~/bin/map2lnd map2lnd.c mapload.c -I. -lphysfs -g
+// gcc -o ~/bin/map2lnd map2lnd.c mapload.c -I. -lphysfs -g -I../../lib/framework
 
 #include <stdlib.h>
 #include <stdio.h>

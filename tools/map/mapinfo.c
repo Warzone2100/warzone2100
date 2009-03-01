@@ -1,4 +1,4 @@
-// gcc -o ~/bin/mapinfo mapinfo.c mapload.c -I. -lphysfs
+// gcc -o ~/bin/mapinfo mapinfo.c mapload.c -I. -lphysfs -I../../lib/framework
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -42,8 +42,10 @@ int main(int argc, char **argv)
 		printf("\tWidth: %d\n", (int)map->width);
 		printf("\tHeight: %d\n", (int)map->height);
 		printf("\tGateways: %d\n", (int)map->numGateways);
+		printf("\tFeatures: %d\n", (int)map->numFeatures);
 		printf("\tScroll limits: (%d, %d, %d, %d)\n", 
 		       (int)map->scrollMinX, (int)map->scrollMinY, (int)map->scrollMaxX, (int)map->scrollMaxY);
+		printf("\tLevel name: %s\n", map->levelName);
 	}
 	mapFree(map);
 

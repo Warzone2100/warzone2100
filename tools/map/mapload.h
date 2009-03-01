@@ -23,27 +23,9 @@
 
 #include <stdint.h>
 #include <stdbool.h>
-#include <physfs.h>
+#include "physfs_ext.h"
 
-static inline bool PHYSFS_writeSLE8(PHYSFS_file* file, int8_t val)
-{
-	return (PHYSFS_write(file, &val, sizeof(int8_t), 1) == 1);
-}
-
-static inline bool PHYSFS_writeULE8(PHYSFS_file* file, uint8_t val)
-{
-	return (PHYSFS_write(file, &val, sizeof(uint8_t), 1) == 1);
-}
-
-static inline bool PHYSFS_readSLE8(PHYSFS_file* file, int8_t* val)
-{
-	return (PHYSFS_read(file, val, sizeof(int8_t), 1) == 1);
-}
-
-static inline bool PHYSFS_readULE8(PHYSFS_file* file, uint8_t* val)
-{
-	return (PHYSFS_read(file, val, sizeof(uint8_t), 1) == 1);
-}
+#define MAX_LEVEL_SIZE	20
 
 /* Information stored with each tile */
 typedef struct _maptile_type
@@ -59,11 +41,12 @@ typedef struct _maptile_type
 typedef struct _mapfile_type
 {
 	MAPTILE			*psMapTiles;
-	uint32_t		height, width, version, numGateways;
+	uint32_t		height, width, version, numGateways, numFeatures;
 	int32_t			scrollMinX;
 	int32_t			scrollMinY;
 	uint32_t		scrollMaxX;
 	uint32_t		scrollMaxY;
+	char			levelName[MAX_LEVEL_SIZE];
 } GAMEMAP;
 
 /* Load the map data */
