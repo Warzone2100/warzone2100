@@ -151,12 +151,8 @@ static BOOL storeName(FUNCTION* pFunction, const char* pNameToStore)
 static BOOL loadProduction(const char *pData)
 {
 	PRODUCTION_FUNCTION*	psFunction;
-	//PROPULSION_TYPE propType;
 	char					functionName[MAX_STR_LENGTH], bodySize[MAX_STR_LENGTH];
 	UDWORD					productionOutput;
-	//char					propulsionType[MAX_STR_LENGTH];
-	//PROPULSION_TYPES*		pPropulsionType;
-	//allocate storage
 
 	psFunction = (PRODUCTION_FUNCTION *)malloc(sizeof(PRODUCTION_FUNCTION));
 	if (psFunction == NULL)
@@ -178,42 +174,12 @@ static BOOL loadProduction(const char *pData)
 
 	//read the data in
 	functionName[0] = '\0';
-	//propulsionType[0] = '\0';
 	bodySize[0] = '\0';
 	sscanf(pData, "%[^','],%[^','],%d", functionName, bodySize,
 		&productionOutput);
 
 	//allocate storage for the name
 	storeName((FUNCTION *)psFunction, functionName);
-
-	//get the propulsion stats pointer
-/*	pPropulsionType = asPropulsionTypes;
-	psFunction->propulsionType = 0;
-	for (i=0; i < numPropulsionTypes; i++)
-	{
-		//compare the names
-		if (!strcmp(propulsionType, pPropulsionType->pName))
-		{
-			psFunction->propulsionType = pPropulsionType;
-			break;
-		}
-		pPropulsionType++;
-	}
-	//if haven't found the propulsion type, then problem
-	if (!psFunction->propulsionType)
-	{
-		DBERROR(("Unknown Propulsion Type"));
-		return false;
-	}
-*/
-#if 0
-	if (!getPropulsionType(propulsionType, &propType))
-	{
-		ASSERT(!"Unknown propulsion type", "Unknown Propulsion Type: %s", propulsionType);
-		return false;
-	}
-	psFunction->propulsionType = propType;
-#endif
 
 	if (!getBodySize(bodySize, (UBYTE*)&psFunction->capacity))
 	{
@@ -230,7 +196,6 @@ static BOOL loadProduction(const char *pData)
 	}
 	else
 	{
-
 		ASSERT( false, "loadProduction: production Output too big for %s",psFunction->pName );
 
 		psFunction->productionOutput = 0;
