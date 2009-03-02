@@ -27,6 +27,11 @@
 
 #define MAX_LEVEL_SIZE	20
 
+typedef struct _gateway
+{
+	uint8_t x1, y1, x2, y2;
+} GATEWAY;
+
 /* Information stored with each tile */
 typedef struct _maptile_type
 {
@@ -40,14 +45,27 @@ typedef struct _maptile_type
 
 typedef struct _mapfile_type
 {
-	MAPTILE			*psMapTiles;
 	uint32_t		height, width, version, numGateways, numFeatures;
 	int32_t			scrollMinX;
 	int32_t			scrollMinY;
 	uint32_t		scrollMaxX;
 	uint32_t		scrollMaxY;
 	char			levelName[MAX_LEVEL_SIZE];
+
+	// private members - don't touch! :-)
+	GATEWAY			*mGateways;
+	MAPTILE			*mMapTiles;
 } GAMEMAP;
+
+static inline MAPTILE *mapTile(GAMEMAP *map, int x, int y)
+{
+        return &map->mMapTiles[y * map->width + x];
+}
+
+static inline GATEWAY *mapGateway(GAMEMAP *map, int index)
+{
+	return &map->mGateways[index];
+}
 
 /* Load the map data */
 GAMEMAP *mapLoad(char *filename);

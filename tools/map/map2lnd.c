@@ -34,11 +34,6 @@ typedef enum _tileset_type
 static const char *tilesetDataSet[] = { "WarzoneDataC1.eds", "WarzoneDataC2.eds", "WarzoneDataC3.eds" };
 static const char *tilesetTextures[] = { "texpages\\tertilesc1.pcx", "texpages\\tertilesc2.pcx", "texpages\\tertilesc3.pcx" };
 
-static MAPTILE *mapTile(GAMEMAP *map, int x, int y)
-{
-	return &map->psMapTiles[y * map->width + x];
-}
-
 int main(int argc, char **argv)
 {
 	char filename[PATH_MAX];
@@ -177,6 +172,9 @@ int main(int argc, char **argv)
 	MADD("    FeatureSet %s", tilesetDataSet[tileset]);
 	MADD("    NumObjects 0");
 	MADD("    Objects {");
+		// %d UniqueID, %d TypeID, \"%s\" StructureName or description or \"NONAME\", %d PlayerID, \"%s\" ScriptName or \"NONAME\" MAY BE MISSING in v<3!
+		// fprintf(Stream, "%.2f %.2f %.2f ", Position.x, Position.y, Position.z);
+		// fprintf(Stream, "%.2f %.2f %.2f\n", curNode->Rotation.x, curNode->Rotation.y, curNode->Rotation.z);
 	MADD("    }");
 	MADD("}");
 	MADD("ScrollLimits {");
@@ -188,8 +186,14 @@ int main(int argc, char **argv)
 	MADD("}");
 	MADD("Gateways {");
 	MADD("    Version 1");
-	MADD("    NumGateways 0");	// FIXME
+	MADD("    NumGateways %d", (int)map->numGateways);
 	MADD("    Gates {");
+	for (i = 0; i < map->numGateways; i++)
+	{
+		GATEWAY *psGate = mapGateway(map, i);
+
+		MADD("        %llu %llu %llu %llu", psGate->x1, psGate->y1, psGate->x2, psGate->y2);
+	}
 	MADD("    }");
 	MADD("}");
 	MADD("TileTypes {");

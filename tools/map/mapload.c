@@ -10,7 +10,8 @@
 
 void mapFree(GAMEMAP *map)
 {
-	free(map->psMapTiles);
+	free(map->mGateways);
+	free(map->mMapTiles);
 	free(map);
 }
 
@@ -51,28 +52,28 @@ GAMEMAP *mapLoad(char *filename)
 	    || aFileType[1] != 'a'
 	    || aFileType[2] != 'p')
 	{
-		debug(LOG_ERROR, "Bad header in %s", filename);
+		debug(LOG_ERROR, "Bad header in %s", path);
 		return NULL;
 	}
 	else if (map->version <= 9)
 	{
-		debug(LOG_ERROR, "%s: Unsupported save format version %u", filename, map->version);
+		debug(LOG_ERROR, "%s: Unsupported save format version %u", path, map->version);
 		return NULL;
 	}
 	else if (map->version > 36)
 	{
-		debug(LOG_ERROR, "%s: Undefined save format version %u", filename, map->version);
+		debug(LOG_ERROR, "%s: Undefined save format version %u", path, map->version);
 		return NULL;
 	}
 	else if (map->width * map->height > MAP_MAXAREA)
 	{
-		debug(LOG_ERROR, "Map %s too large : %d %d", filename, map->width, map->height);
+		debug(LOG_ERROR, "Map %s too large : %d %d", path, map->width, map->height);
 		return NULL;
 	}
 
 	/* Allocate the memory for the map */
-	map->psMapTiles = calloc(map->width * map->height, sizeof(*map->psMapTiles));
-	if (!map->psMapTiles)
+	map->mMapTiles = calloc(map->width * map->height, sizeof(*map->mMapTiles));
+	if (!map->mMapTiles)
 	{
 		debug(LOG_ERROR, "Out of memory");
 		return NULL;
@@ -86,31 +87,31 @@ GAMEMAP *mapLoad(char *filename)
 
 		if (!readU16(&texture) || !readU8(&height))
 		{
-			debug(LOG_ERROR, "%s: Error during savegame load", filename);
+			debug(LOG_ERROR, "%s: Error during savegame load", path);
 			return NULL;
 		}
 
-		map->psMapTiles[i].texture = texture;
-		map->psMapTiles[i].height = height;
+		map->mMapTiles[i].texture = texture;
+		map->mMapTiles[i].height = height;
 		for (j = 0; j < MAX_PLAYERS; j++)
 		{
-			map->psMapTiles[i].tileVisBits = (uint8_t)(map->psMapTiles[i].tileVisBits &~ (uint8_t)(1 << j));
+			map->mMapTiles[i].tileVisBits = (uint8_t)(map->mMapTiles[i].tileVisBits &~ (uint8_t)(1 << j));
 		}
 	}
 
 	if (!readU32(&gwVersion) || !readU32(&map->numGateways) || gwVersion != 1)
 	{
-		debug(LOG_ERROR, "Bad gateway in %s", filename);
+		debug(LOG_ERROR, "Bad gateway in %s", path);
 		return NULL;
 	}
 
+	map->mGateways = calloc(map->numGateways, sizeof(*map->mGateways));
 	for (i = 0; i < map->numGateways; i++)
 	{
-		uint8_t		x0, y0, x1, y1;
-
-		if (!readU8(&x0) || !readU8(&y0) || !readU8(&x1) || !readU8(&y1))
+		if (!readU8(&map->mGateways[i].x1) || !readU8(&map->mGateways[i].y1)
+		    || !readU8(&map->mGateways[i].x2) || !readU8(&map->mGateways[i].y2))
 		{
-			debug(LOG_ERROR, "%s: Failed to read gateway info", filename);
+			debug(LOG_ERROR, "%s: Failed to read gateway info", path);
 			return NULL;
 		}
 	}
