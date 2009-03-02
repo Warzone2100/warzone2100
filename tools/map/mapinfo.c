@@ -37,6 +37,13 @@ int main(int argc, char **argv)
 	map = mapLoad(filename);
 	if (map)
 	{
+		char tilesetName[PATH_MAX];
+
+		if (map->tileset == TILESET_ARIZONA) { strcpy(tilesetName, "Arizona"); }
+		else if (map->tileset == TILESET_URBAN) { strcpy(tilesetName, "Urban"); }
+		else if (map->tileset == TILESET_ROCKIES) { strcpy(tilesetName, "Rockies"); }
+		else { strcpy(tilesetName, "(unknown)"); }
+
 		printf("Loaded map: %s\n", filename);
 		printf("\tMap version: %d\n", (int)map->version);
 		printf("\tWidth: %d\n", (int)map->width);
@@ -46,6 +53,7 @@ int main(int argc, char **argv)
 		printf("\tScroll limits: (%d, %d, %d, %d)\n", 
 		       (int)map->scrollMinX, (int)map->scrollMinY, (int)map->scrollMaxX, (int)map->scrollMaxY);
 		printf("\tLevel name: %s\n", map->levelName);
+		printf("\tTileset: %s\n", tilesetName);
 	}
 	mapFree(map);
 

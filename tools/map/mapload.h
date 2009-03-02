@@ -27,6 +27,13 @@
 
 #define MAX_LEVEL_SIZE	20
 
+typedef enum _tileset_type
+{
+        TILESET_ARIZONA	= 0,
+	TILESET_URBAN	= 1,
+	TILESET_ROCKIES	= 2
+} TILESET;
+
 typedef struct _gateway
 {
 	uint8_t x1, y1, x2, y2;
@@ -45,12 +52,13 @@ typedef struct _maptile_type
 
 typedef struct _mapfile_type
 {
-	uint32_t		height, width, version, numGateways, numFeatures;
+	uint32_t		height, width, version, numGateways, numFeatures, numTerrainTypes;
 	int32_t			scrollMinX;
 	int32_t			scrollMinY;
 	uint32_t		scrollMaxX;
 	uint32_t		scrollMaxY;
 	char			levelName[MAX_LEVEL_SIZE];
+	TILESET			tileset;
 
 	// private members - don't touch! :-)
 	GATEWAY			*mGateways;

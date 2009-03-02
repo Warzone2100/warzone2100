@@ -199,6 +199,7 @@ int main(int argc, char **argv)
 	MADD("TileTypes {");
 	MADD("    NumTiles 128");		// ??? FIXME - read from ttypes file
 	MADD("    Tiles {");
+	// The first value of 2 is not written into the Deliverance (Warzone binary) format for some reason.
 	switch (tileset)
 	{
 	case TILESET_ARIZONA:

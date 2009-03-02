@@ -10,8 +10,11 @@
 
 void mapFree(GAMEMAP *map)
 {
-	free(map->mGateways);
-	free(map->mMapTiles);
+	if (map)
+	{
+		free(map->mGateways);
+		free(map->mMapTiles);
+	}
 	free(map);
 }
 
@@ -20,10 +23,11 @@ GAMEMAP *mapLoad(char *filename)
 {
 	char		path[PATH_MAX];
 	GAMEMAP		*map = malloc(sizeof(*map));
-	uint32_t	gwVersion, i, j, gameVersion, gameTime, gameType, featVersion;
+	uint32_t	gwVersion, i, j, gameVersion, gameTime, gameType, featVersion, terrainVersion;
 	char		aFileType[4];
 	bool		littleEndian = true;
 	PHYSFS_file	*fp = NULL;
+	uint16_t	terrainSignature[3];
 
 	// this cries out for a class based design
 	#define readU8(v) ( littleEndian ? PHYSFS_readULE8(fp, v) : PHYSFS_readUBE8(fp, v) )
@@ -176,6 +180,54 @@ GAMEMAP *mapLoad(char *filename)
 	    || !readU32(&map->numFeatures))
 	{
 		debug(LOG_ERROR, "Bad features header in %s", path);
+		return NULL;
+	}
+	PHYSFS_close(fp);
+
+
+	/* === Load terrain data === */
+
+	littleEndian = true;
+	strcpy(path, filename);
+	strcat(path, "/ttypes.ttp");
+	fp = PHYSFS_openRead(path);
+	if (!fp)
+	{
+		debug(LOG_ERROR, "Terrain type file %s not found", path);
+		return NULL;
+	}
+	else if (PHYSFS_read(fp, aFileType, 4, 1) != 1
+	    || aFileType[0] != 't'
+	    || aFileType[1] != 't'
+	    || aFileType[2] != 'y'
+	    || aFileType[3] != 'p'
+	    || !readU32(&terrainVersion)
+	    || !readU32(&map->numTerrainTypes))
+	{
+		debug(LOG_ERROR, "Bad features header in %s", path);
+		return NULL;
+	}
+	if (!readU16(&terrainSignature[0]) || !readU16(&terrainSignature[1]) || !readU16(&terrainSignature[2]))
+	{
+		debug(LOG_ERROR, "Could not read terrain signature from %s", path);
+		return NULL;
+	}
+	if (terrainSignature[0] == 1 && terrainSignature[1] == 0 && terrainSignature[2] == 2)
+	{
+		map->tileset = TILESET_ARIZONA;
+	}
+	else if (terrainSignature[0] == 2 && terrainSignature[1] == 2 && terrainSignature[2] == 2)
+	{
+		map->tileset = TILESET_URBAN;
+	}
+	else if (terrainSignature[0] == 0 && terrainSignature[1] == 0 && terrainSignature[2] == 2)
+	{
+		map->tileset = TILESET_ROCKIES;
+	}
+	else
+	{
+		debug(LOG_ERROR, "Unknown terrain signature in %s: %lu %lu %lu", path, 
+		      terrainSignature[0], terrainSignature[1], terrainSignature[2]);
 		return NULL;
 	}
 	PHYSFS_close(fp);
