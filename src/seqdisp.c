@@ -93,7 +93,6 @@ typedef struct
  */
 /***************************************************************************/
 
-static BOOL bBackDropWasAlreadyUp;
 static BOOL bAudioPlaying = false;
 static BOOL bHoldSeqForAudio = false;
 static BOOL bSeqSubtitles = true;
@@ -708,11 +707,6 @@ BOOL seq_AnySeqLeft(void)
 static void seqDispCDOK( void )
 {
 	BOOL	bPlayedOK;
-
-	if ( bBackDropWasAlreadyUp == false )
-	{
-		screen_StopBackDrop();
-	}
 
 	currentPlaySeq++;
 	if (currentPlaySeq >= MAX_SEQ_LIST)

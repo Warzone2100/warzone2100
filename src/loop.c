@@ -106,8 +106,6 @@ unsigned int loopStateChanges;
  */
 static BOOL paused=false;
 static BOOL video=false;
-static BOOL bQuitVideo=false;
-static	SDWORD clearCount = 0;
 
 //holds which pause is valid at any one time
 typedef struct _pause_state
@@ -472,10 +470,6 @@ GAMECODE gameLoop(void)
 		pie_SetMouse(CURSOR_DEFAULT, war_GetColouredCursor());
 
 		intRetVal = INT_NONE;
-		if (loop_GetVideoStatus())
-		{
-			bQuitVideo = !seq_UpdateFullScreenVideo(NULL);
-		}
 
 		if(dragBox3D.status != DRAG_DRAGGING)
 		{
@@ -549,10 +543,6 @@ GAMECODE gameLoop(void)
 
 			pie_LoadBackDrop(SCREEN_RANDOMBDROP);
 		}
-		else //if in video mode esc kill video
-		{
-			bQuitVideo = true;
-		}
 	}
 	if (!loop_GetVideoStatus() && !quitting)
 	{
@@ -590,13 +580,6 @@ GAMECODE gameLoop(void)
 		pie_SetFogStatus(true);
 
 		pie_DrawMouse(mouseX(), mouseY());
-	}
-
-	/* Check for toggling video playbackmode */
-	if (bQuitVideo && loop_GetVideoStatus())
-	{
-		seq_StopFullScreenVideo();
-		bQuitVideo = false;
 	}
 
 	pie_GetResetCounts(&loopPieCount, &loopTileCount, &loopPolyCount, &loopStateChanges);
@@ -682,79 +665,22 @@ GAMECODE gameLoop(void)
 /* The video playback loop */
 void videoLoop(void)
 {
-	bool bVolKilled = false;
-	float originalVolume = 0.0;
+	bool videoFinished;
 
-	// There is something really odd here. - Per
-	static BOOL bActiveBackDrop = false;
+	ASSERT( videoMode == 1, "videoMode out of sync" );
 
-#ifdef DEBUG
-	// Surely this should be: bActiveBackDrop = screen_GetBackDrop(); ?? - Per
-	// That would look odd, I tried it. Eg. intelligence screen is not redrawn correctly. -- DevU
-	screen_GetBackDrop();
-#endif
+	// display a frame of the FMV
+	videoFinished = !seq_UpdateFullScreenVideo(NULL);
+	pie_ScreenFlip(CLEAR_BLACK);
 
-	if (loop_GetVideoStatus())
-	{
-		bQuitVideo = !seq_UpdateFullScreenVideo(NULL);
-	}
-
-	if ( (keyPressed(KEY_ESC) || mouseReleased(MOUSE_LMB) || bQuitVideo) && !seq_AnySeqLeft() )
-	{
-		/* zero volume before video quit - restore later */
-		originalVolume = sound_GetUIVolume();
-		sound_SetUIVolume(0.0);
-		bVolKilled = true;
-	}
-
-	//toggling display mode disabled in video mode
-	// Check for quit
-	if (keyPressed(KEY_ESC) || mouseReleased(MOUSE_LMB))
+	// should we stop playing?
+	if (videoFinished || keyPressed(KEY_ESC) || mouseReleased(MOUSE_LMB))
 	{
 		seq_StopFullScreenVideo();
-		bQuitVideo = false;
-
-		// remove the intelligence screen if necessary
-		if (messageIsImmediate())
-		{
-			intResetScreen(true);
-			setMessageImmediate(false);
-		}
-		//Script callback for video over
-		//don't do the callback if we're playing the win/lose video
-		if (!getScriptWinLoseVideo())
-		{
-			eventFireCallbackTrigger((TRIGGER_TYPE)CALL_VIDEO_QUIT);
-		}
-		else
-		{
-			displayGameOver(getScriptWinLoseVideo() == PLAY_WIN);
-		}
-		pie_ScreenFlip(CLEAR_BLACK);// videoloopflip extra mar10
-
-		if (bActiveBackDrop)
-		{
-			// We never get here presently - Per
- 			screen_RestartBackDrop();
-		}
-	}
-
-	//if the video finished...
-	if (bQuitVideo)
-	{
-		seq_StopFullScreenVideo();
-		bQuitVideo = false;
 
 		//set the next video off - if any
-		if (seq_AnySeqLeft())
+		if (videoFinished && seq_AnySeqLeft())
 		{
-			pie_ScreenFlip(CLEAR_BLACK);// videoloopflip extra mar10
-
-			if (bActiveBackDrop)
-			{
-				screen_RestartBackDrop();
-			}
-		 	//bClear = CLEAR_BLACK;
 			seq_StartNextFullScreenVideo();
 		}
 		else
@@ -774,38 +700,7 @@ void videoLoop(void)
 			{
 				displayGameOver(getScriptWinLoseVideo() == PLAY_WIN);
 			}
-			pie_ScreenFlip(CLEAR_BLACK);// videoloopflip extra mar10
-
-			if (bActiveBackDrop)
-			{
-				// We never get here presently - Per
-				screen_RestartBackDrop();
-			}
 		}
-	}
-
-	if( clearCount < 1)
-	{
-		if (screen_GetBackDrop())
-		{
-			bActiveBackDrop = true;
-			screen_StopBackDrop();
-		}
-		else
-		{
-			bActiveBackDrop = false;
-			screen_StopBackDrop();
-		}
-	}
-
-	clearCount++;
-
-	pie_ScreenFlip(CLEAR_BLACK);// videoloopflip
-
-	/* restore volume after video quit */
-	if (bVolKilled)
-	{
-		sound_SetUIVolume(originalVolume);
 	}
 }
 
@@ -815,11 +710,12 @@ void loop_SetVideoPlaybackMode(void)
 	videoMode += 1;
 	paused = true;
 	video = true;
-	clearCount = 0;
 	gameTimeStop();
 	pie_SetFogStatus(false);
 	audio_StopAll();
 	pie_ShowMouse(false);
+	screen_StopBackDrop();
+	pie_ScreenFlip(CLEAR_BLACK);
 }
 
 
@@ -890,14 +786,6 @@ BOOL consolePaused(void)
 void setGameUpdatePause(BOOL state)
 {
 	pauseState.gameUpdatePause = state;
-	if (state)
-	{
-	   	screen_RestartBackDrop();
-	}
-	else
-	{
-		screen_StopBackDrop();
-	}
 }
 void setAudioPause(BOOL state)
 {

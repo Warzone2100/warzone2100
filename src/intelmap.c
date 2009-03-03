@@ -34,6 +34,8 @@
 #include "lib/ivis_common/piestate.h"
 #include "lib/ivis_common/rendmode.h"
 #include "lib/ivis_common/piepalette.h"
+#include "lib/ivis_opengl/screen.h"
+#include "lib/ivis_common/piemode.h"
 
 #include "display3d.h"
 #include "lib/framework/cursors.h"
@@ -286,6 +288,8 @@ BOOL intAddIntelMap(void)
 	{
 		return false;
 	}
+
+	screen_RestartBackDrop();
 
 	return true;
 }
@@ -1020,6 +1024,9 @@ static void intCleanUpIntelMap(void)
 		debug(LOG_SCRIPT, "intCleanUpIntelMap: not running");
 		eventFireCallbackTrigger((TRIGGER_TYPE)CALL_VIDEO_QUIT);
 	}
+
+	screen_StopBackDrop();
+	pie_ScreenFlip(CLEAR_BLACK);
 }
 
 
