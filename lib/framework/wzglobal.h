@@ -384,6 +384,8 @@
  */
 #if WZ_CC_GNU_PREREQ(2,5) && !defined(WZ_CC_INTEL)
 #  define WZ_DECL_NORETURN __attribute__((__noreturn__))
+#elif defined(WZ_CC_MSVC)
+#  define WZ_DECL_NORETURN __declspec(noreturn)
 #else
 #  define WZ_DECL_NORETURN
 #endif
