@@ -357,7 +357,7 @@
  */
 #if WZ_CC_GNU_PREREQ(3,2) || WZ_CC_INTEL_PREREQ(10,0)
 #  define WZ_DECL_DEPRECATED __attribute__((__deprecated__))
-#elif defined(WZ_CC_MSVC) && (_MSC_VER >= 1300)
+#elif defined(WZ_CC_MSVC) && defined(WZ_CC_MSVC_NET)
 #  define WZ_DECL_DEPRECATED __declspec(deprecated)
 #else
 #  define WZ_DECL_DEPRECATED
@@ -462,7 +462,7 @@
  */
 #if defined(WZ_C99) && WZ_CC_GNU_PREREQ(4,1) && !defined(WZ_CC_INTEL)
 #  define WZ_DECL_RESTRICT restrict
-#elif defined(WZ_CC_MSVC) && (_MSC_VER >= 1300)
+#elif defined(WZ_CC_MSVC) && defined(WZ_CC_MSVC_NET)
 #  define WZ_DECL_RESTRICT __restrict
 #else
 #  define WZ_DECL_RESTRICT
