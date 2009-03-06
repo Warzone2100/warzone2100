@@ -387,6 +387,19 @@
 
 
 /*!
+ * \def WZ_DECL_NORETURN
+ * "A few standard library functions, such as abort and exit, cannot return. GCC knows this automatically.
+ *  Some programs define their own functions that never return.
+ *  You can declare them noreturn to tell the compiler this fact."
+ */
+#if WZ_CC_GNU_PREREQ(2,5) && !defined(WZ_CC_INTEL)
+#  define WZ_DECL_NORETURN __attribute__((__noreturn__))
+#else
+#  define WZ_DECL_NORETURN
+#endif
+
+
+/*!
  * \def WZ_DECL_PURE
  * "Many functions have no effects except the return value and their return value depends only on the parameters and/or global variables. Such a function can
  *  be subject to common subexpression elimination and loop optimization just as an arithmetic operator would be."
