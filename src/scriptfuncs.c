@@ -4431,14 +4431,15 @@ static int scrTestStructureModule(lua_State *L)
 	BOOL bFound;
 
 	int player = luaWZ_checkplayer(L, 1);
-	STRUCTURE *psStructure = (STRUCTURE*)luaWZObj_checkobject(L, 2, OBJ_STRUCTURE);
+	STRUCTURE *psStructure;
 
 	/* Nothing yet */
 	bFound = false;
 
 	/* Check the specified case first */
-	if(psStructure)
+	if(!lua_isnil(L, 2))
 	{
+		psStructure = (STRUCTURE*)luaWZObj_checkobject(L, 2, OBJ_STRUCTURE);
 		if(structHasModule(psStructure))
 		{
 			bFound = true;
