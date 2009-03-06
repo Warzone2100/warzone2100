@@ -356,7 +356,7 @@
  *
  */
 #if WZ_CC_GNU_PREREQ(3,2) || WZ_CC_INTEL_PREREQ(10,0)
-#  define WZ_DECL_DEPRECATED __attribute__((deprecated))
+#  define WZ_DECL_DEPRECATED __attribute__((__deprecated__))
 #elif defined(WZ_CC_MSVC) && (_MSC_VER >= 1300)
 #  define WZ_DECL_DEPRECATED __declspec(deprecated)
 #else
@@ -364,32 +364,22 @@
 #endif
 
 
-/*!
- * \def WZ_DECL_UNUSED
- * This function is not used, but shall not generate an unused warning either.
+/*! \def WZ_DECL_FORMAT
+ * GCC: "The format attribute specifies that a function takes printf, scanf, strftime or strfmon
+ *       style arguments which should be type-checked against a format string."
  */
-#if WZ_CC_GNU_PREREQ(3,2) || WZ_CC_INTEL_PREREQ(10,0)
-#  define WZ_DECL_UNUSED __attribute__((unused))
+#if WZ_CC_GNU_PREREQ(2,5) && !defined(WZ_CC_INTEL)
+#  define WZ_DECL_FORMAT(archetype, string_index, first_to_check) \
+          __attribute__((__format__(archetype, string_index, first_to_check)))
 #else
-#  define WZ_DECL_UNUSED
-#endif
-
-
-/*!
- * \def WZ_DECL_WARN_UNUSED_RESULT
- * Warn if return value is unused.
- */
-#if defined(WZ_CC_GNU)
-#  define WZ_DECL_WARN_UNUSED_RESULT __attribute__((warn_unused_result))
-#else
-#  define WZ_DECL_WARN_UNUSED_RESULT
+#  define WZ_DECL_FORMAT(archetype, string_index, first_to_check)
 #endif
 
 
 /*!
  * \def WZ_DECL_NORETURN
- * "A few standard library functions, such as abort and exit, cannot return. GCC knows this automatically.
- *  Some programs define their own functions that never return.
+ * "A few standard library functions, such as abort and exit, cannot return. GCC knows this
+ *  automatically. Some programs define their own functions that never return.
  *  You can declare them noreturn to tell the compiler this fact."
  */
 #if WZ_CC_GNU_PREREQ(2,5) && !defined(WZ_CC_INTEL)
@@ -400,19 +390,75 @@
 
 
 /*!
+ * \def WZ_DECL_CONST
+ * GCC: "Many functions do not examine any values except their arguments, and have no effects
+ *       except the return value. Basically this is just slightly more strict class than
+ *       the pure attribute below, since function is not allowed to read global memory."
+ */
+#if WZ_CC_GNU_PREREQ(2,5) && !defined(WZ_CC_INTEL)
+#  define WZ_DECL_CONST __attribute__((__const__,__warn_unused_result__))
+#else
+#  define WZ_DECL_CONST
+#endif
+
+
+/*!
  * \def WZ_DECL_PURE
- * "Many functions have no effects except the return value and their return value depends only on the parameters and/or global variables. Such a function can
- *  be subject to common subexpression elimination and loop optimization just as an arithmetic operator would be."
+ * GCC: "Many functions have no effects except the return value and their return value depends
+ *       only on the parameters and/or global variables. Such a function can be subject to
+ *       common subexpression elimination and loop optimization just as an arithmetic operator
+ *       would be."
  */
 #if WZ_CC_GNU_PREREQ(2,96) && !defined(WZ_CC_INTEL)
-#  define WZ_DECL_PURE __attribute__((pure))
+#  define WZ_DECL_PURE __attribute__((__pure__))
 #else
 #  define WZ_DECL_PURE
 #endif
 
 
 /*!
+ * \def WZ_DECL_UNUSED
+ * GCC: "This attribute, attached to a function, means that the function is meant to be possibly
+ *       unused. GCC will not produce a warning for this function."
+ */
+#if WZ_CC_GNU_PREREQ(3,2) || WZ_CC_INTEL_PREREQ(10,0)
+#  define WZ_DECL_UNUSED __attribute__((__unused__))
+#else
+#  define WZ_DECL_UNUSED
+#endif
+
+
+/*!
+ * \def WZ_DECL_WARN_UNUSED_RESULT
+ * GCC: "The warn_unused_result attribute causes a warning to be emitted if a caller of the
+ *       function with this attribute does not use its return value. This is useful for
+ *       functions where not checking the result is either a security problem or always a bug,
+ *       such as realloc."
+ */
+#if defined(WZ_CC_GNU) && !defined(WZ_CC_INTEL)
+#  define WZ_DECL_WARN_UNUSED_RESULT __attribute__((__warn_unused_result__))
+#else
+#  define WZ_DECL_WARN_UNUSED_RESULT
+#endif
+
+
+/*! \def WZ_DECL_MAY_ALIAS
+ * GCC: "Accesses to objects with types with this attribute are not subjected to type-based alias
+ *       analysis, but are instead assumed to be able to alias any other type of objects,
+ *       just like the char type. See -fstrict-aliasing for more information on aliasing issues."
+ */
+#if WZ_CC_GNU_PREREQ(3,3) && !defined(WZ_CC_INTEL)
+#  define WZ_DECL_MAY_ALIAS __attribute__((__may_alias__))
+#else
+#  define WZ_DECL_MAY_ALIAS
+#endif
+
+
+/*!
  * \def WZ_DECL_RESTRICT
+ * Apply the "restrict" keyword found in the C99 revision of the standard.
+ * The compiler may assume that the memory referenced by a "restrict" pointer is not aliased
+ * by any other pointer. Thus this forms the opposite of WZ_DECL_MAY_ALIAS.
  */
 #if defined(WZ_C99) && WZ_CC_GNU_PREREQ(4,1) && !defined(WZ_CC_INTEL)
 #  define WZ_DECL_RESTRICT restrict
@@ -420,39 +466,6 @@
 #  define WZ_DECL_RESTRICT __restrict
 #else
 #  define WZ_DECL_RESTRICT
-#endif
-
-
-/*!
- * \def WZ_DECL_CONST
- * GCC: "Many functions do not examine any values except their arguments, and have no effects except the return value. Basically this is just slightly more strict
- *       class than the pure attribute below, since function is not allowed to read global memory."
- */
-#if WZ_CC_GNU_PREREQ(2,5) && !defined(WZ_CC_INTEL)
-#  define WZ_DECL_CONST __attribute__((const,warn_unused_result))
-#else
-#  define WZ_DECL_CONST
-#endif
-
-
-/*! \def WZ_DECL_FORMAT
- * "The format attribute specifies that a function takes printf, scanf, strftime or strfmon style arguments which should be type-checked against a format string."
- */
-#if WZ_CC_GNU_PREREQ(2,5) && !defined(WZ_CC_INTEL)
-#  define WZ_DECL_FORMAT(archetype, string_index, first_to_check) \
-          __attribute__((format(archetype, string_index, first_to_check)))
-#else
-#  define WZ_DECL_FORMAT(archetype, string_index, first_to_check)
-#endif
-
-
-/*! \def WZ_DECL_MAY_ALIAS
- * "Accesses to objects with types with this attribute are not subjected to type-based alias analysis, but are instead assumed to be able to alias any other type of objects, just like the char type. See -fstrict-aliasing for more information on aliasing issues."
- */
-#if WZ_CC_GNU_PREREQ(3,3) && !defined(WZ_CC_INTEL)
-#  define WZ_DECL_MAY_ALIAS __attribute__((may_alias))
-#else
-#  define WZ_DECL_MAY_ALIAS
 #endif
 
 
@@ -469,7 +482,7 @@
 
 
 /*! \def WZ_ASSERT_STATIC_STRING
- * Asserts that two types are equal
+ * Asserts that the given string is statically allocated.
  */
 #if defined(__cplusplus)
 #  include <typeinfo>
