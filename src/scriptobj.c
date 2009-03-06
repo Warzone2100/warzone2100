@@ -1495,7 +1495,7 @@ BASE_OBJECT *luaWZObj_checkbaseobject(lua_State *L, int pos)
 	object = getBaseObjFromId(id);
 	if (object == NULL)
 	{
-		luaL_error(L, "argument %d: id not found (%d)" , pos, id);
+		luaL_error(L, "argument %d: found no object with id %d" , pos, id);
 	}
 	return object;
 }
@@ -1647,7 +1647,7 @@ DROID_TEMPLATE* luaWZObj_checktemplate(lua_State *L, int pos)
 		}
 		else
 		{
-			luaL_error(L, "invalid template id %i at position %i", id, pos);
+			luaL_error(L, "invalid template id %d at position %d", id, pos);
 			return NULL; // not reached
 		}
 	}
@@ -1664,7 +1664,7 @@ DROID_TEMPLATE* luaWZObj_checktemplate(lua_State *L, int pos)
 		}
 		else
 		{
-			luaL_error(L, "invalid template name \"%s\" at position %i", name, pos);
+			luaL_error(L, "invalid template name \"%s\" at position %d", name, pos);
 			return NULL; // not reached
 		}
 

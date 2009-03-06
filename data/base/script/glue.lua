@@ -86,6 +86,9 @@ function setLandingZone(x1, y1, x2, y2)
 end
 
 function random(upper)
+	if upper < 1 then
+		error('cannot call random with a negative value', 2)
+	end
 	return math.random(0, upper-1)
 end
 math.randomseed(os.time())

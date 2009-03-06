@@ -59,8 +59,12 @@ function callbackEvent(handler, event)
 end
 
 function deactivateEvent(handler)
-	_event.event_list[handler].enabled = false
-	_event.event_list[handler].enabled_stored = false
+	if not _event.event_list[handler] then
+		error('trying to deactivate an unknown event handler: '.._save.search(handler), 2)
+	else
+		_event.event_list[handler].enabled = false
+		_event.event_list[handler].enabled_stored = false
+	end
 end
 
 -- will process all conditional events, executed every tick
