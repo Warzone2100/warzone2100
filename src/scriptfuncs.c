@@ -616,7 +616,7 @@ static int scrMakeComponentAvailable(lua_State *L)
 {
 	int index;
 
-	const char *componentName = luaL_checkstring(L, 1);
+	const char *componentName = luaWZObj_checkname(L, 1);
 	int player = luaWZ_checkplayer(L, 2);
 	
 	index = getCompFromResName(COMP_BODY, componentName);
