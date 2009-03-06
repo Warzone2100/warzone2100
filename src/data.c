@@ -973,10 +973,8 @@ static BOOL dataScriptLoad(const char* fileName, void **ppData)
 
 static void dataScriptRelease(void *pData)
 {
-#if 0
-	SCRIPT_CODE *psCode = pData;
-	scriptFreeCode(psCode);
-#endif
+	lua_State *L = (lua_State*)pData;
+	freeScript(L);
 }
 
 
@@ -995,42 +993,11 @@ static BOOL dataScriptLoadVals(const char* fileName, void **ppData)
 	strcpy(slopos, ".lua");
 	debug(LOG_WZ, "trying to load lua file %s", newfilename);
 	
-	scrNewState(newfilename);
+	L = scrNewState(newfilename);
 	
 	free(newfilename);
 	*ppData = L;
 	return true;
-#if 0
-
-	BOOL success;
-	PHYSFS_file* fileHandle;
-
-	*ppData = NULL;
-
-	// don't load anything if a saved game is being loaded
-	if (saveFlag)
-	{
-		return true;
-	}
-
-	debug(LOG_WZ, "Loading script data %s", GetLastResourceFilename());
-
-	fileHandle = PHYSFS_openRead(fileName);
-	debug(LOG_WZ, "Reading...[directory: %s] %s", PHYSFS_getRealDir(fileName), fileName);
-	if (fileHandle == NULL)
-	{
-		return false;
-	}
-
-	success = scrvLoad(fileHandle);
-
-	if (!success)
-		debug(LOG_ERROR, "Script %s did not compile", GetLastResourceFilename());
-
-	PHYSFS_close(fileHandle);
-
-	return success;
-#endif
 }
 
 // New reduced resource type ... specially for PSX
@@ -1098,8 +1065,8 @@ static const RES_TYPE_MIN_FILE FileResourceTypes[] =
 	{"TERTILES", dataTERTILESLoad, dataTERTILESRelease},
 	{"IMG", dataIMGLoad, dataIMGRelease},
 	{"TEXPAGE", dataTexPageLoad, dataImageRelease},
-	{"SCRIPT", dataScriptLoad, dataScriptRelease},
-	{"SCRIPTVAL", dataScriptLoadVals, NULL},
+	{"SCRIPT", dataScriptLoad, NULL},
+	{"SCRIPTVAL", dataScriptLoadVals, dataScriptRelease},
 	{"STR_RES", dataStrResLoad, dataStrResRelease},
 	{ "RESEARCHMSG", dataResearchMsgLoad, dataSMSGRelease },
 };

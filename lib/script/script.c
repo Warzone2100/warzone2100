@@ -66,6 +66,22 @@ void registerScript(lua_State *L)
 	}
 }
 
+void freeScript(lua_State *L)
+{
+	int i;
+	for(i=0;i<100;i++)
+	{
+		if(lua_states[i] == L)
+		{
+			lua_states[i] = NULL;
+			lua_close(L);
+			return;
+		}
+	}
+	debug(LOG_ERROR, "script was not registered");
+	lua_close(L);
+}
+
 static lua_State *scrLoadState(const char *filename)
 {
 	lua_State *L = luaL_newstate();
@@ -96,7 +112,7 @@ static lua_State *scrLoadState(const char *filename)
 	return NULL;
 }
 
-void scrNewState(const char *filename)
+lua_State *scrNewState(const char *filename)
 {
 	lua_State *L = scrLoadState(filename);
 	
@@ -108,6 +124,7 @@ void scrNewState(const char *filename)
 	{
 		debug(LOG_WARNING, "failed loading script %s", filename);
 	}
+	return L;
 }
 
 static char *scrSaveSingleState(lua_State *L)

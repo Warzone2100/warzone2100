@@ -38,8 +38,9 @@
 #include <lualib.h>
 
 extern void registerScript(lua_State *L);
+extern void freeScript(lua_State *L);
 extern void scriptTick(void);
-extern void scrNewState(const char *filename);
+extern lua_State *scrNewState(const char *filename);
 extern void scrSaveState(const char *directory);
 extern void scrLoadStates(const char *directory);
 
