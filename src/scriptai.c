@@ -59,7 +59,7 @@ static int scrNewGroup(lua_State *L)
 	DROID_GROUP *group;
 	if (!grpCreate(&group))
 	{
-		luaL_error(L, "could not create new group");
+		return luaL_error(L, "could not create new group");
 	}
 	// increase the reference count
 	group->refCount += 1;
@@ -75,11 +75,11 @@ static int scrGroupAddDroid(lua_State *L)
 
 	if (psDroid->droidType == DROID_COMMAND)
 	{
-		luaL_error(L, "scrGroupAdd: cannot add a command droid to a group" );
+		return luaL_error(L, "scrGroupAdd: cannot add a command droid to a group" );
 	}
 	if (psDroid->droidType == DROID_TRANSPORTER)
 	{
-		luaL_error(L, "scrGroupAdd: cannot add a transporter to a group" );
+		return luaL_error(L, "scrGroupAdd: cannot add a transporter to a group" );
 	}
 
 	grpJoin(psGroup, psDroid);
@@ -365,14 +365,14 @@ static int scrOrderGroupLoc(lua_State *L)
 	if (order != DORDER_MOVE &&
 		order != DORDER_SCOUT)
 	{
-		luaL_error(L, "scrOrderGroupLoc: Invalid order" );
+		return luaL_error(L, "scrOrderGroupLoc: Invalid order" );
 	}
 	if (x < 0
 	 || x > world_coord(mapWidth)
 	 || y < 0
 	 || y > world_coord(mapHeight))
 	{
-		luaL_error(L, "scrOrderGroupLoc: Invalid location" );
+		return luaL_error(L, "scrOrderGroupLoc: Invalid location" );
 	}
 
 	debug(LOG_NEVER, "group %p (%u) order %d (%d,%d)",
@@ -513,12 +513,12 @@ static int scrOrderDroidStatsLoc(lua_State *L)
 	if ((x < 0) || (x > (SDWORD)mapWidth*TILE_UNITS) ||
 		(y < 0) || (y > (SDWORD)mapHeight*TILE_UNITS))
 	{
-		luaL_error(L, "scrOrderUnitStatsLoc: Invalid location" );
+		return luaL_error(L, "scrOrderUnitStatsLoc: Invalid location" );
 	}
 
 	if (order != DORDER_BUILD)
 	{
-		luaL_error(L, "scrOrderUnitStatsLoc: Invalid order" );
+		return luaL_error(L, "scrOrderUnitStatsLoc: Invalid order" );
 	}
 
 	// Don't allow scripts to order structure builds if players structure
@@ -1340,7 +1340,7 @@ static int scrSkCanBuildTemplate(lua_State *L)
 	case DROID_DEFAULT:		        // Default droid
 	case DROID_ANY:
 	default:
-		luaL_error(L, "scrSkCanBuildTemplate: Unhandled template type" );
+		return luaL_error(L, "scrSkCanBuildTemplate: Unhandled template type" );
 		abort();
 		break;
 	}

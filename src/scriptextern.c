@@ -123,7 +123,7 @@ int scrGetCVar(lua_State *L)
 			lua_pushinteger(L, game.alliance);
 			break;
 		default:
-			luaL_error(L, "invalid id %d for C variable");
+			return luaL_error(L, "invalid id %d for C variable");
 	}
 	return 1;
 }
@@ -135,22 +135,22 @@ int scrSetCVar(lua_State *L)
 	switch (id)
 	{
 		case EXTID_TRACKTRANSPORTER:
-			luaL_error(L, "readonly C variable");
+			return luaL_error(L, "readonly C variable");
 			break;
 		case EXTID_MAPWIDTH:
-			luaL_error(L, "readonly C variable");
+			return luaL_error(L, "readonly C variable");
 			break;
 		case EXTID_MAPHEIGHT:
-			luaL_error(L, "readonly C variable");
+			return luaL_error(L, "readonly C variable");
 			break;
 		case EXTID_GAMEINIT:
-			luaL_error(L, "readonly C variable");
+			return luaL_error(L, "readonly C variable");
 			break;
 		case EXTID_SELECTEDPLAYER:
-			luaL_error(L, "readonly C variable");
+			return luaL_error(L, "readonly C variable");
 			break;
 		case EXTID_GAMETIME:
-			luaL_error(L, "readonly C variable");
+			return luaL_error(L, "readonly C variable");
 			break;
 		case EXTID_GAMELEVEL:
 			value = luaL_checkinteger(L, 2);
@@ -161,13 +161,13 @@ int scrSetCVar(lua_State *L)
 			bInTutorial = value;
 			break;
 		case EXTID_CURSOR:
-			luaL_error(L, "readonly C variable");
+			return luaL_error(L, "readonly C variable");
 			break;
 		case EXTID_INTMODE:
-			luaL_error(L, "readonly C variable");
+			return luaL_error(L, "readonly C variable");
 			break;
 		case EXTID_TARGETTYPE:
-			luaL_error(L, "readonly C variable");
+			return luaL_error(L, "readonly C variable");
 			break;
 		case EXTID_EXTRAVICTORYFLAG:
 			value = luaL_checkboolean(L, 2);
@@ -178,19 +178,19 @@ int scrSetCVar(lua_State *L)
 			bExtraFailFlag = value;
 			break;
 		case EXTID_MULTIGAMETYPE:
-			luaL_error(L, "readonly C variable");
+			return luaL_error(L, "readonly C variable");
 			break;
 		case EXTID_MULTIGAMEHUMANMAX:
-			luaL_error(L, "readonly C variable");
+			return luaL_error(L, "readonly C variable");
 			break;
 		case EXTID_MULTIGAMEBASETYPE:
-			luaL_error(L, "readonly C variable");
+			return luaL_error(L, "readonly C variable");
 			break;
 		case EXTID_MULTIGAMEALLIANCESTYPE:
-			luaL_error(L, "readonly C variable");
+			return luaL_error(L, "readonly C variable");
 			break;
 		default:
-			luaL_error(L, "invalid id %d for C variable");
+			return luaL_error(L, "invalid id %d for C variable");
 	}
 	return 0;
 }

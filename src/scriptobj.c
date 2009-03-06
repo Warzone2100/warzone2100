@@ -1459,6 +1459,7 @@ BASE_OBJECT *luaWZObj_checkobject(lua_State *L, int pos, int type)
 	if (object->type != type)
 	{
 		luaL_error(L, "type of argument %d is %d instead of %d", pos, objectType, type);
+		return NULL; // not reached
 	}
 	return object;
 }
@@ -1473,6 +1474,7 @@ unsigned int luaWZObj_toid(lua_State *L, int pos)
 		if(!lua_isnumber(L, -1))
 		{
 			luaL_error(L, "argument %d has no number field 'id'", pos);
+			return 0; // not reached
 		}
 		id = lua_tointeger(L, -1);
 		lua_pop(L, 1);
@@ -1491,11 +1493,13 @@ BASE_OBJECT *luaWZObj_checkbaseobject(lua_State *L, int pos)
 	if (id == 0)
 	{
 		luaL_error(L, "argument %d should be an id or an object", pos);
+		return NULL; // not reached
 	}
 	object = getBaseObjFromId(id);
 	if (object == NULL)
 	{
 		luaL_error(L, "argument %d: found no object with id %d" , pos, id);
+		return NULL; // not reached
 	}
 	return object;
 }
@@ -1624,6 +1628,7 @@ const char* luaWZObj_checkname(lua_State *L, int pos)
 		if(!lua_isstring(L, -1))
 		{
 			luaL_error(L, "argument %d has no string field 'name'", pos);
+			return ""; // not reached
 		}
 		name = luaL_checkstring(L, -1);
 		lua_pop(L, 1);
@@ -1691,21 +1696,24 @@ DROID_GROUP *luaWZObj_checkgroup(lua_State *L, int pos)
 		if (!lua_tostring(L, -1) || strcmp(lua_tostring(L, -1), "group") != 0)
 		{
 			luaL_error(L, "argument %d is not a group", pos);
+			return NULL; // not reached
 		}
 		lua_pop(L, 1);
 		lua_getfield(L, pos, "pointer");
 		if(!lua_isuserdata(L, -1))
 		{
 			luaL_error(L, "argument %d has no pointer field 'pointer'", pos);
+			return NULL; // not reached
 		}
 		group = lua_touserdata(L, -1);
 		lua_pop(L, 1);
 		if (!group)
 		{
 			luaL_error(L, "group pointer is NULL");
+			return NULL; // not reached
 		}
 		return group;
 	}
 	luaL_error(L, "argument %d is not a group (not even a table)", pos);
-	return NULL;
+	return NULL; // not reached
 }

@@ -668,7 +668,7 @@ static int scrMakeComponentAvailable(lua_State *L)
 		return 0;
 	}
 
-	luaL_error(L, "component %s not found", componentName);
+	return luaL_error(L, "component %s not found", componentName);
 	// not reached
 	return 0;
 }
@@ -844,7 +844,7 @@ static int scrEnableStructure(lua_State *L)
 
 	if (index < (SDWORD)0 || index > (SDWORD)numStructureStats)
 	{
-		luaL_error(L, "invalid structure stat" );
+		return luaL_error(L, "invalid structure stat" );
 	}
 	
 	// enable the appropriate structure
@@ -864,7 +864,7 @@ static int scrIsStructureAvailable(lua_State *L)
 	
 	if (index < 0)
 	{
-		luaL_error(L, "unknown structure type");
+		return luaL_error(L, "unknown structure type");
 	}
 	lua_pushboolean(L, apStructTypeLists[player][index] == AVAILABLE);
 	return 1;
@@ -994,7 +994,7 @@ static int scrAddReticuleButton(lua_State *L)
 		widgReveal(psWScreen, IDRET_CANCEL);
 		break;
 	default:
-		luaL_error(L, "Invalid reticule Button ID" );
+		return luaL_error(L, "Invalid reticule Button ID" );
 	}
 
 	return 0;
@@ -1047,7 +1047,7 @@ static int scrRemoveReticuleButton(lua_State *L)
 		widgHide(psWScreen, IDRET_CANCEL);
 		break;
 	default:
-		luaL_error(L, "Invalid reticule Button ID" );
+		return luaL_error(L, "Invalid reticule Button ID" );
 	}
 
 	return 0;
@@ -1120,7 +1120,7 @@ static int scrRemoveMessage(lua_State *L)
 	}
 	else
 	{
-		luaL_error(L, "cannot find message - %s",
+		return luaL_error(L, "cannot find message - %s",
 			psViewData->pName );
 	}
 
@@ -1138,25 +1138,25 @@ static int scrBuildDroid(lua_State *L)
 	
 	if (productionRun > UBYTE_MAX)
 	{
-		luaL_error(L, "scrBuildUnit: production run too high" );
+		return luaL_error(L, "scrBuildUnit: production run too high" );
 	}
 
 	if (!(psFactory->pStructureType->type == REF_FACTORY ||
 		psFactory->pStructureType->type == REF_CYBORG_FACTORY ||
 		psFactory->pStructureType->type == REF_VTOL_FACTORY))
 	{
-		luaL_error(L, "scrBuildUnit: structure is not a factory" );
+		return luaL_error(L, "scrBuildUnit: structure is not a factory" );
 	}
 	if (psTemplate == NULL)
 	{
-		luaL_error(L, "scrBuildUnit: Invalid template pointer" );
+		return luaL_error(L, "scrBuildUnit: Invalid template pointer" );
 	}
 
 	//check building the right sort of droid for the factory
 	if (!validTemplateForFactory(psTemplate, psFactory))
 	{
 
-		luaL_error(L, "scrBuildUnit: invalid template - %s for factory - %s",
+		return luaL_error(L, "scrBuildUnit: invalid template - %s for factory - %s",
 			psTemplate->aName, psFactory->pStructureType->pName );
 	}
 
@@ -1177,7 +1177,7 @@ static int scrSetAssemblyPoint(lua_State *L)
 		psBuilding->pStructureType->type != REF_CYBORG_FACTORY &&
 		psBuilding->pStructureType->type != REF_VTOL_FACTORY)
 	{
-		luaL_error(L, "structure is not a factory" );
+		return luaL_error(L, "structure is not a factory" );
 	}
 
 	setAssemblyPoint(((FACTORY *)psBuilding->pFunctionality)->psAssemblyPoint,x,y,
@@ -1810,7 +1810,7 @@ static int scrCentreViewPos(lua_State *L)
 	if ( (x < 0) || (x >= (SDWORD)mapWidth*TILE_UNITS) ||
 		 (y < 0) || (y >= (SDWORD)mapHeight*TILE_UNITS))
 	{
-		luaL_error(L, "coords off map" );
+		return luaL_error(L, "coords off map" );
 	}
 
 	//centre the view on the objects x/y
@@ -1865,7 +1865,7 @@ WZ_DECL_UNUSED static BOOL scrGetTemplate(void)
 
 	if (player < 0 || player >= MAX_PLAYERS)
 	{
-		luaL_error(L, "invalid player number" );
+		return luaL_error(L, "invalid player number" );
 	}
 
 	if (!stackPop(&sVal))
@@ -1969,7 +1969,7 @@ WZ_DECL_UNUSED static BOOL scrGetDroid(void)
 
 	if (player < 0 || player >= MAX_PLAYERS)
 	{
-		luaL_error(L, "invalid player number" );
+		return luaL_error(L, "invalid player number" );
 	}
 
 	if (!stackPop(&sVal))
@@ -2340,12 +2340,12 @@ static int scrSetStructureLimits(lua_State *L)
 
 	if (limit < 0)
 	{
-		luaL_error(L, "scrSetStructureLimits: limit is less than zero - %d", limit );
+		return luaL_error(L, "scrSetStructureLimits: limit is less than zero - %d", limit );
 	}
 
 	if (limit > LOTS_OF)
 	{
-		luaL_error(L, "scrSetStructureLimits: limit is too high - %d - must be less than %d",
+		return luaL_error(L, "scrSetStructureLimits: limit is too high - %d - must be less than %d",
 			limit, LOTS_OF );
 	}
 
@@ -2433,7 +2433,7 @@ WZ_DECL_UNUSED static BOOL scrShowConsoleText(void)
 
 	if (player < 0 || player >= MAX_PLAYERS)
 	{
-		luaL_error(L, "invalid player number" );
+		return luaL_error(L, "invalid player number" );
 	}
 
 	if (player == (SDWORD)selectedPlayer)
@@ -2585,7 +2585,7 @@ static int scrGameOverMessage(lua_State *L)
 
 	if (msgType == MSG_PROXIMITY)
 	{
-	    luaL_error(L, "Bad message type (MSG_PROXIMITY)" );
+	    return luaL_error(L, "Bad message type (MSG_PROXIMITY)" );
     }
 	if (psMessage)
 	{
@@ -2896,7 +2896,7 @@ static int scrSetGroupRetreatPoint(lua_State *L)
 	if (x < 0 || x >= (SDWORD)mapWidth*TILE_UNITS ||
 		y < 0 || y >= (SDWORD)mapHeight*TILE_UNITS)
 	{
-		luaL_error(L, "scrSetRetreatPoint: coords off map" );
+		return luaL_error(L, "scrSetRetreatPoint: coords off map" );
 	}
 
 	psGroup->sRunData.sPos.x = x;
@@ -2915,7 +2915,7 @@ static int scrSetGroupRetreatForce(lua_State *L)
 
 	if (level > 100 || level < 0)
 	{
-		luaL_error(L, "scrSetRetreatForce: level out of range" );
+		return luaL_error(L, "scrSetRetreatForce: level out of range" );
 	}
 
 	// count up the current number of droids
@@ -2989,7 +2989,7 @@ static int scrSetGroupRetreatLeadership(lua_State *L)
 
 	if (level > 100 || level < 0)
 	{
-		luaL_error(L, "scrSetRetreatLeadership: level out of range" );
+		return luaL_error(L, "scrSetRetreatLeadership: level out of range" );
 	}
 
 	psGroup->sRunData.leadership = (UBYTE)level;
@@ -3008,7 +3008,7 @@ static int scrStartMission(lua_State *L)
 	//if (missionType > MISSION_NONE)
 	if (missionType > LDS_NONE)
 	{
-		luaL_error(L, "Invalid Mission Type" );
+		return luaL_error(L, "Invalid Mission Type" );
 	}
 
 	// tell the loop that a new level has to be loaded up - not yet!
@@ -3021,7 +3021,7 @@ static int scrStartMission(lua_State *L)
 	{
 		debug( LOG_ERROR, "scrStartMission: couldn't find level data" );
 		abort();
-		luaL_error(L, "couldn't find level data" );
+		return luaL_error(L, "couldn't find level data" );
 	}
 
 	//set the mission rolling...
@@ -3536,16 +3536,16 @@ static int scrStructureBuiltInRange(lua_State *L)
 	if (x < 0
 	 || map_coord(x) > (SDWORD)mapWidth)
 	{
-		luaL_error(L, "The X coordinate is off map");
+		return luaL_error(L, "The X coordinate is off map");
 	}
 	if (y < 0
 	 || map_coord(y) > (SDWORD)mapHeight)
 	{
-		luaL_error(L, "The Y coordinate is off map");
+		return luaL_error(L, "The Y coordinate is off map");
 	}
 	if (range < (SDWORD)0)
 	{
-		luaL_error(L, "Negative range");
+		return luaL_error(L, "Negative range");
 	}
 
 	//now look through the players list of structures to see if this type
@@ -3628,7 +3628,7 @@ static int scrEnableResearch(lua_State *L)
 	psResearch = getResearch(researchName, false);
 	if (!psResearch)
 	{
-		luaL_error(L, "could not find research");
+		return luaL_error(L, "could not find research");
 	}
 
 	enableResearch(psResearch, player);
@@ -3648,13 +3648,13 @@ static int scrCompleteResearch(lua_State *L)
 
 	if(psResearch == NULL)
 	{
-		luaL_error(L, "scrCompleteResearch: no such research topic" );
+		return luaL_error(L, "scrCompleteResearch: no such research topic" );
 	}
 
 	researchIndex = psResearch - asResearch;	//TODO: fix if needed
 	if (researchIndex > numResearch)
 	{
-		luaL_error(L, "scrCompleteResearch: invalid research index" );
+		return luaL_error(L, "scrCompleteResearch: invalid research index" );
 	}
 
 	researchResult(researchIndex, (UBYTE)player, false, NULL);
@@ -3876,40 +3876,40 @@ static int scrSetNoGoArea(lua_State *L)
 
 	if (area == LIMBO_LANDING)
 	{
-		luaL_error(L, "Cannot set the Limbo Landing area with this function" );
+		return luaL_error(L, "Cannot set the Limbo Landing area with this function" );
 	}
 
 	//check the values - check against max possible since can set in one mission for the next
 	//if (x1 > (SDWORD)mapWidth)
 	if (x1 > (SDWORD)MAP_MAXWIDTH)
 	{
-		luaL_error(L, "x1 is greater than max mapWidth" );
+		return luaL_error(L, "x1 is greater than max mapWidth" );
 	}
 	//if (x2 > (SDWORD)mapWidth)
 	if (x2 > (SDWORD)MAP_MAXWIDTH)
 	{
-		luaL_error(L, "x2 is greater than max mapWidth" );
+		return luaL_error(L, "x2 is greater than max mapWidth" );
 	}
 	//if (y1 > (SDWORD)mapHeight)
 	if (y1 > (SDWORD)MAP_MAXHEIGHT)
 	{
-		luaL_error(L, "y1 is greater than max mapHeight" );
+		return luaL_error(L, "y1 is greater than max mapHeight" );
 	}
 	//if (y2 > (SDWORD)mapHeight)
 	if (y2 > (SDWORD)MAP_MAXHEIGHT)
 	{
-		luaL_error(L, "y2 is greater than max mapHeight" );
+		return luaL_error(L, "y2 is greater than max mapHeight" );
 		return false;
 	}
 	//check won't overflow!
 	if (x1 > UBYTE_MAX || y1 > UBYTE_MAX || x2 > UBYTE_MAX || y2 > UBYTE_MAX)
 	{
-		luaL_error(L, "one coord is greater than %d", UBYTE_MAX );
+		return luaL_error(L, "one coord is greater than %d", UBYTE_MAX );
 	}
 
 	if (area >= MAX_NOGO_AREAS)
 	{
-		luaL_error(L, "max num of areas is %d", MAX_NOGO_AREAS );
+		return luaL_error(L, "max num of areas is %d", MAX_NOGO_AREAS );
 	}
 
 	setNoGoArea((UBYTE)x1, (UBYTE)y1, (UBYTE)x2, (UBYTE)y2, (UBYTE)area);
@@ -3928,7 +3928,7 @@ static int scrSetRadarZoom(lua_State *L)
 
 	if (level < 0 || level > 2)
 	{
-		luaL_error(L, "scrSetRadarZoom: zoom level out of range" );
+		return luaL_error(L, "scrSetRadarZoom: zoom level out of range" );
 	}
 
 	SetRadarZoom((UWORD)level);
@@ -5085,22 +5085,22 @@ static int scrTakeOverDroidsInArea(lua_State *L)
 
 	if (x1 > world_coord(MAP_MAXWIDTH))
 	{
-		luaL_error(L, "scrTakeOverUnitsInArea: x1 is greater than max mapWidth" );
+		return luaL_error(L, "scrTakeOverUnitsInArea: x1 is greater than max mapWidth" );
 	}
 
 	if (x2 > world_coord(MAP_MAXWIDTH))
 	{
-		luaL_error(L, "scrTakeOverUnitsInArea: x2 is greater than max mapWidth" );
+		return luaL_error(L, "scrTakeOverUnitsInArea: x2 is greater than max mapWidth" );
 	}
 
 	if (y1 > world_coord(MAP_MAXHEIGHT))
 	{
-		luaL_error(L, "scrTakeOverUnitsInArea: y1 is greater than max mapHeight" );
+		return luaL_error(L, "scrTakeOverUnitsInArea: y1 is greater than max mapHeight" );
 	}
 
 	if (y2 > world_coord(MAP_MAXHEIGHT))
 	{
-		luaL_error(L, "scrTakeOverUnitsInArea: y2 is greater than max mapHeight" );
+		return luaL_error(L, "scrTakeOverUnitsInArea: y2 is greater than max mapHeight" );
 	}
 
 	numChanged = 0;
@@ -9569,7 +9569,7 @@ static int scrGetStructureByID(lua_State *L)
 	structure = (STRUCTURE*)getBaseObjFromId(id);
 	if (structure == NULL || structure->type != OBJ_STRUCTURE)
 	{
-		//luaL_error(L, "invalid structure ID");
+		//return luaL_error(L, "invalid structure ID");
 		// return nil for now
 		lua_pushnil(L);
 		return 1;
@@ -9585,7 +9585,7 @@ static int scrDestroyed(lua_State *L)
 	unsigned int id = luaWZObj_toid(L, 1);
 	if (id == 0)
 	{
-		luaL_error(L, "argument 1 should be an id or an object");
+		return luaL_error(L, "argument 1 should be an id or an object");
 	}
 	BASE_OBJECT *object = getBaseObjFromId(id);
 	if (!object)

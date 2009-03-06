@@ -162,7 +162,7 @@ static int dofile(lua_State *L)
 	const char *filename = luaL_checkstring(L,1);
 	if (!luaWZ_dofile(L, filename))
 	{
-		luaL_error(L, "failed loading file");
+		return luaL_error(L, "failed loading file");
 	}
 	return 0;
 }
@@ -187,7 +187,7 @@ int luaWZ_checkplayer (lua_State *L, int narg) {
 	}
 	if (d < 0 || d >= 8) // HACK: MAX_PLAYERS
 	{
-		luaL_error(L, "player number out of range (%d)", d);
+		return luaL_error(L, "player number out of range (%d)", d);
 	}
 	return d;
 }
