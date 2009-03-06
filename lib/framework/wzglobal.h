@@ -414,7 +414,7 @@
 /*!
  * \def WZ_DECL_RESTRICT
  */
-#if WZ_CC_GNU_PREREQ(4,1) && !defined(WZ_CC_INTEL) && !defined(__cplusplus)
+#if defined(WZ_C99) && WZ_CC_GNU_PREREQ(4,1) && !defined(WZ_CC_INTEL)
 #  define WZ_DECL_RESTRICT restrict
 #elif defined(WZ_CC_MSVC) && (_MSC_VER >= 1300)
 #  define WZ_DECL_RESTRICT __restrict
