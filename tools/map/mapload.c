@@ -160,7 +160,7 @@ GAMEMAP *mapLoad(char *filename)
 	PHYSFS_close(fp);
 
 
-	/* === Load game data === */
+	/* === Load feature data === */
 
 	littleEndian = true;
 	strcpy(path, filename);
@@ -181,6 +181,38 @@ GAMEMAP *mapLoad(char *filename)
 	{
 		debug(LOG_ERROR, "Bad features header in %s", path);
 		return NULL;
+	}
+	map->mLndObjects[0] = malloc(sizeof(*map->mLndObjects[0]) * map->numFeatures);
+	for(i = 0; i < map->numFeatures; i++)
+	{
+		LND_OBJECT *psObj = &map->mLndObjects[0][i];
+		int nameLength = 60;
+		uint32_t dummy;
+		uint8_t visibility[8];
+
+		if (featVersion <= 19)
+		{
+			nameLength = 40;
+		}
+		if (PHYSFS_read(fp, psObj->name, nameLength, 1) != 1
+		    || !readU32(&psObj->id)
+		    || !readU32(&psObj->x) || !readU32(&psObj->y) || !readU32(&psObj->z)
+		    || !readU32(&psObj->direction)
+		    || !readU32(&psObj->player)
+		    || !readU32(&dummy) // BOOL inFire
+		    || !readU32(&dummy) // burnStart
+		    || !readU32(&dummy)) // burnDamage
+		{
+			debug(LOG_ERROR, "Failed to read feature from %s", path);
+			return NULL;
+		}
+		psObj->player = 0;	// work around invalid feature owner
+		if (featVersion >= 14 && PHYSFS_read(fp, &visibility, 1, 8) != 8)
+		{
+			debug(LOG_ERROR, "Failed to read feature visibility from %s", path);
+			return NULL;
+		}
+		psObj->type = 0;	// IMD LND type for feature
 	}
 	PHYSFS_close(fp);
 

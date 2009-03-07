@@ -26,10 +26,12 @@
 #define TRI_FLIPPED(x)	((x)->texture & TILE_TRIFLIP)
 #define SNAP_MODE	0
 
-typedef enum _tileset_type
-{
-	TILESET_ARIZONA = 0, TILESET_URBAN, TILESET_ROCKIES
-} TILESET;
+enum {
+        IMD_FEATURE,
+        IMD_STRUCTURE,
+        IMD_DROID,
+        IMD_OBJECT,
+};
 
 static const char *tilesetDataSet[] = { "WarzoneDataC1.eds", "WarzoneDataC2.eds", "WarzoneDataC3.eds" };
 static const char *tilesetTextures[] = { "texpages\\tertilesc1.pcx", "texpages\\tertilesc2.pcx", "texpages\\tertilesc3.pcx" };
@@ -41,7 +43,6 @@ int main(int argc, char **argv)
 	GAMEMAP *map;
 	FILE *fp;
 	int i, x, y;
-	TILESET tileset = TILESET_ARIZONA; // FIXME, hack for now
 
 	if (argc != 2)
 	{
@@ -80,7 +81,7 @@ int main(int argc, char **argv)
 		return -1;
 	}
 	#define MADD(...) fprintf(fp, __VA_ARGS__); fprintf(fp, "\n");
-	MADD("DataSet %s", tilesetDataSet[tileset]);
+	MADD("DataSet %s", tilesetDataSet[map->tileset]);
 	MADD("GrdLand {");
 	MADD("    Version %d", GRDLANDVERSION);
 	MADD("    3DPosition %f %f %f", 0.0, 0.0, 0.0);	// FIXME
@@ -99,7 +100,7 @@ int main(int argc, char **argv)
 	MADD("    TextureHeight %d", 64);
 	MADD("    NumTextures %d", 1);
 	MADD("    Textures {");
-	MADD("        %s", tilesetTextures[tileset]);
+	MADD("        %s", tilesetTextures[map->tileset]);
 	MADD("    }");
 	MADD("    NumTiles %d",  map->width * map->height);
 	MADD("    Tiles {");
@@ -169,12 +170,27 @@ int main(int argc, char **argv)
 	MADD("}");
 	MADD("ObjectList {");
 	MADD("    Version 3");
-	MADD("    FeatureSet %s", tilesetDataSet[tileset]);
-	MADD("    NumObjects 0");
+	MADD("    FeatureSet %s", tilesetDataSet[map->tileset]);
+	MADD("    NumObjects %d", (int)map->numFeatures);
 	MADD("    Objects {");
-		// %d UniqueID, %d TypeID, \"%s\" StructureName or description or \"NONAME\", %d PlayerID, \"%s\" ScriptName or \"NONAME\" MAY BE MISSING in v<3!
-		// fprintf(Stream, "%.2f %.2f %.2f ", Position.x, Position.y, Position.z);
-		// fprintf(Stream, "%.2f %.2f %.2f\n", curNode->Rotation.x, curNode->Rotation.y, curNode->Rotation.z);
+	for (x = 0; x < 1; x++)
+	{
+		int max = map->numFeatures; 	// FIXME
+
+		for (i = 0; i < max; i++)
+		{
+			LND_OBJECT *psObj = &map->mLndObjects[x][i];
+			double x = (double)psObj->x - (double)map->width * TILE_WIDTH / 2.0;
+			double y = (double)psObj->z - (double)map->height * TILE_HEIGHT / 2.0;
+
+			MADD("        %u %d \"%s\" %u \"NONAME\" %.02f %.02f %.02f 0.00 %.02f 0.00",
+			     psObj->id, psObj->type, psObj->name, psObj->player, x, (double)psObj->z, y, (double)psObj->direction);
+
+			// %d UniqueID, %d TypeID, \"%s\" StructureName or description or \"NONAME\", %d PlayerID, \"%s\" ScriptName or \"NONAME\" MAY BE MISSING in v<3!
+			// fprintf(Stream, "%.2f %.2f %.2f ", Position.x, Position.y, Position.z);
+			// fprintf(Stream, "%.2f %.2f %.2f\n", curNode->Rotation.x, curNode->Rotation.y, curNode->Rotation.z);
+		}
+	}
 	MADD("    }");
 	MADD("}");
 	MADD("ScrollLimits {");
@@ -200,7 +216,7 @@ int main(int argc, char **argv)
 	MADD("    NumTiles 128");		// ??? FIXME - read from ttypes file
 	MADD("    Tiles {");
 	// The first value of 2 is not written into the Deliverance (Warzone binary) format for some reason.
-	switch (tileset)
+	switch (map->tileset)
 	{
 	case TILESET_ARIZONA:
 		MADD("        2 1 0 2 2 0 2 2 2 2 1 1 1 0 7 7\n"

@@ -27,6 +27,17 @@
 
 #define MAX_LEVEL_SIZE	20
 
+typedef struct _lnd_object_type
+{
+	uint32_t	id;
+	uint32_t	player;
+	int 		type;	// "IMD" LND object type
+	char 		name[128];
+	char 		script[32];
+	uint32_t	x, y, z;
+	uint32_t	direction;
+} LND_OBJECT;
+
 typedef enum _tileset_type
 {
         TILESET_ARIZONA	= 0,
@@ -63,6 +74,7 @@ typedef struct _mapfile_type
 	// private members - don't touch! :-)
 	GATEWAY			*mGateways;
 	MAPTILE			*mMapTiles;
+	LND_OBJECT		*mLndObjects[3];	// for map2lnd only
 } GAMEMAP;
 
 static inline MAPTILE *mapTile(GAMEMAP *map, int x, int y)
