@@ -19,6 +19,7 @@ CLEANFILES = \
 
 noinst_LIBRARIES = libgamelib.a
 noinst_HEADERS = \
+	audp_parser.tab.h \
 	anim.h \
 	animobj.h \
 	gtime.h \
