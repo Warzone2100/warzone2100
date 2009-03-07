@@ -280,6 +280,9 @@ GAMEMAP *mapLoad(char *filename)
 
 failure:
 	mapFree(map);
-	PHYSFS_close(fp);
+	if (fp)
+	{
+		PHYSFS_close(fp);
+	}
 	return NULL;
 }
