@@ -1,4 +1,4 @@
-AM_CPPFLAGS = $(SDL_CFLAGS) $(PHYSFS_CFLAGS) $(PNG_CFLAGS) $(OPENGL_CFLAGS) $(WZ_CPPFLAGS) -I../tools -I.
+AM_CPPFLAGS = $(SDL_CFLAGS) $(PHYSFS_CFLAGS) $(PNG_CFLAGS) $(OPENGL_CFLAGS) $(WZ_CPPFLAGS) -I../tools -I. -I../lib/framework
 
 BUILT_SOURCES = maplist.txt
 check_PROGRAMS = maptest
