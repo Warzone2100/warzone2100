@@ -10,27 +10,11 @@ AIVOLUTIONLIST = \
 	commands.txt \
 	multiplay
 
-GRIMLIST = \
-	components \
-	COPYING \
-	structs \
-	texpages \
-	wrf
-
-NEWST_TILESLIST = \
-	COPYING \
-	readme.txt \
-	texpages
-
 AIVOLUTIONARCHIVE = aivolution.wz
-GRIMARCHIVE = grim.wz
-NEWST_TILESARCHIVE = newst_tiles.wz
 
 CLEANFILES = $(AIVOLUTIONARCHIVE) $(GRIMARCHIVE) $(NEWST_TILESARCHIVE)
 
 $(AIVOLUTIONARCHIVE): $(AIVOLUTIONLIST:%=$(basename $(AIVOLUTIONARCHIVE))/%)
-$(GRIMARCHIVE): $(GRIMLIST:%=$(basename $(GRIMARCHIVE))/%)
-$(NEWST_TILESARCHIVE): $(NEWST_TILESLIST:%=$(basename $(NEWST_TILESARCHIVE))/%)
 
 globalmodsdir = $(pkgdatadir)/mods/global
-nodist_globalmods_DATA = $(AIVOLUTIONARCHIVE) $(GRIMARCHIVE) $(NEWST_TILESARCHIVE)
+nodist_globalmods_DATA = $(AIVOLUTIONARCHIVE)
