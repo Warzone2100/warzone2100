@@ -311,7 +311,7 @@ Demolish				_("Demolish")
 
 /* CONSTRUCTION */	
 ZNULLCONSTRUCT				_("Z NULL CONSTRUCT")
-Spade1Mk1				_("Truck - Zarel's Rebalance")
+Spade1Mk1				_("Truck")
 
 /* PROPULSION */
 ZNULLPROP				_("Z NULL PROP")
