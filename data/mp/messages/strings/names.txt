@@ -13,7 +13,7 @@ ZNULLDESIGN				_("New Design")
 
 /* PLAYER 0 VEHICLES */
 Transporter				_("Transport")
-ConstructionDroid			_("Truck - Zarel's Rebalance")
+ConstructionDroid			_("Truck")
 ViperLtMGWheels				_("Machinegun Viper Wheels")
 
 /* PLAYER 1 - NP VEHICLES */
@@ -151,7 +151,7 @@ CobraMortarHalfTrack			_("Mortar Cobra Half-tracks")
 CobraLtCnTrks				_("Light Cannon Cobra Tracks")
 
 /* PLAYER 5 - MULTIPLAYER VEHICLES */
-ConstructorDroid			_("Truck - Zarel's Rebalance")
+ConstructorDroid			_("Truck")
 CyborgRotMgGround			_("Assault Gunner")
 
 /* PLAYER 6 - TEST VEHICLES */
@@ -404,7 +404,7 @@ A0VTolFactory1				_("VTOL Factory")
 A0CyborgFactory				_("Cyborg Factory")
 
 /* DEFENSIVE STRUCTURES */
-Tower-Projector				_("Inferno Emplacement") //previously "Inferno Guard Tower"
+Tower-Projector				_("Inferno Bunker") //previously "Inferno Guard Tower"
 WallTower-Projector			_("Inferno Hardpoint")
 Emplacement-RotMor			_("Pepperpot Pit")
 Emplacement-RotHow			_("Hellstorm Emplacement")
@@ -468,9 +468,9 @@ A0VtolPad				_("VTOL Rearming Pad")
 Emplacement-Howitzer105			_("Howitzer Emplacement")
 Emplacement-PrisLas			_("Flashlight Emplacement")
 //Emplacement-Super			"*Emplacement-SuperGun*"
-WallTower-PulseLas			_("Flashlight Hardpoint")
+WallTower-PulseLas			_("Pulse Laser Hardpoint")
 WallTower-Rail2				_("Rail Gun Hardpoint")
-GuardTower-BeamLas			"*GuardTower-BeamLas*"
+GuardTower-BeamLas			_("Pulse Laser Tower")
 GuardTower-ATMiss			_("Scourge Missile Tower")
 GuardTower-Rail1			_("Needle Gun Tower")
 Emplacement-Rail3			_("Gauss Cannon Emplacement")
@@ -744,7 +744,7 @@ R-Defense-Pillbox03			_("Heavy Machinegun Bunker")
 R-Defense-Pillbox04			_("Light Cannon Bunker")
 R-Defense-Pillbox05			_("Flamer Bunker")
 R-Defense-Pillbox06			_("Lancer Tower")
-R-Defense-PulseLas			_("Pulse Laser Emplacement")
+R-Defense-PulseLas			_("Pulse Laser Tower")
 
 R-DefenssLas				_("Flashlight Emplacement")
 
@@ -782,7 +782,7 @@ R-Defense-WallTower-A-Tmiss		_("Scourge Missile Hardpoint")
 R-Defense-WallTower-HvyFlamer		_("Inferno Hardpoint")
 R-Defense-WallTower-HvyA-Trocket	_("Tank Killer Hardpoint")
 R-Defense-WallTower-HPVcannon		_("HPV Cannon Hardpoint")
-R-Defense-WallTower-PulseLas		_("Flashlight Hardpoint")
+R-Defense-WallTower-PulseLas		_("Pulse Laser Hardpoint")
 R-Defense-WallTower-Rail2		_("Rail Gun Hardpoint")
 R-Defense-WallTower-Rail3		_("Gauss Cannon Hardpoint")
 

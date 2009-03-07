@@ -32,7 +32,7 @@ R-Defense-Pillbox06,GuardTower5,0,174
 R-Defense-PlasmaCannon,Emplacement-PlasmaCannon,0,332
 R-Defense-PlasmiteFlamer,Plasmite-flamer-bunker,0,324
 R-Defense-PrisLas,Emplacement-PrisLas,0,214
-R-Defense-PulseLas,Emplacement-PulseLaser,0,268
+R-Defense-PulseLas,GuardTower-BeamLas,0,268
 R-Defense-Rail2,Emplacement-Rail2,0,269
 R-Defense-Rail3,Emplacement-Rail3,0,221
 R-Defense-RotCannon,Wall-VulcanCan,0,198

@@ -37,9 +37,9 @@ Wall-VulcanCan,Cannon5VulcanMk1,NULL,NULL,NULL,77
 A0BaBaFlameTower,Flame1Mk1,NULL,NULL,NULL,80
 A0BaBaGunTower,BuggyMG,NULL,NULL,NULL,83
 Emplacement-PrisLas,Laser3BEAMMk1,NULL,NULL,NULL,85
-WallTower-PulseLas,Laser3BEAMMk1,NULL,NULL,NULL,87
+WallTower-PulseLas,Laser2PULSEMk1,NULL,NULL,NULL,87
 WallTower-Rail2,RailGun2Mk1,NULL,NULL,NULL,88
-GuardTower-BeamLas,Laser3BEAMMk1,NULL,NULL,NULL,89
+GuardTower-BeamLas,Laser2PULSEMk1,NULL,NULL,NULL,89
 GuardTower-ATMiss,Missile-A-T,NULL,NULL,NULL,90
 GuardTower-Rail1,RailGun1Mk1,NULL,NULL,NULL,91
 Emplacement-Rail3,RailGun3Mk1,NULL,NULL,NULL,92
