@@ -179,7 +179,7 @@ int main(int argc, char **argv)
 		{
 			LND_OBJECT *psObj = &map->mLndObjects[x][i];
 			double x = (double)psObj->x - (double)map->width * TILE_WIDTH / 2.0;
-			double y = (double)psObj->z - (double)map->height * TILE_HEIGHT / 2.0;
+			double y = ((double)psObj->y - (double)map->height * TILE_HEIGHT / 2.0) * -1.0;
 
 			MADD("        %u %d \"%s\" %u \"NONAME\" %.02f %.02f %.02f 0.00 %.02f 0.00",
 			     psObj->id, psObj->type, psObj->name, psObj->player, x, (double)psObj->z, y, (double)psObj->direction);
