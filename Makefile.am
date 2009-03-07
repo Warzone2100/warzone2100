@@ -4,6 +4,7 @@ dist_doc_DATA = \
 	AUTHORS \
 	ChangeLog \
 	COPYING \
+	COPYING.NONGPL \
 	COPYING.README
 
 ACLOCAL_AMFLAGS = -I m4

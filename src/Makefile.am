@@ -157,6 +157,7 @@ noinst_HEADERS = \
 	scriptobj.h \
 	scripttabs.h \
 	scriptvals.h \
+	scriptvals_parser.tab.h \
 	selection.h \
 	seqdisp.h \
 	stats-db2.h \
@@ -170,6 +171,7 @@ noinst_HEADERS = \
 	texture.h \
 	transporter.h \
 	visibility.h \
+	version.h \
 	warcam.h \
 	warzoneconfig.h \
 	weapondef.h \

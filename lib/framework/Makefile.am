@@ -26,6 +26,8 @@ CLEANFILES = \
 
 noinst_LIBRARIES = libframework.a
 noinst_HEADERS = \
+	strres_parser.tab.h \
+	resource_parser.tab.h \
 	configfile.h \
 	cursors.h \
 	debug.h \
@@ -51,7 +53,13 @@ noinst_HEADERS = \
 	trig.h \
 	types.h \
 	utf.h \
-	vector.h
+	vector.h \
+	config-macosx.h \
+	endian_hack.h \
+	gettext.h \
+	macros.h \
+	SDL_framerate.h \
+	wzglobal.h
 
 libframework_a_SOURCES = \
 	configfile.c \
@@ -65,13 +73,9 @@ libframework_a_SOURCES = \
 	input.c \
 	lexer_input.c \
 	physfs_vfs.c \
-	resource_lexer.lex.c \
-	resource_parser.tab.c \
 	SDL_framerate.c \
 	stdio_ext.c \
 	strres.c \
-	strres_lexer.lex.c \
-	strres_parser.tab.c \
 	tagfile.c \
 	treap.c \
 	trig.c \
