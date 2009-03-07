@@ -26,6 +26,8 @@
 #include "physfs_ext.h"
 
 #define MAX_LEVEL_SIZE	20
+#define TILE_HEIGHT	128
+#define TILE_WIDTH	128
 
 typedef struct _lnd_object_type
 {

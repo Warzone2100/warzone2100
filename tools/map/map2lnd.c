@@ -15,8 +15,6 @@
 #define	ELEVATION_SCALE	2
 #define GRAVITY		1
 #define SEALEVEL	0
-#define TILE_HEIGHT	128
-#define TILE_WIDTH	128
 #define TILE_NUMMASK	0x01ff
 #define TILE_XFLIP	0x8000
 #define TILE_YFLIP	0x4000

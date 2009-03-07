@@ -42,11 +42,17 @@ GAMEMAP *mapLoad(char *filename)
 	strcpy(path, filename);
 	strcat(path, "/game.map");
 	fp = PHYSFS_openRead(path);
+	if (!map)
+	{
+		return NULL;
+	}
+	map->mGateways = NULL;
+	map->mMapTiles = NULL;
 
 	if (!fp)
 	{
 		debug(LOG_ERROR, "Map file %s not found", path);
-		return NULL;
+		goto failure;
 	}
 	else if (PHYSFS_read(fp, aFileType, 4, 1) != 1
 	    || !readU32(&map->version)
@@ -57,22 +63,22 @@ GAMEMAP *mapLoad(char *filename)
 	    || aFileType[2] != 'p')
 	{
 		debug(LOG_ERROR, "Bad header in %s", path);
-		return NULL;
+		goto failure;
 	}
 	else if (map->version <= 9)
 	{
 		debug(LOG_ERROR, "%s: Unsupported save format version %u", path, map->version);
-		return NULL;
+		goto failure;
 	}
 	else if (map->version > 36)
 	{
 		debug(LOG_ERROR, "%s: Undefined save format version %u", path, map->version);
-		return NULL;
+		goto failure;
 	}
 	else if (map->width * map->height > MAP_MAXAREA)
 	{
 		debug(LOG_ERROR, "Map %s too large : %d %d", path, map->width, map->height);
-		return NULL;
+		goto failure;
 	}
 
 	/* Allocate the memory for the map */
@@ -80,7 +86,7 @@ GAMEMAP *mapLoad(char *filename)
 	if (!map->mMapTiles)
 	{
 		debug(LOG_ERROR, "Out of memory");
-		return NULL;
+		goto failure;
 	}
 	
 	/* Load in the map data */
@@ -92,7 +98,7 @@ GAMEMAP *mapLoad(char *filename)
 		if (!readU16(&texture) || !readU8(&height))
 		{
 			debug(LOG_ERROR, "%s: Error during savegame load", path);
-			return NULL;
+			goto failure;
 		}
 
 		map->mMapTiles[i].texture = texture;
@@ -106,7 +112,7 @@ GAMEMAP *mapLoad(char *filename)
 	if (!readU32(&gwVersion) || !readU32(&map->numGateways) || gwVersion != 1)
 	{
 		debug(LOG_ERROR, "Bad gateway in %s", path);
-		return NULL;
+		goto failure;
 	}
 
 	map->mGateways = calloc(map->numGateways, sizeof(*map->mGateways));
@@ -116,7 +122,7 @@ GAMEMAP *mapLoad(char *filename)
 		    || !readU8(&map->mGateways[i].x2) || !readU8(&map->mGateways[i].y2))
 		{
 			debug(LOG_ERROR, "%s: Failed to read gateway info", path);
-			return NULL;
+			goto failure;
 		}
 	}
 	PHYSFS_close(fp);
@@ -130,7 +136,7 @@ GAMEMAP *mapLoad(char *filename)
 	if (!fp)
 	{
 		debug(LOG_ERROR, "Game file %s not found", path);
-		return NULL;
+		goto failure;
 	}
 	else if (PHYSFS_read(fp, aFileType, 4, 1) != 1
 	    || aFileType[0] != 'g'
@@ -140,7 +146,7 @@ GAMEMAP *mapLoad(char *filename)
 	    || !readU32(&gameVersion))
 	{
 		debug(LOG_ERROR, "Bad header in %s", path);
-		return NULL;
+		goto failure;
 	}
 	if (gameVersion > 35)	// big-endian
 	{
@@ -155,7 +161,7 @@ GAMEMAP *mapLoad(char *filename)
 	    || PHYSFS_read(fp, map->levelName, 20, 1) != 1)
 	{
 		debug(LOG_ERROR, "Bad data in %s", filename);
-		return NULL;
+		goto failure;
 	}
 	PHYSFS_close(fp);
 
@@ -169,7 +175,7 @@ GAMEMAP *mapLoad(char *filename)
 	if (!fp)
 	{
 		debug(LOG_ERROR, "Feature file %s not found", path);
-		return NULL;
+		goto failure;
 	}
 	else if (PHYSFS_read(fp, aFileType, 4, 1) != 1
 	    || aFileType[0] != 'f'
@@ -180,7 +186,7 @@ GAMEMAP *mapLoad(char *filename)
 	    || !readU32(&map->numFeatures))
 	{
 		debug(LOG_ERROR, "Bad features header in %s", path);
-		return NULL;
+		goto failure;
 	}
 	map->mLndObjects[0] = malloc(sizeof(*map->mLndObjects[0]) * map->numFeatures);
 	for(i = 0; i < map->numFeatures; i++)
@@ -204,15 +210,21 @@ GAMEMAP *mapLoad(char *filename)
 		    || !readU32(&dummy)) // burnDamage
 		{
 			debug(LOG_ERROR, "Failed to read feature from %s", path);
-			return NULL;
+			goto failure;
 		}
 		psObj->player = 0;	// work around invalid feature owner
 		if (featVersion >= 14 && PHYSFS_read(fp, &visibility, 1, 8) != 8)
 		{
 			debug(LOG_ERROR, "Failed to read feature visibility from %s", path);
-			return NULL;
+			goto failure;
 		}
 		psObj->type = 0;	// IMD LND type for feature
+		// Sanity check data
+		if (psObj->x >= map->width * TILE_WIDTH || psObj->y >= map->height * TILE_HEIGHT)
+		{
+			debug(LOG_ERROR, "Bad feature coordinate %u(%u, %u)", psObj->id, psObj->x, psObj->y);
+			goto failure;
+		}
 	}
 	PHYSFS_close(fp);
 
@@ -226,7 +238,7 @@ GAMEMAP *mapLoad(char *filename)
 	if (!fp)
 	{
 		debug(LOG_ERROR, "Terrain type file %s not found", path);
-		return NULL;
+		goto failure;
 	}
 	else if (PHYSFS_read(fp, aFileType, 4, 1) != 1
 	    || aFileType[0] != 't'
@@ -237,12 +249,12 @@ GAMEMAP *mapLoad(char *filename)
 	    || !readU32(&map->numTerrainTypes))
 	{
 		debug(LOG_ERROR, "Bad features header in %s", path);
-		return NULL;
+		goto failure;
 	}
 	if (!readU16(&terrainSignature[0]) || !readU16(&terrainSignature[1]) || !readU16(&terrainSignature[2]))
 	{
 		debug(LOG_ERROR, "Could not read terrain signature from %s", path);
-		return NULL;
+		goto failure;
 	}
 	if (terrainSignature[0] == 1 && terrainSignature[1] == 0 && terrainSignature[2] == 2)
 	{
@@ -260,9 +272,14 @@ GAMEMAP *mapLoad(char *filename)
 	{
 		debug(LOG_ERROR, "Unknown terrain signature in %s: %lu %lu %lu", path, 
 		      terrainSignature[0], terrainSignature[1], terrainSignature[2]);
-		return NULL;
+		goto failure;
 	}
 	PHYSFS_close(fp);
 
 	return map;
+
+failure:
+	mapFree(map);
+	PHYSFS_close(fp);
+	return NULL;
 }
