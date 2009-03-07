@@ -62,6 +62,10 @@ noinst_HEADERS = \
 	wzglobal.h
 
 libframework_a_SOURCES = \
+	resource_lexer.lex.c \
+	resource_parser.tab.c \
+	strres_lexer.lex.c \
+	strres_parser.tab.c \
 	configfile.c \
 	cursors16.c \
 	cursors32.c \
