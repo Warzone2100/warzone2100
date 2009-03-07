@@ -38,10 +38,10 @@
  * Engine:
    * New: Support for naval propulsion type (r5803)
 
-0000-00-00: Version 2.1.2
+2009-03-07: Version 2.1.2
  * General:
    * Fix: No longer crash if more than six players join a game (r6658, ticket:273)
-   * Fix: Some other crash bugs may have been prevented (r6688, r6629, r6596)
+   * Fix: Some other crash bugs may have been prevented (r6688, r6629, r6596, r6762, r6746, r6744)
  * Sound:
    * Fix: When sound isn't enabled (at runtime, unrelated to --disable-sound, e.g. when no sound device is available) do not attempt to set up an AUDIO_STREAM
  * Buildsystem:
