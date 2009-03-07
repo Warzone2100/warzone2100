@@ -22,6 +22,7 @@ R-Struc-Research-Upgrade02,Struc-Research-Upgrade02,442
 R-Struc-Research-Upgrade03,Struc-Research-Upgrade03,443
 R-Sys-Sensor-Upgrade01,Sys-Sensor-Upgrade01,463
 R-Sys-Sensor-Upgrade02,Sys-Sensor-Upgrade02,1035
+R-Sys-Sensor-Upgrade03,Sys-Sensor-Upgrade03,1037
 R-Vehicle-Engine03,Vehicle-Engine03,384
 R-Wpn-Cannon-Damage01,Wpn-Cannon-Damage01,392
 R-Wpn-Cannon-Damage02,Wpn-Cannon-Damage02,393
@@ -38,6 +39,11 @@ R-Wpn-Flamer-ROF03,Wpn-Flamer-ROF03,390
 R-Wpn-MG-Damage01,Wpn-MG-Damage01,362
 R-Wpn-MG-Damage02,Wpn-MG-Damage02,364
 R-Wpn-MG-Damage03,Wpn-MG-Damage03,366
+R-Wpn-MG-Damage04,Wpn-MG-Damage04,368
+R-Wpn-MG-Damage05,Wpn-MG-Damage05,369
+R-Wpn-MG-Damage06,Wpn-MG-Damage06,370
+R-Wpn-MG-Damage07,Wpn-MG-Damage07,371
+R-Wpn-MG-Damage08,Wpn-MG-Damage08,372
 R-Wpn-MG-ROF01,Wpn-MG-ROF01,363
 R-Wpn-MG-ROF02,Wpn-MG-ROF02,365
 R-Wpn-MG-ROF03,Wpn-MG-ROF03,367
@@ -218,6 +224,7 @@ R-Wpn-RocketSlow-Damage05,Wpn-RocketSlow-Damage05,935
 R-Wpn-RocketSlow-Damage06,Wpn-RocketSlow-Damage06,936
 R-Wpn-RocketSlow-ROF01,Wpn-RocketSlow-ROF01,942
 R-Wpn-RocketSlow-ROF02,Wpn-RocketSlow-ROF02,943
+R-Wpn-RocketSlow-ROF03,Wpn-RocketSlow-ROF03,944
 R-Cyborg-Armor-Heat01,Cyborg-Armor-Heat01,988
 R-Cyborg-Armor-Heat02,Cyborg-Armor-Heat02,989
 R-Cyborg-Armor-Heat03,Cyborg-Armor-Heat03,990
