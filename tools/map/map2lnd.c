@@ -162,7 +162,7 @@ int main(int argc, char **argv)
 	MADD("ObjectList {");
 	MADD("    Version 3");
 	MADD("    FeatureSet %s", tilesetDataSet[map->tileset]);
-	MADD("    NumObjects %d", (int)map->numFeatures);
+	MADD("    NumObjects %u", map->numFeatures + map->numStructures + map->numDroids);
 	MADD("    Objects {");
 	for (x = IMD_FEATURE; x < IMD_OBJECT; x++)
 	{
