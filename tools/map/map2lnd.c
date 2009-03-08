@@ -164,9 +164,17 @@ int main(int argc, char **argv)
 	MADD("    FeatureSet %s", tilesetDataSet[map->tileset]);
 	MADD("    NumObjects %d", (int)map->numFeatures);
 	MADD("    Objects {");
-	for (x = 0; x < 1; x++)
+	for (x = IMD_FEATURE; x < IMD_OBJECT; x++)
 	{
-		int max = map->numFeatures; 	// FIXME
+		int max = 0;
+
+		switch (x)
+		{
+		case IMD_FEATURE: max = map->numFeatures; break;
+		case IMD_STRUCTURE: max = map->numStructures; break;
+		case IMD_DROID: max = map->numDroids; break;
+		default: break;
+		}
 
 		for (i = 0; i < max; i++)
 		{
