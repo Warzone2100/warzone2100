@@ -7560,7 +7560,7 @@ function bool repairDamagedDefenses(int _repairx, int _repairy, DROID _truck,
 	_mostDamage = 0;
 	_mostDamagedDefense = NULLOBJECT;
 
-	_def = numDef;
+	_def = numDef - 1;
 	while(_def >= 0)
 	{
 		initEnumStruct(FALSE,def[_def],me,me);
