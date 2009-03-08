@@ -300,11 +300,6 @@ GAMEMAP *mapLoad(char *filename)
 			debug(LOG_ERROR, "Bad structure header in %s", path);
 			goto failure;
 		}
-		if (structVersion >= 12)
-		{
-			debug(LOG_ERROR, "Structure version >= 12 not supported yet.");
-			goto structureFailure;
-		}
 		map->mLndObjects[IMD_STRUCTURE] = malloc(sizeof(*map->mLndObjects[IMD_STRUCTURE]) * map->numStructures);
 		for (i = 0; i < map->numStructures; i++)
 		{
@@ -329,7 +324,10 @@ GAMEMAP *mapLoad(char *filename)
 			    || !readU32(&dummy) // burnStart
 			    || !readU32(&dummy) // burnDamage
 			    || !readU8(&dummy8)	// status - causes structure padding
-			    || !readS32(&dummyS32) // currentBuildPts
+			    || !readU8(&dummy8)	// structure padding
+			    || !readU8(&dummy8)	// structure padding
+			    || !readU8(&dummy8) // structure padding
+			    || !readS32(&dummyS32) // currentBuildPts - aligned on 4 byte boundary
 			    || !readU32(&dummy) // body
 			    || !readU32(&dummy) // armour
 			    || !readU32(&dummy) // resistance
@@ -338,20 +336,18 @@ GAMEMAP *mapLoad(char *filename)
 			    || !readU32(&dummy) // timeStarted
 			    || !readU32(&dummy) // output
 			    || !readU32(&dummy) // capacity
-			    || !readU32(&dummy) // quantity
-			    || !readU8(&dummy8)	// structure padding; I hope it goes at the end
-			    || !readU8(&dummy8)	// structure padding
-			    || !readU8(&dummy8)) // structure padding
+			    || !readU32(&dummy)) // quantity
 			{
 				debug(LOG_ERROR, "Failed to read structure from %s", path);
 				goto failure;
 			}
-#if 0
-			// FIXME: Reading more fields changes structure padding...
 			if (structVersion >= 12
-			    && (!readU32(&dummy) // factoryInc
-			        || !readU8(&dummy8) // loopsPerformed
-			        || !readU32(&dummy) // powerAccrued
+			    && (!readU32(&dummy)    // factoryInc
+			        || !readU8(&dummy8) // loopsPerformed - causes structure padding
+			        || !readU8(&dummy8) // structure padding
+			        || !readU8(&dummy8) // structure padding
+			        || !readU8(&dummy8) // structure padding
+			        || !readU32(&dummy) // powerAccrued - aligned on 4 byte boundary
 			        || !readU32(&dummy) // dummy2
 			        || !readU32(&dummy) // droidTimeStarted
 			        || !readU32(&dummy) // timeToBuild
@@ -367,6 +363,10 @@ GAMEMAP *mapLoad(char *filename)
 			}
 			if (structVersion >= 15 && PHYSFS_read(fp, researchName, nameLength, 1) != 1)
 			{
+				// If version < 20, then this causes no padding, but the short below
+				// will still cause two bytes padding; however, if version >= 20, we
+				// will cause 4 bytes padding, but the short below will eat 2 of them,
+				// leaving us again with only two bytes padding before the next word.
 				debug(LOG_ERROR, "Failed to read structure v15 part from %s", path);
 				goto failure;
 			}
@@ -375,12 +375,16 @@ GAMEMAP *mapLoad(char *filename)
 				debug(LOG_ERROR, "Failed to read structure v17 part from %s", path);
 				goto failure;
 			}
+			if (structVersion >= 15 && !readS16(&dummyS16))	// structure padding
+			{
+				debug(LOG_ERROR, "Failed to read 16 bits of structure padding from %s", path);
+				goto failure;
+			}
 			if (structVersion >= 21 && !readU32(&dummy))
 			{
 				debug(LOG_ERROR, "Failed to read structure v21 part from %s", path);
 				goto failure;
 			}
-#endif
 			psObj->type = IMD_STRUCTURE;
 			// Sanity check data
 			if (psObj->player > MAX_PLAYERS)
@@ -394,7 +398,6 @@ GAMEMAP *mapLoad(char *filename)
 				goto failure;
 			}
 		}
-		structureFailure:
 		PHYSFS_close(fp);
 	}
 
