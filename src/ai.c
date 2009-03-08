@@ -875,8 +875,11 @@ void aiUpdateDroid(DROID *psDroid)
 	SECONDARY_STATE	state;
 	BOOL		lookForTarget,updateTarget;
 
-	ASSERT( psDroid != NULL,
-		"updateUnitAI: invalid Unit pointer" );
+	ASSERT(psDroid != NULL, "Invalid droid pointer");
+	if (!psDroid || isDead((BASE_OBJECT *)psDroid))
+	{
+		return;
+	}
 
 	// HACK: we always want to update orders when NOT running a MP game,
 	// and we don't want to update when the droid belongs to another human player

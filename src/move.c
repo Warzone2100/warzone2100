@@ -2159,7 +2159,7 @@ static void moveUpdateDroidPos( DROID *psDroid, float dx, float dy )
 
 	CHECK_DROID(psDroid);
 
-	if (psDroid->sMove.Status == MOVEPAUSE)
+	if (psDroid->sMove.Status == MOVEPAUSE || isDead((BASE_OBJECT *)psDroid))
 	{
 		// don't actually move if the move is paused
 		return;

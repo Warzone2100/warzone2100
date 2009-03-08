@@ -291,6 +291,11 @@ void orderUpdateDroid(DROID *psDroid)
 	// check for died objects in the list
 	orderCheckList(psDroid);
 
+	if (isDead((BASE_OBJECT *)psDroid))
+	{
+		return;
+	}
+
 	switch (psDroid->order)
 	{
 	case DORDER_NONE:
@@ -1733,6 +1738,12 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		{
 			psDroid->orderX = (UWORD)asRunData[psDroid->player].sPos.x;
 			psDroid->orderY = (UWORD)asRunData[psDroid->player].sPos.y;
+		}
+		if (psDroid->orderX == 0 || psDroid->orderY)
+		{
+			// We have still not managed to find a valid place to run.
+			objTrace(psDroid->id, "Wants to run, but has no designated retreat point - standing still.");
+			break;
 		}
 		actionDroidLoc(psDroid, DACTION_MOVE, psDroid->orderX,psDroid->orderY);
 		break;

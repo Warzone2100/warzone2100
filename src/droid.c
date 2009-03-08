@@ -854,8 +854,12 @@ void droidUpdate(DROID *psDroid)
 	// ai update droid
 	aiUpdateDroid(psDroid);
 
-	// update the droids order
+	// Update the droids order. The droid may be killed here due to burn out.
 	orderUpdateDroid(psDroid);
+	if (isDead((BASE_OBJECT *)psDroid))
+	{
+		return;	// FIXME: Workaround for babarians that were burned to death
+	}
 
 	// update the action of the droid
 	actionUpdateDroid(psDroid);
@@ -975,6 +979,12 @@ void droidUpdate(DROID *psDroid)
 			psDroid->burnStart = gameTime;
 			psDroid->burnDamage = 0;
 		}
+	}
+
+	// At this point, the droid may be dead due to burn damage.
+	if (isDead((BASE_OBJECT *)psDroid))
+	{
+		return;
 	}
 
 	droidUpdateRecoil(psDroid);
