@@ -60,6 +60,9 @@ from sys import stdin, stdout, stderr
 
 cvars = ['trackTransporter', 'mapWidth', 'mapHeight', 'gameInitialised', 'selectedPlayer', 'gameTime', 'gameLevel', 'inTutorial', 'cursorType', 'intMode', 'targetedObjectType', 'extraVictoryFlag', 'extraFailFlag', 'multiPlayerGameType', 'multiPlayerMaxPlayers', 'multiPlayerBaseType', 'multiPlayerAlliancesType']
 rename = {'debug': 'debugFile'}
+unused_parameters = {
+	'chooseValidLoc': [0, 1],
+	}
 
 class Token:
 	def __init__(self, type, attr='', constant=True):
@@ -773,6 +776,14 @@ class CodeGenerator(GenericASTTraversal):
 		elif node[0].code in ['buildingDestroyed']:
 			node.code = 'destroyed(' + node[1][0].code + ')'
 		else:
+			if node[0].code in unused_parameters:
+				# this function has some unused parameters that will need to be removed
+				new_arglist = []
+				for i in xrange(0, len(node[1].arglist)):
+					if not i in unused_parameters[node[0].code]:
+						new_arglist.append(node[1].arglist[i])
+				node[1].arglist = new_arglist
+				node[1].code = ', '.join(node[1].arglist)
 			node.code = node[0].code + '(' + node[1].code + ')'
 			node.ref = node[1].ref
 		called_functions.add(node[0].code)
