@@ -39,6 +39,8 @@
 // FIXME Direct iVis implementation include!
 #include "lib/ivis_opengl/piematrix.h"//matrix code
 #include "lib/ivis_common/piestate.h"
+#include "lib/ivis_opengl/screen.h"
+#include "lib/ivis_common/piemode.h"
 
 #include "display3d.h"
 #include "edit3d.h"
@@ -4837,6 +4839,7 @@ void setDesignPauseState(void)
 		gameTimeStop();
 		setGameUpdatePause(true);
 		setScrollPause(true);
+		screen_RestartBackDrop();
 	}
 }
 
@@ -4850,6 +4853,8 @@ void resetDesignPauseState(void)
 		setGameUpdatePause(false);
 		setScrollPause(false);
 		gameTimeStart();
+		screen_StopBackDrop();
+		pie_ScreenFlip(CLEAR_BLACK);
 	}
 }
 

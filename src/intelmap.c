@@ -289,8 +289,6 @@ BOOL intAddIntelMap(void)
 		return false;
 	}
 
-	screen_RestartBackDrop();
-
 	return true;
 }
 
@@ -1024,9 +1022,6 @@ static void intCleanUpIntelMap(void)
 		debug(LOG_SCRIPT, "intCleanUpIntelMap: not running");
 		eventFireCallbackTrigger((TRIGGER_TYPE)CALL_VIDEO_QUIT);
 	}
-
-	screen_StopBackDrop();
-	pie_ScreenFlip(CLEAR_BLACK);
 }
 
 
@@ -1452,6 +1447,7 @@ void setIntelligencePauseState(void)
 			setConsolePause(true);
 		}
 		setScrollPause(true);
+		screen_RestartBackDrop();
 	}
 }
 
@@ -1470,6 +1466,8 @@ void resetIntelligencePauseState(void)
 		setScrollPause(false);
 		setConsolePause(false);
 		gameTimeStart();
+		screen_StopBackDrop();
+		pie_ScreenFlip(CLEAR_BLACK);
 	}
 }
 
