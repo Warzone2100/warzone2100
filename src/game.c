@@ -2883,6 +2883,26 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 		}
 	}
 
+	// FIXME THIS FILE IS A HUGE MESS, this code should probably appear at another position...
+	if (saveGameVersion > VERSION_12)
+	{
+		//if user save game then load up the FX
+		if ((gameType == GTYPE_SAVE_START) ||
+			(gameType == GTYPE_SAVE_MIDMISSION))
+		{
+			//load in the message list file
+			aFileName[fileExten] = '\0';
+			strcat(aFileName, "fxstate.tag");
+
+			// load the fx data from the file
+			if (!readFXData(aFileName))
+			{
+				debug(LOG_ERROR, "loadgame: Fail33");
+				goto error;
+			}
+		}
+	}
+
 	//save game stuff added after map load
 
 	if (saveGameVersion >= VERSION_16)
@@ -3182,25 +3202,6 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 				}
 			}
 
-		}
-	}
-
-	if (saveGameVersion > VERSION_12)
-	{
-		//if user save game then load up the FX
-		if ((gameType == GTYPE_SAVE_START) ||
-			(gameType == GTYPE_SAVE_MIDMISSION))
-		{
-			//load in the message list file
-			aFileName[fileExten] = '\0';
-			strcat(aFileName, "fxstate.tag");
-
-			// load the fx data from the file
-			if (!readFXData(aFileName))
-			{
-				debug(LOG_ERROR, "loadgame: Fail33");
-				goto error;
-			}
 		}
 	}
 
