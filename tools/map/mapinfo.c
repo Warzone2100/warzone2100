@@ -49,7 +49,10 @@ int main(int argc, char **argv)
 		printf("\tWidth: %d\n", (int)map->width);
 		printf("\tHeight: %d\n", (int)map->height);
 		printf("\tGateways: %d\n", (int)map->numGateways);
+		printf("\tPlayers: %d\n", (int)map->numPlayers);
 		printf("\tFeatures: %d\n", (int)map->numFeatures);
+		printf("\tDroids: %d\n", (int)map->numDroids);
+//		printf("\tStructures: %d\n", (int)map->numStructures);
 		printf("\tScroll limits: (%d, %d, %d, %d)\n", 
 		       (int)map->scrollMinX, (int)map->scrollMinY, (int)map->scrollMaxX, (int)map->scrollMaxY);
 		printf("\tLevel name: %s\n", map->levelName);

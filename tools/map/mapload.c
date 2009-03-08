@@ -23,11 +23,13 @@ GAMEMAP *mapLoad(char *filename)
 {
 	char		path[PATH_MAX];
 	GAMEMAP		*map = malloc(sizeof(*map));
-	uint32_t	gwVersion, i, j, gameVersion, gameTime, gameType, featVersion, terrainVersion;
+	uint32_t	i, j, gameTime, gameType, droidVersion;
+	uint32_t	gwVersion, gameVersion, featVersion, terrainVersion;
 	char		aFileType[4];
 	bool		littleEndian = true;
 	PHYSFS_file	*fp = NULL;
 	uint16_t	terrainSignature[3];
+	bool		counted[MAX_PLAYERS];
 
 	// this cries out for a class based design
 	#define readU8(v) ( littleEndian ? PHYSFS_readULE8(fp, v) : PHYSFS_readUBE8(fp, v) )
@@ -188,7 +190,7 @@ GAMEMAP *mapLoad(char *filename)
 		debug(LOG_ERROR, "Bad features header in %s", path);
 		goto failure;
 	}
-	map->mLndObjects[0] = malloc(sizeof(*map->mLndObjects[0]) * map->numFeatures);
+	map->mLndObjects[IMD_FEATURE] = malloc(sizeof(*map->mLndObjects[IMD_FEATURE]) * map->numFeatures);
 	for(i = 0; i < map->numFeatures; i++)
 	{
 		LND_OBJECT *psObj = &map->mLndObjects[0][i];
@@ -275,6 +277,83 @@ GAMEMAP *mapLoad(char *filename)
 		goto failure;
 	}
 	PHYSFS_close(fp);
+
+
+	/* === Load structure data === */
+
+	map->mLndObjects[IMD_STRUCTURE] = NULL;
+	map->numStructures = 0;
+
+
+	/* === Load droid data === */
+
+	map->mLndObjects[IMD_DROID] = NULL;
+	map->numDroids = 0;
+	littleEndian = true;
+	strcpy(path, filename);
+	strcat(path, "/dinit.bjo");
+	fp = PHYSFS_openRead(path);
+	if (fp)
+	{
+		if (PHYSFS_read(fp, aFileType, 4, 1) != 1
+		    || aFileType[0] != 'd'
+		    || aFileType[1] != 'i'
+		    || aFileType[2] != 'n'
+		    || aFileType[3] != 't'
+		    || !readU32(&droidVersion)
+		    || !readU32(&map->numDroids))
+		{
+			debug(LOG_ERROR, "Bad droid header in %s", path);
+			goto failure;
+		}
+		map->mLndObjects[IMD_DROID] = malloc(sizeof(*map->mLndObjects[IMD_DROID]) * map->numDroids);
+		for (i = 0; i < map->numDroids; i++)
+		{
+			LND_OBJECT *psObj = &map->mLndObjects[IMD_DROID][i];
+			int nameLength = 60;
+			uint32_t dummy;
+			uint8_t visibility[8];
+
+			if (droidVersion <= 19)
+			{
+				nameLength = 40;
+			}
+			if (PHYSFS_read(fp, psObj->name, nameLength, 1) != 1
+			    || !readU32(&psObj->id)
+			    || !readU32(&psObj->x) || !readU32(&psObj->y) || !readU32(&psObj->z)
+			    || !readU32(&psObj->direction)
+			    || !readU32(&psObj->player)
+			    || !readU32(&dummy) // BOOL inFire
+			    || !readU32(&dummy) // burnStart
+			    || !readU32(&dummy)) // burnDamage
+			{
+				debug(LOG_ERROR, "Failed to read droid from %s", path);
+				goto failure;
+			}
+			psObj->type = IMD_DROID;
+			// Sanity check data
+			if (psObj->x >= map->width * TILE_WIDTH || psObj->y >= map->height * TILE_HEIGHT)
+			{
+				debug(LOG_ERROR, "Bad droid coordinate %u(%u, %u)", psObj->id, psObj->x, psObj->y);
+				goto failure;
+			}
+		}
+		PHYSFS_close(fp);
+	}
+
+	// Count players by looking for the obligatory construction droids
+	map->numPlayers = 0;
+	memset(counted, 0, sizeof(counted));
+	for(i = 0; i < map->numDroids; i++)
+	{
+		LND_OBJECT *psObj = &map->mLndObjects[IMD_DROID][i];
+
+		if (counted[psObj->player] == false && (strcmp(psObj->name, "ConstructorDroid") == 0 || strcmp(psObj->name, "ConstructionDroid") == 0))
+		{
+			counted[psObj->player] = true;
+			map->numPlayers++;
+		}
+	}
 
 	return map;
 

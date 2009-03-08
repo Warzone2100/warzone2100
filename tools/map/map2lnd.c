@@ -24,13 +24,6 @@
 #define TRI_FLIPPED(x)	((x)->texture & TILE_TRIFLIP)
 #define SNAP_MODE	0
 
-enum {
-        IMD_FEATURE,
-        IMD_STRUCTURE,
-        IMD_DROID,
-        IMD_OBJECT,
-};
-
 static const char *tilesetDataSet[] = { "WarzoneDataC1.eds", "WarzoneDataC2.eds", "WarzoneDataC3.eds" };
 static const char *tilesetTextures[] = { "texpages\\tertilesc1.pcx", "texpages\\tertilesc2.pcx", "texpages\\tertilesc3.pcx" };
 

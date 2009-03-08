@@ -29,6 +29,13 @@
 #define TILE_HEIGHT	128
 #define TILE_WIDTH	128
 
+enum {
+	IMD_FEATURE,
+	IMD_STRUCTURE,
+	IMD_DROID,
+	IMD_OBJECT,
+};
+
 typedef struct _lnd_object_type
 {
 	uint32_t	id;
@@ -66,6 +73,7 @@ typedef struct _maptile_type
 typedef struct _mapfile_type
 {
 	uint32_t		height, width, version, numGateways, numFeatures, numTerrainTypes;
+	uint32_t		numPlayers, numDroids, numStructures;
 	int32_t			scrollMinX;
 	int32_t			scrollMinY;
 	uint32_t		scrollMaxX;
