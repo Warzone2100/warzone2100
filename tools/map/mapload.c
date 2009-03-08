@@ -23,7 +23,7 @@ GAMEMAP *mapLoad(char *filename)
 {
 	char		path[PATH_MAX];
 	GAMEMAP		*map = malloc(sizeof(*map));
-	uint32_t	i, j, gameTime, gameType, droidVersion;
+	uint32_t	i, j, gameTime, gameType, droidVersion, structVersion;
 	uint32_t	gwVersion, gameVersion, featVersion, terrainVersion;
 	char		aFileType[4];
 	bool		littleEndian = true;
@@ -283,6 +283,120 @@ GAMEMAP *mapLoad(char *filename)
 
 	map->mLndObjects[IMD_STRUCTURE] = NULL;
 	map->numStructures = 0;
+	littleEndian = true;
+	strcpy(path, filename);
+	strcat(path, "/struct.bjo");
+	fp = PHYSFS_openRead(path);
+	if (fp)
+	{
+		if (PHYSFS_read(fp, aFileType, 4, 1) != 1
+		    || aFileType[0] != 's'
+		    || aFileType[1] != 't'
+		    || aFileType[2] != 'r'
+		    || aFileType[3] != 'u'
+		    || !readU32(&structVersion)
+		    || !readU32(&map->numStructures))
+		{
+			debug(LOG_ERROR, "Bad structure header in %s", path);
+			goto failure;
+		}
+		if (structVersion >= 12)
+		{
+			debug(LOG_ERROR, "Structure version >= 12 not supported yet.");
+			goto structureFailure;
+		}
+		map->mLndObjects[IMD_STRUCTURE] = malloc(sizeof(*map->mLndObjects[IMD_STRUCTURE]) * map->numStructures);
+		for (i = 0; i < map->numStructures; i++)
+		{
+			LND_OBJECT *psObj = &map->mLndObjects[IMD_STRUCTURE][i];
+			int nameLength = 60;
+			uint32_t dummy;
+			uint8_t visibility[8], dummy8;
+			int16_t dummyS16;
+			int32_t dummyS32;
+			char researchName[60];
+
+			if (structVersion <= 19)
+			{
+				nameLength = 40;
+			}
+			if (PHYSFS_read(fp, psObj->name, nameLength, 1) != 1
+			    || !readU32(&psObj->id)
+			    || !readU32(&psObj->x) || !readU32(&psObj->y) || !readU32(&psObj->z)
+			    || !readU32(&psObj->direction)
+			    || !readU32(&psObj->player)
+			    || !readU32(&dummy) // BOOL inFire
+			    || !readU32(&dummy) // burnStart
+			    || !readU32(&dummy) // burnDamage
+			    || !readU8(&dummy8)	// status - causes structure padding
+			    || !readS32(&dummyS32) // currentBuildPts
+			    || !readU32(&dummy) // body
+			    || !readU32(&dummy) // armour
+			    || !readU32(&dummy) // resistance
+			    || !readU32(&dummy) // dummy1
+			    || !readU32(&dummy) // subjectInc
+			    || !readU32(&dummy) // timeStarted
+			    || !readU32(&dummy) // output
+			    || !readU32(&dummy) // capacity
+			    || !readU32(&dummy) // quantity
+			    || !readU8(&dummy8)	// structure padding; I hope it goes at the end
+			    || !readU8(&dummy8)	// structure padding
+			    || !readU8(&dummy8)) // structure padding
+			{
+				debug(LOG_ERROR, "Failed to read structure from %s", path);
+				goto failure;
+			}
+#if 0
+			// FIXME: Reading more fields changes structure padding...
+			if (structVersion >= 12
+			    && (!readU32(&dummy) // factoryInc
+			        || !readU8(&dummy8) // loopsPerformed
+			        || !readU32(&dummy) // powerAccrued
+			        || !readU32(&dummy) // dummy2
+			        || !readU32(&dummy) // droidTimeStarted
+			        || !readU32(&dummy) // timeToBuild
+			        || !readU32(&dummy))) // timeStartHold
+			{
+				debug(LOG_ERROR, "Failed to read structure v12 part from %s", path);
+				goto failure;
+			}
+			if (structVersion >= 14 && PHYSFS_read(fp, &visibility, 1, 8) != 8)
+			{
+				debug(LOG_ERROR, "Failed to read structure visibility from %s", path);
+				goto failure;
+			}
+			if (structVersion >= 15 && PHYSFS_read(fp, researchName, nameLength, 1) != 1)
+			{
+				debug(LOG_ERROR, "Failed to read structure v15 part from %s", path);
+				goto failure;
+			}
+			if (structVersion >= 17 && !readS16(&dummyS16))
+			{
+				debug(LOG_ERROR, "Failed to read structure v17 part from %s", path);
+				goto failure;
+			}
+			if (structVersion >= 21 && !readU32(&dummy))
+			{
+				debug(LOG_ERROR, "Failed to read structure v21 part from %s", path);
+				goto failure;
+			}
+#endif
+			psObj->type = IMD_STRUCTURE;
+			// Sanity check data
+			if (psObj->player > MAX_PLAYERS)
+			{
+				debug(LOG_ERROR, "Bad structure owner %u for structure %d id=%u", psObj->player, i, psObj->id);
+				goto failure;
+			}
+			if (psObj->x >= map->width * TILE_WIDTH || psObj->y >= map->height * TILE_HEIGHT)
+			{
+				debug(LOG_ERROR, "Bad structure %d coordinate %u(%u, %u)", i, psObj->id, psObj->x, psObj->y);
+				goto failure;
+			}
+		}
+		structureFailure:
+		PHYSFS_close(fp);
+	}
 
 
 	/* === Load droid data === */
