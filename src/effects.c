@@ -71,8 +71,6 @@
 #include "game.h"
 
 
-#define MAX_EFFECTS	2500
-
 #define	GRAVITON_GRAVITY	((float)-800)
 #define	EFFECT_X_FLIP		0x1
 #define	EFFECT_Y_FLIP		0x2
@@ -165,19 +163,44 @@
 #define	MAX_SHOCKWAVE_SIZE				500
 
 
-/* Our list of all game world effects */
-static EFFECT        asEffectsList[MAX_EFFECTS];
-static EFFECT_STATUS effectStatus[MAX_EFFECTS];
+/*! Number of effects in one chunk */
+#define EFFECT_CHUNK_SIZE 10000
+
+
+/*! A memory chunk of effects */
+typedef struct _EffectChunk EffectChunk;
+
+struct _EffectChunk {
+	EFFECT effects[EFFECT_CHUNK_SIZE]; //!< Chunk of effects
+	EffectChunk *next; //!< Next element in list
+};
+
+
+/*! List containing all allocated effect chunks */
+struct {
+	EffectChunk *first; //!< First element of list, used for iteration
+	EffectChunk *last; //!< Last element of list, used for appending
+} chunkList = {
+	NULL, NULL
+};
+
+
+/*! Our lists of all game world effects */
+struct {
+	size_t num; //!< Number of effects in this list, used when saving
+	EFFECT *first; //!< First element of list, used for iteration / finding free effects
+	EFFECT *last; //!< Last element of list, used for appending
+} activeList = { //!< List of all active effects
+	0, NULL, NULL
+}, inactiveList = { //!< List of unused effects
+	0, NULL, NULL
+};
+
 
 /* Tick counts for updates on a particular interval */
 static	UDWORD	lastUpdateDroids[EFFECT_DROID_DIVISION];
 static	UDWORD	lastUpdateStructures[EFFECT_STRUCTURE_DIVISION];
 
-static	UDWORD	freeEffect; /* Current next slot to use - cyclic */
-static	UDWORD	numEffects;
-static	UDWORD	activeEffects;
-static	UDWORD	missCount;
-static	UDWORD	skipped,skippedEffects,letThrough;
 static	UDWORD	auxVar; // dirty filthy hack - don't look for what this does.... //FIXME
 static	UDWORD	auxVarSec; // dirty filthy hack - don't look for what this does.... //FIXME
 static	UDWORD	specifiedSize;
@@ -233,6 +256,164 @@ static void effectDroidUpdates(void);
 static UDWORD effectGetNumFrames(EFFECT *psEffect);
 
 
+/*!
+ * Initialise memory between first and last as singly linked list
+ * \param first First element in memory chunk
+ * \param last Last element in memory chunk
+ */
+static void initEffectPool(EFFECT *first, EFFECT *last)
+{
+	for (EFFECT *it = first; it < last; it++)
+	{
+		 // We do not need a double-linked-list for inactiveeffects, since we always pick from the front:
+		it->prev = NULL;
+		it->next = it+1;
+	}
+
+	last->prev = NULL;
+	last->next = NULL;
+}
+
+
+/*!
+ * Allocate a new effect from memory pool
+ * FIXME: Does not deal with out-of-memory conditions (yet)
+ * \return New, uninitialised effect
+ */
+static EFFECT *Effect_malloc(void)
+{
+	/* Take the first item in inactiveList */
+	EFFECT *instance = inactiveList.first;
+
+	/* Remove from inactiveList */
+	inactiveList.first = instance->next; // Singly linked, so do not update prev
+	instance->next = NULL; // We are the last in activeList now
+
+	/* Append to activeList */
+	instance->prev = activeList.last;
+
+	if (instance->prev == NULL) {
+		activeList.first = instance; // activeList was empty, so fill it
+	}
+	else {
+		activeList.last->next = instance;
+	}
+
+	activeList.last = instance;
+
+	/* Adjust counts */
+	activeList.num++;
+	inactiveList.num--;
+
+	/* Ensure the next search will have something to feed its hunger with */
+	if (inactiveList.first == NULL)
+	{
+		/* Allocate new effect chunk */
+		EffectChunk *chunk = malloc(sizeof(EffectChunk));
+
+		debug(LOG_MEMORY, "%zd effects in use, allocating %d extra", activeList.num, EFFECT_CHUNK_SIZE);
+
+		/* Deal with out-of-memory conditions */
+		if (chunk == NULL) {
+			debug(LOG_ERROR, "Out of memory");
+			return NULL; // The next call relies on inactiveList being non-empty, and would thus segfault, so bail out early instead
+		}
+
+		/* Append to list */
+		chunk->next = NULL; // Last element
+		chunkList.last->next = chunk;  // chunkList is never empty, thus we can rely on last!=NULL
+
+		/* Update inactiveList */
+		inactiveList.num = EFFECT_CHUNK_SIZE;
+		inactiveList.first = &chunk->effects[0];
+		inactiveList.last = &chunk->effects[EFFECT_CHUNK_SIZE-1];
+
+		/* Initialise list links between inactive effects */
+		initEffectPool(inactiveList.first, inactiveList.last);
+	}
+
+	return instance;
+}
+
+
+/*!
+ * Return an effect into memory pool
+ * \param self Effect to be freed
+ */
+static void Effect_free(void *self)
+{
+	EFFECT *instance = self;
+
+	/* Remove from activeList and fixup endings necessary */
+	if (instance->prev != NULL) {
+		instance->prev->next = instance->next;
+	}
+	else {
+		activeList.first = instance->next; // We were the first in activeList
+	}
+	if (instance->next != NULL) {
+		instance->next->prev = instance->prev;
+	}
+	else {
+		activeList.last = instance->prev; // We were the last in activeList
+	}
+
+	/* Append to inactiveList */
+	instance->prev = NULL; // Singly linked
+	instance->next = NULL; // Last element
+
+	 // inactiveList is never empty (guaranteed in Effect_malloc), thus we can rely on last!=NULL
+	inactiveList.last->next = instance;
+	inactiveList.last = instance;
+
+	/* Adjust counts */
+	inactiveList.num++;
+	activeList.num--;
+}
+
+
+/*!
+ * Initialise effects system
+ * Cleans up old effects, allocates a first chunk of effects, initialises (in)active lists
+ */
+void initEffectsSystem(void)
+{
+	/* Clean up old chunks */
+	EffectChunk *chunk;
+	for (chunk = chunkList.first; chunk != NULL;)
+	{
+		EffectChunk *chunkNext = chunk->next;
+		free(chunk);
+		chunk = chunkNext;
+	}
+
+	/* Allocate new chunk */
+	chunk = malloc(sizeof(EffectChunk));
+
+	/* Deal with out-of-memory conditions */
+	if (chunk == NULL)
+		return; // FIXME We have no way to report an error here...
+
+	/* Create chunkList */
+	chunkList.first = chunk;
+	chunkList.last = chunk;
+	chunk->next = NULL; // Last element
+
+	/* activeList is empty at start */
+	activeList.num = 0;
+	activeList.first = NULL;
+	activeList.last = NULL;
+
+	/* inactiveList contains all elements */
+	inactiveList.num = EFFECT_CHUNK_SIZE;
+	inactiveList.first = &chunk->effects[0];
+	inactiveList.last = &chunk->effects[EFFECT_CHUNK_SIZE-1];
+
+	/* Initialise free-effects pool */
+	initEffectPool(inactiveList.first, inactiveList.last);
+}
+
+
 static void positionEffect(const EFFECT *psEffect)
 {
 	int rx, rz;
@@ -272,76 +453,9 @@ static void killEffect(EFFECT *e)
 			psTile->tileInfoBits &= ~BITS_ON_FIRE;	// clear fire bit
 		}
 	}
-	effectStatus[e-asEffectsList] = ES_INACTIVE;
-	e->control = (UBYTE) 0;
-}
 
-static BOOL	essentialEffect(EFFECT_GROUP group, EFFECT_TYPE type)
-{
-	switch(group)
-	{
-	case	EFFECT_FIRE:
-	case	EFFECT_WAYPOINT:
-	case	EFFECT_DESTRUCTION:
-	case	EFFECT_SAT_LASER:
-	case	EFFECT_STRUCTURE:
-		return(true);
-		break;
-	case	EFFECT_EXPLOSION:
-		if(type == EXPLOSION_TYPE_LAND_LIGHT)
-		{
-			return(true);
-		}
-	default:
-		return(false);
-	}
-}
-
-static BOOL utterlyReject( EFFECT_GROUP group )
-{
-	switch(group)
-	{
-	case EFFECT_BLOOD:
-	case EFFECT_DUST_BALL:
-	case EFFECT_CONSTRUCTION:
-		return(true);
-	default:
-		return(false);
-	}
-}
-
-/**	Simply sets the free pointer to the start - actually this isn't necessary
-	as it will work just fine anyway. This WOULD be necessary were we to change
-	the system so that it seeks FREE slots rather than the oldest one. This is because
-	different effects last for different times and the oldest effect may have
-	just got going (if it was a long effect).
-*/
-void	initEffectsSystem( void )
-{
-	UDWORD	i;
-	EFFECT	*psEffect;
-
-	/* Set position to first */
-	freeEffect = 0;
-
-	/* None are active */
-	numEffects = 0;
-
-	activeEffects = 0;
-
-	missCount=0;
-
-	skipped = letThrough = 0;
-
-	for(i=0; i<MAX_EFFECTS; i++)
-	{
-		/* Get a pointer - just cos our macro requires it, speeds not an issue here */
-		psEffect = &asEffectsList[i];
-		/* Clear all the control bits */
-		psEffect->control = (UBYTE)0;
-		/* All effects are initially inactive */
-		effectStatus[i] = ES_INACTIVE;
-	}
+	/* Put effect back into pool */
+	Effect_free(e);
 }
 
 void	effectSetLandLightSpec(LAND_LIGHT_SPEC spec)
@@ -392,96 +506,27 @@ void addMultiEffect(const Vector3i *basePos, Vector3i *scatter, EFFECT_GROUP gro
 	}
 }
 
-UDWORD	getNumActiveEffects( void )
-{
-	return(activeEffects);
-}
-
-UDWORD	getMissCount( void )
-{
-	return(missCount);
-}
-
-UDWORD	getNumSkippedEffects(void)
-{
-	return(skippedEffects);
-}
-
-UDWORD	getNumEvenEffects(void)
-{
-	return(letThrough);
-}
-
 
 void addEffect(const Vector3i *pos, EFFECT_GROUP group, EFFECT_TYPE type, bool specified, iIMDShape *imd, bool lit)
 {
-	static unsigned int aeCalls = 0;
-	UDWORD	essentialCount;
-	UDWORD	i;
-	EFFECT	*psEffect = NULL;
-
-	aeCalls++;
+	EFFECT *psEffect = NULL;
 
 	if(gamePaused())
 	{
 		return;
 	}
 
-	/* Quick optimsation to reject every second non-essential effect if it's off grid */
-	if(clipXY(pos->x, pos->z) == false)
-	{
-		/* 	If effect is essentail - then let it through */
-	  	if(!essentialEffect(group,type) )
-		{
-			bool bSmoke = false;
+	/* Retrieve a new effect from pool */
+	psEffect = Effect_malloc();
 
-			/* Some we can get rid of right away */
-			if ( utterlyReject( group ) )
-			{
-				skipped++;
-				return;
-			}
-			/* Smoke gets culled more than most off grid effects */
-			if(group == EFFECT_SMOKE)
-			{
-				bSmoke = true;
-			}
-
-			/* Others intermittently (50/50 for most and 25/100 for smoke */
-			if(bSmoke ? (aeCalls & 0x03) : (aeCalls & 0x01) )
-			{
-				/* Do one */
-				skipped++;
-				return;
-			}
-			letThrough++;
-		}
+	/* Deal with out-of-memory conditions */
+	if (psEffect == NULL) {
+		debug(LOG_ERROR, "Out of memory");
+		return; // FIXME We have no way to report an error here...
 	}
 
-
-	for (i = freeEffect, essentialCount = 0; (asEffectsList[i].control & EFFECT_ESSENTIAL)
-		&& essentialCount < MAX_EFFECTS; i++)
-	{
-		/* Check for wrap around */
-		if (i >= (MAX_EFFECTS-1))
-		{
-			/* Go back to the first one */
-			i = 0;
-		}
-		essentialCount++;
-		missCount++;
-	}
-
-	/* Check the list isn't just full of essential effects */
-	if (essentialCount >= MAX_EFFECTS)
-	{
-		/* All of the effects are essential!?!? */
-		return;
-	}
-
-	freeEffect = i;
-
-	psEffect = &asEffectsList[freeEffect];
+	/* Reset control bits */
+	psEffect->control = 0;
 
 	/* Store away it's position - into FRACTS */
 	psEffect->position.x = pos->x;
@@ -499,7 +544,6 @@ void addEffect(const Vector3i *pos, EFFECT_GROUP group, EFFECT_TYPE type, bool s
 	{
 		psEffect->frameNumber = lit;
 	}
-
 	else
 	{
 		/* Starts off on frame zero */
@@ -562,9 +606,6 @@ void addEffect(const Vector3i *pos, EFFECT_GROUP group, EFFECT_TYPE type, bool s
 			break;
 	}
 
-	/* Make the effect active */
-	effectStatus[freeEffect] = ES_ACTIVE;
-
 	/* As of yet, it hasn't bounced (or whatever)... */
 	if(type!=EXPLOSION_TYPE_LAND_LIGHT)
 	{
@@ -572,43 +613,28 @@ void addEffect(const Vector3i *pos, EFFECT_GROUP group, EFFECT_TYPE type, bool s
 	}
 
 	ASSERT(psEffect->imd != NULL || group == EFFECT_DESTRUCTION || group == EFFECT_FIRE || group == EFFECT_SAT_LASER, "null effect imd");
-
-	/* No more slots available? */
-	if(freeEffect++ >= (MAX_EFFECTS-1))
-	{
-		/* Go back to the first one */
-		freeEffect = 0;
-	}
 }
 
 
 /* Calls all the update functions for each different currently active effect */
 void processEffects(void)
 {
-	unsigned int i;
-
-	/* Establish how long the last game frame took */
-	missCount = 0;
-
-	/* Reset counter */
-	numEffects = 0;
-
 	/* Traverse the list */
-	for (i = 0; i < MAX_EFFECTS; i++)
+	for (EFFECT *it = activeList.first; it != NULL;)
 	{
-		/* Don't bother unless it's active */
-		if(effectStatus[i] == ES_ACTIVE)
+		EFFECT *itNext = it->next; // If updateEffect deletes something, we would be screwed...
+
+		/* Run updates, effect may be deleted here */
+		updateEffect(it);
+
+		/* Is it on the grid */
+		if (clipXY(it->position.x, it->position.z))
 		{
-			updateEffect(&asEffectsList[i]);
-			/* One more is active */
-			numEffects++;
-			/* Is it on the grid */
-			if (clipXY(asEffectsList[i].position.x, asEffectsList[i].position.z))
-			{
-				/* Add it to the bucket */
-				bucketAddTypeToList(RENDER_EFFECT,&asEffectsList[i]);
-			}
+			/* Add it to the bucket */
+			bucketAddTypeToList(RENDER_EFFECT, it);
 		}
+
+		it = itNext;
 	}
 
 	/* Add any droid effects */
@@ -616,9 +642,6 @@ void processEffects(void)
 
 	/* Add any structure effects */
 	effectStructureUpdates();
-
-	activeEffects = numEffects;
-	skippedEffects = skipped;
 }
 
 
@@ -2552,8 +2575,6 @@ static const char FXData_file_identifier[] = "FXData";
 /** This will save out the effects data */
 bool writeFXData(const char* fileName)
 {
-	unsigned int count, i;
-
 	if (!tagOpenWrite(FXData_tag_definition, fileName))
 	{
 		ASSERT(false, "writeFXData: error while opening file (%s)", fileName);
@@ -2562,45 +2583,30 @@ bool writeFXData(const char* fileName)
 
 	tagWriteString(0x01, FXData_file_identifier);
 
-	// Count all the active EFFECTs
-	for (i = 0, count = 0; i < MAX_EFFECTS; ++i)
+	// Enter effects group and dump all active EFFECTs
+	tagWriteEnter(0x02, activeList.num);
+	for (EFFECT *it = activeList.first; it != NULL; it = it->next)
 	{
-		if(effectStatus[i] == ES_ACTIVE)
-		{
-			++count;
-		}
-	}
+		tagWrite(0x01, it->control);
+		tagWrite(0x02, it->group);
+		tagWrite(0x03, it->type);
+		tagWrite(0x04, it->frameNumber);
+		tagWrite(0x05, it->size);
+		tagWrite(0x06, it->baseScale);
+		tagWrite(0x07, it->specific);
 
-	// Enter effects group and dump all EFFECTs
-	tagWriteEnter(0x02, count);
-	for (i = 0; i < MAX_EFFECTS; ++i)
-	{
-		const EFFECT* curEffect = &asEffectsList[i];
+		tagWritefv   (0x08, 3, &it->position.x);
+		tagWritefv   (0x09, 3, &it->velocity.x);
+		tagWrites32v (0x0A, 3, &it->rotation.x);
+		tagWrites32v (0x0B, 3, &it->spin.x);
 
-		// Don't save inactive effects
-		if (effectStatus[i] != ES_ACTIVE)
-			continue;
+		tagWrite(0x0C, it->birthTime);
+		tagWrite(0x0D, it->lastFrame);
+		tagWrite(0x0E, it->frameDelay);
+		tagWrite(0x0F, it->lifeSpan);
+		tagWrite(0x10, it->radius);
 
-		tagWrite(0x01, curEffect->control);
-		tagWrite(0x02, curEffect->group);
-		tagWrite(0x03, curEffect->type);
-		tagWrite(0x04, curEffect->frameNumber);
-		tagWrite(0x05, curEffect->size);
-		tagWrite(0x06, curEffect->baseScale);
-		tagWrite(0x07, curEffect->specific);
-
-		tagWritefv   (0x08, 3, &curEffect->position.x);
-		tagWritefv   (0x09, 3, &curEffect->velocity.x);
-		tagWrites32v (0x0A, 3, &curEffect->rotation.x);
-		tagWrites32v (0x0B, 3, &curEffect->spin.x);
-
-		tagWrite(0x0C, curEffect->birthTime);
-		tagWrite(0x0D, curEffect->lastFrame);
-		tagWrite(0x0E, curEffect->frameDelay);
-		tagWrite(0x0F, curEffect->lifeSpan);
-		tagWrite(0x10, curEffect->radius);
-
-		tagWriteString(0x11, resGetNamefromData("IMD", curEffect->imd));
+		tagWriteString(0x11, resGetNamefromData("IMD", it->imd));
 
 		// Move on to reading the next effect group
 		tagWriteNext();
@@ -2642,10 +2648,14 @@ bool readFXData(const char* fileName)
 	count = tagReadEnter(0x02);
 	for(i = 0; i < count; ++i)
 	{
-		EFFECT* curEffect = &asEffectsList[i];
 		char imd_name[PATH_MAX];
+		EFFECT *curEffect = Effect_malloc();
 
-		ASSERT(i < MAX_EFFECTS, "readFXData: more effects in this file than our array can contain");
+		/* Deal with out-of-memory conditions */
+		if (curEffect == NULL) {
+			debug(LOG_ERROR, "Out of memory");
+			return false;
+		}
 
 		curEffect->control      = tagRead(0x01);
 		curEffect->group        = tagRead(0x02);
@@ -2676,16 +2686,11 @@ bool readFXData(const char* fileName)
 			curEffect->imd = NULL;
 		}
 
-		effectStatus[i] = ES_ACTIVE;
-
 		// Move on to reading the next effect group
 		tagReadNext();
 	}
 	// Leave the effects group again...
 	tagReadLeave(0x02);
-
-	/* Ensure free effects kept up to date */
-	freeEffect = i;
 
 	// Close the file
 	tagClose();

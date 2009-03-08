@@ -113,14 +113,6 @@ typedef enum
 } EFFECT_TYPE;
 
 
-/* Is the slot currently being used and is it active? */
-typedef enum
-{
-	ES_INACTIVE,
-	ES_ACTIVE
-} EFFECT_STATUS;
-
-
 typedef enum
 {
 	LL_MIDDLE,
@@ -149,6 +141,7 @@ struct _effect_def
 	uint16_t          lifeSpan;    // what is it's life expectancy?
 	uint16_t          radius;      // Used for area effects
 	iIMDShape         *imd;        // pointer to the imd the effect uses.
+	EFFECT *prev, *next; // Previous and next element in linked list
 };
 
 
