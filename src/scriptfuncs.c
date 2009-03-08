@@ -7248,52 +7248,39 @@ static int scrGetStructureVis(lua_State *L)
 	return 1;
 }
 
-//returns num of visible structures of a certain player in range
-WZ_DECL_UNUSED static BOOL scrChooseValidLoc(void)
+static int scrChooseValidLoc(lua_State *L)
 {
-	SDWORD sendY, sendX, *x, *y, player, threatRange;
 	UDWORD tx,ty;
 
-	if (!stackPopParams(6, VAL_REF|VAL_INT, &x, VAL_REF|VAL_INT, &y,
-		VAL_INT, &sendX, VAL_INT, &sendY, VAL_INT, &player, VAL_INT, &threatRange))
-	{
-		debug(LOG_ERROR,"scrChooseValidLoc: failed to pop");
-		return false;
-	}
+	int x             = luaL_checkint(L, 1);
+	int y             = luaL_checkint(L, 2);
+	int player        = luaWZ_checkplayer(L, 3);
+	int threatRange   = luaL_checkint(L, 4);
 
 	//Check coords
-	if (sendX < 0
-	 || sendX > world_coord(mapWidth)
-	 || sendY < 0
-	 || sendY > world_coord(mapHeight))
+	if (x < 0
+	 || x > world_coord(mapWidth)
+	 || y < 0
+	 || y > world_coord(mapHeight))
 	{
-		debug(LOG_ERROR, "scrChooseValidLoc: coords off map");
-		return false;
+		return luaL_error(L, "coords off map");
 	}
 
-	tx = map_coord(sendX);
-	ty = map_coord(sendY);
+	tx = map_coord(x);
+	ty = map_coord(y);
 
 	if(pickATileGenThreat(&tx, &ty, LOOK_FOR_EMPTY_TILE, threatRange, player, zonedPAT))
 	{
-		*x = world_coord(tx);
-		*y = world_coord(ty);
-		scrFunctionResult.v.bval = true;
-		if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
-		{
-			return false;
-		}
+		lua_pushinteger(L, world_coord(tx));
+		lua_pushinteger(L, world_coord(ty));
+		lua_pushboolean(L, true);
+		return 3;
 	}
 	else
 	{
-		scrFunctionResult.v.bval = false;
-		if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
-		{
-			return false;
-		}
+		lua_pushboolean(L, false);
+		return 1;
 	}
-
-	return true;
 }
 
 //returns closest enemy object
@@ -10100,7 +10087,7 @@ void registerScriptfuncs(lua_State *L)
 	lua_register(L, "testStructureModule", scrTestStructureModule);
 	lua_register(L, "fogTileInRange", scrFogTileInRange);
 	lua_register(L, "factoryGetTemplate", scrFactoryGetTemplate);
-	//lua_register(L, "", );
+	lua_register(L, "chooseValidLoc", scrChooseValidLoc);
 	//lua_register(L, "", );
 	//lua_register(L, "", );
 	//lua_register(L, "", );
