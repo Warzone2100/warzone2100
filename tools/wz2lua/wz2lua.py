@@ -120,7 +120,7 @@ class CodeScanner(GenericScanner):
 		r" [ \t]+ "
 		pass
 	def t_number(self, s):
-		r" -?([0-9]+[.][0-9]+|[.][0-9]+|[0-9]+[.]?) "
+		r" ([0-9]+[.][0-9]+|[.][0-9]+|[0-9]+[.]?) "
 		self.rv.append(Token('number', s))
 	def t_operator(self, s):
 		r" \|\||==|!=|>=|<=|&&|[+*<>&/] "
@@ -296,6 +296,7 @@ class CodeParser(GenericParser):
 		
 	def p_expression_1(self, args):
 		''' expression ::= number
+			expression ::= negative
 			expression ::= string
 			expression ::= function_call
 			expression ::= variable
@@ -308,6 +309,9 @@ class CodeParser(GenericParser):
 	def p_expression_3(self, args):
 		''' expression ::= cast expression '''
 		return args[1]
+	def p_negative(self, args):
+		''' negative ::= min number '''
+		return AST('negative', [args[1]])
 	def p_boolean_expression(self, args):
 		''' boolean_expression ::= expression '''
 		return AST('boolean_expression', [args[0]])
@@ -541,6 +545,8 @@ class CodeGenerator(GenericASTTraversal):
 			macros.append(node[0].code)
 	def n_number(self, node):
 		node.code = node.attr
+	def n_negative(self, node):
+		node.code = '-' + node[0].code
 	def n_string(self, node):
 		node.code = node.attr
 	def n_name(self, node):
@@ -996,7 +1002,10 @@ class VloParser(GenericParser):
 			value ::= number
 			value ::= name '''
 		return args[0]
-		
+	def p_value_2(self, args):
+		''' value ::= min number '''
+		return AST('negative', [args[1]])
+
 
 		
 class VloCodeGenerator(GenericASTTraversal):
@@ -1022,6 +1031,8 @@ class VloCodeGenerator(GenericASTTraversal):
 		node.code = node.attr
 	def n_number(self, node):
 		node.code = node.attr
+	def n_negative(self, node):
+		node.code = '-' + node[0].code
 	def n_string(self, node):
 		node.code = node.attr
 	def n_arrayref(self, node):
