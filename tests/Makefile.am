@@ -9,5 +9,5 @@ CLEANFILES = maplist.txt
 TESTS = maptest
 
 maplist.txt:
-	(cd ../data ; find base -name game.map > ../tests/maplist.txt )
+	(cd ../data ; find base mods -name game.map > ../tests/maplist.txt )
 	touch $@
