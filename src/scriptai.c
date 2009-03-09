@@ -508,10 +508,11 @@ BOOL scrOrderDroid(void)
 		order != DORDER_DESTRUCT &&
 		order != DORDER_RTR &&
 		order != DORDER_RTB &&
-		order != DORDER_RUN)
+		order != DORDER_RUN &&
+		order != DORDER_NONE )
 	{
 		ASSERT( false,
-			"scrOrderUnit: Invalid order" );
+			"scrOrderUnit: Invalid order %d", order );
 		return false;
 	}
 
