@@ -1,3 +1,7 @@
+0000-00-00: Version 2.1.3
+ * Maps:
+   * Fix: Water tiles on little egypt map fixed (r6825, bug #9658)
+
 2009-03-07: Version 2.1.2
  * General:
    * Fix: No longer crash if more than six players join a game (r6658, ticket:273)
