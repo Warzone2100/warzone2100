@@ -35,6 +35,7 @@
    * New: OBJ to PIE format converter (r5774)
  * Map:
    * New: 8c-cockate and 4c-cockpit by zydonk (r5567, r5566, r5286)
+   * Fix: Water tiles on little egypt map fixed (r6824, bug #9658)
  * Engine:
    * New: Support for naval propulsion type (r5803)
 
