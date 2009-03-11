@@ -1789,8 +1789,7 @@ static void moveCalcBoundary(DROID *psDroid)
 		psDroid->sMove.boundY = -sumX;
 	}
 
-	debug( LOG_NEVER, "new boundary: droid %d boundary (%d,%d)\n",
-			psDroid->id, psDroid->sMove.boundX, psDroid->sMove.boundY);
+	objTrace(psDroid->id, "new boundary: droid boundary (%d, %d)", psDroid->sMove.boundX, psDroid->sMove.boundY);
 }
 
 
@@ -1808,18 +1807,8 @@ static BOOL moveReachedWayPoint(DROID *psDroid)
 		(psDroid->sMove.psFormation &&
 		 formationMember(psDroid->sMove.psFormation, psDroid)) ||
 		 (isVtolDroid(psDroid) && (psDroid->sMove.numPoints == psDroid->sMove.Position)) )
-//							 && (psDroid->action != DACTION_VTOLATTACK)) )
 	{
-		if ( psDroid->droidType == DROID_TRANSPORTER )
-		{
-
-			iRange = TILE_UNITS/4;
-
-		}
-		else
-		{
-			iRange = TILE_UNITS/4;
-		}
+		iRange = TILE_UNITS / 4;
 
 		if (droidX*droidX + droidY*droidY < iRange*iRange)
 		{
@@ -3235,55 +3224,13 @@ void moveUpdateDroid(DROID *psDroid)
 		ASSERT(moveDir >= 0 && moveDir <= 360, "Illegal movement direction");
 		break;
 	case MOVEHOVER:
-		/* change vtols to attack run mode if target found - but not if no ammo*/
-		/*if ( psDroid->droidType != DROID_CYBORG && psDroid->psTarget != NULL &&
-			!vtolEmpty(psDroid))
+		if (moveDescending(psDroid, iZ) == false)
 		{
-			psDroid->sMove.Status = MOVEPOINTTOPOINT;
-			break;
-		}*/
-
-/*		moveGetDirection(psDroid, &tx,&ty);
-		tangle = vectorToAngle(tx,ty);
-		moveSpeed = moveCalcDroidSpeed(psDroid);
-		moveDir = tangle;*/
-
-		/* descend if no orders or actions or cyborg at target */
-/*		if ( (psDroid->droidType == DROID_CYBORG) ||
-			 ((psDroid->action == DACTION_NONE) && (psDroid->order == DORDER_NONE)) ||
-			 ((psDroid->action == DACTION_NONE) && (psDroid->order == DORDER_TRANSPORTIN)) ||
-			 ((psDroid->action == DACTION_NONE) && (psDroid->order == DORDER_GUARD)) ||
-			 (psDroid->action == DACTION_MOVE) || (psDroid->action == DACTION_WAITFORREARM) ||
-			 (psDroid->action == DACTION_WAITDURINGREARM)  || (psDroid->action == DACTION_FIRESUPPORT))*/
-		{
-			if ( moveDescending( psDroid, iZ ) == false )
-			{
-				/* reset move state */
-				psDroid->sMove.Status = MOVEINACTIVE;
-			}
-/*			else
-			{
-				UDWORD	landX, landY;
-
-				// see if the landing position is clear
-				landX = psDroid->pos.x;
-				landY = psDroid->pos.y;
-				actionVTOLLandingPos(psDroid, &landX,&landY);
-				if (map_coord(landX) != map_coord(psDroid->pos.x)
-				 && map_coord(landY) != map_coord(psDroid->pos.y))
-				{
-					moveDroidToDirect(psDroid, landX,landY);
-				}
-			}*/
+			/* reset move state */
+			psDroid->sMove.Status = MOVEINACTIVE;
 		}
-/*		else
-		{
-			moveAdjustVtolHeight( psDroid, iZ );
-		}*/
-
 		break;
-
-		// Driven around by the player.
+	// Driven around by the player.
 	case MOVEDRIVE:
 		driveSetDroidMove(psDroid);
 		moveSpeed = driveGetMoveSpeed();	//psDroid->sMove.speed;
