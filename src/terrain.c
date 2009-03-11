@@ -673,6 +673,18 @@ bool initTerrain(void)
 	}
 	if (decreasedSize)
 	{
+		if (sectorSize < 1)
+		{
+			debug(LOG_WARNING, "GL_MAX_ELEMENTS_VERTICES: %i", GLmaxElementsVertices);
+			debug(LOG_WARNING, "GL_MAX_ELEMENTS_INDICES:  %i", GLmaxElementsIndices);
+			debug(LOG_WARNING, "maximum sector size due to vertices: %i", maxSectorSizeVertices);
+			debug(LOG_WARNING, "maximum sector size due to indices: %i", maxSectorSizeIndices);
+			debug(LOG_ERROR, "Your graphics card and/or drivers do not seem to support glDrawRangeElements, needed for the terrain renderer.");
+			debug(LOG_ERROR, "- Do other 3D games work?");
+			debug(LOG_ERROR, "- Did you install the latest drivers correctly?");
+			debug(LOG_ERROR, "- Do you have a 3D window manager (Aero/Compiz) running?");
+			return false;
+		}
 		debug(LOG_WARNING, "decreasing sector size to %i to fit graphics card constraints", sectorSize);
 	}
 	
