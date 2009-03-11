@@ -1817,146 +1817,105 @@ BOOL mapShutdown(void)
 	return true;
 }
 
-/* Return linear interpolated height of x,y */
+/// The height of the terrain at the specified world coordinates
 extern SWORD map_Height(int x, int y)
 {
-	int	retVal, tileX, tileY, tileYOffset, tileX2, tileY2Offset, dx, dy, ox, oy;
-	int	h0, hx, hy, hxy, wTL = 0, wTR = 0, wBL = 0, wBR = 0;
-	BOOL	bWaterTile = false;
+	int tileX, tileY;
+	int i, j;
+	float height[2][2], center;
+	float onTileX, onTileY;
+	float left, right, middle;
+	float onBottom, result;
+	float towardsCenter, towardsRight;
 
-	ASSERT(x >= 0, "map_Height: Negative x value");
-	ASSERT(y >= 0, "map_Height: Negative y value");
+	// make sure we have valid coordinates
+	if (x < 0 ||
+	    y < 0 ||
+	    x >= world_coord(mapWidth-1) ||
+	    y >= world_coord(mapHeight-1))
+	{
+		// we don't so give an arbitrary height
+		return 0;
+	}
 
-	x = (x >= world_coord(mapWidth) ? world_coord(mapWidth - 1) : x);
-	y = (y >= world_coord(mapHeight) ? world_coord(mapHeight - 1) : y);
-
-	/* Turn into tile coordinates */
+	// on which tile are these coords?
 	tileX = map_coord(x);
 	tileY = map_coord(y);
 
-	/* Inter tile comp */
-	ox = map_round(x);
-	oy = map_round(y);
+	// where on the tile? (scale to (0,1))
+	onTileX = (x - world_coord(tileX))/(float)world_coord(1);
+	onTileY = (y - world_coord(tileY))/(float)world_coord(1);
 
-	if (terrainType(mapTile(tileX,tileY)) == TER_WATER)
+	// get the height for the corners and center
+	center = 0;
+	for (i = 0; i < 2; i++)
 	{
-		bWaterTile = true;
-		wTL = environGetValue(tileX,tileY)/2;
-		wTR = environGetValue(tileX+1,tileY)/2;
-		wBL = environGetValue(tileX,tileY+1)/2;
-		wBR = environGetValue(tileX+1,tileY+1)/2;
-	}
-
-	// to account for the border of the map
-	if(tileX + 1 < mapWidth)
-	{
-		tileX2 = tileX + 1;
-	}
-	else
-	{
-		tileX2 = tileX;
-	}
-	tileYOffset = (tileY * mapWidth);
-	if(tileY + 1 < mapHeight)
-	{
-		tileY2Offset = tileYOffset + mapWidth;
-	}
-	else
-	{
-		tileY2Offset = tileYOffset;
-	}
-
-	ASSERT( ox < TILE_UNITS, "mapHeight: x offset too big" );
-	ASSERT( oy < TILE_UNITS, "mapHeight: y offset too big" );
-	ASSERT( ox >= 0, "mapHeight: x offset too small" );
-	ASSERT( oy >= 0, "mapHeight: y offset too small" );
-
-	//different code for 4 different triangle cases
-	if (psMapTiles[tileX + tileYOffset].texture & TILE_TRIFLIP)
-	{
-		if ((ox + oy) > TILE_UNITS)//tile split top right to bottom left object if in bottom right half
+		for (j = 0; j < 2; j++)
 		{
-			ox = TILE_UNITS - ox;
-			oy = TILE_UNITS - oy;
-			hy = psMapTiles[tileX + tileY2Offset].height;
-			hx = psMapTiles[tileX2 + tileYOffset].height;
-			hxy= psMapTiles[tileX2 + tileY2Offset].height;
-			if(bWaterTile)
-			{
-				hy+=wBL;
-				hx+=wTR;
-				hxy+=wBR;
-			}
-
-			dx = ((hy - hxy) * ox )/ TILE_UNITS;
-			dy = ((hx - hxy) * oy )/ TILE_UNITS;
-
-			retVal = (SDWORD)(((hxy + dx + dy)) * ELEVATION_SCALE);
-			ASSERT( retVal<MAX_HEIGHT,"Map height's gone weird!!!" );
-			return ((SWORD)retVal);
+			height[i][j] = map_TileHeight(tileX+i, tileY+j);
+			center += height[i][j];
 		}
-		else //tile split top right to bottom left object if in top left half
+	}
+	center /= 4;
+
+	// we have:
+	//   y ->
+	// x 0,0  A  0,1
+	// |
+	// V D  center B
+	//
+	//   1,0  C  1,1
+
+	// get heights for left and right corners and the distances
+	if (onTileY > onTileX)
+	{
+		if (onTileY < 1 - onTileX)
 		{
-			h0 = psMapTiles[tileX + tileYOffset].height;
-			hy = psMapTiles[tileX + tileY2Offset].height;
-			hx = psMapTiles[tileX2 + tileYOffset].height;
-
-			if(bWaterTile)
-			{
-				h0+=wTL;
-				hy+=wBL;
-				hx+=wTR;
-			}
-			dx = ((hx - h0) * ox )/ TILE_UNITS;
-			dy = ((hy - h0) * oy )/ TILE_UNITS;
-
-			retVal = (SDWORD)((h0 + dx + dy) * ELEVATION_SCALE);
-			ASSERT( retVal<MAX_HEIGHT,"Map height's gone weird!!!" );
-			return ((SWORD)retVal);
+			// A
+			right = height[0][0];
+			left  = height[0][1];
+			towardsCenter = onTileX;
+			towardsRight  = 1 - onTileY;
+		}
+		else
+		{
+			// B
+			right = height[0][1];
+			left  = height[1][1];
+			towardsCenter = 1 - onTileY;
+			towardsRight  = 1 - onTileX;
 		}
 	}
 	else
 	{
-		if (ox > oy) //tile split topleft to bottom right object if in top right half
+		if (onTileX > 1 - onTileY)
 		{
-			h0 = psMapTiles[tileX + tileYOffset].height;
-			hx = psMapTiles[tileX2 + tileYOffset].height;
-			ASSERT( tileX2 + tileY2Offset < mapWidth*mapHeight, "array out of bounds");
-			hxy= psMapTiles[tileX2 + tileY2Offset].height;
-
-			if(bWaterTile)
-			{
-				h0+=wTL;
-				hx+=wTR;
-				hxy+=wBR;
-			}
-			dx = ((hx - h0) * ox )/ TILE_UNITS;
-			dy = ((hxy - hx) * oy )/ TILE_UNITS;
-			retVal = (SDWORD)(((h0 + dx + dy)) * ELEVATION_SCALE);
-			ASSERT( retVal<MAX_HEIGHT,"Map height's gone weird!!!" );
-			return ((SWORD)retVal);
+			// C
+			right = height[1][1];
+			left  = height[1][0];
+			towardsCenter = 1 - onTileX;
+			towardsRight  = onTileY;
 		}
-		else //tile split topleft to bottom right object if in bottom left half
+		else
 		{
-			h0 = psMapTiles[tileX + tileYOffset].height;
-			hy = psMapTiles[tileX + tileY2Offset].height;
-			hxy = psMapTiles[tileX2 + tileY2Offset].height;
-
-			if(bWaterTile)
-			{
-				h0+=wTL;
-				hy+=wBL;
-				hxy+=wBR;
-			}
-			dx = ((hxy - hy) * ox )/ TILE_UNITS;
-			dy = ((hy - h0) * oy )/ TILE_UNITS;
-
-			retVal = (SDWORD)((h0 + dx + dy) * ELEVATION_SCALE);
-			ASSERT( retVal<MAX_HEIGHT,"Map height's gone weird!!!" );
-			return ((SWORD)retVal);
+			// D
+			right = height[1][0];
+			left  = height[0][0];
+			towardsCenter = onTileY;
+			towardsRight  = onTileX;
 		}
 	}
-	return 0;
+	ASSERT(towardsCenter <= 0.5, "towardsCenter is too high");
+
+	// now we have:
+	//         center
+	//    left   m    right
+
+	middle = (left + right)/2;
+	onBottom = left * (1 - towardsRight) + right * towardsRight;
+	result = onBottom + (center - middle) * towardsCenter * 2;
+
+	return (SDWORD)(result+0.5f);
 }
 
 /* returns true if object is above ground */
