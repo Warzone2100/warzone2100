@@ -119,8 +119,17 @@ int pie_AddTexPage(iV_Image *s, const char* filename, int slot, int maxTextureSi
 			                                    width,    height,    GL_UNSIGNED_BYTE, bmp);
 			free(s->bmp);
 		}
-		
-		gluBuild2DMipmaps(GL_TEXTURE_2D, wz_texture_compression, width, height, iV_getPixelFormat(s), GL_UNSIGNED_BYTE, bmp);
+
+		if (maxTextureSize)
+		{
+			// this is a 3D texture, use texture compression
+			gluBuild2DMipmaps(GL_TEXTURE_2D, wz_texture_compression, width, height, iV_getPixelFormat(s), GL_UNSIGNED_BYTE, bmp);
+		}
+		else
+		{
+			// this is an interface texture, do not use compression
+			gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGBA, width, height, iV_getPixelFormat(s), GL_UNSIGNED_BYTE, bmp);
+		}
 	} else {
 		debug(LOG_ERROR, "pie_AddTexPage: non POT texture %s", filename);
 	}
