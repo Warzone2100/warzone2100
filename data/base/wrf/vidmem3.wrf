@@ -32,6 +32,7 @@ file		TEXPAGE	"page-21-fx.png"
 file		TEXPAGE	"page-22-fx.png"
 file		TEXPAGE	"page-23-fx.png"
 file		TEXPAGE	"page-24-fx.png"
+/* When you change these, also update cam3/cam3change.wrf */
 file		TEXPAGE	"page-25-sky-urban.png"
 file		TEXPAGE	"page-42-rock.png"
 file		TEXPAGE	"page-46-cliff.png"
