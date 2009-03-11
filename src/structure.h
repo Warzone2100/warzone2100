@@ -126,7 +126,8 @@ extern void createTestStructures(void);
 //builds a specified structure at a given location
 extern STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y,
 						  UDWORD player,BOOL FromSave);
-
+/// Create a blueprint structure, with just enough information to render it
+extern STRUCTURE *buildBlueprint(STRUCTURE_STATS *psStats, float x, float y, STRUCT_STATES state);
 /* The main update routine for all Structures */
 void structureUpdate(STRUCTURE *psBuilding);
 
@@ -382,6 +383,9 @@ extern void changeProductionPlayer(UBYTE player);
 
 // La!
 extern BOOL IsStatExpansionModule(STRUCTURE_STATS *psStats);
+
+/// is this a blueprint and not a real structure?
+extern BOOL structureIsBlueprint(STRUCTURE *psStructure);
 
 /*checks that the structure stats have loaded up as expected - must be done after
 all StructureStats parts have been loaded*/

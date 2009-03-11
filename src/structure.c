@@ -217,6 +217,13 @@ BOOL IsStatExpansionModule(STRUCTURE_STATS *psStats)
 		}
 }
 
+BOOL structureIsBlueprint(STRUCTURE *psStructure)
+{
+	return (psStructure->status == SS_BLUEPRINT_VALID ||
+	        psStructure->status == SS_BLUEPRINT_INVALID ||
+	        psStructure->status == SS_BLUEPRINT_PLANNED);
+}
+
 void structureInitVars(void)
 {
 	int i, j;
@@ -1982,6 +1989,39 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 	setUnderTilesVis((BASE_OBJECT*)psBuilding,player);
 
 	return psBuilding;
+}
+
+STRUCTURE *buildBlueprint(STRUCTURE_STATS *psStats, float x, float y, STRUCT_STATES state)
+{
+	STRUCTURE *blueprint = malloc(sizeof(STRUCTURE));
+	// construct the fake structure
+	psStats = (STRUCTURE_STATS *)psStats;
+	blueprint->pStructureType = psStats;
+	blueprint->visible[selectedPlayer] = true;
+	blueprint->player = selectedPlayer;
+	blueprint->sDisplay.imd = psStats->pIMD;
+	blueprint->pos.x = x;
+	blueprint->pos.y = y;
+	blueprint->pos.z = map_Height(blueprint->pos.x, blueprint->pos.y) + world_coord(1)/10;
+	blueprint->direction = 0;
+	blueprint->selected = false;
+
+	blueprint->numWeaps = 0;
+	blueprint->asWeaps[0].nStat = 0;
+
+	// give defensive structures a weapon
+	if (psStats->psWeapStat[0])
+	{
+		blueprint->asWeaps[0].nStat = psStats->psWeapStat[0] - asWeaponStats;
+	}
+	// things with sensors or ecm (or repair facilities) need these set, even if they have no official weapon
+	blueprint->numWeaps = 0;
+	blueprint->asWeaps[0].recoilValue = 0;
+	blueprint->asWeaps[0].pitch = 0;
+	blueprint->asWeaps[0].rotation = 0;
+
+	blueprint->status = state;
+	return blueprint;
 }
 
 

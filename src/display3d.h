@@ -58,12 +58,12 @@ extern void disp3d_getView(iView *newView);
 
 extern void draw3DScene (void);
 extern void renderDroid					( DROID *psDroid );
-extern void renderStructure				( STRUCTURE *psStructure );
+extern void renderStructure				( STRUCTURE *psStructure);
 extern void renderFeature				( FEATURE *psFeature );
 extern void renderProximityMsg			( PROXIMITY_DISPLAY	*psProxDisp);
 extern void renderProjectile			( PROJECTILE *psCurr);
 extern void renderAnimComponent			( const COMPONENT_OBJECT *psObj );
-extern void renderDeliveryPoint			( FLAG_POSITION *psPosition );
+extern void renderDeliveryPoint			( FLAG_POSITION *psPosition, BOOL blueprint );
 extern void debugToggleSensorDisplay	( void );
 
 extern void displayFeatures( void );

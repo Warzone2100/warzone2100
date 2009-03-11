@@ -66,8 +66,11 @@
 #define WZCOL_MENU_SHADOW	psPalette[41]
 #define WZCOL_DBLUE					psPalette[42]
 #define WZCOL_LBLUE					psPalette[43]
+#define WZCOL_BLUEPRINT_VALID		psPalette[44]
+#define WZCOL_BLUEPRINT_INVALID		psPalette[45]
+#define WZCOL_BLUEPRINT_PLANNED		psPalette[46]
 
-#define WZCOL_MAX			44
+#define WZCOL_MAX			47
 
 //*************************************************************************
 

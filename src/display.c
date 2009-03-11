@@ -1424,6 +1424,7 @@ static STRUCTURE_STATS ReposStats;
 static BOOL ReposValid = false;
 static BOOL BVReposValid = false;
 static FLAG_POSITION *ReposFlag;
+FLAG_POSITION *deliveryPointToMove = NULL;
 
 void StartTacticalScrollObj(WZ_DECL_UNUSED BOOL driveActive, WZ_DECL_UNUSED BASE_OBJECT* psObj)
 {
@@ -1459,6 +1460,7 @@ void StartDeliveryPosition( OBJECT_POSITION *psLocation )
 
 	//set this object position to be highlighted
 	psLocation->selected = true;
+	deliveryPointToMove = (FLAG_POSITION*)psLocation;
 
 	if(bInTutorial)
 	{

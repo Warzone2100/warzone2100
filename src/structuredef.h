@@ -148,6 +148,9 @@ typedef enum _struct_states
 	SS_BEING_BUILT,
 	SS_BUILT,
 	SS_BEING_DEMOLISHED,
+	SS_BLUEPRINT_VALID,
+	SS_BLUEPRINT_INVALID,
+	SS_BLUEPRINT_PLANNED,
 } STRUCT_STATES;
 
 typedef struct _research_facility
