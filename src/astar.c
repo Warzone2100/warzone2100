@@ -377,22 +377,22 @@ SDWORD fpathAStarRoute(MOVE_CONTROL *psMove, SDWORD sx, SDWORD sy, SDWORD fx, SD
 	const int       tileFX = map_coord(fx);
 	const int       tileFY = map_coord(fy);
 
-		fpathTableReset();
+	fpathTableReset();
 
-		// Add the start point to the open list
-		psCurr = fpathNewNode(tileSX,tileSY, 0, NULL);
-		if (!psCurr)
-		{
-			fpathTableReset();
-			return ASR_FAILED;
-		}
-		// estimate the estimated distance/moves
-		psCurr->est = (SWORD)fpathEstimate(psCurr->x, psCurr->y, tileFX, tileFY);
-		psOpen = NULL;
-		fpathOpenAdd(psCurr);
-		fpathAddNode(psCurr);
-		psRoute = NULL;
-		psNearest = NULL;
+	// Add the start point to the open list
+	psCurr = fpathNewNode(tileSX,tileSY, 0, NULL);
+	if (!psCurr)
+	{
+		fpathTableReset();
+		return ASR_FAILED;
+	}
+	// estimate the estimated distance/moves
+	psCurr->est = (SWORD)fpathEstimate(psCurr->x, psCurr->y, tileFX, tileFY);
+	psOpen = NULL;
+	fpathOpenAdd(psCurr);
+	fpathAddNode(psCurr);
+	psRoute = NULL;
+	psNearest = NULL;
 
 	// search for a route
 	while (psOpen != NULL)
