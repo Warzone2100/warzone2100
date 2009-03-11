@@ -726,7 +726,7 @@ BOOL sound_Play3DSample( TRACK *psTrack, AUDIO_SAMPLE *psSample )
  *  \param onFinished callback to invoke when we're finished playing
  *  \param user_data user-data pointer to pass to the \c onFinished callback
  *  \return a pointer to the currently playing stream when playing started
- *          succesfully, NULL otherwise.
+ *          successfully, NULL otherwise.
  *  \post When a non-NULL pointer is returned the audio stream system will
  *        close the PhysicsFS file handle. Otherwise (when false is returned)
  *        this is left to the user.

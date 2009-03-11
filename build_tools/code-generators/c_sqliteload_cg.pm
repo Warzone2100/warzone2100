@@ -68,7 +68,7 @@ sub printFuncHeader
               . " *\n"
               . " *  \@param db represents the database to load from\n"
               . " *\n"
-              . " *  \@return true if we succesfully loaded all available rows from the table,\n"
+              . " *  \@return true if we successfully loaded all available rows from the table,\n"
               . " *          false otherwise.\n"
               . " */\n"
               . "bool\n"

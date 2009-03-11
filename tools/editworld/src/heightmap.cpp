@@ -4250,7 +4250,7 @@ BOOL CHeightMap::ReadObjects(fileParser& Parser,char *Begin,char *End,int TypeID
 //
 // If DoNormals = TRUE then calculates normals for each face.
 //
-// Returns TRUE if succesfull.
+// Returns TRUE if successful.
 //
 BOOL CHeightMap::ReadIMD(const char* FileName,char *Description, const char* TextDir,int TypeID,BOOL Flanged,BOOL Snap,int ColourKeyIndex,NORMALTYPE NType,
 						 int StructureIndex,int PlayerIndex,C3DObject *Object)

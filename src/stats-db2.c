@@ -9,7 +9,7 @@
  *
  *  @param db represents the database to load from
  *
- *  @return true if we succesfully loaded all available rows from the table,
+ *  @return true if we successfully loaded all available rows from the table,
  *          false otherwise.
  */
 bool
@@ -268,7 +268,7 @@ in_statement_err:
  *
  *  @param db represents the database to load from
  *
- *  @return true if we succesfully loaded all available rows from the table,
+ *  @return true if we successfully loaded all available rows from the table,
  *          false otherwise.
  */
 bool
@@ -585,7 +585,7 @@ in_statement_err:
  *
  *  @param db represents the database to load from
  *
- *  @return true if we succesfully loaded all available rows from the table,
+ *  @return true if we successfully loaded all available rows from the table,
  *          false otherwise.
  */
 bool

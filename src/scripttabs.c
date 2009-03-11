@@ -1638,7 +1638,7 @@ VAR_SYMBOL asObjTable[] =
 		(INTERP_TYPE)ST_GROUP,		GROUPID_CMD,	scrGroupObjGet,	NULL, 0, {0}, NULL },
 
 	/* new member variables */
-	//similiar to .order
+	//similar to .order
 	{ "action",		VAL_INT,	ST_OBJECT,
 		(INTERP_TYPE)ST_DROID,		OBJID_ACTION,	scrBaseObjGet,	NULL, 0, {0}, NULL },
 

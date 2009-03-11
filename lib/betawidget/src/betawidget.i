@@ -38,7 +38,7 @@ static bool callbackHandler(widget* const self, const event* const evt, int cons
 	if (lua_pcall(L, 3, 1, 0) != 0)
                 return false;
 	if (lua_gettop(L) != (stack_top + 1))
-		// If no value got returned assume the event handler was succesfull
+		// If no value got returned assume the event handler was successfull
 		return true;
 
 	// Pop the result from the stack and return it

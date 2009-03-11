@@ -305,7 +305,7 @@ void moveUpdateBaseSpeed(void)
 }
 
 /** Set a target location in world coordinates for a droid to move to
- *  @return true if the routing was succesful, if false then the calling code
+ *  @return true if the routing was successful, if false then the calling code
  *          should not try to route here again for a while
  *  @todo Document what "should not try to route here again for a while" means.
  */
@@ -768,7 +768,7 @@ static void moveCalcTurn(float *pCurr, float target, UDWORD rate)
 	ASSERT( target <= 360.0f && target >= 0.0f,
 			 "moveCalcTurn: target out of range %f", target );
 	ASSERT( retval <= 360.0f && retval >= 0.0f,
-			 "moveCalcTurn: cur ang out of range %f", retval );
+			 "moveCalcTurn: current angle out of range %f", retval );
 
 	// calculate the difference in the angles
 	diff = target - retval;

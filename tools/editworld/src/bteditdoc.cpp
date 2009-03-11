@@ -1402,7 +1402,7 @@ BOOL CBTEditDoc::WriteProject(char *FileName)
 // Creates an instance of the IO class CGrdLandIO, copies data from the
 // project into it and calls it's Write method.
 //
-// Returns TRUE if succesfull.
+// Returns TRUE if successful.
 //
 BOOL CBTEditDoc::WriteProject(char *FileName,UWORD StartX,UWORD StartY,UWORD Width,UWORD Height)
 {
@@ -1500,7 +1500,7 @@ BOOL CBTEditDoc::WriteProject(char *FileName,UWORD StartX,UWORD StartY,UWORD Wid
 // Creates an instance of the IO class CGrdLandIO, copies data from the
 // project into it and calls it's Write method.
 //
-// Returns TRUE if succesfull.
+// Returns TRUE if successful.
 //
 BOOL CBTEditDoc::WriteProject(char *FileName)
 {
@@ -2038,7 +2038,7 @@ BOOL CBTEditDoc::LoadDataSet(char *FullPath)
 // Creates an instance of the IO class CGrdLandIO, calls it's Read
 // method and copies data from it.
 //
-// Returns TRUE if succesfull.
+// Returns TRUE if successful.
 //
 BOOL CBTEditDoc::ReadProject(char *FileName)
 {
