@@ -58,6 +58,9 @@ static void svgManagerFreeRender(void *renderedImage)
 
 static void svgManagerFreeImage(void *image)
 {
+	// Free filename buffer
+	free(((svgImage *)image)->filename);
+
 	// Free the libcairo-svg parse tree
 	svg_cairo_destroy(((svgImage *) image)->svg);
 
@@ -83,7 +86,7 @@ static svgImage *svgManagerLoadInternal(const char *filename)
 	svg_cairo_status_t status;
 
 	// Set the filename of the newly loaded image
-	svg->filename = filename;
+	svg->filename = strdup(filename);
 
 	// Initialise the svg_cairo structure
 	status = svg_cairo_create(&svg->svg);
@@ -117,6 +120,7 @@ static svgImage *svgManagerLoad(const char *filename)
 	svgImage *currSvg, *svg = NULL;
 
 	// See if the image exists in the cache at *any* size
+	vectorRewind(svgImages);
 	while ((currSvg = vectorNext(svgImages)))
 	{
 		// If the filenames match then we have found the image
