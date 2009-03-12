@@ -5846,20 +5846,22 @@ void printStructureInfo(STRUCTURE *psStructure)
 		}
 		break;
 	case REF_DEFENSE:
-		if (psStructure->pStructureType->pSensor == NULL)
-		{
-			break;
-		}
 #ifdef DEBUG
-		else if (getDebugMappingStatus())
+		if (getDebugMappingStatus())
 		{
 			CONPRINTF(ConsoleString, (ConsoleString, "%s - %d Units assigned - ID %d - armour %d|%d - sensor range %hu power %hu - ECM %u",
 				getStatName(psStructure->pStructureType), countAssignedDroids(psStructure),
 				psStructure->id, psStructure->armour[0][WC_KINETIC], psStructure->armour[0][WC_HEAT],
 			        structSensorRange(psStructure), structSensorPower(psStructure), structConcealment(psStructure)));
-		}
+		} else
 #endif
-		else
+		if (psStructure->pStructureType->pSensor != NULL
+		       && (psStructure->pStructureType->pSensor->type == STANDARD_SENSOR
+		       || psStructure->pStructureType->pSensor->type == INDIRECT_CB_SENSOR
+		       || psStructure->pStructureType->pSensor->type == VTOL_INTERCEPT_SENSOR
+		       || psStructure->pStructureType->pSensor->type == VTOL_CB_SENSOR
+		       || psStructure->pStructureType->pSensor->type == SUPER_SENSOR)
+		       && psStructure->pStructureType->pSensor->location == LOC_TURRET)
 		{
 			unsigned int assigned_droids = countAssignedDroids(psStructure);
 

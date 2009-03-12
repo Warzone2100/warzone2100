@@ -3010,7 +3010,7 @@ static void	drawStructureSelections( void )
 
 	if(bMouseOverStructure && !bMouseOverOwnStructure)
 	{
-		if(mouseDown(MOUSE_RMB))
+		if (mouseDown(getRightClickOrders()?MOUSE_LMB:MOUSE_RMB))
 		{
 			psStruct = (STRUCTURE*)psClickedOn;
 			if(psStruct->status==SS_BUILT)
@@ -3200,7 +3200,7 @@ static void	drawDroidSelections( void )
 	/* Are we over an enemy droid */
 	if(bMouseOverDroid && !bMouseOverOwnDroid)
 	{
-		if(mouseDown(MOUSE_RMB))
+		if (mouseDown(getRightClickOrders()?MOUSE_LMB:MOUSE_RMB))
 		{
 			if(psClickedOn->player!=selectedPlayer && psClickedOn->sDisplay.frameNumber == currentGameFrame)
 			{

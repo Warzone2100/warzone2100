@@ -1118,6 +1118,18 @@ BOOL startGameOptions5Menu(void)
 		addTextButton(FRONTEND_CURSORMODE_R, FRONTEND_POS4M-85, FRONTEND_POS4Y, _("Hardware"), true, false);
 	}
 
+	////////////
+	// left-click orders
+	addTextButton(FRONTEND_MBUTTONS,	 FRONTEND_POS2X-35,   FRONTEND_POS5Y, _("Right-click Orders"),true,false);
+	if( getRightClickOrders() )
+	{	// right-click orders
+		addTextButton(FRONTEND_MBUTTONS_R, FRONTEND_POS2M-55,  FRONTEND_POS5Y, _("On"),true,false);
+	}
+	else
+	{	// left-click orders
+		addTextButton(FRONTEND_MBUTTONS_R, FRONTEND_POS2M-55,  FRONTEND_POS5Y, _("Off"),true,false);
+	}
+
 	// Quit/return
 	addMultiBut(psWScreen, FRONTEND_BOTFORM, FRONTEND_QUIT, 10, 10, 30, 29, P_("menu", "Return"), IMAGE_RETURN, IMAGE_RETURN_HI, IMAGE_RETURN_HI);
 
@@ -1169,6 +1181,20 @@ BOOL runGameOptions5Menu(void)
 			{
 				war_SetColouredCursor(true);
 				widgSetString(psWScreen, FRONTEND_CURSORMODE_R, _("Software (coloured)"));
+			}
+			break;
+
+		case FRONTEND_MBUTTONS:
+		case FRONTEND_MBUTTONS_R:
+			if( getRightClickOrders() )
+			{
+				setRightClickOrders(false);
+				widgSetString(psWScreen,FRONTEND_MBUTTONS_R, _("Off"));
+			}
+			else
+			{
+				setRightClickOrders(true);
+				widgSetString(psWScreen,FRONTEND_MBUTTONS_R, _("On"));
 			}
 			break;
 
