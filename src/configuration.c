@@ -232,6 +232,18 @@ BOOL loadConfig(void)
 	}
 	
 	// //////////////////////////
+	// mouse buttons
+	if (getWarzoneKeyNumeric("RightClickOrders", &val))
+	{
+		setRightClickOrders(val);
+	}
+	else
+	{
+		setRightClickOrders(false);
+		setWarzoneKeyNumeric("RightClickOrders", false);
+	}
+	
+	// //////////////////////////
 	// rotate radar
 	if(getWarzoneKeyNumeric("rotateRadar", &val))
 	{
@@ -698,6 +710,7 @@ BOOL saveConfig(void)
 	setWarzoneKeyNumeric("visfog",(SDWORD)(!war_GetFog()));			// fogtype
 	setWarzoneKeyNumeric("shake",(SDWORD)(getShakeStatus()));		// screenshake
 	setWarzoneKeyNumeric("mouseflip",(SDWORD)(getInvertMouseStatus()));	// flipmouse
+	setWarzoneKeyNumeric("RightClickOrders",(SDWORD)(getRightClickOrders()));
 	setWarzoneKeyNumeric("shadows",(SDWORD)(getDrawShadows()));	// shadows
 	setWarzoneKeyNumeric("sound", (SDWORD)war_getSoundEnabled());
 	setWarzoneKeyNumeric("FMVmode",(SDWORD)(war_GetFMVmode()));		// sequences
