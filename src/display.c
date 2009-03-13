@@ -2443,7 +2443,7 @@ static void dealWithRMB( void )
 	BASE_OBJECT			*psClickedOn;
 	DROID				*psDroid;
 	STRUCTURE			*psStructure;
-	BOOL				bDemolish = FALSE;
+	BOOL				bDemolish = false;
 
 	if (driveModeActive() || mouseOverRadar ||
 	    InGameOpUp == true || widgGetFromID(psWScreen,INTINGAMEOP))
@@ -2580,7 +2580,7 @@ static void dealWithRMB( void )
 						if (psDroid->selected &&
 						    chooseOrderObj(psDroid, psClickedOn) == DORDER_DEMOLISH)
 						{
-							bDemolish = TRUE;
+							bDemolish = true;
 							break;
 						}
 					}
