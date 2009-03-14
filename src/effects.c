@@ -263,7 +263,8 @@ static UDWORD effectGetNumFrames(EFFECT *psEffect);
  */
 static void initEffectPool(EFFECT *first, EFFECT *last)
 {
-	for (EFFECT *it = first; it < last; it++)
+	EFFECT *it;
+	for (it = first; it < last; it++)
 	{
 		 // We do not need a double-linked-list for inactiveeffects, since we always pick from the front:
 		it->prev = NULL;
@@ -619,8 +620,9 @@ void addEffect(const Vector3i *pos, EFFECT_GROUP group, EFFECT_TYPE type, bool s
 /* Calls all the update functions for each different currently active effect */
 void processEffects(void)
 {
+	EFFECT *it;
 	/* Traverse the list */
-	for (EFFECT *it = activeList.first; it != NULL;)
+	for (it = activeList.first; it != NULL;)
 	{
 		EFFECT *itNext = it->next; // If updateEffect deletes something, we would be screwed...
 
@@ -2575,6 +2577,8 @@ static const char FXData_file_identifier[] = "FXData";
 /** This will save out the effects data */
 bool writeFXData(const char* fileName)
 {
+	EFFECT *it;
+
 	if (!tagOpenWrite(FXData_tag_definition, fileName))
 	{
 		ASSERT(false, "writeFXData: error while opening file (%s)", fileName);
@@ -2585,7 +2589,8 @@ bool writeFXData(const char* fileName)
 
 	// Enter effects group and dump all active EFFECTs
 	tagWriteEnter(0x02, activeList.num);
-	for (EFFECT *it = activeList.first; it != NULL; it = it->next)
+
+	for (it = activeList.first; it != NULL; it = it->next)
 	{
 		tagWrite(0x01, it->control);
 		tagWrite(0x02, it->group);
