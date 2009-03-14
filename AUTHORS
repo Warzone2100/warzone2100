@@ -24,6 +24,7 @@ Kevin Malec <Kevin`> : Websupport
 Per I. Mathisen <per> : Programming
 Dion Mendel <noid> : Programming, original Linux port
 Kim Metcalfe <lav-coyote25> : Documentation, Maps and Support
+-- <Mysteryem> : 3D Graphics
 Christian Ohm <cybersphinx> : Programming
 Tim P. <kamaze> : Webmaster
 Phil Procario <GrimMoroe, grimandmandy> : 3D Graphics
@@ -50,3 +51,17 @@ data/base/texpages/page-53-cracked-concrete.png
 data/base/texpages/page-54-snow-grass.png
 data/base/texpages/page-55-grass.png
 	Copyright (c) 2008 Image*After/Tristan Bethe (imageafter.com)
+
+These files are licensed CC BY-SA version 3.0,
+but cannot easily contain the copyright in the file itself:
+
+data/base/components/prop/prsrwhl1.pie
+data/base/components/prop/prslwhl1.pie
+data/base/components/prop/prmrwhl1.pie
+data/base/components/prop/prmlwhl1.pie
+data/base/components/prop/prlrwhl1.pie
+data/base/components/prop/prllwhl1.pie
+data/base/components/prop/prhrwhl1.pie
+data/base/components/prop/prhlwhl1.pie
+	Copyright (c) 2008 Mysteryem
+
