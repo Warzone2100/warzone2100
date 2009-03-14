@@ -450,9 +450,13 @@ BOOL loadConfig(void)
 	// map name
 	if(getWarzoneKeyString("mapName", sBuf))
 	{
-		sstrcpy(game.map, sBuf);
+		/* FIXME: Get rid of storing the max-player count in the config
+		 *        file. Instead we should parse the map *before*
+		 *        showing the skirmish/multiplayer setup screen.
+		 */
 		if (getWarzoneKeyNumeric("maxPlayers", &val))
 		{
+			sstrcpy(game.map, sBuf);
 			game.maxPlayers = val;
 		}
 		else
@@ -464,7 +468,6 @@ BOOL loadConfig(void)
 			sstrcpy(game.map, DEFAULTMAPNAME);
 			setWarzoneKeyString("mapName", game.map);
 			setWarzoneKeyNumeric("maxPlayers",game.maxPlayers);
-
 		}
 	}
 	else
