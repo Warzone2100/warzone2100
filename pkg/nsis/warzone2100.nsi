@@ -218,20 +218,6 @@ SectionEnd
 
 SectionGroup /e $(TEXT_SecMods) secMods
 
-Section $(TEXT_SecGrimMod) SecGrimMod
-
-  SetOutPath "$INSTDIR\mods\global"
-
-  File "..\..\data\mods\global\grim.wz"
-
-  SetOutPath "$INSTDIR"
-
-  !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
-    CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\${PACKAGE_NAME} - Grim's GFX.lnk" "$INSTDIR\${PACKAGE}.exe" "--mod grim.wz"
-  !insertmacro MUI_STARTMENU_WRITE_END
-
-SectionEnd
-
 Section $(TEXT_SecAivolutionMod) SecAivolutionMod
 
   SetOutPath "$INSTDIR\mods\global"
@@ -368,9 +354,6 @@ FunctionEnd
   LangString TEXT_SecMods ${LANG_ENGLISH} "Mods"
   LangString DESC_SecMods ${LANG_ENGLISH} "Various mods."
 
-  LangString TEXT_SecGrimMod ${LANG_ENGLISH} "Grim's graphics-update"
-  LangString DESC_SecGrimMod ${LANG_ENGLISH} "Grim's graphics-update. Contains more detailed textures for campaign 1 as well as additional texture- and model-updates. Copyright (C) 2005-2007 Grim Moroe, Use is only permited for ${PACKAGE_NAME}."
-
   LangString TEXT_SecAivolutionMod ${LANG_ENGLISH} "Aivolution"
   LangString DESC_SecAivolutionMod ${LANG_ENGLISH} "Improved artificial intelligence that learns."
 
@@ -394,9 +377,6 @@ FunctionEnd
   LangString TEXT_SecMods ${LANG_DUTCH} "Mods"
   LangString DESC_SecMods ${LANG_DUTCH} "Verschillende mods."
 
-  LangString TEXT_SecGrimMod ${LANG_DUTCH} "Grim's grafische-update"
-  LangString DESC_SecGrimMod ${LANG_DUTCH} "Grim's grafische-update. Bevat meer gedetaïleerde textures voor campaign 1 en extra texture- en model-updates. Copyright (C) 2005-2007 Grim Moroe, gebruik is alleen toegestaan voor ${PACKAGE_NAME}."
-
   LangString TEXT_SecAivolutionMod ${LANG_DUTCH} "Aivolution"
   LangString DESC_SecAivolutionMod ${LANG_DUTCH} "Verbeterde kunstmatige intelligentie die leert."
 
@@ -419,9 +399,6 @@ FunctionEnd
 
   LangString TEXT_SecMods ${LANG_GERMAN} "Mods"
   LangString DESC_SecMods ${LANG_GERMAN} "Verschiedene Mods."
-
-  LangString TEXT_SecGrimMod ${LANG_GERMAN} "Grims Grafik-Update"
-  LangString DESC_SecGrimMod ${LANG_GERMAN} "Grims Grafik-Update. Enthält detailliertere Texturen für Kampagne 1 sowie einige andere Textur- und Model-Updates. Copyright (C) 2005-2007 Grim Moroe, Verwendung nur für ${PACKAGE_NAME} gestattet."
 
   LangString TEXT_SecAivolutionMod ${LANG_GERMAN} "Aivolution"
   LangString DESC_SecAivolutionMod ${LANG_GERMAN} "Verbesserte künstliche Intelligenz, die dazulernt."
@@ -454,7 +431,6 @@ FunctionEnd
     !insertmacro MUI_DESCRIPTION_TEXT ${SecOpenAL} $(DESC_SecOpenAL)
 
     !insertmacro MUI_DESCRIPTION_TEXT ${SecMods} $(DESC_SecMods)
-    !insertmacro MUI_DESCRIPTION_TEXT ${SecGrimMod} $(DESC_SecGrimMod)
     !insertmacro MUI_DESCRIPTION_TEXT ${SecAivolutionMod} $(DESC_SecAivolutionMod)
     !insertmacro MUI_DESCRIPTION_TEXT ${SecMusicMod} $(DESC_SecMusicMod)
     !insertmacro MUI_DESCRIPTION_TEXT ${SecNTWMod} $(DESC_SecNTWMod)
@@ -511,7 +487,6 @@ Section "Uninstall"
   RMDir "$INSTDIR\mods\global\autoload"
 
   Delete "$INSTDIR\mods\global\aivolution.wz"
-  Delete "$INSTDIR\mods\global\grim.wz"
   RMDir "$INSTDIR\mods\global"
 
   Delete "$INSTDIR\mods\multiplay\ntw.wz"
@@ -603,7 +578,6 @@ Section "Uninstall"
 
   Delete "$SMPROGRAMS\$STARTMENU_FOLDER\Uninstall.lnk"
   Delete "$SMPROGRAMS\$STARTMENU_FOLDER\${PACKAGE_NAME}.lnk"
-  Delete "$SMPROGRAMS\$STARTMENU_FOLDER\${PACKAGE_NAME} - Grim's GFX.lnk"
   Delete "$SMPROGRAMS\$STARTMENU_FOLDER\${PACKAGE_NAME} - Aivolution.lnk"
   Delete "$SMPROGRAMS\$STARTMENU_FOLDER\${PACKAGE_NAME} - NTW.lnk"
   RMDir "$SMPROGRAMS\$STARTMENU_FOLDER"
