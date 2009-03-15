@@ -124,6 +124,7 @@ noinst_HEADERS = \
 	miscimd.h \
 	missiondef.h \
 	mission.h \
+	modding.h \
 	movedef.h \
 	move.h \
 	multigifts.h \
@@ -160,9 +161,13 @@ noinst_HEADERS = \
 	scriptvals_parser.tab.h \
 	selection.h \
 	seqdisp.h \
+	stats-db2.c \
 	stats-db2.h \
 	statsdef.h \
 	stats.h \
+	stats-db.c \
+	stats-db.h \
+	stringdef.h \
 	structuredef.h \
 	structure.h \
 	target.h \
