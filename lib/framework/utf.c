@@ -54,7 +54,7 @@
 
 utf_32_char UTF8DecodeChar(const char *utf8_char, const char **next_char)
 {
-	utf_32_char decoded;
+	utf_32_char decoded = '\0';
 	*next_char = utf8_char;
 
 	ASSERT_START_OCTECT(*utf8_char);
