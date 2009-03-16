@@ -35,6 +35,7 @@
 #include "lib/netplay/netplay.h"
 #include "lib/sound/audio.h"
 #include "lib/sound/audio_id.h"
+#include "console.h"
 
 #include "move.h"
 
@@ -304,7 +305,7 @@ void moveUpdateBaseSpeed(void)
 }
 
 /** Set a target location in world coordinates for a droid to move to
- *  @return true if the routing was succesful, if false then the calling code
+ *  @return true if the routing was successful, if false then the calling code
  *          should not try to route here again for a while
  *  @todo Document what "should not try to route here again for a while" means.
  */
@@ -767,7 +768,7 @@ static void moveCalcTurn(float *pCurr, float target, UDWORD rate)
 	ASSERT( target <= 360.0f && target >= 0.0f,
 			 "moveCalcTurn: target out of range %f", target );
 	ASSERT( retval <= 360.0f && retval >= 0.0f,
-			 "moveCalcTurn: cur ang out of range %f", retval );
+			 "moveCalcTurn: current angle out of range %f", retval );
 
 	// calculate the difference in the angles
 	diff = target - retval;
@@ -1788,8 +1789,7 @@ static void moveCalcBoundary(DROID *psDroid)
 		psDroid->sMove.boundY = -sumX;
 	}
 
-	debug( LOG_NEVER, "new boundary: droid %d boundary (%d,%d)\n",
-			psDroid->id, psDroid->sMove.boundX, psDroid->sMove.boundY);
+	objTrace(psDroid->id, "new boundary: droid boundary (%d, %d)", psDroid->sMove.boundX, psDroid->sMove.boundY);
 }
 
 
@@ -1807,18 +1807,8 @@ static BOOL moveReachedWayPoint(DROID *psDroid)
 		(psDroid->sMove.psFormation &&
 		 formationMember(psDroid->sMove.psFormation, psDroid)) ||
 		 (isVtolDroid(psDroid) && (psDroid->sMove.numPoints == psDroid->sMove.Position)) )
-//							 && (psDroid->action != DACTION_VTOLATTACK)) )
 	{
-		if ( psDroid->droidType == DROID_TRANSPORTER )
-		{
-
-			iRange = TILE_UNITS/4;
-
-		}
-		else
-		{
-			iRange = TILE_UNITS/4;
-		}
+		iRange = TILE_UNITS / 4;
 
 		if (droidX*droidX + droidY*droidY < iRange*iRange)
 		{
@@ -2158,7 +2148,7 @@ static void moveUpdateDroidPos( DROID *psDroid, float dx, float dy )
 
 	CHECK_DROID(psDroid);
 
-	if (psDroid->sMove.Status == MOVEPAUSE)
+	if (psDroid->sMove.Status == MOVEPAUSE || isDead((BASE_OBJECT *)psDroid))
 	{
 		// don't actually move if the move is paused
 		return;
@@ -2911,7 +2901,11 @@ static void checkLocalFeatures(DROID *psDroid)
 {
 	SDWORD			i;
 	BASE_OBJECT		*psObj;
+	static int oilTimer = 0;
+	static bool GenerateDrum = false;
+	static uint8_t drumCount = 0;
 
+	// NOTE: Why not do this for AI units also?
 	// only do for players droids.
 	if(psDroid->player != selectedPlayer)
 	{
@@ -2919,7 +2913,7 @@ static void checkLocalFeatures(DROID *psDroid)
 	}
 
 	droidGetNaybors(psDroid);// update naybor list.
-
+	ASSERT( numNaybors <= MAX_NAYBORS, "numNaybors is %d, out of range of %d!", numNaybors, MAX_NAYBORS);
 	// scan the neighbours
 	for(i=0; i<(SDWORD)numNaybors; i++)
 	{
@@ -2927,25 +2921,43 @@ static void checkLocalFeatures(DROID *psDroid)
 		psObj = asDroidNaybors[i].psObj;
 		if (   psObj->type != OBJ_FEATURE
 			|| ((FEATURE *)psObj)->psStats->subType != FEAT_OIL_DRUM
-			|| asDroidNaybors[i].distSqr >= DROIDDIST )
+			|| asDroidNaybors[i].distSqr >= DROIDDIST
+			|| isVtolDroid(psDroid))	// VTOLs can't pick up features!
 		{
 			// object too far away to worry about
 			continue;
 		}
 
-
 		if(bMultiPlayer && (psObj->player == ANYPLAYER))
 		{
 			giftPower(ANYPLAYER,selectedPlayer,true);			// give power and tell everyone.
-			addOilDrum(1);
+			// when player finds oil, we init the timer, and flag that we need a drum
+			if (!oilTimer)
+			{
+				oilTimer = gameTime2;
+				GenerateDrum = true;
+			}
+			// if player finds more than one drum (before timer expires), then we tack on ~50 sec to timer.
+			if(drumCount++)
+			{
+				oilTimer += GAME_TICKS_PER_SEC * 50;
+			}
 		}
 		else
-
 		{
 			addPower(selectedPlayer,OILDRUM_POWER);
+			CONPRINTF(ConsoleString,(ConsoleString,_("You found %u power in an oil drum."),OILDRUM_POWER));
 		}
 		removeFeature((FEATURE*)psObj);							// remove artifact+ send multiplay info.
+	}
 
+	// once they found a oil drum, we then wait ~600 secs before we pop up new one(s).
+	if( ((oilTimer + GAME_TICKS_PER_SEC * 600) < gameTime2 ) && GenerateDrum )
+	{
+		addOilDrum(drumCount);
+		oilTimer = 0;
+		drumCount = 0;
+		GenerateDrum = false;
 	}
 }
 
@@ -3212,55 +3224,13 @@ void moveUpdateDroid(DROID *psDroid)
 		ASSERT(moveDir >= 0 && moveDir <= 360, "Illegal movement direction");
 		break;
 	case MOVEHOVER:
-		/* change vtols to attack run mode if target found - but not if no ammo*/
-		/*if ( psDroid->droidType != DROID_CYBORG && psDroid->psTarget != NULL &&
-			!vtolEmpty(psDroid))
+		if (moveDescending(psDroid, iZ) == false)
 		{
-			psDroid->sMove.Status = MOVEPOINTTOPOINT;
-			break;
-		}*/
-
-/*		moveGetDirection(psDroid, &tx,&ty);
-		tangle = vectorToAngle(tx,ty);
-		moveSpeed = moveCalcDroidSpeed(psDroid);
-		moveDir = tangle;*/
-
-		/* descend if no orders or actions or cyborg at target */
-/*		if ( (psDroid->droidType == DROID_CYBORG) ||
-			 ((psDroid->action == DACTION_NONE) && (psDroid->order == DORDER_NONE)) ||
-			 ((psDroid->action == DACTION_NONE) && (psDroid->order == DORDER_TRANSPORTIN)) ||
-			 ((psDroid->action == DACTION_NONE) && (psDroid->order == DORDER_GUARD)) ||
-			 (psDroid->action == DACTION_MOVE) || (psDroid->action == DACTION_WAITFORREARM) ||
-			 (psDroid->action == DACTION_WAITDURINGREARM)  || (psDroid->action == DACTION_FIRESUPPORT))*/
-		{
-			if ( moveDescending( psDroid, iZ ) == false )
-			{
-				/* reset move state */
-				psDroid->sMove.Status = MOVEINACTIVE;
-			}
-/*			else
-			{
-				UDWORD	landX, landY;
-
-				// see if the landing position is clear
-				landX = psDroid->pos.x;
-				landY = psDroid->pos.y;
-				actionVTOLLandingPos(psDroid, &landX,&landY);
-				if (map_coord(landX) != map_coord(psDroid->pos.x)
-				 && map_coord(landY) != map_coord(psDroid->pos.y))
-				{
-					moveDroidToDirect(psDroid, landX,landY);
-				}
-			}*/
+			/* reset move state */
+			psDroid->sMove.Status = MOVEINACTIVE;
 		}
-/*		else
-		{
-			moveAdjustVtolHeight( psDroid, iZ );
-		}*/
-
 		break;
-
-		// Driven around by the player.
+	// Driven around by the player.
 	case MOVEDRIVE:
 		driveSetDroidMove(psDroid);
 		moveSpeed = driveGetMoveSpeed();	//psDroid->sMove.speed;

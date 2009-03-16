@@ -8397,7 +8397,7 @@ function void buildInitialDefenses(bool _bForceBuild)	//returns TRUE if finished
 
 								//dbg("buildInitialDefenses() - started", me);
 
-								return;	/* this one successfull, try again next time */
+								return;	/* this one successful, try again next time */
 							}
 						}
 					}

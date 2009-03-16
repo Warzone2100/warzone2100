@@ -42,8 +42,6 @@
   ;Get installation folder from registry if available
   InstallDirRegKey HKLM "Software\Warzone 2100" ""
 
-  SetCompressor /FINAL /SOLID lzma
-
 ;--------------------------------
 ;Versioninfo
 

@@ -95,7 +95,16 @@ extern const char* getDroidActionName(DROID_ACTION action);
 /** This is how long a droid is disabled for when its been attacked by an EMP weapon. */
 #define EMP_DISABLE_TIME (10000)     // 10 secs
 
-/** Update the action state for a droid. */
+/**
+ * Update the action state for a droid.
+ *
+ * @todo FIXME: Bad design, "updating" the action state is too fuzzy a goal for
+ *              a function. As a result this beast is <em>way</em> too large.
+ *              The scope of this function should be significantly limited, or
+ *              implemented only as a series of subroutine calls with almost no
+ *              data manipulation in this function itself. In either case, this
+ *              function requires a major refactoring...
+ */
 extern void actionUpdateDroid(DROID *psDroid);
 
 /** Give a droid an action. */

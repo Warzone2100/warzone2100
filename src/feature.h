@@ -31,7 +31,7 @@ extern FEATURE_STATS	*asFeatureStats;
 extern UDWORD			numFeatureStats;
 
 //Value is stored for easy access to this feature in destroyDroid()/destroyStruct()
-extern UDWORD			oilResFeature;
+extern FEATURE_STATS* oilResFeature;
 
 /* Load the feature stats */
 extern BOOL loadFeatureStats(const char *pFeatureData, UDWORD bufferSize);

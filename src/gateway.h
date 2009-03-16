@@ -24,7 +24,11 @@
 #ifndef __INCLUDED_SRC_GATEWAY_H__
 #define __INCLUDED_SRC_GATEWAY_H__
 
-#include "gatewaydef.h"
+typedef struct _gateway
+{
+	UBYTE			x1,y1, x2,y2;
+	struct _gateway		*psNext;
+} GATEWAY;
 
 // the list of gateways on the current map
 extern GATEWAY		*psGateways;
@@ -40,9 +44,6 @@ BOOL gwNewGateway(SDWORD x1, SDWORD y1, SDWORD x2, SDWORD y2);
 
 // Release a gateway
 void gwFreeGateway(GATEWAY *psDel);
-
-// load a gateway list
-BOOL gwLoadGateways(char *pFileBuffer, UDWORD fileSize);
 
 // Get number of gateways.
 UDWORD gwNumGateways(void);

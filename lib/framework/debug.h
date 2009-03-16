@@ -135,8 +135,11 @@ typedef enum {
   LOG_SAVE,
   LOG_SYNC,
   LOG_DEATH,
+  LOG_LIFE,
   LOG_GATEWAY,
   LOG_MSG,
+  LOG_TERRAIN,
+  LOG_FEATURE,
   LOG_LAST /**< _must_ be last! */
 } code_part;
 

@@ -90,6 +90,7 @@
 #include "warzoneconfig.h"
 #include "main.h"
 #include "wrappers.h"
+#include "terrain.h"
 
 static void	initMiscVars(void);
 
@@ -814,6 +815,8 @@ BOOL stageOneShutDown(void)
 
 	//free up the gateway stuff?
 	gwShutDown();
+	
+	shutdownTerrain();
 
 	if (!mapShutdown())
 	{
@@ -1154,6 +1157,11 @@ BOOL campaignReset(void)
 	debug(LOG_MAIN, "campaignReset");
 	gwShutDown();
 	mapShutdown();
+	shutdownTerrain();
+	// when the terrain textures are reloaded we need to reset the radar
+	// otherwise it will end up as a terrain texture somehow
+	ShutdownRadar();
+	InitRadar();
 	return true;
 }
 

@@ -247,7 +247,7 @@ extern BOOL bucketRenderCurrentList(void)
 					renderAnimComponent((COMPONENT_OBJECT*)thisTag->pObject);
 				break;
 				case RENDER_DELIVPOINT:
-					renderDeliveryPoint((FLAG_POSITION*)thisTag->pObject);
+					renderDeliveryPoint((FLAG_POSITION*)thisTag->pObject, false);
 				break;
 			}
 			thisTag = thisTag->psNextTag;
@@ -276,7 +276,7 @@ static SDWORD bucketCalculateZ(RENDER_TYPE objectType, void* pObject)
 	BODY_STATS			*psBStats;
 	SIMPLE_OBJECT		*psSimpObj;
 	COMPONENT_OBJECT	*psCompObj;
-	iIMDShape			*pImd;
+	const iIMDShape		*pImd;
 
    	iV_MatrixBegin();
 
@@ -607,7 +607,7 @@ static SDWORD bucketCalculateZ(RENDER_TYPE objectType, void* pObject)
 static SDWORD bucketCalculateState(RENDER_TYPE objectType, void* pObject)
 {
 	SDWORD				z = 0;
-	iIMDShape*			pie;
+	const iIMDShape*	pie;
 
 	if (bucketCalculateZ(objectType,pObject) < 0)
 	{

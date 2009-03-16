@@ -83,7 +83,13 @@ void war_SetDefaultStates(void)//Sets all states
 	war_SetFog(false);
 	war_setSoundEnabled( true );
 	war_SetPauseOnFocusLoss(true);
+#ifdef WZ_OS_MAC
+	war_SetColouredCursor(true); // Mac OS X doesn't support uncolored cursors
+#else
+	// Colored cursors aren't enabled by default for other OSes
+	// because they carry a performance penalty
 	war_SetColouredCursor(false);
+#endif
 	war_SetMusicEnabled(true);
 }
 

@@ -28,8 +28,8 @@
  * empty, or populated with non-textual data NULL is returned. The character set
  * of the returned is guaranteed to be UTF-8.
  *
- * It remains the responsibility of the caller to free() the string when finished
- * with it.
+ * It remains the responsibility of the caller to free() the string when
+ * finished with it.
  *
  * @return The textual contents of the clipboard (if any), otherwise NULL.
  */

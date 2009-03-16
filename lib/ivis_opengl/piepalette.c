@@ -97,6 +97,9 @@ void pal_Init(void)
 	WZCOL_MENU_SHADOW = WZCOL_BLACK;
 	WZCOL_DBLUE = pal_Colour(0x0f,0x08,0x56);
 	WZCOL_LBLUE = pal_Colour(0x1c,0x9f,0xfb);
+	WZCOL_BLUEPRINT_VALID = pal_Colour(80,255,120);
+	WZCOL_BLUEPRINT_INVALID = pal_Colour(255,80,80);
+	WZCOL_BLUEPRINT_PLANNED = pal_Colour(50,160,75);
 }
 
 void pal_ShutDown(void)

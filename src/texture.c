@@ -49,6 +49,7 @@
 #include "display3ddef.h"
 #include "texture.h"
 #include "radar.h"
+#include "map.h"
 
 
 #define MIPMAP_LEVELS		4
@@ -61,7 +62,8 @@ TILE_TEX_INFO tileTexInfo[MAX_TILES];
 
 static int firstPage; // the last used page before we start adding terrain textures
 int terrainPage; // texture ID of the terrain page
-static int mipmap_max, mipmap_levels, mipmap_user_requested = MIPMAP_NORMAL;
+static int mipmap_max, mipmap_levels;
+static int maxTextureSize = 256; ///< the maximum size texture we will create
 
 void setTextureSize(int texSize)
 {
@@ -70,13 +72,13 @@ void setTextureSize(int texSize)
 		debug(LOG_ERROR, "Attempted to set bad texture size %d! Ignored.", texSize);
 		return;
 	}
-	mipmap_user_requested = texSize;
-	debug(LOG_3D, "texture size set to %d", texSize);
+	maxTextureSize = texSize;
+	debug(LOG_TEXTURE, "texture size set to %d", texSize);
 }
 
 int getTextureSize()
 {
-	return mipmap_user_requested;
+	return maxTextureSize;
 }
 
 // Generate a new texture page both in the texture page table, and on the graphics card
@@ -137,6 +139,10 @@ void texLoad(const char *fileName)
 
 	ASSERT(_TEX_INDEX < iV_TEX_MAX, "Too many texture pages used");
 	ASSERT(MIPMAP_MAX == TILE_WIDTH && MIPMAP_MAX == TILE_HEIGHT, "Bad tile sizes");
+	
+	// store the filename so we can later determine which tileset we are using
+	if (tileset) free(tileset);
+	tileset = strdup(fileName);
 
 	// reset defaults
 	mipmap_max = MIPMAP_MAX;
@@ -157,13 +163,12 @@ void texLoad(const char *fileName)
 			exit(1);
 		}
 	}
-	while (mipmap_user_requested < mipmap_max)
+	while (maxTextureSize < mipmap_max)
 	{
 		mipmap_max /= 2;
 		mipmap_levels--;
-		debug(LOG_3D, "Downgrading texture quality to %d due to user setting %d", mipmap_max, mipmap_user_requested);
+		debug(LOG_TEXTURE, "Downgrading texture quality to %d due to user setting %d", mipmap_max, maxTextureSize);
 	}
-	mipmap_user_requested = mipmap_max; // reduce to lowest possible
 
 	/* Get and set radar colours */
 

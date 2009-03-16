@@ -59,7 +59,7 @@ FEATURE_STATS	*asFeatureStats;
 UDWORD			numFeatureStats;
 
 //Value is stored for easy access to this feature in destroyDroid()/destroyStruct()
-UDWORD			oilResFeature;
+FEATURE_STATS* oilResFeature = NULL;
 
 /* other house droid to add */
 #define DROID_TEMPLINDEX	0
@@ -98,13 +98,13 @@ void featureInitVars(void)
 {
 	asFeatureStats = NULL;
 	numFeatureStats = 0;
-	oilResFeature = 0;
+	oilResFeature = NULL;
 }
 
 static void featureType(FEATURE_STATS* psFeature, const char *pType)
 {
 	unsigned int i;
-	
+
 	for (i = 0; i < ARRAY_SIZE(map); i++)
 	{
 		if (strcmp(pType, map[i].typeStr) == 0)
@@ -177,7 +177,7 @@ BOOL loadFeatureStats(const char *pFeatureData, UDWORD bufferSize)
 		//and the oil resource - assumes only one!
 		if (psFeature->subType == FEAT_OIL_RESOURCE)
 		{
-			oilResFeature = i;
+			oilResFeature = psFeature;
 		}
 
 		//get the IMD for the feature
@@ -254,6 +254,7 @@ FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,BOOL FromSave)
 	FEATURE* psFeature = createFeature();
 	if (psFeature == NULL)
 	{
+		debug(LOG_WARNING, "Feature couldn't be built.");
 		return NULL;
 	}
 	// features are not in the cluster system
@@ -398,7 +399,7 @@ FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,BOOL FromSave)
 					FEATURE *psBlock = (FEATURE *)psTile->psObject;
 
 					debug(LOG_ERROR, "%s(%d) already placed at (%d+%d, %d+%d) when trying to place %s(%d) at (%d+%d, %d+%d) - removing it",
-					      getName(psBlock->psStats->pName), psBlock->id, map_coord(psBlock->pos.x), psBlock->psStats->baseWidth, map_coord(psBlock->pos.y), 
+					      getName(psBlock->psStats->pName), psBlock->id, map_coord(psBlock->pos.x), psBlock->psStats->baseWidth, map_coord(psBlock->pos.y),
 					      psBlock->psStats->baseBreadth, getName(psFeature->psStats->pName), psFeature->id, mapX, psStats->baseWidth, mapY, psStats->baseBreadth);
 
 					removeFeature(psBlock);
@@ -600,7 +601,7 @@ void destroyFeature(FEATURE *psDel)
 			pos.z = psDel->pos.y;
 			pos.y = psDel->pos.z;
 			addEffect(&pos,EFFECT_DESTRUCTION,DESTRUCTION_TYPE_SKYSCRAPER,true,psDel->sDisplay.imd,0);
-			initPerimeterSmoke(psDel->sDisplay.imd,pos.x,pos.y,pos.z);
+			initPerimeterSmoke(psDel->sDisplay.imd, pos);
 
 			// ----- Flip all the tiles under the skyscraper to a rubble tile
 			// smoke effect should disguise this happening

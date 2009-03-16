@@ -63,19 +63,10 @@ typedef struct _map_save_header
 	UDWORD		height;
 } MAP_SAVEHEADER;
 
-
-#define SAVE_MAP_V2 \
-	UWORD		texture; \
-	UBYTE		height
-
 typedef struct _map_save_tilev2
 {
-	SAVE_MAP_V2;
-} MAP_SAVETILEV2;
-
-typedef struct _map_save_tile
-{
-	SAVE_MAP_V2;
+	UWORD		texture;
+	UBYTE		height;
 } MAP_SAVETILE;
 
 typedef struct _gateway_save_header
@@ -88,11 +79,6 @@ typedef struct _gateway_save
 {
 	UBYTE	x0,y0,x1,y1;
 } GATEWAY_SAVE;
-
-typedef struct _zonemap_save_header_v1 {
-	UWORD version;
-	UWORD numZones;
-} ZONEMAP_SAVEHEADER_V1;
 
 typedef struct _zonemap_save_header {
 	UWORD version;
@@ -113,13 +99,18 @@ typedef struct _zonemap_save_header {
 /* Number of entries in the sqrt(1/(1+x*x)) table for aaLine */
 #define	ROOT_TABLE_SIZE		1024
 
-/* aaLine direction bits and tables */
-#define DIR_STEEP			1  /* set when abs(dy) > abs(dx) */
-#define DIR_NEGY			2  /* set whey dy < 0 */
-
 /* The size and contents of the map */
 UDWORD	mapWidth = 0, mapHeight = 0;
 MAPTILE	*psMapTiles = NULL;
+
+#define WATER_DEPTH	180
+
+/// The different ground types
+GROUND_TYPE *psGroundTypes;
+int numGroundTypes;
+int waterGroundType;
+int cliffGroundType;
+char *tileset = NULL;
 
 /* Look up table that returns the terrain type of a given tile texture */
 UBYTE terrainTypes[MAX_TILE_TEXTURES];
@@ -144,6 +135,8 @@ BOOL mapNew(UDWORD width, UDWORD height)
 		free(psMapTiles);
 		psMapTiles = NULL;
 		initStructLimits();
+		
+		free(psGroundTypes);
 	}
 
 	if (width*height > MAP_MAXAREA)
@@ -189,97 +182,683 @@ BOOL mapNew(UDWORD width, UDWORD height)
 	return true;
 }
 
-/* load the map data - for version 3 */
-static BOOL mapLoadV3(char *pFileData, UDWORD fileSize)
+// arizona
+enum {
+	a_red = 0,
+	a_cliff,
+	a_yellow,
+	a_concrete,
+	a_mud,
+	a_green,
+	a_water,
+};
+
+// urban
+enum
 {
-	UDWORD				i,j;
-	MAP_SAVETILEV2		*psTileData;
-	GATEWAY_SAVEHEADER	*psGateHeader;
-	GATEWAY_SAVE		*psGate;
+	u_blue,
+	u_gray,
+	u_stone,
+	u_dark,
+	u_water,
+	u_brown,
+	u_cliff,
+	u_green,
+};
 
-	/* Load in the map data */
-	psTileData = (MAP_SAVETILEV2 *)(pFileData + SAVE_HEADER_SIZE);
-	for(i=0; i< mapWidth * mapHeight; i++)
+enum
+{
+	r_grass,
+	r_rock,
+	r_cliff,
+	r_snowrock,
+	r_brown,
+	r_water,
+	r_snowgrass,
+	r_tiles,
+	r_snow,
+};
+
+static BOOL mapLoadGroundTypes(void)
+{
+	debug(LOG_TERRAIN, "tileset: %s", tileset);
+	// FIXME: Read these from a config file
+	if (strcmp(tileset, "texpages/tertilesc1hw") == 0)
 	{
-		/* MAP_SAVETILEV2 */
-		endian_uword(&psTileData->texture);
-
-		psMapTiles[i].texture = psTileData->texture;
-		psMapTiles[i].height = psTileData->height;
-		for (j=0; j<MAX_PLAYERS; j++)
-		{
-			psMapTiles[i].tileVisBits =(UBYTE)(( (psMapTiles[i].tileVisBits) &~ (UBYTE)(1<<j) ));
-		}
-		psTileData = (MAP_SAVETILEV2 *)(((UBYTE *)psTileData) + SAVE_TILE_SIZE);
+		numGroundTypes = 7;
+		psGroundTypes = malloc(sizeof(GROUND_TYPE)*numGroundTypes);
+		
+		psGroundTypes[a_yellow].textureName = "page-45";
+		psGroundTypes[a_yellow].textureSize = 4.6;
+		psGroundTypes[a_red].textureName = "page-44";
+		psGroundTypes[a_red].textureSize = 6.2;
+		psGroundTypes[a_concrete].textureName = "page-47";
+		psGroundTypes[a_concrete].textureSize = 3.2;
+		psGroundTypes[a_cliff].textureName = "page-46";
+		psGroundTypes[a_cliff].textureSize = 5.8;
+		psGroundTypes[a_water].textureName = "page-42";
+		psGroundTypes[a_water].textureSize = 7.3;
+		
+		psGroundTypes[a_mud] = psGroundTypes[a_red];
+		psGroundTypes[a_green] = psGroundTypes[a_red];
+		
+		waterGroundType = a_water;
+		cliffGroundType = a_cliff;
 	}
+	else if (strcmp(tileset, "texpages/tertilesc2hw") == 0)
+	{
+		numGroundTypes = 8;
+		psGroundTypes = malloc(sizeof(GROUND_TYPE)*numGroundTypes);
 
-	psGateHeader = (GATEWAY_SAVEHEADER*)psTileData;
-	psGate = (GATEWAY_SAVE*)(psGateHeader+1);
+		psGroundTypes[u_gray].textureName = "page-51"; // rubble
+		psGroundTypes[u_gray].textureSize = 3.9;
+		psGroundTypes[u_green].textureName = "page-52"; // close plants
+		psGroundTypes[u_green].textureSize = 2.6;
+		psGroundTypes[u_stone].textureName = "page-47"; // pavement
+		psGroundTypes[u_stone].textureSize = 3.2;
+		psGroundTypes[u_cliff].textureName = "page-49"; // crater walls
+		psGroundTypes[u_cliff].textureSize = 4.7;
+		psGroundTypes[u_brown].textureName = "page-49"; // rocks
+		psGroundTypes[u_brown].textureSize = 4.7;
 
-	/* GATEWAY_SAVEHEADER */
-	endian_udword(&psGateHeader->version);
-	endian_udword(&psGateHeader->numGateways);
-
-	ASSERT( psGateHeader->version == 1,"Invalid gateway version" );
-
-	for(i=0; i<psGateHeader->numGateways; i++) {
-		if (!gwNewGateway(psGate->x0,psGate->y0, psGate->x1,psGate->y1)) {
-			debug( LOG_ERROR, "mapLoadV3: Unable to add gateway" );
-			abort();
-			return false;
-		}
-		psGate++;
+		psGroundTypes[u_blue] = psGroundTypes[u_brown]; // burned ground
+		psGroundTypes[u_dark] = psGroundTypes[u_stone];
+		psGroundTypes[u_water] = psGroundTypes[u_cliff];
+		
+		waterGroundType = u_water;
+		cliffGroundType = u_cliff;
 	}
+	else if (strcmp(tileset, "texpages/tertilesc3hw") == 0)
+	{
+		numGroundTypes = 9;
+		psGroundTypes = malloc(sizeof(GROUND_TYPE)*numGroundTypes);
 
+		psGroundTypes[r_grass].textureName = "page-55";
+		psGroundTypes[r_grass].textureSize = 4.6;
+		psGroundTypes[r_rock].textureName = "page-56";
+		psGroundTypes[r_rock].textureSize = 3.9;
+		psGroundTypes[r_cliff].textureName = "page-46";
+		psGroundTypes[r_cliff].textureSize = 5.8;
+		psGroundTypes[r_water].textureName = "page-49";
+		psGroundTypes[r_water].textureSize = 5.8;
+		psGroundTypes[r_tiles].textureName = "page-47";
+		psGroundTypes[r_tiles].textureSize = 3.2;
+		psGroundTypes[r_snowgrass].textureName = "page-54";
+		psGroundTypes[r_snowgrass].textureSize = 2.1;
+		psGroundTypes[r_snow].textureName = "page-57";
+		psGroundTypes[r_snow].textureSize = 10.2;
+		psGroundTypes[r_snowrock].textureName = "page-58";
+		psGroundTypes[r_snowrock].textureSize = psGroundTypes[r_rock].textureSize;
+		
+		psGroundTypes[r_brown] = psGroundTypes[r_water];
+
+		waterGroundType = r_water;
+		cliffGroundType = r_cliff;
+	}
+	else
+	{
+		debug(LOG_ERROR, "unsupported tileset: %s", tileset);
+		return false;
+	}
 	return true;
 }
 
+static int groundFromArizonaTile(int tile, int i, int j)
+{
+	const int map[][2][2] = {
+		{{a_yellow,a_yellow}, {a_yellow,a_yellow}},
+		{{a_yellow,a_yellow}, {a_yellow,a_yellow}},
+		{{a_yellow,a_mud}, {a_yellow,a_mud}},
+		{{a_mud,a_mud}, {a_mud,a_yellow}},
+		{{a_mud,a_yellow}, {a_yellow,a_yellow}},
+		{{a_mud,a_mud}, {a_mud,a_mud}},
+		{{a_mud,a_mud}, {a_mud,a_mud}},
+		{{a_mud,a_mud}, {a_mud,a_mud}},
+		{{a_mud,a_mud}, {a_mud,a_mud}},
+		{{a_yellow,a_yellow}, {a_yellow,a_yellow}},
+		{{a_yellow,a_yellow}, {a_yellow,a_yellow}},
+		{{a_yellow,a_yellow}, {a_yellow,a_yellow}},
+		{{a_yellow,a_yellow}, {a_yellow,a_yellow}},
+		{{a_water,a_yellow}, {a_yellow,a_yellow}},
+		{{a_water,a_water}, {a_yellow,a_yellow}},
+		{{a_yellow,a_water}, {a_yellow,a_yellow}},
+		{{a_water,a_water}, {a_yellow,a_water}},
+		{{a_water,a_water}, {a_water,a_water}},
+		{{a_cliff,a_cliff}, {a_cliff,a_cliff}},
+		{{a_concrete,a_concrete}, {a_concrete,a_red}},
+		{{a_concrete,a_red}, {a_red,a_red}},
+		{{a_concrete,a_red}, {a_concrete,a_red}},
+		{{a_concrete,a_concrete}, {a_concrete,a_concrete}},
+		{{a_green,a_green}, {a_green,a_green}},
+		{{a_green,a_mud}, {a_green,a_mud}},
+		{{a_green,a_green}, {a_green,a_mud}},
+		{{a_green,a_mud}, {a_mud,a_mud}},
+		{{a_yellow,a_red}, {a_yellow,a_red}},
+		{{a_yellow,a_yellow}, {a_yellow,a_red}},
+		{{a_yellow,a_red}, {a_red,a_red}},
+		{{a_water,a_water}, {a_red,a_green}},
+		{{a_green,a_green}, {a_water,a_water}},
+		{{a_green,a_green}, {a_green,a_water}},
+		{{a_green,a_water}, {a_water,a_water}},
+		{{a_red,a_mud}, {a_red,a_mud}},
+		{{a_red,a_red}, {a_red,a_mud}},
+		{{a_red,a_mud}, {a_mud,a_mud}},
+		{{a_red,a_red}, {a_red,a_red}},
+		{{a_yellow,a_mud}, {a_yellow,a_mud}},
+		{{a_mud,a_mud}, {a_mud,a_yellow}},
+		{{a_mud,a_yellow}, {a_yellow,a_yellow}},
+		{{a_red,a_red}, {a_red,a_yellow}},
+		{{a_red,a_yellow}, {a_yellow,a_yellow}},
+		{{a_red,a_yellow}, {a_red,a_yellow}},
+		{{a_red,a_red}, {a_red,a_red}},
+		{{a_cliff,a_cliff}, {a_red,a_cliff}},
+		{{a_cliff,a_cliff}, {a_cliff,a_cliff}},
+		{{a_red,a_red}, {a_red,a_red}},
+		{{a_red,a_red}, {a_red,a_red}},
+		{{a_red,a_red}, {a_red,a_red}},
+		{{a_red,a_red}, {a_red,a_red}},
+		{{a_red,a_red}, {a_red,a_red}},
+		{{a_red,a_red}, {a_red,a_red}},
+		{{a_red,a_red}, {a_red,a_red}},
+		{{a_red,a_red}, {a_red,a_red}},
+		{{a_yellow,a_yellow}, {a_yellow,a_yellow}},
+		{{a_red,a_red}, {a_red,a_red}},
+		{{a_red,a_red}, {a_red,a_red}},
+		{{a_mud,a_mud}, {a_mud,a_mud}},
+		{{a_red,a_red}, {a_red,a_red}},
+		{{a_red,a_red}, {a_red,a_red}},
+		{{a_red,a_red}, {a_red,a_red}},
+		{{a_green,a_green}, {a_green,a_green}},
+		{{a_yellow,a_yellow}, {a_yellow,a_yellow}},
+		{{a_yellow,a_yellow}, {a_yellow,a_yellow}},
+		{{a_yellow,a_yellow}, {a_yellow,a_yellow}},
+		{{a_yellow,a_yellow}, {a_yellow,a_yellow}},
+		{{a_red,a_red}, {a_red,a_red}},
+		{{a_red,a_red}, {a_red,a_red}},
+		{{a_red,a_red}, {a_red,a_red}},
+		{{a_red,a_red}, {a_red,a_red}},
+		{{a_cliff,a_cliff}, {a_cliff,a_cliff}},
+		{{a_red,a_red}, {a_red,a_red}},
+		{{a_red,a_red}, {a_red,a_red}},
+		{{a_red,a_red}, {a_red,a_red}},
+		{{a_cliff,a_cliff}, {a_cliff,a_red}},
+		{{a_red,a_red}, {a_red,a_red}},
+		{{a_concrete,a_concrete}, {a_concrete,a_concrete}},
+		};
+		
+	// look up
+	return map[TileNumber_tile(tile)][i][j];
+}
+
+
+static int groundFromUrbanTile(int tile, int i, int j)
+{
+	const int map[][2][2] = {
+		{{u_blue, u_blue}, {u_blue, u_blue}},
+		{{u_blue, u_blue}, {u_blue, u_blue}},
+		{{u_blue, u_blue}, {u_blue, u_blue}},
+		{{u_gray, u_blue}, {u_blue, u_blue}},
+		{{u_gray, u_gray}, {u_gray, u_blue}},
+		{{u_gray, u_gray}, {u_gray, u_gray}},
+		{{u_blue, u_gray}, {u_blue, u_gray}},
+		{{u_gray, u_gray}, {u_gray, u_gray}},
+		{{u_gray, u_gray}, {u_gray, u_gray}},
+		{{u_gray, u_stone}, {u_gray, u_stone}},
+		{{u_gray, u_stone}, {u_gray, u_gray}},
+		{{u_stone, u_stone}, {u_dark, u_stone}},
+		{{u_dark, u_stone}, {u_dark, u_stone}},
+		{{u_stone, u_water}, {u_stone, u_water}},
+		{{u_water, u_water}, {u_stone, u_stone}},
+		{{u_stone, u_water}, {u_stone, u_stone}},
+		{{u_water, u_water}, {u_stone, u_water}},
+		{{u_water, u_water}, {u_water, u_water}},
+		{{u_dark, u_dark}, {u_dark, u_dark}},
+		{{u_stone, u_stone}, {u_stone, u_stone}},
+		{{u_stone, u_stone}, {u_stone, u_stone}},
+		{{u_stone, u_stone}, {u_stone, u_stone}},
+		{{u_brown, u_brown}, {u_brown, u_brown}},
+		{{u_gray, u_water}, {u_gray, u_water}},
+		{{u_gray, u_gray}, {u_water, u_water}},
+		{{u_gray, u_water}, {u_water, u_water}},
+		{{u_gray, u_gray}, {u_gray, u_water}},
+		{{u_stone, u_gray}, {u_stone, u_gray}},
+		{{u_stone, u_stone}, {u_stone, u_stone}},
+		{{u_gray, u_stone}, {u_gray, u_gray}},
+		{{u_stone, u_stone}, {u_gray, u_stone}},
+		{{u_brown, u_brown}, {u_brown, u_brown}},
+		{{u_blue, u_blue}, {u_blue, u_blue}},
+		{{u_brown, u_blue}, {u_brown, u_blue}},
+		{{u_brown, u_brown}, {u_brown, u_blue}},
+		{{u_brown, u_blue}, {u_blue, u_blue}},
+		{{u_brown, u_brown}, {u_brown, u_brown}},
+		{{u_green, u_green}, {u_green, u_brown}},
+		{{u_green, u_brown}, {u_brown, u_brown}},
+		{{u_brown, u_green}, {u_brown, u_green}},
+		{{u_stone, u_stone}, {u_stone, u_stone}},
+		{{u_blue, u_blue}, {u_blue, u_blue}},
+		{{u_stone, u_stone}, {u_stone, u_stone}},
+		{{u_gray, u_gray}, {u_gray, u_gray}},
+		{{u_gray, u_gray}, {u_gray, u_gray}},
+		{{u_green, u_green}, {u_green, u_green}},
+		{{u_stone, u_stone}, {u_stone, u_stone}},
+		{{u_gray, u_gray}, {u_gray, u_gray}},
+		{{u_stone, u_stone}, {u_stone, u_stone}},
+		{{u_stone, u_stone}, {u_stone, u_stone}},
+		{{u_green, u_green}, {u_green, u_green}},
+		{{u_stone, u_stone}, {u_stone, u_stone}},
+		{{u_stone, u_stone}, {u_stone, u_stone}},
+		{{u_gray, u_gray}, {u_gray, u_gray}},
+		{{u_gray, u_gray}, {u_gray, u_gray}},
+		{{u_gray, u_gray}, {u_gray, u_gray}},
+		{{u_stone, u_stone}, {u_stone, u_stone}},
+		{{u_blue, u_blue}, {u_blue, u_blue}},
+		{{u_gray, u_gray}, {u_gray, u_gray}},
+		{{u_stone, u_stone}, {u_stone, u_stone}},
+		{{u_brown, u_gray}, {u_brown, u_gray}},
+		{{u_stone, u_stone}, {u_stone, u_stone}},
+		{{u_gray, u_gray}, {u_gray, u_gray}},
+		{{u_blue, u_blue}, {u_blue, u_blue}},
+		{{u_blue, u_blue}, {u_blue, u_blue}},
+		{{u_blue, u_blue}, {u_blue, u_blue}},
+		{{u_blue, u_blue}, {u_blue, u_blue}},
+		{{u_gray, u_gray}, {u_gray, u_gray}},
+		{{u_cliff, u_cliff}, {u_gray, u_cliff}},
+		{{u_cliff, u_cliff}, {u_cliff, u_cliff}},
+		{{u_cliff, u_cliff}, {u_cliff, u_cliff}},
+		{{u_brown, u_stone}, {u_brown, u_stone}},
+		{{u_gray, u_gray}, {u_gray, u_brown}},
+		{{u_gray, u_brown}, {u_brown, u_brown}},
+		{{u_stone, u_stone}, {u_stone, u_stone}},
+		{{u_brown, u_stone}, {u_stone, u_stone}},
+		{{u_brown, u_brown}, {u_brown, u_stone}},
+		{{u_gray, u_green}, {u_gray, u_green}},
+		{{u_gray, u_gray}, {u_gray, u_gray}},
+		{{u_green, u_gray}, {u_green, u_green}},
+		{{u_gray, u_gray}, {u_gray, u_gray}},
+		};
+		
+	// look up
+	return map[TileNumber_tile(tile)][i][j];
+}
+
+static int groundFromRockiesTile(int tile, int i, int j)
+{
+	const int map[][2][2] = {
+		{{r_grass, r_grass}, {r_grass, r_grass}},
+		{{r_grass, r_grass}, {r_grass, r_grass}},
+		{{r_rock, r_grass}, {r_rock, r_grass}},
+		{{r_rock, r_grass}, {r_grass, r_grass}},
+		{{r_rock, r_rock}, {r_rock, r_grass}},
+		{{r_rock, r_rock}, {r_rock, r_rock}},
+		{{r_rock, r_rock}, {r_rock, r_rock}},
+		{{r_rock, r_rock}, {r_rock, r_rock}},
+		{{r_rock, r_rock}, {r_rock, r_rock}},
+		{{r_cliff, r_cliff}, {r_cliff, r_snowrock}},
+		{{r_snowrock, r_snowrock}, {r_snowrock, r_snowrock}},
+		{{r_snowrock, r_rock}, {r_rock, r_rock}},
+		{{r_snowrock, r_snowrock}, {r_rock, r_rock}},
+		{{r_brown, r_brown}, {r_brown, r_brown}},
+		{{r_water, r_water}, {r_grass, r_grass}},
+		{{r_grass, r_water}, {r_grass, r_grass}},
+		{{r_water, r_water}, {r_grass, r_water}},
+		{{r_water, r_water}, {r_water, r_water}},
+		{{r_cliff, r_cliff}, {r_cliff, r_rock}},
+		{{r_tiles, r_brown}, {r_brown, r_brown}},
+		{{r_tiles, r_tiles}, {r_tiles, r_brown}},
+		{{r_tiles, r_brown}, {r_tiles, r_brown}},
+		{{r_tiles, r_tiles}, {r_tiles, r_tiles}},
+		{{r_snowgrass, r_snowgrass}, {r_snowgrass, r_snowgrass}},
+		{{r_snowgrass, r_snowgrass}, {r_snowgrass, r_grass}},
+		{{r_snowgrass, r_grass}, {r_grass, r_grass}},
+		{{r_snowgrass, r_snowgrass}, {r_grass, r_grass}},
+		{{r_brown, r_brown}, {r_brown, r_brown}},
+		{{r_brown, r_brown}, {r_brown, r_brown}},
+		{{r_cliff, r_cliff}, {r_cliff, r_cliff}},
+		{{r_cliff, r_cliff}, {r_cliff, r_cliff}},
+		{{r_rock, r_rock}, {r_water, r_water}},
+		{{r_rock, r_water}, {r_water, r_water}},
+		{{r_rock, r_rock}, {r_rock, r_water}},
+		{{r_grass, r_brown}, {r_grass, r_brown}},
+		{{r_grass, r_grass}, {r_grass, r_brown}},
+		{{r_grass, r_brown}, {r_brown, r_brown}},
+		{{r_brown, r_brown}, {r_brown, r_brown}},
+		{{r_brown, r_rock}, {r_brown, r_rock}},
+		{{r_brown, r_brown}, {r_brown, r_rock}},
+		{{r_brown, r_rock}, {r_rock, r_rock}},
+		{{r_snowrock, r_snowrock}, {r_snowrock, r_snowrock}},
+		{{r_cliff, r_cliff}, {r_rock, r_cliff}},
+		{{r_cliff, r_rock}, {r_rock, r_cliff}},
+		{{r_cliff, r_cliff}, {r_rock, r_cliff}},
+		{{r_cliff, r_cliff}, {r_rock, r_cliff}},
+		{{r_cliff, r_cliff}, {r_cliff, r_cliff}},
+		{{r_grass, r_grass}, {r_grass, r_grass}},
+		{{r_snowrock, r_snowrock}, {r_rock, r_rock}},
+		{{r_brown, r_brown}, {r_brown, r_brown}},
+		{{r_brown, r_brown}, {r_brown, r_brown}},
+		{{r_brown, r_brown}, {r_brown, r_brown}},
+		{{r_brown, r_brown}, {r_brown, r_brown}},
+		{{r_brown, r_brown}, {r_brown, r_brown}},
+		{{r_snow, r_snow}, {r_snow, r_rock}},
+		{{r_rock, r_rock}, {r_rock, r_rock}},
+		{{r_brown, r_brown}, {r_brown, r_brown}},
+		{{r_rock, r_rock}, {r_rock, r_rock}},
+		{{r_grass, r_grass}, {r_grass, r_grass}},
+		{{r_brown, r_brown}, {r_brown, r_brown}},
+		{{r_brown, r_brown}, {r_brown, r_brown}},
+		{{r_cliff, r_cliff}, {r_cliff, r_cliff}},
+		{{r_rock, r_rock}, {r_rock, r_rock}},
+		{{r_cliff, r_cliff}, {r_cliff, r_snow}},
+		{{r_snow, r_snow}, {r_snow, r_snow}},
+		{{r_snow, r_snow}, {r_snow, r_snowrock}},
+		{{r_snow, r_snowrock}, {r_snowrock, r_snowrock}},
+		{{r_snow, r_snow}, {r_snowrock, r_snowrock}},
+		{{r_cliff, r_cliff}, {r_cliff, r_snow}},
+		{{r_cliff, r_cliff}, {r_cliff, r_snow}},
+		{{r_snow, r_snow}, {r_snow, r_snow}},
+		{{r_cliff, r_cliff}, {r_cliff, r_snow}},
+		{{r_brown, r_brown}, {r_brown, r_brown}},
+		{{r_snowrock, r_snowrock}, {r_snowrock, r_snowrock}},
+		{{r_grass, r_grass}, {r_grass, r_grass}},
+		{{r_snowrock, r_snowrock}, {r_snowrock, r_snowrock}},
+		{{r_cliff, r_cliff}, {r_cliff, r_cliff}},
+		{{r_cliff, r_cliff}, {r_cliff, r_cliff}},
+		{{r_cliff, r_cliff}, {r_cliff, r_cliff}},
+		{{r_tiles, r_tiles}, {r_tiles, r_tiles}},
+		};
+		
+	// look up
+	return map[TileNumber_tile(tile)][i][j];
+}
+
+static void rotFlip(int tile, int *i, int *j)
+{
+	int texture = TileNumber_texture(tile);
+	int rot;
+	int map[2][2], invmap[4][2];
+
+	if (texture & TILE_XFLIP)
+	{
+		*i = 1 - *i;
+	}
+	if (texture & TILE_YFLIP)
+	{
+		*j = 1 - *j;
+	}
+
+	map[0][0] = 0; invmap[0][0] = 0; invmap[0][1] = 0;
+	map[1][0] = 1; invmap[1][0] = 1; invmap[1][1] = 0;
+	map[1][1] = 2; invmap[2][0] = 1; invmap[2][1] = 1;
+	map[0][1] = 3; invmap[3][0] = 0; invmap[3][1] = 1;
+	rot = map[*i][*j];
+	rot -= (texture & TILE_ROTMASK) >> TILE_ROTSHIFT;
+	while(rot < 0) rot += 4;
+	*i = invmap[rot][0];
+	*j = invmap[rot][1];
+}
+
+/// Tries to figure out what ground type a grid point is from the surrounding tiles
+static int determineGroundType(int x, int y, const char *tileset)
+{
+	int ground[2][2];
+	int votes[2][2];
+	int i,j, tile;
+	int a,b, best;
+	BOOL arizona, rockies, urban;
+	arizona = rockies = urban = false;
+	if (strcmp(tileset, "texpages/tertilesc1hw") == 0)
+	{
+		arizona = true;
+	} else if (strcmp(tileset, "texpages/tertilesc2hw") == 0)
+	{
+		urban = true;
+	} else if (strcmp(tileset, "texpages/tertilesc3hw") == 0)
+	{
+		rockies = true;
+	} else
+	{
+		debug(LOG_ERROR, "unknown tileset");
+		return 0;
+	}
+
+	
+	if (x <= 0 || y <= 0 || x >= mapWidth || y >= mapHeight)
+	{
+		return 0; // just return the first ground type
+	}
+	
+	// check what tiles surround this grid point
+	for(i=0;i<2;i++)
+	{
+		for(j=0;j<2;j++)
+		{
+			if (x+i-1 <= 0 || y+j-1 <= 0 || x+i-1 >= mapWidth || y+j-1 >= mapHeight)
+			{
+				tile = 0;
+			}
+			else
+			{
+				tile = mapTile(x+i-1, y+j-1)->texture;
+			}
+			a = i;
+			b = j;
+			rotFlip(tile, &a, &b);
+			if (arizona)
+			{
+				ground[i][j] = groundFromArizonaTile(tile, a, b);
+			}
+			if (urban)
+			{
+				ground[i][j] = groundFromUrbanTile(tile, a, b);
+			}
+			if (rockies)
+			{
+				ground[i][j] = groundFromRockiesTile(tile, a, b);
+			}
+			
+			votes[i][j] = 0;
+			
+			if ((ground[i][j] == u_cliff && urban) ||
+			    (ground[i][j] == a_cliff && arizona) ||
+			    (ground[i][j] == r_cliff && rockies))
+			{
+				// cliffs are so small they won't show up otherwise
+				return ground[i][j];
+			}
+		}
+	}
+	// now vote, because some maps have seams
+	for(i=0;i<2;i++)
+	{
+		for(j=0;j<2;j++)
+		{
+			for(a=0;a<2;a++)
+			{
+				for(b=0;b<2;b++)
+				{
+					if (ground[i][j] == ground[a][b])
+					{
+						votes[i][j]++;
+					}
+				}
+			}
+		}
+	}
+	// and determine the winner
+	best = -1;
+	for(i=0;i<2;i++)
+	{
+		for(j=0;j<2;j++)
+		{
+			if (votes[i][j] > best)
+			{
+				best = votes[i][j];
+				a = i;
+				b = j;
+			}
+		}
+	}
+	return ground[a][b];
+}
+
+static BOOL hasArizonaDecal(UDWORD i, UDWORD j)
+{
+	switch ( TileNumber_tile(mapTile(i, j)->texture))
+	{
+		case 37:
+		case 47:
+		case 49:
+		case 50:
+		case 51:
+		case 52:
+		case 55:
+		case 56:
+		case 57:
+		case 58:
+		case 59:
+		case 60:
+		case 61:
+		case 62:
+		case 63:
+		case 64:
+		case 65:
+		case 66:
+		case 67:
+		case 68:
+		case 69:
+		case 70:
+		case 72:
+		case 73:
+			return true;
+		default:
+			return false;
+	}
+}
+
+static BOOL hasUrbanDecal(UDWORD i, UDWORD j)
+{
+	switch ( TileNumber_tile(mapTile(i, j)->texture))
+	{
+		case 11:
+		case 12:
+		case 28:
+		case 32:
+		case 40:
+		case 41:
+		case 42:
+		case 43:
+		case 44:
+		case 45:
+		case 46:
+		case 47:
+		case 48:
+		case 49:
+		case 52:
+		case 53:
+		case 54:
+		case 55:
+		case 56:
+		case 57:
+		case 59:
+		case 61:
+		case 62:
+		case 63:
+		case 64:
+		case 65:
+		case 66:
+		case 67:
+		case 80:
+			return true;
+		default:
+			return false;
+	}
+}
+
+static BOOL hasRockiesDecal(UDWORD i, UDWORD j)
+{
+	switch ( TileNumber_tile(mapTile(i, j)->texture))
+	{
+		case 13:
+		case 37:
+		case 49:
+		case 50:
+		case 51:
+		case 52:
+		case 56:
+		case 58:
+		case 59:
+		case 60:
+		case 62:
+		case 72:
+		case 79:
+			return true;
+		default:
+			return false;
+	}
+}
+
+static BOOL mapSetGroundTypes(void)
+{
+	int i,j;
+	for (i=0;i<mapWidth;i++)
+	{
+		for (j=0;j<mapHeight;j++)
+		{
+			mapTile(i,j)->ground = determineGroundType(i,j,tileset);
+			mapTile(i,j)->decal = false;
+			if (strcmp(tileset, "texpages/tertilesc1hw") == 0)
+			{
+				mapTile(i,j)->decal = hasArizonaDecal(i,j);
+			} else if (strcmp(tileset, "texpages/tertilesc2hw") == 0)
+			{
+				mapTile(i,j)->decal = hasUrbanDecal(i,j);
+			} else if (strcmp(tileset, "texpages/tertilesc3hw") == 0)
+			{
+				mapTile(i,j)->decal = hasRockiesDecal(i,j);
+			}
+		}
+	}
+	return true;
+}
 
 /* Initialise the map structure */
-BOOL mapLoad(char *pFileData, UDWORD fileSize)
+BOOL mapLoad(char *filename)
 {
-	UDWORD				width,height;
-	MAP_SAVEHEADER		*psHeader;
+	UDWORD		numGw, width, height;
+	char		aFileType[4];
+	UDWORD		version;
+	UDWORD		i, j;
+	PHYSFS_file	*fp = PHYSFS_openRead(filename);
 
-	/* Check the file type */
-	psHeader = (MAP_SAVEHEADER *)pFileData;
-	if (psHeader->aFileType[0] != 'm' || psHeader->aFileType[1] != 'a' ||
-		psHeader->aFileType[2] != 'p' || psHeader->aFileType[3] != ' ')
+	if (!fp)
 	{
-		debug( LOG_ERROR, "mapLoad: Incorrect file type" );
-		abort();
-		free(pFileData);
+		debug(LOG_ERROR, "%s not found", filename);
 		return false;
 	}
-
-	/* MAP_SAVEHEADER */
-	endian_udword(&psHeader->version);
-	endian_udword(&psHeader->width);
-	endian_udword(&psHeader->height);
-
-	/* Check the file version */
-	if (psHeader->version <= VERSION_9)
+	else if (PHYSFS_read(fp, aFileType, 4, 1) != 1
+	    || !PHYSFS_readULE32(fp, &version)
+	    || !PHYSFS_readULE32(fp, &width)
+	    || !PHYSFS_readULE32(fp, &height)
+	    || aFileType[0] != 'm'
+	    || aFileType[1] != 'a'
+	    || aFileType[2] != 'p')
 	{
-		ASSERT(false, "MapLoad: unsupported save format version %d", psHeader->version);
-		free(pFileData);
-		return false;
+		debug(LOG_ERROR, "Bad header in %s", filename);
+		goto failure;
 	}
-	else if (psHeader->version > CURRENT_VERSION_NUM)
+	else if (version <= VERSION_9)
 	{
-		ASSERT(false, "MapLoad: undefined save format version %d", psHeader->version);
-		free(pFileData);
-		return false;
+		debug(LOG_ERROR, "%s: Unsupported save format version %u", filename, version);
+		goto failure;
 	}
-
-	/* Get the width and height */
-	width = psHeader->width;
-	height = psHeader->height;
-
-	if (width*height > MAP_MAXAREA)
+	else if (version > CURRENT_VERSION_NUM)
 	{
-		debug( LOG_ERROR, "mapLoad: map too large : %d %d\n", width, height );
-		abort();
-		return false;
+		debug(LOG_ERROR, "%s: Undefined save format version %u", filename, version);
+		goto failure;
+	}
+	else if (width * height > MAP_MAXAREA)
+	{
+		debug(LOG_ERROR, "Map %s too large : %d %d", filename, width, height);
+		goto failure;
 	}
 
 	/* See if this is the first time a map has been loaded */
@@ -287,22 +866,104 @@ BOOL mapLoad(char *pFileData, UDWORD fileSize)
 
 	/* Allocate the memory for the map */
 	psMapTiles = calloc(width * height, sizeof(MAPTILE));
-	ASSERT(psMapTiles != NULL, "mapLoad: Out of memory" );
+	ASSERT(psMapTiles != NULL, "Out of memory" );
 
 	mapWidth = width;
 	mapHeight = height;
-
+	
+	// FIXME: the map preview code loads the map without setting the tileset
+	if (!tileset)
+	{
+		debug(LOG_WARNING, "tileset not loaded, using arizona (map preview?)");
+		tileset = strdup("texpages/tertilesc1hw");
+	}
+	
+	// load the ground types
+	if (!mapLoadGroundTypes())
+	{
+		goto failure;
+	}
+	
 	//load in the map data itself
-	mapLoadV3(pFileData, fileSize);
+	
+	/* Load in the map data */
+	for (i = 0; i < mapWidth * mapHeight; i++)
+	{
+		UWORD	texture;
+		UBYTE	height;
 
+		if (!PHYSFS_readULE16(fp, &texture) || !PHYSFS_readULE8(fp, &height))
+		{
+			debug(LOG_ERROR, "%s: Error during savegame load", filename);
+			goto failure;
+		}
+
+		psMapTiles[i].texture = texture;
+		psMapTiles[i].height = height;
+		for (j = 0; j < MAX_PLAYERS; j++)
+		{
+			psMapTiles[i].tileVisBits =(UBYTE)(psMapTiles[i].tileVisBits &~ (UBYTE)(1 << j));
+		}
+	}
+
+	if (!PHYSFS_readULE32(fp, &version) || !PHYSFS_readULE32(fp, &numGw) || version != 1)
+	{
+		debug(LOG_ERROR, "Bad gateway in %s", filename);
+		goto failure;
+	}
+
+	for (i = 0; i < numGw; i++)
+	{
+		UBYTE	x0, y0, x1, y1;
+
+		if (!PHYSFS_readULE8(fp, &x0) || !PHYSFS_readULE8(fp, &y0) || !PHYSFS_readULE8(fp, &x1) || !PHYSFS_readULE8(fp, &y1))
+		{
+			debug(LOG_ERROR, "%s: Failed to read gateway info", filename);
+			goto failure;
+		}
+		if (!gwNewGateway(x0, y0, x1, y1))
+		{
+			debug(LOG_ERROR, "%s: Unable to add gateway", filename);
+			goto failure;
+		}
+	}
+	
+	if (!mapSetGroundTypes())
+	{
+		goto failure;
+	}
+
+	// reset the random water bottom heights
 	environReset();
-
+	
+	// set the river bed
+	for (i=0;i<mapWidth;i++)
+	{
+		for (j=0;j<mapHeight;j++)
+		{
+			// copy over to height_new
+			setTileHeight(i,j, map_TileHeight(i, j));
+			// FIXME: magic number
+			mapTile(i,j)->waterLevel = mapTile(i,j)->height_new - world_coord(1)/3.0f/(float)ELEVATION_SCALE;
+			// lower riverbed (only for height_new)
+			if (mapTile(i,j)->ground == waterGroundType)
+			{
+				mapTile(i,j)->height_new = mapTile(i,j)->height_new - (WATER_DEPTH - 2.0f*environGetData(i, j)) / (float)ELEVATION_SCALE;
+			}
+		}
+	}
+	
 	/* set up the scroll mins and maxs - set values to valid ones for any new map */
 	scrollMinX = scrollMinY = 0;
 	scrollMaxX = mapWidth;
 	scrollMaxY = mapHeight;
 
+	PHYSFS_close(fp);
 	return true;
+	
+failure:
+	PHYSFS_close(fp);
+	return false;
 }
 
 // Object macro group
@@ -694,10 +1355,7 @@ BOOL mapSaveTagged(char *pFileName)
 	// find the number of non water gateways
 	for (psCurrGate = gwGetGateways(); psCurrGate; psCurrGate = psCurrGate->psNext)
 	{
-		if (!(psCurrGate->flags & GWR_WATERLINK))
-		{
-			numGateways += 1;
-		}
+		numGateways += 1;
 	}
 
 	if (!tagOpenWrite(definition, pFileName))
@@ -744,7 +1402,7 @@ BOOL mapSaveTagged(char *pFileName)
 		tagWrite(0x03, TRI_FLIPPED(psTile));
 		tagWrite(0x04, psTile->texture & TILE_XFLIP);
 		tagWrite(0x05, psTile->texture & TILE_YFLIP);
-		tagWrite(0x06, TILE_IS_NOTBLOCKING(psTile));
+		tagWrite(0x06, TileIsNotBlocking(psTile)); // Redundant, since already included in tileInfoBits
 		tagWrite(0x08, psTile->height);
 		tagWrite(0x09, psTile->tileVisBits);
 		tagWrite(0x0a, psTile->tileInfoBits);
@@ -764,17 +1422,14 @@ BOOL mapSaveTagged(char *pFileName)
 	tagWriteEnter(0x0b, numGateways); // gateway group
 	for (psCurrGate = gwGetGateways(); psCurrGate; psCurrGate = psCurrGate->psNext)
 	{
-		if (!(psCurrGate->flags & GWR_WATERLINK))
-		{
-			uint16_t p[4];
+		uint16_t p[4];
 
-			p[0] = psCurrGate->x1;
-			p[1] = psCurrGate->y1;
-			p[2] = psCurrGate->x2;
-			p[3] = psCurrGate->y2;
-			tagWrite16v(0x01, 4, p);
-			tagWriteNext();
-		}
+		p[0] = psCurrGate->x1;
+		p[1] = psCurrGate->y1;
+		p[2] = psCurrGate->x2;
+		p[3] = psCurrGate->y2;
+		tagWrite16v(0x01, 4, p);
+		tagWriteNext();
 	}
 	debug(LOG_MAP, " * Writing info about %d gateways", (int)numGateways);
 	tagWriteLeave(0x0b);
@@ -1057,16 +1712,13 @@ BOOL mapSave(char **ppFileData, UDWORD *pFileSize)
 	GATEWAY *psCurrGate = NULL;
 	GATEWAY_SAVEHEADER *psGateHeader = NULL;
 	GATEWAY_SAVE *psGate = NULL;
-	ZONEMAP_SAVEHEADER *psZoneHeader = NULL;
 	SDWORD	numGateways = 0;
+	ZONEMAP_SAVEHEADER *psZoneHeader = NULL;
 
 	// find the number of non water gateways
 	for(psCurrGate = gwGetGateways(); psCurrGate; psCurrGate = psCurrGate->psNext)
 	{
-		if (!(psCurrGate->flags & GWR_WATERLINK))
-		{
-			numGateways += 1;
-		}
+		numGateways += 1;
 	}
 
 	/* Allocate the data buffer */
@@ -1107,7 +1759,7 @@ BOOL mapSave(char **ppFileData, UDWORD *pFileSize)
 		psTileData->texture = psTile->texture;
 		psTileData->height = psTile->height;
 
-		/* MAP_SAVETILEV2 */
+		/* MAP_SAVETILE */
 		endian_uword(&psTileData->texture);
 
 		psTileData = (MAP_SAVETILE *)((UBYTE *)psTileData + SAVE_TILE_SIZE);
@@ -1129,15 +1781,12 @@ BOOL mapSave(char **ppFileData, UDWORD *pFileSize)
 	// Put the gateway data.
 	for(psCurrGate = gwGetGateways(); psCurrGate; psCurrGate = psCurrGate->psNext)
 	{
-		if (!(psCurrGate->flags & GWR_WATERLINK))
-		{
-			psGate->x0 = psCurrGate->x1;
-			psGate->y0 = psCurrGate->y1;
-			psGate->x1 = psCurrGate->x2;
-			psGate->y1 = psCurrGate->y2;
-			psGate++;
-			i++;
-		}
+		psGate->x0 = psCurrGate->x1;
+		psGate->y0 = psCurrGate->y1;
+		psGate->x1 = psCurrGate->x2;
+		psGate->y1 = psCurrGate->y2;
+		psGate++;
+		i++;
 	}
 
 	// Put the zone header.
@@ -1168,146 +1817,105 @@ BOOL mapShutdown(void)
 	return true;
 }
 
-/* Return linear interpolated height of x,y */
+/// The height of the terrain at the specified world coordinates
 extern SWORD map_Height(int x, int y)
 {
-	int	retVal, tileX, tileY, tileYOffset, tileX2, tileY2Offset, dx, dy, ox, oy;
-	int	h0, hx, hy, hxy, wTL = 0, wTR = 0, wBL = 0, wBR = 0;
-	BOOL	bWaterTile = false;
+	int tileX, tileY;
+	int i, j;
+	float height[2][2], center;
+	float onTileX, onTileY;
+	float left, right, middle;
+	float onBottom, result;
+	float towardsCenter, towardsRight;
 
-	ASSERT(x >= 0, "map_Height: Negative x value");
-	ASSERT(y >= 0, "map_Height: Negative y value");
+	// make sure we have valid coordinates
+	if (x < 0 ||
+	    y < 0 ||
+	    x >= world_coord(mapWidth-1) ||
+	    y >= world_coord(mapHeight-1))
+	{
+		// we don't so give an arbitrary height
+		return 0;
+	}
 
-	x = (x >= world_coord(mapWidth) ? world_coord(mapWidth - 1) : x);
-	y = (y >= world_coord(mapHeight) ? world_coord(mapHeight - 1) : y);
-
-	/* Turn into tile coordinates */
+	// on which tile are these coords?
 	tileX = map_coord(x);
 	tileY = map_coord(y);
 
-	/* Inter tile comp */
-	ox = map_round(x);
-	oy = map_round(y);
+	// where on the tile? (scale to (0,1))
+	onTileX = (x - world_coord(tileX))/(float)world_coord(1);
+	onTileY = (y - world_coord(tileY))/(float)world_coord(1);
 
-	if (terrainType(mapTile(tileX,tileY)) == TER_WATER)
+	// get the height for the corners and center
+	center = 0;
+	for (i = 0; i < 2; i++)
 	{
-		bWaterTile = true;
-		wTL = environGetValue(tileX,tileY)/2;
-		wTR = environGetValue(tileX+1,tileY)/2;
-		wBL = environGetValue(tileX,tileY+1)/2;
-		wBR = environGetValue(tileX+1,tileY+1)/2;
-	}
-
-	// to account for the border of the map
-	if(tileX + 1 < mapWidth)
-	{
-		tileX2 = tileX + 1;
-	}
-	else
-	{
-		tileX2 = tileX;
-	}
-	tileYOffset = (tileY * mapWidth);
-	if(tileY + 1 < mapHeight)
-	{
-		tileY2Offset = tileYOffset + mapWidth;
-	}
-	else
-	{
-		tileY2Offset = tileYOffset;
-	}
-
-	ASSERT( ox < TILE_UNITS, "mapHeight: x offset too big" );
-	ASSERT( oy < TILE_UNITS, "mapHeight: y offset too big" );
-	ASSERT( ox >= 0, "mapHeight: x offset too small" );
-	ASSERT( oy >= 0, "mapHeight: y offset too small" );
-
-	//different code for 4 different triangle cases
-	if (psMapTiles[tileX + tileYOffset].texture & TILE_TRIFLIP)
-	{
-		if ((ox + oy) > TILE_UNITS)//tile split top right to bottom left object if in bottom right half
+		for (j = 0; j < 2; j++)
 		{
-			ox = TILE_UNITS - ox;
-			oy = TILE_UNITS - oy;
-			hy = psMapTiles[tileX + tileY2Offset].height;
-			hx = psMapTiles[tileX2 + tileYOffset].height;
-			hxy= psMapTiles[tileX2 + tileY2Offset].height;
-			if(bWaterTile)
-			{
-				hy+=wBL;
-				hx+=wTR;
-				hxy+=wBR;
-			}
-
-			dx = ((hy - hxy) * ox )/ TILE_UNITS;
-			dy = ((hx - hxy) * oy )/ TILE_UNITS;
-
-			retVal = (SDWORD)(((hxy + dx + dy)) * ELEVATION_SCALE);
-			ASSERT( retVal<MAX_HEIGHT,"Map height's gone weird!!!" );
-			return ((SWORD)retVal);
+			height[i][j] = map_TileHeight(tileX+i, tileY+j);
+			center += height[i][j];
 		}
-		else //tile split top right to bottom left object if in top left half
+	}
+	center /= 4;
+
+	// we have:
+	//   y ->
+	// x 0,0  A  0,1
+	// |
+	// V D  center B
+	//
+	//   1,0  C  1,1
+
+	// get heights for left and right corners and the distances
+	if (onTileY > onTileX)
+	{
+		if (onTileY < 1 - onTileX)
 		{
-			h0 = psMapTiles[tileX + tileYOffset].height;
-			hy = psMapTiles[tileX + tileY2Offset].height;
-			hx = psMapTiles[tileX2 + tileYOffset].height;
-
-			if(bWaterTile)
-			{
-				h0+=wTL;
-				hy+=wBL;
-				hx+=wTR;
-			}
-			dx = ((hx - h0) * ox )/ TILE_UNITS;
-			dy = ((hy - h0) * oy )/ TILE_UNITS;
-
-			retVal = (SDWORD)((h0 + dx + dy) * ELEVATION_SCALE);
-			ASSERT( retVal<MAX_HEIGHT,"Map height's gone weird!!!" );
-			return ((SWORD)retVal);
+			// A
+			right = height[0][0];
+			left  = height[0][1];
+			towardsCenter = onTileX;
+			towardsRight  = 1 - onTileY;
+		}
+		else
+		{
+			// B
+			right = height[0][1];
+			left  = height[1][1];
+			towardsCenter = 1 - onTileY;
+			towardsRight  = 1 - onTileX;
 		}
 	}
 	else
 	{
-		if (ox > oy) //tile split topleft to bottom right object if in top right half
+		if (onTileX > 1 - onTileY)
 		{
-			h0 = psMapTiles[tileX + tileYOffset].height;
-			hx = psMapTiles[tileX2 + tileYOffset].height;
-			ASSERT( tileX2 + tileY2Offset < mapWidth*mapHeight, "array out of bounds");
-			hxy= psMapTiles[tileX2 + tileY2Offset].height;
-
-			if(bWaterTile)
-			{
-				h0+=wTL;
-				hx+=wTR;
-				hxy+=wBR;
-			}
-			dx = ((hx - h0) * ox )/ TILE_UNITS;
-			dy = ((hxy - hx) * oy )/ TILE_UNITS;
-			retVal = (SDWORD)(((h0 + dx + dy)) * ELEVATION_SCALE);
-			ASSERT( retVal<MAX_HEIGHT,"Map height's gone weird!!!" );
-			return ((SWORD)retVal);
+			// C
+			right = height[1][1];
+			left  = height[1][0];
+			towardsCenter = 1 - onTileX;
+			towardsRight  = onTileY;
 		}
-		else //tile split topleft to bottom right object if in bottom left half
+		else
 		{
-			h0 = psMapTiles[tileX + tileYOffset].height;
-			hy = psMapTiles[tileX + tileY2Offset].height;
-			hxy = psMapTiles[tileX2 + tileY2Offset].height;
-
-			if(bWaterTile)
-			{
-				h0+=wTL;
-				hy+=wBL;
-				hxy+=wBR;
-			}
-			dx = ((hxy - hy) * ox )/ TILE_UNITS;
-			dy = ((hy - h0) * oy )/ TILE_UNITS;
-
-			retVal = (SDWORD)((h0 + dx + dy) * ELEVATION_SCALE);
-			ASSERT( retVal<MAX_HEIGHT,"Map height's gone weird!!!" );
-			return ((SWORD)retVal);
+			// D
+			right = height[1][0];
+			left  = height[0][0];
+			towardsCenter = onTileY;
+			towardsRight  = onTileX;
 		}
 	}
-	return 0;
+	ASSERT(towardsCenter <= 0.5, "towardsCenter is too high");
+
+	// now we have:
+	//         center
+	//    left   m    right
+
+	middle = (left + right)/2;
+	onBottom = left * (1 - towardsRight) + right * towardsRight;
+	result = onBottom + (center - middle) * towardsCenter * 2;
+
+	return (SDWORD)(result+0.5f);
 }
 
 /* returns true if object is above ground */
@@ -1546,4 +2154,16 @@ void mapTest()
 	astarTest("MizaMaze-T3", 5, 5, 108, 112);
 
 	fprintf(stdout, "\tMap self-test: PASSED\n");
+}
+
+
+/** Check if tile contained within the given world coordinates is burning. */
+bool fireOnLocation(unsigned int x, unsigned int y)
+{
+	const int posX = map_coord(x);
+	const int posY = map_coord(y);
+	const MAPTILE *psTile = mapTile(posX, posY);
+
+	ASSERT(psTile, "Checking fire on tile outside the map (%d, %d)", posX, posY);
+	return psTile != NULL && TileIsBurning(psTile);
 }

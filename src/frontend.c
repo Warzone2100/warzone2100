@@ -1024,8 +1024,8 @@ BOOL runGameOptions4Menu(void)
 		{
 			int newTexSize = getTextureSize() * 2;
 
-			// Clip such that 32 <= size <= 128
-			if (newTexSize > 128)
+			// Clip such that 32 <= size <= 2048
+			if (newTexSize > 2048)
 			{
 				newTexSize = 32;
 			}
@@ -1118,6 +1118,18 @@ BOOL startGameOptions5Menu(void)
 		addTextButton(FRONTEND_CURSORMODE_R, FRONTEND_POS4M-85, FRONTEND_POS4Y, _("Hardware"), true, false);
 	}
 
+	////////////
+	// left-click orders
+	addTextButton(FRONTEND_MBUTTONS,	 FRONTEND_POS2X-35,   FRONTEND_POS5Y, _("Right-click Orders"),true,false);
+	if( getRightClickOrders() )
+	{	// right-click orders
+		addTextButton(FRONTEND_MBUTTONS_R, FRONTEND_POS2M-55,  FRONTEND_POS5Y, _("On"),true,false);
+	}
+	else
+	{	// left-click orders
+		addTextButton(FRONTEND_MBUTTONS_R, FRONTEND_POS2M-55,  FRONTEND_POS5Y, _("Off"),true,false);
+	}
+
 	// Quit/return
 	addMultiBut(psWScreen, FRONTEND_BOTFORM, FRONTEND_QUIT, 10, 10, 30, 29, P_("menu", "Return"), IMAGE_RETURN, IMAGE_RETURN_HI, IMAGE_RETURN_HI);
 
@@ -1172,6 +1184,20 @@ BOOL runGameOptions5Menu(void)
 			}
 			break;
 
+		case FRONTEND_MBUTTONS:
+		case FRONTEND_MBUTTONS_R:
+			if( getRightClickOrders() )
+			{
+				setRightClickOrders(false);
+				widgSetString(psWScreen,FRONTEND_MBUTTONS_R, _("Off"));
+			}
+			else
+			{
+				setRightClickOrders(true);
+				widgSetString(psWScreen,FRONTEND_MBUTTONS_R, _("On"));
+			}
+			break;
+
 		case FRONTEND_QUIT:
 			changeTitleMode(OPTIONS);
 			break;
@@ -1194,6 +1220,7 @@ BOOL runGameOptions5Menu(void)
 BOOL startGameOptionsMenu(void)
 {
 	UDWORD	w, h;
+	int playercolor;
 
 	addBackdrop();
 	addTopForm();
@@ -1233,7 +1260,15 @@ BOOL startGameOptionsMenu(void)
 	addTextButton(FRONTEND_LANGUAGE,  FRONTEND_POS2X - 25, FRONTEND_POS5Y, _("Language"), true, false);
 	addTextButton(FRONTEND_LANGUAGE_R,  FRONTEND_POS2M - 25, FRONTEND_POS5Y, getLanguageName(), true, false);
 
-	widgSetButtonState(psWScreen, FE_P0 + getPlayerColour(0), WBUT_LOCK);
+	// FIXME: if playercolor = 1-3, then we Assert in widgSetButtonState() since we don't define FE_P1 - FE_P3
+	// I assume the reason is that in SP games, those are reserved for the AI?  Valid values are 0, 4-7.
+	// This is a workaround, until we find what is setting that to 1-3.  See configuration.c:701
+	playercolor = getPlayerColour(0);
+	if (playercolor >= 1 && playercolor <= 3)
+	{
+		playercolor = 0;
+	}
+	widgSetButtonState(psWScreen, FE_P0 + playercolor, WBUT_LOCK);
 	addTextButton(FRONTEND_COLOUR, FRONTEND_POS4X-25, FRONTEND_POS4Y, _("Unit Colour"), true, false);
 
 	// Quit

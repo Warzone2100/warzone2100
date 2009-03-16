@@ -28,7 +28,7 @@ static inline bool TEST_NAME(void) \
 	} \
 \
 	/* \
-	 * Test the invalid files, succesfully parsing these is a unit test failure. \
+	 * Test the invalid files, successfully parsing these is a unit test failure. \
 	 */ \
 	for (i = 0; i < ARRAY_SIZE(invalid_files); ++i) \
 	{ \
@@ -36,7 +36,7 @@ static inline bool TEST_NAME(void) \
 		fflush(stdout); \
 		if (doParseTest(invalid_files[i].content, strlen(invalid_files[i].content))) \
 		{ \
-			fprintf(stdout, "\t\t\t[%s] " ANSI_COLOUR_RED "Parsing of invalid test file \"" ANSI_COLOUR_YELLOW "%s" ANSI_COLOUR_RED "\" was succesfull, it shouldn't have been!" ANSI_COLOUR_DEFAULT "\n", __FUNCTION__, invalid_files[i].testname); \
+			fprintf(stdout, "\t\t\t[%s] " ANSI_COLOUR_RED "Parsing of invalid test file \"" ANSI_COLOUR_YELLOW "%s" ANSI_COLOUR_RED "\" was successful, it shouldn't have been!" ANSI_COLOUR_DEFAULT "\n", __FUNCTION__, invalid_files[i].testname); \
 			fflush(stdout); \
 			retval = false; \
 		} \

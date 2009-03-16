@@ -43,33 +43,20 @@ extern	void LoadAIExperience(BOOL bNotify);
 extern	BOOL SaveAIExperience(BOOL bNotify);
 
 
-extern	BOOL ExperienceRecallOil(SDWORD nPlayer);
 extern	void InitializeAIExperience(void);
-extern	BOOL OilResourceAt(UDWORD OilX,UDWORD OilY, SDWORD VisibleToPlayer);
-
-extern	SDWORD ReadAISaveData(SDWORD nPlayer);
-extern	BOOL WriteAISaveData(SDWORD nPlayer);
-
-extern	BOOL SetUpInputFile(SDWORD nPlayer);
-extern	BOOL SetUpOutputFile(SDWORD nPlayer);
 
 extern	BOOL StoreBaseDefendLoc(SDWORD x, SDWORD y, SDWORD nPlayer);
 extern	BOOL StoreOilDefendLoc(SDWORD x, SDWORD y, SDWORD nPlayer);
 
-extern	BOOL SortBaseDefendLoc(SDWORD nPlayer);
-extern	BOOL SortOilDefendLoc(SDWORD nPlayer);
-
-extern	SDWORD GetOilDefendLocIndex(SDWORD x, SDWORD y, SDWORD nPlayer);
+extern int GetOilDefendLocIndex(SDWORD x, SDWORD y, SDWORD nPlayer);
 extern	SDWORD GetBaseDefendLocIndex(SDWORD x, SDWORD y, SDWORD nPlayer);
 
-extern BOOL CanRememberPlayerBaseLoc(SDWORD lookingPlayer, SDWORD enemyPlayer);
-extern BOOL CanRememberPlayerBaseDefenseLoc(SDWORD player, SDWORD index);
-extern BOOL CanRememberPlayerOilDefenseLoc(SDWORD player, SDWORD index);
+extern bool CanRememberPlayerBaseLoc(SDWORD lookingPlayer, SDWORD enemyPlayer);
+extern bool CanRememberPlayerBaseDefenseLoc(SDWORD player, SDWORD index);
+extern bool CanRememberPlayerOilDefenseLoc(SDWORD player, SDWORD index);
 
 extern	void BaseExperienceDebug(SDWORD nPlayer);
 extern	void OilExperienceDebug(SDWORD nPlayer);
-
-extern BOOL canRecallOilAt(SDWORD nPlayer, SDWORD x, SDWORD y);
 
 //Return values of experience-loading routine
 #define EXPERIENCE_LOAD_OK			0			//no problemens encountered

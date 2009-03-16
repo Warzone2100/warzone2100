@@ -8,6 +8,7 @@ noinst_HEADERS = \
 	audio_id.h \
 	cdaudio.h \
 	mixer.h \
+	playlist.h \
 	oggvorbis.h \
 	openal_error.h \
 	track.h \

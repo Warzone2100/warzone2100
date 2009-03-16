@@ -29,6 +29,7 @@
 
 #include "lib/framework/frame.h"
 #include "lib/framework/strres.h"
+#include "lib/framework/stdio_ext.h"
 #include "lib/widget/widget.h"
 
 // Lua
@@ -738,11 +739,16 @@ static int scrAddDroid(lua_State *L)
 		if (psDroid)
 		{
 			addDroid(psDroid, apsDroidLists);
+			debug( LOG_LIFE, "created droid for AI player %d %u", player, psDroid->id );
 			if (isVtolDroid(psDroid))
 			{
 				// vtols start in the air
 				moveMakeVtolHover(psDroid);
 			}
+		}
+		else
+		{
+			debug( LOG_LIFE, "failed to create droid for AI player %d", player );
 		}
 	}
 
@@ -2596,27 +2602,6 @@ static int scrGameOverMessage(lua_State *L)
 
 		//we need to set this here so the VIDEO_QUIT callback is not called
 		setScriptWinLoseVideo((UBYTE)(gameWon ? PLAY_WIN : PLAY_LOSE));
-
-		/* For some reason, I can't locate why the script is not adding
-		 * these for us, so I hardcode it here. The script is
-		 * multiplay.txt.
-		 */
-		seq_ClearSeqList();
-		if (gameWon)
-		{
-			seq_AddSeqToList("victory.ogg", NULL, NULL, false);
-		}
-		else
-		{
-			seq_AddSeqToList("end.ogg", NULL, NULL, false);
-		}
-
-        // Can't do this cos won't process windows stuff
-        // Wait for the video to finish.
-		/*while (loop_GetVideoStatus())
-		{
-			videoLoop();
-		}*/
 	}
 	debug(LOG_MSG, "Game over message");
 
@@ -7826,7 +7811,7 @@ WZ_DECL_UNUSED static BOOL scrCirclePerimPoint(void)
 	//if point was inside of the circle, don't modify passed parameter
 	if(factor == 0)
 	{
-		printf_console("scrCirclePerimPoint: division by zero.");
+		debug_console("scrCirclePerimPoint: division by zero.");
 		return true;
 	}
 
@@ -8068,9 +8053,7 @@ WZ_DECL_UNUSED static BOOL scrLearnPlayerBaseLoc(void)
 	baseLocation[playerStoring][enemyPlayer][0] = x;
 	baseLocation[playerStoring][enemyPlayer][1] = y;
 
-#ifdef DEBUG
-	printf_console("Learned player base.");
-#endif
+	debug_console("Learned player base.");
 
 	scrFunctionResult.v.bval = true;
 	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
@@ -8685,11 +8668,11 @@ SDWORD getNumRepairedBy(DROID *psDroidToCheck, SDWORD player)
 	return numRepaired;
 }
 
-/// Uses printf_console() for console debug output right now
+/// Uses debug_console() for console debug output right now
 static int scrMsgBox(lua_State *L)
 {
 	const char *message = luaL_checkstring(L, 1);
-	printf_console("DEBUG: %s",message);
+	debug_console("DEBUG: %s",message);
 	return 0;
 }
 

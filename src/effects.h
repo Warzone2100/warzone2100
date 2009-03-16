@@ -32,6 +32,10 @@
 #include "lib/framework/fixedpoint.h"
 #include "lib/ivis_common/pietypes.h"
 
+
+#define SHOCK_WAVE_HEIGHT	(64)
+
+
 /* All the effect groups */
 typedef enum
 {
@@ -48,6 +52,7 @@ typedef enum
 	EFFECT_FIRE,
 	EFFECT_FIREWORK
 } EFFECT_GROUP;
+
 
 /* Might not even need this */
 typedef enum
@@ -107,42 +112,38 @@ typedef enum
 
 } EFFECT_TYPE;
 
-/* Is the slot currently being used and is it active? */
-typedef enum
-{
-	ES_INACTIVE,
-	ES_ACTIVE
-}EFFECT_STATUS;
 
 typedef enum
 {
 	LL_MIDDLE,
 	LL_INNER,
 	LL_OUTER
-}LAND_LIGHT_SPEC;
+} LAND_LIGHT_SPEC;
 
-#define SHOCK_WAVE_HEIGHT	(64)
 
-typedef struct	_effect_def
+typedef struct _effect_def EFFECT;
+struct _effect_def
 {
-	uint8_t           control;		// Controls the bits above - essential,flips etc
-	uint8_t           group;			// what	group is it - explosion, building effect etc....
-	uint8_t           type;			// what type is it within the group?
-	uint8_t           frameNumber;	// what frame number is the imd on?
-	uint16_t          size;			// Size in terms of percent of original imd.
-	uint8_t           baseScale;		// if scaled, what's bottom line?
-	uint8_t           specific;		// how many times has it bounced?
-	Vector3f          position;		// world coordinates of the effect - floats on the PC.
-	Vector3f          velocity;		// movement values per update
-	Vector3i          rotation;		// current rotation - only for gravitons
-	Vector3i          spin;			// rotation info for spinning things.
-	uint32_t          birthTime;		// what time was it introduced into the world?
-	uint32_t          lastFrame;		// when did we last update the frame?
-	uint16_t          frameDelay;		// how many game ticks between each frame?
-	uint16_t          lifeSpan;		// what is it's life expectancy?
-	uint16_t          radius;			// Used for area effects
-	iIMDShape  *imd;			// pointer to the imd the effect uses.
-} EFFECT;
+	uint8_t           control;     // Controls the bits above - essential,flips etc
+	EFFECT_GROUP      group;       // what group is it - explosion, building effect etc....
+	EFFECT_TYPE       type;        // what type is it within the group?
+	uint8_t           frameNumber; // what frame number is the imd on?
+	uint16_t          size;        // Size in terms of percent of original imd.
+	uint8_t           baseScale;   // if scaled, what's bottom line?
+	uint8_t           specific;    // how many times has it bounced?
+	Vector3f          position;    // world coordinates of the effect - floats on the PC.
+	Vector3f          velocity;    // movement values per update
+	Vector3i          rotation;    // current rotation - only for gravitons
+	Vector3i          spin;        // rotation info for spinning things.
+	uint32_t          birthTime;   // what time was it introduced into the world?
+	uint32_t          lastFrame;   // when did we last update the frame?
+	uint16_t          frameDelay;  // how many game ticks between each frame?
+	uint16_t          lifeSpan;    // what is it's life expectancy?
+	uint16_t          radius;      // Used for area effects
+	iIMDShape         *imd;        // pointer to the imd the effect uses.
+	EFFECT *prev, *next; // Previous and next element in linked list
+};
+
 
 /* Maximum number of effects in the world - need to investigate what this should be */
 /* EXTERNAL REFERENCES */
@@ -151,25 +152,20 @@ extern void	effectGiveAuxVarSec		( UDWORD var); // and so's this
 
 extern void	initEffectsSystem		( void );
 extern void	processEffects			( void );
-extern void	addEffect				( Vector3i *pos, EFFECT_GROUP group,
-										EFFECT_TYPE type, BOOL specified, iIMDShape *imd, BOOL lit );
-extern void	addMultiEffect			( Vector3i *basePos, Vector3i *scatter,EFFECT_GROUP group,
-									EFFECT_TYPE type,BOOL specified, iIMDShape *imd, UDWORD number, BOOL lit, UDWORD size );
+extern void addEffect				( const Vector3i *pos, EFFECT_GROUP group,
+										EFFECT_TYPE type, bool specified, iIMDShape *imd, bool lit );
+extern void addMultiEffect			( const Vector3i *basePos, Vector3i *scatter, EFFECT_GROUP group,
+									EFFECT_TYPE type, bool specified, iIMDShape *imd, unsigned int number, bool lit, unsigned int size );
 
-extern void	renderEffect			( EFFECT *psEffect );
+extern void	renderEffect			( const EFFECT *psEffect );
 extern void	effectResetUpdates		( void );
 extern UDWORD	getNumActiveEffects		( void );
 extern UDWORD	getMissCount( void );
 extern	UDWORD	getNumSkippedEffects(void);
 extern	UDWORD	getNumEvenEffects(void);
 
-extern	bool fireOnLocation(unsigned int x, unsigned int y);
+extern void initPerimeterSmoke( iIMDShape *pImd, Vector3i base);
 
-extern void	initPerimeterSmoke			( iIMDShape *pImd, UDWORD x, UDWORD y, UDWORD z);
-
-#define SKY_MULT	1
-#define SKY_SHIMMY_BASE	((DEG(1)*SKY_MULT)/2)
-#define SKY_SHIMMY (SKY_SHIMMY_BASE - (rand()%(2*SKY_SHIMMY_BASE)))
 extern bool readFXData(const char* fileName);
 extern bool	writeFXData(const char* fileName);
 extern	void	effectSetSize(UDWORD size);

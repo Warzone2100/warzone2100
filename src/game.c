@@ -2724,18 +2724,14 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 		}
 
 		//load the map and the droids then swap pointers
+
 		//load in the map file
 		aFileName[fileExten] = '\0';
 		strcat(aFileName, "mission.map");
-		/* Load in the chosen file data */
-		pFileData = fileLoadBuffer;
-		if (loadFileToBufferNoError(aFileName, pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
+		if (!mapLoad(aFileName))
 		{
-			if (!mapLoad(pFileData, fileSize))
-			{
-				debug( LOG_NEVER, "loadgame: Fail7\n" );
-				return(false);
-			}
+			debug(LOG_ERROR, "Failed to load map");
+			return false;
 		}
 
 		//load in the visibility file
@@ -2880,18 +2876,30 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 		//load in the map file
 		aFileName[fileExten] = '\0';
 		strcat(aFileName, "game.map");
-		/* Load in the chosen file data */
-		pFileData = fileLoadBuffer;
-		if (!loadFileToBuffer(aFileName, pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
-		{
-			debug( LOG_NEVER, "loadgame: Fail5\n" );
-			goto error;
-		}
-
-		if (!mapLoad(pFileData, fileSize))
+		if (!mapLoad(aFileName))
 		{
 			debug( LOG_NEVER, "loadgame: Fail7\n" );
 			return(false);
+		}
+	}
+
+	// FIXME THIS FILE IS A HUGE MESS, this code should probably appear at another position...
+	if (saveGameVersion > VERSION_12)
+	{
+		//if user save game then load up the FX
+		if ((gameType == GTYPE_SAVE_START) ||
+			(gameType == GTYPE_SAVE_MIDMISSION))
+		{
+			//load in the message list file
+			aFileName[fileExten] = '\0';
+			strcat(aFileName, "fxstate.tag");
+
+			// load the fx data from the file
+			if (!readFXData(aFileName))
+			{
+				debug(LOG_ERROR, "loadgame: Fail33");
+				goto error;
+			}
 		}
 	}
 
@@ -3197,25 +3205,6 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 		}
 	}
 
-	if (saveGameVersion > VERSION_12)
-	{
-		//if user save game then load up the FX
-		if ((gameType == GTYPE_SAVE_START) ||
-			(gameType == GTYPE_SAVE_MIDMISSION))
-		{
-			//load in the message list file
-			aFileName[fileExten] = '\0';
-			strcat(aFileName, "fxstate.tag");
-
-			// load the fx data from the file
-			if (!readFXData(aFileName))
-			{
-				debug(LOG_ERROR, "loadgame: Fail33");
-				goto error;
-			}
-		}
-	}
-
 	if (saveGameVersion >= VERSION_16)
 	{
 		//if user save game then load up the FX
@@ -3463,18 +3452,6 @@ error:
 //		free(psMapTiles);
 	}
 	psMapTiles = NULL;
-
-	/*if (!loadFile("blank.map", &pFileData, &fileSize))
-	{
-		return false;
-	}
-
-	if (!mapLoad(pFileData, fileSize))
-	{
-		return false;
-	}
-
-	free(pFileData);*/
 
 	/* Start the game clock */
 	gameTimeStart();
@@ -7000,7 +6977,6 @@ BOOL loadSaveStructureV7(char *pFileData, UDWORD filesize, UDWORD numStructures)
 			if (psStructure == NULL)
 			{
 				debug( LOG_ERROR, "No owning structure for module - %s for player - %d", getSaveStructNameV19((SAVE_STRUCTURE_V17*)psSaveStructure), psSaveStructure->player );
-				abort();
 				//ignore this module
 				continue;
 			}
@@ -7292,7 +7268,6 @@ BOOL loadSaveStructureV19(char *pFileData, UDWORD filesize, UDWORD numStructures
 			if (psStructure == NULL)
 			{
 				debug( LOG_ERROR, "No owning structure for module - %s for player - %d", getSaveStructNameV19(psSaveStructure), psSaveStructure->player );
-				abort();
 				//ignore this module
 				continue;
 			}
@@ -7733,7 +7708,6 @@ BOOL loadSaveStructureV(char *pFileData, UDWORD filesize, UDWORD numStructures, 
 			if (psStructure == NULL)
 			{
 				debug( LOG_ERROR, "No owning structure for module - %s for player - %d", getSaveStructNameV(psSaveStructure), psSaveStructure->player );
-				abort();
 				//ignore this module
 				continue;
 			}

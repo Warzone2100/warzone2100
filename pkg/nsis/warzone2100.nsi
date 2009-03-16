@@ -30,15 +30,13 @@
 
   ;Name and file
   Name "${PACKAGE_NAME}"
-  OutFile "${PACKAGE}-${PACKAGE_VERSION}.exe"
+  OutFile "${OUTFILE}"
 
   ;Default installation folder
   InstallDir "$PROGRAMFILES\${PACKAGE_NAME}"
 
   ;Get installation folder from registry if available
   InstallDirRegKey HKLM "Software\${PACKAGE_NAME}" ""
-
-  SetCompressor /FINAL /SOLID lzma
 
 ;--------------------------------
 ;Versioninfo
@@ -62,8 +60,8 @@ VIAddVersionKey "ProductVersion"	"${PACKAGE_VERSION}"
 ;--------------------------------
 ;Interface Settings
 
-  !define MUI_ICON "..\..\icons\warzone2100.ico"
-  !define MUI_UNICON "..\..\icons\warzone2100.uninstall.ico"
+  !define MUI_ICON "${TOP_SRCDIR}\icons\warzone2100.ico"
+  !define MUI_UNICON "${TOP_SRCDIR}\icons\warzone2100.uninstall.ico"
 
   !define MUI_ABORTWARNING
 
@@ -113,9 +111,9 @@ VIAddVersionKey "ProductVersion"	"${PACKAGE_VERSION}"
 ;--------------------------------
 ;License Language String
 
-  LicenseLangString MUILicense ${LANG_ENGLISH} "..\..\COPYING"
-  LicenseLangString MUILicense ${LANG_DUTCH} "..\..\COPYING"
-  LicenseLangString MUILicense ${LANG_GERMAN} "..\..\COPYING"
+  LicenseLangString MUILicense ${LANG_ENGLISH} "${TOP_SRCDIR}\COPYING"
+  LicenseLangString MUILicense ${LANG_DUTCH} "${TOP_SRCDIR}\COPYING"
+  LicenseLangString MUILicense ${LANG_GERMAN} "${TOP_SRCDIR}\COPYING"
 
 ;--------------------------------
 ;Reserve Files
@@ -140,36 +138,36 @@ Section $(TEXT_SecBase) SecBase
   ;ADD YOUR OWN FILES HERE...
 
   ; Main executable
-  File "..\..\src\${PACKAGE}.exe"
+  File "${TOP_BUILDDIR}\src\${PACKAGE}.exe"
 
   ; Windows dbghelp library
   File "${EXTDIR}\bin\dbghelp.dll.license.txt"
   File "${EXTDIR}\bin\dbghelp.dll"
 
   ; Data files
-  File "..\..\data\mp.wz"
-  File "..\..\data\base.wz"
+  File "${TOP_BUILDDIR}\data\mp.wz"
+  File "${TOP_BUILDDIR}\data\base.wz"
 
   ; Information/documentation files
-  File "/oname=ChangeLog.txt" "..\..\ChangeLog"
-  File "/oname=Authors.txt" "..\..\AUTHORS"
-  File "/oname=License.txt" "..\..\COPYING"
-  File "/oname=Readme.en.txt" "..\..\doc\Readme.en"
-  File "/oname=Readme.de.txt" "..\..\doc\Readme.de"
-  File "/oname=Readme.en.html" "..\..\doc\Readme.en.xhtml"
-  File "/oname=Readme.de.html" "..\..\doc\Readme.de.xhtml"
+  File "/oname=ChangeLog.txt" "${TOP_SRCDIR}\ChangeLog"
+  File "/oname=Authors.txt" "${TOP_SRCDIR}\AUTHORS"
+  File "/oname=License.txt" "${TOP_SRCDIR}\COPYING"
+  File "/oname=Readme.en.txt" "${TOP_SRCDIR}\doc\Readme.en"
+  File "/oname=Readme.de.txt" "${TOP_SRCDIR}\doc\Readme.de"
+  File "/oname=Readme.en.html" "${TOP_SRCDIR}\doc\Readme.en.xhtml"
+  File "/oname=Readme.de.html" "${TOP_SRCDIR}\doc\Readme.de.xhtml"
 
   ; Music files
   SetOutPath "$INSTDIR\music"
-  File "..\..\data\music\menu.ogg"
-  File "..\..\data\music\track1.ogg"
-  File "..\..\data\music\track2.ogg"
-  File "..\..\data\music\music.wpl"
+  File "${TOP_SRCDIR}\data\music\menu.ogg"
+  File "${TOP_SRCDIR}\data\music\track1.ogg"
+  File "${TOP_SRCDIR}\data\music\track2.ogg"
+  File "${TOP_SRCDIR}\data\music\music.wpl"
 
   SetOutPath "$INSTDIR\styles"
 
-  File "/oname=readme.print.css" "..\..\doc\styles\readme.print.css"
-  File "/oname=readme.screen.css" "..\..\doc\styles\readme.screen.css"
+  File "/oname=readme.print.css" "${TOP_SRCDIR}\doc\styles\readme.print.css"
+  File "/oname=readme.screen.css" "${TOP_SRCDIR}\doc\styles\readme.screen.css"
 
   SetOutPath "$INSTDIR\fonts"
 
@@ -220,25 +218,11 @@ SectionEnd
 
 SectionGroup /e $(TEXT_SecMods) secMods
 
-Section $(TEXT_SecGrimMod) SecGrimMod
-
-  SetOutPath "$INSTDIR\mods\global"
-
-  File "..\..\data\mods\global\grim.wz"
-
-  SetOutPath "$INSTDIR"
-
-  !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
-    CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\${PACKAGE_NAME} - Grim's GFX.lnk" "$INSTDIR\${PACKAGE}.exe" "--mod grim.wz"
-  !insertmacro MUI_STARTMENU_WRITE_END
-
-SectionEnd
-
 Section $(TEXT_SecAivolutionMod) SecAivolutionMod
 
   SetOutPath "$INSTDIR\mods\global"
 
-  File "..\..\data\mods\global\aivolution.wz"
+  File "${TOP_BUILDDIR}\data\mods\global\aivolution.wz"
 
   SetOutPath "$INSTDIR"
 
@@ -266,7 +250,7 @@ Section $(TEXT_SecNTWMod) SecNTWMod
 
   SetOutPath "$INSTDIR\mods\multiplay"
 
-  File "..\..\data\mods\multiplay\ntw.wz"
+  File "${TOP_BUILDDIR}\data\mods\multiplay\ntw.wz"
 
   SetOutPath "$INSTDIR"
 
@@ -281,64 +265,64 @@ SectionGroupEnd
 Section $(TEXT_SecNLS) SecNLS
 
   SetOutPath "$INSTDIR\locale\cs\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "..\..\po\cs.gmo"
+  File "/oname=${PACKAGE}.mo" "${TOP_BUILDDIR}\po\cs.gmo"
 
   SetOutPath "$INSTDIR\locale\da\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "..\..\po\da.gmo"
+  File "/oname=${PACKAGE}.mo" "${TOP_BUILDDIR}\po\da.gmo"
 
   SetOutPath "$INSTDIR\locale\de\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "..\..\po\de.gmo"
+  File "/oname=${PACKAGE}.mo" "${TOP_BUILDDIR}\po\de.gmo"
 
   SetOutPath "$INSTDIR\locale\en_GB\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "..\..\po\en_GB.gmo"
+  File "/oname=${PACKAGE}.mo" "${TOP_BUILDDIR}\po\en_GB.gmo"
 
   SetOutPath "$INSTDIR\locale\es\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "..\..\po\es.gmo"
+  File "/oname=${PACKAGE}.mo" "${TOP_BUILDDIR}\po\es.gmo"
 
   SetOutPath "$INSTDIR\locale\fi\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "..\..\po\fi.gmo"
+  File "/oname=${PACKAGE}.mo" "${TOP_BUILDDIR}\po\fi.gmo"
 
   SetOutPath "$INSTDIR\locale\fr\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "..\..\po\fr.gmo"
+  File "/oname=${PACKAGE}.mo" "${TOP_BUILDDIR}\po\fr.gmo"
 
   SetOutPath "$INSTDIR\locale\fy\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "..\..\po\fy.gmo"
+  File "/oname=${PACKAGE}.mo" "${TOP_BUILDDIR}\po\fy.gmo"
 
   SetOutPath "$INSTDIR\locale\ga\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "..\..\po\ga.gmo"
+  File "/oname=${PACKAGE}.mo" "${TOP_BUILDDIR}\po\ga.gmo"
 
   SetOutPath "$INSTDIR\locale\it\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "..\..\po\it.gmo"
+  File "/oname=${PACKAGE}.mo" "${TOP_BUILDDIR}\po\it.gmo"
 
   SetOutPath "$INSTDIR\locale\la\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "..\..\po\la.gmo"
+  File "/oname=${PACKAGE}.mo" "${TOP_BUILDDIR}\po\la.gmo"
 
   SetOutPath "$INSTDIR\locale\lt\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "..\..\po\lt.gmo"
+  File "/oname=${PACKAGE}.mo" "${TOP_BUILDDIR}\po\lt.gmo"
 
   SetOutPath "$INSTDIR\locale\nb\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "..\..\po\nb.gmo"
+  File "/oname=${PACKAGE}.mo" "${TOP_BUILDDIR}\po\nb.gmo"
 
   SetOutPath "$INSTDIR\locale\nl\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "..\..\po\nl.gmo"
+  File "/oname=${PACKAGE}.mo" "${TOP_BUILDDIR}\po\nl.gmo"
 
   SetOutPath "$INSTDIR\locale\pl\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "..\..\po\pl.gmo"
+  File "/oname=${PACKAGE}.mo" "${TOP_BUILDDIR}\po\pl.gmo"
 
   SetOutPath "$INSTDIR\locale\pt_BR\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "..\..\po\pt_BR.gmo"
+  File "/oname=${PACKAGE}.mo" "${TOP_BUILDDIR}\po\pt_BR.gmo"
 
   SetOutPath "$INSTDIR\locale\pt\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "..\..\po\pt.gmo"
+  File "/oname=${PACKAGE}.mo" "${TOP_BUILDDIR}\po\pt.gmo"
 
   SetOutPath "$INSTDIR\locale\ro\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "..\..\po\ro.gmo"
+  File "/oname=${PACKAGE}.mo" "${TOP_BUILDDIR}\po\ro.gmo"
 
   SetOutPath "$INSTDIR\locale\ru\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "..\..\po\ru.gmo"
+  File "/oname=${PACKAGE}.mo" "${TOP_BUILDDIR}\po\ru.gmo"
 
   SetOutPath "$INSTDIR\locale\zh_CN\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "..\..\po\zh_CN.gmo"
+  File "/oname=${PACKAGE}.mo" "${TOP_BUILDDIR}\po\zh_CN.gmo"
 
 SectionEnd
 
@@ -370,9 +354,6 @@ FunctionEnd
   LangString TEXT_SecMods ${LANG_ENGLISH} "Mods"
   LangString DESC_SecMods ${LANG_ENGLISH} "Various mods."
 
-  LangString TEXT_SecGrimMod ${LANG_ENGLISH} "Grim's graphics-update"
-  LangString DESC_SecGrimMod ${LANG_ENGLISH} "Grim's graphics-update. Contains more detailed textures for campaign 1 as well as additional texture- and model-updates. Copyright (C) 2005-2007 Grim Moroe, Use is only permited for ${PACKAGE_NAME}."
-
   LangString TEXT_SecAivolutionMod ${LANG_ENGLISH} "Aivolution"
   LangString DESC_SecAivolutionMod ${LANG_ENGLISH} "Improved artificial intelligence that learns."
 
@@ -396,9 +377,6 @@ FunctionEnd
   LangString TEXT_SecMods ${LANG_DUTCH} "Mods"
   LangString DESC_SecMods ${LANG_DUTCH} "Verschillende mods."
 
-  LangString TEXT_SecGrimMod ${LANG_DUTCH} "Grim's grafische-update"
-  LangString DESC_SecGrimMod ${LANG_DUTCH} "Grim's grafische-update. Bevat meer gedetaïleerde textures voor campaign 1 en extra texture- en model-updates. Copyright (C) 2005-2007 Grim Moroe, gebruik is alleen toegestaan voor ${PACKAGE_NAME}."
-
   LangString TEXT_SecAivolutionMod ${LANG_DUTCH} "Aivolution"
   LangString DESC_SecAivolutionMod ${LANG_DUTCH} "Verbeterde kunstmatige intelligentie die leert."
 
@@ -421,9 +399,6 @@ FunctionEnd
 
   LangString TEXT_SecMods ${LANG_GERMAN} "Mods"
   LangString DESC_SecMods ${LANG_GERMAN} "Verschiedene Mods."
-
-  LangString TEXT_SecGrimMod ${LANG_GERMAN} "Grims Grafik-Update"
-  LangString DESC_SecGrimMod ${LANG_GERMAN} "Grims Grafik-Update. Enthält detailliertere Texturen für Kampagne 1 sowie einige andere Textur- und Model-Updates. Copyright (C) 2005-2007 Grim Moroe, Verwendung nur für ${PACKAGE_NAME} gestattet."
 
   LangString TEXT_SecAivolutionMod ${LANG_GERMAN} "Aivolution"
   LangString DESC_SecAivolutionMod ${LANG_GERMAN} "Verbesserte künstliche Intelligenz, die dazulernt."
@@ -456,7 +431,6 @@ FunctionEnd
     !insertmacro MUI_DESCRIPTION_TEXT ${SecOpenAL} $(DESC_SecOpenAL)
 
     !insertmacro MUI_DESCRIPTION_TEXT ${SecMods} $(DESC_SecMods)
-    !insertmacro MUI_DESCRIPTION_TEXT ${SecGrimMod} $(DESC_SecGrimMod)
     !insertmacro MUI_DESCRIPTION_TEXT ${SecAivolutionMod} $(DESC_SecAivolutionMod)
     !insertmacro MUI_DESCRIPTION_TEXT ${SecMusicMod} $(DESC_SecMusicMod)
     !insertmacro MUI_DESCRIPTION_TEXT ${SecNTWMod} $(DESC_SecNTWMod)
@@ -513,7 +487,6 @@ Section "Uninstall"
   RMDir "$INSTDIR\mods\global\autoload"
 
   Delete "$INSTDIR\mods\global\aivolution.wz"
-  Delete "$INSTDIR\mods\global\grim.wz"
   RMDir "$INSTDIR\mods\global"
 
   Delete "$INSTDIR\mods\multiplay\ntw.wz"
@@ -605,7 +578,6 @@ Section "Uninstall"
 
   Delete "$SMPROGRAMS\$STARTMENU_FOLDER\Uninstall.lnk"
   Delete "$SMPROGRAMS\$STARTMENU_FOLDER\${PACKAGE_NAME}.lnk"
-  Delete "$SMPROGRAMS\$STARTMENU_FOLDER\${PACKAGE_NAME} - Grim's GFX.lnk"
   Delete "$SMPROGRAMS\$STARTMENU_FOLDER\${PACKAGE_NAME} - Aivolution.lnk"
   Delete "$SMPROGRAMS\$STARTMENU_FOLDER\${PACKAGE_NAME} - NTW.lnk"
   RMDir "$SMPROGRAMS\$STARTMENU_FOLDER"

@@ -34,6 +34,8 @@
 #include "lib/ivis_common/piestate.h"
 #include "lib/ivis_common/rendmode.h"
 #include "lib/ivis_common/piepalette.h"
+#include "lib/ivis_opengl/screen.h"
+#include "lib/ivis_common/piemode.h"
 
 #include "display3d.h"
 #include "lib/framework/cursors.h"
@@ -1445,6 +1447,7 @@ void setIntelligencePauseState(void)
 			setConsolePause(true);
 		}
 		setScrollPause(true);
+		screen_RestartBackDrop();
 	}
 }
 
@@ -1463,6 +1466,8 @@ void resetIntelligencePauseState(void)
 		setScrollPause(false);
 		setConsolePause(false);
 		gameTimeStart();
+		screen_StopBackDrop();
+		pie_ScreenFlip(CLEAR_BLACK);
 	}
 }
 

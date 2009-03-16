@@ -217,6 +217,13 @@ BOOL IsStatExpansionModule(STRUCTURE_STATS *psStats)
 		}
 }
 
+BOOL structureIsBlueprint(STRUCTURE *psStructure)
+{
+	return (psStructure->status == SS_BLUEPRINT_VALID ||
+	        psStructure->status == SS_BLUEPRINT_INVALID ||
+	        psStructure->status == SS_BLUEPRINT_PLANNED);
+}
+
 void structureInitVars(void)
 {
 	int i, j;
@@ -1588,8 +1595,8 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 				else if (TileHasStructure(psTile))
 				{
 					debug(LOG_ERROR,
-					       "building %s at (%d, %d) but found %s already at (%d, %d)",
-					       pStructureType->pName, mapX, mapY,
+					       "Player %u (%s): is building %s at (%d, %d) but found %s already at (%d, %d)",
+						   player,isHumanPlayer(player) ? "Human" : "AI", pStructureType->pName, mapX, mapY,
 					       getTileStructure(mapX + width, mapY + breadth)->pStructureType->pName,
 					       mapX + width, mapY + breadth);
 					free(psBuilding);
@@ -1982,6 +1989,39 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 	setUnderTilesVis((BASE_OBJECT*)psBuilding,player);
 
 	return psBuilding;
+}
+
+STRUCTURE *buildBlueprint(STRUCTURE_STATS *psStats, float x, float y, STRUCT_STATES state)
+{
+	STRUCTURE *blueprint = malloc(sizeof(STRUCTURE));
+	// construct the fake structure
+	psStats = (STRUCTURE_STATS *)psStats;
+	blueprint->pStructureType = psStats;
+	blueprint->visible[selectedPlayer] = true;
+	blueprint->player = selectedPlayer;
+	blueprint->sDisplay.imd = psStats->pIMD;
+	blueprint->pos.x = x;
+	blueprint->pos.y = y;
+	blueprint->pos.z = map_Height(blueprint->pos.x, blueprint->pos.y) + world_coord(1)/10;
+	blueprint->direction = 0;
+	blueprint->selected = false;
+
+	blueprint->numWeaps = 0;
+	blueprint->asWeaps[0].nStat = 0;
+
+	// give defensive structures a weapon
+	if (psStats->psWeapStat[0])
+	{
+		blueprint->asWeaps[0].nStat = psStats->psWeapStat[0] - asWeaponStats;
+	}
+	// things with sensors or ecm (or repair facilities) need these set, even if they have no official weapon
+	blueprint->numWeaps = 0;
+	blueprint->asWeaps[0].recoilValue = 0;
+	blueprint->asWeaps[0].pitch = 0;
+	blueprint->asWeaps[0].rotation = 0;
+
+	blueprint->status = state;
+	return blueprint;
 }
 
 
@@ -4702,7 +4742,7 @@ BOOL removeStruct(STRUCTURE *psDel, BOOL bDestroy)
 		{
 			if (psDel->pFunctionality->resourceExtractor.power)
 			{
-				buildFeature(&asFeatureStats[oilResFeature], psDel->pos.x, psDel->pos.y, false);
+				buildFeature(oilResFeature, psDel->pos.x, psDel->pos.y, false);
 				resourceFound = true;
 			}
 		}
@@ -5806,20 +5846,22 @@ void printStructureInfo(STRUCTURE *psStructure)
 		}
 		break;
 	case REF_DEFENSE:
-		if (psStructure->pStructureType->pSensor == NULL)
-		{
-			break;
-		}
 #ifdef DEBUG
-		else if (getDebugMappingStatus())
+		if (getDebugMappingStatus())
 		{
 			CONPRINTF(ConsoleString, (ConsoleString, "%s - %d Units assigned - ID %d - armour %d|%d - sensor range %hu power %hu - ECM %u",
 				getStatName(psStructure->pStructureType), countAssignedDroids(psStructure),
 				psStructure->id, psStructure->armour[0][WC_KINETIC], psStructure->armour[0][WC_HEAT],
 			        structSensorRange(psStructure), structSensorPower(psStructure), structConcealment(psStructure)));
-		}
+		} else
 #endif
-		else
+		if (psStructure->pStructureType->pSensor != NULL
+		       && (psStructure->pStructureType->pSensor->type == STANDARD_SENSOR
+		       || psStructure->pStructureType->pSensor->type == INDIRECT_CB_SENSOR
+		       || psStructure->pStructureType->pSensor->type == VTOL_INTERCEPT_SENSOR
+		       || psStructure->pStructureType->pSensor->type == VTOL_CB_SENSOR
+		       || psStructure->pStructureType->pSensor->type == SUPER_SENSOR)
+		       && psStructure->pStructureType->pSensor->location == LOC_TURRET)
 		{
 			unsigned int assigned_droids = countAssignedDroids(psStructure);
 

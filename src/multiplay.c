@@ -123,7 +123,8 @@ BOOL turnOffMultiMsg(BOOL bDoit)
 	{
 		if(bTemp == true)
 		{
-			debug(LOG_NET, "turnOffMultiMsg: multiple calls to turn off");
+			// This is spammed multiple times.
+			debug(LOG_NEVER, "multiple calls to turn off");
 		}
 		if(bMultiPlayer)
 		{
@@ -703,31 +704,6 @@ BOOL recvMessage(void)
 		case NET_RESEARCH:					// some research has been done.
 			recvResearch();
 			break;
-		case NET_LEAVING:					// player leaving nicely
-		{
-			uint32_t player_id;
-			BOOL host;
-
-			resetReadyStatus(false);
-
-			NETbeginDecode(NET_LEAVING);
-				NETuint32_t(&player_id);
-				NETbool(&host);                 // Added to check for host quit here -- Buggy
-			NETend();
-			if (player_id >= MAX_PLAYERS)
-			{
-				debug(LOG_ERROR, "Bad NET_LEAVING received, player ID is %d", (int)player_id);
-				break;
-			}
-			MultiPlayerLeave(player_id);
-			if (host)                               // host has quit, need to quit too.
-			{
-				//stopJoining();		//NOT defined here, checking if we need it or not.
-				debug(LOG_NET, "***Need to call stopJoining()");
-				addConsoleMessage(_("The host has left the game!"), LEFT_JUSTIFY, SYSTEM_MESSAGE);
-			}
-			break;
-		}
 		case NET_OPTIONS:
 			recvOptions();
 			break;
@@ -1055,6 +1031,11 @@ BOOL sendTextMessage(const char *pStr, BOOL all)
 
 	if (!ingame.localOptionsReceived)
 	{
+		if(!bMultiPlayer)
+		{
+			// apparently we are not in a mp game, so dump the message to the console.
+			addConsoleMessage(pStr,LEFT_JUSTIFY, SYSTEM_MESSAGE);
+		}
 		return true;
 	}
 
@@ -1498,10 +1479,6 @@ static BOOL recvDestroyTemplate()
 // send a destruct feature message.
 BOOL SendDestroyFeature(FEATURE *pF)
 {
-	// Only send if it is our responsibility
-	if (myResponsibility(pF->player))
-		return true;
-
 	NETbeginEncode(NET_FEATUREDEST, NET_ALL_PLAYERS);
 		NETuint32_t(&pF->id);
 	return NETend();
@@ -1518,12 +1495,13 @@ BOOL recvDestroyFeature()
 	NETend();
 
 	pF = IdToFeature(id,ANYPLAYER);
-
 	if (pF == NULL)
 	{
+	debug(LOG_WARNING, "feature id %d not found? (sync error?)", id);
 		return false;
 	}
 
+	debug(LOG_FEATURE, "p%d feature id %d destroyed (%s)", pF->player, pF->id, pF->psStats->pName);
 	// Remove the feature locally
 	turnOffMultiMsg(true);
 	removeFeature(pF);

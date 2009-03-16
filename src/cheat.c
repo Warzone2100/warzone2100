@@ -35,6 +35,7 @@ typedef struct _cheat_entry
 	void (*function)(void);	// pointer to void* function
 } CHEAT_ENTRY;
 
+bool Cheated = false;
 static CHEAT_ENTRY cheatCodes[] =
 {
 //	{"VQKZMY^\\Z",kf_ToggleOverlays},//interface
@@ -88,6 +89,7 @@ BOOL attemptCheatCode(const char* cheat_name)
 			/* We've got our man... */
 			curCheat->function();	// run it
 			/* And get out of here */
+			Cheated = true;
 			return true;
 		}
 	}

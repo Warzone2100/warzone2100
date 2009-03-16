@@ -6,7 +6,6 @@
 	ProjectGUID="{EFE011B6-4C0B-40AA-9F18-5AD599E70D28}"
 	RootNamespace="gamelib"
 	Keyword="Win32Proj"
-	TargetFrameworkVersion="131072"
 	>
 	<Platforms>
 		<Platform
@@ -187,7 +186,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\hashtabl.c"
+				RelativePath=".\hashtable.c"
 				>
 			</File>
 		</Filter>
@@ -213,7 +212,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\hashtabl.h"
+				RelativePath=".\hashtable.h"
 				>
 			</File>
 			<File

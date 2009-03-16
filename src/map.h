@@ -26,6 +26,7 @@
 
 #include "lib/framework/frame.h"
 #include "objects.h"
+#include "terrain.h"
 
 /* The different types of terrain as far as the game is concerned */
 typedef enum _terrain_type
@@ -77,6 +78,12 @@ static inline unsigned short TileNumber_texture(unsigned short tilenumber)
 #define BITS_GATEWAY	0x40		// bit set to show a gateway on the tile
 #define BITS_TALLSTRUCTURE 0x80		// bit set to show a tall structure which camera needs to avoid.
 
+typedef struct _ground_type
+{
+	const char *textureName;
+	float textureSize;
+} GROUND_TYPE;
+
 /* Information stored with each tile */
 typedef struct _maptile
 {
@@ -91,6 +98,10 @@ typedef struct _maptile
 	BASE_OBJECT		*psObject;		// Any object sitting on the location (e.g. building)
 	PIELIGHT		colour;
 
+	int             ground;
+	BOOL            decal;
+	float			height_new; // FIXME: replace height with a float and remove this one
+	float           waterLevel;
 //	TYPE_OF_TERRAIN	type;			// The terrain type for the tile
 } MAPTILE;
 
@@ -101,7 +112,7 @@ typedef struct _maptile
  */
 static inline bool TileIsOccupied(const MAPTILE* tile)
 {
-	return (tile->psObject != NULL);
+	return tile->psObject != NULL;
 }
 
 /** Check if tile contains a structure. Function is NOT thread-safe. */
@@ -126,16 +137,28 @@ static inline bool TileHasWall(const MAPTILE* tile)
 	     || ((STRUCTURE*)tile->psObject)->pStructureType->type == REF_WALLCORNER);
 }
 
+/** Check if tile is burning. */
+static inline bool TileIsBurning(const MAPTILE *tile)
+{
+	return tile->tileInfoBits & BITS_ON_FIRE;
+}
+
 /** Check if tile is highlighted by the user. Function is thread-safe. */
 static inline bool TileIsHighlighted(const MAPTILE* tile)
 {
 	return tile->texture & TILE_HILIGHT;
 }
 
+/** Check if tile is not blocking, even if structure or feature on it */
+static inline bool TileIsNotBlocking(const MAPTILE *tile)
+{
+	return tile->tileInfoBits & BITS_NOTBLOCKING;
+}
+
 /** Check if tile contains a tall structure. Function is thread-safe. */
 static inline WZ_DECL_PURE bool TileHasTallStructure(const MAPTILE* tile)
 {
-	return (tile->tileInfoBits & BITS_TALLSTRUCTURE);
+	return tile->tileInfoBits & BITS_TALLSTRUCTURE;
 }
 
 /** Check if tile contains a small structure. Function is NOT thread-safe. */
@@ -145,28 +168,28 @@ static inline bool TileHasSmallStructure(const MAPTILE* tile)
 	    && ((STRUCTURE*)tile->psObject)->pStructureType->height == 1;
 }
 
-#define TILE_IS_NOTBLOCKING(x)	(x->tileInfoBits & BITS_NOTBLOCKING)
-#define SET_TILE_NOTBLOCKING(x)	(x->tileInfoBits |= BITS_NOTBLOCKING)
-#define CLEAR_TILE_NOTBLOCKING(x)	(x->tileInfoBits &= ~BITS_NOTBLOCKING)
+#define SET_TILE_NOTBLOCKING(x)	((x)->tileInfoBits |= BITS_NOTBLOCKING)
+#define CLEAR_TILE_NOTBLOCKING(x)	((x)->tileInfoBits &= ~BITS_NOTBLOCKING)
 
-#define SET_TILE_HIGHLIGHT(x)	(x->texture = (UWORD)((x)->texture | TILE_HILIGHT))
-#define CLEAR_TILE_HIGHLIGHT(x)	(x->texture = (UWORD)((x)->texture & (~TILE_HILIGHT)))
-#define SET_TILE_TALLSTRUCTURE(x)	(x->tileInfoBits = (UBYTE)((x)->tileInfoBits | BITS_TALLSTRUCTURE))
-#define CLEAR_TILE_TALLSTRUCTURE(x)	(x->tileInfoBits = (UBYTE)((x)->tileInfoBits & (~BITS_TALLSTRUCTURE)))
+#define SET_TILE_HIGHLIGHT(x)	((x)->texture |= TILE_HILIGHT)
+#define CLEAR_TILE_HIGHLIGHT(x)	((x)->texture &= ~TILE_HILIGHT)
+
+#define SET_TILE_TALLSTRUCTURE(x)	((x)->tileInfoBits |= BITS_TALLSTRUCTURE)
+#define CLEAR_TILE_TALLSTRUCTURE(x)	((x)->tileInfoBits &= ~BITS_TALLSTRUCTURE)
 
 // Multiplier for the tile height
 #define	ELEVATION_SCALE	2
 
 /* Allows us to do if(TRI_FLIPPED(psTile)) */
-#define TRI_FLIPPED(x)		(x->texture & TILE_TRIFLIP)
+#define TRI_FLIPPED(x)		((x)->texture & TILE_TRIFLIP)
 /* Flips the triangle partition on a tile pointer */
-#define TOGGLE_TRIFLIP(x)	(x->texture = (UWORD)(x->texture ^ TILE_TRIFLIP))
+#define TOGGLE_TRIFLIP(x)	((x)->texture ^= TILE_TRIFLIP)
 
 /* Can player number p see tile t? */
-#define TEST_TILE_VISIBLE(p,t)	( (t->tileVisBits) & (1<<p) )
+#define TEST_TILE_VISIBLE(p,t)	((t)->tileVisBits & (1<<(p)))
 
 /* Set a tile to be visible for a player */
-#define SET_TILE_VISIBLE(p,t) t->tileVisBits = (UBYTE)(t->tileVisBits | (1<<p))
+#define SET_TILE_VISIBLE(p,t) ((t)->tileVisBits |= 1<<(p))
 
 /* Arbitrary maximum number of terrain textures - used in look up table for terrain type */
 #define MAX_TILE_TEXTURES	255
@@ -191,6 +214,13 @@ static inline unsigned char terrainType(const MAPTILE * tile)
 /* The size and contents of the map */
 extern UDWORD	mapWidth, mapHeight;
 extern MAPTILE *psMapTiles;
+extern float waterLevel;
+
+extern GROUND_TYPE *psGroundTypes;
+extern int numGroundTypes;
+extern int waterGroundType;
+extern int cliffGroundType;
+extern char *tileset;
 
 /*
  * Usage-Example:
@@ -234,7 +264,7 @@ static inline void clip_world_offmap(int* worldX, int* worldY)
 }
 
 /* maps a position down to the corner of a tile */
-#define map_round(coord) (coord & (TILE_UNITS - 1))
+#define map_round(coord) ((coord) & (TILE_UNITS - 1))
 
 /* Shutdown the map module */
 extern BOOL mapShutdown(void);
@@ -243,7 +273,7 @@ extern BOOL mapShutdown(void);
 extern BOOL mapNew(UDWORD width, UDWORD height);
 
 /* Load the map data */
-extern BOOL mapLoad(char *pFileData, UDWORD fileSize);
+extern BOOL mapLoad(char *filename);
 
 /* Save the map data */
 extern BOOL mapSave(char **ppFileData, UDWORD *pFileSize);
@@ -262,22 +292,45 @@ static inline WZ_DECL_PURE MAPTILE *mapTile(UDWORD x, UDWORD y)
 }
 
 /* Return height of tile at x,y */
-static inline WZ_DECL_PURE SWORD map_TileHeight(UDWORD x, UDWORD y)
+static inline WZ_DECL_PURE float map_TileHeight(UDWORD x, UDWORD y)
 {
 	if ( x >= mapWidth || y >= mapHeight )
 	{
 		return 0;
 	}
-	return (SWORD)(psMapTiles[x + (y * mapWidth)].height * ELEVATION_SCALE);
+	return ((float)psMapTiles[x + (y * mapWidth)].height * ELEVATION_SCALE);
 }
 
+/* Return height of tile at x,y, uses float height_new */
+static inline WZ_DECL_PURE float map_TileHeight_new(UDWORD x, UDWORD y)
+{
+	if ( x >= mapWidth || y >= mapHeight )
+	{
+		return 0;
+	}
+	return ((float)psMapTiles[x + (y * mapWidth)].height_new * ELEVATION_SCALE);
+}
+
+/* Return height of tile at x,y */
+static inline WZ_DECL_PURE float map_WaterHeight(UDWORD x, UDWORD y)
+{
+	if ( x >= mapWidth || y >= mapHeight )
+	{
+		return 0;
+	}
+	return ((float)psMapTiles[x + (y * mapWidth)].waterLevel * ELEVATION_SCALE);
+}
+
+
 /*sets the tile height */
-static inline void setTileHeight(UDWORD x, UDWORD y, UDWORD height)
+static inline void setTileHeight(UDWORD x, UDWORD y, float height)
 {
 	ASSERT(x < mapWidth, "x coordinate %u bigger than map width %u", x, mapWidth);
 	ASSERT(y < mapHeight, "y coordinate %u bigger than map height %u", y, mapHeight);
 
-	psMapTiles[x + (y * mapWidth)].height = (UBYTE) (height / ELEVATION_SCALE);
+	psMapTiles[x + (y * mapWidth)].height = (UBYTE)(height / ELEVATION_SCALE);
+	psMapTiles[x + (y * mapWidth)].height_new = (height / ELEVATION_SCALE);
+	markTileDirty(x, y);
 }
 
 /* Return whether a tile coordinate is on the map */
@@ -348,5 +401,7 @@ extern bool	writeVisibilityData(const char* fileName);
 extern SDWORD		scrollMinX, scrollMaxX, scrollMinY, scrollMaxY;
 
 extern void mapTest(void);
+
+extern bool fireOnLocation(unsigned int x, unsigned int y);
 
 #endif // __INCLUDED_SRC_MAP_H__

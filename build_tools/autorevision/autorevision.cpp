@@ -553,7 +553,7 @@ bool RevGitSVNQuery::FindRev(const char* cmd, std::string& str) const
 bool RevGitSVNQuery::extractRevision(RevisionInformation& rev_info)
 {
     string revision;
-    if (!FindRev("git-svn find-rev HEAD", revision)
+    if (!FindRev("git svn find-rev HEAD", revision)
      || !removeAfterNewLine(revision))
     {
         // If we got here it means that the current HEAD of git is no SVN
@@ -561,9 +561,9 @@ bool RevGitSVNQuery::extractRevision(RevisionInformation& rev_info)
         // SVN revision we originate from.
         std::string gitrevision;
         // Retrieve the most recently used git revision that's still from SVN
-        if (!FindRev("git-rev-list --max-count=1 --grep='git-svn-id: ' HEAD", gitrevision)
+        if (!FindRev("git rev-list --max-count=1 --grep='git-svn-id: ' HEAD", gitrevision)
         // Match it up with a subversion revision number
-         || !FindRev(("git-svn find-rev " + gitrevision).c_str(), revision))
+         || !FindRev(("git svn find-rev " + gitrevision).c_str(), revision))
             return RevisionExtractor::extractRevision(rev_info);
 
         removeAfterNewLine(revision);
@@ -577,7 +577,7 @@ bool RevGitSVNQuery::extractRevision(RevisionInformation& rev_info)
         {
             // This command will return without success if the working copy is
             // changed, wether checked into index or not.
-            rev_info.wc_modified = system("git-diff --quiet HEAD");
+            rev_info.wc_modified = system("git diff --quiet HEAD");
         }
     }
 

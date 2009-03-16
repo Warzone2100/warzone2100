@@ -189,8 +189,7 @@ static	UDWORD	dispST;
 static	BOOL	bDispStarted = false;
 static	char	text[255];
 static	char	text2[255];
-
-
+extern bool Cheated;
 // --------------------------------------------------------------------
 /* Initialise the mission data info - done before each mission */
 BOOL	scoreInitSystem( void )
@@ -208,6 +207,7 @@ BOOL	scoreInitSystem( void )
 	missionData.shotsOnTarget	= 0;
 	missionData.shotsOffTarget	= 0;
 	missionData.babasMowedDown	= 0;
+	Cheated = false;
 	bDispStarted = false;
 	return(true);
 }
@@ -345,8 +345,8 @@ UDWORD	width,height;
 
 	fillUpStats();
 
-	pie_UniTransBoxFill(16 + D_W, MT_Y_POS - 16, pie_GetVideoBufferWidth() - D_W - 16, MT_Y_POS + 256, WZCOL_SCORE_BOX);
-	iV_Box(16 + D_W, MT_Y_POS - 16, pie_GetVideoBufferWidth() - D_W - 16, MT_Y_POS + 256, WZCOL_SCORE_BOX_BORDER);
+	pie_UniTransBoxFill(16 + D_W, MT_Y_POS - 16, pie_GetVideoBufferWidth() - D_W - 16, MT_Y_POS + 256+16, WZCOL_SCORE_BOX);
+	iV_Box(16 + D_W, MT_Y_POS - 16, pie_GetVideoBufferWidth() - D_W - 16, MT_Y_POS + 256+16, WZCOL_SCORE_BOX_BORDER);
 
 	iV_DrawText( _("Unit Losses"), LC_X + D_W, 80 + 16 + D_H );
 	iV_DrawText( _("Structure Losses"), LC_X + D_W, 140 + 16 + D_H );
@@ -442,6 +442,14 @@ void	dispAdditionalInfo( void )
 	getAsciiTime( (char*)&text2, gameTime );
 	sprintf( text, _("Total Game Time - %s"), text2 );
 	iV_DrawText( text, (pie_GetVideoBufferWidth() - iV_GetTextWidth(text))/2, 340 + D_H );
+	if (Cheated)
+	{
+		// A quick way to flash the text
+		((gameTime2 / 250) % 2) ? iV_SetTextColour(WZCOL_RED) : iV_SetTextColour(WZCOL_YELLOW);
+		sprintf( text, _("You cheated!"));
+		iV_DrawText( text, (pie_GetVideoBufferWidth() - iV_GetTextWidth(text))/2, 360 + D_H );
+		iV_SetTextColour(WZCOL_TEXT_BRIGHT);
+	}
 }
 
 // -----------------------------------------------------------------------------------

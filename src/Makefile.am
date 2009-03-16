@@ -93,7 +93,6 @@ noinst_HEADERS = \
 	functiondef.h \
 	function.h \
 	game.h \
-	gatewaydef.h \
 	gateway.h \
 	geometry.h \
 	group.h \
@@ -125,6 +124,7 @@ noinst_HEADERS = \
 	miscimd.h \
 	missiondef.h \
 	mission.h \
+	modding.h \
 	movedef.h \
 	move.h \
 	multigifts.h \
@@ -158,18 +158,25 @@ noinst_HEADERS = \
 	scriptobj.h \
 	scripttabs.h \
 	scriptvals.h \
+	scriptvals_parser.tab.h \
 	selection.h \
 	seqdisp.h \
+	stats-db2.c \
 	stats-db2.h \
 	statsdef.h \
 	stats.h \
+	stats-db.c \
+	stats-db.h \
+	stringdef.h \
 	structuredef.h \
 	structure.h \
 	target.h \
+	terrain.h \
 	text.h \
 	texture.h \
 	transporter.h \
 	visibility.h \
+	version.h \
 	warcam.h \
 	warzoneconfig.h \
 	weapondef.h \
@@ -277,6 +284,7 @@ warzone2100_SOURCES = \
 	stats.c \
 	structure.c \
 	target.c \
+	terrain.c \
 	text.c \
 	texture.c \
 	transporter.c \

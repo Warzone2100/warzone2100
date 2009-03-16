@@ -26,6 +26,8 @@ CLEANFILES = \
 
 noinst_LIBRARIES = libscript.a
 noinst_HEADERS = \
+	chat_parser.tab.h \
+	script_parser.tab.h \
 	chat_processing.h \
 	codeprint.h \
 	event.h \

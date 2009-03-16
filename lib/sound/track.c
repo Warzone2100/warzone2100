@@ -88,7 +88,7 @@ BOOL sound_GetSystemActive( void )
  *  \param loop whether the track should be looped until explicitly stopped
  *  \param volume the volume this track should be played on (range is 0-100)
  *  \param audibleRadius the radius from the source of sound where it can be heard
- *  \return a non-zero value representing the track id number when succesfull, zero when the file is not found or no more tracks can be loaded (i.e. the limit is reached)
+ *  \return a non-zero value representing the track id number when successful, zero when the file is not found or no more tracks can be loaded (i.e. the limit is reached)
  */
 unsigned int sound_SetTrackVals(const char* fileName, BOOL loop, unsigned int volume, unsigned int audibleRadius)
 {

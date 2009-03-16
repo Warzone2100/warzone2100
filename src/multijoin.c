@@ -154,11 +154,9 @@ void clearPlayer(UDWORD player,BOOL quietly,BOOL removeOil)
 		}
 		else
 		{
-			if(	(psStruct->pStructureType->type != REF_WALL &&
-				 psStruct->pStructureType->type != REF_WALLCORNER ) )
-			{
-				destroyStruct(psStruct);
-			}
+			// NOTE: when a player leaves, we should destroy everything, including the walls
+			// Is there any reason why not to do this? (removed wall check code)
+			destroyStruct(psStruct);
 		}
 
 		if(bTemp)
@@ -211,11 +209,10 @@ BOOL MultiPlayerLeave( UDWORD dp)
 
 	while((player2dpid[i] != dp) && (i<MAX_PLAYERS) )i++;	// find out which!
 
-	debug(LOG_NET, "Player %u is leaving (dpid=%u)", i, dp);
-
 	if(i != MAX_PLAYERS)									// player not already removed
 	{
-		NETlogEntry("Player Unexpectedly leaving, came from directplay...",0,dp);
+		NETlogEntry("Player leaving game",0,dp);
+		debug(LOG_WARNING,"** Warning, player %u (dpid %u) [%s], has left the game.", i, dp, getPlayerName(i));
 
 		ssprintf(buf, _("%s has Left the Game"), getPlayerName(i));
 
@@ -231,17 +228,20 @@ BOOL MultiPlayerLeave( UDWORD dp)
 		{
 			audio_QueueTrack( ID_CLAN_EXIT );
 		}
+
+		NETplayerInfo();				// update the player info stuff
+
+		// fire script callback to reassign skirmish players.
+		CBPlayerLeft = i;
+		eventFireCallbackTrigger((TRIGGER_TYPE)CALL_PLAYERLEFT);
+		return true;
+	}
+	else
+	{
+		debug(LOG_WARNING, "Could not find Player %u (dpid=%u) to leave?", i, dp);
 	}
 
-	NETplayerInfo();									// update the player info stuff
-
-
-	// fire script callback to reassign skirmish players.
-	CBPlayerLeft = i;
-	eventFireCallbackTrigger((TRIGGER_TYPE)CALL_PLAYERLEFT);
-
-
-	return true;
+	return false;
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -295,7 +295,6 @@ BOOL MultiPlayerJoin(UDWORD dpid)
 		{
 			kickPlayer(dpid);
 		}
-
 	}
 	return true;
 }
@@ -325,25 +324,4 @@ void setupNewPlayer(UDWORD dpid, UDWORD player)
 
 	ssprintf(buf, _("%s is Joining the Game"), getPlayerName(player));
 	addConsoleMessage(buf,DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
-}
-
-// ////////////////////////////////////////////////////////////////////////////
-// reduce the amount of oil that can be extracted.
-void modifyResources(POWER_GEN_FUNCTION* psFunction)
-{
-	switch(game.power)
-	{
-	case LEV_LOW:
-		psFunction->powerMultiplier = psFunction->powerMultiplier * 3/4 ;	// careful with the brackets! (do mul before div)
-		break;
-	case LEV_MED:
-		psFunction->powerMultiplier = psFunction->powerMultiplier * 1;
-		break;
-	case LEV_HI:
-		psFunction->powerMultiplier = psFunction->powerMultiplier * 5/4  ;
-		break;
-	default:
-		break;
-	}
-	return;
 }

@@ -1191,7 +1191,7 @@ static BOOL BuildSelectedDroidList(void)
 
 
 // Set the secondary order state for all currently selected droids. And Factory (if one selected)
-// Returns true if succesfull.
+// Returns true if successful.
 //
 static BOOL SetSecondaryState(SECONDARY_ORDER sec, SECONDARY_STATE State)
 {

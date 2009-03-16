@@ -17,10 +17,10 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/*
- * mission.c
+/**
+ * @file mission.c
  *
- * all the stuff relevant to a mission
+ * All the stuff relevant to a mission.
  */
 #include "mission.h"
 
@@ -2767,13 +2767,13 @@ static BOOL _intAddMissionResult(BOOL result, BOOL bPlaySuccess)
         //don't bother adding the text if haven't played the audio
         if (bPlaySuccess)
         {
-		    sLabInit.pText = _("OBJECTIVE ACHIEVED");//"Objective Achieved";
+			sLabInit.pText = Cheated ? _("OBJECTIVE ACHIEVED by cheating!") : _("OBJECTIVE ACHIEVED");//"Objective Achieved";
         }
 
 	}
 	else
 	{
-	  	sLabInit.pText = _("OBJECTIVE FAILED");//"Objective Failed;
+		sLabInit.pText = Cheated ? _("OBJECTIVE FAILED--and you cheated!"): _("OBJECTIVE FAILED");//"Objective Failed;
 	}
 	sLabInit.FontID = font_regular;
 	if (!widgAddLabel(psWScreen, &sLabInit))

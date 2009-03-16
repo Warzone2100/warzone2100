@@ -127,6 +127,7 @@ static UDWORD hideTime=0;
 #define DEFAULTCAMPAIGNMAP	"Rush"
 #define DEFAULTSKIRMISHMAP	"Sk-Rush"
 
+extern int NET_PlayerConnectionStatus;		// from src/display3d.c
 
 /// end of globals.
 // ////////////////////////////////////////////////////////////////////////////
@@ -179,7 +180,8 @@ static BOOL		safeToUseColour		(UDWORD player,UDWORD col);
 BOOL			chooseColour		(UDWORD);
 static BOOL		changeReadyStatus	(UBYTE player, BOOL bReady);
 void			resetReadyStatus	(bool bSendOptions);
-
+void			initTeams( void );
+static	void stopJoining(void);
 // ////////////////////////////////////////////////////////////////////////////
 // map previews..
 
@@ -230,13 +232,7 @@ void loadMapPreview(void)
 	ptr = strrchr(aFileName, '/');
 	ASSERT(ptr, "this string was supposed to contain a /");
 	strcpy(ptr, "/game.map");
-	pFileData = fileLoadBuffer;
-	if (!loadFileToBuffer(aFileName, pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
-	{
-		debug(LOG_ERROR, "loadMapPreview: Failed to load map file");
-		return;
-	}
-	if (!mapLoad(pFileData, fileSize))
+	if (!mapLoad(aFileName))
 	{
 		debug(LOG_ERROR, "loadMapPreview: Failed to load map");
 		return;
@@ -1701,6 +1697,7 @@ static void stopJoining(void)
 	dwSelectedGame	 = 0;
 	saveConfig();
 
+	debug(LOG_NET,"player %u (Host is %s) stopping.", NetPlay.dpidPlayer, NetPlay.bHost ? "true" : "false");
 	{
 		if(bHosted)											// cancel a hosted game.
 		{
@@ -1916,7 +1913,8 @@ static void processMultiopWidgets(UDWORD id)
 			widgSetButtonState(psWScreen, MULTIOP_ALLIANCE_Y,0);
 
 			widgSetButtonState(psWScreen, MULTIOP_ALLIANCE_TEAMS,0);
-
+			// Host wants NO alliance, so reset all teams back to default
+			initTeams();
 			game.alliance = NO_ALLIANCES;	//0;
 
 			resetReadyStatus(false);
@@ -2157,6 +2155,8 @@ static void processMultiopWidgets(UDWORD id)
 			if(NetPlay.bHost && multiplayPlayersReady(false))
 			{
 				startMultiplayerGame();
+				// reset flag in case people dropped/quit on join screen
+				NET_PlayerConnectionStatus = 0;
 			}
 		}
 	}
@@ -2335,20 +2335,24 @@ void frontendMultiMessages(void)
 			recvPing();
 			break;
 
-		case NET_LEAVING:					// remote player leaving.
+		case NET_PLAYER_DROPPED:		// remote player got disconnected
 		{
 			BOOL host;
 			uint32_t player_id;
 
 			resetReadyStatus(false);
 
-			NETbeginDecode(NET_LEAVING);
+			NETbeginDecode(NET_PLAYER_DROPPED);
 			{
 				NETuint32_t(&player_id);
 				NETbool(&host);
 			}
 			NETend();
+
+			debug(LOG_WARNING,"** player %u has dropped! Host is %s",player_id,host?"true":"false");
+
 			MultiPlayerLeave(player_id);
+			NET_PlayerConnectionStatus = 2;		//DROPPED_CONNECTION
 			if (host)					// host has quit, need to quit too.
 			{
 				stopJoining();
@@ -2574,6 +2578,18 @@ void runMultiOptions(void)
 }
 
 // ////////////////////////////////////////////////////////////////////////////
+void initTeams()
+{
+	int i;
+
+	for(i=0; i < MAX_PLAYERS; i++)
+	{
+		bTeamChooserUp[i] = false;			// default is all false
+		playerTeam[i] = -1;					//team each player belongs to (in the game) default = -1
+		playerTeamGUI[i] = i;				//team each player belongs to (in skirmish setup screen)
+	}
+
+}
 BOOL startMultiOptions(BOOL bReenter)
 {
 	PLAYERSTATS		nullStats;
@@ -2585,7 +2601,7 @@ BOOL startMultiOptions(BOOL bReenter)
 	if(!bReenter)
 	{
 		initPlayerColours();			 // force a colour clearout.
-
+		initTeams();					// reset teams to defaults.
 		for(i=0;i<MAX_PLAYERS;i++)
 		{
 //			game.skirmishPlayers[i] = 1; // clear out skirmish setting
@@ -3101,7 +3117,8 @@ void displayMultiBut(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT 
 			break;
 		default:
 			hiToUse = 0;
-			debug(LOG_WARNING, "no automatic multibut highlight for width = %d", iV_GetImageWidth(FrontImages, im_norm));
+			// This line spams a TON.  (Game options screen, hover mouse over one of the flag colors)
+//			debug(LOG_WARNING, "no automatic multibut highlight for width = %d", iV_GetImageWidth(FrontImages, im_norm));
 			break;
 		}
 	}

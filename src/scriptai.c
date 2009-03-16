@@ -433,9 +433,10 @@ static int scrOrderDroid(lua_State *L)
 		order != DORDER_DESTRUCT &&
 		order != DORDER_RTR &&
 		order != DORDER_RTB &&
-		order != DORDER_RUN)
+		order != DORDER_RUN &&
+		order != DORDER_NONE )
 	{
-		return luaL_error(L, "Invalid order");
+		return luaL_error(L, "Invalid order %d", order);
 	}
 
 	orderDroid(psDroid, order);

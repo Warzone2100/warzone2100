@@ -584,7 +584,7 @@ void audio_Update()
  *  \param loop whether the track should be looped until explicitly stopped
  *  \param volume the volume this track should be played on (range is 0-100)
  *  \param audibleRadius the radius from the source of sound where it can be heard
- *  \return a non-zero value when succesfull or audio is disabled, zero when the file is not found or no more tracks can be loaded (i.e. the limit is reached)
+ *  \return a non-zero value when successful or audio is disabled, zero when the file is not found or no more tracks can be loaded (i.e. the limit is reached)
  */
 unsigned int audio_SetTrackVals(const char* fileName, BOOL loop, unsigned int volume, unsigned int audibleRadius)
 {

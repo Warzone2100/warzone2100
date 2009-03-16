@@ -55,6 +55,9 @@ extern void dealWithDroidSelect(DROID *psDroid, BOOL bDragBox);
 extern	void	setInvertMouseStatus( BOOL val );
 extern BOOL	getInvertMouseStatus( void );
 
+extern	void	setRightClickOrders( BOOL val );
+extern BOOL	getRightClickOrders( void );
+
 extern	void	setDrawShadows( BOOL val );
 extern BOOL	getDrawShadows( void );
 
@@ -178,6 +181,7 @@ extern void FinishDeliveryPosition(UDWORD xPos,UDWORD yPos,void *UserData);
 extern void CancelDeliveryRepos(void);
 extern void StartDeliveryPosition( OBJECT_POSITION *psLocation );
 extern BOOL DeliveryReposValid(void);
+extern FLAG_POSITION *deliveryPointToMove;
 
 extern void StartTacticalScrollObj(BOOL driveActive,BASE_OBJECT *psObj);
 extern void CancelTacticalScroll(void);

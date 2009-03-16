@@ -14,7 +14,7 @@ SRC= \
 	anim.c \
 	animobj.c \
 	gtime.c \
-	hashtabl.c
+	hashtable.c
 
 LIB=gamelib
 

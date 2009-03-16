@@ -151,9 +151,8 @@ lib/framework/i18n.c
 lib/framework/input.c
 lib/framework/lexer_input.c
 lib/framework/physfs_vfs.c
-lib/framework/printf_ext.c
+lib/framework/stdio_ext.c
 lib/framework/SDL_framerate.c
-lib/framework/strnlen1.c
 lib/framework/strres.c
 lib/framework/tagfile.c
 lib/framework/treap.c
@@ -162,7 +161,7 @@ lib/framework/utf.c
 lib/gamelib/anim.c
 lib/gamelib/animobj.c
 lib/gamelib/gtime.c
-lib/gamelib/hashtabl.c
+lib/gamelib/hashtable.c
 lib/ivis_common/bitimage.c
 lib/ivis_common/imd.c
 lib/ivis_common/imdload.c
@@ -187,8 +186,8 @@ lib/netplay/netplay.c
 lib/netplay/nettypes.c
 lib/script/codeprint.c
 lib/script/event.c
-lib/script/evntsave.c
-lib/script/interp.c
+lib/script/eventsave.c
+lib/script/interpreter.c
 lib/script/script.c
 lib/script/stack.c
 lib/sequence/sequence.c

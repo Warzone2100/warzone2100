@@ -8,4 +8,7 @@ if PERL_AVAILABLE
 BUILT_SOURCES = \
 	stats-db2.data.sql \
 	stats-db2.schema.sql
+
+EXTRA_DIST = $(BUILT_SOURCES)
+
 endif

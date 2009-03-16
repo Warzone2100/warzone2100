@@ -775,25 +775,7 @@ BOOL	getConsoleDisplayStatus( void )
 	return(bConsoleDisplayEnabled);
 }
 
-/** output warnings directly to the in-game console */
-void printf_console(const char *pFormat, ...)
-{
-#ifdef DEBUG
-	char		aBuffer[500];   // Output string buffer
-	va_list		pArgs;					  // Format arguments
-
-	/* Print out the string */
-	va_start(pArgs, pFormat);
-	vsnprintf(aBuffer, sizeof(aBuffer), pFormat, pArgs);
-	va_end(pArgs);
-
-	/* Output it */
-
-	addConsoleMessage(aBuffer,RIGHT_JUSTIFY,SYSTEM_MESSAGE);		//debug messages are displayed right-aligned
-#endif
-}
-
-/** like printf_console, but for release */
+/** like debug_console, but for release */
 void console(const char *pFormat, ...)
 {
 	char		aBuffer[500];   // Output string buffer
@@ -806,5 +788,4 @@ void console(const char *pFormat, ...)
 
 	/* Output it */
 	addConsoleMessage(aBuffer,DEFAULT_JUSTIFY,SYSTEM_MESSAGE);
-
 }

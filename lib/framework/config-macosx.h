@@ -296,6 +296,13 @@
 /* Define if the POSIX multithreading library can be used. */
 #define USE_POSIX_THREADS 1
 
+/* OS X has strlcpy and strlcat */
+#define HAVE_VALID_STRLCPY 1
+#define HAVE_SYSTEM_STRLCPY 1
+
+#define HAVE_VALID_STRLCAT 1
+#define HAVE_SYSTEM_STRLCAT 1
+
 /* Define if references to the POSIX multithreading library should be made
    weak. */
 /* #undef USE_POSIX_THREADS_WEAK */

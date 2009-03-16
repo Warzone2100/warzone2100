@@ -232,6 +232,18 @@ BOOL loadConfig(void)
 	}
 	
 	// //////////////////////////
+	// mouse buttons
+	if (getWarzoneKeyNumeric("RightClickOrders", &val))
+	{
+		setRightClickOrders(val);
+	}
+	else
+	{
+		setRightClickOrders(false);
+		setWarzoneKeyNumeric("RightClickOrders", false);
+	}
+	
+	// //////////////////////////
 	// rotate radar
 	if(getWarzoneKeyNumeric("rotateRadar", &val))
 	{
@@ -438,7 +450,25 @@ BOOL loadConfig(void)
 	// map name
 	if(getWarzoneKeyString("mapName", sBuf))
 	{
-		sstrcpy(game.map, sBuf);
+		/* FIXME: Get rid of storing the max-player count in the config
+		 *        file. Instead we should parse the map *before*
+		 *        showing the skirmish/multiplayer setup screen.
+		 */
+		if (getWarzoneKeyNumeric("maxPlayers", &val))
+		{
+			sstrcpy(game.map, sBuf);
+			game.maxPlayers = val;
+		}
+		else
+		{
+			debug(LOG_WARNING, "Invalid or not found maxPlayers parameter for map %s", game.map);
+			debug(LOG_WARNING, "Reseting map to default parameters.");
+			// we don't have maxPlayers set, so fall back to defaults.
+			game.maxPlayers = 4;	//4 is for the DEFAULTMAPNAME map (rush)
+			sstrcpy(game.map, DEFAULTMAPNAME);
+			setWarzoneKeyString("mapName", game.map);
+			setWarzoneKeyNumeric("maxPlayers",game.maxPlayers);
+		}
 	}
 	else
 	{
@@ -577,8 +607,14 @@ BOOL loadRenderMode(void)
 	}
 	else
 	{
+#ifdef WZ_OS_MAC
+		// Mac OS X doesn't support normal cursors
+		war_SetColouredCursor(true);
+		setWarzoneKeyNumeric("ColouredCursor", true);
+#else
 		war_SetColouredCursor(false);
 		setWarzoneKeyNumeric("ColouredCursor", false);
+#endif
 	}
 
 	if (getWarzoneKeyNumeric("trapCursor", &val))
@@ -677,6 +713,7 @@ BOOL saveConfig(void)
 	setWarzoneKeyNumeric("visfog",(SDWORD)(!war_GetFog()));			// fogtype
 	setWarzoneKeyNumeric("shake",(SDWORD)(getShakeStatus()));		// screenshake
 	setWarzoneKeyNumeric("mouseflip",(SDWORD)(getInvertMouseStatus()));	// flipmouse
+	setWarzoneKeyNumeric("RightClickOrders",(SDWORD)(getRightClickOrders()));
 	setWarzoneKeyNumeric("shadows",(SDWORD)(getDrawShadows()));	// shadows
 	setWarzoneKeyNumeric("sound", (SDWORD)war_getSoundEnabled());
 	setWarzoneKeyNumeric("FMVmode",(SDWORD)(war_GetFMVmode()));		// sequences
@@ -699,16 +736,17 @@ BOOL saveConfig(void)
 		debug( LOG_NEVER, "Writing multiplay prefs to registry\n" );
 		if(NetPlay.bHost && ingame.localJoiningInProgress)
 		{
-			setWarzoneKeyString("gameName", game.name);				//  last hosted game
+			setWarzoneKeyString("gameName", game.name);			//  last hosted game
 		}
 		setWarzoneKeyString("mapName", game.map);				//  map name
-		setWarzoneKeyNumeric("power", game.power);			// power
+		setWarzoneKeyNumeric("maxPlayers",game.maxPlayers);		// maxPlayers
+		setWarzoneKeyNumeric("power", game.power);				// power
 		setWarzoneKeyNumeric("type", game.type);				// game type
 		setWarzoneKeyNumeric("base", game.base);				// size of base
-		setWarzoneKeyNumeric("fog", game.fog);				// fog 'o war
-		setWarzoneKeyNumeric("alliance", game.alliance);			// allow alliances
+		setWarzoneKeyNumeric("fog", game.fog);					// fog 'o war
+		setWarzoneKeyNumeric("alliance", game.alliance);		// allow alliances
 		setWarzoneKeyString("playerName",(char*)sPlayer);		// player name
-		setWarzoneKeyString("phrase0", ingame.phrases[0]);	// phrases
+		setWarzoneKeyString("phrase0", ingame.phrases[0]);		// phrases
 		setWarzoneKeyString("phrase1", ingame.phrases[1]);
 		setWarzoneKeyString("phrase2", ingame.phrases[2]);
 		setWarzoneKeyString("phrase3", ingame.phrases[3]);

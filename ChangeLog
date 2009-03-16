@@ -35,15 +35,21 @@
    * New: OBJ to PIE format converter (r5774)
  * Map:
    * New: 8c-cockate and 4c-cockpit by zydonk (r5567, r5566, r5286)
+   * New: 4c-Urban-Chaos by Mysteryem (r6827)
+   * Fix: Water tiles on little egypt map fixed (r6824, bug #9658)
  * Engine:
    * New: Support for naval propulsion type (r5803)
 
-0000-00-00: Version 2.1.2
+2009-03-07: Version 2.1.2
  * General:
-   * Fix: If the target system to run on already provides strlcpy and/or strlcat, check whether they work as expected, and if they do, use them instead (r6556, r6557)
-   * Change: Allow compiling without OpenAL and Vorbis when compiling with --disable-sound
+   * Fix: No longer crash if more than six players join a game (r6658, ticket:273)
+   * Fix: Fix crash when too many maps are available (r6742)
+   * Fix: Some other crash bugs may have been prevented (r6688, r6629, r6596, r6762, r6746, r6744)
  * Sound:
    * Fix: When sound isn't enabled (at runtime, unrelated to --disable-sound, e.g. when no sound device is available) do not attempt to set up an AUDIO_STREAM
+ * Buildsystem:
+   * Fix: If the target system to run on already provides strlcpy and/or strlcat, check whether they work as expected, and if they do, use them instead (r6556, r6557)
+   * Change: Allow compiling without OpenAL and Vorbis when compiling with --disable-sound
 
 2009-01-11: Version 2.1.1
  * General:
