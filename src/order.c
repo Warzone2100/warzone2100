@@ -1749,7 +1749,6 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		if (psDroid->orderX == 0 || psDroid->orderY)
 		{
 			// We have still not managed to find a valid place to run.
-			objTrace(psDroid->id, "Wants to run, but has no designated retreat point - standing still.");
 			break;
 		}
 		actionDroidLoc(psDroid, DACTION_MOVE, psDroid->orderX,psDroid->orderY);
