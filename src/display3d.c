@@ -2902,11 +2902,10 @@ static void	drawStructureSelections( void )
 	STRUCTURE	*psStruct;
 	SDWORD		scrX,scrY;
 	UDWORD		i;
-	BASE_OBJECT	*psClickedOn;
+	BASE_OBJECT	*psClickedOn = mouseTarget();
 	BOOL		bMouseOverStructure = false;
 	BOOL		bMouseOverOwnStructure = false;
 
-	psClickedOn = mouseTarget();
 	if(psClickedOn!=NULL && psClickedOn->type == OBJ_STRUCTURE)
 	{
 		bMouseOverStructure = true;
@@ -2975,9 +2974,9 @@ static void	drawStructureSelections( void )
 		}
 	}
 
-	if (mouseDown(getRightClickOrders()?MOUSE_LMB:MOUSE_RMB))
+	if (bMouseOverStructure && !bMouseOverOwnStructure)
 	{
-		if(mouseDown(MOUSE_RMB))
+		if (mouseDown(getRightClickOrders() ? MOUSE_LMB : MOUSE_RMB))
 		{
 			psStruct = (STRUCTURE*)psClickedOn;
 			if(psStruct->status==SS_BUILT)
