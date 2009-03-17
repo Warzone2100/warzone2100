@@ -1397,11 +1397,15 @@ void displayBlueprints(void)
 		else
 		{
 			// it's a delivery point
-			FLAG_POSITION pos = *deliveryPointToMove;
-			pos.coords.x = world_coord(sBuildDetails.x)+world_coord(1)/2;
-			pos.coords.y = world_coord(sBuildDetails.y)+world_coord(1)/2;
-			pos.coords.z = map_Height(pos.coords.x, pos.coords.y) + world_coord(1)/8;
-			renderDeliveryPoint(&pos, true);
+			ASSERT(deliveryPointToMove, "we are placing something, but it is not a building or a delivery point");
+			if (deliveryPointToMove)
+			{
+				FLAG_POSITION pos = *deliveryPointToMove;
+				pos.coords.x = world_coord(sBuildDetails.x)+world_coord(1)/2;
+				pos.coords.y = world_coord(sBuildDetails.y)+world_coord(1)/2;
+				pos.coords.z = map_Height(pos.coords.x, pos.coords.y) + world_coord(1)/8;
+				renderDeliveryPoint(&pos, true);
+			}
 		}
 	}
 
