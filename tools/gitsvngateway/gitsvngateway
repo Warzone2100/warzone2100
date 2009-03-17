@@ -6,12 +6,12 @@
 #       it under the terms of the GNU General Public License as published by
 #       the Free Software Foundation; either version 2 of the License, or
 #       (at your option) any later version.
-#       
+#
 #       This program is distributed in the hope that it will be useful,
 #       but WITHOUT ANY WARRANTY; without even the implied warranty of
 #       MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #       GNU General Public License for more details.
-#       
+#
 #       You should have received a copy of the GNU General Public License
 #       along with this program; if not, write to the Free Software
 #       Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
@@ -24,6 +24,11 @@ function echo_c {
 	echo -n -e "$color"
 	echo $*
 	echo -n -e "$reset"
+}
+
+function is_merge {
+	git show --raw $1 | grep -q "Merge:"
+	return $?
 }
 
 if [ $# -ne 2 ]
@@ -101,7 +106,7 @@ then
 
 	for hash in $hashes; do
 
-		if git show $hash | grep -r "Merge:"
+		if is_merge $hash
 		then
 			echo_c "== Merge detected for $hash"
 			echo_c "== Commits contained in this merge:"
@@ -111,42 +116,53 @@ then
 			if [ $amount -le 10 ]
 			then
 				echo_c "== Going ahead with unraveling the merge"
-				git branch ${git}_merge ${git}_old
-				hashes=`git log --pretty=oneline ${git}_merge..$hash | cut -f 1 --delimiter=" " | tail -n+2 | tac`
+				filename=gitsvngateway.$hash.merge
+				if ! [ -s $filename ]
+				then
+					git log --pretty=oneline ${git}_old..$hash | cut -f 1 --delimiter=" " | tail -n+2 | tac > $filename
+				fi
+				hashes2=`cat $filename`
+				echo_c "== List of hashes still to merge:"
+				cat $filename
 
-				for hash in $hashes; do
-					if ! git merge --squash $hash
+				for hash2 in $hashes2; do
+					echo_c "== Merging $hash2"
+					# remove the first line from the merge file
+					tail -n+2 $filename > ${filename}2
+					mv ${filename}2 $filename
+
+					mainline=
+					test is_merge $hash2 && mainline=-m1
+					if ! git cherry-pick $mainline $hash2
 					then
 						echo_c "== Could not merge! Please fix this and commit."
 						echo_c "== To use the already existing log message use:"
-						echo_c "git commit -a -c $hash"
-						# to keep track of where we are
-						git branch -f ${git}_merge $hash
+						echo_c "git commit -a -C $hash2"
 						exit
 					fi
-					git commit -a -C $hash
 				done
-				# cleanup
-				git branch -D ${git}_merge
+				# cleanum
+				rm $filename
 				# to keep track of where we are
 				git branch -f ${git}_old $hash
+				echo_c "== Done processing the merge"
 				continue
 			else
 				echo_c "== Squashing this merge"
 			fi
 		fi
-		
-		if ! git merge --squash $hash
+		mainline=
+		test is_merge $hash2 && mainline=-m1
+		if ! git cherry-pick $mainline $hash
 		then
 			echo_c "== Could not merge! Please fix this and commit."
 			echo_c "== To use the already existing log message use:"
-			echo_c "git commit -a -c $hash"
+			echo_c "git commit -a -C $hash"
 			# to keep track of where we are
 			git branch -f ${git}_old $hash
 			exit
 		fi
 		git branch -f ${git}_old $hash
-		git commit -a -C $hash
 	done
 
 	state=git2svn_rebase_complete
