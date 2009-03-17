@@ -83,6 +83,8 @@ then
 	git branch -f ${git} ${svn}_new
 
 	# git -> svn
+	# so we can reset it later when the user decides to abort
+	git branch ${git}_old_backup ${git}_old
 
 	echo "== Rebasing commits from ${git} onto ${svn}"
 	git branch ${svn}_tocommit ${svn}
@@ -90,15 +92,50 @@ then
 	hashes=`git log --pretty=oneline --first-parent ${git}_old..${git}_new | cut -f 1 --delimiter=" " | tac`
 
 	for hash in $hashes; do
-		# to keep track of where we are
-		git branch -f ${git}_old $hash
+
+		if git show $hash | grep -r "Merge:"
+		then
+			echo "== Merge detected for $hash"
+			echo "== Commits contained in this merge:"
+			git log --pretty=oneline ${git}_old..$hash | tail -n+2
+			amount=`git log --pretty=oneline ${git}_old..$hash | tail -n+2 | wc -l`
+			echo "== $amount commit(s) found (threshold == 10)"
+			if [ $amount -le 10 ]
+			then
+				echo "== Going ahead with unraveling the merge"
+				git branch ${git}_merge ${git}_old
+				hashes=`git log --pretty=oneline ${git}_merge..$hash | cut -f 1 --delimiter=" " | tail -n+2 | tac`
+
+				for hash in $hashes; do
+					if ! git merge --squash $hash
+					then
+						echo "== Could not merge! Please fix this and commit."
+						echo "== To use the already existing log message use:"
+						echo "git commit -a -c $hash"
+						# to keep track of where we are
+						git branch -f ${git}_merge $hash
+						exit
+					fi
+					git commit -a -C $hash
+				done
+				# cleanup
+				git branch -D ${git}_merge
+				# to keep track of where we are
+				git branch -f ${git}_old $hash
+				continue
+			fi
+		fi
+		
 		if ! git merge --squash $hash
 		then
 			echo "== Could not merge! Please fix this and commit."
 			echo "== To use the already existing log message use:"
 			echo "git commit -a -c $hash"
+			# to keep track of where we are
+			git branch -f ${git}_old $hash
 			exit
 		fi
+		git branch -f ${git}_old $hash
 		git commit -a -C $hash
 	done
 
@@ -108,14 +145,35 @@ fi
 
 if [ "$state" = "git2svn_rebase_complete" ]
 then
-	echo "== Committing to SVN"
-	git svn dcommit
+	echo "== These changes are staged for commit to SVN =="
+	echo
+	git log ${svn}..${svn}_tocommit
+	echo
+	read -n1 -p "Do you want to commit these changes to SVN? [Y/n]: " answer
+	echo
+	if [ "x$answer" == "x" ]
+	then
+		echo "== Committing to SVN"
+		git svn dcommit
+	else
+		echo "== Cleaning up"
+		git branch -f ${git} ${git}_new
+		git checkout ${git}
+		git branch -f ${git}_old ${git}_old_backup
+		git branch -D ${git}_old_backup
+		git branch -D ${svn}_tocommit
+		git branch -D ${git}_new
+		git branch -D ${svn}_new
+		echo svn2git > "$statefile"
+		exit
+	fi
 
 	echo "== Getting back the changes from SVN"
 	git svn fetch
 
 	echo "== Checking out master"
-	git checkout $git
+	git checkout ${git}
+	git branch -D ${git}_old_backup
 	git branch -D ${svn}_tocommit
 	git branch -D ${git}_new
 	git branch -D ${svn}_new
