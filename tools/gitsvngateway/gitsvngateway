@@ -17,11 +17,20 @@
 #       Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 #       MA 02110-1301, USA.
 
+color="\033[35m"
+reset="\033[0m"
+
+function echo_c {
+	echo -n -e "$color"
+	echo $*
+	echo -n -e "$reset"
+}
+
 if [ $# -ne 2 ]
 then
-	echo "Usage: gitsvngateway [local branch] [svn remote branch]"
-	echo "If you want to reset the state of this script remove the gitsvngateway.*.*.state file."
-	echo "This script assumes that your public git repository is \"origin\""
+	echo_c "Usage: gitsvngateway [local branch] [svn remote branch]"
+	echo_c "If you want to reset the state of this script remove the gitsvngateway.*.*.state file."
+	echo_c "This script assumes that your public git repository is \"origin\""
 	exit
 fi
 
@@ -37,40 +46,39 @@ else
 	state=init
 fi
 
-echo "== svngateway ${git} ${svn}"
-echo "== Current state: ${state}"
+echo_c "== Current state: ${state}"
 
 # svn -> git
 
 if [ "$state" = "init" ]
 then
 
-	echo "== Storing pre-commit states"
+	echo_c "== Storing pre-commit states"
 	git branch ${git}_old ${git}
 	git branch ${svn}_old ${svn}
 	state=svn2git
 	echo $state > "$statefile"
 
-	echo "== You need to run this command on all branches you want to keep in sync."
-	echo "== Otherwise it will not be able to determine which commits from git svn fetch are new."
-	echo "== Please do this now and restart this script (with the same arguments) to continue."
+	echo_c "== You need to run this command on all branches you want to keep in sync."
+	echo_c "== Otherwise it will not be able to determine which commits from git svn fetch are new."
+	echo_c "== Please do this now and restart this script (with the same arguments) to continue."
 	exit 1
 fi
 
 if [ "$state" = "svn2git" ]
 then
-	echo "== Marking current state of ${git}"
+	echo_c "== Marking current state of ${git}"
 	git branch -f ${git}_new ${git}
 
-	echo "== Fetching commits from SVN"
+	echo_c "== Fetching commits from SVN"
 	git svn fetch
 
-	echo "== Rebasing commits from ${svn} onto ${git}"
+	echo_c "== Rebasing commits from ${svn} onto ${git}"
 	git branch -f ${svn}_new ${svn}
 	if ! git rebase -p --onto ${git} ${svn}_old ${svn}_new
 	then
-		echo svn2git_rebase_complete > "$statefile"
-		echo "== Finish the rebase and restart this script (with the same arguments)"
+		echo_c svn2git_rebase_complete > "$statefile"
+		echo_c "== Finish the rebase and restart this script (with the same arguments)"
 		exit 2
 	fi
 	state=svn2git_rebase_complete
@@ -79,26 +87,65 @@ fi
 
 if [ "$state" = "svn2git_rebase_complete" ]
 then
-	echo "== ${svn}_new is the new ${git}"
+	echo_c "== ${svn}_new is the new ${git}"
 	git branch -f ${git} ${svn}_new
 
 	# git -> svn
+	# so we can reset it later when the user decides to abort
+	git branch ${git}_old_backup ${git}_old
 
-	echo "== Rebasing commits from ${git} onto ${svn}"
+	echo_c "== Rebasing commits from ${git} onto ${svn}"
 	git branch ${svn}_tocommit ${svn}
 	git checkout ${svn}_tocommit
 	hashes=`git log --pretty=oneline --first-parent ${git}_old..${git}_new | cut -f 1 --delimiter=" " | tac`
 
 	for hash in $hashes; do
-		# to keep track of where we are
-		git branch -f ${git}_old $hash
+
+		if git show $hash | grep -r "Merge:"
+		then
+			echo_c "== Merge detected for $hash"
+			echo_c "== Commits contained in this merge:"
+			git log --pretty=oneline ${git}_old..$hash | tail -n+2
+			amount=`git log --pretty=oneline ${git}_old..$hash | tail -n+2 | wc -l`
+			echo_c "== $amount commit(s) found, will unravel if 10 or less"
+			if [ $amount -le 10 ]
+			then
+				echo_c "== Going ahead with unraveling the merge"
+				git branch ${git}_merge ${git}_old
+				hashes=`git log --pretty=oneline ${git}_merge..$hash | cut -f 1 --delimiter=" " | tail -n+2 | tac`
+
+				for hash in $hashes; do
+					if ! git merge --squash $hash
+					then
+						echo_c "== Could not merge! Please fix this and commit."
+						echo_c "== To use the already existing log message use:"
+						echo_c "git commit -a -c $hash"
+						# to keep track of where we are
+						git branch -f ${git}_merge $hash
+						exit
+					fi
+					git commit -a -C $hash
+				done
+				# cleanup
+				git branch -D ${git}_merge
+				# to keep track of where we are
+				git branch -f ${git}_old $hash
+				continue
+			else
+				echo_c "== Squashing this merge"
+			fi
+		fi
+		
 		if ! git merge --squash $hash
 		then
-			echo "== Could not merge! Please fix this and commit."
-			echo "== To use the already existing log message use:"
-			echo "git commit -a -c $hash"
+			echo_c "== Could not merge! Please fix this and commit."
+			echo_c "== To use the already existing log message use:"
+			echo_c "git commit -a -c $hash"
+			# to keep track of where we are
+			git branch -f ${git}_old $hash
 			exit
 		fi
+		git branch -f ${git}_old $hash
 		git commit -a -C $hash
 	done
 
@@ -108,22 +155,43 @@ fi
 
 if [ "$state" = "git2svn_rebase_complete" ]
 then
-	echo "== Committing to SVN"
-	git svn dcommit
+	echo
+	echo_c "== These changes are staged for commit to SVN:"
+	git log ${svn}..${svn}_tocommit
+	echo_c -n -e "\nDo you want to commit these changes to SVN? [Y/n]: "
+	read -n1 answer
+	echo_c
+	if [ "x$answer" == "x" ]
+	then
+		echo_c "== Committing to SVN"
+		git svn dcommit
+	else
+		echo_c "== Cleaning up"
+		git branch -f ${git} ${git}_new
+		git checkout ${git}
+		git branch -f ${git}_old ${git}_old_backup
+		git branch -D ${git}_old_backup
+		git branch -D ${svn}_tocommit
+		git branch -D ${git}_new
+		git branch -D ${svn}_new
+		echo svn2git > "$statefile"
+		exit
+	fi
 
-	echo "== Getting back the changes from SVN"
+	echo_c "== Getting back the changes from SVN"
 	git svn fetch
 
-	echo "== Checking out master"
-	git checkout $git
+	echo_c "== Checking out master"
+	git checkout ${git}
+	git branch -D ${git}_old_backup
 	git branch -D ${svn}_tocommit
 	git branch -D ${git}_new
 	git branch -D ${svn}_new
 
-	echo "== Pushing the changes to origin"
+	echo_c "== Pushing the changes to origin"
 	git push origin ${git}
 
-	echo "== Marking current state of ${git} and ${svn}"
+	echo_c "== Marking current state of ${git} and ${svn}"
 	git branch -f ${git}_old ${git}
 	git branch -f ${svn}_old ${svn}
 
