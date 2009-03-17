@@ -31,6 +31,17 @@ function is_merge {
 	return $?
 }
 
+function cherry_pick_from {
+	if is_merge $1
+	then
+		mainline=-m1
+	else
+		mainline=
+	fi
+	git cherry-pick $mainline $1
+	return $?
+}
+
 if [ $# -ne 2 ]
 then
 	echo_c "Usage: gitsvngateway [local branch] [svn remote branch]"
@@ -128,12 +139,9 @@ then
 				for hash2 in $hashes2; do
 					echo_c "== Merging $hash2"
 					# remove the first line from the merge file
-					tail -n+2 $filename > ${filename}2
-					mv ${filename}2 $filename
+					sed -i '1d' $filename
 
-					mainline=
-					test is_merge $hash2 && mainline=-m1
-					if ! git cherry-pick $mainline $hash2
+					if ! cherry_pick_from $hash2
 					then
 						echo_c "== Could not merge! Please fix this and commit."
 						echo_c "== To use the already existing log message use:"
@@ -151,9 +159,7 @@ then
 				echo_c "== Squashing this merge"
 			fi
 		fi
-		mainline=
-		test is_merge $hash2 && mainline=-m1
-		if ! git cherry-pick $mainline $hash
+		if ! cherry_pick_from $hash
 		then
 			echo_c "== Could not merge! Please fix this and commit."
 			echo_c "== To use the already existing log message use:"
