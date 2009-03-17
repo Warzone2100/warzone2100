@@ -1,0 +1,131 @@
+#!/bin/bash
+#       A tool to move commits from svn to git and from git to svn
+#       Copyright (C) 2009  Warzone Resurrection Project
+#
+#       This program is free software; you can redistribute it and/or modify
+#       it under the terms of the GNU General Public License as published by
+#       the Free Software Foundation; either version 2 of the License, or
+#       (at your option) any later version.
+#       
+#       This program is distributed in the hope that it will be useful,
+#       but WITHOUT ANY WARRANTY; without even the implied warranty of
+#       MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#       GNU General Public License for more details.
+#       
+#       You should have received a copy of the GNU General Public License
+#       along with this program; if not, write to the Free Software
+#       Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+#       MA 02110-1301, USA.
+
+if [ $# -ne 2 ]
+then
+	echo "Usage: gitsvngateway [local branch] [svn remote branch]"
+	echo "If you want to reset the state of this script remove the gitsvngateway.*.*.state file."
+	echo "This script assumes that your public git repository is \"origin\""
+	exit
+fi
+
+git=$1
+svn=$2
+statefile="gitsvngateway.$git.$svn.state"
+statefile=${statefile//\//_}
+
+if [ -e $statefile ]
+then
+	state=`cat "$statefile"`
+else
+	state=init
+fi
+
+echo "== svngateway ${git} ${svn}"
+echo "== Current state: ${state}"
+
+# svn -> git
+
+if [ "$state" = "init" ]
+then
+
+	echo "== Storing pre-commit states"
+	git branch ${git}_old ${git}
+	git branch ${svn}_old ${svn}
+	state=svn2git
+	echo $state > "$statefile"
+
+	echo "== You need to run this command on all branches you want to keep in sync."
+	echo "== Otherwise it will not be able to determine which commits from git svn fetch are new."
+	echo "== Please do this now and restart this script (with the same arguments) to continue."
+	exit 1
+fi
+
+if [ "$state" = "svn2git" ]
+then
+	echo "== Marking current state of ${git}"
+	git branch -f ${git}_new ${git}
+
+	echo "== Fetching commits from SVN"
+	git svn fetch
+
+	echo "== Rebasing commits from ${svn} onto ${git}"
+	git branch -f ${svn}_new ${svn}
+	if ! git rebase -p --onto ${git} ${svn}_old ${svn}_new
+	then
+		echo svn2git_rebase_complete > "$statefile"
+		echo "== Finish the rebase and restart this script (with the same arguments)"
+		exit 2
+	fi
+	state=svn2git_rebase_complete
+	echo $state > "$statefile"
+fi
+
+if [ "$state" = "svn2git_rebase_complete" ]
+then
+	echo "== ${svn}_new is the new ${git}"
+	git branch -f ${git} ${svn}_new
+
+	# git -> svn
+
+	echo "== Rebasing commits from ${git} onto ${svn}"
+	git branch ${svn}_tocommit ${svn}
+	git checkout ${svn}_tocommit
+	hashes=`git log --pretty=oneline --first-parent ${git}_old..${git}_new | cut -f 1 --delimiter=" " | tac`
+
+	for hash in $hashes; do
+		# to keep track of where we are
+		git branch -f ${git}_old $hash
+		if ! git merge --squash $hash
+		then
+			echo "== Could not merge! Please fix this and commit."
+			echo "== To use the already existing log message use:"
+			echo "git commit -a -c $hash"
+			exit
+		fi
+		git commit -a -C $hash
+	done
+
+	state=git2svn_rebase_complete
+	echo $state > "$statefile"
+fi
+
+if [ "$state" = "git2svn_rebase_complete" ]
+then
+	echo "== Committing to SVN"
+	git svn dcommit
+
+	echo "== Getting back the changes from SVN"
+	git svn fetch
+
+	echo "== Checking out master"
+	git checkout $git
+	git branch -D ${svn}_tocommit
+	git branch -D ${git}_new
+	git branch -D ${svn}_new
+
+	echo "== Pushing the changes to origin"
+	git push origin ${git}
+
+	echo "== Marking current state of ${git} and ${svn}"
+	git branch -f ${git}_old ${git}
+	git branch -f ${svn}_old ${svn}
+
+	echo svn2git > "$statefile"
+fi
