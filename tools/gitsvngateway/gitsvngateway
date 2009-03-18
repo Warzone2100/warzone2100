@@ -27,7 +27,8 @@ function echo_c {
 }
 
 function is_merge {
-	git show --raw $1 | grep -q "Merge:"
+	# check if this commit has two parents
+	git show --pretty=format:%P $1 | head -n1 | grep -q " "
 	return $?
 }
 
