@@ -69,6 +69,19 @@ EOF
 	exit 1
 }
 
+function revert_and_abort {
+	echo_c "== Reverting changes to branches and exitting"
+	git checkout -q $p/new/${git}
+	git branch -f ${git} $p/new/${git}
+	git checkout -q ${git}
+	git branch -f $p/${git} $p/backup/${git}
+	git branch -D $p/backup/${git} > /dev/null
+	git branch -D $p/tocommit/${svn} > /dev/null
+	git branch -D $p/new/${git} > /dev/null
+	rm -f $mergefile
+	exit 1
+}
+
 color="\033[35m"
 reset="\033[0m"
 p=_gitsvngateway
@@ -101,11 +114,6 @@ git=$1
 svn=$2
 mergefile=$p.$git.$svn.merge
 
-echo_c "dry-run: $dry_run"
-echo_c "prefix: $p"
-echo_c "git: $git"
-echo_c "svn: $svn"
-
 # svn -> git
 
 if ! branch_exists $p/${git} || ! branch_exists $p/${svn}
@@ -129,8 +137,11 @@ then
 	if same_commit $p/${svn} ${svn} && same_commit $p/${git} ${git}
 	then
 		echo_c "== No new commits from SVN and no new local commits"
-		exit
+		exit 1
 	fi
+
+	# so we can reset it later when the user decides to abort
+	git branch $p/backup/${git} $p/${git}
 
 	# mark current state so we know what the local changes were we need to commit to SVN
 	git branch -f $p/new/${git} ${git}
@@ -143,8 +154,13 @@ then
 		git branch -f $p/new/${svn} ${svn}
 		if ! git rebase --onto ${git} $p/${svn} $p/new/${svn}
 		then
-			echo_c "== Finish the rebase and restart this script (with the same arguments)"
-			exit 2
+			if $automatic
+			then
+				revert_and_abort
+			else
+				echo_c "== Finish the rebase and restart this script (with the same arguments)"
+				exit 2
+			fi
 		fi
 		git branch -f ${git} $p/new/${svn}
 		git checkout -q ${git}
@@ -157,8 +173,6 @@ fi
 if branch_exists $p/tocommit/${svn}
 then
 	# git -> svn
-	# so we can reset it later when the user decides to abort
-	git branch $p/backup/${git} $p/${git}
 
 	echo_c "== Rebasing commits from ${git} onto ${svn}"
 	git checkout -q $p/tocommit/${svn}
@@ -190,10 +204,15 @@ then
 
 					if ! cherry_pick_from $hash2
 					then
-						echo_c "== Could not merge! Please fix, commit and restart the script."
-						echo_c "== To use the already existing log message use:"
-						echo_c "git commit -a -C $hash2"
-						exit
+						if $automatic
+						then
+							revert_and_abort
+						else
+							echo_c "== Could not merge! Please fix, commit and restart the script."
+							echo_c "== To use the already existing log message use:"
+							echo_c "git commit -a -C $hash2"
+							exit 2
+						fi
 					fi
 				done
 				# cleanum
@@ -210,10 +229,15 @@ then
 		git branch -f $p/${git} $hash
 		if ! cherry_pick_from $hash
 		then
-			echo_c "== Could not merge! Please fix, commit and restart the script."
-			echo_c "== To use the already existing log message use:"
-			echo_c "git commit -a -C $hash"
-			exit
+			if $automatic
+			then
+				revert_and_abort
+			else
+				echo_c "== Could not merge! Please fix, commit and restart the script."
+				echo_c "== To use the already existing log message use:"
+				echo_c "git commit -a -C $hash"
+				exit 2
+			fi
 		fi
 	done
 
@@ -221,27 +245,23 @@ then
 
 	if ! same_commit ${svn} $p/tocommit/${svn}
 	then
-		echo
-		echo_c "== These changes are staged for commit to SVN:"
-		git log ${svn}..$p/tocommit/${svn} | cat
-		echo_c -n -e "\nDo you want to commit these changes to SVN? [Y/n]: "
-		read -n1 answer
-		echo_c
-		if [ "x$answer" == "x" ]
+		if ! $automatic
+		then
+			echo
+			echo_c "== These changes are staged for commit to SVN:"
+			git log ${svn}..$p/tocommit/${svn} | cat
+			echo_c -n -e "\nDo you want to commit these changes to SVN? [Y/n]: "
+			read -n1 answer
+			echo_c
+		fi
+		if $automatic || [ "x$answer" == "x" ]
 		then
 			echo_c "== Committing to SVN"
 			$dry_run || git svn dcommit
 			echo_c "== Getting back the changes from SVN"
 			$dry_run || git svn fetch
 		else
-			echo_c "== Cleaning up"
-			git branch -f ${git} $p/new/${git}
-			git checkout -q ${git}
-			git branch -f $p/${git} $p/backup/${git}
-			git branch -D $p/backup/${git} > /dev/null
-			git branch -D $p/tocommit/${svn} > /dev/null
-			git branch -D $p/new/${git} > /dev/null
-			exit
+			revert_and_abort
 		fi
 	else
 		echo_c "== Nothing to commit to SVN"
@@ -263,11 +283,7 @@ then
 		git branch -f $p/${git} ${git}
 		git branch -f $p/${svn} ${svn}
 	else
-		git checkout -q $p/new/${git}
-		git branch -D ${git} > /dev/null
-		git branch -f ${git}
-		git checkout -q ${git}
-		git branch -f $p/${git} $p/backup/${git}
+		revert_and_abort
 	fi
 
 	git branch -D $p/backup/${git} > /dev/null
