@@ -65,12 +65,13 @@ Options:
   -p, --prefix=PREFIX  Use PREFIX instead of "_gitsvngateway/" for branches
   -r, --remote=REMOTE  git push to REMOTE instead of to "origin"
   -a, --automatic      When there is a merge conflict clean up and abort
+  -s, --no-fetch       Do not do an initial fetch to see if there are new commits from SVN
 EOF
 	exit 1
 }
 
 function revert_and_abort {
-	echo_c "== Reverting changes to branches and exitting"
+	echo_c "== Reverting changes and exitting"
 	git checkout -q $p/new/${git}
 	git branch -f ${git} $p/new/${git}
 	git checkout -q ${git}
@@ -84,13 +85,14 @@ function revert_and_abort {
 
 color="\033[35m"
 reset="\033[0m"
-p=_gitsvngateway
 
+p=_gitsvngateway
 dry_run=false
 remote=origin
 automatic=false
+no_fetch=false
 
-TEMP=`getopt -o hnp:r:a --long help,dry-run,prefix:,remote:,automatic \
+TEMP=`getopt -o hnp:r:as --long help,dry-run,prefix:,remote:,automatic,no-fetch \
      -n 'gitsvngateway' -- "$@"`
 
 if [ $? != 0 ] ; then usage; fi
@@ -105,6 +107,7 @@ while true ; do
 		-p|--prefix) p="$2"; shift 2;;
 		-r|--remote) remote="$2"; shift 2;;
 		-a|--automatic) automatic=true; shift;;
+		-s|--no-fetch) no_fetch=true; shift;;
 		--) shift ; break ;;
 		*) echo "Internal error!" ; exit 1 ;;
 	esac
@@ -126,18 +129,21 @@ then
 	echo_c "== You need to run this command on all branches you want to keep in sync."
 	echo_c "== Otherwise it will not be able to determine which commits from git svn fetch are new."
 	echo_c "== Please do this now and restart this script (with the same arguments) to continue."
-	exit 1
+	exit
 fi
 
 if ! branch_exists $p/tocommit/${svn}
 then
-	echo_c "== Fetching commits from SVN"
-	$dry_run || git svn fetch
+	if ! $no_fetch
+	then
+		echo_c "== Fetching commits from SVN"
+		$dry_run || git svn fetch
+	fi
 
 	if same_commit $p/${svn} ${svn} && same_commit $p/${git} ${git}
 	then
 		echo_c "== No new commits from SVN and no new local commits"
-		exit 1
+		exit
 	fi
 
 	# so we can reset it later when the user decides to abort
@@ -245,11 +251,11 @@ then
 
 	if ! same_commit ${svn} $p/tocommit/${svn}
 	then
+		echo
+		echo_c "== These changes are staged for commit to SVN:"
+		git log ${svn}..$p/tocommit/${svn} | cat
 		if ! $automatic
 		then
-			echo
-			echo_c "== These changes are staged for commit to SVN:"
-			git log ${svn}..$p/tocommit/${svn} | cat
 			echo_c -n -e "\nDo you want to commit these changes to SVN? [Y/n]: "
 			read -n1 answer
 			echo_c
