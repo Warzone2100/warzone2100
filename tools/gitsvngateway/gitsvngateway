@@ -92,7 +92,7 @@ then
 
 	echo_c "== Rebasing commits from ${svn} onto ${git}"
 	git branch -f ${svn}_new ${svn}
-	if ! git rebase -p --onto ${git} ${svn}_old ${svn}_new
+	if ! git rebase --onto ${git} ${svn}_old ${svn}_new
 	then
 		echo_c svn2git_rebase_complete > "$statefile"
 		echo_c "== Finish the rebase and restart this script (with the same arguments)"
@@ -180,7 +180,7 @@ if [ "$state" = "git2svn_rebase_complete" ]
 then
 	echo
 	echo_c "== These changes are staged for commit to SVN:"
-	git log ${svn}..${svn}_tocommit
+	git log ${svn}..${svn}_tocommit | cat
 	echo_c -n -e "\nDo you want to commit these changes to SVN? [Y/n]: "
 	read -n1 answer
 	echo_c
