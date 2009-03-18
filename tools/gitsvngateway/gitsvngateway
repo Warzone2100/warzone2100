@@ -276,7 +276,7 @@ then
 
 	git checkout -q ${git}
 
-	if ! same_commit ${git} $remote/${git}
+	if ! same_commit $remote/${git} ${git}
 	then
 		echo_c "== Pushing the changes to $remote"
 		$dry_run ||  git push $remote ${git}
