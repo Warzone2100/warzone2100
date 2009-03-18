@@ -70,7 +70,7 @@ EOF
 	exit 1
 }
 
-function revert_and_abort {
+function revert_and_exit {
 	echo_c "== Reverting changes and exitting"
 	git checkout -q $p/new/${git}
 	git branch -f ${git} $p/new/${git}
@@ -80,7 +80,7 @@ function revert_and_abort {
 	git branch -D $p/tocommit/${svn} > /dev/null
 	git branch -D $p/new/${git} > /dev/null
 	rm -f $mergefile
-	exit 1
+	exit $1
 }
 
 color="\033[35m"
@@ -116,6 +116,7 @@ done
 git=$1
 svn=$2
 mergefile=$p.$git.$svn.merge
+mergefile=${mergefile//\//_}
 
 # svn -> git
 
@@ -162,7 +163,7 @@ then
 		then
 			if $automatic
 			then
-				revert_and_abort
+				revert_and_exit 2
 			else
 				echo_c "== Finish the rebase and restart this script (with the same arguments)"
 				exit 2
@@ -191,16 +192,16 @@ then
 			echo_c "== Commits contained in this merge:"
 			git log --pretty=oneline $p/${git}..$hash | tail -n+2
 			amount=`git log --pretty=oneline $p/${git}..$hash | tail -n+2 | wc -l`
-			echo_c "== $amount commit(s) found, will unravel if 10 or less"
-			if [ $amount -le 10 ]
+			echo_c "== $amount commit(s) found, will unravel if 15 or less"
+			if [ $amount -le 15 ]
 			then
 				echo_c "== Going ahead with unraveling the merge"
-				if ! [ -s $mergefile ]
+				if ! [ -s "$mergefile" ]
 				then
 					git log --pretty=oneline $p/${git}..$hash | cut -f 1 --delimiter=" " | tail -n+2 | tac > $mergefile
 				fi
 				hashes2=`cat $mergefile`
-				echo_c "== List of hashes still to merge:"
+				echo_c "== Commits still to merge:"
 				cat $mergefile
 
 				for hash2 in $hashes2; do
@@ -212,7 +213,7 @@ then
 					then
 						if $automatic
 						then
-							revert_and_abort
+							revert_and_exit 2
 						else
 							echo_c "== Could not merge! Please fix, commit and restart the script."
 							echo_c "== To use the already existing log message use:"
@@ -237,7 +238,7 @@ then
 		then
 			if $automatic
 			then
-				revert_and_abort
+				revert_and_exit 2
 			else
 				echo_c "== Could not merge! Please fix, commit and restart the script."
 				echo_c "== To use the already existing log message use:"
@@ -267,7 +268,7 @@ then
 			echo_c "== Getting back the changes from SVN"
 			$dry_run || git svn fetch
 		else
-			revert_and_abort
+			revert_and_exit 1
 		fi
 	else
 		echo_c "== Nothing to commit to SVN"
@@ -289,10 +290,14 @@ then
 		git branch -f $p/${git} ${git}
 		git branch -f $p/${svn} ${svn}
 	else
-		revert_and_abort
+		revert_and_exit 0
 	fi
 
 	git branch -D $p/backup/${git} > /dev/null
 	git branch -D $p/tocommit/${svn} > /dev/null
 	git branch -D $p/new/${git} > /dev/null
+	exit 0
 fi
+
+echo_c "== Not supposed to reach this line!"
+exit 1
