@@ -19,6 +19,10 @@
 
 color="\033[35m"
 reset="\033[0m"
+p=_gitsvngateway
+git=$1
+svn=$2
+mergefile=$p.$git.$svn.merge
 
 function echo_c {
 	echo -n -e "$color"
@@ -63,18 +67,14 @@ then
 	exit
 fi
 
-git=$1
-svn=$2
-mergefile=gitsvngateway.${git}.${svn}.merge
-
 # svn -> git
 
-if ! branch_exists ${git}_old || ! branch_exists ${svn}_old
+if ! branch_exists $p/${git} || ! branch_exists $p/${svn}
 then
 
 	echo_c "== Storing pre-commit states"
-	git branch ${git}_old ${git}
-	git branch ${svn}_old ${svn}
+	git branch $p/${git} ${git}
+	git branch $p/${svn} ${svn}
 
 	echo_c "== You need to run this command on all branches you want to keep in sync."
 	echo_c "== Otherwise it will not be able to determine which commits from git svn fetch are new."
@@ -82,64 +82,63 @@ then
 	exit 1
 fi
 
-if ! branch_exists ${svn}_tocommit
+if ! branch_exists $p/tocommit/${svn}
 then
 	echo_c "== Fetching commits from SVN"
 	git svn fetch
 
-	if same_commit ${svn}_old ${svn} && same_commit ${git}_old ${git}
+	if same_commit $p/${svn} ${svn} && same_commit $p/${git} ${git}
 	then
 		echo_c "== No new commits from SVN and no new local commits"
 		exit
 	fi
 
 	# mark current state so we know what the local changes were we need to commit to SVN
-	git branch -f ${git}_new ${git}
+	git branch -f $p/new/${git} ${git}
 
-	if same_commit ${svn}_old ${svn}
+	if same_commit $p/${svn} ${svn}
 	then
 		echo_c "== No new changes from SVN"
-		git branch -f ${svn}_new ${git}
-		git checkout -q ${svn}_new
 	else
 		echo_c "== Rebasing commits from ${svn} onto ${git}"
-		git branch -f ${svn}_new ${svn}
-		if ! git rebase --onto ${git} ${svn}_old ${svn}_new
+		git branch -f $p/new/${svn} ${svn}
+		if ! git rebase --onto ${git} $p/${svn} $p/new/${svn}
 		then
 			echo_c "== Finish the rebase and restart this script (with the same arguments)"
 			exit 2
 		fi
+		git branch -f ${git} $p/new/${svn}
+		git checkout -q ${git}
+		git branch -D $p/new/${svn} > /dev/null
 	fi
-	git branch ${svn}_tocommit ${svn}
+	git branch $p/tocommit/${svn} ${svn}
 	rm -f $mergefile # make sure we start a new merge
 fi
 
-if branch_exists ${svn}_tocommit
+if branch_exists $p/tocommit/${svn}
 then
-	git branch -f ${git} ${svn}_new
-
 	# git -> svn
 	# so we can reset it later when the user decides to abort
-	git branch ${git}_old_backup ${git}_old
+	git branch $p/backup/${git} $p/${git}
 
 	echo_c "== Rebasing commits from ${git} onto ${svn}"
-	git checkout -q ${svn}_tocommit
-	hashes=`git log --pretty=oneline --first-parent ${git}_old..${git}_new | cut -f 1 --delimiter=" " | tac`
+	git checkout -q $p/tocommit/${svn}
+	hashes=`git log --pretty=oneline --first-parent $p/${git}..$p/new/${git} | cut -f 1 --delimiter=" " | tac`
 
 	for hash in $hashes; do
 		if is_merge $hash
 		then
 			echo_c "== Merge detected for $hash"
 			echo_c "== Commits contained in this merge:"
-			git log --pretty=oneline ${git}_old..$hash | tail -n+2
-			amount=`git log --pretty=oneline ${git}_old..$hash | tail -n+2 | wc -l`
+			git log --pretty=oneline $p/${git}..$hash | tail -n+2
+			amount=`git log --pretty=oneline $p/${git}..$hash | tail -n+2 | wc -l`
 			echo_c "== $amount commit(s) found, will unravel if 10 or less"
 			if [ $amount -le 10 ]
 			then
 				echo_c "== Going ahead with unraveling the merge"
 				if ! [ -s $mergefile ]
 				then
-					git log --pretty=oneline ${git}_old..$hash | cut -f 1 --delimiter=" " | tail -n+2 | tac > $mergefile
+					git log --pretty=oneline $p/${git}..$hash | cut -f 1 --delimiter=" " | tail -n+2 | tac > $mergefile
 				fi
 				hashes2=`cat $mergefile`
 				echo_c "== List of hashes still to merge:"
@@ -161,7 +160,7 @@ then
 				# cleanum
 				rm $mergefile
 				# to keep track of where we are
-				git branch -f ${git}_old $hash
+				git branch -f $p/${git} $hash
 				echo_c "== Done processing the merge"
 				continue
 			else
@@ -169,7 +168,7 @@ then
 			fi
 		fi
 		# to keep track of where we are in case of a failed merge
-		git branch -f ${git}_old $hash
+		git branch -f $p/${git} $hash
 		if ! cherry_pick_from $hash
 		then
 			echo_c "== Could not merge! Please fix, commit and restart the script."
@@ -181,11 +180,11 @@ then
 
 	# everything is done, try to get it back into SVN and origin
 
-	if ! same_commit ${svn} ${svn}_tocommit
+	if ! same_commit ${svn} $p/tocommit/${svn}
 	then
 		echo
 		echo_c "== These changes are staged for commit to SVN:"
-		git log ${svn}..${svn}_tocommit | cat
+		git log ${svn}..$p/tocommit/${svn} | cat
 		echo_c -n -e "\nDo you want to commit these changes to SVN? [Y/n]: "
 		read -n1 answer
 		echo_c
@@ -195,13 +194,12 @@ then
 			git svn dcommit
 		else
 			echo_c "== Cleaning up"
-			git branch -f ${git} ${git}_new
+			git branch -f ${git} $p/new/${git}
 			git checkout -q ${git}
-			git branch -f ${git}_old ${git}_old_backup
-			git branch -D ${git}_old_backup > /dev/null
-			git branch -D ${svn}_tocommit > /dev/null
-			git branch -D ${git}_new > /dev/null
-			git branch -D ${svn}_new > /dev/null
+			git branch -f $p/${git} $p/backup/${git}
+			git branch -D $p/backup/${git} > /dev/null
+			git branch -D $p/tocommit/${svn} > /dev/null
+			git branch -D $p/new/${git} > /dev/null
 			exit
 		fi
 
@@ -212,10 +210,9 @@ then
 	fi
 
 	git checkout -q ${git}
-	git branch -D ${git}_old_backup > /dev/null
-	git branch -D ${svn}_tocommit > /dev/null
-	git branch -D ${git}_new > /dev/null
-	git branch -D ${svn}_new > /dev/null
+	git branch -D $p/backup/${git} > /dev/null
+	git branch -D $p/tocommit/${svn} > /dev/null
+	git branch -D $p/new/${git} > /dev/null
 
 	if ! same_commit ${git} origin/${git}
 	then
@@ -226,6 +223,6 @@ then
 	fi
 
 	echo_c "== Marking current state of ${git} and ${svn}"
-	git branch -f ${git}_old ${git}
-	git branch -f ${svn}_old ${svn}
+	git branch -f $p/${git} ${git}
+	git branch -f $p/${svn} ${svn}
 fi
