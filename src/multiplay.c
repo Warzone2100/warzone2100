@@ -1043,7 +1043,7 @@ BOOL sendTextMessage(const char *pStr, BOOL all)
 	memset(msg,0x0, sizeof(display));		//clear buffer
 	memset(sendto,0x0, sizeof(sendto));		//clear private flag
 	sstrcpy(msg, pStr);
-	for(i = 0; ((pStr[i] >= '0' ) && (pStr[i] <= '8' )  && (i < MAX_PLAYERS )); i++)		// for each numeric char encountered..
+	for (i = 0; pStr[i] >= '0' && pStr[i] <= '7' && i < MAX_PLAYERS; i++)		// for each 0..7 numeric char encountered
 	{
 		sendto[ pStr[i]-'0' ] = true;
 		normal = false;
