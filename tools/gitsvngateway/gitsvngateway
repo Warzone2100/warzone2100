@@ -43,6 +43,16 @@ function cherry_pick_from {
 	return $?
 }
 
+function same_commit {
+	log_lines=`git log --pretty=oneline $1..$2 | wc -l`
+	if [ $log_lines -eq 0 ]
+	then
+		return 0
+	else
+		return 1
+	fi
+}
+
 if [ $# -ne 2 ]
 then
 	echo_c "Usage: gitsvngateway [local branch] [svn remote branch]"
@@ -84,19 +94,32 @@ fi
 
 if [ "$state" = "svn2git" ]
 then
-	echo_c "== Marking current state of ${git}"
-	git branch -f ${git}_new ${git}
-
 	echo_c "== Fetching commits from SVN"
 	git svn fetch
 
-	echo_c "== Rebasing commits from ${svn} onto ${git}"
-	git branch -f ${svn}_new ${svn}
-	if ! git rebase --onto ${git} ${svn}_old ${svn}_new
+	if same_commit ${svn}_old ${svn} && same_commit ${git}_old ${git}
 	then
-		echo_c svn2git_rebase_complete > "$statefile"
-		echo_c "== Finish the rebase and restart this script (with the same arguments)"
-		exit 2
+		echo_c "== No new commits from SVN and no new local commits"
+		exit
+	fi
+
+	# mark current state so we know what the local changes were we need to commit to SVN
+	git branch -f ${git}_new ${git}
+
+	if same_commit ${svn}_old ${svn}
+	then
+		echo_c "== No new changes from SVN"
+		git branch -f ${svn}_new ${git}
+		git checkout -q ${svn}_new
+	else
+		echo_c "== Rebasing commits from ${svn} onto ${git}"
+		git branch -f ${svn}_new ${svn}
+		if ! git rebase --onto ${git} ${svn}_old ${svn}_new
+		then
+			echo_c svn2git_rebase_complete > "$statefile"
+			echo_c "== Finish the rebase and restart this script (with the same arguments)"
+			exit 2
+		fi
 	fi
 	state=svn2git_rebase_complete
 	echo $state > "$statefile"
@@ -104,7 +127,6 @@ fi
 
 if [ "$state" = "svn2git_rebase_complete" ]
 then
-	echo_c "== ${svn}_new is the new ${git}"
 	git branch -f ${git} ${svn}_new
 
 	# git -> svn
@@ -113,7 +135,7 @@ then
 
 	echo_c "== Rebasing commits from ${git} onto ${svn}"
 	git branch ${svn}_tocommit ${svn}
-	git checkout ${svn}_tocommit
+	git checkout -q ${svn}_tocommit
 	hashes=`git log --pretty=oneline --first-parent ${git}_old..${git}_new | cut -f 1 --delimiter=" " | tac`
 
 	for hash in $hashes; do
@@ -178,41 +200,50 @@ fi
 
 if [ "$state" = "git2svn_rebase_complete" ]
 then
-	echo
-	echo_c "== These changes are staged for commit to SVN:"
-	git log ${svn}..${svn}_tocommit | cat
-	echo_c -n -e "\nDo you want to commit these changes to SVN? [Y/n]: "
-	read -n1 answer
-	echo_c
-	if [ "x$answer" == "x" ]
+	if ! same_commit ${svn} ${svn}_tocommit
 	then
-		echo_c "== Committing to SVN"
-		git svn dcommit
+		echo
+		echo_c "== These changes are staged for commit to SVN:"
+		git log ${svn}..${svn}_tocommit | cat
+		echo_c -n -e "\nDo you want to commit these changes to SVN? [Y/n]: "
+		read -n1 answer
+		echo_c
+		if [ "x$answer" == "x" ]
+		then
+			echo_c "== Committing to SVN"
+			git svn dcommit
+		else
+			echo_c "== Cleaning up"
+			git branch -f ${git} ${git}_new
+			git checkout -q ${git}
+			git branch -f ${git}_old ${git}_old_backup
+			git branch -D ${git}_old_backup > /dev/null
+			git branch -D ${svn}_tocommit > /dev/null
+			git branch -D ${git}_new > /dev/null
+			git branch -D ${svn}_new > /dev/null
+			echo svn2git > "$statefile"
+			exit
+		fi
+
+		echo_c "== Getting back the changes from SVN"
+		git svn fetch
 	else
-		echo_c "== Cleaning up"
-		git branch -f ${git} ${git}_new
-		git checkout ${git}
-		git branch -f ${git}_old ${git}_old_backup
-		git branch -D ${git}_old_backup
-		git branch -D ${svn}_tocommit
-		git branch -D ${git}_new
-		git branch -D ${svn}_new
-		echo svn2git > "$statefile"
-		exit
+		echo_c "== Nothing to commit to SVN"
 	fi
 
-	echo_c "== Getting back the changes from SVN"
-	git svn fetch
+	git checkout -q ${git}
+	git branch -D ${git}_old_backup > /dev/null
+	git branch -D ${svn}_tocommit > /dev/null
+	git branch -D ${git}_new > /dev/null
+	git branch -D ${svn}_new > /dev/null
 
-	echo_c "== Checking out master"
-	git checkout ${git}
-	git branch -D ${git}_old_backup
-	git branch -D ${svn}_tocommit
-	git branch -D ${git}_new
-	git branch -D ${svn}_new
-
-	echo_c "== Pushing the changes to origin"
-	git push origin ${git}
+	if ! same_commit ${git} origin/${git}
+	then
+		echo_c "== Pushing the changes to origin"
+		git push origin ${git}
+	else
+		echo_c "== No local changes, so not pushing to origin"
+	fi
 
 	echo_c "== Marking current state of ${git} and ${svn}"
 	git branch -f ${git}_old ${git}
