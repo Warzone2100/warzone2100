@@ -17,13 +17,6 @@
 #       Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 #       MA 02110-1301, USA.
 
-color="\033[35m"
-reset="\033[0m"
-p=_gitsvngateway
-git=$1
-svn=$2
-mergefile=$p.$git.$svn.merge
-
 function echo_c {
 	echo -n -e "$color"
 	echo $*
@@ -59,13 +52,59 @@ function branch_exists {
 	git rev-parse --verify $1 > /dev/null 2>&1
 }
 
-if [ $# -ne 2 ]
-then
-	echo_c "Usage: gitsvngateway [local branch] [svn remote branch]"
-	echo_c "If you want to reset the state of this script remove the gitsvngateway.*.*.state file."
-	echo_c "This script assumes that your public git repository is \"origin\""
-	exit
-fi
+function usage {
+	cat << EOF
+Usage: gitsvngateway [options] LOCAL_BRANCH REMOTE_SVN_BRANCH
+Put new commits from LOCAL_BRANCH and REMOTE_SVN_BRANCH on top of each other and commit to SVN and push to REMOTE
+REMOTE is "origin" by default
+Example: gitsvngateway master svn/trunk
+
+Options:
+  -h, --help           Display this message
+  -n, --dry-run        Do not push or commit to SVN and leave branches in their original state
+  -p, --prefix=PREFIX  Use PREFIX instead of "_gitsvngateway/" for branches
+  -r, --remote=REMOTE  git push to REMOTE instead of to "origin"
+  -a, --automatic      When there is a merge conflict clean up and abort
+EOF
+	exit 1
+}
+
+color="\033[35m"
+reset="\033[0m"
+p=_gitsvngateway
+
+dry_run=false
+remote=origin
+automatic=false
+
+TEMP=`getopt -o hnp:r:a --long help,dry-run,prefix:,remote:,automatic \
+     -n 'gitsvngateway' -- "$@"`
+
+if [ $? != 0 ] ; then usage; fi
+
+# Note the quotes around `$TEMP': they are essential!
+eval set -- "$TEMP"
+
+while true ; do
+	case "$1" in
+		-h|--help) usage; ;;
+		-n|--dry-run) dry_run=true; shift;;
+		-p|--prefix) p="$2"; shift 2;;
+		-r|--remote) remote="$2"; shift 2;;
+		-a|--automatic) automatic=true; shift;;
+		--) shift ; break ;;
+		*) echo "Internal error!" ; exit 1 ;;
+	esac
+done
+
+git=$1
+svn=$2
+mergefile=$p.$git.$svn.merge
+
+echo_c "dry-run: $dry_run"
+echo_c "prefix: $p"
+echo_c "git: $git"
+echo_c "svn: $svn"
 
 # svn -> git
 
@@ -85,7 +124,7 @@ fi
 if ! branch_exists $p/tocommit/${svn}
 then
 	echo_c "== Fetching commits from SVN"
-	git svn fetch
+	$dry_run || git svn fetch
 
 	if same_commit $p/${svn} ${svn} && same_commit $p/${git} ${git}
 	then
@@ -191,7 +230,9 @@ then
 		if [ "x$answer" == "x" ]
 		then
 			echo_c "== Committing to SVN"
-			git svn dcommit
+			$dry_run || git svn dcommit
+			echo_c "== Getting back the changes from SVN"
+			$dry_run || git svn fetch
 		else
 			echo_c "== Cleaning up"
 			git branch -f ${git} $p/new/${git}
@@ -202,27 +243,34 @@ then
 			git branch -D $p/new/${git} > /dev/null
 			exit
 		fi
-
-		echo_c "== Getting back the changes from SVN"
-		git svn fetch
 	else
 		echo_c "== Nothing to commit to SVN"
 	fi
 
 	git checkout -q ${git}
+
+	if ! same_commit ${git} $remote/${git}
+	then
+		echo_c "== Pushing the changes to $remote"
+		$dry_run ||  git push $remote ${git}
+	else
+		echo_c "== No local changes, so not pushing to $remote"
+	fi
+
+	if ! $dry_run
+	then
+		echo_c "== Marking current state of ${git} and ${svn}"
+		git branch -f $p/${git} ${git}
+		git branch -f $p/${svn} ${svn}
+	else
+		git checkout -q $p/new/${git}
+		git branch -D ${git} > /dev/null
+		git branch -f ${git}
+		git checkout -q ${git}
+		git branch -f $p/${git} $p/backup/${git}
+	fi
+
 	git branch -D $p/backup/${git} > /dev/null
 	git branch -D $p/tocommit/${svn} > /dev/null
 	git branch -D $p/new/${git} > /dev/null
-
-	if ! same_commit ${git} origin/${git}
-	then
-		echo_c "== Pushing the changes to origin"
-		git push origin ${git}
-	else
-		echo_c "== No local changes, so not pushing to origin"
-	fi
-
-	echo_c "== Marking current state of ${git} and ${svn}"
-	git branch -f $p/${git} ${git}
-	git branch -f $p/${svn} ${svn}
 fi
