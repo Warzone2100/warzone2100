@@ -74,6 +74,7 @@
 #include "version.h"
 #include "map.h"
 #include "parsetest.h"
+#include "keybind.h"
 
 /* Always use fallbacks on Windows */
 #if defined(WZ_OS_WIN)
@@ -815,6 +816,12 @@ static void mainLoop(void)
 				default:
 					break;
 			}
+		}
+		// Screenshot key is now available globally
+		if(keyPressed(KEY_F10))
+		{
+			kf_ScreenDump();
+			inputLooseFocus();		// remove it from input stream
 		}
 
 		if (focusState == FOCUS_IN)
