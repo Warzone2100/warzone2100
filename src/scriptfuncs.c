@@ -3982,7 +3982,7 @@ BOOL scrCreateAlliance(void)
 	if (player1 < 0 || player1 >= MAX_PLAYERS ||
 		player2 < 0 || player2 >= MAX_PLAYERS)
 	{
-		ASSERT( false, "scrCreateAlliance: player out of range" );
+		ASSERT( false, "scrCreateAlliance: player out of range p1=%d p2=%d", player1, player2 );
 		return false;
 	}
 
@@ -4036,7 +4036,7 @@ BOOL scrOfferAlliance(void)
 		player1 < 0 || player1 >= MAX_PLAYERS ||
 		player2 < 0 || player2 >= MAX_PLAYERS)
 	{
-		ASSERT( false, "scrCreateAlliance: player out of range" );
+		ASSERT( false, "scrOfferAlliance: player out of range p1=%d p2=%d", player1, player2 );
 		return false;
 	}
 
@@ -4061,7 +4061,7 @@ BOOL scrBreakAlliance(void)
 		player1 < 0 || player1 >= MAX_PLAYERS ||
 		player2 < 0 || player2 >= MAX_PLAYERS)
 	{
-		ASSERT( false, "scrCreateAlliance: player out of range" );
+		ASSERT( false, "scrBreakAlliance: player out of range p1=%d p2=%d", player1, player2 );
 		return false;
 	}
 /*
