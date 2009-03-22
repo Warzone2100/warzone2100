@@ -2615,7 +2615,7 @@ BOOL startMultiOptions(BOOL bReenter)
 			game.skDiff[i] = (DIFF_SLIDER_STOPS / 2);
 		}
 
-		if(!NetPlay.bComms)			// firce skirmish if no comms.
+		if(!NetPlay.bComms)			// force skirmish if no comms.
 		{
 			game.type				= SKIRMISH;
 			sstrcpy(game.map, DEFAULTSKIRMISHMAP);
