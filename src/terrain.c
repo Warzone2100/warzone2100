@@ -90,7 +90,7 @@ static int sectorSize = 15;
 static int terrainDistance;
 static int xSectors, ySectors;
 
-bool terrainInitalised = false;
+static bool terrainInitalised = false;
 
 #ifdef DEBUG
 /// Check for OpenGL errors 
@@ -647,9 +647,8 @@ bool initTerrain(void)
 	// this information is useful to prevent crashes with buggy opengl implementations
 	glGetIntegerv(GL_MAX_ELEMENTS_VERTICES, &GLmaxElementsVertices);
 	glGetIntegerv(GL_MAX_ELEMENTS_INDICES,  &GLmaxElementsIndices);
+
 	// testing for crappy cards
-	//GLmaxElementsVertices = 1024;
-	//GLmaxElementsIndices = 1024;
 	debug(LOG_TERRAIN, "GL_MAX_ELEMENTS_VERTICES: %i", GLmaxElementsVertices);
 	debug(LOG_TERRAIN, "GL_MAX_ELEMENTS_INDICES:  %i", GLmaxElementsIndices);
 	
@@ -692,8 +691,6 @@ bool initTerrain(void)
 	debug(LOG_TERRAIN, "visible tiles x:%i y: %i", visibleTiles.x, visibleTiles.y);
 	debug(LOG_TERRAIN, "terrain view distance: %i", terrainDistance);
 	
-#define o(i,j,center) (((i)*mapHeight+(j))*2+(center))
-
 	/////////////////////
 	// Create the sectors
 	xSectors = (mapWidth +sectorSize-1)/sectorSize;
