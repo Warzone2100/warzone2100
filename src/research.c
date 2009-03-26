@@ -2917,19 +2917,10 @@ void replaceStructureComponent(STRUCTURE *pList, UDWORD oldType, UDWORD oldCompI
 		switch (oldType)
 		{
 			case COMP_ECM:
-				if (psStructure->pStructureType->pECM == (asECMStats + oldCompInc))
-				{
-					psStructure->ECMMod = (UWORD)(asECMStats + newCompInc)->power;
-				}
+				objEcmCache((BASE_OBJECT *)psStructure, asECMStats + newCompInc);
 				break;
 			case COMP_SENSOR:
-				if (psStructure->pStructureType->pSensor == (asSensorStats + oldCompInc))
-				{
-					psStructure->sensorPower = (UWORD)sensorPower(asSensorStats +
-						newCompInc,player);
-					psStructure->sensorRange = (UWORD)sensorRange(asSensorStats +
-						newCompInc,player);
-				}
+				objSensorCache((BASE_OBJECT *)psStructure, asSensorStats + newCompInc);
 				break;
 			case COMP_WEAPON:
 				for (inc=0; inc < psStructure->numWeaps; inc++)

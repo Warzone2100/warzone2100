@@ -128,4 +128,7 @@ static inline int objConcealment(const BASE_OBJECT* psObj)
 	return psObj->ECMMod;
 }
 
+void objSensorCache(BASE_OBJECT *psObj, SENSOR_STATS *psSensor);
+void objEcmCache(BASE_OBJECT *psObj, ECM_STATS *psEcm);
+
 #endif // __INCLUDED_SRC_VISIBILITY__

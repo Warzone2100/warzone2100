@@ -38,6 +38,7 @@
 #include "hci.h"
 #include "mapgrid.h"
 #include "cluster.h"
+#include "research.h"
 #include "scriptextern.h"
 #include "structure.h"
 
@@ -806,5 +807,37 @@ bool lineOfFire(const BASE_OBJECT* psViewer, const BASE_OBJECT* psTarget, bool w
 		targetGrad = top * GRAD_MUL / help.lastDist;
 
 		return targetGrad >= help.currGrad;
+	}
+}
+
+void objSensorCache(BASE_OBJECT *psObj, SENSOR_STATS *psSensor)
+{
+	if (psSensor)
+	{
+		psObj->sensorRange = sensorRange(psSensor, psObj->player);
+		psObj->sensorPower = sensorPower(psSensor, psObj->player);
+	}
+	else if (psObj->type == OBJ_DROID || psObj->type == OBJ_STRUCTURE)
+	{
+		// Give them the default sensor if not
+		psObj->sensorRange = sensorRange(asSensorStats + aDefaultSensor[psObj->player], psObj->player);
+		psObj->sensorPower = sensorPower(asSensorStats + aDefaultSensor[psObj->player], psObj->player);
+	}
+	else
+	{
+		psObj->sensorRange = 0;
+		psObj->sensorPower = 0;
+	}
+}
+
+void objEcmCache(BASE_OBJECT *psObj, ECM_STATS *psEcm)
+{
+	if (psEcm)
+	{
+		psObj->ECMMod = ecmPower(psEcm, psObj->player);
+	}
+	else
+	{
+		psObj->ECMMod = 0;
 	}
 }
