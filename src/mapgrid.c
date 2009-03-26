@@ -594,37 +594,5 @@ static BOOL gridIntersect(const int x1, const int y1, const int x2, const int y2
 // Get the range of effect of an object
 static int gridObjRange(WZ_DECL_UNUSED const BASE_OBJECT* psObj)
 {
-#if 0
-	SDWORD	range;
-
-	switch (psObj->type)
-	{
-	case OBJ_DROID:
-		range = ((const DROID *)psObj)->sensorRange;
-		break;
-	case OBJ_STRUCTURE:
-		range = ((const STRUCTURE *)psObj)->sensorRange;
-		if (structCBSensor((STRUCTURE *)psObj)
-		 || structVTOLCBSensor((const STRUCTURE *)psObj))
-		{
-			range = MAX(world_coord(MAP_MAXWIDTH), world_coord(MAP_MAXHEIGHT));
-		}
-		break;
-	case OBJ_FEATURE:
-		range = 0;
-		break;
-	default:
-		range = 0;
-		break;
-	}
-
-	if (range < NAYBOR_RANGE)
-	{
-		range = NAYBOR_RANGE;
-	}
-
-	return range;
-#endif
-
 	return world_coord(20);
 }
