@@ -8,6 +8,12 @@
 *.gmo
 *.pyc
 *.wz
+# LaTeX generated (binary) files
+*.aux
+*.log
+*.out
+*.pdf
+*.toc
 # windows generated binary files:
 *.obj
 *.lib
