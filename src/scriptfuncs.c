@@ -5154,7 +5154,7 @@ BOOL scrGetNearestGateway( void )
 		return(false);
 	}
 
-	if(psGateways == NULL)
+	if (gwGetGateways() == NULL)
 	{
 		ASSERT( false,"SCRIPT : No gateways found in getNearestGatway" );
 		return(false);
@@ -5163,7 +5163,7 @@ BOOL scrGetNearestGateway( void )
 	nearestSoFar = UDWORD_MAX;
 	retX = retY = 0;
 	success = false;
-	for(psGateway = psGateways; psGateway; psGateway = psGateway->psNext)
+	for (psGateway = gwGetGateways(); psGateway; psGateway = psGateway->psNext)
 	{
 		/* Get gateway midpoint */
 		const int gX = (psGateway->x1 + psGateway->x2)/2;

@@ -30,25 +30,25 @@ typedef struct _gateway
 	struct _gateway		*psNext;
 } GATEWAY;
 
-// the list of gateways on the current map
-extern GATEWAY		*psGateways;
-
-// Initialise the gateway system
+/// Initialise the gateway system
 BOOL gwInitialise(void);
 
-// Shutdown the gateway system
+/// Shutdown the gateway system
 void gwShutDown(void);
 
-// Add a gateway to the system
+/// Add a gateway to the system
 BOOL gwNewGateway(SDWORD x1, SDWORD y1, SDWORD x2, SDWORD y2);
 
-// Release a gateway
+/// Release a gateway
 void gwFreeGateway(GATEWAY *psDel);
 
-// Get number of gateways.
+/// Get number of gateways.
 UDWORD gwNumGateways(void);
 
-// Get the gateway list.
+/// Get the gateway list.
 GATEWAY *gwGetGateways(void);
+
+/// Set gateway list
+void gwSetGateways(GATEWAY *ps);
 
 #endif // __INCLUDED_SRC_GATEWAY_H__

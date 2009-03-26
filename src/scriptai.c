@@ -1864,7 +1864,7 @@ static BOOL defenseLocation(BOOL variantB)
 	// go down the gateways, find the nearest gateway with >1 empty tiles
 	nearestSoFar = UDWORD_MAX;
 	psChosenGate = NULL;
-	for(psGate= psGateways; psGate; psGate= psGate->psNext)
+	for (psGate = gwGetGateways(); psGate; psGate = psGate->psNext)
 	{
 		count = 0;
 		noWater = true;
