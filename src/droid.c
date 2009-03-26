@@ -2626,7 +2626,7 @@ UDWORD calcTemplateBody(DROID_TEMPLATE *psTemplate, UBYTE player)
 	/* Add the weapon body points */
 	for(i=0; i<psTemplate->numWeaps; i++)
 	{
-		body += (asWeaponStats + psTemplate->asWeaps[i])->body;
+		body += asWeaponStats[psTemplate->asWeaps[i]].body;
 	}
 
 	//add on any upgrade value that may need to be applied

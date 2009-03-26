@@ -187,11 +187,11 @@ void statsInitVars(void)
 	}
 
 	//initialise the upgrade structures
-	memset(asWeaponUpgrade, 0, MAX_PLAYERS * WSC_NUM_WEAPON_SUBCLASSES * sizeof(WEAPON_UPGRADE));
-	memset(asSensorUpgrade, 0, MAX_PLAYERS * sizeof(SENSOR_UPGRADE));
-	memset(asECMUpgrade, 0, MAX_PLAYERS * sizeof(ECM_UPGRADE));
-	memset(asRepairUpgrade, 0, MAX_PLAYERS * sizeof(REPAIR_UPGRADE));
-	memset(asBodyUpgrade, 0, MAX_PLAYERS * sizeof(BODY_UPGRADE) * BODY_TYPE);
+	memset(asWeaponUpgrade, 0, sizeof(asWeaponUpgrade));
+	memset(asSensorUpgrade, 0, sizeof(asSensorUpgrade));
+	memset(asECMUpgrade, 0, sizeof(asECMUpgrade));
+	memset(asRepairUpgrade, 0, sizeof(asRepairUpgrade));
+	memset(asBodyUpgrade, 0, sizeof(asBodyUpgrade));
 
 	// init the max values
 	maxComponentWeight = maxBodyArmour = maxBodyPower =
