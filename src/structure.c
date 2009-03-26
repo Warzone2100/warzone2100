@@ -1648,31 +1648,8 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 		}
 
 		//set up the sensor stats
-		if (psBuilding->pStructureType->pSensor)
-		{
-			psBuilding->sensorRange = (UWORD)sensorRange(psBuilding->pStructureType->
-				pSensor, (UBYTE)player);
-			psBuilding->sensorPower = (UWORD)sensorPower(psBuilding->pStructureType->
-				pSensor, (UBYTE)player);
-		}
-		else
-		{
-			//give them the default sensor for droids if not
-			psBuilding->sensorRange = (UWORD)sensorRange(asSensorStats +
-				aDefaultSensor[player], (UBYTE)player);
-			psBuilding->sensorPower = (UWORD)sensorPower(asSensorStats +
-				aDefaultSensor[player], (UBYTE)player);
-		}
-		//set up the ecm stat
-		if (psBuilding->pStructureType->pECM)
-		{
-			psBuilding->ECMMod = (UWORD)ecmPower(psBuilding->pStructureType->pECM,
-				psBuilding->player);
-		}
-		else
-		{
-			psBuilding->ECMMod = 0;
-		}
+		objSensorCache((BASE_OBJECT *)psBuilding, psBuilding->pStructureType->pSensor);
+		objEcmCache((BASE_OBJECT *)psBuilding, psBuilding->pStructureType->pECM);
 
 		/* Store the weapons */
 		memset(psBuilding->asWeaps, 0, sizeof(WEAPON));

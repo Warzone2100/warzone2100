@@ -2989,12 +2989,8 @@ DROID* buildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player,
 	psDroid->sDisplay.frameNumber = 0;
 
 	//allocate 'easy-access' data!
-	psDroid->sensorRange = sensorRange((asSensorStats + pTemplate->asParts
-		[COMP_SENSOR]), (UBYTE)player);
-	psDroid->sensorPower = sensorPower((asSensorStats + pTemplate->asParts
-		[COMP_SENSOR]), (UBYTE)player);
-	psDroid->ECMMod = ecmPower((asECMStats + pTemplate->asParts[COMP_ECM]),
-		(UBYTE) player);
+	objSensorCache((BASE_OBJECT *)psDroid, asSensorStats + pTemplate->asParts[COMP_SENSOR]);
+	objEcmCache((BASE_OBJECT *)psDroid, asECMStats + pTemplate->asParts[COMP_ECM]);
 	psDroid->body = calcTemplateBody(pTemplate, (UBYTE)player);
 	psDroid->originalBody = psDroid->body;
 
