@@ -329,7 +329,7 @@ BOOL missionShutDown(void)
 		psMapTiles = mission.psMapTiles;
 		mapWidth = mission.mapWidth;
 		mapHeight = mission.mapHeight;
-		psGateways = mission.psGateways;
+		gwSetGateways(mission.psGateways);
 	}
 
 	// sorry if this breaks something - but it looks like it's what should happen - John
@@ -732,8 +732,8 @@ void saveMissionData(void)
 	mission.scrollMinY = scrollMinY;
 	mission.scrollMaxX = scrollMaxX;
 	mission.scrollMaxY = scrollMaxY;
-	mission.psGateways = psGateways;
-	psGateways = NULL;
+	mission.psGateways = gwGetGateways();
+	gwSetGateways(NULL);
 	// save the selectedPlayer's LZ
 	mission.homeLZ_X = getLandingX(selectedPlayer);
 	mission.homeLZ_Y = getLandingY(selectedPlayer);
@@ -904,7 +904,7 @@ void restoreMissionData(void)
 	scrollMinY = mission.scrollMinY;
 	scrollMaxX = mission.scrollMaxX;
 	scrollMaxY = mission.scrollMaxY;
-	psGateways = mission.psGateways;
+	gwSetGateways(mission.psGateways);
 	//and clear the mission pointers
 	mission.psMapTiles	= NULL;
 	mission.mapWidth	= 0;
@@ -1449,8 +1449,8 @@ void swapMissionPointers(void)
 	mapHeight = mission.mapHeight;
 	mission.mapHeight = udwTemp;
 	//swap gateway zones
-	pVoid = (void*)psGateways;
-	psGateways = mission.psGateways;
+	pVoid = (void*)gwGetGateways();
+	gwSetGateways(mission.psGateways);
 	mission.psGateways = (struct _gateway *)pVoid;
 	// Swap scroll limits
 	udwTemp = scrollMinX;
