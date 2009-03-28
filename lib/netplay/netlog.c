@@ -133,6 +133,11 @@ BOOL NETstopLogging(void)
 	char buf[256];
 	int i;
 
+	if (!pFileHandle)
+	{
+		return false;
+	}
+
 	/* Output stats */
 	for (i = 0; i < NUM_GAME_PACKETS; i++)
 	{
@@ -178,6 +183,12 @@ BOOL NETlogEntry(const char *str,UDWORD a,UDWORD b)
 
 	time( &aclock );                 /* Get time in seconds */
 	newtime = localtime( &aclock );  /* Convert time to struct */
+
+	if (!newtime || a >= NET_GAME_FLAGS || !str)
+	{
+		debug(LOG_ERROR, "Fatal error averted");
+		return false;
+	}
 
 	// check to see if a new frame.
 	if(frame != lastframe)
