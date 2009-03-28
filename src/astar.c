@@ -416,6 +416,11 @@ static 	FP_NODE		*psNearest, *psRoute;
 	const int       tileFX = map_coord(fx);
 	const int       tileFY = map_coord(fy);
 
+	if (sx < 0 || sy < 0)
+	{
+		return ASR_FAILED;
+	}
+
 	if (routeMode == ASR_NEWROUTE)
 	{
 		fpathHashReset();
