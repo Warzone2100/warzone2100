@@ -1,5 +1,10 @@
 0000-00-00: Version 2.1.3
+ * General
+   * Fix: Fixed crashes in netlog code, path-finding, pregame chat, and burning scavengers (r6899, r6898, r6878, r6857)
+ * Multiplayer:
+   * Fix: Players no longer drop from game after too much data has been sent, usually happens in long games (r6890)
  * Maps:
+   * New: New map 4c-Urban-Chaos (r6827)
    * Fix: Water tiles on little egypt map fixed (r6825, bug #9658)
 
 2009-03-07: Version 2.1.2
