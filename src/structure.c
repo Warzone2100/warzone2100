@@ -1974,7 +1974,7 @@ STRUCTURE *buildBlueprint(STRUCTURE_STATS *psStats, float x, float y, STRUCT_STA
 	// construct the fake structure
 	psStats = (STRUCTURE_STATS *)psStats;
 	blueprint->pStructureType = psStats;
-	blueprint->visible[selectedPlayer] = true;
+	blueprint->visible[selectedPlayer] = UBYTE_MAX;
 	blueprint->player = selectedPlayer;
 	blueprint->sDisplay.imd = psStats->pIMD;
 	blueprint->pos.x = x;
