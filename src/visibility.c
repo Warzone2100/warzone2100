@@ -77,8 +77,8 @@ typedef struct {
 } VisibleObjectHelp_t;
 
 
-int *gNumWalls = NULL;
-Vector2i * gWall = NULL;
+static int *gNumWalls = NULL;
+static Vector2i *gWall = NULL;
 
 
 /* Variables for the visibility callback / visTilesUpdate */
@@ -112,6 +112,26 @@ void visUpdateLevel(void)
 	visLevelDecAcc += timeAdjustedIncrement(VIS_LEVEL_DEC, true);
 	visLevelDec = visLevelDecAcc;
 	visLevelDecAcc -= visLevelDec;
+}
+
+// Adjust power by range
+static int adjustPowerByRange(int x1, int y1, int x2, int y2, int range, int power)
+{
+	// Original Pumpkin algorithm cleaned up and put into use
+	int	distSq = (x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2);
+	int	rangeSq = range * range;
+	float	mod;
+
+	if (rangeSq > 0 && distSq > 0 && power > 0)
+	{
+		mod = distSq / rangeSq;
+	}
+	else
+	{
+		return 0;
+	}
+
+	return	power - power * mod;
 }
 
 static int visObjHeight(const BASE_OBJECT * psObject)
@@ -276,17 +296,18 @@ void visTilesUpdate(BASE_OBJECT *psObj, RAY_CALLBACK callback)
  * psTarget can be any type of BASE_OBJECT (e.g. a tree).
  * struckBlock controls whether structures block LOS
  */
-bool visibleObject(const BASE_OBJECT* psViewer, const BASE_OBJECT* psTarget, bool wallsBlock)
+int visibleObject(const BASE_OBJECT* psViewer, const BASE_OBJECT* psTarget, bool wallsBlock)
 {
 	Vector3i pos, dest, diff;
 	int range, distSq;
+	int	power;
 
 	ASSERT(psViewer != NULL, "Invalid viewer pointer!");
 	ASSERT(psTarget != NULL, "Invalid viewed pointer!");
 
 	if (!psViewer || !psTarget)
 	{
-		return false;
+		return 0;
 	}
 
 	// FIXME HACK Needed since we got those ugly Vector3uw floating around in BASE_OBJECT...
@@ -315,13 +336,13 @@ bool visibleObject(const BASE_OBJECT* psViewer, const BASE_OBJECT* psTarget, boo
 			// a structure that is being built cannot see anything
 			if (psStruct->status != SS_BUILT)
 			{
-				return false;
+				return 0;
 			}
 
 			if (psStruct->pStructureType->type == REF_WALL
 				|| psStruct->pStructureType->type == REF_WALLCORNER)
 			{
-				return false;
+				return 0;
 			}
 
 			if ((structCBSensor(psStruct)
@@ -330,7 +351,7 @@ bool visibleObject(const BASE_OBJECT* psViewer, const BASE_OBJECT* psTarget, boo
 			{
 				// if a unit is targetted by a counter battery sensor
 				// it is automatically seen
-				return true;
+				return UBYTE_MAX;
 			}
 
 			// increase the sensor range for AA sites
@@ -347,7 +368,7 @@ bool visibleObject(const BASE_OBJECT* psViewer, const BASE_OBJECT* psTarget, boo
 			ASSERT( false,
 				"visibleObject: visibility checking is only implemented for"
 				"units and structures" );
-			return false;
+			return 0;
 			break;
 	}
 
@@ -362,15 +383,16 @@ bool visibleObject(const BASE_OBJECT* psViewer, const BASE_OBJECT* psTarget, boo
 	if (distSq == 0)
 	{
 		// Should never be on top of each other, but ...
-		return true;
+		return UBYTE_MAX;
 	}
 
 	if (distSq > (range*range))
 	{
 		/* Out of sensor range */
-		return false;
+		return 0;
 	}
 
+	power = adjustPowerByRange(psViewer->pos.x, psViewer->pos.y, psTarget->pos.x, psTarget->pos.y, range, objSensorPower(psViewer));
 	{
 		// initialise the callback variables
 		VisibleObjectHelp_t help = { true, wallsBlock, distSq, pos.z + visObjHeight(psViewer), { map_coord(dest.x), map_coord(dest.y) }, 0, 0, -UBYTE_MAX * GRAD_MUL * ELEVATION_SCALE, 0, { 0, 0 } };
@@ -389,8 +411,19 @@ bool visibleObject(const BASE_OBJECT* psViewer, const BASE_OBJECT* psTarget, boo
 		top = dest.z + visObjHeight(psTarget) - help.startHeight;
 		targetGrad = top * GRAD_MUL / help.lastDist;
 
-		return targetGrad >= help.currGrad;
+		if (targetGrad >= help.currGrad)
+		{
+			if (power > objJammerPower(psTarget))
+			{
+				return UBYTE_MAX;
+			}
+			else
+			{
+				return UBYTE_MAX / 2;
+			}
+		}
 	}
+	return 0;
 }
 
 
@@ -436,8 +469,7 @@ STRUCTURE* visGetBlockingWall(const BASE_OBJECT* psViewer, const BASE_OBJECT* ps
 /* Find out what can see this object */
 void processVisibility(BASE_OBJECT *psObj)
 {
-	BOOL		prevVis[MAX_PLAYERS], currVis[MAX_PLAYERS];
-	SDWORD		visLevel;
+	int		prevVis[MAX_PLAYERS], currVis[MAX_PLAYERS];
 	BASE_OBJECT	*psViewer;
 	MESSAGE		*psMessage;
 	unsigned int player;
@@ -445,20 +477,20 @@ void processVisibility(BASE_OBJECT *psObj)
 	// initialise the visibility array
 	for (player = 0; player < MAX_PLAYERS; player++)
 	{
-		prevVis[player] = (psObj->visible[player] != 0);
+		prevVis[player] = psObj->visible[player];
 	}
 
 	// Droids can vanish from view, other objects will stay
 	if (psObj->type == OBJ_DROID)
 	{
-		memset (currVis, 0, sizeof(BOOL) * MAX_PLAYERS);
+		memset(currVis, 0, sizeof(*currVis) * MAX_PLAYERS);
 
 		// one can trivially see oneself
-		currVis[psObj->player]=true;
+		currVis[psObj->player] = UBYTE_MAX;
 	}
 	else
 	{
-		memcpy(currVis, prevVis, sizeof(BOOL) * MAX_PLAYERS);
+		memcpy(currVis, prevVis, sizeof(*prevVis) * MAX_PLAYERS);
 	}
 
 	// get all the objects from the grid the droid is in
@@ -472,7 +504,7 @@ void processVisibility(BASE_OBJECT *psObj)
 		{
 			if (player != psObj->player && aiCheckAlliances(player, psObj->player))
 			{
-				currVis[player] = true;
+				currVis[player] = UBYTE_MAX;
 			}
 		}
 	}
@@ -483,7 +515,7 @@ void processVisibility(BASE_OBJECT *psObj)
 	{
 		if (getSatUplinkExists(player) || (player == selectedPlayer && godMode))
 		{
-			currVis[player] = true;
+			currVis[player] = UBYTE_MAX;
 			if (psObj->visible[player] == 0)
 			{
 				psObj->visible[player] = 1;
@@ -493,18 +525,19 @@ void processVisibility(BASE_OBJECT *psObj)
 
 	while (psViewer = gridIterate(), psViewer != NULL)
 	{
+		int val;
+
 		// If we've got ranged line of sight...
-		if ( (psViewer->type != OBJ_FEATURE) &&
-			 !currVis[psViewer->player] &&
-			 visibleObject(psViewer, psObj, false) )
+		if (psViewer->type != OBJ_FEATURE && currVis[psViewer->player] < UBYTE_MAX
+		    && (val = visibleObject(psViewer, psObj, false)))
  		{
 			// Tell system that this side can see this object
-			currVis[psViewer->player] = true;
-			if (!prevVis[psViewer->player])
+			currVis[psViewer->player] = val;
+			if (prevVis[psViewer->player] < currVis[psViewer->player])
 			{
-				if (psObj->visible[psViewer->player] == 0)
+				if (psObj->visible[psViewer->player] < val)
 				{
-					psObj->visible[psViewer->player] = 1;
+					psObj->visible[psViewer->player] = val;
 				}
 				if(psObj->type != OBJ_FEATURE)
 				{
@@ -526,7 +559,7 @@ void processVisibility(BASE_OBJECT *psObj)
 			{
 				if (currVis[player] && aiCheckAlliances(player, ally))
 				{
-					currVis[ally] = true;
+					currVis[ally] = currVis[player];
 				}
 			}
 		}
@@ -535,6 +568,8 @@ void processVisibility(BASE_OBJECT *psObj)
 	// update the visibility levels
 	for (player = 0; player < MAX_PLAYERS; player++)
 	{
+		SDWORD	visLevel = currVis[player];
+
 		if (player == psObj->player)
 		{
 			// owner can always see it fully
@@ -542,11 +577,8 @@ void processVisibility(BASE_OBJECT *psObj)
 			continue;
 		}
 
-		visLevel = (currVis[player] ? UBYTE_MAX : 0);
-
 		// Droids can vanish from view, other objects will stay
-		if ( (visLevel < psObj->visible[player]) &&
-			 (psObj->type == OBJ_DROID) )
+		if (visLevel < psObj->visible[player] && psObj->type == OBJ_DROID)
 		{
 			if (psObj->visible[player] <= visLevelDec)
 			{
