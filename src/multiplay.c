@@ -843,8 +843,7 @@ static BOOL recvResearch()
 
 	pPlayerRes = asPlayerResList[player] + index;
 
-	// If they have completed the research
-	if (IsResearchCompleted(pPlayerRes))
+	if (!IsResearchCompleted(pPlayerRes))
 	{
 		MakeResearchCompleted(pPlayerRes);
 		researchResult(index, player, false, NULL);
