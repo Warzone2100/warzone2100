@@ -1427,7 +1427,7 @@ FUNC_SYMBOL asFuncTable[] =
 		3, { VAL_INT, VAL_INT, VAL_INT },
 		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "assembleWeaponTemplate",		scrAssembleWeaponTemplate,		ST_TEMPLATE,
+	{ "assembleWeaponTemplate",		scrAssembleWeaponTemplate,		(INTERP_TYPE)ST_TEMPLATE,
 		4, { VAL_INT, (INTERP_TYPE)ST_BODY, (INTERP_TYPE)ST_PROPULSION, (INTERP_TYPE)ST_WEAPON },
 		0, 0, NULL, 0, 0, NULL, NULL },
 
