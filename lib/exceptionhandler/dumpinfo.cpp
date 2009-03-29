@@ -40,8 +40,10 @@
 #endif
 
 static const char endl[] =
-#if defined(WZ_OS_WIN)
+#if   defined(WZ_OS_WIN)
     "\r\n";
+#elif defined(WZ_OS_MAC)
+    "\r";
 #else
     "\n";
 #endif
