@@ -137,7 +137,10 @@ static FP_NODE* fpathGetNode(int x, int y)
 {
 	FP_NODE * psFound;
 
-	ASSERT(x < ARRAY_SIZE(nodeArray) && y < ARRAY_SIZE(nodeArray[x]), "X (%d) or Y %d) coordinate for path finding node is out of range!", x, y);
+	if (x < 0 || y < 0 || x >= ARRAY_SIZE(nodeArray) || y >= ARRAY_SIZE(nodeArray[x]))
+	{
+		return NULL;
+	}
 
 	psFound = nodeArray[x][y];
 	if (psFound
