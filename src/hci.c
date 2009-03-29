@@ -3627,56 +3627,10 @@ void intManufactureFinished(STRUCTURE *psBuilding)
 /* Tell the interface a research facility has completed a topic */
 void intResearchFinished(STRUCTURE *psBuilding)
 {
-	//SDWORD		    structureID;
-	//STRUCTURE       *psCurr;
-    //BASE_OBJECT     *psObj;
-
-	ASSERT( psBuilding != NULL,
-		"intResearchFinished: Invalid structure pointer" );
+	ASSERT(psBuilding != NULL, "Invalid structure pointer");
 
 	// just do a screen refresh
 	intRefreshScreen();
-	return;
-
-/*	if ((intMode == INT_OBJECT || intMode == INT_STAT) &&
-		(objMode == IOBJ_RESEARCH))
-	{
-		// Find which button the structure is on and clear it's stats
-		structureID = 0;
-    	numObjects = 0;
-	    memset(apsObjectList, 0, sizeof(BASE_OBJECT *) * MAX_OBJECTS);
-		//for (psCurr = apsStructLists[selectedPlayer]; psCurr; psCurr = psCurr->psNext)
-		for (psCurr = interfaceStructList(); psCurr; psCurr = psCurr->psNext)
-		{
-			if (objSelectFunc((BASE_OBJECT *)psCurr))
-			{
-                //the list is ordered now so we have to get all possible entries and sort it before checking if this is the one!
-                apsObjectList[numObjects] = (BASE_OBJECT *)psCurr;
-			    numObjects++;
-            }
-			// make sure the list doesn't overflow
-			if (numObjects >= MAX_OBJECTS)
-			{
-				break;
-			}
-        }
-        //order the list
-        orderResearch();
-
-        //now look thru the list to see which one corresponds to the factory that has just finished
-        structureID = 0;
-        for (psObj = apsObjectList[structureID]; structureID < numObjects; structureID++)
-        {
-            if ((STRUCTURE *)psObj == psBuilding)
-			{
-				intSetStats(structureID + IDOBJ_STATSTART, NULL);
-				break;
-			}
-		}
-	}*/
-
-	// refresh the research interface to update with new topics.
-	//intRefreshScreen();
 }
 
 /* Do the annoying calculation for how many forms are needed
