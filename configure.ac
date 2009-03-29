@@ -187,6 +187,10 @@ elif test "x$enable_debug" = "xdebugprofile" ; then
 elif test "x$enable_debug" = "xprofile" ; then
 	WZ_CFLAGS="${WZ_CFLAGS} -g -Os -pg -Wall -Wwrite-strings"
 	WZ_CPPFLAGS="${WZ_CPPFLAGS} -DNDEBUG"
+elif test "x$enable_debug" = "xg++" ; then
+	WZ_CFLAGS="${WZ_CFLAGS} -g -O2 -Wall -fpermissive"
+	WZ_CPPFLAGS="${WZ_CPPFLAGS} -DDEBUG"
+	CC="g++"
 else
 	WZ_CFLAGS="${WZ_CFLAGS} -g -Wall -Wwrite-strings"
 	WZ_CPPFLAGS="${WZ_CPPFLAGS} -DNDEBUG"
