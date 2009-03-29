@@ -22,18 +22,21 @@ int main(int argc, char **argv)
 		char filename[PATH_MAX], *delim;
 
 		fscanf(fp, "%s\n", &filename);
+
+		// Strip "/game.map"
 		delim = strrchr(filename, '/');
 		if (!delim)
 		{
-			fprintf(stderr, "maptest: Failed to parse %s\n", filename);
+			fprintf(stderr, "maptest: Failed to find map directory for \"%s\"\n", filename);
 			return -1;
 		}
 		*delim = '\0';
+
 		printf("Testing map: %s\n", filename);
 		map = mapLoad(filename);
 		if (!map)
 		{
-			fprintf(stderr, "maptest: Failed to load %s\n", filename);
+			fprintf(stderr, "maptest: Failed to load \"%s\"\n", filename);
 			return -1;
 		}
 		mapFree(map);
