@@ -11506,7 +11506,7 @@ BOOL scrAssembleWeaponTemplate(void)
 	}
 
 	// return template to scripts
-	if (!stackPushResult(ST_TEMPLATE, &scrFunctionResult))
+	if (!stackPushResult((INTERP_TYPE)ST_TEMPLATE, &scrFunctionResult))
 	{
 		return false;
 	}
@@ -11736,7 +11736,7 @@ BOOL scrGettext()
 
 	scrFunctionResult.v.sval = (char*)gettext(strParam1);
 
-	return stackPushResult(ST_TEXTSTRING, &scrFunctionResult);
+	return stackPushResult((INTERP_TYPE)ST_TEXTSTRING, &scrFunctionResult);
 }
 
 BOOL scrGettext_noop()
@@ -11788,7 +11788,7 @@ BOOL scrPgettext()
 		scrFunctionResult.v.sval = translation;
 	}
 
-	return stackPushResult(ST_TEXTSTRING, &scrFunctionResult);
+	return stackPushResult((INTERP_TYPE)ST_TEXTSTRING, &scrFunctionResult);
 }
 
 BOOL scrPgettext_expr()
@@ -11800,7 +11800,7 @@ BOOL scrPgettext_expr()
 
 	scrFunctionResult.v.sval = (char*)pgettext_expr(strParam1, strParam2);
 
-	return stackPushResult(ST_TEXTSTRING, &scrFunctionResult);
+	return stackPushResult((INTERP_TYPE)ST_TEXTSTRING, &scrFunctionResult);
 }
 
 BOOL scrPgettext_noop()

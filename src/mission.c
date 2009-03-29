@@ -67,7 +67,6 @@
 #include "multiplay.h"
 #include "environ.h"
 #include "loop.h"
-#include "levels.h"
 #include "visibility.h"
 #include "mapgrid.h"
 #include "cluster.h"

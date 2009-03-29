@@ -3,6 +3,12 @@
 
 #include <physfs.h>
 
+enum lexinput_type
+{
+	LEXINPUT_PHYSFS,
+	LEXINPUT_BUFFER,
+};
+
 typedef struct
 {
 	union
@@ -14,12 +20,7 @@ typedef struct
 			const char* end;
 		} buffer;
 	} input;
-
-	enum
-	{
-		LEXINPUT_PHYSFS,
-		LEXINPUT_BUFFER,
-	} type;
+	enum lexinput_type type;
 } lexerinput_t;
 
 #ifdef YY_EXTRA_TYPE

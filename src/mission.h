@@ -26,6 +26,7 @@
 
 #include "map.h"
 #include "power.h"
+#include "levels.h"
 #include "missiondef.h"
 #include "group.h"
 
@@ -57,7 +58,7 @@ extern void releaseMission(void);
 /** On the PC - sets the countdown played flag. */
 extern void setMissionCountDown(void);
 
-extern BOOL startMission(UDWORD missionType, char *pGame);
+extern BOOL startMission(LEVEL_TYPE missionType, char *pGame);
 extern void endMission(void);
 
 /** Initialise the mission stuff for a save game. */
