@@ -1135,11 +1135,7 @@ void handleAbandonedStructures()
 
 			// We are only interested in structures accruing
 			if (psCurr->status == SS_BEING_BUILT
-			 && psCurr->currentPowerAccrued < structPowerToBuild(psCurr)
-			 && psCurr->pStructureType->type != REF_FACTORY
-			 && psCurr->pStructureType->type != REF_VTOL_FACTORY
-			 && psCurr->pStructureType->type != REF_RESEARCH
-			 && psCurr->pStructureType->type != REF_POWER_GEN)
+			 && psCurr->currentPowerAccrued < structPowerToBuild(psCurr))
 			{
 				DROID *psDroid;
 				bool beingBuilt = false;
