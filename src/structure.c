@@ -4487,6 +4487,12 @@ BOOL getDroidDestination(BASE_STATS *psStats, UDWORD structX,
 		width = ((FEATURE_STATS *)psStats)->baseWidth;
 		breadth = ((FEATURE_STATS *)psStats)->baseBreadth;
 	}
+	ASSERT(width+breadth, "weird object passed to getDroidDestination");
+	if (width + breadth == 0)
+	{
+		debug(LOG_SYNC, "weird object passed to getDroidDestination");
+		return false;
+	}
 
 	//get a random starting place 0=top left
 	start = (UWORD)(rand() % ((width + breadth) * 2));
