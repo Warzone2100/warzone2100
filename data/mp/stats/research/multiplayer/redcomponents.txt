@@ -3,7 +3,7 @@ R-Wpn-Cannon4AMk1,Cannon2A-TMk1,WEAPON,10
 R-Comp-CommandTurret02,CommandTurret1,WEAPON,10
 R-Comp-CommandTurret03,CommandTurret2,WEAPON,10
 R-Comp-CommandTurret04,CommandTurret3,WEAPON,10
-R-Cyborg-Wpn-RotMG-Grd,CyborgChain1Ground,BODY,2
+R-Wpn-MG4,CyborgChain1Ground,BODY,2
 R-Wpn-Flame2,Flame1Mk1,WEAPON,10
 R-Wpn-Plasmite-Flamer,Flame2,WEAPON,10
 R-Wpn-Howitzer03-Rot,Howitzer105Mk1,WEAPON,10
@@ -23,3 +23,4 @@ R-Wpn-RailGun02,RailGun1-VTOL,WEAPON,10
 R-Wpn-RailGun02,RailGun1Mk1,WEAPON,10
 R-Wpn-Missile2A-T,Rocket-LtA-T,WEAPON,10
 R-Wpn-Missile2A-T,Rocket-VTOL-LtA-T,WEAPON,10
+R-Wpn-Flame2,CyborgFlamerGrd,BODY,2

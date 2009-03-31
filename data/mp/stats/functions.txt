@@ -45,43 +45,43 @@ Production Upgrade,Struc-VTOLFactory-Upgrade09,0,0,1,270
 Weapon Upgrade,Wpn-Cannon-Accuracy01,CANNON,0,10,10,0,0,0,0
 Weapon Upgrade,Wpn-Cannon-Damage01,CANNON,0,0,0,25,10,0,10
 Weapon Upgrade,Wpn-Cannon-Damage02,CANNON,0,0,0,50,20,0,20
-Weapon Upgrade,Wpn-Cannon-Damage03,CANNON,0,0,0,80,30,0,30
+Weapon Upgrade,Wpn-Cannon-Damage03,CANNON,0,0,0,75,30,0,30
 Weapon Upgrade,Wpn-Cannon-ROF01,CANNON,10,0,0,0,0,0,0
 Weapon Upgrade,Wpn-Cannon-ROF02,CANNON,20,0,0,0,0,0,0
 Weapon Upgrade,Wpn-Cannon-ROF03,CANNON,30,0,0,0,0,0,0
 Weapon Upgrade,Wpn-Flamer-Damage01,FLAME,0,0,0,25,0,0,0
 Weapon Upgrade,Wpn-Flamer-Damage02,FLAME,0,0,0,50,0,0,0
-Weapon Upgrade,Wpn-Flamer-Damage03,FLAME,0,0,0,80,0,0,0
-Weapon Upgrade,Wpn-Flamer-ROF01,FLAME,20,0,0,0,0,0,0
-Weapon Upgrade,Wpn-Flamer-ROF02,FLAME,40,0,0,0,0,0,0
-Weapon Upgrade,Wpn-Flamer-ROF03,FLAME,60,0,0,0,0,0,0
-Weapon Upgrade,Wpn-MG-Damage01,MACHINE GUN,0,0,0,30,0,0,0
-Weapon Upgrade,Wpn-MG-Damage02,MACHINE GUN,0,0,0,60,0,0,0
-Weapon Upgrade,Wpn-MG-Damage03,MACHINE GUN,0,0,0,90,0,0,0
-Weapon Upgrade,Wpn-MG-ROF01,MACHINE GUN,20,0,0,0,0,0,0
-Weapon Upgrade,Wpn-MG-ROF02,MACHINE GUN,40,0,0,0,0,0,0
-Weapon Upgrade,Wpn-MG-ROF03,MACHINE GUN,60,0,0,0,0,0,0
+Weapon Upgrade,Wpn-Flamer-Damage03,FLAME,0,0,0,75,0,0,0
+Weapon Upgrade,Wpn-Flamer-ROF01,FLAME,15,0,0,0,0,0,0
+Weapon Upgrade,Wpn-Flamer-ROF02,FLAME,30,0,0,0,0,0,0
+Weapon Upgrade,Wpn-Flamer-ROF03,FLAME,45,0,0,0,0,0,0
+Weapon Upgrade,Wpn-MG-Damage01,MACHINE GUN,0,0,0,25,0,0,0
+Weapon Upgrade,Wpn-MG-Damage02,MACHINE GUN,0,0,0,50,0,0,0
+Weapon Upgrade,Wpn-MG-Damage03,MACHINE GUN,0,0,0,75,0,0,0
+Weapon Upgrade,Wpn-MG-ROF01,MACHINE GUN,15,0,0,0,0,0,0
+Weapon Upgrade,Wpn-MG-ROF02,MACHINE GUN,30,0,0,0,0,0,0
+Weapon Upgrade,Wpn-MG-ROF03,MACHINE GUN,45,0,0,0,0,0,0
 Weapon Upgrade,Wpn-Artillery-Damage01,MORTARS,0,0,0,25,0,0,0
 Weapon Upgrade,Wpn-Artillery-Damage02,MORTARS,0,0,0,50,0,0,0
 Weapon Upgrade,Wpn-Artillery-Damage03,MORTARS,0,0,0,75,0,0,0
-Weapon Upgrade,Wpn-Artillery-ROF01,MORTARS,20,0,0,0,0,0,0
-Weapon Upgrade,Wpn-Artillery-ROF02,MORTARS,40,0,0,0,0,0,0
-Weapon Upgrade,Wpn-Artillery-ROF03,MORTARS,60,0,0,0,0,0,0
-Weapon Upgrade,Wpn-Rocket-Damage01,ROCKET,0,0,0,30,0,0,0
-Weapon Upgrade,Wpn-Rocket-Damage02,ROCKET,0,0,0,60,0,0,0
-Weapon Upgrade,Wpn-Rocket-Damage03,ROCKET,0,0,0,90,0,0,0
-Weapon Upgrade,Wpn-Rocket-ROF01,ROCKET,20,0,0,0,0,0,0
-Weapon Upgrade,Wpn-Rocket-ROF02,ROCKET,40,0,0,0,0,0,0
-Weapon Upgrade,Wpn-Rocket-ROF03,ROCKET,60,0,0,0,0,0,0
-Weapon Upgrade,Wpn-MG-Damage04,MACHINE GUN,0,0,0,120,0,0,0
-Weapon Upgrade,Wpn-MG-Damage05,MACHINE GUN,0,0,0,150,0,0,0
-Weapon Upgrade,Wpn-MG-Damage06,MACHINE GUN,0,0,0,180,0,0,0
-Weapon Upgrade,Wpn-Cannon-Damage04,CANNON,0,0,0,110,30,0,30
-Weapon Upgrade,Wpn-Cannon-Damage05,CANNON,0,0,0,140,30,0,30
-Weapon Upgrade,Wpn-Cannon-Damage06,CANNON,0,0,0,165,30,0,30
-Weapon Upgrade,Wpn-Cannon-Damage07,CANNON,0,0,0,185,30,0,30
-Weapon Upgrade,Wpn-Cannon-Damage08,CANNON,0,0,0,210,30,0,30
-Weapon Upgrade,Wpn-Cannon-Damage09,CANNON,0,0,0,240,30,0,30
+Weapon Upgrade,Wpn-Artillery-ROF01,MORTARS,15,0,0,0,0,0,0
+Weapon Upgrade,Wpn-Artillery-ROF02,MORTARS,30,0,0,0,0,0,0
+Weapon Upgrade,Wpn-Artillery-ROF03,MORTARS,45,0,0,0,0,0,0
+Weapon Upgrade,Wpn-Rocket-Damage01,ROCKET,0,0,0,25,0,0,0
+Weapon Upgrade,Wpn-Rocket-Damage02,ROCKET,0,0,0,50,0,0,0
+Weapon Upgrade,Wpn-Rocket-Damage03,ROCKET,0,0,0,75,0,0,0
+Weapon Upgrade,Wpn-Rocket-ROF01,ROCKET,15,0,0,0,0,0,0
+Weapon Upgrade,Wpn-Rocket-ROF02,ROCKET,30,0,0,0,0,0,0
+Weapon Upgrade,Wpn-Rocket-ROF03,ROCKET,45,0,0,0,0,0,0
+Weapon Upgrade,Wpn-MG-Damage04,MACHINE GUN,0,0,0,100,0,0,0
+Weapon Upgrade,Wpn-MG-Damage05,MACHINE GUN,0,0,0,125,0,0,0
+Weapon Upgrade,Wpn-MG-Damage06,MACHINE GUN,0,0,0,150,0,0,0
+Weapon Upgrade,Wpn-Cannon-Damage04,CANNON,0,0,0,100,30,0,30
+Weapon Upgrade,Wpn-Cannon-Damage05,CANNON,0,0,0,125,30,0,30
+Weapon Upgrade,Wpn-Cannon-Damage06,CANNON,0,0,0,150,30,0,30
+Weapon Upgrade,Wpn-Cannon-Damage07,CANNON,0,0,0,175,30,0,30
+Weapon Upgrade,Wpn-Cannon-Damage08,CANNON,0,0,0,200,30,0,30
+Weapon Upgrade,Wpn-Cannon-Damage09,CANNON,0,0,0,225,30,0,30
 Weapon Upgrade,Wpn-Cannon-ROF04,CANNON,40,0,0,0,0,0,0
 Weapon Upgrade,Wpn-Cannon-ROF05,CANNON,50,0,0,0,0,0,0
 Weapon Upgrade,Wpn-Cannon-ROF06,CANNON,60,0,0,0,0,0,0
@@ -90,12 +90,12 @@ Weapon Upgrade,Wpn-Cannon-Accuracy03,CANNON,0,30,30,0,0,0,0
 Weapon Upgrade,Wpn-AAGun-Accuracy01,A-A GUN,0,10,10,0,0,0,0
 Weapon Upgrade,Wpn-AAGun-Accuracy02,A-A GUN,0,20,20,0,0,0,0
 Weapon Upgrade,Wpn-AAGun-Accuracy03,A-A GUN,0,30,30,0,0,0,0
-Weapon Upgrade,Wpn-AAGun-Damage01,A-A GUN,0,0,0,30,0,0,0
-Weapon Upgrade,Wpn-AAGun-Damage02,A-A GUN,0,0,0,60,0,0,0
-Weapon Upgrade,Wpn-AAGun-Damage03,A-A GUN,0,0,0,90,0,0,0
-Weapon Upgrade,Wpn-AAGun-Damage04,A-A GUN,0,0,0,120,0,0,0
-Weapon Upgrade,Wpn-AAGun-Damage05,A-A GUN,0,0,0,150,0,0,0
-Weapon Upgrade,Wpn-AAGun-Damage06,A-A GUN,0,0,0,180,0,0,0
+Weapon Upgrade,Wpn-AAGun-Damage01,A-A GUN,0,0,0,25,0,0,0
+Weapon Upgrade,Wpn-AAGun-Damage02,A-A GUN,0,0,0,50,0,0,0
+Weapon Upgrade,Wpn-AAGun-Damage03,A-A GUN,0,0,0,75,0,0,0
+Weapon Upgrade,Wpn-AAGun-Damage04,A-A GUN,0,0,0,100,0,0,0
+Weapon Upgrade,Wpn-AAGun-Damage05,A-A GUN,0,0,0,125,0,0,0
+Weapon Upgrade,Wpn-AAGun-Damage06,A-A GUN,0,0,0,150,0,0,0
 Weapon Upgrade,Wpn-AAGun-ROF01,A-A GUN,10,0,0,0,0,0,0
 Weapon Upgrade,Wpn-AAGun-ROF02,A-A GUN,20,0,0,0,0,0,0
 Weapon Upgrade,Wpn-AAGun-ROF03,A-A GUN,30,0,0,0,0,0,0
@@ -105,9 +105,9 @@ Weapon Upgrade,Wpn-AAGun-ROF06,A-A GUN,60,0,0,0,0,0,0
 Weapon Upgrade,Wpn-Bomb-Accuracy01,BOMB,0,10,10,0,0,0,0
 Weapon Upgrade,Wpn-Bomb-Accuracy02,BOMB,0,20,20,0,0,0,0
 Weapon Upgrade,Wpn-Bomb-Accuracy03,BOMB,0,30,30,0,0,0,0
-Weapon Upgrade,Wpn-Flamer-Damage04,FLAME,0,0,0,110,0,0,0
-Weapon Upgrade,Wpn-Flamer-Damage05,FLAME,0,0,0,140,0,0,0
-Weapon Upgrade,Wpn-Flamer-Damage06,FLAME,0,0,0,170,0,0,0
+Weapon Upgrade,Wpn-Flamer-Damage04,FLAME,0,0,0,100,0,0,0
+Weapon Upgrade,Wpn-Flamer-Damage05,FLAME,0,0,0,125,0,0,0
+Weapon Upgrade,Wpn-Flamer-Damage06,FLAME,0,0,0,150,0,0,0
 Weapon Upgrade,Wpn-Howitzer-Accuracy01,HOWITZERS,0,10,10,0,0,0,0
 Weapon Upgrade,Wpn-Howitzer-Accuracy02,HOWITZERS,0,20,20,0,0,0,0
 Weapon Upgrade,Wpn-Howitzer-Accuracy03,HOWITZERS,0,30,30,0,0,0,0
@@ -119,57 +119,57 @@ Weapon Upgrade,Wpn-Howitzer-Damage05,HOWITZERS,0,0,0,125,0,0,0
 Weapon Upgrade,Wpn-Howitzer-Damage06,HOWITZERS,0,0,0,150,0,0,0
 Weapon Upgrade,Wpn-Howitzer-ROF01,HOWITZERS,10,0,0,0,0,0,0
 Weapon Upgrade,Wpn-Howitzer-ROF02,HOWITZERS,20,0,0,0,0,0,0
-Weapon Upgrade,Wpn-Howitzer-ROF03,HOWITZERS,40,0,0,0,0,0,0
-Weapon Upgrade,Wpn-Howitzer-ROF04,HOWITZERS,60,0,0,0,0,0,0
+Weapon Upgrade,Wpn-Howitzer-ROF03,HOWITZERS,30,0,0,0,0,0,0
+Weapon Upgrade,Wpn-Howitzer-ROF04,HOWITZERS,50,0,0,0,0,0,0
 Weapon Upgrade,Wpn-Energy-Accuracy01,ENERGY,0,10,10,0,0,0,0
 Weapon Upgrade,Wpn-Energy-Accuracy02,ENERGY,0,20,20,0,0,0,0
 Weapon Upgrade,Wpn-Energy-Accuracy03,ENERGY,0,30,30,0,0,0,0
-Weapon Upgrade,Wpn-Energy-Damage01,ENERGY,0,0,0,30,0,0,0
-Weapon Upgrade,Wpn-Energy-Damage02,ENERGY,0,0,0,60,0,0,0
-Weapon Upgrade,Wpn-Energy-Damage03,ENERGY,0,0,0,90,0,0,0
-Weapon Upgrade,Wpn-Energy-ROF01,ENERGY,20,0,0,0,0,0,0
-Weapon Upgrade,Wpn-Energy-ROF02,ENERGY,40,0,0,0,0,0,0
-Weapon Upgrade,Wpn-Energy-ROF03,ENERGY,60,0,0,0,0,0,0
-Weapon Upgrade,Wpn-MG-Damage07,MACHINE GUN,0,0,0,215,0,0,0
-Weapon Upgrade,Wpn-MG-Damage08,MACHINE GUN,0,0,0,250,0,0,0
-Weapon Upgrade,Wpn-MG-Damage09,MACHINE GUN,0,0,0,280,0,0,0
+Weapon Upgrade,Wpn-Energy-Damage01,ENERGY,0,0,0,25,0,0,0
+Weapon Upgrade,Wpn-Energy-Damage02,ENERGY,0,0,0,50,0,0,0
+Weapon Upgrade,Wpn-Energy-Damage03,ENERGY,0,0,0,75,0,0,0
+Weapon Upgrade,Wpn-Energy-ROF01,ENERGY,15,0,0,0,0,0,0
+Weapon Upgrade,Wpn-Energy-ROF02,ENERGY,30,0,0,0,0,0,0
+Weapon Upgrade,Wpn-Energy-ROF03,ENERGY,45,0,0,0,0,0,0
+Weapon Upgrade,Wpn-MG-Damage07,MACHINE GUN,0,0,0,175,0,0,0
+Weapon Upgrade,Wpn-MG-Damage08,MACHINE GUN,0,0,0,200,0,0,0
+Weapon Upgrade,Wpn-MG-Damage09,MACHINE GUN,0,0,0,225,0,0,0
 Weapon Upgrade,Wpn-Missile-Accuracy01,MISSILE,0,10,10,0,0,0,0
 Weapon Upgrade,Wpn-Missile-Accuracy02,MISSILE,0,20,20,0,0,0,0
-Weapon Upgrade,Wpn-Missile-Damage01,MISSILE,0,0,0,30,0,0,0
-Weapon Upgrade,Wpn-Missile-Damage02,MISSILE,0,0,0,60,0,0,0
-Weapon Upgrade,Wpn-Missile-Damage03,MISSILE,0,0,0,90,0,0,0
-Weapon Upgrade,Wpn-Missile-ROF01,MISSILE,20,0,0,0,0,0,0
-Weapon Upgrade,Wpn-Missile-ROF02,MISSILE,40,0,0,0,0,0,0
-Weapon Upgrade,Wpn-Missile-ROF03,MISSILE,60,0,0,0,0,0,0
-Weapon Upgrade,Wpn-MissileSlow-Damage01,SLOW MISSILE,0,0,0,30,0,0,0
-Weapon Upgrade,Wpn-MissileSlow-Damage02,SLOW MISSILE,0,0,0,60,0,0,0
-Weapon Upgrade,Wpn-MissileSlow-Damage03,SLOW MISSILE,0,0,0,90,0,0,0
-Weapon Upgrade,Wpn-MissileSlow-ROF01,SLOW MISSILE,20,0,0,0,0,0,0
+Weapon Upgrade,Wpn-Missile-Damage01,MISSILE,0,0,0,25,0,0,0
+Weapon Upgrade,Wpn-Missile-Damage02,MISSILE,0,0,0,50,0,0,0
+Weapon Upgrade,Wpn-Missile-Damage03,MISSILE,0,0,0,75,0,0,0
+Weapon Upgrade,Wpn-Missile-ROF01,MISSILE,15,0,0,0,0,0,0
+Weapon Upgrade,Wpn-Missile-ROF02,MISSILE,30,0,0,0,0,0,0
+Weapon Upgrade,Wpn-Missile-ROF03,MISSILE,45,0,0,0,0,0,0
+Weapon Upgrade,Wpn-MissileSlow-Damage01,SLOW MISSILE,0,0,0,25,0,0,0
+Weapon Upgrade,Wpn-MissileSlow-Damage02,SLOW MISSILE,0,0,0,50,0,0,0
+Weapon Upgrade,Wpn-MissileSlow-Damage03,SLOW MISSILE,0,0,0,75,0,0,0
+Weapon Upgrade,Wpn-MissileSlow-ROF01,SLOW MISSILE,15,0,0,0,0,0,0
 Weapon Upgrade,Wpn-Mortar-Acc01,MORTARS,0,10,10,0,0,0,0
 Weapon Upgrade,Wpn-Mortar-Acc02,MORTARS,0,20,20,0,0,0,0
 Weapon Upgrade,Wpn-Mortar-Acc03,MORTARS,0,30,30,0,0,0,0
 Weapon Upgrade,Wpn-Mortar-Damage01,MORTARS,0,0,0,25,0,0,0
 Weapon Upgrade,Wpn-Mortar-Damage02,MORTARS,0,0,0,50,0,0,0
 Weapon Upgrade,Wpn-Mortar-Damage03,MORTARS,0,0,0,75,0,0,0
-Weapon Upgrade,Wpn-Mortar-Damage04,MORTARS,0,0,0,105,0,0,0
-Weapon Upgrade,Wpn-Mortar-Damage05,MORTARS,0,0,0,135,0,0,0
-Weapon Upgrade,Wpn-Mortar-Damage06,MORTARS,0,0,0,155,0,0,0
+Weapon Upgrade,Wpn-Mortar-Damage04,MORTARS,0,0,0,100,0,0,0
+Weapon Upgrade,Wpn-Mortar-Damage05,MORTARS,0,0,0,125,0,0,0
+Weapon Upgrade,Wpn-Mortar-Damage06,MORTARS,0,0,0,150,0,0,0
 Weapon Upgrade,Wpn-Mortar-ROF01,MORTARS,10,0,0,0,0,0,0
 Weapon Upgrade,Wpn-Mortar-ROF02,MORTARS,20,0,0,0,0,0,0
 Weapon Upgrade,Wpn-Mortar-ROF03,MORTARS,30,0,0,0,0,0,0
 Weapon Upgrade,Wpn-Mortar-ROF04,MORTARS,40,0,0,0,0,0,0
 Weapon Upgrade,Wpn-Rail-Accuracy01,GAUSS,0,10,10,0,0,0,0
-Weapon Upgrade,Wpn-Rail-Damage01,GAUSS,0,0,0,30,0,0,0
-Weapon Upgrade,Wpn-Rail-Damage02,GAUSS,0,0,0,60,0,0,0
-Weapon Upgrade,Wpn-Rail-Damage03,GAUSS,0,0,0,90,0,0,0
-Weapon Upgrade,Wpn-Rail-ROF01,GAUSS,20,0,0,0,0,0,0
-Weapon Upgrade,Wpn-Rail-ROF02,GAUSS,40,0,0,0,0,0,0
-Weapon Upgrade,Wpn-Rail-ROF03,GAUSS,60,0,0,0,0,0,0
+Weapon Upgrade,Wpn-Rail-Damage01,GAUSS,0,0,0,25,0,0,0
+Weapon Upgrade,Wpn-Rail-Damage02,GAUSS,0,0,0,50,0,0,0
+Weapon Upgrade,Wpn-Rail-Damage03,GAUSS,0,0,0,75,0,0,0
+Weapon Upgrade,Wpn-Rail-ROF01,GAUSS,15,0,0,0,0,0,0
+Weapon Upgrade,Wpn-Rail-ROF02,GAUSS,30,0,0,0,0,0,0
+Weapon Upgrade,Wpn-Rail-ROF03,GAUSS,45,0,0,0,0,0,0
 Weapon Upgrade,Wpn-Rocket-Accuracy01,ROCKET,0,10,10,0,0,0,0
 Weapon Upgrade,Wpn-Rocket-Accuracy02,ROCKET,0,20,20,0,0,0,0
-Weapon Upgrade,Wpn-Rocket-Damage04,ROCKET,0,0,0,120,0,0,0
-Weapon Upgrade,Wpn-Rocket-Damage05,ROCKET,0,0,0,150,0,0,0
-Weapon Upgrade,Wpn-Rocket-Damage06,ROCKET,0,0,0,180,0,0,0
+Weapon Upgrade,Wpn-Rocket-Damage04,ROCKET,0,0,0,100,0,0,0
+Weapon Upgrade,Wpn-Rocket-Damage05,ROCKET,0,0,0,125,0,0,0
+Weapon Upgrade,Wpn-Rocket-Damage06,ROCKET,0,0,0,150,0,0,0
 Weapon Upgrade,Wpn-RocketSlow-Accuracy01,SLOW ROCKET,0,10,10,0,0,0,0
 Weapon Upgrade,Wpn-RocketSlow-Accuracy02,SLOW ROCKET,0,20,20,0,0,0,0
 Weapon Upgrade,Wpn-RocketSlow-Accuracy03,SLOW ROCKET,0,30,30,0,0,0,0
@@ -182,9 +182,9 @@ Weapon Upgrade,Wpn-RocketSlow-Damage06,SLOW ROCKET,0,0,0,150,0,0,0
 Weapon Upgrade,Wpn-RocketSlow-ROF01,SLOW ROCKET,15,0,0,0,0,0,0
 Weapon Upgrade,Wpn-RocketSlow-ROF02,SLOW ROCKET,30,0,0,0,0,0,0
 Weapon Upgrade,Wpn-RocketSlow-ROF03,SLOW ROCKET,45,0,0,0,0,0,0
-Weapon Upgrade,Wpn-Flamer-Damage07,FLAME,0,0,0,190,0,0,0
-Weapon Upgrade,Wpn-Flamer-Damage08,FLAME,0,0,0,215,0,0,0
-Weapon Upgrade,Wpn-Flamer-Damage09,FLAME,0,0,0,240,0,0,0
+Weapon Upgrade,Wpn-Flamer-Damage07,FLAME,0,0,0,175,0,0,0
+Weapon Upgrade,Wpn-Flamer-Damage08,FLAME,0,0,0,200,0,0,0
+Weapon Upgrade,Wpn-Flamer-Damage09,FLAME,0,0,0,225,0,0,0
 Wall Function,Basic Wall Function,A0BabaCornerWall,31
 Wall Function,Hardcrete Wall1,A0HardcreteMk1CWall,69
 Wall Function,baba Wall Function,A0BabaCornerWall,73
