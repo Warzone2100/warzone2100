@@ -428,6 +428,12 @@ static void widgetInitVtbl(widget *self)
 		vtbl.resize                 = widgetResizeImpl;
 		vtbl.reposition             = widgetRepositionImpl;
 
+		vtbl.enableGL               = widgetEnableGLImpl;
+		vtbl.disableGL              = widgetDisableGLImpl;
+
+		vtbl.beginGL                = widgetBeginGLImpl;
+		vtbl.endGL                  = widgetEndGLImpl;
+
 		vtbl.composite              = widgetCompositeImpl;
 
 		vtbl.doLayout               = NULL;
@@ -544,6 +550,12 @@ void widgetDestroyImpl(widget *self)
 		cairo_destroy(self->maskCr);
 	}
 
+	// If GL content support is enabled, disable it
+	if (self->openGLEnabled)
+	{
+		widgetDisableGL(self);
+	}
+
 	// Free the ID
 	free((char *) self->id);
 
@@ -565,6 +577,9 @@ void widgetDraw(widget *self)
 
 		self->needsRedraw = false;
 
+		// Mark the texture as needing uploading
+		self->textureNeedsUploading = true;
+
 		// Clear the current context
 		cairo_set_operator(self->cr, CAIRO_OPERATOR_SOURCE);
 		cairo_set_source_rgba(self->cr, 0.0, 0.0, 0.0, 0.0);
@@ -582,11 +597,17 @@ void widgetDraw(widget *self)
 		// Restore the context
 		cairo_restore(self->cr);
 
-		// Update the texture
-		glBindTexture(GL_TEXTURE_RECTANGLE_ARB, self->textureId);
+		// Update the texture if widgetEndGL has not done it for us
+		if (self->textureNeedsUploading)
+		{
+			glBindTexture(GL_TEXTURE_RECTANGLE_ARB, self->textureId);
 
-		glTexImage2D(GL_TEXTURE_RECTANGLE_ARB, 0, GL_RGBA, self->size.x,
-		             self->size.y, 0, GL_BGRA, GL_UNSIGNED_BYTE, bits);
+			glTexImage2D(GL_TEXTURE_RECTANGLE_ARB, 0, GL_RGBA, self->size.x,
+			             self->size.y, 0, GL_BGRA, GL_UNSIGNED_BYTE, bits);
+
+			self->textureNeedsUploading = false;
+		}
+
 	}
 
 	// Draw our children (even if we did not need redrawing our children might)
@@ -1289,6 +1310,138 @@ void widgetRepositionImpl(widget *self, int x, int y)
 	widgetFireCallbacks(self, (event *) &evtReposition);
 }
 
+void widgetEnableGLImpl(widget *self)
+{
+	GLenum status;
+
+	// Check if GL is already enabled
+	if (self->openGLEnabled)
+	{
+		return;
+	}
+
+	// Generate an FBO id
+	glGenFramebuffersEXT(1, &self->fboId);
+	glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, self->fboId);
+
+	// Generate a renderbuffer to server as a depth buffer
+	glGenRenderbuffersEXT(1, &self->depthbufferId);
+	glBindRenderbufferEXT(GL_RENDERBUFFER_EXT, self->depthbufferId);
+	glRenderbufferStorageEXT(GL_RENDERBUFFER_EXT, GL_DEPTH_COMPONENT24,
+	                         self->size.x, self->size.y);
+	glBindRenderbufferEXT(GL_RENDERBUFFER_EXT, 0);
+
+	// Bind our drawing texture and initialise it
+	glBindTexture(GL_TEXTURE_RECTANGLE_ARB, self->textureId);
+	glTexImage2D(GL_TEXTURE_RECTANGLE_ARB, 0, GL_RGBA, self->size.x,
+	             self->size.y, 0, GL_BGRA, GL_UNSIGNED_BYTE, NULL);
+
+	// Attach the texture to the FBO
+	glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0,
+	                          GL_TEXTURE_RECTANGLE_ARB, self->textureId, 0);
+
+	// Attach the depthbuffer to the FBO
+	glFramebufferRenderbufferEXT(GL_FRAMEBUFFER_EXT, GL_DEPTH_ATTACHMENT,
+	                             GL_RENDERBUFFER_EXT, self->depthbufferId);
+
+	// Ensure that the FBO was created successfully
+	status = glCheckFramebufferStatus(GL_FRAMEBUFFER_EXT);
+
+	// Un-bind the FBO
+	glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);
+
+	// Rendering GL content to the widget is now enabled
+	self->openGLEnabled = true;
+}
+
+void widgetDisableGLImpl(widget *self)
+{
+	// Check if GL is already disabled
+	if (!self->openGLEnabled)
+	{
+		return;
+	}
+
+	// Delete the FBO
+	glDeleteFramebuffersEXT(1, &self->fboId);
+
+	// Delete the FBOs depthbuffer (which is a renderbuffer)
+	glDeleteRenderbuffersEXT(1, &self->depthbufferId);
+
+	// Rendering GL content to the widget is now disabled
+	self->openGLEnabled = false;
+}
+
+void widgetBeginGLImpl(widget *self)
+{
+	void *bits = cairo_image_surface_get_data(cairo_get_target(self->cr));
+
+	// Ensure that drawing GL content is enabled
+	assert(self->openGLEnabled);
+
+	// Ensure that we are not in a begin block already
+	assert(!self->openGLInProgress);
+
+	// Flush the cairo surface to ensure that all drawing is completed
+	cairo_surface_flush(cairo_get_target(self->cr));
+
+	// GL rendering is now in progress for the widget
+	self->openGLInProgress = true;
+
+	// Copy the current drawing to the texture
+	glBindTexture(GL_TEXTURE_RECTANGLE_ARB, self->textureId);
+
+	glTexImage2D(GL_TEXTURE_RECTANGLE_ARB, 0, GL_RGBA, self->size.x,
+	             self->size.y, 0, GL_BGRA, GL_UNSIGNED_BYTE, bits);
+
+	// Un-bind the texture, this is crucial for the FBO rendering to work!
+	glBindTexture(GL_TEXTURE_RECTANGLE_ARB, 0);
+
+	// Bind the FBO
+	glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, self->fboId);
+
+	// Save the current GL states
+	glPushAttrib(GL_ALL_ATTRIB_BITS);
+
+	// Reset the projection matrix (making sure to save it first)
+	glMatrixMode(GL_PROJECTION);
+	glPushMatrix();
+	glLoadIdentity();
+
+	// Update the viewport so that it is the size of the texture
+	glViewport(0, 0, self->size.x, self->size.y);
+}
+
+void widgetEndGLImpl(widget *self, bool finishedDrawing)
+{
+	void *bits = cairo_image_surface_get_data(cairo_get_target(self->cr));
+
+	// Make sure we are actually in an OpenGL block
+	assert(self->openGLInProgress);
+
+	// Restore the GL states and un-bin the FBO
+	glMatrixMode(GL_PROJECTION);
+	glPopMatrix();
+	glPopAttrib();
+	glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);
+
+	// If drawing is not finished copy the texture back to the cairo context
+	if (!finishedDrawing)
+	{
+		glBindTexture(GL_TEXTURE_RECTANGLE_ARB, self->textureId);
+		glGetTexImage(GL_TEXTURE_RECTANGLE_ARB, 0, GL_BGRA, GL_UNSIGNED_BYTE,
+		              bits);
+	}
+	// Else drawing is finished so no need for composite to upload the texture
+	else
+	{
+		self->textureNeedsUploading = false;
+	}
+
+	// GL rendering has now finished
+	self->openGLInProgress = false;
+}
+
 void widgetCompositeImpl(widget *self)
 {
 	float blendColour[4];
@@ -1799,6 +1952,26 @@ void widgetResize(widget *self, int w, int h)
 void widgetReposition(widget *self, int x, int y)
 {
 	WIDGET_GET_VTBL(self)->reposition(self, x, y);
+}
+
+void widgetEnableGL(widget *self)
+{
+	WIDGET_GET_VTBL(self)->enableGL(self);
+}
+
+void widgetDisableGL(widget *self)
+{
+	WIDGET_GET_VTBL(self)->disableGL(self);
+}
+
+void widgetBeginGL(widget *self)
+{
+	WIDGET_GET_VTBL(self)->beginGL(self);
+}
+
+void widgetEndGL(widget *self, bool finishedDrawing)
+{
+	WIDGET_GET_VTBL(self)->endGL(self, finishedDrawing);
 }
 
 void widgetComposite(widget *self)
