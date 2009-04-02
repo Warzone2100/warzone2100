@@ -1279,6 +1279,13 @@ void widgetResizeImpl(widget *self, int w, int h)
 		widgetDrawMask(self);
 	}
 
+	// If OpenGL is enabled disable and re-enable it
+	if (self->openGLEnabled)
+	{
+		widgetDisableGL(self);
+		widgetEnableGL(self);
+	}
+
 	// Set the needs redraw flag
 	self->needsRedraw = true;
 
