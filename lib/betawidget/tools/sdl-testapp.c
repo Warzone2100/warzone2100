@@ -78,6 +78,11 @@ static void paintWithGL(widget *self)
 	widgetEndGL(self, false);
 }
 
+static bool timer(widget *self, const event *evt, int handlerId, void *userData)
+{
+	widgetResize(self, self->size.x + 100, self->size.y + 100);
+}
+
 static void createGUI(lua_State *L)
 {
 	window *w = malloc(sizeof(window));
@@ -88,6 +93,8 @@ static void createGUI(lua_State *L)
 	// GL stuff
 	widgetEnableGL(WIDGET(w));
 	WIDGET(w)->vtbl->doDraw = paintWithGL;
+	widgetAddTimerEventHandler(WIDGET(w), EVT_TIMER_SINGLE_SHOT, 3000,
+	                           timer, NULL, NULL);
 }
 #endif
 
