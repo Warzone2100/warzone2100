@@ -24,6 +24,8 @@
 #include "widget.h"
 #include "internal-cairo.h"
 
+#include "patternManager.h"
+
 /*
  * Forward declarations
  */
@@ -52,7 +54,7 @@ struct _window
 	/**
 	 * Window gradient to use when drawing the window.
 	 */
-	cairo_pattern_t* windowPattern;
+	pattern* windowPattern;
 };
 
 /*
@@ -150,5 +152,13 @@ void windowRepositionFromScreen(window *self, hAlign hAlign, int xOffset,
 void windowRepositionFromAnchor(window *self, const window *anchor,
                                 hAlign hAlign, int xOffset,
                                 vAlign vAlign, int yOffset);
+
+/**
+ * Sets the background pattern
+ *
+ * @param self The window to set the pattern
+ * @param patternId The Id of the desired pattern
+ */
+void windowSetBackgroundPattern(window *self, const char *patternId);
 
 #endif /*WINDOW_H_*/

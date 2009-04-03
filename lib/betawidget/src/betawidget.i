@@ -13,6 +13,7 @@ extern "C" {
 #include "textEntry.h"
 #include "lua-wrap.h"
 #include <assert.h>
+#include "patternManager.h"
 }
 
 static bool callbackHandler(widget* const self, const event* const evt, int const handlerId, SWIGLUA_MEMBER_FN const * const callbackRef)
@@ -293,6 +294,11 @@ struct _window : public _widget
                 {
                         return windowRepositionFromAnchor($self, anchor, hAlign, xOffset, vAlign, yOffset);
                 }
+                
+                virtual void setBackgroundPattern(const char *patternId)
+                {
+			return windowSetBackgroundPattern($self, patternId);
+                }
         }
 };
 
@@ -358,6 +364,34 @@ struct _textEntry : public _widget
                 virtual bool setContents(const char* contents)
                 {
                         return textEntrySetContents($self, contents);
+                }
+        }
+};
+
+%rename (pattern) _pattern;
+struct _pattern
+{
+        %extend
+        {
+                _pattern(const char *id, float x0, float y0, float x1, float y1)
+                {
+                        return patternManagerGradientCreateLinear(id, x0, y0, x1, y1);
+                }
+                _pattern(const char *id, float x0, float y0, float r0, float x1, float y1, float r1)
+                {
+                        return patternManagerGradientCreateRadial(id, x0, y0, r0, x1, y1, r1);
+                }
+                void destroy()
+                {
+                        patternManagerRemove($self->id);
+                }
+                void addColourStop(float offset, float red, float green, float blue, float alpha)
+                {
+                        patternManagerGradientAddColourStop($self, offset, red, green, blue, alpha);
+                }
+                void setAsSource(cairo_t *cr, float x, float y)
+                {
+                        patternManagerSetAsSource(cr, $self, x, y);
                 }
         }
 };

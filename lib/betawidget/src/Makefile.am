@@ -29,6 +29,7 @@ libbetawidget_la_SOURCES = \
 	svgManager.c \
 	table.c \
 	textEntry.c \
+	patternManager.c \
 	vector.c \
 	widget.c \
 	window.c
@@ -51,6 +52,7 @@ pkginclude_HEADERS = \
 	svgManager.h \
 	table.h \
 	textEntry.h \
+	patternManager.h \
 	vector.h \
 	widget.h \
 	window.h
