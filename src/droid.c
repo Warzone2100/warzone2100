@@ -1120,6 +1120,7 @@ BOOL droidStartBuild(DROID *psDroid)
 			intBuildFinished(psDroid);
 			return false;
 		}
+		psStruct->body /= 10; // structures start at 10% health
 
 		if (bMultiPlayer)
 		{

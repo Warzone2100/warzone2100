@@ -1217,7 +1217,11 @@ float getStructureDamage(const STRUCTURE* psStructure)
 /// Add buildPoints to the structures currentBuildPts, due to construction work by the droid
 void structureBuild(STRUCTURE *psStruct, DROID *psDroid, int buildPoints)
 {
+	int before, after;
+	before = (9 * psStruct->currentBuildPts * structureBody(psStruct) ) / (10 * psStruct->pStructureType->buildPoints);
 	psStruct->currentBuildPts += buildPoints;
+	after =  (9 * psStruct->currentBuildPts * structureBody(psStruct) ) / (10 * psStruct->pStructureType->buildPoints);
+	psStruct->body += after - before;
 
 	//check if structure is built
 	if (psStruct->currentBuildPts > (SDWORD)psStruct->pStructureType->buildPoints)
