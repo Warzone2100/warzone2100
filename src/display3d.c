@@ -2934,8 +2934,8 @@ static void drawStructureBuildProgress(STRUCTURE *psStruct)
 	powerCol = WZCOL_YELLOW;
 	health = (((width*10000)/100)*health)/10000;
 	health*=2;
-	pie_BoxFill(scrX - scrR - 1, scrY - 1, scrX + scrR + 1, scrY + 2, WZCOL_RELOAD_BACKGROUND);
-	pie_BoxFill(scrX - scrR - 1, scrY, scrX - scrR + health, scrY + 1, powerCol);
+	pie_BoxFill(scrX - scrR - 1, scrY - 1 + 5, scrX + scrR + 1, scrY + 2 + 5, WZCOL_RELOAD_BACKGROUND);
+	pie_BoxFill(scrX - scrR, scrY + 5, scrX - scrR + health, scrY + 1 + 5, powerCol);
 }
 
 /// Draw the health of structures and show enemy structures being targetted
@@ -2971,7 +2971,6 @@ static void	drawStructureSelections( void )
 			        && (psStruct->pStructureType->type != REF_WALL && psStruct->pStructureType->type != REF_WALLCORNER))
 			    || (bMouseOverOwnStructure
 			        && psStruct == (STRUCTURE *) psClickedOn
-			        && ((STRUCTURE * )psClickedOn)->status == SS_BUILT
 			            && psStruct->sDisplay.frameNumber == currentGameFrame))
 			{
 				drawStructureHealth(psStruct);
@@ -2981,12 +2980,10 @@ static void	drawStructureSelections( void )
 					drawWeaponReloadBar((BASE_OBJECT *)psStruct, &psStruct->asWeaps[i], i);
 				}
 			}
-			else
+
+			if(psStruct->status == SS_BEING_BUILT && psStruct->sDisplay.frameNumber == currentGameFrame)
 			{
-				if(psStruct->status == SS_BEING_BUILT && psStruct->sDisplay.frameNumber == currentGameFrame)
-				{
-					drawStructureBuildProgress(psStruct);
-				}
+				drawStructureBuildProgress(psStruct);
 			}
 		}
 	}
