@@ -1,5 +1,21 @@
 -- vim:set et sts=2 sw=2:
 
+-- Defining a new Pattern
+-- The pattern "window" is used in betawidget.window by default
+pattern = betawidget.pattern("window", 0, 0, 0, 1)
+pattern:addColourStop(0.00, 0.0000, 0.0000, 0.2352, 0.75)
+pattern:addColourStop(0.20, 0.1764, 0.1764, 0.3725, 0.80)
+pattern:addColourStop(0.60, 0.1764, 0.1764, 0.3725, 0.70)
+pattern:addColourStop(1.00, 0.1764, 0.1764, 0.3725, 0.70)
+
+-- And this pattern will be selected when clicking once on 'myWindow'
+pattern = betawidget.pattern("window/green", 0, 0, 0, 1)
+pattern:addColourStop(0.0, 0.000000, 0.235294, 0.000000, 0.75)
+pattern:addColourStop(0.2, 0.176470, 0.372549, 0.176470, 0.80)
+pattern:addColourStop(0.6, 0.176470, 0.372549, 0.176470, 0.70)
+pattern:addColourStop(1.0, 0.176470, 0.372549, 0.176470, 0.70)
+
+
 wnd = betawidget.window("myWindow", 400, 400)
 wnd:reposition(400, 50)
 wnd:show()
@@ -13,8 +29,10 @@ wnd:addEventHandler(betawidget.EVT_MOUSE_CLICK,
       print(string.format("Clicked %d times", clicked))
       if (clicked % 2) == 0 then
         self:reposition(400, 50)
+        self:setBackgroundPattern("window")
       else
         self:reposition(0, 0)
+        self:setBackgroundPattern("window/green")
       end
     end
   end)()

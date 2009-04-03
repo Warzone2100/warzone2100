@@ -62,44 +62,10 @@ static void windowInitVtbl(window *self)
 	self->vtbl = &vtbl;
 }
 
-static void windowCreateWindowPattern(window *self, int w, int h)
-{
-	// First clean up our current pattern (if any)
-	if (self->windowPattern)
-	{
-		cairo_pattern_destroy(WINDOW(self)->windowPattern);
-	}
-
-	self->windowPattern = cairo_pattern_create_linear(0, 0, 0, h);
-	cairo_pattern_add_color_stop_rgba(self->windowPattern, 0, 0.000000, 0.000000, 0.235294, 0.75);
-	cairo_pattern_add_color_stop_rgba(self->windowPattern, 0.2, 0.176470, 0.176470, 0.372549, 0.8);
-	cairo_pattern_add_color_stop_rgba(self->windowPattern, 0.6, 0.176470, 0.176470, 0.372549, 0.7);
-	cairo_pattern_add_color_stop_rgba(self->windowPattern, 1, 0.176470, 0.176470, 0.372549, 0.7);
-}
-
-static bool windowResizePatternCallback(widget *self, const event *evt,
-                                        int handlerId, void *userData)
-{
-	// Make sure this is a resize event
-	assert(evt->type == EVT_RESIZE);
-	
-	// Re-create the window pattern
-	windowCreateWindowPattern(WINDOW(self), self->size.x, self->size.y);
-	
-	return true;
-}
-
 void windowInit(window *self, const char *id, int w, int h)
 {	
 	// Init our parent
 	widgetInit(WIDGET(self), id);
-
-	// Patterns initialisation
-	self->windowPattern = NULL;
-	
-	// Ensure the pattern is re-created whenever we are resized
-	widgetAddEventHandler(WIDGET(self), EVT_RESIZE, windowResizePatternCallback,
-	                      NULL, NULL);
 	
 	// Prepare our vtable
 	windowInitVtbl(self);
@@ -118,6 +84,9 @@ void windowInit(window *self, const char *id, int w, int h)
 
 	// Mask for exact mouse events
 	widgetEnableMask(WIDGET(self));
+
+	// Patterns initialisation
+	windowSetBackgroundPattern(self, "window");
 }
 
 void windowDestroyImpl(widget *self)
@@ -133,9 +102,6 @@ void windowDestroyImpl(widget *self)
 			vectorRemoveAt(windowVector, i);
 		}
 	}
-
-	// Remove our pattern
-	cairo_pattern_destroy(WINDOW(self)->windowPattern);
 	
 	// Call our parents destructor
 	widgetDestroyImpl(self);
@@ -197,10 +163,10 @@ void windowDoWindowPath(widget *self, cairo_t *cr)
 void windowDoDrawImpl(widget *self)
 {
 	// Get drawing context
-	cairo_t *cr = WIDGET(self)->cr;
+	cairo_t *cr = self->cr;
 
 	// Select window gradient
-	cairo_set_source(cr, WINDOW(self)->windowPattern);
+	patternManagerSetAsSource(cr, WINDOW(self)->windowPattern, self->size.x, self->size.y);
 
 	// Do the rounded rectangle path
 	windowDoWindowPath(self, cr);
@@ -362,4 +328,15 @@ void windowRepositionFromAnchor(window *self, const window *anchor,
 	
 	// Reposition
 	widgetReposition(WIDGET(self), x, y);
+}
+
+void windowSetBackgroundPattern(window *self, const char *patternId)
+{
+	assert(self != NULL);
+	assert(patternId != NULL);
+	
+	self->windowPattern = patternManagerGetPattern(patternId);
+	
+	WIDGET(self)->needsRedraw = true;
+	widgetDraw(WIDGET(self));
 }
