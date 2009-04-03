@@ -3688,11 +3688,12 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 }
 
 
-/* Decides whether a structure should emit smoke when it's damaged */
+/** Decides whether a structure should emit smoke when it's damaged */
 static BOOL canSmoke(STRUCTURE *psStruct)
 {
 	if(psStruct->pStructureType->type == REF_WALL ||
-		psStruct->pStructureType->type == REF_WALLCORNER)
+		psStruct->pStructureType->type == REF_WALLCORNER ||
+		psStruct->status == SS_BEING_BUILT)
 	{
 		return(false);
 	}
