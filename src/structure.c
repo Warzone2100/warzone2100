@@ -1278,48 +1278,48 @@ void structureDemolish(STRUCTURE *psStruct, DROID *psDroid, int buildPoints)
 
 		if(psStruct->pStructureType->type == REF_POWER_GEN)
 		{
-            //if had module attached - the base must have been completely built
-            if (psStruct->pFunctionality->powerGenerator.capacity)
-            {
-                //so add the power required to build the base struct
-                addPower(psStruct->player, psStruct->pStructureType->powerToBuild);
-            }
-            //add the currentAccruedPower since this may or may not be all required
-            addPower(psStruct->player, psStruct->currentPowerAccrued);
+			//if had module attached - the base must have been completely built
+			if (psStruct->pFunctionality->powerGenerator.capacity)
+			{
+				//so add the power required to build the base struct
+				addPower(psStruct->player, psStruct->pStructureType->powerToBuild);
+			}
+			//add the currentAccruedPower since this may or may not be all required
+			addPower(psStruct->player, psStruct->currentPowerAccrued);
 		}
 		else
 		{
-            //if it had a module attached, need to add the power for the base struct as well
-            if (StructIsFactory(psStruct))
-            {
-                if (psStruct->pFunctionality->factory.capacity)
-                {
-                    //add half power for base struct
-                    addPower(psStruct->player, psStruct->pStructureType->
-                        powerToBuild / 2);
-                    //if large factory - add half power for one upgrade
-                    if (psStruct->pFunctionality->factory.capacity > SIZE_MEDIUM)
-                    {
-                        addPower(psStruct->player, structPowerToBuild(psStruct) / 2);
-                    }
-                }
-            }
-            else if (psStruct->pStructureType->type == REF_RESEARCH)
-            {
-                if (psStruct->pFunctionality->researchFacility.capacity)
-                {
-                    //add half power for base struct
-                    addPower(psStruct->player, psStruct->pStructureType->powerToBuild / 2);
-                }
-            }
-            //add currentAccrued for the current layer of the structure
-            addPower(psStruct->player, psStruct->currentPowerAccrued / 2);
-        }
+			//if it had a module attached, need to add the power for the base struct as well
+			if (StructIsFactory(psStruct))
+			{
+				if (psStruct->pFunctionality->factory.capacity)
+				{
+					//add half power for base struct
+					addPower(psStruct->player, psStruct->pStructureType->
+						powerToBuild / 2);
+					//if large factory - add half power for one upgrade
+					if (psStruct->pFunctionality->factory.capacity > SIZE_MEDIUM)
+					{
+						addPower(psStruct->player, structPowerToBuild(psStruct) / 2);
+					}
+				}
+			}
+			else if (psStruct->pStructureType->type == REF_RESEARCH)
+			{
+				if (psStruct->pFunctionality->researchFacility.capacity)
+				{
+					//add half power for base struct
+					addPower(psStruct->player, psStruct->pStructureType->powerToBuild / 2);
+				}
+			}
+			//add currentAccrued for the current layer of the structure
+			addPower(psStruct->player, psStruct->currentPowerAccrued / 2);
+		}
 		/* remove structure and foundation */
 		removeStruct( psStruct, true );
 
 		/* reset target stats*/
-	    psDroid->psTarStats = NULL;
+		psDroid->psTarStats = NULL;
 
 	}
 }
