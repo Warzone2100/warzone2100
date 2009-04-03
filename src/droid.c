@@ -1239,58 +1239,13 @@ BOOL droidUpdateBuild(DROID *psDroid)
 	pointsToAdd = constructPoints * (gameTime - psDroid->actionStarted) /
 		GAME_TICKS_PER_SEC;
 
-	psStruct->currentBuildPts = (SWORD) (psStruct->currentBuildPts + pointsToAdd - psDroid->actionPoints);
+	structureBuild(psStruct, psDroid, pointsToAdd - psDroid->actionPoints);
 
 	//store the amount just added
 	psDroid->actionPoints = pointsToAdd;
 
-	//check if structure is built
-	if (psStruct->currentBuildPts > (SDWORD)psStruct->pStructureType->buildPoints)
-	{
-		psStruct->currentBuildPts = (SWORD)psStruct->pStructureType->buildPoints;
-		psStruct->status = SS_BUILT;
-		buildingComplete(psStruct);
+	addConstructorEffect(psStruct);
 
-		intBuildFinished(psDroid);
-
-		if((bMultiPlayer) && myResponsibility(psStruct->player))
-		{
-			SendBuildFinished(psStruct);
-		}
-
-
-		//only play the sound if selected player
-		if (psStruct->player == selectedPlayer
-		 && (psDroid->order != DORDER_LINEBUILD
-		  || (map_coord(psDroid->orderX) == map_coord(psDroid->orderX2)
-		   && map_coord(psDroid->orderY) == map_coord(psDroid->orderY2))))
-		{
-			audio_QueueTrackPos( ID_SOUND_STRUCTURE_COMPLETED,
-					psStruct->pos.x, psStruct->pos.y, psStruct->pos.z );
-			intRefreshScreen();		// update any open interface bars.
-		}
-
-		/* Not needed, but left for backward compatibility */
-		structureCompletedCallback(psStruct->pStructureType);
-
-		/* must reset here before the callback, droid must have DACTION_NONE
-		     in order to be able to start a new built task, doubled in actionUpdateDroid() */
-		debug( LOG_NEVER, "DACTION_NONE: done\n");
-		psDroid->action = DACTION_NONE;
-
-		/* Notify scripts we just finished building a structure, pass builder and what was built */
-		psScrCBNewStruct	= psStruct;
-		psScrCBNewStructTruck= psDroid;
-		eventFireCallbackTrigger((TRIGGER_TYPE)CALL_STRUCTBUILT);
-
-		audio_StopObjTrack( psDroid, ID_SOUND_CONSTRUCTION_LOOP );
-
-		return false;
-	}
-	else
-	{
-		addConstructorEffect(psStruct);
-	}
 
 	return true;
 }
