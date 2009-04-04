@@ -652,6 +652,34 @@
 		2244463E0E3EB7CB004D0F1F /* messagely.h in Copy frameworks (36) */ = {isa = PBXBuildFile; fileRef = 2244463B0E3EB7CB004D0F1F /* messagely.h */; };
 		22E244D70E65361800EC2B3E /* baseobject.c in Sources */ = {isa = PBXBuildFile; fileRef = 22E244D40E65361800EC2B3E /* baseobject.c */; };
 		22E244D80E65361800EC2B3E /* baseobject.h in Copy frameworks (36) */ = {isa = PBXBuildFile; fileRef = 22E244D50E65361800EC2B3E /* baseobject.h */; };
+		9711775E0F87A677000C8A96 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0246AA160BD3DFEE004D1C70 /* CoreFoundation.framework */; };
+		971177A80F87A726000C8A96 /* pixman-access-accessors.c in Sources */ = {isa = PBXBuildFile; fileRef = 971177850F87A726000C8A96 /* pixman-access-accessors.c */; };
+		971177A90F87A726000C8A96 /* pixman-access.c in Sources */ = {isa = PBXBuildFile; fileRef = 971177860F87A726000C8A96 /* pixman-access.c */; };
+		971177AC0F87A726000C8A96 /* pixman-combine32.c in Sources */ = {isa = PBXBuildFile; fileRef = 971177890F87A726000C8A96 /* pixman-combine32.c */; };
+		971177AD0F87A726000C8A96 /* pixman-combine32.h in Headers */ = {isa = PBXBuildFile; fileRef = 9711778A0F87A726000C8A96 /* pixman-combine32.h */; };
+		971177AE0F87A726000C8A96 /* pixman-combine64.c in Sources */ = {isa = PBXBuildFile; fileRef = 9711778B0F87A726000C8A96 /* pixman-combine64.c */; };
+		971177AF0F87A726000C8A96 /* pixman-combine64.h in Headers */ = {isa = PBXBuildFile; fileRef = 9711778C0F87A726000C8A96 /* pixman-combine64.h */; };
+		971177B00F87A726000C8A96 /* pixman-compose-accessors.c in Sources */ = {isa = PBXBuildFile; fileRef = 9711778D0F87A726000C8A96 /* pixman-compose-accessors.c */; };
+		971177B10F87A726000C8A96 /* pixman-compose.c in Sources */ = {isa = PBXBuildFile; fileRef = 9711778E0F87A726000C8A96 /* pixman-compose.c */; };
+		971177B20F87A726000C8A96 /* pixman-compute-region.c in Sources */ = {isa = PBXBuildFile; fileRef = 9711778F0F87A726000C8A96 /* pixman-compute-region.c */; };
+		971177B30F87A726000C8A96 /* pixman-edge-accessors.c in Sources */ = {isa = PBXBuildFile; fileRef = 971177900F87A726000C8A96 /* pixman-edge-accessors.c */; };
+		971177B40F87A726000C8A96 /* pixman-edge-imp.h in Headers */ = {isa = PBXBuildFile; fileRef = 971177910F87A726000C8A96 /* pixman-edge-imp.h */; };
+		971177B50F87A726000C8A96 /* pixman-edge.c in Sources */ = {isa = PBXBuildFile; fileRef = 971177920F87A726000C8A96 /* pixman-edge.c */; };
+		971177B60F87A726000C8A96 /* pixman-image.c in Sources */ = {isa = PBXBuildFile; fileRef = 971177930F87A726000C8A96 /* pixman-image.c */; };
+		971177B70F87A726000C8A96 /* pixman-matrix.c in Sources */ = {isa = PBXBuildFile; fileRef = 971177940F87A726000C8A96 /* pixman-matrix.c */; };
+		971177B80F87A726000C8A96 /* pixman-mmx.c in Sources */ = {isa = PBXBuildFile; fileRef = 971177950F87A726000C8A96 /* pixman-mmx.c */; };
+		971177B90F87A726000C8A96 /* pixman-mmx.h in Headers */ = {isa = PBXBuildFile; fileRef = 971177960F87A726000C8A96 /* pixman-mmx.h */; };
+		971177BA0F87A726000C8A96 /* pixman-pict.c in Sources */ = {isa = PBXBuildFile; fileRef = 971177970F87A726000C8A96 /* pixman-pict.c */; };
+		971177BD0F87A726000C8A96 /* pixman-region16.c in Sources */ = {isa = PBXBuildFile; fileRef = 9711779A0F87A726000C8A96 /* pixman-region16.c */; };
+		971177BE0F87A726000C8A96 /* pixman-region32.c in Sources */ = {isa = PBXBuildFile; fileRef = 9711779B0F87A726000C8A96 /* pixman-region32.c */; };
+		971177BF0F87A726000C8A96 /* pixman-source.c in Sources */ = {isa = PBXBuildFile; fileRef = 9711779C0F87A726000C8A96 /* pixman-source.c */; };
+		971177C20F87A726000C8A96 /* pixman-timer.c in Sources */ = {isa = PBXBuildFile; fileRef = 9711779F0F87A726000C8A96 /* pixman-timer.c */; };
+		971177C30F87A726000C8A96 /* pixman-transformed-accessors.c in Sources */ = {isa = PBXBuildFile; fileRef = 971177A00F87A726000C8A96 /* pixman-transformed-accessors.c */; };
+		971177C40F87A726000C8A96 /* pixman-transformed.c in Sources */ = {isa = PBXBuildFile; fileRef = 971177A10F87A726000C8A96 /* pixman-transformed.c */; };
+		971177C50F87A726000C8A96 /* pixman-trap.c in Sources */ = {isa = PBXBuildFile; fileRef = 971177A20F87A726000C8A96 /* pixman-trap.c */; };
+		971177C60F87A726000C8A96 /* pixman-utils.c in Sources */ = {isa = PBXBuildFile; fileRef = 971177A30F87A726000C8A96 /* pixman-utils.c */; };
+		971177C70F87A726000C8A96 /* pixman-version.h in Headers */ = {isa = PBXBuildFile; fileRef = 971177A40F87A726000C8A96 /* pixman-version.h */; };
+		971177CA0F87A726000C8A96 /* pixman.h in Headers */ = {isa = PBXBuildFile; fileRef = 971177A70F87A726000C8A96 /* pixman.h */; };
 		9742E5730DF9975E000A5D41 /* lexer_input.c in Sources */ = {isa = PBXBuildFile; fileRef = 9742E5710DF9975E000A5D41 /* lexer_input.c */; };
 		9742E5740DF9975E000A5D41 /* lexer_input.h in Copy frameworks (36) */ = {isa = PBXBuildFile; fileRef = 9742E5720DF9975E000A5D41 /* lexer_input.h */; };
 		9742E5770DF9979C000A5D41 /* parsetest.c in Sources */ = {isa = PBXBuildFile; fileRef = 9742E5750DF9979C000A5D41 /* parsetest.c */; };
@@ -1778,6 +1806,38 @@
 		2244463B0E3EB7CB004D0F1F /* messagely.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = messagely.h; path = ../src/messagely.h; sourceTree = SOURCE_ROOT; };
 		22E244D40E65361800EC2B3E /* baseobject.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = baseobject.c; path = ../src/baseobject.c; sourceTree = SOURCE_ROOT; };
 		22E244D50E65361800EC2B3E /* baseobject.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = baseobject.h; path = ../src/baseobject.h; sourceTree = SOURCE_ROOT; };
+		971177640F87A677000C8A96 /* pixman.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = pixman.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		971177650F87A677000C8A96 /* PhysFS-Info copy.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "PhysFS-Info copy.plist"; path = "Resources/PhysFS-Info copy.plist"; sourceTree = "<group>"; };
+		971177850F87A726000C8A96 /* pixman-access-accessors.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "pixman-access-accessors.c"; path = "external/pixman/pixman/pixman-access-accessors.c"; sourceTree = "<group>"; };
+		971177860F87A726000C8A96 /* pixman-access.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "pixman-access.c"; path = "external/pixman/pixman/pixman-access.c"; sourceTree = "<group>"; };
+		971177890F87A726000C8A96 /* pixman-combine32.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "pixman-combine32.c"; path = "external/pixman/pixman/pixman-combine32.c"; sourceTree = "<group>"; };
+		9711778A0F87A726000C8A96 /* pixman-combine32.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "pixman-combine32.h"; path = "external/pixman/pixman/pixman-combine32.h"; sourceTree = "<group>"; };
+		9711778B0F87A726000C8A96 /* pixman-combine64.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "pixman-combine64.c"; path = "external/pixman/pixman/pixman-combine64.c"; sourceTree = "<group>"; };
+		9711778C0F87A726000C8A96 /* pixman-combine64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "pixman-combine64.h"; path = "external/pixman/pixman/pixman-combine64.h"; sourceTree = "<group>"; };
+		9711778D0F87A726000C8A96 /* pixman-compose-accessors.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "pixman-compose-accessors.c"; path = "external/pixman/pixman/pixman-compose-accessors.c"; sourceTree = "<group>"; };
+		9711778E0F87A726000C8A96 /* pixman-compose.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "pixman-compose.c"; path = "external/pixman/pixman/pixman-compose.c"; sourceTree = "<group>"; };
+		9711778F0F87A726000C8A96 /* pixman-compute-region.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "pixman-compute-region.c"; path = "external/pixman/pixman/pixman-compute-region.c"; sourceTree = "<group>"; };
+		971177900F87A726000C8A96 /* pixman-edge-accessors.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "pixman-edge-accessors.c"; path = "external/pixman/pixman/pixman-edge-accessors.c"; sourceTree = "<group>"; };
+		971177910F87A726000C8A96 /* pixman-edge-imp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "pixman-edge-imp.h"; path = "external/pixman/pixman/pixman-edge-imp.h"; sourceTree = "<group>"; };
+		971177920F87A726000C8A96 /* pixman-edge.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "pixman-edge.c"; path = "external/pixman/pixman/pixman-edge.c"; sourceTree = "<group>"; };
+		971177930F87A726000C8A96 /* pixman-image.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "pixman-image.c"; path = "external/pixman/pixman/pixman-image.c"; sourceTree = "<group>"; };
+		971177940F87A726000C8A96 /* pixman-matrix.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "pixman-matrix.c"; path = "external/pixman/pixman/pixman-matrix.c"; sourceTree = "<group>"; };
+		971177950F87A726000C8A96 /* pixman-mmx.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "pixman-mmx.c"; path = "external/pixman/pixman/pixman-mmx.c"; sourceTree = "<group>"; };
+		971177960F87A726000C8A96 /* pixman-mmx.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "pixman-mmx.h"; path = "external/pixman/pixman/pixman-mmx.h"; sourceTree = "<group>"; };
+		971177970F87A726000C8A96 /* pixman-pict.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "pixman-pict.c"; path = "external/pixman/pixman/pixman-pict.c"; sourceTree = "<group>"; };
+		971177980F87A726000C8A96 /* pixman-private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "pixman-private.h"; path = "external/pixman/pixman/pixman-private.h"; sourceTree = "<group>"; };
+		971177990F87A726000C8A96 /* pixman-region.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "pixman-region.c"; path = "external/pixman/pixman/pixman-region.c"; sourceTree = "<group>"; };
+		9711779A0F87A726000C8A96 /* pixman-region16.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "pixman-region16.c"; path = "external/pixman/pixman/pixman-region16.c"; sourceTree = "<group>"; };
+		9711779B0F87A726000C8A96 /* pixman-region32.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "pixman-region32.c"; path = "external/pixman/pixman/pixman-region32.c"; sourceTree = "<group>"; };
+		9711779C0F87A726000C8A96 /* pixman-source.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "pixman-source.c"; path = "external/pixman/pixman/pixman-source.c"; sourceTree = "<group>"; };
+		9711779F0F87A726000C8A96 /* pixman-timer.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "pixman-timer.c"; path = "external/pixman/pixman/pixman-timer.c"; sourceTree = "<group>"; };
+		971177A00F87A726000C8A96 /* pixman-transformed-accessors.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "pixman-transformed-accessors.c"; path = "external/pixman/pixman/pixman-transformed-accessors.c"; sourceTree = "<group>"; };
+		971177A10F87A726000C8A96 /* pixman-transformed.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "pixman-transformed.c"; path = "external/pixman/pixman/pixman-transformed.c"; sourceTree = "<group>"; };
+		971177A20F87A726000C8A96 /* pixman-trap.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "pixman-trap.c"; path = "external/pixman/pixman/pixman-trap.c"; sourceTree = "<group>"; };
+		971177A30F87A726000C8A96 /* pixman-utils.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "pixman-utils.c"; path = "external/pixman/pixman/pixman-utils.c"; sourceTree = "<group>"; };
+		971177A40F87A726000C8A96 /* pixman-version.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "pixman-version.h"; path = "external/pixman/pixman/pixman-version.h"; sourceTree = "<group>"; };
+		971177A70F87A726000C8A96 /* pixman.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = pixman.h; path = external/pixman/pixman/pixman.h; sourceTree = "<group>"; };
+		971177E70F87A926000C8A96 /* config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = config.h; path = external/pixman/config.h; sourceTree = "<group>"; };
 		9730E7CE0E8CEAA5009C9481 /* Theora-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "Theora-Info.plist"; path = "Resources/Theora-Info.plist"; sourceTree = "<group>"; };
 		9742E5710DF9975E000A5D41 /* lexer_input.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = lexer_input.c; path = ../lib/framework/lexer_input.c; sourceTree = SOURCE_ROOT; };
 		9742E5720DF9975E000A5D41 /* lexer_input.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = lexer_input.h; path = ../lib/framework/lexer_input.h; sourceTree = SOURCE_ROOT; };
@@ -2020,6 +2080,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		9711775D0F87A677000C8A96 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9711775E0F87A677000C8A96 /* CoreFoundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		97AEAB2E0E8C1B5200A10721 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -2158,6 +2226,7 @@
 				9730E8000E8CEB3B009C9481 /* Theora sources */,
 				02DDA8600BD3C1AF0049AB60 /* Png sources */,
 				02DDA85F0BD3C1A60049AB60 /* Zlib sources */,
+				971177840F87A6D9000C8A96 /* Pixman sources */,
 				02356D760BD3BB3400E9A019 /* Products */,
 				97AEA9550E8C182B00A10721 /* Foundation.framework */,
 				97AEA9600E8C184C00A10721 /* AppKit.framework */,
@@ -2181,6 +2250,7 @@
 				02F5CC6D0D1494AA0000A2D0 /* Popt.framework */,
 				02CDDCF40D159BC300722688 /* Autorevision */,
 				97AEAB330E8C1B5200A10721 /* Theora.framework */,
+				971177640F87A677000C8A96 /* pixman.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -2201,6 +2271,7 @@
 				022B2F230BD55815002E64E3 /* Gettext-Info.plist */,
 				0223BBD20CFE3D5C0056EF85 /* QuesoGLC-Info.plist */,
 				02F5CC6E0D1494AA0000A2D0 /* Popt-Info.plist */,
+				971177650F87A677000C8A96 /* PhysFS-Info copy.plist */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -3105,6 +3176,43 @@
 			name = "Popt sources";
 			sourceTree = "<group>";
 		};
+		971177840F87A6D9000C8A96 /* Pixman sources */ = {
+			isa = PBXGroup;
+			children = (
+				971177E70F87A926000C8A96 /* config.h */,
+				971177850F87A726000C8A96 /* pixman-access-accessors.c */,
+				971177860F87A726000C8A96 /* pixman-access.c */,
+				971177890F87A726000C8A96 /* pixman-combine32.c */,
+				9711778A0F87A726000C8A96 /* pixman-combine32.h */,
+				9711778B0F87A726000C8A96 /* pixman-combine64.c */,
+				9711778C0F87A726000C8A96 /* pixman-combine64.h */,
+				9711778D0F87A726000C8A96 /* pixman-compose-accessors.c */,
+				9711778E0F87A726000C8A96 /* pixman-compose.c */,
+				9711778F0F87A726000C8A96 /* pixman-compute-region.c */,
+				971177900F87A726000C8A96 /* pixman-edge-accessors.c */,
+				971177910F87A726000C8A96 /* pixman-edge-imp.h */,
+				971177920F87A726000C8A96 /* pixman-edge.c */,
+				971177930F87A726000C8A96 /* pixman-image.c */,
+				971177940F87A726000C8A96 /* pixman-matrix.c */,
+				971177950F87A726000C8A96 /* pixman-mmx.c */,
+				971177960F87A726000C8A96 /* pixman-mmx.h */,
+				971177970F87A726000C8A96 /* pixman-pict.c */,
+				971177980F87A726000C8A96 /* pixman-private.h */,
+				971177990F87A726000C8A96 /* pixman-region.c */,
+				9711779A0F87A726000C8A96 /* pixman-region16.c */,
+				9711779B0F87A726000C8A96 /* pixman-region32.c */,
+				9711779C0F87A726000C8A96 /* pixman-source.c */,
+				9711779F0F87A726000C8A96 /* pixman-timer.c */,
+				971177A00F87A726000C8A96 /* pixman-transformed-accessors.c */,
+				971177A10F87A726000C8A96 /* pixman-transformed.c */,
+				971177A20F87A726000C8A96 /* pixman-trap.c */,
+				971177A30F87A726000C8A96 /* pixman-utils.c */,
+				971177A40F87A726000C8A96 /* pixman-version.h */,
+				971177A70F87A726000C8A96 /* pixman.h */,
+			);
+			name = "Pixman sources";
+			sourceTree = "<group>";
+		};
 		9730E8000E8CEB3B009C9481 /* Theora sources */ = {
 			isa = PBXGroup;
 			children = (
@@ -3510,6 +3618,19 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		9711774D0F87A677000C8A96 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				971177AD0F87A726000C8A96 /* pixman-combine32.h in Headers */,
+				971177AF0F87A726000C8A96 /* pixman-combine64.h in Headers */,
+				971177B40F87A726000C8A96 /* pixman-edge-imp.h in Headers */,
+				971177B90F87A726000C8A96 /* pixman-mmx.h in Headers */,
+				971177C70F87A726000C8A96 /* pixman-version.h in Headers */,
+				971177CA0F87A726000C8A96 /* pixman.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		97AEAAEE0E8C1B5200A10721 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
@@ -3826,6 +3947,26 @@
 			productName = Bison;
 			productType = "com.apple.product-type.tool";
 		};
+		971177490F87A677000C8A96 /* Pixman */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 971177610F87A677000C8A96 /* Build configuration list for PBXNativeTarget "Pixman" */;
+			buildPhases = (
+				9711774C0F87A677000C8A96 /* Fetch source */,
+				971177D10F87A82A000C8A96 /* Generate headers */,
+				9711774D0F87A677000C8A96 /* Headers */,
+				971177500F87A677000C8A96 /* Resources */,
+				971177510F87A677000C8A96 /* Sources */,
+				9711775D0F87A677000C8A96 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Pixman;
+			productName = PhysFS;
+			productReference = 971177640F87A677000C8A96 /* pixman.framework */;
+			productType = "com.apple.product-type.framework";
+		};
 		97AEAAEA0E8C1B5200A10721 /* Theora */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 97AEAB300E8C1B5200A10721 /* Build configuration list for PBXNativeTarget "Theora" */;
@@ -3873,6 +4014,7 @@
 				022B2F210BD55814002E64E3 /* Gettext */,
 				02581C5C0BD5A94A00957CBC /* SDLmain */,
 				02F5CC6C0D1494AA0000A2D0 /* Popt */,
+				971177490F87A677000C8A96 /* Pixman */,
 				02CDDCF30D159BC300722688 /* Autorevision */,
 				221052010E3D21E80057CD9C /* Bison */,
 			);
@@ -3953,6 +4095,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		02F5CC690D1494AA0000A2D0 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		971177500F87A677000C8A96 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -4182,6 +4331,34 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "#!/bin/bash\n\nOUTDIR=\"bison\"    # Dir in macosx/external to unpack Bison to\nSYS_BISON=\"bison\" # System Bison executable\nBISON_BIN_DIR=\"`pwd`/external/$OUTDIR/built\" # Directory to install Bison to (relative to macosx/)\nLOCAL_BISON=\"$BISON_BIN_DIR/bison\" # Local Warzone Bison executable\n\n# getLocalBison\n# \n# Attempts to build and (if needed) download a version of Bison that is\n# compatible with Warzone. Returns 0 if successful, else 1.\nfunction getLocalBison\n{\n\tlocal DIRECTORY=\"bison-2.3\"\n\tlocal EXECUTABLE=$LOCAL_BISON\n\tlocal FILENAME=\"bison-2.3.tar.bz2\"\n\tlocal SOURCE=\"http://ftp.gnu.org/gnu/bison/bison-2.3.tar.bz2\"\n\tlocal MD5=\"c18640c6ec31a169d351e3117ecce3ec\"\n\t\n\t## Fetch source ##\n\t\n\tcd external\n\t\n\tif [ -d \"$OUTDIR\" ]; then\n\t  echo \"$OUTDIR exists, skipping\"\n\t  return 0\n\tfi\n\t\n\tif [ -d \"$DIRECTORY\" ]; then\n\t  echo \"$DIRECTORY exists, probably from an earlier failed run\" >&2\n\t  return 1\n\tfi\n\t\n\tif [ ! -r \"$FILENAME\" ]; then\n\t  echo \"Fetching $SOURCE\"\n\t  if ! curl -L -o \"$FILENAME\" \"$SOURCE\"; then\n\t    echo \"Unable to fetch $SOURCE\" >&2\n\t    return 1\n\t  fi\n\tfi\n\t\n\tlocal HAVEMD5=`md5 \"$FILENAME\" | sed -n -e 's/^MD5 (\\(.*\\)) = \\(.*\\)$/\\2/p'`\n\t\n\tif [ -z \"$HAVEMD5\" ]; then\n\t  echo \"Unable to compute md5 for $FILENAME\" >&2\n\t  return 1\n\tfi\n\t\n\tif [ \"$HAVEMD5\" != \"$MD5\" ]; then\n\t  echo \"Md5 does not match for $FILENAME\" >&2\n\t  return 1\n\tfi\n\t\n\tlocal EXTENSION=`echo $FILENAME | sed -e 's/^.*\\.\\([^.]*\\)/\\1/'`\n\t\n\tif [ \"$EXTENSION\" = \"gz\" ]; then\n\t  if ! tar -zxf \"$FILENAME\"; then\n\t    echo \"Unpacking $FILENAME failed\" >&2\n\t    return 1\n\t  fi\n\telif [ \"$EXTENSION\" = \"bz2\" ]; then\n\t  if ! tar -jxf \"$FILENAME\"; then\n\t    echo \"Unpacking $FILENAME failed\" >&2\n\t    return 1\n\t  fi\n\telse\n\t  echo \"Unable to unpack $FILENAME\" >&2\n\t  return 1\n\tfi\n\t\n\tif [ ! -d \"$DIRECTORY\" ]; then\n\t  echo \"Can't find $DIRECTORY to rename\" >&2\n\t  return 1\n\tfi\n\t\n\tmv \"$DIRECTORY\" \"$OUTDIR\"\n\t\n\t## Build source ##\n\t\n\tcd \"$OUTDIR\"\n\t\n\techo \"Configuring GNU Bison\"\n\t./configure --prefix \"$BISON_BIN_DIR\"\n\t\n\tif [ \"$?\" -ne 0 ]; then\n\t\techo \"GNU Bison configure operation failed\" >&2\n\t\treturn 1\n\tfi\n\t\n\techo \"Compiling GNU Bison\"\n\tmake && make install\n\t\n\tif [ \"$?\" -ne 0 ]; then\n\t\techo \"GNU Bison make operation failed\" >&2\n\t\treturn 1\n\tfi\n\t\n\treturn 0\n}\n\n# isValidBison executable\n#\n# Determines if a version of Bison is compatible with Warzone. The argument\n# 'executable' specifies the location of the Bison executable to test. Returns\n# 1 if the version of Bison is valid, else 0\nfunction isValidBison\n{\n\tlocal BISON=$1            # Bison command to check version of\n\tlocal MIN_BISON_MAJOR=1   # Minimum major version of Bison to allow\n\tlocal MIN_BISON_MINOR=31  # Minimum minor version of Bison to allow\n\tlocal BISON_BLACKLIST=()  # Bison versions to blacklist (e.g. \"2.1\")\n\t\n\t# Expects the Bison version to be the only token of the form #.# on the first\n\t# line of the output from ./bison --version, where the first # is the major\n\t# version and the second # is the minor version\n\tlocal BISON_VER=`$BISON --version  | sed -En '1 s:.*([0-9]+\\.[0-9]+):\\1: p'`\n\tlocal BISON_MAJOR=`echo $BISON_VER | sed -E  's:([0-9]+)\\.[0-9]+:\\1:'`\n\tlocal BISON_MINOR=`echo $BISON_VER | sed -E  's:[0-9]+\\.([0-9]+):\\1:'`\n\t\n\tlocal VALID_BISON=$(( (BISON_MAJOR > MIN_BISON_MAJOR)\n\t                   || (  BISON_MAJOR == MIN_BISON_MAJOR\n\t                      && BISON_MINOR >= MIN_BISON_MINOR) ))\n\t\n\t# If version is valid so far, check the blacklist\n\tif [ $VALID_BISON -eq 1 ]; then\n\t\tfor (( i = 0; i < ${#BISON_BLACKLIST[@]}; ++i )); do\n\t\t\tif [ $BISON_VER == ${BISON_BLACKLIST[${i}]} ]; then\n\t\t\t\tVALID_BISON=0\n\t\t\tfi\n\t\tdone\n\tfi\n\t\n\treturn $VALID_BISON\n}\n\n## Main ##\n#\n# If there is not already a local version of Bison (one in macosx/external/) and\n# the version of Bison on the system is incompatible with the build process,\n# attempt to download a compatible version of Bison.\n\n# Check any local version of Bison\nif [ -e $LOCAL_BISON ]; then\n\tisValidBison $LOCAL_BISON\n\t\n\tif [ $? -eq 1 ]; then\n\t\t# Local version is valid (nothing further needs to be done)\n\t\texit 0\n\telse\n\t\t# Local version is invalid\n\t\techo \"The local executable of GNU Bison is of an incompatible version\" >&2\n\t\texit 1\n\tfi\nfi\n\n# If the system version of Bison is incompatible, download a compatible version\nisValidBison $SYS_BISON\nif [ $? -ne 1 ]; then\n\techo \"The version of Bison on your system is not compatible with Warzone\"\n\techo \"A compatible version will be attempted to be downloaded and used\"\n\t\n\tgetLocalBison\n\tif [ $? -ne 0 ]; then\n\t\techo \"Retrieval of a compatible version of Bison has failed\" >&2\n\t\texit 1\n\tfi\nfi\n\nexit 0\n";
+		};
+		9711774C0F87A677000C8A96 /* Fetch source */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Fetch source";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "DIRECTORY=\"pixman-0.14.0\"\nOUTDIR=\"pixman\"\nFILENAME=\"pixman-0.14.0.tar.gz\"\nSOURCE=\"http://cairographics.org/releases/pixman-0.14.0.tar.gz\"\nMD5=\"da330524bbd975271974378b1c5e7b5d\"\n\ncd external\n\nif [ -d \"$OUTDIR\" ]; then\n  echo \"$OUTDIR exists, skipping\"\n  exit 0\nfi\n\nif [ -d \"$DIRECTORY\" ]; then\n  echo \"$DIRECTORY exists, probably from an earlier failed run\" >&2\n  exit 1\nfi\n\nif [ ! -r \"$FILENAME\" ]; then\n  echo \"Fetching $SOURCE\"\n  if ! curl -L -o \"$FILENAME\" \"$SOURCE\"; then\n    echo \"Unable to fetch $SOURCE\" >&2\n    exit 1\n  fi\nfi\n\nHAVEMD5=`md5 \"$FILENAME\" | sed -n -e 's/^MD5 (\\(.*\\)) = \\(.*\\)$/\\2/p'`\n\nif [ -z \"$HAVEMD5\" ]; then\n  echo \"Unable to compute md5 for $FILENAME\" >&2\n  exit 1\nfi\n\nif [ \"$HAVEMD5\" != \"$MD5\" ]; then\n  echo \"Md5 does not match for $FILENAME\" >&2\n  exit 1\nfi\n\nEXTENSION=`echo $FILENAME | sed -e 's/^.*\\.\\([^.]*\\)/\\1/'`\n\nif [ \"$EXTENSION\" = \"gz\" ]; then\n  if ! tar -zxf \"$FILENAME\"; then\n    echo \"Unpacking $FILENAME failed\" >&2\n    exit 1\n  fi\nelif [ \"$EXTENSION\" = \"bz2\" ]; then\n  if ! tar -jxf \"$FILENAME\"; then\n    echo \"Unpacking $FILENAME failed\" >&2\n    exit 1\n  fi\nelse\n  echo \"Unable to unpack $FILENAME\" >&2\n  exit 1\nfi\n\nif [ ! -d \"$DIRECTORY\" ]; then\n  echo \"Can't find $DIRECTORY to rename\" >&2\n  exit 1\nfi\n\nmv \"$DIRECTORY\" \"$OUTDIR\"\n";
+		};
+		971177D10F87A82A000C8A96 /* Generate headers */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Generate headers";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "cd external/pixman\n\ncat <<EOF > config.h\n#define AC_APPLE_UNIVERSAL_BUILD\n#define HAVE_DLFCN_H 1\n#define HAVE_INTTYPES_H 1\n#define HAVE_MEMORY_H 1\n#define HAVE_STDINT_H 1\n#define HAVE_STDLIB_H 1\n#define HAVE_STRINGS_H 1\n#define HAVE_STRING_H 1\n#define HAVE_SYS_STAT_H 1\n#define HAVE_SYS_TYPES_H 1\n#define HAVE_UNISTD_H 1\n#define PACKAGE \"pixman\"\n#define PACKAGE_BUGREPORT \"\"sandmann@daimi.au.dk\"\"\n#define PACKAGE_NAME \"pixman\"\n#define PACKAGE_STRING \"pixman 0.14.0\"\n#define PACKAGE_TARNAME \"pixman\"\n#define PACKAGE_VERSION \"0.14.0\"\n#define STDC_HEADERS 1\n#define VERSION \"0.14.0\"\n#if defined AC_APPLE_UNIVERSAL_BUILD\n# if defined __BIG_ENDIAN__\n#  define WORDS_BIGENDIAN 1\n# endif\n#else\n# ifndef WORDS_BIGENDIAN\n#  define USE_MMX 1\n# endif\n#endif\nEOF";
 		};
 		97AEAAED0E8C1B5200A10721 /* Fetch source */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -4681,6 +4858,34 @@
 				02F5CC8D0D1496580000A2D0 /* poptconfig.c in Sources */,
 				02F5CC8E0D1496580000A2D0 /* popthelp.c in Sources */,
 				02F5CC900D1496580000A2D0 /* poptparse.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		971177510F87A677000C8A96 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				971177A80F87A726000C8A96 /* pixman-access-accessors.c in Sources */,
+				971177A90F87A726000C8A96 /* pixman-access.c in Sources */,
+				971177AC0F87A726000C8A96 /* pixman-combine32.c in Sources */,
+				971177AE0F87A726000C8A96 /* pixman-combine64.c in Sources */,
+				971177B00F87A726000C8A96 /* pixman-compose-accessors.c in Sources */,
+				971177B10F87A726000C8A96 /* pixman-compose.c in Sources */,
+				971177B20F87A726000C8A96 /* pixman-compute-region.c in Sources */,
+				971177B30F87A726000C8A96 /* pixman-edge-accessors.c in Sources */,
+				971177B50F87A726000C8A96 /* pixman-edge.c in Sources */,
+				971177B60F87A726000C8A96 /* pixman-image.c in Sources */,
+				971177B70F87A726000C8A96 /* pixman-matrix.c in Sources */,
+				971177B80F87A726000C8A96 /* pixman-mmx.c in Sources */,
+				971177BA0F87A726000C8A96 /* pixman-pict.c in Sources */,
+				971177BD0F87A726000C8A96 /* pixman-region16.c in Sources */,
+				971177BE0F87A726000C8A96 /* pixman-region32.c in Sources */,
+				971177BF0F87A726000C8A96 /* pixman-source.c in Sources */,
+				971177C20F87A726000C8A96 /* pixman-timer.c in Sources */,
+				971177C30F87A726000C8A96 /* pixman-transformed-accessors.c in Sources */,
+				971177C40F87A726000C8A96 /* pixman-transformed.c in Sources */,
+				971177C50F87A726000C8A96 /* pixman-trap.c in Sources */,
+				971177C60F87A726000C8A96 /* pixman-utils.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5682,6 +5887,73 @@
 			};
 			name = Release;
 		};
+		971177620F87A677000C8A96 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_1)",
+					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_2)",
+				);
+				FRAMEWORK_SEARCH_PATHS_QUOTED_1 = "\"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.4u.sdk/System/Library/Frameworks\"";
+				FRAMEWORK_SEARCH_PATHS_QUOTED_2 = "\"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.4u.sdk/System/Library/Frameworks\"";
+				FRAMEWORK_VERSION = A;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					PIXMAN_DISABLE_DEPRECATED,
+					HAVE_CONFIG_H,
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = "/Users/freddie/Documents/Programming/Warzone/macosx/Resources/PhysFS-Info copy.plist";
+				INSTALL_PATH = "@executable_path/../Frameworks";
+				OTHER_LDFLAGS = "";
+				PREBINDING = NO;
+				PRODUCT_NAME = pixman;
+			};
+			name = Debug;
+		};
+		971177630F87A677000C8A96 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_1)",
+					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_2)",
+				);
+				FRAMEWORK_SEARCH_PATHS_QUOTED_1 = "\"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.4u.sdk/System/Library/Frameworks\"";
+				FRAMEWORK_SEARCH_PATHS_QUOTED_2 = "\"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.4u.sdk/System/Library/Frameworks\"";
+				FRAMEWORK_VERSION = A;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_MODEL_TUNING = G5;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					HAVE_CONFIG_H,
+					PIXMAN_DISABLE_DEPRECATED,
+					__MACOSX__,
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = "/Users/freddie/Documents/Programming/Warzone/macosx/Resources/PhysFS-Info copy.plist";
+				INSTALL_PATH = "@executable_path/../Frameworks";
+				OTHER_LDFLAGS = "";
+				PREBINDING = NO;
+				PRODUCT_NAME = pixman;
+			};
+			name = Release;
+		};
 		97AEAB310E8C1B5200A10721 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -5868,6 +6140,15 @@
 			buildConfigurations = (
 				221052050E3D220C0057CD9C /* Debug */,
 				221052060E3D220C0057CD9C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		971177610F87A677000C8A96 /* Build configuration list for PBXNativeTarget "Pixman" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				971177620F87A677000C8A96 /* Debug */,
+				971177630F87A677000C8A96 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
