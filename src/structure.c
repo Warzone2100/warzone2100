@@ -1218,6 +1218,19 @@ float getStructureDamage(const STRUCTURE* psStructure)
 void structureBuild(STRUCTURE *psStruct, DROID *psDroid, int buildPoints)
 {
 	int before, after;
+	int powerNeeded;
+
+	// Check if there is enough power to perform this construction work
+	powerNeeded = ((psStruct->currentBuildPts + buildPoints) * structPowerToBuild(psStruct))/psStruct->pStructureType->buildPoints -
+	              (psStruct->currentBuildPts * structPowerToBuild(psStruct))/psStruct->pStructureType->buildPoints;
+
+	powerNeeded = MIN(powerNeeded, POWER_PER_CYCLE);
+
+	if (!usePower(psDroid->player, powerNeeded))
+	{
+		return;
+	}
+
 	before = (9 * psStruct->currentBuildPts * structureBody(psStruct) ) / (10 * psStruct->pStructureType->buildPoints);
 	psStruct->currentBuildPts += buildPoints;
 	after =  (9 * psStruct->currentBuildPts * structureBody(psStruct) ) / (10 * psStruct->pStructureType->buildPoints);

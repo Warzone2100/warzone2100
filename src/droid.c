@@ -1227,13 +1227,6 @@ BOOL droidUpdateBuild(DROID *psDroid)
 		return false;
 	}
 
-    // For now wait until have enough power to build
-    if (psStruct->currentPowerAccrued < (SWORD) structPowerToBuild(psStruct))
-    {
-        psDroid->actionStarted = gameTime;
-        return true;
-    }
-
 	constructPoints = constructorPoints(asConstructStats + psDroid->
 		asBits[COMP_CONSTRUCT].nStat, psDroid->player);
 

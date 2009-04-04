@@ -457,30 +457,7 @@ BOOL accruePower(BASE_OBJECT *psObject)
         {
         case DROID_CONSTRUCT:
         case DROID_CYBORG_CONSTRUCT:
-            //check trying to build something (and that hasn't been blown up)
-            if (DroidIsBuilding(psDroid) && psDroid->psTarget && !psDroid->psTarget->died)
-            {
-                powerDiff = structPowerToBuild((STRUCTURE *)psDroid->psTarget) -
-                    ((STRUCTURE *)psDroid->psTarget)->currentPowerAccrued;
-			    //if equal then don't need power
-			    if (powerDiff)
-			    {
-				    if (POWER_PER_CYCLE >= powerDiff)
-				    {
-					    usePower(psDroid->player, powerDiff);
-					    ((STRUCTURE *)psDroid->psTarget)->currentPowerAccrued +=
-                            powerDiff;
-					    bPowerUsed = true;
-				    }
-				    else if (powerDiff > POWER_PER_CYCLE)
-				    {
-					    usePower(psDroid->player, POWER_PER_CYCLE);
-					    ((STRUCTURE *)psDroid->psTarget)->currentPowerAccrued +=
-                            POWER_PER_CYCLE;
-					    bPowerUsed = true;
-				    }
-			    }
-            }
+            // power is used directly when building, in structureBuild
             break;
         case DROID_REPAIR:
         case DROID_CYBORG_REPAIR:
