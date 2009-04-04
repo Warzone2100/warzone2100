@@ -600,6 +600,9 @@ void widgetDraw(widget *self)
 		// Update the texture if widgetEndGL has not done it for us
 		if (self->textureNeedsUploading)
 		{
+			// Flush the cairo surface to ensure that all drawing is completed
+			cairo_surface_flush(cairo_get_target(self->cr));
+
 			glBindTexture(GL_TEXTURE_RECTANGLE_ARB, self->textureId);
 
 			glTexImage2D(GL_TEXTURE_RECTANGLE_ARB, 0, GL_RGBA, self->size.x,
@@ -1438,6 +1441,9 @@ void widgetEndGLImpl(widget *self, bool finishedDrawing)
 		glBindTexture(GL_TEXTURE_RECTANGLE_ARB, self->textureId);
 		glGetTexImage(GL_TEXTURE_RECTANGLE_ARB, 0, GL_BGRA, GL_UNSIGNED_BYTE,
 		              bits);
+
+		// Tell cairo to re-read any cached areas
+		cairo_surface_mark_dirty(cairo_get_target(self->cr));
 	}
 	// Else drawing is finished so no need for composite to upload the texture
 	else
