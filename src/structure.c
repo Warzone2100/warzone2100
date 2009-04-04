@@ -1224,7 +1224,7 @@ void structureBuild(STRUCTURE *psStruct, DROID *psDroid, int buildPoints)
 	psStruct->body += after - before;
 
 	//check if structure is built
-	if (psStruct->currentBuildPts > (SDWORD)psStruct->pStructureType->buildPoints)
+	if (psStruct->currentBuildPts >= (SDWORD)psStruct->pStructureType->buildPoints)
 	{
 		psStruct->currentBuildPts = (SWORD)psStruct->pStructureType->buildPoints;
 		psStruct->status = SS_BUILT;
