@@ -1246,35 +1246,8 @@ BOOL droidUpdateBuild(DROID *psDroid)
 
 BOOL droidStartDemolishing( DROID *psDroid )
 {
-	STRUCTURE	*psStruct;
-
-	CHECK_DROID(psDroid);
-
-	ASSERT( psDroid->order == DORDER_DEMOLISH,
-		"unitStartDemolishing: unit is not demolishing" );
-	psStruct = (STRUCTURE *)psDroid->psTarget;
-	ASSERT( psStruct->type == OBJ_STRUCTURE,
-		"unitStartDemolishing: target is not a structure" );
-
 	psDroid->actionStarted = gameTime;
-	psDroid->actionPoints  = 0;
-
-	/* init build points Don't - could be partially demolished*/
-	//psStruct->currentBuildPts = psStruct->pStructureType->buildPoints;
-	psStruct->status = SS_BEING_DEMOLISHED;
-
-	// Set height scale for demolishing
-	//psStruct->heightScale = (float)psStruct->currentBuildPts /
-	//	psStruct->pStructureType->buildPoints;
-
-	//if start to demolish a power gen need to inform the derricks
-	if (psStruct->pStructureType->type == REF_POWER_GEN)
-	{
-		releasePowerGen(psStruct);
-	}
-
-	CHECK_DROID(psDroid);
-
+	psDroid->actionPoints = 0;
 	return true;
 }
 

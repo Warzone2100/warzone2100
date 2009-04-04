@@ -1203,65 +1203,58 @@ void structureBuild(STRUCTURE *psStruct, DROID *psDroid, int buildPoints)
 	}
 }
 
+static int structureTotalReturn(STRUCTURE *psStruct)
+{
+	int result = structPowerToBuild(psStruct)/2.0f;
+
+	if(psStruct->pStructureType->type == REF_POWER_GEN)
+	{
+		//if had module attached - the base must have been completely built
+		if (psStruct->pFunctionality->powerGenerator.capacity)
+		{
+			//so add the power required to build the base struct
+			result += psStruct->pStructureType->powerToBuild/2.0f;
+		}
+	}
+	else
+	{
+		//if it had a module attached, need to add the power for the base struct as well
+		if (StructIsFactory(psStruct))
+		{
+			if (psStruct->pFunctionality->factory.capacity)
+			{
+				//if large factory - add half power for one upgrade
+				if (psStruct->pFunctionality->factory.capacity > SIZE_MEDIUM)
+				{
+					result += structPowerToBuild(psStruct) / 2.0f;
+				}
+			}
+		}
+		else if (psStruct->pStructureType->type == REF_RESEARCH)
+		{
+			if (psStruct->pFunctionality->researchFacility.capacity)
+			{
+				//add half power for base struct
+				result += psStruct->pStructureType->powerToBuild/2.0f;
+			}
+		}
+	}
+	return result;
+}
+
 void structureDemolish(STRUCTURE *psStruct, DROID *psDroid, int buildPoints)
 {
-	psStruct->currentBuildPts -= buildPoints;
+	float demolishFraction = buildPoints/(float)psStruct->pStructureType->buildPoints;
+	int valueBefore, valueAfter;
 
-	/* check if structure is demolished */
-	if ( psStruct->currentBuildPts <= 0 )
+	valueBefore = (psStruct->body * structureTotalReturn(psStruct)) / structureBody(psStruct);
+	psStruct->body -= MIN(psStruct->body, demolishFraction*structureBody(psStruct));
+	valueAfter  = (psStruct->body * structureTotalReturn(psStruct)) / structureBody(psStruct);
+	addPower(psDroid->player, valueBefore - valueAfter);
+
+	if (psStruct->body == 0)
 	{
-
-		if(bMultiPlayer)
-		{
-			SendDemolishFinished(psStruct,psDroid);
-		}
-
-
-		if(psStruct->pStructureType->type == REF_POWER_GEN)
-		{
-			//if had module attached - the base must have been completely built
-			if (psStruct->pFunctionality->powerGenerator.capacity)
-			{
-				//so add the power required to build the base struct
-				addPower(psStruct->player, psStruct->pStructureType->powerToBuild);
-			}
-			//add the currentAccruedPower since this may or may not be all required
-			addPower(psStruct->player, psStruct->currentPowerAccrued);
-		}
-		else
-		{
-			//if it had a module attached, need to add the power for the base struct as well
-			if (StructIsFactory(psStruct))
-			{
-				if (psStruct->pFunctionality->factory.capacity)
-				{
-					//add half power for base struct
-					addPower(psStruct->player, psStruct->pStructureType->
-						powerToBuild / 2);
-					//if large factory - add half power for one upgrade
-					if (psStruct->pFunctionality->factory.capacity > SIZE_MEDIUM)
-					{
-						addPower(psStruct->player, structPowerToBuild(psStruct) / 2);
-					}
-				}
-			}
-			else if (psStruct->pStructureType->type == REF_RESEARCH)
-			{
-				if (psStruct->pFunctionality->researchFacility.capacity)
-				{
-					//add half power for base struct
-					addPower(psStruct->player, psStruct->pStructureType->powerToBuild / 2);
-				}
-			}
-			//add currentAccrued for the current layer of the structure
-			addPower(psStruct->player, psStruct->currentPowerAccrued / 2);
-		}
-		/* remove structure and foundation */
-		removeStruct( psStruct, true );
-
-		/* reset target stats*/
-		psDroid->psTarStats = NULL;
-
+		removeStruct(psStruct, true);
 	}
 }
 
