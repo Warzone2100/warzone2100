@@ -365,7 +365,14 @@ void orderUpdateDroid(DROID *psDroid)
 			psObj = checkForDamagedStruct(psDroid,NULL);
 			if (psObj && (!bMultiPlayer || myResponsibility(psDroid->player)))
 			{
-				orderDroidObj(psDroid, DORDER_REPAIR, psObj);
+				if (psStruct->status == SS_BUILT)
+				{
+					orderDroidObj(psDroid, DORDER_REPAIR, psObj);
+				}
+				else
+				{
+					orderDroidObj(psDroid, DORDER_HELPBUILD, psObj);
+				}
 			}
 		}
 
@@ -1238,7 +1245,14 @@ void orderUpdateDroid(DROID *psDroid)
 			}
 			if (psObj)
 			{
-				actionDroidObj(psDroid, DACTION_REPAIR, psObj);
+				if (psStruct->status == SS_BUILT)
+				{
+					orderDroidObj(psDroid, DORDER_REPAIR, psObj);
+				}
+				else
+				{
+					orderDroidObj(psDroid, DORDER_HELPBUILD, psObj);
+				}
 			}
 		}
 		break;
