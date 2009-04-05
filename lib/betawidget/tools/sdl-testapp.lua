@@ -1,20 +1,12 @@
 -- vim:set et sts=2 sw=2:
 
--- Defining a new Pattern
--- The pattern "window" is used in betawidget.window by default
-pattern = betawidget.pattern("window", 0, 0, 0, 1)
-pattern:addColourStop(0.00, 0.0000, 0.0000, 0.2352, 0.75)
-pattern:addColourStop(0.20, 0.1764, 0.1764, 0.3725, 0.80)
-pattern:addColourStop(0.60, 0.1764, 0.1764, 0.3725, 0.70)
-pattern:addColourStop(1.00, 0.1764, 0.1764, 0.3725, 0.70)
+dofile("patterns.lua")
 
--- And this pattern will be selected when clicking once on 'myWindow'
+-- A custom pattern
+-- This pattern will be set when clicking once on 'myWindow'
 pattern = betawidget.pattern("window/green", 0, 0, 0, 1)
-pattern:addColourStop(0.0, 0.000000, 0.235294, 0.000000, 0.75)
-pattern:addColourStop(0.2, 0.176470, 0.372549, 0.176470, 0.80)
-pattern:addColourStop(0.6, 0.176470, 0.372549, 0.176470, 0.70)
-pattern:addColourStop(1.0, 0.176470, 0.372549, 0.176470, 0.70)
-
+pattern:addColourStop(0.00, 0.0000, 0.2353, 0.0353, 0.47)
+pattern:addColourStop(1.00, 0.0000, 0.2353, 0.0353, 0.27)
 
 wnd = betawidget.window("myWindow", 400, 400)
 wnd:reposition(400, 50)
@@ -49,6 +41,17 @@ wnd2:repositionFromAnchor(wnd, betawidget.CENTRE, 0, betawidget.MIDDLE, 0)
 print(string.format("It is: %f %f", wnd2.offset.x, wnd2.offset.y))
 wnd2:show()
 
+btn = betawidget.button("myButton", 60, 40);
+btn:show();
+wnd:addChild(btn);
+btn:reposition(40, 60)
+
+imgButton = betawidget.imageButton("myImageButton", 60, 40)
+imgButton:setImage(0, "tank.svg")
+imgButton:show();
+wnd2:addChild(imgButton);
+imgButton:reposition(60, 20)
+
 print(string.format("The clipboard's contents are \"%s\"", betawidget.getClipboardText() or ""))
 betawidget.setClipboardText("Hello World")
 
@@ -59,6 +62,7 @@ betawidget.setClipboardText("Hello World")
 --        references to this widget, e.g. it shouldn't result in
 --        widgetDestroy(WIDGET(widget)) being called twice. We probably need
 --        some way to turn these references into invalidated widget handles.
+--[[
 wnd:addTimerEventHandler(betawidget.EVT_TIMER_SINGLE_SHOT, 5000,
   function (self, evt, handlerId)
     print "collecting garbage: 1"
@@ -72,6 +76,7 @@ wnd:addTimerEventHandler(betawidget.EVT_TIMER_SINGLE_SHOT, 5000,
     )
   end
 )
+--]]
 
 wnd3 = betawidget.window('test destroy window', 75, 37.5)
 wnd3:reposition(50, 50)
