@@ -31,15 +31,15 @@ const classInfo hBoxClassInfo =
 hBox *hBoxCreate(const char *id)
 {
 	hBox *instance = malloc(sizeof(hBox));
-	
+
 	if (instance == NULL)
 	{
 		return NULL;
 	}
-	
+
 	// Call the constructor
 	hBoxInit(instance, id);
-	
+
 	// Return the new object
 	return instance;
 }
@@ -47,22 +47,22 @@ hBox *hBoxCreate(const char *id)
 static void hBoxInitVtbl(hBox *self)
 {
 	static bool initialised = false;
-	
+
 	if (!initialised)
 	{
 		// Copy our parents vtable into ours
 		vtbl.tableVtbl = *(TABLE(self)->vtbl);
-		
+
 		// Overload widget's destroy and addChild methods
 		vtbl.tableVtbl.widgetVtbl.destroy     = hBoxDestroyImpl;
 		vtbl.tableVtbl.widgetVtbl.addChild    = hBoxAddChildImpl;
-		
+
 		initialised = true;
 	}
-	
+
 	// Replace our parents vtable with our own
 	WIDGET(self)->vtbl = &vtbl.tableVtbl.widgetVtbl;
-	
+
 	// Set our vtable
 	self->vtbl = &vtbl;
 }
@@ -70,11 +70,11 @@ static void hBoxInitVtbl(hBox *self)
 void hBoxInit(hBox *self, const char *id)
 {
 	// Init our parent
-	tableInit(TABLE(self), id);
-	
+	tableInit((table *) self, id);
+
 	// Prepare our vtable
 	hBoxInitVtbl(self);
-	
+
 	// Set our type
 	WIDGET(self)->classInfo = &hBoxClassInfo;
 }
@@ -100,7 +100,7 @@ bool hBoxAddChildImpl(widget *self, widget *child)
 {
 	// We want to add the child to the next free column
 	const int column = tableGetColumnCount(TABLE(self)) + 1;
-	
+
 	// Delegate to tableAddChild with row = 1
 	return tableAddChild(TABLE(self), child, 1, column);
 }
