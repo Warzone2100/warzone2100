@@ -67,11 +67,11 @@ void windowInit(window *self, const char *id, int w, int h)
 	// Init our parent
 	widgetInit(((widget *)self), id);
 	
-	// Prepare our vtable
-	windowInitVtbl(self);
-	
 	// Set our type
 	((widget *)self)->classInfo = &windowClassInfo;
+	
+	// Prepare our vtable
+	windowInitVtbl(self);
 	
 	// Make sure we have a window list to add the window to
 	assert(windowVector);
