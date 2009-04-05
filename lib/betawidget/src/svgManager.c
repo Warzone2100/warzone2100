@@ -213,7 +213,7 @@ static size svgManagerGetSizeInternal(svgImage *image,
 			}
 			else if (maxHeight <= height)
 			{
-				height = maxWidth;
+				height = maxHeight;
 			}
 
 			size.x = width;
