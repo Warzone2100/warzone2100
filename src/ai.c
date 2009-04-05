@@ -581,7 +581,6 @@ BOOL aiChooseTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget, int weapon_slot
 	BOOL			bCBTower;
 	STRUCTURE		*psCStruct;
 	DROID			*psCommander;
-	BOOL			bCommanderBlock;
 	SECONDARY_STATE		state;
 	SDWORD			curTargetWeight=-1;
 
@@ -643,6 +642,7 @@ BOOL aiChooseTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget, int weapon_slot
 	{
 		WEAPON_STATS	*psWStats = NULL;
 		int	longRange = 0;
+		BOOL	bCommanderBlock = false;
 
 		ASSERT(((STRUCTURE *)psObj)->asWeaps[weapon_slot].nStat > 0, "no weapons on structure");
 
@@ -652,7 +652,6 @@ BOOL aiChooseTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget, int weapon_slot
 		// see if there is a target from the command droids
 		psTarget = NULL;
 		psCommander = cmdDroidGetDesignator(psObj->player);
-		bCommanderBlock = false;
 		if (!proj_Direct(psWStats) && (psCommander != NULL) &&
 			aiStructHasRange((STRUCTURE *)psObj, (BASE_OBJECT *)psCommander, weapon_slot))
 		{
@@ -713,7 +712,7 @@ BOOL aiChooseTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget, int weapon_slot
 					    }
 					}
 				}
-				else if (structCBSensor(psCStruct)
+				else if ((structCBSensor(psCStruct) || objRadarDetector((BASE_OBJECT *)psCStruct))
 				         && psCStruct->psTarget[0] != NULL
 				         && !psCStruct->psTarget[0]->died)
 				{
@@ -780,81 +779,105 @@ BOOL aiChooseTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget, int weapon_slot
 /* See if there is a target in range for Sensor objects*/
 BOOL aiChooseSensorTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget)
 {
-	SDWORD	sensorRange = objSensorRange(psObj);
-	UDWORD	radSquared;
-	BASE_OBJECT		*psCurr,*psTemp = NULL;
-	BASE_OBJECT		*psTarget = NULL;
-	SDWORD	xdiff,ydiff, distSq, tarDist;
+	int		sensorRange = objSensorRange(psObj);
+	unsigned int	radSquared = sensorRange * sensorRange;
+	bool		radarDetector = objRadarDetector(psObj);
 
-	/* Get the sensor range */
-	switch (psObj->type)
+	if (!objActiveRadar(psObj) && !radarDetector)
 	{
-	case OBJ_DROID:
-		if (asSensorStats[((DROID *)psObj)->asBits[COMP_SENSOR].nStat].
-			location != LOC_TURRET)
-		{
-			// to be used for Turret Sensors only
-			return false;
-		}
-		radSquared = sensorRange * sensorRange;
-		break;
-	case OBJ_STRUCTURE:
-		if (!(structStandardSensor((STRUCTURE *)psObj) ||
-			structVTOLSensor((STRUCTURE *)psObj)))
-		{
-			// to be used for Standard and VTOL intercept Turret Sensors only
-			return false;
-		}
-		radSquared = sensorRange * sensorRange;
-		break;
-	default:
-		radSquared = 0;
-		break;
+		ASSERT(false, "Only to be used for sensor turrets!");
+		return false;
 	}
 
-	/* See if there is a something in range */
-	if (psObj->type == OBJ_DROID && CAN_UPDATE_NAYBORS( (DROID *)psObj ))
+	/* See if there is something in range */
+	if (radarDetector)
 	{
+		BASE_OBJECT	*psCurr, *psTemp = NULL;
+		int		tarDist = SDWORD_MAX;
+
+		gridStartIterate((SDWORD)psObj->pos.x, (SDWORD)psObj->pos.y);
+		psCurr = gridIterate();
+		while (psCurr != NULL)
+		{
+			if (psCurr->type == OBJ_STRUCTURE || psCurr->type == OBJ_DROID)
+			{
+				if (psObj->player != psCurr->player
+				    && !aiCheckAlliances(psCurr->player,psObj->player)
+				    && objActiveRadar(psCurr))
+				{
+					// See if in twice *their* sensor range
+					const int xdiff = psCurr->pos.x - psObj->pos.x;
+					const int ydiff = psCurr->pos.y - psObj->pos.y;
+					const unsigned int distSq = xdiff * xdiff + ydiff * ydiff;
+					const int targetSensor = objSensorRange(psCurr) * 2;
+					const unsigned int sensorSquared = targetSensor * targetSensor;
+
+					if (distSq < sensorSquared && distSq < tarDist)
+					{
+						psTemp = psCurr;
+						tarDist = distSq;
+					}
+				}
+			}
+			psCurr = gridIterate();
+		}
+
+		if (psTemp)
+		{
+			objTrace(psTemp->id, "Targetted by radar detector %d", (int)psObj->id);
+			objTrace(psObj->id, "Targetting radar %d", (int)psTemp->id);
+			ASSERT(!psTemp->died, "aiChooseSensorTarget gave us a dead target");
+			*ppsTarget = psTemp;
+			return true;
+		}
+	}
+	else if (psObj->type == OBJ_DROID && CAN_UPDATE_NAYBORS((DROID *)psObj))
+	{
+		BASE_OBJECT	*psTarget = NULL;
+
 		if (aiBestNearestTarget((DROID *)psObj, &psTarget, 0) >= 0)
 		{
 			/* See if in sensor range */
-			xdiff = psTarget->pos.x - psObj->pos.x;
-			ydiff = psTarget->pos.y - psObj->pos.y;
-			if (xdiff*xdiff + ydiff*ydiff < (SDWORD)radSquared)
+			const int xdiff = psTarget->pos.x - psObj->pos.x;
+			const int ydiff = psTarget->pos.y - psObj->pos.y;
+			const unsigned int distSq = xdiff * xdiff + ydiff * ydiff;
+
+			if (distSq < radSquared)
 			{
 				*ppsTarget = psTarget;
 				return true;
 			}
 		}
 	}
-	else
+	else	// structure
 	{
-		tarDist = SDWORD_MAX;
+		BASE_OBJECT	*psCurr, *psTemp = NULL;
+		int		tarDist = SDWORD_MAX;
+
 		gridStartIterate((SDWORD)psObj->pos.x, (SDWORD)psObj->pos.y);
 		psCurr = gridIterate();
 		while (psCurr != NULL)
 		{
-			    //don't target features
-			    if (psCurr->type != OBJ_FEATURE && !psCurr->died)
-			    {
-				    if (psObj->player != psCurr->player &&
-					    !aiCheckAlliances(psCurr->player,psObj->player) &&
-					    !aiObjIsWall(psCurr))
-				    {
-					    // See if in sensor range and visible
-					    xdiff = psCurr->pos.x - psObj->pos.x;
-					    ydiff = psCurr->pos.y - psObj->pos.y;
-					    distSq = xdiff*xdiff + ydiff*ydiff;
-					    if (distSq < (SDWORD)radSquared &&
-						    psCurr->visible[psObj->player] &&
-						    distSq < tarDist)
-					    {
-						    psTemp = psCurr;
-						    tarDist = distSq;
-					    }
-				    }
-			    }
-			    psCurr = gridIterate();
+			// Don't target features or dead objects
+			if (psCurr->type != OBJ_FEATURE && !psCurr->died)
+			{
+				if (psObj->player != psCurr->player &&
+				    !aiCheckAlliances(psCurr->player,psObj->player) &&
+				    !aiObjIsWall(psCurr))
+				{
+					// See if in sensor range and visible
+					const int xdiff = psCurr->pos.x - psObj->pos.x;
+					const int ydiff = psCurr->pos.y - psObj->pos.y;
+					const unsigned int distSq = xdiff * xdiff + ydiff * ydiff;
+
+					if (distSq < radSquared && psCurr->visible[psObj->player] && distSq < tarDist)
+					{
+						psTemp = psCurr;
+						tarDist = distSq;
+					}
+				}
+			}
+			psCurr = gridIterate();
 		}
 
 		if (psTemp)
@@ -1021,8 +1044,7 @@ void aiUpdateDroid(DROID *psDroid)
 	{
 		if (psDroid->droidType == DROID_SENSOR)
 		{
-			//Watermelon:only 1 target for sensor droid
-			if ( aiChooseTarget((BASE_OBJECT *)psDroid, &psTarget, 0, true) )
+			if (aiChooseSensorTarget((BASE_OBJECT *)psDroid, &psTarget))
 			{
 				orderDroidObj(psDroid, DORDER_OBSERVE, psTarget);
 			}
