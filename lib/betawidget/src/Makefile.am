@@ -22,6 +22,7 @@ lib_LTLIBRARIES = libbetawidget.la
 libbetawidget_la_SOURCES = \
 	betawidget_wrap_lua.cpp \
 	button.c \
+	imageButton.c \
 	font.c \
 	geom.c \
 	hBox.c \
@@ -42,6 +43,8 @@ libbetawidget_la_LIBADD = platform/libplatform.la libutil.la
 #        included by client code of betawidget) as possible should be moved to
 #        noinst_HEADERS.
 pkginclude_HEADERS = \
+	button.h \
+	imageButton.h \
 	clipboard.h \
 	font.h \
 	internal-cairo.h \

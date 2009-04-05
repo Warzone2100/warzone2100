@@ -49,7 +49,7 @@ static lua_State* lua_open_betawidget(void)
 	return L;
 }
 
-#if 0
+#if 1
 static void createGUI(lua_State* const L)
 {
 	const int top = lua_gettop(L); /* save stack */
@@ -135,7 +135,7 @@ int main(int argc, char *argv[])
 	SDL_WM_SetCaption("Warzone UI Simulator", NULL);
 
 	// Init OpenGL
-	glClearColor(0.8f, 0.8f, 0.8f, 0.0f);
+	glClearColor(0.3f, 0.3f, 0.3f, 0.0f);
 	glCullFace(GL_BACK);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_CONSTANT_ALPHA, GL_ONE_MINUS_SRC_ALPHA);

@@ -14,6 +14,8 @@ extern "C" {
 #include "lua-wrap.h"
 #include <assert.h>
 #include "patternManager.h"
+#include "button.h"
+#include "imageButton.h"
 }
 
 static bool callbackHandler(widget* const self, const event* const evt, int const handlerId, SWIGLUA_MEMBER_FN const * const callbackRef)
@@ -300,6 +302,39 @@ struct _window : public _widget
 			return windowSetBackgroundPattern($self, patternId);
                 }
         }
+};
+
+%rename (button) _button;
+struct _button : public _widget
+{
+	%extend
+	{
+		_button(const char *id, int w, int h)
+		{
+			return buttonCreate(id, w, h);
+		}
+		void setPatternForState(buttonState state, const char *fillPatternId, const char *contourPatternId)
+		{
+			return buttonSetPatternsForState($self, state, fillPatternId, contourPatternId);
+		}
+	}
+};
+
+%rename (imageButton) _imageButton;
+struct _imageButton : public _button
+{
+	%extend
+	{
+		_imageButton(const char *id, int w, int h)
+		{
+			return imageButtonCreate(id, w, h);
+		}
+		void setImage(int state, const char *imageFilename)
+		{
+			// replace integer with enum buttonState
+			return imageButtonSetImage($self, (buttonState)state, imageFilename);
+		}
+	}
 };
 
 %rename (hBox) _hBox;
