@@ -277,6 +277,9 @@ enum SENSOR_TYPE
 
     # Works as all of the above together! - new for updates
     SUPER
+
+    %string "RADAR DETECTOR";
+    RADAR_DETECTOR
 end;
 
 struct SENSOR

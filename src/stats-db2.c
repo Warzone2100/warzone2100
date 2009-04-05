@@ -272,7 +272,7 @@ in_statement_err:
  *          false otherwise.
  */
 bool
-#line 285 "stats-db2.tpl"
+#line 288 "stats-db2.tpl"
 loadSensorStatsFromDB
 #line 278 "stats-db2.c"
 	(sqlite3* db)
@@ -313,7 +313,7 @@ loadSensorStatsFromDB
 		ROW_COUNT_VAR = sqlite3_column_int(stmt, 0);
 		sqlite3_finalize(stmt);
 
-#line 287 "stats-db2.tpl"
+#line 290 "stats-db2.tpl"
 		if (!statsAllocSensor(ROW_COUNT_VAR))
 			return false;
 #line 320 "stats-db2.c"
@@ -528,6 +528,8 @@ loadSensorStatsFromDB
 			stats->type = VTOL_INTERCEPT_SENSOR;
 		else if (strcmp((const char*)sqlite3_column_text(stmt, cols.type), "SUPER") == 0)
 			stats->type = SUPER_SENSOR;
+		else if (strcmp((const char*)sqlite3_column_text(stmt, cols.type), "RADAR DETECTOR") == 0)
+			stats->type = RADAR_DETECTOR_SENSOR;
 		else
 		{
 			debug(LOG_ERROR, "Unknown enumerant (%s) for field type", (const char*)sqlite3_column_text(stmt, cols.type));
@@ -552,7 +554,7 @@ loadSensorStatsFromDB
 
 		{
 
-#line 291 "stats-db2.tpl"
+#line 294 "stats-db2.tpl"
 			stats->ref = REF_SENSOR_START + CUR_ROW_NUM;
 
 			// save the stats
@@ -565,7 +567,7 @@ loadSensorStatsFromDB
 				setMaxSensorPower(stats->power);
 				setMaxComponentWeight(stats->weight);
 			}
-#line 569 "stats-db2.c"
+#line 571 "stats-db2.c"
 		}
 
 		/* Retrieve the next row */
@@ -589,9 +591,9 @@ in_statement_err:
  *          false otherwise.
  */
 bool
-#line 566 "stats-db2.tpl"
+#line 569 "stats-db2.tpl"
 loadConstructStatsFromDB
-#line 595 "stats-db2.c"
+#line 597 "stats-db2.c"
 	(sqlite3* db)
 {
 	bool retval = false;
@@ -626,10 +628,10 @@ loadConstructStatsFromDB
 		ROW_COUNT_VAR = sqlite3_column_int(stmt, 0);
 		sqlite3_finalize(stmt);
 
-#line 568 "stats-db2.tpl"
+#line 571 "stats-db2.tpl"
 		if (!statsAllocConstruct(ROW_COUNT_VAR))
 			return false;
-#line 633 "stats-db2.c"
+#line 635 "stats-db2.c"
 	}
 
 	/* Prepare the query to start fetching all rows */
@@ -797,7 +799,7 @@ loadConstructStatsFromDB
 
 		{
 
-#line 572 "stats-db2.tpl"
+#line 575 "stats-db2.tpl"
 			stats->ref = REF_CONSTRUCT_START + CUR_ROW_NUM;
 
 			// save the stats
@@ -809,7 +811,7 @@ loadConstructStatsFromDB
 				setMaxConstPoints(stats->constructPoints);
 				setMaxComponentWeight(stats->weight);
 			}
-#line 813 "stats-db2.c"
+#line 815 "stats-db2.c"
 		}
 
 		/* Retrieve the next row */
