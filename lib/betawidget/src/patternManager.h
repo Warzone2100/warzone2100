@@ -128,9 +128,13 @@ void patternManagerSetAsSource(cairo_t *cr, pattern *item, float x, float y);
 /**
  * Returns the pattern by the given Id
  * The pattern is valid until it's removed by patternManagerRemove()
+ * In fact this function is a wrapper for the internal 
+ * patternManagerLookForPattern function and adds an assert if the
+ * desired pattern exists.
  *
  * @param id The pattern id
  * @return The requested pattern
+ * @see patternManagerLookForPattern
  */
 pattern *patternManagerGetPattern(const char *id);
 
