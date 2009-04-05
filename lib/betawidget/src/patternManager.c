@@ -29,6 +29,8 @@
 
 static vector *patternList = NULL;
 
+static pattern *patternManagerLookForPattern(const char *id);
+
 /**
  * Deletes a pattern item.
  * This function should NOT be called directly; instead use patternManagerRemove.
@@ -84,23 +86,23 @@ pattern *patternManagerAddCairoPattern(const char *id, cairo_pattern_t *crPatter
 	assert(crPattern != NULL);
 	
 	// check for existing patterns
-	item = patternManagerGetPattern(id);
+	item = patternManagerLookForPattern(id);
 	
 	if(item != NULL)
 	{
-		// if there's already a pattern with the desired it then destroy it's cairo pattern.
+		// if there's already a pattern with the desired id then destroy it's cairo pattern.
 		cairo_pattern_destroy(item->crPattern);
 		item->crPattern = NULL;
 	}
 	else
 	{
-		// if there's no occurence of the id we create a new pattern.
+		// if there's no occurence of the id we'll create a new item.
 		item = malloc(sizeof(pattern));
 		assert(item != NULL);
 		item->id = strdup(id);
 	}
 
-	// copy (or add a reference to) the cairo pattern in our pattern structure
+	// copy (or in fact add a reference to) the cairo pattern in our pattern structure
 	item->crPattern = cairo_pattern_reference(crPattern);
 
 	// add it to our global list
@@ -142,6 +144,7 @@ pattern *patternManagerGradientCreateRadial(const char *id, float x0, float y0, 
 
 void patternManagerGradientAddColourStop(pattern *item, float o, float r, float g, float b, float a)
 {
+	assert(item != NULL);
 	cairo_pattern_add_color_stop_rgba(item->crPattern, o, r, g, b, a);
 }
 
@@ -178,17 +181,40 @@ void patternManagerSetAsSource(cairo_t *cr, pattern *item, float x, float y)
 
 pattern *patternManagerGetPattern(const char *id)
 {
+	pattern *item;
+	
+	item = patternManagerLookForPattern(id);
+	assert(item != NULL);
+	
+	return item;
+}
+
+/**
+ * Returns the pattern by the given Id
+ * The pattern is valid until it's removed by patternManagerRemove()
+ * 
+ * Do NOT call this function directly unless you want to know if a
+ * pattern exists. Call patternManagerGetPattern instead which adds
+ * an assert if the pattern doesn't exist.
+ * 
+ * @param id The pattern id
+ * @return The requested pattern
+ * @see patternManagerGetPattern
+ * @see patternManagerAddCairoPattern
+ */
+static pattern *patternManagerLookForPattern(const char *id)
+{
 	pattern *cur, *item;
 	assert(id != NULL);
+	int i;
 	
-	vectorRewind(patternList);
-
 	// the function returns NULL when no occurence is found
 	cur = NULL;
 	item = NULL;
 	
 	// Search the pattern for the corresponding id
-	while ((cur = vectorNext(patternList)))
+	vectorRewind(patternList);
+	while((cur = vectorNext(patternList)))
 	{
 		// If the id matches then we have found the pattern
 		if (strcmp(id, cur->id) == 0)
@@ -214,7 +240,7 @@ void patternManagerQuit()
 	// Ensure that we have not already been called
 	assert(patternList != NULL);
 
-	// Release all rendered SVG images
+	// Release all loaded patterns
 	vectorMapAndDestroy(patternList, patternManagerFreePattern);
 
 	// Note that we have quit
