@@ -1588,8 +1588,7 @@ BOOL droidUpdateRepair( DROID *psDroid )
 		GAME_TICKS_PER_SEC;
 
 	/* add points to structure */
-	psStruct->body = (UWORD)(psStruct->body  + (iPointsToAdd - psDroid->actionPoints));
-
+	structureRepair(psStruct, psDroid, iPointsToAdd - psDroid->actionPoints);
 	/* store the amount just added */
 	psDroid->actionPoints = iPointsToAdd;
 

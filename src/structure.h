@@ -117,6 +117,7 @@ extern float structureDamage(STRUCTURE *psStructure, UDWORD damage,
                             UDWORD weaponClass, UDWORD weaponSubClass, HIT_SIDE impactSide);
 extern void structureBuild(STRUCTURE *psStructure, DROID *psDroid, int buildPoints);
 extern void structureDemolish(STRUCTURE *psStructure, DROID *psDroid, int buildPoints);
+extern void structureRepair(STRUCTURE *psStruct, DROID *psDroid, int buildPoints);
 /* Set the type of droid for a factory to build */
 extern BOOL structSetManufacture(STRUCTURE *psStruct, DROID_TEMPLATE *psTempl,
 								 UBYTE quantity);

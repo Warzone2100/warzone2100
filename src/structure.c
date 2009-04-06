@@ -1244,13 +1244,36 @@ static int structureTotalReturn(STRUCTURE *psStruct)
 
 void structureDemolish(STRUCTURE *psStruct, DROID *psDroid, int buildPoints)
 {
+	structureRepair(psStruct, psDroid, -buildPoints);
+}
+
+/// Function to trade health against power for a structure
+/// Can be used to repair by passing positive buildPoints and to destroy by a negative ones
+void structureRepair(STRUCTURE *psStruct, DROID *psDroid, int buildPoints)
+{
 	float demolishFraction = buildPoints/(float)psStruct->pStructureType->buildPoints;
 	int valueBefore, valueAfter;
+	int powerNeeded;
+	int body = psStruct->body;
 
-	valueBefore = (psStruct->body * structureTotalReturn(psStruct)) / structureBody(psStruct);
-	psStruct->body -= MIN(psStruct->body, demolishFraction*structureBody(psStruct));
-	valueAfter  = (psStruct->body * structureTotalReturn(psStruct)) / structureBody(psStruct);
-	addPower(psDroid->player, valueBefore - valueAfter);
+	valueBefore = (body * structureTotalReturn(psStruct)) / structureBody(psStruct);
+	body += demolishFraction*structureBody(psStruct);
+	body = MAX(0, body);
+	body = MIN(body, structureBody(psStruct));
+	valueAfter  = (body * structureTotalReturn(psStruct)) / structureBody(psStruct);
+	powerNeeded = valueAfter - valueBefore;
+	if (powerNeeded > 0)
+	{
+		if (!usePower(psDroid->player, powerNeeded))
+		{
+			return;
+		}
+	}
+	else
+	{
+		addPower(psDroid->player, -powerNeeded);
+	}
+	psStruct->body = body;
 
 	if (psStruct->body == 0)
 	{
