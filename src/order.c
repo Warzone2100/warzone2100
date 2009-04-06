@@ -248,6 +248,7 @@ BASE_OBJECT * checkForDamagedStruct(DROID *psDroid, STRUCTURE *psTarget)
 		//check for damage
 		if (psCurr->status == SS_BUILT &&
 		    structIsDamaged(psCurr) &&
+		    !checkDroidsDemolishing(psCurr) &&
 			visibleObject((BASE_OBJECT *)psDroid, (BASE_OBJECT *)psCurr, false))
 		{
 			//check for within range
