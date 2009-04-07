@@ -2115,8 +2115,8 @@ void	renderStructure(STRUCTURE *psStructure)
 			}
 			else
 			{
-				pieFlag = 0;
-				pieFlagData = 0;
+				pieFlag = pie_TRANSLUCENT;
+				pieFlagData = 255;
 			}
 			pie_Draw3DShape(psStructure->pStructureType->pBaseIMD, 0, 0, buildingBrightness, WZCOL_BLACK, pieFlag, pieFlagData);
 		}
