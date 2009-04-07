@@ -219,5 +219,5 @@ class line_socket:
 def swap_endianness(i):
     return struct.unpack(">I", struct.pack("<I", i))
 
-if __name__ = "__main__":
+if __name__ == "__main__":
     main()
