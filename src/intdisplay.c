@@ -159,7 +159,7 @@ void intUpdateProgressBar(WIDGET *psWidget, W_CONTEXT *psContext)
 	FACTORY				*Manufacture;
 	RESEARCH_FACILITY	*Research;
 	PLAYER_RESEARCH		*pPlayerRes;
-	UDWORD				BuildPoints,Range, BuildPower;
+	UDWORD				BuildPoints,Range;
 	W_BARGRAPH			*BarGraph = (W_BARGRAPH*)psWidget;
 
 	psObj = (BASE_OBJECT*)BarGraph->pUserData;	// Get the object associated with this widget.
@@ -188,29 +188,14 @@ void intUpdateProgressBar(WIDGET *psWidget, W_CONTEXT *psContext)
 
 				if (Structure)
 				{
-					//check if have all the power to build yet
-					BuildPower = structPowerToBuild(Structure);
-					if (Structure->currentPowerAccrued < (SWORD)BuildPower)
-					{
-						//if not started building show how much power accrued
-						//Range = Structure->pStructureType->powerToBuild;
-						Range = BuildPower;
-						BuildPoints = Structure->currentPowerAccrued;
-						//set the colour of the bar to green
-						BarGraph->majorCol = WZCOL_GREEN;
-						//and change the tool tip
-						widgSetTipText((WIDGET*)BarGraph, _("Power Accrued"));
-					}
-					else
-					{
-						//show progress of build
-						Range =  Structure->pStructureType->buildPoints;	// And how long it takes to build.
-						BuildPoints = Structure->currentBuildPts;			// How near to completion.
-						//set the colour of the bar to yellow
-						BarGraph->majorCol = WZCOL_YELLOW;
-						//and change the tool tip
-						widgSetTipText((WIDGET*)BarGraph, _("Progress Bar"));
-					}
+					//show progress of build
+					Range =  Structure->pStructureType->buildPoints;	// And how long it takes to build.
+					BuildPoints = Structure->currentBuildPts;			// How near to completion.
+					//set the colour of the bar to yellow
+					BarGraph->majorCol = WZCOL_YELLOW;
+					//and change the tool tip
+					widgSetTipText((WIDGET*)BarGraph, _("Build Progress"));
+
 					if (BuildPoints > Range)
 					{
 						BuildPoints = Range;
