@@ -29,6 +29,7 @@ import socket
 import struct
 import threading
 import time
+from client import *
 
 irc_server  = "irc.freenode.net"
 irc_port    = 6667
@@ -106,52 +107,6 @@ class change_notifier(threading.Thread):
                 self.games = new_game_dict
             time.sleep(10)
 
-class masterserver_connection:
-    host = None
-    port = None
-
-    def __init__(self, host, port):
-        self.host = host
-        self.port = port
-
-    def list(self):
-        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        s.connect( (self.host, self.port) )
-
-        self.send(s, "list")
-        (count,) = self.recv(s, "!I")
-        games = []
-        for i in xrange(0,count):
-            (description, size, flags, host, maxPlayers, currentPlayers,
-            user1, user2, user3, user4 ) = self.recv(s, "!64sII16sIIIIII")
-            description = description.strip("\0")
-            host = host.strip("\0")
-            if maxPlayers > 100:
-                maxPlayers = swap_endianness(maxPlayers)
-                currentPlayers = swap_endianness(currentPlayers)
-            g = game(description, host, maxPlayers, currentPlayers)
-            games.append(g)
-
-        s.close()
-        return games
-
-    def send(self, s, command):
-        s.send(command)
-        s.send("\0")
-
-    def recv(self, s, format):
-        data = struct.Struct(format)
-        return data.unpack(s.recv(data.size))
-
-class game:
-    announce = True
-
-    def __init__(self, description, host, maxPlayers, currentPlayers):
-        self.description = description
-        self.host = host
-        self.maxPlayers = maxPlayers
-        self.currentPlayers = currentPlayers
-
 class bot_connection:
     nick = None
     connection = None
@@ -215,9 +170,6 @@ class line_socket:
         self.s.send(line);
         self.s.send("\r\n");
 
-
-def swap_endianness(i):
-    return struct.unpack(">I", struct.pack("<I", i))
 
 if __name__ == "__main__":
     main()
