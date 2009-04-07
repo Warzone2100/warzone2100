@@ -57,7 +57,7 @@ def main():
                     message = "1 game hosted: "
                 else:
                     message = "%i games hosted: " % (len(games))
-                l = [str(g) for g in games]
+                l = ["\x02%s\x02 [%i/%i]" % (g.description, g.currentPlayers, g.maxPlayers) for g in games]
                 message += ", ".join(l)
                 irc.write(message)
         # TODO: if message.startswith("show") # join a game and show information about it
@@ -151,9 +151,6 @@ class game:
         self.host = host
         self.maxPlayers = maxPlayers
         self.currentPlayers = currentPlayers
-
-    def __repr__(self):
-        return "\x02%s\x02 [%i/%i]" % (self.description, self.currentPlayers, self.maxPlayers)
 
 class bot_connection:
     nick = None
