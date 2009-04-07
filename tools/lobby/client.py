@@ -59,6 +59,8 @@ class masterserver_connection:
                 user1, user2, user3, user4 ) = self._recv(s, "!64sII16sIIIIII")
                 description = description.strip("\0")
                 host = host.strip("\0")
+                # Workaround for the fact that some of the
+                # 2.0.x versions don't perform endian swapping
                 if maxPlayers > 100:
                     maxPlayers = _swap_endianness(maxPlayers)
                     currentPlayers = _swap_endianness(currentPlayers)
