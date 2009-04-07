@@ -25,6 +25,7 @@ __author__  = "Warzone Resurrection Project"
 __version__ = "0.0.1"
 __license__ = "GPL"
 
+import re
 import socket
 import struct
 import threading
@@ -127,6 +128,7 @@ class bot_connection:
 class irc_connection:
     s = None
     channel = None
+    channel_message = re.compile(r'^:(?P<nick>[^!]+)\S*\s+PRIVMSG (?P<channel>#[^:]+) :(?P<message>.*)$')
 
     def __init__(self, server, port, channel, nick):
         self.s = line_socket(server, port)
@@ -138,9 +140,12 @@ class irc_connection:
     def read(self):
         while True:
             line = self.s.read()
-            parts = line.split("PRIVMSG "+self.channel+" :")
-            if len(parts) > 1:
-                return parts[1]
+
+            m = self.channel_message.match(line)
+            if m:
+                message = m.group('message')
+                if m.group('channel') == self.channel:
+                    return message
 
     def write(self, line):
         self.s.write("PRIVMSG "+self.channel+" :"+line)
