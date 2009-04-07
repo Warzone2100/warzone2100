@@ -21,6 +21,7 @@
    * Fix: --nosound works correctly with videos now.
  * Gameplay:
    * New: Make repair facilities that are close to each other share the workload if one is overloaded and others are out of work.
+   * New: Add radar detector turret. It will detect and target enemy sensors up to twice their range (r6955, ticket:340)
    * Change: Allow VTOLs to uncover fog of war and land-move to unseen areas in distance fog mode.
    * Change: Remove limitation that VTOLs cannot pass over tall cliffs, and allow that VTOLs to fly over anything to rearm.
    * Fix: Restrict direct fire to weapons range only instead of minimum of sensor range and weapon range.
