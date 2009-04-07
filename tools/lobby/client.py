@@ -78,6 +78,8 @@ class masterserver_connection:
         return data.unpack(s.recv(data.size))
 
 class game:
+    announce = True
+
     def __init__(self, description, host, maxPlayers, currentPlayers):
         self.description = description
         self.host = host
