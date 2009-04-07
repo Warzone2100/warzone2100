@@ -33,7 +33,7 @@ from client import *
 
 irc_server  = "irc.freenode.net"
 irc_port    = 6667
-irc_channel = "#warzone2100"
+irc_channel = "#warzone2100-games"
 irc_nick    = "wzlobbybot"
 
 def main():
@@ -132,7 +132,7 @@ class irc_connection:
         self.s = line_socket(server, port)
         self.channel = channel
         self.s.write("NICK "+nick)
-        self.s.write("USER "+nick+" 0 * :Lobby Bot")
+        self.s.write("USER %s 0 * :Warzone 2100 Lobby Bot ( http://wz2100.net/ )" % (nick))
         self.s.write("JOIN "+channel)
 
     def read(self):
