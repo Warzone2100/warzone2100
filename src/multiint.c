@@ -1705,7 +1705,6 @@ static void stopJoining(void)
 			NETclose();										// quit running game.
 			bHosted = false;								// stop host mode.
 			widgDelete(psWScreen,FRONTEND_BACKDROP);		// refresh options screen.
-//			startMultiOptions(false);
 			startMultiOptions(true);
 			ingame.localJoiningInProgress = false;
 			return;
@@ -2590,6 +2589,7 @@ void initTeams()
 	}
 
 }
+
 BOOL startMultiOptions(BOOL bReenter)
 {
 	PLAYERSTATS		nullStats;
