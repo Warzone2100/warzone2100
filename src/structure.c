@@ -1256,11 +1256,11 @@ void structureRepair(STRUCTURE *psStruct, DROID *psDroid, int buildPoints)
 	int powerNeeded;
 	int body = psStruct->body;
 
-	valueBefore = (body * structureTotalReturn(psStruct)) / structureBody(psStruct);
+	valueBefore = (MAX(body, structureBody(psStruct)/10) / 0.9 * structureTotalReturn(psStruct)) / structureBody(psStruct);
 	body += demolishFraction*structureBody(psStruct);
 	body = MAX(0, body);
 	body = MIN(body, structureBody(psStruct));
-	valueAfter  = (body * structureTotalReturn(psStruct)) / structureBody(psStruct);
+	valueAfter  = (MAX(body, structureBody(psStruct)/10) / 0.9 * structureTotalReturn(psStruct)) / structureBody(psStruct);
 	powerNeeded = valueAfter - valueBefore;
 	if (powerNeeded > 0)
 	{
