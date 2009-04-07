@@ -117,10 +117,7 @@ class bot_connection:
         self.nick = nick
 
     def read(self):
-        while True:
-            line = self.connection.read()
-            if line.find(self.nick) >= 0:
-                return line.replace(self.nick, "").strip(" \t,:.?!")
+        return self.connection.read()
 
     def write(self, line):
         self.connection.write(line)
@@ -128,7 +125,6 @@ class bot_connection:
 class irc_connection:
     s = None
     channel = None
-    channel_message = re.compile(r'^:(?P<nick>[^!]+)\S*\s+PRIVMSG (?P<channel>#[^:]+) :(?P<message>.*)$')
 
     def __init__(self, server, port, channel, nick):
         self.s = line_socket(server, port)
@@ -137,11 +133,13 @@ class irc_connection:
         self.s.write("USER %s 0 * :Warzone 2100 Lobby Bot ( http://wz2100.net/ )" % (nick))
         self.s.write("JOIN "+channel)
 
+        self.private_channel_message = re.compile(r'^:(?P<nick>[^!]+)\S*\s+PRIVMSG (?P<channel>#[^:]+) :[ \t,:.?!]*%s[ \t,:.?!]*(?P<message>.*?)[ \t,:.?!]*$' % (nick))
+
     def read(self):
         while True:
             line = self.s.read()
 
-            m = self.channel_message.match(line)
+            m = self.private_channel_message.match(line)
             if m:
                 message = m.group('message')
                 if m.group('channel') == self.channel:
