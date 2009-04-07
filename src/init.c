@@ -281,6 +281,10 @@ BOOL rebuildSearchPath( searchPathMode mode, BOOL force )
 					sstrcat(tmpstr, "base.wz");
 					PHYSFS_removeFromSearchPath( tmpstr );
 
+					// remove video search path as well
+					sstrcpy(tmpstr, curSearchPath->path);
+					sstrcat(tmpstr, "sequences.wz");
+					PHYSFS_removeFromSearchPath( tmpstr );
 					curSearchPath = curSearchPath->higherPriority;
 				}
 				break;
@@ -313,6 +317,11 @@ BOOL rebuildSearchPath( searchPathMode mode, BOOL force )
 					PHYSFS_addToSearchPath( tmpstr, PHYSFS_APPEND );
 					sstrcpy(tmpstr, curSearchPath->path);
 					sstrcat(tmpstr, "base.wz");
+					PHYSFS_addToSearchPath( tmpstr, PHYSFS_APPEND );
+
+					// add the video file
+					sstrcpy(tmpstr, curSearchPath->path);
+					sstrcat(tmpstr, "sequences.wz");
 					PHYSFS_addToSearchPath( tmpstr, PHYSFS_APPEND );
 
 					curSearchPath = curSearchPath->higherPriority;
@@ -352,6 +361,11 @@ BOOL rebuildSearchPath( searchPathMode mode, BOOL force )
 					PHYSFS_addToSearchPath( tmpstr, PHYSFS_APPEND );
 					sstrcpy(tmpstr, curSearchPath->path);
 					sstrcat(tmpstr, "base.wz");
+					PHYSFS_addToSearchPath( tmpstr, PHYSFS_APPEND );
+
+					// add the video file
+					sstrcpy(tmpstr, curSearchPath->path);
+					sstrcat(tmpstr, "sequences.wz");
 					PHYSFS_addToSearchPath( tmpstr, PHYSFS_APPEND );
 
 					curSearchPath = curSearchPath->higherPriority;
