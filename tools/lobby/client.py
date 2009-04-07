@@ -28,6 +28,14 @@ import struct
 
 __all__ = ['masterserver_connection', 'game']
 
+@contextmanager
+def _socket(family = socket.AF_INET, type = socket.SOCK_STREAM, proto = 0):
+    s = socket.socket(family, type, proto)
+    try:
+        yield s
+    finally:
+        s.close()
+
 def _swap_endianness(i):
     return struct.unpack(">I", struct.pack("<I", i))
 
@@ -40,25 +48,24 @@ class masterserver_connection:
         self.port = port
 
     def list(self):
-        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        s.connect( (self.host, self.port) )
+        with _socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+            s.connect( (self.host, self.port) )
 
-        self._send(s, "list")
-        (count,) = self._recv(s, "!I")
-        games = []
-        for i in xrange(0,count):
-            (description, size, flags, host, maxPlayers, currentPlayers,
-            user1, user2, user3, user4 ) = self._recv(s, "!64sII16sIIIIII")
-            description = description.strip("\0")
-            host = host.strip("\0")
-            if maxPlayers > 100:
-                maxPlayers = _swap_endianness(maxPlayers)
-                currentPlayers = _swap_endianness(currentPlayers)
-            g = game(description, host, maxPlayers, currentPlayers)
-            games.append(g)
+            self._send(s, "list")
+            (count,) = self._recv(s, "!I")
+            games = []
+            for i in xrange(0,count):
+                (description, size, flags, host, maxPlayers, currentPlayers,
+                user1, user2, user3, user4 ) = self._recv(s, "!64sII16sIIIIII")
+                description = description.strip("\0")
+                host = host.strip("\0")
+                if maxPlayers > 100:
+                    maxPlayers = _swap_endianness(maxPlayers)
+                    currentPlayers = _swap_endianness(currentPlayers)
+                g = game(description, host, maxPlayers, currentPlayers)
+                games.append(g)
 
-        s.close()
-        return games
+            return games
 
     def _send(self, s, command):
         s.send(command)
