@@ -55,5 +55,8 @@ void widgetSDLQuit()
 	
 	// Release any cached SVG images
 	svgManagerQuit();
+	
+	// Release all patterns
+	patternManagerQuit();
 }
 
