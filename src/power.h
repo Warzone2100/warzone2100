@@ -39,7 +39,6 @@
 typedef struct _player_power
 {
 	float currentPower;         ///< The current amount of power avaialble to the player.
-	float extractedPower;       ///< The power extracted but not converted.
 	float powerProduced;        ///< Power produced
 	float powerRequested;       ///< Power requested
 	float economyThrottle;      ///< Which percentage of the requested power is actually delivered
@@ -64,7 +63,6 @@ extern float requestPower(int player, float amount);
 extern int requestPowerFor(int player, float amount, int points);
 
 extern void addPower(int player, float quantity);
-extern void addExtractedPower(int player, float quantity);
 
 BOOL checkPower(int player, float quantity);
 void usePower(int player, float quantity);
@@ -74,7 +72,6 @@ extern void updatePlayerPower(UDWORD player);
 
 /** Used in multiplayer to force power levels. */
 extern void setPower(int player, float power);
-extern void setExtractedPower(int player, float power);
 
 /** Get the amount of power current held by the given player. */
 extern float getPower(int player);
@@ -103,6 +100,6 @@ extern BOOL droidUsesPower(DROID *psDroid);
 /** Flag used to check for power calculations to be done or not. */
 extern	BOOL			powerCalculated;
 
-extern void updatePowerSystem(void);
+extern void throttleEconomy(void);
 
 #endif // __INCLUDED_SRC_POWER_H__

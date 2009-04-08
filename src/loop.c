@@ -269,7 +269,7 @@ GAMECODE gameLoop(void)
 
 			fireWaitingCallbacks(); //Now is the good time to fire waiting callbacks (since interpreter is off now)
 
-			updatePowerSystem();
+			throttleEconomy();
 
 			for(i = 0; i < MAX_PLAYERS; i++)
 			{

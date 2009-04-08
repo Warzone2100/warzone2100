@@ -58,7 +58,6 @@ static void updateCurrentPower(POWER_GEN *psPowerGen, UDWORD player);
 /** Each Resource Extractor yields EXTRACT_POINTS per second until there are none left in the resource. */
 static float updateExtractedPower(STRUCTURE *psBuilding);
 
-
 //returns the relevant list based on OffWorld or OnWorld
 static STRUCTURE* powerStructList(UBYTE player);
 
@@ -80,7 +79,6 @@ void clearPlayerPower(void)
 	for (player = 0; player < MAX_PLAYERS; player++)
 	{
 		asPower[player].currentPower = 0;
-		asPower[player].extractedPower = 0;
 		asPower[player].powerProduced = 0;
 		asPower[player].powerRequested = 0;
 		asPower[player].economyThrottle = 1;
@@ -88,7 +86,7 @@ void clearPlayerPower(void)
 	nextPowerSystemUpdate = 0;
 }
 
-void updatePowerSystem(void)
+void throttleEconomy(void)
 {
 	int player;
 	float newThrottle;
@@ -163,14 +161,6 @@ void addPower(int player, float quantity)
 
 	asPower[player].currentPower += quantity;
 }
-
-void addExtractedPower(int player, float quantity)
-{
-	ASSERT(player < MAX_PLAYERS, "addPower: Bad player (%u)", player);
-
-	asPower[player].extractedPower += quantity;
-}
-
 
 /*resets the power calc flag for all players*/
 void powerCalc(BOOL on)
@@ -294,25 +284,11 @@ void setPower(int player, float power)
 	asPower[player].currentPower = power;
 }
 
-void setExtractedPower(int player, float power)
-{
-	ASSERT(player < MAX_PLAYERS, "setPower: Bad player (%u)", player);
-
-	asPower[player].extractedPower = power;
-}
-
 float getPower(int player)
 {
 	ASSERT(player < MAX_PLAYERS, "setPower: Bad player (%u)", player);
 
 	return asPower[player].currentPower;
-}
-
-float getExtractedPower(int player)
-{
-	ASSERT(player < MAX_PLAYERS, "setPower: Bad player (%u)", player);
-
-	return asPower[player].extractedPower;
 }
 
 /*Temp function to give all players some power when a new game has been loaded*/

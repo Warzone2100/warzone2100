@@ -332,7 +332,7 @@ typedef struct _save_weapon
 typedef struct _savePower
 {
 	uint32_t    currentPower;
-	uint32_t    extractedPower;
+	uint32_t    extractedPower; // UNUSED
 } SAVE_POWER;
 
 static bool serializeSavePowerData(PHYSFS_file* fileHandle, const SAVE_POWER* serializePower)
@@ -4752,7 +4752,6 @@ bool gameLoadV(PHYSFS_file* fileHandle, unsigned int version)
             if (gameType == GTYPE_SAVE_MIDMISSION || i == selectedPlayer)
             {
 				setPower(i, powerSaved[i].currentPower);
-				setExtractedPower(i, powerSaved[i].currentPower);
             }
 	    }
     }
@@ -4837,7 +4836,7 @@ static bool writeGameFile(const char* fileName, SDWORD saveType)
 	for (i = 0; i < MAX_PLAYERS; ++i)
 	{
 		saveGame.power[i].currentPower = getPower(i);
-		saveGame.power[i].extractedPower = getExtractedPower(i);
+		saveGame.power[i].extractedPower = 0; // UNUSED
 	}
 
 	//camera position
