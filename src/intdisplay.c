@@ -219,38 +219,14 @@ void intUpdateProgressBar(WIDGET *psWidget, W_CONTEXT *psContext)
 
 			if(StructureIsManufacturing(Structure)) {			// Is it manufacturing.
 				Manufacture = StructureGetFactory(Structure);
-				//check started to build
-				if (Manufacture->timeStarted == ACTION_START_TIME)
-				{
-					//BuildPoints = 0;
-					//if not started building show how much power accrued
-					Range = ((DROID_TEMPLATE *)Manufacture->psSubject)->powerPoints;
-					BuildPoints = Manufacture->powerAccrued;
-					//set the colour of the bar to green
-					BarGraph->majorCol = WZCOL_GREEN;
-					//and change the tool tip
-					widgSetTipText((WIDGET*)BarGraph, _("Power Accrued"));
-				}
-				else
-				{
-					Range = Manufacture->timeToBuild;
-					//set the colour of the bar to yellow
-					BarGraph->majorCol = WZCOL_YELLOW;
-					//and change the tool tip
-					widgSetTipText((WIDGET*)BarGraph, _("Progress Bar"));
-					//if on hold need to take it into account
-					if (Manufacture->timeStartHold)
-					{
-						BuildPoints = (gameTime - (Manufacture->timeStarted + (
-							gameTime - Manufacture->timeStartHold))) /
-							GAME_TICKS_PER_SEC;
-					}
-					else
-					{
-						BuildPoints = (gameTime - Manufacture->timeStarted) /
-							GAME_TICKS_PER_SEC;
-					}
-				}
+
+				Range = ((DROID_TEMPLATE*)Manufacture->psSubject)->buildPoints/(float)Manufacture->productionOutput;
+				BuildPoints = Range - Manufacture->timeToBuild;
+				//set the colour of the bar to yellow
+				BarGraph->majorCol = WZCOL_YELLOW;
+				//and change the tool tip
+				widgSetTipText((WIDGET*)BarGraph, _("Construction Progress"));
+
 				if (BuildPoints > Range)
 				{
 					BuildPoints = Range;
