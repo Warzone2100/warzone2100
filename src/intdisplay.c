@@ -576,19 +576,14 @@ void intDisplayPowerBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DEC
 	SDWORD		x0,y0;
 	SDWORD		Avail,ManPow,realPower;
 	SDWORD		Empty;
-	SDWORD		BarWidth, textWidth = 0;
-	SDWORD		iX,iY;
-	static char		szVal[8];
+	SDWORD		BarWidth;
+	static char string[20];
 
 	ManPow = ManuPower / POWERBAR_SCALE;
 	Avail = getPower(selectedPlayer) / POWERBAR_SCALE;
 	realPower = getPower(selectedPlayer) - ManuPower;
 
 	BarWidth = BarGraph->width;
-	iV_SetFont(font_regular);
-	sprintf( szVal, "%d", realPower );
-	textWidth = iV_GetTextWidth( szVal );
-	BarWidth -= textWidth;
 
 	if (ManPow > Avail)
 	{
@@ -619,22 +614,29 @@ void intDisplayPowerBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DEC
 	pie_SetDepthBufferStatus(DEPTH_CMP_ALWAYS_WRT_ON);
 	pie_SetFogStatus(false);
 
+	iV_SetFont(font_regular);
+
+	// display the amount of power
+	sprintf( string, "Power: %5d", realPower );
+	iV_SetTextColour(WZCOL_TEXT_BRIGHT);
+	iV_DrawText( string, x0 + 3, y0+22 );
+
+	sprintf( string, "+%.0f", getPowerProducedLastSecond(selectedPlayer) );
+	iV_SetTextColour(WZCOL_TEXT_BRIGHT);
+	iV_DrawText( string, x0 + 105, y0+22 );
+
+	sprintf( string, "-%.0f", getPowerRequestedLastSecond(selectedPlayer) );
+	iV_SetTextColour(WZCOL_TEXT_BRIGHT);
+	iV_DrawText( string, x0 + 135, y0+22 );
+	
+	// display the efficiency the economy is running at
+	sprintf( string, "Efficiency: %3d%%", (int)(getEconomyThrottle(selectedPlayer)*100) );
+	iV_SetTextColour(WZCOL_TEXT_BRIGHT);
+	iV_DrawText( string, x0 + 197, y0+22 );
 
 	iV_DrawImage(IntImages,IMAGE_PBAR_TOP,x0,y0);
 
-	iX = x0 + 3;
-	iY = y0 + 9;
-
 	x0 += iV_GetImageWidth(IntImages,IMAGE_PBAR_TOP);
-
-	//fill in the empty section behind text
-	if(textWidth > 0)
-	{
-		iV_DrawImageRect(IntImages,IMAGE_PBAR_EMPTY,
-							x0,y0,
-							textWidth, iV_GetImageHeight(IntImages,IMAGE_PBAR_EMPTY));
-		x0 += textWidth;
-	}
 
 	//draw required section
 	if (ManPow > Avail)
@@ -673,10 +675,6 @@ void intDisplayPowerBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DEC
 	}
 
 	iV_DrawImage(IntImages,IMAGE_PBAR_BOTTOM,x0,y0);
-
-	/* draw text value */
-	iV_SetTextColour(WZCOL_TEXT_BRIGHT);
-	iV_DrawText( szVal, iX, iY );
 }
 
 

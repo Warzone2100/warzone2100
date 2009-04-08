@@ -51,7 +51,7 @@
 
 //flag used to check for power calculations to be done or not
 BOOL	powerCalculated;
-UDWORD nextPowerSystemUpdate;
+UDWORD lastPowerSystemUpdate;
 
 /* Updates the current power based on the extracted power and a Power Generator*/
 static void updateCurrentPower(POWER_GEN *psPowerGen, UDWORD player);
@@ -82,20 +82,23 @@ void clearPlayerPower(void)
 		asPower[player].powerProduced = 0;
 		asPower[player].powerRequested = 0;
 		asPower[player].economyThrottle = 1;
+		asPower[player].powerProducedLastSecond = 0;
+		asPower[player].powerRequestedLastSecond = 0;
 	}
-	nextPowerSystemUpdate = 0;
+	lastPowerSystemUpdate = 0;
 }
 
 void throttleEconomy(void)
 {
 	int player;
 	float newThrottle;
+	int elapsed = gameTime - lastPowerSystemUpdate;
 
-	if (gameTime < nextPowerSystemUpdate)
+	if (elapsed < 1000)
 	{
 		return;
 	}
-	nextPowerSystemUpdate = gameTime + 1000;
+	lastPowerSystemUpdate = gameTime;
 
 	for (player = 0; player < MAX_PLAYERS; player++)
 	{
@@ -120,10 +123,29 @@ void throttleEconomy(void)
 			asPower[player].economyThrottle += 0.02;
 		}
 		CLIP(asPower[player].economyThrottle, 0, 1);
-		debug(LOG_WARNING, "player: %i, power: %f, throttle: %f, produced: %f, requested: %f", player, asPower[player].currentPower, asPower[player].economyThrottle, asPower[player].powerProduced, asPower[player].powerRequested);
+		//debug(LOG_WARNING, "player: %i, power: %f, throttle: %f, produced: %f, requested: %f", player, asPower[player].currentPower, asPower[player].economyThrottle, asPower[player].powerProduced, asPower[player].powerRequested);
+		asPower[player].powerProducedLastSecond *= 0.6;
+		asPower[player].powerRequestedLastSecond *= 0.6;
+		asPower[player].powerProducedLastSecond += 0.4*(asPower[player].powerProduced*elapsed/1000);
+		asPower[player].powerRequestedLastSecond += 0.4*(asPower[player].powerRequested*elapsed/1000);
 		asPower[player].powerProduced = 0;
 		asPower[player].powerRequested = 0;
 	}
+}
+
+float getEconomyThrottle(int player)
+{
+	return asPower[player].economyThrottle;
+}
+
+float getPowerProducedLastSecond(int player)
+{
+	return asPower[player].powerProducedLastSecond;
+}
+
+float getPowerRequestedLastSecond(int player)
+{
+	return asPower[player].powerRequestedLastSecond;
 }
 
 /*Free the space used for playerPower */
