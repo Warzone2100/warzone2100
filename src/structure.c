@@ -2814,6 +2814,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 	DROID_TEMPLATE		*psNextTemplate;
 #endif
 	UDWORD				i;
+	float secondsElapsed,secondsToBuild, powerNeeded;
 
 	CHECK_STRUCTURE(psStructure);
 
@@ -3265,14 +3266,6 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 				}
 			}
 
-			//check enough power has accrued to build the droid
-			if (psFactory->powerAccrued < ((DROID_TEMPLATE *)pSubject)->
-					powerPoints)
-			{
-				//wait until enough power
-				return;
-			}
-
 			/*must be enough power so subtract that required to build*/
 			if (psFactory->timeStarted == ACTION_START_TIME)
 			{
@@ -3280,10 +3273,25 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 				psFactory->timeStarted = gameTime;
 			}
 
-			pointsToAdd = (gameTime - psFactory->timeStarted) / GAME_TICKS_PER_SEC;
+			if (psFactory->timeToBuild > 0)
+			{
+				int progress;
+				secondsElapsed = (gameTime - psFactory->timeStarted) / (float)GAME_TICKS_PER_SEC;
+				secondsToBuild = ((DROID_TEMPLATE*)pSubject)->buildPoints/(float)psFactory->productionOutput;
+				powerNeeded = ((DROID_TEMPLATE *)pSubject)->powerPoints*(secondsElapsed/secondsToBuild);
+				if (secondsElapsed > 1)
+				{
+					progress = requestPowerFor(psStructure->player, powerNeeded, secondsElapsed);
+					if (progress > 0)
+					{
+						psFactory->timeToBuild -= progress;
+						psFactory->timeStarted = gameTime;
+					}
+				}
+			}
 
 			//check for manufacture to be complete
-			if ((pointsToAdd > psFactory->timeToBuild) &&
+			if ((psFactory->timeToBuild <= 0) &&
 				!IsFactoryCommanderGroupFull(psFactory) &&
 				!CheckHaltOnMaxUnitsReached(psStructure))
 			{
@@ -3292,7 +3300,6 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 
 				//reset the start time
 				psFactory->timeStarted = ACTION_START_TIME;
-				psFactory->powerAccrued = 0;
 
 #ifdef INCLUDE_FACTORYLISTS
 				//next bit for productionPlayer only
@@ -6620,11 +6627,7 @@ void cancelProduction(STRUCTURE *psBuilding)
 		memset(asProductionRun[psFactory->psAssemblyPoint->factoryType][
 			psFactory->psAssemblyPoint->factoryInc], 0, sizeof(PRODUCTION_RUN) *
 			MAX_PROD_RUN);
-		//return any accrued power
-		if (psFactory->powerAccrued)
-		{
-			addPower(psBuilding->player, psFactory->powerAccrued);
-		}
+		// FIXME: give any power back that was not yet used
 		//clear the factories subject and quantity
 		psFactory->psSubject = NULL;
 		psFactory->quantity = 0;
@@ -6787,9 +6790,7 @@ void factoryProdAdjust(STRUCTURE *psStructure, DROID_TEMPLATE *psTemplate, BOOL 
 					//add power back if we were working on this one
 					if (psFactory->psSubject == (BASE_STATS *)psTemplate)
 					{
-						addPower(psStructure->player, psFactory->powerAccrued);
-						//set the factory's power accrued back to zero
-						psFactory->powerAccrued = 0;
+						// FIXME: give power back
 					}
 				}
 			}
@@ -6805,9 +6806,7 @@ void factoryProdAdjust(STRUCTURE *psStructure, DROID_TEMPLATE *psTemplate, BOOL 
 					//add power back if we were working on this one
 					if (psFactory->psSubject == (BASE_STATS *)psTemplate)
 					{
-						addPower(psStructure->player, psFactory->powerAccrued);
-						//set the factory's power accrued back to zero
-						psFactory->powerAccrued = 0;
+						// FIXME: give power back
 					}
 
 					if (asProductionRun[factoryType][factoryInc][inc].quantity == 0)

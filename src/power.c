@@ -305,7 +305,6 @@ void newGameInitPower(void)
 /*accrue the power in the facilities that require it - returns true if use some power*/
 BOOL accruePower(BASE_OBJECT *psObject)
 {
-	FACTORY					*psFactory;
 	RESEARCH_FACILITY		*psResearch;
 	SDWORD					powerDiff;
 	UDWORD					count;
@@ -319,30 +318,6 @@ BOOL accruePower(BASE_OBJECT *psObject)
 		// See if it needs power
 		switch(psStructure->pStructureType->type)
 		{
-		case REF_FACTORY:
-		case REF_CYBORG_FACTORY:
-		case REF_VTOL_FACTORY:
-			psFactory = (FACTORY *)psStructure->pFunctionality;
-			// Check the factory is not on hold
-			if (psFactory->timeStartHold)
-			{
-				break;
-			}
-			// Check the factory is active
-			if (psFactory->psSubject)
-			{
-			    //check needs power
-			    powerDiff = ((DROID_TEMPLATE *)psFactory->psSubject)->powerPoints -
-				    psFactory->powerAccrued;
-				CLIP(powerDiff, 0, POWER_PER_CYCLE);
-			    //if equal then don't need power
-			    if (powerDiff > 0)
-			    {
-					psFactory->powerAccrued += requestPower(psStructure->player, powerDiff);
-					bPowerUsed = true;
-			    }
-    		}
-	    	break;
 	    case REF_RESEARCH:
 		    //check the structure is active
 		    psResearch = (RESEARCH_FACILITY  *)psStructure->pFunctionality;
