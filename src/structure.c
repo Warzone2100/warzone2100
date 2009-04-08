@@ -185,7 +185,7 @@ static void	structUpdateRecoil( STRUCTURE *psStruct );
 static void resetResistanceLag(STRUCTURE *psBuilding);
 static void revealAll(UBYTE player);
 static void cbNewDroid(STRUCTURE *psFactory, DROID *psDroid);
-
+static int structureTotalReturn(STRUCTURE *psStruct);
 
 // last time the maximum units message was displayed
 static UDWORD	lastMaxUnitMessage;
@@ -1139,25 +1139,38 @@ float getStructureDamage(const STRUCTURE* psStructure)
 }
 
 /// Add buildPoints to the structures currentBuildPts, due to construction work by the droid
+/// Also can deconstruct (demolish) a building if passed negative buildpoints
 void structureBuild(STRUCTURE *psStruct, DROID *psDroid, int buildPoints)
 {
 	int before, after;
 	int powerNeeded;
 	int buildPointsToAdd;
 
-	// Check if there is enough power to perform this construction work
-	powerNeeded = ((psStruct->currentBuildPts + buildPoints) * structPowerToBuild(psStruct))/psStruct->pStructureType->buildPoints -
-	              (psStruct->currentBuildPts * structPowerToBuild(psStruct))/psStruct->pStructureType->buildPoints;
 
-	buildPointsToAdd = requestPowerFor(psDroid->player, powerNeeded, buildPoints);
+	if (buildPoints > 0)
+	{
+		// Check if there is enough power to perform this construction work
+		powerNeeded = ((psStruct->currentBuildPts + buildPoints) * structPowerToBuild(psStruct))/psStruct->pStructureType->buildPoints -
+		               (psStruct->currentBuildPts * structPowerToBuild(psStruct))/psStruct->pStructureType->buildPoints;
+		buildPointsToAdd = requestPowerFor(psDroid->player, powerNeeded, buildPoints);
+	}
+	else
+	{
+		// get half the power back for repairing 
+		powerNeeded = ((psStruct->currentBuildPts + buildPoints) * structureTotalReturn(psStruct))/(psStruct->pStructureType->buildPoints) -
+		               (psStruct->currentBuildPts * structureTotalReturn(psStruct))/(psStruct->pStructureType->buildPoints);
+		buildPointsToAdd = buildPoints;
+		addPower(psDroid->player, -powerNeeded);
+	}
 
 	before = (9 * psStruct->currentBuildPts * structureBody(psStruct) ) / (10 * psStruct->pStructureType->buildPoints);
 	psStruct->currentBuildPts += buildPointsToAdd;
+	CLIP(psStruct->currentBuildPts, 0, psStruct->pStructureType->buildPoints);
 	after =  (9 * psStruct->currentBuildPts * structureBody(psStruct) ) / (10 * psStruct->pStructureType->buildPoints);
 	psStruct->body += after - before;
 
 	//check if structure is built
-	if (psStruct->currentBuildPts >= (SDWORD)psStruct->pStructureType->buildPoints)
+	if (buildPoints > 0 && psStruct->currentBuildPts >= (SDWORD)psStruct->pStructureType->buildPoints)
 	{
 		psStruct->currentBuildPts = (SWORD)psStruct->pStructureType->buildPoints;
 		psStruct->status = SS_BUILT;
@@ -1196,6 +1209,14 @@ void structureBuild(STRUCTURE *psStruct, DROID *psDroid, int buildPoints)
 
 		audio_StopObjTrack( psDroid, ID_SOUND_CONSTRUCTION_LOOP );
 
+	}
+	else
+	{
+		psStruct->status = SS_BEING_BUILT;
+	}
+	if (buildPoints < 0 && psStruct->currentBuildPts == 0)
+	{
+		removeStruct(psStruct, true);
 	}
 }
 
@@ -1240,35 +1261,15 @@ static int structureTotalReturn(STRUCTURE *psStruct)
 
 void structureDemolish(STRUCTURE *psStruct, DROID *psDroid, int buildPoints)
 {
-	structureRepair(psStruct, psDroid, -buildPoints);
+	structureBuild(psStruct, psDroid, -buildPoints);
 }
 
-/// Function to trade health against power for a structure
-/// Can be used to repair by passing positive buildPoints and to destroy by a negative ones
 void structureRepair(STRUCTURE *psStruct, DROID *psDroid, int buildPoints)
 {
-	float demolishFraction = buildPoints/(float)psStruct->pStructureType->buildPoints;
-	int valueBefore, valueAfter;
-	int powerNeeded;
-	int body = psStruct->body;
+	float repairFraction = buildPoints/(float)psStruct->pStructureType->buildPoints;
 
-	valueBefore = (MAX(body, structureBody(psStruct)/10) / 0.9 * structureTotalReturn(psStruct)) / structureBody(psStruct);
-	body += demolishFraction*structureBody(psStruct);
-	body = MAX(0, body);
-	body = MIN(body, structureBody(psStruct));
-	valueAfter  = (MAX(body, structureBody(psStruct)/10) / 0.9 * structureTotalReturn(psStruct)) / structureBody(psStruct);
-	powerNeeded = valueAfter - valueBefore;
-	if (powerNeeded > 0)
-	{
-		psStruct->body += requestPowerFor(psDroid->player, powerNeeded, body - psStruct->body);
-	}
-	else
-	{
-		addPower(psDroid->player, -powerNeeded);
-		psStruct->body = body;
-	}
-	
-
+	psStruct->body += repairFraction*structureBody(psStruct);
+	CLIP(psStruct->body, 0, structureBody(psStruct));
 	if (psStruct->body == 0)
 	{
 		removeStruct(psStruct, true);
