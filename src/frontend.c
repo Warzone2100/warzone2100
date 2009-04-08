@@ -975,7 +975,7 @@ BOOL runGameOptions4Menu(void)
 		case FRONTEND_RESOLUTION:
 		case FRONTEND_RESOLUTION_R:
 		{
-			int current, count;
+			int current, count, oldcurrent;
 
 			// Get the current mode offset
 			for (count = 0, current = 0; modes[count]; count++)
@@ -988,8 +988,14 @@ BOOL runGameOptions4Menu(void)
 			}
 
 			// Increment and clip if required
-			if (++current == count)
-				current = 0;
+			// Hide resolutions lower than Warzone can support
+			oldcurrent = current;
+			do
+			{
+				if (++current == count)
+					current = 0;
+			} while (modes[current]->w < 640 &&
+			          modes[current]->h < 400 && current != oldcurrent);
 
 			// Set the new width and height (takes effect on restart)
 			war_SetWidth(modes[current]->w);
