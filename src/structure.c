@@ -3168,14 +3168,6 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 			//check research has not already been completed by another structure
 			if (IsResearchCompleted(pPlayerRes)==0)
 			{
-				//check to see if enough power to research has accrued
-				if (psResFacility->powerAccrued < ((RESEARCH *)pSubject)->researchPower)
-				{
-					//wait until enough power
-					return;
-				}
-
-
 				// don't update if not responsible (106)
 				if(bMultiPlayer && !myResponsibility(psStructure->player))
 				{
@@ -3191,10 +3183,15 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 				pointsToAdd = (psResFacility->researchPoints * (gameTime -
 					psResFacility->timeStarted)) / GAME_TICKS_PER_SEC;
 
-				//check if Research is complete
-				if ((pointsToAdd + pPlayerRes->currentPoints) > (
-					(RESEARCH *)pSubject)->researchPoints)
+				if (pointsToAdd > 0)
+				{
+					float powerNeeded = (((RESEARCH *)pSubject)->researchPower * pointsToAdd) / (float)((RESEARCH *)pSubject)->researchPoints;
+					pPlayerRes->currentPoints += requestPowerFor(psStructure->player, powerNeeded, pointsToAdd);
+					psResFacility->timeStarted = gameTime;
+				}
 
+				//check if Research is complete
+				if (pPlayerRes->currentPoints > ((RESEARCH *)pSubject)->researchPoints)
 				{
 					if(bMultiPlayer)
 					{
