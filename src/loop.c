@@ -269,13 +269,12 @@ GAMECODE gameLoop(void)
 
 			fireWaitingCallbacks(); //Now is the good time to fire waiting callbacks (since interpreter is off now)
 
+			updatePowerSystem();
+
 			for(i = 0; i < MAX_PLAYERS; i++)
 			{
 				//update the current power available for a player
 				updatePlayerPower(i);
-
-				//this is a check cos there is a problem with the power but not sure where!!
-				powerCheck(true, (UBYTE)i);
 
 				//set the flag for each player
 				setHQExists(false, i);
@@ -413,8 +412,6 @@ GAMECODE gameLoop(void)
 						setLasSatExists(true, i);
 					}
 				}
-				//this is a check cos there is a problem with the power but not sure where!!
-				powerCheck(false, (UBYTE)i);
 			}
 
 			missionTimerUpdate();

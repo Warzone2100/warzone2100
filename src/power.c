@@ -51,9 +51,13 @@
 
 //flag used to check for power calculations to be done or not
 BOOL	powerCalculated;
+UDWORD nextPowerSystemUpdate;
 
 /* Updates the current power based on the extracted power and a Power Generator*/
 static void updateCurrentPower(POWER_GEN *psPowerGen, UDWORD player);
+/** Each Resource Extractor yields EXTRACT_POINTS per second until there are none left in the resource. */
+static float updateExtractedPower(STRUCTURE *psBuilding);
+
 
 //returns the relevant list based on OffWorld or OnWorld
 static STRUCTURE* powerStructList(UBYTE player);
@@ -75,7 +79,51 @@ void clearPlayerPower(void)
 
 	for (player = 0; player < MAX_PLAYERS; player++)
 	{
-		memset(&asPower[player], 0, sizeof(PLAYER_POWER));
+		asPower[player].currentPower = 0;
+		asPower[player].extractedPower = 0;
+		asPower[player].powerProduced = 0;
+		asPower[player].powerRequested = 0;
+		asPower[player].economyThrottle = 1;
+	}
+	nextPowerSystemUpdate = 0;
+}
+
+void updatePowerSystem(void)
+{
+	int player;
+	float newThrottle;
+
+	if (gameTime < nextPowerSystemUpdate)
+	{
+		return;
+	}
+	nextPowerSystemUpdate = gameTime + 1000;
+
+	for (player = 0; player < MAX_PLAYERS; player++)
+	{
+		if (asPower[player].currentPower > asPower[player].powerRequested ||
+		    asPower[player].powerRequested <= asPower[player].powerProduced)
+		{
+			// we have enough power
+			newThrottle = 1;
+		}
+		else
+		{
+			newThrottle = asPower[player].powerProduced / asPower[player].powerRequested;
+		}
+		if (newThrottle < asPower[player].economyThrottle)
+		{
+			// quickly slow down
+			asPower[player].economyThrottle = newThrottle;
+		}
+		else
+		{
+			// slowly speed up
+			asPower[player].economyThrottle = 0.1 * newThrottle + 0.9 * asPower[player].economyThrottle;
+		}
+		debug(LOG_WARNING, "player: %i, throttle: %f, produced: %f, requested: %f", player, asPower[player].economyThrottle, asPower[player].powerProduced, asPower[player].powerRequested);
+		asPower[player].powerProduced = 0;
+		asPower[player].powerRequested = 0;
 	}
 }
 
@@ -86,7 +134,7 @@ void releasePlayerPower(void)
 }
 
 /*check the current power - if enough return true, else return false */
-BOOL checkPower(UDWORD player, UDWORD quantity)
+BOOL checkPower(int player, float quantity)
 {
 	ASSERT(player < MAX_PLAYERS, "checkPower: Bad player");
 
@@ -103,42 +151,26 @@ BOOL checkPower(UDWORD player, UDWORD quantity)
 	return false;
 }
 
-/*check the current power - if enough subtracts the amount
- required to perform the task and returns true, else returns
- false */
-BOOL usePower(UDWORD player, UDWORD quantity)
+void usePower(int player, float quantity)
 {
-	ASSERT(player < MAX_PLAYERS, "usePower: Bad player");
-
-	//if not doing a check on the power - just return true
-	if (!powerCalculated)
-	{
-		return true;
-	}
-
-	//check there is enough first
-	if (asPower[player].currentPower >= quantity)
-	{
-		asPower[player].currentPower -= quantity;
-		return true;
-	}
-	else if (player == selectedPlayer)
-	{
-		if(titleMode == FORCESELECT) //|| (titleMode == DESIGNSCREEN))
-		{
-			return false;
-		}
-	}
-	return false;
+	ASSERT(asPower[player].currentPower >= quantity, "not enough power");
+	asPower[player].currentPower -= quantity;
 }
 
-//return the power when a structure/droid is deliberately destroyed
-void addPower(UDWORD player, UDWORD quantity)
+void addPower(int player, float quantity)
 {
 	ASSERT(player < MAX_PLAYERS, "addPower: Bad player (%u)", player);
 
 	asPower[player].currentPower += quantity;
 }
+
+void addExtractedPower(int player, float quantity)
+{
+	ASSERT(player < MAX_PLAYERS, "addPower: Bad player (%u)", player);
+
+	asPower[player].extractedPower += quantity;
+}
+
 
 /*resets the power calc flag for all players*/
 void powerCalc(BOOL on)
@@ -153,20 +185,20 @@ void powerCalc(BOOL on)
 	}
 }
 
-/* Each Resource Extractor yields EXTRACT_POINTS per second until there are none
-   left in the resource. */
-UDWORD updateExtractedPower(STRUCTURE	*psBuilding)
+/** Each Resource Extractor yields EXTRACT_POINTS per second FOREVER */
+float updateExtractedPower(STRUCTURE	*psBuilding)
 {
 	RES_EXTRACTOR		*pResExtractor;
-	UDWORD				pointsToAdd, extractedPoints, timeDiff;
+	UDWORD				timeDiff;
 	UBYTE			modifier;
+	float pointsToAdd,extractedPoints;
 
 	pResExtractor = (RES_EXTRACTOR *) psBuilding->pFunctionality;
 	extractedPoints = 0;
 
 	//only extracts points whilst its active ie associated with a power gen
 	//and has got some power to extract
-	if (pResExtractor->active && pResExtractor->power)
+	if (pResExtractor->active)
 	{
 		timeDiff = gameTime - pResExtractor->timeLastUpdated;
 		// Add modifier according to difficulty level
@@ -183,35 +215,10 @@ UDWORD updateExtractedPower(STRUCTURE	*psBuilding)
 			modifier = NORMAL_POWER_MOD;
 		}
 		// include modifier as a %
-		pointsToAdd = (modifier * EXTRACT_POINTS * timeDiff) / (GAME_TICKS_PER_SEC * 100);
-		if (pointsToAdd)
-		{
-			// Lose a lot on rounding this way
-			pResExtractor->timeLastUpdated = gameTime;
-			if (pResExtractor->power > pointsToAdd)
-			{
-				extractedPoints += pointsToAdd;
-				pResExtractor->power -= pointsToAdd;
-			}
-			else
-			{
-				extractedPoints += pResExtractor->power;
-				pResExtractor->power = 0;
-			}
+		pointsToAdd = ((float)modifier * EXTRACT_POINTS * timeDiff) / (GAME_TICKS_PER_SEC * 100);
 
-			if (pResExtractor->power == 0)
-			{
-				// If not having unlimited power, put the 2 lines below back in
-				//set the extractor to be inactive
-				//pResExtractor->active = false;
-				//break the link between the power gen and the res extractor
-				//releaseResExtractor(psBuilding);
-
-				//for now, when the power = 0 set it back to the max level!
-				pResExtractor->power = ((RESOURCE_FUNCTION*)psBuilding->pStructureType->
-					asFuncList[0])->maxPower;
-			}
-		}
+		pResExtractor->timeLastUpdated = gameTime;
+		extractedPoints += pointsToAdd;
 	}
 	return extractedPoints;
 }
@@ -234,6 +241,7 @@ STRUCTURE* powerStructList(UBYTE player)
 void updatePlayerPower(UDWORD player)
 {
 	STRUCTURE		*psStruct;//, *psList;
+	float powerBefore = asPower[player].currentPower;
 
 	ASSERT(player < MAX_PLAYERS, "updatePlayerPower: Bad player");
 
@@ -246,18 +254,14 @@ void updatePlayerPower(UDWORD player)
 			updateCurrentPower((POWER_GEN *)psStruct->pFunctionality, player);
 		}
 	}
-
-	// Check that the psLastPowered hasn't died
-	if (asPower[player].psLastPowered && asPower[player].psLastPowered->died)
-	{
-		asPower[player].psLastPowered = NULL;
-	}
+	asPower[player].powerProduced += asPower[player].currentPower - powerBefore;
 }
 
 /* Updates the current power based on the extracted power and a Power Generator*/
 void updateCurrentPower(POWER_GEN *psPowerGen, UDWORD player)
 {
-	UDWORD		power, i, extractedPower;
+	int i;
+	float extractedPower;
 
 	ASSERT(player < MAX_PLAYERS, "updateCurrentPower: Bad player");
 
@@ -279,36 +283,36 @@ void updateCurrentPower(POWER_GEN *psPowerGen, UDWORD player)
 		}
 	}
 
-	asPower[player].extractedPower += extractedPower ;
-	power = (asPower[player].extractedPower * psPowerGen->multiplier) / 100;
-	if (power)
-	{
-		asPower[player].currentPower += power;
-		asPower[player].extractedPower = 0;
-	}
+	asPower[player].currentPower += (extractedPower * psPowerGen->multiplier) / 100;
 }
 
 // only used in multiplayer games.
-void setPower(UDWORD player, UDWORD avail)
+void setPower(int player, float power)
 {
 	ASSERT(player < MAX_PLAYERS, "setPower: Bad player (%u)", player);
 
-	asPower[player].currentPower = avail;
+	asPower[player].currentPower = power;
 }
 
-UDWORD getPower(UDWORD player)
+void setExtractedPower(int player, float power)
+{
+	ASSERT(player < MAX_PLAYERS, "setPower: Bad player (%u)", player);
+
+	asPower[player].extractedPower = power;
+}
+
+float getPower(int player)
 {
 	ASSERT(player < MAX_PLAYERS, "setPower: Bad player (%u)", player);
 
 	return asPower[player].currentPower;
 }
 
-/*sets the initial value for the power*/
-void setPlayerPower(UDWORD power, UDWORD player)
+float getExtractedPower(int player)
 {
-	ASSERT(player < MAX_PLAYERS, "setPlayerPower: Bad player (%u)", player);
+	ASSERT(player < MAX_PLAYERS, "setPower: Bad player (%u)", player);
 
-	asPower[player].currentPower = power;
+	return asPower[player].extractedPower;
 }
 
 /*Temp function to give all players some power when a new game has been loaded*/
@@ -327,12 +331,10 @@ BOOL accruePower(BASE_OBJECT *psObject)
 {
 	FACTORY					*psFactory;
 	RESEARCH_FACILITY		*psResearch;
-	REPAIR_FACILITY			*psRepair;
 	SDWORD					powerDiff;
 	UDWORD					count;
 	BOOL					bPowerUsed = false;
 	STRUCTURE			*psStructure;
-	DROID				*psDroid, *psTarget;
 
 	switch(psObject->type)
 	{
@@ -356,21 +358,12 @@ BOOL accruePower(BASE_OBJECT *psObject)
 			    //check needs power
 			    powerDiff = ((DROID_TEMPLATE *)psFactory->psSubject)->powerPoints -
 				    psFactory->powerAccrued;
+				CLIP(powerDiff, 0, POWER_PER_CYCLE);
 			    //if equal then don't need power
-			    if (powerDiff)
+			    if (powerDiff > 0)
 			    {
-				    if (POWER_PER_CYCLE >= powerDiff)
-				    {
-					    usePower(psStructure->player, powerDiff);
-					    psFactory->powerAccrued += powerDiff;
-					    bPowerUsed = true;
-				    }
-				    else if (powerDiff > POWER_PER_CYCLE)
-				    {
-					    usePower(psStructure->player, POWER_PER_CYCLE);
-					    psFactory->powerAccrued += POWER_PER_CYCLE;
-					    bPowerUsed = true;
-				    }
+					psFactory->powerAccrued += requestPower(psStructure->player, powerDiff);
+					bPowerUsed = true;
 			    }
     		}
 	    	break;
@@ -392,58 +385,17 @@ BOOL accruePower(BASE_OBJECT *psObject)
 				    //check needs power
 				    powerDiff = ((RESEARCH *)psResearch->psSubject)->researchPower -
 					    psResearch->powerAccrued;
-				    //if equal then don't need power
-				    if (powerDiff)
-				    {
-					    //use the power if appropriate
-					    if (POWER_PER_CYCLE >= powerDiff)
-					    {
-						    usePower(psStructure->player, powerDiff);
-						    psResearch->powerAccrued += powerDiff;
-						    bPowerUsed = true;
-					    }
-					    else if (powerDiff > POWER_PER_CYCLE)
-					    {
-						    usePower(psStructure->player, POWER_PER_CYCLE);
-						    psResearch->powerAccrued += POWER_PER_CYCLE;
-						    bPowerUsed = true;
-					    }
-				    }
+					CLIP(powerDiff, 0, POWER_PER_CYCLE);
+					if (powerDiff > 0)
+					{
+						psResearch->powerAccrued += requestPower(psStructure->player, powerDiff);
+						bPowerUsed = true;
+					}
 			    }
 		    }
 		    break;
 	    case REF_REPAIR_FACILITY:
-		    //POWER REQUIRMENTS REMOVED - AB  22/09/98 - BACK IN - AB 07/01/99
-		    psRepair = (REPAIR_FACILITY *)psStructure->pFunctionality;
-            psDroid = (DROID *)psRepair->psObj;
-            //check the droid hasn't died in the meantime
-            if (psRepair->psObj && psRepair->psObj->died)
-            {
-                psRepair->psObj = NULL;
-            }
-		    if (psRepair->psObj)
-		    {
-			    //check if need power
-                powerDiff = powerReqForDroidRepair(psDroid) - psDroid->powerAccrued;
-                //if equal then don't need power
-			    if (powerDiff > 0)
-			    {
-                    powerDiff /= POWER_FACTOR;
-				    if (POWER_PER_CYCLE >= powerDiff)
-				    {
-					    usePower(psStructure->player, powerDiff);
-                        //the unit accrues the power so more than one thing can be working on it
-					    psDroid->powerAccrued += (powerDiff * POWER_FACTOR);
-					    bPowerUsed = true;
-				    }
-				    else if (powerDiff > POWER_PER_CYCLE)
-				    {
-					    usePower(psStructure->player, POWER_PER_CYCLE);
-					    psDroid->powerAccrued += (POWER_PER_CYCLE * POWER_FACTOR);
-					    bPowerUsed = true;
-				    }
-			    }
-		    }
+		    // FIXME: repairing droids is again free
 		    break;
 	    default:
 		    //no need for power
@@ -452,111 +404,14 @@ BOOL accruePower(BASE_OBJECT *psObject)
         }
         break;
     case OBJ_DROID:
-        psDroid = (DROID *)psObject;
-        switch (psDroid->droidType)
-        {
-        case DROID_CONSTRUCT:
-        case DROID_CYBORG_CONSTRUCT:
-            // power is used directly when building, in structureBuild
-            break;
-        case DROID_REPAIR:
-        case DROID_CYBORG_REPAIR:
-            //check trying to repair something
-            psTarget = NULL;
-            if (DroidIsRepairing(psDroid))
-            {
-                psTarget = (DROID *)psDroid->psTarget;
-            }
-            else
-            {
-                //might have guard order but action of repair
-                if (orderState(psDroid, DORDER_GUARD) && psDroid->action ==
-                    DACTION_DROIDREPAIR)
-                {
-                    psTarget = (DROID *)psDroid->psActionTarget[0];
-                }
-            }
-            //check the droid hasn't died in the meantime
-            if (psTarget && psTarget->died)
-            {
-		setDroidTarget(psDroid, NULL);
-                psTarget = NULL;
-            }
-            if (psTarget)
-            {
-                powerDiff = powerReqForDroidRepair(psTarget) - psTarget->powerAccrued;
-			    //if equal then don't need power
-			    if (powerDiff > 0)
-			    {
-                    powerDiff /= POWER_FACTOR;
-				    if (POWER_PER_CYCLE >= powerDiff)
-				    {
-					    usePower(psDroid->player, powerDiff);
-                        //the unit accrues the power so more than one thing can be working on it
-					    psTarget->powerAccrued += (powerDiff * POWER_FACTOR);
-					    bPowerUsed = true;
-				    }
-				    else if (powerDiff > POWER_PER_CYCLE)
-				    {
-					    usePower(psDroid->player, POWER_PER_CYCLE);
-					    psTarget->powerAccrued += (POWER_PER_CYCLE * POWER_FACTOR);
-					    bPowerUsed = true;
-				    }
-			    }
-            }
-            break;
-        default:
-		    //no need for power
-		    bPowerUsed = false;
-		    break;
-        }
-        break;
+		//no need for power
+		bPowerUsed = false;
+		break;
     default:
         ASSERT( false, "accruePower: Invalid object type" );
     }
 
 	return bPowerUsed;
-}
-
-
-//informs the power array that a object has been destroyed
-void powerDestroyObject(BASE_OBJECT *psObject)
-{
-	ASSERT(psObject != NULL, "invalid object");
-
-	//check that this wasn't the last object that received the power
-	if (asPower[psObject->player].psLastPowered == psObject)
-	{
-		updateLastPowered(NULL, psObject->player);
-	}
-}
-
-/*checks if the Object to be powered next - returns true if power*/
-BOOL getLastPowered(BASE_OBJECT *psObject)
-{
-	ASSERT(psObject != NULL, "invalid object");
-
-	if (asPower[psObject->player].psLastPowered == NULL)
-	{
-		return true;
-	}
-	/*if we've got round to the last object again, by setting to NULL will
-	enable the next object to get some power*/
-	if (asPower[psObject->player].psLastPowered == psObject)
-	{
-		asPower[psObject->player].psLastPowered = NULL;
-	}
-	return false;
-}
-
-/*inform the players power struct that the last object to receive power has changed*/
-void updateLastPowered(BASE_OBJECT *psObject, UBYTE player)
-{
-	ASSERT(player < MAX_PLAYERS, "updateLastPowered: Bad player (%u)", (unsigned int)player);
-	ASSERT(psObject == NULL || psObject->died == 0 || psObject->died == NOT_CURRENT_LIST,
-	       "updateLastPowered: Null or dead object");
-
-	asPower[player].psLastPowered = psObject;
 }
 
 STRUCTURE *getRExtractor(STRUCTURE *psStruct)
@@ -644,36 +499,59 @@ BOOL droidUsesPower(DROID *psDroid)
     return bUsesPower;
 }
 
-//this is a check cos there is a problem with the power but not sure where!!
-void powerCheck(BOOL bBeforePowerUsed, UBYTE player)
+float requestPower(int player, float amount)
 {
-	static BASE_OBJECT	*psLastPowered = NULL;
-	static BOOL		bPowerBefore = false;
+	// this is the amount that we are willing to give
+	float amountConsidered = amount * asPower[player].economyThrottle;
 
-	ASSERT(player < MAX_PLAYERS, "powerCheck: Bad player (%u)", (unsigned int)player);
+	if (!powerCalculated)
+	{
+		return amount; // it's all yours
+	}
 
-	if (bBeforePowerUsed)
+	// keep track on how much energy we could possibly spend
+	asPower[player].powerRequested += amount;
+	
+	if (amountConsidered <= asPower[player].currentPower)
 	{
-		// Set what the lastPowered object is before using any power
-		psLastPowered = asPower[player].psLastPowered;
-		bPowerBefore = false;
-		// Check that there is power available at start of loop
-		if (asPower[player].currentPower > POWER_PER_CYCLE)
-		{
-			bPowerBefore = true;
-		}
+		// you can have it
+		asPower[player].currentPower -= amountConsidered;
+		return amountConsidered;
 	}
-	else
-	{
-		/* Check to see if we've been thru the whole list of structures and
-		 * droids and not reset the lastPowered object in the power structure and
-		 * there was some power at the start of the loop to use. */
-		if (psLastPowered != NULL && psLastPowered == asPower[player].psLastPowered && bPowerBefore)
-		{
-			ASSERT(false, "Trouble at mill! bBeforePowerUsed=%d psLastPowered=%p asPower[%d].psLastPowered=%p", 
-			       (int)bBeforePowerUsed, psLastPowered, player, asPower[player].psLastPowered );
-			// Initialise so something can have some power next cycle
-			asPower[player].psLastPowered = NULL;
-		}
-	}
+	return 0; // no power this frame
 }
+
+static int randomRound(float val)
+{
+	int intPart = val;
+	float floatPart = val - intPart;
+	if (rand()%100 < floatPart*100)
+	{
+		return intPart + 1;
+	}
+	return intPart;
+}
+
+int requestPowerFor(int player, float amount, int points)
+{
+	int pointsConsidered = randomRound(points * asPower[player].economyThrottle);
+	// only what it needs for the n amount of points we consider giving
+	float amountConsidered = amount * (float) pointsConsidered / points;
+
+	if (!powerCalculated)
+	{
+		return points;
+	}
+
+	// keep track on how much energy we could possibly spend
+	asPower[player].powerRequested += amount;
+	
+	if (amountConsidered <= asPower[player].currentPower)
+	{
+		// you can have it
+		asPower[player].currentPower -= amountConsidered;
+		return pointsConsidered;
+	}
+	return 0; // no power this frame
+}
+

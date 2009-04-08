@@ -1143,20 +1143,16 @@ void structureBuild(STRUCTURE *psStruct, DROID *psDroid, int buildPoints)
 {
 	int before, after;
 	int powerNeeded;
+	int buildPointsToAdd;
 
 	// Check if there is enough power to perform this construction work
 	powerNeeded = ((psStruct->currentBuildPts + buildPoints) * structPowerToBuild(psStruct))/psStruct->pStructureType->buildPoints -
 	              (psStruct->currentBuildPts * structPowerToBuild(psStruct))/psStruct->pStructureType->buildPoints;
 
-	powerNeeded = MIN(powerNeeded, POWER_PER_CYCLE);
-
-	if (!usePower(psDroid->player, powerNeeded))
-	{
-		return;
-	}
+	buildPointsToAdd = requestPowerFor(psDroid->player, powerNeeded, buildPoints);
 
 	before = (9 * psStruct->currentBuildPts * structureBody(psStruct) ) / (10 * psStruct->pStructureType->buildPoints);
-	psStruct->currentBuildPts += buildPoints;
+	psStruct->currentBuildPts += buildPointsToAdd;
 	after =  (9 * psStruct->currentBuildPts * structureBody(psStruct) ) / (10 * psStruct->pStructureType->buildPoints);
 	psStruct->body += after - before;
 
@@ -1264,16 +1260,14 @@ void structureRepair(STRUCTURE *psStruct, DROID *psDroid, int buildPoints)
 	powerNeeded = valueAfter - valueBefore;
 	if (powerNeeded > 0)
 	{
-		if (!usePower(psDroid->player, powerNeeded))
-		{
-			return;
-		}
+		psStruct->body += requestPowerFor(psDroid->player, powerNeeded, body - psStruct->body);
 	}
 	else
 	{
 		addPower(psDroid->player, -powerNeeded);
+		psStruct->body = body;
 	}
-	psStruct->body = body;
+	
 
 	if (psStruct->body == 0)
 	{
@@ -2017,8 +2011,6 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 			{
 				intRefreshScreen();
 			}
-			//inform power system that won't be needing power until built
-			powerDestroyObject((BASE_OBJECT *)psBuilding);
 		}
 	}
 	if(pStructureType->type!=REF_WALL && pStructureType->type!=REF_WALLCORNER)
@@ -2957,22 +2949,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 		return;
 	}
 
-	//check if any power available
-	if (structUsesPower(psStructure))
-	{
-		if (checkPower(psStructure->player, POWER_PER_CYCLE))
-		{
-			//check if this structure is due some power
-			if (getLastPowered((BASE_OBJECT *)psStructure))
-			{
-				//get some power if necessary
-				if (accruePower((BASE_OBJECT *)psStructure))
-				{
-					updateLastPowered((BASE_OBJECT *)psStructure, psStructure->player);
-				}
-			}
-		}
-	}
+	accruePower((BASE_OBJECT *)psStructure);
 
 	/* Process the functionality according to type
 	* determine the subject stats (for research or manufacture)
@@ -3379,8 +3356,6 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 	{
 		if ( structureMode == REF_REPAIR_FACILITY )
 		{
-			UDWORD  powerCost;
-
 			psDroid = (DROID *) psChosenObj;
 			ASSERT( psDroid != NULL,
 					"aiUpdateStructure: invalid droid pointer" );
@@ -3414,30 +3389,6 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 						}
 					}
 
-					//check if enough power to do any
-					powerCost = powerReqForDroidRepair(psDroid);
-					if (powerCost > psDroid->powerAccrued)
-					{
-						powerCost = (powerCost - psDroid->powerAccrued) / POWER_FACTOR;
-					}
-					else
-					{
-						powerCost = 0;
-					}
-					//if the power cost is 0 (due to rounding) then do for free!
-					if (powerCost)
-					{
-						if (!psDroid->powerAccrued)
-						{
-							//reset the actionStarted time and actionPoints added so the correct
-							//amount of points are added when there is more power
-							psRepairFac->timeStarted = gameTime;
-							//init so repair points to add won't be huge when start up again
-							psRepairFac->currentPtsAdded = 0;
-							return;
-						}
-					}
-
 					if (psRepairFac->timeStarted == ACTION_START_TIME)
 					{
 						//set the time started
@@ -3445,7 +3396,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 						//reset the points added
 						psRepairFac->currentPtsAdded = 0;
 					}
-
+					// FIXME: duplicate code, make repairing cost power again
 					/* do repairing */
 					iDt = gameTime - psRepairFac->timeStarted;
 					//- this was a bit exponential ...
@@ -3458,7 +3409,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 					{
 						//just add the points if the power cost is negligable
 						//if these points would make the droid healthy again then just add
-						if (!powerCost || (psDroid->body + pointsToAdd >= psDroid->originalBody))
+						if (psDroid->body + pointsToAdd >= psDroid->originalBody)
 						{
 							//anothe HACK but sorts out all the rounding errors when values get small
 							psDroid->body += pointsToAdd;
@@ -3466,22 +3417,8 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 						}
 						else
 						{
-							//see if we have enough power to do this amount of repair
-							powerCost = pointsToAdd * repairPowerPoint(psDroid);
-							if (powerCost <= psDroid->powerAccrued)
-							{
 								psDroid->body += pointsToAdd;
 								psRepairFac->currentPtsAdded += pointsToAdd;
-								//subtract the power cost for these points
-								psDroid->powerAccrued -= powerCost;
-							}
-							else
-							{
-								/*reset the actionStarted time and actionPoints added so the correct
-								amount of points are added when there is more power*/
-								psRepairFac->timeStarted = gameTime;
-								psRepairFac->currentPtsAdded = 0;
-							}
 						}
 					}
 				}
@@ -3494,8 +3431,6 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 
 					/* set droid points to max */
 					psDroid->body = psDroid->originalBody;
-					//reset the power accrued
-					psDroid->powerAccrued = 0;
 
 					// if completely repaired reset order
 					secondarySetState(psDroid, DSO_RETURN_TO_LOC, DSS_NONE);
@@ -4780,9 +4715,6 @@ BOOL removeStruct(STRUCTURE *psDel, BOOL bDestroy)
 	{
 		removeStructFromMap(psDel);
 	}
-
-	//tell the power system its gone
-	powerDestroyObject((BASE_OBJECT *)psDel);
 
 	if (bDestroy)
 	{

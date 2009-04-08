@@ -190,9 +190,8 @@ typedef struct DROID
 	BASE_OBJECT*    psActionTarget[DROID_MAXWEAPS]; ///< Action target object
 	UDWORD          actionStarted;                  ///< Game time action started
 	UDWORD          actionPoints;                   ///< number of points done by action since start
-//	UWORD           actionHeight;                   ///< height to level the ground to for foundation,
-											// possibly use it for other data as well? Yup! - powerAccrued!
-	UWORD           powerAccrued;                   ///< renamed the above variable since this is what its used for now!
+
+	UWORD           UNUSED_powerAccrued;
 
 	UBYTE           illumination;
 	UBYTE           updateFlags;

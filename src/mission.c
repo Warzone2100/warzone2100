@@ -889,9 +889,6 @@ void restoreMissionData(void)
 
 		apsFlagPosLists[inc] = mission.apsFlagPosLists[inc];
 		mission.apsFlagPosLists[inc] = NULL;
-		//asPower[inc].usedPower = mission.usedPower[inc];
-		//init the next structure to be powered
-		asPower[inc].psLastPowered = NULL;
 	}
 	//swap mission data over
 
@@ -1668,20 +1665,8 @@ void aiUpdateMissionStructure(STRUCTURE *psStructure)
 		return;
 	}
 
-	//check if any power available
-	if ((asPower[psStructure->player].currentPower > POWER_PER_CYCLE) ||
-		(!powerCalculated))
-	{
-		//check if this structure is due some power
-		if (getLastPowered((BASE_OBJECT *)psStructure))
-		{
-			//get some power if necessary
-			if (accruePower((BASE_OBJECT *)psStructure))
-			{
-				updateLastPowered((BASE_OBJECT *)psStructure, psStructure->player);
-			}
-		}
-	}
+	accruePower((BASE_OBJECT *)psStructure);
+
 	//determine the Subject
 	switch (psStructure->pStructureType->type)
 	{
@@ -3096,9 +3081,8 @@ void saveMissionPower(void)
 
 	for (inc = 0; inc < MAX_PLAYERS; inc++)
 	{
-		//mission.asPower[inc].initialPower = asPower[inc].initialPower;
-		mission.asPower[inc].extractedPower = asPower[inc].extractedPower;
-		mission.asPower[inc].currentPower = asPower[inc].currentPower;
+		mission.asPower[inc].extractedPower = getExtractedPower(inc);
+		mission.asPower[inc].currentPower = getPower(inc);
 	}
 }
 
@@ -3109,9 +3093,8 @@ void adjustMissionPower(void)
 
 	for (inc = 0; inc < MAX_PLAYERS; inc++)
 	{
-		//asPower[inc].initialPower += mission.asPower[inc].initialPower;
-		asPower[inc].extractedPower += mission.asPower[inc].extractedPower;
-		asPower[inc].currentPower += mission.asPower[inc].currentPower;
+		addExtractedPower(inc, mission.asPower[inc].extractedPower);
+		addPower(inc, mission.asPower[inc].currentPower);
 	}
 }
 

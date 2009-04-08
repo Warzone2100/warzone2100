@@ -4524,7 +4524,7 @@ BOOL scrSetPowerLevel(void)
 		return false;
 	}
 
-	setPlayerPower(power, player);
+	setPower(player, power);
 
 	return true;
 }

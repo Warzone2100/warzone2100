@@ -38,9 +38,11 @@
 
 typedef struct _player_power
 {
-	UDWORD		currentPower;		/**< The current amount of power avaialble to the player. */
-	UDWORD		extractedPower;		/**< The power extracted but not converted. */
-	BASE_OBJECT	*psLastPowered;		/**< The last object that received power before it ran out. */
+	float currentPower;         ///< The current amount of power avaialble to the player.
+	float extractedPower;       ///< The power extracted but not converted.
+	float powerProduced;        ///< Power produced
+	float powerRequested;       ///< Power requested
+	float economyThrottle;      ///< Which percentage of the requested power is actually delivered
 } PLAYER_POWER;
 
 /** Allocate the space for the playerPower. */
@@ -56,51 +58,41 @@ extern BOOL resetPlayerPower(UDWORD player, STRUCTURE *psStruct);
 extern void releasePlayerPower(void);
 
 /** Check the available power. */
-extern BOOL checkPower(UDWORD player, UDWORD quantity);
+extern BOOL checkPower(int player, float quantity);
 
-/** Subtract the power required. */
-extern BOOL usePower(UDWORD player, UDWORD quantity);
+extern float requestPower(int player, float amount);
+extern int requestPowerFor(int player, float amount, int points);
 
-/** Return the power when a structure/droid is deliberately destroyed. */
-extern void addPower(UDWORD player, UDWORD quantity);
+extern void addPower(int player, float quantity);
+extern void addExtractedPower(int player, float quantity);
 
-/** Each Resource Extractor yields EXTRACT_POINTS per second until there are none left in the resource. */
-extern UDWORD updateExtractedPower(STRUCTURE	*psBuilding);
+BOOL checkPower(int player, float quantity);
+void usePower(int player, float quantity);
 
 /** Update current power based on what was extracted during the last cycle and what Power Generators exist. */
 extern void updatePlayerPower(UDWORD player);
 
 /** Used in multiplayer to force power levels. */
-extern void setPower(UDWORD player, UDWORD avail);
+extern void setPower(int player, float power);
+extern void setExtractedPower(int player, float power);
 
 /** Get the amount of power current held by the given player. */
-extern UDWORD getPower(UDWORD player);
+extern float getPower(int player);
+extern float getExtractedPower(int player);
 
 /** Resets the power levels for all players when power is turned back on. */
 void powerCalc(BOOL on);
 
-/** Sets the initial value for the power. */
-void setPlayerPower(UDWORD power, UDWORD player);
-
 /** Temp function to give all players some power when a new game has been loaded. */
 void newGameInitPower(void);
 
-/** Informs the power array that a Object has been destroyed. */
-extern void powerDestroyObject(BASE_OBJECT *psObject);
-
 /** Accrue the power in the facilities that require it. */
 extern BOOL accruePower(BASE_OBJECT *psObject);
-
-/** Inform the players power struct that the last Object to receive power has changed. */
-extern void updateLastPowered(BASE_OBJECT *psObject,UBYTE player);
 
 /**	Returns the next res. Ext. in the list from the one passed in. returns 1st one
 	in list if passed in is NULL and NULL if there's none?
 */
 extern STRUCTURE *getRExtractor(STRUCTURE *psStruct);
-
-/** Checks if the object to be powered next - returns true if power. */
-extern BOOL getLastPowered(BASE_OBJECT *psStructure);
 
 /** Defines which structure types draw power - returns true if use power. */
 extern BOOL structUsesPower(STRUCTURE *psStruct);
@@ -108,13 +100,9 @@ extern BOOL structUsesPower(STRUCTURE *psStruct);
 /** Defines which droid types draw power - returns true if use power. */
 extern BOOL droidUsesPower(DROID *psDroid);
 
-/** This is a check cos there is a problem with the power but not sure where!! */
-extern void powerCheck(BOOL bBeforePowerUsed, UBYTE player);
-
-/** @todo Wrap access to this global and make it static for easier sanity checking! */
-extern PLAYER_POWER		asPower[MAX_PLAYERS];
-
 /** Flag used to check for power calculations to be done or not. */
 extern	BOOL			powerCalculated;
+
+extern void updatePowerSystem(void);
 
 #endif // __INCLUDED_SRC_POWER_H__

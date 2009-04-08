@@ -2457,7 +2457,6 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 			psDroid->actionY = 0;
 			psDroid->actionStarted = 0;
 			psDroid->actionPoints = 0;
-			psDroid->powerAccrued = 0;
 			if (psDroid->numWeaps > 0)
 			{
 				for (i = 0;i < psDroid->numWeaps;i++)
