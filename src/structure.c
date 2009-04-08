@@ -3279,11 +3279,8 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 				if (secondsElapsed > 1)
 				{
 					progress = requestPowerFor(psStructure->player, powerNeeded, secondsElapsed);
-					if (progress > 0)
-					{
-						psFactory->timeToBuild -= progress;
-						psFactory->timeStarted = gameTime;
-					}
+					psFactory->timeToBuild -= progress;
+					psFactory->timeStarted = gameTime;
 				}
 			}
 

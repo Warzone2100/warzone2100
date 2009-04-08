@@ -107,19 +107,20 @@ void throttleEconomy(void)
 		}
 		else
 		{
-			newThrottle = asPower[player].powerProduced / asPower[player].powerRequested;
+			newThrottle = (asPower[player].powerProduced + asPower[player].currentPower) / asPower[player].powerRequested;
 		}
-		if (newThrottle < asPower[player].economyThrottle)
+		if (newThrottle <= asPower[player].economyThrottle)
 		{
 			// quickly slow down
 			asPower[player].economyThrottle = newThrottle;
 		}
-		else
+		else if (asPower[player].powerRequested * asPower[player].economyThrottle * 2 < asPower[player].currentPower)
 		{
 			// slowly speed up
-			asPower[player].economyThrottle = 0.1 * newThrottle + 0.9 * asPower[player].economyThrottle;
+			asPower[player].economyThrottle += 0.02;
 		}
-		debug(LOG_WARNING, "player: %i, throttle: %f, produced: %f, requested: %f", player, asPower[player].economyThrottle, asPower[player].powerProduced, asPower[player].powerRequested);
+		CLIP(asPower[player].economyThrottle, 0, 1);
+		debug(LOG_WARNING, "player: %i, power: %f, throttle: %f, produced: %f, requested: %f", player, asPower[player].currentPower, asPower[player].economyThrottle, asPower[player].powerProduced, asPower[player].powerRequested);
 		asPower[player].powerProduced = 0;
 		asPower[player].powerRequested = 0;
 	}
@@ -305,64 +306,7 @@ void newGameInitPower(void)
 /*accrue the power in the facilities that require it - returns true if use some power*/
 BOOL accruePower(BASE_OBJECT *psObject)
 {
-	RESEARCH_FACILITY		*psResearch;
-	SDWORD					powerDiff;
-	UDWORD					count;
-	BOOL					bPowerUsed = false;
-	STRUCTURE			*psStructure;
-
-	switch(psObject->type)
-	{
-	case OBJ_STRUCTURE:
-		psStructure = (STRUCTURE *)psObject;
-		// See if it needs power
-		switch(psStructure->pStructureType->type)
-		{
-	    case REF_RESEARCH:
-		    //check the structure is active
-		    psResearch = (RESEARCH_FACILITY  *)psStructure->pFunctionality;
-
-		    //check the research facility is not on hold
-            if (psResearch->timeStartHold)
-            {
-                break;
-            }
-		    if (psResearch->psSubject)
-		    {
-			    //check the research hasn't been cancelled
-			    count = ((RESEARCH *)psResearch->psSubject)->ref - REF_RESEARCH_START;
-			    if (IsResearchCancelled(asPlayerResList[selectedPlayer] + count)==false)
-			    {
-				    //check needs power
-				    powerDiff = ((RESEARCH *)psResearch->psSubject)->researchPower -
-					    psResearch->powerAccrued;
-					CLIP(powerDiff, 0, POWER_PER_CYCLE);
-					if (powerDiff > 0)
-					{
-						psResearch->powerAccrued += requestPower(psStructure->player, powerDiff);
-						bPowerUsed = true;
-					}
-			    }
-		    }
-		    break;
-	    case REF_REPAIR_FACILITY:
-		    // FIXME: repairing droids is again free
-		    break;
-	    default:
-		    //no need for power
-		    bPowerUsed = false;
-		    break;
-        }
-        break;
-    case OBJ_DROID:
-		//no need for power
-		bPowerUsed = false;
-		break;
-    default:
-        ASSERT( false, "accruePower: Invalid object type" );
-    }
-
-	return bPowerUsed;
+	return false;
 }
 
 STRUCTURE *getRExtractor(STRUCTURE *psStruct)
@@ -462,6 +406,7 @@ float requestPower(int player, float amount)
 
 	// keep track on how much energy we could possibly spend
 	asPower[player].powerRequested += amount;
+	ASSERT(asPower[player].powerRequested < 1000, "you are asking too much");
 	
 	if (amountConsidered <= asPower[player].currentPower)
 	{
@@ -489,13 +434,14 @@ int requestPowerFor(int player, float amount, int points)
 	// only what it needs for the n amount of points we consider giving
 	float amountConsidered = amount * (float) pointsConsidered / points;
 
-	if (!powerCalculated)
+	if (amount < 0.01 || !powerCalculated)
 	{
 		return points;
 	}
 
 	// keep track on how much energy we could possibly spend
 	asPower[player].powerRequested += amount;
+	ASSERT(asPower[player].powerRequested < 1000, "you are asking too much");
 	
 	if (amountConsidered <= asPower[player].currentPower)
 	{
