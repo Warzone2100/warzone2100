@@ -433,8 +433,7 @@ BOOL scrOrderGroupLoc(void)
 	 || y < 0
 	 || y > world_coord(mapHeight))
 	{
-		ASSERT( false,
-			"scrOrderGroupLoc: Invalid location" );
+		ASSERT(false, "Invalid map location (%d, %d), max is (%d, %d)", x, y, world_coord(mapWidth), world_coord(mapHeight));
 		return false;
 	}
 
