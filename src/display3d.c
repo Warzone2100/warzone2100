@@ -3721,12 +3721,13 @@ static void trackHeight( float desiredHeight )
 }
 
 /// Select the next energy bar display mode
-void toggleEnergyBars(void)
+ENERGY_BAR toggleEnergyBars(void)
 {
 	if (++barMode == BAR_LAST)
 	{
 		barMode = BAR_SELECTED;
 	}
+	return barMode;
 }
 
 /// Set everything up for when the player assigns the sensor target

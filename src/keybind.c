@@ -1382,8 +1382,20 @@ void	kf_FinishResearch( void )
 // --------------------------------------------------------------------------
 void	kf_ToggleEnergyBars( void )
 {
-	toggleEnergyBars();
-	addConsoleMessage(_("Energy bars display toggled"), LEFT_JUSTIFY, SYSTEM_MESSAGE);
+	switch (toggleEnergyBars())
+	{
+	case BAR_SELECTED:
+		addConsoleMessage(_("Only displaying energy bars when selected"), LEFT_JUSTIFY, SYSTEM_MESSAGE);
+		break;
+	case BAR_DROIDS:
+		addConsoleMessage(_("Always displaying energy bars for units"), LEFT_JUSTIFY, SYSTEM_MESSAGE);
+		break;
+	case BAR_DROIDS_AND_STRUCTURES:
+		addConsoleMessage(_("Always displaying energy bars for units and structures"), LEFT_JUSTIFY, SYSTEM_MESSAGE);
+		break;
+	default:
+		ASSERT(false, "Bad energy bar status");
+	}
 }
 
 // --------------------------------------------------------------------------
