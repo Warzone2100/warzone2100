@@ -635,7 +635,7 @@ BOOL loadRenderMode(void)
 	// now load the desired res..
 	// note that we only do this if we havent changed renderer..
 	if (getWarzoneKeyNumeric("width", &val)
-	 && val > 0)
+	 && val >= 640)
 	{
 		pie_SetVideoBufferWidth(val);
 		war_SetWidth(val);
@@ -646,7 +646,7 @@ BOOL loadRenderMode(void)
 	}
 
 	if (getWarzoneKeyNumeric("height", &val)
-	 && val > 0)
+	 && val >= 400)
 	{
 		pie_SetVideoBufferHeight(val);
 		war_SetHeight(val);
