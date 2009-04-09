@@ -413,14 +413,18 @@ BOOL runSinglePlayerMenu(void)
 	}
 	else
 	{
+		// FIXME: We should do a SPinit() to make sure all the variables are reset correctly.
+		// game.type is switched to SKIRMISH in startMultiOptions()
+		NetPlay.bComms = false;
+		bMultiPlayer = false;
+		game.type = CAMPAIGN;
 
-	id = widgRunScreen(psWScreen);						// Run the current set of widgets
+		id = widgRunScreen(psWScreen);						// Run the current set of widgets
 
 		switch(id)
 		{
 			case FRONTEND_NEWGAME:
 				frontEndNewGame();
-				NetPlay.bComms = false;
 				break;
 
 			case FRONTEND_LOADCAM2:
@@ -447,7 +451,6 @@ BOOL runSinglePlayerMenu(void)
 				break;
 
 			case FRONTEND_SKIRMISH:
-				NetPlay.bComms = false; // use network = false
 				ingame.bHostSetup = true;
 				changeTitleMode(MULTIOPTION);
 				break;
@@ -509,6 +512,8 @@ BOOL runMultiPlayerMenu(void)
 	{
 	case FRONTEND_HOST:
 		ingame.bHostSetup = true;
+		bMultiPlayer = true;
+		game.type = SKIRMISH;		// needed?
 		changeTitleMode(MULTIOPTION);
 		break;
 	case FRONTEND_JOIN:
