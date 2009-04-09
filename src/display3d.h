@@ -40,6 +40,14 @@ typedef enum
 	BLOCKING_RUBBLE_TILE = 67 //! You cannot drive over these
 } TILE_ID;
 
+typedef enum
+{
+	BAR_SELECTED,
+	BAR_DROIDS,
+	BAR_DROIDS_AND_STRUCTURES,
+	BAR_LAST
+} ENERGY_BAR;
+
 extern bool showFPS;
 extern bool showSAMPLES;
 
@@ -72,7 +80,7 @@ extern void displayDynamicObjects( void );
 extern void displayProximityMsgs( void );
 extern void displayDelivPoints(void);
 extern void calcScreenCoords(DROID *psDroid);
-extern void toggleEnergyBars( void );
+extern ENERGY_BAR toggleEnergyBars( void );
 
 extern BOOL doWeDrawProximitys( void );
 extern void setProximityDraw(BOOL val);
@@ -125,13 +133,5 @@ extern void showRangeAtPos(SDWORD centerX, SDWORD centerY, SDWORD radius);
 
 extern UWORD barMode;
 extern UDWORD geoOffset;
-
-enum
-{
-	BAR_SELECTED,
-	BAR_DROIDS,
-	BAR_DROIDS_AND_STRUCTURES,
-	BAR_LAST
-};
 
 #endif // __INCLUDED_SRC_DISPLAY3D_H__
