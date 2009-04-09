@@ -232,7 +232,7 @@ void gridRemoveObject(BASE_OBJECT *psObj)
 					{
 						if (psCurr->apsObjects[i] == psObj)
 						{
-							ASSERT( false,"gridRemoveObject: grid out of sync" );
+							ASSERT(false, "Grid out of sync at (%u,%u):%u removing %s", x, y, i, objInfo(psObj));
 							psCurr->apsObjects[i] = NULL;
 						}
 					}
@@ -499,7 +499,7 @@ void gridDisplayCoverage(BASE_OBJECT *psObj)
 		unsigned int	x, y, i;
 		GRID_ARRAY	*psCurr;
 
-		debug( LOG_NEVER, "Grid coverage for object %d (%d,%d) - range %d\n", psObj->id, psObj->pos.x, psObj->pos.y, gridObjRange(psObj) );
+		debug(LOG_ERROR, "Grid coverage for object %d (%d,%d) - range %d", psObj->id, psObj->pos.x, psObj->pos.y, gridObjRange(psObj) );
 		for (x = 0; x < gridWidth; x++)
 		{
 			for(y = 0; y < gridHeight; y++)
@@ -510,7 +510,7 @@ void gridDisplayCoverage(BASE_OBJECT *psObj)
 				{
 					if (psCurr->apsObjects[i] == psObj)
 					{
-						debug( LOG_NEVER, "    %d,%d  [ %d,%d -> %d,%d ]\n", x, y, x*GRID_UNITS, y*GRID_UNITS, (x+1)*GRID_UNITS, (y+1)*GRID_UNITS );
+						debug(LOG_ERROR, "    %d,%d  [ %d,%d -> %d,%d ]", x, y, x*GRID_UNITS, y*GRID_UNITS, (x+1)*GRID_UNITS, (y+1)*GRID_UNITS );
 					}
 
 					++i;
