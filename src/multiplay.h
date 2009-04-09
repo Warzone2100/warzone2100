@@ -109,6 +109,7 @@ extern UBYTE				bDisplayMultiJoiningStatus;	// draw load progress?
 
 #define DIFF_SLIDER_STOPS		20			//max number of stops for the multiplayer difficulty slider
 
+#define MAX_KICK_REASON			80			// max array size for the reason your kicking someone
 // functions
 
 extern WZ_DECL_WARN_UNUSED_RESULT BASE_OBJECT		*IdToPointer(UDWORD id,UDWORD player);
