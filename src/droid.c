@@ -3745,7 +3745,7 @@ UDWORD	getNumDroidsForLevel(UDWORD	level)
 
 // Get the name of a droid from it's DROID structure.
 //
-char *droidGetName(DROID *psDroid)
+const char *droidGetName(const DROID *psDroid)
 {
 	return psDroid->aName;
 }
