@@ -5187,42 +5187,22 @@ void HandleClosingWindows(void)
 }
 
 
-/* Get the object refered to by a button ID on the object screen.
- * This works for object or stats buttons
+/**
+ * Get the object refered to by a button ID on the object screen. This works for object or stats buttons.
  */
 static BASE_OBJECT *intGetObject(UDWORD id)
 {
-//	UDWORD			objID;
 	BASE_OBJECT		*psObj;
 
 	/* If this is a stats button, find the object button linked to it */
-	if (id >= IDOBJ_STATSTART &&
-		id <= IDOBJ_STATEND)
+	if (id >= IDOBJ_STATSTART && id <= IDOBJ_STATEND)
 	{
 		id = IDOBJ_OBJSTART + id - IDOBJ_STATSTART;
 	}
 
 	/* Find the object that the ID refers to */
-	ASSERT( ( (SDWORD)id - IDOBJ_OBJSTART >= 0 ) &&
-			 ( (SDWORD)id - IDOBJ_OBJSTART < numObjects ),
-		"intGetObject: invalid button ID" );
+	ASSERT((SDWORD)id - IDOBJ_OBJSTART >= 0 && (SDWORD)id - IDOBJ_OBJSTART < numObjects, "Invalid button ID %u", id);
 	psObj = apsObjectList[id - IDOBJ_OBJSTART];
-/*	objID = IDOBJ_OBJSTART;
-	for(psObj = psObjList; psObj; psObj = psObj->psNext)
-	{
-		if (objSelectFunc(psObj))
-		{
-			if (objID == id)
-			{
-				// Found the object so jump out of the loops
-				goto found;
-			}
-			objID++;
-		}
-	}
-found:	// Jump to here if an object is found
-	ASSERT( psObj != NULL, "intGetObject: couldn't match id to button" );
-	*/
 
 	return psObj;
 }
