@@ -80,9 +80,6 @@ SDWORD moveCalcDroidSpeed(DROID *psDroid);
 /* Frame update for the movement of a tracked droid */
 extern void moveUpdateTracked(DROID *psDroid);
 
-extern void fillNewBlocks(DROID *psDroid);
-extern void fillInitialView(DROID *psDroid);
-
 /* update body and turret to local slope */
 extern void updateDroidOrientation(DROID *psDroid);
 

@@ -256,7 +256,7 @@ extern UDWORD	getDroidEffectiveLevel(DROID *psDroid);
 extern const char *getDroidLevelName(DROID *psDroid);
 
 // Get a droid's name.
-extern char *droidGetName(DROID *psDroid);
+extern const char *droidGetName(const DROID *psDroid);
 
 // Set a droid's name.
 extern void droidSetName(DROID *psDroid, const char *pName);

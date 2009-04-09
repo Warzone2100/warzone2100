@@ -45,4 +45,7 @@ extern BOOL objShutdown(void);
 the last and the last entry becomes the first!*/
 extern void reverseObjectList(BASE_OBJECT **ppsList);
 
+/** Output an informative string about this object. For debugging. */
+const char *objInfo(const BASE_OBJECT *psObj);
+
 #endif // __INCLUDED_SRC_OBJECTS_H__
