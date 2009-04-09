@@ -1623,6 +1623,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		psDroid->orderY = psOrder->y;
 		setDroidTarget(psDroid, NULL);
 		psDroid->psTarStats = psOrder->psStats;
+		ASSERT((!psDroid->psTarStats || ((STRUCTURE_STATS *)psDroid->psTarStats)->type != REF_DEMOLISH), "Cannot build demolition");
 		actionDroidLoc(psDroid, DACTION_BUILD, psOrder->x,psOrder->y);
 		break;
 	case DORDER_BUILDMODULE:
@@ -1637,6 +1638,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		setDroidTarget(psDroid, NULL);
 		psDroid->psTarStats = (BASE_STATS *)getModuleStat((STRUCTURE *)psOrder->psObj);
 		ASSERT(psDroid->psTarStats != NULL, "orderUnitBase: should have found a module stats");
+		ASSERT((!psDroid->psTarStats || ((STRUCTURE_STATS *)psDroid->psTarStats)->type != REF_DEMOLISH), "Cannot build demolition");
 		actionDroidLoc(psDroid, DACTION_BUILD, psOrder->psObj->pos.x,psOrder->psObj->pos.y);
 		break;
 	case DORDER_LINEBUILD:
@@ -1654,6 +1656,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		psDroid->orderY2 = psOrder->y2;
 		setDroidTarget(psDroid, NULL);
 		psDroid->psTarStats = psOrder->psStats;
+		ASSERT((!psDroid->psTarStats || ((STRUCTURE_STATS *)psDroid->psTarStats)->type != REF_DEMOLISH), "Cannot build demolition");
 		actionDroidLoc(psDroid, DACTION_BUILD, psOrder->x,psOrder->y);
 		break;
 	case DORDER_HELPBUILD:
@@ -1667,6 +1670,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		psDroid->orderY = psOrder->psObj->pos.y;
 		setDroidTarget(psDroid, psOrder->psObj);
 		psDroid->psTarStats = (BASE_STATS *)((STRUCTURE *)psOrder->psObj)->pStructureType;
+		ASSERT((!psDroid->psTarStats || ((STRUCTURE_STATS *)psDroid->psTarStats)->type != REF_DEMOLISH), "Cannot build demolition");
 		actionDroidLoc(psDroid, DACTION_BUILD, psDroid->orderX, psDroid->orderY);
 		break;
 	case DORDER_DEMOLISH:
@@ -1677,6 +1681,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		psDroid->order = DORDER_DEMOLISH;
 		psDroid->orderX = psOrder->psObj->pos.x;
 		psDroid->orderY = psOrder->psObj->pos.y;
+		psDroid->psTarStats = NULL;
 		setDroidTarget(psDroid, psOrder->psObj);
 		actionDroidObj(psDroid, DACTION_DEMOLISH, (BASE_OBJECT *)psOrder->psObj);
 		break;
@@ -2887,7 +2892,8 @@ DROID_ORDER chooseOrderObj(DROID *psDroid, BASE_OBJECT *psObj)
 				//if something else is demolishing, then help demolish
 				if (checkDroidsDemolishing(psStruct))
 				{
-					psDroid->psTarStats = (BASE_STATS *) structGetDemolishStat();
+					psDroid->psTarget = psObj;
+					psDroid->psTarStats = NULL;
 					order = DORDER_DEMOLISH;
 				}
 				//else help build
