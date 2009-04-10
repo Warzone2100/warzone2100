@@ -1227,7 +1227,7 @@ BOOL recvTextMessage()
 	UDWORD	i;
 	char	msg[MAX_CONSOLE_STRING_LENGTH];
 	char newmsg[MAX_CONSOLE_STRING_LENGTH];
-	UDWORD  player=MAX_PLAYERS,j;		//console callback - player who sent the message
+	UDWORD  player;		//console callback - player who sent the message
 
 	memset(msg, 0x0, sizeof(msg));
 	memset(newmsg, 0x0, sizeof(newmsg));
@@ -1240,21 +1240,18 @@ BOOL recvTextMessage()
 	NETend();
 
 
-	for (i = 0; NetPlay.players[i].dpid != dpid; i++);		//findplayer
+	// find player
+	for (i = 0; NetPlay.players[i].dpid != dpid && i < MAX_PLAYERS; i++);
 
 	//console callback - find real number of the player
-	for (j = 0; i < MAX_PLAYERS; j++)
+	for (player = 0; player2dpid[player] != dpid && player < MAX_PLAYERS; player++);
+
+	ASSERT(player != MAX_PLAYERS && i != MAX_PLAYERS, "recvTextMessage: failed to find owner of dpid %d", dpid);
+	if (player == MAX_PLAYERS || i == MAX_PLAYERS)
 	{
-		if (dpid == player2dpid[j])
-		{
-			player = j;
-			break;
-		}
+		return false;
 	}
 
-	ASSERT(player != MAX_PLAYERS, "recvTextMessage: failed to find owner of dpid %d", dpid);
-
-	sstrcpy(msg, NetPlay.players[i].name);
 	// Seperator
 	sstrcat(msg, ": ");
 	// Add message
