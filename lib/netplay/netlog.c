@@ -184,9 +184,9 @@ BOOL NETlogEntry(const char *str,UDWORD a,UDWORD b)
 	time( &aclock );                 /* Get time in seconds */
 	newtime = localtime( &aclock );  /* Convert time to struct */
 
-	if (!newtime || a >= NET_GAME_FLAGS || !str)
+	if (!newtime || a >= NET_GAME_FLAGS || !str || !pFileHandle)
 	{
-		debug(LOG_ERROR, "Fatal error averted");
+		debug(LOG_ERROR, "Fatal error averted in NETlog");
 		return false;
 	}
 
