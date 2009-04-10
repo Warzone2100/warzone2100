@@ -652,8 +652,11 @@ static void addGames(void)
 		case NETERR_NOERR:
 			txt = _("No games are available");
 			break;
-		default:
+		case NETERR_CONN:
 			txt = _("Connection Error");
+			break;
+		default:
+			txt = _("Unknown Error");
 			break;
 		}
 		W_BUTINIT sButInit;
