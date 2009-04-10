@@ -606,7 +606,7 @@ static void addGames(void)
 	// in case they refresh, and a game becomes available.
 	widgDelete(psWScreen,FRONTEND_NOGAMESAVAILABLE); 
 	// only have to do this if we have any games available.
-	if (gcount)
+	if (!getConnError() && gcount)
 	{
 		for(i=0;i<MaxGames;i++)							// draw games
 		{
@@ -646,7 +646,16 @@ static void addGames(void)
 	{
 	// display that no games are available in lobby.
 	// This is a 'button', not text so it can be hilighted/centered.
-		const char *txt = _("NO GAMES ARE AVAILABLE");
+		const char *txt;
+		switch (getConnError())
+		{
+		case NETERR_NOERR:
+			txt = _("No games are available");
+			break;
+		default:
+			txt = _("Connection Error");
+			break;
+		}
 		W_BUTINIT sButInit;
 
 		// delete old widget if necessary
