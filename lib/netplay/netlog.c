@@ -95,7 +95,7 @@ static const char *packetname[NUM_GAME_PACKETS] =
 	"NET_REQUEST_VERSION"
 };
 
-static PHYSFS_file	*pFileHandle;
+static PHYSFS_file	*pFileHandle = NULL;
 static uint32_t		packetcount[2][NUM_GAME_PACKETS];
 static uint32_t		packetsize[2][NUM_GAME_PACKETS];
 
@@ -153,6 +153,7 @@ BOOL NETstopLogging(void)
 		debug(LOG_ERROR, "Could not close net log: %s", PHYSFS_getLastError());
 		return false;
 	}
+	pFileHandle = NULL;
 
 	return true;
 }
