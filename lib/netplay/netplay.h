@@ -170,6 +170,15 @@ extern NETPLAY				NetPlay;
 
 extern NETMSG NetMsg;
 
+// Connection errors
+
+typedef enum {
+	NETERR_NOERR,
+	NETERR_CONN
+} NETERR_TYPES;
+
+extern NETERR_TYPES getConnError(void);
+
 // ////////////////////////////////////////////////////////////////////////
 // functions available to you.
 extern int   NETinit(BOOL bFirstCall);				// init

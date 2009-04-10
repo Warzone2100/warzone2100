@@ -1733,6 +1733,13 @@ BOOL NEThaltJoining(void)
 	return true;
 }
 
+NETERR_TYPES connError = NETERR_NOERR;
+
+NETERR_TYPES getConnError(void)
+{
+	return connError;
+}
+
 // ////////////////////////////////////////////////////////////////////////
 // find games on open connection
 BOOL NETfindGame(void)
@@ -1743,6 +1750,9 @@ BOOL NETfindGame(void)
 	unsigned int port = (hostname == masterserver_name) ? masterserver_port : gameserver_port;
 	int result = 0;
 	debug(LOG_NET, "Looking for games...");
+	
+	if (connError > NETERR_CONN) return false;
+	connError = NETERR_CONN;
 
 	NetPlay.games[0].desc.dwSize = 0;
 	NetPlay.games[0].desc.dwCurrentPlayers = 0;
@@ -1752,6 +1762,7 @@ BOOL NETfindGame(void)
 	{
 		NetPlay.dpidPlayer		= HOST_DPID;
 		NetPlay.bHost			= true;
+		connError = NETERR_NOERR;
 		return true;
 	}
 	// We first check to see if we were given a IP/hostname from the command line
@@ -1847,6 +1858,7 @@ BOOL NETfindGame(void)
 		++gamecount;
 	} while (gamecount < gamesavailable);
 
+	connError = NETERR_NOERR;
 	return true;
 }
 
