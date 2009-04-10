@@ -1869,6 +1869,15 @@ BOOL NEThaltJoining(void)
 }
 
 // ////////////////////////////////////////////////////////////////////////
+// connection error reading
+NETERR_TYPES connError = NETERR_NOERR;
+
+NETERR_TYPES getConnError(void)
+{
+	return connError;
+}
+
+// ////////////////////////////////////////////////////////////////////////
 // find games on open connection
 BOOL NETfindGame(void)
 {
@@ -1878,6 +1887,9 @@ BOOL NETfindGame(void)
 	unsigned int port = (hostname == masterserver_name) ? masterserver_port : gameserver_port;
 	int result = 0;
 	debug(LOG_NET, "Looking for games...");
+
+	if (connError > NETERR_CONN) return false;
+	connError = NETERR_NOERR;
 
 	NetPlay.games[0].desc.dwSize = 0;
 	NetPlay.games[0].desc.dwCurrentPlayers = 0;
@@ -1896,6 +1908,7 @@ BOOL NETfindGame(void)
 		{
 			debug(LOG_ERROR, "Error connecting to client via hostname provided (%s)",iptoconnect);
 			debug(LOG_ERROR, "Cannot resolve hostname :%s",SDLNet_GetError());
+			connError = NETERR_CONN;
 			return false;
 		}
 		else
@@ -1908,6 +1921,7 @@ BOOL NETfindGame(void)
 	else if (SDLNet_ResolveHost(&ip, hostname, port) == -1)
 	{
 		debug(LOG_ERROR, "Cannot resolve hostname \"%s\": %s", hostname, SDLNet_GetError());
+		connError = NETERR_CONN;
 		return false;
 	}
 
@@ -1923,6 +1937,7 @@ BOOL NETfindGame(void)
 	if (tcp_socket == NULL)
 	{
 		debug(LOG_ERROR, "Cannot connect to \"%s:%d\": %s", hostname, port, SDLNet_GetError());
+		connError = NETERR_CONN;
 		return false;
 	}
 	debug(LOG_NET, "New tcp_socket = %p", tcp_socket);
@@ -1931,6 +1946,7 @@ BOOL NETfindGame(void)
 	if (socket_set == NULL)
 	{
 		debug(LOG_ERROR, "Cannot create socket set: %s", SDLNet_GetError());
+		connError = NETERR_CONN;
 		return false;
 	}
 	debug(LOG_NET, "Created socket_set %p", socket_set);
@@ -1955,6 +1971,7 @@ BOOL NETfindGame(void)
 			tcp_socket = NULL; // unsure how to handle invalid sockets?
 		}
 		// when we fail to receive a game count, bail out
+		connError = NETERR_CONN;
 		return false;
 	}
 
