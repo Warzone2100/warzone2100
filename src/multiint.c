@@ -654,7 +654,17 @@ static void addGames(void)
 	{
 	// display that no games are available in lobby.
 	// This is a 'button', not text so it can be hilighted/centered.
-		const char *txt = _("NO GAMES ARE AVAILABLE");
+		const char *txt;
+		switch (getConnError())
+		{
+		case NETERR_NOERR:
+			txt = _("No games are available");
+			break;
+		case NETERR_CONN:
+		default:
+			txt = _("Connection Error");
+			break;
+		}
 		W_BUTINIT sButInit;
 
 		// delete old widget if necessary
