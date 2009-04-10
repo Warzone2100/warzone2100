@@ -1252,6 +1252,7 @@ BOOL recvTextMessage()
 		return false;
 	}
 
+	sstrcpy(msg, NetPlay.players[i].name);
 	// Seperator
 	sstrcat(msg, ": ");
 	// Add message
