@@ -649,6 +649,8 @@ static void addGames(void)
 	// display that no games are available in lobby.
 	// This is a 'button', not text so it can be hilighted/centered.
 		const char *txt;
+		W_BUTINIT sButInit;
+
 		switch (getConnError())
 		{
 		case NETERR_NOERR:
@@ -661,7 +663,6 @@ static void addGames(void)
 			txt = _("Unknown Error");
 			break;
 		}
-		W_BUTINIT sButInit;
 
 		// delete old widget if necessary
 		widgDelete(psWScreen,FRONTEND_NOGAMESAVAILABLE);
