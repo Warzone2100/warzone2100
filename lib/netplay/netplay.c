@@ -25,6 +25,7 @@
 
 #include "lib/framework/frame.h"
 #include "lib/framework/string_ext.h"
+#include "lib/gamelib/gtime.h"
 
 #include <time.h>			// for stats
 #include <SDL_thread.h>
@@ -38,7 +39,6 @@
 
 #include "netplay.h"
 #include "netlog.h"
-#include "lib/gamelib/gtime.h"
 
 // WARNING !!! This is initialised via configuration.c !!!
 char masterserver_name[255] = {'\0'};
@@ -63,17 +63,21 @@ unsigned int masterserver_port = 0, gameserver_port = 0;
 */
 #define NET_BUFFER_SIZE	(MaxMsgSize)	// Would be 8K
 
-// HACK to allow us to call a src/multistat.c function upon receiving a NET_PLAYER_STATS msg
-extern void recvMultiStats(void);
-
+// HACK(s) to allow us to call a src/multi*.c function
+extern void recvMultiStats(void);								// from src/multistat.c
+extern BOOL sendTextMessage(const char *pStr, BOOL all);		// from src/multiplay.c
+extern BOOL MultiPlayerJoin(UDWORD dpid);						// from src/multijoin.c
+extern BOOL MultiPlayerLeave(UDWORD dpid);						// from src/multijoin.c
+extern void kickPlayer(uint32_t player_id, const char *reason); // from src/multiinit.c
 // ////////////////////////////////////////////////////////////////////////
 // Function prototypes
 void NETplayerLeaving(UDWORD dpid);		// Cleanup sockets on player leaving (nicely)
 void NETplayerDropped(UDWORD dpid);		// Broadcast NET_PLAYER_DROPPED & cleanup
 static void NETallowJoining(void);
-extern BOOL MultiPlayerJoin(UDWORD dpid);  /* from src/multijoin.c ! */
-extern BOOL MultiPlayerLeave(UDWORD dpid); /* from src/multijoin.c ! */
-
+void sendVersionCheck(void);
+void recvVersionCheck(void);
+void VersionCheckTimeOut( uint32_t victimdpid );
+void NETCheckVersion( uint32_t player );
 /*
  * Network globals, these are part of the new network API
  */
@@ -139,6 +143,119 @@ static int32_t          NetGameFlags[4] = { 0, 0, 0, 0 };
 char iptoconnect[PATH_MAX] = "\0"; // holds IP/hostname from command line
 
 extern int NET_PlayerConnectionStatus;		// from src/display3d.c
+
+//time when check sent. Note, uses dpid, & using 0xffffffff to signal nothing sent yet.
+uint32_t VersionCheckTime[MAX_PLAYERS] = {-1, -1, -1, -1, -1, -1, -1, -1};
+static BOOL playerVersionFlag[MAX_PLAYERS] = {false};	// we kick on false
+
+// ////////////////////////////////////////////////////////////////////////////
+#define VersionStringSize 80
+/************************************************************************************
+ **  NOTE (!)  Change the VersionString when net code changes!!
+ **			   ie ("trunk", "2.1.3", ...)
+ ************************************************************************************
+**/
+static char VersionString[VersionStringSize] = "trunk"; 
+static int NETCODE_VERSION_MAJOR = 2;	// unused for now
+static int NETCODE_VERSION_MINOR = 2;	// unused for now
+static int NUMBER_OF_MODS = 0;			// unused for now
+static int NETCODE_HASH = 0;			// unused for now
+
+void sendVersionCheck( void )
+{
+	uint32_t playerdpid = NetPlay.dpidPlayer;
+
+	NETlogEntry("Sending version check", 0, 0);
+	NETbeginEncode(NET_VERSION_CHECK, NET_ALL_PLAYERS);
+		NETuint32_t(&playerdpid);
+		NETstring( VersionString, sizeof(VersionString) );
+		NETint32_t( &NETCODE_VERSION_MAJOR );
+		NETint32_t( &NETCODE_VERSION_MINOR );
+		NETint32_t( &NUMBER_OF_MODS );
+		NETint32_t( &NETCODE_HASH );
+	NETend();
+
+	debug(LOG_NET, "sending dpid %u, version string [%s]", playerdpid, VersionString);
+}
+// Checks the version string, and if they are not the same, we auto-kick the player.
+void recvVersionCheck()
+{
+	uint32_t victimdpid = 0;
+	char playersVersion[VersionStringSize];
+	const char* msg;
+	int32_t MajorVersion = 0;			// Not currently used
+	int32_t MinorVersion = 0;			// Not currently used
+	int32_t ModCount = 0;				// Not currently used
+	int32_t Hash_Data = 0;				// Not currently used
+
+	NETlogEntry("Receiving version check", 0, 0);
+
+	NETbeginDecode(NET_VERSION_CHECK);
+		NETuint32_t(&victimdpid);
+		NETstring( playersVersion, sizeof(playersVersion) );
+		NETint32_t( &MajorVersion );	// NETCODE_VERSION_MAJOR
+		NETint32_t( &MinorVersion );	// NETCODE_VERSION_MINOR
+		NETint32_t( &ModCount );		// NUMBER_OF_MODS
+		NETint32_t( &Hash_Data );		// NETCODE_HASH
+	NETend();
+
+	if( strcmp(VersionString,playersVersion) != 0 )
+	{
+		debug(LOG_NET, "Received *wrong* version string [%s] from dpid %u. Expected [%s]", playersVersion, victimdpid, VersionString);
+
+		sasprintf((char**)&msg, _("Player %u has the wrong game version.  Auto kicking."), victimdpid );
+		sendTextMessage(msg, true);
+
+		if(NetPlay.bHost)
+		{
+			// Decrement player count
+			--game.desc.dwCurrentPlayers;
+			kickPlayer( victimdpid, "you have the wrong version of the game, so Update it!" );
+
+			// reset flags /time after we kick them
+			VersionCheckTime[victimdpid] = -1;
+			playerVersionFlag[victimdpid] = false;
+		}
+	}
+	else
+	{
+		playerVersionFlag[victimdpid] = true;
+		debug(LOG_NET, "Received correct version string [%s] from dpid %u", playersVersion, victimdpid);
+	}
+}
+void VersionCheckTimeOut( uint32_t victimdpid )
+{
+	const char* msg;
+
+	debug(LOG_NET, "version string was never received from dpid %u. Auto kicking at %u", victimdpid, gameTime2 );
+
+	sasprintf((char**)&msg, _("Player %u has the wrong game version.  Auto kicking."), victimdpid );
+	sendTextMessage(msg, true);
+
+	if(NetPlay.bHost)
+	{
+		// Decrement player count
+		--game.desc.dwCurrentPlayers;
+		kickPlayer( victimdpid, "You have the wrong version of the game, so Update it!" );
+
+		// reset flags /time after we kick them
+		VersionCheckTime[victimdpid] = -1;
+		playerVersionFlag[victimdpid] = false;
+	}
+}
+void NETCheckVersion( uint32_t player )
+{
+	// When flag is true, means we have received the check OK
+	if( playerVersionFlag[player] == false )
+	{
+		if (player != HOST_DPID)
+		{
+			VersionCheckTimeOut( player);
+		}
+	}
+
+}
+
 // *********** Socket with buffer that read NETMSGs ******************
 
 static NETBUFSOCKET* NET_createBufferedSocket(void)
@@ -1066,6 +1183,17 @@ static BOOL NETprocessSystemMessage(void)
 			}
 			break;
 		}
+		case NET_VERSION_CHECK:
+		{
+			recvVersionCheck();
+			break;
+		}
+		case NET_REQUEST_VERSION:
+		{
+			sendVersionCheck();
+			break;
+		}
+
 		default:
 			return false;
 	}
@@ -1640,6 +1768,13 @@ static void NETallowJoining(void)
 					// Make sure the master server gets updated by disconnecting from it
 					// NETallowJoining will reconnect
 					NETregisterServer(0);
+					// and now, request version from new person
+					NETbeginEncode(NET_REQUEST_VERSION, dpid);
+					NETend();
+					VersionCheckTime[dpid] = gameTime2;		//time we sent the msg
+					// add 7 sec delay factor for lag/slow modems?
+					VersionCheckTime[dpid] += (GAME_TICKS_PER_SEC * 7);
+					debug(LOG_NET, "Requesting Version check @(+7) %u from %u", VersionCheckTime[dpid], dpid);
 				}
 			}
 		}
