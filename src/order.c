@@ -2457,6 +2457,7 @@ BOOL orderDroidList(DROID *psDroid)
         switch (psDroid->asOrderList[0].order)
         {
         case DORDER_MOVE:
+        case DORDER_SCOUT:
 		sOrder.psObj = NULL;
 		break;
         case DORDER_ATTACK:
@@ -2561,8 +2562,8 @@ static BOOL orderDroidLocAdd(DROID *psDroid, DROID_ORDER order, UDWORD x, UDWORD
 {
 	DROID_ORDER_DATA	sOrder;
 
-	// can only queue move orders
-	if (order != DORDER_MOVE)
+	// can only queue move and scout orders
+	if (order != DORDER_MOVE && order != DORDER_SCOUT)
 	{
 		return false;
 	}
