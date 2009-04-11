@@ -2433,7 +2433,10 @@ void frontendMultiMessages(void)
 			if (NetPlay.dpidPlayer == player_id)	// we've been told to leave.
 			{
 				stopJoining();
+				screen_RestartBackDrop();
 				changeTitleMode(TITLE);
+				// maybe we want a custom 'kick' backdrop instead?
+				pie_LoadBackDrop(SCREEN_RANDOMBDROP);
 				debug(LOG_ERROR, "You have been kicked, because %s ", reason );
 			}
 			break;
