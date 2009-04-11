@@ -2217,8 +2217,7 @@ static void processMultiopWidgets(UDWORD id)
 					}
 					sasprintf(&msg, _("The host has kicked %s from the game!"), getPlayerName(j));
 					sendTextMessage(msg, true);
-					kickPlayer(victim, _(" you are being a jerk.") );
-
+					kickPlayer(victim, _("you are being a jerk.") );
 					resetReadyStatus(true);		//reset and send notification to all clients
 				}
 			}

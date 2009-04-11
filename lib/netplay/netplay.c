@@ -208,8 +208,6 @@ void recvVersionCheck()
 
 		if(NetPlay.bHost)
 		{
-			// Decrement player count
-			--game.desc.dwCurrentPlayers;
 			kickPlayer( victimdpid, "you have the wrong version of the game, so Update it!" );
 
 			// reset flags /time after we kick them
@@ -234,8 +232,6 @@ void VersionCheckTimeOut( uint32_t victimdpid )
 
 	if(NetPlay.bHost)
 	{
-		// Decrement player count
-		--game.desc.dwCurrentPlayers;
 		kickPlayer( victimdpid, "You have the wrong version of the game, so Update it!" );
 
 		// reset flags /time after we kick them
@@ -1298,9 +1294,6 @@ receive_message:
 						// This means that the player dropped / disconnected for whatever reason. 
 						debug(LOG_WARNING, "Player, (dpid %u) seems to have dropped/disconnected.", i);
 
-						// Decrement player count
-						--game.desc.dwCurrentPlayers;
-
 						// Send message type speciffically for dropped / disconnects
 						NETbeginEncode(NET_PLAYER_DROPPED, NET_ALL_PLAYERS);
 							NETuint32_t(&i);
@@ -1675,6 +1668,8 @@ static void NETallowJoining(void)
 					}
 					else
 					{
+						// get the correct player count after kicks / leaves
+						game.desc.dwCurrentPlayers = NETplayerInfo();
 						NETsendGAMESTRUCT(tmp_socket[i], &game);
 					}
 				}
