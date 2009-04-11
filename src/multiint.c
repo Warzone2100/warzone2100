@@ -2211,7 +2211,7 @@ static void processMultiopWidgets(UDWORD id)
 					}
 					sasprintf(&msg, _("The host has kicked %s from the game!"), getPlayerName(j));
 					sendTextMessage(msg, true);
-					kickPlayer(victim, _(" your being a jerk.") );
+					kickPlayer(victim, _("you are being a jerk.") );
 
 					resetReadyStatus(true);		//reset and send notification to all clients
 				}
@@ -2427,7 +2427,9 @@ void frontendMultiMessages(void)
 			if (NetPlay.dpidPlayer == player_id)	// we've been told to leave.
 			{
 				stopJoining();
+				screen_RestartBackDrop();
 				changeTitleMode(TITLE);
+				pie_LoadBackDrop(SCREEN_RANDOMBDROP);
 				debug(LOG_ERROR, "You have been kicked, because %s ", reason );
 			}
 			break;
