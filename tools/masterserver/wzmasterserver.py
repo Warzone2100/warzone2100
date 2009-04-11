@@ -50,8 +50,8 @@ import cmd
 ################################################################################
 # Settings.
 
-gamePort  = 9999         # Gameserver port.
-lobbyPort = 9998         # Lobby port.
+gamePort  = 2100         # Gameserver port.
+lobbyPort = 9990         # Lobby port.
 gsSize    = 112          # Size of GAMESTRUCT in byte.
 checkInterval = 100      # Interval between requests causing a gamedb check
 
