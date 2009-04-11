@@ -90,7 +90,9 @@ static const char *packetname[NUM_GAME_PACKETS] =
 	"NET_PLAYER_JOINED",
 	"NET_PLAYER_LEAVING",
 	"NET_PLAYER_DROPPED",
-	"NET_GAME_FLAGS"
+	"NET_GAME_FLAGS",
+	"NET_VERSION_CHECK",
+	"NET_REQUEST_VERSION"
 };
 
 static PHYSFS_file	*pFileHandle = NULL;

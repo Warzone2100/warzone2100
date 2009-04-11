@@ -752,14 +752,18 @@ BOOL recvMessage(void)
 			break;
 		case NET_KICK:
 		{
+			// FIX ME: in game kick ?  Is this even possible with current code?
 			uint32_t player_id;
+			char reason[MAX_KICK_REASON];
 
 			NETbeginDecode(NET_KICK);
 				NETuint32_t(&player_id);
+				NETstring( reason, MAX_KICK_REASON);
 			NETend();
 
 			if (NetPlay.dpidPlayer == player_id)  // we've been told to leave.
 			{
+				debug(LOG_ERROR, "You were kicked because, %s", reason);
 				setPlayerHasLost(true);
 			}
 			break;

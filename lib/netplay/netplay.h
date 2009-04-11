@@ -90,7 +90,10 @@ typedef enum
 	NET_PLAYER_DROPPED,		//57 notice about player dropped / disconnected
 	NET_GAME_FLAGS,			//58 game flags
 	NET_READY_REQUEST,		//59 player ready to start an mp game
-	NUM_GAME_PACKETS
+							//60 to prevent conflict
+	NET_VERSION_CHECK = 61,	//61 version check
+	NET_REQUEST_VERSION,	//62 Host requests version check
+	NUM_GAME_PACKETS		//   *MUST* be last.
 } MESSAGE_TYPES;
 
 // Constants
