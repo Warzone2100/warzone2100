@@ -1,3 +1,12 @@
+ * Network:
+   * CHANGE: Game port is 2100.  Lobby port is 9990 (when you host games). r6994
+   * Add:	Version checking code. If client connects to host, and they don't respond (within 7secs) to the version packet, then it will auto-kick them.
+            If client sends wrong version in the version packet, then it will auto-kick them.  r6992
+   *
+ * General:
+   * Fix: When a person starts & aborts a MP game and trys to start / load SP game. r6991
+   * Change: Allow F10 to *always* be the screenshot key.  Works everywhere now. r6993
+   * Change: New config directory. Mac & Windows (warzone2100 2.2) & linux (.warzone2100-2.2). r6995
 2009-04-01: Version 2.2_beta1
  * General:
    * New: Multi-threaded path-finding should make path-finding much faster (r5735, patch #1064)
