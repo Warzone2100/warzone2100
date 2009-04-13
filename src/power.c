@@ -181,7 +181,7 @@ void usePower(int player, float quantity)
 void addPower(int player, float quantity)
 {
 	ASSERT(player < MAX_PLAYERS, "addPower: Bad player (%u)", player);
-
+	ASSERT(asPower[player].currentPower + quantity >= 0, "not enough power");
 	asPower[player].currentPower += quantity;
 }
 
@@ -233,6 +233,7 @@ float updateExtractedPower(STRUCTURE	*psBuilding)
 		pResExtractor->timeLastUpdated = gameTime;
 		extractedPoints += pointsToAdd;
 	}
+	ASSERT(extractedPoints > 0, "extracted negative amount of power");
 	return extractedPoints;
 }
 
@@ -297,6 +298,7 @@ void updateCurrentPower(POWER_GEN *psPowerGen, UDWORD player)
 	}
 
 	asPower[player].currentPower += (extractedPower * psPowerGen->multiplier) / 100;
+	ASSERT(asPower[player].currentPower >= 0, "negative power");
 }
 
 // only used in multiplayer games.
@@ -305,6 +307,7 @@ void setPower(int player, float power)
 	ASSERT(player < MAX_PLAYERS, "setPower: Bad player (%u)", player);
 
 	asPower[player].currentPower = power;
+	ASSERT(asPower[player].currentPower >= 0, "negative power");
 }
 
 float getPower(int player)

@@ -1156,8 +1156,8 @@ void structureBuild(STRUCTURE *psStruct, DROID *psDroid, int buildPoints)
 	}
 	else
 	{
-		// get half the power back for repairing 
-		powerNeeded = ((psStruct->currentBuildPts + buildPoints) * structureTotalReturn(psStruct))/(psStruct->pStructureType->buildPoints) -
+		// get half the power back for demolishing 
+		powerNeeded = (((int)psStruct->currentBuildPts + buildPoints) * structureTotalReturn(psStruct))/(psStruct->pStructureType->buildPoints) -
 		               (psStruct->currentBuildPts * structureTotalReturn(psStruct))/(psStruct->pStructureType->buildPoints);
 		buildPointsToAdd = buildPoints;
 		addPower(psDroid->player, -powerNeeded);
