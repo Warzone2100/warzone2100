@@ -1,12 +1,13 @@
- * Network:
-   * CHANGE: Game port is 2100.  Lobby port is 9990 (when you host games). r6994
-   * Add:	Version checking code. If client connects to host, and they don't respond (within 7secs) to the version packet, then it will auto-kick them.
-            If client sends wrong version in the version packet, then it will auto-kick them.  r6992
-   *
+0000-00-00: Version 2.2_beta2
  * General:
-   * Fix: When a person starts & aborts a MP game and trys to start / load SP game. r6991
-   * Change: Allow F10 to *always* be the screenshot key.  Works everywhere now. r6993
-   * Change: New config directory. Mac & Windows (warzone2100 2.2) & linux (.warzone2100-2.2). r6995
+   * Fix: Crash when a person aborts multiplayer early then tries to start single-player (r6991)
+   * Change: No longer requires the texture rectangle OpenGL extension to play video (r7022)
+   * Change: F10 is now always the screenshot key (r6993)
+   * Change: New config directory (r6995)
+ * Network:
+   * Add: Version checking added of connecting clients (r6992)
+   * Change: Game now runs on port 2100, and lobby port is now 9990 (r6994)
+
 2009-04-01: Version 2.2_beta1
  * General:
    * New: Multi-threaded path-finding should make path-finding much faster (r5735, patch #1064)
