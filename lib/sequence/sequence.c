@@ -133,7 +133,6 @@ static bool audiobuf_ready = false;		// single 'frame' audio buffer ready for pr
 // file handle
 static PHYSFS_file* fpInfile = NULL;
 
-static GLuint backDropTexture2 = ~0;	// GL texture ID
 static char* RGBAframe = NULL;					// texture buffer
 
 #if !defined(WZ_NOSOUND)
@@ -277,36 +276,30 @@ static void Allocate_videoFrame(void)
 	RGBAframe = malloc(videodata.ti.frame_width * videodata.ti.frame_height * 4);
 }
 
+static int texture_width = 512;
+static int texture_height = 512;
+static GLuint video_texture;
+
 #define Vclip( x )	( (x > 0) ? ((x < 255) ? x : 255) : 0 )
 // main routine to display video on screen.
 static void video_write(bool update)
 {
 	unsigned int x = 0, y = 0;
-	static bool unsupportedExtention = false;
+	const int video_width = videodata.ti.frame_width;
+	const int video_height = videodata.ti.frame_height;
 	yuv_buffer yuv;
 
-	// don't bother continuing if they don't have correct openGL extention.
-	if (unsupportedExtention)
-	{
-		return;
-	}
-	if (!GLEE_ARB_texture_rectangle)
-	{
-		// bail out, and complain about crappy hardware *once*.
-		debug(LOG_WARNING , "You got some really crappy hardware! GL_TEXTURE_RECTANGLE_ARB not supported!");
-		debug(LOG_WARNING , "Video will not show!");
-		unsupportedExtention = true;
-		return;
-	}
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, video_texture);
 
 	if (update)
 	{
 		theora_decode_YUVout(&videodata.td, &yuv);
 
 		// fill the RGBA buffer
-		for (y = 0; y < videodata.ti.frame_height; y++)
+		for (y = 0; y < video_height; y++)
 		{
-			for (x = 0; x < videodata.ti.frame_width; x++)
+			for (x = 0; x < video_width; x++)
 			{
 				int Y = yuv.y[x + y * yuv.y_stride];
 				int U = yuv.u[x / 2 + (y / 2) * yuv.uv_stride];
@@ -320,43 +313,21 @@ static void video_write(bool update)
 				int G = Vclip((298 * C - 100 * D - 208 * E + 128) >> 8);
 				int B = Vclip((298 * C + 516 * D + 128) >> 8);
 
-				RGBAframe[x * 4 + y * videodata.ti.frame_width * 4 + 0] = R;
-				RGBAframe[x * 4 + y * videodata.ti.frame_width * 4 + 1] = G;
-				RGBAframe[x * 4 + y * videodata.ti.frame_width * 4 + 2] = B;
-				RGBAframe[x * 4 + y * videodata.ti.frame_width * 4 + 3] = 0xFF;
+				RGBAframe[x * 4 + y * video_width * 4 + 0] = R;
+				RGBAframe[x * 4 + y * video_width * 4 + 1] = G;
+				RGBAframe[x * 4 + y * video_width * 4 + 2] = B;
+				RGBAframe[x * 4 + y * video_width * 4 + 3] = 0xFF;
 			}
 		}
 
-		if (backDropTexture2 != (GLuint)~0)
-		{
-			glDeleteTextures(1, &backDropTexture2);
-		}
-
-		glGenTextures(1, &backDropTexture2);
-		glEnable(GL_TEXTURE_RECTANGLE_ARB);
-		glBindTexture(GL_TEXTURE_RECTANGLE_ARB, backDropTexture2);
-		glTexImage2D(GL_TEXTURE_RECTANGLE_ARB, 0, GL_RGBA, videodata.ti.frame_width,
-		        videodata.ti.frame_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, RGBAframe);
-
-		glTexParameteri(GL_TEXTURE_RECTANGLE_ARB, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_RECTANGLE_ARB, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		glTexParameterf(GL_TEXTURE_RECTANGLE_ARB, GL_TEXTURE_WRAP_S, GL_CLAMP);
-		glTexParameterf(GL_TEXTURE_RECTANGLE_ARB, GL_TEXTURE_WRAP_T, GL_CLAMP);
-		glBindTexture(GL_TEXTURE_RECTANGLE_ARB, 0);
-		glDisable(GL_TEXTURE_RECTANGLE_ARB);
-
+		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, video_width,
+				video_height, GL_RGBA, GL_UNSIGNED_BYTE, RGBAframe);
 	}
 
 	glDisable(GL_DEPTH_TEST);
 	glDepthMask(GL_FALSE);
 
-	// Make sure the current texture page is reloaded after we are finished
-	// Otherwise WZ will think it is still loaded and not load it again
-	pie_SetTexturePage(-1);
-
 	glPushMatrix();
-	glEnable(GL_TEXTURE_RECTANGLE_ARB);
-	glBindTexture(GL_TEXTURE_RECTANGLE_ARB, backDropTexture2);
 
 	// NOTE: 255 * width | height, because texture matrix is set up with a
 	// call to glScalef(1/256.0, 1/256.0, 1) ... so don't blame me. :P
@@ -364,17 +335,19 @@ static void video_write(bool update)
 	glBegin(GL_TRIANGLE_STRIP);
 	glTexCoord2f(0, 0);
 	glVertex2f(0, 0);
-	glTexCoord2f(255 * videodata.ti.frame_width, 0);
+	glTexCoord2f(256 * video_width / texture_width, 0);
 	glVertex2f(ScrnvidXsize, 0);				//screenWidth
-	glTexCoord2f(0, 255 * videodata.ti.frame_height);
+	glTexCoord2f(0, 256 * video_height / texture_height);
 	glVertex2f(0, ScrnvidYsize);				//screenHeight
-	glTexCoord2f(255 * videodata.ti.frame_width, 255* videodata.ti.frame_height);
+	glTexCoord2f(256 * video_width / texture_width, 256 * video_height / texture_height);
 	glVertex2f(ScrnvidXsize, ScrnvidYsize);		//screenWidth,screenHeight
 	glEnd();
 
-	glBindTexture(GL_TEXTURE_RECTANGLE_ARB, 0);
-	glDisable(GL_TEXTURE_RECTANGLE_ARB);
 	glPopMatrix();
+
+	// Make sure the current texture page is reloaded after we are finished
+	// Otherwise WZ will think it is still loaded and not load it again
+	pie_SetTexturePage(TEXPAGE_NONE);
 }
 
 #if !defined(WZ_NOSOUND)
@@ -684,7 +657,28 @@ bool seq_Play(const char* filename)
 	/* open video */
 	if (theora_p)
 	{
+		if (videodata.ti.frame_width > texture_width ||
+				videodata.ti.frame_height > texture_height)
+		{
+			debug(LOG_ERROR, "Video size too large, must be below %dx%d!",
+					texture_width, texture_height);
+			return false;
+		}
+		if (videodata.ti.pixelformat != OC_PF_420)
+		{
+			debug(LOG_ERROR, "Video not in YUV420 format!");
+			return false;
+		}
 		Allocate_videoFrame();
+
+		glGenTextures(1, &video_texture);
+		glBindTexture(GL_TEXTURE_2D, video_texture);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, texture_width, texture_height,
+				0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
 	}
 
 	/* on to the main decode loop.  We assume in this example that audio
