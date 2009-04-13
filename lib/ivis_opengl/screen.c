@@ -185,11 +185,6 @@ BOOL screenInitialise(
 	debug(LOG_3D, "  * Rectangular texture %s supported.", GLEE_ARB_texture_rectangle ? "is" : "is NOT");
 	debug(LOG_3D, "  * FrameBuffer Object (FBO) %s supported.", GLEE_EXT_framebuffer_object  ? "is" : "is NOT");
 
-	if (!GLEE_ARB_texture_rectangle)
-	{
-		debug(LOG_ERROR, "Radar will not be displayed without support for texture rectangle extension!");
-	}
-
 	glViewport(0, 0, width, height);
 	glMatrixMode(GL_PROJECTION);
 	glPushMatrix();
