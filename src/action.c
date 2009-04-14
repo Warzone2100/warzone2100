@@ -2133,7 +2133,7 @@ void actionUpdateDroid(DROID *psDroid)
 		// align the turret
 		actionTargetTurret((BASE_OBJECT*)psDroid, psDroid->psActionTarget[0], &psDroid->asWeaps[0]);
 
-		if (cbSensorDroid(psDroid))
+		if (cbSensorDroid(psDroid) || objRadarDetector((BASE_OBJECT *)psDroid))
 		{
 			// don't move to the target, just make sure it is visible
 			// Anyone commenting this out will get a knee capping from John.
@@ -2655,7 +2655,7 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 		psDroid->actionX = psDroid->pos.x;
 		psDroid->actionY = psDroid->pos.y;
 		if (//(secondaryGetState(psDroid, DSO_HALTTYPE, &state) && (state == DSS_HALT_HOLD)) ||
-			cbSensorDroid(psDroid))
+			cbSensorDroid(psDroid) || objRadarDetector((BASE_OBJECT *)psDroid))
 		{
 			psDroid->action = DACTION_OBSERVE;
 		}

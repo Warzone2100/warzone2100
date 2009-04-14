@@ -1176,6 +1176,10 @@ BOOL loadSensorStats(const char *pSensorData, UDWORD bufferSize)
 		{
 			psStats->type = SUPER_SENSOR;
 		}
+		else if (!strcmp(type, "RADAR DETECTOR"))
+		{
+			psStats->type = RADAR_DETECTOR_SENSOR;
+		}
 		else
 		{
 			ASSERT( false, "Invalid Sensor type" );
@@ -3355,5 +3359,49 @@ BOOL objHasWeapon(BASE_OBJECT *psObj)
 		}
 	}
 
+	return false;
+}
+
+SENSOR_STATS *objActiveRadar(BASE_OBJECT *psObj)
+{
+	SENSOR_STATS	*psStats = NULL;
+
+	switch (psObj->type)
+	{
+	case OBJ_DROID:
+		if (((DROID *)psObj)->droidType != DROID_SENSOR && ((DROID *)psObj)->droidType != DROID_COMMAND)
+		{
+			return NULL;
+		}
+		psStats = asSensorStats + ((DROID *)psObj)->asBits[COMP_SENSOR].nStat;
+		break;
+	case OBJ_STRUCTURE:
+		psStats = ((STRUCTURE *)psObj)->pStructureType->pSensor;
+		if (psStats == NULL || psStats->location != LOC_TURRET)
+		{
+			return NULL;
+		}
+		break;
+	default:
+		break;
+	}
+	return psStats;
+}
+
+bool objRadarDetector(BASE_OBJECT *psObj)
+{
+	if (psObj->type == OBJ_STRUCTURE)
+	{
+		STRUCTURE *psStruct = (STRUCTURE *)psObj;
+
+		return (psStruct->pStructureType->pSensor && psStruct->pStructureType->pSensor->type == RADAR_DETECTOR_SENSOR);
+	}
+	else if (psObj->type == OBJ_DROID)
+	{
+		DROID *psDroid = (DROID *)psObj;
+		SENSOR_STATS *psSensor = getSensorStats(psDroid);
+
+		return (psSensor && psSensor->type == RADAR_DETECTOR_SENSOR);
+	}
 	return false;
 }

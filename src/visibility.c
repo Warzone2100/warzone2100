@@ -299,11 +299,17 @@ bool visibleObject(const BASE_OBJECT* psViewer, const BASE_OBJECT* psTarget, boo
 	{
 		case OBJ_DROID:
 		{
-			const DROID * psDroid = (DROID *)psViewer;
+			DROID *psDroid = (DROID *)psViewer;
 
 			if (psDroid->droidType == DROID_COMMAND)
 			{
 				range = 3 * range / 2;
+			}
+			if (psDroid->psTarget == psTarget
+			    && (cbSensorDroid(psDroid) || objRadarDetector((BASE_OBJECT *)psDroid)))
+			{
+				// if it is targetted by a counter battery sensor, it is seen
+				return UBYTE_MAX;
 			}
 			break;
 		}
@@ -323,9 +329,8 @@ bool visibleObject(const BASE_OBJECT* psViewer, const BASE_OBJECT* psTarget, boo
 				return false;
 			}
 
-			if ((structCBSensor(psStruct)
-				|| structVTOLCBSensor(psStruct))
-				&& psStruct->psTarget[0] == psTarget)
+			if (psStruct->psTarget[0] == psTarget
+			    && (structCBSensor(psStruct) || structVTOLCBSensor(psStruct) || objRadarDetector((BASE_OBJECT *)psStruct)))
 			{
 				// if a unit is targetted by a counter battery sensor
 				// it is automatically seen

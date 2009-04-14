@@ -2735,8 +2735,6 @@ STRUCTURE	*psStructure;
 		}
 	}
 
-//DBPRINTF(("%d %d\n",mouseTileX,mouseTileY);
-
 	/* We haven't found anything yet */
 	retVal = MT_NOTARGET;
 
@@ -2752,7 +2750,6 @@ STRUCTURE	*psStructure;
 					// need to check for command droids here as well
 					if (psDroid->droidType == DROID_SENSOR)
 					{
-//	DBPRINTF(("MT_SENSOR\n");
 						return MT_SENSOR;
 					}
 					else if (psDroid->droidType == DROID_TRANSPORTER)
