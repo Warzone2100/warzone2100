@@ -750,23 +750,8 @@ void saveMissionData(void)
 				if ((psStructBeingBuilt = (STRUCTURE*)orderStateObj(psDroid, DORDER_BUILD))
 				 && psStructBeingBuilt == psStruct)
 				{
-					// check there is enough power to complete
-					inc = structPowerToBuild(psStruct) - psStruct->currentPowerAccrued;
-					if (inc > 0)
-					{
-						// not accrued enough power, so check if there is enough available
-						if (checkPower(selectedPlayer, inc))
-						{
-							// enough - so use it and set to complete
-							usePower(selectedPlayer, inc);
-							buildingComplete(psStruct);
-						}
-					}
-					else
-					{
-						// enough power or more than enough! - either way, set to complete
-						buildingComplete(psStruct);
-					}
+					// just give it all its build points
+					structureBuild(psStruct, NULL, psStruct->pStructureType->buildPoints);
 					//don't bother looking for any other droids working on it
 					break;
 				}

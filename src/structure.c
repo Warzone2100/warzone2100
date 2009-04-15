@@ -1152,7 +1152,7 @@ void structureBuild(STRUCTURE *psStruct, DROID *psDroid, int buildPoints)
 		// Check if there is enough power to perform this construction work
 		powerNeeded = ((psStruct->currentBuildPts + buildPoints) * structPowerToBuild(psStruct))/psStruct->pStructureType->buildPoints -
 		               (psStruct->currentBuildPts * structPowerToBuild(psStruct))/psStruct->pStructureType->buildPoints;
-		buildPointsToAdd = requestPowerFor(psDroid->player, powerNeeded, buildPoints);
+		buildPointsToAdd = requestPowerFor(psStruct->player, powerNeeded, buildPoints);
 	}
 	else
 	{
@@ -1160,7 +1160,7 @@ void structureBuild(STRUCTURE *psStruct, DROID *psDroid, int buildPoints)
 		powerNeeded = (((int)psStruct->currentBuildPts + buildPoints) * structureTotalReturn(psStruct))/(psStruct->pStructureType->buildPoints) -
 		               (psStruct->currentBuildPts * structureTotalReturn(psStruct))/(psStruct->pStructureType->buildPoints);
 		buildPointsToAdd = buildPoints;
-		addPower(psDroid->player, -powerNeeded);
+		addPower(psStruct->player, -powerNeeded);
 	}
 
 	before = (9 * psStruct->currentBuildPts * structureBody(psStruct) ) / (10 * psStruct->pStructureType->buildPoints);
@@ -1176,7 +1176,10 @@ void structureBuild(STRUCTURE *psStruct, DROID *psDroid, int buildPoints)
 		psStruct->status = SS_BUILT;
 		buildingComplete(psStruct);
 
-		intBuildFinished(psDroid);
+		if (psDroid)
+		{
+			intBuildFinished(psDroid);
+		}
 
 		if((bMultiPlayer) && myResponsibility(psStruct->player))
 		{
@@ -1184,7 +1187,8 @@ void structureBuild(STRUCTURE *psStruct, DROID *psDroid, int buildPoints)
 		}
 
 		//only play the sound if selected player
-		if (psStruct->player == selectedPlayer
+		if (psDroid &&
+		    psStruct->player == selectedPlayer
 		 && (psDroid->order != DORDER_LINEBUILD
 		  || (map_coord(psDroid->orderX) == map_coord(psDroid->orderX2)
 		   && map_coord(psDroid->orderY) == map_coord(psDroid->orderY2))))
@@ -1199,16 +1203,18 @@ void structureBuild(STRUCTURE *psStruct, DROID *psDroid, int buildPoints)
 
 		/* must reset here before the callback, droid must have DACTION_NONE
 		     in order to be able to start a new built task, doubled in actionUpdateDroid() */
-		debug( LOG_NEVER, "DACTION_NONE: done\n");
-		psDroid->action = DACTION_NONE;
+		if (psDroid)
+		{
+			debug( LOG_NEVER, "DACTION_NONE: done\n");
+			psDroid->action = DACTION_NONE;
 
-		/* Notify scripts we just finished building a structure, pass builder and what was built */
-		psScrCBNewStruct	= psStruct;
-		psScrCBNewStructTruck= psDroid;
-		eventFireCallbackTrigger((TRIGGER_TYPE)CALL_STRUCTBUILT);
+			/* Notify scripts we just finished building a structure, pass builder and what was built */
+			psScrCBNewStruct	= psStruct;
+			psScrCBNewStructTruck= psDroid;
+			eventFireCallbackTrigger((TRIGGER_TYPE)CALL_STRUCTBUILT);
 
-		audio_StopObjTrack( psDroid, ID_SOUND_CONSTRUCTION_LOOP );
-
+			audio_StopObjTrack( psDroid, ID_SOUND_CONSTRUCTION_LOOP );
+		}
 	}
 	else
 	{
