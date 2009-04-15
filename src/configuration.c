@@ -54,7 +54,6 @@
 #define DEFAULTFXVOL	80
 #define DEFAULTCDVOL	60
 #define DEFAULTSCROLL	1000
-#define DEFAULTMAPNAME	"Rush"
 
 extern void registry_clear(void); // from configfile.c
 
@@ -464,15 +463,15 @@ BOOL loadConfig(void)
 			debug(LOG_WARNING, "Invalid or not found maxPlayers parameter for map %s", game.map);
 			debug(LOG_WARNING, "Reseting map to default parameters.");
 			// we don't have maxPlayers set, so fall back to defaults.
-			game.maxPlayers = 4;	//4 is for the DEFAULTMAPNAME map (rush)
-			sstrcpy(game.map, DEFAULTMAPNAME);
+			game.maxPlayers = 4;	//4 is for the DEFAULTSKIRMISHMAP map (rush)
+			sstrcpy(game.map, DEFAULTSKIRMISHMAP);
 			setWarzoneKeyString("mapName", game.map);
 			setWarzoneKeyNumeric("maxPlayers",game.maxPlayers);
 		}
 	}
 	else
 	{
-		sstrcpy(game.map, DEFAULTMAPNAME);
+		sstrcpy(game.map, DEFAULTSKIRMISHMAP);
 		setWarzoneKeyString("mapName", game.map);
 	}
 
