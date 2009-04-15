@@ -2887,7 +2887,7 @@ static void drawStructureHealth(STRUCTURE *psStruct)
 			psStruct->pStructureType, psStruct->player);
 		if (resistance)
 		{
-			health = PERCENT(psStruct->resistance, resistance);
+			health = PERCENT(MAX(0,psStruct->resistance), resistance);
 		}
 		else
 		{
