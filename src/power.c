@@ -233,7 +233,7 @@ float updateExtractedPower(STRUCTURE	*psBuilding)
 		pResExtractor->timeLastUpdated = gameTime;
 		extractedPoints += pointsToAdd;
 	}
-	ASSERT(extractedPoints > 0, "extracted negative amount of power");
+	ASSERT(extractedPoints >= 0, "extracted negative amount of power");
 	return extractedPoints;
 }
 
