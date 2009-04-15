@@ -126,9 +126,6 @@ static BOOL					safeSearch		= false;				// allow auto game finding.
 
 static UDWORD hideTime=0;
 
-#define DEFAULTCAMPAIGNMAP	"Rush"
-#define DEFAULTSKIRMISHMAP	"Sk-Rush"
-
 extern int NET_PlayerConnectionStatus;		// from src/display3d.c
 
 /// end of globals.
