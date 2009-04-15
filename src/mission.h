@@ -70,9 +70,6 @@ extern BOOL setUpMission(UDWORD type);
 /** This causes the new mission data to be loaded up. */
 extern void launchMission(void);
 
-/** The update routine for all Structures left back at base during a Mission. */
-extern void missionStructureUpdate(STRUCTURE *psBuilding);
-
 /** The update routine for all droids left back at home base. Only interested in Transporters at present. */
 extern void missionDroidUpdate(DROID *psDroid);
 

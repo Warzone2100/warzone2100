@@ -2792,7 +2792,7 @@ BOOL CheckHaltOnMaxUnitsReached(STRUCTURE *psStructure)
 }
 
 
-static void aiUpdateStructure(STRUCTURE *psStructure)
+static void aiUpdateStructure(STRUCTURE *psStructure, bool mission)
 {
 	BASE_STATS			*pSubject = NULL;
 	UDWORD				pointsToAdd;//, iPower;
@@ -2818,6 +2818,20 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 	float secondsElapsed,secondsToBuild, powerNeeded;
 
 	CHECK_STRUCTURE(psStructure);
+
+	if (mission)
+	{
+		switch (psStructure->pStructureType->type)
+		{
+			case REF_RESEARCH:
+			case REF_FACTORY:
+			case REF_CYBORG_FACTORY:
+			case REF_VTOL_FACTORY:
+				break;
+			default:
+				return; // nothing to do
+		}
+	}
 
 	// Will go out into a building EVENT stats/text file
 	/* Spin round yer sensors! */
@@ -3290,8 +3304,23 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 				!IsFactoryCommanderGroupFull(psFactory) &&
 				!CheckHaltOnMaxUnitsReached(psStructure))
 			{
-				/* Place the droid on the map */
-				bDroidPlaced = structPlaceDroid(psStructure, (DROID_TEMPLATE *)pSubject, &psDroid);
+				if (mission)
+				{
+					// put it in the mission list
+					psDroid = buildMissionDroid((DROID_TEMPLATE *)pSubject,
+					                            psStructure->pos.x, psStructure->pos.y,
+					                            psStructure->player);
+					if (psDroid)
+					{
+						setDroidBase(psDroid, psStructure);
+						bDroidPlaced = true;
+					}
+				}
+				else
+				{
+					// place it on the map
+					bDroidPlaced = structPlaceDroid(psStructure, (DROID_TEMPLATE *)pSubject, &psDroid);
+				}
 
 				//reset the start time
 				psFactory->timeStarted = ACTION_START_TIME;
@@ -3599,7 +3628,7 @@ static float CalcStructureSmokeInterval(float damage)
 }
 
 /* The main update routine for all Structures */
-void structureUpdate(STRUCTURE *psBuilding)
+void structureUpdate(STRUCTURE *psBuilding, bool mission)
 {
 	UDWORD widthScatter,breadthScatter;
 	UDWORD emissionInterval, iPointsToAdd, iPointsRequired;
@@ -3618,7 +3647,7 @@ void structureUpdate(STRUCTURE *psBuilding)
 	//update the manufacture/research of the building once complete
 	if (psBuilding->status == SS_BUILT)
 	{
-		aiUpdateStructure(psBuilding);
+		aiUpdateStructure(psBuilding, mission);
 	}
 
 	if(psBuilding->status!=SS_BUILT)

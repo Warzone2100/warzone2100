@@ -131,7 +131,7 @@ extern STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWO
 /// Create a blueprint structure, with just enough information to render it
 extern STRUCTURE *buildBlueprint(STRUCTURE_STATS *psStats, float x, float y, STRUCT_STATES state);
 /* The main update routine for all Structures */
-void structureUpdate(STRUCTURE *psBuilding);
+void structureUpdate(STRUCTURE *psBuilding, bool mission);
 
 /* Release all resources associated with a structure */
 void structureRelease(STRUCTURE *psBuilding);

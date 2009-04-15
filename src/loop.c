@@ -370,7 +370,7 @@ GAMECODE gameLoop(void)
 				{
 					/* Copy the next pointer - not 100% sure if the structure could get destroyed but this covers us anyway */
 					psNBuilding = psCBuilding->psNext;
-					structureUpdate(psCBuilding);
+					structureUpdate(psCBuilding, false);
 					//set animation flag
 					if (psCBuilding->pStructureType->type == REF_HQ &&
 						psCBuilding->status == SS_BUILT)
@@ -394,7 +394,7 @@ GAMECODE gameLoop(void)
 				{
 					/* Copy the next pointer - not 100% sure if the structure could get destroyed but this covers us anyway. It shouldn't do since its not even on the map!*/
 					psNBuilding = psCBuilding->psNext;
-					missionStructureUpdate(psCBuilding);
+					structureUpdate(psCBuilding, true); // update for mission
 					if (psCBuilding->pStructureType->type == REF_HQ &&
 						psCBuilding->status == SS_BUILT)
 					{
