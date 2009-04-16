@@ -32,8 +32,8 @@
 
 #include "gateway.h"
 
-// the list of gateways on the current map
-GATEWAY		*psGateways;
+/// the list of gateways on the current map
+static GATEWAY	*psGateways;
 
 /******************************************************************************************************/
 /*                   Gateway data access functions                                                    */
@@ -213,4 +213,11 @@ void gwFreeGateway(GATEWAY *psDel)
 	}
 
 	free(psDel);
+}
+
+void gwSetGateways(GATEWAY *ps)
+{
+	// Notice that we do not recreate the gateway flags on tiles here. This is because we usually use this
+	// function to swap main and mission maps, where it will not be necessary.
+	psGateways = ps;
 }

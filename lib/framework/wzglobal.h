@@ -488,7 +488,7 @@
  */
 #if defined(__cplusplus)
 #  include <typeinfo>
-#  define WZ_ASSERT_STATIC_STRING(_var) assert(typeid(_var) == typeid(char[]))
+#  define WZ_ASSERT_STATIC_STRING(_var) assert(typeid(_var) == typeid(char[sizeof(_var)]))
 #elif defined(WZ_CC_GNU) || defined(WZ_CC_INTEL)
 #  define WZ_ASSERT_STATIC_STRING(_var) assert(__builtin_types_compatible_p(typeof(_var), char[]))
 #else

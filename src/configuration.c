@@ -54,7 +54,6 @@
 #define DEFAULTFXVOL	80
 #define DEFAULTCDVOL	60
 #define DEFAULTSCROLL	1000
-#define DEFAULTMAPNAME	"Rush"
 
 extern void registry_clear(void); // from configfile.c
 
@@ -321,8 +320,8 @@ BOOL loadConfig(void)
 	}
 	else
 	{
-		NETsetMasterserverPort(9997);
-		setWarzoneKeyNumeric("masterserver_port", 9997);
+		NETsetMasterserverPort(9990);
+		setWarzoneKeyNumeric("masterserver_port", 9990);
 	}
 
 	if (getWarzoneKeyNumeric("gameserver_port", &val))
@@ -331,8 +330,8 @@ BOOL loadConfig(void)
 	}
 	else
 	{
-		NETsetGameserverPort(9999);
-		setWarzoneKeyNumeric("gameserver_port", 9999);
+		NETsetGameserverPort(2100);
+		setWarzoneKeyNumeric("gameserver_port", 2100);
 	}
 
 	// //////////////////////////
@@ -464,15 +463,15 @@ BOOL loadConfig(void)
 			debug(LOG_WARNING, "Invalid or not found maxPlayers parameter for map %s", game.map);
 			debug(LOG_WARNING, "Reseting map to default parameters.");
 			// we don't have maxPlayers set, so fall back to defaults.
-			game.maxPlayers = 4;	//4 is for the DEFAULTMAPNAME map (rush)
-			sstrcpy(game.map, DEFAULTMAPNAME);
+			game.maxPlayers = 4;	//4 is for the DEFAULTSKIRMISHMAP map (rush)
+			sstrcpy(game.map, DEFAULTSKIRMISHMAP);
 			setWarzoneKeyString("mapName", game.map);
 			setWarzoneKeyNumeric("maxPlayers",game.maxPlayers);
 		}
 	}
 	else
 	{
-		sstrcpy(game.map, DEFAULTMAPNAME);
+		sstrcpy(game.map, DEFAULTSKIRMISHMAP);
 		setWarzoneKeyString("mapName", game.map);
 	}
 
@@ -638,7 +637,7 @@ BOOL loadRenderMode(void)
 	// now load the desired res..
 	// note that we only do this if we havent changed renderer..
 	if (getWarzoneKeyNumeric("width", &val)
-	 && val > 0)
+	 && val >= 640)
 	{
 		pie_SetVideoBufferWidth(val);
 		war_SetWidth(val);
@@ -649,7 +648,7 @@ BOOL loadRenderMode(void)
 	}
 
 	if (getWarzoneKeyNumeric("height", &val)
-	 && val > 0)
+	 && val >= 400)
 	{
 		pie_SetVideoBufferHeight(val);
 		war_SetHeight(val);

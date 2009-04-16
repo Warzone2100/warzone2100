@@ -2372,20 +2372,20 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 		//JPS 25 feb
 		//initialise upgrades
 		//initialise the structure upgrade arrays
-		memset(asStructureUpgrade, 0, MAX_PLAYERS * sizeof(STRUCTURE_UPGRADE));
-		memset(asWallDefenceUpgrade, 0, MAX_PLAYERS * sizeof(WALLDEFENCE_UPGRADE));
-		memset(asResearchUpgrade, 0, MAX_PLAYERS * sizeof(RESEARCH_UPGRADE));
-		memset(asPowerUpgrade, 0, MAX_PLAYERS * sizeof(POWER_UPGRADE));
-		memset(asRepairFacUpgrade, 0, MAX_PLAYERS * sizeof(REPAIR_FACILITY_UPGRADE));
-		memset(asProductionUpgrade, 0, MAX_PLAYERS * NUM_FACTORY_TYPES * sizeof(PRODUCTION_UPGRADE));
-		memset(asReArmUpgrade, 0, MAX_PLAYERS * sizeof(REARM_UPGRADE));
+		memset(asStructureUpgrade, 0, sizeof(asStructureUpgrade));
+		memset(asWallDefenceUpgrade, 0, sizeof(asWallDefenceUpgrade));
+		memset(asResearchUpgrade, 0, sizeof(asResearchUpgrade));
+		memset(asPowerUpgrade, 0, sizeof(asPowerUpgrade));
+		memset(asRepairFacUpgrade, 0, sizeof(asRepairFacUpgrade));
+		memset(asProductionUpgrade, 0, sizeof(asProductionUpgrade));
+		memset(asReArmUpgrade, 0, sizeof(asReArmUpgrade));
 
 		//initialise the upgrade structures
-		memset(asWeaponUpgrade, 0, MAX_PLAYERS * WSC_NUM_WEAPON_SUBCLASSES * sizeof(WEAPON_UPGRADE));
-		memset(asSensorUpgrade, 0, MAX_PLAYERS * sizeof(SENSOR_UPGRADE));
-		memset(asECMUpgrade, 0, MAX_PLAYERS * sizeof(ECM_UPGRADE));
-		memset(asRepairUpgrade, 0, MAX_PLAYERS * sizeof(REPAIR_UPGRADE));
-		memset(asBodyUpgrade, 0, MAX_PLAYERS * sizeof(BODY_UPGRADE) * BODY_TYPE);
+		memset(asWeaponUpgrade, 0, sizeof(asWeaponUpgrade));
+		memset(asSensorUpgrade, 0, sizeof(asSensorUpgrade));
+		memset(asECMUpgrade, 0, sizeof(asECMUpgrade));
+		memset(asRepairUpgrade, 0, sizeof(asRepairUpgrade));
+		memset(asBodyUpgrade, 0, sizeof(asBodyUpgrade));
 		//JPS 25 feb
 	}
 

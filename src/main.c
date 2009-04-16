@@ -74,6 +74,7 @@
 #include "version.h"
 #include "map.h"
 #include "parsetest.h"
+#include "keybind.h"
 
 /* Always use fallbacks on Windows */
 #if defined(WZ_OS_WIN)
@@ -86,13 +87,13 @@
 
 
 #if defined(WZ_OS_WIN)
-# define WZ_WRITEDIR "Warzone 2100 2.1"
+# define WZ_WRITEDIR "Warzone 2100 2.2"
 #elif defined(WZ_OS_MAC)
 # include <CoreServices/CoreServices.h>
 # include <unistd.h>
-# define WZ_WRITEDIR "Warzone 2100 2.1"
+# define WZ_WRITEDIR "Warzone 2100 2.2"
 #else
-# define WZ_WRITEDIR ".warzone2100-2.1"
+# define WZ_WRITEDIR ".warzone2100-2.2"
 #endif
 
 char datadir[PATH_MAX] = "\0"; // Global that src/clparse.c:ParseCommandLine can write to, so it can override the default datadir on runtime. Needs to be \0 on startup for ParseCommandLine to work!
@@ -815,6 +816,12 @@ static void mainLoop(void)
 				default:
 					break;
 			}
+		}
+		// Screenshot key is now available globally
+		if(keyPressed(KEY_F10))
+		{
+			kf_ScreenDump();
+			inputLooseFocus();		// remove it from input stream
 		}
 
 		if (focusState == FOCUS_IN)

@@ -164,8 +164,8 @@ static BOOL _imd_load_polys( const char **ppFileData, iIMDShape *s )
 			}
 			pFileData += cnt;
 
-			ASSERT( tWidth > 0, "_imd_load_polys: texture width = %i", tWidth );
-			ASSERT( tHeight > 0, "_imd_load_polys: texture height = %i", tHeight );
+			ASSERT(tWidth > 0, "%s: texture width = %d", GetLastResourceFilename(), tWidth);
+			ASSERT(tHeight > 0, "%s: texture height = %d (width=%d)", GetLastResourceFilename(), tHeight, tWidth);
 
 			/* Assumes same number of frames per poly */
 			s->numFrames = nFrames;

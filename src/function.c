@@ -1204,51 +1204,22 @@ void structureRepairUpgrade(STRUCTURE *psBuilding)
 
 void structureSensorUpgrade(STRUCTURE *psBuilding)
 {
-	//reallocate the sensor range and power since the upgrade
-	if (psBuilding->pStructureType->pSensor)
-	{
-		psBuilding->sensorRange = (UWORD)sensorRange(psBuilding->pStructureType->
-			pSensor, psBuilding->player);
-		psBuilding->sensorPower = (UWORD)sensorPower(psBuilding->pStructureType->
-			pSensor, psBuilding->player);
-	}
-	else
-	{
-		//give them the default sensor for droids if not
-		psBuilding->sensorRange = (UWORD)sensorRange(asSensorStats +
-			aDefaultSensor[psBuilding->player], psBuilding->player);
-		psBuilding->sensorPower = (UWORD)sensorPower(asSensorStats +
-			aDefaultSensor[psBuilding->player], psBuilding->player);
-	}
+	objSensorCache((BASE_OBJECT *)psBuilding, psBuilding->pStructureType->pSensor);
 }
 
 void structureECMUpgrade(STRUCTURE *psBuilding)
 {
-	//reallocate the sensor range and power since the upgrade
-	if (psBuilding->pStructureType->pECM)
-	{
-		psBuilding->ECMMod = (UWORD)ecmPower(psBuilding->pStructureType->pECM, psBuilding->player);
-	}
-	else
-	{
-		psBuilding->ECMMod = 0;
-	}
+	objEcmCache((BASE_OBJECT *)psBuilding, psBuilding->pStructureType->pECM);
 }
 
 void droidSensorUpgrade(DROID *psDroid)
 {
-	//reallocate the sensor range and power since the upgrade
-	psDroid->sensorRange = sensorRange((asSensorStats + psDroid->asBits
-		[COMP_SENSOR].nStat), psDroid->player);
-	psDroid->sensorPower = sensorPower((asSensorStats + psDroid->asBits
-		[COMP_SENSOR].nStat), psDroid->player);
+	objSensorCache((BASE_OBJECT *)psDroid, asSensorStats + psDroid->asBits[COMP_SENSOR].nStat);
 }
 
 void droidECMUpgrade(DROID *psDroid)
 {
-	//reallocate the ecm power since the upgrade
-	psDroid->ECMMod = ecmPower((asECMStats + psDroid->asBits[COMP_ECM].nStat),
-		psDroid->player);
+	objEcmCache((BASE_OBJECT *)psDroid, asECMStats + psDroid->asBits[COMP_ECM].nStat);
 }
 
 void droidBodyUpgrade(FUNCTION *pFunction, DROID *psDroid)

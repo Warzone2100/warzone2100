@@ -22,6 +22,7 @@
 
 #include "../../widget.h"
 #include "../../svgManager.h"
+#include "../../patternManager.h"
 #include "../../window.h"
 
 #include <SDL.h>
@@ -36,6 +37,9 @@ void widgetSDLInit()
 	
 	// Initialise the SVG manager
 	svgManagerInit();
+	
+	// Initialise the pattern manager
+	patternManagerInit();
 
 	// Create an initial window vector to store windows
 	windowSetWindowVector(vectorCreate());
@@ -51,5 +55,8 @@ void widgetSDLQuit()
 	
 	// Release any cached SVG images
 	svgManagerQuit();
+	
+	// Release all patterns
+	patternManagerQuit();
 }
 

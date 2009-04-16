@@ -150,7 +150,7 @@ void vectorRewind(vector *v)
 
 void *vectorNext(vector *v)
 {
-	if (v->iter >= v->head)
+	if (v->iter >= v->head-1)
 	{
 		vectorRewind(v);
 		return NULL;

@@ -1396,12 +1396,21 @@ void displayBlueprints(void)
 		}
 		else
 		{
-			// it's a delivery point
-			FLAG_POSITION pos = *deliveryPointToMove;
-			pos.coords.x = world_coord(sBuildDetails.x)+world_coord(1)/2;
-			pos.coords.y = world_coord(sBuildDetails.y)+world_coord(1)/2;
-			pos.coords.z = map_Height(pos.coords.x, pos.coords.y) + world_coord(1)/8;
-			renderDeliveryPoint(&pos, true);
+			if (deliveryPointToMove)
+			{
+				// it's a delivery point
+				FLAG_POSITION pos = *deliveryPointToMove;
+				pos.coords.x = world_coord(sBuildDetails.x)+world_coord(1)/2;
+				pos.coords.y = world_coord(sBuildDetails.y)+world_coord(1)/2;
+				pos.coords.z = map_Height(pos.coords.x, pos.coords.y) + world_coord(1)/8;
+				renderDeliveryPoint(&pos, true);
+			}
+			else
+			{
+				// it's a droid or a delivery point (from the debug menu)
+				// display nothing for now
+				;
+			}
 		}
 	}
 
@@ -2106,8 +2115,8 @@ void	renderStructure(STRUCTURE *psStructure)
 			}
 			else
 			{
-				pieFlag = 0;
-				pieFlagData = 0;
+				pieFlag = pie_TRANSLUCENT;
+				pieFlagData = 255;
 			}
 			pie_Draw3DShape(psStructure->pStructureType->pBaseIMD, 0, 0, buildingBrightness, WZCOL_BLACK, pieFlag, pieFlagData);
 		}
@@ -2878,7 +2887,7 @@ static void drawStructureHealth(STRUCTURE *psStruct)
 			psStruct->pStructureType, psStruct->player);
 		if (resistance)
 		{
-			health = PERCENT(psStruct->resistance, resistance);
+			health = PERCENT(MAX(0,psStruct->resistance), resistance);
 		}
 		else
 		{
@@ -3712,12 +3721,13 @@ static void trackHeight( float desiredHeight )
 }
 
 /// Select the next energy bar display mode
-void toggleEnergyBars(void)
+ENERGY_BAR toggleEnergyBars(void)
 {
 	if (++barMode == BAR_LAST)
 	{
 		barMode = BAR_SELECTED;
 	}
+	return barMode;
 }
 
 /// Set everything up for when the player assigns the sensor target

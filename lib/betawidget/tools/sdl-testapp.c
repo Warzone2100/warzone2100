@@ -37,6 +37,8 @@
 #include <lualib.h>
 #include <lauxlib.h>
 
+#include <GL/glu.h>
+
 static lua_State* lua_open_betawidget(void)
 {
 	lua_State* L = lua_open();
@@ -47,6 +49,7 @@ static lua_State* lua_open_betawidget(void)
 	return L;
 }
 
+#if 1
 static void createGUI(lua_State* const L)
 {
 	const int top = lua_gettop(L); /* save stack */
@@ -59,6 +62,41 @@ static void createGUI(lua_State* const L)
 
 	lua_settop(L, top); /* restore the stack */
 }
+#else
+static void paintWithGL(widget *self)
+{
+	cairo_set_source_rgb(self->cr, 0.0f, 0.0f, 1.0f);
+	cairo_paint(self->cr);
+
+	widgetBeginGL(self);
+		glClear(GL_DEPTH_BUFFER_BIT);
+		glMatrixMode(GL_PROJECTION);
+		glLoadIdentity();
+		glOrtho(0.0, self->size.x, self->size.y, 0.0, 1.0, -1.0);
+		glColor4f(1.0f, 1.0f, 0.0f, 0.5f);
+		glRectf(0.0f, 0.0f, self->size.x-100, self->size.y-100);
+	widgetEndGL(self, false);
+}
+
+static bool timer(widget *self, const event *evt, int handlerId, void *userData)
+{
+	widgetResize(self, self->size.x + 100, self->size.y + 100);
+}
+
+static void createGUI(lua_State *L)
+{
+	window *w = malloc(sizeof(window));
+	windowInit(w, "main", 300, 400);
+	widgetReposition(WIDGET(w), 50, 50);
+	widgetShow(WIDGET(w));
+
+	// GL stuff
+	widgetEnableGL(WIDGET(w));
+	WIDGET(w)->vtbl->doDraw = paintWithGL;
+	widgetAddTimerEventHandler(WIDGET(w), EVT_TIMER_SINGLE_SHOT, 3000,
+	                           timer, NULL, NULL);
+}
+#endif
 
 int main(int argc, char *argv[])
 {
@@ -97,7 +135,7 @@ int main(int argc, char *argv[])
 	SDL_WM_SetCaption("Warzone UI Simulator", NULL);
 
 	// Init OpenGL
-	glClearColor(0.8f, 0.8f, 0.8f, 0.0f);
+	glClearColor(0.3f, 0.3f, 0.3f, 0.0f);
 	glCullFace(GL_BACK);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_CONSTANT_ALPHA, GL_ONE_MINUS_SRC_ALPHA);

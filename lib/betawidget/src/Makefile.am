@@ -21,37 +21,30 @@ lib_LTLIBRARIES = libbetawidget.la
 
 libbetawidget_la_SOURCES = \
 	betawidget_wrap_lua.cpp \
-<<<<<<< HEAD:lib/betawidget/src/Makefile.am
-=======
 	button.c \
->>>>>>> trunk:lib/betawidget/src/Makefile.am
+	imageButton.c \
 	font.c \
 	geom.c \
 	hBox.c \
 	spacer.c \
-<<<<<<< HEAD:lib/betawidget/src/Makefile.am
-=======
 	svgManager.c \
->>>>>>> trunk:lib/betawidget/src/Makefile.am
 	table.c \
 	textEntry.c \
+	patternManager.c \
 	vector.c \
 	widget.c \
 	window.c
 
-<<<<<<< HEAD:lib/betawidget/src/Makefile.am
-libbetawidget_la_CPPFLAGS = $(CAIRO_CFLAGS) $(LUA_CFLAGS) -DLIB_COMPILE=1
-libbetawidget_la_LDFLAGS = $(LUA_LIBS) $(CAIRO_LIBS) $(OPENGL_LIBS) -version-info $(LIBTOOL_VERSION)
-=======
 libbetawidget_la_CPPFLAGS = $(SVG_CAIRO_CFLAGS) $(CAIRO_CFLAGS) $(LUA_CFLAGS) -DLIB_COMPILE=1
-libbetawidget_la_LDFLAGS = $(SVG_CAIRO_LIBS) $(LUA_LIBS) $(CAIRO_LIBS) $(OPENGL_LIBS) -version-info $(LIBTOOL_VERSION)
->>>>>>> trunk:lib/betawidget/src/Makefile.am
+libbetawidget_la_LDFLAGS = $(SVG_CAIRO_LIBS) $(CAIRO_CFLAGS) $(LUA_LIBS) $(CAIRO_LIBS) $(OPENGL_LIBS) -version-info $(LIBTOOL_VERSION) -DLIB_COMPILE=1
 libbetawidget_la_LIBADD = platform/libplatform.la libutil.la
 
 # FIXME: As much non-API headers (i.e. headers that shouldn't be directly
 #        included by client code of betawidget) as possible should be moved to
 #        noinst_HEADERS.
 pkginclude_HEADERS = \
+	button.h \
+	imageButton.h \
 	clipboard.h \
 	font.h \
 	internal-cairo.h \
@@ -59,12 +52,10 @@ pkginclude_HEADERS = \
 	geom.h \
 	hBox.h \
 	spacer.h \
-<<<<<<< HEAD:lib/betawidget/src/Makefile.am
-=======
 	svgManager.h \
->>>>>>> trunk:lib/betawidget/src/Makefile.am
 	table.h \
 	textEntry.h \
+	patternManager.h \
 	vector.h \
 	widget.h \
 	window.h

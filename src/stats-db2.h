@@ -268,6 +268,8 @@ typedef enum SENSOR_TYPE
 	 * Works as all of the above together! - new for updates
 	 */
 	SUPER_SENSOR,
+
+	RADAR_DETECTOR_SENSOR,
 } SENSOR_TYPE;
 
 typedef enum FIREONMOVE
@@ -497,7 +499,7 @@ struct sqlite3;
 extern bool
 #line 234 "stats-db2.tpl"
 loadPropulsionStatsFromDB
-#line 501 "stats-db2.h"
+#line 503 "stats-db2.h"
 	(struct sqlite3* db);
 
 typedef struct SENSOR_STATS
@@ -596,9 +598,9 @@ struct sqlite3;
  *          false otherwise.
  */
 extern bool
-#line 285 "stats-db2.tpl"
+#line 288 "stats-db2.tpl"
 loadSensorStatsFromDB
-#line 602 "stats-db2.h"
+#line 604 "stats-db2.h"
 	(struct sqlite3* db);
 
 typedef struct ECM_STATS
@@ -1177,9 +1179,9 @@ struct sqlite3;
  *          false otherwise.
  */
 extern bool
-#line 566 "stats-db2.tpl"
+#line 569 "stats-db2.tpl"
 loadConstructStatsFromDB
-#line 1183 "stats-db2.h"
+#line 1185 "stats-db2.h"
 	(struct sqlite3* db);
 
 #endif // __INCLUDED_DB_TEMPLATE_SCHEMA_STRUCTDEF_STATS_DB2_TPL_H__

@@ -422,6 +422,13 @@ struct _widgetVtbl
 	void    (*resize)                       (widget *self, int w, int h);
 	void    (*reposition)                   (widget *self, int x, int y);
 
+	void    (*enableGL)                     (widget *self);
+	void    (*disableGL)                    (widget *self);
+
+	void    (*beginGL)                      (widget *self);
+	void    (*endGL)                        (widget *self,
+	                                         bool finishedDrawing);
+
 	void    (*composite)                    (widget *self);
 
 	void    (*doDraw)                       (widget *self);
@@ -485,6 +492,16 @@ struct _widget
 	 * The id of the OpenGL texture to which self->cr is mapped
 	 */
 	GLuint textureId;
+
+	/*
+	 * The id of the OpenGL framebuffer used for rendering GL content
+	 */
+	GLuint fboId;
+
+	/*
+	 * The id of the OpenGL depthbuffer attached to the FBO
+	 */
+	GLuint depthbufferId;
 
 	/*
 	 * The widgets mouse-event mask
@@ -566,6 +583,21 @@ struct _widget
 	 * If the widget uses an mouse event mask
 	 */
 	bool maskEnabled;
+
+	/*
+	 * If the widget supports OpenGL content
+	 */
+	bool openGLEnabled;
+
+	/*
+	 * If we are in a widgetBeginGL ... widgetEndGL block
+	 */
+	bool openGLInProgress;
+
+	/*
+	 * If the texture needs syncing with the Cairo context
+	 */
+	bool textureNeedsUploading;
 };
 
 /*
@@ -616,6 +648,10 @@ void widgetResizeImpl(widget *self, int w, int h);
 void widgetRepositionImpl(widget *self, int x, int y);
 bool widgetHandleEventImpl(widget *self, const event *evt);
 void widgetCompositeImpl(widget *self);
+void widgetEnableGLImpl(widget *self);
+void widgetDisableGLImpl(widget *self);
+void widgetBeginGLImpl(widget *self);
+void widgetEndGLImpl(widget *self, bool finishedDrawing);
 
 /*
  * Public static methods
@@ -1005,6 +1041,25 @@ void widgetSetToolTip(widget *self, const char *tip);
  */
 const char *widgetGetToolTip(widget *self);
 
+/**
+ * Allows the widget to host OpenGL content. This is done by creating a
+ * framebuffer object for the widget which is then used for rendering.
+ *
+ * If GL support is already enabled then this function is a no-op.
+ *
+ * @param self  The widget to enable OpenGL rendering on.
+ */
+void widgetEnableGL(widget *self);
+
+/**
+ * Disables OpenGL content support for the widget.
+ *
+ * If GL support is not enabled then this function is a no-op.
+ *
+ * @param self  The widget to disable OpenGL rendering on.
+ */
+void widgetDisableGL(widget *self);
+
 /*
  * Protected methods
  */
@@ -1085,6 +1140,37 @@ void widgetShowToolTip(widget *self);
  * @param self  The widget to hide the tool-tip for.
  */
 void widgetHideToolTip(widget *self);
+
+/**
+ * Sets up the widget for OpenGL rendering. Any OpenGL calls made after a call
+ * to this function (but before a call to widgetEndGL) will affect the widgets
+ * local framebuffer object (FBO).
+ *
+ * This function takes care of storing the current OpenGL states and updating
+ * the viewport and projection matrix so that the framebuffer is ready for use.
+ *
+ * It is illegal to call this function on a widget that does not have OpenGL
+ * rendering enabled (self->openGLEnabled). Furthermore, any call to
+ * widgetBeginGL must be accompanied by a call to widgetEndGL.
+ *
+ * @param self  The widget to begin rendering GL content to.
+ */
+void widgetBeginGL(widget *self);
+
+/**
+ * Finishes any active OpenGL rendering to the widget. It is analogous to glEnd.
+ * If finishedDrawing is false then the texture (which the FBO has rendered to)
+ * will be copied back to the Cairo context to allow for further drawing. This
+ * has performance implications.
+ *
+ * Otherwise, if it is true then the is no texture copy, however the result of
+ * attempting to use the Cairo context is undefined.
+ *
+ * @param self  The widget to end GL rendering on.
+ * @param finishedDrawing   If any further drawing is to be performed on the
+ *                          widget.
+ */
+void widgetEndGL(widget *self, bool finishedDrawing);
 
 /**
  * TODO

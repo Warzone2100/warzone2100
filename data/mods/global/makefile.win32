@@ -33,7 +33,7 @@ all: $(AIVOLUTIONARCHIVE) $(GRIMARCHIVE) $(NEWST_TILESARCHIVE)
 endif
 
 stamp:
-	touch stamp
+	echo stamp > stamp
 
 $(AIVOLUTIONARCHIVE): $(basename $(AIVOLUTIONARCHIVE)) stamp $(patsubst %,$(basename $(AIVOLUTIONARCHIVE))/%,$(AIVOLUTIONLIST))
 	(cd $< && zip -ru0 $@ $(filter-out stamp,$(filter-out $<,$(^:$</%=%))) -x '*svn*' || [ $$? -eq 12 ] && true) # zip returns 12 on "nothing to do"

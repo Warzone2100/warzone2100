@@ -1648,31 +1648,8 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 		}
 
 		//set up the sensor stats
-		if (psBuilding->pStructureType->pSensor)
-		{
-			psBuilding->sensorRange = (UWORD)sensorRange(psBuilding->pStructureType->
-				pSensor, (UBYTE)player);
-			psBuilding->sensorPower = (UWORD)sensorPower(psBuilding->pStructureType->
-				pSensor, (UBYTE)player);
-		}
-		else
-		{
-			//give them the default sensor for droids if not
-			psBuilding->sensorRange = (UWORD)sensorRange(asSensorStats +
-				aDefaultSensor[player], (UBYTE)player);
-			psBuilding->sensorPower = (UWORD)sensorPower(asSensorStats +
-				aDefaultSensor[player], (UBYTE)player);
-		}
-		//set up the ecm stat
-		if (psBuilding->pStructureType->pECM)
-		{
-			psBuilding->ECMMod = (UWORD)ecmPower(psBuilding->pStructureType->pECM,
-				psBuilding->player);
-		}
-		else
-		{
-			psBuilding->ECMMod = 0;
-		}
+		objSensorCache((BASE_OBJECT *)psBuilding, psBuilding->pStructureType->pSensor);
+		objEcmCache((BASE_OBJECT *)psBuilding, psBuilding->pStructureType->pECM);
 
 		/* Store the weapons */
 		memset(psBuilding->asWeaps, 0, sizeof(WEAPON));
@@ -1997,7 +1974,7 @@ STRUCTURE *buildBlueprint(STRUCTURE_STATS *psStats, float x, float y, STRUCT_STA
 	// construct the fake structure
 	psStats = (STRUCTURE_STATS *)psStats;
 	blueprint->pStructureType = psStats;
-	blueprint->visible[selectedPlayer] = true;
+	blueprint->visible[selectedPlayer] = UBYTE_MAX;
 	blueprint->player = selectedPlayer;
 	blueprint->sDisplay.imd = psStats->pIMD;
 	blueprint->pos.x = x;
@@ -2876,7 +2853,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 	/* See if there is an enemy to attack for Sensor Towers that have weapon droids attached*/
 	else if (psStructure->pStructureType->pSensor)
 	{
-		if (structStandardSensor(psStructure) || structVTOLSensor(psStructure))
+		if (structStandardSensor(psStructure) || structVTOLSensor(psStructure) || objRadarDetector((BASE_OBJECT *)psStructure))
 		{
 			if ((psStructure->id % 20) == (frameGetFrameNumber() % 20))
 			{
@@ -2901,7 +2878,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 		// you can always see anything that a CB sensor is targeting
 		// Anyone commenting this out again will get a knee capping from John.
 		// You have been warned!!
-		if ((structCBSensor(psStructure) || structVTOLCBSensor(psStructure)) &&
+		if ((structCBSensor(psStructure) || structVTOLCBSensor(psStructure) || objRadarDetector((BASE_OBJECT *)psStructure)) &&
 			psStructure->psTarget[0] != NULL)
 		{
 			psStructure->psTarget[0]->visible[psStructure->player] = UBYTE_MAX;
@@ -4510,6 +4487,12 @@ BOOL getDroidDestination(BASE_STATS *psStats, UDWORD structX,
 		width = ((FEATURE_STATS *)psStats)->baseWidth;
 		breadth = ((FEATURE_STATS *)psStats)->baseBreadth;
 	}
+	ASSERT(width+breadth, "weird object passed to getDroidDestination");
+	if (width + breadth == 0)
+	{
+		debug(LOG_SYNC, "weird object passed to getDroidDestination");
+		return false;
+	}
 
 	//get a random starting place 0=top left
 	start = (UWORD)(rand() % ((width + breadth) * 2));
@@ -5860,7 +5843,8 @@ void printStructureInfo(STRUCTURE *psStructure)
 		       || psStructure->pStructureType->pSensor->type == INDIRECT_CB_SENSOR
 		       || psStructure->pStructureType->pSensor->type == VTOL_INTERCEPT_SENSOR
 		       || psStructure->pStructureType->pSensor->type == VTOL_CB_SENSOR
-		       || psStructure->pStructureType->pSensor->type == SUPER_SENSOR)
+		       || psStructure->pStructureType->pSensor->type == SUPER_SENSOR
+		       || psStructure->pStructureType->pSensor->type == RADAR_DETECTOR_SENSOR)
 		       && psStructure->pStructureType->pSensor->location == LOC_TURRET)
 		{
 			unsigned int assigned_droids = countAssignedDroids(psStructure);
@@ -7262,6 +7246,7 @@ BOOL structVTOLCBSensor(const STRUCTURE* psStruct)
 	// Super Sensor works as any type
 	if (psStruct->pStructureType->pSensor
 	 && (psStruct->pStructureType->pSensor->type == VTOL_CB_SENSOR
+	  || psStruct->pStructureType->pSensor->type == RADAR_DETECTOR_SENSOR
 	  || psStruct->pStructureType->pSensor->type == SUPER_SENSOR)
 	 && psStruct->pStructureType->pSensor->location == LOC_TURRET)
 	{

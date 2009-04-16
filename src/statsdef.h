@@ -128,8 +128,21 @@ typedef struct _constructor_upgrade
 /*body stats which can be upgraded by research*/
 typedef struct _body_upgrade
 {
+	/**
+	 * Percentage to add to the body's original power output.
+	 */
 	UWORD           powerOutput;
+
+	/**
+	 * Percentage to add to the body's original health points. For existing
+	 * droids this will be applied to both the maximum and current health.
+	 */
 	UWORD           body;
+
+	/**
+	 * Percentage to add to the body's original armour of the specific
+	 * class.
+	 */
 	UWORD           armourValue[WC_NUM_WEAPON_CLASSES];
 } BODY_UPGRADE;
 

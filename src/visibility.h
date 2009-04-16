@@ -43,7 +43,7 @@ extern void visTilesUpdate(BASE_OBJECT *psObj, RAY_CALLBACK callback);
  * currently droids and structures.
  * psTarget can be any type of BASE_OBJECT (e.g. a tree).
  */
-extern bool visibleObject(const BASE_OBJECT* psViewer, const BASE_OBJECT* psTarget, bool wallsBlock);
+extern int visibleObject(const BASE_OBJECT* psViewer, const BASE_OBJECT* psTarget, bool wallsBlock);
 
 /** Can shooter hit target with direct fire weapon? */
 bool lineOfFire(const BASE_OBJECT* psViewer, const BASE_OBJECT* psTarget, bool wallsBlock);
@@ -127,5 +127,8 @@ static inline int objConcealment(const BASE_OBJECT* psObj)
 {
 	return psObj->ECMMod;
 }
+
+void objSensorCache(BASE_OBJECT *psObj, SENSOR_STATS *psSensor);
+void objEcmCache(BASE_OBJECT *psObj, ECM_STATS *psEcm);
 
 #endif // __INCLUDED_SRC_VISIBILITY__

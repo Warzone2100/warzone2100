@@ -541,16 +541,11 @@ void tableSetDefaultAlign(table *self, hAlign h, vAlign v)
 	self->vAlignment = v;
 }
 
-<<<<<<< HEAD:lib/betawidget/src/table.c
-void tableSetPadding(table *self, int h, int v)
-{
-=======
 bool tableSetPadding(table *self, int h, int v)
 {
 	const int oldColPadding = self->columnPadding;
 	const int oldRowPadding = self->rowPadding;
 	
->>>>>>> trunk:lib/betawidget/src/table.c
 	// Set the padding
 	self->columnPadding = h;
 	self->rowPadding = v;
@@ -558,10 +553,6 @@ bool tableSetPadding(table *self, int h, int v)
 	// If applicable re-layout the window
 	if (WIDGET(self)->size.x != -1 && WIDGET(self)->size.y != -1)
 	{
-<<<<<<< HEAD:lib/betawidget/src/table.c
-		widgetDoLayout(widgetGetRoot(WIDGET(self)));
-	}
-=======
 		// If laying out the window with the new padding fails
 		if (!widgetDoLayout(widgetGetRoot(WIDGET(self))))
 		{
@@ -577,7 +568,6 @@ bool tableSetPadding(table *self, int h, int v)
 	
 	// Either widgetDoLayout succeeded or we did not need laying out
 	return true;
->>>>>>> trunk:lib/betawidget/src/table.c
 }
 
 int tableGetRowCount(const table *self)

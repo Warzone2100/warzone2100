@@ -27,14 +27,9 @@
 #include <sstream>
 #include <physfs.h>
 #include "dumpinfo.h"
-
-
-extern "C"
-{
 #include "lib/framework/stdio_ext.h"
 // FIXME: #include from src/
 #include "src/version.h"
-}
 
 #if defined(WZ_OS_UNIX)
 # include <sys/utsname.h>

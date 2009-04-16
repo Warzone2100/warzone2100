@@ -3323,7 +3323,7 @@ WZ_DECL_UNUSED static BOOL scrOfferAlliance(void)
 		player1 < 0 || player1 >= MAX_PLAYERS ||
 		player2 < 0 || player2 >= MAX_PLAYERS)
 	{
-		ASSERT( false, "scrCreateAlliance: player out of range" );
+		ASSERT( false, "scrOfferAlliance: player out of range p1=%d p2=%d", player1, player2 );
 		return false;
 	}
 
@@ -3348,7 +3348,7 @@ WZ_DECL_UNUSED static BOOL scrBreakAlliance(void)
 		player1 < 0 || player1 >= MAX_PLAYERS ||
 		player2 < 0 || player2 >= MAX_PLAYERS)
 	{
-		ASSERT( false, "scrCreateAlliance: player out of range" );
+		ASSERT( false, "scrBreakAlliance: player out of range p1=%d p2=%d", player1, player2 );
 		return false;
 	}
 /*
@@ -4312,7 +4312,7 @@ WZ_DECL_UNUSED static BOOL scrGetNearestGateway( void )
 		return(false);
 	}
 
-	if(psGateways == NULL)
+	if (gwGetGateways() == NULL)
 	{
 		ASSERT( false,"SCRIPT : No gateways found in getNearestGatway" );
 		return(false);
@@ -4321,7 +4321,7 @@ WZ_DECL_UNUSED static BOOL scrGetNearestGateway( void )
 	nearestSoFar = UDWORD_MAX;
 	retX = retY = 0;
 	success = false;
-	for(psGateway = psGateways; psGateway; psGateway = psGateway->psNext)
+	for (psGateway = gwGetGateways(); psGateway; psGateway = psGateway->psNext)
 	{
 		/* Get gateway midpoint */
 		const int gX = (psGateway->x1 + psGateway->x2)/2;
@@ -9857,7 +9857,7 @@ WZ_DECL_UNUSED static BOOL scrGettext(void)
 
 	scrFunctionResult.v.sval = (char*)gettext(strParam1);
 
-	return stackPushResult(ST_TEXTSTRING, &scrFunctionResult);
+	return stackPushResult((INTERP_TYPE)ST_TEXTSTRING, &scrFunctionResult);
 }
 
 WZ_DECL_UNUSED static BOOL scrGettext_noop(void)
@@ -9909,7 +9909,7 @@ WZ_DECL_UNUSED static BOOL scrPgettext(void)
 		scrFunctionResult.v.sval = translation;
 	}
 
-	return stackPushResult(ST_TEXTSTRING, &scrFunctionResult);
+	return stackPushResult((INTERP_TYPE)ST_TEXTSTRING, &scrFunctionResult);
 }
 
 WZ_DECL_UNUSED static BOOL scrPgettext_expr(void)
@@ -9921,7 +9921,7 @@ WZ_DECL_UNUSED static BOOL scrPgettext_expr(void)
 
 	scrFunctionResult.v.sval = (char*)pgettext_expr(strParam1, strParam2);
 
-	return stackPushResult(ST_TEXTSTRING, &scrFunctionResult);
+	return stackPushResult((INTERP_TYPE)ST_TEXTSTRING, &scrFunctionResult);
 }
 
 WZ_DECL_UNUSED static BOOL scrPgettext_noop(void)

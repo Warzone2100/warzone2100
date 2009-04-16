@@ -90,11 +90,15 @@ typedef enum
 	NET_PLAYER_DROPPED,		//57 notice about player dropped / disconnected
 	NET_GAME_FLAGS,			//58 game flags
 	NET_READY_REQUEST,		//59 player ready to start an mp game
-	NUM_GAME_PACKETS
+							//60 to prevent conflict
+	NET_VERSION_CHECK = 61,	//61 version check
+	NET_REQUEST_VERSION,	//62 Host requests version check
+	NUM_GAME_PACKETS		//   *MUST* be last.
 } MESSAGE_TYPES;
 
 // Constants
-#define MaxMsgSize		8000		// max size of a message in bytes.
+// @NOTE / FIXME: We need a way to detect what should happen if the msg buffer exceeds this.
+#define MaxMsgSize		8192		// max size of a message in bytes.
 #define	StringSize		64			// size of strings used.
 #define MaxGames		12			// max number of concurrently playable games to allow.
 
@@ -124,15 +128,15 @@ typedef struct {
 #define NET_ALL_PLAYERS 255
 
 typedef struct {
-	uint16_t	size;			// used size of body
-	uint8_t		type;			// type of packet
-	uint8_t		destination;	// player to send to, or NET_ALL_PLAYERS
-	uint8_t		source;			// player it is sent from
-	char 		body[MaxMsgSize];
-	BOOL		status;			// If the packet compiled or not (this is _not_ sent!)
+	uint16_t	size;				// used size of body
+	uint8_t		type;				// type of packet
+	uint8_t		destination;		// player to send to, or NET_ALL_PLAYERS
+	uint8_t		source;				// player it is sent from
+	char 		body[MaxMsgSize];	// msg buffer
+	BOOL		status;				// If the packet compiled or not (this is _not_ sent!)
 } NETMSG;
 
-#define		FILEMSG			254	// a file packet
+#define		FILEMSG			254		// a file packet
 
 // ////////////////////////////////////////////////////////////////////////
 // Player information. Update using NETplayerinfo
@@ -151,12 +155,12 @@ typedef struct {
 typedef struct {
 	GAMESTRUCT	games[MaxGames];		// the collection of games
 	PLAYER		players[MAX_PLAYERS];	// the array of players.
-	uint32_t        playercount;		// number of players in game.
-	uint32_t        dpidPlayer;			// ID of player created
+	uint32_t	playercount;			// number of players in game.
+	uint32_t	dpidPlayer;				// ID of player created
 
 	// booleans
-	uint32_t        bComms;				// actually do the comms?
-	uint32_t        bHost;				// true if we are hosting the session
+	uint32_t	bComms;					// actually do the comms?
+	uint32_t	bHost;					// true if we are hosting the session
 } NETPLAY;
 
 /// This is the hardcoded dpid (player ID) value for the hosting player.
@@ -168,6 +172,15 @@ typedef struct {
 extern NETPLAY				NetPlay;
 
 extern NETMSG NetMsg;
+
+// Connection errors
+
+typedef enum {
+	NETERR_NOERR,
+	NETERR_CONN
+} NETERR_TYPES;
+
+extern NETERR_TYPES getConnError(void);
 
 // ////////////////////////////////////////////////////////////////////////
 // functions available to you.

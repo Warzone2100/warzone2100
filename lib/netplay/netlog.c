@@ -90,10 +90,12 @@ static const char *packetname[NUM_GAME_PACKETS] =
 	"NET_PLAYER_JOINED",
 	"NET_PLAYER_LEAVING",
 	"NET_PLAYER_DROPPED",
-	"NET_GAME_FLAGS"
+	"NET_GAME_FLAGS",
+	"NET_VERSION_CHECK",
+	"NET_REQUEST_VERSION"
 };
 
-static PHYSFS_file	*pFileHandle;
+static PHYSFS_file	*pFileHandle = NULL;
 static uint32_t		packetcount[2][NUM_GAME_PACKETS];
 static uint32_t		packetsize[2][NUM_GAME_PACKETS];
 
@@ -133,6 +135,11 @@ BOOL NETstopLogging(void)
 	char buf[256];
 	int i;
 
+	if (!pFileHandle)
+	{
+		return false;
+	}
+
 	/* Output stats */
 	for (i = 0; i < NUM_GAME_PACKETS; i++)
 	{
@@ -146,6 +153,7 @@ BOOL NETstopLogging(void)
 		debug(LOG_ERROR, "Could not close net log: %s", PHYSFS_getLastError());
 		return false;
 	}
+	pFileHandle = NULL;
 
 	return true;
 }
@@ -178,6 +186,12 @@ BOOL NETlogEntry(const char *str,UDWORD a,UDWORD b)
 
 	time( &aclock );                 /* Get time in seconds */
 	newtime = localtime( &aclock );  /* Convert time to struct */
+
+	if (!newtime || a >= NET_GAME_FLAGS || !str || !pFileHandle)
+	{
+		debug(LOG_ERROR, "Fatal error averted in NETlog");
+		return false;
+	}
 
 	// check to see if a new frame.
 	if(frame != lastframe)

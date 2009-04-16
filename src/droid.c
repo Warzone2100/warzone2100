@@ -2626,7 +2626,7 @@ UDWORD calcTemplateBody(DROID_TEMPLATE *psTemplate, UBYTE player)
 	/* Add the weapon body points */
 	for(i=0; i<psTemplate->numWeaps; i++)
 	{
-		body += (asWeaponStats + psTemplate->asWeaps[i])->body;
+		body += asWeaponStats[psTemplate->asWeaps[i]].body;
 	}
 
 	//add on any upgrade value that may need to be applied
@@ -2989,12 +2989,8 @@ DROID* buildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player,
 	psDroid->sDisplay.frameNumber = 0;
 
 	//allocate 'easy-access' data!
-	psDroid->sensorRange = sensorRange((asSensorStats + pTemplate->asParts
-		[COMP_SENSOR]), (UBYTE)player);
-	psDroid->sensorPower = sensorPower((asSensorStats + pTemplate->asParts
-		[COMP_SENSOR]), (UBYTE)player);
-	psDroid->ECMMod = ecmPower((asECMStats + pTemplate->asParts[COMP_ECM]),
-		(UBYTE) player);
+	objSensorCache((BASE_OBJECT *)psDroid, asSensorStats + pTemplate->asParts[COMP_SENSOR]);
+	objEcmCache((BASE_OBJECT *)psDroid, asECMStats + pTemplate->asParts[COMP_ECM]);
 	psDroid->body = calcTemplateBody(pTemplate, (UBYTE)player);
 	psDroid->originalBody = psDroid->body;
 
@@ -3749,7 +3745,7 @@ UDWORD	getNumDroidsForLevel(UDWORD	level)
 
 // Get the name of a droid from it's DROID structure.
 //
-char *droidGetName(DROID *psDroid)
+const char *droidGetName(const DROID *psDroid)
 {
 	return psDroid->aName;
 }
@@ -4573,24 +4569,19 @@ BOOL droidSensorDroidWeapon(BASE_OBJECT *psObj, DROID *psDroid)
 	}
 
 	//check vtol droid with vtol sensor
-    if (isVtolDroid(psDroid) && psDroid->asWeaps[0].nStat > 0)
+	if (isVtolDroid(psDroid) && psDroid->asWeaps[0].nStat > 0)
 	{
-		if (psStats->type == VTOL_INTERCEPT_SENSOR ||
-			psStats->type == VTOL_CB_SENSOR ||
-            psStats->type == SUPER_SENSOR)
+		if (psStats->type == VTOL_INTERCEPT_SENSOR || psStats->type == VTOL_CB_SENSOR || psStats->type == SUPER_SENSOR || psStats->type == RADAR_DETECTOR_SENSOR)
 		{
 			return true;
 		}
 		return false;
 	}
 
-	//check indirect weapon droid with standard/cb sensor
-    /*Super Sensor works as any type*/
+	// Check indirect weapon droid with standard/CB/radar detector sensor
 	if (!proj_Direct(asWeaponStats + psDroid->asWeaps[0].nStat))
 	{
-		if (psStats->type == STANDARD_SENSOR ||
-			psStats->type == INDIRECT_CB_SENSOR ||
-            psStats->type == SUPER_SENSOR)
+		if (psStats->type == STANDARD_SENSOR ||	psStats->type == INDIRECT_CB_SENSOR || psStats->type == SUPER_SENSOR || psStats->type == RADAR_DETECTOR_SENSOR)
 		{
 			return true;
 		}

@@ -369,6 +369,7 @@ DefaultSensor1Mk1			"*Default Sensor*"
 NavGunSensor				"*Nexus Sensor*"
 TowerSensor			"*Tower Sensor*"
 FortressSensor			"*Fortress Sensor*"
+RadarDetector				_("Radar Detector")
 SensorTower1Mk1				_("Sensor Tower")
 SensorTower2Mk1				_("Hardened Sensor Tower")
 SensorTurret1Mk1			_("Sensor Turret")
@@ -376,6 +377,7 @@ Sys-CBTower01				"*CB Tower*"
 Sys-VTOLCBTower01			_("VTOL CB Radar Tower")
 Sys-VTOLRadarTower01			_("VTOL CB Radar Tower")
 UplinkSensor				_("Uplink Sensor")
+Sys-RadarDetector01			_("Radar Detector Tower")
 
 Sys-CBTurret01				_("CB Radar Turret")
 Sys-VstrikeTurret01			_("VTOL Strike Turret")
@@ -1697,6 +1699,7 @@ R-Sys-Sensor-SatLink			_("Satellite Uplink Center")
 R-Wpn-LasSat				_("Laser Satellite Command Post")
 R-Sys-Sensor-UpLink			_("Satellite Uplink Center")
 LasSatCommandSensor			"*LasSatCommandSensor*"
+R-Sys-RadarDetector01			_("Radar Detector")
 
 // added by SEBG 5 July 1999
 

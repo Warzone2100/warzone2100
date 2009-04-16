@@ -30,7 +30,7 @@ all: $(NTWARCHIVE)
 endif
 
 stamp:
-	touch stamp
+	echo stamp > stamp
 
 $(NTWARCHIVE): $(basename $(NTWARCHIVE)) stamp $(patsubst %,$(basename $(NTWARCHIVE))/%,$(NTWLIST))
 	(cd $< && zip -ru0 $@ $(filter-out stamp,$(filter-out $<,$(^:$</%=%))) -x '*svn*' || [ $$? -eq 12 ] && true) # zip returns 12 on "nothing to do"

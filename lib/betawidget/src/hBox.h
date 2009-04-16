@@ -32,12 +32,12 @@ typedef struct _hBoxVtbl hBoxVtbl;
 struct _hBoxVtbl
 {
 	struct _tableVtbl tableVtbl;
-	
+
 	// No additional virtual methods
 };
 
 /*
- * 
+ *
  */
 struct _hBox
 {
@@ -45,7 +45,7 @@ struct _hBox
 	 * Parent
 	 */
 	struct _table table;
-	
+
 	/**
 	 * Vtable
 	 */
@@ -76,7 +76,7 @@ bool hBoxAddChildImpl(widget *self, widget *child);
 
 /**
  * Constructs a new hBox object and returns it.
- * 
+ *
  * @param id    The id of the widget.
  * @return A pointer to an hBox on success otherwise NULL.
  */
@@ -85,7 +85,7 @@ hBox *hBoxCreate(const char *id);
 /**
  * Sets the alignment of child widgets of self. This comes into effect when the
  * maximum vertical size of the child widgets is less than that or self.
- * 
+ *
  * @param self  The hBox to set the alignment properties of.
  * @param v     The vertical alignment scheme to use.
  */
@@ -101,7 +101,7 @@ void hBoxSetVAlign(hBox *self, vAlign v);
  *
  * @param self  The hBox to set the padding property of.
  * @param padding   The amount of padding to apply.
- * @return true if the padding was changed successfully; false otherwise. 
+ * @return true if the padding was changed successfully; false otherwise.
  */
 bool hBoxSetPadding(hBox *self, int padding);
 

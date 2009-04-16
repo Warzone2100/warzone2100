@@ -336,7 +336,7 @@ BOOL stackPopParams(unsigned int numParams, ...)
 	for (i = 0; i < numParams; i++)
 	{
 		INTERP_VAL *psVal = psCurr->aVals + index;
-		INTERP_TYPE type = va_arg(args, INTERP_TYPE);
+		INTERP_TYPE type = (INTERP_TYPE)va_arg(args, int);
 		void * pData = va_arg(args, void *);
 
 		switch (type)

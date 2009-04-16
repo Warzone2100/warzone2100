@@ -399,11 +399,7 @@ missed:
 if any support a counter battery sensor*/
 void counterBatteryFire(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget)
 {
-	STRUCTURE		*psStruct;
-	DROID			*psDroid;
 	BASE_OBJECT		*psViewer;
-	SDWORD			sensorRange;
-	SDWORD			xDiff, yDiff;
 
 	/*if a null target is passed in ignore - this will be the case when a 'miss'
 	projectile is sent - we may have to cater for these at some point*/
@@ -419,12 +415,15 @@ void counterBatteryFire(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget)
 	gridStartIterate((SDWORD)psTarget->pos.x, (SDWORD)psTarget->pos.y);
 	for (psViewer = gridIterate(); psViewer != NULL; psViewer = gridIterate())
 	{
+		STRUCTURE	*psStruct;
+		DROID		*psDroid;
+		SDWORD		sensorRange = 0;
+
 		if (psViewer->player != psTarget->player)
 		{
 			//ignore non target players' objects
 			continue;
 		}
-		sensorRange = 0;
 		if (psViewer->type == OBJ_STRUCTURE)
 		{
 			psStruct = (STRUCTURE *)psViewer;
@@ -447,8 +446,9 @@ void counterBatteryFire(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget)
 		//check sensor distance from target
 		if (sensorRange)
 		{
-			xDiff = (SDWORD)psViewer->pos.x - (SDWORD)psTarget->pos.x;
-			yDiff = (SDWORD)psViewer->pos.y - (SDWORD)psTarget->pos.y;
+			SDWORD	xDiff = (SDWORD)psViewer->pos.x - (SDWORD)psTarget->pos.x;
+			SDWORD	yDiff = (SDWORD)psViewer->pos.y - (SDWORD)psTarget->pos.y;
+
 			if (xDiff*xDiff + yDiff*yDiff < sensorRange * sensorRange)
 			{
 				//inform viewer of target

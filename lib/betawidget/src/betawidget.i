@@ -13,6 +13,9 @@ extern "C" {
 #include "textEntry.h"
 #include "lua-wrap.h"
 #include <assert.h>
+#include "patternManager.h"
+#include "button.h"
+#include "imageButton.h"
 }
 
 static bool callbackHandler(widget* const self, const event* const evt, int const handlerId, SWIGLUA_MEMBER_FN const * const callbackRef)
@@ -293,7 +296,45 @@ struct _window : public _widget
                 {
                         return windowRepositionFromAnchor($self, anchor, hAlign, xOffset, vAlign, yOffset);
                 }
+                
+                virtual void setBackgroundPattern(const char *patternId)
+                {
+			return windowSetBackgroundPattern($self, patternId);
+                }
         }
+};
+
+%rename (button) _button;
+struct _button : public _widget
+{
+	%extend
+	{
+		_button(const char *id, int w, int h)
+		{
+			return buttonCreate(id, w, h);
+		}
+		void setPatternForState(buttonState state, const char *fillPatternId, const char *contourPatternId)
+		{
+			return buttonSetPatternsForState($self, state, fillPatternId, contourPatternId);
+		}
+	}
+};
+
+%rename (imageButton) _imageButton;
+struct _imageButton : public _button
+{
+	%extend
+	{
+		_imageButton(const char *id, int w, int h)
+		{
+			return imageButtonCreate(id, w, h);
+		}
+		void setImage(int state, const char *imageFilename)
+		{
+			// replace integer with enum buttonState
+			return imageButtonSetImage($self, (buttonState)state, imageFilename);
+		}
+	}
 };
 
 %rename (hBox) _hBox;
@@ -358,6 +399,34 @@ struct _textEntry : public _widget
                 virtual bool setContents(const char* contents)
                 {
                         return textEntrySetContents($self, contents);
+                }
+        }
+};
+
+%rename (pattern) _pattern;
+struct _pattern
+{
+        %extend
+        {
+                _pattern(const char *id, float x0, float y0, float x1, float y1)
+                {
+                        return patternManagerGradientCreateLinear(id, x0, y0, x1, y1);
+                }
+                _pattern(const char *id, float x0, float y0, float r0, float x1, float y1, float r1)
+                {
+                        return patternManagerGradientCreateRadial(id, x0, y0, r0, x1, y1, r1);
+                }
+                void destroy()
+                {
+                        patternManagerRemove($self->id);
+                }
+                void addColourStop(float offset, float red, float green, float blue, float alpha)
+                {
+                        patternManagerGradientAddColourStop($self, offset, red, green, blue, alpha);
+                }
+                void setAsSource(cairo_t *cr, float x, float y)
+                {
+                        patternManagerSetAsSource(cr, $self, x, y);
                 }
         }
 };

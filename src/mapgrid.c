@@ -232,7 +232,7 @@ void gridRemoveObject(BASE_OBJECT *psObj)
 					{
 						if (psCurr->apsObjects[i] == psObj)
 						{
-							ASSERT( false,"gridRemoveObject: grid out of sync" );
+							ASSERT(false, "Grid out of sync at (%u,%u):%u removing %s", x, y, i, objInfo(psObj));
 							psCurr->apsObjects[i] = NULL;
 						}
 					}
@@ -499,7 +499,7 @@ void gridDisplayCoverage(BASE_OBJECT *psObj)
 		unsigned int	x, y, i;
 		GRID_ARRAY	*psCurr;
 
-		debug( LOG_NEVER, "Grid coverage for object %d (%d,%d) - range %d\n", psObj->id, psObj->pos.x, psObj->pos.y, gridObjRange(psObj) );
+		debug(LOG_ERROR, "Grid coverage for object %d (%d,%d) - range %d", psObj->id, psObj->pos.x, psObj->pos.y, gridObjRange(psObj) );
 		for (x = 0; x < gridWidth; x++)
 		{
 			for(y = 0; y < gridHeight; y++)
@@ -510,7 +510,7 @@ void gridDisplayCoverage(BASE_OBJECT *psObj)
 				{
 					if (psCurr->apsObjects[i] == psObj)
 					{
-						debug( LOG_NEVER, "    %d,%d  [ %d,%d -> %d,%d ]\n", x, y, x*GRID_UNITS, y*GRID_UNITS, (x+1)*GRID_UNITS, (y+1)*GRID_UNITS );
+						debug(LOG_ERROR, "    %d,%d  [ %d,%d -> %d,%d ]", x, y, x*GRID_UNITS, y*GRID_UNITS, (x+1)*GRID_UNITS, (y+1)*GRID_UNITS );
 					}
 
 					++i;
@@ -594,37 +594,5 @@ static BOOL gridIntersect(const int x1, const int y1, const int x2, const int y2
 // Get the range of effect of an object
 static int gridObjRange(WZ_DECL_UNUSED const BASE_OBJECT* psObj)
 {
-#if 0
-	SDWORD	range;
-
-	switch (psObj->type)
-	{
-	case OBJ_DROID:
-		range = ((const DROID *)psObj)->sensorRange;
-		break;
-	case OBJ_STRUCTURE:
-		range = ((const STRUCTURE *)psObj)->sensorRange;
-		if (structCBSensor((STRUCTURE *)psObj)
-		 || structVTOLCBSensor((const STRUCTURE *)psObj))
-		{
-			range = MAX(world_coord(MAP_MAXWIDTH), world_coord(MAP_MAXHEIGHT));
-		}
-		break;
-	case OBJ_FEATURE:
-		range = 0;
-		break;
-	default:
-		range = 0;
-		break;
-	}
-
-	if (range < NAYBOR_RANGE)
-	{
-		range = NAYBOR_RANGE;
-	}
-
-	return range;
-#endif
-
 	return world_coord(20);
 }

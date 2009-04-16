@@ -7,13 +7,21 @@
 #define MAX_PLAYERS	8
 #define MAP_MAXAREA	(256 * 256)
 #define debug(z, ...) do { fprintf(stderr, __VA_ARGS__); fprintf(stderr, "\n"); } while (0)
+#define ARRAY_SIZE(a) (sizeof(a) / sizeof((a)[0]))
 
 void mapFree(GAMEMAP *map)
 {
 	if (map)
 	{
+		unsigned int i;
+
 		free(map->mGateways);
 		free(map->mMapTiles);
+
+		for (i = 0; i < ARRAY_SIZE(map->mLndObjects); ++i)
+		{
+			free(map->mLndObjects[i]);
+		}
 	}
 	free(map);
 }
@@ -193,7 +201,7 @@ GAMEMAP *mapLoad(char *filename)
 	map->mLndObjects[IMD_FEATURE] = malloc(sizeof(*map->mLndObjects[IMD_FEATURE]) * map->numFeatures);
 	for(i = 0; i < map->numFeatures; i++)
 	{
-		LND_OBJECT *psObj = &map->mLndObjects[0][i];
+		LND_OBJECT *psObj = &map->mLndObjects[IMD_FEATURE][i];
 		int nameLength = 60;
 		uint32_t dummy;
 		uint8_t visibility[8];
