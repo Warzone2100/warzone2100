@@ -1,33 +1,35 @@
 #!/usr/bin/env python
 import os
 import re
+import os.path
+
+def find_files(dir, type):
+	files = []
+	type = "."+type
+	for dirpath, dirnames, filenames in os.walk(dir):
+		for f in filenames:
+			if f.endswith(type):
+				files.append(os.path.join(dirpath, f))
+	return files
 
 def convertdir(dir):
 	print 'processing', dir, '...'
 	# first make a dictonary to find the slofiles
-	os.system('find '+dir+' -name "*.slo" > slofiles')
-	slofiles = file('slofiles')
 	slo = {}
-	for path in slofiles:
-		name = path.split('/')[-1].split('.')[0]
+	for path in find_files(dir, "slo"):
+		name = os.path.basename(path).split('.')[0]
 		if name in slo:
 			print path, 'already in slo', slo[name]
-		slo[name] = path.strip()
-	slofiles.close()
-	
-	# add extra ones
-	os.system('find -name "*.slo" > slofiles')
-	slofiles = file('slofiles')
-	for path in slofiles:
-		name = path.split('/')[-1].split('.')[0]
-		if not name in slo:
-			slo[name] = path.strip()
-	slofiles.close()
+		slo[name] = path
 
-	os.system('find '+dir+' -name "*.vlo" > vlofiles')
-	vlofiles = file('vlofiles')
-	for path in vlofiles:
-		vlofile = path.strip()
+	# add extra ones
+	for path in find_files(".", "slo"):
+		name = os.path.basename(path).split('.')[0]
+		if not name in slo:
+			slo[name] = path
+
+	for path in find_files(dir, "vlo"):
+		vlofile = path
 		slofile = ''
 		# now try to find the corresponding slo file
 		f = file(vlofile)
@@ -41,7 +43,7 @@ def convertdir(dir):
 				slofile = slo[name]
 		if not slofile:
 			# generate it from the filename
-			name = path.split('/')[-1].split('.')[0]
+			name = os.path.basename(path).split('.')[0]
 			#print 'generated', name
 			if name in slo:
 				slofile = slo[name]
@@ -50,9 +52,7 @@ def convertdir(dir):
 
 		luafile = path.replace('.vlo', '.lua')
 		print 'processing', vlofile, slofile
-		os.system('tools/wz2lua/wz2lua.py '+vlofile+' '+slofile+' > '+luafile)
-		
-	vlofiles.close()
+		os.system(os.path.normpath('tools/wz2lua/wz2lua.py')+' '+vlofile+' '+slofile+' > '+luafile)
 	
 convertdir('data/base/script')
 convertdir('data/base/multiplay/script')
