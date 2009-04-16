@@ -74,6 +74,29 @@ function Array(a, b)
 	return new_array
 end
 
+-- A dofile that will prepend the path of the script that calls it
+__dofile = dofile
+function dofile(filename)
+	local n, callingfile
+	n = 2
+	path = ""
+	while true do
+		info = debug.getinfo(n)
+		if string.sub(info.source,1,1) == "@" then
+			callingfile = string.sub(info.source,2)
+			break
+		end
+		n = n + 1
+	end
+	if callingfile == "" then error("could not determine calling file") end
+	path = callingfile
+	while true do
+		if string.sub(path,-1) == "/" or path == "" then break end
+		path = string.sub(path,0,-2)
+	end
+	return __dofile(path..filename)
+end
+
 -- Some legacy names
 EnumDroid = enumDroid
 InitEnumDroids = initEnumDroids

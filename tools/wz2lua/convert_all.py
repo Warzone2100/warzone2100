@@ -3,12 +3,11 @@ import os
 import re
 import os.path
 
-def find_files(dir, type):
+def find_files(dir, ends_with):
 	files = []
-	type = "."+type
 	for dirpath, dirnames, filenames in os.walk(dir):
 		for f in filenames:
-			if f.endswith(type):
+			if f.endswith(ends_with):
 				files.append(os.path.join(dirpath, f))
 	return files
 
@@ -16,19 +15,19 @@ def convertdir(dir):
 	print 'processing', dir, '...'
 	# first make a dictonary to find the slofiles
 	slo = {}
-	for path in find_files(dir, "slo"):
+	for path in find_files(dir, ".slo"):
 		name = os.path.basename(path).split('.')[0]
 		if name in slo:
 			print path, 'already in slo', slo[name]
 		slo[name] = path
 
 	# add extra ones
-	for path in find_files(".", "slo"):
+	for path in find_files(".", ".slo"):
 		name = os.path.basename(path).split('.')[0]
 		if not name in slo:
 			slo[name] = path
 
-	for path in find_files(dir, "vlo"):
+	for path in find_files(dir, ".vlo"):
 		vlofile = path
 		slofile = ''
 		# now try to find the corresponding slo file
@@ -50,10 +49,15 @@ def convertdir(dir):
 			else:
 				print 'WARNING: could not find slo for', vlofile
 
-		luafile = path.replace('.vlo', '.lua')
-		print 'processing', vlofile, slofile
-		os.system(os.path.normpath('tools/wz2lua/wz2lua.py')+' '+vlofile+' '+slofile+' > '+luafile)
-	
+		lua_vlo = path.replace('.vlo', '.lua')
+		lua_slo = os.path.join(os.path.dirname(path), os.path.basename(slofile.replace('.slo', '_logic.lua')))
+		print 'processing', vlofile, slofile, "->", lua_vlo, lua_slo
+		os.system("%s %s %s %s %s" % (os.path.normpath('tools/wz2lua/wz2lua.py'), vlofile, slofile, lua_vlo, lua_slo))
+
+# remove the old files
+for path in find_files(".", "_logic.lua"):
+	os.remove(path)
+
 convertdir('data/base/script')
 convertdir('data/base/multiplay/script')
 convertdir('data/base/multiplay/skirmish')
