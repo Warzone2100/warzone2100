@@ -120,7 +120,6 @@ void throttleEconomy(void)
 			asPower[player].economyThrottle += 0.02;
 		}
 		CLIP(asPower[player].economyThrottle, 0, 1);
-		debug(LOG_WARNING, "player: %i, power: %f, throttle: %f, produced: %f, requested: %f", player, asPower[player].currentPower, asPower[player].economyThrottle, asPower[player].powerProduced, asPower[player].powerRequested);
 		asPower[player].powerProduced = 0;
 		asPower[player].powerRequested = 0;
 	}
