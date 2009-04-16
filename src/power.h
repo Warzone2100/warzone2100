@@ -42,8 +42,6 @@ typedef struct _player_power
 	float powerProduced;        ///< Power produced
 	float powerRequested;       ///< Power requested
 	float economyThrottle;      ///< Which percentage of the requested power is actually delivered
-	float powerProducedLastSecond;
-	float powerRequestedLastSecond;
 } PLAYER_POWER;
 
 /** Allocate the space for the playerPower. */
@@ -77,10 +75,7 @@ extern void setPower(int player, float power);
 
 /** Get the amount of power current held by the given player. */
 extern float getPower(int player);
-
-float getEconomyThrottle(int player);
-float getPowerProducedLastSecond(int player);
-float getPowerRequestedLastSecond(int player);
+extern float getExtractedPower(int player);
 
 /** Resets the power levels for all players when power is turned back on. */
 void powerCalc(BOOL on);
