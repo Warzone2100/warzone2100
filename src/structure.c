@@ -2821,7 +2821,8 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool mission)
 	DROID_TEMPLATE		*psNextTemplate;
 #endif
 	UDWORD				i;
-	float secondsElapsed,secondsToBuild, powerNeeded;
+	float secondsToBuild, powerNeeded;
+	int secondsElapsed;
 
 	CHECK_STRUCTURE(psStructure);
 
@@ -3297,11 +3298,11 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool mission)
 				secondsElapsed = (gameTime - psFactory->timeStarted) / (float)GAME_TICKS_PER_SEC;
 				secondsToBuild = ((DROID_TEMPLATE*)pSubject)->buildPoints/(float)psFactory->productionOutput;
 				powerNeeded = ((DROID_TEMPLATE *)pSubject)->powerPoints*(secondsElapsed/secondsToBuild);
-				if (secondsElapsed > 1)
+				if (secondsElapsed > 0)
 				{
 					progress = requestPowerFor(psStructure->player, powerNeeded, secondsElapsed);
 					psFactory->timeToBuild -= progress;
-					psFactory->timeStarted = gameTime;
+					psFactory->timeStarted = psFactory->timeStarted + secondsElapsed*1000;
 				}
 			}
 
@@ -6653,11 +6654,16 @@ void cancelProduction(STRUCTURE *psBuilding)
 	//check its the correct factory
 	if (psBuilding->player == productionPlayer && psFactory->psSubject)
 	{
+		// give the power back that was used until now
+		int secondsToBuild = ((DROID_TEMPLATE*)psFactory->psSubject)->buildPoints/psFactory->productionOutput;
+		int secondsElapsed = secondsToBuild - psFactory->timeToBuild;
+		int powerUsed = (((DROID_TEMPLATE *)psFactory->psSubject)->powerPoints*secondsElapsed)/secondsToBuild;
+		addPower(psBuilding->player, powerUsed);
+
 		//clear the production run for this factory
 		memset(asProductionRun[psFactory->psAssemblyPoint->factoryType][
 			psFactory->psAssemblyPoint->factoryInc], 0, sizeof(PRODUCTION_RUN) *
 			MAX_PROD_RUN);
-		// FIXME: give any power back that was not yet used
 		//clear the factories subject and quantity
 		psFactory->psSubject = NULL;
 		psFactory->quantity = 0;
