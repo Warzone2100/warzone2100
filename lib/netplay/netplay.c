@@ -1675,7 +1675,7 @@ static void NETallowJoining(void)
 					SDLNet_TCP_Close(tmp_socket[i]);
 					tmp_socket[i] = NULL;
 				}
-				else if (NetPlay.playercount + 1 >= NetPlay.maxPlayers)
+				else if (NetPlay.playercount > NetPlay.maxPlayers && NetMsg.type == NET_JOIN)
 				{
 					char name[64];
 
