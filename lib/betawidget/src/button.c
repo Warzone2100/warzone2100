@@ -36,10 +36,10 @@ static bool buttonSetButtonStateHandler(widget *selfWidget, const event *evt,
 {
 	// Cast ourself to a button
 	button *self = BUTTON(selfWidget);
-	
+
 	// Request a redraw
 	WIDGET(self)->needsRedraw = true;
-	
+
 	switch(evt->type)
 	{
 		case EVT_MOUSE_DOWN:	self->state = BUTTON_STATE_MOUSEDOWN; break;
@@ -50,7 +50,7 @@ static bool buttonSetButtonStateHandler(widget *selfWidget, const event *evt,
 		case EVT_DISABLE:		self->state = BUTTON_STATE_DISABLED; break;
 		default: assert(0);
 	}
-	
+
 	return true;
 }
 
@@ -67,13 +67,13 @@ static void buttonInitVtbl(button *self)
 		vtbl.widgetVtbl.destroy		= buttonDestroyImpl;
 		vtbl.widgetVtbl.doDraw		= buttonDoDrawImpl;
 		vtbl.widgetVtbl.doDrawMask 	= buttonDoDrawMaskImpl;
-		
+
 		vtbl.doButtonPath 			= buttonDoButtonPathImpl;
 		vtbl.doDrawNormal			= buttonDoDrawNormalImpl;
 		vtbl.doDrawDisabled			= buttonDoDrawDisabledImpl;
 		vtbl.doDrawMouseOver		= buttonDoDrawMouseOverImpl;
 		vtbl.doDrawMouseDown		= buttonDoDrawMouseDownImpl;
-		
+
 		vtbl.widgetVtbl.getMinSize  = buttonGetMinSizeImpl;
 		vtbl.widgetVtbl.getMaxSize  = buttonGetMaxSizeImpl;
 
@@ -90,15 +90,15 @@ static void buttonInitVtbl(button *self)
 button *buttonCreate(const char *id, int w, int h)
 {
 	button *instance = malloc(sizeof(button));
-	
+
 	if (instance == NULL)
 	{
 		return NULL;
 	}
-	
+
 	// Call the constructor
 	buttonInit(instance, id, w, h);
-	
+
 	// Return the new object
 	return instance;
 }
@@ -123,25 +123,25 @@ void buttonInit(button *self, const char *id, int w, int h)
 
 	// Set our type
 	((widget *)self)->classInfo = &buttonClassInfo;
-	
+
 	// initialise button state
 	self->state = BUTTON_STATE_NORMAL;
-	
+
 	// Mask for exact mouse events
 	widgetEnableMask(WIDGET(self));
-	
+
 	// Install necessary event handlers
 	for (i = 0; i < sizeof(handlers) / sizeof(int); i++)
 	{
 		widgetAddEventHandler(WIDGET(self), handlers[i],
 		                      buttonSetButtonStateHandler, NULL, NULL);
 	}
-	
+
 	buttonSetPatternsForState(self, BUTTON_STATE_NORMAL, "button/normal/fill", "button/normal/contour");
 	buttonSetPatternsForState(self, BUTTON_STATE_DISABLED, "button/disabled/fill", "button/disabled/contour");
 	buttonSetPatternsForState(self, BUTTON_STATE_MOUSEOVER, "button/mouseover/fill", "button/mouseover/contour");
 	buttonSetPatternsForState(self, BUTTON_STATE_MOUSEDOWN, "button/mousedown/fill", "button/mousedown/contour");
-	
+
 	widgetResize(WIDGET(self), w, h);
 }
 
@@ -155,7 +155,7 @@ void buttonDestroyImpl(widget *self)
 void buttonDoDrawImpl(widget *widgetSelf)
 {
 	button *self;
-	
+
 	self = BUTTON(widgetSelf);
 	switch(self->state)
 	{
@@ -182,20 +182,20 @@ void buttonDoDrawMaskImpl(widget *self)
 size buttonGetMinSizeImpl(widget *self)
 {
 	const size minSize = { 60.0f, 40.0f };
-	
+
 	return minSize;
 }
 size buttonGetMaxSizeImpl(widget *self)
 {
 	// Note the int => float conversion
 	const size maxSize = { 60.f, 40.f };
-	
+
 	return maxSize;
 }
 
 /**
  * Draws the button's shape and background using the delivered patterns.
- * 
+ *
  * @param self The button object which will be drawn.
  * @param fillPattern The pattern to fill its shape.
  * @param contourPattern The pattern to outline its shape.
@@ -204,19 +204,19 @@ static void buttonDrawFinally(button *self, pattern *fillPattern, pattern *conto
 {
 	// Get drawing context
 	cairo_t *cr = WIDGET(self)->cr;
-	
+
 	assert(self != NULL);
 	assert(fillPattern != NULL);
 	assert(contourPattern != NULL);
 
 	// Do the rounded rectangle path
 	buttonDoButtonPath(self, cr);
-	
+
 	// Select normal state fill gradient
 	patternManagerSetAsSource(cr, fillPattern, WIDGET(self)->size.x, WIDGET(self)->size.y);
 	// Fill the path, preserving the path
 	cairo_fill_preserve(cr);
-	
+
 	// Select normal state contour gradient
 	patternManagerSetAsSource(cr, contourPattern, WIDGET(self)->size.x, WIDGET(self)->size.y);
 	// Finally stroke the path
@@ -297,7 +297,7 @@ void buttonSetPatternsForState(button *self, buttonState state, const char *fill
 {
 	assert(self != NULL);
 	assert(state < BUTTON_STATE_COUNT);
-	
+
 	if(fillPatternId)
 	{
 		if(fillPatternId[0] != '\0')
@@ -305,7 +305,7 @@ void buttonSetPatternsForState(button *self, buttonState state, const char *fill
 			self->fillPatterns[state] = patternManagerGetPattern(fillPatternId);
 		}
 	}
-	
+
 	if(contourPatternId)
 	{
 		if(contourPatternId[0] != '\0')

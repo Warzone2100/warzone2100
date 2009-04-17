@@ -28,6 +28,7 @@
 #include <errno.h>
 #include <math.h>
 #include <stdbool.h>
+#include <stdint.h>
 #include <GL/gl.h>
 
 #ifndef WIN32

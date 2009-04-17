@@ -35,8 +35,8 @@ libbetawidget_la_SOURCES = \
 	widget.c \
 	window.c
 
-libbetawidget_la_CPPFLAGS = $(SVG_CAIRO_CFLAGS) $(CAIRO_CFLAGS) $(LUA_CFLAGS) -DLIB_COMPILE=1
-libbetawidget_la_LDFLAGS = $(SVG_CAIRO_LIBS) $(CAIRO_CFLAGS) $(LUA_LIBS) $(CAIRO_LIBS) $(OPENGL_LIBS) -version-info $(LIBTOOL_VERSION) -DLIB_COMPILE=1
+libbetawidget_la_CPPFLAGS = $(PANGO_CAIRO_CFLAGS) $(SVG_CAIRO_CFLAGS) $(CAIRO_CFLAGS) $(LUA_CFLAGS) -DLIB_COMPILE=1
+libbetawidget_la_LDFLAGS = $(PANGO_CAIRO_LIBS) $(SVG_CAIRO_LIBS) $(CAIRO_CFLAGS) $(LUA_LIBS) $(CAIRO_LIBS) $(OPENGL_LIBS) -version-info $(LIBTOOL_VERSION) -DLIB_COMPILE=1
 libbetawidget_la_LIBADD = platform/libplatform.la libutil.la
 
 # FIXME: As much non-API headers (i.e. headers that shouldn't be directly

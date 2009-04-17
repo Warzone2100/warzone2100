@@ -407,7 +407,7 @@ void ProcessRadarInput(void)
 				CalcRadarPosition(x, y, &PosX, &PosY);
 				setViewPos(PosX,PosY,true);
 				bRadarDragging = true;
-				if(keyDown(KEY_LCTRL) || keyDown(KEY_RCTRL))
+				if (ctrlShiftDown())
 				{
 					player.r.y = 0;
 				}
@@ -574,8 +574,7 @@ static void CheckFinishedDrag(void)
 			}
 
 			/* Only clear if shift isn't down - this is for the drag selection box for units*/
-			if(!keyDown(KEY_LCTRL) && !keyDown(KEY_RCTRL)
-				&& !keyDown(KEY_LSHIFT) && !keyDown(KEY_RSHIFT) && wallDrag.status==DRAG_INACTIVE)
+			if(!ctrlShiftDown() && wallDrag.status==DRAG_INACTIVE)
 			{
 				clearSelection();
 			}
@@ -1615,7 +1614,7 @@ void dealWithDroidSelect(DROID *psDroid, BOOL bDragBox)
 			/* Fix this ALEX M!!! */
 		}
 	}
-	else if (keyDown(KEY_LCTRL) || keyDown(KEY_RCTRL) || keyDown(KEY_LSHIFT) || keyDown(KEY_RSHIFT)
+	else if (ctrlShiftDown()
 			|| !droidHasLeader(psDroid))
 	{
 
@@ -1770,8 +1769,7 @@ static inline void dealWithLMBDroid(DROID* psDroid, SELECTION_TYPE selection)
 	else if (psDroid->droidType == DROID_COMMAND && selection != SC_INVALID &&
 	          selection != SC_DROID_COMMAND &&
 	          selection != SC_DROID_CONSTRUCT &&
-	          !(keyDown(KEY_LCTRL) || keyDown(KEY_RCTRL)) &&
-	          !(keyDown(KEY_LSHIFT) || keyDown(KEY_RSHIFT)))
+	          !ctrlShiftDown())
 	{
 		turnOffMultiMsg(true);
 		orderSelectedObj(selectedPlayer, (BASE_OBJECT*)psDroid);
@@ -2190,7 +2188,7 @@ void	dealWithLMB( void )
 	if (psLocation == NULL || driveModeActive() || selNumSelected(selectedPlayer))
 	{
 		// now changed to use the multiple order stuff
-		if(keyDown(KEY_LCTRL) || keyDown(KEY_RCTRL))		// ctrl clicked a destination, add an order
+		if (ctrlShiftDown())		// ctrl clicked a destination, add an order
 		{
 			orderSelectedLocAdd(selectedPlayer,
 								mouseTileX*TILE_UNITS+TILE_UNITS/2,

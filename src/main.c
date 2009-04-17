@@ -87,17 +87,17 @@
 
 
 #if defined(WZ_OS_WIN)
-# define WZ_WRITEDIR "Warzone 2100 2.1"
+# define WZ_WRITEDIR "Warzone 2100 2.2"
 #elif defined(WZ_OS_MAC)
 # include <CoreServices/CoreServices.h>
 # include <unistd.h>
-# define WZ_WRITEDIR "Warzone 2100 2.1"
+# define WZ_WRITEDIR "Warzone 2100 2.2"
 #else
-# define WZ_WRITEDIR ".warzone2100-2.1"
+# define WZ_WRITEDIR ".warzone2100-2.2"
 #endif
 
-char datadir[PATH_MAX] = "\0"; // Global that src/clparse.c:ParseCommandLine can write to, so it can override the default datadir on runtime. Needs to be \0 on startup for ParseCommandLine to work!
-char configdir[PATH_MAX] = "\0"; // specifies custom USER directory.  Same rules apply as datadir above.
+char datadir[PATH_MAX] = ""; // Global that src/clparse.c:ParseCommandLine can write to, so it can override the default datadir on runtime. Needs to be empty on startup for ParseCommandLine to work!
+char configdir[PATH_MAX] = ""; // specifies custom USER directory. Same rules apply as datadir above.
 
 char * global_mods[MAX_MODS] = { NULL };
 char * campaign_mods[MAX_MODS] = { NULL };

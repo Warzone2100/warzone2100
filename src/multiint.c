@@ -107,6 +107,8 @@ extern BOOL bFboProblem;			// hack to work around people with bad drivers. (*cou
 extern BOOL bSendingMap;			// used to indicate we are sending a map
 
 extern void intDisplayTemplateButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
+extern void NETCheckVersion( uint32_t player ); // in netplay.c
+extern uint32_t VersionCheckTime[MAX_PLAYERS];	// in netplay.c
 
 BOOL						bHosted			= false;				//we have set up a game
 char						sPlayer[128];							// player name (to be used)
@@ -123,9 +125,6 @@ static UDWORD				gameNumber;								// index to games icons
 static BOOL					safeSearch		= false;				// allow auto game finding.
 
 static UDWORD hideTime=0;
-
-#define DEFAULTCAMPAIGNMAP	"Rush"
-#define DEFAULTSKIRMISHMAP	"Sk-Rush"
 
 extern int NET_PlayerConnectionStatus;		// from src/display3d.c
 
@@ -165,7 +164,7 @@ static	void	addChatBox			(void);
 static	void	disableMultiButs	(void);
 static	void	processMultiopWidgets(UDWORD);
 static	void	SendFireUp			(void);
-void	kickPlayer			(UDWORD dpid);
+void	kickPlayer			(UDWORD dpid, const char *reason);
 void			runMultiOptions		(void);
 BOOL			startMultiOptions	(BOOL);
 void			frontendMultiMessages(void);
@@ -606,7 +605,7 @@ static void addGames(void)
 	// in case they refresh, and a game becomes available.
 	widgDelete(psWScreen,FRONTEND_NOGAMESAVAILABLE); 
 	// only have to do this if we have any games available.
-	if (gcount)
+	if (!getConnError() && gcount)
 	{
 		for(i=0;i<MaxGames;i++)							// draw games
 		{
@@ -646,8 +645,21 @@ static void addGames(void)
 	{
 	// display that no games are available in lobby.
 	// This is a 'button', not text so it can be hilighted/centered.
-		const char *txt = _("NO GAMES ARE AVAILABLE");
+		const char *txt;
 		W_BUTINIT sButInit;
+
+		switch (getConnError())
+		{
+		case NETERR_NOERR:
+			txt = _("No games are available");
+			break;
+		case NETERR_CONN:
+			txt = _("Connection Error");
+			break;
+		default:
+			txt = _("Unknown Error");
+			break;
+		}
 
 		// delete old widget if necessary
 		widgDelete(psWScreen,FRONTEND_NOGAMESAVAILABLE);
@@ -1444,6 +1456,17 @@ static void drawReadyButton(UDWORD player)
 			4,MULTIOP_READY_WIDTH,MULTIOP_READY_HEIGHT,
 			_("Click when ready"),IMAGE_CHECK_OFF,IMAGE_CHECK_OFF,true);
 	}
+	// Hackish note:  Since the Ready Button is only drawn for humans,
+	// the routine was added here.
+	if( NetPlay.bHost)
+	{
+		// make sure we sent the check, then check for timelimit
+		if( VersionCheckTime[NetPlay.players[player].dpid ] != 0xffffffff
+			&& (VersionCheckTime[NetPlay.players[player].dpid ] ) < gameTime2)
+		{
+			NETCheckVersion( NetPlay.players[player].dpid );
+		}
+	}
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -1584,12 +1607,13 @@ static void SendFireUp(void)
 	NETend();
 }
 
-// host kick a player from a game.
-void kickPlayer(uint32_t player_id)
+// host kicks a player from a game.
+void kickPlayer(uint32_t player_id, const char *reason)
 {
 	// send a kick msg
 	NETbeginEncode(NET_KICK, NET_ALL_PLAYERS);
 		NETuint32_t(&player_id);
+		NETstring( (char *) reason, MAX_KICK_REASON);
 	NETend();
 }
 
@@ -2184,7 +2208,7 @@ static void processMultiopWidgets(UDWORD id)
 					}
 					sasprintf(&msg, _("The host has kicked %s from the game!"), getPlayerName(j));
 					sendTextMessage(msg, true);
-					kickPlayer(victim);
+					kickPlayer(victim, _("you are being a jerk.") );
 
 					resetReadyStatus(true);		//reset and send notification to all clients
 				}
@@ -2390,14 +2414,20 @@ void frontendMultiMessages(void)
 		case NET_KICK:						// player is forcing someone to leave
 		{
 			uint32_t player_id;
+			char reason[MAX_KICK_REASON];
 
 			NETbeginDecode(NET_KICK);
 				NETuint32_t(&player_id);
+				NETstring( reason, MAX_KICK_REASON);
 			NETend();
 
 			if (NetPlay.dpidPlayer == player_id)	// we've been told to leave.
 			{
 				stopJoining();
+				screen_RestartBackDrop();
+				changeTitleMode(TITLE);
+				pie_LoadBackDrop(SCREEN_RANDOMBDROP);
+				debug(LOG_ERROR, "You have been kicked, because %s ", reason );
 			}
 			break;
 		}

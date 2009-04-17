@@ -2887,7 +2887,7 @@ static void drawStructureHealth(STRUCTURE *psStruct)
 			psStruct->pStructureType, psStruct->player);
 		if (resistance)
 		{
-			health = PERCENT(psStruct->resistance, resistance);
+			health = PERCENT(MAX(0,psStruct->resistance), resistance);
 		}
 		else
 		{
@@ -3721,12 +3721,13 @@ static void trackHeight( float desiredHeight )
 }
 
 /// Select the next energy bar display mode
-void toggleEnergyBars(void)
+ENERGY_BAR toggleEnergyBars(void)
 {
 	if (++barMode == BAR_LAST)
 	{
 		barMode = BAR_SELECTED;
 	}
+	return barMode;
 }
 
 /// Set everything up for when the player assigns the sensor target

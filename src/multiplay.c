@@ -752,14 +752,18 @@ BOOL recvMessage(void)
 			break;
 		case NET_KICK:
 		{
+			// FIX ME: in game kick ?  Is this even possible with current code?
 			uint32_t player_id;
+			char reason[MAX_KICK_REASON];
 
 			NETbeginDecode(NET_KICK);
 				NETuint32_t(&player_id);
+				NETstring( reason, MAX_KICK_REASON);
 			NETend();
 
 			if (NetPlay.dpidPlayer == player_id)  // we've been told to leave.
 			{
+				debug(LOG_ERROR, "You were kicked because, %s", reason);
 				setPlayerHasLost(true);
 			}
 			break;
@@ -1227,7 +1231,7 @@ BOOL recvTextMessage()
 	UDWORD	i;
 	char	msg[MAX_CONSOLE_STRING_LENGTH];
 	char newmsg[MAX_CONSOLE_STRING_LENGTH];
-	UDWORD  player=MAX_PLAYERS,j;		//console callback - player who sent the message
+	UDWORD  player;		//console callback - player who sent the message
 
 	memset(msg, 0x0, sizeof(msg));
 	memset(newmsg, 0x0, sizeof(newmsg));
@@ -1240,19 +1244,17 @@ BOOL recvTextMessage()
 	NETend();
 
 
-	for (i = 0; NetPlay.players[i].dpid != dpid; i++);		//findplayer
+	// find player
+	for (i = 0; NetPlay.players[i].dpid != dpid && i < MAX_PLAYERS; i++);
 
 	//console callback - find real number of the player
-	for (j = 0; i < MAX_PLAYERS; j++)
-	{
-		if (dpid == player2dpid[j])
-		{
-			player = j;
-			break;
-		}
-	}
+	for (player = 0; player2dpid[player] != dpid && player < MAX_PLAYERS; player++);
 
-	ASSERT(player != MAX_PLAYERS, "recvTextMessage: failed to find owner of dpid %d", dpid);
+	ASSERT(player != MAX_PLAYERS && i != MAX_PLAYERS, "recvTextMessage: failed to find owner of dpid %d", dpid);
+	if (player == MAX_PLAYERS || i == MAX_PLAYERS)
+	{
+		return false;
+	}
 
 	sstrcpy(msg, NetPlay.players[i].name);
 	// Seperator

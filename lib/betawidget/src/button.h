@@ -31,13 +31,13 @@
 typedef struct _button button;
 typedef struct _buttonVtbl buttonVtbl;
 
-typedef enum 
+typedef enum
 {
 	BUTTON_STATE_NORMAL=0,
 	BUTTON_STATE_DISABLED,
 	BUTTON_STATE_MOUSEOVER,
 	BUTTON_STATE_MOUSEDOWN,
- 
+
 	/// Must be the last member
 	BUTTON_STATE_COUNT
 } buttonState;
@@ -53,7 +53,7 @@ struct _buttonVtbl
 	void	(*doDrawMouseOver)  (button *self);
 
 	void	(*doDrawMouseDown)  (button *self);
-	
+
 	void	(*doButtonPath)     (button *self, cairo_t *cr);
 };
 
@@ -68,12 +68,12 @@ struct _button
 	 * Vtable
 	 */
 	struct _buttonVtbl *vtbl;
-	
+
 	/**
 	 * The current button state
 	 */
 	buttonState state;
-	
+
 	/**
 	 * Each button state has a fill and contour pattern
 	 */
