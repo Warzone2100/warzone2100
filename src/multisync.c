@@ -1142,10 +1142,7 @@ BOOL recvScoreSubmission()
 
 static UDWORD averagePing(void)
 {
-	UDWORD i,count,total;
-
-	count =0;
-	total =0;
+	UDWORD i, count = 0, total = 0;
 
 	for(i=0;i<MAX_PLAYERS;i++)
 	{
@@ -1155,7 +1152,7 @@ static UDWORD averagePing(void)
 			count ++;
 		}
 	}
-	return total/count;
+	return total / MAX(count, 1);
 }
 
 BOOL sendPing(void)
