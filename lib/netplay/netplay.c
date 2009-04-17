@@ -109,8 +109,6 @@ typedef struct
 	unsigned int	bytes;
 } NETBUFSOCKET;
 
-#define PLAYER_HOST		1
-
 // ////////////////////////////////////////////////////////////////////////
 // Variables
 
@@ -390,6 +388,7 @@ static void NET_InitPlayers(void)
 	}
 	NetPlay.hostPlayer = 0;	// right now, host starts always at index zero
 	NetPlay.playercount = 0;
+	debug(LOG_NET, "Players initialized");
 }
 
 void NETBroadcastPlayerInfo(uint32_t index)
@@ -420,7 +419,7 @@ static unsigned int NET_CreatePlayer(const char* name)
 			NetPlay.players[index].allocated = true;
 			sstrcpy(NetPlay.players[index].name, name);
 			NETBroadcastPlayerInfo(index);
-			NetPlay.playercount--;
+			NetPlay.playercount++;
 			return index;
 		}
 	}
@@ -433,7 +432,7 @@ static void NET_DestroyPlayer(unsigned int index)
 {
 	debug(LOG_NET, "Freeing slot %u for a new player", index);
 	NetPlay.players[index].allocated = false;
-	NetPlay.playercount++;
+	NetPlay.playercount--;
 	NETBroadcastPlayerInfo(index);
 }
 
