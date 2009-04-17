@@ -268,12 +268,6 @@ BOOL MultiPlayerJoin(UDWORD dpid)
 		setupNewPlayer(dpid);						// setup all the guff for that player.
 		sendOptions();
 		bPlayerReadyGUI[dpid] = false;
-
-		// if skirmish and game full, then kick...
-		if (game.type == SKIRMISH && NetPlay.playercount > game.maxPlayers)
-		{
-			kickPlayer(dpid, "Game is full!");
-		}
 	}
 	return true;
 }
