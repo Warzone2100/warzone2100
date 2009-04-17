@@ -5,6 +5,18 @@ int lexer_input(lexerinput_t* input, char* buf, size_t max_size, int nullvalue)
 {
 	switch (input->type)
 	{
+		case LEXINPUT_STDIO:
+			if (feof(input->input.stdiofile))
+			{
+				buf[0] = EOF;
+				return nullvalue;
+			}
+			else
+			{
+				return fread(buf, 1, max_size, input->input.stdiofile);
+			}
+			break;
+
 		case LEXINPUT_PHYSFS:
 			if (PHYSFS_eof(input->input.physfsfile))
 			{

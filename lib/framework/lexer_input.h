@@ -5,6 +5,7 @@
 
 enum lexinput_type
 {
+	LEXINPUT_STDIO,
 	LEXINPUT_PHYSFS,
 	LEXINPUT_BUFFER,
 };
@@ -13,6 +14,7 @@ typedef struct
 {
 	union
 	{
+		FILE* stdiofile;
 		PHYSFS_file* physfsfile;
 		struct
 		{
