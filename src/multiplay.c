@@ -71,7 +71,6 @@
 // ////////////////////////////////////////////////////////////////////////////
 // globals.
 BOOL						bMultiPlayer				= false;	// true when more than 1 player.
-SDWORD						player2dpid[MAX_PLAYERS]	={0,0,0,0,0,0,0,0};		//stores dpids of each player. FILTHY HACK (ASSUMES 8 players)
 BOOL						openchannels[MAX_PLAYERS]={true};
 UBYTE						bDisplayMultiJoiningStatus;
 
@@ -471,9 +470,11 @@ BOOL setPlayerName(UDWORD player, const char *sName)
 BOOL isHumanPlayer(UDWORD player)
 {
 	if (player >= MAX_PLAYERS)
+	{
 		return false;
+	}
 
-	return (BOOL) (player2dpid[player] != 0);
+	return NetPlay.players[player].allocated;
 }
 
 // returns player responsible for 'player'
@@ -1005,7 +1006,6 @@ BOOL sendTextMessage(const char *pStr, BOOL all)
 	UDWORD				i;
 	char				display[MAX_CONSOLE_STRING_LENGTH];
 	char				msg[MAX_CONSOLE_STRING_LENGTH];
-	uint8_t				netplayer = 0;
 
 	if (!ingame.localOptionsReceived)
 	{
@@ -1048,8 +1048,7 @@ BOOL sendTextMessage(const char *pStr, BOOL all)
 			{
 				if (isHumanPlayer(i))
 				{
-					netplayer = player2dpid[i];
-					NETbeginEncode(NET_TEXTMSG, netplayer);
+					NETbeginEncode(NET_TEXTMSG, i);
 						NETuint32_t(&selectedPlayer);		// who this msg is from
 						NETstring(msg,MAX_CONSOLE_STRING_LENGTH);	// the message to send
 					NETend();
@@ -1069,8 +1068,7 @@ BOOL sendTextMessage(const char *pStr, BOOL all)
 			{
 				if (isHumanPlayer(i))
 				{
-					netplayer = player2dpid[i];
-						NETbeginEncode(NET_TEXTMSG, netplayer);
+					NETbeginEncode(NET_TEXTMSG, i);
 						NETuint32_t(&selectedPlayer);				// who this msg is from
 						NETstring(display, MAX_CONSOLE_STRING_LENGTH);	// the message to send
 					NETend();
@@ -1167,7 +1165,7 @@ BOOL sendBeacon(int32_t locX, int32_t locY, int32_t forPlayer, int32_t sender, c
 
 	// I assume this is correct, looks like it sends it to ONLY that person, and the routine
 	// kf_AddHelpBlip() itterates for each player it needs.
-	NETbeginEncode(NET_BEACONMSG, player2dpid[sendPlayer]);     // send to the player who is hosting 'to' player (might be himself if human and not AI)
+	NETbeginEncode(NET_BEACONMSG, sendPlayer);		// send to the player who is hosting 'to' player (might be himself if human and not AI)
 		NETint32_t(&sender);                                // save the actual sender
 
 		// save the actual player that is to get this msg on the source machine (source can host many AIs)
@@ -1864,24 +1862,6 @@ const char* getPlayerColourName(unsigned int player)
 	}
 
 	return gettext(playerColors[getPlayerColour(player)]);
-}
-
-/*
- * returns player in-game index from a dpid or -1 if player not found (should not happen!)
- */
-SDWORD dpidToPlayer(SDWORD dpid)
-{
-	UDWORD i;
-
-	for(i=0;(i<MAX_PLAYERS) && (dpid != player2dpid[i]); i++);
-
-	if(i >= MAX_PLAYERS)
-	{
-		ASSERT(i< MAX_PLAYERS, "dpidToPlayer: failed to find player with dpid %d", dpid);
-		return -1;
-	}
-
-	return i;
 }
 
 /* Reset ready status for all players */
