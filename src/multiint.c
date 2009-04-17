@@ -107,12 +107,9 @@ extern BOOL bFboProblem;			// hack to work around people with bad drivers. (*cou
 extern BOOL bSendingMap;			// used to indicate we are sending a map
 
 extern void intDisplayTemplateButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
-extern void NETCheckVersion( uint32_t player ); // in netplay.c
-extern uint32_t VersionCheckTime[MAX_PLAYERS];	// in netplay.c
 
 BOOL						bHosted			= false;				//we have set up a game
 char						sPlayer[128];							// player name (to be used)
-char						buildTime[8]	 = "67HGDV3"; //RODZ was __TIME__ ;
 static BOOL					bColourChooserUp= false;
 static BOOL					bTeamChooserUp[MAX_PLAYERS]= {false,false,false,false,false,false,false,false};
 SDWORD						playerTeamGUI[MAX_PLAYERS] = {0,1,2,3,4,5,6,7};		//team each player belongs to (in skirmish setup screen)
@@ -174,7 +171,8 @@ static	void	decideWRF			(void);
 
 static void		closeColourChooser	(void);
 static void		closeTeamChooser	(void);
-static BOOL		SendColourRequest	(UBYTE player, UBYTE col,UBYTE chosenPlayer);
+static BOOL		SendColourRequest	(UBYTE player, UBYTE col);
+static BOOL		SendPositionRequest	(UBYTE player, UBYTE chosenPlayer);
 static BOOL		safeToUseColour		(UDWORD player,UDWORD col);
 BOOL			chooseColour		(UDWORD);
 static BOOL		changeReadyStatus	(UBYTE player, BOOL bReady);
@@ -1073,9 +1071,10 @@ static SDWORD teamChooserUp(void)
 
 	return -1;		//none
 }
+
 static void addColourChooser(UDWORD player)
 {
-	UDWORD i;//,j;
+	UDWORD i;
 
 	// delete that players box,
 	widgDelete(psWScreen,MULTIOP_PLAYER_START+player);
@@ -1137,20 +1136,20 @@ static void closeColourChooser(void)
 
 static void changeTeam(UBYTE player, UBYTE team)
 {
-	playerTeamGUI[player] = team;
+	NetPlay.players[player].team = team;
 	debug(LOG_WZ, "set %d as new team for player %d", team, player);
-	sendOptions(player2dpid[player], player);	// tell everyone && update requesting player.
+	NETBroadcastPlayerInfo(player);
 }
 
 static BOOL SendTeamRequest(UBYTE player, UBYTE chosenTeam)
 {
-	if(NetPlay.bHost)			// do or request the change.
+	if(NetPlay.isHost)			// do or request the change.
 	{
 		changeTeam(player, chosenTeam);	// do the change, remember only the host can do this to avoid confusion.
 	}
 	else
 	{
-		NETbeginEncode(NET_TEAMREQUEST, NET_ALL_PLAYERS);
+		NETbeginEncode(NET_TEAMREQUEST, NetPlay.hostPlayer);
 
 		NETuint8_t(&player);
 		NETuint8_t(&chosenTeam);
@@ -1165,7 +1164,7 @@ BOOL recvTeamRequest()
 {
 	UBYTE	player, team;
 
-	if(!NetPlay.bHost)							//only host should act.
+	if(!NetPlay.isHost)			// only host should act
 	{
 		return true;
 	}
@@ -1191,7 +1190,7 @@ BOOL recvTeamRequest()
 
 static BOOL SendReadyRequest(UBYTE player, BOOL bReady)
 {
-	if(NetPlay.bHost)			// do or request the change.
+	if(NetPlay.isHost)			// do or request the change.
 	{
 		return changeReadyStatus(player, bReady);
 	}
@@ -1210,7 +1209,7 @@ BOOL recvReadyRequest()
 	UBYTE	player;
 	BOOL	bReady;
 
-	if(!NetPlay.bHost)							//only host should act.
+	if(!NetPlay.isHost)					// only host should act
 	{
 		return true;
 	}
@@ -1232,74 +1231,72 @@ BOOL recvReadyRequest()
 
 static BOOL changeReadyStatus(UBYTE player, BOOL bReady)
 {
-	unsigned int playerGUI_ID;
-
-	for(playerGUI_ID=0;(playerGUI_ID <= game.maxPlayers) &&
-		(player2dpid[player] != NetPlay.players[playerGUI_ID].dpid);playerGUI_ID++);
-
-	bPlayerReadyGUI[playerGUI_ID] = bReady;
-
-	drawReadyButton(playerGUI_ID);
-
-	sendOptions(player2dpid[player], player);	// tell everyone && update requesting player.
+	drawReadyButton(player);
+	NetPlay.players[player].ready = bReady;
+	NETBroadcastPlayerInfo(player);
 
 	return true;
 }
 
-static BOOL changeColour(UBYTE player, UBYTE col, UBYTE chosenPlayer)
+static BOOL changePosition(UBYTE player, UBYTE chosenPlayer)
 {
-	if(chosenPlayer == UBYTE_MAX)
-	{	// colour change.
-		if(!safeToUseColour(player,col))
-		{
-			return false;
-		}
+	int32_t position;
 
-		setPlayerColour(player, col);
-		sendOptions(player2dpid[player], player);	// tell everyone && update requesting player.
-	}
-	else // base change.
+	if (isHumanPlayer(chosenPlayer))
 	{
-		UBYTE oldcol;
-		UDWORD dpid;
-
-		if(isHumanPlayer(chosenPlayer))
-		{
-			return false;
-		}
-
-		dpid = player2dpid[player];
-		player2dpid[player] = 0;					// remove player,
-		ingame.JoiningInProgress[player] = false;	// if they never joined, reset the flag
-
-		oldcol = getPlayerColour(chosenPlayer);
-		setPlayerColour(chosenPlayer, getPlayerColour(player));// retain player colour
-		setPlayerColour(player, oldcol);			// reset old colour
-//		chooseColour(chosenPlayer);				// pick an unused colour.
-		setupNewPlayer(dpid, chosenPlayer);		// setup all the guff for that player.
-		sendOptions(dpid, chosenPlayer);
-
-		NETplayerInfo();				// bring netplay up to date with changes.
-
-		if(player == selectedPlayer)			// if host changing
-		{
-			selectedPlayer = chosenPlayer;
-		}
+		return false;	// cannot steal a human player's position on the map
 	}
+
+	// Swap positions
+	position = NetPlay.players[chosenPlayer].position;
+	NetPlay.players[chosenPlayer].position = NetPlay.players[player].position;
+	NetPlay.players[player].position = position;
+
+	NETBroadcastPlayerInfo(player);
+	NETBroadcastPlayerInfo(chosenPlayer);
+
 	return true;
 }
 
-static BOOL SendColourRequest(UBYTE player, UBYTE col,UBYTE chosenPlayer)
+static BOOL changeColour(UBYTE player, UBYTE col)
 {
-	if(NetPlay.bHost)			// do or request the change.
+	if(!safeToUseColour(player,col))
 	{
-		return changeColour(player, col, chosenPlayer);
+		return false;
+	}
+
+	setPlayerColour(player, col);
+	NETBroadcastPlayerInfo(player);
+
+	return true;
+}
+
+static BOOL SendColourRequest(UBYTE player, UBYTE col)
+{
+	if(NetPlay.isHost)			// do or request the change
+	{
+		return changeColour(player, col);
 	}
 	else
 	{
 		NETbeginEncode(NET_COLOURREQUEST, NET_ALL_PLAYERS);
 			NETuint8_t(&player);
 			NETuint8_t(&col);
+		NETend();
+	}
+	return true;
+}
+
+static BOOL SendPositionRequest(UBYTE player, UBYTE chosenPlayer)
+{
+	if(NetPlay.isHost)			// do or request the change
+	{
+		return changePosition(player, chosenPlayer);
+	}
+	else
+	{
+		NETbeginEncode(NET_COLOURREQUEST, NET_ALL_PLAYERS);
+			NETuint8_t(&player);
 			NETuint8_t(&chosenPlayer);
 		NETend();
 	}
@@ -1308,9 +1305,9 @@ static BOOL SendColourRequest(UBYTE player, UBYTE col,UBYTE chosenPlayer)
 
 BOOL recvColourRequest()
 {
-	UBYTE	player, col, chosenPlayer;
+	UBYTE	player, col;
 
-	if(!NetPlay.bHost)							//only host should act.
+	if(!NetPlay.isHost)				// only host should act
 	{
 		return true;
 	}
@@ -1318,10 +1315,35 @@ BOOL recvColourRequest()
 	NETbeginDecode(NET_COLOURREQUEST);
 		NETuint8_t(&player);
 		NETuint8_t(&col);
+	NETend();
+
+	if (player > MAX_PLAYERS)
+	{
+		debug(LOG_ERROR, "Invalid NET_COLOURREQUEST from player %d: Tried to change player %d to colour %d",
+		      NETgetSource(), (int)player, (int)col);
+		return false;
+	}
+
+	resetReadyStatus(false);
+
+	return changeColour(player, col);
+}
+
+BOOL recvPositionRequest()
+{
+	UBYTE	player, chosenPlayer;
+
+	if(!NetPlay.isHost)				// only host should act
+	{
+		return true;
+	}
+
+	NETbeginDecode(NET_COLOURREQUEST);
+		NETuint8_t(&player);
 		NETuint8_t(&chosenPlayer);
 	NETend();
 
-	if (player > MAX_PLAYERS || (chosenPlayer > MAX_PLAYERS && chosenPlayer != UBYTE_MAX))
+	if (player > MAX_PLAYERS || chosenPlayer > MAX_PLAYERS)
 	{
 		debug(LOG_ERROR, "Invalid NET_COLOURREQUEST from player %d: Tried to change player %d to %d",
 		      NETgetSource(), (int)player, (int)chosenPlayer);
@@ -1330,7 +1352,7 @@ BOOL recvColourRequest()
 
 	resetReadyStatus(false);
 
-	return changeColour(player, col, chosenPlayer);
+	return changePosition(player, chosenPlayer);
 }
 
 #define ANYENTRY 0xFF		// used to allow any team slot to be used.
@@ -1444,7 +1466,7 @@ static void drawReadyButton(UDWORD player)
 				MULTIOP_READY_WIDTH,MULTIOP_READY_HEIGHT);
 
 	// draw 'ready' button
-	if(bPlayerReadyGUI[player])
+	if (NetPlay.players[player].ready)
 	{
 		addMultiBut(psWScreen, MULTIOP_READY_FORM_ID+player,MULTIOP_READY_START+player,3,
 			4,MULTIOP_READY_WIDTH,MULTIOP_READY_HEIGHT,
@@ -1458,13 +1480,13 @@ static void drawReadyButton(UDWORD player)
 	}
 	// Hackish note:  Since the Ready Button is only drawn for humans,
 	// the routine was added here.
-	if( NetPlay.bHost)
+	if (NetPlay.isHost)
 	{
 		// make sure we sent the check, then check for timelimit
-		if( VersionCheckTime[NetPlay.players[player].dpid ] != 0xffffffff
-			&& (VersionCheckTime[NetPlay.players[player].dpid ] ) < gameTime2)
+		if (NetPlay.players[player].versionCheckTime != 0xffffffff
+		    && NetPlay.players[player].versionCheckTime < gameTime2)
 		{
-			NETCheckVersion( NetPlay.players[player].dpid );
+			NETCheckVersion(player);
 		}
 	}
 }
@@ -1482,15 +1504,6 @@ UDWORD addPlayerBox(BOOL players)
 	if(widgGetFromID(psWScreen,FRONTEND_BACKDROP) == NULL)
 	{
 		return 0;
-	}
-
-	if(bHosted || ingame.localJoiningInProgress)
-	{
-		NETplayerInfo();
-	}
-	else
-	{
-		NETplayerInfo();			// get player info.
 	}
 
 	widgDelete(psWScreen,MULTIOP_PLAYERS);		// del player window
@@ -1539,7 +1552,7 @@ UDWORD addPlayerBox(BOOL players)
 				}
 			}
 
-			if(ingame.localOptionsReceived && NetPlay.players[i].dpid)					// only draw if real player!
+			if (ingame.localOptionsReceived && NetPlay.players[i].allocated)	// only draw if real player!
 			{
 				// add a 'ready' button
 				drawReadyButton(i);
@@ -1557,8 +1570,7 @@ UDWORD addPlayerBox(BOOL players)
 				sButInit.pDisplay = displayPlayer;//intDisplayButtonHilight;
 				sButInit.UserData = i;
 
-				if(bColourChooserUp && (teamChooserUp() < 0)
-					&& NetPlay.players[i].dpid == player2dpid[selectedPlayer])
+				if (bColourChooserUp && teamChooserUp() < 0 && i == selectedPlayer)
 				{
 					addColourChooser(i);
 				}
@@ -1689,7 +1701,7 @@ static void disableMultiButs(void)
 	if(game.type != CAMPAIGN)	widgSetButtonState(psWScreen, MULTIOP_CAMPAIGN, WBUT_DISABLE);
 	if(game.type != SKIRMISH)	widgSetButtonState(psWScreen, MULTIOP_SKIRMISH, WBUT_DISABLE);
 
-	if(! NetPlay.bHost)
+	if (!NetPlay.isHost)
 	{
 		if( game.fog) widgSetButtonState(psWScreen,MULTIOP_FOG_OFF ,WBUT_DISABLE);		//fog
 		if(!game.fog) widgSetButtonState(psWScreen,MULTIOP_FOG_ON ,WBUT_DISABLE);
@@ -1721,8 +1733,8 @@ static void stopJoining(void)
 	dwSelectedGame	 = 0;
 	saveConfig();
 
-	debug(LOG_NET,"player %u (Host is %s) stopping.", NetPlay.dpidPlayer, NetPlay.bHost ? "true" : "false");
-	{
+	debug(LOG_NET,"player %u (Host is %s) stopping.", selectedPlayer, NetPlay.isHost ? "true" : "false");
+
 		if(bHosted)											// cancel a hosted game.
 		{
 			sendLeavingMsg();								// say goodbye
@@ -1740,9 +1752,9 @@ static void stopJoining(void)
 
 			ingame.localJoiningInProgress = false;			// reset local flags
 			ingame.localOptionsReceived = false;
-			if(!ingame.bHostSetup && NetPlay.bHost)			// joining and host was transfered.
+			if(!ingame.bHostSetup && NetPlay.isHost)			// joining and host was transfered.
 			{
-				NetPlay.bHost = false;
+				NetPlay.isHost = false;
 			}
 
 			if(NetPlay.bComms)	// not even connected.
@@ -1765,7 +1777,6 @@ static void stopJoining(void)
 		{
 				pie_LoadBackDrop(SCREEN_RANDOMBDROP);
 		}
-	}
 }
 
 ////////////////////////////////////////////////////////////////////////////
@@ -1862,7 +1873,7 @@ static void processMultiopWidgets(UDWORD id)
 	}
 
 	// host who is setting up or has hosted
-	if(ingame.bHostSetup)// || NetPlay.bHost) // FIXME Was: if(ingame.bHostSetup);{} ??? Note the ; !
+	if(ingame.bHostSetup)// || NetPlay.isHost) // FIXME Was: if(ingame.bHostSetup);{} ??? Note the ; !
 	{
 		switch(id)
 		{
@@ -1875,7 +1886,7 @@ static void processMultiopWidgets(UDWORD id)
 
 			if(bHosted)
 			{
-				sendOptions(0,0);
+				sendOptions();
 			}
 			break;
 
@@ -1888,7 +1899,7 @@ static void processMultiopWidgets(UDWORD id)
 
 			if(bHosted)
 			{
-				sendOptions(0,0);
+				sendOptions();
 			}
 			break;
 
@@ -1900,7 +1911,7 @@ static void processMultiopWidgets(UDWORD id)
 
 			if(bHosted)
 			{
-				sendOptions(0,0);
+				sendOptions();
 				disableMultiButs();
 			}
 			break;
@@ -1914,7 +1925,7 @@ static void processMultiopWidgets(UDWORD id)
 			if(bHosted)
 			{
 				disableMultiButs();
-				sendOptions(0,0);
+				sendOptions();
 			}
 			break;
 
@@ -1926,7 +1937,7 @@ static void processMultiopWidgets(UDWORD id)
 
 			if(bHosted)
 			{
-				sendOptions(0,0);
+				sendOptions();
 				disableMultiButs();
 			}
 			break;
@@ -1944,7 +1955,7 @@ static void processMultiopWidgets(UDWORD id)
 
 			if(bHosted)
 			{
-				sendOptions(0,0);
+				sendOptions();
 			}
 			break;
 
@@ -1960,7 +1971,7 @@ static void processMultiopWidgets(UDWORD id)
 
 			if(bHosted)
 			{
-				sendOptions(0,0);
+				sendOptions();
 			}
 			break;
 
@@ -1979,7 +1990,7 @@ static void processMultiopWidgets(UDWORD id)
 
 			if(bHosted)
 			{
-				sendOptions(0,0);
+				sendOptions();
 			}
 			break;
 
@@ -1993,7 +2004,7 @@ static void processMultiopWidgets(UDWORD id)
 
 			if(bHosted)
 			{
-				sendOptions(0,0);
+				sendOptions();
 			}
 			break;
 
@@ -2007,7 +2018,7 @@ static void processMultiopWidgets(UDWORD id)
 
 			if(bHosted)
 			{
-				sendOptions(0,0);
+				sendOptions();
 			}
 			break;
 		}
@@ -2038,10 +2049,10 @@ static void processMultiopWidgets(UDWORD id)
 		ssprintf(tmp, "-> %s", sPlayer);
 		sendTextMessage(tmp,true);
 
-		NETchangePlayerName(NetPlay.dpidPlayer, (char*)sPlayer);			// update if joined.
+		NETchangePlayerName(selectedPlayer, (char*)sPlayer);			// update if joined.
 		loadMultiStats((char*)sPlayer,&playerStats);
-		setMultiStats(NetPlay.dpidPlayer,playerStats,false);
-		setMultiStats(NetPlay.dpidPlayer,playerStats,true);
+		setMultiStats(selectedPlayer,playerStats,false);
+		setMultiStats(selectedPlayer,playerStats,true);
 		break;
 
 	case MULTIOP_PNAME_ICON:
@@ -2118,10 +2129,10 @@ static void processMultiopWidgets(UDWORD id)
 	if((id >= MULTIOP_TEAMS_START) && (id <= MULTIOP_TEAMS_END))	// clicked on a team chooser
 	{
 		UDWORD clickedMenuID = id-MULTIOP_TEAMS_START,playerNetID;
-		BOOL	bClickedOnMe = (NetPlay.players[clickedMenuID].dpid == player2dpid[selectedPlayer]);
+		BOOL	bClickedOnMe = (clickedMenuID == selectedPlayer);
 
 		//find net player id
-		for(playerNetID=0;(playerNetID <= MAX_PLAYERS) && (player2dpid[selectedPlayer] != NetPlay.players[playerNetID].dpid);playerNetID++);
+		for (playerNetID = 0; playerNetID <= MAX_PLAYERS && selectedPlayer != playerNetID; playerNetID++);
 
 		ASSERT(playerNetID < MAX_PLAYERS, "processMultiopWidgets: failed to find playerNetID for player %d", selectedPlayer);
 
@@ -2129,8 +2140,8 @@ static void processMultiopWidgets(UDWORD id)
 		if(teamChooserUp() < 0 && !bColourChooserUp)
 		{
 			if(bClickedOnMe		//player selecting team for himself	(clicked on his menu)
-				|| (NetPlay.bHost							//local player=host
-				&& !((NetPlay.players[clickedMenuID].dpid > 0) && !bClickedOnMe)	//human and not me
+				|| (NetPlay.isHost						//local player=host
+				&& !(NetPlay.players[clickedMenuID].connection >= 0 && !bClickedOnMe)	//human and not me
 				))
 				addTeamChooser(clickedMenuID);
 		}
@@ -2170,12 +2181,12 @@ static void processMultiopWidgets(UDWORD id)
 	{
 		UBYTE player = (UBYTE)(id-MULTIOP_READY_START);
 
-		if(NetPlay.players[player].dpid == player2dpid[selectedPlayer] )
+		if (player == selectedPlayer)
 		{
-			SendReadyRequest(selectedPlayer, !bPlayerReadyGUI[player]);
+			SendReadyRequest(selectedPlayer, !NetPlay.players[player].ready);
 
 			// if hosting try to start the game if everyone is ready
-			if(NetPlay.bHost && multiplayPlayersReady(false))
+			if(NetPlay.isHost && multiplayPlayersReady(false))
 			{
 				startMultiplayerGame();
 				// reset flag in case people dropped/quit on join screen
@@ -2187,22 +2198,22 @@ static void processMultiopWidgets(UDWORD id)
 
 	if((id >= MULTIOP_PLAYER_START) && (id <= MULTIOP_PLAYER_END))	// clicked on a player
 	{
-		if(NetPlay.players[id-MULTIOP_PLAYER_START].dpid == player2dpid[selectedPlayer] )
+		if (id - MULTIOP_PLAYER_START == selectedPlayer)
 		{
 			if(teamChooserUp() < 0)		//not choosing team already
 				addColourChooser(id-MULTIOP_PLAYER_START);
 		}
 		else // options for kick out, etc..
 		{
-			if(NetPlay.bHost)
+			if(NetPlay.isHost)
 			{
 				if(mouseDown(MOUSE_RMB)) // both buttons....
 				{
-					int victim = NetPlay.players[id - MULTIOP_PLAYER_START].dpid;	// who to kick out
+					int victim = id - MULTIOP_PLAYER_START;		// who to kick out
 					int j = 0;
 					char *msg;
 
-					while (player2dpid[j] != victim && j < MAX_PLAYERS)
+					while (j != victim && j < MAX_PLAYERS)
 					{
 						j++; // find out ID of player
 					}
@@ -2245,7 +2256,7 @@ static void processMultiopWidgets(UDWORD id)
 
 		resetReadyStatus(false);
 
-		sendOptions(0,0);
+		sendOptions();
 	}
 
 	// don't kill last player
@@ -2253,17 +2264,17 @@ static void processMultiopWidgets(UDWORD id)
 	{
 		resetReadyStatus(false);		// will reset only locally if not a host
 
-		SendColourRequest(selectedPlayer,id-MULTIOP_COLCHOOSER,UBYTE_MAX);
+		SendColourRequest(selectedPlayer, id - MULTIOP_COLCHOOSER);
 		closeColourChooser();
 		addPlayerBox(  !ingame.bHostSetup || bHosted);
 	}
 
 	// request a player number.
-	if((id >= MULTIOP_PLAYCHOOSER) && (id <= MULTIOP_PLAYCHOOSER_END)) // chose a new colour.
+	if((id >= MULTIOP_PLAYCHOOSER) && (id <= MULTIOP_PLAYCHOOSER_END)) // chose a new starting position
 	{
 		resetReadyStatus(false);		// will reset only locally if not a host
 
-		SendColourRequest(selectedPlayer,UBYTE_MAX,id-MULTIOP_PLAYCHOOSER);
+		SendPositionRequest(selectedPlayer, id - MULTIOP_PLAYCHOOSER);
 		closeColourChooser();
 		addPlayerBox(  !ingame.bHostSetup || bHosted);
 	}
@@ -2275,12 +2286,12 @@ void startMultiplayerGame(void)
 	decideWRF();										// set up swrf & game.map
 	bMultiPlayer = true;
 
-	if(NetPlay.bHost)
+	if (NetPlay.isHost)
 	{
 		if(game.type == SKIRMISH)
 		{
 			chooseSkirmishColours();
-			sendOptions(0,0);
+			sendOptions();
 		}
 
 		NEThaltJoining();							// stop new players entering.
@@ -2295,7 +2306,7 @@ void startMultiplayerGame(void)
 
 	bHosted = false;
 
-	if(NetPlay.bHost)
+	if (NetPlay.isHost)
 	{
 		sendTextMessage(_("Host is Starting Game"),true);
 	}
@@ -2348,7 +2359,7 @@ void frontendMultiMessages(void)
 			recvReadyRequest();
 
 			// if hosting try to start the game if everyone is ready
-			if(NetPlay.bHost && multiplayPlayersReady(false))
+			if(NetPlay.isHost && multiplayPlayersReady(false))
 			{
 				startMultiplayerGame();
 			}
@@ -2421,7 +2432,7 @@ void frontendMultiMessages(void)
 				NETstring( reason, MAX_KICK_REASON);
 			NETend();
 
-			if (NetPlay.dpidPlayer == player_id)	// we've been told to leave.
+			if (selectedPlayer == player_id)	// we've been told to leave.
 			{
 				stopJoining();
 				screen_RestartBackDrop();
@@ -2489,9 +2500,9 @@ void runMultiOptions(void)
 						}
 
 
-						if(NetPlay.bHost)
+						if (NetPlay.isHost)
 						{
-							sendOptions(0,0);
+							sendOptions();
 						}
 					}
 				}
@@ -2555,10 +2566,10 @@ void runMultiOptions(void)
 				ssprintf(sTemp, " -> %s", sPlayer);
 				sendTextMessage(sTemp,true);
 
-				NETchangePlayerName(NetPlay.dpidPlayer, (char*)sPlayer);
+				NETchangePlayerName(selectedPlayer, (char*)sPlayer);
 				loadMultiStats((char*)sPlayer,&playerStats);
-				setMultiStats(NetPlay.dpidPlayer,playerStats,false);
-				setMultiStats(NetPlay.dpidPlayer,playerStats,true);
+				setMultiStats(selectedPlayer,playerStats,false);
+				setMultiStats(selectedPlayer,playerStats,true);
 				break;
 			case MULTIOP_MAP:
 				sstrcpy(game.map, sTemp);
@@ -2645,8 +2656,6 @@ BOOL startMultiOptions(BOOL bReenter)
 			sstrcpy(game.map, DEFAULTSKIRMISHMAP);
 			game.maxPlayers = 4;
 		}
-
-		sstrcpy(game.version, buildTime);		// note buildtime.
 
 		ingame.localOptionsReceived = false;
 		if(ingame.numStructureLimits)
@@ -2839,16 +2848,16 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *p
 	//bluboxes.
 	drawBlueBox(x,y,psWidget->width,psWidget->height);							// right
 
-	if(ingame.localOptionsReceived && NetPlay.players[i].dpid)					// only draw if real player!
+	if (ingame.localOptionsReceived && NetPlay.players[i].allocated)					// only draw if real player!
 	{
 		//bluboxes.
 		drawBlueBox(x,y,psWidget->width,psWidget->height);							// right
 		drawBlueBox(x,y,60,psWidget->height);
 		drawBlueBox(x,y,31,psWidget->height);										// left.
 
-		for(j=0; player2dpid[j] != NetPlay.players[i].dpid && j<MAX_PLAYERS; j++);// get the in game playernumber.
+		for (j = 0; j != i && j < MAX_PLAYERS; j++);	// get the in game playernumber.
 
-		iV_SetFont(font_regular);														// font
+		iV_SetFont(font_regular);											// font
 		iV_SetTextColour(WZCOL_TEXT_BRIGHT);
 
 		// name
@@ -3265,7 +3274,7 @@ void setLockedTeamsMode(void)
 	game.alliance = ALLIANCES_TEAMS;		//2
 	if(bHosted)
 	{
-		sendOptions(0,0);
+		sendOptions();
 	}
 }
 
@@ -3280,11 +3289,11 @@ bool multiplayPlayersReady(bool bNotifyStatus)
 	for(player = 0; player < game.maxPlayers; player++)
 	{
 		// check if this human player is ready, ignore AIs
-		if(NetPlay.players[player].dpid && !bPlayerReadyGUI[player])
+		if (NetPlay.players[player].allocated && !NetPlay.players[player].ready)
 		{
 			if(bNotifyStatus)
 			{
-				for(playerID=0;(playerID <= game.maxPlayers) && (player2dpid[playerID] != NetPlay.players[player].dpid);playerID++);
+				for (playerID = 0; playerID <= game.maxPlayers && playerID != player; playerID++) ;
 
 				console("%s is not ready", getPlayerName(playerID));
 			}

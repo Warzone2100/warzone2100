@@ -50,13 +50,12 @@ static PLAYERSTATS playerStats[MAX_PLAYERS];
 
 // ////////////////////////////////////////////////////////////////////////////
 // Get Player's stats
-PLAYERSTATS getMultiStats(UDWORD player,BOOL bLocal)
+PLAYERSTATS getMultiStats(UDWORD player, BOOL bLocal)
 {
 	static PLAYERSTATS stat;
-	uint32_t playerDPID = player2dpid[player];
 
 	// Copy over the data from our local array
-	memcpy(&stat, &playerStats[playerDPID], sizeof(stat));
+	memcpy(&stat, &playerStats[player], sizeof(stat));
 
 	return stat;
 }
@@ -216,7 +215,7 @@ void updateMultiStatsDamage(UDWORD attacker, UDWORD defender, UDWORD inflicted)
 		{
 			st.recentScore += (2*inflicted);
 		}
-		setMultiStats(player2dpid[attacker], st, true);
+		setMultiStats(attacker, st, true);
 	}
 	else
 	{
@@ -235,7 +234,7 @@ void updateMultiStatsDamage(UDWORD attacker, UDWORD defender, UDWORD inflicted)
 		{
 			st.recentScore  -= inflicted;
 		}
-		setMultiStats(player2dpid[defender], st, true);
+		setMultiStats(defender, st, true);
 	}
 	else
 	{
@@ -250,7 +249,7 @@ void updateMultiStatsGames(void)
 
 	st  = getMultiStats(selectedPlayer,true);
 	st.played ++;
-	setMultiStats(player2dpid[selectedPlayer], st, true);
+	setMultiStats(selectedPlayer, st, true);
 }
 
 // games won
@@ -259,7 +258,7 @@ void updateMultiStatsWins(void)
 	PLAYERSTATS	st;
 	st  = getMultiStats(selectedPlayer,true);
 	st.wins ++;
-	setMultiStats(player2dpid[selectedPlayer], st, true);
+	setMultiStats(selectedPlayer, st, true);
 }
 
 //games lost.
@@ -268,7 +267,7 @@ void updateMultiStatsLoses(void)
 	PLAYERSTATS	st;
 	st  = getMultiStats(selectedPlayer,true);
 	++st.losses;
-	setMultiStats(player2dpid[selectedPlayer], st, true);
+	setMultiStats(selectedPlayer, st, true);
 }
 
 // update kills
@@ -288,7 +287,7 @@ void updateMultiStatsKills(BASE_OBJECT *psKilled,UDWORD player)
 		{
 			st.recentKills++;
 		}
-		setMultiStats(player2dpid[player], st, true);
+		setMultiStats(player, st, true);
 	}
 	else
 	{

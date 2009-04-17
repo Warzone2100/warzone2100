@@ -436,11 +436,12 @@ static bool deserializeLandingZoneData(PHYSFS_file* fileHandle, LANDING_ZONE* se
 
 static bool serializeMultiplayerGame(PHYSFS_file* fileHandle, const MULTIPLAYERGAME* serializeMulti)
 {
+	const char *dummy8c = "DUMMYSTRING";
 	unsigned int i;
 
 	if (!PHYSFS_writeUBE8(fileHandle, serializeMulti->type)
 	 || PHYSFS_write(fileHandle, serializeMulti->map, 1, 128) != 128
-	 || PHYSFS_write(fileHandle, serializeMulti->version, 1, 8) != 8
+	 || PHYSFS_write(fileHandle, dummy8c, 1, 8) != 8
 	 || !PHYSFS_writeUBE8(fileHandle, serializeMulti->maxPlayers)
 	 || PHYSFS_write(fileHandle, serializeMulti->name, 1, 128) != 128
 	 || !PHYSFS_writeSBE32(fileHandle, serializeMulti->fog)
@@ -468,10 +469,11 @@ static bool deserializeMultiplayerGame(PHYSFS_file* fileHandle, MULTIPLAYERGAME*
 	int32_t boolFog;
 	uint8_t dummy8;
 	uint16_t dummy16;
+	char dummy8c[8];
 
 	if (!PHYSFS_readUBE8(fileHandle, &serializeMulti->type)
 	 || PHYSFS_read(fileHandle, serializeMulti->map, 1, 128) != 128
-	 || PHYSFS_read(fileHandle, serializeMulti->version, 1, 8) != 8
+	 || PHYSFS_read(fileHandle, dummy8c, 1, 8) != 8
 	 || !PHYSFS_readUBE8(fileHandle, &serializeMulti->maxPlayers)
 	 || PHYSFS_read(fileHandle, serializeMulti->name, 1, 128) != 128
 	 || !PHYSFS_readSBE32(fileHandle, &boolFog)
@@ -535,9 +537,9 @@ static bool deserializeGameStruct(PHYSFS_file* fileHandle, GAMESTRUCT* serialize
 
 static bool serializePlayer(PHYSFS_file* fileHandle, const PLAYER* serializePlayer)
 {
-	return (PHYSFS_writeUBE32(fileHandle, serializePlayer->dpid)
+	return (PHYSFS_writeUBE32(fileHandle, 0)
 	     && PHYSFS_write(fileHandle, serializePlayer->name, StringSize, 1) == 1
-	     && PHYSFS_writeUBE32(fileHandle, serializePlayer->bHost)
+	     && PHYSFS_writeUBE32(fileHandle, 0)
 	     && PHYSFS_writeUBE32(fileHandle, 0));
 }
 
@@ -545,9 +547,9 @@ static bool deserializePlayer(PHYSFS_file* fileHandle, PLAYER* serializePlayer)
 {
 	uint32_t dummy;
 
-	return (PHYSFS_readUBE32(fileHandle, &serializePlayer->dpid)
+	return (PHYSFS_readUBE32(fileHandle, &dummy)
 	     && PHYSFS_read(fileHandle, serializePlayer->name, StringSize, 1) == 1
-	     && PHYSFS_readUBE32(fileHandle, &serializePlayer->bHost)
+	     && PHYSFS_readUBE32(fileHandle, &dummy)
 	     && PHYSFS_readUBE32(fileHandle, &dummy));
 }
 
@@ -568,7 +570,7 @@ static bool serializeNetPlay(PHYSFS_file* fileHandle, const NETPLAY* serializeNe
 	}
 
 	return (PHYSFS_writeUBE32(fileHandle, serializeNetPlay->bComms)
-	     && PHYSFS_writeUBE32(fileHandle, serializeNetPlay->bHost)
+	     && PHYSFS_writeUBE32(fileHandle, 0)
 	     && PHYSFS_writeUBE32(fileHandle, 0)
 	     && PHYSFS_writeUBE32(fileHandle, 0)
 	     && PHYSFS_writeUBE32(fileHandle, 0)
@@ -594,7 +596,7 @@ static bool deserializeNetPlay(PHYSFS_file* fileHandle, NETPLAY* serializeNetPla
 	}
 
 	return (PHYSFS_readUBE32(fileHandle, &serializeNetPlay->bComms)
-	     && PHYSFS_readUBE32(fileHandle, &serializeNetPlay->bHost)
+	     && PHYSFS_readUBE32(fileHandle, &dummy)
 	     && PHYSFS_readUBE32(fileHandle, &dummy)
 	     && PHYSFS_readUBE32(fileHandle, &dummy)
 	     && PHYSFS_readUBE32(fileHandle, &dummy)
@@ -2582,15 +2584,11 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 			productionPlayer= selectedPlayer;
 			bMultiPlayer	= saveGameData.multiPlayer;
 			cmdDroidMultiExpBoost(true);
-			for(inc=0;inc<MAX_PLAYERS;inc++)
-			{
-				player2dpid[inc]=saveGameData.sPlayer2dpid[inc];
-			}
 			if(bMultiPlayer)
 			{
 				loadMultiStats(saveGameData.sPName,&playerStats);				// stats stuff
-				setMultiStats(NetPlay.dpidPlayer,playerStats,false);
-				setMultiStats(NetPlay.dpidPlayer,playerStats,true);
+				setMultiStats(selectedPlayer, playerStats, false);
+				setMultiStats(selectedPlayer, playerStats, true);
 			}
 		}
 
@@ -3926,10 +3924,7 @@ static void endian_SaveGameV(SAVE_GAME* psSaveGame, UDWORD version)
 			endian_sdword(&psSaveGame->sNetPlay.games[i].desc.dwUserFlags[2]);
 			endian_sdword(&psSaveGame->sNetPlay.games[i].desc.dwUserFlags[3]);
 		}
-		for(i = 0; i < MAX_PLAYERS; i++)
-			endian_udword(&psSaveGame->sNetPlay.players[i].dpid);
 		endian_udword(&psSaveGame->sNetPlay.playercount);
-		endian_udword(&psSaveGame->sNetPlay.dpidPlayer);
 		endian_udword(&psSaveGame->savePlayer);
 		for(i = 0; i < MAX_PLAYERS; i++)
 			endian_udword(&psSaveGame->sPlayer2dpid[i]);
@@ -4716,15 +4711,11 @@ bool gameLoadV(PHYSFS_file* fileHandle, unsigned int version)
 			productionPlayer = selectedPlayer;
 			game			= saveGameData.sGame;
 			cmdDroidMultiExpBoost(true);
-			for(i = 0; i < MAX_PLAYERS; ++i)
-			{
-				player2dpid[i] = saveGameData.sPlayer2dpid[i];
-			}
 			if(bMultiPlayer)
 			{
 				loadMultiStats(saveGameData.sPName,&playerStats);				// stats stuff
-				setMultiStats(NetPlay.dpidPlayer,playerStats,false);
-				setMultiStats(NetPlay.dpidPlayer,playerStats,true);
+				setMultiStats(selectedPlayer, playerStats, false);
+				setMultiStats(selectedPlayer, playerStats, true);
 			}
 		}
 
@@ -4951,7 +4942,7 @@ static bool writeGameFile(const char* fileName, SDWORD saveType)
 	strcpy(saveGame.sPName, getPlayerName(selectedPlayer));
 	for (i = 0; i < MAX_PLAYERS; ++i)
 	{
-		saveGame.sPlayer2dpid[i] = player2dpid[i];
+		saveGame.sPlayer2dpid[i] = i;
 	}
 
 	//version 34

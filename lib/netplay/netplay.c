@@ -77,7 +77,7 @@ static void NETallowJoining(void);
 void sendVersionCheck(void);
 void recvVersionCheck(void);
 void VersionCheckTimeOut( uint32_t victimdpid );
-void NETCheckVersion( uint32_t player );
+
 /*
  * Network globals, these are part of the new network API
  */
@@ -103,17 +103,6 @@ typedef struct
 
 typedef struct
 {
-	uint32_t		id;
-	BOOL			allocated;
-	char			name[StringSize];
-	uint32_t		flags;
-	uint32_t		heartattacktime;		//time cardiac arrest started
-	BOOL			heartbeat;				// if we are still alive or not
-	BOOL			kick;					// if we should kick them
-} NET_PLAYER;
-
-typedef struct
-{
 	TCPsocket	socket;
 	char*		buffer;
 	unsigned int	buffer_start;
@@ -133,20 +122,14 @@ static TCPsocket	tcp_socket = NULL;		//socket used to talk to lobbyserver/ host 
 static NETBUFSOCKET*	bsocket = NULL;		//buffered socket (holds tcp_socket) (clients only?)
 static NETBUFSOCKET*	connected_bsocket[MAX_CONNECTED_PLAYERS] = { NULL };
 static SDLNet_SocketSet	socket_set = NULL;
-static BOOL		is_server = false;
 static TCPsocket	tmp_socket[MAX_TMP_SOCKETS] = { NULL };
 static SDLNet_SocketSet	tmp_socket_set = NULL;
 static char*		hostname;
 static NETSTATS		nStats = { 0, 0, 0, 0 };
-static NET_PLAYER	players[MAX_CONNECTED_PLAYERS];
 static int32_t          NetGameFlags[4] = { 0, 0, 0, 0 };
 char iptoconnect[PATH_MAX] = "\0"; // holds IP/hostname from command line
 
 extern int NET_PlayerConnectionStatus;		// from src/display3d.c
-
-//time when check sent. Note, uses dpid, & using 0xffffffff to signal nothing sent yet.
-uint32_t VersionCheckTime[MAX_PLAYERS] = {-1, -1, -1, -1, -1, -1, -1, -1};
-static BOOL playerVersionFlag[MAX_PLAYERS] = {false};	// we kick on false
 
 // ////////////////////////////////////////////////////////////////////////////
 #define VersionStringSize 80
@@ -156,31 +139,30 @@ static BOOL playerVersionFlag[MAX_PLAYERS] = {false};	// we kick on false
  ************************************************************************************
 **/
 static char VersionString[VersionStringSize] = "trunk"; 
-static int NETCODE_VERSION_MAJOR = 2;	// unused for now
-static int NETCODE_VERSION_MINOR = 2;	// unused for now
+static int NETCODE_VERSION_MAJOR = 2;		// unused for now
+static int NETCODE_VERSION_MINOR = 2;		// unused for now
 static int NUMBER_OF_MODS = 0;			// unused for now
 static int NETCODE_HASH = 0;			// unused for now
 
-void sendVersionCheck( void )
+void sendVersionCheck(void)
 {
-	uint32_t playerdpid = NetPlay.dpidPlayer;
-
 	NETlogEntry("Sending version check", 0, 0);
 	NETbeginEncode(NET_VERSION_CHECK, NET_ALL_PLAYERS);
-		NETuint32_t(&playerdpid);
-		NETstring( VersionString, sizeof(VersionString) );
-		NETint32_t( &NETCODE_VERSION_MAJOR );
-		NETint32_t( &NETCODE_VERSION_MINOR );
-		NETint32_t( &NUMBER_OF_MODS );
-		NETint32_t( &NETCODE_HASH );
+		NETuint32_t(&selectedPlayer);
+		NETstring(VersionString, sizeof(VersionString));
+		NETint32_t(&NETCODE_VERSION_MAJOR);
+		NETint32_t(&NETCODE_VERSION_MINOR);
+		NETint32_t(&NUMBER_OF_MODS);
+		NETint32_t(&NETCODE_HASH);
 	NETend();
 
-	debug(LOG_NET, "sending dpid %u, version string [%s]", playerdpid, VersionString);
+	debug(LOG_NET, "sending dpid %u, version string [%s]", selectedPlayer, VersionString);
 }
+
 // Checks the version string, and if they are not the same, we auto-kick the player.
 void recvVersionCheck()
 {
-	uint32_t victimdpid = 0;
+	uint32_t victim = 0;
 	char playersVersion[VersionStringSize];
 	const char* msg;
 	int32_t MajorVersion = 0;			// Not currently used
@@ -191,65 +173,66 @@ void recvVersionCheck()
 	NETlogEntry("Receiving version check", 0, 0);
 
 	NETbeginDecode(NET_VERSION_CHECK);
-		NETuint32_t(&victimdpid);
-		NETstring( playersVersion, sizeof(playersVersion) );
-		NETint32_t( &MajorVersion );	// NETCODE_VERSION_MAJOR
-		NETint32_t( &MinorVersion );	// NETCODE_VERSION_MINOR
-		NETint32_t( &ModCount );		// NUMBER_OF_MODS
-		NETint32_t( &Hash_Data );		// NETCODE_HASH
+		NETuint32_t(&victim);
+		NETstring(playersVersion, sizeof(playersVersion));
+		NETint32_t(&MajorVersion);	// NETCODE_VERSION_MAJOR
+		NETint32_t(&MinorVersion);	// NETCODE_VERSION_MINOR
+		NETint32_t(&ModCount);		// NUMBER_OF_MODS
+		NETint32_t(&Hash_Data);		// NETCODE_HASH
 	NETend();
 
-	if( strcmp(VersionString,playersVersion) != 0 )
+	if (strcmp(VersionString,playersVersion) != 0)
 	{
-		debug(LOG_NET, "Received *wrong* version string [%s] from dpid %u. Expected [%s]", playersVersion, victimdpid, VersionString);
+		debug(LOG_NET, "Received *wrong* version string [%s] from player %u. Expected [%s]", playersVersion, victim, VersionString);
 
-		sasprintf((char**)&msg, _("Player %u has the wrong game version.  Auto kicking."), victimdpid );
+		sasprintf((char**)&msg, _("Player %u has the wrong game version.  Auto kicking."), victim);
 		sendTextMessage(msg, true);
 
-		if(NetPlay.bHost)
+		if (NetPlay.isHost)
 		{
-			kickPlayer( victimdpid, "you have the wrong version of the game, so Update it!" );
+			kickPlayer(victim, "You have the wrong version of the game, so update it!");
 
 			// reset flags /time after we kick them
-			VersionCheckTime[victimdpid] = -1;
-			playerVersionFlag[victimdpid] = false;
+			NetPlay.players[victim].versionCheckTime = -1;
+			NetPlay.players[victim].playerVersionFlag = false;
 		}
 	}
 	else
 	{
-		playerVersionFlag[victimdpid] = true;
-		debug(LOG_NET, "Received correct version string [%s] from dpid %u", playersVersion, victimdpid);
+		NetPlay.players[victim].playerVersionFlag = true;
+		debug(LOG_NET, "Received correct version string [%s] from player %u", playersVersion, victim);
 	}
 }
-void VersionCheckTimeOut( uint32_t victimdpid )
+
+void VersionCheckTimeOut(uint32_t victim)
 {
 	const char* msg;
 
-	debug(LOG_NET, "version string was never received from dpid %u. Auto kicking at %u", victimdpid, gameTime2 );
+	debug(LOG_NET, "version string was never received from dpid %u. Auto kicking at %u", victim, gameTime2);
 
-	sasprintf((char**)&msg, _("Player %u has the wrong game version.  Auto kicking."), victimdpid );
+	sasprintf((char**)&msg, _("Player %u has the wrong game version.  Auto kicking."), victim);
 	sendTextMessage(msg, true);
 
-	if(NetPlay.bHost)
+	if(NetPlay.isHost)
 	{
-		kickPlayer( victimdpid, "You have the wrong version of the game, so Update it!" );
+		kickPlayer(victim, "You have the wrong version of the game, so update it!");
 
 		// reset flags /time after we kick them
-		VersionCheckTime[victimdpid] = -1;
-		playerVersionFlag[victimdpid] = false;
+		NetPlay.players[victim].versionCheckTime = -1;
+		NetPlay.players[victim].playerVersionFlag = false;
 	}
 }
-void NETCheckVersion( uint32_t player )
+
+void NETCheckVersion(uint32_t player)
 {
 	// When flag is true, means we have received the check OK
-	if( playerVersionFlag[player] == false )
+	if (NetPlay.players[player].playerVersionFlag == false)
 	{
-		if (player != HOST_DPID)
+		if (player != NetPlay.hostPlayer)
 		{
-			VersionCheckTimeOut( player);
+			VersionCheckTimeOut(player);
 		}
 	}
-
 }
 
 // *********** Socket with buffer that read NETMSGs ******************
@@ -396,123 +379,95 @@ static void NET_InitPlayers(void)
 
 	for (i = 0; i < MAX_CONNECTED_PLAYERS; ++i)
 	{
-		players[i].allocated = false;
-		players[i].id = i;
-		players[i].heartattacktime = 0;
-		players[i].heartbeat = true;		// we always start with a hearbeat
-		players[i].kick = false;
+		NetPlay.players[i].allocated = false;
+		NetPlay.players[i].heartattacktime = 0;
+		NetPlay.players[i].heartbeat = true;		// we always start with a hearbeat
+		NetPlay.players[i].kick = false;
+		NetPlay.players[i].name[0] = '\0';
+		NetPlay.players[i].colour = i;
+		NetPlay.players[i].ready = false;
+		NetPlay.players[i].team = -1;
 	}
+	NetPlay.hostPlayer = 0;	// right now, host starts always at index zero
+	NetPlay.playercount = 0;
 }
 
-static void NETBroadcastPlayerInfo(uint32_t dpid)
+void NETBroadcastPlayerInfo(uint32_t index)
 {
 	NETbeginEncode(NET_PLAYER_INFO, NET_ALL_PLAYERS);
-		NETuint32_t(&players[dpid].id);
-		NETbool(&players[dpid].allocated);
-		NETbool(&players[dpid].heartbeat);
-		NETbool(&players[dpid].kick);
-		NETstring(players[dpid].name, sizeof(players[dpid].name));
-		NETuint32_t(&players[dpid].flags);
-		NETuint32_t(&players[dpid].heartattacktime);
+		NETuint32_t(&index);
+		NETbool(&NetPlay.players[index].allocated);
+		NETbool(&NetPlay.players[index].heartbeat);
+		NETbool(&NetPlay.players[index].kick);
+		NETstring(NetPlay.players[index].name, sizeof(NetPlay.players[index].name));
+		NETuint32_t(&NetPlay.players[index].heartattacktime);
+		NETint32_t(&NetPlay.players[index].colour);
+		NETint32_t(&NetPlay.players[index].team);
+		NETbool(&NetPlay.players[index].ready);
+		NETuint32_t(&NetPlay.hostPlayer);
 	NETend();
 }
 
-static unsigned int NET_CreatePlayer(const char* name, unsigned int flags)
+static unsigned int NET_CreatePlayer(const char* name)
 {
-	unsigned int i;
+	unsigned int index;
 
-	for (i = 1; i < MAX_CONNECTED_PLAYERS; ++i)
+	for (index = 0; index < MAX_CONNECTED_PLAYERS; index++)
 	{
-		if (players[i].allocated == false)
+		if (NetPlay.players[index].allocated == false)
 		{
-			debug(LOG_NET, "A new player has been created. Player, %s, is set to slot %u", name, i);
-			players[i].allocated = true;
-			sstrcpy(players[i].name, name);
-			players[i].flags = flags;
-			NETBroadcastPlayerInfo(i);
-			return i;
+			debug(LOG_NET, "A new player has been created. Player, %s, is set to slot %u", name, index);
+			NetPlay.players[index].allocated = true;
+			sstrcpy(NetPlay.players[index].name, name);
+			NETBroadcastPlayerInfo(index);
+			NetPlay.playercount--;
+			return index;
 		}
 	}
 
+	debug(LOG_ERROR, "Could not find place for player %s", name);
 	return 0;
 }
 
-static void NET_DestroyPlayer(unsigned int id)
+static void NET_DestroyPlayer(unsigned int index)
 {
-	debug(LOG_NET, "Freeing slot %u for a new player", id);
-	players[id].allocated = false;
+	debug(LOG_NET, "Freeing slot %u for a new player", index);
+	NetPlay.players[index].allocated = false;
+	NetPlay.playercount++;
+	NETBroadcastPlayerInfo(index);
 }
 
-// ////////////////////////////////////////////////////////////////////////
-// count players.
-UDWORD NETplayerInfo(void)
-{
-	unsigned int i;
-
-	NetPlay.playercount = 0;		// reset player counter
-
-	if(!NetPlay.bComms)
-	{
-		NetPlay.playercount		= 1;
-		NetPlay.players[0].bHost	= true;
-		NetPlay.players[0].dpid		= HOST_DPID;
-		return 1;
-	}
-
-	memset(NetPlay.players, 0, sizeof(NetPlay.players));	// reset player info
-
-	for (i = 0; i < MAX_CONNECTED_PLAYERS; ++i)
-	{
-		if (players[i].allocated == true)
-		{
-			NetPlay.players[NetPlay.playercount].dpid = i;
-			sstrcpy(NetPlay.players[NetPlay.playercount].name, players[i].name);
-
-			if (players[i].flags & PLAYER_HOST)
-			{
-				NetPlay.players[NetPlay.playercount].bHost = true;
-			}
-			else
-			{
-				NetPlay.players[NetPlay.playercount].bHost = false;
-			}
-
-			NetPlay.playercount++;
-		}
-	}
-
-	return NetPlay.playercount;
-}
 /**
  * @note When a player leaves nicely (ie, we got a NET_PLAYER_LEAVING
  *       message), we clean up the socket that we used.
- * \param dpid
+ * \param index
  */
-void NETplayerLeaving(UDWORD dpid)
+void NETplayerLeaving(UDWORD index)
 {
-	if(connected_bsocket[dpid])
+	if(connected_bsocket[index])
 	{
 		debug(LOG_NET, "Player (%u) has left nicely, closing socket %p",
-			dpid, connected_bsocket[dpid]->socket);
+			index, connected_bsocket[index]->socket);
 
 		// Although we can get a error result from DelSocket, it don't really matter here.
-		SDLNet_TCP_DelSocket(socket_set, connected_bsocket[dpid]->socket);
-		SDLNet_TCP_Close(connected_bsocket[dpid]->socket);
-		connected_bsocket[dpid]->socket = NULL;
+		SDLNet_TCP_DelSocket(socket_set, connected_bsocket[index]->socket);
+		SDLNet_TCP_Close(connected_bsocket[index]->socket);
+		connected_bsocket[index]->socket = NULL;
 	}
 	else
 	{
-		debug(LOG_NET, "Player (%u) has left nicely", dpid);
+		debug(LOG_NET, "Player (%u) has left nicely", index);
 	}
 }
+
 /**
  * @note When a player's connection is broken we broadcast the NET_PLAYER_DROPPED
  *       message.
- * \param dpid
+ * \param index
  */
-void NETplayerDropped(UDWORD dpid)
+void NETplayerDropped(UDWORD index)
 {
-	uint32_t id = dpid;
+	uint32_t id = index;
 
 	// Send message type speciffically for dropped / disconnects
 	NETbeginEncode(NET_PLAYER_DROPPED, NET_ALL_PLAYERS);
@@ -523,20 +478,21 @@ void NETplayerDropped(UDWORD dpid)
 	MultiPlayerLeave(id);			// more cleanup
 	NET_PlayerConnectionStatus = 2;	//DROPPED_CONNECTION
 }
+
 // ////////////////////////////////////////////////////////////////////////
 // rename the local player
-BOOL NETchangePlayerName(UDWORD dpid, char *newName)
+BOOL NETchangePlayerName(UDWORD index, char *newName)
 {
 	if(!NetPlay.bComms)
 	{
 		sstrcpy(NetPlay.players[0].name, newName);
 		return true;
 	}
-	debug(LOG_NET, "Requesting a change of player name for pid=%u to %s", dpid, newName);
+	debug(LOG_NET, "Requesting a change of player name for pid=%u to %s", index, newName);
 
-	sstrcpy(players[dpid].name, newName);
+	sstrcpy(NetPlay.players[index].name, newName);
 
-	NETBroadcastPlayerInfo(dpid);
+	NETBroadcastPlayerInfo(index);
 
 	return true;
 }
@@ -712,15 +668,13 @@ int NETinit(BOOL bFirstCall)
 	UDWORD i;
 
 	debug(LOG_NET, "NETinit");
+	NET_InitPlayers();
 	if(bFirstCall)
 	{
 		debug(LOG_NET, "NETPLAY: Init called, MORNIN'");
 
-		NetPlay.dpidPlayer		= 0;
-		NetPlay.bHost			= 0;
 		for(i = 0; i < MAX_PLAYERS; i++)
 		{
-			memset(&NetPlay.players[i], 0, sizeof(NetPlay.players[i]));
 			memset(&NetPlay.games[i], 0, sizeof(NetPlay.games[i]));
 		}
 		NetPlay.bComms = true;
@@ -759,7 +713,7 @@ int NETclose(void)
 
 	debug(LOG_NET, "Terminating sockets.");
 
-	is_server=false;
+	NetPlay.isHost = false;
 
 	if(bsocket)
 	{	// need SDLNet_TCP_DelSocket() as well, socket_set or tmp_socket_set?
@@ -931,7 +885,7 @@ BOOL NETsend(NETMSG *msg, UDWORD player)
 	NETlogPacket(msg, false);
 	msg->size = SDL_SwapBE16(msg->size);
 
-	if (is_server)
+	if (NetPlay.isHost)
 	{	// FIXME: We are NOT checking SDLNet_CheckSockets/SDLNet_SocketReady 
 		// SDLNet_TCP_Send *can* block!
 		if (   player < MAX_CONNECTED_PLAYERS
@@ -999,7 +953,7 @@ BOOL NETbcast(NETMSG *msg)
 	NETlogPacket(msg, false);
 	msg->size = SDL_SwapBE16(msg->size);
 
-	if (is_server)
+	if (NetPlay.isHost)
 	{
 		unsigned int i;
 
@@ -1021,8 +975,8 @@ BOOL NETbcast(NETMSG *msg)
 					// Possible client disconnect, and in either case, socket is most likely invalid now.
 					debug(LOG_WARNING, "(server) SDLNet_TCP_Send returned %d < %d, socket %p invalid: %s",
 						  result, size, connected_bsocket[i]->socket, SDLNet_GetError());
-					players[i].heartbeat = false;	//mark them dead
-					debug(LOG_WARNING, "Player (dpid %u) connection was broken.", i);
+					NetPlay.players[i].heartbeat = false;	//mark them dead
+					debug(LOG_WARNING, "Player (player %u) connection was broken.", i);
 					connected_bsocket[i]->socket = NULL; // Unsure how to handle invalid sockets.
 				}
 			}
@@ -1044,7 +998,7 @@ BOOL NETbcast(NETMSG *msg)
 				  result, size, tcp_socket, SDLNet_GetError());
 			debug(LOG_WARNING, "Host connection was broken?");
 			tcp_socket = NULL; // unsure how to handle invalid sockets.
-			players[HOST_DPID].heartbeat = false;	//mark them dead
+			NetPlay.players[NetPlay.hostPlayer].heartbeat = false;	// mark host as dead
 			//Game is pretty much over --should just end everything when HOST dies.
 			return false;
 		}
@@ -1071,79 +1025,79 @@ static BOOL NETprocessSystemMessage(void)
 		}
 		case NET_PLAYER_INFO:
 		{
-			uint32_t dpid;
+			uint32_t index;
+
 			NETbeginDecode(NET_PLAYER_INFO);
 				// Retrieve the player's ID
-				NETuint32_t(&dpid);
+				NETuint32_t(&index);
 
-				debug(LOG_NET, "Receiving MSG_PLAYER_INFO for player %u", (unsigned int)dpid);
+				debug(LOG_NET, "Receiving MSG_PLAYER_INFO for player %u", (unsigned int)index);
 
 				// Bail out if the given ID number is out of range
-				if (dpid >= MAX_CONNECTED_PLAYERS)
+				if (index >= MAX_CONNECTED_PLAYERS)
 				{
-					debug(LOG_WARNING, "MSG_PLAYER_INFO: Player ID (%u) out of range (max %u)", dpid, (unsigned int)MAX_CONNECTED_PLAYERS);
+					debug(LOG_WARNING, "MSG_PLAYER_INFO: Player ID (%u) out of range (max %u)", index, (unsigned int)MAX_CONNECTED_PLAYERS);
 					NETend();
 					break;
 				}
 
-				// Copy the ID into the correct player's slot
-				players[dpid].id = dpid;
-
 				// Retrieve the rest of the data
-				NETbool(&players[dpid].allocated);
-				NETbool(&players[dpid].heartbeat);
-				NETbool(&players[dpid].kick);
-				NETstring(players[dpid].name, sizeof(players[dpid].name));
-				NETuint32_t(&players[dpid].flags);
-				NETuint32_t(&players[dpid].heartattacktime);
+				NETbool(&NetPlay.players[index].allocated);
+				NETbool(&NetPlay.players[index].heartbeat);
+				NETbool(&NetPlay.players[index].kick);
+				NETstring(NetPlay.players[index].name, sizeof(NetPlay.players[index].name));
+				NETuint32_t(&NetPlay.players[index].heartattacktime);
+				NETint32_t(&NetPlay.players[index].colour);
+				NETint32_t(&NetPlay.players[index].team);
+				NETbool(&NetPlay.players[index].ready);
+				NETuint32_t(&NetPlay.hostPlayer);
 			NETend();
-
-			NETplayerInfo();
 
 			// If we're the game host make sure to send the updated
 			// data to all other clients as well.
-			if (is_server)
+			if (NetPlay.isHost)
 			{
-				NETBroadcastPlayerInfo(dpid);
+				NETBroadcastPlayerInfo(index);
 			}
 			break;
 		}
 		case NET_PLAYER_JOINED:
 		{
-			uint8_t dpid;
+			uint8_t index;
+
 			NETbeginDecode(NET_PLAYER_JOINED);
-				NETuint8_t(&dpid);
+				NETuint8_t(&index);
 			NETend();
 
 			debug(LOG_NET, "Receiving NET_PLAYER_JOINED for player %u using socket %p",
-				(unsigned int)dpid, tcp_socket);
+				(unsigned int)index, tcp_socket);
 
-			MultiPlayerJoin(dpid);
+			MultiPlayerJoin(index);
 			break;
 		}
 		// This message type is when player is leaving 'nicely', and socket is still valid.
 		case NET_PLAYER_LEAVING:
 		{
-			uint32_t dpid;
+			uint32_t index;
 
 			NETbeginDecode(NET_PLAYER_LEAVING);
-				NETuint32_t(&dpid);
+				NETuint32_t(&index);
 			NETend();
 
-			if(connected_bsocket[dpid])
+			if(connected_bsocket[index])
 			{
 				debug(LOG_NET, "Receiving NET_PLAYER_LEAVING for player %u on socket %p",
-							(unsigned int)dpid, connected_bsocket[dpid]->socket);
+							(unsigned int)index, connected_bsocket[index]->socket);
 			}
 			else
 			{	// dropped from join screen most likely
-				debug(LOG_NET, "Receiving NET_PLAYER_LEAVING for player %u ", (unsigned int)dpid);
+				debug(LOG_NET, "Receiving NET_PLAYER_LEAVING for player %u ", (unsigned int)index);
 			}
 
-			NET_DestroyPlayer(dpid);			// sets dpid player's array to false
-			MultiPlayerLeave(dpid);				// more cleanup
-			NETplayerLeaving(dpid);				// need to close socket for the player that left.
-			NET_PlayerConnectionStatus = 1;		//LEAVING_NICELY
+			NET_DestroyPlayer(index);		// sets index player's array to false
+			MultiPlayerLeave(index);		// more cleanup
+			NETplayerLeaving(index);		// need to close socket for the player that left.
+			NET_PlayerConnectionStatus = 1;		// LEAVING_NICELY
 			break;
 		}
 		case NET_GAME_FLAGS:
@@ -1173,7 +1127,7 @@ static BOOL NETprocessSystemMessage(void)
 			}
 			NETend();
 
- 			if (is_server)
+ 			if (NetPlay.isHost)
  			{
 				NETsendGameFlags();
 			}
@@ -1196,6 +1150,7 @@ static BOOL NETprocessSystemMessage(void)
 
 	return true;
 }
+
 /*
 *	Checks to see if a human player is still with us.
 *	@note: resuscitation isn't possible with current code, so once we lose
@@ -1206,29 +1161,30 @@ static void NETcheckPlayers(void)
 {
 	int i;
 
-	for(i=0; i< MAX_PLAYERS ; i++)
+	for (i = 0; i< MAX_PLAYERS ; i++)
 	{
-		if(players[i].allocated == 0) continue;		// not allocated means that it most like it is a AI player
-		if( players[i].heartbeat == 0 && players[i].heartattacktime == 0)	// looks like they are dead
+		if (NetPlay.players[i].allocated == 0) continue;		// not allocated means that it most like it is a AI player
+		if (NetPlay.players[i].heartbeat == 0 && NetPlay.players[i].heartattacktime == 0)	// looks like they are dead
 		{
-			players[i].heartattacktime = gameTime2;		// mark when this occured
+			NetPlay.players[i].heartattacktime = gameTime2;		// mark when this occured
 		}
 		else
 		{
-			if(players[i].heartattacktime)
+			if (NetPlay.players[i].heartattacktime)
 			{
-				if( players[i].heartattacktime + (15 * GAME_TICKS_PER_SEC) <  gameTime2) // wait 15 secs
+				if (NetPlay.players[i].heartattacktime + (15 * GAME_TICKS_PER_SEC) <  gameTime2) // wait 15 secs
 				{
-					players[i].kick = true;		// if still dead, then kick em.
+					NetPlay.players[i].kick = true;		// if still dead, then kick em.
 				}
 			}
 		}
-		if( players[i].kick)
+		if (NetPlay.players[i].kick)
 		{
 			NETplayerDropped(i);
 		}
 	}
 }
+
 // ////////////////////////////////////////////////////////////////////////
 // Receive a message over the current connection. We return true if there
 // is a message for the higher level code to process, and false otherwise.
@@ -1245,7 +1201,7 @@ BOOL NETrecv(uint8_t *type)
 		return false;
 	}
 
-	if (is_server)
+	if (NetPlay.isHost)
 	{
 		NETallowJoining();
 	}
@@ -1256,7 +1212,7 @@ BOOL NETrecv(uint8_t *type)
 receive_message:
 		received = false;
 
-		if (is_server)
+		if (NetPlay.isHost)
 		{
 			if (connected_bsocket[current] == NULL)
 			{
@@ -1292,7 +1248,7 @@ receive_message:
 					{
 						// If there is a error in NET_fillBuffer() then socket is already invalid.
 						// This means that the player dropped / disconnected for whatever reason. 
-						debug(LOG_WARNING, "Player, (dpid %u) seems to have dropped/disconnected.", i);
+						debug(LOG_WARNING, "Player, (player %u) seems to have dropped/disconnected.", i);
 
 						// Send message type speciffically for dropped / disconnects
 						NETbeginEncode(NET_PLAYER_DROPPED, NET_ALL_PLAYERS);
@@ -1302,7 +1258,7 @@ receive_message:
 						NET_DestroyPlayer(i);			// just clears array
 						MultiPlayerLeave(i);			// more cleanup
 						NET_PlayerConnectionStatus = 2;	//DROPPED_CONNECTION
-						players[i].kick = true;			//they are going to get kicked.
+						NetPlay.players[i].kick = true;			//they are going to get kicked.
 					}
 
 					if (++i == MAX_CONNECTED_PLAYERS)
@@ -1348,7 +1304,7 @@ receive_message:
 		{
 			size =	  pMsg->size + sizeof(pMsg->size) + sizeof(pMsg->type)
 				+ sizeof(pMsg->destination) + sizeof(pMsg->source);
-			if (is_server == false)
+			if (!NetPlay.isHost)
 			{
 				// do nothing
 			}
@@ -1369,7 +1325,7 @@ receive_message:
 					}
 				}
 			}
-			else if (pMsg->destination != NetPlay.dpidPlayer)
+			else if (pMsg->destination != selectedPlayer)
 			{
 				// message was not meant for us; send it further
 				if (   pMsg->destination < MAX_CONNECTED_PLAYERS
@@ -1606,6 +1562,7 @@ static void NETallowJoining(void)
 	int recv_result = 9999;
 
 	if (allow_joining == false) return;
+	ASSERT(NetPlay.isHost, "Cannot receive joins if not host!");
 
 	NETregisterServer(1);
 
@@ -1669,7 +1626,7 @@ static void NETallowJoining(void)
 					else
 					{
 						// get the correct player count after kicks / leaves
-						game.desc.dwCurrentPlayers = NETplayerInfo();
+						game.desc.dwCurrentPlayers = NetPlay.playercount;
 						NETsendGAMESTRUCT(tmp_socket[i], &game);
 					}
 				}
@@ -1711,48 +1668,44 @@ static void NETallowJoining(void)
 				else if (NetMsg.type == NET_JOIN)
 				{
 					char name[64];
-					uint32_t j;
-					uint8_t dpid;
+					uint8_t j;
+					uint8_t index = NET_CreatePlayer(name);
 
 					NETbeginDecode(NET_JOIN);
 						NETstring(name, sizeof(name));
 					NETend();
 
-					dpid = NET_CreatePlayer(name, 0);
-
 					SDLNet_TCP_DelSocket(tmp_socket_set, tmp_socket[i]);
-					NET_initBufferedSocket(connected_bsocket[dpid], tmp_socket[i]);
-					SDLNet_TCP_AddSocket(socket_set, connected_bsocket[dpid]->socket);
+					NET_initBufferedSocket(connected_bsocket[index], tmp_socket[i]);
+					SDLNet_TCP_AddSocket(socket_set, connected_bsocket[index]->socket);
 					tmp_socket[i] = NULL;
 
-					debug(LOG_NET, "Player, %s, with dpid of %u has joined using socket %p", name,
-									(unsigned int)dpid, connected_bsocket[dpid]->socket);
+					debug(LOG_NET, "Player, %s, with index of %u has joined using socket %p", name,
+					      (unsigned int)index, connected_bsocket[index]->socket);
 
 					// Increment player count
 					game.desc.dwCurrentPlayers++;
 
-					NETbeginEncode(NET_ACCEPTED, dpid);
-						NETuint8_t(&dpid);
+					NETbeginEncode(NET_ACCEPTED, index);
+						NETuint8_t(&index);
 					NETend();
 
-					MultiPlayerJoin(dpid);
+					MultiPlayerJoin(index);
 
 					// Send info about players to newcomer.
 					for (j = 0; j < MAX_CONNECTED_PLAYERS; ++j)
 					{
-						if (players[j].allocated
-						 && dpid != players[j].id)
+						if (NetPlay.players[j].allocated && index != j)
 						{
-							uint8_t id = players[j].id;
-							NETbeginEncode(NET_PLAYER_JOINED, dpid);
-								NETuint8_t(&id);
+							NETbeginEncode(NET_PLAYER_JOINED, index);
+								NETuint8_t(&j);
 							NETend();
 						}
 					}
 
 					// Send info about newcomer to all players.
 					NETbeginEncode(NET_PLAYER_JOINED, NET_ALL_PLAYERS);
-						NETuint8_t(&dpid);
+						NETuint8_t(&index);
 					NETend();
 
 					for (j = 0; j < MAX_CONNECTED_PLAYERS; ++j)
@@ -1764,12 +1717,12 @@ static void NETallowJoining(void)
 					// NETallowJoining will reconnect
 					NETregisterServer(0);
 					// and now, request version from new person
-					NETbeginEncode(NET_REQUEST_VERSION, dpid);
+					NETbeginEncode(NET_REQUEST_VERSION, index);
 					NETend();
-					VersionCheckTime[dpid] = gameTime2;		//time we sent the msg
+					NetPlay.players[index].versionCheckTime = gameTime2;		// Time we sent the msg
 					// add 7 sec delay factor for lag/slow modems?
-					VersionCheckTime[dpid] += (GAME_TICKS_PER_SEC * 7);
-					debug(LOG_NET, "Requesting Version check @(+7) %u from %u", VersionCheckTime[dpid], dpid);
+					NetPlay.players[index].versionCheckTime += GAME_TICKS_PER_SEC * 7;
+					debug(LOG_NET, "Requesting Version check @(+7) %u from %u", NetPlay.players[index].versionCheckTime, index);
 				}
 			}
 		}
@@ -1788,9 +1741,15 @@ BOOL NEThostGame(const char* SessionName, const char* PlayerName,
 
 	if(!NetPlay.bComms)
 	{
-		NetPlay.dpidPlayer		= HOST_DPID;
-		NetPlay.bHost			= true;
-
+		selectedPlayer			= 0;
+		NetPlay.hostPlayer		= 0;
+		NetPlay.isHost			= true;
+		NetPlay.players[0].allocated	= true;
+		NetPlay.players[0].connection	= -1;
+		NetPlay.players[0].position	= 0;
+		NetPlay.players[0].team		= 0;
+		NetPlay.players[0].ready	= false;
+		debug(LOG_NET, "Hosting but no comms");
 		return true;
 	}
 
@@ -1821,7 +1780,7 @@ BOOL NEThostGame(const char* SessionName, const char* PlayerName,
 		connected_bsocket[i] = NET_createBufferedSocket();
 	}
 
-	is_server = true;
+	NetPlay.isHost = true;
 
 	sstrcpy(game.name, SessionName);
 	memset(&game.desc, 0, sizeof(game.desc));
@@ -1837,16 +1796,18 @@ BOOL NEThostGame(const char* SessionName, const char* PlayerName,
 	game.desc.dwUserFlags[3] = four;
 
 	NET_InitPlayers();
-	NetPlay.dpidPlayer	= NET_CreatePlayer(PlayerName, PLAYER_HOST);
-	NetPlay.bHost		= true;
+	selectedPlayer= NET_CreatePlayer(PlayerName);
+	NetPlay.isHost	= true;
+	NetPlay.hostPlayer	= 0;
+	ASSERT(selectedPlayer == 0, "For now, host must start at player index zero, was %d", (int)selectedPlayer);
 
-	MultiPlayerJoin(NetPlay.dpidPlayer);
+	MultiPlayerJoin(selectedPlayer);
 
 	allow_joining = true;
 
 	NETregisterServer(0);
 
-	debug(LOG_NET, "Hosting a server. We are player %d.", NetPlay.dpidPlayer);
+	debug(LOG_NET, "Hosting a server. We are player %d.", selectedPlayer);
 
 	return true;
 }
@@ -1890,8 +1851,9 @@ BOOL NETfindGame(void)
 
 	if(!NetPlay.bComms)
 	{
-		NetPlay.dpidPlayer		= HOST_DPID;
-		NetPlay.bHost			= true;
+		selectedPlayer	= 0;
+		NetPlay.isHost		= true;
+		NetPlay.hostPlayer		= 0;
 		return true;
 	}
 	// We first check to see if we were given a IP/hostname from the command line
@@ -2063,7 +2025,7 @@ BOOL NETjoinGame(UDWORD gameNumber, const char* playername)
 	NET_initBufferedSocket(bsocket, tcp_socket);
 
 	// Send a join message
-	NETbeginEncode(NET_JOIN, HOST_DPID);
+	NETbeginEncode(NET_JOIN, NET_ALL_PLAYERS);
 		// Casting constness away, because NETstring is const-incorrect
 		// when sending/encoding a packet.
 		NETstring((char*)playername, 64);
@@ -2078,28 +2040,27 @@ BOOL NETjoinGame(UDWORD gameNumber, const char* playername)
 
 		if (type == NET_ACCEPTED)
 		{
-			uint8_t dpid;
+			uint8_t index;
+
 			NETbeginDecode(NET_ACCEPTED);
 				// Retrieve the player ID the game host arranged for us
-				NETuint8_t(&dpid);
+				NETuint8_t(&index);
 			NETend();
 
-			NetPlay.dpidPlayer = dpid;
+			selectedPlayer = index;
 			debug(LOG_NET, "NET_ACCEPTED received. Accepted into the game - I'm player %u using bsocket %p, tcp_socket=%p",
-				(unsigned int)NetPlay.dpidPlayer, bsocket->socket, tcp_socket);
-			NetPlay.bHost = false;
+				(unsigned int)index, bsocket->socket, tcp_socket);
+			NetPlay.isHost = false;
 
-			if (NetPlay.dpidPlayer >= MAX_CONNECTED_PLAYERS)
+			if (index >= MAX_CONNECTED_PLAYERS)
 			{
-				debug(LOG_ERROR, "Bad player number (%u) received from host!", NetPlay.dpidPlayer);
+				debug(LOG_ERROR, "Bad player number (%u) received from host!", index);
 				return false;
 			}
 
-			players[NetPlay.dpidPlayer].allocated = true;
-			players[NetPlay.dpidPlayer].id = NetPlay.dpidPlayer;
-			sstrcpy(players[NetPlay.dpidPlayer].name, playername);
-			players[NetPlay.dpidPlayer].flags = 0;
-			players[NetPlay.dpidPlayer].heartbeat = true;
+			NetPlay.players[index].allocated = true;
+			sstrcpy(NetPlay.players[index].name, playername);
+			NetPlay.players[index].heartbeat = true;
 
 			return true;
 		}

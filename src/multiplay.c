@@ -434,31 +434,23 @@ BASE_OBJECT *IdToPointer(UDWORD id,UDWORD player)
 // return a players name.
 const char* getPlayerName(unsigned int player)
 {
-	UDWORD i;
+	ASSERT(player < MAX_PLAYERS , "Wrong player index: %u", player);
 
-	ASSERT( player < MAX_PLAYERS , "getPlayerName: wrong player index: %d", player);
-
-	//Try NetPlay.playerName first (since supports AIs)
-	if(game.type != CAMPAIGN)
-		if(strcmp(playerName[player], "") != 0)
-			return (char*)&playerName[player];
-
-	//Use the ordinary way if failed
-	for(i=0;i<MAX_PLAYERS;i++)
+	if (game.type != CAMPAIGN)
 	{
-		if(player2dpid[player] == (unsigned int)NetPlay.players[i].dpid)
+		if (strcmp(playerName[player], "") != 0)
 		{
-			if(strcmp(NetPlay.players[i].name,"") == 0)
-			{
-				// make up a name for this player.
-				return getPlayerColourName(player);
-			}
-
-			return NetPlay.players[i].name;
+			return (char*)&playerName[player];
 		}
 	}
 
-	return NetPlay.players[0].name;
+	if (strlen(NetPlay.players[player].name) == 0)
+	{
+		// make up a name for this player.
+		return getPlayerColourName(player);
+	}
+
+	return NetPlay.players[player].name;
 }
 
 BOOL setPlayerName(UDWORD player, const char *sName)
@@ -487,37 +479,18 @@ BOOL isHumanPlayer(UDWORD player)
 // returns player responsible for 'player'
 UDWORD  whosResponsible(UDWORD player)
 {
-	UDWORD c;
-
-    c = ANYPLAYER;
 	if (isHumanPlayer(player))
 	{
-		c = player;
+		return player;			// Responsible for him or her self
 	}
-
-	else if(player == selectedPlayer)
+	else if (player == selectedPlayer)
 	{
-		c = player;
+		return player;			// We are responsibly for ourselves
 	}
-
 	else
 	{
-		SDWORD player;
-
-		// find the host using HOST_DPID
-		for(player=0;player <= MAX_PLAYERS && c == ANYPLAYER;player++)
-		{
-			if(player2dpid[player] == HOST_DPID)
-			{
-				c = player;
-			}
-		}
+		return NetPlay.hostPlayer;	// host responsible for all AIs
 	}
-	if(c == ANYPLAYER)
-	{
-		debug( LOG_NEVER, "failed to find a player for %d \n", player );
-	}
-	return c;
 }
 
 //returns true if selected player is responsible for 'player'
@@ -536,7 +509,6 @@ BOOL myResponsibility(UDWORD player)
 //returns true if 'player' is responsible for 'playerinquestion'
 BOOL responsibleFor(UDWORD player, UDWORD playerinquestion)
 {
-
 	if(whosResponsible(playerinquestion) == player)
 	{
 		return true;
@@ -729,6 +701,9 @@ BOOL recvMessage(void)
 		case NET_COLOURREQUEST:
 			recvColourRequest();
 			break;
+		case NET_POSITIONREQUEST:
+			recvPositionRequest();
+			break;
 		case NET_TEAMREQUEST:
 			recvTeamRequest();
 			break;
@@ -736,7 +711,7 @@ BOOL recvMessage(void)
 			recvReadyRequest();
 
 			// if hosting try to start the game if everyone is ready
-			if(NetPlay.bHost && multiplayPlayersReady(false))
+			if(NetPlay.isHost && multiplayPlayersReady(false))
 			{
 				startMultiplayerGame();
 			}
@@ -761,7 +736,7 @@ BOOL recvMessage(void)
 				NETstring( reason, MAX_KICK_REASON);
 			NETend();
 
-			if (NetPlay.dpidPlayer == player_id)  // we've been told to leave.
+			if (selectedPlayer == player_id)  // we've been told to leave.
 			{
 				debug(LOG_ERROR, "You were kicked because, %s", reason);
 				setPlayerHasLost(true);
@@ -1061,7 +1036,7 @@ BOOL sendTextMessage(const char *pStr, BOOL all)
 	if (all)	//broadcast
 	{
 		NETbeginEncode(NET_TEXTMSG, NET_ALL_PLAYERS);
-			NETuint32_t(&NetPlay.dpidPlayer);		// who this msg is from
+			NETuint32_t(&selectedPlayer);		// who this msg is from
 			NETstring(msg,MAX_CONSOLE_STRING_LENGTH);	// the message to send
 		NETend();
 	}
@@ -1074,8 +1049,8 @@ BOOL sendTextMessage(const char *pStr, BOOL all)
 				if (isHumanPlayer(i))
 				{
 					netplayer = player2dpid[i];
-					NETbeginEncode(NET_TEXTMSG,netplayer);
-						NETuint32_t(&NetPlay.dpidPlayer);		// who this msg is from
+					NETbeginEncode(NET_TEXTMSG, netplayer);
+						NETuint32_t(&selectedPlayer);		// who this msg is from
 						NETstring(msg,MAX_CONSOLE_STRING_LENGTH);	// the message to send
 					NETend();
 				}
@@ -1096,7 +1071,7 @@ BOOL sendTextMessage(const char *pStr, BOOL all)
 				{
 					netplayer = player2dpid[i];
 						NETbeginEncode(NET_TEXTMSG, netplayer);
-						NETuint32_t(&NetPlay.dpidPlayer);				// who this msg is from
+						NETuint32_t(&selectedPlayer);				// who this msg is from
 						NETstring(display, MAX_CONSOLE_STRING_LENGTH);	// the message to send
 					NETend();
 				}
@@ -1110,8 +1085,7 @@ BOOL sendTextMessage(const char *pStr, BOOL all)
 	}
 
 	//This is for local display
-	for(i = 0; NetPlay.players[i].dpid != NetPlay.dpidPlayer; i++);	//findplayer
-	sstrcat(display, NetPlay.players[i].name);		// name
+	sstrcat(display, NetPlay.players[selectedPlayer].name);		// name
 	sstrcat(display, ": ");						// seperator
 	sstrcat(display, pStr);						// add message
 
@@ -1124,7 +1098,6 @@ BOOL sendTextMessage(const char *pStr, BOOL all)
 BOOL sendAIMessage(char *pStr, UDWORD player, UDWORD to)
 {
 	UDWORD	sendPlayer;		//dpidPlayer is a uint32_t, not int32_t!
-	uint8_t netplayer=0;
 
 	//check if this is one of the local players, don't need net send then
 	if (to == selectedPlayer || myResponsibility(to))	//(the only) human on this machine or AI on this machine
@@ -1162,10 +1135,9 @@ BOOL sendAIMessage(char *pStr, UDWORD player, UDWORD to)
 			debug(LOG_ERROR, "sendAIMessage() - player is not human.");
 			return false;
 		}
-		netplayer = player2dpid[sendPlayer];
 
 		//send to the player who is hosting 'to' player (might be himself if human and not AI)
-		NETbeginEncode(NET_AITEXTMSG, netplayer);
+		NETbeginEncode(NET_AITEXTMSG, sendPlayer);
 			NETuint32_t(&player);			//save the actual sender
 			//save the actual player that is to get this msg on the source machine (source can host many AIs)
 			NETuint32_t(&to);				//save the actual receiver (might not be the same as the one we are actually sending to, in case of AIs)
@@ -1228,10 +1200,8 @@ void displayAIMessage(char *pStr, SDWORD from, SDWORD to)
 BOOL recvTextMessage()
 {
 	UDWORD	dpid;
-	UDWORD	i;
 	char	msg[MAX_CONSOLE_STRING_LENGTH];
 	char newmsg[MAX_CONSOLE_STRING_LENGTH];
-	UDWORD  player;		//console callback - player who sent the message
 
 	memset(msg, 0x0, sizeof(msg));
 	memset(newmsg, 0x0, sizeof(newmsg));
@@ -1243,30 +1213,22 @@ BOOL recvTextMessage()
 		NETstring(newmsg, MAX_CONSOLE_STRING_LENGTH);
 	NETend();
 
-
-	// find player
-	for (i = 0; NetPlay.players[i].dpid != dpid && i < MAX_PLAYERS; i++);
-
-	//console callback - find real number of the player
-	for (player = 0; player2dpid[player] != dpid && player < MAX_PLAYERS; player++);
-
-	ASSERT(player != MAX_PLAYERS && i != MAX_PLAYERS, "recvTextMessage: failed to find owner of dpid %d", dpid);
-	if (player == MAX_PLAYERS || i == MAX_PLAYERS)
+	if (dpid >= MAX_PLAYERS)
 	{
 		return false;
 	}
 
-	sstrcpy(msg, NetPlay.players[i].name);
+	sstrcpy(msg, NetPlay.players[dpid].name);
 	// Seperator
 	sstrcat(msg, ": ");
 	// Add message
 	sstrcat(msg, newmsg);
 
-	addConsoleMessage(msg, DEFAULT_JUSTIFY, player);
+	addConsoleMessage(msg, DEFAULT_JUSTIFY, dpid);
 
 	// Multiplayer message callback
 	// Received a console message from a player, save
-	MultiMsgPlayerFrom = player;
+	MultiMsgPlayerFrom = dpid;
 	MultiMsgPlayerTo = selectedPlayer;
 
 	sstrcpy(MultiplayMsg, newmsg);
@@ -1518,7 +1480,7 @@ BOOL recvMapFileRequested()
 	char mapStr[256],mapName[256],fixedname[256];
 
 	// another player is requesting the map
-	if(!NetPlay.bHost)
+	if(!NetPlay.isHost)
 	{
 		return true;
 	}
@@ -1935,6 +1897,6 @@ void resetReadyStatus(bool bSendOptions)
 	// notify all clients if needed
 	if(bSendOptions)
 	{
-		sendOptions(player2dpid[selectedPlayer], selectedPlayer);
+		sendOptions();
 	}
 }
