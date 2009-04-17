@@ -167,6 +167,7 @@ typedef struct {
 	uint32_t	hostPlayer;		///< Index of host in player array
 	uint32_t	bComms;			///< Actually do the comms?
 	BOOL		isHost;			///< True if we are hosting the game
+	int32_t		maxPlayers;		///< Maximum number of players in this game
 } NETPLAY;
 
 // ////////////////////////////////////////////////////////////////////////

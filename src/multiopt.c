@@ -229,7 +229,7 @@ void recvOptions()
 BOOL hostCampaign(char *sGame, char *sPlayer)
 {
 	PLAYERSTATS playerStats;
-	UDWORD		numpl, i;
+	UDWORD		i;
 
 	debug(LOG_WZ, "Hosting campaign: '%s', player: '%s'", sGame, sPlayer);
 
@@ -266,12 +266,8 @@ BOOL hostCampaign(char *sGame, char *sPlayer)
 	if(!NetPlay.bComms)
 	{
 		strcpy(NetPlay.players[0].name,sPlayer);
-		numpl = 1;
 	}
-	else
-	{
-		numpl = NetPlay.playercount;
-	}
+	NetPlay.maxPlayers = game.maxPlayers;
 
 	return true;
 }

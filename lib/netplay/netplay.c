@@ -74,9 +74,9 @@ extern void kickPlayer(uint32_t player_id, const char *reason); // from src/mult
 void NETplayerLeaving(UDWORD dpid);		// Cleanup sockets on player leaving (nicely)
 void NETplayerDropped(UDWORD dpid);		// Broadcast NET_PLAYER_DROPPED & cleanup
 static void NETallowJoining(void);
-void sendVersionCheck(void);
-void recvVersionCheck(void);
-void VersionCheckTimeOut( uint32_t victimdpid );
+static void sendVersionCheck(void);
+static void recvVersionCheck(void);
+static void VersionCheckTimeOut( uint32_t victimdpid );
 
 /*
  * Network globals, these are part of the new network API
@@ -142,7 +142,7 @@ static int NETCODE_VERSION_MINOR = 2;		// unused for now
 static int NUMBER_OF_MODS = 0;			// unused for now
 static int NETCODE_HASH = 0;			// unused for now
 
-void sendVersionCheck(void)
+static void sendVersionCheck(void)
 {
 	NETlogEntry("Sending version check", 0, 0);
 	NETbeginEncode(NET_VERSION_CHECK, NET_ALL_PLAYERS);
@@ -158,7 +158,7 @@ void sendVersionCheck(void)
 }
 
 // Checks the version string, and if they are not the same, we auto-kick the player.
-void recvVersionCheck()
+static void recvVersionCheck()
 {
 	uint32_t victim = 0;
 	char playersVersion[VersionStringSize];
@@ -202,7 +202,7 @@ void recvVersionCheck()
 	}
 }
 
-void VersionCheckTimeOut(uint32_t victim)
+static void VersionCheckTimeOut(uint32_t victim)
 {
 	const char* msg;
 
@@ -385,6 +385,8 @@ static void NET_InitPlayers(void)
 		NetPlay.players[i].colour = i;
 		NetPlay.players[i].ready = false;
 		NetPlay.players[i].team = -1;
+		NetPlay.players[i].versionCheckTime = 0xffffffff;
+		NetPlay.players[i].playerVersionFlag = false;
 	}
 	NetPlay.hostPlayer = 0;	// right now, host starts always at index zero
 	NetPlay.playercount = 0;
@@ -1565,6 +1567,15 @@ static void NETallowJoining(void)
 
 	NETregisterServer(1);
 
+	// Version check - make sure we sent the check, then check for timelimit
+	for (i = 0; i < MAX_CONNECTED_PLAYERS; i++)
+	{
+		if (NetPlay.players[i].versionCheckTime != 0xffffffff && NetPlay.players[i].versionCheckTime < gameTime2)
+		{
+			NETCheckVersion(i);
+		}
+	}
+
 	if (tmp_socket_set == NULL)
 	{
 		int result = 0;
@@ -1664,6 +1675,18 @@ static void NETallowJoining(void)
 					SDLNet_TCP_Close(tmp_socket[i]);
 					tmp_socket[i] = NULL;
 				}
+				else if (NetPlay.playercount + 1 >= NetPlay.maxPlayers)
+				{
+					char name[64];
+
+					NETbeginDecode(NET_JOIN);
+						NETstring(name, sizeof(name));
+					NETend();
+					debug(LOG_NET, "Player %s rejected - game full", name);
+					SDLNet_TCP_DelSocket(tmp_socket_set, tmp_socket[i]);
+					SDLNet_TCP_Close(tmp_socket[i]);
+					tmp_socket[i] = NULL;
+				}
 				else if (NetMsg.type == NET_JOIN)
 				{
 					char name[64];
@@ -1739,6 +1762,7 @@ BOOL NEThostGame(const char* SessionName, const char* PlayerName,
 	debug(LOG_NET, "NEThostGame(%s, %s, %d, %d, %d, %d, %u)", SessionName, PlayerName,
 	      one, two, three, four, plyrs);
 
+	NetPlay.maxPlayers = MAX_PLAYERS;
 	if(!NetPlay.bComms)
 	{
 		selectedPlayer			= 0;

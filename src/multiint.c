@@ -1478,17 +1478,6 @@ static void drawReadyButton(UDWORD player)
 			4,MULTIOP_READY_WIDTH,MULTIOP_READY_HEIGHT,
 			_("Click when ready"),IMAGE_CHECK_OFF,IMAGE_CHECK_OFF,true);
 	}
-	// Hackish note:  Since the Ready Button is only drawn for humans,
-	// the routine was added here.
-	if (NetPlay.isHost)
-	{
-		// make sure we sent the check, then check for timelimit
-		if (NetPlay.players[player].versionCheckTime != 0xffffffff
-		    && NetPlay.players[player].versionCheckTime < gameTime2)
-		{
-			NETCheckVersion(player);
-		}
-	}
 }
 
 // ////////////////////////////////////////////////////////////////////////////
