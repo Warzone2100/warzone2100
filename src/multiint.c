@@ -2068,10 +2068,13 @@ static void processMultiopWidgets(UDWORD id)
 		sstrcpy(game.map, widgGetString(psWScreen, MULTIOP_MAP));		// add the name
 
 		resetReadyStatus(false);
-
 		removeWildcards((char*)sPlayer);
 
-		hostCampaign((char*)game.name,(char*)sPlayer);
+		if (!hostCampaign((char*)game.name,(char*)sPlayer))
+		{
+			addConsoleMessage(_("Sorry! Failed to host the game."), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+			break;
+		}
 		bHosted = true;
 
 		widgDelete(psWScreen,MULTIOP_REFRESH);

@@ -242,7 +242,10 @@ BOOL hostCampaign(char *sGame, char *sPlayer)
 		game.maxPlayers = 4;
 	}
 
-	NEThostGame(sGame, sPlayer, game.type, 0, 0, 0, game.maxPlayers); // temporary stuff
+	if (!NEThostGame(sGame, sPlayer, game.type, 0, 0, 0, game.maxPlayers))
+	{
+		return false;
+	}
 
 	for (i = 0; i < MAX_PLAYERS; i++)
 	{

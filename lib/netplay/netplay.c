@@ -1668,11 +1668,12 @@ static void NETallowJoining(void)
 				{
 					char name[64];
 					uint8_t j;
-					uint8_t index = NET_CreatePlayer(name);
+					uint8_t index;
 
 					NETbeginDecode(NET_JOIN);
 						NETstring(name, sizeof(name));
 					NETend();
+					index = NET_CreatePlayer(name);
 
 					SDLNet_TCP_DelSocket(tmp_socket_set, tmp_socket[i]);
 					NET_initBufferedSocket(connected_bsocket[index], tmp_socket[i]);
