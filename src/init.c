@@ -1067,7 +1067,7 @@ BOOL stageThreeInitialise(void)
 	setAllPauseStates(false);
 
 	/* decide if we have to create teams, ONLY in multiplayer mode!*/
-	if( bMultiPlayer && game.alliance == ALLIANCES_TEAMS && game.type == SKIRMISH)
+	if (bMultiPlayer && game.alliance == ALLIANCES_TEAMS)
 	{
 		createTeamAlliances();
 
