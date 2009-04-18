@@ -9547,12 +9547,10 @@ static int scrDestroyed(lua_State *L)
 	if (!object)
 	{
 		lua_pushboolean(L, true);
-		//debug(LOG_WARNING, "scrDestroyed: could not find the id (%d)", id);
 	}
 	else
 	{
-		lua_pushboolean(L, object->died != 0);
-		//debug(LOG_WARNING, "scrDestroyed: the object has been destroyed? %d", object->died != 0);
+		lua_pushboolean(L, object->died);
 	}
 	return 1;
 }
