@@ -52,6 +52,7 @@ typedef struct _warzoneGlobals
 	BOOL		trapCursor;
 	UDWORD		width;
 	UDWORD		height;
+	unsigned int fsaa;
 	bool		vsync;
 	bool            pauseOnFocusLoss;
 	bool            ColouredCursor;
@@ -81,6 +82,7 @@ void war_SetDefaultStates(void)//Sets all states
 {
 	//set those here and reset in clParse or loadConfig
 	war_SetFog(false);
+	war_setFSAA(2);
 	war_setSoundEnabled( true );
 	war_SetPauseOnFocusLoss(true);
 #ifdef WZ_OS_MAC
@@ -107,6 +109,16 @@ void war_setFullscreen(BOOL b) {
 
 BOOL war_getFullscreen(void) {
 	return warGlobs.Fullscreen;
+}
+
+void war_setFSAA(unsigned int fsaa)
+{
+	warGlobs.fsaa = fsaa;
+}
+
+unsigned int war_getFSAA()
+{
+	return warGlobs.fsaa;
 }
 
 void war_SetTrapCursor(BOOL b)

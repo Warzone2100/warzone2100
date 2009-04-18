@@ -933,7 +933,7 @@ int main(int argc, char *argv[])
 	// SQLite's VFS system as the default (non-zero=default, zero=default).
 	sqlite3_register_physfs_vfs(1);
 
-	if (!frameInitialise( "Warzone 2100", pie_GetVideoBufferWidth(), pie_GetVideoBufferHeight(), pie_GetVideoBufferDepth(), war_getFullscreen(), war_GetVsync()))
+	if (!frameInitialise( "Warzone 2100", pie_GetVideoBufferWidth(), pie_GetVideoBufferHeight(), pie_GetVideoBufferDepth(), war_getFSAA(), war_getFullscreen(), war_GetVsync()))
 	{
 		return -1;
 	}
