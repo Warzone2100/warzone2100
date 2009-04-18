@@ -2,6 +2,7 @@
 #define __INCLUDED_LIB_FRAMEWORK_LEXER_INPUT_H__
 
 #include <physfs.h>
+#include <stdio.h>
 
 enum lexinput_type
 {
