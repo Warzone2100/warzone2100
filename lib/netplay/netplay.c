@@ -383,8 +383,9 @@ static void NET_InitPlayers(void)
 		NetPlay.players[i].kick = false;
 		NetPlay.players[i].name[0] = '\0';
 		NetPlay.players[i].colour = i;
-		NetPlay.players[i].ready = false;
+		NetPlay.players[i].position = i;
 		NetPlay.players[i].team = i;
+		NetPlay.players[i].ready = false;
 		NetPlay.players[i].versionCheckTime = 0xffffffff;
 		NetPlay.players[i].playerVersionFlag = false;
 	}
@@ -1762,17 +1763,15 @@ BOOL NEThostGame(const char* SessionName, const char* PlayerName,
 	debug(LOG_NET, "NEThostGame(%s, %s, %d, %d, %d, %d, %u)", SessionName, PlayerName,
 	      one, two, three, four, plyrs);
 
+	NET_InitPlayers();
 	NetPlay.maxPlayers = MAX_PLAYERS;
 	if(!NetPlay.bComms)
 	{
 		selectedPlayer			= 0;
-		NetPlay.hostPlayer		= 0;
 		NetPlay.isHost			= true;
 		NetPlay.players[0].allocated	= true;
 		NetPlay.players[0].connection	= -1;
-		NetPlay.players[0].position	= 0;
-		NetPlay.players[0].team		= 0;
-		NetPlay.players[0].ready	= false;
+		NetPlay.playercount		= 1;
 		debug(LOG_NET, "Hosting but no comms");
 		return true;
 	}
@@ -1819,7 +1818,6 @@ BOOL NEThostGame(const char* SessionName, const char* PlayerName,
 	game.desc.dwUserFlags[2] = three;
 	game.desc.dwUserFlags[3] = four;
 
-	NET_InitPlayers();
 	selectedPlayer= NET_CreatePlayer(PlayerName);
 	NetPlay.isHost	= true;
 	NetPlay.hostPlayer	= 0;

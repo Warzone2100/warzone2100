@@ -263,8 +263,6 @@ BOOL MultiPlayerJoin(UDWORD dpid)
 		ASSERT(NetPlay.playercount <= MAX_PLAYERS, "Too many players!");
 
 		// setup data for this player, then broadcast it to the other players.
-		setPlayerColour(dpid, MAX_PLAYERS);				// force a colourchoice
-		chooseColour(dpid);						// pick an unused colour.
 		setupNewPlayer(dpid);						// setup all the guff for that player.
 		sendOptions();
 		bPlayerReadyGUI[dpid] = false;

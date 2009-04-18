@@ -172,7 +172,6 @@ static void		closeTeamChooser	(void);
 static BOOL		SendColourRequest	(UBYTE player, UBYTE col);
 static BOOL		SendPositionRequest	(UBYTE player, UBYTE chosenPlayer);
 static BOOL		safeToUseColour		(UDWORD player,UDWORD col);
-BOOL			chooseColour		(UDWORD);
 static BOOL		changeReadyStatus	(UBYTE player, BOOL bReady);
 void			resetReadyStatus	(bool bSendOptions);
 void			initTeams( void );
@@ -1039,21 +1038,6 @@ static BOOL safeToUseColour(UDWORD player,UDWORD col)
 	return true;
 }
 
-BOOL chooseColour(UDWORD player)
-{
-	UDWORD col;
-
-	for(col =0;col<MAX_PLAYERS;col++)
-	{
-		if(safeToUseColour(player,col))
-		{
-			setPlayerColour(player,col);
-			return true;
-		}
-	}
-	return true;
-}
-
 static void addColourChooser(UDWORD player)
 {
 	UDWORD i;
@@ -1220,28 +1204,46 @@ static BOOL changeReadyStatus(UBYTE player, BOOL bReady)
 	return true;
 }
 
-static BOOL changePosition(UBYTE player, UBYTE chosenPlayer)
+static BOOL changePosition(UBYTE player, UBYTE position)
 {
-	int32_t position;
+	int i;
 
-	if (isHumanPlayer(chosenPlayer))
+	for (i = 0; i < MAX_PLAYERS; i++)
 	{
-		return false;	// cannot steal a human player's position on the map
+		if (NetPlay.players[i].position == position)
+		{
+			debug(LOG_NET, "Swapping positions between players %d(%d) and %d(%d)",
+			      player, NetPlay.players[player].position, i, NetPlay.players[i].position);
+			NetPlay.players[i].position = NetPlay.players[player].position;
+			NetPlay.players[player].position = position;
+			NETBroadcastPlayerInfo(player);
+			NETBroadcastPlayerInfo(i);
+			return true;
+		}
 	}
-
-	// Swap positions
-	position = NetPlay.players[chosenPlayer].position;
-	NetPlay.players[chosenPlayer].position = NetPlay.players[player].position;
-	NetPlay.players[player].position = position;
-
-	NETBroadcastPlayerInfo(player);
-	NETBroadcastPlayerInfo(chosenPlayer);
-
-	return true;
+	debug(LOG_ERROR, "Failed to swap positions for player %d, position %d", (int)player, (int)position);
+	return false;
 }
 
 static BOOL changeColour(UBYTE player, UBYTE col)
 {
+	int i;
+
+	for (i = 0; i < MAX_PLAYERS; i++)
+	{
+		if (NetPlay.players[i].colour == col)
+		{
+			debug(LOG_NET, "Swapping colours between players %d(%d) and %d(%d)",
+			      player, getPlayerColour(player), i, getPlayerColour(i));
+			setPlayerColour(i, getPlayerColour(player));
+			setPlayerColour(player, col);
+			NETBroadcastPlayerInfo(player);
+			NETBroadcastPlayerInfo(i);
+			return true;
+		}
+	}
+	debug(LOG_ERROR, "Failed to swap colours for player %d, position %d", (int)player, (int)col);
+	return false;
 	if (!safeToUseColour(player, col))
 	{
 		debug(LOG_NET, "Unavailable colour %d", (int)col);
@@ -1270,17 +1272,17 @@ static BOOL SendColourRequest(UBYTE player, UBYTE col)
 	return true;
 }
 
-static BOOL SendPositionRequest(UBYTE player, UBYTE chosenPlayer)
+static BOOL SendPositionRequest(UBYTE player, UBYTE position)
 {
 	if(NetPlay.isHost)			// do or request the change
 	{
-		return changePosition(player, chosenPlayer);
+		return changePosition(player, position);
 	}
 	else
 	{
 		NETbeginEncode(NET_COLOURREQUEST, NET_ALL_PLAYERS);
 			NETuint8_t(&player);
-			NETuint8_t(&chosenPlayer);
+			NETuint8_t(&position);
 		NETend();
 	}
 	return true;
@@ -1314,7 +1316,7 @@ BOOL recvColourRequest()
 
 BOOL recvPositionRequest()
 {
-	UBYTE	player, chosenPlayer;
+	UBYTE	player, position;
 
 	if(!NetPlay.isHost)				// only host should act
 	{
@@ -1323,19 +1325,19 @@ BOOL recvPositionRequest()
 
 	NETbeginDecode(NET_COLOURREQUEST);
 		NETuint8_t(&player);
-		NETuint8_t(&chosenPlayer);
+		NETuint8_t(&position);
 	NETend();
 
-	if (player > MAX_PLAYERS || chosenPlayer > MAX_PLAYERS)
+	if (player > MAX_PLAYERS || position > MAX_PLAYERS)
 	{
 		debug(LOG_ERROR, "Invalid NET_COLOURREQUEST from player %d: Tried to change player %d to %d",
-		      NETgetSource(), (int)player, (int)chosenPlayer);
+		      NETgetSource(), (int)player, (int)position);
 		return false;
 	}
 
 	resetReadyStatus(false);
 
-	return changePosition(player, chosenPlayer);
+	return changePosition(player, position);
 }
 
 #define ANYENTRY 0xFF		// used to allow any team slot to be used.
@@ -2796,8 +2798,7 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *p
 	UDWORD		x = xOffset+psWidget->x;
 	UDWORD		y = yOffset+psWidget->y;
 	BOOL		Hilight = false;
-	UDWORD		j;
-	UDWORD		i = psWidget->UserData, eval;
+	UDWORD		j = psWidget->UserData, eval;
 	PLAYERSTATS stat;
 
 	if( ((W_BUTTON*)psWidget)->state & (WBUTS_HILITE| WCLICK_DOWN | WCLICK_LOCKED | WCLICK_CLICKLOCK))
@@ -2808,24 +2809,22 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *p
 	//bluboxes.
 	drawBlueBox(x,y,psWidget->width,psWidget->height);							// right
 
-	if (ingame.localOptionsReceived && NetPlay.players[i].allocated)					// only draw if real player!
+	if (ingame.localOptionsReceived && NetPlay.players[j].allocated)					// only draw if real player!
 	{
 		//bluboxes.
 		drawBlueBox(x,y,psWidget->width,psWidget->height);							// right
 		drawBlueBox(x,y,60,psWidget->height);
 		drawBlueBox(x,y,31,psWidget->height);										// left.
 
-		for (j = 0; j != i && j < MAX_PLAYERS; j++);	// get the in game playernumber.
-
 		iV_SetFont(font_regular);											// font
 		iV_SetTextColour(WZCOL_TEXT_BRIGHT);
 
 		// name
-		while(iV_GetTextWidth(NetPlay.players[i].name) > psWidget->width -68)	// clip name.
+		while (iV_GetTextWidth(NetPlay.players[j].name) > psWidget->width - 68)		// clip name.
 		{
-			NetPlay.players[i].name[strlen(NetPlay.players[i].name)-1]='\0';
+			NetPlay.players[j].name[strlen(NetPlay.players[j].name) - 1] = '\0';
 		}
-		iV_DrawText(NetPlay.players[i].name, x + 65, y + 22);
+		iV_DrawText(NetPlay.players[j].name, x + 65, y + 22);
 
 		// ping rating
 		if(ingame.PingTimes[j] >= PING_LO && ingame.PingTimes[j] < PING_MED)
@@ -2842,8 +2841,7 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *p
 
 
 		// player number
-//		iV_DrawImage(FrontImages,IMAGE_WEE_GUY,x,y+23);
-		switch(j)
+		switch (NetPlay.players[j].position)
 		{
 		case 0:
 			iV_DrawImage(IntImages,IMAGE_GN_0,x+4,y+29);
@@ -3007,20 +3005,13 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *p
 		default:
 			break;
 		}
-		//unknown bugfix
-//		game.skirmishPlayers[i] =true;	// don't clear this one!
-		game.skDiff[i]=UBYTE_MAX;	// don't clear this one!
+		//unknown bugfix PERFIX
+		game.skDiff[j] = UBYTE_MAX;	// don't clear this one!
 	}
 	else
 	{
 		//bluboxes.
 		drawBlueBox(x,y,psWidget->width,psWidget->height);							// right
-		//drawBlueBox(x,y,31,psWidget->height);										// left.
-
-		//if(game.type == SKIRMISH && game.skDiff[i])
-		//{
-		//	iV_DrawImage(FrontImages,IMAGE_PLAYER_PC,x+2,y+9);
-		//}
 	}
 
 }
