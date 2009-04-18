@@ -78,3 +78,6 @@ function dofile(filename)
 	end
 	return __dofile(path..filename)
 end
+
+-- initialise the random number generator
+math.randomseed(os.time())

@@ -60,12 +60,19 @@ import os.path
 '''
 
 cvars = ['trackTransporter', 'mapWidth', 'mapHeight', 'gameInitialised', 'selectedPlayer', 'gameTime', 'gameLevel', 'inTutorial', 'cursorType', 'intMode', 'targetedObjectType', 'extraVictoryFlag', 'extraFailFlag', 'multiPlayerGameType', 'multiPlayerMaxPlayers', 'multiPlayerBaseType', 'multiPlayerAlliancesType']
+# functions that are to be renamed
 rename = {
 	'debug'          : 'debugFile',
 	'EnumDroid'      : 'enumDroid',
 	'InitEnumDroids' : 'initEnumDroids',
-	'MsgBox'         : 'msgBox'
+	'MsgBox'         : 'msgBox',
+	'min'            : 'math.min',
+	'fmin'           : 'math.min',
+	'max'            : 'math.max',
+	'fmax'           : 'math.max',
+	'toPow'          : 'math.pow',
 	}
+
 unused_parameters = {
 	'chooseValidLoc': [0, 1],
 	}

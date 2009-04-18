@@ -38,8 +38,7 @@ function version(v)
 			end
 			return math.random(0, upper-1)
 		end
-		math.randomseed(os.time())
-
+		
 		function distBetweenTwoPoints(x1, y1, x2, y2)
 			return math.sqrt( math.pow(x1-x2, 2) + math.pow(y1-y2, 2) )
 		end
@@ -57,12 +56,6 @@ function version(v)
 			if not object.type == "droid" then error("object is not a droid", 2) end
 			return object
 		end
-
-		min = math.min
-		fmin = min
-		max = math.max
-		fmax = max
-		toPow = math.pow
 
 		function modulo(a, b)
 			return a % b
