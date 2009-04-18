@@ -845,11 +845,9 @@ static void addGameOptions(BOOL bRedo)
 	// buttons.
 
 	// game type
-	addBlueForm(MULTIOP_OPTIONS,MULTIOP_GAMETYPE,_("Game"),MCOL0,MROW4,MULTIOP_BLUEFORMW,27);
-	addMultiBut(psWScreen,MULTIOP_GAMETYPE,MULTIOP_CAMPAIGN,MCOL1, 2 , MULTIOP_BUTW,MULTIOP_BUTH,
-				_("Mayhem"), IMAGE_ARENA, IMAGE_ARENA_HI, true);	//camp
-	addMultiBut(psWScreen,MULTIOP_GAMETYPE,MULTIOP_SKIRMISH,MCOL2, 2 , MULTIOP_BUTW,MULTIOP_BUTH,
-				_("Skirmish"),IMAGE_SKIRMISH,IMAGE_SKIRMISH_HI,true);	//skirmish
+	addBlueForm(MULTIOP_OPTIONS,MULTIOP_GAMETYPE,_("Scavengers"),MCOL0,MROW4,MULTIOP_BLUEFORMW,27);
+	addMultiBut(psWScreen, MULTIOP_GAMETYPE, MULTIOP_CAMPAIGN, MCOL1, 2, MULTIOP_BUTW, MULTIOP_BUTH, _("Scavengers"), IMAGE_ARENA, IMAGE_ARENA_HI, true);		// "campaign"
+	addMultiBut(psWScreen, MULTIOP_GAMETYPE, MULTIOP_SKIRMISH, MCOL2, 2, MULTIOP_BUTW, MULTIOP_BUTH, _("No Scavengers"), IMAGE_SKIRMISH, IMAGE_SKIRMISH_HI, true);// "skirmish"
 
 	widgSetButtonState(psWScreen, MULTIOP_CAMPAIGN,	0);
 	widgSetButtonState(psWScreen, MULTIOP_SKIRMISH,	0);
@@ -864,9 +862,9 @@ static void addGameOptions(BOOL bRedo)
 		break;
 	}
 
-	if(!NetPlay.bComms)
+	if (NetPlay.playercount == 8 || game.maxPlayers == 8)
 	{
-		widgSetButtonState(psWScreen, MULTIOP_CAMPAIGN, WBUT_DISABLE);
+		widgSetButtonState(psWScreen, MULTIOP_CAMPAIGN, WBUT_DISABLE);	// full, cannot enable scavenger player
 	}
 
 	//just display the game options.
@@ -886,8 +884,6 @@ static void addGameOptions(BOOL bRedo)
 		widgSetButtonState(psWScreen, MULTIOP_FOG_OFF,WBUT_LOCK);
 	}
 
-	if (game.type != CAMPAIGN)
-	{
 		// alliances
 		addBlueForm(MULTIOP_OPTIONS, MULTIOP_ALLIANCES, _("Alliances"), MCOL0, MROW6, MULTIOP_BLUEFORMW, 27);
 
@@ -916,19 +912,9 @@ static void addGameOptions(BOOL bRedo)
 			widgSetButtonState(psWScreen, MULTIOP_ALLIANCE_TEAMS,WBUT_LOCK);
 			break;
 		}
-	}
 
-	if(game.type == CAMPAIGN || game.type == SKIRMISH)
-	{
 		// pow levels
-		if (game.type == CAMPAIGN)
-		{
-			addBlueForm(MULTIOP_OPTIONS,MULTIOP_POWER,_("Power"),MCOL0,MROW6,MULTIOP_BLUEFORMW,27);
-		}
-		else
-		{
-			addBlueForm(MULTIOP_OPTIONS,MULTIOP_POWER,_("Power"),MCOL0,MROW7,MULTIOP_BLUEFORMW,27);
-		}
+		addBlueForm(MULTIOP_OPTIONS,MULTIOP_POWER,_("Power"),MCOL0,MROW7,MULTIOP_BLUEFORMW,27);
 		addMultiBut(psWScreen,MULTIOP_POWER,MULTIOP_POWLEV_LOW,MCOL1,2,MULTIOP_BUTW,MULTIOP_BUTH,
 			_("Low Power Levels"),IMAGE_POWLO,IMAGE_POWLO_HI,true);
 		addMultiBut(psWScreen,MULTIOP_POWER,MULTIOP_POWLEV_MED,MCOL2,2,MULTIOP_BUTW,MULTIOP_BUTH,
@@ -952,14 +938,7 @@ static void addGameOptions(BOOL bRedo)
 		}
 
 		//type clean/base/defence
-		if (game.type == CAMPAIGN)
-		{
-			addBlueForm(MULTIOP_OPTIONS, MULTIOP_BASETYPE, _("Base"), MCOL0, MROW7, MULTIOP_BLUEFORMW, 27);
-		}
-		else
-		{
-			addBlueForm(MULTIOP_OPTIONS, MULTIOP_BASETYPE, _("Base"), MCOL0, MROW8, MULTIOP_BLUEFORMW, 27);
-		}
+		addBlueForm(MULTIOP_OPTIONS, MULTIOP_BASETYPE, _("Base"), MCOL0, MROW8, MULTIOP_BLUEFORMW, 27);
 		addMultiBut(psWScreen,MULTIOP_BASETYPE,MULTIOP_CLEAN,MCOL1,2,MULTIOP_BUTW,MULTIOP_BUTH,
 				_("Start with No Bases"), IMAGE_NOBASE,IMAGE_NOBASE_HI,true);
 		addMultiBut(psWScreen,MULTIOP_BASETYPE,MULTIOP_BASE,MCOL2,2,MULTIOP_BUTW,MULTIOP_BUTH,
@@ -981,7 +960,7 @@ static void addGameOptions(BOOL bRedo)
 			widgSetButtonState(psWScreen, MULTIOP_DEFENCE,WBUT_LOCK);
 			break;
 		}
-	}
+
 	addBlueForm(MULTIOP_OPTIONS, MULTIOP_MAP_PREVIEW, _("Map Preview"), MCOL0, MROW9, MULTIOP_BLUEFORMW, 27);
 	addMultiBut(psWScreen,MULTIOP_MAP_PREVIEW, MULTIOP_MAP_BUT, MCOL2, 2, MULTIOP_BUTW, MULTIOP_BUTH, 
 	            _("Click to see Map"), IMAGE_FOG_OFF, IMAGE_FOG_OFF_HI, true);
@@ -1493,7 +1472,7 @@ UDWORD addPlayerBox(BOOL players)
 	{
 		for(i=0;i<game.maxPlayers;i++)
 		{
-			if(ingame.localOptionsReceived && game.type == SKIRMISH)	// skirmish only
+			if(ingame.localOptionsReceived)
 			{
 				//add team chooser
 				memset(&sButInit, 0, sizeof(W_BUTINIT));
@@ -1561,7 +1540,7 @@ UDWORD addPlayerBox(BOOL players)
 					widgAddButton(psWScreen, &sButInit);
 				}
 			}
-			else if (game.type == SKIRMISH)	// skirmish AI player
+			else	// AI player
 			{
 				memset(&sFormInit, 0, sizeof(W_BUTINIT));
 				sFormInit.formID = MULTIOP_PLAYERS;
@@ -1695,8 +1674,6 @@ static void disableMultiButs(void)
 		if( game.fog) widgSetButtonState(psWScreen,MULTIOP_FOG_OFF ,WBUT_DISABLE);		//fog
 		if(!game.fog) widgSetButtonState(psWScreen,MULTIOP_FOG_ON ,WBUT_DISABLE);
 
-		if(	game.type == CAMPAIGN || game.type == SKIRMISH)
-		{
 			if(game.base != CAMP_CLEAN)	widgSetButtonState(psWScreen,MULTIOP_CLEAN ,WBUT_DISABLE);	// camapign subtype.
 			if(game.base != CAMP_BASE)	widgSetButtonState(psWScreen,MULTIOP_BASE ,WBUT_DISABLE);
 			if(game.base != CAMP_WALLS)	widgSetButtonState(psWScreen,MULTIOP_DEFENCE,WBUT_DISABLE);
@@ -1704,14 +1681,10 @@ static void disableMultiButs(void)
 			if(game.power != LEV_LOW)	widgSetButtonState(psWScreen, MULTIOP_POWLEV_LOW,WBUT_DISABLE);		// pow levels
 			if(game.power != LEV_MED)	widgSetButtonState(psWScreen, MULTIOP_POWLEV_MED,WBUT_DISABLE);
 			if(game.power != LEV_HI )	widgSetButtonState(psWScreen, MULTIOP_POWLEV_HI,WBUT_DISABLE);
-		}
 
-		if (game.type == SKIRMISH)
-		{
 			if(game.alliance != NO_ALLIANCES)	widgSetButtonState(psWScreen,MULTIOP_ALLIANCE_N ,WBUT_DISABLE);	//alliance settings.
 			if(game.alliance != ALLIANCES)	widgSetButtonState(psWScreen,MULTIOP_ALLIANCE_Y ,WBUT_DISABLE);
 			if(game.alliance != ALLIANCES_TEAMS)	widgSetButtonState(psWScreen,MULTIOP_ALLIANCE_TEAMS ,WBUT_DISABLE);
-		}
 	}
 }
 
@@ -1808,9 +1781,9 @@ static void processMultiopWidgets(UDWORD id)
 			widgSetButtonState(psWScreen, MULTIOP_CAMPAIGN, WBUT_LOCK);
 			widgSetButtonState(psWScreen, MULTIOP_SKIRMISH,0);
 			game.type = CAMPAIGN;
+			NetPlay.maxPlayers = game.maxPlayers - 1;
 			widgSetString(psWScreen, MULTIOP_MAP, DEFAULTCAMPAIGNMAP);
 			sstrcpy(game.map,widgGetString(psWScreen, MULTIOP_MAP));
-			game.alliance = NO_ALLIANCES;
 			addGameOptions(false);
 			break;
 
@@ -1818,6 +1791,7 @@ static void processMultiopWidgets(UDWORD id)
 			widgSetButtonState(psWScreen, MULTIOP_CAMPAIGN,0 );
 			widgSetButtonState(psWScreen, MULTIOP_SKIRMISH,WBUT_LOCK);
 			game.type = SKIRMISH;
+			NetPlay.maxPlayers = game.maxPlayers;
 			widgSetString(psWScreen, MULTIOP_MAP, DEFAULTSKIRMISHMAP);
 			sstrcpy(game.map,widgGetString(psWScreen, MULTIOP_MAP));
 			addGameOptions(false);
@@ -2514,6 +2488,10 @@ void runMultiOptions(void)
 			case MULTIOP_MAP:
 				sstrcpy(game.map, sTemp);
 				game.maxPlayers =(UBYTE) value;
+				if (value == 8 || game.type == SKIRMISH)
+				{
+					processMultiopWidgets(MULTIOP_SKIRMISH);	// fake click on 'no scavengers'
+				}
 				loadMapPreview();
 
 				widgSetString(psWScreen,MULTIOP_MAP,sTemp);
