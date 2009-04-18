@@ -2579,8 +2579,6 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 			PLAYERSTATS		playerStats;
 
 			game			= saveGameData.sGame;
-			NetPlay			= saveGameData.sNetPlay;
-			selectedPlayer	= saveGameData.savePlayer;
 			productionPlayer= selectedPlayer;
 			bMultiPlayer	= saveGameData.multiPlayer;
 			cmdDroidMultiExpBoost(true);
@@ -4706,8 +4704,6 @@ bool gameLoadV(PHYSFS_file* fileHandle, unsigned int version)
 			PLAYERSTATS		playerStats;
 
 			bMultiPlayer	= saveGameData.multiPlayer;
-			NetPlay			= saveGameData.sNetPlay;
-			selectedPlayer	= saveGameData.savePlayer;
 			productionPlayer = selectedPlayer;
 			game			= saveGameData.sGame;
 			cmdDroidMultiExpBoost(true);
