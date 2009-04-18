@@ -51,7 +51,7 @@ def convertdir(dir):
 
 		lua_vlo = path.replace('.vlo', '.lua')
 		lua_slo = os.path.join(os.path.dirname(path), os.path.basename(slofile.replace('.slo', '_logic.lua')))
-		print 'processing', vlofile, slofile, "->", lua_vlo, lua_slo
+		print 'processing', vlofile
 		os.system("%s %s %s %s %s" % (os.path.normpath('tools/wz2lua/wz2lua.py'), vlofile, slofile, lua_vlo, lua_slo))
 
 # remove the old files

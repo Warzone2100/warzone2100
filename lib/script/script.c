@@ -103,6 +103,8 @@ static lua_State *scrLoadState(const char *filename)
 	luaWZ_dofile(L, "script/event.lua");
 	luaWZ_dofile(L, "script/group.lua");
 	luaWZ_dofile(L, "script/glue.lua");
+	luaWZ_dofile(L, "script/functions.lua");
+	luaWZ_dofile(L, "script/version.lua");
 	
 	if (luaWZ_dofile(L, filename))
 	{

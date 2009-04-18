@@ -1,6 +1,6 @@
 --[[
 	This file is part of Warzone 2100.
-	Copyright (C) 2005-2008  Warzone Resurrection Project
+	Copyright (C) 2008-2009  Warzone Resurrection Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -56,24 +56,6 @@ end
 -- use the debug library as we can then set metatables for any type
 debug.setmetatable(true, __boolean_meta)
 
-function Array(a, b)
-	local new_array = {}
-	local i,j
-	if not b then
-		for i=0,a do
-			new_array[i] = 0
-		end
-	else
-		for i=0,a do
-			new_array[i] = {}
-			for j=0,b do
-				new_array[i][j] = 0
-			end
-		end
-	end
-	return new_array
-end
-
 -- A dofile that will prepend the path of the script that calls it
 __dofile = dofile
 function dofile(filename)
@@ -96,105 +78,3 @@ function dofile(filename)
 	end
 	return __dofile(path..filename)
 end
-
--- Some legacy names
-EnumDroid = enumDroid
-InitEnumDroids = initEnumDroids
-MsgBox = msgBox
-
--- These are script api functions which are written in Lua
-
-function setLandingZone(x1, y1, x2, y2)
-    setNoGoArea(x1, y1, x2, y2, 0)
-end
-
-function random(upper)
-	if upper < 1 then
-		error('cannot call random with a negative value', 2)
-	end
-	return math.random(0, upper-1)
-end
-math.randomseed(os.time())
-
-function distBetweenTwoPoints(x1, y1, x2, y2)
-	return math.sqrt( math.pow(x1-x2, 2) + math.pow(y1-y2, 2) )
-end
-
-function ASSERT(check, message, me)
-	if not check then error("Player "..me..": "..message, 2) end
-end
-
-function objToStructure(object)
-	if not object.type == "structure" then error("object is not a structure", 2) end
-	return object
-end
-
-function objToDroid(object)
-	if not object.type == "droid" then error("object is not a droid", 2) end
-	return object
-end
-
-min = math.min
-fmin = min
-max = math.max
-fmax = max
-toPow = math.pow
-
-function modulo(a, b)
-	return a % b
-end
-
--- Functions for counting things in a range
--- all objects
-function scrNumFriendlyWeapObjInRange(me, x, y, range, vtols, finished)
-	local count
-	count =         numFriendlyWeapDroidsInRange(me, x, y, range, vtols)
-	count = count + numFriendlyWeapStructsInRange(me, x, y, range, finished) 
-	return count
-end
-
-function scrNumPlayerWeapObjInRange(player, me, x, y, range, vtols, finished)
-	local count
-	count =         numPlayerWeapDroidsInRange(player, me, x, y, range, vtols)
-	count = count + numPlayerWeapStructsInRange(player, me, x, y, range, finished) 
-	return count
-end
-
--- droids
-function numWeapDroidsInRange(me, x, y, range, vtols, friendly)
-	local count = 0
-	local ally
-	for player=0,MAX_PLAYERS-1 do
-		ally = allianceExistsBetween(me, player) or me == player
-		if (ally and friendly) or (not ally and not friendly) then
-			count = count + numPlayerWeapDroidsInRange(player, me, x, y, range, vtols) 
-		end
-	end
-	return count
-end
-function numEnemyWeapDroidsInRange(me, x, y, range, vtols)
-	return numWeapDroidsInRange(me, x, y, range, vtols, false)
-end
-function numFriendlyWeapDroidsInRange(me, x, y, range, vtols)
-	return numWeapDroidsInRange(me, x, y, range, vtols, true)
-end
-
--- structs
-function numWeapStructsInRange(me, x, y, range, finished, friendly)
-	local count = 0
-	local ally
-	for player=0,MAX_PLAYERS-1 do
-		ally = allianceExistsBetween(me, player) or me == player
-		if (ally and friendly) or (not ally and not friendly) then
-			count = count + numPlayerWeapStructsInRange(player, me, x, y, range, finished) 
-		end
-	end
-	return count
-end
-function numEnemyWeapStructsInRange(me, x, y, range, finished)
-	return numWeapStructsInRange(me, x, y, range, finished, false)
-end
-function numFriendlyWeapStructsInRange(me, x, y, range, finished)
-	return numWeapStructsInRange(me, x, y, range, finished, true)
-end
-
