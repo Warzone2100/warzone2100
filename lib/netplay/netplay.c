@@ -371,7 +371,7 @@ error:
 	return false;
 }
 
-static void NET_InitPlayers(void)
+void NET_InitPlayers()
 {
 	unsigned int i;
 

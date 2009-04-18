@@ -227,5 +227,6 @@ extern BOOL NETsetupTCPIP(const char *machine);
 
 extern void NETBroadcastPlayerInfo(uint32_t index);
 extern void NETCheckVersion(uint32_t player);
+extern void NET_InitPlayers(void);
 
 #endif

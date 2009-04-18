@@ -10826,7 +10826,7 @@ BOOL loadSaveFlagV(char *pFileData, UDWORD filesize, UDWORD numflags, UDWORD ver
 		psflag->screenX = psSaveflag->screenX;			//screen coords and radius of Position imd
 		psflag->screenY = psSaveflag->screenY;
 		psflag->screenR = psSaveflag->screenR;
-		psflag->player = psSaveflag->player;			//which player the Position belongs to
+		psflag->player = RemapPlayerNumber(psSaveflag->player);	// which player the position belongs to
 		psflag->selected = psSaveflag->selected;		//flag to indicate whether the Position
 		psflag->coords = psSaveflag->coords;			//the world coords of the Position
 		psflag->factoryInc = psSaveflag->factoryInc;	//indicates whether the first, second etc factory

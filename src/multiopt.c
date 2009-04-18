@@ -644,6 +644,15 @@ static BOOL campInit(void)
 		cleanMap(player);
 	}
 
+	// Remove baba player for skirmish
+	if (game.type == SKIRMISH)
+	{
+		for (player = game.maxPlayers; player < MAX_PLAYERS; player++)
+		{
+			clearPlayer(player, true, false);
+		}
+	}
+
 	if (NetPlay.isHost)	// add oil drums
 	{
 		addOilDrum(NetPlay.playercount * 2);
