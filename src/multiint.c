@@ -1768,39 +1768,6 @@ static void stopJoining(void)
 		}
 }
 
-////////////////////////////////////////////////////////////////////////////
-static void chooseSkirmishColours(void)
-{
-	UDWORD col,i,k;
-	BOOL taken;
-
-	col=0;
-	for(i=0;i<MAX_PLAYERS;i++)	// assign each pc player a colour.
-	{
-		if(!isHumanPlayer(i))	// pick a colour for this player.
-		{
-			taken = true;		// go to next unused colour.
-			while(taken)
-			{
-				taken = false;
-				for(k=0;k<MAX_PLAYERS;k++)
-				{
-					if(isHumanPlayer(k) && getPlayerColour(k) == col)
-					{
-						taken = true;// already taken.
-					}
-				}
-				if(taken)
-				{
-					col++;
-				}
-			}
-			setPlayerColour(i,col);
-			col++;
-		}
-	}
-}
-
 /*
  * Process click events on the multiplayer/skirmish options screen
  * 'id' is id of the button that was pressed
@@ -2266,12 +2233,7 @@ void startMultiplayerGame(void)
 
 	if (NetPlay.isHost)
 	{
-		if(game.type == SKIRMISH)
-		{
-			chooseSkirmishColours();
-			sendOptions();
-		}
-
+		sendOptions();
 		NEThaltJoining();							// stop new players entering.
 		SendFireUp();								//bcast a fireup message
 	}

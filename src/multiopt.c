@@ -252,7 +252,6 @@ BOOL hostCampaign(char *sGame, char *sPlayer)
 		setPlayerName(i, ""); //Clear custom names (use default ones instead)
 	}
 
-	NetPlay.players[selectedPlayer].position = rand() % game.maxPlayers;	// Pick a starting position
 	NetPlay.players[selectedPlayer].ready = false;
 
 	ingame.localJoiningInProgress = true;

@@ -100,7 +100,7 @@
 /// @note This represents a size internal to savegame files, so: DO NOT CHANGE THIS
 #define MAX_GAME_STR_SIZE 20
 
-UDWORD RemapPlayerNumber(UDWORD OldNumber);
+static UDWORD RemapPlayerNumber(UDWORD OldNumber);
 
 typedef struct _game_save_header
 {
@@ -5116,9 +5116,20 @@ DROID_TEMPLATE *FindDroidTemplate(const char * const name)
 
 
 // -----------------------------------------------------------------------------------------
-UDWORD RemapPlayerNumber(UDWORD OldNumber)
+// Remaps old player number based on position on map to new owner
+static UDWORD RemapPlayerNumber(UDWORD OldNumber)
 {
-	return(OldNumber);
+	int i;
+
+	for (i = 0; i < MAX_PLAYERS; i++)
+	{
+		if (OldNumber == NetPlay.players[i].position)
+		{
+			return i;
+		}
+	}
+	ASSERT(false, "Found no player position for player %d", (int)OldNumber);
+	return 0;
 }
 
 // -----------------------------------------------------------------------------------------
@@ -6108,6 +6119,9 @@ BOOL loadSaveDroidV11(char *pFileData, UDWORD filesize, UDWORD numDroids, UDWORD
 			endian_udword(&psSaveDroid->asWeaps[i].lastFired);
 		}
 
+		// Give it to the correct player
+		psSaveDroid->player = RemapPlayerNumber(psSaveDroid->player);
+
 		// Here's a check that will allow us to load up save games on the playstation from the PC
 		//  - It will skip data from any players after MAX_PLAYERS
 		if (psSaveDroid->player >= MAX_PLAYERS)
@@ -6259,6 +6273,9 @@ BOOL loadSaveDroidV19(char *pFileData, UDWORD filesize, UDWORD numDroids, UDWORD
 			endian_udword(&psSaveDroid->asWeaps[i].ammo);
 			endian_udword(&psSaveDroid->asWeaps[i].lastFired);
 		}
+
+		// Give it to the correct player
+		psSaveDroid->player = RemapPlayerNumber(psSaveDroid->player);
 
 		// Here's a check that will allow us to load up save games on the playstation from the PC
 		//  - It will skip data from any players after MAX_PLAYERS
@@ -6420,6 +6437,9 @@ BOOL loadSaveDroidV(char *pFileData, UDWORD filesize, UDWORD numDroids, UDWORD v
 			endian_udword(&psSaveDroid->asWeaps[i].ammo);
 			endian_udword(&psSaveDroid->asWeaps[i].lastFired);
 		}
+
+		// Give it to the correct player
+		psSaveDroid->player = RemapPlayerNumber(psSaveDroid->player);
 
 		// Here's a check that will allow us to load up save games on the playstation from the PC
 		//  - It will skip data from any players after MAX_PLAYERS
@@ -12122,22 +12142,17 @@ BOOL plotStructurePreview16(char *backDropSprite, UBYTE scale, UDWORD offX, UDWO
 				yy = map_coord(psSaveStructure->y);
 			}
 		}
-		// if human player, then use clan color.  If AI, then use something else.
-		if( isHumanPlayer(playerid) )
+		playerid = getPlayerColour(RemapPlayerNumber(playerid));
+		// kludge to fix black, so you can see it on some maps.
+		if (playerid == 3)	// in this case 3 = pallete entry for black.
 		{
-			playerid = (UDWORD) getPlayerColour(playerid);
-			color.rgba = clanColours[playerid].rgba;
-			// kludge to fix black, so you can see it on some maps.
-			if ( playerid == 3 )	// in this case 3 = pallete entry for black.
-			{
-				color = WZCOL_GREY;
-			}
+			color = WZCOL_GREY;
 		}
 		else
-		{	// Use a dark green color for the AI
-			color = WZCOL_MAP_PREVIEW_AIPLAYER ;
+		{
+			color.rgba = clanColours[playerid].rgba;
 		}
-
+		
 		if(HQ)
 		{	// This shows where the HQ is on the map in a special color.
 			// We could do the same for anything else (oil/whatever) also.
