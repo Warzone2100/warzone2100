@@ -107,10 +107,10 @@ typedef struct _maptile
 	short			limitedContinent;	/** For land or sea limited propulsion types */
 	short			hoverContinent;		/** For hover type propulsions */
 
-	int             ground;
-	BOOL            decal;
+	int             ground; ///< The ground type used for the terrain renderer
+	BOOL            decal;  ///< Does this tile has a decal? If so, the tile from "texture" is drawn on top of the terrain.
 	float			height_new; // FIXME: replace height with a float and remove this one
-	float           waterLevel;
+	float           waterLevel; ///< At what height is the water for this tile
 //	TYPE_OF_TERRAIN	type;			// The terrain type for the tile
 } MAPTILE;
 
