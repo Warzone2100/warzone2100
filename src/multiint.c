@@ -1781,7 +1781,7 @@ static void processMultiopWidgets(UDWORD id)
 			widgSetButtonState(psWScreen, MULTIOP_CAMPAIGN, WBUT_LOCK);
 			widgSetButtonState(psWScreen, MULTIOP_SKIRMISH,0);
 			game.type = CAMPAIGN;
-			NetPlay.maxPlayers = game.maxPlayers - 1;
+			NetPlay.maxPlayers = MIN(game.maxPlayers, 7);
 			widgSetString(psWScreen, MULTIOP_MAP, DEFAULTCAMPAIGNMAP);
 			sstrcpy(game.map,widgGetString(psWScreen, MULTIOP_MAP));
 			addGameOptions(false);
