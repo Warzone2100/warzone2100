@@ -395,7 +395,6 @@ BOOL loadConfig(void)
 	// favourite colour
 	if(!bMultiPlayer)
 	{
-		initPlayerColours();	// clear current maps.
 		if(getWarzoneKeyNumeric("colour", &val))
 		{
 			setPlayerColour(0, val);

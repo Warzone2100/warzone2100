@@ -384,7 +384,7 @@ static void NET_InitPlayers(void)
 		NetPlay.players[i].name[0] = '\0';
 		NetPlay.players[i].colour = i;
 		NetPlay.players[i].ready = false;
-		NetPlay.players[i].team = -1;
+		NetPlay.players[i].team = i;
 		NetPlay.players[i].versionCheckTime = 0xffffffff;
 		NetPlay.players[i].playerVersionFlag = false;
 	}

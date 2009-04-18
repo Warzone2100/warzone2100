@@ -40,8 +40,6 @@ extern	BOOL	chooseColour			(UDWORD);
 extern BOOL addMultiBut(W_SCREEN *screen, UDWORD formid, UDWORD id, UDWORD x, UDWORD y, UDWORD width, UDWORD height, const char* tipres, UDWORD norm, UDWORD down, UDWORD hi);
 
 extern	char	sPlayer[128];
-extern	SDWORD	playerTeamGUI[MAX_PLAYERS];
-extern	SDWORD	playerTeam[MAX_PLAYERS];
 
 void	kickPlayer(uint32_t dpid, const char *reason);
 UDWORD	addPlayerBox(BOOL);			// players (mid) box

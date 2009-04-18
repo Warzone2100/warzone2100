@@ -111,9 +111,7 @@ extern void intDisplayTemplateButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yO
 BOOL						bHosted			= false;				//we have set up a game
 char						sPlayer[128];							// player name (to be used)
 static BOOL					bColourChooserUp= false;
-static BOOL					bTeamChooserUp[MAX_PLAYERS]= {false,false,false,false,false,false,false,false};
-SDWORD						playerTeamGUI[MAX_PLAYERS] = {0,1,2,3,4,5,6,7};		//team each player belongs to (in skirmish setup screen)
-SDWORD						playerTeam[MAX_PLAYERS] = {-1,-1,-1,-1,-1,-1,-1,-1};		//team each player belongs to (in the game)
+static int					teamChooserUp = -1;
 static BOOL				SettingsUp		= false;
 static UBYTE				InitialProto	= 0;
 static W_SCREEN				*psConScreen;
@@ -1056,22 +1054,6 @@ BOOL chooseColour(UDWORD player)
 	return true;
 }
 
-/*
- * Checks if a team chooser dialog is up
- * returns index of the player who was choosing a team or -1 if none open
- */
-static SDWORD teamChooserUp(void)
-{
-	UDWORD i;
-	for(i=0;i<MAX_PLAYERS;i++)
-	{
-		if(bTeamChooserUp[i])
-			return i;
-	}
-
-	return -1;		//none
-}
-
 static void addColourChooser(UDWORD player)
 {
 	UDWORD i;
@@ -1260,8 +1242,9 @@ static BOOL changePosition(UBYTE player, UBYTE chosenPlayer)
 
 static BOOL changeColour(UBYTE player, UBYTE col)
 {
-	if(!safeToUseColour(player,col))
+	if (!safeToUseColour(player, col))
 	{
+		debug(LOG_NET, "Unavailable colour %d", (int)col);
 		return false;
 	}
 
@@ -1366,7 +1349,7 @@ static void addTeamChooser(UDWORD player)
 	int disallow = ANYENTRY;
 	SDWORD inSlot[MAX_PLAYERS] = {0};
 
-	debug(LOG_NET, "opened team chooser for %d, current team: %d", player, playerTeamGUI[player]);
+	debug(LOG_NET, "Opened team chooser for %d, current team: %d", player, NetPlay.players[player].team);
 
 	// delete team chooser botton
 	widgDelete(psWScreen,MULTIOP_TEAMS_START+player);
@@ -1386,13 +1369,13 @@ static void addTeamChooser(UDWORD player)
 	// tally up the team counts
 	for (i=0; i< game.maxPlayers ; i++)
 	{
-		inSlot[playerTeamGUI[i]]++;
+		inSlot[NetPlay.players[i].team]++;
 	}
 
 	// Make sure all players can't be on same team.
 	if ( game.maxPlayers <= 2 )	// 2p game
 	{
-		disallow = player ? playerTeamGUI[0] : playerTeamGUI[1];
+		disallow = player ? NetPlay.players[0].team : NetPlay.players[1].team;
 	}
 	else
 		if ( game.maxPlayers > 2 && game.maxPlayers <= 8)	// 4 or 8p game
@@ -1408,7 +1391,7 @@ static void addTeamChooser(UDWORD player)
 				}
 			}
 			range = game.maxPlayers <= 4 ? 2 : 6 ;
-			if ( inSlot[maxslot] <= range  || playerTeamGUI[player] == maxslot)
+			if ( inSlot[maxslot] <= range  || NetPlay.players[player].team == maxslot)
 			{
 				disallow = ANYENTRY;	// we can pick any slot
 			}
@@ -1430,7 +1413,7 @@ static void addTeamChooser(UDWORD player)
 		// may want to add some kind of 'can't do' icon instead of being blank?
 	}
 
-	bTeamChooserUp[player] = true;
+	teamChooserUp = player;
 }
 
 /*
@@ -1438,19 +1421,7 @@ static void addTeamChooser(UDWORD player)
  */
 static void closeTeamChooser(void)
 {
-	UDWORD i;
-	for(i=0; i<MAX_PLAYERS;i++)
-	{
-		if(bTeamChooserUp[i])
-		{
-			debug(LOG_WZ, "closed team chooser for %d, current team: %d", i, playerTeamGUI[i]);
-
-			bTeamChooserUp[i] = false;
-
-			ASSERT(teamChooserUp() < 0, "closeTeamChooser: more than one team chooser open (%d)", teamChooserUp());
-		}
-	}
-
+	teamChooserUp = -1;
 	widgDelete(psWScreen,MULTIOP_TEAMCHOOSER_FORM);	//only once!
 }
 
@@ -1478,6 +1449,11 @@ static void drawReadyButton(UDWORD player)
 			4,MULTIOP_READY_WIDTH,MULTIOP_READY_HEIGHT,
 			_("Click when ready"),IMAGE_CHECK_OFF,IMAGE_CHECK_OFF,true);
 	}
+}
+
+static bool canChooseTeamFor(int i)
+{
+	return (i == selectedPlayer || (!isHumanPlayer(i) && NetPlay.isHost));
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -1526,12 +1502,19 @@ UDWORD addPlayerBox(BOOL players)
 				sButInit.y = (UWORD)(( (MULTIOP_TEAMSHEIGHT+5)*i)+4);
 				sButInit.width = MULTIOP_TEAMSWIDTH;
 				sButInit.height = MULTIOP_TEAMSHEIGHT;
-				sButInit.pTip = "Choose team";	//Players[i].name;
+				if (canChooseTeamFor(i))
+				{
+					sButInit.pTip = "Choose team";
+				}
+				else
+				{
+					sButInit.pTip = NULL;
+				}
 				sButInit.FontID = font_regular;
-				sButInit.pDisplay = displayTeamChooser;//intDisplayButtonHilight;
+				sButInit.pDisplay = displayTeamChooser;
 				sButInit.UserData = i;
 
-				if(bTeamChooserUp[i] && !bColourChooserUp )
+				if (teamChooserUp == i && !bColourChooserUp)
 				{
 					addTeamChooser(i);
 				}
@@ -1546,6 +1529,7 @@ UDWORD addPlayerBox(BOOL players)
 				// add a 'ready' button
 				drawReadyButton(i);
 
+				// draw player info box
 				memset(&sButInit, 0, sizeof(W_BUTINIT));
 				sButInit.formID = MULTIOP_PLAYERS;
 				sButInit.id = MULTIOP_PLAYER_START+i;
@@ -1554,21 +1538,28 @@ UDWORD addPlayerBox(BOOL players)
 				sButInit.y = (UWORD)(( (MULTIOP_PLAYERHEIGHT+5)*i)+4);
 				sButInit.width = MULTIOP_PLAYERWIDTH - MULTIOP_TEAMSWIDTH - MULTIOP_READY_WIDTH;
 				sButInit.height = MULTIOP_PLAYERHEIGHT;
-				sButInit.pTip = NULL;//Players[i].name;
+				if (selectedPlayer == i)
+				{
+					sButInit.pTip = "Click to change player settings";
+				}
+				else
+				{
+					sButInit.pTip = NULL;
+				}
 				sButInit.FontID = font_regular;
-				sButInit.pDisplay = displayPlayer;//intDisplayButtonHilight;
+				sButInit.pDisplay = displayPlayer;
 				sButInit.UserData = i;
 
-				if (bColourChooserUp && teamChooserUp() < 0 && i == selectedPlayer)
+				if (bColourChooserUp && teamChooserUp < 0 && i == selectedPlayer)
 				{
 					addColourChooser(i);
 				}
-				else if(i != teamChooserUp())	//display player number/color only if not selecting team for this player
+				else if (i != teamChooserUp)	// Display player number/color only if not selecting team for this player
 				{
 					widgAddButton(psWScreen, &sButInit);
 				}
 			}
-			else if(game.type == SKIRMISH)	// skirmish player
+			else if (game.type == SKIRMISH)	// skirmish AI player
 			{
 				memset(&sFormInit, 0, sizeof(W_BUTINIT));
 				sFormInit.formID = MULTIOP_PLAYERS;
@@ -1578,8 +1569,15 @@ UDWORD addPlayerBox(BOOL players)
 				sFormInit.y = (UWORD)(( (MULTIOP_PLAYERHEIGHT+5)*i)+4);
 				sFormInit.width = MULTIOP_ROW_WIDTH;
 				sFormInit.height = MULTIOP_PLAYERHEIGHT;
-				sFormInit.pTip = NULL;//Players[i].name;
-				sFormInit.pDisplay = displayPlayer;//intDisplayButtonHilight;
+				if (NetPlay.isHost)
+				{
+					sFormInit.pTip = "Click to adjust AI difficulty";
+				}
+				else
+				{
+					sFormInit.pTip = NULL;
+				}
+				sFormInit.pDisplay = displayPlayer;
 				sFormInit.UserData = i;
 				widgAddForm(psWScreen, &sFormInit);
 				addFESlider(MULTIOP_SKSLIDE+i,sFormInit.id, 43,9, DIFF_SLIDER_STOPS,
@@ -1937,7 +1935,6 @@ static void processMultiopWidgets(UDWORD id)
 
 			widgSetButtonState(psWScreen, MULTIOP_ALLIANCE_TEAMS,0);
 			// Host wants NO alliance, so reset all teams back to default
-			initTeams();
 			game.alliance = NO_ALLIANCES;	//0;
 
 			resetReadyStatus(false);
@@ -2117,42 +2114,29 @@ static void processMultiopWidgets(UDWORD id)
 		break;
 	}
 
-	//pop-up team chooser
-	if((id >= MULTIOP_TEAMS_START) && (id <= MULTIOP_TEAMS_END))	// clicked on a team chooser
+	if (id >= MULTIOP_TEAMS_START && id <= MULTIOP_TEAMS_END)		// Clicked on a team chooser
 	{
-		UDWORD clickedMenuID = id-MULTIOP_TEAMS_START,playerNetID;
-		BOOL	bClickedOnMe = (clickedMenuID == selectedPlayer);
-
-		//find net player id
-		for (playerNetID = 0; playerNetID <= MAX_PLAYERS && selectedPlayer != playerNetID; playerNetID++);
-
-		ASSERT(playerNetID < MAX_PLAYERS, "processMultiopWidgets: failed to find playerNetID for player %d", selectedPlayer);
+		int clickedMenuID = id - MULTIOP_TEAMS_START;
 
 		//make sure team chooser is not up before adding new one for another player
-		if(teamChooserUp() < 0 && !bColourChooserUp)
+		if (teamChooserUp < 0 && !bColourChooserUp && canChooseTeamFor(clickedMenuID))
 		{
-			if(bClickedOnMe		//player selecting team for himself	(clicked on his menu)
-				|| (NetPlay.isHost						//local player=host
-				&& !(NetPlay.players[clickedMenuID].connection >= 0 && !bClickedOnMe)	//human and not me
-				))
-				addTeamChooser(clickedMenuID);
+			addTeamChooser(clickedMenuID);
 		}
 	}
 
 	//clicked on a team
 	if((id >= MULTIOP_TEAMCHOOSER) && (id <= MULTIOP_TEAMCHOOSER_END))
 	{
-		ASSERT(teamChooserUp() >= 0, "processMultiopWidgets: teamChooserUp() < 0");
+		ASSERT(teamChooserUp >= 0, "teamChooserUp < 0");
 		ASSERT(id >= MULTIOP_TEAMCHOOSER
 		    && (id - MULTIOP_TEAMCHOOSER) < MAX_PLAYERS, "processMultiopWidgets: wrong id - MULTIOP_TEAMCHOOSER value (%d)", id - MULTIOP_TEAMCHOOSER);
 
 		resetReadyStatus(false);		// will reset only locally if not a host
 
-		SendTeamRequest(teamChooserUp(),(UBYTE)id-MULTIOP_TEAMCHOOSER);
+		SendTeamRequest(teamChooserUp, (UBYTE)id - MULTIOP_TEAMCHOOSER);
 
-		//playerTeamGUI[teamChooserUp()] = id - MULTIOP_TEAMCHOOSER;
-
-		debug(LOG_WZ, "Changed team for player %d to %d", teamChooserUp(), playerTeamGUI[teamChooserUp()]);
+		debug(LOG_WZ, "Changed team for player %d to %d", teamChooserUp, NetPlay.players[teamChooserUp].team);
 
 		closeTeamChooser();
 		addPlayerBox(  !ingame.bHostSetup || bHosted);	//restore initial options screen
@@ -2192,7 +2176,7 @@ static void processMultiopWidgets(UDWORD id)
 	{
 		if (id - MULTIOP_PLAYER_START == selectedPlayer)
 		{
-			if(teamChooserUp() < 0)		//not choosing team already
+			if (teamChooserUp < 0)		// not choosing team already
 				addColourChooser(id-MULTIOP_PLAYER_START);
 		}
 		else // options for kick out, etc..
@@ -2609,20 +2593,6 @@ void runMultiOptions(void)
 	}
 }
 
-// ////////////////////////////////////////////////////////////////////////////
-void initTeams()
-{
-	int i;
-
-	for(i=0; i < MAX_PLAYERS; i++)
-	{
-		bTeamChooserUp[i] = false;			// default is all false
-		playerTeam[i] = -1;					//team each player belongs to (in the game) default = -1
-		playerTeamGUI[i] = i;				//team each player belongs to (in skirmish setup screen)
-	}
-
-}
-
 BOOL startMultiOptions(BOOL bReenter)
 {
 	PLAYERSTATS		nullStats;
@@ -2633,8 +2603,7 @@ BOOL startMultiOptions(BOOL bReenter)
 
 	if(!bReenter)
 	{
-		initPlayerColours();			 // force a colour clearout.
-		initTeams();					// reset teams to defaults.
+		teamChooserUp = -1;
 		for(i=0;i<MAX_PLAYERS;i++)
 		{
 //			game.skirmishPlayers[i] = 1; // clear out skirmish setting
@@ -2813,13 +2782,12 @@ void displayTeamChooser(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIG
 		Hilight = true;
 	}
 
-	ASSERT(playerTeamGUI[i] >= 0 && playerTeamGUI[i] < MAX_PLAYERS,
-		"displayTeamChooser: playerTeamGUI out of bounds" );
+	ASSERT(i < MAX_PLAYERS && NetPlay.players[i].team >= 0 && NetPlay.players[i].team < MAX_PLAYERS, "Team index out of bounds" );
 
 	//bluboxes.
 	drawBlueBox(x,y,psWidget->width,psWidget->height);							// right
 
-	iV_DrawImage(FrontImages,IMAGE_TEAM0 + playerTeamGUI[i],x+3,y+6);
+	iV_DrawImage(FrontImages, IMAGE_TEAM0 + NetPlay.players[i].team, x + 3, y + 6);
 }
 
 // ////////////////////////////////////////////////////////////////////////////

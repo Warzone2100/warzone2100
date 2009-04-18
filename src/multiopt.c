@@ -621,10 +621,8 @@ static BOOL cleanMap(UDWORD player)
 static BOOL campInit(void)
 {
 	UDWORD			player;
-	UBYTE		newPlayerArray[MAX_PLAYERS];
-	SDWORD		newPlayerTeam[MAX_PLAYERS] = {-1,-1,-1,-1,-1,-1,-1,-1};
 
-// if this is from a savegame, stop here!
+	// If this is from a savegame, stop here!
 	if((getSaveGameType() == GTYPE_SAVE_START)
 	|| (getSaveGameType() == GTYPE_SAVE_MIDMISSION)	)
 	{
@@ -637,47 +635,6 @@ static BOOL campInit(void)
 		return true;
 	}
 
-	//Convert skirmish GUI player ids to in-game ids
-	if(game.type == SKIRMISH)
-	{
-		unsigned int i;
-		unsigned int lastAI = 0; // last used AI slot
-
-		memset(newPlayerArray,1,MAX_PLAYERS * sizeof(newPlayerArray[0]));		//'1' for humans
-		for(i = 0; i < MAX_PLAYERS; ++i)
-		{
-			if(game.skDiff[i] < UBYTE_MAX )		//slot with enabled or disabled AI
-			{
-				unsigned int player;
-
-				//find first unused slot
-				for (player = lastAI;
-				     player < MAX_PLAYERS && isHumanPlayer(player); // skip humans
-				     ++player);
-
-				ASSERT(player < MAX_PLAYERS, "couldn't find free slot while assigning AI %u, lastAI=%u", i, lastAI);
-
-				newPlayerArray[player] = game.skDiff[i];		//copy over
-				newPlayerTeam[player] = playerTeamGUI[i];
-
-				//remove player if it was disabled in menus
-				if(game.skDiff[i] == 0)
-					clearPlayer(player,true,false);
-
-				lastAI = player;
-				lastAI++;
-			}
-			else if(game.skDiff[i] == UBYTE_MAX)	//human player
-			{
-				newPlayerTeam[i] = playerTeamGUI[i];	// FIXME TODO ??
-			}
-
-		}
-
-		memcpy(game.skDiff,newPlayerArray,MAX_PLAYERS  * sizeof(newPlayerArray[0]));
-		memcpy(playerTeam,newPlayerTeam,MAX_PLAYERS * sizeof(newPlayerTeam[0]));
-	}
-
 	for(player = 0;player<game.maxPlayers;player++)			// clean up only to the player limit for this map..
 	{
 		if( (!isHumanPlayer(player)) && game.type != SKIRMISH)	// strip away unused players
@@ -688,22 +645,9 @@ static BOOL campInit(void)
 		cleanMap(player);
 	}
 
-	// optionally remove other computer players.
-	// HACK: if actual number of players is 8, then drop baba player to avoid
-	// exceeding player number (babas need a player, too!) - Per
-	if ((game.type == CAMPAIGN && game.maxPlayers > 7) || game.type == SKIRMISH)
+	if (NetPlay.isHost)	// add oil drums
 	{
-		for(player=game.maxPlayers;player<MAX_PLAYERS;player++)
-		{
-			clearPlayer(player,true,false);
-		}
-	}
-
-	// add free research gifts..
-	if(NetPlay.isHost)
-	{
-		// NOTE: you can set this safely to 50 for testing.
-		addOilDrum( NetPlay.playercount*2);	// add some free power.
+		addOilDrum(NetPlay.playercount * 2);
 	}
 
 	playerResponding();			// say howdy!

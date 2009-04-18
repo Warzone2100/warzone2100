@@ -1147,19 +1147,6 @@ BOOL stageThreeShutDown(void)
 
 	resetVTOLLandingPos();
 
-// Restore player colours since the scripts might of changed them.
-
-	if(!bMultiPlayer)
-	{
-		int temp = getPlayerColour(selectedPlayer);
-		initPlayerColours();
-		setPlayerColour(selectedPlayer,temp);
-	}
-	else
-	{
-		initPlayerColours();		// reset colours leaving multiplayer game.
-	}
-
 	setScriptWinLoseVideo(PLAY_NONE);
 
 	return true;
