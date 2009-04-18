@@ -56,7 +56,7 @@ void NETbeginEncode(uint8_t type, uint8_t player)
 	NetMsg.size = 0;
 	NetMsg.status = true;
 	NetMsg.destination = player;
-	memset(&NetMsg.body, '\0', MaxMsgSize);
+	memset(&NetMsg.body, '\0', sizeof(NetMsg.body));
 }
 
 void NETbeginDecode(uint8_t type)
@@ -107,7 +107,7 @@ BOOL NETint8_t(int8_t *ip)
 	int8_t *store = (int8_t *) &NetMsg.body[NetMsg.size];
 
 	// Make sure there is enough data/space left in the packet
-	if (sizeof(int8_t) + NetMsg.size > MaxMsgSize || !NetMsg.status)
+	if (sizeof(int8_t) + NetMsg.size > sizeof(NetMsg.body) || !NetMsg.status)
 	{
 		return NetMsg.status = false;
 	}
@@ -133,7 +133,7 @@ BOOL NETuint8_t(uint8_t *ip)
 	uint8_t *store = (uint8_t *) &NetMsg.body[NetMsg.size];
 
 	// Make sure there is enough data/space left in the packet
-	if (sizeof(uint8_t) + NetMsg.size > MaxMsgSize || !NetMsg.status)
+	if (sizeof(uint8_t) + NetMsg.size > sizeof(NetMsg.body) || !NetMsg.status)
 	{
 		return NetMsg.status = false;
 	}
@@ -159,7 +159,7 @@ BOOL NETint16_t(int16_t *ip)
 	int16_t *store = (int16_t *) &NetMsg.body[NetMsg.size];
 
 	// Make sure there is enough data/space left in the packet
-	if (sizeof(int16_t) + NetMsg.size > MaxMsgSize || !NetMsg.status)
+	if (sizeof(int16_t) + NetMsg.size > sizeof(NetMsg.body) || !NetMsg.status)
 	{
 		return NetMsg.status = false;
 	}
@@ -185,7 +185,7 @@ BOOL NETuint16_t(uint16_t *ip)
 	uint16_t *store = (uint16_t *) &NetMsg.body[NetMsg.size];
 
 	// Make sure there is enough data/space left in the packet
-	if (sizeof(uint16_t) + NetMsg.size > MaxMsgSize || !NetMsg.status)
+	if (sizeof(uint16_t) + NetMsg.size > sizeof(NetMsg.body) || !NetMsg.status)
 	{
 		return NetMsg.status = false;
 	}
@@ -211,7 +211,7 @@ BOOL NETint32_t(int32_t *ip)
 	int32_t *store = (int32_t *) &NetMsg.body[NetMsg.size];
 
 	// Make sure there is enough data/space left in the packet
-	if (sizeof(int32_t) + NetMsg.size > MaxMsgSize || !NetMsg.status)
+	if (sizeof(int32_t) + NetMsg.size > sizeof(NetMsg.body) || !NetMsg.status)
 	{
 		return NetMsg.status = false;
 	}
@@ -237,7 +237,7 @@ BOOL NETuint32_t(uint32_t *ip)
 	uint32_t *store = (uint32_t *) &NetMsg.body[NetMsg.size];
 
 	// Make sure there is enough data/space left in the packet
-	if (sizeof(uint32_t) + NetMsg.size > MaxMsgSize || !NetMsg.status)
+	if (sizeof(uint32_t) + NetMsg.size > sizeof(NetMsg.body) || !NetMsg.status)
 	{
 		return NetMsg.status = false;
 	}
@@ -339,7 +339,7 @@ BOOL NETstring(char *str, uint16_t maxlen)
 	store = (char *) &NetMsg.body[NetMsg.size];
 
 	// Make sure there is enough data/space left in the packet
-	if (len + NetMsg.size > MaxMsgSize || !NetMsg.status)
+	if (len + NetMsg.size > sizeof(NetMsg.body) || !NetMsg.status)
 	{
 		return NetMsg.status = false;
 	}
@@ -386,7 +386,7 @@ BOOL NETbin(char *str, uint16_t maxlen)
 	store = (char *) &NetMsg.body[NetMsg.size];
 
 	// Make sure there is enough data/space left in the packet
-	if (len + NetMsg.size > MaxMsgSize || !NetMsg.status)
+	if (len + NetMsg.size > sizeof(NetMsg.body) || !NetMsg.status)
 	{
 		return NetMsg.status = false;
 	}
