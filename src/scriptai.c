@@ -514,7 +514,7 @@ static int scrOrderDroidStatsLoc(lua_State *L)
 	if ((x < 0) || (x > (SDWORD)mapWidth*TILE_UNITS) ||
 		(y < 0) || (y > (SDWORD)mapHeight*TILE_UNITS))
 	{
-		return luaL_error(L, "scrOrderUnitStatsLoc: Invalid location" );
+		return luaL_error(L, "scrOrderUnitStatsLoc: Invalid location: %i,%i", x, y);
 	}
 
 	if (order != DORDER_BUILD)

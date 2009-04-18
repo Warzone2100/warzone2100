@@ -4835,25 +4835,10 @@ static BOOL pickStructLocation(int index, int *pX, int *pY, int player, int maxB
 		// back to world coords.
 		*pX = world_coord(x) + (psStat->baseWidth * (TILE_UNITS / 2));
 		*pY = world_coord(y) + (psStat->baseBreadth * (TILE_UNITS / 2));
-
-		scrFunctionResult.v.bval = true;
-		if (!stackPushResult(VAL_BOOL, &scrFunctionResult))		// success!
-		{
-			return false;
-		}
-
 		return true;
 	}
-	else
-	{
 failedstructloc:
-		scrFunctionResult.v.bval = false;
-		if (!stackPushResult(VAL_BOOL, &scrFunctionResult))		// failed!
-		{
-			return false;
-		}
-	}
-	return true;
+	return false;
 }
 
 /// pick a structure location(only used in skirmish game at 27Aug) ajl.
@@ -9562,12 +9547,10 @@ static int scrDestroyed(lua_State *L)
 	if (!object)
 	{
 		lua_pushboolean(L, true);
-		//debug(LOG_WARNING, "scrDestroyed: could not find the id (%d)", id);
 	}
 	else
 	{
-		lua_pushboolean(L, object->died != 0);
-		//debug(LOG_WARNING, "scrDestroyed: the object has been destroyed? %d", object->died != 0);
+		lua_pushboolean(L, object->died);
 	}
 	return 1;
 }
