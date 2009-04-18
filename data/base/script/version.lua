@@ -78,5 +78,15 @@ function version(v)
 			end
 			return new_array
 		end
+
+		function initEnumDroids(player, seen_by)
+			_initEnumDroids_iterator = visibleDroids(player, seen_by)
+		end
+
+		function enumDroid()
+			local droid
+			droid = _initEnumDroids_iterator()
+			return droid
+		end
 	end
 end

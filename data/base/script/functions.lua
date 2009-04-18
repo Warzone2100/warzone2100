@@ -71,3 +71,17 @@ function numFriendlyWeapStructsInRange(me, x, y, range, finished)
 	return numWeapStructsInRange(me, x, y, range, finished, true)
 end
 
+-- iterators
+function visibleDroids(player, visible_by)
+	local droid
+	local number = 0
+	return function()
+			local droid
+			droid, number = _getDroidVisibleBy(player, visible_by, number)
+			return droid
+		end
+end
+
+function droids(player)
+	return visibleDroids(player, player)
+end

@@ -5768,53 +5768,32 @@ static int scrDebugFile(lua_State *L)
 	return 0;
 }
 
-static	UDWORD			playerToEnumDroid;
-static	UDWORD			playerVisibleDroid;
-static	UDWORD			enumDroidCount;
-
-/// Prepare the droid iteration
-static int scrInitEnumDroids(lua_State *L)
+static int scrInternalGetDroidVisibleBy(lua_State *L)
 {
-	int targetplayer  = luaWZ_checkplayer(L, 1);
-	int playerVisible = luaWZ_checkplayer(L, 2);
-
-	playerToEnumDroid	= (UDWORD)targetplayer;
-	playerVisibleDroid	= (UDWORD)playerVisible;
-	enumDroidCount = 0;		//returned 0 droids so far
-	return 0;
-}
-
-/// Get next droid
-static int scrEnumDroid(lua_State *L)
-{
-	UDWORD			count;
-	DROID		 *psDroid;
-	BOOL			found;
+	int player         = luaWZ_checkplayer(L, 1);
+	int seenBy         = luaWZ_checkplayer(L, 2);
+	int enumDroidCount = luaL_checkint(L, 3);
+	int count;
+	DROID *psDroid;
 
 	count = 0;
-	for(psDroid=apsDroidLists[playerToEnumDroid];psDroid && count<enumDroidCount;count++)
+	for(psDroid=apsDroidLists[player];psDroid && count<enumDroidCount;count++)
 	{
 		psDroid = psDroid->psNext;
 	}
 
-
-	//search the players' list of droid to see if one exists and is visible
-	found = false;
 	while(psDroid)
 	{
-		if(psDroid->visible[playerVisibleDroid])
+		enumDroidCount++;
+		if(psDroid->visible[seenBy])
 		{
 			luaWZObj_pushdroid(L, psDroid);
-			enumDroidCount++;
-			return 1;
+			lua_pushinteger(L, enumDroidCount);
+			return 2;
 		}
-
-		enumDroidCount++;
 		psDroid = psDroid->psNext;
 	}
-
-	lua_pushnil(L);
-	return 1;
+	return 0;
 }
 
 /// Return the template factory is currently building
@@ -10014,8 +9993,6 @@ void registerScriptfuncs(lua_State *L)
 	lua_register(L, "researchStarted", scrResearchStarted);
 	lua_register(L, "pursueResearch", scrPursueResearch);
 	lua_register(L, "getNumStructures", scrGetNumStructures);
-	lua_register(L, "initEnumDroids", scrInitEnumDroids);
-	lua_register(L, "enumDroid", scrEnumDroid);
 	lua_register(L, "recallPlayerBaseLoc", scrRecallPlayerBaseLoc);
 	lua_register(L, "playerLoaded", scrPlayerLoaded);
 	lua_register(L, "getPlayerName", scrGetPlayerName);
@@ -10054,6 +10031,14 @@ void registerScriptfuncs(lua_State *L)
 	lua_register(L, "fogTileInRange", scrFogTileInRange);
 	lua_register(L, "factoryGetTemplate", scrFactoryGetTemplate);
 	lua_register(L, "chooseValidLoc", scrChooseValidLoc);
+	lua_register(L, "_getDroidVisibleBy", scrInternalGetDroidVisibleBy);
+	//lua_register(L, "", );
+	//lua_register(L, "", );
+	//lua_register(L, "", );
+	//lua_register(L, "", );
+	//lua_register(L, "", );
+	//lua_register(L, "", );
+	//lua_register(L, "", );
 	//lua_register(L, "", );
 	//lua_register(L, "", );
 	//lua_register(L, "", );
