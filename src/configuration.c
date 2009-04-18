@@ -229,7 +229,7 @@ BOOL loadConfig(void)
 		setInvertMouseStatus(true);
 		setWarzoneKeyNumeric("mouseflip", true);
 	}
-	
+
 	// //////////////////////////
 	// mouse buttons
 	if (getWarzoneKeyNumeric("RightClickOrders", &val))
@@ -241,7 +241,7 @@ BOOL loadConfig(void)
 		setRightClickOrders(false);
 		setWarzoneKeyNumeric("RightClickOrders", false);
 	}
-	
+
 	// //////////////////////////
 	// rotate radar
 	if(getWarzoneKeyNumeric("rotateRadar", &val))
@@ -590,6 +590,15 @@ BOOL loadRenderMode(void)
 
 	if( !openWarzoneKey() ) {
 		return false;
+	}
+
+	if (getWarzoneKeyNumeric("FSAA", &val))
+	{
+		war_setFSAA(val);
+	}
+	else
+	{
+		setWarzoneKeyNumeric("FSAA", war_getFSAA());
 	}
 
 	if( getWarzoneKeyNumeric("fullscreen", &val) ) {
