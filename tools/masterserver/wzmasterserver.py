@@ -67,40 +67,40 @@ gamedblock = Lock()
 
 class GameDB:
 	global gamedblock
-	
+
 	def __init__(self):
 		self.list = set()
-	
+
 	def __remove(self, g):
 		# if g is not in the list, ignore the KeyError exception
 		try:
 			self.list.remove(g)
 		except KeyError:
 			pass
-	
+
 	def addGame(self, g):
 		""" add a game """
 		with gamedblock:
 			self.list.add(g)
-	
+
 	def removeGame(self, g):
 		""" remove a game from the list"""
 		with gamedblock:
 			self.__remove(g)
-	
+
 	# only games with a valid description
 	def getGames(self):
 		""" filter all games with a valid description """
 		return filter(lambda x: x.description, self.list)
-	
+
 	def getAllGames(self):
 		""" return all knwon games """
 		return self.list
-	
+
 	def getGamesByHost(self, host):
 		""" filter all games of a certain host"""
 		return filter(lambda x: x.host == host, self.getGames())
-	
+
 	def checkGames(self):
 		with gamedblock:
 			gamesCount = len(self.getGames())
@@ -109,7 +109,7 @@ class GameDB:
 				if not game.check():
 					logging.debug("Removing unreachable game: %s" % game)
 					self.__remove(game)
-	
+
 	def listGames(self):
 		with gamedblock:
 			gamesCount = len(self.getGames())
@@ -125,7 +125,7 @@ class GameDB:
 
 class Game:
 	""" class for a single game """
-	
+
 	def __init__(self, requestHandler):
 		self.description = None
 		self.size = None
@@ -137,31 +137,31 @@ class Game:
 		self.user2 = None
 		self.user3 = None
 		self.user4 = None
-		self.misc = None				# 64  byte misc string		
-		self.extra = None				# 255 byte extra string (future use)		
-		self.versionstring = None		# 64  byte version string	
+		self.misc = None				# 64  byte misc string
+		self.extra = None				# 255 byte extra string (future use)
+		self.versionstring = None		# 64  byte version string
 		self.modlist = None			# 255 byte string
-		self.GAMESTRUCT_VERSION = None	# version of the GAMESTRUCT	
-		self.game_version_major = None	# game major version	
-		self.game_version_minor = None	# game minor version	
+		self.GAMESTRUCT_VERSION = None	# version of the GAMESTRUCT
+		self.game_version_major = None	# game major version
+		self.game_version_minor = None	# game minor version
 		self.privateGame = None			# 1 = private game (password required)
-		self.pureGame = None			# 1 = no mods allowed	
-		self.Mods = None				# number of concatenated mods they have (list of mods is in modlist)	
-		self.future1 = None			# for future use	
-		self.future2 = None			# for future use	
-		self.future3 = None			# for future use	
-		self.future4 = None			# for future use	
+		self.pureGame = None			# 1 = no mods allowed
+		self.Mods = None				# number of concatenated mods they have (list of mods is in modlist)
+		self.future1 = None			# for future use
+		self.future2 = None			# for future use
+		self.future3 = None			# for future use
+		self.future4 = None			# for future use
 		self.requestHandler = requestHandler
-	
+
 	def __str__(self):
 		if self.privateGame == 1:
 		   return "(private) Game: %16s %s %s %s" % ( self.host, self.description, self.maxPlayers, self.currentPlayers)
 		else:
 		   return "Game: %16s %s %s %s" % ( self.host, self.description, self.maxPlayers, self.currentPlayers)
-	
+
 	def setData(self, d):
 		""" decode the c-structure from the server into local varialbles"""
-		(self.description, self.size, self.flags, self.host, self.maxPlayers, self.currentPlayers, 
+		(self.description, self.size, self.flags, self.host, self.maxPlayers, self.currentPlayers,
 			self.user1, self.user2, self.user3, self.user4,
 			self.misc, self.extra, self.versionstring, self.modlist, self.GAMESTRUCT_VERSION,
 			self.game_version_major, self.game_version_minor, self.privateGame, self.pureGame, self.Mods, self.future1,
@@ -174,7 +174,7 @@ class Game:
 		self.modlist = self.modlist.strip("\x00")
 
 		logging.debug(self)
-	
+
 	def getData(self):
 		""" use local variables and build a c-structure, for sending to the clients"""
 		return struct.pack("!64sII16s6I64s255s64s255s10I",
@@ -189,7 +189,7 @@ class Game:
 			self.GAMESTRUCT_VERSION, self.game_version_major, self.game_version_minor, self.privateGame,
 			self.pureGame, self.Mods, self.future1, self.future2, self.future3, self.future4 )
 
-	
+
 	def check(self):
 		# Check we can connect to the host
 		s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -213,29 +213,29 @@ requestlock = Lock()
 class RequestHandler(SocketServer.ThreadingMixIn, SocketServer.StreamRequestHandler):
 	def handle(self):
 		global requests, requestlock, gamedb
-		
+
 		with requestlock:
 			requests += 1
 			if requests >= checkInterval:
 				gamedb.checkGames()
-		
+
 		# client address
 		gameHost = self.client_address[0]
-		
+
 
 		while True:
 			# Read the incoming command.
 			netCommand = self.rfile.read(4)
 			if netCommand == None:
 				break
-			
+
 			# Skip the trailing NULL.
 			self.rfile.read(1)
-			
+
 			#################################
 			# Process the incoming command. #
 			#################################
-			
+
 			logging.debug("(%s) Command: [%s] " % (gameHost, netCommand))
 			# Give the MOTD
 			if netCommand == 'motd':
@@ -251,24 +251,24 @@ class RequestHandler(SocketServer.ThreadingMixIn, SocketServer.StreamRequestHand
 					g = Game(self)
 					# put it in the database
 					gamedb.addGame(g)
-					
+
 					# and start receiving updates about the game
 					while True:
 						newGameData = self.rfile.read(gsSize)
 						if not newGameData:
 							logging.debug("(%s) Removing aborted game" % gameHost)
 							return
-						
+
 						logging.debug("(%s) Updating game..." % gameHost)
 						#set Gamedata
 						g.setData(newGameData)
 						#set gamehost
 						g.host = gameHost
-						
+
 						if not g.check():
 							logging.debug("(%s) Removing unreachable game" % gameHost)
 							return
-						
+
 						gamedb.listGames()
 				except struct.error:
 					logging.warning("(%s) Host quit unexpectedly" % gameHost)
@@ -284,11 +284,11 @@ class RequestHandler(SocketServer.ThreadingMixIn, SocketServer.StreamRequestHand
 				with gamedblock:
 					gamesCount = len(gamedb.getGames())
 					logging.debug("(%s) Gameserver list: %i game(s)" % (gameHost, gamesCount))
-      		
+
 					# Transmit the length of the following list as unsigned integer (in network byte-order: big-endian).
 					count = struct.pack('!I', gamesCount)
 					self.wfile.write(count)
-					
+
 					# Transmit the single games.
 					for game in gamedb.getGames():
 						logging.debug(" %s" % game)
@@ -314,7 +314,7 @@ if __name__ == '__main__':
 
 
 	gamedb = GameDB()
-	
+
 	SocketServer.ThreadingTCPServer.allow_reuse_address = True
 	tcpserver = SocketServer.ThreadingTCPServer(('0.0.0.0', lobbyPort), RequestHandler)
 	try:

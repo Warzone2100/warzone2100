@@ -53,7 +53,7 @@ def simulateGameServer():
 
 # thread with simulates adding a game
 def doAddGame():
-	
+
 	# gamestrucuure
 	g=wz.Game()
 	g.description = "description"
