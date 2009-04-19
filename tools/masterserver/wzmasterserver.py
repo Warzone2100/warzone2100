@@ -17,6 +17,7 @@
 #              v1.0 by Freddie Witherden (EvilGuru)
 #              v2.0 by Gerhard Schaden (gschaden)
 #              v2.0a by Buginator  (fixed endian issue)
+#              v2.2 add motd, bigger GAMESTRUCT, private game notification
 # --------------------------------------------------------------------------
 #
 ################################################################################
@@ -28,15 +29,15 @@ from __future__ import with_statement
 #
 
 __author__ = "Gerard Krol, Tim Perrei, Freddie Witherden, Gerhard Schaden, Dennis Schridde, Buginator"
-__version__ = "2.0a"
+__version__ = "2.2"
 __bpydoc__ = """\
-This script runs a Warzone 2100 2.x masterserver
+This script runs a Warzone 2100 2.2.x+ masterserver
 """
 
 #
 ################################################################################
 # Get the things we need.
-
+# import pdb
 import sys
 import SocketServer
 import struct
@@ -45,15 +46,16 @@ from threading import Lock, Thread, Event, Timer
 import select
 import logging
 import cmd
-
 #
 ################################################################################
 # Settings.
 
 gamePort  = 2100         # Gameserver port.
 lobbyPort = 9990         # Lobby port.
-gsSize    = 112          # Size of GAMESTRUCT in byte.
+gsSize    = 790          # Size of GAMESTRUCT in byte.
 checkInterval = 100      # Interval between requests causing a gamedb check
+
+MOTDstring = None        # our message of the day (max 255 bytes)
 
 logging.basicConfig(level = logging.DEBUG, format = "%(asctime)-15s %(levelname)s %(message)s")
 
@@ -136,26 +138,58 @@ class Game:
 		self.user2 = None
 		self.user3 = None
 		self.user4 = None
+		self.misc = None				# 64  byte misc string		
+		self.extra = None				# 255 byte extra string (future use)		
+		self.versionstring = None		# 64  byte version string	
+		self.modlist = None			# 255 byte string
+		self.GAMESTRUCT_VERSION = None	# version of the GAMESTRUCT	
+		self.game_version_major = None	# game major version	
+		self.game_version_minor = None	# game minor version	
+		self.privateGame = None			# 1 = private game (password required)
+		self.pureGame = None			# 1 = no mods allowed	
+		self.Mods = None				# number of concatenated mods they have (list of mods is in modlist)	
+		self.future1 = None			# for future use	
+		self.future2 = None			# for future use	
+		self.future3 = None			# for future use	
+		self.future4 = None			# for future use	
 		self.requestHandler = requestHandler
 	
 	def __str__(self):
-		return "Game: %16s %s %s %s" % ( self.host, self.description, self.maxPlayers, self.currentPlayers)
+		if self.privateGame == 1:
+		   return "(private) Game: %16s %s %s %s" % ( self.host, self.description, self.maxPlayers, self.currentPlayers)
+		else:
+		   return "Game: %16s %s %s %s" % ( self.host, self.description, self.maxPlayers, self.currentPlayers)
 	
 	def setData(self, d):
 		""" decode the c-structure from the server into local varialbles"""
 		(self.description, self.size, self.flags, self.host, self.maxPlayers, self.currentPlayers, 
-			self.user1, self.user2, self.user3, self.user4 ) = struct.unpack("!64sII16sIIIIII", d)
+			self.user1, self.user2, self.user3, self.user4,
+			self.misc, self.extra, self.versionstring, self.modlist, self.GAMESTRUCT_VERSION,
+			self.game_version_major, self.game_version_minor, self.privateGame, self.pureGame, self.Mods, self.future1,
+			self.future2, self.future3, self.future4 ) = struct.unpack("!64sII16s6I64s255s64s255s10I", d)
 		self.description = self.description.strip("\x00")
 		self.host = self.host.strip("\x00")
+		self.misc = self.misc.strip("\x00")
+		self.extra = self.extra.strip("\x00")
+		self.versionstring =  self.versionstring.strip("\x00")
+		self.modlist = self.modlist.strip("\x00")
+
 		logging.debug(self)
 	
 	def getData(self):
 		""" use local variables and build a c-structure, for sending to the clients"""
-		return struct.pack("!64sII16sIIIIII",
+		return struct.pack("!64sII16s6I64s255s64s255s10I",
 			self.description.ljust(64, "\x00"),
 			self.size, self.flags,
 			self.host.ljust(16, "\x00"),
-			self.maxPlayers, self.currentPlayers, self.user1, self.user2, self.user3, self.user4)
+			self.maxPlayers, self.currentPlayers, self.user1, self.user2, self.user3, self.user4,
+			self.misc,
+			self.extra,
+			self.versionstring,
+			self.modlist,
+			self.GAMESTRUCT_VERSION, self.game_version_major, self.game_version_minor, self.privateGame,
+			self.pureGame, self.Mods, self.future1, self.future2, self.future3, self.future4 )
+
 	
 	def check(self):
 		# Check we can connect to the host
@@ -189,75 +223,83 @@ class RequestHandler(SocketServer.ThreadingMixIn, SocketServer.StreamRequestHand
 		# client address
 		gameHost = self.client_address[0]
 		
-		# Read the incoming command.
-		netCommand = self.rfile.read(4)
-		
-		# Skip the trailing NULL.
-		self.rfile.read(1)
-		
-		#################################
-		# Process the incoming command. #
-		#################################
-		
-		logging.debug("(%s) Command: %s" % (gameHost, netCommand))
-		
-		# Add a game.
-		if netCommand == 'addg':
+
+		while True:
+			# Read the incoming command.
+			netCommand = self.rfile.read(4)
+			if netCommand == None:
+				break
 			
-			# The host is valid
-			logging.debug("(%s) Adding gameserver..." % gameHost)
-			try:
-				# create a game object
-				g = Game(self)
-				
-				# put it in the database
-				gamedb.addGame(g)
-				
-				# and start receiving updates about the game
-				while True:
-					newGameData = self.rfile.read(gsSize)
-					if not newGameData:
-						logging.debug("(%s) Removing aborted game" % gameHost)
-						return
+			# Skip the trailing NULL.
+			self.rfile.read(1)
+			
+			#################################
+			# Process the incoming command. #
+			#################################
+			
+			logging.debug("(%s) Command: [%s] " % (gameHost, netCommand))
+			# Give the MOTD
+#				logging.debug("(%s) sending MOTD (%s) " % (gameHost, MOTDstring))
+			if netCommand == 'motd':
+				self.wfile.write(MOTDstring[0:255])
+				logging.debug("(%s) sending MOTD (%s)" % (gameHost, MOTDstring[0:255]))
+
+			# Add a game.
+			elif netCommand == 'addg':
+				# The host is valid
+				logging.debug("(%s) Adding gameserver..." % gameHost)
+				try:
+					# create a game object
+					g = Game(self)
+					# put it in the database
+					gamedb.addGame(g)
 					
-					logging.debug("(%s) Updating game..." % gameHost)
-					#set Gamedata
-					g.setData(newGameData)
-					#set gamehost
-					g.host = gameHost
+					# and start receiving updates about the game
+					while True:
+						newGameData = self.rfile.read(gsSize)
+						if not newGameData:
+							logging.debug("(%s) Removing aborted game" % gameHost)
+							return
+						
+						logging.debug("(%s) Updating game..." % gameHost)
+						#set Gamedata
+						g.setData(newGameData)
+						#set gamehost
+						g.host = gameHost
+						
+						if not g.check():
+							logging.debug("(%s) Removing unreachable game" % gameHost)
+							return
+						
+						gamedb.listGames()
+				except struct.error:
+					logging.warning("(%s) Host quit unexpectedly" % gameHost)
+				except KeyError:
+					logging.warning("(%s) Communication error" % gameHost)
+				finally:
+					if g:
+						gamedb.removeGame(g)
+					break
+			# Get a game list.
+			elif netCommand == 'list':
+				# Lock the gamelist to prevent new games while output.
+				with gamedblock:
+					gamesCount = len(gamedb.getGames())
+					logging.debug("(%s) Gameserver list: %i game(s)" % (gameHost, gamesCount))
+      		
+					# Transmit the length of the following list as unsigned integer (in network byte-order: big-endian).
+					count = struct.pack('!I', gamesCount)
+					self.wfile.write(count)
 					
-					if not g.check():
-						logging.debug("(%s) Removing unreachable game" % gameHost)
-						return
-					
-					gamedb.listGames()
-			except struct.error:
-				logging.warning("(%s) Host quit unexpectedly" % gameHost)
-			except KeyError:
-				logging.warning("(%s) Communication error" % gameHost)
-			finally:
-				if g:
-					gamedb.removeGame(g)
-		
-		# Get a game list.
-		elif netCommand == 'list':
-			# Lock the gamelist to prevent new games while output.
-			with gamedblock:
-				gamesCount = len(gamedb.getGames())
-				logging.debug("(%s) Gameserver list: %i game(s)" % (gameHost, gamesCount))
-				
-				# Transmit the length of the following list as unsigned integer (in network byte-order: big-endian).
-				count = struct.pack('!I', gamesCount)
-				self.wfile.write(count)
-				
-				# Transmit the single games.
-				for game in gamedb.getGames():
-					logging.debug(" %s" % game)
-					self.wfile.write(game.getData())
-		
-		# If something unknown apperas.
-		else:
-			raise Exception("(%s) Recieved a unknown command: %s" % (gameHost, netCommand))
+					# Transmit the single games.
+					for game in gamedb.getGames():
+						logging.debug(" %s" % game)
+						self.wfile.write(game.getData())
+					break
+
+			# If something unknown appears.
+			else:
+				raise Exception("(%s) Recieved a unknown command: %s" % (gameHost, netCommand))
 
 #
 ################################################################################
@@ -265,6 +307,14 @@ class RequestHandler(SocketServer.ThreadingMixIn, SocketServer.StreamRequestHand
 
 if __name__ == '__main__':
 	logging.info("Starting Warzone 2100 lobby server on port %d" % lobbyPort)
+
+	# Read in the Message of the Day, max is 1 line, 255 chars
+	in_file = open("motd.txt", "r")
+	MOTDstring = in_file.read()
+	in_file.close()
+	logging.info("The MOTD is (%s)" % MOTDstring)
+
+
 	gamedb = GameDB()
 	
 	SocketServer.ThreadingTCPServer.allow_reuse_address = True

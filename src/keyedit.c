@@ -48,6 +48,7 @@
 #include "intdisplay.h"
 #include "lib/sound/audio_id.h"
 #include "lib/ivis_common/pieblitfunc.h"
+#include "lib/netplay/netplay.h"
 #include "multiint.h"
 
 // ////////////////////////////////////////////////////////////////////////////
