@@ -39,9 +39,9 @@ extern void setDefaultFrameRateLimit(void);
 #define	SP_FRAME_LIMIT	60
 
 /// Default map for Mayhem
-#define DEFAULTCAMPAIGNMAP	"Rush"
+static const char DEFAULTCAMPAIGNMAP[] = "Rush";
 /// Default map for Skirmish
-#define DEFAULTSKIRMISHMAP	"Sk-Rush"
+static const char DEFAULTSKIRMISHMAP[] = "Sk-Rush";
 
 
 #endif // __INCLUDED_SRC_CONFIGURATION_H__
