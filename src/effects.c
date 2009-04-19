@@ -413,7 +413,7 @@ UDWORD	getNumEvenEffects(void)
 }
 
 
-void	addEffect(Vector3i *pos, EFFECT_GROUP group, EFFECT_TYPE type,BOOL specified, iIMDShape *imd, BOOL lit)
+void	addEffect(Vector3i *pos, EFFECT_GROUP group, EFFECT_TYPE type,BOOL specified, iIMDShape *imd, int lit)
 {
 	static unsigned int aeCalls = 0;
 	UDWORD	essentialCount;
