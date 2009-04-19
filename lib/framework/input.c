@@ -527,7 +527,7 @@ void SetMousePos(Uint16 x, Uint16 y)
 
 	if (mousewarp == -1)
 	{
-		SDWORD val;
+		int val;
 
 		mousewarp = 1;
 		if (getWarzoneKeyNumeric("nomousewarp", &val))

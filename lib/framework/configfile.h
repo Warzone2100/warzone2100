@@ -24,13 +24,15 @@
 #ifndef _INCLUDE_LIB_FRAMEWORK_CONFIGFILE_H_
 #define _INCLUDE_LIB_FRAMEWORK_CONFIGFILE_H_
 
+#include "types.h"
+
 extern void registry_clear(void);
-extern BOOL openWarzoneKey(void);
-extern BOOL closeWarzoneKey(void);
-extern BOOL getWarzoneKeyNumeric(const char *pName, SDWORD *val);
-extern BOOL setWarzoneKeyNumeric(const char *pName, SDWORD val);
-extern BOOL getWarzoneKeyString(const char *pName, char *pString);
-extern BOOL setWarzoneKeyString(const char *pName, const char *pString);
+extern bool openWarzoneKey(void);
+extern bool closeWarzoneKey(void);
+extern bool getWarzoneKeyNumeric(const char* key, int* val);
+extern bool setWarzoneKeyNumeric(const char* key, int val);
+extern bool getWarzoneKeyString(const char* key, char* val);
+extern bool setWarzoneKeyString(const char* key, const char* val);
 extern void setRegistryFilePath(const char* fileName);
 
 #endif // _INCLUDE_LIB_FRAMEWORK_CONFIGFILE_H_
