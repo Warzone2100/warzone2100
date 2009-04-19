@@ -536,7 +536,6 @@ BOOL myResponsibility(UDWORD player)
 //returns true if 'player' is responsible for 'playerinquestion'
 BOOL responsibleFor(UDWORD player, UDWORD playerinquestion)
 {
-
 	if(whosResponsible(playerinquestion) == player)
 	{
 		return true;

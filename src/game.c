@@ -100,7 +100,7 @@
 /// @note This represents a size internal to savegame files, so: DO NOT CHANGE THIS
 #define MAX_GAME_STR_SIZE 20
 
-UDWORD RemapPlayerNumber(UDWORD OldNumber);
+static UDWORD RemapPlayerNumber(UDWORD OldNumber);
 
 typedef struct _game_save_header
 {
@@ -6117,6 +6117,9 @@ BOOL loadSaveDroidV11(char *pFileData, UDWORD filesize, UDWORD numDroids, UDWORD
 			endian_udword(&psSaveDroid->asWeaps[i].lastFired);
 		}
 
+		// Give it to the correct player
+		psSaveDroid->player = RemapPlayerNumber(psSaveDroid->player);
+
 		// Here's a check that will allow us to load up save games on the playstation from the PC
 		//  - It will skip data from any players after MAX_PLAYERS
 		if (psSaveDroid->player >= MAX_PLAYERS)
@@ -6268,6 +6271,9 @@ BOOL loadSaveDroidV19(char *pFileData, UDWORD filesize, UDWORD numDroids, UDWORD
 			endian_udword(&psSaveDroid->asWeaps[i].ammo);
 			endian_udword(&psSaveDroid->asWeaps[i].lastFired);
 		}
+
+		// Give it to the correct player
+		psSaveDroid->player = RemapPlayerNumber(psSaveDroid->player);
 
 		// Here's a check that will allow us to load up save games on the playstation from the PC
 		//  - It will skip data from any players after MAX_PLAYERS
@@ -6429,6 +6435,9 @@ BOOL loadSaveDroidV(char *pFileData, UDWORD filesize, UDWORD numDroids, UDWORD v
 			endian_udword(&psSaveDroid->asWeaps[i].ammo);
 			endian_udword(&psSaveDroid->asWeaps[i].lastFired);
 		}
+
+		// Give it to the correct player
+		psSaveDroid->player = RemapPlayerNumber(psSaveDroid->player);
 
 		// Here's a check that will allow us to load up save games on the playstation from the PC
 		//  - It will skip data from any players after MAX_PLAYERS
@@ -10819,7 +10828,7 @@ BOOL loadSaveFlagV(char *pFileData, UDWORD filesize, UDWORD numflags, UDWORD ver
 		psflag->screenX = psSaveflag->screenX;			//screen coords and radius of Position imd
 		psflag->screenY = psSaveflag->screenY;
 		psflag->screenR = psSaveflag->screenR;
-		psflag->player = psSaveflag->player;			//which player the Position belongs to
+		psflag->player = RemapPlayerNumber(psSaveflag->player);	// which player the position belongs to
 		psflag->selected = psSaveflag->selected;		//flag to indicate whether the Position
 		psflag->coords = psSaveflag->coords;			//the world coords of the Position
 		psflag->factoryInc = psSaveflag->factoryInc;	//indicates whether the first, second etc factory
