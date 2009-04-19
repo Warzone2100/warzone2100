@@ -151,7 +151,5 @@ extern void game_SetValidityKey(UDWORD keys);
 /*returns the current type of save game being loaded*/
 extern UDWORD getSaveGameType(void);
 
-UDWORD RemapPlayerNumber(UDWORD OldNumber);
-
 BOOL plotStructurePreview16(char *backDropSprite, UBYTE scale, UDWORD offX, UDWORD offY, Vector2i playeridpos[]);
 #endif // __INCLUDED_SRC_GAME_H__
