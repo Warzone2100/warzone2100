@@ -152,7 +152,7 @@ extern void	effectGiveAuxVarSec		( UDWORD var); // and so's this
 extern void	initEffectsSystem		( void );
 extern void	processEffects			( void );
 extern void	addEffect				( Vector3i *pos, EFFECT_GROUP group,
-										EFFECT_TYPE type, BOOL specified, iIMDShape *imd, BOOL lit );
+										EFFECT_TYPE type, BOOL specified, iIMDShape *imd, int lit );
 extern void	addMultiEffect			( Vector3i *basePos, Vector3i *scatter,EFFECT_GROUP group,
 									EFFECT_TYPE type,BOOL specified, iIMDShape *imd, UDWORD number, BOOL lit, UDWORD size );
 
