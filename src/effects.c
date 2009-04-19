@@ -416,7 +416,7 @@ UDWORD	getNumEvenEffects(void)
 
 UDWORD Reject1;
 
-void	addEffect(Vector3i *pos, EFFECT_GROUP group, EFFECT_TYPE type,BOOL specified, iIMDShape *imd, BOOL lit)
+void	addEffect(Vector3i *pos, EFFECT_GROUP group, EFFECT_TYPE type,BOOL specified, iIMDShape *imd, int lit)
 {
 	UDWORD	essentialCount;
 	UDWORD	i;
