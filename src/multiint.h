@@ -24,20 +24,6 @@
 #ifndef __INCLUDED_SRC_MULTIINT_H__
 #define __INCLUDED_SRC_MULTIINT_H__
 
-
-// Lobby Connection errors
-
-typedef enum
-{
-	ERROR_NOERROR,
-	ERROR_CONNECTION,
-	ERROR_FULL,
-	ERROR_CHEAT,
-	ERROR_KICKED,
-	ERROR_WRONGVESION,
-	ERROR_WRONGPASSWORD				// NOTE WRONG_PASSWORD results in conflict
-} LOBBY_ERROR_TYPES;
-
 extern LOBBY_ERROR_TYPES getLobbyError(void);
 extern void setLobbyError(LOBBY_ERROR_TYPES error_type);
 

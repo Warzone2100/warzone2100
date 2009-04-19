@@ -63,19 +63,6 @@ unsigned int masterserver_port = 0, gameserver_port = 0;
 */
 #define NET_BUFFER_SIZE	(MaxMsgSize)	// Would be 8K
 
-// Lobby Connection errors
-
-typedef enum
-{
-	ERROR_NOERROR,
-	ERROR_CONNECTION,
-	ERROR_FULL,
-	ERROR_CHEAT,
-	ERROR_KICKED,
-	ERROR_WRONGVESION,
-	ERROR_WRONGPASSWORD				// NOTE WRONG_PASSWORD results in conflict
-} LOBBY_ERROR_TYPES;
-
 // HACK(s) to allow us to call a src/multi*.c function
 extern void recvMultiStats(void);								// from src/multistat.c
 extern BOOL sendTextMessage(const char *pStr, BOOL all);		// from src/multiplay.c
