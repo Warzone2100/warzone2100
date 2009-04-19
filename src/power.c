@@ -31,7 +31,7 @@
 #include "lib/sound/audio.h"
 #include "objmem.h"
 #include "frontend.h"
-
+#include "lib/netplay/netplay.h"
 #include "multiplay.h"
 #include "multiint.h"
 

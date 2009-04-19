@@ -170,7 +170,7 @@ static	void	addChatBox			(void);
 static	void	disableMultiButs	(void);
 static	void	processMultiopWidgets(UDWORD);
 static	void	SendFireUp			(void);
-//void	kickPlayer			(UDWORD dpid, const char *reason);
+
 void			runMultiOptions		(void);
 BOOL			startMultiOptions	(BOOL);
 void			frontendMultiMessages(void);
