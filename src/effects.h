@@ -144,31 +144,28 @@ struct _effect_def
 	EFFECT *prev, *next; // Previous and next element in linked list
 };
 
-
 /* Maximum number of effects in the world - need to investigate what this should be */
 /* EXTERNAL REFERENCES */
-extern void	effectGiveAuxVar		( UDWORD var); // naughty
-extern void	effectGiveAuxVarSec		( UDWORD var); // and so's this
+void	effectGiveAuxVar(UDWORD var);		// naughty
+void	effectGiveAuxVarSec(UDWORD var);	// and so's this
 
-extern void	initEffectsSystem		( void );
-extern void	processEffects			( void );
-extern void addEffect				( const Vector3i *pos, EFFECT_GROUP group,
-										EFFECT_TYPE type, bool specified, iIMDShape *imd, bool lit );
-extern void addMultiEffect			( const Vector3i *basePos, Vector3i *scatter, EFFECT_GROUP group,
-									EFFECT_TYPE type, bool specified, iIMDShape *imd, unsigned int number, bool lit, unsigned int size );
+void	initEffectsSystem(void);
+void	processEffects(void);
+void 	addEffect(const Vector3i *pos, EFFECT_GROUP group, EFFECT_TYPE type, bool specified, iIMDShape *imd, int lit);
+void	addMultiEffect(const Vector3i *basePos, Vector3i *scatter, EFFECT_GROUP group, EFFECT_TYPE type, bool specified, iIMDShape *imd, unsigned int number, bool lit, unsigned int size);
 
-extern void	renderEffect			( const EFFECT *psEffect );
-extern void	effectResetUpdates		( void );
-extern UDWORD	getNumActiveEffects		( void );
-extern UDWORD	getMissCount( void );
-extern	UDWORD	getNumSkippedEffects(void);
-extern	UDWORD	getNumEvenEffects(void);
+void	renderEffect(const EFFECT *psEffect);
+void	effectResetUpdates(void);
+UDWORD	getNumActiveEffects(void);
+UDWORD	getMissCount(void);
+UDWORD	getNumSkippedEffects(void);
+UDWORD	getNumEvenEffects(void);
 
-extern void initPerimeterSmoke( iIMDShape *pImd, Vector3i base);
+void	initPerimeterSmoke(iIMDShape *pImd, Vector3i base);
 
-extern bool readFXData(const char* fileName);
-extern bool	writeFXData(const char* fileName);
-extern	void	effectSetSize(UDWORD size);
-extern void	effectSetLandLightSpec(LAND_LIGHT_SPEC spec);
+bool	readFXData(const char* fileName);
+bool	writeFXData(const char* fileName);
+void	effectSetSize(UDWORD size);
+void	effectSetLandLightSpec(LAND_LIGHT_SPEC spec);
 
 #endif // __INCLUDED_SRC_EFFECTS_H__

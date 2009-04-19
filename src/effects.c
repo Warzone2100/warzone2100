@@ -508,7 +508,7 @@ void addMultiEffect(const Vector3i *basePos, Vector3i *scatter, EFFECT_GROUP gro
 }
 
 
-void addEffect(const Vector3i *pos, EFFECT_GROUP group, EFFECT_TYPE type, bool specified, iIMDShape *imd, bool lit)
+void addEffect(const Vector3i *pos, EFFECT_GROUP group, EFFECT_TYPE type, bool specified, iIMDShape *imd, int lit)
 {
 	EFFECT *psEffect = NULL;
 
@@ -796,7 +796,7 @@ static void updateFirework(EFFECT *psEffect)
 	}
 	else	// must be a startburst
 	{
-			/* Time to update the frame number on the smoke sprite */
+		/* Time to update the frame number on the smoke sprite */
 		if(gameTime - psEffect->lastFrame > psEffect->frameDelay)
 		{
 			/* Store away last frame change time */
