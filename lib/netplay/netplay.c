@@ -206,7 +206,7 @@ static void VersionCheckTimeOut(uint32_t victim)
 {
 	const char* msg;
 
-	debug(LOG_NET, "version string was never received from dpid %u. Auto kicking at %u", victim, gameTime2);
+	debug(LOG_NET, "version string was never received from player %u. Auto kicking at %u", victim, gameTime2);
 
 	sasprintf((char**)&msg, _("Player %u has the wrong game version.  Auto kicking."), victim);
 	sendTextMessage(msg, true);
@@ -599,7 +599,7 @@ static void NETsendGAMESTRUCT(TCPsocket socket, const GAMESTRUCT* game)
 	{
 		// If packet could not be sent, we should inform user of the error.
 		debug(LOG_ERROR, "Failed to send GAMESTRUCT. Reason: %s", SDLNet_GetError());
-		debug(LOG_ERROR, "Please make sure TCP ports 9998-9999 are open!");
+		debug(LOG_ERROR, "Please make sure TCP ports 9990 & 2100 are open!");
 	}
 }
 
