@@ -37,7 +37,6 @@ This script runs a Warzone 2100 2.2.x+ masterserver
 #
 ################################################################################
 # Get the things we need.
-# import pdb
 import sys
 import SocketServer
 import struct
@@ -239,7 +238,6 @@ class RequestHandler(SocketServer.ThreadingMixIn, SocketServer.StreamRequestHand
 			
 			logging.debug("(%s) Command: [%s] " % (gameHost, netCommand))
 			# Give the MOTD
-#				logging.debug("(%s) sending MOTD (%s) " % (gameHost, MOTDstring))
 			if netCommand == 'motd':
 				self.wfile.write(MOTDstring[0:255])
 				logging.debug("(%s) sending MOTD (%s)" % (gameHost, MOTDstring[0:255]))
@@ -312,7 +310,7 @@ if __name__ == '__main__':
 	in_file = open("motd.txt", "r")
 	MOTDstring = in_file.read()
 	in_file.close()
-	logging.info("The MOTD is (%s)" % MOTDstring)
+	logging.info("The MOTD is (%s)" % MOTDstring[0:255])
 
 
 	gamedb = GameDB()
