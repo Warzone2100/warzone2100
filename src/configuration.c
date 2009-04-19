@@ -55,8 +55,6 @@
 #define DEFAULTCDVOL	60
 #define DEFAULTSCROLL	1000
 
-extern void registry_clear(void); // from configfile.c
-
 void	setSinglePlayerFrameLimit		(SDWORD limit);
 SDWORD	getSinglePlayerFrameLimit		(void);
 void	setDefaultFrameRateLimit		(void);
@@ -89,7 +87,7 @@ void setDefaultFrameRateLimit(void)
 // ////////////////////////////////////////////////////////////////////////////
 BOOL loadConfig(void)
 {
-	SDWORD	val;
+	int val;
 	char	sBuf[255];
 
 	openWarzoneKey();
