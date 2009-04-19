@@ -1109,7 +1109,7 @@ static UDWORD averagePing(void)
 			count ++;
 		}
 	}
-	return total/count;
+	return total / MAX(count, 1);
 }
 
 BOOL sendPing(void)
