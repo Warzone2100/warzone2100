@@ -82,7 +82,7 @@ void war_SetDefaultStates(void)//Sets all states
 {
 	//set those here and reset in clParse or loadConfig
 	war_SetFog(false);
-	war_setFSAA(2);
+	war_setFSAA(0);
 	war_setSoundEnabled( true );
 	war_SetPauseOnFocusLoss(true);
 #ifdef WZ_OS_MAC
