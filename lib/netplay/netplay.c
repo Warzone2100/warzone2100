@@ -63,12 +63,28 @@ unsigned int masterserver_port = 0, gameserver_port = 0;
 */
 #define NET_BUFFER_SIZE	(MaxMsgSize)	// Would be 8K
 
+// Lobby Connection errors
+
+typedef enum
+{
+	ERROR_NOERROR,
+	ERROR_CONNECTION,
+	ERROR_FULL,
+	ERROR_CHEAT,
+	ERROR_KICKED,
+	ERROR_WRONGVESION,
+	ERROR_WRONGPASSWORD				// NOTE WRONG_PASSWORD results in conflict
+} LOBBY_ERROR_TYPES;
+
 // HACK(s) to allow us to call a src/multi*.c function
 extern void recvMultiStats(void);								// from src/multistat.c
 extern BOOL sendTextMessage(const char *pStr, BOOL all);		// from src/multiplay.c
 extern BOOL MultiPlayerJoin(UDWORD dpid);						// from src/multijoin.c
 extern BOOL MultiPlayerLeave(UDWORD dpid);						// from src/multijoin.c
-extern void kickPlayer(uint32_t player_id, const char *reason); // from src/multiinit.c
+extern void ShowMOTD(void);																// from src/multijoin.c
+extern void kickPlayer(uint32_t player_id, const char *reason, LOBBY_ERROR_TYPES type);	// from src/multiinit.c
+extern void setLobbyError (LOBBY_ERROR_TYPES error_type);							// from src/multiinit.c
+extern LOBBY_ERROR_TYPES getLobbyError(void);										// from src/multiinit.c
 // ////////////////////////////////////////////////////////////////////////
 // Function prototypes
 void NETplayerLeaving(UDWORD dpid);		// Cleanup sockets on player leaving (nicely)
@@ -78,6 +94,11 @@ void sendVersionCheck(void);
 void recvVersionCheck(void);
 void VersionCheckTimeOut( uint32_t victimdpid );
 void NETCheckVersion( uint32_t player );
+
+void NETGameLocked( bool flag);
+void NETresetGamePassword(void);
+void sendPasswordCheck(void);
+void recvPasswordCheck(void);
 /*
  * Network globals, these are part of the new network API
  */
@@ -143,11 +164,12 @@ static int32_t          NetGameFlags[4] = { 0, 0, 0, 0 };
 char iptoconnect[PATH_MAX] = "\0"; // holds IP/hostname from command line
 
 extern int NET_PlayerConnectionStatus;		// from src/display3d.c
+extern LOBBY_ERROR_TYPES LobbyError;		// from src/multiint.c
 
 //time when check sent. Note, uses dpid, & using 0xffffffff to signal nothing sent yet.
 uint32_t VersionCheckTime[MAX_PLAYERS] = {-1, -1, -1, -1, -1, -1, -1, -1};
 static BOOL playerVersionFlag[MAX_PLAYERS] = {false};	// we kick on false
-
+static bool playerPasswordFlag[MAX_PLAYERS] = {false};		// we kick on false
 // ////////////////////////////////////////////////////////////////////////////
 #define VersionStringSize 80
 /************************************************************************************
@@ -155,7 +177,7 @@ static BOOL playerVersionFlag[MAX_PLAYERS] = {false};	// we kick on false
  **			   ie ("trunk", "2.1.3", ...)
  ************************************************************************************
 **/
-static char VersionString[VersionStringSize] = "trunk"; 
+char VersionString[VersionStringSize] = "2.2"; 
 static int NETCODE_VERSION_MAJOR = 2;	// unused for now
 static int NETCODE_VERSION_MINOR = 2;	// unused for now
 static int NUMBER_OF_MODS = 0;			// unused for now
@@ -181,7 +203,7 @@ void sendVersionCheck( void )
 void recvVersionCheck()
 {
 	uint32_t victimdpid = 0;
-	char playersVersion[VersionStringSize];
+	char playersVersion[VersionStringSize] = { '\0' };
 	const char* msg;
 	int32_t MajorVersion = 0;			// Not currently used
 	int32_t MinorVersion = 0;			// Not currently used
@@ -208,7 +230,7 @@ void recvVersionCheck()
 
 		if(NetPlay.bHost)
 		{
-			kickPlayer( victimdpid, "you have the wrong version of the game, so Update it!" );
+			kickPlayer( victimdpid, "you have the wrong version of the game, so Update it!", ERROR_WRONGVESION );
 
 			// reset flags /time after we kick them
 			VersionCheckTime[victimdpid] = -1;
@@ -219,6 +241,15 @@ void recvVersionCheck()
 	{
 		playerVersionFlag[victimdpid] = true;
 		debug(LOG_NET, "Received correct version string [%s] from dpid %u", playersVersion, victimdpid);
+	}
+	// just in case someone has the bright idea of trying to fool us...
+
+	if (NetPlay.GamePassworded && playerVersionFlag[victimdpid] && !playerPasswordFlag[victimdpid])
+	{
+		// really should ban them. :P
+		debug(LOG_ERROR, "Received correct version string [%s] from dpid %u", playersVersion, victimdpid);
+		debug(LOG_ERROR, "Did NOT receive passowrd from them --Autokicking ip %s", "123" );
+		kickPlayer(victimdpid, "you  have attempted to thwart the security measuers.  Entry denied!", ERROR_CHEAT);
 	}
 }
 void VersionCheckTimeOut( uint32_t victimdpid )
@@ -232,7 +263,7 @@ void VersionCheckTimeOut( uint32_t victimdpid )
 
 	if(NetPlay.bHost)
 	{
-		kickPlayer( victimdpid, "You have the wrong version of the game, so Update it!" );
+		kickPlayer( victimdpid, "You have the wrong version of the game, so Update it!", ERROR_WRONGVESION );
 
 		// reset flags /time after we kick them
 		VersionCheckTime[victimdpid] = -1;
@@ -250,6 +281,78 @@ void NETCheckVersion( uint32_t player )
 		}
 	}
 
+}
+
+//	Sets if the game is password protected or not
+void NETGameLocked( bool flag)
+{
+	NetPlay.GamePassworded = flag;
+	game.privateGame = flag;
+	debug(LOG_NET, "Passworded game is %s", NetPlay.GamePassworded ? "TRUE" : "FALSE" );
+}
+
+//	Sets the game password
+void NETsetGamePassword(const char *password)
+{
+	sstrcpy(NetPlay.gamePassword, password);
+	debug(LOG_NET, "Password entered is: [%s]", NetPlay.gamePassword);
+}
+
+//	Resets the game password
+void NETresetGamePassword(void)
+{
+	sstrcpy(NetPlay.gamePassword, "Enter Password Here");
+	debug(LOG_NET, "password reset to 'Enter Password here'");
+	NETGameLocked(false);
+}
+
+//	send our password to host
+void sendPasswordCheck(void)
+{
+	uint32_t playerdpid = NetPlay.dpidPlayer;
+
+	NETlogEntry("Sending password check", 0, 0);
+	NETbeginEncode(NET_PASSWORD_CHECK, PLAYER_HOST);
+		NETuint32_t(&playerdpid);
+		NETstring( NetPlay.gamePassword, sizeof(NetPlay.gamePassword) );
+	NETend();
+
+	debug(LOG_NET, "sending dpid %u, password [%s]", playerdpid, NetPlay.gamePassword);
+}
+
+// Checks the password, and if they are not the same, we auto-kick the player.
+void recvPasswordCheck(void)
+{
+	uint32_t victimdpid = 0;
+
+	char passwordreceived[StringSize];
+	const char* msg;
+
+	NETlogEntry("Receiving password check", 0, 0);
+
+	NETbeginDecode(NET_PASSWORD_CHECK);
+		NETuint32_t(&victimdpid);
+		NETstring( passwordreceived, sizeof(passwordreceived) );
+	NETend();
+
+	if (strcmp(NetPlay.gamePassword, passwordreceived) != 0)
+	{
+		debug(LOG_NET, "Received *wrong* password [%s] from dpid %u. Expected [%s]", passwordreceived, victimdpid, NetPlay.gamePassword);
+
+		sasprintf((char**)&msg, _("Player %u has the wrong password.  Auto kicking."), victimdpid );
+		sendTextMessage(msg, true);
+
+		if (NetPlay.bHost)
+		{
+			kickPlayer(victimdpid, "you have the wrong password! Entry denied!", ERROR_WRONGPASSWORD);
+			playerPasswordFlag[victimdpid] = false;
+		}
+	}
+	else
+	{
+		playerPasswordFlag[victimdpid] = true;
+		debug(LOG_NET, "Received correct password [%s] from dpid %u", passwordreceived, victimdpid);
+	}
 }
 
 // *********** Socket with buffer that read NETMSGs ******************
@@ -604,7 +707,9 @@ static void NETsendGAMESTRUCT(TCPsocket socket, const GAMESTRUCT* game)
 	// circumvents struct padding, which could pose a problem).  Initialise
 	// to zero so that we can be sure we're not sending any (undefined)
 	// memory content across the network.
-	char buf[sizeof(game->name) + sizeof(game->desc.host) + sizeof(int32_t) * 8] = { 0 };
+	char buf[sizeof(game->name) + sizeof(game->desc.host) + (sizeof(int32_t) * 8) +
+		sizeof(game->misc) + sizeof(game->extra) + sizeof(game->versionstring) +
+		sizeof(game->modlist) + (sizeof(uint32_t) * 10) ] = { 0 };
 	char *buffer = buf;
 	unsigned int i;
 	int result;
@@ -635,13 +740,70 @@ static void NETsendGAMESTRUCT(TCPsocket socket, const GAMESTRUCT* game)
 		buffer += sizeof(int32_t);
 	}
 
+	// Copy a string
+	strlcpy(buffer, game->misc, sizeof(game->misc));
+	buffer += sizeof(game->misc);
+
+	// Copy a string
+	strlcpy(buffer, game->extra, sizeof(game->extra));
+	buffer += sizeof(game->extra);
+
+	// Copy a string
+	strlcpy(buffer, game->versionstring, sizeof(game->versionstring));
+	buffer += sizeof(game->versionstring);
+
+	// Copy a string
+	strlcpy(buffer, game->modlist, sizeof(game->modlist));
+	buffer += sizeof(game->modlist);
+
+	// Copy 32bit large big endian numbers
+	*(uint32_t*)buffer = SDL_SwapBE32(game->GAMESTRUCT_VERSION);
+	buffer += sizeof(uint32_t);
+
+	// Copy 32bit large big endian numbers
+	*(uint32_t*)buffer = SDL_SwapBE32(game->game_version_major);
+	buffer += sizeof(uint32_t);
+
+	// Copy 32bit large big endian numbers
+	*(uint32_t*)buffer = SDL_SwapBE32(game->game_version_minor);
+	buffer += sizeof(uint32_t);
+
+	// Copy 32bit large big endian numbers
+	*(uint32_t*)buffer = SDL_SwapBE32(game->privateGame);
+	buffer += sizeof(uint32_t);
+
+	// Copy 32bit large big endian numbers
+	*(uint32_t*)buffer = SDL_SwapBE32(game->pureGame);
+	buffer += sizeof(uint32_t);
+
+	// Copy 32bit large big endian numbers
+	*(uint32_t*)buffer = SDL_SwapBE32(game->Mods);
+	buffer += sizeof(uint32_t);
+
+	// Copy 32bit large big endian numbers
+	*(uint32_t*)buffer = SDL_SwapBE32(game->future1);
+	buffer += sizeof(uint32_t);
+
+	// Copy 32bit large big endian numbers
+	*(uint32_t*)buffer = SDL_SwapBE32(game->future2);
+	buffer += sizeof(uint32_t);
+
+	// Copy 32bit large big endian numbers
+	*(uint32_t*)buffer = SDL_SwapBE32(game->future3);
+	buffer += sizeof(uint32_t);
+
+	// Copy 32bit large big endian numbers
+	*(uint32_t*)buffer = SDL_SwapBE32(game->future4);
+	buffer += sizeof(uint32_t);
+
+
 	// Send over the GAMESTRUCT
 	result = SDLNet_TCP_Send(socket, buf, sizeof(buf));
 	if (result != sizeof(buf))
 	{
 		// If packet could not be sent, we should inform user of the error.
 		debug(LOG_ERROR, "Failed to send GAMESTRUCT. Reason: %s", SDLNet_GetError());
-		debug(LOG_ERROR, "Please make sure TCP ports 9998-9999 are open!");
+		debug(LOG_ERROR, "Please make sure TCP ports 9990 & 2100 are open!");
 	}
 }
 
@@ -656,7 +818,9 @@ static bool NETrecvGAMESTRUCT(GAMESTRUCT* game)
 {
 	// A buffer that's guaranteed to have the correct size (i.e. it
 	// circumvents struct padding, which could pose a problem).
-	char buf[sizeof(game->name) + sizeof(game->desc.host) + sizeof(int32_t) * 8];
+	char buf[sizeof(game->name) + sizeof(game->desc.host) + (sizeof(int32_t) * 8) +
+		sizeof(game->misc) + sizeof(game->extra) + sizeof(game->versionstring) +
+		sizeof(game->modlist) + (sizeof(uint32_t) * 10) ] = { 0 };
 	char* buffer = buf;
 	unsigned int i;
 	int result = 0;
@@ -702,6 +866,44 @@ static bool NETrecvGAMESTRUCT(GAMESTRUCT* game)
 		buffer += sizeof(int32_t);
 	}
 
+	// Copy a string
+	sstrcpy(game->misc, buffer);
+	buffer += sizeof(game->misc);
+
+	// Copy a string
+	sstrcpy(game->extra, buffer);
+	buffer += sizeof(game->extra);
+
+	// Copy a string
+	sstrcpy(game->versionstring, buffer);
+	buffer += sizeof(game->versionstring);
+
+	// Copy a string
+	sstrcpy(game->modlist, buffer);
+	buffer += sizeof(game->modlist);
+
+	// Copy 32bit large big endian numbers
+	game->GAMESTRUCT_VERSION = SDL_SwapBE32(*(uint32_t*)buffer);
+	buffer += sizeof(uint32_t);
+	game->game_version_major = SDL_SwapBE32(*(uint32_t*)buffer);
+	buffer += sizeof(uint32_t);
+	game->game_version_minor = SDL_SwapBE32(*(uint32_t*)buffer);
+	buffer += sizeof(uint32_t);
+	game->privateGame = SDL_SwapBE32(*(uint32_t*)buffer);
+	buffer += sizeof(uint32_t);
+	game->pureGame = SDL_SwapBE32(*(uint32_t*)buffer);
+	buffer += sizeof(uint32_t);
+	game->Mods = SDL_SwapBE32(*(uint32_t*)buffer);
+	buffer += sizeof(uint32_t);
+	game->future1 = SDL_SwapBE32(*(uint32_t*)buffer);
+	buffer += sizeof(uint32_t);	
+	game->future2 = SDL_SwapBE32(*(uint32_t*)buffer);
+	buffer += sizeof(uint32_t);	
+	game->future3 = SDL_SwapBE32(*(uint32_t*)buffer);
+	buffer += sizeof(uint32_t);	
+	game->future4 = SDL_SwapBE32(*(uint32_t*)buffer);
+	buffer += sizeof(uint32_t);	
+	
 	return true;
 }
 
@@ -724,6 +926,11 @@ int NETinit(BOOL bFirstCall)
 			memset(&NetPlay.games[i], 0, sizeof(NetPlay.games[i]));
 		}
 		NetPlay.bComms = true;
+		NetPlay.GamePassworded = false;
+		NetPlay.ShowedMOTD = false;
+		NetPlay.gamePassword[0] = '\0';
+		NetPlay.MOTDbuffer[0] = '\0';
+		sstrcpy(NetPlay.gamePassword,"Enter Password First");
 		NETstartLogging();
 	}
 
@@ -732,6 +939,9 @@ int NETinit(BOOL bFirstCall)
 		debug(LOG_ERROR, "SDLNet_Init reported: %s", SDLNet_GetError());
 		return -1;
 	}
+
+	NetPlay.ShowedMOTD = false;
+	NetPlay.GamePassworded = false;
 
 	return 0;
 }
@@ -755,6 +965,8 @@ int NETclose(void)
 	unsigned int i;
 	int result;
 
+	// reset flag 
+	NetPlay.ShowedMOTD = false;
 	NEThaltJoining();
 
 	debug(LOG_NET, "Terminating sockets.");
@@ -1179,6 +1391,16 @@ static BOOL NETprocessSystemMessage(void)
 			}
 			break;
 		}
+		case NET_PASSWORD_CHECK:
+		{
+			recvPasswordCheck();
+			break;
+		}
+		case NET_REQUEST_PASSWORD:
+		{
+			sendPasswordCheck();
+			break;
+		}
 		case NET_VERSION_CHECK:
 		{
 			recvVersionCheck();
@@ -1553,7 +1775,9 @@ static void NETregisterServer(int state)
 	static TCPsocket rs_socket = NULL;
 	static int registered = 0;
 	static int server_not_there = 0;
+	static SDLNet_SocketSet masterset;
 	IPaddress ip;
+	int result = 0;
 
 	if (server_not_there)
 	{
@@ -1568,6 +1792,7 @@ static void NETregisterServer(int state)
 				if(SDLNet_ResolveHost(&ip, masterserver_name, masterserver_port) == -1)
 				{
 					debug(LOG_ERROR, "Cannot resolve masterserver \"%s\": %s", masterserver_name, SDLNet_GetError());
+					ssprintf(NetPlay.MOTDbuffer, _("Could not resolve masterserver name (%s)!"), masterserver_name);
 					server_not_there = 1;
 					return;
 				}
@@ -1576,16 +1801,62 @@ static void NETregisterServer(int state)
 				if(rs_socket == NULL)
 				{
 					debug(LOG_ERROR, "Cannot connect to masterserver \"%s:%d\": %s", masterserver_name, masterserver_port, SDLNet_GetError());
+					sstrcpy(NetPlay.MOTDbuffer, _("Could not communicate with lobby server!  Is TCP port 9990 open?"));
 					server_not_there = 1;
 					return;
 				}
+				// master server socket set to be friendly
+				if (!masterset)
+				{
+					masterset = SDLNet_AllocSocketSet(1);
+					if (!masterset)
+					{
+						debug(LOG_ERROR, "Couldn't create socket set for master server because: %s", SDLNet_GetError());
+					}
+					result = SDLNet_TCP_AddSocket(masterset, rs_socket);
+					if (result != -1)
+					{
+						debug(LOG_NET,"TCP_AddSocket using socket set %p, socket %p", masterset, rs_socket);
+					}
+				}
+				// get the MOTD from the server
+				SDLNet_TCP_Send(rs_socket, (void*)"motd", sizeof("motd"));
+				result = SDLNet_CheckSockets(masterset, 1000);
+				if (result ==-1)
+				{
+					debug(LOG_NET, "Warning, MOTD CheckSockets Failed. Error %s", SDLNet_GetError());
+				}
+				if (SDLNet_SocketReady(rs_socket))	// true on activity
+				{
+					result = SDLNet_TCP_Recv(rs_socket, NetPlay.MOTDbuffer, sizeof(NetPlay.MOTDbuffer));
+					if (result <= 0)
+					{
+						debug(LOG_NET, "Warning, MOTD TCP_Recv failed. result = %d, error %s", result,  SDLNet_GetError());
+						sstrcpy(NetPlay.MOTDbuffer, "MOTD communication error with lobby server, TCP_Recv failed!");
+					}
+					debug(LOG_NET, "MOTD is [%s]", NetPlay.MOTDbuffer);
+				}
+				else
+				{
+					debug(LOG_NET, "Warning, MOTD Socket Not ready.  Is the motd.txt file empty?  Error %s", SDLNet_GetError());
+					sstrcpy(NetPlay.MOTDbuffer, "MOTD communication error with lobby server, socket not ready?");
+				}
 
 				SDLNet_TCP_Send(rs_socket, (void*)"addg", sizeof("addg"));
+				// and now send what the server wants
 				NETsendGAMESTRUCT(rs_socket, &game);
 			}
 			break;
 
 			case 0:
+				// we don't need this anymore, so clean up
+				result = SDLNet_TCP_DelSocket(masterset,rs_socket);
+				if (result == -1)
+				{
+					debug(LOG_ERROR, "Couldn't delete socket set because: %s", SDLNet_GetError());
+				}
+				SDLNet_FreeSocketSet(masterset);
+				masterset = NULL;
 				SDLNet_TCP_Close(rs_socket);
 				rs_socket=NULL;
 			break;
@@ -1608,6 +1879,14 @@ static void NETallowJoining(void)
 	if (allow_joining == false) return;
 
 	NETregisterServer(1);
+
+	// This is here since we need to get the status, before we can show the info.
+	// FIXME: find better location to stick this?
+	if (!NetPlay.ShowedMOTD)
+	{
+		ShowMOTD();
+		NetPlay.ShowedMOTD = true;
+	}
 
 	if (tmp_socket_set == NULL)
 	{
@@ -1763,6 +2042,13 @@ static void NETallowJoining(void)
 					// Make sure the master server gets updated by disconnecting from it
 					// NETallowJoining will reconnect
 					NETregisterServer(0);
+					// if this is a password locked game then ask for password.
+					if (NetPlay.GamePassworded)
+					{
+						debug(LOG_NET, "Requesting password from %u", dpid);
+						NETbeginEncode(NET_REQUEST_PASSWORD, dpid);
+						NETend();
+					}
 					// and now, request version from new person
 					NETbeginEncode(NET_REQUEST_VERSION, dpid);
 					NETend();
@@ -1835,6 +2121,20 @@ BOOL NEThostGame(const char* SessionName, const char* PlayerName,
 	game.desc.dwUserFlags[1] = two;
 	game.desc.dwUserFlags[2] = three;
 	game.desc.dwUserFlags[3] = four;
+	sstrcpy(game.misc, "Misc data" );					// misc string  (future use)
+	sstrcpy(game.extra, "Extra");						// extra string (future use)
+	sstrcpy(game.versionstring, VersionString);			// version (string)
+	sstrcpy(game.modlist, "Mod list");					// List of mods
+	game.GAMESTRUCT_VERSION = 2;						// version of this structure
+	game.game_version_major = NETCODE_VERSION_MAJOR;	// Netcode Major version
+	game.game_version_minor = NETCODE_VERSION_MINOR;	// NetCode Minor version
+//	game.privateGame = 0;								// if true, it is a private game
+	game.pureGame = 0;									// NO mods allowed if true
+	game.Mods = 0;										// number of concatenated mods?
+	game.future1 = 0xBAD01;								// for future use
+	game.future2 = 0xBAD02;								// for future use
+	game.future3 = 0xBAD03;								// for future use
+	game.future4 = 0xBAD04;								// for future use
 
 	NET_InitPlayers();
 	NetPlay.dpidPlayer	= NET_CreatePlayer(PlayerName, PLAYER_HOST);
@@ -1863,13 +2163,6 @@ BOOL NEThaltJoining(void)
 	return true;
 }
 
-NETERR_TYPES connError = NETERR_NOERR;
-
-NETERR_TYPES getConnError(void)
-{
-	return connError;
-}
-
 // ////////////////////////////////////////////////////////////////////////
 // find games on open connection
 BOOL NETfindGame(void)
@@ -1881,8 +2174,11 @@ BOOL NETfindGame(void)
 	int result = 0;
 	debug(LOG_NET, "Looking for games...");
 	
-	if (connError > NETERR_CONN) return false;
-	connError = NETERR_NOERR;
+	if (getLobbyError() > ERROR_CONNECTION)
+	{
+		return false;
+	}
+	setLobbyError(ERROR_NOERROR);
 
 	NetPlay.games[0].desc.dwSize = 0;
 	NetPlay.games[0].desc.dwCurrentPlayers = 0;
@@ -1901,7 +2197,7 @@ BOOL NETfindGame(void)
 		{
 			debug(LOG_ERROR, "Error connecting to client via hostname provided (%s)",iptoconnect);
 			debug(LOG_ERROR, "Cannot resolve hostname :%s",SDLNet_GetError());
-			connError = NETERR_CONN;
+			setLobbyError(ERROR_CONNECTION);
 			return false;
 		}
 		else
@@ -1914,7 +2210,7 @@ BOOL NETfindGame(void)
 	else if (SDLNet_ResolveHost(&ip, hostname, port) == -1)
 	{
 		debug(LOG_ERROR, "Cannot resolve hostname \"%s\": %s", hostname, SDLNet_GetError());
-		connError = NETERR_CONN;
+		setLobbyError(ERROR_CONNECTION);
 		return false;
 	}
 
@@ -1930,7 +2226,7 @@ BOOL NETfindGame(void)
 	if (tcp_socket == NULL)
 	{
 		debug(LOG_ERROR, "Cannot connect to \"%s:%d\": %s", hostname, port, SDLNet_GetError());
-		connError = NETERR_CONN;
+		setLobbyError(ERROR_CONNECTION);
 		return false;
 	}
 	debug(LOG_NET, "New tcp_socket = %p", tcp_socket);
@@ -1939,7 +2235,7 @@ BOOL NETfindGame(void)
 	if (socket_set == NULL)
 	{
 		debug(LOG_ERROR, "Cannot create socket set: %s", SDLNet_GetError());
-		connError = NETERR_CONN;
+		setLobbyError(ERROR_CONNECTION);
 		return false;
 	}
 	debug(LOG_NET, "Created socket_set %p", socket_set);
@@ -1964,7 +2260,7 @@ BOOL NETfindGame(void)
 			tcp_socket = NULL; // unsure how to handle invalid sockets?
 		}
 		// when we fail to receive a game count, bail out
-		connError = NETERR_CONN;
+		setLobbyError(ERROR_CONNECTION);
 		return false;
 	}
 
@@ -1992,7 +2288,6 @@ BOOL NETfindGame(void)
 		++gamecount;
 	} while (gamecount < gamesavailable);
 
-	connError = NETERR_NOERR;
 	return true;
 }
 

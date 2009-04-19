@@ -293,7 +293,7 @@ BOOL MultiPlayerJoin(UDWORD dpid)
 		// if skirmish and game full, then kick...
 		if(game.type == SKIRMISH && NetPlay.playercount > game.maxPlayers )
 		{
-			kickPlayer(dpid, "game is full!");
+			kickPlayer(dpid, "game is full!", ERROR_FULL);
 		}
 	}
 	return true;
@@ -324,4 +324,17 @@ void setupNewPlayer(UDWORD dpid, UDWORD player)
 
 	ssprintf(buf, _("%s is Joining the Game"), getPlayerName(player));
 	addConsoleMessage(buf,DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+}
+
+
+// While not the perfect place for this, it has to do when a HOST joins (hosts) game
+// unfortunatly, we don't get the message until after the setup is done.
+void ShowMOTD(void)
+{
+	char buf[255];
+	// when HOST joins the game, show server MOTD message first
+	ssprintf(buf, _("System message:"));
+	addConsoleMessage(buf, DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
+	ssprintf(buf, "%s", NetPlay.MOTDbuffer);
+	addConsoleMessage(buf, DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
 }
