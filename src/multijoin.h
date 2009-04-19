@@ -41,5 +41,6 @@ typedef struct {
 } DROIDSTORE, *LPDROIDSTORE;
 
 extern DROIDSTORE *tempDroidList;
+extern void ShowMOTD(void);
 
 #endif // __INCLUDED_SRC_MULTIJOIN_H__

@@ -93,6 +93,8 @@ typedef enum
 							//60 to prevent conflict
 	NET_VERSION_CHECK = 61,	//61 version check
 	NET_REQUEST_VERSION,	//62 Host requests version check
+	NET_REQUEST_PASSWORD,	//63 Host requests password
+	NET_PASSWORD_CHECK,		//64 password check
 	NUM_GAME_PACKETS		//   *MUST* be last.
 } MESSAGE_TYPES;
 
@@ -101,6 +103,8 @@ typedef enum
 #define MaxMsgSize		8192		// max size of a message in bytes.
 #define	StringSize		64			// size of strings used.
 #define MaxGames		12			// max number of concurrently playable games to allow.
+#define extra_string_size	255		// extra 255 char for future use
+#define modlist_string_size	255		// For a concatenated list of mods
 
 #define SESSION_JOINDISABLED	1
 
@@ -117,9 +121,26 @@ typedef struct {					//Available game storage... JUST FOR REFERENCE!
  * @note when changing this structure, NETsendGAMESTRUCT, NETrecvGAMESTRUCT and
  *       the lobby server should be changed accordingly.
  */
-typedef struct {
+typedef struct
+{
 	char		name[StringSize];
 	SESSIONDESC	desc;
+	// END of old GAMESTRUCT format
+	// NOTE: do NOT save the following items in game.c--it will break savegames.
+	char		misc[StringSize];				// misc string  (future use)
+	char		extra[extra_string_size];		// extra string (future use)
+	char		versionstring[StringSize];		// 
+	char		modlist[modlist_string_size];	// ???
+	uint32_t	GAMESTRUCT_VERSION;				// version of this structure
+	uint32_t	game_version_major;				// 
+	uint32_t	game_version_minor;				// 
+	uint32_t	privateGame;					// if true, it is a private game
+	uint32_t	pureGame;						// NO mods allowed if true
+	uint32_t	Mods;							// number of concatenated mods?
+	uint32_t	future1;						// for future use
+	uint32_t	future2;						// for future use
+	uint32_t	future3;						// for future use
+	uint32_t	future4;						// for future use
 } GAMESTRUCT;
 
 // ////////////////////////////////////////////////////////////////////////
@@ -161,6 +182,10 @@ typedef struct {
 	// booleans
 	uint32_t	bComms;					// actually do the comms?
 	uint32_t	bHost;					// true if we are hosting the session
+	char gamePassword[StringSize];		//
+	bool GamePassworded;				// if we have a password or not.
+	bool ShowedMOTD;					// only want to show this once
+	char MOTDbuffer[255];				// buffer for MOTD
 } NETPLAY;
 
 /// This is the hardcoded dpid (player ID) value for the hosting player.
@@ -172,15 +197,6 @@ typedef struct {
 extern NETPLAY				NetPlay;
 
 extern NETMSG NetMsg;
-
-// Connection errors
-
-typedef enum {
-	NETERR_NOERR,
-	NETERR_CONN
-} NETERR_TYPES;
-
-extern NETERR_TYPES getConnError(void);
 
 // ////////////////////////////////////////////////////////////////////////
 // functions available to you.
@@ -224,5 +240,5 @@ extern void NETsetMasterserverPort(unsigned int port);
 extern void NETsetGameserverPort(unsigned int port);
 
 extern BOOL NETsetupTCPIP(const char *machine);
-
+extern void NETsetGamePassword(const char *password);
 #endif

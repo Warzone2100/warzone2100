@@ -24,6 +24,23 @@
 #ifndef __INCLUDED_SRC_MULTIINT_H__
 #define __INCLUDED_SRC_MULTIINT_H__
 
+
+// Lobby Connection errors
+
+typedef enum
+{
+	ERROR_NOERROR,
+	ERROR_CONNECTION,
+	ERROR_FULL,
+	ERROR_CHEAT,
+	ERROR_KICKED,
+	ERROR_WRONGVESION,
+	ERROR_WRONGPASSWORD				// NOTE WRONG_PASSWORD results in conflict
+} LOBBY_ERROR_TYPES;
+
+extern LOBBY_ERROR_TYPES getLobbyError(void);
+extern void setLobbyError(LOBBY_ERROR_TYPES error_type);
+
 extern	void	runConnectionScreen		(void);
 extern	BOOL	startConnectionScreen	(void);
 extern	void	intProcessConnection	(UDWORD id);
@@ -43,7 +60,7 @@ extern	char	sPlayer[128];
 extern	SDWORD	playerTeamGUI[MAX_PLAYERS];
 extern	SDWORD	playerTeam[MAX_PLAYERS];
 
-void	kickPlayer(uint32_t dpid, const char *reason);
+void	kickPlayer(uint32_t dpid, const char *reason, LOBBY_ERROR_TYPES type);
 UDWORD	addPlayerBox(BOOL);			// players (mid) box
 void loadMapPreview(void);
 
@@ -79,37 +96,15 @@ void loadMapPreview(void);
 #define CON_IPX				20
 #define CON_IPY				45
 
-#define CON_COM1			10134
-#define CON_COM1X			22
-#define CON_COM1Y			10
+//for clients
+#define CON_PASSWORD		10139
+#define CON_PASSWORDX		20
+#define CON_PASSWORDY		110
+// for hosts
+#define CON_H_PASSWORD		10140
+#define CON_H_PASSWORDX		MCOL2
+#define CON_H_PASSWORDY		MROW10 +31
 
-#define CON_COM2			10135
-#define CON_COM2X			62
-#define CON_COM2Y			10
-
-#define CON_COM3			10136
-#define CON_COM3X			102
-#define CON_COM3Y			10
-
-#define CON_COM4			10137
-#define CON_COM4X			142
-#define CON_COM4Y			10
-
-#define CON_14400			10138
-#define CON_14400X			22
-#define CON_14400Y			42
-
-#define CON_19200			10139
-#define CON_19200X			62
-#define CON_19200Y			42
-
-#define CON_57600			10140
-#define CON_57600X			102
-#define CON_57600Y			42
-
-#define CON_11520			10141
-#define CON_11520X			142
-#define CON_11520Y			42
 
 
 // ////////////////////////////////////////////////////////////////
@@ -169,8 +164,8 @@ void loadMapPreview(void);
 #define	MROW1					4
 #define	MROW2					MROW1+MULTIOP_EDITBOXH+4
 #define	MROW3					MROW2+MULTIOP_EDITBOXH+4
-#define	MROW4					MROW3+38
-#define MROW5					MROW4+31
+#define	MROW4					MROW3+MULTIOP_EDITBOXH+4
+#define MROW5					MROW4+36
 #define	MROW6					MROW5+31
 #define	MROW7					MROW6+31
 #define	MROW8					MROW7+31
@@ -270,6 +265,10 @@ void loadMapPreview(void);
 
 #define MULTIOP_MAP_PREVIEW 920000
 #define MULTIOP_MAP_BUT		920002
+
+#define MULTIOP_PASSWORD	920010
+#define MULTIOP_PASSWORD_BUT 920012
+#define MULTIOP_PASSWORD_EDIT 920013
 // ///////////////////////////////
 // Many Button Variations..
 
