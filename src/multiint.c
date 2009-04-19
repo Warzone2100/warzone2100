@@ -170,7 +170,7 @@ static	void	addChatBox			(void);
 static	void	disableMultiButs	(void);
 static	void	processMultiopWidgets(UDWORD);
 static	void	SendFireUp			(void);
-//void	kickPlayer			(UDWORD dpid, const char *reason);
+
 void			runMultiOptions		(void);
 BOOL			startMultiOptions	(BOOL);
 void			frontendMultiMessages(void);
@@ -973,26 +973,6 @@ void startGameFind(void)
 		sLabInit.FontID = font_regular;
 		sLabInit.pDisplay = FlashPasswordLabel;
 		widgAddLabel(psWScreen, &sLabInit);
-
-/*
-	// draws the label text as a button
-	ptxt = _("Enter password First!");
-	memset(&sButInit, 0, sizeof(W_BUTINIT));
-	sButInit.formID = FRONTEND_BACKDROP;
-	sButInit.id = CON_SETTINGS_LABEL+1;
-	sButInit.x = 170;
-	sButInit.y = 430;
-	sButInit.style = WBUT_PLAIN | WBUT_TXTCENTRE;
-	sButInit.width = 300;
-	sButInit.UserData = 0; // store disable state
-	sButInit.height = 20;
-	sButInit.pDisplay = displayTextOption;
-	sButInit.FontID = font_large;
-	sButInit.pText = ptxt;
-
-	widgAddButton(psWScreen, &sButInit);
-	widgSetButtonState(psWScreen, CON_SETTINGS_LABEL+1, WBUTS_FLASH);
-*/
 
 	// and finally draw the password entry box
 	memset(&sEdInit, 0, sizeof(W_EDBINIT));
