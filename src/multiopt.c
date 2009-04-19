@@ -337,7 +337,7 @@ BOOL hostCampaign(char *sGame, char *sPlayer)
 		setPlayerName(i, ""); //Clear custom names (use default ones instead)
 	}
 
-
+//	FIXME: FIX ME!!! **RANDOM** ARGH!
 	pl = rand()%game.maxPlayers;						//pick a player
 
 	player2dpid[pl] = NetPlay.dpidPlayer;				// add ourselves to the array.
