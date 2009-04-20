@@ -38,36 +38,61 @@ irc_channel = "#warzone2100-games"
 irc_nick    = "wzlobbybot"
 
 def main():
-    irc = bot_connection(irc_server, irc_port, irc_channel, irc_nick)
-    lobby = masterserver_connection("lobby.wz2100.net", 9997)
-    check = change_notifier(irc, lobby)
-    check.start()
-    try:
-        while True:
-            message = irc.read()
-            if message == "ping":
-                irc.write("pong")
-            if message == "help" or message == "info":
-                irc.write("I'm a bot that shows information from the \x02Warzone 2100\x02 lobby server. I was created by %s. For information about commands you can try: \"commands\"" % (__author__))
-            if message == "commands":
-                irc.write("ping: pong, help/info: general information about this bot, list: show which games are currenly being hosted")
-            if message == "list":
-                games = lobby.list()
-                if not games:
-                    irc.write("No games in lobby")
-                else:
-                    if len(games) == 1:
-                        message = "1 game hosted: "
-                    else:
-                        message = "%i games hosted: " % (len(games))
-                    l = ["\x02%s\x02 [%i/%i]" % (g.description, g.currentPlayers, g.maxPlayers) for g in games]
-                    message += ", ".join(l)
-                    irc.write(message)
-            # TODO: if message.startswith("show") # join a game and show information about it
-    except KeyboardInterrupt:
-        print "Shutting down. Waiting for lobby change notifier to terminate."
-        check.stop()
-        check.join()
+    bot = Bot(irc_server, irc_port, irc_channel, irc_nick, "lobby.wz2100.net", 9997)
+    bot.start()
+
+class Bot:
+    def __init__(self, ircServer, ircPort, ircChannel, ircNick, lobbyServer, lobbyPort):
+        self.commands     = BotCommands()
+        self.commands.bot = self
+        self.irc          = bot_connection(self.commands, ircServer, ircPort, ircChannel, ircNick)
+        self.lobby        = masterserver_connection(lobbyServer, lobbyPort)
+        self.check        = change_notifier(self.irc, self.lobby)
+
+    def start(self):
+        self.check.start()
+        try:
+            while True:
+                self.irc.readAndHandle()
+        except KeyboardInterrupt:
+            print "Shutting down. Waiting for lobby change notifier to terminate."
+            self.stop()
+            raise
+
+    def stop(self):
+        self.check.stop()
+        self.check.join()
+
+    def write(self, text):
+        return self.irc.write(text)
+
+class BotCommands:
+    def ping(self):
+        self.bot.write("pong")
+
+    def help(self):
+        self.bot.write("I'm a bot that shows information from the \x02Warzone 2100\x02 lobby server. I was created by %s. For information about commands you can try: \"commands\"" % (__author__))
+
+    def info(self):
+        return self.help()
+
+    def commands(self):
+        self.bot.write("ping: pong, help/info: general information about this bot, list: show which games are currenly being hosted")
+
+    def list(self):
+        games = self.bot.lobby.list()
+        if not games:
+            self.bot.write("No games in lobby")
+        else:
+            if len(games) == 1:
+                message = "1 game hosted: "
+            else:
+                message = "%i games hosted: " % (len(games))
+            l = ["\x02%s\x02 [%i/%i]" % (g.description, g.currentPlayers, g.maxPlayers) for g in games]
+            message += ", ".join(l)
+            self.bot.write(message)
+
+    # TODO: if message.startswith("show") # join a game and show information about it
 
 class change_notifier(threading.Thread):
     display_game_updated = False
@@ -117,19 +142,20 @@ class change_notifier(threading.Thread):
                             self.irc.write("Game closed: %s [%i/%i]" % (g.description, g.currentPlayers, g.maxPlayers))
                 self.games = new_game_dict
 
-            # Wait until we're requested to stop or a timeout occurs
+            # Wait until we're requested to stop or we're ready for the next lobby update
             self.stopChecking.wait(10)
 
 class bot_connection:
     nick = None
     connection = None
 
-    def __init__(self, server, port, channel, nick):
-        self.connection = irc_connection(server, port, channel, nick)
+    def __init__(self, bot, server, port, channel, nick):
+        self.connection = irc_connection(bot, server, port, channel, nick)
         self.nick = nick
 
-    def read(self):
-        return self.connection.read()
+    def readAndHandle(self):
+        """Read a message from IRC and handle it."""
+        return self.connection.readAndHandle()
 
     def write(self, line):
         self.connection.write(line)
@@ -138,7 +164,8 @@ class irc_connection:
     s = None
     channel = None
 
-    def __init__(self, server, port, channel, nick):
+    def __init__(self, bot, server, port, channel, nick):
+        self.bot = bot
         self.s = line_socket(server, port)
         self.channel = channel
         self.s.write("NICK "+nick)
@@ -156,21 +183,23 @@ class irc_connection:
     def privmsg(self, recipient, message):
         self.s.write("PRIVMSG %s :%s" % (recipient, message))
 
-    def read(self):
-        while True:
-            line = self.s.read()
+    def readAndHandle(self):
+        """Read a message from IRC and handle it."""
+        line = self.s.read()
 
-            m = self.private_channel_message.match(line)
-            if m:
-                nick    = m.group('nick')
-                channel = m.group('channel')
-                message = m.group('message')
-                if channel == self.channel:
-                    return message
-
+        m = self.private_channel_message.match(line)
+        if m:
+            nick    = m.group('nick')
+            channel = m.group('channel')
+            message = m.group('message')
+            if channel == self.channel:
+                try:
+                    getattr(self.bot, message)()
+                except AttributeError:
+                    self.privmsg(channel, '%s: Unknown command \'%s\'. Try \'commands\'.' % (nick, message))
+            else:
                 # Not the serviced channel, point the user at the correct channel
                 self.notice(nick, 'Sorry %s, I will not provide my services in this channel. Please find me in %s' % (nick, self.channel))
-                continue
 
     def write(self, line):
         self.privmsg(self.channel, line)
