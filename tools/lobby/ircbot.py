@@ -32,21 +32,22 @@ import threading
 import time
 from client import *
 
-irc_server   = "irc.freenode.net"
-irc_port     = 6667
-irc_channel  = "#warzone2100-games"
-irc_nick     = "wzlobbybot"
-irc_nickpass = None
+irc_server          = "irc.freenode.net"
+irc_port            = 6667
+irc_serve_channels  = ['#warzone2100-games']
+irc_silent_channels = ['#warzone2100']
+irc_nick            = "wzlobbybot"
+irc_nickpass        = None
 
 def main():
-    bot = Bot(irc_server, irc_port, irc_channel, irc_nick, irc_nickpass, "lobby.wz2100.net", 9997)
+    bot = Bot(irc_server, irc_port, irc_serve_channels, irc_silent_channels, irc_nick, irc_nickpass, "lobby.wz2100.net", 9997)
     bot.start()
 
 class Bot:
-    def __init__(self, ircServer, ircPort, ircChannel, ircNick, nickPass, lobbyServer, lobbyPort):
+    def __init__(self, ircServer, ircPort, ircServeChannels, ircSilentChannels, ircNick, nickPass, lobbyServer, lobbyPort):
         self.commands     = BotCommands()
         self.commands.bot = self
-        self.irc          = bot_connection(self.commands, ircServer, ircPort, ircChannel, ircNick, nickPass)
+        self.irc          = bot_connection(self.commands, ircServer, ircPort, ircServeChannels, ircSilentChannels, ircNick, nickPass)
         self.lobby        = masterserver_connection(lobbyServer, lobbyPort, version='2.1')
         self.check        = change_notifier(self.irc, self.lobby)
 
@@ -153,8 +154,8 @@ class bot_connection:
     nick = None
     connection = None
 
-    def __init__(self, bot, server, port, channel, nick, nickpass = None):
-        self.connection = irc_connection(bot, server, port, channel, nick, nickpass)
+    def __init__(self, bot, server, port, serve_channels, silent_channels, nick, nickpass = None):
+        self.connection = irc_connection(bot, server, port, serve_channels, silent_channels, nick, nickpass)
         self.nick = nick
 
     def readAndHandle(self):
@@ -165,16 +166,16 @@ class bot_connection:
         self.connection.write(line)
 
 class irc_connection:
-    s = None
-    channel = None
-
-    def __init__(self, bot, server, port, channel, nick, nickpass = None):
+    def __init__(self, bot, server, port, serve_channels, silent_channels, nick, nickpass = None):
         self.bot = bot
         self.s = line_socket(server, port)
-        self.channel = channel
+        self.nick = nick
+        self.serve_channels  = serve_channels
+        self.silent_channels = silent_channels
         self.s.write("NICK "+nick)
         self.s.write("USER %s 0 * :Warzone 2100 Lobby Bot ( http://wz2100.net/ )" % (nick))
-        self.join(channel)
+        for channel in self.serve_channels + self.silent_channels:
+            self.join(channel)
         if nickpass:
             self.privmsg('NICKSERV', 'IDENTIFY %s' % (nickpass))
 
@@ -198,14 +199,14 @@ class irc_connection:
             nick    = m.group('nick')
             channel = m.group('channel')
             message = m.group('message')
-            if channel == self.channel:
+            if channel in self.serve_channels:
                 try:
                     getattr(self.bot, message)()
                 except AttributeError:
                     self.privmsg(channel, '%s: Unknown command \'%s\'. Try \'commands\'.' % (nick, message))
             else:
                 # Not the serviced channel, point the user at the correct channel
-                self.notice(nick, 'Sorry %s, I will not provide my services in this channel. Please find me in %s' % (nick, self.channel))
+                self.notice(nick, 'Sorry %s, I will not provide my services in this channel. Please find me in one of %s' % (nick, ', '.join(self.serve_channels)))
 
     def write(self, line):
         self.privmsg(self.channel, line)
