@@ -2586,47 +2586,25 @@ WZ_DECL_UNUSED static BOOL scrGameOver(void)
 }
 
 // -----------------------------------------------------------------------------------------
-WZ_DECL_UNUSED static BOOL scrAnyFactoriesLeft(void)
+static int scrAnyFactoriesLeft(lua_State *L)
 {
-	SDWORD		player;
-	BOOL		bResult;
-	STRUCTURE	*psCurr;
-
-	if (!stackPopParams(1, VAL_INT, &player))
-	{
-		return false;
-	}
-
-	if (player < 0 || player >= MAX_PLAYERS)
-	{
-		ASSERT( false, "scrAnyFactorysLeft:player number is too high" );
-		return false;
-	}
+	int player = luaWZ_checkplayer(L, 1);
+	STRUCTURE *psCurr;
 
 	//check the players list for any structures
-	bResult = false;
 	if(apsStructLists[player])
 	{
 		for (psCurr = apsStructLists[player]; psCurr != NULL; psCurr = psCurr->psNext)
 		{
-//			if (psCurr->pStructureType->type	== REF_FACTORY ||
-//				psCurr->pStructureType->type == REF_CYBORG_FACTORY ||
-//				psCurr->pStructureType->type == REF_VTOL_FACTORY )
 			if(StructIsFactory(psCurr))
 			{
-				bResult = true;
-				break;
+				lua_pushboolean(L, true);
+				return 1;
 			}
 		}
 	}
 
-	scrFunctionResult.v.bval = bResult;
-	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
-	{
-		return false;
-	}
-
-	return true;
+	return 0;
 }
 
 
@@ -10017,7 +9995,7 @@ void registerScriptfuncs(lua_State *L)
 	lua_register(L, "chooseValidLoc", scrChooseValidLoc);
 	lua_register(L, "_getDroidVisibleBy", scrInternalGetDroidVisibleBy);
 	lua_register(L, "_getStructureVisibleBy", scrInternalGetStructureVisibleBy);
-	//lua_register(L, "", );
+	lua_register(L, "anyFactoriesLeft", scrAnyFactoriesLeft);
 	//lua_register(L, "", );
 	//lua_register(L, "", );
 	//lua_register(L, "", );
