@@ -46,7 +46,7 @@ class Bot:
         self.commands     = BotCommands()
         self.commands.bot = self
         self.irc          = bot_connection(self.commands, ircServer, ircPort, ircChannel, ircNick)
-        self.lobby        = masterserver_connection(lobbyServer, lobbyPort)
+        self.lobby        = masterserver_connection(lobbyServer, lobbyPort, version='2.1')
         self.check        = change_notifier(self.irc, self.lobby)
 
     def start(self):
