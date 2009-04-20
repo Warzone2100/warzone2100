@@ -42,27 +42,32 @@ def main():
     lobby = masterserver_connection("lobby.wz2100.net", 9997)
     check = change_notifier(irc, lobby)
     check.start()
-    while True:
-        message = irc.read()
-        if message == "ping":
-            irc.write("pong")
-        if message == "help" or message == "info":
-            irc.write("I'm a bot that shows information from the \x02Warzone 2100\x02 lobby server. I was created by %s. For information about commands you can try: \"commands\"" % (__author__))
-        if message == "commands":
-            irc.write("ping: pong, help/info: general information about this bot, list: show which games are currenly being hosted")
-        if message == "list":
-            games = lobby.list()
-            if not games:
-                irc.write("No games in lobby")
-            else:
-                if len(games) == 1:
-                    message = "1 game hosted: "
+    try:
+        while True:
+            message = irc.read()
+            if message == "ping":
+                irc.write("pong")
+            if message == "help" or message == "info":
+                irc.write("I'm a bot that shows information from the \x02Warzone 2100\x02 lobby server. I was created by %s. For information about commands you can try: \"commands\"" % (__author__))
+            if message == "commands":
+                irc.write("ping: pong, help/info: general information about this bot, list: show which games are currenly being hosted")
+            if message == "list":
+                games = lobby.list()
+                if not games:
+                    irc.write("No games in lobby")
                 else:
-                    message = "%i games hosted: " % (len(games))
-                l = ["\x02%s\x02 [%i/%i]" % (g.description, g.currentPlayers, g.maxPlayers) for g in games]
-                message += ", ".join(l)
-                irc.write(message)
-        # TODO: if message.startswith("show") # join a game and show information about it
+                    if len(games) == 1:
+                        message = "1 game hosted: "
+                    else:
+                        message = "%i games hosted: " % (len(games))
+                    l = ["\x02%s\x02 [%i/%i]" % (g.description, g.currentPlayers, g.maxPlayers) for g in games]
+                    message += ", ".join(l)
+                    irc.write(message)
+            # TODO: if message.startswith("show") # join a game and show information about it
+    except KeyboardInterrupt:
+        print "Shutting down. Waiting for lobby change notifier to terminate."
+        check.stop()
+        check.join()
 
 class change_notifier(threading.Thread):
     display_game_updated = False
@@ -74,9 +79,14 @@ class change_notifier(threading.Thread):
         self.irc = irc
         self.lobby = lobby
         self.games = None
+        self.stopChecking = threading.Event()
+
+    def stop(self):
+        self.stopChecking.set()
 
     def run(self):
-        while True:
+        self.stopChecking.clear()
+        while not self.stopChecking.isSet():
             new_games = self.lobby.list()
             if self.games == None:
                 self.games = {}
@@ -106,7 +116,9 @@ class change_notifier(threading.Thread):
                         if h not in new_game_dict:
                             self.irc.write("Game closed: %s [%i/%i]" % (g.description, g.currentPlayers, g.maxPlayers))
                 self.games = new_game_dict
-            time.sleep(10)
+
+            # Wait until we're requested to stop or a timeout occurs
+            self.stopChecking.wait(10)
 
 class bot_connection:
     nick = None
