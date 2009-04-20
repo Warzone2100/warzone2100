@@ -69,23 +69,23 @@ class Bot:
         return self.irc.write(text, channels)
 
 class BotCommands:
-    def ping(self, nick, channel):
-        self.bot.write("%s: pong" % (nick), [channel])
+    def ping(self, nick, write):
+        write("%s: pong" % (nick))
 
-    def help(self, nick, channel):
-        self.bot.write("%s: I'm a bot that shows information from the \x02Warzone 2100\x02 lobby server. I was created by %s. For information about commands you can try: \"commands\"" % (nick, __author__), [channel])
+    def help(self, nick, write):
+        write("%s: I'm a bot that shows information from the \x02Warzone 2100\x02 lobby server. I was created by %s. For information about commands you can try: \"commands\"" % (nick, __author__))
 
     # Alias 'info' to 'help'
     info = help
 
-    def commands(self, nick, channel):
-        self.bot.write("%s: ping: pong, help/info: general information about this bot, list: show which games are currenly being hosted" % (nick), [channel])
+    def commands(self, nick, write):
+        write("%s: ping: pong, help/info: general information about this bot, list: show which games are currenly being hosted" % (nick))
 
-    def list(self, nick, channel):
+    def list(self, nick, write):
         try:
             games = self.bot.lobby.list(allowException = True)
             if not games:
-                self.bot.write("%s: No games in lobby" % (nick), [channel])
+                write("%s: No games in lobby" % (nick))
             else:
                 if len(games) == 1:
                     message = "1 game hosted: "
@@ -93,9 +93,9 @@ class BotCommands:
                     message = "%i games hosted: " % (len(games))
                 l = ["\x02%s\x02 [%i/%i]" % (g.description, g.currentPlayers, g.maxPlayers) for g in games]
                 message += ", ".join(l)
-                self.bot.write("%s: %s" % (nick, message), [channel])
+                write("%s: %s" % (nick, message))
         except socket.timeout:
-            self.bot.write("%s: Failed to communicate with the lobby (%s:%d)" % (nick, self.bot.lobby.host, self.bot.lobby.port), [channel])
+            write("%s: Failed to communicate with the lobby (%s:%d)" % (nick, self.bot.lobby.host, self.bot.lobby.port))
 
     # TODO: if message.startswith("show") # join a game and show information about it
 
@@ -166,6 +166,8 @@ class bot_connection:
         return self.connection.write(line, channels)
 
 class irc_connection:
+    join_message = re.compile(r'^:(?P<nick>[^!]+)\S*\s+JOIN :(?P<channel>#\S+)')
+
     def __init__(self, bot, server, port, serve_channels, silent_channels, nick, nickpass = None):
         self.bot = bot
         self.s = line_socket(server, port)
@@ -214,6 +216,13 @@ class irc_connection:
         """Read a message from IRC and handle it."""
         line = self.s.read()
 
+        m = self.join_message.match(line)
+        if m:
+            nick    = m.group('nick')
+            channel = m.group('channel')
+            if channel in self.serve_channels:
+                self.bot.list(nick, lambda message: self.notice(nick, message))
+
         m = self.chan_mode_re.match(line)
         if m:
             mode    = m.group('mode')
@@ -243,7 +252,7 @@ class irc_connection:
                     self.privmsg(channel, '%s: Unknown command \'%s\'. Try \'commands\'.' % (nick, message))
 
                 if func:
-                    func(nick, channel)
+                    func(nick, lambda message: self.write(message, [channel]))
             else:
                 # Not the serviced channel, point the user at the correct channel
                 self.notice(nick, 'Sorry %s, I will not provide my services in this channel. Please find me in one of %s' % (nick, ', '.join(self.serve_channels)))
