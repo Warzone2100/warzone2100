@@ -47,7 +47,7 @@ class masterserver_connection:
         self.host = host
         self.port = port
 
-    def list(self):
+    def list(self, allowException = False):
         with _socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             games = []
             try:
@@ -69,7 +69,8 @@ class masterserver_connection:
                     g = game(description, host, maxPlayers, currentPlayers)
                     games.append(g)
             except socket.timeout:
-                pass
+                if allowException:
+                    raise
 
             return games
 

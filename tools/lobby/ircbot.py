@@ -80,17 +80,20 @@ class BotCommands:
         self.bot.write("ping: pong, help/info: general information about this bot, list: show which games are currenly being hosted")
 
     def list(self):
-        games = self.bot.lobby.list()
-        if not games:
-            self.bot.write("No games in lobby")
-        else:
-            if len(games) == 1:
-                message = "1 game hosted: "
+        try:
+            games = self.bot.lobby.list(allowException = True)
+            if not games:
+                self.bot.write("No games in lobby")
             else:
-                message = "%i games hosted: " % (len(games))
-            l = ["\x02%s\x02 [%i/%i]" % (g.description, g.currentPlayers, g.maxPlayers) for g in games]
-            message += ", ".join(l)
-            self.bot.write(message)
+                if len(games) == 1:
+                    message = "1 game hosted: "
+                else:
+                    message = "%i games hosted: " % (len(games))
+                l = ["\x02%s\x02 [%i/%i]" % (g.description, g.currentPlayers, g.maxPlayers) for g in games]
+                message += ", ".join(l)
+                self.bot.write(message)
+        except socket.timeout:
+            self.bot.write("Failed to communicate with the lobby (%s:%d)" % (self.bot.lobby.host, self.bot.lobby.port))
 
     # TODO: if message.startswith("show") # join a game and show information about it
 
