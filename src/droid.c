@@ -391,9 +391,6 @@ void	removeDroidBase(DROID *psDel)
 
 	CHECK_DROID(psDel);
 
-	//tell the power system its gone
-	powerDestroyObject((BASE_OBJECT *)psDel);
-
 	if (isDead((BASE_OBJECT *)psDel))
 	{
 		// droid has already been killed, quit
@@ -583,9 +580,6 @@ BOOL droidRemove(DROID *psDroid, DROID *pList[MAX_PLAYERS])
 
 	driveDroidKilled(psDroid);	// Tell the driver system it's gone.
 
-	//tell the power system its gone
-	powerDestroyObject((BASE_OBJECT *)psDroid);
-
 	if (isDead((BASE_OBJECT *) psDroid))
 	{
 		// droid has already been killed, quit
@@ -616,9 +610,6 @@ BOOL droidRemove(DROID *psDroid, DROID *pList[MAX_PLAYERS])
 	gridRemoveObject((BASE_OBJECT *)psDroid);
 
 	removeDroid(psDroid, pList);
-
-	// tell the power system it is gone
-	powerDestroyObject((BASE_OBJECT *)psDroid);
 
 	if (psDroid->player == selectedPlayer)
 	{
@@ -832,23 +823,6 @@ void droidUpdate(DROID *psDroid)
 	if (psDroid->id % 20 == frameGetFrameNumber() % 20)
 	{
 		clustUpdateObject((BASE_OBJECT *)psDroid);
-	}
-
-	// May need power
-	if (droidUsesPower(psDroid))
-	{
-		if (checkPower(psDroid->player, POWER_PER_CYCLE))
-		{
-			// Check if this droid is due some power
-			if (getLastPowered((BASE_OBJECT *)psDroid))
-			{
-				// Get some power if necessary
-				if (accruePower((BASE_OBJECT *)psDroid))
-				{
-					updateLastPowered((BASE_OBJECT *)psDroid, psDroid->player);
-				}
-			}
-		}
 	}
 
 	// ai update droid
@@ -1227,13 +1201,6 @@ BOOL droidUpdateBuild(DROID *psDroid)
 		return false;
 	}
 
-    // For now wait until have enough power to build
-    if (psStruct->currentPowerAccrued < (SWORD) structPowerToBuild(psStruct))
-    {
-        psDroid->actionStarted = gameTime;
-        return true;
-    }
-
 	constructPoints = constructorPoints(asConstructStats + psDroid->
 		asBits[COMP_CONSTRUCT].nStat, psDroid->player);
 
@@ -1253,35 +1220,8 @@ BOOL droidUpdateBuild(DROID *psDroid)
 
 BOOL droidStartDemolishing( DROID *psDroid )
 {
-	STRUCTURE	*psStruct;
-
-	CHECK_DROID(psDroid);
-
-	ASSERT( psDroid->order == DORDER_DEMOLISH,
-		"unitStartDemolishing: unit is not demolishing" );
-	psStruct = (STRUCTURE *)psDroid->psTarget;
-	ASSERT( psStruct->type == OBJ_STRUCTURE,
-		"unitStartDemolishing: target is not a structure" );
-
 	psDroid->actionStarted = gameTime;
-	psDroid->actionPoints  = 0;
-
-	/* init build points Don't - could be partially demolished*/
-	//psStruct->currentBuildPts = psStruct->pStructureType->buildPoints;
-	psStruct->status = SS_BEING_DEMOLISHED;
-
-	// Set height scale for demolishing
-	//psStruct->heightScale = (float)psStruct->currentBuildPts /
-	//	psStruct->pStructureType->buildPoints;
-
-	//if start to demolish a power gen need to inform the derricks
-	if (psStruct->pStructureType->type == REF_POWER_GEN)
-	{
-		releasePowerGen(psStruct);
-	}
-
-	CHECK_DROID(psDroid);
-
+	psDroid->actionPoints = 0;
 	return true;
 }
 
@@ -1622,8 +1562,7 @@ BOOL droidUpdateRepair( DROID *psDroid )
 		GAME_TICKS_PER_SEC;
 
 	/* add points to structure */
-	psStruct->body = (UWORD)(psStruct->body  + (iPointsToAdd - psDroid->actionPoints));
-
+	structureRepair(psStruct, psDroid, iPointsToAdd - psDroid->actionPoints);
 	/* store the amount just added */
 	psDroid->actionPoints = iPointsToAdd;
 
@@ -1643,7 +1582,7 @@ BOOL droidUpdateRepair( DROID *psDroid )
 BOOL droidUpdateDroidRepair(DROID *psRepairDroid)
 {
 	DROID		*psDroidToRepair;
-	UDWORD		iPointsToAdd, iRepairPoints, powerCost;
+	UDWORD		iPointsToAdd, iRepairPoints;
 	Vector3i iVecEffect;
 
 	CHECK_DROID(psRepairDroid);
@@ -1657,40 +1596,8 @@ BOOL droidUpdateDroidRepair(DROID *psRepairDroid)
 	ASSERT( psDroidToRepair->type == OBJ_DROID,
 		"unitUpdateUnitRepair: target is not a unit" );
 
-    //the amount of power accrued limits how much of the work can be done
-    //self-repair doesn't cost power
-    if (psRepairDroid == psDroidToRepair)
-    {
-        powerCost = 0;
-    }
-    else
-    {
-        //check if enough power to do any
-        powerCost = powerReqForDroidRepair(psDroidToRepair);
-        if (powerCost > psDroidToRepair->powerAccrued)
-        {
-            powerCost = (powerCost - psDroidToRepair->powerAccrued) / POWER_FACTOR;
-        }
-        else
-        {
-            powerCost = 0;
-        }
-
-    }
-
-    //if the power cost is 0 (due to rounding) then do for free!
-    if (powerCost)
-    {
-        if (!psDroidToRepair->powerAccrued)
-        {
-            //reset the actionStarted time and actionPoints added so the correct
-            //amount of points are added when there is more power
-			psRepairDroid->actionStarted = gameTime;
-            //init so repair points to add won't be huge when start up again
-            psRepairDroid->actionPoints = 0;
-            return true;
-        }
-    }
+	// FIXME: add power cost for repair
+	// remember that self repair is free
 
 	iRepairPoints = repairPoints(asRepairStats + psRepairDroid->
 		asBits[COMP_REPAIRUNIT].nStat, psRepairDroid->player);
@@ -1713,7 +1620,7 @@ BOOL droidUpdateDroidRepair(DROID *psRepairDroid)
     {
         //just add the points if the power cost is negligable
         //if these points would make the droid healthy again then just add
-        if (!powerCost || (psDroidToRepair->body + iPointsToAdd >= psDroidToRepair->originalBody))
+        if (psDroidToRepair->body + iPointsToAdd >= psDroidToRepair->originalBody)
         {
             //anothe HACK but sorts out all the rounding errors when values get small
             psDroidToRepair->body += iPointsToAdd;
@@ -1721,22 +1628,8 @@ BOOL droidUpdateDroidRepair(DROID *psRepairDroid)
         }
         else
         {
-            //see if we have enough power to do this amount of repair
-            powerCost = iPointsToAdd * repairPowerPoint(psDroidToRepair);
-            if (powerCost <= psDroidToRepair->powerAccrued)
-            {
-                psDroidToRepair->body += iPointsToAdd;
-                psRepairDroid->actionPoints += iPointsToAdd;
-                //subtract the power cost for these points
-                psDroidToRepair->powerAccrued -= powerCost;
-            }
-            else
-            {
-                /*reset the actionStarted time and actionPoints added so the correct
-                amount of points are added when there is more power*/
-                psRepairDroid->actionStarted = gameTime;
-                psRepairDroid->actionPoints = 0;
-            }
+			psDroidToRepair->body += iPointsToAdd;
+			psRepairDroid->actionPoints += iPointsToAdd;
         }
     }
 
@@ -1761,7 +1654,6 @@ BOOL droidUpdateDroidRepair(DROID *psRepairDroid)
 	else
 	{
         //reset the power accrued
-        psDroidToRepair->powerAccrued = 0;
 		psDroidToRepair->body = psDroidToRepair->originalBody;
 		return false;
 	}
@@ -4948,7 +4840,6 @@ void checkDroid(const DROID *droid, const char *const location, const char *func
 	ASSERT_HELPER(droid->listSize <= ORDER_LIST_MAX, location, function, "CHECK_DROID: Bad number of droid orders %d", (int)droid->listSize);
 	ASSERT_HELPER(droid->player < MAX_PLAYERS, location, function, "CHECK_DROID: Bad droid owner %d", (int)droid->player);
 	ASSERT_HELPER(droidOnMap(droid), location, function, "CHECK_DROID: Droid off map");
-	ASSERT_HELPER((!droid->psTarStats || ((STRUCTURE_STATS *)droid->psTarStats)->type != REF_DEMOLISH), location, function, "CHECK_DROID: Cannot build demolition");
 
 	for (i = 0; i < DROID_MAXWEAPS; ++i)
 	{

@@ -185,7 +185,7 @@ static void	structUpdateRecoil( STRUCTURE *psStruct );
 static void resetResistanceLag(STRUCTURE *psBuilding);
 static void revealAll(UBYTE player);
 static void cbNewDroid(STRUCTURE *psFactory, DROID *psDroid);
-
+static int structureTotalReturn(STRUCTURE *psStruct);
 
 // last time the maximum units message was displayed
 static UDWORD	lastMaxUnitMessage;
@@ -1090,83 +1090,7 @@ BOOL structureStatsShutDown(void)
 // TODO: The abandoned code needs to be factored out, see: saveMissionData
 void handleAbandonedStructures()
 {
-	// FIXME: We should control the calling frequency externally from this
-	//        function, rather than controlling the amount of times this
-	//        function performs work internally.
-	static int lastHandled = 0;
-	int player;
-
-	// We only need to run once every two seconds (2000ms)
-	if (gameTime - lastHandled < 2000)
-	{
-		return;
-	}
-
-	// Update when we last ran
-	lastHandled = gameTime;
-
-	for (player = 0; player < MAX_PLAYERS; ++player)
-	{
-		STRUCTURE *psCurr, *psNext;
-
-		for (psCurr = apsStructLists[player]; psCurr; psCurr = psNext)
-		{
-			// Save the next structure in the list
-			psNext = psCurr->psNext;
-
-			/*
-			 * We are only interested in structures accruing that are not
-			 * structures which can have modules (factory, research, power).
-			 */
-			if (psCurr->status == SS_BEING_BUILT
-			 && psCurr->currentPowerAccrued < structPowerToBuild(psCurr)
-			 && psCurr->pStructureType->type != REF_FACTORY
-			 && psCurr->pStructureType->type != REF_VTOL_FACTORY
-			 && psCurr->pStructureType->type != REF_RESEARCH
-			 && psCurr->pStructureType->type != REF_POWER_GEN)
-			{
-				DROID *psDroid;
-				bool beingBuilt = false;
-
-				// See is there are any droids building it
-				for (psDroid = apsDroidLists[player];
-				     psDroid;
-				     psDroid = psDroid->psNext)
-				{
-					// The droid is working on it and therefore not abandoned
-					if ((STRUCTURE *) orderStateObj(psDroid, DORDER_BUILD) == psCurr)
-					{
-						beingBuilt = true;
-						break;
-					}
-				}
-
-				// Being worked on, nothing to see here
-				if (beingBuilt)
-				{
-					continue;
-				}
-				// Abandoned
-				else
-				{
-					int reductionAmount = 8;
-
-					// Work out how much power to deduct
-					CLIP(reductionAmount, 0, psCurr->currentPowerAccrued);
-
-					// Do the reduction
-					psCurr->currentPowerAccrued -= reductionAmount;
-					addPower(player, reductionAmount);
-
-					// Remove the structure if no power is accrued
-					if (!psCurr->currentPowerAccrued)
-					{
-						removeStruct(psCurr, true);
-					}
-				}
-			}
-		}
-	}
+	// TODO: do something here
 }
 
 /* Deals damage to a Structure.
@@ -1215,22 +1139,47 @@ float getStructureDamage(const STRUCTURE* psStructure)
 }
 
 /// Add buildPoints to the structures currentBuildPts, due to construction work by the droid
+/// Also can deconstruct (demolish) a building if passed negative buildpoints
 void structureBuild(STRUCTURE *psStruct, DROID *psDroid, int buildPoints)
 {
 	int before, after;
+	int powerNeeded;
+	int buildPointsToAdd;
+
+
+	if (buildPoints > 0)
+	{
+		// Check if there is enough power to perform this construction work
+		powerNeeded = ((psStruct->currentBuildPts + buildPoints) * structPowerToBuild(psStruct))/psStruct->pStructureType->buildPoints -
+		               (psStruct->currentBuildPts * structPowerToBuild(psStruct))/psStruct->pStructureType->buildPoints;
+		buildPointsToAdd = requestPowerFor(psStruct->player, powerNeeded, buildPoints);
+	}
+	else
+	{
+		// get half the power back for demolishing 
+		powerNeeded = (((int)psStruct->currentBuildPts + buildPoints) * structureTotalReturn(psStruct))/(psStruct->pStructureType->buildPoints) -
+		               (psStruct->currentBuildPts * structureTotalReturn(psStruct))/(psStruct->pStructureType->buildPoints);
+		buildPointsToAdd = buildPoints;
+		addPower(psStruct->player, -powerNeeded);
+	}
+
 	before = (9 * psStruct->currentBuildPts * structureBody(psStruct) ) / (10 * psStruct->pStructureType->buildPoints);
-	psStruct->currentBuildPts += buildPoints;
+	psStruct->currentBuildPts += buildPointsToAdd;
+	CLIP(psStruct->currentBuildPts, 0, psStruct->pStructureType->buildPoints);
 	after =  (9 * psStruct->currentBuildPts * structureBody(psStruct) ) / (10 * psStruct->pStructureType->buildPoints);
 	psStruct->body += after - before;
 
 	//check if structure is built
-	if (psStruct->currentBuildPts >= (SDWORD)psStruct->pStructureType->buildPoints)
+	if (buildPoints > 0 && psStruct->currentBuildPts >= (SDWORD)psStruct->pStructureType->buildPoints)
 	{
 		psStruct->currentBuildPts = (SWORD)psStruct->pStructureType->buildPoints;
 		psStruct->status = SS_BUILT;
 		buildingComplete(psStruct);
 
-		intBuildFinished(psDroid);
+		if (psDroid)
+		{
+			intBuildFinished(psDroid);
+		}
 
 		if((bMultiPlayer) && myResponsibility(psStruct->player))
 		{
@@ -1238,7 +1187,8 @@ void structureBuild(STRUCTURE *psStruct, DROID *psDroid, int buildPoints)
 		}
 
 		//only play the sound if selected player
-		if (psStruct->player == selectedPlayer
+		if (psDroid &&
+		    psStruct->player == selectedPlayer
 		 && (psDroid->order != DORDER_LINEBUILD
 		  || (map_coord(psDroid->orderX) == map_coord(psDroid->orderX2)
 		   && map_coord(psDroid->orderY) == map_coord(psDroid->orderY2))))
@@ -1253,78 +1203,82 @@ void structureBuild(STRUCTURE *psStruct, DROID *psDroid, int buildPoints)
 
 		/* must reset here before the callback, droid must have DACTION_NONE
 		     in order to be able to start a new built task, doubled in actionUpdateDroid() */
-		debug( LOG_NEVER, "DACTION_NONE: done\n");
-		psDroid->action = DACTION_NONE;
+		if (psDroid)
+		{
+			debug( LOG_NEVER, "DACTION_NONE: done\n");
+			psDroid->action = DACTION_NONE;
 
-		/* Notify scripts we just finished building a structure, pass builder and what was built */
-		psScrCBNewStruct	= psStruct;
-		psScrCBNewStructTruck= psDroid;
-		eventFireCallbackTrigger((TRIGGER_TYPE)CALL_STRUCTBUILT);
+			/* Notify scripts we just finished building a structure, pass builder and what was built */
+			psScrCBNewStruct	= psStruct;
+			psScrCBNewStructTruck= psDroid;
+			eventFireCallbackTrigger((TRIGGER_TYPE)CALL_STRUCTBUILT);
 
-		audio_StopObjTrack( psDroid, ID_SOUND_CONSTRUCTION_LOOP );
-
+			audio_StopObjTrack( psDroid, ID_SOUND_CONSTRUCTION_LOOP );
+		}
 	}
+	else
+	{
+		psStruct->status = SS_BEING_BUILT;
+	}
+	if (buildPoints < 0 && psStruct->currentBuildPts == 0)
+	{
+		removeStruct(psStruct, true);
+	}
+}
+
+static int structureTotalReturn(STRUCTURE *psStruct)
+{
+	int result = structPowerToBuild(psStruct)/2.0f;
+
+	if(psStruct->pStructureType->type == REF_POWER_GEN)
+	{
+		//if had module attached - the base must have been completely built
+		if (psStruct->pFunctionality->powerGenerator.capacity)
+		{
+			//so add the power required to build the base struct
+			result += psStruct->pStructureType->powerToBuild/2.0f;
+		}
+	}
+	else
+	{
+		//if it had a module attached, need to add the power for the base struct as well
+		if (StructIsFactory(psStruct))
+		{
+			if (psStruct->pFunctionality->factory.capacity)
+			{
+				//if large factory - add half power for one upgrade
+				if (psStruct->pFunctionality->factory.capacity > SIZE_MEDIUM)
+				{
+					result += structPowerToBuild(psStruct) / 2.0f;
+				}
+			}
+		}
+		else if (psStruct->pStructureType->type == REF_RESEARCH)
+		{
+			if (psStruct->pFunctionality->researchFacility.capacity)
+			{
+				//add half power for base struct
+				result += psStruct->pStructureType->powerToBuild/2.0f;
+			}
+		}
+	}
+	return result;
 }
 
 void structureDemolish(STRUCTURE *psStruct, DROID *psDroid, int buildPoints)
 {
-	psStruct->currentBuildPts -= buildPoints;
+	structureBuild(psStruct, psDroid, -buildPoints);
+}
 
-	/* check if structure is demolished */
-	if ( psStruct->currentBuildPts <= 0 )
+void structureRepair(STRUCTURE *psStruct, DROID *psDroid, int buildPoints)
+{
+	float repairFraction = buildPoints/(float)psStruct->pStructureType->buildPoints;
+
+	psStruct->body += repairFraction*structureBody(psStruct);
+	CLIP(psStruct->body, 0, structureBody(psStruct));
+	if (psStruct->body == 0)
 	{
-
-		if(bMultiPlayer)
-		{
-			SendDemolishFinished(psStruct,psDroid);
-		}
-
-
-		if(psStruct->pStructureType->type == REF_POWER_GEN)
-		{
-			//if had module attached - the base must have been completely built
-			if (psStruct->pFunctionality->powerGenerator.capacity)
-			{
-				//so add the power required to build the base struct
-				addPower(psStruct->player, psStruct->pStructureType->powerToBuild);
-			}
-			//add the currentAccruedPower since this may or may not be all required
-			addPower(psStruct->player, psStruct->currentPowerAccrued);
-		}
-		else
-		{
-			//if it had a module attached, need to add the power for the base struct as well
-			if (StructIsFactory(psStruct))
-			{
-				if (psStruct->pFunctionality->factory.capacity)
-				{
-					//add half power for base struct
-					addPower(psStruct->player, psStruct->pStructureType->
-						powerToBuild / 2);
-					//if large factory - add half power for one upgrade
-					if (psStruct->pFunctionality->factory.capacity > SIZE_MEDIUM)
-					{
-						addPower(psStruct->player, structPowerToBuild(psStruct) / 2);
-					}
-				}
-			}
-			else if (psStruct->pStructureType->type == REF_RESEARCH)
-			{
-				if (psStruct->pFunctionality->researchFacility.capacity)
-				{
-					//add half power for base struct
-					addPower(psStruct->player, psStruct->pStructureType->powerToBuild / 2);
-				}
-			}
-			//add currentAccrued for the current layer of the structure
-			addPower(psStruct->player, psStruct->currentPowerAccrued / 2);
-		}
-		/* remove structure and foundation */
-		removeStruct( psStruct, true );
-
-		/* reset target stats*/
-		psDroid->psTarStats = NULL;
-
+		removeStruct(psStruct, true);
 	}
 }
 
@@ -2064,8 +2018,6 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 			{
 				intRefreshScreen();
 			}
-			//inform power system that won't be needing power until built
-			powerDestroyObject((BASE_OBJECT *)psBuilding);
 		}
 	}
 	if(pStructureType->type!=REF_WALL && pStructureType->type!=REF_WALLCORNER)
@@ -2846,7 +2798,7 @@ BOOL CheckHaltOnMaxUnitsReached(STRUCTURE *psStructure)
 }
 
 
-static void aiUpdateStructure(STRUCTURE *psStructure)
+static void aiUpdateStructure(STRUCTURE *psStructure, bool mission)
 {
 	BASE_STATS			*pSubject = NULL;
 	UDWORD				pointsToAdd;//, iPower;
@@ -2869,8 +2821,24 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 	DROID_TEMPLATE		*psNextTemplate;
 #endif
 	UDWORD				i;
+	float secondsToBuild, powerNeeded;
+	int secondsElapsed;
 
 	CHECK_STRUCTURE(psStructure);
+
+	if (mission)
+	{
+		switch (psStructure->pStructureType->type)
+		{
+			case REF_RESEARCH:
+			case REF_FACTORY:
+			case REF_CYBORG_FACTORY:
+			case REF_VTOL_FACTORY:
+				break;
+			default:
+				return; // nothing to do
+		}
+	}
 
 	// Will go out into a building EVENT stats/text file
 	/* Spin round yer sensors! */
@@ -3004,22 +2972,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 		return;
 	}
 
-	//check if any power available
-	if (structUsesPower(psStructure))
-	{
-		if (checkPower(psStructure->player, POWER_PER_CYCLE))
-		{
-			//check if this structure is due some power
-			if (getLastPowered((BASE_OBJECT *)psStructure))
-			{
-				//get some power if necessary
-				if (accruePower((BASE_OBJECT *)psStructure))
-				{
-					updateLastPowered((BASE_OBJECT *)psStructure, psStructure->player);
-				}
-			}
-		}
-	}
+	accruePower((BASE_OBJECT *)psStructure);
 
 	/* Process the functionality according to type
 	* determine the subject stats (for research or manufacture)
@@ -3237,14 +3190,6 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 			//check research has not already been completed by another structure
 			if (IsResearchCompleted(pPlayerRes)==0)
 			{
-				//check to see if enough power to research has accrued
-				if (psResFacility->powerAccrued < ((RESEARCH *)pSubject)->researchPower)
-				{
-					//wait until enough power
-					return;
-				}
-
-
 				// don't update if not responsible (106)
 				if(bMultiPlayer && !myResponsibility(psStructure->player))
 				{
@@ -3260,10 +3205,15 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 				pointsToAdd = (psResFacility->researchPoints * (gameTime -
 					psResFacility->timeStarted)) / GAME_TICKS_PER_SEC;
 
-				//check if Research is complete
-				if ((pointsToAdd + pPlayerRes->currentPoints) > (
-					(RESEARCH *)pSubject)->researchPoints)
+				if (pointsToAdd > 0)
+				{
+					float powerNeeded = (((RESEARCH *)pSubject)->researchPower * pointsToAdd) / (float)((RESEARCH *)pSubject)->researchPoints;
+					pPlayerRes->currentPoints += requestPowerFor(psStructure->player, powerNeeded, pointsToAdd);
+					psResFacility->timeStarted = gameTime;
+				}
 
+				//check if Research is complete
+				if (pPlayerRes->currentPoints > ((RESEARCH *)pSubject)->researchPoints)
 				{
 					if(bMultiPlayer)
 					{
@@ -3335,14 +3285,6 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 				}
 			}
 
-			//check enough power has accrued to build the droid
-			if (psFactory->powerAccrued < ((DROID_TEMPLATE *)pSubject)->
-					powerPoints)
-			{
-				//wait until enough power
-				return;
-			}
-
 			/*must be enough power so subtract that required to build*/
 			if (psFactory->timeStarted == ACTION_START_TIME)
 			{
@@ -3350,19 +3292,45 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 				psFactory->timeStarted = gameTime;
 			}
 
-			pointsToAdd = (gameTime - psFactory->timeStarted) / GAME_TICKS_PER_SEC;
+			if (psFactory->timeToBuild > 0)
+			{
+				int progress;
+				secondsElapsed = (gameTime - psFactory->timeStarted) / (float)GAME_TICKS_PER_SEC;
+				secondsToBuild = ((DROID_TEMPLATE*)pSubject)->buildPoints/(float)psFactory->productionOutput;
+				powerNeeded = ((DROID_TEMPLATE *)pSubject)->powerPoints*(secondsElapsed/secondsToBuild);
+				if (secondsElapsed > 0)
+				{
+					progress = requestPowerFor(psStructure->player, powerNeeded, secondsElapsed);
+					psFactory->timeToBuild -= progress;
+					psFactory->timeStarted = psFactory->timeStarted + secondsElapsed*1000;
+				}
+			}
 
 			//check for manufacture to be complete
-			if ((pointsToAdd > psFactory->timeToBuild) &&
+			if ((psFactory->timeToBuild <= 0) &&
 				!IsFactoryCommanderGroupFull(psFactory) &&
 				!CheckHaltOnMaxUnitsReached(psStructure))
 			{
-				/* Place the droid on the map */
-				bDroidPlaced = structPlaceDroid(psStructure, (DROID_TEMPLATE *)pSubject, &psDroid);
+				if (mission)
+				{
+					// put it in the mission list
+					psDroid = buildMissionDroid((DROID_TEMPLATE *)pSubject,
+					                            psStructure->pos.x, psStructure->pos.y,
+					                            psStructure->player);
+					if (psDroid)
+					{
+						setDroidBase(psDroid, psStructure);
+						bDroidPlaced = true;
+					}
+				}
+				else
+				{
+					// place it on the map
+					bDroidPlaced = structPlaceDroid(psStructure, (DROID_TEMPLATE *)pSubject, &psDroid);
+				}
 
 				//reset the start time
 				psFactory->timeStarted = ACTION_START_TIME;
-				psFactory->powerAccrued = 0;
 
 #ifdef INCLUDE_FACTORYLISTS
 				//next bit for productionPlayer only
@@ -3426,8 +3394,6 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 	{
 		if ( structureMode == REF_REPAIR_FACILITY )
 		{
-			UDWORD  powerCost;
-
 			psDroid = (DROID *) psChosenObj;
 			ASSERT( psDroid != NULL,
 					"aiUpdateStructure: invalid droid pointer" );
@@ -3461,30 +3427,6 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 						}
 					}
 
-					//check if enough power to do any
-					powerCost = powerReqForDroidRepair(psDroid);
-					if (powerCost > psDroid->powerAccrued)
-					{
-						powerCost = (powerCost - psDroid->powerAccrued) / POWER_FACTOR;
-					}
-					else
-					{
-						powerCost = 0;
-					}
-					//if the power cost is 0 (due to rounding) then do for free!
-					if (powerCost)
-					{
-						if (!psDroid->powerAccrued)
-						{
-							//reset the actionStarted time and actionPoints added so the correct
-							//amount of points are added when there is more power
-							psRepairFac->timeStarted = gameTime;
-							//init so repair points to add won't be huge when start up again
-							psRepairFac->currentPtsAdded = 0;
-							return;
-						}
-					}
-
 					if (psRepairFac->timeStarted == ACTION_START_TIME)
 					{
 						//set the time started
@@ -3492,7 +3434,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 						//reset the points added
 						psRepairFac->currentPtsAdded = 0;
 					}
-
+					// FIXME: duplicate code, make repairing cost power again
 					/* do repairing */
 					iDt = gameTime - psRepairFac->timeStarted;
 					//- this was a bit exponential ...
@@ -3505,7 +3447,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 					{
 						//just add the points if the power cost is negligable
 						//if these points would make the droid healthy again then just add
-						if (!powerCost || (psDroid->body + pointsToAdd >= psDroid->originalBody))
+						if (psDroid->body + pointsToAdd >= psDroid->originalBody)
 						{
 							//anothe HACK but sorts out all the rounding errors when values get small
 							psDroid->body += pointsToAdd;
@@ -3513,22 +3455,8 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 						}
 						else
 						{
-							//see if we have enough power to do this amount of repair
-							powerCost = pointsToAdd * repairPowerPoint(psDroid);
-							if (powerCost <= psDroid->powerAccrued)
-							{
 								psDroid->body += pointsToAdd;
 								psRepairFac->currentPtsAdded += pointsToAdd;
-								//subtract the power cost for these points
-								psDroid->powerAccrued -= powerCost;
-							}
-							else
-							{
-								/*reset the actionStarted time and actionPoints added so the correct
-								amount of points are added when there is more power*/
-								psRepairFac->timeStarted = gameTime;
-								psRepairFac->currentPtsAdded = 0;
-							}
 						}
 					}
 				}
@@ -3541,8 +3469,6 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 
 					/* set droid points to max */
 					psDroid->body = psDroid->originalBody;
-					//reset the power accrued
-					psDroid->powerAccrued = 0;
 
 					// if completely repaired reset order
 					secondarySetState(psDroid, DSO_RETURN_TO_LOC, DSS_NONE);
@@ -3709,7 +3635,7 @@ static float CalcStructureSmokeInterval(float damage)
 }
 
 /* The main update routine for all Structures */
-void structureUpdate(STRUCTURE *psBuilding)
+void structureUpdate(STRUCTURE *psBuilding, bool mission)
 {
 	UDWORD widthScatter,breadthScatter;
 	UDWORD emissionInterval, iPointsToAdd, iPointsRequired;
@@ -3728,7 +3654,7 @@ void structureUpdate(STRUCTURE *psBuilding)
 	//update the manufacture/research of the building once complete
 	if (psBuilding->status == SS_BUILT)
 	{
-		aiUpdateStructure(psBuilding);
+		aiUpdateStructure(psBuilding, mission);
 	}
 
 	if(psBuilding->status!=SS_BUILT)
@@ -4827,9 +4753,6 @@ BOOL removeStruct(STRUCTURE *psDel, BOOL bDestroy)
 	{
 		removeStructFromMap(psDel);
 	}
-
-	//tell the power system its gone
-	powerDestroyObject((BASE_OBJECT *)psDel);
 
 	if (bDestroy)
 	{
@@ -6732,15 +6655,16 @@ void cancelProduction(STRUCTURE *psBuilding)
 	//check its the correct factory
 	if (psBuilding->player == productionPlayer && psFactory->psSubject)
 	{
+		// give the power back that was used until now
+		int secondsToBuild = ((DROID_TEMPLATE*)psFactory->psSubject)->buildPoints/psFactory->productionOutput;
+		int secondsElapsed = secondsToBuild - psFactory->timeToBuild;
+		int powerUsed = (((DROID_TEMPLATE *)psFactory->psSubject)->powerPoints*secondsElapsed)/secondsToBuild;
+		addPower(psBuilding->player, powerUsed);
+
 		//clear the production run for this factory
 		memset(asProductionRun[psFactory->psAssemblyPoint->factoryType][
 			psFactory->psAssemblyPoint->factoryInc], 0, sizeof(PRODUCTION_RUN) *
 			MAX_PROD_RUN);
-		//return any accrued power
-		if (psFactory->powerAccrued)
-		{
-			addPower(psBuilding->player, psFactory->powerAccrued);
-		}
 		//clear the factories subject and quantity
 		psFactory->psSubject = NULL;
 		psFactory->quantity = 0;
@@ -6903,9 +6827,7 @@ void factoryProdAdjust(STRUCTURE *psStructure, DROID_TEMPLATE *psTemplate, BOOL 
 					//add power back if we were working on this one
 					if (psFactory->psSubject == (BASE_STATS *)psTemplate)
 					{
-						addPower(psStructure->player, psFactory->powerAccrued);
-						//set the factory's power accrued back to zero
-						psFactory->powerAccrued = 0;
+						// FIXME: give power back
 					}
 				}
 			}
@@ -6921,9 +6843,7 @@ void factoryProdAdjust(STRUCTURE *psStructure, DROID_TEMPLATE *psTemplate, BOOL 
 					//add power back if we were working on this one
 					if (psFactory->psSubject == (BASE_STATS *)psTemplate)
 					{
-						addPower(psStructure->player, psFactory->powerAccrued);
-						//set the factory's power accrued back to zero
-						psFactory->powerAccrued = 0;
+						// FIXME: give power back
 					}
 
 					if (asProductionRun[factoryType][factoryInc][inc].quantity == 0)

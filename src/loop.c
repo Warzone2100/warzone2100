@@ -269,13 +269,12 @@ GAMECODE gameLoop(void)
 
 			fireWaitingCallbacks(); //Now is the good time to fire waiting callbacks (since interpreter is off now)
 
+			throttleEconomy();
+
 			for(i = 0; i < MAX_PLAYERS; i++)
 			{
 				//update the current power available for a player
 				updatePlayerPower(i);
-
-				//this is a check cos there is a problem with the power but not sure where!!
-				powerCheck(true, (UBYTE)i);
 
 				//set the flag for each player
 				setHQExists(false, i);
@@ -371,7 +370,7 @@ GAMECODE gameLoop(void)
 				{
 					/* Copy the next pointer - not 100% sure if the structure could get destroyed but this covers us anyway */
 					psNBuilding = psCBuilding->psNext;
-					structureUpdate(psCBuilding);
+					structureUpdate(psCBuilding, false);
 					//set animation flag
 					if (psCBuilding->pStructureType->type == REF_HQ &&
 						psCBuilding->status == SS_BUILT)
@@ -395,7 +394,7 @@ GAMECODE gameLoop(void)
 				{
 					/* Copy the next pointer - not 100% sure if the structure could get destroyed but this covers us anyway. It shouldn't do since its not even on the map!*/
 					psNBuilding = psCBuilding->psNext;
-					missionStructureUpdate(psCBuilding);
+					structureUpdate(psCBuilding, true); // update for mission
 					if (psCBuilding->pStructureType->type == REF_HQ &&
 						psCBuilding->status == SS_BUILT)
 					{
@@ -413,8 +412,6 @@ GAMECODE gameLoop(void)
 						setLasSatExists(true, i);
 					}
 				}
-				//this is a check cos there is a problem with the power but not sure where!!
-				powerCheck(false, (UBYTE)i);
 			}
 
 			missionTimerUpdate();
