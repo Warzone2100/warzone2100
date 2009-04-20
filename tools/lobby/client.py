@@ -57,9 +57,9 @@ class masterserver_connection:
     def __init__(self, host, port, version = '2.2'):
         # Binary struct format to use (GAMESTRUCT)
         if parse_version(version) >= parse_version('2.0'):
-            gameFormat = "!%dsII%ds6I" % (self.name_length, self.host_length)
+            self.gameFormat = "!%dsII%ds6I" % (self.name_length, self.host_length)
         if parse_version(version) >= parse_version('2.2'):
-            gameFormat += '%ds%ds%ds%ds10I' % (self.misc_length, self.extra_length, self.versionstring_length, self.modlist_length)
+            self.gameFormat += '%ds%ds%ds%ds10I' % (self.misc_length, self.extra_length, self.versionstring_length, self.modlist_length)
 
         self.host    = host
         self.port    = port
