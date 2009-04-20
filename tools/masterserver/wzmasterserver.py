@@ -176,8 +176,8 @@ class Game(object):
 	pure               = property(fget = lambda self:    self.data['pure'],
 	                              fset = lambda self, v: self._setPure(v))
 
-	private = property(fget = lambda self:    self.data['private'],
-	                   fset = lambda self, v: self._setPrivate(v))
+	private            = property(fget = lambda self:    self.data['private'],
+	                              fset = lambda self, v: self._setPrivate(v))
 
 	def __init__(self, requestHandler):
 		self.data = {'name':                None,
