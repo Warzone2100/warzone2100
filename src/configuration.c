@@ -269,7 +269,7 @@ BOOL loadConfig(void)
 	else
 	{
 		NETsetMasterserverName("lobby.wz2100.net");
-		setWarzoneKeyString("masterserver_name", "lobby.wz2100.net");
+		setWarzoneKeyString("masterserver_name", NETgetMasterserverName());
 	}
 
 	if (getWarzoneKeyString("fontname", sBuf))
@@ -319,7 +319,7 @@ BOOL loadConfig(void)
 	else
 	{
 		NETsetMasterserverPort(9990);
-		setWarzoneKeyNumeric("masterserver_port", 9990);
+		setWarzoneKeyNumeric("masterserver_port", NETgetMasterserverPort());
 	}
 
 	if (getWarzoneKeyNumeric("gameserver_port", &val))
@@ -329,7 +329,7 @@ BOOL loadConfig(void)
 	else
 	{
 		NETsetGameserverPort(2100);
-		setWarzoneKeyNumeric("gameserver_port", 2100);
+		setWarzoneKeyNumeric("gameserver_port", NETgetGameserverPort());
 	}
 
 	// //////////////////////////
@@ -732,6 +732,9 @@ BOOL saveConfig(void)
 	setWarzoneKeyNumeric("textureSize", getTextureSize());
 	setWarzoneKeyNumeric("PauseOnFocusLoss", war_GetPauseOnFocusLoss());
 	setWarzoneKeyNumeric("ColouredCursor", war_GetColouredCursor());
+	setWarzoneKeyString("masterserver_name", NETgetMasterserverName());
+	setWarzoneKeyNumeric("masterserver_port", NETgetMasterserverPort());
+	setWarzoneKeyNumeric("gameserver_port", NETgetGameserverPort());
 
 	if(!bMultiPlayer)
 	{

@@ -250,8 +250,11 @@ extern BOOL	NETchangePlayerName(UDWORD dpid, char *newName);// change a players 
 #include "netlog.h"
 
 extern void NETsetMasterserverName(const char* hostname);
+extern const char* NETgetMasterserverName(void);
 extern void NETsetMasterserverPort(unsigned int port);
+extern unsigned int NETgetMasterserverPort(void);
 extern void NETsetGameserverPort(unsigned int port);
+extern unsigned int NETgetGameserverPort(void);
 
 extern BOOL NETsetupTCPIP(const char *machine);
 extern void NETsetGamePassword(const char *password);
