@@ -125,17 +125,17 @@ class GameDB:
 class Game(object):
 	""" class for a single game """
 
-        def _setDescription(self, v):
-                self.data['name'] = unicode(v)
+	def _setDescription(self, v):
+		self.data['name'] = unicode(v)
 
-        def _setHost(self, v):
-                self.data['host'] = v
+	def _setHost(self, v):
+		self.data['host'] = v
 
-        def _setMaxPlayers(self, v):
-                self.data['maxPlayers'] = int(v)
+	def _setMaxPlayers(self, v):
+		self.data['maxPlayers'] = int(v)
 
-        def _setCurrentPlayers(self, v):
-                self.data['currentPlayers'] = int(v)
+	def _setCurrentPlayers(self, v):
+		self.data['currentPlayers'] = int(v)
 
 	def _setLobbyVersion(self, v):
 		self.data['lobby-version'] = int(v)
@@ -152,32 +152,32 @@ class Game(object):
 	def _setPrivate(self, v):
 		self.data['private'] = bool(v)
 
-        description        = property(fget = lambda self:    self.data['name'],
-                                      fset = lambda self, v: self._setDescription(v))
+	description        = property(fget = lambda self:    self.data['name'],
+	                              fset = lambda self, v: self._setDescription(v))
 
-        host               = property(fget = lambda self:    self.data['host'],
-                                      fset = lambda self, v: self._setHost(v))
+	host               = property(fget = lambda self:    self.data['host'],
+	                              fset = lambda self, v: self._setHost(v))
 
-        maxPlayers         = property(fget = lambda self:    self.data['maxPlayers'],
-                                      fset = lambda self, v: self._setMaxPlayers(v))
+	maxPlayers         = property(fget = lambda self:    self.data['maxPlayers'],
+	                              fset = lambda self, v: self._setMaxPlayers(v))
 
-        currentPlayers     = property(fget = lambda self:    self.data['currentPlayers'],
-                                      fset = lambda self, v: self._setCurrentPlayers(v))
+	currentPlayers     = property(fget = lambda self:    self.data['currentPlayers'],
+	                              fset = lambda self, v: self._setCurrentPlayers(v))
 
-        lobbyVersion       = property(fget = lambda self:    self.data['lobby-version'],
-                                      fset = lambda self, v: self._setLobbyVersion(v))
+	lobbyVersion       = property(fget = lambda self:    self.data['lobby-version'],
+	                              fset = lambda self, v: self._setLobbyVersion(v))
 
-        multiplayerVersion = property(fget = lambda self:    self.data['multiplayer-version'],
-                                      fset = lambda self, v: self._setMultiplayerVersion(v))
+	multiplayerVersion = property(fget = lambda self:    self.data['multiplayer-version'],
+	                              fset = lambda self, v: self._setMultiplayerVersion(v))
 
-        warzoneVersion     = property(fget = lambda self:    self.data['warzone-version'],
-                                      fset = lambda self, v: self._setWarzoneVersion(v))
+	warzoneVersion     = property(fget = lambda self:    self.data['warzone-version'],
+	                              fset = lambda self, v: self._setWarzoneVersion(v))
 
-        pure               = property(fget = lambda self:    self.data['pure'],
-                                      fset = lambda self, v: self._setPure(v))
+	pure               = property(fget = lambda self:    self.data['pure'],
+	                              fset = lambda self, v: self._setPure(v))
 
-        private = property(fget = lambda self:    self.data['private'],
-                           fset = lambda self, v: self._setPrivate(v))
+	private = property(fget = lambda self:    self.data['private'],
+	                   fset = lambda self, v: self._setPrivate(v))
 
 	def __init__(self, requestHandler):
 		self.data = {'name':                None,
