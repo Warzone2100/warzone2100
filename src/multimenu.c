@@ -934,7 +934,7 @@ static void displayMultiPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset,
 		iV_DrawText(str, x+MULTIMENU_C10, y+MULTIMENU_FONT_OSET);
 
 		//c11: Player power
-		sprintf(str, "%u", getPower(player));
+		sprintf(str, "%u", (int)getPower(player));
 		iV_DrawText(str, MULTIMENU_FORM_X+MULTIMENU_C11,  y+MULTIMENU_FONT_OSET);
 	}
 

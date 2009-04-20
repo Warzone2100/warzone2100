@@ -332,7 +332,7 @@ typedef struct _save_weapon
 typedef struct _savePower
 {
 	uint32_t    currentPower;
-	uint32_t    extractedPower;
+	uint32_t    extractedPower; // UNUSED
 } SAVE_POWER;
 
 static bool serializeSavePowerData(PHYSFS_file* fileHandle, const SAVE_POWER* serializePower)
@@ -4741,6 +4741,7 @@ bool gameLoadV(PHYSFS_file* fileHandle, unsigned int version)
 			(void)setPlayerName(i, saveGameData.sPlayerName[i]);
 	}
 
+	clearPlayerPower();
     //don't adjust any power if a camStart (gameType is set to GTYPE_SCENARIO_START when a camChange saveGame is loaded)
     if (gameType != GTYPE_SCENARIO_START)
     {
@@ -4750,11 +4751,8 @@ bool gameLoadV(PHYSFS_file* fileHandle, unsigned int version)
             //only overwrite selectedPlayer's power on a startMission save game
             if (gameType == GTYPE_SAVE_MIDMISSION || i == selectedPlayer)
             {
-    		    asPower[i].currentPower = powerSaved[i].currentPower;
-	    	    asPower[i].extractedPower = powerSaved[i].extractedPower;
+				setPower(i, powerSaved[i].currentPower);
             }
-		    //init the last structure
-		    asPower[i].psLastPowered = NULL;
 	    }
     }
 
@@ -4837,8 +4835,8 @@ static bool writeGameFile(const char* fileName, SDWORD saveType)
 	//save out the players power
 	for (i = 0; i < MAX_PLAYERS; ++i)
 	{
-		saveGame.power[i].currentPower = asPower[i].currentPower;
-		saveGame.power[i].extractedPower = asPower[i].extractedPower;
+		saveGame.power[i].currentPower = getPower(i);
+		saveGame.power[i].extractedPower = 0; // UNUSED
 	}
 
 	//camera position
@@ -5446,7 +5444,6 @@ static DROID* buildDroidFromSaveDroidV19(SAVE_DROID_V18* psSaveDroid, UDWORD ver
 		FIXME_CAST_ASSIGN(UDWORD, psDroid->psActionTarget[0], psSaveDroid->actionTargetID);
 		psDroid->actionStarted		= psSaveDroid->actionStarted;
 		psDroid->actionPoints		= psSaveDroid->actionPoints;
-		psDroid->powerAccrued		= psSaveDroid->actionHeight;
 		//added for V14
 
 		psDroid->psGroup = NULL;
@@ -5865,7 +5862,6 @@ static DROID* buildDroidFromSaveDroid(SAVE_DROID* psSaveDroid, UDWORD version)
 	FIXME_CAST_ASSIGN(UDWORD, psDroid->psActionTarget[0], psSaveDroid->actionTargetID);
 	psDroid->actionStarted		= psSaveDroid->actionStarted;
 	psDroid->actionPoints		= psSaveDroid->actionPoints;
-	psDroid->powerAccrued		= psSaveDroid->actionHeight;
 	//added for V14
 
 
@@ -6586,7 +6582,7 @@ static BOOL buildSaveDroidFromDroid(SAVE_DROID* psSaveDroid, DROID* psCurr, DROI
 
 			psSaveDroid->actionStarted	= psCurr->actionStarted;
 			psSaveDroid->actionPoints	= psCurr->actionPoints;
-			psSaveDroid->actionHeight	= psCurr->powerAccrued;
+			psSaveDroid->actionHeight	= 0; // UNUSED
 
 			//version 14
 			if (psCurr->psTarStats != NULL)

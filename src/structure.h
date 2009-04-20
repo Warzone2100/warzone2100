@@ -117,6 +117,7 @@ extern float structureDamage(STRUCTURE *psStructure, UDWORD damage,
                             UDWORD weaponClass, UDWORD weaponSubClass, HIT_SIDE impactSide);
 extern void structureBuild(STRUCTURE *psStructure, DROID *psDroid, int buildPoints);
 extern void structureDemolish(STRUCTURE *psStructure, DROID *psDroid, int buildPoints);
+extern void structureRepair(STRUCTURE *psStruct, DROID *psDroid, int buildPoints);
 /* Set the type of droid for a factory to build */
 extern BOOL structSetManufacture(STRUCTURE *psStruct, DROID_TEMPLATE *psTempl,
 								 UBYTE quantity);
@@ -130,7 +131,7 @@ extern STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWO
 /// Create a blueprint structure, with just enough information to render it
 extern STRUCTURE *buildBlueprint(STRUCTURE_STATS *psStats, float x, float y, STRUCT_STATES state);
 /* The main update routine for all Structures */
-void structureUpdate(STRUCTURE *psBuilding);
+void structureUpdate(STRUCTURE *psBuilding, bool mission);
 
 /* Release all resources associated with a structure */
 void structureRelease(STRUCTURE *psBuilding);
