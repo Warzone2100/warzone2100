@@ -200,10 +200,14 @@ class irc_connection:
             channel = m.group('channel')
             message = m.group('message')
             if channel in self.serve_channels:
+                func = None
                 try:
-                    getattr(self.bot, message)()
+                    func = getattr(self.bot, message)
                 except AttributeError:
                     self.privmsg(channel, '%s: Unknown command \'%s\'. Try \'commands\'.' % (nick, message))
+
+                if func:
+                    func()
             else:
                 # Not the serviced channel, point the user at the correct channel
                 self.notice(nick, 'Sorry %s, I will not provide my services in this channel. Please find me in one of %s' % (nick, ', '.join(self.serve_channels)))
