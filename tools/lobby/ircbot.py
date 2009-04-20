@@ -32,20 +32,21 @@ import threading
 import time
 from client import *
 
-irc_server  = "irc.freenode.net"
-irc_port    = 6667
-irc_channel = "#warzone2100-games"
-irc_nick    = "wzlobbybot"
+irc_server   = "irc.freenode.net"
+irc_port     = 6667
+irc_channel  = "#warzone2100-games"
+irc_nick     = "wzlobbybot"
+irc_nickpass = None
 
 def main():
-    bot = Bot(irc_server, irc_port, irc_channel, irc_nick, "lobby.wz2100.net", 9997)
+    bot = Bot(irc_server, irc_port, irc_channel, irc_nick, irc_nickpass, "lobby.wz2100.net", 9997)
     bot.start()
 
 class Bot:
-    def __init__(self, ircServer, ircPort, ircChannel, ircNick, lobbyServer, lobbyPort):
+    def __init__(self, ircServer, ircPort, ircChannel, ircNick, nickPass, lobbyServer, lobbyPort):
         self.commands     = BotCommands()
         self.commands.bot = self
-        self.irc          = bot_connection(self.commands, ircServer, ircPort, ircChannel, ircNick)
+        self.irc          = bot_connection(self.commands, ircServer, ircPort, ircChannel, ircNick, nickPass)
         self.lobby        = masterserver_connection(lobbyServer, lobbyPort, version='2.1')
         self.check        = change_notifier(self.irc, self.lobby)
 
@@ -152,8 +153,8 @@ class bot_connection:
     nick = None
     connection = None
 
-    def __init__(self, bot, server, port, channel, nick):
-        self.connection = irc_connection(bot, server, port, channel, nick)
+    def __init__(self, bot, server, port, channel, nick, nickpass = None):
+        self.connection = irc_connection(bot, server, port, channel, nick, nickpass)
         self.nick = nick
 
     def readAndHandle(self):
@@ -167,13 +168,15 @@ class irc_connection:
     s = None
     channel = None
 
-    def __init__(self, bot, server, port, channel, nick):
+    def __init__(self, bot, server, port, channel, nick, nickpass = None):
         self.bot = bot
         self.s = line_socket(server, port)
         self.channel = channel
         self.s.write("NICK "+nick)
         self.s.write("USER %s 0 * :Warzone 2100 Lobby Bot ( http://wz2100.net/ )" % (nick))
         self.join(channel)
+        if nickpass:
+            self.privmsg('NICKSERV', 'IDENTIFY %s' % (nickpass))
 
         self.private_channel_message = re.compile(r'^:(?P<nick>[^!]+)\S*\s+PRIVMSG (?P<channel>#[^:]+) :[ \t,:.?!]*%s[ \t,:.?!]*(?P<message>.*?)[ \t,:.?!]*$' % (nick))
 
