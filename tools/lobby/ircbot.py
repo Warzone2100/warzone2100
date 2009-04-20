@@ -179,7 +179,15 @@ class irc_connection:
         if nickpass:
             self.privmsg('NICKSERV', 'IDENTIFY %s' % (nickpass))
 
+        serve_channel_re = r'(?P<channel>%s)' % ('|'.join([re.escape(channel) for channel in self.serve_channels]))
+
         self.private_channel_message = re.compile(r'^:(?P<nick>[^!]+)\S*\s+PRIVMSG (?P<channel>#[^:]+) :[ \t,:.?!]*%s[ \t,:.?!]*(?P<message>.*?)[ \t,:.?!]*$' % (nick))
+        self.chan_mode_re = re.compile(r'^:(?P<nick>[^!]+)\S*\s+MODE %s (?P<mode>(?:[-+][oOpPiIsStTnNmMlLbBvVkK])+) %s\s*$' % (serve_channel_re, nick))
+
+        self.on_op = {}
+
+    def invite(self, user, channel):
+        self.as_op(lambda x: self.s.write("INVITE %s %s" % (user, channel)), channel)
 
     def join(self, channel):
         self.s.write("JOIN %s" % (channel))
@@ -190,9 +198,37 @@ class irc_connection:
     def privmsg(self, recipient, message):
         self.s.write("PRIVMSG %s :%s" % (recipient, message))
 
+    def as_op(self, functor, channel):
+        self.op(channel)
+        if not channel in self.on_op:
+            self.on_op[channel] = []
+        self.on_op[channel].append(functor)
+
+    def op(self, channel):
+        self.privmsg('CHANSERV', 'OP %s %s' % (channel, self.nick))
+
+    def deop(self, channel):
+        self.privmsg('CHANSERV', 'OP %s -%s' % (channel, self.nick))
+
     def readAndHandle(self):
         """Read a message from IRC and handle it."""
         line = self.s.read()
+
+        m = self.chan_mode_re.match(line)
+        if m:
+            mode    = m.group('mode')
+            channel = m.group('channel')
+            print "Mode change \"%s\"" % (mode)
+
+            l = mode.rfind('o')
+            if l <= 0:
+                l = mode.rfind('O')
+
+            if l > 0 and mode[l - 1] == '+':
+                for op in self.on_op[channel]:
+                    op(0)
+                self.on_op[channel] = []
+                self.deop(channel)
 
         m = self.private_channel_message.match(line)
         if m:
@@ -211,6 +247,8 @@ class irc_connection:
             else:
                 # Not the serviced channel, point the user at the correct channel
                 self.notice(nick, 'Sorry %s, I will not provide my services in this channel. Please find me in one of %s' % (nick, ', '.join(self.serve_channels)))
+                for channel in self.serve_channels:
+                    self.invite(nick, channel)
 
     def write(self, line, channels = None):
         if not channels:
