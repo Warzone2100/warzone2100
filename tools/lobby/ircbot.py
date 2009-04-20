@@ -21,7 +21,7 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 #
 
-__author__  = "Warzone Resurrection Project"
+__author__  = "The Warzone Resurrection Project"
 __version__ = "0.0.1"
 __license__ = "GPL"
 
@@ -47,7 +47,7 @@ def main():
         if message == "ping":
             irc.write("pong")
         if message == "help" or message == "info":
-            irc.write("I'm a bot that shows information from the \x02Warzone 2100\x02 lobby server. I was created by Gerard Krol. For information about commands you can try: \"commands\"")
+            irc.write("I'm a bot that shows information from the \x02Warzone 2100\x02 lobby server. I was created by %s. For information about commands you can try: \"commands\"" % (__author__))
         if message == "commands":
             irc.write("ping: pong, help/info: general information about this bot, list: show which games are currenly being hosted")
         if message == "list":
@@ -131,9 +131,18 @@ class irc_connection:
         self.channel = channel
         self.s.write("NICK "+nick)
         self.s.write("USER %s 0 * :Warzone 2100 Lobby Bot ( http://wz2100.net/ )" % (nick))
-        self.s.write("JOIN "+channel)
+        self.join(channel)
 
         self.private_channel_message = re.compile(r'^:(?P<nick>[^!]+)\S*\s+PRIVMSG (?P<channel>#[^:]+) :[ \t,:.?!]*%s[ \t,:.?!]*(?P<message>.*?)[ \t,:.?!]*$' % (nick))
+
+    def join(self, channel):
+        self.s.write("JOIN %s" % (channel))
+
+    def notice(self, recipient, message):
+        self.s.write("NOTICE %s :%s" % (recipient, message))
+
+    def privmsg(self, recipient, message):
+        self.s.write("PRIVMSG %s :%s" % (recipient, message))
 
     def read(self):
         while True:
@@ -141,12 +150,18 @@ class irc_connection:
 
             m = self.private_channel_message.match(line)
             if m:
+                nick    = m.group('nick')
+                channel = m.group('channel')
                 message = m.group('message')
-                if m.group('channel') == self.channel:
+                if channel == self.channel:
                     return message
 
+                # Not the serviced channel, point the user at the correct channel
+                self.notice(nick, 'Sorry %s, I will not provide my services in this channel. Please find me in %s' % (nick, self.channel))
+                continue
+
     def write(self, line):
-        self.s.write("PRIVMSG "+self.channel+" :"+line)
+        self.privmsg(self.channel, line)
 
 
 class line_socket:
