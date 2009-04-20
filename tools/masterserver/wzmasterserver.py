@@ -51,7 +51,6 @@ import cmd
 
 gamePort  = 2100         # Gameserver port.
 lobbyPort = 9990         # Lobby port.
-gsSize    = 790          # Size of GAMESTRUCT in byte.
 checkInterval = 100      # Interval between requests causing a gamedb check
 
 MOTDstring = None        # our message of the day (max 255 bytes)
@@ -215,40 +214,6 @@ class Game(object):
 		else:
 		   return "Game: %16s %s %s %s" % ( self.host, self.description, self.maxPlayers, self.currentPlayers)
 
-	def setData(self, d):
-		""" decode the c-structure from the server into local varialbles"""
-		decData = {}
-		(decData['name'], self.size, self.flags, decData['host'], self.maxPlayers, self.currentPlayers,
-			self.user1, self.user2, self.user3, self.user4,
-			self.misc, self.extra, decData['multiplayer-version'], self.modlist, self.GAMESTRUCT_VERSION,
-			self.game_version_major, self.game_version_minor, self.private, self.pure, self.Mods, self.future1,
-			self.future2, self.future3, self.future4 ) = struct.unpack("!64sII16s6I64s255s64s255s10I", d)
-
-		for strKey in ['name', 'host', 'multiplayer-version']:
-			decData[strKey] = decData[strKey].strip('\0')
-
-		self.misc = self.misc.strip("\x00")
-		self.extra = self.extra.strip("\x00")
-		self.modlist = self.modlist.strip("\x00")
-
-		self.data.update(decData)
-
-		logging.debug(self)
-
-	def getData(self):
-		""" use local variables and build a c-structure, for sending to the clients"""
-		return struct.pack("!64sII16s6I64s255s64s255s10I",
-			self.description.ljust(64, "\x00"),
-			self.size, self.flags,
-			self.host.ljust(16, "\x00"),
-			self.maxPlayers, self.currentPlayers, self.user1, self.user2, self.user3, self.user4,
-			self.misc,
-			self.extra,
-			self.multiplayerVersion,
-			self.modlist,
-			self.GAMESTRUCT_VERSION, self.game_version_major, self.game_version_minor, self.private,
-			self.pure, self.Mods, self.future1, self.future2, self.future3, self.future4)
-
 	def check(self):
 		# Check we can connect to the host
 		s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -262,12 +227,107 @@ class Game(object):
 			logging.debug("%s did not respond!" % self.host)
 			return False
 
+class Protocol(object):
+	# Size of a single game is undefined at compile time
+	size = None
+
+	def encodeSingle(data):
+		pass
+
+	def encodeMultiple(data):
+		pass
+
+	def decodeSingle(data):
+		pass
+
+	def decodeMultiple(data):
+		pass
+
+class BinaryProtocol(Protocol):
+	name_length          = 64
+	host_length          = 16
+	misc_length          = 64
+	extra_length         = 255
+	versionstring_length = 64
+	modlist_length       = 255
+	# Binary struct format to use (GAMESTRUCT)
+	gameFormat = '!%dsII%ds6I%ds%ds%ds%ds10I' % (name_length, host_length, misc_length, extra_length, versionstring_length, modlist_length)
+
+	# Size of a single game = sizeof(GAMESTRUCT)
+	size = struct.calcsize(gameFormat)
+
+	countFormat = '!I'
+	countSize = struct.calcsize(countFormat)
+
+	listSeparator = ' '
+
+	def _encodeName(self, game):
+		return game.description[:self.name_length - 1].ljust(self.name_length, "\0")
+
+	def _encodeHost(self, game):
+		return game.host[:self.host_length - 1].ljust(self.host_length, "\0")
+
+	def _encodeMisc(self, game):
+		return game.misc[:self.misc_length - 1].ljust(self.misc_length, "\0")
+
+	def _encodeExtra(self, game):
+		return game.extra[:self.extra_length - 1].ljust(self.extra_length, "\0")
+
+	def _encodeVersionString(self, game):
+		return game.multiplayerVersion[:self.versionstring_length - 1].ljust(self.versionstring_length, "\0")
+
+	def encodeSingle(self, game):
+		return struct.pack(self.gameFormat,
+			self._encodeName(game),
+			game.size or self.size, game.flags,
+			self._encodeHost(game),
+			game.maxPlayers, game.currentPlayers, game.user1, game.user2, game.user3, game.user4,
+			self._encodeMisc(game),
+			self._encodeExtra(game),
+			self._encodeVersionString(game),
+			game.modlist,
+			game.lobbyVersion, game.game_version_major, game.game_version_minor, game.private,
+			game.pure, game.Mods, game.future1, game.future2, game.future3, game.future4)
+
+	def encodeMultiple(self, games):
+		message = struct.pack(self.countFormat, len(games))
+		for game in games:
+			message += self.encodeSingle(game)
+		return message
+
+	def decodeSingle(self, data, game = Game(None)):
+		decData = {}
+
+		(decData['name'], game.size, game.flags, decData['host'], game.maxPlayers, game.currentPlayers,
+			game.user1, game.user2, game.user3, game.user4,
+			game.misc, game.extra, decData['multiplayer-version'], game.modlist, game.lobbyVersion,
+			game.game_version_major, game.game_version_minor, game.private, game.pure, game.Mods, game.future1,
+			game.future2, game.future3, game.future4) = struct.unpack(self.gameFormat, data)
+
+		for strKey in ['name', 'host', 'multiplayer-version']:
+			decData[strKey] = decData[strKey].strip("\0")
+
+		game.misc = game.misc.strip("\0")
+		game.extra = game.extra.strip("\0")
+		game.modlist = game.modlist.strip("\0")
+
+		game.data.update(decData)
+		return game
+
+	def decodeMultiple(self, data):
+		countMsg = data[:countSize]
+		data = data[countSize:]
+		count = struct.pack(self.countFormat, countMsg)
+		return [self.decodeSingle(data[size * i: size * i + size]) for i in range(count)]
+
+
 #
 ################################################################################
 # Socket Handler.
 
 requests = 0
 requestlock = Lock()
+protocol = BinaryProtocol()
 
 class RequestHandler(SocketServer.ThreadingMixIn, SocketServer.StreamRequestHandler):
 	def handle(self):
@@ -313,14 +373,15 @@ class RequestHandler(SocketServer.ThreadingMixIn, SocketServer.StreamRequestHand
 
 					# and start receiving updates about the game
 					while True:
-						newGameData = self.rfile.read(gsSize)
+						newGameData = self.rfile.read(protocol.size)
 						if not newGameData:
 							logging.debug("(%s) Removing aborted game" % gameHost)
 							return
 
 						logging.debug("(%s) Updating game..." % gameHost)
 						#set Gamedata
-						g.setData(newGameData)
+						protocol.decodeSingle(newGameData, g)
+						logging.debug(g)
 						#set gamehost
 						g.host = gameHost
 
@@ -344,14 +405,10 @@ class RequestHandler(SocketServer.ThreadingMixIn, SocketServer.StreamRequestHand
 					gamesCount = len(gamedb.getGames())
 					logging.debug("(%s) Gameserver list: %i game(s)" % (gameHost, gamesCount))
 
-					# Transmit the length of the following list as unsigned integer (in network byte-order: big-endian).
-					count = struct.pack('!I', gamesCount)
-					self.wfile.write(count)
-
-					# Transmit the single games.
+					# Transmit the games.
 					for game in gamedb.getGames():
 						logging.debug(" %s" % game)
-						self.wfile.write(game.getData())
+					self.wfile.write(protocol.encodeMultiple(gamedb.getGames()))
 					break
 
 			# If something unknown appears.
