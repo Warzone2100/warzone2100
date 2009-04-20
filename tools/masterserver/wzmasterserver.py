@@ -123,55 +123,115 @@ class GameDB:
 # NOTE: This must match exactly what we have defined for GAMESTRUCT in netplay.h
 # The structure MUST be packed network byte order !
 
-class Game:
+class Game(object):
 	""" class for a single game """
 
+        def _setDescription(self, v):
+                self.data['name'] = unicode(v)
+
+        def _setHost(self, v):
+                self.data['host'] = v
+
+        def _setMaxPlayers(self, v):
+                self.data['maxPlayers'] = int(v)
+
+        def _setCurrentPlayers(self, v):
+                self.data['currentPlayers'] = int(v)
+
+	def _setLobbyVersion(self, v):
+		self.data['lobby-version'] = int(v)
+
+	def _setMultiplayerVersion(self, v):
+		self.data['multiplayer-version'] = unicode(v)
+
+	def _setWarzoneVersion(self, v):
+		self.data['warzone-version'] = unicode(v)
+
+	def _setPure(self, v):
+		self.data['pure'] = bool(v)
+
+	def _setPrivate(self, v):
+		self.data['private'] = bool(v)
+
+        description        = property(fget = lambda self:    self.data['name'],
+                                      fset = lambda self, v: self._setDescription(v))
+
+        host               = property(fget = lambda self:    self.data['host'],
+                                      fset = lambda self, v: self._setHost(v))
+
+        maxPlayers         = property(fget = lambda self:    self.data['maxPlayers'],
+                                      fset = lambda self, v: self._setMaxPlayers(v))
+
+        currentPlayers     = property(fget = lambda self:    self.data['currentPlayers'],
+                                      fset = lambda self, v: self._setCurrentPlayers(v))
+
+        lobbyVersion       = property(fget = lambda self:    self.data['lobby-version'],
+                                      fset = lambda self, v: self._setLobbyVersion(v))
+
+        multiplayerVersion = property(fget = lambda self:    self.data['multiplayer-version'],
+                                      fset = lambda self, v: self._setMultiplayerVersion(v))
+
+        warzoneVersion     = property(fget = lambda self:    self.data['warzone-version'],
+                                      fset = lambda self, v: self._setWarzoneVersion(v))
+
+        pure               = property(fget = lambda self:    self.data['pure'],
+                                      fset = lambda self, v: self._setPure(v))
+
+        private = property(fget = lambda self:    self.data['private'],
+                           fset = lambda self, v: self._setPrivate(v))
+
 	def __init__(self, requestHandler):
-		self.description = None
+		self.data = {'name':                None,
+		             'host':                None,
+		             'maxPlayers':          None,
+		             'currentPlayers':      None,
+		             'lobby-version':       None,
+		             'multiplayer-version': None,
+		             'warzone-version':     None,
+		             'pure':                None,
+		             'private':             None}
 		self.size = None
 		self.flags = None
-		self.host = None
-		self.maxPlayers = None
-		self.currentPlayers = None
 		self.user1 = None
 		self.user2 = None
 		self.user3 = None
 		self.user4 = None
 		self.misc = None				# 64  byte misc string
 		self.extra = None				# 255 byte extra string (future use)
-		self.versionstring = None		# 64  byte version string
 		self.modlist = None			# 255 byte string
-		self.GAMESTRUCT_VERSION = None	# version of the GAMESTRUCT
 		self.game_version_major = None	# game major version
 		self.game_version_minor = None	# game minor version
-		self.privateGame = None			# 1 = private game (password required)
-		self.pureGame = None			# 1 = no mods allowed
 		self.Mods = None				# number of concatenated mods they have (list of mods is in modlist)
 		self.future1 = None			# for future use
 		self.future2 = None			# for future use
 		self.future3 = None			# for future use
 		self.future4 = None			# for future use
+
 		self.requestHandler = requestHandler
 
 	def __str__(self):
-		if self.privateGame == 1:
+		if self.private == 1:
 		   return "(private) Game: %16s %s %s %s" % ( self.host, self.description, self.maxPlayers, self.currentPlayers)
 		else:
 		   return "Game: %16s %s %s %s" % ( self.host, self.description, self.maxPlayers, self.currentPlayers)
 
 	def setData(self, d):
 		""" decode the c-structure from the server into local varialbles"""
-		(self.description, self.size, self.flags, self.host, self.maxPlayers, self.currentPlayers,
+		decData = {}
+		(decData['name'], self.size, self.flags, decData['host'], self.maxPlayers, self.currentPlayers,
 			self.user1, self.user2, self.user3, self.user4,
-			self.misc, self.extra, self.versionstring, self.modlist, self.GAMESTRUCT_VERSION,
-			self.game_version_major, self.game_version_minor, self.privateGame, self.pureGame, self.Mods, self.future1,
+			self.misc, self.extra, decData['multiplayer-version'], self.modlist, self.GAMESTRUCT_VERSION,
+			self.game_version_major, self.game_version_minor, self.private, self.pure, self.Mods, self.future1,
 			self.future2, self.future3, self.future4 ) = struct.unpack("!64sII16s6I64s255s64s255s10I", d)
-		self.description = self.description.strip("\x00")
-		self.host = self.host.strip("\x00")
+
+		for strKey in ['name', 'host', 'multiplayer-version']:
+			decData[strKey] = decData[strKey].strip('\0')
+
 		self.misc = self.misc.strip("\x00")
 		self.extra = self.extra.strip("\x00")
-		self.versionstring =  self.versionstring.strip("\x00")
 		self.modlist = self.modlist.strip("\x00")
+
+		self.data.update(decData)
 
 		logging.debug(self)
 
@@ -184,11 +244,10 @@ class Game:
 			self.maxPlayers, self.currentPlayers, self.user1, self.user2, self.user3, self.user4,
 			self.misc,
 			self.extra,
-			self.versionstring,
+			self.multiplayerVersion,
 			self.modlist,
-			self.GAMESTRUCT_VERSION, self.game_version_major, self.game_version_minor, self.privateGame,
-			self.pureGame, self.Mods, self.future1, self.future2, self.future3, self.future4 )
-
+			self.GAMESTRUCT_VERSION, self.game_version_major, self.game_version_minor, self.private,
+			self.pure, self.Mods, self.future1, self.future2, self.future3, self.future4)
 
 	def check(self):
 		# Check we can connect to the host
@@ -270,10 +329,10 @@ class RequestHandler(SocketServer.ThreadingMixIn, SocketServer.StreamRequestHand
 							return
 
 						gamedb.listGames()
-				except struct.error:
-					logging.warning("(%s) Host quit unexpectedly" % gameHost)
-				except KeyError:
-					logging.warning("(%s) Communication error" % gameHost)
+				except struct.error, e:
+					logging.warning("(%s) Data decoding error: %s" % (gameHost, e))
+				except KeyError, e:
+					logging.warning("(%s) Communication error: %s" % (gameHost, e))
 				finally:
 					if g:
 						gamedb.removeGame(g)
