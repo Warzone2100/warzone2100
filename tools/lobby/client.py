@@ -49,23 +49,27 @@ class masterserver_connection:
 
     def list(self):
         with _socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-            s.connect( (self.host, self.port) )
-
-            self._send(s, "list")
-            (count,) = self._recv(s, "!I")
             games = []
-            for i in xrange(0,count):
-                (description, size, flags, host, maxPlayers, currentPlayers,
-                user1, user2, user3, user4 ) = self._recv(s, "!64sII16sIIIIII")
-                description = description.strip("\0")
-                host = host.strip("\0")
-                # Workaround for the fact that some of the
-                # 2.0.x versions don't perform endian swapping
-                if maxPlayers > 100:
-                    maxPlayers = _swap_endianness(maxPlayers)
-                    currentPlayers = _swap_endianness(currentPlayers)
-                g = game(description, host, maxPlayers, currentPlayers)
-                games.append(g)
+            try:
+                s.settimeout(10)
+                s.connect( (self.host, self.port) )
+
+                self._send(s, "list\0")
+                (count,) = self._recv(s, "!I")
+                for i in xrange(0,count):
+                    (description, size, flags, host, maxPlayers, currentPlayers,
+                    user1, user2, user3, user4 ) = self._recv(s, "!64sII16sIIIIII")
+                    description = description.strip("\0")
+                    host = host.strip("\0")
+                    # Workaround for the fact that some of the
+                    # 2.0.x versions don't perform endian swapping
+                    if maxPlayers > 100:
+                        maxPlayers = _swap_endianness(maxPlayers)
+                        currentPlayers = _swap_endianness(currentPlayers)
+                    g = game(description, host, maxPlayers, currentPlayers)
+                    games.append(g)
+            except socket.timeout:
+                pass
 
             return games
 
