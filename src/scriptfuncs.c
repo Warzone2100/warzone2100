@@ -1566,78 +1566,14 @@ WZ_DECL_UNUSED static BOOL scrDestroyStructure(void)
 	return true;
 }
 
-
-
 // -----------------------------------------------------------------------------------------
 //NEXT 2 FUNCS ONLY USED IN MULTIPLAYER AS FAR AS I KNOW (25 AUG98) alexl.
-// static vars to enum structs;
-static	STRUCTURE_STATS	*psStructStatToFind;
-static	UDWORD			playerToEnumStruct;
-static	UDWORD			enumStructCount;
-static	BOOL			structfindany;
-static	SDWORD			playerVisibleStruct;		//player whose structures must be visible
-
 //for the bucket version
 static	STRUCTURE_STATS	*psStructStatToFindB[MAX_PLAYERS];
 static	UDWORD			playerToEnumStructB[MAX_PLAYERS];
 static	UDWORD			enumStructCountB[MAX_PLAYERS];
 static	BOOL			structfindanyB[MAX_PLAYERS];
 static	SDWORD			playerVisibleStructB[MAX_PLAYERS];		//player whose structures must be visible
-/// init enum visible structures.
-static int scrInitEnumStruct(lua_State *L)
-{
-	BOOL any          = luaL_checkboolean(L, 1);
-	int iStat = luaWZObj_checkstructurestat(L, 2);
-	int targetPlayer  = luaWZ_checkplayer(L, 3);
-	int lookingPlayer = luaWZ_checkplayer(L, 4);
-
-	structfindany = any;
-
-	psStructStatToFind	= (STRUCTURE_STATS *)(asStructureStats + iStat);
-	playerToEnumStruct	= (UDWORD)targetPlayer;
-	playerVisibleStruct = lookingPlayer;		//remember who must be able to see the structure
-	enumStructCount		= 0;
-	return 0;
-}
-
-// -----------------------------------------------------------------------------------------
-static int scrEnumStruct(lua_State *L)
-{
-	UDWORD		count;
-	STRUCTURE	*psStruct;
-
-	// go to the correct start point in the structure list.
-	count = 0;
-	for(psStruct=apsStructLists[playerToEnumStruct];psStruct && count<enumStructCount;count++)
-	{
-		psStruct = psStruct->psNext;
-	}
-
-	if(psStruct == NULL)		// no more to find.
-	{
-		lua_pushnil(L);
-		return 1;
-	}
-
-	while(psStruct)	// find a visible structure of required type.
-	{
-//		if(	(structfindany || (psStruct->pStructureType->type == psStructStatToFind->type))
-		if(	(structfindany || (psStruct->pStructureType->ref == psStructStatToFind->ref))
-			&&
-			((playerVisibleStruct < 0) || (psStruct->visible[playerVisibleStruct]))	//fix: added playerVisibleStruct for visibility test
-			)
-		{
-			enumStructCount++;
-			luaWZObj_pushstructure(L, psStruct);
-			return 1;
-		}
-		enumStructCount++;
-		psStruct = psStruct->psNext;
-	}
-	// no building found
-	lua_pushnil(L);
-	return 1;
-}
 
 // init enum visible structures - takes bucket as additional parameter
 WZ_DECL_UNUSED static BOOL scrInitEnumStructB(void)
@@ -5793,6 +5729,56 @@ static int scrInternalGetDroidVisibleBy(lua_State *L)
 		}
 		psDroid = psDroid->psNext;
 	}
+	return 0;
+}
+
+static int scrInternalGetStructureVisibleBy(lua_State *L)
+{
+	int index;
+	int player          = luaWZ_checkplayer(L, 2);
+	int seenBy          = luaWZ_checkplayer(L, 3);
+	int enumStructCount = luaL_checkint(L, 4);
+	int count;
+	STRUCTURE *psStruct;
+	STRUCTURE_STATS *stat;
+
+	// check if a structure stat was provided
+	if (lua_isnil(L, 1))
+	{
+		// no, so we are looking for all structures
+		stat = NULL;
+	}
+	else
+	{
+		index = luaWZObj_checkstructurestat(L, 1);
+		stat = (STRUCTURE_STATS *)(asStructureStats + index);
+	}
+
+	// go to the correct start point in the structure list.
+	count = 0;
+	for (psStruct=apsStructLists[player];psStruct && count<enumStructCount;count++)
+	{
+		psStruct = psStruct->psNext;
+	}
+
+	if (psStruct == NULL)		// no more to find.
+	{
+		return 0;
+	}
+
+	while(psStruct)	// find a visible structure of required type.
+	{
+		enumStructCount++;
+		if ((!stat || psStruct->pStructureType->ref == stat->ref) &&
+			(psStruct->visible[seenBy]))
+		{
+			luaWZObj_pushstructure(L, psStruct);
+			lua_pushinteger(L, enumStructCount);
+			return 2;
+		}
+		psStruct = psStruct->psNext;
+	}
+	// no building found
 	return 0;
 }
 
@@ -9965,8 +9951,6 @@ void registerScriptfuncs(lua_State *L)
 	lua_register(L, "setGroupRetreatLeadership", scrSetGroupRetreatLeadership);
 	lua_register(L, "addDroid", scrAddDroid);
 	lua_register(L, "getStructure", scrGetStructure);
-	lua_register(L, "enumStruct", scrEnumStruct);
-	lua_register(L, "initEnumStruct", scrInitEnumStruct);
 	lua_register(L, "myResponsibility", scrMyResponsibility);
 	lua_register(L, "getDroidCount", scrGetDroidCount);
 	lua_register(L, "allianceExistsBetween", scrAllianceExistsBetween);
@@ -10032,7 +10016,7 @@ void registerScriptfuncs(lua_State *L)
 	lua_register(L, "factoryGetTemplate", scrFactoryGetTemplate);
 	lua_register(L, "chooseValidLoc", scrChooseValidLoc);
 	lua_register(L, "_getDroidVisibleBy", scrInternalGetDroidVisibleBy);
-	//lua_register(L, "", );
+	lua_register(L, "_getStructureVisibleBy", scrInternalGetStructureVisibleBy);
 	//lua_register(L, "", );
 	//lua_register(L, "", );
 	//lua_register(L, "", );

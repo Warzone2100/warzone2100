@@ -23,6 +23,13 @@
 ]]--
 
 function version(v)
+	local current_version = 1
+
+	-- check we support this version
+	if v > current_version then
+		error("This script is written using script version "..v.." while this build of Warzone 2100 only supports versions 0-"..current_version)
+	end
+
 	if v < 1 then
 		-- Version 0 are the scripts that are converted using wz2lua
 	
@@ -87,6 +94,18 @@ function version(v)
 			local droid
 			droid = _initEnumDroids_iterator()
 			return droid
+		end
+
+		function initEnumStruct(anystruct, stat, player, seen_by)
+			if anystruct then stat = nil end
+			if seen_by < 0 then seen_by = player end
+			_initEnumStruct_iterator = visibleStructures(stat, player, seen_by)
+		end
+
+		function enumStruct()
+			local structure
+			structure = _initEnumStruct_iterator()
+			return structure
 		end
 	end
 end

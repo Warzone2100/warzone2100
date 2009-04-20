@@ -73,7 +73,6 @@ end
 
 -- iterators
 function visibleDroids(player, visible_by)
-	local droid
 	local number = 0
 	return function()
 			local droid
@@ -84,4 +83,17 @@ end
 
 function droids(player)
 	return visibleDroids(player, player)
+end
+
+function visibleStructures(stat, player, visible_by)
+	local number = 0
+	return function()
+			local structure
+			structure, number = _getStructureVisibleBy(stat, player, visible_by, number)
+			return structure
+		end
+end
+
+function structures(stat, player)
+	return visibleStructures(stat, player, player)
 end
