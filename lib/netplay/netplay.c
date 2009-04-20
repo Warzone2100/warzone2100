@@ -2397,6 +2397,13 @@ void NETsetMasterserverName(const char* hostname)
 	sstrcpy(masterserver_name, hostname);
 }
 
+/**
+ * @return The hostname of the masterserver we will connect to.
+ */
+const char* NETgetMasterserverName()
+{
+	return masterserver_name;
+}
 
 /*!
  * Set the masterserver port
@@ -2407,6 +2414,13 @@ void NETsetMasterserverPort(unsigned int port)
 	masterserver_port = port;
 }
 
+/**
+ * @return The port of the masterserver we will connect to.
+ */
+unsigned int NETgetMasterserverPort()
+{
+	return masterserver_port;
+}
 
 /*!
  * Set the port we shall host games on
@@ -2415,4 +2429,12 @@ void NETsetMasterserverPort(unsigned int port)
 void NETsetGameserverPort(unsigned int port)
 {
 	gameserver_port = port;
+}
+
+/**
+ * @return The port we will host games on.
+ */
+unsigned int NETgetGameserverPort()
+{
+	return gameserver_port;
 }
