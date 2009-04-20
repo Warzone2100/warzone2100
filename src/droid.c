@@ -1120,6 +1120,7 @@ BOOL droidStartBuild(DROID *psDroid)
 			intBuildFinished(psDroid);
 			return false;
 		}
+		psStruct->body /= 10; // structures start at 10% health
 
 		if (bMultiPlayer)
 		{
@@ -1239,58 +1240,13 @@ BOOL droidUpdateBuild(DROID *psDroid)
 	pointsToAdd = constructPoints * (gameTime - psDroid->actionStarted) /
 		GAME_TICKS_PER_SEC;
 
-	psStruct->currentBuildPts = (SWORD) (psStruct->currentBuildPts + pointsToAdd - psDroid->actionPoints);
+	structureBuild(psStruct, psDroid, pointsToAdd - psDroid->actionPoints);
 
 	//store the amount just added
 	psDroid->actionPoints = pointsToAdd;
 
-	//check if structure is built
-	if (psStruct->currentBuildPts > (SDWORD)psStruct->pStructureType->buildPoints)
-	{
-		psStruct->currentBuildPts = (SWORD)psStruct->pStructureType->buildPoints;
-		psStruct->status = SS_BUILT;
-		buildingComplete(psStruct);
+	addConstructorEffect(psStruct);
 
-		intBuildFinished(psDroid);
-
-		if((bMultiPlayer) && myResponsibility(psStruct->player))
-		{
-			SendBuildFinished(psStruct);
-		}
-
-
-		//only play the sound if selected player
-		if (psStruct->player == selectedPlayer
-		 && (psDroid->order != DORDER_LINEBUILD
-		  || (map_coord(psDroid->orderX) == map_coord(psDroid->orderX2)
-		   && map_coord(psDroid->orderY) == map_coord(psDroid->orderY2))))
-		{
-			audio_QueueTrackPos( ID_SOUND_STRUCTURE_COMPLETED,
-					psStruct->pos.x, psStruct->pos.y, psStruct->pos.z );
-			intRefreshScreen();		// update any open interface bars.
-		}
-
-		/* Not needed, but left for backward compatibility */
-		structureCompletedCallback(psStruct->pStructureType);
-
-		/* must reset here before the callback, droid must have DACTION_NONE
-		     in order to be able to start a new built task, doubled in actionUpdateDroid() */
-		debug( LOG_NEVER, "DACTION_NONE: done\n");
-		psDroid->action = DACTION_NONE;
-
-		/* Notify scripts we just finished building a structure, pass builder and what was built */
-		psScrCBNewStruct	= psStruct;
-		psScrCBNewStructTruck= psDroid;
-		eventFireCallbackTrigger((TRIGGER_TYPE)CALL_STRUCTBUILT);
-
-		audio_StopObjTrack( psDroid, ID_SOUND_CONSTRUCTION_LOOP );
-
-		return false;
-	}
-	else
-	{
-		addConstructorEffect(psStruct);
-	}
 
 	return true;
 }
@@ -1344,80 +1300,18 @@ BOOL droidUpdateDemolishing( DROID *psDroid )
 
 	//constructPoints = (asConstructStats + psDroid->asBits[COMP_CONSTRUCT].nStat)->
 	//	constructPoints;
-	constructPoints = constructorPoints(asConstructStats + psDroid->
+	constructPoints = 5 * constructorPoints(asConstructStats + psDroid->
 		asBits[COMP_CONSTRUCT].nStat, psDroid->player);
 
 	pointsToAdd = constructPoints * (gameTime - psDroid->actionStarted) /
 		GAME_TICKS_PER_SEC;
 
-	psStruct->currentBuildPts = (SWORD)(psStruct->currentBuildPts - pointsToAdd - psDroid->actionPoints);
-
-	//psStruct->heightScale = (float)psStruct->currentBuildPts / psStruct->pStructureType->buildPoints;
+	structureDemolish(psStruct, psDroid, pointsToAdd - psDroid->actionPoints);
 
 	//store the amount just subtracted
 	psDroid->actionPoints = pointsToAdd;
 
-	/* check if structure is demolished */
-	if ( psStruct->currentBuildPts <= 0 )
-	{
-
-		if(bMultiPlayer)
-		{
-			SendDemolishFinished(psStruct,psDroid);
-		}
-
-
-		if(psStruct->pStructureType->type == REF_POWER_GEN)
-		{
-            //if had module attached - the base must have been completely built
-            if (psStruct->pFunctionality->powerGenerator.capacity)
-            {
-                //so add the power required to build the base struct
-                addPower(psStruct->player, psStruct->pStructureType->powerToBuild);
-            }
-            //add the currentAccruedPower since this may or may not be all required
-            addPower(psStruct->player, psStruct->currentPowerAccrued);
-		}
-		else
-		{
-            //if it had a module attached, need to add the power for the base struct as well
-            if (StructIsFactory(psStruct))
-            {
-                if (psStruct->pFunctionality->factory.capacity)
-                {
-                    //add half power for base struct
-                    addPower(psStruct->player, psStruct->pStructureType->
-                        powerToBuild / 2);
-                    //if large factory - add half power for one upgrade
-                    if (psStruct->pFunctionality->factory.capacity > SIZE_MEDIUM)
-                    {
-                        addPower(psStruct->player, structPowerToBuild(psStruct) / 2);
-                    }
-                }
-            }
-            else if (psStruct->pStructureType->type == REF_RESEARCH)
-            {
-                if (psStruct->pFunctionality->researchFacility.capacity)
-                {
-                    //add half power for base struct
-                    addPower(psStruct->player, psStruct->pStructureType->powerToBuild / 2);
-                }
-            }
-            //add currentAccrued for the current layer of the structure
-            addPower(psStruct->player, psStruct->currentPowerAccrued / 2);
-        }
-		/* remove structure and foundation */
-		removeStruct( psStruct, true );
-
-		/* reset target stats*/
-	    psDroid->psTarStats = NULL;
-
-		return false;
-	}
-    else
-    {
-		addConstructorEffect(psStruct);
-	}
+	addConstructorEffect(psStruct);
 
 	CHECK_DROID(psDroid);
 
