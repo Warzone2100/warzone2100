@@ -1214,6 +1214,120 @@ float getStructureDamage(const STRUCTURE* psStructure)
 	return 1. - health;
 }
 
+/// Add buildPoints to the structures currentBuildPts, due to construction work by the droid
+void structureBuild(STRUCTURE *psStruct, DROID *psDroid, int buildPoints)
+{
+	int before, after;
+	before = (9 * psStruct->currentBuildPts * structureBody(psStruct) ) / (10 * psStruct->pStructureType->buildPoints);
+	psStruct->currentBuildPts += buildPoints;
+	after =  (9 * psStruct->currentBuildPts * structureBody(psStruct) ) / (10 * psStruct->pStructureType->buildPoints);
+	psStruct->body += after - before;
+
+	//check if structure is built
+	if (psStruct->currentBuildPts >= (SDWORD)psStruct->pStructureType->buildPoints)
+	{
+		psStruct->currentBuildPts = (SWORD)psStruct->pStructureType->buildPoints;
+		psStruct->status = SS_BUILT;
+		buildingComplete(psStruct);
+
+		intBuildFinished(psDroid);
+
+		if((bMultiPlayer) && myResponsibility(psStruct->player))
+		{
+			SendBuildFinished(psStruct);
+		}
+
+		//only play the sound if selected player
+		if (psStruct->player == selectedPlayer
+		 && (psDroid->order != DORDER_LINEBUILD
+		  || (map_coord(psDroid->orderX) == map_coord(psDroid->orderX2)
+		   && map_coord(psDroid->orderY) == map_coord(psDroid->orderY2))))
+		{
+			audio_QueueTrackPos( ID_SOUND_STRUCTURE_COMPLETED,
+					psStruct->pos.x, psStruct->pos.y, psStruct->pos.z );
+			intRefreshScreen();		// update any open interface bars.
+		}
+
+		/* Not needed, but left for backward compatibility */
+		structureCompletedCallback(psStruct->pStructureType);
+
+		/* must reset here before the callback, droid must have DACTION_NONE
+		     in order to be able to start a new built task, doubled in actionUpdateDroid() */
+		debug( LOG_NEVER, "DACTION_NONE: done\n");
+		psDroid->action = DACTION_NONE;
+
+		/* Notify scripts we just finished building a structure, pass builder and what was built */
+		psScrCBNewStruct	= psStruct;
+		psScrCBNewStructTruck= psDroid;
+		eventFireCallbackTrigger((TRIGGER_TYPE)CALL_STRUCTBUILT);
+
+		audio_StopObjTrack( psDroid, ID_SOUND_CONSTRUCTION_LOOP );
+
+	}
+}
+
+void structureDemolish(STRUCTURE *psStruct, DROID *psDroid, int buildPoints)
+{
+	psStruct->currentBuildPts -= buildPoints;
+
+	/* check if structure is demolished */
+	if ( psStruct->currentBuildPts <= 0 )
+	{
+
+		if(bMultiPlayer)
+		{
+			SendDemolishFinished(psStruct,psDroid);
+		}
+
+
+		if(psStruct->pStructureType->type == REF_POWER_GEN)
+		{
+			//if had module attached - the base must have been completely built
+			if (psStruct->pFunctionality->powerGenerator.capacity)
+			{
+				//so add the power required to build the base struct
+				addPower(psStruct->player, psStruct->pStructureType->powerToBuild);
+			}
+			//add the currentAccruedPower since this may or may not be all required
+			addPower(psStruct->player, psStruct->currentPowerAccrued);
+		}
+		else
+		{
+			//if it had a module attached, need to add the power for the base struct as well
+			if (StructIsFactory(psStruct))
+			{
+				if (psStruct->pFunctionality->factory.capacity)
+				{
+					//add half power for base struct
+					addPower(psStruct->player, psStruct->pStructureType->
+						powerToBuild / 2);
+					//if large factory - add half power for one upgrade
+					if (psStruct->pFunctionality->factory.capacity > SIZE_MEDIUM)
+					{
+						addPower(psStruct->player, structPowerToBuild(psStruct) / 2);
+					}
+				}
+			}
+			else if (psStruct->pStructureType->type == REF_RESEARCH)
+			{
+				if (psStruct->pFunctionality->researchFacility.capacity)
+				{
+					//add half power for base struct
+					addPower(psStruct->player, psStruct->pStructureType->powerToBuild / 2);
+				}
+			}
+			//add currentAccrued for the current layer of the structure
+			addPower(psStruct->player, psStruct->currentPowerAccrued / 2);
+		}
+		/* remove structure and foundation */
+		removeStruct( psStruct, true );
+
+		/* reset target stats*/
+		psDroid->psTarStats = NULL;
+
+	}
+}
+
 /* Set the type of droid for a factory to build */
 BOOL structSetManufacture(STRUCTURE *psStruct, DROID_TEMPLATE *psTempl, UBYTE quantity)
 {
@@ -3574,11 +3688,12 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 }
 
 
-/* Decides whether a structure should emit smoke when it's damaged */
+/** Decides whether a structure should emit smoke when it's damaged */
 static BOOL canSmoke(STRUCTURE *psStruct)
 {
 	if(psStruct->pStructureType->type == REF_WALL ||
-		psStruct->pStructureType->type == REF_WALLCORNER)
+		psStruct->pStructureType->type == REF_WALLCORNER ||
+		psStruct->status == SS_BEING_BUILT)
 	{
 		return(false);
 	}
