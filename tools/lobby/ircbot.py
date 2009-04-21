@@ -45,8 +45,7 @@ def main():
 
 class Bot:
     def __init__(self, ircServer, ircPort, ircServeChannels, ircSilentChannels, ircNick, nickPass, lobbyServer, lobbyPort):
-        self.commands     = BotCommands()
-        self.commands.bot = self
+        self.commands = BotCommands(self)
         self.irc          = bot_connection(self.commands, ircServer, ircPort, ircServeChannels, ircSilentChannels, ircNick, nickPass)
         self.lobby        = masterserver_connection(lobbyServer, lobbyPort, version='2.1')
         self.check        = change_notifier(self.irc, self.lobby)
@@ -69,6 +68,11 @@ class Bot:
         return self.irc.write(text, channels)
 
 class BotCommands:
+    disallowed_functions = re.compile(r'__[^_](?:.*[^_])?__')
+
+    def __init__(self, bot):
+        self.bot = bot
+
     def ping(self, nick, write):
         write("%s: pong" % (nick))
 
@@ -222,6 +226,7 @@ class irc_connection:
             channel = m.group('channel')
             if channel in self.serve_channels:
                 self.bot.list(nick, lambda message: self.notice(nick, message))
+                return
 
         m = self.chan_mode_re.match(line)
         if m:
@@ -238,6 +243,7 @@ class irc_connection:
                     op(0)
                 self.on_op[channel] = []
                 self.deop(channel)
+                return
 
         m = self.private_channel_message.match(line)
         if m:
@@ -247,7 +253,10 @@ class irc_connection:
             if channel in self.serve_channels:
                 func = None
                 try:
-                    func = getattr(self.bot, message)
+                    func = getattr(self.bot, message).__call__
+                    if self.bot.disallowed_functions.match(message):
+                        func = None
+                        raise AttributeError('%s function isn\'t allowed to be called' % (message))
                 except AttributeError:
                     self.privmsg(channel, '%s: Unknown command \'%s\'. Try \'commands\'.' % (nick, message))
 
@@ -258,6 +267,7 @@ class irc_connection:
                 self.notice(nick, 'Sorry %s, I will not provide my services in this channel. Please find me in one of %s' % (nick, ', '.join(self.serve_channels)))
                 for channel in self.serve_channels:
                     self.invite(nick, channel)
+            return
 
     def write(self, line, channels = None):
         if not channels:
