@@ -76,14 +76,31 @@ class BotCommands:
     def ping(self, nick, write):
         write("%s: pong" % (nick))
 
-    def help(self, nick, write):
+    def about(self, nick, write):
         write("%s: I'm a bot that shows information from the \x02Warzone 2100\x02 lobby server. I was created by %s. For information about commands you can try: \"commands\"" % (nick, __author__))
 
-    # Alias 'info' to 'help'
-    info = help
+    # Alias 'info' to 'about'
+    info = about
 
     def commands(self, nick, write):
-        write("%s: ping: pong, help/info: general information about this bot, list: show which games are currenly being hosted" % (nick))
+        # Find all non-python operator functions in this class
+        funcs = []
+        for attr in dir(self):
+            if callable(getattr(self, attr)) \
+             and not self.disallowed_functions.match(attr):
+                funcs.append(attr)
+
+        funcs.sort()
+        # Concatenate available commands like this: "aaa, bbb, ccc and ddd"
+        if len(funcs) > 1:
+            available = ', '.join(funcs[:-1])
+            available += ' and %s' % (funcs[-1])
+        elif len(funcs) == 0:
+            return write("%s: No commands available" % (nick))
+        else:
+            available = funcs[0]
+
+        return write("%s: Available commands: %s" % (nick, available))
 
     def list(self, nick, write):
         try:
