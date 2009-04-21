@@ -5760,6 +5760,41 @@ static int scrInternalGetStructureVisibleBy(lua_State *L)
 	return 0;
 }
 
+static int scrInternalGetFeatureVisibleBy(lua_State *L)
+{
+	int seenBy           = luaWZ_checkplayer(L, 1);
+	int featureType      = luaL_checkint(L, 2);
+	int enumFeatureCount = luaL_checkint(L, 3);
+	int count;
+	FEATURE *psFeature;
+
+	// go to the correct start point in the feature list.
+	count = 0;
+	for (psFeature=apsFeatureLists[0];psFeature && count<enumFeatureCount;count++)
+	{
+		psFeature = psFeature->psNext;
+	}
+
+	if (psFeature == NULL)		// no more to find.
+	{
+		return 0;
+	}
+
+	while(psFeature)	// find a visible feature of required type.
+	{
+		enumFeatureCount++;
+		if ((featureType < 0 || psFeature->psStats->subType == featureType) &&
+			(seenBy < 0 || psFeature->visible[seenBy]))
+		{
+			luaWZObj_pushfeature(L, psFeature);
+			lua_pushinteger(L, enumFeatureCount);
+			return 2;
+		}
+		psFeature = psFeature->psNext;
+	}
+	return 0;
+}
+
 /// Return the template factory is currently building
 static int scrFactoryGetTemplate(lua_State *L)
 {
@@ -6443,42 +6478,6 @@ static int scrThreatInRange(lua_State *L)
 	return 1;
 }
 
-
-WZ_DECL_UNUSED static BOOL scrNumEnemyWeapObjInRange(void)
-{
-	SDWORD				lookingPlayer,range,rangeX,rangeY,i;
-	UDWORD				numEnemies = 0;
-	BOOL				bVTOLs,bFinished;
-
-	if (!stackPopParams(6, VAL_INT, &lookingPlayer, VAL_INT, &rangeX,
-		VAL_INT, &rangeY, VAL_INT, &range, VAL_BOOL, &bVTOLs, VAL_BOOL, &bFinished))
-	{
-		debug(LOG_ERROR,  "scrNumEnemyWeapObjInRange(): stack failed");
-		return false;
-	}
-
-
-	for(i=0;i<MAX_PLAYERS;i++)
-	{
-		if((alliances[lookingPlayer][i] == ALLIANCE_FORMED) || (i == lookingPlayer))	//skip allies and myself
-		{
-			continue;
-		}
-
-		numEnemies += numPlayerWeapDroidsInRange(i, lookingPlayer, range, rangeX, rangeY, bVTOLs);
-		numEnemies += numPlayerWeapStructsInRange(i, lookingPlayer, range, rangeX, rangeY, bFinished);
-	}
-
-	scrFunctionResult.v.ival = numEnemies;
-	if (!stackPushResult(VAL_INT, &scrFunctionResult))
-	{
-		debug(LOG_ERROR, "scrNumEnemyWeapObjInRange(): failed to push result");
-		return false;
-	}
-
-	return true;
-}
-
 /* Calculates the total cost of enemy weapon objects in a certain area */
 WZ_DECL_UNUSED static BOOL scrEnemyWeapObjCostInRange(void)
 {
@@ -6905,146 +6904,6 @@ WZ_DECL_UNUSED static BOOL scrNumStructsByStatInArea(void)
 	}
 
 	scrFunctionResult.v.ival = NumStruct;
-	if (!stackPushResult(VAL_INT, &scrFunctionResult))
-	{
-		return false;
-	}
-
-	return true;
-}
-
-WZ_DECL_UNUSED static BOOL scrNumStructsByTypeInRange(void)
-{
-	SDWORD		targetPlayer, lookingPlayer, type, x, y, range;
-	SDWORD		rangeSquared,NumStruct;
-	STRUCTURE	*psCurr;
-	SDWORD		xdiff, ydiff;
-
-	if (!stackPopParams(6, VAL_INT, &lookingPlayer, VAL_INT, &targetPlayer,
-		VAL_INT, &type, VAL_INT, &x, VAL_INT, &y, VAL_INT, &range))
-	{
-		debug(LOG_ERROR,"scrNumStructsByTypeInRange: failed to pop");
-		return false;
-	}
-
-	if (lookingPlayer >= MAX_PLAYERS || targetPlayer >= MAX_PLAYERS)
-	{
-		ASSERT( false, "scrNumStructsByTypeInRange:player number is too high" );
-		return false;
-	}
-
-	if (x < 0
-	 || map_coord(x) > (SDWORD)mapWidth)
-	{
-		ASSERT( false, "scrNumStructsByTypeInRange : invalid X coord" );
-		return false;
-	}
-
-	if (y < 0
-	 || map_coord(y) > (SDWORD)mapHeight)
-	{
-		ASSERT( false,"scrNumStructsByTypeInRange : invalid Y coord" );
-		return false;
-	}
-
-	if (range < (SDWORD)0)
-	{
-		ASSERT( false, "scrNumStructsByTypeInRange : Rnage is less than zero" );
-		return false;
-	}
-
-	NumStruct = 0;
-
-	//now look through the players list of structures to see if this type
-	//exists within range
-	rangeSquared = range * range;
-	for(psCurr = apsStructLists[targetPlayer]; psCurr; psCurr = psCurr->psNext)
-	{
-		xdiff = (SDWORD)psCurr->pos.x - x;
-		ydiff = (SDWORD)psCurr->pos.y - y;
-		if (xdiff*xdiff + ydiff*ydiff <= rangeSquared)
-		{
-			if((type < 0) ||(psCurr->pStructureType->type == type))
-			{
-				if(psCurr->visible[lookingPlayer])		//can we see it?
-				{
-					NumStruct++;
-				}
-			}
-		}
-	}
-
-	scrFunctionResult.v.ival = NumStruct;
-	if (!stackPushResult(VAL_INT, &scrFunctionResult))
-	{
-		return false;
-	}
-
-	return true;
-}
-
-WZ_DECL_UNUSED static BOOL scrNumFeatByTypeInRange(void)
-{
-	SDWORD		lookingPlayer, type, x, y, range;
-	SDWORD		rangeSquared,NumFeat;
-	FEATURE		*psCurr;
-	SDWORD		xdiff, ydiff;
-
-	if (!stackPopParams(5, VAL_INT, &lookingPlayer,
-		VAL_INT, &type, VAL_INT, &x, VAL_INT, &y, VAL_INT, &range))
-	{
-		debug(LOG_ERROR, "scrNumFeatByTypeInRange(): failed to pop");
-		return false;
-	}
-
-	if (lookingPlayer >= MAX_PLAYERS)
-	{
-		ASSERT( false, "scrNumFeatByTypeInRange:player number is too high" );
-		return false;
-	}
-
-	if (x < 0
-	 || map_coord(x) > (SDWORD)mapWidth)
-	{
-		ASSERT( false, "scrNumFeatByTypeInRange : invalid X coord" );
-		return false;
-	}
-
-	if (y < 0
-	 || map_coord(y) > (SDWORD)mapHeight)
-	{
-		ASSERT( false,"scrNumFeatByTypeInRange : invalid Y coord" );
-		return false;
-	}
-
-	if (range < (SDWORD)0)
-	{
-		ASSERT( false, "scrNumFeatByTypeInRange : Rnage is less than zero" );
-		return false;
-	}
-
-	NumFeat = 0;
-
-	//now look through the players list of structures to see if this type
-	//exists within range
-	rangeSquared = range * range;
-	for(psCurr = apsFeatureLists[0]; psCurr; psCurr = psCurr->psNext)
-	{
-		xdiff = (SDWORD)psCurr->pos.x - x;
-		ydiff = (SDWORD)psCurr->pos.y - y;
-		if (xdiff*xdiff + ydiff*ydiff <= rangeSquared)
-		{
-			if((type < 0) ||(psCurr->psStats->subType == type))	//like FEAT_OIL_RESOURCE
-			{
-				if(psCurr->visible[lookingPlayer])		//can we see it?
-				{
-					NumFeat++;
-				}
-			}
-		}
-	}
-
-	scrFunctionResult.v.ival = NumFeat;
 	if (!stackPushResult(VAL_INT, &scrFunctionResult))
 	{
 		return false;
@@ -9996,7 +9855,7 @@ void registerScriptfuncs(lua_State *L)
 	lua_register(L, "_getDroidVisibleBy", scrInternalGetDroidVisibleBy);
 	lua_register(L, "_getStructureVisibleBy", scrInternalGetStructureVisibleBy);
 	lua_register(L, "anyFactoriesLeft", scrAnyFactoriesLeft);
-	//lua_register(L, "", );
+	lua_register(L, "_getFeatureVisibleBy", scrInternalGetFeatureVisibleBy);
 	//lua_register(L, "", );
 	//lua_register(L, "", );
 	//lua_register(L, "", );
