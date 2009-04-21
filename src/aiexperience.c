@@ -174,8 +174,6 @@ static bool SetUpOutputFile(unsigned int nPlayer)
 		return false;
 	}
 
-	sstrcat(SaveDir, "/");
-
 	/* Create filename */
 	sasprintf(&FileName, "%s/%s.lrn", SaveDir, game.map);
 
