@@ -85,10 +85,33 @@ function processEvents()
 						event.check_time = event.check_time + event.time
 					end
 					-- and update
-					run_event(handler, event.parameters)
+					_event.run_event(handler, event.parameters)
 				end
 			end
 		end
+	end
+end
+
+---------------------------------
+-- Pretty backtraces
+function _event.pack(a, ...)
+	return a, arg
+end
+
+function _event.call_with_backtrace(f, arg)
+	local run_function = function () return f(unpack(arg)) end
+	local result, returns = _event.pack(xpcall(run_function, debug.traceback))
+	if not result then
+		-- try to remove the last useless lines
+		local index = string.find(returns[1], "(tail call): ?", 1, true)
+		if index then
+			print(string.sub(returns[1], 1, index-3))
+		else
+			print(returns[1])
+		end
+		return nil
+	else
+		return returns
 	end
 end
 
@@ -105,7 +128,7 @@ function _event.disable_run_enable(handler, ...)
 			print(tostring(i)..':'..tostring(v))
 		end
 	end]]--
-	local results = {handler(unpack(arg))}
+	local results = {_event.call_with_backtrace(handler, arg)}
 	if _event.event_list[handler] then -- could be deactivated
 		_event.event_list[handler].enabled = _event.event_list[handler].enabled_stored
 	end
@@ -114,7 +137,7 @@ end
 
 -- run the handler as a coroutine to intercept the yields produced by pause
 -- handler can be a function or a thread, the thread will be resumed
-function run_event(handler, parameters)
+function _event.run_event(handler, parameters)
 	--[[if parameters then
 		print('run_event')
 		for i,v in ipairs(parameters) do
@@ -135,9 +158,7 @@ function run_event(handler, parameters)
 	else
 		error('handler is not a function or a thread')
 	end
-	if results[1] ~= true then
-		print(results[2])
-	end
+
 	-- check what to do with it
 	if coroutine.status(co) == 'suspended' then
 		-- it called yield, well, what does it want
@@ -188,7 +209,7 @@ function doCallbacksFor(event, ...)
 			for i,v in ipairs(arg) do
 				print(tostring(i)..':'..tostring(v))
 			end]]--
-			run_event(h, arg)
+			_event.run_event(h, arg)
 		end
 	end
 end
