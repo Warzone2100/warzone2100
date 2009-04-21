@@ -9482,11 +9482,13 @@ static int scrGetStructureByID(lua_State *L)
 static int scrDestroyed(lua_State *L)
 {
 	unsigned int id = luaWZObj_toid(L, 1);
+	BASE_OBJECT *object;
+
 	if (id == 0)
 	{
 		return luaL_error(L, "argument 1 should be an id or an object");
 	}
-	BASE_OBJECT *object = getBaseObjFromId(id);
+	object = getBaseObjFromId(id);
 	if (!object)
 	{
 		lua_pushboolean(L, true);

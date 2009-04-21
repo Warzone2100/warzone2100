@@ -982,14 +982,16 @@ static void dataScriptRelease(void *pData)
 static BOOL dataScriptLoadVals(const char* fileName, void **ppData)
 {
 	lua_State *L;
+	char *newfilename;
+	char *slopos;
 
 	debug(LOG_WZ, "COMPILING SCRIPT ...%s", GetLastResourceFilename());
 	
 	//////////////////////////
 	
 	// Try to open it as a lua file
-	char *newfilename = strdup(fileName);
-	char *slopos = strstr(newfilename, ".vlo");
+	newfilename = strdup(fileName);
+	slopos = strstr(newfilename, ".vlo");
 	strcpy(slopos, ".lua");
 	debug(LOG_WZ, "trying to load lua file %s", newfilename);
 	
