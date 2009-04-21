@@ -2749,10 +2749,12 @@ void runMultiOptions(void)
 			case MULTIOP_MAP:
 				sstrcpy(game.map, sTemp);
 				game.maxPlayers =(UBYTE) value;
-				if (value == 8 || game.type == SKIRMISH)
-				{
-					processMultiopWidgets(MULTIOP_SKIRMISH);	// fake click on 'no scavengers'
-				}
+				// The following code resets the map to default, but this voids the map we picked?
+				// commenting out for now until get more information on what this is for.
+				//if (value == 8 || game.type == SKIRMISH)
+				//{
+				//	processMultiopWidgets(MULTIOP_SKIRMISH);	// fake click on 'no scavengers'
+				//}
 				loadMapPreview();
 
 				widgSetString(psWScreen,MULTIOP_MAP,sTemp);

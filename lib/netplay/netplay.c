@@ -530,7 +530,6 @@ static void NET_DestroyPlayer(unsigned int index)
 	debug(LOG_NET, "Freeing slot %u for a new player", index);
 	NetPlay.players[index].allocated = false;
 	NetPlay.playercount--;
-	NETBroadcastPlayerInfo(index);
 }
 
 /**
@@ -2058,7 +2057,10 @@ BOOL NEThostGame(const char* SessionName, const char* PlayerName,
 		return false;
 	}
 	// tcp_socket is the connection to the lobby server (or machine)
-	if(!tcp_socket) tcp_socket = SDLNet_TCP_Open(&ip);
+	if(!tcp_socket)
+	{
+		tcp_socket = SDLNet_TCP_Open(&ip);
+	}
 	if(tcp_socket == NULL)
 	{
 		debug(LOG_ERROR, "Cannot connect to master self: %s", SDLNet_GetError());
@@ -2159,7 +2161,7 @@ BOOL NETfindGame(void)
 
 	if(!NetPlay.bComms)
 	{
-		selectedPlayer	= 0;
+		selectedPlayer	= 0;		// Host is always 0
 		NetPlay.isHost		= true;
 		NetPlay.hostPlayer		= 0;
 		return true;
@@ -2331,8 +2333,8 @@ BOOL NETjoinGame(UDWORD gameNumber, const char* playername)
 	// NOTE: tcp_socket = bsocket->socket now!
 	NET_initBufferedSocket(bsocket, tcp_socket);
 
-	// Send a join message
-	NETbeginEncode(NET_JOIN, NET_ALL_PLAYERS);
+	// Send a join message to the host
+	NETbeginEncode(NET_JOIN, 0);
 		// Casting constness away, because NETstring is const-incorrect
 		// when sending/encoding a packet.
 		NETstring((char*)playername, 64);
