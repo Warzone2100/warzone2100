@@ -215,7 +215,8 @@ float droidDamage(DROID *psDroid, UDWORD damage, UDWORD weaponClass, UDWORD weap
 	return relativeDamage;
 }
 
-// Check that psVictimDroid is not referred to by any other object in the game
+// Check that psVictimDroid is not referred to by any other object in the game. We can dump out some
+// extra data in debug builds that help track down sources of dangling pointer errors.
 BOOL droidCheckReferences(DROID *psVictimDroid)
 {
 	int plr;
@@ -231,44 +232,29 @@ BOOL droidCheckReferences(DROID *psVictimDroid)
 
 			for (i = 0; i < psStruct->numWeaps; i++)
 			{
-				if ((DROID *)psStruct->psTarget[i] == psVictimDroid)
-				{
-#ifndef DEBUG
-					debug(LOG_ERROR, "droidCheckReferences: Illegal reference to droid");
-#else
-					ASSERT(!"Illegal reference to droid", "Illegal reference to droid from %s line %d",
-					       psStruct->targetFunc[i], psStruct->targetLine[i]);
+				ASSERT_OR_RETURN(false, (DROID *)psStruct->psTarget[i] != psVictimDroid, "Illegal reference to droid"
+#ifdef DEBUG
+				                 "from %s line %d", psStruct->targetFunc[i], psStruct->targetLine[i]
 #endif
-					return false;
-				}
+				);
 			}
 		}
 		for (psDroid = apsDroidLists[plr]; psDroid != NULL; psDroid = psDroid->psNext)
 		{
 			unsigned int i;
 
-			if ((DROID *)psDroid->psTarget == psVictimDroid && psVictimDroid != psDroid)
-			{
-#ifndef DEBUG
-				debug(LOG_ERROR, "droidCheckReferences: Illegal reference to droid");
-#else
-				ASSERT(!"Illegal reference to droid", "Illegal reference to droid from %s line %d",
-				       psDroid->targetFunc, psDroid->targetLine);
+			ASSERT_OR_RETURN(false, (DROID *)psDroid->psTarget != psVictimDroid || psVictimDroid == psDroid, "Illegal reference to droid"
+#ifdef DEBUG
+			                 "from %s line %d", psDroid->targetFunc, psDroid->targetLine
 #endif
-				return false;
-			}
+			);
 			for (i = 0; i < psDroid->numWeaps; i++)
 			{
-				if ((DROID *)psDroid->psActionTarget[i] == psVictimDroid && psVictimDroid != psDroid)
-				{
-#ifndef DEBUG
-					debug(LOG_ERROR, "droidCheckReferences: Illegal action reference to droid");
-#else
-					ASSERT(!"Illegal reference to droid", "Illegal action reference to droid from %s line %d",
-					       psDroid->actionTargetFunc[i], psDroid->actionTargetLine[i]);
+				ASSERT_OR_RETURN(false, (DROID *)psDroid->psActionTarget[i] != psVictimDroid || psVictimDroid == psDroid, "Illegal reference to droid"
+#ifdef DEBUG
+				                 "from %s line %d", psDroid->actionTargetFunc[i], psDroid->actionTargetLine[i]
 #endif
-					return false;
-				}
+				);
 			}
 		}
 	}
