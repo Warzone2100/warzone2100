@@ -119,7 +119,7 @@ class BotCommands:
                 l = ["\x02%s\x02 [%i/%i]" % (g.description, g.currentPlayers, g.maxPlayers) for g in games]
                 message += ", ".join(l)
                 write("%s: %s" % (nick, message))
-        except (socket.error, socket.herror, socket.gaierror, socket.timeout) as e:
+        except (socket.error, socket.herror, socket.gaierror, socket.timeout), e:
             write("%s: Failed to communicate with the lobby (%s:%d): %s" % (nick, self.bot.lobby.host, self.bot.lobby.port, e))
 
     # TODO: if message.startswith("show") # join a game and show information about it
