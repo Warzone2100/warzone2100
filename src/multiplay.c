@@ -1893,7 +1893,7 @@ const char* getPlayerColourName(unsigned int player)
 		N_("Cyan")
 	};
 
-	ASSERT(player < ARRAY_SIZE(playerColors), "player number (%d) exceeds maximum (%zu)", player, ARRAY_SIZE(playerColors));
+	ASSERT(player < ARRAY_SIZE(playerColors), "player number (%d) exceeds maximum (%lu)", player, (unsigned long) ARRAY_SIZE(playerColors));
 
 	if (player >= ARRAY_SIZE(playerColors))
 	{

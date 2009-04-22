@@ -668,7 +668,7 @@ void seq_AddSeqToList(const char *pSeqName, const char *pAudioName, const char *
 		size_t check_len = sstrcpy(aSubtitleName, pSeqName);
 		char* extension;
 
-		ASSERT(check_len < sizeof(aSubtitleName), "given sequence name (%s) longer (%zu) than buffer (%zu)", pSeqName, check_len, sizeof(aSubtitleName));
+		ASSERT(check_len < sizeof(aSubtitleName), "given sequence name (%s) longer (%lu) than buffer (%lu)", pSeqName, (unsigned long) check_len, (unsigned long) sizeof(aSubtitleName));
 
 		// check for a subtitle file
 		extension = strrchr(aSubtitleName, '.');
