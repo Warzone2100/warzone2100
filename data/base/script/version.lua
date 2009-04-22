@@ -107,5 +107,22 @@ function version(v)
 			structure = _initEnumStruct_iterator()
 			return structure
 		end
+
+		initGetFeature_iterators = {}
+		function initGetFeature(feature_type, seen_by, bucket)
+			initGetFeature_iterators[bucket] = visibleFeatures(seen_by, feature_type)
+		end
+
+		function getFeature(bucket)
+			local feature
+			for feature in initGetFeature_iterators[bucket] do
+				if not structureOnLocation(feature.x, feature.y) and
+				   not fireOnLocation(feature.x, feature.y) then
+					return feature
+				end
+			end
+			return nil
+		end
+		getFeatureB = getFeature
 	end
 end

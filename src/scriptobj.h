@@ -101,6 +101,7 @@ extern BOOL scrValDefSave(INTERP_VAL *psVal, char *pBuffer, UDWORD *pSize);
 extern BOOL scrValDefLoad(SDWORD version, INTERP_VAL *psVal, char *pBuffer, UDWORD size);
 
 extern int luaWZObj_checkstructurestat(lua_State *L, int pos);
+extern int luaWZObj_checkfeaturestat(lua_State *L, int pos);
 extern BASE_OBJECT *luaWZObj_checkobject(lua_State *L, int pos, int type);
 extern BASE_OBJECT *luaWZObj_checkbaseobject(lua_State *L, int pos);
 extern unsigned int luaWZObj_toid(lua_State *L, int pos);
