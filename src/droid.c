@@ -3502,7 +3502,7 @@ UDWORD getDroidEffectiveLevel(DROID *psDroid)
 const char *getDroidNameForRank(UDWORD rank)
 {
 	ASSERT( rank < (sizeof(arrRank) / sizeof(struct rankMap)),
-	        "getDroidNameForRank: given rank number (%d) out of bounds, we only have %zu ranks\n", rank, (sizeof(arrRank) / sizeof(struct rankMap)) );
+	        "getDroidNameForRank: given rank number (%d) out of bounds, we only have %lu ranks\n", rank, (unsigned long) (sizeof(arrRank) / sizeof(struct rankMap)) );
 
 	return PE_("rank", arrRank[rank].name);
 }
