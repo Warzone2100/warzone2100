@@ -86,7 +86,7 @@ class masterserver_connection:
                         currentPlayers = _swap_endianness(currentPlayers)
                     g = game(description, host, maxPlayers, currentPlayers)
                     games.append(g)
-            except socket.timeout:
+            except (socket.error, socket.herror, socket.gaierror, socket.timeout):
                 if allowException:
                     raise
 
