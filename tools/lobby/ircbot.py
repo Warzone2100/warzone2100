@@ -57,12 +57,12 @@ class Bot:
                 self.irc.readAndHandle()
         except KeyboardInterrupt:
             self.write("Shutting down at request of the administrator. Waiting for lobby change notifier to terminate.")
-            self.stop()
             raise
         except:
             self.write("Encountered fatal error. Shutting down.")
-            self.stop()
             raise
+        finally:
+            self.stop()
 
     def stop(self):
         self.check.stop()
