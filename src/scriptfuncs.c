@@ -7374,17 +7374,15 @@ static int scrGetClosestEnemyStructByType(lua_State *L)
 
 
 //Approx point of intersection of a circle and a line with start loc being circle's center point
-WZ_DECL_UNUSED static BOOL scrCirclePerimPoint(void)
+static int scrCirclePerimPoint(lua_State *L)
 {
-	SDWORD				basex,basey,*grx,*gry,radius;
 	float factor, deltaX, deltaY;
 
-	if (!stackPopParams(5, VAL_INT, &basex, VAL_INT, &basey, VAL_REF|VAL_INT, &grx,
-		VAL_REF|VAL_INT, &gry, VAL_INT, &radius))
-	{
-		debug(LOG_ERROR,"scrCirclePerimPoint(): stack failed");
-		return false;
-	}
+	int basex    = luaL_checkint(L, 1);
+	int basey    = luaL_checkint(L, 2);
+	int x        = luaL_checkint(L, 3);
+	int y        = luaL_checkint(L, 4);
+	float radius = luaL_checknumber(L, 5);
 
 	if(radius == 0)
 	{
@@ -7392,16 +7390,15 @@ WZ_DECL_UNUSED static BOOL scrCirclePerimPoint(void)
 		return true;
 	}
 
-	deltaX = (float)(*grx - basex);	//x len (signed!)
-	deltaY = (float)(*gry - basey);
+	deltaX = (float)(x - basex);	//x len (signed!)
+	deltaY = (float)(y - basey);
 
-	factor =  hypotf(deltaX, deltaY) / (float)radius;			//by what factor is distance > radius?
+	factor =  hypotf(deltaX, deltaY) / radius;			//by what factor is distance > radius?
 
 	//if point was inside of the circle, don't modify passed parameter
 	if(factor == 0)
 	{
-		debug_console("scrCirclePerimPoint: division by zero.");
-		return true;
+		return luaL_error(L, "point is inside the circle");
 	}
 
 	//calc new len
@@ -7409,10 +7406,9 @@ WZ_DECL_UNUSED static BOOL scrCirclePerimPoint(void)
 	deltaY = deltaY / factor;
 
 	//now add new len to the center coords
-	*grx = basex + deltaX;
-	*gry = basey + deltaY;
-
-	return true;
+	lua_pushinteger(L, basex + deltaX);
+	lua_pushinteger(L, basey + deltaY);
+	return 2;
 }
 
 //send my vision to AI
@@ -9678,7 +9674,7 @@ void registerScriptfuncs(lua_State *L)
 	lua_register(L, "structureOnLocation", scrStructureOnLocation);
 	lua_register(L, "fireOnLocation", scrFireOnLocation);
 	lua_register(L, "playerInAlliance", scrPlayerInAlliance);
-	//lua_register(L, "", );
+	lua_register(L, "circlePerimPoint", scrCirclePerimPoint);
 	//lua_register(L, "", );
 	//lua_register(L, "", );
 	//lua_register(L, "", );

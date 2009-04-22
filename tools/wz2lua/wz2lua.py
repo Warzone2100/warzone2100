@@ -77,6 +77,9 @@ unused_parameters = {
 	'chooseValidLoc': [0, 1],
 	}
 
+# these functions do not get an extra return like UNUSED,... = function(...)
+no_extra_return = ['circlePerimPoint']
+
 class Token:
 	def __init__(self, type, attr='', constant=True):
 		self.type = type
@@ -806,7 +809,10 @@ class CodeGenerator(GenericASTTraversal):
 			# this is just a lone function call(ref a, ref b)
 			# as all of these also return a value, we need to add it as UNUSED
 			# the ref parameters are extra returns
-			node.code += 'UNUSED, ' + ', '.join(node[0].ref) + ' = ' + node[0].code + '\n'
+			if not node[0][0].code in no_extra_return:
+				node.code += 'UNUSED, ' + ', '.join(node[0].ref) + ' = ' + node[0].code + '\n'
+			else:
+				node.code += ', '.join(node[0].ref) + ' = ' + node[0].code + '\n'
 		else:
 			node.code += node[0].code + '\n'
 	def n_arglist(self, node):
