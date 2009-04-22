@@ -1451,6 +1451,17 @@ int luaWZObj_checkstructurestat(lua_State *L, int pos)
 	return getStructStatFromName(structure_type);
 }
 
+int luaWZObj_checkfeaturestat(lua_State *L, int pos)
+{
+	const char *feature_type;
+	if (lua_isnumber(L, pos))
+	{
+		return luaL_checkint(L, pos);
+	}
+	feature_type = luaL_checkstring(L, pos);
+	return getFeatureStatFromName(feature_type);
+}
+
 BASE_OBJECT *luaWZObj_checkobject(lua_State *L, int pos, int type)
 {
 	int objectType;

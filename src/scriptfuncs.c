@@ -1237,191 +1237,6 @@ static int scrDestroyFeature(lua_State *L)
 }
 
 // -----------------------------------------------------------------------------------------
-// static vars to enum features.
-static	FEATURE_STATS	*psFeatureStatToFind[MAX_PLAYERS];
-static	SDWORD			playerToEnum[MAX_PLAYERS];
-static  SDWORD			getFeatureCount[MAX_PLAYERS]={0};
-static	FEATURE			*psCurrEnumFeature[MAX_PLAYERS];
-
-// -----------------------------------------------------------------------------------------
-/// init enum visible features.
-static int scrInitGetFeature(lua_State *L)
-{
-	const char *featurename = luaL_checkstring(L, 1);
-	int player = luaWZ_checkplayer(L, 2);
-	int bucket = luaWZ_checkplayer(L, 3);
-	int iFeat = getFeatureStatFromName(featurename);
-
-	psFeatureStatToFind[bucket]		= (FEATURE_STATS *)(asFeatureStats + iFeat);				// find this stat
-	playerToEnum[bucket]			= player;				// that this player can see
-	psCurrEnumFeature[bucket]		= apsFeatureLists[0];
-	getFeatureCount[bucket]			= 0;					// start at the beginning of list.
-	return 0;
-}
-
-// -----------------------------------------------------------------------------------------
-/** get next visible feature of required type
- * \note can't rely on just using the feature list, since it may change
- *       between calls, Use an index into list instead.
- *       Doesn't return Features sharing a tile with a structure.
- *       Skirmish Only, dunno if kev uses this?
- */
-static int scrGetFeature(lua_State *L)
-{
-	int count;
-	FEATURE *psFeat;
-	
-	int bucket = luaWZ_checkplayer(L, 1);
-
-	count =0;
-	// go to the correct start point in the feature list.
-	for(psFeat=apsFeatureLists[0];psFeat && count<getFeatureCount[bucket] ;count++)
-	{
-		psFeat = psFeat->psNext;
-	}
-
-	if(psFeat == NULL)		// no more to find.
-	{
-		lua_pushnil(L);
-		return 1;
-	}
-
-	// check to see if badly called
-	if(psFeatureStatToFind[bucket] == NULL)
-	{
-		debug( LOG_SCRIPT, "invalid feature to find. possibly due to save game\n" );
-		lua_pushnil(L);
-		return 1;
-	}
-
-	// begin searching the feature list for the required stat.
-	while(psFeat)
-	{
-		if (psFeat->psStats->subType == psFeatureStatToFind[bucket]->subType
-		 && psFeat->visible[playerToEnum[bucket]] != 0
-		 && !TileHasStructure(mapTile(map_coord(psFeat->pos.x), map_coord(psFeat->pos.y)))
-		 && !fireOnLocation(psFeat->pos.x,psFeat->pos.y)		// not burning.
-		   )
-		{
-			getFeatureCount[bucket]++;
-			luaWZObj_pushfeature(L, psFeat);
-			return 1;
-		}
-		getFeatureCount[bucket]++;
-		psFeat=psFeat->psNext;
-	}
-
-	// none found
-	lua_pushnil(L);
-	return 1;
-}
-
-/* Faster implementation of scrGetFeature -  assumes no features
- * are deleted between calls, unlike scrGetFeature also returns
- * burning features (mainly relevant for burning oil resources)
- */
-WZ_DECL_UNUSED static BOOL scrGetFeatureB(void)
-{
-	SDWORD	bucket;
-
-	if ( !stackPopParams(1,VAL_INT,&bucket) )
-	{
-		ASSERT( false, "scrGetFeatureB: Failed to pop player number from stack" );
-		return false;
-	}
-
-	ASSERT(bucket >= 0 && bucket < MAX_PLAYERS,
-		"scrGetFeatureB: bucket out of bounds: %d", bucket);
-
-	// check to see if badly called
-	if(psFeatureStatToFind[bucket] == NULL)
-	{
-		debug( LOG_NEVER, "invalid feature to find. possibly due to save game\n" );
-		scrFunctionResult.v.oval = NULL;
-		if(!stackPushResult((INTERP_TYPE)ST_FEATURE, &scrFunctionResult))
-		{
-			ASSERT( false, "scrGetFeatureB: Failed to push result" );
-			return false;
-		}
-		return true;
-	}
-
-	// begin searching the feature list for the required stat.
-	while(psCurrEnumFeature[bucket])
-	{
-		if(	( psCurrEnumFeature[bucket]->psStats->subType == psFeatureStatToFind[bucket]->subType)
-			&&( psCurrEnumFeature[bucket]->visible[playerToEnum[bucket]]	!= 0)
-			&&!TileHasStructure(mapTile(map_coord(psCurrEnumFeature[bucket]->pos.x), map_coord(psCurrEnumFeature[bucket]->pos.y)))
-			&&!fireOnLocation(psCurrEnumFeature[bucket]->pos.x,psCurrEnumFeature[bucket]->pos.y )		// not burning.
-			)
-		{
-			scrFunctionResult.v.oval = psCurrEnumFeature[bucket];
-			if (!stackPushResult((INTERP_TYPE)ST_FEATURE, &scrFunctionResult))	//	push scrFunctionResult
-			{
-				ASSERT( false, "scrGetFeatureB: Failed to push result" );
-				return false;
-			}
-			psCurrEnumFeature[bucket] = psCurrEnumFeature[bucket]->psNext;
-			return true;
-		}
-
-		psCurrEnumFeature[bucket] = psCurrEnumFeature[bucket]->psNext;
-	}
-
-	// none found
-	scrFunctionResult.v.oval = NULL;
-	if (!stackPushResult((INTERP_TYPE)ST_FEATURE,  &scrFunctionResult))
-	{
-		ASSERT( false, "scrGetFeatureB: Failed to push result" );
-		return false;
-	}
-	return true;
-}
-
-
-/*
-// -----------------------------------------------------------------------------------------
-// enum next visible feature of required type.
-// note: wont return features covered by structures (ie oil resources)
-// YUK NASTY BUG. CANT RELY ON THE FEATURE LIST BETWEEN CALLS.
-WZ_DECL_UNUSED static BOOL scrGetFeature(void)
-{
-	SDWORD	bucket;
-
-	if ( !stackPopParams(1,VAL_INT,&bucket) )
-	{
-		return false;
-	}
-
-	while(psCurrEnumFeature[bucket])
-	{
-		if(	( psCurrEnumFeature[bucket]->psStats->subType == psFeatureStatToFind[bucket]->subType)
-			&&
-			( psCurrEnumFeature[bucket]->visible[playerToEnum[bucket]]	!= 0)
-			&&
-			!TileHasStructure(mapTile(map_coord(psCurrEnumFeature[bucket]->pos.x), map_coord(psCurrEnumFeature[bucket]->pos.y)))
-		   )
-		{
-			if (!stackPushResult(ST_FEATURE,(UDWORD) psCurrEnumFeature[bucket]))			//	push scrFunctionResult
-			{
-				return false;
-			}
-			psCurrEnumFeature[bucket] = psCurrEnumFeature[bucket]->psNext;
-			return true;
-		}
-
-		psCurrEnumFeature[bucket] = psCurrEnumFeature[bucket]->psNext;
-	}
-	// push NULL, none found;
-	if (!stackPushResult(ST_FEATURE, (UDWORD)NULL))
-	{
-		return false;
-	}
-	return true;
-}
-*/
-
-// -----------------------------------------------------------------------------------------
 //Add a feature
 static int scrAddFeature(lua_State *L)
 {
@@ -5763,7 +5578,7 @@ static int scrInternalGetStructureVisibleBy(lua_State *L)
 static int scrInternalGetFeatureVisibleBy(lua_State *L)
 {
 	int seenBy           = luaWZ_checkplayer(L, 1);
-	int featureType      = luaL_checkint(L, 2);
+	int featureType      = luaWZObj_checkfeaturestat(L, 2);
 	int enumFeatureCount = luaL_checkint(L, 3);
 	int count;
 	FEATURE *psFeature;
@@ -7861,16 +7676,17 @@ static int scrRecallPlayerBaseLoc(lua_State *L)
 	
 	if(!CanRememberPlayerBaseLoc(playerStoring, enemyPlayer))		//return false if this one not set yet
 	{
-		lua_pushnil(L);
+		lua_pushboolean(L, false);
 		return 1;
 	}
 
 	x = baseLocation[playerStoring][enemyPlayer][0];
 	y = baseLocation[playerStoring][enemyPlayer][1];
 
+	lua_pushboolean(L, true);
 	lua_pushinteger(L, x);
 	lua_pushinteger(L, y);
-	return 2;
+	return 3;
 }
 
 /* Checks if player base loc is stored */
@@ -9729,6 +9545,24 @@ static int scrGetWeapon(lua_State *L)
 	return 1;
 }
 
+static int scrStructureOnLocation(lua_State *L)
+{
+	int x = luaL_checkint(L, 1);
+	int y = luaL_checkint(L, 2);
+
+	lua_pushboolean(L, TileHasStructure(mapTile(map_coord(x), map_coord(y))));
+	return 1;
+}
+
+static int scrFireOnLocation(lua_State *L)
+{
+	int x = luaL_checkint(L, 1);
+	int y = luaL_checkint(L, 2);
+
+	lua_pushboolean(L, fireOnLocation(x, y));
+	return 1;
+}
+
 /// Register all script functions with the Lua interpreter
 void registerScriptfuncs(lua_State *L)
 {
@@ -9796,8 +9630,6 @@ void registerScriptfuncs(lua_State *L)
 	lua_register(L, "pickStructLocationB", scrPickStructLocationB);
 	lua_register(L, "dbgMsgOn", scrDbgMsgOn);
 	lua_register(L, "dbg", scrDbg);
-	lua_register(L, "initGetFeature", scrInitGetFeature);
-	lua_register(L, "getFeature", scrGetFeature);
 	lua_register(L, "isVtol", scrIsVtol);
 	lua_register(L, "setCampaignNumber", scrSetCampaignNumber);
 	lua_register(L, "setBackgroundFog", scrSetBackgroundFog);
@@ -9856,8 +9688,8 @@ void registerScriptfuncs(lua_State *L)
 	lua_register(L, "_getStructureVisibleBy", scrInternalGetStructureVisibleBy);
 	lua_register(L, "anyFactoriesLeft", scrAnyFactoriesLeft);
 	lua_register(L, "_getFeatureVisibleBy", scrInternalGetFeatureVisibleBy);
-	//lua_register(L, "", );
-	//lua_register(L, "", );
+	lua_register(L, "structureOnLocation", scrStructureOnLocation);
+	lua_register(L, "fireOnLocation", scrFireOnLocation);
 	//lua_register(L, "", );
 	//lua_register(L, "", );
 	//lua_register(L, "", );
