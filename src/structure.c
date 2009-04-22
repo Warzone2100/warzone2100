@@ -1166,6 +1166,11 @@ void structureBuild(STRUCTURE *psStruct, DROID *psDroid, int buildPoints)
 		addPower(psStruct->player, -powerNeeded);
 	}
 
+	newBuildPoints = (int)psStruct->currentBuildPts;
+	newBuildPoints += buildPointsToAdd;
+	ASSERT(newBuildPoints < 3 * (int)psStruct->pStructureType->buildPoints, "unsigned int underflow?");
+	CLIP(newBuildPoints, 0, psStruct->pStructureType->buildPoints);
+
 	before = (9 * psStruct->currentBuildPts * structureBody(psStruct) ) / (10 * psStruct->pStructureType->buildPoints);
 	psStruct->currentBuildPts = newBuildPoints;
 	after =  (9 * psStruct->currentBuildPts * structureBody(psStruct) ) / (10 * psStruct->pStructureType->buildPoints);
