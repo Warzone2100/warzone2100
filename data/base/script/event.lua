@@ -102,10 +102,10 @@ function _event.call_with_backtrace(f, arg)
 	local run_function = function () return f(unpack(arg)) end
 	local result, returns = _event.pack(xpcall(run_function, debug.traceback))
 	if not result then
-		-- try to remove the last useless lines
-		local index = string.find(returns[1], "(tail call): ?", 1, true)
+		-- HACK: try to remove the last useless lines
+		local index = string.find(returns[1], "[C]: in function 'xpcall'", 1, true)
 		if index then
-			print(string.sub(returns[1], 1, index-3))
+			print(string.sub(returns[1], 1, index-19))
 		else
 			print(returns[1])
 		end
