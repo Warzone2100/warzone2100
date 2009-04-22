@@ -3157,34 +3157,21 @@ static int scrAllianceExistsBetween(lua_State *L)
 }
 
 // -----------------------------------------------------------------------------------------
-WZ_DECL_UNUSED static BOOL scrPlayerInAlliance(void)
+static int scrPlayerInAlliance(lua_State *L)
 {
-	UDWORD player,j;
-
-	if (!stackPopParams(1, VAL_INT, &player))
-	{
-		return false;
-	}
+	int j;
+	int player = luaWZ_checkplayer(L, 1);
 
 	for(j=0;j<MAX_PLAYERS;j++)
 	{
 		if(alliances[player][j] == ALLIANCE_FORMED)
 		{
-			scrFunctionResult.v.bval = true;
-			if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
-			{
-				return false;
-			}
-			return true;
+			lua_pushboolean(L, true);
+			return 1;
 		}
 	}
-	scrFunctionResult.v.bval = false;
-	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
-	{
-		return false;
-	}
-
-	return true;
+	lua_pushboolean(L, false);
+	return 1;
 }
 
 // -----------------------------------------------------------------------------------------
@@ -9690,7 +9677,7 @@ void registerScriptfuncs(lua_State *L)
 	lua_register(L, "_getFeatureVisibleBy", scrInternalGetFeatureVisibleBy);
 	lua_register(L, "structureOnLocation", scrStructureOnLocation);
 	lua_register(L, "fireOnLocation", scrFireOnLocation);
-	//lua_register(L, "", );
+	lua_register(L, "playerInAlliance", scrPlayerInAlliance);
 	//lua_register(L, "", );
 	//lua_register(L, "", );
 	//lua_register(L, "", );
