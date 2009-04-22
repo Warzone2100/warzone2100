@@ -1145,27 +1145,29 @@ void structureBuild(STRUCTURE *psStruct, DROID *psDroid, int buildPoints)
 	int before, after;
 	int powerNeeded;
 	int buildPointsToAdd;
-
+	int newBuildPoints = (int)psStruct->currentBuildPts; // beware, unsigned
+	newBuildPoints += buildPoints;
+	ASSERT(newBuildPoints < 3 * (int)psStruct->pStructureType->buildPoints, "unsigned int underflow?");
+	CLIP(newBuildPoints, 0, psStruct->pStructureType->buildPoints);
 
 	if (buildPoints > 0)
 	{
 		// Check if there is enough power to perform this construction work
-		powerNeeded = ((psStruct->currentBuildPts + buildPoints) * structPowerToBuild(psStruct))/psStruct->pStructureType->buildPoints -
+		powerNeeded = (newBuildPoints * structPowerToBuild(psStruct))/psStruct->pStructureType->buildPoints -
 		               (psStruct->currentBuildPts * structPowerToBuild(psStruct))/psStruct->pStructureType->buildPoints;
 		buildPointsToAdd = requestPowerFor(psStruct->player, powerNeeded, buildPoints);
 	}
 	else
 	{
 		// get half the power back for demolishing 
-		powerNeeded = (((int)psStruct->currentBuildPts + buildPoints) * structureTotalReturn(psStruct))/(psStruct->pStructureType->buildPoints) -
+		powerNeeded = (newBuildPoints * structureTotalReturn(psStruct))/(psStruct->pStructureType->buildPoints) -
 		               (psStruct->currentBuildPts * structureTotalReturn(psStruct))/(psStruct->pStructureType->buildPoints);
 		buildPointsToAdd = buildPoints;
 		addPower(psStruct->player, -powerNeeded);
 	}
 
 	before = (9 * psStruct->currentBuildPts * structureBody(psStruct) ) / (10 * psStruct->pStructureType->buildPoints);
-	psStruct->currentBuildPts += buildPointsToAdd;
-	CLIP(psStruct->currentBuildPts, 0, psStruct->pStructureType->buildPoints);
+	psStruct->currentBuildPts = newBuildPoints;
 	after =  (9 * psStruct->currentBuildPts * structureBody(psStruct) ) / (10 * psStruct->pStructureType->buildPoints);
 	psStruct->body += after - before;
 
