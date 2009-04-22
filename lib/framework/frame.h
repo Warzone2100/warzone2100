@@ -59,7 +59,7 @@ extern UDWORD selectedPlayer;
  *  @return true when the framework library is successfully initialised, false
  *          when a part of the initialisation failed.
  */
-extern BOOL frameInitialise(const char* pWindowName, UDWORD width, UDWORD height, UDWORD bitDepth, BOOL fullScreen, BOOL vsync);
+extern BOOL frameInitialise(const char* pWindowName, UDWORD width, UDWORD height, UDWORD bitDepth, unsigned int fsaa, BOOL fullScreen, BOOL vsync);
 
 extern bool selfTest;
 

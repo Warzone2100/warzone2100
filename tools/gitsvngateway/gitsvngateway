@@ -65,13 +65,15 @@ Options:
   -p, --prefix=PREFIX  Use PREFIX instead of "_gitsvngateway/" for branches
   -r, --remote=REMOTE  git push to REMOTE instead of to "origin"
   -a, --automatic      When there is a merge conflict clean up and abort
-  -s, --no-fetch       Do not do an initial fetch to see if there are new commits from SVN
+  -f, --no-fetch       Do not do an initial fetch to see if there are new commits from SVN
 EOF
 	exit 1
 }
 
 function revert_and_exit {
 	echo_c "== Reverting changes and exitting"
+	git rebase --abort > /dev/null
+	git reset -q --hard > /dev/null
 	git checkout -q $p/new/${git}
 	git branch -f ${git} $p/new/${git}
 	git checkout -q ${git}
@@ -91,8 +93,9 @@ dry_run=false
 remote=origin
 automatic=false
 no_fetch=false
+squash=false
 
-TEMP=`getopt -o hnp:r:as --long help,dry-run,prefix:,remote:,automatic,no-fetch \
+TEMP=`getopt -o hnp:r:afs --long help,dry-run,prefix:,remote:,automatic,no-fetch,squash \
      -n 'gitsvngateway' -- "$@"`
 
 if [ $? != 0 ] ; then usage; fi
@@ -107,7 +110,8 @@ while true ; do
 		-p|--prefix) p="$2"; shift 2;;
 		-r|--remote) remote="$2"; shift 2;;
 		-a|--automatic) automatic=true; shift;;
-		-s|--no-fetch) no_fetch=true; shift;;
+		-f|--no-fetch) no_fetch=true; shift;;
+		-s|--squash) squash=true; shift;;
 		--) shift ; break ;;
 		*) echo "Internal error!" ; exit 1 ;;
 	esac
@@ -188,48 +192,51 @@ then
 	for hash in $hashes; do
 		if is_merge $hash
 		then
-			echo_c "== Merge detected for $hash"
-			echo_c "== Commits contained in this merge:"
-			git log --pretty=oneline $p/${git}..$hash | tail -n+2
-			amount=`git log --pretty=oneline $p/${git}..$hash | tail -n+2 | wc -l`
-			echo_c "== $amount commit(s) found, will unravel if 15 or less"
-			if [ $amount -le 15 ]
+			if ! $squash
 			then
-				echo_c "== Going ahead with unraveling the merge"
-				if ! [ -s "$mergefile" ]
+				echo_c "== Merge detected for $hash"
+				echo_c "== Commits contained in this merge:"
+				git log --pretty=oneline $p/${git}..$hash | tail -n+2
+				amount=`git log --pretty=oneline $p/${git}..$hash | tail -n+2 | wc -l`
+				echo_c "== $amount commit(s) found, will unravel if 15 or less"
+				if [ $amount -le 15 ]
 				then
-					git log --pretty=oneline $p/${git}..$hash | cut -f 1 --delimiter=" " | tail -n+2 | tac > $mergefile
-				fi
-				hashes2=`cat $mergefile`
-				echo_c "== Commits still to merge:"
-				cat $mergefile
-
-				for hash2 in $hashes2; do
-					echo_c "== Merging $hash2"
-					# remove the first line from the merge file
-					sed -i '1d' $mergefile
-
-					if ! cherry_pick_from $hash2
+					echo_c "== Going ahead with unraveling the merge"
+					if ! [ -s "$mergefile" ]
 					then
-						if $automatic
-						then
-							revert_and_exit 2
-						else
-							echo_c "== Could not merge! Please fix, commit and restart the script."
-							echo_c "== To use the already existing log message use:"
-							echo_c "git commit -a -C $hash2"
-							exit 2
-						fi
+						git log --pretty=oneline $p/${git}..$hash | cut -f 1 --delimiter=" " | tail -n+2 | tac > $mergefile
 					fi
-				done
-				# cleanum
-				rm $mergefile
-				# to keep track of where we are
-				git branch -f $p/${git} $hash
-				echo_c "== Done processing the merge"
-				continue
-			else
-				echo_c "== Squashing this merge"
+					hashes2=`cat $mergefile`
+					echo_c "== Commits still to merge:"
+					cat $mergefile
+
+					for hash2 in $hashes2; do
+						echo_c "== Merging $hash2"
+						# remove the first line from the merge file
+						sed -i '1d' $mergefile
+
+						if ! cherry_pick_from $hash2
+						then
+							if $automatic
+							then
+								revert_and_exit 2
+							else
+								echo_c "== Could not merge! Please fix, commit and restart the script."
+								echo_c "== To use the already existing log message use:"
+								echo_c "git commit -a -C $hash2"
+								exit 2
+							fi
+						fi
+					done
+					# cleanum
+					rm $mergefile
+					# to keep track of where we are
+					git branch -f $p/${git} $hash
+					echo_c "== Done processing the merge"
+					continue
+				else
+					echo_c "== Squashing this merge"
+				fi
 			fi
 		fi
 		# to keep track of where we are in case of a failed merge

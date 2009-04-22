@@ -1,4 +1,4 @@
-#!/usr/bin/python2.5
+#!/usr/bin/env python
 #
 # This file is part of the Warzone 2100 Resurrection Project.
 # Copyright (c) 2007  Warzone 2100 Resurrection Project
@@ -53,7 +53,7 @@ def simulateGameServer():
 
 # thread with simulates adding a game
 def doAddGame():
-	
+
 	# gamestrucuure
 	g=wz.Game()
 	g.description = "description"

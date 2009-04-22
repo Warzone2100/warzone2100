@@ -70,6 +70,7 @@ BOOL screenInitialise(
 			UDWORD		width,		// Display width
 			UDWORD		height,		// Display height
 			UDWORD		bitDepth,	// Display bit depth
+			unsigned int fsaa,      // FSAA anti aliasing level
 			BOOL		fullScreen,	// Whether to start windowed
 							// or full screen
 			BOOL		vsync)		// If to sync to vblank or not
@@ -117,6 +118,13 @@ BOOL screenInitialise(
 
 		// Enable vsync if requested by the user
 		SDL_GL_SetAttribute(SDL_GL_SWAP_CONTROL, vsync);
+
+		// Enable FSAA anti-aliasing if and at the level requested by the user
+		if (fsaa)
+		{
+			SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
+			SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, fsaa);
+		}
 
 		bpp = SDL_VideoModeOK(width, height, bitDepth, video_flags);
 		if (!bpp) {

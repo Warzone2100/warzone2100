@@ -249,7 +249,15 @@ enum {
 	IMAGE_CHECK_OFF,		// checkbox unchecked
 	IMAGE_CHECK_ON,			// checkbox checked
 	IMAGE_CHECK_OFF_HI,		// checkbox unchecked highlighted
-	IMAGE_CHECK_ON_HI,			// checkbox checked highlighted
+	IMAGE_CHECK_ON_HI,		// checkbox checked highlighted
+	IMAGE_DARK_LOCKED,		// dark backround 'locked'
+	IMAGE_DARK_UNLOCKED,	//	 "     "      'unlocked'
+	IMAGE_LOCKED_NOBG,		// No background 'locked'
+	IMAGE_UNLOCKED_NOBG,	// "       "     'unlocked'
+	IMAGE_TRANS_LOCKED,		// clear background 'locked'
+	IMAGE_TRANS_UNLOCKED,	//  "       "       'unlocked'
+	IMAGE_UNLOCK_BLUE,		// Custom image for the host screen to fix the blend issue
+	IMAGE_LOCK_BLUE			//
 };
 
 #endif // __INCLUDED_SRC_FREND_H__

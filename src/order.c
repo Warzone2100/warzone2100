@@ -246,7 +246,9 @@ BASE_OBJECT * checkForDamagedStruct(DROID *psDroid, STRUCTURE *psTarget)
 	for (; psCurr != NULL; psCurr = psCurr->psNext)
 	{
 		//check for damage
-		if (structIsDamaged(psCurr) &&
+		if (psCurr->status == SS_BUILT &&
+		    structIsDamaged(psCurr) &&
+		    !checkDroidsDemolishing(psCurr) &&
 			visibleObject((BASE_OBJECT *)psDroid, (BASE_OBJECT *)psCurr, false))
 		{
 			//check for within range
@@ -1238,7 +1240,7 @@ void orderUpdateDroid(DROID *psDroid)
 			}
 			if (psObj)
 			{
-				actionDroidObj(psDroid, DACTION_REPAIR, psObj);
+				orderDroidObj(psDroid, DORDER_REPAIR, psObj);
 			}
 		}
 		break;

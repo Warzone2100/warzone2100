@@ -326,7 +326,7 @@ void	kf_UpThePower( void )
 		noMPCheatMsg();
 		return;
 	}
-	asPower[selectedPlayer].currentPower+=1000;
+	addPower(selectedPlayer, 1000);
 	sasprintf((char**)&cmsg, _("(Player %u) is using cheat :%s"),
 				selectedPlayer, _("1000 big ones!!!"));
 	sendTextMessage(cmsg, true);
@@ -343,7 +343,7 @@ void	kf_MaxPower( void )
 		noMPCheatMsg();
 		return;
 	}
-	asPower[selectedPlayer].currentPower = SDWORD_MAX / 2;
+	addPower(selectedPlayer, SDWORD_MAX / 2);
 	sasprintf((char**)&cmsg, _("(Player %u) is using cheat :%s"),
 				selectedPlayer, _("Power overwhelming"));
 	sendTextMessage(cmsg, true);

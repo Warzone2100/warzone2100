@@ -40,11 +40,12 @@ win32/release/*
 *.tab.[ch]
 /src/autorevision.h
 /src/force-linker.cpp
+/tests/maplist.txt
 
 # Generated executables:
 /build_tools/autorevision/autorevision
 /src/warzone2100
-/tests/t1000
+/tests/maptest
 
 # Autotool files:
 .deps

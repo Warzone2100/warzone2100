@@ -96,8 +96,8 @@
 # define WZ_WRITEDIR ".warzone2100-2.2"
 #endif
 
-char datadir[PATH_MAX] = "\0"; // Global that src/clparse.c:ParseCommandLine can write to, so it can override the default datadir on runtime. Needs to be \0 on startup for ParseCommandLine to work!
-char configdir[PATH_MAX] = "\0"; // specifies custom USER directory.  Same rules apply as datadir above.
+char datadir[PATH_MAX] = ""; // Global that src/clparse.c:ParseCommandLine can write to, so it can override the default datadir on runtime. Needs to be empty on startup for ParseCommandLine to work!
+char configdir[PATH_MAX] = ""; // specifies custom USER directory. Same rules apply as datadir above.
 
 char * global_mods[MAX_MODS] = { NULL };
 char * campaign_mods[MAX_MODS] = { NULL };
@@ -933,7 +933,7 @@ int main(int argc, char *argv[])
 	// SQLite's VFS system as the default (non-zero=default, zero=default).
 	sqlite3_register_physfs_vfs(1);
 
-	if (!frameInitialise( "Warzone 2100", pie_GetVideoBufferWidth(), pie_GetVideoBufferHeight(), pie_GetVideoBufferDepth(), war_getFullscreen(), war_GetVsync()))
+	if (!frameInitialise( "Warzone 2100", pie_GetVideoBufferWidth(), pie_GetVideoBufferHeight(), pie_GetVideoBufferDepth(), war_getFSAA(), war_getFullscreen(), war_GetVsync()))
 	{
 		return -1;
 	}

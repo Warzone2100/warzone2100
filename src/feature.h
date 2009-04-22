@@ -49,10 +49,10 @@ extern void featureRelease(FEATURE *psFeature);
 extern void featureUpdate(FEATURE *psFeat);
 
 // free up a feature with no visual effects
-extern void removeFeature(FEATURE *psDel);
+extern bool removeFeature(FEATURE *psDel);
 
 /* Remove a Feature and free it's memory */
-extern void destroyFeature(FEATURE *psDel);
+extern bool destroyFeature(FEATURE *psDel);
 
 /* get a feature stat id from its name */
 extern SDWORD getFeatureStatFromName(const char *pName);

@@ -3429,7 +3429,7 @@ static int scrSetPowerLevel(lua_State *L)
 	power = luaL_checkint(L, 1);
 	player = luaWZ_checkplayer(L, 2);
 
-	setPlayerPower(power, player);
+	setPower(player, power);
 
 	return 0;
 }

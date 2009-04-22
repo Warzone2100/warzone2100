@@ -419,6 +419,10 @@ void setConsoleTextColor(SDWORD player)
 	{
 		iV_SetTextColour(WZCOL_CONS_TEXT_SYSTEM);
 	}
+	else if (player == NOTIFY_MESSAGE)
+	{
+		iV_SetTextColour(WZCOL_YELLOW);
+	}
 	else
 	{
 		// Don't use friend-foe colors in the lobby

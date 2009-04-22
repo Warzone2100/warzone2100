@@ -222,6 +222,7 @@ BOOL frameInitialise(
 					UDWORD width,			// The display width
 					UDWORD height,			// The display height
 					UDWORD bitDepth,		// The display bit depth
+					unsigned int fsaa,      // FSAA anti aliasing level
 					BOOL fullScreen,		// Whether to start full screen or windowed
 					BOOL vsync)				// If to sync to vblank or not
 {
@@ -242,7 +243,7 @@ BOOL frameInitialise(
 	/* initialise all cursors */
 	initCursors();
 
-	if (!screenInitialise(width, height, bitDepth, fullScreen, vsync))
+	if (!screenInitialise(width, height, bitDepth, fsaa, fullScreen, vsync))
 	{
 		return false;
 	}

@@ -536,7 +536,6 @@ BOOL myResponsibility(UDWORD player)
 //returns true if 'player' is responsible for 'playerinquestion'
 BOOL responsibleFor(UDWORD player, UDWORD playerinquestion)
 {
-
 	if(whosResponsible(playerinquestion) == player)
 	{
 		return true;
@@ -1894,7 +1893,7 @@ const char* getPlayerColourName(unsigned int player)
 		N_("Cyan")
 	};
 
-	ASSERT(player < ARRAY_SIZE(playerColors), "player number (%d) exceeds maximum (%zu)", player, ARRAY_SIZE(playerColors));
+	ASSERT(player < ARRAY_SIZE(playerColors), "player number (%d) exceeds maximum (%lu)", player, (unsigned long) ARRAY_SIZE(playerColors));
 
 	if (player >= ARRAY_SIZE(playerColors))
 	{

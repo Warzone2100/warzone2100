@@ -47,6 +47,7 @@
 extern BOOL screenInitialise(UDWORD		width,			// Display width
 							 UDWORD		height,			// Display height
 							 UDWORD		bitDepth,		// Display bit depth
+							 unsigned int fsaa,         // FSAA anti aliasing level
 							 BOOL		fullScreen,		// Whether to start windowed
 														// or full screen
 							 BOOL		vsync);

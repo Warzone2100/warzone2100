@@ -19,7 +19,13 @@
 
 /**
  * @file terrain.c
- * Draws the terrain
+ * Draws the terrain.
+ * It uses the ground property of every MAPTILE to divide the terrain into different layers.
+ * For every layer the GROUND_TYPE (from psGroundTypes) determines the texture and size.
+ * The technique used it called "texture splatting".
+ * Every layer only draws the spots where that terrain is, and additive blending is used to make transitions smooth.
+ * Decals are a kind of hack now, as for some tiles (where decal == true) the old tile is just drawn.
+ * The water is drawn using the hardcoded page-80 and page-81 textures. 
  */
 
 #include "lib/ivis_opengl/GLee.h"
@@ -44,52 +50,71 @@
 #include "hci.h"
 #include "loop.h"
 
+/**
+ * A sector contains all information to draw a square piece of the map.
+ * The actual geometry and texture data is not stored in here but in large VBO's.
+ * The sector only stores the index and length of the pieces it's going to use.
+ */
 typedef struct
 {
-	int geometryOffset;
-	int geometrySize;
-	int geometryIndexOffset;
-	int geometryIndexSize;
-	int waterOffset;
-	int waterSize;
-	int waterIndexOffset;
-	int waterIndexSize;
-	int *textureOffset;
-	int *textureSize;
-	int *textureIndexOffset;
-	int *textureIndexSize;
-	int decalOffset;
-	int decalSize;
-	bool draw;
-	bool dirty;
+	int geometryOffset;      ///< The point in the geometry VBO where our geometry starts
+	int geometrySize;        ///< The size of our geometry
+	int geometryIndexOffset; ///< The point in the index VBO where our triangles start
+	int geometryIndexSize;   ///< The size of our indices
+	int waterOffset;         ///< The point in the water VBO where the water geometry starts
+	int waterSize;           ///< The size of the water geometry
+	int waterIndexOffset;    ///< The point in the water index VBO where the water triangles start
+	int waterIndexSize;      ///< The size of our water triangles
+	int *textureOffset;      ///< An array containing the offsets into the texture VBO for each terrain layer
+	int *textureSize;        ///< The size of the geometry for this layer for each layer
+	int *textureIndexOffset; ///< The offset into the index VBO for the texture for each layer
+	int *textureIndexSize;   ///< The size of the indices for each layer
+	int decalOffset;         ///< Index into the decal VBO
+	int decalSize;           ///< Size of the part of the decal VBO we are going to use
+	bool draw;               ///< Do we draw this sector this frame?
+	bool dirty;              ///< Do we need to update the geometry for this sector?
 } Sector;
 
+/// A vertex with just a position
 typedef struct
 {
 	GLfloat x, y, z;        // Vertex
 } RenderVertex;
 
+/// A vertex with a position and texture coordinates
 typedef struct
 {
 	GLfloat x, y, z;
 	GLfloat u, v;          // uv
 } DecalVertex;
 
+/// The lightmap texture
 static GLuint lightmap_tex_num;
+/// When are we going to update the lightmap next?
 static unsigned int lightmapNextUpdate;
+/// How big is the lightmap?
 static int lightmapSize;
 
+/// VBOs
 static GLuint geometryVBO, geometryIndexVBO, textureVBO, textureIndexVBO, decalVBO;
+/// VBOs
 static GLuint waterVBO, waterIndexVBO;
+/// The amount we shift the water textures so the waves appear to be moving
 static float waterOffset;
 
+/// These are properties of your videocard and hardware
 static GLint GLmaxElementsVertices, GLmaxElementsIndices;
 
+/// The sectors are stored here
 static Sector *sectors;
+/// The default sector size (a sector is sectorSize x sectorSize)
 static int sectorSize = 15;
+/// What is the distance we can see
 static int terrainDistance;
+/// How many sectors have we actually got?
 static int xSectors, ySectors;
 
+/// Did we initialise the terrain renderer yet?
 static bool terrainInitalised = false;
 
 #ifdef DEBUG
@@ -108,10 +133,13 @@ static bool terrainInitalised = false;
 /// Helper to specify the offset in a VBO
 #define BUFFER_OFFSET(i) ((char *)NULL + (i))
 
+/// Helper variables for the DrawRangeElements functions
 GLuint dreStart, dreEnd, dreOffset;
 GLsizei dreCount;
+/// Are we actually drawing something using the DrawRangeElements functions?
 bool drawRangeElementsStarted = false;
 
+/// Pass all remaining triangles to OpenGL
 static void finishDrawRangeElements(void)
 {
 	if (drawRangeElementsStarted && dreCount > 0)
@@ -128,6 +156,10 @@ static void finishDrawRangeElements(void)
 	drawRangeElementsStarted = false;
 }
 
+/**
+ * Either draw the elements or batch them to be sent to OpenGL later
+ * This improves performance by reducing the amount of OpenGL calls.
+ */
 static void addDrawRangeElements(GLenum mode,
                                  GLuint start, 
                                  GLuint end, 
@@ -321,6 +353,7 @@ static void getGridPos(Vector3i *result, int x, int y, bool center, bool water)
 	}
 }
 
+/// Calculate the average texture coordinates of 4 points
 static inline void averageUV(Vector2f *center, Vector2f* uv)
 {
 	center->x = (uv[0].x+uv[1].x+uv[2].x+uv[3].x)/4;
@@ -334,6 +367,7 @@ static inline void getTexCoords(Vector2f *uv, float x, float y, int groundType)
 	uv->y = (y/psGroundTypes[groundType].textureSize);
 }
 
+/// Calculate the average colour of 4 points
 static inline void averageColour(PIELIGHT *average, PIELIGHT a, PIELIGHT b,
                                                             PIELIGHT c, PIELIGHT d)
 {
@@ -371,21 +405,11 @@ static inline void getColour(PIELIGHT *colour, int x, int y, bool center)
 	{
 		colour->byte.g = 255;
 	}
-	
-	/* Is the tile highlighted? Perhaps because there's a building foundation on it */
-	if (TileIsHighlighted(psTile))
-	{
-		if (outlineTile)
-		{
-			*colour = pal_SetBrightness(255);
-		}
-		else
-		{
-			colour->byte.r = 255;
-		}
-	}
 }
 
+/**
+ * Set the terrain and water geometry for the specified sector
+ */
 static void setSectorGeometry(int x, int y,
                              RenderVertex *geometry, RenderVertex *water,
                              int *geometrySize, int *waterSize)
@@ -424,6 +448,9 @@ static void setSectorGeometry(int x, int y,
 	}
 }
 
+/**
+ * Set the decals for a sector. This takes care of both the geometry and the texture part.
+ */
 static void setSectorDecals(int x, int y,
                             DecalVertex *decaldata,
                             int *decalSize)
@@ -546,6 +573,9 @@ static void setSectorDecals(int x, int y,
 	}
 }
 
+/**
+ * Update the sector for when the terrain is changed.
+ */
 static void updateSectorGeometry(int x, int y)
 {
 	RenderVertex *geometry;
@@ -583,6 +613,10 @@ static void updateSectorGeometry(int x, int y)
 	free (decaldata);
 }
 
+/**
+ * Mark all tiles that are influenced by this grid point as dirty.
+ * Dirty sectors will later get updated by updateSectorGeometry.
+ */
 void markTileDirty(int i, int j)
 {
 	int x, y;
@@ -623,6 +657,10 @@ void markTileDirty(int i, int j)
 	}
 }
 
+/**
+ * Check what the videocard + drivers support and divide the loaded map into sectors that can be drawn.
+ * It also determines the lightmap size.
+ */
 bool initTerrain(void)
 {
 	int i, j, x, y, a, b, absX, absY;
@@ -979,6 +1017,11 @@ void shutdownTerrain(void)
 	terrainInitalised = false;
 }
 
+/**
+ * Update the lightmap and draw the terrain and decals.
+ * This function first draws the terrain in black, and then uses additive blending to put the terrain layers
+ * on it one by one. Finally the decals are drawn.
+ */
 void drawTerrain(void)
 {
 	int i, j, x, y;
@@ -1298,6 +1341,9 @@ void drawTerrain(void)
 	glPopAttrib();
 }
 
+/**
+ * Draw the water.
+ */
 void drawWater(void)
 {
 	float white[4] = {1.0f, 1.0f, 1.0f, 1.0f};
