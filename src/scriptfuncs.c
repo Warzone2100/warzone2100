@@ -5396,17 +5396,10 @@ WZ_DECL_UNUSED static BOOL scrStrcmp(void)
 }
 
 /* Output a string to console */
-WZ_DECL_UNUSED static BOOL scrConsole(void)
+static int scrConsole(lua_State *L)
 {
-	if (!stackPopParams(1, VAL_STRING, &strParam1))
-	{
-		debug(LOG_ERROR, "scrConsole(): stack failed");
-		return false;
-	}
-
-	addConsoleMessage(strParam1,DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
-
-	return true;
+	addConsoleMessage(luaL_checkstring(L, 1),DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+	return 0;
 }
 
 WZ_DECL_UNUSED static BOOL scrDebug[MAX_PLAYERS];
@@ -9677,6 +9670,12 @@ void registerScriptfuncs(lua_State *L)
 	lua_register(L, "fireOnLocation", scrFireOnLocation);
 	lua_register(L, "playerInAlliance", scrPlayerInAlliance);
 	lua_register(L, "circlePerimPoint", scrCirclePerimPoint);
+	lua_register(L, "console", scrConsole);
+	//lua_register(L, "", );
+	//lua_register(L, "", );
+	//lua_register(L, "", );
+	//lua_register(L, "", );
+	//lua_register(L, "", );
 	//lua_register(L, "", );
 	//lua_register(L, "", );
 	//lua_register(L, "", );
