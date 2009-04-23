@@ -113,7 +113,7 @@ function droids(player)
 	return visibleDroids(player, player)
 end
 
-function visibleStructures(stat, player, visible_by)
+function visibleStructuresOfType(stat, player, visible_by)
 	local number = 0
 	return function()
 			local structure
@@ -122,8 +122,16 @@ function visibleStructures(stat, player, visible_by)
 		end
 end
 
-function structures(stat, player)
-	return visibleStructures(stat, player, player)
+function visibleStructures(player, visible_by)
+	return visibleStructuresOfType(nil, player, visible_by)
+end
+
+function structuresOfType(stat, player)
+	return visibleStructuresOfType(stat, player, player)
+end
+
+function structures(player)
+	return structuresOfType(nil, player)
 end
 
 function visibleFeatures(visible_by, type)

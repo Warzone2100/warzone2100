@@ -1361,23 +1361,10 @@ WZ_DECL_UNUSED static BOOL scrAddStructure(void)
 
 // -----------------------------------------------------------------------------------------
 //Destroy a structure
-WZ_DECL_UNUSED static BOOL scrDestroyStructure(void)
+static int scrDestroyStructure(lua_State *L)
 {
-	STRUCTURE	*psStruct;
-
-	if (!stackPopParams(1, ST_STRUCTURE, &psStruct))
-	{
-		return false;
-	}
-
-	if (psStruct == NULL)
-	{
-		ASSERT( psStruct != NULL,
-			"scrDestroyStructure: Invalid structure pointer" );
-	}
-
-	removeStruct( psStruct, true );
-
+	STRUCTURE *psStruct = (STRUCTURE*)luaWZObj_checkobject(L, 1, OBJ_STRUCTURE);
+	destroyStruct(psStruct);
 	return true;
 }
 
@@ -9660,7 +9647,7 @@ void registerScriptfuncs(lua_State *L)
 	lua_register(L, "removeDroid", scrRemoveDroid);
 	lua_register(L, "addPower", scrAddPower);
 	lua_register(L, "droidHasTemplate", scrDroidHasTemplate);
-	//lua_register(L, "", );
+	lua_register(L, "destroyStructure", scrDestroyStructure);
 	//lua_register(L, "", );
 	//lua_register(L, "", );
 	//lua_register(L, "", );

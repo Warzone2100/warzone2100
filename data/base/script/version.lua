@@ -99,7 +99,7 @@ function version(v)
 		function initEnumStruct(anystruct, stat, player, seen_by)
 			if anystruct then stat = nil end
 			if seen_by < 0 then seen_by = player end
-			_initEnumStruct_iterator = visibleStructures(stat, player, seen_by)
+			_initEnumStruct_iterator = visibleStructuresOfType(stat, player, seen_by)
 		end
 
 		function enumStruct()

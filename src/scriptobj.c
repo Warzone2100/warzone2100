@@ -1552,6 +1552,7 @@ void luaWZObj_pushstructure(lua_State *L, STRUCTURE* structure)
 	luaWZObj_pushbaseobject(L, (BASE_OBJECT*)structure);
 	luaWZ_setstringfield(L, "stat", structure->pStructureType->pName);
 	luaWZ_setintfield(L, "stattype", structure->type);
+	luaWZ_setintfield(L, "status", structure->status);
 
 	lua_pushstring(L, "weapon");
 	// FIXME: expose all weapons to the scripts (for multi-turret droids)
@@ -1577,6 +1578,12 @@ void luaWZObj_pushdroid(lua_State *L, DROID* droid)
 	{
 		// we are building something, set the stat member to the name of the building
 		luaWZ_setstringfield(L, "stat", droid->psTarStats->pName);
+	}
+	if (droid->psTarget)
+	{
+		lua_pushstring(L, "target");
+		luaWZObj_pushobject(L, droid->psTarget);
+		lua_settable(L, -3);
 	}
 	luaWZ_setintfield(L, "action", droid->action);
 	luaWZ_setintfield(L, "actionX", droid->actionX);
