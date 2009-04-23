@@ -42,6 +42,7 @@
 #include "droid.h"
 #include "formation.h"
 #include "mapgrid.h"
+#include "projectile.h"
 
 #ifdef DEBUG
 static SDWORD factoryDeliveryPointCheck[MAX_PLAYERS][NUM_FLAG_TYPES][MAX_FACTORY];
@@ -168,25 +169,6 @@ void objmemUpdate(void)
 		}
 		else
 		{
-			// do the object died callback
-			psCBObjDestroyed = psCurr;
-			eventFireCallbackTrigger((TRIGGER_TYPE)CALL_OBJ_DESTROYED);
-			switch (psCurr->type)
-			{
-			case OBJ_DROID:
-				eventFireCallbackTrigger((TRIGGER_TYPE)CALL_DROID_DESTROYED);
-				break;
-			case OBJ_STRUCTURE:
-				eventFireCallbackTrigger((TRIGGER_TYPE)CALL_STRUCT_DESTROYED);
-				break;
-			case OBJ_FEATURE:
-				eventFireCallbackTrigger((TRIGGER_TYPE)CALL_FEATURE_DESTROYED);
-				break;
-			default:
-				break;
-			}
-			psCBObjDestroyed = NULL;
-
 			psPrev = psCurr;
 		}
 	}
@@ -255,6 +237,28 @@ static inline void addObjectToList(BASE_OBJECT *list[], BASE_OBJECT *object)
 	list[object->player] = object;
 }
 
+static void doDestroyedCallback(BASE_OBJECT *object)
+{
+	psCBObjDestroyed = object;
+	eventFireCallbackTrigger((TRIGGER_TYPE)CALL_OBJ_DESTROYED);
+	switch (object->type)
+	{
+	case OBJ_DROID:
+		eventFireCallbackTrigger((TRIGGER_TYPE)CALL_DROID_DESTROYED);
+		break;
+	case OBJ_STRUCTURE:
+		eventFireCallbackTrigger((TRIGGER_TYPE)CALL_STRUCT_DESTROYED);
+		break;
+	case OBJ_FEATURE:
+		eventFireCallbackTrigger((TRIGGER_TYPE)CALL_FEATURE_DESTROYED);
+		break;
+	default:
+		break;
+	}
+	psCBObjDestroyed = NULL;
+	g_pProjLastAttacker = NULL;
+}
+
 /* Move an object from the active list to the destroyed list.
  * \param list is a pointer to the object list
  * \param del is a pointer to the object to remove
@@ -265,6 +269,9 @@ static inline void destroyObject(BASE_OBJECT* list[], BASE_OBJECT* object)
 
 	ASSERT(object != NULL,
 	       "destroyObject: Invalid pointer");
+
+	// fire the callback while the object is still in the active list
+	doDestroyedCallback(object);
 
 	// If the message to remove is the first one in the list then mark the next one as the first
 	if (list[object->player] == object)

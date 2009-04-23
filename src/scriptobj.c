@@ -1529,7 +1529,7 @@ void luaWZObj_pushobject(lua_State *L, BASE_OBJECT* object)
 			luaWZObj_pushstructure(L, (STRUCTURE*)object);
 			break;
 		default:
-			debug(LOG_ERROR, "invalid structure type: %i", object->type);
+			debug(LOG_ERROR, "invalid object type: %i", object->type);
 	}
 }
 

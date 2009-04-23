@@ -1202,7 +1202,16 @@ void eventFireCallbackTrigger(TRIGGER_TYPE trigger)
 			case CALL_STRUCT_DESTROYED:
 			case CALL_FEATURE_DESTROYED:
 				luaWZObj_pushobject(L, psCBObjDestroyed);
-				args += 1;
+				if (g_pProjLastAttacker)
+				{
+					luaWZObj_pushobject(L, g_pProjLastAttacker);
+				}
+				else
+				{
+					// we don't know who shot it (not in LOS)
+					lua_pushnil(L);
+				}
+				args += 2;
 				break;
 			case CALL_CLUSTER_EMPTY:
 				lua_pushinteger(L, scrCBEmptyClusterID);

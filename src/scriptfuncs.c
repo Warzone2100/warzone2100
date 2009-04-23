@@ -3436,24 +3436,12 @@ static int scrSetPowerLevel(lua_State *L)
 
 // -----------------------------------------------------------------------------------------
 //add some power for a player
-WZ_DECL_UNUSED static BOOL scrAddPower(void)
+static int scrAddPower(lua_State *L)
 {
-	SDWORD		player, power;
-
-	if (!stackPopParams(2, VAL_INT, &power, VAL_INT, &player))
-	{
-		return false;
-	}
-
-	if (player < 0 || player >= MAX_PLAYERS)
-	{
-		ASSERT( false, "scrAddPower:player number is too high" );
-		return false;
-	}
-
+	int player = luaWZ_checkplayer(L, 1);
+	float power = luaL_checknumber(L, 2);
 	addPower(player, power);
-
-	return true;
+	return 0;
 }
 
 // -----------------------------------------------------------------------------------------
@@ -9531,6 +9519,14 @@ static int scrFireOnLocation(lua_State *L)
 	return 1;
 }
 
+static int scrDroidHasTemplate(lua_State *L)
+{
+	DROID *droid = (DROID*)luaWZObj_checkobject(L, 1, OBJ_DROID);
+	DROID_TEMPLATE* template = luaWZObj_checktemplate(L, 2);
+	lua_pushboolean(L, strcmp(droid->aName, template->aName) == 0);
+	return 1;
+}
+
 /// Register all script functions with the Lua interpreter
 void registerScriptfuncs(lua_State *L)
 {
@@ -9662,8 +9658,8 @@ void registerScriptfuncs(lua_State *L)
 	lua_register(L, "circlePerimPoint", scrCirclePerimPoint);
 	lua_register(L, "console", scrConsole);
 	lua_register(L, "removeDroid", scrRemoveDroid);
-	//lua_register(L, "", );
-	//lua_register(L, "", );
+	lua_register(L, "addPower", scrAddPower);
+	lua_register(L, "droidHasTemplate", scrDroidHasTemplate);
 	//lua_register(L, "", );
 	//lua_register(L, "", );
 	//lua_register(L, "", );

@@ -554,6 +554,7 @@ void destroyDroid(DROID *psDel)
 
 void	vanishDroid(DROID *psDel)
 {
+	g_pProjLastAttacker = NULL; // nobody shot it
 	removeDroidBase(psDel);
 }
 
