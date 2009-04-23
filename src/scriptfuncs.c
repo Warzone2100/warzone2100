@@ -2227,13 +2227,10 @@ static int scrTagConsoleText(lua_State *L)
 	return 0;
 }
 
-
-// -----------------------------------------------------------------------------------------
-
-WZ_DECL_UNUSED static BOOL	scrClearConsole(void)
+static int scrClearConsole(lua_State *L)
 {
 	flushConsoleMessages();
-	return(true);
+	return 0;
 }
 
 // -----------------------------------------------------------------------------------------
@@ -2994,37 +2991,15 @@ static int scrCreateAlliance(lua_State *L)
 		if(game.alliance==NO_ALLIANCES || game.alliance==ALLIANCES_TEAMS
 			|| player1 >= game.maxPlayers || player2>=game.maxPlayers)
 		{
-			return true;
+			return 0;
 		}
 	}
 
 	formAlliance((UBYTE)player1, (UBYTE)player2,true,false,true);
 
-/*
-	if(bMultiPlayer)
-	{
-
-		if(game.alliance==NO_ALLIANCES || player1 >= game.maxPlayers || player2>=game.maxPlayers)
-		{
-			return true;
-		}
-
-		if(alliances[player1][player2] != ALLIANCE_FORMED)
-		{
-#ifdef DEBUG
-			CONPRINTF(ConsoleString,(ConsoleString,"%d and %d form an alliance.",player1,player2));
-#endif
-			sendAlliance((UBYTE)player1,(UBYTE)player2,ALLIANCE_FORMED,0);
-		}
-	}
-
-	alliances[player1][player2] = ALLIANCE_FORMED;
-	alliances[player2][player1] = ALLIANCE_FORMED;
-*/
-	return 0;
+	lua_pushboolean(L, true);
+	return 1;
 }
-
-
 
 // -----------------------------------------------------------------------------------------
 // offer an alliance
@@ -8646,6 +8621,20 @@ static int scrAlliancesLocked(lua_State *L)
 	return 1;
 }
 
+static int scrLockAllicances(lua_State *L)
+{
+	bool lock = luaL_checkboolean(L, 1);
+	if (lock)
+	{
+		game.alliance = ALLIANCES_TEAMS;
+	}
+	else
+	{
+		game.alliance = ALLIANCES;
+	}
+	return 0;
+}
+
 /* Visualize radius at position */
 WZ_DECL_UNUSED static BOOL scrShowRangeAtPos(void)
 {
@@ -9514,6 +9503,13 @@ static int scrDroidHasTemplate(lua_State *L)
 	return 1;
 }
 
+static int scrRevealEntireMap(lua_State *L)
+{
+	godMode = true; // view all structures and droids
+	setRevealStatus(false); // view the entire map
+	return 0;
+}
+
 /// Register all script functions with the Lua interpreter
 void registerScriptfuncs(lua_State *L)
 {
@@ -9648,6 +9644,14 @@ void registerScriptfuncs(lua_State *L)
 	lua_register(L, "addPower", scrAddPower);
 	lua_register(L, "droidHasTemplate", scrDroidHasTemplate);
 	lua_register(L, "destroyStructure", scrDestroyStructure);
+	lua_register(L, "clearConsole", scrClearConsole);
+	lua_register(L, "lockAllicances", scrLockAllicances);
+	lua_register(L, "revealEntireMap", scrRevealEntireMap);
+	//lua_register(L, "", );
+	//lua_register(L, "", );
+	//lua_register(L, "", );
+	//lua_register(L, "", );
+	//lua_register(L, "", );
 	//lua_register(L, "", );
 	//lua_register(L, "", );
 	//lua_register(L, "", );
