@@ -4265,21 +4265,11 @@ UDWORD	count=0;
 	return(true);
 }
 // -----------------------------------------------------------------------------------------
-WZ_DECL_UNUSED static BOOL	scrRemoveDroid( void )
+static int scrRemoveDroid(lua_State *L)
 {
-DROID	*psDroid;
-
-	if(!stackPopParams(1,ST_DROID,&psDroid))
-	{		ASSERT( false,"Cannot get vars for scrRemoveDroid!" );
-		return(false);
-	}
-
-	if(psDroid)
-	{
-		vanishDroid(psDroid);
-	}
-
-	return(true);
+	DROID *psDroid = (DROID*)luaWZObj_checkobject(L, 1, OBJ_DROID);
+	vanishDroid(psDroid);
+	return 0;
 }
 // -----------------------------------------------------------------------------------------
 static BOOL	structHasModule(STRUCTURE *psStruct)
@@ -9671,7 +9661,7 @@ void registerScriptfuncs(lua_State *L)
 	lua_register(L, "playerInAlliance", scrPlayerInAlliance);
 	lua_register(L, "circlePerimPoint", scrCirclePerimPoint);
 	lua_register(L, "console", scrConsole);
-	//lua_register(L, "", );
+	lua_register(L, "removeDroid", scrRemoveDroid);
 	//lua_register(L, "", );
 	//lua_register(L, "", );
 	//lua_register(L, "", );
