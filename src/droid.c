@@ -217,6 +217,11 @@ float droidDamage(DROID *psDroid, UDWORD damage, UDWORD weaponClass, UDWORD weap
 
 // Check that psVictimDroid is not referred to by any other object in the game. We can dump out some
 // extra data in debug builds that help track down sources of dangling pointer errors.
+#ifdef DEBUG
+#define DROIDREF(func, line) "Illegal reference to droid from %s line %d", func, line
+#else
+#define DROIDREF(func, line) "Illegal reference to droid"
+#endif
 BOOL droidCheckReferences(DROID *psVictimDroid)
 {
 	int plr;
@@ -232,34 +237,24 @@ BOOL droidCheckReferences(DROID *psVictimDroid)
 
 			for (i = 0; i < psStruct->numWeaps; i++)
 			{
-				ASSERT_OR_RETURN(false, (DROID *)psStruct->psTarget[i] != psVictimDroid, "Illegal reference to droid"
-#ifdef DEBUG
-				                 "from %s line %d", psStruct->targetFunc[i], psStruct->targetLine[i]
-#endif
-				);
+				ASSERT_OR_RETURN(false, (DROID *)psStruct->psTarget[i] != psVictimDroid, DROIDREF(psStruct->targetFunc[i], psStruct->targetLine[i]));
 			}
 		}
 		for (psDroid = apsDroidLists[plr]; psDroid != NULL; psDroid = psDroid->psNext)
 		{
 			unsigned int i;
 
-			ASSERT_OR_RETURN(false, (DROID *)psDroid->psTarget != psVictimDroid || psVictimDroid == psDroid, "Illegal reference to droid"
-#ifdef DEBUG
-			                 "from %s line %d", psDroid->targetFunc, psDroid->targetLine
-#endif
-			);
+			ASSERT_OR_RETURN(false, (DROID *)psDroid->psTarget != psVictimDroid || psVictimDroid == psDroid, DROIDREF(psDroid->targetFunc, psDroid->targetLine));
 			for (i = 0; i < psDroid->numWeaps; i++)
 			{
-				ASSERT_OR_RETURN(false, (DROID *)psDroid->psActionTarget[i] != psVictimDroid || psVictimDroid == psDroid, "Illegal reference to droid"
-#ifdef DEBUG
-				                 "from %s line %d", psDroid->actionTargetFunc[i], psDroid->actionTargetLine[i]
-#endif
-				);
+				ASSERT_OR_RETURN(false, (DROID *)psDroid->psActionTarget[i] != psVictimDroid || psVictimDroid == psDroid, 
+				                 DROIDREF(psDroid->actionTargetFunc[i], psDroid->actionTargetLine[i]));
 			}
 		}
 	}
 	return true;
 }
+#undef DROIDREF
 
 /* droidRelease: release all resources associated with a droid -
  * should only be called by objmem - use vanishDroid preferably
