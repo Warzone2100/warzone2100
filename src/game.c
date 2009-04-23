@@ -6464,7 +6464,7 @@ static BOOL buildSaveDroidFromDroid(SAVE_DROID* psSaveDroid, DROID* psCurr, DROI
 			the translated name - old versions of save games should load because
 			templates are loaded from Access AND the save game so they should all
 			still exist*/
-			ASSERT(strlen(psCurr->aName) + 1 < sizeof(psSaveDroid->name), "Truncation of droid name occurred! Max droid length (without truncation while saving) is %lu", (unsigned long) sizeof(psSaveDroid->name) - 1);
+
 			sstrcpy(psSaveDroid->name, psCurr->aName);
 
 			// not interested in first comp - COMP_UNKNOWN
@@ -9264,7 +9264,6 @@ BOOL writeTemplateFile(char *pFileName)
 	{
 		for(psCurr = apsDroidTemplates[player]; psCurr != NULL; psCurr = psCurr->psNext)
 		{
-			ASSERT(strlen(psCurr->aName) + 1 < sizeof(psSaveTemplate->name), "Truncation of droid name occurred! Max droid length (without truncation while saving) is %lu", (unsigned long) sizeof(psSaveTemplate->name) - 1);
 			sstrcpy(psSaveTemplate->name, psCurr->aName);
 
 			psSaveTemplate->ref = psCurr->ref;
