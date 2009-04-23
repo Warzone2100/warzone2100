@@ -1235,8 +1235,6 @@ static BOOL NETprocessSystemMessage(void)
 				// Retrieve the player's ID
 				NETuint32_t(&index);
 
-				debug(LOG_NET, "Receiving MSG_PLAYER_INFO for player %u", (unsigned int)index);
-
 				// Bail out if the given ID number is out of range
 				if (index >= MAX_CONNECTED_PLAYERS)
 				{
@@ -1256,6 +1254,7 @@ static BOOL NETprocessSystemMessage(void)
 				NETbool(&NetPlay.players[index].ready);
 				NETuint32_t(&NetPlay.hostPlayer);
 			NETend();
+			debug(LOG_NET, "Receiving MSG_PLAYER_INFO for player %u (%s)", (unsigned int)index, NetPlay.players[index].allocated ? "human" : "AI");
 
 			// If we're the game host make sure to send the updated
 			// data to all other clients as well.
