@@ -136,6 +136,7 @@ typedef struct
 NETPLAY	NetPlay;
 
 static BOOL		allow_joining = false;
+static	bool server_not_there = false;
 static GAMESTRUCT	game;
 static TCPsocket	tcp_socket = NULL;		//socket used to talk to lobbyserver/ host machine
 static NETBUFSOCKET*	bsocket = NULL;		//buffered socket (holds tcp_socket) (clients only?)
@@ -959,6 +960,7 @@ int NETclose(void)
 	debug(LOG_NET, "Terminating sockets.");
 
 	is_server=false;
+	server_not_there = false;
 
 	if(bsocket)
 	{	// need SDLNet_TCP_DelSocket() as well, socket_set or tmp_socket_set?
@@ -1761,7 +1763,6 @@ static void NETregisterServer(int state)
 {
 	static TCPsocket rs_socket = NULL;
 	static int registered = 0;
-	static int server_not_there = 0;
 	static SDLNet_SocketSet masterset;
 	IPaddress ip;
 	int result = 0;
@@ -1780,7 +1781,7 @@ static void NETregisterServer(int state)
 				{
 					debug(LOG_ERROR, "Cannot resolve masterserver \"%s\": %s", masterserver_name, SDLNet_GetError());
 					ssprintf(NetPlay.MOTDbuffer, _("Could not resolve masterserver name (%s)!"), masterserver_name);
-					server_not_there = 1;
+					server_not_there = true;
 					return;
 				}
 
@@ -1789,7 +1790,7 @@ static void NETregisterServer(int state)
 				{
 					debug(LOG_ERROR, "Cannot connect to masterserver \"%s:%d\": %s", masterserver_name, masterserver_port, SDLNet_GetError());
 					sstrcpy(NetPlay.MOTDbuffer, _("Could not communicate with lobby server!  Is TCP port 9990 open?"));
-					server_not_there = 1;
+					server_not_there = true;
 					return;
 				}
 				// master server socket set to be friendly
