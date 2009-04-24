@@ -339,25 +339,35 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 
 		/* Kerrrbaaang !!!!! a hit */
 		//Watermelon:Target prediction
-		if(psTarget->type == OBJ_DROID)
+		if (psTarget->type == OBJ_DROID)
 		{
 			double flightTime;
 			SDWORD empTime = 0;
 
 			if (proj_Direct(psStats) || dist <= psStats->minRange)
+			{
 				flightTime = dist / psStats->flightSpeed;
+			}
 			else
+			{
 				flightTime = sqrt(dist) / 30;  /* Purely a guess, but surprisingly effective */
+			}
 
-			if (psTarget->lastHitWeapon == WSC_EMP) {
+			if (psTarget->lastHitWeapon == WSC_EMP)
+			{
 				empTime = EMP_DISABLE_TIME - (gameTime - psTarget->timeLastHit);
 				CLIP(empTime, 0, EMP_DISABLE_TIME);
 				if (empTime >= EMP_DISABLE_TIME * 0.9)
+				{
 					flightTime = 0;  /* Just hit.  Assume they'll get hit again */
-				else {
+				}
+				else
+				{
 					flightTime -= empTime / 1000;
 					if (flightTime < 0.0)
+					{
 						flightTime = 0.0;
+					}
 				}
 			}
 
