@@ -4218,7 +4218,7 @@ UDWORD	count=0;
 static int scrRemoveDroid(lua_State *L)
 {
 	DROID *psDroid = (DROID*)luaWZObj_checkobject(L, 1, OBJ_DROID);
-	vanishDroid(psDroid);
+	destroyDroid(psDroid);
 	return 0;
 }
 // -----------------------------------------------------------------------------------------
@@ -5355,40 +5355,22 @@ static int scrDbgMsgOn(lua_State *L)
 	return 0;
 }
 
-WZ_DECL_UNUSED static BOOL scrMsg(void)
+static int scrMsg(lua_State *L)
 {
-	SDWORD	playerTo,playerFrom;
 	char tmp[255];
+	const char *message = luaL_checkstring(L, 1);
+	int playerFrom      = luaWZ_checkplayer(L, 2);
+	int playerTo        = luaWZ_checkplayer(L, 3);
 
-	if (!stackPopParams(3, VAL_STRING, &strParam1, VAL_INT, &playerFrom, VAL_INT, &playerTo))
-	{
-		debug(LOG_ERROR, "scrMsg(): stack failed");
-		return false;
-	}
-
-	if(playerFrom < 0 || playerFrom >= MAX_PLAYERS)
-	{
-		debug(LOG_ERROR, "scrMsg(): playerFrom out of range");
-		return false;
-	}
-
-	if(playerTo < 0 || playerTo >= MAX_PLAYERS)
-	{
-		debug(LOG_ERROR, "scrMsg(): playerTo out of range");
-		return false;
-	}
-
-	sendAIMessage(strParam1, playerFrom, playerTo);
-
+	sendAIMessage((char*)message, playerFrom, playerTo);
 
 	//show the message we sent on our local console as well (even in skirmish, if player plays as this AI)
 	if(playerFrom == selectedPlayer)
 	{
-		sprintf(tmp,"[%d-%d] : %s",playerFrom, playerTo, strParam1);											// add message
+		snprintf(tmp, sizeof(tmp), "[%d-%d] : %s",playerFrom, playerTo, message);											// add message
 		addConsoleMessage(tmp, RIGHT_JUSTIFY, playerFrom);
 	}
-
-	return true;
+	return 0;
 }
 
 /// Print a debug message to the console
@@ -9656,7 +9638,7 @@ void registerScriptfuncs(lua_State *L)
 	lua_register(L, "lockAllicances", scrLockAllicances);
 	lua_register(L, "revealEntireMap", scrRevealEntireMap);
 	lua_register(L, "sendTextMessage", scrSendTextMessage);
-	//lua_register(L, "", );
+	lua_register(L, "msg", scrMsg);
 	//lua_register(L, "", );
 	//lua_register(L, "", );
 	//lua_register(L, "", );
