@@ -3209,6 +3209,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool mission)
 					psResFacility->timeStarted = gameTime;
 				}
 
+				ASSERT_OR_RETURN(, gameTime >= psResFacility->timeStarted, "research seems to have started in the future");
 				pointsToAdd = (psResFacility->researchPoints * (gameTime -
 					psResFacility->timeStarted)) / GAME_TICKS_PER_SEC;
 
