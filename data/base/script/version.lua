@@ -124,5 +124,10 @@ function version(v)
 			return nil
 		end
 		getFeatureB = getFeature
+
+		_addPower = addPower
+		function addPower(power, player)
+			return _addPower(player, power) -- swap arguments
+		end
 	end
 end
