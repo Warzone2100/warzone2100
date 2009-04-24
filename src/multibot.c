@@ -583,7 +583,7 @@ BOOL recvDroid()
 		NETuint32_t(&power);
 		NETbool(&powerCalculated);
 
-		pT = IdToTemplate(templateID, player);
+		pT = getTemplateFromMultiPlayerID(templateID);
 	}
 	NETend();
 

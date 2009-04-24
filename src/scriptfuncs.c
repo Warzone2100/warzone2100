@@ -9495,6 +9495,14 @@ static int scrFireOnLocation(lua_State *L)
 	return 1;
 }
 
+static int scrSendTextMessage(lua_State *L)
+{
+	const char* message = luaL_checkstring(L, 1);
+	bool toAll          = luaL_checkboolean(L, 2);
+	sendTextMessage(message, toAll);
+	return 0;
+}
+
 static int scrDroidHasTemplate(lua_State *L)
 {
 	DROID *droid = (DROID*)luaWZObj_checkobject(L, 1, OBJ_DROID);
@@ -9647,7 +9655,7 @@ void registerScriptfuncs(lua_State *L)
 	lua_register(L, "clearConsole", scrClearConsole);
 	lua_register(L, "lockAllicances", scrLockAllicances);
 	lua_register(L, "revealEntireMap", scrRevealEntireMap);
-	//lua_register(L, "", );
+	lua_register(L, "sendTextMessage", scrSendTextMessage);
 	//lua_register(L, "", );
 	//lua_register(L, "", );
 	//lua_register(L, "", );
