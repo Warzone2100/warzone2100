@@ -341,9 +341,29 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 		//Watermelon:Target prediction
 		if(psTarget->type == OBJ_DROID)
 		{
-			predict.x = trigSin( ((DROID *)psTarget)->sMove.moveDir ) * ((DROID *)psTarget)->sMove.speed * dist / psStats->flightSpeed;
+			double flightTime;
+			SDWORD empTime = 0;
+
+			if (proj_Direct(psStats) || dist <= psStats->minRange)
+				flightTime = dist / psStats->flightSpeed;
+			else
+				flightTime = sqrt(dist) / 30;  /* Purely a guess, but surprisingly effective */
+
+			if (psTarget->lastHitWeapon == WSC_EMP) {
+				empTime = EMP_DISABLE_TIME - (gameTime - psTarget->timeLastHit);
+				CLIP(empTime, 0, EMP_DISABLE_TIME);
+				if (empTime >= EMP_DISABLE_TIME * 0.9)
+					flightTime = 0;  /* Just hit.  Assume they'll get hit again */
+				else {
+					flightTime -= empTime / 1000;
+					if (flightTime < 0.0)
+						flightTime = 0.0;
+				}
+			}
+
+			predict.x = trigSin( ((DROID *)psTarget)->sMove.moveDir ) * ((DROID *)psTarget)->sMove.speed * flightTime;
 			predict.x += psTarget->pos.x;
-			predict.y = trigCos( ((DROID *)psTarget)->sMove.moveDir ) * ((DROID *)psTarget)->sMove.speed * dist / psStats->flightSpeed;
+			predict.y = trigCos( ((DROID *)psTarget)->sMove.moveDir ) * ((DROID *)psTarget)->sMove.speed * flightTime;
 			predict.y += psTarget->pos.y;
 
 			// Make sure we don't pass any negative or out of bounds numbers to proj_SendProjectile
