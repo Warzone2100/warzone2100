@@ -434,12 +434,14 @@ int requestPowerFor(int player, float amount, int points)
 {
 	int pointsConsidered = randomRound(points * asPower[player].economyThrottle);
 	// only what it needs for the n amount of points we consider giving
-	float amountConsidered = amount * (float) pointsConsidered / points;
+	float amountConsidered;
 
-	if (amount < 0.01 || !powerCalculated)
+	if (points == 0 || amount < 0.01 || !powerCalculated)
 	{
 		return points;
 	}
+
+	amountConsidered = amount * (float) pointsConsidered / points;
 
 	// keep track on how much energy we could possibly spend
 	asPower[player].powerRequested += amount;
