@@ -182,6 +182,11 @@ BOOL NETlogEntry(const char *str,UDWORD a,UDWORD b)
 	struct tm *newtime;
 	char buf[256];
 
+	if (!pFileHandle)
+	{
+		return false;
+	}
+
 #ifndef MASSIVELOGS
 	if(a ==9 || a==10)
 	{
