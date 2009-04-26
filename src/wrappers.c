@@ -124,6 +124,9 @@ TITLECODE titleLoop(void)
 		// then check --join and if neither, run the normal game menu.
 		if( hostlaunch )
 		{
+			ingame.bHostSetup = true;
+			bMultiPlayer = true;
+			game.type = SKIRMISH;		// needed?
 			changeTitleMode(MULTIOPTION);
 			hostlaunch = false;			// reset the bool to default state.
 		}
