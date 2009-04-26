@@ -414,6 +414,14 @@ void kf_ToggleSamples(void) //Displays number of sound sample in the sound queue
 
 	CONPRINTF(ConsoleString, (ConsoleString, "Sound Samples displayed is %s", showSAMPLES ? "Enabled" : "Disabled"));
 }
+
+void kf_ToggleOrders(void)	// Displays orders & action of currently selected unit.
+{
+		// Toggle the boolean value of showFPS
+		showORDERS = !showORDERS;
+		CONPRINTF(ConsoleString, (ConsoleString, "Unit Order/Action displayed is %s", showORDERS ? "Enabled" : "Disabled"));
+}
+
 /* Writes out the frame rate */
 void	kf_FrameRate( void )
 {
