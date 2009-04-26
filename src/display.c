@@ -84,6 +84,8 @@ struct	_dragBox dragBox3D,wallDrag;
 #define POSSIBLE_SELECTIONS		13
 #define POSSIBLE_TARGETS		23
 
+extern char DROIDDOING[512];		// holds the string on what the droid is doing
+
 UDWORD	arnMPointers[POSSIBLE_TARGETS][POSSIBLE_SELECTIONS] =
 {
 // empty terrain tile
@@ -1684,6 +1686,7 @@ static inline void dealWithLMBDroid(DROID* psDroid, SELECTION_TYPE selection)
 {
 	if (psDroid->player != selectedPlayer)
 	{
+		memset(DROIDDOING, 0x0 , sizeof(DROIDDOING)); // take over the other players droid by debug menu.
 		/* We've clicked on somebody else's droid */
 //		addConsoleMessage("Clicked on another player's droid",SYSTEM_MESSAGE);
 		orderSelectedObjAdd(selectedPlayer, (BASE_OBJECT*)psDroid, ctrlShiftDown());
@@ -2674,6 +2677,7 @@ static void dealWithRMB( void )
 			{
 				clearSelection();
 				intObjectSelected(NULL);
+				memset(DROIDDOING, 0x0 , sizeof(DROIDDOING));	// clear string when deselected
 			}
 		}
 	}

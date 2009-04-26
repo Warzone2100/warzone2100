@@ -208,12 +208,20 @@ bool showFPS = false;       //
  * default OFF, turn ON via console command 'showsamples'
  */
 bool showSAMPLES = false;
+/**  Show the current selected units order / action
+ *  default OFF, turn ON via console command 'showorders'
+ */
+bool showORDERS = false;	
 /** When we have a connection issue, we will flash a message on screen
 * 0 = no issue, 1= player leaving nicely, 2= player got disconnected
 */
 int NET_PlayerConnectionStatus = 0;
 #define NETWORK_FORM_ID 0xFAAA
 #define NETWORK_BUT_ID 0xFAAB
+
+/** tells us in realtime, what droid is doing (order / action)
+*/
+char DROIDDOING[512];
 
 /// Geometric offset which will be passed to pie_SetGeometricOffset
 UDWORD geoOffset;
@@ -448,6 +456,14 @@ void draw3DScene( void )
 
 		iV_DrawText(fps, pie_GetVideoBufferWidth() - width, pie_GetVideoBufferHeight() - height);
 	}
+	if (showORDERS)
+	{
+		unsigned int width, height;
+		width = iV_GetTextWidth(DROIDDOING);
+		height = iV_GetTextHeight(DROIDDOING);
+		iV_DrawText(DROIDDOING, 0, pie_GetVideoBufferHeight()- height);
+	}
+
 //	debug(LOG_ERROR,"%d NET_PlayerConnectionStatus",NET_PlayerConnectionStatus);
 	if (NET_PlayerConnectionStatus)
 	{
