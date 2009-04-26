@@ -103,7 +103,8 @@ static UDWORD orderStarted;
 
 // whether an order effect has been displayed
 static BOOL bOrderEffectDisplayed = false;
-
+// what the droid's action / order is currently
+extern char DROIDDOING[512];
 //////////////////////////////////////////////////////////////////
 
 //////////////////////////////////////////////////////////////////
@@ -1254,6 +1255,13 @@ void orderUpdateDroid(DROID *psDroid)
 	{
 		psDroid->order = DORDER_REARM;
 		setDroidTarget(psDroid, psDroid->psActionTarget[0]);
+	}
+
+	if(psDroid->selected)
+	{
+		// Tell us what the droid is doing.
+		sprintf(DROIDDOING,"%.12s,id(%d) order(%d):%s action(%d):%s", droidGetName(psDroid), psDroid->id,
+			psDroid->order, getDroidOrderName(psDroid->order), psDroid->action, getDroidActionName(psDroid->action));
 	}
 }
 
