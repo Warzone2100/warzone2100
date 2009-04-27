@@ -87,7 +87,7 @@ def readable(input):
 			yield io
 		finally:
 			if io:
-				io.close
+				io.close()
 
 class BaseProtocol(object):
 	# Gameserver port.
