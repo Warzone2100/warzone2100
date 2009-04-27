@@ -25,6 +25,20 @@ from game import *
 
 __all__ = ['Protocol', 'BinaryProtocol']
 
+def _encodeCString(string, buf_len):
+	# If we haven't got a string return an empty one
+	if not string:
+		return str('\0' * buf_len)
+
+	# Make sure the string fits
+	string = string[:buf_len - 1]
+
+	# Add a terminating NUL and fill the rest of the buffer with NUL bytes
+	string = string.ljust(buf_len, "\0")
+
+	# Make sure *not* to use a unicode string
+	return str(string)
+
 class Protocol(object):
 	# Size of a single game is undefined at compile time
 	size = None
@@ -72,19 +86,19 @@ class BinaryProtocol(Protocol):
 		self.version = version
 
 	def _encodeName(self, game):
-		return game.description[:self.name_length - 1].ljust(self.name_length, "\0")
+		return _encodeCString(game.description, self.name_length)
 
 	def _encodeHost(self, game):
-		return game.host[:self.host_length - 1].ljust(self.host_length, "\0")
+		return _encodeCString(game.host, self.host_length)
 
 	def _encodeMisc(self, game):
-		return game.misc[:self.misc_length - 1].ljust(self.misc_length, "\0")
+		return _encodeCString(game.misc, self.misc_length)
 
 	def _encodeExtra(self, game):
-		return game.extra[:self.extra_length - 1].ljust(self.extra_length, "\0")
+		return _encodeCString(game.extra, self.extra_length)
 
 	def _encodeVersionString(self, game):
-		return game.multiplayerVersion[:self.versionstring_length - 1].ljust(self.versionstring_length, "\0")
+		return _encodeCString(game.multiplayerVersion, self.versionstring_length)
 
 	def encodeSingle(self, game):
 		if   parse_version(self.version) >= parse_version('2.0'):
