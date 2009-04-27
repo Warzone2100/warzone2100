@@ -97,10 +97,11 @@ callbackEvent(processEvents, CALL_EVERY_FRAME)
 ---------------------------------
 -- Pretty backtraces
 function _event.pack(a, ...)
-	return a, arg
+	return a, {...}
 end
 
-function _event.call_with_backtrace(f, arg) -- has an override in version.lua
+function _event.call_with_backtrace(f, ...) -- has an override in version.lua
+	local arg = {...}
 	local run_function = function () return f(unpack(arg)) end
 	local result, returns = _event.pack(xpcall(run_function, debug.traceback))
 	if not result then
@@ -126,7 +127,7 @@ function _event.disable_run_enable(handler, ...)
 		_event.event_list[handler].enabled = false
 	end
 
-	local results = {_event.call_with_backtrace(handler, arg)}
+	local results = {_event.call_with_backtrace(handler, ...)}
 
 	if _event.event_list[handler] and old == _event.event_list[handler] then -- could be deactivated or reactivated
 		_event.event_list[handler].enabled = _event.event_list[handler].enabled_stored
@@ -135,14 +136,14 @@ function _event.disable_run_enable(handler, ...)
 end
 
 function _event.run_event(handler, ...) -- has an override in version.lua
-	_event.disable_run_enable(handler, unpack(arg))
+	_event.disable_run_enable(handler, ...)
 end
 
 -- called from C when a callback event occurs
 function doCallbacksFor(event, ...)
 	for h, e in pairs(_event.event_list) do
 		if e.type == 'callback' and e.enabled and e.id == event then
-			_event.run_event(h, unpack(arg))
+			_event.run_event(h, ...)
 		end
 	end
 end

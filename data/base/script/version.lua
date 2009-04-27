@@ -146,8 +146,8 @@ function version(v)
 			--print('leaving pause')
 		end
 
-		function _event.call_with_backtrace(f, arg)
-			return f(unpack(arg)) -- no bactrace here!
+		function _event.call_with_backtrace(f, ...)
+			return f(...) -- no bactrace here!
 		end
 
 		-- run the handler as a coroutine to intercept the yields produced by pause
@@ -165,11 +165,11 @@ function version(v)
 			if type(handler) == 'function' then
 				co = coroutine.create(_event.disable_run_enable)
 				-- run it
-				results = {coroutine.resume(co, handler, unpack(arg))}
+				results = {coroutine.resume(co, handler, ...)}
 			elseif type(handler) == 'thread' then
 				co = handler
 				-- run it
-				results = {coroutine.resume(co, unpack(arg))}
+				results = {coroutine.resume(co, ...)}
 			else
 				error('handler is not a function or a thread')
 			end
