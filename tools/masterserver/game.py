@@ -63,6 +63,9 @@ class Game(object):
 	def _setPrivate(self, v):
 		self.data['private'] = bool(v)
 
+	def _setAnnounce(self, v):
+		self.data['announced'] = not bool(v)
+
 	description        = property(fget = lambda self:    self.data['name'],
 	                              fset = lambda self, v: self._setDescription(v))
 
@@ -89,6 +92,9 @@ class Game(object):
 
 	private            = property(fget = lambda self:    self.data['private'],
 	                              fset = lambda self, v: self._setPrivate(v))
+
+	announce           = property(fget = lambda self: not self.private and (not 'announced' in self.data or not self.data['announced']),
+	                              fset = lambda self, v: self._setAnnounce(v))
 
 	def __init__(self):
 		self.data = {'name':                None,

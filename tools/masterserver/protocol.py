@@ -102,6 +102,9 @@ class Protocol(object):
 	def check(game):
 		pass
 
+	def list(host):
+		pass
+
 class BinaryProtocol(Protocol):
 	# Binary struct format to use (GAMESTRUCT)
 	gameFormat = {}
@@ -123,6 +126,10 @@ class BinaryProtocol(Protocol):
 	# Gameserver port.
 	gamePort = {'2.0': 9999,
 	            '2.2': 2100}
+	# Lobby server port.
+	lobbyPort = {'2.0': 9998,
+	             '2.1': 9997,
+	             '2.2': 9990}
 
 	countFormat = struct.Struct('!I')
 
@@ -132,9 +139,14 @@ class BinaryProtocol(Protocol):
 		if   parse_version('2.0') <= parse_version(version) < parse_version('2.2'):
 			self.gameFormat = BinaryProtocol.gameFormat['2.0']
 			self.gamePort   = BinaryProtocol.gamePort['2.0']
+			if   parse_version('2.0') <= parse_version(version) < parse_version('2.1'):
+				self.lobbyPort  = BinaryProtocol.lobbyPort['2.0']
+			elif parse_version('2.1') <= parse_version(version) < parse_version('2.2'):
+				self.lobbyPort  = BinaryProtocol.lobbyPort['2.1']
 		elif parse_version('2.2') <= parse_version(version):
 			self.gameFormat = BinaryProtocol.gameFormat['2.2']
 			self.gamePort   = BinaryProtocol.gamePort['2.2']
+			self.lobbyPort  = BinaryProtocol.lobbyPort['2.2']
 
 		self.version = version
 
@@ -269,3 +281,13 @@ class BinaryProtocol(Protocol):
 			except (socket.error, socket.herror, socket.gaierror, socket.timeout), e:
 				logging.debug("%s did not respond: %s" % (game.host, e))
 				return False
+
+	def list(self, host):
+		"""Retrieve a list of games from the lobby server."""
+		with _socket() as s:
+			s.settimeout(10.0)
+			s.connect((host, self.lobbyPort))
+
+			s.send("list\0")
+			for game in self.decodeMultiple(s):
+				yield game
