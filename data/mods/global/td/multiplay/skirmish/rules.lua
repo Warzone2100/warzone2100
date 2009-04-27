@@ -1,4 +1,26 @@
+--[[
+	This file is part of Warzone 2100.
+	Copyright (C) 2009  Warzone Resurrection Project
+
+	Warzone 2100 is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation; either version 2 of the License, or
+	(at your option) any later version.
+
+	Warzone 2100 is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with Warzone 2100; if not, write to the Free Software
+	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
+]]--
+
 version(1) -- script version
+
+function w(p) return 128*p end
+responsibleFor = myResponsibility -- reads much better
 
 defTech = {
 	"R-Vehicle-Prop-Wheels",
@@ -29,6 +51,8 @@ wave = 0
 ENEMY = 5
 PLAYERS = 4
 
+destination = {x=w(40), y=w(76)}
+
 ONEPLAYERMODE = false
 
 waves = {
@@ -53,9 +77,6 @@ function players()
 		end
 end
 
-function w(p) return 128*p end
-responsibleFor = myResponsibility -- reads much better
-
 function display(message)
 	for player in players() do
 		msg(message, ENEMY, player)
@@ -76,10 +97,11 @@ function initialiseHost()
 
 	delayedEvent(welcome, 5)
 	repeatingEvent(unfinishedBuildingsKiller, 1)
+	repeatingEvent(preventBlocking, 1)
 end
 -- only run this script on the host
 if responsibleFor(ENEMY) then
-	callbackEvent(initialiseHost, CALL_GAMEINIT)
+	delayedEvent(initialiseHost, 0)
 end
 
 -- remove the chatter from the created alliances
@@ -95,7 +117,7 @@ function welcome()
 	display("The first wave will come in 30 seconds")
 	display("Good luck and good hunting!")
 
-	delayedEvent(sendWave, 30)
+	delayedEvent(warnNextWave, 20)
 	repeatingEvent(checkLifeLostEvent, 0.5)
 end
 
@@ -122,12 +144,12 @@ function initialiseClient()
 	-- give money
 	callbackEvent(givePower, CALL_DROID_DESTROYED)
 end
-callbackEvent(initialiseClient, CALL_GAMEINIT)
+delayedEvent(initialiseClient, 0)
 
 function spawnDroid(template, x, y)
 	local droid = addDroid(template, x, y, ENEMY)
-	setDroidSecondary(droid, DSO_ATTACK_LEVEL, DSS_ALEV_NEVER);
-	orderDroidLoc(droid, DORDER_MOVE, w(40), w(76))
+	setDroidSecondary(droid, DSO_ATTACK_LEVEL, DSS_ALEV_NEVER)
+	orderDroidLoc(droid, DORDER_MOVE, destination.x, destination.y)
 	return droid
 end
 
@@ -139,9 +161,15 @@ function spawn()
 	wave_amount = wave_amount - 1
 	if wave_amount == 0 then
 		deactivateEvent(spawn)
+		delayedEvent(warnNextWave, 20)
 	end
 end
 
+
+function warnNextWave()
+	display("Next wave in 10 seconds")
+	delayedEvent(sendWave, 10)
+end
 function sendWave()
 	wave = wave + 1
 	if not waves[wave] then
@@ -158,7 +186,6 @@ function sendWave()
 	else
 		repeatingEvent(spawn, waves[wave].spawn)
 	end
-	delayedEvent(sendWave, 60)
 end
 
 function formatLivesMessage(lives)
@@ -219,17 +246,66 @@ function unfinishedBuildingsKiller()
 			target = rawget(droid, "target") -- use rawget because it may be nil
 		end
 		if not target then target = {id=-1} end
+
+		local building_to_keep = nil
 		for structure in structures(player) do
-			if structure.status == SS_BEING_BUILT and structure.id ~= target.id then
-				destroyStructure(structure)
+			if structure.status == SS_BEING_BUILT then
+				-- under construction
+				if structure.id == target.id then
+					-- we are building it
+					if building_to_keep then
+						-- destroy the previous building we found
+						destroyStructure(building_to_keep)
+					end
+					-- keep it
+					building_to_keep = structure
+				else
+					-- not building it
+					if building_to_keep then
+						-- we already have a building we like, destroy this one
+						destroyStructure(structure)
+					else
+						-- this is the first building we find
+						building_to_keep = structure
+					end
+				end
 			end
 		end
 	end
 end
 
+-- make droids that are blocked attack
+attackTime = {}
+function preventBlocking()
+	for droid in droids(ENEMY) do
+		if attackTime[droid.id] then
+			local timeSinceAttack = getGameTime() - attackTime[droid.id]
+			if timeSinceAttack > 10 then
+				-- become friendly again
+				orderDroidLoc(droid, DORDER_MOVE, destination.x, destination.y)
+				setDroidSecondary(droid, DSO_ATTACK_LEVEL, DSS_ALEV_NEVER)
+				attackTime[droid.id] = nil
+			end
+		else
+			if droid.order == DORDER_NONE then
+				setAggressive(droid)
+			end
+		end
+	end
+end
+
+function setAggressive(droid)
+	orderDroidLoc(droid, DORDER_SCOUT, destination.x, destination.y)
+	setDroidSecondary(droid, DSO_ATTACK_LEVEL, DSS_ALEV_ALWAYS)
+	attackTime[droid.id] = getGameTime()
+end
+
+--------------------------------------------------------
+-- The sad part: Game Over
 function gameOverHost()
 	deactivateEvent(checkLifeLostEvent)
 	deactivateEvent(sendWave)
+	deactivateEvent(preventBlocking)
 end
 
 function gameOverClient()
