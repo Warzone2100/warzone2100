@@ -791,7 +791,7 @@ static void NETsendGAMESTRUCT(TCPsocket socket, const GAMESTRUCT* game)
 	{
 		// If packet could not be sent, we should inform user of the error.
 		debug(LOG_ERROR, "Failed to send GAMESTRUCT. Reason: %s", SDLNet_GetError());
-		debug(LOG_ERROR, "Please make sure TCP ports 9990 & 2100 are open!");
+		debug(LOG_ERROR, "Please make sure TCP ports %u & %u are open!", masterserver_port, gameserver_port);
 	}
 }
 
@@ -1789,7 +1789,7 @@ static void NETregisterServer(int state)
 				if(rs_socket == NULL)
 				{
 					debug(LOG_ERROR, "Cannot connect to masterserver \"%s:%d\": %s", masterserver_name, masterserver_port, SDLNet_GetError());
-					sstrcpy(NetPlay.MOTDbuffer, _("Could not communicate with lobby server!  Is TCP port 9990 open?"));
+					ssprintf(NetPlay.MOTDbuffer, _("Could not communicate with lobby server! Is TCP port %u open?"), masterserver_port);
 					server_not_there = true;
 					return;
 				}
