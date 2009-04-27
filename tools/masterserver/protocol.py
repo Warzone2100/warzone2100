@@ -79,7 +79,7 @@ def readable(input):
 	else:
 		try:
 			# Socket IO
-			io = output.makefile()
+			io = input.makefile()
 			yield io
 		except AttributeError:
 			# String IO (no, not the StringIO class, that would have been matched as "File IO")
@@ -229,7 +229,10 @@ class BinaryProtocol20(BaseProtocol):
 				(count,) = self.countFormat.unpack_from(input)
 
 			for i in xrange(count):
-				yield self.decodeSingle(read or input, offset=(self.size * i + self.countFormat.size))
+				game = self.decodeSingle(read or input, offset=(self.size * i + self.countFormat.size))
+				if game is None:
+					return
+				yield game
 
 class BinaryProtocol21(BinaryProtocol20):
 	lobbyPort = BaseProtocol.lobbyPort['2.1']
