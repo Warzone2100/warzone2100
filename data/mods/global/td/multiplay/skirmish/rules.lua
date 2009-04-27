@@ -1,3 +1,22 @@
+--[[
+	This file is part of Warzone 2100.
+	Copyright (C) 2009  Warzone Resurrection Project
+
+	Warzone 2100 is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation; either version 2 of the License, or
+	(at your option) any later version.
+
+	Warzone 2100 is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with Warzone 2100; if not, write to the Free Software
+	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
+]]--
+
 version(1) -- script version
 
 defTech = {
@@ -219,9 +238,29 @@ function unfinishedBuildingsKiller()
 			target = rawget(droid, "target") -- use rawget because it may be nil
 		end
 		if not target then target = {id=-1} end
+
+		local building_to_keep = nil
 		for structure in structures(player) do
-			if structure.status == SS_BEING_BUILT and structure.id ~= target.id then
-				destroyStructure(structure)
+			if structure.status == SS_BEING_BUILT then
+				-- under construction
+				if structure.id == target.id then
+					-- we are building it
+					if building_to_keep then
+						-- destroy the previous building we found
+						destroyStructure(building_to_keep)
+					end
+					-- keep it
+					building_to_keep = structure
+				else
+					-- not building it
+					if building_to_keep then
+						-- we already have a building we like, destroy this one
+						destroyStructure(structure)
+					else
+						-- this is the first building we find
+						building_to_keep = structure
+					end
+				end
 			end
 		end
 	end
