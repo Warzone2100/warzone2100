@@ -171,15 +171,12 @@ class RequestHandler(SocketServer.ThreadingMixIn, SocketServer.StreamRequestHand
 
 					# and start receiving updates about the game
 					while True:
-						newGameData = self.rfile.read(protocol.size)
+						newGameData = protocol.decodeSingle(self.rfile, g)
 						if not newGameData:
 							logging.debug("(%s) Removing aborted game" % gameHost)
 							return
 
-						logging.debug("(%s) Updating game..." % gameHost)
-						#set Gamedata
-						protocol.decodeSingle(newGameData, g)
-						logging.debug(g)
+						logging.debug("(%s) Updated game: %s" % (gameHost, g))
 						#set gamehost
 						g.host = gameHost
 
@@ -210,7 +207,7 @@ class RequestHandler(SocketServer.ThreadingMixIn, SocketServer.StreamRequestHand
 						# Transmit the games.
 						for game in gamedb.getGames():
 							logging.debug(" %s" % game)
-						self.wfile.write(protocol.encodeMultiple(gamedb.getGames()))
+						protocol.encodeMultiple(gamedb.getGames(), self.wfile)
 						break
 					except:
 						logging.error("(%s) Unhandled exception: %s" % (gameHost, traceback.format_exc()))

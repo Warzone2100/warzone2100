@@ -23,6 +23,7 @@ from contextlib import contextmanager
 import logging
 import socket
 import struct
+from StringIO import StringIO
 from pkg_resources import parse_version
 from game import *
 
@@ -52,6 +53,35 @@ def _encodeCString(string, buf_len):
 
 def _swap_endianness(i):
 	return struct.unpack(">I", struct.pack("<I", i))
+
+@contextmanager
+def writeable(output):
+	if   hasattr(output, 'write'):
+		# File IO
+		yield output
+	else:
+		try:
+			# Socket IO
+			io = output.makefile()
+			yield io
+		except AttributeError:
+			# String, lets use StringIO instead
+			io = StringIO(output)
+			yield io
+		finally:
+			io.close()
+
+def read_method(input):
+	try:
+		# File IO
+		return input.read
+	except AttributeError:
+		try:
+			# Socket IO
+			return input.recv
+		except AttributeError:
+			# String IO (no, not the StringIO class, that would have been matched as "File IO")
+			return None
 
 class Protocol(object):
 	# Size of a single game is undefined at compile time
@@ -123,58 +153,83 @@ class BinaryProtocol(Protocol):
 	def _encodeVersionString(self, game):
 		return _encodeCString(game.multiplayerVersion, self.versionstring_length)
 
-	def encodeSingle(self, game):
-		if   parse_version('2.0') <= parse_version(self.version) < parse_version('2.2'):
-			maxPlayers     = game.maxPlayers
-			currentPlayers = game.currentPlayers
+	def encodeSingle(self, game, out = str()):
+		with writeable(out) as write:
+			if   parse_version('2.0') <= parse_version(self.version) < parse_version('2.2'):
+				maxPlayers     = game.maxPlayers
+				currentPlayers = game.currentPlayers
 
-			# Workaround the fact that the 2.0.x versions don't
-			# perform endian swapping
-			if parse_version('2.0') <= parse_version(self.version) < parse_version('2.1'):
-				maxPlayers     = _swap_endianness(maxPlayers)
-				currentPlayers = _swap_endianness(currentPlayers)
+				# Workaround the fact that the 2.0.x versions don't
+				# perform endian swapping
+				if parse_version('2.0') <= parse_version(self.version) < parse_version('2.1'):
+					maxPlayers     = _swap_endianness(maxPlayers)
+					currentPlayers = _swap_endianness(currentPlayers)
 
-			return self.gameFormat.pack(
-				self._encodeName(game),
-				game.size or self.size, game.flags,
-				self._encodeHost(game),
-				maxPlayers, currentPlayers, game.user1, game.user2, game.user3, game.user4)
-		elif parse_version('2.2') <= parse_version(self.version):
-			return self.gameFormat.pack(
-				self._encodeName(game),
-				game.size or self.size, game.flags,
-				self._encodeHost(game),
-				game.maxPlayers, game.currentPlayers, game.user1, game.user2, game.user3, game.user4,
-				self._encodeMisc(game),
-				self._encodeExtra(game),
-				self._encodeVersionString(game),
-				game.modlist,
-				game.lobbyVersion, game.game_version_major, game.game_version_minor, game.private,
-				game.pure, game.Mods, game.future1, game.future2, game.future3, game.future4)
+				write.write(self.gameFormat.pack(
+					self._encodeName(game),
+					game.size or self.size, game.flags,
+					self._encodeHost(game),
+					maxPlayers, currentPlayers, game.user1, game.user2, game.user3, game.user4))
+			elif parse_version('2.2') <= parse_version(self.version):
+				write.write(self.gameFormat.pack(
+					self._encodeName(game),
+					game.size or self.size, game.flags,
+					self._encodeHost(game),
+					game.maxPlayers, game.currentPlayers, game.user1, game.user2, game.user3, game.user4,
+					self._encodeMisc(game),
+					self._encodeExtra(game),
+					self._encodeVersionString(game),
+					game.modlist,
+					game.lobbyVersion, game.game_version_major, game.game_version_minor, game.private,
+					game.pure, game.Mods, game.future1, game.future2, game.future3, game.future4))
 
-	def encodeMultiple(self, games):
-		message = self.countFormat.pack(len(games))
-		for game in games:
-			message += self.encodeSingle(game)
-		return message
+			try:
+				return write.getvalue()
+			except AttributeError:
+				return out
 
-	def decodeSingle(self, data, game = Game(), offset = None):
+	def encodeMultiple(self, games, out = str()):
+		with writeable(out) as write:
+			write.write(self.countFormat.pack(len(games)))
+			for game in games:
+				self.encodeSingle(game, write)
+
+			try:
+				return write.getvalue()
+			except AttributeError:
+				return out
+
+	def decodeSingle(self, input, game = Game(), offset = None):
+		read = read_method(input)
+
 		decData = {}
 
-		if offset != None:
-			unpack = lambda buffer: self.gameFormat.unpack_from(buffer, offset)
+		if   offset != None and read == None:
+			def unpack():
+				return self.gameFormat.unpack_from(out, offset)
+		elif not read:
+			def unpack():
+				return self.gameFormat.unpack(input)
 		else:
-			unpack = self.gameFormat.unpack
+			def unpack():
+				data = read(self.size)
+				if len(data) != self.size:
+					return None
+				return self.gameFormat.unpack(data)
+
+		data = unpack()
+		if not data:
+			return None
 
 		if   parse_version('2.0') <= parse_version(self.version) < parse_version('2.2'):
 			(decData['name'], game.size, game.flags, decData['host'], game.maxPlayers, game.currentPlayers,
-				game.user1, game.user2, game.user3, game.user4) = unpack(data)
+				game.user1, game.user2, game.user3, game.user4) = data
 		elif parse_version('2.2') <= parse_version(self.version):
 			(decData['name'], game.size, game.flags, decData['host'], game.maxPlayers, game.currentPlayers,
 				game.user1, game.user2, game.user3, game.user4,
 				game.misc, game.extra, decData['multiplayer-version'], game.modlist, game.lobbyVersion,
 				game.game_version_major, game.game_version_minor, game.private, game.pure, game.Mods, game.future1,
-				game.future2, game.future3, game.future4) = unpack(data)
+				game.future2, game.future3, game.future4) = data
 
 		# Workaround the fact that the 2.0.x versions don't perform
 		# endian swapping
@@ -192,9 +247,16 @@ class BinaryProtocol(Protocol):
 		game.data.update(decData)
 		return game
 
-	def decodeMultiple(self, data):
-		(count,) = self.countFormat.unpack_from(data)
-		return [self.decodeSingle(data, offset=(size * i + self.countFormat.size)) for i in xrange(count)]
+	def decodeMultiple(self, input):
+		read = read_method(input)
+
+		if read:
+			(count,) = self.countFormat.unpack(read(self.countFormat.size))
+		else:
+			(count,) = self.countFormat.unpack_from(input)
+
+		for i in xrange(count):
+			yield self.decodeSingle(input, offset=(self.size * i + self.countFormat.size))
 
 	def check(self, game):
 		"""Check we can connect to the game's host."""
