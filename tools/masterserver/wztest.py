@@ -17,6 +17,10 @@
 # --------------------------------------------------------------------------
 #
 ################################################################################
+# import from __future__
+from __future__ import with_statement
+
+################################################################################
 #
 
 __author__ = "Gerhard Schaden"
@@ -29,15 +33,18 @@ This script simulates a Warzone 2100 2.x client to test the masterserver
 ################################################################################
 #
 
-import wzmasterserver as wz
-import socket
 import logging
 from threading import Timer
 import SocketServer
 import time
 import struct
+from game import *
+from protocol import *
+from protocol import _socket as socket
 
 server="lobby.wz2100.net"
+protocol = BinaryProtocol('2.2')
+logging.basicConfig(level = logging.DEBUG, format = "%(asctime)-15s %(levelname)s %(message)s")
 
 # simulate a gameserver
 class RequestHandler(SocketServer.ThreadingMixIn, SocketServer.StreamRequestHandler):
@@ -46,16 +53,14 @@ class RequestHandler(SocketServer.ThreadingMixIn, SocketServer.StreamRequestHand
 
 def simulateGameServer():
 	SocketServer.ThreadingTCPServer.allow_reuse_address = True
-	tcpserver = SocketServer.ThreadingTCPServer(('0.0.0.0', wz.gamePort), RequestHandler)
+	tcpserver = SocketServer.ThreadingTCPServer(('0.0.0.0', protocol.gamePort), RequestHandler)
 	tcpserver.handle_request()
 	tcpserver.server_close()
 
-
 # thread with simulates adding a game
 def doAddGame():
-
 	# gamestrucuure
-	g=wz.Game()
+	g = Game()
 	g.description = "description"
 	g.size = 0
 	g.flags = 0
@@ -66,33 +71,33 @@ def doAddGame():
 	g.user2 = 0
 	g.user3 = 0
 	g.user4 = 0
+	g.multiplayerVersion = protocol.version
+	g.modlist = '\0'
+	g.lobbyVersion = 2
+	g.game_version_major = int(protocol.version[0])
+	g.game_version_minor = int(protocol.version[2])
+	g.private = 0
+	g.pure = 0
+	g.Mods = 0
+	g.future1 = 0
+	g.future2 = 0
+	g.future3 = 0
+	g.future4 = 0
 
-	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-	logging.debug("connect to lobby")
-	s.settimeout(10.0)
-	s.connect((server, wz.lobbyPort))
-	s.send("addg ")
-	s.send(g.getData())
-	#hold the game open for 10 seconds
-	time.sleep(10)
-	s.close()
+	with socket() as s:
+		logging.debug("connect to lobby")
+		s.settimeout(10.0)
+		s.connect((server, protocol.lobbyPort))
+		s.send("addg\0")
+		protocol.encodeSingle(g, s)
+		#hold the game open for 10 seconds
+		time.sleep(10)
 
 #thread with simulates listing the available games
 def doListGames():
-	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-	logging.debug("connect to lobby")
-	s.settimeout(10.0)
-	s.connect((server, wz.lobbyPort))
-	s.send("list ")
-	n = struct.unpack("!I", s.recv(4))[0]
-	logging.debug("read %d games" % n)
-	for i in range(n):
-		g = wz.Game()
-		g.setData(s.recv(wz.gsSize))
-		logging.debug("%s" % g)
-
-	#hold the game open for 10 seconds
-	s.close()
+	logging.debug("Listing games...")
+	for game in protocol.list(server):
+		logging.debug("Game: %s" % (game))
 
 #start gameserver
 t=Timer(0, simulateGameServer)
