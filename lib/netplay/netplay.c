@@ -1686,18 +1686,9 @@ UBYTE NETsendFile(BOOL newFile, char *fileName, UDWORD player)
 	}
 	bytesRead = PHYSFS_read(pFileHandle, inBuff,1, MAX_FILE_TRANSFER_PACKET);
 
-	if (player == 0)
-	{	// FIXME: why would you send (map) file to everyone ??
-		// even if they already have it? multiplay.c 1529 & 1550 are both
-		// NETsendFile(true,mapStr,0); & NETsendFile(false,game.map,0);
-		// so we ALWAYS send it, it seems?
-		NETbeginEncode(FILEMSG, NET_ALL_PLAYERS);	// send it.
-	}
-	else
-	{
-		sendto = (uint8_t) player;
-		NETbeginEncode(FILEMSG,sendto);
-	}
+	// only send map to the player that needs the map
+	sendto = (uint8_t) player;
+	NETbeginEncode(FILEMSG, sendto);
 
 	// form a message
 	NETint32_t(&fileSize);		// total bytes in this file.
