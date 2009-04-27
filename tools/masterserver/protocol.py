@@ -235,24 +235,47 @@ class BinaryProtocol21(BinaryProtocol20):
 	lobbyPort = BaseProtocol.lobbyPort['2.1']
 
 	def encodeSingle(self, game, out = str()):
-		global _swap_endianness
-		_swap_endianness_back = _swap_endianness
-		# Make _swap_endianness (temporarily) a NO-OP
-		_swap_endianness = lambda num: num
-		try:
-			return super(BinaryProtocol21, self).encodeSingle(game, out)
-		finally:
-			_swap_endianness = _swap_endianness_back
+		with writeable(out) as write:
+			write.write(self.gameFormat.pack(
+				self._encodeName(game),
+				game.size or self.size, game.flags,
+				self._encodeHost(game),
+				maxPlayers, currentPlayers, game.user1, game.user2, game.user3, game.user4))
+
+			try:
+				return write.getvalue()
+			except AttributeError:
+				return out
 
 	def decodeSingle(self, input, game = Game(), offset = None):
-		global _swap_endianness
-		_swap_endianness_back = _swap_endianness
-		# Make _swap_endianness (temporarily) a NO-OP
-		_swap_endianness = lambda num: num
-		try:
-			return super(BinaryProtocol21, self).decodeSingle(input, game, offset)
-		finally:
-			_swap_endianness = _swap_endianness_back
+		with readable(input) as read:
+			decData = {}
+
+			if   offset != None and read == None:
+				def unpack():
+					return self.gameFormat.unpack_from(out, offset)
+			elif not read:
+				def unpack():
+					return self.gameFormat.unpack(input)
+			else:
+				def unpack():
+					data = read.read(self.size)
+					if len(data) != self.size:
+						return None
+					return self.gameFormat.unpack(data)
+
+			data = unpack()
+			if not data:
+				return None
+
+			(decData['name'], game.size, game.flags, decData['host'], game.maxPlayers, game.currentPlayers,
+				game.user1, game.user2, game.user3, game.user4) = data
+
+			for strKey in ['name', 'host']:
+				decData[strKey] = decData[strKey].strip("\0")
+
+			game.data.update(decData)
+			return game
 
 class BinaryProtocol22(BinaryProtocol21):
 	# >= 2.2 data
