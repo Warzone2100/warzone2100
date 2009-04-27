@@ -163,7 +163,8 @@ class RequestHandler(SocketServer.ThreadingMixIn, SocketServer.StreamRequestHand
 				logging.debug("(%s) Adding gameserver..." % gameHost)
 				try:
 					# create a game object
-					g = Game(self)
+					g = Game()
+					g.requestHandler = self
 					# put it in the database
 					gamedb.addGame(g)
 

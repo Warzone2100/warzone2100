@@ -92,7 +92,7 @@ class Game(object):
 	private            = property(fget = lambda self:    self.data['private'],
 	                              fset = lambda self, v: self._setPrivate(v))
 
-	def __init__(self, requestHandler):
+	def __init__(self):
 		self.data = {'name':                None,
 		             'host':                None,
 		             'maxPlayers':          None,
@@ -118,8 +118,6 @@ class Game(object):
 		self.future2 = None			# for future use
 		self.future3 = None			# for future use
 		self.future4 = None			# for future use
-
-		self.requestHandler = requestHandler
 
 	def __str__(self):
 		if self.private == 1:
