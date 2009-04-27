@@ -182,7 +182,7 @@ class RequestHandler(SocketServer.ThreadingMixIn, SocketServer.StreamRequestHand
 						#set gamehost
 						g.host = gameHost
 
-						if not g.check():
+						if not protocol.check(g):
 							logging.debug("(%s) Removing unreachable game" % gameHost)
 							return
 

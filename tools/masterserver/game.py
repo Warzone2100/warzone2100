@@ -27,8 +27,6 @@ import logging
 
 __all__ = ['Game']
 
-gamePort  = 2100         # Gameserver port.
-
 #
 ################################################################################
 # Game class
@@ -124,16 +122,3 @@ class Game(object):
 		   return "(private) Game: %16s %s %s %s" % ( self.host, self.description, self.maxPlayers, self.currentPlayers)
 		else:
 		   return "Game: %16s %s %s %s" % ( self.host, self.description, self.maxPlayers, self.currentPlayers)
-
-	def check(self):
-		# Check we can connect to the host
-		s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-		try:
-			logging.debug("Checking %s's vitality..." % self.host)
-			s.settimeout(10.0)
-			s.connect((self.host, gamePort))
-			s.close()
-			return True
-		except:
-			logging.debug("%s did not respond!" % self.host)
-			return False
