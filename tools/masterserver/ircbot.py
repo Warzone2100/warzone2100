@@ -38,16 +38,18 @@ irc_serve_channels  = ['#warzone2100-games']
 irc_silent_channels = ['#warzone2100']
 irc_nick            = "wzlobbybot"
 irc_nickpass        = None
+lobby_host          = 'lobby.wz2100.net'
+lobby_version       = '2.1'
 
 def main():
-    bot = Bot(irc_server, irc_port, irc_serve_channels, irc_silent_channels, irc_nick, irc_nickpass, "lobby.wz2100.net", '2.1')
+    bot = Bot(irc_server, irc_port, irc_serve_channels, irc_silent_channels, irc_nick, irc_nickpass, lobby_host, lobby_version)
     bot.start()
 
 class Bot:
     def __init__(self, ircServer, ircPort, ircServeChannels, ircSilentChannels, ircNick, nickPass, lobbyServer, lobbyVersion):
         self.commands = BotCommands(self)
         self.irc          = bot_connection(self.commands, ircServer, ircPort, ircServeChannels, ircSilentChannels, ircNick, nickPass)
-        self.lobby        = BinaryProtocol(lobbyVersion)
+        self.lobby        = Protocol(lobbyVersion)
         self.lobby.host = lobbyServer
         self.check        = change_notifier(self.irc, self.lobby)
 
