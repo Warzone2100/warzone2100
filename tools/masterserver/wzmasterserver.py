@@ -52,7 +52,6 @@ from protocol import *
 ################################################################################
 # Settings.
 
-lobbyPort = 9990         # Lobby port.
 checkInterval = 100      # Interval between requests causing a gamedb check
 
 MOTDstring = None        # our message of the day (max 255 bytes)
@@ -222,7 +221,7 @@ class RequestHandler(SocketServer.ThreadingMixIn, SocketServer.StreamRequestHand
 # The legendary Main.
 
 if __name__ == '__main__':
-	logging.info("Starting Warzone 2100 lobby server on port %d" % lobbyPort)
+	logging.info("Starting Warzone 2100 lobby server on port %d" % (protocol.lobbyPort))
 
 	# Read in the Message of the Day, max is 1 line, 255 chars
 	in_file = open("motd.txt", "r")
@@ -234,7 +233,7 @@ if __name__ == '__main__':
 	gamedb = GameDB()
 
 	SocketServer.ThreadingTCPServer.allow_reuse_address = True
-	tcpserver = SocketServer.ThreadingTCPServer(('0.0.0.0', lobbyPort), RequestHandler)
+	tcpserver = SocketServer.ThreadingTCPServer(('0.0.0.0', protocol.lobbyPort), RequestHandler)
 	try:
 		while True:
 			tcpserver.handle_request()
