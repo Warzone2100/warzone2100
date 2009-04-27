@@ -409,11 +409,19 @@ void kf_ToggleFPS(void) //This shows *just FPS* and is always visable (when acti
 }
 void kf_ToggleSamples(void) //Displays number of sound sample in the sound queues & lists.
 {
-	// Toggle the boolean value of showFPS
+	// Toggle the boolean value of showSAMPLES
 	showSAMPLES = !showSAMPLES;
 
 	CONPRINTF(ConsoleString, (ConsoleString, "Sound Samples displayed is %s", showSAMPLES ? "Enabled" : "Disabled"));
 }
+
+void kf_ToggleOrders(void)	// Displays orders & action of currently selected unit.
+{
+		// Toggle the boolean value of showORDERS
+		showORDERS = !showORDERS;
+		CONPRINTF(ConsoleString, (ConsoleString, "Unit Order/Action displayed is %s", showORDERS ? "Enabled" : "Disabled"));
+}
+
 /* Writes out the frame rate */
 void	kf_FrameRate( void )
 {
@@ -1358,13 +1366,11 @@ void	kf_FinishResearch( void )
 		{
 			BASE_STATS	*pSubject = NULL;
 
-			((RESEARCH_FACILITY *)psCurr->pFunctionality)->timeStarted = gameTime + 100000;
-			//set power accrued to high value so that will trigger straight away
-			((RESEARCH_FACILITY *)psCurr->pFunctionality)->powerAccrued = 10000;
-			// find out what the heck we are researching
+			// find out what we are researching here
 			pSubject = ((RESEARCH_FACILITY *)psCurr->pFunctionality)->psSubject;
 			if (pSubject)
 			{
+				researchResult((RESEARCH*)pSubject - asResearch, selectedPlayer, false, NULL);
 				sasprintf((char**)&cmsg, _("(Player %u) is using cheat :%s %s"),
 					selectedPlayer, _("Researched"), getName(pSubject->pName) );
 				sendTextMessage(cmsg, true);

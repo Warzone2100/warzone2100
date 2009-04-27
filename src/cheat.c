@@ -75,6 +75,7 @@ static CHEAT_ENTRY cheatCodes[] =
 	{"tileinfo", kf_TileInfo}, // output debug info about a tile
 	{"showfps", kf_ToggleFPS},	//displays your average FPS
 	{"showsamples", kf_ToggleSamples}, //displays the # of Sound samples in Queue & List
+	{"showorders", kf_ToggleOrders}, //displays unit order/action state.
 };
 
 BOOL attemptCheatCode(const char* cheat_name)

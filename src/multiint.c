@@ -1081,7 +1081,11 @@ static void addGameOptions(BOOL bRedo)
 	addMultiEditBox(MULTIOP_OPTIONS, MULTIOP_MAP  , MCOL0, MROW3, _("Select Map"), game.map, IMAGE_EDIT_MAP, IMAGE_EDIT_MAP_HI, MULTIOP_MAP_ICON);
 	// password box
 	addMultiEditBox(MULTIOP_OPTIONS, MULTIOP_PASSWORD_EDIT  , MCOL0, MROW4, _("Click to set Password"), NetPlay.gamePassword, IMAGE_UNLOCK_BLUE, IMAGE_LOCK_BLUE , MULTIOP_PASSWORD_BUT);
-
+	// Disable Password button for skirmish games
+	if (!NetPlay.bComms)
+	{
+		widgSetButtonState(psWScreen, MULTIOP_PASSWORD_BUT, WBUT_DISABLE);
+	}
 	// buttons.
 
 	// game type
@@ -3283,11 +3287,11 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *p
 			}
 
 			// medals.
-			if((stat.losses > 2) && (stat.wins > 2) && (stat.wins > (2 * stat.losses)))// bronze requirement.
+			if ((stat.wins >= 6) && (stat.wins > (2 * stat.losses))) // bronze requirement.
 			{
-				if( stat.wins > (4 * stat.losses))								// silver requirement.
+				if ((stat.wins >= 12) && (stat.wins > (4 * stat.losses))) // silver requirement.
 				{
-					if(stat.wins > (8 * stat.losses))							// gold requirement
+					if ((stat.wins >= 24) && (stat.wins > (8 * stat.losses))) // gold requirement
 					{
 						iV_DrawImage(FrontImages,IMAGE_MEDAL_GOLD,x+49,y+11);
 					}

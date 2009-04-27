@@ -44,6 +44,7 @@ import socket
 from threading import Lock, Thread, Event, Timer
 import select
 import logging
+import traceback
 import cmd
 from game import *
 from protocol import *
@@ -163,33 +164,34 @@ class RequestHandler(SocketServer.ThreadingMixIn, SocketServer.StreamRequestHand
 				logging.debug("(%s) Adding gameserver..." % gameHost)
 				try:
 					# create a game object
-					g = Game(self)
+					g = Game()
+					g.requestHandler = self
 					# put it in the database
 					gamedb.addGame(g)
 
 					# and start receiving updates about the game
 					while True:
-						newGameData = self.rfile.read(protocol.size)
+						newGameData = protocol.decodeSingle(self.rfile, g)
 						if not newGameData:
 							logging.debug("(%s) Removing aborted game" % gameHost)
 							return
 
-						logging.debug("(%s) Updating game..." % gameHost)
-						#set Gamedata
-						protocol.decodeSingle(newGameData, g)
-						logging.debug(g)
+						logging.debug("(%s) Updated game: %s" % (gameHost, g))
 						#set gamehost
 						g.host = gameHost
 
-						if not g.check():
+						if not protocol.check(g):
 							logging.debug("(%s) Removing unreachable game" % gameHost)
 							return
 
 						gamedb.listGames()
 				except struct.error, e:
-					logging.warning("(%s) Data decoding error: %s" % (gameHost, e))
+					logging.warning("(%s) Data decoding error: %s" % (gameHost, traceback.format_exc()))
 				except KeyError, e:
-					logging.warning("(%s) Communication error: %s" % (gameHost, e))
+					logging.warning("(%s) Communication error: %s" % (gameHost, traceback.format_exc()))
+				except:
+					logging.error("(%s) Unhandled exception: %s" % (gameHost, traceback.format_exc()))
+					raise
 				finally:
 					if g:
 						gamedb.removeGame(g)
@@ -198,14 +200,18 @@ class RequestHandler(SocketServer.ThreadingMixIn, SocketServer.StreamRequestHand
 			elif netCommand == 'list':
 				# Lock the gamelist to prevent new games while output.
 				with gamedblock:
-					gamesCount = len(gamedb.getGames())
-					logging.debug("(%s) Gameserver list: %i game(s)" % (gameHost, gamesCount))
+					try:
+						gamesCount = len(gamedb.getGames())
+						logging.debug("(%s) Gameserver list: %i game(s)" % (gameHost, gamesCount))
 
-					# Transmit the games.
-					for game in gamedb.getGames():
-						logging.debug(" %s" % game)
-					self.wfile.write(protocol.encodeMultiple(gamedb.getGames()))
-					break
+						# Transmit the games.
+						for game in gamedb.getGames():
+							logging.debug(" %s" % game)
+						protocol.encodeMultiple(gamedb.getGames(), self.wfile)
+						break
+					except:
+						logging.error("(%s) Unhandled exception: %s" % (gameHost, traceback.format_exc()))
+						raise
 
 			# If something unknown appears.
 			else:

@@ -28,8 +28,9 @@
 extern void	kf_HalveHeights( void );
 extern void	kf_DebugDroidInfo( void );
 extern void	kf_BuildInfo( void );
-extern void	kf_ToggleFPS(void);		//FPS counter NOT same as kf_Framerate! -Q
-extern void	kf_ToggleSamples(void);		// Displays # of sound samples in Q/list.
+extern void	kf_ToggleFPS(void);			//FPS counter NOT same as kf_Framerate! -Q
+extern void	kf_ToggleSamples(void);		// Displays # of sound samples in Queue/list.
+extern void kf_ToggleOrders(void);		//displays unit's Order/action state.
 extern void	kf_FrameRate( void );
 extern void	kf_ShowNumObjects( void );
 extern void	kf_ToggleRadar( void );

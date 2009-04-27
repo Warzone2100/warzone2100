@@ -27,8 +27,6 @@ import logging
 
 __all__ = ['Game']
 
-gamePort  = 2100         # Gameserver port.
-
 #
 ################################################################################
 # Game class
@@ -92,7 +90,7 @@ class Game(object):
 	private            = property(fget = lambda self:    self.data['private'],
 	                              fset = lambda self, v: self._setPrivate(v))
 
-	def __init__(self, requestHandler):
+	def __init__(self):
 		self.data = {'name':                None,
 		             'host':                None,
 		             'maxPlayers':          None,
@@ -119,23 +117,8 @@ class Game(object):
 		self.future3 = None			# for future use
 		self.future4 = None			# for future use
 
-		self.requestHandler = requestHandler
-
 	def __str__(self):
 		if self.private == 1:
 		   return "(private) Game: %16s %s %s %s" % ( self.host, self.description, self.maxPlayers, self.currentPlayers)
 		else:
 		   return "Game: %16s %s %s %s" % ( self.host, self.description, self.maxPlayers, self.currentPlayers)
-
-	def check(self):
-		# Check we can connect to the host
-		s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-		try:
-			logging.debug("Checking %s's vitality..." % self.host)
-			s.settimeout(10.0)
-			s.connect((self.host, gamePort))
-			s.close()
-			return True
-		except:
-			logging.debug("%s did not respond!" % self.host)
-			return False
