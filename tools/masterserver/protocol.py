@@ -139,18 +139,23 @@ class BinaryProtocol(Protocol):
 			message += self.encodeSingle(game)
 		return message
 
-	def decodeSingle(self, data, game = Game(None)):
+	def decodeSingle(self, data, game = Game(None), offset = None):
 		decData = {}
+
+		if offset != None:
+			unpack = lambda buffer: self.gameFormat.unpack_from(buffer, offset)
+		else:
+			unpack = self.gameFormat.unpack
 
 		if   parse_version('2.0') <= parse_version(self.version) < parse_version('2.2'):
 			(decData['name'], game.size, game.flags, decData['host'], game.maxPlayers, game.currentPlayers,
-				game.user1, game.user2, game.user3, game.user4) = self.gameFormat.unpack(data)
+				game.user1, game.user2, game.user3, game.user4) = unpack(data)
 		elif parse_version('2.2') <= parse_version(self.version):
 			(decData['name'], game.size, game.flags, decData['host'], game.maxPlayers, game.currentPlayers,
 				game.user1, game.user2, game.user3, game.user4,
 				game.misc, game.extra, decData['multiplayer-version'], game.modlist, game.lobbyVersion,
 				game.game_version_major, game.game_version_minor, game.private, game.pure, game.Mods, game.future1,
-				game.future2, game.future3, game.future4) = self.gameFormat.unpack(data)
+				game.future2, game.future3, game.future4) = unpack(data)
 
 		# Workaround the fact that the 2.0.x versions don't perform
 		# endian swapping
@@ -169,7 +174,5 @@ class BinaryProtocol(Protocol):
 		return game
 
 	def decodeMultiple(self, data):
-		countMsg = data[:self.countFormat.size]
-		data = data[self.countFormat.size:]
-		count = self.countFormat.unpack(countMsg)
-		return [self.decodeSingle(data[size * i: size * i + size]) for i in range(count)]
+		(count,) = self.countFormat.unpack_from(data)
+		return [self.decodeSingle(data, offset=(size * i + self.countFormat.size)) for i in xrange(count)]
