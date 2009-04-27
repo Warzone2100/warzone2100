@@ -123,7 +123,7 @@ class GameDB:
 
 requests = 0
 requestlock = Lock()
-protocol = BinaryProtocol()
+protocol = Protocol()
 
 class RequestHandler(SocketServer.ThreadingMixIn, SocketServer.StreamRequestHandler):
 	def handle(self):
