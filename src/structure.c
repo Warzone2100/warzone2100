@@ -2810,6 +2810,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool mission)
 	BASE_STATS			*pSubject = NULL;
 	UDWORD				pointsToAdd;//, iPower;
 	PLAYER_RESEARCH		*pPlayerRes = asPlayerResList[psStructure->player];
+	RESEARCH			*pResearch;
 	UDWORD				structureMode = 0;
 	DROID				*psDroid;
 	BASE_OBJECT			*psChosenObjs[STRUCT_MAXWEAPS] = {NULL};
@@ -3197,6 +3198,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool mission)
 			//check research has not already been completed by another structure
 			if (IsResearchCompleted(pPlayerRes)==0)
 			{
+				pResearch = (RESEARCH *)pSubject;
 				// don't update if not responsible (106)
 				if(bMultiPlayer && !myResponsibility(psStructure->player))
 				{
@@ -3212,16 +3214,18 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool mission)
 				ASSERT_OR_RETURN(, gameTime >= psResFacility->timeStarted, "research seems to have started in the future");
 				pointsToAdd = (psResFacility->researchPoints * (gameTime -
 					psResFacility->timeStarted)) / GAME_TICKS_PER_SEC;
+				pointsToAdd = MIN(pointsToAdd, pResearch->researchPoints - pPlayerRes->currentPoints);
 
-				if (pointsToAdd > 0)
+				if (pointsToAdd > 0 &&
+				    pResearch->researchPoints > 0) // might be a "free" research
 				{
-					float powerNeeded = (((RESEARCH *)pSubject)->researchPower * pointsToAdd) / (float)((RESEARCH *)pSubject)->researchPoints;
+					float powerNeeded = (pResearch->researchPower * pointsToAdd) / (float)pResearch->researchPoints;
 					pPlayerRes->currentPoints += requestPowerFor(psStructure->player, powerNeeded, pointsToAdd);
 					psResFacility->timeStarted = gameTime;
 				}
 
 				//check if Research is complete
-				if (pPlayerRes->currentPoints > ((RESEARCH *)pSubject)->researchPoints)
+				if (pPlayerRes->currentPoints >= pResearch->researchPoints)
 				{
 					if(bMultiPlayer)
 					{
@@ -3235,7 +3239,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool mission)
 					}
 					else
 					{
-						if (((RESEARCH *)psResFacility->psSubject)->researchPoints >
+						if (pResearch->researchPoints >
 							((RESEARCH *)psResFacility->psBestTopic)->researchPoints)
 						{
 							psResFacility->psSubject = psResFacility->psSubject;
