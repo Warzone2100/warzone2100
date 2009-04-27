@@ -201,24 +201,24 @@ static void resetMultiVisibility(UDWORD player)
 
 // ////////////////////////////////////////////////////////////////////////////
 // A remote player has left the game
-BOOL MultiPlayerLeave(UDWORD dp)
+BOOL MultiPlayerLeave(UDWORD playerIndex)
 {
 	char	buf[255];
 
-	if (dp >= MAX_PLAYERS)
+	if (playerIndex >= MAX_PLAYERS)
 	{
-		ASSERT(false, "Bad dpid");
+		ASSERT(false, "Bad player number");
 		return false;
 	}
 
-	NETlogEntry("Player leaving game", 0, dp);
-	debug(LOG_WARNING,"** Warning, player %u [%s], has left the game.", dp, getPlayerName(dp));
+	NETlogEntry("Player leaving game", 0, playerIndex);
+	debug(LOG_WARNING,"** Warning, player %u [%s], has left the game.", playerIndex, getPlayerName(playerIndex));
 
-	ssprintf(buf, _("%s has Left the Game"), getPlayerName(dp));
+	ssprintf(buf, _("%s has Left the Game"), getPlayerName(playerIndex));
 
 	turnOffMultiMsg(true);
-	clearPlayer(dp, false, false);
-	game.skDiff[dp] = DIFF_SLIDER_STOPS / 2;
+	clearPlayer(playerIndex, false, false);
+	game.skDiff[playerIndex] = DIFF_SLIDER_STOPS / 2;
 
 	turnOffMultiMsg(false);
 
@@ -230,7 +230,7 @@ BOOL MultiPlayerLeave(UDWORD dp)
 	}
 
 	// fire script callback to reassign skirmish players.
-	CBPlayerLeft = dp;
+	CBPlayerLeft = playerIndex;
 	eventFireCallbackTrigger((TRIGGER_TYPE)CALL_PLAYERLEFT);
 
 	return true;
@@ -238,7 +238,7 @@ BOOL MultiPlayerLeave(UDWORD dp)
 
 // ////////////////////////////////////////////////////////////////////////////
 // A Remote Player has joined the game.
-BOOL MultiPlayerJoin(UDWORD dpid)
+BOOL MultiPlayerJoin(UDWORD playerIndex)
 {
 	if(widgGetFromID(psWScreen,IDRET_FORM))	// if ingame.
 	{
@@ -256,21 +256,21 @@ BOOL MultiPlayerJoin(UDWORD dpid)
 	if(NetPlay.isHost)		// host responsible for welcoming this player.
 	{
 		// if we've already received a request from this player don't reallocate.
-		if (ingame.JoiningInProgress[dpid])
+		if (ingame.JoiningInProgress[playerIndex])
 		{
 			return true;
 		}
 		ASSERT(NetPlay.playercount <= MAX_PLAYERS, "Too many players!");
 
 		// setup data for this player, then broadcast it to the other players.
-		setupNewPlayer(dpid);						// setup all the guff for that player.
+		setupNewPlayer(playerIndex);						// setup all the guff for that player.
 		sendOptions();
-		bPlayerReadyGUI[dpid] = false;
+		bPlayerReadyGUI[playerIndex] = false;
 
 		// if skirmish and game full, then kick...
 		if(game.type == SKIRMISH && NetPlay.playercount > game.maxPlayers )
 		{
-			kickPlayer(dpid, "game is full!", ERROR_FULL);
+			kickPlayer(playerIndex, "game is full!", ERROR_FULL);
 		}
 	}
 	return true;

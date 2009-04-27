@@ -1341,7 +1341,7 @@ static bool deserializeSaveGameV31Data(PHYSFS_file* fileHandle, SAVE_GAME_V31* s
 	uint32_t        savePlayer;	\
 	char            sPName[32];	\
 	BOOL            multiPlayer;\
-	uint32_t        sPlayer2dpid[MAX_PLAYERS]
+	uint32_t        sPlayerIndex[MAX_PLAYERS]
 
 typedef struct save_game_v33
 {
@@ -1362,7 +1362,7 @@ static bool serializeSaveGameV33Data(PHYSFS_file* fileHandle, const SAVE_GAME_V3
 
 	for (i = 0; i < MAX_PLAYERS; ++i)
 	{
-		if (!PHYSFS_writeUBE32(fileHandle, serializeGame->sPlayer2dpid[i]))
+		if (!PHYSFS_writeUBE32(fileHandle, serializeGame->sPlayerIndex[i]))
 			return false;
 	}
 
@@ -1386,7 +1386,7 @@ static bool deserializeSaveGameV33Data(PHYSFS_file* fileHandle, SAVE_GAME_V33* s
 
 	for (i = 0; i < MAX_PLAYERS; ++i)
 	{
-		if (!PHYSFS_readUBE32(fileHandle, &serializeGame->sPlayer2dpid[i]))
+		if (!PHYSFS_readUBE32(fileHandle, &serializeGame->sPlayerIndex[i]))
 			return false;
 	}
 
@@ -3925,7 +3925,7 @@ static void endian_SaveGameV(SAVE_GAME* psSaveGame, UDWORD version)
 		endian_udword(&psSaveGame->sNetPlay.playercount);
 		endian_udword(&psSaveGame->savePlayer);
 		for(i = 0; i < MAX_PLAYERS; i++)
-			endian_udword(&psSaveGame->sPlayer2dpid[i]);
+			endian_udword(&psSaveGame->sPlayerIndex[i]);
 	}
 	/* GAME_SAVE_V31 includes GAME_SAVE_V30 */
 	if(version >= VERSION_31) {
@@ -4938,7 +4938,7 @@ static bool writeGameFile(const char* fileName, SDWORD saveType)
 	strcpy(saveGame.sPName, getPlayerName(selectedPlayer));
 	for (i = 0; i < MAX_PLAYERS; ++i)
 	{
-		saveGame.sPlayer2dpid[i] = i;
+		saveGame.sPlayerIndex[i] = i;
 	}
 
 	//version 34

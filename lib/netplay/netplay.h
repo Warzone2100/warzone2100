@@ -245,7 +245,7 @@ extern BOOL	NETfindGame(void);		// find games being played(uses GAME_GUID);
 extern BOOL	NETjoinGame(UDWORD gameNumber, const char* playername);			// join game given with playername
 extern BOOL	NEThostGame(const char* SessionName, const char* PlayerName,// host a game
 			    SDWORD one, SDWORD two, SDWORD three, SDWORD four, UDWORD plyrs);
-extern BOOL	NETchangePlayerName(UDWORD dpid, char *newName);// change a players name.
+extern BOOL	NETchangePlayerName(UDWORD player, char *newName);// change a players name.
 
 #include "netlog.h"
 

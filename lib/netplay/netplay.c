@@ -66,20 +66,20 @@ unsigned int masterserver_port = 0, gameserver_port = 0;
 // HACK(s) to allow us to call a src/multi*.c function
 extern void recvMultiStats(void);								// from src/multistat.c
 extern BOOL sendTextMessage(const char *pStr, BOOL all);		// from src/multiplay.c
-extern BOOL MultiPlayerJoin(UDWORD dpid);						// from src/multijoin.c
-extern BOOL MultiPlayerLeave(UDWORD dpid);						// from src/multijoin.c
+extern BOOL MultiPlayerJoin(UDWORD playerIndex);				// from src/multijoin.c
+extern BOOL MultiPlayerLeave(UDWORD playerIndex);				// from src/multijoin.c
 extern void ShowMOTD(void);																// from src/multijoin.c
 extern void kickPlayer(uint32_t player_id, const char *reason, LOBBY_ERROR_TYPES type);	// from src/multiinit.c
 extern void setLobbyError (LOBBY_ERROR_TYPES error_type);							// from src/multiinit.c
 extern LOBBY_ERROR_TYPES getLobbyError(void);										// from src/multiinit.c
 // ////////////////////////////////////////////////////////////////////////
 // Function prototypes
-void NETplayerLeaving(UDWORD dpid);		// Cleanup sockets on player leaving (nicely)
-void NETplayerDropped(UDWORD dpid);		// Broadcast NET_PLAYER_DROPPED & cleanup
+void NETplayerLeaving(UDWORD player);		// Cleanup sockets on player leaving (nicely)
+void NETplayerDropped(UDWORD player);		// Broadcast NET_PLAYER_DROPPED & cleanup
 static void NETallowJoining(void);
 static void sendVersionCheck(void);
 static void recvVersionCheck(void);
-static void VersionCheckTimeOut( uint32_t victimdpid );
+static void VersionCheckTimeOut( uint32_t victim );
 
 
 void NETGameLocked( bool flag);
@@ -139,7 +139,7 @@ char iptoconnect[PATH_MAX] = "\0"; // holds IP/hostname from command line
 extern int NET_PlayerConnectionStatus;		// from src/display3d.c
 extern LOBBY_ERROR_TYPES LobbyError;		// from src/multiint.c
 
-//time when check sent. Note, uses dpid, & using 0xffffffff to signal nothing sent yet.
+//time when check sent. Note, using 0xffffffff to signal nothing sent yet.
 uint32_t VersionCheckTime[MAX_PLAYERS] = {-1, -1, -1, -1, -1, -1, -1, -1};
 static BOOL playerVersionFlag[MAX_PLAYERS] = {false};	// we kick on false
 static bool playerPasswordFlag[MAX_PLAYERS] = {false};		// we kick on false
@@ -168,7 +168,7 @@ static void sendVersionCheck(void)
 		NETint32_t(&NETCODE_HASH);
 	NETend();
 
-	debug(LOG_NET, "sending dpid %u, version string [%s]", selectedPlayer, VersionString);
+	debug(LOG_NET, "sending player %u, version string [%s]", selectedPlayer, VersionString);
 }
 
 // Checks the version string, and if they are not the same, we auto-kick the player.

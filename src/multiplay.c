@@ -1197,7 +1197,7 @@ void displayAIMessage(char *pStr, SDWORD from, SDWORD to)
 // Write a message to the console.
 BOOL recvTextMessage()
 {
-	UDWORD	dpid;
+	UDWORD	playerIndex;
 	char	msg[MAX_CONSOLE_STRING_LENGTH];
 	char newmsg[MAX_CONSOLE_STRING_LENGTH];
 
@@ -1206,27 +1206,27 @@ BOOL recvTextMessage()
 
 	NETbeginDecode(NET_TEXTMSG);
 		// Who this msg is from
-		NETuint32_t(&dpid);
+		NETuint32_t(&playerIndex);
 		// The message to send
 		NETstring(newmsg, MAX_CONSOLE_STRING_LENGTH);
 	NETend();
 
-	if (dpid >= MAX_PLAYERS)
+	if (playerIndex >= MAX_PLAYERS)
 	{
 		return false;
 	}
 
-	sstrcpy(msg, NetPlay.players[dpid].name);
+	sstrcpy(msg, NetPlay.players[playerIndex].name);
 	// Seperator
 	sstrcat(msg, ": ");
 	// Add message
 	sstrcat(msg, newmsg);
 
-	addConsoleMessage(msg, DEFAULT_JUSTIFY, dpid);
+	addConsoleMessage(msg, DEFAULT_JUSTIFY, playerIndex);
 
 	// Multiplayer message callback
 	// Received a console message from a player, save
-	MultiMsgPlayerFrom = dpid;
+	MultiMsgPlayerFrom = playerIndex;
 	MultiMsgPlayerTo = selectedPlayer;
 
 	sstrcpy(MultiplayMsg, newmsg);

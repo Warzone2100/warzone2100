@@ -42,7 +42,7 @@ extern BOOL addMultiBut(W_SCREEN *screen, UDWORD formid, UDWORD id, UDWORD x, UD
 
 extern	char	sPlayer[128];
 
-void	kickPlayer(uint32_t dpid, const char *reason, LOBBY_ERROR_TYPES type);
+void	kickPlayer(uint32_t player_id, const char *reason, LOBBY_ERROR_TYPES type);
 UDWORD	addPlayerBox(BOOL);			// players (mid) box
 void loadMapPreview(void);
 
