@@ -39,6 +39,9 @@ def _encodeCString(string, buf_len):
 	# Make sure *not* to use a unicode string
 	return str(string)
 
+def _swap_endianness(i):
+	return struct.unpack(">I", struct.pack("<I", i))
+
 class Protocol(object):
 	# Size of a single game is undefined at compile time
 	size = None
@@ -103,11 +106,20 @@ class BinaryProtocol(Protocol):
 
 	def encodeSingle(self, game):
 		if   parse_version('2.0') <= parse_version(self.version) < parse_version('2.2'):
+			maxPlayers     = game.maxPlayers
+			currentPlayers = game.currentPlayers
+
+			# Workaround the fact that the 2.0.x versions don't
+			# perform endian swapping
+			if parse_version('2.0') <= parse_version(self.version) < parse_version('2.1'):
+				maxPlayers     = _swap_endianness(maxPlayers)
+				currentPlayers = _swap_endianness(currentPlayers)
+
 			return self.gameFormat.pack(
 				self._encodeName(game),
 				game.size or self.size, game.flags,
 				self._encodeHost(game),
-				game.maxPlayers, game.currentPlayers, game.user1, game.user2, game.user3, game.user4)
+				maxPlayers, currentPlayers, game.user1, game.user2, game.user3, game.user4)
 		elif parse_version('2.2') <= parse_version(self.version):
 			return self.gameFormat.pack(
 				self._encodeName(game),
@@ -139,6 +151,12 @@ class BinaryProtocol(Protocol):
 				game.misc, game.extra, decData['multiplayer-version'], game.modlist, game.lobbyVersion,
 				game.game_version_major, game.game_version_minor, game.private, game.pure, game.Mods, game.future1,
 				game.future2, game.future3, game.future4) = self.gameFormat.unpack(data)
+
+		# Workaround the fact that the 2.0.x versions don't perform
+		# endian swapping
+		if   parse_version('2.0') <= parse_version(self.version) < parse_version('2.1'):
+			game.maxPlayers = _swap_endianness(game.maxPlayers)
+			game.currentPlayers = _swap_endianness(game.currentPlayers)
 
 		for strKey in ['name', 'host', 'multiplayer-version']:
 			decData[strKey] = decData[strKey].strip("\0")
