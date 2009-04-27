@@ -71,7 +71,7 @@ class BinaryProtocol(Protocol):
 	versionstring_length = 64
 	modlist_length       = 255
 
-	gameFormat['2.2'] = gameFormat['2.0'] + '%ds%ds%ds%ds10I' misc_length, extra_length, versionstring_length, modlist_length)
+	gameFormat['2.2'] = gameFormat['2.0'] + '%ds%ds%ds%ds10I' % (misc_length, extra_length, versionstring_length, modlist_length)
 
 	countFormat = '!I'
 	countSize = struct.calcsize(countFormat)
@@ -152,5 +152,5 @@ class BinaryProtocol(Protocol):
 	def decodeMultiple(self, data):
 		countMsg = data[:countSize]
 		data = data[countSize:]
-		count = struct.pack(self.countFormat, countMsg)
+		count = struct.unpack(self.countFormat, countMsg)
 		return [self.decodeSingle(data[size * i: size * i + size]) for i in range(count)]
