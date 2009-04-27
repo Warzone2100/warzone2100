@@ -211,7 +211,7 @@ void recvOptions()
 		uint32_t player = selectedPlayer;
 
 		// Request the map from the host
-		NETbeginEncode(NET_REQUESTMAP, NetPlay.hostPlayer);
+		NETbeginEncode(NET_REQUESTMAP, NET_HOST_ONLY);
 		NETuint32_t(&player);
 		NETend();
 

@@ -1318,7 +1318,7 @@ static BOOL SendTeamRequest(UBYTE player, UBYTE chosenTeam)
 	}
 	else
 	{
-		NETbeginEncode(NET_TEAMREQUEST, NetPlay.hostPlayer);
+		NETbeginEncode(NET_TEAMREQUEST, NET_HOST_ONLY);
 
 		NETuint8_t(&player);
 		NETuint8_t(&chosenTeam);
@@ -1468,7 +1468,7 @@ static BOOL SendColourRequest(UBYTE player, UBYTE col)
 	else
 	{
 		// clients tell the host which color they want
-		NETbeginEncode(NET_COLOURREQUEST, 0);
+		NETbeginEncode(NET_COLOURREQUEST, NET_HOST_ONLY);
 			NETuint8_t(&player);
 			NETuint8_t(&col);
 		NETend();
@@ -1485,7 +1485,7 @@ static BOOL SendPositionRequest(UBYTE player, UBYTE position)
 	else
 	{
 		// clients tell the host which position they want
-		NETbeginEncode(NET_POSITIONREQUEST, 0);
+		NETbeginEncode(NET_POSITIONREQUEST, NET_HOST_ONLY);
 			NETuint8_t(&player);
 			NETuint8_t(&position);
 		NETend();

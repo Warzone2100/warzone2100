@@ -490,7 +490,7 @@ UDWORD  whosResponsible(UDWORD player)
 	}
 	else
 	{
-		return NetPlay.hostPlayer;	// host responsible for all AIs
+		return NET_HOST_ONLY;	// host responsible for all AIs
 	}
 }
 

@@ -161,6 +161,7 @@ typedef struct
 // Message information. ie. the packets sent between machines.
 
 #define NET_ALL_PLAYERS 255
+#define NET_HOST_ONLY 0
 
 typedef struct {
 	uint16_t	size;				// used size of body

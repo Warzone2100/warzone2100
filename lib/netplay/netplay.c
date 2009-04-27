@@ -249,7 +249,7 @@ void NETCheckVersion(uint32_t player)
 	// When flag is true, means we have received the check OK
 	if (NetPlay.players[player].playerVersionFlag == false)
 	{
-		if (player != NetPlay.hostPlayer)
+		if (player != NET_HOST_ONLY)
 		{
 			VersionCheckTimeOut(player);
 		}
@@ -285,7 +285,7 @@ void sendPasswordCheck(void)
 	uint32_t player = selectedPlayer;
 
 	NETlogEntry("Sending password check", 0, 0);
-	NETbeginEncode(NET_PASSWORD_CHECK, NetPlay.hostPlayer);
+	NETbeginEncode(NET_PASSWORD_CHECK, NET_HOST_ONLY);
 		NETuint32_t(&player);
 		NETstring( NetPlay.gamePassword, sizeof(NetPlay.gamePassword) );
 	NETend();
@@ -484,7 +484,7 @@ void NET_InitPlayers()
 		NetPlay.players[i].versionCheckTime = 0xffffffff;
 		NetPlay.players[i].playerVersionFlag = false;
 	}
-	NetPlay.hostPlayer = 0;	// right now, host starts always at index zero
+	NetPlay.hostPlayer = NET_HOST_ONLY;	// right now, host starts always at index zero
 	NetPlay.playercount = 0;
 	debug(LOG_NET, "Players initialized");
 }
@@ -2112,8 +2112,8 @@ BOOL NEThostGame(const char* SessionName, const char* PlayerName,
 
 	selectedPlayer= NET_CreatePlayer(PlayerName);
 	NetPlay.isHost	= true;
-	NetPlay.hostPlayer	= 0;
-	ASSERT(selectedPlayer == 0, "For now, host must start at player index zero, was %d", (int)selectedPlayer);
+	NetPlay.hostPlayer	= NET_HOST_ONLY;
+	ASSERT(selectedPlayer == NET_HOST_ONLY, "For now, host must start at player index zero, was %d", (int)selectedPlayer);
 
 	MultiPlayerJoin(selectedPlayer);
 
@@ -2161,9 +2161,9 @@ BOOL NETfindGame(void)
 
 	if(!NetPlay.bComms)
 	{
-		selectedPlayer	= 0;		// Host is always 0
+		selectedPlayer	= NET_HOST_ONLY;		// Host is always 0
 		NetPlay.isHost		= true;
-		NetPlay.hostPlayer		= 0;
+		NetPlay.hostPlayer	= NET_HOST_ONLY;
 		return true;
 	}
 	// We first check to see if we were given a IP/hostname from the command line
@@ -2334,7 +2334,7 @@ BOOL NETjoinGame(UDWORD gameNumber, const char* playername)
 	NET_initBufferedSocket(bsocket, tcp_socket);
 
 	// Send a join message to the host
-	NETbeginEncode(NET_JOIN, 0);
+	NETbeginEncode(NET_JOIN, NET_HOST_ONLY);
 		// Casting constness away, because NETstring is const-incorrect
 		// when sending/encoding a packet.
 		NETstring((char*)playername, 64);
