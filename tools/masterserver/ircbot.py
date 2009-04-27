@@ -30,7 +30,7 @@ import socket
 import struct
 import threading
 import time
-from client import *
+from protocol import *
 
 irc_server          = "irc.freenode.net"
 irc_port            = 6667
@@ -40,14 +40,15 @@ irc_nick            = "wzlobbybot"
 irc_nickpass        = None
 
 def main():
-    bot = Bot(irc_server, irc_port, irc_serve_channels, irc_silent_channels, irc_nick, irc_nickpass, "lobby.wz2100.net", 9997)
+    bot = Bot(irc_server, irc_port, irc_serve_channels, irc_silent_channels, irc_nick, irc_nickpass, "lobby.wz2100.net", '2.1')
     bot.start()
 
 class Bot:
-    def __init__(self, ircServer, ircPort, ircServeChannels, ircSilentChannels, ircNick, nickPass, lobbyServer, lobbyPort):
+    def __init__(self, ircServer, ircPort, ircServeChannels, ircSilentChannels, ircNick, nickPass, lobbyServer, lobbyVersion):
         self.commands = BotCommands(self)
         self.irc          = bot_connection(self.commands, ircServer, ircPort, ircServeChannels, ircSilentChannels, ircNick, nickPass)
-        self.lobby        = masterserver_connection(lobbyServer, lobbyPort, version='2.1')
+        self.lobby        = BinaryProtocol(lobbyVersion)
+        self.lobby.host = lobbyServer
         self.check        = change_notifier(self.irc, self.lobby)
 
     def start(self):
@@ -108,7 +109,7 @@ class BotCommands:
 
     def list(self, nick, write):
         try:
-            games = self.bot.lobby.list(allowException = True)
+            games = [game for game in self.bot.lobby.list(self.bot.lobby.host)]
             if not games:
                 write("%s: No games in lobby" % (nick))
             else:
@@ -120,7 +121,7 @@ class BotCommands:
                 message += ", ".join(l)
                 write("%s: %s" % (nick, message))
         except (socket.error, socket.herror, socket.gaierror, socket.timeout), e:
-            write("%s: Failed to communicate with the lobby (%s:%d): %s" % (nick, self.bot.lobby.host, self.bot.lobby.port, e))
+            write("%s: Failed to communicate with the lobby (%s:%d): %s" % (nick, self.bot.lobby.host, self.bot.lobby.gamePort, e))
 
     # TODO: if message.startswith("show") # join a game and show information about it
 
@@ -142,7 +143,10 @@ class change_notifier(threading.Thread):
     def run(self):
         self.stopChecking.clear()
         while not self.stopChecking.isSet():
-            new_games = self.lobby.list()
+            try:
+                new_games = [game for game in self.lobby.list(self.lobby.host)]
+            except:
+                new_games = []
             if self.games == None:
                 self.games = {}
                 for g in new_games:
@@ -150,7 +154,7 @@ class change_notifier(threading.Thread):
             else:
                 new_game_dict = {}
                 for g in new_games:
-                    if g.host in self.games and g.announce == True:
+                    if g.host in self.games and g.announce:
                         g.announce = False
                         message = "New game: \x02%s\x02 (%i players)" % (g.description, g.maxPlayers)
                         if not g.host in self.timestamps:
