@@ -409,7 +409,7 @@ void kf_ToggleFPS(void) //This shows *just FPS* and is always visable (when acti
 }
 void kf_ToggleSamples(void) //Displays number of sound sample in the sound queues & lists.
 {
-	// Toggle the boolean value of showFPS
+	// Toggle the boolean value of showSAMPLES
 	showSAMPLES = !showSAMPLES;
 
 	CONPRINTF(ConsoleString, (ConsoleString, "Sound Samples displayed is %s", showSAMPLES ? "Enabled" : "Disabled"));
@@ -417,7 +417,7 @@ void kf_ToggleSamples(void) //Displays number of sound sample in the sound queue
 
 void kf_ToggleOrders(void)	// Displays orders & action of currently selected unit.
 {
-		// Toggle the boolean value of showFPS
+		// Toggle the boolean value of showORDERS
 		showORDERS = !showORDERS;
 		CONPRINTF(ConsoleString, (ConsoleString, "Unit Order/Action displayed is %s", showORDERS ? "Enabled" : "Disabled"));
 }
