@@ -19,11 +19,22 @@ from __future__ import with_statement
 #
 ################################################################################
 # Get the things we need.
+from contextlib import contextmanager
+import logging
+import socket
 import struct
 from pkg_resources import parse_version
 from game import *
 
 __all__ = ['Protocol', 'BinaryProtocol']
+
+@contextmanager
+def _socket(family = socket.AF_INET, type = socket.SOCK_STREAM, proto = 0):
+	s = socket.socket(family, type, proto)
+	try:
+		yield s
+	finally:
+		s.close()
 
 def _encodeCString(string, buf_len):
 	# If we haven't got a string return an empty one
@@ -58,6 +69,9 @@ class Protocol(object):
 	def decodeMultiple(data):
 		pass
 
+	def check(game):
+		pass
+
 class BinaryProtocol(Protocol):
 	# Binary struct format to use (GAMESTRUCT)
 	gameFormat = {}
@@ -76,16 +90,21 @@ class BinaryProtocol(Protocol):
 
 	gameFormat['2.2'] = struct.Struct(gameFormat['2.0'].format + '%ds%ds%ds%ds10I' % (misc_length, extra_length, versionstring_length, modlist_length))
 
+	# Gameserver port.
+	gamePort = {'2.0': 9999,
+	            '2.2': 2100}
+
 	countFormat = struct.Struct('!I')
 
 	size = property(fget = lambda self: self.gameFormat.size)
 
 	def __init__(self, version = '2.2'):
-		# Size of a single game = sizeof(GAMESTRUCT)
 		if   parse_version('2.0') <= parse_version(version) < parse_version('2.2'):
 			self.gameFormat = BinaryProtocol.gameFormat['2.0']
+			self.gamePort   = BinaryProtocol.gamePort['2.0']
 		elif parse_version('2.2') <= parse_version(version):
 			self.gameFormat = BinaryProtocol.gameFormat['2.2']
+			self.gamePort   = BinaryProtocol.gamePort['2.2']
 
 		self.version = version
 
@@ -176,3 +195,15 @@ class BinaryProtocol(Protocol):
 	def decodeMultiple(self, data):
 		(count,) = self.countFormat.unpack_from(data)
 		return [self.decodeSingle(data, offset=(size * i + self.countFormat.size)) for i in xrange(count)]
+
+	def check(self, game):
+		"""Check we can connect to the game's host."""
+		with _socket() as s:
+			try:
+				logging.debug("Checking %s's vitality..." % game.host)
+				s.settimeout(10.0)
+				s.connect((game.host, self.gamePort))
+				return True
+			except (socket.error, socket.herror, socket.gaierror, socket.timeout), e:
+				logging.debug("%s did not respond: %s" % (game.host, e))
+				return False
