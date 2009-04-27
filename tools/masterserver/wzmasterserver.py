@@ -44,6 +44,7 @@ import socket
 from threading import Lock, Thread, Event, Timer
 import select
 import logging
+import traceback
 import cmd
 from game import *
 from protocol import *
@@ -188,9 +189,12 @@ class RequestHandler(SocketServer.ThreadingMixIn, SocketServer.StreamRequestHand
 
 						gamedb.listGames()
 				except struct.error, e:
-					logging.warning("(%s) Data decoding error: %s" % (gameHost, e))
+					logging.warning("(%s) Data decoding error: %s" % (gameHost, traceback.format_exc()))
 				except KeyError, e:
-					logging.warning("(%s) Communication error: %s" % (gameHost, e))
+					logging.warning("(%s) Communication error: %s" % (gameHost, traceback.format_exc()))
+				except:
+					logging.error("(%s) Unhandled exception: %s" % (gameHost, traceback.format_exc()))
+					raise
 				finally:
 					if g:
 						gamedb.removeGame(g)
@@ -199,14 +203,18 @@ class RequestHandler(SocketServer.ThreadingMixIn, SocketServer.StreamRequestHand
 			elif netCommand == 'list':
 				# Lock the gamelist to prevent new games while output.
 				with gamedblock:
-					gamesCount = len(gamedb.getGames())
-					logging.debug("(%s) Gameserver list: %i game(s)" % (gameHost, gamesCount))
+					try:
+						gamesCount = len(gamedb.getGames())
+						logging.debug("(%s) Gameserver list: %i game(s)" % (gameHost, gamesCount))
 
-					# Transmit the games.
-					for game in gamedb.getGames():
-						logging.debug(" %s" % game)
-					self.wfile.write(protocol.encodeMultiple(gamedb.getGames()))
-					break
+						# Transmit the games.
+						for game in gamedb.getGames():
+							logging.debug(" %s" % game)
+						self.wfile.write(protocol.encodeMultiple(gamedb.getGames()))
+						break
+					except:
+						logging.error("(%s) Unhandled exception: %s" % (gameHost, traceback.format_exc()))
+						raise
 
 			# If something unknown appears.
 			else:
