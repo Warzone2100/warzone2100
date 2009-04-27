@@ -234,22 +234,6 @@ void scrSaveState(const char *directory)
 	}
 }
 
-void scriptTick()
-{
-	int i;
-	for(i=99;i>=0;i--)
-	{
-		if(!lua_states[i])
-		{
-			continue;
-		}
-		/* push functions and arguments */
-		lua_getglobal(lua_states[i], "tick");  /* function to be called */
-		luaWZ_pcall_backtrace(lua_states[i], 0, 0);
-	}
-}
-
-
 // Initialise the script library
 BOOL scriptInitialise()
 {

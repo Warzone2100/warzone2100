@@ -1250,6 +1250,7 @@ void eventFireCallbackTrigger(TRIGGER_TYPE trigger)
 			case CALL_START_NEXT_LEVEL:
 			case CALL_TRANSPORTER_REINFORCE:
 			case CALL_VIDEO_QUIT:
+			case CALL_EVERY_FRAME:
 				// no args
 				break;
 			default:

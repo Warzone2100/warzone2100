@@ -52,6 +52,7 @@ end
 function callbackEvent(handler, event)
 	--print('adding callback for '..event)
 	local new_event = {}
+	if event == nil then error("nil event") end
 	new_event.type = 'callback'
 	new_event.id = event
 	new_event.enabled = true
@@ -67,7 +68,7 @@ function deactivateEvent(handler)
 	end
 end
 
--- will process all conditional events, executed every tick
+-- will process all conditional events, executed every frame
 function processEvents()
 	local now = getGameTime()
 	-- iterate over all of them
@@ -91,6 +92,7 @@ function processEvents()
 		end
 	end
 end
+callbackEvent(processEvents, CALL_EVERY_FRAME)
 
 ---------------------------------
 -- Pretty backtraces
@@ -98,7 +100,7 @@ function _event.pack(a, ...)
 	return a, arg
 end
 
-function _event.call_with_backtrace(f, arg)
+function _event.call_with_backtrace(f, arg) -- has an override in version.lua
 	local run_function = function () return f(unpack(arg)) end
 	local result, returns = _event.pack(xpcall(run_function, debug.traceback))
 	if not result then
@@ -118,98 +120,29 @@ end
 -- wrapper to make sure that an event handler is not executing twice at the
 -- same time
 function _event.disable_run_enable(handler, ...)
+	local old = _event.event_list[handler]
 	if _event.event_list[handler] then -- could be deactivated
 		_event.event_list[handler].enabled_stored = _event.event_list[handler].enabled
 		_event.event_list[handler].enabled = false
 	end
-	--[[if arg then
-		print('disable_run_enable')
-		for i,v in ipairs(arg) do
-			print(tostring(i)..':'..tostring(v))
-		end
-	end]]--
+
 	local results = {_event.call_with_backtrace(handler, arg)}
-	if _event.event_list[handler] then -- could be deactivated
+
+	if _event.event_list[handler] and old == _event.event_list[handler] then -- could be deactivated or reactivated
 		_event.event_list[handler].enabled = _event.event_list[handler].enabled_stored
 	end
 	return unpack(results)
 end
 
--- run the handler as a coroutine to intercept the yields produced by pause
--- handler can be a function or a thread, the thread will be resumed
-function _event.run_event(handler, parameters)
-	--[[if parameters then
-		print('run_event')
-		for i,v in ipairs(parameters) do
-			print(tostring(i)..':'..tostring(v))
-		end
-	end]]--
-	local results, co
-	parameters = parameters or {}
-	-- first make sure we have a coroutine
-	if type(handler) == 'function' then
-		co = coroutine.create(_event.disable_run_enable)
-		-- run it
-		results = {coroutine.resume(co, handler, unpack(parameters))}
-	elseif type(handler) == 'thread' then
-		co = handler
-		-- run it
-		results = {coroutine.resume(co, unpack(parameters))}
-	else
-		error('handler is not a function or a thread')
-	end
-
-	-- check what to do with it
-	if coroutine.status(co) == 'suspended' then
-		-- it called yield, well, what does it want
-
-		if results[2] == 'pause' then
-			-- pause(time)
-			-- schedule it to be resumed after the specified time
-			delayedEvent(co, results[3])
-		elseif results[2] == 'sound' then
-			print('inserting sound finished')
-			callbackEvent(co, CALL_SOUND_FINISHED)
-		else
-			error('yield returned unsupported request '..results[2])
-		end
-	elseif coroutine.status(co) == 'dead' and type(handler) == 'thread' then
-		_event.event_list[handler].enabled = false
-	end
-end
-
--- pause execution of an event handler for a certain time
--- WARNING: when the game is saved, this function will return immedeately
--- use only "for effect", to make it less obvious that you are acting on
--- the destruction of a building, or the fact that an unit has been spotted
--- if you need a reliable pause, use delayedEvent
-function pause(time)
-	--print('entering pause')
-	if not _event.saving then
-		coroutine.yield('pause', time)
-	end
-	--print('leaving pause')
-end
-
--- called every frame by C
-function tick()
-	processEvents()
+function _event.run_event(handler, ...) -- has an override in version.lua
+	_event.disable_run_enable(handler, unpack(arg))
 end
 
 -- called from C when a callback event occurs
 function doCallbacksFor(event, ...)
-	--print('callback for '..event)
 	for h, e in pairs(_event.event_list) do
-		--print('iterating...')
-		--print(e.type)
-		--print(e.enabled)
-		--print(e.id)
 		if e.type == 'callback' and e.enabled and e.id == event then
-			--[[print('found handler, calling')
-			for i,v in ipairs(arg) do
-				print(tostring(i)..':'..tostring(v))
-			end]]--
-			_event.run_event(h, arg)
+			_event.run_event(h, unpack(arg))
 		end
 	end
 end

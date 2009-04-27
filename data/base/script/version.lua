@@ -29,6 +29,7 @@ function version(v)
 	if v > current_version then
 		error("This script is written using script version "..v.." while this build of Warzone 2100 only supports versions 0-"..current_version)
 	end
+	VERSION = v -- set the global version
 
 	if v < 1 then
 		-- Version 0 are the scripts that are converted using wz2lua
@@ -128,6 +129,69 @@ function version(v)
 		_addPower = addPower
 		function addPower(power, player)
 			return _addPower(player, power) -- swap arguments
+		end
+
+		-------------------------------------------------
+		-- event stuff (to support the "pause" function)
+		-- pause execution of an event handler for a certain time
+		-- WARNING: when the game is saved, this function will return immedeately
+		-- use only "for effect", to make it less obvious that you are acting on
+		-- the destruction of a building, or the fact that an unit has been spotted
+		-- if you need a reliable pause, use delayedEvent
+		function pause(time)
+			--print('entering pause')
+			if not _event.saving then
+				coroutine.yield('pause', time)
+			end
+			--print('leaving pause')
+		end
+
+		function _event.call_with_backtrace(f, arg)
+			return f(unpack(arg)) -- no bactrace here!
+		end
+
+		-- run the handler as a coroutine to intercept the yields produced by pause
+		-- handler can be a function or a thread, the thread will be resumed
+		function _event.run_event(handler, ...)
+			--[[if parameters then
+				print('run_event')
+				for i,v in ipairs(parameters) do
+					print(tostring(i)..':'..tostring(v))
+				end
+			end]]--
+			local results, co
+			parameters = parameters or {}
+			-- first make sure we have a coroutine
+			if type(handler) == 'function' then
+				co = coroutine.create(_event.disable_run_enable)
+				-- run it
+				results = {coroutine.resume(co, handler, unpack(arg))}
+			elseif type(handler) == 'thread' then
+				co = handler
+				-- run it
+				results = {coroutine.resume(co, unpack(arg))}
+			else
+				error('handler is not a function or a thread')
+			end
+
+			-- check what to do with it
+			if coroutine.status(co) == 'suspended' then
+				-- it called yield, well, what does it want
+
+				if results[2] == 'pause' then
+					-- pause(time)
+					-- schedule it to be resumed after the specified time
+					delayedEvent(co, results[3])
+				elseif results[2] == 'sound' then
+					print('inserting sound finished')
+					callbackEvent(co, CALL_SOUND_FINISHED)
+				else
+					error('yield returned unsupported request '..results[2])
+				end
+			elseif coroutine.status(co) == 'dead' and type(handler) == 'thread' then
+				_event.event_list[handler].enabled = false
+			end
+
 		end
 	end
 end

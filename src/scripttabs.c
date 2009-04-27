@@ -791,6 +791,7 @@ CONST_SYMBOL asConstantTable[] =
 	{ "CALL_VTOL_OFF_MAP",		VAL_INT,	false,		CALL_VTOL_OFF_MAP,		NULL, NULL, 0.0f },
 	{ "CALL_KEY_PRESSED",		VAL_INT,	false,		CALL_KEY_PRESSED,		NULL, NULL, 0.0f },
 
+	{ "CALL_EVERY_FRAME",		VAL_INT,	false,		CALL_EVERY_FRAME,		NULL, NULL, 0.0f },
 
 	/* This entry marks the end of the constant list */
 	{ "CONSTANT LIST END",VAL_VOID,	false,		0,	NULL, NULL, 0.0f }

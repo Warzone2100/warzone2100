@@ -180,7 +180,7 @@ GAMECODE gameLoop(void)
 		
 		if (!scriptPaused() && !editPaused())
 		{
-			scriptTick();
+			eventFireCallbackTrigger(CALL_EVERY_FRAME);
 			/* Update the event system */
 			if (!bInTutorial)
 			{
