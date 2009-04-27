@@ -52,7 +52,7 @@ class Protocol(object):
 	def encodeMultiple(data):
 		pass
 
-	def decodeSingle(data, game = Game(None)):
+	def decodeSingle(data, game = Game()):
 		pass
 
 	def decodeMultiple(data):
@@ -139,7 +139,7 @@ class BinaryProtocol(Protocol):
 			message += self.encodeSingle(game)
 		return message
 
-	def decodeSingle(self, data, game = Game(None), offset = None):
+	def decodeSingle(self, data, game = Game(), offset = None):
 		decData = {}
 
 		if offset != None:
