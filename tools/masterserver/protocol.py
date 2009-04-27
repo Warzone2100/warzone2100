@@ -49,7 +49,7 @@ class Protocol(object):
 	def encodeMultiple(data):
 		pass
 
-	def decodeSingle(data):
+	def decodeSingle(data, game = Game(None)):
 		pass
 
 	def decodeMultiple(data):
@@ -63,7 +63,7 @@ class BinaryProtocol(Protocol):
 	name_length          = 64
 	host_length          = 16
 
-	gameFormat['2.0'] = '!%dsII%ds6I' % (name_length, host_length)
+	gameFormat['2.0'] = struct.Struct('!%dsII%ds6I' % (name_length, host_length))
 
 	# >= 2.2 data
 	misc_length          = 64
@@ -71,17 +71,18 @@ class BinaryProtocol(Protocol):
 	versionstring_length = 64
 	modlist_length       = 255
 
-	gameFormat['2.2'] = gameFormat['2.0'] + '%ds%ds%ds%ds10I' % (misc_length, extra_length, versionstring_length, modlist_length)
+	gameFormat['2.2'] = struct.Struct(gameFormat['2.0'].format + '%ds%ds%ds%ds10I' % (misc_length, extra_length, versionstring_length, modlist_length))
 
-	countFormat = '!I'
-	countSize = struct.calcsize(countFormat)
+	countFormat = struct.Struct('!I')
+
+	size = property(fget = lambda self: self.gameFormat.size)
 
 	def __init__(self, version = '2.2'):
 		# Size of a single game = sizeof(GAMESTRUCT)
-		if   parse_version(version) >= parse_version('2.0'):
-			self.size = struct.calcsize(self.gameFormat['2.0'])
-		elif parse_version(version) >= parse_version('2.2'):
-			self.size = struct.calcsize(self.gameFormat['2.2'])
+		if   parse_version('2.0') <= parse_version(version) < parse_version('2.2'):
+			self.gameFormat = BinaryProtocol.gameFormat['2.0']
+		elif parse_version('2.2') <= parse_version(version):
+			self.gameFormat = BinaryProtocol.gameFormat['2.2']
 
 		self.version = version
 
@@ -101,14 +102,14 @@ class BinaryProtocol(Protocol):
 		return _encodeCString(game.multiplayerVersion, self.versionstring_length)
 
 	def encodeSingle(self, game):
-		if   parse_version(self.version) >= parse_version('2.0'):
-			return struct.pack(self.gameFormat,
+		if   parse_version('2.0') <= parse_version(self.version) < parse_version('2.2'):
+			return self.gameFormat.pack(
 				self._encodeName(game),
 				game.size or self.size, game.flags,
 				self._encodeHost(game),
 				game.maxPlayers, game.currentPlayers, game.user1, game.user2, game.user3, game.user4)
-		elif parse_version(self.version) >= parse_version('2.2'):
-			return struct.pack(self.gameFormat,
+		elif parse_version('2.2') <= parse_version(self.version):
+			return self.gameFormat.pack(
 				self._encodeName(game),
 				game.size or self.size, game.flags,
 				self._encodeHost(game),
@@ -121,7 +122,7 @@ class BinaryProtocol(Protocol):
 				game.pure, game.Mods, game.future1, game.future2, game.future3, game.future4)
 
 	def encodeMultiple(self, games):
-		message = struct.pack(self.countFormat, len(games))
+		message = self.countFormat.pack(len(games))
 		for game in games:
 			message += self.encodeSingle(game)
 		return message
@@ -129,15 +130,15 @@ class BinaryProtocol(Protocol):
 	def decodeSingle(self, data, game = Game(None)):
 		decData = {}
 
-		if   parse_version(self.version) >= parse_version('2.0'):
+		if   parse_version('2.0') <= parse_version(self.version) < parse_version('2.2'):
 			(decData['name'], game.size, game.flags, decData['host'], game.maxPlayers, game.currentPlayers,
-				game.user1, game.user2, game.user3, game.user4) = struct.unpack(self.gameFormat, data)
-		elif parse_version(self.version) >= parse_version('2.2'):
+				game.user1, game.user2, game.user3, game.user4) = self.gameFormat.unpack(data)
+		elif parse_version('2.2') <= parse_version(self.version):
 			(decData['name'], game.size, game.flags, decData['host'], game.maxPlayers, game.currentPlayers,
 				game.user1, game.user2, game.user3, game.user4,
 				game.misc, game.extra, decData['multiplayer-version'], game.modlist, game.lobbyVersion,
 				game.game_version_major, game.game_version_minor, game.private, game.pure, game.Mods, game.future1,
-				game.future2, game.future3, game.future4) = struct.unpack(self.gameFormat, data)
+				game.future2, game.future3, game.future4) = self.gameFormat.unpack(data)
 
 		for strKey in ['name', 'host', 'multiplayer-version']:
 			decData[strKey] = decData[strKey].strip("\0")
@@ -150,7 +151,7 @@ class BinaryProtocol(Protocol):
 		return game
 
 	def decodeMultiple(self, data):
-		countMsg = data[:countSize]
-		data = data[countSize:]
-		count = struct.unpack(self.countFormat, countMsg)
+		countMsg = data[:self.countFormat.size]
+		data = data[self.countFormat.size:]
+		count = self.countFormat.unpack(countMsg)
 		return [self.decodeSingle(data[size * i: size * i + size]) for i in range(count)]
