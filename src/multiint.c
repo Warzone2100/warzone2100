@@ -1467,7 +1467,8 @@ static BOOL SendColourRequest(UBYTE player, UBYTE col)
 	}
 	else
 	{
-		NETbeginEncode(NET_COLOURREQUEST, NET_ALL_PLAYERS);
+		// clients tell the host which color they want
+		NETbeginEncode(NET_COLOURREQUEST, 0);
 			NETuint8_t(&player);
 			NETuint8_t(&col);
 		NETend();
@@ -1483,7 +1484,8 @@ static BOOL SendPositionRequest(UBYTE player, UBYTE position)
 	}
 	else
 	{
-		NETbeginEncode(NET_COLOURREQUEST, NET_ALL_PLAYERS);
+		// clients tell the host which position they want
+		NETbeginEncode(NET_POSITIONREQUEST, 0);
 			NETuint8_t(&player);
 			NETuint8_t(&position);
 		NETend();
