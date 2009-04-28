@@ -460,7 +460,7 @@ void orderUpdateDroid(DROID *psDroid)
 	case DORDER_RETREAT:
 	case DORDER_DESTRUCT:
 		// Just wait for the action to finish then clear the order
-		if (psDroid->action == DACTION_NONE)
+		if (psDroid->action == DACTION_NONE || psDroid->action == DACTION_ATTACK)
 		{
 			psDroid->order = DORDER_NONE;
 			setDroidTarget(psDroid, NULL);
@@ -878,8 +878,9 @@ void orderUpdateDroid(DROID *psDroid)
 	case DORDER_RTR_SPECIFIED:
 		if (psDroid->psTarget == NULL)
 		{
+			// Our target got lost. Let's try again.
 			psDroid->order = DORDER_NONE;
-			actionDroid(psDroid, DACTION_NONE);
+			orderDroid(psDroid, DORDER_RTR);
 		}
 		else if (psDroid->action == DACTION_NONE)
 		{

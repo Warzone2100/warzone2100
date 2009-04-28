@@ -2293,23 +2293,29 @@ void	renderStructure(STRUCTURE *psStructure)
 							REPAIR_FACILITY* psRepairFac = &psStructure->pFunctionality->repairFacility;
 							// draw repair flash if the Repair Facility has a target which it has started work on
 							if (weaponImd[i]->nconnectors && psRepairFac->psObj != NULL
-								&& psRepairFac->psObj->type == OBJ_DROID
-								&& ((DROID *)psRepairFac->psObj)->action == DACTION_WAITDURINGREPAIR )
+								&& psRepairFac->psObj->type == OBJ_DROID)
 							{
-								iIMDShape	*pRepImd;
+								DROID *psDroid = (DROID *)psRepairFac->psObj;
+								SDWORD xdiff, ydiff;
+								xdiff = (SDWORD)psDroid->pos.x - (SDWORD)psStructure->pos.x;
+								ydiff = (SDWORD)psDroid->pos.y - (SDWORD)psStructure->pos.y;
+								if (xdiff * xdiff + ydiff * ydiff <= (TILE_UNITS*5/2)*(TILE_UNITS*5/2))
+								{
+									iIMDShape	*pRepImd;
 
-								iV_TRANSLATE(weaponImd[i]->connectors->x,weaponImd[i]->connectors->z-12,weaponImd[i]->connectors->y);
-								pRepImd = getImdFromIndex(MI_FLAME);
+									iV_TRANSLATE(weaponImd[i]->connectors->x,weaponImd[i]->connectors->z-12,weaponImd[i]->connectors->y);
+									pRepImd = getImdFromIndex(MI_FLAME);
 
-								pie_MatRotY(DEG((SDWORD)psStructure->asWeaps[i].rotation));
+									pie_MatRotY(DEG((SDWORD)psStructure->asWeaps[i].rotation));
 
-								iV_MatrixRotateY(-player.r.y);
-								iV_MatrixRotateX(-player.r.x);
-								pie_Draw3DShape(pRepImd, getStaticTimeValueRange(100,pRepImd->numFrames), 0, buildingBrightness, WZCOL_BLACK, pie_ADDITIVE, 192);
+									iV_MatrixRotateY(-player.r.y);
+									iV_MatrixRotateX(-player.r.x);
+									pie_Draw3DShape(pRepImd, getStaticTimeValueRange(100,pRepImd->numFrames), 0, buildingBrightness, WZCOL_BLACK, pie_ADDITIVE, 192);
 
-								iV_MatrixRotateX(player.r.x);
-								iV_MatrixRotateY(player.r.y);
-								pie_MatRotY(DEG((SDWORD)psStructure->asWeaps[i].rotation));
+									iV_MatrixRotateX(player.r.x);
+									iV_MatrixRotateY(player.r.y);
+									pie_MatRotY(DEG((SDWORD)psStructure->asWeaps[i].rotation));
+								}
 							}
 						}
 						// we have a droid weapon so do we draw a muzzle flash
