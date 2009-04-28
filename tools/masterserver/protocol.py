@@ -243,7 +243,7 @@ class BinaryProtocol21(BinaryProtocol20):
 				self._encodeName(game),
 				game.size or self.size, game.flags,
 				self._encodeHost(game),
-				maxPlayers, currentPlayers, game.user1, game.user2, game.user3, game.user4))
+				game.maxPlayers, game.currentPlayers, game.user1, game.user2, game.user3, game.user4))
 
 			try:
 				return write.getvalue()

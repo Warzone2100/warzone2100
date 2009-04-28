@@ -106,7 +106,7 @@ class GameDB:
 			gamesCount = len(self.getGames())
 			logging.debug("Checking: %i game(s)" % (gamesCount))
 			for game in self.getGames():
-				if not game.check():
+				if not protocol.check(game):
 					logging.debug("Removing unreachable game: %s" % game)
 					self.__remove(game)
 
