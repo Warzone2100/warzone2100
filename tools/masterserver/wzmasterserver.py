@@ -216,6 +216,22 @@ class RequestHandler(SocketServer.ThreadingMixIn, SocketServer.StreamRequestHand
 			else:
 				raise Exception("(%s) Recieved a unknown command: %s" % (gameHost, netCommand))
 
+class TCP46Server(SocketServer.TCPServer):
+	"""Class to enable listening on both IPv4 and IPv6 addresses."""
+
+	address_family = socket.AF_INET6
+
+	def server_bind(self):
+		"""Called by constructor to bind the socket.
+
+		Overridden to disable IPV6_V6ONLY.
+
+		"""
+		self.socket.setsockopt(socket.IPPROTO_IPV6, socket.IPV6_V6ONLY, 0)
+		SocketServer.TCPServer.server_bind(self)
+
+class ThreadingTCP46Server(SocketServer.ThreadingMixIn, TCP46Server): pass
+
 #
 ################################################################################
 # The legendary Main.
@@ -232,8 +248,8 @@ if __name__ == '__main__':
 
 	gamedb = GameDB()
 
-	SocketServer.ThreadingTCPServer.allow_reuse_address = True
-	tcpserver = SocketServer.ThreadingTCPServer(('0.0.0.0', protocol.lobbyPort), RequestHandler)
+	ThreadingTCP46Server.allow_reuse_address = True
+	tcpserver = ThreadingTCP46Server(('::', protocol.lobbyPort), RequestHandler)
 	try:
 		while True:
 			tcpserver.handle_request()

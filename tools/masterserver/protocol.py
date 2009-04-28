@@ -33,6 +33,9 @@ __all__ = ['Protocol']
 def _socket(family = socket.AF_INET, type = socket.SOCK_STREAM, proto = 0):
 	s = socket.socket(family, type, proto)
 	try:
+		if family == socket.AF_INET6:
+			# Ensure that connecting to IPv6-mapped IPv4 addresses works as well
+			s.setsockopt(socket.IPPROTO_IPV6, socket.IPV6_V6ONLY, 0)
 		yield s
 	finally:
 		s.close()
@@ -115,7 +118,7 @@ class BaseProtocol(object):
 
 	def check(self, game):
 		"""Check we can connect to the game's host."""
-		with _socket() as s:
+		with _socket(socket.AF_INET6) as s:
 			try:
 				logging.debug("Checking %s's vitality..." % game.host)
 				s.settimeout(10.0)
@@ -127,7 +130,7 @@ class BaseProtocol(object):
 
 	def list(self, host):
 		"""Retrieve a list of games from the lobby server."""
-		with _socket() as s:
+		with _socket(socket.AF_INET6) as s:
 			s.settimeout(10.0)
 			s.connect((host, self.lobbyPort))
 
