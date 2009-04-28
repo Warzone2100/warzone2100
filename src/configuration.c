@@ -258,8 +258,8 @@ BOOL loadConfig(void)
 	}
 	else
 	{
-		war_SetPauseOnFocusLoss(true);
-		setWarzoneKeyNumeric("PauseOnFocusLoss", true);
+		war_SetPauseOnFocusLoss(false);
+		setWarzoneKeyNumeric("PauseOnFocusLoss", false);
 	}
 
 	if (getWarzoneKeyString("masterserver_name", sBuf))
@@ -282,8 +282,8 @@ BOOL loadConfig(void)
 		iV_font("Lucida Grande", NULL, NULL);
 		setWarzoneKeyString("fontname", "Lucida Grande");
 #else
-		iV_font("DejaVu Sans Mono", NULL, NULL);
-		setWarzoneKeyString("fontname", "DejaVu Sans Mono");
+		iV_font("DejaVu Sans", NULL, NULL);
+		setWarzoneKeyString("fontname", "DejaVu Sans");
 #endif
 	}
 
@@ -340,7 +340,7 @@ BOOL loadConfig(void)
 	}
 	else
 	{
-		war_SetFMVmode(FMV_2X);
+		war_SetFMVmode(FMV_FULLSCREEN);
 	}
 
 	// //////////////////////////
