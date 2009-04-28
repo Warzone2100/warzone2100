@@ -1128,16 +1128,47 @@ void structureBuild(STRUCTURE *psStruct, DROID *psDroid, int buildPoints)
 	int before, after;
 	int powerNeeded;
 	int buildPointsToAdd;
+	int player;
 	int newBuildPoints = (int)psStruct->currentBuildPts; // beware, unsigned
+	DROID *psCurr;
 	newBuildPoints += buildPoints;
-	ASSERT(newBuildPoints < 3 * (int)psStruct->pStructureType->buildPoints, "unsigned int underflow?");
+	ASSERT(newBuildPoints <= 1 + 3 * (int)psStruct->pStructureType->buildPoints, "unsigned int underflow?");
 	CLIP(newBuildPoints, 0, psStruct->pStructureType->buildPoints);
 
+	if (!aiCheckAlliances(psStruct->player,psDroid->player))
+	{
+		// Enemy structure
+		buildPoints = 0;
+		powerNeeded = 0;
+		buildPointsToAdd = 0;
+	}
+	else if (psStruct->pStructureType->type != REF_FACTORY_MODULE)
+	{
+		for (player = 0; player < 8; player++)
+		{
+			for (psCurr = apsDroidLists[player]; psCurr; psCurr = psCurr->psNext)
+			{
+				// An enemy droid is blocking it
+				if ((STRUCTURE *) orderStateObj(psCurr, DORDER_BUILD) == psStruct
+				 && !aiCheckAlliances(psStruct->player,psCurr->player))
+				{
+					buildPoints = 0;
+					powerNeeded = 0;
+					buildPointsToAdd = 0;
+					break;
+				}
+			}
+		}
+	}
 	if (buildPoints > 0)
 	{
 		// Check if there is enough power to perform this construction work
 		powerNeeded = (newBuildPoints * structPowerToBuild(psStruct))/psStruct->pStructureType->buildPoints -
 		               (psStruct->currentBuildPts * structPowerToBuild(psStruct))/psStruct->pStructureType->buildPoints;
+		if (buildPoints > newBuildPoints - psStruct->currentBuildPts)
+		{
+			buildPoints = newBuildPoints - psStruct->currentBuildPts + 1;
+		}
 		buildPointsToAdd = requestPowerFor(psStruct->player, powerNeeded, buildPoints);
 	}
 	else
@@ -1149,9 +1180,10 @@ void structureBuild(STRUCTURE *psStruct, DROID *psDroid, int buildPoints)
 		addPower(psStruct->player, -powerNeeded);
 	}
 
-	newBuildPoints = (int)psStruct->currentBuildPts;
+	newBuildPoints = (int)psStruct->currentBuildPts; // beware, unsigned
 	newBuildPoints += buildPointsToAdd;
-	ASSERT(newBuildPoints < 3 * (int)psStruct->pStructureType->buildPoints, "unsigned int underflow?");
+
+	ASSERT(newBuildPoints <= 1 + 3 * (int)psStruct->pStructureType->buildPoints, "unsigned int underflow?");
 	CLIP(newBuildPoints, 0, psStruct->pStructureType->buildPoints);
 
 	before = (9 * psStruct->currentBuildPts * structureBody(psStruct) ) / (10 * psStruct->pStructureType->buildPoints);
@@ -2988,58 +3020,84 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool mission)
 			// skip droids that are doing anything else
 			if (psDroid != NULL
 			    && (!orderState(psDroid, DORDER_RTR)
-			        || psDroid->psTarget != (BASE_OBJECT *)psStructure))
+			    || psDroid->psTarget != (BASE_OBJECT *)psStructure))
 			{
-				objTrace(psStructure->id, "Dropping repair target %d; wrong order=%d, wrong target=%d",
-				         (int)psChosenObj->id, (int)(!orderState(psDroid, DORDER_RTR)), (int)(psDroid->psTarget != (BASE_OBJECT *)psStructure));
-				psChosenObj = NULL;
-				psDroid = NULL;
-				psRepairFac->psObj = NULL;
+				psDroid = (DROID *)psChosenObj;
+				xdiff = (SDWORD)psDroid->pos.x - (SDWORD)psStructure->pos.x;
+				ydiff = (SDWORD)psDroid->pos.y - (SDWORD)psStructure->pos.y;
+				if (xdiff * xdiff + ydiff * ydiff > (TILE_UNITS*5/2)*(TILE_UNITS*5/2))
+				{
+					psChosenObj = NULL;
+					psDroid = NULL;
+					psRepairFac->psObj = NULL;
+				}
 			}
 
 			/* select next droid if none being repaired */
-			if ( psChosenObj == NULL )
+			if (psChosenObj == NULL ||
+			    (((DROID *)psChosenObj)->order != DORDER_RTR && ((DROID *)psChosenObj)->order != DORDER_RTR_SPECIFIED))
 			{
 				ASSERT( psRepairFac->psGroup != NULL,
 					"aiUpdateStructure: invalid repair facility group pointer" );
 
-				mindist = SDWORD_MAX;
+				mindist = (TILE_UNITS*8)*(TILE_UNITS*8)*3;
+				if (psChosenObj)
+				{
+					mindist = (TILE_UNITS*8)*(TILE_UNITS*8)*2;
+				}
 				psRepairFac->droidQueue = 0;
-				for(psDroid = apsDroidLists[psStructure->player]; psDroid; psDroid = psDroid->psNext)
+				for (psDroid = apsDroidLists[psStructure->player]; psDroid; psDroid = psDroid->psNext)
 				{
 					BASE_OBJECT * const psTarget = orderStateObj(psDroid, DORDER_RTR);
 
-					if (psTarget && psTarget == (BASE_OBJECT *)psStructure && psDroid->action == DACTION_WAITFORREPAIR)
+					// Take any "lost" unit with DORDER_RTR
+					if (((psDroid->order == DORDER_RTR || psDroid->order == DORDER_RTR_SPECIFIED)
+					  && psDroid->action != DACTION_WAITFORREPAIR && psDroid->action != DACTION_MOVETOREPAIRPOINT
+					  && psDroid->action != DACTION_WAITDURINGREPAIR)
+					  || (psTarget && psTarget == (BASE_OBJECT *)psStructure))
 					{
+						if (psDroid->body >= psDroid->originalBody)
+						{
+							objTrace(psStructure->id, "Repair not needed of droid %d", (int)psDroid->id);
+
+							/* set droid points to max */
+							psDroid->body = psDroid->originalBody;
+
+							// if completely repaired reset order
+							secondarySetState(psDroid, DSO_RETURN_TO_LOC, DSS_NONE);
+
+							if (hasCommander(psDroid))
+							{
+								// return a droid to it's command group
+								DROID	*psCommander = psDroid->psGroup->psCommander;
+
+								orderDroidObj(psDroid, DORDER_GUARD, (BASE_OBJECT *)psCommander);
+							}
+							else if (psRepairFac->psDeliveryPoint != NULL)
+							{
+								// move the droid out the way
+								orderDroidLoc( psDroid, DORDER_MOVE,
+									psRepairFac->psDeliveryPoint->coords.x,
+									psRepairFac->psDeliveryPoint->coords.y );
+							}
+							continue;
+						}
 						xdiff = (SDWORD)psDroid->pos.x - (SDWORD)psStructure->pos.x;
 						ydiff = (SDWORD)psDroid->pos.y - (SDWORD)psStructure->pos.y;
 						currdist = xdiff*xdiff + ydiff*ydiff;
-						if (currdist < mindist)
+						if (currdist < mindist && currdist < (TILE_UNITS*8)*(TILE_UNITS*8))
 						{
 							mindist = currdist;
 							psChosenObj = (BASE_OBJECT *)psDroid;
 						}
-						psRepairFac->droidQueue++;
+						if (psTarget && psTarget == (BASE_OBJECT *)psStructure)
+						{
+							psRepairFac->droidQueue++;
+						}
 					}
-				}
-				psDroid = (DROID *)psChosenObj;
-				if (psDroid)
-				{
-					objTrace(psStructure->id, "Chose to repair droid %d", (int)psDroid->id);
-					objTrace(psDroid->id, "Chosen to be repaired by repair structure %d", (int)psStructure->id);
-				}
-			}
-
-			/* Steal droid from another repair facility */
-			if (psChosenObj == NULL)
-			{
-				mindist = SDWORD_MAX;
-				psRepairFac->droidQueue = 0;
-				for(psDroid = apsDroidLists[psStructure->player]; psDroid; psDroid = psDroid->psNext)
-				{
-					BASE_OBJECT *const psTarget = orderStateObj(psDroid, DORDER_RTR);
-
-					if (psTarget != (BASE_OBJECT *)psStructure && psDroid->action == DACTION_WAITFORREPAIR)
+					// Otherwise steal a droid from another repair facility
+					else if (mindist > (TILE_UNITS*8)*(TILE_UNITS*8)
+					       && psTarget != (BASE_OBJECT *)psStructure && psDroid->action == DACTION_WAITFORREPAIR)
 					{
 						REPAIR_FACILITY *stealFrom = &((STRUCTURE *)psTarget)->pFunctionality->repairFacility;
 						// make a wild guess about what is a good distance
@@ -3047,40 +3105,75 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool mission)
 
 						xdiff = (SDWORD)psDroid->pos.x - (SDWORD)psStructure->pos.x;
 						ydiff = (SDWORD)psDroid->pos.y - (SDWORD)psStructure->pos.y;
-						currdist = xdiff * xdiff + ydiff * ydiff;
-						if (currdist < mindist && currdist < distLimit)
+						currdist = xdiff * xdiff + ydiff * ydiff + (TILE_UNITS*8)*(TILE_UNITS*8); // lower priority
+						if (currdist < mindist && currdist - (TILE_UNITS*8)*(TILE_UNITS*8) < distLimit)
 						{
 							mindist = currdist;
 							psChosenObj = (BASE_OBJECT *)psDroid;
 							psRepairFac->droidQueue++;	// shared queue
 						}
 					}
+					// Otherwise just repair whatever's nearby
+					else if (mindist > (TILE_UNITS*8)*(TILE_UNITS*8)*2 && psDroid->body < psDroid->originalBody)
+					{
+						xdiff = (SDWORD)psDroid->pos.x - (SDWORD)psStructure->pos.x;
+						ydiff = (SDWORD)psDroid->pos.y - (SDWORD)psStructure->pos.y;
+						currdist = xdiff*xdiff + ydiff*ydiff + (TILE_UNITS*8)*(TILE_UNITS*8)*2; // even lower priority
+						if (currdist < mindist && currdist < (TILE_UNITS*5/2)*(TILE_UNITS*5/2) + (TILE_UNITS*8)*(TILE_UNITS*8)*2)
+						{
+							mindist = currdist;
+							psChosenObj = (BASE_OBJECT *)psDroid;
+						}
+					}
 				}
 				psDroid = (DROID *)psChosenObj;
 				if (psDroid)
 				{
-					objTrace(psStructure->id, "Chose to steal droid %d from another repair queue to repair it", (int)psDroid->id);
-					objTrace(psDroid->id, "Stolen by repair structure %d because current queue too long", (int)psStructure->id);
+					if (psDroid->order == DORDER_RTR || psDroid->order == DORDER_RTR_SPECIFIED)
+					{
+						// Hey, droid, it's your turn! Stop what you're doing and get repaired!
+						psDroid->action = DACTION_WAITFORREPAIR;
+						psDroid->psTarget = (BASE_OBJECT *)psStructure;
+					}
+					objTrace(psStructure->id, "Chose to repair droid %d", (int)psDroid->id);
+					objTrace(psDroid->id, "Chosen to be repaired by repair structure %d", (int)psStructure->id);
 				}
 			}
 
 			// send the droid to be repaired
-			if (psDroid && psDroid->action == DACTION_WAITFORREPAIR)
+			if (psDroid)
 			{
 				/* set chosen object */
 				psChosenObj = (BASE_OBJECT *)psDroid;
 				psRepairFac->psObj = (BASE_OBJECT *)psDroid;
-				psDroid->psTarget = (BASE_OBJECT *)psStructure;
 
 				/* move droid to repair point at rear of facility */
-				objTrace(psStructure->id, "Requesting droid %d to come to us", (int)psDroid->id);
-				actionDroidObjLoc( psDroid, DACTION_MOVETOREPAIRPOINT,
-						(BASE_OBJECT *) psStructure, psStructure->pos.x, psStructure->pos.y);
+				xdiff = (SDWORD)psDroid->pos.x - (SDWORD)psStructure->pos.x;
+				ydiff = (SDWORD)psDroid->pos.y - (SDWORD)psStructure->pos.y;
+				if (psDroid->action == DACTION_WAITFORREPAIR ||
+				    psDroid->action == DACTION_WAITDURINGREPAIR
+				    && xdiff*xdiff + ydiff*ydiff > (TILE_UNITS*5/2)*(TILE_UNITS*5/2))
+				{
+					objTrace(psStructure->id, "Requesting droid %d to come to us", (int)psDroid->id);
+					actionDroidObjLoc(psDroid, DACTION_MOVETOREPAIRPOINT,
+					                  (BASE_OBJECT *) psStructure, psStructure->pos.x, psStructure->pos.y);
+				}
 				/* reset repair started */
 				psRepairFac->timeStarted = ACTION_START_TIME;
 				psRepairFac->currentPtsAdded = 0;
-				break;
 			}
+
+			// update repair arm position
+			if (psChosenObj)
+			{
+				actionTargetTurret((BASE_OBJECT*)psStructure, psChosenObj, &psStructure->asWeaps[0]);
+			}
+			else if ((psStructure->asWeaps[0].rotation % 90) != 0 || psStructure->asWeaps[0].pitch != 0)
+			{
+				// realign the turret
+				actionAlignTurret((BASE_OBJECT *)psStructure, 0);
+			}
+
 			break;
 		}
 		case REF_REARM_PAD:
@@ -3380,8 +3473,9 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool mission)
 					"aiUpdateStructure: invalid droid pointer" );
 			psRepairFac = &psStructure->pFunctionality->repairFacility;
 
-			if (psDroid->action == DACTION_WAITDURINGREPAIR
-			    && actionTargetTurret((BASE_OBJECT*)psStructure, psChosenObj, &psStructure->asWeaps[0]))
+			xdiff = (SDWORD)psDroid->pos.x - (SDWORD)psStructure->pos.x;
+			ydiff = (SDWORD)psDroid->pos.y - (SDWORD)psStructure->pos.y;
+			if (xdiff * xdiff + ydiff * ydiff <= (TILE_UNITS*5/2)*(TILE_UNITS*5/2))
 			{
 				//check droid is not healthy
 				if (psDroid->body < psDroid->originalBody)
@@ -3423,26 +3517,18 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool mission)
 						psRepairFac->currentPtsAdded;
 					bFinishAction = false;
 
-					//do some repair
-					if (pointsToAdd)
+					// do some repair
+					if (!pointsToAdd)
 					{
-						//just add the points if the power cost is negligable
-						//if these points would make the droid healthy again then just add
-						if (psDroid->body + pointsToAdd >= psDroid->originalBody)
-						{
-							//anothe HACK but sorts out all the rounding errors when values get small
-							psDroid->body += pointsToAdd;
-							psRepairFac->currentPtsAdded += pointsToAdd;
-						}
-						else
-						{
-								psDroid->body += pointsToAdd;
-								psRepairFac->currentPtsAdded += pointsToAdd;
-						}
+						// We need to at least repair SOMETHING
+						pointsToAdd = 1;
 					}
+					// just add the points; these are integers, not floats
+					psDroid->body += pointsToAdd;
+					psRepairFac->currentPtsAdded += pointsToAdd;
 				}
 
-				if ( psDroid->body >= psDroid->originalBody )
+				if (psDroid->body >= psDroid->originalBody)
 				{
 					objTrace(psStructure->id, "Repair complete of droid %d", (int)psDroid->id);
 
@@ -3451,22 +3537,26 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool mission)
 					/* set droid points to max */
 					psDroid->body = psDroid->originalBody;
 
-					// if completely repaired reset order
-					secondarySetState(psDroid, DSO_RETURN_TO_LOC, DSS_NONE);
-
-					if (hasCommander(psDroid))
+					if ((psDroid->order == DORDER_RTR || psDroid->order == DORDER_RTR_SPECIFIED)
+					  && psDroid->psTarget == (BASE_OBJECT *)psStructure)
 					{
-						// return a droid to it's command group
-						DROID	*psCommander = psDroid->psGroup->psCommander;
+						// if completely repaired reset order
+						secondarySetState(psDroid, DSO_RETURN_TO_LOC, DSS_NONE);
 
-						orderDroidObj(psDroid, DORDER_GUARD, (BASE_OBJECT *)psCommander);
-					}
-					else if (psRepairFac->psDeliveryPoint != NULL)
-					{
-						// move the droid out the way
-						orderDroidLoc( psDroid, DORDER_MOVE,
-							psRepairFac->psDeliveryPoint->coords.x,
-							psRepairFac->psDeliveryPoint->coords.y );
+						if (hasCommander(psDroid))
+						{
+							// return a droid to it's command group
+							DROID	*psCommander = psDroid->psGroup->psCommander;
+
+							orderDroidObj(psDroid, DORDER_GUARD, (BASE_OBJECT *)psCommander);
+						}
+						else if (psRepairFac->psDeliveryPoint != NULL)
+						{
+							// move the droid out the way
+							orderDroidLoc( psDroid, DORDER_MOVE,
+								psRepairFac->psDeliveryPoint->coords.x,
+								psRepairFac->psDeliveryPoint->coords.y );
+						}
 					}
 				}
 
