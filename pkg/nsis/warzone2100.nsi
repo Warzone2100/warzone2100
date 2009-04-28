@@ -172,8 +172,8 @@ Section $(TEXT_SecBase) SecBase
   SetOutPath "$INSTDIR\fonts"
 
   File "${EXTDIR}\etc\fonts\fonts.conf"
-  File "${EXTDIR}\etc\fonts\DejaVuSansMono.ttf"
-  File "${EXTDIR}\etc\fonts\DejaVuSansMono-Bold.ttf"
+  File "${EXTDIR}\etc\fonts\DejaVuSans.ttf"
+  File "${EXTDIR}\etc\fonts\DejaVuSans-Bold.ttf"
 
   ;Store installation folder
   WriteRegStr HKLM "Software\${PACKAGE_NAME}" "" $INSTDIR
