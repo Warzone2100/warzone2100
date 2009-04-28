@@ -40,6 +40,7 @@
 #include "multirecv.h"
 #include "multistat.h"
 #include "multiint.h"
+#include "mission.h" // for cheats
 
 extern char	MultiPlayersPath[PATH_MAX];
 
@@ -205,6 +206,11 @@ void updateMultiStatsDamage(UDWORD attacker, UDWORD defender, UDWORD inflicted)
 {
 	PLAYERSTATS st;
 
+	if (Cheated)
+	{
+		return;
+	}
+	
 	if(isHumanPlayer(attacker))
 	{
 		st = getMultiStats(attacker,true);	// get stats
@@ -248,6 +254,10 @@ void updateMultiStatsGames(void)
 {
 	PLAYERSTATS	st;
 
+	if (Cheated)
+	{
+		return;
+	}
 	st  = getMultiStats(selectedPlayer,true);
 	st.played ++;
 	setMultiStats(player2dpid[selectedPlayer], st, true);
@@ -257,6 +267,10 @@ void updateMultiStatsGames(void)
 void updateMultiStatsWins(void)
 {
 	PLAYERSTATS	st;
+	if (Cheated)
+	{
+		return;
+	}
 	st  = getMultiStats(selectedPlayer,true);
 	st.wins ++;
 	setMultiStats(player2dpid[selectedPlayer], st, true);
@@ -266,6 +280,10 @@ void updateMultiStatsWins(void)
 void updateMultiStatsLoses(void)
 {
 	PLAYERSTATS	st;
+	if (Cheated)
+	{
+		return;
+	}
 	st  = getMultiStats(selectedPlayer,true);
 	++st.losses;
 	setMultiStats(player2dpid[selectedPlayer], st, true);
@@ -276,6 +294,10 @@ void updateMultiStatsKills(BASE_OBJECT *psKilled,UDWORD player)
 {
 	PLAYERSTATS	st;
 
+	if (Cheated)
+	{
+		return;
+	}
 	if(isHumanPlayer(player))
 	{
 		st  = getMultiStats(player,true);
