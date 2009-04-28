@@ -2929,56 +2929,81 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 			    && (!orderState(psDroid, DORDER_RTR)
 			        || psDroid->psTarget != (BASE_OBJECT *)psStructure))
 			{
-				objTrace(psStructure->id, "Dropping repair target %d; wrong order=%d, wrong target=%d",
-				         (int)psChosenObj->id, (int)(!orderState(psDroid, DORDER_RTR)), (int)(psDroid->psTarget != (BASE_OBJECT *)psStructure));
-				psChosenObj = NULL;
-				psDroid = NULL;
-				psRepairFac->psObj = NULL;
+				xdiff = (SDWORD)psDroid->pos.x - (SDWORD)psStructure->pos.x;
+				ydiff = (SDWORD)psDroid->pos.y - (SDWORD)psStructure->pos.y;
+				if (xdiff * xdiff + ydiff * ydiff > (TILE_UNITS*5/2)*(TILE_UNITS*5/2))
+				{
+					psChosenObj = NULL;
+					psDroid = NULL;
+					psRepairFac->psObj = NULL;
+				}
 			}
 
 			/* select next droid if none being repaired */
-			if ( psChosenObj == NULL )
+			if (psChosenObj == NULL ||
+			    (((DROID *)psChosenObj)->order != DORDER_RTR && ((DROID *)psChosenObj)->order != DORDER_RTR_SPECIFIED))
 			{
 				ASSERT( psRepairFac->psGroup != NULL,
 					"aiUpdateStructure: invalid repair facility group pointer" );
 
-				mindist = SDWORD_MAX;
+				mindist = (TILE_UNITS*8)*(TILE_UNITS*8)*3;
+				if (psChosenObj)
+				{
+					mindist = (TILE_UNITS*8)*(TILE_UNITS*8)*2;
+				}
 				psRepairFac->droidQueue = 0;
-				for(psDroid = apsDroidLists[psStructure->player]; psDroid; psDroid = psDroid->psNext)
+				for (psDroid = apsDroidLists[psStructure->player]; psDroid; psDroid = psDroid->psNext)
 				{
 					BASE_OBJECT * const psTarget = orderStateObj(psDroid, DORDER_RTR);
 
-					if (psTarget && psTarget == (BASE_OBJECT *)psStructure && psDroid->action == DACTION_WAITFORREPAIR)
+					// Take any "lost" unit with DORDER_RTR
+					if (((psDroid->order == DORDER_RTR || psDroid->order == DORDER_RTR_SPECIFIED)
+					  && psDroid->action != DACTION_WAITFORREPAIR && psDroid->action != DACTION_MOVETOREPAIRPOINT
+					  && psDroid->action != DACTION_WAITDURINGREPAIR)
+					  || (psTarget && psTarget == (BASE_OBJECT *)psStructure))
 					{
+						if (psDroid->body >= psDroid->originalBody)
+						{
+							objTrace(psStructure->id, "Repair not needed of droid %d", (int)psDroid->id);
+
+							/* set droid points to max */
+							psDroid->body = psDroid->originalBody;
+
+							// if completely repaired reset order
+							secondarySetState(psDroid, DSO_RETURN_TO_LOC, DSS_NONE);
+
+							if (hasCommander(psDroid))
+							{
+								// return a droid to it's command group
+								DROID	*psCommander = psDroid->psGroup->psCommander;
+
+								orderDroidObj(psDroid, DORDER_GUARD, (BASE_OBJECT *)psCommander);
+							}
+							else if (psRepairFac->psDeliveryPoint != NULL)
+							{
+								// move the droid out the way
+								orderDroidLoc( psDroid, DORDER_MOVE,
+									psRepairFac->psDeliveryPoint->coords.x,
+									psRepairFac->psDeliveryPoint->coords.y );
+							}
+							continue;
+						}
 						xdiff = (SDWORD)psDroid->pos.x - (SDWORD)psStructure->pos.x;
 						ydiff = (SDWORD)psDroid->pos.y - (SDWORD)psStructure->pos.y;
 						currdist = xdiff*xdiff + ydiff*ydiff;
-						if (currdist < mindist)
+						if (currdist < mindist && currdist < (TILE_UNITS*8)*(TILE_UNITS*8))
 						{
 							mindist = currdist;
 							psChosenObj = (BASE_OBJECT *)psDroid;
 						}
-						psRepairFac->droidQueue++;
+						if (psTarget && psTarget == (BASE_OBJECT *)psStructure)
+						{
+							psRepairFac->droidQueue++;
+						}
 					}
-				}
-				psDroid = (DROID *)psChosenObj;
-				if (psDroid)
-				{
-					objTrace(psStructure->id, "Chose to repair droid %d", (int)psDroid->id);
-					objTrace(psDroid->id, "Chosen to be repaired by repair structure %d", (int)psStructure->id);
-				}
-			}
-
-			/* Steal droid from another repair facility */
-			if (psChosenObj == NULL)
-			{
-				mindist = SDWORD_MAX;
-				psRepairFac->droidQueue = 0;
-				for(psDroid = apsDroidLists[psStructure->player]; psDroid; psDroid = psDroid->psNext)
-				{
-					BASE_OBJECT *const psTarget = orderStateObj(psDroid, DORDER_RTR);
-
-					if (psTarget != (BASE_OBJECT *)psStructure && psDroid->action == DACTION_WAITFORREPAIR)
+					// Otherwise steal a droid from another repair facility
+					else if (mindist > (TILE_UNITS*8)*(TILE_UNITS*8)
+					       && psTarget != (BASE_OBJECT *)psStructure && psDroid->action == DACTION_WAITFORREPAIR)
 					{
 						REPAIR_FACILITY *stealFrom = &((STRUCTURE *)psTarget)->pFunctionality->repairFacility;
 						// make a wild guess about what is a good distance
@@ -2986,40 +3011,75 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 
 						xdiff = (SDWORD)psDroid->pos.x - (SDWORD)psStructure->pos.x;
 						ydiff = (SDWORD)psDroid->pos.y - (SDWORD)psStructure->pos.y;
-						currdist = xdiff * xdiff + ydiff * ydiff;
-						if (currdist < mindist && currdist < distLimit)
+						currdist = xdiff * xdiff + ydiff * ydiff + (TILE_UNITS*8)*(TILE_UNITS*8); // lower priority
+						if (currdist < mindist && currdist - (TILE_UNITS*8)*(TILE_UNITS*8) < distLimit)
 						{
 							mindist = currdist;
 							psChosenObj = (BASE_OBJECT *)psDroid;
 							psRepairFac->droidQueue++;	// shared queue
 						}
 					}
+					// Otherwise just repair whatever's nearby
+					else if (mindist > (TILE_UNITS*8)*(TILE_UNITS*8)*2 && psDroid->body < psDroid->originalBody)
+					{
+						xdiff = (SDWORD)psDroid->pos.x - (SDWORD)psStructure->pos.x;
+						ydiff = (SDWORD)psDroid->pos.y - (SDWORD)psStructure->pos.y;
+						currdist = xdiff*xdiff + ydiff*ydiff + (TILE_UNITS*8)*(TILE_UNITS*8)*2; // even lower priority
+						if (currdist < mindist && currdist < (TILE_UNITS*5/2)*(TILE_UNITS*5/2) + (TILE_UNITS*8)*(TILE_UNITS*8)*2)
+						{
+							mindist = currdist;
+							psChosenObj = (BASE_OBJECT *)psDroid;
+						}
+					}
 				}
 				psDroid = (DROID *)psChosenObj;
 				if (psDroid)
 				{
-					objTrace(psStructure->id, "Chose to steal droid %d from another repair queue to repair it", (int)psDroid->id);
-					objTrace(psDroid->id, "Stolen by repair structure %d because current queue too long", (int)psStructure->id);
+					if (psDroid->order == DORDER_RTR || psDroid->order == DORDER_RTR_SPECIFIED)
+					{
+						// Hey, droid, it's your turn! Stop what you're doing and get repaired!
+						psDroid->action = DACTION_WAITFORREPAIR;
+						psDroid->psTarget = (BASE_OBJECT *)psStructure;
+					}
+					objTrace(psStructure->id, "Chose to repair droid %d", (int)psDroid->id);
+					objTrace(psDroid->id, "Chosen to be repaired by repair structure %d", (int)psStructure->id);
 				}
 			}
 
 			// send the droid to be repaired
-			if (psDroid && psDroid->action == DACTION_WAITFORREPAIR)
+			if (psDroid)
 			{
 				/* set chosen object */
 				psChosenObj = (BASE_OBJECT *)psDroid;
 				psRepairFac->psObj = (BASE_OBJECT *)psDroid;
-				psDroid->psTarget = (BASE_OBJECT *)psStructure;
 
 				/* move droid to repair point at rear of facility */
-				objTrace(psStructure->id, "Requesting droid %d to come to us", (int)psDroid->id);
-				actionDroidObjLoc( psDroid, DACTION_MOVETOREPAIRPOINT,
-						(BASE_OBJECT *) psStructure, psStructure->pos.x, psStructure->pos.y);
+				xdiff = (SDWORD)psDroid->pos.x - (SDWORD)psStructure->pos.x;
+				ydiff = (SDWORD)psDroid->pos.y - (SDWORD)psStructure->pos.y;
+				if (psDroid->action == DACTION_WAITFORREPAIR ||
+				    psDroid->action == DACTION_WAITDURINGREPAIR
+				    && xdiff*xdiff + ydiff*ydiff > (TILE_UNITS*5/2)*(TILE_UNITS*5/2))
+				{
+					objTrace(psStructure->id, "Requesting droid %d to come to us", (int)psDroid->id);
+					actionDroidObjLoc(psDroid, DACTION_MOVETOREPAIRPOINT,
+					                  (BASE_OBJECT *) psStructure, psStructure->pos.x, psStructure->pos.y);
+				}
 				/* reset repair started */
 				psRepairFac->timeStarted = ACTION_START_TIME;
 				psRepairFac->currentPtsAdded = 0;
-				break;
 			}
+
+			// update repair arm position
+			if (psChosenObj)
+			{
+				actionTargetTurret((BASE_OBJECT*)psStructure, psChosenObj, &psStructure->asWeaps[0]);
+			}
+			else if ((psStructure->asWeaps[0].rotation % 90) != 0 || psStructure->asWeaps[0].pitch != 0)
+			{
+				// realign the turret
+				actionAlignTurret((BASE_OBJECT *)psStructure, 0);
+			}
+
 			break;
 		}
 		case REF_REARM_PAD:

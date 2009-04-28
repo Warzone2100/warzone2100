@@ -1079,15 +1079,44 @@ void actionUpdateDroid(DROID *psDroid)
 	case DACTION_NONE:
 	case DACTION_WAITFORREPAIR:
 		// doing nothing
-		//since not doing anything, see if need to self repair
-		if (selfRepairEnabled(psDroid->player))
+		// see if there's anything to shoot.
+		if (psDroid->numWeaps > 0 && !isVtolDroid(psDroid) && CAN_UPDATE_NAYBORS(psDroid)
+		    && (psDroid->order == DORDER_NONE || psDroid->order == DORDER_RTR))
 		{
-			//wait for 1 second to give the repair facility a chance to do the repair work
-			if (gameTime - psDroid->actionStarted > GAME_TICKS_PER_SEC)
+			for (i = 0;i < psDroid->numWeaps;i++)
 			{
-				droidSelfRepair(psDroid);
+				if (nonNullWeapon[i])
+				{
+					BASE_OBJECT *psTemp = NULL;
+
+					WEAPON_STATS* const psWeapStats = &asWeaponStats[psDroid->asWeaps[i].nStat];
+					if (psDroid->asWeaps[i].nStat > 0
+					 && psWeapStats->rotate
+					 && aiBestNearestTarget(psDroid, &psTemp, i) >= 0)
+					{
+						SECONDARY_STATE state;
+
+						if (secondaryGetState(psDroid, DSO_ATTACK_LEVEL, &state)
+						    && state != DSS_ALEV_ALWAYS)
+						{
+							psTemp = NULL;
+						}
+						else
+						{
+							psDroid->action = DACTION_ATTACK;
+						}
+					}
+					setDroidActionTarget(psDroid, psTemp, 0);
+				}
 			}
 		}
+		// Still not doing anything? See if we need to self repair.
+		if ((psDroid->action == DACTION_NONE || DACTION_WAITFORREPAIR)
+		    && selfRepairEnabled(psDroid->player))
+		{
+			droidSelfRepair(psDroid);
+		}
+
 		break;
 	case DACTION_WAITDURINGREPAIR:
 		// don't want to be in a formation for this move
@@ -1329,6 +1358,21 @@ void actionUpdateDroid(DROID *psDroid)
 			}
 		}
 
+		/* Extra bit of paranoia, in case none of the weapons have a target */
+		bHasTarget = false; 
+		for (i = 0; i < psDroid->numWeaps; i++)
+		{
+			if (psDroid->psActionTarget[i] != NULL)
+			{
+				bHasTarget = true;
+				break;
+			}
+		}
+		if (!bHasTarget)
+		{
+			psDroid->action = DACTION_MOVE;
+		}
+
 		//check its a VTOL unit since adding Transporter's into multiPlayer
 		/* check vtol attack runs */
 		if (isVtolDroid(psDroid))
@@ -1430,9 +1474,12 @@ void actionUpdateDroid(DROID *psDroid)
 			  && state == DSS_HALT_HOLD)
 			 || (!isVtolDroid(psDroid)
 			  && (psTarget = orderStateObj(psDroid, DORDER_FIRESUPPORT))
-			  && psTarget->type == OBJ_STRUCTURE))
+			  && psTarget->type == OBJ_STRUCTURE)
+			  || (psDroid->order == DORDER_NONE)
+			  || (psDroid->order == DORDER_RTR))
 			{
 				// don't move if on hold or firesupport for a sensor tower
+				// also don't move if we're holding position or waiting for repair
 				psDroid->action = DACTION_NONE;				// holding, cancel the order.
 			}
 			else
@@ -2284,6 +2331,42 @@ void actionUpdateDroid(DROID *psDroid)
 		if (psDroid->psActionTarget[0] != (BASE_OBJECT *)psDroid)
 		{
 			actionTargetTurret((BASE_OBJECT*)psDroid, psDroid->psActionTarget[0], &psDroid->asWeaps[0]);
+		}
+		// Just self-repairing.
+		// See if there's anything to shoot.
+		else if (psDroid->numWeaps > 0 && !isVtolDroid(psDroid) && CAN_UPDATE_NAYBORS(psDroid)
+		          && (psDroid->order == DORDER_NONE || psDroid->order == DORDER_RTR))
+		{
+			for (i = 0;i < psDroid->numWeaps;i++)
+			{
+				if (nonNullWeapon[i])
+				{
+					BASE_OBJECT *psTemp = NULL;
+
+					WEAPON_STATS* const psWeapStats = &asWeaponStats[psDroid->asWeaps[i].nStat];
+					if (psDroid->asWeaps[i].nStat > 0
+					 && psWeapStats->rotate
+					 && aiBestNearestTarget(psDroid, &psTemp, i) >= 0)
+					{
+						SECONDARY_STATE state;
+
+						if (secondaryGetState(psDroid, DSO_ATTACK_LEVEL, &state)
+						    && state != DSS_ALEV_ALWAYS)
+						{
+							psTemp = NULL;
+						}
+						else
+						{
+							psDroid->action = DACTION_ATTACK;
+						}
+					}
+					if (psTemp)
+					{
+						setDroidActionTarget(psDroid, psTemp, 0);
+						break;
+					}
+				}
+			}
 		}
 
 		//check still next to the damaged droid
