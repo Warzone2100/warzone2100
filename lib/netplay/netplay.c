@@ -695,14 +695,18 @@ static void NETsendGAMESTRUCT(TCPsocket socket, const GAMESTRUCT* game)
 	// circumvents struct padding, which could pose a problem).  Initialise
 	// to zero so that we can be sure we're not sending any (undefined)
 	// memory content across the network.
-	char buf[sizeof(game->name) + sizeof(game->desc.host) + (sizeof(int32_t) * 8) +
+	char buf[sizeof(game->GAMESTRUCT_VERSION) + sizeof(game->name) + sizeof(game->desc.host) + (sizeof(int32_t) * 8) +
 		sizeof(game->misc) + sizeof(game->extra) + sizeof(game->versionstring) +
-		sizeof(game->modlist) + (sizeof(uint32_t) * 10) ] = { 0 };
+		sizeof(game->modlist) + (sizeof(uint32_t) * 9) ] = { 0 };
 	char *buffer = buf;
 	unsigned int i;
 	int result;
 
 	// Now dump the data into the buffer
+	// Copy 32bit large big endian numbers
+	*(uint32_t*)buffer = SDL_SwapBE32(game->GAMESTRUCT_VERSION);
+	buffer += sizeof(uint32_t);
+
 	// Copy a string
 	strlcpy(buffer, game->name, sizeof(game->name));
 	buffer += sizeof(game->name);
@@ -743,10 +747,6 @@ static void NETsendGAMESTRUCT(TCPsocket socket, const GAMESTRUCT* game)
 	// Copy a string
 	strlcpy(buffer, game->modlist, sizeof(game->modlist));
 	buffer += sizeof(game->modlist);
-
-	// Copy 32bit large big endian numbers
-	*(uint32_t*)buffer = SDL_SwapBE32(game->GAMESTRUCT_VERSION);
-	buffer += sizeof(uint32_t);
 
 	// Copy 32bit large big endian numbers
 	*(uint32_t*)buffer = SDL_SwapBE32(game->game_version_major);
@@ -806,9 +806,9 @@ static bool NETrecvGAMESTRUCT(GAMESTRUCT* game)
 {
 	// A buffer that's guaranteed to have the correct size (i.e. it
 	// circumvents struct padding, which could pose a problem).
-	char buf[sizeof(game->name) + sizeof(game->desc.host) + (sizeof(int32_t) * 8) +
+	char buf[sizeof(game->GAMESTRUCT_VERSION) + sizeof(game->name) + sizeof(game->desc.host) + (sizeof(int32_t) * 8) +
 		sizeof(game->misc) + sizeof(game->extra) + sizeof(game->versionstring) +
-		sizeof(game->modlist) + (sizeof(uint32_t) * 10) ] = { 0 };
+		sizeof(game->modlist) + (sizeof(uint32_t) * 9) ] = { 0 };
 	char* buffer = buf;
 	unsigned int i;
 	int result = 0;
@@ -829,6 +829,9 @@ static bool NETrecvGAMESTRUCT(GAMESTRUCT* game)
 	}
 
 	// Now dump the data into the game struct
+	// Copy 32bit large big endian numbers
+	game->GAMESTRUCT_VERSION = SDL_SwapBE32(*(uint32_t*)buffer);
+	buffer += sizeof(uint32_t);
 	// Copy a string
 	sstrcpy(game->name, buffer);
 	buffer += sizeof(game->name);
@@ -871,8 +874,6 @@ static bool NETrecvGAMESTRUCT(GAMESTRUCT* game)
 	buffer += sizeof(game->modlist);
 
 	// Copy 32bit large big endian numbers
-	game->GAMESTRUCT_VERSION = SDL_SwapBE32(*(uint32_t*)buffer);
-	buffer += sizeof(uint32_t);
 	game->game_version_major = SDL_SwapBE32(*(uint32_t*)buffer);
 	buffer += sizeof(uint32_t);
 	game->game_version_minor = SDL_SwapBE32(*(uint32_t*)buffer);
