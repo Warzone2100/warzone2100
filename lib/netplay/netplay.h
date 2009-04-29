@@ -125,7 +125,7 @@ typedef enum
 typedef struct {					//Available game storage... JUST FOR REFERENCE!
 	int32_t dwSize;
 	int32_t dwFlags;
-	char host[16];	// host ip address
+	char host[40];	// host's ip address (can fit a full IPv4 and IPv6 address + terminating NUL)
 	int32_t dwMaxPlayers;
 	int32_t dwCurrentPlayers;
 	int32_t dwUserFlags[4];
