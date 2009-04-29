@@ -284,13 +284,16 @@ class BinaryProtocol21(BinaryProtocol20):
 			return game
 
 class BinaryProtocol22(BinaryProtocol21):
+	# changes to >= 2.0 data
+	host_length          = 40
+
 	# >= 2.2 data
 	misc_length          = 64
 	extra_length         = 255
 	versionstring_length = 64
 	modlist_length       = 255
 
-	gameFormat = struct.Struct('!I%dsii%ds6i%ds%ds%ds%ds9I' % (BinaryProtocol21.name_length, hBinaryProtocol21.ost_length, misc_length, extra_length, versionstring_length, modlist_length))
+	gameFormat = struct.Struct('!I%dsii%ds6i%ds%ds%ds%ds9I' % (BinaryProtocol21.name_length, host_length, misc_length, extra_length, versionstring_length, modlist_length))
 
 	gamePort = BaseProtocol.gamePort['2.2']
 	lobbyPort = BaseProtocol.lobbyPort['2.2']
