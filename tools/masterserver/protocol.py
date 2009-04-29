@@ -290,7 +290,7 @@ class BinaryProtocol22(BinaryProtocol21):
 	versionstring_length = 64
 	modlist_length       = 255
 
-	gameFormat = struct.Struct(BinaryProtocol21.gameFormat.format + '%ds%ds%ds%ds10I' % (misc_length, extra_length, versionstring_length, modlist_length))
+	gameFormat = struct.Struct('!I%dsii%ds6i%ds%ds%ds%ds9I' % (BinaryProtocol21.name_length, hBinaryProtocol21.ost_length, misc_length, extra_length, versionstring_length, modlist_length))
 
 	gamePort = BaseProtocol.gamePort['2.2']
 	lobbyPort = BaseProtocol.lobbyPort['2.2']
@@ -307,6 +307,7 @@ class BinaryProtocol22(BinaryProtocol21):
 	def encodeSingle(self, game, out = str()):
 		with writeable(out) as write:
 			write.write(self.gameFormat.pack(
+				game.lobbyVersion,
 				self._encodeName(game),
 				game.size or self.size, game.flags,
 				self._encodeHost(game),
@@ -315,7 +316,7 @@ class BinaryProtocol22(BinaryProtocol21):
 				self._encodeExtra(game),
 				self._encodeVersionString(game),
 				game.modlist,
-				game.lobbyVersion, game.game_version_major, game.game_version_minor, game.private,
+				game.game_version_major, game.game_version_minor, game.private,
 				game.pure, game.Mods, game.future1, game.future2, game.future3, game.future4))
 
 			try:
@@ -344,9 +345,9 @@ class BinaryProtocol22(BinaryProtocol21):
 			if not data:
 				return None
 
-			(decData['name'], game.size, game.flags, decData['host'], game.maxPlayers, game.currentPlayers,
+			(game.lobbyVersion, decData['name'], game.size, game.flags, decData['host'], game.maxPlayers, game.currentPlayers,
 				game.user1, game.user2, game.user3, game.user4,
-				game.misc, game.extra, decData['multiplayer-version'], game.modlist, game.lobbyVersion,
+				game.misc, game.extra, decData['multiplayer-version'], game.modlist,
 				game.game_version_major, game.game_version_minor, game.private, game.pure, game.Mods, game.future1,
 				game.future2, game.future3, game.future4) = data
 
