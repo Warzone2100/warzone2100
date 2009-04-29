@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8" ?>
-<wxsmith>
-	<resource_extra>
-		<object root="1" />
-		<object name="ID_TEXTCTRL_INFOTEXT" class="wxTextCtrl" variable="InfoText_TextCtrl" member="yes" />
-	</resource_extra>
-</wxsmith>
