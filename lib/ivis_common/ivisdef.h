@@ -37,10 +37,10 @@
 // screen surface structure
 //
 //*************************************************************************
-typedef struct { Sint32 left, top, right, bottom; } iClip;
+typedef struct { int32_t left, top, right, bottom; } iClip;
 
 typedef struct _iSurface {
-	Uint32 flags;
+	int32_t flags;
 	int xcentre;
 	int ycentre;
 	int xpshift;
@@ -51,7 +51,7 @@ typedef struct _iSurface {
 
 	int width;
 	int height;
-	Sint32 size;
+	int32_t size;
 } iSurface;
 
 //*************************************************************************
@@ -76,8 +76,8 @@ typedef struct edge_
 typedef int VERTEXID;	// Size of the entry for vertex id in the imd polygon structure
 
 typedef struct {
-	Uint32 flags;
-	Sint32 zcentre;
+	uint32_t flags;
+	int32_t zcentre;
 	unsigned int npnts;
 	Vector3f normal;
 	VERTEXID *pindex;

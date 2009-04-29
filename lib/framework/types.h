@@ -29,6 +29,8 @@
 // Defines C99 types for C99 incompatible compilers (e.g. MSVC)
 #include <limits.h>
 
+#include <ctype.h>
+
 #ifdef WZ_C99
 /* Compilers that have support for C99 have all values below defined in stdint.h */
 # include <stdint.h>

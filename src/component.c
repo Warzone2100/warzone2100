@@ -717,7 +717,7 @@ void displayComponentObject(BASE_OBJECT *psObj)
 {
 	DROID		*psDroid = (DROID *)psObj;
 	Vector3i	position, rotation;
-	Sint32		xShift,zShift;
+	int32_t		xShift,zShift;
 	UDWORD		worldAngle;
 	SDWORD		difference;
 	SDWORD		frame;

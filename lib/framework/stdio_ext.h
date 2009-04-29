@@ -22,6 +22,7 @@
 
 #include "wzglobal.h"
 
+#include <stdio.h>
 #include <stdarg.h>
 
 #if defined(__cplusplus)

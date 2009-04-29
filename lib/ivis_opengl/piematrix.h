@@ -32,8 +32,8 @@
 
 // FIXME DUPLICATE CODE! Already present in trig.c!
 #define SC_TABLESIZE 4096
-#define SIN(X) aSinTable[(Uint16)(X) >> 4]
-#define COS(X) aSinTable[((Uint16)(X) >> 4) + (SC_TABLESIZE/4)]
+#define SIN(X) aSinTable[(uint16_t)(X) >> 4]
+#define COS(X) aSinTable[((uint16_t)(X) >> 4) + (SC_TABLESIZE/4)]
 
 extern SDWORD aSinTable[];
 
@@ -110,7 +110,7 @@ extern void pie_MatScale( unsigned int percent );
 extern void pie_MatRotX(int x);
 extern void pie_MatRotY(int y);
 extern void pie_MatRotZ(int z);
-extern Sint32 pie_RotateProject(const Vector3i *src, Vector2i *dest);
+extern int32_t pie_RotateProject(const Vector3i *src, Vector2i *dest);
 
 //*************************************************************************
 
