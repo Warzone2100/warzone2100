@@ -85,6 +85,11 @@
 #  define DATADIR "data"
 #endif
 
+typedef enum _focus_state
+{
+	FOCUS_OUT,		// Window does not have the focus
+	FOCUS_IN,		// Window has got the focus
+} FOCUS_STATE;
 
 #if defined(WZ_OS_WIN)
 # define WZ_WRITEDIR "Warzone 2100 2.2"
@@ -119,7 +124,7 @@ char	KeyMapPath[PATH_MAX];
 static GS_GAMEMODE gameStatus = GS_TITLE_SCREEN;
 // Status of the gameloop
 static int gameLoopStatus = 0;
-extern FOCUS_STATE focusState;
+static FOCUS_STATE focusState = FOCUS_IN;
 
 extern void debug_callback_stderr( void**, const char * );
 extern void debug_callback_win32debug( void**, const char * );

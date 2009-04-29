@@ -51,8 +51,6 @@ static const enum CURSOR_TYPE cursor_type =
 static CURSOR currentCursor = ~(CURSOR)0;
 static SDL_Cursor* aCursors[CURSOR_MAX];
 
-FOCUS_STATE focusState = FOCUS_IN;
-
 bool selfTest = false;
 
 /************************************************************************************
