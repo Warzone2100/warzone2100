@@ -28,6 +28,7 @@
 
 #include "utf.h"
 #include <assert.h>
+#include <stdlib.h>
 
 #if defined(LIB_COMPILE)
 # define ASSERT(expr, ...) (assert(expr))

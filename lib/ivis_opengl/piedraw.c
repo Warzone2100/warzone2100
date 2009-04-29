@@ -23,7 +23,6 @@
 
 #include "lib/ivis_opengl/GLee.h"
 #include <string.h>
-#include <SDL_video.h>
 
 #include "lib/framework/frame.h"
 #include "lib/ivis_common/ivisdef.h"
