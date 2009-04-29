@@ -3151,8 +3151,8 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool mission)
 				xdiff = (SDWORD)psDroid->pos.x - (SDWORD)psStructure->pos.x;
 				ydiff = (SDWORD)psDroid->pos.y - (SDWORD)psStructure->pos.y;
 				if (psDroid->action == DACTION_WAITFORREPAIR ||
-				    psDroid->action == DACTION_WAITDURINGREPAIR
-				    && xdiff*xdiff + ydiff*ydiff > (TILE_UNITS*5/2)*(TILE_UNITS*5/2))
+				    (psDroid->action == DACTION_WAITDURINGREPAIR
+				    && xdiff*xdiff + ydiff*ydiff > (TILE_UNITS*5/2)*(TILE_UNITS*5/2)))
 				{
 					objTrace(psStructure->id, "Requesting droid %d to come to us", (int)psDroid->id);
 					actionDroidObjLoc(psDroid, DACTION_MOVETOREPAIRPOINT,
