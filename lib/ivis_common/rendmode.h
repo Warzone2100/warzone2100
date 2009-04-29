@@ -55,6 +55,6 @@ extern iSurface *psRendSurface;
 
 extern void iV_RenderAssign(iSurface *s);
 extern void iV_SurfaceDestroy(iSurface *s);
-extern iSurface *iV_SurfaceCreate(Uint32 flags, int width, int height, int xp, int yp, Uint8 *buffer);
+extern iSurface *iV_SurfaceCreate(uint32_t flags, int width, int height, int xp, int yp, uint8_t *buffer);
 
 #endif
