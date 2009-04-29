@@ -137,6 +137,11 @@ typedef struct {					//Available game storage... JUST FOR REFERENCE!
  */
 typedef struct
 {
+	/* Version of this structure and thus the binary lobby protocol.
+	 * @NOTE: <em>MUST</em> be the first item of this struct.
+	 */
+	uint32_t	GAMESTRUCT_VERSION;
+
 	char		name[StringSize];
 	SESSIONDESC	desc;
 	// END of old GAMESTRUCT format
@@ -145,7 +150,6 @@ typedef struct
 	char		extra[extra_string_size];		// extra string (future use)
 	char		versionstring[StringSize];		// 
 	char		modlist[modlist_string_size];	// ???
-	uint32_t	GAMESTRUCT_VERSION;				// version of this structure
 	uint32_t	game_version_major;				// 
 	uint32_t	game_version_minor;				// 
 	uint32_t	privateGame;					// if true, it is a private game
