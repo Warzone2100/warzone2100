@@ -412,17 +412,6 @@ void iV_SetTextColour(PIELIGHT colour)
 	font_colour[3] = colour.byte.a / 255.0f;
 }
 
-// --------------------------------------------------------------------------
-
-enum {
-	EXTENTS_NONE,
-	EXTENTS_START,
-	EXTENTS_END
-};
-
-static char FString[256];		// Must do something about these wastefull static arrays.
-static char FWord[256];
-
 /** Draws formatted text with word wrap, long word splitting, embedded newlines
  *  (uses '@' rather than '\n') and colour toggle mode ('#') which enables or
  *  disables font colouring.
@@ -437,15 +426,15 @@ static char FWord[256];
  */
 int iV_DrawFormattedText(const char* String, UDWORD x, UDWORD y, UDWORD Width, UDWORD Justify)
 {
+	char FString[256];
+	char FWord[256];
 	int i;
 	int jx = x;		// Default to left justify.
 	int jy = y;
 	UDWORD WWidth;
 	int TWidth;
-
 	const char* curChar = String;
 
-	curChar = String;
 	while (*curChar != 0)
 	{
 		bool GotSpace = false;
