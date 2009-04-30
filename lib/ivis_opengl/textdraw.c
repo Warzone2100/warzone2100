@@ -422,14 +422,6 @@ enum {
 
 static char FString[256];		// Must do something about these wastefull static arrays.
 static char FWord[256];
-static int LastX;				// Cursor position after last draw.
-static int LastY;
-static int LastTWidth;			// Pixel width of the last string draw.
-static int RecordExtents = EXTENTS_NONE;
-static int ExtentsStartX;
-static int ExtentsStartY;
-static int ExtentsEndX;
-static int ExtentsEndY;
 
 /** Draws formatted text with word wrap, long word splitting, embedded newlines
  *  (uses '@' rather than '\n') and colour toggle mode ('#') which enables or
@@ -580,31 +572,8 @@ int iV_DrawFormattedText(const char* String, UDWORD x, UDWORD y, UDWORD Width, U
 		//iV_SetTextSize(12.f);
 		iV_DrawText(FString, jx, jy);
 
-		/* callback type for resload display callback*/
-		// remember where we were..
-		LastX = jx + TWidth;
-		LastY = jy;
-		LastTWidth = TWidth;
-
 		// and move down a line.
 		jy += iV_GetTextLineSize();
-	}
-
-	if (RecordExtents == EXTENTS_START)
-	{
-		RecordExtents = EXTENTS_END;
-
-		ExtentsStartY = y + iV_GetTextAboveBase();
-		ExtentsEndY = jy - iV_GetTextLineSize() + iV_GetTextBelowBase();
-
-		ExtentsStartX = x;	// Was jx, but this broke the console centre justified text background.
-		ExtentsEndX = x + Width;
-	}
-	else if (RecordExtents == EXTENTS_END)
-	{
-		ExtentsEndY = jy - iV_GetTextLineSize() + iV_GetTextBelowBase();
-
-		ExtentsEndX = x + Width;
 	}
 
 	return jy;
