@@ -25,16 +25,15 @@
 #define __INCLUDED_LIB_FRAMEWORK_TYPES_H__
 
 #include "wzglobal.h"
-
-// Defines C99 types for C99 incompatible compilers (e.g. MSVC)
 #include <limits.h>
-
 #include <ctype.h>
 
 #ifdef WZ_C99
 /* Compilers that have support for C99 have all values below defined in stdint.h */
 # include <stdint.h>
 #else
+// Defines C99 types for C99 incompatible compilers (e.g. MSVC)
+#include <SDL_stdinc.h>
 # define INT8_MIN               (-128)
 # define INT16_MIN              (-32767-1)
 # define INT32_MIN              (-2147483647-1)
