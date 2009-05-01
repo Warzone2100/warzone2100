@@ -42,7 +42,7 @@ from SocketServer import ThreadingTCPServer
 import SocketServer
 import struct
 import socket
-from threading import Lock, Thread, Event, Timer
+from threading import Lock, RLock, Thread, Event, Timer
 from select import select
 import logging
 import traceback
@@ -64,13 +64,11 @@ logging.basicConfig(level = logging.DEBUG, format = "%(asctime)-15s %(levelname)
 # Game DB
 
 gamedb = None
-gamedblock = Lock()
 
 class GameDB:
-	global gamedblock
-
 	def __init__(self):
 		self.list = set()
+		self.lock = RLock()
 
 	def __remove(self, g):
 		# if g is not in the list, ignore the KeyError exception
@@ -81,41 +79,47 @@ class GameDB:
 
 	def addGame(self, g):
 		""" add a game """
-		with gamedblock:
+		with self.lock:
 			self.list.add(g)
 
 	def removeGame(self, g):
 		""" remove a game from the list"""
-		with gamedblock:
+		with self.lock:
 			self.__remove(g)
 
 	# only games with a valid description
 	def getGames(self):
 		""" filter all games with a valid description """
-		return filter(lambda x: x.description, self.list)
+		for game in self.getAllGames()
+			if game.description:
+				yield game
 
 	def getAllGames(self):
 		""" return all knwon games """
-		return self.list
+		with self.lock:
+			for game in self.list:
+				yield game
 
 	def getGamesByHost(self, host):
 		""" filter all games of a certain host"""
-		return filter(lambda x: x.host == host, self.getGames())
+		for game in self.getGames():
+			if game.host == host:
+				yield game
 
 	def checkGames(self):
-		with gamedblock:
-			gamesCount = len(self.getGames())
-			logging.debug("Checking: %i game(s)" % (gamesCount))
-			for game in self.getGames():
+		with self.lock:
+			games = list(self.getGames())
+			logging.debug("Checking: %i game(s)" % (len(games)))
+			for game in games:
 				if not protocol.check(game):
 					logging.debug("Removing unreachable game: %s" % game)
 					self.__remove(game)
 
 	def listGames(self):
-		with gamedblock:
-			gamesCount = len(self.getGames())
-			logging.debug("Gameserver list: %i game(s)" % (gamesCount))
-			for game in self.getGames():
+		with self.lock:
+			games = list(self.getGames())
+			logging.debug("Gameserver list: %i game(s)" % (len(games)))
+			for game in games:
 				logging.debug(" %s" % game)
 
 #
@@ -200,15 +204,15 @@ class RequestHandler(SocketServer.ThreadingMixIn, SocketServer.StreamRequestHand
 			# Get a game list.
 			elif netCommand == 'list':
 				# Lock the gamelist to prevent new games while output.
-				with gamedblock:
+				with gamedb.lock:
 					try:
-						gamesCount = len(gamedb.getGames())
-						logging.debug("(%s) Gameserver list: %i game(s)" % (gameHost, gamesCount))
+						games = list(gamedb.getGames())
+						logging.debug("(%s) Gameserver list: %i game(s)" % (gameHost, len(games)))
 
 						# Transmit the games.
-						for game in gamedb.getGames():
+						for game in games:
 							logging.debug(" %s" % game)
-						protocol.encodeMultiple(gamedb.getGames(), self.wfile)
+						protocol.encodeMultiple(games, self.wfile)
 						break
 					except:
 						logging.error("(%s) Unhandled exception: %s" % (gameHost, traceback.format_exc()))
