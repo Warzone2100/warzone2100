@@ -49,10 +49,10 @@ bool patternManagerRemove(const char *id)
 {
 	pattern *cur = NULL;
 	int index;
-	
+
 	assert(id != NULL);
 	assert(patternList != NULL);
-	
+
 	vectorRewind(patternList);
 	// Search the pattern list for the corresponding id
 	for(index = 0; (cur = vectorNext(patternList)); index++)
@@ -71,8 +71,8 @@ bool patternManagerRemove(const char *id)
 
 /**
  * Copies an existing cairo pattern and adds it to our global list. An existing
- * pattern with the same id will be overwritten while all pointers to the pattern
- * structure will be kept intact.
+ * pattern with the same id will be overwritten while all pointers to the
+ * pattern structure will be kept intact.
  *
  * @param id The pattern's id.
  * @param crPattern The cairo pattern.
@@ -81,13 +81,13 @@ bool patternManagerRemove(const char *id)
 pattern *patternManagerAddCairoPattern(const char *id, cairo_pattern_t *crPattern)
 {
 	pattern *item;
-	
+
 	assert(id != NULL);
 	assert(crPattern != NULL);
-	
+
 	// check for existing patterns
 	item = patternManagerLookForPattern(id);
-	
+
 	if(item != NULL)
 	{
 		// if there's already a pattern with the desired id then destroy it's cairo pattern.
@@ -110,47 +110,52 @@ pattern *patternManagerAddCairoPattern(const char *id, cairo_pattern_t *crPatter
 	return item;
 }
 
-pattern *patternManagerGradientCreateLinear(const char *id, float x0, float y0, float x1, float y1)
+pattern *patternManagerGradientCreateLinear(const char *id,
+                                            float x0, float y0,
+                                            float x1, float y1)
 {
 	cairo_pattern_t *crPattern;
 	pattern *pat;
-	
+
 	assert(id != NULL);
-	
+
 	// create a linear cairo pattern
 	crPattern = cairo_pattern_create_linear(x0, y0, x1, y1);
-	
+
 	// and create a pattern for use in betawidget
 	pat = patternManagerAddCairoPattern(id, crPattern);
-	
+
 	return pat;
 }
 
-pattern *patternManagerGradientCreateRadial(const char *id, float x0, float y0, float r0, float x1, float y1, float r1)
+pattern *patternManagerGradientCreateRadial(const char *id,
+                                            float x0, float y0, float r0,
+                                            float x1, float y1, float r1)
 {
 	cairo_pattern_t *crPattern;
 	pattern *pat;
-	
+
 	assert(id != NULL);
-	
+
 	// create a radial cairo pattern
 	crPattern = cairo_pattern_create_radial(x0, y0, r0, x1, y1, r1);
-	
+
 	// and create a pattern for use in betawidget
 	pat = patternManagerAddCairoPattern(id, crPattern);
-	
+
 	return pat;
 }
 
-void patternManagerGradientAddColourStop(pattern *item, float o, float r, float g, float b, float a)
+void patternManagerGradientAddColourStop(pattern *item, float o,
+                                         float r, float g, float b, float a)
 {
 	assert(item != NULL);
 	cairo_pattern_add_color_stop_rgba(item->crPattern, o, r, g, b, a);
 }
 
-/** 
+/**
  * Scales the pattern matrix to get the desired size.
- * For this reason, the gradient coordinates should be normalized.
+ * For this reason, the gradient coordinates should be normalised.
  *
  * @param item The Pattern to set the size of.
  * @param size The desired size.
@@ -162,8 +167,8 @@ void patternManagerSetSize(pattern *item, point size)
 	assert(item != NULL);
 
 	// create a new identity matrix and scale it
-	cairo_matrix_init_scale(&matrixScale, 1./size.x, 1./size.y);
-	
+	cairo_matrix_init_scale(&matrixScale, 1.0 / size.x, 1.0 / size.y);
+
 	// apply the matrix
 	cairo_pattern_set_matrix(item->crPattern, &matrixScale);
 }
@@ -172,7 +177,7 @@ void patternManagerSetAsSource(cairo_t *cr, pattern *item, float x, float y)
 {
 	assert(cr != NULL);
 	assert(item != NULL);
-	
+
 	point p = {x, y};
 
 	patternManagerSetSize(item, p);
@@ -182,21 +187,21 @@ void patternManagerSetAsSource(cairo_t *cr, pattern *item, float x, float y)
 pattern *patternManagerGetPattern(const char *id)
 {
 	pattern *item;
-	
+
 	item = patternManagerLookForPattern(id);
 	assert(item != NULL);
-	
+
 	return item;
 }
 
 /**
  * Returns the pattern by the given Id
  * The pattern is valid until it's removed by patternManagerRemove()
- * 
+ *
  * Do NOT call this function directly unless you want to know if a
  * pattern exists. Call patternManagerGetPattern instead which adds
  * an assert if the pattern doesn't exist.
- * 
+ *
  * @param id The pattern id
  * @return The requested pattern
  * @see patternManagerGetPattern
@@ -207,11 +212,11 @@ static pattern *patternManagerLookForPattern(const char *id)
 	pattern *cur, *item;
 	assert(id != NULL);
 	int i;
-	
+
 	// the function returns NULL when no occurence is found
 	cur = NULL;
 	item = NULL;
-	
+
 	// Search the pattern for the corresponding id
 	vectorRewind(patternList);
 	while((cur = vectorNext(patternList)))
@@ -223,7 +228,7 @@ static pattern *patternManagerLookForPattern(const char *id)
 			break;
 		}
 	}
-	
+
 	return item;
 }
 
@@ -246,4 +251,3 @@ void patternManagerQuit()
 	// Note that we have quit
 	patternList = NULL;
 }
-
