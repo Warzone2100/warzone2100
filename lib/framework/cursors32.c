@@ -1137,8 +1137,8 @@ static const struct
 SDL_Cursor* init_system_cursor32(CURSOR cur)
 {
 	int i, row, col;
-	Uint8 data[4 * 32];
-	Uint8 mask[4 * 32];
+	uint8_t data[4 * 32];
+	uint8_t mask[4 * 32];
 	int hot_x, hot_y;
 	const char** image;
 	ASSERT(cur < CURSOR_MAX, "Attempting to load non-existent cursor: %u", (unsigned int)cur);
@@ -1180,4 +1180,3 @@ SDL_Cursor* init_system_cursor32(CURSOR cur)
 	sscanf(image[4 + row], "%d,%d", &hot_x, &hot_y);
 	return SDL_CreateCursor(data, mask, 32, 32, hot_x, hot_y);
 }
-
