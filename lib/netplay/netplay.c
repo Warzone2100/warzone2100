@@ -1953,25 +1953,28 @@ static void NETallowJoining(void)
 						game.desc.dwCurrentPlayers = NETplayerInfo();
 						NETsendGAMESTRUCT(tmp_socket[i], &game);
 					}
+
+					SDLNet_TCP_DelSocket(tmp_socket_set, tmp_socket[i]);
+					SDLNet_TCP_Close(tmp_socket[i]);
+					tmp_socket[i] = NULL;
 				}
 				else if (strcmp(buffer, "join") == 0)
 				{
 					debug(LOG_NET, "cmd: join.  Sending GAMESTRUCT");
 					NETsendGAMESTRUCT(tmp_socket[i], &game);
 				}
-
+				else
+				{
+					SDLNet_TCP_DelSocket(tmp_socket_set, tmp_socket[i]);
+					SDLNet_TCP_Close(tmp_socket[i]);
+					tmp_socket[i] = NULL;
+				}
 			}
 			else
 			{
-				//if (recv_result <= 0)
-				//{
-				//	// An error may have occured, but sometimes you can just ignore it
-				//	// It may be good to disconnect sock because it is likely invalid now.
-				//	// We need to handle this error correctly!
-				//	debug(LOG_ERROR,"Couldn't contact server!  Are required TCP ports open?");
-
-				//}
-				return;
+				SDLNet_TCP_DelSocket(tmp_socket_set, tmp_socket[i]);
+				SDLNet_TCP_Close(tmp_socket[i]);
+				tmp_socket[i] = NULL;
 			}
 		}
 		for(i = 0; i < MAX_TMP_SOCKETS; ++i)
