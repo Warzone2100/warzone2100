@@ -300,10 +300,6 @@ void recvOptions()
 
 		addConsoleMessage("MAP REQUESTED!",DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 	}
-	else
-	{
-		loadMapPreview();
-	}
 }
 
 

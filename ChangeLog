@@ -1,3 +1,7 @@
+0000-00-00: Version 2.1.4
+ * GUI
+   * Fix: No longer shows map when switching color, position, team, etc in staging area
+
 2009-04-01: Version 2.1.3
  * General
    * Fix: Fixed issue that prevented information about enemy research to be shared between hosts. (r6915)
