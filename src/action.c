@@ -1405,14 +1405,32 @@ void actionUpdateDroid(DROID *psDroid)
 		}
 
 		bHasTarget = false;
-		for(i = 0;i < psDroid->numWeaps;i++)
+		for (i = 0;i < psDroid->numWeaps;i++)
 		{
 			BASE_OBJECT* psActionTarget;
 
-			//Skip main turret target changes
-			if (i > 0 &&
-				psDroid->psActionTarget[i] == NULL &&
-				aiChooseTarget((BASE_OBJECT*)psDroid, &psTargets[i], i, false))
+			if (i > 0)
+			{
+				// If we're ordered to shoot something, and we can, shoot it
+				if ((psDroid->order == DORDER_ATTACK || psDroid->order == DORDER_ATTACKTARGET) &&
+				    psDroid->psActionTarget[i] != psDroid->psActionTarget[0] &&
+				    validTarget((BASE_OBJECT *)psDroid, psDroid->psActionTarget[0], i) &&
+				    actionInRange(psDroid, psDroid->psActionTarget[0], i))
+				{
+					setDroidActionTarget(psDroid, psDroid->psActionTarget[0], i);
+				}
+				// If we still don't have a target, try to find one
+				else if (psDroid->psActionTarget[i] == NULL &&
+					aiChooseTarget((BASE_OBJECT*)psDroid, &psTargets[i], i, false))
+				{
+					setDroidActionTarget(psDroid, psTargets[i], i);
+				}
+			}
+			// Main turret lost its target, but we're not ordered to attack any specific
+			// target, so try to find a new one
+			else if (psDroid->psActionTarget[0] == NULL &&
+			          psDroid->order != DORDER_ATTACK &&
+			          aiChooseTarget((BASE_OBJECT*)psDroid, &psTargets[i], i, false))
 			{
 				setDroidActionTarget(psDroid, psTargets[i], i);
 			}
@@ -1448,7 +1466,15 @@ void actionUpdateDroid(DROID *psDroid)
 
 					if (dirDiff > FIXED_TURRET_DIR)
 					{
-						if (psDroid->sMove.Status != MOVESHUFFLE)
+						if (i > 0)
+						{
+							if (psDroid->psActionTarget[i] != psDroid->psActionTarget[0])
+							{
+								// Nope, can't shoot this, try something else next time
+								psDroid->psActionTarget[i] = NULL;
+							}
+						}
+						else if (psDroid->sMove.Status != MOVESHUFFLE)
 						{
 							psDroid->action = DACTION_ROTATETOATTACK;
 							moveTurnDroid(psDroid, psActionTarget->pos.x, psActionTarget->pos.y);
@@ -1461,6 +1487,16 @@ void actionUpdateDroid(DROID *psDroid)
 						combFire(&psDroid->asWeaps[i], (BASE_OBJECT *)psDroid, psActionTarget, i);
 					}
 				}
+				else if (i > 0)
+				{
+					// Nope, can't shoot this, try something else next time
+					psDroid->psActionTarget[i] = NULL;
+				}
+			}
+			else if (i > 0)
+			{
+				// Nope, can't shoot this, try something else next time
+				psDroid->psActionTarget[i] = NULL;
 			}
 		}
 
@@ -2324,10 +2360,9 @@ void actionUpdateDroid(DROID *psDroid)
 	}
 	case DACTION_DROIDREPAIR:
 	{
-		int xdiff , ydiff;
+		int xdiff, ydiff;
 
-		//if not doing self-repair
-		//Watermelon:use 0 for repair droid
+		// If not doing self-repair (psActionTarget[0] is repair target)
 		if (psDroid->psActionTarget[0] != (BASE_OBJECT *)psDroid)
 		{
 			actionTargetTurret((BASE_OBJECT*)psDroid, psDroid->psActionTarget[0], &psDroid->asWeaps[0]);
@@ -2355,13 +2390,10 @@ void actionUpdateDroid(DROID *psDroid)
 						{
 							psTemp = NULL;
 						}
-						else
-						{
-							psDroid->action = DACTION_ATTACK;
-						}
 					}
 					if (psTemp)
 					{
+						psDroid->action = DACTION_ATTACK;
 						setDroidActionTarget(psDroid, psTemp, 0);
 						break;
 					}
