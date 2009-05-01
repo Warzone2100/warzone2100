@@ -131,6 +131,25 @@ requestlock = Lock()
 protocol = Protocol()
 
 class RequestHandler(SocketServer.ThreadingMixIn, SocketServer.StreamRequestHandler):
+	def __init__(self, request, client_address, server):
+		self.request = request
+		self.client_address = client_address
+		self.server = server
+		try:
+			self.setup()
+			try:
+				self.handle()
+			finally:
+				self.finish()
+		finally:
+			sys.exc_traceback = None    # Help garbage collection
+
+	def setup(self):
+		for parent in (SocketServer.ThreadingMixIn, SocketServer.StreamRequestHandler):
+			if hasattr(parent, 'setup'):
+				parent.setup(self)
+		self.g = None
+
 	def handle(self):
 		global requests, requestlock, gamedb
 
@@ -169,23 +188,23 @@ class RequestHandler(SocketServer.ThreadingMixIn, SocketServer.StreamRequestHand
 				logging.debug("(%s) Adding gameserver..." % gameHost)
 				try:
 					# create a game object
-					g = Game()
-					g.requestHandler = self
+					self.g = Game()
+					self.g.requestHandler = self
 					# put it in the database
-					gamedb.addGame(g)
+					gamedb.addGame(self.g)
 
 					# and start receiving updates about the game
 					while True:
-						newGameData = protocol.decodeSingle(self.rfile, g)
+						newGameData = protocol.decodeSingle(self.rfile, self.g)
 						if not newGameData:
 							logging.debug("(%s) Removing aborted game" % gameHost)
 							return
 
-						logging.debug("(%s) Updated game: %s" % (gameHost, g))
+						logging.debug("(%s) Updated game: %s" % (gameHost, self.g))
 						#set gamehost
-						g.host = gameHost
+						self.g.host = gameHost
 
-						if not protocol.check(g):
+						if not protocol.check(self.g):
 							logging.debug("(%s) Removing unreachable game" % gameHost)
 							return
 
@@ -197,10 +216,7 @@ class RequestHandler(SocketServer.ThreadingMixIn, SocketServer.StreamRequestHand
 				except:
 					logging.error("(%s) Unhandled exception: %s" % (gameHost, traceback.format_exc()))
 					raise
-				finally:
-					if g:
-						gamedb.removeGame(g)
-					break
+				return
 			# Get a game list.
 			elif netCommand == 'list':
 				# Lock the gamelist to prevent new games while output.
@@ -221,6 +237,13 @@ class RequestHandler(SocketServer.ThreadingMixIn, SocketServer.StreamRequestHand
 			# If something unknown appears.
 			else:
 				raise Exception("(%s) Recieved a unknown command: %s" % (gameHost, netCommand))
+
+	def finish(self):
+		if self.g:
+			gamedb.removeGame(self.g)
+		for parent in (SocketServer.ThreadingMixIn, SocketServer.StreamRequestHandler):
+			if hasattr(parent, 'finish'):
+				parent.finish(self)
 
 class TCP6Server(SocketServer.TCPServer):
 	"""Class to enable listening on both IPv4 and IPv6 addresses."""
