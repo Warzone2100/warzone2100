@@ -1362,7 +1362,7 @@ const char *GetDefaultTemplateName(DROID_TEMPLATE *psTemplate)
 
 	if ( psTemplate->numWeaps > 1 )
 	{
-		sstrcat(aCurrName, "Hydra ");
+		sstrcat(aCurrName, _("Hydra "));
 	}
 
 	psStats = (COMPONENT_STATS *) (asBodyStats + psTemplate->asParts[COMP_BODY]);
