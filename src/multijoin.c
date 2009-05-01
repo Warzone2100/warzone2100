@@ -297,7 +297,7 @@ BOOL MultiPlayerJoin(UDWORD dpid)
 		// if skirmish and game full, then kick...
 		if(game.type == SKIRMISH && NetPlay.playercount > game.maxPlayers )
 		{
-			kickPlayer(dpid, "game is full!", ERROR_FULL);
+			kickPlayer(dpid, _("The game is full!"), ERROR_FULL);
 		}
 	}
 	return true;

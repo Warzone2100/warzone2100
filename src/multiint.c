@@ -193,7 +193,7 @@ static	void stopJoining(void);
 /// This function is a HACK
 /// Loads the entire map (including calculating gateways) just to show
 /// a picture of it
-void loadMapPreview(void)
+void loadMapPreview(bool hideInterface)
 {
 	char			aFileName[256];
 	UDWORD			fileSize;
@@ -402,7 +402,10 @@ void loadMapPreview(void)
 	free(fboData);
 	free(imageData);
 
-	hideTime = gameTime;
+	if (hideInterface)
+	{
+		hideTime = gameTime;
+	}
 	mapShutdown();
 	Delete_FBO();
 }
@@ -2132,7 +2135,7 @@ static void processMultiopWidgets(UDWORD id)
 			addGameOptions(false);
 			break;
 		case MULTIOP_MAP_BUT:
-			loadMapPreview();
+			loadMapPreview(true);
 			break;
 		}
 	}
@@ -2385,7 +2388,7 @@ static void processMultiopWidgets(UDWORD id)
 		stopJoining();
 		break;
 	case MULTIOP_MAP_BUT:
-		loadMapPreview();
+		loadMapPreview(true);
 		break;
 	default:
 		break;
@@ -2843,7 +2846,7 @@ void runMultiOptions(void)
 			case MULTIOP_MAP:
 				sstrcpy(game.map, sTemp);
 				game.maxPlayers =(UBYTE) value;
-				loadMapPreview();
+				loadMapPreview(true);
 
 				widgSetString(psWScreen,MULTIOP_MAP,sTemp);
 				addGameOptions(false);
