@@ -3017,7 +3017,14 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool mission)
 			structureMode = REF_REPAIR_FACILITY;
 			psDroid = (DROID *)psChosenObj;
 
-			// skip droids that are doing anything else
+			// If the droid we're repairing just died, find a new one
+			if (psDroid && psDroid->died)
+			{
+				psDroid = NULL;
+				psChosenObj = NULL;
+			}
+			
+			// skip droids that are trying to get to other repair factories
 			if (psDroid != NULL
 			    && (!orderState(psDroid, DORDER_RTR)
 			    || psDroid->psTarget != (BASE_OBJECT *)psStructure))
@@ -3025,6 +3032,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool mission)
 				psDroid = (DROID *)psChosenObj;
 				xdiff = (SDWORD)psDroid->pos.x - (SDWORD)psStructure->pos.x;
 				ydiff = (SDWORD)psDroid->pos.y - (SDWORD)psStructure->pos.y;
+				// unless it has orders to repair here, forget about it when it gets out of range
 				if (xdiff * xdiff + ydiff * ydiff > (TILE_UNITS*5/2)*(TILE_UNITS*5/2))
 				{
 					psChosenObj = NULL;
@@ -3033,16 +3041,22 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool mission)
 				}
 			}
 
-			/* select next droid if none being repaired */
+			// select next droid if none being repaired,
+			// or look for a better droid if not repairing one with repair orders
 			if (psChosenObj == NULL ||
 			    (((DROID *)psChosenObj)->order != DORDER_RTR && ((DROID *)psChosenObj)->order != DORDER_RTR_SPECIFIED))
 			{
 				ASSERT( psRepairFac->psGroup != NULL,
 					"aiUpdateStructure: invalid repair facility group pointer" );
 
+				// Tries to find most important droid to repair
+				// Lower dist = more important
+				// mindist contains lowest dist found so far
 				mindist = (TILE_UNITS*8)*(TILE_UNITS*8)*3;
 				if (psChosenObj)
 				{
+					// We already have a valid droid to repair, no need to look at
+					// droids without a repair order.
 					mindist = (TILE_UNITS*8)*(TILE_UNITS*8)*2;
 				}
 				psRepairFac->droidQueue = 0;
@@ -3050,7 +3064,10 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool mission)
 				{
 					BASE_OBJECT * const psTarget = orderStateObj(psDroid, DORDER_RTR);
 
-					// Take any "lost" unit with DORDER_RTR
+					// Highest priority:
+					// Take any droid with orders to Return to Repair (DORDER_RTR),
+					// or that have been ordered to this repair facility (DORDER_RTR_SPECIFIED),
+					// or any "lost" unit with one of those two orders.
 					if (((psDroid->order == DORDER_RTR || psDroid->order == DORDER_RTR_SPECIFIED)
 					  && psDroid->action != DACTION_WAITFORREPAIR && psDroid->action != DACTION_MOVETOREPAIRPOINT
 					  && psDroid->action != DACTION_WAITDURINGREPAIR)
@@ -3095,7 +3112,8 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool mission)
 							psRepairFac->droidQueue++;
 						}
 					}
-					// Otherwise steal a droid from another repair facility
+					// Second highest priority:
+					// Help out another nearby repair facility
 					else if (mindist > (TILE_UNITS*8)*(TILE_UNITS*8)
 					       && psTarget != (BASE_OBJECT *)psStructure && psDroid->action == DACTION_WAITFORREPAIR)
 					{
@@ -3113,7 +3131,8 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool mission)
 							psRepairFac->droidQueue++;	// shared queue
 						}
 					}
-					// Otherwise just repair whatever's nearby
+					// Lowest priority:
+					// Just repair whatever's nearby and needs repairing.
 					else if (mindist > (TILE_UNITS*8)*(TILE_UNITS*8)*2 && psDroid->body < psDroid->originalBody)
 					{
 						xdiff = (SDWORD)psDroid->pos.x - (SDWORD)psStructure->pos.x;
@@ -3131,7 +3150,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool mission)
 				{
 					if (psDroid->order == DORDER_RTR || psDroid->order == DORDER_RTR_SPECIFIED)
 					{
-						// Hey, droid, it's your turn! Stop what you're doing and get repaired!
+						// Hey, droid, it's your turn! Stop what you're doing and get ready to get repaired!
 						psDroid->action = DACTION_WAITFORREPAIR;
 						psDroid->psTarget = (BASE_OBJECT *)psStructure;
 					}

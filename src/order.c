@@ -705,7 +705,7 @@ void orderUpdateDroid(DROID *psDroid)
 		break;
 	case DORDER_ATTACK:
 	case DORDER_ATTACKTARGET:
-		if (psDroid->psTarget == NULL)
+		if (psDroid->psTarget == NULL || psDroid->psTarget->died)
 		{
 			// if vtol then return to rearm pad as long as there are no other
 			// orders queued up
