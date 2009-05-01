@@ -38,11 +38,12 @@ This script runs a Warzone 2100 2.2.x+ masterserver
 ################################################################################
 # Get the things we need.
 import sys
+from SocketServer import ThreadingTCPServer
 import SocketServer
 import struct
 import socket
 from threading import Lock, Thread, Event, Timer
-import select
+from select import select
 import logging
 import traceback
 import cmd
@@ -216,7 +217,7 @@ class RequestHandler(SocketServer.ThreadingMixIn, SocketServer.StreamRequestHand
 			else:
 				raise Exception("(%s) Recieved a unknown command: %s" % (gameHost, netCommand))
 
-class TCP46Server(SocketServer.TCPServer):
+class TCP6Server(SocketServer.TCPServer):
 	"""Class to enable listening on both IPv4 and IPv6 addresses."""
 
 	address_family = socket.AF_INET6
@@ -224,13 +225,13 @@ class TCP46Server(SocketServer.TCPServer):
 	def server_bind(self):
 		"""Called by constructor to bind the socket.
 
-		Overridden to disable IPV6_V6ONLY.
+		Overridden to enable IPV6_V6ONLY.
 
 		"""
-		self.socket.setsockopt(socket.IPPROTO_IPV6, socket.IPV6_V6ONLY, 0)
+		self.socket.setsockopt(socket.IPPROTO_IPV6, socket.IPV6_V6ONLY, 1)
 		SocketServer.TCPServer.server_bind(self)
 
-class ThreadingTCP46Server(SocketServer.ThreadingMixIn, TCP46Server): pass
+class ThreadingTCP6Server(SocketServer.ThreadingMixIn, TCP6Server): pass
 
 #
 ################################################################################
@@ -248,14 +249,19 @@ if __name__ == '__main__':
 
 	gamedb = GameDB()
 
-	ThreadingTCP46Server.allow_reuse_address = True
-	tcpserver = ThreadingTCP46Server(('::', protocol.lobbyPort), RequestHandler)
+	ThreadingTCPServer.allow_reuse_address = True
+	ThreadingTCP6Server.allow_reuse_address = True
+	tcpservers = [ThreadingTCPServer(('0.0.0.0', protocol.lobbyPort), RequestHandler),
+	              ThreadingTCP6Server(('::', protocol.lobbyPort), RequestHandler)]
 	try:
 		while True:
-			tcpserver.handle_request()
+			(readyServers, wlist, xlist) = select(tcpservers, [], [])
+			for tcpserver in readyServers:
+				tcpserver.handle_request()
 	except KeyboardInterrupt:
 		pass
 	logging.info("Shutting down lobby server, cleaning up")
 	for game in gamedb.getAllGames():
 		game.requestHandler.finish()
-	tcpserver.server_close()
+	for tcpserver in tcpservers:
+		tcpserver.server_close()
