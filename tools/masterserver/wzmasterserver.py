@@ -134,6 +134,7 @@ class RequestHandler(SocketServer.ThreadingMixIn, SocketServer.StreamRequestHand
 			requests += 1
 			if requests >= checkInterval:
 				gamedb.checkGames()
+				requests = 0
 
 		# client address
 		gameHost = self.client_address[0]
