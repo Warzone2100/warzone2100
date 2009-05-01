@@ -138,12 +138,25 @@ NETPLAY	NetPlay;
 static BOOL		allow_joining = false;
 static	bool server_not_there = false;
 static GAMESTRUCT	game;
+
+/**
+ * Socket used for these purposes:
+ *  * Host a game, be a server.
+ *  * Connect to the lobby server.
+ *  * Join a server for a game.
+ */
 static TCPsocket	tcp_socket = NULL;		//socket used to talk to lobbyserver/ host machine
+
 static NETBUFSOCKET*	bsocket = NULL;		//buffered socket (holds tcp_socket) (clients only?)
 static NETBUFSOCKET*	connected_bsocket[MAX_CONNECTED_PLAYERS] = { NULL };
 static SDLNet_SocketSet	socket_set = NULL;
 static BOOL		is_server = false;
+
+/**
+ * Used for connections with clients.
+ */
 static TCPsocket	tmp_socket[MAX_TMP_SOCKETS] = { NULL };
+
 static SDLNet_SocketSet	tmp_socket_set = NULL;
 static char*		hostname;
 static NETSTATS		nStats = { 0, 0, 0, 0 };
