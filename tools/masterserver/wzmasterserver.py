@@ -135,10 +135,19 @@ class RequestHandler(SocketServer.ThreadingMixIn, SocketServer.StreamRequestHand
 		self.request = request
 		self.client_address = client_address
 		self.server = server
+
+		# Client's address
+		gameHost = self.client_address[0]
+
 		try:
 			self.setup()
 			try:
 				self.handle()
+			except struct.error, e:
+				logging.warning("(%s) Data decoding error: %s" % (gameHost, traceback.format_exc()))
+			except:
+				logging.error("(%s) Unhandled exception: %s" % (gameHost, traceback.format_exc()))
+				raise
 			finally:
 				self.finish()
 		finally:
@@ -167,7 +176,7 @@ class RequestHandler(SocketServer.ThreadingMixIn, SocketServer.StreamRequestHand
 			# Read the incoming command.
 			netCommand = self.rfile.read(4)
 			if netCommand == None:
-				break
+				return
 
 			# Skip the trailing NULL.
 			self.rfile.read(1)
@@ -186,57 +195,46 @@ class RequestHandler(SocketServer.ThreadingMixIn, SocketServer.StreamRequestHand
 			elif netCommand == 'addg':
 				# The host is valid
 				logging.debug("(%s) Adding gameserver..." % gameHost)
-				try:
-					# create a game object
-					self.g = Game()
-					self.g.requestHandler = self
-					# put it in the database
-					gamedb.addGame(self.g)
 
-					# and start receiving updates about the game
-					while True:
-						newGameData = protocol.decodeSingle(self.rfile, self.g)
-						if not newGameData:
-							logging.debug("(%s) Removing aborted game" % gameHost)
-							return
+				# create a game object
+				self.g = Game()
+				self.g.requestHandler = self
+				# put it in the database
+				gamedb.addGame(self.g)
 
-						logging.debug("(%s) Updated game: %s" % (gameHost, self.g))
-						#set gamehost
-						self.g.host = gameHost
+				# and start receiving updates about the game
+				while True:
+					newGameData = protocol.decodeSingle(self.rfile, self.g)
+					if not newGameData:
+						logging.debug("(%s) Removing aborted game" % gameHost)
+						return
 
-						if not protocol.check(self.g):
-							logging.debug("(%s) Removing unreachable game" % gameHost)
-							return
+					logging.debug("(%s) Updated game: %s" % (gameHost, self.g))
+					#set gamehost
+					self.g.host = gameHost
 
-						gamedb.listGames()
-				except struct.error, e:
-					logging.warning("(%s) Data decoding error: %s" % (gameHost, traceback.format_exc()))
-				except KeyError, e:
-					logging.warning("(%s) Communication error: %s" % (gameHost, traceback.format_exc()))
-				except:
-					logging.error("(%s) Unhandled exception: %s" % (gameHost, traceback.format_exc()))
-					raise
+					if not protocol.check(self.g):
+						logging.debug("(%s) Removing unreachable game" % gameHost)
+						return
+
+					gamedb.listGames()
 				return
 			# Get a game list.
 			elif netCommand == 'list':
 				# Lock the gamelist to prevent new games while output.
 				with gamedb.lock:
-					try:
-						games = list(gamedb.getGames())
-						logging.debug("(%s) Gameserver list: %i game(s)" % (gameHost, len(games)))
+					games = list(gamedb.getGames())
+					logging.debug("(%s) Gameserver list: %i game(s)" % (gameHost, len(games)))
 
-						# Transmit the games.
-						for game in games:
-							logging.debug(" %s" % game)
-						protocol.encodeMultiple(games, self.wfile)
-						break
-					except:
-						logging.error("(%s) Unhandled exception: %s" % (gameHost, traceback.format_exc()))
-						raise
+					# Transmit the games.
+					for game in games:
+						logging.debug(" %s" % game)
+					protocol.encodeMultiple(games, self.wfile)
+				return
 
 			# If something unknown appears.
 			else:
-				raise Exception("(%s) Recieved a unknown command: %s" % (gameHost, netCommand))
+				raise Exception("(%s) Received an unknown command: %s" % (gameHost, netCommand))
 
 	def finish(self):
 		if self.g:
