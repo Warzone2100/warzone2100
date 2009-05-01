@@ -90,12 +90,12 @@ class GameDB:
 	# only games with a valid description
 	def getGames(self):
 		""" filter all games with a valid description """
-		for game in self.getAllGames()
+		for game in self.getAllGames():
 			if game.description:
 				yield game
 
 	def getAllGames(self):
-		""" return all knwon games """
+		""" return all known games """
 		with self.lock:
 			for game in self.list:
 				yield game
