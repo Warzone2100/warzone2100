@@ -1471,7 +1471,7 @@ void actionUpdateDroid(DROID *psDroid)
 							if (psDroid->psActionTarget[i] != psDroid->psActionTarget[0])
 							{
 								// Nope, can't shoot this, try something else next time
-								psDroid->psActionTarget[i] = NULL;
+								setDroidActionTarget(psDroid, NULL, i);
 							}
 						}
 						else if (psDroid->sMove.Status != MOVESHUFFLE)
@@ -1490,13 +1490,13 @@ void actionUpdateDroid(DROID *psDroid)
 				else if (i > 0)
 				{
 					// Nope, can't shoot this, try something else next time
-					psDroid->psActionTarget[i] = NULL;
+					setDroidActionTarget(psDroid, NULL, i);
 				}
 			}
 			else if (i > 0)
 			{
 				// Nope, can't shoot this, try something else next time
-				psDroid->psActionTarget[i] = NULL;
+				setDroidActionTarget(psDroid, NULL, i);
 			}
 		}
 
