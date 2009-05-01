@@ -306,7 +306,7 @@ void recvOptions()
 	}
 	else
 	{
-		loadMapPreview();
+		loadMapPreview(false);
 	}
 }
 
