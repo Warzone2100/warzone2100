@@ -1830,12 +1830,14 @@ static void NETregisterServer(int state)
 				}
 				if (SDLNet_SocketReady(rs_socket))	// true on activity
 				{
-					result = SDLNet_TCP_Recv(rs_socket, NetPlay.MOTDbuffer, sizeof(NetPlay.MOTDbuffer));
+					result = SDLNet_TCP_Recv(rs_socket, NetPlay.MOTDbuffer, sizeof(NetPlay.MOTDbuffer) - 1);
 					if (result <= 0)
 					{
 						debug(LOG_NET, "Warning, MOTD TCP_Recv failed. result = %d, error %s", result,  SDLNet_GetError());
 						sstrcpy(NetPlay.MOTDbuffer, "MOTD communication error with lobby server, TCP_Recv failed!");
 					}
+					// Make sure to NUL terminate the MOTD string
+					NetPlay.MOTDbuffer[result] = '\0';
 					debug(LOG_NET, "MOTD is [%s]", NetPlay.MOTDbuffer);
 				}
 				else
