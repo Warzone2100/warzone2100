@@ -231,7 +231,7 @@ void recvVersionCheck()
 
 		if(NetPlay.bHost)
 		{
-			kickPlayer( victimdpid, "you have the wrong version of the game, so Update it!", ERROR_WRONGVESION );
+			kickPlayer( victimdpid, "you have the wrong version of the game, so Update it!", ERROR_WRONGVERSION );
 
 			// reset flags /time after we kick them
 			VersionCheckTime[victimdpid] = -1;
@@ -264,7 +264,7 @@ void VersionCheckTimeOut( uint32_t victimdpid )
 
 	if(NetPlay.bHost)
 	{
-		kickPlayer( victimdpid, "You have the wrong version of the game, so Update it!", ERROR_WRONGVESION );
+		kickPlayer( victimdpid, "You have the wrong version of the game, so Update it!", ERROR_WRONGVERSION );
 
 		// reset flags /time after we kick them
 		VersionCheckTime[victimdpid] = -1;
