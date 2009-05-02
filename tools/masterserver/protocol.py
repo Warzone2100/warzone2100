@@ -55,7 +55,7 @@ def _encodeCString(string, buf_len):
 	return str(string)
 
 def _swap_endianness(i):
-	return struct.unpack(">I", struct.pack("<I", i))
+	return struct.unpack(">I", struct.pack("<I", i))[0]
 
 @contextmanager
 def writeable(output):
