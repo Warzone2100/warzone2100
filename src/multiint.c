@@ -726,7 +726,7 @@ static void addGames(void)
 		case ERROR_CHEAT:
 			txt = _("You were kicked!");
 			break;
-		case ERROR_WRONGVESION:
+		case ERROR_WRONGVERSION:
 			txt = _("Wrong Game Verion!");
 			break;
 		case ERROR_WRONGPASSWORD:
