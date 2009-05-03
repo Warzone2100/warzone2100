@@ -95,6 +95,18 @@ AS_IF([test -z "$CC_FOR_BUILD"],[
     AC_SUBST([CC_FOR_BUILD], [${CC}])
 ])
 
+AC_ARG_VAR([CFLAGS_FOR_BUILD], [Flags to use for the C
+	    compiler that produces binaries for the build system])
+AS_IF([test -z "$CFLAGS_FOR_BUILD"],[
+    AC_SUBST([CFLAGS_FOR_BUILD], [${CFLAGS}])
+])
+
+AC_ARG_VAR([CXXFLAGS_FOR_BUILD], [Flags to use for the C++
+	    compiler that produces binaries for the build system])
+AS_IF([test -z "$CXXFLAGS_FOR_BUILD"],[
+    AC_SUBST([CXXFLAGS_FOR_BUILD], [${CXXFLAGS}])
+])
+
 AC_ARG_VAR([CPPFLAGS_FOR_BUILD], [Preprocessor flags to use for the C and C++
 	    compilers that produce binaries for the build system])
 AS_IF([test -z "$CPPFLAGS_FOR_BUILD"],[
