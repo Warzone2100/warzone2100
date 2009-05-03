@@ -633,12 +633,15 @@ static void socketClose(Socket* sock)
 
 static Socket* socketAccept(Socket* sock)
 {
+	char textAddress[40];
+	struct sockaddr_storage addr;
+	socklen_t addr_len = sizeof(addr);
 	SOCKET newConn;
 	Socket* conn;
 
 	ASSERT(sock != NULL, "NULL Socket provided");
 
-	newConn = accept(sock->fd, NULL, NULL);
+	newConn = accept(sock->fd, (struct sockaddr*)&addr, &addr_len);
 	if (newConn == INVALID_SOCKET)
 	{
 		// Ignore the case where no connection is pending
@@ -664,6 +667,9 @@ static Socket* socketAccept(Socket* sock)
 
 	sock->ready = false;
 
+	addressToText((const struct sockaddr*)&addr, textAddress, sizeof(textAddress));
+	debug(LOG_NET, "Incoming connection from %s:%d", textAddress, (unsigned int)ntohs(((const struct sockaddr_in*)&addr)->sin_port));
+
 	return conn;
 }
 
@@ -683,7 +689,7 @@ static Socket* SocketOpen(const struct addrinfo* addr, unsigned int timeout)
 	ASSERT(addr != NULL, "NULL Socket provided");
 
 	addressToText(addr->ai_addr, textAddress, sizeof(textAddress));
-	debug(LOG_NET, "Connecting to %s:%hd", textAddress, ntohs(((const struct sockaddr_in*)addr->ai_addr)->sin_port));
+	debug(LOG_NET, "Connecting to %s:%d", textAddress, (int)ntohs(((const struct sockaddr_in*)addr->ai_addr)->sin_port));
 
 	conn->ready = false;
 	conn->fd = socket(addr->ai_family, addr->ai_socktype, addr->ai_protocol);
@@ -2598,7 +2604,6 @@ static void NETallowJoining(void)
 	if (tmp_socket[i] == NULL // Make sure that we're not out of sockets
 	 && (tmp_socket[i] = socketAccept(tcp_socket)) != NULL)
 	{
-		debug(LOG_NET, "tmp_socket[%d]=%p Accepted", i, tmp_socket[i]);
 		addSocket(tmp_socket_set, tmp_socket[i]);
 		if (checkSockets(tmp_socket_set, 1000) > 0
 		    && tmp_socket[i]->ready
