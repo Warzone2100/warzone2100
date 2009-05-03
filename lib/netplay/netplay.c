@@ -198,24 +198,26 @@ static int NETCODE_VERSION_MINOR = 2;	// unused for now
 static int NUMBER_OF_MODS = 0;			// unused for now
 static int NETCODE_HASH = 0;			// unused for now
 
-static ssize_t read_all(const int fd, void* buf, size_t max_size)
+static ssize_t read_all(Socket* sock, void* buf, size_t max_size)
 {
 	ssize_t received;
 
 	{
-		received = read(fd, buf, max_size);
+		received = read(sock->fd, buf, max_size);
 	} while (received == -1 && (errno == EAGAIN || errno == EINTR));
+
+	sock->ready = false;
 
 	return received;
 }
 
-static ssize_t write_all(const int fd, const void* buf, size_t size)
+static ssize_t write_all(Socket* sock, const void* buf, size_t size)
 {
 	size_t written = 0;
 
 	while (written < size)
 	{
-		ssize_t ret = write(fd, &((char*)buf)[written], size - written);
+		ssize_t ret = write(sock->fd, &((char*)buf)[written], size - written);
 		if (ret == 0)
 		{
 			return written;
@@ -772,7 +774,7 @@ static BOOL NET_fillBuffer(NETBUFSOCKET* bs, SocketSet* socket_set)
 		return false;
 	}
 
-	size = read_all(bs->socket->fd, bufstart, bufsize);
+	size = read_all(bs->socket, bufstart, bufsize);
 
 	if (size > 0)
 	{
@@ -1071,7 +1073,7 @@ BOOL NETsetGameFlags(UDWORD flag, SDWORD value)
  *
  * @see GAMESTRUCT,NETrecvGAMESTRUCT
  */
-static void NETsendGAMESTRUCT(int fd, const GAMESTRUCT* game)
+static void NETsendGAMESTRUCT(Socket* sock, const GAMESTRUCT* game)
 {
 	// A buffer that's guaranteed to have the correct size (i.e. it
 	// circumvents struct padding, which could pose a problem).  Initialise
@@ -1168,7 +1170,7 @@ static void NETsendGAMESTRUCT(int fd, const GAMESTRUCT* game)
 
 
 	// Send over the GAMESTRUCT
-	result = write_all(fd, buf, sizeof(buf));
+	result = write_all(sock, buf, sizeof(buf));
 	if (result != sizeof(buf))
 	{
 		// If packet could not be sent, we should inform user of the error.
@@ -1200,7 +1202,7 @@ static bool NETrecvGAMESTRUCT(GAMESTRUCT* game)
 	 || socket_set == NULL
 	 || checkSockets(socket_set, 1000) <= 0
 	 || !tcp_socket->ready
-	 || (result = read_all(tcp_socket->fd, buf, sizeof(buf))) != sizeof(buf))
+	 || (result = read_all(tcp_socket, buf, sizeof(buf))) != sizeof(buf))
 	{
 		if (result < 0)
 		{
@@ -1524,7 +1526,7 @@ BOOL NETsend(NETMSG *msg, UDWORD player)
 		if (   player < MAX_CONNECTED_PLAYERS
 		    && connected_bsocket[player] != NULL
 		    && connected_bsocket[player]->socket != NULL
-		    && (result = write_all(connected_bsocket[player]->socket->fd,
+		    && (result = write_all(connected_bsocket[player]->socket,
 				       msg, size) == size))
 		{
 			nStats.bytesSent   += size;
@@ -1546,7 +1548,7 @@ BOOL NETsend(NETMSG *msg, UDWORD player)
 	{
 		// FIXME: We are NOT checking checkSockets/SDLNet_SocketReady 
 		// SDLNet_TCP_Send *can* block!
-			if (tcp_socket && (result = write_all(tcp_socket->fd, msg, size) == size))
+			if (tcp_socket && (result = write_all(tcp_socket, msg, size) == size))
 			{
 				return true;
 			}
@@ -1601,7 +1603,7 @@ BOOL NETbcast(NETMSG *msg)
 			{	
 				// FIXME: We are NOT checking checkSockets/SDLNet_SocketReady 
 				// SDLNet_TCP_Send *can* block!
-				result = write_all(connected_bsocket[i]->socket->fd, msg, size);
+				result = write_all(connected_bsocket[i]->socket, msg, size);
 				if (result < size)
 				{
 					// TCP_Send error, inform user of problem.  This really should never happen normally.
@@ -1623,7 +1625,7 @@ BOOL NETbcast(NETMSG *msg)
 		}
 		// FIXME: We are NOT checking checkSockets/SDLNet_SocketReady 
 		// SDLNet_TCP_Send *can* block!
-		result = write_all(tcp_socket->fd, msg, size);
+		result = write_all(tcp_socket, msg, size);
 		if (result < size)
 		{
 			// I believe host has dropped...here
@@ -1962,7 +1964,7 @@ receive_message:
 					    && connected_bsocket[j] != NULL
 					    && connected_bsocket[j]->socket != NULL)
 					{
-						write_all(connected_bsocket[j]->socket->fd, pMsg, size);
+						write_all(connected_bsocket[j]->socket, pMsg, size);
 					}
 				}
 			}
@@ -1978,7 +1980,7 @@ receive_message:
 					debug(LOG_NET, "Reflecting message type %hhu to %hhu", pMsg->type, pMsg->destination);
 					pMsg->size = ntohs(pMsg->size);
 
-					result = write_all(connected_bsocket[pMsg->destination]->socket->fd, pMsg, size);
+					result = write_all(connected_bsocket[pMsg->destination]->socket, pMsg, size);
 					if (result < size)
 					{
 						debug(LOG_WARNING,"SDLNet_TCP_Send(line %d) failed, because of %s", __LINE__, strerror(errno));
@@ -2203,7 +2205,7 @@ static void NETregisterServer(int state)
 					}
 				}
 				// get the MOTD from the server
-				write_all(rs_socket->fd, "motd", sizeof("motd"));
+				write_all(rs_socket, "motd", sizeof("motd"));
 				result = checkSockets(masterset, 1000);
 				if (result ==-1)
 				{
@@ -2211,7 +2213,7 @@ static void NETregisterServer(int state)
 				}
 				if (rs_socket->ready)	// true on activity
 				{
-					result = read_all(rs_socket->fd, NetPlay.MOTDbuffer, sizeof(NetPlay.MOTDbuffer) - 1);
+					result = read_all(rs_socket, NetPlay.MOTDbuffer, sizeof(NetPlay.MOTDbuffer) - 1);
 					if (result <= 0)
 					{
 						debug(LOG_NET, "Warning, MOTD TCP_Recv failed. result = %d, error %s", result,  strerror(errno));
@@ -2227,9 +2229,9 @@ static void NETregisterServer(int state)
 					sstrcpy(NetPlay.MOTDbuffer, "MOTD communication error with lobby server, socket not ready?");
 				}
 
-				write_all(rs_socket->fd, "addg", sizeof("addg"));
+				write_all(rs_socket, "addg", sizeof("addg"));
 				// and now send what the server wants
-				NETsendGAMESTRUCT(rs_socket->fd, &game);
+				NETsendGAMESTRUCT(rs_socket, &game);
 			}
 			break;
 
@@ -2315,13 +2317,13 @@ static void NETallowJoining(void)
 			addSocket(tmp_socket_set, tmp_socket[i]);
 			if (checkSockets(tmp_socket_set, 1000) > 0
 			    && tmp_socket[i]->ready
-			    && (recv_result = read_all(tmp_socket[i]->fd, buffer, 5)))
+			    && (recv_result = read_all(tmp_socket[i], buffer, 5)))
 			{
 				if(strcmp(buffer, "list")==0)
 				{
 					int result = 0;
 					debug(LOG_NET, "cmd: list.  Sending game list");
-					result = write_all(tmp_socket[i]->fd, &numgames, sizeof(numgames));
+					result = write_all(tmp_socket[i], &numgames, sizeof(numgames));
 					if( result < sizeof(numgames) )
 					{
 						// TCP_Send error, inform user of problem.  This really should never happen normally.
@@ -2334,7 +2336,7 @@ static void NETallowJoining(void)
 					{
 						// get the correct player count after kicks / leaves
 						game.desc.dwCurrentPlayers = NETplayerInfo();
-						NETsendGAMESTRUCT(tmp_socket[i]->fd, &game);
+						NETsendGAMESTRUCT(tmp_socket[i], &game);
 					}
 
 					delSocket(tmp_socket_set, tmp_socket[i]);
@@ -2344,7 +2346,7 @@ static void NETallowJoining(void)
 				else if (strcmp(buffer, "join") == 0)
 				{
 					debug(LOG_NET, "cmd: join.  Sending GAMESTRUCT");
-					NETsendGAMESTRUCT(tmp_socket[i]->fd, &game);
+					NETsendGAMESTRUCT(tmp_socket[i], &game);
 				}
 				else
 				{
@@ -2365,7 +2367,7 @@ static void NETallowJoining(void)
 			if (   tmp_socket[i] != NULL
 			    && tmp_socket[i]->ready)
 			{
-				int size = read_all(tmp_socket[i]->fd, &NetMsg, sizeof(NetMsg));
+				int size = read_all(tmp_socket[i], &NetMsg, sizeof(NetMsg));
 
 				if (size <= 0)
 				{
@@ -2636,11 +2638,11 @@ BOOL NETfindGame(void)
 	addSocket(socket_set, tcp_socket);
 
 	debug(LOG_NET, "Sending list cmd");
-	write_all(tcp_socket->fd, "list", sizeof("list"));
+	write_all(tcp_socket, "list", sizeof("list"));
 
 	if (checkSockets(socket_set, 1000) > 0
 	 && tcp_socket->ready
-	 && (result = read_all(tcp_socket->fd, &gamesavailable, sizeof(gamesavailable))))
+	 && (result = read_all(tcp_socket, &gamesavailable, sizeof(gamesavailable))))
 	{
 		gamesavailable = ntohl(gamesavailable);
 	}
@@ -2748,7 +2750,7 @@ BOOL NETjoinGame(UDWORD gameNumber, const char* playername)
 	// tcp_socket is used to talk to host machine
 	addSocket(socket_set, tcp_socket);
 
-	write_all(tcp_socket->fd, "join", sizeof("join"));
+	write_all(tcp_socket, "join", sizeof("join"));
 
 	if (NETrecvGAMESTRUCT(&NetPlay.games[gameNumber])
 	 && NetPlay.games[gameNumber].desc.host[0] == '\0')
