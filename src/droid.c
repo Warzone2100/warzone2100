@@ -1568,14 +1568,11 @@ BOOL droidUpdateDroidRepair(DROID *psRepairDroid)
 
 	CHECK_DROID(psRepairDroid);
 
-	ASSERT( psRepairDroid->action == DACTION_DROIDREPAIR,
-		"unitUpdateUnitRepair: unit does not have unit repair order" );
-	ASSERT( psRepairDroid->asBits[COMP_REPAIRUNIT].nStat != 0,
-		"unitUpdateUnitRepair: unit does not have a repair turret" );
+	ASSERT_OR_RETURN(false, psRepairDroid->action == DACTION_DROIDREPAIR, "Unit does not have unit repair order");
+	ASSERT_OR_RETURN(false, psRepairDroid->asBits[COMP_REPAIRUNIT].nStat != 0, "Unit does not have a repair turret");
 
 	psDroidToRepair = (DROID *)psRepairDroid->psActionTarget[0];
-	ASSERT( psDroidToRepair->type == OBJ_DROID,
-		"unitUpdateUnitRepair: target is not a unit" );
+	ASSERT_OR_RETURN(false, psDroidToRepair->type == OBJ_DROID, "Target is not a unit");
 
 	// FIXME: add power cost for repair
 	// remember that self repair is free
