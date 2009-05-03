@@ -40,6 +40,8 @@
    * Fix: Water tiles on little egypt map fixed (r6824, bug #9658)
  * Engine:
    * New: Support for naval propulsion type (r5803)
+ * Network:
+  * Change: Replaced SDL-net by using BSD sockets instead.
 
 2009-03-07: Version 2.1.2
  * General:

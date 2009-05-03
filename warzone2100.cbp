@@ -185,7 +185,6 @@
 			<Add library="physfs" />
 			<Add library="png" />
 			<Add library="SDL" />
-			<Add library="SDL_net" />
 			<Add library="vorbisfile" />
 			<Add library="vorbis" />
 			<Add library="ogg" />

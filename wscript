@@ -61,9 +61,6 @@ def configure(conf):
 		conf.check_header2('vorbis/vorbisfile.h')
 		conf.check_library2('vorbisfile')
 
-	conf.check_header2('SDL/SDL_net.h')
-	conf.check_library2('SDL_net')
-
 	conf.check_header2('GL/gl.h')
 	conf.check_library2('GL')
 
@@ -100,7 +97,7 @@ def configure(conf):
 def build(bld):
 	obj = bld.create_obj('cc', 'program')
 	obj.find_sources_in_dirs('lib/framework lib/gamelib lib/netplay lib/ivis_common lib/ivis_opengl lib/script lib/sequence lib/sound lib/widget src')
-	obj.uselib='PNG OGG VORBISFILE GLU GL OPENAL PHYSFS SDL_NET SDL SDLMAIN'
+	obj.uselib='PNG OGG VORBISFILE GLU GL OPENAL PHYSFS SDL SDLMAIN'
 	obj.includes='lib/framework lib/gamelib lib/script src'
 	obj.defines='HAVE_CONFIG_H'
 	obj.target='warzone2100'
