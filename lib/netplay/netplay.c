@@ -516,18 +516,14 @@ static bool setSocketBlocking(const SOCKET fd, bool blocking)
 		sockopts |= O_NONBLOCK;
 
 	if (fcntl(fd, F_SETFL, sockopts) == SOCKET_ERROR)
-	{
-		debug(LOG_NET, "Failed to set socket %sblocking: %s", (blocking ? "" : "non-"), strsockerror(getSockErr()));
-		return false;
-	}
 #elif defined(WZ_OS_WIN)
 	unsigned long nonblocking = !blocking;
 	if (ioctlsocket(fd, FIONBIO, &nonblocking) == SOCKET_ERROR)
+#endif
 	{
 		debug(LOG_NET, "Failed to set socket %sblocking: %s", (blocking ? "" : "non-"), strsockerror(getSockErr()));
 		return false;
 	}
-#endif
 
 	return true;
 }
