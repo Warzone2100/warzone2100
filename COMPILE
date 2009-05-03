@@ -16,7 +16,7 @@ Linux Compilation:
 	Note that the last command must be run as a privileged user (e.g. root) in order to succeed.
 
 	If the above commands fail, you're probably not having all the required software needed to satisfy the dependencies that warzone has on other libraries or tools. In that case, the scripts will tell you what package you're missing.
- 	Warzone has compile-time dependencies on the following software: autotools, gcc, make, SDL-dev, SDL_net-dev, oggvorbis-dev, zlib-dev, physicsfs-dev, OpenAL-dev, libpng-dev.
+	Warzone has compile-time dependencies on the following software: autotools, gcc, make, SDL-dev, oggvorbis-dev, zlib-dev, physicsfs-dev, OpenAL-dev, libpng-dev.
  	Depending on your flavor of Linux, the package names may be different.
  	If you are certain that you got all the packages required, but still can't compile, then try compiling with this command instead:
  		make -f Makefile.raw

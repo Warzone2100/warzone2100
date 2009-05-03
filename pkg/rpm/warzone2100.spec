@@ -10,7 +10,7 @@ URL:            http://wz2100.net/
 Source0:        http://download.gna.org/warzone/releases/2.1/%{name}-%{version}.tar.bz2
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
-BuildRequires: physfs-devel SDL_net-devel openal-devel bison flex zip
+BuildRequires: physfs-devel openal-devel bison flex zip
 BuildRequires: libjpeg-devel libpng-devel libogg-devel libvorbis-devel
 BuildRequires: quesoglc-devel popt-devel gettext
 BuildRequires: automake >= 1.8
