@@ -1125,6 +1125,12 @@ void actionUpdateDroid(DROID *psDroid)
 			formationLeave(psDroid->sMove.psFormation, psDroid);
 			psDroid->sMove.psFormation = NULL;
 		}
+		// Check that repair facility still exists
+		if (!psDroid->psTarget)
+		{
+			psDroid->action = DACTION_NONE;
+			break;
+		}
 		// move back to the repair facility if necessary
 		if (DROID_STOPPED(psDroid) &&
 			!actionReachedBuildPos(psDroid,
@@ -2399,6 +2405,10 @@ void actionUpdateDroid(DROID *psDroid)
 					}
 				}
 			}
+		}
+		if (psDroid->action != DACTION_DROIDREPAIR)
+		{
+			break;	// action has changed
 		}
 
 		//check still next to the damaged droid
