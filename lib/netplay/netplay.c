@@ -44,7 +44,7 @@
 # include <unistd.h>
 typedef int SOCKET;
 static const SOCKET INVALID_SOCKET = -1;
-static const int SOCKET_ERROR;
+static const int SOCKET_ERROR = -1;
 #elif defined(WZ_OS_WIN)
 # include <winsock2.h>
 # include <ws2tcpip.h>
