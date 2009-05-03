@@ -55,6 +55,9 @@
 #define DEFAULTCDVOL	60
 #define DEFAULTSCROLL	1000
 
+#define MASTERSERVERPORT 9990
+#define GAMESERVERPORT   2100
+
 extern void registry_clear(void); // from configfile.c
 
 void	setSinglePlayerFrameLimit		(SDWORD limit);
@@ -321,29 +324,29 @@ BOOL loadConfig(void)
 	if (getWarzoneKeyNumeric("masterserver_port", &val))
 	{
 		NETsetMasterserverPort(val);
-		if (val != 9990)
+		if (val != MASTERSERVERPORT)
 		{
-			debug(LOG_ERROR, "We are not using port 9990 (which is the default Master server port), we are using %d?", val);
+			debug(LOG_ERROR, "We are not using port %d (which is the default Master server port), we are using %d?", MASTERSERVERPORT, val);
 		}
 	}
 	else
 	{
-		NETsetMasterserverPort(9990);
-		setWarzoneKeyNumeric("masterserver_port", 9990);
+		NETsetMasterserverPort(MASTERSERVERPORT);
+		setWarzoneKeyNumeric("masterserver_port", MASTERSERVERPORT);
 	}
 
 	if (getWarzoneKeyNumeric("gameserver_port", &val))
 	{
 		NETsetGameserverPort(val);
-		if (val != 2100)
+		if (val != GAMESERVERPORT)
 		{
-			debug(LOG_ERROR, "We are not using port 2100 (which is the default Game server port), we are using %d?", val);
+			debug(LOG_ERROR, "We are not using port %d (which is the default Game server port), we are using %d?", GAMESERVERPORT, val);
 		}
 	}
 	else
 	{
-		NETsetGameserverPort(2100);
-		setWarzoneKeyNumeric("gameserver_port", 2100);
+		NETsetGameserverPort(GAMESERVERPORT);
+		setWarzoneKeyNumeric("gameserver_port", GAMESERVERPORT);
 	}
 
 	// //////////////////////////
