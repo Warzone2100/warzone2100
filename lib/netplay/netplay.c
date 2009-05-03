@@ -760,11 +760,11 @@ static Socket* SocketOpen(const struct addrinfo* addr, unsigned int timeout)
 			return NULL;
 		}
 
-		ASSERT(FD_ISSET(conn->fd, &conReady)
 #if   defined(WZ_OS_WIN)
-			|| FD_ISSET(conn->fd, &conFailed)
+		ASSERT(FD_ISSET(conn->fd, &conReady) || FD_ISSET(conn->fd, &conFailed), "\"sock\" is the only file descriptor in set, it should be the one that is set.");
+#else
+		ASSERT(FD_ISSET(conn->fd, &conReady), "\"sock\" is the only file descriptor in set, it should be the one that is set.");
 #endif
-			, "\"sock\" is the only file descriptor in set, it should be the one that is set.");
 
 #if   defined(WZ_OS_WIN)
 		if (FD_ISSET(conn->fd, &conFailed))
