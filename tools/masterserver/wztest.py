@@ -43,7 +43,7 @@ from protocol import *
 from protocol import _socket as socket
 
 server="lobby.wz2100.net"
-protocol = BinaryProtocol('2.2')
+protocol = Protocol()
 logging.basicConfig(level = logging.DEBUG, format = "%(asctime)-15s %(levelname)s %(message)s")
 
 # simulate a gameserver
