@@ -331,6 +331,27 @@ static void freeaddrinfo(struct addrinfo *res)
 }
 #endif
 
+static int addressToText(const struct sockaddr* addr, char* buf, size_t size)
+{
+	switch (addr->sa_family)
+	{
+		case AF_INET:
+		{
+			unsigned char* address = (unsigned char*)&((const struct sockaddr_in*)addr)->sin_addr.s_addr;
+
+			return snprintf(buf, size,
+			"%i.%i.%i.%i",
+				(int)(address[0]),
+				(int)(address[1]),
+				(int)(address[2]),
+				(int)(address[3]));
+		}
+		default:
+			ASSERT(!"Unknown address famliy", "Got non IPv4 address!");
+			return -1;
+	}
+}
+
 static const char* strSockError(int error)
 {
 #if   defined(WZ_OS_WIN)
@@ -648,7 +669,7 @@ static Socket* socketAccept(Socket* sock)
 
 static Socket* SocketOpen(const struct addrinfo* addr, unsigned int timeout)
 {
-	const unsigned char* address;
+	char textAddress[40];
 	int ret;
 
 	Socket* const conn = malloc(sizeof(*conn));
@@ -661,8 +682,8 @@ static Socket* SocketOpen(const struct addrinfo* addr, unsigned int timeout)
 
 	ASSERT(addr != NULL, "NULL Socket provided");
 
-	address = (unsigned char*)&((const struct sockaddr_in*)addr->ai_addr)->sin_addr.s_addr;
-	debug(LOG_NET, "Connecting to %i.%i.%i.%i:%hd", (int)address[0], (int)address[1], (int)address[2], (int)address[3], ntohs(((const struct sockaddr_in*)addr->ai_addr)->sin_port));
+	addressToText(addr->ai_addr, textAddress, sizeof(textAddress));
+	debug(LOG_NET, "Connecting to %s:%hd", textAddress, ntohs(((const struct sockaddr_in*)addr->ai_addr)->sin_port));
 
 	conn->ready = false;
 	conn->fd = socket(addr->ai_family, addr->ai_socktype, addr->ai_protocol);
@@ -2944,16 +2965,7 @@ BOOL NETfindGame(void)
 
 		if (NetPlay.games[gamecount].desc.host[0] == '\0')
 		{
-			ASSERT(cur->ai_addr->sa_family == AF_INET, "Got non IPv4 address!");
-
-			unsigned char* address = (unsigned char*)&((const struct sockaddr_in*)cur->ai_addr)->sin_addr.s_addr;
-
-			snprintf(NetPlay.games[gamecount].desc.host, sizeof(NetPlay.games[gamecount].desc.host),
-			"%i.%i.%i.%i",
-				(int)(address[0]),
-				(int)(address[1]),
-				(int)(address[2]),
-				(int)(address[3]));
+			addressToText(cur->ai_addr, NetPlay.games[gamecount].desc.host, sizeof(NetPlay.games[gamecount].desc.host));
 		}
 
 		++gamecount;
@@ -3025,14 +3037,7 @@ BOOL NETjoinGame(UDWORD gameNumber, const char* playername)
 	if (NETrecvGAMESTRUCT(&NetPlay.games[gameNumber])
 	 && NetPlay.games[gameNumber].desc.host[0] == '\0')
 	{
-		unsigned char* address = (unsigned char*)&((const struct sockaddr_in*)cur->ai_addr)->sin_addr.s_addr;
-
-		snprintf(NetPlay.games[gameNumber].desc.host, sizeof(NetPlay.games[gameNumber].desc.host),
-			"%i.%i.%i.%i",
-			(int)(address[0]),
-			(int)(address[1]),
-			(int)(address[2]),
-			(int)(address[3]));
+		addressToText(cur->ai_addr, NetPlay.games[gameNumber].desc.host, sizeof(NetPlay.games[gameNumber].desc.host));
 	}
 	freeaddrinfo(hosts);
 	// Allocate memory for a new socket
