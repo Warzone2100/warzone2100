@@ -346,11 +346,11 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 
 			if (proj_Direct(psStats) || dist <= psStats->minRange)
 			{
-				flightTime = dist / psStats->flightSpeed;
+				flightTime = (double)dist / (double)psStats->flightSpeed;
 			}
 			else
 			{
-				flightTime = sqrt(dist) / 30;  /* Purely a guess, but surprisingly effective */
+				flightTime = sqrt((double)dist) / 30;  /* Purely a guess, but surprisingly effective */
 			}
 
 			if (psTarget->lastHitWeapon == WSC_EMP)
@@ -363,7 +363,7 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 				}
 				else
 				{
-					flightTime -= empTime / 1000;
+					flightTime -= (double)empTime / 1000;
 					if (flightTime < 0.0)
 					{
 						flightTime = 0.0;
