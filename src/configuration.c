@@ -267,6 +267,10 @@ BOOL loadConfig(void)
 	if (getWarzoneKeyString("masterserver_name", sBuf))
 	{
 		NETsetMasterserverName(sBuf);
+		if (stricmp(sBuf, "lobby.wz2100.net") != 0)
+		{
+			debug(LOG_ERROR, "We are not using lobby.wz2100.net, for the master server name, we are using %s instead?", sBuf);
+		}
 	}
 	else
 	{
@@ -317,6 +321,10 @@ BOOL loadConfig(void)
 	if (getWarzoneKeyNumeric("masterserver_port", &val))
 	{
 		NETsetMasterserverPort(val);
+		if (val != 9990)
+		{
+			debug(LOG_ERROR, "We are not using port 9990 (which is the default Master server port), we are using %d?", val);
+		}
 	}
 	else
 	{
@@ -327,6 +335,10 @@ BOOL loadConfig(void)
 	if (getWarzoneKeyNumeric("gameserver_port", &val))
 	{
 		NETsetGameserverPort(val);
+		if (val != 2100)
+		{
+			debug(LOG_ERROR, "We are not using port 2100 (which is the default Game server port), we are using %d?", val);
+		}
 	}
 	else
 	{
