@@ -585,6 +585,20 @@ static int checkSockets(const SocketSet* set, unsigned int timeout)
 	return ret;
 }
 
+static void SocketClose(Socket* sock)
+{
+	if (sock->fd != INVALID_SOCKET)
+	{
+#if   defined(WZ_OS_WIN)
+		closesocket(sock->fd);
+#else
+		close(sock->fd);
+#endif
+	}
+
+	free(sock);
+}
+
 static Socket* SocketAccept(const Socket* sock)
 {
 	Socket* const conn = malloc(sizeof(*conn));
@@ -603,7 +617,7 @@ static Socket* SocketAccept(const Socket* sock)
 	if (conn->fd == INVALID_SOCKET)
 	{
 		debug(LOG_ERROR, "accept failed: %s", strsockerror(getSockErr()));
-		free(conn);
+		SocketClose(conn);
 		return NULL;
 	}
 
@@ -634,14 +648,13 @@ static Socket* SocketOpen(const struct addrinfo* addr, unsigned int timeout)
 	if (conn->fd == INVALID_SOCKET)
 	{
 		debug(LOG_ERROR, "Failed to create a socket: %s", strsockerror(getSockErr()));
-		free(conn);
+		SocketClose(conn);
 		return NULL;
 	}
 
 	if (!setSocketBlocking(conn->fd, false))
 	{
-		close(conn->fd);
-		free(conn);
+		SocketClose(conn);
 		return NULL;
 	}
 
@@ -661,8 +674,7 @@ static Socket* SocketOpen(const struct addrinfo* addr, unsigned int timeout)
 		 || timeout == 0)
 		{
 			debug(LOG_NET, "Failed to start connecting: %s", strsockerror(getSockErr()));
-			close(conn->fd);
-			free(conn);
+			SocketClose(conn);
 			return NULL;
 		}
 
@@ -686,8 +698,7 @@ static Socket* SocketOpen(const struct addrinfo* addr, unsigned int timeout)
 		if (ret == SOCKET_ERROR)
 		{
 			debug(LOG_NET, "Failed to wait for connection: %s", strsockerror(getSockErr()));
-			close(conn->fd);
-			free(conn);
+			SocketClose(conn);
 			return NULL;
 		}
 
@@ -695,8 +706,7 @@ static Socket* SocketOpen(const struct addrinfo* addr, unsigned int timeout)
 		{
 			setSockErr(ETIMEDOUT);
 			debug(LOG_NET, "Timed out while waiting for connection to be established: %s", strsockerror(getSockErr()));
-			close(conn->fd);
-			free(conn);
+			SocketClose(conn);
 			return NULL;
 		}
 
@@ -714,16 +724,14 @@ static Socket* SocketOpen(const struct addrinfo* addr, unsigned int timeout)
 #endif
 		{
 			debug(LOG_NET, "Failed to connect: %s", strsockerror(getSockErr()));
-			close(conn->fd);
-			free(conn);
+			SocketClose(conn);
 			return NULL;
 		}
 	}
 
 	if (!setSocketBlocking(conn->fd, true))
 	{
-		close(conn->fd);
-		free(conn);
+		SocketClose(conn);
 		return NULL;
 	}
 
@@ -753,7 +761,7 @@ static Socket* SocketListen(unsigned int port)
 	if (conn->fd == INVALID_SOCKET)
 	{
 		debug(LOG_ERROR, "Failed to create an IPv4 socket: %s", strsockerror(getSockErr()));
-		free(conn);
+		SocketClose(conn);
 		return NULL;
 	}
 
@@ -761,18 +769,11 @@ static Socket* SocketListen(unsigned int port)
 	 || listen(conn->fd, 5) == SOCKET_ERROR)
 	{
 		debug(LOG_ERROR, "Failed to set up IPv4 socket for listening on port %u: %s", port, strsockerror(getSockErr()));
-		close(conn->fd);
-		free(conn);
+		SocketClose(conn);
 		return NULL;
 	}
 
 	return conn;
-}
-
-static void SocketClose(Socket* sock)
-{
-	close(sock->fd);
-	free(sock);
 }
 
 static struct addrinfo* resolveHost(const char* host, unsigned int port)
