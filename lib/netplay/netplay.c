@@ -2562,63 +2562,51 @@ static void NETallowJoining(void)
 			debug(LOG_ERROR, "Cannot create socket set: %s", strSockError(getSockErr()));
 			return;
 		}
-		debug(LOG_NET, "Created tmp_socket_set %p", tmp_socket_set);
+	}
 
-		if (addSocket(tmp_socket_set, tcp_socket))
+	// Find the first empty socket slot
+	for (i = 0; i < MAX_TMP_SOCKETS; ++i)
+	{
+		if (tmp_socket[i] == NULL)
 		{
-			debug(LOG_NET,"TCP_AddSocket using socket set %p, socket %p", tmp_socket_set, tcp_socket);
+			break;
 		}
 	}
 
-	if (checkSockets(tmp_socket_set, NET_READ_TIMEOUT) > 0)
+	// See if there's an incoming connection
+	if (tmp_socket[i] == NULL // Make sure that we're not out of sockets
+	 && (tmp_socket[i] = socketAccept(tcp_socket)) != NULL)
 	{
-		if (tcp_socket->ready)
+		debug(LOG_NET, "tmp_socket[%d]=%p Accepted", i, tmp_socket[i]);
+		addSocket(tmp_socket_set, tmp_socket[i]);
+		if (checkSockets(tmp_socket_set, 1000) > 0
+		    && tmp_socket[i]->ready
+		    && (recv_result = readNoInt(tmp_socket[i], buffer, 5)))
 		{
-			for (i = 0; i < MAX_TMP_SOCKETS; ++i)
+			if(strcmp(buffer, "list")==0)
 			{
-				if (tmp_socket[i] == NULL)
+				debug(LOG_NET, "cmd: list.  Sending game list");
+				if (writeAll(tmp_socket[i], &numgames, sizeof(numgames)) == SOCKET_ERROR)
 				{
-					break;
-				}
-			}
-			tmp_socket[i] = socketAccept(tcp_socket);
-			debug(LOG_NET, "tmp_socket[%d]=%p Accepted", i, tmp_socket[i]);
-			addSocket(tmp_socket_set, tmp_socket[i]);
-			if (checkSockets(tmp_socket_set, 1000) > 0
-			    && tmp_socket[i]->ready
-			    && (recv_result = readNoInt(tmp_socket[i], buffer, 5)))
-			{
-				if(strcmp(buffer, "list")==0)
-				{
-					debug(LOG_NET, "cmd: list.  Sending game list");
-					if (writeAll(tmp_socket[i], &numgames, sizeof(numgames)) == SOCKET_ERROR)
-					{
-						// Write error, most likely client disconnect.
-						debug(LOG_ERROR, "Failed to send message: %s", strSockError(getSockErr()));
-						debug(LOG_WARNING, "Couldn't get list from server. Make sure required ports are open. (TCP 9998-9999)");
-					}
-					else
-					{
-						// get the correct player count after kicks / leaves
-						game.desc.dwCurrentPlayers = NETplayerInfo();
-						NETsendGAMESTRUCT(tmp_socket[i], &game);
-					}
-
-					delSocket(tmp_socket_set, tmp_socket[i]);
-					socketClose(tmp_socket[i]);
-					tmp_socket[i] = NULL;
-				}
-				else if (strcmp(buffer, "join") == 0)
-				{
-					debug(LOG_NET, "cmd: join.  Sending GAMESTRUCT");
-					NETsendGAMESTRUCT(tmp_socket[i], &game);
+					// Write error, most likely client disconnect.
+					debug(LOG_ERROR, "Failed to send message: %s", strSockError(getSockErr()));
+					debug(LOG_WARNING, "Couldn't get list from server. Make sure required ports are open. (TCP 9998-9999)");
 				}
 				else
 				{
-					delSocket(tmp_socket_set, tmp_socket[i]);
-					socketClose(tmp_socket[i]);
-					tmp_socket[i] = NULL;
+					// get the correct player count after kicks / leaves
+					game.desc.dwCurrentPlayers = NETplayerInfo();
+					NETsendGAMESTRUCT(tmp_socket[i], &game);
 				}
+
+				delSocket(tmp_socket_set, tmp_socket[i]);
+				socketClose(tmp_socket[i]);
+				tmp_socket[i] = NULL;
+			}
+			else if (strcmp(buffer, "join") == 0)
+			{
+				debug(LOG_NET, "cmd: join.  Sending GAMESTRUCT");
+				NETsendGAMESTRUCT(tmp_socket[i], &game);
 			}
 			else
 			{
@@ -2627,6 +2615,16 @@ static void NETallowJoining(void)
 				tmp_socket[i] = NULL;
 			}
 		}
+		else
+		{
+			delSocket(tmp_socket_set, tmp_socket[i]);
+			socketClose(tmp_socket[i]);
+			tmp_socket[i] = NULL;
+		}
+	}
+
+	if (checkSockets(tmp_socket_set, NET_READ_TIMEOUT) > 0)
+	{
 		for(i = 0; i < MAX_TMP_SOCKETS; ++i)
 		{
 			if (   tmp_socket[i] != NULL
@@ -2758,7 +2756,6 @@ BOOL NEThostGame(const char* SessionName, const char* PlayerName,
 		debug(LOG_ERROR, "Cannot create socket set: %s", strSockError(getSockErr()));
 		return false;
 	}
-	addSocket(socket_set, tcp_socket);
 	// allocate socket storage for all possible players
 	for (i = 0; i < MAX_CONNECTED_PLAYERS; ++i)
 	{
