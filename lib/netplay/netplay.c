@@ -476,6 +476,8 @@ static bool addSocket(SocketSet* set, Socket* socket)
 		}
 	}
 
+	debug(LOG_ERROR, "Socket set full, no room left (max %zu)", set->len);
+
 	return false;
 }
 
@@ -2454,7 +2456,7 @@ static void NETregisterServer(int state)
 					{
 						debug(LOG_ERROR, "Couldn't create socket set for master server because: %s", strsockerror(getSockErr()));
 					}
-					if (!addSocket(masterset, rs_socket))
+					if (addSocket(masterset, rs_socket))
 					{
 						debug(LOG_NET,"TCP_AddSocket using socket set %p, socket %p", masterset, rs_socket);
 					}
@@ -2537,14 +2539,9 @@ static void NETallowJoining(void)
 		}
 		debug(LOG_NET, "Created tmp_socket_set %p", tmp_socket_set);
 
-		if (!addSocket(tmp_socket_set, tcp_socket))
+		if (addSocket(tmp_socket_set, tcp_socket))
 		{
 			debug(LOG_NET,"TCP_AddSocket using socket set %p, socket %p", tmp_socket_set, tcp_socket);
-		}
-		else
-		{
-			// Should never fail, or we will have major problems.
-			debug(LOG_ERROR,"SDLNet_AddSocket: %s\n", strsockerror(getSockErr()));
 		}
 	}
 
