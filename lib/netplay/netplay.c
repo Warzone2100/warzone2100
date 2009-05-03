@@ -612,7 +612,25 @@ static void socketClose(Socket* sock)
 
 static Socket* socketAccept(Socket* sock)
 {
-	Socket* const conn = malloc(sizeof(*conn));
+	SOCKET newConn;
+	Socket* conn;
+
+	ASSERT(sock != NULL, "NULL Socket provided");
+
+	newConn = accept(sock->fd, NULL, NULL);
+	if (newConn == INVALID_SOCKET)
+	{
+		// Ignore the case where no connection is pending
+		if (getSockErr() != EAGAIN
+		 && getSockErr() != EWOULDBLOCK)
+		{
+			debug(LOG_ERROR, "accept failed: %s", strSockError(getSockErr()));
+		}
+
+		return NULL;
+	}
+
+	conn = malloc(sizeof(*conn));
 	if (conn == NULL)
 	{
 		debug(LOG_ERROR, "Out of memory!");
@@ -620,19 +638,10 @@ static Socket* socketAccept(Socket* sock)
 		return NULL;
 	}
 
-	ASSERT(sock != NULL, "NULL Socket provided");
-
 	conn->ready = false;
-	conn->fd = accept(sock->fd, NULL, NULL);
+	conn->fd = newConn;
 
 	sock->ready = false;
-
-	if (conn->fd == INVALID_SOCKET)
-	{
-		debug(LOG_ERROR, "accept failed: %s", strSockError(getSockErr()));
-		socketClose(conn);
-		return NULL;
-	}
 
 	return conn;
 }
@@ -780,7 +789,8 @@ static Socket* socketListen(unsigned int port)
 	}
 
 	if (bind(conn->fd, (const struct sockaddr*)&addr, sizeof(addr)) == SOCKET_ERROR
-	 || listen(conn->fd, 5) == SOCKET_ERROR)
+	 || listen(conn->fd, 5) == SOCKET_ERROR
+	 || !setSocketBlocking(conn->fd, false))
 	{
 		debug(LOG_ERROR, "Failed to set up IPv4 socket for listening on port %u: %s", port, strSockError(getSockErr()));
 		socketClose(conn);
