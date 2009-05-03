@@ -599,7 +599,7 @@ static void SocketClose(Socket* sock)
 	free(sock);
 }
 
-static Socket* SocketAccept(const Socket* sock)
+static Socket* SocketAccept(Socket* sock)
 {
 	Socket* const conn = malloc(sizeof(*conn));
 	if (conn == NULL)
@@ -613,6 +613,8 @@ static Socket* SocketAccept(const Socket* sock)
 
 	conn->ready = false;
 	conn->fd = accept(sock->fd, NULL, NULL);
+
+	sock->ready = false;
 
 	if (conn->fd == INVALID_SOCKET)
 	{
