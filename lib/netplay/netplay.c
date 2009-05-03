@@ -398,7 +398,7 @@ static ssize_t read_all(Socket* sock, void* buf, size_t max_size)
 
 	{
 		received = recv(sock->fd, buf, max_size, 0);
-	} while (received == SOCKET_ERROR && (getSockErr() == EAGAIN || getSockErr() == EINTR));
+	} while (received == SOCKET_ERROR && getSockErr() == EINTR);
 
 	sock->ready = false;
 
