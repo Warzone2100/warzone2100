@@ -34,10 +34,13 @@ cd ..
     --prefix="${PREFIX}" \
 	${CONF_EXTRA_FLAGS} \
     CFLAGS="${CFLAGS}" \
+    CXXFLAGS="${CXXFLAGS}" \
     CPPFLAGS="${CPPFLAGS}" \
     LDFLAGS="${LDFLAGS}" \
     CC_FOR_BUILD="gcc" \
     CXX_FOR_BUILD="g++" \
+    CFLAGS_FOR_BUILD=" " \
+    CXXFLAGS_FOR_BUILD=" " \
     CPPFLAGS_FOR_BUILD=" " \
     PKGCONFIG_PREFIX="${PREFIX}" || exit 1
 make ${MAKE_FLAGS} || exit 1
