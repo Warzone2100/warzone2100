@@ -43,6 +43,8 @@
 # include <sys/types.h>
 # include <unistd.h>
 typedef int SOCKET;
+static const SOCKET INVALID_SOCKET = -1;
+static const int SOCKET_ERROR;
 #elif defined(WZ_OS_WIN)
 # include <winsock2.h>
 # include <ws2tcpip.h>
@@ -396,7 +398,7 @@ static ssize_t read_all(Socket* sock, void* buf, size_t max_size)
 
 	{
 		received = recv(sock->fd, buf, max_size, 0);
-	} while (received == -1 && (getSockErr() == EAGAIN || getSockErr() == EINTR));
+	} while (received == SOCKET_ERROR && (getSockErr() == EAGAIN || getSockErr() == EINTR));
 
 	sock->ready = false;
 
@@ -410,7 +412,7 @@ static ssize_t write_all(Socket* sock, const void* buf, size_t size)
 	while (written < size)
 	{
 		ssize_t ret = send(sock->fd, &((char*)buf)[written], size - written, 0);
-		if (ret == -1)
+		if (ret == SOCKET_ERROR)
 		{
 			switch (getSockErr())
 			{
@@ -419,7 +421,7 @@ static ssize_t write_all(Socket* sock, const void* buf, size_t size)
 					continue;
 
 				default:
-					return -1;
+					return SOCKET_ERROR;
 			}
 		}
 
@@ -501,7 +503,7 @@ static bool setSocketBlocking(const SOCKET fd, bool blocking)
 {
 #if   defined(WZ_OS_UNIX)
 	int sockopts = fcntl(fd, F_GETFL);
-	if (sockopts == -1)
+	if (sockopts == SOCKET_ERROR)
 	{
 		debug(LOG_NET, "Failed to retrieve current socket options: %s", strsockerror(getSockErr()));
 		return false;
@@ -513,7 +515,7 @@ static bool setSocketBlocking(const SOCKET fd, bool blocking)
 	else
 		sockopts |= O_NONBLOCK;
 
-	if (fcntl(fd, F_SETFL, sockopts) == -1)
+	if (fcntl(fd, F_SETFL, sockopts) == SOCKET_ERROR)
 	{
 		debug(LOG_NET, "Failed to set socket %sblocking: %s", (blocking ? "" : "non-"), strsockerror(getSockErr()));
 		return false;
@@ -566,12 +568,12 @@ static int checkSockets(const SocketSet* set, unsigned int timeout)
 		}
 
 		ret = select(maxfd + 1, &fds, NULL, NULL, &tv);
-	} while (ret == -1 && getSockErr() == EINTR);
+	} while (ret == SOCKET_ERROR && getSockErr() == EINTR);
 
-	if (ret == -1)
+	if (ret == SOCKET_ERROR)
 	{
 		debug(LOG_ERROR, "select failed: %s", strsockerror(getSockErr()));
-		return -1;
+		return SOCKET_ERROR;
 	}
 
 	for (i = 0; i < set->len; ++i)
@@ -646,7 +648,7 @@ static Socket* SocketOpen(const struct addrinfo* addr, unsigned int timeout)
 	}
 
 	ret = connect(conn->fd, addr->ai_addr, addr->ai_addrlen);
-	if (ret == -1)
+	if (ret == SOCKET_ERROR)
 	{
 		fd_set conReady;
 #if   defined(WZ_OS_WIN)
@@ -681,9 +683,9 @@ static Socket* SocketOpen(const struct addrinfo* addr, unsigned int timeout)
 #else
 			ret = select(conn->fd + 1, NULL, &conReady, NULL, &tv);
 #endif
-		} while (ret == -1 && getSockErr() == EINTR);
+		} while (ret == SOCKET_ERROR && getSockErr() == EINTR);
 
-		if (ret == -1)
+		if (ret == SOCKET_ERROR)
 		{
 			debug(LOG_NET, "Failed to wait for connection: %s", strsockerror(getSockErr()));
 			close(conn->fd);
@@ -709,7 +711,7 @@ static Socket* SocketOpen(const struct addrinfo* addr, unsigned int timeout)
 #if   defined(WZ_OS_WIN)
 		if (FD_ISSET(conn->fd, &conFailed))
 #elif defined(WZ_OS_UNIX)
-		if (connect(conn->fd, addr->ai_addr, addr->ai_addrlen) == -1
+		if (connect(conn->fd, addr->ai_addr, addr->ai_addrlen) == SOCKET_ERROR
 		 && getSockErr() != EISCONN)
 #endif
 		{
@@ -757,8 +759,8 @@ static Socket* SocketListen(unsigned int port)
 		return NULL;
 	}
 
-	if (bind(conn->fd, (const struct sockaddr*)&addr, sizeof(addr)) == -1
-	 || listen(conn->fd, 5) == -1)
+	if (bind(conn->fd, (const struct sockaddr*)&addr, sizeof(addr)) == SOCKET_ERROR
+	 || listen(conn->fd, 5) == SOCKET_ERROR)
 	{
 		debug(LOG_ERROR, "Failed to set up IPv4 socket for listening on port %u: %s", port, strsockerror(getSockErr()));
 		close(conn->fd);
@@ -1415,7 +1417,7 @@ static void NETsendGAMESTRUCT(Socket* sock, const GAMESTRUCT* game)
 
 	// Send over the GAMESTRUCT
 	result = write_all(sock, buf, sizeof(buf));
-	if (result == -1)
+	if (result == SOCKET_ERROR)
 	{
 		// If packet could not be sent, we should inform user of the error.
 		debug(LOG_ERROR, "Failed to send GAMESTRUCT. Reason: %s", strsockerror(getSockErr()));
@@ -1448,7 +1450,7 @@ static bool NETrecvGAMESTRUCT(GAMESTRUCT* game)
 	 || !tcp_socket->ready
 	 || (result = read_all(tcp_socket, buf, sizeof(buf))) != sizeof(buf))
 	{
-		if (result == -1)
+		if (result == SOCKET_ERROR)
 		{
 			debug(LOG_WARNING, "Server socket ecountered error: %s", strsockerror(getSockErr()));
 			SocketClose(tcp_socket);
@@ -1796,7 +1798,7 @@ BOOL NETsend(NETMSG *msg, UDWORD player)
 			nStats.packetsSent += 1;
 			return true;
 		}
-		else if (result == -1)
+		else if (result == SOCKET_ERROR)
 		{
 			// Write error, most likely client disconnect.
 			debug(LOG_ERROR, "Failed to send message: %s", strsockerror(getSockErr()));
@@ -1812,7 +1814,7 @@ BOOL NETsend(NETMSG *msg, UDWORD player)
 			{
 				return true;
 			}
-			else if (result == -1)
+			else if (result == SOCKET_ERROR)
 			{
 				// Write error, most likely client disconnect.
 				debug(LOG_ERROR, "Failed to send message: %s", strsockerror(getSockErr()));
@@ -1830,7 +1832,6 @@ BOOL NETsend(NETMSG *msg, UDWORD player)
 BOOL NETbcast(NETMSG *msg)
 {
 	int size;
-	int result = 0;
 
 	if(!NetPlay.bComms)
 	{
@@ -1860,8 +1861,7 @@ BOOL NETbcast(NETMSG *msg)
 			{	
 				// FIXME: We are NOT checking checkSockets/SDLNet_SocketReady 
 				// SDLNet_TCP_Send *can* block!
-				result = write_all(connected_bsocket[i]->socket, msg, size);
-				if (result == -1)
+				if (write_all(connected_bsocket[i]->socket, msg, size) == SOCKET_ERROR)
 				{
 					// Write error, most likely client disconnect.
 					debug(LOG_ERROR, "Failed to send message: %s", strsockerror(getSockErr()));
@@ -1881,8 +1881,7 @@ BOOL NETbcast(NETMSG *msg)
 		}
 		// FIXME: We are NOT checking checkSockets/SDLNet_SocketReady 
 		// SDLNet_TCP_Send *can* block!
-		result = write_all(tcp_socket, msg, size);
-		if (result == -1)
+		if (write_all(tcp_socket, msg, size) == SOCKET_ERROR)
 		{
 			// Write error, most likely client disconnect.
 			debug(LOG_ERROR, "Failed to send message: %s", strsockerror(getSockErr()));
@@ -2220,7 +2219,7 @@ receive_message:
 					    && connected_bsocket[j] != NULL
 					    && connected_bsocket[j]->socket != NULL)
 					{
-						if (write_all(connected_bsocket[j]->socket, pMsg, size) == -1)
+						if (write_all(connected_bsocket[j]->socket, pMsg, size) == SOCKET_ERROR)
 						{
 							// Write error, most likely client disconnect.
 							debug(LOG_ERROR, "Failed to send message: %s", strsockerror(getSockErr()));
@@ -2237,13 +2236,10 @@ receive_message:
 				    && connected_bsocket[pMsg->destination] != NULL
 				    && connected_bsocket[pMsg->destination]->socket != NULL)
 				{
-					int result = 0;
-
 					debug(LOG_NET, "Reflecting message type %hhu to %hhu", pMsg->type, pMsg->destination);
 					pMsg->size = ntohs(pMsg->size);
 
-					result = write_all(connected_bsocket[pMsg->destination]->socket, pMsg, size);
-					if (result == -1)
+					if (write_all(connected_bsocket[pMsg->destination]->socket, pMsg, size) == SOCKET_ERROR)
 					{
 						// Write error, most likely client disconnect.
 						debug(LOG_ERROR, "Failed to send message: %s", strsockerror(getSockErr()));
@@ -2462,16 +2458,14 @@ static void NETregisterServer(int state)
 					{
 						debug(LOG_ERROR, "Couldn't create socket set for master server because: %s", strsockerror(getSockErr()));
 					}
-					result = addSocket(masterset, rs_socket);
-					if (result != -1)
+					if (!addSocket(masterset, rs_socket))
 					{
 						debug(LOG_NET,"TCP_AddSocket using socket set %p, socket %p", masterset, rs_socket);
 					}
 				}
 				// get the MOTD from the server
 				write_all(rs_socket, "motd", sizeof("motd"));
-				result = checkSockets(masterset, 1000);
-				if (result ==-1)
+				if (checkSockets(masterset, 1000) == SOCKET_ERROR)
 				{
 					debug(LOG_NET, "Warning, MOTD CheckSockets Failed. Error %s", strsockerror(getSockErr()));
 				}
@@ -2502,10 +2496,6 @@ static void NETregisterServer(int state)
 			case 0:
 				// we don't need this anymore, so clean up
 				delSocket(masterset,rs_socket);
-				if (result == -1)
-				{
-					debug(LOG_ERROR, "Couldn't delete socket set because: %s", strsockerror(getSockErr()));
-				}
 				free(masterset);
 				masterset = NULL;
 				SocketClose(rs_socket);
@@ -2541,8 +2531,6 @@ static void NETallowJoining(void)
 
 	if (tmp_socket_set == NULL)
 	{
-		int result = 0;
-
 		// initialize server socket set
 		// FIXME: why is this not done in NETinit()?? - Per
 		tmp_socket_set = allocSocketSet(MAX_TMP_SOCKETS+1);
@@ -2553,8 +2541,7 @@ static void NETallowJoining(void)
 		}
 		debug(LOG_NET, "Created tmp_socket_set %p", tmp_socket_set);
 
-		result = addSocket(tmp_socket_set, tcp_socket);
-		if( result != -1)
+		if (!addSocket(tmp_socket_set, tcp_socket))
 		{
 			debug(LOG_NET,"TCP_AddSocket using socket set %p, socket %p", tmp_socket_set, tcp_socket);
 		}
@@ -2585,10 +2572,8 @@ static void NETallowJoining(void)
 			{
 				if(strcmp(buffer, "list")==0)
 				{
-					int result = 0;
 					debug(LOG_NET, "cmd: list.  Sending game list");
-					result = write_all(tmp_socket[i], &numgames, sizeof(numgames));
-					if (result == -1)
+					if (write_all(tmp_socket[i], &numgames, sizeof(numgames)) == SOCKET_ERROR)
 					{
 						// Write error, most likely client disconnect.
 						debug(LOG_ERROR, "Failed to send message: %s", strsockerror(getSockErr()));
@@ -2918,7 +2903,7 @@ BOOL NETfindGame(void)
 	}
 	else
 	{
-		if (result == -1)
+		if (result == SOCKET_ERROR)
 		{
 			debug(LOG_NET, "Server socket ecountered error: %s", strsockerror(getSockErr()));
 			SocketClose(tcp_socket);
