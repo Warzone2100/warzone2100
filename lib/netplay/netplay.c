@@ -48,6 +48,7 @@ static const int SOCKET_ERROR = -1;
 #elif defined(WZ_OS_WIN)
 # include <winsock2.h>
 # include <ws2tcpip.h>
+# define EAGAIN      WSAEWOULDBLOCK
 # define EINPROGRESS WSAEINPROGRESS
 # define EISCONN     WSAEISCONN
 # define ETIMEDOUT   WSAETIMEDOUT
@@ -679,6 +680,7 @@ static Socket* SocketOpen(const struct addrinfo* addr, unsigned int timeout)
 #endif
 
 		if ((getSockErr() != EINPROGRESS
+		  && getSockErr() != EAGAIN
 		  && getSockErr() != EWOULDBLOCK)
 #if   defined(WZ_OS_UNIX)
 		 || conn->fd >= FD_SETSIZE
