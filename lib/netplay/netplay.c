@@ -218,11 +218,6 @@ static ssize_t write_all(Socket* sock, const void* buf, size_t size)
 	while (written < size)
 	{
 		ssize_t ret = write(sock->fd, &((char*)buf)[written], size - written);
-		if (ret == 0)
-		{
-			return written;
-		}
-
 		if (ret == -1)
 		{
 			switch (errno)
@@ -232,8 +227,6 @@ static ssize_t write_all(Socket* sock, const void* buf, size_t size)
 					continue;
 
 				default:
-					if (written)
-						return written;
 					return -1;
 			}
 		}
@@ -1171,7 +1164,7 @@ static void NETsendGAMESTRUCT(Socket* sock, const GAMESTRUCT* game)
 
 	// Send over the GAMESTRUCT
 	result = write_all(sock, buf, sizeof(buf));
-	if (result != sizeof(buf))
+	if (result == -1)
 	{
 		// If packet could not be sent, we should inform user of the error.
 		debug(LOG_ERROR, "Failed to send GAMESTRUCT. Reason: %s", strerror(errno));
@@ -1204,10 +1197,11 @@ static bool NETrecvGAMESTRUCT(GAMESTRUCT* game)
 	 || !tcp_socket->ready
 	 || (result = read_all(tcp_socket, buf, sizeof(buf))) != sizeof(buf))
 	{
-		if (result < 0)
+		if (result == -1)
 		{
-			debug(LOG_WARNING, "SDLNet_TCP_Recv error: %s tcp_socket %p is now invalid", strerror(errno), tcp_socket);
-			tcp_socket = NULL;  //SDLnet docs say to 'disconnect' here. Dunno how. :S
+			debug(LOG_WARNING, "Server socket ecountered error: %s", strerror(errno));
+			SocketClose(tcp_socket);
+			tcp_socket = NULL;
 		}
 		return false;
 	}
@@ -1533,15 +1527,12 @@ BOOL NETsend(NETMSG *msg, UDWORD player)
 			nStats.packetsSent += 1;
 			return true;
 		}
-		else
+		else if (result == -1)
 		{
-			if (result < size)
-			{
-				// TCP_Send error, inform user of problem.  This really should never happen normally.
-				// Possible client disconnect, and in either case, socket is most likely invalid now.
-				debug(LOG_WARNING, "SDLNet_TCP_Send returned: %d error: %s line %d", result, strerror(errno), __LINE__);
-				connected_bsocket[player]->socket = NULL ; // It is invalid,  Unknown how to handle.
-			}
+			// Write error, most likely client disconnect.
+			debug(LOG_ERROR, "Failed to send message: %s", strerror(errno));
+			SocketClose(connected_bsocket[player]->socket);
+			connected_bsocket[player]->socket = NULL;
 		}
 	}
 	else
@@ -1552,15 +1543,12 @@ BOOL NETsend(NETMSG *msg, UDWORD player)
 			{
 				return true;
 			}
-			else
+			else if (result == -1)
 			{
-				if (result < size)
-				{
-					// TCP_Send error, inform user of problem.  This really should never happen normally.
-					// Possible client disconnect, and in either case, socket is most likely invalid now.
-					debug(LOG_WARNING, "SDLNet_TCP_Send returned: %d error: %s line %d", result, strerror(errno), __LINE__);
-					tcp_socket = NULL; // unknow how to handle when invalid.
-				}
+				// Write error, most likely client disconnect.
+				debug(LOG_ERROR, "Failed to send message: %s", strerror(errno));
+				SocketClose(tcp_socket);
+				tcp_socket = NULL;
 			}
 
 	}
@@ -1604,15 +1592,14 @@ BOOL NETbcast(NETMSG *msg)
 				// FIXME: We are NOT checking checkSockets/SDLNet_SocketReady 
 				// SDLNet_TCP_Send *can* block!
 				result = write_all(connected_bsocket[i]->socket, msg, size);
-				if (result < size)
+				if (result == -1)
 				{
-					// TCP_Send error, inform user of problem.  This really should never happen normally.
-					// Possible client disconnect, and in either case, socket is most likely invalid now.
-					debug(LOG_WARNING, "(server) SDLNet_TCP_Send returned %d < %d, socket %p invalid: %s",
-						  result, size, connected_bsocket[i]->socket, strerror(errno));
+					// Write error, most likely client disconnect.
+					debug(LOG_ERROR, "Failed to send message: %s", strerror(errno));
 					players[i].heartbeat = false;	//mark them dead
 					debug(LOG_WARNING, "Player (dpid %u) connection was broken.", i);
-					connected_bsocket[i]->socket = NULL; // Unsure how to handle invalid sockets.
+					SocketClose(connected_bsocket[i]->socket);
+					connected_bsocket[i]->socket = NULL;
 				}
 			}
 		}
@@ -1626,13 +1613,13 @@ BOOL NETbcast(NETMSG *msg)
 		// FIXME: We are NOT checking checkSockets/SDLNet_SocketReady 
 		// SDLNet_TCP_Send *can* block!
 		result = write_all(tcp_socket, msg, size);
-		if (result < size)
+		if (result == -1)
 		{
-			// I believe host has dropped...here
-			debug(LOG_WARNING, "(client) SDLNet_TCP_Send returned %d < %d, tcp_socket %p is now invalid: %s", 
-				  result, size, tcp_socket, strerror(errno));
+			// Write error, most likely client disconnect.
+			debug(LOG_ERROR, "Failed to send message: %s", strerror(errno));
 			debug(LOG_WARNING, "Host connection was broken?");
-			tcp_socket = NULL; // unsure how to handle invalid sockets.
+			SocketClose(tcp_socket);
+			tcp_socket = NULL;
 			players[HOST_DPID].heartbeat = false;	//mark them dead
 			//Game is pretty much over --should just end everything when HOST dies.
 			return false;
@@ -1964,7 +1951,13 @@ receive_message:
 					    && connected_bsocket[j] != NULL
 					    && connected_bsocket[j]->socket != NULL)
 					{
-						write_all(connected_bsocket[j]->socket, pMsg, size);
+						if (write_all(connected_bsocket[j]->socket, pMsg, size) == -1)
+						{
+							// Write error, most likely client disconnect.
+							debug(LOG_ERROR, "Failed to send message: %s", strerror(errno));
+							SocketClose(connected_bsocket[pMsg->destination]->socket);
+							connected_bsocket[pMsg->destination]->socket = NULL;
+						}
 					}
 				}
 			}
@@ -1981,10 +1974,12 @@ receive_message:
 					pMsg->size = ntohs(pMsg->size);
 
 					result = write_all(connected_bsocket[pMsg->destination]->socket, pMsg, size);
-					if (result < size)
+					if (result == -1)
 					{
-						debug(LOG_WARNING,"SDLNet_TCP_Send(line %d) failed, because of %s", __LINE__, strerror(errno));
-						connected_bsocket[pMsg->destination]->socket = NULL; // socket becomes invalid on error
+						// Write error, most likely client disconnect.
+						debug(LOG_ERROR, "Failed to send message: %s", strerror(errno));
+						SocketClose(connected_bsocket[pMsg->destination]->socket);
+						connected_bsocket[pMsg->destination]->socket = NULL;
 					}
 				}
 				else
@@ -2324,12 +2319,10 @@ static void NETallowJoining(void)
 					int result = 0;
 					debug(LOG_NET, "cmd: list.  Sending game list");
 					result = write_all(tmp_socket[i], &numgames, sizeof(numgames));
-					if( result < sizeof(numgames) )
+					if (result == -1)
 					{
-						// TCP_Send error, inform user of problem.  This really should never happen normally.
-						// Possible client disconnect, and in either case, socket is most likely invalid now.
-						// How to handle error?
-						debug(LOG_WARNING, "SDLNet_TCP_Send returned: %d error: %s line %d", result, strerror(errno),__LINE__);
+						// Write error, most likely client disconnect.
+						debug(LOG_ERROR, "Failed to send message: %s", strerror(errno));
 						debug(LOG_WARNING, "Couldn't get list from server. Make sure required ports are open. (TCP 9998-9999)");
 					}
 					else
@@ -2371,8 +2364,16 @@ static void NETallowJoining(void)
 
 				if (size <= 0)
 				{
-					// socket probably disconnected.
-					debug(LOG_NET, "tmp socket %p probably disconnected", tmp_socket[i]);
+					// disconnect or programmer error
+					if (size == 0)
+					{
+						debug(LOG_NET, "Client socket disconnected.");
+					}
+					else
+					{
+						debug(LOG_NET, "Client socket ecountered error: %s", strerror(errno));
+					}
+
 					delSocket(tmp_socket_set, tmp_socket[i]);
 					SocketClose(tmp_socket[i]);
 					tmp_socket[i] = NULL;
@@ -2648,11 +2649,11 @@ BOOL NETfindGame(void)
 	}
 	else
 	{
-		if (result < 0)
+		if (result == -1)
 		{
-			debug(LOG_NET, "SDLNet_TCP_Recv returned %d, error: %s - tcp_socket %p is now invalid.",
-			      result, strerror(errno), tcp_socket);
-			tcp_socket = NULL; // unsure how to handle invalid sockets?
+			debug(LOG_NET, "Server socket ecountered error: %s", strerror(errno));
+			SocketClose(tcp_socket);
+			tcp_socket = NULL;
 		}
 		// when we fail to receive a game count, bail out
 		setLobbyError(ERROR_CONNECTION);
