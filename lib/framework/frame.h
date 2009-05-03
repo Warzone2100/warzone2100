@@ -100,11 +100,7 @@ extern UDWORD HashString( const char *String );
 extern UDWORD HashStringIgnoreCase( const char *String );
 
 #if defined(WZ_OS_WIN)
-struct timeval
-{
-	long tv_sec;
-	long tv_usec;
-};
+# include <winsock2.h> /* for struct timeval */
 
 struct timezone;
 extern int gettimeofday(struct timeval* tv, struct timezone* tz);
