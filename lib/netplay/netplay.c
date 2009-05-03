@@ -330,7 +330,7 @@ static void freeaddrinfo(struct addrinfo *res)
 }
 #endif
 
-static const char* strsockerror(int error)
+static const char* strSockError(int error)
 {
 #if   defined(WZ_OS_WIN)
 	switch (error)
@@ -392,7 +392,11 @@ static const char* strsockerror(int error)
 #endif
 }
 
-static ssize_t read_all(Socket* sock, void* buf, size_t max_size)
+/**
+ * Similar to read(2) with the exception that this function won't be
+ * interrupted by signals (EINTR).
+ */
+static ssize_t readNoInt(Socket* sock, void* buf, size_t max_size)
 {
 	ssize_t received;
 
@@ -405,7 +409,13 @@ static ssize_t read_all(Socket* sock, void* buf, size_t max_size)
 	return received;
 }
 
-static ssize_t write_all(Socket* sock, const void* buf, size_t size)
+/**
+ * Similar to write(2) with the exception that this function will block until
+ * <em>all</em> data has been written or an error occurs.
+ *
+ * @return @c size when succesful or @c SOCKET_ERROR if an error occurred.
+ */
+static ssize_t writeAll(Socket* sock, const void* buf, size_t size)
 {
 	size_t written = 0;
 
@@ -507,7 +517,7 @@ static bool setSocketBlocking(const SOCKET fd, bool blocking)
 	int sockopts = fcntl(fd, F_GETFL);
 	if (sockopts == SOCKET_ERROR)
 	{
-		debug(LOG_NET, "Failed to retrieve current socket options: %s", strsockerror(getSockErr()));
+		debug(LOG_NET, "Failed to retrieve current socket options: %s", strSockError(getSockErr()));
 		return false;
 	}
 
@@ -523,7 +533,7 @@ static bool setSocketBlocking(const SOCKET fd, bool blocking)
 	if (ioctlsocket(fd, FIONBIO, &nonblocking) == SOCKET_ERROR)
 #endif
 	{
-		debug(LOG_NET, "Failed to set socket %sblocking: %s", (blocking ? "" : "non-"), strsockerror(getSockErr()));
+		debug(LOG_NET, "Failed to set socket %sblocking: %s", (blocking ? "" : "non-"), strSockError(getSockErr()));
 		return false;
 	}
 
@@ -570,7 +580,7 @@ static int checkSockets(const SocketSet* set, unsigned int timeout)
 
 	if (ret == SOCKET_ERROR)
 	{
-		debug(LOG_ERROR, "select failed: %s", strsockerror(getSockErr()));
+		debug(LOG_ERROR, "select failed: %s", strSockError(getSockErr()));
 		return SOCKET_ERROR;
 	}
 
@@ -585,7 +595,7 @@ static int checkSockets(const SocketSet* set, unsigned int timeout)
 	return ret;
 }
 
-static void SocketClose(Socket* sock)
+static void socketClose(Socket* sock)
 {
 	if (sock->fd != INVALID_SOCKET)
 	{
@@ -599,7 +609,7 @@ static void SocketClose(Socket* sock)
 	free(sock);
 }
 
-static Socket* SocketAccept(Socket* sock)
+static Socket* socketAccept(Socket* sock)
 {
 	Socket* const conn = malloc(sizeof(*conn));
 	if (conn == NULL)
@@ -618,8 +628,8 @@ static Socket* SocketAccept(Socket* sock)
 
 	if (conn->fd == INVALID_SOCKET)
 	{
-		debug(LOG_ERROR, "accept failed: %s", strsockerror(getSockErr()));
-		SocketClose(conn);
+		debug(LOG_ERROR, "accept failed: %s", strSockError(getSockErr()));
+		socketClose(conn);
 		return NULL;
 	}
 
@@ -649,14 +659,14 @@ static Socket* SocketOpen(const struct addrinfo* addr, unsigned int timeout)
 
 	if (conn->fd == INVALID_SOCKET)
 	{
-		debug(LOG_ERROR, "Failed to create a socket: %s", strsockerror(getSockErr()));
-		SocketClose(conn);
+		debug(LOG_ERROR, "Failed to create a socket: %s", strSockError(getSockErr()));
+		socketClose(conn);
 		return NULL;
 	}
 
 	if (!setSocketBlocking(conn->fd, false))
 	{
-		SocketClose(conn);
+		socketClose(conn);
 		return NULL;
 	}
 
@@ -675,8 +685,8 @@ static Socket* SocketOpen(const struct addrinfo* addr, unsigned int timeout)
 #endif
 		 || timeout == 0)
 		{
-			debug(LOG_NET, "Failed to start connecting: %s", strsockerror(getSockErr()));
-			SocketClose(conn);
+			debug(LOG_NET, "Failed to start connecting: %s", strSockError(getSockErr()));
+			socketClose(conn);
 			return NULL;
 		}
 
@@ -699,16 +709,16 @@ static Socket* SocketOpen(const struct addrinfo* addr, unsigned int timeout)
 
 		if (ret == SOCKET_ERROR)
 		{
-			debug(LOG_NET, "Failed to wait for connection: %s", strsockerror(getSockErr()));
-			SocketClose(conn);
+			debug(LOG_NET, "Failed to wait for connection: %s", strSockError(getSockErr()));
+			socketClose(conn);
 			return NULL;
 		}
 
 		if (ret == 0)
 		{
 			setSockErr(ETIMEDOUT);
-			debug(LOG_NET, "Timed out while waiting for connection to be established: %s", strsockerror(getSockErr()));
-			SocketClose(conn);
+			debug(LOG_NET, "Timed out while waiting for connection to be established: %s", strSockError(getSockErr()));
+			socketClose(conn);
 			return NULL;
 		}
 
@@ -725,22 +735,22 @@ static Socket* SocketOpen(const struct addrinfo* addr, unsigned int timeout)
 		 && getSockErr() != EISCONN)
 #endif
 		{
-			debug(LOG_NET, "Failed to connect: %s", strsockerror(getSockErr()));
-			SocketClose(conn);
+			debug(LOG_NET, "Failed to connect: %s", strSockError(getSockErr()));
+			socketClose(conn);
 			return NULL;
 		}
 	}
 
 	if (!setSocketBlocking(conn->fd, true))
 	{
-		SocketClose(conn);
+		socketClose(conn);
 		return NULL;
 	}
 
 	return conn;
 }
 
-static Socket* SocketListen(unsigned int port)
+static Socket* socketListen(unsigned int port)
 {
 	struct sockaddr_in addr;
 
@@ -762,16 +772,16 @@ static Socket* SocketListen(unsigned int port)
 
 	if (conn->fd == INVALID_SOCKET)
 	{
-		debug(LOG_ERROR, "Failed to create an IPv4 socket: %s", strsockerror(getSockErr()));
-		SocketClose(conn);
+		debug(LOG_ERROR, "Failed to create an IPv4 socket: %s", strSockError(getSockErr()));
+		socketClose(conn);
 		return NULL;
 	}
 
 	if (bind(conn->fd, (const struct sockaddr*)&addr, sizeof(addr)) == SOCKET_ERROR
 	 || listen(conn->fd, 5) == SOCKET_ERROR)
 	{
-		debug(LOG_ERROR, "Failed to set up IPv4 socket for listening on port %u: %s", port, strsockerror(getSockErr()));
-		SocketClose(conn);
+		debug(LOG_ERROR, "Failed to set up IPv4 socket for listening on port %u: %s", port, strSockError(getSockErr()));
+		socketClose(conn);
 		return NULL;
 	}
 
@@ -1021,7 +1031,7 @@ static BOOL NET_fillBuffer(NETBUFSOCKET* bs, SocketSet* socket_set)
 		return false;
 	}
 
-	size = read_all(bs->socket, bufstart, bufsize);
+	size = readNoInt(bs->socket, bufstart, bufsize);
 
 	if (size > 0)
 	{
@@ -1039,8 +1049,8 @@ static BOOL NET_fillBuffer(NETBUFSOCKET* bs, SocketSet* socket_set)
 		{
 			debug(LOG_ERROR, "Fatal connection error: buffer size of (%d) was too small, current byte count was %d", NET_BUFFER_SIZE, bs->bytes);
 		}
-		debug(LOG_WARNING, "SDLNet_TCP_Recv error: %s tcp_socket %p is now invalid", strsockerror(getSockErr()), bs->socket);
-		SocketClose(bs->socket);
+		debug(LOG_WARNING, "SDLNet_TCP_Recv error: %s tcp_socket %p is now invalid", strSockError(getSockErr()), bs->socket);
+		socketClose(bs->socket);
 		bs->socket = NULL;
 	}
 
@@ -1219,7 +1229,7 @@ void NETplayerLeaving(UDWORD dpid)
 
 		// Although we can get a error result from DelSocket, it don't really matter here.
 		delSocket(socket_set, connected_bsocket[dpid]->socket);
-		SocketClose(connected_bsocket[dpid]->socket);
+		socketClose(connected_bsocket[dpid]->socket);
 		connected_bsocket[dpid]->socket = NULL;
 	}
 	else
@@ -1417,11 +1427,11 @@ static void NETsendGAMESTRUCT(Socket* sock, const GAMESTRUCT* game)
 
 
 	// Send over the GAMESTRUCT
-	result = write_all(sock, buf, sizeof(buf));
+	result = writeAll(sock, buf, sizeof(buf));
 	if (result == SOCKET_ERROR)
 	{
 		// If packet could not be sent, we should inform user of the error.
-		debug(LOG_ERROR, "Failed to send GAMESTRUCT. Reason: %s", strsockerror(getSockErr()));
+		debug(LOG_ERROR, "Failed to send GAMESTRUCT. Reason: %s", strSockError(getSockErr()));
 		debug(LOG_ERROR, "Please make sure TCP ports %u & %u are open!", masterserver_port, gameserver_port);
 	}
 }
@@ -1449,12 +1459,12 @@ static bool NETrecvGAMESTRUCT(GAMESTRUCT* game)
 	 || socket_set == NULL
 	 || checkSockets(socket_set, 1000) <= 0
 	 || !tcp_socket->ready
-	 || (result = read_all(tcp_socket, buf, sizeof(buf))) != sizeof(buf))
+	 || (result = readNoInt(tcp_socket, buf, sizeof(buf))) != sizeof(buf))
 	{
 		if (result == SOCKET_ERROR)
 		{
-			debug(LOG_WARNING, "Server socket ecountered error: %s", strsockerror(getSockErr()));
-			SocketClose(tcp_socket);
+			debug(LOG_WARNING, "Server socket ecountered error: %s", strSockError(getSockErr()));
+			socketClose(tcp_socket);
 			tcp_socket = NULL;
 		}
 		return false;
@@ -1561,7 +1571,7 @@ int NETinit(BOOL bFirstCall)
 		WORD ver_required = (2 << 8) + 2;
 		if (WSAStartup(ver_required, &stuff) != 0)
 		{
-			debug(LOG_ERROR, "Failed to initialize Winsock: %s", strsockerror(getSockErr()));
+			debug(LOG_ERROR, "Failed to initialize Winsock: %s", strSockError(getSockErr()));
 			return -1;
 		}
 	}
@@ -1625,7 +1635,7 @@ int NETclose(void)
 	if(bsocket)
 	{	// need delSocket() as well, socket_set or tmp_socket_set?
 		debug(LOG_NET, "Closing bsocket %p socket %p (tcp_socket=%p)", bsocket, bsocket->socket, tcp_socket);
-		//SocketClose(bsocket->socket);
+		//socketClose(bsocket->socket);
 		NET_destroyBufferedSocket(bsocket);
 		bsocket=NULL;
 	}
@@ -1637,7 +1647,7 @@ int NETclose(void)
 			if(connected_bsocket[i]->socket)
 			{
 				debug(LOG_NET, "Closing connected_bsocket[%u], %p", i, connected_bsocket[i]->socket);
-				SocketClose(connected_bsocket[i]->socket);
+				socketClose(connected_bsocket[i]->socket);
 			}
 			NET_destroyBufferedSocket(connected_bsocket[i]);
 			connected_bsocket[i]=NULL;
@@ -1658,7 +1668,7 @@ int NETclose(void)
 		{
 			// FIXME: need delSocket() as well, socket_set or tmp_socket_set?
 			debug(LOG_NET, "Closing tmp_socket[%d] %p", i, tmp_socket[i]);
-			SocketClose(tmp_socket[i]);
+			socketClose(tmp_socket[i]);
 			tmp_socket[i]=NULL;
 		}
 	}
@@ -1674,7 +1684,7 @@ int NETclose(void)
 	if (tcp_socket)
 	{
 		debug(LOG_NET, "Closing tcp_socket %p", tcp_socket);
-		SocketClose(tcp_socket);
+		socketClose(tcp_socket);
 		tcp_socket=NULL;
 	}
 
@@ -1792,7 +1802,7 @@ BOOL NETsend(NETMSG *msg, UDWORD player)
 		if (   player < MAX_CONNECTED_PLAYERS
 		    && connected_bsocket[player] != NULL
 		    && connected_bsocket[player]->socket != NULL
-		    && (result = write_all(connected_bsocket[player]->socket,
+		    && (result = writeAll(connected_bsocket[player]->socket,
 				       msg, size) == size))
 		{
 			nStats.bytesSent   += size;
@@ -1802,8 +1812,8 @@ BOOL NETsend(NETMSG *msg, UDWORD player)
 		else if (result == SOCKET_ERROR)
 		{
 			// Write error, most likely client disconnect.
-			debug(LOG_ERROR, "Failed to send message: %s", strsockerror(getSockErr()));
-			SocketClose(connected_bsocket[player]->socket);
+			debug(LOG_ERROR, "Failed to send message: %s", strSockError(getSockErr()));
+			socketClose(connected_bsocket[player]->socket);
 			connected_bsocket[player]->socket = NULL;
 		}
 	}
@@ -1811,15 +1821,15 @@ BOOL NETsend(NETMSG *msg, UDWORD player)
 	{
 		// FIXME: We are NOT checking checkSockets/SDLNet_SocketReady 
 		// SDLNet_TCP_Send *can* block!
-			if (tcp_socket && (result = write_all(tcp_socket, msg, size) == size))
+			if (tcp_socket && (result = writeAll(tcp_socket, msg, size) == size))
 			{
 				return true;
 			}
 			else if (result == SOCKET_ERROR)
 			{
 				// Write error, most likely client disconnect.
-				debug(LOG_ERROR, "Failed to send message: %s", strsockerror(getSockErr()));
-				SocketClose(tcp_socket);
+				debug(LOG_ERROR, "Failed to send message: %s", strSockError(getSockErr()));
+				socketClose(tcp_socket);
 				tcp_socket = NULL;
 			}
 
@@ -1862,13 +1872,13 @@ BOOL NETbcast(NETMSG *msg)
 			{	
 				// FIXME: We are NOT checking checkSockets/SDLNet_SocketReady 
 				// SDLNet_TCP_Send *can* block!
-				if (write_all(connected_bsocket[i]->socket, msg, size) == SOCKET_ERROR)
+				if (writeAll(connected_bsocket[i]->socket, msg, size) == SOCKET_ERROR)
 				{
 					// Write error, most likely client disconnect.
-					debug(LOG_ERROR, "Failed to send message: %s", strsockerror(getSockErr()));
+					debug(LOG_ERROR, "Failed to send message: %s", strSockError(getSockErr()));
 					players[i].heartbeat = false;	//mark them dead
 					debug(LOG_WARNING, "Player (dpid %u) connection was broken.", i);
-					SocketClose(connected_bsocket[i]->socket);
+					socketClose(connected_bsocket[i]->socket);
 					connected_bsocket[i]->socket = NULL;
 				}
 			}
@@ -1882,12 +1892,12 @@ BOOL NETbcast(NETMSG *msg)
 		}
 		// FIXME: We are NOT checking checkSockets/SDLNet_SocketReady 
 		// SDLNet_TCP_Send *can* block!
-		if (write_all(tcp_socket, msg, size) == SOCKET_ERROR)
+		if (writeAll(tcp_socket, msg, size) == SOCKET_ERROR)
 		{
 			// Write error, most likely client disconnect.
-			debug(LOG_ERROR, "Failed to send message: %s", strsockerror(getSockErr()));
+			debug(LOG_ERROR, "Failed to send message: %s", strSockError(getSockErr()));
 			debug(LOG_WARNING, "Host connection was broken?");
-			SocketClose(tcp_socket);
+			socketClose(tcp_socket);
 			tcp_socket = NULL;
 			players[HOST_DPID].heartbeat = false;	//mark them dead
 			//Game is pretty much over --should just end everything when HOST dies.
@@ -2220,11 +2230,11 @@ receive_message:
 					    && connected_bsocket[j] != NULL
 					    && connected_bsocket[j]->socket != NULL)
 					{
-						if (write_all(connected_bsocket[j]->socket, pMsg, size) == SOCKET_ERROR)
+						if (writeAll(connected_bsocket[j]->socket, pMsg, size) == SOCKET_ERROR)
 						{
 							// Write error, most likely client disconnect.
-							debug(LOG_ERROR, "Failed to send message: %s", strsockerror(getSockErr()));
-							SocketClose(connected_bsocket[pMsg->destination]->socket);
+							debug(LOG_ERROR, "Failed to send message: %s", strSockError(getSockErr()));
+							socketClose(connected_bsocket[pMsg->destination]->socket);
 							connected_bsocket[pMsg->destination]->socket = NULL;
 						}
 					}
@@ -2240,11 +2250,11 @@ receive_message:
 					debug(LOG_NET, "Reflecting message type %hhu to %hhu", pMsg->type, pMsg->destination);
 					pMsg->size = ntohs(pMsg->size);
 
-					if (write_all(connected_bsocket[pMsg->destination]->socket, pMsg, size) == SOCKET_ERROR)
+					if (writeAll(connected_bsocket[pMsg->destination]->socket, pMsg, size) == SOCKET_ERROR)
 					{
 						// Write error, most likely client disconnect.
-						debug(LOG_ERROR, "Failed to send message: %s", strsockerror(getSockErr()));
-						SocketClose(connected_bsocket[pMsg->destination]->socket);
+						debug(LOG_ERROR, "Failed to send message: %s", strSockError(getSockErr()));
+						socketClose(connected_bsocket[pMsg->destination]->socket);
 						connected_bsocket[pMsg->destination]->socket = NULL;
 					}
 				}
@@ -2430,7 +2440,7 @@ static void NETregisterServer(int state)
 				struct addrinfo* const hosts = resolveHost(masterserver_name, masterserver_port);
 				if (hosts == NULL)
 				{
-					debug(LOG_ERROR, "Cannot resolve masterserver \"%s\": %s", masterserver_name, strsockerror(getSockErr()));
+					debug(LOG_ERROR, "Cannot resolve masterserver \"%s\": %s", masterserver_name, strSockError(getSockErr()));
 					ssprintf(NetPlay.MOTDbuffer, _("Could not resolve masterserver name (%s)!"), masterserver_name);
 					server_not_there = true;
 					return;
@@ -2446,7 +2456,7 @@ static void NETregisterServer(int state)
 
 				if(rs_socket == NULL)
 				{
-					debug(LOG_ERROR, "Cannot connect to masterserver \"%s:%d\": %s", masterserver_name, masterserver_port, strsockerror(getSockErr()));
+					debug(LOG_ERROR, "Cannot connect to masterserver \"%s:%d\": %s", masterserver_name, masterserver_port, strSockError(getSockErr()));
 					ssprintf(NetPlay.MOTDbuffer, _("Could not communicate with lobby server! Is TCP port %u open?"), masterserver_port);
 					server_not_there = true;
 					return;
@@ -2457,7 +2467,7 @@ static void NETregisterServer(int state)
 					masterset = allocSocketSet(1);
 					if (!masterset)
 					{
-						debug(LOG_ERROR, "Couldn't create socket set for master server because: %s", strsockerror(getSockErr()));
+						debug(LOG_ERROR, "Couldn't create socket set for master server because: %s", strSockError(getSockErr()));
 					}
 					if (addSocket(masterset, rs_socket))
 					{
@@ -2465,17 +2475,17 @@ static void NETregisterServer(int state)
 					}
 				}
 				// get the MOTD from the server
-				write_all(rs_socket, "motd", sizeof("motd"));
+				writeAll(rs_socket, "motd", sizeof("motd"));
 				if (checkSockets(masterset, 1000) == SOCKET_ERROR)
 				{
-					debug(LOG_NET, "Warning, MOTD CheckSockets Failed. Error %s", strsockerror(getSockErr()));
+					debug(LOG_NET, "Warning, MOTD CheckSockets Failed. Error %s", strSockError(getSockErr()));
 				}
 				if (rs_socket->ready)	// true on activity
 				{
-					result = read_all(rs_socket, NetPlay.MOTDbuffer, sizeof(NetPlay.MOTDbuffer) - 1);
+					result = readNoInt(rs_socket, NetPlay.MOTDbuffer, sizeof(NetPlay.MOTDbuffer) - 1);
 					if (result <= 0)
 					{
-						debug(LOG_NET, "Warning, MOTD TCP_Recv failed. result = %d, error %s", result,  strsockerror(getSockErr()));
+						debug(LOG_NET, "Warning, MOTD TCP_Recv failed. result = %d, error %s", result,  strSockError(getSockErr()));
 						sstrcpy(NetPlay.MOTDbuffer, "MOTD communication error with lobby server, TCP_Recv failed!");
 					}
 					// Make sure to NUL terminate the MOTD string
@@ -2484,11 +2494,11 @@ static void NETregisterServer(int state)
 				}
 				else
 				{
-					debug(LOG_NET, "Warning, MOTD Socket Not ready.  Is the motd.txt file empty?  Error %s", strsockerror(getSockErr()));
+					debug(LOG_NET, "Warning, MOTD Socket Not ready.  Is the motd.txt file empty?  Error %s", strSockError(getSockErr()));
 					sstrcpy(NetPlay.MOTDbuffer, "MOTD communication error with lobby server, socket not ready?");
 				}
 
-				write_all(rs_socket, "addg", sizeof("addg"));
+				writeAll(rs_socket, "addg", sizeof("addg"));
 				// and now send what the server wants
 				NETsendGAMESTRUCT(rs_socket, &game);
 			}
@@ -2499,7 +2509,7 @@ static void NETregisterServer(int state)
 				delSocket(masterset,rs_socket);
 				free(masterset);
 				masterset = NULL;
-				SocketClose(rs_socket);
+				socketClose(rs_socket);
 				rs_socket=NULL;
 			break;
 		}
@@ -2537,7 +2547,7 @@ static void NETallowJoining(void)
 		tmp_socket_set = allocSocketSet(MAX_TMP_SOCKETS+1);
 		if (tmp_socket_set == NULL)
 		{
-			debug(LOG_ERROR, "Cannot create socket set: %s", strsockerror(getSockErr()));
+			debug(LOG_ERROR, "Cannot create socket set: %s", strSockError(getSockErr()));
 			return;
 		}
 		debug(LOG_NET, "Created tmp_socket_set %p", tmp_socket_set);
@@ -2559,20 +2569,20 @@ static void NETallowJoining(void)
 					break;
 				}
 			}
-			tmp_socket[i] = SocketAccept(tcp_socket);
+			tmp_socket[i] = socketAccept(tcp_socket);
 			debug(LOG_NET, "tmp_socket[%d]=%p Accepted", i, tmp_socket[i]);
 			addSocket(tmp_socket_set, tmp_socket[i]);
 			if (checkSockets(tmp_socket_set, 1000) > 0
 			    && tmp_socket[i]->ready
-			    && (recv_result = read_all(tmp_socket[i], buffer, 5)))
+			    && (recv_result = readNoInt(tmp_socket[i], buffer, 5)))
 			{
 				if(strcmp(buffer, "list")==0)
 				{
 					debug(LOG_NET, "cmd: list.  Sending game list");
-					if (write_all(tmp_socket[i], &numgames, sizeof(numgames)) == SOCKET_ERROR)
+					if (writeAll(tmp_socket[i], &numgames, sizeof(numgames)) == SOCKET_ERROR)
 					{
 						// Write error, most likely client disconnect.
-						debug(LOG_ERROR, "Failed to send message: %s", strsockerror(getSockErr()));
+						debug(LOG_ERROR, "Failed to send message: %s", strSockError(getSockErr()));
 						debug(LOG_WARNING, "Couldn't get list from server. Make sure required ports are open. (TCP 9998-9999)");
 					}
 					else
@@ -2583,7 +2593,7 @@ static void NETallowJoining(void)
 					}
 
 					delSocket(tmp_socket_set, tmp_socket[i]);
-					SocketClose(tmp_socket[i]);
+					socketClose(tmp_socket[i]);
 					tmp_socket[i] = NULL;
 				}
 				else if (strcmp(buffer, "join") == 0)
@@ -2594,14 +2604,14 @@ static void NETallowJoining(void)
 				else
 				{
 					delSocket(tmp_socket_set, tmp_socket[i]);
-					SocketClose(tmp_socket[i]);
+					socketClose(tmp_socket[i]);
 					tmp_socket[i] = NULL;
 				}
 			}
 			else
 			{
 				delSocket(tmp_socket_set, tmp_socket[i]);
-				SocketClose(tmp_socket[i]);
+				socketClose(tmp_socket[i]);
 				tmp_socket[i] = NULL;
 			}
 		}
@@ -2610,7 +2620,7 @@ static void NETallowJoining(void)
 			if (   tmp_socket[i] != NULL
 			    && tmp_socket[i]->ready)
 			{
-				int size = read_all(tmp_socket[i], &NetMsg, sizeof(NetMsg));
+				int size = readNoInt(tmp_socket[i], &NetMsg, sizeof(NetMsg));
 
 				if (size <= 0)
 				{
@@ -2621,11 +2631,11 @@ static void NETallowJoining(void)
 					}
 					else
 					{
-						debug(LOG_NET, "Client socket ecountered error: %s", strsockerror(getSockErr()));
+						debug(LOG_NET, "Client socket ecountered error: %s", strSockError(getSockErr()));
 					}
 
 					delSocket(tmp_socket_set, tmp_socket[i]);
-					SocketClose(tmp_socket[i]);
+					socketClose(tmp_socket[i]);
 					tmp_socket[i] = NULL;
 				}
 				else if (NetMsg.type == NET_JOIN)
@@ -2722,10 +2732,10 @@ BOOL NEThostGame(const char* SessionName, const char* PlayerName,
 
 	// tcp_socket is the connection to the lobby server (or machine)
 	if (!tcp_socket)
-		tcp_socket = SocketListen(gameserver_port);
+		tcp_socket = socketListen(gameserver_port);
 	if(tcp_socket == NULL)
 	{
-		debug(LOG_ERROR, "Cannot connect to master self: %s", strsockerror(getSockErr()));
+		debug(LOG_ERROR, "Cannot connect to master self: %s", strSockError(getSockErr()));
 		return false;
 	}
 	debug(LOG_NET, "New tcp_socket = %p", tcp_socket);
@@ -2733,7 +2743,7 @@ BOOL NEThostGame(const char* SessionName, const char* PlayerName,
 	if(!socket_set) socket_set = allocSocketSet(MAX_CONNECTED_PLAYERS);
 	if (socket_set == NULL)
 	{
-		debug(LOG_ERROR, "Cannot create socket set: %s", strsockerror(getSockErr()));
+		debug(LOG_ERROR, "Cannot create socket set: %s", strSockError(getSockErr()));
 		return false;
 	}
 	addSocket(socket_set, tcp_socket);
@@ -2834,7 +2844,7 @@ BOOL NETfindGame(void)
 		if (hosts == NULL)
 		{
 			debug(LOG_ERROR, "Error connecting to client via hostname provided (%s)",iptoconnect);
-			debug(LOG_ERROR, "Cannot resolve hostname :%s",strsockerror(getSockErr()));
+			debug(LOG_ERROR, "Cannot resolve hostname :%s",strSockError(getSockErr()));
 			setLobbyError(ERROR_CONNECTION);
 			return false;
 		}
@@ -2847,7 +2857,7 @@ BOOL NETfindGame(void)
 	}
 	else if ((hosts = resolveHost(hostname, port)) == NULL)
 	{
-		debug(LOG_ERROR, "Cannot resolve hostname \"%s\": %s", hostname, strsockerror(getSockErr()));
+		debug(LOG_ERROR, "Cannot resolve hostname \"%s\": %s", hostname, strSockError(getSockErr()));
 		setLobbyError(ERROR_CONNECTION);
 		return false;
 	}
@@ -2856,7 +2866,7 @@ BOOL NETfindGame(void)
 	{
 		debug(LOG_NET, "Deleting tcp_socket %p", tcp_socket);
 		delSocket(socket_set,tcp_socket);
-		SocketClose(tcp_socket);
+		socketClose(tcp_socket);
 		tcp_socket = NULL;
 	}
 
@@ -2869,7 +2879,7 @@ BOOL NETfindGame(void)
 
 	if (tcp_socket == NULL)
 	{
-		debug(LOG_ERROR, "Cannot connect to \"%s:%d\": %s", hostname, port, strsockerror(getSockErr()));
+		debug(LOG_ERROR, "Cannot connect to \"%s:%d\": %s", hostname, port, strSockError(getSockErr()));
 		setLobbyError(ERROR_CONNECTION);
 		freeaddrinfo(hosts);
 		return false;
@@ -2879,7 +2889,7 @@ BOOL NETfindGame(void)
 	socket_set = allocSocketSet(1);
 	if (socket_set == NULL)
 	{
-		debug(LOG_ERROR, "Cannot create socket set: %s", strsockerror(getSockErr()));
+		debug(LOG_ERROR, "Cannot create socket set: %s", strSockError(getSockErr()));
 		setLobbyError(ERROR_CONNECTION);
 		freeaddrinfo(hosts);
 		return false;
@@ -2889,11 +2899,11 @@ BOOL NETfindGame(void)
 	addSocket(socket_set, tcp_socket);
 
 	debug(LOG_NET, "Sending list cmd");
-	write_all(tcp_socket, "list", sizeof("list"));
+	writeAll(tcp_socket, "list", sizeof("list"));
 
 	if (checkSockets(socket_set, 1000) > 0
 	 && tcp_socket->ready
-	 && (result = read_all(tcp_socket, &gamesavailable, sizeof(gamesavailable))))
+	 && (result = readNoInt(tcp_socket, &gamesavailable, sizeof(gamesavailable))))
 	{
 		gamesavailable = ntohl(gamesavailable);
 	}
@@ -2901,8 +2911,8 @@ BOOL NETfindGame(void)
 	{
 		if (result == SOCKET_ERROR)
 		{
-			debug(LOG_NET, "Server socket ecountered error: %s", strsockerror(getSockErr()));
-			SocketClose(tcp_socket);
+			debug(LOG_NET, "Server socket ecountered error: %s", strSockError(getSockErr()));
+			socketClose(tcp_socket);
 			tcp_socket = NULL;
 		}
 		// when we fail to receive a game count, bail out
@@ -2966,13 +2976,13 @@ BOOL NETjoinGame(UDWORD gameNumber, const char* playername)
 	hosts = resolveHost(hostname, gameserver_port);
 	if (hosts == NULL)
 	{
-		debug(LOG_ERROR, "Cannot resolve hostname \"%s\": %s", hostname, strsockerror(getSockErr()));
+		debug(LOG_ERROR, "Cannot resolve hostname \"%s\": %s", hostname, strSockError(getSockErr()));
 		return false;
 	}
 
 	if (tcp_socket != NULL)
 	{
-		SocketClose(tcp_socket);
+		socketClose(tcp_socket);
 	}
 
 	for (cur = hosts; cur; cur = cur->ai_next)
@@ -2984,7 +2994,7 @@ BOOL NETjoinGame(UDWORD gameNumber, const char* playername)
 
  	if (tcp_socket == NULL)
 	{
-		debug(LOG_ERROR, "Cannot connect to \"%s:%d\": %s", hostname, gameserver_port, strsockerror(getSockErr()));
+		debug(LOG_ERROR, "Cannot connect to \"%s:%d\": %s", hostname, gameserver_port, strSockError(getSockErr()));
 		freeaddrinfo(hosts);
 		return false;
 	}
@@ -2992,7 +3002,7 @@ BOOL NETjoinGame(UDWORD gameNumber, const char* playername)
 	socket_set = allocSocketSet(1);
 	if (socket_set == NULL)
 	{
-		debug(LOG_ERROR, "Cannot create socket set: %s", strsockerror(getSockErr()));
+		debug(LOG_ERROR, "Cannot create socket set: %s", strSockError(getSockErr()));
 		freeaddrinfo(hosts);
  		return false;
  	}
@@ -3001,7 +3011,7 @@ BOOL NETjoinGame(UDWORD gameNumber, const char* playername)
 	// tcp_socket is used to talk to host machine
 	addSocket(socket_set, tcp_socket);
 
-	write_all(tcp_socket, "join", sizeof("join"));
+	writeAll(tcp_socket, "join", sizeof("join"));
 
 	if (NETrecvGAMESTRUCT(&NetPlay.games[gameNumber])
 	 && NetPlay.games[gameNumber].desc.host[0] == '\0')
