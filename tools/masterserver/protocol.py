@@ -40,6 +40,25 @@ def _socket(family = socket.AF_INET, type = socket.SOCK_STREAM, proto = 0):
 	finally:
 		s.close()
 
+@contextmanager
+def connection(host, port, family = socket.AF_UNSPEC, socktype = socket.SOCK_STREAM):
+	addrs = socket.getaddrinfo(host, port, family, socktype)
+	for i in xrange(len(addrs)):
+		(family, socktype, proto, canonname, sockaddr) = addrs[i]
+		with _socket(family, socktype, proto) as s:
+			timeout = s.gettimeout()
+			s.settimeout(10.0)
+			try:
+				s.connect(sockaddr)
+			except socket.timeout:
+				if i == (len(addrs) - 1):
+					raise
+				continue
+			s.settimeout(timeout)
+
+			yield s
+			return
+
 def _encodeCString(string, buf_len):
 	# If we haven't got a string return an empty one
 	if not string:
@@ -118,22 +137,17 @@ class BaseProtocol(object):
 
 	def check(self, game):
 		"""Check we can connect to the game's host."""
-		with _socket(socket.AF_INET6) as s:
-			try:
-				logging.debug("Checking %s's vitality..." % game.host)
-				s.settimeout(10.0)
-				s.connect((game.host, self.gamePort))
+		try:
+			logging.debug("Checking %s's vitality..." % game.host)
+			with connection(game.host, self.gamePort) as s:
 				return True
-			except (socket.error, socket.herror, socket.gaierror, socket.timeout), e:
-				logging.debug("%s did not respond: %s" % (game.host, e))
-				return False
+		except (socket.error, socket.herror, socket.gaierror, socket.timeout), e:
+			logging.debug("%s did not respond: %s" % (game.host, e))
+			return False
 
 	def list(self, host):
 		"""Retrieve a list of games from the lobby server."""
-		with _socket(socket.AF_INET6) as s:
-			s.settimeout(10.0)
-			s.connect((host, self.lobbyPort))
-
+		with connection(host, self.lobbyPort) as s:
 			s.send("list\0")
 			for game in self.decodeMultiple(s):
 				yield game

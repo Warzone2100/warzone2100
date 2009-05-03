@@ -40,7 +40,7 @@ import time
 import struct
 from game import *
 from protocol import *
-from protocol import _socket as socket
+from protocol import connection
 
 server="lobby.wz2100.net"
 protocol = Protocol()
@@ -84,10 +84,8 @@ def doAddGame():
 	g.future3 = 0
 	g.future4 = 0
 
-	with socket() as s:
-		logging.debug("connect to lobby")
-		s.settimeout(10.0)
-		s.connect((server, protocol.lobbyPort))
+	logging.debug("connect to lobby")
+	with connection(server, protocol.lobbyPort) as s:
 		s.send("addg\0")
 		protocol.encodeSingle(g, s)
 		#hold the game open for 10 seconds
