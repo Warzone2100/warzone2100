@@ -267,7 +267,9 @@ if __name__ == '__main__':
 	logging.info("Starting Warzone 2100 lobby server on port %d" % (protocol.lobbyPort))
 
 	# Read in the Message of the Day, max is 1 line, 255 chars
-	MOTDstring = "The message of the day!!!"
+	in_file = open("motd.txt", "r")
+	MOTDstring = in_file.read()
+	in_file.close()
 	logging.info("The MOTD is (%s)" % MOTDstring[0:255])
 
 
