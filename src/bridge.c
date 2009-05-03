@@ -33,12 +33,12 @@
 /**
  * @file bridge.c
  * Bridges - currently unused.
- * 
+ *
  * Handles rendering and placement of bridging sections for
  * traversing water and ravines?! My guess is this won't make it into
  * the final game, but we'll see...
  * Alex McLean, Pumpkin Studios EIDOS Interactive, 1998.
- * 
+ *
  * He was right. It did not make the final game. The code below
  * is unused. Can it be reused? - Per, 2007
  */
@@ -50,54 +50,54 @@ and end points. We can also check other stuff here like what it's going
 over. Also, it has to be between a minimum and maximum length and
 one of the axes must share the same values.
 */
-BOOL	bridgeValid(UDWORD startX,UDWORD startY, UDWORD endX, UDWORD endY)
+BOOL	bridgeValid(UDWORD startX, UDWORD startY, UDWORD endX, UDWORD endY)
 {
-BOOL	xBridge, yBridge;
-UDWORD	bridgeLength;
-UDWORD	startHeight,endHeight,sectionHeight;
-UDWORD	i;
+	BOOL	xBridge, yBridge;
+	UDWORD	bridgeLength;
+	UDWORD	startHeight, endHeight, sectionHeight;
+	UDWORD	i;
 
 	/* Establish axes allignment */
-	xBridge = ( (startX == endX) ? true : false );
-	yBridge = ( (startY == endY) ? true : false );
+	xBridge = ((startX == endX) ? true : false);
+	yBridge = ((startY == endY) ? true : false);
 
 	/* At least one axis must be constant */
 	if (!xBridge && !yBridge)
 	{
 		/*	Bridge isn't straight - this shouldn't have been passed
 			in, but better safe than sorry! */
-		return(false);
+		return false;
 	}
 
 	/* Get the bridge length */
-	bridgeLength = ( xBridge ? abs(startY-endY) : abs(startX-endX) );
+	bridgeLength = (xBridge ? abs(startY - endY) : abs(startX - endX));
 
 	/* check it's not too long or short */
-	if(bridgeLength<MINIMUM_BRIDGE_SPAN || bridgeLength>MAXIMUM_BRIDGE_SPAN)
+	if (bridgeLength < MINIMUM_BRIDGE_SPAN || bridgeLength > MAXIMUM_BRIDGE_SPAN)
 	{
 		/* Cry out */
-		return(false);
+		return false;
 	}
 
 	/*	Check intervening tiles to see if they're lower
 	so first get the start and end heights */
-	startHeight = mapTile(startX,startY)->height;
-	endHeight = mapTile(endX,endY)->height;
+	startHeight = mapTile(startX, startY)->height;
+	endHeight = mapTile(endX, endY)->height;
 
 	/*
 		Don't whinge about this piece of code please! It's nice and short
 		and is called very infrequently. Could be made slightly faster.
 	*/
-	for(i = ( xBridge ? MIN(startY, endY) : MIN(startX, endX) );
-		i < ( xBridge ? MAX(startY, endY) : MAX(startX, endX) ); i++)
+	for (i = (xBridge ? MIN(startY, endY) : MIN(startX, endX));
+	        i < (xBridge ? MAX(startY, endY) : MAX(startX, endX)); i++)
 	{
 		/* Get the height of a bridge section */
-		sectionHeight = mapTile((xBridge ? startX : startY),i)->height;
+		sectionHeight = mapTile((xBridge ? startX : startY), i)->height;
 		/* Is it higher than BOTH end points? */
-		if( sectionHeight > MAX(startHeight,endHeight) )
+		if (sectionHeight > MAX(startHeight, endHeight))
 		{
 			/* Cry out */
-			return(false);
+			return false;
 		}
 	}
 	/* Everything's just fine */
@@ -114,44 +114,37 @@ UDWORD	i;
 */
 BOOL	renderBridgeSection(STRUCTURE *psStructure)
 {
-	SDWORD			structX,structY,structZ;
-	SDWORD			rx,rz;
-	//iIMDShape		*imd;
+	SDWORD			rx, rz;
 	Vector3i dv;
 
-			/* Bomb out if it's not visible */
-			if(!psStructure->visible[selectedPlayer])
-			{
-				return(false);
-			}
+	/* Bomb out if it's not visible */
+	if (!psStructure->visible[selectedPlayer])
+	{
+		return false;
+	}
 
-			/* Get it's x and y coordinates so we don't have to deref. struct later */
-			structX = psStructure->pos.x;
-			structY = psStructure->pos.y;
-			structZ = psStructure->pos.z;
+	/* Establish where it is in the world */
+	dv.x = (psStructure->pos.x - player.p.x) - terrainMidX * TILE_UNITS;
+	dv.z = terrainMidY * TILE_UNITS - (psStructure->pos.y - player.p.z);
+	dv.y = psStructure->pos.z;
 
-			/* Establish where it is in the world */
-			dv.x = (structX - player.p.x) - terrainMidX*TILE_UNITS;
-			dv.z = terrainMidY*TILE_UNITS - (structY - player.p.z);
-			dv.y = structZ;
+	/* Push the indentity matrix */
+	pie_MatBegin();
 
-			/* Push the indentity matrix */
-			pie_MatBegin();
+	/* Translate */
+	pie_TRANSLATE(dv.x, dv.y, dv.z);
 
-			/* Translate */
-			pie_TRANSLATE(dv.x,dv.y,dv.z);
+	/* Get the x,z translation components */
+	rx = map_round(player.p.x);
+	rz = map_round(player.p.z);
 
-			/* Get the x,z translation components */
-			rx = map_round(player.p.x);
-			rz = map_round(player.p.z);
+	/* Translate */
+	pie_TRANSLATE(rx, 0, -rz);
 
-			/* Translate */
-			pie_TRANSLATE(rx,0,-rz);
+	pie_Draw3DShape(psStructure->sDisplay.imd, 0, 0, WZCOL_WHITE, WZCOL_BLACK, 0, 0);
 
-			pie_Draw3DShape(psStructure->sDisplay.imd, 0, 0, WZCOL_WHITE, WZCOL_BLACK, 0, 0);
-
-			pie_MatEnd();
-			return(true);
+	pie_MatEnd();
+	return(true);
 }
 
 /*
@@ -160,11 +153,11 @@ BOOL	renderBridgeSection(STRUCTURE *psStructure)
 	what you need to alter start and end terrain heights by to establish to
 	connection.
 */
-void	getBridgeInfo(UDWORD startX,UDWORD startY,UDWORD endX, UDWORD endY, BRIDGE_INFO *info)
+void	getBridgeInfo(UDWORD startX, UDWORD startY, UDWORD endX, UDWORD endY, BRIDGE_INFO *info)
 {
-BOOL	xBridge,yBridge;
-UDWORD	startHeight,endHeight;
-BOOL	startHigher;
+	BOOL	xBridge, yBridge;
+	UDWORD	startHeight, endHeight;
+	BOOL	startHigher;
 
 	/* Copy over the location coordinates */
 	info->startX = startX;
@@ -173,14 +166,14 @@ BOOL	startHigher;
 	info->endY = endY;
 
 	/* Get the heights of the start and end positions */
-	startHeight = map_TileHeight(startX,startY);
-	endHeight = map_TileHeight(endX,endY);
+	startHeight = map_TileHeight(startX, startY);
+	endHeight = map_TileHeight(endX, endY);
 
 	/* Find out which is higher */
-	startHigher = (startHeight>=endHeight ? true : false);
+	startHigher = (startHeight >= endHeight ? true : false);
 
 	/* If the start position is higher */
-	if(startHigher)
+	if (startHigher)
 	{
 		/* Inform structure */
 		info->startHighest = true;
@@ -200,8 +193,8 @@ BOOL	startHigher;
 	/* Establish axes allignment */
 	/* Only one of these can occur otherwise
 	bridge is one square big */
-	xBridge = ( (startX == endX) ? true : false );
-	yBridge = ( (startY == endY) ? true : false );
+	xBridge = ((startX == endX) ? true : false);
+	yBridge = ((startY == endY) ? true : false);
 
 	/*
 		Set the bridge's height.
@@ -210,31 +203,30 @@ BOOL	startHigher;
 		(x,y) and (x,y+1) is constant X and (x,y) and (x+1,y) if constant
 		Y
 	*/
-	if(startHigher)
+	if (startHigher)
 	{
-		info->bridgeHeight = map_TileHeight(startX,startY);
+		info->bridgeHeight = map_TileHeight(startX, startY);
 	}
 	else
 	{
-		info->bridgeHeight = map_TileHeight(endX,endY);
+		info->bridgeHeight = map_TileHeight(endX, endY);
 	}
 
 	/* We've got a bridge of constant X */
-	if(xBridge)
+	if (xBridge)
 	{
 		info->bConstantX = true;
-		info->bridgeLength = abs(startY-endY);
+		info->bridgeLength = abs(startY - endY);
 	}
 	/* We've got a bridge of constant Y */
-	else if(yBridge)
+	else if (yBridge)
 	{
 		info->bConstantX = false;
-		info->bridgeLength = abs(startX-endX);
+		info->bridgeLength = abs(startX - endX);
 	}
 	else
 	{
-		debug( LOG_ERROR, "Weirdy Bridge requested - no axes allignment" );
-		abort();
+		debug(LOG_ERROR, "Weirdy bridge requested - no axis of alignment");
 	}
 }
 
@@ -244,72 +236,69 @@ void testBuildBridge(UDWORD startX, UDWORD startY, UDWORD endX, UDWORD endY)
 	UDWORD	i;
 	Vector3i dv;
 
-	if(bridgeValid(startX,startY,endX,endY))
+	if (bridgeValid(startX, startY, endX, endY))
 	{
-		getBridgeInfo(startX,startY,endX,endY,&bridge);
-		if(bridge.bConstantX)
+		getBridgeInfo(startX, startY, endX, endY, &bridge);
+		if (bridge.bConstantX)
 		{
 
-			for(i = MIN(bridge.startY, bridge.endY); i < (MAX(bridge.startY, bridge.endY) + 1); i++)
+			for (i = MIN(bridge.startY, bridge.endY); i < (MAX(bridge.startY, bridge.endY) + 1); i++)
 			{
-		   		dv.x = ((bridge.startX*128)+64);
-		   		dv.z = ((i*128)+64);
+				dv.x = ((bridge.startX * 128) + 64);
+				dv.z = ((i * 128) + 64);
 				dv.y = bridge.bridgeHeight;
-				addEffect(&dv,EFFECT_SMOKE,SMOKE_TYPE_DRIFTING,false,NULL,0);
-//				addExplosion(&dv,TYPE_EXPLOSION_SMOKE_CLOUD,NULL);
+				addEffect(&dv, EFFECT_SMOKE, SMOKE_TYPE_DRIFTING, false, NULL, 0);
+//				addExplosion(&dv, TYPE_EXPLOSION_SMOKE_CLOUD, NULL);
 			}
 		}
 		else
 		{
-			for(i = MIN(bridge.startX, bridge.endX); i < (MAX(bridge.startX,bridge.endX) + 1); i++)
+			for (i = MIN(bridge.startX, bridge.endX); i < (MAX(bridge.startX, bridge.endX) + 1); i++)
 			{
-		   		dv.x = ((i*128)+64);
-		   		dv.z = ((bridge.startY*128)+64);
+				dv.x = ((i * 128) + 64);
+				dv.z = ((bridge.startY * 128) + 64);
 				dv.y = bridge.bridgeHeight;
-				addEffect(&dv,EFFECT_SMOKE,SMOKE_TYPE_DRIFTING,false,NULL,0);
-//				addExplosion(&dv,TYPE_EXPLOSION_SMOKE_CLOUD,NULL);
+				addEffect(&dv, EFFECT_SMOKE, SMOKE_TYPE_DRIFTING, false, NULL, 0);
+//				addExplosion(&dv, TYPE_EXPLOSION_SMOKE_CLOUD, NULL);
 			}
 		}
-			/* Flatten the start tile */
-			setTileHeight(bridge.startX,bridge.startY,bridge.bridgeHeight);
-			setTileHeight(bridge.startX,bridge.startY+1,bridge.bridgeHeight);
-			setTileHeight(bridge.startX+1,bridge.startY,bridge.bridgeHeight);
-			setTileHeight(bridge.startX+1,bridge.startY+1,bridge.bridgeHeight);
+		/* Flatten the start tile */
+		setTileHeight(bridge.startX, bridge.startY, bridge.bridgeHeight);
+		setTileHeight(bridge.startX, bridge.startY + 1, bridge.bridgeHeight);
+		setTileHeight(bridge.startX + 1, bridge.startY, bridge.bridgeHeight);
+		setTileHeight(bridge.startX + 1, bridge.startY + 1, bridge.bridgeHeight);
 
-			/* Flatten the end tile */
-			setTileHeight(bridge.endX,bridge.endY,bridge.bridgeHeight);
-			setTileHeight(bridge.endX,bridge.endY+1,bridge.bridgeHeight);
-			setTileHeight(bridge.endX+1,bridge.endY,bridge.bridgeHeight);
-			setTileHeight(bridge.endX+1,bridge.endY+1,bridge.bridgeHeight);
+		/* Flatten the end tile */
+		setTileHeight(bridge.endX, bridge.endY, bridge.bridgeHeight);
+		setTileHeight(bridge.endX, bridge.endY + 1, bridge.bridgeHeight);
+		setTileHeight(bridge.endX + 1, bridge.endY, bridge.bridgeHeight);
+		setTileHeight(bridge.endX + 1, bridge.endY + 1, bridge.bridgeHeight);
 	}
 	else
 	{
-		getBridgeInfo(startX,startY,endX,endY,&bridge);
-		if(bridge.bConstantX)
+		getBridgeInfo(startX, startY, endX, endY, &bridge);
+		if (bridge.bConstantX)
 		{
-			for(i = MIN(bridge.startY, bridge.endY); i < (MAX(bridge.startY, bridge.endY) + 1); i++)
+			for (i = MIN(bridge.startY, bridge.endY); i < (MAX(bridge.startY, bridge.endY) + 1); i++)
 			{
-		   		dv.x = ((bridge.startX*128)+64);
-		   		dv.z = ((i*128)+64);
+				dv.x = ((bridge.startX * 128) + 64);
+				dv.z = ((i * 128) + 64);
 				dv.y = bridge.bridgeHeight;
-				addEffect(&dv,EFFECT_EXPLOSION,EXPLOSION_TYPE_SMALL,false,NULL,0);
-//				addExplosion(&dv,TYPE_EXPLOSION_MED,NULL);
+				addEffect(&dv, EFFECT_EXPLOSION, EXPLOSION_TYPE_SMALL, false, NULL, 0);
+//				addExplosion(&dv, TYPE_EXPLOSION_MED, NULL);
 			}
 		}
 		else
 		{
-			for(i = MIN(bridge.startX,bridge.endX); i < (MAX(bridge.startX, bridge.endX) + 1); i++)
+			for (i = MIN(bridge.startX, bridge.endX); i < (MAX(bridge.startX, bridge.endX) + 1); i++)
 			{
-		   		dv.x = ((i*128)+64);
-		   		dv.z = ((bridge.startY*128)+64);
+				dv.x = ((i * 128) + 64);
+				dv.z = ((bridge.startY * 128) + 64);
 				dv.y = bridge.bridgeHeight;
-				addEffect(&dv,EFFECT_EXPLOSION,EXPLOSION_TYPE_SMALL,false,NULL,0);
-//				addExplosion(&dv,TYPE_EXPLOSION_MED,NULL);
+				addEffect(&dv, EFFECT_EXPLOSION, EXPLOSION_TYPE_SMALL, false, NULL, 0);
+//				addExplosion(&dv, TYPE_EXPLOSION_MED, NULL);
 			}
 		}
 
 	}
 }
-
-
-
