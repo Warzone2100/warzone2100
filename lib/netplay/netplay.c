@@ -48,9 +48,15 @@ static const int SOCKET_ERROR = -1;
 #elif defined(WZ_OS_WIN)
 # include <winsock2.h>
 # include <ws2tcpip.h>
+# undef EAGAIN
+# undef EINPROGRESS
+# undef EINTR
+# undef EISCONN
+# undef ETIMEDOUT
+# undef EWOULDBLOCK
 # define EAGAIN      WSAEWOULDBLOCK
-# define EINTR       WSAEINTR
 # define EINPROGRESS WSAEINPROGRESS
+# define EINTR       WSAEINTR
 # define EISCONN     WSAEISCONN
 # define ETIMEDOUT   WSAETIMEDOUT
 # define EWOULDBLOCK WSAEWOULDBLOCK
