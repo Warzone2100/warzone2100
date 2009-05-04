@@ -33,8 +33,8 @@
 #define GTIME_MINFRAME	(GAME_TICKS_PER_SEC/80)
 
 /* See header file for documentation */
-UDWORD gameTime, frameTime, gameTime2, frameTime2;
-float frameTimeFraction, frameTimeFraction2;
+UDWORD gameTime = 0, frameTime = 0, gameTime2 = 0, frameTime2 = 0;
+float frameTimeFraction = 0.0, frameTimeFraction2 = 0.0;
 
 /** The current clock modifier. Set to speed up the game. */
 static float modifier;
