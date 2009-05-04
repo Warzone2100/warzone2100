@@ -337,5 +337,5 @@ void ShowMOTD(void)
 {
 	// when HOST joins the game, show server MOTD message first
 	addConsoleMessage(_("System message:"), DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
-	addConsoleMessage(NetPlay.MOTDbuffer, DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
+	addConsoleMessage(NetPlay.MOTD, DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
 }

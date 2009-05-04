@@ -203,7 +203,7 @@ typedef struct {
 	char gamePassword[StringSize];		//
 	bool GamePassworded;				// if we have a password or not.
 	bool ShowedMOTD;					// only want to show this once
-	char MOTDbuffer[255];				// buffer for MOTD
+	char* MOTD;
 } NETPLAY;
 
 /// This is the hardcoded dpid (player ID) value for the hosting player.

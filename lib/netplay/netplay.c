@@ -625,6 +625,71 @@ static int checkSockets(const SocketSet* set, unsigned int timeout)
 	return ret;
 }
 
+/**
+ * Similar to read(2) with the exception that this function won't be
+ * interrupted by signals (EINTR) and will only return when <em>exactly</em>
+ * @c size bytes have been received. I.e. this function blocks until all data
+ * has been received or a timeout occurred.
+ *
+ * @param timeout When non-zero this function times out after @c timeout
+ *                milliseconds. When zero this function blocks until success or
+ *                an error occurs.
+ *
+ * @c return @c size when succesful, less than @c size but at least zero (0)
+ * when the other end disconnected or a timeout occurred. Or @c SOCKET_ERROR if
+ * an error occurred.
+ */
+static ssize_t readAll(Socket* sock, void* buf, size_t size, unsigned int timeout)
+{
+	Socket* sockAr[] = { sock };
+	const SocketSet set = { ARRAY_SIZE(sockAr), sockAr };
+
+	size_t received = 0;
+
+	while (received < size)
+	{
+		ssize_t ret;
+
+		// If a timeout is set, wait for that amount of time for data to arrive (or abort)
+		if (timeout)
+		{
+			ret = checkSockets(&set, timeout);
+			if (ret < set.len
+			 || !sock->ready)
+			{
+				if (ret == 0)
+					setSockErr(ETIMEDOUT);
+				return SOCKET_ERROR;
+			}
+		}
+
+		ret = recv(sock->fd, &((char*)buf)[received], size - received, 0);
+		sock->ready = false;
+		if (ret == 0)
+		{
+			debug(LOG_NET, "Socket disconnected.");
+			return received;
+		}
+
+		if (ret == SOCKET_ERROR)
+		{
+			switch (getSockErr())
+			{
+				case EINTR:
+				case EAGAIN:
+					continue;
+
+				default:
+					return SOCKET_ERROR;
+			}
+		}
+
+		received += ret;
+	}
+
+	return received;
+}
+
 static void socketClose(Socket* sock)
 {
 	if (sock->fd != INVALID_SOCKET)
@@ -1607,7 +1672,7 @@ int NETinit(BOOL bFirstCall)
 		NetPlay.GamePassworded = false;
 		NetPlay.ShowedMOTD = false;
 		NetPlay.gamePassword[0] = '\0';
-		NetPlay.MOTDbuffer[0] = '\0';
+		NetPlay.MOTD = strdup("");
 		sstrcpy(NetPlay.gamePassword,"Enter Password First");
 		NETstartLogging();
 	}
@@ -2465,12 +2530,61 @@ UBYTE NETrecvFile(void)
 	return ((currPos + bytesRead) * 100) / fileSize;
 }
 
+static ssize_t readLobbyResponse(Socket* sock, unsigned int timeout)
+{
+	uint32_t lobbyStatusCode;
+	uint32_t MOTDLength;
+	uint32_t buffer[2];
+	ssize_t result, received = 0;
+
+	// Get status and message length
+	result = readAll(sock, &buffer, sizeof(buffer), timeout);
+	if (result != sizeof(buffer))
+		goto error;
+	received += result;
+	lobbyStatusCode = ntohl(buffer[0]);
+	MOTDLength = ntohl(buffer[1]);
+
+	// Get status message
+	free(NetPlay.MOTD);
+	NetPlay.MOTD = malloc(MOTDLength + 1);
+	result = readAll(sock, NetPlay.MOTD, MOTDLength, timeout);
+	if (result != MOTDLength)
+		goto error;
+	received += result;
+	// NUL terminate string
+	NetPlay.MOTD[MOTDLength] = '\0';
+
+	if (lobbyStatusCode / 100 != 2) // Check whether status code is 2xx (success)
+	{
+		debug(LOG_ERROR, "Lobby error (%u): %s", (unsigned int)lobbyStatusCode, NetPlay.MOTD);
+		return SOCKET_ERROR;
+	}
+
+	debug(LOG_NET, "Lobby success (%u): %s", (unsigned int)lobbyStatusCode, NetPlay.MOTD);
+	return received;
+
+error:
+	if (result == SOCKET_ERROR)
+	{
+		free(NetPlay.MOTD);
+		asprintf(&NetPlay.MOTD, "Error while communicating with the lobby server: %s", strSockError(getSockErr()));
+		debug(LOG_ERROR, "%s", NetPlay.MOTD);
+	}
+	else
+	{
+		free(NetPlay.MOTD);
+		asprintf(&NetPlay.MOTD, "Disconnected from lobby server. Failed to register game.");
+		debug(LOG_ERROR, "%s", NetPlay.MOTD);
+	}
+
+	return SOCKET_ERROR;
+}
+
 static void NETregisterServer(int state)
 {
 	static Socket* rs_socket = NULL;
 	static int registered = 0;
-	static SocketSet* masterset;
-	int result = 0;
 
 	if (server_not_there)
 	{
@@ -2485,10 +2599,12 @@ static void NETregisterServer(int state)
 			{
 				struct addrinfo* cur;
 				struct addrinfo* const hosts = resolveHost(masterserver_name, masterserver_port);
+
 				if (hosts == NULL)
 				{
 					debug(LOG_ERROR, "Cannot resolve masterserver \"%s\": %s", masterserver_name, strSockError(getSockErr()));
-					ssprintf(NetPlay.MOTDbuffer, _("Could not resolve masterserver name (%s)!"), masterserver_name);
+					free(NetPlay.MOTD);
+					asprintf(&NetPlay.MOTD, _("Could not resolve masterserver name (%s)!"), masterserver_name);
 					server_not_there = true;
 					return;
 				}
@@ -2504,60 +2620,31 @@ static void NETregisterServer(int state)
 				if(rs_socket == NULL)
 				{
 					debug(LOG_ERROR, "Cannot connect to masterserver \"%s:%d\": %s", masterserver_name, masterserver_port, strSockError(getSockErr()));
-					ssprintf(NetPlay.MOTDbuffer, _("Could not communicate with lobby server! Is TCP port %u open?"), masterserver_port);
+					free(NetPlay.MOTD);
+					asprintf(&NetPlay.MOTD, _("Could not communicate with lobby server! Is TCP port %u open?"), masterserver_port);
 					server_not_there = true;
 					return;
 				}
-				// master server socket set to be friendly
-				if (!masterset)
-				{
-					masterset = allocSocketSet(1);
-					if (!masterset)
-					{
-						debug(LOG_ERROR, "Couldn't create socket set for master server because: %s", strSockError(getSockErr()));
-					}
-					if (addSocket(masterset, rs_socket))
-					{
-						debug(LOG_NET,"TCP_AddSocket using socket set %p, socket %p", masterset, rs_socket);
-					}
-				}
-				// get the MOTD from the server
-				writeAll(rs_socket, "motd", sizeof("motd"));
-				if (checkSockets(masterset, 1000) == SOCKET_ERROR)
-				{
-					debug(LOG_NET, "Warning, MOTD CheckSockets Failed. Error %s", strSockError(getSockErr()));
-				}
-				if (rs_socket->ready)	// true on activity
-				{
-					result = readNoInt(rs_socket, NetPlay.MOTDbuffer, sizeof(NetPlay.MOTDbuffer) - 1);
-					if (result <= 0)
-					{
-						debug(LOG_NET, "Warning, MOTD TCP_Recv failed. result = %d, error %s", result,  strSockError(getSockErr()));
-						sstrcpy(NetPlay.MOTDbuffer, "MOTD communication error with lobby server, TCP_Recv failed!");
-					}
-					// Make sure to NUL terminate the MOTD string
-					NetPlay.MOTDbuffer[result] = '\0';
-					debug(LOG_NET, "MOTD is [%s]", NetPlay.MOTDbuffer);
-				}
-				else
-				{
-					debug(LOG_NET, "Warning, MOTD Socket Not ready.  Is the motd.txt file empty?  Error %s", strSockError(getSockErr()));
-					sstrcpy(NetPlay.MOTDbuffer, "MOTD communication error with lobby server, socket not ready?");
-				}
 
+				// Register our game with the lobby server
 				writeAll(rs_socket, "addg", sizeof("addg"));
-				// and now send what the server wants
 				NETsendGAMESTRUCT(rs_socket, &game);
+
+				// Get the return code
+				if (readLobbyResponse(rs_socket, 1000) == SOCKET_ERROR)
+				{
+					// The socket has been invalidated, so get rid of it. (using it now may cause SIGPIPE).
+					socketClose(rs_socket);
+					rs_socket = NULL;
+					return;
+				}
 			}
 			break;
 
 			case 0:
 				// we don't need this anymore, so clean up
-				delSocket(masterset,rs_socket);
-				free(masterset);
-				masterset = NULL;
 				socketClose(rs_socket);
-				rs_socket=NULL;
+				rs_socket = NULL;
 			break;
 		}
 		registered=state;
