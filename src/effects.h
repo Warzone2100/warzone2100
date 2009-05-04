@@ -150,6 +150,7 @@ void	effectGiveAuxVar(UDWORD var);		// naughty
 void	effectGiveAuxVarSec(UDWORD var);	// and so's this
 
 void	initEffectsSystem(void);
+void	shutdownEffectsSystem(void);
 void	processEffects(void);
 void 	addEffect(const Vector3i *pos, EFFECT_GROUP group, EFFECT_TYPE type, bool specified, iIMDShape *imd, int lit);
 void	addMultiEffect(const Vector3i *basePos, Vector3i *scatter, EFFECT_GROUP group, EFFECT_TYPE type, bool specified, iIMDShape *imd, unsigned int number, bool lit, unsigned int size);
