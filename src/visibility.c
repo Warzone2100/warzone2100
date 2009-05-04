@@ -435,7 +435,7 @@ int visibleObject(const BASE_OBJECT* psViewer, const BASE_OBJECT* psTarget, bool
 // Find the wall that is blocking LOS to a target (if any)
 STRUCTURE* visGetBlockingWall(const BASE_OBJECT* psViewer, const BASE_OBJECT* psTarget)
 {
-	int numWalls;
+	int numWalls = 0;
 	Vector2i wall;
 
 	// HACK Using globals to not clutter visibleObject() interface too much
