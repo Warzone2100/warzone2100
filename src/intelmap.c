@@ -1478,8 +1478,9 @@ void displayImmediateMessage(MESSAGE *psMessage)
 	psCurrentMsg = psMessage;
 	StartMessageSequences(psMessage,true);
 	// remind the player that the message can be seen again from
-	// the intelligence screen
+	// the intelligence screen, and flash the button
 	addConsoleMessage(_("New Intelligence Report"), CENTRE_JUSTIFY, SYSTEM_MESSAGE);
+	flashReticuleButton(IDRET_INTEL_MAP);
 }
 
 
