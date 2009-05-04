@@ -1378,7 +1378,9 @@ BOOL scrAddMessage(void)
 		if (playImmediate && !selfTest)
 		{
 			displayImmediateMessage(psMessage);
-			stopReticuleButtonFlash(IDRET_INTEL_MAP);
+			// FIXME: We should add some kind of check to see if the FMVs are available or not, and enable this based on that.
+			// If we want to inform user of a message, we shouldn't stop the flash right?
+			//stopReticuleButtonFlash(IDRET_INTEL_MAP);
 		}
 	}
 
@@ -3233,7 +3235,9 @@ BOOL scrGameOverMessage(void)
 		//set the data
 		psMessage->pViewData = (MSG_VIEWDATA *)psViewData;
 		displayImmediateMessage(psMessage);
-		stopReticuleButtonFlash(IDRET_INTEL_MAP);
+		// FIXME: We should add some kind of check to see if the FMVs are available or not, and enable this based on that.
+		// If we want to inform user of a message, we shouldn't stop the flash right?
+		//stopReticuleButtonFlash(IDRET_INTEL_MAP);
 
 		//we need to set this here so the VIDEO_QUIT callback is not called
 		setScriptWinLoseVideo((UBYTE)(gameWon ? PLAY_WIN : PLAY_LOSE));
