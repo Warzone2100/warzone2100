@@ -131,22 +131,30 @@ requestlock = Lock()
 protocol = Protocol()
 
 class RequestHandler(SocketServer.ThreadingMixIn, SocketServer.StreamRequestHandler):
+	SUCCESS_OK = 200
+
+	CLIENT_ERROR_NOT_ACCEPTABLE = 406
+
+	def sendStatusMessage(self, status, message):
+		logging.debug("(%s) Sending response status (%d) and message: %s" % (self.gameHost, status, message))
+		self.wfile.write(struct.pack('!II%ds' % len(message), status, len(message), message))
+
 	def __init__(self, request, client_address, server):
 		self.request = request
 		self.client_address = client_address
 		self.server = server
 
 		# Client's address
-		gameHost = self.client_address[0]
+		self.gameHost = self.client_address[0]
 
 		try:
 			self.setup()
 			try:
 				self.handle()
 			except struct.error, e:
-				logging.warning("(%s) Data decoding error: %s" % (gameHost, traceback.format_exc()))
+				logging.warning("(%s) Data decoding error: %s" % (self.gameHost, traceback.format_exc()))
 			except:
-				logging.error("(%s) Unhandled exception: %s" % (gameHost, traceback.format_exc()))
+				logging.error("(%s) Unhandled exception: %s" % (self.gameHost, traceback.format_exc()))
 				raise
 			finally:
 				self.finish()
@@ -168,10 +176,6 @@ class RequestHandler(SocketServer.ThreadingMixIn, SocketServer.StreamRequestHand
 				gamedb.checkGames()
 				requests = 0
 
-		# client address
-		gameHost = self.client_address[0]
-
-
 		while True:
 			# Read the incoming command.
 			netCommand = self.rfile.read(4)
@@ -185,7 +189,8 @@ class RequestHandler(SocketServer.ThreadingMixIn, SocketServer.StreamRequestHand
 			# Process the incoming command. #
 			#################################
 
-			logging.debug("(%s) Command: [%s] " % (gameHost, netCommand))
+			logging.debug("(%s) Command: [%s] " % (self.gameHost, netCommand))
+			# TODO: When releasing a new 2.2 version remove the "motd" command
 			# Give the MOTD
 			if netCommand == 'motd':
 				self.wfile.write(MOTDstring[0:255])
@@ -194,7 +199,7 @@ class RequestHandler(SocketServer.ThreadingMixIn, SocketServer.StreamRequestHand
 			# Add a game.
 			elif netCommand == 'addg':
 				# The host is valid
-				logging.debug("(%s) Adding gameserver..." % gameHost)
+				logging.debug("(%s) Adding gameserver..." % self.gameHost)
 
 				# create a game object
 				self.g = Game()
@@ -206,17 +211,19 @@ class RequestHandler(SocketServer.ThreadingMixIn, SocketServer.StreamRequestHand
 				while True:
 					newGameData = protocol.decodeSingle(self.rfile, self.g)
 					if not newGameData:
-						logging.debug("(%s) Removing aborted game" % gameHost)
+						logging.debug("(%s) Removing aborted game" % self.gameHost)
 						return
 
-					logging.debug("(%s) Updated game: %s" % (gameHost, self.g))
+					logging.debug("(%s) Updated game: %s" % (self.gameHost, self.g))
 					#set gamehost
-					self.g.host = gameHost
+					self.g.host = self.gameHost
 
 					if not protocol.check(self.g):
-						logging.debug("(%s) Removing unreachable game" % gameHost)
+						logging.debug("(%s) Removing unreachable game" % self.gameHost)
+						self.sendStatusMessage(self.CLIENT_ERROR_NOT_ACCEPTABLE, 'Game unreachable, failed to open a connection to: [%s]:%d' % (self.g.host, protocol.lobbyPort))
 						return
 
+					self.sendStatusMessage(self.SUCCESS_OK, MOTDstring)
 					gamedb.listGames()
 				return
 			# Get a game list.
@@ -224,7 +231,7 @@ class RequestHandler(SocketServer.ThreadingMixIn, SocketServer.StreamRequestHand
 				# Lock the gamelist to prevent new games while output.
 				with gamedb.lock:
 					games = list(gamedb.getGames())
-					logging.debug("(%s) Gameserver list: %i game(s)" % (gameHost, len(games)))
+					logging.debug("(%s) Gameserver list: %i game(s)" % (self.gameHost, len(games)))
 
 					# Transmit the games.
 					for game in games:
@@ -234,7 +241,7 @@ class RequestHandler(SocketServer.ThreadingMixIn, SocketServer.StreamRequestHand
 
 			# If something unknown appears.
 			else:
-				raise Exception("(%s) Received an unknown command: %s" % (gameHost, netCommand))
+				raise Exception("(%s) Received an unknown command: %s" % (self.gameHost, netCommand))
 
 	def finish(self):
 		if self.g:
@@ -270,7 +277,7 @@ if __name__ == '__main__':
 	in_file = open("motd.txt", "r")
 	MOTDstring = in_file.read()
 	in_file.close()
-	logging.info("The MOTD is (%s)" % MOTDstring[0:255])
+	logging.info("The MOTD is (%s)" % MOTDstring)
 
 
 	gamedb = GameDB()
