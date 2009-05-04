@@ -132,12 +132,7 @@ BOOL researchInitVars(void)
 	asResearch = NULL;
 	// research is a pre-defined size now
 	asResearch = (RESEARCH *)malloc(sizeof(RESEARCH)* MAX_RESEARCH);
-	if (asResearch == NULL)
-	{
-		debug( LOG_ERROR, "Research Stats - Out of memory" );
-		abort();
-		return false;
-	}
+	ASSERT_OR_RETURN(false, asResearch, "Research Stats - Out of memory");
 	memset(asResearch, 0, (MAX_RESEARCH * sizeof(RESEARCH)));
 
 	// create the PLAYER_RESEARCH arrays
@@ -158,75 +153,35 @@ BOOL researchInitVars(void)
 
 	// and deal with all the other arrays for research
 	pResearchPR = (UWORD *) malloc(sizeof(UWORD) * MAX_RESEARCH_PR);
-	if (pResearchPR == NULL)
-	{
-		debug( LOG_ERROR, "Research Stats - Out of memory" );
-		abort();
-		return false;
-	}
+	ASSERT_OR_RETURN(false, pResearchPR, "Research Stats - Out of memory");
 	memset(pResearchPR, 0, (MAX_RESEARCH_PR * sizeof(UWORD)));
 
 	pResearchStructPR = (UWORD *) malloc(sizeof(UWORD) * MAX_RESEARCH_STRUCT_PR);
-	if (pResearchStructPR == NULL)
-	{
-		debug( LOG_ERROR, "Research Stats - Out of memory" );
-		abort();
-		return false;
-	}
+	ASSERT_OR_RETURN(false, pResearchStructPR, "Research Stats - Out of memory");
 	memset(pResearchStructPR, 0, (MAX_RESEARCH_STRUCT_PR * sizeof(UWORD)));
 
 	pResearchFunc = (FUNCTION **) malloc(sizeof(FUNCTION *) * MAX_RESEARCH_FUNC);
-	if (pResearchFunc == NULL)
-	{
-		debug( LOG_ERROR, "Research Stats - Out of memory" );
-		abort();
-		return false;
-	}
+	ASSERT_OR_RETURN(false, pResearchFunc, "Research Stats - Out of memory");
 	memset(pResearchFunc, 0, (MAX_RESEARCH_FUNC * sizeof(FUNCTION *)));
 
 	pResearchStructRed = (UWORD *) malloc(sizeof(UWORD) * MAX_RESEARCH_STRUCT_RED);
-	if (pResearchStructRed == NULL)
-	{
-		debug( LOG_ERROR, "Research Stats - Out of memory" );
-		abort();
-		return false;
-	}
+	ASSERT_OR_RETURN(false, pResearchStructRed, "Research Stats - Out of memory");
 	memset(pResearchStructRed, 0, (MAX_RESEARCH_STRUCT_RED * sizeof(UWORD)));
 
 	pResearchArteRed = (COMPONENT_STATS **) malloc(sizeof(COMPONENT_STATS *) * MAX_RESEARCH_ARTE_RED);
-	if (pResearchArteRed == NULL)
-	{
-		debug( LOG_ERROR, "Research Stats - Out of memory" );
-		abort();
-		return false;
-	}
+	ASSERT_OR_RETURN(false, pResearchArteRed, "Research Stats - Out of memory");
 	memset(pResearchArteRed, 0, (MAX_RESEARCH_ARTE_RED * sizeof(COMPONENT_STATS *)));
 
 	pResearchStructRes = (UWORD *) malloc(sizeof(UWORD) * MAX_RESEARCH_STRUCT_RES);
-	if (pResearchStructRes == NULL)
-	{
-		debug( LOG_ERROR, "Research Stats - Out of memory" );
-		abort();
-		return false;
-	}
+	ASSERT_OR_RETURN(false, pResearchStructRes, "Research Stats - Out of memory");
 	memset(pResearchStructRes, 0, (MAX_RESEARCH_STRUCT_RES * sizeof(UWORD)));
 
 	pResearchArteRes = (COMPONENT_STATS **) malloc(sizeof(COMPONENT_STATS *) * MAX_RESEARCH_ARTE_RES);
-	if (pResearchArteRes == NULL)
-	{
-		debug( LOG_ERROR, "Research Stats - Out of memory" );
-		abort();
-		return false;
-	}
+	ASSERT_OR_RETURN(false, pResearchArteRes, "Research Stats - Out of memory");
 	memset(pResearchArteRes, 0, (MAX_RESEARCH_ARTE_RES * sizeof(COMPONENT_STATS *)));
 
 	pResearchArteRep = (COMPONENT_STATS **) malloc(sizeof(COMPONENT_STATS *) * MAX_RESEARCH_ARTE_RES);
-	if (pResearchArteRep == NULL)
-	{
-		debug( LOG_ERROR, "Research Stats - Out of memory" );
-		abort();
-		return false;
-	}
+	ASSERT_OR_RETURN(false, pResearchArteRep, "Research Stats - Out of memory");
 	memset(pResearchArteRep, 0, (MAX_RESEARCH_ARTE_RES * sizeof(COMPONENT_STATS *)));
 
 	for(i=0; i<MAX_PLAYERS; i++)
@@ -273,19 +228,12 @@ BOOL loadResearch(const char *pResearchData, UDWORD bufferSize)
 
 		//allocate storage for the name
 		pResearch->pName = allocateName(ResearchName);
-		if (!pResearch->pName)
-		{
-			return false;
-		}
+		ASSERT_OR_RETURN(false, pResearch->pName, "Failed allocating research name");
 
 		//check the name hasn't been used already
-		if (!checkResearchName(pResearch, i))
-		{
-			return false;
-		}
+		ASSERT_OR_RETURN(false, checkResearchName(pResearch, i), "Research name %s used already", pResearch->pName);
 
 		pResearchData += (strlen(ResearchName)+1);
-
 		pResearch->ref = REF_RESEARCH_START + i;
 
 		//determine the tech level (unused, so we don't use the resulting string)
@@ -353,12 +301,7 @@ BOOL loadResearch(const char *pResearchData, UDWORD bufferSize)
 		}
 
 		//check the tech code is valid
-		if (techCode > 1)
-		{
-			debug( LOG_ERROR, "Invalid tech code for research topic - %s ", getResearchName(pResearch) );
-			abort();
-			return false;
-		}
+		ASSERT_OR_RETURN(false, techCode <= 1, "Invalid tech code for research topic - %s ", getResearchName(pResearch));
 		if (techCode == 0)
 		{
 			pResearch->techCode = TC_MAJOR;
@@ -383,31 +326,15 @@ BOOL loadResearch(const char *pResearchData, UDWORD bufferSize)
 		{
 			//find the structure stat
 			structID = getStructStatFromName(structName);
-			if (structID >= 0)
-			{
-				pResearch->psStat = (BASE_STATS *)(asStructureStats + structID);
-			}
-			else
-			{
-				debug( LOG_ERROR, "Cannot find the structure Stat for Research %s", getResearchName(pResearch) );
-				abort();
-				return false;
-			}
+			ASSERT_OR_RETURN(false, structID >= 0, "Cannot find the structure Stat for Research %s", getResearchName(pResearch));
+			pResearch->psStat = (BASE_STATS *)(asStructureStats + structID);
 		}
 		else if (strcmp(compName, "0"))
 		{
 			//find the component stat
 			psComp = getComponentDetails(compType, compName);
-			if (psComp != NULL)
-			{
-				pResearch->psStat = (BASE_STATS *)psComp;
-			}
-			else
-			{
-				debug( LOG_ERROR, "Cannot find the component Stat for Research %s", getResearchName(pResearch) );
-				abort();
-				return false;
-			}
+			ASSERT_OR_RETURN(false, psComp, "Cannot find the component Stat for Research %s", getResearchName(pResearch));
+			pResearch->psStat = (BASE_STATS *)psComp;
 		}
 		else
 		{
@@ -416,12 +343,7 @@ BOOL loadResearch(const char *pResearchData, UDWORD bufferSize)
 		if (strcmp(imdName, "0"))
 		{
 			pResearch->pIMD = (iIMDShape *) resGetData("IMD", imdName);
-			if (pResearch->pIMD == NULL)
-			{
-				debug( LOG_ERROR, "Cannot find the research PIE for record %s", getResearchName(pResearch) );
-				abort();
-				return false;
-			}
+			ASSERT_OR_RETURN(false, pResearch->pIMD, "Cannot find the research PIE for record %s", getResearchName(pResearch));
 		}
 		else
 		{
@@ -431,12 +353,7 @@ BOOL loadResearch(const char *pResearchData, UDWORD bufferSize)
 		if (strcmp(imdName2, "0"))
 		{
 			pResearch->pIMD2 = (iIMDShape *) resGetData("IMD", imdName2);
-			if (pResearch->pIMD2 == NULL)
-			{
-				debug( LOG_ERROR, "Cannot find the 2nd research PIE for record %s", getResearchName(pResearch) );
-				abort();
-				return false;
-			}
+			ASSERT_OR_RETURN(false, pResearch->pIMD2, "Cannot find the 2nd research PIE for record %s", getResearchName(pResearch));
 		}
 		else
 		{
@@ -447,12 +364,8 @@ BOOL loadResearch(const char *pResearchData, UDWORD bufferSize)
 		if (strcmp(msgName, "0"))
 		{
 			//check its a major tech code
-			if (pResearch->techCode != TC_MAJOR)
-			{
-				debug( LOG_ERROR, "This research should not have a message associated with it, %s the message will be ignored!", getResearchName(pResearch) );
-				abort();
-			}
-			else
+			ASSERT(pResearch->techCode == TC_MAJOR, "This research should not have a message associated with it, %s the message will be ignored!", getResearchName(pResearch));
+			if (pResearch->techCode == TC_MAJOR)
 			{
 				pResearch->pViewData = getViewData(msgName);
 			}
@@ -461,12 +374,8 @@ BOOL loadResearch(const char *pResearchData, UDWORD bufferSize)
 		//redundancies - artefacts
 		if (pResearch->numRedArtefacts > 0)
 		{
-			if (numResearchArteRed >= MAX_RESEARCH_ARTE_RED)
-			{
-				debug( LOG_ERROR, "Out of memory assigning research artefacts - redundancies" );
-				abort();
-				return false;
-			}
+			ASSERT_OR_RETURN(false, numResearchArteRed < MAX_RESEARCH_ARTE_RED, "Too many research redundancies (%d)", (int)numResearchArteRed);
+
 			//don't MALLOC - get them from the pre-defined arrays
 			pResearch->pRedArtefacts = pResearchArteRed + numResearchArteRed;
 
@@ -476,12 +385,7 @@ BOOL loadResearch(const char *pResearchData, UDWORD bufferSize)
 		//results
 		if (pResearch->numArteResults > 0)
 		{
-			if (numResearchArteRed >= MAX_RESEARCH_ARTE_RES)
-			{
-				debug( LOG_ERROR, "Out of memory assigning research artefacts - results" );
-				abort();
-				return false;
-			}
+			ASSERT_OR_RETURN(false, numResearchArteRed < MAX_RESEARCH_ARTE_RES, "Too many research artefacts (%d)", (int)numResearchArteRed);
 
 			//don't MALLOC - get them from the pre-defined arrays
 			pResearch->pArtefactResults = pResearchArteRes + numResearchArteRes;
@@ -493,12 +397,7 @@ BOOL loadResearch(const char *pResearchData, UDWORD bufferSize)
 		//replacements
 		if (pResearch->numArteResults > 0)
 		{
-			if (numResearchArteRep >= MAX_RESEARCH_ARTE_RES)
-			{
-				debug( LOG_ERROR, "Out of memory assigning research artefacts - replacements" );
-				abort();
-				return false;
-			}
+			ASSERT_OR_RETURN(false, numResearchArteRep < MAX_RESEARCH_ARTE_RES, "Too many research artefact replacements (%d)", (int)numResearchArteRep);
 
 			//don't MALLOC - get them from the pre-defined arrays
 			pResearch->pReplacedArtefacts = pResearchArteRep + numResearchArteRep;
@@ -510,12 +409,7 @@ BOOL loadResearch(const char *pResearchData, UDWORD bufferSize)
 		//allocate storage for the functions
 		if (pResearch->numFunctions > 0)
 		{
-			if (numResearchFunc >= MAX_RESEARCH_FUNC)
-			{
-				debug( LOG_ERROR, "Out of memory assigning research functions" );
-				abort();
-				return false;
-			}
+			ASSERT_OR_RETURN(false, numResearchFunc < MAX_RESEARCH_FUNC, "Too many research functions (%d)", (int)numResearchFunc);
 
 			//don't MALLOC - get them from the pre-defined arrays
 			pResearch->pFunctionList = pResearchFunc + numResearchFunc;
@@ -527,12 +421,7 @@ BOOL loadResearch(const char *pResearchData, UDWORD bufferSize)
 		//allocate storage for the pre-requisities
 		if (pResearch->numPRRequired > 0)
 		{
-			if (numResearchPR >= MAX_RESEARCH_PR)
-			{
-				debug( LOG_ERROR, "Out of memory assigning research pre-requisities" );
-				abort();
-				return false;
-			}
+			ASSERT_OR_RETURN(false, numResearchPR < MAX_RESEARCH_PR, "Too many research pre-requisites (%d)", (int)numResearchPR);
 
 			//don't MALLOC - get them from the pre-defined arrays
 			pResearch->pPRList = pResearchPR + numResearchPR;
@@ -545,12 +434,7 @@ BOOL loadResearch(const char *pResearchData, UDWORD bufferSize)
 		//requirements
 		if (pResearch->numStructures > 0)
 		{
-			if (numResearchStructPR >= MAX_RESEARCH_STRUCT_PR)
-			{
-				debug( LOG_ERROR, "Out of memory assigning research structures - requirements" );
-				abort();
-				return false;
-			}
+			ASSERT_OR_RETURN(false, numResearchStructPR < MAX_RESEARCH_STRUCT_PR, "Too many research structure requirements (%d)", (int)numResearchStructPR);
 
 			//don't MALLOC - get them from the pre-defined arrays
 			pResearch->pStructList = pResearchStructPR + numResearchStructPR;
@@ -562,12 +446,8 @@ BOOL loadResearch(const char *pResearchData, UDWORD bufferSize)
 		// Redundancies
 		if (pResearch->numRedStructs > 0)
 		{
-			if (numResearchStructRed >= MAX_RESEARCH_STRUCT_RED)
-			{
-				debug( LOG_ERROR, "Out of memory assigning research structures - redundancies" );
-				abort();
-				return false;
-			}
+			ASSERT_OR_RETURN(false, numResearchStructRed < MAX_RESEARCH_STRUCT_RED, "Too many research structure redundancies (%d)", (int)numResearchStructRed);
+
 			//don't MALLOC - get them from the pre-defined arrays
 			pResearch->pRedStructs = pResearchStructRed + numResearchStructRed;
 
@@ -577,12 +457,7 @@ BOOL loadResearch(const char *pResearchData, UDWORD bufferSize)
 		//results
 		if (pResearch->numStructResults > 0)
 		{
-			if (numResearchStructRes >= MAX_RESEARCH_STRUCT_RES)
-			{
-				debug( LOG_ERROR, "Out of memory assigning research structures - results" );
-				abort();
-				return false;
-			}
+			ASSERT_OR_RETURN(false, numResearchStructRes < MAX_RESEARCH_STRUCT_RES, "Too many research structure results (%d)", numResearchStructRes);
 
 			//don't MALLOC - get them from the pre-defined arrays
 			pResearch->pStructureResults = pResearchStructRes + numResearchStructRes;
@@ -592,12 +467,7 @@ BOOL loadResearch(const char *pResearchData, UDWORD bufferSize)
 		}
 
 		//set the researchPoints
-		if (resPoints > UWORD_MAX)
-		{
-			debug( LOG_ERROR, "Research Points too high for research topic - %s ", getResearchName(pResearch) );
-			abort();
-			return false;
-		}
+		ASSERT_OR_RETURN(false, resPoints <= UWORD_MAX, "Research Points too high for research topic - %s ", getResearchName(pResearch));
 		pResearch->researchPoints = (UWORD)resPoints;
 
 		//set the research power
