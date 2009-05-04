@@ -194,7 +194,7 @@ class RequestHandler(SocketServer.ThreadingMixIn, SocketServer.StreamRequestHand
 			# Give the MOTD
 			if netCommand == 'motd':
 				self.wfile.write(MOTDstring[0:255])
-				logging.debug("(%s) sending MOTD (%s)" % (gameHost, MOTDstring[0:255]))
+				logging.debug("(%s) sending MOTD (%s)" % (self.gameHost, MOTDstring[0:255]))
 
 			# Add a game.
 			elif netCommand == 'addg':
