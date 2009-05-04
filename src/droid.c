@@ -4980,8 +4980,18 @@ UWORD powerReqForDroidRepair(DROID *psDroid)
 /*power cost for One repair point*/
 UWORD repairPowerPoint(DROID *psDroid)
 {
-    return (UWORD)(((POWER_FACTOR * calcDroidPower(psDroid)) / psDroid->originalBody) *
-        REPAIR_POWER_FACTOR);
+	ASSERT( psDroid->originalBody != 0, "Droid's originalBody is 0!");
+
+	// if the body is 0, then it shouldn't cost anything?
+	if( psDroid->originalBody == 0 )
+	{
+		return 0;
+	}
+	else
+	{
+		return (UWORD)(((POWER_FACTOR * calcDroidPower(psDroid)) / psDroid->originalBody) *
+			REPAIR_POWER_FACTOR);
+	}
 }
 
 /** Callback function for stopped audio tracks
