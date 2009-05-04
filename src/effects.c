@@ -372,6 +372,19 @@ static void Effect_free(void *self)
 	activeList.num--;
 }
 
+void shutdownEffectsSystem(void)
+{
+	EffectChunk *chunk;
+
+	for (chunk = chunkList.first; chunk != NULL;)
+	{
+		EffectChunk *chunkNext = chunk->next;
+		free(chunk);
+		chunk = chunkNext;
+	}
+	chunkList.first = NULL;
+	chunkList.last = NULL;
+}
 
 /*!
  * Initialise effects system
@@ -379,14 +392,10 @@ static void Effect_free(void *self)
  */
 void initEffectsSystem(void)
 {
-	/* Clean up old chunks */
 	EffectChunk *chunk;
-	for (chunk = chunkList.first; chunk != NULL;)
-	{
-		EffectChunk *chunkNext = chunk->next;
-		free(chunk);
-		chunk = chunkNext;
-	}
+
+	/* Clean up old chunks */
+	shutdownEffectsSystem();
 
 	/* Allocate new chunk */
 	chunk = malloc(sizeof(EffectChunk));
