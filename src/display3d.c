@@ -950,6 +950,8 @@ BOOL init3DView(void)
 	// distance is not saved, so initialise it now
 	distance = START_DISTANCE; // distance
 	
+	disp3d_resetView();	// clear player view variables
+
 	if (!initTerrain())
 	{
 		return false;
