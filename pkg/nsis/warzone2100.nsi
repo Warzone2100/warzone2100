@@ -91,7 +91,6 @@ VIAddVersionKey "ProductVersion"	"${PACKAGE_VERSION}"
 ;Pages
 
   !insertmacro MUI_PAGE_WELCOME
-  !insertmacro MUI_PAGE_LICENSE $(MUILicense)
   !insertmacro MUI_PAGE_COMPONENTS
   !insertmacro MUI_PAGE_DIRECTORY
   !insertmacro MUI_PAGE_STARTMENU "Application" $STARTMENU_FOLDER
@@ -213,7 +212,7 @@ Section $(TEXT_SecOpenAL) SecOpenAL
 
   File "${EXTDIR}\bin\oalinst.exe"
 
-  ExecWait "$INSTDIR\oalinst.exe"
+  ExecWait '"$INSTDIR\oalinst.exe" --silent'
 
 SectionEnd
 
@@ -252,11 +251,12 @@ Section $(TEXT_SecMusicMod) SecMusicMod
 
   SetOutPath "$INSTDIR\mods\global\autoload"
 
-  NSISdl::download "http://download.gna.org/warzone/releases/mods/community-music_1.0.AUTHORS"          "music_1.0.AUTHORS.txt"
-  NSISdl::download "http://download.gna.org/warzone/releases/mods/community-music_1.0.wz"               "music_1.0.wz"
-  Pop $R0 ; Get the return value
-  StrCmp $R0 "success" +2
-    MessageBox MB_OK|MB_ICONSTOP "Download of Music mod failed: $R0"
+  IfFileExists "music_1.0.wz" +6
+    NSISdl::download "http://download.gna.org/warzone/releases/mods/community-music_1.0.AUTHORS"          "music_1.0.AUTHORS.txt"
+    NSISdl::download "http://download.gna.org/warzone/releases/mods/community-music_1.0.wz"               "music_1.0.wz"
+    Pop $R0 ; Get the return value
+    StrCmp $R0 "success" +2
+      MessageBox MB_OK|MB_ICONSTOP "Download of Music mod failed: $R0"
 
   SetOutPath "$INSTDIR"
 
