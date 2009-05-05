@@ -208,8 +208,8 @@ static int readAll(TCPsocket sock, void* buf, size_t size, unsigned int timeout)
 			 || !SDLNet_SocketReady(sock))
 			{
 				debug(LOG_NET, "Timed out");
-				received = -1
-				goto error:
+				received = -1;
+				goto error;
 			}
 		}
 
@@ -217,7 +217,7 @@ static int readAll(TCPsocket sock, void* buf, size_t size, unsigned int timeout)
 		if (ret == 0)
 		{
 			debug(LOG_NET, "Socket disconnected.");
-			goto error:
+			goto error;
 		}
 
 		if (ret == -1)
