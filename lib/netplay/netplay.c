@@ -2577,8 +2577,6 @@ error:
 		asprintf(&NetPlay.MOTD, "Disconnected from lobby server. Failed to register game.");
 		debug(LOG_ERROR, "%s", NetPlay.MOTD);
 	}
-	// on error, we don't want to keep hitting the server.  Causes massive delays.
-	server_not_there = true;
 
 	return SOCKET_ERROR;
 }
@@ -2638,6 +2636,7 @@ static void NETregisterServer(int state)
 					// The socket has been invalidated, so get rid of it. (using it now may cause SIGPIPE).
 					socketClose(rs_socket);
 					rs_socket = NULL;
+					server_not_there = true;
 					return;
 				}
 			}
