@@ -1872,6 +1872,8 @@ error:
 		asprintf(&NetPlay.MOTD, "Disconnected from lobby server. Failed to register game.");
 		debug(LOG_ERROR, "%s", NetPlay.MOTD);
 	}
+	// on error, we don't want to keep hitting the server.  Causes massive delays.
+	server_not_there = true;
 
 	return -1;
 }
