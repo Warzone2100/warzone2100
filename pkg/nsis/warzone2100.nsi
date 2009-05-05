@@ -24,6 +24,7 @@
 ;Include Modern UI
 
   !include "MUI.nsh"
+  !include "FileFunc.nsh"
 
 ;--------------------------------
 ;General
@@ -89,7 +90,6 @@ VIAddVersionKey "ProductVersion"	"${PACKAGE_VERSION}"
 ;Pages
 
   !insertmacro MUI_PAGE_WELCOME
-  !insertmacro MUI_PAGE_LICENSE $(MUILicense)
   !insertmacro MUI_PAGE_COMPONENTS
   !insertmacro MUI_PAGE_DIRECTORY
   !insertmacro MUI_PAGE_STARTMENU "Application" $STARTMENU_FOLDER
@@ -211,7 +211,7 @@ Section $(TEXT_SecOpenAL) SecOpenAL
 
   File "${EXTDIR}\bin\oalinst.exe"
 
-  ExecWait "$INSTDIR\oalinst.exe"
+  ExecWait '"$INSTDIR\oalinst.exe" --silent'
 
 SectionEnd
 
@@ -236,13 +236,24 @@ Section $(TEXT_SecMusicMod) SecMusicMod
 
   SetOutPath "$INSTDIR\mods\global\autoload"
 
-  NSISdl::download "http://download.gna.org/warzone/releases/mods/community-music_1.0.AUTHORS"          "music_1.0.AUTHORS.txt"
-  NSISdl::download "http://download.gna.org/warzone/releases/mods/community-music_1.0.wz"               "music_1.0.wz"
-  Pop $R0 ; Get the return value
-  StrCmp $R0 "success" +2
-    MessageBox MB_OK|MB_ICONSTOP "Download of Music mod failed: $R0"
+  IfFileExists "music_1.0.wz" +6
+    NSISdl::download "http://download.gna.org/warzone/releases/mods/community-music_1.0.AUTHORS"          "music_1.0.AUTHORS.txt"
+    NSISdl::download "http://download.gna.org/warzone/releases/mods/community-music_1.0.wz"               "music_1.0.wz"
+    Pop $R0 ; Get the return value
+    StrCmp $R0 "success" +2
+      MessageBox MB_OK|MB_ICONSTOP "Download of Music mod failed: $R0"
 
   SetOutPath "$INSTDIR"
+
+SectionEnd
+
+Section $(TEXT_SecFMVs) SecFMVs
+
+  IfFileExists "sequences.wz" +5
+    NSISdl::download "http://download.gna.org/warzone/videos/sequences.wz"               "sequences.wz"
+    Pop $R0 ; Get the return value
+    StrCmp $R0 "success" +2
+      MessageBox MB_OK|MB_ICONSTOP "Download of videos failed: $R0"
 
 SectionEnd
 
@@ -360,6 +371,9 @@ FunctionEnd
   LangString TEXT_SecMusicMod ${LANG_ENGLISH} "Music"
   LangString DESC_SecMusicMod ${LANG_ENGLISH} "Download and install music."
 
+  LangString TEXT_SecFMVs ${LANG_ENGLISH} "Videos"
+  LangString DESC_SecFMVs ${LANG_ENGLISH} "Download and install videos (in-game cutscenes)."
+
   LangString TEXT_SecNLS ${LANG_ENGLISH} "NLS"
   LangString DESC_SecNLS ${LANG_ENGLISH} "Support for languages other than English."
 
@@ -383,6 +397,9 @@ FunctionEnd
   LangString TEXT_SecMusicMod ${LANG_DUTCH} "Muziek"
   LangString DESC_SecMusicMod ${LANG_DUTCH} "Muziek downloaden en installeren."
 
+  LangString TEXT_SecFMVs ${LANG_DUTCH} "FMV"
+  LangString DESC_SecFMVs ${LANG_DUTCH} "FMV downloaden en installeren."
+
   LangString TEXT_SecNLS ${LANG_DUTCH} "NLS"
   LangString DESC_SecNLS ${LANG_DUTCH} "Ondersteuning voor andere talen dan Engels (Nederlands inbegrepen)."
 
@@ -405,6 +422,9 @@ FunctionEnd
 
   LangString TEXT_SecMusicMod ${LANG_GERMAN} "Musik"
   LangString DESC_SecMusicMod ${LANG_GERMAN} "Musik herunterladen und installieren."
+
+  LangString TEXT_SecFMVs ${LANG_GERMAN} "FMV"
+  LangString DESC_SecFMVs ${LANG_GERMAN} "FMV herunterladen und installieren."
 
   LangString TEXT_SecNLS ${LANG_GERMAN} "NLS"
   LangString DESC_SecNLS ${LANG_GERMAN} "Unterstützung für Sprachen außer Englisch (Deutsch inbegriffen)."
@@ -433,6 +453,7 @@ FunctionEnd
     !insertmacro MUI_DESCRIPTION_TEXT ${SecMods} $(DESC_SecMods)
     !insertmacro MUI_DESCRIPTION_TEXT ${SecAivolutionMod} $(DESC_SecAivolutionMod)
     !insertmacro MUI_DESCRIPTION_TEXT ${SecMusicMod} $(DESC_SecMusicMod)
+    !insertmacro MUI_DESCRIPTION_TEXT ${SecFMVs} $(DESC_SecFMVs)
     !insertmacro MUI_DESCRIPTION_TEXT ${SecNTWMod} $(DESC_SecNTWMod)
 
     !insertmacro MUI_DESCRIPTION_TEXT ${SecNLS} $(DESC_SecNLS)

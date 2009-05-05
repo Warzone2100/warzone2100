@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 source __BUILD_CONFIG
 
