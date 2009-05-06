@@ -220,7 +220,7 @@ class RequestHandler(SocketServer.ThreadingMixIn, SocketServer.StreamRequestHand
 
 					if not protocol.check(self.g):
 						logging.debug("(%s) Removing unreachable game" % self.gameHost)
-						self.sendStatusMessage(self.CLIENT_ERROR_NOT_ACCEPTABLE, 'Game unreachable, failed to open a connection to: [%s]:%d' % (self.g.host, protocol.lobbyPort))
+						self.sendStatusMessage(self.CLIENT_ERROR_NOT_ACCEPTABLE, 'Game unreachable, failed to open a connection to: [%s]:%d' % (self.g.host, protocol.gamePort))
 						return
 
 					self.sendStatusMessage(self.SUCCESS_OK, MOTDstring)
