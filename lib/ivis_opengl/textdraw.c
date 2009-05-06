@@ -455,7 +455,8 @@ int iV_DrawFormattedText(const char* String, UDWORD x, UDWORD y, UDWORD Width, U
 			i = 0;
 			for (; *curChar != 0
 			    && *curChar != ASCII_SPACE
-			    && *curChar != ASCII_NEWLINE;
+			    && *curChar != ASCII_NEWLINE
+			    && *curChar != '\n';
 			     ++i, ++curChar)
 			{
 				if (*curChar == ASCII_COLOURMODE) // If it's a colour mode toggle char then just add it to the word.
@@ -494,7 +495,8 @@ int iV_DrawFormattedText(const char* String, UDWORD x, UDWORD y, UDWORD Width, U
 				}
 			}
 			// Check for new line character.
-			else if (*curChar == ASCII_NEWLINE)
+			else if (*curChar == ASCII_NEWLINE
+			      || *curChar == '\n')
 			{
 				NewLine = true;
 				++curChar;
