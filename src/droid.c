@@ -1068,6 +1068,12 @@ BOOL droidStartBuild(DROID *psDroid)
 			intBuildFinished(psDroid);
 			return false;
 		}
+		// Can't build on burning oil derricks.
+		if (psStructStat->type == REF_RESOURCE_EXTRACTOR && fireOnLocation(psDroid->orderX,psDroid->orderY))
+		{
+			intBuildFinished(psDroid);
+			return false;
+		}
 		//ok to build
 		psStruct = buildStructure(psStructStat, psDroid->orderX,psDroid->orderY, psDroid->player,false);
 		if (!psStruct)
