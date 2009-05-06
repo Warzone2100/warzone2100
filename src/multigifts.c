@@ -738,7 +738,7 @@ void giftArtifact(UDWORD owner, UDWORD x, UDWORD y)
 	{
 		pO	 = asPlayerResList[owner];
 
-		for (topic = numResearch - 1; topic >= 0; topic--)
+		for (topic = numResearch - 1; topic > 0; topic--)
 		{
 			if (IsResearchCompleted(&pO[topic])
 			 && !IsResearchPossible(&pR[topic]))
