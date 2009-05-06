@@ -5090,7 +5090,6 @@ DROID_TEMPLATE *FindDroidTemplate(const char * const name)
 	if (!nameStr)
 	{
 		debug( LOG_ERROR, "Cannot find resource for template - %s", name );
-		abort();
 		return NULL;
 	}
 
