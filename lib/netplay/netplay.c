@@ -1863,7 +1863,7 @@ error:
 	if (result == -1)
 	{
 		free(NetPlay.MOTD);
-		asprintf(&NetPlay.MOTD, "Error while communicating with the lobby server: %s", SDLNet_GetError());
+		asprintf(&NetPlay.MOTD, "Error while registering game with the lobby server: Is port 2100 open?" );
 		debug(LOG_ERROR, "%s", NetPlay.MOTD);
 	}
 	else
