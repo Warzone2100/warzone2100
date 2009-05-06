@@ -49,12 +49,14 @@ static const int SOCKET_ERROR = -1;
 # include <winsock2.h>
 # include <ws2tcpip.h>
 # undef EAGAIN
+# undef ECONNRESET
 # undef EINPROGRESS
 # undef EINTR
 # undef EISCONN
 # undef ETIMEDOUT
 # undef EWOULDBLOCK
 # define EAGAIN      WSAEWOULDBLOCK
+# define ECONNRESET  WSAECONNRESET
 # define EINPROGRESS WSAEINPROGRESS
 # define EINTR       WSAEINTR
 # define EISCONN     WSAEISCONN
@@ -668,6 +670,7 @@ static ssize_t readAll(Socket* sock, void* buf, size_t size, unsigned int timeou
 		if (ret == 0)
 		{
 			debug(LOG_NET, "Socket disconnected.");
+			setSockErr(ECONNRESET);
 			return received;
 		}
 
