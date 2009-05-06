@@ -261,7 +261,13 @@ class TCP6Server(SocketServer.TCPServer):
 		Overridden to enable IPV6_V6ONLY.
 
 		"""
-		self.socket.setsockopt(socket.IPPROTO_IPV6, socket.IPV6_V6ONLY, 1)
+		try:
+			self.socket.setsockopt(socket.IPPROTO_IPV6, socket.IPV6_V6ONLY, 1)
+		except AttributeError:
+			# Apparently IPV6_V6ONLY isn't supported on this
+			# platform. Lets hope that IPv6 mapping of IPv4
+			# addresses isn't supported either...
+			pass
 		SocketServer.TCPServer.server_bind(self)
 
 class ThreadingTCP6Server(SocketServer.ThreadingMixIn, TCP6Server): pass
