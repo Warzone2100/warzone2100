@@ -1,5 +1,3 @@
-R-Struc-Factory-Upgrade01,Struc-Factory-Upgrade01,444
-R-Struc-Factory-Upgrade02,Struc-Factory-Upgrade02,445
 R-Struc-PowerModuleMk1,Struc-PowerModuleMk1,225
 R-Vehicle-Engine01,Vehicle-Engine01,381
 R-Vehicle-Engine02,Vehicle-Engine02,382
@@ -16,7 +14,6 @@ R-Cyborg-Metals01,Cyborg-Metals01,449
 R-Cyborg-Metals02,Cyborg-Metals02,450
 R-Cyborg-Metals03,Cyborg-Metals03,451
 R-Wpn-Cannon-Accuracy01,Wpn-Cannon-Accuracy01,469
-R-Struc-Factory-Upgrade03,Struc-Factory-Upgrade03,446
 R-Struc-Research-Upgrade01,Struc-Research-Upgrade01,441
 R-Struc-Research-Upgrade02,Struc-Research-Upgrade02,442
 R-Struc-Research-Upgrade03,Struc-Research-Upgrade03,443
@@ -90,9 +87,6 @@ R-Defense-WallUpgrade07,Defense-WallUpgrade07,676
 R-Defense-WallUpgrade08,Defense-WallUpgrade08,677
 R-Defense-WallUpgrade09,Defense-WallUpgrade09,678
 R-Defense-WallUpgrade10,Defense-WallUpgrade10,1133
-R-Struc-Factory-Upgrade04,Struc-Factory-Upgrade04,680
-R-Struc-Factory-Upgrade05,Struc-Factory-Upgrade05,681
-R-Struc-Factory-Upgrade06,Struc-Factory-Upgrade06,682
 R-Struc-Materials04,Struc-Materials04,711
 R-Struc-Materials05,Struc-Materials05,712
 R-Struc-Materials06,Struc-Materials06,713
@@ -101,18 +95,18 @@ R-Struc-Materials08,Struc-Materials08,715
 R-Struc-Materials09,Struc-Materials09,716
 R-Struc-Power-Upgrade01,Struc-Power Upgrade01,718
 R-Struc-Power-Upgrade02,Struc-Power Upgrade02,719
-R-Struc-Factory-Cyborg-Upgrade01,Struc-Factory-Cyborg-Upgrade01,687
-R-Struc-Factory-Cyborg-Upgrade02,Struc-Factory-Cyborg-Upgrade02,688
-R-Struc-Factory-Cyborg-Upgrade03,Struc-Factory-Cyborg-Upgrade03,689
-R-Struc-Factory-Cyborg-Upgrade04,Struc-Factory-Cyborg-Upgrade04,690
-R-Struc-Factory-Cyborg-Upgrade05,Struc-Factory-Cyborg-Upgrade05,691
-R-Struc-Factory-Cyborg-Upgrade06,Struc-Factory-Cyborg-Upgrade06,692
-R-Struc-VTOLFactory-Upgrade01,Struc-VTOLFactory-Upgrade01,697
-R-Struc-VTOLFactory-Upgrade02,Struc-VTOLFactory-Upgrade02,698
-R-Struc-VTOLFactory-Upgrade03,Struc-VTOLFactory-Upgrade03,699
-R-Struc-VTOLFactory-Upgrade04,Struc-VTOLFactory-Upgrade04,700
-R-Struc-VTOLFactory-Upgrade05,Struc-VTOLFactory-Upgrade05,701
-R-Struc-VTOLFactory-Upgrade06,Struc-VTOLFactory-Upgrade06,702
+R-Struc-Factory-Upgrade01,Struc-Factory-Upgrade02,444
+R-Struc-Factory-Upgrade01,Struc-Factory-Cyborg-Upgrade02,687
+R-Struc-Factory-Upgrade01,Struc-VTOLFactory-Upgrade01,697
+R-Struc-Factory-Upgrade04,Struc-Factory-Upgrade04,680
+R-Struc-Factory-Upgrade04,Struc-Factory-Cyborg-Upgrade04,690
+R-Struc-Factory-Upgrade04,Struc-VTOLFactory-Upgrade04,700
+R-Struc-Factory-Upgrade07,Struc-Factory-Upgrade06,1144
+R-Struc-Factory-Upgrade07,Struc-Factory-Cyborg-Upgrade06,1147
+R-Struc-Factory-Upgrade07,Struc-VTOLFactory-Upgrade05,701
+R-Struc-Factory-Upgrade09,Struc-Factory-Upgrade08,1146
+R-Struc-Factory-Upgrade09,Struc-Factory-Cyborg-Upgrade08,1149
+R-Struc-Factory-Upgrade09,Struc-VTOLFactory-Upgrade06,702
 R-Struc-Research-Upgrade04,Struc-Research-Upgrade04,720
 R-Struc-Research-Upgrade05,Struc-Research-Upgrade05,721
 R-Struc-Research-Upgrade06,Struc-Research-Upgrade06,722
@@ -125,11 +119,8 @@ R-Struc-VTOLPad-Upgrade03,Struc-VTOLPad-Upgrade03,706
 R-Struc-VTOLPad-Upgrade04,Struc-VTOLPad-Upgrade04,707
 R-Struc-VTOLPad-Upgrade05,Struc-VTOLPad-Upgrade05,708
 R-Struc-VTOLPad-Upgrade06,Struc-VTOLPad-Upgrade06,709
-R-Struc-RprFac-Upgrade01,Struc-RprFac-Upgrade01,499
-R-Struc-RprFac-Upgrade02,Struc-RprFac-Upgrade02,500
-R-Struc-RprFac-Upgrade03,Struc-RprFac-Upgrade03,501
+R-Struc-RprFac-Upgrade01,Struc-RprFac-Upgrade02,499
 R-Struc-RprFac-Upgrade04,Struc-RprFac-Upgrade04,727
-R-Struc-RprFac-Upgrade05,Struc-RprFac-Upgrade05,728
 R-Struc-RprFac-Upgrade06,Struc-RprFac-Upgrade06,729
 R-Sys-Engineering02,Sys-Engineering-Upgrade02,749
 R-Sys-Engineering03,Sys-Engineering-Upgrade03,750
@@ -243,12 +234,6 @@ R-Vehicle-Armor-Heat08,Vehicle-Armor-Heat08,1086
 R-Vehicle-Armor-Heat09,Vehicle-Armor-Heat09,1087
 R-Defense-WallUpgrade11,Defense-WallUpgrade11,1134
 R-Defense-WallUpgrade12,Defense-WallUpgrade12,1135
-R-Struc-Factory-Upgrade07,Struc-Factory-Upgrade07,1144
-R-Struc-Factory-Upgrade08,Struc-Factory-Upgrade08,1145
-R-Struc-Factory-Upgrade09,Struc-Factory-Upgrade09,1146
-R-Struc-Factory-Cyborg-Upgrade07,Struc-Factory-Cyborg-Upgrade07,1147
-R-Struc-Factory-Cyborg-Upgrade08,Struc-Factory-Cyborg-Upgrade08,1148
-R-Struc-Factory-Cyborg-Upgrade09,Struc-Factory-Cyborg-Upgrade09,1149
 R-Wpn-Flamer-Damage07,Wpn-Flamer-Damage07,1141
 R-Wpn-Flamer-Damage08,Wpn-Flamer-Damage08,1142
 R-Wpn-Flamer-Damage09,Wpn-Flamer-Damage09,1143
