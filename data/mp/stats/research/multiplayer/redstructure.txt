@@ -2,7 +2,6 @@ R-Defense-AASite-QuadRotMg,AASite-QuadMg1,189
 R-Defense-Emplacement-HPVcannon,PillBox4,130
 R-Defense-GuardTower-ATMiss,GuardTower5,123
 R-Defense-GuardTower-Rail1,GuardTower1,119
-R-Defense-HvyArtMissile,Emplacement-MdART-pit,270
 R-Defense-HvyArtMissile,Emplacement-Howitzer105,134
 R-Defense-HvyFlamer,PillBox5,158
 R-Defense-HvyMor,Emplacement-MortarPit01,142
