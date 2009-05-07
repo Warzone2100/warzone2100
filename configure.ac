@@ -1,7 +1,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.56])
-AC_INIT([Warzone 2100],[2.1.3],[http://wz2100.net/],[warzone2100])
+AC_INIT([Warzone 2100],[2.1.4],[http://wz2100.net/],[warzone2100])
 AM_INIT_AUTOMAKE([1.10])
 
 AC_CONFIG_MACRO_DIR([m4])
