@@ -97,14 +97,14 @@ unsigned int sound_SetTrackVals(const char* fileName, BOOL loop, unsigned int vo
 
 	if (fileName == NULL || strlen(fileName) == 0) // check for empty filename.  This is a non fatal error.
 	{
-		debug(LOG_ERROR, "sound_SetTrackVals: fileName is %s", (fileName == NULL) ? "a NULL pointer" : "empty");
+		debug(LOG_WARNING, "fileName is %s", (fileName == NULL) ? "a NULL pointer" : "empty");
 		return 0;
 	}
 
 	psTrack	= resGetData( "WAV", fileName );
 	if (psTrack == NULL)
 	{
-		debug(LOG_ERROR, "sound_SetTrackVals: track %s resource not found", fileName);
+		debug(LOG_WARNING, "track %s resource not found", fileName);
 		return 0;
 	}
 
