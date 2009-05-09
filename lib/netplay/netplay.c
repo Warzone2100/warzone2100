@@ -169,9 +169,24 @@ typedef struct
 	BOOL			kick;					// if we should kick them
 } NET_PLAYER;
 
+enum
+{
+	SOCK_CONNECTION,
+	SOCK_IPV4_LISTEN = SOCK_CONNECTION,
+	SOCK_IPV6_LISTEN,
+
+	SOCK_COUNT,
+};
+
 typedef struct
 {
-	SOCKET fd;
+	/* Multiple socket handles only for listening sockets. This allows us
+	 * to listen on multiple protocols and address families (e.g. IPv4 and
+	 * IPv6).
+	 *
+	 * All non-listening sockets will only use the first socket handle.
+	 */
+	SOCKET fd[SOCK_COUNT];
 	bool ready;
 } Socket;
 
@@ -433,7 +448,7 @@ static ssize_t readNoInt(Socket* sock, void* buf, size_t max_size)
 	ssize_t received;
 
 	{
-		received = recv(sock->fd, buf, max_size, 0);
+		received = recv(sock->fd[SOCK_CONNECTION], buf, max_size, 0);
 	} while (received == SOCKET_ERROR && getSockErr() == EINTR);
 
 	sock->ready = false;
@@ -453,7 +468,7 @@ static ssize_t writeAll(Socket* sock, const void* buf, size_t size)
 
 	while (written < size)
 	{
-		ssize_t ret = send(sock->fd, &((char*)buf)[written], size - written, 0);
+		ssize_t ret = send(sock->fd[SOCK_CONNECTION], &((char*)buf)[written], size - written, 0);
 		if (ret == SOCKET_ERROR)
 		{
 			switch (getSockErr())
@@ -587,10 +602,10 @@ static int checkSockets(const SocketSet* set, unsigned int timeout)
 	{
 		if (set->fds[i])
 		{
-			ASSERT(set->fds[i]->fd != INVALID_SOCKET, "Invalid file descriptor!");
+			ASSERT(set->fds[i]->fd[SOCK_CONNECTION] != INVALID_SOCKET, "Invalid file descriptor!");
 
 			++count;
-			maxfd = MAX(maxfd, set->fds[i]->fd);
+			maxfd = MAX(maxfd, set->fds[i]->fd[SOCK_CONNECTION]);
 		}
 	}
 
@@ -604,7 +619,7 @@ static int checkSockets(const SocketSet* set, unsigned int timeout)
 		for (i = 0; i < set->len; ++i)
 		{
 			if (set->fds[i])
-				FD_SET(set->fds[i]->fd, &fds);
+				FD_SET(set->fds[i]->fd[SOCK_CONNECTION], &fds);
 		}
 
 		ret = select(maxfd + 1, &fds, NULL, NULL, &tv);
@@ -620,7 +635,7 @@ static int checkSockets(const SocketSet* set, unsigned int timeout)
 	{
 		if (set->fds[i])
 		{
-			set->fds[i]->ready = FD_ISSET(set->fds[i]->fd, &fds);
+			set->fds[i]->ready = FD_ISSET(set->fds[i]->fd[SOCK_CONNECTION], &fds);
 		}
 	}
 
@@ -665,7 +680,7 @@ static ssize_t readAll(Socket* sock, void* buf, size_t size, unsigned int timeou
 			}
 		}
 
-		ret = recv(sock->fd, &((char*)buf)[received], size - received, 0);
+		ret = recv(sock->fd[SOCK_CONNECTION], &((char*)buf)[received], size - received, 0);
 		sock->ready = false;
 		if (ret == 0)
 		{
@@ -695,13 +710,18 @@ static ssize_t readAll(Socket* sock, void* buf, size_t size, unsigned int timeou
 
 static void socketClose(Socket* sock)
 {
-	if (sock->fd != INVALID_SOCKET)
+	unsigned int i;
+
+	for (i = 0; i < ARRAY_SIZE(sock->fd); ++i)
 	{
+		if (sock->fd[i] != INVALID_SOCKET)
+		{
 #if   defined(WZ_OS_WIN)
-		closesocket(sock->fd);
+			closesocket(sock->fd[i]);
 #else
-		close(sock->fd);
+			close(sock->fd[i]);
 #endif
+		}
 	}
 
 	free(sock);
@@ -709,49 +729,69 @@ static void socketClose(Socket* sock)
 
 static Socket* socketAccept(Socket* sock)
 {
-	char textAddress[40];
-	struct sockaddr_storage addr;
-	socklen_t addr_len = sizeof(addr);
-	SOCKET newConn;
-	Socket* conn;
+	unsigned int i;
 
 	ASSERT(sock != NULL, "NULL Socket provided");
 
-	newConn = accept(sock->fd, (struct sockaddr*)&addr, &addr_len);
-	if (newConn == INVALID_SOCKET)
+	/* Search for a socket that has a pending connection on it and accept
+	 * the first one.
+	 */
+	for (i = 0; i < ARRAY_SIZE(sock->fd); ++i)
 	{
-		// Ignore the case where no connection is pending
-		if (getSockErr() != EAGAIN
-		 && getSockErr() != EWOULDBLOCK)
+		if (sock->fd[i] != INVALID_SOCKET)
 		{
-			debug(LOG_ERROR, "accept failed: %s", strSockError(getSockErr()));
+			char textAddress[40];
+			struct sockaddr_storage addr;
+			socklen_t addr_len = sizeof(addr);
+			Socket* conn;
+			unsigned int j;
+
+			const SOCKET newConn = accept(sock->fd[i], (struct sockaddr*)&addr, &addr_len);
+			if (newConn == INVALID_SOCKET)
+			{
+				// Ignore the case where no connection is pending
+				if (getSockErr() != EAGAIN
+				 && getSockErr() != EWOULDBLOCK)
+				{
+					debug(LOG_ERROR, "accept failed: %s", strSockError(getSockErr()));
+				}
+
+				continue;
+			}
+
+			conn = malloc(sizeof(*conn) + addr_len);
+			if (conn == NULL)
+			{
+				debug(LOG_ERROR, "Out of memory!");
+				abort();
+				return NULL;
+			}
+
+			// Mark all unused socket handles as invalid
+			for (j = 0; j < ARRAY_SIZE(conn->fd); ++j)
+			{
+				conn->fd[j] = INVALID_SOCKET;
+			}
+
+			conn->ready = false;
+			conn->fd[SOCK_CONNECTION] = newConn;
+
+			sock->ready = false;
+
+			addressToText((const struct sockaddr*)&addr, textAddress, sizeof(textAddress));
+			debug(LOG_NET, "Incoming connection from [%s]:%d", textAddress, (unsigned int)ntohs(((const struct sockaddr_in*)&addr)->sin_port));
+
+			return conn;
 		}
-
-		return NULL;
 	}
 
-	conn = malloc(sizeof(*conn));
-	if (conn == NULL)
-	{
-		debug(LOG_ERROR, "Out of memory!");
-		abort();
-		return NULL;
-	}
-
-	conn->ready = false;
-	conn->fd = newConn;
-
-	sock->ready = false;
-
-	addressToText((const struct sockaddr*)&addr, textAddress, sizeof(textAddress));
-	debug(LOG_NET, "Incoming connection from %s:%d", textAddress, (unsigned int)ntohs(((const struct sockaddr_in*)&addr)->sin_port));
-
-	return conn;
+	return NULL;
 }
 
 static Socket* SocketOpen(const struct addrinfo* addr, unsigned int timeout)
 {
 	char textAddress[40];
+	unsigned int i;
 	int ret;
 
 	Socket* const conn = malloc(sizeof(*conn));
@@ -765,25 +805,31 @@ static Socket* SocketOpen(const struct addrinfo* addr, unsigned int timeout)
 	ASSERT(addr != NULL, "NULL Socket provided");
 
 	addressToText(addr->ai_addr, textAddress, sizeof(textAddress));
-	debug(LOG_NET, "Connecting to %s:%d", textAddress, (int)ntohs(((const struct sockaddr_in*)addr->ai_addr)->sin_port));
+	debug(LOG_NET, "Connecting to [%s]:%d", textAddress, (int)ntohs(((const struct sockaddr_in*)addr->ai_addr)->sin_port));
+
+	// Mark all unused socket handles as invalid
+	for (i = 0; i < ARRAY_SIZE(conn->fd); ++i)
+	{
+		conn->fd[i] = INVALID_SOCKET;
+	}
 
 	conn->ready = false;
-	conn->fd = socket(addr->ai_family, addr->ai_socktype, addr->ai_protocol);
+	conn->fd[SOCK_CONNECTION] = socket(addr->ai_family, addr->ai_socktype, addr->ai_protocol);
 
-	if (conn->fd == INVALID_SOCKET)
+	if (conn->fd[SOCK_CONNECTION] == INVALID_SOCKET)
 	{
 		debug(LOG_ERROR, "Failed to create a socket: %s", strSockError(getSockErr()));
 		socketClose(conn);
 		return NULL;
 	}
 
-	if (!setSocketBlocking(conn->fd, false))
+	if (!setSocketBlocking(conn->fd[SOCK_CONNECTION], false))
 	{
 		socketClose(conn);
 		return NULL;
 	}
 
-	ret = connect(conn->fd, addr->ai_addr, addr->ai_addrlen);
+	ret = connect(conn->fd[SOCK_CONNECTION], addr->ai_addr, addr->ai_addrlen);
 	if (ret == SOCKET_ERROR)
 	{
 		fd_set conReady;
@@ -795,7 +841,7 @@ static Socket* SocketOpen(const struct addrinfo* addr, unsigned int timeout)
 		  && getSockErr() != EAGAIN
 		  && getSockErr() != EWOULDBLOCK)
 #if   defined(WZ_OS_UNIX)
-		 || conn->fd >= FD_SETSIZE
+		 || conn->fd[SOCK_CONNECTION] >= FD_SETSIZE
 #endif
 		 || timeout == 0)
 		{
@@ -808,16 +854,16 @@ static Socket* SocketOpen(const struct addrinfo* addr, unsigned int timeout)
 			struct timeval tv = { timeout / 1000, (timeout % 1000) * 1000 };
 
 			FD_ZERO(&conReady);
-			FD_SET(conn->fd, &conReady);
+			FD_SET(conn->fd[SOCK_CONNECTION], &conReady);
 #if   defined(WZ_OS_WIN)
 			FD_ZERO(&conFailed);
-			FD_SET(conn->fd, &conFailed);
+			FD_SET(conn->fd[SOCK_CONNECTION], &conFailed);
 #endif
 
 #if   defined(WZ_OS_WIN)
-			ret = select(conn->fd + 1, NULL, &conReady, &conFailed, &tv);
+			ret = select(conn->fd[SOCK_CONNECTION] + 1, NULL, &conReady, &conFailed, &tv);
 #else
-			ret = select(conn->fd + 1, NULL, &conReady, NULL, &tv);
+			ret = select(conn->fd[SOCK_CONNECTION] + 1, NULL, &conReady, NULL, &tv);
 #endif
 		} while (ret == SOCKET_ERROR && getSockErr() == EINTR);
 
@@ -837,15 +883,15 @@ static Socket* SocketOpen(const struct addrinfo* addr, unsigned int timeout)
 		}
 
 #if   defined(WZ_OS_WIN)
-		ASSERT(FD_ISSET(conn->fd, &conReady) || FD_ISSET(conn->fd, &conFailed), "\"sock\" is the only file descriptor in set, it should be the one that is set.");
+		ASSERT(FD_ISSET(conn->fd[SOCK_CONNECTION], &conReady) || FD_ISSET(conn->fd[SOCK_CONNECTION], &conFailed), "\"sock\" is the only file descriptor in set, it should be the one that is set.");
 #else
-		ASSERT(FD_ISSET(conn->fd, &conReady), "\"sock\" is the only file descriptor in set, it should be the one that is set.");
+		ASSERT(FD_ISSET(conn->fd[SOCK_CONNECTION], &conReady), "\"sock\" is the only file descriptor in set, it should be the one that is set.");
 #endif
 
 #if   defined(WZ_OS_WIN)
-		if (FD_ISSET(conn->fd, &conFailed))
+		if (FD_ISSET(conn->fd[SOCK_CONNECTION], &conFailed))
 #elif defined(WZ_OS_UNIX)
-		if (connect(conn->fd, addr->ai_addr, addr->ai_addrlen) == SOCKET_ERROR
+		if (connect(conn->fd[SOCK_CONNECTION], addr->ai_addr, addr->ai_addrlen) == SOCKET_ERROR
 		 && getSockErr() != EISCONN)
 #endif
 		{
@@ -855,7 +901,7 @@ static Socket* SocketOpen(const struct addrinfo* addr, unsigned int timeout)
 		}
 	}
 
-	if (!setSocketBlocking(conn->fd, true))
+	if (!setSocketBlocking(conn->fd[SOCK_CONNECTION], true))
 	{
 		socketClose(conn);
 		return NULL;
@@ -866,7 +912,15 @@ static Socket* SocketOpen(const struct addrinfo* addr, unsigned int timeout)
 
 static Socket* socketListen(unsigned int port)
 {
-	struct sockaddr_in addr;
+	/* Disable the V4 to V6 mapping because it isn't available on all
+	 * platforms and only complicates this implementation for platforms
+	 * that do.
+	 */
+	static const int ipv6_v6only = 1;
+
+	struct sockaddr_in addr4;
+	struct sockaddr_in6 addr6;
+	unsigned int i;
 
 	Socket* const conn = malloc(sizeof(*conn));
 	if (conn == NULL)
@@ -876,26 +930,48 @@ static Socket* socketListen(unsigned int port)
 		return NULL;
 	}
 
-	// Listen on all local IPv4 addresses for the given port
-	addr.sin_family      = AF_INET;
-	addr.sin_port        = htons(port);
-	addr.sin_addr.s_addr = INADDR_ANY;
+	// Mark all unused socket handles as invalid
+	for (i = 0; i < ARRAY_SIZE(conn->fd); ++i)
+	{
+		conn->fd[i] = INVALID_SOCKET;
+	}
+
+	// Listen on all local IPv4 and IPv6 addresses for the given port
+	addr4.sin_family      = AF_INET;
+	addr4.sin_port        = htons(port);
+	addr4.sin_addr.s_addr = INADDR_ANY;
+
+	addr6.sin6_family   = AF_INET6;
+	addr6.sin6_port     = htons(port);
+	addr6.sin6_addr     = in6addr_any;
+	addr6.sin6_flowinfo = 0;
+	addr6.sin6_scope_id = 0;
 
 	conn->ready = false;
-	conn->fd = socket(addr.sin_family, SOCK_STREAM, 0);
+	conn->fd[SOCK_IPV4_LISTEN] = socket(addr4.sin_family, SOCK_STREAM, 0);
+	conn->fd[SOCK_IPV6_LISTEN] = socket(addr6.sin6_family, SOCK_STREAM, 0);
 
-	if (conn->fd == INVALID_SOCKET)
+	if (conn->fd[SOCK_IPV4_LISTEN] == INVALID_SOCKET
+	 || conn->fd[SOCK_IPV6_LISTEN] == INVALID_SOCKET)
 	{
-		debug(LOG_ERROR, "Failed to create an IPv4 socket: %s", strSockError(getSockErr()));
+		debug(LOG_ERROR, "Failed to create an IPv4 or IPv6 socket: %s", strSockError(getSockErr()));
 		socketClose(conn);
 		return NULL;
 	}
 
-	if (bind(conn->fd, (const struct sockaddr*)&addr, sizeof(addr)) == SOCKET_ERROR
-	 || listen(conn->fd, 5) == SOCKET_ERROR
-	 || !setSocketBlocking(conn->fd, false))
+	if (setsockopt(conn->fd[SOCK_IPV6_LISTEN], IPPROTO_IPV6, IPV6_V6ONLY, &ipv6_v6only, sizeof(ipv6_v6only)) == SOCKET_ERROR)
 	{
-		debug(LOG_ERROR, "Failed to set up IPv4 socket for listening on port %u: %s", port, strSockError(getSockErr()));
+		debug(LOG_WARNING, "Failed to set IPv6 socket to stick to IPv6 alone (i.e. don't use IPv4 to IPv6 mapping), this may cause problems later on: %s", strSockError(getSockErr()));
+	}
+
+	if (bind(conn->fd[SOCK_IPV4_LISTEN], (const struct sockaddr*)&addr4, sizeof(addr4)) == SOCKET_ERROR
+	 || bind(conn->fd[SOCK_IPV6_LISTEN], (const struct sockaddr*)&addr6, sizeof(addr6)) == SOCKET_ERROR
+	 || listen(conn->fd[SOCK_IPV4_LISTEN], 5) == SOCKET_ERROR
+	 || listen(conn->fd[SOCK_IPV6_LISTEN], 5) == SOCKET_ERROR
+	 || !setSocketBlocking(conn->fd[SOCK_IPV4_LISTEN], false)
+	 || !setSocketBlocking(conn->fd[SOCK_IPV6_LISTEN], false))
+	{
+		debug(LOG_ERROR, "Failed to set up IPv4 or IPv6 socket for listening on port %u: %s", port, strSockError(getSockErr()));
 		socketClose(conn);
 		return NULL;
 	}
