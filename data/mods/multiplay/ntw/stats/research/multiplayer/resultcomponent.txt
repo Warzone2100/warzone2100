@@ -23,7 +23,6 @@ R-Wpn-MG2Mk1,MG2Mk1,WEAPON,0,0,10
 R-Wpn-MG3Mk1,MG3-VTOL,WEAPON,0,0,10
 R-Wpn-MG3Mk1,MG3Mk1,WEAPON,0,0,10
 R-Wpn-Cannon2Mk1,Cannon2A-TMk1,WEAPON,0,0,10
-R-Wpn-Cannon2Mk1,Cyb-Hvybod-Mcannon,BODY,0,0,2
 R-Wpn-Rocket02-MRL,Rocket-MRL,WEAPON,0,0,10
 R-Wpn-Mortar01Lt,Mortar1Mk1,WEAPON,0,0,10
 R-Wpn-Mortar01Lt,Cyb-Hvybod-HPV,BODY,0,0,2
@@ -47,6 +46,7 @@ R-Sys-Sensor-Turret01,SensorTurret1Mk1,SENSOR,0,0,8
 R-Wpn-Cannon4AMk1,Cannon4AUTO-VTOL,WEAPON,0,0,10
 R-Wpn-Cannon4AMk1,Cannon4AUTOMk1,WEAPON,0,0,10
 R-Wpn-Cannon3Mk1,Cannon375mmMk1,WEAPON,0,0,10
+R-Wpn-Cannon3Mk1,Cyb-Hvybod-Mcannon,BODY,0,0,2
 R-Wpn-Rocket06-IDF,Rocket-IDF,WEAPON,0,0,10
 R-Wpn-HowitzerMk1,Howitzer105Mk1,WEAPON,0,0,10
 R-Comp-CommandTurret01,CommandBrain01,BRAIN,0,0,3

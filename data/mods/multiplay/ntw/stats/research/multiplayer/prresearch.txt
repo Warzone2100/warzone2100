@@ -92,7 +92,7 @@ R-Struc-RepairFacility,R-Sys-MobileRepairTurret01,109
 R-Struc-RepairFacility,R-Struc-Factory-Module,109
 R-Wpn-Cannon4AMk1,R-Wpn-Cannon-ROF01,109
 R-Wpn-Cannon4AMk1,R-Wpn-Cannon3Mk1,109
-R-Wpn-Cannon4AMk1,R-Wpn-Cannon-Damage08,109
+R-Wpn-Cannon4AMk1,R-Wpn-Cannon-Damage09,109
 R-Wpn-Cannon3Mk1,R-Wpn-Cannon-Damage06,109
 R-Wpn-Cannon3Mk1,R-Wpn-Cannon2Mk1,109
 R-Wpn-Rocket06-IDF,R-Wpn-Rocket02-MRL,109
