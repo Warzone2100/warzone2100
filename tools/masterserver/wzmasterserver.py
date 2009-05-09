@@ -245,7 +245,7 @@ class RequestHandler(SocketServer.ThreadingMixIn, SocketServer.StreamRequestHand
 			elif netCommand == 'gaId':
 				self.GameId = gamedb.getGameID()
 				self.GameId.requestHandlers = [self]
-				self.GameId.hosts[0] = self.gameHost
+				self.GameId.hosts.append(self.gameHost)
 				logging.debug("(%s) Created game ID: %d" % (self.gameHost, self.GameId.gameId))
 				protocol.encodeGameID(self.GameId.gameId, self.wfile)
 			# Add a game.
@@ -290,7 +290,7 @@ class RequestHandler(SocketServer.ThreadingMixIn, SocketServer.StreamRequestHand
 
 					logging.debug("(%s) Updated game: %s" % (self.gameHost, self.g))
 					#set gamehost
-					if not self.g.hosts[0]:
+					if not len(self.g.hosts) or not self.g.hosts[0]:
 						self.g.hosts[0] = self.gameHost
 
 					if not protocol.check(self.g, self.gameHost):

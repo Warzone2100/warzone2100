@@ -386,9 +386,9 @@ class BinaryProtocol22(BinaryProtocol21):
 
 			for strKey in ['name', 'multiplayer-version']:
 				decData[strKey] = decData[strKey].strip("\0")
-			decData['hosts'] = filter(bool, decData['hosts'])
 			for i in xrange(len(decData['hosts'])):
 				decData['hosts'][i] = decData['hosts'][i].strip("\0")
+			decData['hosts'] = filter(bool, decData['hosts'])
 
 			game.extra = game.extra.strip("\0")
 			game.modlist = game.modlist.strip("\0")
