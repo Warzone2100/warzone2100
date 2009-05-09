@@ -1,7 +1,7 @@
 TUTMG,mgbar1.ogg,-1, 101 
 Superweapon2,mgbar2.ogg,-1, 102 
 Superweapon,mgbar2.ogg,-1, 103 
-SpyTurret01,rotlsr.ogg,-1, 104 
+SpyTurret01,nxstower.ogg,nxsexpld.ogg, 104 
 RocketSuper,rocket.ogg,lrgexpl.ogg, 105 
 Rocket-VTOL-Pod,rocket.ogg,smlexpl.ogg, 106 
 Rocket-VTOL-LtA-T,rocket.ogg,smlexpl.ogg, 107 
@@ -26,7 +26,7 @@ NX-CyborgPulseLas,plslsr.ogg,lsrexpl.ogg, 125
 NX-CyborgMiss,rocket.ogg,lrgexpl.ogg, 126
 NX-CyborgChaingun,mgbar2.ogg,-1, 127 
 NX-Cyb-Rail1,gaussgun.ogg,smlexpl.ogg, 128  
-NEXUSlink,col012a.ogg,nxsexpld.ogg, 129 
+NEXUSlink,nxstower.ogg,nxsexpld.ogg, 129 
 MortarEMP,emp.ogg,-1, 130 
 Mortar3ROTARYMk1,mortar.ogg,lrgexpl.ogg, 131 
 Mortar2Mk1,col014a.ogg,lrgexpl.ogg, 132 
@@ -38,7 +38,7 @@ Missile-MdArt,col016a.ogg,atnkexpl.ogg, 137
 Missile-LtSAM,rocket.ogg,smlexpl.ogg, 138 
 Missile-HvySAM,rocket.ogg,lrgexpl.ogg, 139 
 Missile-HvyArt,col016a.ogg,lrgexpl.ogg, 140 
-Missile-A-T,col016a.ogg,atnkexpl.ogg, 141 
+Missile-A-T,col016a.ogg,lrgexpl.ogg, 141 
 MG5TWINROTARY,asltmg.ogg,-1, 142 
 MG4ROTARYMk1,asltmg.ogg,-1, 143 
 MG4ROTARY-VTOL,asltmg.ogg,-1, 144 
@@ -113,7 +113,7 @@ BabaPitRocket,rocket.ogg,lrgexpl.ogg, 215
 BaBaMG,col011a.ogg,-1, 216 
 BabaFlame,flmthrow.ogg,-1, 217 
 BaBaCannon,smlcan.ogg,smlexpl.ogg, 218 
-AAGunLaser,hivelcan.ogg,lsrexpl.ogg, 219 
+AAGunLaser,col012a.ogg,lsrexpl.ogg, 219 
 AAGun2Mk1,defabsrd.ogg,lrgexpl.ogg, 220 
 ZNULLMINE,silence.ogg,-1, 221 
 WepMine1,lrgexpl.ogg,smlexpl.ogg, 222 
