@@ -371,8 +371,23 @@ static int addressToText(const struct sockaddr* addr, char* buf, size_t size)
 				(int)(address[2]),
 				(int)(address[3]));
 		}
+		case AF_INET6:
+		{
+			uint16_t* address = (uint16_t*)&((const struct sockaddr_in6*)addr)->sin6_addr.s6_addr;
+
+			return snprintf(buf, size,
+			"%x:%x:%x:%x:%x:%x:%x:%x",
+				(int)ntohs(address[0]),
+				(int)ntohs(address[1]),
+				(int)ntohs(address[2]),
+				(int)ntohs(address[3]),
+				(int)ntohs(address[4]),
+				(int)ntohs(address[5]),
+				(int)ntohs(address[6]),
+				(int)ntohs(address[7]));
+		}
 		default:
-			ASSERT(!"Unknown address famliy", "Got non IPv4 address!");
+			ASSERT(!"Unknown address famliy", "Got non IPv4 or IPv6 address!");
 			return -1;
 	}
 }
@@ -986,7 +1001,7 @@ static struct addrinfo* resolveHost(const char* host, unsigned int port)
 	struct addrinfo hint;
 	int error;
 
-	hint.ai_family    = AF_INET;
+	hint.ai_family    = AF_UNSPEC;
 	hint.ai_socktype  = SOCK_STREAM;
 	hint.ai_protocol  = 0;
 	hint.ai_flags     = (AI_V4MAPPED | AI_ADDRCONFIG);
