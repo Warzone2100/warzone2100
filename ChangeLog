@@ -41,7 +41,7 @@
  * Engine:
    * New: Support for naval propulsion type (r5803)
  * Network:
-  * Change: Replaced SDL-net by using BSD sockets instead.
+  * Change: Replaced SDL-net by using BSD sockets instead. (ticket:435)
   * New: Add IPv6 support. (ticket:452)
 
 2009-03-07: Version 2.1.2
