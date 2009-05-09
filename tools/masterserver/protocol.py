@@ -135,14 +135,14 @@ class BaseProtocol(object):
 	def decodeMultiple(data):
 		pass
 
-	def check(self, game):
+	def check(self, game, host):
 		"""Check we can connect to the game's host."""
 		try:
-			logging.debug("Checking %s's vitality..." % game.host)
-			with connection(game.host, self.gamePort) as s:
+			logging.debug("Checking %s's vitality..." % host)
+			with connection(host, self.gamePort) as s:
 				return True
 		except (socket.error, socket.herror, socket.gaierror, socket.timeout), e:
-			logging.debug("%s did not respond: %s" % (game.host, e))
+			logging.debug("%s did not respond: %s" % (host, e))
 			return False
 
 	def list(self, host):
@@ -171,10 +171,10 @@ class BinaryProtocol20(BaseProtocol):
 	def _encodeName(self, game):
 		return _encodeCString(game.description, self.name_length)
 
-	def _encodeHost(self, game):
-		return _encodeCString(game.host, self.host_length)
+	def _encodeHost(self, game, hostnum = 0):
+		return _encodeCString(game.hosts[hostnum], self.host_length)
 
-	def encodeSingle(self, game, out = str()):
+	def encodeSingle(self, game, out = str(), hideGameID = False):
 		with writeable(out) as write:
 			# Workaround the fact that the 2.0.x versions don't
 			# perform endian swapping
@@ -192,11 +192,11 @@ class BinaryProtocol20(BaseProtocol):
 			except AttributeError:
 				return out
 
-	def encodeMultiple(self, games, out = str()):
+	def encodeMultiple(self, games, out = str(), hideGameID = False):
 		with writeable(out) as write:
 			write.write(self.countFormat.pack(len(games)))
 			for game in games:
-				self.encodeSingle(game, write)
+				self.encodeSingle(game, write, hideGameID)
 
 			try:
 				return write.getvalue()
@@ -205,7 +205,7 @@ class BinaryProtocol20(BaseProtocol):
 
 	def decodeSingle(self, input, game = Game(), offset = None):
 		with readable(input) as read:
-			decData = {}
+			decData = {'hosts': [None, None, None]}
 
 			if   offset != None and read == None:
 				def unpack():
@@ -224,7 +224,7 @@ class BinaryProtocol20(BaseProtocol):
 			if not data:
 				return None
 
-			(decData['name'], game.size, game.flags, decData['host'], game.maxPlayers, game.currentPlayers,
+			(decData['name'], game.size, game.flags, decData['hosts'][0], game.maxPlayers, game.currentPlayers,
 				game.user1, game.user2, game.user3, game.user4) = data
 
 			# Workaround the fact that the 2.0.x versions don't
@@ -232,8 +232,8 @@ class BinaryProtocol20(BaseProtocol):
 			game.maxPlayers = _swap_endianness(game.maxPlayers)
 			game.currentPlayers = _swap_endianness(game.currentPlayers)
 
-			for strKey in ['name', 'host']:
-				decData[strKey] = decData[strKey].strip("\0")
+			decData['name'] = decData['name'].strip("\0")
+			decData['hosts'][0] = decData['hosts'][0].strip("\0")
 
 			game.data.update(decData)
 			return game
@@ -254,7 +254,7 @@ class BinaryProtocol20(BaseProtocol):
 class BinaryProtocol21(BinaryProtocol20):
 	lobbyPort = BaseProtocol.lobbyPort['2.1']
 
-	def encodeSingle(self, game, out = str()):
+	def encodeSingle(self, game, out = str(), hideGameID = False):
 		with writeable(out) as write:
 			write.write(self.gameFormat.pack(
 				self._encodeName(game),
@@ -269,7 +269,7 @@ class BinaryProtocol21(BinaryProtocol20):
 
 	def decodeSingle(self, input, game = Game(), offset = None):
 		with readable(input) as read:
-			decData = {}
+			decData = {'hosts': [None, None, None]}
 
 			if   offset != None and read == None:
 				def unpack():
@@ -288,11 +288,11 @@ class BinaryProtocol21(BinaryProtocol20):
 			if not data:
 				return None
 
-			(decData['name'], game.size, game.flags, decData['host'], game.maxPlayers, game.currentPlayers,
+			(decData['name'], game.size, game.flags, decData['hosts'][0], game.maxPlayers, game.currentPlayers,
 				game.user1, game.user2, game.user3, game.user4) = data
 
-			for strKey in ['name', 'host']:
-				decData[strKey] = decData[strKey].strip("\0")
+			decData['name'] = decData['name'].strip("\0")
+			decData['hosts'][0] = decData['hosts'][0].strip("\0")
 
 			game.data.update(decData)
 			return game
@@ -302,18 +302,14 @@ class BinaryProtocol22(BinaryProtocol21):
 	host_length          = 40
 
 	# >= 2.2 data
-	misc_length          = 64
-	extra_length         = 255
+	extra_length         = 239
 	versionstring_length = 64
 	modlist_length       = 255
 
-	gameFormat = struct.Struct('!I%dsii%ds6i%ds%ds%ds%ds9I' % (BinaryProtocol21.name_length, host_length, misc_length, extra_length, versionstring_length, modlist_length))
+	gameFormat = struct.Struct('!I%dsii%ds6i%ds%ds%ds%ds%ds9I' % (BinaryProtocol21.name_length, host_length, host_length, host_length, extra_length, versionstring_length, modlist_length))
 
 	gamePort = BaseProtocol.gamePort['2.2']
 	lobbyPort = BaseProtocol.lobbyPort['2.2']
-
-	def _encodeMisc(self, game):
-		return _encodeCString(game.misc, self.misc_length)
 
 	def _encodeExtra(self, game):
 		return _encodeCString(game.extra, self.extra_length)
@@ -321,20 +317,25 @@ class BinaryProtocol22(BinaryProtocol21):
 	def _encodeVersionString(self, game):
 		return _encodeCString(game.multiplayerVersion, self.versionstring_length)
 
-	def encodeSingle(self, game, out = str()):
+	def encodeSingle(self, game, out = str(), hideGameID = False):
 		with writeable(out) as write:
+			if hideGameID:
+				gameId = 0
+			else:
+				gameId = game.gameId
 			write.write(self.gameFormat.pack(
 				game.lobbyVersion,
 				self._encodeName(game),
 				game.size or self.size, game.flags,
-				self._encodeHost(game),
+				self._encodeHost(game, 0),
 				game.maxPlayers, game.currentPlayers, game.user1, game.user2, game.user3, game.user4,
-				self._encodeMisc(game),
+				self._encodeHost(game, 1),
+				self._encodeHost(game, 2),
 				self._encodeExtra(game),
 				self._encodeVersionString(game),
 				game.modlist,
 				game.game_version_major, game.game_version_minor, game.private,
-				game.pure, game.Mods, game.future1, game.future2, game.future3, game.future4))
+				game.pure, game.Mods, gameId, game.future2, game.future3, game.future4))
 
 			try:
 				return write.getvalue()
@@ -343,7 +344,7 @@ class BinaryProtocol22(BinaryProtocol21):
 
 	def decodeSingle(self, input, game = Game(), offset = None):
 		with readable(input) as read:
-			decData = {}
+			decData = {'hosts': [None, None, None]}
 
 			if   offset != None and read == None:
 				def unpack():
@@ -362,16 +363,17 @@ class BinaryProtocol22(BinaryProtocol21):
 			if not data:
 				return None
 
-			(game.lobbyVersion, decData['name'], game.size, game.flags, decData['host'], game.maxPlayers, game.currentPlayers,
+			(game.lobbyVersion, decData['name'], game.size, game.flags, decData['hosts'][0], game.maxPlayers, game.currentPlayers,
 				game.user1, game.user2, game.user3, game.user4,
-				game.misc, game.extra, decData['multiplayer-version'], game.modlist,
-				game.game_version_major, game.game_version_minor, game.private, game.pure, game.Mods, game.future1,
+				decData['hosts'][1], decData['hosts'][2], game.extra, decData['multiplayer-version'], game.modlist,
+				game.game_version_major, game.game_version_minor, game.private, game.pure, game.Mods, game.gameId,
 				game.future2, game.future3, game.future4) = data
 
-			for strKey in ['name', 'host', 'multiplayer-version']:
+			for strKey in ['name', 'multiplayer-version']:
 				decData[strKey] = decData[strKey].strip("\0")
+			for i in xrange(len(decData['hosts'])):
+				decData['hosts'][i] = decData['hosts'][i].strip("\0")
 
-			game.misc = game.misc.strip("\0")
 			game.extra = game.extra.strip("\0")
 			game.modlist = game.modlist.strip("\0")
 

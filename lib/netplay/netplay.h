@@ -117,7 +117,7 @@ typedef enum
 #define MaxMsgSize		8192		// max size of a message in bytes.
 #define	StringSize		64			// size of strings used.
 #define MaxGames		12			// max number of concurrently playable games to allow.
-#define extra_string_size	255		// extra 255 char for future use
+#define extra_string_size	239		// extra 255 char for future use
 #define modlist_string_size	255		// For a concatenated list of mods
 
 #define SESSION_JOINDISABLED	1
@@ -146,7 +146,7 @@ typedef struct
 	SESSIONDESC	desc;
 	// END of old GAMESTRUCT format
 	// NOTE: do NOT save the following items in game.c--it will break savegames.
-	char		misc[StringSize];				// misc string  (future use)
+	char		secondaryHosts[2][40];
 	char		extra[extra_string_size];		// extra string (future use)
 	char		versionstring[StringSize];		// 
 	char		modlist[modlist_string_size];	// ???
@@ -155,7 +155,8 @@ typedef struct
 	uint32_t	privateGame;					// if true, it is a private game
 	uint32_t	pureGame;						// NO mods allowed if true
 	uint32_t	Mods;							// number of concatenated mods?
-	uint32_t	future1;						// for future use
+	// Game ID, used on the lobby server to link games with multiple address families to eachother
+	uint32_t	gameId;
 	uint32_t	future2;						// for future use
 	uint32_t	future3;						// for future use
 	uint32_t	future4;						// for future use

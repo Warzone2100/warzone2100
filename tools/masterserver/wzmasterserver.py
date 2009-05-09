@@ -65,10 +65,26 @@ logging.basicConfig(level = logging.DEBUG, format = "%(asctime)-15s %(levelname)
 
 gamedb = None
 
+class MultiAddressGame(Game):
+	def __init__(self, gameId):
+		super(MultiAddressGame, self).__init__()
+		self.addressCount = 0
+		self.gameId = gameId
+
+		assert self.gameId > 0, "Invalid game ID"
+
 class GameDB:
 	def __init__(self):
 		self.list = set()
+		self.index = {}
 		self.lock = RLock()
+		self.numgen = self.genNum()
+
+	def genNum(self):
+		while True:
+			for n in xrange(1, pow(2, 31) - 1):
+				if n != 0xBAD01 and n not in self.index:
+					yield n
 
 	def __remove(self, g):
 		# if g is not in the list, ignore the KeyError exception
@@ -80,12 +96,35 @@ class GameDB:
 	def addGame(self, g):
 		""" add a game """
 		with self.lock:
-			self.list.add(g)
+			try:
+				g.addressCount += 1
+			except AttributeError:
+				self.list.add(g)
 
 	def removeGame(self, g):
 		""" remove a game from the list"""
 		with self.lock:
-			self.__remove(g)
+			try:
+				if g.addressCount == 0:
+					self.__remove(g)
+					del self.index[g.gameId]
+				else:
+					g.addressCount -= 1
+			except AttributeError:
+				self.__remove(g)
+
+	def getGameID(self):
+		with self.lock:
+			g = MultiAddressGame(self.numgen.next())
+
+			self.list.add(g)
+			self.index[g.gameId] = g
+
+			return g
+
+	def getGameByID(self, gameId):
+		with self.lock:
+			return self.index[gameId]
 
 	# only games with a valid description
 	def getGames(self):
@@ -103,7 +142,7 @@ class GameDB:
 	def getGamesByHost(self, host):
 		""" filter all games of a certain host"""
 		for game in self.getGames():
-			if game.host == host:
+			if host in game.hosts:
 				yield game
 
 	def checkGames(self):
@@ -111,9 +150,14 @@ class GameDB:
 			games = list(self.getGames())
 			logging.debug("Checking: %i game(s)" % (len(games)))
 			for game in games:
-				if not protocol.check(game):
-					logging.debug("Removing unreachable game: %s" % game)
-					self.__remove(game)
+				for host in game.hosts:
+					if not host:
+						continue
+
+					if not protocol.check(game, host):
+						logging.debug("Removing unreachable game: %s" % game)
+						self.__remove(game)
+						break
 
 	def listGames(self):
 		with self.lock:
@@ -166,6 +210,7 @@ class RequestHandler(SocketServer.ThreadingMixIn, SocketServer.StreamRequestHand
 			if hasattr(parent, 'setup'):
 				parent.setup(self)
 		self.g = None
+		self.GameId = None
 
 	def handle(self):
 		global requests, requestlock, gamedb
@@ -196,31 +241,64 @@ class RequestHandler(SocketServer.ThreadingMixIn, SocketServer.StreamRequestHand
 				self.wfile.write(MOTDstring[0:255])
 				logging.debug("(%s) sending MOTD (%s)" % (self.gameHost, MOTDstring[0:255]))
 
+			# Get a game ID (for multi address games)
+			elif netCommand == 'gaId':
+				self.GameId = gamedb.getGameID()
+				self.GameId.requestHandlers = [self]
+				self.GameId.hosts[0] = self.gameHost
+				logging.debug("(%s) Created game ID: %d" % (self.gameHost, self.GameId.gameId))
+				self.wfile.write(struct.pack('!I', self.GameId.gameId))
 			# Add a game.
 			elif netCommand == 'addg':
 				# The host is valid
 				logging.debug("(%s) Adding gameserver..." % self.gameHost)
-
-				# create a game object
-				self.g = Game()
-				self.g.requestHandler = self
+				if self.GameId:
+					self.g = self.GameId
+					if self.g.requestHandlers[0] is not self:
+						self.g.requestHandlers.append(self)
+				else:
+					# create a game object
+					self.g = Game()
+					self.g.requestHandlers = [self]
 				# put it in the database
 				gamedb.addGame(self.g)
 
 				# and start receiving updates about the game
 				while True:
+					hosts = self.g.hosts
 					newGameData = protocol.decodeSingle(self.rfile, self.g)
 					if not newGameData:
 						logging.debug("(%s) Removing aborted game" % self.gameHost)
 						return
+					self.g.hosts = hosts
+
+					if not hasattr(self.g, 'addressCount') and self.g.gameId > 0:
+						try:
+							self.GameId = gamedb.getGameByID(self.g.gameId)
+							logging.debug("(%s) Game with same ID already present, linking games...", (self.gameHost))
+
+							# Apparently a game with this ID exists already, so remove this duplicate game
+							gamedb.removeGame(self.g)
+							self.g = None
+
+							# Attach this request handler to the existing game
+							(self.g, self.GameId) = (self.GameId, self.g)
+							gamedb.addGame(self.g)
+							for i in xrange(len(self.g.hosts)):
+								if not self.g.hosts[i]:
+									self.g.hosts[i] = self.gameHost
+									break
+						except KeyError:
+							pass
 
 					logging.debug("(%s) Updated game: %s" % (self.gameHost, self.g))
 					#set gamehost
-					self.g.host = self.gameHost
+					if not self.g.hosts[0]:
+						self.g.hosts[0] = self.gameHost
 
-					if not protocol.check(self.g):
+					if not protocol.check(self.g, self.gameHost):
 						logging.debug("(%s) Removing unreachable game" % self.gameHost)
-						self.sendStatusMessage(self.CLIENT_ERROR_NOT_ACCEPTABLE, 'Game unreachable, failed to open a connection to: [%s]:%d' % (self.g.host, protocol.gamePort))
+						self.sendStatusMessage(self.CLIENT_ERROR_NOT_ACCEPTABLE, 'Game unreachable, failed to open a connection to: [%s]:%d' % (self.gameHost, protocol.gamePort))
 						return
 
 					self.sendStatusMessage(self.SUCCESS_OK, MOTDstring)
@@ -236,7 +314,7 @@ class RequestHandler(SocketServer.ThreadingMixIn, SocketServer.StreamRequestHand
 					# Transmit the games.
 					for game in games:
 						logging.debug(" %s" % game)
-					protocol.encodeMultiple(games, self.wfile)
+					protocol.encodeMultiple(games, self.wfile, hideGameID=True)
 				return
 
 			# If something unknown appears.
@@ -245,7 +323,13 @@ class RequestHandler(SocketServer.ThreadingMixIn, SocketServer.StreamRequestHand
 
 	def finish(self):
 		if self.g:
+			for i in xrange(len(self.g.hosts)):
+				if self.g.hosts[i] == self.gameHost:
+					self.g.hosts[i] = None
+
 			gamedb.removeGame(self.g)
+		if self.GameId:
+			gamedb.removeGame(self.GameId)
 		for parent in (SocketServer.ThreadingMixIn, SocketServer.StreamRequestHandler):
 			if hasattr(parent, 'finish'):
 				parent.finish(self)
@@ -301,6 +385,7 @@ if __name__ == '__main__':
 		pass
 	logging.info("Shutting down lobby server, cleaning up")
 	for game in gamedb.getAllGames():
-		game.requestHandler.finish()
+		for requestHandler in game.requestHandlers:
+			requestHandler.finish()
 	for tcpserver in tcpservers:
 		tcpserver.server_close()

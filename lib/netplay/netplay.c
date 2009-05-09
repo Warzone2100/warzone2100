@@ -1543,7 +1543,7 @@ static void NETsendGAMESTRUCT(Socket* sock, const GAMESTRUCT* game)
 	// to zero so that we can be sure we're not sending any (undefined)
 	// memory content across the network.
 	char buf[sizeof(game->GAMESTRUCT_VERSION) + sizeof(game->name) + sizeof(game->desc.host) + (sizeof(int32_t) * 8) +
-		sizeof(game->misc) + sizeof(game->extra) + sizeof(game->versionstring) +
+		sizeof(game->secondaryHosts) + sizeof(game->extra) + sizeof(game->versionstring) +
 		sizeof(game->modlist) + (sizeof(uint32_t) * 9) ] = { 0 };
 	char *buffer = buf;
 	unsigned int i;
@@ -1580,8 +1580,11 @@ static void NETsendGAMESTRUCT(Socket* sock, const GAMESTRUCT* game)
 	}
 
 	// Copy a string
-	strlcpy(buffer, game->misc, sizeof(game->misc));
-	buffer += sizeof(game->misc);
+	for (i = 0; i <ARRAY_SIZE(game->secondaryHosts); ++i)
+	{
+		strlcpy(buffer, game->secondaryHosts[i], sizeof(game->secondaryHosts[i]));
+		buffer += sizeof(game->secondaryHosts[i]);
+	}
 
 	// Copy a string
 	strlcpy(buffer, game->extra, sizeof(game->extra));
@@ -1616,7 +1619,7 @@ static void NETsendGAMESTRUCT(Socket* sock, const GAMESTRUCT* game)
 	buffer += sizeof(uint32_t);
 
 	// Copy 32bit large big endian numbers
-	*(uint32_t*)buffer = htonl(game->future1);
+	*(uint32_t*)buffer = htonl(game->gameId);
 	buffer += sizeof(uint32_t);
 
 	// Copy 32bit large big endian numbers
@@ -1654,7 +1657,7 @@ static bool NETrecvGAMESTRUCT(GAMESTRUCT* game)
 	// A buffer that's guaranteed to have the correct size (i.e. it
 	// circumvents struct padding, which could pose a problem).
 	char buf[sizeof(game->GAMESTRUCT_VERSION) + sizeof(game->name) + sizeof(game->desc.host) + (sizeof(int32_t) * 8) +
-		sizeof(game->misc) + sizeof(game->extra) + sizeof(game->versionstring) +
+		sizeof(game->secondaryHosts) + sizeof(game->extra) + sizeof(game->versionstring) +
 		sizeof(game->modlist) + (sizeof(uint32_t) * 9) ] = { 0 };
 	char* buffer = buf;
 	unsigned int i;
@@ -1706,8 +1709,11 @@ static bool NETrecvGAMESTRUCT(GAMESTRUCT* game)
 	}
 
 	// Copy a string
-	sstrcpy(game->misc, buffer);
-	buffer += sizeof(game->misc);
+	for (i = 0; i < ARRAY_SIZE(game->secondaryHosts); ++i)
+	{
+		sstrcpy(game->secondaryHosts[i], buffer);
+		buffer += sizeof(game->secondaryHosts[i]);
+	}
 
 	// Copy a string
 	sstrcpy(game->extra, buffer);
@@ -1732,7 +1738,7 @@ static bool NETrecvGAMESTRUCT(GAMESTRUCT* game)
 	buffer += sizeof(uint32_t);
 	game->Mods = ntohl(*(uint32_t*)buffer);
 	buffer += sizeof(uint32_t);
-	game->future1 = ntohl(*(uint32_t*)buffer);
+	game->gameId = ntohl(*(uint32_t*)buffer);
 	buffer += sizeof(uint32_t);	
 	game->future2 = ntohl(*(uint32_t*)buffer);
 	buffer += sizeof(uint32_t);	
@@ -2677,8 +2683,9 @@ error:
 
 static void NETregisterServer(int state)
 {
-	static Socket* rs_socket = NULL;
+	static Socket* rs_socket[2] = { NULL };
 	static int registered = 0;
+	unsigned int i;
 
 	if (server_not_there)
 	{
@@ -2691,6 +2698,8 @@ static void NETregisterServer(int state)
 		{
 			case 1:
 			{
+				bool succesful = false;
+				uint32_t gameId = 0;
 				struct addrinfo* cur;
 				struct addrinfo* const hosts = resolveHost(masterserver_name, masterserver_port);
 
@@ -2705,31 +2714,82 @@ static void NETregisterServer(int state)
 
 				for (cur = hosts; cur; cur = cur->ai_next)
 				{
-					if (rs_socket)
+					for (i = 0; i < ARRAY_SIZE(rs_socket); ++i)
+					{
+						if (rs_socket[i] == NULL)
+							break;
+					}
+					if (i >= ARRAY_SIZE(rs_socket))
 						break;
-					rs_socket = SocketOpen(cur, 15000);
+
+					if (cur->ai_family == AF_INET
+					 || cur->ai_family == AF_INET6)
+						rs_socket[i] = SocketOpen(cur, 15000);
 				}
 				freeaddrinfo(hosts);
 
-				if(rs_socket == NULL)
+				if (rs_socket[0] == NULL)
 				{
 					debug(LOG_ERROR, "Cannot connect to masterserver \"%s:%d\": %s", masterserver_name, masterserver_port, strSockError(getSockErr()));
 					free(NetPlay.MOTD);
-					asprintf(&NetPlay.MOTD, _("Could not communicate with lobby server! Is TCP port %u open?"), masterserver_port);
+					asprintf(&NetPlay.MOTD, _("Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"), masterserver_port);
 					server_not_there = true;
 					return;
 				}
 
-				// Register our game with the lobby server
-				writeAll(rs_socket, "addg", sizeof("addg"));
-				NETsendGAMESTRUCT(rs_socket, &game);
-
-				// Get the return code
-				if (readLobbyResponse(rs_socket, 1000) == SOCKET_ERROR)
+				// Get a game ID
+				writeAll(rs_socket[0], "gaId", sizeof("gaId"));
+				if (readAll(rs_socket[0], &gameId, sizeof(gameId), 10000) != sizeof(gameId))
 				{
-					// The socket has been invalidated, so get rid of it. (using it now may cause SIGPIPE).
-					socketClose(rs_socket);
-					rs_socket = NULL;
+					free(NetPlay.MOTD);
+					asprintf(&NetPlay.MOTD, "Failed to retrieve a game ID: %s", strSockError(getSockErr()));
+					debug(LOG_ERROR, "%s", NetPlay.MOTD);
+
+					// The sockets have been invalidated, so get rid of it. (using them now may cause SIGPIPE).
+					for (i = 0; i < ARRAY_SIZE(rs_socket); ++i)
+					{
+						if (rs_socket[i] == NULL)
+							continue;
+
+						socketClose(rs_socket[i]);
+						rs_socket[i] = NULL;
+					}
+					server_not_there = true;
+					return;
+				}
+
+				game.gameId = ntohl(gameId);
+				debug(LOG_NET, "Using game ID: %u", (unsigned int)game.gameId);
+
+				// Register our game with the server for all available address families
+				for (i = 0; i < ARRAY_SIZE(rs_socket); ++i)
+				{
+					if (rs_socket[i] == NULL)
+						continue;
+
+					writeAll(rs_socket[i], "addg", sizeof("addg"));
+					// and now send what the server wants
+					NETsendGAMESTRUCT(rs_socket[i], &game);
+				}
+
+				// Get the return codes
+				for (i = 0; i < ARRAY_SIZE(rs_socket); ++i)
+				{
+					if (rs_socket[i] == NULL)
+						continue;
+
+					if (readLobbyResponse(rs_socket[i], 1000) == SOCKET_ERROR)
+					{
+						socketClose(rs_socket[i]);
+						rs_socket[i] = NULL;
+						continue;
+					}
+
+					succesful = true;
+				}
+
+				if (!succesful)
+				{
 					server_not_there = true;
 					return;
 				}
@@ -2738,8 +2798,14 @@ static void NETregisterServer(int state)
 
 			case 0:
 				// we don't need this anymore, so clean up
-				socketClose(rs_socket);
-				rs_socket = NULL;
+				for (i = 0; i < ARRAY_SIZE(rs_socket); ++i)
+				{
+					if (rs_socket[i] == NULL)
+						continue;
+
+					socketClose(rs_socket[i]);
+					rs_socket[i] = NULL;
+				}
 			break;
 		}
 		registered=state;
@@ -2984,7 +3050,7 @@ BOOL NEThostGame(const char* SessionName, const char* PlayerName,
 	memset(&game.desc, 0, sizeof(game.desc));
 	game.desc.dwSize = sizeof(game.desc);
 	//game.desc.guidApplication = GAME_GUID;
-	game.desc.host[0] = '\0';
+	memset(game.desc.host, 0, sizeof(game.desc.host));
 	game.desc.dwCurrentPlayers = 1;
 	game.desc.dwMaxPlayers = plyrs;
 	game.desc.dwFlags = 0;
@@ -2992,17 +3058,17 @@ BOOL NEThostGame(const char* SessionName, const char* PlayerName,
 	game.desc.dwUserFlags[1] = two;
 	game.desc.dwUserFlags[2] = three;
 	game.desc.dwUserFlags[3] = four;
-	sstrcpy(game.misc, "Misc data" );					// misc string  (future use)
+	memset(game.secondaryHosts, 0, sizeof(game.secondaryHosts));
 	sstrcpy(game.extra, "Extra");						// extra string (future use)
 	sstrcpy(game.versionstring, VersionString);			// version (string)
 	sstrcpy(game.modlist, "Mod list");					// List of mods
-	game.GAMESTRUCT_VERSION = 2;						// version of this structure
+	game.GAMESTRUCT_VERSION = 3;						// version of this structure
 	game.game_version_major = NETCODE_VERSION_MAJOR;	// Netcode Major version
 	game.game_version_minor = NETCODE_VERSION_MINOR;	// NetCode Minor version
 //	game.privateGame = 0;								// if true, it is a private game
 	game.pureGame = 0;									// NO mods allowed if true
 	game.Mods = 0;										// number of concatenated mods?
-	game.future1 = 0xBAD01;								// for future use
+	game.gameId  = 0;
 	game.future2 = 0xBAD02;								// for future use
 	game.future3 = 0xBAD03;								// for future use
 	game.future4 = 0xBAD04;								// for future use
@@ -3137,9 +3203,14 @@ BOOL NETfindGame(void)
 		if (result == SOCKET_ERROR)
 		{
 			debug(LOG_NET, "Server socket ecountered error: %s", strSockError(getSockErr()));
-			socketClose(tcp_socket);
-			tcp_socket = NULL;
 		}
+		else
+		{
+			debug(LOG_NET, "Server didn't respond (timeout)");
+		}
+		socketClose(tcp_socket);
+		tcp_socket = NULL;
+
 		// when we fail to receive a game count, bail out
 		setLobbyError(ERROR_CONNECTION);
 		freeaddrinfo(hosts);
@@ -3177,43 +3248,56 @@ BOOL NETjoinGame(UDWORD gameNumber, const char* playername)
 {
 	struct addrinfo* cur;
 	struct addrinfo* hosts;
+	unsigned int i;
 
 	debug(LOG_NET, "resetting sockets.");
 	NETclose();	// just to be sure :)
 
 	debug(LOG_NET, "Trying to join gameNumber (%u)...", gameNumber);
 
-	if (hostname != masterserver_name)
+	if (hostname == masterserver_name)
+	{
+		hostname = NULL;
+	}
+
+	// Loop through all of the hosts, using the first one we can connect to.
+	for (i = 0; i < ARRAY_SIZE(NetPlay.games[gameNumber].secondaryHosts) + 1; ++i)
 	{
 		free(hostname);
-	}
-	hostname = strdup(NetPlay.games[gameNumber].desc.host);
+		if (i > 0)
+			hostname = strdup(NetPlay.games[gameNumber].secondaryHosts[i - 1]);
+		else
+			hostname = strdup(NetPlay.games[gameNumber].desc.host);
 
-	hosts = resolveHost(hostname, gameserver_port);
-	if (hosts == NULL)
-	{
-		debug(LOG_ERROR, "Cannot resolve hostname \"%s\": %s", hostname, strSockError(getSockErr()));
-		return false;
-	}
+		hosts = resolveHost(hostname, gameserver_port);
+		if (hosts == NULL)
+		{
+			debug(LOG_ERROR, "Cannot resolve hostname \"%s\": %s", hostname, strSockError(getSockErr()));
+			continue;
+		}
 
-	if (tcp_socket != NULL)
-	{
-		socketClose(tcp_socket);
-	}
+		if (tcp_socket != NULL)
+		{
+			socketClose(tcp_socket);
+		}
 
-	for (cur = hosts; cur; cur = cur->ai_next)
-	{
-		tcp_socket = SocketOpen(cur, 15000);
-		if (tcp_socket)
-			break;
-	}
+		for (cur = hosts; cur; cur = cur->ai_next)
+		{
+			tcp_socket = SocketOpen(cur, 15000);
+			if (tcp_socket)
+				goto connect_succesfull;
+		}
 
- 	if (tcp_socket == NULL)
-	{
-		debug(LOG_ERROR, "Cannot connect to \"%s:%d\": %s", hostname, gameserver_port, strSockError(getSockErr()));
 		freeaddrinfo(hosts);
+	}
+
+	if (tcp_socket == NULL)
+	{
 		return false;
 	}
+
+connect_succesfull:
+
 	// client machines only need 1 socket set
 	socket_set = allocSocketSet(1);
 	if (socket_set == NULL)
