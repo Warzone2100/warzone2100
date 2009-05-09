@@ -181,7 +181,7 @@ class RequestHandler(SocketServer.ThreadingMixIn, SocketServer.StreamRequestHand
 
 	def sendStatusMessage(self, status, message):
 		logging.debug("(%s) Sending response status (%d) and message: %s" % (self.gameHost, status, message))
-		self.wfile.write(struct.pack('!II%ds' % len(message), status, len(message), message))
+		protocol.sendStatusMessage(self.gameHost, status, message, self.wfile)
 
 	def __init__(self, request, client_address, server):
 		self.request = request
@@ -247,7 +247,7 @@ class RequestHandler(SocketServer.ThreadingMixIn, SocketServer.StreamRequestHand
 				self.GameId.requestHandlers = [self]
 				self.GameId.hosts[0] = self.gameHost
 				logging.debug("(%s) Created game ID: %d" % (self.gameHost, self.GameId.gameId))
-				self.wfile.write(struct.pack('!I', self.GameId.gameId))
+				protocol.encodeGameID(self.GameId.gameId, self.wfile)
 			# Add a game.
 			elif netCommand == 'addg':
 				# The host is valid
@@ -284,10 +284,7 @@ class RequestHandler(SocketServer.ThreadingMixIn, SocketServer.StreamRequestHand
 							# Attach this request handler to the existing game
 							(self.g, self.GameId) = (self.GameId, self.g)
 							gamedb.addGame(self.g)
-							for i in xrange(len(self.g.hosts)):
-								if not self.g.hosts[i]:
-									self.g.hosts[i] = self.gameHost
-									break
+							self.g.hosts.append(self.gameHost)
 						except KeyError:
 							pass
 
@@ -323,10 +320,7 @@ class RequestHandler(SocketServer.ThreadingMixIn, SocketServer.StreamRequestHand
 
 	def finish(self):
 		if self.g:
-			for i in xrange(len(self.g.hosts)):
-				if self.g.hosts[i] == self.gameHost:
-					self.g.hosts[i] = None
-
+			self.g.hosts = filter(lambda s: s != self.gameHost, self.g.hosts)
 			gamedb.removeGame(self.g)
 		if self.GameId:
 			gamedb.removeGame(self.GameId)

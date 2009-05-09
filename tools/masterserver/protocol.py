@@ -135,6 +135,12 @@ class BaseProtocol(object):
 	def decodeMultiple(data):
 		pass
 
+	def encodeGameID(gameId):
+		pass
+
+	def sendStatusMessage(host, status, message):
+		pass
+
 	def check(self, game, host):
 		"""Check we can connect to the game's host."""
 		try:
@@ -172,7 +178,10 @@ class BinaryProtocol20(BaseProtocol):
 		return _encodeCString(game.description, self.name_length)
 
 	def _encodeHost(self, game, hostnum = 0):
-		return _encodeCString(game.hosts[hostnum], self.host_length)
+		if hostnum < len(game.hosts):
+			return _encodeCString(game.hosts[hostnum], self.host_length)
+		else:
+			return _encodeCString(str(), self.host_length)
 
 	def encodeSingle(self, game, out = str(), hideGameID = False):
 		with writeable(out) as write:
@@ -205,7 +214,7 @@ class BinaryProtocol20(BaseProtocol):
 
 	def decodeSingle(self, input, game = Game(), offset = None):
 		with readable(input) as read:
-			decData = {'hosts': [None, None, None]}
+			decData = {'hosts': [None]}
 
 			if   offset != None and read == None:
 				def unpack():
@@ -251,6 +260,12 @@ class BinaryProtocol20(BaseProtocol):
 					return
 				yield game
 
+	def encodeGameID(self, gameId, out = str()):
+		assert False, "Not supported by this protocol version"
+
+	def sendStatusMessage(self, host, status, message, out = str()):
+		assert False, "Not supported by this protocol version"
+
 class BinaryProtocol21(BinaryProtocol20):
 	lobbyPort = BaseProtocol.lobbyPort['2.1']
 
@@ -269,7 +284,7 @@ class BinaryProtocol21(BinaryProtocol20):
 
 	def decodeSingle(self, input, game = Game(), offset = None):
 		with readable(input) as read:
-			decData = {'hosts': [None, None, None]}
+			decData = {'hosts': [None]}
 
 			if   offset != None and read == None:
 				def unpack():
@@ -371,6 +386,7 @@ class BinaryProtocol22(BinaryProtocol21):
 
 			for strKey in ['name', 'multiplayer-version']:
 				decData[strKey] = decData[strKey].strip("\0")
+			decData['hosts'] = filter(bool, decData['hosts'])
 			for i in xrange(len(decData['hosts'])):
 				decData['hosts'][i] = decData['hosts'][i].strip("\0")
 
@@ -379,6 +395,24 @@ class BinaryProtocol22(BinaryProtocol21):
 
 			game.data.update(decData)
 			return game
+
+	def encodeGameID(self, gameId, out = str()):
+		with writeable(out) as write:
+			write.write(struct.pack('!I', gameId))
+
+			try:
+				return write.getvalue()
+			except AttributeError:
+				return out
+
+	def sendStatusMessage(self, host, status, message, out = str()):
+		with writeable(out) as write:
+			write.write(struct.pack('!II%ds' % len(message), status, len(message), message))
+
+			try:
+				return write.getvalue()
+			except AttributeError:
+				return out
 
 def Protocol(version = '2.2'):
 	if   parse_version('2.0') <= parse_version(version) < parse_version('2.1'):

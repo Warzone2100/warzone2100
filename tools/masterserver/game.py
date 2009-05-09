@@ -40,9 +40,8 @@ class Game(object):
 		self.data['name'] = unicode(v)
 
 	def _setHosts(self, v):
-		# Make sure that 'v' is a 3-sized tuple or list as well
-		v = list(v)
-		self.data['hosts'] = [v[0], v[1], v[2]]
+		# Make sure that 'v' is a list
+		self.data['hosts'] = list(v)
 
 	def _setMaxPlayers(self, v):
 		self.data['maxPlayers'] = int(v)
@@ -105,7 +104,7 @@ class Game(object):
 	                              fset = lambda self, v: self._setGameId(v))
 	def __init__(self):
 		self.data = {'name':                None,
-		             'hosts':               [None, None, None],
+		             'hosts':               [],
 		             'maxPlayers':          None,
 		             'currentPlayers':      None,
 		             'lobby-version':       None,
@@ -132,6 +131,6 @@ class Game(object):
 
 	def __str__(self):
 		if self.private == 1:
-		   return "(private) Game: %s %s %s %s" % ( self.hosts, self.description, self.maxPlayers, self.currentPlayers)
+		   return "(private) Game: %s %s %s %s" % (self.hosts, self.description, self.maxPlayers, self.currentPlayers)
 		else:
-		   return "Game: %s %s %s %s" % ( self.hosts, self.description, self.maxPlayers, self.currentPlayers)
+		   return "Game: %s %s %s %s" % (self.hosts, self.description, self.maxPlayers, self.currentPlayers)
