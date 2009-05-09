@@ -974,10 +974,12 @@ static Socket* socketListen(unsigned int port)
 		return NULL;
 	}
 
+#if defined(IPV6_V6ONLY)
 	if (setsockopt(conn->fd[SOCK_IPV6_LISTEN], IPPROTO_IPV6, IPV6_V6ONLY, &ipv6_v6only, sizeof(ipv6_v6only)) == SOCKET_ERROR)
 	{
 		debug(LOG_WARNING, "Failed to set IPv6 socket to stick to IPv6 alone (i.e. don't use IPv4 to IPv6 mapping), this may cause problems later on: %s", strSockError(getSockErr()));
 	}
+#endif
 
 	if (bind(conn->fd[SOCK_IPV4_LISTEN], (const struct sockaddr*)&addr4, sizeof(addr4)) == SOCKET_ERROR
 	 || bind(conn->fd[SOCK_IPV6_LISTEN], (const struct sockaddr*)&addr6, sizeof(addr6)) == SOCKET_ERROR
