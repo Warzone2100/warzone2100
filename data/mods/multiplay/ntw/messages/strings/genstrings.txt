@@ -1,0 +1,56 @@
+/* General Script Strings */
+
+/* Generic Briefing Stuff */
+TRANS_MSG1			_("Briefing Commences:")
+
+/* Early mission script stuff (may not need?) */
+BARBASE_MSG			_("Scavenger Outpost")
+POWRES_MSG			_("Power Resource")
+ART_MSG				_("Unknown Artifact")
+POWSURGE_MSG			_("Source of Power Surge")
+
+/* LZ stuff */
+LZ_MSG				_("Landing Zone")
+RUINS_MSG			_("Mission Target")
+RUINS_MSG2			_("Pre-Collapse Research Center")
+/* In flight brief TEXT */
+INFLIGHT_MSG1			_("En-route To Mission Site")
+END_MSG1			_("Mission Failed")
+WIN_MSG1			_("Mission Successful")
+
+/* more proximity text */
+LZ_MSG3				_("Enemy Landing Zone")
+ENEMYBASE_MSG			_("Enemy Base")
+MISSIONTARGET_MSG		_("Mission Target")
+
+/* incoming transmission */
+NP_MSG1				_("Incoming transmission")
+
+/* Incoming intelligence report. */
+INCOM_INT		_("Incoming intelligence report.")
+
+/* Additional Messages */
+ADD_MSG42			_("Nuclear Reactor")
+
+
+/*Custom AI Messages*/
+
+AI_ally_msg1			"Sucker!! You'll have to destroy me!"
+AI_ally_msg2			"Heh ... you wish..."
+AI_ally_msg3			"Stop dreaming and fight me!"
+AI_ally_msg4			"Afraid of me? .....buh!"
+Debug_msg_1			"     *****     Debug: Base defence active     *****     "
+Debug_msg_2			"     *****     Debug: Base defence OFF     *****     "
+Debug_msg_3			"     *****     Debug: Starting attack     *****     "
+Debug_msg_4			"     *****     Debug: Initializing AllOutAttack     *****     "
+Debug_msg_5			"     *****     Debug: Attack stopped     *****     "
+Debug_msg_6			"     *****     Debug: Adding some defenders to attackers    *****     "
+Debug_msg_7			"     *****     Debug: RETREATING: not enough units left    *****     "
+Debug_msg_8			"     *****     Debug: ATTACK: reached enemy base    *****     "
+Debug_msg_9			"     *****     Debug: DROP: Initializing drop    *****     "
+Debug_msg_10			"     *****     Debug: STUCK: Running a bit    *****     "
+Debug_msg_11			"     *****     Debug: STUCK: Removing obstacles    *****     "
+Debug_msg_12			"     *****     Debug: ALLY: Helping Ally's base    *****     "
+Debug_msg_13			"     *****     Debug: ALLY: Ally's base is safe. Returning.    *****     "
+Debug_msg_14			"     *****     Debug: BASE: Base attacked. Defending.    *****     "
+Debug_msg_15			"     *****     Debug: BASE: Agressive defence.    *****     "
