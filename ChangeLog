@@ -1,4 +1,4 @@
-2009-05-01: Version 2.2_beta3
+2009-05-10: Version 2.2_rc1
  * General:
    * New: Windows installer has option to download and install videos (enabled by default). (r7328)
    * Change: Windows installer no longer has any license agreements, since they are not EULAs. (r7328)
@@ -6,6 +6,8 @@
    * Fix: Don't count cheated games as multiplayer wins and losses. (r7228)
    * Fix: Windows installer doesn't redownload the music mod if it's already installed. (r7328)
    * Fix: Let's not underflow a unsigned variable. (r7335)
+   * Change: Remove 'grim' mod, since it is broken for 2.2 (r7385, r7386, ticket:463)
+   * Fix: NTW Mod 1.8.6b for 2.2 by Delphino (r7368, r7369)
  * Gameplay:
    * New: Repair facilities will repair nearby units if they don't have anything else to do. (r7234, patch #413)
    * Change: Multi-turret units have been removed due to graphics bugs. (r7274)
@@ -14,9 +16,10 @@
    * Fix: Pretty much every known bug involving repair facilities have been fixed. (r7234)
    * Fix: Trucks will not help enemies build structures. (r7234, patch #413)
    * Fix: Multi-turret units will always shoot with both weapons. (r7261)
-   * Fix: Target prediction works correctly again. (r7279)
+   * Fix: Target prediction works correctly again. (r7279, r7383, ticket:374)
  * GUI:
    * Fix: Interface no longer disappears for a few seconds when someone changes team/color/location/readiness in multiplayer staging area. (r7259)
+   * Change: Add new icons for when player leaves or gets disconnected.  Icons by Zarel.  (r7373, ticket:274)
  * Graphics:
    * Change: Do not use texture compression for interface textures. (r7348)
    * Change: Scale down textures used for 3D when they exceed the size specified with the textureSize option (r7347)

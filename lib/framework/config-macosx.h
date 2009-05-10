@@ -258,19 +258,19 @@
 #define PACKAGE "warzone2100"
 
 /* Define to the address where bug reports for this package should be sent. */
-#define PACKAGE_BUGREPORT "http://wz2100.net/"
+#define PACKAGE_BUGREPORT "http://developer.wz2100.net/newticket"
 
 /* Define to the full name of this package. */
 #define PACKAGE_NAME "Warzone 2100"
 
 /* Define to the full name and version of this package. */
-#define PACKAGE_STRING "Warzone 2100 2.2 beta 2"
+#define PACKAGE_STRING "Warzone 2100 2.2 rc 1"
 
 /* Define to the one symbol short name of this package. */
 #define PACKAGE_TARNAME "warzone2100"
 
 /* Define to the version of this package. */
-#define PACKAGE_VERSION "2.2_beta2"
+#define PACKAGE_VERSION "2.2_rc1"
 
 /* Define if <inttypes.h> exists and defines unusable PRI* macros. */
 /* #undef PRI_MACROS_BROKEN */
