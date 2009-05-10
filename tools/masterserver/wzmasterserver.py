@@ -291,7 +291,7 @@ class RequestHandler(SocketServer.ThreadingMixIn, SocketServer.StreamRequestHand
 					logging.debug("(%s) Updated game: %s" % (self.gameHost, self.g))
 					#set gamehost
 					if not len(self.g.hosts) or not self.g.hosts[0]:
-						self.g.hosts[0] = self.gameHost
+						self.g.hosts.append(self.gameHost)
 
 					if not protocol.check(self.g, self.gameHost):
 						logging.debug("(%s) Removing unreachable game" % self.gameHost)
