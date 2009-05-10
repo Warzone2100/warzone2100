@@ -464,7 +464,6 @@ void draw3DScene( void )
 		iV_DrawText(DROIDDOING, 0, pie_GetVideoBufferHeight()- height);
 	}
 
-//	debug(LOG_ERROR,"%d NET_PlayerConnectionStatus",NET_PlayerConnectionStatus);
 	if (NET_PlayerConnectionStatus)
 	{
 		static W_FORMINIT		sFormInit;
@@ -479,10 +478,10 @@ void draw3DScene( void )
 			sFormInit.formID = 0;
 			sFormInit.id = NETWORK_FORM_ID;
 			sFormInit.style = WFORM_PLAIN;
-			sFormInit.x = RET_X;
-			sFormInit.y = (SWORD)RET_Y-40;
-			sFormInit.width = 31;
-			sFormInit.height = 	21;
+			sFormInit.x = (SDWORD) (pie_GetVideoBufferWidth() - 52) ;
+			sFormInit.y = 80;
+			sFormInit.width = 36;
+			sFormInit.height = 	24;
 			sFormInit.pDisplay = NetworkDisplayPlainForm;
 			if (!widgAddForm(psWScreen, &sFormInit))
 			{
@@ -495,8 +494,8 @@ void draw3DScene( void )
 			memset(&sButInit, 0, sizeof(W_BUTINIT));
 			sButInit.formID = NETWORK_FORM_ID;
 			sButInit.id = NETWORK_BUT_ID;
-			sButInit.width = 31;
-			sButInit.height = 21;
+			sButInit.width = 36;
+			sButInit.height = 24;
 			sButInit.FontID = font_regular;
 
 			//add button
@@ -506,7 +505,14 @@ void draw3DScene( void )
 			sButInit.pTip = NET_PlayerConnectionStatus == 1 ? _("Player left"):_("Player dropped");
 			sButInit.pDisplay = NetworkDisplayImage;
 			// Note we would set the image to be different based on which issue it is.
-			sButInit.UserData = PACKDWORD_TRI(1, 316, 311);	//IMAGE_MULTI_POW_HI,IMAGE_MULTI_POW
+			if (NET_PlayerConnectionStatus == 1)
+			{
+				sButInit.UserData = PACKDWORD_TRI(1, IMAGE_PLAYER_LEFT_HI, IMAGE_PLAYER_LEFT_LO);
+			}
+			else
+			{
+				sButInit.UserData = PACKDWORD_TRI(1, IMAGE_DISCONNECT_LO, IMAGE_DISCONNECT_HI);
+			}
 
 			if (!widgAddButton(psWScreen, &sButInit))
 			{
