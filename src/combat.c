@@ -350,7 +350,22 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 			}
 			else
 			{
-				flightTime = sqrt((double)dist) / 30;  /* Purely a guess, but surprisingly effective */
+				/* Copied out of proj_SendProjectile.  Simplified slightly. */
+				SDWORD dz = psTarget->pos.z - psAttacker->pos.z;
+				SDWORD iRadSq = distSquared + dz*dz;
+				SDWORD iVelSq = psStats->flightSpeed * psStats->flightSpeed;
+				double fA = ACC_GRAVITY * (double)iRadSq / (2.0 * iVelSq);
+				double fC = 4.0 * fA * (dz + fA);
+				double fS = (double)iRadSq - fC;
+
+				if (fS < 0.0)
+				{
+					flightTime = sqrt((double)dist) / 30;  /* Purely a guess, but surprisingly effective */
+				}
+				else
+				{
+					flightTime = (double)dist / (double)psStats->flightSpeed;
+				}
 			}
 
 			if (psTarget->lastHitWeapon == WSC_EMP)

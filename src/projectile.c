@@ -61,7 +61,6 @@
 #include "mapgrid.h"
 
 #define	PROJ_MAX_PITCH			30
-#define	ACC_GRAVITY				1000
 #define	DIRECT_PROJ_SPEED		500
 #define VTOL_HITBOX_MODIFICATOR 100
 
@@ -918,6 +917,11 @@ static void proj_InFlightIndirectFunc(PROJECTILE *psProj)
 				psProj->startY + (distanceRatio * move.y),
 				psProj->srcHeight + move.z
 			};
+			if (nextPos.z > UWORD_MAX / 2)  /* Assume it wrapped around */
+			{
+				/* XXX FIXME Unfortunately, this usually occurs because we skipped past our target. */
+				nextPos.z = 0;
+			}
 
 			/* impact if about to go off map else update coordinates */
 			if (!worldOnMap(nextPos.x, nextPos.y))
