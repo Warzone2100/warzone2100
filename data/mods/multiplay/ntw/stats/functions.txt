@@ -1,26 +1,26 @@
-Production,FacProd1,LIGHT,5
-Production,FacMod1,LIGHT,8
-Production,BaBaFacProd,LIGHT,2
-Research Upgrade,Struc-Research-Upgrade01,30
-Research Upgrade,Struc-Research-Upgrade02,60
-Research Upgrade,Struc-Research-Upgrade03,90
-Research Upgrade,Struc-Research-Upgrade04,120
-Research Upgrade,Struc-Research-Upgrade05,150
-Research Upgrade,Struc-Research-Upgrade06,180
-Research Upgrade,Struc-Research-Upgrade07,210
-Research Upgrade,Struc-Research-Upgrade08,240
-Research Upgrade,Struc-Research-Upgrade09,270
-Repair Droid,RepairFacilityFunc,40
+Production,FacProd1,LIGHT,7
+Production,FacMod1,LIGHT,10
+Production,BaBaFacProd,LIGHT,10
+Research Upgrade,Struc-Research-Upgrade01,40
+Research Upgrade,Struc-Research-Upgrade02,70
+Research Upgrade,Struc-Research-Upgrade03,100
+Research Upgrade,Struc-Research-Upgrade04,140
+Research Upgrade,Struc-Research-Upgrade05,170
+Research Upgrade,Struc-Research-Upgrade06,200
+Research Upgrade,Struc-Research-Upgrade07,240
+Research Upgrade,Struc-Research-Upgrade08,270
+Research Upgrade,Struc-Research-Upgrade09,300
+Repair Droid,RepairFacilityFunc,50
 Power Generator,PowGen1,0,55,0,0,0,0
-Power Generator,BaBaPowGen,400,50,0,0,0,0
-Power Generator,PowerModule,0,28,0,0,0,0
+Power Generator,BaBaPowGen,400,55,0,0,0,0
+Power Generator,PowerModule,0,35,0,0,0,0
 Resource,Resource,12500
 Production Upgrade,Struc-Factory-Upgrade01,1,0,0,10
-Production Upgrade,Struc-Factory-Upgrade02,1,0,0,20
-Production Upgrade,Struc-Factory-Upgrade03,1,0,0,30
-Production Upgrade,Struc-Factory-Upgrade04,1,0,0,60
-Production Upgrade,Struc-Factory-Upgrade05,1,0,0,90
-Production Upgrade,Struc-Factory-Upgrade06,1,0,0,120
+Production Upgrade,Struc-Factory-Upgrade02,1,0,0,30
+Production Upgrade,Struc-Factory-Upgrade03,1,0,0,50
+Production Upgrade,Struc-Factory-Upgrade04,1,0,0,80
+Production Upgrade,Struc-Factory-Upgrade05,1,0,0,110
+Production Upgrade,Struc-Factory-Upgrade06,1,0,0,140
 Production Upgrade,Struc-Factory-Cyborg-Upgrade01,0,1,0,60
 Production Upgrade,Struc-Factory-Cyborg-Upgrade02,0,1,0,90
 Production Upgrade,Struc-Factory-Cyborg-Upgrade03,0,1,0,120
@@ -33,9 +33,9 @@ Production Upgrade,Struc-VTOLFactory-Upgrade03,0,0,1,90
 Production Upgrade,Struc-VTOLFactory-Upgrade04,0,0,1,120
 Production Upgrade,Struc-VTOLFactory-Upgrade05,0,0,1,150
 Production Upgrade,Struc-VTOLFactory-Upgrade06,0,0,1,180
-Production Upgrade,Struc-Factory-Upgrade07,1,0,0,170
-Production Upgrade,Struc-Factory-Upgrade08,1,0,0,220
-Production Upgrade,Struc-Factory-Upgrade09,1,0,0,270
+Production Upgrade,Struc-Factory-Upgrade07,1,0,0,185
+Production Upgrade,Struc-Factory-Upgrade08,1,0,0,230
+Production Upgrade,Struc-Factory-Upgrade09,1,0,0,275
 Production Upgrade,Struc-Factory-Cyborg-Upgrade07,0,1,0,240
 Production Upgrade,Struc-Factory-Cyborg-Upgrade08,0,1,0,270
 Production Upgrade,Struc-Factory-Cyborg-Upgrade09,0,1,0,300
@@ -199,20 +199,20 @@ Structure Upgrade,Struc-Materials08,270,240,0
 Structure Upgrade,Struc-Materials09,305,270,0
 Structure Upgrade,Struc-Materials10,340,300,0
 Structure Upgrade,Sys-Resistance-Upgrade0,0,0,10
-WallDefence Upgrade,Defense-WallUpgrade01,5,30
-WallDefence Upgrade,Defense-WallUpgrade02,40,60
-WallDefence Upgrade,Defense-WallUpgrade03,75,90
-WallDefence Upgrade,Defense-WallUpgrade04,105,120
-WallDefence Upgrade,Defense-WallUpgrade05,140,150
-WallDefence Upgrade,Defense-WallUpgrade06,175,180
-WallDefence Upgrade,Defense-WallUpgrade07,205,210
-WallDefence Upgrade,Defense-WallUpgrade08,240,240
-WallDefence Upgrade,Defense-WallUpgrade09,275,270
-WallDefence Upgrade,Defense-WallUpgrade10,315,310
-WallDefence Upgrade,Defense-WallUpgrade11,360,350
-WallDefence Upgrade,Defense-WallUpgrade12,405,390
-Research,Research Facility,14
-Research,Research Module,12
+WallDefence Upgrade,Defense-WallUpgrade01,5,20
+WallDefence Upgrade,Defense-WallUpgrade02,35,40
+WallDefence Upgrade,Defense-WallUpgrade03,65,60
+WallDefence Upgrade,Defense-WallUpgrade04,100,100
+WallDefence Upgrade,Defense-WallUpgrade05,130,130
+WallDefence Upgrade,Defense-WallUpgrade06,160,160
+WallDefence Upgrade,Defense-WallUpgrade07,200,200
+WallDefence Upgrade,Defense-WallUpgrade08,230,230
+WallDefence Upgrade,Defense-WallUpgrade09,260,260
+WallDefence Upgrade,Defense-WallUpgrade10,300,300
+WallDefence Upgrade,Defense-WallUpgrade11,350,340
+WallDefence Upgrade,Defense-WallUpgrade12,400,380
+Research,Research Facility,20
+Research,Research Module,10
 Repair Upgrade,RepairFacility-Upgrade01,10
 Repair Upgrade,RepairFacility-Upgrade02,20
 Repair Upgrade,RepairFacility-Upgrade03,30
@@ -297,5 +297,5 @@ ReArm Upgrade,Struc-VTOLPad-Upgrade03,90
 ReArm Upgrade,Struc-VTOLPad-Upgrade04,120
 ReArm Upgrade,Struc-VTOLPad-Upgrade05,150
 ReArm Upgrade,Struc-VTOLPad-Upgrade06,180
-WallDefence Upgrade,Defense-WallUpgrade13,450,430
+WallDefence Upgrade,Defense-WallUpgrade13,450,420
 Production Upgrade,Struc-Factory-Cyborg-Upgrade-extra,0,1,0,250

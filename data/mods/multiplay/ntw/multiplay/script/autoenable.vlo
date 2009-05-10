@@ -10,7 +10,7 @@ run
 	player6			INT					6
 	player7			INT					7 
 
-  	numStrux  INT  19
+  	numStrux  INT  17
  	Strux[0]  STRUCTURESTAT  "A0BaBaFlameTower"
   	Strux[1]  STRUCTURESTAT  "A0BaBaGunTower"
   	Strux[2]  STRUCTURESTAT  "A0BaBaRocketPit"
@@ -28,16 +28,12 @@ run
   	Strux[14]  STRUCTURESTAT  "A0CannonTower"
   	Strux[15]  STRUCTURESTAT  "A0BaBaMortarPit"
   	Strux[16]  STRUCTURESTAT  "A0TankTrap"
-	Strux[17]	STRUCTURESTAT  	"StakeMark"
-	Strux[18]	STRUCTURESTAT  	"StakeMark_h"
 
-
-	numTemplates	INT		5
+	numTemplates	INT		4
 	tmpl[0]		RESEARCHSTAT  	"R-Sys-Engineering01"
 	tmpl[1]		RESEARCHSTAT  	"R-Cyb-MineSwp"
 	tmpl[2]		RESEARCHSTAT  	"R-Cyborg-Sys-ComEng"
 	tmpl[3]		RESEARCHSTAT  	"R-Struc-Factory-Cyborg-Upgrade-extra"
-	tmpl[4]		RESEARCHSTAT  	"R-StakeMark_h"
 
 	numCompo	INT		6
 	compo[0]	BODY		"B4body-sml-trike01"
