@@ -653,6 +653,15 @@ BOOL scrOrderDroidStatsLoc(void)
 	// limit has been reached.
 	if (!IsPlayerStructureLimitReached(psDroid->player))
 	{
+		// HACK: FIXME: Looks like a script error in the player*.slo files
+		// buildOnExactLocation() which references previously destroyed buildings from
+		// _stat = rebuildStructStat[_count]  causes this.
+		if (strcmp(psStats->pName, "A0ADemolishStructure") == 0)
+		{
+			// I don't feel like spamming a ASSERT here, we *know* it is a issue. 
+			return true;
+		}
+
 		orderDroidStatsLoc(psDroid, order, psStats, (UDWORD)x,(UDWORD)y);
 	}
 

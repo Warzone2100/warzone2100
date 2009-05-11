@@ -55,6 +55,9 @@
 #define DEFAULTCDVOL	60
 #define DEFAULTSCROLL	1000
 
+#define MASTERSERVERPORT	9990
+#define GAMESERVERPORT		2100
+
 void	setSinglePlayerFrameLimit		(SDWORD limit);
 SDWORD	getSinglePlayerFrameLimit		(void);
 void	setDefaultFrameRateLimit		(void);
@@ -265,6 +268,10 @@ BOOL loadConfig(void)
 	if (getWarzoneKeyString("masterserver_name", sBuf))
 	{
 		NETsetMasterserverName(sBuf);
+		if (strcasecmp(sBuf, "lobby.wz2100.net") != 0)
+		{
+			debug(LOG_ERROR, "We are not using lobby.wz2100.net, for the master server name, we are using %s instead?", sBuf);
+		}
 	}
 	else
 	{
@@ -315,20 +322,28 @@ BOOL loadConfig(void)
 	if (getWarzoneKeyNumeric("masterserver_port", &val))
 	{
 		NETsetMasterserverPort(val);
+		if (val != MASTERSERVERPORT)
+		{
+			debug(LOG_ERROR, "We are not using port %d (which is the default Master server port), we are using %d?", MASTERSERVERPORT, val);
+		}
 	}
 	else
 	{
-		NETsetMasterserverPort(9990);
+		NETsetMasterserverPort(MASTERSERVERPORT);
 		setWarzoneKeyNumeric("masterserver_port", 9990);
 	}
 
 	if (getWarzoneKeyNumeric("gameserver_port", &val))
 	{
 		NETsetGameserverPort(val);
+		if (val != GAMESERVERPORT)
+		{
+			debug(LOG_ERROR, "We are not using port %d (which is the default Game server port), we are using %d?", GAMESERVERPORT, val);
+		}
 	}
 	else
 	{
-		NETsetGameserverPort(2100);
+		NETsetGameserverPort(GAMESERVERPORT);
 		setWarzoneKeyNumeric("gameserver_port", 2100);
 	}
 
