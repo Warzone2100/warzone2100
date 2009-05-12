@@ -47,6 +47,9 @@ extern BOOL		ClosingMultiMenu;
 
 extern BOOL		DebugMenuUp;
 
+extern UDWORD		current_numplayers;
+extern UDWORD		current_tech;
+
 #define MULTIMENU				10600
 #define MULTIMENU_FORM			MULTIMENU
 
