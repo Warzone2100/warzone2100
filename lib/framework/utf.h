@@ -30,6 +30,11 @@
 
 #include "types.h"
 
+/**
+ * The maximum size (in octets) a single UTF-8 encoded codepoint can use.
+ */
+#define MAX_UTF8_LEN 8
+
 /** Used to store a UTF-32 character in
  */
 typedef uint32_t utf_32_char;
@@ -60,6 +65,14 @@ utf_32_char UTF16DecodeChar(const utf_16_char *utf16_char, const utf_16_char **n
  *  \return The Unicode character encoded as UTF-32 with native endianness.
  */
 utf_32_char UTF8DecodeChar(const char *utf8_char, const char **next_char);
+
+/** Encode a single Unicode character as UTF-8.
+ *  \param[out] utf8_char Points to a character buffer at least \c MAX_UTF8_LEN octects large. Will be used to store a UTF-8 encoded version of \c.
+ *  \param      c         The Unicode character to encode.
+ *
+ *  \return \c utf8_char on success, NULL otherwise.
+ */
+char* UTF8EncodeChar(char utf8_char[MAX_UTF8_LEN], utf_32_char c);
 
 /** Determines the amount of unicode codepoints in a UTF-8 encoded string
  *  \param utf8_string the UTF-8 encoded string to count
