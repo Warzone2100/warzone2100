@@ -59,9 +59,8 @@ typedef struct __json_element
 %union
 {
 	char*                   sval;
-	int                     ival;
+	long int                ival;
 	double                  fval;
-	bool                    bval;
 	uint8_t                 u8val;
 	uint32_t                u32val;
 	json_value*             jval;
@@ -86,7 +85,6 @@ typedef struct __json_element
 %token          TTRUE
 %token          TFALSE
 /* Boolean rules */
-%type <bval>    bool_rule
 %type <jval>    json_bool
 
 /* NULL tokens */
@@ -197,50 +195,26 @@ json_value:             json_string
 
 json_array:             '[' ']'
 				{
-					$$ = malloc(sizeof(*$$));
+					$$ = createJsonArray(0);
 					if ($$ == NULL)
-					{
-						debug(LOG_ERROR, "Out of memory!");
-						abort();
 						YYABORT;
-					}
-
-					$$->type = JSON_ARRAY;
-					$$->value.array.size = 0;
-#ifdef DEBUG
-					$$->value.array.a    = NULL;
-#endif
 				}
                       | '[' json_array_elements ']'
 				{
-					size_t i;
+					size_t i, count;
 					json_element* cur;
 
-					$$ = malloc(sizeof(*$$));
-					if ($$ == NULL)
-					{
-						debug(LOG_ERROR, "Out of memory!");
-						abort();
-						YYABORT;
-					}
-
-					$$->type = JSON_ARRAY;
-
 					// Determine the amount of elements
-					$$->value.array.size = 0;
+					count = 0;
 					for (cur = $2; cur != NULL; cur = cur->next)
 					{
-						$$->value.array.size += 1;
+						count += 1;
 					}
 
 					// Allocate memory for the elements
-					$$->value.array.a = malloc(sizeof($$->value.array.a[0]) * $$->value.array.size);
-					if ($$->value.array.a == NULL)
-					{
-						debug(LOG_ERROR, "Out of memory!");
-						abort();
+					$$ = createJsonArray(count);
+					if ($$ == NULL)
 						YYABORT;
-					}
 
 					// Copy all elements into the array and delete the originals
 					cur = $2;
@@ -288,62 +262,37 @@ json_array_elements:    json_value
 
 json_number:            INTEGER
 				{
-					$$ = malloc(sizeof(*$$));
+					$$ = createJsonInteger($1);
 					if ($$ == NULL)
-					{
-						debug(LOG_ERROR, "Out of memory!");
-						abort();
 						YYABORT;
-					}
-
-					$$->type = JSON_NUMBER_INT;
-					$$->value.num_int = $1;
 				}
                       | FLOAT
 				{
-					$$ = malloc(sizeof(*$$));
+					$$ = createJsonFloat($1);
 					if ($$ == NULL)
-					{
-						debug(LOG_ERROR, "Out of memory!");
-						abort();
 						YYABORT;
-					}
-
-					$$->type = JSON_NUMBER_FLOAT;
-					$$->value.num_float = $1;
 				}
                         ;
 
-json_bool:              bool_rule
+json_bool:              TTRUE
 				{
-					$$ = malloc(sizeof(*$$));
+					$$ = createJsonBool(true);
 					if ($$ == NULL)
-					{
-						debug(LOG_ERROR, "Out of memory!");
-						abort();
 						YYABORT;
-					}
-
-					$$->type = JSON_BOOL;
-					$$->value.boolean = $1;
 				}
-                        ;
-
-bool_rule:              TTRUE
-				{ $$ = true;  }
                       | TFALSE
-				{ $$ = false; }
+				{
+					$$ = createJsonBool(false);
+					if ($$ == NULL)
+						YYABORT;
+				}
                         ;
 
 json_null:              TNULL
 				{
 					$$ = malloc(sizeof(*$$));
 					if ($$ == NULL)
-					{
-						debug(LOG_ERROR, "Out of memory!");
-						abort();
 						YYABORT;
-					}
 
 					$$->type = JSON_NULL;
 				}
@@ -353,11 +302,7 @@ json_string:            STRING
 				{
 					$$ = createJsonString($1);
 					if ($$ == NULL)
-					{
-						debug(LOG_ERROR, "Out of memory!");
-						abort();
 						YYABORT;
-					}
 
 					// Clean up our string parameter (as we own it)
 					free($1);
