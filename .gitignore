@@ -45,6 +45,7 @@ win32/release/*
 # Generated executables:
 /build_tools/autorevision/autorevision
 /src/warzone2100
+/tests/json
 /tests/maptest
 
 # Autotool files:

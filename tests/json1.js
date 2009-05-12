@@ -1,0 +1,61 @@
+/*
+	This file is part of Warzone 2100.
+	Copyright (C) 2008-2009  Giel van Schijndel
+	Copyright (C) 2009       Warzone Resurrection Project
+
+	Warzone 2100 is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation; either version 2 of the License, or
+	(at your option) any later version.
+
+	Warzone 2100 is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with Warzone 2100; if not, write to the Free Software
+	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
+*/
+
+{"wid\nget": {
+    "debug": "on",
+    "window": {
+        "title": "Sample Konfabulator Widget",
+        "name": "main_window",
+        "width": 500,
+        "height": 500,
+        "visible": true
+    },
+    "image": {
+        "src": "Images/Sun.png",
+        "name": "sun1",
+        "hOffset": 250,
+        "vOffset": 250,
+        "alignment": "center",
+        "visible": false
+    },
+    "text": {
+        "data": null,
+        "size": 36,
+        "style": "bold",
+        "name": "text1",
+        "hOffset": 250,
+        "vOffset": 100,
+        "alignment": "center",
+        "onMouseUp": "sun1.opacity = (sun1.opacity / 100) * 90;",
+        "visible": true
+    },
+    "menu": {
+      "id": "file",
+      "value": "File",
+      "popup": {
+        "menuitem": [
+          {"value": "New", "onclick": "CreateNewDoc()"},
+          {"value": "Open", "onclick": "OpenDoc()"},
+          {"value": "Save", "onclick": "SaveDoc()"},
+          {"value": "Close", "onclick": "CloseDoc()"}
+        ]
+      }
+    }
+}}
