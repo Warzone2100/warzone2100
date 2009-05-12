@@ -25,11 +25,9 @@
 extern "C" {
 #endif
 
-#include "frame.h"
-#include "debug.h"
+#include "wzglobal.h"
 #include <string.h>
 #include <stddef.h>
-#include <stdlib.h>
 #include <assert.h>
 
 
@@ -91,36 +89,6 @@ static inline size_t strlcpy(char *dest, const char *src, size_t size)
 	return strlen(src);
 }
 #endif // HAVE_VALID_STRLCPY
-
-/**
- * Concatenates two strings, resizing the first one to make sure enough memory
- * is available.
- * \param first  The first string with the first part of the string. Should be
- *               NULL or a valid pointer as returned by malloc.
- * \param second The string to append to the first (if \c first is NULL \c
- *               second's contents will be come the returned string).
- * \return The return value will reside in memory of its own, containing a
- *         concatenation of \c first and \c second. On error NULL is returned
- *         (indicates out of memory).
- * \note The memory that \c first points to will not be valid anymore when this
- *       function is successfull.
- */
-static inline char* strrealloccat(char* first, const char* second)
-{
-	const size_t len1 = first ? strlen(first) : 0;
-
-	char* const str = (char*)realloc(first, len1 + strlen(second) + 1);
-	if (str == NULL)
-	{
-		debug(LOG_ERROR, "Out of memory!");
-		abort();
-		return NULL;
-	}
-
-	strcpy(&str[len1], second);
-
-	return str;
-}
 
 #ifndef HAVE_VALID_STRLCAT
 # ifdef HAVE_SYSTEM_STRLCAT

@@ -9,9 +9,6 @@ AM_CFLAGS = $(WZ_CFLAGS)
 AM_LFLAGS = $(FLEX_FLAGS)
 AM_YFLAGS = -d
 BUILT_SOURCES = \
-	json_lexer.lex.c \
-	json_parser.tab.c \
-	json_parser.tab.h \
 	resource_lexer.lex.c \
 	resource_parser.tab.c \
 	resource_parser.tab.h \
@@ -20,11 +17,15 @@ BUILT_SOURCES = \
 	strres_parser.tab.h
 
 CLEANFILES = \
-	$(BUILT_SOURCES)
+	resource_lexer.lex.c \
+	resource_parser.tab.c \
+	resource_parser.tab.h \
+	strres_lexer.lex.c \
+	strres_parser.tab.c \
+	strres_parser.tab.h
 
 noinst_LIBRARIES = libframework.a
 noinst_HEADERS = \
-	json_parser.tab.h \
 	strres_parser.tab.h \
 	resource_parser.tab.h \
 	configfile.h \
@@ -37,7 +38,6 @@ noinst_HEADERS = \
 	frameresource.h \
 	i18n.h \
 	input.h \
-	json_value.h \
 	lexer_input.h \
 	listmacs.h \
 	math_ext.h \
@@ -62,8 +62,6 @@ noinst_HEADERS = \
 	wzglobal.h
 
 libframework_a_SOURCES = \
-	json_lexer.lex.c \
-	json_parser.tab.c \
 	resource_lexer.lex.c \
 	resource_parser.tab.c \
 	strres_lexer.lex.c \
@@ -77,7 +75,6 @@ libframework_a_SOURCES = \
 	frameresource.c \
 	i18n.c \
 	input.c \
-	json_value.c \
 	lexer_input.c \
 	physfs_vfs.c \
 	SDL_framerate.c \
