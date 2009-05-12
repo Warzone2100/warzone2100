@@ -268,7 +268,6 @@ class RequestHandler(SocketServer.ThreadingMixIn, SocketServer.StreamRequestHand
 					hosts = self.g.hosts
 					newGameData = protocol.decodeSingle(self.rfile, self.g)
 					if not newGameData:
-						logging.debug("(%s) Removing aborted game" % self.gameHost)
 						return
 					self.g.hosts = hosts
 
@@ -321,6 +320,8 @@ class RequestHandler(SocketServer.ThreadingMixIn, SocketServer.StreamRequestHand
 	def finish(self):
 		if self.g:
 			self.g.hosts = filter(lambda s: s != self.gameHost, self.g.hosts)
+			if not filter(None, self.g.hosts):
+				logging.debug("(%s) Removing aborted game" % self.gameHost)
 			gamedb.removeGame(self.g)
 		if self.GameId:
 			gamedb.removeGame(self.GameId)
