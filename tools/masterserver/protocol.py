@@ -187,8 +187,8 @@ class BinaryProtocol20(BaseProtocol):
 		with writeable(out) as write:
 			# Workaround the fact that the 2.0.x versions don't
 			# perform endian swapping
-			maxPlayers     = _swap_endianness(maxPlayers)
-			currentPlayers = _swap_endianness(currentPlayers)
+			maxPlayers     = _swap_endianness(game.maxPlayers)
+			currentPlayers = _swap_endianness(game.currentPlayers)
 
 			write.write(self.gameFormat.pack(
 				self._encodeName(game),
