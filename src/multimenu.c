@@ -69,8 +69,8 @@ BOOL	MultiMenuUp			= false;
 BOOL	ClosingMultiMenu	= false;
 BOOL	DebugMenuUp		= false;
 static UDWORD	context = 0;
-static UDWORD	current_tech = 0;
-static UDWORD	current_numplayers = 0;
+UDWORD	current_tech = 1;
+UDWORD	current_numplayers = 4;
 
 #define DEBUGMENU_FORM_W		200
 #define DEBUGMENU_FORM_H		300
