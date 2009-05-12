@@ -2084,7 +2084,7 @@ static void processMultiopWidgets(UDWORD id)
 			widgDelete(psWScreen,FRONTEND_SIDETEXT2);					// del text too,
 
 			debug(LOG_WZ, "processMultiopWidgets[MULTIOP_MAP_ICON]: %s.wrf", MultiCustomMapsPath);
-			addMultiRequest(MultiCustomMapsPath, ".wrf", MULTIOP_MAP, 1, 2);
+			addMultiRequest(MultiCustomMapsPath, ".wrf", MULTIOP_MAP, current_tech, current_numplayers);
 			break;
 
 		case MULTIOP_CAMPAIGN:									// turn on campaign game
