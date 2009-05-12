@@ -83,6 +83,19 @@ void freeJsonValue(json_value* v)
 	free(v);
 }
 
+static json_value* allocJsonVal(void)
+{
+	json_value* const jsonVal = malloc(sizeof(*jsonVal));
+	if (jsonVal == NULL)
+	{
+		debug(LOG_ERROR, "Out of memory!");
+		abort();
+		return NULL;
+	}
+
+	return jsonVal;
+}
+
 json_value* createJsonString(const char* s)
 {
 	json_value* v = malloc(sizeof(*v) + strlen(s) + 1);
@@ -115,6 +128,82 @@ json_value_pair* createJsonValuePair(const char* name, json_value* value)
 	p->value = value;
 
 	return p;
+}
+
+json_value* createJsonArray(size_t size)
+{
+	json_value* const jsonArray = allocJsonVal();
+	if (jsonArray == NULL)
+		return NULL;
+
+	jsonArray->type = JSON_ARRAY;
+	jsonArray->value.array.size = size;
+	if (size == 0)
+	{
+#ifdef DEBUG
+		jsonArray->value.array.a = NULL;
+#endif
+		return jsonArray;
+	}
+
+	// Allocate memory for the elements
+	jsonArray->value.array.a = calloc(size, sizeof(*jsonArray->value.array.a[0]));
+	if (jsonArray->value.array.a == NULL)
+	{
+		debug(LOG_ERROR, "Out of memory!");
+		abort();
+		free(jsonArray);
+		return NULL;
+	}
+
+	return jsonArray;
+}
+
+json_value* createJsonInteger(long int val)
+{
+	json_value* const jsonVal = allocJsonVal();
+	if (jsonVal == NULL)
+		return NULL;
+
+	jsonVal->type = JSON_NUMBER_INT;
+	jsonVal->value.num_int = val;
+
+	return jsonVal;
+}
+
+json_value* createJsonFloat(double val)
+{
+	json_value* const jsonVal = allocJsonVal();
+	if (jsonVal == NULL)
+		return NULL;
+
+	jsonVal->type = JSON_NUMBER_INT;
+	jsonVal->value.num_float = val;
+
+	return jsonVal;
+}
+
+json_value* createJsonBool(bool val)
+{
+	json_value* const jsonVal = allocJsonVal();
+	if (jsonVal == NULL)
+		return NULL;
+
+	jsonVal->type = JSON_BOOL;
+	jsonVal->value.boolean = val;
+
+	return jsonVal;
+}
+
+json_value* createJsonNull()
+{
+	json_value* const jsonVal = allocJsonVal();
+	if (jsonVal == NULL)
+		return NULL;
+
+	jsonVal->type = JSON_NULL;
+
+	return jsonVal;
 }
 
 static char* serializeJsonString(char* out, const char* s)

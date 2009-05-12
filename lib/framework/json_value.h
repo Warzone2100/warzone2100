@@ -63,6 +63,11 @@ extern void freeJsonValue(json_value* v);
 
 extern json_value* createJsonString(const char* s);
 extern json_value_pair* createJsonValuePair(const char* name, json_value* value);
+extern json_value* createJsonArray(size_t size);
+extern json_value* createJsonInteger(long int val);
+extern json_value* createJsonFloat(double val);
+extern json_value* createJsonBool(bool val);
+extern json_value* createJsonNull(void);
 
 extern char* serializeJsonValuePair(const json_value_pair* p);
 extern char* serializeJsonValue(const json_value* v);
