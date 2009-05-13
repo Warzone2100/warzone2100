@@ -2947,6 +2947,100 @@ static void drawStructureHealth(STRUCTURE *psStruct)
 	pie_BoxFill(scrX-scrR, scrY, scrX-scrR+health, scrY+1, powerCol);
 }
 
+static void drawDroidHealth(DROID *psDroid)
+{
+	UDWORD			scrX,scrY,scrR;
+	//DROID			*psDroid;
+	UDWORD			damage;
+	PIELIGHT		powerCol = WZCOL_BLACK;
+	PIELIGHT		boxCol;
+	//BASE_OBJECT		*psClickedOn;
+	//BOOL			bMouseOverDroid = false;
+	//BOOL			bMouseOverOwnDroid = false;
+	//BOOL			bBeingTracked;
+	//UDWORD			i,index;
+	//FEATURE			*psFeature;
+	float			mulH;
+
+	//show resistance values if CTRL/SHIFT depressed
+	if (ctrlShiftDown())
+	{
+		if (psDroid->resistance)
+		{
+			damage = PERCENT(psDroid->resistance, droidResistance(psDroid));
+		}
+		else
+		{
+			damage = 100;
+		}
+	}
+	else
+	{
+		damage = PERCENT(psDroid->body,psDroid->originalBody);
+	}
+
+	if (damage > REPAIRLEV_HIGH)
+	{
+		powerCol = WZCOL_HEALTH_HIGH;
+	}
+	else if (damage > REPAIRLEV_LOW)
+	{
+		powerCol = WZCOL_HEALTH_MEDIUM;
+	}
+	else
+	{
+		powerCol = WZCOL_HEALTH_LOW;
+	}
+
+	//show resistance values if CTRL/SHIFT depressed
+	if (ctrlShiftDown())
+	{
+		if (psDroid->resistance)
+		{
+			mulH = (float)psDroid->resistance / (float)droidResistance(psDroid);
+		}
+		else
+		{
+			mulH = 100.f;
+		}
+	}
+	else
+	{
+		mulH = (float)psDroid->body / (float)psDroid->originalBody;
+	}
+	damage = mulH * (float)psDroid->sDisplay.screenR; // (((psDroid->sDisplay.screenR*10000)/100)*damage)/10000;
+	if (damage > psDroid->sDisplay.screenR) 
+	{
+		damage = psDroid->sDisplay.screenR;
+	}
+	damage *= 2;
+	scrX = psDroid->sDisplay.screenX;
+	scrY = psDroid->sDisplay.screenY;
+	scrR = psDroid->sDisplay.screenR;
+
+	/* Yeah, yeah yeah - hardcoded palette entries - need to change to #defined colour names */
+	/* Three DFX clips properly right now - not sure if software does */
+	if((scrX+scrR)>0 && (scrY+scrR)>0 && (scrX-scrR) < pie_GetVideoBufferWidth() && (scrY-scrR) < pie_GetVideoBufferHeight())
+	{
+		if (!driveModeActive() || driveIsDriven(psDroid))
+		{
+			boxCol = WZCOL_WHITE;
+		}
+		else
+		{
+			boxCol = WZCOL_GREEN;
+		}
+
+		//we always want to show the enemy health/resistance as energyBar - AB 18/06/99
+		//if(bEnergyBars)
+		{
+			/* Power bars */
+			pie_BoxFill(scrX - scrR - 1, scrY + scrR + 2, scrX + scrR + 1, scrY + scrR + 5, WZCOL_RELOAD_BACKGROUND);
+			pie_BoxFill(scrX - scrR, scrY + scrR+3, scrX - scrR + damage, scrY + scrR + 4, powerCol);
+		}
+	}
+}
+
 /// draw the construction bar for the specified structure
 static void drawStructureBuildProgress(STRUCTURE *psStruct)
 {
@@ -2997,11 +3091,12 @@ static void	drawStructureSelections( void )
 		{
 			/* If it's selected */
 			if (psStruct->selected
+			    || keyDown(KEY_LALT)
 			    || (barMode == BAR_DROIDS_AND_STRUCTURES
 			        && (psStruct->pStructureType->type != REF_WALL && psStruct->pStructureType->type != REF_WALLCORNER))
 			    || (bMouseOverOwnStructure
 			        && psStruct == (STRUCTURE *) psClickedOn
-			            && psStruct->sDisplay.frameNumber == currentGameFrame))
+			        && psStruct->sDisplay.frameNumber == currentGameFrame))
 			{
 				drawStructureHealth(psStruct);
 				
@@ -3018,20 +3113,19 @@ static void	drawStructureSelections( void )
 		}
 	}
 
-	for(i=0; i<MAX_PLAYERS; i++)
+	for (i=0; i<MAX_PLAYERS; i++)
 	{
 		/* Go thru' all the buildings */
-		for(psStruct = apsStructLists[i]; psStruct; psStruct = psStruct->psNext)
+		if (i!=selectedPlayer)		// only see enemy buildings being targetted, not yours!
 		{
-			if(i!=selectedPlayer)		// only see enemy buildings being targetted, not yours!
+			for (psStruct = apsStructLists[i]; psStruct; psStruct = psStruct->psNext)
 			{
-				if(clipXY(psStruct->pos.x,psStruct->pos.y))
+				if (clipXY(psStruct->pos.x,psStruct->pos.y))
 				{
 					/* If it's targetted and on-screen */
-					if(psStruct->targetted)
+					if (psStruct->targetted)
 					{
-						if(psStruct->sDisplay.frameNumber == currentGameFrame)
-
+						if (psStruct->sDisplay.frameNumber == currentGameFrame)
 						{
 							psStruct->targetted = 0;
 							scrX = psStruct->sDisplay.screenX;
@@ -3039,24 +3133,22 @@ static void	drawStructureSelections( void )
 							iV_DrawImage(IntImages,getTargettingGfx(),scrX,scrY);
 						}
 					}
+					/* If it's on-screen and Alt is being held down */
+					if (keyDown(KEY_LALT))
+					{
+						drawStructureHealth(psStruct);
+					}
 				}
 			}
 		}
 	}
 
-	if(bMouseOverStructure && !bMouseOverOwnStructure)
+	if((bMouseOverStructure && !bMouseOverOwnStructure) && !keyDown(KEY_LALT))
 	{
 		if (mouseDown(getRightClickOrders()?MOUSE_LMB:MOUSE_RMB))
 		{
 			psStruct = (STRUCTURE*)psClickedOn;
-			if(psStruct->status==SS_BUILT)
-			{
-				drawStructureHealth(psStruct);
-			}
-			else if(psStruct->status == SS_BEING_BUILT)
-			{
-				drawStructureBuildProgress(psStruct);
-			}
+			drawStructureHealth(psStruct);
 		}
 	}
 
@@ -3155,7 +3247,8 @@ static void	drawDroidSelections( void )
 		bBeingTracked = false;
 		/* If it's selected and on screen or it's the one the mouse is over ||*/
 		// ABSOLUTELY MAD LOGICAL EXPRESSION!!! :-)
-		if ((eitherSelected(psDroid) && psDroid->sDisplay.frameNumber == currentGameFrame)
+		if (keyDown(KEY_LALT)
+		 || (eitherSelected(psDroid) && psDroid->sDisplay.frameNumber == currentGameFrame)
 		 || (bMouseOverOwnDroid && psDroid == (DROID *) psClickedOn)
 		 || (droidUnderRepair(psDroid) && psDroid->sDisplay.frameNumber == currentGameFrame)
 		 ||  (barMode == BAR_DROIDS || barMode == BAR_DROIDS_AND_STRUCTURES))
@@ -3234,103 +3327,39 @@ static void	drawDroidSelections( void )
 
 
 	/* Are we over an enemy droid */
-	if(bMouseOverDroid && !bMouseOverOwnDroid)
+	if(bMouseOverDroid && !bMouseOverOwnDroid && !keyDown(KEY_LALT))
 	{
 		if (mouseDown(getRightClickOrders()?MOUSE_LMB:MOUSE_RMB))
 		{
 			if(psClickedOn->player!=selectedPlayer && psClickedOn->sDisplay.frameNumber == currentGameFrame)
 			{
-				psDroid = (DROID*)psClickedOn;
-				//show resistance values if CTRL/SHIFT depressed
-				if (ctrlShiftDown())
-				{
-					if (psDroid->resistance)
-					{
-						damage = PERCENT(psDroid->resistance, droidResistance(psDroid));
-					}
-					else
-					{
-						damage = 100;
-					}
-				}
-				else
-				{
-					damage = PERCENT(psDroid->body,psDroid->originalBody);
-				}
-
-				if (damage > REPAIRLEV_HIGH)
-				{
-					powerCol = WZCOL_HEALTH_HIGH;
-				}
-				else if (damage > REPAIRLEV_LOW)
-				{
-					powerCol = WZCOL_HEALTH_MEDIUM;
-				}
-				else
-				{
-					powerCol = WZCOL_HEALTH_LOW;
-				}
-
-				//show resistance values if CTRL/SHIFT depressed
-				if (ctrlShiftDown())
-				{
-					if (psDroid->resistance)
-					{
-						mulH = (float)psDroid->resistance / (float)droidResistance(psDroid);
-					}
-					else
-					{
-						mulH = 100.f;
-					}
-				}
-				else
-				{
-					mulH = (float)psDroid->body / (float)psDroid->originalBody;
-				}
-				damage = mulH * (float)psDroid->sDisplay.screenR;// (((psDroid->sDisplay.screenR*10000)/100)*damage)/10000;
-				if(damage>psDroid->sDisplay.screenR) damage = psDroid->sDisplay.screenR;
-				damage *=2;
-				scrX = psDroid->sDisplay.screenX;
-				scrY = psDroid->sDisplay.screenY;
-				scrR = psDroid->sDisplay.screenR;
-
-				/* Yeah, yeah yeah - hardcoded palette entries - need to change to #defined colour names */
-				/* Three DFX clips properly right now - not sure if software does */
-				if((scrX+scrR)>0 && (scrY+scrR)>0 && (scrX-scrR) < pie_GetVideoBufferWidth() && (scrY-scrR) < pie_GetVideoBufferHeight())
-				{
-					if(!driveModeActive() || driveIsDriven(psDroid)) {
-						boxCol = WZCOL_WHITE;
-					} else {
-						boxCol = WZCOL_GREEN;
-					}
-
-					//we always want to show the enemy health/resistance as energyBar - AB 18/06/99
-					//if(bEnergyBars)
-					{
-						/* Power bars */
-						pie_BoxFill(scrX - scrR - 1, scrY + scrR + 2, scrX + scrR + 1, scrY + scrR + 5, WZCOL_RELOAD_BACKGROUND);
-						pie_BoxFill(scrX - scrR, scrY + scrR+3, scrX - scrR + damage, scrY + scrR + 4, powerCol);
-					}
-				}
+				drawDroidHealth((DROID*)psClickedOn);
 			}
 		}
 	}
 
-	for(i=0; i<MAX_PLAYERS; i++)
+	for (i=0; i<MAX_PLAYERS; i++)
 	{
 		/* Go thru' all the droidss */
-		for(psDroid = apsDroidLists[i]; psDroid; psDroid = psDroid->psNext)
+		if (i != selectedPlayer)
 		{
-			if(i!=selectedPlayer && !psDroid->died && psDroid->sDisplay.frameNumber == currentGameFrame)
+			for (psDroid = apsDroidLists[i]; psDroid; psDroid = psDroid->psNext)
 			{
-				/* If it's selected */
-				if(psDroid->bTargetted && (psDroid->visible[selectedPlayer] == UBYTE_MAX))
+				if (!psDroid->died && psDroid->sDisplay.frameNumber == currentGameFrame)
 				{
-					psDroid->bTargetted = false;
-					scrX = psDroid->sDisplay.screenX;
-					scrY = psDroid->sDisplay.screenY - 8;
-					index = IMAGE_BLUE1+getTimeValueRange(1020,5);
-					iV_DrawImage(IntImages,index,scrX,scrY);
+					/* If it's selected */
+					if (psDroid->bTargetted && (psDroid->visible[selectedPlayer] == UBYTE_MAX))
+					{
+						psDroid->bTargetted = false;
+						scrX = psDroid->sDisplay.screenX;
+						scrY = psDroid->sDisplay.screenY - 8;
+						index = IMAGE_BLUE1+getTimeValueRange(1020,5);
+						iV_DrawImage(IntImages,index,scrX,scrY);
+					}
+					if (keyDown(KEY_LALT))
+					{
+						drawDroidHealth(psDroid);
+					}
 				}
 			}
 		}
