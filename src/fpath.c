@@ -53,16 +53,6 @@ static volatile bool fpathQuit = false;
 #define	LIFT_BLOCK_HEIGHT_MEDIUMBODY	 350
 #define	LIFT_BLOCK_HEIGHT_HEAVYBODY		 350
 
-typedef struct _jobNode
-{
-	PROPULSION_TYPE	propulsion;
-	DROID_TYPE	droidType;
-	int		destX, destY;
-	int		origX, origY;
-	UDWORD		droidID;
-	struct _jobNode	*next;
-} PATHJOB;
-
 typedef struct _jobDone
 {
 	UDWORD		droidID;	///< Unique droid ID.
@@ -570,7 +560,7 @@ FPATH_RETVAL fpathDroidRoute(DROID* psDroid, SDWORD tX, SDWORD tY)
 // Run only from path thread
 static void fpathExecute(PATHJOB *psJob, PATHRESULT *psResult)
 {
-	FPATH_RETVAL retval = fpathAStarRoute(&psResult->sMove, psJob->origX, psJob->origY, psJob->destX, psJob->destY, psJob->propulsion);
+	FPATH_RETVAL retval = fpathAStarRoute(&psResult->sMove, psJob);
 
 	ASSERT(retval != ASR_OK || psResult->sMove.asPath, "Ok result but no path in result");
 	switch (retval)
