@@ -1126,7 +1126,7 @@ void audioTest()
 {
 	int i;
 
-	for (i = 0; i < 50; i++)
+	for (i = 0; i < 10; i++)
 	{
 		// On non-debug builds prevent warnings about defining but not using dummyCB
 		(void)dummyCB;
