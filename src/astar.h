@@ -21,6 +21,8 @@
 #ifndef __INCLUDED_SRC_ASTART_H__
 #define __INCLUDED_SRC_ASTART_H__
 
+#include "fpath.h"
+
 /** Reset the A* counters
  *
  *  This function resets astarInner among others.
@@ -44,7 +46,7 @@ enum
  *
  *  @ingroup pathfinding
  */
-SDWORD fpathAStarRoute(MOVE_CONTROL *psMove, SDWORD sx, SDWORD sy, SDWORD fx, SDWORD fy, PROPULSION_TYPE propulsion);
+SDWORD fpathAStarRoute(MOVE_CONTROL *psMove, PATHJOB *psJob);
 
 /** Check LOS (Line Of Sight) between two tiles
  */

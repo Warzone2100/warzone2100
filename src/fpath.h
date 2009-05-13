@@ -31,6 +31,17 @@
  *  @ingroup pathfinding
  *  @{
  */
+
+typedef struct _jobNode
+{
+	PROPULSION_TYPE	propulsion;
+	DROID_TYPE	droidType;
+	int		destX, destY;
+	int		origX, origY;
+	UDWORD		droidID;
+	struct _jobNode	*next;
+} PATHJOB;
+
 typedef enum _fpath_retval
 {
 	FPR_OK,         ///< found a route
