@@ -517,7 +517,7 @@ static BOOL _runLoadSave(BOOL bResetMissionWidgets)
 	{
 		char sTemp[MAX_STR_LENGTH];
 
-		if(!keyPressed(KEY_RETURN))						// enter was not pushed, so not a vaild entry.
+		if(!keyPressed(KEY_RETURN) && !keyPressed(KEY_KPENTER))						// enter was not pushed, so not a vaild entry.
 		{
 			widgDelete(psRequestScreen,SAVEENTRY_EDIT);	//unselect this box, and go back ..
 			widgReveal(psRequestScreen,chosenSlotId);
