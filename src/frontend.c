@@ -514,6 +514,7 @@ BOOL runMultiPlayerMenu(void)
 		ingame.bHostSetup = true;
 		bMultiPlayer = true;
 		game.type = SKIRMISH;		// needed?
+		NetPlay.bComms = true;
 		changeTitleMode(MULTIOPTION);
 		break;
 	case FRONTEND_JOIN:
