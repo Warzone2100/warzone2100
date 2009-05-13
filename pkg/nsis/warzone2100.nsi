@@ -247,16 +247,6 @@ Section $(TEXT_SecMusicMod) SecMusicMod
 
 SectionEnd
 
-Section $(TEXT_SecFMVs) SecFMVs
-
-  IfFileExists "sequences.wz" +5
-    NSISdl::download "http://download.gna.org/warzone/videos/sequences.wz"               "sequences.wz"
-    Pop $R0 ; Get the return value
-    StrCmp $R0 "success" +2
-      MessageBox MB_OK|MB_ICONSTOP "Download of videos failed: $R0"
-
-SectionEnd
-
 Section $(TEXT_SecNTWMod) SecNTWMod
 
   SetOutPath "$INSTDIR\mods\multiplay"
@@ -272,6 +262,16 @@ Section $(TEXT_SecNTWMod) SecNTWMod
 SectionEnd
 
 SectionGroupEnd
+
+Section $(TEXT_SecFMVs) SecFMVs
+
+  IfFileExists "sequences.wz" +5
+    NSISdl::download "http://download.gna.org/warzone/videos/sequences.wz"               "sequences.wz"
+    Pop $R0 ; Get the return value
+    StrCmp $R0 "success" +2
+      MessageBox MB_OK|MB_ICONSTOP "Download of videos failed: $R0"
+
+SectionEnd
 
 Section $(TEXT_SecNLS) SecNLS
 
