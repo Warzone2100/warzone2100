@@ -425,8 +425,7 @@ bool ParseCommandLine(int argc, const char** argv)
 				token = poptGetOptArg(poptCon);
 				if (sscanf(token, "%ix%i", &width, &height ) != 2 )
 				{
-					debug(LOG_ERROR, "Invalid resolution");
-					abort();
+					debug(LOG_ERROR, "Invalid parameter specified. (format is: 800x600)");
 					return false;
 				}
 				// tell the display system of the desired resolution
