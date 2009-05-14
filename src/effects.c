@@ -336,6 +336,8 @@ void	initEffectsSystem( void )
 	{
 		/* Get a pointer - just cos our macro requires it, speeds not an issue here */
 		psEffect = &asEffectsList[i];
+		// clear the fire bit
+		killEffect(psEffect);
 		/* Clear all the control bits */
 		psEffect->control = (UBYTE)0;
 		/* All effects are initially inactive */
