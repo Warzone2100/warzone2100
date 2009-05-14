@@ -1640,7 +1640,11 @@ void dealWithDroidSelect(DROID *psDroid, BOOL bDragBox)
 		}
 		else
 		{
-			SelectDroid(psDroid);
+			// we shouldn't ever control the transporter in SP games
+			if (psDroid->droidType != DROID_TRANSPORTER || bMultiPlayer)
+			{
+				SelectDroid(psDroid);
+			}
 		}
 /*						if(psDroid->droidType == DROID_COMMAND)
 		{
