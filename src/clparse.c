@@ -206,9 +206,8 @@ bool ParseCommandLineEarly(int argc, const char** argv)
 				token = poptGetOptArg(poptCon);
 				if (token == NULL)
 				{
-					debug(LOG_ERROR, "Missing filename?");
+					debug(LOG_ERROR, "Missing debugfile filename?");
 					poptFreeContext(poptCon);
-					abort();
 					return false;
 				}
 				debug_register_callback( debug_callback_file, debug_callback_file_init, debug_callback_file_exit, (void*)token );
@@ -317,7 +316,6 @@ bool ParseCommandLine(int argc, const char** argv)
 				{
 					debug(LOG_ERROR, "No IP/hostname given");
 					poptFreeContext(poptCon);
-					abort();
 					return false;
 				}
 				sstrcpy(iptoconnect, token);
@@ -333,15 +331,14 @@ bool ParseCommandLine(int argc, const char** argv)
 				{
 					debug(LOG_ERROR, "No game name");
 					poptFreeContext(poptCon);
-					abort();
 					return false;
 				}
 				if (strcmp(token, "CAM_1A") && strcmp(token, "CAM_2A") && strcmp(token, "CAM_3A")
 				    && strcmp(token, "TUTORIAL3") && strcmp(token, "FASTPLAY"))
 				{
-					fprintf(stderr, "The game parameter requires one of the following keywords:\n");
-					fprintf(stderr, "\tCAM_1A\n\tCAM_2A\n\tCAM_3A\n\tTUTORIAL3\n\tFASTPLAY\n");
-					exit(1);
+					debug(LOG_ERROR, "The game parameter requires one of the following keywords:");
+					debug(LOG_ERROR, "CAM_1A, CAM_2A, CAM_3A, TUTORIAL3, or FASTPLAY");
+					return false;
 				}
 				NetPlay.bComms = false;
 				sstrcpy(aLevelName, token);
@@ -443,7 +440,6 @@ bool ParseCommandLine(int argc, const char** argv)
 				{
 					debug(LOG_ERROR, "Unrecognised savegame name");
 					poptFreeContext(poptCon);
-					abort();
 					return false;
 				}
 				snprintf(saveGameName, sizeof(saveGameName), "%s/%s", SaveGamePath, token);
