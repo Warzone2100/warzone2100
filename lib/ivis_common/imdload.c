@@ -280,8 +280,8 @@ static BOOL ReadPoints( const char **ppFileData, iIMDShape *s )
 static BOOL _imd_load_points( const char **ppFileData, iIMDShape *s )
 {
 	Vector3f *p = NULL;
-	Sint32 tempXMax, tempXMin, tempZMax, tempZMin;
-	Sint32 xmax, ymax, zmax;
+	int32_t tempXMax, tempXMin, tempZMax, tempZMin;
+	int32_t xmax, ymax, zmax;
 	double dx, dy, dz, rad_sq, rad, old_to_p_sq, old_to_p, old_to_new;
 	double xspan, yspan, zspan, maxspan;
 	Vector3f dia1, dia2, cen;
@@ -672,8 +672,8 @@ iIMDShape *iV_ProcessIMD( const char **ppFileData, const char *FileDataEnd )
 	int cnt, nlevels;
 	iIMDShape *shape, *psShape;
 	UDWORD level;
-	Sint32 imd_version;
-	Uint32 imd_flags; // FIXME UNUSED
+	int32_t imd_version;
+	uint32_t imd_flags; // FIXME UNUSED
 	BOOL bTextured = false;
 
 	if (sscanf(pFileData, "%s %d%n", buffer, &imd_version, &cnt) != 2)

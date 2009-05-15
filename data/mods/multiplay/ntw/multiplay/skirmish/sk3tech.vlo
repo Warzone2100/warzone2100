@@ -1,4 +1,4 @@
-script "sktech.slo"
+script "skTech.slo"
 run
 {	  
 //ALWAYS MAKE THIS THE SAME AS THE INDEX OF THE LAST ENTRY IN THE cam Tech[] array

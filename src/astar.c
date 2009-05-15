@@ -369,16 +369,16 @@ BOOL fpathTileLOS(SDWORD x1,SDWORD y1, SDWORD x2,SDWORD y2)
 	return !obstruction;
 }
 
-SDWORD fpathAStarRoute(MOVE_CONTROL *psMove, SDWORD sx, SDWORD sy, SDWORD fx, SDWORD fy, PROPULSION_TYPE propulsion)
+SDWORD fpathAStarRoute(MOVE_CONTROL *psMove, PATHJOB *psJob)
 {
 	FP_NODE		*psFound, *psCurr, *psNew, *psParent, *psNext;
 	FP_NODE		*psNearest, *psRoute;
 	SDWORD		dir, x,y, currDist;
 	SDWORD		retval = ASR_OK;
-	const int       tileSX = map_coord(sx);
-	const int       tileSY = map_coord(sy);
-	const int       tileFX = map_coord(fx);
-	const int       tileFY = map_coord(fy);
+	const int       tileSX = map_coord(psJob->origX);
+	const int       tileSY = map_coord(psJob->origY);
+	const int       tileFX = map_coord(psJob->destX);
+	const int       tileFY = map_coord(psJob->destY);
 
 	fpathTableReset();
 
@@ -448,15 +448,13 @@ SDWORD fpathAStarRoute(MOVE_CONTROL *psMove, SDWORD sx, SDWORD sy, SDWORD fx, SD
 			if (psFound && psFound->dist <= currDist)
 			{
 				// already visited node by a shorter route
-// 				debug( LOG_NEVER, "blocked (%d)     : %3d, %3d dist %d\n", psFound->type, x, y, currDist );
 				continue;
 			}
 
 			// If the tile hasn't been visited see if it is a blocking tile
-			if (!psFound && fpathBlockingTile(x, y, propulsion))
+			if (!psFound && fpathBlockingTile(x, y, psJob->propulsion))
 			{
 				// tile is blocked, skip it
-// 				debug( LOG_NEVER, "blocked          : %3d, %3d\n", x, y );
 				continue;
 			}
 
@@ -473,7 +471,6 @@ SDWORD fpathAStarRoute(MOVE_CONTROL *psMove, SDWORD sx, SDWORD sy, SDWORD fx, SD
 					psNew->est = (SWORD)fpathEstimate(x,y, tileFX, tileFY);
 					fpathOpenAdd(psNew);
 					fpathAddNode(psNew);
-// 					debug( LOG_NEVER, "new              : %3d, %3d (%d,%d) = %d\n", x, y, currDist, psNew->est, currDist + psNew->est );
 				}
 			}
 			else if (psFound->type == NT_OPEN)
@@ -483,7 +480,6 @@ SDWORD fpathAStarRoute(MOVE_CONTROL *psMove, SDWORD sx, SDWORD sy, SDWORD fx, SD
 				// already in the open list but this is shorter
 				psFound->dist = (SWORD)currDist;
 				psFound->psRoute = psCurr;
-// 				debug( LOG_NEVER, "replace open     : %3d, %3d dist %d\n", x, y, currDist, psFound->est, currDist + psFound->est );
 			}
 			else if (psFound->type == NT_CLOSED)
 			{
@@ -492,7 +488,6 @@ SDWORD fpathAStarRoute(MOVE_CONTROL *psMove, SDWORD sx, SDWORD sy, SDWORD fx, SD
 				psFound->dist = (SWORD)currDist;
 				psFound->psRoute = psCurr;
 				fpathOpenAdd(psFound);
-// 				debug( LOG_NEVER, "replace closed   : %3d, %3d dist %d\n", x, y, currDist, psFound->est, currDist + psFound->est );
 			}
 			else
 			{
@@ -503,15 +498,12 @@ SDWORD fpathAStarRoute(MOVE_CONTROL *psMove, SDWORD sx, SDWORD sy, SDWORD fx, SD
 		// add the current point to the closed nodes
 //		fpathAddNode(psCurr);
 		psCurr->type = NT_CLOSED;
-// 		debug( LOG_NEVER, "HashAdd - closed : %3d,%3d (%d,%d) = %d\n", psCurr->pos.x, psCurr->pos.y, psCurr->dist, psCurr->est, psCurr->dist+psCurr->est );
 	}
 
 	// return the nearest route if no actual route was found
 	if (!psRoute && psNearest)
 	{
 		psRoute = psNearest;
-		fx = world_coord(psNearest->x) + TILE_UNITS / 2;
-		fy = world_coord(psNearest->y) + TILE_UNITS / 2;
 		retval = ASR_NEAREST;
 	}
 

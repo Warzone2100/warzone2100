@@ -250,7 +250,7 @@ void pie_MatRotX(int x)
  * \param[out] v2d  resulting 2D vector
  * \return projected z component of v2d
  */
-Sint32 pie_RotateProject(const Vector3i *v3d, Vector2i *v2d)
+int32_t pie_RotateProject(const Vector3i *v3d, Vector2i *v2d)
 {
 	Vector3i v = {
 		v3d->x * psMatrix->a + v3d->y * psMatrix->d + v3d->z * psMatrix->g + psMatrix->j,
@@ -363,9 +363,9 @@ void pie_MatInit(void)
 		double v = sin(i * conv) * FP12_MULTIPLIER;
 
 		if (v >= 0.0)
-			aSinTable[i] = (Sint32)(v + 0.5);
+			aSinTable[i] = (int32_t)(v + 0.5);
 		else
-			aSinTable[i] = (Sint32)(v - 0.5);
+			aSinTable[i] = (int32_t)(v - 0.5);
 	}
 
 	// init matrix/quat stack

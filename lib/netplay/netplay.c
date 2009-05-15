@@ -28,17 +28,66 @@
 #include "lib/gamelib/gtime.h"
 
 #include <time.h>			// for stats
-#include <SDL_thread.h>
-#ifdef WZ_OS_MAC
-#include <SDL_net/SDL_net.h>
-#else
-#include <SDL_net.h>
-#endif
 #include <physfs.h>
 #include <string.h>
 
 #include "netplay.h"
 #include "netlog.h"
+
+#if   defined(WZ_OS_UNIX)
+# include <arpa/inet.h>
+# include <errno.h>
+# include <fcntl.h>
+# include <netdb.h>
+# include <sys/socket.h>
+# include <sys/types.h>
+# include <unistd.h>
+typedef int SOCKET;
+static const SOCKET INVALID_SOCKET = -1;
+static const int SOCKET_ERROR = -1;
+#elif defined(WZ_OS_WIN)
+# include <winsock2.h>
+# include <ws2tcpip.h>
+# undef EAGAIN
+# undef ECONNRESET
+# undef EINPROGRESS
+# undef EINTR
+# undef EISCONN
+# undef ETIMEDOUT
+# undef EWOULDBLOCK
+# define EAGAIN      WSAEWOULDBLOCK
+# define ECONNRESET  WSAECONNRESET
+# define EINPROGRESS WSAEINPROGRESS
+# define EINTR       WSAEINTR
+# define EISCONN     WSAEISCONN
+# define ETIMEDOUT   WSAETIMEDOUT
+# define EWOULDBLOCK WSAEWOULDBLOCK
+typedef SSIZE_T ssize_t;
+# ifndef AI_V4MAPPED
+#  define AI_V4MAPPED	0x0008	/* IPv4 mapped addresses are acceptable.  */
+# endif
+# ifndef AI_ADDRCONFIG
+#  define AI_ADDRCONFIG	0x0020	/* Use configuration of this host to choose returned address type..  */
+# endif
+#endif
+
+static int getSockErr(void)
+{
+#if   defined(WZ_OS_UNIX)
+	return errno;
+#elif defined(WZ_OS_WIN)
+	return WSAGetLastError();
+#endif
+}
+
+static void setSockErr(int error)
+{
+#if   defined(WZ_OS_UNIX)
+	errno = error;
+#elif defined(WZ_OS_WIN)
+	WSASetLastError(error);
+#endif
+}
 
 // WARNING !!! This is initialised via configuration.c !!!
 char masterserver_name[255] = {'\0'};
@@ -120,13 +169,40 @@ typedef struct
 	BOOL			kick;					// if we should kick them
 } NET_PLAYER;
 
+enum
+{
+	SOCK_CONNECTION,
+	SOCK_IPV4_LISTEN = SOCK_CONNECTION,
+	SOCK_IPV6_LISTEN,
+
+	SOCK_COUNT,
+};
+
 typedef struct
 {
-	TCPsocket	socket;
+	/* Multiple socket handles only for listening sockets. This allows us
+	 * to listen on multiple protocols and address families (e.g. IPv4 and
+	 * IPv6).
+	 *
+	 * All non-listening sockets will only use the first socket handle.
+	 */
+	SOCKET fd[SOCK_COUNT];
+	bool ready;
+} Socket;
+
+typedef struct
+{
+	Socket* socket;
 	char*		buffer;
 	unsigned int	buffer_start;
 	unsigned int	bytes;
 } NETBUFSOCKET;
+
+typedef struct
+{
+	size_t len;
+	Socket** fds;
+} SocketSet;
 
 #define PLAYER_HOST		1
 
@@ -138,13 +214,26 @@ NETPLAY	NetPlay;
 static BOOL		allow_joining = false;
 static	bool server_not_there = false;
 static GAMESTRUCT	game;
-static TCPsocket	tcp_socket = NULL;		//socket used to talk to lobbyserver/ host machine
+
+/**
+ * Socket used for these purposes:
+ *  * Host a game, be a server.
+ *  * Connect to the lobby server.
+ *  * Join a server for a game.
+ */
+static Socket* tcp_socket = NULL;		//socket used to talk to lobbyserver/ host machine
+
 static NETBUFSOCKET*	bsocket = NULL;		//buffered socket (holds tcp_socket) (clients only?)
 static NETBUFSOCKET*	connected_bsocket[MAX_CONNECTED_PLAYERS] = { NULL };
-static SDLNet_SocketSet	socket_set = NULL;
+static SocketSet* socket_set = NULL;
 static BOOL		is_server = false;
-static TCPsocket	tmp_socket[MAX_TMP_SOCKETS] = { NULL };
-static SDLNet_SocketSet	tmp_socket_set = NULL;
+
+/**
+ * Used for connections with clients.
+ */
+static Socket* tmp_socket[MAX_TMP_SOCKETS] = { NULL };
+
+static SocketSet* tmp_socket_set = NULL;
 static char*		hostname;
 static NETSTATS		nStats = { 0, 0, 0, 0 };
 static NET_PLAYER	players[MAX_CONNECTED_PLAYERS];
@@ -165,11 +254,775 @@ static bool playerPasswordFlag[MAX_PLAYERS] = {false};		// we kick on false
  **			   ie ("trunk", "2.1.3", ...)
  ************************************************************************************
 **/
-char VersionString[VersionStringSize] = "2.2"; 
+char VersionString[VersionStringSize] = "trunk"; 
 static int NETCODE_VERSION_MAJOR = 2;	// unused for now
 static int NETCODE_VERSION_MINOR = 2;	// unused for now
 static int NUMBER_OF_MODS = 0;			// unused for now
 static int NETCODE_HASH = 0;			// unused for now
+
+#if defined(WZ_OS_WIN)
+static HMODULE winsock2_dll = NULL;
+static unsigned int major_windows_version = 0;
+static int (WINAPI * getaddrinfo_dll_func)(const char *node, const char *service,
+                                           const struct addrinfo *hints,
+                                           struct addrinfo **res) = NULL;
+
+static int (WINAPI * freeaddrinfo_dll_func)(struct addrinfo *res) = NULL;
+
+# define getaddrinfo  getaddrinfo_dll_dispatcher
+# define freeaddrinfo freeaddrinfo_dll_dispatcher
+
+static int getaddrinfo(const char *node, const char *service,
+                       const struct addrinfo *hints,
+                       struct addrinfo **res)
+{
+	struct addrinfo hint;
+	if (hints)
+	{
+		memcpy(&hint, hints, sizeof(hint));
+	}
+
+	switch (major_windows_version)
+	{
+		case 0:
+		case 1:
+		case 2:
+		case 3:
+		// Windows 95, 98 and ME
+		case 4:
+			debug(LOG_ERROR, "Name resolution isn't supported on this version (%u) of Windows", major_windows_version);
+			return EAI_FAIL;
+
+		// Windows 2000, XP and Server 2003
+		case 5:
+			if (hints)
+			{
+				// These flags are only supported from version 6 and onward
+				hint.ai_flags &= ~(AI_V4MAPPED | AI_ADDRCONFIG);
+			}
+		// Windows Vista and Server 2008
+		case 6:
+		// Onward (aka: in the future)
+		default:
+			if (!winsock2_dll)
+			{
+				debug(LOG_ERROR, "Failed to load winsock2 DLL. Required for name resolution.");
+				return EAI_FAIL;
+			}
+
+			if (!getaddrinfo_dll_func)
+			{
+				debug(LOG_ERROR, "Failed to retrieve \"getaddrinfo\" function from winsock2 DLL. Required for name resolution.");
+				return EAI_FAIL;
+			}
+
+			return getaddrinfo_dll_func(node, service, hints ? &hint: NULL, res);
+	}
+}
+
+static void freeaddrinfo(struct addrinfo *res)
+{
+	switch (major_windows_version)
+	{
+		case 0:
+		case 1:
+		case 2:
+		case 3:
+		// Windows 95, 98 and ME
+		case 4:
+			debug(LOG_ERROR, "Name resolution isn't supported on this version (%u) of Windows", major_windows_version);
+			return;
+
+		// Windows 2000, XP and Server 2003
+		case 5:
+		// Windows Vista and Server 2008
+		case 6:
+		// Onward (aka: in the future)
+		default:
+			if (!winsock2_dll)
+			{
+				debug(LOG_ERROR, "Failed to load winsock2 DLL. Required for name resolution.");
+				return;
+			}
+
+			if (!freeaddrinfo_dll_func)
+			{
+				debug(LOG_ERROR, "Failed to retrieve \"freeaddrinfo\" function from winsock2 DLL. Required for name resolution.");
+				return;
+			}
+
+			freeaddrinfo_dll_func(res);
+	}
+}
+#endif
+
+static int addressToText(const struct sockaddr* addr, char* buf, size_t size)
+{
+	switch (addr->sa_family)
+	{
+		case AF_INET:
+		{
+			unsigned char* address = (unsigned char*)&((const struct sockaddr_in*)addr)->sin_addr.s_addr;
+
+			return snprintf(buf, size,
+			"%i.%i.%i.%i",
+				(int)(address[0]),
+				(int)(address[1]),
+				(int)(address[2]),
+				(int)(address[3]));
+		}
+		case AF_INET6:
+		{
+			uint16_t* address = (uint16_t*)&((const struct sockaddr_in6*)addr)->sin6_addr.s6_addr;
+
+			return snprintf(buf, size,
+			"%x:%x:%x:%x:%x:%x:%x:%x",
+				(int)ntohs(address[0]),
+				(int)ntohs(address[1]),
+				(int)ntohs(address[2]),
+				(int)ntohs(address[3]),
+				(int)ntohs(address[4]),
+				(int)ntohs(address[5]),
+				(int)ntohs(address[6]),
+				(int)ntohs(address[7]));
+		}
+		default:
+			ASSERT(!"Unknown address famliy", "Got non IPv4 or IPv6 address!");
+			return -1;
+	}
+}
+
+static const char* strSockError(int error)
+{
+#if   defined(WZ_OS_WIN)
+	switch (error)
+	{
+                case 0:                     return "No error";
+                case WSAEINTR:              return "Interrupted system call";
+                case WSAEBADF:              return "Bad file number";
+                case WSAEACCES:             return "Permission denied";
+                case WSAEFAULT:             return "Bad address";
+                case WSAEINVAL:             return "Invalid argument";
+                case WSAEMFILE:             return "Too many open sockets";
+                case WSAEWOULDBLOCK:        return "Operation would block";
+                case WSAEINPROGRESS:        return "Operation now in progress";
+                case WSAEALREADY:           return "Operation already in progress";
+                case WSAENOTSOCK:           return "Socket operation on non-socket";
+                case WSAEDESTADDRREQ:       return "Destination address required";
+                case WSAEMSGSIZE:           return "Message too long";
+                case WSAEPROTOTYPE:         return "Protocol wrong type for socket";
+                case WSAENOPROTOOPT:        return "Bad protocol option";
+                case WSAEPROTONOSUPPORT:    return "Protocol not supported";
+                case WSAESOCKTNOSUPPORT:    return "Socket type not supported";
+                case WSAEOPNOTSUPP:         return "Operation not supported on socket";
+                case WSAEPFNOSUPPORT:       return "Protocol family not supported";
+                case WSAEAFNOSUPPORT:       return "Address family not supported";
+                case WSAEADDRINUSE:         return "Address already in use";
+                case WSAEADDRNOTAVAIL:      return "Can't assign requested address";
+                case WSAENETDOWN:           return "Network is down";
+                case WSAENETUNREACH:        return "Network is unreachable";
+                case WSAENETRESET:          return "Net connection reset";
+                case WSAECONNABORTED:       return "Software caused connection abort";
+                case WSAECONNRESET:         return "Connection reset by peer";
+                case WSAENOBUFS:            return "No buffer space available";
+                case WSAEISCONN:            return "Socket is already connected";
+                case WSAENOTCONN:           return "Socket is not connected";
+                case WSAESHUTDOWN:          return "Can't send after socket shutdown";
+                case WSAETOOMANYREFS:       return "Too many references, can't splice";
+                case WSAETIMEDOUT:          return "Connection timed out";
+                case WSAECONNREFUSED:       return "Connection refused";
+                case WSAELOOP:              return "Too many levels of symbolic links";
+                case WSAENAMETOOLONG:       return "File name too long";
+                case WSAEHOSTDOWN:          return "Host is down";
+                case WSAEHOSTUNREACH:       return "No route to host";
+                case WSAENOTEMPTY:          return "Directory not empty";
+                case WSAEPROCLIM:           return "Too many processes";
+                case WSAEUSERS:             return "Too many users";
+                case WSAEDQUOT:             return "Disc quota exceeded";
+                case WSAESTALE:             return "Stale NFS file handle";
+                case WSAEREMOTE:            return "Too many levels of remote in path";
+                case WSASYSNOTREADY:        return "Network system is unavailable";
+                case WSAVERNOTSUPPORTED:    return "Winsock version out of range";
+                case WSANOTINITIALISED:     return "WSAStartup not yet called";
+                case WSAEDISCON:            return "Graceful shutdown in progress";
+                case WSAHOST_NOT_FOUND:     return "Host not found";
+                case WSANO_DATA:            return "No host data of that type was found";
+		default:                    return "Unknown error";
+	}
+#elif defined(WZ_OS_UNIX)
+	return strerror(error);
+#endif
+}
+
+/**
+ * Similar to read(2) with the exception that this function won't be
+ * interrupted by signals (EINTR).
+ */
+static ssize_t readNoInt(Socket* sock, void* buf, size_t max_size)
+{
+	ssize_t received;
+
+	{
+		received = recv(sock->fd[SOCK_CONNECTION], buf, max_size, 0);
+	} while (received == SOCKET_ERROR && getSockErr() == EINTR);
+
+	sock->ready = false;
+
+	return received;
+}
+
+/**
+ * Similar to write(2) with the exception that this function will block until
+ * <em>all</em> data has been written or an error occurs.
+ *
+ * @return @c size when succesful or @c SOCKET_ERROR if an error occurred.
+ */
+static ssize_t writeAll(Socket* sock, const void* buf, size_t size)
+{
+	size_t written = 0;
+
+	while (written < size)
+	{
+		ssize_t ret = send(sock->fd[SOCK_CONNECTION], &((char*)buf)[written], size - written, 0);
+		if (ret == SOCKET_ERROR)
+		{
+			switch (getSockErr())
+			{
+				case EAGAIN:
+				case EINTR:
+					continue;
+
+				default:
+					return SOCKET_ERROR;
+			}
+		}
+
+		written += ret;
+	}
+
+	return written;
+}
+
+static SocketSet* allocSocketSet(size_t count)
+{
+	SocketSet* const set = malloc(sizeof(*set) + sizeof(set->fds[0]) * count);
+	if (set == NULL)
+	{
+		debug(LOG_ERROR, "Out of memory!");
+		abort();
+		return NULL;
+	}
+
+	set->len = count;
+	set->fds = (Socket**)(set + 1);
+	memset(set->fds, 0, sizeof(set->fds[0]) * count);
+
+	return set;
+}
+
+/**
+ * @return true if @c socket is succesfully added to @set.
+ */
+static bool addSocket(SocketSet* set, Socket* socket)
+{
+	size_t i;
+
+	ASSERT(set != NULL, "NULL SocketSet provided");
+	ASSERT(socket != NULL, "NULL Socket provided");
+
+	/* Check whether this socket is already present in this set (i.e. it
+	 * shouldn't be added again).
+	 */
+	for (i = 0; i < set->len; ++i)
+	{
+		if (set->fds[i] == socket)
+			return true;
+	}
+
+	for (i = 0; i < set->len; ++i)
+	{
+		if (set->fds[i] == NULL)
+		{
+			set->fds[i] = socket;
+			return true;
+		}
+	}
+
+	debug(LOG_ERROR, "Socket set full, no room left (max %zu)", set->len);
+
+	return false;
+}
+
+/**
+ * @return true if @c socket is succesfully added to @set.
+ */
+static void delSocket(SocketSet* set, Socket* socket)
+{
+	size_t i;
+
+	ASSERT(set != NULL, "NULL SocketSet provided");
+	ASSERT(socket != NULL, "NULL Socket provided");
+
+	for (i = 0; i < set->len; ++i)
+	{
+		if (set->fds[i] == socket)
+		{
+			set->fds[i] = NULL;
+			break;
+		}
+	}
+}
+
+static bool setSocketBlocking(const SOCKET fd, bool blocking)
+{
+#if   defined(WZ_OS_UNIX)
+	int sockopts = fcntl(fd, F_GETFL);
+	if (sockopts == SOCKET_ERROR)
+	{
+		debug(LOG_NET, "Failed to retrieve current socket options: %s", strSockError(getSockErr()));
+		return false;
+	}
+
+	// Set or clear O_NONBLOCK flag
+	if (blocking)
+		sockopts &= ~O_NONBLOCK;
+	else
+		sockopts |= O_NONBLOCK;
+
+	if (fcntl(fd, F_SETFL, sockopts) == SOCKET_ERROR)
+#elif defined(WZ_OS_WIN)
+	unsigned long nonblocking = !blocking;
+	if (ioctlsocket(fd, FIONBIO, &nonblocking) == SOCKET_ERROR)
+#endif
+	{
+		debug(LOG_NET, "Failed to set socket %sblocking: %s", (blocking ? "" : "non-"), strSockError(getSockErr()));
+		return false;
+	}
+
+	return true;
+}
+
+static int checkSockets(const SocketSet* set, unsigned int timeout)
+{
+	int ret;
+	fd_set fds;
+	size_t count = 0, i;
+#if   defined(WZ_OS_UNIX)
+	SOCKET maxfd = INT_MIN;
+#elif defined(WZ_OS_WIN)
+	SOCKET maxfd = 0;
+#endif
+
+	for (i = 0; i < set->len; ++i)
+	{
+		if (set->fds[i])
+		{
+			ASSERT(set->fds[i]->fd[SOCK_CONNECTION] != INVALID_SOCKET, "Invalid file descriptor!");
+
+			++count;
+			maxfd = MAX(maxfd, set->fds[i]->fd[SOCK_CONNECTION]);
+		}
+	}
+
+	if (!count)
+		return 0;
+
+	{
+		struct timeval tv = { timeout / 1000, (timeout % 1000) * 1000 };
+
+		FD_ZERO(&fds);
+		for (i = 0; i < set->len; ++i)
+		{
+			if (set->fds[i])
+				FD_SET(set->fds[i]->fd[SOCK_CONNECTION], &fds);
+		}
+
+		ret = select(maxfd + 1, &fds, NULL, NULL, &tv);
+	} while (ret == SOCKET_ERROR && getSockErr() == EINTR);
+
+	if (ret == SOCKET_ERROR)
+	{
+		debug(LOG_ERROR, "select failed: %s", strSockError(getSockErr()));
+		return SOCKET_ERROR;
+	}
+
+	for (i = 0; i < set->len; ++i)
+	{
+		if (set->fds[i])
+		{
+			set->fds[i]->ready = FD_ISSET(set->fds[i]->fd[SOCK_CONNECTION], &fds);
+		}
+	}
+
+	return ret;
+}
+
+/**
+ * Similar to read(2) with the exception that this function won't be
+ * interrupted by signals (EINTR) and will only return when <em>exactly</em>
+ * @c size bytes have been received. I.e. this function blocks until all data
+ * has been received or a timeout occurred.
+ *
+ * @param timeout When non-zero this function times out after @c timeout
+ *                milliseconds. When zero this function blocks until success or
+ *                an error occurs.
+ *
+ * @c return @c size when succesful, less than @c size but at least zero (0)
+ * when the other end disconnected or a timeout occurred. Or @c SOCKET_ERROR if
+ * an error occurred.
+ */
+static ssize_t readAll(Socket* sock, void* buf, size_t size, unsigned int timeout)
+{
+	Socket* sockAr[] = { sock };
+	const SocketSet set = { ARRAY_SIZE(sockAr), sockAr };
+
+	size_t received = 0;
+
+	while (received < size)
+	{
+		ssize_t ret;
+
+		// If a timeout is set, wait for that amount of time for data to arrive (or abort)
+		if (timeout)
+		{
+			ret = checkSockets(&set, timeout);
+			if (ret < set.len
+			 || !sock->ready)
+			{
+				if (ret == 0)
+					setSockErr(ETIMEDOUT);
+				return SOCKET_ERROR;
+			}
+		}
+
+		ret = recv(sock->fd[SOCK_CONNECTION], &((char*)buf)[received], size - received, 0);
+		sock->ready = false;
+		if (ret == 0)
+		{
+			debug(LOG_NET, "Socket disconnected.");
+			setSockErr(ECONNRESET);
+			return received;
+		}
+
+		if (ret == SOCKET_ERROR)
+		{
+			switch (getSockErr())
+			{
+				case EINTR:
+				case EAGAIN:
+					continue;
+
+				default:
+					return SOCKET_ERROR;
+			}
+		}
+
+		received += ret;
+	}
+
+	return received;
+}
+
+static void socketClose(Socket* sock)
+{
+	unsigned int i;
+
+	for (i = 0; i < ARRAY_SIZE(sock->fd); ++i)
+	{
+		if (sock->fd[i] != INVALID_SOCKET)
+		{
+#if   defined(WZ_OS_WIN)
+			closesocket(sock->fd[i]);
+#else
+			close(sock->fd[i]);
+#endif
+		}
+	}
+
+	free(sock);
+}
+
+static Socket* socketAccept(Socket* sock)
+{
+	unsigned int i;
+
+	ASSERT(sock != NULL, "NULL Socket provided");
+
+	/* Search for a socket that has a pending connection on it and accept
+	 * the first one.
+	 */
+	for (i = 0; i < ARRAY_SIZE(sock->fd); ++i)
+	{
+		if (sock->fd[i] != INVALID_SOCKET)
+		{
+			char textAddress[40];
+			struct sockaddr_storage addr;
+			socklen_t addr_len = sizeof(addr);
+			Socket* conn;
+			unsigned int j;
+
+			const SOCKET newConn = accept(sock->fd[i], (struct sockaddr*)&addr, &addr_len);
+			if (newConn == INVALID_SOCKET)
+			{
+				// Ignore the case where no connection is pending
+				if (getSockErr() != EAGAIN
+				 && getSockErr() != EWOULDBLOCK)
+				{
+					debug(LOG_ERROR, "accept failed: %s", strSockError(getSockErr()));
+				}
+
+				continue;
+			}
+
+			conn = malloc(sizeof(*conn) + addr_len);
+			if (conn == NULL)
+			{
+				debug(LOG_ERROR, "Out of memory!");
+				abort();
+				return NULL;
+			}
+
+			// Mark all unused socket handles as invalid
+			for (j = 0; j < ARRAY_SIZE(conn->fd); ++j)
+			{
+				conn->fd[j] = INVALID_SOCKET;
+			}
+
+			conn->ready = false;
+			conn->fd[SOCK_CONNECTION] = newConn;
+
+			sock->ready = false;
+
+			addressToText((const struct sockaddr*)&addr, textAddress, sizeof(textAddress));
+			debug(LOG_NET, "Incoming connection from [%s]:%d", textAddress, (unsigned int)ntohs(((const struct sockaddr_in*)&addr)->sin_port));
+
+			return conn;
+		}
+	}
+
+	return NULL;
+}
+
+static Socket* SocketOpen(const struct addrinfo* addr, unsigned int timeout)
+{
+	char textAddress[40];
+	unsigned int i;
+	int ret;
+
+	Socket* const conn = malloc(sizeof(*conn));
+	if (conn == NULL)
+	{
+		debug(LOG_ERROR, "Out of memory!");
+		abort();
+		return NULL;
+	}
+
+	ASSERT(addr != NULL, "NULL Socket provided");
+
+	addressToText(addr->ai_addr, textAddress, sizeof(textAddress));
+	debug(LOG_NET, "Connecting to [%s]:%d", textAddress, (int)ntohs(((const struct sockaddr_in*)addr->ai_addr)->sin_port));
+
+	// Mark all unused socket handles as invalid
+	for (i = 0; i < ARRAY_SIZE(conn->fd); ++i)
+	{
+		conn->fd[i] = INVALID_SOCKET;
+	}
+
+	conn->ready = false;
+	conn->fd[SOCK_CONNECTION] = socket(addr->ai_family, addr->ai_socktype, addr->ai_protocol);
+
+	if (conn->fd[SOCK_CONNECTION] == INVALID_SOCKET)
+	{
+		debug(LOG_ERROR, "Failed to create a socket: %s", strSockError(getSockErr()));
+		socketClose(conn);
+		return NULL;
+	}
+
+	if (!setSocketBlocking(conn->fd[SOCK_CONNECTION], false))
+	{
+		socketClose(conn);
+		return NULL;
+	}
+
+	ret = connect(conn->fd[SOCK_CONNECTION], addr->ai_addr, addr->ai_addrlen);
+	if (ret == SOCKET_ERROR)
+	{
+		fd_set conReady;
+#if   defined(WZ_OS_WIN)
+		fd_set conFailed;
+#endif
+
+		if ((getSockErr() != EINPROGRESS
+		  && getSockErr() != EAGAIN
+		  && getSockErr() != EWOULDBLOCK)
+#if   defined(WZ_OS_UNIX)
+		 || conn->fd[SOCK_CONNECTION] >= FD_SETSIZE
+#endif
+		 || timeout == 0)
+		{
+			debug(LOG_NET, "Failed to start connecting: %s", strSockError(getSockErr()));
+			socketClose(conn);
+			return NULL;
+		}
+
+		{
+			struct timeval tv = { timeout / 1000, (timeout % 1000) * 1000 };
+
+			FD_ZERO(&conReady);
+			FD_SET(conn->fd[SOCK_CONNECTION], &conReady);
+#if   defined(WZ_OS_WIN)
+			FD_ZERO(&conFailed);
+			FD_SET(conn->fd[SOCK_CONNECTION], &conFailed);
+#endif
+
+#if   defined(WZ_OS_WIN)
+			ret = select(conn->fd[SOCK_CONNECTION] + 1, NULL, &conReady, &conFailed, &tv);
+#else
+			ret = select(conn->fd[SOCK_CONNECTION] + 1, NULL, &conReady, NULL, &tv);
+#endif
+		} while (ret == SOCKET_ERROR && getSockErr() == EINTR);
+
+		if (ret == SOCKET_ERROR)
+		{
+			debug(LOG_NET, "Failed to wait for connection: %s", strSockError(getSockErr()));
+			socketClose(conn);
+			return NULL;
+		}
+
+		if (ret == 0)
+		{
+			setSockErr(ETIMEDOUT);
+			debug(LOG_NET, "Timed out while waiting for connection to be established: %s", strSockError(getSockErr()));
+			socketClose(conn);
+			return NULL;
+		}
+
+#if   defined(WZ_OS_WIN)
+		ASSERT(FD_ISSET(conn->fd[SOCK_CONNECTION], &conReady) || FD_ISSET(conn->fd[SOCK_CONNECTION], &conFailed), "\"sock\" is the only file descriptor in set, it should be the one that is set.");
+#else
+		ASSERT(FD_ISSET(conn->fd[SOCK_CONNECTION], &conReady), "\"sock\" is the only file descriptor in set, it should be the one that is set.");
+#endif
+
+#if   defined(WZ_OS_WIN)
+		if (FD_ISSET(conn->fd[SOCK_CONNECTION], &conFailed))
+#elif defined(WZ_OS_UNIX)
+		if (connect(conn->fd[SOCK_CONNECTION], addr->ai_addr, addr->ai_addrlen) == SOCKET_ERROR
+		 && getSockErr() != EISCONN)
+#endif
+		{
+			debug(LOG_NET, "Failed to connect: %s", strSockError(getSockErr()));
+			socketClose(conn);
+			return NULL;
+		}
+	}
+
+	if (!setSocketBlocking(conn->fd[SOCK_CONNECTION], true))
+	{
+		socketClose(conn);
+		return NULL;
+	}
+
+	return conn;
+}
+
+static Socket* socketListen(unsigned int port)
+{
+	/* Disable the V4 to V6 mapping because it isn't available on all
+	 * platforms and only complicates this implementation for platforms
+	 * that do.
+	 */
+	static const int ipv6_v6only = 1;
+
+	struct sockaddr_in addr4;
+	struct sockaddr_in6 addr6;
+	unsigned int i;
+
+	Socket* const conn = malloc(sizeof(*conn));
+	if (conn == NULL)
+	{
+		debug(LOG_ERROR, "Out of memory!");
+		abort();
+		return NULL;
+	}
+
+	// Mark all unused socket handles as invalid
+	for (i = 0; i < ARRAY_SIZE(conn->fd); ++i)
+	{
+		conn->fd[i] = INVALID_SOCKET;
+	}
+
+	// Listen on all local IPv4 and IPv6 addresses for the given port
+	addr4.sin_family      = AF_INET;
+	addr4.sin_port        = htons(port);
+	addr4.sin_addr.s_addr = INADDR_ANY;
+
+	addr6.sin6_family   = AF_INET6;
+	addr6.sin6_port     = htons(port);
+	addr6.sin6_addr     = in6addr_any;
+	addr6.sin6_flowinfo = 0;
+	addr6.sin6_scope_id = 0;
+
+	conn->ready = false;
+	conn->fd[SOCK_IPV4_LISTEN] = socket(addr4.sin_family, SOCK_STREAM, 0);
+	conn->fd[SOCK_IPV6_LISTEN] = socket(addr6.sin6_family, SOCK_STREAM, 0);
+
+	if (conn->fd[SOCK_IPV4_LISTEN] == INVALID_SOCKET
+	 || conn->fd[SOCK_IPV6_LISTEN] == INVALID_SOCKET)
+	{
+		debug(LOG_ERROR, "Failed to create an IPv4 or IPv6 socket: %s", strSockError(getSockErr()));
+		socketClose(conn);
+		return NULL;
+	}
+
+#if defined(IPV6_V6ONLY)
+	if (setsockopt(conn->fd[SOCK_IPV6_LISTEN], IPPROTO_IPV6, IPV6_V6ONLY, &ipv6_v6only, sizeof(ipv6_v6only)) == SOCKET_ERROR)
+	{
+		debug(LOG_WARNING, "Failed to set IPv6 socket to stick to IPv6 alone (i.e. don't use IPv4 to IPv6 mapping), this may cause problems later on: %s", strSockError(getSockErr()));
+	}
+#endif
+
+	if (bind(conn->fd[SOCK_IPV4_LISTEN], (const struct sockaddr*)&addr4, sizeof(addr4)) == SOCKET_ERROR
+	 || bind(conn->fd[SOCK_IPV6_LISTEN], (const struct sockaddr*)&addr6, sizeof(addr6)) == SOCKET_ERROR
+	 || listen(conn->fd[SOCK_IPV4_LISTEN], 5) == SOCKET_ERROR
+	 || listen(conn->fd[SOCK_IPV6_LISTEN], 5) == SOCKET_ERROR
+	 || !setSocketBlocking(conn->fd[SOCK_IPV4_LISTEN], false)
+	 || !setSocketBlocking(conn->fd[SOCK_IPV6_LISTEN], false))
+	{
+		debug(LOG_ERROR, "Failed to set up IPv4 or IPv6 socket for listening on port %u: %s", port, strSockError(getSockErr()));
+		socketClose(conn);
+		return NULL;
+	}
+
+	return conn;
+}
+
+static struct addrinfo* resolveHost(const char* host, unsigned int port)
+{
+	struct addrinfo* results;
+	char* service;
+	struct addrinfo hint;
+	int error;
+
+	hint.ai_family    = AF_UNSPEC;
+	hint.ai_socktype  = SOCK_STREAM;
+	hint.ai_protocol  = 0;
+	hint.ai_flags     = (AI_V4MAPPED | AI_ADDRCONFIG);
+	hint.ai_addrlen   = 0;
+	hint.ai_addr      = NULL;
+	hint.ai_canonname = NULL;
+	hint.ai_next      = NULL;
+
+	sasprintf(&service, "%u", port);
+
+	error = getaddrinfo(host, service, &hint, &results);
+	if (error != 0)
+	{
+		debug(LOG_NET, "getaddrinfo failed for %s:%s: %s", host, service, gai_strerror(error));
+		return NULL;
+	}
+
+	return results;
+}
 
 void sendVersionCheck( void )
 {
@@ -218,7 +1071,7 @@ void recvVersionCheck()
 
 		if(NetPlay.bHost)
 		{
-			kickPlayer( victimdpid, "you have the wrong version of the game, so Update it!", ERROR_WRONGVESION );
+			kickPlayer( victimdpid, "you have the wrong version of the game, so Update it!", ERROR_WRONGVERSION );
 
 			// reset flags /time after we kick them
 			VersionCheckTime[victimdpid] = -1;
@@ -251,7 +1104,7 @@ void VersionCheckTimeOut( uint32_t victimdpid )
 
 	if(NetPlay.bHost)
 	{
-		kickPlayer( victimdpid, "You have the wrong version of the game, so Update it!", ERROR_WRONGVESION );
+		kickPlayer( victimdpid, "You have the wrong version of the game, so Update it!", ERROR_WRONGVERSION );
 
 		// reset flags /time after we kick them
 		VersionCheckTime[victimdpid] = -1;
@@ -363,7 +1216,7 @@ static void NET_destroyBufferedSocket(NETBUFSOCKET* bs)
 	free(bs);
 }
 
-static void NET_initBufferedSocket(NETBUFSOCKET* bs, TCPsocket s)
+static void NET_initBufferedSocket(NETBUFSOCKET* bs, Socket* s)
 {
 	bs->socket = s;
 	if (bs->buffer == NULL) {
@@ -373,24 +1226,20 @@ static void NET_initBufferedSocket(NETBUFSOCKET* bs, TCPsocket s)
 	bs->bytes = 0;
 }
 
-static BOOL NET_fillBuffer(NETBUFSOCKET* bs, SDLNet_SocketSet socket_set)
+static BOOL NET_fillBuffer(NETBUFSOCKET* bs, SocketSet* socket_set)
 {
 	int size;
 	char* bufstart = bs->buffer + bs->buffer_start + bs->bytes;
 	const int bufsize = NET_BUFFER_SIZE - bs->buffer_start - bs->bytes;
 
 
-	if (bs->buffer_start != 0)
+	if (bs->buffer_start != 0
+	 || !bs->socket->ready)
 	{
 		return false;
 	}
 
-	if (SDLNet_SocketReady(bs->socket) <= 0)
-	{
-		return false;
-	}
-
-	size = SDLNet_TCP_Recv(bs->socket, bufstart, bufsize);
+	size = readNoInt(bs->socket, bufstart, bufsize);
 
 	if (size > 0)
 	{
@@ -401,15 +1250,15 @@ static BOOL NET_fillBuffer(NETBUFSOCKET* bs, SDLNet_SocketSet socket_set)
 	{	// an error occured, or the remote host has closed the connection.
 		if (socket_set != NULL)
 		{
-			SDLNet_TCP_DelSocket(socket_set, bs->socket);
+			delSocket(socket_set, bs->socket);
 		}
 		ASSERT( bs->bytes < NET_BUFFER_SIZE, "Socket buffer is too small!");
 		if( bs->bytes > NET_BUFFER_SIZE)
 		{
 			debug(LOG_ERROR, "Fatal connection error: buffer size of (%d) was too small, current byte count was %d", NET_BUFFER_SIZE, bs->bytes);
 		}
-		debug(LOG_WARNING, "SDLNet_TCP_Recv error: %s tcp_socket %p is now invalid", SDLNet_GetError(), bs->socket);
-		SDLNet_TCP_Close(bs->socket);
+		debug(LOG_WARNING, "SDLNet_TCP_Recv error: %s tcp_socket %p is now invalid", strSockError(getSockErr()), bs->socket);
+		socketClose(bs->socket);
 		bs->socket = NULL;
 	}
 
@@ -434,7 +1283,7 @@ static BOOL NET_recvMessage(NETBUFSOCKET* bs)
 		goto error;
 	}
 
-	size = SDL_SwapBE16(message->size) + headersize;
+	size = ntohs(message->size) + headersize;
 
 	if (size > bs->bytes)
 	{
@@ -442,7 +1291,7 @@ static BOOL NET_recvMessage(NETBUFSOCKET* bs)
 	}
 
 	memcpy(pMsg, message, size);
-	pMsg->size = SDL_SwapBE16(message->size);
+	pMsg->size = ntohs(message->size);
 	bs->buffer_start += size;
 	bs->bytes -= size;
 
@@ -587,8 +1436,8 @@ void NETplayerLeaving(UDWORD dpid)
 			dpid, connected_bsocket[dpid]->socket);
 
 		// Although we can get a error result from DelSocket, it don't really matter here.
-		SDLNet_TCP_DelSocket(socket_set, connected_bsocket[dpid]->socket);
-		SDLNet_TCP_Close(connected_bsocket[dpid]->socket);
+		delSocket(socket_set, connected_bsocket[dpid]->socket);
+		socketClose(connected_bsocket[dpid]->socket);
 		connected_bsocket[dpid]->socket = NULL;
 	}
 	else
@@ -689,28 +1538,32 @@ BOOL NETsetGameFlags(UDWORD flag, SDWORD value)
  *
  * @see GAMESTRUCT,NETrecvGAMESTRUCT
  */
-static void NETsendGAMESTRUCT(TCPsocket socket, const GAMESTRUCT* game)
+static void NETsendGAMESTRUCT(Socket* sock, const GAMESTRUCT* game)
 {
 	// A buffer that's guaranteed to have the correct size (i.e. it
 	// circumvents struct padding, which could pose a problem).  Initialise
 	// to zero so that we can be sure we're not sending any (undefined)
 	// memory content across the network.
-	char buf[sizeof(game->name) + sizeof(game->desc.host) + (sizeof(int32_t) * 8) +
-		sizeof(game->misc) + sizeof(game->extra) + sizeof(game->versionstring) +
-		sizeof(game->modlist) + (sizeof(uint32_t) * 10) ] = { 0 };
+	char buf[sizeof(game->GAMESTRUCT_VERSION) + sizeof(game->name) + sizeof(game->desc.host) + (sizeof(int32_t) * 8) +
+		sizeof(game->secondaryHosts) + sizeof(game->extra) + sizeof(game->versionstring) +
+		sizeof(game->modlist) + (sizeof(uint32_t) * 9) ] = { 0 };
 	char *buffer = buf;
 	unsigned int i;
 	int result;
 
 	// Now dump the data into the buffer
+	// Copy 32bit large big endian numbers
+	*(uint32_t*)buffer = htonl(game->GAMESTRUCT_VERSION);
+	buffer += sizeof(uint32_t);
+
 	// Copy a string
 	strlcpy(buffer, game->name, sizeof(game->name));
 	buffer += sizeof(game->name);
 
 	// Copy 32bit large big endian numbers
-	*(int32_t*)buffer = SDL_SwapBE32(game->desc.dwSize);
+	*(int32_t*)buffer = htonl(game->desc.dwSize);
 	buffer += sizeof(int32_t);
-	*(int32_t*)buffer = SDL_SwapBE32(game->desc.dwFlags);
+	*(int32_t*)buffer = htonl(game->desc.dwFlags);
 	buffer += sizeof(int32_t);
 
 	// Copy yet another string
@@ -718,19 +1571,22 @@ static void NETsendGAMESTRUCT(TCPsocket socket, const GAMESTRUCT* game)
 	buffer += sizeof(game->desc.host);
 
 	// Copy 32bit large big endian numbers
-	*(int32_t*)buffer = SDL_SwapBE32(game->desc.dwMaxPlayers);
+	*(int32_t*)buffer = htonl(game->desc.dwMaxPlayers);
 	buffer += sizeof(int32_t);
-	*(int32_t*)buffer = SDL_SwapBE32(game->desc.dwCurrentPlayers);
+	*(int32_t*)buffer = htonl(game->desc.dwCurrentPlayers);
 	buffer += sizeof(int32_t);
 	for (i = 0; i < ARRAY_SIZE(game->desc.dwUserFlags); ++i)
 	{
-		*(int32_t*)buffer = SDL_SwapBE32(game->desc.dwUserFlags[i]);
+		*(int32_t*)buffer = htonl(game->desc.dwUserFlags[i]);
 		buffer += sizeof(int32_t);
 	}
 
 	// Copy a string
-	strlcpy(buffer, game->misc, sizeof(game->misc));
-	buffer += sizeof(game->misc);
+	for (i = 0; i <ARRAY_SIZE(game->secondaryHosts); ++i)
+	{
+		strlcpy(buffer, game->secondaryHosts[i], sizeof(game->secondaryHosts[i]));
+		buffer += sizeof(game->secondaryHosts[i]);
+	}
 
 	// Copy a string
 	strlcpy(buffer, game->extra, sizeof(game->extra));
@@ -745,53 +1601,49 @@ static void NETsendGAMESTRUCT(TCPsocket socket, const GAMESTRUCT* game)
 	buffer += sizeof(game->modlist);
 
 	// Copy 32bit large big endian numbers
-	*(uint32_t*)buffer = SDL_SwapBE32(game->GAMESTRUCT_VERSION);
+	*(uint32_t*)buffer = htonl(game->game_version_major);
 	buffer += sizeof(uint32_t);
 
 	// Copy 32bit large big endian numbers
-	*(uint32_t*)buffer = SDL_SwapBE32(game->game_version_major);
+	*(uint32_t*)buffer = htonl(game->game_version_minor);
 	buffer += sizeof(uint32_t);
 
 	// Copy 32bit large big endian numbers
-	*(uint32_t*)buffer = SDL_SwapBE32(game->game_version_minor);
+	*(uint32_t*)buffer = htonl(game->privateGame);
 	buffer += sizeof(uint32_t);
 
 	// Copy 32bit large big endian numbers
-	*(uint32_t*)buffer = SDL_SwapBE32(game->privateGame);
+	*(uint32_t*)buffer = htonl(game->pureGame);
 	buffer += sizeof(uint32_t);
 
 	// Copy 32bit large big endian numbers
-	*(uint32_t*)buffer = SDL_SwapBE32(game->pureGame);
+	*(uint32_t*)buffer = htonl(game->Mods);
 	buffer += sizeof(uint32_t);
 
 	// Copy 32bit large big endian numbers
-	*(uint32_t*)buffer = SDL_SwapBE32(game->Mods);
+	*(uint32_t*)buffer = htonl(game->gameId);
 	buffer += sizeof(uint32_t);
 
 	// Copy 32bit large big endian numbers
-	*(uint32_t*)buffer = SDL_SwapBE32(game->future1);
+	*(uint32_t*)buffer = htonl(game->future2);
 	buffer += sizeof(uint32_t);
 
 	// Copy 32bit large big endian numbers
-	*(uint32_t*)buffer = SDL_SwapBE32(game->future2);
+	*(uint32_t*)buffer = htonl(game->future3);
 	buffer += sizeof(uint32_t);
 
 	// Copy 32bit large big endian numbers
-	*(uint32_t*)buffer = SDL_SwapBE32(game->future3);
-	buffer += sizeof(uint32_t);
-
-	// Copy 32bit large big endian numbers
-	*(uint32_t*)buffer = SDL_SwapBE32(game->future4);
+	*(uint32_t*)buffer = htonl(game->future4);
 	buffer += sizeof(uint32_t);
 
 
 	// Send over the GAMESTRUCT
-	result = SDLNet_TCP_Send(socket, buf, sizeof(buf));
-	if (result != sizeof(buf))
+	result = writeAll(sock, buf, sizeof(buf));
+	if (result == SOCKET_ERROR)
 	{
 		// If packet could not be sent, we should inform user of the error.
-		debug(LOG_ERROR, "Failed to send GAMESTRUCT. Reason: %s", SDLNet_GetError());
-		debug(LOG_ERROR, "Please make sure TCP ports 9990 & 2100 are open!");
+		debug(LOG_ERROR, "Failed to send GAMESTRUCT. Reason: %s", strSockError(getSockErr()));
+		debug(LOG_ERROR, "Please make sure TCP ports %u & %u are open!", masterserver_port, gameserver_port);
 	}
 }
 
@@ -806,9 +1658,9 @@ static bool NETrecvGAMESTRUCT(GAMESTRUCT* game)
 {
 	// A buffer that's guaranteed to have the correct size (i.e. it
 	// circumvents struct padding, which could pose a problem).
-	char buf[sizeof(game->name) + sizeof(game->desc.host) + (sizeof(int32_t) * 8) +
-		sizeof(game->misc) + sizeof(game->extra) + sizeof(game->versionstring) +
-		sizeof(game->modlist) + (sizeof(uint32_t) * 10) ] = { 0 };
+	char buf[sizeof(game->GAMESTRUCT_VERSION) + sizeof(game->name) + sizeof(game->desc.host) + (sizeof(int32_t) * 8) +
+		sizeof(game->secondaryHosts) + sizeof(game->extra) + sizeof(game->versionstring) +
+		sizeof(game->modlist) + (sizeof(uint32_t) * 9) ] = { 0 };
 	char* buffer = buf;
 	unsigned int i;
 	int result = 0;
@@ -816,27 +1668,31 @@ static bool NETrecvGAMESTRUCT(GAMESTRUCT* game)
 	// Read a GAMESTRUCT from the connection
 	if (tcp_socket == NULL
 	 || socket_set == NULL
-	 || SDLNet_CheckSockets(socket_set, 1000) <= 0
-	 || !SDLNet_SocketReady(tcp_socket)
-	 || (result = SDLNet_TCP_Recv(tcp_socket, buf, sizeof(buf))) != sizeof(buf))
+	 || checkSockets(socket_set, 1000) <= 0
+	 || !tcp_socket->ready
+	 || (result = readNoInt(tcp_socket, buf, sizeof(buf))) != sizeof(buf))
 	{
-		if (result < 0)
+		if (result == SOCKET_ERROR)
 		{
-			debug(LOG_WARNING, "SDLNet_TCP_Recv error: %s tcp_socket %p is now invalid", SDLNet_GetError(), tcp_socket);
-			tcp_socket = NULL;  //SDLnet docs say to 'disconnect' here. Dunno how. :S
+			debug(LOG_WARNING, "Server socket ecountered error: %s", strSockError(getSockErr()));
+			socketClose(tcp_socket);
+			tcp_socket = NULL;
 		}
 		return false;
 	}
 
 	// Now dump the data into the game struct
+	// Copy 32bit large big endian numbers
+	game->GAMESTRUCT_VERSION = ntohl(*(uint32_t*)buffer);
+	buffer += sizeof(uint32_t);
 	// Copy a string
 	sstrcpy(game->name, buffer);
 	buffer += sizeof(game->name);
 
 	// Copy 32bit large big endian numbers
-	game->desc.dwSize = SDL_SwapBE32(*(int32_t*)buffer);
+	game->desc.dwSize = ntohl(*(int32_t*)buffer);
 	buffer += sizeof(int32_t);
-	game->desc.dwFlags = SDL_SwapBE32(*(int32_t*)buffer);
+	game->desc.dwFlags = ntohl(*(int32_t*)buffer);
 	buffer += sizeof(int32_t);
 
 	// Copy yet another string
@@ -844,19 +1700,22 @@ static bool NETrecvGAMESTRUCT(GAMESTRUCT* game)
 	buffer += sizeof(game->desc.host);
 
 	// Copy 32bit large big endian numbers
-	game->desc.dwMaxPlayers = SDL_SwapBE32(*(int32_t*)buffer);
+	game->desc.dwMaxPlayers = ntohl(*(int32_t*)buffer);
 	buffer += sizeof(int32_t);
-	game->desc.dwCurrentPlayers = SDL_SwapBE32(*(int32_t*)buffer);
+	game->desc.dwCurrentPlayers = ntohl(*(int32_t*)buffer);
 	buffer += sizeof(int32_t);
 	for (i = 0; i < ARRAY_SIZE(game->desc.dwUserFlags); ++i)
 	{
-		game->desc.dwUserFlags[i] = SDL_SwapBE32(*(int32_t*)buffer);
+		game->desc.dwUserFlags[i] = ntohl(*(int32_t*)buffer);
 		buffer += sizeof(int32_t);
 	}
 
 	// Copy a string
-	sstrcpy(game->misc, buffer);
-	buffer += sizeof(game->misc);
+	for (i = 0; i < ARRAY_SIZE(game->secondaryHosts); ++i)
+	{
+		sstrcpy(game->secondaryHosts[i], buffer);
+		buffer += sizeof(game->secondaryHosts[i]);
+	}
 
 	// Copy a string
 	sstrcpy(game->extra, buffer);
@@ -871,25 +1730,23 @@ static bool NETrecvGAMESTRUCT(GAMESTRUCT* game)
 	buffer += sizeof(game->modlist);
 
 	// Copy 32bit large big endian numbers
-	game->GAMESTRUCT_VERSION = SDL_SwapBE32(*(uint32_t*)buffer);
+	game->game_version_major = ntohl(*(uint32_t*)buffer);
 	buffer += sizeof(uint32_t);
-	game->game_version_major = SDL_SwapBE32(*(uint32_t*)buffer);
+	game->game_version_minor = ntohl(*(uint32_t*)buffer);
 	buffer += sizeof(uint32_t);
-	game->game_version_minor = SDL_SwapBE32(*(uint32_t*)buffer);
+	game->privateGame = ntohl(*(uint32_t*)buffer);
 	buffer += sizeof(uint32_t);
-	game->privateGame = SDL_SwapBE32(*(uint32_t*)buffer);
+	game->pureGame = ntohl(*(uint32_t*)buffer);
 	buffer += sizeof(uint32_t);
-	game->pureGame = SDL_SwapBE32(*(uint32_t*)buffer);
+	game->Mods = ntohl(*(uint32_t*)buffer);
 	buffer += sizeof(uint32_t);
-	game->Mods = SDL_SwapBE32(*(uint32_t*)buffer);
-	buffer += sizeof(uint32_t);
-	game->future1 = SDL_SwapBE32(*(uint32_t*)buffer);
+	game->gameId = ntohl(*(uint32_t*)buffer);
 	buffer += sizeof(uint32_t);	
-	game->future2 = SDL_SwapBE32(*(uint32_t*)buffer);
+	game->future2 = ntohl(*(uint32_t*)buffer);
 	buffer += sizeof(uint32_t);	
-	game->future3 = SDL_SwapBE32(*(uint32_t*)buffer);
+	game->future3 = ntohl(*(uint32_t*)buffer);
 	buffer += sizeof(uint32_t);	
-	game->future4 = SDL_SwapBE32(*(uint32_t*)buffer);
+	game->future4 = ntohl(*(uint32_t*)buffer);
 	buffer += sizeof(uint32_t);	
 	
 	return true;
@@ -917,16 +1774,32 @@ int NETinit(BOOL bFirstCall)
 		NetPlay.GamePassworded = false;
 		NetPlay.ShowedMOTD = false;
 		NetPlay.gamePassword[0] = '\0';
-		NetPlay.MOTDbuffer[0] = '\0';
+		NetPlay.MOTD = strdup("");
 		sstrcpy(NetPlay.gamePassword,"Enter Password First");
 		NETstartLogging();
 	}
 
-	if (SDLNet_Init() == -1)
+#if defined(WZ_OS_WIN)
 	{
-		debug(LOG_ERROR, "SDLNet_Init reported: %s", SDLNet_GetError());
-		return -1;
+		static WSADATA stuff;
+		WORD ver_required = (2 << 8) + 2;
+		if (WSAStartup(ver_required, &stuff) != 0)
+		{
+			debug(LOG_ERROR, "Failed to initialize Winsock: %s", strSockError(getSockErr()));
+			return -1;
+		}
 	}
+
+	winsock2_dll = LoadLibraryA("ws2_32.dll");
+	if (winsock2_dll)
+	{
+		getaddrinfo_dll_func = GetProcAddress(winsock2_dll, "getaddrinfo");
+		freeaddrinfo_dll_func = GetProcAddress(winsock2_dll, "freeaddrinfo");
+	}
+
+	// Determine major Windows version
+	major_windows_version = LOBYTE(LOWORD(GetVersion()));
+#endif
 
 	NetPlay.ShowedMOTD = false;
 	NetPlay.GamePassworded = false;
@@ -942,7 +1815,19 @@ int NETshutdown(void)
 	debug( LOG_NET, "NETshutdown" );
 
 	NETstopLogging();
-	SDLNet_Quit();
+
+#if defined(WZ_OS_WIN)
+	WSACleanup();
+
+	if (winsock2_dll)
+	{
+		FreeLibrary(winsock2_dll);
+		winsock2_dll = NULL;
+		getaddrinfo_dll_func = NULL;
+		freeaddrinfo_dll_func = NULL;
+	}
+#endif
+
 	return 0;
 }
 
@@ -951,7 +1836,6 @@ int NETshutdown(void)
 int NETclose(void)
 {
 	unsigned int i;
-	int result;
 
 	// reset flag 
 	NetPlay.ShowedMOTD = false;
@@ -963,9 +1847,9 @@ int NETclose(void)
 	server_not_there = false;
 
 	if(bsocket)
-	{	// need SDLNet_TCP_DelSocket() as well, socket_set or tmp_socket_set?
+	{	// need delSocket() as well, socket_set or tmp_socket_set?
 		debug(LOG_NET, "Closing bsocket %p socket %p (tcp_socket=%p)", bsocket, bsocket->socket, tcp_socket);
-		//SDLNet_TCP_Close(bsocket->socket);
+		//socketClose(bsocket->socket);
 		NET_destroyBufferedSocket(bsocket);
 		bsocket=NULL;
 	}
@@ -977,7 +1861,7 @@ int NETclose(void)
 			if(connected_bsocket[i]->socket)
 			{
 				debug(LOG_NET, "Closing connected_bsocket[%u], %p", i, connected_bsocket[i]->socket);
-				SDLNet_TCP_Close(connected_bsocket[i]->socket);
+				socketClose(connected_bsocket[i]->socket);
 			}
 			NET_destroyBufferedSocket(connected_bsocket[i]);
 			connected_bsocket[i]=NULL;
@@ -988,7 +1872,7 @@ int NETclose(void)
 	if (tmp_socket_set)
 	{
 		debug(LOG_NET, "Freeing tmp_socket_set %p", tmp_socket_set);
-		SDLNet_FreeSocketSet(tmp_socket_set);
+		free(tmp_socket_set);
 		tmp_socket_set=NULL;
 	}
 
@@ -996,9 +1880,9 @@ int NETclose(void)
 	{
 		if (tmp_socket[i])
 		{
-			// FIXME: need SDLNet_TCP_DelSocket() as well, socket_set or tmp_socket_set?
+			// FIXME: need delSocket() as well, socket_set or tmp_socket_set?
 			debug(LOG_NET, "Closing tmp_socket[%d] %p", i, tmp_socket[i]);
-			SDLNet_TCP_Close(tmp_socket[i]);
+			socketClose(tmp_socket[i]);
 			tmp_socket[i]=NULL;
 		}
 	}
@@ -1006,21 +1890,15 @@ int NETclose(void)
 	if (socket_set)
 	{
 		// checking to make sure tcp_socket is still valid
-		result = SDLNet_TCP_DelSocket(socket_set, tcp_socket);
-		if (result == -1)
-		{
-			// non fatal error
-			debug(LOG_NET,"SDLNet_DelSocket error: %s", SDLNet_GetError());
-			tcp_socket = NULL;
-		}
+		delSocket(socket_set, tcp_socket);
 		debug(LOG_NET, "Freeing socket_set %p", socket_set);
-		SDLNet_FreeSocketSet(socket_set);
+		free(socket_set);
 		socket_set=NULL;
 	}
 	if (tcp_socket)
 	{
 		debug(LOG_NET, "Closing tcp_socket %p", tcp_socket);
-		SDLNet_TCP_Close(tcp_socket);
+		socketClose(tcp_socket);
 		tcp_socket=NULL;
 	}
 
@@ -1130,49 +2008,43 @@ BOOL NETsend(NETMSG *msg, UDWORD player)
 	size = msg->size + sizeof(msg->size) + sizeof(msg->type) + sizeof(msg->destination) + sizeof(msg->source);
 
 	NETlogPacket(msg, false);
-	msg->size = SDL_SwapBE16(msg->size);
+	msg->size = htons(msg->size);
 
 	if (is_server)
-	{	// FIXME: We are NOT checking SDLNet_CheckSockets/SDLNet_SocketReady 
+	{	// FIXME: We are NOT checking checkSockets/SDLNet_SocketReady 
 		// SDLNet_TCP_Send *can* block!
 		if (   player < MAX_CONNECTED_PLAYERS
 		    && connected_bsocket[player] != NULL
 		    && connected_bsocket[player]->socket != NULL
-		    && (result = SDLNet_TCP_Send(connected_bsocket[player]->socket,
+		    && (result = writeAll(connected_bsocket[player]->socket,
 				       msg, size) == size))
 		{
 			nStats.bytesSent   += size;
 			nStats.packetsSent += 1;
 			return true;
 		}
-		else
+		else if (result == SOCKET_ERROR)
 		{
-			if (result < size)
-			{
-				// TCP_Send error, inform user of problem.  This really should never happen normally.
-				// Possible client disconnect, and in either case, socket is most likely invalid now.
-				debug(LOG_WARNING, "SDLNet_TCP_Send returned: %d error: %s line %d", result, SDLNet_GetError(), __LINE__);
-				connected_bsocket[player]->socket = NULL ; // It is invalid,  Unknown how to handle.
-			}
+			// Write error, most likely client disconnect.
+			debug(LOG_ERROR, "Failed to send message: %s", strSockError(getSockErr()));
+			socketClose(connected_bsocket[player]->socket);
+			connected_bsocket[player]->socket = NULL;
 		}
 	}
 	else
 	{
-		// FIXME: We are NOT checking SDLNet_CheckSockets/SDLNet_SocketReady 
+		// FIXME: We are NOT checking checkSockets/SDLNet_SocketReady 
 		// SDLNet_TCP_Send *can* block!
-			if (tcp_socket && (result = SDLNet_TCP_Send(tcp_socket, msg, size) == size))
+			if (tcp_socket && (result = writeAll(tcp_socket, msg, size) == size))
 			{
 				return true;
 			}
-			else
+			else if (result == SOCKET_ERROR)
 			{
-				if (result < size)
-				{
-					// TCP_Send error, inform user of problem.  This really should never happen normally.
-					// Possible client disconnect, and in either case, socket is most likely invalid now.
-					debug(LOG_WARNING, "SDLNet_TCP_Send returned: %d error: %s line %d", result, SDLNet_GetError(), __LINE__);
-					tcp_socket = NULL; // unknow how to handle when invalid.
-				}
+				// Write error, most likely client disconnect.
+				debug(LOG_ERROR, "Failed to send message: %s", strSockError(getSockErr()));
+				socketClose(tcp_socket);
+				tcp_socket = NULL;
 			}
 
 	}
@@ -1185,7 +2057,6 @@ BOOL NETsend(NETMSG *msg, UDWORD player)
 BOOL NETbcast(NETMSG *msg)
 {
 	int size;
-	int result = 0;
 
 	if(!NetPlay.bComms)
 	{
@@ -1198,7 +2069,7 @@ BOOL NETbcast(NETMSG *msg)
 	size = msg->size + sizeof(msg->size) + sizeof(msg->type) + sizeof(msg->destination) + sizeof(msg->source);
 
 	NETlogPacket(msg, false);
-	msg->size = SDL_SwapBE16(msg->size);
+	msg->size = htons(msg->size);
 
 	if (is_server)
 	{
@@ -1213,18 +2084,16 @@ BOOL NETbcast(NETMSG *msg)
 			}
 			else
 			{	
-				// FIXME: We are NOT checking SDLNet_CheckSockets/SDLNet_SocketReady 
+				// FIXME: We are NOT checking checkSockets/SDLNet_SocketReady 
 				// SDLNet_TCP_Send *can* block!
-				result = SDLNet_TCP_Send(connected_bsocket[i]->socket, msg, size);
-				if (result < size)
+				if (writeAll(connected_bsocket[i]->socket, msg, size) == SOCKET_ERROR)
 				{
-					// TCP_Send error, inform user of problem.  This really should never happen normally.
-					// Possible client disconnect, and in either case, socket is most likely invalid now.
-					debug(LOG_WARNING, "(server) SDLNet_TCP_Send returned %d < %d, socket %p invalid: %s",
-						  result, size, connected_bsocket[i]->socket, SDLNet_GetError());
+					// Write error, most likely client disconnect.
+					debug(LOG_ERROR, "Failed to send message: %s", strSockError(getSockErr()));
 					players[i].heartbeat = false;	//mark them dead
 					debug(LOG_WARNING, "Player (dpid %u) connection was broken.", i);
-					connected_bsocket[i]->socket = NULL; // Unsure how to handle invalid sockets.
+					socketClose(connected_bsocket[i]->socket);
+					connected_bsocket[i]->socket = NULL;
 				}
 			}
 		}
@@ -1235,16 +2104,15 @@ BOOL NETbcast(NETMSG *msg)
 		{
 			return false;
 		}
-		// FIXME: We are NOT checking SDLNet_CheckSockets/SDLNet_SocketReady 
+		// FIXME: We are NOT checking checkSockets/SDLNet_SocketReady 
 		// SDLNet_TCP_Send *can* block!
-		result = SDLNet_TCP_Send(tcp_socket, msg, size);
-		if (result < size)
+		if (writeAll(tcp_socket, msg, size) == SOCKET_ERROR)
 		{
-			// I believe host has dropped...here
-			debug(LOG_WARNING, "(client) SDLNet_TCP_Send returned %d < %d, tcp_socket %p is now invalid: %s", 
-				  result, size, tcp_socket, SDLNet_GetError());
+			// Write error, most likely client disconnect.
+			debug(LOG_ERROR, "Failed to send message: %s", strSockError(getSockErr()));
 			debug(LOG_WARNING, "Host connection was broken?");
-			tcp_socket = NULL; // unsure how to handle invalid sockets.
+			socketClose(tcp_socket);
+			tcp_socket = NULL;
 			players[HOST_DPID].heartbeat = false;	//mark them dead
 			//Game is pretty much over --should just end everything when HOST dies.
 			return false;
@@ -1481,7 +2349,7 @@ receive_message:
 				uint32_t i = (current + 1) % 8;
 
 				if (socket_set == NULL
-				    || SDLNet_CheckSockets(socket_set, NET_READ_TIMEOUT) <= 0)
+				    || checkSockets(socket_set, NET_READ_TIMEOUT) <= 0)
 				{
 					return false;
 				}
@@ -1542,7 +2410,7 @@ receive_message:
 				if (received == false)
 				{
 					if (   socket_set != NULL
-					    && SDLNet_CheckSockets(socket_set, NET_READ_TIMEOUT) > 0
+					    && checkSockets(socket_set, NET_READ_TIMEOUT) > 0
 					    && NET_fillBuffer(bsocket, socket_set))
 					{
 						received = NET_recvMessage(bsocket);
@@ -1567,7 +2435,7 @@ receive_message:
 			{
 				unsigned int j;
 
-				pMsg->size = SDL_SwapBE16(pMsg->size);
+				pMsg->size = ntohs(pMsg->size);
 
 				// we are the host, and have received a broadcast packet; distribute it
 				for (j = 0; j < MAX_CONNECTED_PLAYERS; ++j)
@@ -1576,7 +2444,13 @@ receive_message:
 					    && connected_bsocket[j] != NULL
 					    && connected_bsocket[j]->socket != NULL)
 					{
-						SDLNet_TCP_Send(connected_bsocket[j]->socket, pMsg, size);
+						if (writeAll(connected_bsocket[j]->socket, pMsg, size) == SOCKET_ERROR)
+						{
+							// Write error, most likely client disconnect.
+							debug(LOG_ERROR, "Failed to send message: %s", strSockError(getSockErr()));
+							socketClose(connected_bsocket[pMsg->destination]->socket);
+							connected_bsocket[pMsg->destination]->socket = NULL;
+						}
 					}
 				}
 			}
@@ -1587,16 +2461,15 @@ receive_message:
 				    && connected_bsocket[pMsg->destination] != NULL
 				    && connected_bsocket[pMsg->destination]->socket != NULL)
 				{
-					int result = 0;
-
 					debug(LOG_NET, "Reflecting message type %hhu to %hhu", pMsg->type, pMsg->destination);
-					pMsg->size = SDL_SwapBE16(pMsg->size);
+					pMsg->size = ntohs(pMsg->size);
 
-					result = SDLNet_TCP_Send(connected_bsocket[pMsg->destination]->socket, pMsg, size);
-					if (result < size)
+					if (writeAll(connected_bsocket[pMsg->destination]->socket, pMsg, size) == SOCKET_ERROR)
 					{
-						debug(LOG_WARNING,"SDLNet_TCP_Send(line %d) failed, because of %s", __LINE__, SDLNet_GetError());
-						connected_bsocket[pMsg->destination]->socket = NULL; // socket becomes invalid on error
+						// Write error, most likely client disconnect.
+						debug(LOG_ERROR, "Failed to send message: %s", strSockError(getSockErr()));
+						socketClose(connected_bsocket[pMsg->destination]->socket);
+						connected_bsocket[pMsg->destination]->socket = NULL;
 					}
 				}
 				else
@@ -1759,13 +2632,62 @@ UBYTE NETrecvFile(void)
 	return ((currPos + bytesRead) * 100) / fileSize;
 }
 
+static ssize_t readLobbyResponse(Socket* sock, unsigned int timeout)
+{
+	uint32_t lobbyStatusCode;
+	uint32_t MOTDLength;
+	uint32_t buffer[2];
+	ssize_t result, received = 0;
+
+	// Get status and message length
+	result = readAll(sock, &buffer, sizeof(buffer), timeout);
+	if (result != sizeof(buffer))
+		goto error;
+	received += result;
+	lobbyStatusCode = ntohl(buffer[0]);
+	MOTDLength = ntohl(buffer[1]);
+
+	// Get status message
+	free(NetPlay.MOTD);
+	NetPlay.MOTD = malloc(MOTDLength + 1);
+	result = readAll(sock, NetPlay.MOTD, MOTDLength, timeout);
+	if (result != MOTDLength)
+		goto error;
+	received += result;
+	// NUL terminate string
+	NetPlay.MOTD[MOTDLength] = '\0';
+
+	if (lobbyStatusCode / 100 != 2) // Check whether status code is 2xx (success)
+	{
+		debug(LOG_ERROR, "Lobby error (%u): %s", (unsigned int)lobbyStatusCode, NetPlay.MOTD);
+		return SOCKET_ERROR;
+	}
+
+	debug(LOG_NET, "Lobby success (%u): %s", (unsigned int)lobbyStatusCode, NetPlay.MOTD);
+	return received;
+
+error:
+	if (result == SOCKET_ERROR)
+	{
+		free(NetPlay.MOTD);
+		asprintf(&NetPlay.MOTD, "Error while communicating with the lobby server: %s", strSockError(getSockErr()));
+		debug(LOG_ERROR, "%s", NetPlay.MOTD);
+	}
+	else
+	{
+		free(NetPlay.MOTD);
+		asprintf(&NetPlay.MOTD, "Disconnected from lobby server. Failed to register game.");
+		debug(LOG_ERROR, "%s", NetPlay.MOTD);
+	}
+
+	return SOCKET_ERROR;
+}
+
 static void NETregisterServer(int state)
 {
-	static TCPsocket rs_socket = NULL;
+	static Socket* rs_socket[2] = { NULL };
 	static int registered = 0;
-	static SDLNet_SocketSet masterset;
-	IPaddress ip;
-	int result = 0;
+	unsigned int i;
 
 	if (server_not_there)
 	{
@@ -1776,77 +2698,116 @@ static void NETregisterServer(int state)
 	{
 		switch(state)
 		{
-			case 1: {
-				if(SDLNet_ResolveHost(&ip, masterserver_name, masterserver_port) == -1)
+			case 1:
+			{
+				bool succesful = false;
+				uint32_t gameId = 0;
+				struct addrinfo* cur;
+				struct addrinfo* const hosts = resolveHost(masterserver_name, masterserver_port);
+
+				if (hosts == NULL)
 				{
-					debug(LOG_ERROR, "Cannot resolve masterserver \"%s\": %s", masterserver_name, SDLNet_GetError());
-					ssprintf(NetPlay.MOTDbuffer, _("Could not resolve masterserver name (%s)!"), masterserver_name);
+					debug(LOG_ERROR, "Cannot resolve masterserver \"%s\": %s", masterserver_name, strSockError(getSockErr()));
+					free(NetPlay.MOTD);
+					asprintf(&NetPlay.MOTD, _("Could not resolve masterserver name (%s)!"), masterserver_name);
 					server_not_there = true;
 					return;
 				}
 
-				if(!rs_socket) rs_socket = SDLNet_TCP_Open(&ip);
-				if(rs_socket == NULL)
+				for (cur = hosts; cur; cur = cur->ai_next)
 				{
-					debug(LOG_ERROR, "Cannot connect to masterserver \"%s:%d\": %s", masterserver_name, masterserver_port, SDLNet_GetError());
-					sstrcpy(NetPlay.MOTDbuffer, _("Could not communicate with lobby server!  Is TCP port 9990 open?"));
+					for (i = 0; i < ARRAY_SIZE(rs_socket); ++i)
+					{
+						if (rs_socket[i] == NULL)
+							break;
+					}
+					if (i >= ARRAY_SIZE(rs_socket))
+						break;
+
+					if (cur->ai_family == AF_INET
+					 || cur->ai_family == AF_INET6)
+						rs_socket[i] = SocketOpen(cur, 15000);
+				}
+				freeaddrinfo(hosts);
+
+				if (rs_socket[0] == NULL)
+				{
+					debug(LOG_ERROR, "Cannot connect to masterserver \"%s:%d\": %s", masterserver_name, masterserver_port, strSockError(getSockErr()));
+					free(NetPlay.MOTD);
+					asprintf(&NetPlay.MOTD, _("Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"), masterserver_port);
 					server_not_there = true;
 					return;
 				}
-				// master server socket set to be friendly
-				if (!masterset)
+
+				// Get a game ID
+				writeAll(rs_socket[0], "gaId", sizeof("gaId"));
+				if (readAll(rs_socket[0], &gameId, sizeof(gameId), 10000) != sizeof(gameId))
 				{
-					masterset = SDLNet_AllocSocketSet(1);
-					if (!masterset)
+					free(NetPlay.MOTD);
+					asprintf(&NetPlay.MOTD, "Failed to retrieve a game ID: %s", strSockError(getSockErr()));
+					debug(LOG_ERROR, "%s", NetPlay.MOTD);
+
+					// The sockets have been invalidated, so get rid of it. (using them now may cause SIGPIPE).
+					for (i = 0; i < ARRAY_SIZE(rs_socket); ++i)
 					{
-						debug(LOG_ERROR, "Couldn't create socket set for master server because: %s", SDLNet_GetError());
+						if (rs_socket[i] == NULL)
+							continue;
+
+						socketClose(rs_socket[i]);
+						rs_socket[i] = NULL;
 					}
-					result = SDLNet_TCP_AddSocket(masterset, rs_socket);
-					if (result != -1)
-					{
-						debug(LOG_NET,"TCP_AddSocket using socket set %p, socket %p", masterset, rs_socket);
-					}
-				}
-				// get the MOTD from the server
-				SDLNet_TCP_Send(rs_socket, (void*)"motd", sizeof("motd"));
-				result = SDLNet_CheckSockets(masterset, 1000);
-				if (result ==-1)
-				{
-					debug(LOG_NET, "Warning, MOTD CheckSockets Failed. Error %s", SDLNet_GetError());
-				}
-				if (SDLNet_SocketReady(rs_socket))	// true on activity
-				{
-					result = SDLNet_TCP_Recv(rs_socket, NetPlay.MOTDbuffer, sizeof(NetPlay.MOTDbuffer));
-					if (result <= 0)
-					{
-						debug(LOG_NET, "Warning, MOTD TCP_Recv failed. result = %d, error %s", result,  SDLNet_GetError());
-						sstrcpy(NetPlay.MOTDbuffer, "MOTD communication error with lobby server, TCP_Recv failed!");
-					}
-					debug(LOG_NET, "MOTD is [%s]", NetPlay.MOTDbuffer);
-				}
-				else
-				{
-					debug(LOG_NET, "Warning, MOTD Socket Not ready.  Is the motd.txt file empty?  Error %s", SDLNet_GetError());
-					sstrcpy(NetPlay.MOTDbuffer, "MOTD communication error with lobby server, socket not ready?");
+					server_not_there = true;
+					return;
 				}
 
-				SDLNet_TCP_Send(rs_socket, (void*)"addg", sizeof("addg"));
-				// and now send what the server wants
-				NETsendGAMESTRUCT(rs_socket, &game);
+				game.gameId = ntohl(gameId);
+				debug(LOG_NET, "Using game ID: %u", (unsigned int)game.gameId);
+
+				// Register our game with the server for all available address families
+				for (i = 0; i < ARRAY_SIZE(rs_socket); ++i)
+				{
+					if (rs_socket[i] == NULL)
+						continue;
+
+					writeAll(rs_socket[i], "addg", sizeof("addg"));
+					// and now send what the server wants
+					NETsendGAMESTRUCT(rs_socket[i], &game);
+				}
+
+				// Get the return codes
+				for (i = 0; i < ARRAY_SIZE(rs_socket); ++i)
+				{
+					if (rs_socket[i] == NULL)
+						continue;
+
+					if (readLobbyResponse(rs_socket[i], 1000) == SOCKET_ERROR)
+					{
+						socketClose(rs_socket[i]);
+						rs_socket[i] = NULL;
+						continue;
+					}
+
+					succesful = true;
+				}
+
+				if (!succesful)
+				{
+					server_not_there = true;
+					return;
+				}
 			}
 			break;
 
 			case 0:
 				// we don't need this anymore, so clean up
-				result = SDLNet_TCP_DelSocket(masterset,rs_socket);
-				if (result == -1)
+				for (i = 0; i < ARRAY_SIZE(rs_socket); ++i)
 				{
-					debug(LOG_ERROR, "Couldn't delete socket set because: %s", SDLNet_GetError());
+					if (rs_socket[i] == NULL)
+						continue;
+
+					socketClose(rs_socket[i]);
+					rs_socket[i] = NULL;
 				}
-				SDLNet_FreeSocketSet(masterset);
-				masterset = NULL;
-				SDLNet_TCP_Close(rs_socket);
-				rs_socket=NULL;
 			break;
 		}
 		registered=state;
@@ -1860,7 +2821,7 @@ static void NETregisterServer(int state)
 static void NETallowJoining(void)
 {
 	unsigned int i;
-	UDWORD numgames = SDL_SwapBE32(1);	// always 1 on normal server
+	UDWORD numgames = htonl(1);	// always 1 on normal server
 	char buffer[5];
 	int recv_result = 9999;
 
@@ -1878,101 +2839,97 @@ static void NETallowJoining(void)
 
 	if (tmp_socket_set == NULL)
 	{
-		int result = 0;
-
 		// initialize server socket set
 		// FIXME: why is this not done in NETinit()?? - Per
-		tmp_socket_set = SDLNet_AllocSocketSet(MAX_TMP_SOCKETS+1);
+		tmp_socket_set = allocSocketSet(MAX_TMP_SOCKETS+1);
 		if (tmp_socket_set == NULL)
 		{
-			debug(LOG_ERROR, "Cannot create socket set: %s", SDLNet_GetError());
+			debug(LOG_ERROR, "Cannot create socket set: %s", strSockError(getSockErr()));
 			return;
-		}
-		debug(LOG_NET, "Created tmp_socket_set %p", tmp_socket_set);
-
-		result = SDLNet_TCP_AddSocket(tmp_socket_set, tcp_socket);
-		if( result != -1)
-		{
-			debug(LOG_NET,"TCP_AddSocket using socket set %p, socket %p", tmp_socket_set, tcp_socket);
-		}
-		else
-		{
-			// Should never fail, or we will have major problems.
-			debug(LOG_ERROR,"SDLNet_AddSocket: %s\n", SDLNet_GetError());
 		}
 	}
 
-	if (SDLNet_CheckSockets(tmp_socket_set, NET_READ_TIMEOUT) > 0)
+	// Find the first empty socket slot
+	for (i = 0; i < MAX_TMP_SOCKETS; ++i)
 	{
-		if (SDLNet_SocketReady(tcp_socket))
+		if (tmp_socket[i] == NULL)
 		{
-			for (i = 0; i < MAX_TMP_SOCKETS; ++i)
+			break;
+		}
+	}
+
+	// See if there's an incoming connection
+	if (tmp_socket[i] == NULL // Make sure that we're not out of sockets
+	 && (tmp_socket[i] = socketAccept(tcp_socket)) != NULL)
+	{
+		addSocket(tmp_socket_set, tmp_socket[i]);
+		if (checkSockets(tmp_socket_set, 1000) > 0
+		    && tmp_socket[i]->ready
+		    && (recv_result = readNoInt(tmp_socket[i], buffer, 5)))
+		{
+			if(strcmp(buffer, "list")==0)
 			{
-				if (tmp_socket[i] == NULL)
+				debug(LOG_NET, "cmd: list.  Sending game list");
+				if (writeAll(tmp_socket[i], &numgames, sizeof(numgames)) == SOCKET_ERROR)
 				{
-					break;
+					// Write error, most likely client disconnect.
+					debug(LOG_ERROR, "Failed to send message: %s", strSockError(getSockErr()));
+					debug(LOG_WARNING, "Couldn't get list from server. Make sure required ports are open. (TCP 9998-9999)");
 				}
-			}
-			tmp_socket[i] = SDLNet_TCP_Accept(tcp_socket);
-			debug(LOG_NET, "tmp_socket[%d]=%p Accepted", i, tmp_socket[i]);
-			SDLNet_TCP_AddSocket(tmp_socket_set, tmp_socket[i]);
-			if (SDLNet_CheckSockets(tmp_socket_set, 1000) > 0
-			    && SDLNet_SocketReady(tmp_socket[0])
-			    && (recv_result = SDLNet_TCP_Recv(tmp_socket[i], buffer, 5)))
-			{
-				if(strcmp(buffer, "list")==0)
+				else
 				{
-					int result = 0;
-					debug(LOG_NET, "cmd: list.  Sending game list");
-					result = SDLNet_TCP_Send(tmp_socket[i], &numgames, sizeof(numgames));
-					if( result < sizeof(numgames) )
-					{
-						// TCP_Send error, inform user of problem.  This really should never happen normally.
-						// Possible client disconnect, and in either case, socket is most likely invalid now.
-						// How to handle error?
-						debug(LOG_WARNING, "SDLNet_TCP_Send returned: %d error: %s line %d", result, SDLNet_GetError(),__LINE__);
-						debug(LOG_WARNING, "Couldn't get list from server. Make sure required ports are open. (TCP 9998-9999)");
-					}
-					else
-					{
-						// get the correct player count after kicks / leaves
-						game.desc.dwCurrentPlayers = NETplayerInfo();
-						NETsendGAMESTRUCT(tmp_socket[i], &game);
-					}
-				}
-				else if (strcmp(buffer, "join") == 0)
-				{
-					debug(LOG_NET, "cmd: join.  Sending GAMESTRUCT");
+					// get the correct player count after kicks / leaves
+					game.desc.dwCurrentPlayers = NETplayerInfo();
 					NETsendGAMESTRUCT(tmp_socket[i], &game);
 				}
 
+				delSocket(tmp_socket_set, tmp_socket[i]);
+				socketClose(tmp_socket[i]);
+				tmp_socket[i] = NULL;
+			}
+			else if (strcmp(buffer, "join") == 0)
+			{
+				debug(LOG_NET, "cmd: join.  Sending GAMESTRUCT");
+				NETsendGAMESTRUCT(tmp_socket[i], &game);
 			}
 			else
 			{
-				//if (recv_result <= 0)
-				//{
-				//	// An error may have occured, but sometimes you can just ignore it
-				//	// It may be good to disconnect sock because it is likely invalid now.
-				//	// We need to handle this error correctly!
-				//	debug(LOG_ERROR,"Couldn't contact server!  Are required TCP ports open?");
-
-				//}
-				return;
+				delSocket(tmp_socket_set, tmp_socket[i]);
+				socketClose(tmp_socket[i]);
+				tmp_socket[i] = NULL;
 			}
 		}
+		else
+		{
+			delSocket(tmp_socket_set, tmp_socket[i]);
+			socketClose(tmp_socket[i]);
+			tmp_socket[i] = NULL;
+		}
+	}
+
+	if (checkSockets(tmp_socket_set, NET_READ_TIMEOUT) > 0)
+	{
 		for(i = 0; i < MAX_TMP_SOCKETS; ++i)
 		{
 			if (   tmp_socket[i] != NULL
-			    && SDLNet_SocketReady(tmp_socket[i]) > 0)
+			    && tmp_socket[i]->ready)
 			{
-				int size = SDLNet_TCP_Recv(tmp_socket[i], &NetMsg, sizeof(NetMsg));
+				int size = readNoInt(tmp_socket[i], &NetMsg, sizeof(NetMsg));
 
 				if (size <= 0)
 				{
-					// socket probably disconnected.
-					debug(LOG_NET, "tmp socket %p probably disconnected", tmp_socket[i]);
-					SDLNet_TCP_DelSocket(tmp_socket_set, tmp_socket[i]);
-					SDLNet_TCP_Close(tmp_socket[i]);
+					// disconnect or programmer error
+					if (size == 0)
+					{
+						debug(LOG_NET, "Client socket disconnected.");
+					}
+					else
+					{
+						debug(LOG_NET, "Client socket ecountered error: %s", strSockError(getSockErr()));
+					}
+
+					delSocket(tmp_socket_set, tmp_socket[i]);
+					socketClose(tmp_socket[i]);
 					tmp_socket[i] = NULL;
 				}
 				else if (NetMsg.type == NET_JOIN)
@@ -1987,9 +2944,9 @@ static void NETallowJoining(void)
 
 					dpid = NET_CreatePlayer(name, 0);
 
-					SDLNet_TCP_DelSocket(tmp_socket_set, tmp_socket[i]);
+					delSocket(tmp_socket_set, tmp_socket[i]);
 					NET_initBufferedSocket(connected_bsocket[dpid], tmp_socket[i]);
-					SDLNet_TCP_AddSocket(socket_set, connected_bsocket[dpid]->socket);
+					addSocket(socket_set, connected_bsocket[dpid]->socket);
 					tmp_socket[i] = NULL;
 
 					debug(LOG_NET, "Player, %s, with dpid of %u has joined using socket %p", name,
@@ -2054,7 +3011,6 @@ BOOL NEThostGame(const char* SessionName, const char* PlayerName,
 		 SDWORD one, SDWORD two, SDWORD three, SDWORD four,
 		 UDWORD plyrs)	// # of players.
 {
-	IPaddress ip;
 	unsigned int i;
 
 	debug(LOG_NET, "NEThostGame(%s, %s, %d, %d, %d, %d, %u)", SessionName, PlayerName,
@@ -2068,27 +3024,22 @@ BOOL NEThostGame(const char* SessionName, const char* PlayerName,
 		return true;
 	}
 
-	if(SDLNet_ResolveHost(&ip, NULL, gameserver_port) == -1)
-	{
-		debug(LOG_ERROR, "Cannot resolve master self: %s", SDLNet_GetError());
-		return false;
-	}
 	// tcp_socket is the connection to the lobby server (or machine)
-	if(!tcp_socket) tcp_socket = SDLNet_TCP_Open(&ip);
+	if (!tcp_socket)
+		tcp_socket = socketListen(gameserver_port);
 	if(tcp_socket == NULL)
 	{
-		debug(LOG_ERROR, "Cannot connect to master self: %s", SDLNet_GetError());
+		debug(LOG_ERROR, "Cannot connect to master self: %s", strSockError(getSockErr()));
 		return false;
 	}
 	debug(LOG_NET, "New tcp_socket = %p", tcp_socket);
 	// Host needs to create a socket set for MAX_PLAYERS
-	if(!socket_set) socket_set = SDLNet_AllocSocketSet(MAX_CONNECTED_PLAYERS);
+	if(!socket_set) socket_set = allocSocketSet(MAX_CONNECTED_PLAYERS);
 	if (socket_set == NULL)
 	{
-		debug(LOG_ERROR, "Cannot create socket set: %s", SDLNet_GetError());
+		debug(LOG_ERROR, "Cannot create socket set: %s", strSockError(getSockErr()));
 		return false;
 	}
-	SDLNet_TCP_AddSocket(socket_set, tcp_socket);
 	// allocate socket storage for all possible players
 	for (i = 0; i < MAX_CONNECTED_PLAYERS; ++i)
 	{
@@ -2101,7 +3052,7 @@ BOOL NEThostGame(const char* SessionName, const char* PlayerName,
 	memset(&game.desc, 0, sizeof(game.desc));
 	game.desc.dwSize = sizeof(game.desc);
 	//game.desc.guidApplication = GAME_GUID;
-	game.desc.host[0] = '\0';
+	memset(game.desc.host, 0, sizeof(game.desc.host));
 	game.desc.dwCurrentPlayers = 1;
 	game.desc.dwMaxPlayers = plyrs;
 	game.desc.dwFlags = 0;
@@ -2109,17 +3060,17 @@ BOOL NEThostGame(const char* SessionName, const char* PlayerName,
 	game.desc.dwUserFlags[1] = two;
 	game.desc.dwUserFlags[2] = three;
 	game.desc.dwUserFlags[3] = four;
-	sstrcpy(game.misc, "Misc data" );					// misc string  (future use)
+	memset(game.secondaryHosts, 0, sizeof(game.secondaryHosts));
 	sstrcpy(game.extra, "Extra");						// extra string (future use)
 	sstrcpy(game.versionstring, VersionString);			// version (string)
 	sstrcpy(game.modlist, "Mod list");					// List of mods
-	game.GAMESTRUCT_VERSION = 2;						// version of this structure
+	game.GAMESTRUCT_VERSION = 3;						// version of this structure
 	game.game_version_major = NETCODE_VERSION_MAJOR;	// Netcode Major version
 	game.game_version_minor = NETCODE_VERSION_MINOR;	// NetCode Minor version
 //	game.privateGame = 0;								// if true, it is a private game
 	game.pureGame = 0;									// NO mods allowed if true
 	game.Mods = 0;										// number of concatenated mods?
-	game.future1 = 0xBAD01;								// for future use
+	game.gameId  = 0;
 	game.future2 = 0xBAD02;								// for future use
 	game.future3 = 0xBAD03;								// for future use
 	game.future4 = 0xBAD04;								// for future use
@@ -2155,9 +3106,10 @@ BOOL NEThaltJoining(void)
 // find games on open connection
 BOOL NETfindGame(void)
 {
+	struct addrinfo* cur;
+	struct addrinfo* hosts;
 	unsigned int gamecount = 0;
 	uint32_t gamesavailable;
-	IPaddress ip;
 	unsigned int port = (hostname == masterserver_name) ? masterserver_port : gameserver_port;
 	int result = 0;
 	debug(LOG_NET, "Looking for games...");
@@ -2181,10 +3133,11 @@ BOOL NETfindGame(void)
 	// We first check to see if we were given a IP/hostname from the command line
 	if (strlen(iptoconnect) )
 	{
-		if (SDLNet_ResolveHost(&ip, iptoconnect, port) == -1)
+		hosts = resolveHost(iptoconnect, port);
+		if (hosts == NULL)
 		{
 			debug(LOG_ERROR, "Error connecting to client via hostname provided (%s)",iptoconnect);
-			debug(LOG_ERROR, "Cannot resolve hostname :%s",SDLNet_GetError());
+			debug(LOG_ERROR, "Cannot resolve hostname :%s",strSockError(getSockErr()));
 			setLobbyError(ERROR_CONNECTION);
 			return false;
 		}
@@ -2195,9 +3148,9 @@ BOOL NETfindGame(void)
 			memset(iptoconnect,0x0,sizeof(iptoconnect));	//reset it (so we don't loop back to this routine)
 		}
 	}
-	else if (SDLNet_ResolveHost(&ip, hostname, port) == -1)
+	else if ((hosts = resolveHost(hostname, port)) == NULL)
 	{
-		debug(LOG_ERROR, "Cannot resolve hostname \"%s\": %s", hostname, SDLNet_GetError());
+		debug(LOG_ERROR, "Cannot resolve hostname \"%s\": %s", hostname, strSockError(getSockErr()));
 		setLobbyError(ERROR_CONNECTION);
 		return false;
 	}
@@ -2205,50 +3158,64 @@ BOOL NETfindGame(void)
 	if (tcp_socket != NULL)
 	{
 		debug(LOG_NET, "Deleting tcp_socket %p", tcp_socket);
-		SDLNet_TCP_DelSocket(socket_set,tcp_socket);
-		SDLNet_TCP_Close(tcp_socket);
+		delSocket(socket_set,tcp_socket);
+		socketClose(tcp_socket);
 		tcp_socket = NULL;
 	}
 
-	tcp_socket = SDLNet_TCP_Open(&ip);
+	for (cur = hosts; cur; cur = cur->ai_next)
+	{
+		tcp_socket = SocketOpen(cur, 15000);
+		if (tcp_socket)
+			break;
+	}
+
 	if (tcp_socket == NULL)
 	{
-		debug(LOG_ERROR, "Cannot connect to \"%s:%d\": %s", hostname, port, SDLNet_GetError());
+		debug(LOG_ERROR, "Cannot connect to \"%s:%d\": %s", hostname, port, strSockError(getSockErr()));
 		setLobbyError(ERROR_CONNECTION);
+		freeaddrinfo(hosts);
 		return false;
 	}
 	debug(LOG_NET, "New tcp_socket = %p", tcp_socket);
 	// client machines only need 1 socket set
-	socket_set = SDLNet_AllocSocketSet(1);
+	socket_set = allocSocketSet(1);
 	if (socket_set == NULL)
 	{
-		debug(LOG_ERROR, "Cannot create socket set: %s", SDLNet_GetError());
+		debug(LOG_ERROR, "Cannot create socket set: %s", strSockError(getSockErr()));
 		setLobbyError(ERROR_CONNECTION);
+		freeaddrinfo(hosts);
 		return false;
 	}
 	debug(LOG_NET, "Created socket_set %p", socket_set);
 
-	SDLNet_TCP_AddSocket(socket_set, tcp_socket);
+	addSocket(socket_set, tcp_socket);
 
 	debug(LOG_NET, "Sending list cmd");
-	SDLNet_TCP_Send(tcp_socket, (void*)"list", sizeof("list"));
+	writeAll(tcp_socket, "list", sizeof("list"));
 
-	if (SDLNet_CheckSockets(socket_set, 1000) > 0
-	 && SDLNet_SocketReady(tcp_socket)
-	 && (result = SDLNet_TCP_Recv(tcp_socket, &gamesavailable, sizeof(gamesavailable))))
+	if (checkSockets(socket_set, 1000) > 0
+	 && tcp_socket->ready
+	 && (result = readNoInt(tcp_socket, &gamesavailable, sizeof(gamesavailable))))
 	{
-		gamesavailable = SDL_SwapBE32(gamesavailable);
+		gamesavailable = ntohl(gamesavailable);
 	}
 	else
 	{
-		if (result < 0)
+		if (result == SOCKET_ERROR)
 		{
-			debug(LOG_NET, "SDLNet_TCP_Recv returned %d, error: %s - tcp_socket %p is now invalid.",
-			      result, SDLNet_GetError(), tcp_socket);
-			tcp_socket = NULL; // unsure how to handle invalid sockets?
+			debug(LOG_NET, "Server socket ecountered error: %s", strSockError(getSockErr()));
 		}
+		else
+		{
+			debug(LOG_NET, "Server didn't respond (timeout)");
+		}
+		socketClose(tcp_socket);
+		tcp_socket = NULL;
+
 		// when we fail to receive a game count, bail out
 		setLobbyError(ERROR_CONNECTION);
+		freeaddrinfo(hosts);
 		return false;
 	}
 
@@ -2258,24 +3225,21 @@ BOOL NETfindGame(void)
 	{
 		// Attempt to receive a game description structure
 		if (!NETrecvGAMESTRUCT(&NetPlay.games[gamecount]))
+		{
 			// If we fail, success depends on the amount of games that we've read already
+			freeaddrinfo(hosts);
 			return gamecount;
+		}
 
 		if (NetPlay.games[gamecount].desc.host[0] == '\0')
 		{
-			unsigned char* address = (unsigned char*)(&(ip.host));
-
-			snprintf(NetPlay.games[gamecount].desc.host, sizeof(NetPlay.games[gamecount].desc.host),
-			"%i.%i.%i.%i",
-				(int)(address[0]),
-				(int)(address[1]),
-				(int)(address[2]),
-				(int)(address[3]));
+			addressToText(cur->ai_addr, NetPlay.games[gamecount].desc.host, sizeof(NetPlay.games[gamecount].desc.host));
 		}
 
 		++gamecount;
 	} while (gamecount < gamesavailable);
 
+	freeaddrinfo(hosts);
 	return true;
 }
 
@@ -2284,62 +3248,79 @@ BOOL NETfindGame(void)
 // Functions used to setup and join games.
 BOOL NETjoinGame(UDWORD gameNumber, const char* playername)
 {
-	IPaddress ip;
+	struct addrinfo* cur;
+	struct addrinfo* hosts;
+	unsigned int i;
 
 	debug(LOG_NET, "resetting sockets.");
 	NETclose();	// just to be sure :)
 
 	debug(LOG_NET, "Trying to join gameNumber (%u)...", gameNumber);
 
-	if (hostname != masterserver_name)
+	if (hostname == masterserver_name)
+	{
+		hostname = NULL;
+	}
+
+	// Loop through all of the hosts, using the first one we can connect to.
+	for (i = 0; i < ARRAY_SIZE(NetPlay.games[gameNumber].secondaryHosts) + 1; ++i)
 	{
 		free(hostname);
-	}
-	hostname = strdup(NetPlay.games[gameNumber].desc.host);
+		if (i > 0)
+			hostname = strdup(NetPlay.games[gameNumber].secondaryHosts[i - 1]);
+		else
+			hostname = strdup(NetPlay.games[gameNumber].desc.host);
 
-	if(SDLNet_ResolveHost(&ip, hostname, gameserver_port) == -1)
+		hosts = resolveHost(hostname, gameserver_port);
+		if (hosts == NULL)
+		{
+			debug(LOG_ERROR, "Cannot resolve hostname \"%s\": %s", hostname, strSockError(getSockErr()));
+			continue;
+		}
+
+		if (tcp_socket != NULL)
+		{
+			socketClose(tcp_socket);
+		}
+
+		for (cur = hosts; cur; cur = cur->ai_next)
+		{
+			tcp_socket = SocketOpen(cur, 15000);
+			if (tcp_socket)
+				goto connect_succesfull;
+		}
+
+		freeaddrinfo(hosts);
+	}
+
+	if (tcp_socket == NULL)
 	{
-		debug(LOG_ERROR, "Cannot resolve hostname \"%s\": %s", hostname, SDLNet_GetError());
 		return false;
 	}
 
-	if (tcp_socket != NULL)
-	{
-		SDLNet_TCP_Close(tcp_socket);
-	}
+connect_succesfull:
 
-	tcp_socket = SDLNet_TCP_Open(&ip);
- 	if (tcp_socket == NULL)
-	{
-		debug(LOG_ERROR, "Cannot connect to \"%s:%d\": %s", hostname, gameserver_port, SDLNet_GetError());
-		return false;
-	}
 	// client machines only need 1 socket set
-	socket_set = SDLNet_AllocSocketSet(1);
+	socket_set = allocSocketSet(1);
 	if (socket_set == NULL)
 	{
-		debug(LOG_ERROR, "Cannot create socket set: %s", SDLNet_GetError());
+		debug(LOG_ERROR, "Cannot create socket set: %s", strSockError(getSockErr()));
+		freeaddrinfo(hosts);
  		return false;
  	}
 	debug(LOG_NET, "Created socket_set %p", socket_set);
 
 	// tcp_socket is used to talk to host machine
-	SDLNet_TCP_AddSocket(socket_set, tcp_socket);
+	addSocket(socket_set, tcp_socket);
 
-	SDLNet_TCP_Send(tcp_socket, (void*)"join", sizeof("join"));
+	writeAll(tcp_socket, "join", sizeof("join"));
 
 	if (NETrecvGAMESTRUCT(&NetPlay.games[gameNumber])
 	 && NetPlay.games[gameNumber].desc.host[0] == '\0')
 	{
-		unsigned char* address = (unsigned char*)(&(ip.host));
-
-		snprintf(NetPlay.games[gameNumber].desc.host, sizeof(NetPlay.games[gameNumber].desc.host),
-			"%i.%i.%i.%i",
-			(int)(address[0]),
-			(int)(address[1]),
-			(int)(address[2]),
-			(int)(address[3]));
+		addressToText(cur->ai_addr, NetPlay.games[gameNumber].desc.host, sizeof(NetPlay.games[gameNumber].desc.host));
 	}
+	freeaddrinfo(hosts);
 	// Allocate memory for a new socket
 	bsocket = NET_createBufferedSocket();
 	// NOTE: tcp_socket = bsocket->socket now!

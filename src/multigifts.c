@@ -738,7 +738,7 @@ void giftArtifact(UDWORD owner, UDWORD x, UDWORD y)
 	{
 		pO	 = asPlayerResList[owner];
 
-		for (topic = numResearch - 1; topic >= 0; topic--)
+		for (topic = numResearch - 1; topic > 0; topic--)
 		{
 			if (IsResearchCompleted(&pO[topic])
 			 && !IsResearchPossible(&pR[topic]))
@@ -750,14 +750,13 @@ void giftArtifact(UDWORD owner, UDWORD x, UDWORD y)
 					MakeResearchPossible(&pR[topic]);
 					CONPRINTF(ConsoleString,(ConsoleString,_("You Discover Blueprints For %s"),
 						getName(asResearch[topic].pName)));
+					break;
 				}
 				// Invalid topic
 				else
 				{
 					debug(LOG_WARNING, "%s is a invalid research topic?", getName(asResearch[topic].pName));
 				}
-
-				break;
 			}
 		}
 	}

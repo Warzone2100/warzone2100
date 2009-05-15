@@ -27,15 +27,37 @@ from StringIO import StringIO
 from pkg_resources import parse_version
 from game import *
 
-__all__ = ['Protocol', 'BinaryProtocol']
+__all__ = ['Protocol']
 
 @contextmanager
 def _socket(family = socket.AF_INET, type = socket.SOCK_STREAM, proto = 0):
 	s = socket.socket(family, type, proto)
 	try:
+		if family == socket.AF_INET6:
+			# Ensure that connecting to IPv6-mapped IPv4 addresses works as well
+			s.setsockopt(socket.IPPROTO_IPV6, socket.IPV6_V6ONLY, 0)
 		yield s
 	finally:
 		s.close()
+
+@contextmanager
+def connection(host, port, family = socket.AF_UNSPEC, socktype = socket.SOCK_STREAM):
+	addrs = socket.getaddrinfo(host, port, family, socktype)
+	for i in xrange(len(addrs)):
+		(family, socktype, proto, canonname, sockaddr) = addrs[i]
+		with _socket(family, socktype, proto) as s:
+			timeout = s.gettimeout()
+			s.settimeout(10.0)
+			try:
+				s.connect(sockaddr)
+			except socket.timeout:
+				if i == (len(addrs) - 1):
+					raise
+				continue
+			s.settimeout(timeout)
+
+			yield s
+			return
 
 def _encodeCString(string, buf_len):
 	# If we haven't got a string return an empty one
@@ -52,7 +74,7 @@ def _encodeCString(string, buf_len):
 	return str(string)
 
 def _swap_endianness(i):
-	return struct.unpack(">I", struct.pack("<I", i))
+	return struct.unpack(">I", struct.pack("<I", i))[0]
 
 @contextmanager
 def writeable(output):
@@ -71,21 +93,35 @@ def writeable(output):
 		finally:
 			io.close()
 
-def read_method(input):
-	try:
+@contextmanager
+def readable(input):
+	if   hasattr(input, 'read'):
 		# File IO
-		return input.read
-	except AttributeError:
+		yield input
+	else:
 		try:
 			# Socket IO
-			return input.recv
+			io = input.makefile()
+			yield io
 		except AttributeError:
 			# String IO (no, not the StringIO class, that would have been matched as "File IO")
-			return None
+			io = None
+			yield io
+		finally:
+			if io:
+				io.close()
 
-class Protocol(object):
-	# Size of a single game is undefined at compile time
-	size = None
+class BaseProtocol(object):
+	# Gameserver port.
+	gamePort = {'2.0': 9999,
+	            '2.2': 2100}
+	# Lobby server port.
+	lobbyPort = {'2.0': 9998,
+	             '2.1': 9997,
+	             '2.2': 9990}
+
+	def __init__(self, version):
+		self.version = version
 
 	def encodeSingle(data):
 		pass
@@ -99,100 +135,77 @@ class Protocol(object):
 	def decodeMultiple(data):
 		pass
 
-	def check(game):
+	def encodeGameID(gameId):
 		pass
 
-class BinaryProtocol(Protocol):
+	def sendStatusMessage(host, status, message):
+		pass
+
+	def check(self, game, host):
+		"""Check we can connect to the game's host."""
+		try:
+			logging.debug("Checking %s's vitality..." % host)
+			with connection(host, self.gamePort) as s:
+				return True
+		except (socket.error, socket.herror, socket.gaierror, socket.timeout), e:
+			logging.debug("%s did not respond: %s" % (host, e))
+			return False
+
+	def list(self, host):
+		"""Retrieve a list of games from the lobby server."""
+		with connection(host, self.lobbyPort) as s:
+			s.send("list\0")
+			for game in self.decodeMultiple(s):
+				yield game
+
+class BinaryProtocol20(BaseProtocol):
 	# Binary struct format to use (GAMESTRUCT)
-	gameFormat = {}
 
 	# >= 2.0 data
 	name_length          = 64
 	host_length          = 16
 
-	gameFormat['2.0'] = struct.Struct('!%dsII%ds6I' % (name_length, host_length))
-
-	# >= 2.2 data
-	misc_length          = 64
-	extra_length         = 255
-	versionstring_length = 64
-	modlist_length       = 255
-
-	gameFormat['2.2'] = struct.Struct(gameFormat['2.0'].format + '%ds%ds%ds%ds10I' % (misc_length, extra_length, versionstring_length, modlist_length))
-
-	# Gameserver port.
-	gamePort = {'2.0': 9999,
-	            '2.2': 2100}
+	gameFormat = struct.Struct('!%dsII%ds6I' % (name_length, host_length))
 
 	countFormat = struct.Struct('!I')
 
 	size = property(fget = lambda self: self.gameFormat.size)
 
-	def __init__(self, version = '2.2'):
-		if   parse_version('2.0') <= parse_version(version) < parse_version('2.2'):
-			self.gameFormat = BinaryProtocol.gameFormat['2.0']
-			self.gamePort   = BinaryProtocol.gamePort['2.0']
-		elif parse_version('2.2') <= parse_version(version):
-			self.gameFormat = BinaryProtocol.gameFormat['2.2']
-			self.gamePort   = BinaryProtocol.gamePort['2.2']
-
-		self.version = version
+	gamePort = BaseProtocol.gamePort['2.0']
+	lobbyPort = BaseProtocol.lobbyPort['2.0']
 
 	def _encodeName(self, game):
 		return _encodeCString(game.description, self.name_length)
 
-	def _encodeHost(self, game):
-		return _encodeCString(game.host, self.host_length)
+	def _encodeHost(self, game, hostnum = 0):
+		if hostnum < len(game.hosts):
+			return _encodeCString(game.hosts[hostnum], self.host_length)
+		else:
+			return _encodeCString(str(), self.host_length)
 
-	def _encodeMisc(self, game):
-		return _encodeCString(game.misc, self.misc_length)
-
-	def _encodeExtra(self, game):
-		return _encodeCString(game.extra, self.extra_length)
-
-	def _encodeVersionString(self, game):
-		return _encodeCString(game.multiplayerVersion, self.versionstring_length)
-
-	def encodeSingle(self, game, out = str()):
+	def encodeSingle(self, game, out = str(), hideGameID = False):
 		with writeable(out) as write:
-			if   parse_version('2.0') <= parse_version(self.version) < parse_version('2.2'):
-				maxPlayers     = game.maxPlayers
-				currentPlayers = game.currentPlayers
+			# Workaround the fact that the 2.0.x versions don't
+			# perform endian swapping
+			maxPlayers     = _swap_endianness(game.maxPlayers)
+			currentPlayers = _swap_endianness(game.currentPlayers)
 
-				# Workaround the fact that the 2.0.x versions don't
-				# perform endian swapping
-				if parse_version('2.0') <= parse_version(self.version) < parse_version('2.1'):
-					maxPlayers     = _swap_endianness(maxPlayers)
-					currentPlayers = _swap_endianness(currentPlayers)
-
-				write.write(self.gameFormat.pack(
-					self._encodeName(game),
-					game.size or self.size, game.flags,
-					self._encodeHost(game),
-					maxPlayers, currentPlayers, game.user1, game.user2, game.user3, game.user4))
-			elif parse_version('2.2') <= parse_version(self.version):
-				write.write(self.gameFormat.pack(
-					self._encodeName(game),
-					game.size or self.size, game.flags,
-					self._encodeHost(game),
-					game.maxPlayers, game.currentPlayers, game.user1, game.user2, game.user3, game.user4,
-					self._encodeMisc(game),
-					self._encodeExtra(game),
-					self._encodeVersionString(game),
-					game.modlist,
-					game.lobbyVersion, game.game_version_major, game.game_version_minor, game.private,
-					game.pure, game.Mods, game.future1, game.future2, game.future3, game.future4))
+			write.write(self.gameFormat.pack(
+				self._encodeName(game),
+				game.size or self.size, game.flags,
+				self._encodeHost(game),
+				maxPlayers, currentPlayers, game.user1, game.user2, game.user3, game.user4))
 
 			try:
 				return write.getvalue()
 			except AttributeError:
 				return out
 
-	def encodeMultiple(self, games, out = str()):
+	def encodeMultiple(self, games, out = str(), hideGameID = False):
 		with writeable(out) as write:
 			write.write(self.countFormat.pack(len(games)))
 			for game in games:
-				self.encodeSingle(game, write)
+				self.encodeSingle(game, write, hideGameID)
 
 			try:
 				return write.getvalue()
@@ -200,72 +213,211 @@ class BinaryProtocol(Protocol):
 				return out
 
 	def decodeSingle(self, input, game = Game(), offset = None):
-		read = read_method(input)
+		with readable(input) as read:
+			decData = {'hosts': [None]}
 
-		decData = {}
+			if   offset != None and read == None:
+				def unpack():
+					return self.gameFormat.unpack_from(out, offset)
+			elif not read:
+				def unpack():
+					return self.gameFormat.unpack(input)
+			else:
+				def unpack():
+					data = read.read(self.size)
+					if len(data) != self.size:
+						return None
+					return self.gameFormat.unpack(data)
 
-		if   offset != None and read == None:
-			def unpack():
-				return self.gameFormat.unpack_from(out, offset)
-		elif not read:
-			def unpack():
-				return self.gameFormat.unpack(input)
-		else:
-			def unpack():
-				data = read(self.size)
-				if len(data) != self.size:
-					return None
-				return self.gameFormat.unpack(data)
+			data = unpack()
+			if not data:
+				return None
 
-		data = unpack()
-		if not data:
-			return None
-
-		if   parse_version('2.0') <= parse_version(self.version) < parse_version('2.2'):
-			(decData['name'], game.size, game.flags, decData['host'], game.maxPlayers, game.currentPlayers,
+			(decData['name'], game.size, game.flags, decData['hosts'][0], game.maxPlayers, game.currentPlayers,
 				game.user1, game.user2, game.user3, game.user4) = data
-		elif parse_version('2.2') <= parse_version(self.version):
-			(decData['name'], game.size, game.flags, decData['host'], game.maxPlayers, game.currentPlayers,
-				game.user1, game.user2, game.user3, game.user4,
-				game.misc, game.extra, decData['multiplayer-version'], game.modlist, game.lobbyVersion,
-				game.game_version_major, game.game_version_minor, game.private, game.pure, game.Mods, game.future1,
-				game.future2, game.future3, game.future4) = data
 
-		# Workaround the fact that the 2.0.x versions don't perform
-		# endian swapping
-		if   parse_version('2.0') <= parse_version(self.version) < parse_version('2.1'):
+			# Workaround the fact that the 2.0.x versions don't
+			# perform endian swapping
 			game.maxPlayers = _swap_endianness(game.maxPlayers)
 			game.currentPlayers = _swap_endianness(game.currentPlayers)
 
-		for strKey in ['name', 'host', 'multiplayer-version']:
-			decData[strKey] = decData[strKey].strip("\0")
+			decData['name'] = decData['name'].strip("\0")
+			decData['hosts'][0] = decData['hosts'][0].strip("\0")
 
-		game.misc = game.misc.strip("\0")
-		game.extra = game.extra.strip("\0")
-		game.modlist = game.modlist.strip("\0")
-
-		game.data.update(decData)
-		return game
+			game.data.update(decData)
+			return game
 
 	def decodeMultiple(self, input):
-		read = read_method(input)
+		with readable(input) as read:
+			if read:
+				(count,) = self.countFormat.unpack(read.read(self.countFormat.size))
+			else:
+				(count,) = self.countFormat.unpack_from(input)
 
-		if read:
-			(count,) = self.countFormat.unpack(read(self.countFormat.size))
-		else:
-			(count,) = self.countFormat.unpack_from(input)
+			for i in xrange(count):
+				game = self.decodeSingle(read or input, offset=(self.size * i + self.countFormat.size))
+				if game is None:
+					return
+				yield game
 
-		for i in xrange(count):
-			yield self.decodeSingle(input, offset=(self.size * i + self.countFormat.size))
+	def encodeGameID(self, gameId, out = str()):
+		assert False, "Not supported by this protocol version"
 
-	def check(self, game):
-		"""Check we can connect to the game's host."""
-		with _socket() as s:
+	def sendStatusMessage(self, host, status, message, out = str()):
+		assert False, "Not supported by this protocol version"
+
+class BinaryProtocol21(BinaryProtocol20):
+	lobbyPort = BaseProtocol.lobbyPort['2.1']
+
+	def encodeSingle(self, game, out = str(), hideGameID = False):
+		with writeable(out) as write:
+			write.write(self.gameFormat.pack(
+				self._encodeName(game),
+				game.size or self.size, game.flags,
+				self._encodeHost(game),
+				game.maxPlayers, game.currentPlayers, game.user1, game.user2, game.user3, game.user4))
+
 			try:
-				logging.debug("Checking %s's vitality..." % game.host)
-				s.settimeout(10.0)
-				s.connect((game.host, self.gamePort))
-				return True
-			except (socket.error, socket.herror, socket.gaierror, socket.timeout), e:
-				logging.debug("%s did not respond: %s" % (game.host, e))
-				return False
+				return write.getvalue()
+			except AttributeError:
+				return out
+
+	def decodeSingle(self, input, game = Game(), offset = None):
+		with readable(input) as read:
+			decData = {'hosts': [None]}
+
+			if   offset != None and read == None:
+				def unpack():
+					return self.gameFormat.unpack_from(out, offset)
+			elif not read:
+				def unpack():
+					return self.gameFormat.unpack(input)
+			else:
+				def unpack():
+					data = read.read(self.size)
+					if len(data) != self.size:
+						return None
+					return self.gameFormat.unpack(data)
+
+			data = unpack()
+			if not data:
+				return None
+
+			(decData['name'], game.size, game.flags, decData['hosts'][0], game.maxPlayers, game.currentPlayers,
+				game.user1, game.user2, game.user3, game.user4) = data
+
+			decData['name'] = decData['name'].strip("\0")
+			decData['hosts'][0] = decData['hosts'][0].strip("\0")
+
+			game.data.update(decData)
+			return game
+
+class BinaryProtocol22(BinaryProtocol21):
+	# changes to >= 2.0 data
+	host_length          = 40
+
+	# >= 2.2 data
+	extra_length         = 239
+	versionstring_length = 64
+	modlist_length       = 255
+
+	gameFormat = struct.Struct('!I%dsii%ds6i%ds%ds%ds%ds%ds9I' % (BinaryProtocol21.name_length, host_length, host_length, host_length, extra_length, versionstring_length, modlist_length))
+
+	gamePort = BaseProtocol.gamePort['2.2']
+	lobbyPort = BaseProtocol.lobbyPort['2.2']
+
+	def _encodeExtra(self, game):
+		return _encodeCString(game.extra, self.extra_length)
+
+	def _encodeVersionString(self, game):
+		return _encodeCString(game.multiplayerVersion, self.versionstring_length)
+
+	def encodeSingle(self, game, out = str(), hideGameID = False):
+		with writeable(out) as write:
+			if hideGameID:
+				gameId = 0
+			else:
+				gameId = game.gameId
+			write.write(self.gameFormat.pack(
+				game.lobbyVersion,
+				self._encodeName(game),
+				game.size or self.size, game.flags,
+				self._encodeHost(game, 0),
+				game.maxPlayers, game.currentPlayers, game.user1, game.user2, game.user3, game.user4,
+				self._encodeHost(game, 1),
+				self._encodeHost(game, 2),
+				self._encodeExtra(game),
+				self._encodeVersionString(game),
+				game.modlist,
+				game.game_version_major, game.game_version_minor, game.private,
+				game.pure, game.Mods, gameId, game.future2, game.future3, game.future4))
+
+			try:
+				return write.getvalue()
+			except AttributeError:
+				return out
+
+	def decodeSingle(self, input, game = Game(), offset = None):
+		with readable(input) as read:
+			decData = {'hosts': [None, None, None]}
+
+			if   offset != None and read == None:
+				def unpack():
+					return self.gameFormat.unpack_from(out, offset)
+			elif not read:
+				def unpack():
+					return self.gameFormat.unpack(input)
+			else:
+				def unpack():
+					data = read.read(self.size)
+					if len(data) != self.size:
+						return None
+					return self.gameFormat.unpack(data)
+
+			data = unpack()
+			if not data:
+				return None
+
+			(game.lobbyVersion, decData['name'], game.size, game.flags, decData['hosts'][0], game.maxPlayers, game.currentPlayers,
+				game.user1, game.user2, game.user3, game.user4,
+				decData['hosts'][1], decData['hosts'][2], game.extra, decData['multiplayer-version'], game.modlist,
+				game.game_version_major, game.game_version_minor, game.private, game.pure, game.Mods, game.gameId,
+				game.future2, game.future3, game.future4) = data
+
+			for strKey in ['name', 'multiplayer-version']:
+				decData[strKey] = decData[strKey].strip("\0")
+			for i in xrange(len(decData['hosts'])):
+				decData['hosts'][i] = decData['hosts'][i].strip("\0")
+			decData['hosts'] = filter(bool, decData['hosts'])
+
+			game.extra = game.extra.strip("\0")
+			game.modlist = game.modlist.strip("\0")
+
+			game.data.update(decData)
+			return game
+
+	def encodeGameID(self, gameId, out = str()):
+		with writeable(out) as write:
+			write.write(struct.pack('!I', gameId))
+
+			try:
+				return write.getvalue()
+			except AttributeError:
+				return out
+
+	def sendStatusMessage(self, host, status, message, out = str()):
+		with writeable(out) as write:
+			write.write(struct.pack('!II%ds' % len(message), status, len(message), message))
+
+			try:
+				return write.getvalue()
+			except AttributeError:
+				return out
+
+def Protocol(version = '2.2'):
+	if   parse_version('2.0') <= parse_version(version) < parse_version('2.1'):
+		return BinaryProtocol20(version)
+	elif parse_version('2.1') <= parse_version(version) < parse_version('2.2'):
+		return BinaryProtocol21(version)
+	elif parse_version('2.2') <= parse_version(version):
+		return BinaryProtocol22(version)

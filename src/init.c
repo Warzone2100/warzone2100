@@ -472,8 +472,7 @@ BOOL systemInitialise(void)
 //
 void systemShutdown(void)
 {
-//	unsigned int i;
-
+	shutdownEffectsSystem();
 	keyClearMappings();
 
 	// free up all the load functions (all the data should already have been freed)

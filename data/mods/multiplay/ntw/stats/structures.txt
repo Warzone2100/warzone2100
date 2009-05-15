@@ -15,11 +15,9 @@ A0CommandCentreDEL,HQ,Level All,HARD,0,2,2,Concrete,500,3,10,500,10,100,30,300,1
 A0CommandCentreNE,HQ,Level Three,HARD,0,2,2,Concrete,500,3,10,500,10,100,30,300,1,1,ZNULLECM,CCSensor,1,blhq4.Pie,0,1,0
 A0CommandCentreNP,HQ,Level One,HARD,0,2,2,Concrete,500,3,10,500,10,100,30,300,1,1,ZNULLECM,CCSensor,1,blhq2.Pie,0,1,0
 A0CyborgFactory,CYBORG FACTORY,Level All,MEDIUM,1,1,2,Concrete,500,2,10,500,100,100,30,150,5,20,ZNULLECM,DefaultSensor1Mk1,0,blcfact1.Pie,0,1,0
-A0FacMod1,FACTORY MODULE,Level All,MEDIUM,1,3,3,Concrete,500,2,10,500,100,100,30,150,255,20,ZNULLECM,DefaultSensor1Mk1,0,BLFACT1.PIE,0,1,0
+A0FacMod1,FACTORY MODULE,Level All,MEDIUM,1,3,3,Concrete,500,3,10,500,100,100,30,150,255,20,ZNULLECM,DefaultSensor1Mk1,0,BLFACT1.PIE,0,1,0
 A0HardcreteMk1CWall,CORNER WALL,Level All,HARD,1,1,1,Concrete,125,2,15,265,10,75,1,0,255,0,ZNULLECM,ZNULLSENSOR,0,BLWALLC1.PIE,0,0,0
 A0HardcreteMk1Wall,WALL,Level All,HARD,1,1,1,Concrete,125,2,15,265,10,75,1,0,255,0,ZNULLECM,ZNULLSENSOR,0,BLWALLH.PIE,0,1,0
-StakeMark,DOOR,Level All,HARD,1,1,2,Concrete,250,2,15,265,10,75,10,25,255,0,ZNULLECM,ZNULLSENSOR,0,gatev.pie,0,1,0
-StakeMark_h,DOOR,Level All,HARD,1,2,1,Concrete,250,2,15,265,10,75,10,25,255,0,ZNULLECM,ZNULLSENSOR,0,gateh.pie,0,1,0
 A0LasSatCommand,DOOR,Level All,HARD,1,1,1,Concrete,2000,3,10,500,10,2000,30,300,1,0,ZNULLECM,ZNULLSENSOR,1,blmssilo.pie,mibcool.pie,0,1
 A0LightFactory,FACTORY,Level One,MEDIUM,1,3,3,Concrete,500,3,10,500,100,100,30,150,255,20,ZNULLECM,BaBaSensor,0,BLBRBFAC.PIE,0,1,0
 A0PowerGenerator,POWER GENERATOR,Level One,MEDIUM,1,2,2,Concrete,500,3,20,500,30,100,30,300,255,10,ZNULLECM,BaBaSensor,0,BLBRBGEN.PIE,0,1,0
@@ -105,13 +103,13 @@ PillBox3,DEFENSE,Level All,BUNKER,0,1,1,Concrete,400,1,20,500,10,130,10,150,255,
 PillBox4,DEFENSE,Level All,BUNKER,0,1,1,Concrete,400,1,20,500,10,125,10,150,255,1,ZNULLECM,DefaultSensor1Mk1,1,Blcanpil.Pie,0,1,1
 PillBox5,DEFENSE,Level All,BUNKER,0,1,1,Concrete,400,1,20,500,10,125,10,150,255,1,ZNULLECM,DefaultSensor1Mk1,1,Blcanpil.Pie,0,0,1
 PillBox6,DEFENSE,Level All,BUNKER,0,1,1,Concrete,400,1,20,500,10,175,10,150,255,1,ZNULLECM,DefaultSensor1Mk1,1,Blcanpil.Pie,0,0,1
-WallTower-HPVcannon,DEFENSE,Level Two-Three,BUNKER,0,1,1,Concrete,400,1,20,500,10,250,10,150,255,1,ZNULLECM,DefaultSensor1Mk1,1,Blcanpil.pie,0,0,1
-Emplacement-PlasmaCannon,DEFENSE,Level Three,BUNKER,0,1,1,Concrete,400,1,20,400,10,425,10,150,255,1,ZNULLECM,DefaultSensor1Mk1,1,adv-bunker.pie,0,0,1
+WallTower-HPVcannon,DEFENSE,Level Two-Three,BUNKER,0,1,1,Concrete,400,1,20,500,10,300,10,150,255,1,ZNULLECM,DefaultSensor1Mk1,1,Blcanpil.pie,0,0,1
+Emplacement-PlasmaCannon,DEFENSE,Level Three,BUNKER,0,1,1,Concrete,400,1,20,400,10,400,10,150,255,1,ZNULLECM,DefaultSensor1Mk1,1,adv-bunker.pie,0,0,1
 Emplacement-PulseLaser,DEFENSE,Level Three,BUNKER,0,1,1,Concrete,400,1,20,500,10,300,10,150,255,1,ZNULLECM,DefaultSensor1Mk1,1,adv-bunker.pie,0,0,1
 Emplacement-PrisLas,DEFENSE,Level Three,BUNKER,0,1,1,Concrete,400,1,20,500,10,200,10,150,255,1,ZNULLECM,DefaultSensor1Mk1,1,adv-bunker.pie,0,0,1
-Emplacement-Rail2,DEFENSE,Level Three,BUNKER,0,1,1,Concrete,400,1,20,500,10,350,10,150,255,1,ZNULLECM,DefaultSensor1Mk1,1,adv-bunker.pie,0,0,1
-Emplacement-Rail3,DEFENSE,Level Three,BUNKER,0,1,1,Concrete,400,1,20,500,10,450,10,150,255,1,ZNULLECM,DefaultSensor1Mk1,1,adv-bunker.pie,0,0,1
-Emplacement-HvyATrocket,DEFENSE,Level All,BUNKER,0,1,1,Concrete,400,1,20,500,10,200,10,150,255,1,ZNULLECM,DefaultSensor1Mk1,1,Blcanpil.Pie,0,0,1
+Emplacement-Rail2,DEFENSE,Level Three,BUNKER,0,1,1,Concrete,400,1,20,500,10,300,10,150,255,1,ZNULLECM,DefaultSensor1Mk1,1,adv-bunker.pie,0,0,1
+Emplacement-Rail3,DEFENSE,Level Three,BUNKER,0,1,1,Concrete,400,1,20,500,10,400,10,150,255,1,ZNULLECM,DefaultSensor1Mk1,1,adv-bunker.pie,0,0,1
+Emplacement-HvyATrocket,DEFENSE,Level All,BUNKER,0,1,1,Concrete,400,1,20,500,10,225,10,150,255,1,ZNULLECM,DefaultSensor1Mk1,1,Blcanpil.Pie,0,0,1
 Emplacement-MortarPit-Incenediary,DEFENSE,Level Three,BUNKER,0,1,1,Concrete,400,1,20,500,10,350,10,150,255,1,ZNULLECM,DefaultSensor1Mk1,1,Blcanpil.pie,0,0,1
 Emplacement-HeavyLaser,DEFENSE,Level Three,BUNKER,0,1,1,Concrete,400,1,20,500,10,350,10,150,255,1,ZNULLECM,DefaultSensor1Mk1,1,adv-bunker.pie,0,0,1
 Plasmite-flamer-bunker,DEFENSE,Level Three,BUNKER,0,1,1,Concrete,400,1,20,400,10,175,10,150,255,1,ZNULLECM,DefaultSensor1Mk1,1,Blcanpil.Pie,0,0,1
@@ -123,8 +121,8 @@ Sys-NX-VTOL-CB-Tow,DEFENSE,Level Two-Three,HARD,0,1,1,Concrete,400,3,15,400,0,10
 Sys-NX-VTOL-RadTow,DEFENSE,Level Two-Three,HARD,0,1,1,Concrete,400,3,15,400,0,100,10,150,255,0,ZNULLECM,Sys-VTOLRadarTower01,1,Blgrdnex.Pie,0,0,0
 Sys-SensoTower01,DEFENSE,Level All,MEDIUM,0,1,1,Concrete,300,3,10,300,0,60,10,150,255,0,ZNULLECM,SensorTurret1Mk1,1,BLGUARDM.PIE,0,0,0
 Sys-SensoTower02,DEFENSE,Level Two-Three,HARD,0,1,1,Concrete,400,3,15,400,0,100,10,150,255,0,ZNULLECM,SensorTower2Mk1,1,BLGUARDR.PIE,0,0,0
-Sys-SensoTowerWS,DEFENSE,Level Two-Three,HARD,0,1,1,Concrete,800,3,15,400,0,250,10,150,255,0,ZNULLECM,Sensor-WideSpec,1,BLGUARDR.PIE,0,0,0
-Sys-SpyTower,DEFENSE,Level Two-Three,HARD,0,1,1,Concrete,800,3,15,400,0,600,10,150,255,0,ZNULLECM,DefaultSensor1Mk1,1,BLGUARDR.PIE,0,0,1
+Sys-SensoTowerWS,DEFENSE,Level Two-Three,HARD,0,1,1,Concrete,700,3,15,400,0,250,10,150,255,0,ZNULLECM,Sensor-WideSpec,1,BLGUARDR.PIE,0,0,0
+Sys-SpyTower,DEFENSE,Level Two-Three,HARD,0,1,1,Concrete,700,3,15,400,0,500,10,150,255,0,ZNULLECM,DefaultSensor1Mk1,1,BLGUARDR.PIE,0,0,1
 Sys-VTOL-CB-Tower01,DEFENSE,Level Two-Three,HARD,0,1,1,Concrete,400,3,15,400,0,100,10,150,255,0,ZNULLECM,Sys-VTOLCBTower01,1,BLGUARDR.PIE,0,0,0
 Sys-VTOL-RadarTower01,DEFENSE,Level Two-Three,HARD,0,1,1,Concrete,400,3,15,400,0,100,10,150,255,0,ZNULLECM,Sys-VTOLRadarTower01,1,BLGUARDR.PIE,0,0,0
 TankTrapC,CORNER WALL,Level All,HARD,1,1,1,Concrete,40,1,10,100,10,15,1,0,255,0,ZNULLECM,ZNULLSENSOR,0,tank-traps.pie,0,1,0
@@ -137,13 +135,13 @@ Wall-VulcanCan,DEFENSE,Level Two-Three,HARD,0,1,1,Concrete,400,2,15,420,10,275,1
 WallTower-Atmiss,DEFENSE,Level Three,HARD,0,1,1,Concrete,400,2,15,420,10,350,10,150,255,1,ZNULLECM,DefaultSensor1Mk1,1,BLGUARD1.PIE,0,0,1
 WallTower-DoubleAAGun,DEFENSE,Level Two,HARD,0,1,1,Concrete,400,2,15,420,10,400,10,150,255,1,ZNULLECM,DefaultSensor1Mk1,1,BLGUARD1.PIE,0,0,1
 WallTower-EMP,DEFENSE,Level All,HARD,0,1,1,Concrete,400,2,15,420,10,350,15,150,255,1,ZNULLECM,DefaultSensor1Mk1,1,BLGUARD1.PIE,0,0,1
-WallTower-HvATrocket,DEFENSE,Level Two-Three,HARD,0,1,1,Concrete,400,2,15,420,10,300,10,150,255,1,ZNULLECM,DefaultSensor1Mk1,1,BLGUARD1.PIE,0,0,1
+WallTower-HvATrocket,DEFENSE,Level Two-Three,HARD,0,1,1,Concrete,400,2,15,420,10,200,10,150,255,1,ZNULLECM,DefaultSensor1Mk1,1,BLGUARD1.PIE,0,0,1
 WallTower-Projector,DEFENSE,Level Two-Three,HARD,0,1,1,Concrete,400,2,15,420,10,150,10,150,255,1,ZNULLECM,DefaultSensor1Mk1,1,BLHARDPT.PIE,0,0,1
 WallTower-PulseLas,DEFENSE,Level Three,HARD,0,1,1,Concrete,400,2,15,420,10,275,10,150,255,1,ZNULLECM,DefaultSensor1Mk1,1,BLGUARD1.PIE,0,0,1
 WallTower-QuadRotAAGun,DEFENSE,Level Three,HARD,0,1,1,Concrete,400,2,15,420,10,400,10,150,255,1,ZNULLECM,DefaultSensor1Mk1,1,BLGUARD1.PIE,0,0,1
-WallTower-Rail2,DEFENSE,Level Three,HARD,0,1,1,Concrete,400,2,15,420,10,350,10,150,255,1,ZNULLECM,DefaultSensor1Mk1,1,BLGUARD1.PIE,0,0,1
-WallTower-Rail3,DEFENSE,Level Three,HARD,0,1,1,Concrete,400,2,15,420,10,400,10,150,255,1,ZNULLECM,DefaultSensor1Mk1,1,BLGUARD1.PIE,0,0,1
-WallTower-Rail4,DEFENSE,Level Three,HARD,0,1,1,Concrete,400,2,15,420,10,450,10,150,255,1,ZNULLECM,DefaultSensor1Mk1,1,BLGUARD1.PIE,0,0,1
+WallTower-Rail2,DEFENSE,Level Three,HARD,0,1,1,Concrete,400,2,15,420,10,275,10,150,255,1,ZNULLECM,DefaultSensor1Mk1,1,BLGUARD1.PIE,0,0,1
+WallTower-Rail3,DEFENSE,Level Three,HARD,0,1,1,Concrete,400,2,15,420,10,375,10,150,255,1,ZNULLECM,DefaultSensor1Mk1,1,BLGUARD1.PIE,0,0,1
+WallTower-Rail4,DEFENSE,Level Three,HARD,0,1,1,Concrete,400,2,15,420,10,425,10,150,255,1,ZNULLECM,DefaultSensor1Mk1,1,BLGUARD1.PIE,0,0,1
 WallTower-SamHvy,DEFENSE,Level Three,HARD,0,1,1,Concrete,400,2,15,420,10,400,10,150,255,1,ZNULLECM,DefaultSensor1Mk1,1,BLGUARD1.PIE,0,0,1
 WallTower-SamSite,DEFENSE,Level Three,HARD,0,1,1,Concrete,400,2,15,420,10,400,10,150,255,1,ZNULLECM,DefaultSensor1Mk1,1,BLGUARD1.PIE,0,0,1
 WallTower-TwinAssaultGun,DEFENSE,Level Three,HARD,0,1,1,Concrete,400,2,15,420,10,250,10,150,255,1,ZNULLECM,DefaultSensor1Mk1,1,BLGUARD1.PIE,0,0,1
@@ -153,7 +151,7 @@ WallTower03,DEFENSE,Level All,HARD,0,1,1,Concrete,400,2,15,420,10,175,10,150,255
 WallTower04,DEFENSE,Level All,HARD,0,1,1,Concrete,400,2,15,420,10,250,10,150,255,1,ZNULLECM,DefaultSensor1Mk1,1,BLGUARD1.PIE,0,0,1
 WallTower05,DEFENSE,Level All,HARD,0,1,1,Concrete,400,2,15,420,10,100,10,150,255,1,ZNULLECM,DefaultSensor1Mk1,1,BLGUARD1.PIE,0,0,1
 WallTower06,DEFENSE,Level All,HARD,0,1,1,Concrete,400,2,15,420,10,150,10,150,255,1,ZNULLECM,DefaultSensor1Mk1,1,BLGUARD1.PIE,0,0,1
-Emplacement-HPVcannon,DEFENSE,Level Two-Three,HARD,0,1,1,Concrete,400,2,15,420,10,225,10,150,255,1,ZNULLECM,DefaultSensor1Mk1,1,BLGUARD1.PIE,0,0,1
+Emplacement-HPVcannon,DEFENSE,Level Two-Three,HARD,0,1,1,Concrete,400,2,15,420,10,275,10,150,255,1,ZNULLECM,DefaultSensor1Mk1,1,BLGUARD1.PIE,0,0,1
 WreckedTransporter,DEFENSE,Level All,BUNKER,0,3,3,Concrete,10,1,12,300,1,100,1,0,255,1,ZNULLECM,ZNULLSENSOR,0,drtrans.Pie,0,0,0
 X-Super-Cannon,DOOR,Level All,HARD,0,2,2,Concrete,1000,1,15,1200,10,800,10,100,255,1,ZNULLECM,DefaultSensor1Mk1,1,STWPFCAN.PIE,0,0,1
 X-Super-MassDriver,DOOR,Level All,HARD,0,2,2,Concrete,1000,1,15,1200,10,1000,10,100,255,1,ZNULLECM,DefaultSensor1Mk1,1,STWPFCAN.PIE,0,0,1
@@ -167,10 +165,6 @@ ContaMine3,DEFENSE,Level One-Two,MEDIUM,0,1,1,Concrete,30,1,12,200,1,150,1,150,2
 ContaMine4,DEFENSE,Level One-Two,MEDIUM,0,1,1,Concrete,50,1,12,200,1,200,1,150,255,0,ZNULLECM,ZNULLSENSOR,1,Mine_vis.pie,0,0,1
 ContaMine5,DEFENSE,Level Two-Three,MEDIUM,0,1,1,Concrete,70,1,14,300,1,200,1,150,255,0,ZNULLECM,ZNULLSENSOR,1,Mine_Vis.pie,0,0,1
 ContaMine6,DEFENSE,Level Two-Three,MEDIUM,0,1,1,Concrete,70,1,14,300,1,250,1,150,255,0,ZNULLECM,ZNULLSENSOR,1,Mine_vis.pie,0,0,1
-ContaMine8,DEFENSE,Level Three,MEDIUM,0,1,1,Concrete,100,1,20,200,1,300,1,150,255,0,ZNULLECM,ZNULLSENSOR,1,Mine_Vis.pie,0,0,1
+ContaMine8,DEFENSE,Level Three,MEDIUM,0,1,1,Concrete,100,1,20,200,1,350,1,150,255,0,ZNULLECM,ZNULLSENSOR,1,Mine_Vis.pie,0,0,1
 AAShield,DEFENSE,Level Three,MEDIUM,1,2,2,Concrete,1000,3,20,300,10,1000,10,150,255,0,ZNULLECM,ZNULLSENSOR2,1,shield.pie,0,0,1
 A0CommandCentreCO,HQ,Level Two,HARD,0,2,2,Concrete,500,3,10,500,10,100,30,300,1,1,ZNULLECM,CCSensor,0,blhq3.pie,0,1,0
-GateStake,DEFENSE,Level All,HARD,1,1,1,Concrete,250,3,15,265,10,75,10,25,255,0,ZNULLECM,ZNULLSENSOR,0,gatedoorv.pie,0,1,0
-GateGround,DOOR,Level All,HARD,1,1,1,Concrete,250,3,15,265,10,75,10,25,255,0,ZNULLECM,ZNULLSENSOR,0,gatev.pie,0,1,0
-GateStake_h,DEFENSE,Level All,HARD,1,1,1,Concrete,250,3,15,265,10,75,10,25,255,0,ZNULLECM,ZNULLSENSOR,0,gatedoorh.pie,0,1,0
-GateGround_h,DOOR,Level All,HARD,1,1,1,Concrete,250,3,15,265,10,75,10,25,255,0,ZNULLECM,ZNULLSENSOR,0,gateh.pie,0,1,0

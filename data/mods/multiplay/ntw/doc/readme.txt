@@ -1,14 +1,14 @@
-    //|  // ======== \\       //\       //    /|    ====/  /===\
-   //|| //     ||     \\     // \\     //    //|       /  ||   ||
-  // ||//      ||      \\   //   \\   //    //||    = /=   \===||
- //  ||/       ||       \\ //     \\ //       ||     /         ||
-//   ||        ||        \//       \//        ||()  /   () \===/
+    //|  // ======== \\       //\       //
+   //|| //     ||     \\     // \\     // 
+  // ||//      ||      \\   //   \\   //  
+ //  ||/       ||       \\ //     \\ //   
+//   ||        ||        \//       \//    
 
 
 =============== Install ===============
 
 Just copy the mods folder into your warzone 2100 main folder.
-Target parameter for your shortcut is: --mod_mp NTW_Mod_v1.6.6.wz
+Target parameter for your shortcut is: --mod_mp NTW.wz
 
 Thanks to everyone for licensing their work GPL2+ so it could be compiled into this mod.
 
@@ -31,9 +31,6 @@ Walls / Gates(.pie[s]) / Desert Textures:
    Elric - elrictheslayer@neo.rr.com
    GrimMoroe - grimandmandy@hotmail.com
 
-Gates Script:
-   Tiuz - http://forums.wz2100.net
-
 1.12 Patch:
    Stratadrake - strata_ranger@hotmail.com and http://en.wikipedia.org/wiki/User:Stratadrake
 
@@ -54,9 +51,14 @@ AI - Aivolution:
 Fish, Dolphin, Whale Bodys (not the Textures):
    Mertens - http://forums.wz2100.net
 
+Factory Textures
+   Mysteryem - http://www.mysterymayhem.co.uk
+
+Camo Textures
+   Black Project - http://forums.wz2100.net
+
 The Rest is made/remade by me:
    Delphinio - jurgfrnd@aol.com
-
 
 =============== Special Thanks to ===============
 

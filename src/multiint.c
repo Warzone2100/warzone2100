@@ -193,7 +193,7 @@ static	void stopJoining(void);
 /// This function is a HACK
 /// Loads the entire map (including calculating gateways) just to show
 /// a picture of it
-void loadMapPreview(void)
+void loadMapPreview(bool hideInterface)
 {
 	char			aFileName[256];
 	UDWORD			fileSize;
@@ -295,9 +295,42 @@ void loadMapPreview(void)
 			{
 				for (y = (i * scale); y < (i * scale) + scale; y++)
 				{
-					imageData[3 * ((offY2 + y) * BACKDROP_HACK_WIDTH + (x + offX2))] = col;
-					imageData[3 * ((offY2 + y) * BACKDROP_HACK_WIDTH + (x + offX2)) + 1] = col;
-					imageData[3 * ((offY2 + y) * BACKDROP_HACK_WIDTH + (x + offX2)) + 2] = col;
+
+#define WZCOL_TER_CLIFF_LOW   pal_Colour(0x68, 0x3C, 0x24)
+#define WZCOL_TER_CLIFF_HIGH  pal_Colour(0xE8, 0x84, 0x5C)
+
+#define WZCOL_TER_WATER       pal_Colour(0x3F, 0x68, 0x9A)
+
+#define WZCOL_TER_ROAD_LOW    pal_Colour(0x24, 0x1F, 0x16)
+#define WZCOL_TER_ROAD_HIGH   pal_Colour(0xB2, 0x9A, 0x66)
+
+#define WZCOL_TER_GROUND_LOW  pal_Colour(0x24, 0x1F, 0x16)
+#define WZCOL_TER_GROUND_HIGH pal_Colour(0xCC, 0xB2, 0x80)
+
+					char * const p = imageData + (3 * ((offY2 + y) * BACKDROP_HACK_WIDTH + (x + offX2)));
+					switch (terrainType(WTile))
+					{
+					case TER_CLIFFFACE:
+						p[0] = WZCOL_TER_CLIFF_LOW.byte.r + (WZCOL_TER_CLIFF_HIGH.byte.r-WZCOL_TER_CLIFF_LOW.byte.r) * col / 256;
+						p[1] = WZCOL_TER_CLIFF_LOW.byte.g + (WZCOL_TER_CLIFF_HIGH.byte.g-WZCOL_TER_CLIFF_LOW.byte.g) * col / 256;
+						p[2] = WZCOL_TER_CLIFF_LOW.byte.b + (WZCOL_TER_CLIFF_HIGH.byte.b-WZCOL_TER_CLIFF_LOW.byte.b) * col / 256;
+						break;
+					case TER_WATER:
+						p[0] = WZCOL_TER_WATER.byte.r;
+						p[1] = WZCOL_TER_WATER.byte.g;
+						p[2] = WZCOL_TER_WATER.byte.b;
+						break;
+					case TER_ROAD:
+						p[0] = WZCOL_TER_ROAD_LOW.byte.r + (WZCOL_TER_ROAD_HIGH.byte.r-WZCOL_TER_ROAD_LOW.byte.r) * col / 256;
+						p[1] = WZCOL_TER_ROAD_LOW.byte.g + (WZCOL_TER_ROAD_HIGH.byte.g-WZCOL_TER_ROAD_LOW.byte.g) * col / 256;
+						p[2] = WZCOL_TER_ROAD_LOW.byte.b + (WZCOL_TER_ROAD_HIGH.byte.b-WZCOL_TER_ROAD_LOW.byte.b) * col / 256;
+						break;
+					default:
+						p[0] = WZCOL_TER_GROUND_LOW.byte.r + (WZCOL_TER_GROUND_HIGH.byte.r-WZCOL_TER_GROUND_LOW.byte.r) * col / 256;
+						p[1] = WZCOL_TER_GROUND_LOW.byte.g + (WZCOL_TER_GROUND_HIGH.byte.g-WZCOL_TER_GROUND_LOW.byte.g) * col / 256;
+						p[2] = WZCOL_TER_GROUND_LOW.byte.b + (WZCOL_TER_GROUND_HIGH.byte.b-WZCOL_TER_GROUND_LOW.byte.b) * col / 256;
+						break;
+					}
 				}
 			}
 			WTile += 1;
@@ -402,7 +435,10 @@ void loadMapPreview(void)
 	free(fboData);
 	free(imageData);
 
-	hideTime = gameTime;
+	if (hideInterface)
+	{
+		hideTime = gameTime;
+	}
 	mapShutdown();
 	Delete_FBO();
 }
@@ -723,7 +759,7 @@ static void addGames(void)
 		case ERROR_CHEAT:
 			txt = _("You were kicked!");
 			break;
-		case ERROR_WRONGVESION:
+		case ERROR_WRONGVERSION:
 			txt = _("Wrong Game Verion!");
 			break;
 		case ERROR_WRONGPASSWORD:
@@ -2081,7 +2117,7 @@ static void processMultiopWidgets(UDWORD id)
 			widgDelete(psWScreen,FRONTEND_SIDETEXT2);					// del text too,
 
 			debug(LOG_WZ, "processMultiopWidgets[MULTIOP_MAP_ICON]: %s.wrf", MultiCustomMapsPath);
-			addMultiRequest(MultiCustomMapsPath, ".wrf", MULTIOP_MAP, 1, 2);
+			addMultiRequest(MultiCustomMapsPath, ".wrf", MULTIOP_MAP, current_tech, current_numplayers);
 			break;
 
 		case MULTIOP_CAMPAIGN:									// turn on campaign game
@@ -2132,7 +2168,7 @@ static void processMultiopWidgets(UDWORD id)
 			addGameOptions(false);
 			break;
 		case MULTIOP_MAP_BUT:
-			loadMapPreview();
+			loadMapPreview(true);
 			break;
 		}
 	}
@@ -2385,7 +2421,7 @@ static void processMultiopWidgets(UDWORD id)
 		stopJoining();
 		break;
 	case MULTIOP_MAP_BUT:
-		loadMapPreview();
+		loadMapPreview(true);
 		break;
 	default:
 		break;
@@ -2843,7 +2879,7 @@ void runMultiOptions(void)
 			case MULTIOP_MAP:
 				sstrcpy(game.map, sTemp);
 				game.maxPlayers =(UBYTE) value;
-				loadMapPreview();
+				loadMapPreview(true);
 
 				widgSetString(psWScreen,MULTIOP_MAP,sTemp);
 				addGameOptions(false);

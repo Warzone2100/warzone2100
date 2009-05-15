@@ -1335,6 +1335,8 @@ intChooseSystemStats( DROID_TEMPLATE *psTemplate )
 
 const char *GetDefaultTemplateName(DROID_TEMPLATE *psTemplate)
 {
+	// NOTE:	At this time, savegames can support a max of 60. We are using WIDG_MAXSTR (currently 80 )for display
+	// We are also returning a truncated string, instead of NULL if the string is too long.
 	COMPONENT_STATS *psStats = NULL;
 
 	/*
@@ -1364,7 +1366,7 @@ const char *GetDefaultTemplateName(DROID_TEMPLATE *psTemplate)
 
 	if ( psTemplate->numWeaps > 1 )
 	{
-		sstrcat(aCurrName, "Hydra ");
+		sstrcat(aCurrName, _("Hydra "));
 	}
 
 	psStats = (COMPONENT_STATS *) (asBodyStats + psTemplate->asParts[COMP_BODY]);
@@ -1374,8 +1376,8 @@ const char *GetDefaultTemplateName(DROID_TEMPLATE *psTemplate)
 
 		if ( strlen( aCurrName ) + strlen( pStr ) > WIDG_MAXSTR )
 		{
-			debug( LOG_NEVER, "GetDefaultTemplateName: name string too long %s+%s\n", aCurrName, pStr );
-			return NULL;
+			debug(LOG_ERROR, "Name string too long %s+%s > %u", aCurrName, pStr, WIDG_MAXSTR);
+			debug(LOG_ERROR, "Please report what language you are using in the bug report!");
 		}
 
 		sstrcat(aCurrName, pStr);
@@ -1389,8 +1391,8 @@ const char *GetDefaultTemplateName(DROID_TEMPLATE *psTemplate)
 
 		if ( strlen( aCurrName ) + strlen( pStr ) > WIDG_MAXSTR )
 		{
-			debug( LOG_NEVER, "GetDefaultTemplateName: name string too long %s+%s\n", aCurrName, pStr );
-			return NULL;
+			debug(LOG_ERROR, "Name string too long %s+%s\n", aCurrName, pStr);
+			debug(LOG_ERROR, "Please report what language you are using in the bug report!");
 		}
 
 		sstrcat(aCurrName, pStr);
@@ -3185,9 +3187,8 @@ static void intSetTemplateBodyShadowStats(COMPONENT_STATS *psStats)
     		bodyBody) / 100;
 
      	//add weapon power
-        // FIXME: Only takes first weapon into account
         body += weaponBody;
-    	for(i=1; i<sCurrDesign.numWeaps; i++)
+    	for (i=1; i<sCurrDesign.numWeaps; i++)
     	{
     		body += asWeaponStats[sCurrDesign.asWeaps[i]].body;
     	}

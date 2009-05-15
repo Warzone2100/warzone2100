@@ -39,8 +39,9 @@ class Game(object):
 	def _setDescription(self, v):
 		self.data['name'] = unicode(v)
 
-	def _setHost(self, v):
-		self.data['host'] = v
+	def _setHosts(self, v):
+		# Make sure that 'v' is a list
+		self.data['hosts'] = list(v)
 
 	def _setMaxPlayers(self, v):
 		self.data['maxPlayers'] = int(v)
@@ -63,11 +64,17 @@ class Game(object):
 	def _setPrivate(self, v):
 		self.data['private'] = bool(v)
 
+	def _setAnnounce(self, v):
+		self.data['announced'] = not bool(v)
+
+	def _setGameId(self, v):
+		self.data['gameId'] = int(v)
+
 	description        = property(fget = lambda self:    self.data['name'],
 	                              fset = lambda self, v: self._setDescription(v))
 
-	host               = property(fget = lambda self:    self.data['host'],
-	                              fset = lambda self, v: self._setHost(v))
+	hosts              = property(fget = lambda self:    self.data['hosts'],
+	                              fset = lambda self, v: self._setHosts(v))
 
 	maxPlayers         = property(fget = lambda self:    self.data['maxPlayers'],
 	                              fset = lambda self, v: self._setMaxPlayers(v))
@@ -90,16 +97,22 @@ class Game(object):
 	private            = property(fget = lambda self:    self.data['private'],
 	                              fset = lambda self, v: self._setPrivate(v))
 
+	announce           = property(fget = lambda self: not self.private and (not 'announced' in self.data or not self.data['announced']),
+	                              fset = lambda self, v: self._setAnnounce(v))
+
+	gameId             = property(fget = lambda self:    self.data['gameId'],
+	                              fset = lambda self, v: self._setGameId(v))
 	def __init__(self):
 		self.data = {'name':                None,
-		             'host':                None,
+		             'hosts':               [],
 		             'maxPlayers':          None,
 		             'currentPlayers':      None,
 		             'lobby-version':       None,
 		             'multiplayer-version': None,
 		             'warzone-version':     None,
 		             'pure':                None,
-		             'private':             None}
+		             'private':             None,
+		             'gameId':              0}
 		self.size = None
 		self.flags = None
 		self.user1 = None
@@ -112,13 +125,12 @@ class Game(object):
 		self.game_version_major = None	# game major version
 		self.game_version_minor = None	# game minor version
 		self.Mods = None				# number of concatenated mods they have (list of mods is in modlist)
-		self.future1 = None			# for future use
 		self.future2 = None			# for future use
 		self.future3 = None			# for future use
 		self.future4 = None			# for future use
 
 	def __str__(self):
 		if self.private == 1:
-		   return "(private) Game: %16s %s %s %s" % ( self.host, self.description, self.maxPlayers, self.currentPlayers)
+		   return "(private) Game: %s %s %s %s" % (self.hosts, self.description, self.maxPlayers, self.currentPlayers)
 		else:
-		   return "Game: %16s %s %s %s" % ( self.host, self.description, self.maxPlayers, self.currentPlayers)
+		   return "Game: %s %s %s %s" % (self.hosts, self.description, self.maxPlayers, self.currentPlayers)

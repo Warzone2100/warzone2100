@@ -17,7 +17,7 @@ R-Struc-CommandRelay,A0ComDroidControl,0,114
 R-Defense-TankTrap01,A0TankTrap2,0,132
 R-Defense-Tower01,GuardTower1,0,175
 R-Defense-Tower06,GuardTower6,0,180
-R-Defense-Pillbox01,PillBox1,0,201
+R-Defense-Pillbox01,PillBox2,0,201
 R-Defense-Pillbox04,PillBox4,0,204
 R-Defense-Pillbox05,PillBox5,0,205
 R-Defense-WallTower06,WallTower06,0,245

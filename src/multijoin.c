@@ -98,6 +98,10 @@ BOOL intDisplayMultiJoiningStatus(UBYTE joinCount)
 	iV_DrawText(_("Players Still Joining"),
 					x+(w/2)-(iV_GetTextWidth(_("Players Still Joining"))/2),
 					y+(h/2)-8 );
+	if (!NetPlay.playercount)
+	{
+		return true;
+	}
 	sprintf(sTmp,"%d%%", PERCENT((NetPlay.playercount-joinCount),NetPlay.playercount) );
 	iV_DrawText(sTmp ,x + (w / 2) - 10, y + (h / 2) + 10);
 
@@ -293,7 +297,7 @@ BOOL MultiPlayerJoin(UDWORD dpid)
 		// if skirmish and game full, then kick...
 		if(game.type == SKIRMISH && NetPlay.playercount > game.maxPlayers )
 		{
-			kickPlayer(dpid, "game is full!", ERROR_FULL);
+			kickPlayer(dpid, _("The game is full!"), ERROR_FULL);
 		}
 	}
 	return true;
@@ -331,10 +335,7 @@ void setupNewPlayer(UDWORD dpid, UDWORD player)
 // unfortunatly, we don't get the message until after the setup is done.
 void ShowMOTD(void)
 {
-	char buf[255];
 	// when HOST joins the game, show server MOTD message first
-	ssprintf(buf, _("System message:"));
-	addConsoleMessage(buf, DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
-	ssprintf(buf, "%s", NetPlay.MOTDbuffer);
-	addConsoleMessage(buf, DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
+	addConsoleMessage(_("System message:"), DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
+	addConsoleMessage(NetPlay.MOTD, DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
 }

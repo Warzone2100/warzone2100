@@ -464,7 +464,6 @@ void draw3DScene( void )
 		iV_DrawText(DROIDDOING, 0, pie_GetVideoBufferHeight()- height);
 	}
 
-//	debug(LOG_ERROR,"%d NET_PlayerConnectionStatus",NET_PlayerConnectionStatus);
 	if (NET_PlayerConnectionStatus)
 	{
 		static W_FORMINIT		sFormInit;
@@ -479,10 +478,10 @@ void draw3DScene( void )
 			sFormInit.formID = 0;
 			sFormInit.id = NETWORK_FORM_ID;
 			sFormInit.style = WFORM_PLAIN;
-			sFormInit.x = RET_X;
-			sFormInit.y = (SWORD)RET_Y-40;
-			sFormInit.width = 31;
-			sFormInit.height = 	21;
+			sFormInit.x = (SDWORD) (pie_GetVideoBufferWidth() - 52) ;
+			sFormInit.y = 80;
+			sFormInit.width = 36;
+			sFormInit.height = 	24;
 			sFormInit.pDisplay = NetworkDisplayPlainForm;
 			if (!widgAddForm(psWScreen, &sFormInit))
 			{
@@ -495,8 +494,8 @@ void draw3DScene( void )
 			memset(&sButInit, 0, sizeof(W_BUTINIT));
 			sButInit.formID = NETWORK_FORM_ID;
 			sButInit.id = NETWORK_BUT_ID;
-			sButInit.width = 31;
-			sButInit.height = 21;
+			sButInit.width = 36;
+			sButInit.height = 24;
 			sButInit.FontID = font_regular;
 
 			//add button
@@ -506,7 +505,14 @@ void draw3DScene( void )
 			sButInit.pTip = NET_PlayerConnectionStatus == 1 ? _("Player left"):_("Player dropped");
 			sButInit.pDisplay = NetworkDisplayImage;
 			// Note we would set the image to be different based on which issue it is.
-			sButInit.UserData = PACKDWORD_TRI(1, 316, 311);	//IMAGE_MULTI_POW_HI,IMAGE_MULTI_POW
+			if (NET_PlayerConnectionStatus == 1)
+			{
+				sButInit.UserData = PACKDWORD_TRI(1, IMAGE_PLAYER_LEFT_HI, IMAGE_PLAYER_LEFT_LO);
+			}
+			else
+			{
+				sButInit.UserData = PACKDWORD_TRI(1, IMAGE_DISCONNECT_LO, IMAGE_DISCONNECT_HI);
+			}
 
 			if (!widgAddButton(psWScreen, &sButInit))
 			{
@@ -950,6 +956,8 @@ BOOL init3DView(void)
 	// distance is not saved, so initialise it now
 	distance = START_DISTANCE; // distance
 	
+	disp3d_resetView();	// clear player view variables
+
 	if (!initTerrain())
 	{
 		return false;
@@ -2293,23 +2301,29 @@ void	renderStructure(STRUCTURE *psStructure)
 							REPAIR_FACILITY* psRepairFac = &psStructure->pFunctionality->repairFacility;
 							// draw repair flash if the Repair Facility has a target which it has started work on
 							if (weaponImd[i]->nconnectors && psRepairFac->psObj != NULL
-								&& psRepairFac->psObj->type == OBJ_DROID
-								&& ((DROID *)psRepairFac->psObj)->action == DACTION_WAITDURINGREPAIR )
+								&& psRepairFac->psObj->type == OBJ_DROID)
 							{
-								iIMDShape	*pRepImd;
+								DROID *psDroid = (DROID *)psRepairFac->psObj;
+								SDWORD xdiff, ydiff;
+								xdiff = (SDWORD)psDroid->pos.x - (SDWORD)psStructure->pos.x;
+								ydiff = (SDWORD)psDroid->pos.y - (SDWORD)psStructure->pos.y;
+								if (xdiff * xdiff + ydiff * ydiff <= (TILE_UNITS*5/2)*(TILE_UNITS*5/2))
+								{
+									iIMDShape	*pRepImd;
 
-								iV_TRANSLATE(weaponImd[i]->connectors->x,weaponImd[i]->connectors->z-12,weaponImd[i]->connectors->y);
-								pRepImd = getImdFromIndex(MI_FLAME);
+									iV_TRANSLATE(weaponImd[i]->connectors->x,weaponImd[i]->connectors->z-12,weaponImd[i]->connectors->y);
+									pRepImd = getImdFromIndex(MI_FLAME);
 
-								pie_MatRotY(DEG((SDWORD)psStructure->asWeaps[i].rotation));
+									pie_MatRotY(DEG((SDWORD)psStructure->asWeaps[i].rotation));
 
-								iV_MatrixRotateY(-player.r.y);
-								iV_MatrixRotateX(-player.r.x);
-								pie_Draw3DShape(pRepImd, getStaticTimeValueRange(100,pRepImd->numFrames), 0, buildingBrightness, WZCOL_BLACK, pie_ADDITIVE, 192);
+									iV_MatrixRotateY(-player.r.y);
+									iV_MatrixRotateX(-player.r.x);
+									pie_Draw3DShape(pRepImd, getStaticTimeValueRange(100,pRepImd->numFrames), 0, buildingBrightness, WZCOL_BLACK, pie_ADDITIVE, 192);
 
-								iV_MatrixRotateX(player.r.x);
-								iV_MatrixRotateY(player.r.y);
-								pie_MatRotY(DEG((SDWORD)psStructure->asWeaps[i].rotation));
+									iV_MatrixRotateX(player.r.x);
+									iV_MatrixRotateY(player.r.y);
+									pie_MatRotY(DEG((SDWORD)psStructure->asWeaps[i].rotation));
+								}
 							}
 						}
 						// we have a droid weapon so do we draw a muzzle flash

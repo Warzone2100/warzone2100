@@ -28,7 +28,6 @@
 #include "lib/framework/frameint.h"
 
 #include <string.h>
-#include <SDL_timer.h>
 #include <physfs.h>
 
 #include "lib/framework/file.h"

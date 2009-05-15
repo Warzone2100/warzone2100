@@ -37,7 +37,7 @@ typedef enum
 	ERROR_FULL,
 	ERROR_CHEAT,
 	ERROR_KICKED,
-	ERROR_WRONGVESION,
+	ERROR_WRONGVERSION,
 	ERROR_WRONGPASSWORD				// NOTE WRONG_PASSWORD results in conflict
 } LOBBY_ERROR_TYPES;
 
@@ -117,7 +117,7 @@ typedef enum
 #define MaxMsgSize		8192		// max size of a message in bytes.
 #define	StringSize		64			// size of strings used.
 #define MaxGames		12			// max number of concurrently playable games to allow.
-#define extra_string_size	255		// extra 255 char for future use
+#define extra_string_size	239		// extra 255 char for future use
 #define modlist_string_size	255		// For a concatenated list of mods
 
 #define SESSION_JOINDISABLED	1
@@ -125,7 +125,7 @@ typedef enum
 typedef struct {					//Available game storage... JUST FOR REFERENCE!
 	int32_t dwSize;
 	int32_t dwFlags;
-	char host[16];	// host ip address
+	char host[40];	// host's ip address (can fit a full IPv4 and IPv6 address + terminating NUL)
 	int32_t dwMaxPlayers;
 	int32_t dwCurrentPlayers;
 	int32_t dwUserFlags[4];
@@ -137,21 +137,26 @@ typedef struct {					//Available game storage... JUST FOR REFERENCE!
  */
 typedef struct
 {
+	/* Version of this structure and thus the binary lobby protocol.
+	 * @NOTE: <em>MUST</em> be the first item of this struct.
+	 */
+	uint32_t	GAMESTRUCT_VERSION;
+
 	char		name[StringSize];
 	SESSIONDESC	desc;
 	// END of old GAMESTRUCT format
 	// NOTE: do NOT save the following items in game.c--it will break savegames.
-	char		misc[StringSize];				// misc string  (future use)
+	char		secondaryHosts[2][40];
 	char		extra[extra_string_size];		// extra string (future use)
 	char		versionstring[StringSize];		// 
 	char		modlist[modlist_string_size];	// ???
-	uint32_t	GAMESTRUCT_VERSION;				// version of this structure
 	uint32_t	game_version_major;				// 
 	uint32_t	game_version_minor;				// 
 	uint32_t	privateGame;					// if true, it is a private game
 	uint32_t	pureGame;						// NO mods allowed if true
 	uint32_t	Mods;							// number of concatenated mods?
-	uint32_t	future1;						// for future use
+	// Game ID, used on the lobby server to link games with multiple address families to eachother
+	uint32_t	gameId;
 	uint32_t	future2;						// for future use
 	uint32_t	future3;						// for future use
 	uint32_t	future4;						// for future use
@@ -199,7 +204,7 @@ typedef struct {
 	char gamePassword[StringSize];		//
 	bool GamePassworded;				// if we have a password or not.
 	bool ShowedMOTD;					// only want to show this once
-	char MOTDbuffer[255];				// buffer for MOTD
+	char* MOTD;
 } NETPLAY;
 
 /// This is the hardcoded dpid (player ID) value for the hosting player.

@@ -11999,6 +11999,19 @@ GLuint __GLeeLink_GL_ARB_vertex_buffer_object(void)
     if ((GLeeFuncPtr_glUnmapBufferARB = (GLEEPFNGLUNMAPBUFFERARBPROC) __GLeeGetProcAddress("glUnmapBufferARB"))!=0) nLinked++;
     if ((GLeeFuncPtr_glGetBufferParameterivARB = (GLEEPFNGLGETBUFFERPARAMETERIVARBPROC) __GLeeGetProcAddress("glGetBufferParameterivARB"))!=0) nLinked++;
     if ((GLeeFuncPtr_glGetBufferPointervARB = (GLEEPFNGLGETBUFFERPOINTERVARBPROC) __GLeeGetProcAddress("glGetBufferPointervARB"))!=0) nLinked++;
+
+	// HACK: work around for drivers that report VBO, but don't have full openGL 1.5 implementation.
+	GLeeFuncPtr_glBindBuffer = GLeeFuncPtr_glBindBufferARB;
+	GLeeFuncPtr_glDeleteBuffers = GLeeFuncPtr_glDeleteBuffersARB;
+	GLeeFuncPtr_glGenBuffers = GLeeFuncPtr_glGenBuffersARB;
+	GLeeFuncPtr_glIsBuffer = GLeeFuncPtr_glIsBufferARB;
+	GLeeFuncPtr_glBufferData = GLeeFuncPtr_glBufferDataARB;
+	GLeeFuncPtr_glBufferSubData = GLeeFuncPtr_glBufferSubDataARB;
+	GLeeFuncPtr_glGetBufferSubData = GLeeFuncPtr_glGetBufferSubDataARB;
+	GLeeFuncPtr_glMapBuffer = GLeeFuncPtr_glMapBufferARB;
+	GLeeFuncPtr_glUnmapBuffer = GLeeFuncPtr_glUnmapBufferARB;
+	GLeeFuncPtr_glGetBufferParameteriv = GLeeFuncPtr_glGetBufferParameterivARB;
+	GLeeFuncPtr_glGetBufferPointerv = GLeeFuncPtr_glGetBufferPointervARB;
 #endif
     if (nLinked==11) return GLEE_LINK_COMPLETE;
     if (nLinked==0) return GLEE_LINK_FAIL;

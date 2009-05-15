@@ -69,7 +69,7 @@ case ${host_os} in
 	*mingw32*)
 		host_os_mingw32=yes
 		AC_CHECK_TOOL([WINDRES], [windres], AC_MSG_ERROR([windres not found]))
-		WIN32_LIBS='-ldbghelp -lshfolder -lwinmm -lwsock32'
+		WIN32_LIBS='-ldbghelp -lshfolder -lwinmm -lws2_32'
 		AC_SUBST([WIN32_LIBS], [${WIN32_LIBS}])
 		;;
 	*)
@@ -93,6 +93,18 @@ AC_ARG_VAR([CC_FOR_BUILD], [C compiler that produces binaries that will run on
 	    the build system])
 AS_IF([test -z "$CC_FOR_BUILD"],[
     AC_SUBST([CC_FOR_BUILD], [${CC}])
+])
+
+AC_ARG_VAR([CFLAGS_FOR_BUILD], [Flags to use for the C
+	    compiler that produces binaries for the build system])
+AS_IF([test -z "$CFLAGS_FOR_BUILD"],[
+    AC_SUBST([CFLAGS_FOR_BUILD], [${CFLAGS}])
+])
+
+AC_ARG_VAR([CXXFLAGS_FOR_BUILD], [Flags to use for the C++
+	    compiler that produces binaries for the build system])
+AS_IF([test -z "$CXXFLAGS_FOR_BUILD"],[
+    AC_SUBST([CXXFLAGS_FOR_BUILD], [${CXXFLAGS}])
 ])
 
 AC_ARG_VAR([CPPFLAGS_FOR_BUILD], [Preprocessor flags to use for the C and C++
@@ -293,10 +305,6 @@ AC_CHECK_LIB(popt, poptGetContext, AC_SUBST([POPT_LIBS], [-lpopt]), AC_MSG_ERROR
 # Look for PhysicsFS
 AC_CHECK_HEADER(physfs.h, , AC_MSG_ERROR([PhysicsFS header not found.]))
 AC_CHECK_LIB(physfs, PHYSFS_init, AC_SUBST([PHYSFS_LIBS], [-lphysfs]), AC_MSG_ERROR([PhysicsFS not found.]), [${WIN32_LIBS}])
-
-# Look for SDL_net
-AC_CHECK_HEADER(SDL/SDL_net.h, , AC_MSG_ERROR([SDL_net header not found.]))
-AC_CHECK_LIB(SDL_net, SDLNet_Init, AC_SUBST([SDL_NET_LIBS], [-lSDL_net]), AC_MSG_ERROR([SDL_net not found.]), [${SDL_LIBS} ${WIN32_LIBS}])
 
 # Look for OpenGL
 AC_CHECK_HEADER(SDL/SDL_opengl.h, ,

@@ -35,7 +35,7 @@ struct _pattern
 {
 	/// Unique Identifier
 	char *id;
-	
+
 	/// The underlying cairo pattern
 	cairo_pattern_t *crPattern;
 };
@@ -92,7 +92,9 @@ pattern *patternManagerGradientCreateLinear(const char *id, float x0, float y0, 
  * @param r1 The Radius of the circle in the end point
  * @param radiusEnd The end radius of the gradient
  */
-pattern *patternManagerGradientCreateRadial(const char *id, float x0, float y0, float r0, float x1, float y1, float r1);
+pattern *patternManagerGradientCreateRadial(const char *id,
+                                            float x0, float y0, float r0,
+                                            float x1, float y1, float r1);
 
 /**
  * Adds a colour stop to a (linear/radial) gradient pattern.
@@ -103,7 +105,8 @@ pattern *patternManagerGradientCreateRadial(const char *id, float x0, float y0, 
  * @param b Blue colour component
  * @param a Alpha component
  */
-void patternManagerGradientAddColourStop(pattern *item, float o, float r, float g, float b, float a);
+void patternManagerGradientAddColourStop(pattern *item, float o,
+                                         float r, float g, float b, float a);
 
 /**
  * Removes and deletes a pattern by it's Id. All pointers to that pattern are
@@ -128,7 +131,7 @@ void patternManagerSetAsSource(cairo_t *cr, pattern *item, float x, float y);
 /**
  * Returns the pattern by the given Id
  * The pattern is valid until it's removed by patternManagerRemove()
- * In fact this function is a wrapper for the internal 
+ * In fact this function is a wrapper for the internal
  * patternManagerLookForPattern function and adds an assert if the
  * desired pattern exists.
  *
@@ -139,4 +142,3 @@ void patternManagerSetAsSource(cairo_t *cr, pattern *item, float x, float y);
 pattern *patternManagerGetPattern(const char *id);
 
 #endif /* PATTERN_MANAGER_H */
-

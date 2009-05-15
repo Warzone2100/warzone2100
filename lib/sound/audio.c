@@ -1023,7 +1023,7 @@ SDWORD audio_GetTrackID( const char *fileName )
 
 	if (fileName == NULL || strlen(fileName) == 0)
 	{
-		debug(LOG_ERROR, "audio_GetTrackID: fileName is %s", (fileName == NULL) ? "a NULL pointer" : "empty");
+		debug(LOG_WARNING, "fileName is %s", (fileName == NULL) ? "a NULL pointer" : "empty");
 		return SAMPLE_NOT_FOUND;
 	}
 
@@ -1126,7 +1126,7 @@ void audioTest()
 {
 	int i;
 
-	for (i = 0; i < 50; i++)
+	for (i = 0; i < 10; i++)
 	{
 		// On non-debug builds prevent warnings about defining but not using dummyCB
 		(void)dummyCB;

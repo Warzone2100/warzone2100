@@ -7,6 +7,10 @@ script "rules.slo"
 run
 {
 
+//CUSTOMIZING
+NullEcm			ECM		"ZNULLECM"
+//CUSTOMIZING END
+
 endMsg			INTMESSAGE	"END"
 winMsg			INTMESSAGE	"WIN"
 
@@ -23,12 +27,12 @@ cybfac			STRUCTURESTAT		"A0CyborgFactory"
 vtolfac			STRUCTURESTAT		"A0VTolFactory1"
 NuclearReactor1		STRUCTURESTAT		"NuclearReactor"
 CoolingTower1		STRUCTURESTAT		"CoolingTower"
+look			STRUCTURESTAT		"LookOutTower"
 shield		STRUCTURESTAT		"AAShield"
-command2		STRUCTURESTAT		"A0CommandCentreDEL"
 
 // Technologies
 numCleanTech	int					4	// do x for clean	
-numBaseTech		int					19	// do x for base
+numBaseTech		int					18	// do x for base
 numDefTech		int					40	// do x for defensive
 
 defTech[0]	RESEARCHSTAT	"R-Vehicle-Prop-Wheels"
@@ -42,16 +46,16 @@ defTech[6]		RESEARCHSTAT	"R-Defense-HardcreteWall"
 defTech[7]		RESEARCHSTAT	"R-Vehicle-Prop-Wheels"
 defTech[8]		RESEARCHSTAT	"R-Sys-Spade1Mk1"
 defTech[9]		RESEARCHSTAT	"R-Struc-Factory-Cyborg"
-defTech[10]		RESEARCHSTAT	"R-Defense-Pillbox01"
-defTech[11]		RESEARCHSTAT	"R-Defense-Tower01"
-defTech[12]		RESEARCHSTAT	"R-Wpn-Rocket05-MiniPod"
-defTech[13]		RESEARCHSTAT	"R-Vehicle-Engine01"
-defTech[14]	RESEARCHSTAT	"R-Struc-CommandRelay"
-defTech[15]	RESEARCHSTAT	"R-Vehicle-Prop-Halftracks"
-defTech[16]	RESEARCHSTAT	"R-Sys-Sensor-Turret01"
-defTech[17]	RESEARCHSTAT	"R-Wpn-Flamer01Mk1"
-defTech[18]	RESEARCHSTAT	"R-Sys-Sensor-Tower01"
+defTech[10]		RESEARCHSTAT	"R-Defense-Tower01"
+defTech[11]		RESEARCHSTAT	"R-Wpn-Rocket05-MiniPod"
+defTech[12]		RESEARCHSTAT	"R-Vehicle-Engine01"
+defTech[13]	RESEARCHSTAT	"R-Struc-CommandRelay"
+defTech[14]	RESEARCHSTAT	"R-Vehicle-Prop-Halftracks"
+defTech[15]	RESEARCHSTAT	"R-Sys-Sensor-Turret01"
+defTech[16]	RESEARCHSTAT	"R-Wpn-Flamer01Mk1"
+defTech[17]	RESEARCHSTAT	"R-Sys-Sensor-Tower01"
 
+defTech[18]	RESEARCHSTAT	"R-Wpn-MG2Mk1"
 defTech[19]		RESEARCHSTAT	"R-Vehicle-Body01"
 defTech[20]		RESEARCHSTAT	"R-Vehicle-Engine01"
 defTech[21]		RESEARCHSTAT	"R-Struc-Research-Module"

@@ -2655,7 +2655,6 @@ const char* getName(const char *pNameID)
 	if (!name)
 	{
 		debug( LOG_ERROR, "Unable to find string resource for %s", pNameID );
-		abort();
 		return "Name Unknown";
 	}
 

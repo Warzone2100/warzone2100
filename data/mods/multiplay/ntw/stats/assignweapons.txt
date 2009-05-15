@@ -313,3 +313,5 @@ Sk-Leopard-Vtol-HVC,Cannon4AUTO-VTOL,NULL,NULL,6
 Sk-Panther-Vtol-HVC,Cannon4AUTO-VTOL,NULL,NULL,6
 Cyb-MineSweep,Cyborg_RocketMine,NULL,NULL,5
 Sk-Ret-Vtol-plas,Bomb5-VTOL-Plasmite,NULL,NULL,6
+PythonMedCanTracks,Cannon2A-TMk1,NULL,NULL,6
+PythonTKTracks,Rocket-HvyA-T,NULL,NULL,6
