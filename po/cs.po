@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2009-05-15 16:42+0200\n"
+"POT-Creation-Date: 2009-05-15 22:46+0200\n"
 "PO-Revision-Date: 2008-05-09 16:05+0000\n"
 "Last-Translator: Lubos <alvinx12@centrum.cz>\n"
 "Language-Team: Czech <cs@li.org>\n"
@@ -4758,7 +4758,6 @@ msgid "New Design"
 msgstr ""
 
 #: data/base/messages/strings/names.txt:15
-#: data/mp/messages/strings/names.txt:15
 msgid "Transport"
 msgstr ""
 
@@ -8973,6 +8972,11 @@ msgstr ""
 msgid "Upgraded battlefield computer system"
 msgstr ""
 
+#: data/mp/messages/strings/names.txt:15
+#: data/mp/messages/strings/names.txt:680
+msgid "Cyborg Transport"
+msgstr ""
+
 #: data/mp/messages/strings/names.txt:144
 msgid "Light Cannon Viper Half-tracks"
 msgstr ""
@@ -9056,10 +9060,6 @@ msgstr ""
 
 #: data/mp/messages/strings/names.txt:612
 msgid "Nexus Corner Wall"
-msgstr ""
-
-#: data/mp/messages/strings/names.txt:680
-msgid "Cyborg Transport"
 msgstr ""
 
 #: data/mp/messages/strings/names.txt:718
@@ -10206,7 +10206,7 @@ msgstr "Hráč"
 
 #: src/design.c:455
 #: src/design.c:476
-#: src/design.c:3552
+#: src/design.c:3554
 msgid "New Vehicle"
 msgstr "Nové vozidlo"
 
@@ -10246,18 +10246,18 @@ msgstr "Výfuk"
 
 #: src/design.c:727
 #: src/design.c:782
-#: src/design.c:1591
-#: src/design.c:1632
-#: src/design.c:1657
-#: src/design.c:1675
-#: src/design.c:1700
-#: src/design.c:1718
-#: src/design.c:1760
-#: src/design.c:1795
-#: src/design.c:1931
-#: src/design.c:1948
-#: src/design.c:1983
-#: src/design.c:2019
+#: src/design.c:1593
+#: src/design.c:1634
+#: src/design.c:1659
+#: src/design.c:1677
+#: src/design.c:1702
+#: src/design.c:1720
+#: src/design.c:1762
+#: src/design.c:1797
+#: src/design.c:1933
+#: src/design.c:1950
+#: src/design.c:1985
+#: src/design.c:2021
 msgid "Weight"
 msgstr "Hmotnost"
 
@@ -10276,73 +10276,73 @@ msgstr ""
 msgid "Power Usage"
 msgstr "Použitá energie"
 
-#: src/design.c:1345
+#: src/design.c:1347
 msgid "Transporter"
 msgstr "Transportér"
 
-#: src/design.c:1367
+#: src/design.c:1369
 msgid "Hydra "
 msgstr ""
 
-#: src/design.c:1573
+#: src/design.c:1575
 msgid "Sensor Range"
 msgstr "Dosah snímačů"
 
-#: src/design.c:1582
+#: src/design.c:1584
 msgid "Sensor Power"
 msgstr ""
 
-#: src/design.c:1623
+#: src/design.c:1625
 msgid "ECM Power"
 msgstr ""
 
-#: src/design.c:1649
-#: src/design.c:1666
-#: src/design.c:1692
-#: src/design.c:1709
+#: src/design.c:1651
+#: src/design.c:1668
+#: src/design.c:1694
+#: src/design.c:1711
 msgid "Build Points"
 msgstr ""
 
-#: src/design.c:1736
-#: src/design.c:1768
+#: src/design.c:1738
+#: src/design.c:1770
 msgid "Range"
 msgstr "Rozsah"
 
-#: src/design.c:1744
-#: src/design.c:1777
+#: src/design.c:1746
+#: src/design.c:1779
 msgid "Damage"
 msgstr "Poškození"
 
-#: src/design.c:1752
-#: src/design.c:1786
+#: src/design.c:1754
+#: src/design.c:1788
 msgid "Rate-of-Fire"
 msgstr ""
 
-#: src/design.c:1923
-#: src/design.c:1939
+#: src/design.c:1925
+#: src/design.c:1941
 msgid "Air Speed"
 msgstr "Rychlost letu"
 
-#: src/design.c:1959
-#: src/design.c:1992
+#: src/design.c:1961
+#: src/design.c:1994
 msgid "Road Speed"
 msgstr "Rychlost po cestě"
 
-#: src/design.c:1967
-#: src/design.c:2001
+#: src/design.c:1969
+#: src/design.c:2003
 msgid "Off-Road Speed"
 msgstr "Rychlost v terénu"
 
-#: src/design.c:1975
-#: src/design.c:2010
+#: src/design.c:1977
+#: src/design.c:2012
 msgid "Water Speed"
 msgstr "Rychlost po vodě"
 
-#: src/design.c:2144
+#: src/design.c:2146
 msgid "Weapons"
 msgstr "Zbraně"
 
-#: src/design.c:2168
+#: src/design.c:2170
 msgid "Systems"
 msgstr ""
 
@@ -10617,7 +10617,7 @@ msgid "Off"
 msgstr "Vypnuto"
 
 #: src/frontend.c:639
-#: src/multiint.c:1123
+#: src/multiint.c:1156
 msgid "Fog"
 msgstr "Mlha"
 
@@ -10628,7 +10628,7 @@ msgstr "Mlha"
 
 #: src/frontend.c:646
 #: src/frontend.c:747
-#: src/multiint.c:1125
+#: src/multiint.c:1158
 msgid "Fog Of War"
 msgstr "Válečná mlha"
 
@@ -10838,8 +10838,8 @@ msgid "Build (F3)"
 msgstr "Stavba (F3)"
 
 #: src/hci.c:3855
-#: src/multiint.c:1173
-#: src/multiint.c:1177
+#: src/multiint.c:1206
+#: src/multiint.c:1210
 msgid "Power"
 msgstr "Energie"
 
@@ -11341,10 +11341,10 @@ msgid "KEY MAPPING"
 msgstr "MAPOVÁNÍ KLÁVES"
 
 #: src/keyedit.c:379
-#: src/multiint.c:512
-#: src/multiint.c:554
-#: src/multiint.c:943
-#: src/multiint.c:1242
+#: src/multiint.c:545
+#: src/multiint.c:587
+#: src/multiint.c:976
+#: src/multiint.c:1275
 #: src/multilimit.c:148
 msgid "Return To Previous Screen"
 msgstr "Zpět na Předchozí Obrazovku"
@@ -11823,219 +11823,219 @@ msgstr "%s uzavřel spojenectví s %s"
 msgid "You Discover Blueprints For %s"
 msgstr "Nalezl jsi plány na %s"
 
-#: src/multiint.c:457
+#: src/multiint.c:490
 #: src/multilimit.c:156
 msgid "Accept Settings"
 msgstr "Potvrď nastavení"
 
-#: src/multiint.c:468
+#: src/multiint.c:501
 msgid "IP Address or Machine Name"
 msgstr "IP Adresa nebo Jméno Stroje"
 
-#: src/multiint.c:509
+#: src/multiint.c:542
 msgid "CONNECTION"
 msgstr "SPOJENÍ"
 
-#: src/multiint.c:522
+#: src/multiint.c:555
 msgid "Lobby"
 msgstr "Lobby"
 
-#: src/multiint.c:523
+#: src/multiint.c:556
 msgid "IP"
 msgstr "IP"
 
-#: src/multiint.c:720
+#: src/multiint.c:753
 #, fuzzy
 msgid "No games are available"
 msgstr "Posily jsou k dispozici."
 
-#: src/multiint.c:723
+#: src/multiint.c:756
 msgid "Game is full"
 msgstr ""
 
-#: src/multiint.c:727
+#: src/multiint.c:760
 msgid "You were kicked!"
 msgstr ""
 
-#: src/multiint.c:730
+#: src/multiint.c:763
 msgid "Wrong Game Verion!"
 msgstr ""
 
-#: src/multiint.c:733
+#: src/multiint.c:766
 msgid "Incorrect Password!"
 msgstr ""
 
-#: src/multiint.c:737
+#: src/multiint.c:770
 msgid "Connection Error"
 msgstr ""
 
-#: src/multiint.c:835
+#: src/multiint.c:868
 msgid "Searching"
 msgstr "Hledám"
 
-#: src/multiint.c:940
+#: src/multiint.c:973
 msgid "GAMES"
 msgstr "HRY"
 
-#: src/multiint.c:950
+#: src/multiint.c:983
 msgid "Refresh Games List"
 msgstr "Aktualizuj Seznam Her"
 
-#: src/multiint.c:971
+#: src/multiint.c:1004
 msgid "Enter Password First "
 msgstr ""
 
-#: src/multiint.c:1081
+#: src/multiint.c:1114
 msgid "OPTIONS"
 msgstr "NASTAVENÍ"
 
-#: src/multiint.c:1083
+#: src/multiint.c:1116
 msgid "Select Game Name"
 msgstr "Vyber jméno hry"
 
-#: src/multiint.c:1084
+#: src/multiint.c:1117
 msgid "Select Map"
 msgstr "Vyber Mapu"
 
-#: src/multiint.c:1086
+#: src/multiint.c:1119
 msgid "Click to set Password"
 msgstr ""
 
-#: src/multiint.c:1095
+#: src/multiint.c:1128
 msgid "Game"
 msgstr "Hra"
 
-#: src/multiint.c:1097
+#: src/multiint.c:1130
 msgid "Mayhem"
 msgstr "Mayhem"
 
-#: src/multiint.c:1099
+#: src/multiint.c:1132
 #, fuzzy
 msgid "Skirmish"
 msgstr "Šarvátka"
 
-#: src/multiint.c:1120
+#: src/multiint.c:1153
 msgid "Select Player Name"
 msgstr "Vyber jméno hráče"
 
-#: src/multiint.c:1126
+#: src/multiint.c:1159
 #, fuzzy
 msgid "Distance Fog"
 msgstr "vzdálená mlha"
 
-#: src/multiint.c:1139
+#: src/multiint.c:1172
 #: src/multimenu.c:754
 msgid "Alliances"
 msgstr "Spojenectví"
 
-#: src/multiint.c:1142
+#: src/multiint.c:1175
 msgid "No Alliances"
 msgstr "Bez Spojenectví"
 
-#: src/multiint.c:1144
+#: src/multiint.c:1177
 msgid "Allow Alliances"
 msgstr "Povolená Spojenectví"
 
-#: src/multiint.c:1148
+#: src/multiint.c:1181
 msgid "Locked Teams"
 msgstr "Pevné Týmy"
 
-#: src/multiint.c:1180
+#: src/multiint.c:1213
 #, fuzzy
 msgid "Low Power Levels"
 msgstr "Nízkoenergetické úrovně"
 
-#: src/multiint.c:1182
+#: src/multiint.c:1215
 #, fuzzy
 msgid "Medium Power Levels"
 msgstr "Středně energetické úrovně"
 
-#: src/multiint.c:1184
+#: src/multiint.c:1217
 #, fuzzy
 msgid "High Power Levels"
 msgstr "Vysokoenergetické úrovně"
 
-#: src/multiint.c:1204
-#: src/multiint.c:1208
+#: src/multiint.c:1237
+#: src/multiint.c:1241
 msgid "Base"
 msgstr "Základna"
 
-#: src/multiint.c:1211
+#: src/multiint.c:1244
 msgid "Start with No Bases"
 msgstr "Začni bez Základen"
 
-#: src/multiint.c:1213
+#: src/multiint.c:1246
 msgid "Start with Bases"
 msgstr "Začni se Základnami"
 
-#: src/multiint.c:1215
+#: src/multiint.c:1248
 msgid "Start with Advanced Bases"
 msgstr "Začni s Rozvinutými Základnami"
 
-#: src/multiint.c:1232
+#: src/multiint.c:1265
 msgid "Map Preview"
 msgstr ""
 
-#: src/multiint.c:1234
+#: src/multiint.c:1267
 msgid "Click to see Map"
 msgstr ""
 
-#: src/multiint.c:1248
+#: src/multiint.c:1281
 #, fuzzy
 msgid "Start Hosting Game"
 msgstr "Začni hostovat hru"
 
-#: src/multiint.c:1256
+#: src/multiint.c:1289
 msgid "Set Structure Limits"
 msgstr "Nastavení limitu budov"
 
-#: src/multiint.c:1648
+#: src/multiint.c:1681
 msgid "Team"
 msgstr ""
 
-#: src/multiint.c:1693
+#: src/multiint.c:1726
 msgid "Waiting for other players"
 msgstr ""
 
-#: src/multiint.c:1699
+#: src/multiint.c:1732
 msgid "Click when ready"
 msgstr ""
 
-#: src/multiint.c:1752
+#: src/multiint.c:1785
 msgid "PLAYERS"
 msgstr "HRÁČI"
 
-#: src/multiint.c:1891
+#: src/multiint.c:1924
 msgid "CHAT"
 msgstr "CHAT"
 
-#: src/multiint.c:2113
+#: src/multiint.c:2146
 msgid "*** password is now required! ***"
 msgstr ""
 
-#: src/multiint.c:2120
+#: src/multiint.c:2153
 msgid "*** password is NOT required! ***"
 msgstr ""
 
-#: src/multiint.c:2444
+#: src/multiint.c:2477
 #, fuzzy
 msgid "'Locked Teams' mode enabled"
 msgstr "Pevné Týmy"
 
-#: src/multiint.c:2489
+#: src/multiint.c:2522
 #, c-format
 msgid "The host has kicked %s from the game!"
 msgstr "Hostitel vyhodil %s ze hry!"
 
-#: src/multiint.c:2491
+#: src/multiint.c:2524
 msgid "you are being a jerk."
 msgstr ""
 
-#: src/multiint.c:2579
+#: src/multiint.c:2612
 msgid "Host is Starting Game"
 msgstr "Host začíná hru"
 
-#: src/multiint.c:3067
+#: src/multiint.c:3100
 msgid "Players"
 msgstr "Hráči"
 
