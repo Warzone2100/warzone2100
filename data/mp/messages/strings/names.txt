@@ -12,7 +12,7 @@
 ZNULLDESIGN				_("New Design")
 
 /* PLAYER 0 VEHICLES */
-Transporter				_("Transport")
+Transporter				_("Cyborg Transport")
 ConstructionDroid			_("Truck")
 ViperLtMGWheels				_("Machinegun Viper Wheels")
 
