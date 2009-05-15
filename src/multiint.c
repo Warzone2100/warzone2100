@@ -295,9 +295,42 @@ void loadMapPreview(bool hideInterface)
 			{
 				for (y = (i * scale); y < (i * scale) + scale; y++)
 				{
-					imageData[3 * ((offY2 + y) * BACKDROP_HACK_WIDTH + (x + offX2))] = col;
-					imageData[3 * ((offY2 + y) * BACKDROP_HACK_WIDTH + (x + offX2)) + 1] = col;
-					imageData[3 * ((offY2 + y) * BACKDROP_HACK_WIDTH + (x + offX2)) + 2] = col;
+
+#define WZCOL_TER_CLIFF_LOW   pal_Colour(0x68, 0x3C, 0x24)
+#define WZCOL_TER_CLIFF_HIGH  pal_Colour(0xE8, 0x84, 0x5C)
+
+#define WZCOL_TER_WATER       pal_Colour(0x3F, 0x68, 0x9A)
+
+#define WZCOL_TER_ROAD_LOW    pal_Colour(0x24, 0x1F, 0x16)
+#define WZCOL_TER_ROAD_HIGH   pal_Colour(0xB2, 0x9A, 0x66)
+
+#define WZCOL_TER_GROUND_LOW  pal_Colour(0x24, 0x1F, 0x16)
+#define WZCOL_TER_GROUND_HIGH pal_Colour(0xCC, 0xB2, 0x80)
+
+					char * const p = imageData + (3 * ((offY2 + y) * BACKDROP_HACK_WIDTH + (x + offX2)));
+					switch (terrainType(WTile))
+					{
+					case TER_CLIFFFACE:
+						p[0] = WZCOL_TER_CLIFF_LOW.byte.r + (WZCOL_TER_CLIFF_HIGH.byte.r-WZCOL_TER_CLIFF_LOW.byte.r) * col / 256;
+						p[1] = WZCOL_TER_CLIFF_LOW.byte.g + (WZCOL_TER_CLIFF_HIGH.byte.g-WZCOL_TER_CLIFF_LOW.byte.g) * col / 256;
+						p[2] = WZCOL_TER_CLIFF_LOW.byte.b + (WZCOL_TER_CLIFF_HIGH.byte.b-WZCOL_TER_CLIFF_LOW.byte.b) * col / 256;
+						break;
+					case TER_WATER:
+						p[0] = WZCOL_TER_WATER.byte.r;
+						p[1] = WZCOL_TER_WATER.byte.g;
+						p[2] = WZCOL_TER_WATER.byte.b;
+						break;
+					case TER_ROAD:
+						p[0] = WZCOL_TER_ROAD_LOW.byte.r + (WZCOL_TER_ROAD_HIGH.byte.r-WZCOL_TER_ROAD_LOW.byte.r) * col / 256;
+						p[1] = WZCOL_TER_ROAD_LOW.byte.g + (WZCOL_TER_ROAD_HIGH.byte.g-WZCOL_TER_ROAD_LOW.byte.g) * col / 256;
+						p[2] = WZCOL_TER_ROAD_LOW.byte.b + (WZCOL_TER_ROAD_HIGH.byte.b-WZCOL_TER_ROAD_LOW.byte.b) * col / 256;
+						break;
+					default:
+						p[0] = WZCOL_TER_GROUND_LOW.byte.r + (WZCOL_TER_GROUND_HIGH.byte.r-WZCOL_TER_GROUND_LOW.byte.r) * col / 256;
+						p[1] = WZCOL_TER_GROUND_LOW.byte.g + (WZCOL_TER_GROUND_HIGH.byte.g-WZCOL_TER_GROUND_LOW.byte.g) * col / 256;
+						p[2] = WZCOL_TER_GROUND_LOW.byte.b + (WZCOL_TER_GROUND_HIGH.byte.b-WZCOL_TER_GROUND_LOW.byte.b) * col / 256;
+						break;
+					}
 				}
 			}
 			WTile += 1;
