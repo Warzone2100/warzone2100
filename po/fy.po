@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2009-05-15 23:01+0200\n"
+"POT-Creation-Date: 2009-05-16 15:20+0200\n"
 "PO-Revision-Date: 2008-04-21 08:59+0000\n"
 "Last-Translator: Wander Nauta <wnauta@gmail.com>\n"
 "Language-Team: Frisian <fy@li.org>\n"
@@ -12146,20 +12146,20 @@ msgstr ""
 msgid "You cheated!"
 msgstr ""
 
-#: src/scriptfuncs.c:3219
+#: src/scriptfuncs.c:3234
 msgid "YOU ARE VICTORIOUS!"
 msgstr ""
 
-#: src/scriptfuncs.c:3223
+#: src/scriptfuncs.c:3238
 msgid "YOU WERE DEFEATED!"
 msgstr ""
 
-#: src/scriptfuncs.c:10134
+#: src/scriptfuncs.c:10149
 #, c-format
 msgid "Beacon received from %s!"
 msgstr ""
 
-#: src/scriptfuncs.c:10180
+#: src/scriptfuncs.c:10195
 #, c-format
 msgid "Beacon %d"
 msgstr ""
@@ -12188,59 +12188,59 @@ msgstr "Koe gjin Sensorienheden fine!"
 msgid "Unable to locate any Commanders!"
 msgstr "Koe gjin Kommandanten fine!"
 
-#: src/structure.c:2725
+#: src/structure.c:2728
 msgid "Command Control Limit Reached - Production Halted"
 msgstr "Kommandolimyt helle - Produksje stopt"
 
-#: src/structure.c:5827
-#: src/structure.c:5852
+#: src/structure.c:5830
+#: src/structure.c:5855
 #, c-format
 msgid "%s - %u Unit assigned"
 msgid_plural "%s - %u Units assigned"
 msgstr[0] "%s - %u Ienheid tawezen"
 msgstr[1] "%s - %u Ienheden tawezen"
 
-#: src/structure.c:5902
+#: src/structure.c:5905
 #, c-format
 msgid "%s - Connected %u of %u"
 msgstr "%s - %u fan %u ferbûn"
 
-#: src/structure.c:5916
+#: src/structure.c:5919
 #, fuzzy, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - Skea %3.0f%%"
 
-#: src/structure.c:6036
-#: src/structure.c:6085
+#: src/structure.c:6039
+#: src/structure.c:6088
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - Elektronysk skea tabrocht"
 
-#: src/structure.c:6320
+#: src/structure.c:6323
 msgid "Electronic Reward - Visibility Report"
 msgstr "Elektronyske priis - Sichtberhydsrapport"
 
-#: src/structure.c:6360
+#: src/structure.c:6363
 msgid "Factory Reward - Propulsion"
 msgstr "Fabrykspriis - Oandriuwing"
 
-#: src/structure.c:6384
+#: src/structure.c:6387
 msgid "Factory Reward - Body"
 msgstr "Fabrykspriis - Lichem"
 
-#: src/structure.c:6408
+#: src/structure.c:6411
 msgid "Factory Reward - Weapon"
 msgstr "Fabrykspriis - Wapen"
 
-#: src/structure.c:6417
+#: src/structure.c:6420
 msgid "Factory Reward - Nothing"
 msgstr "Fabrykspriis - Niks"
 
-#: src/structure.c:6445
+#: src/structure.c:6448
 msgid "Repair Facility Award - Repair"
 msgstr "Reparaasjefasiliteit Priis - Reparaasje"
 
-#: src/structure.c:6452
+#: src/structure.c:6455
 msgid "Repair Facility Award - Nothing"
 msgstr "Reparaasjefasiliteit Priis - Niks"
 
