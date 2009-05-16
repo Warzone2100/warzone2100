@@ -111,7 +111,8 @@ void radarInitVars(void)
 //called for when a new mission is started
 void resetRadarRedraw()
 {
-	// nothing here now
+	// make sure Radar buffer is correct
+	resizeRadar();
 }
 
 BOOL InitRadar(void)
