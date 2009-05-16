@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2009-05-15 22:46+0200\n"
+"POT-Creation-Date: 2009-05-16 15:13+0200\n"
 "PO-Revision-Date: 2008-11-20 20:34+0000\n"
 "Last-Translator: Cyril Brulebois <kibi@debian.org>\n"
 "Language-Team: French <warzone-dev@gna.org>\n"
@@ -12428,20 +12428,20 @@ msgstr "Temps de Jeu Total - %s"
 msgid "You cheated!"
 msgstr ""
 
-#: src/scriptfuncs.c:3219
+#: src/scriptfuncs.c:3234
 msgid "YOU ARE VICTORIOUS!"
 msgstr "VOUS ÊTES VICTORIEUX !"
 
-#: src/scriptfuncs.c:3223
+#: src/scriptfuncs.c:3238
 msgid "YOU WERE DEFEATED!"
 msgstr "VOUS AVEZ PERDU !"
 
-#: src/scriptfuncs.c:10134
+#: src/scriptfuncs.c:10149
 #, c-format
 msgid "Beacon received from %s!"
 msgstr "Signal émis par %s !"
 
-#: src/scriptfuncs.c:10180
+#: src/scriptfuncs.c:10195
 #, c-format
 msgid "Beacon %d"
 msgstr "Signal %d"
@@ -12470,61 +12470,61 @@ msgstr "Impossible de localiser la moindre unité radar !"
 msgid "Unable to locate any Commanders!"
 msgstr "Impossible de localiser le moindre Commandant !"
 
-#: src/structure.c:2799
+#: src/structure.c:2802
 msgid "Command Control Limit Reached - Production Halted"
 msgstr "Limite de Commandement Atteinte - Arrêt de la Production"
 
-#: src/structure.c:5949
-#: src/structure.c:5974
+#: src/structure.c:5952
+#: src/structure.c:5977
 #, c-format
 msgid "%s - %u Unit assigned"
 msgid_plural "%s - %u Units assigned"
 msgstr[0] "%s - %u Unité assignée"
 msgstr[1] "%s - %u Unités assignées"
 
-#: src/structure.c:6024
+#: src/structure.c:6027
 #, c-format
 msgid "%s - Connected %u of %u"
 msgstr "%s - %u connexions établies sur %u"
 
-#: src/structure.c:6038
+#: src/structure.c:6041
 #, fuzzy, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - Endommagé à %3.0f%%"
 
-#: src/structure.c:6154
-#: src/structure.c:6199
+#: src/structure.c:6157
+#: src/structure.c:6202
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - Électroniquement endommagé"
 
-#: src/structure.c:6434
+#: src/structure.c:6437
 #, fuzzy
 msgid "Electronic Reward - Visibility Report"
 msgstr "Récompense électronique - Rapport de visibilité"
 
-#: src/structure.c:6474
+#: src/structure.c:6477
 msgid "Factory Reward - Propulsion"
 msgstr "Récompense d'usine - Propulsion"
 
-#: src/structure.c:6498
+#: src/structure.c:6501
 msgid "Factory Reward - Body"
 msgstr "Récompense d'usine - Corps"
 
-#: src/structure.c:6522
+#: src/structure.c:6525
 msgid "Factory Reward - Weapon"
 msgstr "Récompense d'usine - Armes"
 
-#: src/structure.c:6531
+#: src/structure.c:6534
 msgid "Factory Reward - Nothing"
 msgstr "Récompense d'usine - Rien"
 
-#: src/structure.c:6559
+#: src/structure.c:6562
 #, fuzzy
 msgid "Repair Facility Award - Repair"
 msgstr "Atelier de réparation d'attribution - Réparation"
 
-#: src/structure.c:6566
+#: src/structure.c:6569
 #, fuzzy
 msgid "Repair Facility Award - Nothing"
 msgstr "Atelier de réparation d'attribution - Rien"

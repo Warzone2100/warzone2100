@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2009-05-15 22:46+0200\n"
+"POT-Creation-Date: 2009-05-16 15:13+0200\n"
 "PO-Revision-Date: 2008-05-09 16:05+0000\n"
 "Last-Translator: Lubos <alvinx12@centrum.cz>\n"
 "Language-Team: Czech <cs@li.org>\n"
@@ -12296,20 +12296,20 @@ msgstr "Celkový Čas Hry - %s"
 msgid "You cheated!"
 msgstr ""
 
-#: src/scriptfuncs.c:3219
+#: src/scriptfuncs.c:3234
 msgid "YOU ARE VICTORIOUS!"
 msgstr ""
 
-#: src/scriptfuncs.c:3223
+#: src/scriptfuncs.c:3238
 msgid "YOU WERE DEFEATED!"
 msgstr ""
 
-#: src/scriptfuncs.c:10134
+#: src/scriptfuncs.c:10149
 #, c-format
 msgid "Beacon received from %s!"
 msgstr ""
 
-#: src/scriptfuncs.c:10180
+#: src/scriptfuncs.c:10195
 #, c-format
 msgid "Beacon %d"
 msgstr ""
@@ -12339,59 +12339,59 @@ msgstr "Nemohu nalézt žádnou senzorovou jednotku!"
 msgid "Unable to locate any Commanders!"
 msgstr "Nemohu nalézt žádného velitele!"
 
-#: src/structure.c:2799
+#: src/structure.c:2802
 msgid "Command Control Limit Reached - Production Halted"
 msgstr ""
 
-#: src/structure.c:5949
-#: src/structure.c:5974
+#: src/structure.c:5952
+#: src/structure.c:5977
 #, fuzzy, c-format
 msgid "%s - %u Unit assigned"
 msgid_plural "%s - %u Units assigned"
 msgstr[0] "Jednotka přiřazena"
 msgstr[1] "Jednotky přiřazeny"
 
-#: src/structure.c:6024
+#: src/structure.c:6027
 #, fuzzy, c-format
 msgid "%s - Connected %u of %u"
 msgstr "%s - Připojeno %u z %u"
 
-#: src/structure.c:6038
+#: src/structure.c:6041
 #, fuzzy, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - Poškození %3.0f%%"
 
-#: src/structure.c:6154
-#: src/structure.c:6199
+#: src/structure.c:6157
+#: src/structure.c:6202
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr ""
 
-#: src/structure.c:6434
+#: src/structure.c:6437
 msgid "Electronic Reward - Visibility Report"
 msgstr ""
 
-#: src/structure.c:6474
+#: src/structure.c:6477
 msgid "Factory Reward - Propulsion"
 msgstr ""
 
-#: src/structure.c:6498
+#: src/structure.c:6501
 msgid "Factory Reward - Body"
 msgstr ""
 
-#: src/structure.c:6522
+#: src/structure.c:6525
 msgid "Factory Reward - Weapon"
 msgstr ""
 
-#: src/structure.c:6531
+#: src/structure.c:6534
 msgid "Factory Reward - Nothing"
 msgstr ""
 
-#: src/structure.c:6559
+#: src/structure.c:6562
 msgid "Repair Facility Award - Repair"
 msgstr ""
 
-#: src/structure.c:6566
+#: src/structure.c:6569
 msgid "Repair Facility Award - Nothing"
 msgstr ""
 
