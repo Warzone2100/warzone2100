@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2009-05-15 22:46+0200\n"
+"POT-Creation-Date: 2009-05-16 15:13+0200\n"
 "PO-Revision-Date: 2009-02-01 20:57+0100\n"
 "Last-Translator: Makary155 <makary155@wp.pl>\n"
 "Language-Team: Warzone PL Team <makary155@wp.pl>\n"
@@ -12437,21 +12437,21 @@ msgstr "Całkowity czas gry - %s"
 msgid "You cheated!"
 msgstr ""
 
-#: src/scriptfuncs.c:3219
+#: src/scriptfuncs.c:3234
 msgid "YOU ARE VICTORIOUS!"
 msgstr "ZWYCIĘŻYŁEŚ!"
 
-#: src/scriptfuncs.c:3223
+#: src/scriptfuncs.c:3238
 msgid "YOU WERE DEFEATED!"
 msgstr "ZOSTAŁEŚ POKONANY!"
 
 # I used 'Beacon' as 'Signal', IMO it sounds better
-#: src/scriptfuncs.c:10134
+#: src/scriptfuncs.c:10149
 #, c-format
 msgid "Beacon received from %s!"
 msgstr "Sygnał otrzymany od %s!"
 
-#: src/scriptfuncs.c:10180
+#: src/scriptfuncs.c:10195
 #, c-format
 msgid "Beacon %d"
 msgstr "Sygnał %d"
@@ -12481,12 +12481,12 @@ msgstr "Brak jednostek z sensorem!"
 msgid "Unable to locate any Commanders!"
 msgstr "Brak dowódców!"
 
-#: src/structure.c:2799
+#: src/structure.c:2802
 msgid "Command Control Limit Reached - Production Halted"
 msgstr "Przekroczony limit Kwatery Głównej - produkcja wstrzymana"
 
-#: src/structure.c:5949
-#: src/structure.c:5974
+#: src/structure.c:5952
+#: src/structure.c:5977
 #, c-format
 msgid "%s - %u Unit assigned"
 msgid_plural "%s - %u Units assigned"
@@ -12494,48 +12494,48 @@ msgstr[0] "%s - %u Jednostka przydzielona"
 msgstr[1] "%s - %u Jednostki przydzielone"
 msgstr[2] "%s - %u Jednostek przydzielonych"
 
-#: src/structure.c:6024
+#: src/structure.c:6027
 #, c-format
 msgid "%s - Connected %u of %u"
 msgstr "%s - Połączony %u z %u"
 
-#: src/structure.c:6038
+#: src/structure.c:6041
 #, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - Uszkodzenia %3.0f%%"
 
-#: src/structure.c:6154
-#: src/structure.c:6199
+#: src/structure.c:6157
+#: src/structure.c:6202
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - Uszkodzony elektronicznie"
 
 # This maybe sound weird, but I translated this as 'stolen technology'
-#: src/structure.c:6434
+#: src/structure.c:6437
 msgid "Electronic Reward - Visibility Report"
 msgstr "Technologia skradziona - raport widoczności"
 
-#: src/structure.c:6474
+#: src/structure.c:6477
 msgid "Factory Reward - Propulsion"
 msgstr "Technologia skradziona - Napęd"
 
-#: src/structure.c:6498
+#: src/structure.c:6501
 msgid "Factory Reward - Body"
 msgstr "Technologia skradziona - kadłub"
 
-#: src/structure.c:6522
+#: src/structure.c:6525
 msgid "Factory Reward - Weapon"
 msgstr "Technologia skradziona - Broń"
 
-#: src/structure.c:6531
+#: src/structure.c:6534
 msgid "Factory Reward - Nothing"
 msgstr "Technologia skradziona - Brak"
 
-#: src/structure.c:6559
+#: src/structure.c:6562
 msgid "Repair Facility Award - Repair"
 msgstr "Technologia skradziona - Naprawa"
 
-#: src/structure.c:6566
+#: src/structure.c:6569
 msgid "Repair Facility Award - Nothing"
 msgstr "Technologia skradziona - Brak"
 
