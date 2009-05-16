@@ -1815,6 +1815,7 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 			scrollMinY = 0;
 			scrollMaxX = mapWidth;
 			scrollMaxY = mapHeight;
+			// NOTE: resizeRadar() may be required here, since we change scroll limits?
 		}
 		//set the functionality dependant on the type of structure
 		if(!setFunctionality(psBuilding, pStructureType->type))
@@ -1829,6 +1830,7 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 				scrollMinY = preScrollMinY;
 				scrollMaxX = preScrollMaxX;
 				scrollMaxY = preScrollMaxY;
+				// NOTE: resizeRadar() may be required here, since we change scroll limits?
 			}
 			return NULL;
 		}
@@ -1841,6 +1843,7 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 			scrollMinY = preScrollMinY;
 			scrollMaxX = preScrollMaxX;
 			scrollMaxY = preScrollMaxY;
+			// NOTE: resizeRadar() may be required here, since we change scroll limits?
 		}
 
 		psBuilding->body = (UWORD)structureBody(psBuilding);
