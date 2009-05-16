@@ -341,19 +341,7 @@ static void DrawRadarTiles(void)
 			MAPTILE	*psTile = mapTile(x, y);
 			size_t pos = radarTexWidth * (y - scrollMinY) + (x - scrollMinX);
 
-			if ((pos * sizeof(*radarBuffer)) >= radarBufferSize)
-			{
-				// NOTE: on campaign, the radar can get bigger when it expands in-between levels.
-				// so this should only assert if this happens in skirmish/mp game
-				if (bMultiPlayer)
-				{
-					ASSERT(pos * sizeof(*radarBuffer) < radarBufferSize, "Buffer overrun");
-					debug(LOG_ERROR, "Radar size has changed in-between levels, and it isn't a campaign level?");
-				}
-				resizeRadar();
-				return;
-			}
-
+			ASSERT(pos * sizeof(*radarBuffer) < radarBufferSize, "Buffer overrun");
 			if (!getRevealStatus() || TEST_TILE_VISIBLE(selectedPlayer, psTile))
 			{
 				radarBuffer[pos] = appliedRadarColour(radarDrawMode, psTile).rgba;
