@@ -548,13 +548,29 @@ BOOL multiTemplateSetup(void)
 
 	case SKIRMISH:
 		// create the pc player list in deathmatch set.
+
+		// Yes, this code really *is* as hacky as it looks.
+		// I'm going to try to narrate what's going on.
+
+		// Player 5 currently contains the human player template set.
+		// (i.e. Nothing but a truck)
+		// Templates from players 5, 2, and 6 are added to player 4.
+		// This puts the AI template set in player 4.
 		addTemplateSet(CAMPAIGNTEMPLATES,DEATHMATCHTEMPLATES);
 		addTemplateSet(6,DEATHMATCHTEMPLATES);
 		addTemplateSet(2,DEATHMATCHTEMPLATES);
 
+		// To reiterate:
+		// Player 5 contains the human player template set.
+		// Player 4 contains the AI player template set.
+
 		//choose which way to do this.
 		if(isHumanPlayer(CAMPAIGNTEMPLATES))
 		{
+			// Player 5 is a human. No workarounds are needed.
+			// We just copy player 4's templates onto all the AI's,
+			// then copy player 5's template onto all the humans.
+
 			//pc first
 			for(player=0;player<game.maxPlayers;player++)
 			{
@@ -574,6 +590,13 @@ BOOL multiTemplateSetup(void)
 		}
 		else
 		{
+			// Player 5 is an AI player. This is a really bad workaround.
+			// We find an AI player: pcPlayer.
+			// We copy player 4's templates onto pcPlayer.
+			// Then, we copy player 5's templates onto all the
+			// human players, and pcPlayer's templates onto all the
+			// AI players.
+
 			// ensure a copy of pc templates to a pc player.
 			if(isHumanPlayer(DEATHMATCHTEMPLATES))
 			{
