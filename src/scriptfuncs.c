@@ -2655,9 +2655,12 @@ BOOL scrSetScrollParams(void)
 
 	// When the scroll limits change midgame - need to redo the lighting
 	initLighting(prevMinX < scrollMinX ? prevMinX : scrollMinX,
-	             prevMinY < scrollMinY ? prevMinY : scrollMinY,
-	             prevMaxX < scrollMaxX ? prevMaxX : scrollMaxX,
-	             prevMaxY < scrollMaxY ? prevMaxY : scrollMaxY);
+				 prevMinY < scrollMinY ? prevMinY : scrollMinY,
+				 prevMaxX < scrollMaxX ? prevMaxX : scrollMaxX,
+				 prevMaxY < scrollMaxY ? prevMaxY : scrollMaxY);
+
+	// need to reset radar to take into account of new size
+	resizeRadar();
 
 	return true;
 }
@@ -2680,15 +2683,18 @@ BOOL scrSetScrollMinX(void)
 		return false;
 	}
 
-    prevMinX = scrollMinX;
+	prevMinX = scrollMinX;
 
-    scrollMinX = minX;
+	scrollMinX = minX;
 
-    //when the scroll limits change midgame - need to redo the lighting
-    initLighting(prevMinX < scrollMinX ? prevMinX : scrollMinX,
-        scrollMinY, scrollMaxX, scrollMaxY);
+	//when the scroll limits change midgame - need to redo the lighting
+	initLighting(prevMinX < scrollMinX ? prevMinX : scrollMinX,
+		scrollMinY, scrollMaxX, scrollMaxY);
 
-    return true;
+	// need to reset radar to take into account of new size
+	resizeRadar();
+
+	return true;
 }
 
 // -----------------------------------------------------------------------------------------
@@ -2709,16 +2715,19 @@ BOOL scrSetScrollMinY(void)
 		return false;
 	}
 
-    prevMinY = scrollMinY;
+	prevMinY = scrollMinY;
 
 	scrollMinY = minY;
 
-    //when the scroll limits change midgame - need to redo the lighting
-    initLighting(scrollMinX,
-        prevMinY < scrollMinY ? prevMinY : scrollMinY,
-        scrollMaxX, scrollMaxY);
+	//when the scroll limits change midgame - need to redo the lighting
+	initLighting(scrollMinX,
+		prevMinY < scrollMinY ? prevMinY : scrollMinY,
+		scrollMaxX, scrollMaxY);
 
-    return true;
+	// need to reset radar to take into account of new size
+	resizeRadar();
+
+	return true;
 }
 
 // -----------------------------------------------------------------------------------------
@@ -2739,16 +2748,19 @@ BOOL scrSetScrollMaxX(void)
 		return false;
 	}
 
-    prevMaxX = scrollMaxX;
+	prevMaxX = scrollMaxX;
 
 	scrollMaxX = maxX;
 
-    //when the scroll limits change midgame - need to redo the lighting
-    initLighting(scrollMinX,  scrollMinY,
-        prevMaxX < scrollMaxX ? prevMaxX : scrollMaxX,
-        scrollMaxY);
+	//when the scroll limits change midgame - need to redo the lighting
+	initLighting(scrollMinX,  scrollMinY,
+		prevMaxX < scrollMaxX ? prevMaxX : scrollMaxX,
+		scrollMaxY);
 
-    return true;
+	// need to reset radar to take into account of new size
+	resizeRadar();
+
+	return true;
 }
 
 // -----------------------------------------------------------------------------------------
@@ -2769,15 +2781,18 @@ BOOL scrSetScrollMaxY(void)
 		return false;
 	}
 
-    prevMaxY = scrollMaxY;
+	prevMaxY = scrollMaxY;
 
 	scrollMaxY = maxY;
 
-    //when the scroll limits change midgame - need to redo the lighting
-    initLighting(scrollMinX, scrollMinY, scrollMaxX,
-        prevMaxY < scrollMaxY ? prevMaxY : scrollMaxY);
+	//when the scroll limits change midgame - need to redo the lighting
+	initLighting(scrollMinX, scrollMinY, scrollMaxX,
+		prevMaxY < scrollMaxY ? prevMaxY : scrollMaxY);
 
-    return true;
+	// need to reset radar to take into account of new size
+	resizeRadar();
+
+	return true;
 }
 
 // -----------------------------------------------------------------------------------------
