@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2009-05-15 16:08+0200\n"
+"POT-Creation-Date: 2009-05-16 14:29+0200\n"
 "PO-Revision-Date: 2008-05-09 16:08+0000\n"
 "Last-Translator: carson <Unknown>\n"
 "Language-Team: Dansk <da@li.org>\n"
@@ -10457,7 +10457,7 @@ msgstr "Spiller"
 
 #: src/design.c:453
 #: src/design.c:474
-#: src/design.c:3551
+#: src/design.c:3553
 msgid "New Vehicle"
 msgstr "Nyt design"
 
@@ -10496,18 +10496,18 @@ msgstr "Hestekrafter"
 
 #: src/design.c:725
 #: src/design.c:780
-#: src/design.c:1589
-#: src/design.c:1630
-#: src/design.c:1655
-#: src/design.c:1673
-#: src/design.c:1698
-#: src/design.c:1716
-#: src/design.c:1758
-#: src/design.c:1793
-#: src/design.c:1929
-#: src/design.c:1946
-#: src/design.c:1981
-#: src/design.c:2017
+#: src/design.c:1591
+#: src/design.c:1632
+#: src/design.c:1657
+#: src/design.c:1675
+#: src/design.c:1700
+#: src/design.c:1718
+#: src/design.c:1760
+#: src/design.c:1795
+#: src/design.c:1931
+#: src/design.c:1948
+#: src/design.c:1983
+#: src/design.c:2019
 msgid "Weight"
 msgstr "Vægt"
 
@@ -10527,74 +10527,74 @@ msgstr "Total pansring"
 msgid "Power Usage"
 msgstr "Energi forbrug"
 
-#: src/design.c:1343
+#: src/design.c:1345
 msgid "Transporter"
 msgstr "Transportskib"
 
-#: src/design.c:1365
+#: src/design.c:1367
 msgid "Hydra "
 msgstr ""
 
-#: src/design.c:1571
+#: src/design.c:1573
 msgid "Sensor Range"
 msgstr "Rækkevide"
 
 # This is always 1000 ingame... any reason to have this at all? is it ever used?
-#: src/design.c:1580
+#: src/design.c:1582
 msgid "Sensor Power"
 msgstr "Watt"
 
-#: src/design.c:1621
+#: src/design.c:1623
 msgid "ECM Power"
 msgstr "ECM Effekt"
 
-#: src/design.c:1647
-#: src/design.c:1664
-#: src/design.c:1690
-#: src/design.c:1707
+#: src/design.c:1649
+#: src/design.c:1666
+#: src/design.c:1692
+#: src/design.c:1709
 msgid "Build Points"
 msgstr "Effektivitet"
 
-#: src/design.c:1734
-#: src/design.c:1766
+#: src/design.c:1736
+#: src/design.c:1768
 msgid "Range"
 msgstr "Rækkevide"
 
-#: src/design.c:1742
-#: src/design.c:1775
+#: src/design.c:1744
+#: src/design.c:1777
 msgid "Damage"
 msgstr "Skade"
 
-#: src/design.c:1750
-#: src/design.c:1784
+#: src/design.c:1752
+#: src/design.c:1786
 msgid "Rate-of-Fire"
 msgstr "Kadance"
 
-#: src/design.c:1921
-#: src/design.c:1937
+#: src/design.c:1923
+#: src/design.c:1939
 msgid "Air Speed"
 msgstr "Lufthastighed"
 
-#: src/design.c:1957
-#: src/design.c:1990
+#: src/design.c:1959
+#: src/design.c:1992
 msgid "Road Speed"
 msgstr "Vejhastighed"
 
-#: src/design.c:1965
-#: src/design.c:1999
+#: src/design.c:1967
+#: src/design.c:2001
 msgid "Off-Road Speed"
 msgstr "Hastighed i terræn"
 
-#: src/design.c:1973
-#: src/design.c:2008
+#: src/design.c:1975
+#: src/design.c:2010
 msgid "Water Speed"
 msgstr "Vandhastighed"
 
-#: src/design.c:2142
+#: src/design.c:2144
 msgid "Weapons"
 msgstr "Våben"
 
-#: src/design.c:2166
+#: src/design.c:2168
 msgid "Systems"
 msgstr "Systemer"
 
@@ -10862,7 +10862,7 @@ msgid "Off"
 msgstr "Fra"
 
 #: src/frontend.c:640
-#: src/multiint.c:1104
+#: src/multiint.c:1137
 msgid "Fog"
 msgstr "Tåge"
 
@@ -10873,7 +10873,7 @@ msgstr "Afstandståge"
 
 #: src/frontend.c:647
 #: src/frontend.c:748
-#: src/multiint.c:1106
+#: src/multiint.c:1139
 msgid "Fog Of War"
 msgstr "Krigståge"
 
@@ -11088,8 +11088,8 @@ msgid "Build (F3)"
 msgstr "Konstruktion (F3)"
 
 #: src/hci.c:3901
-#: src/multiint.c:1154
-#: src/multiint.c:1158
+#: src/multiint.c:1187
+#: src/multiint.c:1191
 msgid "Power"
 msgstr "Kraft"
 
@@ -11585,10 +11585,10 @@ msgid "KEY MAPPING"
 msgstr "TASTATUR MAPPING"
 
 #: src/keyedit.c:379
-#: src/multiint.c:518
-#: src/multiint.c:560
-#: src/multiint.c:947
-#: src/multiint.c:1223
+#: src/multiint.c:551
+#: src/multiint.c:593
+#: src/multiint.c:980
+#: src/multiint.c:1256
 #: src/multilimit.c:148
 msgid "Return To Previous Screen"
 msgstr "Tilbage"
@@ -12054,217 +12054,217 @@ msgstr "%s Danner aliance med %s"
 msgid "You Discover Blueprints For %s"
 msgstr "Du opdager plantegninger for %s"
 
-#: src/multiint.c:463
+#: src/multiint.c:496
 #: src/multilimit.c:156
 msgid "Accept Settings"
 msgstr "Akceptér opsætning"
 
-#: src/multiint.c:474
+#: src/multiint.c:507
 msgid "IP Address or Machine Name"
 msgstr "IP adressse eller computernavn"
 
-#: src/multiint.c:515
+#: src/multiint.c:548
 msgid "CONNECTION"
 msgstr "FORBINDELSE"
 
-#: src/multiint.c:528
+#: src/multiint.c:561
 msgid "Lobby"
 msgstr ""
 
-#: src/multiint.c:529
+#: src/multiint.c:562
 msgid "IP"
 msgstr "IP"
 
-#: src/multiint.c:725
+#: src/multiint.c:758
 #, fuzzy
 msgid "No games are available"
 msgstr "Forstærkninger er tilgængelige."
 
-#: src/multiint.c:728
+#: src/multiint.c:761
 msgid "Game is full"
 msgstr ""
 
-#: src/multiint.c:732
+#: src/multiint.c:765
 msgid "You were kicked!"
 msgstr ""
 
-#: src/multiint.c:735
+#: src/multiint.c:768
 msgid "Wrong Game Verion!"
 msgstr ""
 
-#: src/multiint.c:738
+#: src/multiint.c:771
 msgid "Incorrect Password!"
 msgstr ""
 
-#: src/multiint.c:742
+#: src/multiint.c:775
 msgid "Connection Error"
 msgstr ""
 
-#: src/multiint.c:839
+#: src/multiint.c:872
 msgid "Searching"
 msgstr "Søger"
 
-#: src/multiint.c:944
+#: src/multiint.c:977
 msgid "GAMES"
 msgstr "SPIL"
 
-#: src/multiint.c:954
+#: src/multiint.c:987
 msgid "Refresh Games List"
 msgstr "Opdatér spilliste"
 
-#: src/multiint.c:975
+#: src/multiint.c:1008
 msgid "Enter Password First "
 msgstr ""
 
-#: src/multiint.c:1063
+#: src/multiint.c:1096
 msgid "OPTIONS"
 msgstr "TILVALG"
 
-#: src/multiint.c:1065
+#: src/multiint.c:1098
 msgid "Select Game Name"
 msgstr "Vælg spilnavn"
 
-#: src/multiint.c:1066
+#: src/multiint.c:1099
 msgid "Select Map"
 msgstr "Vælg kort"
 
-#: src/multiint.c:1068
+#: src/multiint.c:1101
 msgid "Click to set Password"
 msgstr ""
 
-#: src/multiint.c:1076
+#: src/multiint.c:1109
 msgid "Game"
 msgstr "Spil"
 
-#: src/multiint.c:1078
+#: src/multiint.c:1111
 msgid "Mayhem"
 msgstr ""
 
-#: src/multiint.c:1080
+#: src/multiint.c:1113
 msgid "Skirmish"
 msgstr "Mod computeren"
 
-#: src/multiint.c:1101
+#: src/multiint.c:1134
 #, fuzzy
 msgid "Select Player Name"
 msgstr "Flerbruger spil"
 
-#: src/multiint.c:1107
+#: src/multiint.c:1140
 msgid "Distance Fog"
 msgstr "Afstandståge"
 
-#: src/multiint.c:1120
+#: src/multiint.c:1153
 #: src/multimenu.c:754
 msgid "Alliances"
 msgstr "Aliancer"
 
-#: src/multiint.c:1123
+#: src/multiint.c:1156
 msgid "No Alliances"
 msgstr "Uden alliancer"
 
-#: src/multiint.c:1125
+#: src/multiint.c:1158
 msgid "Allow Alliances"
 msgstr "Med alliancer"
 
-#: src/multiint.c:1129
+#: src/multiint.c:1162
 msgid "Locked Teams"
 msgstr "Låste hold"
 
-#: src/multiint.c:1161
+#: src/multiint.c:1194
 msgid "Low Power Levels"
 msgstr "Sparsom energi"
 
-#: src/multiint.c:1163
+#: src/multiint.c:1196
 msgid "Medium Power Levels"
 msgstr "Medium energi"
 
-#: src/multiint.c:1165
+#: src/multiint.c:1198
 msgid "High Power Levels"
 msgstr "Meget energi"
 
-#: src/multiint.c:1185
-#: src/multiint.c:1189
+#: src/multiint.c:1218
+#: src/multiint.c:1222
 msgid "Base"
 msgstr "Base"
 
-#: src/multiint.c:1192
+#: src/multiint.c:1225
 msgid "Start with No Bases"
 msgstr "Start uden baser"
 
-#: src/multiint.c:1194
+#: src/multiint.c:1227
 msgid "Start with Bases"
 msgstr "Start med baser"
 
-#: src/multiint.c:1196
+#: src/multiint.c:1229
 msgid "Start with Advanced Bases"
 msgstr "Start med advancerede baser"
 
-#: src/multiint.c:1213
+#: src/multiint.c:1246
 msgid "Map Preview"
 msgstr ""
 
-#: src/multiint.c:1215
+#: src/multiint.c:1248
 msgid "Click to see Map"
 msgstr ""
 
-#: src/multiint.c:1229
+#: src/multiint.c:1262
 #, fuzzy
 msgid "Start Hosting Game"
 msgstr "Værten starter spillet"
 
-#: src/multiint.c:1237
+#: src/multiint.c:1270
 #, fuzzy
 msgid "Set Structure Limits"
 msgstr "Tabte bygninger"
 
-#: src/multiint.c:1629
+#: src/multiint.c:1662
 #, fuzzy
 msgid "Team"
 msgstr "Hurtgigt spil"
 
-#: src/multiint.c:1674
+#: src/multiint.c:1707
 msgid "Waiting for other players"
 msgstr ""
 
-#: src/multiint.c:1680
+#: src/multiint.c:1713
 msgid "Click when ready"
 msgstr ""
 
-#: src/multiint.c:1734
+#: src/multiint.c:1767
 msgid "PLAYERS"
 msgstr "SPILLERE"
 
-#: src/multiint.c:1873
+#: src/multiint.c:1906
 msgid "CHAT"
 msgstr "BESKEDER"
 
-#: src/multiint.c:2096
+#: src/multiint.c:2129
 msgid "*** password is now required! ***"
 msgstr ""
 
-#: src/multiint.c:2103
+#: src/multiint.c:2136
 msgid "*** password is NOT required! ***"
 msgstr ""
 
-#: src/multiint.c:2427
+#: src/multiint.c:2460
 #, fuzzy
 msgid "'Locked Teams' mode enabled"
 msgstr "Låste hold"
 
-#: src/multiint.c:2472
+#: src/multiint.c:2505
 #, fuzzy, c-format
 msgid "The host has kicked %s from the game!"
 msgstr "%s har forladt spillet"
 
-#: src/multiint.c:2474
+#: src/multiint.c:2507
 msgid "you are being a jerk."
 msgstr ""
 
-#: src/multiint.c:2562
+#: src/multiint.c:2595
 msgid "Host is Starting Game"
 msgstr "Værten starter spillet"
 
-#: src/multiint.c:3048
+#: src/multiint.c:3081
 msgid "Players"
 msgstr "Spillere"
 
@@ -12525,20 +12525,20 @@ msgstr "Total anvendt tid: %s"
 msgid "You cheated!"
 msgstr ""
 
-#: src/scriptfuncs.c:3221
+#: src/scriptfuncs.c:3236
 msgid "YOU ARE VICTORIOUS!"
 msgstr ""
 
-#: src/scriptfuncs.c:3225
+#: src/scriptfuncs.c:3240
 msgid "YOU WERE DEFEATED!"
 msgstr ""
 
-#: src/scriptfuncs.c:10140
+#: src/scriptfuncs.c:10155
 #, c-format
 msgid "Beacon received from %s!"
 msgstr ""
 
-#: src/scriptfuncs.c:10186
+#: src/scriptfuncs.c:10201
 #, c-format
 msgid "Beacon %d"
 msgstr ""
@@ -12567,59 +12567,59 @@ msgstr "Kan ikke finde nogle rekonniseringsenheder!"
 msgid "Unable to locate any Commanders!"
 msgstr "Kan ikke finde nogle kommandører!"
 
-#: src/structure.c:2708
+#: src/structure.c:2711
 msgid "Command Control Limit Reached - Production Halted"
 msgstr "Kommandobegrænsning nået - indstiller produktion"
 
-#: src/structure.c:5845
-#: src/structure.c:5870
+#: src/structure.c:5848
+#: src/structure.c:5873
 #, c-format
 msgid "%s - %u Unit assigned"
 msgid_plural "%s - %u Units assigned"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/structure.c:5920
+#: src/structure.c:5923
 #, c-format
 msgid "%s - Connected %u of %u"
 msgstr "%s - Forbundet %u af %u"
 
-#: src/structure.c:5934
+#: src/structure.c:5937
 #, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - Skade %3.0f%%"
 
-#: src/structure.c:6054
-#: src/structure.c:6103
+#: src/structure.c:6057
+#: src/structure.c:6106
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - Elektronisk beskadiget"
 
-#: src/structure.c:6338
+#: src/structure.c:6341
 msgid "Electronic Reward - Visibility Report"
 msgstr "Elektronisk gevinst - Rekonniseringsrapport"
 
-#: src/structure.c:6378
+#: src/structure.c:6381
 msgid "Factory Reward - Propulsion"
 msgstr "Fabriksgevinst - Fremdrift"
 
-#: src/structure.c:6402
+#: src/structure.c:6405
 msgid "Factory Reward - Body"
 msgstr "Fabriksgevinst - Skrog"
 
-#: src/structure.c:6426
+#: src/structure.c:6429
 msgid "Factory Reward - Weapon"
 msgstr "Frabriskgevinst - Våben"
 
-#: src/structure.c:6435
+#: src/structure.c:6438
 msgid "Factory Reward - Nothing"
 msgstr "Fabriksgevinst - Ingen"
 
-#: src/structure.c:6463
+#: src/structure.c:6466
 msgid "Repair Facility Award - Repair"
 msgstr "Reperationsgevinst - Reperation"
 
-#: src/structure.c:6470
+#: src/structure.c:6473
 msgid "Repair Facility Award - Nothing"
 msgstr "Reperationsgevinst - Ingen"
 
