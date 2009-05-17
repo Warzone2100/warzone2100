@@ -487,6 +487,8 @@ BOOL levReleaseAll(void)
 {
 	SDWORD i;
 
+	// clear out old effect data first
+	initEffectsSystem();
 	// release old data if any was loaded
 	if (psCurrLevel != NULL)
 	{

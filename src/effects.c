@@ -338,8 +338,8 @@ void	initEffectsSystem( void )
 		psEffect = &asEffectsList[i];
 		// clear the fire bit
 		killEffect(psEffect);
-		/* Clear all the control bits */
-		psEffect->control = (UBYTE)0;
+		// Clear out the whole array
+		memset(psEffect, 0x0, sizeof(EFFECT));
 		/* All effects are initially inactive */
 		effectStatus[i] = ES_INACTIVE;
 	}
