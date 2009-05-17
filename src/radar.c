@@ -196,8 +196,8 @@ void CalcRadarPosition(int mX, int mY, int *PosX, int *PosY)
 	{
 		pos = Vector2f_Rotate2f(pos, -player.r.y/DEG(1));
 	}
-	pos.x += radarWidth/2;
-	pos.y += radarHeight/2;
+	pos.x += radarWidth/2.0;
+	pos.y += radarHeight/2.0;
 
 	if (pos.x<0 || pos.y<0 || pos.x>=radarWidth || pos.y>=radarHeight)
 	{
@@ -269,16 +269,19 @@ void drawRadar(void)
 			iV_MatrixRotateZ(player.r.y);
 		}
 		// draw the box at the dimensions of the map
-		iV_TransBoxFill(-radarWidth/2,
-						-radarHeight/2,
-						 radarWidth/2,
-						 radarHeight/2);
-		pie_RenderRadar(-radarWidth/2,
-						-radarHeight/2,
+		iV_TransBoxFill(-radarWidth/2.0,
+						-radarHeight/2.0,
+						 radarWidth/2.0,
+						 radarHeight/2.0);
+		pie_RenderRadar(-radarWidth/2.0,
+						-radarHeight/2.0,
 						 radarWidth,
 						 radarHeight);
-		DrawRadarExtras(-radarWidth/2, -radarHeight/2, pixSizeH, pixSizeV);
-		drawRadarBlips(-radarWidth/2, -radarHeight/2, pixSizeH, pixSizeV);
+        pie_MatBegin();
+            pie_TRANSLATE(-radarWidth/2 - 1, -radarHeight/2 - 1, 0);
+            DrawRadarExtras(0, 0, pixSizeH, pixSizeV);
+        pie_MatEnd();
+		drawRadarBlips(-radarWidth/2.0, -radarHeight/2.0, pixSizeH, pixSizeV);
 	pie_MatEnd();
 }
 
