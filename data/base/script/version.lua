@@ -20,18 +20,31 @@
 --[[
 	This file provides compatibility functions.
 	Use version(<script compatibility version>) at the start of your scripts to provide fallbacks and wrappers.
+
+	Versions (even are releases, odd ones support both n-1 and n+1 functions but will warn about deprecation):
+	0: The scripts that shipped with the original version of Warzone
+	1: Compatibility mode, will warn about functions that are removed or changed in version 2
+	2: Changes to the script API that were done while going from wzscript to Lua.
 ]]--
 
+function deprecate(f, message)
+	return function(...) warning("function ".. debug.getinfo(1).name .." is deprecated: "..message, 2); f(...) end
+end
+
 function version(v)
-	local current_version = 1
+	local current_version = 2
 
 	-- check we support this version
 	if v > current_version then
 		error("This script is written using script version "..v.." while this build of Warzone 2100 only supports versions 0-"..current_version)
 	end
+	if v % 2 > 0 then
+		print("WARNING: Running in version ".. (v-1) .. " compatibility mode")
+		print("         Please fully convert to version " .. (v+1) .. " before releasing this script")
+	end
 	VERSION = v -- set the global version
 
-	if v < 1 then
+	if v < 2 then
 		-- Version 0 are the scripts that are converted using wz2lua
 	
 		-- These are script api functions which are written in Lua
@@ -193,5 +206,23 @@ function version(v)
 			end
 
 		end
+	end
+
+	if v == 1 then
+		setLandingZone       = deprecate(setLandingZone, "use setNoGoArea")
+		random               = deprecate(random, "use math.random")
+		distBetweenTwoPoints = deprecate(distBetweenTwoPoints, "do the calculations yourself")
+		ASSERT               = deprecate(ASSERT, "use \"if not <condition> then error(...)\"")
+		objToStructure       = deprecate(objToStructure, "use <object>.type to see if it has the correct one")
+		objToDroid           = deprecate(objToDroid, "use <object>.type to see if it has the correct one")
+		modulo               = deprecate(modulo, "use \"a % b\"")
+		Array                = deprecate(Array, "use the Lua list definition syntax")
+		initEnumDroids       = deprecate(initEnumDroids, "use the droid iterator functions (droids/visibleDroids)")
+		enumDroid            = deprecate(enumDroid, "use the droid iterator functions (droids/visibleDroids)")
+		initEnumStruct       = deprecate(initEnumStruct, "use the structure iterator functions")
+		enumStruct           = deprecate(enumStruct, "use the structure iterator functions")
+		initGetFeature       = deprecate(initGetFeature, "use the feature iterator functions")
+		getFeature           = deprecate(getFeature, "use the feature iterator functions")
+		pause                = deprecate(pause, "use delayedEvent")
 	end
 end

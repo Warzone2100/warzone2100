@@ -79,5 +79,18 @@ function dofile(filename)
 	return __dofile(path..filename)
 end
 
+-- like "error" but this one does return
+function warning(message, level)
+	local info, file
+
+	level = level or 1
+	info = debug.getinfo(level+1)
+	file = "<unknown>"
+	if string.sub(info.source,1,1) == "@" then
+		file = string.sub(info.source,2)
+	end
+	print(file..":".. info.currentline ..": ".. message)
+end
+
 -- initialise the random number generator
 math.randomseed(os.time())
