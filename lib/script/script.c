@@ -80,14 +80,21 @@ void scriptFreeCode(SCRIPT_CODE *psCode)
 			//free strings for event i
 			for (j = 0; j < psCode->numLocalVars[i]; j++)
 			{
-				if (psCode->ppsLocalVarVal[i][j].type == VAL_STRING)
+				// When a script fails, it don't allocate storage.
+				if (psCode->ppsLocalVarVal)
 				{
-					free(psCode->ppsLocalVarVal[i][j].v.sval);
+					if (psCode->ppsLocalVarVal[i][j].type == VAL_STRING)
+					{
+						free(psCode->ppsLocalVarVal[i][j].v.sval);
+					}
 				}
 			}
 
 			free(psCode->ppsLocalVars[i]);
-			free(psCode->ppsLocalVarVal[i]); // free pointer to event i local vars
+			if (psCode->ppsLocalVarVal)
+			{
+				free(psCode->ppsLocalVarVal[i]); // free pointer to event i local vars
+			}
 		}
 	}
 
