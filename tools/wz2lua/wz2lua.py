@@ -791,6 +791,9 @@ class CodeGenerator(GenericASTTraversal):
 			node.code = node[0].code + '(' + node[1].code + '/10.0)'
 		elif node[0].code in ['buildingDestroyed']:
 			node.code = 'destroyed(' + node[1][0].code + ')'
+		elif node[0].code in ['addPower']:
+			# reverse the arguments
+			node.code = 'addPower(' + node[1].arglist[1] + ', ' + node[1].arglist[0] + ')'
 		else:
 			if node[0].code in unused_parameters:
 				# this function has some unused parameters that will need to be removed

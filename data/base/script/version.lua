@@ -139,11 +139,6 @@ function version(v)
 		end
 		getFeatureB = getFeature
 
-		_addPower = addPower
-		function addPower(power, player)
-			return _addPower(player, power) -- swap arguments
-		end
-
 		-------------------------------------------------
 		-- event stuff (to support the "pause" function)
 		-- pause execution of an event handler for a certain time
