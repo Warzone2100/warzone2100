@@ -80,20 +80,14 @@ void scriptFreeCode(SCRIPT_CODE *psCode)
 			//free strings for event i
 			for (j = 0; j < psCode->numLocalVars[i]; j++)
 			{
-				if (psCode->ppsLocalVarVal)
+				if (psCode->ppsLocalVarVal[i][j].type == VAL_STRING)
 				{
-					if (psCode->ppsLocalVarVal[i][j].type == VAL_STRING)
-					{
-						free(psCode->ppsLocalVarVal[i][j].v.sval);
-					}
+					free(psCode->ppsLocalVarVal[i][j].v.sval);
 				}
 			}
 
 			free(psCode->ppsLocalVars[i]);
-			if (psCode->ppsLocalVarVal)
-			{
-				free(psCode->ppsLocalVarVal[i]); // free pointer to event i local vars
-			}
+			free(psCode->ppsLocalVarVal[i]); // free pointer to event i local vars
 		}
 	}
 
