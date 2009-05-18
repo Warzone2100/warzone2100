@@ -2,6 +2,7 @@
 import os
 import re
 import os.path
+import sys
 
 def find_files(dir, ends_with):
 	files = []
@@ -58,8 +59,12 @@ def convertdir(dir):
 for path in find_files(".", "_logic.lua"):
 	os.remove(path)
 
-convertdir('data/base/script')
-convertdir('data/base/multiplay/script')
-convertdir('data/base/multiplay/skirmish')
-convertdir('data/mods/global/aivolution')
-convertdir('data/mp/multiplay/script')
+if len(sys.argv) > 1:
+	convertdir(sys.argv[1])
+else:
+	print 'no directory specified, converting everything'
+	convertdir('data/base/script')
+	convertdir('data/base/multiplay/script')
+	convertdir('data/base/multiplay/skirmish')
+	convertdir('data/mods/global/aivolution')
+	convertdir('data/mp/multiplay/script')
