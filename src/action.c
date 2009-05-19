@@ -1111,7 +1111,7 @@ void actionUpdateDroid(DROID *psDroid)
 			}
 		}
 		// Still not doing anything? See if we need to self repair.
-		if ((psDroid->action == DACTION_NONE || DACTION_WAITFORREPAIR)
+		if ((psDroid->action == DACTION_NONE || psDroid->action == DACTION_WAITFORREPAIR)
 		    && selfRepairEnabled(psDroid->player))
 		{
 			droidSelfRepair(psDroid);
