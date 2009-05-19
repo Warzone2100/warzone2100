@@ -1130,7 +1130,9 @@ void eventFireCallbackTrigger(TRIGGER_TYPE trigger)
 {
 	int i, args;
 	lua_State *L;
-	for(i=0;i<100;i++)
+	// reverse loop because some scripts expect scripts that are loaded later
+	// to be the first to get the callback
+	for(i=99;i>=0;i--)
 	{
 		L = lua_states[i];
 		if (!L)
