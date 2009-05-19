@@ -3494,11 +3494,7 @@ BOOL saveGame(char *aFileName, SDWORD saveType)
 	UDWORD			fileExtension;
 	DROID			*psDroid, *psNext;
 
-	ASSERT(aFileName && strlen(aFileName) > 4, "Bad savegame filename");
-	if (!aFileName || strlen(aFileName) < 4)
-	{
-		return false;
-	}
+	ASSERT_OR_RETURN(false, aFileName && strlen(aFileName) > 4, "Bad savegame filename");
 
 	debug(LOG_WZ, "saveGame: %s", aFileName);
 
@@ -4833,14 +4829,8 @@ static bool writeGameFile(const char* fileName, SDWORD saveType)
 	saveGame.GameType = saveType;
 
 	//save the current level so we can load up the STARTING point of the mission
-	if (strlen(aLevelName) > MAX_LEVEL_SIZE)
-	{
-		ASSERT( false,
-			"writeGameFile:Unable to save level name - too long (max20) - %s",
-			aLevelName );
-
-		return false;
-	}
+	ASSERT_OR_RETURN(false, strlen(aLevelName) < MAX_LEVEL_SIZE, "Unable to save level name - too long (max %d) - %s",
+	                 (int)MAX_LEVEL_SIZE, aLevelName);
 	sstrcpy(saveGame.levelName, aLevelName);
 
 	//save out the players power
@@ -5241,11 +5231,7 @@ static DROID* buildDroidFromSaveDroidV11(SAVE_DROID_V11* psSaveDroid)
 	for (i=0; i < psSaveDroid->numWeaps; i++)
 	{
 		int weapon = getCompFromName(COMP_WEAPON, psSaveDroid->asWeaps[i].name);
-		if( weapon < 0)
-		{
-			ASSERT(false, "This component does not exist : %s", psSaveDroid->asWeaps[i].name );
-			return NULL;
-		}
+		ASSERT_OR_RETURN(false, weapon >= 0, "This component does not exist : %s", psSaveDroid->asWeaps[i].name);
 		psTemplate->asWeaps[i] = weapon;
 	}
 
@@ -5341,12 +5327,7 @@ static DROID* buildDroidFromSaveDroidV19(SAVE_DROID_V18* psSaveDroid, UDWORD ver
 		}
 		psTemplate->asParts[i] = (UDWORD)compInc;
 	}
-	if (!found)
-	{
-		//ignore this record
-		ASSERT( found,"buildUnitFromSavedUnit; failed to find weapon" );
-		return NULL;
-	}
+	ASSERT_OR_RETURN(NULL, found, "Failed to find weapon");
 	psTemplate->numWeaps = psSaveDroid->numWeaps;
 
 	if (psSaveDroid->numWeaps > 0)
@@ -5354,11 +5335,7 @@ static DROID* buildDroidFromSaveDroidV19(SAVE_DROID_V18* psSaveDroid, UDWORD ver
 		for(i = 0;i < psTemplate->numWeaps;i++)
 		{
 			int weapon = getCompFromName(COMP_WEAPON, psSaveDroid->asWeaps[i].name);
-			if( weapon < 0)
-			{
-				ASSERT(false, "This component does not exist : %s", psSaveDroid->asWeaps[i].name );
-				return NULL;
-			}
+			ASSERT_OR_RETURN(NULL, weapon >= 0, "This component does not exist : %s", psSaveDroid->asWeaps[i].name);
 			psTemplate->asWeaps[i] = weapon;
 		}
 	}
@@ -5390,12 +5367,7 @@ static DROID* buildDroidFromSaveDroidV19(SAVE_DROID_V18* psSaveDroid, UDWORD ver
 			psSaveDroid->player, false);
 	}
 
-	if(psDroid == NULL)
-	{
-		ASSERT( false,"buildUnitFromSavedUnit; failed to build unit" );
-		return NULL;
-	}
-
+	ASSERT_OR_RETURN(NULL, psDroid, "Failed to build unit");
 
 	//copy the droid's weapon stats
 	for (i=0; i < psDroid->numWeaps; i++)
@@ -5743,32 +5715,20 @@ static DROID* buildDroidFromSaveDroid(SAVE_DROID* psSaveDroid, UDWORD version)
         }
 		else if (compInc < 0)
 		{
-
-			debug( LOG_ERROR, "This component no longer exists - %s, the droid will be deleted", psSaveDroid->asBits[i].name );
-			abort();
-
+			ASSERT(compInc >= 0, "This component no longer exists - %s, the droid will be deleted", psSaveDroid->asBits[i].name);
 			found = false;
 			break;//continue;
 		}
 		psTemplate->asParts[i] = (UDWORD)compInc;
 	}
-	if (!found)
-	{
-		//ignore this record
-		ASSERT( found,"buildUnitFromSavedUnit; failed to find weapon" );
-		return NULL;
-	}
+	ASSERT_OR_RETURN(NULL, found, "Failed to find weapon");
 	psTemplate->numWeaps = psSaveDroid->numWeaps;
 	if (psSaveDroid->numWeaps > 0)
 	{
 		for(i = 0;i < psTemplate->numWeaps;i++)
 		{
 			int weapon = getCompFromName(COMP_WEAPON, psSaveDroid->asWeaps[i].name);
-			if( weapon < 0)
-			{
-				ASSERT(false, "This component does not exist : %s", psSaveDroid->asWeaps[i].name );
-				return NULL;
-			}
+			ASSERT_OR_RETURN(NULL, weapon >= 0, "This component does not exist : %s", psSaveDroid->asWeaps[i].name);
 			psTemplate->asWeaps[i] = weapon;
 		}
 	}
@@ -5802,11 +5762,7 @@ static DROID* buildDroidFromSaveDroid(SAVE_DROID* psSaveDroid, UDWORD version)
 			psSaveDroid->player, false);
 	}
 
-	if(psDroid == NULL)
-	{
-		ASSERT( false,"buildUnitFromSavedUnit; failed to build unit" );
-		return NULL;
-	}
+	ASSERT_OR_RETURN(NULL, psDroid, "Failed to build unit");
 
 	turnOffMultiMsg(false);
 
@@ -7005,11 +6961,7 @@ BOOL loadSaveStructureV7(char *pFileData, UDWORD filesize, UDWORD numStructures)
 
         psStructure = buildStructure(psStats, psSaveStructure->x, psSaveStructure->y,
 			psSaveStructure->player,true);
-		if (!psStructure)
-		{
-			ASSERT( false, "loadSaveStructure:Unable to create structure" );
-			return false;
-		}
+	ASSERT_OR_RETURN(false, psStructure, "Unable to create structure");
 
         /*The original code here didn't work and so the scriptwriters worked
         round it by using the module ID - so making it work now will screw up
@@ -7292,13 +7244,8 @@ BOOL loadSaveStructureV19(char *pFileData, UDWORD filesize, UDWORD numStructures
             continue;
         }
 
-		psStructure = buildStructure(psStats, psSaveStructure->x, psSaveStructure->y,
-			psSaveStructure->player,true);
-		if (!psStructure)
-		{
-			ASSERT( false, "loadSaveStructure:Unable to create structure" );
-			return false;
-		}
+	psStructure = buildStructure(psStats, psSaveStructure->x, psSaveStructure->y, psSaveStructure->player,true);
+	ASSERT_OR_RETURN(false, psStructure, "Unable to create structure");
 
         /*The original code here didn't work and so the scriptwriters worked
         round it by using the module ID - so making it work now will screw up
@@ -7732,13 +7679,8 @@ BOOL loadSaveStructureV(char *pFileData, UDWORD filesize, UDWORD numStructures, 
             continue;
         }
 
-		psStructure = buildStructure(psStats, psSaveStructure->x, psSaveStructure->y,
-			psSaveStructure->player,true);
-		if (!psStructure)
-		{
-			ASSERT( false, "loadSaveStructure:Unable to create structure" );
-			return false;
-		}
+	psStructure = buildStructure(psStats, psSaveStructure->x, psSaveStructure->y, psSaveStructure->player, true);
+	ASSERT_OR_RETURN(false, psStructure, "Unable to create structure");
 
         /*The original code here didn't work and so the scriptwriters worked
         round it by using the module ID - so making it work now will screw up
@@ -8549,11 +8491,7 @@ BOOL loadSaveFeatureV14(char *pFileData, UDWORD filesize, UDWORD numFeatures, UD
 		pFeature = buildFeature(psStats, psSaveFeature->x, psSaveFeature->y,true);
 		//will be added to the top of the linked list
 		//pFeature = apsFeatureLists[0];
-		if (!pFeature)
-		{
-			ASSERT( false, "loadSaveFeature:Unable to create feature" );
-			return false;
-		}
+		ASSERT_OR_RETURN(false, pFeature, "Unable to create feature");
 		//restore values
 		pFeature->id = psSaveFeature->id;
 		pFeature->direction = psSaveFeature->direction;
@@ -8653,11 +8591,7 @@ BOOL loadSaveFeatureV(char *pFileData, UDWORD filesize, UDWORD numFeatures, UDWO
 		pFeature = buildFeature(psStats, psSaveFeature->x, psSaveFeature->y,true);
 		//will be added to the top of the linked list
 		//pFeature = apsFeatureLists[0];
-		if (!pFeature)
-		{
-			ASSERT( false, "loadSaveFeature:Unable to create feature" );
-			return false;
-		}
+		ASSERT_OR_RETURN(false, pFeature, "Unable to create feature");
 		//restore values
 		pFeature->id = psSaveFeature->id;
 		pFeature->direction = psSaveFeature->direction;
