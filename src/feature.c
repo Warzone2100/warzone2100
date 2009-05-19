@@ -221,7 +221,7 @@ float featureDamage(FEATURE *psFeature, UDWORD damage, UDWORD weaponClass, UDWOR
 {
 	float		relativeDamage;
 
-	ASSERT(psFeature != NULL, "featureDamage: Invalid feature pointer");
+	ASSERT_OR_RETURN(0.0, psFeature != NULL, "Invalid feature pointer");
 
 	debug(LOG_ATTACK, "featureDamage(%d): body %d armour %d damage: %d",
 	      psFeature->id, psFeature->body, psFeature->armour[impactSide][weaponClass], damage);
@@ -375,7 +375,7 @@ FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,BOOL FromSave)
   	}
 
 
-	assert(psFeature->sDisplay.imd);		// make sure we have an imd.
+	ASSERT_OR_RETURN(NULL, psFeature->sDisplay.imd, "No IMD for feature");		// make sure we have an imd.
 
 	for (width = 0; width <= psStats->baseWidth; width++)
 	{
@@ -479,29 +479,19 @@ void featureUpdate(FEATURE *psFeat)
 
 
 // free up a feature with no visual effects
-void removeFeature(FEATURE *psDel)
+bool removeFeature(FEATURE *psDel)
 {
 	UDWORD		mapX, mapY, width,breadth, player;
 	MESSAGE		*psMessage;
 	Vector3i pos;
 
-	ASSERT( psDel != NULL,
-		"removeFeature: invalid feature pointer\n" );
-
-	if (psDel->died)
-	{
-		// feature has already been killed, quit
-		ASSERT( false,
-			"removeFeature: feature already dead" );
-		return;
-	}
-
+	ASSERT_OR_RETURN(false, psDel != NULL, "Invalid feature pointer");
+	ASSERT_OR_RETURN(false, !psDel->died, "Feature already dead");
 
 	if(bMultiPlayer && !ingame.localJoiningInProgress)
 	{
 		SendDestroyFeature(psDel);	// inform other players of destruction
 	}
-
 
 	//remove from the map data
 	mapX = map_coord(psDel->pos.x - psDel->psStats->baseWidth * TILE_UNITS / 2);
@@ -549,10 +539,12 @@ void removeFeature(FEATURE *psDel)
 	gridRemoveObject((BASE_OBJECT *)psDel);
 
 	killFeature(psDel);
+
+	return true;
 }
 
 /* Remove a Feature and free it's memory */
-void destroyFeature(FEATURE *psDel)
+bool destroyFeature(FEATURE *psDel)
 {
 	UDWORD			widthScatter,breadthScatter,heightScatter, i;
 	EFFECT_TYPE		explosionSize;
@@ -561,8 +553,7 @@ void destroyFeature(FEATURE *psDel)
 	UDWORD			mapX,mapY;
 	UDWORD			texture;
 
-	ASSERT( psDel != NULL,
-		"destroyFeature: invalid feature pointer\n" );
+	ASSERT_OR_RETURN(false, psDel != NULL, "Invalid feature pointer");
 
  	/* Only add if visible and damageable*/
 	if(psDel->visible[selectedPlayer] && psDel->psStats->damageable)
@@ -661,6 +652,7 @@ void destroyFeature(FEATURE *psDel)
 //---------------------------------------------------------------------------------------
 
 	removeFeature(psDel);
+	return true;
 }
 
 

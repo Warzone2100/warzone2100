@@ -54,9 +54,19 @@ extern char last_called_script_event[MAX_EVENT_NAME_LEN];
 /** Whether asserts are currently enabled. */
 extern bool assertEnabled;
 
+/** Deals with failure in an assert. Expression is (re-)evaluated for output in the assert() call. */
+#define ASSERT_FAILURE(expr, expr_string, location_description, function, ...) \
+	( \
+		(void)_debug(LOG_ERROR, function, __VA_ARGS__), \
+		(void)_debug(LOG_ERROR, function, "Assert in Warzone: %s (%s), last script event: '%s'", \
+	                                  location_description, expr_string, last_called_script_event), \
+		( assertEnabled ? assert(expr) : (void)0 )\
+	)
+
 /**
- * ASSERT helper macro to allow some debug functions to use an alternate
- * calling location.
+ * Internal assert helper macro to allow some debug functions to use an alternate calling location.
+ * Expression is only evaluated once if true, if false it is evaluated another time to provide decent 
+ * feedback on OSes that have good GUI facilities for asserts and lousy backtrace facilities. 
  *
  * \param expr                 Expression to assert on.
  * \param location_description A string describing the calling location, e.g.:
@@ -71,17 +81,10 @@ extern bool assertEnabled;
  */
 #define ASSERT_HELPER(expr, location_description, function, ...) \
 ( \
-	( \
-		(expr) ? /* if (expr) */ \
-			(void)0 \
-		: /* else */\
-		( \
-			(void)_debug(LOG_ERROR, function, __VA_ARGS__), \
-			(void)_debug(LOG_ERROR, function, "Assert in Warzone: %s (%s), last script event: '%s'", \
-		                                  location_description, (#expr), last_called_script_event) \
-		) \
-	), \
-	assertEnabled ? assert(expr) : (void)0 \
+	(expr) ? /* if (expr) */ \
+		(void)0 \
+	: /* else */\
+	ASSERT_FAILURE(expr, #expr, location_description, function, __VA_ARGS__) \
 )
 
 /**
@@ -93,6 +96,14 @@ extern bool assertEnabled;
  */
 #define ASSERT(expr, ...) \
 	ASSERT_HELPER(expr, AT_MACRO, __FUNCTION__, __VA_ARGS__)
+
+/**
+ *
+ * Assert-or-return-zero, macro that returns zero (can also be interpreted as false or NULL) on failure,
+ * and also provides asserts and debug output for debugging.
+ */
+#define ASSERT_OR_RETURN(retval, expr, ...) \
+	do { bool _wzeval = (expr); if (!_wzeval) { ASSERT_FAILURE(expr, #expr, AT_MACRO, __FUNCTION__, __VA_ARGS__); return retval; } } while (0)
 
 
 /**
