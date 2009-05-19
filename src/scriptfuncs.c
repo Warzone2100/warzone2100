@@ -8946,24 +8946,20 @@ WZ_DECL_UNUSED static BOOL scrSetTileHeight(void)
 /* Returns structure which placed on provided coordinates.
  * Returns NULL (NULLOBJECT) if there's no structure.
  */
-WZ_DECL_UNUSED static BOOL scrGetTileStructure(void)
+static int scrGetTileStructure(lua_State *L)
 {
-	SDWORD		structureX,structureY;
+	int x = luaL_checkint(L, 1);
+	int y = luaL_checkint(L, 2);
+	STRUCTURE *s = getTileStructure(x, y);
 
-	if (!stackPopParams(2, VAL_INT, &structureX, VAL_INT, &structureY))
+	if (s)
 	{
-		debug(LOG_ERROR, "scrGetTileStructure(): stack failed");
-		return false;
+		luaWZObj_pushstructure(L, s);
+		return 1; 
 	}
 
-	scrFunctionResult.v.oval = getTileStructure(structureX, structureY);
-	if (!stackPushResult((INTERP_TYPE)ST_STRUCTURE, &scrFunctionResult))
-	{
-		debug(LOG_ERROR, "scrGetTileStructure(): failed to push result");
-		return false;
-	}
-
-	return true;
+	// nothing found
+	return 0;
 }
 
 /* Outputs script call stack
@@ -9630,7 +9626,7 @@ void registerScriptfuncs(lua_State *L)
 	lua_register(L, "lockAllicances", scrLockAllicances);
 	lua_register(L, "revealEntireMap", scrRevealEntireMap);
 	lua_register(L, "msg", scrMsg);
-	//lua_register(L, "", );
+	lua_register(L, "getTileStructure", scrGetTileStructure);
 	//lua_register(L, "", );
 	//lua_register(L, "", );
 	//lua_register(L, "", );
