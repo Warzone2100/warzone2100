@@ -867,7 +867,7 @@ void GenerateExceptionReport(PEXCEPTION_POINTERS pExceptionInfo)
 	dbgDumpHeader(hReportFile);
 
 	// First print information about the type of fault
-	rprintf(_T("%s caused "),  GetModuleFileName(NULL, szModule, MAX_PATH) ? szModule : "Application");
+	rprintf(_T("\r\n%s caused "),  GetModuleFileName(NULL, szModule, MAX_PATH) ? szModule : "Application");
 	switch(pExceptionRecord->ExceptionCode)
 	{
 		case EXCEPTION_ACCESS_VIOLATION:
