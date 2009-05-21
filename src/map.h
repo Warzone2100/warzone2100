@@ -25,6 +25,7 @@
 #define __INCLUDED_SRC_MAP_H__
 
 #include "lib/framework/frame.h"
+#include "lib/framework/debug.h"
 #include "objects.h"
 
 /* The different types of terrain as far as the game is concerned */
@@ -267,8 +268,8 @@ BOOL mapLoadTagged(char *pFileName);
 /* Return a pointer to the tile structure at x,y */
 static inline WZ_DECL_PURE MAPTILE *mapTile(UDWORD x, UDWORD y)
 {
-	ASSERT(x < mapWidth, "x coordinate %u bigger than map width %u", x, mapWidth);
-	ASSERT(y < mapHeight, "y coordinate %u bigger than map height %u", y, mapHeight);
+	ASSERT_OR_RETURN(0, x < mapWidth, "x coordinate %u bigger than map width %u", x, mapWidth);
+	ASSERT_OR_RETURN(0, y < mapHeight, "y coordinate %u bigger than map height %u", y, mapHeight);
 
 	return &psMapTiles[x + (y * mapWidth)];
 }
@@ -286,8 +287,8 @@ static inline WZ_DECL_PURE SWORD map_TileHeight(UDWORD x, UDWORD y)
 /*sets the tile height */
 static inline void setTileHeight(UDWORD x, UDWORD y, UDWORD height)
 {
-	ASSERT(x < mapWidth, "x coordinate %u bigger than map width %u", x, mapWidth);
-	ASSERT(y < mapHeight, "y coordinate %u bigger than map height %u", y, mapHeight);
+	ASSERT_OR_RETURN( , x < mapWidth, "x coordinate %u bigger than map width %u", x, mapWidth);
+	ASSERT_OR_RETURN( , y < mapHeight, "y coordinate %u bigger than map height %u", y, mapHeight);
 
 	psMapTiles[x + (y * mapWidth)].height = (UBYTE) (height / ELEVATION_SCALE);
 }
