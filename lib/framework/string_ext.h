@@ -25,7 +25,8 @@
 extern "C" {
 #endif
 
-#include "wzglobal.h"
+#include "frame.h"
+#include "debug.h"
 #include <string.h>
 #include <stddef.h>
 #include <assert.h>
@@ -74,14 +75,12 @@ static inline size_t strnlen1(const char* string, size_t maxlen)
  */
 static inline size_t strlcpy(char *dest, const char *src, size_t size)
 {
-	assert(src != NULL);
+	ASSERT_OR_RETURN(0, src != NULL, "strlcpy was passed an invalid src parameter.");
+	ASSERT_OR_RETURN(0, dest != NULL, "strlcpy was passed an invalid dest parameter.");
 
 	if (size > 0)
 	{
-		assert(dest != NULL);
-
 		strncpy(dest, src, size - 1);
-
 		// Guarantee to nul-terminate
 		dest[size - 1] = '\0';
 	}
@@ -113,14 +112,15 @@ static inline size_t strlcat(char *dest, const char *src, size_t size)
 {
 	size_t len;
 
-	assert(src != NULL);
+	ASSERT_OR_RETURN(0, src != NULL, "strlcat was passed an invalid src parameter.");
+	ASSERT_OR_RETURN(0, dest != NULL, "strlcat was passed an invalid dest parameter.");
+
 	len = strlen(src);
 
 	if (size > 0)
 	{
 		size_t dlen;
 
-		assert(dest != NULL);
 		dlen = strnlen1(dest, size);
 		len += dlen;
 
