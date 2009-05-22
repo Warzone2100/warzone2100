@@ -181,7 +181,11 @@ class RequestHandler(SocketServer.ThreadingMixIn, SocketServer.StreamRequestHand
 
 	def sendStatusMessage(self, status, message):
 		logging.debug("(%s) Sending response status (%d) and message: %s" % (self.gameHost, status, message))
-		protocol.sendStatusMessage(self.gameHost, status, message, self.wfile)
+		try:
+			protocol.sendStatusMessage(self.gameHost, status, message, self.wfile)
+		except NotImlementedError:
+			# Ignore the case where sending of status messages isn't supported
+			pass
 
 	def __init__(self, request, client_address, server):
 		self.request = request
