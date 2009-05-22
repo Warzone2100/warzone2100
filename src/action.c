@@ -647,11 +647,7 @@ BOOL actionVisibleTarget(DROID *psDroid, BASE_OBJECT *psTarget, int weapon_slot)
 	WEAPON_STATS	*psStats;
 
 	CHECK_DROID(psDroid);
-	ASSERT(psTarget != NULL, "actionVisibleTarget: Target is NULL");
-	if (!psTarget)
-	{
-		return false;
-	}
+	ASSERT_OR_RETURN(false, psTarget != NULL, "Target is NULL");
 
 	if (psDroid->numWeaps == 0)
 	{
@@ -880,12 +876,8 @@ BOOL actionReachedBuildPos(DROID *psDroid, SDWORD x, SDWORD y, BASE_STATS *psSta
 {
 	SDWORD		width, breadth, tx,ty, dx,dy;
 
+	ASSERT_OR_RETURN(false, psStats != NULL && psDroid != NULL, "Bad stat or droid");
 	CHECK_DROID(psDroid);
-	ASSERT(psStats != NULL, "Bad stat");
-	if (!psStats || !psDroid)
-	{
-		return false;
-	}
 
 	// do all calculations in half tile units so that
 	// the droid moves to within half a tile of the target
@@ -938,12 +930,7 @@ BOOL actionDroidOnBuildPos(DROID *psDroid, SDWORD x, SDWORD y, BASE_STATS *psSta
 	SDWORD	width, breadth, tx,ty, dx,dy;
 
 	CHECK_DROID(psDroid);
-
-	ASSERT(psStats != NULL, "Bad stat");
-	if (!psStats)
-	{
-		return false;
-	}
+	ASSERT_OR_RETURN(false, psStats != NULL, "Bad stat");
 
 	dx = map_coord(psDroid->pos.x);
 	dy = map_coord(psDroid->pos.y);
@@ -979,8 +966,7 @@ static void actionHomeBasePos(SDWORD player, SDWORD *px, SDWORD *py)
 {
 	STRUCTURE	*psStruct;
 
-	ASSERT( player >= 0 && player < MAX_PLAYERS,
-		"actionHomeBasePos: invalide player number" );
+	ASSERT_OR_RETURN(, player >= 0 && player < MAX_PLAYERS, "Invalid player number %d", (int)player);
 
 	for(psStruct = apsStructLists[player]; psStruct; psStruct=psStruct->psNext)
 	{
@@ -1016,7 +1002,7 @@ void actionUpdateDroid(DROID *psDroid)
 	CHECK_DROID(psDroid);
 
 	psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
-	ASSERT(psPropStats != NULL, "invalid propulsion stats pointer");
+	ASSERT_OR_RETURN(, psPropStats != NULL, "Invalid propulsion stats pointer");
 
 	// clear the target if it has died
 	for (i = 0; i < DROID_MAXWEAPS; i++)
