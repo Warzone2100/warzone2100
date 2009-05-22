@@ -62,6 +62,7 @@
 #include "lib/ivis_common/piestate.h"
 #include "lib/sound/audio.h"
 #include "lib/sound/openal_error.h"
+#include "lib/sound/mixer.h"
 
 #include <theora/theora.h>
 #include <physfs.h>
@@ -211,6 +212,8 @@ static void seq_SetFrameNumber(int frame)
 /// @TODO FIXME:  This routine can & will fail when sources are used up!
 static void open_audio(void)
 {
+	float volume = 1.0;
+
 	audiodata.audiofd_fragsize = (((videodata.vi.channels * 16) / 8) * videodata.vi.rate);
 	audiobuf = malloc(audiodata.audiofd_fragsize);
 
@@ -228,6 +231,10 @@ static void open_audio(void)
 	// Clear Error Codes
 	alGetError();
 	audiodata.totbufstarted = 0;
+
+	// set the volume of the FMV based on the user's preferences
+	volume = sound_GetUIVolume();
+	alSourcef(audiodata.source, AL_GAIN, volume);
 }
 
 /** Cleans up audio sources & buffers
