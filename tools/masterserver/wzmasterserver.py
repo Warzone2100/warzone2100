@@ -183,7 +183,7 @@ class RequestHandler(SocketServer.ThreadingMixIn, SocketServer.StreamRequestHand
 		logging.debug("(%s) Sending response status (%d) and message: %s" % (self.gameHost, status, message))
 		try:
 			protocol.sendStatusMessage(self.gameHost, status, message, self.wfile)
-		except NotImlementedError:
+		except NotImplementedError:
 			# Ignore the case where sending of status messages isn't supported
 			pass
 
