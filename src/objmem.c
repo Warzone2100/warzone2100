@@ -205,8 +205,7 @@ static inline BASE_OBJECT* createObject(UDWORD player, OBJECT_TYPE objType)
 {
 	BASE_OBJECT* newObject;
 
-	ASSERT(player < MAX_PLAYERS,
-	       "createObject: invalid player number");
+	ASSERT_OR_RETURN(NULL, player < MAX_PLAYERS, "invalid player number");
 
 	switch (objType)
 	{
@@ -247,8 +246,7 @@ static inline BASE_OBJECT* createObject(UDWORD player, OBJECT_TYPE objType)
  */
 static inline void addObjectToList(BASE_OBJECT *list[], BASE_OBJECT *object)
 {
-	ASSERT(object != NULL,
-	       "addObjectToList: Invalid pointer");
+	ASSERT_OR_RETURN( , object != NULL, "Invalid pointer");
 
 	// Prepend the object to the top of the list
 	object->psNext = list[object->player];
@@ -263,8 +261,7 @@ static inline void destroyObject(BASE_OBJECT* list[], BASE_OBJECT* object)
 {
 	BASE_OBJECT *psPrev = NULL, *psCurr;
 
-	ASSERT(object != NULL,
-	       "destroyObject: Invalid pointer");
+	ASSERT_OR_RETURN( , object != NULL, "Invalid pointer");
 
 	// If the message to remove is the first one in the list then mark the next one as the first
 	if (list[object->player] == object)
@@ -282,8 +279,7 @@ static inline void destroyObject(BASE_OBJECT* list[], BASE_OBJECT* object)
 		psPrev = psCurr;
 	}
 
-	ASSERT(psCurr != NULL,
-	       "destroyObject: object not found in list");
+	ASSERT(psCurr != NULL, "object not found in list");
 
 	if (psCurr != NULL)
 	{
@@ -309,8 +305,7 @@ static inline void removeObjectFromList(BASE_OBJECT *list[], BASE_OBJECT *object
 {
 	BASE_OBJECT *psPrev = NULL, *psCurr;
 
-	ASSERT( object != NULL,
-		"removeObjectFromList: Invalid pointer" );
+	ASSERT_OR_RETURN( , object != NULL, "Invalid pointer");
 
 	// If the message to remove is the first one in the list then mark the next one as the first
 	if (list[object->player] == object)
@@ -326,8 +321,7 @@ static inline void removeObjectFromList(BASE_OBJECT *list[], BASE_OBJECT *object
 		psPrev = psCurr;
 	}
 
-	ASSERT( psCurr != NULL,
-		"removeObjectFromList: object not found in list" );
+	ASSERT( psCurr != NULL, "object not found in list");
 
 	if (psCurr != NULL)
 	{
@@ -365,7 +359,7 @@ static inline void releaseAllObjectsInList(BASE_OBJECT *list[], OBJECT_DESTRUCTO
 		// Iterate through all objects in list
 		for(psCurr = list[i]; psCurr != NULL; psCurr = psNext)
 		{
-	 		psNext = psCurr->psNext;
+			psNext = psCurr->psNext;
 
 			// Call a specialized destruction function
 			// (will do all cleanup except for releasing memory of object)
@@ -392,39 +386,37 @@ DROID* createDroid(UDWORD player)
 }
 
 /* add the droid to the Droid Lists */
- void addDroid(DROID *psDroidToAdd, DROID *pList[MAX_PLAYERS])
- {
-	 DROID_GROUP	*psGroup;
+void addDroid(DROID *psDroidToAdd, DROID *pList[MAX_PLAYERS])
+{
+	DROID_GROUP	*psGroup;
 
-	 addObjectToList((BASE_OBJECT**)pList, (BASE_OBJECT*)psDroidToAdd);
-     /*whenever a droid gets added to a list other than the current list
-     its died flag is set to NOT_CURRENT_LIST so that anything targetting
-     it will cancel itself - HACK?!*/
-     if (pList[psDroidToAdd->player] == apsDroidLists[psDroidToAdd->player])
-     {
-         psDroidToAdd->died = false;
+	addObjectToList((BASE_OBJECT**)pList, (BASE_OBJECT*)psDroidToAdd);
+	/*whenever a droid gets added to a list other than the current list
+	 its died flag is set to NOT_CURRENT_LIST so that anything targetting
+	 it will cancel itself - HACK?!*/
+	if (pList[psDroidToAdd->player] == apsDroidLists[psDroidToAdd->player])
+	{
+		psDroidToAdd->died = false;
 
-		 // commanders have to get their group back
-		 if (psDroidToAdd->droidType == DROID_COMMAND)
-		 {
-			 grpCreate(&psGroup);
-			 if (psGroup)
-			 {
-				 grpJoin(psGroup, psDroidToAdd);
-			 }
-		 }
-     }
- }
+		// commanders have to get their group back
+		if (psDroidToAdd->droidType == DROID_COMMAND)
+		{
+			grpCreate(&psGroup);
+			if (psGroup)
+			{
+				grpJoin(psGroup, psDroidToAdd);
+			}
+		}
+	}
+}
 
- /*destroy a droid */
+/*destroy a droid */
 void killDroid(DROID *psDel)
 {
 	int i;
 
-	ASSERT( psDel->type == OBJ_DROID,
-		"killUnit: pointer is not a unit" );
-	ASSERT( psDel->player < MAX_PLAYERS,
-		"killUnit: invalid player for unit" );
+	ASSERT( psDel->type == OBJ_DROID, "pointer is not a unit");
+	ASSERT( psDel->player < MAX_PLAYERS, "invalid player for unit");
 
 	setDroidTarget(psDel, NULL);
 	for (i = 0; i < DROID_MAXWEAPS; i++)
@@ -445,10 +437,9 @@ void freeAllDroids(void)
 /*Remove a single Droid from a list*/
 void removeDroid(DROID *psDroidToRemove, DROID *pList[MAX_PLAYERS])
 {
-	ASSERT( psDroidToRemove->type == OBJ_DROID,
-		"removeUnit: pointer is not a unit" );
-	ASSERT( psDroidToRemove->player < MAX_PLAYERS,
-		"removeUnit: invalid player for unit" );
+	ASSERT( psDroidToRemove->type == OBJ_DROID, "pointer is not a unit");
+	ASSERT( psDroidToRemove->player < MAX_PLAYERS, "invalid player for unit");
+
 	removeObjectFromList((BASE_OBJECT**)pList, (BASE_OBJECT*)psDroidToRemove);
 
 	/* Whenever a droid is removed from the current list its died
@@ -483,7 +474,7 @@ STRUCTURE* createStruct(UDWORD player)
 /* add the structure to the Structure Lists */
 void addStructure(STRUCTURE *psStructToAdd)
 {
-    addObjectToList((BASE_OBJECT**)apsStructLists, (BASE_OBJECT*)psStructToAdd);
+	addObjectToList((BASE_OBJECT**)apsStructLists, (BASE_OBJECT*)psStructToAdd);
 }
 
 /* Destroy a structure */
@@ -491,10 +482,8 @@ void killStruct(STRUCTURE *psBuilding)
 {
 	int i;
 
-	ASSERT( psBuilding->type == OBJ_STRUCTURE,
-		"killStruct: pointer is not a droid" );
-	ASSERT( psBuilding->player < MAX_PLAYERS,
-		"killStruct: invalid player for stucture" );
+	ASSERT( psBuilding->type == OBJ_STRUCTURE, "pointer is not a droid");
+	ASSERT( psBuilding->player < MAX_PLAYERS, "invalid player for stucture");
 
 	for (i = 0; i < STRUCT_MAXWEAPS; i++)
 	{
@@ -548,10 +537,9 @@ void freeAllStructs(void)
 /*Remove a single Structure from a list*/
 void removeStructureFromList(STRUCTURE *psStructToRemove, STRUCTURE *pList[MAX_PLAYERS])
 {
-	ASSERT( psStructToRemove->type == OBJ_STRUCTURE,
-		"removeStructureFromList: pointer is not a structure" );
-	ASSERT( psStructToRemove->player < MAX_PLAYERS,
-		"removeStructureFromList: invalid player for structure" );
+	ASSERT( psStructToRemove->type == OBJ_STRUCTURE, "pointer is not a structure");
+	ASSERT( psStructToRemove->player < MAX_PLAYERS, "invalid player for structure");
+
 	removeObjectFromList((BASE_OBJECT**)pList, (BASE_OBJECT*)psStructToRemove);
 }
 
@@ -574,8 +562,7 @@ FEATURE* createFeature()
 // it's a bit of a hack, but hey, it works
 void killFeature(FEATURE *psDel)
 {
-	ASSERT( psDel->type == OBJ_FEATURE,
-		"killFeature: pointer is not a feature" );
+	ASSERT( psDel->type == OBJ_FEATURE, "pointer is not a feature");
 	psDel->player = 0;
 	destroyObject((BASE_OBJECT**)apsFeatureLists, (BASE_OBJECT*)psDel);
 }
@@ -591,7 +578,7 @@ void freeAllFeatures(void)
 /* Create a new Flag Position */
 BOOL createFlagPosition(FLAG_POSITION **ppsNew, UDWORD player)
 {
-	ASSERT( player<MAX_PLAYERS, "createFlagPosition: invalid player number" );
+	ASSERT_OR_RETURN(false, player<MAX_PLAYERS, "invalid player number");
 
 	*ppsNew = malloc(sizeof(FLAG_POSITION));
 	if (*ppsNew == NULL)
@@ -610,23 +597,21 @@ BOOL createFlagPosition(FLAG_POSITION **ppsNew, UDWORD player)
 }
 
 /* add the Flag Position to the Flag Position Lists */
- void addFlagPosition(FLAG_POSITION *psFlagPosToAdd)
- {
-	ASSERT( psFlagPosToAdd != NULL,
-		"addFlagPosition: Invalid FlagPosition pointer" );
-	ASSERT(psFlagPosToAdd->coords.x != ~0, "flag has invalid position");
+void addFlagPosition(FLAG_POSITION *psFlagPosToAdd)
+{
+	ASSERT_OR_RETURN( , psFlagPosToAdd != NULL, "Invalid FlagPosition pointer");
+	ASSERT_OR_RETURN( , psFlagPosToAdd->coords.x != ~0, "flag has invalid position");
 
 	psFlagPosToAdd->psNext = apsFlagPosLists[psFlagPosToAdd->player];
 	apsFlagPosLists[psFlagPosToAdd->player] = psFlagPosToAdd;
- }
+}
 
 /* Remove a Flag Position from the Lists */
 void removeFlagPosition(FLAG_POSITION *psDel)
 {
 	FLAG_POSITION		*psPrev=NULL, *psCurr;
 
-	ASSERT( psDel != NULL,
-		"removeFlagPosition: Invalid Flag Positionpointer" );
+	ASSERT_OR_RETURN( , psDel != NULL, "Invalid Flag Positionpointer");
 
 	if (apsFlagPosLists[psDel->player] == psDel)
 	{
@@ -678,7 +663,7 @@ void checkFactoryFlags(void)
 	for(player=0; player<MAX_PLAYERS; player++)
 	{
 		//for(type=0; type<NUM_FACTORY_TYPES; type++)
-        for(type=0; type<NUM_FLAG_TYPES; type++)
+		for(type=0; type<NUM_FLAG_TYPES; type++)
 		{
 			for(factory=0; factory<MAX_FACTORY; factory++)
 			{
@@ -866,7 +851,7 @@ static void objListIntegCheck(void)
 		{
 			ASSERT( psCurr->type == OBJ_DROID &&
 					(SDWORD)psCurr->player == player,
-					"objListIntegCheck: misplaced object in the droid list for player %d",
+					"misplaced object in the droid list for player %d",
 					player );
 		}
 	}
@@ -876,18 +861,18 @@ static void objListIntegCheck(void)
 		{
 			ASSERT( psCurr->type == OBJ_STRUCTURE &&
 					(SDWORD)psCurr->player == player,
-					"objListIntegCheck: misplaced object in the structure list for player %d",
+					"misplaced object in the structure list for player %d",
 					player );
 		}
 	}
 	for(psCurr = (BASE_OBJECT*)apsFeatureLists[0]; psCurr; psCurr=psCurr->psNext)
 	{
 		ASSERT( psCurr->type == OBJ_FEATURE,
-				"objListIntegCheck: misplaced object in the feature list" );
+				"misplaced object in the feature list" );
 	}
 	for (psCurr = (BASE_OBJECT*)psDestroyedObj; psCurr; psCurr = psCurr->psNext)
 	{
-		ASSERT( psCurr->died > 0, "objListIntegCheck: Object in destroyed list but not dead!" );
+		ASSERT( psCurr->died > 0, "Object in destroyed list but not dead!" );
 	}
 }
 #endif
