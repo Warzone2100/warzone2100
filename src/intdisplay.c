@@ -3089,6 +3089,11 @@ void drawRadarBlips(int radarX, int radarY, float pixSizeH, float pixSizeV)
 	UWORD			imageID;
 	UDWORD			delay = 150;
 	UDWORD			i;
+	SDWORD width, height;
+
+	// store the width & height of the radar/mini-map
+	width = scrollMaxX - scrollMinX;
+	height = scrollMaxY - scrollMinY;
 
 	// Check if it's time to remove beacons
 	for (i = 0; i < MAX_PLAYERS; i++)
@@ -3180,8 +3185,15 @@ void drawRadarBlips(int radarX, int radarY, float pixSizeH, float pixSizeV)
 			continue;
 		}
 
-		// Draw the 'blip'
-		iV_DrawImage(IntImages, imageID, x + radarX, y + radarY);
+		// NOTE:  On certain missions (limbo & expand), there is still valid data that is stored outside the
+		// normal radar/mini-map view.  We must now calculate the radar/mini-map's bounding box, and clip
+		// everything outside the box.
+		if ( (x+radarX) < width && (x+radarX) > -width 
+			&& (y+radarY) < height && (y+radarY) > -height)
+		{
+			// Draw the 'blip'
+			iV_DrawImage(IntImages, imageID, x + radarX, y + radarY);
+		}
 	}
 }
 
