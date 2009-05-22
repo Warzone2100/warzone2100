@@ -4537,6 +4537,7 @@ true if valid weapon*/
 /* this will be buggy if the droid being checked has both AA weapon and non-AA weapon
 Cannot think of a solution without adding additional return value atm.
 */
+// FIXME: This routine is a mess
 BOOL checkValidWeaponForProp(DROID_TEMPLATE *psTemplate)
 {
 	PROPULSION_STATS	*psPropStats;
@@ -4544,7 +4545,16 @@ BOOL checkValidWeaponForProp(DROID_TEMPLATE *psTemplate)
 
 	//check propulsion stat for vtol
 	psPropStats = asPropulsionStats + psTemplate->asParts[COMP_PROPULSION];
+
 	ASSERT_OR_RETURN(false, psPropStats != NULL, "invalid propulsion stats pointer");
+
+	// if there are no weapons, then don't even bother continuing
+	if (psTemplate->numWeaps == 0)
+	{
+		return false;
+	}
+
+	// FIXME -- why are we checking vtolAttackRuns on non AIR units?
 	if (asPropulsionTypes[psPropStats->propulsionType].travel == AIR)
 	{
 		//check weapon stat for indirect
@@ -4562,11 +4572,7 @@ BOOL checkValidWeaponForProp(DROID_TEMPLATE *psTemplate)
 		}
 	}
 
-	//also checks that there is only a weapon attached and no other system component
-	if (psTemplate->numWeaps == 0)
-	{
-		bValid = false;
-	}
+	//also checks that there is no other system component
 	if (psTemplate->asParts[COMP_BRAIN] != 0
 		&& asWeaponStats[psTemplate->asWeaps[0]].weaponSubClass != WSC_COMMAND)
 	{
