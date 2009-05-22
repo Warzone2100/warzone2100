@@ -123,7 +123,7 @@ static DES_SYSMODE desSysMode;
 #define IDES_EXTRATAB2	2
 
 /* Which component type is being selected on the design screen */
-//Watermelon:added IDES_TURRET_A,IDES_TURRET_B,changing the name of IDES_TURRET might break exist codes
+//added IDES_TURRET_A,IDES_TURRET_B,changing the name of IDES_TURRET might break exist codes
 typedef enum _des_compmode
 {
 	IDES_SYSTEM,		// The main system for the droid (sensor, ECM, constructor)
@@ -578,12 +578,12 @@ static BOOL _intAddDesign( BOOL bShowCentreScreen )
 		return false;
 	}
 
-	//Watermelon: add the turret_a button
+	// add the turret_a button
 	sButInit.formID = IDDES_PARTFORM;
 	sButInit.id = IDDES_WPABUTTON;
 	sButInit.style = WBUT_PLAIN;
 	sButInit.x = DES_PARTSEPARATIONX;
-	//Watermelon: use BODY height for now
+	// use BODY height for now
 	sButInit.y = (UWORD)(iV_GetImageHeight(IntImages, IMAGE_DES_PROPULSION) +
 				 iV_GetImageHeight(IntImages, IMAGE_DES_BODY)   +
 				 iV_GetImageHeight(IntImages, IMAGE_DES_BODY)   +
@@ -603,12 +603,12 @@ static BOOL _intAddDesign( BOOL bShowCentreScreen )
 		return false;
 	}
 
-	//Watermelon: add the turret_b button
+	// add the turret_b button
 	sButInit.formID = IDDES_PARTFORM;
 	sButInit.id = IDDES_WPBBUTTON;
 	sButInit.style = WBUT_PLAIN;
 	sButInit.x = DES_PARTSEPARATIONX;
-	//Watermelon:use body height for now
+	//use body height for now
 	sButInit.y = (UWORD)(iV_GetImageHeight(IntImages, IMAGE_DES_PROPULSION) +
 				 iV_GetImageHeight(IntImages, IMAGE_DES_BODY)   +
 				 iV_GetImageHeight(IntImages, IMAGE_DES_BODY)   +
@@ -1077,7 +1077,7 @@ BOOL intAddTemplateButtons(UDWORD formID, UDWORD formWidth, UDWORD formHeight,
 			sButInit.pTip = getTemplateName(psTempl);
 
 			BufferID = GetStatBuffer();
-			ASSERT( BufferID >= 0,"Unable to aquire stat buffer." );
+			ASSERT_OR_RETURN(false, BufferID >= 0,"Unable to aquire stat buffer." );
 			RENDERBUTTON_INUSE(&StatBuffers[BufferID]);
 			StatBuffers[BufferID].Data = (void*)psTempl;
 			sButInit.pUserData = &StatBuffers[BufferID];
@@ -1142,7 +1142,7 @@ BOOL intAddTemplateButtons(UDWORD formID, UDWORD formWidth, UDWORD formHeight,
 
 /* Set the current mode of the design screen, and display the appropriate
  * component lists
- * Watermelon:added case IDES_TURRET_A,IDES_TURRET_B
+ * added case IDES_TURRET_A,IDES_TURRET_B
  */
 static void intSetDesignMode(DES_COMPMODE newCompMode)
 {
@@ -1308,7 +1308,7 @@ intChooseSystemStats( DROID_TEMPLATE *psTemplate )
 								psTemplate->asParts[COMP_REPAIRUNIT]);
 		break;
 	case DROID_WEAPON:
-		//Watermelon:this is naming stuff
+		//this is naming stuff
 		if (psTemplate->numWeaps > 0)
 		{
 			psStats = (COMPONENT_STATS *)(asWeaponStats +
@@ -1391,7 +1391,7 @@ const char *GetDefaultTemplateName(DROID_TEMPLATE *psTemplate)
 
 		if ( strlen( aCurrName ) + strlen( pStr ) > WIDG_MAXSTR )
 		{
-			debug(LOG_ERROR, "Name string too long %s+%s\n", aCurrName, pStr);
+			debug(LOG_ERROR, "Name string too long %s+%s", aCurrName, pStr);
 			debug(LOG_ERROR, "Please report what language you are using in the bug report!");
 		}
 
@@ -1544,8 +1544,8 @@ static BOOL _intSetSystemForm(COMPONENT_STATS *psStats)
 	if (psStats->ref >= REF_SENSOR_START &&
 		psStats->ref < REF_SENSOR_START + REF_RANGE)
 	{
-		ASSERT( psStats != NULL,
-			"intAddSystemForm: Invalid sensor stats pointer" );
+		// FIX ME: psSensor isn't used?
+		ASSERT( psStats != NULL, "Invalid sensor stats pointer");
 		psSensor = (SENSOR_STATS *)psStats;
 
 		/* Add the bar graphs*/
@@ -1601,8 +1601,8 @@ static BOOL _intSetSystemForm(COMPONENT_STATS *psStats)
 	else if (psStats->ref >= REF_ECM_START &&
 			 psStats->ref < REF_ECM_START + REF_RANGE)
 	{
-		ASSERT( psStats != NULL,
-			"intAddSystemForm: Invalid ecm stats pointer" );
+		// FIX ME: psECM isn't used?
+		ASSERT( psStats != NULL, "Invalid ecm stats pointer");
 		psECM = (ECM_STATS *)psStats;
 
 		/* Add the bar graphs */
@@ -1642,8 +1642,8 @@ static BOOL _intSetSystemForm(COMPONENT_STATS *psStats)
 	else if (psStats->ref >= REF_CONSTRUCT_START &&
 			 psStats->ref < REF_CONSTRUCT_START + REF_RANGE)
 	{
-		ASSERT( psStats != NULL,
-			"intAddSystemForm: Invalid constructor stats pointer" );
+		// FIX ME: psConst isn't used?
+		ASSERT( psStats != NULL, "Invalid constructor stats pointer");
 		psConst = (CONSTRUCT_STATS *)psStats;
 
 		/* Add the bar graphs */
@@ -1685,8 +1685,8 @@ static BOOL _intSetSystemForm(COMPONENT_STATS *psStats)
 	else if (psStats->ref >= REF_REPAIR_START &&
 			 psStats->ref < REF_REPAIR_START + REF_RANGE)
 	{
-		ASSERT( psStats != NULL,
-			"intAddSystemForm: Invalid repair stats pointer" );
+		// FIX ME: psRepair isn't used?
+		ASSERT( psStats != NULL, "Invalid repair stats pointer");
 		psRepair = (REPAIR_STATS *)psStats;
 
 		/* Add the bar graphs */
@@ -1728,8 +1728,8 @@ static BOOL _intSetSystemForm(COMPONENT_STATS *psStats)
 	else if (psStats->ref >= REF_WEAPON_START &&
 			 psStats->ref < REF_WEAPON_START + REF_RANGE)
 	{
-		ASSERT( psStats != NULL,
-			"intAddSystemForm: Invalid ecm stats pointer" );
+		// FIX ME: psWeapon isn't used?
+		ASSERT( psStats != NULL, "Invalid ecm stats pointer");
 		psWeapon = (WEAPON_STATS *)psStats;
 
 		/* Add the bar graphs */
@@ -1841,8 +1841,7 @@ static BOOL intSetPropulsionForm(PROPULSION_STATS *psStats)
 	W_LABINIT		sLabInit;
 	DES_PROPMODE	newPropMode=(DES_PROPMODE)0;
 
-	ASSERT( psStats != NULL,
-		"intAddPropulsionForm: Invalid propulsion stats pointer" );
+	ASSERT_OR_RETURN(false, psStats != NULL, "Invalid propulsion stats pointer");
 
 	memset(&sFormInit, 0, sizeof(W_FORMINIT));
 	memset(&sLabInit, 0, sizeof(W_LABINIT));
@@ -2153,7 +2152,7 @@ static BOOL intAddSystemButtons(DES_COMPMODE mode)
 	}
 
     //if currently got a VTOL proplusion attached then don't add the system buttons
-	//Watermelon:dont add the system button if mode is IDES_TURRET_A or IDES_TURRET_B
+	//dont add the system button if mode is IDES_TURRET_A or IDES_TURRET_B
     if (!checkTemplateIsVtol(&sCurrDesign) &&
 		mode != IDES_TURRET_A &&
 		mode != IDES_TURRET_B &&
@@ -2192,7 +2191,7 @@ static BOOL intAddSystemButtons(DES_COMPMODE mode)
 		case IDES_SYSTEM:
 			break;
 		default:
-			ASSERT(!"invalid/unexpected mode", "intAddSystemButtons: unexpected mode");
+			ASSERT(!"invalid/unexpected mode", "unexpected mode");
 			break;
 	}
 
@@ -2206,14 +2205,14 @@ static BOOL intAddComponentButtons(COMPONENT_STATS *psStats, UDWORD size,
 								   UDWORD compID,UDWORD WhichTab)
 {
 	W_FORMINIT			sButInit;
-    W_TABFORM           *psTabForm;
+	W_TABFORM           *psTabForm;
 	UDWORD				i, maxComponents;
 	COMPONENT_STATS		*psCurrStats;
 	char				aButText[DES_COMPBUTMAXCHAR + 1];
 	SDWORD				BufferID;
 	PROPULSION_STATS	*psPropStats;
 	BOOL				bVTol, bWeapon, bVtolWeapon;
-    UWORD               numTabs;
+	UWORD               numTabs;
 
 	ClearObjectBuffers();
 
@@ -2262,8 +2261,8 @@ static BOOL intAddComponentButtons(COMPONENT_STATS *psStats, UDWORD size,
 		{
 			psPropStats = asPropulsionStats + sCurrDesign.
 				asParts[COMP_PROPULSION];
-			ASSERT( psPropStats != NULL,
-				"intAddComponentButtons: invalid propulsion stats pointer" );
+			ASSERT_OR_RETURN(false, psPropStats != NULL, "invalid propulsion stats pointer");
+
 			if (asPropulsionTypes[psPropStats->propulsionType].travel == AIR)
 			{
 				bVTol = true;
@@ -2287,7 +2286,7 @@ static BOOL intAddComponentButtons(COMPONENT_STATS *psStats, UDWORD size,
 
 		/* Skip unavailable entries and non-design ones*/
 		if (!(aAvailable[i] & AVAILABLE)
-                 || !psCurrStats->designable)
+				 || !psCurrStats->designable)
 		{
 			/* Update the stats pointer for the next button */
 			psCurrStats = (COMPONENT_STATS *)(((UBYTE *)psCurrStats) + size);
@@ -2320,7 +2319,8 @@ static BOOL intAddComponentButtons(COMPONENT_STATS *psStats, UDWORD size,
 		sButInit.pTip = getStatName(psCurrStats);
 
 		BufferID = GetObjectBuffer();
-		ASSERT( BufferID >= 0,"Unable to acquire Topic buffer." );
+		ASSERT_OR_RETURN(false, BufferID >= 0,"Unable to acquire Topic buffer." );
+
 		RENDERBUTTON_INUSE(&ObjectBuffers[BufferID]);
 		ObjectBuffers[BufferID].Data = psCurrStats;
 		sButInit.pUserData = &ObjectBuffers[BufferID];
@@ -2495,8 +2495,7 @@ static BOOL intAddExtraSystemButtons(UDWORD sensorIndex, UDWORD ecmIndex,
 			// If we are out of space in the list - stop
 			if (numExtraSys >= MAXEXTRASYS)
 			{
-				ASSERT( false,
-					"intAddExtraSystemButtons: Too many components for the list" );
+				ASSERT( false, "Too many components for the list");
 				return false;
 			}
 
@@ -2515,7 +2514,7 @@ static BOOL intAddExtraSystemButtons(UDWORD sensorIndex, UDWORD ecmIndex,
 			sButInit.pTip = getStatName(psCurrStats);
 
 			BufferID = sButInit.id-IDDES_EXTRASYSSTART;
-			ASSERT( BufferID < NUM_OBJECTBUFFERS,"BufferID > NUM_OBJECTBUFFERS" );
+			ASSERT_OR_RETURN(false, BufferID < NUM_OBJECTBUFFERS, "BufferID > NUM_OBJECTBUFFERS");
 
 			//just use one set of buffers for mixed system form
 			RENDERBUTTON_INUSE(&System0Buffers[BufferID]);
@@ -2576,7 +2575,7 @@ static void intSetSystemStats(COMPONENT_STATS *psStats)
 {
 	W_FORM *psForm;
 
-	ASSERT( psStats != NULL, "intSetSystemStats: Invalid stats pointer" );
+	ASSERT_OR_RETURN( , psStats != NULL, "Invalid stats pointer");
 
 	/* set form tip to stats string */
 	widgSetTip( psWScreen, IDDES_SYSTEMFORM, getStatName(psStats) );
@@ -2703,11 +2702,9 @@ static void intSetSystemShadowStats(COMPONENT_STATS *psStats)
 /* Set the bar graphs for the sensor stats */
 static void intSetSensorStats(SENSOR_STATS *psStats)
 {
-	ASSERT( psStats != NULL,
-		"intSetSensorStats: Invalid stats pointer" );
-	ASSERT( (psStats->ref >= REF_SENSOR_START) &&
-			(psStats->ref < REF_SENSOR_START + REF_RANGE),
-		"intSetSensorStats: stats ref is out of range" );
+	ASSERT_OR_RETURN( , psStats != NULL, "Invalid stats pointer");
+	ASSERT_OR_RETURN( , (psStats->ref >= REF_SENSOR_START) &&
+			(psStats->ref < REF_SENSOR_START + REF_RANGE), "stats ref is out of range");
 
 	/* range */
 	widgSetBarSize(psWScreen, IDDES_SENSORRANGE,
@@ -2725,7 +2722,7 @@ static void intSetSensorShadowStats(SENSOR_STATS *psStats)
 	ASSERT( psStats == NULL ||
 			((psStats->ref >= REF_SENSOR_START) &&
 			 (psStats->ref < REF_SENSOR_START + REF_RANGE)),
-		"intSetSensorShadowStats: stats ref is out of range" );
+		"stats ref is out of range" );
 
 	if (psStats)
 	{
@@ -2751,11 +2748,9 @@ static void intSetSensorShadowStats(SENSOR_STATS *psStats)
 /* Set the bar graphs for the ECM stats */
 static void intSetECMStats(ECM_STATS *psStats)
 {
-	ASSERT( psStats != NULL,
-		"intSetECMStats: Invalid stats pointer" );
-	ASSERT( (psStats->ref >= REF_ECM_START) &&
-			(psStats->ref < REF_ECM_START + REF_RANGE),
-		"intSetECMStats: stats ref is out of range" );
+	ASSERT_OR_RETURN( , psStats != NULL, "Invalid stats pointer");
+	ASSERT_OR_RETURN( , (psStats->ref >= REF_ECM_START) &&
+			(psStats->ref < REF_ECM_START + REF_RANGE), "stats ref is out of range");
 
 	/* power */
 	widgSetBarSize(psWScreen, IDDES_ECMPOWER,
@@ -2770,7 +2765,7 @@ static void intSetECMShadowStats(ECM_STATS *psStats)
 	ASSERT( psStats == NULL ||
 			((psStats->ref >= REF_ECM_START) &&
 			 (psStats->ref < REF_ECM_START + REF_RANGE)),
-		"intSetECMShadowStats: stats ref is out of range" );
+		"stats ref is out of range" );
 
 	if (psStats)
 	{
@@ -2792,11 +2787,9 @@ static void intSetECMShadowStats(ECM_STATS *psStats)
 /* Set the bar graphs for the Constructor stats */
 static void intSetConstructStats(CONSTRUCT_STATS *psStats)
 {
-	ASSERT( psStats != NULL,
-		"intSetConstructStats: Invalid stats pointer" );
-	ASSERT( (psStats->ref >= REF_CONSTRUCT_START) &&
-		(psStats->ref < REF_CONSTRUCT_START + REF_RANGE),
-		"intSetConstructStats: stats ref is out of range" );
+	ASSERT_OR_RETURN( , psStats != NULL, "Invalid stats pointer");
+	ASSERT_OR_RETURN( , (psStats->ref >= REF_CONSTRUCT_START) &&
+		(psStats->ref < REF_CONSTRUCT_START + REF_RANGE), "stats ref is out of range");
 
 	/* power */
 	widgSetBarSize(psWScreen, IDDES_CONSTPOINTS,
@@ -2810,9 +2803,9 @@ static void intSetConstructStats(CONSTRUCT_STATS *psStats)
 static void intSetConstructShadowStats(CONSTRUCT_STATS *psStats)
 {
 	ASSERT( psStats == NULL ||
-		    ((psStats->ref >= REF_CONSTRUCT_START) &&
+			((psStats->ref >= REF_CONSTRUCT_START) &&
 			 (psStats->ref < REF_CONSTRUCT_START + REF_RANGE)),
-		"intSetConstructShadowStats: stats ref is out of range" );
+		"stats ref is out of range" );
 
 	if (psStats)
 	{
@@ -2833,11 +2826,9 @@ static void intSetConstructShadowStats(CONSTRUCT_STATS *psStats)
 /* Set the bar graphs for the Repair stats */
 static void intSetRepairStats(REPAIR_STATS *psStats)
 {
-	ASSERT( psStats != NULL,
-		"intSetRepairStats: Invalid stats pointer" );
-	ASSERT( (psStats->ref >= REF_REPAIR_START) &&
-			(psStats->ref < REF_REPAIR_START + REF_RANGE),
-		"intSetRepairStats: stats ref is out of range" );
+	ASSERT_OR_RETURN( , psStats != NULL, "Invalid stats pointer");
+	ASSERT_OR_RETURN( , (psStats->ref >= REF_REPAIR_START) &&
+			(psStats->ref < REF_REPAIR_START + REF_RANGE), "stats ref is out of range");
 
 	/* power */
 	widgSetBarSize(psWScreen, IDDES_REPAIRPOINTS,
@@ -2851,9 +2842,9 @@ static void intSetRepairStats(REPAIR_STATS *psStats)
 static void intSetRepairShadowStats(REPAIR_STATS *psStats)
 {
 	ASSERT( psStats == NULL ||
-		    ((psStats->ref >= REF_REPAIR_START) &&
+			((psStats->ref >= REF_REPAIR_START) &&
 			 (psStats->ref < REF_REPAIR_START + REF_RANGE)),
-		"intSetRepairShadowStats: stats ref is out of range" );
+		"stats ref is out of range" );
 
 	if (psStats)
 	{
@@ -2875,11 +2866,9 @@ static void intSetRepairShadowStats(REPAIR_STATS *psStats)
 /* Set the bar graphs for the Weapon stats */
 static void intSetWeaponStats(WEAPON_STATS *psStats)
 {
-	ASSERT( psStats != NULL,
-		"intSetWeaponStats: Invalid stats pointer" );
-	ASSERT( (psStats->ref >= REF_WEAPON_START) &&
-			(psStats->ref < REF_WEAPON_START + REF_RANGE),
-		"intSetWeaponStats: stats ref is out of range" );
+	ASSERT_OR_RETURN( , psStats != NULL, "Invalid stats pointer");
+	ASSERT_OR_RETURN( , (psStats->ref >= REF_WEAPON_START) &&
+			(psStats->ref < REF_WEAPON_START + REF_RANGE), "stats ref is out of range");
 
 	/* range */
 	widgSetBarSize(psWScreen, IDDES_WEAPRANGE, proj_GetLongRange(psStats));
@@ -2898,7 +2887,7 @@ static void intSetWeaponShadowStats(WEAPON_STATS *psStats)
 	ASSERT( psStats == NULL ||
 			((psStats->ref >= REF_WEAPON_START) &&
 			 (psStats->ref < REF_WEAPON_START + REF_RANGE)),
-		"intSetWeaponShadowStats: stats ref is out of range" );
+		"stats ref is out of range" );
 
 	if (psStats)
 	{
@@ -2927,11 +2916,10 @@ static void intSetBodyStats(BODY_STATS *psStats)
 {
 	W_FORM	*psForm;
 
-	ASSERT( psStats != NULL,
-		"intSetBodyStats: Invalid stats pointer" );
-	ASSERT( (psStats->ref >= REF_BODY_START) &&
+	ASSERT_OR_RETURN( , psStats != NULL, "Invalid stats pointer");
+	ASSERT_OR_RETURN( , (psStats->ref >= REF_BODY_START) &&
 			(psStats->ref < REF_BODY_START + REF_RANGE),
-		"intSetBodyStats: stats ref is out of range" );
+		"stats ref is out of range");
 
 	/* set form tip to stats string */
 	widgSetTip( psWScreen, IDDES_BODYFORM, getStatName(psStats) );
@@ -2973,7 +2961,7 @@ static void intSetBodyShadowStats(BODY_STATS *psStats)
 	ASSERT( psStats == NULL ||
 			((psStats->ref >= REF_BODY_START) &&
 			 (psStats->ref < REF_BODY_START + REF_RANGE)),
-		"intSetBodyShadowStats: stats ref is out of range" );
+		"stats ref is out of range" );
 
 	if (psStats)
 	{
@@ -3033,7 +3021,7 @@ static UDWORD getSystemType(DROID_TEMPLATE* droidTemplate)
 	} else if (droidTemplate->asWeaps[0]) {
 		return COMP_WEAPON;
 	} else {
-	    // compare it with the current weapon
+		// compare it with the current weapon
 		return COMP_WEAPON;
 	}
 }
@@ -3045,14 +3033,14 @@ static void intSetTemplatePowerShadowStats(COMPONENT_STATS *psStats)
 	UDWORD				power, i;
 
 	if (psStats != NULL) {
-        UDWORD bodyPower        = asBodyStats[sCurrDesign.asParts[COMP_BODY]].buildPower;
-        UDWORD brainPower       = asBrainStats[sCurrDesign.asParts[COMP_BRAIN]].buildPower;
-        UDWORD sensorPower      = asSensorStats[sCurrDesign.asParts[COMP_SENSOR]].buildPower;
-        UDWORD ECMPower         = asECMStats[sCurrDesign.asParts[COMP_ECM]].buildPower;
-        UDWORD repairPower      = asRepairStats[sCurrDesign.asParts[COMP_REPAIRUNIT]].buildPower;
-        UDWORD constructPower   = asConstructStats[sCurrDesign.asParts[COMP_CONSTRUCT]].buildPower;
-        UDWORD propulsionPower  = asPropulsionStats[sCurrDesign.asParts[COMP_PROPULSION]].buildPower;
-        UDWORD weaponPower      = asWeaponStats[sCurrDesign.numWeaps ? sCurrDesign.asWeaps[0] : 0].buildPower;
+		UDWORD bodyPower        = asBodyStats[sCurrDesign.asParts[COMP_BODY]].buildPower;
+		UDWORD brainPower       = asBrainStats[sCurrDesign.asParts[COMP_BRAIN]].buildPower;
+		UDWORD sensorPower      = asSensorStats[sCurrDesign.asParts[COMP_SENSOR]].buildPower;
+		UDWORD ECMPower         = asECMStats[sCurrDesign.asParts[COMP_ECM]].buildPower;
+		UDWORD repairPower      = asRepairStats[sCurrDesign.asParts[COMP_REPAIRUNIT]].buildPower;
+		UDWORD constructPower   = asConstructStats[sCurrDesign.asParts[COMP_CONSTRUCT]].buildPower;
+		UDWORD propulsionPower  = asPropulsionStats[sCurrDesign.asParts[COMP_PROPULSION]].buildPower;
+		UDWORD weaponPower      = asWeaponStats[sCurrDesign.numWeaps ? sCurrDesign.asWeaps[0] : 0].buildPower;
 
 
 		type = statType(psStats->ref);
@@ -3093,21 +3081,21 @@ static void intSetTemplatePowerShadowStats(COMPONENT_STATS *psStats)
 
 		// this code is from calcTemplatePower
 
-    	//get the component power
-    	power = bodyPower + brainPower + sensorPower + ECMPower + repairPower + constructPower;
+		//get the component power
+		power = bodyPower + brainPower + sensorPower + ECMPower + repairPower + constructPower;
 
-    	/* propulsion power points are a percentage of the bodys' power points */
-    	power += (propulsionPower *
-    		bodyPower) / 100;
+		/* propulsion power points are a percentage of the bodys' power points */
+		power += (propulsionPower *
+			bodyPower) / 100;
 
-     	//add weapon power
-        // FIXME: Only takes first weapon into account
-        power += weaponPower;
-    	for(i=1; i<sCurrDesign.numWeaps; i++)
-    	{
-    		power += asWeaponStats[sCurrDesign.asWeaps[i]].buildPower;
-    	}
-   		widgSetMinorBarSize( psWScreen, IDDES_POWERBAR,
+		//add weapon power
+		// FIXME: Only takes first weapon into account
+		power += weaponPower;
+		for(i=1; i<sCurrDesign.numWeaps; i++)
+		{
+			power += asWeaponStats[sCurrDesign.asWeaps[i]].buildPower;
+		}
+		widgSetMinorBarSize( psWScreen, IDDES_POWERBAR,
 								power);
 	}
 	else
@@ -3132,14 +3120,14 @@ static void intSetTemplateBodyShadowStats(COMPONENT_STATS *psStats)
 	UDWORD				body, i;
 
 	if (psStats != NULL) {
-        UDWORD bodyBody        = asBodyStats[sCurrDesign.asParts[COMP_BODY]].body;
-        UDWORD brainBody       = asBrainStats[sCurrDesign.asParts[COMP_BRAIN]].body;
-        UDWORD sensorBody      = asSensorStats[sCurrDesign.asParts[COMP_SENSOR]].body;
-        UDWORD ECMBody         = asECMStats[sCurrDesign.asParts[COMP_ECM]].body;
-        UDWORD repairBody      = asRepairStats[sCurrDesign.asParts[COMP_REPAIRUNIT]].body;
-        UDWORD constructBody   = asConstructStats[sCurrDesign.asParts[COMP_CONSTRUCT]].body;
-        UDWORD propulsionBody  = asPropulsionStats[sCurrDesign.asParts[COMP_PROPULSION]].body;
-        UDWORD weaponBody      = asWeaponStats[sCurrDesign.numWeaps ? sCurrDesign.asWeaps[0] : 0].body;
+		UDWORD bodyBody        = asBodyStats[sCurrDesign.asParts[COMP_BODY]].body;
+		UDWORD brainBody       = asBrainStats[sCurrDesign.asParts[COMP_BRAIN]].body;
+		UDWORD sensorBody      = asSensorStats[sCurrDesign.asParts[COMP_SENSOR]].body;
+		UDWORD ECMBody         = asECMStats[sCurrDesign.asParts[COMP_ECM]].body;
+		UDWORD repairBody      = asRepairStats[sCurrDesign.asParts[COMP_REPAIRUNIT]].body;
+		UDWORD constructBody   = asConstructStats[sCurrDesign.asParts[COMP_CONSTRUCT]].body;
+		UDWORD propulsionBody  = asPropulsionStats[sCurrDesign.asParts[COMP_PROPULSION]].body;
+		UDWORD weaponBody      = asWeaponStats[sCurrDesign.numWeaps ? sCurrDesign.asWeaps[0] : 0].body;
 
 
 		type = statType(psStats->ref);
@@ -3177,7 +3165,7 @@ static void intSetTemplateBodyShadowStats(COMPONENT_STATS *psStats)
 		//default:
 			//don't want to draw for unknown comp
 		}
-	    // this code is from calcTemplateBody
+		// this code is from calcTemplateBody
 
     	//get the component power
     	body = bodyBody + brainBody + sensorBody + ECMBody + repairBody + constructBody;
@@ -3215,14 +3203,14 @@ static UDWORD intCalcSpeed(TYPE_OF_TERRAIN type, PROPULSION_STATS *psProp)
 	{
 		return 0;
 	}
-    //we want the design screen to show zero speed over water for all prop types except Hover and Vtol
-    if (type == TER_WATER)
-    {
-        if (!(psProp->propulsionType == PROPULSION_TYPE_HOVER || psProp->propulsionType == PROPULSION_TYPE_LIFT))
-        {
-            return 0;
-        }
-    }
+	//we want the design screen to show zero speed over water for all prop types except Hover and Vtol
+	if (type == TER_WATER)
+	{
+		if (!(psProp->propulsionType == PROPULSION_TYPE_HOVER || psProp->propulsionType == PROPULSION_TYPE_LIFT))
+		{
+			return 0;
+		}
+	}
 
 
 	return calcDroidSpeed(calcDroidBaseSpeed(&sCurrDesign, weight,
@@ -3234,13 +3222,11 @@ static UDWORD intCalcSpeed(TYPE_OF_TERRAIN type, PROPULSION_STATS *psProp)
 static void intSetPropulsionStats(PROPULSION_STATS *psStats)
 {
 	W_FORM	    *psForm;
-    UDWORD      weight;
+	UDWORD      weight;
 
-	ASSERT( psStats != NULL,
-		"intSetPropulsionStats: Invalid stats pointer" );
-	ASSERT( (psStats->ref >= REF_PROPULSION_START) &&
-			(psStats->ref < REF_PROPULSION_START + REF_RANGE),
-		"intSetPropulsionStats: stats ref is out of range" );
+	ASSERT_OR_RETURN( , psStats != NULL, "Invalid stats pointer");
+	ASSERT_OR_RETURN( , (psStats->ref >= REF_PROPULSION_START) &&
+			(psStats->ref < REF_PROPULSION_START + REF_RANGE), "stats ref is out of range");
 
 	/* set form tip to stats string */
 	widgSetTip( psWScreen, IDDES_PROPFORM, getStatName(psStats) );
@@ -3273,30 +3259,30 @@ static void intSetPropulsionStats(PROPULSION_STATS *psStats)
 	/* weight */
 	//widgSetBarSize(psWScreen, IDDES_PROPWEIGHT, psStats->weight);
 
-    /* propulsion weight is a percentage of the body weight */
-    if (sCurrDesign.asParts[COMP_BODY] != 0)
-    {
-       	weight = psStats->weight * asBodyStats[sCurrDesign.asParts[COMP_BODY]].weight / 100;
-    }
-    else
-    {
-        //if haven't got a body - can't calculate a value
-        weight = 0;
-    }
-    widgSetBarSize(psWScreen, IDDES_PROPWEIGHT, weight);
+	/* propulsion weight is a percentage of the body weight */
+	if (sCurrDesign.asParts[COMP_BODY] != 0)
+	{
+		weight = psStats->weight * asBodyStats[sCurrDesign.asParts[COMP_BODY]].weight / 100;
+	}
+	else
+	{
+		//if haven't got a body - can't calculate a value
+		weight = 0;
+	}
+	widgSetBarSize(psWScreen, IDDES_PROPWEIGHT, weight);
 }
 
 
 /* Set the shadow bar graphs for the Propulsion stats */
 static void intSetPropulsionShadowStats(PROPULSION_STATS *psStats)
 {
-    UDWORD      weight;
+	UDWORD      weight;
 
 
 	ASSERT( psStats == NULL ||
 			((psStats->ref >= REF_PROPULSION_START) &&
 			 (psStats->ref < REF_PROPULSION_START + REF_RANGE)),
-		"intSetPropulsionShadowStats: stats ref is out of range" );
+		"stats ref is out of range" );
 
 	/* Only set the shadow stats if they are the right type */
 	if (psStats &&
@@ -3353,17 +3339,17 @@ static void intSetPropulsionShadowStats(PROPULSION_STATS *psStats)
 		/* weight */
 		//widgSetMinorBarSize(psWScreen, IDDES_PROPWEIGHT, psStats->weight);
 
-        /* propulsion weight is a percentage of the body weight */
-        if (sCurrDesign.asParts[COMP_BODY] != 0)
-        {
-       	    weight = psStats->weight * asBodyStats[sCurrDesign.asParts[COMP_BODY]].weight / 100;
-        }
-        else
-        {
-            //if haven't got a body - can't calculate a value
-            weight = 0;
-        }
-        widgSetMinorBarSize(psWScreen, IDDES_PROPWEIGHT, weight);
+		/* propulsion weight is a percentage of the body weight */
+		if (sCurrDesign.asParts[COMP_BODY] != 0)
+		{
+			weight = psStats->weight * asBodyStats[sCurrDesign.asParts[COMP_BODY]].weight / 100;
+		}
+		else
+		{
+			//if haven't got a body - can't calculate a value
+			weight = 0;
+		}
+		widgSetMinorBarSize(psWScreen, IDDES_PROPWEIGHT, weight);
 	}
 	else
 	{
@@ -3415,14 +3401,14 @@ BOOL intValidTemplate(DROID_TEMPLATE *psTempl, const char *newName)
 		}
 	}
 
-    //can only have a weapon on a VTOL propulsion
-    if (checkTemplateIsVtol(psTempl))
-    {
-        if (psTempl->numWeaps == 0)
-        {
-            return false;
-        }
-    }
+	//can only have a weapon on a VTOL propulsion
+	if (checkTemplateIsVtol(psTempl))
+	{
+		if (psTempl->numWeaps == 0)
+		{
+			return false;
+		}
+	}
 
 	if (psTempl->asParts[COMP_SENSOR] == 0)
 	{
@@ -3501,7 +3487,7 @@ static void intSetButtonFlash( UDWORD id, BOOL bFlash )
 #ifdef FLASH_BUTTONS
 	WIDGET	*psWidget = widgGetFromID( psWScreen, id );
 
-	ASSERT( psWidget->type == WIDG_BUTTON,"intSetButtonFlash : Not a button" );
+	ASSERT_OR_RETURN( , psWidget->type == WIDG_BUTTON, "Not a button");
 
 	if ( bFlash == true )
 	{
@@ -3557,7 +3543,7 @@ void intProcessDesign(UDWORD id)
 			/* hide body and system component buttons */
 			widgHide( psWScreen, IDDES_SYSTEMBUTTON );
 			widgHide( psWScreen, IDDES_PROPBUTTON );
-			//Watermelon:hide WeaponA and WeaponB button
+			//hide WeaponA and WeaponB button
 			widgHide( psWScreen, IDDES_WPABUTTON );
 			widgHide( psWScreen, IDDES_WPBBUTTON );
 
@@ -3565,7 +3551,7 @@ void intProcessDesign(UDWORD id)
 			intSetButtonFlash( IDDES_SYSTEMBUTTON, true );
 			intSetButtonFlash( IDDES_BODYBUTTON,   true );
 			intSetButtonFlash( IDDES_PROPBUTTON,   true );
-			//Watermelon:set WeaponA and Weapon button to flash
+			//set WeaponA and Weapon button to flash
 			intSetButtonFlash( IDDES_WPABUTTON,   true );
 			intSetButtonFlash( IDDES_WPBBUTTON,   true );
 		}
@@ -3584,7 +3570,7 @@ void intProcessDesign(UDWORD id)
 				currID ++;
 			}
 
-			ASSERT( psTempl != NULL, "intProcessDesign: template not found!\n" );
+			ASSERT( psTempl != NULL, "template not found!");
 
 			if ( psTempl != NULL )
 			{
@@ -3596,11 +3582,11 @@ void intProcessDesign(UDWORD id)
 				widgReveal( psWScreen, IDDES_BODYBUTTON );
 				widgReveal( psWScreen, IDDES_PROPBUTTON );
 				widgReveal( psWScreen, IDDES_SYSTEMBUTTON );
-				//Watermelon:hide these 2 to prevent cheat
+				//hide these 2 to prevent cheat
 				widgHide( psWScreen, IDDES_WPABUTTON );
 				widgHide( psWScreen, IDDES_WPBBUTTON );
 
-				// Watermelon:reveal,flash,reset additional buttons
+				// reveal,flash,reset additional buttons
 				if (psTempl->numWeaps == 2 && (asBodyStats + psTempl->asParts[COMP_BODY])->weaponSlots == 2 )
 				{
 					widgReveal( psWScreen, IDDES_WPABUTTON );
@@ -3621,7 +3607,7 @@ void intProcessDesign(UDWORD id)
 				intSetButtonFlash( IDDES_SYSTEMBUTTON, false );
 				intSetButtonFlash( IDDES_BODYBUTTON,   false );
 				intSetButtonFlash( IDDES_PROPBUTTON,   false );
-				//Watermelon:turn off additional 2 button flashes
+				//turn off additional 2 button flashes
 				intSetButtonFlash( IDDES_WPABUTTON,   false );
 				intSetButtonFlash( IDDES_WPBBUTTON,   false );
 
@@ -3629,7 +3615,7 @@ void intProcessDesign(UDWORD id)
 				widgSetButtonState(psWScreen, IDDES_SYSTEMBUTTON, 0);
 				widgSetButtonState(psWScreen, IDDES_BODYBUTTON,   0);
 				widgSetButtonState(psWScreen, IDDES_PROPBUTTON,   0);
-				//Watermelon:reset additional 2 buttons
+				//reset additional 2 buttons
 				widgSetButtonState(psWScreen, IDDES_WPABUTTON,   0);
 				widgSetButtonState(psWScreen, IDDES_WPBBUTTON,   0);
 			}
@@ -3690,7 +3676,7 @@ void intProcessDesign(UDWORD id)
 		switch (desCompMode)
 		{
 		case IDES_SYSTEM:
-			//Watermelon:0 weapon for utility droid
+			//0 weapon for utility droid
 			sCurrDesign.numWeaps = 0;
 			break;
 		case IDES_TURRET:
@@ -3720,7 +3706,7 @@ void intProcessDesign(UDWORD id)
 				eventFireCallbackTrigger((TRIGGER_TYPE)CALL_DESIGN_WEAPON);
 			}
 			break;
-		//Watermelon:Added cases for 2nd/3rd turret
+		//Added cases for 2nd/3rd turret
 		case IDES_TURRET_A:
 			/* Calculate the index of the component */
 			sCurrDesign.asWeaps[1] =
@@ -3884,7 +3870,7 @@ void intProcessDesign(UDWORD id)
 					break;
 				case IDES_SYSTEM:
 				case IDES_TURRET:
-					//Watermelon:if weaponSlots > 1,+ 1 turret else fall back to body button
+					//if weaponSlots > 1,+ 1 turret else fall back to body button
 					if( (asBodyStats + sCurrDesign.asParts[COMP_BODY])->weaponSlots > 1 )
 					{
 						widgSetButtonState(psWScreen, IDDES_WPABUTTON, WBUT_CLICKLOCK);
@@ -3893,9 +3879,9 @@ void intProcessDesign(UDWORD id)
 					{
 						widgSetButtonState(psWScreen, IDDES_BODYBUTTON, WBUT_CLICKLOCK);
 					}
-				//Watermelon: hope these hacks will work
+				// hope these hacks will work
 				case IDES_TURRET_A:
-					//Watermelon:if body weaponSlots > 2,+ 1 turret else fall back to body button
+					//if body weaponSlots > 2,+ 1 turret else fall back to body button
 					if( (asBodyStats + sCurrDesign.asParts[COMP_BODY])->weaponSlots > 2 )
 					{
 						widgSetButtonState(psWScreen, IDDES_WPBBUTTON, WBUT_CLICKLOCK);
@@ -4198,7 +4184,7 @@ void intProcessDesign(UDWORD id)
 				widgSetButtonState(psWScreen, IDDES_SYSTEMBUTTON, WBUT_CLICKLOCK);
 				widgSetButtonState(psWScreen, IDDES_BODYBUTTON,   0);
 				widgSetButtonState(psWScreen, IDDES_PROPBUTTON,   0);
-				//Watermelon:weaponSlots > 1 check
+				//weaponSlots > 1 check
 				if ( (asBodyStats + sCurrDesign.asParts[COMP_BODY])->weaponSlots > 1 )
 				{
 					widgSetButtonState(psWScreen, IDDES_WPABUTTON,   0);
@@ -4207,7 +4193,7 @@ void intProcessDesign(UDWORD id)
 #endif
 
 			break;
-		//Watermelon: WPABUTTON
+		// WPABUTTON
 		case IDDES_WPABUTTON:
 			// Add the correct component form
 			switch (droidTemplateType(&sCurrDesign))
@@ -4237,7 +4223,7 @@ void intProcessDesign(UDWORD id)
 				widgSetButtonState(psWScreen, IDDES_BODYBUTTON,   0);
 				widgSetButtonState(psWScreen, IDDES_PROPBUTTON,   0);
 				widgSetButtonState(psWScreen, IDDES_WPABUTTON,   WBUT_CLICKLOCK);
-				//Watermelon:weaponSlots > 2 checks
+				//weaponSlots > 2 checks
 				if ( (asBodyStats + sCurrDesign.asParts[COMP_BODY])->weaponSlots > 2 )
 				{
 					widgSetButtonState(psWScreen, IDDES_WPBBUTTON,   0);
@@ -4246,7 +4232,7 @@ void intProcessDesign(UDWORD id)
 #endif
 
 			break;
-		//Watermelon: WPBBUTTON
+		// WPBBUTTON
 		case IDDES_WPBBUTTON:
 			// Add the correct component form
 			switch (droidTemplateType(&sCurrDesign))
@@ -4272,7 +4258,7 @@ void intProcessDesign(UDWORD id)
 			/* lock button if design complete */
 			if ( intValidTemplate( &sCurrDesign, aCurrName ) == true )
 			{
-				//Watermelon:enable the 2nd turret button
+				//enable the 2nd turret button
 				widgSetButtonState(psWScreen, IDDES_WPBBUTTON, WBUT_CLICKLOCK);
 				widgSetButtonState(psWScreen, IDDES_WPABUTTON, 0);
 				widgSetButtonState(psWScreen, IDDES_BODYBUTTON,   0);
@@ -4356,7 +4342,7 @@ void intProcessDesign(UDWORD id)
 
 			case IDES_SYSTEM:
 			case IDES_TURRET:
-			//Watermelon: reveals SYSTEMFORM
+			// reveals SYSTEMFORM
 			case IDES_TURRET_A:
 			case IDES_TURRET_B:
 				widgHide(   psWScreen, IDDES_BODYFORM );
@@ -4721,9 +4707,9 @@ static BOOL saveTemplate(void)
 			/* Get existing template */
 			psTempl = apsTemplateList[i];
 			newTemplate = false;
-            /*ANY change to the template affect the production - even if the
-            template is changed and then changed back again!*/
-            deleteTemplateFromProduction(psTempl, (UBYTE)selectedPlayer);
+			/*ANY change to the template affect the production - even if the
+			template is changed and then changed back again!*/
+			deleteTemplateFromProduction(psTempl, (UBYTE)selectedPlayer);
 		}
 
 		/* Copy the template */
@@ -4739,7 +4725,7 @@ static BOOL saveTemplate(void)
 
 	if (stored)
 	{
-		ASSERT(psTempl != NULL, "Template is NULL in saveTemplate()!");
+		ASSERT_OR_RETURN( false, psTempl != NULL, "Template is NULL in saveTemplate()!");
 		psTempl->multiPlayerID = (objID<<3)|selectedPlayer;
 		objID++;
 		if (bMultiPlayer)
@@ -4764,10 +4750,10 @@ void runTemplateShadowStats(UDWORD id)
 
 	/* Find the template for the new button */
 	//currID = IDDES_TEMPLSTART;
-    //we're ignoring the Blank Design so start at the second button
-    currID = IDDES_TEMPLSTART + 1;
+	//we're ignoring the Blank Design so start at the second button
+	currID = IDDES_TEMPLSTART + 1;
 	for( i=1; i<MAXTEMPLATES; i++ )
-    {
+	{
 		psTempl = apsTemplateList[i];
 		if (currID == id)
 		{
@@ -4864,7 +4850,7 @@ to check the weapon is 'allowed'. Check if VTOL, the weapon is direct fire.
 Also check numVTOLattackRuns for the weapon is not zero - return true if valid weapon*/
 static BOOL intCheckValidWeaponForProp(void)
 {
-    return checkValidWeaponForProp(&sCurrDesign);
+	return checkValidWeaponForProp(&sCurrDesign);
 }
 
 BOOL intAddDesign( BOOL bShowCentreScreen )
@@ -4888,36 +4874,36 @@ static BOOL intAddTemplateForm(DROID_TEMPLATE *psSelected)
 //checks if the template has PROPULSION_TYPE_LIFT propulsion attached - returns true if it does
 BOOL checkTemplateIsVtol(DROID_TEMPLATE *psTemplate)
 {
-    if (asPropulsionStats[psTemplate->asParts[COMP_PROPULSION]].
-        propulsionType == PROPULSION_TYPE_LIFT)
-    {
-        return true;
-    }
-    else
-    {
-        return false;
-    }
+	if (asPropulsionStats[psTemplate->asParts[COMP_PROPULSION]].
+		propulsionType == PROPULSION_TYPE_LIFT)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
 }
 
 /*goes thru' the list passed in reversing the order so the first entry becomes
 the last and the last entry becomes the first!*/
 void reverseTemplateList(DROID_TEMPLATE **ppsList)
 {
-    DROID_TEMPLATE     *psPrev, *psNext, *psCurrent, *psObjList;
+	DROID_TEMPLATE     *psPrev, *psNext, *psCurrent, *psObjList;
 
-    //initialise the pointers
-    psObjList = *ppsList;
-    psPrev = psNext = NULL;
-    psCurrent = psObjList;
+	//initialise the pointers
+	psObjList = *ppsList;
+	psPrev = psNext = NULL;
+	psCurrent = psObjList;
 
-    while(psCurrent != NULL)
-    {
-        psNext = psCurrent->psNext;
-        psCurrent->psNext = psPrev;
-        psPrev = psCurrent;
-        psCurrent = psNext;
-    }
-    //set the list passed in to point to the new top
-    *ppsList = psPrev;
+	while(psCurrent != NULL)
+	{
+		psNext = psCurrent->psNext;
+		psCurrent->psNext = psPrev;
+		psPrev = psCurrent;
+		psCurrent = psNext;
+	}
+	//set the list passed in to point to the new top
+	*ppsList = psPrev;
 }
 
