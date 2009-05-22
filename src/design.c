@@ -1443,11 +1443,6 @@ static void intSetDesignStats( DROID_TEMPLATE *psTemplate )
 /* Set up the system clickable form of the design screen given a set of stats */
 static BOOL _intSetSystemForm(COMPONENT_STATS *psStats)
 {
-	SENSOR_STATS	*psSensor;
-	ECM_STATS		*psECM;
-	CONSTRUCT_STATS	*psConst;
-	WEAPON_STATS	*psWeapon;
-	REPAIR_STATS	*psRepair;
 	W_FORMINIT		sFormInit;
 	W_BARINIT		sBarInit;
 	W_LABINIT		sLabInit;
@@ -1542,10 +1537,6 @@ static BOOL _intSetSystemForm(COMPONENT_STATS *psStats)
 	if (psStats->ref >= REF_SENSOR_START &&
 		psStats->ref < REF_SENSOR_START + REF_RANGE)
 	{
-		// FIX ME: psSensor isn't used?
-		ASSERT( psStats != NULL, "Invalid sensor stats pointer");
-		psSensor = (SENSOR_STATS *)psStats;
-
 		/* Add the bar graphs*/
 		sBarInit.id = IDDES_SENSORRANGE;
 		sBarInit.iRange = (UWORD)getMaxSensorRange();//DBAR_SENSORMAXRANGE;
@@ -1599,10 +1590,6 @@ static BOOL _intSetSystemForm(COMPONENT_STATS *psStats)
 	else if (psStats->ref >= REF_ECM_START &&
 			 psStats->ref < REF_ECM_START + REF_RANGE)
 	{
-		// FIX ME: psECM isn't used?
-		ASSERT( psStats != NULL, "Invalid ecm stats pointer");
-		psECM = (ECM_STATS *)psStats;
-
 		/* Add the bar graphs */
 		sBarInit.id = IDDES_ECMPOWER;
 		sBarInit.iRange = (UWORD)getMaxECMPower();//DBAR_ECMMAXPOWER;
@@ -1640,10 +1627,6 @@ static BOOL _intSetSystemForm(COMPONENT_STATS *psStats)
 	else if (psStats->ref >= REF_CONSTRUCT_START &&
 			 psStats->ref < REF_CONSTRUCT_START + REF_RANGE)
 	{
-		// FIX ME: psConst isn't used?
-		ASSERT( psStats != NULL, "Invalid constructor stats pointer");
-		psConst = (CONSTRUCT_STATS *)psStats;
-
 		/* Add the bar graphs */
 		sBarInit.id = IDDES_CONSTPOINTS;
 		sBarInit.pTip = _("Build Points");
@@ -1683,10 +1666,6 @@ static BOOL _intSetSystemForm(COMPONENT_STATS *psStats)
 	else if (psStats->ref >= REF_REPAIR_START &&
 			 psStats->ref < REF_REPAIR_START + REF_RANGE)
 	{
-		// FIX ME: psRepair isn't used?
-		ASSERT( psStats != NULL, "Invalid repair stats pointer");
-		psRepair = (REPAIR_STATS *)psStats;
-
 		/* Add the bar graphs */
 		sBarInit.id = IDDES_REPAIRPOINTS;
 		sBarInit.pTip = _("Build Points");
@@ -1726,10 +1705,6 @@ static BOOL _intSetSystemForm(COMPONENT_STATS *psStats)
 	else if (psStats->ref >= REF_WEAPON_START &&
 			 psStats->ref < REF_WEAPON_START + REF_RANGE)
 	{
-		// FIX ME: psWeapon isn't used?
-		ASSERT( psStats != NULL, "Invalid ecm stats pointer");
-		psWeapon = (WEAPON_STATS *)psStats;
-
 		/* Add the bar graphs */
 		sBarInit.id = IDDES_WEAPRANGE;
 		sBarInit.iRange = (UWORD)getMaxWeaponRange();//DBAR_WEAPMAXRANGE;
@@ -4037,7 +4012,7 @@ void intProcessDesign(UDWORD id)
 		switch (id)
 		{
 			/* The four component clickable forms */
-			/* Watermelon the six component clickable forms... */
+			/* the six component clickable forms... */
 		case IDDES_WEAPONS:
 			desCompID = 0;
 			intSetDesignMode(IDES_TURRET);
