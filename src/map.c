@@ -131,7 +131,7 @@ BOOL mapNew(UDWORD width, UDWORD height)
 	if (width*height > MAP_MAXAREA)
 	{
 		debug(LOG_ERROR, "map too large : %u %u", width, height);
-		abort();
+
 		return false;
 	}
 
@@ -207,7 +207,7 @@ static BOOL mapLoadV3(char *pFileData, UDWORD fileSize)
 	for(i=0; i<psGateHeader->numGateways; i++) {
 		if (!gwNewGateway(psGate->x0,psGate->y0, psGate->x1,psGate->y1)) {
 			debug( LOG_ERROR, "mapLoadV3: Unable to add gateway" );
-			abort();
+
 			return false;
 		}
 		psGate++;
@@ -1461,7 +1461,7 @@ bool readVisibilityData(const char* fileName)
 	{
 		PHYSFS_close(fileHandle);
 		ASSERT(!"readVisibilityData: unexpected filesize", "readVisibilityData: unexpected filesize; should be %u, but is %u", expectedFileSize, fileSize);
-		abort();
+
 		return false;
 	}
 

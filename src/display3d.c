@@ -3851,7 +3851,7 @@ static iIMDShape	*flattenImd(iIMDShape *imd, UDWORD structX, UDWORD structY, UDW
 		break;
 	default:
 		debug(LOG_ERROR, "Weird direction (%u) for a structure in flattenImd", direction);
-		abort();
+
 		break;
 	}
 

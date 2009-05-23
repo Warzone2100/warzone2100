@@ -695,7 +695,6 @@ static BOOL dataIMDBufferLoad(const char *pBuffer, UDWORD size, void **ppData)
 	psIMD = iV_ProcessIMD( &pBufferPosition, pBufferPosition + size );
 	if (psIMD == NULL) {
 		debug( LOG_ERROR, "IMD load failed - %s", GetLastResourceFilename() );
-		abort();
 		return false;
 	}
 
