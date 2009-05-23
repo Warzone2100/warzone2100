@@ -673,7 +673,6 @@ static void updateEffect(EFFECT *psEffect)
 	}
 
 	debug( LOG_ERROR, "Weirdy class of effect passed to updateEffect" );
-	abort();
 }
 
 // ----------------------------------------------------------------------------------------
@@ -1600,7 +1599,6 @@ void	renderEffect(EFFECT *psEffect)
 	}
 
 	debug( LOG_ERROR, "Weirdy class of effect passed to renderEffect" );
-	abort();
 }
 
 /** drawing func for wapypoints */

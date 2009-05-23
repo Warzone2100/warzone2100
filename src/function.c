@@ -627,7 +627,7 @@ static BOOL loadWeaponUpgradeFunction(const char *pData)
 		radiusHit > UWORD_MAX)
 	{
 		debug( LOG_ERROR, "A percentage increase for Weapon Upgrade function is too large" );
-		abort();
+
 		return false;
 	}
 
@@ -685,7 +685,7 @@ static BOOL loadStructureUpgradeFunction(const char *pData)
 		resistance > UWORD_MAX)
 	{
 		debug( LOG_ERROR, "A percentage increase for Structure Upgrade function is too large" );
-		abort();
+
 		return false;
 	}
 
@@ -735,7 +735,7 @@ static BOOL loadWallDefenceUpgradeFunction(const char *pData)
 		body > UWORD_MAX)
 	{
 		debug( LOG_ERROR, "A percentage increase for WallDefence Upgrade function is too large" );
-		abort();
+
 		return false;
 	}
 
@@ -907,7 +907,7 @@ static BOOL loadWallFunction(const char *pData)
 	if (!psFunction->pStructName)
 	{
 		debug( LOG_ERROR, "Structure Stats Invalid for function - %s", functionName );
-		abort();
+
 		return false;
 	}
 	psFunction->pCornerStat = NULL;

@@ -1320,8 +1320,7 @@ intChooseSystemStats( DROID_TEMPLATE *psTemplate )
 								psTemplate->asWeaps[0]);
 		break;
 	default:
-		debug( LOG_ERROR, "intSetDesignStats: unrecognised droid type" );
-		abort();
+		debug( LOG_ERROR, "unrecognised droid type" );
 		return NULL;
 	}
 
