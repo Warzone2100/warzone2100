@@ -4390,9 +4390,7 @@ BOOL validLocation(BASE_STATS *psStats, UDWORD x, UDWORD y, UDWORD player,
 							psTile = mapTile(i,j);
 							if (TileIsOccupied(psTile))
 							{
-								if (TileHasWall(psTile)
-								    && (psBuilding->type == REF_DEFENSE ||
--                                                                       psBuilding->type == REF_WALL))
+								if (TileHasWall(psTile) && (psBuilding->type == REF_DEFENSE || psBuilding->type == REF_WALL))
 								{
 									psStruct = getTileStructure(i,j);
 									if (psStruct != NULL &&
