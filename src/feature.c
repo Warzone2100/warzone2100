@@ -185,7 +185,6 @@ BOOL loadFeatureStats(const char *pFeatureData, UDWORD bufferSize)
 		if (psFeature->psImd == NULL)
 		{
 			debug( LOG_ERROR, "Cannot find the feature PIE for record %s",  getName( psFeature->pName ) );
-			abort();
 			return false;
 		}
 
