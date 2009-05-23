@@ -1689,7 +1689,6 @@ BOOL loadDroidTemplates(const char *pDroidData, UDWORD bufferSize)
 			if (!found)
 			{
 				debug( LOG_ERROR, "Body component not found for droid %s", getTemplateName(pDroidDesign) );
-				abort();
 				free(pDroidDesign->pName);
 				free(pDroidDesign);
 				return false;
