@@ -198,6 +198,10 @@ static std::string getProgramPath(const char* programCommand)
 		std::string::size_type eol = programPath.find('\n');
 		if (eol != std::string::npos)
 			programPath.erase(eol); 
+		// Strip any NUL chars
+		std::string::size_type nul = programPath.find('\0');
+		if (nul != std::string::npos)
+			programPath.erase(nul); 
 		debug(LOG_WZ, "Found us at %s", programPath.c_str());
 	}
 	else
@@ -205,7 +209,7 @@ static std::string getProgramPath(const char* programCommand)
 		debug(LOG_WARNING, "Could not retrieve full path to %s, will not create extended backtrace", programCommand);
 	}
 
-	return programPath.c_str();
+	return programPath;
 }
 
 static std::string getSysinfo()
