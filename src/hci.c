@@ -625,7 +625,7 @@ BOOL intInitialise(void)
 	if (psWScreen == NULL)
 	{
 		debug(LOG_ERROR, "intInitialise: Couldn't create widget screen");
-		abort();
+
 		return false;
 	}
 
@@ -636,14 +636,14 @@ BOOL intInitialise(void)
 		if (!intAddReticule())
 		{
 			debug( LOG_ERROR, "intInitialise: Couldn't create reticule widgets (Out of memory ?)" );
-			abort();
+
 			return false;
 		}
 
 		if (!intAddPower())
 		{
 			debug( LOG_ERROR, "intInitialise: Couldn't create power Bar widget(Out of memory ?)" );
-			abort();
+
 			return false;
 		}
 	}
