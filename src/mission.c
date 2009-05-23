@@ -477,7 +477,7 @@ BOOL startMission(LEVEL_TYPE missionType, char *pGame)
 		{
 			//error!
 			debug( LOG_ERROR, "Unknown Mission Type" );
-			abort();
+
 			loaded = false;
 		}
 	}
@@ -485,7 +485,7 @@ BOOL startMission(LEVEL_TYPE missionType, char *pGame)
 	if (!loaded)
 	{
 		debug( LOG_ERROR, "Unable to load mission file" );
-		abort();
+
 		return false;
 	}
 

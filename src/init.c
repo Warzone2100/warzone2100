@@ -532,7 +532,7 @@ init_ObjectDead( void * psObj )
 
 			default:
 				debug( LOG_ERROR, "init_ObjectAnimRemoved: unrecognised object type" );
-				abort();
+				return false;
 		}
 	}
 
@@ -900,7 +900,7 @@ BOOL stageTwoInitialise(void)
 	if(!initMiscImds())			/* Set up the explosions */
 	{
 		iV_ShutDown();
-		debug( LOG_ERROR, "Can't find all the explosions PCX's" );
+		debug( LOG_ERROR, "Can't find all the explosions graphics?" );
 		abort();
 		return false;
 	}
