@@ -180,7 +180,7 @@ BOOL	initMiscImds( void )
 		if (!pAssemblyPointIMDs[FACTORY_FLAG][i])
 		{
 			debug( LOG_ERROR, "Can't find assembly point graphic for factory" );
-			abort();
+
 			return(false);
 		}
 		cybName[6] = *pieNum;
@@ -188,7 +188,7 @@ BOOL	initMiscImds( void )
 		if (!pAssemblyPointIMDs[CYBORG_FLAG][i])
 		{
 			debug( LOG_ERROR, "Can't find assembly point graphic for cyborg factory" );
-			abort();
+
 			return(false);
 		}
 		vtolName[6] = *pieNum;
@@ -196,14 +196,14 @@ BOOL	initMiscImds( void )
 		if (!pAssemblyPointIMDs[VTOL_FLAG][i])
 		{
 			debug( LOG_ERROR, "Can't find assembly point graphic for vtol factory" );
-			abort();
+
 			return(false);
 		}
 		pAssemblyPointIMDs[REPAIR_FLAG][i] = (iIMDShape*)resGetData("IMD", "mirnum1.pie");
 		if (!pAssemblyPointIMDs[REPAIR_FLAG][i])
 		{
 			debug( LOG_ERROR, "Can't find assembly point graphic for repair facility" );
-			abort();
+
 			return(false);
 		}
 	}
