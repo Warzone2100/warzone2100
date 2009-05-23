@@ -142,7 +142,7 @@ BOOL mapNew(UDWORD width, UDWORD height)
 	if (width*height > MAP_MAXAREA)
 	{
 		debug(LOG_ERROR, "map too large : %u %u", width, height);
-		abort();
+
 		return false;
 	}
 
@@ -2088,7 +2088,7 @@ bool readVisibilityData(const char* fileName)
 	{
 		PHYSFS_close(fileHandle);
 		ASSERT(!"readVisibilityData: unexpected filesize", "readVisibilityData: unexpected filesize; should be %u, but is %u", expectedFileSize, fileSize);
-		abort();
+
 		return false;
 	}
 
