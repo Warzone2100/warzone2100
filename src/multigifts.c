@@ -133,7 +133,7 @@ BOOL sendGift(uint8_t type, uint8_t to)
 			break;
 		default:
 			debug( LOG_ERROR, "Unknown Gift sent" );
-			abort();
+
 			return false;
 			break;
 	}
