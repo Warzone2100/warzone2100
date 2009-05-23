@@ -1,5 +1,7 @@
-2009-05-10: Version 2.2
+2009-06-01: Version 2.2
  * General:
+   * Fix: set the volume of the FMV based on the user's preferences (r7489, ticket:526)
+   * Fix: Check if the unit has weapons, before trying to see what weapons they have. (r7488, ticket:523)
    * Change: remove 'autoload' handling.  (r7474)
    * Fix: Fix windows crash dump output (r7473)
    * Fix: Fix handling of limbo & expand missions (r7454)
