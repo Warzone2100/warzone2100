@@ -73,7 +73,14 @@ case ${host_os} in
 		AC_SUBST([WIN32_LIBS], [${WIN32_LIBS}])
 		;;
 	*)
-		AC_DEFINE([_XOPEN_SOURCE], 600, [Enable POSIX extensions if present])
+		# Some platforms don't need _XOPEN_SOURCE
+		case ${host_os} in
+			*freebsd*) ;;
+			*)
+				AC_DEFINE([_XOPEN_SOURCE], 600, [Enable POSIX extensions if present])
+				;;
+		esac
+
 		# Make sure that backtrace_symbols_fd (GNU raw back trace extension) has some symbols to work  with
 		LDFLAGS="-rdynamic ${LDFLAGS}"
 		;;
