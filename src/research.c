@@ -355,8 +355,8 @@ BOOL loadResearch(const char *pResearchData, UDWORD bufferSize)
 		//check the tech code is valid
 		if (techCode > 1)
 		{
-			debug( LOG_ERROR, "Invalid tech code for research topic - %s ", getResearchName(pResearch) );
-			abort();
+			ASSERT(false, "Invalid tech code for research topic - %s ", getResearchName(pResearch) );
+
 			return false;
 		}
 		if (techCode == 0)
@@ -389,8 +389,8 @@ BOOL loadResearch(const char *pResearchData, UDWORD bufferSize)
 			}
 			else
 			{
-				debug( LOG_ERROR, "Cannot find the structure Stat for Research %s", getResearchName(pResearch) );
-				abort();
+				ASSERT(false, "Cannot find the structure Stat for Research %s", getResearchName(pResearch) );
+
 				return false;
 			}
 		}
@@ -404,8 +404,8 @@ BOOL loadResearch(const char *pResearchData, UDWORD bufferSize)
 			}
 			else
 			{
-				debug( LOG_ERROR, "Cannot find the component Stat for Research %s", getResearchName(pResearch) );
-				abort();
+				ASSERT(false, "Cannot find the component Stat for Research %s", getResearchName(pResearch) );
+
 				return false;
 			}
 		}
@@ -418,8 +418,8 @@ BOOL loadResearch(const char *pResearchData, UDWORD bufferSize)
 			pResearch->pIMD = (iIMDShape *) resGetData("IMD", imdName);
 			if (pResearch->pIMD == NULL)
 			{
-				debug( LOG_ERROR, "Cannot find the research PIE for record %s", getResearchName(pResearch) );
-				abort();
+				ASSERT(false, "Cannot find the research PIE for record %s", getResearchName(pResearch) );
+
 				return false;
 			}
 		}
@@ -433,8 +433,8 @@ BOOL loadResearch(const char *pResearchData, UDWORD bufferSize)
 			pResearch->pIMD2 = (iIMDShape *) resGetData("IMD", imdName2);
 			if (pResearch->pIMD2 == NULL)
 			{
-				debug( LOG_ERROR, "Cannot find the 2nd research PIE for record %s", getResearchName(pResearch) );
-				abort();
+				ASSERT(false, "Cannot find the 2nd research PIE for record %s", getResearchName(pResearch) );
+
 				return false;
 			}
 		}
@@ -449,8 +449,8 @@ BOOL loadResearch(const char *pResearchData, UDWORD bufferSize)
 			//check its a major tech code
 			if (pResearch->techCode != TC_MAJOR)
 			{
-				debug( LOG_ERROR, "This research should not have a message associated with it, %s the message will be ignored!", getResearchName(pResearch) );
-				abort();
+				ASSERT(false, "This research should not have a message associated with it, %s the message will be ignored!", getResearchName(pResearch) );
+				return false;
 			}
 			else
 			{
@@ -463,8 +463,7 @@ BOOL loadResearch(const char *pResearchData, UDWORD bufferSize)
 		{
 			if (numResearchArteRed >= MAX_RESEARCH_ARTE_RED)
 			{
-				debug( LOG_ERROR, "Out of memory assigning research artefacts - redundancies" );
-				abort();
+				ASSERT(false, "Buffer overflow assigning research artefacts - redundancies" );
 				return false;
 			}
 			//don't MALLOC - get them from the pre-defined arrays
@@ -478,8 +477,8 @@ BOOL loadResearch(const char *pResearchData, UDWORD bufferSize)
 		{
 			if (numResearchArteRed >= MAX_RESEARCH_ARTE_RES)
 			{
-				debug( LOG_ERROR, "Out of memory assigning research artefacts - results" );
-				abort();
+				ASSERT(false, "Buffer overflow assigning research artefacts - results" );
+
 				return false;
 			}
 
@@ -495,8 +494,8 @@ BOOL loadResearch(const char *pResearchData, UDWORD bufferSize)
 		{
 			if (numResearchArteRep >= MAX_RESEARCH_ARTE_RES)
 			{
-				debug( LOG_ERROR, "Out of memory assigning research artefacts - replacements" );
-				abort();
+				ASSERT(false, "Buffer overflow assigning research artefacts - replacements" );
+
 				return false;
 			}
 
@@ -512,8 +511,8 @@ BOOL loadResearch(const char *pResearchData, UDWORD bufferSize)
 		{
 			if (numResearchFunc >= MAX_RESEARCH_FUNC)
 			{
-				debug( LOG_ERROR, "Out of memory assigning research functions" );
-				abort();
+				ASSERT(false, "Buffer overflow assigning research functions" );
+
 				return false;
 			}
 
@@ -529,8 +528,8 @@ BOOL loadResearch(const char *pResearchData, UDWORD bufferSize)
 		{
 			if (numResearchPR >= MAX_RESEARCH_PR)
 			{
-				debug( LOG_ERROR, "Out of memory assigning research pre-requisities" );
-				abort();
+				ASSERT(false, "Buffer overflow assigning research pre-requisities" );
+
 				return false;
 			}
 
@@ -547,8 +546,8 @@ BOOL loadResearch(const char *pResearchData, UDWORD bufferSize)
 		{
 			if (numResearchStructPR >= MAX_RESEARCH_STRUCT_PR)
 			{
-				debug( LOG_ERROR, "Out of memory assigning research structures - requirements" );
-				abort();
+				ASSERT(false, "Buffer overflow assigning research structures - requirements" );
+
 				return false;
 			}
 
@@ -564,8 +563,8 @@ BOOL loadResearch(const char *pResearchData, UDWORD bufferSize)
 		{
 			if (numResearchStructRed >= MAX_RESEARCH_STRUCT_RED)
 			{
-				debug( LOG_ERROR, "Out of memory assigning research structures - redundancies" );
-				abort();
+				ASSERT(false, "Buffer overflow assigning research structures - redundancies" );
+
 				return false;
 			}
 			//don't MALLOC - get them from the pre-defined arrays
@@ -579,8 +578,8 @@ BOOL loadResearch(const char *pResearchData, UDWORD bufferSize)
 		{
 			if (numResearchStructRes >= MAX_RESEARCH_STRUCT_RES)
 			{
-				debug( LOG_ERROR, "Out of memory assigning research structures - results" );
-				abort();
+				ASSERT(false, "Buffer overflow assigning research structures - results" );
+
 				return false;
 			}
 
@@ -594,8 +593,8 @@ BOOL loadResearch(const char *pResearchData, UDWORD bufferSize)
 		//set the researchPoints
 		if (resPoints > UWORD_MAX)
 		{
-			debug( LOG_ERROR, "Research Points too high for research topic - %s ", getResearchName(pResearch) );
-			abort();
+			ASSERT(false, "Research Points too high for research topic - %s ", getResearchName(pResearch) );
+
 			return false;
 		}
 		pResearch->researchPoints = (UWORD)resPoints;
@@ -663,15 +662,15 @@ BOOL loadResearchPR(const char *pPRData, UDWORD bufferSize)
 						if ((pResearch[incR].storeCount + 1) >
 										(SDWORD)pResearch[incR].numPRRequired)
 						{
-							debug( LOG_ERROR, "Trying to allocate more pre-requisites than allowed for research %s", ResearchName );
-							abort();
+							ASSERT(false, "Trying to allocate more pre-requisites than allowed for research %s", ResearchName );
+
 							return false;
 						}
 						//PRresearch found alloc this to the current Research
 						pResearch[incR].pPRList[pResearch[incR].
 							storeCount] = incPR;
-                        //keep tab on how many we have loaded in
-                        numResearchPR++;
+						//keep tab on how many we have loaded in
+						numResearchPR++;
 						pResearch[incR].storeCount++;
 						recFound = true;
 						break;
@@ -680,8 +679,8 @@ BOOL loadResearchPR(const char *pPRData, UDWORD bufferSize)
 				//if pre-requisite not found - error
 				if (!recFound)
 				{
-					debug( LOG_ERROR, "Unable to find Pre-requisite %s for research %s", PRName, ResearchName );
-					abort();
+					ASSERT(false, "Unable to find Pre-requisite %s for research %s", PRName, ResearchName );
+
 					return false;
 				}
 				else
@@ -693,8 +692,8 @@ BOOL loadResearchPR(const char *pPRData, UDWORD bufferSize)
 		//if Research not found - error
 		if (!recFound)
 		{
-			debug( LOG_ERROR, "Unable to find Research %s", ResearchName );
-			abort();
+			ASSERT(false, "Unable to find Research %s", ResearchName );
+
 			return false;
 		}
 		//quick check that haven't reached maxPR
@@ -795,8 +794,8 @@ BOOL loadResearchArtefacts(const char *pArteData, UDWORD bufferSize, UDWORD list
 				maxArtefacts = pResearch->numArteResults;
 				break;
 			default:
-				debug( LOG_ERROR, "Unknown research list" );
-				abort();
+				ASSERT(false, "Unknown research list" );
+
 				return false;
 		}
 		//deal with extra data
@@ -828,8 +827,8 @@ BOOL loadResearchArtefacts(const char *pArteData, UDWORD bufferSize, UDWORD list
 					//check the old and new types are the same
 					if (statType(pArtefact->ref) != newType)
 					{
-						debug( LOG_ERROR, "You are trying to replace one type of component with a different type for research %s in ResultComponents.txt", ResearchName );
-						abort();
+						ASSERT(false, "You are trying to replace one type of component with a different type for research %s in ResultComponents.txt", ResearchName );
+
 						return false;
 					}
 					//ArtefactResearch found - alloc the artefact to the current Research topic
@@ -838,16 +837,16 @@ BOOL loadResearchArtefacts(const char *pArteData, UDWORD bufferSize, UDWORD list
 				}
 				break;
 			default:
-				debug( LOG_ERROR, "Unknown research list" );
-				abort();
+				ASSERT(false, "Unknown research list" );
+
 				return false;
 		}
 
 		//check not allocating more than allowed
 		if (pResearch->storeCount > maxArtefacts)
 		{
-			debug( LOG_ERROR, "Trying to allocate more artefacts than allowed for research %s", getResearchName(pResearch) );
-			abort();
+			ASSERT(false, "Trying to allocate more artefacts than allowed for research %s", getResearchName(pResearch) );
+
 			return false;
 		}
 		pResearch->storeCount++;
@@ -979,8 +978,8 @@ BOOL loadResearchStructures(const char *pStructData, UDWORD bufferSize,UDWORD li
 				//if Structure not found - error
 				if (!recFound)
 				{
-					debug( LOG_ERROR, "Unable to find Structure %s for research %s", StructureName, ResearchName );
-					abort();
+					ASSERT(false, "Unable to find Structure %s for research %s", StructureName, ResearchName );
+
 					return false;
 				}
 				else
@@ -992,8 +991,8 @@ BOOL loadResearchStructures(const char *pStructData, UDWORD bufferSize,UDWORD li
 		//if Research not found - error
 		if (!recFound)
 		{
-			debug( LOG_ERROR, "Unable to allocate all Research Structures for %s", ResearchName );
-			abort();
+			ASSERT(false, "Unable to allocate all Research Structures for %s", ResearchName );
+
 			return false;
 		}
 
@@ -1079,8 +1078,8 @@ BOOL loadResearchFunctions(const char *pFunctionData, UDWORD bufferSize)
 				//if Function not found - error
 				if (!recFound)
 				{
-					debug( LOG_ERROR, "Unable to find Function %s for research %s", FunctionName, ResearchName );
-					abort();
+					ASSERT(false, "Unable to find Function %s for research %s", FunctionName, ResearchName );
+
 					return false;
 				}
 				else
@@ -1092,8 +1091,8 @@ BOOL loadResearchFunctions(const char *pFunctionData, UDWORD bufferSize)
 		//if Research not found - error
 		if (!recFound)
 		{
-			debug( LOG_ERROR, "Unable to allocate all research Functions for %s", ResearchName );
-			abort();
+			ASSERT(false, "Unable to allocate all research Functions for %s", ResearchName );
+
 			return false;
 		}
 		//quick check that haven't reached maxPR
@@ -2034,7 +2033,7 @@ void CancelAllResearch(UDWORD pl)
 			 &&  ( ((RESEARCH_FACILITY *)psCurr->pFunctionality)->psSubject !=NULL )
 			   )
 			{
-				debug( LOG_NEVER, "canceling research for %p\n", psCurr );
+				debug( LOG_NEVER, "canceling research for %p", psCurr );
 				cancelResearch(psCurr);
 			}
 		}
@@ -2436,8 +2435,8 @@ COMPONENT_STATS * getComponentDetails(char *pName, char *pCompName)
 		default:
 		{
 			//COMP_UNKNOWN should be an error
-			debug( LOG_ERROR, "Unknown artefact type  - %s", pName );
-			abort();
+			ASSERT(false, "Unknown artefact type  - %s", pName );
+
 			return false;
 		}
 	}
@@ -2451,8 +2450,8 @@ COMPONENT_STATS * getComponentDetails(char *pName, char *pCompName)
 		pArtefact = (COMPONENT_STATS*)((char*)pArtefact + size);
 	}
 
-	debug( LOG_ERROR, "Cannot find component %s", pCompName );
-	abort();
+	ASSERT(false, "Cannot find component %s", pCompName );
+
 	return NULL;
 }
 
@@ -2539,8 +2538,8 @@ static void replaceComponent(COMPONENT_STATS *pNewComponent, COMPONENT_STATS *pO
 				break;
 			default:
 				//unknown comp type
-				debug( LOG_ERROR, "Unknown component type - invalid Template" );
-				abort();
+				ASSERT(false, "Unknown component type - invalid Template" );
+
 				return;
 		}
 	}
@@ -2982,8 +2981,8 @@ static void switchComponent(DROID *psDroid, UDWORD oldType, UDWORD oldCompInc,
 			break;
 		default:
 			//unknown comp type
-			debug( LOG_ERROR, "Unknown component type - invalid droid" );
-			abort();
+			ASSERT(false, "Unknown component type - invalid droid" );
+
 			return;
 	}
 }
