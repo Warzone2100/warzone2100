@@ -928,11 +928,10 @@ static Socket* SocketOpen(const struct addrinfo* addr, unsigned int timeout)
 
 static Socket* socketListen(unsigned int port)
 {
-	/* Disable the V4 to V6 mapping because it isn't available on all
-	 * platforms and only complicates this implementation for platforms
-	 * that do.
+	/* Enable the V4 to V6 mapping, but only when available, because it
+	 * isn't available on all platforms.
 	 */
-	static const int ipv6_v6only = 1;
+	static const int ipv6_v6only = 0;
 
 	struct sockaddr_in addr4;
 	struct sockaddr_in6 addr6;
@@ -968,28 +967,55 @@ static Socket* socketListen(unsigned int port)
 	conn->fd[SOCK_IPV6_LISTEN] = socket(addr6.sin6_family, SOCK_STREAM, 0);
 
 	if (conn->fd[SOCK_IPV4_LISTEN] == INVALID_SOCKET
-	 || conn->fd[SOCK_IPV6_LISTEN] == INVALID_SOCKET)
+	 && conn->fd[SOCK_IPV6_LISTEN] == INVALID_SOCKET)
 	{
-		debug(LOG_ERROR, "Failed to create an IPv4 or IPv6 socket: %s", strSockError(getSockErr()));
+		debug(LOG_ERROR, "Failed to create an IPv4 and IPv6 (only supported address families) socket: %s", strSockError(getSockErr()));
 		socketClose(conn);
 		return NULL;
 	}
 
 #if defined(IPV6_V6ONLY)
-	if (setsockopt(conn->fd[SOCK_IPV6_LISTEN], IPPROTO_IPV6, IPV6_V6ONLY, &ipv6_v6only, sizeof(ipv6_v6only)) == SOCKET_ERROR)
+	if (conn->fd[SOCK_IPV6_LISTEN] != INVALID_SOCKET
+	 && setsockopt(conn->fd[SOCK_IPV6_LISTEN], IPPROTO_IPV6, IPV6_V6ONLY, &ipv6_v6only, sizeof(ipv6_v6only)) == SOCKET_ERROR)
 	{
-		debug(LOG_WARNING, "Failed to set IPv6 socket to stick to IPv6 alone (i.e. don't use IPv4 to IPv6 mapping), this may cause problems later on: %s", strSockError(getSockErr()));
+		debug(LOG_WARNING, "Failed to set IPv6 socket to perform IPv4 to IPv6 mapping. Falling back to using two sockets. Error: %s", strSockError(getSockErr()));
+	}
+	else
+	{
+		debug(LOG_NET, "Succesfully enabled IPv4 to IPv6 mapping. Cleaning up IPv4 socket.");
+#if   defined(WZ_OS_WIN)
+		closesocket(conn->fd[SOCK_IPV4_LISTEN]);
+#else
+		close(conn->fd[SOCK_IPV4_LISTEN]);
+#endif
+		conn->fd[SOCK_IPV4_LISTEN] = INVALID_SOCKET;
 	}
 #endif
 
-	if (bind(conn->fd[SOCK_IPV4_LISTEN], (const struct sockaddr*)&addr4, sizeof(addr4)) == SOCKET_ERROR
-	 || bind(conn->fd[SOCK_IPV6_LISTEN], (const struct sockaddr*)&addr6, sizeof(addr6)) == SOCKET_ERROR
-	 || listen(conn->fd[SOCK_IPV4_LISTEN], 5) == SOCKET_ERROR
-	 || listen(conn->fd[SOCK_IPV6_LISTEN], 5) == SOCKET_ERROR
-	 || !setSocketBlocking(conn->fd[SOCK_IPV4_LISTEN], false)
-	 || !setSocketBlocking(conn->fd[SOCK_IPV6_LISTEN], false))
+	if (conn->fd[SOCK_IPV4_LISTEN] != INVALID_SOCKET)
 	{
-		debug(LOG_ERROR, "Failed to set up IPv4 or IPv6 socket for listening on port %u: %s", port, strSockError(getSockErr()));
+		if (bind(conn->fd[SOCK_IPV4_LISTEN], (const struct sockaddr*)&addr4, sizeof(addr4)) == SOCKET_ERROR
+		 || listen(conn->fd[SOCK_IPV4_LISTEN], 5) == SOCKET_ERROR
+		 || !setSocketBlocking(conn->fd[SOCK_IPV4_LISTEN], false))
+		{
+			debug(LOG_ERROR, "Failed to set up IPv4 socket for listening on port %u: %s", port, strSockError(getSockErr()));
+		}
+	}
+
+	if (conn->fd[SOCK_IPV6_LISTEN] != INVALID_SOCKET)
+	{
+		if (bind(conn->fd[SOCK_IPV6_LISTEN], (const struct sockaddr*)&addr6, sizeof(addr6)) == SOCKET_ERROR
+		 || listen(conn->fd[SOCK_IPV6_LISTEN], 5) == SOCKET_ERROR
+		 || !setSocketBlocking(conn->fd[SOCK_IPV6_LISTEN], false))
+		{
+			debug(LOG_ERROR, "Failed to set up IPv6 socket for listening on port %u: %s", port, strSockError(getSockErr()));
+		}
+	}
+
+	// Check whether we still have at least a single (operating) socket.
+	if (conn->fd[SOCK_IPV4_LISTEN] == INVALID_SOCKET
+	 && conn->fd[SOCK_IPV6_LISTEN] == INVALID_SOCKET)
+	{
 		socketClose(conn);
 		return NULL;
 	}
