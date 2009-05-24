@@ -30,10 +30,10 @@ fi
 AC_PROG_VERSION_CHECK([bison], [1.31])
 
 AC_PROG_LEX
-if test "x$LEX" != "xflex" ; then
+if test `basename "$LEX"` != "flex" ; then
 	AC_MSG_ERROR([Flex is not installed])
 fi
-AC_PROG_VERSION_CHECK([flex], [2.5.33], [2.5.34])
+AC_PROG_VERSION_CHECK([${LEX}], [2.5.33], [2.5.34])
 
 AX_WITH_PROG([PERL], [perl])
 AX_PROG_PERL_VERSION([5.10], [], [ PERL="" ])
