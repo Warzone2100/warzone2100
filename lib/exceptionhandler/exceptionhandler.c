@@ -177,24 +177,6 @@ static const char * wz_strsignal(int signum, int sigcode)
 				default:
 					return "SIGBUS: Access to an undefined portion of a memory object";
 			}
-		case SIGCHLD:
-			switch (sigcode)
-			{
-				case CLD_EXITED:
-					return "SIGCHLD: Child process terminated, stopped, or continued: Child has exited";
-				case CLD_KILLED:
-					return "SIGCHLD: Child process terminated, stopped, or continued: Child has terminated abnormally and did not create a core file";
-				case CLD_DUMPED:
-					return "SIGCHLD: Child process terminated, stopped, or continued: Child has terminated abnormally and created a core file";
-				case CLD_TRAPPED:
-					return "SIGCHLD: Child process terminated, stopped, or continued: Traced child has trapped";
-				case CLD_STOPPED:
-					return "SIGCHLD: Child process terminated, stopped, or continued: Child has stopped";
-				case CLD_CONTINUED:
-					return "SIGCHLD: Child process terminated, stopped, or continued: Stopped child has continued";
-			}
-		case SIGCONT:
-			return "SIGCONT: Continue executing, if stopped";
 		case SIGFPE:
 			switch (sigcode)
 			{
@@ -259,52 +241,13 @@ static const char * wz_strsignal(int signum, int sigcode)
 				default:
 					return "SIGSEGV: Invalid memory reference";
 			}
-		case SIGSTOP:
-			return "SIGSTOP: Stop executing";
 		case SIGTERM:
 			return "SIGTERM: Termination signal";
-		case SIGTSTP:
-			return "SIGTSTP: Terminal stop signal";
-		case SIGTTIN:
-			return "SIGTTIN: Background process attempting read";
-		case SIGTTOU:
-			return "SIGTTOU: Background process attempting write";
 		case SIGUSR1:
 			return "SIGUSR1: User-defined signal 1";
 		case SIGUSR2:
 			return "SIGUSR2: User-defined signal 2";
 #if _XOPEN_UNIX
-		case SIGPOLL:
-			switch (sigcode)
-			{
-				case POLL_IN:
-					return "SIGPOLL: Pollable event: Data input available";
-				case POLL_OUT:
-					return "SIGPOLL: Pollable event: Output buffers available";
-				case POLL_MSG:
-					return "SIGPOLL: Pollable event: Input message available";
-#if defined(POLL_ERR) && defined(POLL_HUP) && (POLL_ERR != POLL_HUP)
-				case POLL_ERR:
-					return "SIGPOLL: Pollable event: I/O error";
-#endif
-				case POLL_PRI:
-					return "SIGPOLL: Pollable event: High priority input available";
-#if defined(POLL_ERR) && defined(POLL_HUP) && (POLL_ERR != POLL_HUP)
-				case POLL_HUP:
-					return "SIGPOLL: Pollable event: Device disconnected.";
-#endif
-	/* Work around the fact that the FreeBSD kernel uses the same value for
-	 * POLL_ERR and POLL_HUP. See
-	 * http://www.freebsd.org/cgi/cvsweb.cgi/src/sys/sys/signal.h (version
-	 * 1.47 introduced these constants with the same values).
-	 */
-#if defined(POLL_ERR) && defined(POLL_HUP) && (POLL_ERR == POLL_HUP)
-				case POLL_ERR:
-					return "SIGPOLL: Pollable event: \"I/O error\" or \"Device disconnected\".";
-#endif
-				default:
-					return "SIGPOLL: Pollable event";
-			}
 		case SIGPROF:
 			return "SIGPROF: Profiling timer expired";
 		case SIGSYS:
@@ -320,8 +263,6 @@ static const char * wz_strsignal(int signum, int sigcode)
 					return "SIGTRAP: Trace/breakpoint trap";
 			}
 #endif // _XOPEN_UNIX
-		case SIGURG:
-			return "SIGURG: High bandwidth data is available at a socket";
 #if _XOPEN_UNIX
 		case SIGVTALRM:
 			return "SIGVTALRM: Virtual timer expired";
