@@ -974,23 +974,35 @@ static Socket* socketListen(unsigned int port)
 		return NULL;
 	}
 
+	if (conn->fd[SOCK_IPV4_LISTEN] != INVALID_SOCKET)
+	{
+		debug(LOG_NET, "Succesfully created an IPv4 socket");
+	}
+
+	if (conn->fd[SOCK_IPV6_LISTEN] != INVALID_SOCKET)
+	{
+		debug(LOG_NET, "Succesfully created an IPv6 socket");
+	}
+
 #if defined(IPV6_V6ONLY)
-	if (conn->fd[SOCK_IPV6_LISTEN] != INVALID_SOCKET
-	 && setsockopt(conn->fd[SOCK_IPV6_LISTEN], IPPROTO_IPV6, IPV6_V6ONLY, &ipv6_v6only, sizeof(ipv6_v6only)) == SOCKET_ERROR)
+	if (conn->fd[SOCK_IPV6_LISTEN] != INVALID_SOCKET)
 	{
-		debug(LOG_WARNING, "Failed to set IPv6 socket to perform IPv4 to IPv6 mapping. Falling back to using two sockets. Error: %s", strSockError(getSockErr()));
-	}
-	else
-	{
-		debug(LOG_NET, "Succesfully enabled IPv4 to IPv6 mapping. Cleaning up IPv4 socket.");
+		if (setsockopt(conn->fd[SOCK_IPV6_LISTEN], IPPROTO_IPV6, IPV6_V6ONLY, &ipv6_v6only, sizeof(ipv6_v6only)) == SOCKET_ERROR)
+		{
+			debug(LOG_WARNING, "Failed to set IPv6 socket to perform IPv4 to IPv6 mapping. Falling back to using two sockets. Error: %s", strSockError(getSockErr()));
+		}
+		else
+		{
+			debug(LOG_NET, "Succesfully enabled IPv4 to IPv6 mapping. Cleaning up IPv4 socket.");
 #if   defined(WZ_OS_WIN)
-		closesocket(conn->fd[SOCK_IPV4_LISTEN]);
+			closesocket(conn->fd[SOCK_IPV4_LISTEN]);
 #else
-		close(conn->fd[SOCK_IPV4_LISTEN]);
+			close(conn->fd[SOCK_IPV4_LISTEN]);
 #endif
-		conn->fd[SOCK_IPV4_LISTEN] = INVALID_SOCKET;
+			conn->fd[SOCK_IPV4_LISTEN] = INVALID_SOCKET;
+		}
+#endif
 	}
-#endif
 
 	if (conn->fd[SOCK_IPV4_LISTEN] != INVALID_SOCKET)
 	{
@@ -999,6 +1011,12 @@ static Socket* socketListen(unsigned int port)
 		 || !setSocketBlocking(conn->fd[SOCK_IPV4_LISTEN], false))
 		{
 			debug(LOG_ERROR, "Failed to set up IPv4 socket for listening on port %u: %s", port, strSockError(getSockErr()));
+#if   defined(WZ_OS_WIN)
+			closesocket(conn->fd[SOCK_IPV4_LISTEN]);
+#else
+			close(conn->fd[SOCK_IPV4_LISTEN]);
+#endif
+			conn->fd[SOCK_IPV4_LISTEN] = INVALID_SOCKET;
 		}
 	}
 
@@ -1009,6 +1027,12 @@ static Socket* socketListen(unsigned int port)
 		 || !setSocketBlocking(conn->fd[SOCK_IPV6_LISTEN], false))
 		{
 			debug(LOG_ERROR, "Failed to set up IPv6 socket for listening on port %u: %s", port, strSockError(getSockErr()));
+#if   defined(WZ_OS_WIN)
+			closesocket(conn->fd[SOCK_IPV6_LISTEN]);
+#else
+			close(conn->fd[SOCK_IPV6_LISTEN]);
+#endif
+			conn->fd[SOCK_IPV6_LISTEN] = INVALID_SOCKET;
 		}
 	}
 
