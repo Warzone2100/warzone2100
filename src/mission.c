@@ -2600,8 +2600,12 @@ void intRunMissionResult(void)
 
 				if (!bRequestLoad)
 				{
+					char msg[256] = {'\0'};
+
 					saveGame(sRequestResult,GTYPE_SAVE_START);
-					addConsoleMessage(_("GAME SAVED!"), LEFT_JUSTIFY, SYSTEM_MESSAGE);
+					sstrcpy(msg, _("GAME SAVED :"));
+					sstrcat(msg, sRequestResult);
+					addConsoleMessage(msg, LEFT_JUSTIFY, NOTIFY_MESSAGE);
 				}
 			}
 		}
