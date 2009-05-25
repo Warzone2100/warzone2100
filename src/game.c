@@ -3782,6 +3782,9 @@ BOOL saveGame(char *aFileName, SDWORD saveType)
 		swapMissionPointers();
 	}
 
+	// strip the last filename
+	aFileName[fileExtension-1] = '\0';
+
 	/* Start the game clock */
 	gameTimeStart();
 	return true;

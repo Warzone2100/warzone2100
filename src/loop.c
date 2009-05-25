@@ -497,15 +497,21 @@ GAMECODE gameLoop(void)
 			}
 			else
 			{
+				char msgbuffer[256]= {'\0'};
+
 				if (saveInMissionRes())
 				{
 					if (saveGame(sRequestResult, GTYPE_SAVE_START))
 					{
-						addConsoleMessage(_("GAME SAVED!"), LEFT_JUSTIFY, SYSTEM_MESSAGE);
+						sstrcpy(msgbuffer, _("GAME SAVED :"));
+						sstrcat(msgbuffer, sRequestResult);
+						addConsoleMessage( msgbuffer, LEFT_JUSTIFY, NOTIFY_MESSAGE);
 					}
 					else
 					{
 						ASSERT( false,"Mission Results: saveGame Failed" );
+						sstrcpy(msgbuffer, _("Could not save game!"));
+						addConsoleMessage( msgbuffer, LEFT_JUSTIFY, NOTIFY_MESSAGE);
 						deleteSaveGame(sRequestResult);
 					}
 				}
@@ -513,11 +519,15 @@ GAMECODE gameLoop(void)
 				{
 					if (saveGame(sRequestResult, GTYPE_SAVE_MIDMISSION))//mid mission from [esc] menu
 					{
-						addConsoleMessage(_("GAME SAVED!"), LEFT_JUSTIFY, SYSTEM_MESSAGE);
+						sstrcpy(msgbuffer, _("GAME SAVED :"));
+						sstrcat(msgbuffer, sRequestResult);
+						addConsoleMessage( msgbuffer, LEFT_JUSTIFY, NOTIFY_MESSAGE);
 					}
 					else
 					{
 						ASSERT(!"saveGame(sRequestResult, GTYPE_SAVE_MIDMISSION) failed", "Mid Mission: saveGame Failed" );
+						sstrcpy(msgbuffer, _("Could not save game!"));
+						addConsoleMessage( msgbuffer, LEFT_JUSTIFY, NOTIFY_MESSAGE);
 						deleteSaveGame(sRequestResult);
 					}
 				}

@@ -59,25 +59,26 @@
 #include "lib/gamelib/gtime.h"
 //======================================================================================
 //--------------------------------
-#define totalslots 20			//saves slots.. was 10 , now 20   *Away with hard coding values!* -Q
-#define totalslotspace 64		//guessing 64 max chars for filename.
+#define totalslots 36			// saves slots
+#define slotsInColumn 12		// # of slots in a column
+#define totalslotspace 64		// guessing 64 max chars for filename.
 //--------------------------------
 // ////////////////////////////////////////////////////////////////////////////
-#define LOADSAVE_X				130	+ D_W
-#define LOADSAVE_Y				30	+ D_H		//was 170 -Q
-#define LOADSAVE_W				380
-#define LOADSAVE_H				240	//was 200 -Q
+#define LOADSAVE_X				D_W + 16
+#define LOADSAVE_Y				D_H + 5
+#define LOADSAVE_W				610
+#define LOADSAVE_H				220
 
 #define MAX_SAVE_NAME			60
 
 
-#define LOADSAVE_HGAP			9		//from 5 to 9 -Q
-#define LOADSAVE_VGAP			9		//from 5 to 9 -Q
-#define LOADSAVE_BANNER_DEPTH	40 		//was 25 top banner which displays either load or save
+#define LOADSAVE_HGAP			9
+#define LOADSAVE_VGAP			9
+#define LOADSAVE_BANNER_DEPTH	40 		//top banner which displays either load or save
 
 
-#define LOADENTRY_W				(LOADSAVE_W -(3 * LOADSAVE_HGAP)) /2
-#define LOADENTRY_H				(LOADSAVE_H -(6 * LOADSAVE_VGAP )- (LOADSAVE_BANNER_DEPTH+LOADSAVE_VGAP) ) /5
+#define LOADENTRY_W				((LOADSAVE_W / 3 )-(3 * LOADSAVE_HGAP)) 
+#define LOADENTRY_H				(LOADSAVE_H -(5 * LOADSAVE_VGAP )- (LOADSAVE_BANNER_DEPTH+LOADSAVE_VGAP) ) /5
 
 #define ID_LOADSAVE				21000
 #define LOADSAVE_FORM			ID_LOADSAVE+1		// back form.
@@ -88,7 +89,7 @@
 #define LOADENTRY_START			ID_LOADSAVE+10		// each of the buttons.
 #define LOADENTRY_END			ID_LOADSAVE+10 +totalslots  // must have unique ID hmm -Q
 
-#define SAVEENTRY_EDIT			ID_LOADSAVE+50		// save edit box. must be highest value possible I guess. -Q
+#define SAVEENTRY_EDIT			ID_LOADSAVE + totalslots + totalslots		// save edit box. must be highest value possible I guess. -Q
 
 // ////////////////////////////////////////////////////////////////////////////
 void drawBlueBox				(UDWORD x,UDWORD y, UDWORD w, UDWORD h);
@@ -213,10 +214,12 @@ static BOOL _addLoadSave(BOOL bLoad, const char *sSearchPath, const char *sExten
 	sFormInit.formID = 0;				//this adds the blue background, and the "box" behind the buttons -Q
 	sFormInit.id = LOADSAVE_FORM;
 	sFormInit.style = WFORM_PLAIN;
-	sFormInit.x = (SWORD)(LOADSAVE_X);
-	sFormInit.y = (SWORD)(LOADSAVE_Y);
+	sFormInit.x = (SWORD) LOADSAVE_X;
+	sFormInit.y = (SWORD) LOADSAVE_Y;
 	sFormInit.width = LOADSAVE_W;
-	sFormInit.height = (LOADSAVE_H*2)-46;		// hmm..the bottom of the box.... -Q
+	// we need the form to be long enough for all resolutions, so we take the total number of items * height
+	// and * the gaps, add the banner, and finally, the fudge factor ;)
+	sFormInit.height = (slotsInColumn * LOADENTRY_H + LOADSAVE_HGAP* slotsInColumn)+ LOADSAVE_BANNER_DEPTH+20;
 	sFormInit.disableChildren = true;
 	sFormInit.pDisplay = intOpenPlainForm;
 	widgAddForm(psRequestScreen, &sFormInit);
@@ -277,17 +280,23 @@ static BOOL _addLoadSave(BOOL bLoad, const char *sSearchPath, const char *sExten
 	{
 		sButInit.id		= slotCount+LOADENTRY_START;
 
-		if(slotCount<(totalslots/2))
+		if(slotCount < slotsInColumn)
 		{
-			sButInit.x	= LOADSAVE_HGAP;
+			sButInit.x	= 22 + LOADSAVE_HGAP;
 			sButInit.y	= (SWORD)((LOADSAVE_BANNER_DEPTH +(2*LOADSAVE_VGAP)) + (
-                slotCount*(LOADSAVE_VGAP+LOADENTRY_H)));
+				slotCount*(LOADSAVE_VGAP+LOADENTRY_H)));
+		}
+		else if (slotCount >= slotsInColumn && (slotCount < (slotsInColumn *2)))
+		{
+			sButInit.x	= 22 + (2*LOADSAVE_HGAP + LOADENTRY_W);
+			sButInit.y	= (SWORD)((LOADSAVE_BANNER_DEPTH +(2* LOADSAVE_VGAP)) + (
+				(slotCount % slotsInColumn)*(LOADSAVE_VGAP+LOADENTRY_H)));
 		}
 		else
 		{
-			sButInit.x	= (2*LOADSAVE_HGAP)+LOADENTRY_W;
+			sButInit.x	= 22 + (3*LOADSAVE_HGAP + (2*LOADENTRY_W));
 			sButInit.y	= (SWORD)((LOADSAVE_BANNER_DEPTH +(2* LOADSAVE_VGAP)) + (
-                (slotCount-(totalslots/2)) *(LOADSAVE_VGAP+LOADENTRY_H)));
+				(slotCount % slotsInColumn)*(LOADSAVE_VGAP+LOADENTRY_H)));
 		}
 		widgAddButton(psRequestScreen, &sButInit);
 	}
