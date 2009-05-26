@@ -82,7 +82,7 @@ R-Wpn-MG4,MG4ROTARY-VTOL,WEAPON,0,0,10
 R-Wpn-MG4,MG4ROTARYMk1,WEAPON,0,0,10
 R-Wpn-MG5,MG5TWINROTARY,WEAPON,0,BODY,10
 R-Wpn-Missile2A-T,Missile-A-T,WEAPON,0,0,10
-R-Wpn-HvArtMissile,Missile-HvyArt,WEAPON,Rocket-IDF,WEAPON,10
+R-Wpn-HvArtMissile,Missile-HvyArt,WEAPON,0,0,10
 R-Wpn-Missile-HvSAM,Missile-HvySAM,WEAPON,0,0,10
 R-Wpn-Missile-LtSAM,Missile-LtSAM,WEAPON,0,0,10
 R-Wpn-MdArtMissile,Missile-MdArt,WEAPON,0,0,10
