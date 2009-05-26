@@ -760,7 +760,7 @@ static void addGames(void)
 			txt = _("You were kicked!");
 			break;
 		case ERROR_WRONGVERSION:
-			txt = _("Wrong Game Verion!");
+			txt = _("Wrong Game Version!");
 			break;
 		case ERROR_WRONGPASSWORD:
 			txt = _("Incorrect Password!");
