@@ -2907,7 +2907,8 @@ static void checkLocalFeatures(DROID *psDroid)
 
 	// NOTE: Why not do this for AI units also?
 	// only do for players droids.
-	if(psDroid->player != selectedPlayer)
+	if (psDroid->player != selectedPlayer &&
+	    false)
 	{
 		return;
 	}

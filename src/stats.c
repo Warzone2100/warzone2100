@@ -547,9 +547,8 @@ BOOL loadWeaponStats(const char *pWeaponData, UDWORD bufferSize)
 		}
 		else
 		{
-			debug( LOG_ERROR, "Invalid fire on move flag for weapon %s", getStatName(psStats) );
-			abort();
-			return false;
+			debug( LOG_ERROR, "Invalid fire on move flag for weapon %s - assuming YES", getStatName(psStats) );
+			psStats->fireOnMove = FOM_YES;
 		}
 
 		//set the weapon class
@@ -573,9 +572,8 @@ BOOL loadWeaponStats(const char *pWeaponData, UDWORD bufferSize)
 		}
 		else
 		{
-			debug( LOG_ERROR, "Invalid weapon class for weapon %s", getStatName(psStats) );
-			abort();
-			return false;
+			debug( LOG_ERROR, "Invalid weapon class for weapon %s - assuming KINETIC", getStatName(psStats) );
+			psStats->weaponClass = WC_KINETIC;
 		}
 
 		//set the subClass
@@ -992,7 +990,8 @@ bool getPropulsionType(const char* typeName, PROPULSION_TYPE* type)
 	}
 	else
 	{
-		return false;
+		debug( LOG_ERROR, "getPropulsionType: Invalid Propulsion type %s - assuming Hover", typeName );
+		*type = PROPULSION_TYPE_HOVER;
 	}
 
 	return true;
