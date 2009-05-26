@@ -32,6 +32,12 @@
  *  @{
  */
 
+typedef enum _fpath_movetype
+{
+	FMT_MOVE,		///< Move around all obstacles
+	FMT_ATTACK,		///< Assume that we will destroy enemy obstacles
+} FPATH_MOVETYPE;
+
 typedef struct _jobNode
 {
 	PROPULSION_TYPE	propulsion;
@@ -40,6 +46,8 @@ typedef struct _jobNode
 	int		origX, origY;
 	UDWORD		droidID;
 	struct _jobNode	*next;
+	FPATH_MOVETYPE	moveType;
+	int		owner;		///< Player owner
 } PATHJOB;
 
 typedef enum _fpath_retval
@@ -70,7 +78,8 @@ extern FPATH_RETVAL fpathDroidRoute(DROID* psDroid, SDWORD targetX, SDWORD targe
  *
  *  @return true if the given tile is blocking for this droid
  */
-extern BOOL fpathBlockingTile(SDWORD x, SDWORD y, PROPULSION_TYPE propulsion);
+BOOL fpathBlockingTile(SDWORD x, SDWORD y, PROPULSION_TYPE propulsion);
+BOOL fpathBaseBlockingTile(SDWORD x, SDWORD y, PROPULSION_TYPE propulsion, int player, FPATH_MOVETYPE moveType);
 
 /** Set a direct path to position.
  *

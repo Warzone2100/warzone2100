@@ -452,7 +452,7 @@ SDWORD fpathAStarRoute(MOVE_CONTROL *psMove, PATHJOB *psJob)
 			}
 
 			// If the tile hasn't been visited see if it is a blocking tile
-			if (!psFound && fpathBlockingTile(x, y, psJob->propulsion))
+			if (!psFound && fpathBaseBlockingTile(x, y, psJob->propulsion, psJob->owner, psJob->moveType))
 			{
 				// tile is blocked, skip it
 				continue;
