@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2009-05-16 15:13+0200\n"
+"POT-Creation-Date: 2009-05-26 17:37+0200\n"
 "PO-Revision-Date: 2009-03-30 19:26+0600\n"
 "Last-Translator: Макс <Raptor9000@rambler.ru>\n"
 "Language-Team: Russian <>\n"
@@ -10048,23 +10048,23 @@ msgstr "Упрощенный китайский"
 msgid "Latin"
 msgstr "Латинский"
 
-#: lib/netplay/netplay.c:1069
-#: lib/netplay/netplay.c:1102
+#: lib/netplay/netplay.c:1120
+#: lib/netplay/netplay.c:1153
 #, c-format
 msgid "Player %u has the wrong game version.  Auto kicking."
 msgstr ""
 
-#: lib/netplay/netplay.c:1183
+#: lib/netplay/netplay.c:1234
 #, c-format
 msgid "Player %u has the wrong password.  Auto kicking."
 msgstr ""
 
-#: lib/netplay/netplay.c:2712
+#: lib/netplay/netplay.c:2763
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr ""
 
-#: lib/netplay/netplay.c:2737
+#: lib/netplay/netplay.c:2788
 #, c-format
 msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"
 msgstr ""
@@ -10211,7 +10211,7 @@ msgstr "Игрок"
 
 #: src/design.c:455
 #: src/design.c:476
-#: src/design.c:3554
+#: src/design.c:3514
 msgid "New Vehicle"
 msgstr "Новая машина"
 
@@ -10250,18 +10250,18 @@ msgstr "Мощность двигателя"
 
 #: src/design.c:727
 #: src/design.c:782
-#: src/design.c:1593
-#: src/design.c:1634
+#: src/design.c:1583
+#: src/design.c:1620
+#: src/design.c:1641
 #: src/design.c:1659
-#: src/design.c:1677
-#: src/design.c:1702
-#: src/design.c:1720
-#: src/design.c:1762
-#: src/design.c:1797
-#: src/design.c:1933
-#: src/design.c:1950
-#: src/design.c:1985
-#: src/design.c:2021
+#: src/design.c:1680
+#: src/design.c:1698
+#: src/design.c:1736
+#: src/design.c:1771
+#: src/design.c:1906
+#: src/design.c:1923
+#: src/design.c:1958
+#: src/design.c:1994
 msgid "Weight"
 msgstr "Масса"
 
@@ -10280,73 +10280,73 @@ msgstr "Общее бронирование корпуса"
 msgid "Power Usage"
 msgstr "Использование энергии"
 
-#: src/design.c:1347
+#: src/design.c:1346
 msgid "Transporter"
 msgstr "Перевозчик"
 
-#: src/design.c:1369
+#: src/design.c:1368
 msgid "Hydra "
 msgstr ""
 
-#: src/design.c:1575
+#: src/design.c:1565
 msgid "Sensor Range"
 msgstr "Дальность сенсора"
 
-#: src/design.c:1584
+#: src/design.c:1574
 msgid "Sensor Power"
 msgstr "Мощность сенсора"
 
-#: src/design.c:1625
+#: src/design.c:1611
 msgid "ECM Power"
 msgstr "ЕМ Мощность"
 
-#: src/design.c:1651
-#: src/design.c:1668
-#: src/design.c:1694
-#: src/design.c:1711
+#: src/design.c:1633
+#: src/design.c:1650
+#: src/design.c:1672
+#: src/design.c:1689
 msgid "Build Points"
 msgstr "Бронирование"
 
-#: src/design.c:1738
-#: src/design.c:1770
+#: src/design.c:1712
+#: src/design.c:1744
 msgid "Range"
 msgstr "Дальность"
 
-#: src/design.c:1746
-#: src/design.c:1779
+#: src/design.c:1720
+#: src/design.c:1753
 msgid "Damage"
 msgstr "Урон"
 
-#: src/design.c:1754
-#: src/design.c:1788
+#: src/design.c:1728
+#: src/design.c:1762
 msgid "Rate-of-Fire"
 msgstr "Скорострельность"
 
-#: src/design.c:1925
-#: src/design.c:1941
+#: src/design.c:1898
+#: src/design.c:1914
 msgid "Air Speed"
 msgstr "Скорость в воздухе"
 
-#: src/design.c:1961
-#: src/design.c:1994
+#: src/design.c:1934
+#: src/design.c:1967
 msgid "Road Speed"
 msgstr "Скорость по дороге"
 
-#: src/design.c:1969
-#: src/design.c:2003
+#: src/design.c:1942
+#: src/design.c:1976
 msgid "Off-Road Speed"
 msgstr "Скорость по бездорожью"
 
-#: src/design.c:1977
-#: src/design.c:2012
+#: src/design.c:1950
+#: src/design.c:1985
 msgid "Water Speed"
 msgstr "Скорость по воде"
 
-#: src/design.c:2146
+#: src/design.c:2119
 msgid "Weapons"
 msgstr "Вооружение"
 
-#: src/design.c:2170
+#: src/design.c:2143
 msgid "Systems"
 msgstr "Системы"
 
@@ -10376,11 +10376,11 @@ msgstr "Грузовику приказано строить нефтевышк�
 msgid "Unit Lost!"
 msgstr "Юнит потерян!"
 
-#: src/droid.c:1449
+#: src/droid.c:1421
 msgid "Structure Restored"
 msgstr "постройка восстановлена"
 
-#: src/droid.c:3175
+#: src/droid.c:3132
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
@@ -10388,7 +10388,7 @@ msgstr[0] "Выбрана группа %u - %u юнит"
 msgstr[1] "Выбрана группа %u - %u юнита"
 msgstr[2] "Выбрана группа %u - %u юнитов"
 
-#: src/droid.c:3188
+#: src/droid.c:3145
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
@@ -10396,7 +10396,7 @@ msgstr[0] "%u юнит назначен группе %u"
 msgstr[1] "%u юнита назначено группе %u"
 msgstr[2] "%u юнитов назначено группе %u"
 
-#: src/droid.c:3201
+#: src/droid.c:3158
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
@@ -10404,7 +10404,7 @@ msgstr[0] "Фокус на группе %u - %u юнит"
 msgstr[1] "Фокус на группе %u - %u юнита"
 msgstr[2] "Фокус на группе %u - %u юнитов"
 
-#: src/droid.c:3205
+#: src/droid.c:3162
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
@@ -10412,40 +10412,40 @@ msgstr[0] "Соединить с группой %u - %u Юнит"
 msgstr[1] "Соединить с группой %u - %u Юниты"
 msgstr[2] "Соединить с группой %u - %u Юниты"
 
-#: src/droid.c:3424
+#: src/droid.c:3381
 msgid "Rookie"
 msgstr "Новобранец"
 
-#: src/droid.c:3425
+#: src/droid.c:3382
 msgctxt "rank"
 msgid "Green"
 msgstr "Молодой"
 
-#: src/droid.c:3426
+#: src/droid.c:3383
 msgid "Trained"
 msgstr "Тренированный"
 
-#: src/droid.c:3427
+#: src/droid.c:3384
 msgid "Regular"
 msgstr "Опытный"
 
-#: src/droid.c:3428
+#: src/droid.c:3385
 msgid "Professional"
 msgstr "Профессионал"
 
-#: src/droid.c:3429
+#: src/droid.c:3386
 msgid "Veteran"
 msgstr "Ветеран"
 
-#: src/droid.c:3430
+#: src/droid.c:3387
 msgid "Elite"
 msgstr "Элита"
 
-#: src/droid.c:3431
+#: src/droid.c:3388
 msgid "Special"
 msgstr "Специалист"
 
-#: src/droid.c:3432
+#: src/droid.c:3389
 msgid "Hero"
 msgstr "Герой"
 
@@ -10521,7 +10521,7 @@ msgstr "ОДИНОЧНАЯ ИГРА"
 #: src/frontend.c:450
 #: src/ingameop.c:394
 #: src/mission.c:2535
-#: src/mission.c:2636
+#: src/mission.c:2640
 msgid "Load Saved Game"
 msgstr "Загрузить Игру"
 
@@ -10763,13 +10763,13 @@ msgid "Unit Colour"
 msgstr "Цвет юнита"
 
 #: src/hci.c:1009
-#: src/hci.c:3793
-#: src/hci.c:3944
-#: src/hci.c:4397
-#: src/hci.c:5601
+#: src/hci.c:3797
+#: src/hci.c:3948
+#: src/hci.c:4401
+#: src/hci.c:5605
 #: src/intelmap.c:532
 #: src/intorder.c:661
-#: src/loadsave.c:262
+#: src/loadsave.c:265
 #: src/multimenu.c:477
 #: src/multimenu.c:1336
 #: src/transporter.c:286
@@ -10779,131 +10779,136 @@ msgid "Close"
 msgstr "Закрыть"
 
 #: src/hci.c:1355
-#: src/hci.c:1700
-#: src/loop.c:504
-#: src/loop.c:516
-#: src/mission.c:2604
-msgid "GAME SAVED!"
+#, fuzzy
+msgid "MAP SAVED!"
 msgstr "ИГРА СОХРАНЕНА!"
 
-#: src/hci.c:2104
+#: src/hci.c:1702
+#: src/loop.c:506
+#: src/loop.c:522
+#: src/mission.c:2606
+#, fuzzy
+msgid "GAME SAVED :"
+msgstr "ИГРА СОХРАНЕНА!"
+
+#: src/hci.c:2108
 msgid "Failed to create building"
 msgstr "невозможно создать постройку"
 
-#: src/hci.c:2127
+#: src/hci.c:2131
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new structure: %s."
 msgstr "Игрок %u использует читы (меню отладки) его/её новая постройка: %s."
 
-#: src/hci.c:2142
+#: src/hci.c:2146
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new feature: %s."
 msgstr "Игрок %u использует читы (меню отладки) его/её новый особый элемент: %s."
 
-#: src/hci.c:2163
+#: src/hci.c:2167
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new droid: %s."
 msgstr "Игрок %u использует читы (меню отладки) его/её новая машина: %s."
 
-#: src/hci.c:3695
+#: src/hci.c:3699
 msgid "Commanders (F6)"
 msgstr "Командиры (F6)"
 
-#: src/hci.c:3711
+#: src/hci.c:3715
 msgid "Intelligence Display (F5)"
 msgstr "Дисплей разведки (F5)"
 
-#: src/hci.c:3727
+#: src/hci.c:3731
 msgid "Manufacture (F1)"
 msgstr "Производство (F1)"
 
-#: src/hci.c:3743
+#: src/hci.c:3747
 msgid "Design (F4)"
 msgstr "Дизайн (F4)"
 
-#: src/hci.c:3759
+#: src/hci.c:3763
 msgid "Research (F2)"
 msgstr "Исследования (F2)"
 
-#: src/hci.c:3775
+#: src/hci.c:3779
 msgid "Build (F3)"
 msgstr "Строить (F3)"
 
-#: src/hci.c:3855
+#: src/hci.c:3859
 #: src/multiint.c:1206
 #: src/multiint.c:1210
 msgid "Power"
 msgstr "Энергия"
 
-#: src/hci.c:4039
+#: src/hci.c:4043
 msgid "Tile"
 msgstr "Плитка"
 
-#: src/hci.c:4040
+#: src/hci.c:4044
 msgid "Place tiles on map"
 msgstr "поместить эемент изображения на карту"
 
-#: src/hci.c:4049
+#: src/hci.c:4053
 msgid "Unit"
 msgstr "Юнит"
 
-#: src/hci.c:4050
+#: src/hci.c:4054
 msgid "Place Unit on map"
 msgstr "поместить юнита на карту"
 
-#: src/hci.c:4058
+#: src/hci.c:4062
 msgid "Struct"
 msgstr "постройки"
 
-#: src/hci.c:4059
+#: src/hci.c:4063
 msgid "Place Structures on map"
 msgstr "Расположить постройки на карте"
 
-#: src/hci.c:4067
+#: src/hci.c:4071
 msgid "Feat"
 msgstr "разное"
 
-#: src/hci.c:4068
+#: src/hci.c:4072
 msgid "Place Features on map"
 msgstr "поместить особый элемент на карту"
 
-#: src/hci.c:4079
+#: src/hci.c:4083
 msgid "Pause or unpause the game"
 msgstr "Пауза или продолжить игру"
 
-#: src/hci.c:4093
+#: src/hci.c:4097
 msgid "Align height of all map objects"
 msgstr "выровнять высоту всех объектов на карте"
 
-#: src/hci.c:4118
+#: src/hci.c:4122
 #: src/ingameop.c:121
 #: src/ingameop.c:240
 #: src/ingameop.c:245
 msgid "Quit"
 msgstr "Выход"
 
-#: src/hci.c:4119
+#: src/hci.c:4123
 msgid "Exit Game"
 msgstr "Выйти из игры"
 
-#: src/hci.c:4482
+#: src/hci.c:4486
 #: src/intdisplay.c:267
 msgid "Progress Bar"
 msgstr "Панель прогресса"
 
-#: src/hci.c:5516
+#: src/hci.c:5520
 msgid "Factory Delivery Point"
 msgstr "Точка прибытия с фабрики"
 
-#: src/hci.c:5535
+#: src/hci.c:5539
 msgid "Loop Production"
 msgstr "Повторное производство"
 
-#: src/hci.c:5626
+#: src/hci.c:5630
 msgid "Tab Scroll left"
 msgstr "Таб скрол налево"
 
-#: src/hci.c:5643
+#: src/hci.c:5647
 msgid "Tab Scroll right"
 msgstr "Таб скрол на право"
 
@@ -10916,7 +10921,7 @@ msgstr "Продолжить игру"
 #: src/ingameop.c:259
 #: src/ingameop.c:398
 #: src/mission.c:2525
-#: src/mission.c:2639
+#: src/mission.c:2643
 msgid "Save Game"
 msgstr "Сохранить игру"
 
@@ -11698,6 +11703,12 @@ msgstr "Выбрать следующий завод киборгов"
 msgid "Toggle reopening the build menu"
 msgstr "открыть заново меню постройки"
 
+#: src/loop.c:513
+#: src/loop.c:529
+#, fuzzy
+msgid "Could not save game!"
+msgstr "Загрузить игру"
+
 #: src/mission.c:2073
 msgid "Load Transport"
 msgstr "Загрузить Транспорт"
@@ -11720,7 +11731,7 @@ msgstr "ЗАДАНИЕ ПРОВАЛЕНО"
 
 #: src/mission.c:2504
 #: src/mission.c:2541
-#: src/mission.c:2655
+#: src/mission.c:2659
 msgid "Quit To Main Menu"
 msgstr "Выйти в главное меню"
 
@@ -12090,35 +12101,35 @@ msgstr "Передать выбранных юнитов"
 msgid "Give Power To Player"
 msgstr "Передать энергию  игроку"
 
-#: src/multiplay.c:1886
+#: src/multiplay.c:1893
 msgid "Green"
 msgstr "Зелёный"
 
-#: src/multiplay.c:1887
+#: src/multiplay.c:1894
 msgid "Orange"
 msgstr "Оранжевый"
 
-#: src/multiplay.c:1888
+#: src/multiplay.c:1895
 msgid "Grey"
 msgstr "Серый"
 
-#: src/multiplay.c:1889
+#: src/multiplay.c:1896
 msgid "Black"
 msgstr "Чёрный"
 
-#: src/multiplay.c:1890
+#: src/multiplay.c:1897
 msgid "Red"
 msgstr "Красный"
 
-#: src/multiplay.c:1891
+#: src/multiplay.c:1898
 msgid "Blue"
 msgstr "Синий"
 
-#: src/multiplay.c:1892
+#: src/multiplay.c:1899
 msgid "Pink"
 msgstr "Розовый"
 
-#: src/multiplay.c:1893
+#: src/multiplay.c:1900
 msgid "Cyan"
 msgstr "Голубой"
 
@@ -12296,12 +12307,12 @@ msgstr "Не найдено ни одного сенсорного юнита!"
 msgid "Unable to locate any Commanders!"
 msgstr "невозможно найти ни одного командира"
 
-#: src/structure.c:2802
+#: src/structure.c:2787
 msgid "Command Control Limit Reached - Production Halted"
 msgstr "Достигнут Предел - Производство Остановлено"
 
-#: src/structure.c:5952
-#: src/structure.c:5977
+#: src/structure.c:5930
+#: src/structure.c:5955
 #, c-format
 msgid "%s - %u Unit assigned"
 msgid_plural "%s - %u Units assigned"
@@ -12309,47 +12320,47 @@ msgstr[0] "%s - %u Юнит назначен"
 msgstr[1] "%s - %u Юнитов назначено"
 msgstr[2] "%s - %u Юнита назначено"
 
-#: src/structure.c:6027
+#: src/structure.c:6005
 #, c-format
 msgid "%s - Connected %u of %u"
 msgstr "%s - подключено %u из %u"
 
-#: src/structure.c:6041
+#: src/structure.c:6019
 #, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - повреждение %3.0f%%"
 
-#: src/structure.c:6157
-#: src/structure.c:6202
+#: src/structure.c:6135
+#: src/structure.c:6180
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - Электронные повреждения"
 
-#: src/structure.c:6437
+#: src/structure.c:6415
 msgid "Electronic Reward - Visibility Report"
 msgstr "награда - доклад о местоположении"
 
-#: src/structure.c:6477
+#: src/structure.c:6455
 msgid "Factory Reward - Propulsion"
 msgstr "награда завода - движитель"
 
-#: src/structure.c:6501
+#: src/structure.c:6479
 msgid "Factory Reward - Body"
 msgstr "награда завода - рама"
 
-#: src/structure.c:6525
+#: src/structure.c:6503
 msgid "Factory Reward - Weapon"
 msgstr "награда завода - оружие"
 
-#: src/structure.c:6534
+#: src/structure.c:6512
 msgid "Factory Reward - Nothing"
 msgstr "награда завода - ШИШ"
 
-#: src/structure.c:6562
+#: src/structure.c:6540
 msgid "Repair Facility Award - Repair"
 msgstr "награда мастерской - ремонт"
 
-#: src/structure.c:6569
+#: src/structure.c:6547
 msgid "Repair Facility Award - Nothing"
 msgstr "награда мастерской  - ШИШ"
 
