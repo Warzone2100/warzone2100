@@ -881,7 +881,7 @@ static bool NETrecvGAMESTRUCT(GAMESTRUCT* game)
 	// Read a GAMESTRUCT from the connection
 	if (tcp_socket == NULL
 	 || socket_set == NULL
-	 || SDLNet_CheckSockets(socket_set, 1000) <= 0
+	 || SDLNet_CheckSockets(socket_set, 2500) <= 0
 	 || !SDLNet_SocketReady(tcp_socket)
 	 || (result = SDLNet_TCP_Recv(tcp_socket, buf, sizeof(buf))) != sizeof(buf))
 	{
@@ -1932,7 +1932,7 @@ static void NETregisterServer(int state)
 				NETsendGAMESTRUCT(rs_socket, &game);
 
 				// Get the return code
-				if (readLobbyResponse(rs_socket, 1000) == -1)
+				if (readLobbyResponse(rs_socket, 3000) == -1)
 				{
 					// The socket has been invalidated, so get rid of it. (using it now may cause SIGPIPE).
 					SDLNet_TCP_Close(rs_socket);
@@ -2023,7 +2023,7 @@ static void NETallowJoining(void)
 			tmp_socket[i] = SDLNet_TCP_Accept(tcp_socket);
 			debug(LOG_NET, "tmp_socket[%d]=%p Accepted", i, tmp_socket[i]);
 			SDLNet_TCP_AddSocket(tmp_socket_set, tmp_socket[i]);
-			if (SDLNet_CheckSockets(tmp_socket_set, 1000) > 0
+			if (SDLNet_CheckSockets(tmp_socket_set, 2500) > 0
 			    && SDLNet_SocketReady(tmp_socket[0])
 			    && (recv_result = SDLNet_TCP_Recv(tmp_socket[i], buffer, 5)))
 			{
@@ -2340,7 +2340,7 @@ BOOL NETfindGame(void)
 	debug(LOG_NET, "Sending list cmd");
 	SDLNet_TCP_Send(tcp_socket, (void*)"list", sizeof("list"));
 
-	if (SDLNet_CheckSockets(socket_set, 1000) > 0
+	if (SDLNet_CheckSockets(socket_set, 2500) > 0
 	 && SDLNet_SocketReady(tcp_socket)
 	 && (result = SDLNet_TCP_Recv(tcp_socket, &gamesavailable, sizeof(gamesavailable))))
 	{
