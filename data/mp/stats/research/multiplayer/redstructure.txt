@@ -3,11 +3,11 @@ R-Defense-Emplacement-HPVcannon,PillBox4,130
 R-Defense-GuardTower-ATMiss,GuardTower5,123
 R-Defense-GuardTower-Rail1,GuardTower1,119
 R-Defense-HvyArtMissile,Emplacement-Howitzer105,134
+R-Defense-HvyArtMissile,Emplacement-Rocket06-IDF,222
+R-Defense-HvyArtMissile,Emplacement-MortarPit02,282
 R-Defense-HvyFlamer,PillBox5,158
 R-Defense-HvyMor,Emplacement-MortarPit01,142
-R-Defense-MdArtMissile,Emplacement-Rocket06-IDF,222
 R-Defense-MdArtMissile,Emplacement-MRL-pit,263
-R-Defense-MdArtMissile,Emplacement-MortarPit02,282
 R-Defense-Pillbox-RotMG,PillBox1,126
 R-Defense-PlasmiteFlamer,WallTower-Projector,184
 R-Defense-PlasmiteFlamer,Tower-Projector,183
