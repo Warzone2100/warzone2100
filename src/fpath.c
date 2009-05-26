@@ -35,7 +35,7 @@
 #include "geometry.h"
 #include "hci.h"
 #include "order.h"
-
+#include "multiplay.h"
 #include "astar.h"
 #include "action.h"
 #include "formation.h"
@@ -238,15 +238,12 @@ void fpathUpdate(void)
 
 
 // Check if the map tile at a location blocks a droid
-BOOL fpathBlockingTile(SDWORD x, SDWORD y, PROPULSION_TYPE propulsion)
+BOOL fpathBaseBlockingTile(SDWORD x, SDWORD y, PROPULSION_TYPE propulsion, int player, FPATH_MOVETYPE moveType)
 {
 	MAPTILE	*psTile;
 
 	/* All tiles outside of the map and on map border are blocking. */
-	if (x < 1
-	 || y < 1
-	 || x > mapWidth - 1
-	 || y > mapHeight - 1)
+	if (x < 1 || y < 1 || x > mapWidth - 1 || y > mapHeight - 1)
 	{
 		return true;
 	}
@@ -274,7 +271,22 @@ BOOL fpathBlockingTile(SDWORD x, SDWORD y, PROPULSION_TYPE propulsion)
 		return true;
 	}
 
-	if (psTile->tileInfoBits & BITS_FPATHBLOCK || (TileIsOccupied(psTile) && !TileIsNotBlocking(psTile))
+	if (TileIsOccupied(psTile) && !TileIsNotBlocking(psTile))
+	{
+		// If the type of movement order is simple movement (FMT_MOVE) then we treat all genuine obstacles as
+		// impassable. However, if it is an attack type order, we assume we can blast our way through enemy buildings.
+		if (moveType == FMT_MOVE)
+		{
+			return true;
+		}
+		else if (moveType == FMT_ATTACK
+		         && psTile->psObject->type == OBJ_STRUCTURE && aiCheckAlliances(psTile->psObject->player, player))
+		{
+			return true;
+		}
+	}
+
+	if (psTile->tileInfoBits & BITS_FPATHBLOCK 
 	    || terrainType(psTile) == TER_CLIFFFACE
 	    || (terrainType(psTile) == TER_WATER && propulsion != PROPULSION_TYPE_HOVER && propulsion != PROPULSION_TYPE_PROPELLOR))
 	{
@@ -282,6 +294,12 @@ BOOL fpathBlockingTile(SDWORD x, SDWORD y, PROPULSION_TYPE propulsion)
 	}
 
 	return false;
+}
+
+// Check if the map tile at a location blocks a droid
+BOOL fpathBlockingTile(SDWORD x, SDWORD y, PROPULSION_TYPE propulsion)
+{
+	return fpathBaseBlockingTile(x, y, propulsion, MAX_PLAYERS, FMT_MOVE);
 }
 
 
@@ -384,11 +402,11 @@ void fpathRemoveDroidData(int id)
 }
 
 
-static FPATH_RETVAL fpathRoute(MOVE_CONTROL *psMove, int id, int startX, int startY, int tX, int tY, PROPULSION_TYPE propulsionType, DROID_TYPE droidType)
+static FPATH_RETVAL fpathRoute(MOVE_CONTROL *psMove, int id, int startX, int startY, int tX, int tY, PROPULSION_TYPE propulsionType, DROID_TYPE droidType, FPATH_MOVETYPE moveType, int owner)
 {
 	PATHJOB		*psJob = NULL;
 
-	objTrace(id, "called(,%d,%d,%d,%d,%d,,)", id, startX, startY, tX, tY);
+	objTrace(id, "called(*,id=%d,sx=%d,sy=%d,ex=%d,ey=%d,prop=%d,type=%d,move=%d,owner=%d)", id, startX, startY, tX, tY, (int)propulsionType, (int)droidType, (int)moveType, owner);
 
 	// don't have to do anything if already there
 	if (startX == tX && startY == tY)
@@ -466,6 +484,8 @@ static FPATH_RETVAL fpathRoute(MOVE_CONTROL *psMove, int id, int startX, int sta
 	psJob->next = NULL;
 	psJob->droidType = droidType;
 	psJob->propulsion = propulsionType;
+	psJob->moveType = moveType;
+	psJob->owner = owner;
 
 	// Clear any results or jobs waiting already. It is a vital assumption that there is only one
 	// job or result for each droid in the system at any time.
@@ -501,13 +521,16 @@ static FPATH_RETVAL fpathRoute(MOVE_CONTROL *psMove, int id, int startX, int sta
 FPATH_RETVAL fpathDroidRoute(DROID* psDroid, SDWORD tX, SDWORD tY)
 {
 	PROPULSION_STATS	*psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
+	FPATH_MOVETYPE		moveType = isHumanPlayer(psDroid->player) ? FMT_MOVE : FMT_ATTACK;
 
-	ASSERT(psPropStats != NULL, "invalid propulsion stats pointer");
-	ASSERT(psDroid->type == OBJ_DROID, "We got passed an object that isn't a DROID!");
-	if (psDroid->type != OBJ_DROID || !psPropStats)
+	ASSERT_OR_RETURN(FPR_FAILED, psPropStats != NULL, "invalid propulsion stats pointer");
+	ASSERT_OR_RETURN(FPR_FAILED, psDroid->type == OBJ_DROID, "We got passed an object that isn't a DROID!");
+
+	if (psDroid->asWeaps[0].nStat == 0)
 	{
-		return FPR_FAILED;
+		moveType = FMT_MOVE;	// cannot blast its way through walls, so don't even try
 	}
+
 	// check whether the end point of the route
 	// is a blocking tile and find an alternative if it is
 	if (psDroid->sMove.Status != MOVEWAITROUTE && fpathBlockingTile(map_coord(tX), map_coord(tY), psPropStats->propulsionType))
@@ -554,7 +577,7 @@ FPATH_RETVAL fpathDroidRoute(DROID* psDroid, SDWORD tX, SDWORD tY)
 			objTrace(psDroid->id, "Workaround found at (%d, %d)", map_coord(tX), map_coord(tY));
 		}
 	}
-	return fpathRoute(&psDroid->sMove, psDroid->id, psDroid->pos.x, psDroid->pos.y, tX, tY, psPropStats->propulsionType, psDroid->droidType);
+	return fpathRoute(&psDroid->sMove, psDroid->id, psDroid->pos.x, psDroid->pos.y, tX, tY, psPropStats->propulsionType, psDroid->droidType, moveType, psDroid->player);
 }
 
 // Run only from path thread
@@ -590,6 +613,10 @@ static void fpathExecute(PATHJOB *psJob, PATHRESULT *psResult)
 	}
 }
 
+static FPATH_RETVAL fpathSimpleRoute(MOVE_CONTROL *psMove, int id, int startX, int startY, int tX, int tY)
+{
+	return fpathRoute(psMove, id, startX, startY, tX, tY, PROPULSION_TYPE_WHEELED, DROID_WEAPON, FMT_MOVE, 0);
+}
 
 void fpathTest(int x, int y, int x2, int y2)
 {
@@ -617,7 +644,7 @@ void fpathTest(int x, int y, int x2, int y2)
 
 	/* Test one path */
 	sMove.Status = MOVEINACTIVE;
-	r = fpathRoute(&sMove, 1, x, y, x2, y2, PROPULSION_TYPE_WHEELED, DROID_WEAPON);
+	r = fpathSimpleRoute(&sMove, 1, x, y, x2, y2);
 	assert(r == FPR_WAIT);
 	sMove.Status = MOVEWAITROUTE;
 	assert(fpathJobQueueLength() == 1 || fpathResultQueueLength() == 1);
@@ -626,7 +653,7 @@ void fpathTest(int x, int y, int x2, int y2)
 	while (fpathResultQueueLength() == 0) SDL_Delay(10);
 	assert(fpathJobQueueLength() == 0);
 	assert(fpathResultQueueLength() == 1);
-	r = fpathRoute(&sMove, 1, x, y, x2, y2, PROPULSION_TYPE_WHEELED, DROID_WEAPON);
+	r = fpathSimpleRoute(&sMove, 1, x, y, x2, y2);
 	assert(r == FPR_OK);
 	assert(sMove.numPoints > 0 && sMove.asPath);
 	assert(sMove.asPath[sMove.numPoints - 1].x == map_coord(x2));
@@ -637,7 +664,7 @@ void fpathTest(int x, int y, int x2, int y2)
 	sMove.Status = MOVEINACTIVE;
 	for (i = 1; i <= 100; i++)
 	{
-		r = fpathRoute(&sMove, i, x, y, x2, y2, PROPULSION_TYPE_WHEELED, DROID_WEAPON);
+		r = fpathSimpleRoute(&sMove, i, x, y, x2, y2);
 		assert(r == FPR_WAIT);
 	}
 	while (fpathResultQueueLength() != 100) SDL_Delay(10);
@@ -645,7 +672,7 @@ void fpathTest(int x, int y, int x2, int y2)
 	for (i = 1; i <= 100; i++)
 	{
 		sMove.Status = MOVEWAITROUTE;
-		r = fpathRoute(&sMove, i, x, y, x2, y2, PROPULSION_TYPE_WHEELED, DROID_WEAPON);
+		r = fpathSimpleRoute(&sMove, i, x, y, x2, y2);
 		assert(r == FPR_OK);
 		assert(sMove.numPoints > 0 && sMove.asPath);
 		assert(sMove.asPath[sMove.numPoints - 1].x == map_coord(x2));
@@ -657,7 +684,7 @@ void fpathTest(int x, int y, int x2, int y2)
 	sMove.Status = MOVEINACTIVE;
 	for (i = 1; i <= 100; i++)
 	{
-		r = fpathRoute(&sMove, i, x, y, x2, y2, PROPULSION_TYPE_WHEELED, DROID_WEAPON);
+		r = fpathSimpleRoute(&sMove, i, x, y, x2, y2);
 		assert(r == FPR_WAIT);
 	}
 	for (i = 1; i <= 100; i++)
