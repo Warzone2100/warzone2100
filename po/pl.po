@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2009-05-26 17:37+0200\n"
+"POT-Creation-Date: 2009-05-26 18:12+0200\n"
 "PO-Revision-Date: 2009-02-01 20:57+0100\n"
 "Last-Translator: Makary155 <makary155@wp.pl>\n"
 "Language-Team: Warzone PL Team <makary155@wp.pl>\n"
@@ -12016,7 +12016,7 @@ msgid "You were kicked!"
 msgstr ""
 
 #: src/multiint.c:763
-msgid "Wrong Game Verion!"
+msgid "Wrong Game Version!"
 msgstr ""
 
 #: src/multiint.c:766
