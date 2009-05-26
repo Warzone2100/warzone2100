@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2009-05-16 14:29+0200\n"
+"POT-Creation-Date: 2009-05-26 17:16+0200\n"
 "PO-Revision-Date: 2008-05-09 16:08+0000\n"
 "Last-Translator: carson <Unknown>\n"
 "Language-Team: Dansk <da@li.org>\n"
@@ -10457,7 +10457,7 @@ msgstr "Spiller"
 
 #: src/design.c:453
 #: src/design.c:474
-#: src/design.c:3553
+#: src/design.c:3513
 msgid "New Vehicle"
 msgstr "Nyt design"
 
@@ -10496,18 +10496,18 @@ msgstr "Hestekrafter"
 
 #: src/design.c:725
 #: src/design.c:780
-#: src/design.c:1591
-#: src/design.c:1632
+#: src/design.c:1581
+#: src/design.c:1618
+#: src/design.c:1639
 #: src/design.c:1657
-#: src/design.c:1675
-#: src/design.c:1700
-#: src/design.c:1718
-#: src/design.c:1760
-#: src/design.c:1795
-#: src/design.c:1931
-#: src/design.c:1948
-#: src/design.c:1983
-#: src/design.c:2019
+#: src/design.c:1678
+#: src/design.c:1696
+#: src/design.c:1734
+#: src/design.c:1769
+#: src/design.c:1904
+#: src/design.c:1921
+#: src/design.c:1956
+#: src/design.c:1992
 msgid "Weight"
 msgstr "Vægt"
 
@@ -10527,74 +10527,74 @@ msgstr "Total pansring"
 msgid "Power Usage"
 msgstr "Energi forbrug"
 
-#: src/design.c:1345
+#: src/design.c:1344
 msgid "Transporter"
 msgstr "Transportskib"
 
-#: src/design.c:1367
+#: src/design.c:1366
 msgid "Hydra "
 msgstr ""
 
-#: src/design.c:1573
+#: src/design.c:1563
 msgid "Sensor Range"
 msgstr "Rækkevide"
 
 # This is always 1000 ingame... any reason to have this at all? is it ever used?
-#: src/design.c:1582
+#: src/design.c:1572
 msgid "Sensor Power"
 msgstr "Watt"
 
-#: src/design.c:1623
+#: src/design.c:1609
 msgid "ECM Power"
 msgstr "ECM Effekt"
 
-#: src/design.c:1649
-#: src/design.c:1666
-#: src/design.c:1692
-#: src/design.c:1709
+#: src/design.c:1631
+#: src/design.c:1648
+#: src/design.c:1670
+#: src/design.c:1687
 msgid "Build Points"
 msgstr "Effektivitet"
 
-#: src/design.c:1736
-#: src/design.c:1768
+#: src/design.c:1710
+#: src/design.c:1742
 msgid "Range"
 msgstr "Rækkevide"
 
-#: src/design.c:1744
-#: src/design.c:1777
+#: src/design.c:1718
+#: src/design.c:1751
 msgid "Damage"
 msgstr "Skade"
 
-#: src/design.c:1752
-#: src/design.c:1786
+#: src/design.c:1726
+#: src/design.c:1760
 msgid "Rate-of-Fire"
 msgstr "Kadance"
 
-#: src/design.c:1923
-#: src/design.c:1939
+#: src/design.c:1896
+#: src/design.c:1912
 msgid "Air Speed"
 msgstr "Lufthastighed"
 
-#: src/design.c:1959
-#: src/design.c:1992
+#: src/design.c:1932
+#: src/design.c:1965
 msgid "Road Speed"
 msgstr "Vejhastighed"
 
-#: src/design.c:1967
-#: src/design.c:2001
+#: src/design.c:1940
+#: src/design.c:1974
 msgid "Off-Road Speed"
 msgstr "Hastighed i terræn"
 
-#: src/design.c:1975
-#: src/design.c:2010
+#: src/design.c:1948
+#: src/design.c:1983
 msgid "Water Speed"
 msgstr "Vandhastighed"
 
-#: src/design.c:2144
+#: src/design.c:2117
 msgid "Weapons"
 msgstr "Våben"
 
-#: src/design.c:2168
+#: src/design.c:2141
 msgid "Systems"
 msgstr "Systemer"
 
@@ -10626,72 +10626,72 @@ msgstr "Truck beordret til at bygge oliebrøn."
 msgid "Unit Lost!"
 msgstr "Enhed tabt!"
 
-#: src/droid.c:1634
+#: src/droid.c:1585
 msgid "Structure Restored"
 msgstr "Bygning restoreret"
 
-#: src/droid.c:3415
+#: src/droid.c:3348
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
 msgstr[0] "Gruppe %u valgt - %u Enheder"
 msgstr[1] "Gruppe %u valgt - %u Enheder"
 
-#: src/droid.c:3428
+#: src/droid.c:3361
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
 msgstr[0] "%u Enheder tildelt gruppe %u"
 msgstr[1] "%u Enheder tildelt gruppe %u"
 
-#: src/droid.c:3441
+#: src/droid.c:3374
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
 msgstr[0] "Fokuseret på gruppe %u - %u Enheder"
 msgstr[1] "Fokuseret på gruppe %u - %u Enheder"
 
-#: src/droid.c:3445
+#: src/droid.c:3378
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] "Korigerede med gruppe %u - %u Enheder"
 msgstr[1] "Korigerede med gruppe %u - %u Enheder"
 
-#: src/droid.c:3664
+#: src/droid.c:3597
 msgid "Rookie"
 msgstr "Utrænet"
 
-#: src/droid.c:3665
+#: src/droid.c:3598
 msgctxt "rank"
 msgid "Green"
 msgstr "Grøn"
 
-#: src/droid.c:3666
+#: src/droid.c:3599
 msgid "Trained"
 msgstr "Trænet"
 
-#: src/droid.c:3667
+#: src/droid.c:3600
 msgid "Regular"
 msgstr "Regulær"
 
-#: src/droid.c:3668
+#: src/droid.c:3601
 msgid "Professional"
 msgstr "Professionel"
 
-#: src/droid.c:3669
+#: src/droid.c:3602
 msgid "Veteran"
 msgstr "Veteran"
 
-#: src/droid.c:3670
+#: src/droid.c:3603
 msgid "Elite"
 msgstr "Elite"
 
-#: src/droid.c:3671
+#: src/droid.c:3604
 msgid "Special"
 msgstr "Speciel"
 
-#: src/droid.c:3672
+#: src/droid.c:3605
 msgid "Hero"
 msgstr "Helt"
 
@@ -10771,7 +10771,7 @@ msgstr "SOLO SPILLER"
 #: src/frontend.c:450
 #: src/ingameop.c:394
 #: src/mission.c:2833
-#: src/mission.c:2934
+#: src/mission.c:2938
 msgid "Load Saved Game"
 msgstr "Indlæs gemt spil"
 
@@ -11019,13 +11019,13 @@ msgid "Unit Colour"
 msgstr "Holdfarve"
 
 #: src/hci.c:1009
-#: src/hci.c:3839
-#: src/hci.c:3990
-#: src/hci.c:4443
-#: src/hci.c:5647
+#: src/hci.c:3843
+#: src/hci.c:3994
+#: src/hci.c:4447
+#: src/hci.c:5651
 #: src/intelmap.c:530
 #: src/intorder.c:661
-#: src/loadsave.c:262
+#: src/loadsave.c:265
 #: src/multimenu.c:477
 #: src/multimenu.c:1336
 #: src/transporter.c:286
@@ -11035,141 +11035,146 @@ msgid "Close"
 msgstr "Luk"
 
 #: src/hci.c:1355
-#: src/hci.c:1700
-#: src/loop.c:513
-#: src/loop.c:525
-#: src/mission.c:2902
-msgid "GAME SAVED!"
+#, fuzzy
+msgid "MAP SAVED!"
 msgstr "SPIL GEMT!"
 
-#: src/hci.c:2104
+#: src/hci.c:1702
+#: src/loop.c:515
+#: src/loop.c:531
+#: src/mission.c:2904
+#, fuzzy
+msgid "GAME SAVED :"
+msgstr "SPIL GEMT!"
+
+#: src/hci.c:2108
 msgid "Failed to create building"
 msgstr ""
 
-#: src/hci.c:2127
+#: src/hci.c:2131
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new structure: %s."
 msgstr ""
 
-#: src/hci.c:2142
+#: src/hci.c:2146
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new feature: %s."
 msgstr ""
 
-#: src/hci.c:2163
+#: src/hci.c:2167
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new droid: %s."
 msgstr ""
 
-#: src/hci.c:3741
+#: src/hci.c:3745
 msgid "Commanders (F6)"
 msgstr "Kommandører (F6)"
 
-#: src/hci.c:3757
+#: src/hci.c:3761
 #, fuzzy
 msgid "Intelligence Display (F5)"
 msgstr "Kommando Pult"
 
-#: src/hci.c:3773
+#: src/hci.c:3777
 #, fuzzy
 msgid "Manufacture (F1)"
 msgstr "Fabrikering"
 
-#: src/hci.c:3789
+#: src/hci.c:3793
 msgid "Design (F4)"
 msgstr "Design (F4)"
 
-#: src/hci.c:3805
+#: src/hci.c:3809
 msgid "Research (F2)"
 msgstr "Forskning (F2)"
 
-#: src/hci.c:3821
+#: src/hci.c:3825
 msgid "Build (F3)"
 msgstr "Konstruktion (F3)"
 
-#: src/hci.c:3901
+#: src/hci.c:3905
 #: src/multiint.c:1187
 #: src/multiint.c:1191
 msgid "Power"
 msgstr "Kraft"
 
-#: src/hci.c:4085
+#: src/hci.c:4089
 #, fuzzy
 msgid "Tile"
 msgstr "fil"
 
-#: src/hci.c:4086
+#: src/hci.c:4090
 #, fuzzy
 msgid "Place tiles on map"
 msgstr "Tabte bygninger"
 
-#: src/hci.c:4095
+#: src/hci.c:4099
 msgid "Unit"
 msgstr "Enhed"
 
-#: src/hci.c:4096
+#: src/hci.c:4100
 #, fuzzy
 msgid "Place Unit on map"
 msgstr "Tabte bygninger"
 
-#: src/hci.c:4104
+#: src/hci.c:4108
 msgid "Struct"
 msgstr ""
 
-#: src/hci.c:4105
+#: src/hci.c:4109
 #, fuzzy
 msgid "Place Structures on map"
 msgstr "Tabte bygninger"
 
-#: src/hci.c:4113
+#: src/hci.c:4117
 msgid "Feat"
 msgstr ""
 
-#: src/hci.c:4114
+#: src/hci.c:4118
 #, fuzzy
 msgid "Place Features on map"
 msgstr "Tabte bygninger"
 
-#: src/hci.c:4125
+#: src/hci.c:4129
 #, fuzzy
 msgid "Pause or unpause the game"
 msgstr "Værten har forladt spillet"
 
-#: src/hci.c:4139
+#: src/hci.c:4143
 msgid "Align height of all map objects"
 msgstr ""
 
-#: src/hci.c:4164
+#: src/hci.c:4168
 #: src/ingameop.c:121
 #: src/ingameop.c:240
 #: src/ingameop.c:245
 msgid "Quit"
 msgstr "Afslut"
 
-#: src/hci.c:4165
+#: src/hci.c:4169
 msgid "Exit Game"
 msgstr "Forlad spil"
 
-#: src/hci.c:4528
+#: src/hci.c:4532
 #: src/intdisplay.c:212
 #: src/intdisplay.c:255
 #: src/intdisplay.c:306
 msgid "Progress Bar"
 msgstr "Statuslinje"
 
-#: src/hci.c:5562
+#: src/hci.c:5566
 msgid "Factory Delivery Point"
 msgstr "Leveringspunkt"
 
-#: src/hci.c:5581
+#: src/hci.c:5585
 msgid "Loop Production"
 msgstr "Gentag produktion"
 
-#: src/hci.c:5672
+#: src/hci.c:5676
 msgid "Tab Scroll left"
 msgstr ""
 
-#: src/hci.c:5689
+#: src/hci.c:5693
 msgid "Tab Scroll right"
 msgstr ""
 
@@ -11182,7 +11187,7 @@ msgstr "Genoptag spil"
 #: src/ingameop.c:259
 #: src/ingameop.c:398
 #: src/mission.c:2823
-#: src/mission.c:2937
+#: src/mission.c:2941
 msgid "Save Game"
 msgstr "Gem spil"
 
@@ -11966,6 +11971,12 @@ msgstr "Find næste cyborg fabrik"
 msgid "Toggle reopening the build menu"
 msgstr "Slå genåbning af konstruktionsmenuen til/fra"
 
+#: src/loop.c:522
+#: src/loop.c:538
+#, fuzzy
+msgid "Could not save game!"
+msgstr "Hent et gemt spil"
+
 #: src/mission.c:2371
 msgid "Load Transport"
 msgstr "Fyld transportskib"
@@ -11990,7 +12001,7 @@ msgstr "MISSIONEN FEJLEDE"
 
 #: src/mission.c:2802
 #: src/mission.c:2839
-#: src/mission.c:2953
+#: src/mission.c:2957
 msgid "Quit To Main Menu"
 msgstr "Tilbage til hovedmenu"
 
@@ -12362,48 +12373,48 @@ msgstr "Forær enheder"
 msgid "Give Power To Player"
 msgstr "Forær energi"
 
-#: src/multiplay.c:1887
+#: src/multiplay.c:1894
 msgid "Green"
 msgstr "Grøn"
 
-#: src/multiplay.c:1888
+#: src/multiplay.c:1895
 msgid "Orange"
 msgstr "Orange"
 
-#: src/multiplay.c:1889
+#: src/multiplay.c:1896
 msgid "Grey"
 msgstr "Grå"
 
-#: src/multiplay.c:1890
+#: src/multiplay.c:1897
 msgid "Black"
 msgstr "Sort"
 
-#: src/multiplay.c:1891
+#: src/multiplay.c:1898
 msgid "Red"
 msgstr "Rød"
 
-#: src/multiplay.c:1892
+#: src/multiplay.c:1899
 msgid "Blue"
 msgstr "Blå"
 
-#: src/multiplay.c:1893
+#: src/multiplay.c:1900
 msgid "Pink"
 msgstr "Lyserød"
 
-#: src/multiplay.c:1894
+#: src/multiplay.c:1901
 msgid "Cyan"
 msgstr "Turkis"
 
-#: src/research.c:1845
+#: src/research.c:1844
 #, c-format
 msgid "Research completed: %s"
 msgstr "Forskning fuldendt: %s"
 
-#: src/research.c:1850
+#: src/research.c:1849
 msgid "Research Completed"
 msgstr "Forskning fuldendt"
 
-#: src/research.c:2658
+#: src/research.c:2657
 msgid "Research Award"
 msgstr "Forskningsgevinst"
 
@@ -12567,59 +12578,59 @@ msgstr "Kan ikke finde nogle rekonniseringsenheder!"
 msgid "Unable to locate any Commanders!"
 msgstr "Kan ikke finde nogle kommandører!"
 
-#: src/structure.c:2711
+#: src/structure.c:2693
 msgid "Command Control Limit Reached - Production Halted"
 msgstr "Kommandobegrænsning nået - indstiller produktion"
 
-#: src/structure.c:5848
-#: src/structure.c:5873
+#: src/structure.c:5822
+#: src/structure.c:5847
 #, c-format
 msgid "%s - %u Unit assigned"
 msgid_plural "%s - %u Units assigned"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/structure.c:5923
+#: src/structure.c:5897
 #, c-format
 msgid "%s - Connected %u of %u"
 msgstr "%s - Forbundet %u af %u"
 
-#: src/structure.c:5937
+#: src/structure.c:5911
 #, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - Skade %3.0f%%"
 
-#: src/structure.c:6057
-#: src/structure.c:6106
+#: src/structure.c:6032
+#: src/structure.c:6081
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - Elektronisk beskadiget"
 
-#: src/structure.c:6341
+#: src/structure.c:6316
 msgid "Electronic Reward - Visibility Report"
 msgstr "Elektronisk gevinst - Rekonniseringsrapport"
 
-#: src/structure.c:6381
+#: src/structure.c:6356
 msgid "Factory Reward - Propulsion"
 msgstr "Fabriksgevinst - Fremdrift"
 
-#: src/structure.c:6405
+#: src/structure.c:6380
 msgid "Factory Reward - Body"
 msgstr "Fabriksgevinst - Skrog"
 
-#: src/structure.c:6429
+#: src/structure.c:6404
 msgid "Factory Reward - Weapon"
 msgstr "Frabriskgevinst - Våben"
 
-#: src/structure.c:6438
+#: src/structure.c:6413
 msgid "Factory Reward - Nothing"
 msgstr "Fabriksgevinst - Ingen"
 
-#: src/structure.c:6466
+#: src/structure.c:6441
 msgid "Repair Facility Award - Repair"
 msgstr "Reperationsgevinst - Reperation"
 
-#: src/structure.c:6473
+#: src/structure.c:6448
 msgid "Repair Facility Award - Nothing"
 msgstr "Reperationsgevinst - Ingen"
 
