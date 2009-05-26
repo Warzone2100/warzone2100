@@ -477,6 +477,10 @@ Section "Uninstall"
 
   Delete "$INSTDIR\base.wz"
   Delete "$INSTDIR\mp.wz"
+  Delete "$INSTDIR\sequences.wz"
+
+  Delete "$INSTDIR\stderr.txt"
+  Delete "$INSTDIR\stdout.txt"
 
   Delete "$INSTDIR\Readme.en.txt"
   Delete "$INSTDIR\Readme.de.txt"
@@ -491,6 +495,7 @@ Section "Uninstall"
   Delete "$INSTDIR\music\track1.ogg"
   Delete "$INSTDIR\music\track2.ogg"
   Delete "$INSTDIR\music\music.wpl"
+  RMDir "$INSTDIR\music"
 
   Delete "$INSTDIR\uninstall.exe"
 
@@ -501,6 +506,8 @@ Section "Uninstall"
   Delete "$INSTDIR\fonts\fonts.conf"
   Delete "$INSTDIR\fonts\DejaVuSansMono.ttf"
   Delete "$INSTDIR\fonts\DejaVuSansMono-Bold.ttf"
+  Delete "$INSTDIR\fonts\DejaVuSans.ttf"
+  Delete "$INSTDIR\fonts\DejaVuSans-Bold.ttf"
   RMDir "$INSTDIR\fonts"
 
   Delete "$INSTDIR\mods\global\autoload\music_1.0.AUTHORS.txt"
