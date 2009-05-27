@@ -1,5 +1,6 @@
 2009-06-01: Version 2.2
  * General:
+   * New: Add a new translation:  zh_TW.po  by chtsau (r7561, ticket:239)
    * Change: Allow up to 36 savegame 'slots' (r7535)
    * Change: add 'mod/music' directory to be use for custom music. (r7557)
    * Fix: set the volume of the FMV based on the user's preferences (r7489, ticket:526)
