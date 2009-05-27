@@ -1,5 +1,7 @@
 2009-06-01: Version 2.2
  * General:
+   * Change: Allow up to 36 savegame 'slots' (r7535)
+   * Change: add 'mod/music' directory to be use for custom music. (r7557)
    * Fix: set the volume of the FMV based on the user's preferences (r7489, ticket:526)
    * Fix: Check if the unit has weapons, before trying to see what weapons they have. (r7488, ticket:523)
    * Change: remove 'autoload' handling.  (r7474)
@@ -18,7 +20,8 @@
    * Fix: Fix issue with radar / mini-map. (r7458, ticket:333)
    * Fix: Fix issue with radar / mini-map drawing objects outside its scope. (r7441)
    * Change: Better map previews (patch by Florian Schanda, color scheme by Zarel). (r7434)
-
+ * Network:
+   * Change: Increase timeout delay to 2500ms for dial-up modem users. (r7556)
 
 2009-05-10: Version 2.2_rc1
  * General:
