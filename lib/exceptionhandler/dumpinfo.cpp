@@ -193,6 +193,10 @@ static std::string getProgramPath(const char* programCommand)
 		std::string::size_type eol = programPath.find('\n');
 		if (eol != std::string::npos)
 			programPath.erase(eol); 
+		// Strip any NUL chars
+		std::string::size_type nul = programPath.find('\0');
+		if (nul != std::string::npos)
+			programPath.erase(nul); 
 		debug(LOG_WZ, "Found us at %s", programPath.c_str());
 	}
 	else

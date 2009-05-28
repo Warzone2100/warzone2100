@@ -625,7 +625,7 @@ BOOL intInitialise(void)
 	if (psWScreen == NULL)
 	{
 		debug(LOG_ERROR, "intInitialise: Couldn't create widget screen");
-		abort();
+
 		return false;
 	}
 
@@ -636,14 +636,14 @@ BOOL intInitialise(void)
 		if (!intAddReticule())
 		{
 			debug( LOG_ERROR, "intInitialise: Couldn't create reticule widgets (Out of memory ?)" );
-			abort();
+
 			return false;
 		}
 
 		if (!intAddPower())
 		{
 			debug( LOG_ERROR, "intInitialise: Couldn't create power Bar widget(Out of memory ?)" );
-			abort();
+
 			return false;
 		}
 	}
@@ -1352,7 +1352,7 @@ static void intProcessOptions(UDWORD id)
 			strcpy(saveName, "maps/builtin-test.gam");
 			if (saveGame(saveName, GTYPE_SAVE_START))
 			{
-				addConsoleMessage(_("GAME SAVED!"), LEFT_JUSTIFY,SYSTEM_MESSAGE);
+				addConsoleMessage(_("MAP SAVED!"), LEFT_JUSTIFY,SYSTEM_MESSAGE);
 				intRemoveOptions();
 				intMode = INT_NORMAL;
 			}
@@ -1697,7 +1697,11 @@ INT_RETVAL intRunWidgets(void)
 				{
 					if (saveGame(sRequestResult, GTYPE_SAVE_START))
 					{
-						addConsoleMessage(_("GAME SAVED!"), LEFT_JUSTIFY,SYSTEM_MESSAGE);
+						char msg[256] = {'\0'};
+
+						sstrcpy(msg, _("GAME SAVED :"));
+						sstrcat(msg, saveGameName);
+						addConsoleMessage(msg, LEFT_JUSTIFY, NOTIFY_MESSAGE);
 
 						if(widgGetFromID(psWScreen,IDMISSIONRES_SAVE))
 						{

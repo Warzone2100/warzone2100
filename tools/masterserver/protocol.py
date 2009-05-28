@@ -261,10 +261,12 @@ class BinaryProtocol20(BaseProtocol):
 				yield game
 
 	def encodeGameID(self, gameId, out = str()):
-		assert False, "Not supported by this protocol version"
+		"""Unsupported by this protocol version."""
+		raise NotImplementedError
 
 	def sendStatusMessage(self, host, status, message, out = str()):
-		assert False, "Not supported by this protocol version"
+		"""Unsupported by this protocol version."""
+		raise NotImplementedError
 
 class BinaryProtocol21(BinaryProtocol20):
 	lobbyPort = BaseProtocol.lobbyPort['2.1']

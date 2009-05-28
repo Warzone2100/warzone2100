@@ -1109,12 +1109,19 @@ BOOL sendTextMessage(const char *pStr, BOOL all)
 	}
 
 	//This is for local display
-	for(i = 0; NetPlay.players[i].dpid != NetPlay.dpidPlayer; i++);	//findplayer
-	sstrcat(display, NetPlay.players[i].name);		// name
-	sstrcat(display, ": ");						// seperator
-	sstrcat(display, pStr);						// add message
+	for (i = 0; i < ARRAY_SIZE(NetPlay.players); ++i)
+	{
+		if (NetPlay.players[i].dpid == NetPlay.dpidPlayer)
+		{
+			sstrcat(display, NetPlay.players[i].name);		// name
+			sstrcat(display, ": ");						// seperator
+			sstrcat(display, pStr);						// add message
 
-	addConsoleMessage(display, DEFAULT_JUSTIFY, selectedPlayer);	// display
+			addConsoleMessage(display, DEFAULT_JUSTIFY, selectedPlayer);	// display
+			break;
+		}
+	}
+
 
 	return true;
 }

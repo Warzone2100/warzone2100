@@ -192,7 +192,8 @@ static void gridCalcCoverage(BASE_OBJECT *psObj, SDWORD objx, SDWORD objy, COVER
 // add an object to the grid system
 void gridAddObject(BASE_OBJECT *psObj)
 {
-	ASSERT(!isDead(psObj), "Added a dead object to the map grid!");
+	ASSERT_OR_RETURN(, psObj != NULL, "Attempted to add a NULL pointer");
+	ASSERT_OR_RETURN(, !isDead(psObj), "Attempted to add dead object %s(%d) to the map grid!", objInfo(psObj), (int)psObj->id);
 	gridCalcCoverage(psObj, (SDWORD)psObj->pos.x, (SDWORD)psObj->pos.y, GRID_ADDOBJECT);
 }
 
@@ -232,7 +233,7 @@ void gridRemoveObject(BASE_OBJECT *psObj)
 					{
 						if (psCurr->apsObjects[i] == psObj)
 						{
-							ASSERT(false, "Grid out of sync at (%u,%u):%u removing %s", x, y, i, objInfo(psObj));
+							ASSERT(false, "Grid out of sync at (%u,%u):%u removing %s(%d)", x, y, i, objInfo(psObj), (int)psObj->id);
 							psCurr->apsObjects[i] = NULL;
 						}
 					}
@@ -248,12 +249,12 @@ void gridRemoveObject(BASE_OBJECT *psObj)
 // could affect a location (x,y in world coords)
 void gridStartIterate(SDWORD x, SDWORD y)
 {
-	ASSERT(x >= 0 && x < gridWidth * GRID_UNITS && y >= 0 && y < gridHeight * GRID_UNITS, "coords(%d, %d) off grid", x, y);
+	const int nx = x / GRID_UNITS;
+	const int ny = y / GRID_UNITS;
 
-	x = x / GRID_UNITS;
-	y = y / GRID_UNITS;
+	ASSERT_OR_RETURN(, nx >= 0 && nx < gridWidth && ny >= 0 && ny < gridHeight, "Coordinates(%d, %d) off grid(%u, %u)", nx, ny, gridWidth, gridHeight);
 
-	psIterateGrid = apsMapGrid[GridIndex(x,y)];
+	psIterateGrid = apsMapGrid[GridIndex(nx, ny)];
 	iterateEntry = 0;
 }
 

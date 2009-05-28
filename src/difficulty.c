@@ -79,7 +79,9 @@ void	setDifficultyLevel(DIFFICULTY_LEVEL lev)
 		break;
 	default:
 		debug( LOG_ERROR, "Invalid difficulty level selected - forcing NORMAL" );
-		abort();
+		fDifPlayerModifier = 100.f / 100.f;
+		fDifEnemyModifier = 100.f / 100.f;
+		lev = DL_NORMAL;
 		break;
 	}
 

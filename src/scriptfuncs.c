@@ -1829,9 +1829,12 @@ WZ_DECL_UNUSED static BOOL scrSetScrollParams(void)
 
 	// When the scroll limits change midgame - need to redo the lighting
 	initLighting(prevMinX < scrollMinX ? prevMinX : scrollMinX,
-	             prevMinY < scrollMinY ? prevMinY : scrollMinY,
-	             prevMaxX < scrollMaxX ? prevMaxX : scrollMaxX,
-	             prevMaxY < scrollMaxY ? prevMaxY : scrollMaxY);
+				 prevMinY < scrollMinY ? prevMinY : scrollMinY,
+				 prevMaxX < scrollMaxX ? prevMaxX : scrollMaxX,
+				 prevMaxY < scrollMaxY ? prevMaxY : scrollMaxY);
+
+	// need to reset radar to take into account of new size
+	resizeRadar();
 
 	return true;
 }
@@ -1862,7 +1865,10 @@ WZ_DECL_UNUSED static BOOL scrSetScrollMinX(void)
 	initLighting(prevMinX < scrollMinX ? prevMinX : scrollMinX,
 		scrollMinY, scrollMaxX, scrollMaxY);
 
-    return true;
+	// need to reset radar to take into account of new size
+	resizeRadar();
+
+	return true;
 }
 
 // -----------------------------------------------------------------------------------------
@@ -1892,7 +1898,10 @@ WZ_DECL_UNUSED static BOOL scrSetScrollMinY(void)
 		prevMinY < scrollMinY ? prevMinY : scrollMinY,
 		scrollMaxX, scrollMaxY);
 
-    return true;
+	// need to reset radar to take into account of new size
+	resizeRadar();
+
+	return true;
 }
 
 // -----------------------------------------------------------------------------------------
@@ -1922,7 +1931,10 @@ WZ_DECL_UNUSED static BOOL scrSetScrollMaxX(void)
 		prevMaxX < scrollMaxX ? prevMaxX : scrollMaxX,
 		scrollMaxY);
 
-    return true;
+	// need to reset radar to take into account of new size
+	resizeRadar();
+
+	return true;
 }
 
 // -----------------------------------------------------------------------------------------
@@ -1951,7 +1963,10 @@ WZ_DECL_UNUSED static BOOL scrSetScrollMaxY(void)
 	initLighting(scrollMinX, scrollMinY, scrollMaxX,
 		prevMaxY < scrollMaxY ? prevMaxY : scrollMaxY);
 
-    return true;
+	// need to reset radar to take into account of new size
+	resizeRadar();
+
+	return true;
 }
 
 // -----------------------------------------------------------------------------------------

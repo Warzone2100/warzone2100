@@ -62,7 +62,7 @@ static void setMatrix(Vector3i *Position, Vector3i *Rotation, BOOL RotXYZ);
 #define	DEFAULT_COMPONENT_TRANSLUCENCY	128
 #define	DROID_EMP_SPREAD	(20 - rand()%40)
 
-//Watermelon:VTOL weapon connector start
+//VTOL weapon connector start
 #define VTOL_CONNECTOR_START 5
 
 static void displayCompObj(BASE_OBJECT *psObj, BOOL bButton);
@@ -85,8 +85,7 @@ BOOL setPlayerColour(UDWORD player, UDWORD col)
 {
 	if(player >MAX_PLAYERS || col >MAX_PLAYERS)
 	{
-		debug( LOG_ERROR, "setplayercolour: wrong values" );
-		abort();
+		debug(LOG_ERROR, "wrong values");
 		return false;
 	}
 	PlayerColour[(UBYTE)player] = (UBYTE)col;
@@ -112,9 +111,9 @@ void updateLightLevels(void)
 {
 	if(gameTime>(lightLastChanged+lightInterval))
 	{
-	   	droidLightLevel+=lightSpeed;
+		droidLightLevel+=lightSpeed;
 		lightLastChanged = gameTime;
-	 	if(droidLightLevel>255 || droidLightLevel<128)
+		if(droidLightLevel>255 || droidLightLevel<128)
 		{
 			if(lightSpeed>0)
 			{
@@ -132,7 +131,7 @@ void updateLightLevels(void)
 static void setMatrix(Vector3i *Position, Vector3i *Rotation, BOOL RotXYZ)
 {
 	pie_PerspectiveBegin();
-   	pie_MatBegin();
+	pie_MatBegin();
 
 	pie_TRANSLATE(Position->x,Position->y,Position->z);
 
@@ -185,8 +184,8 @@ UDWORD getComponentRadius(BASE_STATS *psComponent)
 
 	/* VTOL bombs are only stats allowed to have NULL ComponentIMD */
 	if (StatIsComponent(psComponent) != COMP_WEAPON
-	    || (((WEAPON_STATS *)psComponent)->weaponSubClass != WSC_BOMB
-	        && ((WEAPON_STATS *)psComponent)->weaponSubClass != WSC_EMP))
+		|| (((WEAPON_STATS *)psComponent)->weaponSubClass != WSC_BOMB
+			&& ((WEAPON_STATS *)psComponent)->weaponSubClass != WSC_EMP))
 	{
 		ASSERT(ComponentIMD, "No ComponentIMD!");
 	}
@@ -199,11 +198,12 @@ UDWORD getResearchRadius(BASE_STATS *Stat)
 {
 	iIMDShape *ResearchIMD = ((RESEARCH *)Stat)->pIMD;
 
-	if(ResearchIMD) {
+	if(ResearchIMD)
+	{
 		return GetRadius(ResearchIMD);
 	}
 
-	debug(LOG_ERROR, "getResearchRadius: ResearchPIE == NULL");
+	debug(LOG_ERROR, "ResearchPIE == NULL");
 
 	return 100;
 }
@@ -262,7 +262,7 @@ void displayIMDButton(iIMDShape *IMDShape, Vector3i *Rotation, Vector3i *Positio
 }
 
 
-//Watermelon:changed it to loop thru and draw all weapons
+//changed it to loop thru and draw all weapons
 void displayStructureButton(STRUCTURE *psStructure, Vector3i *Rotation, Vector3i *Position, BOOL RotXYZ, SDWORD scale)
 {
 	iIMDShape *baseImd,*strImd;//*mountImd,*weaponImd;
@@ -275,7 +275,7 @@ void displayStructureButton(STRUCTURE *psStructure, Vector3i *Rotation, Vector3i
 	if its a 'tall thin (ie tower)' structure with something on the top - offset the
 	position to show the object on top*/
 	if (psStructure->pStructureType->pIMD->nconnectors && scale == SMALL_STRUCT_SCALE &&
-	    getStructureHeight(psStructure) > TOWER_HEIGHT)
+		getStructureHeight(psStructure) > TOWER_HEIGHT)
 	{
 		Position->y -= 20;
 	}
@@ -301,7 +301,7 @@ void displayStructureButton(STRUCTURE *psStructure, Vector3i *Rotation, Vector3i
 		strImd = psStructure->sDisplay.imd;
 		//get an imd to draw on the connector priority is weapon, ECM, sensor
 		//check for weapon
-		//Watermelon:re-enabled if (psStructure->numWeaps > 0)
+		//re-enabled if (psStructure->numWeaps > 0)
 		if (psStructure->numWeaps > 0)
 		{
 			for (i = 0;i < psStructure->numWeaps;i++)
@@ -366,7 +366,7 @@ void displayStructureButton(STRUCTURE *psStructure, Vector3i *Rotation, Vector3i
 		}
 
 		//draw Weapon/ECM/Sensor for structure
-		//Watermelon:uses 0
+		//uses 0
 		if(weaponImd[0] != NULL)
 		{
 			if (psStructure->numWeaps > 0)
@@ -460,7 +460,7 @@ void displayStructureStatButton(STRUCTURE_STATS *Stats, Vector3i *Rotation, Vect
 		strImd = Stats->pIMD;
 		//get an imd to draw on the connector priority is weapon, ECM, sensor
 		//check for weapon
-		//Watermelon:can only have the STRUCT_MAXWEAPS
+		//can only have the STRUCT_MAXWEAPS
 		if (Stats->numWeaps > 0)
 		{
 			for (i = 0;i < Stats->numWeaps;i++)
@@ -596,8 +596,8 @@ void displayComponentButton(BASE_STATS *Stat, Vector3i *Rotation, Vector3i *Posi
 
 	/* VTOL bombs are only stats allowed to have NULL ComponentIMD */
 	if (StatIsComponent(Stat) != COMP_WEAPON
-	    || (((WEAPON_STATS *)Stat)->weaponSubClass != WSC_BOMB
-	        && ((WEAPON_STATS *)Stat)->weaponSubClass != WSC_EMP))
+		|| (((WEAPON_STATS *)Stat)->weaponSubClass != WSC_BOMB
+			&& ((WEAPON_STATS *)Stat)->weaponSubClass != WSC_EMP))
 	{
 		ASSERT(ComponentIMD, "No ComponentIMD");
 	}
@@ -636,7 +636,7 @@ void displayResearchButton(BASE_STATS *Stat, Vector3i *Rotation, Vector3i *Posit
 	}
 	else
 	{
-		debug(LOG_ERROR, "displayResearchButton: ResearchIMD == NULL");
+		debug(LOG_ERROR, "ResearchIMD == NULL");
 	}
 }
 
@@ -712,7 +712,7 @@ void displayComponentButtonObject(DROID *psDroid, Vector3i *Rotation, Vector3i *
 
 
 /* Assumes matrix context is already set */
-// Watermelon:multiple turrets display removed the pointless mountRotation
+// multiple turrets display removed the pointless mountRotation
 void displayComponentObject(BASE_OBJECT *psObj)
 {
 	DROID		*psDroid = (DROID *)psObj;
@@ -792,7 +792,7 @@ void displayComponentObject(BASE_OBJECT *psObj)
 	if ((psDroid->visible[selectedPlayer] == UBYTE_MAX) || demoGetStatus())
 	{
 		//ingame not button object
-		//Watermelon:should render 3 mounted weapons now
+		//should render 3 mounted weapons now
 		displayCompObj(psObj,false);
 	}
 	else
@@ -807,8 +807,8 @@ void displayComponentObject(BASE_OBJECT *psObj)
 			psTile = mapTile(tileX,tileY);
 			if (terrainType(psTile) != TER_WATER)
 			{
-			   	frame = gameTime/BLIP_ANIM_DURATION + psDroid->id; //visible[selectedPlayer];
-			   	pie_Draw3DShape(getImdFromIndex(MI_BLIP), frame, 0, WZCOL_WHITE, WZCOL_BLACK, pie_ADDITIVE, psDroid->visible[selectedPlayer] / 2);
+				frame = gameTime/BLIP_ANIM_DURATION + psDroid->id; //visible[selectedPlayer];
+				pie_Draw3DShape(getImdFromIndex(MI_BLIP), frame, 0, WZCOL_WHITE, WZCOL_BLACK, pie_ADDITIVE, psDroid->visible[selectedPlayer] / 2);
 				/* set up all the screen coords stuff - need to REMOVE FROM THIS LOOP */
 			}
 		}
@@ -818,7 +818,7 @@ void displayComponentObject(BASE_OBJECT *psObj)
 
 
 /* Assumes matrix context is already set */
-// Watermelon:this is able to handle multiple weapon graphics now
+// this is able to handle multiple weapon graphics now
 // removed mountRotation,they get such stuff from psObj directly now
 void displayCompObj(BASE_OBJECT *psObj, BOOL bButton)
 {
@@ -836,7 +836,7 @@ void displayCompObj(BASE_OBJECT *psObj, BOOL bButton)
 	UDWORD				bDarkSide = false;
 	UBYTE	i;
 
-   	/* Cast the droid pointer */
+	/* Cast the droid pointer */
 	psDroid = (DROID *)psObj;
 	if( (gameTime-psDroid->timeLastHit < GAME_TICKS_PER_SEC/4 ) && psDroid->lastHitWeapon == WSC_ELECTRONIC && !gamePaused())
 	{
@@ -850,7 +850,7 @@ void displayCompObj(BASE_OBJECT *psObj, BOOL bButton)
 	
 	/* get propulsion stats */
 	psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
-	ASSERT( psPropStats != NULL, "invalid propulsion stats pointer" );
+	ASSERT_OR_RETURN( , psPropStats != NULL, "invalid propulsion stats pointer");
 
 	//set pieflag for button object or ingame object
 	if ( bButton )
@@ -892,7 +892,7 @@ void displayCompObj(BASE_OBJECT *psObj, BOOL bButton)
 		pie_TRANSLATE(0, -world_coord(1)/2.3f, 0);
 	}
 
-	//Watermelon:uses psShapeTemp too separate it from turret's psShape
+	//uses psShapeTemp too separate it from turret's psShape
 	psShapeTemp = (leftFirst ? getLeftPropulsionIMD(psDroid) : getRightPropulsionIMD(psDroid));
 	if(psShapeTemp!=NULL)
 	{
@@ -912,7 +912,7 @@ void displayCompObj(BASE_OBJECT *psObj, BOOL bButton)
 	}
 
 	/* Get the body graphic now*/
-	//Watermelon:uses psShapeTemp too separate it from turret's psShape
+	//uses psShapeTemp too separate it from turret's psShape
 	psShapeTemp = BODY_IMD(psDroid,psDroid->player);
 	if(psShapeTemp!=NULL)
 	{
@@ -944,12 +944,12 @@ void displayCompObj(BASE_OBJECT *psObj, BOOL bButton)
 
 	/* render vtol jet if flying - horrible hack - GJ */
 	if (((psPropStats->propulsionType == PROPULSION_TYPE_LIFT) &&
-	    //(psDroid->droidType != DROID_CYBORG)) && (!bButton))
-	    (!cyborgDroid(psDroid))) && (!bButton))
+		//(psDroid->droidType != DROID_CYBORG)) && (!bButton))
+		(!cyborgDroid(psDroid))) && (!bButton))
 	{
 		/* show flame if above ground */
 		if ( psDroid->sMove.Status != MOVEINACTIVE )
- 		{
+		{
 			/* draw flame if found  */
 
 			/* GJ TODO: add flame-finding code here */
@@ -993,7 +993,7 @@ void displayCompObj(BASE_OBJECT *psObj, BOOL bButton)
 		{
 			/* vtol weapons attach to connector 2 (underneath);
 			 * all others to connector 1 */
-			/* Watermelon:VTOL's now skip the first 5 connectors(0 to 4),
+			/* VTOL's now skip the first 5 connectors(0 to 4),
 			VTOL's use 5,6,7,8 etc now */
 			if ( (psPropStats->propulsionType == PROPULSION_TYPE_LIFT) &&
 				  psDroid->droidType == DROID_WEAPON )
@@ -1017,7 +1017,7 @@ void displayCompObj(BASE_OBJECT *psObj, BOOL bButton)
 				Allegedly - all droids will have a mount graphic so this shouldn't
 				fall on it's arse......*/
 				/* Double check that the weapon droid actually has any */
-				//Watermelon:uses numWeaps
+				//uses numWeaps
 				//if(psDroid->numWeaps)
 				for (i = 0;i < psDroid->numWeaps;i++)
 				{
@@ -1026,10 +1026,10 @@ void displayCompObj(BASE_OBJECT *psObj, BOOL bButton)
 						if ( psShapeTemp->connectors )
 						{
 							pie_MatBegin();
-							//Watermelon:reset Z?
+							//reset Z?
 							dummyZ = pie_RotateProject(&zero, &screenCoords);
 
-							//Watermelon:to skip number of VTOL_CONNECTOR_START ground unit connectors
+							//to skip number of VTOL_CONNECTOR_START ground unit connectors
 							if ( iConnector < VTOL_CONNECTOR_START )
 							{
 								pie_TRANSLATE(psShapeTemp->connectors[i].x,
@@ -1106,13 +1106,13 @@ void displayCompObj(BASE_OBJECT *psObj, BOOL bButton)
 							if( psShape && psShape->nconnectors )
 							{
 								/* Now we need to move to the end fo the barrel */
-								//Watermelon:fixed the bug,I mingled body connector and weapon connector :/
+								//fixed the bug,I mingled body connector and weapon connector :/
 								pie_TRANSLATE( psShape->connectors[0].x,
 											   psShape->connectors[0].z,
 											   psShape->connectors[0].y  );
 								//and draw the muzzle flash
 								//animate for the duration of the flash only
-								//Watermelon:change macro to actual accessor for each turret effect
+								//change macro to actual accessor for each turret effect
 								//psShape = MUZZLE_FLASH_PIE(psDroid,psDroid->player);
 								psShape = (asWeaponStats[psDroid->asWeaps[i].nStat]).pMuzzleGraphic;
 								if(psShape)
@@ -1146,9 +1146,9 @@ void displayCompObj(BASE_OBJECT *psObj, BOOL bButton)
 				/*	Get the mounting graphic - we've already moved to the right position
 				Allegedly - all droids will have a mount graphic so this shouldn't
 				fall on it's arse......*/
-				//Watermelon:sensor uses connectors[0]
+				//sensor uses connectors[0]
 				pie_MatBegin();
-				//Watermelon:reset Z?
+				//reset Z?
 				dummyZ = pie_RotateProject(&zero, &screenCoords);
 				/* vtol weapons inverted */
 				if ( iConnector >= VTOL_CONNECTOR_START )
@@ -1187,9 +1187,9 @@ void displayCompObj(BASE_OBJECT *psObj, BOOL bButton)
 				/*	Get the mounting graphic - we've already moved to the right position
 				Allegedly - all droids will have a mount graphic so this shouldn't
 				fall on it's arse......*/
-				//Watermelon:cyborg uses connectors[0]
+				//cyborg uses connectors[0]
 				pie_MatBegin();
-				//Watermelon:reset Z?
+				//reset Z?
 				dummyZ = pie_RotateProject(&zero, &screenCoords);
 				/* vtol weapons inverted */
 				if ( iConnector >= VTOL_CONNECTOR_START )
@@ -1234,9 +1234,9 @@ void displayCompObj(BASE_OBJECT *psObj, BOOL bButton)
 				/*	Get the mounting graphic - we've already moved to the right position
 				Allegedly - all droids will have a mount graphic so this shouldn't
 				fall on it's arse......*/
-				//Watermelon:ecm uses connectors[0]
+				//ecm uses connectors[0]
 				pie_MatBegin();
-				//Watermelon:reset Z?
+				//reset Z?
 				dummyZ = pie_RotateProject(&zero, &screenCoords);
 				/* vtol weapons inverted */
 				if ( iConnector >= VTOL_CONNECTOR_START )
@@ -1273,9 +1273,9 @@ void displayCompObj(BASE_OBJECT *psObj, BOOL bButton)
 				/*	Get the mounting graphic - we've already moved to the right position
 				Allegedly - all droids will have a mount graphic so this shouldn't
 				fall on it's arse......*/
-				//Watermelon:cyborg uses connectors[0]
+				//cyborg uses connectors[0]
 				pie_MatBegin();
-				//Watermelon:reset Z?
+				//reset Z?
 				dummyZ = pie_RotateProject(&zero, &screenCoords);
 				/* vtol weapons inverted */
 				if ( iConnector >= VTOL_CONNECTOR_START )
@@ -1325,15 +1325,15 @@ void displayCompObj(BASE_OBJECT *psObj, BOOL bButton)
 						pie_MatRotY( DEG( (SDWORD)psDroid->direction ) );
 						pie_MatRotX( DEG( -psDroid->pitch ) );
 						pie_MatRotZ( DEG( -psDroid->roll ) );
-						//Watermelon:rotate Y
-					   	pie_MatRotY(DEG( -( (-(SDWORD)(psDroid->asWeaps[0].rotation)) ) ));
+						//rotate Y
+						pie_MatRotY(DEG( -( (-(SDWORD)(psDroid->asWeaps[0].rotation)) ) ));
 
 						iV_MatrixRotateY(-player.r.y);
 						iV_MatrixRotateX(-player.r.x);
 							/* Dither on software */
 
-					   	pie_Draw3DShape(psShape, getStaticTimeValueRange(100,psShape->numFrames), 0, brightness, WZCOL_BLACK, pie_ADDITIVE, 140);
-					  		/* Dither off software */
+						pie_Draw3DShape(psShape, getStaticTimeValueRange(100,psShape->numFrames), 0, brightness, WZCOL_BLACK, pie_ADDITIVE, 140);
+							/* Dither off software */
 
 						iV_MatrixRotateX(player.r.x);
 						iV_MatrixRotateY(player.r.y);
@@ -1381,7 +1381,7 @@ void destroyFXDroid(DROID	*psDroid)
 	SDWORD	widthScatter, breadthScatter, heightScatter;
 	Vector3i pos;
 
- 	widthScatter = TILE_UNITS/4;
+	widthScatter = TILE_UNITS/4;
 	breadthScatter = TILE_UNITS/4;
 	heightScatter = TILE_UNITS/5;
 	for(i=0; i<5; i++)

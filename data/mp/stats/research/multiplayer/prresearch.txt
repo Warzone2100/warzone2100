@@ -523,7 +523,8 @@ R-Wpn-Mortar-ROF01,R-Wpn-Mortar-Damage03,403
 R-Wpn-Mortar-ROF02,R-Wpn-Mortar-ROF01,404
 R-Wpn-Mortar-ROF02,R-Wpn-Mortar02Hvy,404
 R-Wpn-Mortar-ROF03,R-Wpn-Mortar-ROF02,405
-R-Wpn-Mortar-ROF04,R-Wpn-Cannon-ROF04,956
+R-Wpn-Mortar-ROF04,R-Wpn-Mortar-ROF03,956
+R-Wpn-Mortar-ROF04,R-Wpn-Cannon-ROF03,956
 R-Wpn-Mortar01Lt,R-Wpn-Cannon-Damage01,212
 R-Wpn-Mortar01Lt,R-Struc-Factory-Module,212
 R-Wpn-Mortar02Hvy,R-Vehicle-Metals01,221

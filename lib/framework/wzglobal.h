@@ -554,7 +554,10 @@
 
 #elif defined(WZ_OS_UNIX)
 #  include <unistd.h>
+#elif defined(WZ_OS_LINUX)
 #  include <alloca.h>
+#elif defined(WZ_OS_FREEBSD)
+#  include <stdlib.h> // For alloca
 #endif /* WZ_OS_* */
 
 

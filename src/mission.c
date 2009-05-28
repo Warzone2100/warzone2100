@@ -476,7 +476,7 @@ BOOL startMission(LEVEL_TYPE missionType, char *pGame)
 		{
 			//error!
 			debug( LOG_ERROR, "Unknown Mission Type" );
-			abort();
+
 			loaded = false;
 		}
 	}
@@ -484,7 +484,7 @@ BOOL startMission(LEVEL_TYPE missionType, char *pGame)
 	if (!loaded)
 	{
 		debug( LOG_ERROR, "Unable to load mission file" );
-		abort();
+
 		return false;
 	}
 
@@ -2600,8 +2600,12 @@ void intRunMissionResult(void)
 
 				if (!bRequestLoad)
 				{
+					char msg[256] = {'\0'};
+
 					saveGame(sRequestResult,GTYPE_SAVE_START);
-					addConsoleMessage(_("GAME SAVED!"), LEFT_JUSTIFY, SYSTEM_MESSAGE);
+					sstrcpy(msg, _("GAME SAVED :"));
+					sstrcat(msg, sRequestResult);
+					addConsoleMessage(msg, LEFT_JUSTIFY, NOTIFY_MESSAGE);
 				}
 			}
 		}

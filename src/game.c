@@ -3792,6 +3792,9 @@ BOOL saveGame(char *aFileName, SDWORD saveType)
 		swapMissionPointers();
 	}
 
+	// strip the last filename
+	aFileName[fileExtension-1] = '\0';
+
 	/* Start the game clock */
 	gameTimeStart();
 	return true;
@@ -3875,7 +3878,7 @@ static bool gameLoad(const char* fileName)
 		      fileHeader.aFileType[3]);
 
 		PHYSFS_close(fileHandle);
-		abort();
+
 		return false;
 	}
 
@@ -3889,7 +3892,7 @@ static bool gameLoad(const char* fileName)
 	{
 		debug(LOG_ERROR, "gameLoad: unsupported save format version %d", fileHeader.version);
 		PHYSFS_close(fileHandle);
-		abort();
+
 		return false;
 	}
 	else if (fileHeader.version < VERSION_9)
@@ -3908,7 +3911,7 @@ static bool gameLoad(const char* fileName)
 	{
 		debug(LOG_ERROR, "gameLoad: undefined save format version %u", fileHeader.version);
 		PHYSFS_close(fileHandle);
-		abort();
+
 		return false;
 	}
 }
@@ -4069,7 +4072,7 @@ static UDWORD getCampaignV(PHYSFS_file* fileHandle, unsigned int version)
 		if (PHYSFS_read(fileHandle, &saveGame, sizeof(SAVE_GAME_V14), 1) != 1)
 		{
 			debug(LOG_ERROR, "getCampaignV: error while reading file: %s", PHYSFS_getLastError());
-			abort();
+
 			return 0;
 		}
 
@@ -4081,7 +4084,7 @@ static UDWORD getCampaignV(PHYSFS_file* fileHandle, unsigned int version)
 		if (!deserializeSaveGameV14Data(fileHandle, &saveGame))
 		{
 			debug(LOG_ERROR, "getCampaignV: error while reading file: %s", PHYSFS_getLastError());
-			abort();
+
 			return 0;
 		}
 	}
@@ -4128,7 +4131,7 @@ UDWORD getCampaign(const char* fileName)
 		      fileHeader.aFileType[3]);
 
 		PHYSFS_close(fileHandle);
-		abort();
+
 		return false;
 	}
 
@@ -4161,7 +4164,7 @@ UDWORD getCampaign(const char* fileName)
 	{
 		debug(LOG_ERROR, "getCampaign: undefined save format version %d", fileHeader.version);
 		PHYSFS_close(fileHandle);
-		abort();
+
 		return 0;
 	}
 
@@ -4185,7 +4188,7 @@ bool gameLoadV7(PHYSFS_file* fileHandle)
 	if (PHYSFS_read(fileHandle, &saveGame, sizeof(saveGame), 1) != 1)
 	{
 		debug(LOG_ERROR, "gameLoadV7: error while reading file: %s", PHYSFS_getLastError());
-		abort();
+
 		return false;
 	}
 
@@ -4223,7 +4226,7 @@ bool gameLoadV7(PHYSFS_file* fileHandle)
 		if (psNewLevel == NULL)
 		{
 			debug( LOG_ERROR, "gameLoadV7: couldn't find level data" );
-			abort();
+
 			return false;
 		}
 		//check to see whether mission automatically starts
@@ -4264,7 +4267,7 @@ bool gameLoadV(PHYSFS_file* fileHandle, unsigned int version)
 		if (PHYSFS_read(fileHandle, &saveGameData, sizeof(SAVE_GAME_V10), 1) != 1)
 		{
 			debug(LOG_ERROR, "gameLoadV: error while reading file (with version number %u): %s", version, PHYSFS_getLastError());
-			abort();
+
 			return false;
 		}
 	}
@@ -4273,7 +4276,7 @@ bool gameLoadV(PHYSFS_file* fileHandle, unsigned int version)
 		if (PHYSFS_read(fileHandle, &saveGameData, sizeof(SAVE_GAME_V11), 1) != 1)
 		{
 			debug(LOG_ERROR, "gameLoadV: error while reading file (with version number %u): %s", version, PHYSFS_getLastError());
-			abort();
+
 			return false;
 		}
 	}
@@ -4282,7 +4285,7 @@ bool gameLoadV(PHYSFS_file* fileHandle, unsigned int version)
 		if (PHYSFS_read(fileHandle, &saveGameData, sizeof(SAVE_GAME_V12), 1) != 1)
 		{
 			debug(LOG_ERROR, "gameLoadV: error while reading file (with version number %u): %s", version, PHYSFS_getLastError());
-			abort();
+
 			return false;
 		}
 	}
@@ -4291,7 +4294,7 @@ bool gameLoadV(PHYSFS_file* fileHandle, unsigned int version)
 		if (PHYSFS_read(fileHandle, &saveGameData, sizeof(SAVE_GAME_V14), 1) != 1)
 		{
 			debug(LOG_ERROR, "gameLoadV: error while reading file (with version number %u): %s", version, PHYSFS_getLastError());
-			abort();
+
 			return false;
 		}
 	}
@@ -4300,7 +4303,7 @@ bool gameLoadV(PHYSFS_file* fileHandle, unsigned int version)
 		if (PHYSFS_read(fileHandle, &saveGameData, sizeof(SAVE_GAME_V15), 1) != 1)
 		{
 			debug(LOG_ERROR, "gameLoadV: error while reading file (with version number %u): %s", version, PHYSFS_getLastError());
-			abort();
+
 			return false;
 		}
 	}
@@ -4309,7 +4312,7 @@ bool gameLoadV(PHYSFS_file* fileHandle, unsigned int version)
 		if (PHYSFS_read(fileHandle, &saveGameData, sizeof(SAVE_GAME_V16), 1) != 1)
 		{
 			debug(LOG_ERROR, "gameLoadV: error while reading file (with version number %u): %s", version, PHYSFS_getLastError());
-			abort();
+
 			return false;
 		}
 	}
@@ -4318,7 +4321,7 @@ bool gameLoadV(PHYSFS_file* fileHandle, unsigned int version)
 		if (PHYSFS_read(fileHandle, &saveGameData, sizeof(SAVE_GAME_V17), 1) != 1)
 		{
 			debug(LOG_ERROR, "gameLoadV: error while reading file (with version number %u): %s", version, PHYSFS_getLastError());
-			abort();
+
 			return false;
 		}
 	}
@@ -4327,7 +4330,7 @@ bool gameLoadV(PHYSFS_file* fileHandle, unsigned int version)
 		if (PHYSFS_read(fileHandle, &saveGameData, sizeof(SAVE_GAME_V18), 1) != 1)
 		{
 			debug(LOG_ERROR, "gameLoadV: error while reading file (with version number %u): %s", version, PHYSFS_getLastError());
-			abort();
+
 			return false;
 		}
 	}
@@ -4336,7 +4339,7 @@ bool gameLoadV(PHYSFS_file* fileHandle, unsigned int version)
 		if (PHYSFS_read(fileHandle, &saveGameData, sizeof(SAVE_GAME_V19), 1) != 1)
 		{
 			debug(LOG_ERROR, "gameLoadV: error while reading file (with version number %u): %s", version, PHYSFS_getLastError());
-			abort();
+
 			return false;
 		}
 	}
@@ -4345,7 +4348,7 @@ bool gameLoadV(PHYSFS_file* fileHandle, unsigned int version)
 		if (PHYSFS_read(fileHandle, &saveGameData, sizeof(SAVE_GAME_V20), 1) != 1)
 		{
 			debug(LOG_ERROR, "gameLoadV: error while reading file (with version number %u): %s", version, PHYSFS_getLastError());
-			abort();
+
 			return false;
 		}
 	}
@@ -4354,7 +4357,7 @@ bool gameLoadV(PHYSFS_file* fileHandle, unsigned int version)
 		if (PHYSFS_read(fileHandle, &saveGameData, sizeof(SAVE_GAME_V22), 1) != 1)
 		{
 			debug(LOG_ERROR, "gameLoadV: error while reading file (with version number %u): %s", version, PHYSFS_getLastError());
-			abort();
+
 			return false;
 		}
 	}
@@ -4363,7 +4366,7 @@ bool gameLoadV(PHYSFS_file* fileHandle, unsigned int version)
 		if (PHYSFS_read(fileHandle, &saveGameData, sizeof(SAVE_GAME_V24), 1) != 1)
 		{
 			debug(LOG_ERROR, "gameLoadV: error while reading file (with version number %u): %s", version, PHYSFS_getLastError());
-			abort();
+
 			return false;
 		}
 	}
@@ -4372,7 +4375,7 @@ bool gameLoadV(PHYSFS_file* fileHandle, unsigned int version)
 		if (PHYSFS_read(fileHandle, &saveGameData, sizeof(SAVE_GAME_V27), 1) != 1)
 		{
 			debug(LOG_ERROR, "gameLoadV: error while reading file (with version number %u): %s", version, PHYSFS_getLastError());
-			abort();
+
 			return false;
 		}
 	}
@@ -4381,7 +4384,7 @@ bool gameLoadV(PHYSFS_file* fileHandle, unsigned int version)
 		if (PHYSFS_read(fileHandle, &saveGameData, sizeof(SAVE_GAME_V29), 1) != 1)
 		{
 			debug(LOG_ERROR, "gameLoadV: error while reading file (with version number %u): %s", version, PHYSFS_getLastError());
-			abort();
+
 			return false;
 		}
 	}
@@ -4390,7 +4393,7 @@ bool gameLoadV(PHYSFS_file* fileHandle, unsigned int version)
 		if (PHYSFS_read(fileHandle, &saveGameData, sizeof(SAVE_GAME_V30), 1) != 1)
 		{
 			debug(LOG_ERROR, "gameLoadV: error while reading file (with version number %u): %s", version, PHYSFS_getLastError());
-			abort();
+
 			return false;
 		}
 	}
@@ -4399,7 +4402,7 @@ bool gameLoadV(PHYSFS_file* fileHandle, unsigned int version)
 		if (PHYSFS_read(fileHandle, &saveGameData, sizeof(SAVE_GAME_V31), 1) != 1)
 		{
 			debug(LOG_ERROR, "gameLoadV: error while reading file (with version number %u): %s", version, PHYSFS_getLastError());
-			abort();
+
 			return false;
 		}
 	}
@@ -4408,7 +4411,7 @@ bool gameLoadV(PHYSFS_file* fileHandle, unsigned int version)
 		if (PHYSFS_read(fileHandle, &saveGameData, sizeof(SAVE_GAME_V33), 1) != 1)
 		{
 			debug(LOG_ERROR, "gameLoadV: error while reading file (with version number %u): %s", version, PHYSFS_getLastError());
-			abort();
+
 			return false;
 		}
 	}
@@ -4417,7 +4420,7 @@ bool gameLoadV(PHYSFS_file* fileHandle, unsigned int version)
 		if (PHYSFS_read(fileHandle, &saveGameData, sizeof(SAVE_GAME_V34), 1) != 1)
 		{
 			debug(LOG_ERROR, "gameLoadV: error while reading file (with version number %u): %s", version, PHYSFS_getLastError());
-			abort();
+
 			return false;
 		}
 	}
@@ -4426,14 +4429,14 @@ bool gameLoadV(PHYSFS_file* fileHandle, unsigned int version)
 		if (!deserializeSaveGameData(fileHandle, &saveGameData))
 		{
 			debug(LOG_ERROR, "gameLoadV: error while reading data from file for deserialization (with version number %u): %s", version, PHYSFS_getLastError());
-			abort();
+
 			return false;
 		}
 	}
 	else
 	{
 		debug(LOG_ERROR, "gameLoadV: out of range version number (%u) for savegame", version);
-		abort();
+
 		return false;
 	}
 
@@ -4980,7 +4983,7 @@ BOOL loadSaveDroidInit(char *pFileData, UDWORD filesize)
 	if (psHeader->aFileType[0] != 'd' || psHeader->aFileType[1] != 'i' ||
 		psHeader->aFileType[2] != 'n' || psHeader->aFileType[3] != 't')	{
 		debug( LOG_ERROR, "loadSaveUnitInit: Incorrect file type" );
-		abort();
+
 		return false;
 	}
 
@@ -4995,7 +4998,7 @@ BOOL loadSaveDroidInit(char *pFileData, UDWORD filesize)
 	if (psHeader->version < VERSION_7)
 	{
 		debug( LOG_ERROR, "UnitInit; unsupported save format version %d", psHeader->version );
-		abort();
+
 		return false;
 	}
 	else if (psHeader->version <= CURRENT_VERSION_NUM)
@@ -5008,7 +5011,7 @@ BOOL loadSaveDroidInit(char *pFileData, UDWORD filesize)
 	else
 	{
 		debug( LOG_ERROR, "UnitInit: undefined save format version %d", psHeader->version );
-		abort();
+
 		return false;
 	}
 
@@ -5075,15 +5078,16 @@ BOOL loadSaveDroidInitV2(char *pFileData, UDWORD filesize,UDWORD quantity)
 				{
 
 					debug( LOG_ERROR, "This droid cannot be built - %s", pDroidInit->name );
-					abort();
+					return false;
 				}
 			}
 		}
 		pDroidInit++;
 	}
-	if(NumberOfSkippedDroids) {
+	if(NumberOfSkippedDroids)
+	{
 		debug( LOG_ERROR, "unitLoad: Bad Player number in %d unit(s)... assigned to the last player!\n", NumberOfSkippedDroids );
-		abort();
+		return false;
 	}
 	return true;
 }
@@ -5139,7 +5143,7 @@ BOOL loadSaveDroid(char *pFileData, UDWORD filesize, DROID **ppsCurrentDroidList
 		psHeader->aFileType[2] != 'o' || psHeader->aFileType[3] != 'd')
 	{
 		debug( LOG_ERROR, "loadSaveUnit: Incorrect file type" );
-		abort();
+
 		return false;
 	}
 
@@ -5154,7 +5158,7 @@ BOOL loadSaveDroid(char *pFileData, UDWORD filesize, DROID **ppsCurrentDroidList
 	if (psHeader->version < VERSION_9)
 	{
 		debug( LOG_ERROR, "UnitLoad; unsupported save format version %d", psHeader->version );
-		abort();
+
 		return false;
 	}
 	else if (psHeader->version == VERSION_11)
@@ -5181,7 +5185,7 @@ BOOL loadSaveDroid(char *pFileData, UDWORD filesize, DROID **ppsCurrentDroidList
 	else
 	{
 		debug( LOG_ERROR, "UnitLoad: undefined save format version %d", psHeader->version );
-		abort();
+
 		return false;
 	}
 
@@ -5215,7 +5219,7 @@ static DROID* buildDroidFromSaveDroidV11(SAVE_DROID_V11* psSaveDroid)
 		{
 
 			debug( LOG_ERROR, "This component no longer exists - %s, the droid will be deleted", psSaveDroid->asBits[i].name );
-			abort();
+
 			found = false;
 			break;//continue;
 		}
@@ -5319,7 +5323,6 @@ static DROID* buildDroidFromSaveDroidV19(SAVE_DROID_V18* psSaveDroid, UDWORD ver
 		{
 
 			debug( LOG_ERROR, "This component no longer exists - %s, the droid will be deleted", psSaveDroid->asBits[i].name );
-			abort();
 
 			found = false;
 			break;//continue;
@@ -6048,7 +6051,7 @@ BOOL loadSaveDroidV11(char *pFileData, UDWORD filesize, UDWORD numDroids, UDWORD
 		filesize)
 	{
 		debug( LOG_ERROR, "unitLoad: unexpected end of file" );
-		abort();
+
 		return false;
 	}
 
@@ -6094,7 +6097,7 @@ BOOL loadSaveDroidV11(char *pFileData, UDWORD filesize, UDWORD numDroids, UDWORD
 		if (psDroid == NULL)
 		{
 			debug( LOG_ERROR, "unitLoad: Template not found for unit\n" );
-			abort();
+			return false;
 		}
 		else if (psSaveDroid->saveType == DROID_ON_TRANSPORT)
 		{
@@ -6132,7 +6135,7 @@ BOOL loadSaveDroidV11(char *pFileData, UDWORD filesize, UDWORD numDroids, UDWORD
 	if (NumberOfSkippedDroids>0)
 	{
 		debug( LOG_ERROR, "unitLoad: Bad Player number in %d unit(s)... assigned to the last player!\n", NumberOfSkippedDroids );
-		abort();
+		return false;
 	}
 
 	ppsCurrentDroidLists = NULL;//ensure it always gets set
@@ -6182,7 +6185,7 @@ BOOL loadSaveDroidV19(char *pFileData, UDWORD filesize, UDWORD numDroids, UDWORD
 		filesize)
 	{
 		debug( LOG_ERROR, "unitLoad: unexpected end of file" );
-		abort();
+
 		return false;
 	}
 
@@ -6289,7 +6292,7 @@ BOOL loadSaveDroidV19(char *pFileData, UDWORD filesize, UDWORD numDroids, UDWORD
 	if (NumberOfSkippedDroids>0)
 	{
 		debug( LOG_ERROR, "unitLoad: Bad Player number in %d unit(s)... assigned to the last player!\n", NumberOfSkippedDroids );
-		abort();
+		return false;
 	}
 
 	ppsCurrentDroidLists = NULL;//ensure it always gets set
@@ -6328,7 +6331,7 @@ BOOL loadSaveDroidV(char *pFileData, UDWORD filesize, UDWORD numDroids, UDWORD v
 		filesize)
 	{
 		debug( LOG_ERROR, "unitLoad: unexpected end of file" );
-		abort();
+
 		return false;
 	}
 
@@ -6455,7 +6458,7 @@ BOOL loadSaveDroidV(char *pFileData, UDWORD filesize, UDWORD numDroids, UDWORD v
 	if (NumberOfSkippedDroids>0)
 	{
 		debug( LOG_ERROR, "unitLoad: Bad Player number in %d unit(s)... assigned to the last player!\n", NumberOfSkippedDroids );
-		abort();
+		return false;
 	}
 
 	ppsCurrentDroidLists = NULL;//ensure it always gets set
@@ -6702,7 +6705,7 @@ BOOL writeDroidFile(char *pFileName, DROID **ppsCurrentDroidLists)
 					if (psTrans->psGrpNext == dangling_ptr)
 					{
 						debug( LOG_ERROR, "transporter ->psGrpNext not reset" );
-						abort();
+						return false;
 					}
 				}
 #endif
@@ -6794,7 +6797,7 @@ BOOL loadSaveStructure(char *pFileData, UDWORD filesize)
 		psHeader->aFileType[2] != 'r' || psHeader->aFileType[3] != 'u')
 	{
 		debug( LOG_ERROR, "loadSaveStructure: Incorrect file type" );
-		abort();
+
 		return false;
 	}
 
@@ -6809,7 +6812,7 @@ BOOL loadSaveStructure(char *pFileData, UDWORD filesize)
 	if (psHeader->version < VERSION_7)
 	{
 		debug( LOG_ERROR, "StructLoad: unsupported save format version %d", psHeader->version );
-		abort();
+
 		return false;
 	}
 	else if (psHeader->version < VERSION_9)
@@ -6836,7 +6839,7 @@ BOOL loadSaveStructure(char *pFileData, UDWORD filesize)
 	else
 	{
 		debug( LOG_ERROR, "StructLoad: undefined save format version %d", psHeader->version );
-		abort();
+
 		return false;
 	}
 
@@ -6863,7 +6866,7 @@ BOOL loadSaveStructureV7(char *pFileData, UDWORD filesize, UDWORD numStructures)
 		filesize)
 	{
 		debug( LOG_ERROR, "structureLoad: unexpected end of file" );
-		abort();
+
 		return false;
 	}
 
@@ -6925,7 +6928,7 @@ BOOL loadSaveStructureV7(char *pFileData, UDWORD filesize, UDWORD numStructures)
 		if (!found)
 		{
 			debug( LOG_ERROR, "This structure no longer exists - %s", getSaveStructNameV19((SAVE_STRUCTURE_V17*)psSaveStructure) );
-			abort();
+			//ignore this
 			continue;
 		}
 
@@ -6954,14 +6957,14 @@ BOOL loadSaveStructureV7(char *pFileData, UDWORD filesize, UDWORD numStructures)
     	 || map_coord(psSaveStructure->x) > mapWidth - TOO_NEAR_EDGE)
         {
 			debug( LOG_ERROR, "Structure %s, x coord too near the edge of the map. id - %d", getSaveStructNameV19((SAVE_STRUCTURE_V17*)psSaveStructure), psSaveStructure->id );
-			abort();
+			//ignore this
             continue;
         }
     	if (map_coord(psSaveStructure->y) < TOO_NEAR_EDGE
     	 || map_coord(psSaveStructure->y) > mapHeight - TOO_NEAR_EDGE)
         {
 			debug( LOG_ERROR, "Structure %s, y coord too near the edge of the map. id - %d", getSaveStructNameV19((SAVE_STRUCTURE_V17*)psSaveStructure), psSaveStructure->id );
-			abort();
+			//ignore this
             continue;
         }
 
@@ -7065,7 +7068,7 @@ BOOL loadSaveStructureV7(char *pFileData, UDWORD filesize, UDWORD numStructures)
 	if (NumberOfSkippedStructures>0)
 	{
 		debug( LOG_ERROR, "structureLoad: invalid player number in %d structures ... assigned to the last player!\n\n", NumberOfSkippedStructures );
-		abort();
+		return false;
 	}
 
 	return true;
@@ -7088,7 +7091,7 @@ static UDWORD getResearchIdFromName(char *pName)
 	}
 
 	debug( LOG_ERROR, "Unknown research - %s", pName );
-	abort();
+
 	return NULL_ID;
 }
 
@@ -7140,7 +7143,7 @@ BOOL loadSaveStructureV19(char *pFileData, UDWORD filesize, UDWORD numStructures
 		filesize)
 	{
 		debug( LOG_ERROR, "structureLoad: unexpected end of file" );
-		abort();
+
 		return false;
 	}
 
@@ -7212,7 +7215,7 @@ BOOL loadSaveStructureV19(char *pFileData, UDWORD filesize, UDWORD numStructures
 		if (!found)
 		{
 			debug( LOG_ERROR, "This structure no longer exists - %s", getSaveStructNameV19(psSaveStructure) );
-			abort();
+			//ignore this
 			continue;
 		}
 		/*create the Structure */
@@ -7239,14 +7242,14 @@ BOOL loadSaveStructureV19(char *pFileData, UDWORD filesize, UDWORD numStructures
     	 || map_coord(psSaveStructure->x) > mapWidth - TOO_NEAR_EDGE)
         {
 			debug( LOG_ERROR, "Structure %s, x coord too near the edge of the map. id - %d", getSaveStructNameV19((SAVE_STRUCTURE_V17*)psSaveStructure), psSaveStructure->id );
-			abort();
+			//ignore this
             continue;
         }
     	if (map_coord(psSaveStructure->y) < TOO_NEAR_EDGE
     	 || map_coord(psSaveStructure->y) > mapHeight - TOO_NEAR_EDGE)
         {
 			debug( LOG_ERROR, "Structure %s, y coord too near the edge of the map. id - %d", getSaveStructNameV19((SAVE_STRUCTURE_V17*)psSaveStructure), psSaveStructure->id );
-			abort();
+			//ignore this
             continue;
         }
 
@@ -7532,7 +7535,7 @@ BOOL loadSaveStructureV19(char *pFileData, UDWORD filesize, UDWORD numStructures
 	if (NumberOfSkippedStructures>0)
 	{
 		debug( LOG_ERROR, "structureLoad: invalid player number in %d structures ... assigned to the last player!\n\n", NumberOfSkippedStructures );
-		abort();
+		return false;
 	}
 
 	return true;
@@ -7575,7 +7578,7 @@ BOOL loadSaveStructureV(char *pFileData, UDWORD filesize, UDWORD numStructures, 
 		filesize)
 	{
 		debug( LOG_ERROR, "structureLoad: unexpected end of file" );
-		abort();
+
 		return false;
 	}
 
@@ -7647,7 +7650,7 @@ BOOL loadSaveStructureV(char *pFileData, UDWORD filesize, UDWORD numStructures, 
 		if (!found)
 		{
 			debug( LOG_ERROR, "This structure no longer exists - %s", getSaveStructNameV(psSaveStructure) );
-			abort();
+			//ignore this
 			continue;
 		}
 		/*create the Structure */
@@ -7674,14 +7677,14 @@ BOOL loadSaveStructureV(char *pFileData, UDWORD filesize, UDWORD numStructures, 
     	 || map_coord(psSaveStructure->x) > mapWidth - TOO_NEAR_EDGE)
         {
 			debug( LOG_ERROR, "Structure %s, x coord too near the edge of the map. id - %d", getSaveStructNameV((SAVE_STRUCTURE*)psSaveStructure), psSaveStructure->id );
-			abort();
+			//ignore this
             continue;
         }
     	if (map_coord(psSaveStructure->y) < TOO_NEAR_EDGE
     	 || map_coord(psSaveStructure->y) > mapHeight - TOO_NEAR_EDGE)
         {
 			debug( LOG_ERROR, "Structure %s, y coord too near the edge of the map. id - %d", getSaveStructNameV((SAVE_STRUCTURE*)psSaveStructure), psSaveStructure->id );
-			abort();
+			//ignore this
             continue;
         }
 
@@ -7960,7 +7963,7 @@ BOOL loadSaveStructureV(char *pFileData, UDWORD filesize, UDWORD numStructures, 
 	if (NumberOfSkippedStructures>0)
 	{
 		debug( LOG_ERROR, "structureLoad: invalid player number in %d structures ... assigned to the last player!\n\n", NumberOfSkippedStructures );
-		abort();
+		return false;
 	}
 
 	return true;
@@ -8367,7 +8370,7 @@ BOOL loadSaveFeature(char *pFileData, UDWORD filesize)
 		psHeader->aFileType[2] != 'a' || psHeader->aFileType[3] != 't')
 	{
 		debug( LOG_ERROR, "loadSaveFeature: Incorrect file type" );
-		abort();
+
 		return false;
 	}
 
@@ -8382,7 +8385,7 @@ BOOL loadSaveFeature(char *pFileData, UDWORD filesize)
 	if (psHeader->version < VERSION_7)
 	{
 		debug( LOG_ERROR, "FeatLoad: unsupported save format version %d", psHeader->version );
-		abort();
+
 		return false;
 	}
 	else if (psHeader->version <= VERSION_19)
@@ -8402,7 +8405,7 @@ BOOL loadSaveFeature(char *pFileData, UDWORD filesize)
 	else
 	{
 		debug( LOG_ERROR, "FeatLoad: undefined save format version %d", psHeader->version );
-		abort();
+
 		return false;
 	}
 
@@ -8435,7 +8438,7 @@ BOOL loadSaveFeatureV14(char *pFileData, UDWORD filesize, UDWORD numFeatures, UD
 		filesize)
 	{
 		debug( LOG_ERROR, "featureLoad: unexpected end of file" );
-		abort();
+
 		return false;
 	}
 
@@ -8488,7 +8491,7 @@ BOOL loadSaveFeatureV14(char *pFileData, UDWORD filesize, UDWORD numFeatures, UD
 		{
 
 			debug( LOG_ERROR, "This feature no longer exists - %s", psSaveFeature->name );
-			abort();
+			//ignore this
 			continue;
 		}
 		//create the Feature
@@ -8535,7 +8538,7 @@ BOOL loadSaveFeatureV(char *pFileData, UDWORD filesize, UDWORD numFeatures, UDWO
 		filesize)
 	{
 		debug( LOG_ERROR, "featureLoad: unexpected end of file" );
-		abort();
+
 		return false;
 	}
 
@@ -8587,8 +8590,7 @@ BOOL loadSaveFeatureV(char *pFileData, UDWORD filesize, UDWORD numFeatures, UDWO
 		{
 
 			debug( LOG_ERROR, "This feature no longer exists - %s", psSaveFeature->name );
-			abort();
-
+			//ignore this
 			continue;
 		}
 		//create the Feature
@@ -8717,7 +8719,7 @@ BOOL loadSaveTemplate(char *pFileData, UDWORD filesize)
 		psHeader->aFileType[2] != 'm' || psHeader->aFileType[3] != 'p')
 	{
 		debug( LOG_ERROR, "loadSaveTemplate: Incorrect file type" );
-		abort();
+
 		return false;
 	}
 
@@ -8732,7 +8734,7 @@ BOOL loadSaveTemplate(char *pFileData, UDWORD filesize)
 	if (psHeader->version < VERSION_7)
 	{
 		debug( LOG_ERROR, "TemplateLoad: unsupported save format version %d", psHeader->version );
-		abort();
+
 		return false;
 	}
 	else if (psHeader->version < VERSION_14)
@@ -8759,7 +8761,7 @@ BOOL loadSaveTemplate(char *pFileData, UDWORD filesize)
 	else
 	{
 		debug( LOG_ERROR, "TemplateLoad: undefined save format version %d", psHeader->version );
-		abort();
+
 		return false;
 	}
 	return true;
@@ -8780,7 +8782,7 @@ BOOL loadSaveTemplateV7(char *pFileData, UDWORD filesize, UDWORD numTemplates)
 	if ((sizeof(SAVE_TEMPLATE_V2) * numTemplates + TEMPLATE_HEADER_SIZE) > filesize)
 	{
 		debug( LOG_ERROR, "templateLoad: unexpected end of file" );
-		abort();
+
 		return false;
 	}
 
@@ -8833,7 +8835,6 @@ BOOL loadSaveTemplateV7(char *pFileData, UDWORD filesize, UDWORD numTemplates)
 			{
 
 				debug( LOG_ERROR, "This component no longer exists - %s, the template will be deleted", psSaveTemplate->asParts[i] );
-				abort();
 
 				found = false;
 				//continue;
@@ -8858,7 +8859,6 @@ BOOL loadSaveTemplateV7(char *pFileData, UDWORD filesize, UDWORD numTemplates)
 			{
 
 				debug( LOG_ERROR, "This weapon no longer exists - %s, the template will be deleted", psSaveTemplate->asWeaps[i] );
-				abort();
 
 				found = false;
 				//continue;
@@ -8911,7 +8911,7 @@ BOOL loadSaveTemplateV14(char *pFileData, UDWORD filesize, UDWORD numTemplates)
 	if ((sizeof(SAVE_TEMPLATE_V14) * numTemplates + TEMPLATE_HEADER_SIZE) > filesize)
 	{
 		debug( LOG_ERROR, "templateLoad: unexpected end of file" );
-		abort();
+
 		return false;
 	}
 
@@ -8939,7 +8939,7 @@ BOOL loadSaveTemplateV14(char *pFileData, UDWORD filesize, UDWORD numTemplates)
 		if (psTemplate == NULL)
 		{
 			debug(LOG_ERROR, "loadSaveTemplateV14: Out of memory");
-			abort();
+
 			goto error;
 		}
 		//copy the values across
@@ -8966,7 +8966,6 @@ BOOL loadSaveTemplateV14(char *pFileData, UDWORD filesize, UDWORD numTemplates)
 			{
 
 				debug( LOG_ERROR, "This component no longer exists - %s, the template will be deleted", psSaveTemplate->asParts[i] );
-				abort();
 
 				found = false;
 				//continue;
@@ -8990,7 +8989,6 @@ BOOL loadSaveTemplateV14(char *pFileData, UDWORD filesize, UDWORD numTemplates)
 			if (compInc < 0)
 			{
 				debug( LOG_ERROR, "This weapon no longer exists - %s, the template will be deleted", psSaveTemplate->asWeaps[i] );
-				abort();
 
 				found = false;
 				//continue;
@@ -9065,7 +9063,7 @@ BOOL loadSaveTemplateV(char *pFileData, UDWORD filesize, UDWORD numTemplates)
 	if ((sizeof(SAVE_TEMPLATE) * numTemplates + TEMPLATE_HEADER_SIZE) > filesize)
 	{
 		debug( LOG_ERROR, "templateLoad: unexpected end of file" );
-		abort();
+
 		return false;
 	}
 
@@ -9138,7 +9136,6 @@ BOOL loadSaveTemplateV(char *pFileData, UDWORD filesize, UDWORD numTemplates)
 			{
 
 				debug( LOG_ERROR, "This component no longer exists - %s, the template will be deleted", psSaveTemplate->asParts[i] );
-				abort();
 
 				found = false;
 				//continue;
@@ -9163,8 +9160,6 @@ BOOL loadSaveTemplateV(char *pFileData, UDWORD filesize, UDWORD numTemplates)
 			{
 
 				debug( LOG_ERROR, "This weapon no longer exists - %s, the template will be deleted", psSaveTemplate->asWeaps[i] );
-				abort();
-
 
 				found = false;
 				//continue;
@@ -9340,7 +9335,6 @@ BOOL loadTerrainTypeMap(const char *pFileData, UDWORD filesize)
 	if (filesize < TILETYPE_HEADER_SIZE)
 	{
 		debug( LOG_ERROR, "loadTerrainTypeMap: file too small" );
-		abort();
 		return false;
 	}
 
@@ -9350,7 +9344,7 @@ BOOL loadTerrainTypeMap(const char *pFileData, UDWORD filesize)
 		psHeader->aFileType[2] != 'y' || psHeader->aFileType[3] != 'p')
 	{
 		debug( LOG_ERROR, "loadTerrainTypeMap: Incorrect file type" );
-		abort();
+
 		return false;
 	}
 
@@ -9374,7 +9368,7 @@ BOOL loadTerrainTypeMap(const char *pFileData, UDWORD filesize)
 		if (*pType > TER_MAX)
 		{
 			debug( LOG_ERROR, "loadTerrainTypeMap: terrain type out of range" );
-			abort();
+
 			return false;
 		}
 
@@ -9447,7 +9441,7 @@ BOOL loadSaveCompList(char *pFileData, UDWORD filesize)
 		psHeader->aFileType[2] != 'p' || psHeader->aFileType[3] != 'l')
 	{
 		debug( LOG_ERROR, "loadSaveCompList: Incorrect file type" );
-		abort();
+
 		return false;
 	}
 
@@ -9462,7 +9456,7 @@ BOOL loadSaveCompList(char *pFileData, UDWORD filesize)
 	if (psHeader->version < VERSION_7)
 	{
 		debug( LOG_ERROR, "CompLoad: unsupported save format version %d", psHeader->version );
-		abort();
+
 		return false;
 	}
 	else if (psHeader->version <= VERSION_19)
@@ -9482,7 +9476,7 @@ BOOL loadSaveCompList(char *pFileData, UDWORD filesize)
 	else
 	{
 		debug( LOG_ERROR, "CompLoad: undefined save format version %d", psHeader->version );
-		abort();
+
 		return false;
 	}
 
@@ -9500,7 +9494,7 @@ BOOL loadSaveCompListV9(char *pFileData, UDWORD filesize, UDWORD numRecords, UDW
 		filesize)
 	{
 		debug( LOG_ERROR, "CompListLoad: unexpected end of file" );
-		abort();
+
 		return false;
 	}
 
@@ -9567,7 +9561,7 @@ BOOL loadSaveCompListV(char *pFileData, UDWORD filesize, UDWORD numRecords, UDWO
 		filesize)
 	{
 		debug( LOG_ERROR, "CompListLoad: unexpected end of file" );
-		abort();
+
 		return false;
 	}
 
@@ -9760,7 +9754,7 @@ BOOL loadSaveStructTypeList(char *pFileData, UDWORD filesize)
 		psHeader->aFileType[2] != 'r' || psHeader->aFileType[3] != 'l')
 	{
 		debug( LOG_ERROR, "loadSaveStructTypeList: Incorrect file type" );
-		abort();
+
 		return false;
 	}
 
@@ -9775,7 +9769,7 @@ BOOL loadSaveStructTypeList(char *pFileData, UDWORD filesize)
 	if (psHeader->version < VERSION_7)
 	{
 		debug( LOG_ERROR, "StructTypeLoad: unsupported save format version %d", psHeader->version );
-		abort();
+
 		return false;
 	}
 	else if (psHeader->version <= VERSION_19)
@@ -9795,7 +9789,7 @@ BOOL loadSaveStructTypeList(char *pFileData, UDWORD filesize)
 	else
 	{
 		debug( LOG_ERROR, "StructTypeLoad: undefined save format version %d", psHeader->version );
-		abort();
+
 		return false;
 	}
 
@@ -9814,7 +9808,7 @@ BOOL loadSaveStructTypeListV7(char *pFileData, UDWORD filesize, UDWORD numRecord
 		filesize)
 	{
 		debug( LOG_ERROR, "StructListLoad: unexpected end of file" );
-		abort();
+
 		return false;
 	}
 
@@ -9873,7 +9867,7 @@ BOOL loadSaveStructTypeListV(char *pFileData, UDWORD filesize, UDWORD numRecords
 		filesize)
 	{
 		debug( LOG_ERROR, "StructListLoad: unexpected end of file" );
-		abort();
+
 		return false;
 	}
 
@@ -9994,7 +9988,7 @@ BOOL loadSaveResearch(char *pFileData, UDWORD filesize)
 		psHeader->aFileType[2] != 's' || psHeader->aFileType[3] != 'h')
 	{
 		debug( LOG_ERROR, "loadSaveResearch: Incorrect file type" );
-		abort();
+
 		return false;
 	}
 
@@ -10009,7 +10003,7 @@ BOOL loadSaveResearch(char *pFileData, UDWORD filesize)
 	if (psHeader->version < VERSION_8)
 	{
 		debug( LOG_ERROR, "ResearchLoad: unsupported save format version %d", psHeader->version );
-		abort();
+
 		return false;
 	}
 	else if (psHeader->version <= VERSION_19)
@@ -10029,7 +10023,7 @@ BOOL loadSaveResearch(char *pFileData, UDWORD filesize)
 	else
 	{
 		debug( LOG_ERROR, "ResearchLoad: undefined save format version %d", psHeader->version );
-		abort();
+
 		return false;
 	}
 
@@ -10049,7 +10043,7 @@ BOOL loadSaveResearchV8(char *pFileData, UDWORD filesize, UDWORD numRecords)
 		filesize)
 	{
 		debug( LOG_ERROR, "loadSaveResearch: unexpected end of file" );
-		abort();
+
 		return false;
 	}
 
@@ -10133,7 +10127,7 @@ BOOL loadSaveResearchV(char *pFileData, UDWORD filesize, UDWORD numRecords)
 		filesize)
 	{
 		debug( LOG_ERROR, "loadSaveResearch: unexpected end of file" );
-		abort();
+
 		return false;
 	}
 
@@ -10276,7 +10270,7 @@ BOOL loadSaveMessage(char *pFileData, UDWORD filesize, SWORD levelType)
 		psHeader->aFileType[2] != 's' || psHeader->aFileType[3] != 's')
 	{
 		debug( LOG_ERROR, "loadSaveMessage: Incorrect file type" );
-		abort();
+
 		return false;
 	}
 
@@ -10336,7 +10330,7 @@ BOOL loadSaveMessageV(char *pFileData, UDWORD filesize, UDWORD numMessages, UDWO
 		filesize)
 	{
 		debug( LOG_ERROR, "loadSaveMessage: unexpected end of file" );
-		abort();
+
 		return false;
 	}
 
@@ -10448,7 +10442,7 @@ BOOL loadSaveMessage36(char *pFileData, UDWORD filesize, UDWORD numMessages, UDW
 		filesize)
 	{
 		debug( LOG_ERROR, "loadSaveMessage: unexpected end of file" );
-		abort();
+
 		return false;
 	}
 
@@ -10692,7 +10686,7 @@ BOOL loadSaveFlag(char *pFileData, UDWORD filesize)
 		psHeader->aFileType[2] != 'a' || psHeader->aFileType[3] != 'g')
 	{
 		debug( LOG_ERROR, "loadSaveflag: Incorrect file type" );
-		abort();
+
 		return false;
 	}
 
@@ -10739,7 +10733,7 @@ BOOL loadSaveFlagV(char *pFileData, UDWORD filesize, UDWORD numflags, UDWORD ver
 	if ((sizeOfSaveFlag * numflags + FLAG_HEADER_SIZE) > filesize)
 	{
 		debug( LOG_ERROR, "loadSaveflag: unexpected end of file" );
-		abort();
+
 		return false;
 	}
 
@@ -11046,7 +11040,7 @@ BOOL loadSaveProduction(char *pFileData, UDWORD filesize)
 		psHeader->aFileType[2] != 'o' || psHeader->aFileType[3] != 'd')
 	{
 		debug( LOG_ERROR, "loadSaveProduction: Incorrect file type" );
-		abort();
+
 		return false;
 	}
 
@@ -11076,7 +11070,7 @@ BOOL loadSaveProductionV(char *pFileData, UDWORD filesize, UDWORD version)
 		filesize)
 	{
 		debug( LOG_ERROR, "loadSaveProduction: unexpected end of file" );
-		abort();
+
 		return false;
 	}
 
@@ -11190,7 +11184,7 @@ BOOL loadSaveStructLimits(char *pFileData, UDWORD filesize)
 		psHeader->aFileType[2] != 't' || psHeader->aFileType[3] != 's')
 	{
 		debug( LOG_ERROR, "loadSaveStructLimits: Incorrect file type" );
-		abort();
+
 		return false;
 	}
 
@@ -11219,7 +11213,7 @@ BOOL loadSaveStructLimits(char *pFileData, UDWORD filesize)
 	else
 	{
 		debug( LOG_ERROR, "loadSaveStructLimits: Incorrect file format version" );
-		abort();
+
 		return false;
 	}
 	return true;
@@ -11247,7 +11241,7 @@ BOOL loadSaveStructLimitsV19(char *pFileData, UDWORD filesize, UDWORD numLimits)
 		filesize)
 	{
 		debug( LOG_ERROR, "loadSaveStructLimits: unexpected end of file" );
-		abort();
+
 		return false;
 	}
 
@@ -11273,7 +11267,7 @@ BOOL loadSaveStructLimitsV19(char *pFileData, UDWORD filesize, UDWORD numLimits)
 		if (!found)
 		{
 			debug( LOG_ERROR, "The structure no longer exists. The limits have not been set! - %s", psSaveLimits->name );
-			abort();
+
 			continue;
 		}
 
@@ -11291,7 +11285,8 @@ BOOL loadSaveStructLimitsV19(char *pFileData, UDWORD filesize, UDWORD numLimits)
 	if (SkippedRecords>0)
 	{
 		debug( LOG_ERROR, "Skipped %d records in structure limits due to bad player number\n", SkippedRecords );
-		abort();
+		free(psSaveLimits);
+		return false;
 	}
 	free(psSaveLimits);
 	return true;
@@ -11318,7 +11313,7 @@ BOOL loadSaveStructLimitsV(char *pFileData, UDWORD filesize, UDWORD numLimits)
 		filesize)
 	{
 		debug( LOG_ERROR, "loadSaveStructLimits: unexpected end of file" );
-		abort();
+
 		return false;
 	}
 
@@ -11344,7 +11339,7 @@ BOOL loadSaveStructLimitsV(char *pFileData, UDWORD filesize, UDWORD numLimits)
 		if (!found)
 		{
 			debug( LOG_ERROR, "The structure no longer exists. The limits have not been set! - %s", psSaveLimits->name );
-			abort();
+
 			continue;
 		}
 
@@ -11362,7 +11357,8 @@ BOOL loadSaveStructLimitsV(char *pFileData, UDWORD filesize, UDWORD numLimits)
 	if (SkippedRecords>0)
 	{
 		debug( LOG_ERROR, "Skipped %d records in structure limits due to bad player number\n", SkippedRecords );
-		abort();
+		free(psSaveLimits);
+		return false;
 	}
 	free(psSaveLimits);
 	return true;
@@ -11626,7 +11622,7 @@ static BOOL getNameFromComp(UDWORD compType, char *pDest, UDWORD compIndex)
 		break;
 	default:
 		debug( LOG_ERROR, "Invalid component type - game.c" );
-		abort();
+
 		return false;
 	}
 
@@ -11686,7 +11682,7 @@ BOOL plotStructurePreview16(char *backDropSprite, UBYTE scale, UDWORD offX, UDWO
 		psHeader->aFileType[2] != 'r' || psHeader->aFileType[3] != 'u')
 	{
 		debug( LOG_ERROR, "plotStructurePreview16: Incorrect file type" );
-		abort();
+
 		return false;
 	}
 

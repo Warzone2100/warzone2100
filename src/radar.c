@@ -111,7 +111,8 @@ void radarInitVars(void)
 //called for when a new mission is started
 void resetRadarRedraw()
 {
-	// nothing here now
+	// make sure Radar buffer is correct
+	resizeRadar();
 }
 
 BOOL InitRadar(void)
@@ -195,8 +196,8 @@ void CalcRadarPosition(int mX, int mY, int *PosX, int *PosY)
 	{
 		pos = Vector2f_Rotate2f(pos, -player.r.y/DEG(1));
 	}
-	pos.x += radarWidth/2;
-	pos.y += radarHeight/2;
+	pos.x += radarWidth/2.0;
+	pos.y += radarHeight/2.0;
 
 	if (pos.x<0 || pos.y<0 || pos.x>=radarWidth || pos.y>=radarHeight)
 	{
@@ -268,16 +269,19 @@ void drawRadar(void)
 			iV_MatrixRotateZ(player.r.y);
 		}
 		// draw the box at the dimensions of the map
-		iV_TransBoxFill(-radarWidth/2,
-						-radarHeight/2,
-						 radarWidth/2,
-						 radarHeight/2);
-		pie_RenderRadar(-radarWidth/2,
-						-radarHeight/2,
+		iV_TransBoxFill(-radarWidth/2.0,
+						-radarHeight/2.0,
+						 radarWidth/2.0,
+						 radarHeight/2.0);
+		pie_RenderRadar(-radarWidth/2.0,
+						-radarHeight/2.0,
 						 radarWidth,
 						 radarHeight);
-		DrawRadarExtras(-radarWidth/2, -radarHeight/2, pixSizeH, pixSizeV);
-		drawRadarBlips(-radarWidth/2, -radarHeight/2, pixSizeH, pixSizeV);
+        pie_MatBegin();
+            pie_TRANSLATE(-radarWidth/2 - 1, -radarHeight/2 - 1, 0);
+            DrawRadarExtras(0, 0, pixSizeH, pixSizeV);
+        pie_MatEnd();
+		drawRadarBlips(-radarWidth/2.0, -radarHeight/2.0, pixSizeH, pixSizeV);
 	pie_MatEnd();
 }
 
@@ -341,19 +345,7 @@ static void DrawRadarTiles(void)
 			MAPTILE	*psTile = mapTile(x, y);
 			size_t pos = radarTexWidth * (y - scrollMinY) + (x - scrollMinX);
 
-			if ((pos * sizeof(*radarBuffer)) >= radarBufferSize)
-			{
-				// NOTE: on campaign, the radar can get bigger when it expands in-between levels.
-				// so this should only assert if this happens in skirmish/mp game
-				if (bMultiPlayer)
-				{
-					ASSERT(pos * sizeof(*radarBuffer) < radarBufferSize, "Buffer overrun");
-					debug(LOG_ERROR, "Radar size has changed in-between levels, and it isn't a campaign level?");
-				}
-				resizeRadar();
-				return;
-			}
-
+			ASSERT(pos * sizeof(*radarBuffer) < radarBufferSize, "Buffer overrun");
 			if (!getRevealStatus() || TEST_TILE_VISIBLE(selectedPlayer, psTile))
 			{
 				radarBuffer[pos] = appliedRadarColour(radarDrawMode, psTile).rgba;
