@@ -1627,51 +1627,37 @@ static int scrSkDifficultyModifier(lua_State *L)
 // ********************************************************************************************
 
 // not a direct script function but a helper for scrSkDefenseLocation and scrSkDefenseLocationB
-static BOOL defenseLocation(BOOL variantB)
+static BOOL defenseLocation(lua_State *L, BOOL noNarrowGateways)
 {
-	SDWORD		*pX,*pY,statIndex,statIndex2;
-	UDWORD		x,y,gX,gY,dist,player,nearestSoFar,count;
+	UDWORD		x,y,gX,gY,dist,nearestSoFar,count;
 	GATEWAY		*psGate,*psChosenGate;
-	DROID		*psDroid;
 	BASE_STATS	*psStats,*psWStats;
 	UDWORD		x1,x2,x3,x4,y1,y2,y3,y4;
 	BOOL		noWater;
 	UDWORD      minCount;
 	UDWORD      offset;
 
-	if (!stackPopParams(6,
-						VAL_REF|VAL_INT, &pX,
-						VAL_REF|VAL_INT, &pY,
-						ST_STRUCTURESTAT, &statIndex,
-						ST_STRUCTURESTAT, &statIndex2,
-						ST_DROID, &psDroid,
-						VAL_INT, &player) )
-	{
-		debug(LOG_ERROR,"defenseLocation: failed to pop");
-		return false;
-	}
-
-	if (player >= MAX_PLAYERS)
-	{
-		ASSERT( false, "defenseLocation:player number is too high" );
-		return false;
-	}
+	int worldX = luaL_checkint(L, 1);
+	int worldY = luaL_checkint(L, 2);
+	int statIndex = luaL_checkint(L, 3);
+	int statIndex2 = luaL_checkint(L, 4);
+	DROID *psDroid = (DROID*)luaWZObj_checkobject(L, 5, OBJ_DROID);
+	// and eventual last player argument is ignored
 
 	psStats = (BASE_STATS *)(asStructureStats + statIndex);
 	psWStats = (BASE_STATS *)(asStructureStats + statIndex2);
 
     // check for wacky coords.
-	if(		*pX < 0
-		||	*pX > world_coord(mapWidth)
-		||	*pY < 0
-		||	*pY > world_coord(mapHeight)
-	  )
+	if( worldX < 0 ||
+	    worldX > world_coord(mapWidth) ||
+	    worldY < 0 ||
+	    worldY > world_coord(mapHeight) )
 	{
 		goto failed;
 	}
 
-	x = map_coord(*pX);					// change to tile coords.
-	y = map_coord(*pY);
+	x = map_coord(worldX);					// change to tile coords.
+	y = map_coord(worldY);
 
 	// go down the gateways, find the nearest gateway with >1 empty tiles
 	nearestSoFar = UDWORD_MAX;
@@ -1684,7 +1670,7 @@ static BOOL defenseLocation(BOOL variantB)
 		if(psGate->x1 == psGate->x2)
 		{// vert
 			//skip gates that are too short
-			if(variantB && (psGate->y2 - psGate->y1) <= 2)
+			if(noNarrowGateways && (psGate->y2 - psGate->y1) <= 2)
 			{
 				continue;
 			}
@@ -1704,7 +1690,7 @@ static BOOL defenseLocation(BOOL variantB)
 		else
 		{// horiz
 			//skip gates that are too short
-			if(variantB && (psGate->x2 - psGate->x1) <= 2)
+			if(noNarrowGateways && (psGate->x2 - psGate->x1) <= 2)
 			{
 				continue;
 			}
@@ -1721,7 +1707,7 @@ static BOOL defenseLocation(BOOL variantB)
 				}
 			}
 		}
-		if(variantB) {
+		if(noNarrowGateways) {
 		    minCount = 2;
 		} else {
 		    minCount = 1;
@@ -1777,17 +1763,6 @@ static BOOL defenseLocation(BOOL variantB)
 		}
 	}
 
-	// back to world coords and store result.
-	*pX = world_coord(x) + (TILE_UNITS / 2);		// return centre of tile.
-	*pY = world_coord(y) + (TILE_UNITS / 2);
-
-	scrFunctionResult.v.bval = true;
-	if (!stackPushResult(VAL_BOOL,&scrFunctionResult))		// success
-	{
-		return false;
-	}
-
-
 	// order the droid to build two walls, one either side of the gateway.
 	// or one in the case of a 2 size gateway.
 
@@ -1799,7 +1774,7 @@ static BOOL defenseLocation(BOOL variantB)
 	x1 = world_coord(psChosenGate->x1) + (TILE_UNITS / 2);
 	y1 = world_coord(psChosenGate->y1) + (TILE_UNITS / 2);
 
-	if(variantB) {
+	if(noNarrowGateways) {
 	    offset = 2;
 	} else {
 	    offset = 1;
@@ -1843,28 +1818,26 @@ static BOOL defenseLocation(BOOL variantB)
 		orderDroidStatsTwoLocAdd(psDroid, DORDER_LINEBUILD, psWStats,  x3, y3,x4,y4);
 	}
 
-	return true;
+	// back to world coords and return result.
+	lua_pushinteger(L, world_coord(x) + (TILE_UNITS / 2));
+	lua_pushinteger(L, world_coord(y) + (TILE_UNITS / 2));
+	return 2;
 
 failed:
-	scrFunctionResult.v.bval = false;
-	if (!stackPushResult(VAL_BOOL,&scrFunctionResult))		// failed!
-	{
-		return false;
-	}
-	return true;
+	return 0;
 }
 
 
 // return a good place to build a defence, given a starting point
-WZ_DECL_UNUSED static BOOL scrSkDefenseLocation(void)
+static int scrSkDefenseLocation(lua_State *L)
 {
-    return defenseLocation(false);
+    return defenseLocation(L, false);
 }
 
 // return a good place to build a defence with a min number of clear tiles
-WZ_DECL_UNUSED static BOOL scrSkDefenseLocationB(void)
+static int scrSkDefenseLocationB(lua_State *L)
 {
-    return defenseLocation(true);
+    return defenseLocation(L, true);
 }
 
 
@@ -2004,6 +1977,12 @@ void registerScriptAIfuncs(lua_State *L)
 	lua_register(L, "iterateGroupB", scrIterateGroupB);
 	lua_register(L, "skGetFactoryCapacity", scrSkGetFactoryCapacity);
 	lua_register(L, "orderDroidLoc", scrOrderDroidLoc);
+	lua_register(L, "skDefenseLocation", scrSkDefenseLocation);
+	lua_register(L, "skDefenseLocationB", scrSkDefenseLocationB);
+	//lua_register(L, "", );
+	//lua_register(L, "", );
+	//lua_register(L, "", );
+	//lua_register(L, "", );
 	//lua_register(L, "", );
 	//lua_register(L, "", );
 	//lua_register(L, "", );
