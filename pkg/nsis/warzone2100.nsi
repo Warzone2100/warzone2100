@@ -28,6 +28,7 @@
 
 ;--------------------------------
 ;General
+   CRCCheck on   ;make sure this isn't corrupted
 
   ;Name and file
   Name "${PACKAGE_NAME}"
@@ -170,8 +171,14 @@ Section $(TEXT_SecBase) SecBase
   File "/oname=readme.screen.css" "${TOP_SRCDIR}\doc\styles\readme.screen.css"
 
   SetOutPath "$INSTDIR\fonts"
-
-  File "${EXTDIR}\etc\fonts\fonts.conf"
+  MessageBox MB_YESNO|MB_ICONQUESTION|MB_DEFBUTTON2 \
+ "Fontconfig will be using a custom font, if you wish to use a font other than the custom font, then fontconfig needs to build a font cache from the windows fonts directory. $\r$\n$\r$\nDo you wish to allow this? [default is NO]$\r$\n$\r$\n$\r$\n(NOTE: This will have a huge performance impact on Vista, on the first run of the program, while fontconfig builds the font cache.)" IDYES WINDOWSFONT_ENABLED IDNO WINDOWSFONT_DISABLED
+WINDOWSFONT_ENABLED:
+  File "/oname=fonts.conf" "${EXTDIR}\etc\fonts\fonts.conf.wd_enable" 
+  goto FONT_DONE
+WINDOWSFONT_DISABLED:
+  File "/oname=fonts.conf" "${EXTDIR}\etc\fonts\fonts.conf.wd_disable"
+FONT_DONE:
   File "${EXTDIR}\etc\fonts\DejaVuSans.ttf"
   File "${EXTDIR}\etc\fonts\DejaVuSans-Bold.ttf"
 
@@ -201,6 +208,8 @@ Section $(TEXT_SecBase) SecBase
 
   !insertmacro MUI_STARTMENU_WRITE_END
 
+  SetOutPath "$INSTDIR\"	
+  CreateShortCut "$DESKTOP\${PACKAGE_NAME}.lnk" "$INSTDIR\${PACKAGE}.exe"
 SectionEnd
 
 
@@ -232,20 +241,22 @@ Section $(TEXT_SecAivolutionMod) SecAivolutionMod
 
 SectionEnd
 
-Section $(TEXT_SecMusicMod) SecMusicMod
-
-  SetOutPath "$INSTDIR\mods\global\autoload"
-
-  IfFileExists "music_1.0.wz" +6
-    NSISdl::download "http://download.gna.org/warzone/releases/mods/community-music_1.0.AUTHORS"          "music_1.0.AUTHORS.txt"
-    NSISdl::download "http://download.gna.org/warzone/releases/mods/community-music_1.0.wz"               "music_1.0.wz"
-    Pop $R0 ; Get the return value
-    StrCmp $R0 "success" +2
-      MessageBox MB_OK|MB_ICONSTOP "Download of Music mod failed: $R0"
-
-  SetOutPath "$INSTDIR"
-
-SectionEnd
+; This is disabled for now
+;
+;Section $(TEXT_SecMusicMod) SecMusicMod
+;
+;  SetOutPath "$INSTDIR\mods\music"
+;
+;  IfFileExists "music_1.0.wz" +6
+;    NSISdl::download "http://download.gna.org/warzone/releases/mods/community-music_1.1.AUTHORS"          "music_1.1.AUTHORS.txt"
+;    NSISdl::download "http://download.gna.org/warzone/releases/mods/community-music_1.1.wz"               "music_1.1.wz"
+;    Pop $R0 ; Get the return value
+;    StrCmp $R0 "success" +2
+;      MessageBox MB_OK|MB_ICONSTOP "Download of Music mod failed: $R0"
+;
+;  SetOutPath "$INSTDIR"
+;
+;SectionEnd
 
 Section $(TEXT_SecNTWMod) SecNTWMod
 
@@ -332,6 +343,12 @@ Section $(TEXT_SecNLS) SecNLS
   SetOutPath "$INSTDIR\locale\ru\LC_MESSAGES"
   File "/oname=${PACKAGE}.mo" "${TOP_BUILDDIR}\po\ru.gmo"
 
+  SetOutPath "$INSTDIR\locale\sl\LC_MESSAGES"
+  File "/oname=${PACKAGE}.mo" "${TOP_BUILDDIR}\po\sl.gmo"
+
+  SetOutPath "$INSTDIR\locale\zh_TW\LC_MESSAGES"
+  File "/oname=${PACKAGE}.mo" "${TOP_BUILDDIR}\po\zh_TW.gmo"
+
   SetOutPath "$INSTDIR\locale\zh_CN\LC_MESSAGES"
   File "/oname=${PACKAGE}.mo" "${TOP_BUILDDIR}\po\zh_CN.gmo"
 
@@ -349,7 +366,7 @@ Function .onInit
 FunctionEnd
 
 Function LaunchLink
-  ExecShell "" "$SMPROGRAMS\$STARTMENU_FOLDER\${PACKAGE_NAME}.lnk"
+  Exec '$INSTDIR\${PACKAGE}.exe'
 FunctionEnd
 
 ;--------------------------------
@@ -368,8 +385,8 @@ FunctionEnd
   LangString TEXT_SecAivolutionMod ${LANG_ENGLISH} "Aivolution"
   LangString DESC_SecAivolutionMod ${LANG_ENGLISH} "Improved artificial intelligence that learns."
 
-  LangString TEXT_SecMusicMod ${LANG_ENGLISH} "Music"
-  LangString DESC_SecMusicMod ${LANG_ENGLISH} "Download and install music."
+;  LangString TEXT_SecMusicMod ${LANG_ENGLISH} "Music"
+;  LangString DESC_SecMusicMod ${LANG_ENGLISH} "Download and install music."
 
   LangString TEXT_SecFMVs ${LANG_ENGLISH} "Videos"
   LangString DESC_SecFMVs ${LANG_ENGLISH} "Download and install videos (in-game cutscenes)."
@@ -394,8 +411,8 @@ FunctionEnd
   LangString TEXT_SecAivolutionMod ${LANG_DUTCH} "Aivolution"
   LangString DESC_SecAivolutionMod ${LANG_DUTCH} "Verbeterde kunstmatige intelligentie die leert."
 
-  LangString TEXT_SecMusicMod ${LANG_DUTCH} "Muziek"
-  LangString DESC_SecMusicMod ${LANG_DUTCH} "Muziek downloaden en installeren."
+;  LangString TEXT_SecMusicMod ${LANG_DUTCH} "Muziek"
+;  LangString DESC_SecMusicMod ${LANG_DUTCH} "Muziek downloaden en installeren."
 
   LangString TEXT_SecFMVs ${LANG_DUTCH} "FMV"
   LangString DESC_SecFMVs ${LANG_DUTCH} "FMV downloaden en installeren."
@@ -420,8 +437,8 @@ FunctionEnd
   LangString TEXT_SecAivolutionMod ${LANG_GERMAN} "Aivolution"
   LangString DESC_SecAivolutionMod ${LANG_GERMAN} "Verbesserte künstliche Intelligenz, die dazulernt."
 
-  LangString TEXT_SecMusicMod ${LANG_GERMAN} "Musik"
-  LangString DESC_SecMusicMod ${LANG_GERMAN} "Musik herunterladen und installieren."
+;  LangString TEXT_SecMusicMod ${LANG_GERMAN} "Musik"
+;  LangString DESC_SecMusicMod ${LANG_GERMAN} "Musik herunterladen und installieren."
 
   LangString TEXT_SecFMVs ${LANG_GERMAN} "FMV"
   LangString DESC_SecFMVs ${LANG_GERMAN} "FMV herunterladen und installieren."
@@ -452,7 +469,7 @@ FunctionEnd
 
     !insertmacro MUI_DESCRIPTION_TEXT ${SecMods} $(DESC_SecMods)
     !insertmacro MUI_DESCRIPTION_TEXT ${SecAivolutionMod} $(DESC_SecAivolutionMod)
-    !insertmacro MUI_DESCRIPTION_TEXT ${SecMusicMod} $(DESC_SecMusicMod)
+;    !insertmacro MUI_DESCRIPTION_TEXT ${SecMusicMod} $(DESC_SecMusicMod)
     !insertmacro MUI_DESCRIPTION_TEXT ${SecFMVs} $(DESC_SecFMVs)
     !insertmacro MUI_DESCRIPTION_TEXT ${SecNTWMod} $(DESC_SecNTWMod)
 
@@ -510,9 +527,10 @@ Section "Uninstall"
   Delete "$INSTDIR\fonts\DejaVuSans-Bold.ttf"
   RMDir "$INSTDIR\fonts"
 
-  Delete "$INSTDIR\mods\global\autoload\music_1.0.AUTHORS.txt"
-  Delete "$INSTDIR\mods\global\autoload\music_1.0.wz"
-  RMDir "$INSTDIR\mods\global\autoload"
+
+  Delete "$INSTDIR\mods\music\music_1.0.AUTHORS.txt"
+  Delete "$INSTDIR\mods\music\music_1.0.wz"
+  RMDir "$INSTDIR\mods\music"
 
   Delete "$INSTDIR\mods\global\aivolution.wz"
   RMDir "$INSTDIR\mods\global"
@@ -597,6 +615,14 @@ Section "Uninstall"
   RMDir "$INSTDIR\locale\ru\LC_MESSAGES"
   RMDir "$INSTDIR\locale\ru"
 
+  Delete "$INSTDIR\locale\sl\LC_MESSAGES\${PACKAGE}.mo"
+  RMDir "$INSTDIR\locale\sl\LC_MESSAGES"
+  RMDir "$INSTDIR\locale\sl"
+
+  Delete "$INSTDIR\locale\zh_TW\LC_MESSAGES\${PACKAGE}.mo"
+  RMDir "$INSTDIR\locale\zh_TW\LC_MESSAGES"
+  RMDir "$INSTDIR\locale\zh_TW"
+
   Delete "$INSTDIR\locale\zh_CN\LC_MESSAGES\${PACKAGE}.mo"
   RMDir "$INSTDIR\locale\zh_CN\LC_MESSAGES"
   RMDir "$INSTDIR\locale\zh_CN"
@@ -604,6 +630,7 @@ Section "Uninstall"
   RMDir "$INSTDIR\locale"
   RMDir "$INSTDIR"
 
+  Delete "$DESKTOP\${PACKAGE_NAME}.lnk"
   Delete "$SMPROGRAMS\$STARTMENU_FOLDER\Uninstall.lnk"
   Delete "$SMPROGRAMS\$STARTMENU_FOLDER\${PACKAGE_NAME}.lnk"
   Delete "$SMPROGRAMS\$STARTMENU_FOLDER\${PACKAGE_NAME} - Aivolution.lnk"
