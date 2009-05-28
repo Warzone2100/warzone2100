@@ -51,6 +51,12 @@
 #include "fpath.h"
 #include "levels.h"
 
+struct ffnode
+{
+	struct ffnode *next;
+	int x, y;
+};
+
 //scroll min and max values
 SDWORD		scrollMinX, scrollMaxX, scrollMinY, scrollMaxY;
 
@@ -957,6 +963,9 @@ BOOL mapLoad(char *filename)
 	scrollMinX = scrollMinY = 0;
 	scrollMaxX = mapWidth;
 	scrollMaxY = mapHeight;
+
+	/* Set continents. This should ideally be done in advance by the map editor. */
+	mapFloodFillContinents();
 
 	PHYSFS_close(fp);
 	return true;
@@ -2164,6 +2173,127 @@ void mapTest()
 	fprintf(stdout, "\tMap self-test: PASSED\n");
 }
 
+// Convert a direction into an offset.
+// dir 0 => x = 0, y = -1
+#define NUM_DIR		8
+static const Vector2i aDirOffset[NUM_DIR] =
+{
+        { 0, 1},
+        {-1, 1},
+        {-1, 0},
+        {-1,-1},
+        { 0,-1},
+        { 1,-1},
+        { 1, 0},
+        { 1, 1},
+};
+
+// Flood fill a "continent". Note that we reuse x, y inside this function.
+static void mapFloodFill(int x, int y, int continent, PROPULSION_TYPE propulsion)
+{
+	struct ffnode *open = NULL;
+	int i;
+
+	do
+	{
+		MAPTILE *currTile = mapTile(x, y);
+
+		// Add accessible neighbouring tiles to the open list
+		for (i = 0; i < NUM_DIR; i++)
+		{
+			// rely on the fact that all border tiles are inaccessible to avoid checking explicitly
+			Vector2i npos = { x + aDirOffset[i].x, y + aDirOffset[i].y };
+			MAPTILE *psTile;
+			bool limitedTile = (propulsion == PROPULSION_TYPE_PROPELLOR || propulsion == PROPULSION_TYPE_WHEELED);
+
+			if (!tileOnMap(npos.x, npos.y) || (npos.x == x && npos.y == y))
+			{
+				continue;
+			}
+			psTile = mapTile(npos.x, npos.y);
+
+			if (!fpathBlockingTile(npos.x, npos.y, propulsion) && ((limitedTile && psTile->limitedContinent == 0) || (!limitedTile && psTile->hoverContinent == 0)))
+			{
+				struct ffnode *node = malloc(sizeof(*node));
+
+				node->next = open;	// add to beginning of open list
+				node->x = npos.x;
+				node->y = npos.y;
+				open = node;
+			}
+		}
+
+		// Set continent value
+		if (propulsion == PROPULSION_TYPE_PROPELLOR || propulsion == PROPULSION_TYPE_WHEELED)
+		{
+			currTile->limitedContinent = continent;
+		}
+		else
+		{
+			currTile->hoverContinent = continent;
+		}
+
+		// Pop the first open node off the list for the next iteration
+		if (open)
+		{
+			struct ffnode *tmp = open;
+
+			x = open->x;
+			y = open->y;
+			open = open->next;
+			free(tmp);
+		}
+	} while (open);
+}
+
+void mapFloodFillContinents()
+{
+	int x, y, limitedContinents = 0, hoverContinents = 0;
+
+	/* Clear continents */
+	for (x = 0; x < mapWidth; x++)
+	{
+		for (y = 0; y < mapHeight; y++)
+		{
+			MAPTILE *psTile = mapTile(x, y);
+
+			psTile->limitedContinent = 0;
+			psTile->hoverContinent = 0;
+		}
+	}
+
+	/* Iterate over the whole map, looking for unset continents */
+	for (x = 0; x < mapWidth; x++)
+	{
+		for (y = 0; y < mapHeight; y++)
+		{
+			MAPTILE *psTile = mapTile(x, y);
+
+			if (psTile->limitedContinent == 0 && !fpathBlockingTile(x, y, PROPULSION_TYPE_WHEELED))
+			{
+				mapFloodFill(x, y, 1 + limitedContinents++, PROPULSION_TYPE_WHEELED);
+			}
+			else if (psTile->limitedContinent == 0 && !fpathBlockingTile(x, y, PROPULSION_TYPE_PROPELLOR))
+			{
+				mapFloodFill(x, y, 1 + limitedContinents++, PROPULSION_TYPE_PROPELLOR);
+			}
+		}
+	}
+	debug(LOG_MAP, "Found %d limited continents", (int)limitedContinents);
+	for (x = 0; x < mapWidth; x++)
+	{
+		for (y = 0; y < mapHeight; y++)
+		{
+			MAPTILE *psTile = mapTile(x, y);
+
+			if (psTile->hoverContinent == 0 && !fpathBlockingTile(x, y, PROPULSION_TYPE_HOVER))
+			{
+				mapFloodFill(x, y, 1 + hoverContinents++, PROPULSION_TYPE_HOVER);
+			}
+		}
+	}
+	debug(LOG_MAP, "Found %d hover continents", (int)hoverContinents);
+}
 
 /** Check if tile contained within the given world coordinates is burning. */
 bool fireOnLocation(unsigned int x, unsigned int y)
