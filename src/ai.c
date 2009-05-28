@@ -250,6 +250,8 @@ SDWORD aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot
 			}
 			else if (targetInQuestion->type == OBJ_STRUCTURE)
 			{
+				STRUCTURE *psStruct = (STRUCTURE *)targetInQuestion;
+
 				if (electronic)
 				{
 					/* don't want to target structures with resistance of zero if using electronic warfare */
@@ -258,17 +260,13 @@ SDWORD aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot
 						psTarget = targetInQuestion;
 					}
 				}
-				else if (((STRUCTURE *)targetInQuestion)->asWeaps[weapon_slot].nStat > 0)
+				else if (psStruct->asWeaps[weapon_slot].nStat > 0)
 				{
 					// structure with weapons - go for this
 					psTarget = targetInQuestion;
 				}
-				else if ( (  ((STRUCTURE *)targetInQuestion)->pStructureType->type != REF_WALL
-						   &&((STRUCTURE *)targetInQuestion)->pStructureType->type != REF_WALLCORNER
-						  )
-						 || driveModeActive()
-						 || (bMultiPlayer && game.type == SKIRMISH && !isHumanPlayer(psDroid->player))
-						)
+				else if ((psStruct->pStructureType->type != REF_WALL && psStruct->pStructureType->type != REF_WALLCORNER)
+				         || driveModeActive() || (bMultiPlayer && !isHumanPlayer(psDroid->player)))
 				{
 					psTarget = targetInQuestion;
 				}
