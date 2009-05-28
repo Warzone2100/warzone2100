@@ -35,9 +35,34 @@ function version(v)
 	local current_version = 2
 
 	-- check we support this version
-	if v > current_version then
+	if v < 0 or v > current_version then
 		error("This script is written using script version "..v.." while this build of Warzone 2100 only supports versions 0-"..current_version)
 	end
+	-- did we already select a script version?
+	if VERSION then
+		if VERSION ~= v then
+			warning("Loading a script with version "..v..", but the previous script loaded in this state required version "..VERSION..": ", 2)
+			-- now check which version to select
+			if math.abs(VERSION - v) > 2 or
+			   (math.abs(VERSION - v) > 1 and (VERSION % 2 ~= 0 or v % 2 ~= 0)) then
+				print("versions differ too much, keeping the previous version ("..VERSION..")")
+				v = VERSION
+			else
+				-- if two stable versions, select the compatibility mode
+				if VERSION % 2 == 0 and v % 2 == 0 then
+					v = (VERSION + v) / 2
+					print("selecting compatibility mode (version "..v..")")
+				else
+					-- now select the compatibility mode one
+					if VERSION % 2 > 0 then
+						v = VERSION
+					end
+					print("selected compatibility version "..v)
+				end
+			end
+		end
+	end
+	-- warn for compatibility mode
 	if v % 2 > 0 then
 		print("WARNING: Running in version ".. (v-1) .. " compatibility mode")
 		print("         Please fully convert to version " .. (v+1) .. " before releasing this script")
@@ -203,7 +228,8 @@ function version(v)
 		end
 	end
 
-	if v == 1 then
+	if v == 1 and not __DEPRECATED_VERSION_1__ then
+		__DEPRECATED_VERSION_1__ = true
 		setLandingZone       = deprecate(setLandingZone, "use setNoGoArea")
 		random               = deprecate(random, "use math.random")
 		distBetweenTwoPoints = deprecate(distBetweenTwoPoints, "do the calculations yourself")

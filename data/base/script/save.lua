@@ -244,7 +244,7 @@ function saveall()
 	local result = save('_G', _G)
 	-- now fix everything up again
 	onload()
-	return result
+	return 'version('..VERSION..')\n'..result
 end
 
 for k,v in pairs(_G) do
