@@ -696,3 +696,31 @@ void fpathTest(int x, int y, int x2, int y2)
 	assert(firstJob == NULL);
 	assert(firstResult == NULL);
 }
+
+bool fpathCheck(Vector2i orig, Vector2i dest, PROPULSION_TYPE propulsion)
+{
+	MAPTILE *origTile = mapTile(orig.x, orig.y);
+	MAPTILE *destTile = mapTile(dest.x, dest.y);
+
+	ASSERT(propulsion != PROPULSION_TYPE_NUM, "Bad propulsion type");
+	ASSERT(origTile != NULL && destTile != NULL, "Bad tile parameter");
+
+	switch (propulsion)
+	{
+	case PROPULSION_TYPE_PROPELLOR:
+	case PROPULSION_TYPE_WHEELED:
+	case PROPULSION_TYPE_TRACKED:
+	case PROPULSION_TYPE_LEGGED:
+	case PROPULSION_TYPE_SKI: 	// ?!
+	case PROPULSION_TYPE_HALF_TRACKED:
+		return origTile->limitedContinent == destTile->limitedContinent;
+	case PROPULSION_TYPE_HOVER:
+		return origTile->hoverContinent == destTile->hoverContinent;
+	case PROPULSION_TYPE_JUMP:
+	case PROPULSION_TYPE_LIFT:
+		return true;	// FIXME: This is not entirely correct for all possible maps. - Per
+	case PROPULSION_TYPE_NUM:
+		break;
+	}
+	return true;	// should never get here
+}

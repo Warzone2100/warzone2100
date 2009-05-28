@@ -1472,9 +1472,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 {
 	UDWORD		iRepairFacDistSq, iStructDistSq, iFactoryDistSq;
 	STRUCTURE	*psStruct, *psRepairFac, *psFactory;
-	SDWORD		iDX, iDY;
 	SECONDARY_STATE state;
-	UDWORD		droidX,droidY;
 
 	// deal with a droid receiving a primary order
 	if (secondaryGotPrimaryOrder(psDroid, psOrder->order))
@@ -1771,8 +1769,9 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		// send vtols back to their return pos
 		if (isVtolDroid(psDroid) && !bMultiPlayer && psDroid->player != selectedPlayer)
 		{
-			iDX = asVTOLReturnPos[psDroid->player].x;
-			iDY = asVTOLReturnPos[psDroid->player].y;
+			int iDX = asVTOLReturnPos[psDroid->player].x;
+			int iDY = asVTOLReturnPos[psDroid->player].y;
+
 			if (iDX && iDY)
 			{
 				psDroid->order = DORDER_LEAVEMAP;
@@ -1790,9 +1789,10 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		{
 			if (psStruct->pStructureType->type == REF_HQ)
 			{
+				UDWORD	droidX = psStruct->pos.x;
+				UDWORD	droidY = psStruct->pos.y;
+
 				psDroid->order = DORDER_RTB;
-				droidX = psStruct->pos.x;
-				droidY = psStruct->pos.y;
 				// Find a place to land for vtols. And Transporters in a multiPlay game.
 				if (isVtolDroid(psDroid) || ((game.maxPlayers > 0) && (psDroid->droidType == DROID_TRANSPORTER)))
 				{
@@ -1806,8 +1806,9 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		if (psDroid->order != DORDER_RTB)
 		{
 			// see if the LZ has been set up
-			iDX = getLandingX(psDroid->player);
-			iDY = getLandingY(psDroid->player);
+			int iDX = getLandingX(psDroid->player);
+			int iDY = getLandingY(psDroid->player);
+
 			if (iDX && iDY)
 			{
 			    psDroid->order = DORDER_RTB;
@@ -1838,16 +1839,22 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 				if ((psStruct->pStructureType->type == REF_REPAIR_FACILITY) ||
 					((psStruct->pStructureType->type == REF_HQ) && (psRepairFac == NULL)))
 				{
+					PROPULSION_STATS *psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
+					Vector2i dPos = { map_coord(psDroid->pos.x), map_coord(psDroid->pos.y) };
+					Vector2i rPos = { map_coord(psStruct->pos.x), map_coord(psStruct->pos.y) };
 					/* get droid->facility distance squared */
-					iDX = (SDWORD)psDroid->pos.x - (SDWORD)psStruct->pos.x;
-					iDY = (SDWORD)psDroid->pos.y - (SDWORD)psStruct->pos.y;
+					int iDX = (SDWORD)psDroid->pos.x - (SDWORD)psStruct->pos.x;
+					int iDY = (SDWORD)psDroid->pos.y - (SDWORD)psStruct->pos.y;
+
+					if (!fpathCheck(dPos, rPos, psPropStats->propulsionType))
+					{
+						continue;	// cannot reach position
+					}
+
 					iStructDistSq = iDX*iDX + iDY*iDY;
 
-					/* choose current structure if first repair facility found or
-					 * nearer than previously chosen facility
-					 */
-					if ( psRepairFac == NULL || (psRepairFac->pStructureType->type == REF_HQ) ||
-						(iRepairFacDistSq > iStructDistSq) )
+					/* Choose current structure if first repair facility found or nearer than previously chosen facility */
+					if (psRepairFac == NULL || psRepairFac->pStructureType->type == REF_HQ || iRepairFacDistSq > iStructDistSq)
 					{
 						/* first facility found */
 						psRepairFac = psStruct;
@@ -1953,8 +1960,9 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
                 psStruct->pStructureType->type == REF_REPAIR_FACILITY)
 			{
 				/* get droid->facility distance squared */
-				iDX = (SDWORD)psDroid->pos.x - (SDWORD)psStruct->pos.x;
-				iDY = (SDWORD)psDroid->pos.y - (SDWORD)psStruct->pos.y;
+				int iDX = (SDWORD)psDroid->pos.x - (SDWORD)psStruct->pos.x;
+				int iDY = (SDWORD)psDroid->pos.y - (SDWORD)psStruct->pos.y;
+
 				iStructDistSq = iDX*iDX + iDY*iDY;
 
 				/* choose current structure if first facility found or
