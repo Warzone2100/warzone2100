@@ -32,7 +32,8 @@ function _group.convert_to_ids(t, seen)
 	for k,v in pairs(t) do
 		if v ~= C then
 			if type(v) == 'table' then
-				if v.type == 'group' then
+				-- use rawget because it may not have a member named 'type'
+				if rawget(v, 'type') == 'group' then
 					t[k] = {} -- empty it
 					t[k].type = 'savedgroup'
 					t[k].ids = {}
@@ -65,7 +66,8 @@ function _group.convert_from_ids(t, seen)
 	for k,v in pairs(t) do
 		if v ~= C then
 			if type(v) == 'table' then
-				if v.type == 'savedgroup' then
+				-- use rawget because it may not have a member named 'type'
+				if rawget(v, 'type') == 'savedgroup' then
 					t[k] = Group()
 					for i, id in ipairs(v.ids) do
 						groupAddDroid(t[k], id)

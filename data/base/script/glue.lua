@@ -21,7 +21,7 @@
 __undefined_meta = {}
 function __undefined_meta.__index(table, key)
 	local name
-	val = rawget(table, key)
+	local val = rawget(table, key)
 	if not val then
 		name = _save.search(table)
 		if name then
