@@ -158,6 +158,12 @@ Section $(TEXT_SecBase) SecBase
   File "/oname=Readme.en.html" "${TOP_SRCDIR}\doc\Readme.en.xhtml"
   File "/oname=Readme.de.html" "${TOP_SRCDIR}\doc\Readme.de.xhtml"
 
+  ; Create mod directories
+  CreateDir "$INSTDIR\mods\campaign"
+  CreateDir "$INSTDIR\mods\music"
+  CreateDir "$INSTDIR\mods\global"
+  CreateDir "$INSTDIR\mods\multiplay" 	
+
   ; Music files
   SetOutPath "$INSTDIR\music"
   File "${TOP_SRCDIR}\data\music\menu.ogg"
@@ -538,6 +544,10 @@ Section "Uninstall"
   Delete "$INSTDIR\mods\multiplay\ntw.wz"
   RMDir "$INSTDIR\mods\multiplay"
   RMDir "$INSTDIR\mods"
+
+  RMDir "$INSTDIR\mods\campaign"
+
+; remove all the locales
 
   Delete "$INSTDIR\locale\cs\LC_MESSAGES\${PACKAGE}.mo"
   RMDir "$INSTDIR\locale\cs\LC_MESSAGES"
