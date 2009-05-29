@@ -944,7 +944,7 @@ int main(int argc, char *argv[])
 		for(i=0; i < 100; i++)
 		{
 			modname = global_mods[i];
-			if (fname == NULL)
+			if (modname == NULL)
 			{
 				break;
 			}
@@ -964,8 +964,8 @@ int main(int argc, char *argv[])
 		// check campaign mods
 		for(i=0; i < 100; i++)
 		{
-			fname = campaign_mods[i];
-			if (fname == NULL)
+			modname = campaign_mods[i];
+			if (modname == NULL)
 			{
 				break;
 			}
@@ -985,8 +985,8 @@ int main(int argc, char *argv[])
 		// check multiplay mods
 		for(i=0; i < 100; i++)
 		{
-			fname = multiplay_mods[i];
-			if (fname == NULL)
+			modname = multiplay_mods[i];
+			if (modname == NULL)
 			{
 				break;
 			}
