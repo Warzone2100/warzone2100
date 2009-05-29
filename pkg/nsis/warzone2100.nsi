@@ -235,9 +235,9 @@ SectionGroup /e $(TEXT_SecMods) secMods
 
 Section $(TEXT_SecAivolutionMod) SecAivolutionMod
 
-  SetOutPath "$INSTDIR\mods\global"
+  SetOutPath "$INSTDIR\mods\multiplay"
 
-  File "${TOP_BUILDDIR}\data\mods\global\aivolution.wz"
+  File "${TOP_BUILDDIR}\data\mods\multiplay\aivolution.wz"
 
   SetOutPath "$INSTDIR"
 
@@ -536,16 +536,17 @@ Section "Uninstall"
 
   Delete "$INSTDIR\mods\music\music_1.0.AUTHORS.txt"
   Delete "$INSTDIR\mods\music\music_1.0.wz"
-  RMDir "$INSTDIR\mods\music"
-
-  Delete "$INSTDIR\mods\global\aivolution.wz"
-  RMDir "$INSTDIR\mods\global"
 
   Delete "$INSTDIR\mods\multiplay\ntw.wz"
+  Delete "$INSTDIR\mods\multiplay\aivolution.wz"
+
   RMDir "$INSTDIR\mods\multiplay"
+  RMDir "$INSTDIR\mods\music"
+  RMDir "$INSTDIR\mods\campaign"
+  RMDir "$INSTDIR\mods\global"
+
   RMDir "$INSTDIR\mods"
 
-  RMDir "$INSTDIR\mods\campaign"
 
 ; remove all the locales
 
