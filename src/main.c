@@ -929,82 +929,6 @@ int main(int argc, char *argv[])
 		soundTest();
 	}
 
-	// Now we check the mods to see if they exsist or not (specified on the command line)
-	// They are all capped at 100 mods max(see clparse.c)
-	// FIX ME: I know this is a bit hackish, but better than nothing for now?
-	{
-		char *modname;
-		char modtocheck[256];
-		char **filelist;
-		char *item;
-		int i = 0;
-
-
-		// check global mods
-		for(i=0; i < 100; i++)
-		{
-			modname = global_mods[i];
-			if (modname == NULL)
-			{
-				break;
-			}
-			ssprintf(modtocheck, "mods/global/%s", modname);
-			filelist = PHYSFS_enumerateFiles(modtocheck); 
-			item = filelist;
-			if (!*item)
-			{
-				debug(LOG_ERROR, "The (global) mod (%s) you have specified doesn't exist!", modname);
-			}
-			else
-			{
-				printf("(global) mod (%s) is enabled", modname);
-			}
-			PHYSFS_freeList(filelist);
-		}
-		// check campaign mods
-		for(i=0; i < 100; i++)
-		{
-			modname = campaign_mods[i];
-			if (modname == NULL)
-			{
-				break;
-			}
-			ssprintf(modtocheck, "mods/campaign/%s", modname);
-			filelist = PHYSFS_enumerateFiles(modtocheck); 
-			item = filelist;
-			if (!*item)
-			{
-				debug(LOG_ERROR, "The mod_ca (%s) you have specified doesn't exist!", modname);
-			}
-			else
-			{
-				printf("mod_ca (%s) is enabled", modname);
-			}
-			PHYSFS_freeList(filelist);
-		}
-		// check multiplay mods
-		for(i=0; i < 100; i++)
-		{
-			modname = multiplay_mods[i];
-			if (modname == NULL)
-			{
-				break;
-			}
-			ssprintf(modtocheck, "mods/multiplay/%s", modname);
-			filelist = PHYSFS_enumerateFiles(modtocheck); 
-			item = filelist;
-			if (!*item)
-			{
-				debug(LOG_ERROR, "The mod_mp (%s) you have specified doesn't exist!", modname);
-			}
-			else
-			{
-				printf("mod_mp (%s) is enabled", modname);
-			}
-			PHYSFS_freeList(filelist);
-		}
-	}
-
 	// Register the PhysicsFS implementation of the SQLite VFS class with
 	// SQLite's VFS system as the default (non-zero=default, zero=default).
 	sqlite3_register_physfs_vfs(1);
@@ -1090,5 +1014,3 @@ void SetGameMode(GS_GAMEMODE status)
 {
 	gameStatus = status;
 }
-
-
