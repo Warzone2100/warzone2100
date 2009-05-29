@@ -119,7 +119,7 @@ public	int				numVtolTemplates;
 public	TEMPLATE		sense[11];
 public	int				numSenseTemplates;
 
-public	TEMPLATE		constructor,aiconstructor,repairUnit;
+public	TEMPLATE		constructor,repairUnit;
 public	int				numRepairUnits;
 
 //defend
@@ -1456,7 +1456,7 @@ event droidDestroyed(droidDestroyedTr)
 
 		if( (structure != NULLOBJECT) and (getDroidCount(me) < MAX_DROIDS) )
 		{
-			buildDroid(aiconstructor, structure, me, 1);	// build constructor
+			buildDroid(constructor, structure, me, 1);	// build constructor
 		}
 
 	}
@@ -1488,7 +1488,7 @@ event conDroids(conDroidsTr)
 	_haveTrucks = buildGroup.members;
 	
 	// Find out how many trucks and combat engineers are already in production
-	_numBuilding = numTemplatesInProduction(aiconstructor,me);	//trucks
+	_numBuilding = numTemplatesInProduction(constructor,me);	//trucks
 	_numBuilding = _numBuilding + numTemplatesInProduction(cybEngineer,me);	//engineers
 
 	_totalTrucks = _numBuilding + _haveTrucks;
@@ -1502,7 +1502,7 @@ event conDroids(conDroidsTr)
 		{
 			if(getDroidCount(me) < MAX_DROIDS)
 			{
-				buildDroid(aiconstructor, _factory, me, 1);	// build constructor
+				buildDroid(constructor, _factory, me, 1);	// build constructor
 				_numBuilding++;
 				_totalTrucks++;
 			}
@@ -1529,7 +1529,7 @@ function void buildTruck()
 	_haveTrucks = buildGroup.members;
 	
 	//Find out how many trucks and combat engineers are already in production
-	_numBuilding = numTemplatesInProduction(aiconstructor,me);	//trucks
+	_numBuilding = numTemplatesInProduction(constructor,me);	//trucks
 	_numBuilding = _numBuilding + numTemplatesInProduction(cybEngineer,me);	//engineers
 
 	_totalTrucks = _numBuilding + _haveTrucks;
@@ -1541,7 +1541,7 @@ function void buildTruck()
 		and (_totalTrucks < _maxTrucks))
 	{
 		//Try to build a truck
-		_bStartedBuilding = buildUnit(aiconstructor, _factory, factory, FALSE);	//build truck even if not idle
+		_bStartedBuilding = buildUnit(constructor, _factory, factory, FALSE);	//build truck even if not idle
 		
 		//Update statistics if started building a truck
 		if(_bStartedBuilding)
