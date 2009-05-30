@@ -3,6 +3,6 @@ top_builddir=$(top_srcdir)
 
 include $(top_srcdir)/makerules/common.mk
 
-SUBDIRS=global multiplay
+SUBDIRS=multiplay
 
 include $(top_srcdir)/makerules/submake.mk

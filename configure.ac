@@ -368,7 +368,6 @@ AC_CONFIG_FILES([Makefile
 		data/base/Makefile
 		data/base/stats-sql/Makefile
 		data/mods/Makefile
-		data/mods/global/Makefile
 		data/mods/multiplay/Makefile
 		data/music/Makefile
 		pkg/Makefile

@@ -1,1 +1,1 @@
-SUBDIRS = global multiplay
+SUBDIRS = multiplay
