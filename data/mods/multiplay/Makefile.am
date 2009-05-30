@@ -23,9 +23,19 @@ NTWLIST = \
 
 NTWARCHIVE = ntw.wz
 
-CLEANFILES = $(NTWARCHIVE)
+
+AIVOLUTIONLIST = \
+	commands.txt \
+	multiplay
+
+AIVOLUTIONARCHIVE = aivolution.wz
+
+
+CLEANFILES = $(NTWARCHIVE) $(AIVOLUTIONARCHIVE)
 
 $(NTWARCHIVE): $(NTWLIST:%=$(basename $(NTWARCHIVE))/%)
+$(AIVOLUTIONARCHIVE): $(AIVOLUTIONLIST:%=$(basename $(AIVOLUTIONARCHIVE))/%)
+
 
 multiplaymodsdir = $(pkgdatadir)/mods/multiplay
-nodist_multiplaymods_DATA = $(NTWARCHIVE)
+nodist_multiplaymods_DATA = $(NTWARCHIVE) $(AIVOLUTIONARCHIVE)

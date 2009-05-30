@@ -157,6 +157,12 @@ Section $(TEXT_SecBase) SecBase
   File "/oname=Readme.en.html" "${TOP_SRCDIR}\doc\Readme.en.xhtml"
   File "/oname=Readme.de.html" "${TOP_SRCDIR}\doc\Readme.de.xhtml"
 
+  ; Create mod directories
+  CreateDirectory "$INSTDIR\mods\campaign"
+  CreateDirectory "$INSTDIR\mods\music"
+  CreateDirectory "$INSTDIR\mods\global"
+  CreateDirectory "$INSTDIR\mods\multiplay"
+
   ; Music files
   SetOutPath "$INSTDIR\music"
   File "${TOP_SRCDIR}\data\music\menu.ogg"
@@ -220,9 +226,9 @@ SectionGroup /e $(TEXT_SecMods) secMods
 
 Section $(TEXT_SecAivolutionMod) SecAivolutionMod
 
-  SetOutPath "$INSTDIR\mods\global"
+  SetOutPath "$INSTDIR\mods\multiplay"
 
-  File "${TOP_BUILDDIR}\data\mods\global\aivolution.wz"
+  File "${TOP_BUILDDIR}\data\mods\multiplay\aivolution.wz"
 
   SetOutPath "$INSTDIR"
 
@@ -514,12 +520,21 @@ Section "Uninstall"
   Delete "$INSTDIR\mods\global\autoload\music_1.0.wz"
   RMDir "$INSTDIR\mods\global\autoload"
 
-  Delete "$INSTDIR\mods\global\aivolution.wz"
-  RMDir "$INSTDIR\mods\global"
+  Delete "$INSTDIR\mods\music\music_1.0.AUTHORS.txt"
+  Delete "$INSTDIR\mods\music\music_1.0.wz"
 
   Delete "$INSTDIR\mods\multiplay\ntw.wz"
+  Delete "$INSTDIR\mods\multiplay\aivolution.wz"
+
   RMDir "$INSTDIR\mods\multiplay"
+  RMDir "$INSTDIR\mods\music"
+  RMDir "$INSTDIR\mods\campaign"
+  RMDir "$INSTDIR\mods\global"
+
   RMDir "$INSTDIR\mods"
+
+
+; remove all the locales
 
   Delete "$INSTDIR\locale\cs\LC_MESSAGES\${PACKAGE}.mo"
   RMDir "$INSTDIR\locale\cs\LC_MESSAGES"
