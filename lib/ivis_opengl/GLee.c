@@ -12000,7 +12000,9 @@ GLuint __GLeeLink_GL_ARB_vertex_buffer_object(void)
     if ((GLeeFuncPtr_glGetBufferParameterivARB = (GLEEPFNGLGETBUFFERPARAMETERIVARBPROC) __GLeeGetProcAddress("glGetBufferParameterivARB"))!=0) nLinked++;
     if ((GLeeFuncPtr_glGetBufferPointervARB = (GLEEPFNGLGETBUFFERPOINTERVARBPROC) __GLeeGetProcAddress("glGetBufferPointervARB"))!=0) nLinked++;
 
+	// NOTE: this hack causes issues with MAC OS
 	// HACK: work around for drivers that report VBO, but don't have full openGL 1.5 implementation.
+	#if defined(WZ_OS_UNIX) && !defined(WZ_OS_MAC)
 	GLeeFuncPtr_glBindBuffer = GLeeFuncPtr_glBindBufferARB;
 	GLeeFuncPtr_glDeleteBuffers = GLeeFuncPtr_glDeleteBuffersARB;
 	GLeeFuncPtr_glGenBuffers = GLeeFuncPtr_glGenBuffersARB;
@@ -12012,6 +12014,7 @@ GLuint __GLeeLink_GL_ARB_vertex_buffer_object(void)
 	GLeeFuncPtr_glUnmapBuffer = GLeeFuncPtr_glUnmapBufferARB;
 	GLeeFuncPtr_glGetBufferParameteriv = GLeeFuncPtr_glGetBufferParameterivARB;
 	GLeeFuncPtr_glGetBufferPointerv = GLeeFuncPtr_glGetBufferPointervARB;
+	#endif
 #endif
     if (nLinked==11) return GLEE_LINK_COMPLETE;
     if (nLinked==0) return GLEE_LINK_FAIL;
