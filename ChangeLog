@@ -1,5 +1,77 @@
 0000-00-00: SVN
  * General:
+   * Fix: Tells user if mod entered on the command line / shorcut is enabled, or is invalid. Output is to stdout or stderr. (r7586)
+   * Fix: Launching the game from installer now works (7568 ticket:364)
+   * Fix: Angel missile no longer obsoletes long-range artillery, Ripple Rockets no longer autoupgrades to Archie, and Mortar Fast Loader requires Mortar Rapid Loader Mk3 (r7559, ticket:533, 292, 398)
+   * New: Add a new translation:  zh_TW.po  by chtsau (r7561, ticket:239)
+   * Change: Allow up to 36 savegame 'slots' (r7535)
+   * Change: add 'mod/music' directory to be use for custom music. (r7557)
+   * Fix: set the volume of the FMV based on the user's preferences (r7489, ticket:526)
+   * Fix: Check if the unit has weapons, before trying to see what weapons they have. (r7488, ticket:523)
+   * Change: remove 'autoload' handling.  (r7474)
+   * Fix: Fix windows crash dump output (r7473)
+   * Fix: Fix handling of limbo & expand missions (r7454)
+   * Change: Let players save games with Num-Enter as well as Return - should make it easier on international keyboards (r7412)
+   * Change: translation of ru.po by Maxim (r7444, ticket:347)
+   * Fix: We now return the truncated string, instead of returning NULL if the string is too long. (r7426, ticket:493)
+   * Fix: pl.po file by Makary (r7423, ticket:241)
+   * New: Slovenian translation sl.po file by ThomasCarstein (r7422, ticket:392)
+   * Fix: pt_BR.po update by Tucalipe (r7421m ticket:350)
+   * Fix: Clear out old effects (prevents burning lasting between missions) (r7416)
+   * Fix: Don't allow the transporter to be controlled in SP games.  (r7414)
+   * Fix: Remember player number and tech level for map selection screen (r7400)
+ * Gameplay:
+   * Fix: Make AI ignore hostile structures for path-finding when armed. (r7579)
+ * Graphics:
+   * Fix: Fix issue with radar / mini-map. (r7458, ticket:333)
+   * Fix: Fix issue with radar / mini-map drawing objects outside its scope. (r7441)
+   * Change: Better map previews (patch by Florian Schanda, color scheme by Zarel). (r7434)
+ * Network:
+   * Change: Increase timeout delay to 2500ms for dial-up modem users. (r7556, ticket:543)
+
+2009-05-10: Version 2.2_rc1
+ * General:
+   * New: Windows installer has option to download and install videos (enabled by default). (r7328)
+   * Change: Windows installer no longer has any license agreements, since they are not EULAs. (r7328)
+   * Change: Flash the intel button when we get new intel. (r7317)
+   * Fix: Don't count cheated games as multiplayer wins and losses. (r7228)
+   * Fix: Windows installer doesn't redownload the music mod if it's already installed. (r7328)
+   * Fix: Let's not underflow a unsigned variable. (r7335)
+   * Change: Remove 'grim' mod, since it is broken for 2.2 (r7385, r7386, ticket:463)
+   * Fix: NTW Mod 1.8.6b for 2.2 by Delphino (r7368, r7369)
+ * Gameplay:
+   * New: Repair facilities will repair nearby units if they don't have anything else to do. (r7234, patch #413)
+   * Change: Multi-turret units have been removed due to graphics bugs. (r7274)
+   * Fix: Trucks will never, ever, ever build on burning oil resources. Ever. Not even if you're an AI. (r7340)
+   * Fix: Droids with Fire-At-Will will fire upon anything within range. (r7234, patch #413)
+   * Fix: Pretty much every known bug involving repair facilities have been fixed. (r7234)
+   * Fix: Trucks will not help enemies build structures. (r7234, patch #413)
+   * Fix: Multi-turret units will always shoot with both weapons. (r7261)
+   * Fix: Target prediction works correctly again. (r7279, r7383, ticket:374)
+ * GUI:
+   * Fix: Interface no longer disappears for a few seconds when someone changes team/color/location/readiness in multiplayer staging area. (r7259)
+   * Change: Add new icons for when player leaves or gets disconnected.  Icons by Zarel.  (r7373, ticket:274)
+ * Graphics:
+   * Change: Do not use texture compression for interface textures. (r7348)
+   * Change: Scale down textures used for 3D when they exceed the size specified with the textureSize option (r7347)
+ * Network:
+   * Fix / Change: Modify the server & client code to detect when the Host can't host a game, Change how 'addg' works + other enhancements (r7325) 
+   * Change: Use a more descriptive error message instead of the worthless SDLnet message. (r7344)
+
+2009-05-01: Version 2.2_beta2
+ * General:
+   * New: Add radar detector turret. It will detect and target enemy sensors up to twice their range (r6955, ticket:340)
+   * Fix: Crash when a person aborts multiplayer early then tries to start single-player (r6991)
+   * Change: No longer requires the texture rectangle OpenGL extension to play video (r7022)
+   * Change: F10 is now always the screenshot key (r6993)
+   * Change: New config directory (r6995)
+ * Network:
+   * Add: Version checking added of connecting clients (r6992)
+   * Change: Game now runs on port 2100, and lobby port is now 9990 (r6994)
+   * Change: Games can now be password protected (r7078)
+
+2009-04-01: Version 2.2_beta1
+ * General:
    * New: Multi-threaded path-finding should make path-finding much faster (r5735, patch #1064)
    * New: Original sound tracks added (r5261)
    * New: Playing of Ogg Theora full motion videos are now supported (r6119, ticket:64, ticket:46)
