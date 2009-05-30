@@ -159,10 +159,10 @@ Section $(TEXT_SecBase) SecBase
   File "/oname=Readme.de.html" "${TOP_SRCDIR}\doc\Readme.de.xhtml"
 
   ; Create mod directories
-  CreateDir "$INSTDIR\mods\campaign"
-  CreateDir "$INSTDIR\mods\music"
-  CreateDir "$INSTDIR\mods\global"
-  CreateDir "$INSTDIR\mods\multiplay" 	
+  CreateDirectory "$INSTDIR\mods\campaign"
+  CreateDirectory "$INSTDIR\mods\music"
+  CreateDirectory "$INSTDIR\mods\global"
+  CreateDirectory "$INSTDIR\mods\multiplay"
 
   ; Music files
   SetOutPath "$INSTDIR\music"
