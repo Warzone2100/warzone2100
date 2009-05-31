@@ -1,4 +1,4 @@
-2009-06-01: Version 2.2
+2009-05-31: Version 2.2
  * General:
    * Fix: Tells user if mod entered on the command line / shorcut is enabled, or is invalid. Output is to stdout or stderr. (r7586)
    * Fix: Launching the game from installer now works (r7568 ticket:364)
@@ -22,6 +22,8 @@
    * Fix: Remember player number and tech level for map selection screen (r7400)
  * Gameplay:
    * Fix: Make AI ignore hostile structures for path-finding when armed. (r7579)
+   * Fix: Allow Fog mode to be set based on user preferences for campaign games. (r7597, ticket:561)
+   * Fix: Don't allow 2x the experience points in a campaign game, when this is reserved for MP games. (r7598, ticket:562)
  * Graphics:
    * Fix: Fix issue with radar / mini-map. (r7458, ticket:333)
    * Fix: Fix issue with radar / mini-map drawing objects outside its scope. (r7441)

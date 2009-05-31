@@ -178,7 +178,7 @@ Section $(TEXT_SecBase) SecBase
 
   SetOutPath "$INSTDIR\fonts"
   MessageBox MB_YESNO|MB_ICONQUESTION|MB_DEFBUTTON2 \
- "Fontconfig will be using a custom font, if you wish to use a font other than the custom font, then fontconfig needs to build a font cache from the windows fonts directory. $\r$\n$\r$\nDo you wish to allow this? [default is NO]$\r$\n$\r$\n$\r$\n(NOTE: This will have a huge performance impact on Vista, on the first run of the program, while fontconfig builds the font cache.)" IDYES WINDOWSFONT_ENABLED IDNO WINDOWSFONT_DISABLED
+ "Do you wish to enable support for languages other than English, French, or German?$\r$\n$\r$\n[Default is NO]$\r$\n$\r$\n$\r$\n(NOTE: This will have a huge performance impact on Vista, on the first run of the program, while fontconfig builds the font cache, if you answer yes.)" IDYES WINDOWSFONT_ENABLED IDNO WINDOWSFONT_DISABLED
 WINDOWSFONT_ENABLED:
   File "/oname=fonts.conf" "${EXTDIR}\etc\fonts\fonts.conf.wd_enable" 
   goto FONT_DONE
@@ -283,7 +283,7 @@ SectionGroupEnd
 Section $(TEXT_SecFMVs) SecFMVs
 
   IfFileExists "sequences.wz" +5
-    NSISdl::download "http://download.gna.org/warzone/videos/sequences.wz"               "sequences.wz"
+    NSISdl::download "http://download.gna.org/warzone/videos/sequences-2.2.wz"               "sequences.wz"
     Pop $R0 ; Get the return value
     StrCmp $R0 "success" +2
       MessageBox MB_OK|MB_ICONSTOP "Download of videos failed: $R0"
