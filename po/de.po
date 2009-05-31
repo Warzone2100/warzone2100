@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2009-05-27 13:24+0200\n"
+"POT-Creation-Date: 2009-05-31 15:47+0200\n"
 "PO-Revision-Date: 2009-05-27 17:28+0100\n"
 "Last-Translator: Steven 'Kreuvf' Koenig <translations@kreuvf.de>\n"
 "Language-Team: Deutsch <warzone-dev@gna.org>\n"
@@ -12388,72 +12388,106 @@ msgstr "Version %s%s%s%s"
 
 #~ msgid "Viper Light Cannon Wheels"
 #~ msgstr "Viper Leichtes Geschütz Räder"
+
 #~ msgid "Viper Flamer Wheels"
 #~ msgstr "Viper Flammenwerfer Räder"
+
 #~ msgid "Viper Sensor Wheels"
 #~ msgstr "Viper Sensor Räder"
+
 #~ msgid "Viper Light Cannon Tracks"
 #~ msgstr "Viper Leichtes Geschütz Halbketten"
+
 #~ msgid "Cobra Heavy Machinegun Half-track"
 #~ msgstr "Cobra Schweres Maschinengewehr Halbketten"
+
 #~ msgid "Cobra Mortar Half-track"
 #~ msgstr "Cobra Mörser Halbketten"
+
 #~ msgid "Cobra Light Cannon Tracks"
 #~ msgstr "Cobra Leichtes Geschütz Ketten"
+
 #~ msgid "Viper Medium Cannon Tracks"
 #~ msgstr "Viper Mittleres Geschütz Ketten"
+
 #~ msgid "Viper Repair Wheels"
 #~ msgstr "Viper Reparaturarm Räder"
+
 #~ msgid "Viper Repair Half-track"
 #~ msgstr "Viper Reparaturarm Halbketten"
+
 #~ msgid "Viper Machine Gun Wheels"
 #~ msgstr "Viper Maschinengewehr Räder"
+
 #~ msgid "Viper Twin Machinegun Wheels"
 #~ msgstr "Viper Zwillings-Maschinengewehr Räder"
+
 #~ msgid "Viper Twin Machinegun Half-track"
 #~ msgstr "Viper Zwillings-Maschinengewehr Halbketten"
+
 #~ msgid "Viper Heavy Machinegun Half-track"
 #~ msgstr "Viper Schweres Maschinengewehr Halbketten"
+
 #~ msgid "Viper Heavy Machinegun Tracks"
 #~ msgstr "Viper Schweres Maschinengewehr Ketten"
+
 #~ msgid "Viper Lancer Wheels"
 #~ msgstr "Viper Lancer Räder"
+
 #~ msgid "Viper Mini-Pod Rockets Wheels"
 #~ msgstr "Viper Miniraketen Räder"
+
 #~ msgid "Viper Mini-Rocket Artillery Wheels"
 #~ msgstr "Viper Miniartillerieraketen Räder"
+
 #~ msgid "Viper Bunker Buster Rockets Wheels"
 #~ msgstr "Viper Bunker Buster Räder"
+
 #~ msgid "Cobra Heavy Cannon Tracks"
 #~ msgstr "Cobra Schweres Geschütz Ketten"
+
 #~ msgid "Cobra Sensor Half-track"
 #~ msgstr "Cobra Sensor Halbketten"
+
 #~ msgid "Cobra Bombard Half-track"
 #~ msgstr "Cobra Bombard Halbketten"
+
 #~ msgid "Cobra Command Turret Half-track"
 #~ msgstr "Cobra Commander Halbketten"
+
 #~ msgid "Cobra Lancer Half-track"
 #~ msgstr "Cobra Lancer Halbketten"
+
 #~ msgid "Cobra Mini-Rocket Artillery Half-track"
 #~ msgstr "Cobra Miniartillerieraketen Halbketten"
+
 #~ msgid "Python Light Cannon Tracks"
 #~ msgstr "Python Leichtes Geschütz Ketten"
+
 #~ msgid "Python Medium Cannon Tracks"
 #~ msgstr "Python Mittleres Geschütz Ketten"
+
 #~ msgid "Python Commander Tracks"
 #~ msgstr "Pyhton Commander Ketten"
+
 #~ msgid "Mini-Pod"
 #~ msgstr "Miniraketen"
+
 #~ msgid "VTOL Mini-Pod"
 #~ msgstr "VTOL-Miniraketen"
+
 #~ msgid "Machine Gunner"
 #~ msgstr "MG-Schütze"
+
 #~ msgid "Mini-Pod Rockets"
 #~ msgstr "Miniraketen"
+
 #~ msgid "Machine Gun Artifact"
 #~ msgstr "Maschinengewehr-Artefakt"
+
 #~ msgid "HMG Cobra Half-tracks"
 #~ msgstr "Schweres Maschinengewehr Cobra Halbketten"
+
 #~ msgid "Commander Python Tracks"
 #~ msgstr "Commander Python Ketten"
 
@@ -12524,220 +12558,327 @@ msgstr "Version %s%s%s%s"
 #, fuzzy
 #~ msgid "Cluster Bombs Bug VTOL"
 #~ msgstr "Bug Streubomben VTOL"
+
 #~ msgid "Energy bars display toggled"
 #~ msgstr "Anzeige der Energiebalken umgeschaltet"
+
 #~ msgid "The host has left the game!"
 #~ msgstr "Der Spielleiter hat das Spiel verlassen!"
+
 #~ msgid "NEXUS Link Tower"
 #~ msgstr "Turm mit NEXUS-Link"
+
 #~ msgid "Whirlwind AATurret"
 #~ msgstr "Whirlwind-Luftabwehrturm"
+
 #~ msgid "Power Upgrade"
 #~ msgstr "Kraftwerkverbesserung"
+
 #~ msgid "Viper Wheels Machinegun"
 #~ msgstr "Viper Räder Maschinenengewehr"
+
 #~ msgid "Viper Wheels Twin Machinegun"
 #~ msgstr "Viper Räder Zwillings-Maschinengewehr"
+
 #~ msgid "Viper Wheels Heavy Machinegun"
 #~ msgstr "Viper Räder Schweres Maschinengewehr"
+
 #~ msgid "Cobra Wheels Heavy Machinegun"
 #~ msgstr "Cobra Räder Schweres Maschinengewehr"
+
 #~ msgid "Cobra Hover Heavy Machinegun"
 #~ msgstr "Cobra Hover Schweres Maschinengewehr"
+
 #~ msgid "Viper Tracks Machinegun"
 #~ msgstr "Viper Ketten Maschinengewehr"
+
 #~ msgid "Viper Tracks Twin Machinegun"
 #~ msgstr "Viper Ketten Zwillings-Maschinengewehr"
+
 #~ msgid "Viper Tracks Heavy Machinegun"
 #~ msgstr "Viper Ketten Schweres Maschinengewehr"
+
 #~ msgid "Cobra Tracks Heavy Machinegun"
 #~ msgstr "Cobra Ketten Schweres Maschinengewehr"
+
 #~ msgid "Cobra Hover Medium Cannon"
 #~ msgstr "Cobra Hover Mittleres Geschütz"
+
 #~ msgid "Scorpion Hover Medium Cannon"
 #~ msgstr "Scorpion Hover Mittleres Geschütz"
+
 #~ msgid "Scorpion Tracks Medium Cannon"
 #~ msgstr "Scorpion Ketten Mittleres Geschütz"
+
 #~ msgid "Python Hover Medium Cannon"
 #~ msgstr "Python Hover Mittleres Geschütz"
+
 #~ msgid "Python Hover Heavy Cannon"
 #~ msgstr "Python Hover Schweres Geschütz"
+
 #~ msgid "Python Tracks Heavy Cannon"
 #~ msgstr "Python Ketten Schweres Geschütz"
+
 #~ msgid "Mantis Tracks Railgun"
 #~ msgstr "Mantis Ketten Magnetgeschütz"
+
 #~ msgid "Mantis Tracks Pulse Laser"
 #~ msgstr "Mantis Ketten Pulslaser"
+
 #~ msgid "Python Tracks Lancer"
 #~ msgstr "Python Ketten Lancer"
+
 #~ msgid "Mantis Tracks Lancer"
 #~ msgstr "Mantis Ketten Lancer"
+
 #~ msgid "Vengeance Tracks Tank Killer"
 #~ msgstr "Vengeance Ketten Tank Killer"
+
 #~ msgid "Tiger Tracks Heavy Cannon"
 #~ msgstr "Tiger Ketten Schweres Geschütz"
+
 #~ msgid "Tiger Tracks Needle Gun"
 #~ msgstr "Tiger Ketten Nadelgeschütz"
+
 #~ msgid "Vengeance Tracks Needle Gun"
 #~ msgstr "Vengeance Ketten Nadelgeschütz"
+
 #~ msgid "Scorpion Cluster Bomb VTOL"
 #~ msgstr "Scorpion Streubomben VTOL"
+
 #~ msgid "Scorpion Bunker Buster VTOL"
 #~ msgstr "Scorpion Bunker Buster VTOL"
+
 #~ msgid "Bug Lancer VTOL"
 #~ msgstr "Bug Lancer VTOL"
+
 #~ msgid "Bug HPV VTOL"
 #~ msgstr "Bug Hochgeschwindigkeitsgeschütz VTOL"
+
 #~ msgid "Scorpion HPV VTOL"
 #~ msgstr "Scorpion Hochgeschwindigkeitsgeschütz VTOL"
+
 #~ msgid "Mantis Lancer VTOL"
 #~ msgstr "Mantis Lancer VTOL"
+
 #~ msgid "Mantis HPV VTOL"
 #~ msgstr "Mantis Hochgeschwindigkeitsgeschütz VTOL"
+
 #~ msgid "Cobra Repair Tracks"
 #~ msgstr "Cobra Reparatur Ketten"
+
 #~ msgid "Mantis Repair Tracks"
 #~ msgstr "Mantis Reparatur Ketten"
+
 #~ msgid "Python Tank Killer Tracks"
 #~ msgstr "Python Tank Killer Ketten"
+
 #~ msgid "Load Campaign"
 #~ msgstr "Kampagne laden"
+
 #~ msgid "One Player Skirmish"
 #~ msgstr "Einzelspieler-Geplänkel"
+
 #~ msgid "Full"
 #~ msgstr "Vollbild"
+
 #~ msgid "Minimal"
 #~ msgstr "Kleinstmöglich"
+
 #~ msgid "Played"
 #~ msgstr "Gespielt"
+
 #~ msgid "Campaign One Full Version Test Message"
 #~ msgstr "Kampagne Eins Vollversions Testnachricht"
+
 #~ msgid "New Paradigm Transmission"
 #~ msgstr "Übertragung vom New Paradigm"
+
 #~ msgid "The New Paradigm have been driven from this zone."
 #~ msgstr "Das New Paradigm wurde aus dieser Zone vertrieben."
+
 #~ msgid "Establish a forward base near the site of the Research Centre."
 #~ msgstr "Errichten Sie eine vorgelagerte Basis in der Nähe der Forschungsanlage."
+
 #~ msgid "Commander"
 #~ msgstr "Commander"
+
 #~ msgid "Congratulations on defeating the New Paradigm."
 #~ msgstr "Gratulation zu Ihrem Sieg über das New Paradigm."
+
 #~ msgid "This sector is now secure."
 #~ msgstr "Dieser Sektor ist nun sicher."
+
 #~ msgid "When we failed to respond it became threatening."
 #~ msgstr "Als wir nicht darauf antworteten, drohte es uns."
+
 #~ msgid "Nexus removed itself leaving no trace"
 #~ msgstr "NEXUS entfernte sich selbst ohne eine Spur zu hinterlassen."
+
 #~ msgid "The Nexus Intruder Program has links with the Reed corporation."
 #~ msgstr "Das NEXUS-Eindringlingsprogramm steht in Verbindung zur Reed Corporation."
+
 #~ msgid "Nexus has technology and weapons and is not friendly."
 #~ msgstr "NEXUS verfügt über Technologien und Waffen und ist nicht freundlich gesinnt."
+
 #~ msgid "Warriors of the Collective..."
 #~ msgstr "Krieger des Kollektiv..."
+
 #~ msgid "Destroy and kill all who resist the Machine."
 #~ msgstr "Zerstört und tötet alle, die sich der Maschine widersetzen."
+
 #~ msgid "Attack!"
 #~ msgstr "Angriff!"
+
 #~ msgid "Analysis of the reactor site indicates The Collective"
 #~ msgstr "Analysen der Reaktoranlage deuten darauf hin, dass das Kollektiv"
+
 #~ msgid "were preparing to route its power to this location."
 #~ msgstr "einen Energietransfer zu dieser Position vorbereitete."
+
 #~ msgid "Argle Bargle - Please Remove when some text here!"
 #~ msgstr "Argle Bargle - Bitte entfernen wenn Text vorhanden (Ryo: literally translated ...)"
+
 #~ msgid "Proceed with caution. Scout and confirm Gamma are not contaminated."
 #~ msgstr "Rücken Sie vorsichtig vor. Erkunden Sie und stellen Sie sicher, dass Gamma nicht kontaminiert ist."
+
 #~ msgid "Secure this zone."
 #~ msgstr "Sichern Sie diese Zone."
+
 #~ msgid "A relief force will be sent as soon as the zone is cleared of all enemy."
 #~ msgstr "Ein Hilfstrupp wird geschickt, sobald das Gebiet von allen Feinden befreit wurde."
+
 #~ msgid "Be wary of attempts by NEXUS to control and infiltrate your systems."
 #~ msgstr "Nehmen Sie sich vor Infiltrationsversuchen von NEXUS in acht."
+
 #~ msgid "End Of Briefing."
 #~ msgstr "Ende der Missionsbesprechung."
+
 #~ msgid "Armed Scavengers Approaching"
 #~ msgstr "Bewaffnete Scavengers rücken an"
+
 #~ msgid "Civilian Rescued"
 #~ msgstr "Zivilist gerettet"
+
 #~ msgid "Civilians Rescued"
 #~ msgstr "Zivilisten gerettet"
+
 #~ msgid "Unit Rescued"
 #~ msgstr "Einheit gerettet"
+
 #~ msgid "Units Rescued"
 #~ msgstr "Einheiten gerettet"
+
 #~ msgid "Group Rescued"
 #~ msgstr "Gruppe gerettet"
+
 #~ msgid "Unit Captured"
 #~ msgstr "Einheit gekapert"
+
 #~ msgid "Group Captured"
 #~ msgstr "Gruppe gekapert"
+
 #~ msgid "Structure Captured"
 #~ msgstr "Gebäude gekapert"
+
 #~ msgid "Structure Destroyed"
 #~ msgstr "Gebäude zerstört"
+
 #~ msgid "Structure Infected"
 #~ msgstr "Gebäude infiziert"
+
 #~ msgid "Unit Infected"
 #~ msgstr "Einheit infiziert"
+
 #~ msgid "Group Infected"
 #~ msgstr "Gruppe infiziert"
+
 #~ msgid "Primary Objective Completed"
 #~ msgstr "Primäres Missionsziel erfüllt"
+
 #~ msgid "Secondary Objective Completed"
 #~ msgstr "Sekundäres Missionsziel erfüllt"
+
 #~ msgid "Time Limit Exceeded"
 #~ msgstr "Zeitlimit überschritten"
+
 #~ msgid "Out Of Time"
 #~ msgstr "Zeit abgelaufen"
+
 #~ msgid "Enemy Escaped"
 #~ msgstr "Feind geflohen"
+
 #~ msgid "Enemy Transport Landing"
 #~ msgstr "Feindlicher Transporter landet"
+
 #~ msgid "Incoming Airstrike"
 #~ msgstr "Eintreffender Luftangriff"
+
 #~ msgid "Team Alpha Eradicated"
 #~ msgstr "Team Alpha ausgelöscht"
+
 #~ msgid "Team Beta Eradicated"
 #~ msgstr "Team Beta ausgelöscht"
+
 #~ msgid "Team Gamma Eradicated"
 #~ msgstr "Team Gamma ausgelöscht"
+
 #~ msgid "Team Alpha Rescued"
 #~ msgstr "Team Alpha gerettet"
+
 #~ msgid "Team Beta Rescued"
 #~ msgstr "Team Beta gerettet"
+
 #~ msgid "Team Gamma Rescued"
 #~ msgstr "Team Gamma gerettet"
+
 #~ msgid "Team Alpha Liberated"
 #~ msgstr "Team Alpha befreit"
+
 #~ msgid "Team Beta Liberated"
 #~ msgstr "Team Beta befreit"
+
 #~ msgid "Team Gamma Liberated"
 #~ msgstr "Team Gamma befreit"
+
 #~ msgid "Civilians Eradicated"
 #~ msgstr "Zivilisten ausgelöscht"
+
 #~ msgid "Civilians Liberated"
 #~ msgstr "Zivilisten befreit"
+
 #~ msgid "Enemy Eradicated"
 #~ msgstr "Feind ausgelöscht"
+
 #~ msgid "New Paradigm base eradicated"
 #~ msgstr "New Paradigm-Basis ausgelöscht"
+
 #~ msgid "Collective base eradicated"
 #~ msgstr "Basis des Kollektivs ausgelöscht"
+
 #~ msgid "Nexus base eradicated"
 #~ msgstr "NEXUS-Basis ausgelöscht"
+
 #~ msgid "LasSat firing"
 #~ msgstr "Lasersatellit feuert"
+
 #~ msgid "LasSats firing"
 #~ msgstr "Lasersatelliten feuern"
+
 #~ msgid "Satellite Uplink"
 #~ msgstr "Satellitenkontrolle"
+
 #~ msgid "NASDA Central"
 #~ msgstr "NASDA-Zentrale"
+
 #~ msgid "SAM Site"
 #~ msgstr "Boden-Luft-Raketenstellung"
+
 #~ msgid "Now left click the Viper Body"
 #~ msgstr "Machen Sie einen Linksklick auf den Rumpf Viper"
+
 #~ msgid "Select the Vehicle Propulsion icon"
 #~ msgstr "Wählen Sie das Fahrzeugantrieb-Symbol"
+
 #~ msgid "Presently unused"
 #~ msgstr "Derzeit nicht verwendet"
-
