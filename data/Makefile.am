@@ -47,4 +47,6 @@ CLEANFILES = $(BASEARCHIVE) $(PATCHARCHIVE)
 $(BASEARCHIVE): $(BASELIST:%=$(basename $(BASEARCHIVE))/%)
 $(PATCHARCHIVE): $(PATCHLIST:%=$(basename $(PATCHARCHIVE))/%)
 
-nodist_pkgdata_DATA =  $(BASEARCHIVE) $(PATCHARCHIVE)
+dist-hook:
+	unzip -u $(BASEARCHIVE) -d $(DESTDIR)$(distdir)/$(basename $(BASEARCHIVE))
+	unzip -u $(PATCHARCHIVE) -d $(DESTDIR)$(distdir)/$(basename $(PATCHARCHIVE))
