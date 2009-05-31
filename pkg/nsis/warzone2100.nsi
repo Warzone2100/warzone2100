@@ -129,7 +129,7 @@ VIAddVersionKey "ProductVersion"	"${PACKAGE_VERSION}"
 ; for the message box
 LangString DIALOG_MSG ${LANG_ENGLISH} "Do you want to play the game in Chinese?$\r$\n$\r$\n$\r$\nImportant: This requires a different font, which may cause Warzone 2100 to take a long time to start on Windows Vista and later." 
 LangString DIALOG_MSG ${LANG_GERMAN} "Möchten Sie das Spiel auf Chinesisch spielen?$\r$\n$\r$\n$\r$\nWichtig: Dies benötigt eine andere Schriftart, was dazu führen könnte, dass Warzone 2100 unter Windows Vista und später sehr viel Zeit zum Starten benötigt."
-
+LangString DIALOG_MSG ${LANG_DUTCH}  "Do you want to play the game in Chinese?$\r$\n$\r$\n$\r$\nImportant: This requires a different font, which may cause Warzone 2100 to take a long time to start on Windows Vista and later." 
 ;--------------------------------
 ;Installer Sections
 
@@ -208,7 +208,7 @@ FONT_DONE:
   WriteUninstaller "$INSTDIR\uninstall.exe"
 
   !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
-
+    SetOutPath "$INSTDIR"	
     ;Create shortcuts
     CreateDirectory "$SMPROGRAMS\$STARTMENU_FOLDER"
     CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Uninstall.lnk" "$INSTDIR\uninstall.exe"
@@ -216,7 +216,7 @@ FONT_DONE:
 
   !insertmacro MUI_STARTMENU_WRITE_END
 
-  SetOutPath "$INSTDIR\"	
+  SetOutPath "$INSTDIR"	
   CreateShortCut "$DESKTOP\${PACKAGE_NAME}.lnk" "$INSTDIR\${PACKAGE}.exe"
 SectionEnd
 
@@ -643,15 +643,22 @@ Section "Uninstall"
   RMDir "$INSTDIR\locale"
   RMDir "$INSTDIR"
 
+; remove the desktop shortcut icon
+
   Delete "$DESKTOP\${PACKAGE_NAME}.lnk"
-  Delete "$SMPROGRAMS\$STARTMENU_FOLDER\Uninstall.lnk"
-  Delete "$SMPROGRAMS\$STARTMENU_FOLDER\${PACKAGE_NAME}.lnk"
-  Delete "$SMPROGRAMS\$STARTMENU_FOLDER\${PACKAGE_NAME} - Aivolution.lnk"
-  Delete "$SMPROGRAMS\$STARTMENU_FOLDER\${PACKAGE_NAME} - NTW.lnk"
-  RMDir "$SMPROGRAMS\$STARTMENU_FOLDER"
+
+; and now, lets really remove the startmenu entries...
+
+  !insertmacro MUI_STARTMENU_GETFOLDER Application $MUI_TEMP
+
+  Delete "$SMPROGRAMS\$MUI_TEMP\Uninstall.lnk"
+  Delete "$SMPROGRAMS\$MUI_TEMP\${PACKAGE_NAME}.lnk"
+  Delete "$SMPROGRAMS\$MUI_TEMP\${PACKAGE_NAME} - Aivolution.lnk"
+  Delete "$SMPROGRAMS\$MUI_TEMP\${PACKAGE_NAME} - NTW.lnk"
+;  RMDir "$SMPROGRAMS\$STARTMENU_FOLDER"
 
   ;Delete empty start menu parent diretories
-  !insertmacro MUI_STARTMENU_GETFOLDER Application $MUI_TEMP
+;  !insertmacro MUI_STARTMENU_GETFOLDER Application $MUI_TEMP
   StrCpy $MUI_TEMP "$SMPROGRAMS\$MUI_TEMP"
 
   startMenuDeleteLoop:
