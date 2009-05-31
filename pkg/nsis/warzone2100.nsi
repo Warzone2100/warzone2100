@@ -127,8 +127,8 @@ VIAddVersionKey "ProductVersion"	"${PACKAGE_VERSION}"
 
 ;-------------------------------
 ; for the message box
-LangString DIALOG_MSG ${LANG_ENGLISH} "Do you want to use a custom font or a font supporting Chinese characters?$\r$\n$\r$\n$\r$\nImportant: On Windows Vista the initial run of Warzone 2100 will take a very long time as the Windows font directory is read." 
-LangString DIALOG_MSG ${LANG_GERMAN} "Möchten Sie eine andere Schriftart wählen oder eine Schriftart, die chinesische Zeichen unterstützt?$\r$\n$\r$\n$\r$\nWichtig: Unter Windows Vista wird der erste Start von Warzone 2100 sehr viel Zeit benötigen, da das Windows-Schriftart-Verzeichnis gelesen wird."
+LangString DIALOG_MSG ${LANG_ENGLISH} "Do you want to play the game in Chinese?$\r$\n$\r$\n$\r$\nImportant: This requires a different font, which may cause Warzone 2100 to take a long time to start on Windows Vista and later." 
+LangString DIALOG_MSG ${LANG_GERMAN} "Möchten Sie das Spiel auf Chinesisch spielen?$\r$\n$\r$\n$\r$\nWichtig: Dies benötigt eine andere Schriftart, was dazu führen könnte, dass Warzone 2100 unter Windows Vista und später sehr viel Zeit zum Starten benötigt."
 
 ;--------------------------------
 ;Installer Sections
