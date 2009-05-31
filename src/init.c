@@ -420,7 +420,7 @@ BOOL systemInitialise(void)
 	buildMapList();
 
 	// Initialize render engine
-	war_SetFog(false);
+	war_SetFog(war_GetFog());		// Set Fog mode based on user preferences
 	if (!pie_Initialise()) {
 		debug(LOG_ERROR, "Unable to initialise renderer");
 		return false;
