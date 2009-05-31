@@ -1,7 +1,7 @@
 2009-06-01: Version 2.2
  * General:
    * Fix: Tells user if mod entered on the command line / shorcut is enabled, or is invalid. Output is to stdout or stderr. (r7586)
-   * Fix: Launching the game from installer now works (7568 ticket:364)
+   * Fix: Launching the game from installer now works (r7568 ticket:364)
    * Fix: Angel missile no longer obsoletes long-range artillery, Ripple Rockets no longer autoupgrades to Archie, and Mortar Fast Loader requires Mortar Rapid Loader Mk3 (r7559, ticket:533, 292, 398)
    * New: Add a new translation:  zh_TW.po  by chtsau (r7561, ticket:239)
    * Change: Allow up to 36 savegame 'slots' (r7535)
@@ -16,7 +16,7 @@
    * Fix: We now return the truncated string, instead of returning NULL if the string is too long. (r7426, ticket:493)
    * Fix: pl.po file by Makary (r7423, ticket:241)
    * New: Slovenian translation sl.po file by ThomasCarstein (r7422, ticket:392)
-   * Fix: pt_BR.po update by Tucalipe (r7421m ticket:350)
+   * Fix: pt_BR.po update by Tucalipe (r7421 ticket:350)
    * Fix: Clear out old effects (prevents burning lasting between missions) (r7416)
    * Fix: Don't allow the transporter to be controlled in SP games.  (r7414)
    * Fix: Remember player number and tech level for map selection screen (r7400)
