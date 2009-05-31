@@ -125,7 +125,10 @@ VIAddVersionKey "ProductVersion"	"${PACKAGE_VERSION}"
 
   !insertmacro MUI_RESERVEFILE_LANGDLL
 
-
+;-------------------------------
+; for the message box
+LangString DIALOG_MSG ${LANG_ENGLISH} "Do you want to use a custom font or a font supporting Chinese characters?\r\n\r\n\n\r\nImportant: On Windows Vista the initial run of Warzone 2100 will take a very long time as the Windows font directory is read." 
+LangString DIALOG_MSG ${LANG_GERMAN} "Möchten Sie eine andere Schriftart wählen oder eine Schriftart, die chinesische Zeichen unterstützt?\r\n\r\n\n\r\nWichtig: Unter Windows Vista wird der erste Start von Warzone 2100 sehr viel Zeit benötigen, da das Windows-Schriftart-Verzeichnis gelesen wird."
 
 ;--------------------------------
 ;Installer Sections
@@ -177,8 +180,7 @@ Section $(TEXT_SecBase) SecBase
   File "/oname=readme.screen.css" "${TOP_SRCDIR}\doc\styles\readme.screen.css"
 
   SetOutPath "$INSTDIR\fonts"
-  MessageBox MB_YESNO|MB_ICONQUESTION|MB_DEFBUTTON2 \
- "Do you wish to enable support for languages other than English, French, or German?$\r$\n$\r$\n[Default is NO]$\r$\n$\r$\n$\r$\n(NOTE: This will have a huge performance impact on Vista, on the first run of the program, while fontconfig builds the font cache, if you answer yes.)" IDYES WINDOWSFONT_ENABLED IDNO WINDOWSFONT_DISABLED
+  MessageBox MB_YESNO|MB_ICONQUESTION|MB_DEFBUTTON2 $DIALOG_MSG IDYES WINDOWSFONT_ENABLED IDNO WINDOWSFONT_DISABLED
 WINDOWSFONT_ENABLED:
   File "/oname=fonts.conf" "${EXTDIR}\etc\fonts\fonts.conf.wd_enable" 
   goto FONT_DONE
@@ -242,7 +244,7 @@ Section $(TEXT_SecAivolutionMod) SecAivolutionMod
   SetOutPath "$INSTDIR"
 
   !insertmacro MUI_STARTMENU_WRITE_BEGIN "Application"
-    CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\${PACKAGE_NAME} - Aivolution.lnk" "$INSTDIR\${PACKAGE}.exe" "--mod aivolution.wz"
+    CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\${PACKAGE_NAME} - Aivolution.lnk" "$INSTDIR\${PACKAGE}.exe" "--mod_mp aivolution.wz"
   !insertmacro MUI_STARTMENU_WRITE_END
 
 SectionEnd
