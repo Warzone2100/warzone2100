@@ -3613,7 +3613,7 @@ unsigned int getDroidLevel(const DROID* psDroid)
 	unsigned int i;
 
 	// Commanders don't need as much kills for ranks in multiplayer
-	if (isCommander && cmdGetDroidMultiExpBoost())
+	if (isCommander && cmdGetDroidMultiExpBoost() && bMultiPlayer)
 	{
 		numKills *= 2;
 	}
