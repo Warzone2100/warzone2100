@@ -222,7 +222,7 @@ static float vectorToAngle(float vx, float vy);
 static BOOL	g_bFormationSpeedLimitingOn = true;
 
 /* Return the difference in directions */
-static UDWORD dirDiff(SDWORD start, SDWORD end)
+static UDWORD moveDirDiff(SDWORD start, SDWORD end)
 {
 	SDWORD retval, diff;
 
@@ -252,7 +252,7 @@ static UDWORD dirDiff(SDWORD start, SDWORD end)
 	}
 
 	ASSERT( retval >=0 && retval <=180,
-		"dirDiff: result out of range" );
+		"moveDirDiff: result out of range" );
 
 	return retval;
 }
@@ -478,39 +478,6 @@ void moveTurnDroid(DROID *psDroid, UDWORD x, UDWORD y)
 		psDroid->sMove.targetY = (SDWORD)y;
 		psDroid->sMove.Status = MOVETURNTOTARGET;
 	}
-}
-
-// get the difference in direction
-static SDWORD moveDirDiff(SDWORD start, SDWORD end)
-{
-	SDWORD retval, diff;
-
-	diff = end - start;
-
-	if (diff > 0)
-	{
-		if (diff < 180)
-		{
-			retval = diff;
-		}
-		else
-		{
-			retval = diff - 360;
-		}
-	}
-	else
-	{
-		if (diff > -180)
-		{
-			retval = diff;
-		}
-		else
-		{
-			retval = 360 + diff;
-		}
-	}
-
-	return retval;
 }
 
 // Tell a droid to move out the way for a shuffle
@@ -1000,7 +967,7 @@ static BOOL moveBlocked(DROID *psDroid)
 	}
 
 	// See if the block can be cancelled
-	if (dirDiff(psDroid->direction, psDroid->sMove.bumpDir) > BLOCK_DIR)
+	if (moveDirDiff(psDroid->direction, psDroid->sMove.bumpDir) > BLOCK_DIR)
 	{
 		// Move on, clear the bump
 		psDroid->sMove.bumpTime = 0;
