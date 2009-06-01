@@ -1,5 +1,9 @@
+//3
+// Skirmish Base Script.
 //
-// Multi-player script for upto 8 players.
+// contains the rules for starting and ending a game.
+// as well as warning messages.
+// alex lee. pumpkin studios 99.
 //
 
 public	STRUCTURESTAT	command;			
@@ -14,106 +18,199 @@ public 	STRUCTURESTAT	cybfac;
 public 	STRUCTURESTAT	vtolfac;
 public	STRUCTURESTAT	NuclearReactor1;
 public	STRUCTURESTAT	CoolingTower1;
+public	STRUCTURESTAT	look;
 public	STRUCTURESTAT	shield;
 public	STRUCTURESTAT	command2;
 
+////////
 // starting technologies.
-public	int				numtecP0, numtecP1, numtecP2, numtecP3,numtecP4, numtecP5, numtecP6, numtecP7;
-public	RESEARCHSTAT	tecP0[5], tecP1[5], tecP2[5], tecP3[5], tecP4[5], tecP5[5], tecP6[5], tecP7[5];
-
 public	int				numCleanTech,	numBaseTech,	numDefTech;
-public	RESEARCHSTAT	cleanTech[32],	baseTech[32],	defTech[64];
+public	RESEARCHSTAT	defTech[50];
 
 // research topics
-public	int				numResP0, numResP1, numResP2, numResP3, numResP4, numResP5, numResP6, numResP7;
-public	RESEARCHSTAT	resP0[5], resP1[5], resP2[5], resP3[5],	resP4[5], resP5[5], resP6[5], resP7[5];
-
-public	int				numCleanRes,	numBaseRes,		numDefRes;
-public	RESEARCHSTAT	cleanRes[10],	baseRes[10],	defRes[10];		
+public	int				numBaseRes;
+public	RESEARCHSTAT	baseRes[10];		
 
 //	Other Stuff
 private	INT				count;
 private INT				playnum;
-private	BOOL			gamenotwon;
+private	BOOL			gamewon;
+private	BOOL			boolResult;
 
-// Base Under Attack Stuff 
-private	STRUCTURE		hitStruc;
+// Base Under Attack  
+private	STRUCTURE		hitStruc,structure;
+private	DROID			droid;
 private	BASEOBJ			attackerObj;
 private	int				t;
 public	SOUND			attackSnd1;	
 
 public	INTMESSAGE		endMsg, winMsg;
 
+/*--------------------------------------------------------------*/
+/*			Customizing				*/
+/*--------------------------------------------------------------*/
+public	ECM			NullEcm;
+
+private	BOOL			TeamAlliances;		//General AI/Human team alliance building on/off
+private	BOOL			ChangeHumanColor;
+private	BOOL			ChangeAIColor;
+private	int			ColorAITeam;
+private	int			ColorHumanTeam;
+private	BOOL			HumansCanDisally;
+private	BOOL			isObserver[8];
+
+
+/*--------------------------------------------------------------*/
+/*			Descriptions				*/
+/*--------------------------------------------------------------*/
+/*%? Help1	=	"This is the global switch. 
+By enabling this the games will ally AIs and Humans with each other.\n\n 
+If you disable this, some other options like Team Color etc will not have any effect." */
+
+/*%? Help2	=	"Select this option to make this player an observer. 
+This player cannot influence the game in any way. 
+He has no structures or units and cannot win or lose.\n\n
+NOTE: if you are not playing a multiplayer game and want to see the entire map, 
+you can enter debug mode (SHIFT-?), and press CTRL-G to reveal the map and 
+CTRL-O to place HQ on the map.\n\n In a multiplayer game all players must 
+use identical configuration." */
 // /////////////////////////////////////////////////////////////////
 
-trigger	endConditions(every, 100);	
+trigger	endConditions	(every, 100);
+trigger AllyWatchTr	(every, 20);
+
+event	AllyWatch;
 
 // /////////////////////////////////////////////////////////////////
 //this event is called once the game has initialised itself
 
+
 event initialisedEvent(CALL_GAMEINIT)
 {
-	playnum=0;
-	while (playnum < 8)
-	{
-		if(multiPlayerBaseType == CAMP_CLEAN)
-		{
-			setPowerLevel(750,playnum);	
-			count = 0;								
-			while (count < numCleanTech)
-			{
-				completeResearch(cleanTech[count], playnum);
-				count = count +1;
-			}
-			
-			count = 0;
-			while (count < numCleanRes)
-			{
-				enableResearch(cleanRes[count], playnum);
-				count = count +1;
-			}
-		}
-		else if(multiPlayerBaseType == CAMP_BASE)
-		{
-			setPowerLevel(1000,playnum);	
-			count = 0;								
-			while (count < numBaseTech)
-			{
-				completeResearch(baseTech[count], playnum);
-				count = count +1;
-			}
-			count = 0;								
-			while (count < numBaseRes)
-			{
-				enableResearch(baseRes[count], playnum);
-				count = count +1;
-			}
-		}
-		else
-		{	
-			setPowerLevel(2000,playnum);		
-			count = 0;								
-			while (count < numDefTech)
-			{
-				completeResearch(defTech[count], playnum);
-				count = count +1;
-			}
-			count = 0;								
-			while (count < numDefRes)
-			{
-				enableResearch(defRes[count], playnum);
-				count = count +1;
-			}
-		}
+	TeamAlliances = FALSE;		/*%!	ID="TeamAlliances",
+						MainDesc="Enable AI/Human teams",
+						MoreInfo="<Help1>",
+						type="asn",		//Assign
+						val="FALSE",
+						ArgDesc="No",
+						val="TRUE",
+						ArgDesc="Yes"	*/
 	
-		playnum = playnum + 1;		
-	}
+	ChangeAIColor = FALSE;		/*%!	ID="ChangeAIColor",
+						MainDesc="Set AI team colors",
+						type="asn",		//Assign
+						val="FALSE",
+						ArgDesc="No",
+						val="TRUE",
+						ArgDesc="Yes"	*/
 
-}
+	ChangeHumanColor = FALSE;	/*%!	ID="ChangeHumanColor",
+						MainDesc="Set Human team colors",
+						type="asn",		//Assign
+						val="FALSE",
+						ArgDesc="No",
+						val="TRUE",
+						ArgDesc="Yes"	*/
 
+	HumansCanDisally = TRUE;	/*%!	ID="HumansCanDisally",
+						MainDesc="Humans allowed to break alliances",
+						type="asn",		//Assign
+						val="FALSE",
+						ArgDesc="No",
+						val="TRUE",
+						ArgDesc="Yes"	*/
 
-event initialisedEvent2(CALL_GAMEINIT)
-{
+	ColorHumanTeam = 1;		/*%!	ID="ColorHumanTeam",
+						MainDesc="Human Team Color",
+						type="asn",		//Assign
+						val="5",
+						ArgDesc="Blue",
+						val="0",
+						ArgDesc="Green",
+						val="1",
+						ArgDesc="Orange",
+						val="2",
+						ArgDesc="Grey",
+						val="3",
+						ArgDesc="Black",
+						val="4",
+						ArgDesc="Red",
+						val="6",
+						ArgDesc="Pink",
+						val="7",
+						ArgDesc="Cyan",
+						val="random(8)",
+						ArgDesc="Random"	*/
+
+	ColorAITeam = 2;		/*%!	ID="ColorAITeam",
+						MainDesc="AI Team Color",
+						type="asn",		//Assign
+						val="4",
+						ArgDesc="Red",
+						val="0",
+						ArgDesc="Green",
+						val="1",
+						ArgDesc="Orange",
+						val="2",
+						ArgDesc="Grey",
+						val="3",
+						ArgDesc="Black",
+						val="5",
+						ArgDesc="Blue",
+						val="6",
+						ArgDesc="Pink",
+						val="7",
+						ArgDesc="Cyan",
+						val="random(8)",
+						ArgDesc="Random"	*/
+
+	isObserver[0] = FALSE;		/*%!	ID="Observer0",
+						MainDesc="Player0 is an observer",
+						MoreInfo="<Help2>",
+						type="asn",		//Assign
+						tmpl="YesNo"	*/
+
+	isObserver[1] = FALSE;		/*%!	ID="Observer1",
+						MainDesc="Player1 is an observer",
+						MoreInfo="<Help2>",
+						type="asn",		//Assign
+						tmpl="YesNo"	*/
+
+	isObserver[2] = FALSE;		/*%!	ID="Observer2",
+						MainDesc="Player2 is an observer",
+						MoreInfo="<Help2>",
+						type="asn",		//Assign
+						tmpl="YesNo"	*/
+
+	isObserver[3] = FALSE;		/*%!	ID="Observer3",
+						MainDesc="Player3 is an observer",
+						MoreInfo="<Help2>",
+						type="asn",		//Assign
+						tmpl="YesNo"	*/
+
+	isObserver[4] = FALSE;		/*%!	ID="Observer4",
+						MainDesc="Player4 is an observer",
+						MoreInfo="<Help2>",
+						type="asn",		//Assign
+						tmpl="YesNo"	*/
+
+	isObserver[5] = FALSE;		/*%!	ID="Observer5",
+						MainDesc="Player5 is an observer",
+						MoreInfo="<Help2>",
+						type="asn",		//Assign
+						tmpl="YesNo"	*/
+
+	isObserver[6] = FALSE;		/*%!	ID="Observer6",
+						MainDesc="Player6 is an observer",
+						MoreInfo="<Help2>",
+						type="asn",		//Assign
+						tmpl="YesNo"	*/
+
+	isObserver[7] = FALSE;		/*%!	ID="Observer7",
+						MainDesc="Player7 is an observer",
+						MoreInfo="<Help2>",
+						type="asn",		//Assign
+						tmpl="YesNo"	*/
 
 	//set up the reticule buttons
 	addReticuleButton(OPTIONS);
@@ -124,202 +221,283 @@ event initialisedEvent2(CALL_GAMEINIT)
 	addReticuleButton(INTELMAP);
 	addReticuleButton(DESIGN);
 
-	playnum=0;
+	playnum = 0;
 	while (playnum < 8)
 	{
-		enableStructure(command	,	playnum);		//make structures available to build
-		enableStructure(factory,	playnum);
-		//enableStructure(wall,		playnum);
-		//enableStructure(cornerWall,	playnum);
-		enableStructure(oilDerrick,	playnum);
-		enableStructure(powerGen,	playnum);
-		enableStructure(research,	playnum);
+		enableStructure(command		,playnum);		//make structures available to build
+		enableStructure(factory		,playnum);
+//		enableStructure(wall		,playnum);
+//		enableStructure(cornerWall	,playnum);
+		enableStructure(oilDerrick	,playnum);
+		enableStructure(powerGen	,playnum);
+		enableStructure(research	,playnum);
 		
 		setStructureLimits(factory,	5, playnum);	// set structure limits
-		setStructureLimits(powerGen,	5, playnum);
-		setStructureLimits(research,	5, playnum);
+		setStructureLimits(powerGen,5, playnum);
+		setStructureLimits(research,5, playnum);
 		setStructureLimits(command,	1, playnum);
 		setStructureLimits(commandrelay,1, playnum);
 		setStructureLimits(cybfac,	5, playnum);
 		setStructureLimits(vtolfac,	5, playnum);
 		setStructureLimits(NuclearReactor1, 	1, playnum);
-		setStructureLimits(CoolingTower1, 	4, playnum);
+		setStructureLimits(CoolingTower1, 	4,playnum);
+		setStructureLimits(look, 	1, playnum);
 		setStructureLimits(shield, 	1, playnum);
 		setStructureLimits(command2, 	1, playnum);
 
-		playnum = playnum+1;
+//-----------------------------------------
+//MOD code comes here
+//-----------------------------------------
+		if(TeamAlliances)
+		{
+			setEventTrigger(AllyWatch, AllyWatchTr);	//Every 20
+
+			count = 0;
+			while(count < 8)
+			{
+				//Set human color if required
+				if(isHumanPlayer(count))
+				{
+					if(ChangeHumanColor)
+					{
+						setPlayerColour(ColorHumanTeam, count);
+					}
+				}
+
+				if(count != playnum)
+				{
+					if((isHumanPlayer(playnum))  and (isHumanPlayer(count)))
+					{
+						createAlliance(playnum, count);
+						//if(ChangeHumanColor)
+						//{
+						//	setPlayerColour(ColorHumanTeam, playnum);
+						//}
+					}
+
+					if((not isHumanPlayer(playnum))  and (not isHumanPlayer(count)))
+					{
+						createAlliance(playnum, count);
+						if(ChangeAIColor)
+						{
+							setPlayerColour(ColorAITeam, playnum);
+						}
+					}
+				}
+				count = count + 1;
+			}
+		}
+
+
+
+
+
+	//---------------------------------
+	//Observer code
+	//---------------------------------
+	if(isObserver[playnum])
+	{
+		//Structures
+		boolResult = TRUE;
+		while(boolResult)
+		{
+			initEnumStruct(TRUE,factory,playnum,playnum);			
+			structure = enumStruct();
+			while(structure != NULLOBJECT)
+			{
+				destroyStructure(structure);
+				structure = enumStruct();
+			}
+
+			initEnumStruct(TRUE,factory,playnum,playnum);			
+			structure = enumStruct();
+			boolResult = FALSE;
+			if(structure != NULLOBJECT)
+			{
+				boolResult = TRUE;		//Still structures left
+			}
+		}
+
+		//Droids
+		droid = getDroid(NullEcm, playnum);
+		while(droid != NULLOBJECT)
+		{
+			vanishUnit(droid);
+			droid = getDroid(NullEcm, playnum);
+		}
 	}
+
+
+
+//-----------------------------------------
+//End of MOD code
+//-----------------------------------------
+
+		playnum = playnum+ 1;	
+	}
+
 	applyLimitSet();	// set limit options
+}
 
-	// player specific technology startups
-	count = 0;
-	while (count < numtecP0)
+//AI's only
+event AllyWatch(inactive)		//(every, 20)
+{
+	playnum = 0;
+	while (playnum < multiPlayerMaxPlayers)
 	{
-		completeResearch(tecP0[count], 0);
-		count = count +1;
-	}
-	count = 0;
-	while (count < numtecP1)
-	{
-		completeResearch(tecP1[count], 1);
-		count = count +1;
-	}
-	count = 0;
-	while (count < numtecP2)
-	{
-		completeResearch(tecP2[count], 2);
-		count = count +1;
-	}
-	count = 0;
-	while (count < numtecP3)
-	{
-		completeResearch(tecP3[count], 3);
-		count = count +1;
-	}
-	count = 0;
-	while (count < numtecP4)
-	{
-		completeResearch(tecP4[count], 4);
-		count = count +1;
-	}
-	count = 0;
-	while (count < numtecP5)
-	{
-		completeResearch(tecP5[count], 5);
-		count = count +1;
-	}
-	count = 0;
-	while (count < numtecP6)
-	{
-		completeResearch(tecP6[count], 6);
-		count = count +1;
-	}
-	count = 0;
-	while (count < numtecP7)
-	{
-		completeResearch(tecP7[count], 7);
-		count = count +1;
-	}
+		count = 0;
+		while(count < multiPlayerMaxPlayers)
+		{
+			if(count != playnum)
+			{
+				//Ally AIs
+				if(not allianceExistsBetween(playnum, count))
+				{
 
+					//AIs
+					if((not isHumanPlayer(playnum))  and (not isHumanPlayer(count)))	//If both AIs
+					{
+						createAlliance(playnum, count);
 
-	// player specific research startups
-	count = 0;
-	while (count < numResP0)
-	{
-		enableResearch(resP0[count], 0);
-		count = count +1;
+						if(ChangeAIColor)
+						{
+							setPlayerColour(ColorAITeam, playnum);
+						}
+					}//Humans
+					else if((isHumanPlayer(playnum))  and (isHumanPlayer(count)))
+					{
+						//Re-ally humans if they are not allowed to break alliances
+						if(not (HumansCanDisally))
+						{
+							createAlliance(playnum, count);
+							if(ChangeHumanColor)
+							{
+								setPlayerColour(ColorHumanTeam, playnum);
+							}
+						}
+					}
+				}
+				else	//Check if allowed to stay allied
+				{
+					if((isHumanPlayer(playnum))  and (not isHumanPlayer(count)))	//If Human and AI allied
+					{
+						breakAlliance(playnum, count);
+					}
+					else if((not isHumanPlayer(playnum))  and (isHumanPlayer(count)))	//If Human and AI allied
+					{
+						breakAlliance(playnum, count);
+					}
+				}
+			}
+			count = count + 1;
+		}
+
+		playnum = playnum+ 1;	
 	}
-	count = 0;
-	while (count < numResP1)
+}
+
+event initialisedEventTwo(CALL_GAMEINIT)
+{
+	
+	playnum=0;
+	while (playnum < 8)
 	{
-		enableResearch(resP1[count], 1);
-		count = count +1;
-	}
-	count = 0;
-	while (count < numResP2)
-	{
-		enableResearch(resP2[count], 2);
-		count = count +1;
-	}
-	count = 0;
-	while (count < numResP3)
-	{
-		enableResearch(resP3[count], 3);
-		count = count +1;
-	}
-	count = 0;
-	while (count < numResP4)
-	{
-		enableResearch(resP4[count], 4);
-		count = count +1;
-	}
-	count = 0;
-	while (count < numResP5)
-	{
-		enableResearch(resP5[count], 5);
-		count = count +1;
-	}
-	count = 0;
-	while (count < numResP6)
-	{
-		enableResearch(resP6[count], 6);
-		count = count +1;
-	}
-	count = 0;
-	while (count < numResP7)
-	{
-		enableResearch(resP7[count], 7);
-		count = count +1;
+		count = 0;								
+		while (count < numBaseRes)
+		{
+			enableResearch(baseRes[count], playnum);
+			count = count +1;
+		}
+
+		if(multiPlayerBaseType == CAMP_CLEAN)
+		{
+			setPowerLevel(1300,playnum);	
+			count = 0;								
+			while (count < numCleanTech)
+			{
+
+				completeResearch(defTech[count], playnum);
+				count = count +1;
+			}
+		}
+		else if(multiPlayerBaseType == CAMP_BASE)
+		{
+			setPowerLevel(2500,playnum);	
+			count = 0;								
+			while (count < numBaseTech)
+			{
+				completeResearch(defTech[count], playnum);
+				count = count +1;
+			}
+		
+		}
+		else
+		{	
+
+			setPowerLevel(2500,playnum);		
+			count = 0;								
+			while (count < numDefTech)
+			{
+				completeResearch(defTech[count], playnum);
+				count = count +1;
+			}
+		}
+	
+		playnum = playnum+ 1;		
 	}
 }
 
 
 
 // /////////////////////////////////////////////////////////////////
+// END CONDITIONS
 event checkEndConditions (endConditions)
 {
-	// Losing Conditions
-//	if(	   ( not (multiPlayerGameType == DMATCH))
-	  if(  ( not anyDroidsLeft(selectedPlayer))
-  	  and  ( not anyFactoriesLeft(selectedPlayer))	
-//	  and  ( not playerInAlliance(selectedPlayer)) 
-	  )
+	if(not (isObserver[selectedPlayer]))
 	{
-//		addMessage(endMsg, MISS_MSG, 0, true);
-//		pause(10);
-//		gameOver(FALSE);
-		gameOverMessage(endMsg, MISS_MSG, 0, FALSE);
-		setEventTrigger(checkEndConditions, inactive);
-	}
-	
-	
-	// Winning Conditions
-	playnum=0;
-	gamenotwon = FALSE;
-
-	////////////////
-	// Campaign Game
-	if(multiPlayerGameType == CAMPAIGN)
-	{
-		// check humans are still about
-		while (playnum < multiPlayerMaxPlayers)
+		// Losing Conditions
+		if(( not anyDroidsLeft(selectedPlayer)) and  ( not anyFactoriesLeft(selectedPlayer))	)
 		{
-			if (playnum != selectedPlayer)
-			{
-				if(anyDroidsLeft(playnum) or anyFactoriesLeft(playnum) )
-				{
-					gamenotwon = TRUE;
-				}
-			}
-			playnum = playnum + 1;			
+			gameOverMessage(endMsg, MISS_MSG, 0, FALSE);
+			setEventTrigger(checkEndConditions, inactive);
 		}
-		
-		//check computer/babas are wiped out completely
-		while(playnum<8)
+	
+		// Winning Conditions. selected Player is the only remaining player
+		count =0;
+		gamewon = TRUE;
+
+		while (count < multiPlayerMaxPlayers)
 		{
-			if(not isHumanPlayer(playnum))
+			if ( (count != selectedPlayer) and not(isHumanPlayer(count))  )
 			{
-				if(anyDroidsLeft(playnum) or anyStructButWallsLeft(playnum))
+				if( anyDroidsLeft(count) or anyFactoriesLeft(count) ) 
 				{
-					gamenotwon = TRUE;
+					gamewon = FALSE;
 				}
 			}
-			playnum = playnum + 1;			
-		}			
+			count = count + 1;			
+		}
+
+		if(gamewon == TRUE)
+		{
+			gamewon = FALSE;
+			if(dominatingAlliance())
+			{
+				gamewon = TRUE;
+			}
+		}
+
+		if(gamewon == TRUE)
+		{	
+			gameOverMessage(winMsg, MISS_MSG, 0, TRUE);
+			setEventTrigger(checkEndConditions, inactive);
+		}	
 	}
-	
-	if(gamenotwon == FALSE)
-	{
-//		addMessage(winMsg, MISS_MSG, 0, true);
-//		pause(10);
-//		gameOver(TRUE);
-		gameOverMessage(winMsg, MISS_MSG, 0, TRUE);
-		setEventTrigger(checkEndConditions, inactive);
-	}	
 }
 
 // /////////////////////////////////////////////////////////////////
-/* Base Under Attack */
+// WARNING MESSAGES 
+// Base Under Attack 
 event baseHit(CALL_STRUCT_ATTACKED, selectedPlayer, ref hitStruc, ref attackerObj)
 {
 	if (t >= 10)
