@@ -396,9 +396,6 @@ void draw3DScene( void )
 	// draw terrain
 	displayTerrain();
 
-	// draw skybox
-	renderSurroundings();
-
 	pie_BeginInterface();
 	updateLightLevels();
 	drawDroidSelections();
@@ -823,6 +820,9 @@ static void drawTiles(iView *player)
 	pie_TranslateTextureEnd();
 	// and to the warzone modelview transform
 	glPopMatrix();
+
+	// draw skybox
+	renderSurroundings();
 	
 	// clear the terrain highlight
 	for (i = 0; i < visibleTiles.y; i++)
@@ -3611,9 +3611,6 @@ static void renderSurroundings(void)
 	static float wind = 0.0f;
 	const float skybox_scale = 20000.0f;
 
-	// set up matrices and textures
-	pie_PerspectiveBegin();
-
 	// Push identity matrix onto stack
 	pie_MatBegin();
 
@@ -3646,7 +3643,6 @@ static void renderSurroundings(void)
 
 	// Load Saved State
 	pie_MatEnd();
-	pie_PerspectiveEnd();
 }
 
 /// Flattens an imd to the landscape and handles 4 different rotations
