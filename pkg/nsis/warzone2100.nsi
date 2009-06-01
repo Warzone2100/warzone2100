@@ -29,6 +29,7 @@
 ;--------------------------------
 ;General
    CRCCheck on   ;make sure this isn't corrupted
+   SetCompressor /SOLID  lzma
 
   ;Name and file
   Name "${PACKAGE_NAME}"
@@ -61,6 +62,10 @@ VIAddVersionKey "ProductVersion"	"${PACKAGE_VERSION}"
 
 ;--------------------------------
 ;Interface Settings
+
+  !define MUI_HEADERIMAGE
+  !define MUI_HEADERIMAGE_BITMAP "${TOP_SRCDIR}\icons\wz2100header.bmp"
+  !define MUI_HEADERIMAGE_RIGHT
 
   !define MUI_ICON "${TOP_SRCDIR}\icons\warzone2100.ico"
   !define MUI_UNICON "${TOP_SRCDIR}\icons\warzone2100.uninstall.ico"
