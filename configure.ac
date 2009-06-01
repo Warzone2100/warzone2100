@@ -1,5 +1,5 @@
 AC_PREREQ([2.56])
-AC_INIT([Warzone 2100],[2.2],[http://wz2100.net/],[warzone2100])
+AC_INIT([Warzone 2100],[2.2.0],[http://wz2100.net/],[warzone2100])
 
 AM_INIT_AUTOMAKE([1.10])
 
