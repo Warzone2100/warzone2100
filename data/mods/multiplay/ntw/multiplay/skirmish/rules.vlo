@@ -29,6 +29,7 @@ NuclearReactor1		STRUCTURESTAT		"NuclearReactor"
 CoolingTower1		STRUCTURESTAT		"CoolingTower"
 look			STRUCTURESTAT		"LookOutTower"
 shield		STRUCTURESTAT		"AAShield"
+command2		STRUCTURESTAT		"A0CommandCentreDEL"
 
 // Technologies
 numCleanTech	int					4	// do x for clean	
