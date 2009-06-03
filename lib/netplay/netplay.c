@@ -1001,8 +1001,8 @@ static Socket* socketListen(unsigned int port)
 #endif
 			conn->fd[SOCK_IPV4_LISTEN] = INVALID_SOCKET;
 		}
-#endif
 	}
+#endif
 
 	if (conn->fd[SOCK_IPV4_LISTEN] != INVALID_SOCKET)
 	{
