@@ -604,7 +604,7 @@ void draw3DScene( void )
 		char *crash = 0;
 		debug(LOG_ERROR, "Forcing a segfault! (crash handler test)");
 		// and here comes the crash
-		*crash = 0x666;
+		*crash = 0x3;
 		exit(-1);	// will never reach this, but just in case...
 	}
 	//visualize radius if needed
