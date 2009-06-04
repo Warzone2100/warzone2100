@@ -1434,22 +1434,26 @@ static void moveCalcDroidSlide(DROID *psDroid, float *pmx, float *pmy)
 				}
 
 				// tell inactive droids to get out the way
-				if ((psObst->type == OBJ_DROID) &&
-					aiCheckAlliances(psObst->player, psDroid->player) &&
-					((((DROID *)psObst)->sMove.Status == MOVEINACTIVE) ||
-					 (((DROID *)psObst)->sMove.Status == MOVEROUTE)) )
+				if (psObst->type == OBJ_DROID)
 				{
-					if (psDroid->sMove.Status == MOVESHUFFLE)
+					DROID *psShuffleDroid = (DROID *)psObst;
+
+					if (aiCheckAlliances(psObst->player, psDroid->player)
+					    && psShuffleDroid->action != DACTION_WAITDURINGREARM
+					    && (psShuffleDroid->sMove.Status == MOVEINACTIVE || psShuffleDroid->sMove.Status == MOVEROUTE))
 					{
-						moveShuffleDroid( (DROID *)psObst, psDroid->sMove.shuffleStart,
-							psDroid->sMove.targetX - (SDWORD)psDroid->pos.x,
-							psDroid->sMove.targetY - (SDWORD)psDroid->pos.y);
-					}
-					else
-					{
-						moveShuffleDroid( (DROID *)psObst, gameTime,
-							psDroid->sMove.targetX - (SDWORD)psDroid->pos.x,
-							psDroid->sMove.targetY - (SDWORD)psDroid->pos.y);
+						if (psDroid->sMove.Status == MOVESHUFFLE)
+						{
+							moveShuffleDroid(psShuffleDroid, psDroid->sMove.shuffleStart,
+							                 psDroid->sMove.targetX - (SDWORD)psDroid->pos.x,
+							                 psDroid->sMove.targetY - (SDWORD)psDroid->pos.y);
+						}
+						else
+						{
+							moveShuffleDroid(psShuffleDroid, gameTime,
+							                 psDroid->sMove.targetX - (SDWORD)psDroid->pos.x,
+							                 psDroid->sMove.targetY - (SDWORD)psDroid->pos.y);
+						}
 					}
 				}
 			}
