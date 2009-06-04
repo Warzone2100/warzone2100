@@ -1860,7 +1860,7 @@ void actionUpdateDroid(DROID *psDroid)
 										psDroid->player,
 										false))
 				{
-					debug( LOG_NEVER, "DACTION_MOVETOBUILD: !validLocation");
+					objTrace(psDroid->id, "DACTION_MOVETOBUILD: !validLocation");
 					psDroid->action = DACTION_NONE;
 				}
 				else
@@ -1870,9 +1870,9 @@ void actionUpdateDroid(DROID *psDroid)
 					psDroid->actionPoints = 0;
 				}
 			}
-			else if(  (psDroid->order == DORDER_LINEBUILD||psDroid->order==DORDER_BUILD)
-					&&(psStructStats->type == REF_WALL   || psStructStats->type == REF_WALLCORNER ||
-					psStructStats->type == REF_DEFENSE))
+			else if ((psDroid->order == DORDER_LINEBUILD || psDroid->order==DORDER_BUILD)
+			         && (psStructStats->type == REF_WALL || psStructStats->type == REF_WALLCORNER ||
+			             psStructStats->type == REF_DEFENSE || psStructStats->type == REF_REARM_PAD))
 			{
 				// building a wall.
 				MAPTILE* const psTile = mapTile(map_coord(psDroid->orderX), map_coord(psDroid->orderY));
