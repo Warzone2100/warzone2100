@@ -1836,6 +1836,13 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 		//add the structure to the list - this enables it to be drawn whilst being built
 		addStructure(psBuilding);
 
+		if (pStructureType->type == REF_REARM_PAD)
+		{
+			MAPTILE *psTile = mapTile(map_coord(psBuilding->pos.x), map_coord(psBuilding->pos.y));
+
+			SET_TILE_NOTBLOCKING(psTile);
+		}
+
 		gridAddObject((BASE_OBJECT *)psBuilding);
 
 		clustNewStruct(psBuilding);
@@ -2809,7 +2816,6 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool mission)
 	FACTORY				*psFactory;
 	REPAIR_FACILITY		*psRepairFac = NULL;
 	RESEARCH_FACILITY	*psResFacility;
-	REARM_PAD			*psReArmPad;
 	Vector3i iVecEffect;
 	BOOL				bFinishAction,bDroidPlaced;
 	WEAPON_STATS		*psWStats;
@@ -3183,7 +3189,9 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool mission)
 		}
 		case REF_REARM_PAD:
 		{
-			psReArmPad = &psStructure->pFunctionality->rearmPad;
+			REARM_PAD	*psReArmPad = &psStructure->pFunctionality->rearmPad;
+			MAPTILE		*psTile = mapTile(map_coord(psStructure->pos.x), map_coord(psStructure->pos.y));
+
 			psChosenObj = psReArmPad->psObj;
 			structureMode = REF_REARM_PAD;
 			psDroid = NULL;
@@ -3221,6 +3229,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool mission)
 			// if found a droid to rearm assign it to the rearm pad
 			if (psDroid != NULL)
 			{
+
 				/* set chosen object */
 				psChosenObj = (BASE_OBJECT *)psDroid;
 				psReArmPad->psObj = psChosenObj;
@@ -3230,6 +3239,11 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool mission)
 					psReArmPad->timeStarted = ACTION_START_TIME;
 					psReArmPad->currentPtsAdded = 0;
 				}
+				CLEAR_TILE_NOTBLOCKING(psTile);	// no longer passable
+			}
+			else
+			{
+				SET_TILE_NOTBLOCKING(psTile);
 			}
 			break;
 		}
@@ -3579,7 +3593,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool mission)
 		//check for rearming
 		else if (structureMode == REF_REARM_PAD)
 		{
-			psReArmPad = &psStructure->pFunctionality->rearmPad;
+			REARM_PAD	*psReArmPad = &psStructure->pFunctionality->rearmPad;
 
 			psDroid = (DROID *)psChosenObj;
 			ASSERT_OR_RETURN( , psDroid != NULL, "invalid droid pointer");
@@ -3680,7 +3694,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool mission)
 					psDroid->action = DACTION_NONE;
 					bFinishAction = true;
 					psReArmPad->psObj = NULL;
-
+					CLEAR_TILE_NOTBLOCKING(mapTile(map_coord(psStructure->pos.x), map_coord(psStructure->pos.y)));
 				}
 			}
 		}
@@ -4063,7 +4077,7 @@ BOOL validLocation(BASE_STATS *psStats, UDWORD x, UDWORD y, UDWORD player,
 		}
 		//if we're dragging the wall/defense we need to check along the current dragged size
 		if (wallDrag.status != DRAG_INACTIVE
-			&& (psBuilding->type == REF_WALL || psBuilding->type == REF_DEFENSE)
+			&& (psBuilding->type == REF_WALL || psBuilding->type == REF_DEFENSE || psBuilding->type == REF_REARM_PAD)
 			&& !isLasSat(psBuilding))
 		{
 				UWORD    dx,dy;
@@ -4318,6 +4332,7 @@ BOOL validLocation(BASE_STATS *psStats, UDWORD x, UDWORD y, UDWORD player,
 					if (!(psBuilding->type == REF_DEFENSE ||
 						psBuilding->type == REF_WALL ||
 						psBuilding->type == REF_WALLCORNER ||
+						psBuilding->type == REF_REARM_PAD ||
 						psBuilding->type == REF_MISSILE_SILO))
 					{
 						/*need to check there is one tile between buildings*/
@@ -4470,8 +4485,7 @@ BOOL validLocation(BASE_STATS *psStats, UDWORD x, UDWORD y, UDWORD player,
 			BOOL    validCombi;
 
 			//defense and missile silo's can be built next to anything so don't need to check
-			if (!(psBuilding->type == REF_DEFENSE || psBuilding->type ==
-				REF_MISSILE_SILO))
+			if (!(psBuilding->type == REF_DEFENSE || psBuilding->type == REF_MISSILE_SILO || psBuilding->type == REF_REARM_PAD))
 			{
 				for (psDroid = apsDroidLists[player]; psDroid; psDroid = psDroid->psNext)
 				{
@@ -4488,6 +4502,8 @@ BOOL validLocation(BASE_STATS *psStats, UDWORD x, UDWORD y, UDWORD player,
 						{
 							if (psDroid->asOrderList[order].order == DORDER_BUILD)
 							{
+								STRUCTURE_STATS *orderTarget = (STRUCTURE_STATS *)psDroid->asOrderList[order].psOrderTarget;
+
 								validCombi = false;
 								if (((STRUCTURE_STATS *)psDroid->asOrderList[order].
 									psOrderTarget)->type == REF_DEFENSE ||
@@ -4498,8 +4514,7 @@ BOOL validLocation(BASE_STATS *psStats, UDWORD x, UDWORD y, UDWORD player,
 								}
 								//walls can be built next to walls and defence
 								if ((psBuilding->type == REF_WALL || psBuilding->type == REF_WALLCORNER)
-					&& (((STRUCTURE_STATS *)psDroid->asOrderList[order].psOrderTarget)->type == REF_WALL
-					|| ((STRUCTURE_STATS *)psDroid->asOrderList[order].psOrderTarget)->type == REF_WALLCORNER))
+								    && (orderTarget->type == REF_WALL || orderTarget->type == REF_WALLCORNER))
 								{
 									validCombi = true;
 								}
