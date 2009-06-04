@@ -357,7 +357,7 @@ void loadMapPreview(bool hideInterface)
 		glMatrixMode(GL_PROJECTION);
 		glPushMatrix();
 		glLoadIdentity();
-		glOrtho(0.0,(double)BACKDROP_HACK_HEIGHT,0,(double)BACKDROP_HACK_WIDTH,-1,1);
+		glOrtho(0.0f,(double)BACKDROP_HACK_HEIGHT,0,(double)BACKDROP_HACK_WIDTH,-1.0f,1.0f);
 
 		glMatrixMode(GL_MODELVIEW);
 		glPushMatrix();
