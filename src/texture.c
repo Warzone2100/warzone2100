@@ -128,7 +128,7 @@ static int newPage(const char *name, int level, int width, int height, int count
 	return texPage;
 }
 
-void texLoad(const char *fileName)
+bool texLoad(const char *fileName)
 {
 	char fullPath[PATH_MAX], partialPath[PATH_MAX], *buffer;
 	unsigned int i, j, k, size;
@@ -137,8 +137,8 @@ void texLoad(const char *fileName)
 
 	firstPage = _TEX_INDEX;
 
-	ASSERT(_TEX_INDEX < iV_TEX_MAX, "Too many texture pages used");
-	ASSERT(MIPMAP_MAX == TILE_WIDTH && MIPMAP_MAX == TILE_HEIGHT, "Bad tile sizes");
+	ASSERT_OR_RETURN(false, _TEX_INDEX < iV_TEX_MAX, "Too many texture pages used");
+	ASSERT_OR_RETURN(false, MIPMAP_MAX == TILE_WIDTH && MIPMAP_MAX == TILE_HEIGHT, "Bad tile sizes");
 	
 	// store the filename so we can later determine which tileset we are using
 	if (tileset) free(tileset);
@@ -224,12 +224,12 @@ void texLoad(const char *fileName)
 			if (PHYSFS_exists(fullPath)) // avoid dire warning
 			{
 				BOOL retval = iV_loadImage_PNG(fullPath, &tile);
-				ASSERT(retval, "texLoad: Could not load %s", fullPath);
+				ASSERT_OR_RETURN(false, retval, "Could not load %s!", fullPath);
 			}
 			else
 			{
 				// no more textures in this set
-				ASSERT(k > 0, "texLoad: Could not find %s", fullPath);
+				ASSERT_OR_RETURN(false, k > 0, "Could not find %s", fullPath);
 				break;
 			}
 			// Insert into texture page
@@ -264,4 +264,6 @@ void texLoad(const char *fileName)
 		      k, partialPath, i, texPage, _TEX_PAGE[texPage].id);
 		i /= 2;	// halve the dimensions for the next series; OpenGL mipmaps start with largest at level zero
 	}
+
+	return true;
 }
