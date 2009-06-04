@@ -218,6 +218,8 @@ bool showORDERS = false;
 int NET_PlayerConnectionStatus = 0;
 #define NETWORK_FORM_ID 0xFAAA
 #define NETWORK_BUT_ID 0xFAAB
+/** When enabled, this causes a segfault in the game, to test out the crash handler */
+bool CauseCrash = false;
 
 /** tells us in realtime, what droid is doing (order / action)
 */
@@ -586,7 +588,14 @@ void draw3DScene( void )
 	structureEffects(); // add fancy effects to structures
 
 	showDroidSensorRanges(); //shows sensor data for units/droids/whatever...-Q 5-10-05
-
+	if (CauseCrash)
+	{
+		char *crash = 0;
+		debug(LOG_ERROR, "Forcing a segfault! (crash handler test)");
+		// and here comes the crash
+		*crash = 0x3;
+		exit(-1);	// will never reach this, but just in case...
+	}
 	//visualize radius if needed
 	if (bRangeDisplay)
 	{
