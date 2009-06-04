@@ -23,7 +23,7 @@
 
 #include "display3ddef.h"
 
-void texLoad(const char *fileName);
+bool texLoad(const char *fileName);
 
 typedef struct _tileTexInfo
 {

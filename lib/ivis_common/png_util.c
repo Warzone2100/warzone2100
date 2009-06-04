@@ -19,7 +19,7 @@
 */
 
 #include "lib/framework/frame.h"
-
+#include "lib/framework/debug.h"
 #include "png_util.h"
 #include <png.h>
 #include <physfs.h>
@@ -166,6 +166,9 @@ BOOL iV_loadImage_PNG(const char *fileName, iV_Image *image)
 	}
 
 	PNGReadCleanup(&info_ptr, &png_ptr, fileHandle);
+
+	ASSERT_OR_RETURN(false, image->depth > 3, "Unsupported image depth (%d) found.  We only support 3 (RGB) or 4 (ARGB)", image->depth);
+
 	return true;
 }
 
