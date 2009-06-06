@@ -52,7 +52,6 @@
 #include "lib/script/script.h"
 #include "lib/sound/audio.h"
 #include "lib/sound/cdaudio.h"
-#include "lib/framework/physfs_vfs.h"
 
 #include "clparse.h"
 #include "configuration.h"
@@ -999,10 +998,6 @@ int main(int argc, char *argv[])
 			}
 		}
 	}
-
-	// Register the PhysicsFS implementation of the SQLite VFS class with
-	// SQLite's VFS system as the default (non-zero=default, zero=default).
-	sqlite3_register_physfs_vfs(1);
 
 	if (!frameInitialise( "Warzone 2100", pie_GetVideoBufferWidth(), pie_GetVideoBufferHeight(), pie_GetVideoBufferDepth(), war_getFullscreen(), war_GetVsync()))
 	{

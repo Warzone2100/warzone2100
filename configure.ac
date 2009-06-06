@@ -255,16 +255,6 @@ AS_IF([test "x$enable_sound" = "xyes"],[
 	PKG_CHECK_MODULES([OGGVORBIS], [vorbisfile >= 1.1])
 ])
 
-# Only accept SQLite versions newer than 3.6.10, otherwise use built-in
-PKG_CHECK_MODULES([SQLITE], [sqlite3 >= 3.6.10],
-	[ use_system_sqlite="yes" ], [
-	use_system_sqlite="no"
-	SQLITE_CFLAGS="-I\$(top_srcdir)/lib/sqlite3"
-	SQLITE_LIBS="\$(top_builddir)/lib/sqlite3/libsqlite3.a"
-	AC_SUBST([SQLITE_CFLAGS])
-	AC_SUBST([SQLITE_LIBS])])
-AM_CONDITIONAL([USE_SYSTEM_SQLITE], [ test "x$use_system_sqlite" = "xyes" ])
-
 if test "x$enable_static" = "xyes" ; then
 	# If linking statically, make sure to include the direct dependencies of
 	# QuesoGLC as well, because it does not have a pkg-config file.
@@ -347,7 +337,6 @@ AC_CONFIG_FILES([Makefile
 		icons/Makefile
 		data/Makefile
 		data/base/Makefile
-		data/base/stats-sql/Makefile
 		data/mods/Makefile
 		data/mods/multiplay/Makefile
 		data/music/Makefile
@@ -364,7 +353,6 @@ AC_CONFIG_FILES([Makefile
 		lib/script/Makefile
 		lib/sequence/Makefile
 		lib/sound/Makefile
-		lib/sqlite3/Makefile
 		lib/widget/Makefile
 		src/Makefile])
 AC_OUTPUT
@@ -378,13 +366,6 @@ AS_IF([test "x$with_distributor" = "xUNKNOWN"],[
 	AC_MSG_NOTICE()
 	AC_MSG_WARN([Distributor unknown!])
 	AC_MSG_NOTICE([Use --with-distributor when compiling package for distribution])
-])
-
-AS_IF([test "x$use_system_sqlite" = "xno"],[
-	AC_MSG_NOTICE()
-	AC_MSG_WARN([Not using a system provided SQLite library.])
-	AC_MSG_WARN([${SQLITE_PKG_ERRORS}])
-	AC_MSG_WARN([We currently only accept SQLite versions >= 3.6.10.])
 ])
 
 AS_IF([test -z "$PERL"],[
