@@ -2710,7 +2710,7 @@ void frontendMultiMessages(void)
 		{
 			uint32_t player_id;
 			char reason[MAX_KICK_REASON];
-			LOBBY_ERROR_TYPES KICK_TYPE;
+			LOBBY_ERROR_TYPES KICK_TYPE = ERROR_NOERROR;
 
 			NETbeginDecode(NET_KICK);
 				NETuint32_t(&player_id);
