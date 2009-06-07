@@ -24,6 +24,10 @@ CLEANFILES = \
 	strres_parser.tab.c \
 	strres_parser.tab.h
 
+EXTRA_DIST = \
+	resource_lexer.l resource_parser.y \
+	strres_lexer.l strres_parser.y
+
 noinst_LIBRARIES = libframework.a
 noinst_HEADERS = \
 	strres_parser.tab.h \
