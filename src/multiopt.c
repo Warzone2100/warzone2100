@@ -659,11 +659,6 @@ static BOOL campInit(void)
 
 	for(player = 0;player<game.maxPlayers;player++)			// clean up only to the player limit for this map..
 	{
-		if( (!isHumanPlayer(player)) && game.type != SKIRMISH)	// strip away unused players
-		{
-			clearPlayer(player,true,true);
-		}
-
 		cleanMap(player);
 	}
 
