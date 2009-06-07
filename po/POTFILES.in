@@ -134,7 +134,6 @@ lib/framework/frameresource.c
 lib/framework/i18n.c
 lib/framework/input.c
 lib/framework/lexer_input.c
-lib/framework/physfs_vfs.c
 lib/framework/stdio_ext.c
 lib/framework/SDL_framerate.c
 lib/framework/strres.c
@@ -288,7 +287,6 @@ src/seqdisp.c
 src/stats.c
 src/stats-db2.c
 src/stats-db2.tpl.sql.c
-src/stats-db.c
 src/structure.c
 src/target.c
 src/text.c
