@@ -51,43 +51,42 @@ static PLAYERSTATS playerStats[MAX_PLAYERS];
 
 // ////////////////////////////////////////////////////////////////////////////
 // Get Player's stats
-PLAYERSTATS getMultiStats(UDWORD player,BOOL bLocal)
+PLAYERSTATS getMultiStats(UDWORD player, BOOL bLocal)
 {
 	static PLAYERSTATS stat;
-	uint32_t playerDPID = player2dpid[player];
 
 	// Copy over the data from our local array
-	memcpy(&stat, &playerStats[playerDPID], sizeof(stat));
+	memcpy(&stat, &playerStats[player], sizeof(stat));
 
 	return stat;
 }
 
 // ////////////////////////////////////////////////////////////////////////////
 // Set Player's stats
-BOOL setMultiStats(SDWORD dp, PLAYERSTATS plStats, BOOL bLocal)
+BOOL setMultiStats(SDWORD player, PLAYERSTATS plStats, BOOL bLocal)
 {
-	uint32_t playerDPID = (uint32_t)dp;
+	uint32_t playerIndex = (uint32_t)player;
 
 	// First copy over the data into our local array
-	memcpy(&playerStats[playerDPID], &plStats, sizeof(plStats));
+	memcpy(&playerStats[playerIndex], &plStats, sizeof(plStats));
 
 	if (!bLocal)
 	{
 		// Now send it to all other players
 		NETbeginEncode(NET_PLAYER_STATS, NET_ALL_PLAYERS);
 			// Send the ID of the player's stats we're updating
-			NETuint32_t(&playerDPID);
+			NETuint32_t(&playerIndex);
 
 			// Send over the actual stats
-			NETuint32_t(&playerStats[playerDPID].played);
-			NETuint32_t(&playerStats[playerDPID].wins);
-			NETuint32_t(&playerStats[playerDPID].losses);
-			NETuint32_t(&playerStats[playerDPID].totalKills);
-			NETuint32_t(&playerStats[playerDPID].totalScore);
-			NETuint32_t(&playerStats[playerDPID].recentKills);
-			NETuint32_t(&playerStats[playerDPID].recentScore);
-			NETuint32_t(&playerStats[playerDPID].killsToAdd);
-			NETuint32_t(&playerStats[playerDPID].scoreToAdd);
+			NETuint32_t(&playerStats[playerIndex].played);
+			NETuint32_t(&playerStats[playerIndex].wins);
+			NETuint32_t(&playerStats[playerIndex].losses);
+			NETuint32_t(&playerStats[playerIndex].totalKills);
+			NETuint32_t(&playerStats[playerIndex].totalScore);
+			NETuint32_t(&playerStats[playerIndex].recentKills);
+			NETuint32_t(&playerStats[playerIndex].recentScore);
+			NETuint32_t(&playerStats[playerIndex].killsToAdd);
+			NETuint32_t(&playerStats[playerIndex].scoreToAdd);
 		NETend();
 	}
 
@@ -96,23 +95,23 @@ BOOL setMultiStats(SDWORD dp, PLAYERSTATS plStats, BOOL bLocal)
 
 void recvMultiStats()
 {
-	uint32_t playerDPID;
+	uint32_t playerIndex;
 
 	NETbeginDecode(NET_PLAYER_STATS);
 		// Retrieve the ID number of the player for which we need to
 		// update the stats
-		NETuint32_t(&playerDPID);
+		NETuint32_t(&playerIndex);
 
 		// Retrieve the actual stats
-		NETuint32_t(&playerStats[playerDPID].played);
-		NETuint32_t(&playerStats[playerDPID].wins);
-		NETuint32_t(&playerStats[playerDPID].losses);
-		NETuint32_t(&playerStats[playerDPID].totalKills);
-		NETuint32_t(&playerStats[playerDPID].totalScore);
-		NETuint32_t(&playerStats[playerDPID].recentKills);
-		NETuint32_t(&playerStats[playerDPID].recentScore);
-		NETuint32_t(&playerStats[playerDPID].killsToAdd);
-		NETuint32_t(&playerStats[playerDPID].scoreToAdd);
+		NETuint32_t(&playerStats[playerIndex].played);
+		NETuint32_t(&playerStats[playerIndex].wins);
+		NETuint32_t(&playerStats[playerIndex].losses);
+		NETuint32_t(&playerStats[playerIndex].totalKills);
+		NETuint32_t(&playerStats[playerIndex].totalScore);
+		NETuint32_t(&playerStats[playerIndex].recentKills);
+		NETuint32_t(&playerStats[playerIndex].recentScore);
+		NETuint32_t(&playerStats[playerIndex].killsToAdd);
+		NETuint32_t(&playerStats[playerIndex].scoreToAdd);
 	NETend();
 }
 
@@ -222,7 +221,7 @@ void updateMultiStatsDamage(UDWORD attacker, UDWORD defender, UDWORD inflicted)
 		{
 			st.recentScore += (2*inflicted);
 		}
-		setMultiStats(player2dpid[attacker], st, true);
+		setMultiStats(attacker, st, true);
 	}
 	else
 	{
@@ -241,7 +240,7 @@ void updateMultiStatsDamage(UDWORD attacker, UDWORD defender, UDWORD inflicted)
 		{
 			st.recentScore  -= inflicted;
 		}
-		setMultiStats(player2dpid[defender], st, true);
+		setMultiStats(defender, st, true);
 	}
 	else
 	{
@@ -260,7 +259,7 @@ void updateMultiStatsGames(void)
 	}
 	st  = getMultiStats(selectedPlayer,true);
 	st.played ++;
-	setMultiStats(player2dpid[selectedPlayer], st, true);
+	setMultiStats(selectedPlayer, st, true);
 }
 
 // games won
@@ -273,7 +272,7 @@ void updateMultiStatsWins(void)
 	}
 	st  = getMultiStats(selectedPlayer,true);
 	st.wins ++;
-	setMultiStats(player2dpid[selectedPlayer], st, true);
+	setMultiStats(selectedPlayer, st, true);
 }
 
 //games lost.
@@ -286,7 +285,7 @@ void updateMultiStatsLoses(void)
 	}
 	st  = getMultiStats(selectedPlayer,true);
 	++st.losses;
-	setMultiStats(player2dpid[selectedPlayer], st, true);
+	setMultiStats(selectedPlayer, st, true);
 }
 
 // update kills
@@ -310,7 +309,7 @@ void updateMultiStatsKills(BASE_OBJECT *psKilled,UDWORD player)
 		{
 			st.recentKills++;
 		}
-		setMultiStats(player2dpid[player], st, true);
+		setMultiStats(player, st, true);
 	}
 	else
 	{

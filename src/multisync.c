@@ -1057,10 +1057,10 @@ BOOL sendScoreCheck(void)
 	stats.killsToAdd = stats.scoreToAdd = 0;
 
 	// Store local version
-	setMultiStats(player2dpid[selectedPlayer], stats, true);
+	setMultiStats(selectedPlayer, stats, true);
 
 	// Send score to the ether
-	setMultiStats(player2dpid[selectedPlayer], stats, false);
+	setMultiStats(selectedPlayer, stats, false);
 
 	// Broadcast any changes in other players, but not in FRONTEND!!!
 	if (titleMode != MULTIOPTION && titleMode != MULTILIMIT)
@@ -1102,7 +1102,7 @@ BOOL sendScoreCheck(void)
 	{
 		if (isHumanPlayer(i))
 		{
-			setMultiStats(player2dpid[i], getMultiStats(i, false), true);
+			setMultiStats(i, getMultiStats(i, false), true);
 		}
 	}
 
@@ -1177,7 +1177,7 @@ BOOL sendPing(void)
 	lastPing = gameTime;
 
 	// If host, also update the average ping stat for joiners
-	if (NetPlay.bHost)
+	if (NetPlay.isHost)
 	{
 		if (lastav > gameTime)
 		{
@@ -1248,7 +1248,7 @@ BOOL recvPing()
 	// If this is a new ping, respond to it
 	if (isNew)
 	{
-		NETbeginEncode(NET_PING, player2dpid[sender]);
+		NETbeginEncode(NET_PING, sender);
 			// We are responding to a new ping
 			isNew = false;
 

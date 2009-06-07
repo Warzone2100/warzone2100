@@ -31,7 +31,6 @@
 typedef struct {
 	uint8_t		type;						// DMATCH/CAMPAIGN/SKIRMISH/TEAMPLAY etc...
 	char		map[128];					// name of multiplayer map being used.
-	char		version[8];					// version of warzone
 	uint8_t		maxPlayers;					// max players to allow
 	char		name[128];					// game name   (to be used)
 	BOOL		fog;
@@ -69,7 +68,6 @@ extern MULTIPLAYERINGAME	ingame;						// the game description.
 
 extern BOOL					bMultiPlayer;				// true when more than 1 player.
 extern UDWORD				selectedPlayer;
-extern SDWORD				player2dpid[MAX_PLAYERS];	// note this is of type DPID, not DWORD
 extern BOOL					openchannels[MAX_PLAYERS];
 extern UBYTE				bDisplayMultiJoiningStatus;	// draw load progress?
 
@@ -127,7 +125,6 @@ extern BOOL myResponsibility	(UDWORD player);
 extern BOOL responsibleFor		(UDWORD player, UDWORD playerinquestion);
 extern UDWORD whosResponsible	(UDWORD player);
 extern Vector3i cameraToHome		(UDWORD player,BOOL scroll);
-extern SDWORD dpidToPlayer		(SDWORD dpid);
 extern char		playerName[MAX_PLAYERS][MAX_STR_LENGTH];	//Array to store all player names (humans and AIs)
 
 extern BOOL	multiPlayerLoop		(void);							// for loop.c

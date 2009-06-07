@@ -337,7 +337,7 @@ void createLimitSet(void)
 	ingame.numStructureLimits	= numchanges;
 	ingame.pStructureLimits		= pEntry;
 
-	sendOptions(0, 0);
+	sendOptions();
 }
 
 // ////////////////////////////////////////////////////////////////////////////

@@ -38,15 +38,11 @@ extern	void	runMultiOptions			(void);
 extern	BOOL	startMultiOptions		(BOOL bReenter);
 extern	void	frontendMultiMessages	(void);
 
-extern	BOOL	chooseColour			(UDWORD);
-
 extern BOOL addMultiBut(W_SCREEN *screen, UDWORD formid, UDWORD id, UDWORD x, UDWORD y, UDWORD width, UDWORD height, const char* tipres, UDWORD norm, UDWORD down, UDWORD hi);
 
 extern	char	sPlayer[128];
-extern	SDWORD	playerTeamGUI[MAX_PLAYERS];
-extern	SDWORD	playerTeam[MAX_PLAYERS];
 
-void	kickPlayer(uint32_t dpid, const char *reason, LOBBY_ERROR_TYPES type);
+void	kickPlayer(uint32_t player_id, const char *reason, LOBBY_ERROR_TYPES type);
 UDWORD	addPlayerBox(BOOL);			// players (mid) box
 void loadMapPreview(bool hideInterface);
 
