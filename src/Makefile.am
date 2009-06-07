@@ -47,6 +47,11 @@ CLEANFILES = \
 	scriptvals_parser.tab.c \
 	scriptvals_parser.tab.h
 
+EXTRA_DIST = \
+	message_lexer.l message_parser.y \
+	scriptvals_lexer.l scriptvals_parser.y \
+	level_lexer.l
+
 bin_PROGRAMS = warzone2100
 noinst_HEADERS = \
 	action.h \
