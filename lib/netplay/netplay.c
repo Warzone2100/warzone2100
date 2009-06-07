@@ -2706,7 +2706,6 @@ static void NETregisterServer(int state)
 	static Socket* rs_socket[2] = { NULL };
 	static int registered = 0;
 	unsigned int i;
-	int result = 0;
 
 	if (server_not_there)
 	{
