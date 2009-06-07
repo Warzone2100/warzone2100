@@ -8,6 +8,7 @@ AM_CPPFLAGS = -DYY_NO_INPUT $(SDL_CFLAGS) $(WZ_CPPFLAGS)
 AM_CFLAGS = $(WZ_CFLAGS)
 AM_LFLAGS = $(FLEX_FLAGS)
 AM_YFLAGS = -d
+
 BUILT_SOURCES = \
 	chat_lexer.lex.c \
 	chat_parser.tab.c \
@@ -23,6 +24,10 @@ CLEANFILES = \
 	script_lexer.lex.c \
 	script_parser.tab.c \
 	script_parser.tab.h
+
+EXTRA_DIST = \
+	chat_lexer.l chat_parser.y \
+	script_lexer.l script_parser.y
 
 noinst_LIBRARIES = libscript.a
 noinst_HEADERS = \
