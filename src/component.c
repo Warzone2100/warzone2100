@@ -24,6 +24,7 @@
 #include <string.h>
 
 #include "lib/framework/frame.h"
+#include "lib/netplay/netplay.h"
 #include "basedef.h"
 #include "droid.h"
 #include "action.h"
@@ -77,35 +78,19 @@ static UDWORD		lightLastChanged;
 SDWORD		lightSpeed=2;
 extern UDWORD selectedPlayer;
 
-UBYTE		PlayerColour[MAX_PLAYERS];// = {0,1,2,3,4,5,6,7}
-
 // Colour Lookups
 // use col = MAX_PLAYERS for anycolour (see multiint.c)
 BOOL setPlayerColour(UDWORD player, UDWORD col)
 {
-	if(player >MAX_PLAYERS || col >MAX_PLAYERS)
-	{
-		debug(LOG_ERROR, "wrong values");
-		return false;
-	}
-	PlayerColour[(UBYTE)player] = (UBYTE)col;
+	ASSERT(player < MAX_PLAYERS && col < MAX_PLAYERS, "Bad colour setting");
+	NetPlay.players[player].colour = col;
 	return true;
 }
 
 UBYTE getPlayerColour(UDWORD pl)
 {
-	return PlayerColour[pl];
+	return NetPlay.players[pl].colour;
 }
-
-void initPlayerColours(void)
-{
-	UBYTE i;
-	for(i=0;i<MAX_PLAYERS;i++)
-	{
-		PlayerColour[i] = i;
-	}
-}
-
 
 void updateLightLevels(void)
 {

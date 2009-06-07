@@ -38,6 +38,7 @@
 // FIXME Direct iVis implementation include!
 #include "lib/ivis_opengl/screen.h"
 #include "lib/script/script.h"
+#include "lib/netplay/netplay.h"
 
 #include "action.h"
 #include "lib/sound/audio_id.h"
@@ -1689,7 +1690,7 @@ INT_RETVAL intRunWidgets(void)
 			{
 				if(bRequestLoad)
 				{
-//					loadGame(sRequestResult,true,false,true);
+					NET_InitPlayers();	// reinitialize starting positions
 					loopMissionState = LMS_LOADGAME;
 					sstrcpy(saveGameName, sRequestResult);
 				}

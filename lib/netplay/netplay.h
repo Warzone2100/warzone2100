@@ -109,6 +109,7 @@ typedef enum
 	NET_REQUEST_VERSION,	//62 Host requests version check
 	NET_REQUEST_PASSWORD,	//63 Host requests password
 	NET_PASSWORD_CHECK,		//64 password check
+	NET_POSITIONREQUEST,	//65 position in GUI player list
 	NUM_GAME_PACKETS		//   *MUST* be last.
 } MESSAGE_TYPES;
 
@@ -166,6 +167,7 @@ typedef struct
 // Message information. ie. the packets sent between machines.
 
 #define NET_ALL_PLAYERS 255
+#define NET_HOST_ONLY 0
 
 typedef struct {
 	uint16_t	size;				// used size of body
@@ -179,42 +181,45 @@ typedef struct {
 #define		FILEMSG			254		// a file packet
 
 // ////////////////////////////////////////////////////////////////////////
-// Player information. Update using NETplayerinfo
-typedef struct {
-	uint32_t dpid;
-	char name[StringSize];
-
-	// These are actually boolean values so uint8_t would suffice just as well.
-	// The problem is however that these where previously declared as BOOL,
-	// which is typedef'd as int, which on most platforms is equal to uint32_t.
-	uint32_t bHost;
+// Player information. Filled when players join, never re-ordered. selectedPlayer global points to 
+// currently controlled player. This array is indexed by GUI slots in pregame.
+typedef struct
+{
+	char		name[StringSize];	///< Player name
+	int32_t		position;		///< Map starting position
+	int32_t		colour;			///< Which colour slot this player is using
+	BOOL		allocated;		///< Active?
+	uint32_t	heartattacktime;	///< Time cardiac arrest started
+	BOOL		heartbeat;		///< If we are still alive or not
+	BOOL		kick;			///< If we should kick them
+	int32_t		connection;		///< Index into connection list
+	int32_t		team;			///< Which team we are on
+	BOOL		ready;			///< player ready to start?
+	uint32_t	versionCheckTime;	///< Time when check sent. Uses 0xffffffff for nothing sent yet
+	BOOL		playerVersionFlag;	///< We kick on false
 } PLAYER;
 
 // ////////////////////////////////////////////////////////////////////////
 // all the luvly Netplay info....
 typedef struct {
-	GAMESTRUCT	games[MaxGames];		// the collection of games
-	PLAYER		players[MAX_PLAYERS];	// the array of players.
-	uint32_t	playercount;			// number of players in game.
-	uint32_t	dpidPlayer;				// ID of player created
-
-	// booleans
-	uint32_t	bComms;					// actually do the comms?
-	uint32_t	bHost;					// true if we are hosting the session
+	GAMESTRUCT	games[MaxGames];	///< The collection of games
+	PLAYER		players[MAX_PLAYERS];	///< The array of players.
+	uint32_t	playercount;		///< Number of players in game.
+	uint32_t	hostPlayer;		///< Index of host in player array
+	uint32_t	bComms;			///< Actually do the comms?
+	BOOL		isHost;			///< True if we are hosting the game
+	int32_t		maxPlayers;		///< Maximum number of players in this game
 	char gamePassword[StringSize];		//
 	bool GamePassworded;				// if we have a password or not.
 	bool ShowedMOTD;					// only want to show this once
+	char MOTDbuffer[255];				// buffer for MOTD
 	char* MOTD;
 } NETPLAY;
-
-/// This is the hardcoded dpid (player ID) value for the hosting player.
-#define HOST_DPID 1
 
 // ////////////////////////////////////////////////////////////////////////
 // variables
 
 extern NETPLAY				NetPlay;
-
 extern NETMSG NetMsg;
 
 // ////////////////////////////////////////////////////////////////////////
@@ -227,7 +232,7 @@ extern BOOL   NETrecv(uint8_t *type);				// recv a message if possible
 extern UBYTE   NETsendFile(BOOL newFile, char *fileName, UDWORD player);	// send file chunk.
 extern UBYTE   NETrecvFile(void);			// recv file chunk
 
-extern int NETclose	(void);					// close current game
+extern int NETclose(void);					// close current game
 extern int NETshutdown(void);					// leave the game in play.
 
 extern UDWORD	NETgetBytesSent(void);				// return bytes sent/recv.  call regularly for good results
@@ -247,10 +252,7 @@ extern BOOL	NETfindGame(void);		// find games being played(uses GAME_GUID);
 extern BOOL	NETjoinGame(UDWORD gameNumber, const char* playername);			// join game given with playername
 extern BOOL	NEThostGame(const char* SessionName, const char* PlayerName,// host a game
 			    SDWORD one, SDWORD two, SDWORD three, SDWORD four, UDWORD plyrs);
-
-//from netusers.c
-extern UDWORD	NETplayerInfo(void);		// count players in this game.
-extern BOOL	NETchangePlayerName(UDWORD dpid, char *newName);// change a players name.
+extern BOOL	NETchangePlayerName(UDWORD player, char *newName);// change a players name.
 
 #include "netlog.h"
 
@@ -263,4 +265,8 @@ extern unsigned int NETgetGameserverPort(void);
 
 extern BOOL NETsetupTCPIP(const char *machine);
 extern void NETsetGamePassword(const char *password);
+extern void NETBroadcastPlayerInfo(uint32_t index);
+extern void NETCheckVersion(uint32_t player);
+extern void NET_InitPlayers(void);
+
 #endif

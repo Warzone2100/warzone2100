@@ -817,9 +817,8 @@ void createTeamAlliances(void)
 		for (j = 0; j < MAX_PLAYERS; j++)
 		{
 			if (i != j
-			 && playerTeam[i] == playerTeam[j]	// Wto different players belonging to the same team
+			 && NetPlay.players[i].team == NetPlay.players[j].team	// two different players belonging to the same team
 			 && !aiCheckAlliances(i, j)
-			 && playerTeam[i] >= 0
 			 && game.skDiff[i]
 			 && game.skDiff[j])	// Not allied and not ignoring teams
 			{

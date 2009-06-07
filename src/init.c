@@ -1066,7 +1066,7 @@ BOOL stageThreeInitialise(void)
 	setAllPauseStates(false);
 
 	/* decide if we have to create teams, ONLY in multiplayer mode!*/
-	if( bMultiPlayer && game.alliance == ALLIANCES_TEAMS && game.type == SKIRMISH)
+	if (bMultiPlayer && game.alliance == ALLIANCES_TEAMS)
 	{
 		createTeamAlliances();
 
@@ -1145,19 +1145,6 @@ BOOL stageThreeShutDown(void)
     initRunData();
 
 	resetVTOLLandingPos();
-
-// Restore player colours since the scripts might of changed them.
-
-	if(!bMultiPlayer)
-	{
-		int temp = getPlayerColour(selectedPlayer);
-		initPlayerColours();
-		setPlayerColour(selectedPlayer,temp);
-	}
-	else
-	{
-		initPlayerColours();		// reset colours leaving multiplayer game.
-	}
 
 	setScriptWinLoseVideo(PLAY_NONE);
 

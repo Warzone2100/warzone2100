@@ -63,8 +63,7 @@ extern char	buildTime[8];
 // ////////////////////////////////////////////////////////////////////////////
 
 // send complete game info set!
-// dpid == 0 for no new players.
-void sendOptions(uint32_t dest, uint32_t play)
+void sendOptions()
 {
 	unsigned int i;
 
@@ -73,7 +72,6 @@ void sendOptions(uint32_t dest, uint32_t play)
 	// First send information about the game
 	NETuint8_t(&game.type);
 	NETstring(game.map, 128);
-	NETstring(game.version, 8);
 	NETuint8_t(&game.maxPlayers);
 	NETstring(game.name, 128);
 	NETbool(&game.fog);
@@ -86,27 +84,10 @@ void sendOptions(uint32_t dest, uint32_t play)
 		NETuint8_t(&game.skDiff[i]);
 	}
 
-	// Now the dpid array
-	for (i = 0; i < MAX_PLAYERS; i++)
-	{
-		// We should probably re-define player2dpid as a uint8_t
-		NETint32_t(&player2dpid[i]);
-	}
-
 	// Send the list of who is still joining
 	for (i = 0; i < MAX_PLAYERS; i++)
 	{
 		NETbool(&ingame.JoiningInProgress[i]);
-	}
-
-	// Send dest and play
-	NETuint32_t(&dest);
-	NETuint32_t(&play);
-
-	// Send over the list of player colours
-	for (i = 0; i < MAX_PLAYERS; i++)
-	{
-		NETuint8_t(&PlayerColour[i]);
 	}
 
 	// Same goes for the alliances
@@ -120,13 +101,6 @@ void sendOptions(uint32_t dest, uint32_t play)
 		}
 	}
 
-	// Send their team (this is apparently not related to alliances
-	for (i = 0; i < MAX_PLAYERS; i++)
-	{
-		// This should also be a uint8_t
-		NETint32_t(&playerTeamGUI[i]);
-	}
-
 	// Send the number of structure limits to expect
 	NETuint32_t(&ingame.numStructureLimits);
 
@@ -135,12 +109,6 @@ void sendOptions(uint32_t dest, uint32_t play)
 	{
 		NETuint8_t(&ingame.pStructureLimits[i].id);
 		NETuint8_t(&ingame.pStructureLimits[i].limit);
-	}
-
-	// Send ready status of all players
-	for (i = 0; i < MAX_PLAYERS; i++)
-	{
-		NETbool(&bPlayerReadyGUI[i]);
 	}
 
 	NETend();
@@ -170,15 +138,12 @@ static BOOL checkGameWdg(const char *nm)
 void recvOptions()
 {
 	unsigned int i;
-	UDWORD	play;
-	UDWORD	newPl;
 
 	NETbeginDecode(NET_OPTIONS);
 
 	// Get general information about the game
 	NETuint8_t(&game.type);
 	NETstring(game.map, 128);
-	NETstring(game.version, 8);
 	NETuint8_t(&game.maxPlayers);
 	NETstring(game.name, 128);
 	NETbool(&game.fog);
@@ -191,31 +156,10 @@ void recvOptions()
 		NETuint8_t(&game.skDiff[i]);
 	}
 
-	// Check the version
-	if (strncmp(game.version, buildTime, 8) != 0)
-	{
-		debug(LOG_ERROR, "Host is running a different version of Warzone2100.");
-	}
-
-	// Now the dpid array
-	for (i = 0; i < MAX_PLAYERS; i++)
-	{
-		NETint32_t(&player2dpid[i]);
-	}
-
 	// Send the list of who is still joining
 	for (i = 0; i < MAX_PLAYERS; i++)
 	{
 		NETbool(&ingame.JoiningInProgress[i]);
-	}
-
-	NETuint32_t(&newPl);
-	NETuint32_t(&play);
-
-	// Player colours
-	for (i = 0; i < MAX_PLAYERS; i++)
-	{
-		NETuint8_t(&PlayerColour[i]);
 	}
 
 	// Alliances
@@ -227,12 +171,6 @@ void recvOptions()
 		{
 			NETuint8_t(&alliances[i][j]);
 		}
-	}
-
-	// Teams
-	for (i = 0; i < MAX_PLAYERS; i++)
-	{
-		NETint32_t(&playerTeamGUI[i]);
 	}
 
 	// Free any structure limits we may have in-place
@@ -258,31 +196,6 @@ void recvOptions()
 		NETuint8_t(&ingame.pStructureLimits[i].limit);
 	}
 
-	// Receive ready status of all players
-	for (i = 0; i < MAX_PLAYERS; i++)
-	{
-		NETbool(&bPlayerReadyGUI[i]);
-	}
-
-	NETend();
-
-	// Post process
-	if (newPl != 0)
-	{
-		// If we are the new player
-		if (newPl == NetPlay.dpidPlayer)
- 		{
-			selectedPlayer = play;		// Select player
-			NETplayerInfo();			// Get player info
-			powerCalculated = false;	// Turn off any power requirements
-		}
-		// Someone else is joining.
-		else
-		{
-			setupNewPlayer(newPl, play);
- 		}
- 	}
-
 	// Do the skirmish slider settings if they are up
 	for (i = 0; i < MAX_PLAYERS; i++)
  	{
@@ -295,11 +208,11 @@ void recvOptions()
 	// See if we have the map or not
 	if (!checkGameWdg(game.map))
 	{
+		uint32_t player = selectedPlayer;
+
 		// Request the map from the host
-		NETbeginEncode(NET_REQUESTMAP, NET_ALL_PLAYERS);
-
-		NETuint32_t(&NetPlay.dpidPlayer);
-
+		NETbeginEncode(NET_REQUESTMAP, NET_HOST_ONLY);
+		NETuint32_t(&player);
 		NETend();
 
 		addConsoleMessage("MAP REQUESTED!",DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
@@ -316,7 +229,7 @@ void recvOptions()
 BOOL hostCampaign(char *sGame, char *sPlayer)
 {
 	PLAYERSTATS playerStats;
-	UDWORD		pl,numpl,i,j;
+	UDWORD		i;
 
 	debug(LOG_WZ, "Hosting campaign: '%s', player: '%s'", sGame, sPlayer);
 
@@ -329,53 +242,31 @@ BOOL hostCampaign(char *sGame, char *sPlayer)
 		game.maxPlayers = 4;
 	}
 
-	NEThostGame(sGame, sPlayer, game.type, 0, 0, 0, game.maxPlayers); // temporary stuff
+	if (!NEThostGame(sGame, sPlayer, game.type, 0, 0, 0, game.maxPlayers))
+	{
+		return false;
+	}
 
 	for (i = 0; i < MAX_PLAYERS; i++)
 	{
-		player2dpid[i] = 0;
 		setPlayerName(i, ""); //Clear custom names (use default ones instead)
 	}
 
-
-	pl = rand()%game.maxPlayers;						//pick a player
-
-	player2dpid[pl] = NetPlay.dpidPlayer;				// add ourselves to the array.
-	selectedPlayer = pl;
+	NetPlay.players[selectedPlayer].ready = false;
 
 	ingame.localJoiningInProgress = true;
 	ingame.JoiningInProgress[selectedPlayer] = true;
 	bMultiPlayer = true;								// enable messages
 
 	loadMultiStats(sPlayer,&playerStats);				// stats stuff
-	setMultiStats(NetPlay.dpidPlayer,playerStats,false);
-	setMultiStats(NetPlay.dpidPlayer,playerStats,true);
-
-	bPlayerReadyGUI[0] = false;
+	setMultiStats(selectedPlayer, playerStats, false);
+	setMultiStats(selectedPlayer, playerStats, true);
 
 	if(!NetPlay.bComms)
 	{
-		NETplayerInfo();
 		strcpy(NetPlay.players[0].name,sPlayer);
-		numpl = 1;
 	}
-	else
-	{
-		numpl = NETplayerInfo();
-	}
-
-	// may be more than one player already. check and resolve!
-	if(numpl >1)
-	{
-		for(j = 0;j<MAX_PLAYERS;j++)
-		{
-			if(NetPlay.players[j].dpid && (NetPlay.players[j].dpid != NetPlay.dpidPlayer))
-			{
-				for(i = 0;player2dpid[i] != 0;i++);
-				player2dpid[i] = NetPlay.players[j].dpid;
-			}
-		}
-	}
+	NetPlay.maxPlayers = game.maxPlayers;
 
 	return true;
 }
@@ -393,44 +284,14 @@ BOOL joinCampaign(UDWORD gameNumber, char *sPlayer)
 		ingame.localJoiningInProgress	= true;
 
 		loadMultiStats(sPlayer,&playerStats);
-		setMultiStats(NetPlay.dpidPlayer,playerStats,false);
-		setMultiStats(NetPlay.dpidPlayer,playerStats,true);
+		setMultiStats(selectedPlayer, playerStats, false);
+		setMultiStats(selectedPlayer, playerStats, true);
 		return false;
 	}
 
 	bMultiPlayer = true;
 	return true;
 }
-
-#if 0	// unused - useful?
-// ////////////////////////////////////////////////////////////////////////////
-// Lobby launched. fires the correct routine when the game was lobby launched.
-BOOL LobbyLaunched(void)
-{
-	UDWORD i;
-	PLAYERSTATS pl = { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-
-	// set the player info as soon as possible to avoid screwy scores appearing elsewhere.
-	NETplayerInfo();
-	NETfindGame();
-
-	for (i = 0; i < MAX_PLAYERS && NetPlay.players[i].dpid != NetPlay.dpidPlayer; i++);
-
-	if(!loadMultiStats(NetPlay.players[i].name, &pl) )
-	{
-		return false; // cheating was detected, so fail.
-	}
-
-	setMultiStats(NetPlay.dpidPlayer, pl, false);
-	setMultiStats(NetPlay.dpidPlayer, pl, true);
-
-	// setup text boxes on multiplay screen.
-	strcpy((char*) sPlayer, NetPlay.players[i].name);
-	strcpy((char*) game.name, NetPlay.games[0].name);
-
-	return true;
-}
-#endif
 
 // ////////////////////////////////////////////////////////////////////////////
 // Broadcast that we are leaving the game 'nicely', (we wanted to) and not
@@ -440,10 +301,10 @@ BOOL sendLeavingMsg(void)
 	debug(LOG_NET, "We are leaving 'nicely'");
 	NETbeginEncode(NET_PLAYER_LEAVING, NET_ALL_PLAYERS);
 	{
-		uint32_t player_id = player2dpid[selectedPlayer];
-		BOOL host = NetPlay.bHost;
+		BOOL host = NetPlay.isHost;
+		uint32_t id = selectedPlayer;
 
-		NETuint32_t(&player_id);
+		NETuint32_t(&id);
 		NETbool(&host);
 	}
 	NETend();
@@ -782,10 +643,8 @@ static BOOL cleanMap(UDWORD player)
 static BOOL campInit(void)
 {
 	UDWORD			player;
-	UBYTE		newPlayerArray[MAX_PLAYERS];
-	SDWORD		newPlayerTeam[MAX_PLAYERS] = {-1,-1,-1,-1,-1,-1,-1,-1};
 
-// if this is from a savegame, stop here!
+	// If this is from a savegame, stop here!
 	if((getSaveGameType() == GTYPE_SAVE_START)
 	|| (getSaveGameType() == GTYPE_SAVE_MIDMISSION)	)
 	{
@@ -798,56 +657,6 @@ static BOOL campInit(void)
 		return true;
 	}
 
-	//Convert skirmish GUI player ids to in-game ids
-	if(game.type == SKIRMISH)
-	{
-		unsigned int i;
-		unsigned int lastAI = 0; // last used AI slot
-
-		memset(newPlayerArray,1,MAX_PLAYERS * sizeof(newPlayerArray[0]));		//'1' for humans
-		for(i = 0; i < MAX_PLAYERS; ++i)
-		{
-			if(game.skDiff[i] < UBYTE_MAX )		//slot with enabled or disabled AI
-			{
-				unsigned int player;
-
-				//find first unused slot
-				for (player = lastAI;
-				     player < MAX_PLAYERS && isHumanPlayer(player); // skip humans
-				     ++player);
-
-				ASSERT(player < MAX_PLAYERS, "couldn't find free slot while assigning AI %u, lastAI=%u", i, lastAI);
-
-				newPlayerArray[player] = game.skDiff[i];		//copy over
-				newPlayerTeam[player] = playerTeamGUI[i];
-
-				//remove player if it was disabled in menus
-				if(game.skDiff[i] == 0)
-					clearPlayer(player,true,false);
-
-				lastAI = player;
-				lastAI++;
-			}
-			else if(game.skDiff[i] == UBYTE_MAX)	//human player
-			{
-				unsigned int player;
-
-				//find player net id
-				for (player = 0;
-				     player < MAX_PLAYERS && player2dpid[player] != NetPlay.players[i].dpid;
-				     ++player);
-
-				ASSERT(player < MAX_PLAYERS, "couldn't find player id for GUI id %u", i);
-
-				newPlayerTeam[player] = playerTeamGUI[i];
-			}
-
-		}
-
-		memcpy(game.skDiff,newPlayerArray,MAX_PLAYERS  * sizeof(newPlayerArray[0]));
-		memcpy(playerTeam,newPlayerTeam,MAX_PLAYERS * sizeof(newPlayerTeam[0]));
-	}
-
 	for(player = 0;player<game.maxPlayers;player++)			// clean up only to the player limit for this map..
 	{
 		if( (!isHumanPlayer(player)) && game.type != SKIRMISH)	// strip away unused players
@@ -858,22 +667,18 @@ static BOOL campInit(void)
 		cleanMap(player);
 	}
 
-	// optionally remove other computer players.
-	// HACK: if actual number of players is 8, then drop baba player to avoid
-	// exceeding player number (babas need a player, too!) - Per
-	if ((game.type == CAMPAIGN && game.maxPlayers > 7) || game.type == SKIRMISH)
+	// Remove baba player for skirmish
+	if (game.type == SKIRMISH)
 	{
-		for(player=game.maxPlayers;player<MAX_PLAYERS;player++)
+		for (player = game.maxPlayers; player < MAX_PLAYERS; player++)
 		{
-			clearPlayer(player,true,false);
+			clearPlayer(player, true, false);
 		}
 	}
 
-	// add free research gifts..
-	if(NetPlay.bHost)
+	if (NetPlay.isHost)	// add oil drums
 	{
-		// NOTE: you can set this safely to 50 for testing.
-		addOilDrum( NetPlay.playercount*2);	// add some free power.
+		addOilDrum(NetPlay.playercount * 2);
 	}
 
 	playerResponding();			// say howdy!
@@ -946,7 +751,7 @@ BOOL multiGameShutdown(void)
 	ingame.localJoiningInProgress = false; // Clean up
 	ingame.localOptionsReceived = false;
 	ingame.bHostSetup = false;	// Dont attempt a host
-	NetPlay.bHost					= false;
+	NetPlay.isHost					= false;
 	bMultiPlayer					= false;	// Back to single player mode
 	selectedPlayer					= 0;		// Back to use player 0 (single player friendly)
 
