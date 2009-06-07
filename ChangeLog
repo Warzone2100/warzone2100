@@ -1,4 +1,10 @@
-2009-05-31: Version 2.2
+2009-00-00: Version 2.2.1
+ * Campaign:
+   * Fix: Flashing box around mission timer was too small, resulting in a graphics glitch. (r7672, ticket:596)
+ * Build system:
+   * Fix: Various issues (r7669, r7664, r7663, r7661, r7655, r7642, r7640)
+
+2009-05-31: Version 2.2.0
  * General:
    * Fix: Tells user if mod entered on the command line / shorcut is enabled, or is invalid. Output is to stdout or stderr. (r7586)
    * Fix: Launching the game from installer now works (r7568 ticket:364)
