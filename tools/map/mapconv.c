@@ -80,6 +80,10 @@ int main(int argc, char **argv)
 	}
 	#define MADD(...) fprintf(fp, __VA_ARGS__); fprintf(fp, "\n");
 	MADD("[map]");
+	if (map->levelName[0] != '\0')
+	{
+		MADD("Name = %s", map->levelName);
+	}
 	MADD("SnapMode = %d", SNAP_MODE);
 	MADD("Gravity = %d", GRAVITY);
 	MADD("HeightScale = %d", ELEVATION_SCALE);
@@ -90,6 +94,11 @@ int main(int argc, char **argv)
 	MADD("SeaLevel = %d", SEALEVEL);
 	MADD("Tileset = %s", tilesetTextures[map->tileset]);
 	MADD("NumTiles = %d", map->width * map->height);
+	MADD("\n[scroll_limits]");
+	MADD("x1 = %d", map->scrollMinX);
+	MADD("y1 = %d", map->scrollMinY);
+	MADD("x2 = %u", map->scrollMaxX);
+	MADD("y2 = %u", map->scrollMaxY);
 	fclose(fp);
 
 	/*** Terrain data ***/
@@ -134,7 +143,7 @@ int main(int argc, char **argv)
 	{
 		LND_OBJECT *psObj = &map->mLndObjects[IMD_FEATURE][i];
 
-		MADD("\n[droid_%04u]", i);
+		MADD("\n[feature_%04u]", i);
 		MADD("pos.x = %u", psObj->x);
 		MADD("pos.y = %u", psObj->y);
 		MADD("pos.z = %u", psObj->z);
@@ -154,7 +163,7 @@ int main(int argc, char **argv)
 	{
 		LND_OBJECT *psObj = &map->mLndObjects[IMD_STRUCTURE][i];
 
-		MADD("\n[droid_%04u]", i);
+		MADD("\n[structure_%04u]", i);
 		MADD("pos.x = %u", psObj->x);
 		MADD("pos.y = %u", psObj->y);
 		MADD("pos.z = %u", psObj->z);
