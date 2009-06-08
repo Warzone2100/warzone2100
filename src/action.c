@@ -1789,7 +1789,6 @@ void actionUpdateDroid(DROID *psDroid)
 	case DACTION_MOVETOBUILD:
 		if (!psDroid->psTarStats)
 		{
-			debug(LOG_ERROR, "Bad move to build action target");
 			psDroid->action = DACTION_NONE;
 			break;
 		}
@@ -1968,6 +1967,11 @@ void actionUpdateDroid(DROID *psDroid)
 		}
 		break;
 	case DACTION_BUILD:
+		if (!psDroid->psTarStats)
+		{
+			psDroid->action = DACTION_NONE;
+			break;
+		}
 		// The droid cannot be in a formation
 		if (psDroid->sMove.psFormation != NULL)
 		{
@@ -2005,7 +2009,11 @@ void actionUpdateDroid(DROID *psDroid)
 	case DACTION_MOVETOREPAIR:
 	case DACTION_MOVETOCLEAR:
 	case DACTION_MOVETORESTORE:
-
+		if (!psDroid->psTarStats)
+		{
+			psDroid->action = DACTION_NONE;
+			break;
+		}
 		// The droid cannot be in a formation
 		if (psDroid->sMove.psFormation != NULL)
 		{
@@ -2067,6 +2075,11 @@ void actionUpdateDroid(DROID *psDroid)
 	case DACTION_REPAIR:
 	case DACTION_CLEARWRECK:
 	case DACTION_RESTORE:
+		if (!psDroid->psTarStats)
+		{
+			psDroid->action = DACTION_NONE;
+			break;
+		}
 		// set up for the specific action
 		switch (psDroid->action)
 		{
@@ -2155,6 +2168,11 @@ void actionUpdateDroid(DROID *psDroid)
 		}
 		break;
 	case DACTION_BUILD_FOUNDATION:
+		if (!psDroid->psTarStats)
+		{
+			psDroid->action = DACTION_NONE;
+			break;
+		}
 		//building a structure's foundation - flattening the ground for now
 		{
 			MAPTILE* const psTile = mapTile(map_coord(psDroid->orderX), map_coord(psDroid->orderY));
@@ -2711,6 +2729,11 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 		break;
 
 	case DACTION_BUILD:
+		if (!psDroid->psTarStats)
+		{
+			psDroid->action = DACTION_NONE;
+			break;
+		}
 		ASSERT(psDroid->order == DORDER_BUILD || psDroid->order == DORDER_HELPBUILD ||
 				psDroid->order == DORDER_LINEBUILD,
 			"cannot start build action without a build order");
