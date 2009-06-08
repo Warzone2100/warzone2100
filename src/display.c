@@ -565,7 +565,8 @@ static void CheckFinishedDrag(void)
 				    && sBuildDetails.psStats->ref < (REF_STRUCTURE_START + REF_RANGE))
 				{
 					if ((((STRUCTURE_STATS *)sBuildDetails.psStats)->type == REF_WALL
-					     || ((STRUCTURE_STATS *)sBuildDetails.psStats)->type == REF_DEFENSE)
+					     || ((STRUCTURE_STATS *)sBuildDetails.psStats)->type == REF_DEFENSE
+					     || ((STRUCTURE_STATS *)sBuildDetails.psStats)->type == REF_REARM_PAD)
 					    && !isLasSat((STRUCTURE_STATS *)sBuildDetails.psStats))
 					{
 						wallDrag.x2 = mouseTileX;
@@ -609,7 +610,8 @@ static void CheckStartWallDrag(void)
 		    && sBuildDetails.psStats->ref < (REF_STRUCTURE_START + REF_RANGE))
 		{
 			if ((((STRUCTURE_STATS *)sBuildDetails.psStats)->type == REF_WALL
-			     || ((STRUCTURE_STATS *)sBuildDetails.psStats)->type == REF_DEFENSE)
+			     || ((STRUCTURE_STATS *)sBuildDetails.psStats)->type == REF_DEFENSE
+			     || ((STRUCTURE_STATS *)sBuildDetails.psStats)->type == REF_REARM_PAD)
 			    && !isLasSat((STRUCTURE_STATS *)sBuildDetails.psStats))
 			{
 				wallDrag.x1 = wallDrag.x2 = mouseTileX;
@@ -687,7 +689,8 @@ static void HandleDrag(void)
 		if(buildState == BUILD3D_VALID)
 		{
 			if ((((STRUCTURE_STATS *)sBuildDetails.psStats)->type == REF_WALL
-			     || ((STRUCTURE_STATS *)sBuildDetails.psStats)->type == REF_DEFENSE)
+			     || ((STRUCTURE_STATS *)sBuildDetails.psStats)->type == REF_DEFENSE
+			     || ((STRUCTURE_STATS *)sBuildDetails.psStats)->type == REF_REARM_PAD)
 			    && !isLasSat((STRUCTURE_STATS *)sBuildDetails.psStats))
 			{
 				int dx, dy;
