@@ -1,12 +1,13 @@
 2009-00-00: Version 2.2.1
  * General:
-   * Fix: Various crashes (r7699)
+   * Change: No longer require space between rearm pads, allow dragging pad production with mouse, and droids may drive over inactive rearm pads (r7701, ticket:569)
+   * Fix: Various crashes related to failing orders (r7699)
  * AI:
    * Fix: Resolve AI droid traffic jams by clearing orders and make jammed droids stop going for repair (r7700, ticket:597)
  * Campaign:
    * Fix: Flashing box around mission timer was too small, resulting in a graphics glitch. (r7672, ticket:596)
  * Build system:
-   * Fix: Various issues (r7669, r7664, r7663, r7661, r7655, r7642, r7640)
+   * Fix: Various build system issues (r7669, r7664, r7663, r7661, r7655, r7642, r7640)
 
 2009-05-31: Version 2.2.0
  * General:
