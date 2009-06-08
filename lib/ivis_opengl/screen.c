@@ -194,7 +194,7 @@ BOOL screenInitialise(
 
 	// Make OpenGL's VBO functions available under the core names for
 	// implementations that have them only as extensions, namely Mesa.
-	if (!strncmp((const char *)glGetString(GL_RENDERER), "Masa", 4))
+	if (!strncmp((const char *)glGetString(GL_RENDERER), "Mesa", 4))
 	{
 		debug(LOG_3D, "Using VBO extension functions under the core names.");
 		// GLee is usually initialized automatically when needed, but
