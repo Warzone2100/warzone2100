@@ -280,7 +280,7 @@ GAMEMAP *mapLoad(char *filename)
 	}
 	else
 	{
-		debug(LOG_ERROR, "Unknown terrain signature in %s: %lu %lu %lu", path, 
+		debug(LOG_ERROR, "Unknown terrain signature in %s: %hu %hu %hu", path, 
 		      terrainSignature[0], terrainSignature[1], terrainSignature[2]);
 		goto failure;
 	}
@@ -437,7 +437,6 @@ GAMEMAP *mapLoad(char *filename)
 			LND_OBJECT *psObj = &map->mLndObjects[IMD_DROID][i];
 			int nameLength = 60;
 			uint32_t dummy;
-			uint8_t visibility[8];
 
 			if (droidVersion <= 19)
 			{

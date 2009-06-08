@@ -1,9 +1,10 @@
-// gcc -o ~/bin/mapinfo mapinfo.c mapload.c -I. -lphysfs -I../../lib/framework
+// gcc -o ~/bin/mapinfo mapinfo.c mapload.c -I. -lphysfs -I../../lib/framework -Wall
 
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 #include <limits.h>
+
 #include "mapload.h"
 
 int main(int argc, char **argv)
