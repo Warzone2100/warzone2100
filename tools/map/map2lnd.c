@@ -3,7 +3,7 @@
 // the rightmost and bottom most vertices, which in Warzone is snapped to
 // sea level, while it can be freely manipulated in Editworld.
 
-// gcc -o ~/bin/map2lnd map2lnd.c mapload.c -I. -lphysfs -g -I../../lib/framework
+// gcc -o ~/bin/map2lnd map2lnd.c mapload.c -I. -lphysfs -g -I../../lib/framework -Wall
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -207,7 +207,7 @@ int main(int argc, char **argv)
 	{
 		GATEWAY *psGate = mapGateway(map, i);
 
-		MADD("        %llu %llu %llu %llu", psGate->x1, psGate->y1, psGate->x2, psGate->y2);
+		MADD("        %hhu %hhu %hhu %hhu", psGate->x1, psGate->y1, psGate->x2, psGate->y2);
 	}
 	MADD("    }");
 	MADD("}");
