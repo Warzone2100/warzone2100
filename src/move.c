@@ -1007,6 +1007,14 @@ static BOOL moveBlocked(DROID *psDroid)
 			!fpathTileLOS(map_coord((SDWORD)psDroid->pos.x), map_coord((SDWORD)psDroid->pos.y),
 						  map_coord(psDroid->sMove.DestinationX), map_coord(psDroid->sMove.DestinationY)))
 		{
+			if (!isHumanPlayer(psDroid->player))
+			{
+				// AI gets into trouble with droids that go home to repair. Or just go somewhere strange. Try to fix this.
+				secondarySetState(psDroid, DSO_REPAIR_LEVEL, DSS_REPLEV_NEVER);
+				psDroid->order = DORDER_NONE;
+				setDroidTarget(psDroid, NULL);
+				psDroid->psTarStats = NULL;
+			}
 			objTrace(psDroid->id, "Trying to reroute to (%d,%d)", psDroid->sMove.DestinationX, psDroid->sMove.DestinationY);
 			moveDroidTo(psDroid, psDroid->sMove.DestinationX, psDroid->sMove.DestinationY);
 			return false;
