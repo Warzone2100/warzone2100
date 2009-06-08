@@ -1,6 +1,6 @@
 // Converter from old Warzone (savegame) map format to new format.
 
-// gcc -o ~/bin/mapconvert mapconvert.c mapload.c pngsave.c -I. -lphysfs -g -I../../lib/framework -lpng -Wall
+// gcc -o ~/bin/mapconv mapconv.c mapload.c pngsave.c -I. -lphysfs -g -I../../lib/framework -lpng -Wall
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -33,8 +33,8 @@ int main(int argc, char **argv)
 	char path[PATH_MAX], *delim;
 	GAMEMAP *map;
 	FILE *fp;
-	uint16_t *terrain;
-	uint8_t *height;
+	uint16_t *terrain, *rotate;
+	uint8_t *height, *flip;
 	int i;
 	MAPTILE *psTile;
 
@@ -70,6 +70,7 @@ int main(int argc, char **argv)
 	mkdir(filename, 0777);
 	strcpy(base, filename);
 
+	/*** Map configuration ***/
 	strcat(filename, "/map.ini");
 	fp = fopen(filename, "w");
 	if (!fp)
@@ -91,13 +92,18 @@ int main(int argc, char **argv)
 	MADD("NumTiles = %d", map->width * map->height);
 	fclose(fp);
 
+	/*** Terrain data ***/
 	terrain = malloc(map->width * map->height * 2);
 	height = malloc(map->width * map->height);
+	rotate = malloc(map->width * map->height * 2);
+	flip = malloc(map->width * map->height);
 	psTile = mapTile(map, 0, 0);
 	for (i = 0; i < map->width * map->height; i++)
 	{
 		height[i] = psTile->height;
 		terrain[i] = psTile->texture & TILE_NUMMASK;
+		rotate[i] = ((psTile->texture & TILE_ROTMASK) >> TILE_ROTSHIFT) * 90;
+		flip[i] = TRI_FLIPPED(psTile) ? 255 : 0;
 
 		psTile++;
 	}
@@ -107,60 +113,18 @@ int main(int argc, char **argv)
 	strcpy(filename, base);
 	strcat(filename, "/height.png");
 	savePngI8(filename, height, map->width, map->height);
+	strcpy(filename, base);
+	strcat(filename, "/rotations.png");
+	savePngI16(filename, rotate, map->width, map->height);
+	strcpy(filename, base);
+	strcat(filename, "/flips.png");
+	savePngI8(filename, flip, map->width, map->height);
+	free(height);
+	free(terrain);
+	free(rotate);
+	free(flip);
 
-#if 0
-	for (i = 0, x = 0, y = 0; i < map->width * map->height; i++)
-	{
-		MAPTILE *psTile = mapTile(map, x, y);
-		int tid = psTile->texture & TILE_NUMMASK;
-		int vf = TRI_FLIPPED(psTile);
-		int tf = (psTile->texture & TILE_XFLIP) > 0 ? 1 : 0;
-		int f = 0;
-		int vh[4];
-
-		// Compose flag
-		if (TRI_FLIPPED(psTile)) f += 2;
-		if (psTile->texture & TILE_XFLIP) f += 4;
-		if (psTile->texture & TILE_YFLIP) f += 8;
-		switch ((psTile->texture & TILE_ROTMASK) >> TILE_ROTSHIFT)
-		{
-		case 0:		break;
-		case 1:		f += 16; break;
-		case 2:		f += 32; break;
-		case 3:		f += 48; break;
-		default:	fprintf(stderr, "Bad rotation value: %d\n", (psTile->texture & TILE_ROTMASK) >> TILE_ROTSHIFT); return -1;
-		}
-
-		// Vertex positions set in clockwise order
-		vh[0] = psTile->height;
-		vh[1] = vh[2] = vh[3] = 0;
-		if (x + 1 < map->width)
-		{
-			vh[1] = mapTile(map, x + 1, y)->height;
-		}
-		if (x + 1 < map->width && y + 1 < map->height)
-		{
-			vh[2] = mapTile(map, x + 1, y + 1)->height;
-		}
-		if (y + 1 < map->height)
-		{
-			vh[3] = mapTile(map, x, y + 1)->height;
-		}
-
-		// No idea why +1 to TID. In EditWorld source, it is a "hide" flag.
-		MADD("        TID %d VF %d TF %d F %d VH %d %d %d %d", 
-		     tid + 1, vf, tf, f, vh[0], vh[1], vh[2], vh[3]);
-		x++;
-		if (x == map->width)
-		{
-			x = 0;
-			y++;
-		}
-	}
-	MADD("    }");
-	MADD("}");
-#endif
-
+	/*** Features ***/
 	strcpy(filename, base);
 	strcat(filename, "/features.ini");
 	fp = fopen(filename, "w");
@@ -180,6 +144,7 @@ int main(int argc, char **argv)
 	}
 	fclose(fp);
 
+	/*** Structures ***/
 	strcpy(filename, base);
 	strcat(filename, "/structure.ini");
 	fp = fopen(filename, "w");
@@ -199,6 +164,7 @@ int main(int argc, char **argv)
 	}
 	fclose(fp);
 
+	/*** Droids ***/
 	strcpy(filename, base);
 	strcat(filename, "/droids.ini");
 	fp = fopen(filename, "w");
@@ -218,6 +184,7 @@ int main(int argc, char **argv)
 	}
 	fclose(fp);
 
+	/*** Gateways ***/
 	strcpy(filename, base);
 	strcat(filename, "/gateways.ini");
 	fp = fopen(filename, "w");
