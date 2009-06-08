@@ -256,12 +256,10 @@ BOOL rebuildSearchPath( searchPathMode mode, BOOL force )
 #endif // DEBUG
 					// Remove maps and mods
 					removeSubdirs( curSearchPath->path, "maps", NULL );
+					removeSubdirs( curSearchPath->path, "mods/music", NULL );
 					removeSubdirs( curSearchPath->path, "mods/global", global_mods );
-					removeSubdirs( curSearchPath->path, "mods/global/autoload", NULL );
 					removeSubdirs( curSearchPath->path, "mods/campaign", campaign_mods );
-					removeSubdirs( curSearchPath->path, "mods/campaign/autoload", NULL );
 					removeSubdirs( curSearchPath->path, "mods/multiplay", multiplay_mods );
-					removeSubdirs( curSearchPath->path, "mods/multiplay/autoload", NULL );
 
 					// Remove multiplay patches
 					sstrcpy(tmpstr, curSearchPath->path);
@@ -300,10 +298,9 @@ BOOL rebuildSearchPath( searchPathMode mode, BOOL force )
 					// Add global and campaign mods
 					PHYSFS_addToSearchPath( curSearchPath->path, PHYSFS_APPEND );
 
+					addSubdirs( curSearchPath->path, "mods/music", PHYSFS_APPEND, NULL );
 					addSubdirs( curSearchPath->path, "mods/global", PHYSFS_APPEND, global_mods );
-					addSubdirs( curSearchPath->path, "mods/global/autoload", PHYSFS_APPEND, NULL );
 					addSubdirs( curSearchPath->path, "mods/campaign", PHYSFS_APPEND, campaign_mods );
-					addSubdirs( curSearchPath->path, "mods/campaign/autoload", PHYSFS_APPEND, NULL );
 					if (!PHYSFS_removeFromSearchPath( curSearchPath->path ))
 					{
 						debug(LOG_ERROR, "Failed to remove path %s again", curSearchPath->path);
@@ -339,10 +336,10 @@ BOOL rebuildSearchPath( searchPathMode mode, BOOL force )
 					// Add maps and global and multiplay mods
 					PHYSFS_addToSearchPath( curSearchPath->path, PHYSFS_APPEND );
 					addSubdirs( curSearchPath->path, "maps", PHYSFS_APPEND, NULL );
+					addSubdirs( curSearchPath->path, "mods/music", PHYSFS_APPEND, NULL );
 					addSubdirs( curSearchPath->path, "mods/global", PHYSFS_APPEND, global_mods );
 					addSubdirs( curSearchPath->path, "mods/global/autoload", PHYSFS_APPEND, NULL );
 					addSubdirs( curSearchPath->path, "mods/multiplay", PHYSFS_APPEND, multiplay_mods );
-					addSubdirs( curSearchPath->path, "mods/multiplay/autoload", PHYSFS_APPEND, NULL );
 					PHYSFS_removeFromSearchPath( curSearchPath->path );
 
 					// Add multiplay patches
