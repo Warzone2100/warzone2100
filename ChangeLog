@@ -1,4 +1,6 @@
 2009-00-00: Version 2.2.1
+ * General:
+   * Fix: Various crashes (r7699)
  * Campaign:
    * Fix: Flashing box around mission timer was too small, resulting in a graphics glitch. (r7672, ticket:596)
  * Build system:
