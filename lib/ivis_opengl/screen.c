@@ -171,7 +171,6 @@ BOOL screenInitialise(
 	{
 		debug( LOG_ERROR, "OpenGL initialization did not give double buffering!" );
 	}
-	// Note that no initialisation of GLee is required, since this is handled automatically.
 
 	/* Dump information about OpenGL implementation to the console */
 	debug(LOG_3D, "OpenGL Vendor : %s", glGetString(GL_VENDOR));
@@ -192,6 +191,27 @@ BOOL screenInitialise(
 	debug(LOG_3D, "  * Anisotropic filtering %s supported.", GLEE_EXT_texture_filter_anisotropic ? "is" : "is NOT");
 	debug(LOG_3D, "  * Rectangular texture %s supported.", GLEE_ARB_texture_rectangle ? "is" : "is NOT");
 	debug(LOG_3D, "  * FrameBuffer Object (FBO) %s supported.", GLEE_EXT_framebuffer_object  ? "is" : "is NOT");
+
+	// Make OpenGL's VBO functions available under the core names for
+	// implementations that have them only as extensions, namely Mesa.
+	if (!strncmp((const char *)glGetString(GL_RENDERER), "Masa", 4))
+	{
+		debug(LOG_3D, "Using VBO extension functions under the core names.");
+		// GLee is usually initialized automatically when needed, but
+		// here it has to be done explicitly.
+		GLeeInit();
+		GLeeFuncPtr_glBindBuffer = GLeeFuncPtr_glBindBufferARB;
+		GLeeFuncPtr_glDeleteBuffers = GLeeFuncPtr_glDeleteBuffersARB;
+		GLeeFuncPtr_glGenBuffers = GLeeFuncPtr_glGenBuffersARB;
+		GLeeFuncPtr_glIsBuffer = GLeeFuncPtr_glIsBufferARB;
+		GLeeFuncPtr_glBufferData = GLeeFuncPtr_glBufferDataARB;
+		GLeeFuncPtr_glBufferSubData = GLeeFuncPtr_glBufferSubDataARB;
+		GLeeFuncPtr_glGetBufferSubData = GLeeFuncPtr_glGetBufferSubDataARB;
+		GLeeFuncPtr_glMapBuffer = GLeeFuncPtr_glMapBufferARB;
+		GLeeFuncPtr_glUnmapBuffer = GLeeFuncPtr_glUnmapBufferARB;
+		GLeeFuncPtr_glGetBufferParameteriv = GLeeFuncPtr_glGetBufferParameterivARB;
+		GLeeFuncPtr_glGetBufferPointerv = GLeeFuncPtr_glGetBufferPointervARB;
+	}
 
 	glViewport(0, 0, width, height);
 	glMatrixMode(GL_PROJECTION);
