@@ -338,7 +338,6 @@ BOOL rebuildSearchPath( searchPathMode mode, BOOL force )
 					addSubdirs( curSearchPath->path, "maps", PHYSFS_APPEND, NULL );
 					addSubdirs( curSearchPath->path, "mods/music", PHYSFS_APPEND, NULL );
 					addSubdirs( curSearchPath->path, "mods/global", PHYSFS_APPEND, global_mods );
-					addSubdirs( curSearchPath->path, "mods/global/autoload", PHYSFS_APPEND, NULL );
 					addSubdirs( curSearchPath->path, "mods/multiplay", PHYSFS_APPEND, multiplay_mods );
 					PHYSFS_removeFromSearchPath( curSearchPath->path );
 
