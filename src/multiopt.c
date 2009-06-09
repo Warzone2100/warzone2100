@@ -78,6 +78,7 @@ void sendOptions()
 	NETuint32_t(&game.power);
 	NETuint8_t(&game.base);
 	NETuint8_t(&game.alliance);
+	NETbool(&game.scavengers);
 
 	for (i = 0; i < MAX_PLAYERS; i++)
 	{
@@ -150,6 +151,7 @@ void recvOptions()
 	NETuint32_t(&game.power);
 	NETuint8_t(&game.base);
 	NETuint8_t(&game.alliance);
+	NETbool(&game.scavengers);
 
 	for (i = 0; i < MAX_PLAYERS; i++)
 	{
@@ -398,18 +400,6 @@ BOOL multiTemplateSetup(void)
 {
 	UDWORD player, pcPlayer = 0;
 
-	switch (game.type)
-	{
-	case CAMPAIGN:
-		for(player=0;player<game.maxPlayers;player++)
-		{
-			copyTemplateSet(CAMPAIGNTEMPLATES,player);
-		}
-		break;
-
-	case SKIRMISH:
-		// create the pc player list in deathmatch set.
-
 		// Yes, this code really *is* as hacky as it looks.
 		// I'm going to try to narrate what's going on.
 
@@ -474,7 +464,7 @@ BOOL multiTemplateSetup(void)
 				pcPlayer = DEATHMATCHTEMPLATES;
 			}
 			//players first
-			for(player=0;player<game.maxPlayers;player++)
+			for (player = 0; player < game.maxPlayers; player++)
 			{
 				if(isHumanPlayer(player))
 				{
@@ -482,7 +472,7 @@ BOOL multiTemplateSetup(void)
 				}
 			}
 			//now pc
-			for(player=0;player<game.maxPlayers;player++)
+			for (player = 0; player < game.maxPlayers; player++)
 			{
 				if(!isHumanPlayer(player))
 				{
@@ -490,11 +480,6 @@ BOOL multiTemplateSetup(void)
 				}
 			}
 		}
-		break;
-
-	default:
-		break;
-	}
 
 	return true;
 }
@@ -663,7 +648,7 @@ static BOOL campInit(void)
 	}
 
 	// Remove baba player for skirmish
-	if (game.type == SKIRMISH)
+	if (!game.scavengers)
 	{
 		for (player = game.maxPlayers; player < MAX_PLAYERS; player++)
 		{
