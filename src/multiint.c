@@ -1133,15 +1133,8 @@ static void addGameOptions(BOOL bRedo)
 	widgSetButtonState(psWScreen, MULTIOP_CAMPAIGN,	0);
 	widgSetButtonState(psWScreen, MULTIOP_SKIRMISH,	0);
 
-	switch(game.type)
-	{
-	case CAMPAIGN:
-		widgSetButtonState(psWScreen,MULTIOP_CAMPAIGN,WBUT_LOCK);
-		break;
-	case SKIRMISH:
-		widgSetButtonState(psWScreen,MULTIOP_SKIRMISH,WBUT_LOCK);
-		break;
-	}
+	if (game.scavengers)	widgSetButtonState(psWScreen, MULTIOP_CAMPAIGN, WBUT_LOCK);
+	else			widgSetButtonState(psWScreen, MULTIOP_SKIRMISH, WBUT_LOCK);
 
 	if (game.maxPlayers == 8)
 	{
@@ -1955,8 +1948,8 @@ static void disableMultiButs(void)
 	widgSetButtonState(psWScreen,MULTIOP_GNAME,WEDBS_DISABLE);
 	widgSetButtonState(psWScreen,MULTIOP_MAP,WEDBS_DISABLE);
 
-	if(game.type != CAMPAIGN)	widgSetButtonState(psWScreen, MULTIOP_CAMPAIGN, WBUT_DISABLE);
-	if(game.type != SKIRMISH)	widgSetButtonState(psWScreen, MULTIOP_SKIRMISH, WBUT_DISABLE);
+	if (game.scavengers)	widgSetButtonState(psWScreen, MULTIOP_CAMPAIGN, WBUT_DISABLE);
+	if (!game.scavengers)	widgSetButtonState(psWScreen, MULTIOP_SKIRMISH, WBUT_DISABLE);
 
 	if (!NetPlay.isHost)
 	{
@@ -2069,10 +2062,10 @@ static void processMultiopWidgets(UDWORD id)
 		case MULTIOP_CAMPAIGN:									// turn on campaign game
 			widgSetButtonState(psWScreen, MULTIOP_CAMPAIGN, WBUT_LOCK);
 			widgSetButtonState(psWScreen, MULTIOP_SKIRMISH,0);
-			game.type = CAMPAIGN;
+			game.scavengers = true;
 			NetPlay.maxPlayers = MIN(game.maxPlayers, 7);
-			widgSetString(psWScreen, MULTIOP_MAP, DEFAULTCAMPAIGNMAP);
-			sstrcpy(game.map,widgGetString(psWScreen, MULTIOP_MAP));
+//			widgSetString(psWScreen, MULTIOP_MAP, DEFAULTCAMPAIGNMAP);
+//			sstrcpy(game.map,widgGetString(psWScreen, MULTIOP_MAP));
 			addGameOptions(false);
 			break;
 		case MULTIOP_PASSWORD_BUT:
@@ -2108,10 +2101,10 @@ static void processMultiopWidgets(UDWORD id)
 		case MULTIOP_SKIRMISH:
 			widgSetButtonState(psWScreen, MULTIOP_CAMPAIGN,0 );
 			widgSetButtonState(psWScreen, MULTIOP_SKIRMISH,WBUT_LOCK);
-			game.type = SKIRMISH;
+			game.scavengers = false;
 			NetPlay.maxPlayers = game.maxPlayers;
-			widgSetString(psWScreen, MULTIOP_MAP, DEFAULTSKIRMISHMAP);
-			sstrcpy(game.map,widgGetString(psWScreen, MULTIOP_MAP));
+//			widgSetString(psWScreen, MULTIOP_MAP, DEFAULTSKIRMISHMAP);
+//			sstrcpy(game.map,widgGetString(psWScreen, MULTIOP_MAP));
 			addGameOptions(false);
 			break;
 		case MULTIOP_MAP_BUT:
@@ -2877,7 +2870,8 @@ BOOL startMultiOptions(BOOL bReenter)
 
 		if(!NetPlay.bComms)			// force skirmish if no comms.
 		{
-			game.type				= SKIRMISH;
+			game.type = SKIRMISH;
+			game.scavengers = false;
 			sstrcpy(game.map, DEFAULTSKIRMISHMAP);
 			game.maxPlayers = 4;
 		}

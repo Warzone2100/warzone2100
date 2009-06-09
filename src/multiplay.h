@@ -30,6 +30,7 @@
 // Game Options Structure. Enough info to completely describe the static stuff in amultiplay game.
 typedef struct {
 	uint8_t		type;						// DMATCH/CAMPAIGN/SKIRMISH/TEAMPLAY etc...
+	BOOL		scavengers;					// whether scavengers are on or off
 	char		map[128];					// name of multiplayer map being used.
 	uint8_t		maxPlayers;					// max players to allow
 	char		name[128];					// game name   (to be used)

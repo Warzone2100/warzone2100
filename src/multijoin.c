@@ -272,9 +272,9 @@ BOOL MultiPlayerJoin(UDWORD playerIndex)
 		bPlayerReadyGUI[playerIndex] = false;
 
 		// if skirmish and game full, then kick...
-		if(game.type == SKIRMISH && NetPlay.playercount > game.maxPlayers )
+		if (NetPlay.playercount > game.maxPlayers)
 		{
-			kickPlayer(playerIndex, "game is full!", ERROR_FULL);
+			kickPlayer(playerIndex, "Sorry, game is full!", ERROR_FULL);
 		}
 	}
 	return true;

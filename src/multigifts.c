@@ -428,7 +428,7 @@ void formAlliance(uint8_t p1, uint8_t p2, BOOL prop, BOOL allowAudio, BOOL allow
 	}
 
 	// Not campaign and alliances are transitive
-	if ((bMultiPlayer || game.type == SKIRMISH) && game.alliance == ALLIANCES_TEAMS)
+	if (game.alliance == ALLIANCES_TEAMS)
 	{
 		giftRadar(p1, p2, false);
 		giftRadar(p2, p1, false);

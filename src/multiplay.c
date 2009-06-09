@@ -776,7 +776,7 @@ BOOL SendResearch(uint8_t player, uint32_t index)
 
 	/*
 	 * Since we are called when the state of research changes (completed,
-	 * stopped &c) we also need to update our onw local copy of what our allies
+	 * stopped &c) we also need to update our own local copy of what our allies
 	 * are doing/have done.
 	 */
 	if (game.type == SKIRMISH)
