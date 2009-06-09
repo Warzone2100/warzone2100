@@ -1948,9 +1948,6 @@ static void disableMultiButs(void)
 	widgSetButtonState(psWScreen,MULTIOP_GNAME,WEDBS_DISABLE);
 	widgSetButtonState(psWScreen,MULTIOP_MAP,WEDBS_DISABLE);
 
-	if (game.scavengers)	widgSetButtonState(psWScreen, MULTIOP_CAMPAIGN, WBUT_DISABLE);
-	if (!game.scavengers)	widgSetButtonState(psWScreen, MULTIOP_SKIRMISH, WBUT_DISABLE);
-
 	if (!NetPlay.isHost)
 	{
 		if( game.fog) widgSetButtonState(psWScreen,MULTIOP_FOG_OFF ,WBUT_DISABLE);		//fog
@@ -2059,15 +2056,6 @@ static void processMultiopWidgets(UDWORD id)
 			addMultiRequest(MultiCustomMapsPath, ".wrf", MULTIOP_MAP, current_tech, current_numplayers);
 			break;
 
-		case MULTIOP_CAMPAIGN:									// turn on campaign game
-			widgSetButtonState(psWScreen, MULTIOP_CAMPAIGN, WBUT_LOCK);
-			widgSetButtonState(psWScreen, MULTIOP_SKIRMISH,0);
-			game.scavengers = true;
-			NetPlay.maxPlayers = MIN(game.maxPlayers, 7);
-//			widgSetString(psWScreen, MULTIOP_MAP, DEFAULTCAMPAIGNMAP);
-//			sstrcpy(game.map,widgGetString(psWScreen, MULTIOP_MAP));
-			addGameOptions(false);
-			break;
 		case MULTIOP_PASSWORD_BUT:
 			{
 				char game_password[64];
@@ -2098,15 +2086,7 @@ static void processMultiopWidgets(UDWORD id)
 
 			}
 			break;
-		case MULTIOP_SKIRMISH:
-			widgSetButtonState(psWScreen, MULTIOP_CAMPAIGN,0 );
-			widgSetButtonState(psWScreen, MULTIOP_SKIRMISH,WBUT_LOCK);
-			game.scavengers = false;
-			NetPlay.maxPlayers = game.maxPlayers;
-//			widgSetString(psWScreen, MULTIOP_MAP, DEFAULTSKIRMISHMAP);
-//			sstrcpy(game.map,widgGetString(psWScreen, MULTIOP_MAP));
-			addGameOptions(false);
-			break;
+
 		case MULTIOP_MAP_BUT:
 			loadMapPreview(true);
 			break;
@@ -2118,6 +2098,30 @@ static void processMultiopWidgets(UDWORD id)
 	{
 		switch(id)
 		{
+		case MULTIOP_CAMPAIGN:									// turn on campaign game
+			widgSetButtonState(psWScreen, MULTIOP_CAMPAIGN, WBUT_LOCK);
+			widgSetButtonState(psWScreen, MULTIOP_SKIRMISH,0);
+			game.scavengers = true;
+			NetPlay.maxPlayers = MIN(game.maxPlayers, 7);
+			resetReadyStatus(false);
+			if(bHosted)
+			{
+				sendOptions();
+			}
+			break;
+
+		case MULTIOP_SKIRMISH:
+			widgSetButtonState(psWScreen, MULTIOP_CAMPAIGN,0 );
+			widgSetButtonState(psWScreen, MULTIOP_SKIRMISH,WBUT_LOCK);
+			game.scavengers = false;
+			NetPlay.maxPlayers = game.maxPlayers;
+			resetReadyStatus(false);
+			if(bHosted)
+			{
+				sendOptions();
+			}
+			break;
+
 		case MULTIOP_FOG_ON:
 			widgSetButtonState(psWScreen, MULTIOP_FOG_ON,WBUT_LOCK);
 			widgSetButtonState(psWScreen, MULTIOP_FOG_OFF,0);
