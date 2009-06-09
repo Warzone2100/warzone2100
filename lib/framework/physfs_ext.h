@@ -85,4 +85,6 @@ static inline bool PHYSFS_readBEFloat(PHYSFS_file* file, float* val)
 	return (PHYSFS_readUBE32(file, readValue) != 0);
 }
 
+bool PHYSFS_printf(PHYSFS_file *file, const char *format, ...) WZ_DECL_FORMAT(printf, 2, 3);
+
 #endif // _physfs_ext_h
