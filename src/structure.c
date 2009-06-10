@@ -3776,7 +3776,7 @@ void structureUpdate(STRUCTURE *psBuilding, bool mission)
 		}
 	}
 
-	if ((psBuilding->id % 10) == (frameGetFrameNumber() % 10))
+	if (!mission && (psBuilding->id % 10) == (frameGetFrameNumber() % 10))
 	{
 		processVisibility((BASE_OBJECT*)psBuilding);
 	}
