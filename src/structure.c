@@ -1120,7 +1120,7 @@ void structureBuild(STRUCTURE *psStruct, DROID *psDroid, int buildPoints)
 	ASSERT(newBuildPoints <= 1 + 3 * (int)psStruct->pStructureType->buildPoints, "unsigned int underflow?");
 	CLIP(newBuildPoints, 0, psStruct->pStructureType->buildPoints);
 
-	if (!aiCheckAlliances(psStruct->player,psDroid->player))
+	if (psDroid && !aiCheckAlliances(psStruct->player,psDroid->player))
 	{
 		// Enemy structure
 		buildPoints = 0;
