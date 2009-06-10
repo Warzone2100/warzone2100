@@ -3754,7 +3754,7 @@ void structureUpdate(STRUCTURE *psBuilding, bool mission)
 	}
 
 	/* Only add smoke if they're visible and they can 'burn' */
-	if(psBuilding->visible[selectedPlayer] && canSmoke(psBuilding))
+	if (!mission && psBuilding->visible[selectedPlayer] && canSmoke(psBuilding))
 	{
 		const float damage = getStructureDamage(psBuilding);
 
@@ -3844,7 +3844,7 @@ void structureUpdate(STRUCTURE *psBuilding, bool mission)
 				aDefaultRepair[psBuilding->player])->time);
 
 			//add the blue flashing effect for multiPlayer
-			if(bMultiPlayer && ONEINTEN)
+			if(bMultiPlayer && ONEINTEN && !mission)
 			{
 				Vector3i position;
 				Vector3f *point;
