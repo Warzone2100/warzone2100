@@ -1158,7 +1158,7 @@ static void setTexCoords(unsigned int tileNumber, unsigned int i, unsigned int j
 	float one = 1.0f / (TILES_IN_PAGE_COLUMN * texsize);
 	Vector2f sP1, sP2, sP3, sP4, sPTemp;
 
-	// // bump the texture coords, for 1 pixel border, so our range is [.5  to  (texsize - .5)]
+	// // bump the texture coords, for 1 pixel border, so our range is [.5,(texsize - .5)]
 	one += centertile * shiftamount;
 
 	/*
