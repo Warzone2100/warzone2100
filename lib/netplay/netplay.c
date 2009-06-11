@@ -97,6 +97,7 @@ unsigned int masterserver_port = 0, gameserver_port = 0;
 #define MAX_CONNECTED_PLAYERS	8
 #define MAX_TMP_SOCKETS		16
 
+#define NET_TIMEOUT_DELAY	2500		// we wait this amount of time for socket activity
 #define NET_READ_TIMEOUT	0
 /*
 *
@@ -1686,7 +1687,7 @@ static bool NETrecvGAMESTRUCT(GAMESTRUCT* game)
 	// Read a GAMESTRUCT from the connection
 	if (tcp_socket == NULL
 	 || socket_set == NULL
-	 || checkSockets(socket_set, 2500) <= 0
+	 || checkSockets(socket_set, NET_TIMEOUT_DELAY) <= 0
 	 || !tcp_socket->ready
 	 || (result = readNoInt(tcp_socket, buf, sizeof(buf))) != sizeof(buf))
 	{
@@ -2798,7 +2799,7 @@ static void NETregisterServer(int state)
 					if (rs_socket[i] == NULL)
 						continue;
 
-					if (readLobbyResponse(rs_socket[i], 2500) == SOCKET_ERROR)
+					if (readLobbyResponse(rs_socket[i], NET_TIMEOUT_DELAY) == SOCKET_ERROR)
 					{
 						socketClose(rs_socket[i]);
 						rs_socket[i] = NULL;
@@ -2890,7 +2891,7 @@ static void NETallowJoining(void)
 	 && (tmp_socket[i] = socketAccept(tcp_socket)) != NULL)
 	{
 		addSocket(tmp_socket_set, tmp_socket[i]);
-		if (checkSockets(tmp_socket_set, 2500) > 0
+		if (checkSockets(tmp_socket_set, NET_TIMEOUT_DELAY) > 0
 		    && tmp_socket[i]->ready
 		    && (recv_result = readNoInt(tmp_socket[i], buffer, 5)))
 		{
@@ -3225,7 +3226,7 @@ BOOL NETfindGame(void)
 	debug(LOG_NET, "Sending list cmd");
 	writeAll(tcp_socket, "list", sizeof("list"));
 
-	if (checkSockets(socket_set, 2500) > 0
+	if (checkSockets(socket_set, NET_TIMEOUT_DELAY) > 0
 	 && tcp_socket->ready
 	 && (result = readNoInt(tcp_socket, &gamesavailable, sizeof(gamesavailable))))
 	{
