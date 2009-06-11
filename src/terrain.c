@@ -232,18 +232,26 @@ static void getTileTexCoords(Vector2f *uv, unsigned int tileNumber)
 	/* Used to calculate texture coordinates */
 	const float xMult = 1.0f / TILES_IN_PAGE_COLUMN;
 	const float yMult = 1.0f / TILES_IN_PAGE_ROW;
-	const float one = 1.0f / (TILES_IN_PAGE_COLUMN * (float)getTextureSize());
+	const float texsize = (float)getTextureSize();
+	const float centertile = 0.5f / texsize;			//compute center of tile
+	const float shiftamount = (texsize -1.0) / texsize;	// 1 pixel border
+	float one = 1.0f / (TILES_IN_PAGE_COLUMN * texsize);
+	Vector2f sP1, sP2, sP3, sP4, sPTemp;
 
+	// bump the texture coords, for 1 pixel border, so our range is [.5,(texsize - .5)]
+	one += centertile * shiftamount;
 	/*
 	 * Points for flipping the texture around if the tile is flipped or rotated
 	 * Store the source rect as four points
 	 */
-	Vector2f
-		sP1 = { one, one },
-		sP2 = { xMult - one, one },
-		sP3 = { xMult - one, yMult - one },
-		sP4 = { one, yMult - one },
-		sPTemp;
+	sP1.x = one;
+	sP1.y = one;
+	sP2.x = xMult - one;
+	sP2.y = one;
+	sP3.x = xMult - one;
+	sP3.y = yMult - one;
+	sP4.x = one;
+	sP4.y = yMult - one;
 
 	if (texture & TILE_XFLIP)
 	{
