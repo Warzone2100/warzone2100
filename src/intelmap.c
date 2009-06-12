@@ -1361,7 +1361,7 @@ void intDisplayTEXTView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DEC
 		/* Get the travel to the next line */
 		linePitch = iV_GetTextLineSize();
 		/* Fix for spacing.... */
-		linePitch+=6;
+		linePitch+=3;
 		ty+=3;
 		/* Fix for spacing.... */
 
