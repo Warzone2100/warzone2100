@@ -1450,7 +1450,7 @@ static void orderPlayFireSupportAudio( BASE_OBJECT *psObj )
 /* The base order function */
 void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 {
-	UDWORD		iRepairFacDistSq, iStructDistSq, iFactoryDistSq;
+	UDWORD		iFactoryDistSq;
 	STRUCTURE	*psStruct, *psRepairFac, *psFactory;
 	SECONDARY_STATE state;
 
@@ -1812,26 +1812,20 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		}
 		if (psOrder->psObj == NULL)
 		{
+			int iRepairFacDistSq = 0;
+
 			psRepairFac = NULL;
-			iRepairFacDistSq = 0;
 			for(psStruct=apsStructLists[psDroid->player]; psStruct; psStruct = psStruct->psNext)
 			{
 				if ((psStruct->pStructureType->type == REF_REPAIR_FACILITY) ||
 					((psStruct->pStructureType->type == REF_HQ) && (psRepairFac == NULL)))
 				{
-					PROPULSION_STATS *psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
-					Vector2i dPos = { map_coord(psDroid->pos.x), map_coord(psDroid->pos.y) };
-					Vector2i rPos = { map_coord(psStruct->pos.x), map_coord(psStruct->pos.y) };
-					/* get droid->facility distance squared */
-					int iDX = (SDWORD)psDroid->pos.x - (SDWORD)psStruct->pos.x;
-					int iDY = (SDWORD)psDroid->pos.y - (SDWORD)psStruct->pos.y;
+					int iStructDistSq = droidSqDist(psDroid, (BASE_OBJECT *)psStruct);
 
-					if (!fpathCheck(dPos, rPos, psPropStats->propulsionType))
+					if (iStructDistSq <= 0)
 					{
 						continue;	// cannot reach position
 					}
-
-					iStructDistSq = iDX*iDX + iDY*iDY;
 
 					/* Choose current structure if first repair facility found or nearer than previously chosen facility */
 					if (psRepairFac == NULL || psRepairFac->pStructureType->type == REF_HQ || iRepairFacDistSq > iStructDistSq)
@@ -1933,24 +1927,16 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		iFactoryDistSq = 0;
 		for(psStruct=apsStructLists[psDroid->player]; psStruct; psStruct = psStruct->psNext)
 		{
-            //look for nearest factory or repair facility
-			if (psStruct->pStructureType->type == REF_FACTORY ||
-				psStruct->pStructureType->type == REF_CYBORG_FACTORY ||
-				psStruct->pStructureType->type == REF_VTOL_FACTORY ||
-                psStruct->pStructureType->type == REF_REPAIR_FACILITY)
+			// Look for nearest factory or repair facility
+			if (psStruct->pStructureType->type == REF_FACTORY || psStruct->pStructureType->type == REF_CYBORG_FACTORY
+			    || psStruct->pStructureType->type == REF_VTOL_FACTORY || psStruct->pStructureType->type == REF_REPAIR_FACILITY)
 			{
 				/* get droid->facility distance squared */
-				int iDX = (SDWORD)psDroid->pos.x - (SDWORD)psStruct->pos.x;
-				int iDY = (SDWORD)psDroid->pos.y - (SDWORD)psStruct->pos.y;
+				int iStructDistSq = droidSqDist(psDroid, (BASE_OBJECT *)psStruct);
 
-				iStructDistSq = iDX*iDX + iDY*iDY;
-
-				/* choose current structure if first facility found or
-				 * nearer than previously chosen facility
-				 */
-				if ( psFactory == NULL || (iFactoryDistSq > iStructDistSq) )
+				/* Choose current structure if first facility found or nearer than previously chosen facility */
+				if (iStructDistSq > 0 && (psFactory == NULL || iFactoryDistSq > iStructDistSq))
 				{
-					/* first facility found */
 					psFactory = psStruct;
 					iFactoryDistSq = iStructDistSq;
 				}
@@ -1970,7 +1956,6 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 			actionDroidObjLoc( psDroid, DACTION_MOVE, (BASE_OBJECT *) psFactory,
 								psDroid->orderX, psDroid->orderY);
 		}
-
 		break;
 	case DORDER_GUARD:
 		psDroid->order = DORDER_GUARD;
