@@ -1251,7 +1251,15 @@ BOOL recvTextMessage()
 	NETend();
 
 
-	for (i = 0; NetPlay.players[i].dpid != dpid; i++);		//findplayer
+	for (i = 0; i < MAX_PLAYERS; i++)		//findplayer
+	{
+		if (NetPlay.players[i].dpid == dpid)
+		{
+			break;
+		}
+	}
+
+	ASSERT_OR_RETURN(false, i != MAX_PLAYERS, "Failed to find player's dpid %u", dpid);
 
 	//console callback - find real number of the player
 	for (j = 0; i < MAX_PLAYERS; j++)
@@ -1263,7 +1271,7 @@ BOOL recvTextMessage()
 		}
 	}
 
-	ASSERT(player != MAX_PLAYERS, "recvTextMessage: failed to find owner of dpid %d", dpid);
+	ASSERT_OR_RETURN(false, player != MAX_PLAYERS, "Failed to find 'real' owner of dpid %u", dpid);
 
 	sstrcpy(msg, NetPlay.players[i].name);
 	// Seperator
