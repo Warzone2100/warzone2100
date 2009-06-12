@@ -4795,3 +4795,16 @@ void checkDroid(const DROID *droid, const char *const location, const char *func
 		}
 	}
 }
+
+int droidSqDist(DROID *psDroid, BASE_OBJECT *psObj)
+{
+	PROPULSION_STATS *psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
+	Vector2i dPos = { map_coord(psDroid->pos.x), map_coord(psDroid->pos.y) };
+	Vector2i rPos = { map_coord(psObj->pos.x), map_coord(psObj->pos.y) };
+
+	if (!fpathCheck(dPos, rPos, psPropStats->propulsionType))
+	{
+		return -1;
+	}
+	return objPosDiffSq(psDroid->pos, psObj->pos);
+}

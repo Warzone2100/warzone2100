@@ -556,8 +556,11 @@ static inline void setSaveDroidBase(DROID *psSaveDroid, STRUCTURE *psNewBase)
 
 void checkDroid(const DROID *droid, const char * const location_description, const char * function, const int recurse);
 
-/* assert if droid is bad */
+/** assert if droid is bad */
 #define CHECK_DROID(droid) checkDroid(droid, AT_MACRO, __FUNCTION__, max_check_object_recursion)
+
+/** If droid can get to given object using its current propulsion, return the square distance. Otherwise return -1. */
+int droidSqDist(DROID *psDroid, BASE_OBJECT *psObj);
 
 // Minimum damage a weapon will deal to its target
 #define	MIN_WEAPON_DAMAGE	1

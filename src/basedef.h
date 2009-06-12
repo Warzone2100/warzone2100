@@ -104,6 +104,13 @@ static inline bool isDead(const BASE_OBJECT* psObj)
 	return (psObj->died > NOT_CURRENT_LIST);
 }
 
+static inline int objPosDiffSq(Vector3uw pos1, Vector3uw pos2)
+{
+	const int xdiff = pos1.x - pos2.x;
+	const int ydiff = pos1.y - pos2.y;
+	return (xdiff * xdiff + ydiff * ydiff);
+}
+
 // Must be #included __AFTER__ the definition of BASE_OBJECT
 #include "baseobject.h"
 

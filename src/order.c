@@ -171,7 +171,6 @@ a defined range*/
 BASE_OBJECT * checkForRepairRange(DROID *psDroid,DROID *psTarget)
 {
 	DROID		*psCurr;
-	SDWORD		xdiff, ydiff;
 
 	ASSERT( psDroid->droidType == DROID_REPAIR || psDroid->droidType ==
         DROID_CYBORG_REPAIR, "checkForRepairRange:Invalid droid type" );
@@ -204,16 +203,10 @@ BASE_OBJECT * checkForRepairRange(DROID *psDroid,DROID *psTarget)
 	for (; psCurr != NULL; psCurr = psCurr->psNext)
 	{
 		//check for damage
-		if (droidIsDamaged(psCurr) &&
-			visibleObject((BASE_OBJECT *)psDroid, (BASE_OBJECT *)psCurr, false))
+		if (droidIsDamaged(psCurr) && visibleObject((BASE_OBJECT *)psDroid, (BASE_OBJECT *)psCurr, false)
+		    && droidSqDist(psDroid, (BASE_OBJECT *)psCurr) < REPAIR_MAXDIST * REPAIR_MAXDIST)
 		{
-			//check for within range
-			xdiff = (SDWORD)psDroid->pos.x - (SDWORD)psCurr->pos.x;
-			ydiff = (SDWORD)psDroid->pos.y - (SDWORD)psCurr->pos.y;
-			if ( (xdiff*xdiff) + (ydiff*ydiff) < REPAIR_MAXDIST*REPAIR_MAXDIST)
-			{
-				return (BASE_OBJECT *)psCurr;
-			}
+			return (BASE_OBJECT *)psCurr;
 		}
 	}
 	return NULL;
@@ -224,7 +217,6 @@ a defined range*/
 BASE_OBJECT * checkForDamagedStruct(DROID *psDroid, STRUCTURE *psTarget)
 {
 	STRUCTURE		*psCurr;
-	SDWORD			xdiff, ydiff;
 
 	ASSERT(psDroid->droidType == DROID_CONSTRUCT || psDroid->droidType == DROID_CYBORG_CONSTRUCT, "Invalid unit type");
 
@@ -247,19 +239,11 @@ BASE_OBJECT * checkForDamagedStruct(DROID *psDroid, STRUCTURE *psTarget)
 	for (; psCurr != NULL; psCurr = psCurr->psNext)
 	{
 		//check for damage
-		if (psCurr->status == SS_BUILT &&
-		    structIsDamaged(psCurr) &&
-		    !checkDroidsDemolishing(psCurr) &&
-			visibleObject((BASE_OBJECT *)psDroid, (BASE_OBJECT *)psCurr, false))
+		if (psCurr->status == SS_BUILT && structIsDamaged(psCurr) && !checkDroidsDemolishing(psCurr) 
+		    && visibleObject((BASE_OBJECT *)psDroid, (BASE_OBJECT *)psCurr, false)
+		    && droidSqDist(psDroid, (BASE_OBJECT *)psCurr) < REPAIR_MAXDIST * REPAIR_MAXDIST)
 		{
-			//check for within range
-			xdiff = (SDWORD)psDroid->pos.x - (SDWORD)psCurr->pos.x;
-			ydiff = (SDWORD)psDroid->pos.y - (SDWORD)psCurr->pos.y;
-			//check for repair distance and not construct_dist - this allows for structures being up to 3 tiles across
-			if ((xdiff*xdiff) + (ydiff*ydiff) < REPAIR_MAXDIST*REPAIR_MAXDIST)
-			{
-				return (BASE_OBJECT *)psCurr;
-			}
+			return (BASE_OBJECT *)psCurr;
 		}
 	}
 	return NULL;
@@ -892,9 +876,7 @@ void orderUpdateDroid(DROID *psDroid)
 			ASSERT( psRepairFac != NULL,
 				"orderUpdateUnit: invalid repair facility pointer" );
 
-			xdiff = (SDWORD)psDroid->pos.x - (SDWORD)psDroid->psTarget->pos.x;
-			ydiff = (SDWORD)psDroid->pos.y - (SDWORD)psDroid->psTarget->pos.y;
-			if (xdiff*xdiff + ydiff*ydiff < (TILE_UNITS*8)*(TILE_UNITS*8))
+			if (objPosDiffSq(psDroid->pos, psDroid->psTarget->pos) < (TILE_UNITS * 8) * (TILE_UNITS * 8))
 			{
 				/* action droid to wait */
 				actionDroid(psDroid, DACTION_WAITFORREPAIR);
@@ -1271,7 +1253,7 @@ void orderUpdateDroid(DROID *psDroid)
 static void orderCmdGroupBase(DROID_GROUP *psGroup, DROID_ORDER_DATA *psData)
 {
 	DROID	*psCurr, *psChosen;
-	SDWORD	xdiff,ydiff, currdist, mindist;
+	SDWORD	currdist, mindist;
 
 	ASSERT( psGroup != NULL,
 		"cmdUnitOrderGroupBase: invalid unit group" );
@@ -1283,9 +1265,7 @@ static void orderCmdGroupBase(DROID_GROUP *psGroup, DROID_ORDER_DATA *psData)
 		mindist = SDWORD_MAX;
 		for(psCurr = psGroup->psList; psCurr; psCurr=psCurr->psGrpNext)
 		{
-			xdiff = (SDWORD)psCurr->pos.x - (SDWORD)psData->psObj->pos.x;
-			ydiff = (SDWORD)psCurr->pos.y - (SDWORD)psData->psObj->pos.y;
-			currdist = xdiff*xdiff + ydiff*ydiff;
+			currdist = objPosDiffSq(psCurr->pos, psData->psObj->pos);
 			if (currdist < mindist)
 			{
 				psChosen = psCurr;
