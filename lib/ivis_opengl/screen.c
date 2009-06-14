@@ -196,7 +196,7 @@ BOOL screenInitialise(
 	// implementations that have them only as extensions, namely Mesa.
 	if (!strncmp((const char *)glGetString(GL_RENDERER), "Mesa", 4))
 	{
-		debug(LOG_3D, "Using VBO extension functions under the core names.");
+		info("Using VBO extension functions under the core names.");
 		// GLee is usually initialized automatically when needed, but
 		// here it has to be done explicitly.
 		GLeeInit();
