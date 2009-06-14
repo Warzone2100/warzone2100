@@ -741,7 +741,7 @@ static void handleActiveEvent(SDL_ActiveEvent * activeEvent)
 
 	if ( activeEvent->gain == 1 )
 	{
-		debug( LOG_NEVER, "WM_SETFOCUS\n");
+		debug( LOG_NEVER, "WM_SETFOCUS");
 		if (focusState != FOCUS_IN)
 		{
 			focusState = FOCUS_IN;
@@ -756,7 +756,7 @@ static void handleActiveEvent(SDL_ActiveEvent * activeEvent)
 	// Only loose focus when the config settings allow us to
 	else if (war_GetPauseOnFocusLoss())
 	{
-		debug( LOG_NEVER, "WM_KILLFOCUS\n");
+		debug( LOG_NEVER, "WM_KILLFOCUS");
 		if (focusState != FOCUS_OUT)
 		{
 			focusState = FOCUS_OUT;
@@ -954,7 +954,7 @@ int main(int argc, char *argv[])
 			}
 			else
 			{
-				printf("(global) mod (%s) is enabled\n", modname);
+				info("(global) mod (%s) is enabled", modname);
 			}
 		}
 		// check campaign mods
@@ -974,7 +974,7 @@ int main(int argc, char *argv[])
 			}
 			else
 			{
-				printf("mod_ca (%s) is enabled\n", modname);
+				info("mod_ca (%s) is enabled", modname);
 			}
 		}
 		// check multiplay mods
@@ -994,7 +994,7 @@ int main(int argc, char *argv[])
 			}
 			else
 			{
-				printf("mod_mp (%s) is enabled\n", modname);
+				info("mod_mp (%s) is enabled", modname);
 			}
 		}
 	}

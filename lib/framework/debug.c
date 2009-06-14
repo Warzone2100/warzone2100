@@ -73,6 +73,7 @@ static const char *code_part_names[] = {
 	"life",
 	"gateway",
 	"message",
+	"info",
 	"last"
 };
 
@@ -226,6 +227,7 @@ void debug_init(void)
 
 	memset( enabled_debug, false, sizeof(enabled_debug) );
 	enabled_debug[LOG_ERROR] = true;
+	enabled_debug[LOG_INFO] = true;
 	inputBuffer[0][0] = '\0';
 	inputBuffer[1][0] = '\0';
 #ifdef DEBUG
