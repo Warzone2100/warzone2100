@@ -149,6 +149,7 @@ typedef enum {
   LOG_LIFE,
   LOG_GATEWAY,
   LOG_MSG,
+  LOG_INFO, /**< special; on by default, for both debug & release builds */
   LOG_TERRAIN,
   LOG_FEATURE,
   LOG_LAST /**< _must_ be last! */
@@ -213,7 +214,8 @@ void debug_callback_win32debug(void** data, const char* outputBuffer);
  * \param	str	Codepart in textformat
  */
 bool debug_enable_switch(const char *str);
-
+// macro for always outputting informational responses on both debug & release builds
+#define info(...) do { _debug(LOG_INFO, __FUNCTION__, __VA_ARGS__); } while(0)
 /**
  * Output printf style format str with additional arguments.
  *

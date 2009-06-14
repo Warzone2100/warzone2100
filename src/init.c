@@ -303,7 +303,7 @@ BOOL rebuildSearchPath( searchPathMode mode, BOOL force )
 					addSubdirs( curSearchPath->path, "mods/campaign", PHYSFS_APPEND, campaign_mods );
 					if (!PHYSFS_removeFromSearchPath( curSearchPath->path ))
 					{
-						debug(LOG_ERROR, "Failed to remove path %s again", curSearchPath->path);
+						info("* Failed to remove path %s again", curSearchPath->path);
 					}
 
 					// Add plain dir
