@@ -45,6 +45,7 @@
 #include "scripttabs.h"
 #include "research.h"
 #include "lib/framework/lexer_input.h"
+#include "effects.h"
 
 extern int lev_get_lineno(void);
 extern char* lev_get_text(void);
@@ -487,6 +488,8 @@ BOOL levReleaseAll(void)
 {
 	SDWORD i;
 
+	// clear out old effect data first
+	initEffectsSystem();
 	// release old data if any was loaded
 	if (psCurrLevel != NULL)
 	{
