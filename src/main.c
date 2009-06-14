@@ -960,7 +960,7 @@ int main(int argc, char *argv[])
 			}
 			else
 			{
-				info("(global) mod (%s) is enabled\n", modname);
+				info("(global) mod (%s) is enabled", modname);
 			}
 		}
 		// check campaign mods
@@ -980,7 +980,7 @@ int main(int argc, char *argv[])
 			}
 			else
 			{
-				info("mod_ca (%s) is enabled\n", modname);
+				info("mod_ca (%s) is enabled", modname);
 			}
 		}
 		// check multiplay mods
@@ -1000,7 +1000,7 @@ int main(int argc, char *argv[])
 			}
 			else
 			{
-				info("mod_mp (%s) is enabled\n", modname);
+				info("mod_mp (%s) is enabled", modname);
 			}
 		}
 	}
