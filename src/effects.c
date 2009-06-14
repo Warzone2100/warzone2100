@@ -254,7 +254,7 @@ static void effectStructureUpdates(void);
 static void effectDroidUpdates(void);
 
 static UDWORD effectGetNumFrames(EFFECT *psEffect);
-
+static void killEffect(EFFECT *e);
 
 /*!
  * Initialise memory between first and last as singly linked list
@@ -266,7 +266,8 @@ static void initEffectPool(EFFECT *first, EFFECT *last)
 	EFFECT *it;
 	for (it = first; it < last; it++)
 	{
-		 // We do not need a double-linked-list for inactiveeffects, since we always pick from the front:
+		killEffect(it);		// We must clear the fire bit on tiles.
+		// We do not need a double-linked-list for inactiveeffects, since we always pick from the front:
 		it->prev = NULL;
 		it->next = it+1;
 	}
@@ -310,7 +311,7 @@ static EFFECT *Effect_malloc(void)
 	if (inactiveList.first == NULL)
 	{
 		/* Allocate new effect chunk */
-		EffectChunk *chunk = malloc(sizeof(EffectChunk));
+		EffectChunk *chunk = calloc(1, sizeof(EffectChunk));
 
 		debug(LOG_MEMORY, "%zd effects in use, allocating %d extra", activeList.num, EFFECT_CHUNK_SIZE);
 
@@ -375,10 +376,16 @@ static void Effect_free(void *self)
 void shutdownEffectsSystem(void)
 {
 	EffectChunk *chunk;
+	int i = 0;
 
 	for (chunk = chunkList.first; chunk != NULL;)
 	{
 		EffectChunk *chunkNext = chunk->next;
+		for (i=0; i < EFFECT_CHUNK_SIZE; i++)
+		{
+			// clear the blasted fire effects!
+			killEffect(&chunk->effects[i]);
+		}
 		free(chunk);
 		chunk = chunkNext;
 	}
@@ -398,7 +405,7 @@ void initEffectsSystem(void)
 	shutdownEffectsSystem();
 
 	/* Allocate new chunk */
-	chunk = malloc(sizeof(EffectChunk));
+	chunk = calloc(1, sizeof(EffectChunk));
 
 	/* Deal with out-of-memory conditions */
 	if (chunk == NULL)
