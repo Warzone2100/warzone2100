@@ -26,6 +26,7 @@
 
 #include "lib/ivis_opengl/GLee.h"
 #include "lib/framework/frame.h"
+#include "lib/exceptionhandler/dumpinfo.h"
 
 #include <SDL.h>
 #include <physfs.h>
