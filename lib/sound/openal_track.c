@@ -25,6 +25,7 @@
 #include "lib/framework/frame.h"
 #include "lib/framework/math_ext.h"
 #include "lib/framework/frameresource.h"
+#include "lib/exceptionhandler/dumpinfo.h"
 
 #ifndef WZ_NOSOUND
 # ifdef WZ_OS_MAC
@@ -122,6 +123,7 @@ static void sound_RemoveSample(SAMPLE_LIST* previous, SAMPLE_LIST* to_remove)
 static void PrintOpenALVersion(code_part part)
 {
 	const ALchar* pDeviceNames = NULL;
+	char buf[256];
 
 	debug(part, "OpenAL Vendor: %s", alGetString(AL_VENDOR));
 	debug(part, "OpenAL Version: %s", alGetString(AL_VERSION));
@@ -139,6 +141,14 @@ static void PrintOpenALVersion(code_part part)
 		debug(part, "available openAL device(s) are: %s", pDeviceNames);
 		pDeviceNames += strlen(pDeviceNames) + 1;
 	}
+
+	// Copy this info to the crash handler report info
+	ssprintf(buf,"OpenAL Vendor: %s", alGetString(AL_VENDOR));
+	addDumpInfo(buf);
+	ssprintf(buf,"OpenAL Version: %s", alGetString(AL_VERSION));
+	addDumpInfo(buf);
+	ssprintf(buf,"OpenAL Renderer: %s", alGetString(AL_RENDERER));
+	addDumpInfo(buf);
 }
 #endif
 
