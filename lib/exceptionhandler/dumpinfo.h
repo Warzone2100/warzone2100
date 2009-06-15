@@ -45,6 +45,8 @@ extern void dbgDumpLog(DumpFileHandle file);
 
 extern void dbgDumpInit(int argc, char* argv[]);
 
+extern void addDumpInfo(char *inbuffer);
+
 #if defined(__cplusplus)
 }
 #endif
