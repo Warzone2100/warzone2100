@@ -176,7 +176,7 @@ BOOL screenInitialise(
 	{
 		char buf[256];
 
-		// Copy this info to the crash handler report info
+		// Copy this info to be used by the crash handler for the dump file
 		ssprintf(buf, "OpenGL Vendor : %s", glGetString(GL_VENDOR));
 		addDumpInfo(buf);
 		ssprintf(buf, "OpenGL Renderer : %s", glGetString(GL_RENDERER));

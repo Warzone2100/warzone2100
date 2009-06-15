@@ -142,12 +142,12 @@ static void PrintOpenALVersion(code_part part)
 		pDeviceNames += strlen(pDeviceNames) + 1;
 	}
 
-	// Copy this info to the crash handler report info
-	ssprintf(buf,"OpenAL Vendor: %s", alGetString(AL_VENDOR));
+	// Copy this info to be used by the crash handler for the dump file
+	ssprintf(buf, "OpenAL Vendor: %s", alGetString(AL_VENDOR));
 	addDumpInfo(buf);
-	ssprintf(buf,"OpenAL Version: %s", alGetString(AL_VERSION));
+	ssprintf(buf, "OpenAL Version: %s", alGetString(AL_VERSION));
 	addDumpInfo(buf);
-	ssprintf(buf,"OpenAL Renderer: %s", alGetString(AL_RENDERER));
+	ssprintf(buf, "OpenAL Renderer: %s", alGetString(AL_RENDERER));
 	addDumpInfo(buf);
 }
 #endif
