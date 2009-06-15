@@ -51,6 +51,9 @@ static const std::size_t max_debug_messages = 20;
 static char* dbgHeader = NULL;
 static std::deque<std::vector<char> > dbgMessages;
 
+// used to add custom info to the crash log
+static std::ostringstream miscData;
+
 static void dumpstr(const DumpFileHandle file, const char * const str, std::size_t const size)
 {
 #if defined(WZ_OS_WIN)
@@ -126,6 +129,13 @@ void dbgDumpHeader(DumpFileHandle file)
 	if (dbgHeader)
 	{
 		dumpstr(file, dbgHeader);
+		// Now get any other data that we need to include in bug report
+		dumpstr(file, "Misc Data:");
+		dumpEOL(file);
+		dumpstr(file, miscData.str().c_str());
+		dumpEOL(file);
+		dumpstr(file, "===============");
+		dumpEOL(file);
 	}
 	else
 	{
@@ -307,6 +317,7 @@ static void createHeader(int const argc, char* argv[])
 	PHYSFS_getLinkedVersion(&physfs_version);
 	os << "Running with PhysicsFS version: " << physfs_version << endl
 	   << endl;
+	os << "===============" << endl;
 
 	dbgHeader = strdup(os.str().c_str());
 	if (dbgHeader == NULL)
@@ -315,6 +326,11 @@ static void createHeader(int const argc, char* argv[])
 		abort();
 		return;
 	}
+}
+
+void addDumpInfo( char *inbuffer)
+{
+	miscData << std::string(inbuffer) << endl;
 }
 
 void dbgDumpInit(int argc, char* argv[])

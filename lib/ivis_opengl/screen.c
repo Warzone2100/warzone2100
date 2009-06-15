@@ -26,7 +26,7 @@
 
 #include "lib/ivis_opengl/GLee.h"
 #include "lib/framework/frame.h"
-
+#include "lib/exceptionhandler/dumpinfo.h"
 #include <SDL.h>
 #include <physfs.h>
 #include <png.h>
@@ -36,6 +36,7 @@
 #include "lib/framework/frameint.h"
 #include "lib/ivis_common/piestate.h"
 #include "lib/ivis_common/pieblitfunc.h"
+
 #if defined(WZ_OS_MAC)
 #include <OpenGL/glu.h>
 #else
@@ -171,27 +172,37 @@ BOOL screenInitialise(
 	{
 		debug( LOG_ERROR, "OpenGL initialization did not give double buffering!" );
 	}
+	
+	{
+		char buf[256];
 
-	/* Dump information about OpenGL implementation to the console */
-	debug(LOG_3D, "OpenGL Vendor : %s", glGetString(GL_VENDOR));
-	debug(LOG_3D, "OpenGL Renderer : %s", glGetString(GL_RENDERER));
-	debug(LOG_3D, "OpenGL Version : %s", glGetString(GL_VERSION));
-	debug(LOG_3D, "OpenGL Extensions : %s", glGetString(GL_EXTENSIONS)); // FIXME This is too much for MAX_LEN_LOG_LINE
-	debug(LOG_3D, "Supported OpenGL extensions:");
-	debug(LOG_3D, "  * OpenGL 1.2 %s supported!", GLEE_VERSION_1_2 ? "is" : "is NOT");
-	debug(LOG_3D, "  * OpenGL 1.3 %s supported!", GLEE_VERSION_1_3 ? "is" : "is NOT");
-	debug(LOG_3D, "  * OpenGL 1.4 %s supported!", GLEE_VERSION_1_4 ? "is" : "is NOT");
-	debug(LOG_3D, "  * OpenGL 1.5 %s supported!", GLEE_VERSION_1_5 ? "is" : "is NOT");
-	debug(LOG_3D, "  * OpenGL 2.0 %s supported!", GLEE_VERSION_2_0 ? "is" : "is NOT");
-	debug(LOG_3D, "  * OpenGL 2.1 %s supported!", GLEE_VERSION_2_1 ? "is" : "is NOT");
-	debug(LOG_3D, "  * OpenGL 3.0 %s supported!", GLEE_VERSION_3_0 ? "is" : "is NOT");
-	debug(LOG_3D, "  * Texture compression %s supported.", GLEE_ARB_texture_compression ? "is" : "is NOT");
-	debug(LOG_3D, "  * Two side stencil %s supported.", GLEE_EXT_stencil_two_side ? "is" : "is NOT");
-	debug(LOG_3D, "  * Stencil wrap %s supported.", GLEE_EXT_stencil_wrap ? "is" : "is NOT");
-	debug(LOG_3D, "  * Anisotropic filtering %s supported.", GLEE_EXT_texture_filter_anisotropic ? "is" : "is NOT");
-	debug(LOG_3D, "  * Rectangular texture %s supported.", GLEE_ARB_texture_rectangle ? "is" : "is NOT");
-	debug(LOG_3D, "  * FrameBuffer Object (FBO) %s supported.", GLEE_EXT_framebuffer_object  ? "is" : "is NOT");
-
+		// Copy this info to the crash handler report info
+		ssprintf(buf, "OpenGL Vendor : %s", glGetString(GL_VENDOR));
+		addDumpInfo(buf);
+		ssprintf(buf, "OpenGL Renderer : %s", glGetString(GL_RENDERER));
+		addDumpInfo(buf);
+		ssprintf(buf, "OpenGL Version : %s", glGetString(GL_VERSION));
+		addDumpInfo(buf);
+		/* Dump information about OpenGL implementation to the console */
+		debug(LOG_3D, "OpenGL Vendor : %s", glGetString(GL_VENDOR));
+		debug(LOG_3D, "OpenGL Renderer : %s", glGetString(GL_RENDERER));
+		debug(LOG_3D, "OpenGL Version : %s", glGetString(GL_VERSION));
+		debug(LOG_3D, "OpenGL Extensions : %s", glGetString(GL_EXTENSIONS)); // FIXME This is too much for MAX_LEN_LOG_LINE
+		debug(LOG_3D, "Supported OpenGL extensions:");
+		debug(LOG_3D, "  * OpenGL 1.2 %s supported!", GLEE_VERSION_1_2 ? "is" : "is NOT");
+		debug(LOG_3D, "  * OpenGL 1.3 %s supported!", GLEE_VERSION_1_3 ? "is" : "is NOT");
+		debug(LOG_3D, "  * OpenGL 1.4 %s supported!", GLEE_VERSION_1_4 ? "is" : "is NOT");
+		debug(LOG_3D, "  * OpenGL 1.5 %s supported!", GLEE_VERSION_1_5 ? "is" : "is NOT");
+		debug(LOG_3D, "  * OpenGL 2.0 %s supported!", GLEE_VERSION_2_0 ? "is" : "is NOT");
+		debug(LOG_3D, "  * OpenGL 2.1 %s supported!", GLEE_VERSION_2_1 ? "is" : "is NOT");
+		debug(LOG_3D, "  * OpenGL 3.0 %s supported!", GLEE_VERSION_3_0 ? "is" : "is NOT");
+		debug(LOG_3D, "  * Texture compression %s supported.", GLEE_ARB_texture_compression ? "is" : "is NOT");
+		debug(LOG_3D, "  * Two side stencil %s supported.", GLEE_EXT_stencil_two_side ? "is" : "is NOT");
+		debug(LOG_3D, "  * Stencil wrap %s supported.", GLEE_EXT_stencil_wrap ? "is" : "is NOT");
+		debug(LOG_3D, "  * Anisotropic filtering %s supported.", GLEE_EXT_texture_filter_anisotropic ? "is" : "is NOT");
+		debug(LOG_3D, "  * Rectangular texture %s supported.", GLEE_ARB_texture_rectangle ? "is" : "is NOT");
+		debug(LOG_3D, "  * FrameBuffer Object (FBO) %s supported.", GLEE_EXT_framebuffer_object  ? "is" : "is NOT");
+	}
 	// Make OpenGL's VBO functions available under the core names for
 	// implementations that have them only as extensions, namely Mesa.
 	if (!strncmp((const char *)glGetString(GL_RENDERER), "Mesa", 4))
