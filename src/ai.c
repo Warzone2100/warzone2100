@@ -65,7 +65,6 @@ static BOOL aiStructHasRange(STRUCTURE *psStruct, BASE_OBJECT *psTarget, int wea
 	{
 		// in range
 		return true;
-
 	}
 
 	return false;
@@ -91,7 +90,6 @@ static BOOL aiDroidHasRange(DROID *psDroid, BASE_OBJECT *psTarget, int weapon_sl
 	{
 		// in range
 		return true;
-
 	}
 
 	return false;
@@ -100,13 +98,12 @@ static BOOL aiDroidHasRange(DROID *psDroid, BASE_OBJECT *psTarget, int weapon_sl
 /* alliance code for ai. return true if an alliance has formed. */
 BOOL aiCheckAlliances(UDWORD s1,UDWORD s2)
 {
-    //features have their player number set to (MAX_PLAYERS + 1)
-    if ( s1 == (MAX_PLAYERS + 1) || s2 == (MAX_PLAYERS + 1))
-    {
-        return false;
-    }
-	if ((s1 == s2) ||
-		(alliances[s1][s2] == ALLIANCE_FORMED))
+	// features have their player number set to (MAX_PLAYERS + 1)
+	if (s1 == (MAX_PLAYERS + 1) || s2 == (MAX_PLAYERS + 1))
+	{
+		return false;
+	}
+	if (s1 == s2 || alliances[s1][s2] == ALLIANCE_FORMED)
 	{
 		return true;
 	}
@@ -336,9 +333,7 @@ static SDWORD targetAttackWeight(BASE_OBJECT *psTarget, BASE_OBJECT *psAttacker,
 	{
 		psAttackerDroid = (DROID *)psAttacker;
 
-		attackerWeapon = (WEAPON_STATS *)(asWeaponStats +
-			psAttackerDroid->asWeaps[weapon_slot].nStat);
-
+		attackerWeapon = (WEAPON_STATS *)(asWeaponStats + psAttackerDroid->asWeaps[weapon_slot].nStat);
 
 		//check if this droid is assigned to a commander
 		bCmdAttached = hasCommander(psAttackerDroid);
@@ -366,11 +361,10 @@ static SDWORD targetAttackWeight(BASE_OBJECT *psTarget, BASE_OBJECT *psAttacker,
 				if(psTarget->type == OBJ_STRUCTURE)
 				{
 					//go through all enemy weapons
-					for(weaponSlot = 0; !bTargetingCmd &&
-						weaponSlot < ((STRUCTURE *)psTarget)->numWeaps; weaponSlot++)
+					for(weaponSlot = 0; !bTargetingCmd && weaponSlot < ((STRUCTURE *)psTarget)->numWeaps; weaponSlot++)
 					{
-						if( ((STRUCTURE *)psTarget)->psTarget[weaponSlot] ==
-								(BASE_OBJECT *)psAttackerDroid->psGroup->psCommander)
+						if (((STRUCTURE *)psTarget)->psTarget[weaponSlot] == 
+						    (BASE_OBJECT *)psAttackerDroid->psGroup->psCommander)
 						{
 							bTargetingCmd = true;
 						}
@@ -381,8 +375,7 @@ static SDWORD targetAttackWeight(BASE_OBJECT *psTarget, BASE_OBJECT *psAttacker,
 	}
 	else if(psAttacker->type == OBJ_STRUCTURE)
 	{
-		attackerWeapon = ((WEAPON_STATS *)(asWeaponStats +
-			((STRUCTURE *)psAttacker)->asWeaps[weapon_slot].nStat));
+		attackerWeapon = ((WEAPON_STATS *)(asWeaponStats + ((STRUCTURE *)psAttacker)->asWeaps[weapon_slot].nStat));
 	}
 	else	/* feature */
 	{
@@ -533,8 +526,7 @@ static SDWORD targetAttackWeight(BASE_OBJECT *psTarget, BASE_OBJECT *psAttacker,
 		}
 
 		//fire support - go through all droids assigned to the commander
-		for(psGroupDroid = psAttackerDroid->psGroup->psList;
-			psGroupDroid; psGroupDroid = psGroupDroid->psGrpNext)
+		for (psGroupDroid = psAttackerDroid->psGroup->psList; psGroupDroid; psGroupDroid = psGroupDroid->psGrpNext)
 		{
 			for(weaponSlot = 0; weaponSlot < psGroupDroid->numWeaps; weaponSlot++)
 			{
