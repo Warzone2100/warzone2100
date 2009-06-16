@@ -134,8 +134,6 @@ void dbgDumpHeader(DumpFileHandle file)
 		dumpEOL(file);
 		dumpstr(file, miscData.str().c_str());
 		dumpEOL(file);
-		dumpstr(file, "===============");
-		dumpEOL(file);
 	}
 	else
 	{
@@ -317,7 +315,6 @@ static void createHeader(int const argc, char* argv[])
 	PHYSFS_getLinkedVersion(&physfs_version);
 	os << "Running with PhysicsFS version: " << physfs_version << endl
 	   << endl;
-	os << "===============" << endl;
 
 	dbgHeader = strdup(os.str().c_str());
 	if (dbgHeader == NULL)
@@ -330,7 +327,16 @@ static void createHeader(int const argc, char* argv[])
 
 void addDumpInfo( char *inbuffer)
 {
-	miscData << std::string(inbuffer) << endl;
+	time_t rawtime;
+	struct tm * timeinfo;
+	char ourtime[15];		//HH:MM:SS
+
+	time ( &rawtime );
+	timeinfo = localtime ( &rawtime );
+	strftime (ourtime,15,"%I:%M:%S",timeinfo);
+
+	// add timestamp to all strings
+	miscData << "[" << ourtime << "]" << std::string(inbuffer) << endl;
 }
 
 void dbgDumpInit(int argc, char* argv[])

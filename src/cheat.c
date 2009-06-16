@@ -25,6 +25,7 @@
 
 #include "lib/framework/frame.h"
 #include "lib/framework/string_ext.h"
+#include "lib/exceptionhandler/dumpinfo.h"
 #include "cheat.h"
 #include "console.h"
 #include "keybind.h"
@@ -87,8 +88,15 @@ BOOL attemptCheatCode(const char* cheat_name)
 	{
 		if (strcmp(cheat_name, curCheat->pName) == 0)
 		{
+			char buf[256];
+
 			/* We've got our man... */
 			curCheat->function();	// run it
+
+			// Copy this info to be used by the crash handler for the dump file
+			ssprintf(buf, "User has used cheat code: %s", curCheat->pName);
+			addDumpInfo(buf);
+
 			/* And get out of here */
 			Cheated = true;
 			return true;
