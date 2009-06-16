@@ -40,6 +40,7 @@
 #include "lib/framework/physfs_ext.h"
 #include "lib/framework/tagfile.h"
 #include "lib/exceptionhandler/exceptionhandler.h"
+#include "lib/exceptionhandler/dumpinfo.h"
 
 #include "lib/sound/playlist.h"
 #include "lib/gamelib/gtime.h"
@@ -1046,6 +1047,13 @@ int main(int argc, char *argv[])
 		exit(0);
 	}
 
+	{
+		// Copy this info to be used by the crash handler for the dump file
+		char buf[256];
+
+		ssprintf(buf,"Using language: %s", getLanguageName());
+		addDumpInfo(buf);
+	}
 	// Do the game mode specific initialisation.
 	switch(GetGameMode())
 	{
