@@ -30,6 +30,7 @@
 #include "lib/framework/frame.h"
 #include "lib/framework/frameresource.h"
 #include "lib/framework/listmacs.h"
+#include "lib/exceptionhandler/dumpinfo.h"
 #include "init.h"
 #include "objects.h"
 #include "hci.h"
@@ -976,6 +977,14 @@ BOOL levLoadData(const char* name, char *pSaveName, GAME_TYPE saveType)
 	else
 	{
 		psCurrLevel = psChangeLevel;
+	}
+
+	{
+		// Copy this info to be used by the crash handler for the dump file
+		char buf[256];
+
+		ssprintf(buf, "Current Level/map is %s", psCurrLevel->pName);
+		addDumpInfo(buf);
 	}
 
 
