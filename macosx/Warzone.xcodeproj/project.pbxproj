@@ -5785,6 +5785,15 @@
 				GCC_MODEL_TUNING = G5;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					PHYSFS_SUPPORTS_GRP,
+					PHYSFS_SUPPORTS_HOG,
+					PHYSFS_SUPPORTS_QPAK,
+					PHYSFS_SUPPORTS_WAD,
+					PHYSFS_SUPPORTS_MVL,
+					PHYSFS_SUPPORTS_ZIP,
+					"$(inherited)",
+				);
 				INFOPLIST_FILE = "Resources/PhysFS-Info.plist";
 				INSTALL_PATH = "@executable_path/../Frameworks";
 				OTHER_LDFLAGS = "";
