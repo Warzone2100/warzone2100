@@ -211,7 +211,7 @@ extern BOOL placeDroid(STRUCTURE *psStructure, UDWORD *droidX, UDWORD *droidY);
 static inline BOOL isLasSat(STRUCTURE_STATS *pStructureType)
 {
 	ASSERT_OR_RETURN(false, pStructureType != NULL, "LasSat is invalid?");
-	ASSERT_OR_RETURN(false, pStructureType->psWeapStat[0] != NULL, "This doesn't appear to be a LasSat?");
+
 	return (pStructureType->psWeapStat[0]
 	        && pStructureType->psWeapStat[0]->weaponSubClass == WSC_LAS_SAT);
 }
