@@ -223,9 +223,13 @@ static BOOL setLocaleWindows(USHORT usPrimaryLanguage, USHORT usSubLanguage)
 	BOOL success = SUCCEEDED( SetThreadLocale( MAKELCID( MAKELANGID(usPrimaryLanguage, usSubLanguage), SORT_DEFAULT ) ) );
 
 	if (!success)
-		debug(LOG_ERROR, "Failed to set locale to \"%d\"", usPrimaryLanguage);
+	{
+		info("Failed to set locale to \"%d\"", usPrimaryLanguage);
+	}
 	else
+	{
 		debug(LOG_WZ, "Requested locale \"%d\"", usPrimaryLanguage);
+	}
 
 	setlocale(LC_NUMERIC, "C"); // set radix character to the period (".")
 
@@ -242,9 +246,13 @@ static BOOL setLocaleUnix(const char* locale)
 	const char *actualLocale = setlocale(LC_ALL, locale);
 
 	if (actualLocale == NULL)
-		debug(LOG_ERROR, "Failed to set locale to \"%s\"", locale);
+	{
+		info("Failed to set locale to \"%s\"", locale);
+	}
 	else
+	{
 		debug(LOG_WZ, "Requested locale \"%s\", got \"%s\" instead", locale, actualLocale);
+	}
 
 	setlocale(LC_NUMERIC, "C"); // set radix character to the period (".")
 
