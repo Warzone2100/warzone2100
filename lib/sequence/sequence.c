@@ -486,7 +486,7 @@ bool seq_Play(const char* filename)
 	fpInfile = PHYSFS_openRead(filename);
 	if (fpInfile == NULL)
 	{
-		debug(LOG_ERROR, "unable to open '%s' for playback", filename);
+		info("unable to open '%s' for playback", filename);
 		return false;
 	}
 
