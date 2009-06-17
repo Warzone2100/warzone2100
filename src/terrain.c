@@ -222,7 +222,7 @@ void setTileColour(int x, int y, PIELIGHT colour)
 	psTile->colour = colour;
 }
 
-// HACK NOTE:  The current (max) texture size of a tile is 128x128.  We allow up to a user defined texture size
+// NOTE:  The current (max) texture size of a tile is 128x128.  We allow up to a user defined texture size
 // of 2048.  This will cause ugly seams for the decals, if user picks a texture size bigger than the tile!
 #define MAX_TILE_TEXTURE_SIZE 128.0f
 /// Set up the texture coordinates for a tile
@@ -247,7 +247,6 @@ static void getTileTexCoords(Vector2f *uv, unsigned int tileNumber)
 	centertile = 0.5f / texsize;			//compute center of tile
 	shiftamount = (texsize -1.0) / texsize;	// 1 pixel border
 	one = 1.0f / (TILES_IN_PAGE_COLUMN * texsize);
-
 
 	// bump the texture coords, for 1 pixel border, so our range is [.5,(texsize - .5)]
 	one += centertile * shiftamount;
