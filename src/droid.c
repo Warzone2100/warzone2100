@@ -2455,15 +2455,16 @@ UDWORD calcDroidSpeed(UDWORD baseSpeed, UDWORD terrainType, UDWORD propIndex, UD
 	// Factor in terrain
 	speed *= getSpeedFactor(terrainType, propulsion->propulsionType);
 	speed /= 100;
-	// Factor in experience
-	speed *= (100 + EXP_SPEED_BONUS * level);
-	speed /= 100;
 
 	// Need to ensure doesn't go over the max speed possible for this propulsion
 	if (speed > propulsion->maxSpeed)
 	{
 		speed = propulsion->maxSpeed;
 	}
+
+	// Factor in experience
+	speed *= (100 + EXP_SPEED_BONUS * level);
+	speed /= 100;
 
 	return speed;
 }

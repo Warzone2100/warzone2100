@@ -1857,7 +1857,7 @@ SDWORD moveCalcDroidSpeed(DROID *psDroid)
 	}
 	// now offset the speed for the slope of the droid
 	speed = (MAX_SPEED_PITCH - pitch) * speed / MAX_SPEED_PITCH;
-	if (speed <= 0)
+	if (speed <= 10)
 	{
 		// Very nasty hack to deal with buggy maps, where some cliffs are
 		// not properly marked as being cliffs, but too steep to drive over.
