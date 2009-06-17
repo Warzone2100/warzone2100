@@ -1142,9 +1142,9 @@ void disp3d_getView(iView *newView)
 	memcpy(newView,&player,sizeof(iView));
 }
 
-// HACK NOTE:  The current (max) texture size of a tile is 128x128.  We allow up to a user defined texture size
+// NOTE:  The current (max) texture size of a tile is 128x128.  We allow up to a user defined texture size
 // of 2048.  This will cause ugly seams for the terrain & decals, if user picks a texture size bigger than the tile!
-#define TILE_TEXTURE_SIZE 128.0f
+#define MAX_TILE_TEXTURE_SIZE 128.0f
 /// Set up the texture coordinates for a tile
 static void setTexCoords(unsigned int tileNumber, unsigned int i, unsigned int j)
 {
@@ -1155,11 +1155,18 @@ static void setTexCoords(unsigned int tileNumber, unsigned int i, unsigned int j
 	/* Used to calculate texture coordinates */
 	const float xMult = 1.0f / TILES_IN_PAGE_COLUMN;
 	const float yMult = 1.0f / TILES_IN_PAGE_ROW;
-	const float texsize = TILE_TEXTURE_SIZE;
-	const float centertile = 0.5f / texsize;			//compute center of tile
-	const float shiftamount = (texsize -1.0) / texsize;	// 1 pixel border
-	float one = 1.0f / (TILES_IN_PAGE_COLUMN * texsize);
+	float texsize = (float)getTextureSize();
+	float centertile, shiftamount, one;
 	Vector2f sP1, sP2, sP3, sP4, sPTemp;
+
+	// the decals / terrain are 128x128 (at this time), we should not go above this value.  See note above
+	if (texsize > MAX_TILE_TEXTURE_SIZE)
+	{
+		texsize = MAX_TILE_TEXTURE_SIZE;
+	}
+	centertile = 0.5f / texsize;			//compute center of tile
+	shiftamount = (texsize -1.0) / texsize;	// 1 pixel border
+	one = 1.0f / (TILES_IN_PAGE_COLUMN * texsize);
 
 	// // bump the texture coords, for 1 pixel border, so our range is [.5,(texsize - .5)]
 	one += centertile * (shiftamount);
