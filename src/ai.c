@@ -95,6 +95,19 @@ static BOOL aiDroidHasRange(DROID *psDroid, BASE_OBJECT *psTarget, int weapon_sl
 	return false;
 }
 
+static BOOL aiObjHasRange(BASE_OBJECT *psObj, BASE_OBJECT *psTarget, int weapon_slot)
+{
+	if (psObj->type == OBJ_DROID)
+	{
+		return aiDroidHasRange((DROID *)psObj, psTarget, weapon_slot);
+	}
+	else if (psObj->type == OBJ_STRUCTURE)
+	{
+		return aiStructHasRange((STRUCTURE *)psObj, psTarget, weapon_slot);
+	}
+	return false;
+}
+
 /* alliance code for ai. return true if an alliance has formed. */
 BOOL aiCheckAlliances(UDWORD s1,UDWORD s2)
 {
@@ -133,16 +146,76 @@ BOOL aiShutdown(void)
 	return true;
 }
 
+/** Search the global list of sensors for a possible target for psObj. */
+BASE_OBJECT *aiSearchSensorTargets(BASE_OBJECT *psObj, int weapon_slot, WEAPON_STATS *psWStats)
+{
+	int		longRange = proj_GetLongRange(psWStats);
+	int		tarDist = longRange * longRange;
+	int		minDist = psWStats->minRange * psWStats->minRange;
+	BASE_OBJECT	*psSensor, *psTarget = NULL;
+
+	for (psSensor = apsSensorList[0]; psSensor; psSensor = psSensor->psNextFunc)
+	{
+		BASE_OBJECT	*psTemp = NULL;
+		bool		isCB = false;
+
+		if (!aiCheckAlliances(psSensor->player, psObj->player))
+		{
+			continue;
+		}
+		else if (psSensor->type == OBJ_DROID)
+		{
+			DROID		*psDroid = (DROID *)psSensor;
+
+			ASSERT_OR_RETURN(false, psDroid->droidType == DROID_SENSOR, "A non-sensor droid in a sensor list is non-sense");
+			psTemp = psDroid->psTarget;
+			isCB = cbSensorDroid(psDroid);
+		}
+		else if (psSensor->type == OBJ_STRUCTURE)
+		{
+			STRUCTURE	*psCStruct = (STRUCTURE *)psSensor;
+
+			// skip incomplete structures
+			if (psCStruct->status != SS_BUILT)
+			{
+				continue;
+			}
+			psTemp = psCStruct->psTarget[0];
+			isCB = structCBSensor(psCStruct);
+		}
+		if (!psTemp || psTemp->died || !validTarget(psObj, psTemp, 0) || aiCheckAlliances(psTemp->player, psObj->player))
+		{
+			continue;
+		}
+		if (aiObjHasRange(psObj, psTemp, weapon_slot))
+		{
+			int distSq = objPosDiffSq(psTemp->pos, psObj->pos);
+
+			// Need to be in range, prefer closer targets or CB targets
+			if ((isCB || distSq < tarDist) && distSq > minDist)
+			{
+				tarDist = distSq;
+				psTarget = psTemp;
+				if (isCB)
+				{
+					break;	// got CB target, drop everything and shoot!
+				}
+			}
+		}
+	}
+	return psTarget;
+}
+
 // Find the best nearest target for a droid
 // Returns integer representing target priority, -1 if failed
 SDWORD aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot)
 {
 	UDWORD				i;
-	SDWORD				bestMod,newMod,failure=-1;
-	BASE_OBJECT			*psTarget,*friendlyObj,*bestTarget,*targetInQuestion,*tempTarget;
+	SDWORD				bestMod = 0,newMod, failure = -1;
+	BASE_OBJECT			*psTarget = NULL, *friendlyObj, *bestTarget = NULL, *targetInQuestion, *tempTarget;
 	BOOL				electronic = false;
 	STRUCTURE			*targetStructure;
-	WEAPON_EFFECT		weaponEffect;
+	WEAPON_EFFECT			weaponEffect;
 
 	//don't bother looking if empty vtol droid
 	if (vtolEmpty(psDroid))
@@ -151,23 +224,24 @@ SDWORD aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot
 	}
 
 	/* Return if have no weapons */
-	// Watermelon:added a protection against no weapon droid 'numWeaps'
 	// The ai orders a non-combat droid to patrol = crash without it...
 	if(psDroid->asWeaps[0].nStat == 0 || psDroid->numWeaps == 0)
 	{
 		return failure;
 	}
+	// Check if we have a CB target to begin with
+	if (!proj_Direct(asWeaponStats + psDroid->asWeaps[weapon_slot].nStat))
+	{
+		WEAPON_STATS	*psWStats = psWStats = psDroid->asWeaps[weapon_slot].nStat + asWeaponStats;
 
+		bestTarget = aiSearchSensorTargets((BASE_OBJECT *)psDroid, weapon_slot, psWStats);
+		bestMod = targetAttackWeight(bestTarget, (BASE_OBJECT *)psDroid, weapon_slot);
+	}
 	droidGetNaybors(psDroid);
 
-	//weaponMod = asWeaponModifier[weaponEffect][(asPropulsionStats + ((DROID*)psObj)->asBits[COMP_PROPULSION].nStat)->propulsionType];
 	weaponEffect = ((WEAPON_STATS *)(asWeaponStats + psDroid->asWeaps[weapon_slot].nStat))->weaponEffect;
 
-	//electronic warfare can only be used against structures at present - not any more! AB 6/11/98
 	electronic = electronicDroid(psDroid);
-	psTarget = NULL;
-	bestTarget = NULL;
-	bestMod = 0;
 	for (i=0; i< numNaybors; i++)
 	{
 		friendlyObj = NULL;
@@ -567,9 +641,6 @@ static BOOL aiObjIsWall(BASE_OBJECT *psObj)
 BOOL aiChooseTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget, int weapon_slot, BOOL bUpdateTarget)
 {
 	BASE_OBJECT		*psTarget = NULL;
-	SDWORD			xdiff,ydiff, distSq, tarDist, minDist;
-	BOOL			bCBTower;
-	STRUCTURE		*psCStruct;
 	DROID			*psCommander;
 	SECONDARY_STATE		state;
 	SDWORD			curTargetWeight=-1;
@@ -631,7 +702,7 @@ BOOL aiChooseTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget, int weapon_slot
 	else if (psObj->type == OBJ_STRUCTURE)
 	{
 		WEAPON_STATS	*psWStats = NULL;
-		int	longRange = 0;
+		int	tarDist, longRange = 0;
 		BOOL	bCommanderBlock = false;
 
 		ASSERT(((STRUCTURE *)psObj)->asWeaps[weapon_slot].nStat > 0, "no weapons on structure");
@@ -669,60 +740,9 @@ BOOL aiChooseTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget, int weapon_slot
 
 		// indirect fire structures use sensor towers first
 		tarDist = longRange * longRange;
-		minDist = psWStats->minRange * psWStats->minRange;
-		bCBTower = false;
 		if (psTarget == NULL && !bCommanderBlock && !proj_Direct(psWStats))
 		{
-			for(psCStruct=apsStructLists[psObj->player]; psCStruct; psCStruct=psCStruct->psNext)
-			{
-				// skip incomplete structures
-				if (psCStruct->status != SS_BUILT)
-				{
-					continue;
-				}
-
-				if (!bCBTower
-				    && structStandardSensor(psCStruct)
-				    && psCStruct->psTarget[0] != NULL
-				    && !psCStruct->psTarget[0]->died)
-				{
-					/* Check it is a valid target */
-					//Watermelon:Greater than 1 for now
-					if ( validTarget(psObj, psCStruct->psTarget[0], 0) &&
-						aiStructHasRange((STRUCTURE *)psObj, psCStruct->psTarget[0], weapon_slot))
-					{
-					    xdiff = (SDWORD)psCStruct->psTarget[0]->pos.x - (SDWORD)psObj->pos.x;
-					    ydiff = (SDWORD)psCStruct->psTarget[0]->pos.y - (SDWORD)psObj->pos.y;
-					    distSq = xdiff*xdiff + ydiff*ydiff;
-					    if ((distSq < tarDist) &&
-						    (distSq > minDist))
-					    {
-						    tarDist = distSq;
-						    psTarget = psCStruct->psTarget[0];
-					    }
-					}
-				}
-				else if ((structCBSensor(psCStruct) || objRadarDetector((BASE_OBJECT *)psCStruct))
-				         && psCStruct->psTarget[0] != NULL
-				         && !psCStruct->psTarget[0]->died)
-				{
-					/* Check it is a valid target */
-					if ( validTarget(psObj, psCStruct->psTarget[0], 0) &&
-						aiStructHasRange((STRUCTURE *)psObj, psCStruct->psTarget[0], weapon_slot))
-					{
-						xdiff = (SDWORD)psCStruct->psTarget[0]->pos.x - (SDWORD)psObj->pos.x;
-						ydiff = (SDWORD)psCStruct->psTarget[0]->pos.y - (SDWORD)psObj->pos.y;
-						distSq = xdiff*xdiff + ydiff*ydiff;
-					    if ((!bCBTower || (distSq < tarDist)) &&
-						    (distSq > minDist))
-					    {
-						    tarDist = distSq;
-						    psTarget = psCStruct->psTarget[0];
-						    bCBTower = true;
-					    }
-					}
-				}
-			}
+			psTarget = aiSearchSensorTargets(psObj, weapon_slot, psWStats);
 		}
 
 		if (psTarget == NULL && !bCommanderBlock)
@@ -739,9 +759,8 @@ BOOL aiChooseTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget, int weapon_slot
 				    && validTarget(psObj, psCurr, weapon_slot) && psCurr->visible[psObj->player])
 				{
 					// See if in sensor range and visible
-					xdiff = psCurr->pos.x - psObj->pos.x;
-					ydiff = psCurr->pos.y - psObj->pos.y;
-					distSq = xdiff * xdiff + ydiff * ydiff;
+					int distSq = objPosDiffSq(psCurr->pos, psObj->pos);
+
 					if (distSq < tarDist
 					    || (psTarget && psTarget->type == OBJ_STRUCTURE && ((STRUCTURE *)psTarget)->status != SS_BUILT)
 					    || (psTarget && aiObjIsWall(psTarget) && !aiObjIsWall(psCurr)))
