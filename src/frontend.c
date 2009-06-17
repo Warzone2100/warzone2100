@@ -1035,10 +1035,10 @@ BOOL runGameOptions4Menu(void)
 		{
 			int newTexSize = getTextureSize() * 2;
 
-			// Clip such that 32 <= size <= 2048
+			// Clip such that 128 <= size <= 2048
 			if (newTexSize > 2048)
 			{
-				newTexSize = 32;
+				newTexSize = 128;
 			}
 
 			// Set the new size
