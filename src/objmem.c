@@ -55,12 +55,12 @@ static SDWORD factoryDeliveryPointCheck[MAX_PLAYERS][NUM_FLAG_TYPES][MAX_FACTORY
  */
 UDWORD	objID;
 
-
 /* The lists of objects allocated */
 DROID			*apsDroidLists[MAX_PLAYERS];
 STRUCTURE		*apsStructLists[MAX_PLAYERS];
-FEATURE			*apsFeatureLists[MAX_PLAYERS];		// Only player zero is valid for
-													// features
+FEATURE			*apsFeatureLists[MAX_PLAYERS];		///< Only player zero is valid for features. TODO: Reduce to single list.
+BASE_OBJECT		*apsSensorList[1];			///< List of sensors in the game.
+
 /*The list of Flag Positions allocated */
 FLAG_POSITION	*apsFlagPosLists[MAX_PLAYERS];
 
@@ -245,14 +245,25 @@ static inline BASE_OBJECT* createObject(UDWORD player, OBJECT_TYPE objType)
 /* Add the object to its list
  * \param list is a pointer to the object list
  */
-static inline void addObjectToList(BASE_OBJECT *list[], BASE_OBJECT *object)
+static inline void addObjectToList(BASE_OBJECT *list[], BASE_OBJECT *object, int player)
 {
-	ASSERT(object != NULL,
-	       "addObjectToList: Invalid pointer");
+	ASSERT(object != NULL, "Invalid pointer");
 
 	// Prepend the object to the top of the list
-	object->psNext = list[object->player];
-	list[object->player] = object;
+	object->psNext = list[player];
+	list[player] = object;
+}
+
+/* Add the object to its list
+ * \param list is a pointer to the object list
+ */
+static inline void addObjectToFuncList(BASE_OBJECT *list[], BASE_OBJECT *object, int player)
+{
+	ASSERT(object != NULL, "Invalid pointer");
+
+	// Prepend the object to the top of the list
+	object->psNextFunc = list[player];
+	list[player] = object;
 }
 
 /* Move an object from the active list to the destroyed list.
@@ -305,36 +316,61 @@ static inline void destroyObject(BASE_OBJECT* list[], BASE_OBJECT* object)
  * \param remove is a pointer to the object to remove
  * \param type is the type of the object
  */
-static inline void removeObjectFromList(BASE_OBJECT *list[], BASE_OBJECT *object)
+static inline void removeObjectFromList(BASE_OBJECT *list[], BASE_OBJECT *object, int player)
 {
 	BASE_OBJECT *psPrev = NULL, *psCurr;
 
-	ASSERT( object != NULL,
-		"removeObjectFromList: Invalid pointer" );
+	ASSERT_OR_RETURN(, object != NULL, "Invalid pointer");
 
 	// If the message to remove is the first one in the list then mark the next one as the first
-	if (list[object->player] == object)
+	if (list[player] == object)
 	{
-		list[object->player] = list[object->player]->psNext;
-		
+		list[player] = list[player]->psNext;
 		return;
 	}
 	
 	// Iterate through the list and find the item before the object to delete
-	for(psCurr = list[object->player]; (psCurr != object) && (psCurr != NULL); psCurr = psCurr->psNext)
+	for(psCurr = list[player]; (psCurr != object) && (psCurr != NULL); psCurr = psCurr->psNext)
 	{
 		psPrev = psCurr;
 	}
 
-	ASSERT( psCurr != NULL,
-		"removeObjectFromList: object not found in list" );
+	ASSERT_OR_RETURN(, psCurr != NULL, "Object %p not found in list", object);
 
-	if (psCurr != NULL)
+	// Modify the "next" pointer of the previous item to
+	// point to the "next" item of the item to delete.
+	psPrev->psNext = psCurr->psNext;
+}
+
+/* Remove an object from the relevant function list. An object can only be in one function list at a time!
+ * \param list is a pointer to the object list
+ * \param remove is a pointer to the object to remove
+ * \param type is the type of the object
+ */
+static inline void removeObjectFromFuncList(BASE_OBJECT *list[], BASE_OBJECT *object, int player)
+{
+	BASE_OBJECT *psPrev = NULL, *psCurr;
+
+	ASSERT_OR_RETURN(, object != NULL, "Invalid pointer");
+
+	// If the message to remove is the first one in the list then mark the next one as the first
+	if (list[player] == object)
 	{
-		// Modify the "next" pointer of the previous item to
-		// point to the "next" item of the item to delete.
-		psPrev->psNext = psCurr->psNext;
+		list[player] = list[player]->psNextFunc;
+		return;
 	}
+	
+	// Iterate through the list and find the item before the object to delete
+	for(psCurr = list[player]; psCurr != object && psCurr != NULL; psCurr = psCurr->psNextFunc)
+	{
+		psPrev = psCurr;
+	}
+
+	ASSERT_OR_RETURN(, psCurr != NULL, "Object %p not found in list", object);
+
+	// Modify the "next" pointer of the previous item to
+	// point to the "next" item of the item to delete.
+	psPrev->psNextFunc = psCurr->psNextFunc;
 }
 
 static inline BASE_OBJECT* findObjectInList(BASE_OBJECT list[], UDWORD idNum)
@@ -392,31 +428,36 @@ DROID* createDroid(UDWORD player)
 }
 
 /* add the droid to the Droid Lists */
- void addDroid(DROID *psDroidToAdd, DROID *pList[MAX_PLAYERS])
- {
-	 DROID_GROUP	*psGroup;
+void addDroid(DROID *psDroidToAdd, DROID *pList[MAX_PLAYERS])
+{
+	DROID_GROUP	*psGroup;
 
-	 addObjectToList((BASE_OBJECT**)pList, (BASE_OBJECT*)psDroidToAdd);
-     /*whenever a droid gets added to a list other than the current list
-     its died flag is set to NOT_CURRENT_LIST so that anything targetting
-     it will cancel itself - HACK?!*/
-     if (pList[psDroidToAdd->player] == apsDroidLists[psDroidToAdd->player])
-     {
-         psDroidToAdd->died = false;
+	addObjectToList((BASE_OBJECT**)pList, (BASE_OBJECT*)psDroidToAdd, psDroidToAdd->player);
 
-		 // commanders have to get their group back
-		 if (psDroidToAdd->droidType == DROID_COMMAND)
-		 {
-			 grpCreate(&psGroup);
-			 if (psGroup)
-			 {
-				 grpJoin(psGroup, psDroidToAdd);
-			 }
-		 }
-     }
- }
+	/* Whenever a droid gets added to a list other than the current list
+	 * its died flag is set to NOT_CURRENT_LIST so that anything targetting
+	 * it will cancel itself - HACK?! */
+	if (pList[psDroidToAdd->player] == apsDroidLists[psDroidToAdd->player])
+	{
+		psDroidToAdd->died = false;
+		if (psDroidToAdd->droidType == DROID_SENSOR)
+		{
+			addObjectToFuncList(apsSensorList, (BASE_OBJECT*)psDroidToAdd, 0);
+		}
 
- /*destroy a droid */
+		// commanders have to get their group back
+		if (psDroidToAdd->droidType == DROID_COMMAND)
+		{
+			grpCreate(&psGroup);
+			if (psGroup)
+			{
+				grpJoin(psGroup, psDroidToAdd);
+			}
+		}
+	}
+}
+
+/* Destroy a droid */
 void killDroid(DROID *psDel)
 {
 	int i;
@@ -432,6 +473,10 @@ void killDroid(DROID *psDel)
 		setDroidActionTarget(psDel, NULL, i);
 	}
 	setDroidBase(psDel, NULL);
+	if (psDel->droidType == DROID_SENSOR)
+	{
+		removeObjectFromFuncList(apsSensorList, (BASE_OBJECT*)psDel, 0);
+	}
 
 	destroyObject((BASE_OBJECT**)apsDroidLists, (BASE_OBJECT*)psDel);
 }
@@ -449,13 +494,17 @@ void removeDroid(DROID *psDroidToRemove, DROID *pList[MAX_PLAYERS])
 		"removeUnit: pointer is not a unit" );
 	ASSERT( psDroidToRemove->player < MAX_PLAYERS,
 		"removeUnit: invalid player for unit" );
-	removeObjectFromList((BASE_OBJECT**)pList, (BASE_OBJECT*)psDroidToRemove);
+	removeObjectFromList((BASE_OBJECT**)pList, (BASE_OBJECT*)psDroidToRemove, psDroidToRemove->player);
 
 	/* Whenever a droid is removed from the current list its died
 	 * flag is set to NOT_CURRENT_LIST so that anything targetting
 	 * it will cancel itself, and we know it is not really on the map. */
 	if (pList[psDroidToRemove->player] == apsDroidLists[psDroidToRemove->player])
 	{
+		if (psDroidToRemove->droidType == DROID_SENSOR)
+		{
+			removeObjectFromFuncList(apsSensorList, (BASE_OBJECT*)psDroidToRemove, 0);
+		}
 		psDroidToRemove->died = NOT_CURRENT_LIST;
 	}
 }
@@ -483,7 +532,12 @@ STRUCTURE* createStruct(UDWORD player)
 /* add the structure to the Structure Lists */
 void addStructure(STRUCTURE *psStructToAdd)
 {
-    addObjectToList((BASE_OBJECT**)apsStructLists, (BASE_OBJECT*)psStructToAdd);
+	addObjectToList((BASE_OBJECT**)apsStructLists, (BASE_OBJECT*)psStructToAdd, psStructToAdd->player);
+	if (psStructToAdd->pStructureType->pSensor
+	    && psStructToAdd->pStructureType->pSensor->location == LOC_TURRET)
+	{
+		addObjectToFuncList(apsSensorList, (BASE_OBJECT*)psStructToAdd, 0);
+	}
 }
 
 /* Destroy a structure */
@@ -495,6 +549,12 @@ void killStruct(STRUCTURE *psBuilding)
 		"killStruct: pointer is not a droid" );
 	ASSERT( psBuilding->player < MAX_PLAYERS,
 		"killStruct: invalid player for stucture" );
+
+	if (psBuilding->pStructureType->pSensor
+	    && psBuilding->pStructureType->pSensor->location == LOC_TURRET)
+	{
+		removeObjectFromFuncList(apsSensorList, (BASE_OBJECT*)psBuilding, 0);
+	}
 
 	for (i = 0; i < STRUCT_MAXWEAPS; i++)
 	{
@@ -552,7 +612,12 @@ void removeStructureFromList(STRUCTURE *psStructToRemove, STRUCTURE *pList[MAX_P
 		"removeStructureFromList: pointer is not a structure" );
 	ASSERT( psStructToRemove->player < MAX_PLAYERS,
 		"removeStructureFromList: invalid player for structure" );
-	removeObjectFromList((BASE_OBJECT**)pList, (BASE_OBJECT*)psStructToRemove);
+	removeObjectFromList((BASE_OBJECT**)pList, (BASE_OBJECT*)psStructToRemove, psStructToRemove->player);
+	if (psStructToRemove->pStructureType->pSensor
+	    && psStructToRemove->pStructureType->pSensor->location == LOC_TURRET)
+	{
+		removeObjectFromFuncList(apsSensorList, (BASE_OBJECT*)psStructToRemove, 0);
+	}
 }
 
 /**************************  FEATURE  *********************************/
@@ -566,7 +631,7 @@ FEATURE* createFeature()
 /* add the feature to the Feature Lists */
  void addFeature(FEATURE *psFeatureToAdd)
  {
-	addObjectToList((BASE_OBJECT**)apsFeatureLists, (BASE_OBJECT*)psFeatureToAdd);
+	addObjectToList((BASE_OBJECT**)apsFeatureLists, (BASE_OBJECT*)psFeatureToAdd, 0);
  }
 
 /* Destroy a feature */
@@ -876,8 +941,8 @@ static void objListIntegCheck(void)
 		{
 			ASSERT( psCurr->type == OBJ_STRUCTURE &&
 					(SDWORD)psCurr->player == player,
-					"objListIntegCheck: misplaced object in the structure list for player %d",
-					player );
+					"objListIntegCheck: misplaced %s(%p) in the structure list for player %d, is owned by %d",
+					objInfo(psCurr), psCurr, player, (int)psCurr->player);
 		}
 	}
 	for(psCurr = (BASE_OBJECT*)apsFeatureLists[0]; psCurr; psCurr=psCurr->psNext)

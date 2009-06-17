@@ -78,7 +78,8 @@ typedef enum _object_type
 	UDWORD              armour[NUM_HIT_SIDES][WC_NUM_WEAPON_CLASSES]
 
 #define NEXTOBJ(pointerType) \
-	pointerType     *psNext                         /**< Pointer to the next object in the list */
+	pointerType     *psNext;			/**< Pointer to the next object in the object list */ \
+	pointerType     *psNextFunc			/**< Pointer to the next object in the function list */
 
 #define SIMPLE_ELEMENTS(pointerType) \
 	BASE_ELEMENTS1(pointerType); \
