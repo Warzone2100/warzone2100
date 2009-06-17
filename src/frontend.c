@@ -1000,8 +1000,7 @@ BOOL runGameOptions4Menu(void)
 			{
 				if (++current == count)
 					current = 0;
-			} while (modes[current]->w < 640 &&
-			          modes[current]->h < 400 && current != oldcurrent);
+			} while (modes[current]->w < 640 && modes[current]->h < 480 && current != oldcurrent);
 
 			// Set the new width and height (takes effect on restart)
 			war_SetWidth(modes[current]->w);
