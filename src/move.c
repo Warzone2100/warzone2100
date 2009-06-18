@@ -2896,7 +2896,7 @@ static void checkLocalFeatures(DROID *psDroid)
 	// scan the neighbours
 	for(i=0; i<(SDWORD)numNaybors; i++)
 	{
-#define DROIDDIST (((TILE_UNITS*3)/2) * ((TILE_UNITS*3)/2))
+#define DROIDDIST (((TILE_UNITS*5)/2) * ((TILE_UNITS*5)/2))
 		psObj = asDroidNaybors[i].psObj;
 		if (   psObj->type != OBJ_FEATURE
 			|| ((FEATURE *)psObj)->psStats->subType != FEAT_OIL_DRUM
