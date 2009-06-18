@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
 "POT-Creation-Date: 2009-05-27 13:29+0200\n"
-"PO-Revision-Date: 2009-04-22 01:02+0100\n"
+"PO-Revision-Date: 2009-06-10 14:43+0100\n"
 "Last-Translator: Tomaž Povšin <tomaz.povsin@gmail.com>\n"
 "Language-Team: Slovenian <sl@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -8986,12 +8986,11 @@ msgstr "Naočarka s senzorsko kupolo in polgosenicami"
 #: data/mp/messages/strings/names.txt:372
 #: data/mp/messages/strings/names.txt:1702
 msgid "Radar Detector"
-msgstr ""
+msgstr "Radarski zaznavalec"
 
 #: data/mp/messages/strings/names.txt:380
-#, fuzzy
 msgid "Radar Detector Tower"
-msgstr "NVP radarski stolp"
+msgstr "Radarski zaznavni stolp"
 
 #: data/mp/messages/strings/names.txt:385
 msgid "Nexus Link"
@@ -9037,7 +9036,6 @@ msgid "Laser Satellite Command Post"
 msgstr "Poveljniška postaja laserskega satelita"
 
 #: data/mp/messages/strings/names.txt:582
-#, fuzzy
 msgid "VTOL Cluster Bomb Bay"
 msgstr "NVP oddelek za kasetne bombe"
 
@@ -9074,94 +9072,76 @@ msgid "Flamer Tower"
 msgstr "Stolp s plamenometalcem"
 
 #: data/mp/messages/strings/names.txt:805
-#, fuzzy
 msgid "Automated Manufacturing"
-msgstr "Samodejna ponovna oborožitev NVP"
+msgstr "Samodejna izdelava"
 
 #: data/mp/messages/strings/names.txt:806
-#, fuzzy
 msgid "Automated Manufacturing Mk2"
-msgstr "Samodejna ponovna oborožitev NVP tip 2"
+msgstr "Samodejna izdelava tip 2"
 
 #: data/mp/messages/strings/names.txt:807
-#, fuzzy
 msgid "Automated Manufacturing Mk3"
-msgstr "Samodejna ponovna oborožitev NVP tip 3"
+msgstr "Samodejna izdelava tip 3"
 
 #: data/mp/messages/strings/names.txt:808
-#, fuzzy
 msgid "Robotic Manufacturing"
-msgstr "Izdeluj"
+msgstr "Robotska izdelava"
 
 #: data/mp/messages/strings/names.txt:809
-#, fuzzy
 msgid "Robotic Manufacturing Mk2"
-msgstr "Robotska ponovna oborožitev NVP tip 2"
+msgstr "Robotska izdelava tip 2"
 
 #: data/mp/messages/strings/names.txt:810
-#, fuzzy
 msgid "Robotic Manufacturing Mk3"
-msgstr "Robotska ponovna oborožitev NVP tip 3"
+msgstr "Robotska izdelava tip 3"
 
 #: data/mp/messages/strings/names.txt:811
-#, fuzzy
 msgid "Advanced Manufacturing"
-msgstr "Napredno vojskovanje"
+msgstr "Napredna izdelava"
 
 #: data/mp/messages/strings/names.txt:812
-#, fuzzy
 msgid "Advanced Manufacturing Mk2"
-msgstr "Napredna tovarniška izdelava tip 2"
+msgstr "Napredna izdelava tip 2"
 
 #: data/mp/messages/strings/names.txt:813
-#, fuzzy
 msgid "Self-Replicating Manufacturing"
-msgstr "Samoreprodukcijska tovarniška izdelava"
+msgstr "Samoreprodukcijska izdelava"
 
 #: data/mp/messages/strings/names.txt:814
-#, fuzzy
 msgid "Advanced Manufacturing Mk3"
-msgstr "Napredna tovarniška izdelava tip 3"
+msgstr "Napredna izdelava tip 3"
 
 #: data/mp/messages/strings/names.txt:833
-#, fuzzy
 msgid "Automated Repair Facility Mk2"
-msgstr "Samodejna stavba za popravila"
+msgstr "Samodejna stavba za popravila tip 2"
 
 #: data/mp/messages/strings/names.txt:834
-#, fuzzy
 msgid "Automated Repair Facility Mk3"
-msgstr "Samodejna stavba za popravila"
+msgstr "Samodejna stavba za popravila tip 3"
 
 #: data/mp/messages/strings/names.txt:835
-#, fuzzy
 msgid "Robotic Repair Facility"
-msgstr "Nadgradnja robotska stavba za popravila"
+msgstr "Robotska stavba za popravila"
 
 #: data/mp/messages/strings/names.txt:836
-#, fuzzy
 msgid "Robotic Repair Facility Mk2"
-msgstr "Nadgradnja robotska stavba za popravila tip 2"
+msgstr "Robotska stavba za popravila tip 2"
 
 #: data/mp/messages/strings/names.txt:837
-#, fuzzy
 msgid "Advanced Repair Facility"
-msgstr "Nadgradnja napredna stavba za popravila"
+msgstr "Napredna stavba za popravila"
 
 #: data/mp/messages/strings/names.txt:838
-#, fuzzy
 msgid "Robotic Repair Facility Mk3"
-msgstr "Nadgradnja robotska stavba za popravila tip 3"
+msgstr "Robotska stavba za popravila tip 3"
 
 #: data/mp/messages/strings/names.txt:839
-#, fuzzy
 msgid "Advanced Repair Facility Mk2"
-msgstr "Nadgradnja napredna stavba za popravila tip 2"
+msgstr "Napredna stavba za popravila tip 2"
 
 #: data/mp/messages/strings/names.txt:840
-#, fuzzy
 msgid "Advanced Repair Facility Mk3"
-msgstr "Nadgradnja napredna stavba za popravila tip 3"
+msgstr "Napredna stavba za popravila tip 3"
 
 #: data/mp/messages/strings/names.txt:885
 msgid "Auto-Repair"
@@ -9191,24 +9171,20 @@ msgid "Nexus Resistance Circuits Mk3"
 msgstr "Nexus-ovi uporni tokokrogi tip 3"
 
 #: data/mp/messages/strings/names.txt:1016
-#, fuzzy
 msgid "Cluster Bomb Bay"
 msgstr "Oddelek za kasetne bombe"
 
 #: data/mp/messages/strings/names.txt:1021
-#, fuzzy
 msgid "HE Bomb Shells"
-msgstr "VE granate za možnar"
+msgstr "VE bombne granate"
 
 #: data/mp/messages/strings/names.txt:1022
-#, fuzzy
 msgid "Improved Bomb Warhead"
-msgstr "Izboljšana bojna glava z oblikovanim polnilom"
+msgstr "Izboljšana bombna bojna glava"
 
 #: data/mp/messages/strings/names.txt:1023
-#, fuzzy
 msgid "Advanced Bomb Warhead"
-msgstr "Napredna bojna glava izstrelka"
+msgstr "Napredna bombna bojna glava"
 
 #: data/mp/messages/strings/names.txt:1093
 msgid "Howitzer Fast Loader"
@@ -9695,24 +9671,20 @@ msgid "Vengeance Tracks Guass Scourge"
 msgstr "Maščevanje Gosenice Gavs bič"
 
 #: data/mp/messages/strings/names.txt:1864
-#, fuzzy
 msgid "VTOL Cluster Bomb Bay Bug VTOL"
-msgstr "NVP oddelek za kasetne bombe"
+msgstr "NVP Oddelek za kasetne bombe Hrošč NVP"
 
 #: data/mp/messages/strings/names.txt:1865
-#, fuzzy
 msgid "VTOL Bunker Buster Bug VTOL"
-msgstr "Uničevalec bunkerjev Hrošč NVP"
+msgstr "NVP Uničevalec bunkerjev Hrošč NVP"
 
 #: data/mp/messages/strings/names.txt:1866
-#, fuzzy
 msgid "VTOL Cluster Bomb Bay Scorpion VTOL"
-msgstr "Kasetna bomba Škorpijon NVP"
+msgstr "NVP Oddelek za kasetne bombe Škorpijon NVP"
 
 #: data/mp/messages/strings/names.txt:1867
-#, fuzzy
 msgid "VTOL Bunker Buster Scorpion VTOL"
-msgstr "Uničevalec bunkerjev Škorpijon NVP"
+msgstr "NVP Uničevalec bunkerjev Škorpijon NVP"
 
 #: data/mp/messages/strings/names.txt:1870
 msgid "VTOL Lancer Bug VTOL"
@@ -9739,9 +9711,8 @@ msgid "VTOL HPV Cannon Mantis VTOL"
 msgstr "NVP HH top Bogomolka NVP"
 
 #: data/mp/messages/strings/names.txt:1879
-#, fuzzy
 msgid "Repair Turret Mantis Tracks"
-msgstr "Popravila Bogomolka Gosenice"
+msgstr "Kupola za popravila Bogomolka Gosenice"
 
 #: data/mp/messages/strings/names.txt:1881
 msgid "Lancer Scorpion Tracks"
@@ -9792,7 +9763,6 @@ msgid "Scourge Mantis Tracks"
 msgstr "Bič Bogomolka Gosenice"
 
 #: data/mp/messages/strings/names.txt:1895
-#, fuzzy
 msgid "Heavy Machinegun Scorpion Tracks"
 msgstr "Težka strojnica Škorpijon Gosenice"
 
@@ -10046,22 +10016,22 @@ msgstr "Latinski"
 #: lib/netplay/netplay.c:1153
 #, c-format
 msgid "Player %u has the wrong game version.  Auto kicking."
-msgstr ""
+msgstr "Igralec %u ima napačno verzijo igre. Auto brcam."
 
 #: lib/netplay/netplay.c:1234
 #, c-format
 msgid "Player %u has the wrong password.  Auto kicking."
-msgstr ""
+msgstr "Igralec %u ima napačno geslo. Auto brcam."
 
 #: lib/netplay/netplay.c:2763
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
-msgstr ""
+msgstr "Ni bilo mogoče razrešiti imena glavnega strežnika (%s)!"
 
 #: lib/netplay/netplay.c:2788
 #, c-format
 msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"
-msgstr ""
+msgstr "Ni bilo mogoče komunicirati z vežnim strežnikom! Je TCP prehod %u odprt za izhodni promet?"
 
 #: src/clparse.c:97
 msgid "Run in cheat mode"
@@ -10280,7 +10250,7 @@ msgstr "Prevoz"
 
 #: src/design.c:1368
 msgid "Hydra "
-msgstr ""
+msgstr "Hidra"
 
 #: src/design.c:1565
 msgid "Sensor Range"
@@ -10777,17 +10747,15 @@ msgid "Close"
 msgstr "Zapri"
 
 #: src/hci.c:1355
-#, fuzzy
 msgid "MAP SAVED!"
-msgstr "IGRA SHRANJENA!"
+msgstr "MAPA SHRANJENA!"
 
 #: src/hci.c:1702
 #: src/loop.c:506
 #: src/loop.c:522
 #: src/mission.c:2606
-#, fuzzy
 msgid "GAME SAVED :"
-msgstr "IGRA SHRANJENA!"
+msgstr "IGRA SHRANJENA:"
 
 #: src/hci.c:2108
 msgid "Failed to create building"
@@ -10924,14 +10892,12 @@ msgid "Save Game"
 msgstr "Shrani igro"
 
 #: src/intdisplay.c:197
-#, fuzzy
 msgid "Build Progress"
-msgstr "Gradne točke"
+msgstr "Potek gradnje"
 
 #: src/intdisplay.c:228
-#, fuzzy
 msgid "Construction Progress"
-msgstr "Gradbena enota"
+msgstr "Potek izdelave"
 
 #: src/intdisplay.c:260
 msgid "Power Accrued"
@@ -11206,15 +11172,15 @@ msgstr "Raziskano"
 
 #: src/keybind.c:1394
 msgid "Only displaying energy bars when selected"
-msgstr ""
+msgstr "Črte moči prikazane le ob izboru"
 
 #: src/keybind.c:1397
 msgid "Always displaying energy bars for units"
-msgstr ""
+msgstr "Vedno prikazane črte moči za enote"
 
 #: src/keybind.c:1400
 msgid "Always displaying energy bars for units and structures"
-msgstr ""
+msgstr "Vedno prikazane črte moči za enote in zgradbe"
 
 #: src/keybind.c:1422
 msgid "Demo mode off - Returning to normal game mode"
@@ -11703,9 +11669,8 @@ msgstr "Nastavi ponovno odpiranje gradbenega menija"
 
 #: src/loop.c:513
 #: src/loop.c:529
-#, fuzzy
 msgid "Could not save game!"
-msgstr "Naloži shranjeno igro"
+msgstr "Ni bilo mogoče shraniti igre!"
 
 #: src/mission.c:2073
 msgid "Load Transport"
@@ -11819,29 +11784,28 @@ msgid "IP"
 msgstr "IP"
 
 #: src/multiint.c:753
-#, fuzzy
 msgid "No games are available"
-msgstr "Nove tehnologije so na voljo."
+msgstr "Nobenih iger ni na voljo"
 
 #: src/multiint.c:756
 msgid "Game is full"
-msgstr ""
+msgstr "Igra je polna"
 
 #: src/multiint.c:760
 msgid "You were kicked!"
-msgstr ""
+msgstr "Bili ste brcnjeni!"
 
 #: src/multiint.c:763
 msgid "Wrong Game Version!"
-msgstr ""
+msgstr "Napačna verzija igre!"
 
 #: src/multiint.c:766
 msgid "Incorrect Password!"
-msgstr ""
+msgstr "Napačno geslo!"
 
 #: src/multiint.c:770
 msgid "Connection Error"
-msgstr ""
+msgstr "Napaka v povezavi"
 
 #: src/multiint.c:868
 msgid "Searching"
@@ -11857,7 +11821,7 @@ msgstr "Osveži spisek iger"
 
 #: src/multiint.c:1004
 msgid "Enter Password First "
-msgstr ""
+msgstr "Najprej vnesite geslo"
 
 #: src/multiint.c:1114
 msgid "OPTIONS"
@@ -11872,9 +11836,8 @@ msgid "Select Map"
 msgstr "Izberite mapo"
 
 #: src/multiint.c:1119
-#, fuzzy
 msgid "Click to set Password"
-msgstr "Kliknite za ogled mape"
+msgstr "Kliknite za nastavitev gesla"
 
 #: src/multiint.c:1128
 msgid "Game"
@@ -11980,11 +11943,11 @@ msgstr "POGOVOR"
 
 #: src/multiint.c:2146
 msgid "*** password is now required! ***"
-msgstr ""
+msgstr "*** geslo je sedaj potrebno! ***"
 
 #: src/multiint.c:2153
 msgid "*** password is NOT required! ***"
-msgstr ""
+msgstr "*** geslo NI potrebno! ***"
 
 #: src/multiint.c:2477
 msgid "'Locked Teams' mode enabled"
@@ -11997,7 +11960,7 @@ msgstr "Gostitelj je brcnil %s iz igre!"
 
 #: src/multiint.c:2524
 msgid "you are being a jerk."
-msgstr ""
+msgstr "obnašate se neumno."
 
 #: src/multiint.c:2612
 msgid "Host is Starting Game"
@@ -12019,7 +11982,7 @@ msgstr "%s je zapustil igro"
 
 #: src/multijoin.c:300
 msgid "The game is full!"
-msgstr ""
+msgstr "Igra je polna!"
 
 #: src/multijoin.c:329
 #, c-format
@@ -12027,9 +11990,8 @@ msgid "%s is Joining the Game"
 msgstr "%s se pridružuje igri"
 
 #: src/multijoin.c:339
-#, fuzzy
 msgid "System message:"
-msgstr "Lokalni sistem"
+msgstr "Sistemsko sporočilo:"
 
 #: src/multimenu.c:607
 msgid "Technology level 1"
@@ -12403,106 +12365,72 @@ msgstr "Verzija %s%s%s%s"
 
 #~ msgid "Cluster Bombs Bug VTOL"
 #~ msgstr "Kasetne bombe Hrošč NVP"
-
 #~ msgid "Energy bars display toggled"
 #~ msgstr "Prikaz črt energije nastavljen"
-
 #~ msgid "NO GAMES ARE AVAILABLE"
 #~ msgstr "NOBENIH IGER NI NA VOLJO"
-
 #~ msgid "Viper Light Cannon Wheels"
 #~ msgstr "Gad Lahki top Kolesa"
-
 #~ msgid "Viper Flamer Wheels"
 #~ msgstr "Gad Metalec ognja Kolesa"
-
 #~ msgid "Viper Sensor Wheels"
 #~ msgstr "Gad Senzor Kolesa"
-
 #~ msgid "Viper Light Cannon Tracks"
 #~ msgstr "Gad Lahki top Kolesa"
-
 #~ msgid "Cobra Heavy Machinegun Half-track"
 #~ msgstr "Naočarka Težka strojnica Polgosenice"
-
 #~ msgid "Cobra Mortar Half-track"
 #~ msgstr "Naočarka Možnar Polgosenice"
-
 #~ msgid "Cobra Light Cannon Tracks"
 #~ msgstr "Naočarka Lahki top Gosenice"
-
 #~ msgid "Viper Medium Cannon Tracks"
 #~ msgstr "Gad Srednje težki top Gosenice"
-
 #~ msgid "Viper Repair Wheels"
 #~ msgstr "Gad Popravila Kolesa"
-
 #~ msgid "Viper Repair Half-track"
 #~ msgstr "Gad Popravila Polgosenice"
-
 #~ msgid "Viper Machine Gun Wheels"
 #~ msgstr "Gad Strojnica Kolesa"
-
 #~ msgid "Viper Twin Machinegun Wheels"
 #~ msgstr "Gad Dvojna strojnica Kolesa"
-
 #~ msgid "Viper Twin Machinegun Half-track"
 #~ msgstr "Gad Dvojna strojnica Polgosenice"
-
 #~ msgid "Viper Heavy Machinegun Half-track"
 #~ msgstr "Gad Težka strojnica Polgosenice"
-
 #~ msgid "Viper Heavy Machinegun Tracks"
 #~ msgstr "Gad Težka strojnica Gosenice"
-
 #~ msgid "Viper Lancer Wheels"
 #~ msgstr "Gad Suličar Kolesa"
-
 #~ msgid "Viper Mini-Pod Rockets Wheels"
 #~ msgstr "Gad Mini-metalne rakete Kolesa"
-
 #~ msgid "Viper Mini-Rocket Artillery Wheels"
 #~ msgstr "Gad Mini-raketno topništvo Kolesa"
-
 #~ msgid "Viper Bunker Buster Rockets Wheels"
 #~ msgstr "Gad Rakete za uničevanje bunkerjev Kolesa"
-
 #~ msgid "Cobra Heavy Cannon Tracks"
 #~ msgstr "Naočarka Težki top Gosenice"
-
 #~ msgid "Cobra Sensor Half-track"
 #~ msgstr "Naočarka Senzor Polgosenice"
-
 #~ msgid "Cobra Bombard Half-track"
 #~ msgstr "Naočarka Bombardir Polgosenice"
-
 #~ msgid "Cobra Command Turret Half-track"
 #~ msgstr "Naočarka Poveljniška kupola Polgosenice"
-
 #~ msgid "Cobra Lancer Half-track"
 #~ msgstr "Naočarka Suličar Polgosenice"
-
 #~ msgid "Cobra Mini-Rocket Artillery Half-track"
 #~ msgstr "Naočarka Mini-raketno topništvo Polgosenice"
-
 #~ msgid "Python Light Cannon Tracks"
 #~ msgstr "Piton Lahki top Gosenice"
-
 #~ msgid "Python Medium Cannon Tracks"
 #~ msgstr "Piton Srednje težki top Gosenice"
-
 #~ msgid "Python Commander Tracks"
 #~ msgstr "Piton Poveljnik Gosenice"
-
 #~ msgid "Mini-Pod"
 #~ msgstr "Mini-metalec"
-
 #~ msgid "VTOL Mini-Pod"
 #~ msgstr "NVP mini-metalec"
-
 #~ msgid "Machine Gunner"
 #~ msgstr "Strojničar"
-
 #~ msgid "Mini-Pod Rockets"
 #~ msgstr "Mini-metalne rakete"
 
@@ -12517,55 +12445,38 @@ msgstr "Verzija %s%s%s%s"
 #, fuzzy
 #~ msgid "Commander Python Tracks"
 #~ msgstr "Poveljniška kupola Piton Gosenice"
-
 #~ msgid "Mini-Pod Artillery"
 #~ msgstr "Mini-metalno topništvo"
-
 #~ msgid "Mini-Pod Battery"
 #~ msgstr "Mini-metalna topniška edinica"
-
 #~ msgid "Stabilized Mini-Pods"
 #~ msgstr "Uravnoteženi mini-metalci"
-
 #~ msgid "Stabilized Mini-Pods Mk2"
 #~ msgstr "Uravnoteženi mini-metalci tip 2"
-
 #~ msgid "HE Mini-Pods"
 #~ msgstr "VE mini-metalci"
-
 #~ msgid "HE Mini-Pods Mk2"
 #~ msgstr "VE mini-metalci tip 2"
-
 #~ msgid "HE Mini-Pods Mk3"
 #~ msgstr "VE mini-metalci tip 3"
-
 #~ msgid "HEAP Mini-Pods"
 #~ msgstr "VEPO mini-metalci"
-
 #~ msgid "HEAP Mini-Pods Mk2"
 #~ msgstr "VEPO mini-metalci tip 2"
-
 #~ msgid "HEAP Mini-Pods Mk3"
 #~ msgstr "VEPO mini-metalci tip 3"
-
 #~ msgid "Fast Fire Mini-Pods"
 #~ msgstr "Hitro streljajoči mini-metalci"
-
 #~ msgid "Fast Fire Mini-Pods Mk2"
 #~ msgstr "Hitro streljajoči mini-metalci tip 2"
-
 #~ msgid "Fast Fire Mini-Pods Mk3"
 #~ msgstr "Hitro streljajoči mini-metalci tip 3"
-
 #~ msgid "Rapid Fire Mini-Pods"
 #~ msgstr "Zelo hitro streljajoči mini-metalci"
-
 #~ msgid "Rapid Fire Mini-Pods Mk2"
 #~ msgstr "Zelo hitro streljajoči mini-metalci tip 2"
-
 #~ msgid "Rapid Fire Mini-Pods Mk3"
 #~ msgstr "Zelo hitro streljajoči mini-metalci tip 3"
-
 #~ msgid "The host has left the game!"
 #~ msgstr "Gostitelj je zapustil igro!"
 
@@ -12580,49 +12491,34 @@ msgstr "Verzija %s%s%s%s"
 #, fuzzy
 #~ msgid "Power Upgrade"
 #~ msgstr "Nadgradnja havbice"
-
 #~ msgid "Viper Wheels Machinegun"
 #~ msgstr "Gad s strojnico in kolesi"
-
 #~ msgid "Viper Wheels Twin Machinegun"
 #~ msgstr "Gad z dvojno strojnico in kolesi"
-
 #~ msgid "Viper Wheels Heavy Machinegun"
 #~ msgstr "Gad z mitraljezom in kolesi"
-
 #~ msgid "Cobra Wheels Heavy Machinegun"
 #~ msgstr "Naočarka z mitraljezom in kolesi"
-
 #~ msgid "Cobra Hover Heavy Machinegun"
 #~ msgstr "Naočarka z mitraljezom in zračno blazino"
-
 #~ msgid "Viper Tracks Machinegun"
 #~ msgstr "Gad s strojnico in gosenicami"
-
 #~ msgid "Viper Tracks Twin Machinegun"
 #~ msgstr "Gad z dvojno strojnico in gosenicami"
-
 #~ msgid "Viper Tracks Heavy Machinegun"
 #~ msgstr "Gad z mitraljezom in gosenicami"
-
 #~ msgid "Cobra Tracks Heavy Machinegun"
 #~ msgstr "Naočarka z mitraljezom in gosenicami"
-
 #~ msgid "Cobra Hover Medium Cannon"
 #~ msgstr "Naočarka s srednje težkim topom in zračno blazino"
-
 #~ msgid "Scorpion Hover Medium Cannon"
 #~ msgstr "Škorpijon s srednje težkim topom in zračno blazino"
-
 #~ msgid "Scorpion Tracks Medium Cannon"
 #~ msgstr "Škorpijon s srednje težkim topom in gosenicami"
-
 #~ msgid "Python Hover Medium Cannon"
 #~ msgstr "Piton s srednje težkim topom in zračno blazino"
-
 #~ msgid "Python Hover Heavy Cannon"
 #~ msgstr "Piton s težkim topom in zračno blazino"
-
 #~ msgid "Python Tracks Heavy Cannon"
 #~ msgstr "Piton s težkim topom in gosenicami"
 
@@ -12669,7 +12565,6 @@ msgstr "Verzija %s%s%s%s"
 #, fuzzy
 #~ msgid "Bug Lancer VTOL"
 #~ msgstr "NVP Suličar Hrošč NVP"
-
 #~ msgid "Bug HPV VTOL"
 #~ msgstr "Hrošč HH NVP"
 
@@ -12696,224 +12591,154 @@ msgstr "Verzija %s%s%s%s"
 #, fuzzy
 #~ msgid "Python Tank Killer Tracks"
 #~ msgstr "Piton poveljnik z gosenicami"
-
 #~ msgid "Load Campaign"
 #~ msgstr "Naloži bojni pohod"
-
 #~ msgid "One Player Skirmish"
 #~ msgstr "Enoigralski spopad"
-
 #~ msgid "Full"
 #~ msgstr "Celo"
-
 #~ msgid "Minimal"
 #~ msgstr "Minimalno"
-
 #~ msgid "Played"
 #~ msgstr "Čas igranja"
-
 #~ msgid "Campaign One Full Version Test Message"
 #~ msgstr "Testno sporočilo polne različice prvega bojnega pohoda"
-
 #~ msgid "New Paradigm Transmission"
 #~ msgstr "Sporočilo Nove paradigme"
-
 #~ msgid "The New Paradigm have been driven from this zone."
 #~ msgstr "Nova paradigma je bila pregnana iz te cone."
-
 #~ msgid "Establish a forward base near the site of the Research Centre."
 #~ msgstr "Vzpostavite prednjo bazo blizu položaja raziskovalnega središča."
-
 #~ msgid "Commander"
 #~ msgstr "Poveljnik"
-
 #~ msgid "Congratulations on defeating the New Paradigm."
 #~ msgstr "Čestitke za premaganje Nove paradigme."
-
 #~ msgid "This sector is now secure."
 #~ msgstr "Ta sektor je sedaj varen."
-
 #~ msgid "When we failed to respond it became threatening."
 #~ msgstr "Ko se nismo odzvali, je postal napadalen."
-
 #~ msgid "Nexus removed itself leaving no trace"
 #~ msgstr "Nexus se je odstranil brez sledu"
-
 #~ msgid "The Nexus Intruder Program has links with the Reed corporation."
 #~ msgstr "Vdorni program Nexus ima povezave z korporacijo Reed."
-
 #~ msgid "Nexus has technology and weapons and is not friendly."
 #~ msgstr "Nexus ima tehnologijo in orožje ter ni prijateljski."
-
 #~ msgid "Warriors of the Collective..."
 #~ msgstr "Bojevniki Kolektiva..."
-
 #~ msgid "Destroy and kill all who resist the Machine."
 #~ msgstr "Uničite vse, ki se upirajo Stroju."
-
 #~ msgid "Attack!"
 #~ msgstr "Napad!"
-
 #~ msgid "Analysis of the reactor site indicates The Collective"
 #~ msgstr "Analiza reaktorjevega položaja kaže, da je Kolektiv"
-
 #~ msgid "were preparing to route its power to this location."
 #~ msgstr "nameraval speljati njegovo energijo na to lokacijo."
-
 #~ msgid "Argle Bargle - Please Remove when some text here!"
 #~ msgstr "Argle Bargle - prosim odstranite, če je tukaj tekst!"
-
 #~ msgid "Proceed with caution. Scout and confirm Gamma are not contaminated."
 #~ msgstr "Nadaljujte previdno. Preverite ter potrdite, da gama niso okuženi."
-
 #~ msgid "Secure this zone."
 #~ msgstr "Zavarujte to cono."
-
 #~ msgid "A relief force will be sent as soon as the zone is cleared of all enemy."
 #~ msgstr "Okrepitvena četa bo poslana takoj, ko bodo iz cone odstranjeni vsi sovražniki."
-
 #~ msgid "Be wary of attempts by NEXUS to control and infiltrate your systems."
 #~ msgstr "Bodite pozorni na NEXUS-ove poskuse nadzora ter infiltracije vaših sistemov."
-
 #~ msgid "End Of Briefing."
 #~ msgstr "Konec navodil."
-
 #~ msgid "Armed Scavengers Approaching"
 #~ msgstr "Bližajo se oboroženi plenilci"
-
 #~ msgid "Civilian Rescued"
 #~ msgstr "Civilist rešen"
-
 #~ msgid "Civilians Rescued"
 #~ msgstr "Civilisti rešeni"
-
 #~ msgid "Unit Rescued"
 #~ msgstr "Enota rešena"
-
 #~ msgid "Units Rescued"
 #~ msgstr "Enote rešene"
-
 #~ msgid "Group Rescued"
 #~ msgstr "Skupina rešena"
-
 #~ msgid "Unit Captured"
 #~ msgstr "Enota zajeta"
-
 #~ msgid "Group Captured"
 #~ msgstr "Skupina zajeta"
-
 #~ msgid "Structure Captured"
 #~ msgstr "Zgradba zajeta"
-
 #~ msgid "Structure Destroyed"
 #~ msgstr "Zgradba uničena"
-
 #~ msgid "Structure Infected"
 #~ msgstr "Zgradba okužena"
-
 #~ msgid "Unit Infected"
 #~ msgstr "Enota okužena"
-
 #~ msgid "Group Infected"
 #~ msgstr "Skupina okužena"
-
 #~ msgid "Primary Objective Completed"
 #~ msgstr "Primarni cilj dokončan"
-
 #~ msgid "Secondary Objective Completed"
 #~ msgstr "Sekundarni cilj dokončan"
-
 #~ msgid "Time Limit Exceeded"
 #~ msgstr "Prekoračena časovna omejitev "
-
 #~ msgid "Out Of Time"
 #~ msgstr "Zmanjkalo je časa"
-
 #~ msgid "Enemy Escaped"
 #~ msgstr "Sovražnik je pobegnil"
-
 #~ msgid "Enemy Transport Landing"
 #~ msgstr "Sovražni prevoz pristaja"
-
 #~ msgid "Incoming Airstrike"
 #~ msgstr "Prihajajoč zračni napad"
-
 #~ msgid "Team Alpha Eradicated"
 #~ msgstr "Skupina alfa uničena"
-
 #~ msgid "Team Beta Eradicated"
 #~ msgstr "Skupina beta uničena"
-
 #~ msgid "Team Gamma Eradicated"
 #~ msgstr "Skupina gama uničena"
-
 #~ msgid "Team Alpha Rescued"
 #~ msgstr "Skupina alfa rešena"
-
 #~ msgid "Team Beta Rescued"
 #~ msgstr "Skupina beta rešena"
-
 #~ msgid "Team Gamma Rescued"
 #~ msgstr "Skupina gama rešena"
-
 #~ msgid "Team Alpha Liberated"
 #~ msgstr "Skupina alfa osvobojena"
-
 #~ msgid "Team Beta Liberated"
 #~ msgstr "Skupina beta osvobojena"
-
 #~ msgid "Team Gamma Liberated"
 #~ msgstr "Skupina gama osvobojena"
-
 #~ msgid "Civilians Eradicated"
 #~ msgstr "Civilisti uničeni"
-
 #~ msgid "Civilians Liberated"
 #~ msgstr "Civilisti osvobojeni"
-
 #~ msgid "Enemy Eradicated"
 #~ msgstr "Sovražnik uničen"
-
 #~ msgid "New Paradigm base eradicated"
 #~ msgstr "Baza Nove paradigme uničena"
-
 #~ msgid "Collective base eradicated"
 #~ msgstr "Kolektivova baza uničena"
-
 #~ msgid "Nexus base eradicated"
 #~ msgstr "Nexus-ova baza uničena"
-
 #~ msgid "LasSat firing"
 #~ msgstr "LasSat strelja"
-
 #~ msgid "LasSats firing"
 #~ msgstr "LasSat-i streljajo"
-
 #~ msgid "Satellite Uplink"
 #~ msgstr "Satelitska povezava"
-
 #~ msgid "NASDA Central"
 #~ msgstr "Središče NASDA"
-
 #~ msgid "SAM Site"
 #~ msgstr "Položaj raket zemlja-zrak"
-
 #~ msgid "Now left click the Viper Body"
 #~ msgstr "Sedaj levo kliknite telo Gad"
 
 #, fuzzy
 #~ msgid "Select the Vehicle Propulsion icon"
 #~ msgstr "Pogon vozila"
-
 #~ msgid "Presently unused"
 #~ msgstr "Trenutno neuporabljen"
 
 #, fuzzy
 #~ msgid "TRANSPORT MISSION: Rescue Civilians from Containment Camp "
 #~ msgstr "PREVOZNA MISIJA: Rešite civiliste iz zadrževalnega tabora."
-
 #~ msgid "R-Wpn-MG-Damage11"
 #~ msgstr "R-Orž-MG-Škoda11"
-
 #~ msgid "R-Struc-Power-Cam2"
 #~ msgstr "R-Zgrad-Moč-Kam2"
+
