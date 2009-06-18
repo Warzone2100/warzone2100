@@ -1248,7 +1248,7 @@
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
 			<File
-				RelativePath="..\win32\warzone2100.rc"
+				RelativePath=".\warzone2100.vs2k5.rc"
 				>
 			</File>
 		</Filter>
