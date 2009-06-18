@@ -4681,8 +4681,12 @@ void deleteTemplateFromProduction(DROID_TEMPLATE *psTemplate, UBYTE player)
 //
 void SelectDroid(DROID *psDroid)
 {
-	psDroid->selected = true;
-	intRefreshScreen();
+	// we shouldn't ever control the transporter in SP games
+	if (psDroid->droidType != DROID_TRANSPORTER || bMultiPlayer)
+	{
+		psDroid->selected = true;
+		intRefreshScreen();
+	}
 }
 
 
