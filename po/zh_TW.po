@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2009-05-31 15:47+0200\n"
+"POT-Creation-Date: 2009-06-18 14:13+0200\n"
 "PO-Revision-Date: 2009-05-11 00:21+0800\n"
 "Last-Translator: \n"
 "Language-Team: zh_TW\n"
@@ -10088,137 +10088,141 @@ msgstr ""
 msgid "Could not communicate with lobby server!  Is TCP port 9990 open?"
 msgstr ""
 
-#: src/clparse.c:97
+#: src/clparse.c:99
 msgid "Run in cheat mode"
 msgstr "以作弊模式運行"
 
-#: src/clparse.c:98
+#: src/clparse.c:100
 msgid "Set default data directory"
 msgstr "設定預設資料夾"
 
-#: src/clparse.c:98
+#: src/clparse.c:100
 msgid "data directory"
 msgstr "資料夾"
 
-#: src/clparse.c:99
+#: src/clparse.c:101
 msgid "Set configuration directory"
 msgstr "設定設定資料夾"
 
-#: src/clparse.c:99
+#: src/clparse.c:101
 msgid "configuration directory"
 msgstr "設定資料夾"
 
-#: src/clparse.c:100
+#: src/clparse.c:102
 msgid "Show debug for given level"
 msgstr "Show debug for given level"
 
-#: src/clparse.c:100
+#: src/clparse.c:102
 msgid "debug level"
 msgstr "debug level"
 
-#: src/clparse.c:101
+#: src/clparse.c:103
 msgid "Log debug output to file"
 msgstr "將除錯訊息輸出至檔案"
 
-#: src/clparse.c:101
+#: src/clparse.c:103
 msgid "file"
 msgstr "檔案"
 
-#: src/clparse.c:102
+#: src/clparse.c:104
 msgid "Flush all debug output written to stderr"
 msgstr "Flush all debug output written to stderr"
 
-#: src/clparse.c:103
+#: src/clparse.c:105
 msgid "Play in fullscreen mode"
 msgstr "以全螢幕模式運行"
 
-#: src/clparse.c:104
+#: src/clparse.c:106
 msgid "Load a specific game"
 msgstr "載入特定遊戲"
 
-#: src/clparse.c:104
+#: src/clparse.c:106
 msgid "game-name"
 msgstr "選擇遊戲名稱"
 
-#: src/clparse.c:105
+#: src/clparse.c:107
 msgid "Show this help message and exit"
 msgstr "顯示幫助訊息及離開"
 
-#: src/clparse.c:106
+#: src/clparse.c:108
 msgid "Enable a global mod"
 msgstr "開啟global mod"
 
-#: src/clparse.c:106
-#: src/clparse.c:107
 #: src/clparse.c:108
+#: src/clparse.c:109
+#: src/clparse.c:110
 msgid "mod"
 msgstr "mod"
 
-#: src/clparse.c:107
+#: src/clparse.c:109
 msgid "Enable a campaign only mod"
 msgstr "開啟戰役模式"
 
-#: src/clparse.c:108
+#: src/clparse.c:110
 msgid "Enable a multiplay only mod"
 msgstr "開啟多人模式"
 
-#: src/clparse.c:109
+#: src/clparse.c:111
 msgid "Disable asserts"
 msgstr "停用宣告"
 
-#: src/clparse.c:110
+#: src/clparse.c:112
+msgid "Causes a crash to test the crash handler"
+msgstr ""
+
+#: src/clparse.c:113
 msgid "Load a saved game"
 msgstr "載入已儲存的遊戲"
 
-#: src/clparse.c:110
+#: src/clparse.c:113
 msgid "savegame"
 msgstr "儲存遊戲"
 
-#: src/clparse.c:113
+#: src/clparse.c:116
 msgid "Play in windowed mode"
 msgstr "以視窗模式運行"
 
-#: src/clparse.c:114
+#: src/clparse.c:117
 msgid "Show version information and exit"
 msgstr "顯示版本資訊及離開"
 
-#: src/clparse.c:115
+#: src/clparse.c:118
 msgid "Set the resolution to use"
 msgstr "設定解析度"
 
-#: src/clparse.c:115
+#: src/clparse.c:118
 msgid "WIDTHxHEIGHT"
 msgstr "寬 x 高"
 
-#: src/clparse.c:116
+#: src/clparse.c:119
 msgid "Enable shadows"
 msgstr "開啟影子"
 
-#: src/clparse.c:117
+#: src/clparse.c:120
 msgid "Disable shadows"
 msgstr "關閉影子"
 
-#: src/clparse.c:118
+#: src/clparse.c:121
 msgid "Enable sound"
 msgstr "開啟聲音"
 
-#: src/clparse.c:119
+#: src/clparse.c:122
 msgid "Disable sound"
 msgstr "關閉聲音"
 
-#: src/clparse.c:120
+#: src/clparse.c:123
 msgid "Activate self-test"
 msgstr "啟動自我測試（self-test）"
 
-#: src/clparse.c:121
+#: src/clparse.c:124
 msgid "connect directly to IP/hostname"
 msgstr "直接連結到IP/hostname"
 
-#: src/clparse.c:121
+#: src/clparse.c:124
 msgid "host"
 msgstr "host"
 
-#: src/clparse.c:122
+#: src/clparse.c:125
 msgid "go directly to host screen"
 msgstr "go directly to host screen"
 
@@ -10369,27 +10373,27 @@ msgstr "武器裝備"
 msgid "Systems"
 msgstr "系統裝備"
 
-#: src/display3d.c:513
+#: src/display3d.c:515
 #, fuzzy
 msgid "Player left"
 msgstr "玩家"
 
-#: src/display3d.c:513
+#: src/display3d.c:515
 #, fuzzy
 msgid "Player dropped"
 msgstr "玩家"
 
-#: src/display.c:1691
+#: src/display.c:1690
 msgid "Cannot Build. Oil Resource Burning."
 msgstr "油田燃燒中，無法建築鑽油井"
 
-#: src/display.c:1887
-#: src/display.c:2516
+#: src/display.c:1886
+#: src/display.c:2515
 #, c-format
 msgid "%s - Damage %d%% - Experience %d, %s"
 msgstr "%s - 損傷 %d%% - 經驗值 %d, %s"
 
-#: src/display.c:2097
+#: src/display.c:2096
 msgid "Truck ordered to build Oil Derrick"
 msgstr "命令工程車建造鑽油井"
 
@@ -10401,64 +10405,64 @@ msgstr "損失單位！"
 msgid "Structure Restored"
 msgstr "建築物重建"
 
-#: src/droid.c:3348
+#: src/droid.c:3349
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
 msgstr[0] "第 %u 隊聽令 - 共 %u  單位"
 
-#: src/droid.c:3361
+#: src/droid.c:3362
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
 msgstr[0] "共 %u 單位 被指派為 第 %u 隊"
 
-#: src/droid.c:3374
+#: src/droid.c:3375
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
 msgstr[0] "視角移動至第 %u  隊 - 共 %u 單位"
 
-#: src/droid.c:3378
+#: src/droid.c:3379
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] "Aligning with Group %u - %u 單位"
 
-#: src/droid.c:3597
+#: src/droid.c:3598
 msgid "Rookie"
 msgstr "菜鳥"
 
-#: src/droid.c:3598
+#: src/droid.c:3599
 msgctxt "rank"
 msgid "Green"
 msgstr "青澀"
 
-#: src/droid.c:3599
+#: src/droid.c:3600
 msgid "Trained"
 msgstr "訓練有素的"
 
-#: src/droid.c:3600
+#: src/droid.c:3601
 msgid "Regular"
 msgstr "好樣的"
 
-#: src/droid.c:3601
+#: src/droid.c:3602
 msgid "Professional"
 msgstr "專家"
 
-#: src/droid.c:3602
+#: src/droid.c:3603
 msgid "Veteran"
 msgstr "老手"
 
-#: src/droid.c:3603
+#: src/droid.c:3604
 msgid "Elite"
 msgstr "菁英"
 
-#: src/droid.c:3604
+#: src/droid.c:3605
 msgid "Special"
 msgstr "特務"
 
-#: src/droid.c:3605
+#: src/droid.c:3606
 msgid "Hero"
 msgstr "英雄"
 
@@ -10508,8 +10512,8 @@ msgstr "教學模式"
 #: src/frontend.c:713
 #: src/frontend.c:852
 #: src/frontend.c:955
-#: src/frontend.c:1146
-#: src/frontend.c:1287
+#: src/frontend.c:1145
+#: src/frontend.c:1286
 msgctxt "menu"
 msgid "Return"
 msgstr "返回"
@@ -10552,8 +10556,8 @@ msgstr "加入遊戲"
 
 #: src/frontend.c:548
 #: src/frontend.c:855
-#: src/frontend.c:1290
-#: src/frontend.c:1310
+#: src/frontend.c:1289
+#: src/frontend.c:1309
 msgid "GAME OPTIONS"
 msgstr "遊戲選項"
 
@@ -10592,14 +10596,14 @@ msgstr "震動螢幕"
 #: src/frontend.c:773
 #: src/frontend.c:782
 #: src/frontend.c:944
-#: src/frontend.c:1030
-#: src/frontend.c:1068
-#: src/frontend.c:1102
-#: src/frontend.c:1114
-#: src/frontend.c:1138
-#: src/frontend.c:1168
-#: src/frontend.c:1181
-#: src/frontend.c:1209
+#: src/frontend.c:1029
+#: src/frontend.c:1067
+#: src/frontend.c:1101
+#: src/frontend.c:1113
+#: src/frontend.c:1137
+#: src/frontend.c:1167
+#: src/frontend.c:1180
+#: src/frontend.c:1208
 msgid "On"
 msgstr "開啟"
 
@@ -10611,14 +10615,14 @@ msgstr "開啟"
 #: src/frontend.c:768
 #: src/frontend.c:786
 #: src/frontend.c:948
-#: src/frontend.c:1025
-#: src/frontend.c:1063
-#: src/frontend.c:1106
-#: src/frontend.c:1118
-#: src/frontend.c:1142
-#: src/frontend.c:1163
-#: src/frontend.c:1176
-#: src/frontend.c:1204
+#: src/frontend.c:1024
+#: src/frontend.c:1062
+#: src/frontend.c:1105
+#: src/frontend.c:1117
+#: src/frontend.c:1141
+#: src/frontend.c:1162
+#: src/frontend.c:1175
+#: src/frontend.c:1203
 msgid "Off"
 msgstr "關閉"
 
@@ -10708,70 +10712,70 @@ msgstr "垂直同步*"
 msgid "* Takes effect on game restart"
 msgstr "*重啟遊戲後生效"
 
-#: src/frontend.c:1099
+#: src/frontend.c:1098
 msgid "Reverse Mouse"
 msgstr "反向滑鼠"
 
-#: src/frontend.c:1110
+#: src/frontend.c:1109
 msgid "Trap Cursor"
 msgstr "捕捉滑鼠"
 
-#: src/frontend.c:1122
+#: src/frontend.c:1121
 msgid "Cursor Mode"
 msgstr "滑鼠模式"
 
-#: src/frontend.c:1126
+#: src/frontend.c:1125
 msgid "Software (colored)"
 msgstr "軟體 (colored)"
 
-#: src/frontend.c:1130
-#: src/frontend.c:1190
+#: src/frontend.c:1129
+#: src/frontend.c:1189
 msgid "Hardware"
 msgstr "硬體"
 
-#: src/frontend.c:1135
+#: src/frontend.c:1134
 msgid "Right-click Orders"
 msgstr ""
 
-#: src/frontend.c:1195
+#: src/frontend.c:1194
 msgid "Software (coloured)"
 msgstr "軟體 (coloured)"
 
-#: src/frontend.c:1242
-#: src/frontend.c:1308
+#: src/frontend.c:1241
+#: src/frontend.c:1307
 msgid "Difficulty"
 msgstr "難度"
 
-#: src/frontend.c:1246
-#: src/frontend.c:1316
-#: src/frontend.c:1348
+#: src/frontend.c:1245
+#: src/frontend.c:1315
+#: src/frontend.c:1347
 msgid "Easy"
 msgstr "容易"
 
-#: src/frontend.c:1249
-#: src/frontend.c:1319
-#: src/frontend.c:1340
+#: src/frontend.c:1248
+#: src/frontend.c:1318
+#: src/frontend.c:1339
 msgid "Normal"
 msgstr "普通"
 
-#: src/frontend.c:1253
-#: src/frontend.c:1322
-#: src/frontend.c:1344
+#: src/frontend.c:1252
+#: src/frontend.c:1321
+#: src/frontend.c:1343
 msgid "Hard"
 msgstr "困難"
 
-#: src/frontend.c:1258
-#: src/frontend.c:1309
+#: src/frontend.c:1257
+#: src/frontend.c:1308
 msgid "Scroll Speed"
 msgstr "捲動速度"
 
-#: src/frontend.c:1272
-#: src/frontend.c:1306
+#: src/frontend.c:1271
+#: src/frontend.c:1305
 msgid "Language"
 msgstr "語言"
 
-#: src/frontend.c:1284
-#: src/frontend.c:1307
+#: src/frontend.c:1283
+#: src/frontend.c:1306
 msgid "Unit Colour"
 msgstr "單位顏色"
 
@@ -11752,7 +11756,7 @@ msgstr "退出至主選單"
 msgid "Continue Game"
 msgstr "繼續遊戲"
 
-#: src/move.c:2947
+#: src/move.c:2959
 #: src/multigifts.c:326
 #, c-format
 msgid "You found %u power in an oil drum"
@@ -12110,35 +12114,35 @@ msgstr "交出選擇的單位"
 msgid "Give Power To Player"
 msgstr "提供玩家能源"
 
-#: src/multiplay.c:1894
+#: src/multiplay.c:1902
 msgid "Green"
 msgstr "綠色"
 
-#: src/multiplay.c:1895
+#: src/multiplay.c:1903
 msgid "Orange"
 msgstr "橙色"
 
-#: src/multiplay.c:1896
+#: src/multiplay.c:1904
 msgid "Grey"
 msgstr "灰色"
 
-#: src/multiplay.c:1897
+#: src/multiplay.c:1905
 msgid "Black"
 msgstr "黑色"
 
-#: src/multiplay.c:1898
+#: src/multiplay.c:1906
 msgid "Red"
 msgstr "紅色"
 
-#: src/multiplay.c:1899
+#: src/multiplay.c:1907
 msgid "Blue"
 msgstr "藍色"
 
-#: src/multiplay.c:1900
+#: src/multiplay.c:1908
 msgid "Pink"
 msgstr "粉紅色"
 
-#: src/multiplay.c:1901
+#: src/multiplay.c:1909
 msgid "Cyan"
 msgstr "青綠色"
 
@@ -12314,58 +12318,58 @@ msgstr "找不到任何雷達單位！"
 msgid "Unable to locate any Commanders!"
 msgstr "找不到任何指揮官車！"
 
-#: src/structure.c:2693
+#: src/structure.c:2700
 msgid "Command Control Limit Reached - Production Halted"
 msgstr "已達到可控制單位總數上限，停止生產新單位"
 
-#: src/structure.c:5822
-#: src/structure.c:5847
+#: src/structure.c:5837
+#: src/structure.c:5862
 #, c-format
 msgid "%s - %u Unit assigned"
 msgid_plural "%s - %u Units assigned"
 msgstr[0] "%s - 已指派 %u  單位"
 
-#: src/structure.c:5897
+#: src/structure.c:5912
 #, c-format
 msgid "%s - Connected %u of %u"
 msgstr "%s - 連接鑽油井數量 %u of %u"
 
-#: src/structure.c:5911
+#: src/structure.c:5926
 #, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - 損傷 %3.0f%%"
 
-#: src/structure.c:6032
-#: src/structure.c:6081
+#: src/structure.c:6047
+#: src/structure.c:6096
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s -電子傷害"
 
-#: src/structure.c:6316
+#: src/structure.c:6331
 msgid "Electronic Reward - Visibility Report"
 msgstr "電子回饋—可檢視報告"
 
-#: src/structure.c:6356
+#: src/structure.c:6371
 msgid "Factory Reward - Propulsion"
 msgstr "工廠獎勵—推進動力"
 
-#: src/structure.c:6380
+#: src/structure.c:6395
 msgid "Factory Reward - Body"
 msgstr "工廠獎勵—車身"
 
-#: src/structure.c:6404
+#: src/structure.c:6419
 msgid "Factory Reward - Weapon"
 msgstr "工廠獎勵—武器"
 
-#: src/structure.c:6413
+#: src/structure.c:6428
 msgid "Factory Reward - Nothing"
 msgstr "工廠獎勵—無"
 
-#: src/structure.c:6441
+#: src/structure.c:6456
 msgid "Repair Facility Award - Repair"
 msgstr "修理中心獎勵—修理"
 
-#: src/structure.c:6448
+#: src/structure.c:6463
 msgid "Repair Facility Award - Nothing"
 msgstr "修理工廠回饋—無"
 
