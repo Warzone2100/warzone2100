@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2009-05-27 13:29+0200\n"
+"POT-Creation-Date: 2009-06-18 14:58+0200\n"
 "PO-Revision-Date: 2009-06-10 14:43+0100\n"
 "Last-Translator: Tomaž Povšin <tomaz.povsin@gmail.com>\n"
 "Language-Team: Slovenian <sl@li.org>\n"
@@ -10012,164 +10012,168 @@ msgstr "Poenostavljen kitajski"
 msgid "Latin"
 msgstr "Latinski"
 
-#: lib/netplay/netplay.c:1120
-#: lib/netplay/netplay.c:1153
+#: lib/netplay/netplay.c:1111
+#: lib/netplay/netplay.c:1145
 #, c-format
 msgid "Player %u has the wrong game version.  Auto kicking."
 msgstr "Igralec %u ima napačno verzijo igre. Auto brcam."
 
-#: lib/netplay/netplay.c:1234
+#: lib/netplay/netplay.c:1226
 #, c-format
 msgid "Player %u has the wrong password.  Auto kicking."
 msgstr "Igralec %u ima napačno geslo. Auto brcam."
 
-#: lib/netplay/netplay.c:2763
+#: lib/netplay/netplay.c:2731
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr "Ni bilo mogoče razrešiti imena glavnega strežnika (%s)!"
 
-#: lib/netplay/netplay.c:2788
+#: lib/netplay/netplay.c:2756
 #, c-format
 msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"
 msgstr "Ni bilo mogoče komunicirati z vežnim strežnikom! Je TCP prehod %u odprt za izhodni promet?"
 
-#: src/clparse.c:97
+#: src/clparse.c:99
 msgid "Run in cheat mode"
 msgstr "Zaženi v goljufalnem načinu"
 
-#: src/clparse.c:98
+#: src/clparse.c:100
 msgid "Set default data directory"
 msgstr "Določi privzeti podatkovni direktorij"
 
-#: src/clparse.c:98
+#: src/clparse.c:100
 msgid "data directory"
 msgstr "podatkovni direktorij"
 
-#: src/clparse.c:99
+#: src/clparse.c:101
 msgid "Set configuration directory"
 msgstr "Določi direktorij z nastavitvami"
 
-#: src/clparse.c:99
+#: src/clparse.c:101
 msgid "configuration directory"
 msgstr "Direktorij z nastavitvami"
 
-#: src/clparse.c:100
+#: src/clparse.c:102
 msgid "Show debug for given level"
 msgstr "Pokaži razhroščitev za dano stopnjo"
 
-#: src/clparse.c:100
+#: src/clparse.c:102
 msgid "debug level"
 msgstr "razhrošči stopnjo"
 
-#: src/clparse.c:101
+#: src/clparse.c:103
 msgid "Log debug output to file"
 msgstr "Zabeleži proizvod razhroščitve v datoteko"
 
-#: src/clparse.c:101
+#: src/clparse.c:103
 msgid "file"
 msgstr "datoteka"
 
-#: src/clparse.c:102
+#: src/clparse.c:104
 msgid "Flush all debug output written to stderr"
 msgstr "Splakni ves proizvod razhroščitve napisan v stderr"
 
-#: src/clparse.c:103
+#: src/clparse.c:105
 msgid "Play in fullscreen mode"
 msgstr "Igraj v celozaslonskem načinu"
 
-#: src/clparse.c:104
+#: src/clparse.c:106
 msgid "Load a specific game"
 msgstr "Naloži določeno igro"
 
-#: src/clparse.c:104
+#: src/clparse.c:106
 msgid "game-name"
 msgstr "Ime igre"
 
-#: src/clparse.c:105
+#: src/clparse.c:107
 msgid "Show this help message and exit"
 msgstr "Pokaži to sporočilo pomoči in pojdi ven"
 
-#: src/clparse.c:106
+#: src/clparse.c:108
 msgid "Enable a global mod"
 msgstr "Omogoči celoten mod"
 
-#: src/clparse.c:106
-#: src/clparse.c:107
 #: src/clparse.c:108
+#: src/clparse.c:109
+#: src/clparse.c:110
 msgid "mod"
 msgstr "mod"
 
-#: src/clparse.c:107
+#: src/clparse.c:109
 msgid "Enable a campaign only mod"
 msgstr "Omogoči le bojno pohodni mod"
 
-#: src/clparse.c:108
+#: src/clparse.c:110
 msgid "Enable a multiplay only mod"
 msgstr "Omogoči le večigralski mod"
 
-#: src/clparse.c:109
+#: src/clparse.c:111
 msgid "Disable asserts"
 msgstr "Prepreči zahteve"
 
-#: src/clparse.c:110
+#: src/clparse.c:112
+msgid "Causes a crash to test the crash handler"
+msgstr ""
+
+#: src/clparse.c:113
 msgid "Load a saved game"
 msgstr "Naloži shranjeno igro"
 
-#: src/clparse.c:110
+#: src/clparse.c:113
 msgid "savegame"
 msgstr "Shranjena igra"
 
-#: src/clparse.c:113
+#: src/clparse.c:116
 msgid "Play in windowed mode"
 msgstr "Igraj v okenskem načinu"
 
-#: src/clparse.c:114
+#: src/clparse.c:117
 msgid "Show version information and exit"
 msgstr "Pokaži informacijo o verziji in pojdi ven"
 
-#: src/clparse.c:115
+#: src/clparse.c:118
 msgid "Set the resolution to use"
 msgstr "Določi ločljivosti uporabo"
 
-#: src/clparse.c:115
+#: src/clparse.c:118
 msgid "WIDTHxHEIGHT"
 msgstr "ŠIRINAxVIŠINA"
 
-#: src/clparse.c:116
+#: src/clparse.c:119
 msgid "Enable shadows"
 msgstr "Omogoči sence"
 
-#: src/clparse.c:117
+#: src/clparse.c:120
 msgid "Disable shadows"
 msgstr "Prepreči sence"
 
-#: src/clparse.c:118
+#: src/clparse.c:121
 msgid "Enable sound"
 msgstr "Omogoči zvoke"
 
-#: src/clparse.c:119
+#: src/clparse.c:122
 msgid "Disable sound"
 msgstr "Prepreči zvoke"
 
-#: src/clparse.c:120
+#: src/clparse.c:123
 msgid "Activate self-test"
 msgstr "Sproži samopregled"
 
-#: src/clparse.c:121
+#: src/clparse.c:124
 msgid "connect directly to IP/hostname"
 msgstr "poveži se direktno na IP/ime gostitelja"
 
-#: src/clparse.c:121
+#: src/clparse.c:124
 msgid "host"
 msgstr "gostitelj"
 
-#: src/clparse.c:122
+#: src/clparse.c:125
 msgid "go directly to host screen"
 msgstr "pojdi naravnost na gostiteljev zaslon"
 
+#: src/configuration.c:457
 #: src/configuration.c:458
-#: src/configuration.c:459
-#: src/multistat.c:132
+#: src/multistat.c:131
 msgid "Player"
 msgstr "Igralec"
 
@@ -10314,25 +10318,25 @@ msgstr "Orožja"
 msgid "Systems"
 msgstr "Sistemi"
 
-#: src/display3d.c:505
+#: src/display3d.c:504
 msgid "Player left"
 msgstr "Igralec odšel"
 
-#: src/display3d.c:505
+#: src/display3d.c:504
 msgid "Player dropped"
 msgstr "Igralec izpadel"
 
-#: src/display.c:1685
+#: src/display.c:1684
 msgid "Cannot Build. Oil Resource Burning."
 msgstr "Gradnja ni možna. Vir nafte gori."
 
-#: src/display.c:1881
-#: src/display.c:2487
+#: src/display.c:1880
+#: src/display.c:2486
 #, c-format
 msgid "%s - Damage %d%% - Experience %d, %s"
 msgstr "%s - Poškodbe %d%% - Izkušenj %d %s"
 
-#: src/display.c:2090
+#: src/display.c:2089
 msgid "Truck ordered to build Oil Derrick"
 msgstr "Tovornjaku ukazana gradnja naftne vrtine"
 
@@ -10344,7 +10348,7 @@ msgstr "Enota izgubljena!"
 msgid "Structure Restored"
 msgstr "Zgradba obnovljena"
 
-#: src/droid.c:3132
+#: src/droid.c:3133
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
@@ -10353,7 +10357,7 @@ msgstr[1] "Skupina %u izbrana - %u enota"
 msgstr[2] "Skupina %u izbrana - %u enoti"
 msgstr[3] "Skupina %u izbrana - %u enote"
 
-#: src/droid.c:3145
+#: src/droid.c:3146
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
@@ -10362,7 +10366,7 @@ msgstr[1] "%u enota dodeljena skupini %u"
 msgstr[2] "%u enoti dodeljeni skupini %u"
 msgstr[3] "%u enote dodeljene skupini %u"
 
-#: src/droid.c:3158
+#: src/droid.c:3159
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
@@ -10371,7 +10375,7 @@ msgstr[1] "Centriran na skupino %u - %u enota"
 msgstr[2] "Centriran na skupino %u - %u enoti"
 msgstr[3] "Centriran na skupino %u - %u enote"
 
-#: src/droid.c:3162
+#: src/droid.c:3163
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
@@ -10380,40 +10384,40 @@ msgstr[1] "Poravnava s skupino %u - %u enota"
 msgstr[2] "Poravnava s skupino %u - %u enoti"
 msgstr[3] "Poravnava s skupino %u - %u enote"
 
-#: src/droid.c:3381
+#: src/droid.c:3382
 msgid "Rookie"
 msgstr "Novinec"
 
-#: src/droid.c:3382
+#: src/droid.c:3383
 msgctxt "rank"
 msgid "Green"
 msgstr "Zelen"
 
-#: src/droid.c:3383
+#: src/droid.c:3384
 msgid "Trained"
 msgstr "Izurjen"
 
-#: src/droid.c:3384
+#: src/droid.c:3385
 msgid "Regular"
 msgstr "Navaden"
 
-#: src/droid.c:3385
+#: src/droid.c:3386
 msgid "Professional"
 msgstr "Poklicni"
 
-#: src/droid.c:3386
+#: src/droid.c:3387
 msgid "Veteran"
 msgstr "Veteran"
 
-#: src/droid.c:3387
+#: src/droid.c:3388
 msgid "Elite"
 msgstr "Elita"
 
-#: src/droid.c:3388
+#: src/droid.c:3389
 msgid "Special"
 msgstr "Poseben"
 
-#: src/droid.c:3389
+#: src/droid.c:3390
 msgid "Hero"
 msgstr "Junak"
 
@@ -10578,7 +10582,7 @@ msgid "Off"
 msgstr "Izklopljeno"
 
 #: src/frontend.c:639
-#: src/multiint.c:1156
+#: src/multiint.c:1148
 msgid "Fog"
 msgstr "Megla"
 
@@ -10589,7 +10593,7 @@ msgstr "Meglica"
 
 #: src/frontend.c:646
 #: src/frontend.c:747
-#: src/multiint.c:1158
+#: src/multiint.c:1150
 msgid "Fog Of War"
 msgstr "Megla vojne"
 
@@ -10730,11 +10734,11 @@ msgstr "Jezik"
 msgid "Unit Colour"
 msgstr "Barva enot"
 
-#: src/hci.c:1009
-#: src/hci.c:3797
-#: src/hci.c:3948
-#: src/hci.c:4401
-#: src/hci.c:5605
+#: src/hci.c:1010
+#: src/hci.c:3798
+#: src/hci.c:3949
+#: src/hci.c:4402
+#: src/hci.c:5606
 #: src/intelmap.c:532
 #: src/intorder.c:661
 #: src/loadsave.c:265
@@ -10746,135 +10750,134 @@ msgstr "Barva enot"
 msgid "Close"
 msgstr "Zapri"
 
-#: src/hci.c:1355
+#: src/hci.c:1356
 msgid "MAP SAVED!"
 msgstr "MAPA SHRANJENA!"
 
-#: src/hci.c:1702
+#: src/hci.c:1703
 #: src/loop.c:506
 #: src/loop.c:522
 #: src/mission.c:2606
 msgid "GAME SAVED :"
 msgstr "IGRA SHRANJENA:"
 
-#: src/hci.c:2108
+#: src/hci.c:2109
 msgid "Failed to create building"
 msgstr "Ni uspelo zgraditi stavbe"
 
-#: src/hci.c:2131
+#: src/hci.c:2132
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new structure: %s."
 msgstr "Igralec/ka %u si je prigoljufal/a (razhroščevalni meni) novo zgradbo: %s."
 
-#: src/hci.c:2146
+#: src/hci.c:2147
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new feature: %s."
 msgstr "Igralec/ka %u si je prigoljufal/a (razhroščevalni meni) novo odliko: %s."
 
-#: src/hci.c:2167
+#: src/hci.c:2168
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new droid: %s."
 msgstr "Igralec/ka %u si je prigoljufal/a (razhroščevalni meni) novega droida: %s."
 
-#: src/hci.c:3699
+#: src/hci.c:3700
 msgid "Commanders (F6)"
 msgstr "Poveljniki (F6)"
 
-#: src/hci.c:3715
+#: src/hci.c:3716
 msgid "Intelligence Display (F5)"
 msgstr "Obveščevalni zaslon (F5)"
 
-#: src/hci.c:3731
+#: src/hci.c:3732
 msgid "Manufacture (F1)"
 msgstr "Izdelava (F1)"
 
-#: src/hci.c:3747
+#: src/hci.c:3748
 msgid "Design (F4)"
 msgstr "Načrtovanje (F4)"
 
-#: src/hci.c:3763
+#: src/hci.c:3764
 msgid "Research (F2)"
 msgstr "Raziskave (F2)"
 
-#: src/hci.c:3779
+#: src/hci.c:3780
 msgid "Build (F3)"
 msgstr "Gradnja (F3)"
 
-#: src/hci.c:3859
-#: src/multiint.c:1206
-#: src/multiint.c:1210
+#: src/hci.c:3860
+#: src/multiint.c:1190
 msgid "Power"
 msgstr "Moč"
 
-#: src/hci.c:4043
+#: src/hci.c:4044
 msgid "Tile"
 msgstr "Plošča"
 
-#: src/hci.c:4044
+#: src/hci.c:4045
 msgid "Place tiles on map"
 msgstr "Položi plošče na mapo"
 
-#: src/hci.c:4053
+#: src/hci.c:4054
 msgid "Unit"
 msgstr "Enota"
 
-#: src/hci.c:4054
+#: src/hci.c:4055
 msgid "Place Unit on map"
 msgstr "Položi enote na mapo"
 
-#: src/hci.c:4062
+#: src/hci.c:4063
 msgid "Struct"
 msgstr "Zgradba"
 
-#: src/hci.c:4063
+#: src/hci.c:4064
 msgid "Place Structures on map"
 msgstr "Položi zgradbe na mapo"
 
-#: src/hci.c:4071
+#: src/hci.c:4072
 msgid "Feat"
 msgstr "Odlika"
 
-#: src/hci.c:4072
+#: src/hci.c:4073
 msgid "Place Features on map"
 msgstr "Položi odlike na mapo"
 
-#: src/hci.c:4083
+#: src/hci.c:4084
 msgid "Pause or unpause the game"
 msgstr "Ustavi ali nadaljuj igro"
 
-#: src/hci.c:4097
+#: src/hci.c:4098
 msgid "Align height of all map objects"
 msgstr "Uskladi višino vseh predmetov na mapi"
 
-#: src/hci.c:4122
+#: src/hci.c:4123
 #: src/ingameop.c:121
 #: src/ingameop.c:240
 #: src/ingameop.c:245
 msgid "Quit"
 msgstr "Končaj"
 
-#: src/hci.c:4123
+#: src/hci.c:4124
 msgid "Exit Game"
 msgstr "Zapusti igro"
 
-#: src/hci.c:4486
+#: src/hci.c:4487
 #: src/intdisplay.c:267
 msgid "Progress Bar"
 msgstr "Črta napredka"
 
-#: src/hci.c:5520
+#: src/hci.c:5521
 msgid "Factory Delivery Point"
 msgstr "Dostavna točka tovarne"
 
-#: src/hci.c:5539
+#: src/hci.c:5540
 msgid "Loop Production"
 msgstr "Ponavljaj izdelavo"
 
-#: src/hci.c:5630
+#: src/hci.c:5631
 msgid "Tab Scroll left"
 msgstr "Tab premakni levo"
 
-#: src/hci.c:5647
+#: src/hci.c:5648
 msgid "Tab Scroll right"
 msgstr "Tab premakni desno"
 
@@ -11287,10 +11290,10 @@ msgid "KEY MAPPING"
 msgstr "VNAŠANJE TIPK"
 
 #: src/keyedit.c:379
-#: src/multiint.c:545
-#: src/multiint.c:587
-#: src/multiint.c:976
-#: src/multiint.c:1275
+#: src/multiint.c:546
+#: src/multiint.c:588
+#: src/multiint.c:977
+#: src/multiint.c:1246
 #: src/multilimit.c:148
 msgid "Return To Previous Screen"
 msgstr "Vrni se na prejšnji zaslon"
@@ -11702,7 +11705,7 @@ msgstr "Končaj v glavni meni"
 msgid "Continue Game"
 msgstr "Nadaljuj igro"
 
-#: src/move.c:2949
+#: src/move.c:2928
 #, c-format
 msgid "You found %u power in an oil drum."
 msgstr "Našli ste %u moči v sodu nafte"
@@ -11762,211 +11765,213 @@ msgstr "%s je sklenil zavezništvo z %s"
 msgid "You Discover Blueprints For %s"
 msgstr "Odkrijete načrte za %s"
 
-#: src/multiint.c:490
+#: src/multiint.c:491
 #: src/multilimit.c:156
 msgid "Accept Settings"
 msgstr "Sprejmi nastavitve"
 
-#: src/multiint.c:501
+#: src/multiint.c:502
 msgid "IP Address or Machine Name"
 msgstr "IP naslov ali ime računalnika"
 
-#: src/multiint.c:542
+#: src/multiint.c:543
 msgid "CONNECTION"
 msgstr "POVEZAVA"
 
-#: src/multiint.c:555
+#: src/multiint.c:556
 msgid "Lobby"
 msgstr "Veža"
 
-#: src/multiint.c:556
+#: src/multiint.c:557
 msgid "IP"
 msgstr "IP"
 
-#: src/multiint.c:753
+#: src/multiint.c:754
 msgid "No games are available"
 msgstr "Nobenih iger ni na voljo"
 
-#: src/multiint.c:756
+#: src/multiint.c:757
 msgid "Game is full"
 msgstr "Igra je polna"
 
-#: src/multiint.c:760
+#: src/multiint.c:761
 msgid "You were kicked!"
 msgstr "Bili ste brcnjeni!"
 
-#: src/multiint.c:763
+#: src/multiint.c:764
 msgid "Wrong Game Version!"
 msgstr "Napačna verzija igre!"
 
-#: src/multiint.c:766
+#: src/multiint.c:767
 msgid "Incorrect Password!"
 msgstr "Napačno geslo!"
 
-#: src/multiint.c:770
+#: src/multiint.c:771
 msgid "Connection Error"
 msgstr "Napaka v povezavi"
 
-#: src/multiint.c:868
+#: src/multiint.c:869
 msgid "Searching"
 msgstr "Iskanje"
 
-#: src/multiint.c:973
+#: src/multiint.c:974
 msgid "GAMES"
 msgstr "IGRE"
 
-#: src/multiint.c:983
+#: src/multiint.c:984
 msgid "Refresh Games List"
 msgstr "Osveži spisek iger"
 
-#: src/multiint.c:1004
+#: src/multiint.c:1005
 msgid "Enter Password First "
 msgstr "Najprej vnesite geslo"
 
-#: src/multiint.c:1114
+#: src/multiint.c:1115
 msgid "OPTIONS"
 msgstr "MOŽNOSTI"
 
-#: src/multiint.c:1116
+#: src/multiint.c:1117
 msgid "Select Game Name"
 msgstr "Izberite ime igre"
 
-#: src/multiint.c:1117
+#: src/multiint.c:1118
 msgid "Select Map"
 msgstr "Izberite mapo"
 
-#: src/multiint.c:1119
+#: src/multiint.c:1120
 msgid "Click to set Password"
 msgstr "Kliknite za nastavitev gesla"
 
-#: src/multiint.c:1128
-msgid "Game"
-msgstr "Igra"
-
+#: src/multiint.c:1129
 #: src/multiint.c:1130
-msgid "Mayhem"
-msgstr "Pohabljenje"
+#, fuzzy
+msgid "Scavengers"
+msgstr "Plenilec"
 
-#: src/multiint.c:1132
-msgid "Skirmish"
-msgstr "Spopad"
+#: src/multiint.c:1131
+#, fuzzy
+msgid "No Scavengers"
+msgstr "Plenilec"
 
-#: src/multiint.c:1153
+#: src/multiint.c:1145
 msgid "Select Player Name"
 msgstr "Izberite ime igralca"
 
-#: src/multiint.c:1159
+#: src/multiint.c:1151
 msgid "Distance Fog"
 msgstr "Daljna megla"
 
-#: src/multiint.c:1172
+#: src/multiint.c:1162
 #: src/multimenu.c:754
 msgid "Alliances"
 msgstr "Zavezništva"
 
-#: src/multiint.c:1175
+#: src/multiint.c:1165
 msgid "No Alliances"
 msgstr "Nobenih zavezništev"
 
-#: src/multiint.c:1177
+#: src/multiint.c:1167
 msgid "Allow Alliances"
 msgstr "Dovoli zavezništva"
 
-#: src/multiint.c:1181
+#: src/multiint.c:1171
 msgid "Locked Teams"
 msgstr "Zaklenjene skupine"
 
-#: src/multiint.c:1213
+#: src/multiint.c:1192
 msgid "Low Power Levels"
 msgstr "Nizke stopnje moči"
 
-#: src/multiint.c:1215
+#: src/multiint.c:1194
 msgid "Medium Power Levels"
 msgstr "Srednje velike stopnje moči"
 
-#: src/multiint.c:1217
+#: src/multiint.c:1196
 msgid "High Power Levels"
 msgstr "Visoke stopnje moči"
 
-#: src/multiint.c:1237
-#: src/multiint.c:1241
+#: src/multiint.c:1213
 msgid "Base"
 msgstr "Baza"
 
-#: src/multiint.c:1244
+#: src/multiint.c:1215
 msgid "Start with No Bases"
 msgstr "Začnite brez baz"
 
-#: src/multiint.c:1246
+#: src/multiint.c:1217
 msgid "Start with Bases"
 msgstr "Začnite z bazami"
 
-#: src/multiint.c:1248
+#: src/multiint.c:1219
 msgid "Start with Advanced Bases"
 msgstr "Začnite z naprednimi bazami"
 
-#: src/multiint.c:1265
+#: src/multiint.c:1236
 msgid "Map Preview"
 msgstr "Predogled mape"
 
-#: src/multiint.c:1267
+#: src/multiint.c:1238
 msgid "Click to see Map"
 msgstr "Kliknite za ogled mape"
 
-#: src/multiint.c:1281
+#: src/multiint.c:1252
 msgid "Start Hosting Game"
 msgstr "Začnite gostiti igro"
 
-#: src/multiint.c:1289
+#: src/multiint.c:1260
 msgid "Set Structure Limits"
 msgstr "Nastavite gradbene omejitve"
 
-#: src/multiint.c:1681
+#: src/multiint.c:1666
 msgid "Team"
 msgstr "Skupina"
 
-#: src/multiint.c:1726
+#: src/multiint.c:1699
 msgid "Waiting for other players"
 msgstr "Čakanje ostalih igralcev"
 
-#: src/multiint.c:1732
+#: src/multiint.c:1705
 msgid "Click when ready"
 msgstr "Kliknite, ko boste pripravljeni"
 
-#: src/multiint.c:1785
+#: src/multiint.c:1743
 msgid "PLAYERS"
 msgstr "IGRALCI"
 
-#: src/multiint.c:1924
+#: src/multiint.c:1903
 msgid "CHAT"
 msgstr "POGOVOR"
 
-#: src/multiint.c:2146
+#: src/multiint.c:2073
 msgid "*** password is now required! ***"
 msgstr "*** geslo je sedaj potrebno! ***"
 
-#: src/multiint.c:2153
+#: src/multiint.c:2080
 msgid "*** password is NOT required! ***"
 msgstr "*** geslo NI potrebno! ***"
 
-#: src/multiint.c:2477
+#: src/multiint.c:2319
+msgid "Sorry! Failed to host the game."
+msgstr ""
+
+#: src/multiint.c:2410
 msgid "'Locked Teams' mode enabled"
 msgstr "Omogočen način 'zaklenjene skupine'"
 
-#: src/multiint.c:2522
+#: src/multiint.c:2455
 #, c-format
 msgid "The host has kicked %s from the game!"
 msgstr "Gostitelj je brcnil %s iz igre!"
 
-#: src/multiint.c:2524
+#: src/multiint.c:2457
 msgid "you are being a jerk."
 msgstr "obnašate se neumno."
 
-#: src/multiint.c:2612
+#: src/multiint.c:2540
 msgid "Host is Starting Game"
 msgstr "Gostitelj začenja igro"
 
-#: src/multiint.c:3100
+#: src/multiint.c:3012
 msgid "Players"
 msgstr "Igralci"
 
@@ -11980,16 +11985,12 @@ msgstr "Igralci se še pridružujejo"
 msgid "%s has Left the Game"
 msgstr "%s je zapustil igro"
 
-#: src/multijoin.c:300
-msgid "The game is full!"
-msgstr "Igra je polna!"
-
-#: src/multijoin.c:329
+#: src/multijoin.c:303
 #, c-format
 msgid "%s is Joining the Game"
 msgstr "%s se pridružuje igri"
 
-#: src/multijoin.c:339
+#: src/multijoin.c:313
 msgid "System message:"
 msgstr "Sistemsko sporočilo:"
 
@@ -12061,35 +12062,35 @@ msgstr "Predaj izbrane enote"
 msgid "Give Power To Player"
 msgstr "Daj igralcu moč"
 
-#: src/multiplay.c:1893
+#: src/multiplay.c:1847
 msgid "Green"
 msgstr "Zelena"
 
-#: src/multiplay.c:1894
+#: src/multiplay.c:1848
 msgid "Orange"
 msgstr "Oranžna"
 
-#: src/multiplay.c:1895
+#: src/multiplay.c:1849
 msgid "Grey"
 msgstr "Siva"
 
-#: src/multiplay.c:1896
+#: src/multiplay.c:1850
 msgid "Black"
 msgstr "Črna"
 
-#: src/multiplay.c:1897
+#: src/multiplay.c:1851
 msgid "Red"
 msgstr "Rdeča"
 
-#: src/multiplay.c:1898
+#: src/multiplay.c:1852
 msgid "Blue"
 msgstr "Modra"
 
-#: src/multiplay.c:1899
+#: src/multiplay.c:1853
 msgid "Pink"
 msgstr "Roza"
 
-#: src/multiplay.c:1900
+#: src/multiplay.c:1854
 msgid "Cyan"
 msgstr "Cijan"
 
@@ -12268,12 +12269,12 @@ msgstr "Ni mogoče najti nobenih senzorskih enot!"
 msgid "Unable to locate any Commanders!"
 msgstr "Ni mogoče najti nobenih poveljnikov!"
 
-#: src/structure.c:2787
+#: src/structure.c:2794
 msgid "Command Control Limit Reached - Production Halted"
 msgstr "Meja poveljniškega nadzora dosežena - izdelava ustavljena"
 
-#: src/structure.c:5930
-#: src/structure.c:5955
+#: src/structure.c:5945
+#: src/structure.c:5970
 #, c-format
 msgid "%s - %u Unit assigned"
 msgid_plural "%s - %u Units assigned"
@@ -12282,47 +12283,47 @@ msgstr[1] "%s - %u enota dodeljena"
 msgstr[2] "%s - %u enoti dodeljeni"
 msgstr[3] "%s - %u enote dodeljene"
 
-#: src/structure.c:6005
+#: src/structure.c:6020
 #, c-format
 msgid "%s - Connected %u of %u"
 msgstr "%s - povezane %u od %u"
 
-#: src/structure.c:6019
+#: src/structure.c:6034
 #, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - Poškodbe %3.0f%%"
 
-#: src/structure.c:6135
-#: src/structure.c:6180
+#: src/structure.c:6150
+#: src/structure.c:6195
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - elektronsko poškodovan"
 
-#: src/structure.c:6415
+#: src/structure.c:6430
 msgid "Electronic Reward - Visibility Report"
 msgstr "Elektronska nagrada - poročilo o vidljivosti"
 
-#: src/structure.c:6455
+#: src/structure.c:6470
 msgid "Factory Reward - Propulsion"
 msgstr "Nagrada tovarne - pogon"
 
-#: src/structure.c:6479
+#: src/structure.c:6494
 msgid "Factory Reward - Body"
 msgstr "Nagrada tovarne - telo"
 
-#: src/structure.c:6503
+#: src/structure.c:6518
 msgid "Factory Reward - Weapon"
 msgstr "Nagrada tovarne - orožje"
 
-#: src/structure.c:6512
+#: src/structure.c:6527
 msgid "Factory Reward - Nothing"
 msgstr "Nagrada tovarne - nič"
 
-#: src/structure.c:6540
+#: src/structure.c:6555
 msgid "Repair Facility Award - Repair"
 msgstr "Nagrada stavbe za popravila - popravilo"
 
-#: src/structure.c:6547
+#: src/structure.c:6562
 msgid "Repair Facility Award - Nothing"
 msgstr "Nagrada stavbe za popravila - nič"
 
@@ -12363,74 +12364,120 @@ msgstr "- Zgrajen %s"
 msgid "Version %s%s%s%s"
 msgstr "Verzija %s%s%s%s"
 
+#~ msgid "Game"
+#~ msgstr "Igra"
+
+#~ msgid "Mayhem"
+#~ msgstr "Pohabljenje"
+
+#~ msgid "Skirmish"
+#~ msgstr "Spopad"
+
+#~ msgid "The game is full!"
+#~ msgstr "Igra je polna!"
+
 #~ msgid "Cluster Bombs Bug VTOL"
 #~ msgstr "Kasetne bombe Hrošč NVP"
+
 #~ msgid "Energy bars display toggled"
 #~ msgstr "Prikaz črt energije nastavljen"
+
 #~ msgid "NO GAMES ARE AVAILABLE"
 #~ msgstr "NOBENIH IGER NI NA VOLJO"
+
 #~ msgid "Viper Light Cannon Wheels"
 #~ msgstr "Gad Lahki top Kolesa"
+
 #~ msgid "Viper Flamer Wheels"
 #~ msgstr "Gad Metalec ognja Kolesa"
+
 #~ msgid "Viper Sensor Wheels"
 #~ msgstr "Gad Senzor Kolesa"
+
 #~ msgid "Viper Light Cannon Tracks"
 #~ msgstr "Gad Lahki top Kolesa"
+
 #~ msgid "Cobra Heavy Machinegun Half-track"
 #~ msgstr "Naočarka Težka strojnica Polgosenice"
+
 #~ msgid "Cobra Mortar Half-track"
 #~ msgstr "Naočarka Možnar Polgosenice"
+
 #~ msgid "Cobra Light Cannon Tracks"
 #~ msgstr "Naočarka Lahki top Gosenice"
+
 #~ msgid "Viper Medium Cannon Tracks"
 #~ msgstr "Gad Srednje težki top Gosenice"
+
 #~ msgid "Viper Repair Wheels"
 #~ msgstr "Gad Popravila Kolesa"
+
 #~ msgid "Viper Repair Half-track"
 #~ msgstr "Gad Popravila Polgosenice"
+
 #~ msgid "Viper Machine Gun Wheels"
 #~ msgstr "Gad Strojnica Kolesa"
+
 #~ msgid "Viper Twin Machinegun Wheels"
 #~ msgstr "Gad Dvojna strojnica Kolesa"
+
 #~ msgid "Viper Twin Machinegun Half-track"
 #~ msgstr "Gad Dvojna strojnica Polgosenice"
+
 #~ msgid "Viper Heavy Machinegun Half-track"
 #~ msgstr "Gad Težka strojnica Polgosenice"
+
 #~ msgid "Viper Heavy Machinegun Tracks"
 #~ msgstr "Gad Težka strojnica Gosenice"
+
 #~ msgid "Viper Lancer Wheels"
 #~ msgstr "Gad Suličar Kolesa"
+
 #~ msgid "Viper Mini-Pod Rockets Wheels"
 #~ msgstr "Gad Mini-metalne rakete Kolesa"
+
 #~ msgid "Viper Mini-Rocket Artillery Wheels"
 #~ msgstr "Gad Mini-raketno topništvo Kolesa"
+
 #~ msgid "Viper Bunker Buster Rockets Wheels"
 #~ msgstr "Gad Rakete za uničevanje bunkerjev Kolesa"
+
 #~ msgid "Cobra Heavy Cannon Tracks"
 #~ msgstr "Naočarka Težki top Gosenice"
+
 #~ msgid "Cobra Sensor Half-track"
 #~ msgstr "Naočarka Senzor Polgosenice"
+
 #~ msgid "Cobra Bombard Half-track"
 #~ msgstr "Naočarka Bombardir Polgosenice"
+
 #~ msgid "Cobra Command Turret Half-track"
 #~ msgstr "Naočarka Poveljniška kupola Polgosenice"
+
 #~ msgid "Cobra Lancer Half-track"
 #~ msgstr "Naočarka Suličar Polgosenice"
+
 #~ msgid "Cobra Mini-Rocket Artillery Half-track"
 #~ msgstr "Naočarka Mini-raketno topništvo Polgosenice"
+
 #~ msgid "Python Light Cannon Tracks"
 #~ msgstr "Piton Lahki top Gosenice"
+
 #~ msgid "Python Medium Cannon Tracks"
 #~ msgstr "Piton Srednje težki top Gosenice"
+
 #~ msgid "Python Commander Tracks"
 #~ msgstr "Piton Poveljnik Gosenice"
+
 #~ msgid "Mini-Pod"
 #~ msgstr "Mini-metalec"
+
 #~ msgid "VTOL Mini-Pod"
 #~ msgstr "NVP mini-metalec"
+
 #~ msgid "Machine Gunner"
 #~ msgstr "Strojničar"
+
 #~ msgid "Mini-Pod Rockets"
 #~ msgstr "Mini-metalne rakete"
 
@@ -12445,38 +12492,55 @@ msgstr "Verzija %s%s%s%s"
 #, fuzzy
 #~ msgid "Commander Python Tracks"
 #~ msgstr "Poveljniška kupola Piton Gosenice"
+
 #~ msgid "Mini-Pod Artillery"
 #~ msgstr "Mini-metalno topništvo"
+
 #~ msgid "Mini-Pod Battery"
 #~ msgstr "Mini-metalna topniška edinica"
+
 #~ msgid "Stabilized Mini-Pods"
 #~ msgstr "Uravnoteženi mini-metalci"
+
 #~ msgid "Stabilized Mini-Pods Mk2"
 #~ msgstr "Uravnoteženi mini-metalci tip 2"
+
 #~ msgid "HE Mini-Pods"
 #~ msgstr "VE mini-metalci"
+
 #~ msgid "HE Mini-Pods Mk2"
 #~ msgstr "VE mini-metalci tip 2"
+
 #~ msgid "HE Mini-Pods Mk3"
 #~ msgstr "VE mini-metalci tip 3"
+
 #~ msgid "HEAP Mini-Pods"
 #~ msgstr "VEPO mini-metalci"
+
 #~ msgid "HEAP Mini-Pods Mk2"
 #~ msgstr "VEPO mini-metalci tip 2"
+
 #~ msgid "HEAP Mini-Pods Mk3"
 #~ msgstr "VEPO mini-metalci tip 3"
+
 #~ msgid "Fast Fire Mini-Pods"
 #~ msgstr "Hitro streljajoči mini-metalci"
+
 #~ msgid "Fast Fire Mini-Pods Mk2"
 #~ msgstr "Hitro streljajoči mini-metalci tip 2"
+
 #~ msgid "Fast Fire Mini-Pods Mk3"
 #~ msgstr "Hitro streljajoči mini-metalci tip 3"
+
 #~ msgid "Rapid Fire Mini-Pods"
 #~ msgstr "Zelo hitro streljajoči mini-metalci"
+
 #~ msgid "Rapid Fire Mini-Pods Mk2"
 #~ msgstr "Zelo hitro streljajoči mini-metalci tip 2"
+
 #~ msgid "Rapid Fire Mini-Pods Mk3"
 #~ msgstr "Zelo hitro streljajoči mini-metalci tip 3"
+
 #~ msgid "The host has left the game!"
 #~ msgstr "Gostitelj je zapustil igro!"
 
@@ -12491,34 +12555,49 @@ msgstr "Verzija %s%s%s%s"
 #, fuzzy
 #~ msgid "Power Upgrade"
 #~ msgstr "Nadgradnja havbice"
+
 #~ msgid "Viper Wheels Machinegun"
 #~ msgstr "Gad s strojnico in kolesi"
+
 #~ msgid "Viper Wheels Twin Machinegun"
 #~ msgstr "Gad z dvojno strojnico in kolesi"
+
 #~ msgid "Viper Wheels Heavy Machinegun"
 #~ msgstr "Gad z mitraljezom in kolesi"
+
 #~ msgid "Cobra Wheels Heavy Machinegun"
 #~ msgstr "Naočarka z mitraljezom in kolesi"
+
 #~ msgid "Cobra Hover Heavy Machinegun"
 #~ msgstr "Naočarka z mitraljezom in zračno blazino"
+
 #~ msgid "Viper Tracks Machinegun"
 #~ msgstr "Gad s strojnico in gosenicami"
+
 #~ msgid "Viper Tracks Twin Machinegun"
 #~ msgstr "Gad z dvojno strojnico in gosenicami"
+
 #~ msgid "Viper Tracks Heavy Machinegun"
 #~ msgstr "Gad z mitraljezom in gosenicami"
+
 #~ msgid "Cobra Tracks Heavy Machinegun"
 #~ msgstr "Naočarka z mitraljezom in gosenicami"
+
 #~ msgid "Cobra Hover Medium Cannon"
 #~ msgstr "Naočarka s srednje težkim topom in zračno blazino"
+
 #~ msgid "Scorpion Hover Medium Cannon"
 #~ msgstr "Škorpijon s srednje težkim topom in zračno blazino"
+
 #~ msgid "Scorpion Tracks Medium Cannon"
 #~ msgstr "Škorpijon s srednje težkim topom in gosenicami"
+
 #~ msgid "Python Hover Medium Cannon"
 #~ msgstr "Piton s srednje težkim topom in zračno blazino"
+
 #~ msgid "Python Hover Heavy Cannon"
 #~ msgstr "Piton s težkim topom in zračno blazino"
+
 #~ msgid "Python Tracks Heavy Cannon"
 #~ msgstr "Piton s težkim topom in gosenicami"
 
@@ -12565,6 +12644,7 @@ msgstr "Verzija %s%s%s%s"
 #, fuzzy
 #~ msgid "Bug Lancer VTOL"
 #~ msgstr "NVP Suličar Hrošč NVP"
+
 #~ msgid "Bug HPV VTOL"
 #~ msgstr "Hrošč HH NVP"
 
@@ -12591,154 +12671,224 @@ msgstr "Verzija %s%s%s%s"
 #, fuzzy
 #~ msgid "Python Tank Killer Tracks"
 #~ msgstr "Piton poveljnik z gosenicami"
+
 #~ msgid "Load Campaign"
 #~ msgstr "Naloži bojni pohod"
+
 #~ msgid "One Player Skirmish"
 #~ msgstr "Enoigralski spopad"
+
 #~ msgid "Full"
 #~ msgstr "Celo"
+
 #~ msgid "Minimal"
 #~ msgstr "Minimalno"
+
 #~ msgid "Played"
 #~ msgstr "Čas igranja"
+
 #~ msgid "Campaign One Full Version Test Message"
 #~ msgstr "Testno sporočilo polne različice prvega bojnega pohoda"
+
 #~ msgid "New Paradigm Transmission"
 #~ msgstr "Sporočilo Nove paradigme"
+
 #~ msgid "The New Paradigm have been driven from this zone."
 #~ msgstr "Nova paradigma je bila pregnana iz te cone."
+
 #~ msgid "Establish a forward base near the site of the Research Centre."
 #~ msgstr "Vzpostavite prednjo bazo blizu položaja raziskovalnega središča."
+
 #~ msgid "Commander"
 #~ msgstr "Poveljnik"
+
 #~ msgid "Congratulations on defeating the New Paradigm."
 #~ msgstr "Čestitke za premaganje Nove paradigme."
+
 #~ msgid "This sector is now secure."
 #~ msgstr "Ta sektor je sedaj varen."
+
 #~ msgid "When we failed to respond it became threatening."
 #~ msgstr "Ko se nismo odzvali, je postal napadalen."
+
 #~ msgid "Nexus removed itself leaving no trace"
 #~ msgstr "Nexus se je odstranil brez sledu"
+
 #~ msgid "The Nexus Intruder Program has links with the Reed corporation."
 #~ msgstr "Vdorni program Nexus ima povezave z korporacijo Reed."
+
 #~ msgid "Nexus has technology and weapons and is not friendly."
 #~ msgstr "Nexus ima tehnologijo in orožje ter ni prijateljski."
+
 #~ msgid "Warriors of the Collective..."
 #~ msgstr "Bojevniki Kolektiva..."
+
 #~ msgid "Destroy and kill all who resist the Machine."
 #~ msgstr "Uničite vse, ki se upirajo Stroju."
+
 #~ msgid "Attack!"
 #~ msgstr "Napad!"
+
 #~ msgid "Analysis of the reactor site indicates The Collective"
 #~ msgstr "Analiza reaktorjevega položaja kaže, da je Kolektiv"
+
 #~ msgid "were preparing to route its power to this location."
 #~ msgstr "nameraval speljati njegovo energijo na to lokacijo."
+
 #~ msgid "Argle Bargle - Please Remove when some text here!"
 #~ msgstr "Argle Bargle - prosim odstranite, če je tukaj tekst!"
+
 #~ msgid "Proceed with caution. Scout and confirm Gamma are not contaminated."
 #~ msgstr "Nadaljujte previdno. Preverite ter potrdite, da gama niso okuženi."
+
 #~ msgid "Secure this zone."
 #~ msgstr "Zavarujte to cono."
+
 #~ msgid "A relief force will be sent as soon as the zone is cleared of all enemy."
 #~ msgstr "Okrepitvena četa bo poslana takoj, ko bodo iz cone odstranjeni vsi sovražniki."
+
 #~ msgid "Be wary of attempts by NEXUS to control and infiltrate your systems."
 #~ msgstr "Bodite pozorni na NEXUS-ove poskuse nadzora ter infiltracije vaših sistemov."
+
 #~ msgid "End Of Briefing."
 #~ msgstr "Konec navodil."
+
 #~ msgid "Armed Scavengers Approaching"
 #~ msgstr "Bližajo se oboroženi plenilci"
+
 #~ msgid "Civilian Rescued"
 #~ msgstr "Civilist rešen"
+
 #~ msgid "Civilians Rescued"
 #~ msgstr "Civilisti rešeni"
+
 #~ msgid "Unit Rescued"
 #~ msgstr "Enota rešena"
+
 #~ msgid "Units Rescued"
 #~ msgstr "Enote rešene"
+
 #~ msgid "Group Rescued"
 #~ msgstr "Skupina rešena"
+
 #~ msgid "Unit Captured"
 #~ msgstr "Enota zajeta"
+
 #~ msgid "Group Captured"
 #~ msgstr "Skupina zajeta"
+
 #~ msgid "Structure Captured"
 #~ msgstr "Zgradba zajeta"
+
 #~ msgid "Structure Destroyed"
 #~ msgstr "Zgradba uničena"
+
 #~ msgid "Structure Infected"
 #~ msgstr "Zgradba okužena"
+
 #~ msgid "Unit Infected"
 #~ msgstr "Enota okužena"
+
 #~ msgid "Group Infected"
 #~ msgstr "Skupina okužena"
+
 #~ msgid "Primary Objective Completed"
 #~ msgstr "Primarni cilj dokončan"
+
 #~ msgid "Secondary Objective Completed"
 #~ msgstr "Sekundarni cilj dokončan"
+
 #~ msgid "Time Limit Exceeded"
 #~ msgstr "Prekoračena časovna omejitev "
+
 #~ msgid "Out Of Time"
 #~ msgstr "Zmanjkalo je časa"
+
 #~ msgid "Enemy Escaped"
 #~ msgstr "Sovražnik je pobegnil"
+
 #~ msgid "Enemy Transport Landing"
 #~ msgstr "Sovražni prevoz pristaja"
+
 #~ msgid "Incoming Airstrike"
 #~ msgstr "Prihajajoč zračni napad"
+
 #~ msgid "Team Alpha Eradicated"
 #~ msgstr "Skupina alfa uničena"
+
 #~ msgid "Team Beta Eradicated"
 #~ msgstr "Skupina beta uničena"
+
 #~ msgid "Team Gamma Eradicated"
 #~ msgstr "Skupina gama uničena"
+
 #~ msgid "Team Alpha Rescued"
 #~ msgstr "Skupina alfa rešena"
+
 #~ msgid "Team Beta Rescued"
 #~ msgstr "Skupina beta rešena"
+
 #~ msgid "Team Gamma Rescued"
 #~ msgstr "Skupina gama rešena"
+
 #~ msgid "Team Alpha Liberated"
 #~ msgstr "Skupina alfa osvobojena"
+
 #~ msgid "Team Beta Liberated"
 #~ msgstr "Skupina beta osvobojena"
+
 #~ msgid "Team Gamma Liberated"
 #~ msgstr "Skupina gama osvobojena"
+
 #~ msgid "Civilians Eradicated"
 #~ msgstr "Civilisti uničeni"
+
 #~ msgid "Civilians Liberated"
 #~ msgstr "Civilisti osvobojeni"
+
 #~ msgid "Enemy Eradicated"
 #~ msgstr "Sovražnik uničen"
+
 #~ msgid "New Paradigm base eradicated"
 #~ msgstr "Baza Nove paradigme uničena"
+
 #~ msgid "Collective base eradicated"
 #~ msgstr "Kolektivova baza uničena"
+
 #~ msgid "Nexus base eradicated"
 #~ msgstr "Nexus-ova baza uničena"
+
 #~ msgid "LasSat firing"
 #~ msgstr "LasSat strelja"
+
 #~ msgid "LasSats firing"
 #~ msgstr "LasSat-i streljajo"
+
 #~ msgid "Satellite Uplink"
 #~ msgstr "Satelitska povezava"
+
 #~ msgid "NASDA Central"
 #~ msgstr "Središče NASDA"
+
 #~ msgid "SAM Site"
 #~ msgstr "Položaj raket zemlja-zrak"
+
 #~ msgid "Now left click the Viper Body"
 #~ msgstr "Sedaj levo kliknite telo Gad"
 
 #, fuzzy
 #~ msgid "Select the Vehicle Propulsion icon"
 #~ msgstr "Pogon vozila"
+
 #~ msgid "Presently unused"
 #~ msgstr "Trenutno neuporabljen"
 
 #, fuzzy
 #~ msgid "TRANSPORT MISSION: Rescue Civilians from Containment Camp "
 #~ msgstr "PREVOZNA MISIJA: Rešite civiliste iz zadrževalnega tabora."
+
 #~ msgid "R-Wpn-MG-Damage11"
 #~ msgstr "R-Orž-MG-Škoda11"
+
 #~ msgid "R-Struc-Power-Cam2"
 #~ msgstr "R-Zgrad-Moč-Kam2"
-
