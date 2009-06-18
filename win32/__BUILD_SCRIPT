@@ -30,7 +30,7 @@ CONF_EXTRA_FLAGS="${DEBUGFLAG}
 cd ..
 
 ./autogen.sh || exit 1
-./configure --target=${CROSSCOMPILETARGET} --host=${CROSSCOMPILETARGET} --enable-static --disable-shared \
+./configure --target=${CROSSCOMPILETARGET} --host=${CROSSCOMPILETARGET} --enable-static --disable-shared --with-distributor=wz2100.net\
     --prefix="${PREFIX}" \
 	${CONF_EXTRA_FLAGS} \
     CFLAGS="${CFLAGS}" \
