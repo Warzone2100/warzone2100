@@ -59,7 +59,7 @@ STRUCTURE				*psCBLastResStructure;
 SDWORD					CBResFacilityOwner;
 
 //research is now loaded per campaign - this hopefully is the max there will be in any one campaign!
-#define MAX_RESEARCH        (450)
+#define MAX_RESEARCH        (500)
 
 //need to define max's for each of the lists associated with the research - these
 //values have been chosen based on the current research stats - 21/12/98
