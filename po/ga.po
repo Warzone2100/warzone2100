@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2009-05-31 15:47+0200\n"
+"POT-Creation-Date: 2009-06-18 14:13+0200\n"
 "PO-Revision-Date: 2008-05-08 17:14+0000\n"
 "Last-Translator: Seanan <Unknown>\n"
 "Language-Team: Irish <ga@li.org>\n"
@@ -10042,137 +10042,141 @@ msgstr ""
 msgid "Could not communicate with lobby server!  Is TCP port 9990 open?"
 msgstr ""
 
-#: src/clparse.c:97
+#: src/clparse.c:99
 msgid "Run in cheat mode"
 msgstr ""
 
-#: src/clparse.c:98
+#: src/clparse.c:100
 msgid "Set default data directory"
 msgstr ""
 
-#: src/clparse.c:98
+#: src/clparse.c:100
 msgid "data directory"
 msgstr ""
 
-#: src/clparse.c:99
+#: src/clparse.c:101
 msgid "Set configuration directory"
 msgstr ""
 
-#: src/clparse.c:99
+#: src/clparse.c:101
 msgid "configuration directory"
 msgstr ""
 
-#: src/clparse.c:100
+#: src/clparse.c:102
 msgid "Show debug for given level"
 msgstr ""
 
-#: src/clparse.c:100
+#: src/clparse.c:102
 msgid "debug level"
 msgstr ""
 
-#: src/clparse.c:101
+#: src/clparse.c:103
 msgid "Log debug output to file"
 msgstr ""
 
-#: src/clparse.c:101
+#: src/clparse.c:103
 msgid "file"
 msgstr ""
 
-#: src/clparse.c:102
+#: src/clparse.c:104
 msgid "Flush all debug output written to stderr"
 msgstr ""
 
-#: src/clparse.c:103
+#: src/clparse.c:105
 msgid "Play in fullscreen mode"
 msgstr ""
 
-#: src/clparse.c:104
+#: src/clparse.c:106
 msgid "Load a specific game"
 msgstr ""
 
-#: src/clparse.c:104
+#: src/clparse.c:106
 msgid "game-name"
 msgstr ""
 
-#: src/clparse.c:105
+#: src/clparse.c:107
 msgid "Show this help message and exit"
 msgstr ""
 
-#: src/clparse.c:106
+#: src/clparse.c:108
 msgid "Enable a global mod"
 msgstr ""
 
-#: src/clparse.c:106
-#: src/clparse.c:107
 #: src/clparse.c:108
+#: src/clparse.c:109
+#: src/clparse.c:110
 msgid "mod"
 msgstr ""
 
-#: src/clparse.c:107
+#: src/clparse.c:109
 msgid "Enable a campaign only mod"
 msgstr ""
 
-#: src/clparse.c:108
+#: src/clparse.c:110
 msgid "Enable a multiplay only mod"
 msgstr ""
 
-#: src/clparse.c:109
+#: src/clparse.c:111
 msgid "Disable asserts"
 msgstr ""
 
-#: src/clparse.c:110
-msgid "Load a saved game"
-msgstr ""
-
-#: src/clparse.c:110
-msgid "savegame"
+#: src/clparse.c:112
+msgid "Causes a crash to test the crash handler"
 msgstr ""
 
 #: src/clparse.c:113
-msgid "Play in windowed mode"
+msgid "Load a saved game"
 msgstr ""
 
-#: src/clparse.c:114
-msgid "Show version information and exit"
-msgstr ""
-
-#: src/clparse.c:115
-msgid "Set the resolution to use"
-msgstr ""
-
-#: src/clparse.c:115
-msgid "WIDTHxHEIGHT"
+#: src/clparse.c:113
+msgid "savegame"
 msgstr ""
 
 #: src/clparse.c:116
-msgid "Enable shadows"
+msgid "Play in windowed mode"
 msgstr ""
 
 #: src/clparse.c:117
-msgid "Disable shadows"
+msgid "Show version information and exit"
 msgstr ""
 
 #: src/clparse.c:118
-msgid "Enable sound"
+msgid "Set the resolution to use"
+msgstr ""
+
+#: src/clparse.c:118
+msgid "WIDTHxHEIGHT"
 msgstr ""
 
 #: src/clparse.c:119
-msgid "Disable sound"
+msgid "Enable shadows"
 msgstr ""
 
 #: src/clparse.c:120
-msgid "Activate self-test"
+msgid "Disable shadows"
 msgstr ""
 
 #: src/clparse.c:121
-msgid "connect directly to IP/hostname"
-msgstr ""
-
-#: src/clparse.c:121
-msgid "host"
+msgid "Enable sound"
 msgstr ""
 
 #: src/clparse.c:122
+msgid "Disable sound"
+msgstr ""
+
+#: src/clparse.c:123
+msgid "Activate self-test"
+msgstr ""
+
+#: src/clparse.c:124
+msgid "connect directly to IP/hostname"
+msgstr ""
+
+#: src/clparse.c:124
+msgid "host"
+msgstr ""
+
+#: src/clparse.c:125
 msgid "go directly to host screen"
 msgstr ""
 
@@ -10323,27 +10327,27 @@ msgstr ""
 msgid "Systems"
 msgstr ""
 
-#: src/display3d.c:513
+#: src/display3d.c:515
 #, fuzzy
 msgid "Player left"
 msgstr "Imreoir"
 
-#: src/display3d.c:513
+#: src/display3d.c:515
 #, fuzzy
 msgid "Player dropped"
 msgstr "Imreoir"
 
-#: src/display.c:1691
+#: src/display.c:1690
 msgid "Cannot Build. Oil Resource Burning."
 msgstr ""
 
-#: src/display.c:1887
-#: src/display.c:2516
+#: src/display.c:1886
+#: src/display.c:2515
 #, c-format
 msgid "%s - Damage %d%% - Experience %d, %s"
 msgstr "%s - Dochar %d%% - Taithí %d, %s"
 
-#: src/display.c:2097
+#: src/display.c:2096
 msgid "Truck ordered to build Oil Derrick"
 msgstr ""
 
@@ -10355,68 +10359,68 @@ msgstr "Chaill an t-Aonad!"
 msgid "Structure Restored"
 msgstr ""
 
-#: src/droid.c:3348
+#: src/droid.c:3349
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/droid.c:3361
+#: src/droid.c:3362
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/droid.c:3374
+#: src/droid.c:3375
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/droid.c:3378
+#: src/droid.c:3379
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/droid.c:3597
+#: src/droid.c:3598
 msgid "Rookie"
 msgstr "Glasearcach"
 
-#: src/droid.c:3598
+#: src/droid.c:3599
 msgctxt "rank"
 msgid "Green"
 msgstr "Glasearcach"
 
-#: src/droid.c:3599
+#: src/droid.c:3600
 msgid "Trained"
 msgstr "Oilte"
 
-#: src/droid.c:3600
+#: src/droid.c:3601
 msgid "Regular"
 msgstr "Gnáth"
 
-#: src/droid.c:3601
+#: src/droid.c:3602
 msgid "Professional"
 msgstr "Gairmiúil"
 
-#: src/droid.c:3602
+#: src/droid.c:3603
 msgid "Veteran"
 msgstr "Seansaighdiúir"
 
-#: src/droid.c:3603
+#: src/droid.c:3604
 msgid "Elite"
 msgstr "Tofa"
 
-#: src/droid.c:3604
+#: src/droid.c:3605
 msgid "Special"
 msgstr "Sain"
 
-#: src/droid.c:3605
+#: src/droid.c:3606
 msgid "Hero"
 msgstr "Laoch"
 
@@ -10468,8 +10472,8 @@ msgstr ""
 #: src/frontend.c:713
 #: src/frontend.c:852
 #: src/frontend.c:955
-#: src/frontend.c:1146
-#: src/frontend.c:1287
+#: src/frontend.c:1145
+#: src/frontend.c:1286
 msgctxt "menu"
 msgid "Return"
 msgstr ""
@@ -10513,8 +10517,8 @@ msgstr ""
 
 #: src/frontend.c:548
 #: src/frontend.c:855
-#: src/frontend.c:1290
-#: src/frontend.c:1310
+#: src/frontend.c:1289
+#: src/frontend.c:1309
 msgid "GAME OPTIONS"
 msgstr ""
 
@@ -10553,14 +10557,14 @@ msgstr ""
 #: src/frontend.c:773
 #: src/frontend.c:782
 #: src/frontend.c:944
-#: src/frontend.c:1030
-#: src/frontend.c:1068
-#: src/frontend.c:1102
-#: src/frontend.c:1114
-#: src/frontend.c:1138
-#: src/frontend.c:1168
-#: src/frontend.c:1181
-#: src/frontend.c:1209
+#: src/frontend.c:1029
+#: src/frontend.c:1067
+#: src/frontend.c:1101
+#: src/frontend.c:1113
+#: src/frontend.c:1137
+#: src/frontend.c:1167
+#: src/frontend.c:1180
+#: src/frontend.c:1208
 msgid "On"
 msgstr ""
 
@@ -10572,14 +10576,14 @@ msgstr ""
 #: src/frontend.c:768
 #: src/frontend.c:786
 #: src/frontend.c:948
-#: src/frontend.c:1025
-#: src/frontend.c:1063
-#: src/frontend.c:1106
-#: src/frontend.c:1118
-#: src/frontend.c:1142
-#: src/frontend.c:1163
-#: src/frontend.c:1176
-#: src/frontend.c:1204
+#: src/frontend.c:1024
+#: src/frontend.c:1062
+#: src/frontend.c:1105
+#: src/frontend.c:1117
+#: src/frontend.c:1141
+#: src/frontend.c:1162
+#: src/frontend.c:1175
+#: src/frontend.c:1203
 msgid "Off"
 msgstr ""
 
@@ -10669,70 +10673,70 @@ msgstr ""
 msgid "* Takes effect on game restart"
 msgstr ""
 
-#: src/frontend.c:1099
+#: src/frontend.c:1098
 msgid "Reverse Mouse"
 msgstr ""
 
-#: src/frontend.c:1110
+#: src/frontend.c:1109
 msgid "Trap Cursor"
 msgstr ""
 
-#: src/frontend.c:1122
+#: src/frontend.c:1121
 msgid "Cursor Mode"
 msgstr ""
 
-#: src/frontend.c:1126
+#: src/frontend.c:1125
 msgid "Software (colored)"
 msgstr ""
 
-#: src/frontend.c:1130
-#: src/frontend.c:1190
+#: src/frontend.c:1129
+#: src/frontend.c:1189
 msgid "Hardware"
 msgstr ""
 
-#: src/frontend.c:1135
+#: src/frontend.c:1134
 msgid "Right-click Orders"
 msgstr ""
 
-#: src/frontend.c:1195
+#: src/frontend.c:1194
 msgid "Software (coloured)"
 msgstr ""
 
-#: src/frontend.c:1242
-#: src/frontend.c:1308
+#: src/frontend.c:1241
+#: src/frontend.c:1307
 msgid "Difficulty"
 msgstr ""
 
-#: src/frontend.c:1246
-#: src/frontend.c:1316
-#: src/frontend.c:1348
+#: src/frontend.c:1245
+#: src/frontend.c:1315
+#: src/frontend.c:1347
 msgid "Easy"
 msgstr ""
 
-#: src/frontend.c:1249
-#: src/frontend.c:1319
-#: src/frontend.c:1340
+#: src/frontend.c:1248
+#: src/frontend.c:1318
+#: src/frontend.c:1339
 msgid "Normal"
 msgstr ""
 
-#: src/frontend.c:1253
-#: src/frontend.c:1322
-#: src/frontend.c:1344
+#: src/frontend.c:1252
+#: src/frontend.c:1321
+#: src/frontend.c:1343
 msgid "Hard"
 msgstr ""
 
-#: src/frontend.c:1258
-#: src/frontend.c:1309
+#: src/frontend.c:1257
+#: src/frontend.c:1308
 msgid "Scroll Speed"
 msgstr ""
 
-#: src/frontend.c:1272
-#: src/frontend.c:1306
+#: src/frontend.c:1271
+#: src/frontend.c:1305
 msgid "Language"
 msgstr ""
 
-#: src/frontend.c:1284
-#: src/frontend.c:1307
+#: src/frontend.c:1283
+#: src/frontend.c:1306
 msgid "Unit Colour"
 msgstr ""
 
@@ -11706,7 +11710,7 @@ msgstr "Fill Chuig An Príomh Roghchlár"
 msgid "Continue Game"
 msgstr "Lean Leis an Cluiche"
 
-#: src/move.c:2947
+#: src/move.c:2959
 #: src/multigifts.c:326
 #, c-format
 msgid "You found %u power in an oil drum"
@@ -12062,35 +12066,35 @@ msgstr ""
 msgid "Give Power To Player"
 msgstr ""
 
-#: src/multiplay.c:1894
+#: src/multiplay.c:1902
 msgid "Green"
 msgstr "Uaine"
 
-#: src/multiplay.c:1895
+#: src/multiplay.c:1903
 msgid "Orange"
 msgstr "Flannbhuí"
 
-#: src/multiplay.c:1896
+#: src/multiplay.c:1904
 msgid "Grey"
 msgstr "Liath"
 
-#: src/multiplay.c:1897
+#: src/multiplay.c:1905
 msgid "Black"
 msgstr "Dubh"
 
-#: src/multiplay.c:1898
+#: src/multiplay.c:1906
 msgid "Red"
 msgstr "Dearg"
 
-#: src/multiplay.c:1899
+#: src/multiplay.c:1907
 msgid "Blue"
 msgstr "Gorm"
 
-#: src/multiplay.c:1900
+#: src/multiplay.c:1908
 msgid "Pink"
 msgstr "Bándearg"
 
-#: src/multiplay.c:1901
+#: src/multiplay.c:1909
 msgid "Cyan"
 msgstr "Cian"
 
@@ -12267,59 +12271,59 @@ msgstr ""
 msgid "Unable to locate any Commanders!"
 msgstr ""
 
-#: src/structure.c:2693
+#: src/structure.c:2700
 msgid "Command Control Limit Reached - Production Halted"
 msgstr ""
 
-#: src/structure.c:5822
-#: src/structure.c:5847
+#: src/structure.c:5837
+#: src/structure.c:5862
 #, c-format
 msgid "%s - %u Unit assigned"
 msgid_plural "%s - %u Units assigned"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/structure.c:5897
+#: src/structure.c:5912
 #, c-format
 msgid "%s - Connected %u of %u"
 msgstr ""
 
-#: src/structure.c:5911
+#: src/structure.c:5926
 #, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr ""
 
-#: src/structure.c:6032
-#: src/structure.c:6081
+#: src/structure.c:6047
+#: src/structure.c:6096
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr ""
 
-#: src/structure.c:6316
+#: src/structure.c:6331
 msgid "Electronic Reward - Visibility Report"
 msgstr ""
 
-#: src/structure.c:6356
+#: src/structure.c:6371
 msgid "Factory Reward - Propulsion"
 msgstr ""
 
-#: src/structure.c:6380
+#: src/structure.c:6395
 msgid "Factory Reward - Body"
 msgstr ""
 
-#: src/structure.c:6404
+#: src/structure.c:6419
 msgid "Factory Reward - Weapon"
 msgstr ""
 
-#: src/structure.c:6413
+#: src/structure.c:6428
 msgid "Factory Reward - Nothing"
 msgstr ""
 
-#: src/structure.c:6441
+#: src/structure.c:6456
 msgid "Repair Facility Award - Repair"
 msgstr ""
 
-#: src/structure.c:6448
+#: src/structure.c:6463
 msgid "Repair Facility Award - Nothing"
 msgstr ""
 
