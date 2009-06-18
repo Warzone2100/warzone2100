@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2009-05-27 13:29+0200\n"
+"POT-Creation-Date: 2009-06-18 14:58+0200\n"
 "PO-Revision-Date: 2008-05-09 16:08+0000\n"
 "Last-Translator: carson <Unknown>\n"
 "Language-Team: Dansk <da@li.org>\n"
@@ -10295,164 +10295,168 @@ msgstr ""
 msgid "Latin"
 msgstr ""
 
-#: lib/netplay/netplay.c:1120
-#: lib/netplay/netplay.c:1153
+#: lib/netplay/netplay.c:1111
+#: lib/netplay/netplay.c:1145
 #, c-format
 msgid "Player %u has the wrong game version.  Auto kicking."
 msgstr ""
 
-#: lib/netplay/netplay.c:1234
+#: lib/netplay/netplay.c:1226
 #, c-format
 msgid "Player %u has the wrong password.  Auto kicking."
 msgstr ""
 
-#: lib/netplay/netplay.c:2763
+#: lib/netplay/netplay.c:2731
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr ""
 
-#: lib/netplay/netplay.c:2788
+#: lib/netplay/netplay.c:2756
 #, c-format
 msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"
 msgstr ""
 
-#: src/clparse.c:97
+#: src/clparse.c:99
 msgid "Run in cheat mode"
 msgstr ""
 
-#: src/clparse.c:98
+#: src/clparse.c:100
 msgid "Set default data directory"
 msgstr ""
 
-#: src/clparse.c:98
+#: src/clparse.c:100
 msgid "data directory"
 msgstr ""
 
-#: src/clparse.c:99
+#: src/clparse.c:101
 msgid "Set configuration directory"
 msgstr ""
 
-#: src/clparse.c:99
+#: src/clparse.c:101
 msgid "configuration directory"
 msgstr ""
 
-#: src/clparse.c:100
+#: src/clparse.c:102
 msgid "Show debug for given level"
 msgstr ""
 
-#: src/clparse.c:100
+#: src/clparse.c:102
 msgid "debug level"
 msgstr ""
 
-#: src/clparse.c:101
+#: src/clparse.c:103
 msgid "Log debug output to file"
 msgstr ""
 
-#: src/clparse.c:101
+#: src/clparse.c:103
 msgid "file"
 msgstr "fil"
 
-#: src/clparse.c:102
+#: src/clparse.c:104
 msgid "Flush all debug output written to stderr"
 msgstr ""
 
-#: src/clparse.c:103
+#: src/clparse.c:105
 msgid "Play in fullscreen mode"
 msgstr ""
 
-#: src/clparse.c:104
+#: src/clparse.c:106
 msgid "Load a specific game"
 msgstr "Indlæs et bestemt spil"
 
-#: src/clparse.c:104
+#: src/clparse.c:106
 msgid "game-name"
 msgstr ""
 
-#: src/clparse.c:105
+#: src/clparse.c:107
 msgid "Show this help message and exit"
 msgstr ""
 
-#: src/clparse.c:106
+#: src/clparse.c:108
 msgid "Enable a global mod"
 msgstr ""
 
-#: src/clparse.c:106
-#: src/clparse.c:107
 #: src/clparse.c:108
+#: src/clparse.c:109
+#: src/clparse.c:110
 msgid "mod"
 msgstr ""
 
-#: src/clparse.c:107
+#: src/clparse.c:109
 msgid "Enable a campaign only mod"
 msgstr ""
 
-#: src/clparse.c:108
+#: src/clparse.c:110
 msgid "Enable a multiplay only mod"
 msgstr ""
 
-#: src/clparse.c:109
+#: src/clparse.c:111
 msgid "Disable asserts"
 msgstr ""
 
-#: src/clparse.c:110
+#: src/clparse.c:112
+msgid "Causes a crash to test the crash handler"
+msgstr ""
+
+#: src/clparse.c:113
 msgid "Load a saved game"
 msgstr "Hent et gemt spil"
 
-#: src/clparse.c:110
+#: src/clparse.c:113
 msgid "savegame"
 msgstr "Gem spil"
 
-#: src/clparse.c:113
+#: src/clparse.c:116
 msgid "Play in windowed mode"
 msgstr ""
 
-#: src/clparse.c:114
+#: src/clparse.c:117
 msgid "Show version information and exit"
 msgstr "Vis versionsoplysninger og afslut"
 
-#: src/clparse.c:115
+#: src/clparse.c:118
 msgid "Set the resolution to use"
 msgstr ""
 
-#: src/clparse.c:115
+#: src/clparse.c:118
 msgid "WIDTHxHEIGHT"
 msgstr ""
 
-#: src/clparse.c:116
+#: src/clparse.c:119
 msgid "Enable shadows"
 msgstr ""
 
-#: src/clparse.c:117
+#: src/clparse.c:120
 msgid "Disable shadows"
 msgstr ""
 
-#: src/clparse.c:118
+#: src/clparse.c:121
 msgid "Enable sound"
 msgstr "Aktivér lyd"
 
-#: src/clparse.c:119
+#: src/clparse.c:122
 msgid "Disable sound"
 msgstr ""
 
-#: src/clparse.c:120
+#: src/clparse.c:123
 msgid "Activate self-test"
 msgstr ""
 
-#: src/clparse.c:121
+#: src/clparse.c:124
 msgid "connect directly to IP/hostname"
 msgstr ""
 
-#: src/clparse.c:121
+#: src/clparse.c:124
 msgid "host"
 msgstr ""
 
-#: src/clparse.c:122
+#: src/clparse.c:125
 msgid "go directly to host screen"
 msgstr ""
 
+#: src/configuration.c:457
 #: src/configuration.c:458
-#: src/configuration.c:459
-#: src/multistat.c:132
+#: src/multistat.c:131
 msgid "Player"
 msgstr "Spiller"
 
@@ -10599,27 +10603,27 @@ msgstr "Våben"
 msgid "Systems"
 msgstr "Systemer"
 
-#: src/display3d.c:505
+#: src/display3d.c:504
 #, fuzzy
 msgid "Player left"
 msgstr "Spiller"
 
-#: src/display3d.c:505
+#: src/display3d.c:504
 #, fuzzy
 msgid "Player dropped"
 msgstr "Spiller"
 
-#: src/display.c:1685
+#: src/display.c:1684
 msgid "Cannot Build. Oil Resource Burning."
 msgstr "Kan ikke bygge på brændende oilebrøn."
 
-#: src/display.c:1881
-#: src/display.c:2487
+#: src/display.c:1880
+#: src/display.c:2486
 #, fuzzy, c-format
 msgid "%s - Damage %d%% - Experience %d, %s"
 msgstr "%s - Skade %d%% - Drab %d, %s"
 
-#: src/display.c:2090
+#: src/display.c:2089
 msgid "Truck ordered to build Oil Derrick"
 msgstr "Truck beordret til at bygge oliebrøn."
 
@@ -10631,68 +10635,68 @@ msgstr "Enhed tabt!"
 msgid "Structure Restored"
 msgstr "Bygning restoreret"
 
-#: src/droid.c:3132
+#: src/droid.c:3133
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
 msgstr[0] "Gruppe %u valgt - %u Enheder"
 msgstr[1] "Gruppe %u valgt - %u Enheder"
 
-#: src/droid.c:3145
+#: src/droid.c:3146
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
 msgstr[0] "%u Enheder tildelt gruppe %u"
 msgstr[1] "%u Enheder tildelt gruppe %u"
 
-#: src/droid.c:3158
+#: src/droid.c:3159
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
 msgstr[0] "Fokuseret på gruppe %u - %u Enheder"
 msgstr[1] "Fokuseret på gruppe %u - %u Enheder"
 
-#: src/droid.c:3162
+#: src/droid.c:3163
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] "Korigerede med gruppe %u - %u Enheder"
 msgstr[1] "Korigerede med gruppe %u - %u Enheder"
 
-#: src/droid.c:3381
+#: src/droid.c:3382
 msgid "Rookie"
 msgstr "Utrænet"
 
-#: src/droid.c:3382
+#: src/droid.c:3383
 msgctxt "rank"
 msgid "Green"
 msgstr "Grøn"
 
-#: src/droid.c:3383
+#: src/droid.c:3384
 msgid "Trained"
 msgstr "Trænet"
 
-#: src/droid.c:3384
+#: src/droid.c:3385
 msgid "Regular"
 msgstr "Regulær"
 
-#: src/droid.c:3385
+#: src/droid.c:3386
 msgid "Professional"
 msgstr "Professionel"
 
-#: src/droid.c:3386
+#: src/droid.c:3387
 msgid "Veteran"
 msgstr "Veteran"
 
-#: src/droid.c:3387
+#: src/droid.c:3388
 msgid "Elite"
 msgstr "Elite"
 
-#: src/droid.c:3388
+#: src/droid.c:3389
 msgid "Special"
 msgstr "Speciel"
 
-#: src/droid.c:3389
+#: src/droid.c:3390
 msgid "Hero"
 msgstr "Helt"
 
@@ -10863,7 +10867,7 @@ msgid "Off"
 msgstr "Fra"
 
 #: src/frontend.c:639
-#: src/multiint.c:1156
+#: src/multiint.c:1148
 msgid "Fog"
 msgstr "Tåge"
 
@@ -10874,7 +10878,7 @@ msgstr "Afstandståge"
 
 #: src/frontend.c:646
 #: src/frontend.c:747
-#: src/multiint.c:1158
+#: src/multiint.c:1150
 msgid "Fog Of War"
 msgstr "Krigståge"
 
@@ -11019,11 +11023,11 @@ msgstr "Sprog"
 msgid "Unit Colour"
 msgstr "Holdfarve"
 
-#: src/hci.c:1009
-#: src/hci.c:3797
-#: src/hci.c:3948
-#: src/hci.c:4401
-#: src/hci.c:5605
+#: src/hci.c:1010
+#: src/hci.c:3798
+#: src/hci.c:3949
+#: src/hci.c:4402
+#: src/hci.c:5606
 #: src/intelmap.c:532
 #: src/intorder.c:661
 #: src/loadsave.c:265
@@ -11035,12 +11039,12 @@ msgstr "Holdfarve"
 msgid "Close"
 msgstr "Luk"
 
-#: src/hci.c:1355
+#: src/hci.c:1356
 #, fuzzy
 msgid "MAP SAVED!"
 msgstr "SPIL GEMT!"
 
-#: src/hci.c:1702
+#: src/hci.c:1703
 #: src/loop.c:506
 #: src/loop.c:522
 #: src/mission.c:2606
@@ -11048,132 +11052,131 @@ msgstr "SPIL GEMT!"
 msgid "GAME SAVED :"
 msgstr "SPIL GEMT!"
 
-#: src/hci.c:2108
+#: src/hci.c:2109
 msgid "Failed to create building"
 msgstr ""
 
-#: src/hci.c:2131
+#: src/hci.c:2132
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new structure: %s."
 msgstr ""
 
-#: src/hci.c:2146
+#: src/hci.c:2147
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new feature: %s."
 msgstr ""
 
-#: src/hci.c:2167
+#: src/hci.c:2168
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new droid: %s."
 msgstr ""
 
-#: src/hci.c:3699
+#: src/hci.c:3700
 msgid "Commanders (F6)"
 msgstr "Kommandører (F6)"
 
-#: src/hci.c:3715
+#: src/hci.c:3716
 #, fuzzy
 msgid "Intelligence Display (F5)"
 msgstr "Kommando Pult"
 
-#: src/hci.c:3731
+#: src/hci.c:3732
 #, fuzzy
 msgid "Manufacture (F1)"
 msgstr "Fabrikering"
 
-#: src/hci.c:3747
+#: src/hci.c:3748
 msgid "Design (F4)"
 msgstr "Design (F4)"
 
-#: src/hci.c:3763
+#: src/hci.c:3764
 msgid "Research (F2)"
 msgstr "Forskning (F2)"
 
-#: src/hci.c:3779
+#: src/hci.c:3780
 msgid "Build (F3)"
 msgstr "Konstruktion (F3)"
 
-#: src/hci.c:3859
-#: src/multiint.c:1206
-#: src/multiint.c:1210
+#: src/hci.c:3860
+#: src/multiint.c:1190
 msgid "Power"
 msgstr "Kraft"
 
-#: src/hci.c:4043
+#: src/hci.c:4044
 #, fuzzy
 msgid "Tile"
 msgstr "fil"
 
-#: src/hci.c:4044
+#: src/hci.c:4045
 #, fuzzy
 msgid "Place tiles on map"
 msgstr "Tabte bygninger"
 
-#: src/hci.c:4053
+#: src/hci.c:4054
 msgid "Unit"
 msgstr "Enhed"
 
-#: src/hci.c:4054
+#: src/hci.c:4055
 #, fuzzy
 msgid "Place Unit on map"
 msgstr "Tabte bygninger"
 
-#: src/hci.c:4062
+#: src/hci.c:4063
 msgid "Struct"
 msgstr ""
 
-#: src/hci.c:4063
+#: src/hci.c:4064
 #, fuzzy
 msgid "Place Structures on map"
 msgstr "Tabte bygninger"
 
-#: src/hci.c:4071
+#: src/hci.c:4072
 msgid "Feat"
 msgstr ""
 
-#: src/hci.c:4072
+#: src/hci.c:4073
 #, fuzzy
 msgid "Place Features on map"
 msgstr "Tabte bygninger"
 
-#: src/hci.c:4083
+#: src/hci.c:4084
 #, fuzzy
 msgid "Pause or unpause the game"
 msgstr "Værten har forladt spillet"
 
-#: src/hci.c:4097
+#: src/hci.c:4098
 msgid "Align height of all map objects"
 msgstr ""
 
-#: src/hci.c:4122
+#: src/hci.c:4123
 #: src/ingameop.c:121
 #: src/ingameop.c:240
 #: src/ingameop.c:245
 msgid "Quit"
 msgstr "Afslut"
 
-#: src/hci.c:4123
+#: src/hci.c:4124
 msgid "Exit Game"
 msgstr "Forlad spil"
 
-#: src/hci.c:4486
+#: src/hci.c:4487
 #: src/intdisplay.c:267
 msgid "Progress Bar"
 msgstr "Statuslinje"
 
-#: src/hci.c:5520
+#: src/hci.c:5521
 msgid "Factory Delivery Point"
 msgstr "Leveringspunkt"
 
-#: src/hci.c:5539
+#: src/hci.c:5540
 msgid "Loop Production"
 msgstr "Gentag produktion"
 
-#: src/hci.c:5630
+#: src/hci.c:5631
 msgid "Tab Scroll left"
 msgstr ""
 
-#: src/hci.c:5647
+#: src/hci.c:5648
 msgid "Tab Scroll right"
 msgstr ""
 
@@ -11596,10 +11599,10 @@ msgid "KEY MAPPING"
 msgstr "TASTATUR MAPPING"
 
 #: src/keyedit.c:379
-#: src/multiint.c:545
-#: src/multiint.c:587
-#: src/multiint.c:976
-#: src/multiint.c:1275
+#: src/multiint.c:546
+#: src/multiint.c:588
+#: src/multiint.c:977
+#: src/multiint.c:1246
 #: src/multilimit.c:148
 msgid "Return To Previous Screen"
 msgstr "Tilbage"
@@ -12015,7 +12018,7 @@ msgstr "Tilbage til hovedmenu"
 msgid "Continue Game"
 msgstr "Fortsæt spil"
 
-#: src/move.c:2949
+#: src/move.c:2928
 #, c-format
 msgid "You found %u power in an oil drum."
 msgstr ""
@@ -12075,217 +12078,219 @@ msgstr "%s Danner aliance med %s"
 msgid "You Discover Blueprints For %s"
 msgstr "Du opdager plantegninger for %s"
 
-#: src/multiint.c:490
+#: src/multiint.c:491
 #: src/multilimit.c:156
 msgid "Accept Settings"
 msgstr "Akceptér opsætning"
 
-#: src/multiint.c:501
+#: src/multiint.c:502
 msgid "IP Address or Machine Name"
 msgstr "IP adressse eller computernavn"
 
-#: src/multiint.c:542
+#: src/multiint.c:543
 msgid "CONNECTION"
 msgstr "FORBINDELSE"
 
-#: src/multiint.c:555
+#: src/multiint.c:556
 msgid "Lobby"
 msgstr ""
 
-#: src/multiint.c:556
+#: src/multiint.c:557
 msgid "IP"
 msgstr "IP"
 
-#: src/multiint.c:753
+#: src/multiint.c:754
 #, fuzzy
 msgid "No games are available"
 msgstr "Forstærkninger er tilgængelige."
 
-#: src/multiint.c:756
+#: src/multiint.c:757
 msgid "Game is full"
 msgstr ""
 
-#: src/multiint.c:760
+#: src/multiint.c:761
 msgid "You were kicked!"
 msgstr ""
 
-#: src/multiint.c:763
+#: src/multiint.c:764
 msgid "Wrong Game Version!"
 msgstr ""
 
-#: src/multiint.c:766
+#: src/multiint.c:767
 msgid "Incorrect Password!"
 msgstr ""
 
-#: src/multiint.c:770
+#: src/multiint.c:771
 msgid "Connection Error"
 msgstr ""
 
-#: src/multiint.c:868
+#: src/multiint.c:869
 msgid "Searching"
 msgstr "Søger"
 
-#: src/multiint.c:973
+#: src/multiint.c:974
 msgid "GAMES"
 msgstr "SPIL"
 
-#: src/multiint.c:983
+#: src/multiint.c:984
 msgid "Refresh Games List"
 msgstr "Opdatér spilliste"
 
-#: src/multiint.c:1004
+#: src/multiint.c:1005
 msgid "Enter Password First "
 msgstr ""
 
-#: src/multiint.c:1114
+#: src/multiint.c:1115
 msgid "OPTIONS"
 msgstr "TILVALG"
 
-#: src/multiint.c:1116
+#: src/multiint.c:1117
 msgid "Select Game Name"
 msgstr "Vælg spilnavn"
 
-#: src/multiint.c:1117
+#: src/multiint.c:1118
 msgid "Select Map"
 msgstr "Vælg kort"
 
-#: src/multiint.c:1119
+#: src/multiint.c:1120
 msgid "Click to set Password"
 msgstr ""
 
-#: src/multiint.c:1128
-msgid "Game"
-msgstr "Spil"
-
+#: src/multiint.c:1129
 #: src/multiint.c:1130
-msgid "Mayhem"
-msgstr ""
+#, fuzzy
+msgid "Scavengers"
+msgstr "Hestekrafter"
 
-#: src/multiint.c:1132
-msgid "Skirmish"
-msgstr "Mod computeren"
+#: src/multiint.c:1131
+#, fuzzy
+msgid "No Scavengers"
+msgstr "Hestekrafter"
 
-#: src/multiint.c:1153
+#: src/multiint.c:1145
 #, fuzzy
 msgid "Select Player Name"
 msgstr "Flerbruger spil"
 
-#: src/multiint.c:1159
+#: src/multiint.c:1151
 msgid "Distance Fog"
 msgstr "Afstandståge"
 
-#: src/multiint.c:1172
+#: src/multiint.c:1162
 #: src/multimenu.c:754
 msgid "Alliances"
 msgstr "Aliancer"
 
-#: src/multiint.c:1175
+#: src/multiint.c:1165
 msgid "No Alliances"
 msgstr "Uden alliancer"
 
-#: src/multiint.c:1177
+#: src/multiint.c:1167
 msgid "Allow Alliances"
 msgstr "Med alliancer"
 
-#: src/multiint.c:1181
+#: src/multiint.c:1171
 msgid "Locked Teams"
 msgstr "Låste hold"
 
-#: src/multiint.c:1213
+#: src/multiint.c:1192
 msgid "Low Power Levels"
 msgstr "Sparsom energi"
 
-#: src/multiint.c:1215
+#: src/multiint.c:1194
 msgid "Medium Power Levels"
 msgstr "Medium energi"
 
-#: src/multiint.c:1217
+#: src/multiint.c:1196
 msgid "High Power Levels"
 msgstr "Meget energi"
 
-#: src/multiint.c:1237
-#: src/multiint.c:1241
+#: src/multiint.c:1213
 msgid "Base"
 msgstr "Base"
 
-#: src/multiint.c:1244
+#: src/multiint.c:1215
 msgid "Start with No Bases"
 msgstr "Start uden baser"
 
-#: src/multiint.c:1246
+#: src/multiint.c:1217
 msgid "Start with Bases"
 msgstr "Start med baser"
 
-#: src/multiint.c:1248
+#: src/multiint.c:1219
 msgid "Start with Advanced Bases"
 msgstr "Start med advancerede baser"
 
-#: src/multiint.c:1265
+#: src/multiint.c:1236
 msgid "Map Preview"
 msgstr ""
 
-#: src/multiint.c:1267
+#: src/multiint.c:1238
 msgid "Click to see Map"
 msgstr ""
 
-#: src/multiint.c:1281
+#: src/multiint.c:1252
 #, fuzzy
 msgid "Start Hosting Game"
 msgstr "Værten starter spillet"
 
-#: src/multiint.c:1289
+#: src/multiint.c:1260
 #, fuzzy
 msgid "Set Structure Limits"
 msgstr "Tabte bygninger"
 
-#: src/multiint.c:1681
+#: src/multiint.c:1666
 #, fuzzy
 msgid "Team"
 msgstr "Hurtgigt spil"
 
-#: src/multiint.c:1726
+#: src/multiint.c:1699
 msgid "Waiting for other players"
 msgstr ""
 
-#: src/multiint.c:1732
+#: src/multiint.c:1705
 msgid "Click when ready"
 msgstr ""
 
-#: src/multiint.c:1785
+#: src/multiint.c:1743
 msgid "PLAYERS"
 msgstr "SPILLERE"
 
-#: src/multiint.c:1924
+#: src/multiint.c:1903
 msgid "CHAT"
 msgstr "BESKEDER"
 
-#: src/multiint.c:2146
+#: src/multiint.c:2073
 msgid "*** password is now required! ***"
 msgstr ""
 
-#: src/multiint.c:2153
+#: src/multiint.c:2080
 msgid "*** password is NOT required! ***"
 msgstr ""
 
-#: src/multiint.c:2477
+#: src/multiint.c:2319
+msgid "Sorry! Failed to host the game."
+msgstr ""
+
+#: src/multiint.c:2410
 #, fuzzy
 msgid "'Locked Teams' mode enabled"
 msgstr "Låste hold"
 
-#: src/multiint.c:2522
+#: src/multiint.c:2455
 #, fuzzy, c-format
 msgid "The host has kicked %s from the game!"
 msgstr "%s har forladt spillet"
 
-#: src/multiint.c:2524
+#: src/multiint.c:2457
 msgid "you are being a jerk."
 msgstr ""
 
-#: src/multiint.c:2612
+#: src/multiint.c:2540
 msgid "Host is Starting Game"
 msgstr "Værten starter spillet"
 
-#: src/multiint.c:3100
+#: src/multiint.c:3012
 msgid "Players"
 msgstr "Spillere"
 
@@ -12299,16 +12304,12 @@ msgstr "Spillere tilkobler stadig"
 msgid "%s has Left the Game"
 msgstr "%s har forladt spillet"
 
-#: src/multijoin.c:300
-msgid "The game is full!"
-msgstr ""
-
-#: src/multijoin.c:329
+#: src/multijoin.c:303
 #, c-format
 msgid "%s is Joining the Game"
 msgstr "%s kom med i spillet"
 
-#: src/multijoin.c:339
+#: src/multijoin.c:313
 #, fuzzy
 msgid "System message:"
 msgstr "Elektronik"
@@ -12383,35 +12384,35 @@ msgstr "Forær enheder"
 msgid "Give Power To Player"
 msgstr "Forær energi"
 
-#: src/multiplay.c:1893
+#: src/multiplay.c:1847
 msgid "Green"
 msgstr "Grøn"
 
-#: src/multiplay.c:1894
+#: src/multiplay.c:1848
 msgid "Orange"
 msgstr "Orange"
 
-#: src/multiplay.c:1895
+#: src/multiplay.c:1849
 msgid "Grey"
 msgstr "Grå"
 
-#: src/multiplay.c:1896
+#: src/multiplay.c:1850
 msgid "Black"
 msgstr "Sort"
 
-#: src/multiplay.c:1897
+#: src/multiplay.c:1851
 msgid "Red"
 msgstr "Rød"
 
-#: src/multiplay.c:1898
+#: src/multiplay.c:1852
 msgid "Blue"
 msgstr "Blå"
 
-#: src/multiplay.c:1899
+#: src/multiplay.c:1853
 msgid "Pink"
 msgstr "Lyserød"
 
-#: src/multiplay.c:1900
+#: src/multiplay.c:1854
 msgid "Cyan"
 msgstr "Turkis"
 
@@ -12588,59 +12589,59 @@ msgstr "Kan ikke finde nogle rekonniseringsenheder!"
 msgid "Unable to locate any Commanders!"
 msgstr "Kan ikke finde nogle kommandører!"
 
-#: src/structure.c:2787
+#: src/structure.c:2794
 msgid "Command Control Limit Reached - Production Halted"
 msgstr "Kommandobegrænsning nået - indstiller produktion"
 
-#: src/structure.c:5930
-#: src/structure.c:5955
+#: src/structure.c:5945
+#: src/structure.c:5970
 #, c-format
 msgid "%s - %u Unit assigned"
 msgid_plural "%s - %u Units assigned"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/structure.c:6005
+#: src/structure.c:6020
 #, c-format
 msgid "%s - Connected %u of %u"
 msgstr "%s - Forbundet %u af %u"
 
-#: src/structure.c:6019
+#: src/structure.c:6034
 #, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - Skade %3.0f%%"
 
-#: src/structure.c:6135
-#: src/structure.c:6180
+#: src/structure.c:6150
+#: src/structure.c:6195
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - Elektronisk beskadiget"
 
-#: src/structure.c:6415
+#: src/structure.c:6430
 msgid "Electronic Reward - Visibility Report"
 msgstr "Elektronisk gevinst - Rekonniseringsrapport"
 
-#: src/structure.c:6455
+#: src/structure.c:6470
 msgid "Factory Reward - Propulsion"
 msgstr "Fabriksgevinst - Fremdrift"
 
-#: src/structure.c:6479
+#: src/structure.c:6494
 msgid "Factory Reward - Body"
 msgstr "Fabriksgevinst - Skrog"
 
-#: src/structure.c:6503
+#: src/structure.c:6518
 msgid "Factory Reward - Weapon"
 msgstr "Frabriskgevinst - Våben"
 
-#: src/structure.c:6512
+#: src/structure.c:6527
 msgid "Factory Reward - Nothing"
 msgstr "Fabriksgevinst - Ingen"
 
-#: src/structure.c:6540
+#: src/structure.c:6555
 msgid "Repair Facility Award - Repair"
 msgstr "Reperationsgevinst - Reperation"
 
-#: src/structure.c:6547
+#: src/structure.c:6562
 msgid "Repair Facility Award - Nothing"
 msgstr "Reperationsgevinst - Ingen"
 
@@ -12680,6 +12681,12 @@ msgstr ""
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr ""
+
+#~ msgid "Game"
+#~ msgstr "Spil"
+
+#~ msgid "Skirmish"
+#~ msgstr "Mod computeren"
 
 #~ msgid "Energy bars display toggled"
 #~ msgstr "Energibar slået til/fra"
