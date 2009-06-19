@@ -49,7 +49,7 @@ extern	SDWORD	playerTeam[MAX_PLAYERS];
 void	kickPlayer(uint32_t dpid, const char *reason, LOBBY_ERROR_TYPES type);
 UDWORD	addPlayerBox(BOOL);			// players (mid) box
 void loadMapPreview(bool hideInterface);
-
+void stopJoining(void);
 
 // ////////////////////////////////////////////////////////////////
 // CONNECTION SCREEN
