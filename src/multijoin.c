@@ -207,6 +207,15 @@ BOOL MultiPlayerLeave( UDWORD dp)
 	unsigned int i = 0;
 	char	buf[255];
 
+	// when the host drops in the lobby, we are screwed, so exit lobby screen
+	if (ingame.JoiningInProgress[NetPlay.dpidPlayer] && dp == HOST_DPID)
+	{
+		info("Host has quit the game, aborting!");
+		setLobbyError(ERROR_HOSTDROPPED);
+		stopJoining();
+		return true;
+	}
+
 	while((player2dpid[i] != dp) && (i<MAX_PLAYERS) )i++;	// find out which!
 
 	if(i != MAX_PLAYERS)									// player not already removed
@@ -218,7 +227,8 @@ BOOL MultiPlayerLeave( UDWORD dp)
 
 		turnOffMultiMsg(true);
 		clearPlayer(i,false,false);
-		game.skDiff[i] = (DIFF_SLIDER_STOPS / 2);
+		// game.skDiff[] is using dpid as a index.
+		game.skDiff[dp] = (DIFF_SLIDER_STOPS / 2);
 
 		turnOffMultiMsg(false);
 

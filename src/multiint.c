@@ -186,7 +186,7 @@ BOOL			chooseColour		(UDWORD);
 static BOOL		changeReadyStatus	(UBYTE player, BOOL bReady);
 void			resetReadyStatus	(bool bSendOptions);
 void			initTeams( void );
-static	void stopJoining(void);
+
 // ////////////////////////////////////////////////////////////////////////////
 // map previews..
 
@@ -769,6 +769,9 @@ static void addGames(void)
 			break;
 		case ERROR_WRONGPASSWORD:
 			txt = _("Incorrect Password!");
+			break;
+		case ERROR_HOSTDROPPED:
+			txt = _("Host has dropped connection!");
 			break;
 		case ERROR_CONNECTION:
 		default:
@@ -1981,7 +1984,7 @@ static void disableMultiButs(void)
 
 
 ////////////////////////////////////////////////////////////////////////////
-static void stopJoining(void)
+void stopJoining(void)
 {
 	dwSelectedGame	 = 0;
 	saveConfig();
