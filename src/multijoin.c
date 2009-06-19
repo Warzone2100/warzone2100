@@ -208,7 +208,8 @@ BOOL MultiPlayerLeave( UDWORD dp)
 	char	buf[255];
 
 	// when the host drops in the lobby, we are screwed, so exit lobby screen
-	if (ingame.JoiningInProgress[NetPlay.dpidPlayer] && dp == HOST_DPID)
+	while((player2dpid[i] != NetPlay.dpidPlayer) && (i<MAX_PLAYERS) )i++;	// need to find who we are
+	if (ingame.JoiningInProgress[i] && dp == HOST_DPID)
 	{
 		info("Host has quit the game, aborting!");
 		setLobbyError(ERROR_HOSTDROPPED);
@@ -216,6 +217,7 @@ BOOL MultiPlayerLeave( UDWORD dp)
 		return true;
 	}
 
+	i = 0;
 	while((player2dpid[i] != dp) && (i<MAX_PLAYERS) )i++;	// find out which!
 
 	if(i != MAX_PLAYERS)									// player not already removed
