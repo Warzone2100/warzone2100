@@ -13,6 +13,9 @@
    * Change: Allow droids to grab artifacts and oil drums from up to 1 tile away  (r7779)
    * Change: Bump up MAX_RESEARCH to 500 from 450. (r7774, ticket:599)
    * Fix: Make sure we take xOffset into account, we don't always start at 0 for the FMV text. (r7780, ticket:625)
+   * Change: When host drops from the lobby, abort the game. (r7787 ticket:583)
+   * Fix: Make sure either parameter isn't below the minimum screen res. that we support. (r7786)
+   * Fix: Make sure we take xOffset into account, we don't always start at 0 for the FMV text. (r7780, ticket:625)
  * AI:
    * Fix: Resolve AI droid traffic jams by clearing orders and make jammed droids stop going for repair (r7700, ticket:597)
  * Campaign:
