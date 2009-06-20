@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
 "POT-Creation-Date: 2009-06-20 21:04+0200\n"
-"PO-Revision-Date: 2009-05-27 17:28+0100\n"
+"PO-Revision-Date: 2009-06-20 21:23+0100\n"
 "Last-Translator: Steven 'Kreuvf' Koenig <translations@kreuvf.de>\n"
 "Language-Team: Deutsch <warzone-dev@gna.org>\n"
 "MIME-Version: 1.0\n"
@@ -10143,7 +10143,7 @@ msgstr "Asserts deaktivieren"
 
 #: src/clparse.c:112
 msgid "Causes a crash to test the crash handler"
-msgstr ""
+msgstr "Verursacht einen Absturz, um den Crash Handler zu testen"
 
 #: src/clparse.c:113
 msgid "Load a saved game"
@@ -11832,7 +11832,7 @@ msgstr "Falsches Passwort!"
 
 #: src/multiint.c:774
 msgid "Host has dropped connection!"
-msgstr ""
+msgstr "Spielleiter hat die Verbindung gekappt!"
 
 #: src/multiint.c:778
 msgid "Connection Error"
@@ -12300,9 +12300,8 @@ msgid "Unable to locate any Commanders!"
 msgstr "Kann keine Commander finden!"
 
 #: src/structure.c:2700
-#, fuzzy
 msgid "Control Limit Reached - Production Halted"
-msgstr "Commandereinheit hat Kontrollgrenze erreicht - Produktion angehalten"
+msgstr "Kontrollgrenze erreicht - Produktion eingestellt"
 
 # nix Gruppe! -Kreuvf
 #: src/structure.c:5837
