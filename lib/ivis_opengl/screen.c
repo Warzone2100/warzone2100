@@ -203,6 +203,8 @@ BOOL screenInitialise(
 		debug(LOG_3D, "  * Rectangular texture %s supported.", GLEE_ARB_texture_rectangle ? "is" : "is NOT");
 		debug(LOG_3D, "  * FrameBuffer Object (FBO) %s supported.", GLEE_EXT_framebuffer_object  ? "is" : "is NOT");
 	}
+	
+#ifndef WZ_OS_MAC
 	// Make OpenGL's VBO functions available under the core names for
 	// implementations that have them only as extensions, namely Mesa.
 	if (!strncmp((const char *)glGetString(GL_RENDERER), "Mesa", 4))
@@ -223,6 +225,7 @@ BOOL screenInitialise(
 		GLeeFuncPtr_glGetBufferParameteriv = GLeeFuncPtr_glGetBufferParameterivARB;
 		GLeeFuncPtr_glGetBufferPointerv = GLeeFuncPtr_glGetBufferPointervARB;
 	}
+#endif
 
 	glViewport(0, 0, width, height);
 	glMatrixMode(GL_PROJECTION);
