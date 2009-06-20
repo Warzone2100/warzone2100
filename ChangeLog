@@ -6,9 +6,7 @@
    * Change: Add more information to the crash dump file (r7740, 7745)
    * Fix: Mac users can read in .wz files (r7754)
    * Fix: Experience speed adjustment happens after max speed limit; fix bug with speed calculation. (r7761)
-   * Fix: Numerous issues with NTW mod (r7676-7677, r7713-7716
-   * Fix: Translation: it.po by Alpha93 (r7769, ticket:621)
-   * Fix: Translation update: sl.po by ThomasCarstein (r7772, ticket:615)
+   * Fix: Numerous issues with NTW mod (r7676-7677, r7713-7716)
    * Fix: fix to *never* control the transport in SP games. (really this time!) (r7776, ticket:568)
    * Change: Allow droids to grab artifacts and oil drums from up to 1 tile away  (r7779)
    * Change: Bump up MAX_RESEARCH to 500 from 450. (r7774, ticket:599)
@@ -20,6 +18,8 @@
    * Fix: Resolve AI droid traffic jams by clearing orders and make jammed droids stop going for repair (r7700, ticket:597)
  * Campaign:
    * Fix: Flashing box around mission timer was too small, resulting in a graphics glitch. (r7672, ticket:596)
+ * Translations:
+   * Fix: Italian and Slovakian translations updated (r7769, ticket:621, r7772, ticket:615)
  * Build system:
    * Fix: Various build system issues (r7669, r7664, r7663, r7661, r7655, r7642, r7640)
  * Graphics:
