@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2009-06-18 14:13+0200\n"
+"POT-Creation-Date: 2009-06-20 21:04+0200\n"
 "PO-Revision-Date: 2008-04-21 08:59+0000\n"
 "Last-Translator: Wander Nauta <wnauta@gmail.com>\n"
 "Language-Team: Frisian <fy@li.org>\n"
@@ -10588,7 +10588,7 @@ msgid "Off"
 msgstr ""
 
 #: src/frontend.c:640
-#: src/multiint.c:1137
+#: src/multiint.c:1140
 msgid "Fog"
 msgstr "Dize"
 
@@ -10599,7 +10599,7 @@ msgstr ""
 
 #: src/frontend.c:647
 #: src/frontend.c:748
-#: src/multiint.c:1139
+#: src/multiint.c:1142
 msgid "Fog Of War"
 msgstr "Kriigsdize"
 
@@ -10813,8 +10813,8 @@ msgid "Build (F3)"
 msgstr "Bouwe (F3)"
 
 #: src/hci.c:3905
-#: src/multiint.c:1187
-#: src/multiint.c:1191
+#: src/multiint.c:1190
+#: src/multiint.c:1194
 msgid "Power"
 msgstr "Krêft"
 
@@ -11302,8 +11302,8 @@ msgstr "KEY MAPPING"
 #: src/keyedit.c:379
 #: src/multiint.c:551
 #: src/multiint.c:593
-#: src/multiint.c:980
-#: src/multiint.c:1256
+#: src/multiint.c:983
+#: src/multiint.c:1259
 #: src/multilimit.c:148
 msgid "Return To Previous Screen"
 msgstr "Werom Nei Foarige Skerm"
@@ -11815,171 +11815,175 @@ msgstr ""
 msgid "Incorrect Password!"
 msgstr ""
 
-#: src/multiint.c:775
+#: src/multiint.c:774
+msgid "Host has dropped connection!"
+msgstr ""
+
+#: src/multiint.c:778
 msgid "Connection Error"
 msgstr ""
 
-#: src/multiint.c:872
+#: src/multiint.c:875
 msgid "Searching"
 msgstr "Siekjen"
 
-#: src/multiint.c:977
+#: src/multiint.c:980
 msgid "GAMES"
 msgstr "SPULLEN"
 
-#: src/multiint.c:987
+#: src/multiint.c:990
 msgid "Refresh Games List"
 msgstr "Spullist fernije"
 
-#: src/multiint.c:1008
+#: src/multiint.c:1011
 msgid "Enter Password First "
 msgstr ""
 
-#: src/multiint.c:1096
+#: src/multiint.c:1099
 msgid "OPTIONS"
 msgstr "YNSTELLINGS"
 
-#: src/multiint.c:1098
+#: src/multiint.c:1101
 msgid "Select Game Name"
 msgstr "Spulnamme Selekteare"
 
-#: src/multiint.c:1099
+#: src/multiint.c:1102
 msgid "Select Map"
 msgstr "Omjouwing Selekteare"
 
-#: src/multiint.c:1101
+#: src/multiint.c:1104
 msgid "Click to set Password"
 msgstr ""
 
-#: src/multiint.c:1109
+#: src/multiint.c:1112
 msgid "Game"
 msgstr "Spul"
 
-#: src/multiint.c:1111
+#: src/multiint.c:1114
 msgid "Mayhem"
 msgstr "Gekkichheid"
 
-#: src/multiint.c:1113
+#: src/multiint.c:1116
 msgid "Skirmish"
 msgstr "Oanpast"
 
-#: src/multiint.c:1134
+#: src/multiint.c:1137
 msgid "Select Player Name"
 msgstr "Spilernamme Selekteare"
 
-#: src/multiint.c:1140
+#: src/multiint.c:1143
 msgid "Distance Fog"
 msgstr "Ôfstansdize"
 
-#: src/multiint.c:1153
+#: src/multiint.c:1156
 #: src/multimenu.c:754
 msgid "Alliances"
 msgstr "Freonskippen"
 
-#: src/multiint.c:1156
+#: src/multiint.c:1159
 msgid "No Alliances"
 msgstr "Gjin Freonskippen"
 
-#: src/multiint.c:1158
+#: src/multiint.c:1161
 msgid "Allow Alliances"
 msgstr "Freonskippen Tastean"
 
-#: src/multiint.c:1162
+#: src/multiint.c:1165
 msgid "Locked Teams"
 msgstr "Teams fêststelle"
 
-#: src/multiint.c:1194
+#: src/multiint.c:1197
 msgid "Low Power Levels"
 msgstr "Lege krêftniveaus"
 
-#: src/multiint.c:1196
+#: src/multiint.c:1199
 msgid "Medium Power Levels"
 msgstr "Normale krêftniveaus"
 
-#: src/multiint.c:1198
+#: src/multiint.c:1201
 msgid "High Power Levels"
 msgstr "Hege krêftniveaus"
 
-#: src/multiint.c:1218
-#: src/multiint.c:1222
+#: src/multiint.c:1221
+#: src/multiint.c:1225
 msgid "Base"
 msgstr "Basis"
 
-#: src/multiint.c:1225
+#: src/multiint.c:1228
 msgid "Start with No Bases"
 msgstr "Begjinne mei gjin basis"
 
-#: src/multiint.c:1227
+#: src/multiint.c:1230
 msgid "Start with Bases"
 msgstr "Begjinne mei basis"
 
-#: src/multiint.c:1229
+#: src/multiint.c:1232
 msgid "Start with Advanced Bases"
 msgstr "Begjinne mei avanseare basis"
 
-#: src/multiint.c:1246
+#: src/multiint.c:1249
 msgid "Map Preview"
 msgstr ""
 
-#: src/multiint.c:1248
+#: src/multiint.c:1251
 msgid "Click to see Map"
 msgstr ""
 
-#: src/multiint.c:1262
+#: src/multiint.c:1265
 msgid "Start Hosting Game"
 msgstr "Tsjinnen Spul Starte"
 
-#: src/multiint.c:1270
+#: src/multiint.c:1273
 msgid "Set Structure Limits"
 msgstr "Struktuurlimyten ynstelle"
 
-#: src/multiint.c:1662
+#: src/multiint.c:1665
 msgid "Team"
 msgstr ""
 
-#: src/multiint.c:1707
+#: src/multiint.c:1710
 msgid "Waiting for other players"
 msgstr ""
 
-#: src/multiint.c:1713
+#: src/multiint.c:1716
 msgid "Click when ready"
 msgstr ""
 
-#: src/multiint.c:1767
+#: src/multiint.c:1770
 msgid "PLAYERS"
 msgstr "SPILERS"
 
-#: src/multiint.c:1906
+#: src/multiint.c:1909
 msgid "CHAT"
 msgstr "CHAT"
 
-#: src/multiint.c:2129
+#: src/multiint.c:2132
 msgid "*** password is now required! ***"
 msgstr ""
 
-#: src/multiint.c:2136
+#: src/multiint.c:2139
 msgid "*** password is NOT required! ***"
 msgstr ""
 
-#: src/multiint.c:2460
+#: src/multiint.c:2463
 #, fuzzy
 msgid "'Locked Teams' mode enabled"
 msgstr "Teams fêststelle"
 
-#: src/multiint.c:2505
+#: src/multiint.c:2508
 #, c-format
 msgid "The host has kicked %s from the game!"
 msgstr "De tsjinner hat %s fan it spul skopt!"
 
-#: src/multiint.c:2507
+#: src/multiint.c:2510
 msgid "you are being a jerk."
 msgstr ""
 
-#: src/multiint.c:2595
+#: src/multiint.c:2598
 msgid "Host is Starting Game"
 msgstr "Tsjinner is spul oan it starten"
 
-#: src/multiint.c:3081
+#: src/multiint.c:3084
 msgid "Players"
 msgstr "Spilers"
 
@@ -11988,21 +11992,21 @@ msgstr "Spilers"
 msgid "Players Still Joining"
 msgstr ""
 
-#: src/multijoin.c:217
+#: src/multijoin.c:228
 #, c-format
 msgid "%s has Left the Game"
 msgstr ""
 
-#: src/multijoin.c:296
+#: src/multijoin.c:308
 msgid "The game is full!"
 msgstr ""
 
-#: src/multijoin.c:325
+#: src/multijoin.c:337
 #, c-format
 msgid "%s is Joining the Game"
 msgstr ""
 
-#: src/multijoin.c:334
+#: src/multijoin.c:346
 #, fuzzy
 msgid "System message:"
 msgstr "Systeemlocale"
@@ -12283,7 +12287,8 @@ msgid "Unable to locate any Commanders!"
 msgstr "Koe gjin Kommandanten fine!"
 
 #: src/structure.c:2700
-msgid "Command Control Limit Reached - Production Halted"
+#, fuzzy
+msgid "Control Limit Reached - Production Halted"
 msgstr "Kommandolimyt helle - Produksje stopt"
 
 #: src/structure.c:5837
