@@ -266,7 +266,6 @@ static void initEffectPool(EFFECT *first, EFFECT *last)
 	EFFECT *it;
 	for (it = first; it < last; it++)
 	{
-		killEffect(it);		// We must clear the fire bit on tiles.
 		// We do not need a double-linked-list for inactiveeffects, since we always pick from the front:
 		it->prev = NULL;
 		it->next = it+1;
@@ -370,24 +369,21 @@ static void Effect_free(void *self)
 
 	/* Adjust counts */
 	inactiveList.num++;
+	ASSERT_OR_RETURN(, activeList.num > 0, "Underflow");
 	activeList.num--;
 }
 
 void shutdownEffectsSystem(void)
 {
-	EffectChunk *chunk;
-	int i = 0;
+	EFFECT *eff;
 
-	for (chunk = chunkList.first; chunk != NULL;)
+	/* Traverse the list */
+	for (eff = activeList.first; eff;)
 	{
-		EffectChunk *chunkNext = chunk->next;
-		for (i=0; i < EFFECT_CHUNK_SIZE; i++)
-		{
-			// clear the blasted fire effects!
-			killEffect(&chunk->effects[i]);
-		}
-		free(chunk);
-		chunk = chunkNext;
+		EFFECT *effNext = eff->next;
+
+		killEffect(eff);
+		eff = effNext;
 	}
 	chunkList.first = NULL;
 	chunkList.last = NULL;
