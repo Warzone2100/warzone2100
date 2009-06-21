@@ -3798,7 +3798,6 @@ static bool writeMapFile(const char* fileName)
 {
 	char* pFileData = NULL;
 	UDWORD fileSize;
-	char fileNameMod[250], *dot;
 
 	/* Get the save data */
 	bool status = mapSave(&pFileData, &fileSize);
@@ -3808,19 +3807,6 @@ static bool writeMapFile(const char* fileName)
 		/* Write the data to the file */
 		status = saveFile(fileName, pFileData, fileSize);
 	}
-
-	/* Save in new savegame format */
-	strcpy(fileNameMod, fileName);
-	dot = strrchr(fileNameMod, '.');
-	*dot = '\0';
-	strcat(fileNameMod, ".wzs");
-	debug(LOG_WZ, "SAVING %s INTO NEW FORMAT AS %s!", fileName, fileNameMod);
-	if (!mapSaveTagged(fileNameMod))
-	{
-		debug(LOG_ERROR, "Saving %s into new format as %s FAILED!", fileName, fileNameMod);
-	}
-	debug(LOG_WZ, "Loading new savegame format for validation");
-	mapLoadTagged(fileNameMod);
 
 	if (pFileData != NULL)
 	{
