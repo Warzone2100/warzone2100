@@ -1,5 +1,5 @@
 ;  This file is part of Warzone 2100.
-;  Copyright (C) 2006-2009  Warzone Resurrection Project
+;  Copyright (C) 2006-2009  Warzone 2100 Project
 ;  Copyright (C) 2006       Dennis Schridde
 ;
 ;  Warzone 2100 is free software; you can redistribute it and/or modify
@@ -17,7 +17,7 @@
 ;  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 ;
 ;  NSIS Modern User Interface
-;  Warzone 2100 Resurrection Installer script
+;  Warzone 2100 Project Installer script
 ;
 
 ;--------------------------------
@@ -45,11 +45,11 @@
 ;Versioninfo
 
 VIProductVersion "${VERSIONNUM}"
-VIAddVersionKey "CompanyName"		"Warzone Resurrection Project"
+VIAddVersionKey "CompanyName"		"Warzone 2100 Project"
 VIAddVersionKey "FileDescription"	"${PACKAGE_NAME} Installer"
 VIAddVersionKey "FileVersion"		"${PACKAGE_VERSION}"
 VIAddVersionKey "InternalName"		"${PACKAGE_NAME}"
-VIAddVersionKey "LegalCopyright"	"Copyright © 2006-2009 Warzone Resurrection Project"
+VIAddVersionKey "LegalCopyright"	"Copyright © 2006-2009 Warzone 2100 Project"
 VIAddVersionKey "OriginalFilename"	"${PACKAGE}-${PACKAGE_VERSION}.exe"
 VIAddVersionKey "ProductName"		"${PACKAGE_NAME}"
 VIAddVersionKey "ProductVersion"	"${PACKAGE_VERSION}"
@@ -290,7 +290,7 @@ SectionGroupEnd
 Section $(TEXT_SecFMVs) SecFMVs
 
   IfFileExists "sequences.wz" +5
-    NSISdl::download "http://download.gna.org/warzone/videos/sequences-2.2.wz"               "sequences.wz"
+    NSISdl::download "http://download.gna.org/warzone/videos/warzone2100-sequences-latest.wz"               "sequences.wz"
     Pop $R0 ; Get the return value
     StrCmp $R0 "success" +2
       MessageBox MB_OK|MB_ICONSTOP "Download of videos failed: $R0"
