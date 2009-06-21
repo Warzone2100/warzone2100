@@ -20,11 +20,11 @@ BEGIN
 	BEGIN
 		BLOCK "040904b0"
 		BEGIN
-			VALUE "CompanyName", "Warzone Resurrection Project"
+			VALUE "CompanyName", "Warzone 2100 Project"
 			VALUE "FileDescription", "Warzone 2100"
 			VALUE "FileVersion", "2.2.1"
 			VALUE "InternalName", "Warzone 2100"
-			VALUE "LegalCopyright", "Copyright © 2005-2009 Warzone Resurrection Project"
+			VALUE "LegalCopyright", "Copyright © 2005-2009 Warzone 2100 Project"
 			VALUE "OriginalFilename", "warzone2100.exe"
 			VALUE "ProductName", "Warzone 2100"
 			VALUE "ProductVersion", "2.2.1"
