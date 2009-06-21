@@ -660,7 +660,7 @@ BOOL loadRenderMode(void)
 	}
 
 	if (getWarzoneKeyNumeric("height", &val)
-	 && val >= 400)
+	 && val >= 480)
 	{
 		pie_SetVideoBufferHeight(val);
 		war_SetHeight(val);
