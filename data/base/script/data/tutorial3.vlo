@@ -30,9 +30,9 @@ art1Msg			INTMESSAGE		"TUT_ART1"
 
 research		STRUCTURESTAT		"A0ResearchFacility"
 
-artefact		RESEARCHSTAT		"R-Wpn-TUTMG"
+artefact		RESEARCHSTAT		"R-Wpn-MG1Mk1"
 factory			STRUCTURESTAT		"A0LightFactory"
-mg			WEAPON			"TUTMG"
+mg			WEAPON			"MG1Mk1"
 
 
 // New and improved audio
