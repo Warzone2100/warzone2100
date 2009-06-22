@@ -80,7 +80,7 @@ art2Comp	RESEARCHSTAT	"R-Vehicle-Prop-Halftracks"
 
 //Player Bonus Research Topics given on completion of mission
 numResP0	int		0			//number of topics to enable
-resP0[0]	RESEARCHSTAT	"R-Wpn-TUTMG"
+resP0[0]	RESEARCHSTAT	"R-Wpn-MG1Mk1"
 
 /* Proximity: Enemy */
 //base1

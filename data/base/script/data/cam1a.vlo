@@ -80,7 +80,7 @@ art4Comp	RESEARCHSTAT	"R-Wpn-MG-Damage01"
 
 //Player Bonus Research Topics given on completion of mission
 numResP0	int		0			//number of topics to enable
-resP0[0]	RESEARCHSTAT	"R-Wpn-TUTMG"
+resP0[0]	RESEARCHSTAT	"R-Wpn-MG1Mk1"
 
 /* Proximity: Enemy */
 //new 1st base
