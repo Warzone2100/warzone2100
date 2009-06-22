@@ -13,7 +13,7 @@ startPower	int		1300	//initial power level
 viperBody		BODY			"Body1REC"
 spade			CONSTRUCT		"Spade1Mk1"
 wheeledProp		PROPULSION		"wheeled01"
-mg			WEAPON			"TUTMG"
+mg			WEAPON			"MG1Mk1"
 
 /* Starting Tech done as completed research */
 numTech		int		3

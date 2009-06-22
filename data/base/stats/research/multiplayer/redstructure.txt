@@ -1,3 +1,0 @@
-R-Defense-HvyMor,Emplacement-MortarPit01,142
-R-Defense-WallTower03,WallTower02,101
-R-Sys-Sensor-Tower02,Sys-SensoTower01,89
