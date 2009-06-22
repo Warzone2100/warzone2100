@@ -12,5 +12,5 @@ startTech[1]	RESEARCHSTAT	"R-Sys-Spade1Mk1"
 startTech[2]	RESEARCHSTAT	"R-Vehicle-Prop-Wheels"
 startTech[3]	RESEARCHSTAT	"R-Wpn-MG1Mk1"
 startTech[4]	RESEARCHSTAT	"R-Wpn-MG-Damage03"
-mg		WEAPON		"TUTMG"				//req'd for 1st level
+mg		WEAPON		"MG1Mk1"				//req'd for 1st level
 }
