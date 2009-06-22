@@ -35,7 +35,6 @@ Rocket-LtA-T,rocket.ogg,smlexpl.ogg,199
 Rocket-MRL,rocket.ogg,lrgexpl.ogg,200
 Rocket-BB,rocket.ogg,smlexpl.ogg,201
 Rocket-Pod,rocket.ogg,smlexpl.ogg,203
-TUTMG,mgbar1.ogg,-1,204
 CyborgRocket,rocket.ogg,lrgexpl.ogg,205
 BusCannon,smlcan.ogg,smlexpl.ogg,206
 BabaPitRocket,rocket.ogg,lrgexpl.ogg,207
