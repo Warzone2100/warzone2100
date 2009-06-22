@@ -30,7 +30,7 @@ transporter	TEMPLATE	"Transporter"	//for enemy transports
 
 //Player Bonus Research Topics given on completion of mission
 numResP0	int		0			//number of topics to enable
-resP0[0]	RESEARCHSTAT	"R-Wpn-TUTMG"
+resP0[0]	RESEARCHSTAT	"R-Wpn-MG1Mk1"
 
 /* Reinforce Lists for New Paradigm */
 numReinf	int		3
