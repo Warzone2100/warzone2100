@@ -66,7 +66,7 @@ art1Comp	RESEARCHSTAT	"R-Wpn-MG3Mk1" //HMG "R-Wpn-Cannon1Mk1"
 
 //Player Bonus Research Topics given on completion of mission
 numResP0	int		0			//number of topics to enable
-resP0[0]	RESEARCHSTAT	"R-Wpn-TUTMG"
+resP0[0]	RESEARCHSTAT	"R-Wpn-MG1Mk1"
 
 /*
 art2X		int		2368
