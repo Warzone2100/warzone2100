@@ -190,7 +190,7 @@ void cmdDroidUpdateKills(DROID *psKiller, float experienceInc)
 // returns true if a droid in question is assigned to a commander
 bool hasCommander(const DROID* psDroid)
 {
-	ASSERT(psDroid != NULL, "invalid droid pointer");
+	ASSERT_OR_RETURN(false, psDroid != NULL, "invalid droid pointer");
 
 	if (psDroid->droidType != DROID_COMMAND &&
 		psDroid->psGroup != NULL &&
