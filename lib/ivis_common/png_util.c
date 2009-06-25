@@ -25,8 +25,6 @@
 #include <physfs.h>
 
 #define PNG_BYTES_TO_CHECK 8
-static const unsigned int channelBitdepth = 8;
-static const unsigned int channelsPerPixel = 3;
 
 // PNG callbacks
 static void wzpng_read_data(png_structp ctx, png_bytep area, png_size_t size)
@@ -172,11 +170,19 @@ BOOL iV_loadImage_PNG(const char *fileName, iV_Image *image)
 	return true;
 }
 
-void iV_saveImage_PNG(const char *fileName, const iV_Image *image)
+static void internal_saveImage_PNG(const char *fileName, const iV_Image *image, int color_type)
 {
 	unsigned char** scanlines = NULL;
 	png_infop info_ptr = NULL;
 	png_structp png_ptr = NULL;
+	unsigned int channelsPerPixel = 3;
+
+	if (color_type == PNG_COLOR_TYPE_GRAY)
+	{
+		channelsPerPixel = 1;
+	}
+
+	ASSERT(image->depth != 0, "Bad depth");
 
 	PHYSFS_file* fileHandle = PHYSFS_openWrite(fileName);
 	if (fileHandle == NULL)
@@ -207,7 +213,7 @@ void iV_saveImage_PNG(const char *fileName, const iV_Image *image)
 	else
 	{
 		unsigned int currentRow;
-		unsigned int row_stride = image->width * channelsPerPixel;
+		unsigned int row_stride = image->width * channelsPerPixel * image->depth / 8;
 
 		scanlines = malloc(sizeof(const char*) * image->height);
 		if (scanlines == NULL)
@@ -244,8 +250,8 @@ void iV_saveImage_PNG(const char *fileName, const iV_Image *image)
 		// so to spare some CPU cycles we comment this out.
 		// png_set_compression_level(png_ptr, Z_DEFAULT_COMPRESSION);
 
-		png_set_IHDR(png_ptr, info_ptr, image->width, image->height, channelBitdepth,
-			             PNG_COLOR_TYPE_RGB, PNG_INTERLACE_NONE, PNG_COMPRESSION_TYPE_DEFAULT, PNG_FILTER_TYPE_DEFAULT);
+		png_set_IHDR(png_ptr, info_ptr, image->width, image->height, image->depth,
+		             color_type, PNG_INTERLACE_NONE, PNG_COMPRESSION_TYPE_DEFAULT, PNG_FILTER_TYPE_DEFAULT);
 
 		// Create an array of scanlines
 		for (currentRow = 0; currentRow < image->height; ++currentRow)
@@ -262,4 +268,14 @@ void iV_saveImage_PNG(const char *fileName, const iV_Image *image)
 
 	free(scanlines);
 	return PNGWriteCleanup(&info_ptr, &png_ptr, fileHandle);
+}
+
+void iV_saveImage_PNG(const char *fileName, const iV_Image *image)
+{
+	internal_saveImage_PNG(fileName, image, PNG_COLOR_TYPE_RGB);
+}
+
+void iV_saveImage_PNG_Gray(const char *fileName, const iV_Image *image)
+{
+	internal_saveImage_PNG(fileName, image, PNG_COLOR_TYPE_GRAY);
 }
