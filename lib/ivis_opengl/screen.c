@@ -389,7 +389,7 @@ static const unsigned int channelsPerPixel = 3;
 void screenDoDumpToDiskIfRequired(void)
 {
 	const char* fileName = screendump_filename;
-	static iV_Image image = { 0, 0, 0, NULL };
+	static iV_Image image = { 0, 0, 8, NULL };
 
 	if (!screendump_required) return;
 	debug( LOG_3D, "Saving screenshot %s\n", fileName );
