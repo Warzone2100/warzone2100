@@ -176,6 +176,7 @@ static void internal_saveImage_PNG(const char *fileName, const iV_Image *image, 
 	png_infop info_ptr = NULL;
 	png_structp png_ptr = NULL;
 	unsigned int channelsPerPixel = 3;
+	PHYSFS_file* fileHandle;
 
 	if (color_type == PNG_COLOR_TYPE_GRAY)
 	{
@@ -184,7 +185,7 @@ static void internal_saveImage_PNG(const char *fileName, const iV_Image *image, 
 
 	ASSERT(image->depth != 0, "Bad depth");
 
-	PHYSFS_file* fileHandle = PHYSFS_openWrite(fileName);
+	fileHandle = PHYSFS_openWrite(fileName);
 	if (fileHandle == NULL)
 	{
 		debug(LOG_ERROR, "pie_PNGSaveFile: PHYSFS_openWrite failed (while openening file %s) with error: %s\n", fileName, PHYSFS_getLastError());
