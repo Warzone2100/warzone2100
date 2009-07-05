@@ -99,7 +99,7 @@ extern bool assertEnabled;
 
 /**
  *
- * Assert-or-return-zero, macro that returns zero (can also be interpreted as false or NULL) on failure,
+ * Assert-or-return macro that returns given return value (can also be a mere comma if function has no return value) on failure,
  * and also provides asserts and debug output for debugging.
  */
 #define ASSERT_OR_RETURN(retval, expr, ...) \
