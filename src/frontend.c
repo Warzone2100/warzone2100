@@ -622,6 +622,28 @@ BOOL startGameOptions2Menu(void)
 	addTopForm();
 	addBottomForm();
 
+//	////////////
+//	//FMV mode.
+	addTextButton(FRONTEND_FMVMODE,	FRONTEND_POS2X - 35, FRONTEND_POS2Y, _("Video Playback"), true, false);
+	switch (war_GetFMVmode())
+	{
+		case FMV_1X:
+			addTextButton(FRONTEND_FMVMODE_R, FRONTEND_POS2M - 55,FRONTEND_POS2Y, _("1X"), true, false);
+			break;
+
+		case FMV_2X:
+			addTextButton(FRONTEND_FMVMODE_R, FRONTEND_POS2M - 55,FRONTEND_POS2Y, _("2X"), true, false);
+			break;
+
+		case FMV_FULLSCREEN:
+			addTextButton(FRONTEND_FMVMODE_R, FRONTEND_POS2M - 55,FRONTEND_POS2Y, _("Fullscreen"), true, false);
+			break;
+
+		default:
+			ASSERT(!"invalid FMV mode", "Invalid FMV mode: %u", (unsigned int)war_GetFMVmode());
+			break;
+	}
+
 	////////////
 	// screenshake
 	addTextButton(FRONTEND_SSHAKE,	 FRONTEND_POS3X-35,   FRONTEND_POS3Y, _("Screen Shake"),true,false);
@@ -644,28 +666,6 @@ BOOL startGameOptions2Menu(void)
 	else
 	{
 		addTextButton(FRONTEND_FOGTYPE_R,FRONTEND_POS4M-55,FRONTEND_POS4Y, _("Fog Of War"),true,false);
-	}
-
-//	////////////
-//	//FMV mode.
-	addTextButton(FRONTEND_FMVMODE,	FRONTEND_POS6X - 35, FRONTEND_POS6Y, _("Video Playback"), true, false);
-	switch (war_GetFMVmode())
-	{
-		case FMV_1X:
-			addTextButton(FRONTEND_FMVMODE_R, FRONTEND_POS6M - 55,FRONTEND_POS6Y, _("1X"), true, false);
-			break;
-
-		case FMV_2X:
-			addTextButton(FRONTEND_FMVMODE_R, FRONTEND_POS6M - 55,FRONTEND_POS6Y, _("2X"), true, false);
-			break;
-
-		case FMV_FULLSCREEN:
-			addTextButton(FRONTEND_FMVMODE_R, FRONTEND_POS6M - 55,FRONTEND_POS6Y, _("Fullscreen"), true, false);
-			break;
-
-		default:
-			ASSERT(!"invalid FMV mode", "Invalid FMV mode: %u", (unsigned int)war_GetFMVmode());
-			break;
 	}
 
 	////////////
@@ -697,14 +697,14 @@ BOOL startGameOptions2Menu(void)
 
 	////////////
 	//shadows
-	addTextButton(FRONTEND_SHADOWS, FRONTEND_POS7X - 35, FRONTEND_POS7Y, _("Shadows"), true, false);
+	addTextButton(FRONTEND_SHADOWS, FRONTEND_POS6X - 35, FRONTEND_POS6Y, _("Shadows"), true, false);
 	if (getDrawShadows())
 	{
-		addTextButton(FRONTEND_SHADOWS_R, FRONTEND_POS7M - 55,  FRONTEND_POS7Y, _("On"), true, false);
+		addTextButton(FRONTEND_SHADOWS_R, FRONTEND_POS6M - 55,  FRONTEND_POS6Y, _("On"), true, false);
 	}
 	else
 	{	// not flipped
-		addTextButton(FRONTEND_SHADOWS_R, FRONTEND_POS7M - 55,  FRONTEND_POS7Y, _("Off"), true, false);
+		addTextButton(FRONTEND_SHADOWS_R, FRONTEND_POS6M - 55,  FRONTEND_POS6Y, _("Off"), true, false);
 	}
 
 	////////////
@@ -1098,11 +1098,11 @@ BOOL startGameOptions5Menu(void)
 	addTextButton(FRONTEND_MFLIP,	 FRONTEND_POS2X-35,   FRONTEND_POS2Y, _("Reverse Rotation"),true,false);
 	if( getInvertMouseStatus() )
 	{	// flipped
-		addTextButton(FRONTEND_MFLIP_R, FRONTEND_POS2M-55,  FRONTEND_POS2Y, _("On"),true,false);
+		addTextButton(FRONTEND_MFLIP_R, FRONTEND_POS2M-25,  FRONTEND_POS2Y, _("On"),true,false);
 	}
 	else
 	{	// not flipped
-		addTextButton(FRONTEND_MFLIP_R, FRONTEND_POS2M-55,  FRONTEND_POS2Y, _("Off"),true,false);
+		addTextButton(FRONTEND_MFLIP_R, FRONTEND_POS2M-25,  FRONTEND_POS2Y, _("Off"),true,false);
 	}
 
 	// Cursor trapping
@@ -1110,23 +1110,23 @@ BOOL startGameOptions5Menu(void)
 
 	if (war_GetTrapCursor())
 	{
-		addTextButton(FRONTEND_TRAP_R, FRONTEND_POS3M-55, FRONTEND_POS3Y, _("On"), true, false);
+		addTextButton(FRONTEND_TRAP_R, FRONTEND_POS3M-25, FRONTEND_POS3Y, _("On"), true, false);
 	}
 	else
 	{
-		addTextButton(FRONTEND_TRAP_R, FRONTEND_POS3M-55, FRONTEND_POS3Y, _("Off"), true, false);
+		addTextButton(FRONTEND_TRAP_R, FRONTEND_POS3M-25, FRONTEND_POS3Y, _("Off"), true, false);
 	}
 	
 	// Hardware / software cursor toggle
-	addTextButton(FRONTEND_CURSORMODE, FRONTEND_POS4X-35, FRONTEND_POS4Y, _("Cursor Mode"), true, false);
+	addTextButton(FRONTEND_CURSORMODE, FRONTEND_POS4X-35, FRONTEND_POS4Y, _("Colored Cursors *"), true, false);
 
 	if (war_GetColouredCursor())
 	{
-		addTextButton(FRONTEND_CURSORMODE_R, FRONTEND_POS4M-85, FRONTEND_POS4Y, _("Software (colored)"), true, false);
+		addTextButton(FRONTEND_CURSORMODE_R, FRONTEND_POS4M-25, FRONTEND_POS4Y, _("On"), true, false);
 	}
 	else
 	{
-		addTextButton(FRONTEND_CURSORMODE_R, FRONTEND_POS4M-85, FRONTEND_POS4Y, _("Hardware"), true, false);
+		addTextButton(FRONTEND_CURSORMODE_R, FRONTEND_POS4M-25, FRONTEND_POS4Y, _("Off"), true, false);
 	}
 
 	////////////
@@ -1134,12 +1134,14 @@ BOOL startGameOptions5Menu(void)
 	addTextButton(FRONTEND_MBUTTONS,	 FRONTEND_POS2X-35,   FRONTEND_POS5Y, _("Switch Mouse Buttons"),true,false);
 	if( getRightClickOrders() )
 	{	// right-click orders
-		addTextButton(FRONTEND_MBUTTONS_R, FRONTEND_POS2M-55,  FRONTEND_POS5Y, _("On"),true,false);
+		addTextButton(FRONTEND_MBUTTONS_R, FRONTEND_POS2M-25,  FRONTEND_POS5Y, _("On"),true,false);
 	}
 	else
 	{	// left-click orders
-		addTextButton(FRONTEND_MBUTTONS_R, FRONTEND_POS2M-55,  FRONTEND_POS5Y, _("Off"),true,false);
+		addTextButton(FRONTEND_MBUTTONS_R, FRONTEND_POS2M-25,  FRONTEND_POS5Y, _("Off"),true,false);
 	}
+
+	addTextButton(FRONTEND_TAKESEFFECT, FRONTEND_POS6X-35, FRONTEND_POS6Y, _("* May negatively affect performance"), true, true);
 
 	// Quit/return
 	addMultiBut(psWScreen, FRONTEND_BOTFORM, FRONTEND_QUIT, 10, 10, 30, 29, P_("menu", "Return"), IMAGE_RETURN, IMAGE_RETURN_HI, IMAGE_RETURN_HI);
