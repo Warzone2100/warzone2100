@@ -686,7 +686,7 @@ static void addGames(void)
 
 
 	// we want the old games deleted, and only list games when we should
-	if (getLobbyError() > ERROR_CONNECTION)
+	if (getLobbyError() >= ERROR_CONNECTION)
 	{
 		for(i = 0; i<MaxGames; i++)
 		{
@@ -694,46 +694,46 @@ static void addGames(void)
 		}
 		gcount = 0;
 	}
-
 	// in case they refresh, and a game becomes available.
-	widgDelete(psWScreen,FRONTEND_NOGAMESAVAILABLE); 
+	widgDelete(psWScreen,FRONTEND_NOGAMESAVAILABLE);
+	
 	// only have to do this if we have any games available.
 	if (!getLobbyError() && gcount)
 	{
-		for(i=0;i<MaxGames;i++)							// draw games
+		for (i=0; i<MaxGames; i++)							// draw games
 		{
 			widgDelete(psWScreen, GAMES_GAMESTART+i);	// remove old icon.
-			if( NetPlay.games[i].desc.dwSize !=0)
+			if (NetPlay.games[i].desc.dwSize !=0)
 			{
 
 				sButInit.id = GAMES_GAMESTART+i;
 
-				if(gcount < 6)							// only center column needed.
+				if (gcount < 6)							// only center column needed.
 				{
 					sButInit.x = 125;
 					sButInit.y = (UWORD)(30+((5+GAMES_GAMEHEIGHT)*i) );
 				}
-			else
-			{
-				if(i<6)		//column 1
+				else
 				{
-					sButInit.x = 10;
-					sButInit.y = (UWORD)(30+((5+GAMES_GAMEHEIGHT)*i) );
+					if (i<6)		//column 1
+					{
+						sButInit.x = 10;
+						sButInit.y = (UWORD)(30+((5+GAMES_GAMEHEIGHT)*i) );
+					}
+					else		//column 2
+					{
+						sButInit.x = 20+GAMES_GAMEWIDTH;
+						sButInit.y = (UWORD)(30+((5+GAMES_GAMEHEIGHT)*(i-6) ) );
+					}
 				}
-				else		//column 2
+				// display the correct tooltip message.
+				if (strcmp(VersionString, NetPlay.games[i].versionstring) != 0)
 				{
-					sButInit.x = 20+GAMES_GAMEWIDTH;
-					sButInit.y = (UWORD)(30+((5+GAMES_GAMEHEIGHT)*(i-6) ) );
+					sButInit.pTip = wrongVersionTip;
 				}
-			}
-			// display the correct tooltip message.
-			if ( strcmp(VersionString, NetPlay.games[i].versionstring) != 0)
-			{
-				sButInit.pTip = wrongVersionTip;
-			}
-			else
-			{
-			sButInit.pTip = NetPlay.games[i].name;
+				else
+				{
+				sButInit.pTip = NetPlay.games[i].name;
 			}
 			sButInit.UserData = i;
 
