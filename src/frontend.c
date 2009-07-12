@@ -1095,7 +1095,7 @@ BOOL startGameOptions5Menu(void)
 
 	////////////
 	// mouseflip
-	addTextButton(FRONTEND_MFLIP,	 FRONTEND_POS2X-35,   FRONTEND_POS2Y, _("Reverse Mouse"),true,false);
+	addTextButton(FRONTEND_MFLIP,	 FRONTEND_POS2X-35,   FRONTEND_POS2Y, _("Reverse Rotation"),true,false);
 	if( getInvertMouseStatus() )
 	{	// flipped
 		addTextButton(FRONTEND_MFLIP_R, FRONTEND_POS2M-55,  FRONTEND_POS2Y, _("On"),true,false);
@@ -1131,7 +1131,7 @@ BOOL startGameOptions5Menu(void)
 
 	////////////
 	// left-click orders
-	addTextButton(FRONTEND_MBUTTONS,	 FRONTEND_POS2X-35,   FRONTEND_POS5Y, _("Right-click Orders"),true,false);
+	addTextButton(FRONTEND_MBUTTONS,	 FRONTEND_POS2X-35,   FRONTEND_POS5Y, _("Switch Mouse Buttons"),true,false);
 	if( getRightClickOrders() )
 	{	// right-click orders
 		addTextButton(FRONTEND_MBUTTONS_R, FRONTEND_POS2M-55,  FRONTEND_POS5Y, _("On"),true,false);
