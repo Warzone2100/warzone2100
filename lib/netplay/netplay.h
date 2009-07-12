@@ -188,7 +188,7 @@ typedef struct
 	char		name[StringSize];	///< Player name
 	int32_t		position;		///< Map starting position
 	int32_t		colour;			///< Which colour slot this player is using
-	BOOL		allocated;		///< Active?
+	BOOL		allocated;		///< Allocated as a human player
 	uint32_t	heartattacktime;	///< Time cardiac arrest started
 	BOOL		heartbeat;		///< If we are still alive or not
 	BOOL		kick;			///< If we should kick them

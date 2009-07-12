@@ -433,7 +433,7 @@ BASE_OBJECT *IdToPointer(UDWORD id,UDWORD player)
 // return a players name.
 const char* getPlayerName(unsigned int player)
 {
-	ASSERT(player < MAX_PLAYERS , "Wrong player index: %u", player);
+	ASSERT_OR_RETURN(NULL, player < MAX_PLAYERS , "Wrong player index: %u", player);
 
 	if (game.type != CAMPAIGN)
 	{
@@ -454,14 +454,8 @@ const char* getPlayerName(unsigned int player)
 
 BOOL setPlayerName(UDWORD player, const char *sName)
 {
-	if(player > MAX_PLAYERS)
-	{
-		ASSERT(false, "setPlayerName: wrong player index (%d)", player);
-		return false;
-	}
-
-	strcpy(playerName[player],sName);
-
+	ASSERT_OR_RETURN(false, player < MAX_PLAYERS, "Player index (%u) out of range", player);
+	sstrcpy(playerName[player], sName);
 	return true;
 }
 
@@ -469,11 +463,7 @@ BOOL setPlayerName(UDWORD player, const char *sName)
 // to determine human/computer players and responsibilities of each..
 BOOL isHumanPlayer(UDWORD player)
 {
-	if (player >= MAX_PLAYERS)
-	{
-		return false;
-	}
-
+	ASSERT_OR_RETURN(false, player < MAX_PLAYERS, "Player index (%u) out of range", player);
 	return NetPlay.players[player].allocated;
 }
 
