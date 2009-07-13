@@ -126,9 +126,10 @@ typedef struct {
 	int YOffset;            /**< Y offset into source position */
 } IMAGEDEF;
 
+#define MAX_NUM_TPAGEIDS 16
 typedef struct {
 	int NumImages;          /**< Number of images contained here */
-	int TPageIDs[16];       /**< OpenGL Texture IDs */
+	int TPageIDs[MAX_NUM_TPAGEIDS];	/**< OpenGL Texture IDs */
 	IMAGEDEF *ImageDefs;    /**< Stored images */
 } IMAGEFILE;
 

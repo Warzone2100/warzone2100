@@ -167,6 +167,7 @@ void pie_SetTexturePage(SDWORD num)
 				{
 					glEnable(GL_TEXTURE_2D);
 				}
+				ASSERT_OR_RETURN(, num < iV_TEX_MAX, "Index out of bounds: %d", num);
 				glBindTexture(GL_TEXTURE_2D, _TEX_PAGE[num].id);
 		}
 		rendStates.texPage = num;
