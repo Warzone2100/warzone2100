@@ -1700,7 +1700,7 @@ INT_RETVAL intRunWidgets(void)
 					{
 						char msg[256] = {'\0'};
 
-						sstrcpy(msg, _("GAME SAVED :"));
+						sstrcpy(msg, _("GAME SAVED: "));
 						sstrcat(msg, saveGameName);
 						addConsoleMessage(msg, LEFT_JUSTIFY, NOTIFY_MESSAGE);
 
