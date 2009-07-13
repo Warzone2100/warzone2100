@@ -885,12 +885,29 @@ static bool NETrecvGAMESTRUCT(GAMESTRUCT* game)
 	 || !SDLNet_SocketReady(tcp_socket)
 	 || (result = SDLNet_TCP_Recv(tcp_socket, buf, sizeof(buf))) != sizeof(buf))
 	{
+		unsigned int time = SDL_GetTicks();
 		if (result < 0)
 		{
 			debug(LOG_WARNING, "SDLNet_TCP_Recv error: %s tcp_socket %p is now invalid", SDLNet_GetError(), tcp_socket);
 			tcp_socket = NULL;  //SDLnet docs say to 'disconnect' here. Dunno how. :S
+			return false;
 		}
-		return false;
+		i = result;
+		while (i < sizeof(buf) && SDL_GetTicks() < time + 2500)
+		{
+			result = SDLNet_TCP_Recv(tcp_socket, buf+i, sizeof(buf)-i);
+			if (result <= 0)
+			{
+				debug(LOG_WARNING, "GAMESTRUCT recv failed; received %d bytes out of %d", i, sizeof(buf));
+				return false;
+			}
+			i += result;
+		}
+		if (i != sizeof(buf))
+		{
+			debug(LOG_WARNING, "GAMESTRUCT recv size mismatch; received %d bytes; expecting %d", i, sizeof(buf));
+			return false;
+		}
 	}
 
 	// Now dump the data into the game struct
@@ -2365,8 +2382,11 @@ BOOL NETfindGame(void)
 	{
 		// Attempt to receive a game description structure
 		if (!NETrecvGAMESTRUCT(&NetPlay.games[gamecount]))
+		{
+			debug(LOG_NET, "only %u game(s) received", (unsigned int)gamecount);
 			// If we fail, success depends on the amount of games that we've read already
 			return gamecount;
+		}
 
 		if (NetPlay.games[gamecount].desc.host[0] == '\0')
 		{
