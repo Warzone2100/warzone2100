@@ -163,9 +163,10 @@ void pie_ImageFileID(IMAGEFILE *ImageFile, UWORD ID, int x, int y)
 	PIEIMAGE pieImage;
 	PIERECT dest;
 
-	assert(ID < ImageFile->NumImages);
+	ASSERT_OR_RETURN(, ID < ImageFile->NumImages, "Out of range 1: %d", (int)Image->TPageID);
 	Image = &ImageFile->ImageDefs[ID];
 
+	ASSERT_OR_RETURN(, Image->TPageID < MAX_NUM_TPAGEIDS, "Out of range 2: %d", (int)Image->TPageID);
 	pie_SetRendMode(REND_ALPHA_TEX);
 	pie_SetAlphaTest(true);
 
@@ -188,10 +189,10 @@ void pie_ImageFileIDTile(IMAGEFILE *ImageFile, UWORD ID, int x, int y, int Width
 	PIEIMAGE pieImage;
 	PIERECT dest;
 
-	assert(ID < ImageFile->NumImages);
-
+	ASSERT_OR_RETURN(, ID < ImageFile->NumImages, "Out of range 1: %d", (int)Image->TPageID);
 	Image = &ImageFile->ImageDefs[ID];
 
+	ASSERT_OR_RETURN(, Image->TPageID < MAX_NUM_TPAGEIDS, "Out of range 2: %d", (int)Image->TPageID);
 	pie_SetRendMode(REND_GOURAUD_TEX);
 	pie_SetAlphaTest(true);
 
