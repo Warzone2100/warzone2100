@@ -633,6 +633,12 @@ void missionFlyTransportersIn( SDWORD iPlayer, BOOL bTrackTransporter )
 	SDWORD	iLandX, iLandY, iDx, iDy;
 	double  fR;
 
+	if ((unsigned int)iPlayer >= 8)
+	{
+		debug( LOG_ERROR, "Flying nonexistent player %d's transporters in", iPlayer);
+		return;
+	}
+
 	bTrackingTransporter = bTrackTransporter;
 
 	iLandX = getLandingX(iPlayer);
@@ -2986,6 +2992,10 @@ BOOL withinLandingZone(UDWORD x, UDWORD y)
 UWORD getLandingX( SDWORD iPlayer )
 {
 	ASSERT( iPlayer<MAX_NOGO_AREAS, "getLandingX: player %d out of range", iPlayer );
+	if ((unsigned int) iPlayer > 8)
+	{
+		iPlayer = 8;
+	}
 	return (UWORD)world_coord((sLandingZone[iPlayer].x1 + (sLandingZone[iPlayer].x2 -
 		sLandingZone[iPlayer].x1)/2));
 }
@@ -2994,6 +3004,10 @@ UWORD getLandingX( SDWORD iPlayer )
 UWORD getLandingY( SDWORD iPlayer )
 {
 	ASSERT( iPlayer<MAX_NOGO_AREAS, "getLandingY: player %d out of range", iPlayer );
+	if ((unsigned int) iPlayer > 8)
+	{
+		iPlayer = 8;
+	}
 	return (UWORD)world_coord((sLandingZone[iPlayer].y1 + (sLandingZone[iPlayer].y2 -
 		sLandingZone[iPlayer].y1)/2));
 }
