@@ -28,6 +28,7 @@
 #include "lib/gamelib/gtime.h"
 
 #include <time.h>			// for stats
+#include <SDL_timer.h>
 #include <physfs.h>
 #include <string.h>
 
@@ -1691,11 +1692,29 @@ static bool NETrecvGAMESTRUCT(GAMESTRUCT* game)
 	 || !tcp_socket->ready
 	 || (result = readNoInt(tcp_socket, buf, sizeof(buf))) != sizeof(buf))
 	{
+		unsigned int time = SDL_GetTicks();
 		if (result == SOCKET_ERROR)
 		{
 			debug(LOG_WARNING, "Server socket ecountered error: %s", strSockError(getSockErr()));
 			socketClose(tcp_socket);
 			tcp_socket = NULL;
+			return false;
+		}
+		i = result;
+		while (i < sizeof(buf) && SDL_GetTicks() < time + 2500)
+		{
+			result = readNoInt(tcp_socket, buf+i, sizeof(buf)-i);
+			if (result == SOCKET_ERROR || result <= 0)
+			{
+				debug(LOG_WARNING, "GAMESTRUCT recv failed; received %d bytes out of %d", i, sizeof(buf));
+				return false;
+			}
+			i += result;
+		}
+		if (i != sizeof(buf))
+		{
+			debug(LOG_WARNING, "GAMESTRUCT recv size mismatch; received %d bytes; expecting %d", i, sizeof(buf));
+			return false;
 		}
 		return false;
 	}
@@ -3258,6 +3277,7 @@ BOOL NETfindGame(void)
 		// Attempt to receive a game description structure
 		if (!NETrecvGAMESTRUCT(&NetPlay.games[gamecount]))
 		{
+			debug(LOG_NET, "only %u game(s) received", (unsigned int)gamecount);
 			// If we fail, success depends on the amount of games that we've read already
 			freeaddrinfo(hosts);
 			return gamecount;
