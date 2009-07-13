@@ -1,3 +1,7 @@
+0000-00-00: Version 2.2.2
+ * General:
+   * Fix: Various workarounds to make game run more stable (r7836)
+
 2009-06-21: Version 2.2.1
  * General:
    * Change: No longer require space between rearm pads, allow dragging pad production with mouse, and droids may drive over inactive rearm pads (r7701, ticket:569)
