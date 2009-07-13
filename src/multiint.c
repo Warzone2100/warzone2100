@@ -686,7 +686,7 @@ static void addGames(void)
 
 
 	// we want the old games deleted, and only list games when we should
-	if (getLobbyError() >= ERROR_CONNECTION)
+	if (getLobbyError() || !gcount)
 	{
 		for(i = 0; i<MaxGames; i++)
 		{
