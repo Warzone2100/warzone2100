@@ -503,7 +503,7 @@ GAMECODE gameLoop(void)
 				{
 					if (saveGame(sRequestResult, GTYPE_SAVE_START))
 					{
-						sstrcpy(msgbuffer, _("GAME SAVED :"));
+						sstrcpy(msgbuffer, _("GAME SAVED: "));
 						sstrcat(msgbuffer, sRequestResult);
 						addConsoleMessage( msgbuffer, LEFT_JUSTIFY, NOTIFY_MESSAGE);
 					}
@@ -519,7 +519,7 @@ GAMECODE gameLoop(void)
 				{
 					if (saveGame(sRequestResult, GTYPE_SAVE_MIDMISSION))//mid mission from [esc] menu
 					{
-						sstrcpy(msgbuffer, _("GAME SAVED :"));
+						sstrcpy(msgbuffer, _("GAME SAVED: "));
 						sstrcat(msgbuffer, sRequestResult);
 						addConsoleMessage( msgbuffer, LEFT_JUSTIFY, NOTIFY_MESSAGE);
 					}
