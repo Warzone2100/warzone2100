@@ -2583,6 +2583,21 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 			productionPlayer= selectedPlayer;
 			bMultiPlayer	= saveGameData.multiPlayer;
 			cmdDroidMultiExpBoost(true);
+
+			NetPlay.bComms = (saveGameData.sNetPlay).bComms;
+			for (i = 0; i < MAX_PLAYERS; i++)
+			{
+				strcpy((NetPlay.players[i]).name, ((saveGameData.sNetPlay).players[i]).name);
+				if ((saveGameData.sGame).skDiff[i] == UBYTE_MAX)
+				{
+					(NetPlay.players[i]).allocated = true;
+				}
+				else
+				{
+					(NetPlay.players[i]).allocated = false;
+				}
+			}
+			
 			if(bMultiPlayer)
 			{
 				loadMultiStats(saveGameData.sPName,&playerStats);				// stats stuff
@@ -4693,6 +4708,21 @@ bool gameLoadV(PHYSFS_file* fileHandle, unsigned int version)
 			productionPlayer = selectedPlayer;
 			game			= saveGameData.sGame;
 			cmdDroidMultiExpBoost(true);
+
+			NetPlay.bComms = (saveGameData.sNetPlay).bComms;
+			for (i = 0; i < MAX_PLAYERS; i++)
+			{
+				strcpy((NetPlay.players[i]).name, ((saveGameData.sNetPlay).players[i]).name);
+				if ((saveGameData.sGame).skDiff[i] == UBYTE_MAX)
+				{
+					(NetPlay.players[i]).allocated = true;
+				}
+				else
+				{
+					(NetPlay.players[i]).allocated = false;
+				}
+			}
+			
 			if(bMultiPlayer)
 			{
 				loadMultiStats(saveGameData.sPName,&playerStats);				// stats stuff
