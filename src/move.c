@@ -381,6 +381,7 @@ static BOOL moveDroidToBase(DROID *psDroid, UDWORD x, UDWORD y, BOOL bFormation)
 			}
 			else
 			{
+				ASSERT_OR_RETURN(false, psDroid->sMove.numPoints > 0, "Invalid point count for path"); 
 				// align the formation with the last path of the route
 				fmx2 = psDroid->sMove.asPath[psDroid->sMove.numPoints -1].x;
 				fmy2 = psDroid->sMove.asPath[psDroid->sMove.numPoints -1].y;
@@ -393,6 +394,7 @@ static BOOL moveDroidToBase(DROID *psDroid, UDWORD x, UDWORD y, BOOL bFormation)
 				}
 				else
 				{
+					ASSERT_OR_RETURN(false, psDroid->sMove.numPoints > 1, "Invalid point count for path"); 
 					fmx1 = psDroid->sMove.asPath[psDroid->sMove.numPoints -2].x;
 					fmy1 = psDroid->sMove.asPath[psDroid->sMove.numPoints -2].y;
 					fmx1 = world_coord(fmx1) + TILE_UNITS / 2;
