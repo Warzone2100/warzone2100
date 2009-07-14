@@ -1706,14 +1706,14 @@ static bool NETrecvGAMESTRUCT(GAMESTRUCT* game)
 			result = readNoInt(tcp_socket, buf+i, sizeof(buf)-i);
 			if (result == SOCKET_ERROR || result <= 0)
 			{
-				debug(LOG_WARNING, "GAMESTRUCT recv failed; received %d bytes out of %d", i, sizeof(buf));
+				debug(LOG_WARNING, "GAMESTRUCT recv failed; received %u bytes out of %lu", i, sizeof(buf));
 				return false;
 			}
 			i += result;
 		}
 		if (i != sizeof(buf))
 		{
-			debug(LOG_WARNING, "GAMESTRUCT recv size mismatch; received %d bytes; expecting %d", i, sizeof(buf));
+			debug(LOG_WARNING, "GAMESTRUCT recv size mismatch; received %u bytes; expecting %lu", i, sizeof(buf));
 			return false;
 		}
 		return false;
