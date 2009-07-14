@@ -279,7 +279,7 @@ BOOL fpathBaseBlockingTile(SDWORD x, SDWORD y, PROPULSION_TYPE propulsion, int p
 		{
 			return true;
 		}
-		else if (moveType == FMT_ATTACK
+		else if (moveType == FMT_ATTACK && psTile->psObject
 		         && psTile->psObject->type == OBJ_STRUCTURE && aiCheckAlliances(psTile->psObject->player, player))
 		{
 			return true;
