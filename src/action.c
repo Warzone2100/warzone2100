@@ -776,7 +776,7 @@ static void actionAddVtolAttackRun( DROID *psDroid )
 
 static void actionUpdateVtolAttack( DROID *psDroid )
 {
-	WEAPON_STATS	*psWeapStats[DROID_MAXWEAPS];
+	WEAPON_STATS	*psWeapStats[DROID_MAXWEAPS] = { NULL, NULL, NULL };
 	UBYTE i;
 
 	CHECK_DROID(psDroid);

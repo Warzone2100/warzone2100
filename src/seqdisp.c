@@ -234,7 +234,7 @@ static void seq_SetUserResolution(void)
 //full screenvideo functions
 static bool seq_StartFullScreenVideo(const char* videoName, const char* audioName, VIDEO_RESOLUTION resolution)
 {
-	const char* aAudioName;
+	const char* aAudioName = NULL;
 	int chars_printed;
 
 	bHoldSeqForAudio = false;
