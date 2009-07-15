@@ -2904,6 +2904,11 @@ static void NETallowJoining(void)
 			break;
 		}
 	}
+	if (i == MAX_TMP_SOCKETS)
+	{
+		// prevent out-of-bounds access
+		i--;
+	}
 
 	// See if there's an incoming connection
 	if (tmp_socket[i] == NULL // Make sure that we're not out of sockets
