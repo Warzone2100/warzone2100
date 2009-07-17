@@ -2217,14 +2217,9 @@ static void kfsf_SetSelectedDroidsState( SECONDARY_ORDER sec, SECONDARY_STATE st
 {
 	DROID	*psDroid;
 
-#ifndef DEBUG
-	// Bail out if we're running a _true_ multiplayer game (to prevent MP cheating)
-	if (runningMultiplayer())
-	{
-		noMPCheatMsg();
-		return;
-	}
-#endif
+	// NOT A CHEAT CODE
+	// This is a function to set unit orders via keyboard shortcuts. It should
+	// _not_ be disallowed in multiplayer games.
 
 	for(psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
 	{
