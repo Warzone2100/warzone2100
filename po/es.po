@@ -10221,7 +10221,7 @@ msgstr "El Jugador %u tiene una version erronea del juego.  Auto Expulsando."
 #: lib/netplay/netplay.c:1226
 #, c-format
 msgid "Player %u has the wrong password.  Auto kicking."
-msgstr "El Jugador tiene una clave incorrecta.  Auto Expulsando."
+msgstr "El Jugador %u tiene una clave incorrecta.  Auto Expulsando."
 
 #: lib/netplay/netplay.c:2731
 #, c-format
