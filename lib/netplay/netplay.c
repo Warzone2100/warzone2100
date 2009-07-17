@@ -1437,8 +1437,11 @@ static unsigned int NET_CreatePlayer(const char* name)
 static void NET_DestroyPlayer(unsigned int index)
 {
 	debug(LOG_NET, "Freeing slot %u for a new player", index);
-	NetPlay.players[index].allocated = false;
-	NetPlay.playercount--;
+	if (NetPlay.players[index].allocated)
+	{
+		NetPlay.players[index].allocated = false;
+		NetPlay.playercount--;
+	}
 }
 
 /**
