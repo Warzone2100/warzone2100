@@ -51,6 +51,7 @@
 
 #include "init.h"
 #include "warcam.h"	// these 4 for fireworks
+#include "mission.h"
 #include "effects.h"
 #include "lib/gamelib/gtime.h"
 #include "keybind.h"
@@ -175,7 +176,7 @@ BOOL multiplayerWinSequence(BOOL firstCall)
 	}
 
 	// rotate world
-	if(!getWarCamStatus())
+	if (MissionResUp && !getWarCamStatus())
 	{
 		rotAmount = timeAdjustedIncrement(MAP_SPIN_RATE / 12, true);
 		player.r.y += rotAmount;
