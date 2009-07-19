@@ -3,7 +3,7 @@ SUBDIRS = base mods music
 stamp:
 	touch stamp
 
-%.wz: % stamp
+%.wz: $(abs_srcdir)/% stamp
 	(cd $(srcdir)/$(notdir $<) && zip -ru0 $(abs_builddir)/$@ $(filter-out stamp,$(filter-out $<,$(^:$</%=%))) -x '*svn*' -x '*Makefile*' || [ $$? -eq 12 ] && true) # zip returns 12 on "nothing to do"
 	zip -T $@
 	rm -f stamp
@@ -44,8 +44,8 @@ PATCHARCHIVE = mp.wz
 
 CLEANFILES = $(BASEARCHIVE) $(PATCHARCHIVE)
 
-$(BASEARCHIVE): $(BASELIST:%=$(basename $(BASEARCHIVE))/%)
-$(PATCHARCHIVE): $(PATCHLIST:%=$(basename $(PATCHARCHIVE))/%)
+$(BASEARCHIVE): $(BASELIST:%=$(abs_srcdir)/$(basename $(BASEARCHIVE))/%)
+$(PATCHARCHIVE): $(PATCHLIST:%=$(abs_srcdir)/$(basename $(PATCHARCHIVE))/%)
 
 nodist_pkgdata_DATA =  $(BASEARCHIVE) $(PATCHARCHIVE)
 
