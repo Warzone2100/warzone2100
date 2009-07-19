@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2009-06-18 14:58+0200\n"
+"POT-Creation-Date: 2009-07-19 17:34+0200\n"
 "PO-Revision-Date: 2009-03-30 19:26+0600\n"
 "Last-Translator: Макс <Raptor9000@rambler.ru>\n"
 "Language-Team: Russian <>\n"
@@ -10048,23 +10048,23 @@ msgstr "Упрощенный китайский"
 msgid "Latin"
 msgstr "Латинский"
 
-#: lib/netplay/netplay.c:1111
-#: lib/netplay/netplay.c:1145
+#: lib/netplay/netplay.c:1112
+#: lib/netplay/netplay.c:1146
 #, c-format
 msgid "Player %u has the wrong game version.  Auto kicking."
 msgstr ""
 
-#: lib/netplay/netplay.c:1226
+#: lib/netplay/netplay.c:1227
 #, c-format
 msgid "Player %u has the wrong password.  Auto kicking."
 msgstr ""
 
-#: lib/netplay/netplay.c:2731
+#: lib/netplay/netplay.c:2753
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr ""
 
-#: lib/netplay/netplay.c:2756
+#: lib/netplay/netplay.c:2778
 #, c-format
 msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"
 msgstr ""
@@ -10499,8 +10499,8 @@ msgstr "ОБУЧЕНИЕ"
 #: src/frontend.c:712
 #: src/frontend.c:851
 #: src/frontend.c:954
-#: src/frontend.c:1145
-#: src/frontend.c:1286
+#: src/frontend.c:1147
+#: src/frontend.c:1288
 msgctxt "menu"
 msgid "Return"
 msgstr "Назад"
@@ -10524,8 +10524,8 @@ msgstr "ОДИНОЧНАЯ ИГРА"
 
 #: src/frontend.c:450
 #: src/ingameop.c:394
-#: src/mission.c:2535
-#: src/mission.c:2640
+#: src/mission.c:2541
+#: src/mission.c:2646
 msgid "Load Saved Game"
 msgstr "Загрузить Игру"
 
@@ -10543,8 +10543,8 @@ msgstr "Присоединиться"
 
 #: src/frontend.c:547
 #: src/frontend.c:854
-#: src/frontend.c:1289
-#: src/frontend.c:1309
+#: src/frontend.c:1291
+#: src/frontend.c:1311
 msgid "GAME OPTIONS"
 msgstr "НАСТРОЙКИ ИГРЫ"
 
@@ -10573,10 +10573,31 @@ msgid "Key Mappings"
 msgstr "Расскладка клавиатуры"
 
 #: src/frontend.c:627
+msgid "Video Playback"
+msgstr "Воспроизведение видео"
+
+#: src/frontend.c:631
+#: src/frontend.c:805
+msgid "1X"
+msgstr "1Х"
+
+#: src/frontend.c:635
+#: src/frontend.c:795
+msgid "2X"
+msgstr "2X"
+
+#: src/frontend.c:639
+#: src/frontend.c:800
+#: src/frontend.c:922
+#: src/frontend.c:976
+msgid "Fullscreen"
+msgstr "Полный экран"
+
+#: src/frontend.c:649
 msgid "Screen Shake"
 msgstr "Дрожание экрана"
 
-#: src/frontend.c:630
+#: src/frontend.c:652
 #: src/frontend.c:690
 #: src/frontend.c:703
 #: src/frontend.c:736
@@ -10587,14 +10608,15 @@ msgstr "Дрожание экрана"
 #: src/frontend.c:1067
 #: src/frontend.c:1101
 #: src/frontend.c:1113
+#: src/frontend.c:1125
 #: src/frontend.c:1137
-#: src/frontend.c:1167
-#: src/frontend.c:1180
-#: src/frontend.c:1208
+#: src/frontend.c:1169
+#: src/frontend.c:1182
+#: src/frontend.c:1210
 msgid "On"
 msgstr "Вкл."
 
-#: src/frontend.c:634
+#: src/frontend.c:656
 #: src/frontend.c:686
 #: src/frontend.c:695
 #: src/frontend.c:707
@@ -10606,49 +10628,29 @@ msgstr "Вкл."
 #: src/frontend.c:1062
 #: src/frontend.c:1105
 #: src/frontend.c:1117
+#: src/frontend.c:1129
 #: src/frontend.c:1141
-#: src/frontend.c:1162
-#: src/frontend.c:1175
-#: src/frontend.c:1203
+#: src/frontend.c:1164
+#: src/frontend.c:1177
+#: src/frontend.c:1205
 msgid "Off"
 msgstr "Выкл."
 
-#: src/frontend.c:639
+#: src/frontend.c:661
 #: src/multiint.c:1148
 msgid "Fog"
 msgstr "Туман"
 
-#: src/frontend.c:642
+#: src/frontend.c:664
 #: src/frontend.c:754
 msgid "Mist"
 msgstr "Мгла"
 
-#: src/frontend.c:646
+#: src/frontend.c:668
 #: src/frontend.c:747
 #: src/multiint.c:1150
 msgid "Fog Of War"
 msgstr "Туман войны"
-
-#: src/frontend.c:651
-msgid "Video Playback"
-msgstr "Воспроизведение видео"
-
-#: src/frontend.c:655
-#: src/frontend.c:805
-msgid "1X"
-msgstr "1Х"
-
-#: src/frontend.c:659
-#: src/frontend.c:795
-msgid "2X"
-msgstr "2X"
-
-#: src/frontend.c:663
-#: src/frontend.c:800
-#: src/frontend.c:922
-#: src/frontend.c:976
-msgid "Fullscreen"
-msgstr "Полный экран"
 
 #: src/frontend.c:675
 #: src/frontend.c:679
@@ -10700,7 +10702,8 @@ msgid "* Takes effect on game restart"
 msgstr "* Применится после перезагрузки игры"
 
 #: src/frontend.c:1098
-msgid "Reverse Mouse"
+#, fuzzy
+msgid "Reverse Rotation"
 msgstr "Инверсия мыши"
 
 #: src/frontend.c:1109
@@ -10708,61 +10711,61 @@ msgid "Trap Cursor"
 msgstr "Захват курсора"
 
 #: src/frontend.c:1121
-msgid "Cursor Mode"
-msgstr "настройка Курсора"
+msgid "Colored Cursors *"
+msgstr ""
 
-#: src/frontend.c:1125
-msgid "Software (colored)"
-msgstr "софт (окрашено)"
+#: src/frontend.c:1134
+#, fuzzy
+msgid "Switch Mouse Buttons"
+msgstr "Настройки Мыши"
 
-#: src/frontend.c:1129
-#: src/frontend.c:1189
+#: src/frontend.c:1144
+msgid "* May negatively affect performance"
+msgstr ""
+
+#: src/frontend.c:1191
 msgid "Hardware"
 msgstr "Железо"
 
-#: src/frontend.c:1134
-msgid "Right-click Orders"
-msgstr "приказы правой кнопкой мыши"
-
-#: src/frontend.c:1194
+#: src/frontend.c:1196
 msgid "Software (coloured)"
 msgstr "софт (окрашено)"
 
-#: src/frontend.c:1241
-#: src/frontend.c:1307
+#: src/frontend.c:1243
+#: src/frontend.c:1309
 msgid "Difficulty"
 msgstr "Сложность"
 
-#: src/frontend.c:1245
-#: src/frontend.c:1315
-#: src/frontend.c:1347
+#: src/frontend.c:1247
+#: src/frontend.c:1317
+#: src/frontend.c:1349
 msgid "Easy"
 msgstr "Легкая"
 
-#: src/frontend.c:1248
-#: src/frontend.c:1318
-#: src/frontend.c:1339
+#: src/frontend.c:1250
+#: src/frontend.c:1320
+#: src/frontend.c:1341
 msgid "Normal"
 msgstr "Нормальная"
 
-#: src/frontend.c:1252
-#: src/frontend.c:1321
-#: src/frontend.c:1343
+#: src/frontend.c:1254
+#: src/frontend.c:1323
+#: src/frontend.c:1345
 msgid "Hard"
 msgstr "Тяжелая"
 
-#: src/frontend.c:1257
-#: src/frontend.c:1308
+#: src/frontend.c:1259
+#: src/frontend.c:1310
 msgid "Scroll Speed"
 msgstr "Скорость прокрутки"
 
-#: src/frontend.c:1271
-#: src/frontend.c:1305
+#: src/frontend.c:1273
+#: src/frontend.c:1307
 msgid "Language"
 msgstr "Язык"
 
-#: src/frontend.c:1283
-#: src/frontend.c:1306
+#: src/frontend.c:1285
+#: src/frontend.c:1308
 msgid "Unit Colour"
 msgstr "Цвет юнита"
 
@@ -10790,9 +10793,8 @@ msgstr "ИГРА СОХРАНЕНА!"
 #: src/hci.c:1703
 #: src/loop.c:506
 #: src/loop.c:522
-#: src/mission.c:2606
 #, fuzzy
-msgid "GAME SAVED :"
+msgid "GAME SAVED: "
 msgstr "ИГРА СОХРАНЕНА!"
 
 #: src/hci.c:2109
@@ -10923,8 +10925,8 @@ msgstr "Продолжить игру"
 
 #: src/ingameop.c:259
 #: src/ingameop.c:398
-#: src/mission.c:2525
-#: src/mission.c:2643
+#: src/mission.c:2531
+#: src/mission.c:2649
 msgid "Save Game"
 msgstr "Сохранить игру"
 
@@ -11257,67 +11259,67 @@ msgstr "Враги уничтожены с помощью читов!"
 msgid "Destroying selected droids and structures!"
 msgstr "Уничтожаю выбранные постройки и машины"
 
-#: src/keybind.c:2296
+#: src/keybind.c:2291
 msgid "Centered on player HQ, direction NORTH"
 msgstr "Фокус на штабе, вид на СЕВЕР"
 
-#: src/keybind.c:2308
+#: src/keybind.c:2303
 msgid "Unable to locate HQ!"
 msgstr "Невозможно найти штаб!"
 
-#: src/keybind.c:2324
+#: src/keybind.c:2319
 msgid "Formation speed limiting OFF"
 msgstr "Ограничение Скорости Откл."
 
-#: src/keybind.c:2328
+#: src/keybind.c:2323
 msgid "Formation speed limiting ON"
 msgstr "Ограничение Скорости Вкл."
 
-#: src/keybind.c:2458
-#: src/keybind.c:2499
-#: src/keybind.c:2521
+#: src/keybind.c:2453
+#: src/keybind.c:2494
+#: src/keybind.c:2516
 msgid "Game Speed Reset"
 msgstr "Скорость Игры Сброшена"
 
-#: src/keybind.c:2462
+#: src/keybind.c:2457
 #, c-format
 msgid "Game Speed Increased to %3.1f"
 msgstr "Скорость игры увеличена в %3.1f"
 
-#: src/keybind.c:2503
+#: src/keybind.c:2498
 #, c-format
 msgid "Game Speed Reduced to %3.1f"
 msgstr "Скорость игры уменьшена в %3.1f"
 
-#: src/keybind.c:2533
+#: src/keybind.c:2528
 msgid "Build menu will reopen"
 msgstr "меню постройки снова откроется"
 
-#: src/keybind.c:2537
+#: src/keybind.c:2532
 msgid "Build menu will not reopen"
 msgstr "меню постройки е откроется"
 
-#: src/keybind.c:2549
+#: src/keybind.c:2544
 msgid "Radar showing friend-foe colors"
 msgstr "Радар отображает цвета свой-чужой"
 
-#: src/keybind.c:2553
+#: src/keybind.c:2548
 msgid "Radar showing player colors"
 msgstr "Радар отображает цвета игрока"
 
-#: src/keybind.c:2570
+#: src/keybind.c:2565
 msgid "Radar showing only objects"
 msgstr "Радар отображает только объекты"
 
-#: src/keybind.c:2573
+#: src/keybind.c:2568
 msgid "Radar blending terrain and height"
 msgstr "радар не различает ландшафт и рельеф"
 
-#: src/keybind.c:2576
+#: src/keybind.c:2571
 msgid "Radar showing terrain"
 msgstr "Радар отображает поверхность"
 
-#: src/keybind.c:2579
+#: src/keybind.c:2574
 msgid "Radar showing height"
 msgstr "радар показывает рельеф"
 
@@ -11712,37 +11714,42 @@ msgstr "открыть заново меню постройки"
 msgid "Could not save game!"
 msgstr "Загрузить игру"
 
-#: src/mission.c:2073
+#: src/mission.c:2079
 msgid "Load Transport"
 msgstr "Загрузить Транспорт"
 
-#: src/mission.c:2472
+#: src/mission.c:2478
 msgid "OBJECTIVE ACHIEVED by cheating!"
 msgstr "ЗАДАНИЕ ВЫПОЛНЕНО Читами"
 
-#: src/mission.c:2472
+#: src/mission.c:2478
 msgid "OBJECTIVE ACHIEVED"
 msgstr "ЗАДАНИЕ ВЫПОЛНЕНО"
 
-#: src/mission.c:2478
+#: src/mission.c:2484
 msgid "OBJECTIVE FAILED--and you cheated!"
 msgstr "ЗАДАНИЕ ПРОВАЛЕНО - и читы вам не помогли!"
 
-#: src/mission.c:2478
+#: src/mission.c:2484
 msgid "OBJECTIVE FAILED"
 msgstr "ЗАДАНИЕ ПРОВАЛЕНО"
 
-#: src/mission.c:2504
-#: src/mission.c:2541
-#: src/mission.c:2659
+#: src/mission.c:2510
+#: src/mission.c:2547
+#: src/mission.c:2665
 msgid "Quit To Main Menu"
 msgstr "Выйти в главное меню"
 
-#: src/mission.c:2512
+#: src/mission.c:2518
 msgid "Continue Game"
 msgstr "Продолжить игру"
 
-#: src/move.c:2928
+#: src/mission.c:2612
+#, fuzzy
+msgid "GAME SAVED :"
+msgstr "ИГРА СОХРАНЕНА!"
+
+#: src/move.c:2930
 #, c-format
 msgid "You found %u power in an oil drum."
 msgstr "ты нашел  %u энергии в бочке с горючим"
@@ -12102,35 +12109,35 @@ msgstr "Передать выбранных юнитов"
 msgid "Give Power To Player"
 msgstr "Передать энергию  игроку"
 
-#: src/multiplay.c:1847
+#: src/multiplay.c:1837
 msgid "Green"
 msgstr "Зелёный"
 
-#: src/multiplay.c:1848
+#: src/multiplay.c:1838
 msgid "Orange"
 msgstr "Оранжевый"
 
-#: src/multiplay.c:1849
+#: src/multiplay.c:1839
 msgid "Grey"
 msgstr "Серый"
 
-#: src/multiplay.c:1850
+#: src/multiplay.c:1840
 msgid "Black"
 msgstr "Чёрный"
 
-#: src/multiplay.c:1851
+#: src/multiplay.c:1841
 msgid "Red"
 msgstr "Красный"
 
-#: src/multiplay.c:1852
+#: src/multiplay.c:1842
 msgid "Blue"
 msgstr "Синий"
 
-#: src/multiplay.c:1853
+#: src/multiplay.c:1843
 msgid "Pink"
 msgstr "Розовый"
 
-#: src/multiplay.c:1854
+#: src/multiplay.c:1844
 msgid "Cyan"
 msgstr "Голубой"
 
@@ -12401,6 +12408,15 @@ msgstr " - сборка %s"
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "Версия %s%s%s%s"
+
+#~ msgid "Cursor Mode"
+#~ msgstr "настройка Курсора"
+
+#~ msgid "Software (colored)"
+#~ msgstr "софт (окрашено)"
+
+#~ msgid "Right-click Orders"
+#~ msgstr "приказы правой кнопкой мыши"
 
 #~ msgid "Game"
 #~ msgstr "Игра"
