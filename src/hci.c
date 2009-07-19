@@ -5206,7 +5206,7 @@ static BASE_OBJECT *intGetObject(UDWORD id)
 	}
 
 	/* Find the object that the ID refers to */
-	ASSERT((SDWORD)id - IDOBJ_OBJSTART >= 0 && (SDWORD)id - IDOBJ_OBJSTART < numObjects, "Invalid button ID %u", id);
+	ASSERT_OR_RETURN(NULL, (SDWORD)id - IDOBJ_OBJSTART >= 0 && (SDWORD)id - IDOBJ_OBJSTART < numObjects, "Invalid button ID %u", id);
 	psObj = apsObjectList[id - IDOBJ_OBJSTART];
 
 	return psObj;
