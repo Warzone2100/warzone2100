@@ -4289,7 +4289,7 @@ BOOL droidSensorDroidWeapon(BASE_OBJECT *psObj, DROID *psDroid)
 	//finally check the right droid/sensor combination
 	// check vtol droid with commander
 	if ((isVtolDroid(psDroid) || !proj_Direct(asWeaponStats + psDroid->asWeaps[0].nStat)) &&
-		((DROID *)psObj)->droidType == DROID_COMMAND)
+		psObj->type == OBJ_DROID && ((DROID *)psObj)->droidType == DROID_COMMAND)
 	{
 		return true;
 	}
