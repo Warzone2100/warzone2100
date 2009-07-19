@@ -63,6 +63,7 @@ static const struct
 	{ "fy", N_("Frisian"), LANG_FRISIAN, SUBLANG_FRISIAN_NETHERLANDS },
 	{ "ga", N_("Irish"), LANG_IRISH, SUBLANG_DEFAULT },
 	{ "it", N_("Italian"), LANG_ITALIAN, SUBLANG_DEFAULT },
+	{ "la", N_("Latin"), LANG_LATIN, SUBLANG_DEFAULT },
 	{ "lt", N_("Lithuanian"), LANG_LITHUANIAN, SUBLANG_DEFAULT },
 	{ "lv", N_("Latvian"), LANG_LATVIAN, SUBLANG_DEFAULT },
 	{ "nb", N_("Norwegian"), LANG_NORWEGIAN, SUBLANG_DEFAULT },
@@ -83,6 +84,7 @@ static const struct
 	{ "tr", N_("Turkish"), LANG_TURKISH, SUBLANG_DEFAULT },
 	{ "uz", N_("Uzbek (Cyrillic)"), LANG_UZBEK, SUBLANG_UZBEK_CYRILLIC },
 	{ "zh_CN", N_("Simplified Chinese"), LANG_CHINESE, SUBLANG_CHINESE_SIMPLIFIED },
+	{ "zh_TW", N_("Traditional Chinese"), LANG_CHINESE, SUBLANG_CHINESE_TRADITIONAL },
 #  endif
 };
 #else
@@ -131,6 +133,7 @@ static const struct
 	{ "tr", N_("Turkish"), "tr.UTF-8", "tr" },
 	{ "uz", N_("Uzbek (Cyrillic)"), "uz.UTF-8", "uz" },
 	{ "zh_CN", N_("Simplified Chinese"), "zh_CN.UTF-8", "zh_CN" },
+	{ "zh_TW", N_("Traditional Chinese"), "zh_TW.UTF-8", "zh_TW" },
 #  endif
 };
 #endif
@@ -211,7 +214,7 @@ const char* getLanguageName(void)
 		}
 	}
 
-	ASSERT(false, "getLanguageName: Unknown language");
+	ASSERT(false, "getLanguageName: Unknown language %s", language);
 	return NULL;
 }
 
