@@ -10694,9 +10694,8 @@ msgid "* Takes effect on game restart"
 msgstr "* Wirkt sich bei Spielneustart aus"
 
 #: src/frontend.c:1098
-#, fuzzy
 msgid "Reverse Rotation"
-msgstr "Maus umkehren"
+msgstr "Drehrichtung umkehren"
 
 #: src/frontend.c:1109
 msgid "Trap Cursor"
@@ -10704,16 +10703,15 @@ msgstr "Mauszeiger einfangen"
 
 #: src/frontend.c:1121
 msgid "Colored Cursors *"
-msgstr ""
+msgstr "Bunte Mauszeiger *"
 
 #: src/frontend.c:1134
-#, fuzzy
 msgid "Switch Mouse Buttons"
-msgstr "Mausoptionen"
+msgstr "Maustasten vertauschen"
 
 #: src/frontend.c:1144
 msgid "* May negatively affect performance"
-msgstr ""
+msgstr "* Könnte die Spielgeschwindigkeit negativ beeinflussen"
 
 #: src/frontend.c:1243
 #: src/frontend.c:1309
