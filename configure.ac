@@ -402,7 +402,7 @@ AS_IF([test "x$with_distributor" = "xUNKNOWN"],[
 
 AS_IF([test "x$use_system_sqlite" = "xno"],[
 	AC_MSG_NOTICE()
-	AC_MSG_WARN([Not using a system provided SQLite library.])
+	AC_MSG_WARN([No compatible SQLite library detected, using integrated copy instead.])
 	AC_MSG_WARN([${SQLITE_PKG_ERRORS}])
 	AC_MSG_WARN([We currently only accept SQLite versions >= 3.6.10.])
 ])
