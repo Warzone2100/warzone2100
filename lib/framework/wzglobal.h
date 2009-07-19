@@ -29,6 +29,7 @@
 
 
 #if defined(HAVE_CONFIG_H)
+#  undef _XOPEN_SOURCE
 #  include "config.h"
 #elif defined(__MACOSX__)
 #  include "config-macosx.h"
