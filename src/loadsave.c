@@ -27,6 +27,7 @@
 
 #include <ctype.h>
 #include <physfs.h>
+#include <time.h>
 
 #include "lib/framework/frame.h"
 #include "lib/framework/strres.h"
@@ -165,7 +166,8 @@ static BOOL _addLoadSave(BOOL bLoad, const char *sSearchPath, const char *sExten
 	W_LABINIT		sLabInit;
 	UDWORD			slotCount;
 // removed hardcoded values!  change with the defines above! -Q
-	static char	sSlots[totalslots][totalslotspace];
+	static char	sSlotCaps[totalslots][totalslotspace];
+	static char	sSlotTips[totalslots][totalslotspace];
 	char **i, **files;
 	const char* checkExtension;
 
@@ -317,6 +319,8 @@ static BOOL _addLoadSave(BOOL bLoad, const char *sSearchPath, const char *sExten
 	for (i = files; *i != NULL; ++i)
 	{
 		W_BUTTON *button;
+		char savefile[256];
+		time_t savetime;
 
 		// See if this filename contains the extension we're looking for
 		if (!strstr(*i, checkExtension))
@@ -328,11 +332,19 @@ static BOOL _addLoadSave(BOOL bLoad, const char *sSearchPath, const char *sExten
 		button = (W_BUTTON*)widgGetFromID(psRequestScreen, LOADENTRY_START + slotCount);
 
 		debug(LOG_SAVE, "We found [%s]", *i);
-		/* Set the tip and add the button */
+
+		/* Figure save-time */
+		snprintf(savefile, sizeof(savefile), "%s/%s", sSearchPath, *i);
+		savetime = PHYSFS_getLastModTime(savefile);
+		sstrcpy(sSlotTips[slotCount], ctime(&savetime));
+
+		/* Set the button-text */
 		(*i)[strlen(*i) - 4] = '\0'; // remove .gam extension
-		sstrcpy(sSlots[slotCount], *i);  //store it!
-		button->pTip = sSlots[slotCount];
-		button->pText = sSlots[slotCount];
+		sstrcpy(sSlotCaps[slotCount], *i);  //store it!
+		
+		/* Add button */
+		button->pTip = sSlotTips[slotCount];
+		button->pText = sSlotCaps[slotCount];
 		slotCount++;		// goto next but...
 		if (slotCount == totalslots)
 		{
@@ -688,9 +700,9 @@ static void displayLoadSlot(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ
 
 	drawBlueBox(x,y,psWidget->width,psWidget->height);	//draw box
 
-	if(((W_BUTTON *)psWidget)->pTip )
+	if(((W_BUTTON *)psWidget)->pText )
 	{
-		sstrcpy(butString, ((W_BUTTON *)psWidget)->pTip);
+		sstrcpy(butString, ((W_BUTTON *)psWidget)->pText);
 
 		iV_SetFont(font_regular);									// font
 		iV_SetTextColour(WZCOL_TEXT_BRIGHT);
