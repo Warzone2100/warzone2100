@@ -3,21 +3,24 @@
 # Copyright (c) 2008 Rosetta Contributors and Canonical Ltd 2008
 # This file is distributed under the same license as the warzone2100 package.
 #
-# Tao Wei <Unknown>, 2008.
+# Tang Kai Bin <Unknown>, 2009.4
 msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
 "POT-Creation-Date: 2009-07-19 21:30+0200\n"
-"PO-Revision-Date: 2008-04-27 11:55+0000\n"
-"Last-Translator: Tao Wei <Unknown>\n"
+"PO-Revision-Date: 2009-05-13 16:12+0800\n"
+"Last-Translator: Terra <wz2100cn@gmail.com>\n"
 "Language-Team: Simplified Chinese <zh_CN@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Launchpad-Export-Date: 2008-05-10 13:56+0000\n"
+"X-Launchpad-Export-Date: 2008-07-19 19:37+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
+"X-Poedit-Language: Chinese\n"
+"X-Poedit-Country: CHINA\n"
+"X-Poedit-SourceCharset: utf-8\n"
 
 #: data/base/messages/messages.rmsg:4
 msgid "Structure Research Completed"
@@ -1206,7 +1209,7 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:406
 #: data/mp/messages/strings/names.txt:793
 msgid "Cyborg Factory"
-msgstr ""
+msgstr "生化人制造工厂"
 
 #: data/base/messages/resmessages1.rmsg:292
 msgid "Produces Cyborgs"
@@ -1474,7 +1477,7 @@ msgstr ""
 #: data/base/messages/strings/names.txt:942
 #: data/mp/messages/strings/names.txt:955
 msgid "Fuel Injection Engine"
-msgstr ""
+msgstr "燃油喷射发动机"
 
 #: data/base/messages/resmessages1.rmsg:461
 #: data/base/messages/resmessages2.rmsg:500
@@ -2461,7 +2464,7 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:958
 #: data/mp/messages/strings/resstrings.txt:593
 msgid "Turbo-Charged Engine"
-msgstr ""
+msgstr "涡轮增压发动机"
 
 #: data/base/messages/resmessages2.rmsg:524
 #: data/base/messages/resmessages3.rmsg:719
@@ -3143,7 +3146,7 @@ msgstr ""
 #: data/base/messages/strings/names.txt:948
 #: data/mp/messages/strings/names.txt:961
 msgid "Gas Turbine Engine"
-msgstr ""
+msgstr "燃气涡轮发动机"
 
 #: data/base/messages/resmessages3.rmsg:681
 msgid "Ionizing Turbine Engine"
@@ -3607,40 +3610,40 @@ msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:3
 msgid "OBJECTIVE: Locate and recover neural synapse technology"
-msgstr ""
+msgstr "任 务 目 标 ： 搜 寻 并 获 得 神 经 元 突 触 科 技"
 
 #: data/base/messages/strings/cam1strings.txt:4
 msgid "Establish a base, then search for a Pre-Collapse structure."
-msgstr ""
+msgstr "建 立 一 个 基 地 ， 并 搜 索 文 明 遗 迹。"
 
 #: data/base/messages/strings/cam1strings.txt:5
 msgid "This structure contains technology vital for the success of the Project."
-msgstr ""
+msgstr "这 个 遗 迹 保 存 着 对 我 们 的 计 划 极 为 重 要 的 科 技。"
 
 #: data/base/messages/strings/cam1strings.txt:7
 msgid "ALPHA BASE MISSION: Scavenger Raiders"
-msgstr ""
+msgstr "阿 尔 法 基 地 任 务 ： 清 道 夫 的 袭 击"
 
 #: data/base/messages/strings/cam1strings.txt:8
 msgid "Scavenger raiders are approaching our base."
-msgstr ""
+msgstr "清 道 夫 正 在 向 我 们 的 基 地 袭 来 。"
 
 #: data/base/messages/strings/cam1strings.txt:9
 msgid "Defend the base then destroy the Scavenger camps."
-msgstr ""
+msgstr "保 护 我 们 的 基 地 ， 并 摧 毁 清 道 夫 营 地 。"
 
 #: data/base/messages/strings/cam1strings.txt:11
 #: data/base/messages/strings/cam1strings.txt:65
 msgid "ALPHA BASE MISSION: Power Surge Detected"
-msgstr ""
+msgstr "阿 尔 法 基 地 任 务 ： 发 现 能 量 波 动"
 
 #: data/base/messages/strings/cam1strings.txt:12
 msgid "A power surge has been detected to the south of our position."
-msgstr ""
+msgstr "在 我 们 的 南 方 发 现 一 股 能 量 波 动 。"
 
 #: data/base/messages/strings/cam1strings.txt:13
 msgid "Investigate and secure the area."
-msgstr ""
+msgstr "调 查 该 事 件 ， 并 确 保 该 区 域 的 安 全 。"
 
 #: data/base/messages/strings/cam1strings.txt:15
 msgid "ALPHA BASE MISSION: The New Paradigm"
@@ -3668,7 +3671,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:23
 msgid "TRANSPORT MISSION: Investigate Research Center"
-msgstr ""
+msgstr "运送任务: 调查研究中心"
 
 #: data/base/messages/strings/cam1strings.txt:24
 msgid "Investigate the area and recover any artifacts present."
@@ -3783,11 +3786,11 @@ msgstr ""
 #: data/base/messages/strings/cam2strings.txt:108
 #: data/base/messages/strings/cam3strings.txt:156
 msgid " "
-msgstr ""
+msgstr " "
 
 #: data/base/messages/strings/cam1strings.txt:66
 msgid "Congratulations Commander."
-msgstr ""
+msgstr "恭喜你, 指挥官"
 
 #: data/base/messages/strings/cam1strings.txt:67
 msgid "We now have a further task for you."
@@ -3891,7 +3894,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:119
 msgid "Commander."
-msgstr ""
+msgstr "指挥官。"
 
 #: data/base/messages/strings/cam1strings.txt:120
 msgid "We have decoded the incoming message to the New Paradigm..."
@@ -4289,7 +4292,7 @@ msgstr ""
 #: data/base/messages/strings/cam2strings.txt:153
 #: data/base/messages/strings/cam3strings.txt:30
 msgid "Good luck, Commander."
-msgstr ""
+msgstr "祝您好运，指挥官。"
 
 #: data/base/messages/strings/cam3strings.txt:4
 msgid "TRANSPORT MISSION: Northern Sector"
@@ -4689,7 +4692,7 @@ msgstr ""
 
 #: data/base/messages/strings/genstrings.txt:4
 msgid "Briefing Commences:"
-msgstr ""
+msgstr "简报开始: "
 
 #: data/base/messages/strings/genstrings.txt:7
 msgid "Scavenger Outpost"
@@ -4714,7 +4717,7 @@ msgstr ""
 #: data/base/messages/strings/genstrings.txt:14
 #: data/base/messages/strings/genstrings.txt:24
 msgid "Mission Target"
-msgstr ""
+msgstr "任务目标"
 
 #: data/base/messages/strings/genstrings.txt:15
 msgid "Pre-Collapse Research Center"
@@ -4755,11 +4758,11 @@ msgstr ""
 #: data/base/messages/strings/names.txt:12
 #: data/mp/messages/strings/names.txt:12
 msgid "New Design"
-msgstr ""
+msgstr "设计新的单位"
 
 #: data/base/messages/strings/names.txt:15
 msgid "Transport"
-msgstr ""
+msgstr "运送"
 
 #: data/base/messages/strings/names.txt:16
 #: data/base/messages/strings/names.txt:153
@@ -4770,7 +4773,7 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:314
 #: data/mp/messages/strings/names.txt:1470
 msgid "Truck"
-msgstr ""
+msgstr "工程车"
 
 #: data/base/messages/strings/names.txt:17
 #: data/base/messages/strings/names.txt:173
@@ -4778,51 +4781,60 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:176
 #: data/mp/messages/strings/names.txt:1829
 msgid "Machinegun Viper Wheels"
-msgstr ""
+msgstr "轮式蝰蛇坦克（机枪）"
 
 #: data/base/messages/strings/names.txt:143
 #: data/mp/messages/strings/names.txt:143
+#, fuzzy
 msgid "Light Cannon Viper Wheels"
-msgstr ""
+msgstr "轻型加农炮地堡"
 
 #: data/base/messages/strings/names.txt:144
 #: data/mp/messages/strings/names.txt:145
+#, fuzzy
 msgid "Flamer Viper Wheels"
-msgstr ""
+msgstr "轮式蝰蛇坦克（机枪）"
 
 #: data/base/messages/strings/names.txt:145
 #: data/mp/messages/strings/names.txt:146
+#, fuzzy
 msgid "Sensor Turret Viper Wheels"
-msgstr ""
+msgstr "轮式蝰蛇坦克（机枪）"
 
 #: data/base/messages/strings/names.txt:146
 #: data/mp/messages/strings/names.txt:147
+#, fuzzy
 msgid "Light Cannon Viper Tracks"
-msgstr ""
+msgstr "轻型加农炮地堡"
 
 #: data/base/messages/strings/names.txt:148
+#, fuzzy
 msgid "Heavy Machinegun Cobra Half-trackS"
-msgstr ""
+msgstr "重型机枪防御塔"
 
 #: data/base/messages/strings/names.txt:149
 #: data/mp/messages/strings/names.txt:150
+#, fuzzy
 msgid "Mortar Cobra Half-tracks"
-msgstr ""
+msgstr "半履带式"
 
 #: data/base/messages/strings/names.txt:150
 #: data/mp/messages/strings/names.txt:151
+#, fuzzy
 msgid "Light Cannon Cobra Tracks"
-msgstr ""
+msgstr "轻型加农炮"
 
 #: data/base/messages/strings/names.txt:170
 #: data/mp/messages/strings/names.txt:173
+#, fuzzy
 msgid "Medium Cannon Viper Tracks"
-msgstr ""
+msgstr "中型加农炮"
 
 #: data/base/messages/strings/names.txt:171
 #: data/mp/messages/strings/names.txt:174
+#, fuzzy
 msgid "Repair Turret Viper Wheels"
-msgstr ""
+msgstr "轮式蝰蛇坦克（机枪）"
 
 #: data/base/messages/strings/names.txt:172
 msgid "Repair Turret Viper Half-tracks"
@@ -4831,34 +4843,40 @@ msgstr ""
 #: data/base/messages/strings/names.txt:174
 #: data/mp/messages/strings/names.txt:177
 #: data/mp/messages/strings/names.txt:1830
+#, fuzzy
 msgid "Twin Machinegun Viper Wheels"
-msgstr ""
+msgstr "轮式蝰蛇坦克（机枪）"
 
 #: data/base/messages/strings/names.txt:175
 #: data/mp/messages/strings/names.txt:178
+#, fuzzy
 msgid "Twin Machinegun Viper Half-tracks"
-msgstr ""
+msgstr "轮式蝰蛇坦克（机枪）"
 
 #: data/base/messages/strings/names.txt:176
 #: data/mp/messages/strings/names.txt:179
+#, fuzzy
 msgid "Heavy Machinegun Viper Half-tracks"
-msgstr ""
+msgstr "轮式蝰蛇坦克（机枪）"
 
 #: data/base/messages/strings/names.txt:177
 #: data/mp/messages/strings/names.txt:180
 #: data/mp/messages/strings/names.txt:1837
+#, fuzzy
 msgid "Heavy Machinegun Viper Tracks"
-msgstr ""
+msgstr "重型机枪防御塔"
 
 #: data/base/messages/strings/names.txt:178
 #: data/mp/messages/strings/names.txt:181
+#, fuzzy
 msgid "Lancer Viper Wheels"
-msgstr ""
+msgstr "轮式蝰蛇坦克（机枪）"
 
 #: data/base/messages/strings/names.txt:179
 #: data/mp/messages/strings/names.txt:182
+#, fuzzy
 msgid "Mini-Rocket Viper Wheels"
-msgstr ""
+msgstr "轮式蝰蛇坦克（机枪）"
 
 #: data/base/messages/strings/names.txt:180
 #: data/mp/messages/strings/names.txt:183
@@ -4866,19 +4884,22 @@ msgid "Mini-Rocket Artillery Viper Wheels"
 msgstr ""
 
 #: data/base/messages/strings/names.txt:181
+#, fuzzy
 msgid "Bunker Buster Viper Wheels"
-msgstr ""
+msgstr "轮式蝰蛇坦克（机枪）"
 
 #: data/base/messages/strings/names.txt:183
 #: data/mp/messages/strings/names.txt:186
 #: data/mp/messages/strings/names.txt:1359
+#, fuzzy
 msgid "Medium Cannon Cobra Tracks"
-msgstr ""
+msgstr "中型加农炮"
 
 #: data/base/messages/strings/names.txt:184
 #: data/mp/messages/strings/names.txt:187
+#, fuzzy
 msgid "Heavy Cannon Cobra Tracks"
-msgstr ""
+msgstr "重型加农炮"
 
 #: data/base/messages/strings/names.txt:185
 #: data/base/messages/strings/names.txt:1344
@@ -4888,8 +4909,9 @@ msgid "Cobra Truck"
 msgstr ""
 
 #: data/base/messages/strings/names.txt:186
+#, fuzzy
 msgid "Sensor Cobra Half-tracks"
-msgstr ""
+msgstr "半履带式"
 
 #: data/base/messages/strings/names.txt:187
 #: data/mp/messages/strings/names.txt:190
@@ -4899,13 +4921,15 @@ msgstr ""
 
 #: data/base/messages/strings/names.txt:188
 #: data/mp/messages/strings/names.txt:191
+#, fuzzy
 msgid "Bombard Cobra Half-tracks"
-msgstr ""
+msgstr "半履带式"
 
 #: data/base/messages/strings/names.txt:189
 #: data/mp/messages/strings/names.txt:192
+#, fuzzy
 msgid "Command Turret Cobra Half-tracks"
-msgstr ""
+msgstr "指挥炮塔"
 
 #: data/base/messages/strings/names.txt:190
 #: data/base/messages/strings/names.txt:1420
@@ -4921,30 +4945,34 @@ msgstr ""
 
 #: data/base/messages/strings/names.txt:193
 #: data/mp/messages/strings/names.txt:196
+#, fuzzy
 msgid "Light Cannon Python Tracks"
-msgstr ""
+msgstr "轻型加农炮地堡"
 
 #: data/base/messages/strings/names.txt:194
 #: data/mods/multiplay/ntw/messages/strings/names.txt:1331
 #: data/mp/messages/strings/names.txt:197
 #: data/mp/messages/strings/names.txt:1920
+#, fuzzy
 msgid "Medium Cannon Python Tracks"
-msgstr ""
+msgstr "中型加农炮"
 
 #: data/base/messages/strings/names.txt:195
 #: data/mp/messages/strings/names.txt:198
 #: data/mp/messages/strings/names.txt:1356
 #: data/mp/messages/strings/names.txt:1510
 #: data/mp/messages/strings/names.txt:1845
+#, fuzzy
 msgid "Heavy Cannon Python Tracks"
-msgstr ""
+msgstr "重型加农炮"
 
 #: data/base/messages/strings/names.txt:196
 #: data/base/messages/strings/names.txt:1422
 #: data/mp/messages/strings/names.txt:199
 #: data/mp/messages/strings/names.txt:1435
+#, fuzzy
 msgid "Command Turret Python Tracks"
-msgstr ""
+msgstr "指挥炮塔"
 
 #: data/base/messages/strings/names.txt:199
 #: data/mp/messages/strings/names.txt:202
@@ -5060,67 +5088,67 @@ msgstr ""
 #: data/base/messages/strings/names.txt:234
 #: data/mp/messages/strings/names.txt:237
 msgid "Viper"
-msgstr ""
+msgstr "蝰蛇坦克"
 
 #: data/base/messages/strings/names.txt:235
 #: data/mp/messages/strings/names.txt:238
 msgid "Leopard"
-msgstr ""
+msgstr "美洲豹坦克"
 
 #: data/base/messages/strings/names.txt:236
 #: data/mp/messages/strings/names.txt:239
 msgid "Retaliation"
-msgstr ""
+msgstr "反击者坦克"
 
 #: data/base/messages/strings/names.txt:237
 #: data/mp/messages/strings/names.txt:240
 msgid "Bug"
-msgstr ""
+msgstr "昆虫坦克"
 
 #: data/base/messages/strings/names.txt:238
 #: data/mp/messages/strings/names.txt:241
 msgid "Cobra"
-msgstr ""
+msgstr "眼镜蛇坦克"
 
 #: data/base/messages/strings/names.txt:239
 #: data/mp/messages/strings/names.txt:242
 msgid "Panther"
-msgstr ""
+msgstr "黑豹坦克"
 
 #: data/base/messages/strings/names.txt:240
 #: data/mp/messages/strings/names.txt:243
 msgid "Retribution"
-msgstr ""
+msgstr "惩罚者坦克"
 
 #: data/base/messages/strings/names.txt:241
 #: data/mp/messages/strings/names.txt:244
 msgid "Scorpion"
-msgstr ""
+msgstr "毒蝎坦克"
 
 #: data/base/messages/strings/names.txt:242
 #: data/mp/messages/strings/names.txt:245
 msgid "Tiger"
-msgstr ""
+msgstr "猛虎坦克"
 
 #: data/base/messages/strings/names.txt:243
 #: data/mp/messages/strings/names.txt:246
 msgid "Vengeance"
-msgstr ""
+msgstr "复仇者坦克"
 
 #: data/base/messages/strings/names.txt:244
 #: data/mp/messages/strings/names.txt:247
 msgid "Python"
-msgstr ""
+msgstr "蟒蛇坦克"
 
 #: data/base/messages/strings/names.txt:245
 #: data/mp/messages/strings/names.txt:248
 msgid "Mantis"
-msgstr ""
+msgstr "螳螂坦克"
 
 #: data/base/messages/strings/names.txt:247
 #: data/mp/messages/strings/names.txt:250
 msgid "Transport Body"
-msgstr ""
+msgstr "车体"
 
 #: data/base/messages/strings/names.txt:297
 #: data/mp/messages/strings/names.txt:300
@@ -5134,7 +5162,7 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:549
 #: data/mp/messages/strings/names.txt:655
 msgid "Command Turret"
-msgstr ""
+msgstr "指挥炮塔"
 
 #: data/base/messages/strings/names.txt:303
 #: data/mp/messages/strings/names.txt:306
@@ -5146,7 +5174,7 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:310
 #: data/mp/messages/strings/names.txt:399
 msgid "Demolish"
-msgstr ""
+msgstr "拆除"
 
 #: data/base/messages/strings/names.txt:310
 #: data/mp/messages/strings/names.txt:313
@@ -5161,91 +5189,91 @@ msgstr ""
 #: data/base/messages/strings/names.txt:315
 #: data/mp/messages/strings/names.txt:318
 msgid "Wheels"
-msgstr ""
+msgstr "轮式"
 
 #: data/base/messages/strings/names.txt:316
 #: data/mp/messages/strings/names.txt:319
 msgid "Wheels II"
-msgstr ""
+msgstr "轮式二型"
 
 #: data/base/messages/strings/names.txt:317
 #: data/mp/messages/strings/names.txt:320
 msgid "Wheels III"
-msgstr ""
+msgstr "轮式三型"
 
 #: data/base/messages/strings/names.txt:318
 #: data/mp/messages/strings/names.txt:321
 msgid "Tracks"
-msgstr ""
+msgstr "履带式"
 
 #: data/base/messages/strings/names.txt:319
 #: data/mp/messages/strings/names.txt:322
 msgid "Tracks II"
-msgstr ""
+msgstr "履带式二型"
 
 #: data/base/messages/strings/names.txt:320
 #: data/mp/messages/strings/names.txt:323
 msgid "Tracks III"
-msgstr ""
+msgstr "履带式三型"
 
 #: data/base/messages/strings/names.txt:321
 #: data/mp/messages/strings/names.txt:324
 msgid "Hover"
-msgstr ""
+msgstr "气垫式"
 
 #: data/base/messages/strings/names.txt:322
 #: data/mp/messages/strings/names.txt:325
 msgid "Hover II"
-msgstr ""
+msgstr "气垫式二型"
 
 #: data/base/messages/strings/names.txt:323
 #: data/mp/messages/strings/names.txt:326
 msgid "Hover III"
-msgstr ""
+msgstr "气垫式三型"
 
 #: data/base/messages/strings/names.txt:324
 #: data/mp/messages/strings/names.txt:327
 msgid "VTOL"
-msgstr ""
+msgstr "垂直起降式"
 
 #: data/base/messages/strings/names.txt:325
 #: data/mp/messages/strings/names.txt:328
 msgid "VTOL II"
-msgstr ""
+msgstr "垂直起降式二型"
 
 #: data/base/messages/strings/names.txt:326
 #: data/mp/messages/strings/names.txt:329
 msgid "VTOL III"
-msgstr ""
+msgstr "垂直起降式三型"
 
 #: data/base/messages/strings/names.txt:327
 #: data/mp/messages/strings/names.txt:330
 msgid "Half-tracks"
-msgstr ""
+msgstr "半履带式"
 
 #: data/base/messages/strings/names.txt:328
 #: data/mp/messages/strings/names.txt:331
 msgid "Half-tracks II"
-msgstr ""
+msgstr "半履带式二型"
 
 #: data/base/messages/strings/names.txt:329
 #: data/mp/messages/strings/names.txt:332
 msgid "Half-tracks III"
-msgstr ""
+msgstr "半履带式三型"
 
 #: data/base/messages/strings/names.txt:330
 #: data/base/messages/strings/names.txt:693
 #: data/mp/messages/strings/names.txt:333
 #: data/mp/messages/strings/names.txt:702
 msgid "Cyborg Propulsion II"
-msgstr ""
+msgstr "生化步兵二型"
 
 #: data/base/messages/strings/names.txt:331
 #: data/base/messages/strings/names.txt:694
 #: data/mp/messages/strings/names.txt:334
 #: data/mp/messages/strings/names.txt:703
 msgid "Cyborg Propulsion III"
-msgstr ""
+msgstr "生化步兵三型"
 
 #: data/base/messages/strings/names.txt:334
 #: data/mp/messages/strings/names.txt:337
@@ -5267,7 +5295,7 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:344
 #: data/mp/messages/strings/names.txt:701
 msgid "Cyborg Propulsion"
-msgstr ""
+msgstr "生化步兵"
 
 #: data/base/messages/strings/names.txt:345
 #: data/mp/messages/strings/names.txt:348
@@ -5276,8 +5304,9 @@ msgstr ""
 
 #: data/base/messages/strings/names.txt:346
 #: data/mp/messages/strings/names.txt:349
+#, fuzzy
 msgid "Repair Turret"
-msgstr ""
+msgstr "维修中心"
 
 #: data/base/messages/strings/names.txt:349
 #: data/mp/messages/strings/names.txt:352
@@ -5355,65 +5384,65 @@ msgstr ""
 #: data/base/messages/strings/names.txt:383
 #: data/mp/messages/strings/names.txt:390
 msgid "Oil Derrick"
-msgstr ""
+msgstr "钻油井"
 
 #: data/base/messages/strings/names.txt:384
 #: data/mp/messages/strings/names.txt:391
 msgid "Command Center"
-msgstr ""
+msgstr "指挥中心"
 
 #: data/base/messages/strings/names.txt:385
 #: data/mp/messages/strings/names.txt:392
 msgid "Factory"
-msgstr ""
+msgstr "制造工厂"
 
 #: data/base/messages/strings/names.txt:386
 #: data/base/messages/strings/names.txt:793
 #: data/mp/messages/strings/names.txt:393
 #: data/mp/messages/strings/names.txt:804
 msgid "Factory Module"
-msgstr ""
+msgstr "制造工厂扩展设施"
 
 #: data/base/messages/strings/names.txt:387
 #: data/mp/messages/strings/names.txt:394
 msgid "Power Generator"
-msgstr ""
+msgstr "能源电厂"
 
 #: data/base/messages/strings/names.txt:388
 #: data/base/messages/strings/names.txt:816
 #: data/mp/messages/strings/names.txt:395
 #: data/mp/messages/strings/names.txt:827
 msgid "Power Module"
-msgstr ""
+msgstr "能源电厂扩展设施"
 
 #: data/base/messages/strings/names.txt:389
 #: data/mp/messages/strings/names.txt:396
 msgid "Research Facility"
-msgstr ""
+msgstr "科技研究机构"
 
 #: data/base/messages/strings/names.txt:390
 #: data/base/messages/strings/names.txt:831
 #: data/mp/messages/strings/names.txt:397
 #: data/mp/messages/strings/names.txt:842
 msgid "Research Module"
-msgstr ""
+msgstr "科技研究机构扩展设施"
 
 #: data/base/messages/strings/names.txt:391
 #: data/mp/messages/strings/names.txt:398
 msgid "Demolish Structure"
-msgstr ""
+msgstr "拆除建筑物"
 
 #: data/base/messages/strings/names.txt:393
 #: data/base/messages/strings/names.txt:1448
 #: data/mp/messages/strings/names.txt:400
 #: data/mp/messages/strings/names.txt:1461
 msgid "Repair Center"
-msgstr ""
+msgstr "维修中心"
 
 #: data/base/messages/strings/names.txt:394
 #: data/mp/messages/strings/names.txt:401
 msgid "Command Relay Center"
-msgstr ""
+msgstr "指挥中转中心"
 
 #: data/base/messages/strings/names.txt:395
 #: data/mp/messages/strings/names.txt:402
@@ -5581,31 +5610,33 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:445
 #: data/mp/messages/strings/names.txt:766
 msgid "Machinegun Guard Tower"
-msgstr ""
+msgstr "机枪防御塔"
 
 #: data/base/messages/strings/names.txt:439
 #: data/mp/messages/strings/names.txt:446
 msgid "Twin Machinegun Guard Tower"
-msgstr ""
+msgstr "双管机枪防御塔"
 
 #: data/base/messages/strings/names.txt:440
 #: data/mp/messages/strings/names.txt:447
 #: data/mp/messages/strings/names.txt:767
+#, fuzzy
 msgid "Heavy Machinegun Tower"
-msgstr ""
+msgstr "重型机枪防御塔"
 
 #: data/base/messages/strings/names.txt:441
 #: data/base/messages/strings/names.txt:757
 #: data/mp/messages/strings/names.txt:448
 msgid "Flamer Guard Tower"
-msgstr ""
+msgstr "喷火器防御塔"
 
 #: data/base/messages/strings/names.txt:442
 #: data/mp/messages/strings/names.txt:449
 #: data/mp/messages/strings/names.txt:748
 #: data/mp/messages/strings/names.txt:769
+#, fuzzy
 msgid "Lancer Tower"
-msgstr ""
+msgstr "喷火器防御塔"
 
 #: data/base/messages/strings/names.txt:443
 #: data/mp/messages/strings/names.txt:450
@@ -5620,14 +5651,14 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:503
 #: data/mp/messages/strings/names.txt:744
 msgid "Machinegun Bunker"
-msgstr ""
+msgstr "机枪地堡"
 
 #: data/base/messages/strings/names.txt:447
 #: data/base/messages/strings/names.txt:498
 #: data/mp/messages/strings/names.txt:454
 #: data/mp/messages/strings/names.txt:505
 msgid "Twin Machinegun Bunker"
-msgstr ""
+msgstr "双管机枪地堡"
 
 #: data/base/messages/strings/names.txt:448
 #: data/base/messages/strings/names.txt:500
@@ -5636,21 +5667,21 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:507
 #: data/mp/messages/strings/names.txt:745
 msgid "Heavy Machinegun Bunker"
-msgstr ""
+msgstr "重型机枪地堡"
 
 #: data/base/messages/strings/names.txt:449
 #: data/base/messages/strings/names.txt:735
 #: data/mp/messages/strings/names.txt:456
 #: data/mp/messages/strings/names.txt:746
 msgid "Light Cannon Bunker"
-msgstr ""
+msgstr "轻型加农炮地堡"
 
 #: data/base/messages/strings/names.txt:450
 #: data/base/messages/strings/names.txt:736
 #: data/mp/messages/strings/names.txt:457
 #: data/mp/messages/strings/names.txt:747
 msgid "Flamer Bunker"
-msgstr ""
+msgstr "喷火器地堡"
 
 #: data/base/messages/strings/names.txt:451
 #: data/base/messages/strings/names.txt:737
@@ -5739,21 +5770,21 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:481
 #: data/mp/messages/strings/names.txt:1046
 msgid "Light Cannon"
-msgstr ""
+msgstr "轻型加农炮"
 
 #: data/base/messages/strings/names.txt:475
 #: data/base/messages/strings/names.txt:1034
 #: data/mp/messages/strings/names.txt:482
 #: data/mp/messages/strings/names.txt:1047
 msgid "Medium Cannon"
-msgstr ""
+msgstr "中型加农炮"
 
 #: data/base/messages/strings/names.txt:476
 #: data/base/messages/strings/names.txt:1035
 #: data/mp/messages/strings/names.txt:483
 #: data/mp/messages/strings/names.txt:1048
 msgid "Heavy Cannon"
-msgstr ""
+msgstr "重型加农炮"
 
 #: data/base/messages/strings/names.txt:477
 #: data/base/messages/strings/names.txt:1036
@@ -5814,56 +5845,56 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:547
 #: data/mp/messages/strings/names.txt:1111
 msgid "Machinegun"
-msgstr ""
+msgstr "机枪"
 
 #: data/base/messages/strings/names.txt:497
 #: data/base/messages/strings/names.txt:1099
 #: data/mp/messages/strings/names.txt:504
 #: data/mp/messages/strings/names.txt:1112
 msgid "Twin Machinegun"
-msgstr ""
+msgstr "双管机枪"
 
 #: data/base/messages/strings/names.txt:499
 #: data/base/messages/strings/names.txt:1100
 #: data/mp/messages/strings/names.txt:506
 #: data/mp/messages/strings/names.txt:1113
 msgid "Heavy Machinegun"
-msgstr ""
+msgstr "重型机枪"
 
 #: data/base/messages/strings/names.txt:501
 #: data/base/messages/strings/names.txt:1101
 #: data/mp/messages/strings/names.txt:508
 #: data/mp/messages/strings/names.txt:1114
 msgid "Assault Gun"
-msgstr ""
+msgstr "突击炮"
 
 #: data/base/messages/strings/names.txt:504
 #: data/base/messages/strings/names.txt:1120
 #: data/mp/messages/strings/names.txt:511
 #: data/mp/messages/strings/names.txt:1133
 msgid "Scourge Missile"
-msgstr ""
+msgstr "鞭挞导弹"
 
 #: data/base/messages/strings/names.txt:505
 #: data/base/messages/strings/names.txt:1121
 #: data/mp/messages/strings/names.txt:512
 #: data/mp/messages/strings/names.txt:1134
 msgid "Angel Missile"
-msgstr ""
+msgstr "天使导弹"
 
 #: data/base/messages/strings/names.txt:506
 #: data/base/messages/strings/names.txt:1119
 #: data/mp/messages/strings/names.txt:513
 #: data/mp/messages/strings/names.txt:1132
 msgid "Vindicator SAM"
-msgstr ""
+msgstr "保护者防空导弹"
 
 #: data/base/messages/strings/names.txt:507
 #: data/base/messages/strings/names.txt:1122
 #: data/mp/messages/strings/names.txt:514
 #: data/mp/messages/strings/names.txt:1135
 msgid "Archangel Missile"
-msgstr ""
+msgstr "大天使导弹"
 
 #: data/base/messages/strings/names.txt:509
 #: data/base/messages/strings/names.txt:1118
@@ -5958,7 +5989,7 @@ msgstr ""
 #: data/base/messages/strings/names.txt:528
 #: data/mp/messages/strings/names.txt:535
 msgid "Tank Killer"
-msgstr ""
+msgstr "坦克杀手"
 
 #: data/base/messages/strings/names.txt:529
 #: data/mp/messages/strings/names.txt:536
@@ -6290,13 +6321,15 @@ msgstr ""
 
 #: data/base/messages/strings/names.txt:675
 #: data/mp/messages/strings/names.txt:684
+#, fuzzy
 msgid "Flamer Cyborg"
-msgstr ""
+msgstr "喷火器地堡"
 
 #: data/base/messages/strings/names.txt:676
 #: data/mp/messages/strings/names.txt:685
+#, fuzzy
 msgid "Machinegunner Cyborg"
-msgstr ""
+msgstr "机枪地堡"
 
 #: data/base/messages/strings/names.txt:677
 #: data/mp/messages/strings/names.txt:686
@@ -6305,8 +6338,9 @@ msgstr ""
 
 #: data/base/messages/strings/names.txt:678
 #: data/mp/messages/strings/names.txt:687
+#, fuzzy
 msgid "Assault Gunner Cyborg"
-msgstr ""
+msgstr "突击炮"
 
 #: data/base/messages/strings/names.txt:679
 #: data/mp/messages/strings/names.txt:688
@@ -6497,15 +6531,16 @@ msgstr ""
 
 #: data/base/messages/strings/names.txt:756
 msgid "Heavy Machinegun Guard Tower"
-msgstr ""
+msgstr "重型机枪防御塔"
 
 #: data/base/messages/strings/names.txt:758
 msgid "Lancer Guard Tower"
 msgstr ""
 
 #: data/base/messages/strings/names.txt:759
+#, fuzzy
 msgid "Mini-Rocket Guard Tower"
-msgstr ""
+msgstr "机枪防御塔"
 
 #: data/base/messages/strings/names.txt:772
 #: data/base/messages/strings/names.txt:1382
@@ -7004,97 +7039,97 @@ msgstr ""
 #: data/base/messages/strings/names.txt:929
 #: data/mp/messages/strings/names.txt:942
 msgid "Light Body - Viper"
-msgstr ""
+msgstr "轻量级车体 - 蝰蛇"
 
 #: data/base/messages/strings/names.txt:930
 #: data/mp/messages/strings/names.txt:943
 msgid "Light Body - Leopard"
-msgstr ""
+msgstr "轻量级车体 - 美洲豹"
 
 #: data/base/messages/strings/names.txt:931
 #: data/mp/messages/strings/names.txt:944
 msgid "Light Body - Retaliation"
-msgstr ""
+msgstr "轻量级车体 - 反击者"
 
 #: data/base/messages/strings/names.txt:932
 #: data/mp/messages/strings/names.txt:945
 msgid "Light Body - Bug"
-msgstr ""
+msgstr "轻量级车体 - 虫式"
 
 #: data/base/messages/strings/names.txt:933
 #: data/mp/messages/strings/names.txt:946
 msgid "Medium Body - Cobra"
-msgstr ""
+msgstr "中量级车体 - 眼镜蛇"
 
 #: data/base/messages/strings/names.txt:934
 #: data/mp/messages/strings/names.txt:947
 msgid "Medium Body - Panther"
-msgstr ""
+msgstr "中量级车体 - 黑豹"
 
 #: data/base/messages/strings/names.txt:935
 #: data/mp/messages/strings/names.txt:948
 msgid "Medium Body - Retribution"
-msgstr ""
+msgstr "中量级车体 - 惩罚者"
 
 #: data/base/messages/strings/names.txt:936
 #: data/mp/messages/strings/names.txt:949
 msgid "Medium Body - Scorpion"
-msgstr ""
+msgstr "中量级车体 - 毒蝎"
 
 #: data/base/messages/strings/names.txt:937
 #: data/mp/messages/strings/names.txt:950
 msgid "Heavy Body - Tiger"
-msgstr ""
+msgstr "重量级车体 - 猛虎"
 
 #: data/base/messages/strings/names.txt:938
 #: data/mp/messages/strings/names.txt:951
 msgid "Heavy Body - Vengeance"
-msgstr ""
+msgstr "重量级车体 - 复仇者"
 
 #: data/base/messages/strings/names.txt:939
 #: data/mp/messages/strings/names.txt:952
 msgid "Heavy Body - Python"
-msgstr ""
+msgstr "重量级车体 - 蟒蛇"
 
 #: data/base/messages/strings/names.txt:940
 #: data/mp/messages/strings/names.txt:953
 msgid "Heavy Body - Mantis"
-msgstr ""
+msgstr "重量级车体 - 螳螂"
 
 #: data/base/messages/strings/names.txt:943
 #: data/mp/messages/strings/names.txt:956
 msgid "Fuel Injection Engine Mk2"
-msgstr ""
+msgstr "燃油喷射发动机Mk2型"
 
 #: data/base/messages/strings/names.txt:944
 #: data/mp/messages/strings/names.txt:957
 msgid "Fuel Injection Engine Mk3"
-msgstr ""
+msgstr "燃油喷射发动机Mk3型"
 
 #: data/base/messages/strings/names.txt:946
 #: data/mp/messages/strings/names.txt:959
 msgid "Turbo-Charged Engine Mk2"
-msgstr ""
+msgstr "涡轮增压发动机Mk2型"
 
 #: data/base/messages/strings/names.txt:947
 #: data/mp/messages/strings/names.txt:960
 msgid "Turbo-Charged Engine Mk3"
-msgstr ""
+msgstr "涡轮增压发动机Mk3型"
 
 #: data/base/messages/strings/names.txt:949
 #: data/mp/messages/strings/names.txt:962
 msgid "Gas Turbine Engine Mk2"
-msgstr ""
+msgstr "燃气涡轮发动机Mk2型"
 
 #: data/base/messages/strings/names.txt:950
 #: data/mp/messages/strings/names.txt:963
 msgid "Gas Turbine Engine Mk3"
-msgstr ""
+msgstr "燃气涡轮发动机Mk3型"
 
 #: data/base/messages/strings/names.txt:953
 #: data/mp/messages/strings/names.txt:966
 msgid "Composite Alloys"
-msgstr ""
+msgstr "复合合金"
 
 #: data/base/messages/strings/names.txt:954
 #: data/mp/messages/strings/names.txt:967
@@ -7549,61 +7584,61 @@ msgstr ""
 #: data/base/messages/strings/names.txt:1085
 #: data/mp/messages/strings/names.txt:1098
 msgid "Hardened MG Bullets"
-msgstr ""
+msgstr "淬硬子弹"
 
 #: data/base/messages/strings/names.txt:1086
 #: data/mp/messages/strings/names.txt:1099
 msgid "APDSB MG Bullets"
-msgstr ""
+msgstr "脱壳穿甲弹"
 
 #: data/base/messages/strings/names.txt:1087
 #: data/mp/messages/strings/names.txt:1100
 msgid "APDSB MG Bullets Mk2"
-msgstr ""
+msgstr "脱壳穿甲弹Mk2型"
 
 #: data/base/messages/strings/names.txt:1088
 #: data/mp/messages/strings/names.txt:1101
 msgid "APDSB MG Bullets Mk3"
-msgstr ""
+msgstr "脱壳穿甲弹Mk3型"
 
 #: data/base/messages/strings/names.txt:1089
 #: data/mp/messages/strings/names.txt:1102
 msgid "Tungsten-Tipped MG Bullets"
-msgstr ""
+msgstr "钨核子弹（机枪攻击力增加）"
 
 #: data/base/messages/strings/names.txt:1090
 #: data/mp/messages/strings/names.txt:1103
 msgid "Tungsten-Tipped MG Bullets Mk2"
-msgstr ""
+msgstr "钨核子弹Mk2型（机枪攻击力增加）"
 
 #: data/base/messages/strings/names.txt:1091
 #: data/mp/messages/strings/names.txt:1104
 msgid "Tungsten-Tipped MG Bullets Mk3"
-msgstr ""
+msgstr "钨核子弹Mk3型（机枪攻击力增加）"
 
 #: data/base/messages/strings/names.txt:1092
 #: data/mp/messages/strings/names.txt:1105
 msgid "Depleted Uranium MG Bullets"
-msgstr ""
+msgstr "贫铀子弹（机枪攻击力增加）"
 
 #: data/base/messages/strings/names.txt:1093
 #: data/mp/messages/strings/names.txt:1106
 msgid "Depleted Uranium MG Bullets Mk2"
-msgstr ""
+msgstr "贫铀子弹Mk2型（机枪攻击力增加）"
 
 #: data/base/messages/strings/names.txt:1095
 #: data/mp/messages/strings/names.txt:1108
 msgid "Chaingun Upgrade"
-msgstr ""
+msgstr "链式机枪升级"
 
 #: data/base/messages/strings/names.txt:1096
 msgid "Rapid Fire Chaingun Upgrade"
-msgstr ""
+msgstr "高速链式机枪升级"
 
 #: data/base/messages/strings/names.txt:1097
 #: data/mp/messages/strings/names.txt:1110
 msgid "Hyper Fire Chaingun Upgrade"
-msgstr ""
+msgstr "超速速射链式机枪升级"
 
 #: data/base/messages/strings/names.txt:1103
 #: data/mp/messages/strings/names.txt:1116
@@ -7921,8 +7956,9 @@ msgstr ""
 
 #: data/base/messages/strings/names.txt:1187
 #: data/mp/messages/strings/names.txt:1200
+#, fuzzy
 msgid "Machinegun Artifact"
-msgstr ""
+msgstr "机枪"
 
 #: data/base/messages/strings/names.txt:1190
 #: data/mp/messages/strings/names.txt:1203
@@ -8144,8 +8180,9 @@ msgstr ""
 #: data/base/messages/strings/names.txt:1421
 #: data/mp/messages/strings/names.txt:149
 #: data/mp/messages/strings/names.txt:1434
+#, fuzzy
 msgid "Heavy Machinegun Cobra Half-tracks"
-msgstr ""
+msgstr "重型机枪防御塔"
 
 #: data/base/messages/strings/names.txt:1423
 #: data/mp/messages/strings/names.txt:1878
@@ -8345,7 +8382,7 @@ msgstr ""
 
 #: data/base/script/text/tutorial3.slo:289
 msgid "In this training session you'll learn how to build an effective base"
-msgstr ""
+msgstr "在这个训练任务中，你将学习如何建立一个有用的基地"
 
 #: data/base/script/text/tutorial3.slo:304
 msgid "Oil resources are key to your success"
@@ -8969,8 +9006,9 @@ msgid "Cyborg Transport"
 msgstr ""
 
 #: data/mp/messages/strings/names.txt:144
+#, fuzzy
 msgid "Light Cannon Viper Half-tracks"
-msgstr ""
+msgstr "轻型加农炮地堡"
 
 #: data/mp/messages/strings/names.txt:175
 msgid "Repair Turret Viper Half-track"
@@ -9004,8 +9042,9 @@ msgstr ""
 
 #: data/mp/messages/strings/names.txt:409
 #: data/mp/messages/strings/names.txt:732
+#, fuzzy
 msgid "Inferno Bunker"
-msgstr ""
+msgstr "喷火器地堡"
 
 #: data/mp/messages/strings/names.txt:416
 msgid "Tornado AA Site"
@@ -9023,8 +9062,9 @@ msgstr ""
 
 #: data/mp/messages/strings/names.txt:475
 #: data/mp/messages/strings/names.txt:749
+#, fuzzy
 msgid "Pulse Laser Tower"
-msgstr ""
+msgstr "喷火器防御塔"
 
 #: data/mp/messages/strings/names.txt:525
 msgid "Peperpot Emplacement"
@@ -9069,8 +9109,9 @@ msgid "Plasteel Mk3"
 msgstr ""
 
 #: data/mp/messages/strings/names.txt:768
+#, fuzzy
 msgid "Flamer Tower"
-msgstr ""
+msgstr "喷火器防御塔"
 
 #: data/mp/messages/strings/names.txt:805
 msgid "Automated Manufacturing"
@@ -9085,8 +9126,9 @@ msgid "Automated Manufacturing Mk3"
 msgstr ""
 
 #: data/mp/messages/strings/names.txt:808
+#, fuzzy
 msgid "Robotic Manufacturing"
-msgstr ""
+msgstr "生产单位"
 
 #: data/mp/messages/strings/names.txt:809
 msgid "Robotic Manufacturing Mk2"
@@ -9097,8 +9139,9 @@ msgid "Robotic Manufacturing Mk3"
 msgstr ""
 
 #: data/mp/messages/strings/names.txt:811
+#, fuzzy
 msgid "Advanced Manufacturing"
-msgstr ""
+msgstr "生产单位"
 
 #: data/mp/messages/strings/names.txt:812
 msgid "Advanced Manufacturing Mk2"
@@ -9121,16 +9164,18 @@ msgid "Automated Repair Facility Mk3"
 msgstr ""
 
 #: data/mp/messages/strings/names.txt:835
+#, fuzzy
 msgid "Robotic Repair Facility"
-msgstr ""
+msgstr "科技研究机构"
 
 #: data/mp/messages/strings/names.txt:836
 msgid "Robotic Repair Facility Mk2"
 msgstr ""
 
 #: data/mp/messages/strings/names.txt:837
+#, fuzzy
 msgid "Advanced Repair Facility"
-msgstr ""
+msgstr "科技研究机构"
 
 #: data/mp/messages/strings/names.txt:838
 msgid "Robotic Repair Facility Mk3"
@@ -9172,8 +9217,9 @@ msgid "Nexus Resistance Circuits Mk3"
 msgstr ""
 
 #: data/mp/messages/strings/names.txt:1016
+#, fuzzy
 msgid "Cluster Bomb Bay"
-msgstr ""
+msgstr "电浆炸弹"
 
 #: data/mp/messages/strings/names.txt:1021
 msgid "HE Bomb Shells"
@@ -9200,8 +9246,9 @@ msgid "Rail Target Prediction Computer"
 msgstr ""
 
 #: data/mp/messages/strings/names.txt:1382
+#, fuzzy
 msgid "Assault Gun Tower"
-msgstr ""
+msgstr "突击炮"
 
 #: data/mp/messages/strings/names.txt:1436
 msgid "Repair Cobra Tracks"
@@ -9212,28 +9259,34 @@ msgid "Bunker Buster Cobra Hover"
 msgstr ""
 
 #: data/mp/messages/strings/names.txt:1513
+#, fuzzy
 msgid "Sensor Upgrade Mk2"
-msgstr ""
+msgstr "传感器半径"
 
 #: data/mp/messages/strings/names.txt:1514
+#, fuzzy
 msgid "Sensor Upgrade Mk3"
-msgstr ""
+msgstr "传感器半径"
 
 #: data/mp/messages/strings/names.txt:1515
+#, fuzzy
 msgid "Vapor Turbine Generator Mk2"
-msgstr ""
+msgstr "燃气涡轮发动机Mk2型"
 
 #: data/mp/messages/strings/names.txt:1519
+#, fuzzy
 msgid "Gas Turbine Generator Mk2"
-msgstr ""
+msgstr "燃气涡轮发动机Mk2型"
 
 #: data/mp/messages/strings/names.txt:1520
+#, fuzzy
 msgid "Gas Turbine Generator Mk3"
-msgstr ""
+msgstr "燃气涡轮发动机Mk3型"
 
 #: data/mp/messages/strings/names.txt:1523
+#, fuzzy
 msgid "Vapor Turbine Generator Mk3"
-msgstr ""
+msgstr "燃气涡轮发动机Mk3型"
 
 #: data/mp/messages/strings/names.txt:1608
 msgid "Thermite Flamer Cyborg"
@@ -9278,8 +9331,9 @@ msgstr ""
 
 #: data/mp/messages/strings/names.txt:1638
 #: data/mp/messages/strings/names.txt:1639
+#, fuzzy
 msgid "Plasmite Flamer Bunker"
-msgstr ""
+msgstr "喷火器地堡"
 
 #: data/mp/messages/strings/names.txt:1640
 #: data/mp/messages/strings/names.txt:1641
@@ -9527,20 +9581,22 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:1792
 #: data/mp/messages/strings/names.txt:1793
 msgid "Twin Assault Gun"
-msgstr ""
+msgstr "双管突击炮"
 
 #: data/mp/messages/strings/names.txt:1794
 #: data/mp/messages/strings/names.txt:1795
+#, fuzzy
 msgid "Twin Assault Gun Hardpoint"
-msgstr ""
+msgstr "双管突击炮"
 
 #: data/mp/messages/strings/names.txt:1797
+#, fuzzy
 msgid "VTOL Plasmite Bomb Bay"
-msgstr ""
+msgstr "电浆炸弹"
 
 #: data/mp/messages/strings/names.txt:1798
 msgid "Plasmite Bomb"
-msgstr ""
+msgstr "电浆炸弹"
 
 #: data/mp/messages/strings/names.txt:1799
 msgid "VTOL EMP Missile Launcher"
@@ -9571,57 +9627,70 @@ msgstr ""
 
 #: data/mp/messages/strings/names.txt:1820
 #: data/mp/messages/strings/names.txt:1831
+#, fuzzy
 msgid "Heavy Machinegun Viper Wheels"
-msgstr ""
+msgstr "轮式蝰蛇坦克（机枪）"
 
 #: data/mp/messages/strings/names.txt:1822
+#, fuzzy
 msgid "Tank Killer Mantis Hover"
-msgstr ""
+msgstr "坦克杀手"
 
 #: data/mp/messages/strings/names.txt:1823
 #: data/mp/messages/strings/names.txt:1838
+#, fuzzy
 msgid "Heavy Machinegun Cobra Tracks"
-msgstr ""
+msgstr "重型机枪防御塔"
 
 #: data/mp/messages/strings/names.txt:1824
+#, fuzzy
 msgid "Heavy Cannon Cobra Hover"
-msgstr ""
+msgstr "重型加农炮"
 
 #: data/mp/messages/strings/names.txt:1832
+#, fuzzy
 msgid "Heavy Machinegun Cobra Wheels"
-msgstr ""
+msgstr "轮式蝰蛇坦克（机枪）"
 
 #: data/mp/messages/strings/names.txt:1833
+#, fuzzy
 msgid "Heavy Machinegun Cobra Hover"
-msgstr ""
+msgstr "重型机枪防御塔"
 
 #: data/mp/messages/strings/names.txt:1835
+#, fuzzy
 msgid "Machinegun Viper Tracks"
-msgstr ""
+msgstr "轮式蝰蛇坦克（机枪）"
 
 #: data/mp/messages/strings/names.txt:1836
+#, fuzzy
 msgid "Twin Machinegun Viper Tracks"
-msgstr ""
+msgstr "双管机枪防御塔"
 
 #: data/mp/messages/strings/names.txt:1840
+#, fuzzy
 msgid "Medium Cannon Cobra Hover"
-msgstr ""
+msgstr "中型加农炮"
 
 #: data/mp/messages/strings/names.txt:1841
+#, fuzzy
 msgid "Medium Cannon Scorpion Hover"
-msgstr ""
+msgstr "中量级车体 - 毒蝎"
 
 #: data/mp/messages/strings/names.txt:1842
+#, fuzzy
 msgid "Medium Cannon Scorpion Tracks"
-msgstr ""
+msgstr "中量级车体 - 毒蝎"
 
 #: data/mp/messages/strings/names.txt:1843
+#, fuzzy
 msgid "Medium Cannon Python Hover"
-msgstr ""
+msgstr "中型加农炮"
 
 #: data/mp/messages/strings/names.txt:1844
+#, fuzzy
 msgid "Heavy Cannon Python Hover"
-msgstr ""
+msgstr "重型加农炮"
 
 #: data/mp/messages/strings/names.txt:1846
 msgid "Rail Gun Mantis Tracks"
@@ -9644,8 +9713,9 @@ msgid "Tank Killer Vengeance Tracks"
 msgstr ""
 
 #: data/mp/messages/strings/names.txt:1855
+#, fuzzy
 msgid "Heavy Cannon Tiger Tracks"
-msgstr ""
+msgstr "重型加农炮"
 
 #: data/mp/messages/strings/names.txt:1856
 msgid "Needle Gun Tiger Tracks"
@@ -9720,8 +9790,9 @@ msgid "Lancer Scorpion Tracks"
 msgstr ""
 
 #: data/mp/messages/strings/names.txt:1882
+#, fuzzy
 msgid "Heavy Cannon Scorpion Tracks"
-msgstr ""
+msgstr "重型加农炮"
 
 #: data/mp/messages/strings/names.txt:1883
 msgid "Lancer Scorpion VTOL"
@@ -9732,40 +9803,48 @@ msgid "Bunker Buster Scorpion VTOL"
 msgstr ""
 
 #: data/mp/messages/strings/names.txt:1886
+#, fuzzy
 msgid "Command Turret Viper Tracks"
-msgstr ""
+msgstr "指挥炮塔"
 
 #: data/mp/messages/strings/names.txt:1887
+#, fuzzy
 msgid "Command Turret Cobra Tracks"
-msgstr ""
+msgstr "指挥炮塔"
 
 #: data/mp/messages/strings/names.txt:1888
+#, fuzzy
 msgid "Command Turret Scorpion Tracks"
-msgstr ""
+msgstr "指挥炮塔"
 
 #: data/mp/messages/strings/names.txt:1889
+#, fuzzy
 msgid "Command Turret Mantis Tracks"
-msgstr ""
+msgstr "指挥炮塔"
 
 #: data/mp/messages/strings/names.txt:1891
 msgid "Lancer Cobra Tracks"
 msgstr ""
 
 #: data/mp/messages/strings/names.txt:1892
+#, fuzzy
 msgid "Heavy Cannon Mantis Tracks"
-msgstr ""
+msgstr "重型加农炮"
 
 #: data/mp/messages/strings/names.txt:1893
+#, fuzzy
 msgid "Tank Killer Mantis Tracks"
-msgstr ""
+msgstr "坦克杀手"
 
 #: data/mp/messages/strings/names.txt:1894
+#, fuzzy
 msgid "Scourge Mantis Tracks"
-msgstr ""
+msgstr "鞭挞导弹"
 
 #: data/mp/messages/strings/names.txt:1895
+#, fuzzy
 msgid "Heavy Machinegun Scorpion Tracks"
-msgstr ""
+msgstr "重型机枪防御塔"
 
 #: data/mp/messages/strings/names.txt:1897
 msgid "Repair Scorpion Tracks"
@@ -9856,8 +9935,9 @@ msgid "Heavy Laser Wyvern Tracks"
 msgstr ""
 
 #: data/mp/messages/strings/names.txt:1930
+#, fuzzy
 msgid "Machinegun Viper Half-Tracks"
-msgstr ""
+msgstr "轮式蝰蛇坦克（机枪）"
 
 #: data/mp/messages/strings/names.txt:1931
 msgid "Flamer Viper Half-Tracks"
@@ -9903,7 +9983,7 @@ msgstr "丹麦语"
 #: lib/framework/i18n.c:106
 #, fuzzy
 msgid "Basque"
-msgstr "蓝色"
+msgstr "基地"
 
 #: lib/framework/i18n.c:54
 #: lib/framework/i18n.c:107
@@ -9923,8 +10003,9 @@ msgstr ""
 
 #: lib/framework/i18n.c:64
 #: lib/framework/i18n.c:117
+#, fuzzy
 msgid "Irish"
-msgstr ""
+msgstr "人机对战"
 
 #: lib/framework/i18n.c:65
 #: lib/framework/i18n.c:118
@@ -9967,7 +10048,7 @@ msgstr "荷兰语"
 #: lib/framework/i18n.c:125
 #, fuzzy
 msgid "Polish"
-msgstr "英语"
+msgstr "拆除"
 
 #: lib/framework/i18n.c:73
 #: lib/framework/i18n.c:126
@@ -10009,8 +10090,9 @@ msgstr "瑞典语"
 
 #: lib/framework/i18n.c:84
 #: lib/framework/i18n.c:133
+#, fuzzy
 msgid "Turkish"
-msgstr ""
+msgstr "履带式"
 
 #: lib/framework/i18n.c:85
 #: lib/framework/i18n.c:134
@@ -10050,15 +10132,15 @@ msgstr ""
 
 #: src/clparse.c:99
 msgid "Run in cheat mode"
-msgstr ""
+msgstr "运行在作弊模式"
 
 #: src/clparse.c:100
 msgid "Set default data directory"
-msgstr ""
+msgstr "设置默认数据目录"
 
 #: src/clparse.c:100
 msgid "data directory"
-msgstr ""
+msgstr "数据目录"
 
 #: src/clparse.c:101
 msgid "Set configuration directory"
@@ -10082,7 +10164,7 @@ msgstr ""
 
 #: src/clparse.c:103
 msgid "file"
-msgstr ""
+msgstr "文件"
 
 #: src/clparse.c:104
 msgid "Flush all debug output written to stderr"
@@ -10090,7 +10172,7 @@ msgstr ""
 
 #: src/clparse.c:105
 msgid "Play in fullscreen mode"
-msgstr ""
+msgstr "运行在全屏模式"
 
 #: src/clparse.c:106
 msgid "Load a specific game"
@@ -10102,7 +10184,7 @@ msgstr ""
 
 #: src/clparse.c:107
 msgid "Show this help message and exit"
-msgstr ""
+msgstr "显示帮助信息并退出"
 
 #: src/clparse.c:108
 msgid "Enable a global mod"
@@ -10123,8 +10205,9 @@ msgid "Enable a multiplay only mod"
 msgstr ""
 
 #: src/clparse.c:111
+#, fuzzy
 msgid "Disable asserts"
-msgstr ""
+msgstr "关闭阴影"
 
 #: src/clparse.c:112
 msgid "Causes a crash to test the crash handler"
@@ -10132,19 +10215,19 @@ msgstr ""
 
 #: src/clparse.c:113
 msgid "Load a saved game"
-msgstr ""
+msgstr "载入游戏"
 
 #: src/clparse.c:113
 msgid "savegame"
-msgstr ""
+msgstr "保存游戏"
 
 #: src/clparse.c:116
 msgid "Play in windowed mode"
-msgstr ""
+msgstr "运行在窗口模式"
 
 #: src/clparse.c:117
 msgid "Show version information and exit"
-msgstr ""
+msgstr "显示版本信息并退出"
 
 #: src/clparse.c:118
 msgid "Set the resolution to use"
@@ -10156,19 +10239,19 @@ msgstr ""
 
 #: src/clparse.c:119
 msgid "Enable shadows"
-msgstr ""
+msgstr "开启阴影"
 
 #: src/clparse.c:120
 msgid "Disable shadows"
-msgstr ""
+msgstr "关闭阴影"
 
 #: src/clparse.c:121
 msgid "Enable sound"
-msgstr ""
+msgstr "开启声音"
 
 #: src/clparse.c:122
 msgid "Disable sound"
-msgstr ""
+msgstr "关闭声音"
 
 #: src/clparse.c:123
 msgid "Activate self-test"
@@ -10196,40 +10279,40 @@ msgstr "玩家"
 #: src/design.c:476
 #: src/design.c:3514
 msgid "New Vehicle"
-msgstr ""
+msgstr "设计新单位"
 
 #: src/design.c:523
 msgid "Vehicle Body"
-msgstr ""
+msgstr "车体"
 
 #: src/design.c:545
 msgid "Vehicle Propulsion"
-msgstr ""
+msgstr "驱动"
 
 #: src/design.c:568
 #: src/design.c:593
 #: src/design.c:619
 msgid "Vehicle Turret"
-msgstr ""
+msgstr "炮塔"
 
 #: src/design.c:640
 msgid "Delete Design"
-msgstr ""
+msgstr "删除设计图"
 
 #: src/design.c:694
 #: src/design.c:742
 msgid "Kinetic Armour"
-msgstr ""
+msgstr "动能防护力"
 
 #: src/design.c:703
 #: src/design.c:753
 msgid "Thermal Armour"
-msgstr ""
+msgstr "热能防护力"
 
 #: src/design.c:719
 #: src/design.c:773
 msgid "Engine Output"
-msgstr ""
+msgstr "发动机输出功率"
 
 #: src/design.c:727
 #: src/design.c:782
@@ -10246,26 +10329,26 @@ msgstr ""
 #: src/design.c:1958
 #: src/design.c:1994
 msgid "Weight"
-msgstr ""
+msgstr "重量"
 
 #: src/design.c:813
 #: src/design.c:833
 msgid "Total Power Required"
-msgstr ""
+msgstr "总体能源需求"
 
 #: src/design.c:846
 #: src/design.c:867
 msgid "Total Body Points"
-msgstr ""
+msgstr "总体成本"
 
 #: src/design.c:1063
 #: src/design.c:1095
 msgid "Power Usage"
-msgstr ""
+msgstr "能源占用"
 
 #: src/design.c:1346
 msgid "Transporter"
-msgstr ""
+msgstr "运输占位"
 
 #: src/design.c:1368
 msgid "Hydra "
@@ -10273,65 +10356,65 @@ msgstr ""
 
 #: src/design.c:1565
 msgid "Sensor Range"
-msgstr ""
+msgstr "传感器半径"
 
 #: src/design.c:1574
 msgid "Sensor Power"
-msgstr ""
+msgstr "传感器能源"
 
 #: src/design.c:1611
 msgid "ECM Power"
-msgstr ""
+msgstr "ECM 能源"
 
 #: src/design.c:1633
 #: src/design.c:1650
 #: src/design.c:1672
 #: src/design.c:1689
 msgid "Build Points"
-msgstr ""
+msgstr "生产成本"
 
 #: src/design.c:1712
 #: src/design.c:1744
 msgid "Range"
-msgstr ""
+msgstr "攻击范围"
 
 #: src/design.c:1720
 #: src/design.c:1753
 msgid "Damage"
-msgstr ""
+msgstr "攻击力"
 
 #: src/design.c:1728
 #: src/design.c:1762
 msgid "Rate-of-Fire"
-msgstr ""
+msgstr "火力评估"
 
 #: src/design.c:1898
 #: src/design.c:1914
 msgid "Air Speed"
-msgstr ""
+msgstr "飞行移动速度"
 
 #: src/design.c:1934
 #: src/design.c:1967
 msgid "Road Speed"
-msgstr ""
+msgstr "公路移动速度"
 
 #: src/design.c:1942
 #: src/design.c:1976
 msgid "Off-Road Speed"
-msgstr ""
+msgstr "野地移动速度"
 
 #: src/design.c:1950
 #: src/design.c:1985
 msgid "Water Speed"
-msgstr ""
+msgstr "水面移动速度"
 
 #: src/design.c:2119
 msgid "Weapons"
-msgstr ""
+msgstr "武器"
 
 #: src/design.c:2143
 msgid "Systems"
-msgstr ""
+msgstr "系统"
 
 #: src/display3d.c:504
 #, fuzzy
@@ -10345,46 +10428,43 @@ msgstr "玩家"
 
 #: src/display.c:1684
 msgid "Cannot Build. Oil Resource Burning."
-msgstr ""
+msgstr "油井在燃烧, 无法建造钻油塔"
 
 #: src/display.c:1880
 #: src/display.c:2486
 #, c-format
 msgid "%s - Damage %d%% - Experience %d, %s"
-msgstr ""
+msgstr "%s - 损伤 %d%% - 经验 %d, %s"
 
 #: src/display.c:2089
 msgid "Truck ordered to build Oil Derrick"
-msgstr ""
+msgstr "命令工程车建造钻油塔"
 
 #: src/droid.c:191
 msgid "Unit Lost!"
-msgstr "单位丢失！"
+msgstr "单位被摧毁! "
 
 #: src/droid.c:1421
 msgid "Structure Restored"
-msgstr ""
+msgstr "重建建筑物"
 
 #: src/droid.c:3133
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "已选择 %u 号编队 - %u 单位"
 
 #: src/droid.c:3146
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%u 单位已指派为 %u 号编队"
 
 #: src/droid.c:3159
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "移动视野中心到 %u 号编队 - %u 单位"
 
 #: src/droid.c:3163
 #, c-format
@@ -10394,81 +10474,84 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: src/droid.c:3382
+#, fuzzy
 msgid "Rookie"
-msgstr ""
+msgstr "新兵部队: %u"
 
 #: src/droid.c:3383
+#, fuzzy
 msgctxt "rank"
 msgid "Green"
-msgstr ""
+msgstr "绿色"
 
 #: src/droid.c:3384
+#, fuzzy
 msgid "Trained"
-msgstr ""
+msgstr "作训部队: %u"
 
 #: src/droid.c:3385
+#, fuzzy
 msgid "Regular"
-msgstr ""
+msgstr "标准部队: %u"
 
 #: src/droid.c:3386
 msgid "Professional"
-msgstr ""
+msgstr "专业部队"
 
 #: src/droid.c:3387
 msgid "Veteran"
-msgstr ""
+msgstr "老兵部队"
 
 #: src/droid.c:3388
 msgid "Elite"
-msgstr ""
+msgstr "精锐部队"
 
 #: src/droid.c:3389
 msgid "Special"
-msgstr ""
+msgstr "特种部队"
 
 #: src/droid.c:3390
 msgid "Hero"
-msgstr ""
+msgstr "英雄部队"
 
 #: src/frontend.c:246
-#, fuzzy
 msgid "Single Player"
-msgstr "玩家"
+msgstr "单人游戏"
 
 #: src/frontend.c:247
-#, fuzzy
 msgid "Multi Player"
-msgstr "玩家"
+msgstr "多人游戏"
 
 #: src/frontend.c:248
 #: src/frontend.c:306
 msgid "Tutorial"
-msgstr ""
+msgstr "游戏教程"
 
 #: src/frontend.c:249
 #: src/ingameop.c:252
 msgid "Options"
-msgstr ""
+msgstr "选项设置"
 
 #: src/frontend.c:250
+#, fuzzy
 msgid "View Intro"
-msgstr ""
+msgstr "查看下一个工程车"
 
 #: src/frontend.c:252
 msgid "Quit Game"
-msgstr ""
+msgstr "退出游戏"
 
 #: src/frontend.c:254
 msgid "MAIN MENU"
-msgstr ""
+msgstr "主菜单"
 
 #: src/frontend.c:307
 msgid "Fast Play"
-msgstr ""
+msgstr "快速开始"
 
 #: src/frontend.c:308
 msgid "TUTORIALS"
-msgstr ""
+msgstr "游戏教程"
 
 #. TRANSLATORS: "Return", in this context, means "return to previous screen/menu"
 #: src/frontend.c:310
@@ -10482,78 +10565,79 @@ msgstr ""
 #: src/frontend.c:1288
 msgctxt "menu"
 msgid "Return"
-msgstr ""
+msgstr "返回"
 
 #: src/frontend.c:362
 msgid "New Campaign"
-msgstr ""
+msgstr "新的战役"
 
 #: src/frontend.c:363
 msgid "Start Skirmish Game"
-msgstr ""
+msgstr "人机对战"
 
 #: src/frontend.c:364
 #: src/ingameop.c:257
 msgid "Load Game"
-msgstr ""
+msgstr "载入游戏"
 
 #: src/frontend.c:366
 msgid "SINGLE PLAYER"
-msgstr ""
+msgstr "单人游戏"
 
 #: src/frontend.c:450
 #: src/ingameop.c:394
 #: src/mission.c:2541
 #: src/mission.c:2646
 msgid "Load Saved Game"
-msgstr "加载保存的游戏"
+msgstr "载入游戏"
 
 #: src/frontend.c:495
 msgid "MULTI PLAYER"
-msgstr ""
+msgstr "多人游戏"
 
 #: src/frontend.c:497
 msgid "Host Game"
-msgstr ""
+msgstr "建立游戏"
 
 #: src/frontend.c:498
 msgid "Join Game"
-msgstr ""
+msgstr "加入游戏"
 
 #: src/frontend.c:547
 #: src/frontend.c:854
 #: src/frontend.c:1291
 #: src/frontend.c:1311
 msgid "GAME OPTIONS"
-msgstr ""
+msgstr "游戏选项"
 
 #: src/frontend.c:548
 msgid "Game Options"
-msgstr ""
+msgstr "游戏选项"
 
 #: src/frontend.c:549
 msgid "Graphics Options"
-msgstr ""
+msgstr "图形选项"
 
 #: src/frontend.c:550
 msgid "Video Options"
-msgstr ""
+msgstr "视频选项"
 
 #: src/frontend.c:551
 msgid "Audio Options"
-msgstr ""
+msgstr "音频选项"
 
 #: src/frontend.c:552
+#, fuzzy
 msgid "Mouse Options"
-msgstr ""
+msgstr "游戏选项"
 
 #: src/frontend.c:553
 msgid "Key Mappings"
-msgstr ""
+msgstr "按键设置"
 
 #: src/frontend.c:627
 msgid "Video Playback"
-msgstr ""
+msgstr "视频回放"
 
 #: src/frontend.c:631
 #: src/frontend.c:805
@@ -10570,11 +10654,11 @@ msgstr ""
 #: src/frontend.c:922
 #: src/frontend.c:976
 msgid "Fullscreen"
-msgstr ""
+msgstr "全屏显示"
 
 #: src/frontend.c:649
 msgid "Screen Shake"
-msgstr ""
+msgstr "屏幕震动"
 
 #: src/frontend.c:652
 #: src/frontend.c:690
@@ -10593,7 +10677,7 @@ msgstr ""
 #: src/frontend.c:1182
 #: src/frontend.c:1210
 msgid "On"
-msgstr ""
+msgstr "开"
 
 #: src/frontend.c:656
 #: src/frontend.c:686
@@ -10613,64 +10697,64 @@ msgstr ""
 #: src/frontend.c:1177
 #: src/frontend.c:1205
 msgid "Off"
-msgstr ""
+msgstr "关"
 
 #: src/frontend.c:661
 #: src/multiint.c:1148
 msgid "Fog"
-msgstr ""
+msgstr "迷雾"
 
 #: src/frontend.c:664
 #: src/frontend.c:754
 msgid "Mist"
-msgstr ""
+msgstr "薄雾（可以看见地形）"
 
 #: src/frontend.c:668
 #: src/frontend.c:747
 #: src/multiint.c:1150
 msgid "Fog Of War"
-msgstr ""
+msgstr "战争迷雾"
 
 #: src/frontend.c:675
 #: src/frontend.c:679
 msgid "Subtitles"
-msgstr ""
+msgstr "字幕"
 
 #: src/frontend.c:700
 msgid "Shadows"
-msgstr ""
+msgstr "阴影"
 
 #: src/frontend.c:839
 #: src/ingameop.c:155
 msgid "Voice Volume"
-msgstr ""
+msgstr "语音音量"
 
 #: src/frontend.c:843
 #: src/ingameop.c:160
 msgid "FX Volume"
-msgstr ""
+msgstr "声效音量"
 
 #: src/frontend.c:847
 #: src/ingameop.c:165
 msgid "Music Volume"
-msgstr ""
+msgstr "音乐音量"
 
 #: src/frontend.c:918
 msgid "Graphics Mode*"
-msgstr ""
+msgstr "图形模式*"
 
 #: src/frontend.c:926
 #: src/frontend.c:971
 msgid "Windowed"
-msgstr ""
+msgstr "窗口"
 
 #: src/frontend.c:930
 msgid "Resolution*"
-msgstr ""
+msgstr "屏幕分辨率*"
 
 #: src/frontend.c:935
 msgid "Texture size"
-msgstr ""
+msgstr "质材尺寸"
 
 #: src/frontend.c:939
 msgid "Vertical sync*"
@@ -10678,11 +10762,12 @@ msgstr ""
 
 #: src/frontend.c:951
 msgid "* Takes effect on game restart"
-msgstr ""
+msgstr "* 重启游戏后生效"
 
 #: src/frontend.c:1098
+#, fuzzy
 msgid "Reverse Rotation"
-msgstr ""
+msgstr "翻转鼠标"
 
 #: src/frontend.c:1109
 msgid "Trap Cursor"
@@ -10701,8 +10786,9 @@ msgid "* May negatively affect performance"
 msgstr ""
 
 #: src/frontend.c:1191
+#, fuzzy
 msgid "Hardware"
-msgstr ""
+msgstr "困难"
 
 #: src/frontend.c:1196
 msgid "Software (coloured)"
@@ -10711,40 +10797,40 @@ msgstr ""
 #: src/frontend.c:1243
 #: src/frontend.c:1309
 msgid "Difficulty"
-msgstr ""
+msgstr "游戏难度"
 
 #: src/frontend.c:1247
 #: src/frontend.c:1317
 #: src/frontend.c:1349
 msgid "Easy"
-msgstr ""
+msgstr "容易"
 
 #: src/frontend.c:1250
 #: src/frontend.c:1320
 #: src/frontend.c:1341
 msgid "Normal"
-msgstr ""
+msgstr "正常"
 
 #: src/frontend.c:1254
 #: src/frontend.c:1323
 #: src/frontend.c:1345
 msgid "Hard"
-msgstr ""
+msgstr "困难"
 
 #: src/frontend.c:1259
 #: src/frontend.c:1310
 msgid "Scroll Speed"
-msgstr ""
+msgstr "屏幕卷动速度"
 
 #: src/frontend.c:1273
 #: src/frontend.c:1307
 msgid "Language"
-msgstr ""
+msgstr "语言"
 
 #: src/frontend.c:1285
 #: src/frontend.c:1308
 msgid "Unit Colour"
-msgstr ""
+msgstr "单位颜色"
 
 #: src/hci.c:1010
 #: src/hci.c:3798
@@ -10765,14 +10851,14 @@ msgstr "关闭"
 #: src/hci.c:1356
 #, fuzzy
 msgid "MAP SAVED!"
-msgstr "游戏已保存！"
+msgstr "游戏已保存! "
 
 #: src/hci.c:1703
 #: src/loop.c:506
 #: src/loop.c:522
 #, fuzzy
 msgid "GAME SAVED: "
-msgstr "游戏已保存！"
+msgstr "游戏已保存! "
 
 #: src/hci.c:2109
 msgid "Failed to create building"
@@ -10795,27 +10881,27 @@ msgstr ""
 
 #: src/hci.c:3700
 msgid "Commanders (F6)"
-msgstr ""
+msgstr "指挥官 (F6)"
 
 #: src/hci.c:3716
 msgid "Intelligence Display (F5)"
-msgstr ""
+msgstr "情报显示 (F5)"
 
 #: src/hci.c:3732
 msgid "Manufacture (F1)"
-msgstr ""
+msgstr "单位生产 (F1)"
 
 #: src/hci.c:3748
 msgid "Design (F4)"
-msgstr ""
+msgstr "单位设计 (F4)"
 
 #: src/hci.c:3764
 msgid "Research (F2)"
-msgstr ""
+msgstr "科技研究 (F2)"
 
 #: src/hci.c:3780
 msgid "Build (F3)"
-msgstr ""
+msgstr "建造建筑 (F3)"
 
 #: src/hci.c:3860
 #: src/multiint.c:1190
@@ -10857,7 +10943,7 @@ msgstr ""
 #: src/hci.c:4084
 #, fuzzy
 msgid "Pause or unpause the game"
-msgstr "主机已经离开了游戏！"
+msgstr "暂停/继续游戏"
 
 #: src/hci.c:4098
 msgid "Align height of all map objects"
@@ -10885,7 +10971,7 @@ msgstr ""
 
 #: src/hci.c:5540
 msgid "Loop Production"
-msgstr ""
+msgstr "循环生产"
 
 #: src/hci.c:5631
 msgid "Tab Scroll left"
@@ -10899,7 +10985,7 @@ msgstr ""
 #: src/ingameop.c:152
 #: src/ingameop.c:249
 msgid "Resume Game"
-msgstr ""
+msgstr "继续游戏"
 
 #: src/ingameop.c:259
 #: src/ingameop.c:398
@@ -10911,7 +10997,7 @@ msgstr "保存游戏"
 #: src/intdisplay.c:197
 #, fuzzy
 msgid "Build Progress"
-msgstr "进度条"
+msgstr "生产成本"
 
 #: src/intdisplay.c:228
 msgid "Construction Progress"
@@ -10924,19 +11010,19 @@ msgstr ""
 #: src/intelmap.c:245
 #: src/keybind.c:1292
 msgid "PAUSED"
-msgstr ""
+msgstr "暂停"
 
 #: src/intelmap.c:406
 msgid "Research Update"
-msgstr ""
+msgstr "研究升级"
 
 #: src/intelmap.c:410
 msgid "Project Goals"
-msgstr ""
+msgstr "计划目标"
 
 #: src/intelmap.c:413
 msgid "Current Objective"
-msgstr ""
+msgstr "当前目标"
 
 #: src/intelmap.c:1487
 msgid "New Intelligence Report"
@@ -10945,78 +11031,79 @@ msgstr ""
 #: src/intorder.c:179
 #: src/keymap.c:388
 msgid "Short Range"
-msgstr ""
+msgstr "短距离"
 
 #: src/intorder.c:180
 #: src/keymap.c:394
 msgid "Long Range"
-msgstr ""
+msgstr "长距离"
 
 #: src/intorder.c:181
 #: src/keymap.c:387
 msgid "Optimum Range"
-msgstr ""
+msgstr "最佳攻击范围"
 
 #: src/intorder.c:182
 #: src/keymap.c:405
 msgid "Retreat at Medium Damage"
-msgstr ""
+msgstr "半伤时撤退"
 
 #: src/intorder.c:183
 #: src/keymap.c:406
 msgid "Retreat at Heavy Damage"
-msgstr ""
+msgstr "重伤时撤退"
 
 #: src/intorder.c:184
 #: src/keymap.c:407
 msgid "Do or Die!"
-msgstr ""
+msgstr "不死不休"
 
 #: src/intorder.c:185
 msgid "Fire-At-Will"
-msgstr ""
+msgstr "自由开火"
 
 #: src/intorder.c:186
 #: src/keymap.c:384
 msgid "Return Fire"
-msgstr ""
+msgstr "还击"
 
 #: src/intorder.c:187
 #: src/keymap.c:382
 msgid "Hold Fire"
-msgstr ""
+msgstr "停火"
 
 #: src/intorder.c:188
 #: src/keymap.c:390
 msgid "Patrol"
-msgstr ""
+msgstr "巡逻"
 
 #: src/intorder.c:189
 #: src/keymap.c:389
 msgid "Pursue"
-msgstr ""
+msgstr "追击"
 
 #: src/intorder.c:190
 msgid "Guard Position"
-msgstr ""
+msgstr "保护"
 
 #: src/intorder.c:191
 #: src/keymap.c:392
 msgid "Hold Position"
-msgstr ""
+msgstr "驻留"
 
 #: src/intorder.c:192
 #: src/keymap.c:391
 msgid "Return For Repair"
-msgstr ""
+msgstr "返回维修点"
 
 #: src/intorder.c:193
+#, fuzzy
 msgid "Return To HQ"
-msgstr ""
+msgstr "返回"
 
 #: src/intorder.c:194
 msgid "Go to Transport"
-msgstr ""
+msgstr "前往运送点"
 
 #: src/intorder.c:195
 #: src/keymap.c:416
@@ -11025,7 +11112,7 @@ msgstr ""
 
 #: src/intorder.c:196
 msgid "Recycle"
-msgstr ""
+msgstr "循环利用"
 
 #: src/intorder.c:197
 msgid "Assign Factory Production"
@@ -11037,7 +11124,7 @@ msgstr ""
 
 #: src/intorder.c:199
 msgid "Assign Fire Support"
-msgstr ""
+msgstr "指派火力支援"
 
 #: src/intorder.c:200
 msgid "Assign VTOL Factory Production"
@@ -11049,7 +11136,7 @@ msgstr ""
 
 #: src/keybind.c:133
 msgid "Sorry, that cheat is disabled in multiplayer games."
-msgstr ""
+msgstr "抱歉, 多人游戏时无法使用作弊码"
 
 #: src/keybind.c:139
 msgid "Warning! This cheat is buggy.  We recommend to NOT use it."
@@ -11110,16 +11197,16 @@ msgstr ""
 
 #: src/keybind.c:403
 msgid "FPS display is enabled."
-msgstr ""
+msgstr "开启 FPS 显示"
 
 #: src/keybind.c:407
 msgid "FPS display is disabled."
-msgstr ""
+msgstr "关闭 FPS 显示"
 
 #: src/keybind.c:428
 #, c-format
 msgid "FPS %d; FPS-Limit: %d; PIEs %d; polys %d; Terr. polys %d; States %d"
-msgstr ""
+msgstr "FPS %d; FPS上限: %d; PIEs %d; polys %d; Terr. polys %d; 状态 %d"
 
 #: src/keybind.c:460
 #, c-format
@@ -11140,11 +11227,11 @@ msgstr ""
 
 #: src/keybind.c:643
 msgid "Fog on"
-msgstr ""
+msgstr "迷雾 开"
 
 #: src/keybind.c:643
 msgid "Fog off"
-msgstr ""
+msgstr "迷雾 关"
 
 #: src/keybind.c:1079
 #, c-format
@@ -11185,8 +11272,9 @@ msgid "(Player %u) is using cheat :%s %s"
 msgstr ""
 
 #: src/keybind.c:1374
+#, fuzzy
 msgid "Researched"
-msgstr ""
+msgstr "研究科技"
 
 #: src/keybind.c:1394
 msgid "Only displaying energy bars when selected"
@@ -11202,7 +11290,7 @@ msgstr ""
 
 #: src/keybind.c:1422
 msgid "Demo mode off - Returning to normal game mode"
-msgstr ""
+msgstr "演示模式关闭 - 正在返回正常游戏模式"
 
 #: src/keybind.c:1437
 msgid "Debug menu is Open"
@@ -11302,7 +11390,7 @@ msgstr ""
 
 #: src/keyedit.c:357
 msgid "KEY MAPPING"
-msgstr ""
+msgstr "按键设置"
 
 #: src/keyedit.c:379
 #: src/multiint.c:546
@@ -11311,27 +11399,27 @@ msgstr ""
 #: src/multiint.c:1246
 #: src/multilimit.c:148
 msgid "Return To Previous Screen"
-msgstr ""
+msgstr "返回到前一个屏幕"
 
 #: src/keyedit.c:384
 msgid "Select Default"
-msgstr ""
+msgstr "还原到默认按键设置"
 
 #: src/keymap.c:292
 msgid "Manufacture"
-msgstr ""
+msgstr "生产单位"
 
 #: src/keymap.c:293
 msgid "Research"
-msgstr ""
+msgstr "研究科技"
 
 #: src/keymap.c:294
 msgid "Build"
-msgstr ""
+msgstr "建造建筑物"
 
 #: src/keymap.c:295
 msgid "Design"
-msgstr ""
+msgstr "设计单位"
 
 #: src/keymap.c:296
 msgid "Intelligence Display"
@@ -11339,7 +11427,7 @@ msgstr ""
 
 #: src/keymap.c:297
 msgid "Commanders"
-msgstr ""
+msgstr "指挥官"
 
 #: src/keymap.c:298
 msgid "Toggle Radar"
@@ -11367,135 +11455,135 @@ msgstr ""
 
 #: src/keymap.c:308
 msgid "Assign Group 0"
-msgstr ""
+msgstr "设定 0 号编队"
 
 #: src/keymap.c:309
 msgid "Assign Group 1"
-msgstr ""
+msgstr "设定 1 号编队"
 
 #: src/keymap.c:310
 msgid "Assign Group 2"
-msgstr ""
+msgstr "设定 2 号编队"
 
 #: src/keymap.c:311
 msgid "Assign Group 3"
-msgstr ""
+msgstr "设定 3 号编队"
 
 #: src/keymap.c:312
 msgid "Assign Group 4"
-msgstr ""
+msgstr "设定 4 号编队"
 
 #: src/keymap.c:313
 msgid "Assign Group 5"
-msgstr ""
+msgstr "设定 5 号编队"
 
 #: src/keymap.c:314
 msgid "Assign Group 6"
-msgstr ""
+msgstr "设定 6 号编队"
 
 #: src/keymap.c:315
 msgid "Assign Group 7"
-msgstr ""
+msgstr "设定 7 号编队"
 
 #: src/keymap.c:316
 msgid "Assign Group 8"
-msgstr ""
+msgstr "设定 8 号编队"
 
 #: src/keymap.c:317
 msgid "Assign Group 9"
-msgstr ""
+msgstr "设定 9 号编队"
 
 #: src/keymap.c:321
 msgid "Select Group 0"
-msgstr ""
+msgstr "选择 0 号编队"
 
 #: src/keymap.c:322
 msgid "Select Group 1"
-msgstr ""
+msgstr "选择 1 号编队"
 
 #: src/keymap.c:323
 msgid "Select Group 2"
-msgstr ""
+msgstr "选择 2 号编队"
 
 #: src/keymap.c:324
 msgid "Select Group 3"
-msgstr ""
+msgstr "选择 3 号编队"
 
 #: src/keymap.c:325
 msgid "Select Group 4"
-msgstr ""
+msgstr "选择 4 号编队"
 
 #: src/keymap.c:326
 msgid "Select Group 5"
-msgstr ""
+msgstr "选择 5 号编队"
 
 #: src/keymap.c:327
 msgid "Select Group 6"
-msgstr ""
+msgstr "选择 6 号编队"
 
 #: src/keymap.c:328
 msgid "Select Group 7"
-msgstr ""
+msgstr "选择 7 号编队"
 
 #: src/keymap.c:329
 msgid "Select Group 8"
-msgstr ""
+msgstr "选择 8 号编队"
 
 #: src/keymap.c:330
 msgid "Select Group 9"
-msgstr ""
+msgstr "选择 9 号编队"
 
 #: src/keymap.c:334
 msgid "Select Commander 0"
-msgstr ""
+msgstr "选择 0 号指挥官"
 
 #: src/keymap.c:335
 msgid "Select Commander 1"
-msgstr ""
+msgstr "选择 1 号指挥官"
 
 #: src/keymap.c:336
 msgid "Select Commander 2"
-msgstr ""
+msgstr "选择 2 号指挥官"
 
 #: src/keymap.c:337
 msgid "Select Commander 3"
-msgstr ""
+msgstr "选择 3 号指挥官"
 
 #: src/keymap.c:338
 msgid "Select Commander 4"
-msgstr ""
+msgstr "选择 4 号指挥官"
 
 #: src/keymap.c:339
 msgid "Select Commander 5"
-msgstr ""
+msgstr "选择 5 号指挥官"
 
 #: src/keymap.c:340
 msgid "Select Commander 6"
-msgstr ""
+msgstr "选择 6 号指挥官"
 
 #: src/keymap.c:341
 msgid "Select Commander 7"
-msgstr ""
+msgstr "选择 7 号指挥官"
 
 #: src/keymap.c:342
 msgid "Select Commander 8"
-msgstr ""
+msgstr "选择 8 号指挥官"
 
 #: src/keymap.c:343
 msgid "Select Commander 9"
-msgstr ""
+msgstr "选择 9 号指挥官"
 
 #: src/keymap.c:347
 msgid "Multiplayer Options"
-msgstr ""
+msgstr "多人游戏选项"
 
 #: src/keymap.c:348
 msgid "Start Multiplayer Audio"
-msgstr ""
+msgstr "开始多人游戏音频"
 
 #: src/keymap.c:349
 msgid "Stop Multiplayer Audio"
-msgstr ""
+msgstr "停止多人游戏音频"
 
 #: src/keymap.c:352
 msgid "Snap View to North"
@@ -11547,47 +11635,47 @@ msgstr ""
 
 #: src/keymap.c:364
 msgid "Orders Menu"
-msgstr ""
+msgstr "指令菜单"
 
 #: src/keymap.c:365
 msgid "Decrease Game Speed"
-msgstr ""
+msgstr "减慢游戏速度"
 
 #: src/keymap.c:366
 msgid "Increase Game Speed"
-msgstr ""
+msgstr "加快游戏速度"
 
 #: src/keymap.c:367
 msgid "Reset Game Speed"
-msgstr ""
+msgstr "恢复正常游戏速度"
 
 #: src/keymap.c:368
 msgid "View North"
-msgstr ""
+msgstr "查看北方"
 
 #: src/keymap.c:369
 msgid "View South"
-msgstr ""
+msgstr "查看南方"
 
 #: src/keymap.c:370
 msgid "View East"
-msgstr ""
+msgstr "查看东方"
 
 #: src/keymap.c:371
 msgid "View West"
-msgstr ""
+msgstr "查看西方"
 
 #: src/keymap.c:372
 msgid "View next Oil Derrick"
-msgstr ""
+msgstr "查看下一个钻油塔"
 
 #: src/keymap.c:373
 msgid "View next Repair Unit"
-msgstr ""
+msgstr "查看下一个修理单位"
 
 #: src/keymap.c:374
 msgid "View next Truck"
-msgstr ""
+msgstr "查看下一个工程车"
 
 #: src/keymap.c:375
 msgid "View next Sensor Unit"
@@ -11595,7 +11683,7 @@ msgstr ""
 
 #: src/keymap.c:376
 msgid "View next Commander"
-msgstr ""
+msgstr "查看下一个指挥官"
 
 #: src/keymap.c:377
 msgid "Toggle Overlays"
@@ -11611,11 +11699,11 @@ msgstr ""
 
 #: src/keymap.c:383
 msgid "View Unassigned Units"
-msgstr ""
+msgstr "查看未指派的单位"
 
 #: src/keymap.c:385
 msgid "Fire at Will"
-msgstr ""
+msgstr "自由开火"
 
 #: src/keymap.c:386
 msgid "Return to HQ"
@@ -11623,7 +11711,7 @@ msgstr ""
 
 #: src/keymap.c:393
 msgid "Send Text Message"
-msgstr ""
+msgstr "发送文本信息"
 
 #: src/keymap.c:411
 msgid "Select all Combat Units"
@@ -11687,34 +11775,37 @@ msgstr ""
 
 #: src/loop.c:513
 #: src/loop.c:529
+#, fuzzy
 msgid "Could not save game!"
-msgstr ""
+msgstr "载入游戏"
 
 #: src/mission.c:2079
 msgid "Load Transport"
-msgstr ""
+msgstr "登陆运输飞船"
 
 #: src/mission.c:2478
+#, fuzzy
 msgid "OBJECTIVE ACHIEVED by cheating!"
-msgstr ""
+msgstr "任务目标完成"
 
 #: src/mission.c:2478
 msgid "OBJECTIVE ACHIEVED"
-msgstr ""
+msgstr "任务目标完成"
 
 #: src/mission.c:2484
+#, fuzzy
 msgid "OBJECTIVE FAILED--and you cheated!"
-msgstr ""
+msgstr "任务目标失败"
 
 #: src/mission.c:2484
 msgid "OBJECTIVE FAILED"
-msgstr ""
+msgstr "任务目标失败"
 
 #: src/mission.c:2510
 #: src/mission.c:2547
 #: src/mission.c:2665
 msgid "Quit To Main Menu"
-msgstr "退出到主菜单"
+msgstr "退回到主菜单"
 
 #: src/mission.c:2518
 msgid "Continue Game"
@@ -11723,7 +11814,7 @@ msgstr "继续游戏"
 #: src/mission.c:2612
 #, fuzzy
 msgid "GAME SAVED :"
-msgstr "游戏已保存！"
+msgstr "游戏已保存! "
 
 #: src/move.c:2930
 #, c-format
@@ -11733,12 +11824,12 @@ msgstr ""
 #: src/multigifts.c:169
 #, c-format
 msgid "%s Gives You A Visibility Report"
-msgstr ""
+msgstr "%s 玩家给你一份地图视野报告"
 
 #: src/multigifts.c:189
 #, c-format
 msgid "%s Gives you a %s"
-msgstr "%s 给你一个 %s"
+msgstr "%s 玩家给你一个 %s"
 
 #: src/multigifts.c:240
 #, c-format
@@ -11748,7 +11839,7 @@ msgstr ""
 #: src/multigifts.c:299
 #, c-format
 msgid "%s Gives You Technology Documents"
-msgstr ""
+msgstr "%s 玩家给你科技文件"
 
 #: src/multigifts.c:314
 #, c-format
@@ -11758,17 +11849,17 @@ msgstr ""
 #: src/multigifts.c:338
 #, fuzzy, c-format
 msgid "%s Gives You %u Power"
-msgstr "%s 给你能源"
+msgstr "%s 玩家给你能源"
 
 #: src/multigifts.c:358
 #, c-format
 msgid "%s Requests An Alliance With You"
-msgstr ""
+msgstr "%s 玩家请求与你同盟"
 
 #: src/multigifts.c:367
 #, c-format
 msgid "You Invite %s To Form An Alliance"
-msgstr ""
+msgstr "你向 %s 玩家发出同盟请求"
 
 #: src/multigifts.c:387
 #, c-format
@@ -11788,23 +11879,23 @@ msgstr ""
 #: src/multiint.c:491
 #: src/multilimit.c:156
 msgid "Accept Settings"
-msgstr ""
+msgstr "确认设置"
 
 #: src/multiint.c:502
 msgid "IP Address or Machine Name"
-msgstr ""
+msgstr "IP地址或计算机名称"
 
 #: src/multiint.c:543
 msgid "CONNECTION"
-msgstr ""
+msgstr "连接"
 
 #: src/multiint.c:556
 msgid "Lobby"
-msgstr ""
+msgstr "游戏大厅"
 
 #: src/multiint.c:557
 msgid "IP"
-msgstr ""
+msgstr "IP直连"
 
 #: src/multiint.c:754
 msgid "No games are available"
@@ -11832,15 +11923,15 @@ msgstr ""
 
 #: src/multiint.c:869
 msgid "Searching"
-msgstr ""
+msgstr "正在搜索"
 
 #: src/multiint.c:974
 msgid "GAMES"
-msgstr ""
+msgstr "游戏"
 
 #: src/multiint.c:984
 msgid "Refresh Games List"
-msgstr ""
+msgstr "刷新游戏列表"
 
 #: src/multiint.c:1005
 msgid "Enter Password First "
@@ -11848,19 +11939,20 @@ msgstr ""
 
 #: src/multiint.c:1115
 msgid "OPTIONS"
-msgstr ""
+msgstr "选项"
 
 #: src/multiint.c:1117
 msgid "Select Game Name"
-msgstr ""
+msgstr "选择游戏名称"
 
 #: src/multiint.c:1118
 msgid "Select Map"
-msgstr ""
+msgstr "选择地图"
 
 #: src/multiint.c:1120
+#, fuzzy
 msgid "Click to set Password"
-msgstr ""
+msgstr "点击查看地图"
 
 #: src/multiint.c:1129
 #: src/multiint.c:1130
@@ -11873,92 +11965,92 @@ msgstr ""
 
 #: src/multiint.c:1145
 msgid "Select Player Name"
-msgstr ""
+msgstr "选择玩家名字"
 
 #: src/multiint.c:1151
 msgid "Distance Fog"
-msgstr ""
+msgstr "薄雾（可以看见地形）"
 
 #: src/multiint.c:1162
 #: src/multimenu.c:754
 msgid "Alliances"
-msgstr ""
+msgstr "同盟"
 
 #: src/multiint.c:1165
 msgid "No Alliances"
-msgstr ""
+msgstr "无同盟"
 
 #: src/multiint.c:1167
 msgid "Allow Alliances"
-msgstr ""
+msgstr "允许同盟"
 
 #: src/multiint.c:1171
 msgid "Locked Teams"
-msgstr ""
+msgstr "已锁定团队"
 
 #: src/multiint.c:1192
 msgid "Low Power Levels"
-msgstr ""
+msgstr "低能源水平"
 
 #: src/multiint.c:1194
 msgid "Medium Power Levels"
-msgstr ""
+msgstr "中等能源水平"
 
 #: src/multiint.c:1196
 msgid "High Power Levels"
-msgstr ""
+msgstr "高能源水平"
 
 #: src/multiint.c:1213
 msgid "Base"
-msgstr ""
+msgstr "基地"
 
 #: src/multiint.c:1215
 msgid "Start with No Bases"
-msgstr ""
+msgstr "开始时没有基地"
 
 #: src/multiint.c:1217
 msgid "Start with Bases"
-msgstr ""
+msgstr "开始时有基地"
 
 #: src/multiint.c:1219
 msgid "Start with Advanced Bases"
-msgstr ""
+msgstr "开始时有高级基地"
 
 #: src/multiint.c:1236
 msgid "Map Preview"
-msgstr ""
+msgstr "地图预览"
 
 #: src/multiint.c:1238
 msgid "Click to see Map"
-msgstr ""
+msgstr "点击查看地图"
 
 #: src/multiint.c:1252
 msgid "Start Hosting Game"
-msgstr ""
+msgstr "开始建立游戏"
 
 #: src/multiint.c:1260
 msgid "Set Structure Limits"
-msgstr ""
+msgstr "设置建筑数量限制"
 
 #: src/multiint.c:1666
 msgid "Team"
-msgstr ""
+msgstr "团队"
 
 #: src/multiint.c:1699
 msgid "Waiting for other players"
-msgstr ""
+msgstr "等待其他玩家"
 
 #: src/multiint.c:1705
 msgid "Click when ready"
-msgstr ""
+msgstr "点击准备开始游戏"
 
 #: src/multiint.c:1743
 msgid "PLAYERS"
-msgstr ""
+msgstr "玩家"
 
 #: src/multiint.c:1903
 msgid "CHAT"
-msgstr ""
+msgstr "聊天"
 
 #: src/multiint.c:2073
 msgid "*** password is now required! ***"
@@ -11973,13 +12065,14 @@ msgid "Sorry! Failed to host the game."
 msgstr ""
 
 #: src/multiint.c:2410
+#, fuzzy
 msgid "'Locked Teams' mode enabled"
-msgstr ""
+msgstr "已锁定团队"
 
 #: src/multiint.c:2455
 #, c-format
 msgid "The host has kicked %s from the game!"
-msgstr ""
+msgstr "主玩家将 %s 踢出游戏!"
 
 #: src/multiint.c:2457
 msgid "you are being a jerk."
@@ -11987,11 +12080,11 @@ msgstr ""
 
 #: src/multiint.c:2540
 msgid "Host is Starting Game"
-msgstr ""
+msgstr "主玩家正在开始游戏"
 
 #: src/multiint.c:3012
 msgid "Players"
-msgstr ""
+msgstr "玩家"
 
 #: src/multijoin.c:98
 #: src/multijoin.c:99
@@ -12001,12 +12094,12 @@ msgstr ""
 #: src/multijoin.c:221
 #, c-format
 msgid "%s has Left the Game"
-msgstr ""
+msgstr "%s 已离开游戏"
 
 #: src/multijoin.c:303
 #, c-format
 msgid "%s is Joining the Game"
-msgstr ""
+msgstr "%s 正在进入游戏"
 
 #: src/multijoin.c:313
 #, fuzzy
@@ -12015,15 +12108,15 @@ msgstr "系统语言"
 
 #: src/multimenu.c:607
 msgid "Technology level 1"
-msgstr ""
+msgstr "技术等级1"
 
 #: src/multimenu.c:615
 msgid "Technology level 2"
-msgstr ""
+msgstr "技术等级2"
 
 #: src/multimenu.c:621
 msgid "Technology level 3"
-msgstr ""
+msgstr "技术等级3"
 
 #: src/multimenu.c:627
 msgid "Any number of players"
@@ -12031,23 +12124,23 @@ msgstr ""
 
 #: src/multimenu.c:634
 msgid "2 players"
-msgstr ""
+msgstr "2个玩家"
 
 #: src/multimenu.c:640
 msgid "4 players"
-msgstr ""
+msgstr "4个玩家"
 
 #: src/multimenu.c:646
 msgid "8 players"
-msgstr ""
+msgstr "8个玩家"
 
 #: src/multimenu.c:755
 msgid "Score"
-msgstr ""
+msgstr "分数"
 
 #: src/multimenu.c:756
 msgid "Kills"
-msgstr ""
+msgstr "杀敌"
 
 #: src/multimenu.c:765
 #, fuzzy
@@ -12059,8 +12152,9 @@ msgid "Ping"
 msgstr ""
 
 #: src/multimenu.c:774
+#, fuzzy
 msgid "Structs"
-msgstr ""
+msgstr "损失建筑物"
 
 #: src/multimenu.c:1110
 msgid "Toggle Alliance State"
@@ -12117,113 +12211,113 @@ msgstr "青绿色"
 #: src/research.c:1715
 #, c-format
 msgid "Research completed: %s"
-msgstr ""
+msgstr "科技研发已完成: %s"
 
 #: src/research.c:1720
 msgid "Research Completed"
-msgstr ""
+msgstr "研究已完成"
 
 #: src/research.c:2528
 msgid "Research Award"
-msgstr ""
+msgstr "科技研发中心"
 
 #: src/scores.c:99
 #, c-format
 msgid "Own Units: %u"
-msgstr ""
+msgstr "我方单位: %u"
 
 #: src/scores.c:100
 #, c-format
 msgid "Enemy Units: %u"
-msgstr ""
+msgstr "敌方单位: %u"
 
 #: src/scores.c:101
 #, c-format
 msgid "Own Structures: %u"
-msgstr ""
+msgstr "我方建筑物: %u"
 
 #: src/scores.c:102
 #, c-format
 msgid "Enemy Structures: %u"
-msgstr ""
+msgstr "敌方建筑物: %u"
 
 #: src/scores.c:103
 #, c-format
 msgid "Units Manufactured: %u"
-msgstr ""
+msgstr "单位生产数: %u"
 
 #: src/scores.c:104
 #, c-format
 msgid "Total Units: %u"
-msgstr ""
+msgstr "单位总数: %u"
 
 #: src/scores.c:105
 #, c-format
 msgid "Structures Built: %u"
-msgstr ""
+msgstr "建筑物建造数: %u"
 
 #: src/scores.c:106
 #, c-format
 msgid "Total Structures: %u"
-msgstr ""
+msgstr "建筑物总数: %u"
 
 #: src/scores.c:108
 #, c-format
 msgid "Rookie: %u"
-msgstr ""
+msgstr "新兵部队: %u"
 
 #: src/scores.c:109
 #, fuzzy, c-format
 msgctxt "rank"
 msgid "Green: %u"
-msgstr "绿色"
+msgstr "生手部队: %u"
 
 #: src/scores.c:110
 #, c-format
 msgid "Trained: %u"
-msgstr ""
+msgstr "作训部队: %u"
 
 #: src/scores.c:111
 #, c-format
 msgid "Regular: %u"
-msgstr ""
+msgstr "标准部队: %u"
 
 #: src/scores.c:112
 #, c-format
 msgid "Professional: %u"
-msgstr ""
+msgstr "专业部队: %u"
 
 #: src/scores.c:113
 #, c-format
 msgid "Veteran: %u"
-msgstr ""
+msgstr "老兵部队: %u"
 
 #: src/scores.c:114
 #, c-format
 msgid "Elite: %u"
-msgstr ""
+msgstr "精锐部队: %u"
 
 #: src/scores.c:115
 #, c-format
 msgid "Special: %u"
-msgstr ""
+msgstr "特种部队: %u"
 
 #: src/scores.c:116
 #, c-format
 msgid "Hero: %u"
-msgstr ""
+msgstr "英雄部队: %u"
 
 #: src/scores.c:351
 msgid "Unit Losses"
-msgstr ""
+msgstr "损失单位"
 
 #: src/scores.c:352
 msgid "Structure Losses"
-msgstr ""
+msgstr "损失建筑物"
 
 #: src/scores.c:353
 msgid "Force Information"
-msgstr ""
+msgstr "武力信息"
 
 #: src/scores.c:433
 #, c-format
@@ -12233,12 +12327,12 @@ msgstr ""
 #: src/scores.c:438
 #, c-format
 msgid "Mission Time - %s"
-msgstr ""
+msgstr "当前任务使用时间 - %s"
 
 #: src/scores.c:443
 #, c-format
 msgid "Total Game Time - %s"
-msgstr ""
+msgstr "总游戏时间 - %s"
 
 #: src/scores.c:449
 #, c-format
@@ -12247,11 +12341,11 @@ msgstr ""
 
 #: src/scriptfuncs.c:3234
 msgid "YOU ARE VICTORIOUS!"
-msgstr ""
+msgstr "你取得了胜利! "
 
 #: src/scriptfuncs.c:3238
 msgid "YOU WERE DEFEATED!"
-msgstr ""
+msgstr "你被击败了! "
 
 #: src/scriptfuncs.c:10149
 #, c-format
@@ -12267,17 +12361,16 @@ msgstr ""
 #, c-format
 msgid "%u unit selected"
 msgid_plural "%u units selected"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "已选取 %u 单位"
 
 #: src/selection.c:434
 #: src/selection.c:521
 msgid "Unable to locate any repair units!"
-msgstr ""
+msgstr "未能定位任何修理单位"
 
 #: src/selection.c:437
 msgid "Unable to locate any Trucks!"
-msgstr ""
+msgstr "未能定位任何工程车"
 
 #: src/selection.c:440
 msgid "Unable to locate any Sensor Units!"
@@ -12285,19 +12378,18 @@ msgstr ""
 
 #: src/selection.c:443
 msgid "Unable to locate any Commanders!"
-msgstr ""
+msgstr "未能定位任何指挥官"
 
 #: src/structure.c:2794
 msgid "Command Control Limit Reached - Production Halted"
-msgstr ""
+msgstr "已达到可控制单位总数上限 - 停止生产新单位"
 
 #: src/structure.c:5945
 #: src/structure.c:5970
 #, c-format
 msgid "%s - %u Unit assigned"
 msgid_plural "%s - %u Units assigned"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%s - 已指派 %u 单位"
 
 #: src/structure.c:6020
 #, c-format
@@ -12307,13 +12399,13 @@ msgstr ""
 #: src/structure.c:6034
 #, c-format
 msgid "%s - Damage %3.0f%%"
-msgstr ""
+msgstr "%s - 损伤 %3.0f%%"
 
 #: src/structure.c:6150
 #: src/structure.c:6195
 #, c-format
 msgid "%s - Electronically Damaged"
-msgstr ""
+msgstr "%s - 电子伤害"
 
 #: src/structure.c:6430
 msgid "Electronic Reward - Visibility Report"
@@ -12346,7 +12438,7 @@ msgstr ""
 #: src/transporter.c:397
 #: src/transporter.c:451
 msgid "Launch Transport"
-msgstr ""
+msgstr "发射运输飞船"
 
 #: src/transporter.c:1747
 msgid "Reinforcements landing"
@@ -12380,5 +12472,74 @@ msgstr ""
 msgid "Version %s%s%s%s"
 msgstr ""
 
+#~ msgid "Commander"
+#~ msgstr "指挥官"
+
+#~ msgid "End Of Briefing."
+#~ msgstr "简报结束。"
+
+#~ msgid "Viper Wheels Machinegun"
+#~ msgstr "轮式蝰蛇坦克（机枪）"
+
+#~ msgid "Viper Wheels Twin Machinegun"
+#~ msgstr "蝰蛇 轮式 双管机枪"
+
+#~ msgid "Viper Wheels Heavy Machinegun"
+#~ msgstr "蝰蛇 轮式 重型机枪"
+
+#~ msgid "Cobra Wheels Heavy Machinegun"
+#~ msgstr "眼镜蛇 轮式 重型机枪"
+
+#~ msgid "Cobra Hover Heavy Machinegun"
+#~ msgstr "眼镜蛇 气垫式 重型机枪"
+
+#~ msgid "Viper Tracks Machinegun"
+#~ msgstr "蝰蛇 履带式 机枪"
+
+#~ msgid "Viper Tracks Twin Machinegun"
+#~ msgstr "蝰蛇 履带式 双管机枪"
+
+#~ msgid "Viper Tracks Heavy Machinegun"
+#~ msgstr "蝰蛇 履带式 重型机枪"
+
+#~ msgid "Cobra Tracks Heavy Machinegun"
+#~ msgstr "眼镜蛇 履带式 重型机枪"
+
+#~ msgid "Cobra Hover Medium Cannon"
+#~ msgstr "眼镜蛇 气垫式 中型加农炮"
+
+#~ msgid "Scorpion Hover Medium Cannon"
+#~ msgstr "毒蝎 气垫式 中型 加农炮"
+
+#~ msgid "Scorpion Tracks Medium Cannon"
+#~ msgstr "毒蝎 履带式 中型加农炮"
+
+#~ msgid "Python Hover Medium Cannon"
+#~ msgstr "蟒蛇 气垫式 中型加农炮"
+
+#~ msgid "Python Hover Heavy Cannon"
+#~ msgstr "蟒蛇 气垫式 重型加农炮"
+
+#~ msgid "Python Tracks Heavy Cannon"
+#~ msgstr "蟒蛇 履带式 重型加农炮"
+
+#~ msgid "Load Campaign"
+#~ msgstr "载入战役"
+
+#~ msgid "One Player Skirmish"
+#~ msgstr "单人的人机对战"
+
+#~ msgid "Full"
+#~ msgstr "全屏"
+
+#~ msgid "Minimal"
+#~ msgstr "最小"
+
+#~ msgid "Game"
+#~ msgstr "游戏"
+
+#~ msgid "Mayhem"
+#~ msgstr "玩家对战"
+
 #~ msgid "The host has left the game!"
-#~ msgstr "主机已经离开了游戏！"
+#~ msgstr "主机已经离开了游戏! "
