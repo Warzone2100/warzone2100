@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2009-06-18 14:58+0200\n"
+"POT-Creation-Date: 2009-07-19 17:34+0200\n"
 "PO-Revision-Date: 2009-01-05 00:56+0100\n"
 "Last-Translator: Mathijs <mathijssch@gmail.com>\n"
 "Language-Team: Dutch <vertaling@vrijschrift.org>\n"
@@ -10128,23 +10128,23 @@ msgstr "Vereenvoudigd Chinees"
 msgid "Latin"
 msgstr "Latijn"
 
-#: lib/netplay/netplay.c:1111
-#: lib/netplay/netplay.c:1145
+#: lib/netplay/netplay.c:1112
+#: lib/netplay/netplay.c:1146
 #, c-format
 msgid "Player %u has the wrong game version.  Auto kicking."
 msgstr ""
 
-#: lib/netplay/netplay.c:1226
+#: lib/netplay/netplay.c:1227
 #, c-format
 msgid "Player %u has the wrong password.  Auto kicking."
 msgstr ""
 
-#: lib/netplay/netplay.c:2731
+#: lib/netplay/netplay.c:2753
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr ""
 
-#: lib/netplay/netplay.c:2756
+#: lib/netplay/netplay.c:2778
 #, c-format
 msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"
 msgstr ""
@@ -10578,8 +10578,8 @@ msgstr "OEFENPOTJES"
 #: src/frontend.c:712
 #: src/frontend.c:851
 #: src/frontend.c:954
-#: src/frontend.c:1145
-#: src/frontend.c:1286
+#: src/frontend.c:1147
+#: src/frontend.c:1288
 msgctxt "menu"
 msgid "Return"
 msgstr "Terug"
@@ -10603,8 +10603,8 @@ msgstr "EEN SPELER"
 
 #: src/frontend.c:450
 #: src/ingameop.c:394
-#: src/mission.c:2535
-#: src/mission.c:2640
+#: src/mission.c:2541
+#: src/mission.c:2646
 msgid "Load Saved Game"
 msgstr "Opgeslagen spel laden"
 
@@ -10622,8 +10622,8 @@ msgstr "Deelnemen aan spel"
 
 #: src/frontend.c:547
 #: src/frontend.c:854
-#: src/frontend.c:1289
-#: src/frontend.c:1309
+#: src/frontend.c:1291
+#: src/frontend.c:1311
 msgid "GAME OPTIONS"
 msgstr "SPELINSTELLINGEN"
 
@@ -10652,10 +10652,31 @@ msgid "Key Mappings"
 msgstr "Sneltoetsen"
 
 #: src/frontend.c:627
+msgid "Video Playback"
+msgstr "Video afspelen"
+
+#: src/frontend.c:631
+#: src/frontend.c:805
+msgid "1X"
+msgstr "1x"
+
+#: src/frontend.c:635
+#: src/frontend.c:795
+msgid "2X"
+msgstr "2x"
+
+#: src/frontend.c:639
+#: src/frontend.c:800
+#: src/frontend.c:922
+#: src/frontend.c:976
+msgid "Fullscreen"
+msgstr "Volledig scherm"
+
+#: src/frontend.c:649
 msgid "Screen Shake"
 msgstr "Scherm schudden"
 
-#: src/frontend.c:630
+#: src/frontend.c:652
 #: src/frontend.c:690
 #: src/frontend.c:703
 #: src/frontend.c:736
@@ -10666,14 +10687,15 @@ msgstr "Scherm schudden"
 #: src/frontend.c:1067
 #: src/frontend.c:1101
 #: src/frontend.c:1113
+#: src/frontend.c:1125
 #: src/frontend.c:1137
-#: src/frontend.c:1167
-#: src/frontend.c:1180
-#: src/frontend.c:1208
+#: src/frontend.c:1169
+#: src/frontend.c:1182
+#: src/frontend.c:1210
 msgid "On"
 msgstr "Aan"
 
-#: src/frontend.c:634
+#: src/frontend.c:656
 #: src/frontend.c:686
 #: src/frontend.c:695
 #: src/frontend.c:707
@@ -10685,49 +10707,29 @@ msgstr "Aan"
 #: src/frontend.c:1062
 #: src/frontend.c:1105
 #: src/frontend.c:1117
+#: src/frontend.c:1129
 #: src/frontend.c:1141
-#: src/frontend.c:1162
-#: src/frontend.c:1175
-#: src/frontend.c:1203
+#: src/frontend.c:1164
+#: src/frontend.c:1177
+#: src/frontend.c:1205
 msgid "Off"
 msgstr "Uit"
 
-#: src/frontend.c:639
+#: src/frontend.c:661
 #: src/multiint.c:1148
 msgid "Fog"
 msgstr "Mist"
 
-#: src/frontend.c:642
+#: src/frontend.c:664
 #: src/frontend.c:754
 msgid "Mist"
 msgstr "Nevel"
 
-#: src/frontend.c:646
+#: src/frontend.c:668
 #: src/frontend.c:747
 #: src/multiint.c:1150
 msgid "Fog Of War"
 msgstr "Oorlogsmist"
-
-#: src/frontend.c:651
-msgid "Video Playback"
-msgstr "Video afspelen"
-
-#: src/frontend.c:655
-#: src/frontend.c:805
-msgid "1X"
-msgstr "1x"
-
-#: src/frontend.c:659
-#: src/frontend.c:795
-msgid "2X"
-msgstr "2x"
-
-#: src/frontend.c:663
-#: src/frontend.c:800
-#: src/frontend.c:922
-#: src/frontend.c:976
-msgid "Fullscreen"
-msgstr "Volledig scherm"
 
 #: src/frontend.c:675
 #: src/frontend.c:679
@@ -10779,7 +10781,8 @@ msgid "* Takes effect on game restart"
 msgstr "* Gaat in na herstart"
 
 #: src/frontend.c:1098
-msgid "Reverse Mouse"
+#, fuzzy
+msgid "Reverse Rotation"
 msgstr "Draai knoppen om"
 
 #: src/frontend.c:1109
@@ -10787,61 +10790,61 @@ msgid "Trap Cursor"
 msgstr "Cursor opsluiten"
 
 #: src/frontend.c:1121
-msgid "Cursor Mode"
-msgstr "Cursormodus"
+msgid "Colored Cursors *"
+msgstr ""
 
-#: src/frontend.c:1125
-msgid "Software (colored)"
-msgstr "Programmatuur (gekleurd)"
+#: src/frontend.c:1134
+#, fuzzy
+msgid "Switch Mouse Buttons"
+msgstr "Muisinstellingen"
 
-#: src/frontend.c:1129
-#: src/frontend.c:1189
+#: src/frontend.c:1144
+msgid "* May negatively affect performance"
+msgstr ""
+
+#: src/frontend.c:1191
 msgid "Hardware"
 msgstr "Apparatuur"
 
-#: src/frontend.c:1134
-msgid "Right-click Orders"
-msgstr ""
-
-#: src/frontend.c:1194
+#: src/frontend.c:1196
 msgid "Software (coloured)"
 msgstr "Programmatuur (gekleurd)"
 
-#: src/frontend.c:1241
-#: src/frontend.c:1307
+#: src/frontend.c:1243
+#: src/frontend.c:1309
 msgid "Difficulty"
 msgstr "Moeilijkheidsgraad"
 
-#: src/frontend.c:1245
-#: src/frontend.c:1315
-#: src/frontend.c:1347
+#: src/frontend.c:1247
+#: src/frontend.c:1317
+#: src/frontend.c:1349
 msgid "Easy"
 msgstr "Makkelijk"
 
-#: src/frontend.c:1248
-#: src/frontend.c:1318
-#: src/frontend.c:1339
+#: src/frontend.c:1250
+#: src/frontend.c:1320
+#: src/frontend.c:1341
 msgid "Normal"
 msgstr "Normaal"
 
-#: src/frontend.c:1252
-#: src/frontend.c:1321
-#: src/frontend.c:1343
+#: src/frontend.c:1254
+#: src/frontend.c:1323
+#: src/frontend.c:1345
 msgid "Hard"
 msgstr "Moeilijk"
 
-#: src/frontend.c:1257
-#: src/frontend.c:1308
+#: src/frontend.c:1259
+#: src/frontend.c:1310
 msgid "Scroll Speed"
 msgstr "Scrollsnelheid"
 
-#: src/frontend.c:1271
-#: src/frontend.c:1305
+#: src/frontend.c:1273
+#: src/frontend.c:1307
 msgid "Language"
 msgstr "Taal"
 
-#: src/frontend.c:1283
-#: src/frontend.c:1306
+#: src/frontend.c:1285
+#: src/frontend.c:1308
 msgid "Unit Colour"
 msgstr "Speelkleur"
 
@@ -10869,9 +10872,8 @@ msgstr "SPEL OPGESLAGEN!"
 #: src/hci.c:1703
 #: src/loop.c:506
 #: src/loop.c:522
-#: src/mission.c:2606
 #, fuzzy
-msgid "GAME SAVED :"
+msgid "GAME SAVED: "
 msgstr "SPEL OPGESLAGEN!"
 
 #: src/hci.c:2109
@@ -11002,8 +11004,8 @@ msgstr "Spel hervatten"
 
 #: src/ingameop.c:259
 #: src/ingameop.c:398
-#: src/mission.c:2525
-#: src/mission.c:2643
+#: src/mission.c:2531
+#: src/mission.c:2649
 msgid "Save Game"
 msgstr "Spel opslaan"
 
@@ -11340,67 +11342,67 @@ msgstr "Vijand vernietigd door vals spelen!"
 msgid "Destroying selected droids and structures!"
 msgstr ""
 
-#: src/keybind.c:2296
+#: src/keybind.c:2291
 msgid "Centered on player HQ, direction NORTH"
 msgstr "Kijk op spelers HK, richting het NOORDEN"
 
-#: src/keybind.c:2308
+#: src/keybind.c:2303
 msgid "Unable to locate HQ!"
 msgstr "Kan het HK niet vinden!"
 
-#: src/keybind.c:2324
+#: src/keybind.c:2319
 msgid "Formation speed limiting OFF"
 msgstr "Snelheid beperken door formatie UIT"
 
-#: src/keybind.c:2328
+#: src/keybind.c:2323
 msgid "Formation speed limiting ON"
 msgstr "Snelheid beperken door formatie AAN"
 
-#: src/keybind.c:2458
-#: src/keybind.c:2499
-#: src/keybind.c:2521
+#: src/keybind.c:2453
+#: src/keybind.c:2494
+#: src/keybind.c:2516
 msgid "Game Speed Reset"
 msgstr "Speelsnelheid herstellen"
 
-#: src/keybind.c:2462
+#: src/keybind.c:2457
 #, c-format
 msgid "Game Speed Increased to %3.1f"
 msgstr "Speelsnelheid toegenomen tot %3.1f"
 
-#: src/keybind.c:2503
+#: src/keybind.c:2498
 #, c-format
 msgid "Game Speed Reduced to %3.1f"
 msgstr "Speelsnelheid verminderd tot %3.1f"
 
-#: src/keybind.c:2533
+#: src/keybind.c:2528
 msgid "Build menu will reopen"
 msgstr "Bouwmenu zal opnieuw openen"
 
-#: src/keybind.c:2537
+#: src/keybind.c:2532
 msgid "Build menu will not reopen"
 msgstr "Bouwmenu zal niet opnieuw openen"
 
-#: src/keybind.c:2549
+#: src/keybind.c:2544
 msgid "Radar showing friend-foe colors"
 msgstr "Radar toont vriend-en-vijand-kleuren"
 
-#: src/keybind.c:2553
+#: src/keybind.c:2548
 msgid "Radar showing player colors"
 msgstr "Radar toont spelerskleuren"
 
-#: src/keybind.c:2570
+#: src/keybind.c:2565
 msgid "Radar showing only objects"
 msgstr "Radar toont enkel objecten"
 
-#: src/keybind.c:2573
+#: src/keybind.c:2568
 msgid "Radar blending terrain and height"
 msgstr "Radar toon terrein en hoogte"
 
-#: src/keybind.c:2576
+#: src/keybind.c:2571
 msgid "Radar showing terrain"
 msgstr "Radar toont terrein"
 
-#: src/keybind.c:2579
+#: src/keybind.c:2574
 msgid "Radar showing height"
 msgstr "Radar toont hoogte"
 
@@ -11795,39 +11797,44 @@ msgstr "Bouwmenu heropenen"
 msgid "Could not save game!"
 msgstr "Laad een opgeslagen spel"
 
-#: src/mission.c:2073
+#: src/mission.c:2079
 msgid "Load Transport"
 msgstr "Vervoer inladen"
 
-#: src/mission.c:2472
+#: src/mission.c:2478
 #, fuzzy
 msgid "OBJECTIVE ACHIEVED by cheating!"
 msgstr "DOEL BEHAALD"
 
-#: src/mission.c:2472
+#: src/mission.c:2478
 msgid "OBJECTIVE ACHIEVED"
 msgstr "DOEL BEHAALD"
 
-#: src/mission.c:2478
+#: src/mission.c:2484
 #, fuzzy
 msgid "OBJECTIVE FAILED--and you cheated!"
 msgstr "DOEL MISLUKT"
 
-#: src/mission.c:2478
+#: src/mission.c:2484
 msgid "OBJECTIVE FAILED"
 msgstr "DOEL MISLUKT"
 
-#: src/mission.c:2504
-#: src/mission.c:2541
-#: src/mission.c:2659
+#: src/mission.c:2510
+#: src/mission.c:2547
+#: src/mission.c:2665
 msgid "Quit To Main Menu"
 msgstr "Afsluiten naar hoofdmenu"
 
-#: src/mission.c:2512
+#: src/mission.c:2518
 msgid "Continue Game"
 msgstr "Spel vervolgen"
 
-#: src/move.c:2928
+#: src/mission.c:2612
+#, fuzzy
+msgid "GAME SAVED :"
+msgstr "SPEL OPGESLAGEN!"
+
+#: src/move.c:2930
 #, c-format
 msgid "You found %u power in an oil drum."
 msgstr ""
@@ -12187,35 +12194,35 @@ msgstr "Geselecteerde eenheden overdragen"
 msgid "Give Power To Player"
 msgstr "Geef energie aan speler"
 
-#: src/multiplay.c:1847
+#: src/multiplay.c:1837
 msgid "Green"
 msgstr "Groen"
 
-#: src/multiplay.c:1848
+#: src/multiplay.c:1838
 msgid "Orange"
 msgstr "Oranje"
 
-#: src/multiplay.c:1849
+#: src/multiplay.c:1839
 msgid "Grey"
 msgstr "Grijs"
 
-#: src/multiplay.c:1850
+#: src/multiplay.c:1840
 msgid "Black"
 msgstr "Zwart"
 
-#: src/multiplay.c:1851
+#: src/multiplay.c:1841
 msgid "Red"
 msgstr "Rood"
 
-#: src/multiplay.c:1852
+#: src/multiplay.c:1842
 msgid "Blue"
 msgstr "Blauw"
 
-#: src/multiplay.c:1853
+#: src/multiplay.c:1843
 msgid "Pink"
 msgstr "Roze"
 
-#: src/multiplay.c:1854
+#: src/multiplay.c:1844
 msgid "Cyan"
 msgstr "Cyaan"
 
@@ -12484,6 +12491,12 @@ msgstr " - Gebouwd %s"
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "Versie %s%s%s%s"
+
+#~ msgid "Cursor Mode"
+#~ msgstr "Cursormodus"
+
+#~ msgid "Software (colored)"
+#~ msgstr "Programmatuur (gekleurd)"
 
 #~ msgid "Game"
 #~ msgstr "Spel"

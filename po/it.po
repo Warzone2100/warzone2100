@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2009-06-18 14:58+0200\n"
+"POT-Creation-Date: 2009-07-19 17:34+0200\n"
 "PO-Revision-Date: 2009-06-12 13:45+0100\n"
 "Last-Translator: Cristian Odorico <generalchris@hotmail.it>\n"
 "Language-Team: Italian <warzone-dev@gna.org>\n"
@@ -10019,23 +10019,23 @@ msgstr "Cinese semplice"
 msgid "Latin"
 msgstr "Latino"
 
-#: lib/netplay/netplay.c:1111
-#: lib/netplay/netplay.c:1145
+#: lib/netplay/netplay.c:1112
+#: lib/netplay/netplay.c:1146
 #, c-format
 msgid "Player %u has the wrong game version.  Auto kicking."
 msgstr "Il giocatore %u ha la versione sbagliata.Auto-kicking."
 
-#: lib/netplay/netplay.c:1226
+#: lib/netplay/netplay.c:1227
 #, fuzzy, c-format
 msgid "Player %u has the wrong password.  Auto kicking."
 msgstr "Il giocatore %u ha la password sbagliata.Auto-kicking."
 
-#: lib/netplay/netplay.c:2731
+#: lib/netplay/netplay.c:2753
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr "Non posso decidere il nome del server master (%s)!"
 
-#: lib/netplay/netplay.c:2756
+#: lib/netplay/netplay.c:2778
 #, fuzzy, c-format
 msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"
 msgstr "Non posso comunicare con il server della Lobby! La porta TCP 9990 è aperta?"
@@ -10466,8 +10466,8 @@ msgstr "TUTORIAL"
 #: src/frontend.c:712
 #: src/frontend.c:851
 #: src/frontend.c:954
-#: src/frontend.c:1145
-#: src/frontend.c:1286
+#: src/frontend.c:1147
+#: src/frontend.c:1288
 msgctxt "menu"
 msgid "Return"
 msgstr "Indietro"
@@ -10491,8 +10491,8 @@ msgstr "GIOCATORE SINGOLO"
 
 #: src/frontend.c:450
 #: src/ingameop.c:394
-#: src/mission.c:2535
-#: src/mission.c:2640
+#: src/mission.c:2541
+#: src/mission.c:2646
 msgid "Load Saved Game"
 msgstr "Carica Partita"
 
@@ -10510,8 +10510,8 @@ msgstr "Unisciti a una partita"
 
 #: src/frontend.c:547
 #: src/frontend.c:854
-#: src/frontend.c:1289
-#: src/frontend.c:1309
+#: src/frontend.c:1291
+#: src/frontend.c:1311
 msgid "GAME OPTIONS"
 msgstr "OPZIONI DI GIOCO"
 
@@ -10540,10 +10540,31 @@ msgid "Key Mappings"
 msgstr "Assegnazione dei Tasti"
 
 #: src/frontend.c:627
+msgid "Video Playback"
+msgstr "Riproduzione dei Video"
+
+#: src/frontend.c:631
+#: src/frontend.c:805
+msgid "1X"
+msgstr "1X"
+
+#: src/frontend.c:635
+#: src/frontend.c:795
+msgid "2X"
+msgstr "2X"
+
+#: src/frontend.c:639
+#: src/frontend.c:800
+#: src/frontend.c:922
+#: src/frontend.c:976
+msgid "Fullscreen"
+msgstr "A schermo pieno"
+
+#: src/frontend.c:649
 msgid "Screen Shake"
 msgstr "Scuoti lo Schermo"
 
-#: src/frontend.c:630
+#: src/frontend.c:652
 #: src/frontend.c:690
 #: src/frontend.c:703
 #: src/frontend.c:736
@@ -10554,14 +10575,15 @@ msgstr "Scuoti lo Schermo"
 #: src/frontend.c:1067
 #: src/frontend.c:1101
 #: src/frontend.c:1113
+#: src/frontend.c:1125
 #: src/frontend.c:1137
-#: src/frontend.c:1167
-#: src/frontend.c:1180
-#: src/frontend.c:1208
+#: src/frontend.c:1169
+#: src/frontend.c:1182
+#: src/frontend.c:1210
 msgid "On"
 msgstr "On"
 
-#: src/frontend.c:634
+#: src/frontend.c:656
 #: src/frontend.c:686
 #: src/frontend.c:695
 #: src/frontend.c:707
@@ -10573,49 +10595,29 @@ msgstr "On"
 #: src/frontend.c:1062
 #: src/frontend.c:1105
 #: src/frontend.c:1117
+#: src/frontend.c:1129
 #: src/frontend.c:1141
-#: src/frontend.c:1162
-#: src/frontend.c:1175
-#: src/frontend.c:1203
+#: src/frontend.c:1164
+#: src/frontend.c:1177
+#: src/frontend.c:1205
 msgid "Off"
 msgstr "Off"
 
-#: src/frontend.c:639
+#: src/frontend.c:661
 #: src/multiint.c:1148
 msgid "Fog"
 msgstr "Nebbia"
 
-#: src/frontend.c:642
+#: src/frontend.c:664
 #: src/frontend.c:754
 msgid "Mist"
 msgstr "Nebbia"
 
-#: src/frontend.c:646
+#: src/frontend.c:668
 #: src/frontend.c:747
 #: src/multiint.c:1150
 msgid "Fog Of War"
 msgstr "Nebbia di Guerra"
-
-#: src/frontend.c:651
-msgid "Video Playback"
-msgstr "Riproduzione dei Video"
-
-#: src/frontend.c:655
-#: src/frontend.c:805
-msgid "1X"
-msgstr "1X"
-
-#: src/frontend.c:659
-#: src/frontend.c:795
-msgid "2X"
-msgstr "2X"
-
-#: src/frontend.c:663
-#: src/frontend.c:800
-#: src/frontend.c:922
-#: src/frontend.c:976
-msgid "Fullscreen"
-msgstr "A schermo pieno"
 
 #: src/frontend.c:675
 #: src/frontend.c:679
@@ -10667,7 +10669,8 @@ msgid "* Takes effect on game restart"
 msgstr "* Ha effetto al riavvio del gioco"
 
 #: src/frontend.c:1098
-msgid "Reverse Mouse"
+#, fuzzy
+msgid "Reverse Rotation"
 msgstr "Inverti il Mouse"
 
 #: src/frontend.c:1109
@@ -10675,61 +10678,61 @@ msgid "Trap Cursor"
 msgstr "Blocca il Cursore"
 
 #: src/frontend.c:1121
-msgid "Cursor Mode"
-msgstr "Modalità cursore."
+msgid "Colored Cursors *"
+msgstr ""
 
-#: src/frontend.c:1125
-msgid "Software (colored)"
-msgstr "Software (colorato)"
+#: src/frontend.c:1134
+#, fuzzy
+msgid "Switch Mouse Buttons"
+msgstr "Opzioni del mouse"
 
-#: src/frontend.c:1129
-#: src/frontend.c:1189
+#: src/frontend.c:1144
+msgid "* May negatively affect performance"
+msgstr ""
+
+#: src/frontend.c:1191
 msgid "Hardware"
 msgstr "Hardware"
 
-#: src/frontend.c:1134
-msgid "Right-click Orders"
-msgstr "Ordini tramite click destro"
-
-#: src/frontend.c:1194
+#: src/frontend.c:1196
 msgid "Software (coloured)"
 msgstr "Software (colorato)"
 
-#: src/frontend.c:1241
-#: src/frontend.c:1307
+#: src/frontend.c:1243
+#: src/frontend.c:1309
 msgid "Difficulty"
 msgstr "Difficoltà"
 
-#: src/frontend.c:1245
-#: src/frontend.c:1315
-#: src/frontend.c:1347
+#: src/frontend.c:1247
+#: src/frontend.c:1317
+#: src/frontend.c:1349
 msgid "Easy"
 msgstr "Facile"
 
-#: src/frontend.c:1248
-#: src/frontend.c:1318
-#: src/frontend.c:1339
+#: src/frontend.c:1250
+#: src/frontend.c:1320
+#: src/frontend.c:1341
 msgid "Normal"
 msgstr "Normale"
 
-#: src/frontend.c:1252
-#: src/frontend.c:1321
-#: src/frontend.c:1343
+#: src/frontend.c:1254
+#: src/frontend.c:1323
+#: src/frontend.c:1345
 msgid "Hard"
 msgstr "Difficile"
 
-#: src/frontend.c:1257
-#: src/frontend.c:1308
+#: src/frontend.c:1259
+#: src/frontend.c:1310
 msgid "Scroll Speed"
 msgstr "Velocità di Scorrimento"
 
-#: src/frontend.c:1271
-#: src/frontend.c:1305
+#: src/frontend.c:1273
+#: src/frontend.c:1307
 msgid "Language"
 msgstr "Lingua"
 
-#: src/frontend.c:1283
-#: src/frontend.c:1306
+#: src/frontend.c:1285
+#: src/frontend.c:1308
 msgid "Unit Colour"
 msgstr "Colore delle Unità"
 
@@ -10756,8 +10759,8 @@ msgstr "MAPPA SALVATA!"
 #: src/hci.c:1703
 #: src/loop.c:506
 #: src/loop.c:522
-#: src/mission.c:2606
-msgid "GAME SAVED :"
+#, fuzzy
+msgid "GAME SAVED: "
 msgstr "PARTITA SALVATA!"
 
 #: src/hci.c:2109
@@ -10888,8 +10891,8 @@ msgstr "Riprendi la partita"
 
 #: src/ingameop.c:259
 #: src/ingameop.c:398
-#: src/mission.c:2525
-#: src/mission.c:2643
+#: src/mission.c:2531
+#: src/mission.c:2649
 msgid "Save Game"
 msgstr "Salva Partita"
 
@@ -11222,67 +11225,67 @@ msgstr "Nemici distrutti con i trucchi!"
 msgid "Destroying selected droids and structures!"
 msgstr "I droidi e le strutture selezione saranno distrutte."
 
-#: src/keybind.c:2296
+#: src/keybind.c:2291
 msgid "Centered on player HQ, direction NORTH"
 msgstr "Visuale centrata sul Quartier Generale, direzione NORD"
 
-#: src/keybind.c:2308
+#: src/keybind.c:2303
 msgid "Unable to locate HQ!"
 msgstr "Impossibile localizzare il Quartier Generale!"
 
-#: src/keybind.c:2324
+#: src/keybind.c:2319
 msgid "Formation speed limiting OFF"
 msgstr "Limitazione velocità in formazione OFF"
 
-#: src/keybind.c:2328
+#: src/keybind.c:2323
 msgid "Formation speed limiting ON"
 msgstr "Limitazione velocità in formazione ON"
 
-#: src/keybind.c:2458
-#: src/keybind.c:2499
-#: src/keybind.c:2521
+#: src/keybind.c:2453
+#: src/keybind.c:2494
+#: src/keybind.c:2516
 msgid "Game Speed Reset"
 msgstr "Velocità di Gioco Reimpostata"
 
-#: src/keybind.c:2462
+#: src/keybind.c:2457
 #, c-format
 msgid "Game Speed Increased to %3.1f"
 msgstr "Velocità di Gioco Aumentata a %3.1f"
 
-#: src/keybind.c:2503
+#: src/keybind.c:2498
 #, c-format
 msgid "Game Speed Reduced to %3.1f"
 msgstr "Velocità di Gioco Ridotta a %3.1f"
 
-#: src/keybind.c:2533
+#: src/keybind.c:2528
 msgid "Build menu will reopen"
 msgstr "Il menu Costruzione si riaprirà"
 
-#: src/keybind.c:2537
+#: src/keybind.c:2532
 msgid "Build menu will not reopen"
 msgstr "Il menu Costruzione non si riaprirà"
 
-#: src/keybind.c:2549
+#: src/keybind.c:2544
 msgid "Radar showing friend-foe colors"
 msgstr "Il radar mostra i colori Amici-Nemici"
 
-#: src/keybind.c:2553
+#: src/keybind.c:2548
 msgid "Radar showing player colors"
 msgstr "Il radar mostra il colore dei giocatori"
 
-#: src/keybind.c:2570
+#: src/keybind.c:2565
 msgid "Radar showing only objects"
 msgstr "Il radar mostra solo oggetti"
 
-#: src/keybind.c:2573
+#: src/keybind.c:2568
 msgid "Radar blending terrain and height"
 msgstr "Radar visualizzante terreno e altitudine"
 
-#: src/keybind.c:2576
+#: src/keybind.c:2571
 msgid "Radar showing terrain"
 msgstr "Il radar mostra il terreno"
 
-#: src/keybind.c:2579
+#: src/keybind.c:2574
 msgid "Radar showing height"
 msgstr "Il radar mostra l'altitudine"
 
@@ -11676,37 +11679,41 @@ msgstr "Attiva la riapertura del menu di costruzione"
 msgid "Could not save game!"
 msgstr "Non posso salvare la partita!"
 
-#: src/mission.c:2073
+#: src/mission.c:2079
 msgid "Load Transport"
 msgstr "Carica il trasporto"
 
-#: src/mission.c:2472
+#: src/mission.c:2478
 msgid "OBJECTIVE ACHIEVED by cheating!"
 msgstr "OBIETTIVO RAGGIUNTO barando!"
 
-#: src/mission.c:2472
+#: src/mission.c:2478
 msgid "OBJECTIVE ACHIEVED"
 msgstr "OBIETTIVO RAGGIUNTO"
 
-#: src/mission.c:2478
+#: src/mission.c:2484
 msgid "OBJECTIVE FAILED--and you cheated!"
 msgstr "MISSIONE FALLITA e hai barato!"
 
-#: src/mission.c:2478
+#: src/mission.c:2484
 msgid "OBJECTIVE FAILED"
 msgstr "MISSIONE FALLITA"
 
-#: src/mission.c:2504
-#: src/mission.c:2541
-#: src/mission.c:2659
+#: src/mission.c:2510
+#: src/mission.c:2547
+#: src/mission.c:2665
 msgid "Quit To Main Menu"
 msgstr "Esci al Menu Principale"
 
-#: src/mission.c:2512
+#: src/mission.c:2518
 msgid "Continue Game"
 msgstr "Continua la Partita"
 
-#: src/move.c:2928
+#: src/mission.c:2612
+msgid "GAME SAVED :"
+msgstr "PARTITA SALVATA!"
+
+#: src/move.c:2930
 #, fuzzy, c-format
 msgid "You found %u power in an oil drum."
 msgstr "Hai trovato %u di energia in un barile di petrolio"
@@ -12063,35 +12070,35 @@ msgstr "Consegna le Unità Selezionate"
 msgid "Give Power To Player"
 msgstr "Invia Energia al Giocatore"
 
-#: src/multiplay.c:1847
+#: src/multiplay.c:1837
 msgid "Green"
 msgstr "Verde"
 
-#: src/multiplay.c:1848
+#: src/multiplay.c:1838
 msgid "Orange"
 msgstr "Arancione"
 
-#: src/multiplay.c:1849
+#: src/multiplay.c:1839
 msgid "Grey"
 msgstr "Grigio"
 
-#: src/multiplay.c:1850
+#: src/multiplay.c:1840
 msgid "Black"
 msgstr "Nero"
 
-#: src/multiplay.c:1851
+#: src/multiplay.c:1841
 msgid "Red"
 msgstr "Rosso"
 
-#: src/multiplay.c:1852
+#: src/multiplay.c:1842
 msgid "Blue"
 msgstr "Blu"
 
-#: src/multiplay.c:1853
+#: src/multiplay.c:1843
 msgid "Pink"
 msgstr "Rosa"
 
-#: src/multiplay.c:1854
+#: src/multiplay.c:1844
 msgid "Cyan"
 msgstr "Azzurro"
 
@@ -12360,6 +12367,15 @@ msgstr " - Costruito %s"
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "Versione %s%s%s%s"
+
+#~ msgid "Cursor Mode"
+#~ msgstr "Modalità cursore."
+
+#~ msgid "Software (colored)"
+#~ msgstr "Software (colorato)"
+
+#~ msgid "Right-click Orders"
+#~ msgstr "Ordini tramite click destro"
 
 #~ msgid "Game"
 #~ msgstr "Partita"

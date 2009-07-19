@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2009-06-18 14:58+0200\n"
+"POT-Creation-Date: 2009-07-19 17:34+0200\n"
 "PO-Revision-Date: 2009-05-11 00:21+0800\n"
 "Last-Translator: \n"
 "Language-Team: zh_TW\n"
@@ -10068,23 +10068,23 @@ msgstr "簡體中文"
 msgid "Latin"
 msgstr "拉丁語"
 
-#: lib/netplay/netplay.c:1111
-#: lib/netplay/netplay.c:1145
+#: lib/netplay/netplay.c:1112
+#: lib/netplay/netplay.c:1146
 #, c-format
 msgid "Player %u has the wrong game version.  Auto kicking."
 msgstr ""
 
-#: lib/netplay/netplay.c:1226
+#: lib/netplay/netplay.c:1227
 #, c-format
 msgid "Player %u has the wrong password.  Auto kicking."
 msgstr ""
 
-#: lib/netplay/netplay.c:2731
+#: lib/netplay/netplay.c:2753
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr ""
 
-#: lib/netplay/netplay.c:2756
+#: lib/netplay/netplay.c:2778
 #, c-format
 msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"
 msgstr ""
@@ -10513,8 +10513,8 @@ msgstr "教學模式"
 #: src/frontend.c:712
 #: src/frontend.c:851
 #: src/frontend.c:954
-#: src/frontend.c:1145
-#: src/frontend.c:1286
+#: src/frontend.c:1147
+#: src/frontend.c:1288
 msgctxt "menu"
 msgid "Return"
 msgstr "返回"
@@ -10538,8 +10538,8 @@ msgstr "SINGLE PLAYER"
 
 #: src/frontend.c:450
 #: src/ingameop.c:394
-#: src/mission.c:2535
-#: src/mission.c:2640
+#: src/mission.c:2541
+#: src/mission.c:2646
 msgid "Load Saved Game"
 msgstr "載入已儲存的遊戲"
 
@@ -10557,8 +10557,8 @@ msgstr "加入遊戲"
 
 #: src/frontend.c:547
 #: src/frontend.c:854
-#: src/frontend.c:1289
-#: src/frontend.c:1309
+#: src/frontend.c:1291
+#: src/frontend.c:1311
 msgid "GAME OPTIONS"
 msgstr "遊戲選項"
 
@@ -10587,10 +10587,31 @@ msgid "Key Mappings"
 msgstr "鍵盤配置"
 
 #: src/frontend.c:627
+msgid "Video Playback"
+msgstr "播放影片"
+
+#: src/frontend.c:631
+#: src/frontend.c:805
+msgid "1X"
+msgstr "1倍大小"
+
+#: src/frontend.c:635
+#: src/frontend.c:795
+msgid "2X"
+msgstr "2倍大小"
+
+#: src/frontend.c:639
+#: src/frontend.c:800
+#: src/frontend.c:922
+#: src/frontend.c:976
+msgid "Fullscreen"
+msgstr "全螢幕"
+
+#: src/frontend.c:649
 msgid "Screen Shake"
 msgstr "震動螢幕"
 
-#: src/frontend.c:630
+#: src/frontend.c:652
 #: src/frontend.c:690
 #: src/frontend.c:703
 #: src/frontend.c:736
@@ -10601,14 +10622,15 @@ msgstr "震動螢幕"
 #: src/frontend.c:1067
 #: src/frontend.c:1101
 #: src/frontend.c:1113
+#: src/frontend.c:1125
 #: src/frontend.c:1137
-#: src/frontend.c:1167
-#: src/frontend.c:1180
-#: src/frontend.c:1208
+#: src/frontend.c:1169
+#: src/frontend.c:1182
+#: src/frontend.c:1210
 msgid "On"
 msgstr "開啟"
 
-#: src/frontend.c:634
+#: src/frontend.c:656
 #: src/frontend.c:686
 #: src/frontend.c:695
 #: src/frontend.c:707
@@ -10620,49 +10642,29 @@ msgstr "開啟"
 #: src/frontend.c:1062
 #: src/frontend.c:1105
 #: src/frontend.c:1117
+#: src/frontend.c:1129
 #: src/frontend.c:1141
-#: src/frontend.c:1162
-#: src/frontend.c:1175
-#: src/frontend.c:1203
+#: src/frontend.c:1164
+#: src/frontend.c:1177
+#: src/frontend.c:1205
 msgid "Off"
 msgstr "關閉"
 
-#: src/frontend.c:639
+#: src/frontend.c:661
 #: src/multiint.c:1148
 msgid "Fog"
 msgstr "迷霧"
 
-#: src/frontend.c:642
+#: src/frontend.c:664
 #: src/frontend.c:754
 msgid "Mist"
 msgstr "迷霧"
 
-#: src/frontend.c:646
+#: src/frontend.c:668
 #: src/frontend.c:747
 #: src/multiint.c:1150
 msgid "Fog Of War"
 msgstr "完全迷霧"
-
-#: src/frontend.c:651
-msgid "Video Playback"
-msgstr "播放影片"
-
-#: src/frontend.c:655
-#: src/frontend.c:805
-msgid "1X"
-msgstr "1倍大小"
-
-#: src/frontend.c:659
-#: src/frontend.c:795
-msgid "2X"
-msgstr "2倍大小"
-
-#: src/frontend.c:663
-#: src/frontend.c:800
-#: src/frontend.c:922
-#: src/frontend.c:976
-msgid "Fullscreen"
-msgstr "全螢幕"
 
 #: src/frontend.c:675
 #: src/frontend.c:679
@@ -10714,7 +10716,8 @@ msgid "* Takes effect on game restart"
 msgstr "*重啟遊戲後生效"
 
 #: src/frontend.c:1098
-msgid "Reverse Mouse"
+#, fuzzy
+msgid "Reverse Rotation"
 msgstr "反向滑鼠"
 
 #: src/frontend.c:1109
@@ -10722,61 +10725,61 @@ msgid "Trap Cursor"
 msgstr "捕捉滑鼠"
 
 #: src/frontend.c:1121
-msgid "Cursor Mode"
-msgstr "滑鼠模式"
+msgid "Colored Cursors *"
+msgstr ""
 
-#: src/frontend.c:1125
-msgid "Software (colored)"
-msgstr "軟體 (colored)"
+#: src/frontend.c:1134
+#, fuzzy
+msgid "Switch Mouse Buttons"
+msgstr "滑鼠選項"
 
-#: src/frontend.c:1129
-#: src/frontend.c:1189
+#: src/frontend.c:1144
+msgid "* May negatively affect performance"
+msgstr ""
+
+#: src/frontend.c:1191
 msgid "Hardware"
 msgstr "硬體"
 
-#: src/frontend.c:1134
-msgid "Right-click Orders"
-msgstr ""
-
-#: src/frontend.c:1194
+#: src/frontend.c:1196
 msgid "Software (coloured)"
 msgstr "軟體 (coloured)"
 
-#: src/frontend.c:1241
-#: src/frontend.c:1307
+#: src/frontend.c:1243
+#: src/frontend.c:1309
 msgid "Difficulty"
 msgstr "難度"
 
-#: src/frontend.c:1245
-#: src/frontend.c:1315
-#: src/frontend.c:1347
+#: src/frontend.c:1247
+#: src/frontend.c:1317
+#: src/frontend.c:1349
 msgid "Easy"
 msgstr "容易"
 
-#: src/frontend.c:1248
-#: src/frontend.c:1318
-#: src/frontend.c:1339
+#: src/frontend.c:1250
+#: src/frontend.c:1320
+#: src/frontend.c:1341
 msgid "Normal"
 msgstr "普通"
 
-#: src/frontend.c:1252
-#: src/frontend.c:1321
-#: src/frontend.c:1343
+#: src/frontend.c:1254
+#: src/frontend.c:1323
+#: src/frontend.c:1345
 msgid "Hard"
 msgstr "困難"
 
-#: src/frontend.c:1257
-#: src/frontend.c:1308
+#: src/frontend.c:1259
+#: src/frontend.c:1310
 msgid "Scroll Speed"
 msgstr "捲動速度"
 
-#: src/frontend.c:1271
-#: src/frontend.c:1305
+#: src/frontend.c:1273
+#: src/frontend.c:1307
 msgid "Language"
 msgstr "語言"
 
-#: src/frontend.c:1283
-#: src/frontend.c:1306
+#: src/frontend.c:1285
+#: src/frontend.c:1308
 msgid "Unit Colour"
 msgstr "單位顏色"
 
@@ -10804,9 +10807,8 @@ msgstr "遊戲已儲存"
 #: src/hci.c:1703
 #: src/loop.c:506
 #: src/loop.c:522
-#: src/mission.c:2606
 #, fuzzy
-msgid "GAME SAVED :"
+msgid "GAME SAVED: "
 msgstr "遊戲已儲存"
 
 #: src/hci.c:2109
@@ -10937,8 +10939,8 @@ msgstr "返回遊戲"
 
 #: src/ingameop.c:259
 #: src/ingameop.c:398
-#: src/mission.c:2525
-#: src/mission.c:2643
+#: src/mission.c:2531
+#: src/mission.c:2649
 msgid "Save Game"
 msgstr "儲存遊戲"
 
@@ -11275,67 +11277,67 @@ msgstr "敵軍已經死了...由於你作弊的關係.."
 msgid "Destroying selected droids and structures!"
 msgstr ""
 
-#: src/keybind.c:2296
+#: src/keybind.c:2291
 msgid "Centered on player HQ, direction NORTH"
 msgstr "視角移至主基地，面向北方"
 
-#: src/keybind.c:2308
+#: src/keybind.c:2303
 msgid "Unable to locate HQ!"
 msgstr "無法定位至主基地"
 
-#: src/keybind.c:2324
+#: src/keybind.c:2319
 msgid "Formation speed limiting OFF"
 msgstr "成型速度限制關閉"
 
-#: src/keybind.c:2328
+#: src/keybind.c:2323
 msgid "Formation speed limiting ON"
 msgstr "成型速度限制開啟"
 
-#: src/keybind.c:2458
-#: src/keybind.c:2499
-#: src/keybind.c:2521
+#: src/keybind.c:2453
+#: src/keybind.c:2494
+#: src/keybind.c:2516
 msgid "Game Speed Reset"
 msgstr "重設遊戲速度"
 
-#: src/keybind.c:2462
+#: src/keybind.c:2457
 #, c-format
 msgid "Game Speed Increased to %3.1f"
 msgstr "遊戲速度增加至 %3.1f"
 
-#: src/keybind.c:2503
+#: src/keybind.c:2498
 #, c-format
 msgid "Game Speed Reduced to %3.1f"
 msgstr "遊戲速度減少至 %3.1f"
 
-#: src/keybind.c:2533
+#: src/keybind.c:2528
 msgid "Build menu will reopen"
 msgstr "建築選單將重新開啟"
 
-#: src/keybind.c:2537
+#: src/keybind.c:2532
 msgid "Build menu will not reopen"
 msgstr "建造選單將不會開啟"
 
-#: src/keybind.c:2549
+#: src/keybind.c:2544
 msgid "Radar showing friend-foe colors"
 msgstr "雷達顯示友軍顏色"
 
-#: src/keybind.c:2553
+#: src/keybind.c:2548
 msgid "Radar showing player colors"
 msgstr "雷達顯示玩家顏色"
 
-#: src/keybind.c:2570
+#: src/keybind.c:2565
 msgid "Radar showing only objects"
 msgstr "雷達僅顯示物件"
 
-#: src/keybind.c:2573
+#: src/keybind.c:2568
 msgid "Radar blending terrain and height"
 msgstr "雷達描繪地形及高度"
 
-#: src/keybind.c:2576
+#: src/keybind.c:2571
 msgid "Radar showing terrain"
 msgstr "雷達顯示地形"
 
-#: src/keybind.c:2579
+#: src/keybind.c:2574
 msgid "Radar showing height"
 msgstr "雷達顯示高度"
 
@@ -11730,39 +11732,44 @@ msgstr "開啟或關閉建築選單"
 msgid "Could not save game!"
 msgstr "載入已儲存的遊戲"
 
-#: src/mission.c:2073
+#: src/mission.c:2079
 msgid "Load Transport"
 msgstr "送上運輸艦"
 
-#: src/mission.c:2472
+#: src/mission.c:2478
 #, fuzzy
 msgid "OBJECTIVE ACHIEVED by cheating!"
 msgstr "任務完成"
 
-#: src/mission.c:2472
+#: src/mission.c:2478
 msgid "OBJECTIVE ACHIEVED"
 msgstr "任務完成"
 
-#: src/mission.c:2478
+#: src/mission.c:2484
 #, fuzzy
 msgid "OBJECTIVE FAILED--and you cheated!"
 msgstr "任務失敗"
 
-#: src/mission.c:2478
+#: src/mission.c:2484
 msgid "OBJECTIVE FAILED"
 msgstr "任務失敗"
 
-#: src/mission.c:2504
-#: src/mission.c:2541
-#: src/mission.c:2659
+#: src/mission.c:2510
+#: src/mission.c:2547
+#: src/mission.c:2665
 msgid "Quit To Main Menu"
 msgstr "退出至主選單"
 
-#: src/mission.c:2512
+#: src/mission.c:2518
 msgid "Continue Game"
 msgstr "繼續遊戲"
 
-#: src/move.c:2928
+#: src/mission.c:2612
+#, fuzzy
+msgid "GAME SAVED :"
+msgstr "遊戲已儲存"
+
+#: src/move.c:2930
 #, c-format
 msgid "You found %u power in an oil drum."
 msgstr ""
@@ -12122,35 +12129,35 @@ msgstr "交出選擇的單位"
 msgid "Give Power To Player"
 msgstr "提供玩家能源"
 
-#: src/multiplay.c:1847
+#: src/multiplay.c:1837
 msgid "Green"
 msgstr "綠色"
 
-#: src/multiplay.c:1848
+#: src/multiplay.c:1838
 msgid "Orange"
 msgstr "橙色"
 
-#: src/multiplay.c:1849
+#: src/multiplay.c:1839
 msgid "Grey"
 msgstr "灰色"
 
-#: src/multiplay.c:1850
+#: src/multiplay.c:1840
 msgid "Black"
 msgstr "黑色"
 
-#: src/multiplay.c:1851
+#: src/multiplay.c:1841
 msgid "Red"
 msgstr "紅色"
 
-#: src/multiplay.c:1852
+#: src/multiplay.c:1842
 msgid "Blue"
 msgstr "藍色"
 
-#: src/multiplay.c:1853
+#: src/multiplay.c:1843
 msgid "Pink"
 msgstr "粉紅色"
 
-#: src/multiplay.c:1854
+#: src/multiplay.c:1844
 msgid "Cyan"
 msgstr "青綠色"
 
@@ -12417,6 +12424,12 @@ msgstr " - Built %s"
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "版本 %s%s%s%s"
+
+#~ msgid "Cursor Mode"
+#~ msgstr "滑鼠模式"
+
+#~ msgid "Software (colored)"
+#~ msgstr "軟體 (colored)"
 
 #~ msgid "Game"
 #~ msgstr "遊戲"
