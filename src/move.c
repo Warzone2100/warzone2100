@@ -770,7 +770,7 @@ static void moveCalcTurn(float *pCurr, float target, UDWORD rate)
 	ASSERT( target <= 360.0f && target >= 0.0f,
 			 "moveCalcTurn: target out of range %f", target );
 	ASSERT( retval <= 360.0f && retval >= 0.0f,
-			 "moveCalcTurn: cur ang out of range %f", retval );
+			 "moveCalcTurn: current angle %f out of range", retval );
 
 	// calculate the difference in the angles
 	diff = target - retval;
